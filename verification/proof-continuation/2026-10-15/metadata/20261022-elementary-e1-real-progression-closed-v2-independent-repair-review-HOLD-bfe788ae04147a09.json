@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "status": "EXACT_E1_V2_ONE_LITERAL_REPAIR_INDEPENDENT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "result": "previous_line67_addition_side_blocker_fixed_no_new_static_blocker",
+  "HOLD": true,
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-22T00:23:15.387084+00:00",
+  "source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryE1RealProgression-v2-module-source.txt",
+    "sha256": "039ed038025bc5d938b19e01fb3ff8914b9a71986614b27d3bf9dff5b94f2366",
+    "bytes": 3664
+  },
+  "author_CP": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-elementary-e1-real-progression-closed-v2-source-repair-author-HOLD.json",
+    "sha256": "1b6da58169789a8bda41559cc41799b59b7b4e38d35f62101938fc082ecf1a22",
+    "bytes": 22288
+  },
+  "original_source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryE1RealProgression-module-source.txt",
+    "sha256": "4203f7d539585a989fc5e5cdd52cc7a21f58e09b6d07b898c22274d733b79d05",
+    "bytes": 3660
+  },
+  "original_BLOCKED_review_preserved": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-elementary-e1-real-progression-closed-independent-source-review-BLOCKED-HOLD.json",
+    "sha256": "9dd38a2f8f6f88eb2f95af08e2f71bed167bf7ec7f2177a43bbc40cfe79498a6",
+    "bytes": 22822
+  },
+  "raw_delta": {
+    "old_literal": "(add_le_add_right hmain _)",
+    "new_literal": "(add_le_add hmain (le_refl _))",
+    "byte_offset": 3275,
+    "only_changed_line": 67,
+    "forward_bytes_exact": true,
+    "inverse_bytes_exact": true,
+    "all_other_bytes_identical": true,
+    "77_LF": true
+  },
+  "complete_declaration": {
+    "name": "sum_fouvryTau_E1_real_progression",
+    "first": 22,
+    "type_last": 30,
+    "last": 74,
+    "complete_type": "theorem sum_fouvryTau_E1_real_progression\n    (S : Finset ℕ) {K q : ℕ} {r : ℤ} (hK : 2 ≤ K) (hq : 0 < q)\n    {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b) (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((b - a) / (q : ℝ)) * (fouvryTau K q : ℝ) *\n        (1 + Real.log Z) ^ (K - 1) +\n          Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+    "type_sha256": "8b903129fe5931b61b6b592fe70b143e16d91122a49cb7a3133ad2538a3e779a",
+    "complete_body": "  let R : ℝ := realDeletionRadius K Z\n  let D : ℕ := ⌊R⌋₊\n  let Y : ℝ := b - a\n  let Cq : ℝ := (fouvryTau K q : ℝ) / (q : ℝ)\n  have hY : 0 ≤ Y := sub_nonneg.mpr hab\n  have hCq : 0 ≤ Cq := div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _)\n  have hR : 1 ≤ R ∧ R ≤ Z := realDeletionRadius_bounds hK (by linarith : 1 ≤ Z)\n  have horder : K - 1 + 1 = K := by omega\n  have hlcm := sum_fouvryTau_div_lcm_le_exact_divisor_constant\n    (j := K - 1) (D := D) (q := q) (by omega : 1 ≤ K - 1) hq\n  rw [horder] at hlcm\n  have hmain : Y * (∑ d ∈ Icc 1 D,\n      (fouvryTau (K - 1) d : ℝ) / (Nat.lcm d q : ℝ)) ≤\n      (Y * Cq) * (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) := by\n    simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hlcm hY\n  have hmean := native_floor_tau_payment hK (R := R) (Z := Z) (Y := Y * Cq)\n    hR.1 hR.2 (mul_nonneg hY hCq)\n  calc\n    _ ≤ (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (Y / (Nat.lcm d q : ℝ) + 1) :=\n      sum_fouvryTau_real_progression_floor_lcm_payment S hK hq ha hab hZ hbZ hS hmod\n    _ = (K : ℝ) * (Y * (∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) / (Nat.lcm d q : ℝ)) +\n          ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n      congr 1\n      calc\n        _ = ∑ d ∈ Icc 1 D, (Y *\n            ((fouvryTau (K - 1) d : ℝ) / (Nat.lcm d q : ℝ)) +\n              (fouvryTau (K - 1) d : ℝ)) := by\n          apply Finset.sum_congr rfl\n          intro d _hd\n          ring\n        _ = _ := by rw [Finset.sum_add_distrib, ← Finset.mul_sum]\n    _ ≤ (K : ℝ) * ((Y * Cq) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n          ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) :=\n      mul_le_mul_of_nonneg_left (add_le_add hmain (le_refl _)) (Nat.cast_nonneg K)\n    _ ≤ (K : ℝ) * ((Y * Cq) * (1 + Real.log Z) ^ (K - 1) +\n        R * (1 + Real.log Z) ^ (K - 2)) :=\n      mul_le_mul_of_nonneg_left hmean (Nat.cast_nonneg K)\n    _ = _ := by\n      dsimp only [Y, Cq, R]\n      rw [realDeletionRadius_eq_manuscript hK Z]\n      ring\n",
+    "body_sha256": "5f3f65944b5885c24e84556e869fde4bfd17a4bad837dca0ace77d3844366dfd"
+  },
+  "actual_native_API": {
+    "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Monoid/Unbundled/Basic.lean",
+    "sha256": "5e294a0e96698d3537095d94dda4ccf3bc7304ad8772f39e25d712a390281337",
+    "bytes": 51997,
+    "first": 202,
+    "last": 205,
+    "literal_source": "@[to_additive (attr := gcongr high) add_le_add]\ntheorem mul_le_mul' [MulLeftMono α] [MulRightMono α]\n    {a b c d : α} (h₁ : a ≤ b) (h₂ : c ≤ d) :\n    a * c ≤ b * d := by grw [h₁, h₂]\n",
+    "additive_generated_type": "add_le_add {a b c d : alpha} (h1 : a <= b) (h2 : c <= d) : a+c <= b+d",
+    "application": "hmain : A<=B and le_refl C : C<=C give exactly A+C<=B+C; outer mul_le_mul_of_nonneg_left uses Nat.cast_nonneg K. No commutativity conversion is needed."
+  },
+  "future_parent_source_hashes_reobserved": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryProgressionLCMPayment-module-source.txt",
+      "sha256": "868a77bb8532f5fa5e4e1a62eb6dd0272a521cd6bb408dac59ea0f71b5c502af",
+      "bytes": 4046
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3FouvryTauLCMHarmonic-module-source.txt",
+      "sha256": "cb5e2915ef0aa23181a283a9c7109a76123f0cf223fea0c86b03515ba452d870",
+      "bytes": 4011
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryCRTSpacing-module-source.txt",
+      "sha256": "3efe260ca0e39d4316ebffece2598b95ff3dba3c70e352dd927600959a8fd5b0",
+      "bytes": 2938
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3FouvryTauArgumentSubmultiplicative-module-source.txt",
+      "sha256": "622b3e42bde7958499b5f72bd5d975a25687b8f6447e9bd6748e54f65be9900d",
+      "bytes": 4307
+    }
+  ],
+  "inherited_independent_review": "All original full-source mathematical and parent-interface checks remain bound through the unchanged raw bytes and original independent CP. This review reread all77 lines and the entire revised type/body.",
+  "scope_exact": {
+    "type_imports_namespaces_parents_all_unchanged": true,
+    "arbitrary_r_Int": true,
+    "all_q_positive": true,
+    "true_real_endpoints": "1<=a<=b<=Z and Z>=2, with actual finite support S",
+    "exact_main": "K * ((b-a)/q) * d_K(q) * (1+log Z)^(K-1)",
+    "exact_endpoint_error": "K * Z^(1-1/K) * (1+log Z)^(K-2); no division by q",
+    "new_analytic_premise": false
+  },
+  "acceptance_boundary": "No future parent or this module has been import-resolved, elaborated, strict-checked or kernel-accepted by this review. Existing StrictFloor/RealEndpoint APIs remain actual inputs, while LCMPayment, CRT, finite harmonic, argument submultiplicativity remain future source proposals. No mixed M2 x/q estimate or rough-modulus range is closed.",
+  "checks": {
+    "raw_hashes": true,
+    "JSON_duplicate_keys_absent_author_and_original_review": true,
+    "Lean_Runtime_proper_classifier_census_run": false,
+    "actual_cache_old_evidence_Git_Site_mutated": false,
+    "only_this_new_CP_written": true
+  },
+  "quota": {
+    "latest_observed_remaining_percent": 46,
+    "active_stop_remaining_lte": 5,
+    "historical_author_stop40_superseded_by_root_latest_instruction": true
+  }
+}

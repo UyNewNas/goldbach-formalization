@@ -1,0 +1,168 @@
+{
+  "status": "ONE_FINITE_MANUSCRIPT_COST_ALGEBRA_SOURCE_CANDIDATE_HOLD",
+  "author": "/root/nonresonant_cost_algebra_sol_high_oct21",
+  "date": "2026-10-21",
+  "HOLD": true,
+  "compile_status": "NOT_RUN_SOURCE_ONLY",
+  "allowed_scope": "One new Lean file and this new CP record only; no existing Lean/source/helper/catalog/Git mutation, compiler, checker, classifier, or build.",
+  "quota": {
+    "secondary": null,
+    "stop_remaining_lte": 40,
+    "after_used_percent": 32,
+    "after_remaining_percent": 68,
+    "before_used_percent": 32,
+    "stop_used_gte": 60,
+    "before_remaining_percent": 68
+  },
+  "source": {
+    "theorem_headers_and_types": [
+      "theorem completed_diagonal_normalization\n    {U V Q R S : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    prefactorSq U Q R S * diagonalCost U V Q R S =\n      (U ^ 2 / Q) ^ 2 * D0 U V R S ",
+      "theorem prefactor_fourth_normalization\n    {U Q R S : ℝ} (hU : 0 < U) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n      1 / normalizer U R S ",
+      "theorem spectral_second_monomial\n    {C Z : ℝ} (hC : 0 < C) (hZ : 0 < Z) (B θ : ℝ) :\n    C ^ (1 + 2 * θ) * B * Z ^ ((2 : ℝ) - 2 * θ) =\n      C * B * Z ^ 2 * (C / Z) ^ (2 * θ) ",
+      "theorem completed_spectral_normalization\n    {U V Q R S : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (a θ : ℝ) :\n    spectralCost U V Q R S a θ / normalizer U R S =\n      (1 + a / (U * V)) * D1 U V Q R S a θ +\n        D2 U V Q R S θ + zeroModeCost V Q R S ",
+      "theorem zero_mode_le_D1\n    {U V Q R S a θ : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 ≤ a) (hθ : 0 ≤ θ)\n    (hgeom : (U * R) ^ 2 ≤ U * V) :\n    zeroModeCost V Q R S ≤ D1 U V Q R S a θ ",
+      "theorem completed_spectral_upper_bound\n    {U V Q R S a θ : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 ≤ a) (hθ : 0 ≤ θ)\n    (hgeom : (U * R) ^ 2 ≤ U * V) :\n    spectralCost U V Q R S a θ / normalizer U R S ≤\n      2 * ((1 + a / (U * V)) * D1 U V Q R S a θ + D2 U V Q R S θ) "
+    ],
+    "bytes": 6154,
+    "path": "ImbalancedChen/Part3NonresonantManuscriptCostAlgebra.lean",
+    "full_source": "import Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\n\n/-!\n# Finite completed-box manuscript cost algebra\n\nSOURCE-ONLY CANDIDATE; HOLD. No compiler, checker, or build was run for this file.\n\nSource binding: `.lake/proof-continuation/source-reviews/\n20261021-manuscript-cost-gap-audit-HOLD.json`, SHA256\ne0f6d0c61280b3b8937fa2fe0479d2efc7381fc6e763c140cfb3c53d88d37f0b.\nIts bound Appendix A is `../goldbach-research/\ndistribution-medium-completion-20261010.txt`, SHA256\n93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7.\nLines 323--333 specify P and the completed-box resonance; lines 335--347\nretain F in the squared coefficient norm; lines 382--400 specify the spectral\npolynomial and its substitution. The audit states the resulting finite cost\nlemma explicitly. This file proves only that scalar algebra.\n\nHere x = U*V, F = U/Q, B = U*R, C = U*R*S, Z = S^2,\nH = Q*R^2*S^2/V and Y = F*H*S. The prefactor is represented by its\nexact squared normalization U^2/(Q^2*R^2*S^3). Thus the resonance theorem\nis the squared version of P*sqrt(Diag) = (U^2/Q)*sqrt(D0).\nThe spectral theorem retains the actual real powers in all four monomials.\n\nNo assertion here supplies a coefficient norm, spectral estimate, supported\nCauchy inequality, general-D packet bridge, ceil-frequency comparison, or\nanalytic kernel. In particular this file does not connect to hLower/hUpper\nor certify the full manuscript theorem. Fourth roots and analytic losses\nare outside this candidate.\n-/\n\nnamespace ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n\nnoncomputable section\n\ndef prefactorSq (U Q R S : ℝ) : ℝ :=\n  U ^ 2 / (Q ^ 2 * R ^ 2 * S ^ 3)\n\ndef normalizer (U R S : ℝ) : ℝ := U ^ 4 * R ^ 4 * S ^ 6\n\ndef D0 (U V R S : ℝ) : ℝ := U ^ 2 * R ^ 2 * S / (U * V)\n\ndef D1 (U V Q R S a θ : ℝ) : ℝ :=\n  a ^ θ * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef D2 (U V Q R S θ : ℝ) : ℝ :=\n  (U * R / S) ^ (2 * θ) * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef zeroModeCost (V Q R S : ℝ) : ℝ := Q * R ^ 4 * S ^ 5 / V ^ 3\n\ndef diagonalCost (U V Q R S : ℝ) : ℝ :=\n  (Q * R ^ 2 * S ^ 2 / V) * S * (U * R) * (U / Q) * (U * R * S)\n\ndef spectralCost (U V Q R S a θ : ℝ) : ℝ :=\n  let H := Q * R ^ 2 * S ^ 2 / V\n  let F := U / Q\n  let B := U * R\n  let C := U * R * S\n  let Z := S ^ 2\n  let Y := F * H * S\n  (a ^ θ * (C * B * Z + a * Y) * Z +\n    C ^ (1 + 2 * θ) * B * Z ^ ((2 : ℝ) - 2 * θ) +\n    B ^ 2 * Y * Z) * (H * S) ^ 2 * F\n\n/-- Exact squared resonance normalization, with the completed F = U/Q count. -/\ntheorem completed_diagonal_normalization\n    {U V Q R S : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    prefactorSq U Q R S * diagonalCost U V Q R S =\n      (U ^ 2 / Q) ^ 2 * D0 U V R S := by\n  unfold prefactorSq diagonalCost D0\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- P^4/(U^2/Q)^4 is the reciprocal spectral normalizer. -/\ntheorem prefactor_fourth_normalization\n    {U Q R S : ℝ} (hU : 0 < U) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n      1 / normalizer U R S := by\n  unfold prefactorSq normalizer\n  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- An exact real-power rewrite of the source's exceptional monomial. -/\ntheorem spectral_second_monomial\n    {C Z : ℝ} (hC : 0 < C) (hZ : 0 < Z) (B θ : ℝ) :\n    C ^ (1 + 2 * θ) * B * Z ^ ((2 : ℝ) - 2 * θ) =\n      C * B * Z ^ 2 * (C / Z) ^ (2 * θ) := by\n  rw [Real.rpow_add hC 1 (2 * θ), Real.rpow_sub hZ 2 (2 * θ),\n    Real.rpow_one, Real.rpow_two, Real.div_rpow hC.le hZ.le (2 * θ)]\n  field_simp [(Real.rpow_pos_of_pos hZ (2 * θ)).ne'] <;> ring\n\n/-- All four source monomials are retained: D1, (a/x)D1, D2 and the zero mode. -/\ntheorem completed_spectral_normalization\n    {U V Q R S : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (a θ : ℝ) :\n    spectralCost U V Q R S a θ / normalizer U R S =\n      (1 + a / (U * V)) * D1 U V Q R S a θ +\n        D2 U V Q R S θ + zeroModeCost V Q R S := by\n  unfold spectralCost\n  dsimp only\n  rw [spectral_second_monomial (by positivity) (by positivity)]\n  have hratio : U * R * S / S ^ 2 = U * R / S := by\n    field_simp [hS.ne'] <;> ring\n  rw [hratio]\n  unfold normalizer D1 D2 zeroModeCost\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- The original geometry and a^theta >= 1 pay the zero Poisson mode. -/\ntheorem zero_mode_le_D1\n    {U V Q R S a θ : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 ≤ a) (hθ : 0 ≤ θ)\n    (hgeom : (U * R) ^ 2 ≤ U * V) :\n    zeroModeCost V Q R S ≤ D1 U V Q R S a θ := by\n  let base := U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n  have hbase : 0 ≤ base := by dsimp [base]; positivity\n  have hratio : (U * R) ^ 2 / (U * V) ≤ 1 :=\n    (div_le_one (by positivity)).mpr hgeom\n  calc\n    zeroModeCost V Q R S = (U * R) ^ 2 / (U * V) * base := by\n      dsimp [zeroModeCost, base]\n      field_simp [hU.ne', hV.ne'] <;> ring\n    _ ≤ 1 * base := mul_le_mul_of_nonneg_right hratio hbase\n    _ ≤ a ^ θ * base :=\n      mul_le_mul_of_nonneg_right (Real.one_le_rpow ha hθ) hbase\n    _ = D1 U V Q R S a θ := by dsimp [base, D1]; ring\n\n/-- The finite normalized polynomial bound before taking fourth roots. -/\ntheorem completed_spectral_upper_bound\n    {U V Q R S a θ : ℝ} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 ≤ a) (hθ : 0 ≤ θ)\n    (hgeom : (U * R) ^ 2 ≤ U * V) :\n    spectralCost U V Q R S a θ / normalizer U R S ≤\n      2 * ((1 + a / (U * V)) * D1 U V Q R S a θ + D2 U V Q R S θ) := by\n  rw [completed_spectral_normalization hU hV hQ hR hS]\n  have hzero := zero_mode_le_D1 hU hV hQ hR hS ha hθ hgeom\n  have ha0 : 0 ≤ a := by linarith\n  have hD1 : 0 ≤ D1 U V Q R S a θ := by unfold D1; positivity\n  have hD2 : 0 ≤ D2 U V Q R S θ := by unfold D2; positivity\n  have hproduct : 0 ≤ a / (U * V) * D1 U V Q R S a θ := by positivity\n  nlinarith\n\nend ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n",
+    "sha256": "8bff5342036282f3308de59159f21c27a6ea07eb6bd9e20344a6e5d7b1c3a341"
+  },
+  "audit_binding": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-manuscript-cost-gap-audit-HOLD.json",
+    "hash_checked": true,
+    "sha256": "e0f6d0c61280b3b8937fa2fe0479d2efc7381fc6e763c140cfb3c53d88d37f0b"
+  },
+  "actual_manuscript_binding": {
+    "relevant_lines": [
+      "323-333 prefactor and completed-box resonance",
+      "335-347 squared coefficient norm retains F",
+      "382-400 actual spectral polynomial and scale substitution"
+    ],
+    "full_file_hash_checked": true,
+    "path": "../goldbach-research/distribution-medium-completion-20261010.txt",
+    "actual_lines_read": "297-424",
+    "sha256": "93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7"
+  },
+  "mathlib": {
+    "api_bindings": [
+      {
+        "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+        "path": "Analysis/SpecialFunctions/Pow/Real.lean",
+        "read_spans": [
+          "1-30",
+          "195-220",
+          "245-280",
+          "375-400",
+          "475-494",
+          "676-684"
+        ],
+        "declarations": [
+          "Real.rpow_pos_of_pos:116",
+          "Real.rpow_one:148",
+          "Real.rpow_add:207",
+          "Real.rpow_sub:262",
+          "Real.rpow_two:470",
+          "Real.div_rpow:486",
+          "Real.one_le_rpow:676"
+        ]
+      },
+      {
+        "sha256": "1d6672beae57890d355067ff20de13b715bece8e87e0d088b7e959e773025f57",
+        "path": "Algebra/Order/Field/Basic.lean",
+        "read_spans": [
+          "43"
+        ],
+        "declarations": [
+          "div_le_one:43"
+        ]
+      },
+      {
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "path": "Algebra/Order/GroupWithZero/Defs.lean",
+        "read_spans": [
+          "221-234"
+        ],
+        "declarations": [
+          "mul_le_mul_of_nonneg_right:230"
+        ]
+      },
+      {
+        "sha256": "924a11d74ca2851409f1d78284affbd60c21c9d54ac5bb4fb4676f17cbecb679",
+        "path": "Tactic/FieldSimp.lean",
+        "read_spans": [
+          "687-739"
+        ],
+        "declarations": [
+          "field_simp syntax/elaborator:710"
+        ]
+      },
+      {
+        "sha256": "6f399d05a40a26cf0aeaec29fa0a8eb3e706d31b26c41d7eceeb849b7a6f23a1",
+        "path": "Tactic/Ring/Basic.lean",
+        "read_spans": [
+          "571-603"
+        ],
+        "declarations": [
+          "ring1 elaborator:595"
+        ]
+      },
+      {
+        "sha256": "96f7e73f696f2e0f28592538eade5e1bfae6c63bb7fc58744d3e1f8aae219b28",
+        "path": "Tactic/Ring/RingNF.lean",
+        "read_spans": [
+          "196-202"
+        ],
+        "declarations": [
+          "ring macro:196"
+        ]
+      },
+      {
+        "sha256": "03979d96a9235324da896b72b6a777c4b152cfa361b7413d6670105376d2f2c8",
+        "path": "Tactic/Linarith/Frontend.lean",
+        "read_spans": [
+          "477",
+          "505"
+        ],
+        "declarations": [
+          "linarith syntax:477",
+          "nlinarith syntax:505"
+        ]
+      },
+      {
+        "sha256": "f6a7869df090efd0ea1c3cdb07dd85913ec172803c0c07da3e013caa9eb0b2dd",
+        "path": "Tactic/Positivity/Core.lean",
+        "read_spans": [
+          "586-615"
+        ],
+        "declarations": [
+          "positivity syntax/elaborator:593-599"
+        ]
+      }
+    ],
+    "source_root": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib",
+    "revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "imports": [
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring"
+    ]
+  },
+  "source_inspection": {
+    "prohibited_proof_tokens_found": false,
+    "compile_or_elaboration_claim": false,
+    "theorem_count": 6,
+    "mathematical_check": "Manual monomial algebra: normalized terms D1,(a/x)D1,D2,E3; zeroModeCost=((UR)^2/x)*(UQR^2S^5/x^2); original geometry and a^theta>=1 give E3<=D1.",
+    "definition_count": 8
+  },
+  "remaining_connection_limits": [
+    "Squared resonance normalization uses prefactorSq=U^2/(Q^2 R^2 S^3); no real-rpow-to-P or sqrt/fourth-root bridge is asserted as a Lean theorem.",
+    "No analytic spectral estimate or coefficient norm is proved or assumed as the target conclusion.",
+    "No actual supported row kernel, general-D packet, gcd/CRT masks, moving signed residue, common coefficient weights, ceil frequency window or retained decay is connected.",
+    "The source S>=1, a>=1 and 0<=theta<=1/2 regime implies the weaker scalar conditions used here, but no geometric theorem interface is imported.",
+    "No closure of hLower/hUpper or original 7/32 analytic obligations; no whole-manuscript certification.",
+    "Source candidate may have elaboration or tactic issues; root must serialize any later compile/check work."
+  ]
+}

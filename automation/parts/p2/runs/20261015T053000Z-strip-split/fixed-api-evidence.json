@@ -1,0 +1,28 @@
+{
+  "schema": "p2-fixed-api-source-evidence-v1",
+  "verification_level": "SOURCE_ONLY",
+  "toolchain": "leanprover/lean4:v4.33.0-rc1",
+  "lean_commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+  "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "sources": [
+    {
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Init/Data/Fin/Lemmas.lean",
+      "blob_sha": "ce5976f7bd35fe22066289e875cb8c2d48472409",
+      "lines": [
+        1050,
+        1082
+      ],
+      "excerpt": "@[elab_as_elim] def addCases {m n : Nat} {motive : Fin (m + n) → Sort u}\n    (left : ∀ i, motive (castAdd n i)) (right : ∀ i, motive (natAdd m i))\n    (i : Fin (m + n)) : motive i :=\n  if hi : (i : Nat) < m then (castAdd_castLT n i hi) ▸ (left (castLT i hi))\n  else (natAdd_subNat_cast (Nat.le_of_not_lt hi)) ▸ (right _)"
+    },
+    {
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Init/Data/Fin/Basic.lean",
+      "blob_sha": "6fee3ab2eaacf1b76de02ea7f7880f29fbac8294",
+      "lines": [
+        300,
+        375
+      ],
+      "excerpt": "@[inline, implicit_reducible] def castAdd (m) : Fin n → Fin (n + m) :=\n  castLE <| Nat.le_add_right n m\n\ndef natAdd (n) (i : Fin m) : Fin (n + m) := ⟨n + i, Nat.add_lt_add_left i.2 _⟩"
+    }
+  ],
+  "scope": "Read-only official source text only; no Lean runtime loading or compiler validation."
+}

@@ -1,0 +1,147 @@
+{
+  "status": "ROOT_NONAUTHOR_FULL272_SOURCE_THIRTEEN_HEADERS_ONE_PRIMITIVE_MATH_EXACT_CURRENT_UPPER49_SPECIFIC_FIRST_GATE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T05:10:20.697798+00:00",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdInitialCutoff.lean",
+    "sha256": "69c928f10c84e647febf141fd23d100194ac61f3c7bed86579de99b7bc21259a",
+    "lines": 272,
+    "declarations": 13,
+    "primitive_definitions": 1
+  },
+  "independent_full_source_review": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-thin-signed-density-current-minimal-chain-full-readonly-review.json",
+    "sha256": "0fab0a43315b83cb16b17708738b10a7d360425db4fa1b15da3109456641fd1a"
+  },
+  "all13_complete_headers_and1_primitive": [
+    {
+      "name": "actualExtendedThirdInitialStopExponent",
+      "kind": "def",
+      "modifier": null,
+      "line": 26,
+      "complete_header": "def actualExtendedThirdInitialStopExponent (e : ℝ) (m : ℕ) : ℝ",
+      "complete_primitive_definition": "def actualExtendedThirdInitialStopExponent (e : ℝ) (m : ℕ) : ℝ :=\n  actualExtendedThirdDyadicStep m *\n    (⌊(thirdPrefixRho - 4 * e) / actualExtendedThirdDyadicStep m⌋₊ : ℝ)"
+    },
+    {
+      "name": "actualExtendedThirdInitialStopExponent_bounds",
+      "kind": "theorem",
+      "modifier": null,
+      "line": 30,
+      "complete_header": "theorem actualExtendedThirdInitialStopExponent_bounds {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (m : ℕ) :\n    0 ≤ actualExtendedThirdInitialStopExponent e m ∧\n      actualExtendedThirdInitialStopExponent e m ≤ thirdPrefixRho - 4 * e ∧\n        thirdPrefixRho - 4 * e - actualExtendedThirdDyadicStep m <\n          actualExtendedThirdInitialStopExponent e m ∧\n            actualExtendedThirdInitialStopExponent e m < thirdPrefixRho"
+    },
+    {
+      "name": "initialDyadicLo_step",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 57,
+      "complete_header": "private theorem initialDyadicLo_step (m : ℕ) (i : Fin (2 ^ m)) :\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 =\n      actualExtendedThirdDyadicStep m * (i.val : ℝ)"
+    },
+    {
+      "name": "initialDyadicHi_step",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 63,
+      "complete_header": "private theorem initialDyadicHi_step (m : ℕ) (i : Fin (2 ^ m)) :\n    actualExtendedThirdDyadicHi m (fun _ => i) 0 =\n      actualExtendedThirdDyadicStep m * ((i.val + 1 : ℕ) : ℝ)"
+    },
+    {
+      "name": "initialDyadicStep_full",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 69,
+      "complete_header": "private theorem initialDyadicStep_full (m : ℕ) :\n    actualExtendedThirdDyadicStep m * ((2 ^ m : ℕ) : ℝ) = thirdPrefixRho"
+    },
+    {
+      "name": "compactFirstStop_iff_log",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 74,
+      "complete_header": "private theorem compactFirstStop_iff_log {e : ℝ} (he0 : 0 < e)\n    (he : e ≤ 1 / 384) (m N : ℕ) (history : List ℕ)\n    (hx : 0 ≤ primeHistoryLogCoordinates (N : ℝ) 1 history 0) :\n    actualExtendedThirdCompactFirstStop e m N history ↔\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdInitialStopExponent e m"
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop_iff_prime",
+      "kind": "theorem",
+      "modifier": null,
+      "line": 124,
+      "complete_header": "theorem actualExtendedThirdCompactFirstStop_iff_prime {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N)\n    (m p : ℕ) (hp : 0 < p) :\n    actualExtendedThirdCompactFirstStop e m N [p] ↔\n      (p : ℝ) < (N : ℝ) ^ actualExtendedThirdInitialStopExponent e m"
+    },
+    {
+      "name": "actualExtendedThirdInitialStop_cutoff_le_target",
+      "kind": "theorem",
+      "modifier": null,
+      "line": 141,
+      "complete_header": "theorem actualExtendedThirdInitialStop_cutoff_le_target {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N) (m : ℕ) :\n    (N : ℝ) ^ actualExtendedThirdInitialStopExponent e m ≤ (N : ℝ)"
+    },
+    {
+      "name": "initial_next_eq_ordinary",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 151,
+      "complete_header": "private theorem initial_next_eq_ordinary (e : ℝ) (m N : ℕ)\n    (positive : Bool) (q : ℕ) (history : List ℕ) (hne : history ≠ []) :\n    actualExtendedThirdCompactInitialPolicy e m N positive (q :: history) =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))\n        positive (q :: history)"
+    },
+    {
+      "name": "initial_nonempty_continuation",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 165,
+      "complete_header": "private theorem initial_nonempty_continuation (e : ℝ) (m N : ℕ)\n    (weight : ℕ → ℝ) (remaining history : List ℕ) (positive : Bool) (mass : ℝ)\n    (hne : history ≠ []) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight history positive mass remaining =\n      firstExitRetainedPolynomial\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)))\n        weight history positive mass remaining"
+    },
+    {
+      "name": "initial_root_on_low",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 184,
+      "complete_header": "private theorem initial_root_on_low (e : ℝ) (m N : ℕ) (weight : ℕ → ℝ)\n    (carrier : List ℕ)\n    (hstop : ∀ p ∈ carrier, actualExtendedThirdCompactFirstStop e m N [p]) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 carrier =\n      firstExitRetainedPolynomial\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)))\n        weight [] true 1 carrier"
+    },
+    {
+      "name": "initial_root_skip_high",
+      "kind": "theorem",
+      "modifier": "private",
+      "line": 211,
+      "complete_header": "private theorem initial_root_skip_high (e : ℝ) (m N : ℕ) (weight : ℕ → ℝ)\n    (high low : List ℕ)\n    (hfail : ∀ p ∈ high, actualExtendedThirdCompactInitialPolicy e m N false [p] = false) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 (high ++ low) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 low"
+    },
+    {
+      "name": "actualExtendedThirdInitialPolicy_eq_actualPlus",
+      "kind": "theorem",
+      "modifier": null,
+      "line": 231,
+      "complete_header": "theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N) (m : ℕ) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N N 0 ((N : ℝ) ^ thirdPrefixRho)) =\n      actualSmallRosserPlusDensity N N\n        ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n        ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))"
+    }
+  ],
+  "root_full272_source_read": true,
+  "root_math_rederived": [
+    "Floorgrid stop exponent step*floor((rho-4e)/step) is nonnegative/belowwall/belowrho, allowing zero on coarse grids. e>0 gives floorcount<2^m, so exact Fin-owned bins cover exactly[0,qcut). No endpoint is rounded away.",
+    "At N>1, log coordinates and strict rpow monotonicity identify the same first stop with literal p<N^qcut, including empty/coarse qcut0. Actual targetN coverscutoff.",
+    "After a nonempty history, length(q::history)!=1 removes only the first-stop implication, leaving the ordinary original total-product/fullcube tests. Exact induction transports every continuation polynomial without a sign inequality.",
+    "The decreasing actual target-deleted prime universe splits exactly at strictz=N^qcut. Every high firstselectionfails and every low firstselectionpasses the same extra stop. Thus root polynomial(capN,w0) equals ordinary-plus density atz and unchangedoldlevelN^(theta-2e).",
+    "Legal e<=1/384 pays wall/nonnegative/oldlevel>1, thresholds/parameters/strictprime endpoints/firstcubes remain unchanged. This supplies a finite baseline identity only, not its asymptotic mean, full signed policy orK."
+  ],
+  "actual_only_direct_owned_parent": {
+    "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+    "receipt": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261018T050207997839Z\\receipt.json",
+    "receipt_sha256": "1f87c866599bf387b8395c9fa80f348a06f3282197a41c4f7eb8125801342e60",
+    "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+    "complete_declarations": 49,
+    "object": {
+      ".olean": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b"
+    }
+  },
+  "root_actual_proper_source_subgraph": {
+    "proper_parents": 66,
+    "inclusive": 67,
+    "foreign_including_Init": 71,
+    "all_current_sources_rechecked": true,
+    "new_foreign_delta": []
+  },
+  "specific_first_gate": {
+    "target": "ImbalancedChen.ActualExtendedThirdInitialCutoff",
+    "source_sha256": "69c928f10c84e647febf141fd23d100194ac61f3c7bed86579de99b7bc21259a",
+    "preconditions": [
+      "sole runtime lock/publication released",
+      "freshproper66 projectsourceobjectexact/onlyselfmissing/71foreignknown0new ormissing;no prerequisite bootstrap",
+      "same actual sole direct Upperd8b49 source/object receipt above"
+    ],
+    "execution": "ONE fullcurrent source strict at unchangedj2/M6144/RSS6656/warningsAsErrors; iff actualPASS original-objectstock replay and original all-generated complete inventory/fulltypes/safety/transitive-three-axiom owned audit. Preserve actualfailures/no tools/resource/pin/CI changes.",
+    "priority": "Lower than ready Zero/Energy/NZ core gates; may use sole idle slot when no higher core ready. No authorization to bootstrap remainder of192node density chain."
+  },
+  "main_density_orK_claimed": false
+}

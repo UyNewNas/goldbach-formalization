@@ -1,0 +1,243 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_ENDPOINT_BUDGET_FIRST_DIAGNOSTIC_EXACT_REBIND_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author of repair",
+  "created_utc": "2026-10-15T22:45:24.788426+00:00",
+  "module": "ImbalancedChen.ActualRoughVectorEndpointBudget",
+  "old_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-endpoint-budget-dffa-before-first-diagnostics.lean",
+    "sha256": "dffaaf435cd81cdd7ad48242c25ad94ca50b86f0642fcb51fb2aef7aba16bd24"
+  },
+  "new_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRoughVectorEndpointBudget.lean",
+    "sha256": "d3b76af73d68d25c0fd84278363f8e40d5eb7d7b23872e230d6c85c2ce919e0e"
+  },
+  "literal_patches": [
+    {
+      "old": "List.map_const, List.prod_replicate",
+      "new": "List.map_const', List.prod_replicate"
+    },
+    {
+      "old": "        rw [← List.map_map (f := upper) (g := fun p : ℕ => (p : ℝ)), actualNatList_cast_prod]\n        exact Nat.cast_nonneg _",
+      "new": "        simpa only [← actualNatList_cast_prod (input.map upper), List.map_map, Function.comp_def]\n          using (Nat.cast_nonneg (α := ℝ) (input.map upper).prod)"
+    },
+    {
+      "old": "    rw [← List.map_map (f := actual) (g := fun p : ℕ => (p : ℝ)), actualNatList_cast_prod]\n    exact Nat.cast_nonneg _",
+      "new": "    simpa only [← actualNatList_cast_prod ((input.take i).map actual), List.map_map, Function.comp_def]\n      using (Nat.cast_nonneg (α := ℝ) ((input.take i).map actual).prod)"
+    },
+    {
+      "old": "(input.map actual) (by simpa only [List.map_eq_nil_iff] using hne)",
+      "new": "(input.map actual) (by intro heq; exact hne (List.map_eq_nil_iff.mp heq))"
+    }
+  ],
+  "forward_and_inverse_bytes_exact": true,
+  "patch_count": 4,
+  "only_changed_proof_declarations": [
+    "actualRoughPrimeVector_length_le",
+    "mapped_upper_prod_le_inflation",
+    "actualDwellSupport_upper_inflation",
+    "actualExtendedThirdSelectedPair_upperSupport"
+  ],
+  "complete_declaration_count": 6,
+  "definition_count": 1,
+  "complete_declarations": [
+    {
+      "name": "actualRoughVectorRankBound",
+      "kind": "def",
+      "private": false,
+      "line": 25,
+      "complete_header": "def actualRoughVectorRankBound (ρ : ℝ) : ℕ",
+      "complete_definition": "def actualRoughVectorRankBound (ρ : ℝ) : ℕ := ⌊(5 / 8 : ℝ) / ρ⌋₊"
+    },
+    {
+      "name": "actualDwellSupport_prod_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 27,
+      "complete_header": "theorem actualDwellSupport_prod_le {D : ℝ} (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p) (hfull : actualDwellSupport D input) :\n    (input.prod : ℝ) ≤ D",
+      "complete_proof": "induction input using List.reverseRecOn with\n  | nil => exact (hne rfl).elim\n  | append_singleton input p _ih =>\n      have hlast := (prefixSquareBound_append_singleton_iff\n        (fun p : ℕ => (p : ℝ)) D input p).mp hfull |>.2\n      have hp : (1 : ℝ) ≤ p := by\n        have hpNat : 1 ≤ p := hpositive p (by simp)\n        exact_mod_cast hpNat\n      have hp2 : (p : ℝ) ≤ (p : ℝ) ^ 2 := by nlinarith\n      have hpre : (0 : ℝ) ≤ (input.map (fun p : ℕ => (p : ℝ))).prod := by\n        rw [actualNatList_cast_prod]\n        exact Nat.cast_nonneg _\n      have h := (mul_le_mul_of_nonneg_left hp2 hpre).trans hlast\n      simpa only [List.prod_append, List.prod_cons, List.prod_nil, mul_one,\n        Nat.cast_mul, actualNatList_cast_prod] using h"
+    },
+    {
+      "name": "actualRoughPrimeVector_length_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 48,
+      "complete_header": "theorem actualRoughPrimeVector_length_le {x ρ lam0 : ℝ}\n    (hx : 1 < x) (hρ : 0 < ρ) (hlevel : lam0 ≤ 5 / 8)\n    (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p)\n    (hrough : ∀ p ∈ input, x ^ ρ ≤ (p : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) input) :\n    input.length ≤ actualRoughVectorRankBound ρ",
+      "complete_proof": "have hxpos : 0 < x := zero_lt_one.trans hx\n  have hprod := actualDwellSupport_prod_le input hne hpositive hfull\n  have hlower := List.prod_map_le_prod_map₀ (fun _ : ℕ => x ^ ρ)\n    (fun p : ℕ => (p : ℝ))\n    (fun _ _ => Real.rpow_nonneg hxpos.le ρ) hrough\n  have hpow : x ^ (ρ * (input.length : ℝ)) ≤ x ^ (5 / 8 : ℝ) := by\n    rw [Real.rpow_mul hxpos.le, Real.rpow_natCast]\n    apply le_trans ?_ (hprod.trans (Real.rpow_le_rpow_of_exponent_le hx.le hlevel))\n    simpa only [List.map_const', List.prod_replicate, actualNatList_cast_prod] using hlower\n  have hlen : ρ * (input.length : ℝ) ≤ 5 / 8 := (Real.rpow_le_rpow_left_iff hx).mp hpow\n  unfold actualRoughVectorRankBound\n  apply (Nat.le_floor_iff (div_nonneg (by norm_num : (0 : ℝ) ≤ 5 / 8) hρ.le)).mpr\n  apply (le_div_iff₀ hρ).mpr\n  simpa only [mul_comm] using hlen"
+    },
+    {
+      "name": "mapped_upper_prod_le_inflation",
+      "kind": "theorem",
+      "private": true,
+      "line": 70,
+      "complete_header": "private theorem mapped_upper_prod_le_inflation {α : Type*} (x τ : ℝ) (hx : 0 < x)\n    (actual upper : α → ℕ) (input : List α)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ)) :\n    (input.map (fun i => (upper i : ℝ))).prod ≤\n      (x ^ τ) ^ input.length * (input.map (fun i => (actual i : ℝ))).prod",
+      "complete_proof": "revert hsize\n  induction input with\n  | nil => intro _; simp\n  | cons i input ih =>\n      intro hsize\n      have hi := hsize i (by simp)\n      have ht := ih (fun j hj => hsize j (List.mem_cons_of_mem i hj))\n      have hprod0 : 0 ≤ (input.map (fun j => (upper j : ℝ))).prod := by\n        simpa only [← actualNatList_cast_prod (input.map upper), List.map_map, Function.comp_def]\n          using (Nat.cast_nonneg (α := ℝ) (input.map upper).prod)\n      have h := mul_le_mul hi ht hprod0\n        (mul_nonneg (Real.rpow_nonneg hx.le τ) (Nat.cast_nonneg _))\n      simpa only [List.map_cons, List.prod_cons, List.length_cons, pow_succ,\n        mul_assoc, mul_comm, mul_left_comm] using h"
+    },
+    {
+      "name": "actualDwellSupport_upper_inflation",
+      "kind": "theorem",
+      "private": false,
+      "line": 92,
+      "complete_header": "theorem actualDwellSupport_upper_inflation {α : Type*} {x τ lam0 lam1 : ℝ} {R : ℕ}\n    (hx : 1 < x) (hτ : 0 ≤ τ) (actual upper : α → ℕ) (input : List α)\n    (hlen : input.length ≤ R)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) (input.map actual))\n    (hbudget : lam0 + τ * (R + 1) ≤ lam1) :\n    actualDwellSupport (x ^ lam1) (input.map upper)",
+      "complete_proof": "have hxpos : 0 < x := zero_lt_one.trans hx\n  intro i hi\n  have hi' : i < input.length := by simpa only [List.length_map] using hi\n  have hs := hfull i (by simpa only [List.length_map] using hi')\n  simp only [← List.map_take, List.map_map, List.getElem_map, Function.comp_def] at hs ⊢\n  have hpre := mapped_upper_prod_le_inflation x τ hxpos actual upper (input.take i)\n    (fun j hj => hsize j (List.mem_of_mem_take hj))\n  rw [List.length_take, Nat.min_eq_left hi'.le] at hpre\n  have hq := hsize input[i] (List.getElem_mem hi')\n  have hq2 := pow_le_pow_left₀ (Nat.cast_nonneg (upper input[i])) hq 2\n  have hactual0 : 0 ≤ ((input.take i).map (fun j => (actual j : ℝ))).prod := by\n    simpa only [← actualNatList_cast_prod ((input.take i).map actual), List.map_map, Function.comp_def]\n      using (Nat.cast_nonneg (α := ℝ) ((input.take i).map actual).prod)\n  calc\n    _ ≤ ((x ^ τ) ^ i * ((input.take i).map (fun j => (actual j : ℝ))).prod) *\n        (x ^ τ * (actual input[i] : ℝ)) ^ 2 :=\n      mul_le_mul hpre hq2 (sq_nonneg _) (mul_nonneg (pow_nonneg (Real.rpow_nonneg hxpos.le _) _) hactual0)\n    _ = (x ^ τ) ^ (i + 2) *\n        (((input.take i).map (fun j => (actual j : ℝ))).prod * (actual input[i] : ℝ) ^ 2) := by\n      rw [pow_add]\n      ring\n    _ ≤ (x ^ τ) ^ (i + 2) * x ^ lam0 :=\n      mul_le_mul_of_nonneg_left hs (pow_nonneg (Real.rpow_nonneg hxpos.le _) _)\n    _ = x ^ (τ * (i + 2 : ℕ) + lam0) := by\n      rw [Real.rpow_add hxpos, Real.rpow_mul_natCast hxpos.le]\n    _ ≤ x ^ lam1 := by\n      apply Real.rpow_le_rpow_of_exponent_le hx.le\n      have hiR : ((i + 2 : ℕ) : ℝ) ≤ (R : ℝ) + 1 := by\n        exact_mod_cast (show i + 2 ≤ R + 1 by omega)\n      nlinarith"
+    },
+    {
+      "name": "actualExtendedThirdSelectedPair_upperSupport",
+      "kind": "theorem",
+      "private": false,
+      "line": 132,
+      "complete_header": "theorem actualExtendedThirdSelectedPair_upperSupport\n    {α : Type*} {e δ ρ τ x : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (hδ : δ ≤ e / 32)\n    (hρ : 0 < ρ) (hτ : 0 ≤ τ)\n    (hwidth : τ * (actualRoughVectorRankBound ρ + 1) ≤ e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : α → ℕ) (input : List α) (hne : input ≠ [])\n    (hpositive : ∀ i ∈ input, 0 < actual i)\n    (hrough : ∀ i ∈ input, x ^ ρ ≤ (actual i : ℝ))\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (input.map actual)) :\n    actualDwellSupport (x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ))\n      (input.map upper)",
+      "complete_proof": "obtain ⟨_, hθhi, hlevel, _⟩ := actualExtendedThirdSelectedPair_wholeCell\n    he0 he hmesh hfull ht yz hk\n  have hlen : input.length ≤ actualRoughVectorRankBound ρ := by\n    have h := actualRoughPrimeVector_length_le hx hρ\n      (show actualExtendedThirdPhysicalLevel e m j ≤ 5 / 8 by linarith)\n      (input.map actual) (by intro heq; exact hne (List.map_eq_nil_iff.mp heq))\n      (by simpa only [List.forall_mem_map] using hpositive)\n      (by simpa only [List.forall_mem_map] using hrough) hsupport\n    simpa only [List.length_map] using h\n  exact actualDwellSupport_upper_inflation hx hτ actual upper input hlen hsize hsupport (by linarith)"
+    }
+  ],
+  "all_complete_types_definition_imports_quantifiers_thresholds_identical": true,
+  "header": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "actual_failure": {
+    "full_stdout_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T224218294306Z-ImbalancedChen.ActualRoughVectorEndpointBudget\\stdout.log",
+    "stdout_sha256": "83f7e0f0c9d4dc57db5fd307f4ffd10a694a428a12d5365ef19a0a2d6a249dfd",
+    "read_in_full": true,
+    "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T224218294306Z-ImbalancedChen.ActualRoughVectorEndpointBudget\\receipt.json",
+    "receipt_sha256": "53722d29c68a794fbaaf592ed84ab8caf1b2d18ff1c080c0a7b1b26f04c4c297",
+    "status": "FAILED",
+    "bound_source_sha256": "dffaaf435cd81cdd7ad48242c25ad94ca50b86f0642fcb51fb2aef7aba16bd24",
+    "diagnostics": "Exactly old63 lambda constant map not simplified; old83 and110 reverse map_map composition patterns absent; old154 mapped nonempty argument not simplified. Old FAILED evidence is retained and not reclassified."
+  },
+  "fixed_API": {
+    "native_List_Lemmas_path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Lemmas.lean",
+    "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac",
+    "declarations": [
+      {
+        "line": 2294,
+        "signature": "List.map_const' {l}{b}: map (fun _=>b) l = replicate l.length b",
+        "assessment": "The exact lambda variant is explicitly supplied in simp only, matching the actual logged expression; original map_const is Function.const form."
+      },
+      {
+        "line": 1252,
+        "signature": "List.map_map {g}{f}{l}: map g (map f l)=map(g ∘ f)l",
+        "assessment": "New positivity proofs begin with Nat.cast_nonneg on the literal mapped natural product, reverse the exact specialized cast-product lemma, then use the forward map_map direction plus Function.comp_def. They no longer ask rw to synthesize a composition hidden in a lambda."
+      },
+      {
+        "line": 1138,
+        "signature": "List.map_eq_nil_iff {f}{l}: map f l=[] iff l=[]",
+        "assessment": "Taking mp of an assumed mapped empty equality gives original input=[] directly, contradicting hne. No injectivity or positivity is required."
+      }
+    ],
+    "project_cast_product_API": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualTwoCapacityGreedy.lean",
+      "source_sha256": "a13ece9126eecd183c9994cec64f860bdec7661450047762dcf14c53d8d8a7d9",
+      "line": 84,
+      "complete_header": "theorem actualNatList_cast_prod (input : List ℕ) : (input.map (fun p : ℕ => (p : ℝ))).prod = (input.prod : ℝ)"
+    }
+  },
+  "whole_file_mathematics_review": [
+    {
+      "declaration": "actualRoughVectorRankBound",
+      "assessment": "Rank floor((5/8)/rho) depends on fixed rough exponent only; definition unchanged."
+    },
+    {
+      "declaration": "actualDwellSupport_prod_le",
+      "assessment": "For a nonempty positive natural vector, the final original prefix-square bound dominates its full product because final p>=1 implies p<=p^2 and prefix product is nonnegative. Repeated entries allowed."
+    },
+    {
+      "declaration": "actualRoughPrimeVector_length_le",
+      "assessment": "Rough lower product x^(rho*length), full-product upper x^lam0 and lam0<=5/8 give rho*length<=5/8 for x>1; positive rho permits division and Nat.le_floor_iff. No primality or Nodup hypothesis is needed."
+    },
+    {
+      "declaration": "mapped_upper_prod_le_inflation",
+      "assessment": "List induction multiplies coordinate inflation bounds using nonnegative natural casts and x^tau; exactly one x^tau factor per original slot."
+    },
+    {
+      "declaration": "actualDwellSupport_upper_inflation",
+      "assessment": "At index i the original prefix and squared indexed coordinate cost i+2 copies of tau. i<length<=R implies i+2<=R+1; tau>=0 and original full support give unchanged exponent budget lam0+tau*(R+1)<=lam1. Actual and upper prefix expressions are rewritten by the same valid map_take API."
+    },
+    {
+      "declaration": "actualExtendedThirdSelectedPair_upperSupport",
+      "assessment": "Same-cell chosen-pair whole-cell bounds give physicalLevel+e<=theta and theta<=5/8. Original rough/full support bounds original vector length. tau*(R+1)<=e/2 and delta<=e/32 pay the complete endpoint support theta-2delta. All physical-cell, least-winning-index, mesh, width and positivity premises remain explicit. No caller assignment, replacement-remainder budget or distribution license is introduced."
+    }
+  ],
+  "mathematics_rebind": "All original product, rough rank floor, every prefix-square inflation (i+2)*tau, selected-pair theta-2delta budget, mesh and complete original-vector hypotheses remain literally unchanged. Four repairs only express existing lambda/map/natural-cast/nonempty facts with the pinned APIs; no assignment/remainder license or analytic conclusion is added.",
+  "unchanged_semantic_basis": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-endpoint-budget-map-take-independent-rebind.json",
+    "sha256": "b53c72fab313f19ba0b953f497f176a4ae4ece23139d28b8f69fa4995fec3868",
+    "scope": "Earlier exact dffa full source mathematical review. Earlier statement that dffa had no own failure was true at that earlier review; this later report expressly records the actual first FAILED attempt."
+  },
+  "current_direct_parent": {
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualFrozenCapacitySlots.lean",
+    "source_sha256": "40b5e534d7fbd180c69cc33e2ae75d1c9a854712f4832f19c5b6ebc3fc251007",
+    "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualFrozenCapacitySlots.olean",
+    "object_sha256": "98b74d4a5a2fe2acdd169acece8903ff4ed90cd7a852b7ca39db8b18cf721c0b",
+    "existing_cache_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.ActualFrozenCapacitySlots.json",
+    "cache_sha256": "58c1e21613ec4d5d1bd526d1fc7586dade9d6f1cced3743d5e01feaa3d43de93",
+    "cache_status": "PASS",
+    "exact_source_object_matches": true,
+    "same_parent_object_as_actual_failed_budget_attempt": true,
+    "scope": "Existing strict PASS development receipt and exact current object read only. This reviewer did not run any parent audit or independently replay its imported closure; final owned gate remains runtime responsibility."
+  },
+  "relative_DAG": {
+    "direct_imports_identical": true,
+    "new_project_imports": 0,
+    "new_foreign_roots": 0,
+    "full_imported_closure_replay_claimed": false
+  },
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "resource_profile": {
+    "source_options_identical": true,
+    "resource_or_linter_options_added": false,
+    "checker_or_runtime_policy_modified": false,
+    "existing_concrete_profile": "Root-authorized original6144 bounded diagnostic retry; report itself does not authorize or execute a compile."
+  },
+  "findings": [],
+  "no_determined_mathematical_or_fixed_API_blocker": true,
+  "remaining_gates": [
+    "Actual exact d3b7 bounded retry and complete owned audit are still required. This source-only review does not predict or assert elaboration PASS.",
+    "No arithmetic mean, distribution endpoint or equality to tuplewise greedy allocation follows from full-original upper support alone."
+  ],
+  "lean_invoked": false,
+  "lake_build_checker_invoked": false,
+  "source_checker_pin_modified": false,
+  "bytecode_written": false,
+  "Lean_PASS_or_imported_closure_acceptance_claimed": false
+}

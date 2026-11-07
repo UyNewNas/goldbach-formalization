@@ -1,0 +1,19 @@
+--- S1LowerRosserAudit.before-options-fix.lean
++++ S1LowerRosserAudit.lean
+@@ -44,10 +44,12 @@
+       | .recInfo _ => "recursor"
+     let type ← liftTermElabM do
+       return (← Meta.ppExpr info.type).pretty
+-    let typeExplicit ← withOptions (fun opts =>
+-        (((opts.setBool `pp.explicit true).setBool `pp.universes true)
+-          .setBool `pp.fullNames true).setBool `pp.proofs true) do
+-      liftTermElabM do
++    let typeExplicit ← liftTermElabM do
++      withOptions (fun opts =>
++          let opts := opts.setBool `pp.explicit true
++          let opts := opts.setBool `pp.universes true
++          let opts := opts.setBool `pp.fullNames true
++          opts.setBool `pp.proofs true) do
+         return (← Meta.ppExpr info.type).pretty
+     let record := Json.mkObj [
+       ("name", toJson name.toString),

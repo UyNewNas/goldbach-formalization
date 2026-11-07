@@ -1,0 +1,90 @@
+{
+  "kind": "read-only exact-semantic consumer proposal, no Lean source authored or compiled",
+  "reviewer": "/root/signed_density_oct18",
+  "source_files": {
+    "ActualExtendedThirdCompactPolicySaving": {
+      "sha256": "199f13bb5c6809b06de5f5b7aad19a0a3de0b2f6e47eb2aa6464d58c49e6e8da",
+      "lines": 354,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdCompactResidualProfile": {
+      "sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251",
+      "lines": 230,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdCompactUpperRho": {
+      "sha256": "9b68d3d5e1bdc9847b6e6d29be6b0c20fc7f73bde1d70be0575bef41ff157537",
+      "lines": 293,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdCompactFrontier": {
+      "sha256": "8e15c650d9e5e0b7f72aa16589a4dbf2049687558482d096f48f7fee1635dbe7",
+      "lines": 197,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdInitialCutoff": {
+      "sha256": "69c928f10c84e647febf141fd23d100194ac61f3c7bed86579de99b7bc21259a",
+      "lines": 272,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdCompactCellConvergence": {
+      "sha256": "5bb123e99301c00083529385a23015fbfaf6e4f33ef26e085ad9b4920d16c510",
+      "lines": 122,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualExtendedThirdPhysicalCell": {
+      "sha256": "601afd3ed6aa21e3e3d6569b37a1a0f90cb3ae8fe10427305df4daeeb6639edd",
+      "lines": 275,
+      "review_scope": "lines 1 through 153 only, including full physical-cell and PhysicalGamma/Level primitive definitions; no full-source review claim for this extra file"
+    },
+    "ActualRosserUpperGeneralLimit": {
+      "sha256": "46ad77f78ea908f1ac7a7b203274b223b2cf68a5789fb99a816133ac7d1cf77d",
+      "lines": 109,
+      "review_scope": "complete nontruncated source"
+    },
+    "ActualFirstExitDensityProjection": {
+      "sha256": "7318f2bcd426b4101a7fc3d9a7a3376f695b030729bcfcf68515b0bef1a0c603",
+      "lines": 121,
+      "review_scope": "complete nontruncated source"
+    }
+  },
+  "proposed_module": "ImbalancedChen.ActualExtendedThirdCompactSignedDensityLimit",
+  "proposed_imports": [
+    "ImbalancedChen.ActualExtendedThirdCompactPolicySaving",
+    "ImbalancedChen.ActualExtendedThirdInitialCutoff"
+  ],
+  "primary_public_type": "theorem tendsto_actualExtendedThirdCompactSignedDensityCorrection {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) :\n    Tendsto (fun N : ℕ =>\n      (reciprocalTotientDensity\n          (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho))\n          (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n        actualSmallRosserPlusDensity N N\n          ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n          ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m))",
+  "second_endpoint": {
+    "description": "There exist h > 0, 0 < e <= 1/384 and m with original dyadic step <= e/2 such that for all sufficiently large positive even N the absolute difference between the literal normalized signed correction in primary_public_type and actualExtendedThirdIdealFunctional is <= epsilon. All choices occur before N; no density/profile estimate is a premise.",
+    "quantifiers": "∀ epsilon > 0, ∃ h > 0, ∃ e > 0, e <= 1/384 ∧ ∃ m, step m <= e/2 ∧ ∀ᶠ N in positive even atTop, |literal correction(N,e,h,m) - IdealFunctional| <= epsilon"
+  },
+  "proof_route": [
+    "Get original-cap residual convergence from tendsto_actualExtendedThirdCompactResidualDensitySum hh he0.le he m.",
+    "Along eventual N>1, rewrite exact literal fixed rough density to the SAME retained polynomial via actualExtendedThirdCompactRoughDensity_eq_policy.",
+    "Rewrite exact baseline actualSmallRosserPlusDensity at dyadic cutoff to the SAME initial polynomial via actualExtendedThirdInitialPolicy_eq_actualPlus he0 he hN m.",
+    "Apply actualExtendedThirdCompactPolicySaving hN hh he0 he hmesh. Thus eventual function equality transports the proved original-cap limit; neither sign nor cap is altered.",
+    "For epsilon endpoint choose h,e0,m0 from actualExtendedThirdCompactCellFunctional_uniform_approx (epsilon/2); set e=e0/2; choose m>=m0 and large enough step m<=e/2 using tendsto_actualExtendedThirdDyadicStep; then take residual/density convergence error <epsilon/2 and triangle inequality."
+  ],
+  "objects_preserved": [
+    "same actual upper policy defined before N/test integer, not an abs or positive replacement",
+    "literal signed Mobius lookup fixedRoughCoefficient on exact physical rough support",
+    "same deleted target primes, cap N, w=0, z=N^(19/96)",
+    "same old exponent 299/500-2e and strict exact dyadic first stop (including possible coarse zero cutoff in finite source)",
+    "both strict inherited own-cube conditions; original third negative-prefix mass and subtraction orientation",
+    "same owned half-open dyadic cells, robust physical real-infimum cap construction, no Cartesian/factorial replacement"
+  ],
+  "not_claimed": [
+    "The parent sources are not yet accepted/owned merely from review. Runtime and complete axiom checks remain mandatory.",
+    "This is the actual extended-third rough correction, NOT the full final fourth/fifth/refined-seed policy.",
+    "actualExtendedThirdPhysicalGamma consists of exact real closed-cell infima. It is explicitly not identical by definition to fixed-D certificate extendedClippedLower. A numerical witness/selector semantic bridge remains.",
+    "No adopted currentK=8452171/1250000 bound follows from this correction limit alone.",
+    "No physical w>0 signed density bound nor distribution error is supplied. Existing ActualFirstExitDensityProjection reserve comparison is separate and still needs accepted dependencies.",
+    "The exact initial baseline itself can later be evaluated using existing tendsto_actualSmallRosserPlusDensity_general_normalized with u=qcut, s=(theta-2e)/u; it is deliberately not an assumption of this consumer.",
+    "No new external module/pin/CI/cache modification or compiler started."
+  ],
+  "further_actual_gap": [
+    "Full literal upper density limit still needs general plus baseline at exact qcut; positivity and residual>1 follow from he and hmesh, not from a density supplier.",
+    "Adopted K route additionally needs same-policy fourth/fifth finite signed subtree identities and their accepted density limits, exact certified retained-domain comparison, signed physical reserve and actual distribution estimates."
+  ],
+  "source_changes": []
+}

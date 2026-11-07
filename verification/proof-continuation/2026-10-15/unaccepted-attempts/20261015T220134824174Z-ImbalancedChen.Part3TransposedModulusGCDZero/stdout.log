@@ -1,0 +1,226 @@
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:123:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑
+    m ∈
+      { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+          intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,
+          gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.commonSmoothCarrier,
+    if
+        ↑m ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+          ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then
+      CommonSmoothCutoff.scaledDyadicCutoff d.V ↑m
+    else 0
+in the target expression
+  { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+              intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,
+              gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.complexFactorGamma
+          a *
+        star
+          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            b) *
+      ↑(∑
+          n ∈
+            { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.commonSmoothCarrier,
+          if
+              ↑n ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+                ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then
+            CommonSmoothCutoff.scaledDyadicCutoff d.V ↑n
+          else 0) =
+    { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+          star
+            ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                  intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                  beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                  gamma3 := d.gamma3 }.complexFactorGamma
+              b) *
+        ↑(d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass) +
+      { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+          star
+            ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                  intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                  beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                  gamma3 := d.gamma3 }.complexFactorGamma
+              b) *
+        ↑(∑' (h : ℤ),
+              CommonSmoothCutoff.poissonNonzeroFrequency
+                (d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+                (↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue) /
+                  ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+                h).re
+
+case pos
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+D : ℝ
+n₁ n₂ : ℕ
+a : ℕ × ℕ × ℕ
+ha : a ∈ d.transposedAtom.complexFactorLabels
+b : ℕ × ℕ × ℕ
+hb : b ∈ d.transposedAtom.complexFactorLabels
+hD : D < ↑((complexFactorModulus a).gcd (complexFactorModulus b))
+hmask : decide (D < ↑((complexFactorModulus a).gcd (complexFactorModulus b))) = true
+hc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂
+hL : 0 < (complexFactorModulus a).lcm (complexFactorModulus b)
+he :
+  (∑
+      m ∈
+        { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+            intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,
+            gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.commonSmoothCarrier,
+      if
+          ↑m ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+            ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then
+        CommonSmoothCutoff.scaledDyadicCutoff d.V ↑m
+      else 0) =
+    d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass +
+      (∑' (h : ℤ),
+          CommonSmoothCutoff.poissonNonzeroFrequency (d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+            (↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue) /
+              ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+            h).re
+⊢ { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+              intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,
+              gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.complexFactorGamma
+          a *
+        star
+          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            b) *
+      ↑(∑
+          n ∈
+            { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.commonSmoothCarrier,
+          if
+              ↑n ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+                ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then
+            CommonSmoothCutoff.scaledDyadicCutoff d.V ↑n
+          else 0) =
+    { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+          star
+            ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                  intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                  beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                  gamma3 := d.gamma3 }.complexFactorGamma
+              b) *
+        ↑(d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass) +
+      { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+          star
+            ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                  intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta,
+                  beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                  gamma3 := d.gamma3 }.complexFactorGamma
+              b) *
+        ↑(∑' (h : ℤ),
+              CommonSmoothCutoff.poissonNonzeroFrequency
+                (d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+                (↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue) /
+                  ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+                h).re
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Int.instDecidableModEq
+  has type
+    Decidable
+      (↑n ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.transposedAtom.residue [ZMOD
+        ↑((complexFactorModulus a).lcm (complexFactorModulus b))])
+  but is expected to have type
+    Decidable
+      (↑n ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+        ↑((complexFactorModulus a).lcm (complexFactorModulus b))])
+  in the application
+    @ite ℝ
+      (↑n ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+        ↑((complexFactorModulus a).lcm (complexFactorModulus b))])
+      Int.instDecidableModEq
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:323:26: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:391:40: error: Application type mismatch: The argument
+  add_le_add_right hh 1
+has type
+  1 + 2 * d.U / ↑(q.gcd r) ≤ 1 + 2 * d.U / D
+but is expected to have type
+  2 * d.U / ↑(q.gcd r) + 1 ≤ 2 * d.U / D + 1
+in the application
+  mul_le_mul_of_nonneg_left (add_le_add_right hh 1)
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:443:8: error: linarith failed to find a contradiction
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+Y D : ℝ
+hD : 0 < D
+hU0 : 0 < d.U
+hV0 : 0 ≤ d.V
+hHV : 0 ≤ 1 + Real.log (2 * d.V)
+hHC : 0 ≤ 1 + Real.log d.physicalFactorCap
+hi : 0 ≤ 1 / d.U
+a✝ : 8 * (1 / D + 1 / d.U) < 8 / D + 4 / d.U
+⊢ False
+failed
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:447:79: error: `ring_nf` made no progress on the goal
+ImbalancedChen/Part3TransposedModulusGCDZero.lean:533:4: error: linarith failed to find a contradiction
+B : ℕ
+sigma kappa c0 A delta : ℝ
+hsigma : 0 < sigma
+hdelta : 0 < delta
+p : ℕ := (2 ^ B) ^ 2 - 1
+N : ℕ := p + 19
+C : ℝ := 2 + Real.log 8
+E : ℝ := 16 * |CommonSmoothCutoff.cutoffMass| * C ^ N
+z : ℝ := min sigma delta
+hz : 0 < z
+hC : 1 ≤ C
+hE : 0 ≤ E
+hevent : ∀ᶠ (x : ℝ) in atTop, E * Real.log x ^ (A + ↑N) ≤ x ^ z
+x1 : ℝ
+hx1 : ∀ (b : ℝ), x1 ≤ b → E * Real.log b ^ (A + ↑N) ≤ b ^ z
+x2 : ℝ
+hx2 : ∀ (b : ℝ), x2 ≤ b → 1 ≤ Real.log b
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+hx : max 2 (max x1 x2) ≤ d.scale
+Y : ℝ
+hxScale : 1 ≤ d.scale
+hx0 : 0 < d.scale
+hU0 : 0 < d.U
+hlog : 1 ≤ Real.log d.scale
+hlog0 : 0 < Real.log d.scale
+hPow : 0 < d.scale ^ z
+hD : 0 < d.scale ^ delta
+hzd : d.scale ^ z ≤ d.scale ^ delta
+hzU : d.scale ^ z ≤ d.U
+h1 : 1 / d.scale ^ delta ≤ 1 / d.scale ^ z
+h2 : 1 / d.U ≤ 1 / d.scale ^ z
+a✝ : 2 / d.scale ^ z < 1 / d.scale ^ delta + 1 / d.U
+⊢ False
+failed

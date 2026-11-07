@@ -1,0 +1,930 @@
+{
+  "status": "SOURCE_ONLY_NONAUTHOR_ACTUAL_FIRST_DIAGNOSTIC_EXACT_REBIND",
+  "reviewer": "/root/lower_resume (not source author)",
+  "created_utc": "2026-10-16T00:05:21.498858+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+  "old_sha256": "645531ed78523f0c5e2be9ec8a8200fc24a2a30ad115766b020993330d278c1d",
+  "new_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+  "author_report": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-shared-first-factor-large-paired-gcd-W-first-diagnostic-self-rebind.json",
+    "sha256": "71e9a8f787dda934570ca4171feaff39a0519f836df846b2b1369ef1db9bde1b"
+  },
+  "historical_complete_independent_scope": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-SharedFirstFactorLargePairedGCDW-lower-independent-semantics.json",
+    "sha256": "b28e8ef457decd71a561a591d6e73d6c8674e05050c2fe6075417660c0c380a8",
+    "preserved_unchanged": true
+  },
+  "full_new_source": "import ImbalancedChen.Part3SharedFirstFactorDispersion\r\nimport ImbalancedChen.Part3SharedFirstFactorPairCount\r\n\r\n/-!\r\n# The actual shared-first-factor W at large paired gcd\r\n\r\nThe full primitive p carrier is unchanged. The original cleaned alpha\r\nsupplies the nonzero signed differences; the primitive p gate and the\r\nactual product congruences separately supply coprimality with p.\r\n\r\nOnly the whole W under the actual ordered paired-gcd mask is bounded.\r\nNo raw-zero, nonzero, centered energy or logarithmic payment is asserted.\r\nThe original beta is absent from this energy and is not assumed bounded\r\nby one. Its outside factor stays in the preceding finite Cauchy bridge.\r\n-/\r\n\r\nnamespace ImbalancedChen.Part3\r\n\r\nnoncomputable section\r\n\r\nopen Classical Finset\r\nopen scoped BigOperators Topology\r\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\r\n\r\ndef MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ :=\r\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y\r\n\r\nnamespace SharedFirstFactorLargePairedGCDW\r\n\r\n/- The auxiliary beta=1 record has the original geometry. The row proof\r\nuses the public owned tau-four bound, never a mangled private name. -/\r\nprivate theorem absoluteRow_le_tauFour_of_not_dvd\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\r\n    (hn : ¬(n : ℤ) ∣ d.residue) :\r\n    d.absoluteFactorModulusRow m n ≤\r\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\r\n  let e : MediumAtom := { d with beta := fun _ ↦ 1 }\r\n  have he : MediumAdmissible 0 sigma kappa c0 e := by\r\n    obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, _hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\r\n    refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, ?_, hGamma1, hGamma2, hGamma3⟩\r\n    intro k _\r\n    change ‖(1 : ℂ)‖ ≤ (k.divisors.card : ℝ) ^ 0\r\n    norm_num\r\n  have hgood : e.cleanedBeta n ≠ 0 := by\r\n    change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0\r\n    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)\r\n  exact e.absoluteFactorModulusRow_le_tauFour he m n hgood\r\n\r\n/- These three private polynomial-difference and subpower proofs are\r\nliteral extractions from the already owned TransposedLargeGCDFourier. -/\r\nprivate theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\r\n  unfold MediumAtom.scale\r\n  calc\r\n    1 = (1 : ℝ) * 1 := by norm_num\r\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\r\n\r\nprivate theorem actual_difference_le_polynomial\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\r\n    (hn : n ∈ d.transposedAtom.betaCarrier)\r\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\r\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\r\n      7 * d.scale ^ (max 1 (1 + kappa)) := by\r\n  have hx := one_le_scale hd\r\n  obtain ⟨hU, hV, _, _, _, _, _, ha, _⟩ := hd\r\n  have hxK : d.scale ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    simpa only [Real.rpow_one] using\r\n      Real.rpow_le_rpow_of_exponent_le hx (le_max_left (1 : ℝ) (1 + kappa))\r\n  have haK : |(d.residue : ℝ)| ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    have ha' : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\r\n      simpa only [Nat.cast_natAbs, Int.cast_abs] using ha\r\n    exact ha'.trans (Real.rpow_le_rpow_of_exponent_le hx (le_max_right 1 (1 + kappa)))\r\n  have hms : (m : ℝ) ∈ tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.V) :=\r\n    subset_closure hm\r\n  have hmhi := (CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset\r\n    (lt_of_lt_of_le zero_lt_one hV) hms).2\r\n  have hnhi : (n : ℝ) ≤ 2 * d.U :=\r\n    (show (n : ℝ) ≤ (Nat.floor (2 * d.U) : ℝ) by\r\n      exact_mod_cast (Finset.mem_Icc.mp hn).2).trans\r\n        (Nat.floor_le (by linarith : 0 ≤ 2 * d.U))\r\n  have hmn : (m : ℝ) * n ≤ 6 * d.scale := by\r\n    calc\r\n      _ ≤ (3 * d.V) * (2 * d.U) :=\r\n        mul_le_mul hmhi hnhi (Nat.cast_nonneg _) (by linarith)\r\n      _ = _ := by unfold MediumAtom.scale; ring\r\n  calc\r\n    _ = |(m : ℝ) * n - d.residue| := by\r\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\r\n      push_cast\r\n      rfl\r\n    _ ≤ |(m : ℝ) * n| + |(d.residue : ℝ)| := abs_sub _ _\r\n    _ ≤ 6 * d.scale + d.scale ^ (max 1 (1 + kappa)) := by\r\n      rw [abs_of_nonneg (by positivity : 0 ≤ (m : ℝ) * n)]\r\n      exact add_le_add hmn haK\r\n    _ ≤ _ := by linarith\r\n\r\nprivate theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\r\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\r\n          ¬(n : ℤ) ∣ d.residue →\r\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\r\n              C * d.scale ^ (epsilon / 2) := by\r\n  let K : ℝ := max 1 (1 + kappa)\r\n  have hK : 1 ≤ K := le_max_left _ _\r\n  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK\r\n  let eta : ℝ := epsilon / (2 * K)\r\n  have heta : 0 < eta := div_pos hepsilon (mul_pos (by norm_num) hKpos)\r\n  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']\r\n  obtain ⟨D, hD, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow\r\n    (k := 4) (by norm_num) heta\r\n  refine ⟨D * (7 : ℝ) ^ eta, by positivity, fun B sigma c0 d hd m n hn hm hndiv ↦ ?_⟩\r\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\r\n    intro h\r\n    exact hndiv ⟨m, by nlinarith⟩\r\n  have hx := one_le_scale hd\r\n  calc\r\n    _ ≤ D * (((m : ℤ) * n - d.residue).natAbs : ℝ) ^ eta :=\r\n      hbound _ (Nat.pos_of_ne_zero (Int.natAbs_ne_zero.mpr hne))\r\n    _ ≤ D * (7 * d.scale ^ K) ^ eta :=\r\n      mul_le_mul_of_nonneg_left (Real.rpow_le_rpow (Nat.cast_nonneg _)\r\n        (actual_difference_le_polynomial hd hn hm) heta.le) hD.le\r\n    _ = _ := by\r\n      rw [Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 7) (Real.rpow_nonneg (by linarith) _),\r\n        ← Real.rpow_mul (by linarith : 0 ≤ d.scale), hKeta]\r\n      ring\r\n\r\n\r\nprivate theorem p_pos_lower\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\r\n    (hp : p ∈ d.primitiveFirstFactorCarrier) : 0 < p ∧ d.Q1 ≤ (p : ℝ) := by\r\n  have hlo := (mem_Icc.mp (mem_filter.mp hp).1).1\r\n  have hlower : d.Q1 ≤ (p : ℝ) := (Nat.le_ceil d.Q1).trans (by exact_mod_cast hlo)\r\n  have hpos : (0 : ℝ) < p := (zero_lt_one.trans_le hd.2.2.1).trans_le hlower\r\n  exact ⟨by exact_mod_cast hpos, hlower⟩\r\n\r\nprivate theorem p_coprime_residue\r\n    {d : MediumAtom} {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n    Int.gcd d.residue p = 1 := by\r\n  simpa only [Int.gcd, Int.natAbs_natCast] using (mem_filter.mp hp).2.symm\r\n\r\nprivate theorem slice_gamma (d : MediumAtom) (p : ℕ) (r : ℕ × ℕ × ℕ) :\r\n    (d.q1SliceAtom p).transposedAtom.complexFactorGamma r =\r\n      (if r.1 = p then (1 : ℂ) else 0) * d.gamma2 r.2.1 * d.gamma3 r.2.2 := rfl\r\n\r\n/-- This is the actual p-divisibility support, with all complex labels. -/\r\nprivate theorem absoluteRow_eq_zero_of_not_product (d : MediumAtom) (p m n : ℕ)\r\n    (hnot : ¬Int.ModEq p ((m : ℤ) * n) d.residue) :\r\n    (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n = 0 := by\r\n  unfold MediumAtom.absoluteFactorModulusRow\r\n  rw [show (d.q1SliceAtom p).transposedAtom.residue = d.residue from rfl]\r\n  apply sum_eq_zero\r\n  intro r _\r\n  by_cases hq : r.1 = p\r\n  · by_cases hr : Int.ModEq (complexFactorModulus r) ((m : ℤ) * n) d.residue\r\n    · have hdiv : (p : ℤ) ∣ (complexFactorModulus r : ℤ) := by\r\n        refine ⟨((r.2.1 * r.2.2 : ℕ) : ℤ), ?_⟩\r\n        simp only [complexFactorModulus]\r\n        rw [hq]\r\n        push_cast\r\n        ring\r\n      exact (hnot (hr.of_dvd hdiv)).elim\r\n    · simp only [if_neg hr]\r\n  · simp only [slice_gamma, if_neg hq, zero_mul, norm_zero, ite_self]\r\n\r\n/- Exact primitive-product and congruence cancellation from the owned\r\nComplexCRTConsumer, specialized to the same p. The original numerator\r\nis signed and no size condition is used. -/\r\nprivate theorem coprime_of_product_congruent {a : ℤ} {p n m : ℕ}\r\n    (ha : Int.gcd a p = 1) (h : Int.ModEq p ((n : ℤ) * m) a) :\r\n    n.Coprime p ∧ m.Coprime p := by\r\n  have hg : Int.gcd ((n : ℤ) * m) p = 1 := by\r\n    rw [← Int.gcd_emod ((n : ℤ) * m) p, h.eq, Int.gcd_emod, ha]\r\n  have hnm : (n * m).Coprime p := by\r\n    simpa [Int.gcd, Int.natAbs_mul] using hg\r\n  exact Nat.coprime_mul_iff_left.mp hnm\r\n\r\nprivate theorem shared_conditions_of_products {a : ℤ} {p m n₁ n₂ : ℕ}\r\n    (hp : 0 < p) (ha : Int.gcd a p = 1)\r\n    (h₁ : Int.ModEq p ((m : ℤ) * n₁) a)\r\n    (h₂ : Int.ModEq p ((m : ℤ) * n₂) a) :\r\n    n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ := by\r\n  refine ⟨(coprime_of_product_congruent ha h₁).2,\r\n    (coprime_of_product_congruent ha h₂).2, ?_⟩\r\n  have hcross : Int.ModEq p (a * n₁) (a * n₂) :=\r\n    (h₂.mul_right (n₁ : ℤ)).symm.trans\r\n      (by simpa [mul_assoc, mul_comm, mul_left_comm] using h₁.mul_right (n₂ : ℤ))\r\n  apply Int.natCast_modEq_iff.mp\r\n  simpa only [Int.gcd_comm (p : ℤ) a, ha, Nat.cast_one, Int.ediv_one]\r\n    using hcross.cancel_left_div_gcd (by exact_mod_cast hp : (0 : ℤ) < p)\r\n\r\n/-- The finite progression count is the owned Alpha quotient-block count. -/\r\nprivate theorem sum_weight_product_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p n : ℕ}\r\n    (hp : 0 < p) (hn : n.Coprime p) (a : ℤ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n) a then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / p + 1 := by\r\n  have hpR : (0 : ℝ) < p := by exact_mod_cast hp\r\n  have hceil : (Nat.ceil (3 * d.V) : ℝ) ≤ 4 * d.V := by\r\n    have hh := Nat.ceil_lt_add_one (by linarith : 0 ≤ 3 * d.V)\r\n    linarith\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n) a then (1 : ℝ) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      split_ifs\r\n      · exact CommonSmoothCutoff.scaledDyadicCutoff_le_one _ _\r\n      · exact le_rfl\r\n    _ = (((Icc 0 (Nat.ceil (3 * d.V))).filter\r\n        (fun m : ℕ ↦ Int.ModEq p ((m : ℤ) * n) a)).card : ℝ) := by\r\n      rw [← sum_filter]\r\n      simp [MediumAtom.commonSmoothCarrier, MediumAtom.transposedAtom]\r\n    _ ≤ ((Nat.ceil (3 * d.V) / p + 1 : ℕ) : ℝ) := by\r\n      exact_mod_cast PairedAlphaDeletion.card_product_modEq_le (Nat.ceil (3 * d.V)) p n a hn\r\n    _ ≤ (Nat.ceil (3 * d.V) : ℝ) / p + 1 := by\r\n      push_cast\r\n      have hh : ((Nat.ceil (3 * d.V) / p : ℕ) : ℝ) ≤\r\n          (Nat.ceil (3 * d.V) : ℝ) / p := Nat.cast_div_le\r\n      exact add_le_add hh le_rfl\r\n    _ ≤ _ := add_le_add (div_le_div_of_nonneg_right hceil hpR.le) le_rfl\r\n\r\nprivate theorem sum_weight_two_products_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p : ℕ} (hp : 0 < p)\r\n    (ha : Int.gcd d.residue p = 1) (n₁ n₂ : ℕ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n          Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\r\n      if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n        4 * d.V / p + 1 else 0 := by\r\n  by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n  · rw [if_pos hc]\r\n    apply le_trans _ (sum_weight_product_le hV hp hc.1 d.residue)\r\n    apply sum_le_sum\r\n    intro m _\r\n    by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n    · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n      · simp only [h₁, h₂, and_self, if_true, le_refl]\r\n      · simpa only [h₁, h₂, and_false, if_false, if_true] using\r\n          d.transposedAtom.commonSmoothWeight_nonneg m\r\n    · simp only [h₁, false_and, if_false, le_refl]\r\n  · rw [if_neg hc]\r\n    have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m else 0) = 0 := by\r\n      apply sum_eq_zero\r\n      intro m _\r\n      apply if_neg\r\n      exact fun hm ↦ hc (shared_conditions_of_products hp ha hm.1 hm.2)\r\n    exact hz.le\r\n\r\n/-- Whole factor-pair norm, with the p-progressions still inside its cost. -/\r\nprivate theorem slice_factorPair_norm_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ p : ℕ,\r\n        p ∈ d.primitiveFirstFactorCarrier → ∀ n₁ n₂ : ℕ,\r\n          n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\r\n            ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\r\n              ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\r\n                C * d.scale ^ epsilon *\r\n                  (if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n                    4 * d.V / p + 1 else 0) := by\r\n  obtain ⟨C, hC, hbound⟩ := tauFour_difference_subpower kappa hepsilon\r\n  refine ⟨C ^ 2, by positivity, fun B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂ hnd₁ hnd₂ ↦ ?_⟩\r\n  have hs := mediumAdmissible_q1SliceAtom hd hp\r\n  have hx := one_le_scale hd\r\n  have hp0 := (p_pos_lower hd hp).1\r\n  have hsum := ((d.q1SliceAtom p).transposedAtom.commonFactorPairWeight_norm_le n₁ n₂)\r\n  have hcar : (d.q1SliceAtom p).transposedAtom.commonSmoothCarrier =\r\n      d.transposedAtom.commonSmoothCarrier := rfl\r\n  have hweight (m : ℕ) : (d.q1SliceAtom p).transposedAtom.commonSmoothWeight m =\r\n      d.transposedAtom.commonSmoothWeight m := rfl\r\n  rw [hcar] at hsum\r\n  simp only [hweight] at hsum\r\n  apply hsum.trans\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m * (C ^ 2 * d.scale ^ epsilon) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      by_cases hm : d.transposedAtom.commonSmoothWeight m = 0\r\n      · simp only [hm, zero_mul, ite_self, le_refl]\r\n      by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n      · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n        · rw [if_pos ⟨h₁, h₂⟩]\r\n          have ha₁ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₁ hnd₁).trans\r\n              (hbound B sigma c0 d hd m n₁ hn₁ hm hnd₁)\r\n          have ha₂ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₂ hnd₂).trans\r\n              (hbound B sigma c0 d hd m n₂ hn₂ hm hnd₂)\r\n          have hh : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n                C ^ 2 * d.scale ^ epsilon := by\r\n            calc\r\n              _ ≤ (C * d.scale ^ (epsilon / 2)) * (C * d.scale ^ (epsilon / 2)) :=\r\n                mul_le_mul ha₁ ha₂\r\n                  ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow_nonneg m n₂)\r\n                  (mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _))\r\n              _ = _ := by\r\n                rw [mul_mul_mul_comm, ← Real.rpow_add (zero_lt_one.trans_le hx),\r\n                  show epsilon / 2 + epsilon / 2 = epsilon by ring, pow_two]\r\n          exact (show _ = d.transposedAtom.commonSmoothWeight m *\r\n            ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂) by ring).trans_le\r\n                (mul_le_mul_of_nonneg_left hh (d.transposedAtom.commonSmoothWeight_nonneg m))\r\n        · rw [absoluteRow_eq_zero_of_not_product d p m n₂ h₂, mul_zero]\r\n          simp only [h₂, and_false, if_false, le_refl]\r\n      · rw [absoluteRow_eq_zero_of_not_product d p m n₁ h₁, mul_zero, zero_mul]\r\n        simp only [h₁, false_and, if_false, le_refl]\r\n    _ = (C ^ 2 * d.scale ^ epsilon) *\r\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n          if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n              Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n            d.transposedAtom.commonSmoothWeight m else 0 := by\r\n      rw [mul_sum]\r\n      apply sum_congr rfl\r\n      intro m _\r\n      split_ifs <;> ring\r\n    _ ≤ _ := mul_le_mul_of_nonneg_left\r\n      (sum_weight_two_products_le hd.2.1 hp0 (p_coprime_residue hp) n₁ n₂)\r\n      (mul_nonneg (sq_nonneg C) (Real.rpow_nonneg (zero_le_one.trans hx) _))\r\n\r\nprivate theorem cleaned_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\r\n  have hclean := mediumAdmissible_cleanedAlphaAtom hd\r\n  have hAlpha : ∀ n ∈ d.cleanedAlphaAtom.alphaCarrier, ‖d.cleanedAlphaAtom.alpha n‖ ≤ 1 := by\r\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hclean\r\n    exact hAlpha\r\n  change ‖if n ∈ d.cleanedAlphaAtom.alphaCarrier then d.cleanedAlphaAtom.alpha n else 0‖ ≤ 1\r\n  by_cases hn : n ∈ d.cleanedAlphaAtom.alphaCarrier\r\n  · simpa only [if_pos hn] using hAlpha n hn\r\n  · simp only [if_neg hn, norm_zero, zero_le_one]\r\n\r\nprivate theorem card_primitiveCarrier_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1 := by\r\n  have hsub : d.primitiveFirstFactorCarrier ⊆ Ioc 0 (Nat.floor (2 * d.Q1)) := by\r\n    intro p hp\r\n    have hlo := (mem_Icc.mp (mem_filter.mp hp).1).2\r\n    exact mem_Ioc.mpr ⟨(p_pos_lower hd hp).1, hlo⟩\r\n  have hc := card_le_card hsub\r\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hc\r\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤ (Nat.floor (2 * d.Q1) : ℝ) by\r\n    exact_mod_cast hc).trans (Nat.floor_le (by linarith [hd.2.2.1]))\r\n\r\nend SharedFirstFactorLargePairedGCDW\r\n\r\n/-- A whole-W bound for precisely the same ordered large-paired-gcd mask.\r\nThere is no bound for its raw zero or full nonzero part in this theorem. -/\r\ntheorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\r\n        ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\r\n          C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n            (16 * d.U ^ 2 / Y + 4 * d.Q1 * d.U * (1 + Real.log (2 * d.U))) := by\r\n  obtain ⟨C, hC, hfactor⟩ :=\r\n    SharedFirstFactorLargePairedGCDW.slice_factorPair_norm_subpower kappa hepsilon\r\n  refine ⟨C, hC, fun B sigma c0 d hd Y hY ↦ ?_⟩\r\n  have hx := SharedFirstFactorLargePairedGCDW.one_le_scale hd\r\n  have hXeps : 0 ≤ C * d.scale ^ epsilon :=\r\n    mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _)\r\n  have hU0 : 0 ≤ d.U := zero_le_one.trans hd.1\r\n  have hV0 : 0 ≤ d.V := zero_le_one.trans hd.2.1\r\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\r\n  have hYpos : 0 < Y := zero_lt_one.trans_le hY\r\n  have hH : 0 ≤ 1 + Real.log (2 * d.U) := by\r\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.U by linarith [hd.1])]\r\n  have hSlice (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n      ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ ≤\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) := by\r\n    have hpR : (0 : ℝ) < p := by\r\n      exact_mod_cast (SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp).1\r\n    have hA : 0 ≤ C * d.scale ^ epsilon * (4 * d.V / p + 1) :=\r\n      mul_nonneg hXeps (by positivity)\r\n    have hExpand : (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y =\r\n        ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if Y < (n₁.gcd n₂ : ℝ) then\r\n            d.cleanedAlphaAtom.transposedAtom.beta n₁ *\r\n              star (d.cleanedAlphaAtom.transposedAtom.beta n₂) *\r\n                (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ else 0 := rfl\r\n    rw [hExpand]\r\n    calc\r\n      _ ≤ ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧ Y < (n₁.gcd n₂ : ℝ) then\r\n            C * d.scale ^ epsilon * (4 * d.V / p + 1) else 0 := by\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₁ hn₁\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₂ hn₂\r\n        by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n        · rw [if_pos hy]\r\n          by_cases h₁ : d.cleanedAlphaAtom.transposedAtom.beta n₁ = 0\r\n          · simp only [h₁, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          by_cases h₂ : d.cleanedAlphaAtom.transposedAtom.beta n₂ = 0\r\n          · simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          have hb := hfactor B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₁)\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₂)\r\n          by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n          · have hfull : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ) := ⟨hc.1, hc.2.1, hc.2.2, hy⟩\r\n            rw [if_pos hc] at hb\r\n            rw [if_pos hfull]\r\n            simp only [norm_mul, norm_star]\r\n            have hcoef : ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\r\n                ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ ≤ 1 := by\r\n              simpa only [one_mul] using mul_le_mul\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₁)\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₂)\r\n                (norm_nonneg _) zero_le_one\r\n            calc\r\n              _ ≤ 1 * (C * d.scale ^ epsilon * (4 * d.V / p + 1)) :=\r\n                mul_le_mul hcoef hb (norm_nonneg _) zero_le_one\r\n              _ = _ := one_mul _\r\n          · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hc ⟨h.1, h.2.1, h.2.2.1⟩\r\n            have hzero : (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ = 0 := by\r\n              apply norm_eq_zero.mp\r\n              exact le_antisymm (by simpa only [if_neg hc, mul_zero] using hb) (norm_nonneg _)\r\n            simp only [hzero, mul_zero, norm_zero, if_neg hnot, le_refl]\r\n        · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n              Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hy h.2.2.2\r\n          simp only [if_neg hy, if_neg hnot, norm_zero, le_refl]\r\n      _ = _ := by\r\n        rw [← sum_product', ← sum_filter]\r\n        simp only [sharedPrimitiveLargeGCDPairs, sum_const, nsmul_eq_mul]\r\n        ring\r\n  have hRect : ∀ p ∈ d.primitiveFirstFactorCarrier,\r\n      (4 * d.V / p + 1) * ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n    intro p hp\r\n    obtain ⟨hp0, hpQ⟩ := SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp\r\n    have hpR : (0 : ℝ) < p := by exact_mod_cast hp0\r\n    have hA : 4 * d.V / p + 1 ≤ 4 * d.V / d.Q1 + 1 :=\r\n      add_le_add (div_le_div_of_nonneg_left (by positivity) hQpos hpQ) le_rfl\r\n    have hCount := d.card_sharedPrimitiveLargeGCDPairs_le hd.1 hY hp0\r\n    have hden : d.Q1 * Y ≤ (p : ℝ) * Y := mul_le_mul_of_nonneg_right hpQ hYpos.le\r\n    have hCount' : ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)) := hCount.trans\r\n      (add_le_add (div_le_div_of_nonneg_left (by positivity) (mul_pos hQpos hYpos) hden) le_rfl)\r\n    exact mul_le_mul hA hCount' (Nat.cast_nonneg _) (by positivity)\r\n  unfold MediumAtom.sharedLargePairedGCDW\r\n  rw [show d.cleanedAlphaAtom.primitiveFirstFactorCarrier = d.primitiveFirstFactorCarrier from rfl]\r\n  calc\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ := norm_sum_le _ _\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) :=\r\n      sum_le_sum hSlice\r\n    _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n      apply sum_le_sum\r\n      intro p hp\r\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left (hRect p hp) hXeps\r\n    _ = (d.primitiveFirstFactorCarrier.card : ℝ) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) := by\r\n      rw [sum_const, nsmul_eq_mul]\r\n    _ ≤ (2 * d.Q1) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) :=\r\n      mul_le_mul_of_nonneg_right (SharedFirstFactorLargePairedGCDW.card_primitiveCarrier_le hd)\r\n        (mul_nonneg (mul_nonneg hXeps (by positivity))\r\n          (add_nonneg (div_nonneg (by positivity) (mul_nonneg hQpos.le hYpos.le))\r\n            (mul_nonneg (mul_nonneg (by norm_num) hU0) hH)))\r\n    _ = _ := by\r\n      field_simp [hQpos.ne', hYpos.ne']\r\n      ring\r\n\r\nend\r\n\r\nend ImbalancedChen.Part3\r\n",
+  "all_seventeen_complete_declarations": [
+    {
+      "name": "MediumAtom.sharedLargePairedGCDW",
+      "kind": "def",
+      "private": false,
+      "start_line": 25,
+      "complete_source_header": "def MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ",
+      "complete_definition": "def MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ :=\n∑ p ∈ d.primitiveFirstFactorCarrier,\r\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y"
+    },
+    {
+      "name": "absoluteRow_le_tauFour_of_not_dvd",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 33,
+      "complete_source_header": "private theorem absoluteRow_le_tauFour_of_not_dvd\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\r\n    (hn : ¬(n : ℤ) ∣ d.residue) :\r\n    d.absoluteFactorModulusRow m n ≤\r\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)",
+      "complete_proof_body_after_by": "let e : MediumAtom := { d with beta := fun _ ↦ 1 }\r\n  have he : MediumAdmissible 0 sigma kappa c0 e := by\r\n    obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, _hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\r\n    refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, ?_, hGamma1, hGamma2, hGamma3⟩\r\n    intro k _\r\n    change ‖(1 : ℂ)‖ ≤ (k.divisors.card : ℝ) ^ 0\r\n    norm_num\r\n  have hgood : e.cleanedBeta n ≠ 0 := by\r\n    change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0\r\n    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)\r\n  exact e.absoluteFactorModulusRow_le_tauFour he m n hgood"
+    },
+    {
+      "name": "one_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 55,
+      "complete_source_header": "private theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+      "complete_proof_body_after_by": "unfold MediumAtom.scale\r\n  calc\r\n    1 = (1 : ℝ) * 1 := by norm_num\r\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])"
+    },
+    {
+      "name": "actual_difference_le_polynomial",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 63,
+      "complete_source_header": "private theorem actual_difference_le_polynomial\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\r\n    (hn : n ∈ d.transposedAtom.betaCarrier)\r\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\r\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\r\n      7 * d.scale ^ (max 1 (1 + kappa))",
+      "complete_proof_body_after_by": "have hx := one_le_scale hd\r\n  obtain ⟨hU, hV, _, _, _, _, _, ha, _⟩ := hd\r\n  have hxK : d.scale ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    simpa only [Real.rpow_one] using\r\n      Real.rpow_le_rpow_of_exponent_le hx (le_max_left (1 : ℝ) (1 + kappa))\r\n  have haK : |(d.residue : ℝ)| ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    have ha' : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\r\n      simpa only [Nat.cast_natAbs, Int.cast_abs] using ha\r\n    exact ha'.trans (Real.rpow_le_rpow_of_exponent_le hx (le_max_right 1 (1 + kappa)))\r\n  have hms : (m : ℝ) ∈ tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.V) :=\r\n    subset_closure hm\r\n  have hmhi := (CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset\r\n    (lt_of_lt_of_le zero_lt_one hV) hms).2\r\n  have hnhi : (n : ℝ) ≤ 2 * d.U :=\r\n    (show (n : ℝ) ≤ (Nat.floor (2 * d.U) : ℝ) by\r\n      exact_mod_cast (Finset.mem_Icc.mp hn).2).trans\r\n        (Nat.floor_le (by linarith : 0 ≤ 2 * d.U))\r\n  have hmn : (m : ℝ) * n ≤ 6 * d.scale := by\r\n    calc\r\n      _ ≤ (3 * d.V) * (2 * d.U) :=\r\n        mul_le_mul hmhi hnhi (Nat.cast_nonneg _) (by linarith)\r\n      _ = _ := by unfold MediumAtom.scale; ring\r\n  calc\r\n    _ = |(m : ℝ) * n - d.residue| := by\r\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\r\n      push_cast\r\n      rfl\r\n    _ ≤ |(m : ℝ) * n| + |(d.residue : ℝ)| := abs_sub _ _\r\n    _ ≤ 6 * d.scale + d.scale ^ (max 1 (1 + kappa)) := by\r\n      rw [abs_of_nonneg (by positivity : 0 ≤ (m : ℝ) * n)]\r\n      exact add_le_add hmn haK\r\n    _ ≤ _ := by linarith"
+    },
+    {
+      "name": "tauFour_difference_subpower",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 103,
+      "complete_source_header": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\r\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\r\n          ¬(n : ℤ) ∣ d.residue →\r\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\r\n              C * d.scale ^ (epsilon / 2)",
+      "complete_proof_body_after_by": "let K : ℝ := max 1 (1 + kappa)\r\n  have hK : 1 ≤ K := le_max_left _ _\r\n  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK\r\n  let eta : ℝ := epsilon / (2 * K)\r\n  have heta : 0 < eta := div_pos hepsilon (mul_pos (by norm_num) hKpos)\r\n  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']\r\n  obtain ⟨D, hD, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow\r\n    (k := 4) (by norm_num) heta\r\n  refine ⟨D * (7 : ℝ) ^ eta, by positivity, fun B sigma c0 d hd m n hn hm hndiv ↦ ?_⟩\r\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\r\n    intro h\r\n    exact hndiv ⟨m, by nlinarith⟩\r\n  have hx := one_le_scale hd\r\n  calc\r\n    _ ≤ D * (((m : ℤ) * n - d.residue).natAbs : ℝ) ^ eta :=\r\n      hbound _ (Nat.pos_of_ne_zero (Int.natAbs_ne_zero.mpr hne))\r\n    _ ≤ D * (7 * d.scale ^ K) ^ eta :=\r\n      mul_le_mul_of_nonneg_left (Real.rpow_le_rpow (Nat.cast_nonneg _)\r\n        (actual_difference_le_polynomial hd hn hm) heta.le) hD.le\r\n    _ = _ := by\r\n      rw [Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 7) (Real.rpow_nonneg (by linarith) _),\r\n        ← Real.rpow_mul (by linarith : 0 ≤ d.scale), hKeta]\r\n      ring"
+    },
+    {
+      "name": "p_pos_lower",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 136,
+      "complete_source_header": "private theorem p_pos_lower\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\r\n    (hp : p ∈ d.primitiveFirstFactorCarrier) : 0 < p ∧ d.Q1 ≤ (p : ℝ)",
+      "complete_proof_body_after_by": "have hlo := (mem_Icc.mp (mem_filter.mp hp).1).1\r\n  have hlower : d.Q1 ≤ (p : ℝ) := (Nat.le_ceil d.Q1).trans (by exact_mod_cast hlo)\r\n  have hpos : (0 : ℝ) < p := (zero_lt_one.trans_le hd.2.2.1).trans_le hlower\r\n  exact ⟨by exact_mod_cast hpos, hlower⟩"
+    },
+    {
+      "name": "p_coprime_residue",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 145,
+      "complete_source_header": "private theorem p_coprime_residue\r\n    {d : MediumAtom} {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n    Int.gcd d.residue p = 1",
+      "complete_proof_body_after_by": "simpa only [Int.gcd, Int.natAbs_natCast] using (mem_filter.mp hp).2.symm"
+    },
+    {
+      "name": "slice_gamma",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 150,
+      "complete_source_header": "private theorem slice_gamma (d : MediumAtom) (p : ℕ) (r : ℕ × ℕ × ℕ) :\r\n    (d.q1SliceAtom p).transposedAtom.complexFactorGamma r =\r\n      (if r.1 = p then (1 : ℂ) else 0) * d.gamma2 r.2.1 * d.gamma3 r.2.2",
+      "complete_term_proof": "rfl"
+    },
+    {
+      "name": "absoluteRow_eq_zero_of_not_product",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 155,
+      "complete_source_header": "private theorem absoluteRow_eq_zero_of_not_product (d : MediumAtom) (p m n : ℕ)\r\n    (hnot : ¬Int.ModEq p ((m : ℤ) * n) d.residue) :\r\n    (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n = 0",
+      "complete_proof_body_after_by": "unfold MediumAtom.absoluteFactorModulusRow\r\n  rw [show (d.q1SliceAtom p).transposedAtom.residue = d.residue from rfl]\r\n  apply sum_eq_zero\r\n  intro r _\r\n  by_cases hq : r.1 = p\r\n  · by_cases hr : Int.ModEq (complexFactorModulus r) ((m : ℤ) * n) d.residue\r\n    · have hdiv : (p : ℤ) ∣ (complexFactorModulus r : ℤ) := by\r\n        refine ⟨((r.2.1 * r.2.2 : ℕ) : ℤ), ?_⟩\r\n        simp only [complexFactorModulus]\r\n        rw [hq]\r\n        push_cast\r\n        ring\r\n      exact (hnot (hr.of_dvd hdiv)).elim\r\n    · simp only [if_neg hr]\r\n  · simp only [slice_gamma, if_neg hq, zero_mul, norm_zero, ite_self]"
+    },
+    {
+      "name": "coprime_of_product_congruent",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 177,
+      "complete_source_header": "private theorem coprime_of_product_congruent {a : ℤ} {p n m : ℕ}\r\n    (ha : Int.gcd a p = 1) (h : Int.ModEq p ((n : ℤ) * m) a) :\r\n    n.Coprime p ∧ m.Coprime p",
+      "complete_proof_body_after_by": "have hg : Int.gcd ((n : ℤ) * m) p = 1 := by\r\n    rw [← Int.gcd_emod ((n : ℤ) * m) p, h.eq, Int.gcd_emod, ha]\r\n  have hnm : (n * m).Coprime p := by\r\n    simpa [Int.gcd, Int.natAbs_mul] using hg\r\n  exact Nat.coprime_mul_iff_left.mp hnm"
+    },
+    {
+      "name": "shared_conditions_of_products",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 186,
+      "complete_source_header": "private theorem shared_conditions_of_products {a : ℤ} {p m n₁ n₂ : ℕ}\r\n    (hp : 0 < p) (ha : Int.gcd a p = 1)\r\n    (h₁ : Int.ModEq p ((m : ℤ) * n₁) a)\r\n    (h₂ : Int.ModEq p ((m : ℤ) * n₂) a) :\r\n    n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂",
+      "complete_proof_body_after_by": "refine ⟨(coprime_of_product_congruent ha h₁).2,\r\n    (coprime_of_product_congruent ha h₂).2, ?_⟩\r\n  have hcross : Int.ModEq p (a * n₁) (a * n₂) :=\r\n    (h₂.mul_right (n₁ : ℤ)).symm.trans\r\n      (by simpa [mul_assoc, mul_comm, mul_left_comm] using h₁.mul_right (n₂ : ℤ))\r\n  apply Int.natCast_modEq_iff.mp\r\n  simpa only [Int.gcd_comm (p : ℤ) a, ha, Nat.cast_one, Int.ediv_one]\r\n    using hcross.cancel_left_div_gcd (by exact_mod_cast hp : (0 : ℤ) < p)"
+    },
+    {
+      "name": "sum_weight_product_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 201,
+      "complete_source_header": "private theorem sum_weight_product_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p n : ℕ}\r\n    (hp : 0 < p) (hn : n.Coprime p) (a : ℤ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n) a then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / p + 1",
+      "complete_proof_body_after_by": "have hpR : (0 : ℝ) < p := by exact_mod_cast hp\r\n  have hceil : (Nat.ceil (3 * d.V) : ℝ) ≤ 4 * d.V := by\r\n    have hh := Nat.ceil_lt_add_one (by linarith : 0 ≤ 3 * d.V)\r\n    linarith\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n) a then (1 : ℝ) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      split_ifs\r\n      · exact CommonSmoothCutoff.scaledDyadicCutoff_le_one _ _\r\n      · exact le_rfl\r\n    _ = (((Icc 0 (Nat.ceil (3 * d.V))).filter\r\n        (fun m : ℕ ↦ Int.ModEq p ((m : ℤ) * n) a)).card : ℝ) := by\r\n      rw [← sum_filter]\r\n      simp [MediumAtom.commonSmoothCarrier, MediumAtom.transposedAtom]\r\n    _ ≤ ((Nat.ceil (3 * d.V) / p + 1 : ℕ) : ℝ) := by\r\n      exact_mod_cast PairedAlphaDeletion.card_product_modEq_le (Nat.ceil (3 * d.V)) p n a hn\r\n    _ ≤ (Nat.ceil (3 * d.V) : ℝ) / p + 1 := by\r\n      push_cast\r\n      have hh : ((Nat.ceil (3 * d.V) / p : ℕ) : ℝ) ≤\r\n          (Nat.ceil (3 * d.V) : ℝ) / p := Nat.cast_div_le\r\n      exact add_le_add hh le_rfl\r\n    _ ≤ _ := add_le_add (div_le_div_of_nonneg_right hceil hpR.le) le_rfl"
+    },
+    {
+      "name": "sum_weight_two_products_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 232,
+      "complete_source_header": "private theorem sum_weight_two_products_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p : ℕ} (hp : 0 < p)\r\n    (ha : Int.gcd d.residue p = 1) (n₁ n₂ : ℕ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n          Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\r\n      if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n        4 * d.V / p + 1 else 0",
+      "complete_proof_body_after_by": "by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n  · rw [if_pos hc]\r\n    apply le_trans _ (sum_weight_product_le hV hp hc.1 d.residue)\r\n    apply sum_le_sum\r\n    intro m _\r\n    by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n    · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n      · simp only [h₁, h₂, and_self, if_true, le_refl]\r\n      · simpa only [h₁, h₂, and_false, if_false, if_true] using\r\n          d.transposedAtom.commonSmoothWeight_nonneg m\r\n    · simp only [h₁, false_and, if_false, le_refl]\r\n  · rw [if_neg hc]\r\n    have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m else 0) = 0 := by\r\n      apply sum_eq_zero\r\n      intro m _\r\n      apply if_neg\r\n      exact fun hm ↦ hc (shared_conditions_of_products hp ha hm.1 hm.2)\r\n    exact hz.le"
+    },
+    {
+      "name": "slice_factorPair_norm_subpower",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 264,
+      "complete_source_header": "private theorem slice_factorPair_norm_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ p : ℕ,\r\n        p ∈ d.primitiveFirstFactorCarrier → ∀ n₁ n₂ : ℕ,\r\n          n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\r\n            ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\r\n              ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\r\n                C * d.scale ^ epsilon *\r\n                  (if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n                    4 * d.V / p + 1 else 0)",
+      "complete_proof_body_after_by": "obtain ⟨C, hC, hbound⟩ := tauFour_difference_subpower kappa hepsilon\r\n  refine ⟨C ^ 2, by positivity, fun B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂ hnd₁ hnd₂ ↦ ?_⟩\r\n  have hs := mediumAdmissible_q1SliceAtom hd hp\r\n  have hx := one_le_scale hd\r\n  have hp0 := (p_pos_lower hd hp).1\r\n  have hsum := ((d.q1SliceAtom p).transposedAtom.commonFactorPairWeight_norm_le n₁ n₂)\r\n  have hcar : (d.q1SliceAtom p).transposedAtom.commonSmoothCarrier =\r\n      d.transposedAtom.commonSmoothCarrier := rfl\r\n  have hweight (m : ℕ) : (d.q1SliceAtom p).transposedAtom.commonSmoothWeight m =\r\n      d.transposedAtom.commonSmoothWeight m := rfl\r\n  rw [hcar] at hsum\r\n  simp only [hweight] at hsum\r\n  apply hsum.trans\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m * (C ^ 2 * d.scale ^ epsilon) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      by_cases hm : d.transposedAtom.commonSmoothWeight m = 0\r\n      · simp only [hm, zero_mul, ite_self, le_refl]\r\n      by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n      · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n        · rw [if_pos ⟨h₁, h₂⟩]\r\n          have ha₁ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₁ hnd₁).trans\r\n              (hbound B sigma c0 d hd m n₁ hn₁ hm hnd₁)\r\n          have ha₂ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₂ hnd₂).trans\r\n              (hbound B sigma c0 d hd m n₂ hn₂ hm hnd₂)\r\n          have hh : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n                C ^ 2 * d.scale ^ epsilon := by\r\n            calc\r\n              _ ≤ (C * d.scale ^ (epsilon / 2)) * (C * d.scale ^ (epsilon / 2)) :=\r\n                mul_le_mul ha₁ ha₂\r\n                  ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow_nonneg m n₂)\r\n                  (mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _))\r\n              _ = _ := by\r\n                rw [mul_mul_mul_comm, ← Real.rpow_add (zero_lt_one.trans_le hx),\r\n                  show epsilon / 2 + epsilon / 2 = epsilon by ring, pow_two]\r\n          exact (show _ = d.transposedAtom.commonSmoothWeight m *\r\n            ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂) by ring).trans_le\r\n                (mul_le_mul_of_nonneg_left hh (d.transposedAtom.commonSmoothWeight_nonneg m))\r\n        · rw [absoluteRow_eq_zero_of_not_product d p m n₂ h₂, mul_zero]\r\n          simp only [h₂, and_false, if_false, le_refl]\r\n      · rw [absoluteRow_eq_zero_of_not_product d p m n₁ h₁, mul_zero, zero_mul]\r\n        simp only [h₁, false_and, if_false, le_refl]\r\n    _ = (C ^ 2 * d.scale ^ epsilon) *\r\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n          if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n              Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n            d.transposedAtom.commonSmoothWeight m else 0 := by\r\n      rw [mul_sum]\r\n      apply sum_congr rfl\r\n      intro m _\r\n      split_ifs <;> ring\r\n    _ ≤ _ := mul_le_mul_of_nonneg_left\r\n      (sum_weight_two_products_le hd.2.1 hp0 (p_coprime_residue hp) n₁ n₂)\r\n      (mul_nonneg (sq_nonneg C) (Real.rpow_nonneg (zero_le_one.trans hx) _))"
+    },
+    {
+      "name": "cleaned_beta_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 340,
+      "complete_source_header": "private theorem cleaned_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1",
+      "complete_proof_body_after_by": "have hclean := mediumAdmissible_cleanedAlphaAtom hd\r\n  have hAlpha : ∀ n ∈ d.cleanedAlphaAtom.alphaCarrier, ‖d.cleanedAlphaAtom.alpha n‖ ≤ 1 := by\r\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hclean\r\n    exact hAlpha\r\n  change ‖if n ∈ d.cleanedAlphaAtom.alphaCarrier then d.cleanedAlphaAtom.alpha n else 0‖ ≤ 1\r\n  by_cases hn : n ∈ d.cleanedAlphaAtom.alphaCarrier\r\n  · simpa only [if_pos hn] using hAlpha n hn\r\n  · simp only [if_neg hn, norm_zero, zero_le_one]"
+    },
+    {
+      "name": "card_primitiveCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 353,
+      "complete_source_header": "private theorem card_primitiveCarrier_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1",
+      "complete_proof_body_after_by": "have hsub : d.primitiveFirstFactorCarrier ⊆ Ioc 0 (Nat.floor (2 * d.Q1)) := by\r\n    intro p hp\r\n    have hlo := (mem_Icc.mp (mem_filter.mp hp).1).2\r\n    exact mem_Ioc.mpr ⟨(p_pos_lower hd hp).1, hlo⟩\r\n  have hc := card_le_card hsub\r\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hc\r\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤ (Nat.floor (2 * d.Q1) : ℝ) by\r\n    exact_mod_cast hc).trans (Nat.floor_le (by linarith [hd.2.2.1]))"
+    },
+    {
+      "name": "cleanedAlpha_sharedLargePairedGCDW_bound",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 370,
+      "complete_source_header": "theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\r\n        ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\r\n          C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n            (16 * d.U ^ 2 / Y + 4 * d.Q1 * d.U * (1 + Real.log (2 * d.U)))",
+      "complete_proof_body_after_by": "obtain ⟨C, hC, hfactor⟩ :=\r\n    SharedFirstFactorLargePairedGCDW.slice_factorPair_norm_subpower kappa hepsilon\r\n  refine ⟨C, hC, fun B sigma c0 d hd Y hY ↦ ?_⟩\r\n  have hx := SharedFirstFactorLargePairedGCDW.one_le_scale hd\r\n  have hXeps : 0 ≤ C * d.scale ^ epsilon :=\r\n    mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _)\r\n  have hU0 : 0 ≤ d.U := zero_le_one.trans hd.1\r\n  have hV0 : 0 ≤ d.V := zero_le_one.trans hd.2.1\r\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\r\n  have hYpos : 0 < Y := zero_lt_one.trans_le hY\r\n  have hH : 0 ≤ 1 + Real.log (2 * d.U) := by\r\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.U by linarith [hd.1])]\r\n  have hSlice (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n      ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ ≤\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) := by\r\n    have hpR : (0 : ℝ) < p := by\r\n      exact_mod_cast (SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp).1\r\n    have hA : 0 ≤ C * d.scale ^ epsilon * (4 * d.V / p + 1) :=\r\n      mul_nonneg hXeps (by positivity)\r\n    have hExpand : (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y =\r\n        ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if Y < (n₁.gcd n₂ : ℝ) then\r\n            d.cleanedAlphaAtom.transposedAtom.beta n₁ *\r\n              star (d.cleanedAlphaAtom.transposedAtom.beta n₂) *\r\n                (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ else 0 := rfl\r\n    rw [hExpand]\r\n    calc\r\n      _ ≤ ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧ Y < (n₁.gcd n₂ : ℝ) then\r\n            C * d.scale ^ epsilon * (4 * d.V / p + 1) else 0 := by\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₁ hn₁\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₂ hn₂\r\n        by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n        · rw [if_pos hy]\r\n          by_cases h₁ : d.cleanedAlphaAtom.transposedAtom.beta n₁ = 0\r\n          · simp only [h₁, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          by_cases h₂ : d.cleanedAlphaAtom.transposedAtom.beta n₂ = 0\r\n          · simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          have hb := hfactor B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₁)\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₂)\r\n          by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n          · have hfull : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ) := ⟨hc.1, hc.2.1, hc.2.2, hy⟩\r\n            rw [if_pos hc] at hb\r\n            rw [if_pos hfull]\r\n            simp only [norm_mul, norm_star]\r\n            have hcoef : ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\r\n                ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ ≤ 1 := by\r\n              simpa only [one_mul] using mul_le_mul\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₁)\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₂)\r\n                (norm_nonneg _) zero_le_one\r\n            calc\r\n              _ ≤ 1 * (C * d.scale ^ epsilon * (4 * d.V / p + 1)) :=\r\n                mul_le_mul hcoef hb (norm_nonneg _) zero_le_one\r\n              _ = _ := one_mul _\r\n          · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hc ⟨h.1, h.2.1, h.2.2.1⟩\r\n            have hzero : (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ = 0 := by\r\n              apply norm_eq_zero.mp\r\n              exact le_antisymm (by simpa only [if_neg hc, mul_zero] using hb) (norm_nonneg _)\r\n            simp only [hzero, mul_zero, norm_zero, if_neg hnot, le_refl]\r\n        · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n              Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hy h.2.2.2\r\n          simp only [if_neg hy, if_neg hnot, norm_zero, le_refl]\r\n      _ = _ := by\r\n        rw [← sum_product', ← sum_filter]\r\n        simp only [sharedPrimitiveLargeGCDPairs, sum_const, nsmul_eq_mul]\r\n        ring\r\n  have hRect : ∀ p ∈ d.primitiveFirstFactorCarrier,\r\n      (4 * d.V / p + 1) * ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n    intro p hp\r\n    obtain ⟨hp0, hpQ⟩ := SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp\r\n    have hpR : (0 : ℝ) < p := by exact_mod_cast hp0\r\n    have hA : 4 * d.V / p + 1 ≤ 4 * d.V / d.Q1 + 1 :=\r\n      add_le_add (div_le_div_of_nonneg_left (by positivity) hQpos hpQ) le_rfl\r\n    have hCount := d.card_sharedPrimitiveLargeGCDPairs_le hd.1 hY hp0\r\n    have hden : d.Q1 * Y ≤ (p : ℝ) * Y := mul_le_mul_of_nonneg_right hpQ hYpos.le\r\n    have hCount' : ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)) := hCount.trans\r\n      (add_le_add (div_le_div_of_nonneg_left (by positivity) (mul_pos hQpos hYpos) hden) le_rfl)\r\n    exact mul_le_mul hA hCount' (Nat.cast_nonneg _) (by positivity)\r\n  unfold MediumAtom.sharedLargePairedGCDW\r\n  rw [show d.cleanedAlphaAtom.primitiveFirstFactorCarrier = d.primitiveFirstFactorCarrier from rfl]\r\n  calc\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ := norm_sum_le _ _\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) :=\r\n      sum_le_sum hSlice\r\n    _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n      apply sum_le_sum\r\n      intro p hp\r\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left (hRect p hp) hXeps\r\n    _ = (d.primitiveFirstFactorCarrier.card : ℝ) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) := by\r\n      rw [sum_const, nsmul_eq_mul]\r\n    _ ≤ (2 * d.Q1) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) :=\r\n      mul_le_mul_of_nonneg_right (SharedFirstFactorLargePairedGCDW.card_primitiveCarrier_le hd)\r\n        (mul_nonneg (mul_nonneg hXeps (by positivity))\r\n          (add_nonneg (div_nonneg (by positivity) (mul_nonneg hQpos.le hYpos.le))\r\n            (mul_nonneg (mul_nonneg (by norm_num) hU0) hH)))\r\n    _ = _ := by\r\n      field_simp [hQpos.ne', hYpos.ne']\r\n      ring"
+    }
+  ],
+  "declaration_count": 17,
+  "definition_count": 1,
+  "complete_header_extraction": "All tactic declarations split at actual :=by; slice_gamma is the direct top-level :=rfl term, not dropped or misparsed.",
+  "all_seventeen_complete_headers_unchanged": true,
+  "sole_definition_unchanged": true,
+  "slice_gamma_complete_term_proof_unchanged": true,
+  "other_fifteen_proofs_unchanged": true,
+  "changedproof": [
+    "cleanedAlpha_sharedLargePairedGCDW_bound"
+  ],
+  "literal_edits": [
+    {
+      "old": "simp only [h₂, star_zero, mul_zero, norm_zero]",
+      "new": "simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]"
+    },
+    {
+      "old": "rw [← sum_product, ← sum_filter]",
+      "new": "rw [← sum_product', ← sum_filter]"
+    }
+  ],
+  "offset_byte_patches": [
+    {
+      "old_start": 21870,
+      "old_end": 21870,
+      "new_start": 21870,
+      "new_end": 21880,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "7a65726f5f6d756c2c20"
+    },
+    {
+      "old_start": 23880,
+      "old_end": 23880,
+      "new_start": 23890,
+      "new_end": 23891,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "27"
+    }
+  ],
+  "both_literal_and_offset_forward_inverse_exact": true,
+  "actual_failure": {
+    "receipt_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T235913820331Z-ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW/receipt.json",
+    "receipt_sha256": "e86d56b8df0fd85690ce252a710ebf406d62ab5be57080aa13e2c7c3bed8b740",
+    "stdout_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T235913820331Z-ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW/stdout.log",
+    "stdout_sha256": "5c81e2512cd125eb0ab0a283bdb1d56e4885e56ad0ce735b6e588747d012b517",
+    "full_stdout": "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:421:51: error: typeclass instance problem is stuck\n  Preorder ?m.661\n\nNote: Lean will not try to resolve this typeclass instance problem because the type argument to `Preorder` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.\nImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:421:45: error: Type mismatch\n  le_rfl\nhas type\n  ?m.663 ≤ ?m.663\nbut is expected to have type\n  ‖0 * (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤ 0\nImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:451:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x ∈ ?s, ∑ y ∈ ?t, ?f (x, y)\nin the target expression\n  (∑ n₁ ∈ d.transposedAtom.betaCarrier,\n      ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] ∧ Y < ↑(n₁.gcd n₂) then\n          C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)\n        else 0) =\n    C * d.scale ^ epsilon * (4 * d.V / ↑p + 1) * ↑(#(sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y))\n\nkappa epsilon : ℝ\nhepsilon : 0 < epsilon\nC : ℝ\nhC : 0 < C\nhfactor :\n  ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      ∀ p ∈ d.primitiveFirstFactorCarrier,\n        ∀ (n₁ n₂ : ℕ),\n          n₁ ∈ d.transposedAtom.betaCarrier →\n            n₂ ∈ d.transposedAtom.betaCarrier →\n              ¬↑n₁ ∣ d.residue →\n                ¬↑n₂ ∣ d.residue →\n                  ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\n                    C * d.scale ^ epsilon *\n                      if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] then 4 * d.V / ↑p + 1 else 0\nB : ℕ\nsigma c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nY : ℝ\nhY : 1 ≤ Y\nhx : 1 ≤ d.scale\nhXeps : 0 ≤ C * d.scale ^ epsilon\nhU0 : 0 ≤ d.U\nhV0 : 0 ≤ d.V\nhQpos : 0 < d.Q1\nhYpos : 0 < Y\nhH : 0 ≤ 1 + Real.log (2 * d.U)\np : ℕ\nhp : p ∈ d.primitiveFirstFactorCarrier\nhpR : 0 < ↑p\nhA : 0 ≤ C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)\nhExpand :\n  (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y =\n    ∑ n₁ ∈ d.transposedAtom.betaCarrier,\n      ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        if Y < ↑(n₁.gcd n₂) then\n          d.cleanedAlphaAtom.transposedAtom.beta n₁ * star (d.cleanedAlphaAtom.transposedAtom.beta n₂) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂\n        else 0\n⊢ (∑ n₁ ∈ d.transposedAtom.betaCarrier,\n      ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] ∧ Y < ↑(n₁.gcd n₂) then\n          C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)\n        else 0) =\n    C * d.scale ^ epsilon * (4 * d.V / ↑p + 1) * ↑(#(sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y))\nImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:420:48: error: This simp argument is unused:\n  norm_zero\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [h₂, star_zero, mul_zero]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "old_status_preserved": "FAILED"
+  },
+  "direct_parents_actual_bindings": [
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "object_sha256": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+      "actual_owned_audits": [
+        {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T230927740441Z/receipt.json",
+          "sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorPairCount",
+      "source_sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+      "object_sha256": "0e6e985e7c2b514ed1d84ca349a39a2367b4a147ecf2b2f7a55033cc60b1a935",
+      "actual_owned_audits": [
+        {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T234824636753Z/receipt.json",
+          "sha256": "9f6cd4afd92e1cd8347739f10272a6290ef2fe8dff59f7dbb065349686409456"
+        }
+      ]
+    }
+  ],
+  "native_reverse_product_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+    "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+    "current_equals_pinned_blob": true,
+    "lines": [
+      75,
+      90
+    ],
+    "literal_source": "\n/-- The product over a product set equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_product'`. -/\n@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product'` -/]\ntheorem prod_product (s : Finset γ) (t : Finset α) (f : γ × α → β) :\n    ∏ x ∈ s ×ˢ t, f x = ∏ x ∈ s, ∏ y ∈ t, f (x, y) :=\n  prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product\n\n/-- The product over a product set equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_product`. -/\n@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product` -/]\ntheorem prod_product' (s : Finset γ) (t : Finset α) (f : γ → α → β) :\n    ∏ x ∈ s ×ˢ t, f x.1 x.2 = ∏ x ∈ s, ∏ y ∈ t, f x y :=\n  prod_product .."
+  },
+  "independent_proof_review": [
+    "The actual n2-zero branch first has beta(n1)*star(0)*weight. Existing star_zero and mul_zero turn the first product into0 but leave0*weight inside the norm. The added zero_mul removes exactly that remaining factor, so norm_zero is now used and the original hA/le_rfl branches have the actual real order goal. No coefficient nonzero condition or estimate changes.",
+    "The actual mask sum is curried in n1 and n2. Pinned Finset Sigma lines75–90 explicitly provide the sum_product-prime variant for this reverse direction. Replacing only the unprimed name restores the exact same ordered Cartesian product and same primitive/same-p/large-gcd filtered cardinal, including all diagonals.",
+    "The original full b28 mathematical review remains applicable because the only differences are these two literal proof/API sites and all17 headers/one definition/imports are equal. The original arbitrary-real kappa, signed residue, actual clean-alpha divisor deletion, full shared composite p, both unit gates, same-p congruence, original-beta-outside convention and exact16/4 wholeW bound remain unchanged. No rawzero/NZ/payment or final-target claim is added.",
+    "Current direct parent source and original-object SHA pairs match the real old failed run and their actual full-owned audit receipts. This new source is still uncompiled by this reviewer; old645 FAILED receipt and historical source review are retained."
+  ],
+  "fresh_relative_project_DAG": {
+    "parser_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py",
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "candidate_count": 61,
+    "parent_union_count": 60,
+    "addedlocal": [
+      "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW"
+    ],
+    "addedforeign": [],
+    "missing": [],
+    "parser_findings": [],
+    "current_local_sources": {
+      "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW": {
+        "sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3SharedFirstFactorPairCount"
+        ]
+      },
+      "ImbalancedChen.Part3SharedFirstFactorDispersion": {
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3TransposedDispersion"
+        ]
+      },
+      "ImbalancedChen.Part3TransposedDispersion": {
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ]
+      },
+      "ImbalancedChen.Part3CommonPoisson": {
+        "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3ComplexCRTConsumer",
+          "Mathlib.Analysis.Fourier.PoissonSummation"
+        ]
+      },
+      "ImbalancedChen.Part3CommonSmoothCutoff": {
+        "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+          "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+        ]
+      },
+      "ImbalancedChen.Part3ComplexDispersion": {
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ]
+      },
+      "ImbalancedChen.Part3DistributionTargets": {
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ]
+      },
+      "ImbalancedChen.RestrictedResidueScale": {
+        "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductGridRanges": {
+        "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ]
+      },
+      "ImbalancedChen.PanProductGrid": {
+        "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductAggregateBudget": {
+        "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductLiuBridge"
+        ]
+      },
+      "ImbalancedChen.PanProductLiuBridge": {
+        "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ]
+      },
+      "ImbalancedChen.PanProductResidueBudget": {
+        "sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ]
+      },
+      "ImbalancedChen.PanProductStrips": {
+        "sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      "ImbalancedChen.HalfProductPanFinite": {
+        "sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ]
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.OrderedBad": {
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RationalPowers"
+        ]
+      },
+      "ImbalancedChen.RationalPowers": {
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ]
+      },
+      "ImbalancedChen.Counting": {
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassFibres": {
+        "sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Data.Nat.Sqrt",
+          "Mathlib.NumberTheory.PrimeCounting"
+        ]
+      },
+      "ImbalancedChen.PrimeRectanglePrefixes": {
+        "sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ]
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ]
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ]
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ]
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ]
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.SelectedGridRanges": {
+        "sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ]
+      },
+      "ImbalancedChen.ActualSieveGate": {
+        "sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.SingularSeries": {
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ]
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ]
+      },
+      "ImbalancedChen.ResidueSelectorBudget": {
+        "sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductMassSplit": {
+        "sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductMass": {
+        "sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ]
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ]
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ]
+      },
+      "ImbalancedChen.Multiplicity": {
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassLimit": {
+        "sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassError": {
+        "sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassSplit": {
+        "sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      "ImbalancedChen.UniformPrimeTail": {
+        "sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.Asymptotics.Defs",
+          "Mathlib.Analysis.Real.Sqrt",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.NumberTheory.PrimeCounting",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.MassLogIntegral": {
+        "sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry"
+        ]
+      },
+      "ImbalancedChen.Part3ComplexCRTConsumer": {
+        "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Data.Int.ModEq",
+          "Mathlib.Data.Nat.ModEq"
+        ]
+      },
+      "ImbalancedChen.Part3FactorFiberDivisor": {
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ]
+      },
+      "ImbalancedChen.Part3SharedFirstFactorPairCount": {
+        "sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3PairedAlphaDeletion"
+        ]
+      },
+      "ImbalancedChen.Part3PairedAlphaDeletion": {
+        "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SignedDivisorDeletion",
+          "ImbalancedChen.Part3TransposedDispersion"
+        ]
+      },
+      "ImbalancedChen.Part3SignedDivisorDeletion": {
+        "sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ActualLargeGCDBetaMass"
+        ]
+      },
+      "ImbalancedChen.Part3ActualLargeGCDBetaMass": {
+        "sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+          "Mathlib.Data.Nat.Factorization.Basic",
+          "Mathlib.NumberTheory.Divisors",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Analysis.Real.Sqrt"
+        ]
+      },
+      "ImbalancedChen.Part3PolynomialResidueDivisorBound": {
+        "sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+        ]
+      },
+      "ImbalancedChen.Part3CleanBetaLargeGCDMajorant": {
+        "sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3FactorFiberDivisor",
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ]
+      }
+    },
+    "scope": "project source header graph and foreign fringe only; not full foreign/cache acceptance"
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_HEAD_tracked_clean": [
+    {
+      "name": "goldbach",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "tracked_diff_HEAD_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "tracked_diff_HEAD_exit_code": 0
+    }
+  ],
+  "no_source_edit_Lean_build_install_cache_mutation_or_resource_change": true,
+  "bytecode_writes_disabled": true,
+  "not_strict_or_owned_acceptance": true
+}

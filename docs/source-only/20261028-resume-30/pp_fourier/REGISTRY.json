@@ -1,0 +1,123 @@
+{
+  "schema": "paper-first-resume-source-registry-v1",
+  "task_id": "pp_fourier",
+  "worker": "/root/pp_fourier",
+  "status": "SOURCE_WRITTEN_UNCOMPILED_ZERO_CREDIT",
+  "module": "ImbalancedChen.P5Z.AllRankCauchyCubeTail",
+  "target_install_path": "ImbalancedChen/P5AllRankCauchyCubeTail.lean",
+  "source": {
+    "path": "goldbach-proof-continuation/docs/source-only/20261028-resume-30/pp_fourier/P5AllRankCauchyCubeTail.lean",
+    "sha256": "bca1b6c0aa92d67ac5e5d3f1d6d917ae46656209ca37eaa1e45133227b83b6db",
+    "bytes": 15768
+  },
+  "paper_anchors": [
+    {
+      "path": "chen-imbalanced-semiprimes/paper/source/modules/distribution-prime-product-completion-20261010.txt",
+      "sha256": "a953b3233c1249b4791830da33b76a58b19ca110a5e1b5b6172b3248a00053e1",
+      "bytes": 23235,
+      "lines": "153-163, section 4 equation (F): mixed Fourier L1 and uniform cube truncation error; 165-171 complete-modulus payment remains separate"
+    },
+    {
+      "path": "chen-imbalanced-semiprimes/paper/source/manuscript-body.tex",
+      "lines": "256-357 eq:current-PP",
+      "sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd"
+    }
+  ],
+  "imports": [
+    "ImbalancedChen.P5AllRankCauchyKernelIntegral",
+    "Mathlib.MeasureTheory.Integral.Bochner.Set",
+    "Mathlib.MeasureTheory.Integral.Pi",
+    "Mathlib.Analysis.SpecialFunctions.ImproperIntegrals"
+  ],
+  "source_dependencies": [
+    {
+      "path": "goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB-Mellin-AllRank/P5AllRankCauchyKernelIntegral.lean",
+      "sha256": "49161610166d61a9bdc0a4fec98aac462a9c60379e832d2205670e47409a597f",
+      "bytes": 3556,
+      "compiled": false,
+      "formal_credit": 0,
+      "install_path": "ImbalancedChen/P5AllRankCauchyKernelIntegral.lean",
+      "role": "direct import"
+    },
+    {
+      "path": "goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB-Mellin-AllRank/P5AllRankCompactFourierExactMean.lean",
+      "sha256": "dac5d159619fcc8e98a533dc3a74dd10de054f59b8b2235c508b40e414f4f57e",
+      "bytes": 4003,
+      "compiled": false,
+      "formal_credit": 0,
+      "install_path": "ImbalancedChen/P5AllRankCompactFourierExactMean.lean",
+      "role": "transitive direct-import prerequisite"
+    },
+    {
+      "path": "goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB5-Mellin-Pointwise/P5AllRankMixedFourierPointwise.lean",
+      "sha256": "23f2b8e0bec3d8a73e92cf4c4e63c9ddd4871e93aa7facf08f5dc8b8e9cb7c3a",
+      "bytes": 6580,
+      "compiled": false,
+      "formal_credit": 0,
+      "install_path": "ImbalancedChen/P5AllRankMixedFourierPointwise.lean",
+      "role": "pointwise upstream caller; NOT imported by this module"
+    }
+  ],
+  "mathlib": {
+    "repo": "https://github.com/leanprover-community/mathlib4",
+    "revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "source_api_reads": [
+      "Mathlib/Analysis/SpecialFunctions/ImproperIntegrals.lean:integral_Ioi_rpow_of_lt, integrableOn_Ioi_rpow_of_lt",
+      "Mathlib/MeasureTheory/Integral/Pi.lean:Integrable.fintype_prod, integral_fintype_prod_volume_eq_prod",
+      "Mathlib/MeasureTheory/Integral/Bochner/Set.lean:integral_indicator, setIntegral_mono_on, integral_add_compl"
+    ],
+    "api_read_only": true,
+    "compiler_run": false
+  },
+  "new_declarations": [
+    "measurableSet_tail1",
+    "measurableSet_outsideCube",
+    "tail1_integrable",
+    "slab_integrable",
+    "cubeTail_integrable",
+    "cubeTail_le_sum_slab",
+    "integral_slab",
+    "integral_cubeTail_le",
+    "cauchy_positive_tail_le",
+    "cauchy_absolute_tail_le",
+    "normalizedCauchy_integrable",
+    "normalizedCauchy_nonneg",
+    "normalizedCauchy_integral",
+    "normalizedCauchy_tail_le",
+    "normalized_cube_tail_le",
+    "physical_cubeTail_eq",
+    "normalized_physical_cube_tail_le",
+    "physical_frequency_tail_le",
+    "normalized_synthesis_error_le"
+  ],
+  "proof_steps": [
+    "Build literal outside-cube and coordinate-slab functions with strict cutoff; prove measurability/integrability.",
+    "Prove a finite union pointwise majorant and perform product Fubini, including rank zero. No disjointness or rank-four premise.",
+    "Derive the one-dimensional positive Cauchy tail from comparison with x^(-2) and its actual improper integral; reflect to include both signs.",
+    "Normalize the coordinate kernel to mass one, derive all-rank product cube tail, and restore precisely (2*pi)^(-m).",
+    "Derive the normalized A-tail and retained-cube synthesis error from the mixed-IBP pointwise majorant, without paying H^m."
+  ],
+  "actually_discharged_obligation": "The missing all-rank product-Cauchy omitted-cube union/Fubini calculation in section 4 (F), including explicit normalized synthesis bound m*D/H and m=0.",
+  "assumptions": [
+    "Only ordinary integrability/measurability, nonnegative D, positive H and the upstream mixed-IBP pointwise derivative estimate for a physical-frequency A are needed by the final synthesis theorem.",
+    "No arithmetic hPP/hMedium/hUpper/hLower or cube-tail estimate is supplied as a hypothesis."
+  ],
+  "remaining": [
+    "Compiler/type elaboration belongs to user; every file and cited draft dependency is uncompiled.",
+    "Connect the actual Euclidean Fourier transform at normalized nu to the physical-frequency A(xi) via xi=2*pi*nu, using actual dilation/Jacobian; this file does not claim that bridge.",
+    "Construct and bind actual all-rank independent W_N and its D_T derivative payment to the preceding pointwise theorem.",
+    "Insert Fourier tail after the complete modulus count/mean sum, including b=T and reciprocal-totient payments; no final PP discrepancy has been proved."
+  ],
+  "complete_module": true,
+  "task_complete": false,
+  "ready_to_install": false,
+  "compiled": false,
+  "formal_credit": 0,
+  "checker_run": false,
+  "new_manuscript_gap": null,
+  "static_review": {
+    "forbidden_proof_tokens_found": [],
+    "declarations_with_proof_bodies": 19,
+    "status": "author source inspection only; no kernel verification"
+  }
+}

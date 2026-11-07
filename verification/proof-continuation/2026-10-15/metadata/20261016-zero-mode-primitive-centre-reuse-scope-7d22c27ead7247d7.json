@@ -1,0 +1,576 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T18:57:51.784469+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_REUSE_SCOPE_GAP_IDENTIFIED",
+  "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+  "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "conclusion": "The actual common-Poisson identity preserves raw zero-2V+U exactly but does not pay it. Pinned finite W-zero/U-zero covariance and V-zero=U-zero identities are genuine unconditional algebraic reuse material. The complete provider zero-mode payment explicitly requires SW on paired beta, which the actual U-side common-smoothing route does not have; its U/V logarithmic remainder payment also requires paired beta at short C.2 scale. No complete direct actual cancellation/payment endpoint was established.",
+  "project_source_evidence": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPoisson.lean",
+      "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "imports": [
+        "ImbalancedChen.Part3CommonSmoothCutoff",
+        "ImbalancedChen.Part3ComplexCRTConsumer",
+        "Mathlib.Analysis.Fourier.PoissonSummation"
+      ],
+      "selected_declarations": [
+        {
+          "name": "MediumAtom.complexCRTSmoothZeroPart",
+          "kind": "def",
+          "line": 211,
+          "complete_source_header": "def MediumAtom.complexCRTSmoothZeroPart (d : MediumAtom) : ℂ",
+          "primitive_source_definition": "def MediumAtom.complexCRTSmoothZeroPart (d : MediumAtom) : ℂ :=\n  ∑ l ∈ d.complexRowLabels, ∑ l' ∈ d.complexRowLabels,\n    d.complexBetaCoefficient l * star (d.complexBetaCoefficient l') *\n      (if ComplexCRT.Compatible (complexFactorModulus l.1)\n        (complexFactorModulus l'.1) l.2 l'.2 then\n          ((d.U / (complexFactorModulus l.1).lcm (complexFactorModulus l'.1)) *\n            CommonSmoothCutoff.cutoffMass : ℝ) else 0)"
+        },
+        {
+          "name": "MediumAtom.complexCRTSmoothNonzeroPart",
+          "kind": "def",
+          "line": 220,
+          "complete_source_header": "def MediumAtom.complexCRTSmoothNonzeroPart (d : MediumAtom) : ℂ",
+          "primitive_source_definition": "def MediumAtom.complexCRTSmoothNonzeroPart (d : MediumAtom) : ℂ :=\n  ∑ l ∈ d.complexRowLabels, ∑ l' ∈ d.complexRowLabels,\n    d.complexBetaCoefficient l * star (d.complexBetaCoefficient l') *\n      (if ComplexCRT.Compatible (complexFactorModulus l.1)\n        (complexFactorModulus l'.1) l.2 l'.2 then\n          (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n            (d.U / (complexFactorModulus l.1).lcm (complexFactorModulus l'.1))\n            ((ComplexCRT.residue (complexFactorModulus l.1)\n              (complexFactorModulus l'.1) l.2 l'.2 d.residue : ℝ) /\n                (complexFactorModulus l.1).lcm (complexFactorModulus l'.1)) h).re\n      else 0 : ℝ)"
+        },
+        {
+          "name": "MediumAtom.complexDispersionW_commonSmooth_eq_zero_add_nonzero",
+          "kind": "theorem",
+          "line": 234,
+          "complete_source_header": "theorem MediumAtom.complexDispersionW_commonSmooth_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.complexDispersionW d.commonSmoothCarrier d.commonSmoothWeight : ℂ) =\n      d.complexCRTSmoothZeroPart + d.complexCRTSmoothNonzeroPart"
+        },
+        {
+          "name": "MediumAtom.complex_dispersion_identity_with_commonPoisson",
+          "kind": "theorem",
+          "line": 264,
+          "complete_source_header": "theorem MediumAtom.complex_dispersion_identity_with_commonPoisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ n ∈ d.commonSmoothCarrier,\n      d.commonSmoothWeight n * ‖d.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.complexCRTSmoothZeroPart -\n        2 * (d.complexDispersionV d.commonSmoothCarrier d.commonSmoothWeight : ℂ) +\n          (d.complexDispersionU d.commonSmoothCarrier d.commonSmoothWeight : ℂ)) +\n        d.complexCRTSmoothNonzeroPart"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "imports": [
+        "ImbalancedChen.Part3ComplexDispersion",
+        "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+        "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+        "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+      ],
+      "selected_declarations": [
+        {
+          "name": "MediumAtom.commonSmoothCarrier",
+          "kind": "def",
+          "line": 157,
+          "complete_source_header": "def MediumAtom.commonSmoothCarrier (d : MediumAtom) : Finset ℕ",
+          "primitive_source_definition": "def MediumAtom.commonSmoothCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc 0 (Nat.ceil (3 * d.U))"
+        },
+        {
+          "name": "MediumAtom.commonSmoothWeight",
+          "kind": "def",
+          "line": 160,
+          "complete_source_header": "def MediumAtom.commonSmoothWeight (d : MediumAtom) (n : ℕ) : ℝ",
+          "primitive_source_definition": "def MediumAtom.commonSmoothWeight (d : MediumAtom) (n : ℕ) : ℝ :=\n  CommonSmoothCutoff.scaledDyadicCutoff d.U (n : ℝ)"
+        },
+        {
+          "name": "MediumAtom.signedError_norm_sq_le_commonSmoothDispersion",
+          "kind": "theorem",
+          "line": 202,
+          "complete_source_header": "theorem MediumAtom.signedError_norm_sq_le_commonSmoothDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ ^ 2) *\n        (d.complexDispersionW d.commonSmoothCarrier d.commonSmoothWeight -\n          2 * d.complexDispersionV d.commonSmoothCarrier d.commonSmoothWeight +\n            d.complexDispersionU d.commonSmoothCarrier d.commonSmoothWeight)"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "imports": [
+        "ImbalancedChen.Part3DistributionTargets",
+        "Mathlib.Analysis.Complex.Basic",
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Algebra.Star.BigOperators"
+      ],
+      "selected_declarations": [
+        {
+          "name": "complexPrimitiveKernel",
+          "kind": "def",
+          "line": 50,
+          "complete_source_header": "def complexPrimitiveKernel (a : ℤ) (q n m : ℕ) : ℂ",
+          "primitive_source_definition": "def complexPrimitiveKernel (a : ℤ) (q n m : ℕ) : ℂ :=\n  (if (((n * m : ℕ) : ℤ) % (q : ℤ) = a % (q : ℤ)) then 1 else 0) -\n    (if (n * m).Coprime q then 1 else 0) / (Nat.totient q : ℂ)"
+        },
+        {
+          "name": "MediumAtom.complexFactorLabels",
+          "kind": "def",
+          "line": 40,
+          "complete_source_header": "def MediumAtom.complexFactorLabels (d : MediumAtom) : Finset (ℕ × ℕ × ℕ)",
+          "primitive_source_definition": "def MediumAtom.complexFactorLabels (d : MediumAtom) : Finset (ℕ × ℕ × ℕ) :=\n  factorCarrier d.Q1 ×ˢ (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3)"
+        },
+        {
+          "name": "MediumAtom.complexDispersionW",
+          "kind": "def",
+          "line": 173,
+          "complete_source_header": "def MediumAtom.complexDispersionW (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ",
+          "primitive_source_definition": "def MediumAtom.complexDispersionW (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n * ‖d.complexProgressionRow n‖ ^ 2"
+        },
+        {
+          "name": "MediumAtom.complexDispersionV",
+          "kind": "def",
+          "line": 177,
+          "complete_source_header": "def MediumAtom.complexDispersionV (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ",
+          "primitive_source_definition": "def MediumAtom.complexDispersionV (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n *\n    (d.complexProgressionRow n * star (d.complexPrincipalRow n)).re"
+        },
+        {
+          "name": "MediumAtom.complexDispersionU",
+          "kind": "def",
+          "line": 182,
+          "complete_source_header": "def MediumAtom.complexDispersionU (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ",
+          "primitive_source_definition": "def MediumAtom.complexDispersionU (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n * ‖d.complexPrincipalRow n‖ ^ 2"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "imports": [
+        "ImbalancedChen.Part3ComplexDispersion",
+        "Mathlib.Data.Int.ModEq",
+        "Mathlib.Data.Nat.ModEq"
+      ],
+      "selected_declarations": [
+        {
+          "name": "Compatible",
+          "kind": "def",
+          "line": 81,
+          "complete_source_header": "def Compatible (q r m1 m2 : ℕ) : Prop",
+          "primitive_source_definition": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2"
+        },
+        {
+          "name": "MediumAtom.complexBetaCoefficient",
+          "kind": "def",
+          "line": 164,
+          "complete_source_header": "def MediumAtom.complexBetaCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ × ℕ) × ℕ) : ℂ",
+          "primitive_source_definition": "def MediumAtom.complexBetaCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ × ℕ) × ℕ) : ℂ := d.complexFactorGamma l.1 * d.beta l.2"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "imports": [
+        "ImbalancedChen.RestrictedResidueScale",
+        "Mathlib.Analysis.Complex.Exponential"
+      ],
+      "selected_declarations": [
+        {
+          "name": "UniformAuxiliarySW",
+          "kind": "def",
+          "line": 103,
+          "complete_source_header": "def UniformAuxiliarySW {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ) : Prop",
+          "primitive_source_definition": "def UniformAuxiliarySW {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ) : Prop :=\n  ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n    ∀ i : ι, x0 ≤ (F i).scale → ∀ k q b : ℕ,\n      1 ≤ k → 1 ≤ q → Nat.Coprime b q →\n      ‖(F i).auxSWError k q b‖ ≤\n        C * (F i).U * ((k.divisors.card : ℝ) ^ C0) /\n          (Real.log (F i).scale) ^ A"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CenteredFourier.lean",
+      "sha256": "95b02e303aec578140dab65129409186e1b83841f9d571981708a788fea01d33",
+      "imports": [
+        "ImbalancedChen.Part3DistributionTargets",
+        "Mathlib.Analysis.Fourier.ZMod",
+        "Mathlib.Data.Nat.Totient"
+      ],
+      "selected_declarations": [
+        {
+          "name": "centeredResidueIndicator",
+          "kind": "def",
+          "line": 32,
+          "complete_source_header": "def centeredResidueIndicator (q : ℕ) [NeZero q] (a z : ZMod q) : ℂ",
+          "primitive_source_definition": "def centeredResidueIndicator (q : ℕ) [NeZero q] (a z : ZMod q) : ℂ :=\n  (if z = a then 1 else 0) -\n    (if IsUnit z then 1 else 0) / (Nat.totient q : ℂ)"
+        },
+        {
+          "name": "centeredAdditiveCoefficient",
+          "kind": "def",
+          "line": 43,
+          "complete_source_header": "def centeredAdditiveCoefficient (q : ℕ) [NeZero q] (a h : ZMod q) : ℂ",
+          "primitive_source_definition": "def centeredAdditiveCoefficient (q : ℕ) [NeZero q] (a h : ZMod q) : ℂ :=\n  ZMod.stdAddChar (-h * a) -\n    primitiveAdditiveCoefficient q h / (Nat.totient q : ℂ)"
+        },
+        {
+          "name": "centeredAdditiveCoefficient_zero",
+          "kind": "theorem",
+          "line": 110,
+          "complete_source_header": "theorem centeredAdditiveCoefficient_zero (q : ℕ) [NeZero q]\n    (a : ZMod q) : centeredAdditiveCoefficient q a 0 = 0"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "imports": [
+        "ImbalancedChen.Part3ComplexCRTConsumer",
+        "Mathlib.Data.Nat.Factorization.Basic",
+        "Mathlib.Algebra.BigOperators.Associated"
+      ],
+      "selected_declarations": [
+        {
+          "name": "wGCDData",
+          "kind": "def",
+          "line": 116,
+          "complete_source_header": "def wGCDData (q r N₁ N₂ : ℕ) : WGCDData",
+          "primitive_source_definition": "def wGCDData (q r N₁ N₂ : ℕ) : WGCDData :=\n  let d := N₁.gcd N₂\n  let δ := q.gcd r\n  { d := d, d₁ := supportedPart (N₁ / d) d\n    δ := δ, δ₁ := supportedPart (q / δ) δ, δ₂ := supportedPart (r / δ) δ\n    k₁ := coprimePart (q / δ) δ, k₂ := coprimePart (r / δ) δ\n    n₁ := coprimePart (N₁ / d) d, n₂ := N₂ / d }"
+        }
+      ]
+    }
+  ],
+  "pinned_provider_source_evidence": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryWZeroMode.lean",
+      "sha256": "2b1fc6b2dc6772243e09cf2af55f3d7c421543a8673eeea1e99b5c4cec980088",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryArithmeticPoisson"
+      ],
+      "selected_declarations": [
+        {
+          "name": "WCompatible",
+          "kind": "def",
+          "line": 175,
+          "complete_source_header": "def WCompatible (q r n₁ n₂ : ℕ) : Prop",
+          "primitive_source_definition": "def WCompatible (q r n₁ n₂ : ℕ) : Prop :=\n  n₁.Coprime q ∧ n₂.Coprime r ∧ Nat.ModEq (q.gcd r) n₁ n₂"
+        },
+        {
+          "name": "smoothWMain",
+          "kind": "def",
+          "line": 280,
+          "complete_source_header": "def smoothWMain (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothWMain (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  (M * dyadicCutoffMass) *\n    ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n      (c q * c r / (q.lcm r : ℝ)) *\n        ∑ n₁ ∈ N, ∑ n₂ ∈ N,\n          if WCompatible q r n₁ n₂ then β n₁ * β n₂ else 0"
+        },
+        {
+          "name": "smoothWNonzeroMode",
+          "kind": "def",
+          "line": 288,
+          "complete_source_header": "def smoothWNonzeroMode (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothWNonzeroMode (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n    ∑ n₁ ∈ N, ∑ n₂ ∈ N,\n      if WCompatible q r n₁ n₂ then\n        (c q * c r * β n₁ * β n₂) * (∑' h : ℤ, wPoissonFrequency M a q r n₁ n₂ h).re\n      else 0"
+        },
+        {
+          "name": "dispersionW_eq_smoothWMain_add_nonzeroMode",
+          "kind": "theorem",
+          "line": 318,
+          "complete_source_header": "theorem dispersionW_eq_smoothWMain_add_nonzeroMode\n    {M : ℝ} (hM : 0 < M) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ)\n    (hQ : ∀ q ∈ Q, q ≠ 0) :\n    dispersionW (dyadicCutoffNatSupport M) N Q\n        (fun m ↦ scaledDyadicCutoff M m) β c a =\n      smoothWMain M N Q β c a + smoothWNonzeroMode M N Q β c a"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothMainTerm.lean",
+      "sha256": "c182f2d581a2dd3fd68111c383f68284e990d9922bf1760ff61a6c2daeb891e6",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryArithmeticPoisson"
+      ],
+      "selected_declarations": [
+        {
+          "name": "smoothUMain",
+          "kind": "def",
+          "line": 104,
+          "complete_source_header": "def smoothUMain (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothUMain (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n    uModulusCoefficient N β c q r *\n      ((M * dyadicCutoffMass) * ((q * r).totient : ℝ) / (q * r : ℕ))"
+        },
+        {
+          "name": "smoothVZeroMode",
+          "kind": "def",
+          "line": 113,
+          "complete_source_header": "def smoothVZeroMode (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothVZeroMode (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n    vModulusCoefficient N β c q r *\n      (coprimeMass N β q * ((M * dyadicCutoffMass / q) *\n        ∑ d ∈ r.divisors.filter (fun d ↦ d.Coprime q),\n          (ArithmeticFunction.moebius d : ℝ) / d))"
+        },
+        {
+          "name": "smoothVZeroMode_eq_smoothUMain",
+          "kind": "theorem",
+          "line": 121,
+          "complete_source_header": "theorem smoothVZeroMode_eq_smoothUMain\n    (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ)\n    (hQ : ∀ q ∈ Q, q ≠ 0) :\n    smoothVZeroMode M N Q β c a = smoothUMain M N Q β c a"
+        },
+        {
+          "name": "dispersionU_smooth_uniform_error",
+          "kind": "theorem",
+          "line": 172,
+          "complete_source_header": "theorem dispersionU_smooth_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ N Q : Finset ℕ, ∀ β c : ℕ → ℝ, ∀ a : ℤ,\n      (∀ q ∈ Q, q ≠ 0) →\n      |dispersionU S N Q (fun m ↦ scaledDyadicCutoff M m) β c a -\n          smoothUMain M N Q β c a| ≤ C * smoothUErrorEnvelope N Q β c a"
+        },
+        {
+          "name": "dispersionV_smooth_uniform_error",
+          "kind": "theorem",
+          "line": 207,
+          "complete_source_header": "theorem dispersionV_smooth_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ N Q : Finset ℕ, ∀ β c : ℕ → ℝ, ∀ a : ℤ,\n      (∀ q ∈ Q, q ≠ 0) →\n      |dispersionV S N Q (fun m ↦ scaledDyadicCutoff M m) β c a -\n          smoothUMain M N Q β c a| ≤ C * smoothVErrorEnvelope N Q β c a"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryBetaCovariance.lean",
+      "sha256": "bc86c7b0bf6db7de3575083cd17da8bb7036c4dfc1fe845bf4666f73d745fc4d",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothMainTerm",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryWZeroMode"
+      ],
+      "selected_declarations": [
+        {
+          "name": "betaReducedResidues",
+          "kind": "def",
+          "line": 24,
+          "complete_source_header": "def betaReducedResidues (δ : ℕ) : Finset ℕ",
+          "primitive_source_definition": "def betaReducedResidues (δ : ℕ) : Finset ℕ :=\n  (Finset.range δ).filter (fun b ↦ b.Coprime δ)"
+        },
+        {
+          "name": "betaResidueMass",
+          "kind": "def",
+          "line": 33,
+          "complete_source_header": "def betaResidueMass (N : Finset ℕ) (β : ℕ → ℝ) (q δ b : ℕ) : ℝ",
+          "primitive_source_definition": "def betaResidueMass (N : Finset ℕ) (β : ℕ → ℝ) (q δ b : ℕ) : ℝ :=\n  ∑ n ∈ N, if n.Coprime q ∧ Nat.ModEq δ n b then β n else 0"
+        },
+        {
+          "name": "betaCovariance",
+          "kind": "def",
+          "line": 123,
+          "complete_source_header": "def betaCovariance (N : Finset ℕ) (β : ℕ → ℝ) (q r : ℕ) : ℝ",
+          "primitive_source_definition": "def betaCovariance (N : Finset ℕ) (β : ℕ → ℝ) (q r : ℕ) : ℝ :=\n  ∑ b ∈ betaReducedResidues (q.gcd r),\n    (betaResidueMass N β q (q.gcd r) b -\n      coprimeMass N β q / ((q.gcd r).totient : ℝ)) *\n    (betaResidueMass N β r (q.gcd r) b -\n      coprimeMass N β r / ((q.gcd r).totient : ℝ))"
+        },
+        {
+          "name": "betaCoprimeAPDiscrepancy",
+          "kind": "def",
+          "line": 270,
+          "complete_source_header": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ",
+          "primitive_source_definition": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ :=\n  (∑ n ∈ N, if n.Coprime h ∧ Nat.ModEq d n b then β n else 0) -\n    coprimeMass N β (d * h) / (d.totient : ℝ)"
+        },
+        {
+          "name": "beta_covariance_identity",
+          "kind": "theorem",
+          "line": 132,
+          "complete_source_header": "theorem beta_covariance_identity\n    (N : Finset ℕ) (β : ℕ → ℝ) {q r : ℕ} (hq : 0 < q) :\n    (∑ b ∈ betaReducedResidues (q.gcd r),\n      betaResidueMass N β q (q.gcd r) b *\n      betaResidueMass N β r (q.gcd r) b) -\n        coprimeMass N β q * coprimeMass N β r / ((q.gcd r).totient : ℝ) =\n      betaCovariance N β q r"
+        },
+        {
+          "name": "smoothWMain_sub_smoothUMain_eq_betaCovariance",
+          "kind": "theorem",
+          "line": 220,
+          "complete_source_header": "theorem smoothWMain_sub_smoothUMain_eq_betaCovariance\n    (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ)\n    (hQ : ∀ q ∈ Q, q ≠ 0) :\n    smoothWMain M N Q β c a - smoothUMain M N Q β c a =\n      (M * dyadicCutoffMass) *\n        ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n          (c q * c r / (q.lcm r : ℝ)) * betaCovariance N β q r"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModeBound.lean",
+      "sha256": "ac3c405cbfabd7c4bb8e2e0575d8f5b4f2671d5291602c643319ffa0a67add85",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryHighDeltaWeights"
+      ],
+      "selected_declarations": [
+        {
+          "name": "smoothWMain_sub_smoothUMain_abs_le_coprimeAP_lcm",
+          "kind": "theorem",
+          "line": 69,
+          "complete_source_header": "theorem smoothWMain_sub_smoothUMain_abs_le_coprimeAP_lcm\n    {k : ℕ} (hk : 1 ≤ k) (j κ : ℕ)\n    {T L E : ℝ} (hT : 1 ≤ T) (hL : 1 ≤ L) (hE : 0 ≤ E)\n    (M : ℝ) (N Q : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊)\n    (hQ : Q ⊆ Ioc 0 ⌊L⌋₊) (β c : ℕ → ℝ)\n    (hβ : ∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ))\n    (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) (a : ℤ)\n    (hAP : ∀ q ∈ Q, ∀ δ : ℕ, δ ∣ q → 0 < δ →\n      ∀ b ∈ betaReducedResidues δ,\n        |betaCoprimeAPDiscrepancy N β δ (q / δ) b| ≤\n          E * (fouvryTau κ (q / δ) : ℝ)) :\n    |smoothWMain M N Q β c a - smoothUMain M N Q β c a| ≤\n      2 * |M * dyadicCutoffMass| * E *\n        (T * (1 + Real.log T) ^ (k - 1)) *\n        (1 + Real.log L) ^ (2 * (j * (κ + 1)) ^ 2 + 1)"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModePayment.lean",
+      "sha256": "48c3765c4f25906097a7cd9e95691040903aaa3399c0de9744b0eeaf2fab5479",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryZeroModeBound",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmallDeltaPayment"
+      ],
+      "selected_declarations": [
+        {
+          "name": "smoothWMain_sub_smoothUMain_abs_le_SW",
+          "kind": "theorem",
+          "line": 20,
+          "complete_source_header": "theorem smoothWMain_sub_smoothUMain_abs_le_SW\n    {k : ℕ} (hk : 1 ≤ k) (j κ B : ℕ)\n    {T L C : ℝ} (hT : 1 ≤ T) (hL : 1 ≤ L) (hC : 0 ≤ C)\n    (M : ℝ) (N Q : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊)\n    (hQ : Q ⊆ Ioc 0 ⌊L⌋₊) (β c : ℕ → ℝ)\n    (hβ : ∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ))\n    (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) (a : ℤ)\n    (hSW : ∀ d h : ℕ, 0 < d → 0 < h → ∀ b : ℕ, b.Coprime d →\n      |betaCoprimeAPDiscrepancy N β d h b| ≤\n        C * T * (fouvryTau κ h : ℝ) / Real.log (2 * T) ^ B) :\n    |smoothWMain M N Q β c a - smoothUMain M N Q β c a| ≤\n      2 * |M * dyadicCutoffMass| * C * T ^ 2 *\n        ((1 + Real.log T) ^ (k - 1) *\n          (1 + Real.log L) ^ (2 * (j * (κ + 1)) ^ 2 + 1) /\n            Real.log (2 * T) ^ B)"
+        },
+        {
+          "name": "alpha_sq_mul_smoothWU_SWFamily_log_payment",
+          "kind": "theorem",
+          "line": 99,
+          "complete_source_header": "theorem alpha_sq_mul_smoothWU_SWFamily_log_payment\n    {ι : Type*} {κ k ℓ : ℕ} (hk : 1 ≤ k) (hℓ : 1 ≤ ℓ) (j A : ℕ)\n    {T : ι → ℝ} {N : ι → Finset ℕ} {β : ι → ℕ → ℝ}\n    (hSW : BetaCoprimeSWFamily κ T N β)\n    (hT : ∀ i, 1 ≤ T i) (hN : ∀ i, N i ⊆ Ioc 0 ⌊T i⌋₊)\n    (hβ : ∀ i, ∀ n ∈ N i, |β i n| ≤ (fouvryTau k n : ℝ))\n    {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ x : ℝ in atTop, ∀ i : ι, ∀ M L : ℝ,\n      1 ≤ M → 1 ≤ L → M * T i ≤ x → L ≤ x → x ^ ε ≤ T i →\n      ∀ S Q : Finset ℕ,\n      (∀ m ∈ S, M ≤ (m : ℝ) ∧ (m : ℝ) ≤ 2 * M) →\n      Q ⊆ Ioc 0 ⌊L⌋₊ → ∀ α c : ℕ → ℝ,\n      (∀ m ∈ S, |α m| ≤ (fouvryTau ℓ m : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      (∑ m ∈ S, α m ^ 2) *\n        |smoothWMain M (N i) Q (β i) c a - smoothUMain M (N i) Q (β i) c a| ≤\n        x ^ 2 / Real.log x ^ A"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModeReduction.lean",
+      "sha256": "7085afcd7078355766621bbb65271de4a3301752977c50b941fcd4d9ae398c42",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryZeroModePayment",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothErrorPayment"
+      ],
+      "selected_declarations": [
+        {
+          "name": "signedError_sq_le_nonzeroMode_c2",
+          "kind": "theorem",
+          "line": 22,
+          "complete_source_header": "theorem signedError_sq_le_nonzeroMode_c2\n    {ι : Type*} {κ k ℓ j : ℕ} (hk : 1 ≤ k) (hℓ : 1 ≤ ℓ) (hj : 1 ≤ j) (A : ℕ)\n    {T : ι → ℝ} {N : ι → Finset ℕ} {β : ι → ℕ → ℝ}\n    (hSW : BetaCoprimeSWFamily κ T N β) (hT : ∀ i, 1 ≤ T i)\n    (hN : ∀ i, ∀ n ∈ N i, T i ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * T i)\n    (hβ : ∀ i, ∀ n ∈ N i, |β i n| ≤ (fouvryTau k n : ℝ))\n    {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ x : ℝ in atTop, ∀ i : ι, ∀ M L : ℝ,\n      1 ≤ M → 1 ≤ L → 4 * M * T i = x →\n      x ^ ε ≤ T i → T i ≤ x ^ (1 / 10 : ℝ) → L ≤ x ^ (5 / 9 : ℝ) →\n      ∀ S Q : Finset ℕ,\n      (∀ m ∈ S, M ≤ (m : ℝ) ∧ (m : ℝ) ≤ 2 * M) →\n      Q ⊆ Ioc 0 ⌊L⌋₊ → ∀ α c : ℕ → ℝ,\n      (∀ m ∈ S, |α m| ≤ (fouvryTau ℓ m : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      signedError S (N i) Q α (β i) c a ^ 2 ≤\n        (∑ m ∈ S, α m ^ 2) * smoothWNonzeroMode M (N i) Q (β i) c a +\n          x ^ 2 / Real.log x ^ A"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothErrorPayment.lean",
+      "sha256": "e1e7ecceefbde2fb43dfe03a4416d613e58bf4527264e842e3127327acf1c843",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothErrorBounds",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+      ],
+      "selected_declarations": [
+        {
+          "name": "dispersionUV_smooth_c2_dyadic_log_payment",
+          "kind": "theorem",
+          "line": 227,
+          "complete_source_header": "theorem dispersionUV_smooth_c2_dyadic_log_payment\n    {i k j : ℕ} (hi : 1 ≤ i) (hk : 1 ≤ k) (hj : 1 ≤ j) (A : ℕ) :\n    ∀ᶠ x : ℝ in atTop, ∀ M T L : ℝ,\n      1 ≤ M → 1 ≤ T → 1 ≤ L → 4 * M * T = x →\n      T ≤ x ^ (1 / 10 : ℝ) → L ≤ x ^ (5 / 9 : ℝ) →\n      ∀ S P N Q : Finset ℕ,\n      (∀ m ∈ S, M ≤ (m : ℝ) ∧ (m : ℝ) ≤ 2 * M) →\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ P) →\n      (∀ n ∈ N, T ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * T) →\n      Q ⊆ Ioc 0 ⌊L⌋₊ → ∀ α β c : ℕ → ℝ,\n      (∀ m ∈ S, |α m| ≤ (fouvryTau i m : ℝ)) →\n      (∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      (∑ m ∈ S, α m ^ 2) *\n        (|dispersionU P N Q (fun m => scaledDyadicCutoff M m) β c a -\n            smoothUMain M N Q β c a| +\n          2 * |dispersionV P N Q (fun m => scaledDyadicCutoff M m) β c a -\n            smoothUMain M N Q β c a|) ≤ x ^ 2 / Real.log x ^ A"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothErrorBounds.lean",
+      "sha256": "7acd28d04a21bdcf3a7415f6b9401fc7c369592a5bd0ad2cd8b6af328039aa9b",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothMainTerm",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+        "Mathlib.Data.Finset.NatDivisors"
+      ],
+      "selected_declarations": [
+        {
+          "name": "dispersionU_smooth_fouvryTau_uniform_error",
+          "kind": "theorem",
+          "line": 168,
+          "complete_source_header": "theorem dispersionU_smooth_fouvryTau_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ k : ℕ, 1 ≤ k → ∀ j : ℕ, ∀ T L : ℝ, 1 ≤ T → 1 ≤ L →\n      ∀ N Q : Finset ℕ, N ⊆ Ioc 0 ⌊T⌋₊ → Q ⊆ Ioc 0 ⌊L⌋₊ →\n      ∀ β c : ℕ → ℝ, (∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      |dispersionU S N Q (fun m => scaledDyadicCutoff M m) β c a -\n          smoothUMain M N Q β c a| ≤\n        C * ((T * (1 + Real.log T) ^ (k - 1)) ^ 2 * (1 + Real.log L) ^ (8 * j))"
+        },
+        {
+          "name": "dispersionV_smooth_fouvryTau_uniform_error",
+          "kind": "theorem",
+          "line": 187,
+          "complete_source_header": "theorem dispersionV_smooth_fouvryTau_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ k j : ℕ, 1 ≤ k → 1 ≤ j → ∀ T L : ℝ, 1 ≤ T → 1 ≤ L →\n      ∀ N Q : Finset ℕ, N ⊆ Ioc 0 ⌊T⌋₊ → Q ⊆ Ioc 0 ⌊L⌋₊ →\n      ∀ β c : ℕ → ℝ, (∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      |dispersionV S N Q (fun m => scaledDyadicCutoff M m) β c a -\n          smoothUMain M N Q β c a| ≤\n        C * ((T * (1 + Real.log T) ^ (k - 1)) ^ 2 * L *\n          (1 + Real.log L) ^ (5 * j - 1))"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDelta.lean",
+      "sha256": "08d4ab419a64dd4bbadc975fcac8036b6ac60fa301da02791275e2e862f803b4",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryBetaCovariance",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothErrorBounds"
+      ],
+      "selected_declarations": [
+        {
+          "name": "smoothWUSmallDelta",
+          "kind": "def",
+          "line": 90,
+          "complete_source_header": "def smoothWUSmallDelta (M D : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothWUSmallDelta (M D : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  (M * dyadicCutoffMass) *\n    ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n      if (q.gcd r : ℝ) ≤ D then\n        (c q * c r / (q.lcm r : ℝ)) * betaCovariance N β q r else 0"
+        },
+        {
+          "name": "smoothWULargeDelta",
+          "kind": "def",
+          "line": 97,
+          "complete_source_header": "def smoothWULargeDelta (M D : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ",
+          "primitive_source_definition": "def smoothWULargeDelta (M D : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ) : ℝ :=\n  (M * dyadicCutoffMass) *\n    ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n      if D < (q.gcd r : ℝ) then\n        (c q * c r / (q.lcm r : ℝ)) * betaCovariance N β q r else 0"
+        },
+        {
+          "name": "smoothWMain_sub_smoothUMain_eq_small_add_large",
+          "kind": "theorem",
+          "line": 103,
+          "complete_source_header": "theorem smoothWMain_sub_smoothUMain_eq_small_add_large\n    (M D : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ)\n    (hQ : ∀ q ∈ Q, q ≠ 0) :\n    smoothWMain M N Q β c a - smoothUMain M N Q β c a =\n      smoothWUSmallDelta M D N Q β c a + smoothWULargeDelta M D N Q β c a"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDeltaPayment.lean",
+      "sha256": "1b51a295c66fa3b8d333c4277357ee55563c22923d2f015098419f159aa4e30f",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmallDelta",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+      ],
+      "selected_declarations": [
+        {
+          "name": "BetaCoprimeSWFamily",
+          "kind": "def",
+          "line": 24,
+          "complete_source_header": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop",
+          "primitive_source_definition": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop :=\n  ∀ B : ℕ, ∃ C : ℝ, 0 < C ∧\n    ∀ i : ι, ∀ d h : ℕ, 0 < d → 0 < h → ∀ b : ℕ, b.Coprime d →\n      |betaCoprimeAPDiscrepancy (N i) (β i) d h b| ≤\n        C * T i * (fouvryTau κ h : ℝ) / Real.log (2 * T i) ^ B"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryWGCD.lean",
+      "sha256": "d92fa9b50de42b01d91e8d66b2d76dad09ae0d8b9800b71640c84f50e8d9a033",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryPrimeSupport",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryWPhaseThreeFactor"
+      ],
+      "selected_declarations": [
+        {
+          "name": "wGCDData",
+          "kind": "def",
+          "line": 28,
+          "complete_source_header": "def wGCDData (q r N₁ N₂ : ℕ) : WGCDData",
+          "primitive_source_definition": "def wGCDData (q r N₁ N₂ : ℕ) : WGCDData :=\n  let d := N₁.gcd N₂\n  let δ := q.gcd r\n  { d := d, d₁ := supportedPart (N₁ / d) d\n    δ := δ, δ₁ := supportedPart (q / δ) δ, δ₂ := supportedPart (r / δ) δ\n    k₁ := coprimePart (q / δ) δ, k₂ := coprimePart (r / δ) δ\n    n₁ := coprimePart (N₁ / d) d, n₂ := N₂ / d }"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCoprimeCount.lean",
+      "sha256": "58d55fb7bd508b2bd8dc413775a8a08d6418425c99b83ff371e53de16cbbcf30",
+      "imports": [
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryMainTerm",
+        "Mathlib.Data.Nat.Factorization.Basic"
+      ],
+      "selected_declarations": [
+        {
+          "name": "uModulusCoefficient",
+          "kind": "def",
+          "line": 88,
+          "complete_source_header": "def uModulusCoefficient (N : Finset ℕ) (β c : ℕ → ℝ) (q r : ℕ) : ℝ",
+          "primitive_source_definition": "def uModulusCoefficient (N : Finset ℕ) (β c : ℕ → ℝ) (q r : ℕ) : ℝ :=\n  (c q * c r / ((q.totient : ℝ) * (r.totient : ℝ))) *\n    coprimeMass N β q * coprimeMass N β r"
+        }
+      ],
+      "bytes_equal_pin_blob": true
+    }
+  ],
+  "finite_entry_points": [
+    {
+      "name": "smoothVZeroMode_eq_smoothUMain",
+      "source": "LiLiuPrereqFouvrySmoothMainTerm.lean:121",
+      "scope": "Exact finite restricted-Mobius/totient identity, arbitrary real beta and modulus coefficients, any signed residue, only nonzero physical moduli. No analytic-estimate premise."
+    },
+    {
+      "name": "smoothWMain_sub_smoothUMain_eq_betaCovariance",
+      "source": "LiLiuPrereqFouvryBetaCovariance.lean:220",
+      "scope": "Exact signed finite identity at delta=gcd(q,r), arbitrary M,beta,c,a and nonzero moduli. It does not assert the covariance is small."
+    },
+    {
+      "name": "dispersionU_smooth_fouvryTau_uniform_error / dispersionV_smooth_fouvryTau_uniform_error",
+      "source": "LiLiuPrereqFouvrySmoothErrorBounds.lean:168,187",
+      "scope": "Genuine supplied envelope bounds with no analytic-error premise. The U envelope is C*(T log^(k-1))^2*log^(8j), while V additionally costs L*log^(5j-1); these do not themselves give the actual target logarithmic payment."
+    }
+  ],
+  "provider_payment_boundary": [
+    "ZeroModePayment alpha_sq_mul_smoothWU_SWFamily_log_payment pays all delta ranges, rather than only small delta, but explicitly assumes BetaCoprimeSWFamily for the very beta paired in W. It is not analytic-supply-free.",
+    "ZeroModeReduction signedError_sq_le_nonzeroMode_c2 combines zero-mode and U/V errors, but retains beta SW and the explicit short beta condition T<=x^(1/10), physical modulus level L<=x^(5/9), x=4MT.",
+    "SmallDelta smoothWMain_sub_smoothUMain_eq_small_add_large is only an exact partition; its large-delta term must not be treated as already paid absent the all-delta SW endpoint hypotheses."
+  ],
+  "actual_dictionary_and_gaps": [
+    "Keeping the original commonSmoothCarrier fixes the smoothed row variable at original alpha length U. The paired N is the original betaCarrier, upper endpoint 2V, and beta is the actual cleaned complex beta. UniformAuxiliarySW controls alpha on alphaCarrier, not that paired beta.",
+    "Cleaning removes signed-divisor beta indices and preserves the original alpha SW. It supplies neither AP equidistribution nor BetaCoprimeSWFamily for beta.",
+    "Under the original geometry and positive sigma, U^2 Q2 Q3^2<X^(1-8sigma), Qi>=1 imply asymptotically U<X^(1/2-4sigma), hence V>X^(1/2+4sigma). This cannot satisfy the provider paired-beta short range V<=(4X)^(1/10) at x=4UV=4X.",
+    "A finite sum transpose could place original alpha on provider beta, where the given SW belongs; it would smooth the original beta variable and require a different carrier at scale V. That is a different dispersion representation and is not a direct reuse on the original U-side commonSmoothCarrier.",
+    "Provider finite identities are real scalar formulas with c(q)c(r) and beta(n1)beta(n2). Actual formulas are complex Hermitian products, full labelled factor coefficients and their conjugates. An explicit Hermitian finite-algebra dictionary and preservation of all label multiplicities are needed; the existing real-component signed-error expansion does not alone identify those quadratic terms.",
+    "Actual gamma grouping has a finite tau3 bound and preserves the full physical modulus, but no source bridge inspected identifies actual complexCRTSmoothZeroPart with provider smoothWMain or actual primitive V/U with provider smoothUMain plus paid errors. The project and provider cutoff bumps have the same explicit radii/form, yet their isolated namespace objects still need the actual use-site dictionary."
+  ],
+  "zero_frequencies_not_to_conflate": {
+    "existing_single_modulus_fact": "Part3CenteredFourier.centeredAdditiveCoefficient_zero proves the centered Fourier coefficient at h=0 vanishes for each individual positive modulus.",
+    "remaining_paired_zero": "After multiplying two centered rows, a zero frequency in the common smoothing variable also includes nonzero collisions h/q=hprime/r. It corresponds to delta=gcd(full physical q,r) residue covariance and is not deleted by the single-modulus h=0 lemma."
+  },
+  "first_unpaid_coordinates": {
+    "zero_route": "delta=gcd(q,r), where q and r are the full products q1*q2*q3 on the two actual labels. Delta=1 covariance is trivial; delta>1 needs the actual paired-beta coprime AP/covariance estimate, including its actual q/delta auxiliary sieve. That estimate is not supplied by alpha SW.",
+    "five_gcd_screening_after_paid_beta_d": "The new cleaned large-beta-gcd bound pays d=gcd(N1,N2). In the ordered canonical five-coordinate screening d,d1,delta,delta1,delta2, the first coordinate still lacking a project actual exclusion budget is d1=supportedPart(N1/d,d), the part of N1/d supported on primes of d. This differs from the zero-route delta obstruction; canonical decomposition validity alone pays neither."
+  },
+  "evidence_limits": [
+    "Source-only reading and exact pin-blob/hash comparison. No Lean/lake, build, checker, object replay, elaborated type export, transitive axiom audit, cache mutation or mathematical source edits.",
+    "Full selected types and primitive definitions are included as source text, not compiler-elaborated types. No no-sorry or unconditional theorem-completion claim is inferred from filenames, token counts or cached objects.",
+    "No full source-DAG census or import walker was run/imported, so no bytecode cache was written.",
+    "No new actual zero-mode theorem or desired energy/distribution assumption was introduced."
+  ]
+}

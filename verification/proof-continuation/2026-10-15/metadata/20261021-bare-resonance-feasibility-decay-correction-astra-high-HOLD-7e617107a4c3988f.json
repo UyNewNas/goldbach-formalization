@@ -1,0 +1,205 @@
+{
+  "status": "ONE_BARE_RESONANCE_FEASIBILITY_AUDIT_COUNTEREXAMPLE_AND_DECAY_CORRECTION_HOLD",
+  "author": "/root/mellin_cost_astra_high_oct21",
+  "date_utc": "2026-10-21",
+  "scope": "ONE bounded read-only mathematical audit. No compiler, Lean/manuscript/helper sources, catalog, Git, CI, pins, resources or agents changed. Only this audit JSON is written.",
+  "quota": {
+    "start_used_percent": 27,
+    "last_checked_used_percent": 27,
+    "remaining_percent": 73,
+    "stop_remaining_lte": 50,
+    "standard_claimed_selected": false
+  },
+  "verdict": {
+    "unweighted_bare_endpoint": "DISPROVED for the coefficient-discarded current O carrier: an admissible family has E_out*sqrt(|O|*R_bare)>=X^2 even at kappa=0. This is not a counterexample to the original theorem or original weighted sum.",
+    "cause": "The ceil-defined frequency window contains h=1 even when the original lowpass and Schwartz weight vanish or are extremely small. The currently proposed uniform envelope discards this amplitude decay.",
+    "corrective_finite_result": "Retaining a common dyadic factor(1+|u0|)^(-1) yields a rigorous finite resonance bound. Summed over signed dyadic h blocks, R_decay <=8192*T*(1+log(2S))*V*U^2/Q, where T=max_{1<=w<=floor(4RS)}tau(w). Also |O|<=64*T*U^2*R^2*S.",
+    "original_range_comparison": "After original E_out, Cauchy normalization, one row envelope cost X^(4kappa), and only logarithmic block summation, the resonance contribution divided by X^2 is <=C*T*fixedlogs*X^(4kappa)*sqrt(QR^2S/V)<C*T*fixedlogs*X^(-9sigma/2+4kappa). Original kappa<=sigma/100 leaves a resonance-only power margin; no smaller-kappa premise is needed.",
+    "status_limit": "The finite inequalities and decay-envelope proof route here are mathematical, not formalized. Existing Envelope313d has NO u0-decay conclusion. Nonresonant/root/spectral7/32 estimates, exact full operator assembly, C/K,hLower,hUpper remain OPEN."
+  },
+  "notation": {
+    "scales": "Q=Q1,R=Q3,S=Q2,X=UV; U,V,Q,R,S>=1. Z=X^eta with eta>0 fixed when discussing eventual payment. The finite counting bounds hold for every Z>0 and do not choose eta.",
+    "outer": "O=smallCoreSquaredOuterCarrier: o=((p,N1,N2),((r,rprime,sprime),D)). N1,N2 in[U,2U],N1!=N2,N1 congruent N2 mod p; p in primitive carrier[Q,2Q]; r,rprime in[R,2R],sprime in[S,2S],D a positive divisor of w=rprime*sprime.",
+    "mesh": "A_o=VD/(p*r*S*rprime*sprime)>0. This is the normalized s0=S mesh, before multiplying exp(-log(s/S)). On the actual gcd mask L=p*r*s*rprime*sprime/D.",
+    "kernel": "K_o(s,h) is the original gcd/CRT-masked root-times-difference unit phase, without the slow profile, restricted to s in[S,2S] and signed0<|h|<=H_D. It satisfies|K|<=1, and nonzero K implies gcd(rs,w)=D and Compatible(prs,pw,N1,N2). Thus pD divides N1-N2. All these masks remain in the definition; dropping them below is only in positive upper bounds.",
+    "frequency": "H_D=ceil(64 Z Q R^2 S^2/(DV)). It is positive forZ>0. D>=1 gives H_D<=H_1; no claim H_D<=constant*Z/D without its ceiling is used.",
+    "bare_resonance": "For ONE common sequences|lambda_s|<=1,|omega_h|<=1, R_bare=sum_o A_o^2 sum_{q=|h|/s} |sum_{(s,h):|h|/s=q}lambda_s omega_h K_o(s,h)|^2. The unsigned-slope relation includes both same and opposite signed slopes.",
+    "outside": "E_out=(sum_{m in original betaCarrier}||beta(m)||^2)*(sum_{p in primitiveFirstFactorCarrier}||gamma1(p)||^2). It is NOT the cleaned transposed beta/alpha coefficient discarded by the second Cauchy.",
+    "divisor_majorant": "T=max_{1<=w<=floor(4RS)}tau(w), or any finite real T>=1 dominating those positive divisor counts. This is a defined actual maximum, not a new analytic supplier. L_S=1+log(2S).",
+    "dyadic_blocks": "For ell>=0 set H_ell=2^ell and I_ell^epsilon={h in Z:sign(h)=epsilon,H_ell<=|h|<2H_ell}, with epsilon=+,-; intersect each row's exact H_D window. These blocks partition all nonzero h up to H_1 exactly, with no h=0 and no endpoint multiplicity."
+  },
+  "counterexample": {
+    "family": "Take integer n→infinity (even n may be used), U=n,V=n^3,X=n^4,Q=R=S=1,residue a=n^4,B=0,sigma=1/1000,kappa=0,c0=1. Choose intervalLo=n-1,intervalHi=2n; alpha identically0; beta=1 on original betaCarrier and0 elsewhere; gamma_i(q)=1 ifq=1 and0 otherwise.",
+    "admissibility": "For large n: X>exp(exp1),|a|=X exactly;1<n^(1-4sigma);U^2=n^2<n^(4-32sigma);|a|^(7/32)U=n^(15/8)<n^(8-60sigma);U^(1+7/16)=n^(23/16)<n^(8-60sigma). Coefficient norm/coprimality gates hold because active factor1 is coprime to a. Rough-alpha gate is vacuous and UniformAuxiliarySW is identically zero. This is a genuinely admissible family for the original parameters, though its actual alpha-weighted sum is zero.",
+    "outer_subset": "Take p=r=rprime=sprime=D=1 and every ordered N1,N2 in{n,...,2n},N1!=N2. There are n(n+1) such pairs. Each lies in O, gcd(r*1,rprime*sprime)=1=D, and CRT compatibility for q=qprime=1 holds automatically. No choice of a or inverse phase can change the unit norm of K_o(1,1).",
+    "single_common_coefficients": "Use lambda_s=1_{s=1},omega_h=1_{h=1}, common to every outer row. Then each selected row has one nonzero bare inner entry, so its sole nonzero unsigned-slope fibre has squared modulus1. A_o=V=n^3, hence R_bare>=V^2*n(n+1) and |O|>=n(n+1).",
+    "ceil_and_true_profile": "Choose any fixed0<eta<3/4, including arbitrarily small eta allowed by the route. Then Z=n^(4eta), and for sufficiently large n,0<64 Z/V<=1, so H_1=1. Thus h=1 is in the EXACT source window, not an artificial enlarged window. But the actual lowpass at s=1 has argument V/Z=n^(3-4eta)>=2 and is zero. The true smooth row contributions of this subset vanish.",
+    "outside_lower_bound": "Original betaCarrier={n^3,...,2n^3}, so its beta energy is n^3+1. The original gamma1 energy is1. Hence E_out=n^3+1 and E_out*sqrt(|O|*R_bare)>=(n^3+1)*n^3*n(n+1)>=n^8=X^2. Any uniform O(X^2/log(X)^A),A>0, bound for this bare expression is false, even BEFORE multiplying the nondecaying envelope mass.",
+    "O_versus_C_warning": "The source outer coefficient C_o contains cleaned transposed beta=cleaned alpha, hence C_o=0 in this family. The source's upper bound sum|C_o|^2<=|O| discards this information. The paired-gcd/supported-part Y gates also live in C_o and are discarded in O. Therefore the counterexample refutes precisely the OVERSTRONG coefficient-discarded bare endpoint proposed for O; it does not claim these are nonzero original coefficient rows, nor that all Y gates hold for every selected pair.",
+    "no_stronger_claim": "No lower bound with retained Y gates or nonzero rough alpha density is asserted. Obtaining such a different counterexample would require a separate density argument and is unnecessary to refute the actual coefficient-discarded bare endpoint. Original theorem and exact C/K constants are untouched."
+  },
+  "finite_fibre_count": {
+    "exact_identity": "For positive integer s,t and integer H>=0, the number of signed nonzero h,k with|h|,|k|<=H and|h|/s=|k|/t equals4*floor(H*gcd(s,t)/max(s,t)). Write s=g*s1,t=g*t1 with(s1,t1)=1: |h|=j*s1,|k|=j*t1,1<=j<=H/max(s1,t1),and choose the two signs independently.",
+    "bound": "For s,t in the integer interval[S,2S], total count P(H,S)<=16 H S*(1+log(2S)). Proof: floor<=argument,max(s,t)>=S,gcd(s,t)<=sum_{d|s,d|t}d. There are at most floor(2S/d)<=2S/d multiples of d in the interval. Hence sum_{s,t}gcd(s,t)<=4S^2*sum_{d<=floor(2S)}1/d<=4S^2*(1+log(2S)). Multiply by4H/S.",
+    "block_version": "A signed dyadic block has|h|<2H_ell, so using the larger window gives P<=32 H_ell S L_S. The sum of the two separate same-sign fibre counts is at most this full signed count. Original masks only delete pairs; triangle inequality and |lambda|,|omega|,|K|<=1 make this valid for arbitrary common complex sequences and phases.",
+    "why_plain_sum_A_squared_bad": "The coarse formula R_bare<=16 S L_S sum_o H_D A_o^2 is mathematically true, but by itself loses positive D factors and the small-frequency amplitude. H_D includes a+1 ceiling term. The counterexample shows no sharper treatment of gcd counts alone can make the unweighted bare endpoint uniformly logarithmically small."
+  },
+  "exact_outer_counts": {
+    "offdiagonal_progression_count": "For fixed positive integer m, the number of ordered distinct N1,N2 in[U,2U] with N1 congruent N2 mod m is <=4U^2/m. There are<=U+1<=2U choices forN1; each nonzero difference is a signed multiple of m of absolute value<=U, giving at most2floor(U/m)<=2U/m choices. Crucially there is no additive+1 because N1=N2 is excluded.",
+    "O_card": "In O use m=p. Sum_p1/p<=2 on[Q,2Q], and there are<=8R^2S triples(r,rprime,sprime). Every w=rprime*sprime<=4RS has<=T divisors. Therefore |O|<=4U^2*2*8R^2S*T=64 T U^2R^2S.",
+    "active_rows": "Let Ostar={o in O:pD divides N1-N2}. Every nonzero K row lies here by exact CRT compatibility and the gcd=D mask. Using m=pD, count N pairs<=4U^2/(pD). This positivity restriction is used before summing D; replacing it by only mod p loses the needed cancellation.",
+    "mesh_first_moment": "For fixed p,r,rprime,sprime,D, count*Nmesh <=[4U^2/(pD)]*[VD/(p*r*S*rprime*sprime)]=4VU^2/(p^2*r*S*rprime*sprime). D cancels EXACTLY. Summing D costs only T, not sumD or maxD. Use sum_p1/p^2<=2/Q, sum_r1/r<=2,sum_rprime1/rprime<=2,sum_sprime1/sprime<=2 to get sum_{o in Ostar}A_o<=64 T VU^2/(Q S).",
+    "mask_scope": "Dropping the remaining gcd and coprimality restrictions in these positive upper bounds is harmless. They remain in the defined kernel; no arbitrary-mask cancellation theorem is inferred. The bounds also hold if actual Y/coefficient support restrictions are retained, since those only shrink the positive sums."
+  },
+  "required_decay_envelope": {
+    "new_statement_not_existing": "For every fixed M,J, the literal fixed-log-localizer family admits ||D^j W(t)||<=C_{M,J}(1+|u0|)^(-M)*(1+R)^j forj<=J, uniformly inZ>=1 and signedu0,rho0 under the original phase bound on fixed support. In d=2, applying normalizedFourth gives |hat W(xi)|<=C_M(1+|u0|)^(-M)*(1+R)^4*(1+||xi||^2)^(-2). This stronger bound is NOT the current313d theorem.",
+    "mathematical_proof_route": "On fixed compact log support, |u(t)|=|u0|*exp(<a,t>) is comparable to|u0| by fixed positive constants. The explicit mixed chain-rule expansion has phase powers|rho|^k|u|^k, withk<=j. Assign M extra powers of decay to the fixed Schwartz spectrum F, above those already paying Euler and phase factors. Cutoff Euler derivatives remain uniformly bounded, so this introduces no power ofZ orrho. FixedQ derivatives and exp(<c,t>) are bounded on support. Thus the same fourth-order normalized operator proof works, with a higher FIXED Schwartz weight but unchanged modulation exponent4.",
+    "actual_row_specialization": "For each dyadic h block H=2^ell, a=(-1,+1),b=0,c=(-1,0),u0(o)=sign(h)*A_o*H andrho0(o)=a/(N1 V). Thus the common scalar decay can be d_o(H)=(1+A_o H)^(-M), after absorbing fixed support-comparability constants intoC_M. UseM=1 for the finite bound below.",
+    "operator_meaning": "The factor d_o(H) stays in the weighted row Hilbert norm as A_o^2*d_o(H)^2. Only the remaining normalized Fourier density is discarded by diagonal contraction. This avoids reintroducing arbitrary joint h/row coefficients into the spectral kernel. It changes the bare endpoint to a DECAY-WEIGHTED one.",
+    "current_313d_limitation": "The current observed Envelope source SHA313d5646... states C(1+R)^4/(1+||xi||^2)^2 with no decay in u0; Mixed334-344 also exposes only the unweighted jet estimate. The literal function still contains F and therefore has the decay mathematically, but current public conclusions do not retain it after uniform domination. No claim is made that an already proved fixed-D/packet norm automatically pays this missing factor.",
+    "fixed_D_alternative": "A full7D transform at fixed atom,D,dyadic packet can retain a common base-amplitude decay as well, since u0 is then fixed. However using only its currently stated uniform L1 bound discards that decay. AcrossD the rowwise retained factor is more precise and must not be replaced by an unproved sup/integral exchange."
+  },
+  "decay_weighted_resonance_inequality": {
+    "definition": "For each ell and physical sign epsilon, let R_ell,epsilon=sum_o A_o^2/(1+A_o H_ell)^2 * sum_q |sum_{(s,h) in I_ell^epsilon, |h|/s=q}lambda_s omega_h K_o(s,h)|^2. Keep exact H_D,gcd,CRT masks. The estimate is simultaneous for arbitrary common sequences, and remains valid if the sequences are selected separately for each block.",
+    "block_bound": "By the signed fibre count, sum_epsilon R_ell,epsilon <=32 H_ell S L_S *sum_{o in Ostar} A_o^2/(1+A_o H_ell)^2.",
+    "dyadic_scalar_bound": "For everyA>0, sum_{ell>=0} A^2*2^ell/(1+A*2^ell)^2<=4A. Write x_ell=A2^ell. The sum ofx_ell forx_ell<=1 is<=2, and the sum of1/x_ell forx_ell>1 is<=2; x/(1+x)^2 is bounded by the appropriate quantity. This also coversA>>1 and the ceil-window h=1 artifact.",
+    "summed_result": "Consequently sum_{ell,epsilon} R_ell,epsilon <=128 S L_S *sum_{Ostar}A_o <=8192 T L_S VU^2/Q. Restricting to the finitely many actual blocks only decreases this upper bound. This is a rigorous finite/arithmetic estimate for all original admissible masks and D, with no spectral7/32 input.",
+    "ceil_handling": "No H_D≈Z/D approximation is needed in this calculation. Ceil only determines which finite blocks exist, while the positive dyadic scalar sum is enlarged to all ell>=0. Thus the dangerous ceiling+1 is absorbed by the retained decay rather than falsely deleted.",
+    "real_parts_and_signs": "The physical h signs are the epsilon blocks. The separate Re(P)=(P+conj P)/2 split is exact before gamma2 multiplication; bounding its two phase branches by the same positive count costs no additional power or independent square. Its1/2 is retained."
+  },
+  "normalization_and_original_range": {
+    "outside_source": "Part3SharedFirstFactorDispersion.sharedFirstFactor_outside_le gives E_out<=4VQ*L_B, L_B=(1+log(2V))^((2^B)^2-1). These are original beta and gamma1 energies. The second source Cauchy contributes |O|, not a second E_out.",
+    "number_of_blocks": "Let L_H be the number of dyadic absolute-h blocks intersecting[1,H_1]. Then there are at most2L_H signed blocks. A Cauchy bound on the sum of their square-root resonance bounds costs sqrt(2L_H), not a power ofH_1.",
+    "combined_bound": "Let M_R=C_env*(1+Rphase)^4 be the common remaining envelope mass after retaining decay. The resonance-only contribution to the quantity E_out*sqrt(CauchyMass) is bounded by E_out*sqrt(|O|)*M_R*sqrt(2L_H)*sqrt(sum R_ell,epsilon). Using the exact constants above yields <=4096*C_env*T*L_B*sqrt(L_H*L_S)*(1+Rphase)^4 * U^2*V^(3/2)*Q^(1/2)*R*S^(1/2). Here4096=4*sqrt(64*8192*2).",
+    "ratio": "Divide byX^2=U^2V^2: <=4096*C_env*T*L_B*sqrt(L_H*L_S)*(1+Rphase)^4*sqrt(QR^2S/V). WithN1>=U, Rphase=X^kappa is valid for the fixed-row log family. SinceX>=1,kappa>=0,(1+Rphase)^4<=16X^(4kappa).",
+    "geometry": "Q<U X^(-sigma) and U^2SR^2<X^(1-8sigma)=UV X^(-8sigma) imply QR^2S/V <X^(-9sigma). Therefore the only new power in the normalized resonance estimate is X^(-9sigma/2+4kappa), before divisor/log factors.",
+    "eta_and_logs": "For fixed eta>0, H_1=ceil(64X^eta QR^2S^2/V). UsingQ<=U andU^2R^2S<X gives QR^2S^2/V<S<=X; hence H_1<=1+64X^(eta+1), soL_H=O_eta(1+logX). AlsoS,V<=X. Thus all L_H,L_S,L_B are fixed logarithmic powers. No smallness condition on eta is needed for THIS corrected resonance bound; eta restrictions from other pieces remain separate.",
+    "divisor_subpower": "SinceR,S>=1 andU^2SR^2<X,4RS<=4X. The standard elementary divisor subpower bound therefore givesT<=C_delta X^delta for every fixeddelta>0. This audit does not claim a newly compiled divisor lemma; its required scope is only the actual finite maximum up to4X, not a new spectral estimate.",
+    "original_kappa": "For0<=kappa<=sigma/100, -9sigma/2+4kappa<=-4.46sigma. For example choosing divisor exponentdelta=sigma/2 and absorbing all fixed logarithmic factors in anotherX^(sigma/2) leaves exponent at most-3.46sigma. Thus, AFTER proving the retained-decay envelope and formal finite bridges, this resonance component has enough margin for every prescribed log saving under the unchanged original parameter range.",
+    "Gram_cost_precision": "The envelope costs8kappa in the total Gram square, but its square root in E_out*sqrt(CauchyMass) costs4kappa. Counting8kappa again at this normalized stage would double-charge that square. Other future squares must still be tracked separately.",
+    "not_full_operator_bound": "This bound pays the NEW decay-weighted positive resonance only. The bare/decay-weighted nonresonant form, root operators, coefficient separation and spectral7/32 estimate have not been proved. No assumption asserting them is added."
+  },
+  "next_ONE": {
+    "recommended": "Prove the actual b=0 fixed-rho retained-decay envelope from the accepted public ordinary-u weighted-jet theorem; arbitrary-b mixed decay is unnecessary for the physical 2D row.",
+    "precise_target": "In d=2, fixed a,c and compact smooth Q, b=0, exists C>0 before all Z>=1,u0,rho0,R>=0 with |rho0|<=R and all xi, such that ||Fourier W(xi)||<=C*(1+|u0|)^(-1)*(1+R)^4/(1+||xi||^2)^2. Here W(t)=Q(t)*exp(<c,t>)*profile(Z,rho0,u0*exp(<a,t>)); actual a=(-1,+1),c=(-1,0). This is a future theorem, not current313d.",
+    "stop": "One actual proof or precise API blocker, thenHOLD. Do not spend further wrappers on the disproved unweighted bare endpoint.",
+    "ordinary_jet_bridge": "For general fixed m,J and b=0, each order-j log derivative is a finite fixed-coefficient sum of fixed-localizer derivatives times u^k*(ordinary derivative order k of profile), k<=j. Apply Profile.smoothReciprocityProfile_iteratedDeriv_uniform with weight m+J and derivative k. Since |u|^k/(1+|u|)^(m+J)<=(1+|u|)^(-m), every term has bound C*(1+|u|)^(-m)*(1+|rho0|)^j. Compact support makes exp(<a,t>) bounded above and bounded away from0, transferring this to C*(1+|u0|)^(-m). Set m=1,J=4, apply the existing normalized-fourth-order Fourier proof. No arbitrary-rho-chain-rule extension is needed; formal chain-rule/support/Fourier assembly remains future work.",
+    "source_binding": {
+      "path": "ImbalancedChen/Part3SmoothReciprocityProfile.lean",
+      "lines": "324-332",
+      "file_sha256": "4b67e10465db25f2360b3af0f7ba4e14985c1f0621fdf11669f738230ed8cc09",
+      "span_sha256_lf_utf8": "974f3110f092446303d02ea4a757f8840aec36baf9853d2d75d12124d69edf56",
+      "status": "Public signature read directly; parent reports accepted. No compiler run in this audit."
+    }
+  },
+  "HOLD": true,
+  "source_file_span_bindings": [
+    {
+      "path": "ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "spans": [
+        {
+          "first": 51,
+          "last": 64,
+          "normalized_lf_utf8_sha256": "b52b0f31882c93c14b9c6a68b331e3d99c16f937a4dc28bc5ae678ed24f76518"
+        },
+        {
+          "first": 126,
+          "last": 148,
+          "normalized_lf_utf8_sha256": "6c6ad1c398c235af394a2a4b6232e405ebc5c2de648cc448ad97074af7bf1b0a"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3TransposedDispersion.lean",
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "spans": [
+        {
+          "first": 34,
+          "last": 41,
+          "normalized_lf_utf8_sha256": "a50dc8ed44617f5f26008dd2d22ab4e927fb85337738bea459640193023e5833"
+        },
+        {
+          "first": 63,
+          "last": 64,
+          "normalized_lf_utf8_sha256": "b7652472d56a3abfc933a54d27c0858be6940aa6d2752b8c048c71ecfffc50d5"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21",
+      "spans": [
+        {
+          "first": 25,
+          "last": 84,
+          "normalized_lf_utf8_sha256": "8f7b3ca26ec05fd8dc949893005efcc85273f74100e689343ce896c72ce1847f"
+        },
+        {
+          "first": 540,
+          "last": 580,
+          "normalized_lf_utf8_sha256": "23a458dc7e443540c792fa85c05e59d1418738dcfb805a2ca6911289194da6a8"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+      "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+      "spans": [
+        {
+          "first": 25,
+          "last": 49,
+          "normalized_lf_utf8_sha256": "fcc66b732c38e3c409d7bd577a98fca4d2e14dee9646adc50b61fd3401226d00"
+        },
+        {
+          "first": 219,
+          "last": 231,
+          "normalized_lf_utf8_sha256": "a789972d7989bea54b2274178e83c768120a28ed0ce1d4d2bd0657df2ee548d2"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "spans": [
+        {
+          "first": 255,
+          "last": 260,
+          "normalized_lf_utf8_sha256": "b5131e70466ce1e636034f1a28f06e25471dd4b6cd1a336ce6c984bb74496c22"
+        },
+        {
+          "first": 405,
+          "last": 409,
+          "normalized_lf_utf8_sha256": "0a0d8d4cc5da9c296d74fee6795d77dfa4cc5b4d0b6ab7dc499bb25db6ff607d"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogMixed.lean",
+      "sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d",
+      "spans": [
+        {
+          "first": 334,
+          "last": 344,
+          "normalized_lf_utf8_sha256": "b9bd035372a2bd8ff64399eabb58d54421d4100a1e53cd840f696bc54e81b53d"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogFourierEnvelope.lean",
+      "sha256": "313d5646dcb7573548fcc49a1b8673ab2d37d149cec809b3296466adb33301f7",
+      "spans": [
+        {
+          "first": 227,
+          "last": 243,
+          "normalized_lf_utf8_sha256": "0614ac63211eae805b0cf4b9a6c1b3c00dbda97b553090597f4110ec35e3d39f"
+        },
+        {
+          "first": 274,
+          "last": 279,
+          "normalized_lf_utf8_sha256": "1ac617c5abe9ec8d8b1a444df833b2cdd0313278d783a99970f5ea2c374ec68d"
+        }
+      ]
+    }
+  ]
+}

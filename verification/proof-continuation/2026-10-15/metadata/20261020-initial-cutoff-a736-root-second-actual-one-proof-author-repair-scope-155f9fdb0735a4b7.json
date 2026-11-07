@@ -1,0 +1,38 @@
+{
+  "status": "ROOT_ACTUAL_SECOND_FAILURE_ONE_PROOF_ONLY_AUTHOR_REPAIR_SCOPE_NOT_COMPILE",
+  "created_utc": "2026-10-20T09:58:48.538585+00:00",
+  "author": "/root/phase_oct20",
+  "source": "ImbalancedChen/ActualExtendedThirdInitialCutoff.lean",
+  "source_before_sha256": "a73690f722a2bb26371f65782d657dccab998d42cb63db0690fedc77b58696e3",
+  "actual_receipt_sha256": "f00681ffc3b2bf38651b51f4990f9a36e55672e9c4203275f673997eca531982",
+  "actual_stdout_sha256": "7e29dfa96a37fb10bf08c33172064bcb8fd50492d6420fcc2246f9108372a7d9",
+  "actual_complete_stdout": "ImbalancedChen/ActualExtendedThirdInitialCutoff.lean:394:61: error: unsolved goals\ne : ℝ\nhe0 : 0 < e\nhe : e ≤ 1 / 384\nN : ℕ\nhN : 1 < N\nm : ℕ\nz : ℝ := ↑N ^ actualExtendedThirdInitialStopExponent e m\nweight : ℕ → ℝ := fun p => 1 / (↑p - 1)\nhNr : 1 < ↑N\nhz : z ≤ ↑N ^ thirdPrefixRho\nhfail :\n  ∀ p ∈ roughPrimeUniverse N N z (↑N ^ thirdPrefixRho), actualExtendedThirdCompactInitialPolicy e m N false [p] = false\nhstop : ∀ p ∈ roughPrimeUniverse N N 0 z, actualExtendedThirdCompactFirstStop e m N [p]\nhlevel : 0 < thirdPrefixTheta - 2 * e\nR : ℝ := ↑N ^ (thirdPrefixTheta - 2 * e)\ncarrier : List ℕ := roughPrimeUniverse N N 0 z\npolicy : Bool → List ℕ → Bool := ordinaryParityRosserPolicy false R\nAdm : List ℕ → Prop := ordinaryRosserPrefixAdmissible false R\nhR : 1 < R\nhnil : Adm []\nhtail :\n  ∀ (q : ℕ) (pre : List ℕ), Nat.Prime q → List.Pairwise (fun x1 x2 => x1 < x2) (q :: pre) → Adm (q :: pre) → Adm pre\nhappend :\n  ∀ (small pre : List ℕ),\n    (∀ p ∈ small ++ pre, Nat.Prime p) →\n      List.Pairwise (fun x1 x2 => x1 < x2) (small ++ pre) → Adm (small ++ pre) → Adm pre\nhstep :\n  ∀ (pre : List ℕ) (positive : Bool) (q : ℕ),\n    Adm pre →\n      positive = evenListLength pre →\n        Nat.Prime q →\n          List.Pairwise (fun x1 x2 => x1 < x2) (q :: pre) → policy (!positive) (q :: pre) = decide (Adm (q :: pre))\nhforward :\n  ∀ (remaining pre : List ℕ) (positive : Bool) (mass : ℝ),\n    Adm pre →\n      positive = evenListLength pre →\n        (∀ p ∈ remaining.reverse ++ pre, Nat.Prime p) →\n          List.Pairwise (fun x1 x2 => x1 < x2) (remaining.reverse ++ pre) →\n            ∀ leaf ∈ firstExitRetainedLeaves policy (fun x => 1) pre positive mass remaining, Adm leaf.selected\nchosen✝ remaining✝ chosen remaining : List ℕ\np : ℕ\nhsub : chosen.Sublist remaining\nih :\n  ∀ (pre : List ℕ) (positive : Bool) (mass : ℝ),\n    (∀ p ∈ chosen.reverse ++ pre, Nat.Prime p) →\n      List.Pairwise (fun x1 x2 => x1 < x2) (chosen.reverse ++ pre) →\n        Adm (chosen.reverse ++ pre) →\n          ∃ leaf ∈ firstExitRetainedLeaves policy (fun x => 1) pre positive mass remaining,\n            leaf.selected = chosen.reverse ++ pre\npre : List ℕ\npositive : Bool\nmass : ℝ\nhprime : ∀ p_1 ∈ (p :: chosen).reverse ++ pre, Nat.Prime p_1\nhsort : List.Pairwise (fun x1 x2 => x1 < x2) ((p :: chosen).reverse ++ pre)\nhfinal : Adm ((p :: chosen).reverse ++ pre)\nhprime' : ∀ q ∈ chosen.reverse ++ p :: pre, Nat.Prime q\nhsort' : List.Pairwise (fun x1 x2 => x1 < x2) (chosen.reverse ++ p :: pre)\nhfinal' : Adm (chosen.reverse ++ p :: pre)\nhnext : Adm (p :: pre)\n⊢ positive = false ∨ ordinaryRosserPrefixAdmissible false R (p :: pre)\nImbalancedChen/ActualExtendedThirdInitialCutoff.lean:498:4: error: Type mismatch: After simplification, term\n  List.prod_toFinset (fun p => p) (roughPrimeUniverse_nodup N N 0 z)\n has type\n  @Eq ℕ (∏ p ∈ (roughPrimeUniverse N N 0 z).toFinset, p) (roughPrimeUniverse N N 0 z).prod\nbut is expected to have type\n  @Eq ℕ ((roughPrimeUniverse N N 0 z).toFinset.prod id) (roughPrimeUniverse N N 0 z).prod\nImbalancedChen/ActualExtendedThirdInitialCutoff.lean:328:50: error: This simp argument is unused:\n  oddFirstExitPolicy\n\nHint: Omit it from the simp argument list.\n  [apply] simp [policy, ordinaryParityRosserPolicy, hfull]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/ActualExtendedThirdInitialCutoff.lean:395:72: error: This simp argument is unused:\n  hnext\n\nHint: Omit it from the simp argument list.\n  [apply] simp [policy, ordinaryParityRosserPolicy, oddFirstExitPolicy]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+  "only_permitted_changed_proof": "actualExtendedThirdInitialPolicy_eq_actualPlus",
+  "complete_fixed_target_header": "theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N) (m : ℕ) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N N 0 ((N : ℝ) ^ thirdPrefixRho)) =\n      actualSmallRosserPlusDensity N N\n        ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n        ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) :=",
+  "root_actual_review": "Actually read complete3769B stdout, receiptbinding, hstep/hconstruct/hM fullaffectedspans plus prior originalwhole515source and full247linefiniteproof reviewed ineed22fairgate. All4actualdiagnostics lie in this ONE finaltheorem proof.",
+  "actual_sites": [
+    "line328 unused oddFirstExitPolicy argument onlyremove actualunusedsimp argument, do notdisablelint",
+    "line394-395 hconstruct policytrue: existinghnext:Adm(p::pre) needslocalAdm unfolding/typeduse toactualordinarypredicate; no new hsign or otherhypothesis",
+    "line498 hM List.prod_toFinset lambda vsFinset.prod id/letcarrier exactdefinitionalnormalization"
+  ],
+  "preserve_byte_exact": [
+    "all13completeheaders andsolecompleteStopExponentdefinition",
+    "other11theoremproofs",
+    "soleUpperRhoimportd8b and alloptions/namespaces/scopes",
+    "originale/m/N hN parameters/cutoff/fullactualweightedpolynomial andactualPlus endpoint",
+    "entirefiniteordinaryRosserdictionary, allnativeactualadmissibility/retainedmoduli/squarefreeMöbiusarguments outsideactualAPIproofsites"
+  ],
+  "no_author_compiler_or_new_scope": [
+    "no newtopdecl/primitive/import/assumption/supplier",
+    "no linterdisable/hypothesisstrengthening/frozenruntime/audit/parser/pin/toolchain/cache/install/CI/automation/resource change"
+  ],
+  "required_artifacts": "Preserve exactwholea736 beforeedit and originalactualfailure; exactwholeforwardinversepatchwithline-endingexplicit; all13headers/1def/other11proofs exact; changedlocalproofspans atactual3sites; freezefinalsource thenrootactualwholecompleteproofdiffreview beforeanyruntimegate.",
+  "current_parent_owned": {
+    "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+    "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+    "owned": 49
+  },
+  "no_initial_acceptance_or_signed_density_CK_main_claim": true,
+  "quota_remaining_latest_root": 93,
+  "hard_stop_remaining_at_most": 50
+}

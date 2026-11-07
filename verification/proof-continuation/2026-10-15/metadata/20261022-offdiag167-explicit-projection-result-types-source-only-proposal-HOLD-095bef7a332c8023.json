@@ -1,0 +1,378 @@
+{
+  "status": "OFFDIAG167_EXPLICIT_PROJECTION_RESULT_TYPES_SOURCE_ONLY_PROPOSAL_UNAPPLIED_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T17:32:50.654522+00:00",
+  "target": "ImbalancedChen.Part3ResonanceOffDiagonalCount",
+  "authorization": "Root explicitly authorized preparation only of two local typed-lambda projection-result type annotations. No original Lean edit, compiler/checker retry, proper/classifier execution. Other heavy owner may run Chen7.",
+  "before": {
+    "path": "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+    "sha256": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+    "bytes": 7199,
+    "LF": 167,
+    "CR": 0
+  },
+  "proposal": {
+    "path": "rounds/20261022-offdiag167-explicit-projection-result-types-source-only-proposal.lean.txt",
+    "sha256": "8826a1ca9fdbebcbe2f5a44cac43b02ac0510c568e916eefa09fff64194e4546",
+    "bytes": 7247,
+    "LF": 167,
+    "CR": 0,
+    "full_source_utf8": "import Mathlib.Algebra.Order.Archimedean.Real.Basic\nimport Mathlib.Algebra.Order.Floor.Semiring\nimport Mathlib.Data.Finset.Prod\nimport Mathlib.Data.Nat.ModEq\nimport Mathlib.Order.Interval.Finset.Nat\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.NormNum\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\nimport Lean.Elab.Tactic.NormCast\nimport Lean.Elab.Tactic.Omega\n\n/-!\n# Finite ordered off-diagonal congruence count on the original dyadic interval\n\nThe interval is the inclusive natural-number interval from `ceil U` to\n`floor (2 * U)`, exactly the original `factorCarrier U`. The modulus is any\npositive natural number. Both orders of a pair are counted, and equal labels\nare excluded before counting positive differences. This exclusion makes the\nquotient interval start at one and removes any additive rounding term.\n\nThis leaf proves only a finite arithmetic count. It has no resonance,\nFourier-envelope, root-operator, or spectral estimate among its hypotheses.\n-/\n\nnamespace ImbalancedChen.Part3.ResonanceOffDiagonalCount\n\nnoncomputable section\n\nopen Classical Finset\n\nprivate theorem increasing_count_le (S : Finset \u2115) (U : \u211d)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    ((S \u00d7\u02e2 S).filter (fun z => z.1 < z.2 \u2227 Nat.ModEq m z.1 z.2)).card \u2264\n      S.card * Nat.floor (U / (m : \u211d)) := by\n  have hmR : (0 : \u211d) < m := by exact_mod_cast hm\n  calc\n    _ \u2264 (S \u00d7\u02e2 Icc 1 (Nat.floor (U / (m : \u211d)))).card := by\n      apply card_le_card_of_injOn\n        (fun z : \u2115 \u00d7 \u2115 => (z.1, (z.2 - z.1) / m))\n      \u00b7 intro z hz\n        obtain \u27e8hzS, hzlt, hzmod\u27e9 := mem_filter.mp hz\n        obtain \u27e8hz1, hz2\u27e9 := mem_product.mp hzS\n        have hdvd : m \u2223 z.2 - z.1 :=\n          (Nat.modEq_iff_dvd' hzlt.le).mp hzmod\n        have hdiffpos : 0 < z.2 - z.1 := Nat.sub_pos_of_lt hzlt\n        have hqpos : 0 < (z.2 - z.1) / m :=\n          Nat.div_pos (Nat.le_of_dvd hdiffpos hdvd) hm\n        have hqmul : (((z.2 - z.1) / m : \u2115) : \u211d) * m =\n            ((z.2 - z.1 : \u2115) : \u211d) := by\n          exact_mod_cast Nat.div_mul_cancel hdvd\n        have hdiffadd : ((z.2 - z.1 : \u2115) : \u211d) + z.1 = z.2 := by\n          exact_mod_cast Nat.sub_add_cancel hzlt.le\n        have hdiffbound : ((z.2 - z.1 : \u2115) : \u211d) \u2264 U := by\n          have hlo := (hS z.1 hz1).1\n          have hhi := (hS z.2 hz2).2\n          linarith\n        have hqupper : (((z.2 - z.1) / m : \u2115) : \u211d) \u2264 U / (m : \u211d) := by\n          apply (le_div_iff\u2080 hmR).mpr\n          rw [hqmul]\n          exact hdiffbound\n        exact mem_product.mpr \u27e8hz1, mem_Icc.mpr\n          \u27e8Nat.succ_le_iff.mpr hqpos, Nat.le_floor hqupper\u27e9\u27e9\n      \u00b7 intro z hz w hw he\n        obtain \u27e8_, hzlt, hzmod\u27e9 := mem_filter.mp hz\n        obtain \u27e8_, hwlt, hwmod\u27e9 := mem_filter.mp hw\n        have hfirst : z.1 = w.1 := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n          congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n        have hzdvd : m \u2223 z.2 - z.1 :=\n          (Nat.modEq_iff_dvd' hzlt.le).mp hzmod\n        have hwdvd : m \u2223 w.2 - w.1 :=\n          (Nat.modEq_iff_dvd' hwlt.le).mp hwmod\n        have hdiff : z.2 - z.1 = w.2 - w.1 := by\n          calc\n            _ = ((z.2 - z.1) / m) * m := (Nat.div_mul_cancel hzdvd).symm\n            _ = ((w.2 - w.1) / m) * m := by rw [hquot]\n            _ = _ := Nat.div_mul_cancel hwdvd\n        apply Prod.ext hfirst\n        omega\n    _ = _ := by\n      simp only [card_product, Nat.card_Icc, Nat.add_sub_cancel]\n\nprivate theorem finite_count_le (S : Finset \u2115) (U : \u211d) (hU : 1 \u2264 U)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    (((S \u00d7\u02e2 S).filter (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n      4 * U ^ 2 / (m : \u211d) := by\n  let A := (S \u00d7\u02e2 S).filter (fun z => z.1 < z.2 \u2227 Nat.ModEq m z.1 z.2)\n  let B := (S \u00d7\u02e2 S).filter (fun z => z.2 < z.1 \u2227 Nat.ModEq m z.1 z.2)\n  have hAB : B.card \u2264 A.card := by\n    apply card_le_card_of_injOn (fun z : \u2115 \u00d7 \u2115 => (z.2, z.1))\n    \u00b7 intro z hz\n      obtain \u27e8hzS, hzlt, hzmod\u27e9 := mem_filter.mp hz\n      obtain \u27e8hz1, hz2\u27e9 := mem_product.mp hzS\n      exact mem_filter.mpr\n        \u27e8mem_product.mpr \u27e8hz2, hz1\u27e9, hzlt, hzmod.symm\u27e9\n    \u00b7 intro z _ w _ he\n      exact Prod.ext (congrArg Prod.snd he) (congrArg Prod.fst he)\n  have hsplit :\n      (S \u00d7\u02e2 S).filter (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2) = A \u222a B := by\n    ext z\n    simp only [A, B, mem_filter, mem_union]\n    constructor\n    \u00b7 rintro \u27e8hz, hne, hmod\u27e9\n      rcases lt_or_gt_of_ne hne with hlt | hgt\n      \u00b7 exact Or.inl \u27e8hz, hlt, hmod\u27e9\n      \u00b7 exact Or.inr \u27e8hz, hgt, hmod\u27e9\n    \u00b7 rintro (h | h)\n      \u00b7 exact \u27e8h.1, ne_of_lt h.2.1, h.2.2\u27e9\n      \u00b7 exact \u27e8h.1, (ne_of_lt h.2.1).symm, h.2.2\u27e9\n  have hA : A.card \u2264 S.card * Nat.floor (U / (m : \u211d)) :=\n    increasing_count_le S U hS m hm\n  have hcount :\n      ((S \u00d7\u02e2 S).filter (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card \u2264\n        2 * S.card * Nat.floor (U / (m : \u211d)) := by\n    rw [hsplit]\n    calc\n      _ \u2264 A.card + B.card := card_union_le A B\n      _ \u2264 S.card * Nat.floor (U / (m : \u211d)) +\n          S.card * Nat.floor (U / (m : \u211d)) :=\n        Nat.add_le_add hA (hAB.trans hA)\n      _ = _ := by ring\n  have hprefix : S \u2286 Ioc 0 (Nat.floor (2 * U)) := by\n    intro n hn\n    obtain \u27e8hlo, hhi\u27e9 := hS n hn\n    have hnOne : 1 \u2264 n := by exact_mod_cast hU.trans hlo\n    exact mem_Ioc.mpr \u27e8by omega, Nat.le_floor hhi\u27e9\n  have hcard : (S.card : \u211d) \u2264 2 * U := by\n    have hc := card_le_card hprefix\n    simp only [Nat.card_Ioc, Nat.sub_zero] at hc\n    exact (show (S.card : \u211d) \u2264 (Nat.floor (2 * U) : \u211d) by\n      exact_mod_cast hc).trans (Nat.floor_le (by linarith))\n  have hmR : (0 : \u211d) < m := by exact_mod_cast hm\n  have hfloor : (Nat.floor (U / (m : \u211d)) : \u211d) \u2264 U / (m : \u211d) :=\n    Nat.floor_le (div_nonneg (by linarith) hmR.le)\n  calc\n    _ \u2264 2 * (S.card : \u211d) * (Nat.floor (U / (m : \u211d)) : \u211d) := by\n      exact_mod_cast hcount\n    _ \u2264 (2 * (2 * U)) * (U / (m : \u211d)) :=\n      mul_le_mul (mul_le_mul_of_nonneg_left hcard (by norm_num)) hfloor\n        (Nat.cast_nonneg _) (by linarith)\n    _ = _ := by ring\n\n/-- Inclusive original dyadic carrier; ordered pairs; the diagonal is excluded.\nThere is no additive `+1`, including when `m > U` and the carrier is empty of\noff-diagonal congruent pairs. The endpoint condition `1 \u2264 U` is the original\nscale condition and includes the case `U = 1`.\n-/\ntheorem dyadic_ordered_offDiagonal_modEq_count_le (U : \u211d) (hU : 1 \u2264 U)\n    (m : \u2115) (hm : 0 < m) :\n    (((Icc (Nat.ceil U) (Nat.floor (2 * U)) \u00d7\u02e2\n        Icc (Nat.ceil U) (Nat.floor (2 * U))).filter\n      (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n        4 * U ^ 2 / (m : \u211d) := by\n  apply finite_count_le (Icc (Nat.ceil U) (Nat.floor (2 * U))) U hU\n    (m := m) (hm := hm)\n  intro n hn\n  obtain \u27e8hlo, hhi\u27e9 := mem_Icc.mp hn\n  exact \u27e8(Nat.le_ceil U).trans (by exact_mod_cast hlo),\n    (show (n : \u211d) \u2264 (Nat.floor (2 * U) : \u211d) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith))\u27e9\n\nend\n\nend ImbalancedChen.Part3.ResonanceOffDiagonalCount\n",
+    "applied": false,
+    "compiled": false,
+    "kernel_accepted": false
+  },
+  "repair": {
+    "kind": "Only explicit result types for hfirst and hquot; typed congrArg lambda terms unchanged.",
+    "changed_source_lines": [
+      68,
+      69
+    ],
+    "before_complete_block": "        have hfirst := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n        have hquot :=\n          congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n",
+    "proposal_complete_block": "        have hfirst : z.1 = w.1 := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n          congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n",
+    "new_hypotheses": false,
+    "conclusion_change": false,
+    "root_requested_preferred_fix_followed": true,
+    "static_typing_rationale": "With he relating encoded pairs F z and F w, congrArg on the already explicitly typed Nat-pair projection yields equality of projected encoded terms. The explicit expected result type z.1=w.1 or quotient_z=quotient_w provides the reduced proposition at the local have boundary using definitional beta/projection reduction. Subsequent rw hquot therefore sees the quotient equality directly, while Prod.ext hfirst sees the first coordinates of z and w. No separate simp/rw/Prod.ext/omega proof step is changed.",
+    "rationale_status": "Static elaboration reasoning and actual native congrArg signature reviewed; no new Lean elaboration or compiler result claimed."
+  },
+  "complete_three_types_unchanged": [
+    {
+      "source_name": "increasing_count_le",
+      "visibility": "private",
+      "complete_header_and_type": "private theorem increasing_count_le (S : Finset \u2115) (U : \u211d)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    ((S \u00d7\u02e2 S).filter (fun z => z.1 < z.2 \u2227 Nat.ModEq m z.1 z.2)).card \u2264\n      S.card * Nat.floor (U / (m : \u211d))",
+      "sha256": "d98047ef9e2df03f1b49b840ed9d409f378e709aae6f0c6c70d6cad55a3637ba",
+      "first_line": 32,
+      "before_proposal_byte_exact": true
+    },
+    {
+      "source_name": "finite_count_le",
+      "visibility": "private",
+      "complete_header_and_type": "private theorem finite_count_le (S : Finset \u2115) (U : \u211d) (hU : 1 \u2264 U)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    (((S \u00d7\u02e2 S).filter (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n      4 * U ^ 2 / (m : \u211d)",
+      "sha256": "cca50fd4bb711798039832e6ceb92fd159838545282c221ec931c9f1f65d27e6",
+      "first_line": 85,
+      "before_proposal_byte_exact": true
+    },
+    {
+      "source_name": "dyadic_ordered_offDiagonal_modEq_count_le",
+      "visibility": "public",
+      "complete_header_and_type": "theorem dyadic_ordered_offDiagonal_modEq_count_le (U : \u211d) (hU : 1 \u2264 U)\n    (m : \u2115) (hm : 0 < m) :\n    (((Icc (Nat.ceil U) (Nat.floor (2 * U)) \u00d7\u02e2\n        Icc (Nat.ceil U) (Nat.floor (2 * U))).filter\n      (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n        4 * U ^ 2 / (m : \u211d)",
+      "sha256": "c9511e9adf77a4cede3651cbfb2139946c0919cf347a9de2fec2248526d5abc0",
+      "first_line": 151,
+      "before_proposal_byte_exact": true
+    }
+  ],
+  "all17_native_API_actual_hash_span_excerpt_checks": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+      "names": [
+        "Nat.ModEq.symm"
+      ],
+      "file_sha256_actual": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+      "first_line": 87,
+      "last_line": 93,
+      "span_sha256_actual": "e7a57c7c2121e804c2b11eb5a78fdb6fea322ab85ad042c75825d3aa2b56391c",
+      "complete_excerpt": "@[symm]\nprotected theorem symm : a \u2261 b [MOD n] \u2192 b \u2261 a [MOD n] :=\n  Eq.symm\n\n@[trans]\nprotected theorem trans : a \u2261 b [MOD n] \u2192 b \u2261 c [MOD n] \u2192 a \u2261 c [MOD n] :=\n  Eq.trans\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+      "names": [
+        "Nat.modEq_iff_dvd'"
+      ],
+      "file_sha256_actual": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+      "first_line": 117,
+      "last_line": 119,
+      "span_sha256_actual": "0a5883894694ce7f1bb2be40ec6b3a891c732cb8c339978d0b5505ad68a298cb",
+      "complete_excerpt": "/-- A variant of `modEq_iff_dvd` with `Nat` divisibility -/\ntheorem modEq_iff_dvd' (h : a \u2264 b) : a \u2261 b [MOD n] \u2194 n \u2223 b - a := by\n  rw [modEq_iff_dvd, \u2190 Int.natCast_dvd_natCast, Int.ofNat_sub h]\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+      "names": [
+        "Finset.card_le_card_of_injOn"
+      ],
+      "file_sha256_actual": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "first_line": 427,
+      "last_line": 432,
+      "span_sha256_actual": "11c401a65812e6d18a01c623ba3ce05b5ac7a4e707a007cfee8a013613e84b1e",
+      "complete_excerpt": "lemma card_le_card_of_injOn (f : \u03b1 \u2192 \u03b2) (hf : Set.MapsTo f s t) (f_inj : (s : Set \u03b1).InjOn f) :\n    #s \u2264 #t := by\n  classical\n  calc\n    #s = #(s.image f) := (card_image_of_injOn f_inj).symm\n    _ \u2264 #t := card_le_card <| image_subset_iff.2 hf\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+      "names": [
+        "Finset.card_union_le"
+      ],
+      "file_sha256_actual": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "first_line": 576,
+      "last_line": 576,
+      "span_sha256_actual": "beaa8c1ed6dbfac4dce096731b11d1f1dde0a05160e6e113d01eddd39ad5322e",
+      "complete_excerpt": "theorem card_union_le (s t : Finset \u03b1) : #(s \u222a t) \u2264 #s + #t := by grind\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Prod.lean",
+      "names": [
+        "Finset.mem_product"
+      ],
+      "file_sha256_actual": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+      "first_line": 61,
+      "last_line": 62,
+      "span_sha256_actual": "fcd01ba5a9babf7aa92bfd3b25e38ea8320ef3797c32149bf6cd9d1fff9cb650",
+      "complete_excerpt": "theorem mem_product {p : \u03b1 \u00d7 \u03b2} : p \u2208 s \u00d7\u02e2 t \u2194 p.1 \u2208 s \u2227 p.2 \u2208 t :=\n  Multiset.mem_product\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Prod.lean",
+      "names": [
+        "Finset.card_product"
+      ],
+      "file_sha256_actual": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+      "first_line": 141,
+      "last_line": 142,
+      "span_sha256_actual": "1c6ce8eae2f3b944499b47c307ad862093129704035a8aacd93b799bbf57b5cb",
+      "complete_excerpt": "theorem card_product (s : Finset \u03b1) (t : Finset \u03b2) : card (s \u00d7\u02e2 t) = card s * card t :=\n  Multiset.card_product _ _\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Finset\\Nat.lean",
+      "names": [
+        "Nat.card_Icc",
+        "Nat.card_Ioc"
+      ],
+      "file_sha256_actual": "90339c927a9c62f2bed05fd25089b1570397415d65bfc09def8b8e536a4019c9",
+      "first_line": 83,
+      "last_line": 85,
+      "span_sha256_actual": "d27f801753eec50214498f3e54d7304eb7b72aeff5976a089df37565f2b54612",
+      "complete_excerpt": "@[simp] lemma card_Icc : #(Icc a b) = b + 1 - a := List.length_range' ..\n@[simp] lemma card_Ico : #(Ico a b) = b - a := List.length_range' ..\n@[simp] lemma card_Ioc : #(Ioc a b) = b - a := List.length_range' ..\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Defs.lean",
+      "names": [
+        "Nat.le_floor_iff",
+        "Nat.le_floor"
+      ],
+      "file_sha256_actual": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+      "first_line": 140,
+      "last_line": 144,
+      "span_sha256_actual": "68bd88a831b25726bd05670e09df599ff98973685d95625a732d97fa052c0244",
+      "complete_excerpt": "theorem le_floor_iff (ha : 0 \u2264 a) : n \u2264 \u230aa\u230b\u208a \u2194 (n : \u03b1) \u2264 a :=\n  FloorSemiring.gc_floor ha\n\ntheorem le_floor (h : (n : \u03b1) \u2264 a) : n \u2264 \u230aa\u230b\u208a :=\n  (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "names": [
+        "Nat.floor_le"
+      ],
+      "file_sha256_actual": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "first_line": 47,
+      "last_line": 48,
+      "span_sha256_actual": "f61ac8b4c392fba9e977a64fdebfb5f1d3fe334ca6be41d38d819b22adc01bf6",
+      "complete_excerpt": "theorem floor_le (ha : 0 \u2264 a) : (\u230aa\u230b\u208a : R) \u2264 a :=\n  (le_floor_iff ha).1 le_rfl\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "names": [
+        "Nat.le_ceil"
+      ],
+      "file_sha256_actual": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "first_line": 178,
+      "last_line": 179,
+      "span_sha256_actual": "18b71915eab2fae07fb63f8299a4c5180905e669c21b51636d7da95ce934e5d1",
+      "complete_excerpt": "theorem le_ceil (a : R) : a \u2264 \u2308a\u2309\u208a :=\n  ceil_le.1 le_rfl\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "names": [
+        "le_div_iff\u2080"
+      ],
+      "file_sha256_actual": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "first_line": 1134,
+      "last_line": 1135,
+      "span_sha256_actual": "1d6958b31c32c7c7b383a1b29d2d24947b63f4cdcfb219d3c61a68c809760b2d",
+      "complete_excerpt": "lemma le_div_iff\u2080 (hc : 0 < c) : a \u2264 b / c \u2194 a * c \u2264 b := by\n  rw [div_eq_mul_inv, le_mul_inv_iff\u2080 hc]\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Defs\\LinearOrder.lean",
+      "names": [
+        "lt_or_gt_of_ne"
+      ],
+      "file_sha256_actual": "837dba1e44eb02eb7837e8e7b72b59c277e85899454f45d3be66de44ecd98632",
+      "first_line": 110,
+      "last_line": 111,
+      "span_sha256_actual": "518757d3efeb8593b5404d05c00314de3bbf32b5bf37d4c3a8765659a6a074b3",
+      "complete_excerpt": "lemma lt_or_gt_of_ne (h : a \u2260 b) : a < b \u2228 b < a :=\n  (lt_trichotomy a b).imp_right (fun h' \u21a6 h'.resolve_left h)\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "names": [
+        "Nat.le_of_dvd"
+      ],
+      "file_sha256_actual": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "first_line": 65,
+      "last_line": 70,
+      "span_sha256_actual": "41ed5db4301618957736b6f63e56afa9551b1b439a652e35bcf808751c2f4ccd",
+      "complete_excerpt": "theorem le_of_dvd {m n : Nat} (h : 0 < n) : m \u2223 n \u2192 m \u2264 n\n  | \u27e8k, e\u27e9 => by\n    revert h\n    rw [e]\n    match k with\n    | 0 => intro hn; simp at hn\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "names": [
+        "Nat.div_mul_cancel"
+      ],
+      "file_sha256_actual": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "first_line": 110,
+      "last_line": 111,
+      "span_sha256_actual": "c636c0266956b96a429f69c6e00f60bf71c744eca10074131e1b9630df874984",
+      "complete_excerpt": "protected theorem div_mul_cancel {n m : Nat} (H : n \u2223 m) : m / n * n = m := by\n  rw [Nat.mul_comm, Nat.mul_div_cancel' H]\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Div\\Lemmas.lean",
+      "names": [
+        "Nat.div_pos"
+      ],
+      "file_sha256_actual": "3046e785238fe8afe1f0b40f02902ee1cef13589ba8fcb045bc48f16ad4412c0",
+      "first_line": 96,
+      "last_line": 99,
+      "span_sha256_actual": "807d69d93eaa5f3ffeec2057ecc46d6a99539f1cc1c7254e892167503204c529",
+      "complete_excerpt": "theorem div_pos (hba : b \u2264 a) (hb : 0 < b) : 0 < a / b := by\n  cases b\n  \u00b7 contradiction\n  \u00b7 simp [Nat.pos_iff_ne_zero, hba]\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+      "names": [
+        "Nat.sub_add_cancel"
+      ],
+      "file_sha256_actual": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+      "first_line": 991,
+      "last_line": 992,
+      "span_sha256_actual": "c9aafcafdcc262cfacee296138e5b5257ff97273d736dfcc7911cc6753a467e5",
+      "complete_excerpt": "@[simp] protected theorem sub_add_cancel {n m : Nat} (h : m \u2264 n) : n - m + m = n := by\n  rw [Nat.add_comm, Nat.add_sub_of_le h]\n",
+      "all_metadata_bindings_exact": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+      "names": [
+        "Nat.sub_pos_of_lt"
+      ],
+      "file_sha256_actual": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+      "first_line": 1115,
+      "last_line": 1116,
+      "span_sha256_actual": "c7b107c1b731153181f3e34e9c4d85deeda6a40f9adc0094d85e593f171cdd00",
+      "complete_excerpt": "protected theorem sub_pos_of_lt (h : m < n) : 0 < n - m :=\n  Nat.pos_iff_ne_zero.2 (Nat.sub_ne_zero_of_lt h)\n",
+      "all_metadata_bindings_exact": true
+    }
+  ],
+  "relevant_core_API": {
+    "congrArg": {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Prelude.lean",
+      "file_sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+      "first_line": 424,
+      "last_line": 425,
+      "complete_source_excerpt": "theorem congrArg {\u03b1 : Sort u} {\u03b2 : Sort v} {a\u2081 a\u2082 : \u03b1} (f : \u03b1 \u2192 \u03b2) (h : Eq a\u2081 a\u2082) : Eq (f a\u2081) (f a\u2082) :=\n  h \u25b8 rfl\n",
+      "span_sha256": "42ba2eacfa5235163bc5b52b4f8516ada26d799288e03ff058477ee4ea29ad52"
+    },
+    "Prod_ext": "Actual failed compiler log prints its instantiated full type and shows image-pair endpoints inferred from unannotated hfirst. Proposal gives hfirst reduced explicit z.1=w.1 type; Prod.ext source/theorem code itself is unchanged. No invented native declaration or signature is recorded."
+  },
+  "preservation": {
+    "entire_original167LF_source_read": true,
+    "all_source_bytes_except_one_consecutive_projectionblock_exact": true,
+    "actual_changed_lines_only68_69": true,
+    "typed_lambda_terms_unchanged": true,
+    "all3_complete_types_visibility_and_line_locations_byte_exact": true,
+    "all11_import_lines_byte_exact": true,
+    "inclusive_ceil_floor_endpoints_positive_modulus_diagonal_exclusion_ordered_pair_count_fourU2overm_conclusion_unchanged": true,
+    "all_other_proofs_including_hdiff_rw_Prod_ext_omega_unchanged": true,
+    "metadata17API_and_originalauthor_not_rewritten": true,
+    "no_new_axiom_unsafe_partial_or_admit_construct": true
+  },
+  "failure_binding": {
+    "terminal_CP": {
+      "path": "source-reviews/20261022-offdiage3ac-fresh177-soleheavy-operator-terminal-HOLD.json",
+      "sha256": "30330c0d8dc76f28f651ab8d4a6cfb4462e8a88e0e539db90bf6fd954feaa7ff",
+      "bytes": 41792
+    },
+    "original_failedreceipt": {
+      "path": "runs/20261021T172504666964Z-ImbalancedChen.Part3ResonanceOffDiagonalCount/receipt.json",
+      "sha256": "e3ed43a8bd4d8e4fe4548e46b139cfc8d376c259cdc622fd1c85a8b184c12cd8",
+      "bytes": 18005
+    },
+    "original_compiler_log": {
+      "path": "runs/20261021T172504666964Z-ImbalancedChen.Part3ResonanceOffDiagonalCount/stdout.log",
+      "sha256": "4e2c07e0a899d5846decd637841e3dc54e568aea8e8555dd9420906b9737eaab",
+      "bytes": 2236
+    },
+    "original_failed_source_SHA": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+    "actual_errors": "Original source78:48 rw[hquot] cannot match unreduced image projection; source80:8 Prod.ext hfirst concludes image-pair equality rather than z=w.",
+    "old_failure_receipt_and_log_not_modified": true
+  },
+  "diff": {
+    "path": "rounds/20261022-offdiag167-explicit-projection-result-types-source-only-proposal.diff",
+    "sha256": "c937132b7dc578b12744955c8eada712ac3f975ae5fd7d85385c061c98ddb1a0",
+    "bytes": 673,
+    "full_diff_utf8": "--- ImbalancedChen/Part3ResonanceOffDiagonalCount.lean\n+++ rounds/20261022-offdiag167-explicit-projection-result-types-source-only-proposal.lean.txt\n@@ -65,8 +65,8 @@\n       \u00b7 intro z hz w hw he\n         obtain \u27e8_, hzlt, hzmod\u27e9 := mem_filter.mp hz\n         obtain \u27e8_, hwlt, hwmod\u27e9 := mem_filter.mp hw\n-        have hfirst := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n-        have hquot :=\n+        have hfirst : z.1 = w.1 := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n+        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n           congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n         have hzdvd : m \u2223 z.2 - z.1 :=\n           (Nat.modEq_iff_dvd' hzlt.le).mp hzmod\n"
+  },
+  "raw_inverse": {
+    "path": "rounds/20261022-offdiag167-explicit-projection-result-types-source-only-proposal.raw-inverse.json",
+    "sha256": "a2bfaaea764365eec782735c864127162ef6335edf8d22e4daaa9305216c0f16",
+    "bytes": 1599,
+    "full_raw_inverse": {
+      "original_path": "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+      "original_root": "repository",
+      "original_sha256": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+      "proposal_path": "rounds/20261022-offdiag167-explicit-projection-result-types-source-only-proposal.lean.txt",
+      "proposal_sha256": "8826a1ca9fdbebcbe2f5a44cac43b02ac0510c568e916eefa09fff64194e4546",
+      "offset_units": "UTF8 raw byte offsets",
+      "edits": [
+        {
+          "old_start": 2819,
+          "old_end": 2954,
+          "new_start": 2819,
+          "new_end": 3002,
+          "old_hex": "20202020202020206861766520686669727374203a3d20636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e31292068650a202020202020202068617665206871756f74203a3d0a20202020202020202020636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e32292068650a",
+          "new_hex": "20202020202020206861766520686669727374203a207a2e31203d20772e31203a3d20636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e31292068650a202020202020202068617665206871756f74203a20287a2e32202d207a2e3129202f206d203d2028772e32202d20772e3129202f206d203a3d0a20202020202020202020636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e32292068650a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1,
+          "changed_lines": [
+            68,
+            69
+          ],
+          "context": "Complete consecutive hfirst/hquot local proof block; typed lambda expressions unchanged."
+        }
+      ],
+      "raw_forward_exact": true,
+      "raw_reverse_exact": true,
+      "only_two_local_result_type_annotations_added": true
+    },
+    "unique_UTF8_anchor_counts": 1,
+    "raw_forward_reverse_wholebytes_exact": true
+  },
+  "execution_scope": {
+    "original_Lean_modified": false,
+    "only_new_source_snapshot_diff_inverse_and_this_CP_written": true,
+    "proper_classifier_census_compiler_checker_audit_run": false,
+    "Git_used": false,
+    "originalsource_helpers_pins_cache_CP_modified": false,
+    "actual_generated_declarations": null,
+    "main_theorem_claimed": false
+  },
+  "diagnostics": [
+    "Initial read-only source display used Windows default GBK and failed before any write; repeated explicitly as UTF8. No artifact/source mutation resulted.",
+    "WSL rg unavailable; API lookup used read-only Python source scans. No compiler was used."
+  ],
+  "quota": {
+    "last_fresh_used_percent": 39,
+    "last_fresh_remaining_percent": 61,
+    "secondary": null,
+    "stop_if_remaining_lte": 40,
+    "last_fresh_check_from_immediately_preceding_terminal_turn": true
+  },
+  "next": "Root independently reviews complete proposed source, unchanged three complete types/native API, exact two-annotation diff/raw inverse. Root may separately apply proposal; this task leaves original Lean e3ac untouched.",
+  "HOLD": true
+}

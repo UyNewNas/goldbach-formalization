@@ -1,0 +1,424 @@
+{
+  "audit_id": "20261022-general-D-cleaned-supported-row-consumer-source-candidate-HOLD",
+  "created_utc": "2026-10-21T16:35:35.4179714Z",
+  "author": "/root/row_carrier_consumer_sol_high_oct22",
+  "status": "ONE_ACTUAL_CLEANED_SUPPORTED_CARRIER_FINITE_BLOCK_CONSUMER_SOURCE_ONLY_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "One new independent Lean consumer and one author checkpoint; exactly one new public theorem. Original admissibility and literal supported-carrier membership automatically discharge all positivity premises of the unchanged finite block adapter.",
+  "parent_context": {
+    "baseline": "Parent reported b5025c7 accepted175/4066/123; no new count or acceptance claim",
+    "RootPacket": "Parent restoring c165 after/census; original strict+stockALL3 PASS reported; no status independently claimed",
+    "inherited_RowAdapter_and_PairedFourier": "Uncompiled source candidates, not kernel accepted in this task",
+    "original_RowAdapter_sha256": "8fbd321c661ca7896978cc3f099288b120b8dcff37d3f076e2cbdc352be0f2ba",
+    "original_RowAdapter_lines": 247,
+    "author_CP": "source-reviews/20261021-general-D-actual-row-four-branch-adapter-source-candidate-HOLD.json",
+    "author_CP_sha256": "d73e1436b2dfbe295abea4c91791ca8da8fcd261667621ccdf441f7ae48c8bdf",
+    "independent_review_CP": "source-reviews/20261021-generalD-actual-row-adapter-independent-source-review-HOLD.json",
+    "independent_review_CP_sha256": "7154f6dc50112c979a4b54d86e77e3413322e96b6b6d76061c3bd11650c403b6",
+    "independently_queried_quota_used_percent": 37,
+    "independently_queried_quota_remaining_percent": 63,
+    "stop_remaining_lte": 40
+  },
+  "applicable_instructions": {
+    "agent_files_found": [],
+    "checked_ancestors": [
+      "E:/AGENTS.md",
+      "E:/timot/AGENTS.md",
+      "E:/timot/Documents/AGENTS.md",
+      "E:/timot/Documents/FilesForGPT/AGENTS.md",
+      "E:/timot/Documents/FilesForGPT/Myath/AGENTS.md",
+      "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/AGENTS.md"
+    ],
+    "descendant_AGENTS": "No matching AGENTS.md in read-only rg --files --hidden search of ImbalancedChen and .lake/proof-continuation",
+    "subagent_spawned": false
+  },
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDSupportedRowConsumer.lean",
+    "sha256": "8878da32f261be27fb67265c8057a2b2c44179fc43eab9f8349cf5eabcf06fa7",
+    "lines": 95,
+    "spans": [
+      {
+        "first": 1,
+        "last": 95,
+        "literal_source": "import ImbalancedChen.Part3SharedFirstFactorGeneralDRowAdapter\nimport ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy\n\n/-!\n# Actual cleaned supported-carrier consumer of the general-D row adapter\n\nOriginal admissibility and literal outer-carrier membership supply every\npositivity premise of the finite block adapter. The atom is the actual\ncleaned original atom, and both outer cutoffs are the original scale^(sigma/4).\nThe inner carrier, signed resonance mask, guarded rows and complete four-branch\npackets are unchanged. This is an exact finite identity, with no spectral\nbound or positivity assertion for the complementary block.\n\nThe imported row adapter and its paired Fourier identity are source candidates\npending separate kernel acceptance. This consumer is likewise source-only.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\n\nnamespace SharedGeneralDSupportedRowConsumer\n\nprivate theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n  obtain ⟨hlo, _⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\nend SharedGeneralDSupportedRowConsumer\n\n/-- On the actual nonzero coefficient support, original admissibility\nautomatically discharges every positivity premise of the packet adapter. -/\ntheorem MediumAtom.cleaned_smallCoreSquaredSupportedBlock_eq_pairedPacket\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d) (Z : ℝ) (resonant : Bool)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))) :\n    d.cleanedAlphaAtom.smallCoreSquaredBlock Z resonant o =\n      ∑ u ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n        ∑ v ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n          if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n              u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n            d.cleanedAlphaAtom.smallCoreSquaredPairedPacketTerm Z o u v\n          else 0 := by\n  let e := d.cleanedAlphaAtom\n  have he : MediumAdmissible B sigma kappa c0 e :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  have hoOuter : o ∈ e.smallCoreSquaredOuterCarrier :=\n    ((e.mem_smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) o).mp ho).1\n  change o ∈ ((e.primitiveFirstFactorCarrier ×ˢ\n    (e.transposedAtom.betaCarrier ×ˢ e.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier e.Q3) ×ˢ ((factorCarrier e.Q3) ×ˢ factorCarrier e.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at hoOuter\n  have hPairs := (Finset.mem_filter.mp (Finset.mem_product.mp hoOuter).1).1\n  have hpCarrier : o.1.1 ∈ factorCarrier e.Q1 :=\n    (Finset.mem_filter.mp (Finset.mem_product.mp hPairs).1).1\n  have hN1Carrier : o.1.2.1 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).1\n  have hN2Carrier : o.1.2.2 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).2\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp hoOuter).2\n  obtain ⟨D, _hD, hImageEq⟩ := Finset.mem_image.mp hImage\n  have htEq : t = o.2.1 := congrArg Prod.fst hImageEq\n  rw [htEq] at ht\n  have hrCarrier : o.2.1.1 ∈ factorCarrier e.Q3 := (Finset.mem_product.mp ht).1\n  have hr'Carrier : o.2.1.2.1 ∈ factorCarrier e.Q3 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1\n  have hs'Carrier : o.2.1.2.2 ∈ factorCarrier e.Q2 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2\n  have hp : 0 < o.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.1 hpCarrier\n  have hr : 0 < o.2.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hrCarrier\n  have hr' : 0 < o.2.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hr'Carrier\n  have hs' : 0 < o.2.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.1 hs'Carrier\n  have hw : 0 < o.2.1.2.1 * o.2.1.2.2 := Nat.mul_pos hr' hs'\n  have hN1 : 0 < o.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN1Carrier\n  have hN2 : 0 < o.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN2Carrier\n  exact e.smallCoreSquaredBlock_eq_pairedPacket Z resonant o he.2.2.2.1\n    hp hr hw hN1 hN2\n\nend\n\nend ImbalancedChen.Part3\n",
+        "normalized_lf_utf8_sha256": "8878da32f261be27fb67265c8057a2b2c44179fc43eab9f8349cf5eabcf06fa7"
+      }
+    ],
+    "actual_source_read": true,
+    "full_source": "import ImbalancedChen.Part3SharedFirstFactorGeneralDRowAdapter\nimport ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy\n\n/-!\n# Actual cleaned supported-carrier consumer of the general-D row adapter\n\nOriginal admissibility and literal outer-carrier membership supply every\npositivity premise of the finite block adapter. The atom is the actual\ncleaned original atom, and both outer cutoffs are the original scale^(sigma/4).\nThe inner carrier, signed resonance mask, guarded rows and complete four-branch\npackets are unchanged. This is an exact finite identity, with no spectral\nbound or positivity assertion for the complementary block.\n\nThe imported row adapter and its paired Fourier identity are source candidates\npending separate kernel acceptance. This consumer is likewise source-only.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\n\nnamespace SharedGeneralDSupportedRowConsumer\n\nprivate theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n  obtain ⟨hlo, _⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\nend SharedGeneralDSupportedRowConsumer\n\n/-- On the actual nonzero coefficient support, original admissibility\nautomatically discharges every positivity premise of the packet adapter. -/\ntheorem MediumAtom.cleaned_smallCoreSquaredSupportedBlock_eq_pairedPacket\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d) (Z : ℝ) (resonant : Bool)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))) :\n    d.cleanedAlphaAtom.smallCoreSquaredBlock Z resonant o =\n      ∑ u ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n        ∑ v ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n          if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n              u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n            d.cleanedAlphaAtom.smallCoreSquaredPairedPacketTerm Z o u v\n          else 0 := by\n  let e := d.cleanedAlphaAtom\n  have he : MediumAdmissible B sigma kappa c0 e :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  have hoOuter : o ∈ e.smallCoreSquaredOuterCarrier :=\n    ((e.mem_smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) o).mp ho).1\n  change o ∈ ((e.primitiveFirstFactorCarrier ×ˢ\n    (e.transposedAtom.betaCarrier ×ˢ e.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier e.Q3) ×ˢ ((factorCarrier e.Q3) ×ˢ factorCarrier e.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at hoOuter\n  have hPairs := (Finset.mem_filter.mp (Finset.mem_product.mp hoOuter).1).1\n  have hpCarrier : o.1.1 ∈ factorCarrier e.Q1 :=\n    (Finset.mem_filter.mp (Finset.mem_product.mp hPairs).1).1\n  have hN1Carrier : o.1.2.1 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).1\n  have hN2Carrier : o.1.2.2 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).2\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp hoOuter).2\n  obtain ⟨D, _hD, hImageEq⟩ := Finset.mem_image.mp hImage\n  have htEq : t = o.2.1 := congrArg Prod.fst hImageEq\n  rw [htEq] at ht\n  have hrCarrier : o.2.1.1 ∈ factorCarrier e.Q3 := (Finset.mem_product.mp ht).1\n  have hr'Carrier : o.2.1.2.1 ∈ factorCarrier e.Q3 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1\n  have hs'Carrier : o.2.1.2.2 ∈ factorCarrier e.Q2 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2\n  have hp : 0 < o.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.1 hpCarrier\n  have hr : 0 < o.2.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hrCarrier\n  have hr' : 0 < o.2.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hr'Carrier\n  have hs' : 0 < o.2.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.1 hs'Carrier\n  have hw : 0 < o.2.1.2.1 * o.2.1.2.2 := Nat.mul_pos hr' hs'\n  have hN1 : 0 < o.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN1Carrier\n  have hN2 : 0 < o.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN2Carrier\n  exact e.smallCoreSquaredBlock_eq_pairedPacket Z resonant o he.2.2.2.1\n    hp hr hw hN1 hN2\n\nend\n\nend ImbalancedChen.Part3\n",
+    "normalized_lf_utf8_sha256": "8878da32f261be27fb67265c8057a2b2c44179fc43eab9f8349cf5eabcf06fa7"
+  },
+  "declarations": [
+    {
+      "name": "ImbalancedChen.Part3.SharedGeneralDSupportedRowConsumer.factor_pos",
+      "visibility": "private",
+      "complete_written_type": {
+        "first": 27,
+        "last": 28,
+        "literal_source": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n",
+        "normalized_lf_utf8_sha256": "21ff96d0b266b2957bcca0f78ad7b4eb0ac45b042f632a5b1c200f87ebfa0d48"
+      },
+      "full_declaration": {
+        "first": 27,
+        "last": 31,
+        "literal_source": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n  obtain ⟨hlo, _⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n",
+        "normalized_lf_utf8_sha256": "0958e51b61974abf397b7cad7932d9947da74e21d2c011879c6fc95eaadcd846"
+      }
+    },
+    {
+      "name": "ImbalancedChen.Part3.MediumAtom.cleaned_smallCoreSquaredSupportedBlock_eq_pairedPacket",
+      "visibility": "public",
+      "complete_written_type": {
+        "first": 37,
+        "last": 49,
+        "literal_source": "theorem MediumAtom.cleaned_smallCoreSquaredSupportedBlock_eq_pairedPacket\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d) (Z : ℝ) (resonant : Bool)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))) :\n    d.cleanedAlphaAtom.smallCoreSquaredBlock Z resonant o =\n      ∑ u ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n        ∑ v ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n          if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n              u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n            d.cleanedAlphaAtom.smallCoreSquaredPairedPacketTerm Z o u v\n          else 0 := by\n",
+        "normalized_lf_utf8_sha256": "7cfb3a12ee3b687e8681956bbde9c0daf8d9c8f2ec68b38103d5d1318369404f"
+      },
+      "full_declaration": {
+        "first": 37,
+        "last": 91,
+        "literal_source": "theorem MediumAtom.cleaned_smallCoreSquaredSupportedBlock_eq_pairedPacket\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d) (Z : ℝ) (resonant : Bool)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))) :\n    d.cleanedAlphaAtom.smallCoreSquaredBlock Z resonant o =\n      ∑ u ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n        ∑ v ∈ d.cleanedAlphaAtom.smallCoreSquaredInnerCarrier Z o,\n          if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n              u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n            d.cleanedAlphaAtom.smallCoreSquaredPairedPacketTerm Z o u v\n          else 0 := by\n  let e := d.cleanedAlphaAtom\n  have he : MediumAdmissible B sigma kappa c0 e :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  have hoOuter : o ∈ e.smallCoreSquaredOuterCarrier :=\n    ((e.mem_smallCoreSquaredSupportedOuterCarrier\n      (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) o).mp ho).1\n  change o ∈ ((e.primitiveFirstFactorCarrier ×ˢ\n    (e.transposedAtom.betaCarrier ×ˢ e.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier e.Q3) ×ˢ ((factorCarrier e.Q3) ×ˢ factorCarrier e.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at hoOuter\n  have hPairs := (Finset.mem_filter.mp (Finset.mem_product.mp hoOuter).1).1\n  have hpCarrier : o.1.1 ∈ factorCarrier e.Q1 :=\n    (Finset.mem_filter.mp (Finset.mem_product.mp hPairs).1).1\n  have hN1Carrier : o.1.2.1 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).1\n  have hN2Carrier : o.1.2.2 ∈ factorCarrier e.U :=\n    (Finset.mem_product.mp (Finset.mem_product.mp hPairs).2).2\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp hoOuter).2\n  obtain ⟨D, _hD, hImageEq⟩ := Finset.mem_image.mp hImage\n  have htEq : t = o.2.1 := congrArg Prod.fst hImageEq\n  rw [htEq] at ht\n  have hrCarrier : o.2.1.1 ∈ factorCarrier e.Q3 := (Finset.mem_product.mp ht).1\n  have hr'Carrier : o.2.1.2.1 ∈ factorCarrier e.Q3 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1\n  have hs'Carrier : o.2.1.2.2 ∈ factorCarrier e.Q2 :=\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2\n  have hp : 0 < o.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.1 hpCarrier\n  have hr : 0 < o.2.1.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hrCarrier\n  have hr' : 0 < o.2.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.2.1 hr'Carrier\n  have hs' : 0 < o.2.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.2.2.2.1 hs'Carrier\n  have hw : 0 < o.2.1.2.1 * o.2.1.2.2 := Nat.mul_pos hr' hs'\n  have hN1 : 0 < o.1.2.1 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN1Carrier\n  have hN2 : 0 < o.1.2.2 :=\n    SharedGeneralDSupportedRowConsumer.factor_pos he.1 hN2Carrier\n  exact e.smallCoreSquaredBlock_eq_pairedPacket Z resonant o he.2.2.2.1\n    hp hr hw hN1 hN2\n",
+        "normalized_lf_utf8_sha256": "658a4b0a82017eb7cc5eaa10ac30ebece0e69bb33628b90b3e5c145456cfa8b7"
+      }
+    }
+  ],
+  "substantive_result": {
+    "atom": "e := d.cleanedAlphaAtom, the actual cleaned original atom",
+    "original_cutoffs": "Both equal d.scale ^ (sigma / 4)",
+    "premises": "Original MediumAdmissible and original cleaned nonzero-coefficient supported outer-carrier membership only; Z and resonant are arbitrary existing parameters",
+    "positivity_derivation": [
+      "mediumAdmissible_cleanedAlphaAtom retains U,Q1,Q2,Q3>=1.",
+      "The supported carrier membership projects to the unchanged unfiltered outer carrier.",
+      "The original primitive first-factor filter implies p in factorCarrier e.Q1.",
+      "The original paired N labels are in e.transposedAtom.betaCarrier, definitionally factorCarrier e.U.",
+      "The original tail biUnion/image membership implies r,r-prime in factorCarrier e.Q3 and s-prime in factorCarrier e.Q2.",
+      "A private elementary Nat.le_ceil/Icc lemma gives all factor positivities, and Nat.mul_pos gives w=r-prime*s-prime>0.",
+      "The unchanged adapter then derives positivity of its original inner s labels from Q2>=1."
+    ],
+    "actual_adapter_call": "e.smallCoreSquaredBlock_eq_pairedPacket Z resonant o he.2.2.2.1 hp hr hw hN1 hN2",
+    "retained": [
+      "actual cleaned atom",
+      "gcd and CRT gates",
+      "literal nonzero outer coefficient support",
+      "original inner finite carrier",
+      "coefficient multiplicity",
+      "zero-frequency gate",
+      "complex Poisson amplitude",
+      "signed resonance union",
+      "four signed k branches",
+      "root inverse",
+      "complete slow phase",
+      "reciprocal inverse"
+    ],
+    "extra_domain_premises": [],
+    "carrier_enlargement": false,
+    "ReciprocalAPSupplier_added": false,
+    "ReciprocalAPSupplier_inherited": false,
+    "dependency_audit": "Read-only recursive local import traversal from RowAdapter and SupportedCoreCauchy found no Part3ReciprocalAPSupplier. No AP result is used or imported. Only elementary ceil positivity is reproduced privately."
+  },
+  "API_files": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDRowAdapter.lean",
+      "sha256": "8fbd321c661ca7896978cc3f099288b120b8dcff37d3f076e2cbdc352be0f2ba",
+      "lines": 247,
+      "spans": [
+        {
+          "first": 29,
+          "last": 58,
+          "literal_source": "def packet (p r s s' w N1 N2 : ℕ) (a h h' : ℤ) : ℂ :=\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  let t' := s' / q\n  let g := N1.gcd N2\n  let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n  let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n  let n2 := N2 / g\n  let A := g * d1\n  let w0 := w / D\n  let b := A * n2 * r0\n  let c := n1 * w0\n  let zeta := c * p * D * r0\n  let K := (p * D) * r0 * w0\n  let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n  let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n  let z := t * t'\n  fourier 1\n      (((-(a : ℝ) * (k : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : ℝ) / A) : ℝ) :\n          UnitAddCircle) *\n    fourier 1 ((((a : ℝ) * (k : ℝ) /\n      ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) *\n    fourier 1\n      ((((a : ℝ) * (f : ℝ) * (k : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : ℝ) / c) : ℝ) :\n          UnitAddCircle)\n",
+          "normalized_lf_utf8_sha256": "71cdf6a32bcb9c6f58db9cc2227522541b1367b40692b12461c8a7798d2ce645"
+        },
+        {
+          "first": 67,
+          "last": 72,
+          "literal_source": "def amplitude (d : MediumAtom) (Z : ℝ) (p r s w : ℕ) (h : ℤ) : ℂ :=\n  let L := (p * (r * s)).lcm (p * w)\n  let T := d.V / (L : ℝ)\n  if h = 0 then 0 else\n    (poissonSmoothLowPass (T * (h : ℝ) / Z) : ℂ) *\n      (T • (𝓕 dyadicCutoffSchwartz) (T * (h : ℝ)))\n",
+          "normalized_lf_utf8_sha256": "5e3f7b2743d53a05a583baed9e0ccf78dcaab37dbc51e449b31a8b16a5be72f1"
+        },
+        {
+          "first": 154,
+          "last": 158,
+          "literal_source": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n  obtain ⟨hlo, _⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n",
+          "normalized_lf_utf8_sha256": "0958e51b61974abf397b7cad7932d9947da74e21d2c011879c6fc95eaadcd846"
+        },
+        {
+          "first": 163,
+          "last": 184,
+          "literal_source": "def MediumAtom.smallCoreSquaredPairedPacketTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u v : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let r := o.2.1.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let alpha := SharedGeneralDRowAdapter.amplitude d Z p r u.1 w u.2\n  let beta := SharedGeneralDRowAdapter.amplitude d Z p r v.1 w v.2\n  if ((r * u.1).gcd w = D ∧ ComplexCRT.Compatible (p * (r * u.1)) (p * w) N1 N2) ∧\n      ((r * v.1).gcd w = D ∧ ComplexCRT.Compatible (p * (r * v.1)) (p * w) N1 N2) then\n    (d.gamma2 u.1 * star (d.gamma2 v.1)) / 4 *\n      (alpha * star beta *\n          SharedGeneralDRowAdapter.packet p r u.1 v.1 w N1 N2 d.residue u.2 v.2 +\n        alpha * beta *\n          SharedGeneralDRowAdapter.packet p r u.1 v.1 w N1 N2 d.residue u.2 (-v.2) +\n        star alpha * star beta *\n          SharedGeneralDRowAdapter.packet p r u.1 v.1 w N1 N2 d.residue (-u.2) v.2 +\n        star alpha * beta *\n          SharedGeneralDRowAdapter.packet p r u.1 v.1 w N1 N2 d.residue (-u.2) (-v.2))\n  else 0\n",
+          "normalized_lf_utf8_sha256": "897843e51eaba4cf48c6587ce501a1ab76d0141ee3c0fe8b6b8a9aa9ff7173f7"
+        },
+        {
+          "first": 188,
+          "last": 196,
+          "literal_source": "theorem MediumAtom.smallCoreSquaredRowTerm_pair_packet\n    (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u v : ℕ × ℤ)\n    (hp : 0 < o.1.1) (hr : 0 < o.2.1.1)\n    (hs : 0 < u.1) (hs' : 0 < v.1)\n    (hw : 0 < o.2.1.2.1 * o.2.1.2.2)\n    (hN1 : 0 < o.1.2.1) (hN2 : 0 < o.1.2.2) :\n    d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v) =\n      d.smallCoreSquaredPairedPacketTerm Z o u v := by\n",
+          "normalized_lf_utf8_sha256": "f106e1f108df295a1832fe2fe7e30659d113be7df64f28ed994b324dc9642a49"
+        },
+        {
+          "first": 217,
+          "last": 229,
+          "literal_source": "theorem MediumAtom.smallCoreSquaredBlock_eq_pairedPacket\n    (d : MediumAtom) (Z : ℝ) (resonant : Bool)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (hQ2 : 1 ≤ d.Q2) (hp : 0 < o.1.1) (hr : 0 < o.2.1.1)\n    (hw : 0 < o.2.1.2.1 * o.2.1.2.2)\n    (hN1 : 0 < o.1.2.1) (hN2 : 0 < o.1.2.2) :\n    d.smallCoreSquaredBlock Z resonant o =\n      ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n        ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n          if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n              u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n            d.smallCoreSquaredPairedPacketTerm Z o u v\n          else 0 := by\n",
+          "normalized_lf_utf8_sha256": "da7c466c345ae9b120751599aa88090fe72a1f6cc768c379125e106f0a9f2cff"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDPairedFourier.lean",
+      "sha256": "024842983e6a72164d07d06685ea7b18f49833bc6b6dcfc4e1997fc63fd53a6e",
+      "lines": 303,
+      "spans": [
+        {
+          "first": 112,
+          "last": 160,
+          "literal_source": "theorem sharedGeneralD_paired_fourier\n    {p r s s' w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hs' : 0 < s') (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (hc' : ComplexCRT.Compatible (p * (r * s')) (p * w) N1 N2)\n    (hsame : (r * s').gcd w = (r * s).gcd w) (a h h' : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let t' := s' / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let K := (p * D) * r0 * w0\n    let L := (p * (r * s)).lcm (p * w)\n    let L' := (p * (r * s')).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n    let z := t * t'\n    0 < K ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ s' = q * t' ∧\n      b.Coprime c ∧ zeta.Coprime A ∧\n      t.Coprime (A * c) ∧ t'.Coprime (A * c) ∧\n      L = K * t ∧ L' = K * t' ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) *\n        star (fourier h'\n          (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n            UnitAddCircle)) =\n        fourier 1\n          (((-(a : ℝ) * (k : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier 1 ((((a : ℝ) * (k : ℝ) /\n            ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) *\n          fourier 1\n            ((((a : ℝ) * (f : ℝ) * (k : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : ℝ) / c) : ℝ) :\n                UnitAddCircle) := by\n",
+          "normalized_lf_utf8_sha256": "6fbb0c4b94b5c04802715c00f43aa430ce22199ebaed1bb061a5b3a32782f716"
+        },
+        {
+          "first": 293,
+          "last": 296,
+          "literal_source": "theorem sharedGeneralD_realProjection_four_branches (lambda mu F G : ℂ) :\n    (lambda * (F.re : ℂ)) * star (mu * (G.re : ℂ)) =\n      (lambda * star mu) / 4 *\n        (F * star G + F * G + star F * star G + star F * G) := by\n",
+          "normalized_lf_utf8_sha256": "3f13a5e26e2a78d764856c8a2213230d1ba3559e662853e951da35beb371bbfd"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSupportedCoreCauchy.lean",
+      "sha256": "13a0733609f30d51af3649566b4d85053f866ab785fd35bac3c2f317c95a794e",
+      "lines": 183,
+      "spans": [
+        {
+          "first": 25,
+          "last": 30,
+          "literal_source": "def MediumAtom.smallCoreSquaredSupportedOuterCarrier (d : MediumAtom)\n    (Ybeta Ysupport : ℝ) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  d.smallCoreSquaredOuterCarrier.filter\n    (fun o => d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o ≠ 0)\n\n",
+          "normalized_lf_utf8_sha256": "15f93887abca9cde00666f49f810b3573b28781a8311d1099eae23f1145ed468"
+        },
+        {
+          "first": 44,
+          "last": 50,
+          "literal_source": "theorem MediumAtom.mem_smallCoreSquaredSupportedOuterCarrier\n    (d : MediumAtom) (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :\n    o ∈ d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport ↔\n      o ∈ d.smallCoreSquaredOuterCarrier ∧\n        d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o ≠ 0 := by\n  exact Finset.mem_filter\n",
+          "normalized_lf_utf8_sha256": "c40ddbfafcaaa4740ca7332a25cf7dbb8a818016ebfbeff3872bee627fb9a9bb"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21",
+      "lines": 619,
+      "spans": [
+        {
+          "first": 25,
+          "last": 80,
+          "literal_source": "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))\n\ndef MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)\n\ndef MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0\n\ndef MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0\n\ndef MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0\n\n",
+          "normalized_lf_utf8_sha256": "ff477d4516f04c2b680d43fc8db78eff4816b416f56fb0767585d3e2bb9eac9e"
+        },
+        {
+          "first": 126,
+          "last": 142,
+          "literal_source": "    (ho : o ∈ d.smallCoreSquaredOuterCarrier) :\n    o.2.1.1 ∈ factorCarrier d.Q3 ∧\n      o.2.1.2.1 ∈ factorCarrier d.Q3 ∧ o.2.1.2.2 ∈ factorCarrier d.Q2 := by\n  change o ∈ ((d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at ho\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp ho).2\n  obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hImage\n  have het : t = o.2.1 := congrArg Prod.fst he\n  rw [← het]\n  exact ⟨(Finset.mem_product.mp ht).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2⟩\n\nprivate theorem cleaned_squared_outerCoefficient_norm_le_one\n",
+          "normalized_lf_utf8_sha256": "f37d75d2b66f9718bd33783ffc1b2a38ba30cfe4688ef198e5bde9a27406c4fa"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "lines": 197,
+      "spans": [
+        {
+          "first": 63,
+          "last": 64,
+          "literal_source": "def factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n",
+          "normalized_lf_utf8_sha256": "68758e91db9d0375f8ff63dbbfd7b5f8eee7299484e9883f3b5fdcd65bb91880"
+        },
+        {
+          "first": 126,
+          "last": 151,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n\n/-- Missing uniform signed medium estimate.  This proposition is not proved\nby the low-rank BV or one-long integer-slot results in this Part. -/\n",
+          "normalized_lf_utf8_sha256": "f0a8e0714a012dfbf43199e464fa296d59abf4bb0cf47e5d71d484ced07f5b71"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3PairedAlphaDeletion.lean",
+      "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "lines": 786,
+      "spans": [
+        {
+          "first": 38,
+          "last": 45,
+          "literal_source": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n\n\ndef MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0\n\ndef MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }\n",
+          "normalized_lf_utf8_sha256": "c8a813898599a468edab1fd166514964497535eda723074b926d2d492c14ddf2"
+        },
+        {
+          "first": 71,
+          "last": 91,
+          "literal_source": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom := by\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    ?_, ?_, hBeta, hGamma1, hGamma2, hGamma3⟩\n  · intro n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1\n    by_cases h : (n : ℤ) ∣ d.residue\n    · simp only [MediumAtom.cleanedAlpha, if_pos h, norm_zero, zero_le_one]\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hAlpha n hn\n  · intro n hn hnz p hp hpn\n    apply hRough n hn _ p hp hpn\n    change d.cleanedAlpha n ≠ 0 at hnz\n    by_cases h : (n : ℤ) ∣ d.residue\n    · exact (hnz (by simp only [MediumAtom.cleanedAlpha, if_pos h])).elim\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hnz\n\ntheorem MediumAtom.cleanedAlpha_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n",
+          "normalized_lf_utf8_sha256": "0046792099404718e6301f45c9e27218a7295d3c708b4b2d61310cc1d8c3a419"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedDispersion.lean",
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "lines": 379,
+      "spans": [
+        {
+          "first": 35,
+          "last": 44,
+          "literal_source": "  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }\n\ntheorem MediumAtom.transposedAtom_scale (d : MediumAtom) :\n    d.transposedAtom.scale = d.scale := by\n",
+          "normalized_lf_utf8_sha256": "1406a7bd6abe4c547e6ebd946c20475ffb35e415b49dacb493973fb71c0dee81"
+        },
+        {
+          "first": 63,
+          "last": 64,
+          "literal_source": "theorem MediumAtom.transposedAtom_betaCarrier (d : MediumAtom) :\n    d.transposedAtom.betaCarrier = factorCarrier d.U := rfl\n",
+          "normalized_lf_utf8_sha256": "b7652472d56a3abfc933a54d27c0858be6940aa6d2752b8c048c71ecfffc50d5"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "lines": 592,
+      "spans": [
+        {
+          "first": 32,
+          "last": 33,
+          "literal_source": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n",
+          "normalized_lf_utf8_sha256": "80cd07face4405daa750d931d7c536b2c8f2797034b65ae7042ffa04a86fa64c"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Prod.lean",
+      "sha256": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+      "lines": 382,
+      "spans": [
+        {
+          "first": 60,
+          "last": 62,
+          "literal_source": "@[simp, grind =]\ntheorem mem_product {p : α × β} : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t :=\n  Multiset.mem_product\n",
+          "normalized_lf_utf8_sha256": "c8482e73a3b6a1d85b3fa0840ce64b7796ba336d02df4c70bb919732ca3ab0d9"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Filter.lean",
+      "sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+      "lines": 236,
+      "spans": [
+        {
+          "first": 126,
+          "last": 128,
+          "literal_source": "@[simp, grind =]\ntheorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=\n  Multiset.mem_filter\n",
+          "normalized_lf_utf8_sha256": "00dbc8f7f6f684494646df8ab01d82ad0f14c50aa610ae5a6d4842fb31ac5d3f"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Union.lean",
+      "sha256": "e2202bb257f2d4de339beca0096c576027027af52ee5976733a214525464735a",
+      "lines": 318,
+      "spans": [
+        {
+          "first": 202,
+          "last": 203,
+          "literal_source": "@[simp, grind =] lemma mem_biUnion {b : β} : b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t a := by\n  simp only [mem_def, biUnion_val, Multiset.mem_dedup, Multiset.mem_bind]\n",
+          "normalized_lf_utf8_sha256": "84b18e1bb14dd094f1a0866743eabea28c221d7c145377ceb3f9fdfe7f37a2cc"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Image.lean",
+      "sha256": "d7b7e2a714868a3998939bac8f909bbf5b6b0c6895a11fdb8891e39c3ebe326d",
+      "lines": 794,
+      "spans": [
+        {
+          "first": 293,
+          "last": 295,
+          "literal_source": "@[simp, grind =]\ntheorem mem_image : b ∈ s.image f ↔ ∃ a ∈ s, f a = b := by\n  simp only [mem_def, image_val, mem_dedup, Multiset.mem_map]\n",
+          "normalized_lf_utf8_sha256": "f60490a19d2c7d61ae34c7820eb23f7fff571921c6c9ca3408ab2453dc0c9806"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Order/Interval/Finset/Defs.lean",
+      "sha256": "1955182f4d5efe48b58fdd3c5a2498b7a148807dccbe61d0c5a3937084b91f9b",
+      "lines": 1141,
+      "spans": [
+        {
+          "first": 300,
+          "last": 302,
+          "literal_source": "@[simp, grind =]\ntheorem mem_Icc : x ∈ Icc a b ↔ a ≤ x ∧ x ≤ b :=\n  LocallyFiniteOrder.finset_mem_Icc a b x\n",
+          "normalized_lf_utf8_sha256": "b1b751ffcd45f1fce6e161924f7aa6404485595e292333294cce71c51ca74a5a"
+        }
+      ],
+      "actual_source_read": true
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Semiring.lean",
+      "sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "lines": 450,
+      "spans": [
+        {
+          "first": 177,
+          "last": 180,
+          "literal_source": "@[bound]\ntheorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=\n  ceil_le.1 le_rfl\n\n",
+          "normalized_lf_utf8_sha256": "861876f8cf9a557aa58d8012d5f2ce489402a9c0a3f3e27b3f226f9247c0dc9d"
+        }
+      ],
+      "actual_source_read": true
+    }
+  ],
+  "manuscript": {
+    "repository": "chen-imbalanced-semiprimes",
+    "pinned_commit": "ba6ec11d800eccc54406490631895e174de85766",
+    "reference_read": "Read .git/HEAD and .git/refs/heads/master as text; exact pinned commit present. No Git process or API.",
+    "path": "E:/timot/Documents/FilesForGPT/Myath/chen-imbalanced-semiprimes/paper/source/manuscript-body.tex",
+    "sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd",
+    "spans": [
+      {
+        "first": 191,
+        "last": 210,
+        "literal_source": "The exact products $nm=\\mathfrak a$ are removed before Cauchy and\nrestored in the prescribed order, with separate power bounds.  The\npositive principal Gram variance is retained and estimated.  In the\nsecond dispersion term the clean coprimalities give the exact identity\nbelow. Here $e(t)=\\exp(2\\pi it)$, and a bar denotes the multiplicative\ninverse modulo the denominator of the corresponding fraction.\n\\begin{align}\n &e\\left(\\frac{\\mathfrak a h\\overline{n_1w_2}}{qdw_1}\n          +\\frac{\\mathfrak a h\\overline{n_2qdw_1}}{w_2}\\right)\n \\notag\\\\[-2pt]\n &\\quad=\n e\\left(\\frac{\\mathfrak a h(n_1-n_2)\n                    \\overline{n_2qdw_1}}{n_1w_2}\\right)\n e\\left(\\frac{\\mathfrak a h}{qdw_1w_2n_1}\\right).\n \\label{eq:current-retained-phase}\n\\end{align}\nThe last phase is kept.  Partial summation in its five normalized\ncoordinates costs $x^{5\\kappa+o(1)}$, once.  After the coprime\npartition and polarization, the spectral return uses a common\ncompleted-variable interval and a common additive phase across levels.\n",
+        "normalized_lf_utf8_sha256": "4d5daa64bbe87bc6ddc396f537d7efae88f415724729eba194a5a758370e74e8"
+      }
+    ],
+    "reconciliation": "The manuscript deletes exact products before Cauchy and restores them separately, retains positive principal Gram variance, and explicitly keeps the last slow phase. This consumer preserves the inherited full phase and asserts only a finite equality."
+  },
+  "source_review": {
+    "RowAdapter_unchanged": true,
+    "exactly_one_public_theorem": true,
+    "private_ceil_lemma_only": true,
+    "complete_type_headers_reach_theorem_level_by": true,
+    "inherited_paired_type_retains_all_lets": true,
+    "reviewed": "Manual source check of product/filter carrier projections, tail image equality orientation, cleaned-field definitional reductions, admissibility conjunction projection depths and final adapter argument order.",
+    "unresolved": "New consumer and inherited RowAdapter/PairedFourier candidates still require parent-owned compilation and independent acceptance. No analytic cancellation or main theorem closure."
+  },
+  "execution_scope": {
+    "existing_Lean_source_modified": false,
+    "compiler_executed": false,
+    "checker_executed": false,
+    "proper_executed": false,
+    "classifier_executed": false,
+    "census_executed": false,
+    "cache_modified": false,
+    "Git_executable_or_API_executed": false,
+    "publication_executed": false,
+    "pins_changed": false,
+    "baseline_changed": false,
+    "kernel_acceptance": false,
+    "operations": "Read-only source searches, source/reference text reads and SHA256 calculations; one new independent Lean source and one JSON author checkpoint. No heavy gates."
+  },
+  "hash_convention": "Whole-file SHA256 covers exact bytes. Spans, complete written types and full_source use actual ReadAllLines rejoined as UTF-8 LF with terminal LF. Each span has a distinct normalized hash. Complete theorem types end at the theorem-level := by, retaining all intervening lets."
+}

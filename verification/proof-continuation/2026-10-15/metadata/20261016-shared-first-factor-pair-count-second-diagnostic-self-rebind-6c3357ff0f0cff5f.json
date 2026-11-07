@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_ACTUAL_SECOND_PROOF_API_DIAGNOSTIC_REBIND_PENDING_INDEPENDENT",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T23:40:37.290372+00:00",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorPairCount.lean",
+  "old_sha256": "a242f14dc4d4ace3c59718b1f6a8064e781ebdd1af9c67c1db4329e0576b4b74",
+  "new_sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3SharedFirstFactorPairCount.a242f14dc4d4ace3c59718b1f6a8064e781ebdd1af9c67c1db4329e0576b4b74.lean",
+  "failed_stdout": ".lake\\proof-continuation\\runs\\20261015T233924991839Z-ImbalancedChen.Part3SharedFirstFactorPairCount\\stdout.log",
+  "failed_stdout_sha256": "e37411a66b7dcb3d810c0b01d1b176e7527eac45a96d05507bd10da55d35b1c3",
+  "edits": [
+    {
+      "old": "      simpa only [if_pos ⟨Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _, hzmod⟩] using hs",
+      "new": "      have hdiv : z.1.gcd z.2 ∣ z.1 ∧ z.1.gcd z.2 ∣ z.2 ∧ Nat.ModEq p z.1 z.2 :=\n        ⟨Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _, hzmod⟩\n      simpa only [if_pos hdiv] using hs"
+    },
+    {
+      "old": "      simp only [divisibleCongruentPairs, sum_const, nsmul_eq_mul, mul_one]",
+      "new": "      simp only [divisibleCongruentPairs, sum_const, nsmul_eq_mul, mul_one]\n      rfl"
+    }
+  ],
+  "forward_and_reverse_exact_bytes": true,
+  "original_line_endings_preserved": "LF",
+  "all_eleven_complete_headers_unchanged": true,
+  "all_three_complete_definitions_unchanged": true,
+  "all_complete_declarations": [
+    {
+      "name": "sharedPrimitiveLargeGCDPairs",
+      "kind": "def",
+      "complete_header": "def sharedPrimitiveLargeGCDPairs (N : Finset ℕ) (p : ℕ) (Y : ℝ) :\n    Finset (ℕ × ℕ)",
+      "complete_definition": "def sharedPrimitiveLargeGCDPairs (N : Finset ℕ) (p : ℕ) (Y : ℝ) :\n    Finset (ℕ × ℕ) :=\n  (N ×ˢ N).filter (fun z ↦ z.1.Coprime p ∧ z.2.Coprime p ∧\n    Nat.ModEq p z.1 z.2 ∧ Y < (z.1.gcd z.2 : ℝ))"
+    },
+    {
+      "name": "congruentPairs",
+      "kind": "def",
+      "complete_header": "private def congruentPairs (K p : ℕ) : Finset (ℕ × ℕ)",
+      "complete_definition": "private def congruentPairs (K p : ℕ) : Finset (ℕ × ℕ) :=\n  (Ioc 0 K ×ˢ Ioc 0 K).filter (fun z ↦ Nat.ModEq p z.1 z.2)"
+    },
+    {
+      "name": "divisibleCongruentPairs",
+      "kind": "def",
+      "complete_header": "private def divisibleCongruentPairs (K p g : ℕ) : Finset (ℕ × ℕ)",
+      "complete_definition": "private def divisibleCongruentPairs (K p g : ℕ) : Finset (ℕ × ℕ) :=\n  (Ioc 0 K ×ˢ Ioc 0 K).filter (fun z ↦\n    g ∣ z.1 ∧ g ∣ z.2 ∧ Nat.ModEq p z.1 z.2)"
+    },
+    {
+      "name": "card_congruentPairs_le",
+      "kind": "theorem",
+      "complete_header": "private theorem card_congruentPairs_le (K p : ℕ) :\n    (congruentPairs K p).card ≤ K * (K / p + 1)",
+      "complete_definition": null
+    },
+    {
+      "name": "card_divisibleCongruentPairs_le",
+      "kind": "theorem",
+      "complete_header": "private theorem card_divisibleCongruentPairs_le (K p g : ℕ)\n    (hg : 0 < g) (hgp : g.Coprime p) :\n    (divisibleCongruentPairs K p g).card ≤ (K / g) * ((K / g) / p + 1)",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_sq_Icc_le",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_inv_sq_Icc_le (M K : ℕ) (hM : 0 < M) :\n    (∑ g ∈ Icc M K, ((g : ℝ)⁻¹) ^ 2) ≤ 2 / M",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_sq_large_le",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_inv_sq_large_le (T Y : ℝ) (hY : 1 ≤ Y)\n    (G : Finset ℕ) (hG : ∀ g ∈ G, g ≤ Nat.floor T ∧ Y < (g : ℝ)) :\n    (∑ g ∈ G, ((g : ℝ)⁻¹) ^ 2) ≤ 2 / Y",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_le_log",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_inv_le_log {T : ℝ} (hT : 1 ≤ T)\n    (G : Finset ℕ) (hG : G ⊆ Ioc 0 (Nat.floor T)) :\n    (∑ g ∈ G, (g : ℝ)⁻¹) ≤ 1 + Real.log T",
+      "complete_definition": null
+    },
+    {
+      "name": "card_le_sum_divisible",
+      "kind": "theorem",
+      "complete_header": "private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)\n    (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    (sharedPrimitiveLargeGCDPairs N p Y).card ≤\n      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p),\n        (divisibleCongruentPairs (Nat.floor T) p g).card",
+      "complete_definition": null
+    },
+    {
+      "name": "card_sharedPrimitiveLargeGCDPairs_le",
+      "kind": "theorem",
+      "complete_header": "theorem card_sharedPrimitiveLargeGCDPairs_le\n    {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) {p : ℕ} (hp : 0 < p)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    ((sharedPrimitiveLargeGCDPairs N p Y).card : ℝ) ≤\n      2 * T ^ 2 / ((p : ℝ) * Y) + T * (1 + Real.log T)",
+      "complete_definition": null
+    },
+    {
+      "name": "MediumAtom.card_sharedPrimitiveLargeGCDPairs_le",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.card_sharedPrimitiveLargeGCDPairs_le\n    {d : MediumAtom} (hU : 1 ≤ d.U) {Y : ℝ} (hY : 1 ≤ Y)\n    {p : ℕ} (hp : 0 < p) :\n    ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\n      8 * d.U ^ 2 / ((p : ℝ) * Y) + 2 * d.U * (1 + Real.log (2 * d.U))",
+      "complete_definition": null
+    }
+  ],
+  "same_imports": true,
+  "new_foreign": 0,
+  "mathematical_scope_unchanged": "Typed hdiv only instantiates already proved actual gcd-divisor/shared-congruence conjunction for if_pos. Residual identical finite-card cast closed by rfl. Current private Nat filter header and both public endpoints, composite p, both unit gates, full diagonal, 2/Y telescope and constants8/2 unchanged.",
+  "prior_private_type_scope": "a242 is the current root-authorized one-private-header Nat annotation source; this second repair does not alter it. Original44cd failed/source and first reports preserved.",
+  "no_Lean_or_build": true,
+  "acceptance_claim": false
+}

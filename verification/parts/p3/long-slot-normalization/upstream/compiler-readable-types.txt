@@ -1,0 +1,185 @@
+ImbalancedChen.part3IntervalAPCount
+ℕ → ℕ → ℕ → ℕ → ℕ
+
+ImbalancedChen.part3IntervalAPCount_abs_sub_le_two
+∀ (L U q a b : ℕ),
+  LT.lt.{0} 0 q →
+    LE.le.{0}
+      (abs.{0}
+        (HSub.hSub.{0, 0, 0} ↑(ImbalancedChen.part3IntervalAPCount L U q a)
+          ↑(ImbalancedChen.part3IntervalAPCount L U q b)))
+      2
+
+ImbalancedChen.part3IntervalAPCount_coprimeMean_error
+∀ (L U q a : ℕ),
+  LT.lt.{0} 0 q →
+    LE.le.{0}
+      (abs.{0}
+        (HSub.hSub.{0, 0, 0} (↑(ImbalancedChen.part3IntervalAPCount L U q a))
+          (HDiv.hDiv.{0, 0, 0} ↑(ImbalancedChen.part3IntervalCoprimeCount L U q) ↑q.totient)))
+      2
+
+ImbalancedChen.part3IntervalAPCount_le_add_two
+∀ (L U q a b : ℕ),
+  LT.lt.{0} 0 q →
+    LE.le.{0} (ImbalancedChen.part3IntervalAPCount L U q a)
+      (HAdd.hAdd.{0, 0, 0} (ImbalancedChen.part3IntervalAPCount L U q b) 2)
+
+ImbalancedChen.part3IntervalCoprimeCount
+ℕ → ℕ → ℕ → ℕ
+
+ImbalancedChen.part3IntervalCoprimeCount_eq_sum
+∀ (L U q : ℕ),
+  LT.lt.{0} 0 q →
+    Eq.{1} (ImbalancedChen.part3IntervalCoprimeCount L U q)
+      (∑ a ∈ Finset.range q with q.Coprime a, ImbalancedChen.part3IntervalAPCount L U q a)
+
+ImbalancedChen.part3LongSlotAPCount
+ℕ → ℕ → ℕ → ℕ → ℕ → ℕ
+
+ImbalancedChen.part3LongSlotCoprimeCount
+ℕ → ℕ → ℕ → ℕ → ℕ
+
+ImbalancedChen.part3LongSlotRemainder
+ℕ → ℕ → ℕ → ℕ → ℕ → ℝ
+
+ImbalancedChen.part3LongSlotRemainder_abs_le_two
+∀ (L U q a m : ℕ), LT.lt.{0} 0 q → a.Coprime q → LE.le.{0} (abs.{0} (ImbalancedChen.part3LongSlotRemainder L U q a m)) 2
+
+ImbalancedChen.part3LongSlotRemainder_eq_zero_of_not_coprime
+∀ (L U q a m : ℕ), a.Coprime q → ¬m.Coprime q → Eq.{1} (ImbalancedChen.part3LongSlotRemainder L U q a m) 0
+
+ImbalancedChen.part3LongSlotSignedError
+Finset.{0} ℕ → Finset.{0} ℕ → (ℕ → ℂ) → (ℕ → ℂ) → ℕ → ℕ → ℕ → ℂ
+
+ImbalancedChen.part3LongSlotSignedError_norm_le
+∀ (S Q : Finset.{0} ℕ) (α ρ : ℕ → ℂ) (L U a : ℕ),
+  (∀ (q : ℕ), Membership.mem.{0, 0} Q q → LT.lt.{0} 0 q) →
+    (∀ (q : ℕ), Membership.mem.{0, 0} Q q → a.Coprime q) →
+      LE.le.{0} (Norm.norm.{0} (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 (∑ m ∈ S, Norm.norm.{0} (α m))) (∑ q ∈ Q, Norm.norm.{0} (ρ q)))
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_box
+∀ (M D L U a : ℕ) (α ρ : ℕ → ℂ),
+  (∀ (m : ℕ), Membership.mem.{0, 0} (Finset.Icc.{0} 1 M) m → LE.le.{0} (Norm.norm.{0} (α m)) 1) →
+    (∀ (q : ℕ), Membership.mem.{0, 0} ({q ∈ Finset.Icc.{0} 1 D | a.Coprime q}) q → LE.le.{0} (Norm.norm.{0} (ρ q)) 1) →
+      LE.le.{0}
+        (Norm.norm.{0}
+          (ImbalancedChen.part3LongSlotSignedError (Finset.Icc.{0} 1 M) ({q ∈ Finset.Icc.{0} 1 D | a.Coprime q}) α ρ L U
+            a))
+        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 ↑M) ↑D)
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_card
+∀ (S Q : Finset.{0} ℕ) (α ρ : ℕ → ℂ) (L U a : ℕ),
+  (∀ (q : ℕ), Membership.mem.{0, 0} Q q → LT.lt.{0} 0 q) →
+    (∀ (q : ℕ), Membership.mem.{0, 0} Q q → a.Coprime q) →
+      (∀ (m : ℕ), Membership.mem.{0, 0} S m → LE.le.{0} (Norm.norm.{0} (α m)) 1) →
+        (∀ (q : ℕ), Membership.mem.{0, 0} Q q → LE.le.{0} (Norm.norm.{0} (ρ q)) 1) →
+          LE.le.{0} (Norm.norm.{0} (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+            (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 ↑(Finset.card.{0} S)) ↑(Finset.card.{0} Q))
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_of_mass
+∀ (S Q : Finset.{0} ℕ) (α ρ : ℕ → ℂ) (L U a : ℕ) (M D : ℝ),
+  (∀ (q : ℕ), Membership.mem.{0, 0} Q q → LT.lt.{0} 0 q) →
+    (∀ (q : ℕ), Membership.mem.{0, 0} Q q → a.Coprime q) →
+      LE.le.{0} (∑ m ∈ S, Norm.norm.{0} (α m)) M →
+        LE.le.{0} (∑ q ∈ Q, Norm.norm.{0} (ρ q)) D →
+          LE.le.{0} (Norm.norm.{0} (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+            (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 M) D)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub
+∀ (L U : ℕ),
+  LE.le.{0} L U →
+    ∀ (P : ℕ → Prop) [inst : DecidablePred.{1} P],
+      Eq.{1} (Finset.card.{0} (Finset.filter.{0} P (Finset.Ico.{0} L U)))
+        (HSub.hSub.{0, 0, 0} (Nat.count P U) (Nat.count P L))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one
+∀ (U q a b : ℕ),
+  LT.lt.{0} 0 q →
+    LE.le.{0} (Nat.count (fun n => n ≡ a [MOD q]) U) (HAdd.hAdd.{0, 0, 0} (Nat.count (fun n => n ≡ b [MOD q]) U) 1)
+
+ImbalancedChen.part3IntervalAPCount.eq_1
+∀ (L U q a : ℕ),
+  Eq.{1} (ImbalancedChen.part3IntervalAPCount L U q a) (Finset.card.{0} ({n ∈ Finset.Ico.{0} L U | n ≡ a [MOD q]}))
+
+ImbalancedChen.part3IntervalAPCount_le_add_two._proof_1_1
+∀ (L U q a b : ℕ),
+  LE.le.{0} (Nat.count (fun n => n ≡ a [MOD q]) U) (HAdd.hAdd.{0, 0, 0} (Nat.count (fun n => n ≡ b [MOD q]) U) 1) →
+    LE.le.{0} (Nat.count (fun n => n ≡ b [MOD q]) L) (HAdd.hAdd.{0, 0, 0} (Nat.count (fun n => n ≡ a [MOD q]) L) 1) →
+      LE.le.{0} (Nat.count (fun n => n ≡ a [MOD q]) L) (Nat.count (fun n => n ≡ a [MOD q]) U) →
+        LE.le.{0} (Nat.count (fun n => n ≡ b [MOD q]) L) (Nat.count (fun n => n ≡ b [MOD q]) U) →
+          ¬LE.le.{0} (HSub.hSub.{0, 0, 0} (Nat.count (fun n => n ≡ a [MOD q]) U) (Nat.count (fun n => n ≡ a [MOD q]) L))
+                (HAdd.hAdd.{0, 0, 0}
+                  (HSub.hSub.{0, 0, 0} (Nat.count (fun n => n ≡ b [MOD q]) U) (Nat.count (fun n => n ≡ b [MOD q]) L))
+                  2) →
+            False
+
+ImbalancedChen.part3IntervalAPCount_le_add_two._proof_1_3
+∀ (L U q : ℕ), ¬LE.le.{0} L U → ¬LE.le.{0} U L → False
+
+ImbalancedChen.part3IntervalCoprimeCount.eq_1
+∀ (L U q : ℕ),
+  Eq.{1} (ImbalancedChen.part3IntervalCoprimeCount L U q) (Finset.card.{0} ({n ∈ Finset.Ico.{0} L U | q.Coprime n}))
+
+ImbalancedChen.part3IntervalCoprimeCount_eq_sum._simp_1_1
+∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred.{u_1 + 1} p] {s : Finset.{u_1} α} {a : α},
+  Eq.{1} (Membership.mem.{u_1, u_1} (Finset.filter.{u_1} p s) a) (Membership.mem.{u_1, u_1} s a ∧ p a)
+
+ImbalancedChen.part3LongSlotAPCount.eq_1
+∀ (L U q a m : ℕ),
+  Eq.{1} (ImbalancedChen.part3LongSlotAPCount L U q a m)
+    (Finset.card.{0} ({n ∈ Finset.Ico.{0} L U | HMul.hMul.{0, 0, 0} m n ≡ a [MOD q]}))
+
+ImbalancedChen.part3LongSlotCoprimeCount.eq_1
+∀ (L U q m : ℕ),
+  Eq.{1} (ImbalancedChen.part3LongSlotCoprimeCount L U q m)
+    (Finset.card.{0} ({n ∈ Finset.Ico.{0} L U | (HMul.hMul.{0, 0, 0} m n).Coprime q}))
+
+ImbalancedChen.part3LongSlotRemainder.eq_1
+∀ (L U q a m : ℕ),
+  Eq.{1} (ImbalancedChen.part3LongSlotRemainder L U q a m)
+    (HSub.hSub.{0, 0, 0} (↑(ImbalancedChen.part3LongSlotAPCount L U q a m))
+      (HDiv.hDiv.{0, 0, 0} ↑(ImbalancedChen.part3LongSlotCoprimeCount L U q m) ↑q.totient))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._proof_1_5
+∀ (L U n : ℕ), ¬(LE.le.{0} L n ∧ LT.lt.{0} n U ↔ LT.lt.{0} n U ∧ ¬LT.lt.{0} n L) → False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_1
+∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred.{u_1 + 1} p] {s : Finset.{u_1} α} {a : α},
+  Eq.{1} (Membership.mem.{u_1, u_1} (Finset.filter.{u_1} p s) a) (Membership.mem.{u_1, u_1} s a ∧ p a)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_2
+∀ {α : Type u_1} [inst : Preorder.{u_1} α] [inst_1 : LocallyFiniteOrder.{u_1} α] {a b x : α},
+  Eq.{1} (Membership.mem.{u_1, u_1} (Finset.Ico.{u_1} a b) x) (LE.le.{u_1} a x ∧ LT.lt.{u_1} x b)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_3
+∀ {α : Type u_1} [inst : DecidableEq.{u_1 + 1} α] {s t : Finset.{u_1} α} {a : α},
+  Eq.{1} (Membership.mem.{u_1, u_1} (SDiff.sdiff.{u_1} s t) a) (Membership.mem.{u_1, u_1} s a ∧ a ∉ t)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_4
+∀ {n m : ℕ}, Eq.{1} (Membership.mem.{0, 0} (Finset.range n) m) (LT.lt.{0} m n)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_1
+∀ (U q a b : ℕ),
+  ¬LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 1)
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 1) 1) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_2
+∀ (U q a b : ℕ),
+  ¬LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 1)
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 0) 1) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_3
+∀ (U q a b : ℕ),
+  ¬LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 0)
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 1) 1) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_4
+∀ (U q a b : ℕ),
+  ¬LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 0)
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} U q) 0) 1) →
+    False

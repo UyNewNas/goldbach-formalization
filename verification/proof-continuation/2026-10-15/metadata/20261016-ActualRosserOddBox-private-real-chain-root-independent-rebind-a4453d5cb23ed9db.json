@@ -1,0 +1,160 @@
+{
+  "status": "SOURCE_ONLY_ROOT_NONAUTHOR_ONE_PRIVATE_FINITE_CHAIN_EXTRACTION_REBIND_PENDING_ORIGINAL_6144_EXECUTION",
+  "reviewer": "/root (not author of repair)",
+  "created_at_utc": "2026-10-15T22:27:30.016443+00:00",
+  "candidate": "ImbalancedChen/ActualRosserOddBox.lean",
+  "old_actual_failed_sha256": "1bc9376e2d9c96844ddf056ce667c9f8b41bf0e9e46d2763c1314e6a9cd9ea73",
+  "current_sha256": "6e74bc50c77952c72453e904e1d9c3afb67514cb17e67f6d7cf6b9a5cc30880e",
+  "owner_report": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-ActualRosserOddBox-private-real-chain-owner-rebind.json",
+    "sha256": "e53c6e560697cc68cdd3dbced7060618cfc5933abc6f07988e1e9b8cc4984a5d"
+  },
+  "actual_second_OOM": {
+    "receipt": ".lake/proof-continuation/runs/20261015T221702479672Z-ImbalancedChen.ActualRosserOddBox/receipt.json",
+    "receipt_sha256": "13c2560a572faa2132eef21422b599ed27d3d591e7bb0e7c930b0bcbf2d8c3b5",
+    "stdout": ".lake/proof-continuation/runs/20261015T221702479672Z-ImbalancedChen.ActualRosserOddBox/stdout.log",
+    "stdout_sha256": "48bc2200174632932b9ea98fd0a0c30e6dc353ce535531045f1c7efc7b79940a",
+    "complete_stdout": "libc++abi: terminating due to uncaught exception of type lean::memory_exception: excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)\n",
+    "exit_code": -6,
+    "memory_mib": 6144,
+    "max_rss_kib": 6605412,
+    "seconds": 37.176,
+    "proof_diagnostic": false,
+    "OOM_line_identified": false,
+    "runtime_success_inferred_from_shorter_time": false
+  },
+  "all10_complete_types_and2definitions": [
+    {
+      "name": "actualRosserOddTail",
+      "kind": "def",
+      "private": false,
+      "complete_type": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ",
+      "complete_definition": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k) => p i.castSucc)"
+    },
+    {
+      "name": "actualRosserOddBoundaryMap",
+      "kind": "def",
+      "private": false,
+      "complete_type": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+      "complete_definition": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k)), actualRosserOddTail p⟩"
+    },
+    {
+      "name": "actualRosserOddTail_card",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddTail_card {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) : (actualRosserOddTail p).card = 2 * k"
+    },
+    {
+      "name": "actualRosserOddTail_prod",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddTail_prod {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserOddTail p, g r) = ∏ i : Fin (2 * k), g (p i.castSucc)"
+    },
+    {
+      "name": "actualRosserOddTail_range",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddTail_range {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Set.range p = (↑(actualRosserOddTail p) : Set ℕ) ∪ {p (Fin.last (2 * k))}"
+    },
+    {
+      "name": "actualRosserOddBoundaryMap_injOn_strictAnti",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 1) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserOddBoundaryMap (k := k)) (T : Set (Fin (2 * k + 1) → ℕ))"
+    },
+    {
+      "name": "actualRosserOddTail_rank_eq",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 1) → ℕ} {r : Fin (2 * l + 1) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserOddTail p = actualRosserOddTail r) : k = l"
+    },
+    {
+      "name": "odd_box_upper_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_type": "private theorem odd_box_upper_le {k : ℕ} {a b : Fin (2 * k + 1) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u"
+    },
+    {
+      "name": "odd_boundaryChain_of_realBounds",
+      "kind": "theorem",
+      "private": true,
+      "complete_type": "private theorem odd_boundaryChain_of_realBounds\n    {k : ℕ} (p : Fin (2 * k + 1) → ℕ) (R : ℝ)\n    (hlsorted : (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)).SortedGT)\n    (htotalReal : (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) < R)\n    (hprefixReal : ∀ i : Fin (2 * k), Even i.val →\n      (∏ j : Fin (2 * k) with j.val < i.val, (p j.castSucc : ℝ)) *\n        (p i.castSucc : ℝ) ^ 3 < R)\n    (hshellReal : R ≤ (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) *\n      (p (Fin.last (2 * k)) : ℝ) ^ 3) :\n    LinearSieve.UpperRosserBoundaryChain (Nat.ceil R)\n      (p (Fin.last (2 * k))) (List.ofFn (fun i : Fin (2 * k) => p i.castSucc))"
+    },
+    {
+      "name": "actualRosserOddBox_mem_boundary",
+      "kind": "theorem",
+      "private": false,
+      "complete_type": "theorem actualRosserOddBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 1) → ℝ) (u beta : ℝ)\n    (hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k), Even i.val →\n      (∑ j : Fin (2 * k) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k), a i.castSucc) +\n      3 * a (Fin.last (2 * k)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 1) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserOddTail p ∈ actualUpperRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k))) ∧\n      (actualRosserOddTail p).card = 2 * k"
+    }
+  ],
+  "original9_complete_types_and2definitions_exactly_unchanged": true,
+  "one_added_private_theorem": {
+    "name": "odd_boundaryChain_of_realBounds",
+    "kind": "theorem",
+    "private": true,
+    "complete_type": "private theorem odd_boundaryChain_of_realBounds\n    {k : ℕ} (p : Fin (2 * k + 1) → ℕ) (R : ℝ)\n    (hlsorted : (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)).SortedGT)\n    (htotalReal : (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) < R)\n    (hprefixReal : ∀ i : Fin (2 * k), Even i.val →\n      (∏ j : Fin (2 * k) with j.val < i.val, (p j.castSucc : ℝ)) *\n        (p i.castSucc : ℝ) ^ 3 < R)\n    (hshellReal : R ≤ (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) *\n      (p (Fin.last (2 * k)) : ℝ) ^ 3) :\n    LinearSieve.UpperRosserBoundaryChain (Nat.ceil R)\n      (p (Fin.last (2 * k))) (List.ofFn (fun i : Fin (2 * k) => p i.castSucc))"
+  },
+  "independent_forward_inverse_exact_bytes": true,
+  "old_OOM_bytes_match_published_HEAD_exactly": true,
+  "literal_byte_patches": [
+    {
+      "old": "/-- All prefix tests and the terminal crossing are verified at the same\n",
+      "new": "private theorem odd_boundaryChain_of_realBounds\n    {k : ℕ} (p : Fin (2 * k + 1) → ℕ) (R : ℝ)\n    (hlsorted : (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)).SortedGT)\n    (htotalReal : (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) < R)\n    (hprefixReal : ∀ i : Fin (2 * k), Even i.val →\n      (∏ j : Fin (2 * k) with j.val < i.val, (p j.castSucc : ℝ)) *\n        (p i.castSucc : ℝ) ^ 3 < R)\n    (hshellReal : R ≤ (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) *\n      (p (Fin.last (2 * k)) : ℝ) ^ 3) :\n    LinearSieve.UpperRosserBoundaryChain (Nat.ceil R)\n      (p (Fin.last (2 * k))) (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)) := by\n  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)\n  have hllen : l.length = 2 * k := List.length_ofFn\n  have hlprod : (l.prod : ℝ) = ∏ i : Fin (2 * k), (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_ofFn, Nat.cast_prod]\n  have hltake (r : ℕ) : ((l.take r).prod : ℝ) =\n      ∏ i : Fin (2 * k) with i.val < r, (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_take_ofFn, Nat.cast_prod]\n  have hlget (i : Fin l.length) :\n      (l.get i : ℝ) = (p (Fin.cast hllen i).castSucc : ℝ) := by\n    simp only [l, List.get_ofFn]\n  change LinearSieve.UpperRosserBoundaryChain (Nat.ceil R) (p (Fin.last (2 * k))) l\n  refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n  · rw [hllen]\n    exact ⟨k, by omega⟩\n  · apply Nat.lt_ceil.mpr\n    rw [hlprod]\n    exact htotalReal\n  · intro i hi\n    apply Nat.lt_ceil.mpr\n    rw [Nat.cast_mul, Nat.cast_pow, hltake, hlget]\n    exact hprefixReal (Fin.cast hllen i) hi\n  · apply Nat.ceil_le.mpr\n    rw [Nat.cast_mul, Nat.cast_pow, hlprod]\n    exact hshellReal\n\n/-- All prefix tests and the terminal crossing are verified at the same\n",
+      "occurrences": 1
+    },
+    {
+      "old": "  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)\n  have hllen : l.length = 2 * k := List.length_ofFn\n  have hlprod : (l.prod : ℝ) = ∏ i : Fin (2 * k), (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_ofFn, Nat.cast_prod]\n  have hltake (r : ℕ) : ((l.take r).prod : ℝ) =\n      ∏ i : Fin (2 * k) with i.val < r, (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_take_ofFn, Nat.cast_prod]\n  have hlget (i : Fin l.length) :\n      (l.get i : ℝ) = (p (Fin.cast hllen i).castSucc : ℝ) := by\n    simp only [l, List.get_ofFn]\n  have hlinj",
+      "new": "  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)\n  have hlinj",
+      "occurrences": 1
+    },
+    {
+      "old": "  have hchain : LinearSieve.UpperRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k))) l := by\n    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n    · rw [hllen]\n      exact ⟨k, by omega⟩\n    · apply Nat.lt_ceil.mpr\n      rw [hlprod]\n      exact htotalReal\n    · intro i hi\n      apply Nat.lt_ceil.mpr\n      rw [Nat.cast_mul, Nat.cast_pow, hltake, hlget]\n      exact hprefixReal (Fin.cast hllen i) hi\n    · apply Nat.ceil_le.mpr\n      rw [Nat.cast_mul, Nat.cast_pow, hlprod]\n      exact hshellReal\n",
+      "new": "  have hchain : LinearSieve.UpperRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k))) l :=\n    odd_boundaryChain_of_realBounds p ((N : ℝ) ^ beta)\n      hlsorted htotalReal hprefixReal hshellReal\n",
+      "occurrences": 1
+    }
+  ],
+  "independent_parent_source_hash_checks": [
+    {
+      "module": "ImbalancedChen.ActualRosserBoundaryExpansion",
+      "current_sha256": "be0f26dc2405d3ae48d82cf70a72b31105014b8915c2098a1abdf279cdfa6768",
+      "expected_sha256": "be0f26dc2405d3ae48d82cf70a72b31105014b8915c2098a1abdf279cdfa6768"
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "current_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "expected_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a"
+    },
+    {
+      "module": "Mathlib.Algebra.BigOperators.Fin",
+      "current_sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+      "expected_sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5"
+    },
+    {
+      "module": "Mathlib.Data.List.FinRange",
+      "current_sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3",
+      "expected_sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3"
+    },
+    {
+      "module": "Mathlib.Order.WellFounded",
+      "current_sha256": "51e96625f2ea719cc9575cf623a1d4169cda879fd06a12e8f003b0b2cae0f039",
+      "expected_sha256": "51e96625f2ea719cc9575cf623a1d4169cda879fd06a12e8f003b0b2cae0f039"
+    }
+  ],
+  "pins_fresh_unchanged": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "mathematical_review": [
+    "New private theorem is precisely the root-approved finite list/real product to natural-ceiling chain conversion, for arbitrary actual tuple p and actual real R. No density, boundary conclusion, asymptotic, actual mean or analytic budget is a premise.",
+    "Four local list equalities and the existing chain proof are mechanically moved from the large main proof into this smaller private proof context. They retain exact actual ofFn, Fin.cast indices, parity, products, strict total/prefix tests and weak terminal crossing.",
+    "Original main still proves sortedness and all three real geometry inequalities from the original actual prime box and original exponent hypotheses, then supplies those proved facts to the helper at R=N^beta. No caller is asked to supply the theorem being formalized.",
+    "All original rank/injection, k=0, cutoff/cap, prime exclusions, owned finite carrier and boundary conclusion remain exactly the same. All imports and source DAG shape remain unchanged.",
+    "Old OOM had no proof diagnostic or located line. This source refactor is a bounded resource hypothesis, not evidence that memory use is reduced or the new source executes successfully."
+  ],
+  "findings": [],
+  "root_specific_gate": "New exact6e74 only, after sole runtime owner actual current direct-parent cache binding and this whole report: originalM6144/RSS6656/j2 fair strict then complete owned checks if strict succeeds. No unchanged old2be/1bc retry, resource increase, foreign bootstrap or wider new declaration.",
+  "lean_or_lake_invoked": false,
+  "source_modified_by_reviewer": false,
+  "owned_or_imported_closure_acceptance": false
+}

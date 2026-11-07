@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:21:33.4278642Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_DRAFT_SELF_REVIEW_NO_RUNTIME_SUBMISSION",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3PrimitiveZeroReal.lean",
+    "sha256": "bdc6a0b30068c1b842555baf94911f151a31eab37250985c05ef6fc3f631c36b",
+    "declaration_count": 3,
+    "definition_count": 0,
+    "all_complete_headers": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.star_sum_pair_eq_of_hermitian",
+        "kind": "theorem",
+        "start_line": 21,
+        "signature_last_line": 24,
+        "complete_source_header": "theorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_star",
+        "kind": "theorem",
+        "start_line": 35,
+        "signature_last_line": 36,
+        "complete_source_header": "theorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_ofReal_re",
+        "kind": "theorem",
+        "start_line": 49,
+        "signature_last_line": 50,
+        "complete_source_header": "theorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d"
+      }
+    ],
+    "full_source": "import ImbalancedChen.Part3TransposedZeroCovariance\n\n/-!\n# Reality of the actual primitive zero main term\n\nThe actual complex factor coefficients and coprime masses form a Hermitian\npair. The totient density is real and symmetric under exchanging the two\ncomplete physical labels. Finite Fubini therefore makes primitiveZeroMain\nself-conjugate without changing any carrier or imposing coefficient bounds.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical\nopen scoped BigOperators\n\nnamespace TransposedZeroCovariance\n\ntheorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b := by\n  simp only [star_sum]\n  calc\n    _ = ∑ a ∈ S, ∑ b ∈ S, f b a := by\n      apply Finset.sum_congr rfl\n      intro a ha\n      apply Finset.sum_congr rfl\n      intro b hb\n      exact hf a ha b hb\n    _ = _ := Finset.sum_comm\n\ntheorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d := by\n  unfold primitiveZeroMain\n  rw [star_mul]\n  have hs : star ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) := by\n    simp only [Complex.star_def, Complex.conj_ofReal]\n  rw [hs]\n  congr 1\n  apply star_sum_pair_eq_of_hermitian\n  intro a _ b _\n  simp only [star_mul, star_div₀, star_star, star_natCast,\n    Nat.mul_comm, mul_comm, mul_left_comm, mul_assoc]\n\ntheorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d := by\n  apply Complex.conj_eq_iff_re.mp\n  simpa only [Complex.star_def] using primitiveZeroMain_star d\n\nend TransposedZeroCovariance\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance"
+  ],
+  "direct_dependency": {
+    "path": "ImbalancedChen/Part3TransposedZeroCovariance.lean",
+    "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+    "owner_note": "Parent reported the dependency revision was not yet owned. At draft self-review the actual dependency hash is recorded above; no ownership, runtime request, or acceptance is presumed."
+  },
+  "sourceDAG_delta": {
+    "basis": "Relative to parent staged union containing Part3TransposedZeroCovariance and its imports.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3PrimitiveZeroReal"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "no_new_direct_foreign_imports": true,
+    "full_tree_rescanned": false
+  },
+  "source_semantics": [
+    "Generic finite Hermitian double sum: conjugation distributes over the two finite sums, each term becomes its swapped-label term, and Finset.sum_comm restores the original sum.",
+    "primitiveZeroMain_star unfolds the literal actual primitiveZeroMain. Its scalar V*local cutoffMass is a real cast and hence self-conjugate. The exact totient density is a ratio of natural casts and therefore real; q*r and r*q agree, so the density is symmetric. The complex factor/coprime-mass pair is exchanged exactly by star; only associativity and commutativity are used.",
+    "primitiveZeroMain_ofReal_re is the standard Complex.conj_eq_iff_re consequence of the proved self-conjugacy.",
+    "No MediumAdmissible, norm bound, positivity, nonzero modulus, residue gate, smoothing identity, coefficient replacement, or carrier restriction is assumed. Total complex division makes the algebraic statement valid even at zero density denominators."
+  ],
+  "self_review": {
+    "complete_headers_read": true,
+    "only_one_local_import": true,
+    "three_theorems_zero_definitions": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "algebra_only": true,
+    "fixed_mathlib_api_names_source_checked": [
+      "star_sum",
+      "star_mul",
+      "star_div₀",
+      "star_star",
+      "star_natCast",
+      "Complex.star_def",
+      "Complex.conj_ofReal",
+      "Complex.conj_eq_iff_re"
+    ],
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "runtime_request_submitted": false,
+    "runtime_elaboration_result": "NOT_RUN",
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "owned_sources_modified": false,
+    "zero_covariance_modified": false,
+    "new_files_only": [
+      "ImbalancedChen/Part3PrimitiveZeroReal.lean",
+      ".lake/proof-continuation/source-reviews/20261016-primitive-zero-real-self-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Parent review and freezing of this new draft.",
+    "Dependency ownership/acceptance for the current Part3TransposedZeroCovariance revision.",
+    "Owner-controlled runtime elaboration and any separately required replay/axiom audit."
+  ]
+}

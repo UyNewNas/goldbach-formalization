@@ -1,0 +1,2429 @@
+{
+  "status": "INDEPENDENT_COMPLETE_MATH_API_REVIEW_APPROVES_ONE_NEW_SOURCE_AUTHORING_ONLY_NOT_COMPILED",
+  "reviewer": "/root/spectral_reuse_oct20",
+  "created_utc": "2026-10-20T09:28:21.335630+00:00",
+  "scope": "Read-only complete mathematical/API review of one literal core definition, four complete proposed public types, every proof route, and current actual source/object/owned parent bindings. No source authored and no compiler/checker/cache/install invoked.",
+  "proposal": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-shared-three-mask-small-supported-next-interface-complete-readonly-proposal.json",
+    "sha256": "07f27b7a992bd48fe4fab7b5c4a74767e4f58d61f93bad01c65192bdc69683cc",
+    "complete_literal_definition_unchanged": [
+      "def MediumAtom.sharedSmallPairedSmallSupportedNonzero (d : MediumAtom)\n    (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2\n      else 0"
+    ],
+    "four_complete_public_types_unchanged": [
+      "theorem MediumAtom.sharedFirstFactorNonzero_eq_threePairedSupportMasks\n    (d : MediumAtom) (Ybeta Ysupport : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) =\n        d.sharedLargePairedGCDNonzero Ybeta +\n          d.sharedSmallPairedLargeSupportedNonzero Ybeta Ysupport +\n            d.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport",
+      "theorem actual_signedError_sq_cleanedAlpha_sq_difference_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        |‖d.signedError‖ ^ 2 - ‖d.cleanedAlphaAtom.signedError‖ ^ 2| ≤\n          d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "theorem actual_betaL2_gamma1L2_cleaned_deletedPairedSupportedNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero\n              (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedNonzero\n              (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))‖) ≤\n                2 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+      "theorem uniformAuxiliarySW_signedError_sq_le_cleanedSmallPairedSupportedNonzero_add_log_payment\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).signedError‖ ^ 2 ≤\n            (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n              (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2) *\n                ((F i).cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n                  ((F i).scale ^ (sigma / 4)) ((F i).scale ^ (sigma / 4))).re +\n                    C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A"
+    ],
+    "new_private_helper_must_be_proved": "private theorem cleanedAlpha_signedError_crude_subpower (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma) : ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom, MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ‖d.cleanedAlphaAtom.signedError‖ ≤ C * d.scale ^ (1 + sigma / 4)"
+  },
+  "approval": {
+    "one_new_module": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+    "only_imports": [
+      "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+      "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+      "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion"
+    ],
+    "public_scope": "Exactly the one proposed full literal definition and four proposed complete public types; ordinary local private finite helper lemmas may implement the detailed routes. No new analytic premise or supplier hypothesis.",
+    "mathematical_counterexample_or_missing_analytic_assumption_found": false,
+    "this_is_authoring_permission_recommendation_to_root": true,
+    "compile_or_kernel_acceptance_claimed": false,
+    "author_must_freeze_and_submit_whole_source_for_independent_review_before_first_actual_compiler_gate": true
+  },
+  "quota": {
+    "guard_path": ".lake/proof-continuation/quota-guard.json",
+    "guard_sha256": "a0cef79dc5196366bce148d21f05c90b4628382b5d92eadf294e947faf70523c",
+    "actual_start_and_refresh": "mcp__codex_app__get_usage_limits actually called twice in this resumed review; codex primary10080minutes usedPercent6, remaining94; secondary null (unavailable, not zero). No reset credits consumed.",
+    "threshold": 50,
+    "hold_triggered": false
+  },
+  "Support_current_owned_rebind": {
+    "old_pending_proposal_sha256": "59c6ac82ba7e16bfbad664aff2c85c8e27006e021ddfc893745a125dae64cdd3",
+    "current_source_sha256": "e9f741c2a897e42bc8161d6db9c0e42a5698b87a735fb02ede9621006d4fa655",
+    "rebind_not_mutating_original_proposal": true,
+    "before_snapshot": ".lake/proof-continuation/source-reviews/20261020-large-supported-59c6ac82-before-second-actual-diagnostic.lean.txt",
+    "actual_whole_forward_inverse_two_line_replacement_checked": true,
+    "only_changed_proof_name": "sharedSmallPairedLargeSupportedZero_bound",
+    "old_text": "add_le_add_left (mul_le_mul_of_nonneg_right\n              (by norm_num : (8 : ℝ) ≤ 16) hU) _",
+    "new_text": "add_le_add le_rfl (mul_le_mul_of_nonneg_right\n              (by norm_num : (8 : ℝ) ≤ 16) hU)",
+    "independent_math": "The unchanged left addend is 16*U²/Q1; the right addend8U<=16U follows from U>=0. add_le_add le_rfl supplies exactly that goal. This is only proof API orientation and changes no statement, mask, coefficient, definition, import or endpoint.",
+    "71_complete_headers_and_15_full_defs_unchanged": true,
+    "old_owner_rebind_sha256": "2edb91d85fb712472b19cacd7033b0ed13b1d0c24087701d542c27ae5577e96c",
+    "root_fair_rebind_sha256": "1aacb3dbef197c1371c48aa49b339c7e5cad6571eda4bd35dddb9f8513b4e8a2",
+    "actual_receipt_path": ".lake/proof-continuation/audits/20261020T091905803504Z/receipt.json",
+    "receipt_sha256": "003d9b1a0325e26a907e315d12c7da3ed71dff3beba8031cd0cefb6b805c3046",
+    "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "inputs_before_after_exact": true,
+    "current_original_object_sha256": "37e4c5da11eb80131bb4d456216cbdf31dbffc6da49a422b0ddd233ba95b91c1",
+    "actual_declarations_sha256": "6a19aaf7ef1a225db85e6c5d29d4c196e3e939d3ace5acee561e4655d6fd7dca",
+    "all111_generated_declarations_actual_safe_three_standard_axioms": true,
+    "complete_consumed_owned_record": {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+      "name": "ImbalancedChen.Part3.actual_betaL2_gamma1L2_cleaned_sharedLargeSupported_log_payment",
+      "partial": false,
+      "type": "∀ (B : Nat) (sigma kappa c0 A : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma),\n  @Exists.{1} Real fun (x0 : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n      (∀ (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale d) →\n            ∀ (Ybeta : Real),\n              @LE.le.{0} Real Real.instLE\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n                      fun (n : Nat) =>\n                      @HPow.hPow.{0, 0, 0} Real Nat Real\n                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                        (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta d n))\n                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                      (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) fun (p : Nat) =>\n                      @HPow.hPow.{0, 0, 0} Real Nat Real\n                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                        (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 d p))\n                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                      (@Norm.norm.{0} Complex Complex.instNorm\n                        (ImbalancedChen.Part3.MediumAtom.sharedSmallPairedLargeSupportedW\n                          (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d) Ybeta\n                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                            (ImbalancedChen.Part3.MediumAtom.scale d)\n                            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) sigma\n                              (@OfNat.ofNat.{0} Real (nat_lit 4)\n                                (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                                  (@Nat.instAtLeastTwoHAddOfNat\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                                    (@Nat.instNeZeroSucc\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))))))\n                      (@Norm.norm.{0} Complex Complex.instNorm\n                        (ImbalancedChen.Part3.MediumAtom.sharedSmallPairedLargeSupportedZero\n                          (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d) Ybeta\n                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                            (ImbalancedChen.Part3.MediumAtom.scale d)\n                            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) sigma\n                              (@OfNat.ofNat.{0} Real (nat_lit 4)\n                                (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                                  (@Nat.instAtLeastTwoHAddOfNat\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                                    (@Nat.instNeZeroSucc\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))))))))\n                    (@Norm.norm.{0} Complex Complex.instNorm\n                      (ImbalancedChen.Part3.MediumAtom.sharedSmallPairedLargeSupportedNonzero\n                        (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d) Ybeta\n                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                          (ImbalancedChen.Part3.MediumAtom.scale d)\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) sigma\n                            (@OfNat.ofNat.{0} Real (nat_lit 4)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                                  (@Nat.instNeZeroSucc\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))))))))\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@HPow.hPow.{0, 0, 0} Real Nat Real\n                    (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                    (ImbalancedChen.Part3.MediumAtom.scale d)\n                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                  (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                    (Real.log (ImbalancedChen.Part3.MediumAtom.scale d)) A)))",
+      "unsafe": false
+    },
+    "old_pending_59c_is_not_parent_acceptance_evidence": true
+  },
+  "fresh_actual_import_boundary": {
+    "frozen_walker_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "proper_parent_count": 84,
+    "new_module_inclusive_count": 85,
+    "foreign_source_header_boundary_count": 66,
+    "all_parent_source_cache_object_hashes_matched": true,
+    "source_delta_vs_proposal": [
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+        "old_sha256": "59c6ac82ba7e16bfbad664aff2c85c8e27006e021ddfc893745a125dae64cdd3",
+        "current_sha256": "e9f741c2a897e42bc8161d6db9c0e42a5698b87a735fb02ede9621006d4fa655"
+      }
+    ],
+    "project_module_set_and_foreign_boundary_set_unchanged": true,
+    "proper_parents": [
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLargeSupportedDeletion.lean",
+        "source_sha256": "e9f741c2a897e42bc8161d6db9c0e42a5698b87a735fb02ede9621006d4fa655",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+          "ImbalancedChen.Part3TransposedGCDPoissonMask",
+          "ImbalancedChen.Part3CanonicalReciprocalData",
+          "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "1b60103f4583a82329a96fa4dc00e69071595451a75024e344a123e9faffe108",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLargeSupportedDeletion.olean",
+        "object_sha256": "37e4c5da11eb80131bb4d456216cbdf31dbffc6da49a422b0ddd233ba95b91c1",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean",
+        "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+          "ImbalancedChen.Part3SignedDivisorDeletion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "c533c59658fccbe8267112459667cb3c803e54e89b679f5ba1ec5900bee3a5ef",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveUPayment.olean",
+        "object_sha256": "220bd038ad9935a5ca757c5ad5bbfd8bf10804f622bec27494711a621e144683",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+        "path": "ImbalancedChen/Part3SignedDivisorDeletion.lean",
+        "source_sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+        "literal_imports": [
+          "ImbalancedChen.Part3ActualLargeGCDBetaMass"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b4a5ee0df7e9c91301564247ca94de07b5f14758a8fe3211819c8e6e8dc2c62e",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SignedDivisorDeletion.olean",
+        "object_sha256": "6b525c56397e58854df189255135aea974099dd1af06c28e77a289a109e61dcb",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+        "path": "ImbalancedChen/Part3ActualLargeGCDBetaMass.lean",
+        "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+        "literal_imports": [
+          "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+          "Mathlib.Data.Nat.Factorization.Basic",
+          "Mathlib.NumberTheory.Divisors",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Analysis.Real.Sqrt"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "dd4f72b0172330edfb966d3552dfafbd2ea37442a46aad469718309bb60798a2",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3ActualLargeGCDBetaMass.olean",
+        "object_sha256": "462da8e1032d9f4b207a7c2de1b11c8461282027412ce0e29dd02b6820dbff2b",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+        "path": "ImbalancedChen/Part3PolynomialResidueDivisorBound.lean",
+        "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+        "literal_imports": [
+          "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "ba64143f0f8e32541b16951bab45eff16aa99c2579f7aca19146550bcd50ba9c",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3PolynomialResidueDivisorBound.olean",
+        "object_sha256": "80c87b905dfec82eeb4a49405cef43d4fc698e7fd91f6919afd6ece748537d32",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+        "path": "ImbalancedChen/Part3CleanBetaLargeGCDMajorant.lean",
+        "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+        "literal_imports": [
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3FactorFiberDivisor",
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "21d12578f1629af4fd0f374207e5bb1ae4d0c30564cd568dbbcc007d2813c3d7",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3CleanBetaLargeGCDMajorant.olean",
+        "object_sha256": "85e51f6bdec1d2bce561e13ac5d2b85648d1775d88078410c2b7c6db2ae31f9b",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+        "path": "ImbalancedChen/Part3ComplexCRTConsumer.lean",
+        "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "literal_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Data.Int.ModEq",
+          "Mathlib.Data.Nat.ModEq"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "e7c08c8a9e32fcf64bd436ff9f8276097cd7bb8c130c1ec45aecf07204dae573",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3ComplexCRTConsumer.olean",
+        "object_sha256": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3ComplexDispersion",
+        "path": "ImbalancedChen/Part3ComplexDispersion.lean",
+        "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "literal_imports": [
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b7018abf4668ffb7bb35f6f22af3ab500264a984b487c746b05833ef5f5fb75f",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3ComplexDispersion.olean",
+        "object_sha256": "4cc8348bb784f5b7819112b37ca1e3af2019affa8fa72e8d4fa2f4a82d9c8101",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3DistributionTargets",
+        "path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "literal_imports": [
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "50899e53fd76c39bd8c59067ce8dc82aecffb5f46159f4c57a125993171b68d9",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3DistributionTargets.olean",
+        "object_sha256": "ace5c67f7d4a4b2c317e795b9db54992d6f326e7875cebd71fa66e8272a60220",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RestrictedResidueScale",
+        "path": "ImbalancedChen/RestrictedResidueScale.lean",
+        "source_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "literal_imports": [
+          "ImbalancedChen.PanProductGridRanges"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "e2975a75503553307b2c645035f21fb1d53e0f16b266af996a39bcc90179c778",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RestrictedResidueScale.olean",
+        "object_sha256": "6accb864a75392565c12515b51613724121c89d78d79b9ab14d7653852fa768f",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductGridRanges",
+        "path": "ImbalancedChen/PanProductGridRanges.lean",
+        "source_sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "literal_imports": [
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "12fdcd6ac5d6d85d838d4d303ed51779c70894947c64aaabb6e2c715d6c69aa4",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductGridRanges.olean",
+        "object_sha256": "8a592012f42b417fee17ee20db06d3459302dd6e923ba257c743c0a535bd7e66",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductMassSplit",
+        "path": "ImbalancedChen/RealHalfProductMassSplit.lean",
+        "source_sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "literal_imports": [
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "4a843632911f3737772f26915563808d8c4b5e607e8023a4ccb1f5093bf10f7b",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RealHalfProductMassSplit.olean",
+        "object_sha256": "f9894566be5967ad03927c024c207ca3fabd9e5595ede88362fffe7381223fea",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PowerErrorBudget",
+        "path": "ImbalancedChen/PowerErrorBudget.lean",
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "literal_imports": [
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "db582e271a78623e878424bfd5a328378b6b8b1e6db0aaac406254b96e32a3db",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PowerErrorBudget.olean",
+        "object_sha256": "2241bba520345793b723a5f8cc74dc9f3b5d6dcc9d0c561f8c3f5701eed9d202",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.SingularSeries",
+        "path": "ImbalancedChen/SingularSeries.lean",
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "literal_imports": [
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "9858e1f83a364400b124d0ed069856a06396b394ac739137f59da869085fca39",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/SingularSeries.olean",
+        "object_sha256": "09b35699dc5eaf32bd81b1ea4c5196abec5925b16c475773c261c839e1142150",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.NormalizationGrowth",
+        "path": "ImbalancedChen/NormalizationGrowth.lean",
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "literal_imports": [
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "12c5cd1d99a9bb942600c8a792279fabecf0e38c89f0061fed856fbf0b9e8f2b",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/NormalizationGrowth.olean",
+        "object_sha256": "12e44886d5f17db7b59698497868352aaacac28544c1db1c27b2da8410edcef1",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductMass",
+        "path": "ImbalancedChen/RealHalfProductMass.lean",
+        "source_sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "literal_imports": [
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "3412ee5b3f3f8fc89d9d14e8f15c320ea030ac585c7d79fcd004ea86ebb2d3aa",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RealHalfProductMass.olean",
+        "object_sha256": "25611ef2ce2d5599721f05888d0cbfedacaf727de6b6f4ea286b96713b275784",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassLimit",
+        "path": "ImbalancedChen/HalfProductMassLimit.lean",
+        "source_sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "df48f1e9cb59f67224eb494a662b8e6105696907652f93921ae79b82d170633d",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductMassLimit.olean",
+        "object_sha256": "0587e134453f5811a810eb95563e9f5ee08e5f9d5b4368730ce8776fc801d20a",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.MassLogIntegral",
+        "path": "ImbalancedChen/MassLogIntegral.lean",
+        "source_sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductGeometry"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "bd8741d051a76567713e3fd6216652d087a9d00b925fb6cdcad8fd138f49351b",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/MassLogIntegral.olean",
+        "object_sha256": "1ef54feb5c2d2697719eac2334a5d2542d539f83dc9868dd0c28a75fb5d74154",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductGeometry",
+        "path": "ImbalancedChen/HalfProductGeometry.lean",
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "literal_imports": [
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b88942ff9c2a53e969b094e79677664e55a612670c95eafcfabf4efc6498d58b",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductGeometry.olean",
+        "object_sha256": "0098c098c00919fc5b15389767d7913e8ffdbc77fa2317028b98f91866868f39",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.OrderedBad",
+        "path": "ImbalancedChen/OrderedBad.lean",
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "literal_imports": [
+          "ImbalancedChen.RationalPowers"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "5ca055b6ab291fc7d13f550c022e8a6b12f084e6ea085aea72e6ed9aa298bce7",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/OrderedBad.olean",
+        "object_sha256": "1c06aa82a786baabba94ac4f6899f369d074f5f6502c0278f48bc2ada3b7cce2",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RationalPowers",
+        "path": "ImbalancedChen/RationalPowers.lean",
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "literal_imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "6ba43d8efbf0a96ea3a0c9c2d11b624c522fc9944a63d7521fa3a49d37840880",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RationalPowers.olean",
+        "object_sha256": "6cabb79e4990a879873ecf5cc7f8deda8cdeb6c257b793927fe0f40b566b4dea",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Counting",
+        "path": "ImbalancedChen/Counting.lean",
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "literal_imports": [
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "1cabfb6023b99505ab292d46b9bd81f06372cde697c0f413167d10547417232c",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Counting.olean",
+        "object_sha256": "3ba19b992217dc7cefe42fc28364905a1f83c479ed1a227a94d09725fa9513f8",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassError",
+        "path": "ImbalancedChen/HalfProductMassError.lean",
+        "source_sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "ded98533e707c69fdcbfd84603995299be397a442a979a566b025733e5f32306",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductMassError.olean",
+        "object_sha256": "4fe425880a9c568b388a1f75cf36bca55f1ed395259964940e3ccacaa30a78fc",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.LogCutoffError",
+        "path": "ImbalancedChen/LogCutoffError.lean",
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "literal_imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "0a4f6342628d998cdb451606a3166f9b0993af5aaac3dc61bc835ef15c8b7c37",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/LogCutoffError.olean",
+        "object_sha256": "9b1846343405d92dff183ba1a6354ec00efaccd23f87b8200c44f26d48d16331",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.BadSourceLocalization",
+        "path": "ImbalancedChen/BadSourceLocalization.lean",
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "468dc0cf40761dc1f4c202ef6173f2f9dda7af4a0cb4e0798bfdc5c40da50234",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/BadSourceLocalization.olean",
+        "object_sha256": "ae5bd040391e37faad01afa949e372600ef95c291215c16d68f68f77a7799e59",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.UniformPrimeTail",
+        "path": "ImbalancedChen/UniformPrimeTail.lean",
+        "source_sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "literal_imports": [
+          "Mathlib.Analysis.Asymptotics.Defs",
+          "Mathlib.Analysis.Real.Sqrt",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.NumberTheory.PrimeCounting",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "0a422578cdb9fc5296dc69159d5d0bd5b7f57904021d11a84e34629891da3aa4",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/UniformPrimeTail.olean",
+        "object_sha256": "7fa70cded38e1e11168ccf1eb0dee4cae481c9a698d3520480441c5532dbbe98",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassSplit",
+        "path": "ImbalancedChen/HalfProductMassSplit.lean",
+        "source_sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "e1b41bc5d95551e3bb8f4c019f8d40f53844b64b65cb7d7835303eaadfd99844",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductMassSplit.olean",
+        "object_sha256": "2fb207493a4a604bbca37cc54202c081ae000ff06230364fd8eef16f6d0c1185",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassFibres",
+        "path": "ImbalancedChen/HalfProductMassFibres.lean",
+        "source_sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Data.Nat.Sqrt",
+          "Mathlib.NumberTheory.PrimeCounting"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "707ce8d47b6022fcc2b2150b069fd760fd3f448a91a18be519832e2edc5288d6",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductMassFibres.olean",
+        "object_sha256": "41d3e29f54a7ef4e191f57bfa1b5c9a23aaa9bf7159fe85f4369fbae197fd396",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductSource",
+        "path": "ImbalancedChen/HalfProductSource.lean",
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "literal_imports": [
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b589480942d791dc666f6e86f97182f046328e07649bb4df503e4cd2b5e60a72",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductSource.olean",
+        "object_sha256": "e8e3c3900d6bf35767cfeaace22f52749154338d98f356206e515560a9af0635",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductSource",
+        "path": "ImbalancedChen/RealHalfProductSource.lean",
+        "source_sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "literal_imports": [
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "3612807b228b069e8bfe292a34d5775c44ef966f315ca06338def61efb2d9a81",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RealHalfProductSource.olean",
+        "object_sha256": "85a5f074be9a161387f4d6066700dc3229e9c2c81da312530798b223b1d85cc8",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.CurrentMainTheorem",
+        "path": "ImbalancedChen/CurrentMainTheorem.lean",
+        "source_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "literal_imports": [
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "251a621aeb0312adbbb353dac4b772a24d4dfe69da9ef3eee34273857a2f442d",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/CurrentMainTheorem.olean",
+        "object_sha256": "ffceaf8aea007c1dbb6d020288e849847794e7e6aa10302b1ca6b9fd5b2537df",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.CurrentNumericalTransfer",
+        "path": "ImbalancedChen/CurrentNumericalTransfer.lean",
+        "source_sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "literal_imports": [
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "666a7ae66a498f1d5223e58a7082b3631ee6d4ff47e8c2b46887a78f98739760",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/CurrentNumericalTransfer.olean",
+        "object_sha256": "dba62ec9b9ec2cdeb604c994f146ea6969a0bcbfde67963e90bd95b40054e984",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.AsymptoticTransfer",
+        "path": "ImbalancedChen/AsymptoticTransfer.lean",
+        "source_sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "literal_imports": [
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "9dac8a0ec238e287bbab2e01782b0807ebc8b133b5bfcfff7396fc5ce515c8c8",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/AsymptoticTransfer.olean",
+        "object_sha256": "34bf4ca29753fe7cdc0256cc58a4a804c88e2d44f7b1f0f0cc10d584ce3af89d",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Multiplicity",
+        "path": "ImbalancedChen/Multiplicity.lean",
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "literal_imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "34660622ad7c1717b8d8977c4161d5c3db865e87a6e382536b9fef3df6fe7e0a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Multiplicity.olean",
+        "object_sha256": "2f421673793f153c6dccfcc8463657c8f76d73342f2994e33eb04ed1266ff180",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductGrid",
+        "path": "ImbalancedChen/PanProductGrid.lean",
+        "source_sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "literal_imports": [
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "dbdf86ee87f1a6fa47ccd7ed718232c0875b2fb823c1c98d87139af9ba58fda8",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductGrid.olean",
+        "object_sha256": "033c900f689b93f95ede97e2a69b2a9f945340dc11b46fb58fab1b66a9cb1905",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.SelectedGridRanges",
+        "path": "ImbalancedChen/SelectedGridRanges.lean",
+        "source_sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "literal_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "8a210daac8ec893849b76c8458d916eaa61b7aa43ee9867a04b63d3bf9ba6b24",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/SelectedGridRanges.olean",
+        "object_sha256": "178599e2d96169b3b1d584b87803762d3b55051d3174f76351c4815f57a6d29f",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.ActualSieveGate",
+        "path": "ImbalancedChen/ActualSieveGate.lean",
+        "source_sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "literal_imports": [
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "4bf2b1a1101a3e8946b48c513f45b8faef41091e7f55e99d7aa1f406e808c731",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/ActualSieveGate.olean",
+        "object_sha256": "f9bd4bda795d00c4c58c118ce7462d67fa12f702088de2776ea02d71ef8ffde1",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.SieveSourceCoprimality",
+        "path": "ImbalancedChen/SieveSourceCoprimality.lean",
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "483b4f3446b18e2e42a6bcffba476a93fbb7e07be20ce2b36a86531eaaf9f17a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/SieveSourceCoprimality.olean",
+        "object_sha256": "b31818d931630f334bd1acccb51ef626943e9c2e139d7be951116503aaa9926b",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.ActualGridEnvelopes",
+        "path": "ImbalancedChen/ActualGridEnvelopes.lean",
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "literal_imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "f0d55cd893b02ed13ba6c1d0fa97eafff5ec6ce6fe1b91e85a18e8dd5d88fed6",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/ActualGridEnvelopes.olean",
+        "object_sha256": "8044561fb6ce0dd6339f83423dd15206422406a251f9808bf48a683919433716",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGlobalCaps",
+        "path": "ImbalancedChen/BoundaryGlobalCaps.lean",
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "literal_imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "e68f28693fe5d3efcb911981598d3949d01eb0fe11479967089dc286f5ad950f",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/BoundaryGlobalCaps.olean",
+        "object_sha256": "37a46bd5b8b56ac80a39cfce88e236307397d88a959eb4364dca2a969edb0609",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.BoundaryCellContainment",
+        "path": "ImbalancedChen/BoundaryCellContainment.lean",
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "literal_imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "09601690331b3b054c73a549bb250d6405f95f58506751be0bc55579f524077f",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/BoundaryCellContainment.olean",
+        "object_sha256": "6d9a76f92c8bb510d0e7887550b0c2cdb972fe821adb0354e5323a7389adba30",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGridBudget",
+        "path": "ImbalancedChen/BoundaryGridBudget.lean",
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "literal_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "78cc074968501b8bb476e34cbe78b847fa8d481288be15fb8804642bd6b31898",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/BoundaryGridBudget.olean",
+        "object_sha256": "59145ad590fa326d1fc666f207aa78180b44d6d0f5d79d90dac96e66b656c5a6",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+        "path": "ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "literal_imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "15a66b17c38d0e0e30ff32e0469b4564de29b5ef93fbba9625f422fc4529f9a9",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/CurvedRegionDiscrepancy.olean",
+        "object_sha256": "e2ed1389c18411729b0f7f2177905d8de93e90d051abcd624f945e285bcd0562",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveModel",
+        "path": "ImbalancedChen/FiniteSieveModel.lean",
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "literal_imports": [
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "68502ccd1ddcac7f9f5df4d43a9483238627355f39fa5281cbb8bac753a1444a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/FiniteSieveModel.olean",
+        "object_sha256": "2b3fd7589702d14452e1064daef7bff3ab9d688440ca814809745f4f73e8f615",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.MultiplicativeGridPartition",
+        "path": "ImbalancedChen/MultiplicativeGridPartition.lean",
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "literal_imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "1af7f1fe08348842ae92992e980cbdd0b161e6fdcbb6a4935d71eafcfadccbb5",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/MultiplicativeGridPartition.olean",
+        "object_sha256": "f08d04f92bbe7164ab8d746736da915d8bbe9880308df7f7fc9007a5ec3f1b11",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductAggregateBudget",
+        "path": "ImbalancedChen/PanProductAggregateBudget.lean",
+        "source_sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "literal_imports": [
+          "ImbalancedChen.PanProductLiuBridge"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "52f51b6f2e822882f13baa9903cf5ec38f57d7338ce21e05737652983ca9b3db",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductAggregateBudget.olean",
+        "object_sha256": "3fb0381fd22a2bdc959f08ebc824e92f2aca4299813643a85a8d71abfb53a8bf",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductLiuBridge",
+        "path": "ImbalancedChen/PanProductLiuBridge.lean",
+        "source_sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "literal_imports": [
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "ca55a128d2e31b52e4af6d07b30a80dd38795dca65da34f3c288cbe024a4d217",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductLiuBridge.olean",
+        "object_sha256": "282ea9c6ee6069605261275cad59ca7a82dca60f770e265b53889f3eb0800718",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductResidueBudget",
+        "path": "ImbalancedChen/PanProductResidueBudget.lean",
+        "source_sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "literal_imports": [
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "a73d367cc9113dde02c1910250e53bc957a7f93e406484eb234f84649039c4f5",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductResidueBudget.olean",
+        "object_sha256": "d5ff575623c81448fb3628d16f948a287c0fa3dcb61f32b5c3a5c7b103cd24c6",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.ResidueSelectorBudget",
+        "path": "ImbalancedChen/ResidueSelectorBudget.lean",
+        "source_sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "literal_imports": [
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "aca41855c18ec7d914c639d005e0fb6af209f2245296f67faf83e3d5b7bf0fae",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/ResidueSelectorBudget.olean",
+        "object_sha256": "67c5e7b245dab08eee689d0b965d2c56ee8a04ef2742a0de1fad545af8be9521",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PrimeRectanglePrefixes",
+        "path": "ImbalancedChen/PrimeRectanglePrefixes.lean",
+        "source_sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "literal_imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "2d30044d3317e0b9e72b6423c7f151147b38056025cd1f0731a56b86e422b6c7",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PrimeRectanglePrefixes.olean",
+        "object_sha256": "324bc0a2f0ea6996b39b6a38675c51ef53ea371129a12c259bffffb562a79fde",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.CoprimeRecentering",
+        "path": "ImbalancedChen/CoprimeRecentering.lean",
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "literal_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "aa89c8b90b34dd897a5c952e064f5612f9dd3b3a97e3faed5cc9efcda872394a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/CoprimeRecentering.olean",
+        "object_sha256": "984964000ca61288896fa4db232848426c7e548ac7d813f1eaff58c0425fabc4",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+        "path": "ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "literal_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "8af38b5a52965cb502080c7489d6b1fd77852673542a7f71ef1c00562e6d0c23",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/RectangleDiscrepancyAssembly.olean",
+        "object_sha256": "123a6e2a34494782d1adec01935a456e5f301505942d25dd11fea961944b97b1",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.TotientReciprocalBudget",
+        "path": "ImbalancedChen/TotientReciprocalBudget.lean",
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "literal_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "425d20b10f80e421a3c58bbaa6d075518b80252066c1417d724cbc19be3d95fb",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/TotientReciprocalBudget.olean",
+        "object_sha256": "752ee429a6ca6bf2f735b859a60c66d3ebcb9016e49f29d5f7c5bbcf7c74522f",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.PanProductStrips",
+        "path": "ImbalancedChen/PanProductStrips.lean",
+        "source_sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "literal_imports": [
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "9269dfabc2fa09855c032f34fff9835ee170076c7d48b8f490b45b22342f20a2",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/PanProductStrips.olean",
+        "object_sha256": "202dc0159b5f4749f064d012fe5b7897ee0b3ccd8c27562f1fa57638d0d351f3",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.HalfProductPanFinite",
+        "path": "ImbalancedChen/HalfProductPanFinite.lean",
+        "source_sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "literal_imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "c156efb56ab80b36c863f329aa7738e64794b3159d72977656491e80dff96f19",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/HalfProductPanFinite.olean",
+        "object_sha256": "ece75c968733e5b01be26317a7a9dced044111dad501159801bf5096108c8151",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "path": "ImbalancedChen/Part3FactorFiberDivisor.lean",
+        "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "literal_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "17989db10d0097730445208b5477caa1725823ece272d9163fd306693a31ae60",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3FactorFiberDivisor.olean",
+        "object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+        "path": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+        "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "literal_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+          "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "bfe24b2620585268590d71926bad5fb78032223bb87a9d3e78dcce66173f18f0",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3CommonSmoothCutoff.olean",
+        "object_sha256": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveUMoment.lean",
+        "source_sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedPrimitiveU"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b3a55e9501772432c8ddb3e158cc18c373bcbd294c9bfff6907f4e83c3fdab95",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveUMoment.olean",
+        "object_sha256": "d4afc5558094f2db9d0115042ddfcea88a4cbf515e1368447f3e346286ebfab5",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveU.lean",
+        "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedZeroCovariance",
+          "ImbalancedChen.Part3SmoothCoprimeError"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "737bbd37f11cf7c74cdb1c10c585c069953b2843d555b89ed64c8fdd15af1559",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveU.olean",
+        "object_sha256": "65b8914959cc18fd59fd2be369aec883b4ddbcf78ac2c92f4f76109f540052b2",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SmoothCoprimeError",
+        "path": "ImbalancedChen/Part3SmoothCoprimeError.lean",
+        "source_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+        "literal_imports": [
+          "ImbalancedChen.Part3SmoothProgressionError",
+          "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+          "Mathlib.Data.Nat.Factorization.Basic"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "cfebfbd9ffdd83c48cb3e417187fdafc7c146e526abad2520b3e0e270fc109fc",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SmoothCoprimeError.olean",
+        "object_sha256": "37f6a7107eec73494925f691acf23924fc2b5615800fff72c2115a6fabc69b71",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SmoothProgressionError",
+        "path": "ImbalancedChen/Part3SmoothProgressionError.lean",
+        "source_sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+        "literal_imports": [
+          "ImbalancedChen.Part3CommonPoisson"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b7d30112fd73db3e25da088e37288243a3ba6bfabac9b2d619ed1bf0dea7ea74",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SmoothProgressionError.olean",
+        "object_sha256": "47f476d1cd57e9631164a07f87b5f8e7cddd904b83424ff8fea847775fb0ba00",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3CommonPoisson",
+        "path": "ImbalancedChen/Part3CommonPoisson.lean",
+        "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+        "literal_imports": [
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3ComplexCRTConsumer",
+          "Mathlib.Analysis.Fourier.PoissonSummation"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "6a1bc4e2d36da1d981dbe964317a99b641fd36f74722f798d8dbefbbe1c8bd85",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3CommonPoisson.olean",
+        "object_sha256": "3e0b5afde4cc4655adefa76700f88ed5286543b305ea86b3df9f64d60d3a90ae",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+        "path": "ImbalancedChen/Part3TransposedZeroCovariance.lean",
+        "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedDispersion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "ebe5c76f37dab3924aa168554990006e9212a7b96a07b3e464d5c21c6fd6076f",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedZeroCovariance.olean",
+        "object_sha256": "3b005df47fbf16dcc139274a880125cf3130858faaea41a76d784bf7567bc598",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedDispersion",
+        "path": "ImbalancedChen/Part3TransposedDispersion.lean",
+        "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "literal_imports": [
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "c20403262b8fc965aab07895028a75e801f7e73a9abd398e121eb068389febae",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedDispersion.olean",
+        "object_sha256": "0e2146b64d4d38c9d031284d1d72d433f66a47902d47826b412a0c1393749603",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+        "path": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+        "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+        "literal_imports": [
+          "ImbalancedChen.Part3ComplexCRTConsumer",
+          "Mathlib.Data.Nat.Factorization.Basic",
+          "Mathlib.Algebra.BigOperators.Associated"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "742f65d5e6da93810baf0fd825cd0f0e8f4ead71186b1469d2bffeb5ce584e4a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3CanonicalReciprocalData.olean",
+        "object_sha256": "82e37fd95b03ec7fd97007a2e4f5a82e27c9c0a8adbc72e1249de8326f00a3e6",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+        "path": "ImbalancedChen/Part3TransposedGCDPoissonMask.lean",
+        "source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedZeroCovariance",
+          "ImbalancedChen.Part3SignedDivisorDeletion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "a45bbc421145e1f988800313920a98ec1159eceeaed77255b3dabd482aaffed9",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedGCDPoissonMask.olean",
+        "object_sha256": "e587db905aa69588b9322f2850cc5ba692969476015eb9578476df6832e0d09e",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean",
+        "source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3SharedFirstFactorPairCount"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "87c78289204ac66a35cda59d5ecc9fef9b04b66e2f34e35ea654836a1da39ab8",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.olean",
+        "object_sha256": "ce54b5ff1959c1bdb837ce9ae0c05459cd47012f03c906ea7c8a20c25475c7b0",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorPairCount",
+        "path": "ImbalancedChen/Part3SharedFirstFactorPairCount.lean",
+        "source_sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+        "literal_imports": [
+          "ImbalancedChen.Part3PairedAlphaDeletion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "35606b3bbfe8c7161849771656c5a825bfeb987cbfba17a019ebeba48a55578d",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorPairCount.olean",
+        "object_sha256": "0e6e985e7c2b514ed1d84ca349a39a2367b4a147ecf2b2f7a55033cc60b1a935",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "path": "ImbalancedChen/Part3PairedAlphaDeletion.lean",
+        "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+        "literal_imports": [
+          "ImbalancedChen.Part3SignedDivisorDeletion",
+          "ImbalancedChen.Part3TransposedDispersion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "1ded35f0da417d2ed868a5813ec71ad9734a2679efa541a35ea605fc73984bcd",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3PairedAlphaDeletion.olean",
+        "object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "path": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+        "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedDispersion"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "3c66dbaef9f452446648160c0a910e7e3175ea5102764e8913cf31bfef1d08c3",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorDispersion.olean",
+        "object_sha256": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDNonzero.lean",
+        "source_sha256": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+          "ImbalancedChen.Part3TransposedGCDPoissonMask",
+          "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "b1e525c30906547e94131bb9548f0a2b31369c1a93ea267b0e78eead7139b2b6",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLargePairedGCDNonzero.olean",
+        "object_sha256": "c8a6727f1bd139274592ec6267f9d00bfe1ee14bec57f5c83f6006b24249db0b",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+        "path": "ImbalancedChen/Part3SharedFirstFactorEnergyNonzeroReduction.lean",
+        "source_sha256": "c6fc9f63e91c676226f1a858173f75dfa4ce05b38defed4ec8060b802a8c442d",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment",
+          "ImbalancedChen.Part3SharedFirstFactorPrimitiveUVPayment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "367925ea8844413bd0984ba56f4ca749e0c0e27340aaee2357f8462105d8d0d5",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorEnergyNonzeroReduction.olean",
+        "object_sha256": "2a2925b12d17fe90fa9d0c1517187ec027926044d89969af76ddad177adec526",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorPrimitiveUVPayment",
+        "path": "ImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean",
+        "source_sha256": "631af675eaf29f8452963a2fe544517b2fae9b87cdcb5e38b7e6b2e1f9e1ce64",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3TransposedPrimitiveVPayment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "a15f7fb7f31f1ca28305f4c4726c5176aa7e9148a8bcd16662800e1e03ef93d8",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.olean",
+        "object_sha256": "05c485df6e443d70fc5587811a126ec9f4f7ada3f8425c36a562d817c4a4f99a",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveVPayment",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveVPayment.lean",
+        "source_sha256": "fd11a4e09110eb357cdf28515c5a467c9990236231ede5faa090ca0007f0e200",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+          "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "51d87b7a63fea4ea0b1ecf664d26482a0b4fb363a9fd0ede312fcf9b964b02db",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveVPayment.olean",
+        "object_sha256": "d1a1fe87cef6e0d0dc8a49d0e534be872e2e7f96a30bab450727916f93111dae",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveVMoment.lean",
+        "source_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedPrimitiveV",
+          "ImbalancedChen.Part3TransposedPrimitiveUMoment"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "530b6159199cfafd2239876612e8bc7fad7df4679ee065b8bc29d9fad47967bc",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveVMoment.olean",
+        "object_sha256": "e0b2fc9240f86fff78a6cc3dc3f4648582957d23482489e666bdaf71c327e4bf",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+        "path": "ImbalancedChen/Part3TransposedPrimitiveV.lean",
+        "source_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedPrimitiveU",
+          "ImbalancedChen.Part3PrimitiveZeroReal"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "3d5c67ac1c0f4e5469145ff84c7775eafe43f324b4ca1148c1677fe17c220d1b",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedPrimitiveV.olean",
+        "object_sha256": "7125ca5e89858969cf41dd7e975fc1b11865b31f6f7979f679bfa705f64436a8",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3PrimitiveZeroReal",
+        "path": "ImbalancedChen/Part3PrimitiveZeroReal.lean",
+        "source_sha256": "ef3396f5130f06a4a8068a3bd5e070bb91c7f260a60a3ff524c67c6e8dfd9741",
+        "literal_imports": [
+          "ImbalancedChen.Part3TransposedZeroCovariance"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "da4a4296bc0c79edb09f945cdded9fef2525e160cf804e0f037c5f9ed3ba55c4",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3PrimitiveZeroReal.olean",
+        "object_sha256": "1f138663fec1ab8b5ab629505832456ed4802ba6af90e4abaf8da5707fc31fcc",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment",
+        "path": "ImbalancedChen/Part3SharedFirstFactorZeroCovariancePayment.lean",
+        "source_sha256": "b080f4a4c8d27d2880213e1aa0cbe5394a4b1b76fb5da5e1eb27113f680e1a39",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+          "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+          "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "71014fa0e4a62f1cc5c40ae349f90d09bc731a515bef45fb50dc6ea593398784",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorZeroCovariancePayment.olean",
+        "object_sha256": "4ca5098455722e21ba4d3ea62d0f037df9702e140e076449160cbf56a070a306",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean",
+        "source_sha256": "2801c38ab964e3df1850fb0b07cb3adc272c6f80004088aabc95adf360c6afda",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "3ea0e2c20fb0824b218323eaaf600c12c945666200f016c358d749abd4bff35f",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.olean",
+        "object_sha256": "7c65fa2e6f414c671ac3eebfe3f434ee99b324b40df284915020991c9bfa9ce1",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+        "path": "ImbalancedChen/Part3SharedFirstFactorCharacterDictionary.lean",
+        "source_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3TransposedZeroCovariance"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "2c5addf3b772ed74a1517f981ec6dd9de312b3c5b4b9ef02d05e97840bb42871",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorCharacterDictionary.olean",
+        "object_sha256": "eba7316b8bfeb93bed7ab688c8457dc75d5b2bbae197bd291a0cc9594ffab068",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+        "path": "ImbalancedChen/Part3SharedFirstFactorSmallResidualHighConductorZero.lean",
+        "source_sha256": "cb10abb7e651b3c03a94b589f6c4df4174dad45f6f34fe490bb46aea3225b687",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+          "ImbalancedChen.Part3SharedFirstFactorHighConductor"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "f258a311e588bf5509c77fd6e4fe6321a8d8308d68625476fba5526e9036074e",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorSmallResidualHighConductorZero.olean",
+        "object_sha256": "f391ece014df7449a36555990c01784577777f72fac3d6e72dcc5996426e857d",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+        "path": "ImbalancedChen/Part3SharedFirstFactorHighConductor.lean",
+        "source_sha256": "2a2f1f4677b5e1210117284cd446a19683be1bfa08eec5bd99247a1be33bfae1",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3PolynomialResidueDivisorBound"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "5adea232a96de6967ea09b636aca76e746b2319afa9cae28d087c7c2973ed5cf",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorHighConductor.olean",
+        "object_sha256": "aa79482d2d52605cfdc60a70b7eeceff1300b0984a24edbbf3ac3c6aa41ba6f6",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLowConductorAggregate.lean",
+        "source_sha256": "503dc1699ee91b0a3d4d8dcb8b0a7287ca066fa72d5666ebdd52800703846fc8",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorLowConductorSW"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "9681a6485bc77e4d4353ecb2ad1a790f92fc3328e4b78c0a1a4eb8a95fd7a091",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLowConductorAggregate.olean",
+        "object_sha256": "b6358ff5ddc61784a28116f030bd5f1c5154d94b795a13a343dd9ca9f72972ef",
+        "cache_object_matches": true
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+        "path": "ImbalancedChen/Part3SharedFirstFactorLowConductorSW.lean",
+        "source_sha256": "5df46739cf416fbf9efd7d40ec17c7434a3cde986f805d1c0193d059b0770485",
+        "literal_imports": [
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary"
+        ],
+        "parser_findings": [],
+        "cache_sha256": "2a176955fc0ceb2f15e0c48ddc1516c8a764956d95fa4ce29e26c2f3a11c950a",
+        "cache_status": "PASS",
+        "cache_source_matches": true,
+        "object_path": ".lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorLowConductorSW.olean",
+        "object_sha256": "5d9c8bbf506f18a377c4061172fb1660cbf03dfefdf482a70c3ab96c91613140",
+        "cache_object_matches": true
+      }
+    ],
+    "foreign_source_header_roots": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Associated",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Algebra.Star.BigOperators",
+      "Mathlib.Analysis.Asymptotics.Defs",
+      "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+      "Mathlib.Analysis.Complex.Basic",
+      "Mathlib.Analysis.Complex.Exponential",
+      "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+      "Mathlib.Analysis.Fourier.PoissonSummation",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.Real.Sqrt",
+      "Mathlib.Analysis.SpecialFunctions.Log.Base",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Int.ModEq",
+      "Mathlib.Data.Nat.Factorization.Basic",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Sqrt",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+      "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+      "Mathlib.NumberTheory.Divisors",
+      "Mathlib.NumberTheory.Harmonic.Bounds",
+      "Mathlib.NumberTheory.PrimeCounting",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Interval.Finset.Nat",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Order.Field",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+    ],
+    "counts_scope": "Foreign66 means distinct non-project header boundary modules reached from all84 proper project sources, including implicit Init; it is not a claim that the entire recursive foreign closure was replayed here.",
+    "pins_actual": {
+      "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    },
+    "native_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "actual19_owned_API_bindings_with_complete_types_and_recheck": [
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+      "source_sha256": "c6fc9f63e91c676226f1a858173f75dfa4ce05b38defed4ec8060b802a8c442d",
+      "receipt": ".lake/proof-continuation/audits/20261020T084423109646Z/receipt.json",
+      "receipt_sha256": "51da3d19c2e4f74ca0da335fe1b5fd7fb63db50e925546411245afd05de22dbc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "56f9e6efda7ab559ee667108a20efc56b6996fc68849a2bae9e0029f82df641b",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+        "name": "ImbalancedChen.Part3.uniformAuxiliarySW_sharedFirstFactor_signedError_sq_le_nonzero_add_log_payment",
+        "partial": false,
+        "type": "∀ {ι : Type u_1} (F : ι → ImbalancedChen.Part3.MediumAtom) (B C0 : Nat) (sigma kappa c0 : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  (hsigma_small :\n    @LT.lt.{0} Real Real.instLT sigma\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n        (@OfNat.ofNat.{0} Real (nat_lit 100)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 100) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 99) (instOfNatNat (nat_lit 99)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 98) (instOfNatNat (nat_lit 98)))))))))\n  (hc0 : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c0)\n  (hkappa :\n    @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) kappa)\n  (hkappa_small :\n    @LE.le.{0} Real Real.instLE kappa\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        sigma\n        (@OfNat.ofNat.{0} Real (nat_lit 100)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 100) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 99) (instOfNatNat (nat_lit 99)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 98) (instOfNatNat (nat_lit 98)))))))))\n  (hadmissible : ∀ (i : ι), ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (F i))\n  (hSW : @ImbalancedChen.Part3.UniformAuxiliarySW.{u_1} ι F C0) (A : Real),\n  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) A →\n    @Exists.{1} Real fun (C : Real) =>\n      And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n        (@Exists.{1} Real fun (x0 : Real) =>\n          And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n            (∀ (i : ι),\n              @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale (F i)) →\n                @LE.le.{0} Real Real.instLE\n                  (@HPow.hPow.{0, 0, 0} Real Nat Real\n                    (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                    (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.signedError (F i)))\n                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                          (ImbalancedChen.Part3.MediumAtom.betaCarrier (F i)) fun (n : Nat) =>\n                          @HPow.hPow.{0, 0, 0} Real Nat Real\n                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                            (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta (F i) n))\n                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                        (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                          (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier (F i)) fun (p : Nat) =>\n                          @HPow.hPow.{0, 0, 0} Real Nat Real\n                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                            (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 (F i) p))\n                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                      (Complex.re\n                        (@Finset.sum.{0, 0} Nat Complex Complex.instAddCommMonoid\n                          (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier (F i)) fun (p : Nat) =>\n                          ImbalancedChen.Part3.MediumAtom.complexCRTSmoothNonzeroPart\n                            (ImbalancedChen.Part3.MediumAtom.transposedAtom\n                              (ImbalancedChen.Part3.MediumAtom.q1SliceAtom (F i) p)))))\n                    (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                      (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n                        (@HPow.hPow.{0, 0, 0} Real Nat Real\n                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                          (ImbalancedChen.Part3.MediumAtom.scale (F i))\n                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                        (Real.log (ImbalancedChen.Part3.MediumAtom.scale (F i))) A)))))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "2a2925b12d17fe90fa9d0c1517187ec027926044d89969af76ddad177adec526"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+      "source_sha256": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+      "receipt": ".lake/proof-continuation/audits/20261020T083716897272Z/receipt.json",
+      "receipt_sha256": "e885d8b623e2b85c8b906f76496e9ae171836f78109b3cd497b6cc130561171b",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "bb893c49479c08868c37b24b4e34e89da97d3bfafeec82b0bed463ec69fff784",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+        "name": "ImbalancedChen.Part3.MediumAtom.sharedLargePairedGCDNonzero",
+        "partial": false,
+        "type": "(d : ImbalancedChen.Part3.MediumAtom) → (Y : Real) → Complex",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "c8a6727f1bd139274592ec6267f9d00bfe1ee14bec57f5c83f6006b24249db0b"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+      "source_sha256": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+      "receipt": ".lake/proof-continuation/audits/20261020T083716897272Z/receipt.json",
+      "receipt_sha256": "e885d8b623e2b85c8b906f76496e9ae171836f78109b3cd497b6cc130561171b",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "bb893c49479c08868c37b24b4e34e89da97d3bfafeec82b0bed463ec69fff784",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+        "name": "ImbalancedChen.Part3.actual_betaL2_gamma1L2_cleaned_sharedLargePairedGCDNonzero_log_payment",
+        "partial": false,
+        "type": "∀ (B : Nat) (sigma kappa c0 A : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma),\n  @Exists.{1} Real fun (x0 : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n      (∀ (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale d) →\n            @LE.le.{0} Real Real.instLE\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n                    fun (n : Nat) =>\n                    @HPow.hPow.{0, 0, 0} Real Nat Real\n                      (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                      (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta d n))\n                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                  (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                    (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) fun (p : Nat) =>\n                    @HPow.hPow.{0, 0, 0} Real Nat Real\n                      (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                      (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 d p))\n                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                (@Norm.norm.{0} Complex Complex.instNorm\n                  (ImbalancedChen.Part3.MediumAtom.sharedLargePairedGCDNonzero\n                    (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)\n                    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                      (ImbalancedChen.Part3.MediumAtom.scale d)\n                      (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) sigma\n                        (@OfNat.ofNat.{0} Real (nat_lit 4)\n                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                              (@Nat.instNeZeroSucc\n                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))))))))\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@HPow.hPow.{0, 0, 0} Real Nat Real\n                  (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                  (ImbalancedChen.Part3.MediumAtom.scale d)\n                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                  (Real.log (ImbalancedChen.Part3.MediumAtom.scale d)) A)))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "c8a6727f1bd139274592ec6267f9d00bfe1ee14bec57f5c83f6006b24249db0b"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom",
+        "partial": false,
+        "type": "(d : ImbalancedChen.Part3.MediumAtom) → ImbalancedChen.Part3.MediumAtom",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.MediumAtom.signedError_sub_cleanAlpha_eq_divisorAlpha",
+        "partial": false,
+        "type": "∀ (d : ImbalancedChen.Part3.MediumAtom),\n  @Eq.{1} Complex\n    (@HSub.hSub.{0, 0, 0} Complex Complex Complex (@instHSub.{0} Complex Complex.instSub)\n      (ImbalancedChen.Part3.MediumAtom.signedError d)\n      (ImbalancedChen.Part3.MediumAtom.signedError (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)))\n    (ImbalancedChen.Part3.MediumAtom.signedError (ImbalancedChen.Part3.MediumAtom.divisorAlphaAtom d))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.mediumAdmissible_cleanedAlphaAtom",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd",
+        "partial": false,
+        "type": "∀ {d : ImbalancedChen.Part3.MediumAtom} {n : Nat}\n  (hn :\n    @Ne.{1} Complex\n      (ImbalancedChen.Part3.MediumAtom.beta\n        (ImbalancedChen.Part3.MediumAtom.transposedAtom (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)) n)\n      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))),\n  Not (@Dvd.dvd.{0} Int Int.instDvd (@Nat.cast.{0} Int instNatCastInt n) (ImbalancedChen.Part3.MediumAtom.residue d))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.PairedAlphaDeletion.signedError_sub_cleanAlpha_power_bound",
+        "partial": false,
+        "type": "∀ (B : Nat) (sigma kappa c0 : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  (hc0 : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c0),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (@Exists.{1} Real fun (x0 : Real) =>\n        And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n          (∀ (d : ImbalancedChen.Part3.MediumAtom),\n            ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n              @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale d) →\n                @LE.le.{0} Real Real.instLE\n                  (@Norm.norm.{0} Complex Complex.instNorm\n                    (@HSub.hSub.{0, 0, 0} Complex Complex Complex (@instHSub.{0} Complex Complex.instSub)\n                      (ImbalancedChen.Part3.MediumAtom.signedError d)\n                      (ImbalancedChen.Part3.MediumAtom.signedError\n                        (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d))))\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n                    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                      (ImbalancedChen.Part3.MediumAtom.scale d)\n                      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n                        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                        (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) sigma\n                          (@OfNat.ofNat.{0} Real (nat_lit 2)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                                (@Nat.instNeZeroSucc\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.PairedAlphaDeletion.uniformAuxiliarySW_cleanedAlphaAtom",
+        "partial": false,
+        "type": "∀ {ι : Type u_1} (F : ι → ImbalancedChen.Part3.MediumAtom) (B C0 : Nat) (sigma kappa c0 : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  (hc0 : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c0)\n  (hadmissible : ∀ (i : ι), ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (F i))\n  (hSW : @ImbalancedChen.Part3.UniformAuxiliarySW.{u_1} ι F C0),\n  @ImbalancedChen.Part3.UniformAuxiliarySW.{u_1} ι\n    (fun (i : ι) => ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom (F i)) C0",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "receipt": ".lake/proof-continuation/audits/20261015T214547521812Z/receipt.json",
+      "receipt_sha256": "3d7d2421d949485fe5a154541fcc93c9bd56f9e1d439afe4c9d5f8553786c851",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "2f85ad3c3a4f8230cac04a296fb50a023d4aefa5a7d61d1217a838b3743ed621",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.complexCRTSmoothNonzeroPart_eq_betaPairs",
+        "partial": false,
+        "type": "∀ (d : ImbalancedChen.Part3.MediumAtom),\n  @Eq.{1} Complex (ImbalancedChen.Part3.MediumAtom.complexCRTSmoothNonzeroPart d)\n    (@Finset.sum.{0, 0} Nat Complex Complex.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n      fun (n₁ : Nat) =>\n      @Finset.sum.{0, 0} Nat Complex Complex.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n        fun (n₂ : Nat) =>\n        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n            (ImbalancedChen.Part3.MediumAtom.beta d n₁)\n            (@Star.star.{0} Complex\n              (@InvolutiveStar.toStar.{0} Complex\n                (@StarAddMonoid.toInvolutiveStar.{0} Complex\n                  (@AddCommMonoid.toAddMonoid.{0} Complex\n                    (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Complex\n                      (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))))\n                  (@StarRing.toStarAddMonoid.{0} Complex\n                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))\n                    Complex.instStarRing)))\n              (ImbalancedChen.Part3.MediumAtom.beta d n₂)))\n          (ImbalancedChen.Part3.MediumAtom.commonFactorPairNonzeroWeight d n₁ n₂))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "e587db905aa69588b9322f2850cc5ba692969476015eb9578476df6832e0d09e"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "receipt": ".lake/proof-continuation/audits/20261015T214547521812Z/receipt.json",
+      "receipt_sha256": "3d7d2421d949485fe5a154541fcc93c9bd56f9e1d439afe4c9d5f8553786c851",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "2f85ad3c3a4f8230cac04a296fb50a023d4aefa5a7d61d1217a838b3743ed621",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+        "name": "ImbalancedChen.Part3.MediumAtom.commonFactorPairNonzeroWeight",
+        "partial": false,
+        "type": "(d : ImbalancedChen.Part3.MediumAtom) → (n₁ n₂ : Nat) → Complex",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "e587db905aa69588b9322f2850cc5ba692969476015eb9578476df6832e0d09e"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "receipt": ".lake/proof-continuation/audits/20261015T220551593674Z/receipt.json",
+      "receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "4a93aa5f55e8cedaa0425b124079958b09a4940137ed5a717cd557da0764ff85",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUPayment.eventually_actual_log_cost_le_rpow",
+        "partial": false,
+        "type": "∀ (p s : Nat) (sigma : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  {epsilon : Real}\n  (hepsilon :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon),\n  @Exists.{1} Real fun (x0 : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n      (∀ (B : Nat) (kappa c0 : Real) (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale d) →\n            @LE.le.{0} Real Real.instLE\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@HPow.hPow.{0, 0, 0} Real Nat Real\n                  (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                    (Real.log\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@OfNat.ofNat.{0} Real (nat_lit 2)\n                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                        (ImbalancedChen.Part3.MediumAtom.V d))))\n                  p)\n                (@HPow.hPow.{0, 0, 0} Real Nat Real\n                  (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                    (Real.log (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)))\n                  s))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (ImbalancedChen.Part3.MediumAtom.scale d) epsilon))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "220bd038ad9935a5ca757c5ad5bbfd8bf10804f622bec27494711a621e144683"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "receipt": ".lake/proof-continuation/audits/20261015T220551593674Z/receipt.json",
+      "receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "4a93aa5f55e8cedaa0425b124079958b09a4940137ed5a717cd557da0764ff85",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUPayment.eventually_const_rpow_two_le_logBudget",
+        "partial": false,
+        "type": "∀ (C A : Real)\n  (hC : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n  {delta : Real}\n  (hdelta :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) delta),\n  @Filter.Eventually.{0} Real\n    (fun (x : Real) =>\n      @LE.le.{0} Real Real.instLE\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) x\n            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n              (@OfNat.ofNat.{0} Real (nat_lit 2)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n              delta)))\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@HPow.hPow.{0, 0, 0} Real Nat Real\n            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid))) x\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (Real.log x) A)))\n    (@Filter.atTop.{0} Real Real.instPreorder)",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "220bd038ad9935a5ca757c5ad5bbfd8bf10804f622bec27494711a621e144683"
+    },
+    {
+      "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "receipt": ".lake/proof-continuation/audits/20261015T184729411519Z/receipt.json",
+      "receipt_sha256": "04957b52c0c083b8301750a0db75c3c6058ff8f0529e88f56a4116330737d5f4",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "ed1909318b04ca04a85d1877acee6d14ba5d94be0fa7c346e922e3ebda47e7bb",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+        "name": "ImbalancedChen.Part3.MediumAtom.absoluteFactorModulusRow",
+        "partial": false,
+        "type": "(d : ImbalancedChen.Part3.MediumAtom) → (m n : Nat) → Real",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "85e51f6bdec1d2bce561e13ac5d2b85648d1775d88078410c2b7c6db2ae31f9b"
+    },
+    {
+      "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "receipt": ".lake/proof-continuation/audits/20261015T184729411519Z/receipt.json",
+      "receipt_sha256": "04957b52c0c083b8301750a0db75c3c6058ff8f0529e88f56a4116330737d5f4",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "ed1909318b04ca04a85d1877acee6d14ba5d94be0fa7c346e922e3ebda47e7bb",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+        "name": "ImbalancedChen.Part3.MediumAtom.absoluteFactorModulusRow_le_tauFour",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) (m n : Nat)\n  (hn :\n    @Ne.{1} Complex (ImbalancedChen.Part3.MediumAtom.cleanedBeta d n)\n      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))),\n  @LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.MediumAtom.absoluteFactorModulusRow d m n)\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@DFunLike.coe.{1, 1, 1} (@ArithmeticFunction.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass)) Nat\n        (fun (x : Nat) => Nat)\n        (@ArithmeticFunction.instFunLikeNat.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))\n        (MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry.fouvryTau\n          (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))\n        (Int.natAbs\n          (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n            (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt m)\n              (@Nat.cast.{0} Int instNatCastInt n))\n            (ImbalancedChen.Part3.MediumAtom.residue d)))))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "85e51f6bdec1d2bce561e13ac5d2b85648d1775d88078410c2b7c6db2ae31f9b"
+    },
+    {
+      "module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+      "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+      "receipt": ".lake/proof-continuation/audits/20261015T184729411519Z/receipt.json",
+      "receipt_sha256": "04957b52c0c083b8301750a0db75c3c6058ff8f0529e88f56a4116330737d5f4",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "ed1909318b04ca04a85d1877acee6d14ba5d94be0fa7c346e922e3ebda47e7bb",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+        "name": "ImbalancedChen.Part3.PolynomialResidueDivisorBound.fouvryTau_le_const_rpow",
+        "partial": false,
+        "type": "∀ {k : Nat} (hk : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) k) {ε : Real}\n  (hε : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) ε),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (∀ (n : Nat),\n        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n →\n          @LE.le.{0} Real Real.instLE\n            (@Nat.cast.{0} Real Real.instNatCast\n              (@DFunLike.coe.{1, 1, 1} (@ArithmeticFunction.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))\n                Nat (fun (x : Nat) => Nat)\n                (@ArithmeticFunction.instFunLikeNat.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))\n                (MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry.fouvryTau k) n))\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast n) ε)))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "80c87b905dfec82eeb4a49405cef43d4fc698e7fd91f6919afd6ece748537d32"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "receipt": ".lake/proof-continuation/audits/20261015T103752259559Z/receipt.json",
+      "receipt_sha256": "799b975312dd0474e38fb12b8e7bdc830d52507539d9040505bcd9b47f070a19",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "09e7bc600ec9a4fc710b9d230d2bf081b6dc2e1d9c947af8d0d784b2300297d1",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "name": "ImbalancedChen.Part3.MediumAtom.groupedFactorGamma_norm_le_tauThree",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) (q : Nat),\n  @LE.le.{0} Real Real.instLE\n    (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.groupedFactorGamma d q))\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@DFunLike.coe.{1, 1, 1} (@ArithmeticFunction.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass)) Nat\n        (fun (x : Nat) => Nat)\n        (@ArithmeticFunction.instFunLikeNat.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))\n        (MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry.fouvryTau\n          (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))\n        q))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "receipt": ".lake/proof-continuation/audits/20261015T103752259559Z/receipt.json",
+      "receipt_sha256": "799b975312dd0474e38fb12b8e7bdc830d52507539d9040505bcd9b47f070a19",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "09e7bc600ec9a4fc710b9d230d2bf081b6dc2e1d9c947af8d0d784b2300297d1",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "name": "ImbalancedChen.Part3.MediumAtom.physicalFactorModuli_subset_cap",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LE.le.{0} (Finset.{0} Nat)\n    (@Preorder.toLE.{0} (Finset.{0} Nat)\n      (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n    (ImbalancedChen.Part3.MediumAtom.physicalFactorModuli d)\n    (@Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder\n      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n      (@Nat.floor.{0} Real Real.semiring Real.partialOrder\n        (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n        (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)))",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "receipt": ".lake/proof-continuation/audits/20261015T103752259559Z/receipt.json",
+      "receipt_sha256": "799b975312dd0474e38fb12b8e7bdc830d52507539d9040505bcd9b47f070a19",
+      "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "declarations_sha256": "09e7bc600ec9a4fc710b9d230d2bf081b6dc2e1d9c947af8d0d784b2300297d1",
+      "complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "name": "ImbalancedChen.Part3.MediumAtom.one_le_physicalFactorCap",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n    (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)",
+        "unsafe": false
+      },
+      "independent_actual_checks": {
+        "receipt_sha_matches": true,
+        "declarations_sha_matches": true,
+        "complete_record_matches": true,
+        "current_source_matches": true,
+        "source_receipt_matches": true,
+        "object_receipt_matches": true,
+        "before_after_inputs_exact": true,
+        "safe_three_standard_axioms": true
+      },
+      "current_object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2"
+    }
+  ],
+  "actual_source_spans_read_and_rederived": [
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "read_line_spans": [
+        [
+          30,
+          108
+        ],
+        [
+          230,
+          308
+        ],
+        [
+          374,
+          434
+        ],
+        [
+          438,
+          521
+        ],
+        [
+          525,
+          586
+        ],
+        [
+          699,
+          744
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "read_line_spans": [
+        [
+          25,
+          111
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "read_line_spans": [
+        [
+          138,
+          219
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "read_line_spans": [
+        [
+          31,
+          133
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "read_line_spans": [
+        [
+          70,
+          110
+        ],
+        [
+          150,
+          196
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+      "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+      "read_line_spans": [
+        [
+          80,
+          111
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "read_line_spans": [
+        [
+          76,
+          145
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+      "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+      "read_line_spans": [
+        [
+          172,
+          193
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3DistributionTargets",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "read_line_spans": [
+        [
+          46,
+          110
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+      "source_sha256": "e9f741c2a897e42bc8161d6db9c0e42a5698b87a735fb02ede9621006d4fa655",
+      "read_line_spans": [
+        [
+          20,
+          66
+        ],
+        [
+          904,
+          931
+        ],
+        [
+          1300,
+          1495
+        ]
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+      "source_sha256": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+      "read_line_spans": [
+        [
+          756,
+          782
+        ]
+      ]
+    }
+  ],
+  "independent_math_reconstruction": {
+    "fixed_parameters_and_quantifiers": "Take fixed B,sigma>0,kappa,c0; X=U*V>=1, eta=sigma/8>0, K=max1(1+kappa)>=1. All constants and x0 chosen before d (and in the family before i). K handles arbitrary real kappa in the private crude theorem and squared-clean theorem; no kappa>=0 is needed there.",
+    "beta_cost": {
+      "existing_public_API": "PolynomialResidueDivisorBound.fouvryTau_le_const_rpow; native fouvryTau_pow_le, exact copied finite pattern of owned private PairedAlphaDeletion.beta_norm_subpower",
+      "proof": "MediumAdmissible gives norm beta(m)<=tau2(m)^B<=tau_(2^B)(m). Every m in actual betaCarrier is positive and m<=2V<=2X. Fixed-order divisor subpower at exponent eta yields Cbeta X^eta (absorbing2^eta). Order2^B>=1 includes B=0. Do not import/call a private mangled declaration.",
+      "Cbeta_dependency": "B,eta only; choose positive once before d"
+    },
+    "actual_carriers_and_clean_alpha": "alphaCarrier subset Ioc0(floor(2U)) by U>=1 and interval-filter membership; betaCarrier subset Ioc0(floor(2V)) by V>=1. Hence real cardinalities <=2U,2V using Finset.card_le_card, Nat.card_Ioc and Nat.floor_le. cleanedAlpha remains bounded by1, keeps original carriers and interval. Active cleaned alpha implies signed n does not divide a, including degenerate a=0 where the clean coefficient vanishes.",
+    "tau4_progression_row": {
+      "actual_gate": "For active clean alpha n and any original m, mn-a!=0, because equality would make n divide signed a. Must discharge this gate before applying tau at a positive natAbs.",
+      "public_transport": "Local e={d with beta:=fun_=>1}, prove MediumAdmissible0 sigma kappa c0 e directly from hd and norm1<=tau2^0. Then e.cleanedBeta n!=0 from notdvd. Public e.absoluteFactorModulusRow_le_tauFour applies. The row is definitionally independent of beta and alpha; no assumption norm original beta<=1 and no transposed admissibility.",
+      "polynomial": "Original m<=2V,n<=2U gives |mn-a|<=4X+X^K<=5X^K<=7X^K. Thus at exponent eta/K>0, the public tau4 subpower bound gives Ctau X^eta. Actual residue upper bound is X^(1+kappa), absorbed into X^K at X>=1.",
+      "progression_total": "Triangle on exact original factor labels first; complete progression contribution <=(2U)(2V) Cbeta Ctau X^(2eta)=4 Cbeta Ctau X^(1+2eta). No change to actual signed coefficients."
+    },
+    "primitive_mean_cost": {
+      "exact_grouping": "Use complexCenteredRow_eq_groupedFactorGamma (or exact factor-label fiberwise grouping before norms). d and cleanedAlphaAtom have the same actual centered row. Grouped coefficient Gamma(q) is the sum over every ordered factor triple with that physical q, retaining multiplicity and complex signs before the norm.",
+      "pointwise_envelope": "norm Gamma(q)<=tau3(q); physicalFactorModuli subset positive Ioc0(floor physicalFactorCap); cap=8Q1Q2Q3>=1. Therefore sum_q normGamma(q)/phi(q)<=sum_{0<q<=cap}tau3(q)/phi(q)<=(1+logcap)^6. Coprime mean indicators have norm<=1; all q here positive so phi(q)>0.",
+      "carrier_and_beta_cost": "Complete mean contribution <=(2U)(2V) Cbeta X^eta Hcap^6 =4Cbeta X^(1+eta)Hcap^6. The tau3/phi mean API is already within the same foreign boundary.",
+      "log_cost": "TransposedPrimitiveUPayment.eventually_actual_log_cost_le_rpow at natural p=0,s=6, actual original sigma>0 and epsilon=eta yields Hcap^6<=X^eta uniformly before B,kappa,c0,d. No new mean-value supplier.",
+      "native_mean_source": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+        "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+        "complete_consumed_header": "theorem sum_fouvryTau_div_totient_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) : (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n.totient) ≤ (1 + Real.log x) ^ (2 * k)",
+        "actual_source_excerpt_246_270": "246:     (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n) ≤ (1 + Real.log x) ^ k := by\n247:   have heq : reciprocalSum ⌊x⌋₊ = (harmonic ⌊x⌋₊ : ℝ) := by\n248:     have hI : Ioc 0 ⌊x⌋₊ = Icc 1 ⌊x⌋₊ := by\n249:       ext; simp only [mem_Ioc, mem_Icc]; omega\n250:     simp [reciprocalSum, harmonic_eq_sum_Icc, hI]\n251:   exact (sum_reciprocalTau_le k ⌊x⌋₊).trans\n252:     (pow_le_pow_left₀ (reciprocalSum_nonneg _)\n253:       (heq ▸ harmonic_floor_le_one_add_log x hx) _)\n254: \n255: /-- A global totient-weighted divisor mean, with no order-dependent\n256: implicit constant. -/\n257: theorem sum_fouvryTau_div_totient_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) :\n258:     (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n.totient) ≤\n259:       (1 + Real.log x) ^ (2 * k) := by\n260:   calc\n261:     _ ≤ ∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau (2 * k) n : ℝ) / n :=\n262:       sum_le_sum (fun n _ => fouvryTau_div_totient_le k n)\n263:     _ ≤ _ := sum_fouvryTau_div_le_real _ hx\n264: \n265: /-- The reciprocal second moment, useful for sums of modulus weights. -/\n266: theorem sum_fouvryTau_sq_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) :\n267:     (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) ^ 2 / n) ≤\n268:       (1 + Real.log x) ^ (k ^ 2) := by\n269:   calc\n270:     _ ≤ ∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau (k ^ 2) n : ℝ) / n := by",
+        "fixed_k": 3,
+        "log_power": 6,
+        "already_existing_boundary": true,
+        "new_foreign_replay_claimed": false
+      }
+    },
+    "new_private_crude_helper": "Adding both contributions proves normSclean<=Cclean X^(1+sigma/4), Cclean=4 Cbeta(Ctau+1)>0. This new helper is a proof obligation to implement using the finite routes above; it cannot be encoded as a hypothesis, structure field, axiom, or assumed analytic estimate. No SW and no spectral cancellation is needed.",
+    "unit_coefficient_square_cleaning": {
+      "owned_input": "PairedAlphaDeletion.signedError_sub_cleanAlpha_power_bound with original c0>0 gives Delta=norm(S-Sclean)<=D X^(1-sigma/2), D>0, threshold before d. The proposed public squared-clean theorem explicitly includes hc0>0.",
+      "elementary_square": "reverse triangle gives |normS-normT|<=Delta; normS+normT<=2normT+Delta; hence |normS²-normT²|<=(2normT+Delta)Delta.",
+      "exact_powers": "2 Cclean D X^[(1+sigma/4)+(1-sigma/2)] +D² X^[2(1-sigma/2)] =2CcleanD X^(2-sigma/4)+D²X^(2-sigma). For X>=1 and sigma>0 this is <=(2CcleanD+D²)X^(2-sigma/4).",
+      "one_budget": "TransposedPrimitiveUPayment.eventually_const_rpow_two_le_logBudget at C=2CcleanD+D²>=0, delta=sigma/4>0 and requested real A pays one X²/log(X)^A budget. LogX>0 ensured by x0>1. Core coefficient remains1.",
+      "forbidden_shortcut": "normS²<=2normSclean²+2Delta² would multiply the later core coefficient by2 and does not implement this endpoint."
+    },
+    "exact_three_mask_identity": "For each original finite p,N1,N2, put g=gcd(N1,N2) and s=supportedPart(N1/g,g) in precisely this order. Exhaustive disjoint cases: Ybeta<g; g<=Ybeta and Ysupport<s; g<=Ybeta and s<=Ysupport. Endpoints belong in small branches. Public fullNZ_eq_betaPairs plus finite distributivity proves identity for arbitrary real cutoffs even negative and all natural pairs; no need to assume positivity or gcd nonzero. Do not impose a new tail-D/frequency mask.",
+    "two_deleted_NZ_costs": "Actual owned LargePaired708 pays norm large paired NZ at Ybeta=X^(sigma/4) with original outside betaL2*gamma1L2. New fully owned Supporte9 pays sum of W,zero,NZ norms at Ysupport=X^(sigma/4) for every Ybeta, so norm NZ alone is <=that sum by nonnegativity. The original outside is nonnegative. Choose Ybeta=X^(sigma/4), max the two thresholds and add two unit log budgets. This is norm nonnegativity of separate already bounded terms, not monotonicity of signed subsums.",
+    "family_same_SW_and_geometry": "Fclean i=(F i).cleanedAlphaAtom, only local proof notation. mediumAdmissible_cleanedAlphaAtom preserves actual B,sigma,kappa,c0 and geometry. PairedAlphaDeletion.uniformAuxiliarySW_cleanedAlphaAtom transports UniformAuxiliarySW F C0 with the identical fixed C0; no additional SW premise. Original betaCarrier,beta,gamma1,primitive pCarrier,scale,residue and alpha interval unchanged.",
+    "real_projection_semantics": "commonFactorPairNonzeroWeight contains real projection of its Poisson expression BEFORE arbitrary complex paired beta/gamma coefficients. The proposed identity leaves that literal kernel untouched. Re may be taken after the full exact three-mask complex identity; Re of each deleted aggregate <=its norm. It is invalid in general to commute Re past an arbitrary complex coefficient, or to replace C*Re(P) by Re(C*P).",
+    "unit_core_final_assembly": "Apply owned Energyc6fc to Fclean with unchanged C0 and parameter hypotheses. Keep its original outside factors literally. Substitute exact three-mask identity, then project real. Outside>=0 lets discarded Re terms be bounded by their two norms, costing2 budgets. Add squared-cleaning difference, costing1. Final uniform constant CE+3>0 and x0=max(xEnergyClean,max(xDeletedNZ,xSquaredCleaning)) precede i and all labels. No core positivity or reality assumption is needed. Literal core has coefficient exactly1.",
+    "two_A": "The proposed reduction works for requested positive A. A future deduction of linear target at A must request squared reduction/core estimate at2A, then use logX>0 and sqrt(X²/log^(2A))=X/log^A. This review proves no small-core estimate."
+  },
+  "implementation_hazards_to_enforce": [
+    "No new analytic supplier for the crude helper, grouped phi mean, square difference, or core.",
+    "Never call private imported mangled names; reproduce the short elementary local helper arguments through actual public APIs.",
+    "Preserve every actual ordered label, star orientation, and the real-projection placement inside the existing kernel.",
+    "Keep exact original sigma/4 cutoffs; do not silently replace by smaller free eta or rescale admissibility sigma/kappa.",
+    "Keep all four complete public theorem hypotheses/quantifier order unchanged.",
+    "All new Lean text must undergo separate whole-source read and strict/owned allgenerated fulltype/axiom validation before acceptance."
+  ],
+  "remaining_unproved": [
+    "Author implementation and kernel acceptance of this single finite reduction module, including new private crude and squared-cleaning proofs.",
+    "Genuine original shared-p small paired-gcd small-supported reciprocal core estimate with smooth Fourier kernel, root phase, signed difference, all tail-gcd and frequency costs.",
+    "The needed7/32 spectral/trilinear estimate is not provided by this interface or finite packet bound.",
+    "Full distribution C/K/hLower/hUpper transport and unconditional1+1.75 main theorem remain unclosed."
+  ],
+  "no_new_Lean_source_compile_checker_lake_install_cache_pin_CI_or_spawn": true,
+  "source_mutation_in_this_review": false,
+  "owned_acceptance_of_this_future_module": false,
+  "main_theorem_completion_claimed": false
+}

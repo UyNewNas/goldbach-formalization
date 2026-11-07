@@ -1,0 +1,64 @@
+{
+  "before_sha256": "476d36c7e1ee433ddf427460d5ab7638d2a9eec5e63deea4e69d75ce4a9f9498",
+  "after_sha256": "4daafa0becefe322a3aaa7f7e76bb47e72d2b3d9c33cd30a8bde27f5ba4d61a0",
+  "all54_headers_raw_unchanged": true,
+  "all13_defs_raw_unchanged": true,
+  "only8_actual_proofs_modified": [
+    "card_decompositionCarrier_le",
+    "harmonic_floor_twice_ge_one",
+    "multiplicityL2_le_second_moment",
+    "row_fiber_card",
+    "row_square_le",
+    "signedDifference_multiplicityL2_bound",
+    "source_rows_eq_moment",
+    "tau_le_divisorMaximum"
+  ],
+  "9_actual_local_edits": [
+    {
+      "declaration": "tau_le_divisorMaximum",
+      "old_local_span_LF": "  unfold divisorMaximum\n  apply le_sup\n  apply mem_Icc.mpr\n  refine ⟨Nat.succ_le_iff.mpr hn, ?_⟩\n  exact_mod_cast hbound.trans (Nat.le_ceil _)",
+      "new_local_span_LF": "  have hmem : n ∈ Icc 1 (supportCap S H F) := by\n    apply mem_Icc.mpr\n    refine ⟨Nat.succ_le_iff.mpr hn, ?_⟩\n    exact_mod_cast hbound.trans (Nat.le_ceil _)\n  have hsup := Finset.le_sup (s := Icc 1 (supportCap S H F))\n    (f := fun m : ℕ => m.divisors.card) (b := n) hmem\n  simpa only [divisorMaximum] using hsup"
+    },
+    {
+      "declaration": "card_decompositionCarrier_le",
+      "old_local_span_LF": "        have hlast : a.2.2 = b.2.2 := congrArg (fun p : ℕ × ℕ => p.2) heq",
+      "new_local_span_LF": "        have hpair : (a.1, a.2.2) = (b.1, b.2.2) := heq\n        have hlast := congrArg (fun p : ℕ × ℕ => p.2) hpair"
+    },
+    {
+      "declaration": "row_fiber_card",
+      "old_local_span_LF": "      apply Prod.ext rfl",
+      "new_local_span_LF": "      unfold output\n      apply Prod.ext rfl"
+    },
+    {
+      "declaration": "source_rows_eq_moment",
+      "old_local_span_LF": "      simp only [sum_product, sum_filter, output, difference]",
+      "new_local_span_LF": "      simp only [sum_product, sum_filter, output, difference]\n      rfl"
+    },
+    {
+      "declaration": "row_square_le",
+      "old_local_span_LF": "  convert h using 1 <;> ring",
+      "new_local_span_LF": "  calc\n    ((row H (s₁, s₂) k).card : ℝ) ^ 2 =\n        ((row H (s₁, s₂) k).card : ℝ) * ((row H (s₁, s₂) k).card : ℝ) := pow_two _\n    _ ≤ (1 + 2 * H * (s₁.gcd s₂ : ℝ) / S) *\n        ((row H (s₁, s₂) k).card : ℝ) := h\n    _ = ((row H (s₁, s₂) k).card : ℝ) +\n        (2 * H / S) * (s₁.gcd s₂ : ℝ) * ((row H (s₁, s₂) k).card : ℝ) := by ring"
+    },
+    {
+      "declaration": "multiplicityL2_le_second_moment",
+      "old_local_span_LF": "    convert h using 1 <;> ring",
+      "new_local_span_LF": "    convert h using 1\n    ring"
+    },
+    {
+      "declaration": "harmonic_floor_twice_ge_one",
+      "old_local_span_LF": "    change (1 : ℝ) ≤ 2 * S\n    linarith",
+      "new_local_span_LF": "    simpa only [Nat.cast_one] using (by linarith : (1 : ℝ) ≤ 2 * S)"
+    },
+    {
+      "declaration": "signedDifference_multiplicityL2_bound",
+      "old_local_span_LF": "        convert hpaid using 1 <;>\n          simp only [D, t, J, x, T, div_eq_mul_inv] <;> ring",
+      "new_local_span_LF": "        change multiplicityL2 S H F nu ≤\n          (64 * (divisorMaximum S H F : ℝ) ^ 3 * (nu.divisors.card : ℝ) +\n            128 * (divisorMaximum S H F : ℝ) ^ 3 * (nu.divisors.card : ℝ) ^ 2 *\n              (harmonic (Nat.floor (2 * S)) : ℝ) * (H / S)) *\n            ((H * S) ^ 2 * F / (nu : ℝ))\n        calc\n          _ ≤ (divisorMaximum S H F : ℝ) ^ 2 * (2 * F / (nu : ℝ)) *\n              (32 * (divisorMaximum S H F : ℝ) * (nu.divisors.card : ℝ) * (H * S) ^ 2 +\n                (2 * H / S) * (32 * (divisorMaximum S H F : ℝ) *\n                  (nu.divisors.card : ℝ) ^ 2 * (H * S) ^ 2 *\n                    (harmonic (Nat.floor (2 * S)) : ℝ))) := hpaid\n          _ = _ := by ring"
+    },
+    {
+      "declaration": "signedDifference_multiplicityL2_bound",
+      "old_local_span_LF": "      convert hfinal using 1 <;>\n        simp only [D, J, x, T, div_eq_mul_inv] <;> ring",
+      "new_local_span_LF": "      calc\n        _ ≤ 576 * D ^ 5 * J * (1 + x) * T := hfinal\n        _ = _ := by\n          change\n            576 * (divisorMaximum S H F : ℝ) ^ 5 *\n                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *\n                  ((H * S) ^ 2 * F / (nu : ℝ)) =\n              576 * (divisorMaximum S H F : ℝ) ^ 5 *\n                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *\n                  (H * S) ^ 2 * F / (nu : ℝ)\n          ring"
+    }
+  ],
+  "compiler_invoked": false
+}

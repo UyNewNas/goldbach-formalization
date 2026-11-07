@@ -1,0 +1,20 @@
+--- a/ImbalancedChen/Certificates/RationalLogCertificate.lean
++++ b/ImbalancedChen/Certificates/RationalLogCertificate.lean
+@@ -63,7 +63,8 @@
+     (1 + logParameter q) / (1 - logParameter q) = q := by
+   have hden : q + 1 ≠ 0 := ne_of_gt (by linarith : 0 < q + 1)
+   unfold logParameter
+-  field_simp [hden] <;> ring
++  field_simp [hden]
++  ring
+ 
+ /-- The finite checks enclose `Real.log` of the supplied rational argument.
+ The certificate's two stored endpoints are not themselves a semantic
+@@ -99,6 +100,7 @@
+     exact_mod_cast hhi
+   rw [hlCast] at hloR
+   rw [huCast, hlCast] at hhiR
++  simp only [mul_div_assoc] at hhiR
+   constructor <;> linarith
+ 
+ end ImbalancedChen.Certificates

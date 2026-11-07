@@ -1,0 +1,23 @@
+{
+  "status": "ROOT_DIAGNOSTIC_SOURCE_REPAIR_NOT_COMPILED",
+  "created_utc": "2026-10-21T06:40:20.805200+00:00",
+  "source": "ImbalancedChen\\Part3SchwartzFourierL1Sobolev.lean",
+  "old_sha256": "bb99945a37040ebe36d0202e69ecc533078e043dc4c3ea0e2a22f6fab7363a65",
+  "new_sha256": "b839d998114141aa8a5272e46601857a48b2ea80683380ddb674e2571f082140",
+  "bytes": 7787,
+  "LF": 158,
+  "original_failed_receipt": "runs/20261021T063629096966Z-ImbalancedChen.Part3SchwartzFourierL1Sobolev/receipt.json",
+  "original_failed_receipt_sha256": "f7f13b81cc1c933448f016ea854caecbe939caa73ca75148f12b4d41c0408c25",
+  "original_diagnostics_sha256": "d08f15c1a6c92f3a0d4c723270284b4b379d48ee7de676773ab454f3cd7b32e2",
+  "changes": [
+    "Explicitly omit four unneeded instances in three elementary inverse-symbol proofs; no linter setting changed",
+    "Typed nonzero hne to instantiate the continuous inverse proof",
+    "Native inv_pow closes the final inverse power equality"
+  ],
+  "public_context_definitions_and_theorem_unchanged": true,
+  "imports_unchanged": true,
+  "no_frozen_checker_or_resource_change": true,
+  "compiled": false,
+  "owned": false,
+  "whole_diff": "--- bb999-original\n+++ diagnostic-repair\n@@ -70,21 +70,25 @@\n \n private def inverseSymbol (ξ : E) : ℝ := ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹\n \n+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in\n private theorem inverseSymbol_nonneg (ξ : E) : 0 ≤ inverseSymbol ξ := by\n   unfold inverseSymbol\n   positivity\n \n+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in\n private theorem inverseSymbol_continuous : Continuous (inverseSymbol : E → ℝ) := by\n   unfold inverseSymbol\n-  exact ((continuous_const.add (continuous_norm.pow 2)).pow 2).inv₀\n-    (fun ξ ↦ by positivity)\n+  have hne (ξ : E) : (1 + ‖ξ‖ ^ 2) ^ 2 ≠ 0 := by positivity\n+  exact ((continuous_const.add (continuous_norm.pow 2)).pow 2).inv₀ hne\n \n+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in\n private theorem inverseSymbol_sq_eq (ξ : E) :\n     inverseSymbol ξ ^ 2 = (1 + ‖ξ‖ ^ 2) ^ (-(8 : ℝ) / 2) := by\n   have he : -(8 : ℝ) / 2 = -(4 : ℝ) := by norm_num\n   rw [he]\n   norm_num only [inverseSymbol, Real.rpow_neg_ofNat, zpow_neg, zpow_natCast,\n     ← inv_pow, ← pow_mul]\n+  exact inv_pow _ _\n \n private theorem inverseSymbol_sq_integrable\n     (hd : Module.finrank ℝ E < 8) :\n"
+}

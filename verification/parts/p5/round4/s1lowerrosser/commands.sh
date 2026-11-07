@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Actual target commands, in execution order. See JSON for cwd, environment and results.
+# The fixed frontend driver calls Lean.Elab.runFrontend at trustLevel=0.
+export LEAN_SYSROOT=/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux
+export LAKE_HOME=/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux
+export LEAN_NUM_THREADS=1
+export PATH=/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin:"$PATH"
+export LEAN_PATH=/workspace/scratch/cd30ec11ea1d/goldbach-formalization/.lake/build/lib/lean:/workspace/scratch/535d89efd063/p0-round2/validation/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean
+export LEAN_SRC_PATH=/workspace/scratch/cd30ec11ea1d/goldbach-formalization:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/goldbach:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/mathlib:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanArchitect:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/plausible:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanSearchClient:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/importGraph:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/proofwidgets:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/aesop:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Qq:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/batteries:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Cli:/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/src/lean/lake:/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/src/lean
+cd /workspace/scratch/cd30ec11ea1d/goldbach-formalization
+
+# compile: exit 0, 259.896 seconds
+/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin/lake -d /workspace/scratch/cd30ec11ea1d/p5-round2/runtime/frontend-driver -f lakefile.lean script run compileOne /workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/goldbach/MathlibNt/SieveTheory/LiLiuGoldbachS1LowerRosser.lean MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser /workspace/scratch/cd30ec11ea1d/goldbach-formalization/.lake/build/lib/lean/MathlibNt/SieveTheory/LiLiuGoldbachS1LowerRosser.olean strict
+
+# replay: exit 0, 95.498 seconds
+/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin/leanchecker --verbose MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser
+
+# audit: exit 1, 81.689 seconds
+/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin/lake -d /workspace/scratch/cd30ec11ea1d/p5-round2/runtime/frontend-driver -f lakefile.lean script run compileOne /workspace/scratch/cd30ec11ea1d/goldbach-formalization/verification/parts/p5/S1LowerRosserAudit.lean verification.parts.p5.S1LowerRosserAudit /workspace/scratch/cd30ec11ea1d/goldbach-formalization/.lake/build/lib/lean/verification/parts/p5/S1LowerRosserAudit.olean strict
+
+# audit: exit 0, 358.243 seconds
+/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin/lake -d /workspace/scratch/cd30ec11ea1d/p5-round2/runtime/frontend-driver -f lakefile.lean script run compileOne /workspace/scratch/cd30ec11ea1d/goldbach-formalization/verification/parts/p5/S1LowerRosserAudit.lean verification.parts.p5.S1LowerRosserAudit /workspace/scratch/cd30ec11ea1d/goldbach-formalization/.lake/build/lib/lean/verification/parts/p5/S1LowerRosserAudit.olean strict

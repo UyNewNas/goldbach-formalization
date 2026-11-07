@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "status": "RETAINED_VARIANCE_IDENTITY_INDEPENDENT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "result": "all_two_definitions_six_proofs_and_original_WVU_interfaces_statically_consistent",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-22T00:39:33.488720+00:00",
+  "HOLD": true,
+  "source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPRetainedVarianceIdentity-module-source.txt",
+    "sha256": "100408e5e1db1ec6341d91f4dfa41619da8f9f932b99171fa383a77b411ff753",
+    "bytes": 3927,
+    "lf_lines": 87
+  },
+  "route_note": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-retained-variance-identity-route-HOLD.txt",
+    "sha256": "8f7e6c655472ca2d7686148a0237eded1278a5fb2492f6ca4ef756e37b2d58ed",
+    "bytes": 7368,
+    "lf_lines": 122
+  },
+  "counts": {
+    "LF": 87,
+    "definitions": 2,
+    "theorem_proofs": 6,
+    "actual_generated_declarations_predicted": null
+  },
+  "complete_written_declarations": [
+    {
+      "name": "retainedVariance",
+      "kind": "def",
+      "first": 16,
+      "last": 20,
+      "complete_type": "def retainedVariance (d : MediumAtom) (H : ℝ) : ℝ",
+      "type_sha256": "99a891eec9d23b05b1a5eacdf8e65d87b28c000f4794aeeb0c6c57808e16e8a2",
+      "complete_body": ":=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n        ‖truncatedCenteredRow d H p m‖ ^ 2\n",
+      "body_sha256": "15ee7be98718793b486d78ee5bb89fb74a9abab18e6e145b75ad31391e7a65cb",
+      "full_declaration_sha256": "e51daef178e7f89d1a272ac1898026e847af3ab6505aa940f0b0b77981f28529",
+      "full_type_body_read": true
+    },
+    {
+      "name": "tailPrincipalCross",
+      "kind": "def",
+      "first": 22,
+      "last": 27,
+      "complete_type": "def tailPrincipalCross (d : MediumAtom) (H : ℝ) : ℝ",
+      "type_sha256": "87c0057746f57262fe2605e0f5e957dab2e8fb96540850aadf903331888a619a",
+      "complete_body": ":=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n        (tailRow d H p m *\n          star ((d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m)).re\n",
+      "body_sha256": "84a6ad9c7cd74d957f4f885d906b9b72b87ec204e8a1f0cf0d17d4e32d85461a",
+      "full_declaration_sha256": "112742fe99f928a5a8a18f127b302fc9a449fa26bdf0799db3ab635e97c3aa85",
+      "full_type_body_read": true
+    },
+    {
+      "name": "retained_sub_hybrid_scalar",
+      "kind": "theorem",
+      "first": 30,
+      "last": 35,
+      "complete_type": "theorem retained_sub_hybrid_scalar (P K J : ℂ) :\n    ‖K - J‖ ^ 2 - (‖K‖ ^ 2 - 2 * (P * star J).re + ‖J‖ ^ 2) =\n      2 * ((P - K) * star J).re",
+      "type_sha256": "9f9902ec3e533901b4f0a07a506866b2646f7549351925c1891e65297b2f615b",
+      "complete_body": ":= by\n  simp_rw [← Complex.normSq_eq_norm_sq, Complex.normSq_sub, starRingEnd_apply]\n  simp only [sub_mul, Complex.sub_re]\n  ring\n",
+      "body_sha256": "80f5c6a6144d2f920a93e69a3821f90bb8d08199d973869462126ee29cb1d4ab",
+      "full_declaration_sha256": "27752ad15ebe671fdf33b5f3e596a5797d843ed6bb59e3674b6b9167cf3ab47f",
+      "full_type_body_read": true
+    },
+    {
+      "name": "progression_sub_kept_eq_tail",
+      "kind": "theorem",
+      "first": 38,
+      "last": 46,
+      "complete_type": "theorem progression_sub_kept_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m -\n      keptProgressionRow d H p m = tailRow d H p m",
+      "type_sha256": "23e04261b1994509041dc31e247600c594ae7c46c87e28bd310661e96fdd9908",
+      "complete_body": ":= by\n  have ht := centeredRow_sub_truncated_eq_tail hd H hp m\n  unfold MediumAtom.complexCenteredRow truncatedCenteredRow at ht\n  linear_combination ht\n",
+      "body_sha256": "5c60ef33e5a3055ee90d8e391912c2e6f70acee8c3356963f29568123fe6666a",
+      "full_declaration_sha256": "3e177f909221fb61cc39d0b947ea33bdd9e26c7a6a7461c259ab1c0d33b16b36",
+      "full_type_body_read": true
+    },
+    {
+      "name": "retained_row_sub_hybrid",
+      "kind": "theorem",
+      "first": 48,
+      "last": 56,
+      "complete_type": "theorem retained_row_sub_hybrid\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    ‖truncatedCenteredRow d H p m‖ ^ 2 - hybridRow d H p m =\n      2 * (tailRow d H p m *\n        star ((d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m)).re",
+      "type_sha256": "9a1ab04c65afe54a4cfba2b83695b4f5d8abbf49e2c41fb4e585d7691ae67be9",
+      "complete_body": ":= by\n  unfold truncatedCenteredRow hybridRow\n  rw [retained_sub_hybrid_scalar, progression_sub_kept_eq_tail hd H hp m]\n",
+      "body_sha256": "b1c130ab30f2f29d501d0900ee7171c3cbc32940b155f28a11b08051468f2886",
+      "full_declaration_sha256": "6faaa1847014c9346b723ac58e70042a7a204630ef156b5b1fed906d5ff87ec2",
+      "full_type_body_read": true
+    },
+    {
+      "name": "retainedVariance_sub_hybridVariance",
+      "kind": "theorem",
+      "first": 59,
+      "last": 70,
+      "complete_type": "theorem retainedVariance_sub_hybridVariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (H : ℝ) :\n    retainedVariance d H - hybridVariance d H = 2 * tailPrincipalCross d H",
+      "type_sha256": "89564d9b7f8a64d23ebeb28c95b570b827a1f860b015ebe75a59c6fd8d384797",
+      "complete_body": ":= by\n  unfold retainedVariance hybridVariance tailPrincipalCross\n  simp only [← Finset.sum_sub_distrib, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro p hp\n  apply Finset.sum_congr rfl\n  intro m _hm\n  rw [← mul_sub, retained_row_sub_hybrid hd H hp m]\n  ring\n",
+      "body_sha256": "f6b7d93393eeab762a4741ce23ecd34a063a606374a801512f846d7243a3b5f9",
+      "full_declaration_sha256": "108ad65e91e1ae3e9f9da0a6716586915370b117774725efb4202b5d79c72f00",
+      "full_type_body_read": true
+    },
+    {
+      "name": "originalVariance_sub_retainedVariance",
+      "kind": "theorem",
+      "first": 72,
+      "last": 77,
+      "complete_type": "theorem originalVariance_sub_retainedVariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (H : ℝ) :\n    originalVariance d - retainedVariance d H =\n      (originalVariance d - hybridVariance d H) - 2 * tailPrincipalCross d H",
+      "type_sha256": "2a58ebb2f36625ee2c10d99eb787da2dc397b90a273e78edb3ab20596d804261",
+      "complete_body": ":= by\n  linarith [retainedVariance_sub_hybridVariance hd H]\n",
+      "body_sha256": "b208330efd0bbc717464a3930881d8a883b9a0faf1713ecacaae1592b05460a2",
+      "full_declaration_sha256": "cb288effe4bfd9e13b3e17d2ca611be4fcfce97f4692f8b47ac7210fdbd8bb00",
+      "full_type_body_read": true
+    },
+    {
+      "name": "retainedVariance_nonneg",
+      "kind": "theorem",
+      "first": 79,
+      "last": 84,
+      "complete_type": "theorem retainedVariance_nonneg (d : MediumAtom) (H : ℝ) :\n    0 ≤ retainedVariance d H",
+      "type_sha256": "1fa9ad9d16f3d7286d590122a2663fbb02db5412106bfe9a75910df9687514ee",
+      "complete_body": ":= by\n  unfold retainedVariance\n  exact Finset.sum_nonneg (fun p _ => Finset.sum_nonneg (fun m _ =>\n    mul_nonneg (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      (sq_nonneg _)))\n",
+      "body_sha256": "6551b0c125887716c2ebca8bcebf66f8c6260b6c2d9f2303fba2efb91ae048c4",
+      "full_declaration_sha256": "00d663a7add179a138b5ca75e83f3f1921f2a104a1bb863dab701f7beec6c72d",
+      "full_type_body_read": true
+    }
+  ],
+  "future_parent_bindings": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPWVarianceBridge-module-source.txt",
+      "sha256": "31a1264a2727681448e3ca97cbd0c92ba823d47de3dc52279cdee4ed5f635905",
+      "bytes": 7243,
+      "lf_lines": 153,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPPairMaskRestoration-module-source.txt",
+      "sha256": "30ff8c812dd011de3af11e34c0ddaaa14411f0455f633ad0069c76931d3dc516",
+      "bytes": 13023,
+      "lf_lines": 219,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailCutoff-module-source.txt",
+      "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+      "bytes": 15908,
+      "lf_lines": 334,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    }
+  ],
+  "parent_independent_review": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-W-only-variance-bridge-independent-source-review-HOLD.json",
+    "sha256": "17c297807cf9c0492c40ad8eb71e81dbf89e860e6431f6716a007a450b21eacc",
+    "bytes": 33157,
+    "lf_lines": 414
+  },
+  "actual_original_interfaces_read": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "bytes": 13464,
+      "lf_lines": 287,
+      "API_spans_read": [
+        {
+          "first": 37,
+          "last": 73
+        },
+        {
+          "first": 128,
+          "last": 139
+        },
+        {
+          "first": 173,
+          "last": 200
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "bytes": 29327,
+      "lf_lines": 592,
+      "API_spans_read": [
+        {
+          "first": 29,
+          "last": 40
+        },
+        {
+          "first": 224,
+          "last": 252
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2FiniteFold.lean",
+      "sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+      "bytes": 15172,
+      "lf_lines": 314,
+      "API_spans_read": [
+        {
+          "first": 24,
+          "last": 35
+        },
+        {
+          "first": 50,
+          "last": 54
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "bytes": 9757,
+      "lf_lines": 220,
+      "API_spans_read": [
+        {
+          "first": 163,
+          "last": 166
+        }
+      ]
+    }
+  ],
+  "native_API_bindings_and_exact_spans": [
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Complex/Basic.lean",
+      "sha256": "e279bd6369e83ebf6716e17a8f38c81c812020753472cac5e7ae2a501790b760",
+      "bytes": 30091,
+      "lf_lines": 881,
+      "actual_API_spans": [
+        {
+          "first": 653,
+          "last": 654,
+          "literal_source": "theorem sub_re (z w : ℂ) : (z - w).re = z.re - w.re :=\n  rfl\n",
+          "normalized_lf_utf8_sha256": "ae8fc891cf250878d307b983a226078bb7040ab5ad214c5e4cf67d1c8f100554"
+        },
+        {
+          "first": 671,
+          "last": 674,
+          "literal_source": "theorem normSq_sub (z w : ℂ) : normSq (z - w) = normSq z + normSq w - 2 * (z * conj w).re := by\n  rw [sub_eq_add_neg, normSq_add]\n  simp only [map_neg, mul_neg, neg_re, normSq_neg]\n  ring\n",
+          "normalized_lf_utf8_sha256": "21c017f6e15c32dbd36342dd04c04b3b0fd1d13c5a08eb5c96b1d4aab2f30e7f"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Complex/Norm.lean",
+      "sha256": "815efa05d2282b0b234139eac16d614f1128d69e39cf02249df887934ccc9741",
+      "bytes": 15446,
+      "lf_lines": 390,
+      "actual_API_spans": [
+        {
+          "first": 147,
+          "last": 150,
+          "literal_source": "lemma normSq_eq_norm_sq (z : ℂ) : normSq z = ‖z‖ ^ 2 := by\n  simp [norm_def, sq, Real.mul_self_sqrt (normSq_nonneg _)]\n\nprotected theorem sq_norm (z : ℂ) : ‖z‖ ^ 2 = normSq z := (normSq_eq_norm_sq z).symm\n",
+          "normalized_lf_utf8_sha256": "0fe103846148bb4ec9acf19c3a40f441d079e3ef98b8b777c6480159eea01968"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Star/Basic.lean",
+      "sha256": "cdfcab3077ba3a210ef23a201906ab90fe738fc6d84724ce11f616b291a6ed4e",
+      "bytes": 23389,
+      "lf_lines": 622,
+      "actual_API_spans": [
+        {
+          "first": 345,
+          "last": 351,
+          "literal_source": "@[inherit_doc]\nscoped[ComplexConjugate] notation \"conj\" => starRingEnd _\n\n/-- This is not a simp lemma, since we usually want simp to keep `starRingEnd` bundled.\nFor example, for complex conjugation, we don't want simp to turn `conj x`\ninto the bare function `star x` automatically since most lemmas are about `conj x`. -/\ntheorem starRingEnd_apply (x : R) : starRingEnd R x = star x := rfl\n",
+          "normalized_lf_utf8_sha256": "e3d8e0f6e302bcc6e6b1b292730298258da83db78b414b6232742bef4697b18c"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/BigOperators/Ring/Finset.lean",
+      "sha256": "c89a7463df5acd6485e64d14b958daaedf6b857aad2808a4ead0570b52220568",
+      "bytes": 12700,
+      "lf_lines": 270,
+      "actual_API_spans": [
+        {
+          "first": 158,
+          "last": 164,
+          "literal_source": "/-- **Cauchy-Schwarz inequality** for finsets, squared version. -/\nlemma sum_mul_sq_le_sq_mul_sq [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]\n    [ExistsAddOfLE R] (s : Finset ι)\n    (f g : ι → R) : (∑ i ∈ s, f i * g i) ^ 2 ≤ (∑ i ∈ s, f i ^ 2) * ∑ i ∈ s, g i ^ 2 :=\n  sum_sq_le_sum_mul_sum_of_sq_le_mul s\n    (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ (mul_pow ..).le)\n\n",
+          "normalized_lf_utf8_sha256": "dd37ec4c737037bbcbfd0c834f83570e97446b76c6813b1807c283b46e8ff6ea"
+        }
+      ]
+    }
+  ],
+  "parent_API_spans_read": {
+    "W_bridge": "originalVariance17-21,hybridRow24-28,hybridVariance30-33,row_variance_defect96-103; originalVariance_sub_hybrid_le_M2 begins106, complete proof and full153LF read",
+    "TailCutoff": "literal tail/kept/truncated definitions24-42; public declaration starts: centeredRow_sub_truncated_eq_tail240,tailRow_norm_le277,centered_tail_energy_le_M2292; complete types/proofs read",
+    "PairMask": "ordered labels/coeff/keep16-24 read; no label quotient or change of principal"
+  },
+  "proof_audit": [
+    {
+      "name": "retained_sub_hybrid_scalar",
+      "judgment": "Native normSq_sub expands ||K-J||^2 as normSqK+normSqJ-2Re(KconjJ). starRingEnd_apply makes conjugation identical to star. sub_mul and Complex.sub_re then leave a real polynomial equality solved by ring. Sign is +2Re((P-K)conjJ). P=J=1,K=0 gives retained1 minus hybrid(-1)=2, agreeing with RHS2."
+    },
+    {
+      "name": "progression_sub_kept_eq_tail",
+      "judgment": "The literal public parent equality is (P-J)-(K-J)=T. Unfolding only original complexCenteredRow and truncatedCenteredRow and linear_combination ht gives P-K=T; no principal truncation, positivity of H, or new analytic assumption is needed."
+    },
+    {
+      "name": "retained_row_sub_hybrid",
+      "judgment": "Unfold truncatedCenteredRow and hybridRow. Scalar theorem matches original P,keptK,originalJ exactly. Rewriting P-K by public tail split gives literal tailRow times star(original principal)."
+    },
+    {
+      "name": "retainedVariance_sub_hybridVariance",
+      "judgment": "Both sums use identical primitive p and original commonSmooth m carrier/weight. Reverse sum_sub_distrib aligns both differences; mul_sum distributes2 on RHS. sum_congr leaves w*(squaredretained-hybrid)=2*w*Re(TconjJ), proved by row identity and ring. No weights/labels/coefficient signs discarded."
+    },
+    {
+      "name": "originalVariance_sub_retainedVariance",
+      "judgment": "Linear arithmetic consequence of retained-hybrid=2X: D-Dret=(D-Dstar)-2X. Sign checked exactly."
+    },
+    {
+      "name": "retainedVariance_nonneg",
+      "judgment": "All weights are globally nonnegative by actual commonSmoothWeight_nonneg; norm square nonnegative; nested finite sums preserve nonnegativity. No hd or H>0 required."
+    }
+  ],
+  "mathematical_scope": {
+    "original_objects": "P=literal sliced transposed progression,J=literal sliced transposed full primitive principal,K=kept progression,T=P-K. W=sumw|P|²,V=sumwRe(PconjJ),U=sumw|J|².",
+    "true_retained_variance": "Dret=sumw|K-J|²=W_H-2V_H^J+U, where V_H^J=sumwRe(KconjJ). Original U is unchanged. Hybrid Dstar=W_H-2V+U need not be nonnegative.",
+    "exact_identity": "Dret-Dstar=2sumwRe(TconjJ); D-Dret=(D-Dstar)-2sumwRe(TconjJ).",
+    "labels_coefficients_mask": "Original primitive-p carrier, ordered(n,r,s) physical labels, arbitrary complex coefficients gamma2*gamma3*beta, original real nonnegative smoothing weight and original signed shiftDifference mask are retained through exact existing definitions. No coprimality deletion or quotient relabeling added.",
+    "original_principal": "Original principal uses full complexRowLabels/betaCarrier with primitive-coprime indicator and totient denominator, no progression congruence or new keep-mask. No J_H substitution occurs."
+  },
+  "route_finite_bounds_audit": {
+    "status": "Correct mathematical finite consequences under listed parent results, NOT declarations written in this87LF source and NOT kernel checked.",
+    "unweighted_tail_energy": "For H>0, pointwise tailRow_norm_le and rowSum>=0 give R=sumw|T|²<=M/H² directly with same moment M. This avoids cancelling outsideEnergy E, including E=0.",
+    "finite_Cauchy": "With w>=0, square-root weighted factors and actual finite Cauchy API give |X|<=sqrt(RU)<=sqrt(MU)/H; U=sumw|J|²>=0. Both coefficient energies use the same finite p,m carrier.",
+    "restoration": "Triangle inequality plus future W-only bridge E|D-Dstar|<=2EM/H gives E|D-Dret|<=2EM/H+2E*sqrt(MU)/H. E>=0 follows literal outsideEnergy product of finite squared norms. No analytic U bound is assumed or supplied.",
+    "comparison": "P-J=(K-J)+T and squared norm triangle bound give D<=2Dret+2R<=2Dret+2M/H²; likewise Dret<=2D+2R. No U factor is needed for these comparisons, but neither variance is analytically bounded by this identity.",
+    "other_route_claims": "|D-Dret|<=R+2sqrt(RDret) follows the same exact row expansion/Cauchy. Masked-principal J_H would change BOTH V and U and add DeltaJ tail/cross obligations; this source uses no such masked principal.",
+    "analytic_boundary": "A needed uniform E*U scale/log estimate remains an independent obligation for the first error route. Joint(m,n)arithmetic mask still prevents an automatic separated smooth Poisson argument. No spectral cancellation or7/32 estimate, masked SW supplier, uniformx/q M2 bound, or rough-range closure follows."
+  },
+  "premise_audit": {
+    "new_analytic_U_estimate_inserted": false,
+    "target_shaped_analytic_hypothesis": false,
+    "identity_H_positive_required": false,
+    "finite_error_route_H_positive_required": true,
+    "new_constants_or_original_C_K_parameters_changed": false
+  },
+  "static_blockers": [],
+  "acceptance_boundary": "Parent W bridge31a126,PairMask30ff and TailCutoff remain uncompiled future sources. These6proof bodies are statically plausible only; future imports,elaboration,tactic execution,strict linter and kernel acceptance remain unperformed. No new accepted module/declaration/receipt count is claimed.",
+  "actions": {
+    "only_this_new_independent_CP_written": true,
+    "actual_Lean_TeX_old_evidence_cache_mutated": false,
+    "Lean_Runtime_proper_compiler_checker_operator_Git_Site_run": false,
+    "heavy_slot_or_root_gate_touched": false
+  },
+  "quota": {
+    "latest_root_reported_remaining_percent": 46,
+    "active_stop_remaining_lte": 5
+  }
+}

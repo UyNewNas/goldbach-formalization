@@ -1,0 +1,75 @@
+{
+  "review_date": "2026-10-15",
+  "reviewer": "/root/u5_independent_review",
+  "status": "SOURCE_SEMANTICS_PASS",
+  "source_sha256": {
+    "ActualExtendedThirdKernelL1Convergence": "24e8e52de1fe1b62ccd2488cfe1ac4f5e8363b21f88a70a9bb9f43ddf27803bf",
+    "ActualExtendedThirdCompactKernelApproximation": "a4a38b1eabc9b78059e5db57a7767542a9433c60225dc61e8df541ef5060c614",
+    "ActualExtendedThirdBoundaryLoss": "6236736705199d074b2552072c68ea7f148c06fe2af0d29ad1d62c934ab99120",
+    "ActualExtendedThirdStripIntegral": "8454f8498da3adaf4d093221692a5060aa8843ae3500f545f06e0272c74d4312",
+    "ActualExtendedThirdFiniteTailIntegral": "6b3bfe512b886a14f244e9b069aab875bbe836ff7fb069f7958236877a532019"
+  },
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "tracked_source_modified": false,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false
+  },
+  "actual_target": {
+    "lines": "26-29,147-152",
+    "description": "Absolute nonnegative Lebesgue integral on the full actualClosedOrderRegion rho of actualFiniteKernel e m minus actualGatedKernel 0. Uniform epsilon -> h -> e0,m0 -> every e in [0,e0],m>=m0. No caller integrability, tail, or selector-limit premise."
+  },
+  "checks": [
+    {
+      "lines": "31-67",
+      "description": "Triangle inequality is applied to actual two kernels before splitting mass; measurable finite kernel pays lintegral_add_left. The physical kernel uses buffer e and the ideal uses buffer zero, independently of wall width delta."
+    },
+    {
+      "lines": "69-106",
+      "description": "Concrete compact rectangle [0,rho]^3 has exact product measure rho^3. Every actualCompactOrder h point is inside it since h>0 and z<=y<=x<=rho. Good region is a measurable closed-order set minus the two actual strips."
+    },
+    {
+      "lines": "108-143",
+      "description": "The full actual closed-order region is contained in small-z S union good G union mu-strip union rho-strip. Splitting at z<=h includes equality in the small tail and can overlap compact sets harmlessly; repeated lintegral_union_le supplies an upper bound without disjointness or null-wall assumptions."
+    },
+    {
+      "lines": "153-184",
+      "description": "First epsilon/8 chooses a single h from the paid two-kernel uniform tail valid for all e,m. Then C=compactBound(h)*rho^2 and delta=epsilon/[16(C+1)] are fixed. nu=epsilon/[4(rho^3+1)] invokes true compact uniform approximation. Finally e0=min(e1,delta/8),m0=max(m1,m2) guarantee width=4e+mesh<=delta uniformly before any varying point."
+    },
+    {
+      "lines": "185-210",
+      "description": "Same h pays physical e tail and ideal zero-buffer tail at epsilon/8 each, so small mass<=epsilon/4. Each actual compact wall mass for both kernels is <=2*C*width<=epsilon/8; physical buffer e and ideal buffer zero remain independent."
+    },
+    {
+      "lines": "211-244",
+      "description": "Actual off-strip pointwise difference<=nu times actual good-region volume<=rho^3 gives good mass<=epsilon/4. Adding small,good,mu,rho yields 3epsilon/4<=epsilon. All ENNReal additions use explicit nonnegative real budgets, so no infinity subtraction is used."
+    }
+  ],
+  "limits": [
+    "This is the full absolute nonnegative L1 mass bound, not yet a Bochner integral equality or arithmetic mean theorem.",
+    "It does not establish action realization, factorization, alpha perturbation or hUpper coefficient."
+  ],
+  "proper_dag": {
+    "report": ".lake/proof-continuation/source-reviews/20261015-kernel-l1-proper-dag.json",
+    "report_sha256": "d5fbb67f6615f268c29a8ce6dc5e7bf565369c141a1f4bffbe0ef18719b6f950",
+    "walker_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "baseline_roots": [
+      "ImbalancedChen.ActualExtendedThirdCompactKernelApproximation",
+      "ImbalancedChen.ActualExtendedThirdBoundaryLoss"
+    ],
+    "baseline_nodes": 6606,
+    "target_nodes": 6607,
+    "added": [
+      "ImbalancedChen.ActualExtendedThirdKernelL1Convergence"
+    ],
+    "removed": [],
+    "added_foreign": [],
+    "missing_baseline": [],
+    "missing_target": [],
+    "parser_findings_baseline": 0,
+    "parser_findings_target": 0,
+    "all_inputs_rehashed_unchanged": true
+  },
+  "issues_found": []
+}

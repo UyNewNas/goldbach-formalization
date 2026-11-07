@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETE_FINITE_LCM_HARMONIC_INDEPENDENT_SOURCE_REVIEW_UNCOMPILED_HOLD",
+  "result": "no_static_blocker",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-22T00:07:37.447253+00:00",
+  "HOLD": true,
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3FouvryTauLCMHarmonic-module-source.txt",
+    "sha256": "cb5e2915ef0aa23181a283a9c7109a76123f0cf223fea0c86b03515ba452d870",
+    "bytes": 4011,
+    "spans": [
+      {
+        "first": 1,
+        "last": 1,
+        "literal_source": "import ImbalancedChen.Part3FouvryTauArgumentSubmultiplicative\n",
+        "normalized_lf_utf8_sha256": "8669047b1f8b02a6ec3ff840e545cc7a73676180198e938146a590f1aec00d10"
+      }
+    ]
+  },
+  "author_CP": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-fouvry-tau-lcm-harmonic-finite-source-proposal-author-HOLD.json",
+    "sha256": "5a4ed6cf837c130b169f8cc042a3bf95d932d59c5025b877a92d4cdcbcdaa905",
+    "bytes": 20809,
+    "spans": []
+  },
+  "all81_source_lines_independently_read": true,
+  "complete_actual_declaration": {
+    "name": "sum_fouvryTau_div_lcm_le_exact_divisor_constant",
+    "first": 19,
+    "type_last": 23,
+    "last": 79,
+    "complete_type": "theorem sum_fouvryTau_div_lcm_le_exact_divisor_constant\n    {j D q : ℕ} (hj : 1 ≤ j) (hq : 0 < q) :\n    (∑ d ∈ Icc 1 D, (fouvryTau j d : ℝ) / (Nat.lcm d q : ℝ)) ≤\n      ((fouvryTau (j + 1) q : ℝ) / (q : ℝ)) *\n        (∑ u ∈ Icc 1 D, (fouvryTau j u : ℝ) / (u : ℝ)) := by\n",
+    "type_sha256": "0ab0a259c3e00c10a27ef469dd9224bab216e21d80344c1305a3c14b4e91a8c5",
+    "complete_body": "  let splitDivisor : ℕ → ℕ × ℕ := fun d => (Nat.gcd d q, d / Nat.gcd d q)\n  let W : ℕ × ℕ → ℝ := fun z =>\n    ((fouvryTau j z.1 : ℝ) / (q : ℝ)) * ((fouvryTau j z.2 : ℝ) / (z.2 : ℝ))\n  have hinj : Function.Injective splitDivisor := gcd_quotient_split_injective q\n  have hpositive : ∀ d ∈ Icc 1 D,\n      0 < Nat.gcd d q ∧ 0 < d / Nat.gcd d q := by\n    intro d hd\n    have hdpos : 0 < d := lt_of_lt_of_le Nat.zero_lt_one (Finset.mem_Icc.mp hd).1\n    exact ⟨Nat.gcd_pos_of_pos_left q hdpos, Nat.div_gcd_pos_of_pos_left q hdpos⟩\n  have hmaps : (Icc 1 D).image splitDivisor ⊆ q.divisors ×ˢ Icc 1 D := by\n    intro z hz\n    obtain ⟨d, hd, rfl⟩ := Finset.mem_image.mp hz\n    exact Finset.mem_product.mpr\n      ⟨Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_right d q, hq.ne'⟩,\n        Finset.mem_Icc.mpr ⟨(hpositive d hd).2,\n          (Nat.div_le_self d _).trans (Finset.mem_Icc.mp hd).2⟩⟩\n  have hlcm : ∀ d, Nat.lcm d q = q * (d / Nat.gcd d q) := by\n    intro d\n    rw [Nat.lcm_eq_mul_div, Nat.mul_comm d q,\n      Nat.mul_div_assoc q (Nat.gcd_dvd_left d q)]\n  have hpoint : ∀ d ∈ Icc 1 D,\n      (fouvryTau j d : ℝ) / (Nat.lcm d q : ℝ) ≤ W (splitDivisor d) := by\n    intro d hd\n    have hnat : fouvryTau j d ≤\n        fouvryTau j (Nat.gcd d q) * fouvryTau j (d / Nat.gcd d q) := by\n      simpa only [Nat.mul_div_cancel' (Nat.gcd_dvd_left d q)] using\n        (fouvryTau_mul_argument_le hj (hpositive d hd).1 (hpositive d hd).2)\n    have hreal : (fouvryTau j d : ℝ) ≤\n        (fouvryTau j (Nat.gcd d q) : ℝ) * (fouvryTau j (d / Nat.gcd d q) : ℝ) := by\n      exact_mod_cast hnat\n    have hden : (0 : ℝ) < (Nat.lcm d q : ℝ) := by\n      exact_mod_cast Nat.lcm_pos\n        (lt_of_lt_of_le Nat.zero_lt_one (Finset.mem_Icc.mp hd).1) hq\n    calc\n      _ ≤ ((fouvryTau j (Nat.gcd d q) : ℝ) *\n          (fouvryTau j (d / Nat.gcd d q) : ℝ)) / (Nat.lcm d q : ℝ) :=\n        div_le_div_of_nonneg_right hreal hden.le\n      _ = W (splitDivisor d) := by\n        dsimp only [W, splitDivisor]\n        rw [hlcm d, Nat.cast_mul, div_mul_div_comm]\n  have hW : ∀ z : ℕ × ℕ, 0 ≤ W z := by\n    intro z\n    exact mul_nonneg\n      (div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n      (div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n  calc\n    _ ≤ ∑ d ∈ Icc 1 D, W (splitDivisor d) := Finset.sum_le_sum hpoint\n    _ = ∑ z ∈ (Icc 1 D).image splitDivisor, W z := (Finset.sum_image hinj.injOn).symm\n    _ ≤ ∑ z ∈ q.divisors ×ˢ Icc 1 D, W z :=\n      Finset.sum_le_sum_of_subset_of_nonneg hmaps (fun z _ _ => hW z)\n    _ = (∑ g ∈ q.divisors, (fouvryTau j g : ℝ) / (q : ℝ)) *\n        (∑ u ∈ Icc 1 D, (fouvryTau j u : ℝ) / (u : ℝ)) := by\n      dsimp only [W]\n      rw [Finset.sum_product]\n      exact (Finset.sum_mul_sum _ _ _ _).symm\n    _ = _ := by rw [← Finset.sum_div, ← Nat.cast_sum, ← fouvryTau_succ j q]\n",
+    "body_sha256": "71530f331d23f92f80407acb62345e964e688c6a574ed89a3720a67b917f0725",
+    "matches_actual_author_body_hash": true
+  },
+  "written_counts": {
+    "proofs": 1,
+    "definitions": 0,
+    "lf_lines": 81
+  },
+  "exact_future_parent": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3FouvryTauArgumentSubmultiplicative-module-source.txt",
+    "sha256": "622b3e42bde7958499b5f72bd5d975a25687b8f6447e9bd6748e54f65be9900d",
+    "bytes": 4307,
+    "spans": [
+      {
+        "first": 29,
+        "last": 37,
+        "literal_source": "theorem gcd_quotient_split_injective (m : ℕ) :\n    Function.Injective (fun e : ℕ => (Nat.gcd e m, e / Nat.gcd e m)) := by\n  intro e f h\n  calc\n    e = Nat.gcd e m * (e / Nat.gcd e m) :=\n      (Nat.mul_div_cancel' (Nat.gcd_dvd_left e m)).symm\n    _ = Nat.gcd f m * (f / Nat.gcd f m) :=\n      congrArg (fun z : ℕ × ℕ => z.1 * z.2) h\n    _ = f := Nat.mul_div_cancel' (Nat.gcd_dvd_left f m)\n",
+        "normalized_lf_utf8_sha256": "b47b6b9da35787600c0ef7a1a288b7ccfc1c1ef9a66dfcfa608e672a0b3a43c3"
+      },
+      {
+        "first": 40,
+        "last": 42,
+        "literal_source": "theorem fouvryTau_mul_argument_le {j : ℕ} (hj : 1 ≤ j) :\n    ∀ {m n : ℕ}, 0 < m → 0 < n →\n      fouvryTau j (m * n) ≤ fouvryTau j m * fouvryTau j n := by\n",
+        "normalized_lf_utf8_sha256": "de3dc548aed314ce48f2fa6a01ff0a3f3d97dd429c881acdba61d4556e6e172a"
+      }
+    ]
+  },
+  "parent_source_review": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-fouvry-tau-argument-submultiplicative-independent-source-review-HOLD.json",
+    "sha256": "08325a569625765380396e37db23c42ab51ce566eefe134ab41d2ff74634711b",
+    "bytes": 21941,
+    "spans": []
+  },
+  "direct_actual_native_API": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "bytes": 17917,
+      "spans": [
+        {
+          "first": 33,
+          "last": 35,
+          "literal_source": "theorem fouvryTau_succ (k n : ℕ) :\n    fouvryTau (k + 1) n = ∑ d ∈ n.divisors, fouvryTau k d := by\n  exact ArithmeticFunction.coe_mul_zeta_apply (f := fouvryTau k)\n",
+          "normalized_lf_utf8_sha256": "51a7f18435b9d3b03b15955741b284171ad84ea84e391d35fe03e568ca50f0d1"
+        },
+        {
+          "first": 245,
+          "last": 247,
+          "literal_source": "theorem sum_fouvryTau_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n) ≤ (1 + Real.log x) ^ k := by\n  have heq : reciprocalSum ⌊x⌋₊ = (harmonic ⌊x⌋₊ : ℝ) := by\n",
+          "normalized_lf_utf8_sha256": "ade02f7d2f1887549bca0918aeb521a90807966f339944b819df92a612533fd6"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "bytes": 20329,
+      "spans": [
+        {
+          "first": 92,
+          "last": 94,
+          "literal_source": "theorem gcd_dvd_left (m n : Nat) : gcd m n ∣ m := (gcd_dvd m n).left\n\ntheorem gcd_dvd_right (m n : Nat) : gcd m n ∣ n := (gcd_dvd m n).right\n",
+          "normalized_lf_utf8_sha256": "f7ecf27ae2ca255dad237987480d1c524c39cd2fa8f6461f95a8d98e76241b44"
+        },
+        {
+          "first": 147,
+          "last": 154,
+          "literal_source": "theorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_left m n) mpos\n\ntheorem gcd_pos_of_pos_right (m : Nat) {n : Nat} (npos : 0 < n) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_right m n) npos\n\ntheorem div_gcd_pos_of_pos_left (b : Nat) (h : 0 < a) : 0 < a / a.gcd b :=\n  (Nat.le_div_iff_mul_le <| Nat.gcd_pos_of_pos_left _ h).2 (Nat.one_mul _ ▸ Nat.gcd_le_left _ h)\n",
+          "normalized_lf_utf8_sha256": "3bb859973dbdb7471d0d857852db3d4862a6bf169d4b27ddff3ef1e28d23a4de"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "bytes": 6888,
+      "spans": [
+        {
+          "first": 106,
+          "last": 109,
+          "literal_source": "protected theorem mul_div_cancel' {n m : Nat} (H : n ∣ m) : n * (m / n) = m := by\n  have := mod_add_div m n\n  rwa [mod_eq_zero_of_dvd H, Nat.zero_add] at this\n\n",
+          "normalized_lf_utf8_sha256": "90de4b4b40a751a9641ede8e63416a27361f8e0d3a43562239227f721d39a95e"
+        },
+        {
+          "first": 162,
+          "last": 167,
+          "literal_source": "protected theorem mul_div_assoc (m : Nat) (H : k ∣ n) : m * n / k = m * (n / k) := by\n  match Nat.eq_zero_or_pos k with\n  | .inl h0 => rw [h0, Nat.div_zero, Nat.div_zero, Nat.mul_zero]\n  | .inr hpos =>\n    have h1 : m * n / k = m * (n / k * k) / k := by rw [Nat.div_mul_cancel H]\n    rw [h1, ← Nat.mul_assoc, Nat.mul_div_cancel _ hpos]\n",
+          "normalized_lf_utf8_sha256": "f7d13b200f42a13d4c6bc27f8f0b74fe589bd6572be33407e3d055b7bf000037"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Div\\Basic.lean",
+      "sha256": "67f894497257111dff81a5b3bab0f849cc53f31a3c62656333366ad62ab63a58",
+      "bytes": 17368,
+      "spans": [
+        {
+          "first": 71,
+          "last": 73,
+          "literal_source": "theorem div_le_self (n k : Nat) : n / k ≤ n := by\n  induction n using Nat.strongRecOn with\n  | ind n ih =>\n",
+          "normalized_lf_utf8_sha256": "6d46aad5ec54cab11815f0ff9ce2a34e65b4577b3847137225d2d5dad4b318d2"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lcm.lean",
+      "sha256": "c4accc5e10306750e0c990d43eebf4b02bf8444bb3a56be6c4aef663bcf5018c",
+      "bytes": 10816,
+      "spans": [
+        {
+          "first": 36,
+          "last": 36,
+          "literal_source": "theorem lcm_eq_mul_div (m n : Nat) : lcm m n = m * n / gcd m n := rfl\n",
+          "normalized_lf_utf8_sha256": "2665a25abfec29cb76ec9659b249d8ca7577221b69a8bae0c72c9a84c57a932d"
+        },
+        {
+          "first": 89,
+          "last": 90,
+          "literal_source": "theorem lcm_pos : 0 < m → 0 < n → 0 < lcm m n := by\n  simpa [← Nat.pos_iff_ne_zero] using lcm_ne_zero\n",
+          "normalized_lf_utf8_sha256": "f682b3850f3903faa746b55133150d814b75475a09ef61780ac83efa330a2e9e"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Divisors.lean",
+      "sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+      "bytes": 31481,
+      "spans": [
+        {
+          "first": 108,
+          "last": 112,
+          "literal_source": "theorem mem_divisors {m : ℕ} : n ∈ divisors m ↔ n ∣ m ∧ m ≠ 0 := by\n  rcases eq_or_ne m 0 with (rfl | hm); · simp [divisors]\n  simp only [hm, Ne, not_false_iff, and_true, ← filter_dvd_eq_divisors hm, mem_filter,\n    mem_range, and_iff_right_iff_imp, Nat.lt_succ_iff]\n  exact le_of_dvd hm.bot_lt\n",
+          "normalized_lf_utf8_sha256": "439990420474c526d59e52a0da467720ad4bcdaa24bd7e7c9c452dd617e3771e"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Basic.lean",
+      "sha256": "1ba194c84c72d56d485334bb05b2a943627c3a73de91a0b939ab6fd5ea17d1b1",
+      "bytes": 38365,
+      "spans": [
+        {
+          "first": 574,
+          "last": 575,
+          "literal_source": "@[to_additive]\ntheorem div_mul_div_comm : a / b * (c / d) = a * c / (b * d) := by simp\n",
+          "normalized_lf_utf8_sha256": "2a4de5ef386e5f15fcd6c944a7356c32475d9c75bdf1fd5c1ff58b322b85c079"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Field.lean",
+      "sha256": "ea6805b6e04e1a10e4f1800fbf6f645af1b3fbe7b7bc9db5c014508a4b9f528f",
+      "bytes": 2002,
+      "spans": [
+        {
+          "first": 26,
+          "last": 27,
+          "literal_source": "lemma Finset.sum_div (s : Finset ι) (f : ι → K) (a : K) :\n    (∑ i ∈ s, f i) / a = ∑ i ∈ s, f i / a := by simp only [div_eq_mul_inv, sum_mul]\n",
+          "normalized_lf_utf8_sha256": "0ba6fe598dcf9f7a7214526456762895234a7d407aa109de81282bee345a25a1"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean",
+      "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+      "bytes": 16305,
+      "spans": [
+        {
+          "first": 62,
+          "last": 64,
+          "literal_source": "lemma sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :\n    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by\n  simp_rw [sum_mul, ← mul_sum]\n",
+          "normalized_lf_utf8_sha256": "d87d28cfa8e964d86eea1fae191acd0b640dfe55fbaf3238d7accee1e4217853"
+        },
+        {
+          "first": 336,
+          "last": 339,
+          "literal_source": "@[simp, norm_cast]\nlemma cast_sum [AddCommMonoidWithOne R] (s : Finset ι) (f : ι → ℕ) :\n    ↑(∑ x ∈ s, f x : ℕ) = ∑ x ∈ s, (f x : R) :=\n  map_sum (castAddMonoidHom R) _ _\n",
+          "normalized_lf_utf8_sha256": "ed92167312270ea4d180aca64d9097f73751d7ac097e8b44f0981955f04f66c7"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "bytes": 51600,
+      "spans": [
+        {
+          "first": 90,
+          "last": 97,
+          "literal_source": "/-- If a function is injective on a finset, products over the original finset or its image coincide.\nSee also `prod_image_of_pairwise_eq_one` for a version with weaker assumptions. -/\n@[to_additive (attr := simp) /-- If a function is injective on a finset, sums over the original\nfinset or its image coincide.\nSee also `sum_image_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_image [DecidableEq ι] {s : Finset κ} {g : κ → ι} :\n    Set.InjOn g s → ∏ x ∈ s.image g, f x = ∏ x ∈ s, f (g x) :=\n  fold_image\n",
+          "normalized_lf_utf8_sha256": "4d15059a79605c469ef2075430c5287d644bfb365b0970dd962df2643642261e"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+      "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+      "bytes": 36509,
+      "spans": [
+        {
+          "first": 158,
+          "last": 166,
+          "literal_source": "\n@[to_additive (attr := gcongr) sum_le_sum_of_subset_of_nonneg]\ntheorem prod_le_prod_of_subset_of_one_le' [MulLeftMono N] (h : s ⊆ t)\n    (hf : ∀ i ∈ t, i ∉ s → 1 ≤ f i) : ∏ i ∈ s, f i ≤ ∏ i ∈ t, f i := by\n  classical calc\n      ∏ i ∈ s, f i ≤ (∏ i ∈ t \\ s, f i) * ∏ i ∈ s, f i :=\n        le_mul_of_one_le_left' <| one_le_prod' <| by simpa only [mem_sdiff, and_imp]\n      _ = ∏ i ∈ t \\ s ∪ s, f i := (prod_union sdiff_disjoint).symm\n      _ = ∏ i ∈ t, f i := by rw [sdiff_union_of_subset h]\n",
+          "normalized_lf_utf8_sha256": "a8a8395ee8b78be93044ed60c5bee4a698b6e2e4967e763d7232f9bb5dadc1da"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "bytes": 63984,
+      "spans": [
+        {
+          "first": 1197,
+          "last": 1201,
+          "literal_source": "\n@[mono, gcongr, bound]\nlemma div_le_div_of_nonneg_right (hab : a ≤ b) (hc : 0 ≤ c) : a / c ≤ b / c := by\n  rw [div_eq_mul_inv a c, div_eq_mul_inv b c]\n  gcongr; exact Right.inv_nonneg.2 hc\n",
+          "normalized_lf_utf8_sha256": "b65bd1d329049648d6b52a6d212e2041fb739649ae2c71e20b8586e0ee47af6f"
+        }
+      ]
+    }
+  ],
+  "mathematical_route": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-lcm-harmonic-exact-divisor-constant-mathematical-review-HOLD.json",
+    "sha256": "749f88cad9ccb0c45df59bbc2564d897418dcb6f4e0c9398976b15623e38203a",
+    "bytes": 8886,
+    "spans": []
+  },
+  "independent_proof_audit": [
+    {
+      "step": "split image and positivity",
+      "argument": "For each d in Icc1D, d>=1 and hence d>0. Actual gcd_pos_of_pos_left q and div_gcd_pos_of_pos_left q give both split components positive. gcd(d,q)|q and q!=0 put g in the complete q.divisors. Nat.div_le_self gives u<=d<=D, and0<u is the Nat lower-bound1<=u, so u lies in the original Icc1D. The actual image is only included in the complete product, never falsely identified with it."
+    },
+    {
+      "step": "injection and exact lcm",
+      "argument": "Parent gcd_quotient_split_injective q gives exactly the local split map injection. Actual lcm_eq_mul_div,commutativity and Nat.mul_div_assoc using gcd(d,q)|d prove lcm(d,q)=q*(d/gcd(d,q)), even at d=0. No residual coprimality claim is introduced."
+    },
+    {
+      "step": "pointwise real inequality",
+      "argument": "Parent argument-submultiplicativity applies to the two proved-positive split factors; Nat.mul_div_cancel prime reconstructs g*u=d. Exact_mod_cast gives the real numerator product inequality. Actual lcm_pos with d>0,q>0 casts to a strictly positive real denominator, so div_le_div_of_nonneg_right preserves its direction. Rewriting lcm and Nat.cast_mul and using div_mul_div_comm on the RHS gives exactly W(g,u)=(d_j(g)/q)*(d_j(u)/u). No divisor or denominator factor disappears."
+    },
+    {
+      "step": "weighted reindexing",
+      "argument": "Sum the pointwise comparison on Icc1D. Global injection restricted to that source permits exact Finset.sum_image. Enlarge only from this true image to q.divisors product Icc1D using W>=0. The displayed hW proof is valid on every Nat pair, including u=0, because natural casts are nonnegative and Real division is totalized; no division cancellation at zero is used."
+    },
+    {
+      "step": "exact coefficient",
+      "argument": "Actual sum_product and sum_mul_sum factor the complete product. Reverse Finset.sum_div pulls the constant q denominator outside the divisor sum. Reverse Nat.cast_sum then actual fouvryTau_succ j q replace exactly sum(g|q)d_j(g) by d_(j+1)(q). The conclusion coefficient is exactly d_(j+1)(q)/q with constant1, no tau(q) surrogate and no extra logarithm."
+    },
+    {
+      "step": "D=0",
+      "argument": "All source-member positivity/map/pointwise obligations are vacuous for Icc1(0)=empty. Both harmonic sums vanish; the right is the finite exact coefficient times0. No positive-length or real endpoint assumption has been inserted."
+    }
+  ],
+  "domain_and_constant": {
+    "j": "Every positive order1<=j.",
+    "q": "Every positive natural q; no prime,squarefree or gcd premise.",
+    "D": "Every Nat cutoff including0.",
+    "coefficient": "Exactly(fouvryTau(j+1)(q):Real)/(q:Real).",
+    "analytic_premise": false,
+    "residue": "No residue or progression specialization; can be used as a finite independent component later."
+  },
+  "static_issues": [],
+  "minimal_source_repair": null,
+  "namespace_search": "Read-only rg found no new exact namespace/theorem name in actual ImbalancedChen Lean files.",
+  "scope_boundaries": [
+    "Source-only static consistency: future parent/source import resolution,elaboration,strict linter and kernel acceptance remain unchecked. Parent independent source review is not a kernel certificate.",
+    "No logarithmic corollary or closed progression mean has been proved here. The inspected native harmonic-log API is not used or assumed in this theorem.",
+    "Composition with arbitrary-r payment and its ordinary +1 endpoint remainder remains separate. No endpoint error division byq, general-q analyticM2,rough-tail,spectral,original C/K or main theorem closure is claimed.",
+    "No accepted module/declaration/receipt count or generated declaration count is inferred."
+  ],
+  "actions": {
+    "new_review_CP_only": true,
+    "actual_source_old_draft_or_evidence_changed": 0,
+    "Lean_Runtime_proper_classifier_census_Git_Site": 0,
+    "heavy_pipeline_or_lock": 0,
+    "new_agent_spawn": 0
+  },
+  "quota": {
+    "fresh_used_percent": 54,
+    "fresh_remaining_percent": 46,
+    "stop_remaining_lte": 40,
+    "reset_consumed": false
+  },
+  "engineering_admission": false,
+  "kernel_acceptance": false
+}

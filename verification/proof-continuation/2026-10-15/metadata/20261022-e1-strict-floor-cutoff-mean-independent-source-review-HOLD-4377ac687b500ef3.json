@@ -1,0 +1,558 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-e1-strict-floor-cutoff-mean-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T19:53:23.7084541Z",
+  "reviewer": "/root/elementary_tau_truncation_sol_xhigh_oct22",
+  "reviewed_author": "/root/tau_truncation_review_sol_high_oct22",
+  "status": "INDEPENDENT_NEW12_STRICT_FLOOR_SHARP_NATURAL_ENDPOINT_E1_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "verdict": "no_static_blocker",
+  "HOLD": true,
+  "scope": "Independent bounded static review of only the twelve newly written strict-successor, real-radius/floor, native-mean consumer and sharp natural-endpoint E1 declarations. All twelve full types and bodies were read. Earlier 493-LF dependency is byte-bound to its existing independent review, not re-reviewed as independently authored work.",
+  "independence_boundary": "This reviewer authored earlier tau304 work. No fresh independent claim is made for that work or the copied old25 proofs. The new12 were written by another agent; this review covers their complete types and bodies. Old proof bodies were not reread; only required reused call types and the old review metadata were consulted.",
+  "inputs": {
+    "draft": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-e1-strict-floor-cutoff-mean-source-proposal.txt",
+      "expected_sha256": "9724fe22ae6a0c5af45dff9927d45f042ad108ab9298687fe9a359a7cfe68f95",
+      "measured_sha256": "9724fe22ae6a0c5af45dff9927d45f042ad108ab9298687fe9a359a7cfe68f95",
+      "lf_lines": 792,
+      "bytes": 38713
+    },
+    "author_checkpoint": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-e1-strict-floor-cutoff-mean-source-proposal-author-HOLD.json",
+      "expected_sha256": "b3f4cf3e50b48963a639dfc3d4e9f2ad458fa16b919aba8d6bd9b2fe76cc416f",
+      "measured_sha256": "b3f4cf3e50b48963a639dfc3d4e9f2ad458fa16b919aba8d6bd9b2fe76cc416f"
+    },
+    "reused_493_dependency": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-elementary-interval-divisibility-source-proposal.txt",
+      "expected_sha256": "59babff31ff6f9dcd9856d6f69d7a1b9cc5548dc318d26f9d5c7ab61b549d4eb",
+      "measured_sha256": "59babff31ff6f9dcd9856d6f69d7a1b9cc5548dc318d26f9d5c7ab61b549d4eb",
+      "copied_new_span": [
+        3,
+        495
+      ],
+      "copied_normalized_lf_utf8_sha256": "59babff31ff6f9dcd9856d6f69d7a1b9cc5548dc318d26f9d5c7ab61b549d4eb",
+      "byte_exact": true,
+      "proof_body_re_reviewed": false,
+      "independent_review_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-elementary-interval-divisibility-independent-source-review-HOLD.json",
+      "independent_review_expected_sha256": "708aedc30eaa1137ba8f936dfa200fc6d35955755573df89f1e37acc151677ab",
+      "independent_review_measured_sha256": "708aedc30eaa1137ba8f936dfa200fc6d35955755573df89f1e37acc151677ab",
+      "prior_verdict": "no_static_blocker",
+      "prior_status": "INDEPENDENT_FINITE_INTERVAL_NATIVE_TAU_PAYMENT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD"
+    }
+  },
+  "reviewed_new_declarations": [
+    {
+      "name": "exists_deletedProduct_le_strict",
+      "first": 535,
+      "type_last": 538,
+      "last": 561,
+      "complete_written_type": "theorem exists_deletedProduct_le_strict (a : ι → ℕ) {n D : ℕ}\n    (hcard : 2 ≤ Fintype.card ι) (hprod : (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    ∃ i : ι, deletedProduct a i ≤ D := by\n",
+      "complete_written_declaration": "theorem exists_deletedProduct_le_strict (a : ι → ℕ) {n D : ℕ}\n    (hcard : 2 ≤ Fintype.card ι) (hprod : (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    ∃ i : ι, deletedProduct a i ≤ D := by\n  have hcpos : 0 < Fintype.card ι := by omega\n  have hne : (Finset.univ : Finset ι).Nonempty :=\n    Finset.card_pos.mp (by simpa only [Finset.card_univ] using hcpos)\n  obtain ⟨i, hi, hmax⟩ := Finset.exists_max_image Finset.univ a hne\n  refine ⟨i, ?_⟩\n  have hbound : deletedProduct a i ≤ a i ^ (Fintype.card ι - 1) := by\n    simpa only [deletedProduct, Finset.card_erase_of_mem hi, Finset.card_univ] using\n      (Finset.prod_le_pow_card ((Finset.univ : Finset ι).erase i) a (a i)\n        (fun j _hj => hmax j (Finset.mem_univ j)))\n  have hpower : deletedProduct a i ^ Fintype.card ι ≤ n ^ (Fintype.card ι - 1) := by\n    calc\n      deletedProduct a i ^ Fintype.card ι =\n          deletedProduct a i ^ ((Fintype.card ι - 1) + 1) := by congr 1; omega\n      _ = deletedProduct a i ^ (Fintype.card ι - 1) * deletedProduct a i := pow_succ _ _\n      _ ≤ deletedProduct a i ^ (Fintype.card ι - 1) * a i ^ (Fintype.card ι - 1) :=\n        Nat.mul_le_mul_left _ hbound\n      _ = (deletedProduct a i * a i) ^ (Fintype.card ι - 1) := (mul_pow _ _ _).symm\n      _ = n ^ (Fintype.card ι - 1) := by rw [deletedProduct_mul, hprod]\n  by_contra h\n  have hsucc : D + 1 ≤ deletedProduct a i := by omega\n  have hmono : (D + 1) ^ Fintype.card ι ≤ deletedProduct a i ^ Fintype.card ι :=\n    pow_le_pow_left₀ (Nat.zero_le _) hsucc _\n  exact (not_lt_of_ge (hmono.trans hpower)) hcut\n",
+      "type_normalized_lf_utf8_sha256": "5167a341f771736b6b88f26765c5fbe745983ab9ff27610650bc39f36cb84a17",
+      "declaration_normalized_lf_utf8_sha256": "20e660d880811ff0b2c450899370f03d613afc1fdd0e0c987021c44a05f699ff",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "The maximum-coordinate argument gives dp^K<=n^(K-1) with cardinal exponent handled by hcard>=2. If dp>D, natural integrality gives D+1<=dp; monotonic powers contradict hcut. No positivity or rounding premise is silently added to this geometric step."
+    },
+    {
+      "name": "card_smallCover_eq_sum_deletionFibers",
+      "first": 564,
+      "type_last": 567,
+      "last": 594,
+      "complete_written_type": "theorem card_smallCover_eq_sum_deletionFibers (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hprod : ∀ a ∈ S, (∏ j, a j) = n) (i : ι) :\n    (S.filter (fun a => deletedProduct a i ≤ D)).card =\n      ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+      "complete_written_declaration": "theorem card_smallCover_eq_sum_deletionFibers (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hprod : ∀ a ∈ S, (∏ j, a j) = n) (i : ι) :\n    (S.filter (fun a => deletedProduct a i ≤ D)).card =\n      ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n  have hmaps : Set.MapsTo (fun a => deletedProduct a i)\n      (S.filter (fun a => deletedProduct a i ≤ D)) (truncatedDivisors n D) := by\n    intro a ha\n    obtain ⟨haS, haD⟩ := Finset.mem_filter.mp ha\n    exact Finset.mem_filter.mpr\n      ⟨Nat.mem_divisors.mpr ⟨deletedProduct_dvd (hprod a haS) i, hn.ne'⟩, haD⟩\n  rw [Finset.card_eq_sum_card_fiberwise (f := fun a => deletedProduct a i)\n    (s := S.filter (fun a => deletedProduct a i ≤ D)) (t := truncatedDivisors n D) hmaps]\n  apply Finset.sum_congr rfl\n  intro d hd\n  have hdD : d ≤ D := (Finset.mem_filter.mp hd).2\n  have hfiber : ((S.filter (fun a => deletedProduct a i ≤ D)).filter\n      (fun a => deletedProduct a i = d)) = S.filter (fun a => deletedProduct a i = d) := by\n    ext a\n    simp only [Finset.mem_filter]\n    constructor\n    · intro ha\n      exact ⟨ha.1.1, ha.2⟩\n    · rintro ⟨haS, had⟩\n      exact ⟨⟨haS, had.le.trans hdD⟩, had⟩\n  rw [hfiber]\n  unfold deletionFiber\n  symm\n  apply Finset.card_image_of_injOn\n  intro a ha b hb hab\n  exact eraseAt_injective_of_product hn (hprod a (Finset.mem_filter.mp ha).1)\n    (hprod b (Finset.mem_filter.mp hb).1) i hab\n",
+      "type_normalized_lf_utf8_sha256": "2d4a1374408810b1e155573349f6d5933d1595a52f837fddb9b0e8fa5cf424a3",
+      "declaration_normalized_lf_utf8_sha256": "34c68ae0c851ed9e7a85de38256c8bf07cd083ab6db039f0713a3a8fb676a377",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "The exact small cover maps to truncated divisors by the common positive product. Fiberwise cardinality is partitioned exactly, and eraseAt is injective on that fixed n>0 carrier. Removing the already-known d<=D predicate inside the d fiber preserves its count."
+    },
+    {
+      "name": "card_le_sum_deletionFibers_strict",
+      "first": 597,
+      "type_last": 601,
+      "last": 610,
+      "complete_written_type": "theorem card_le_sum_deletionFibers_strict (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hcard : 2 ≤ Fintype.card ι)\n    (hprod : ∀ a ∈ S, (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    S.card ≤ ∑ i : ι, ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+      "complete_written_declaration": "theorem card_le_sum_deletionFibers_strict (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hcard : 2 ≤ Fintype.card ι)\n    (hprod : ∀ a ∈ S, (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    S.card ≤ ∑ i : ι, ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n  have hcover : S ⊆ (Finset.univ : Finset ι).biUnion\n      (fun i => S.filter (fun a => deletedProduct a i ≤ D)) := by\n    intro a ha\n    obtain ⟨i, hi⟩ := exists_deletedProduct_le_strict a hcard (hprod a ha) hcut\n    exact Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ i, Finset.mem_filter.mpr ⟨ha, hi⟩⟩\n  calc\n    S.card ≤ ∑ i : ι, (S.filter (fun a => deletedProduct a i ≤ D)).card :=\n      (Finset.card_le_card hcover).trans Finset.card_biUnion_le\n    _ = _ := Finset.sum_congr rfl (fun i _ => card_smallCover_eq_sum_deletionFibers S hn hprod i)\n",
+      "type_normalized_lf_utf8_sha256": "7cf1c539dae048681f8eef890d224ae9ef0501b79aa7ee1818828c59745a8e44",
+      "declaration_normalized_lf_utf8_sha256": "7f0be3a5a825b295ad12732a7d1fbe9c2f1bfc02541ad5018918b8b1bbb87bdf",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "Every source tuple belongs to at least one indexed small cover by the strict geometric lemma. card_biUnion_le pays all indices; the exact partition theorem supplies every deletion-image fiber. No multiplicity is dropped."
+    },
+    {
+      "name": "fouvryTau_le_truncated_divisor_sum_strict",
+      "first": 615,
+      "type_last": 618,
+      "last": 641,
+      "complete_written_type": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n",
+      "complete_written_declaration": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n  have hfin : (orderedFactorTuples K n).card ≤\n      ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := by\n    apply card_le_sum_deletionFibers_strict (hn := by omega)\n    · simpa only [Fintype.card_fin] using hK\n    · intro a ha\n      exact (Finset.mem_filter.mp ha).2\n    · simpa only [Fintype.card_fin] using hcut\n  calc\n    fouvryTau K n = (orderedFactorTuples K n).card :=\n      (card_orderedFactorTuples_eq_fouvryTau K n (by omega)).symm\n    _ ≤ ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := hfin\n    _ ≤ ∑ _i : Fin K, ∑ d ∈ truncatedDivisors n D, fouvryTau (K - 1) d := by\n      apply Finset.sum_le_sum\n      intro i _hi\n      apply Finset.sum_le_sum\n      intro d hd\n      exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n        (Finset.mem_filter.mp hd).1 i\n    _ = _ := by\n      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n        truncatedDivisors]\n",
+      "type_normalized_lf_utf8_sha256": "8fe7636cb2d61dbadc743efe39e7452212bfb394cc45a974af9624d42bdb6a77",
+      "declaration_normalized_lf_utf8_sha256": "6ad02b128d8a1676dfec975e4dcfb5f6276c9ac182be8d3842525bd9d58c8d13",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "The source uses the complete prior native tuple-cardinality bridge and deletion-fiber tau bound, both preserved in the copied dependency. Only the sufficient cutoff premise changes to the strict successor condition. The outer Fin K constant sum yields exactly K."
+    },
+    {
+      "name": "sum_fouvryTau_interval_payment_strict",
+      "first": 652,
+      "type_last": 656,
+      "last": 681,
+      "complete_written_type": "theorem sum_fouvryTau_interval_payment_strict {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+      "complete_written_declaration": "theorem sum_fouvryTau_interval_payment_strict {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n  have hpoint : ∀ n ∈ Ioc A B, (fouvryTau K n : ℝ) ≤\n      (K : ℝ) * ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n),\n        (fouvryTau (K - 1) d : ℝ) := by\n    intro n hn\n    obtain ⟨hAn, hnB⟩ := Finset.mem_Ioc.mp hn\n    have hnpos : 0 < n := lt_of_le_of_lt (Nat.zero_le A) hAn\n    have hpow : n ^ (K - 1) ≤ B ^ (K - 1) :=\n      pow_le_pow_left₀ (Nat.zero_le n) hnB _\n    have hnat := fouvryTau_le_truncated_divisor_sum_strict hK (by omega : 1 ≤ n)\n      (hpow.trans_lt hcut)\n    rw [truncated_divisor_carrier_eq hnpos] at hnat\n    exact_mod_cast hnat\n  calc\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n        ∑ n ∈ Ioc A B, (K : ℝ) *\n          ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), (fouvryTau (K - 1) d : ℝ) :=\n      Finset.sum_le_sum hpoint\n    _ = (K : ℝ) * (∑ n ∈ Ioc A B,\n        ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), (fouvryTau (K - 1) d : ℝ)) :=\n      (Finset.mul_sum _ _ _).symm\n    _ ≤ (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) :=\n      mul_le_mul_of_nonneg_left\n        (sum_interval_divisor_weights_le (fun d => (fouvryTau (K - 1) d : ℝ)) hAB\n          (fun d _hd => Nat.cast_nonneg _)) (Nat.cast_nonneg K)\n",
+      "type_normalized_lf_utf8_sha256": "38826d300783e3fc85d099844cf89613c8ebb0bf3d259472cb594f30d2997901",
+      "declaration_normalized_lf_utf8_sha256": "1e6641770bb20aa3d33d14757b8957105597aabc39e471af39dadfa15096899e",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "Every n in natural Ioc A B is positive and satisfies n<=B; monotonicity propagates the B strict cutoff to n. The positive divisor-carrier equality and previously reviewed weight-count lemma have the actual required signatures. Real casts and the nonnegative K multiplier preserve the full coefficient."
+    },
+    {
+      "name": "sum_fouvryTau_interval_payment_strict_split",
+      "first": 684,
+      "type_last": 689,
+      "last": 705,
+      "complete_written_type": "theorem sum_fouvryTau_interval_payment_strict_split {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n",
+      "complete_written_declaration": "theorem sum_fouvryTau_interval_payment_strict_split {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n  calc\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n        (K : ℝ) * ∑ d ∈ Icc 1 D,\n          (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) :=\n      sum_fouvryTau_interval_payment_strict hK hAB hcut\n    _ = _ := by\n      congr 1\n      calc\n        (∑ d ∈ Icc 1 D,\n            (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1)) =\n            ∑ d ∈ Icc 1 D, (((B : ℝ) - (A : ℝ)) *\n              ((fouvryTau (K - 1) d : ℝ) / (d : ℝ)) + (fouvryTau (K - 1) d : ℝ)) := by\n          apply Finset.sum_congr rfl\n          intro d _hd\n          ring\n        _ = _ := by rw [Finset.sum_add_distrib, ← Finset.mul_sum]\n",
+      "type_normalized_lf_utf8_sha256": "ffa6c7d7e624476bb091d55051fea41509c2323e50cebfab20ed739b640ccc5c",
+      "declaration_normalized_lf_utf8_sha256": "65071d5bf3d8a1d0bc51eb4a837b8c5071a25387e0a661ac8abc0d60dae47ba1",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "Ring algebra and finite sum distribution separate exactly Y*sum tau/d plus sum tau, where Y=(B:Real)-(A:Real). No sign or lower-length hypothesis is used in this identity."
+    },
+    {
+      "name": "realDeletionRadius_eq_manuscript",
+      "first": 710,
+      "type_last": 711,
+      "last": 719,
+      "complete_written_type": "theorem realDeletionRadius_eq_manuscript {K : ℕ} (hK : 2 ≤ K) (Z : ℝ) :\n    realDeletionRadius K Z = Z ^ (1 - 1 / (K : ℝ)) := by\n",
+      "complete_written_declaration": "theorem realDeletionRadius_eq_manuscript {K : ℕ} (hK : 2 ≤ K) (Z : ℝ) :\n    realDeletionRadius K Z = Z ^ (1 - 1 / (K : ℝ)) := by\n  have hKn : K ≠ 0 := by omega\n  have hKR : (K : ℝ) ≠ 0 := by exact_mod_cast hKn\n  have hcast : ((K - 1 : ℕ) : ℝ) = (K : ℝ) - 1 := by\n    rw [Nat.cast_sub (by omega : 1 ≤ K), Nat.cast_one]\n  unfold realDeletionRadius\n  congr 1\n  rw [hcast]\n  field_simp [hKR] <;> ring\n",
+      "type_normalized_lf_utf8_sha256": "65c4734eeeef75047242e6f92b69eec9519448f11f07d09b9ee2f52747e0927a",
+      "declaration_normalized_lf_utf8_sha256": "c805f53d583a4711a588cae6e2f0841b8f6775bca55d5b08ff0a61f201503538",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "K>=2 supplies 1<=K for Nat.cast_sub and K!=0 for the real denominator. The exponent identity ((K-1:Nat):Real)/K = 1-1/K is exact; the field_simp/ring step uses that nonzero cast. No premise on Z is needed for equality of equal exponents."
+    },
+    {
+      "name": "realDeletionRadius_pow",
+      "first": 721,
+      "type_last": 722,
+      "last": 725,
+      "complete_written_type": "theorem realDeletionRadius_pow {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 0 ≤ Z) :\n    realDeletionRadius K Z ^ K = Z ^ (K - 1) := by\n",
+      "complete_written_declaration": "theorem realDeletionRadius_pow {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 0 ≤ Z) :\n    realDeletionRadius K Z ^ K = Z ^ (K - 1) := by\n  have hKR : (K : ℝ) ≠ 0 := by exact_mod_cast (by omega : K ≠ 0)\n  unfold realDeletionRadius\n  rw [← Real.rpow_mul_natCast hZ _ K, div_mul_cancel₀ _ hKR, Real.rpow_natCast]\n",
+      "type_normalized_lf_utf8_sha256": "c59fa6a37e22956dfd31dae26fc7e672af9cb834c32f424ffc0c2c702261f4af",
+      "declaration_normalized_lf_utf8_sha256": "7a07c68ce32733edc99c15a199ce43657d2813f650790e1b6c38ab879b15d0c1",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "The actual Real.rpow_mul_natCast API requires 0<=Z and has exactly the reverse-rewrite orientation used. Multiplying by the nonzero real cast K cancels the denominator, and rpow_natCast converts the remaining natural exponent. The result is precisely R^K=Z^(K-1)."
+    },
+    {
+      "name": "realDeletionRadius_bounds",
+      "first": 727,
+      "type_last": 728,
+      "last": 733,
+      "complete_written_type": "theorem realDeletionRadius_bounds {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 1 ≤ Z) :\n    1 ≤ realDeletionRadius K Z ∧ realDeletionRadius K Z ≤ Z := by\n",
+      "complete_written_declaration": "theorem realDeletionRadius_bounds {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 1 ≤ Z) :\n    1 ≤ realDeletionRadius K Z ∧ realDeletionRadius K Z ≤ Z := by\n  have hKR : (0 : ℝ) < K := by exact_mod_cast (by omega : 0 < K)\n  have hnum : ((K - 1 : ℕ) : ℝ) ≤ (K : ℝ) := by exact_mod_cast (Nat.sub_le K 1)\n  constructor\n  · exact Real.one_le_rpow hZ (div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n  · exact Real.rpow_le_self_of_one_le hZ ((div_le_iff₀ hKR).mpr (by simpa using hnum))\n",
+      "type_normalized_lf_utf8_sha256": "39517e96cd68b75d6a051ad3bb0d571402f10ffa5dbe10a12d71a608bd95df1e",
+      "declaration_normalized_lf_utf8_sha256": "7a391a33b34df26323fb37af6ba62fb821a67cc864bff1528e90eb411c269e1f",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "For Z>=1 the exponent is nonnegative and at most one: Nat.sub_le and the positive real cast K justify the quotient comparison. The actual one_le_rpow and rpow_le_self_of_one_le signatures yield 1<=R<=Z."
+    },
+    {
+      "name": "floor_radius_strict_cutoff",
+      "first": 736,
+      "type_last": 738,
+      "last": 746,
+      "complete_written_type": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n",
+      "complete_written_declaration": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n  have hR0 : 0 ≤ realDeletionRadius K Z := le_trans zero_le_one (realDeletionRadius_bounds hK hZ).1\n  have hlt : realDeletionRadius K Z ^ K <\n      ((⌊realDeletionRadius K Z⌋₊ : ℝ) + 1) ^ K :=\n    pow_lt_pow_left₀ (Nat.lt_floor_add_one _) hR0 (by omega : K ≠ 0)\n  rw [realDeletionRadius_pow hK (by linarith : 0 ≤ Z)] at hlt\n  have hBpow : (B : ℝ) ^ (K - 1) ≤ Z ^ (K - 1) :=\n    pow_le_pow_left₀ (Nat.cast_nonneg B) hBZ _\n  exact_mod_cast hBpow.trans_lt hlt\n",
+      "type_normalized_lf_utf8_sha256": "6267b634a9a75def166ae70680fb763ca289aeb02257fdc41c4a572df75a65f0",
+      "declaration_normalized_lf_utf8_sha256": "c2f82153f9949886b6d1730324fdc1a9773702580aa44fa37665276c23631ae0",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "Nat.lt_floor_add_one yields R<floor(R)+1, including integral R. The actual pow_lt_pow_left0 API requires R>=0 and K!=0, both supplied. Replacing R^K by Z^(K-1), bounding B^(K-1) by it, and exact_mod_cast give the stated strict natural successor inequality; there is no false floor(R)^K comparison."
+    },
+    {
+      "name": "native_floor_tau_payment",
+      "first": 749,
+      "type_last": 753,
+      "last": 774,
+      "complete_written_type": "theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}\n    (hR : 1 ≤ R) (hRZ : R ≤ Z) (hY : 0 ≤ Y) :\n    Y * (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ)) ≤\n      Y * (1 + Real.log Z) ^ (K - 1) + R * (1 + Real.log Z) ^ (K - 2) := by\n",
+      "complete_written_declaration": "theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}\n    (hR : 1 ≤ R) (hRZ : R ≤ Z) (hY : 0 ≤ Y) :\n    Y * (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ)) ≤\n      Y * (1 + Real.log Z) ^ (K - 1) + R * (1 + Real.log Z) ^ (K - 2) := by\n  have hI : Icc 1 ⌊R⌋₊ = Ioc 0 ⌊R⌋₊ := by\n    ext d\n    simp only [Finset.mem_Icc, Finset.mem_Ioc]\n    omega\n  have hrec := sum_fouvryTau_div_le_real (K - 1) hR\n  have hord := sum_fouvryTau_le_real (k := K - 1) (by omega) hR\n  have hexp : (K - 1) - 1 = K - 2 := by omega\n  rw [← hI] at hrec hord\n  rw [hexp] at hord\n  have hL0 : 0 ≤ 1 + Real.log R := by\n    have := Real.log_nonneg hR\n    linarith\n  have hL : 1 + Real.log R ≤ 1 + Real.log Z :=\n    add_le_add_left (Real.log_le_log (by linarith : 0 < R) hRZ) 1\n  have hp1 : (1 + Real.log R) ^ (K - 1) ≤ (1 + Real.log Z) ^ (K - 1) :=\n    pow_le_pow_left₀ hL0 hL _\n  have hp2 : (1 + Real.log R) ^ (K - 2) ≤ (1 + Real.log Z) ^ (K - 2) :=\n    pow_le_pow_left₀ hL0 hL _\n  exact add_le_add\n    (mul_le_mul_of_nonneg_left (hrec.trans hp1) hY)\n    (hord.trans (mul_le_mul_of_nonneg_left hp2 (by linarith : 0 ≤ R)))\n",
+      "type_normalized_lf_utf8_sha256": "4aeaa3ab120b0e5b029b6d7b572fc324215832ca992b080a8f10fbb489c5ea2c",
+      "declaration_normalized_lf_utf8_sha256": "f8272bb0da42e8f93680d280e300d66a7ec6a864a690883b91b2c3353af4098d",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "The genuine native reciprocal mean at order K-1 needs only R>=1 and has exponent K-1. The ordinary mean needs order>=1, supplied by K>=2, and gives exponent (K-1)-1=K-2 with exactly coefficient R. The exact Icc 1 floor(R)=Ioc 0 floor(R) identity matches both supports. Log monotonicity uses R>0 and R<=Z; multiplying by nonnegative Y and R introduces no constants."
+    },
+    {
+      "name": "sum_fouvryTau_E1_nat_endpoints",
+      "first": 777,
+      "type_last": 781,
+      "last": 789,
+      "complete_written_type": "theorem sum_fouvryTau_E1_nat_endpoints {K A B : ℕ} (hK : 2 ≤ K)\n    (hAB : A ≤ B) {Z : ℝ} (hZ : 2 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+      "complete_written_declaration": "theorem sum_fouvryTau_E1_nat_endpoints {K A B : ℕ} (hK : 2 ≤ K)\n    (hAB : A ≤ B) {Z : ℝ} (hZ : 2 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n  have hZ1 : 1 ≤ Z := by linarith\n  have hb := floor_radius_strict_cutoff hK hZ1 hBZ\n  have hfin := sum_fouvryTau_interval_payment_strict_split hK hAB hb\n  have hlength : 0 ≤ (B : ℝ) - (A : ℝ) := sub_nonneg.mpr (by exact_mod_cast hAB)\n  have hmean := native_floor_tau_payment hK (realDeletionRadius_bounds hK hZ1).1\n    (realDeletionRadius_bounds hK hZ1).2 hlength\n  rw [← realDeletionRadius_eq_manuscript hK Z]\n  exact hfin.trans (mul_le_mul_of_nonneg_left hmean (Nat.cast_nonneg K))\n",
+      "type_normalized_lf_utf8_sha256": "6e50200237a2dea45a9c01d4eed1ef2fc943a9b78c9c76b0d37342dc1283f3ca",
+      "declaration_normalized_lf_utf8_sha256": "f17de216e426ba02fcc250baafc6f58ca0160956c35f84bc29ad987a79587631",
+      "type_matches_author_checkpoint": true,
+      "full_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "reason": "Choose the genuine radius and its floor, use the strict finite interval split, and consume the two exact native means. hAB gives only Y>=0; there is no Y>=R assumption. Radius equality restores Z^(1-1/K), and the outer nonnegative K is retained exactly. The conclusion is the sharp manuscript formula on the stated natural-endpoint Ioc carrier only."
+    }
+  ],
+  "new_definition": {
+    "first": 708,
+    "last": 708,
+    "literal_source": "def realDeletionRadius (K : ℕ) (Z : ℝ) : ℝ := Z ^ (((K - 1 : ℕ) : ℝ) / (K : ℝ))\n",
+    "normalized_lf_utf8_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054"
+  },
+  "reused_interval_call_types_only": [
+    {
+      "name_as_written": "truncated_divisor_carrier_eq",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.truncated_divisor_carrier_eq",
+      "visibility": "public",
+      "first": 398,
+      "type_last": 399,
+      "last": 410,
+      "complete_written_type": "theorem truncated_divisor_carrier_eq {n D : ℕ} (hn : 0 < n) :\n    n.divisors.filter (fun d => d ≤ D) = (Icc 1 D).filter (fun d => d ∣ n) := by\n",
+      "type_normalized_lf_utf8_sha256": "11e1cb6afd6cdd503f11d044bda985df352228971756f522499aba387d423dc7",
+      "full_declaration_normalized_lf_utf8_sha256": "c605cd28bdc53b619f181ac1ad2aec6cae273bd9265facba94476cfcbe60d700",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "sum_interval_divisor_weights_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_interval_divisor_weights_le",
+      "visibility": "public",
+      "first": 423,
+      "type_last": 426,
+      "last": 433,
+      "complete_written_type": "theorem sum_interval_divisor_weights_le {A B D : ℕ} (w : ℕ → ℝ)\n    (hAB : A ≤ B) (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n    (∑ n ∈ Ioc A B, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n      ∑ d ∈ Icc 1 D, w d * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+      "type_normalized_lf_utf8_sha256": "65c8f2be58ac56b7bca75fbb75072f35cfcfecc1e3e66a6e7339f9d49625066c",
+      "full_declaration_normalized_lf_utf8_sha256": "8d2069903980dae7245f74286854180f7e0e279564314f0677807aa27c5dec18",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    }
+  ],
+  "actual_pinned_api_evidence": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 61,
+          "last": 62,
+          "literal_source": "@[simp, norm_cast]\ntheorem rpow_natCast (x : ℝ) (n : ℕ) : x ^ (n : ℝ) = x ^ n := by simpa using rpow_intCast x n\n",
+          "normalized_lf_utf8_sha256": "be56829b0f5cbb7775e3b419b3d06333abc34f755ef5d9177de4ff74cf526b64"
+        },
+        {
+          "first": 518,
+          "last": 519,
+          "literal_source": "lemma rpow_mul_natCast (hx : 0 ≤ x) (y : ℝ) (n : ℕ) : x ^ (y * n) = (x ^ y) ^ n := by\n  rw [rpow_mul hx, rpow_natCast]\n",
+          "normalized_lf_utf8_sha256": "9b0009f05e528a4b7bea408287ae3fd98e80ea38c5923a5852bc5ff81d6bf52f"
+        },
+        {
+          "first": 675,
+          "last": 678,
+          "literal_source": "\ntheorem one_le_rpow {x z : ℝ} (hx : 1 ≤ x) (hz : 0 ≤ z) : 1 ≤ x ^ z := by\n  rw [← one_rpow z]\n  gcongr\n",
+          "normalized_lf_utf8_sha256": "565d660784b204298febc32b695549eeb139cf4983cb2d13c96a842e3e77539b"
+        },
+        {
+          "first": 746,
+          "last": 747,
+          "literal_source": "theorem rpow_le_self_of_one_le (h₁ : 1 ≤ x) (h₂ : y ≤ 1) : x ^ y ≤ x := by\n  simpa only [rpow_one] using rpow_le_rpow_of_exponent_le h₁ h₂\n",
+          "normalized_lf_utf8_sha256": "35c979e8e0ebfe0c41159fc1a20b135a3a1de76ab685476b81aa273f22800016"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 47,
+          "last": 63,
+          "literal_source": "theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a :=\n  (le_floor_iff ha).1 le_rfl\n\ntheorem floor_eq_iff (ha : 0 ≤ a) : ⌊a⌋₊ = n ↔ ↑n ≤ a ∧ a < ↑n + 1 := by\n  rw [← le_floor_iff ha, ← Nat.cast_one, ← Nat.cast_add, ← floor_lt ha, Nat.lt_add_one_iff,\n    le_antisymm_iff, and_comm]\n\ntheorem lt_of_floor_lt (h : ⌊a⌋₊ < n) : a < n :=\n  lt_of_not_ge fun h' => (le_floor h').not_gt h\n\ntheorem lt_one_of_floor_lt_one (h : ⌊a⌋₊ < 1) : a < 1 := mod_cast lt_of_floor_lt h\n\ntheorem lt_succ_floor (a : R) : a < ⌊a⌋₊.succ :=\n  lt_of_floor_lt <| Nat.lt_succ_self _\n\n@[bound]\ntheorem lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1 := by simpa using lt_succ_floor a\n",
+          "normalized_lf_utf8_sha256": "1bd54514afb718017df7a85ee3b42aed0735bc2fc0fe2a8f4ea612333f212948"
+        },
+        {
+          "first": 177,
+          "last": 179,
+          "literal_source": "@[bound]\ntheorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=\n  ceil_le.1 le_rfl\n",
+          "normalized_lf_utf8_sha256": "a584964ae3ecd602ae26f7a739af084b7c3261308bce03e268ac01475ad96b16"
+        },
+        {
+          "first": 357,
+          "last": 358,
+          "literal_source": "theorem ceil_lt_add_one (ha : 0 ≤ a) : (⌈a⌉₊ : R) < a + 1 :=\n  lt_ceil.1 <| (Nat.lt_succ_self _).trans_le (ceil_add_one ha).ge\n",
+          "normalized_lf_utf8_sha256": "8da43481de7f0b8171c48c4736dbd3b43fb6ab68634fc21fa95502a28b408c72"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 469,
+          "last": 475,
+          "literal_source": "@[mono, gcongr, bound]\ntheorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]\n    (ha : 0 ≤ a) (hab : a ≤ b) : ∀ n, a ^ n ≤ b ^ n\n  | 0 => by simp\n  | 1 => by simpa using hab\n  | n + 2 => by simpa only [pow_succ']\n      using mul_le_mul hab (pow_le_pow_left₀ ha hab _) (pow_succ_nonneg ha _) (ha.trans hab)\n",
+          "normalized_lf_utf8_sha256": "780d8849fc108a1c6ea540be3a03d43fd77afc7dcf43a1ecaffe76d6de637cd5"
+        },
+        {
+          "first": 545,
+          "last": 551,
+          "literal_source": "@[gcongr, bound]\nlemma pow_lt_pow_left₀ [MulPosMono M₀] (hab : a < b)\n    (ha : 0 ≤ a) : ∀ {n : ℕ}, n ≠ 0 → a ^ n < b ^ n\n  | 1, _ => by simpa using hab\n  | n + 2, _ => by\n    simpa only [pow_succ] using mul_lt_mul_of_le_of_lt_of_nonneg_of_pos\n      (pow_le_pow_left₀ ha hab.le _) hab ha (pow_succ_pos (ha.trans_lt hab) _)\n",
+          "normalized_lf_utf8_sha256": "819f87f0db79861c05e3aab60f8e1b7c9f45bff1e015d96eb6cc68d4b3918122"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\GroupWithZero\\Units\\Basic.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "70d9819b0015e85972be567f2864a0516302a566f12fda8f67c243bff5d16bca",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 337,
+          "last": 337,
+          "literal_source": "lemma div_mul_cancel₀ (a : G₀) (h : b ≠ 0) : a / b * b = a := by simp [h]\n",
+          "normalized_lf_utf8_sha256": "333a0562b1c98c0ad037c1e917c5122e66621c394892e27dea65cff3ef1a296b"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 147,
+          "last": 153,
+          "literal_source": "theorem log_le_log_iff (h : 0 < x) (h₁ : 0 < y) : log x ≤ log y ↔ x ≤ y := by\n  rw [← exp_le_exp, exp_log h, exp_log h₁]\n\n@[gcongr, bound]\nlemma log_le_log (hx : 0 < x) (hxy : x ≤ y) : log x ≤ log y :=\n  (log_le_log_iff hx (hx.trans_le hxy)).2 hxy\n\n",
+          "normalized_lf_utf8_sha256": "d3c094a5f9e6f090158acaedee1fb4bce330df2f47a322991555c079e85e976f"
+        },
+        {
+          "first": 212,
+          "last": 214,
+          "literal_source": "@[bound]\ntheorem log_nonneg (hx : 1 ≤ x) : 0 ≤ log x :=\n  (log_nonneg_iff (zero_lt_one.trans_le hx)).2 hx\n",
+          "normalized_lf_utf8_sha256": "d58117374bfb81b052a790afa82d819188a8e94cadc8227c7f66d8cb8b7fac79"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "raw_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 245,
+          "last": 254,
+          "literal_source": "theorem sum_fouvryTau_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n) ≤ (1 + Real.log x) ^ k := by\n  have heq : reciprocalSum ⌊x⌋₊ = (harmonic ⌊x⌋₊ : ℝ) := by\n    have hI : Ioc 0 ⌊x⌋₊ = Icc 1 ⌊x⌋₊ := by\n      ext; simp only [mem_Ioc, mem_Icc]; omega\n    simp [reciprocalSum, harmonic_eq_sum_Icc, hI]\n  exact (sum_reciprocalTau_le k ⌊x⌋₊).trans\n    (pow_le_pow_left₀ (reciprocalSum_nonneg _)\n      (heq ▸ harmonic_floor_le_one_add_log x hx) _)\n\n",
+          "normalized_lf_utf8_sha256": "df652501bf4cdad956fa5f302184ea1f23e2ec9ea64eb8cbb78d309a62466942"
+        },
+        {
+          "first": 327,
+          "last": 349,
+          "literal_source": "theorem sum_fouvryTau_le (k N : ℕ) :\n    (∑ n ∈ Ioc 0 N, (fouvryTau (k + 1) n : ℝ)) ≤\n      N * (1 + Real.log N) ^ k := by\n  refine (sum_fouvryTau_le_harmonic k N).trans ?_\n  exact mul_le_mul_of_nonneg_left\n    (pow_le_pow_left₀ (reciprocalSum_nonneg _) (reciprocalSum_le_log _) _) (by positivity)\n\n/-- Real-endpoint form, uniform in `x`, with the order kept explicit. -/\ntheorem sum_fouvryTau_le_real {k : ℕ} (hk : 1 ≤ k) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ)) ≤\n      x * (1 + Real.log x) ^ (k - 1) := by\n  obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : k ≠ 0)\n  have hfloor : 1 ≤ ⌊x⌋₊ := Nat.le_floor (by simpa using hx)\n  have hlog : 1 + Real.log (⌊x⌋₊ : ℝ) ≤ 1 + Real.log x := by\n    have := Real.log_le_log (by exact_mod_cast (show 0 < ⌊x⌋₊ by omega))\n      (Nat.floor_le (by linarith : 0 ≤ x))\n    linarith\n  have hnonneg : 0 ≤ 1 + Real.log (⌊x⌋₊ : ℝ) := by\n    have := Real.log_nonneg (show (1 : ℝ) ≤ ⌊x⌋₊ by exact_mod_cast hfloor)\n    linarith\n  simpa only [Nat.succ_sub_one] using\n    (sum_fouvryTau_le j ⌊x⌋₊).trans\n      (mul_le_mul (Nat.floor_le (by linarith)) (pow_le_pow_left₀ hnonneg hlog j)\n",
+          "normalized_lf_utf8_sha256": "c51e9ce8760dca691d40c66524f504dfe68f22754bc37d0c7c107997f1e9b146"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Max.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "6a67c04a5ad263999707cf927121c15edf11bd66f7b5b48652c0e0e660a0d58c",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 528,
+          "last": 532,
+          "literal_source": "theorem exists_max_image (s : Finset β) (f : β → α) (h : s.Nonempty) :\n    ∃ x ∈ s, ∀ x' ∈ s, f x' ≤ f x := by\n  obtain ⟨y, hy⟩ := max_of_nonempty (h.image f)\n  rcases mem_image.mp (mem_of_max hy) with ⟨x, hx, rfl⟩\n  exact ⟨x, hx, fun x' hx' => le_max_of_eq (mem_image_of_mem f hx') hy⟩\n",
+          "normalized_lf_utf8_sha256": "d8b672abdfbddfa985e164896a76160f04a9971f3bf8155029282232671ead8a"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 243,
+          "last": 247,
+          "literal_source": "theorem prod_le_pow_card [MulLeftMono N] (s : Finset ι) (f : ι → N) (n : N) (h : ∀ x ∈ s, f x ≤ n) :\n    s.prod f ≤ n ^ #s := by\n  refine (Multiset.prod_le_pow_card (s.val.map f) n ?_).trans ?_\n  · simpa using h\n  · simp\n",
+          "normalized_lf_utf8_sha256": "695b3a91e5c5497e65e0cfaf36f6addff356e595918ba940fb5e3bd0aa346a3b"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 976,
+          "last": 987,
+          "literal_source": "theorem card_biUnion_le [DecidableEq M] {s : Finset ι} {t : ι → Finset M} :\n    #(s.biUnion t) ≤ ∑ a ∈ s, #(t a) :=\n  haveI := Classical.decEq ι\n  Finset.induction_on s (by simp) fun a s has ih =>\n    calc\n      #((insert a s).biUnion t) ≤ #(t a) + #(s.biUnion t) := by\n        rw [biUnion_insert]; exact card_union_le ..\n      _ ≤ ∑ a ∈ insert a s, #(t a) := by grind\n\ntheorem card_eq_sum_card_fiberwise [DecidableEq M] {f : ι → M} {s : Finset ι} {t : Finset M}\n    (H : (s : Set ι).MapsTo f t) : #s = ∑ b ∈ t, #{a ∈ s | f a = b} := by\n  simp only [card_eq_sum_ones, sum_fiberwise_of_maps_to H]\n",
+          "normalized_lf_utf8_sha256": "a0df9a9bc0027b328043a23725349c6dda976ec4e5f1fdeee724cf797afde3e0"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "raw_sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 236,
+          "last": 237,
+          "literal_source": "theorem card_image_of_injOn [DecidableEq β] (H : Set.InjOn f s) : #(s.image f) = #s := by\n  simp only [card, image_val_of_injOn H, card_map]\n",
+          "normalized_lf_utf8_sha256": "c8a44bd0e101b876764a71f317d6dc2a19240aad608205906ace4c9dfd83f744"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryTauTruncation.lean",
+      "pin": "actual-core-8e315-source; root-accepted-as-reported",
+      "raw_sha256": "8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f",
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 98,
+          "last": 99,
+          "literal_source": "theorem deletedProduct_mul (a : ι → ℕ) (i : ι) :\n    deletedProduct a i * a i = ∏ j, a j := by\n",
+          "normalized_lf_utf8_sha256": "c1f79766856c18dab3d0f7127a2f9b5db35d93b3e313f7743a8f6cdebceb9b1d"
+        },
+        {
+          "first": 102,
+          "last": 103,
+          "literal_source": "theorem deletedProduct_dvd {a : ι → ℕ} {n : ℕ}\n    (hprod : (∏ j, a j) = n) (i : ι) : deletedProduct a i ∣ n := by\n",
+          "normalized_lf_utf8_sha256": "b7b21c74ae01f40841cef1446e7393b2a8e566bceb1b7b99edddf0278f13dee0"
+        },
+        {
+          "first": 135,
+          "last": 137,
+          "literal_source": "theorem eraseAt_injective_of_product {a b : ι → ℕ} {n : ℕ}\n    (hn : 0 < n) (ha : (∏ j, a j) = n) (hb : (∏ j, b j) = n)\n    (i : ι) (hab : eraseAt a i = eraseAt b i) : a = b := by\n",
+          "normalized_lf_utf8_sha256": "8cbb21f085af6a7c485a5abfea208f90cba3260ba682aad846c64b075dc4d5b4"
+        }
+      ]
+    }
+  ],
+  "pins": {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "provenance": "Task-declared fixed pins and independently read actual WSLnative-packages bytes; raw file hashes are recorded. No Git operation was used to infer or modify checkout state."
+  },
+  "literal_manuscript": {
+    "pin": "ba6ec11d800eccc54406490631895e174de85766",
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\chen-imbalanced-semiprimes\\proof-library\\source\\q1-elementary-shifted-moments-20261010.txt",
+    "raw_sha256": "7c14edc906731ee6fe28c884c5df4c951c882c99d60f9c8e09692e137c981a4e",
+    "E1_span": {
+      "first": 21,
+      "last": 48,
+      "literal_source": "1. An elementary short-interval divisor bound\n\nFor integer k>=2, let d_k(n) be the number of ordered k-tuples of positive\nintegers with product n. If I is an interval in [1,Z], Z>=2, of length Y,\nthen\n\n sum_(n in I) d_k(n)\n <= k*[Y*(1+log Z)^(k-1)+Z^(1-1/k)*(1+log Z)^(k-2)].       (E1)\n\nProof. For every ordered tuple choose a largest coordinate (use the first\none in a tie). If its value is v and the product of the other coordinates\nis d, then v>=n^(1/k), so d<=n^(1-1/k)<=D=Z^(1-1/k).\nThere are at most k choices of its position. For each ordered remaining\ntuple of product d, the condition dv in I permits at most Y/d+1 integers\nv. Dropping the requirement that v be largest only increases the count.\nTherefore the left side is at most\n\n k*sum_(d<=D) d_(k-1)(d)*(Y/d+1).\n\nThe elementary product expansions give, for j>=1,\n\n sum_(d<=D) d_j(d)/d <= (1+log D)^j,\n sum_(d<=D) d_j(d) <= D*(1+log D)^(j-1).\n\nFor the second inequality, sum the last factor with floor(D/product)\nand then use the first inequality for the other j-1 factors; j=1 is\nimmediate. Substitution proves (E1). All endpoints and locations of I\nare allowed; no coprimality condition or arithmetic progression is used.\n",
+      "normalized_lf_utf8_sha256": "1f96c75dafd20098a40099ab10896a745537fdf656b7efee349fe0d32fe996cb"
+    },
+    "quantifiers": "The literal manuscript has K>=2, Z>=2, arbitrary interval length Y and exact prefactor K; no Y>=Z^(1-1/K) condition. Its assertion covers all endpoint placements. The reviewed new theorem supplies that formula only for natural A<=B and Ioc A B, B<=Z."
+  },
+  "global_chain_review": {
+    "strict_condition": "n^(K-1)<(D+1)^K is sufficient because max-coordinate deletion gives dp^K<=n^(K-1). It is not the old stronger D^K condition.",
+    "true_floor": "For R=Z^((K-1)/K), use R<floor(R)+1 and R^K=Z^(K-1). No comparison in the false direction R^K<=floor(R)^K is made.",
+    "native_mean_coefficients": "The actual pinned reciprocal theorem has coefficient 1 and exponent K-1. The ordinary theorem has coefficient R and exponent K-2 after order substitution. Neither contributes an extra K or other constant.",
+    "length_requirement": "Only Y>=0 is required in native_floor_tau_payment, supplied by A<=B. No minimum-length assumption occurs anywhere in the final type/body.",
+    "sharp_prefactor": "Exactly K survives from the indexed covers through finite interval payment and both native means. No ceil enlargement, factor two, or enlarged logarithm appears in the final inequality.",
+    "ceil_scope": "The author correctly labels a ceil alternative as coarser. It is not used as a proof of literal sharp E1.",
+    "exact_final_type": "theorem sum_fouvryTau_E1_nat_endpoints {K A B : ℕ} (hK : 2 ≤ K)\n    (hAB : A ≤ B) {Z : ℝ} (hZ : 2 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n"
+  },
+  "edge_case_audit": [
+    {
+      "case": "K=2",
+      "finding": "Order K-1=1 satisfies the genuine ordinary mean premise, and K-2=0 is retained. The Nat subtraction/cast equations are justified by hK."
+    },
+    {
+      "case": "Z=2 or any Z>=2",
+      "finding": "hZ gives Z>=1 and nonnegative Z, hence 1<=R<=Z. All rpow/log/floor premises are explicitly discharged."
+    },
+    {
+      "case": "Integral radius and floor boundary",
+      "finding": "R<floor(R)+1 remains strict even if R is an integer; monotone positive K-th power and the exact radius identity give the required strict successor cutoff."
+    },
+    {
+      "case": "A=B / zero length",
+      "finding": "Ioc A A is empty and Y=0. The chain never divides by Y or assumes positive length. Native mean payment allows hY=0."
+    },
+    {
+      "case": "A=0",
+      "finding": "Ioc 0 B excludes n=0, and the new pointwise proof derives n>0 from 0<=A<n. No fouvryTau at zero or divisor-zero inversion is used."
+    },
+    {
+      "case": "Small intervals",
+      "finding": "The final natural-endpoint statement contains no Y>=R condition. Arbitrary real endpoints producing subunit lengths are outside this theorem and remain an adapter obligation."
+    },
+    {
+      "case": "D=0 in finite strict lemmas",
+      "finding": "D=0 is permitted algebraically; any impossible positive-product case is ruled out by the strict hypothesis itself. The genuine radius used by the final theorem has R>=1."
+    }
+  ],
+  "obstructions": [],
+  "minimal_repair_required": null,
+  "static_acceptance_limits": {
+    "all_new12_full_types_and_bodies_read": true,
+    "no_mathematical_counterexample_found": true,
+    "no_static_API_blocker_found": true,
+    "no_kernel_or_elaboration_result": true,
+    "actual_core_status": "Source hash 8e315... was independently measured. Root reports accepted core 181/4146/129 with checkpoint prefixes f546d198 and 73542ac9; this review did not rerun or independently verify the heavy acceptance.",
+    "remaining_source_layers": "Generic tau304, finite493 and this new strict/floor792 chain remain without kernel acceptance. Prior source reviews do not change that.",
+    "separate_CommonP_failure": "Parent reports a strict-check failure only in a CommonP local additive API. It is outside this new12 review; no repair or mathematical counterexample is inferred, and no whole-pipeline compiler success is claimed."
+  },
+  "remaining_open": [
+    "Arbitrary real endpoint and open/closed endpoint adapters retaining the exact manuscript length Y and prefactor K.",
+    "Root-owned integration and authorized compilation/proper/kernel acceptance of the complete tau/interval/strict-floor source pipeline.",
+    "The actual shifted M2 composition and its coefficient, smooth-weight support and outside-energy inputs.",
+    "All 7/32, spectral/rough suppliers, original forall-kappa and main-theorem obligations."
+  ],
+  "authorized_actions": {
+    "new_checkpoint_only": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-e1-strict-floor-cutoff-mean-independent-source-review-HOLD.json",
+    "actual_lean_writes": 0,
+    "old_draft_or_checkpoint_writes": 0,
+    "helper_files_written": 0,
+    "compiler_runs": 0,
+    "proper_runs": 0,
+    "checker_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "git_operations": 0,
+    "new_subagents": 0
+  },
+  "quota": {
+    "fresh_used_percent": 44,
+    "fresh_remaining_percent": 56,
+    "latest_used_percent": 44,
+    "latest_remaining_percent": 56,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "stop_condition": "Bounded new12 independent source review complete. HOLD; no autonomous expansion or actual integration."
+}

@@ -1,0 +1,34 @@
+SOURCE_REVIEW_PASS for the narrow frozen `saving16_trim` candidate. The new source pays the literal fourteen-cell real trim loss, actual reciprocal-prime strip mass and actual signed ordinary eight-prime discarded residual, with inactive current-parent branches inheriting current and contributing zero. One trim and beta parameter precede one common arithmetic threshold. The complete saving16 history/compiler/integral target remains OPEN; `local_step_complete=false`, `task_complete=false`, `compiled=false`, `kernel_verified=false`, `formal_credit=0`, `ready_to_install=false`.
+
+The reviewed freeze is exact:
+
+- `REGISTRY.json`: `b5d587cb1539df5942212395f828852d673b0e0159341d7d479951784d530cc1`.
+- `REPORT.md`: `507c65e4d1ba4059c3979d3156f0feed09c8e7317dd8256d14bf85c2aa29e0ce`.
+- `P2OriginalFourteenWeightedTrim.lean`: `a94098ded3e81606f9e243c6b75da15f735b844ac144a51a8ecdee8c1d253aae` (14696 bytes).
+- `P2OriginalFourteenSignedTrimPayment.lean`: `922292a764eec770c5760a91fc19b9d9cbf09f5fb0f20afe9a24123ca5113e9c` (25084 bytes).
+
+I independently read both new modules, the J atlas and all four J compiler modules, their REGISTRY/REPORT and existing narrow review boundaries, manuscript360-509, the original saving16 family text, the independent family producer and original cell semantics as text, and the relevant global completion section. The original family is exactly ascending IDs0..14 except adopted7, mask129={1,8}, with96 nonconstant physical rows per cell. R=C(t2+t3), M=min(A,C)(t1+t8)-10^-6, cutoff53/13824, mu25/128, coefficient4, all eight coordinate denominators, c=49044063/25000000 and K=8452171/1250000 remain unchanged. No saving19, eleven-sixth-action or11026-family substitution occurs.
+
+The actual J trim is retained. `discarded = region \ trimmedRegion` is a partition of the literal union, so real integral reconstruction needs neither cell disjointness nor a triangulation assumption. Eventual point retention and J's genuine kernel integrability give dominated convergence of the discarded absolute source integral. The exact retained-plus-discarded identity then controls the real source-integral loss (WeightedTrim41-98).
+
+The arithmetic strip argument is substantive. Each clamp majorant uses the actual rational affine row. A zero identity contributes zero and cannot witness positive slack; a nonzero constant is eventually outside the shrinking strip; every nonzero linear part has a null affine level set. A discarded point has some strictly positive original row slack below the trim width, hence is dominated by the finite row-majorant sum. Dominated convergence pays its reciprocal-coordinate integral on the cutoff cube. The existing actual continuous prime-test theorem applies only after the majorant is fixed, and yields one threshold for the target-excluding prime tuple mass (WeightedTrim100-285). No null-wall, proper-row, rejectedCost or desired source-convergence premise is introduced. Pointwise exhaustion is not being substituted for arithmetic smallness.
+
+The signed arithmetic residual is the finite old-minus-new ordinary density, normalized by log(N)/C_N and weighted by the product of1/(p_i-1). Its level uses the actual product of all eight primes and last prime p7, with the genuine logarithmic product dictionary. The compact ordinary first-cube supplier gives two-sided error1 bounds at one threshold. Active points have both residual exponents between t8 and3t8, deriving this range from H7<current<=R; the absolute difference is bounded by8/cutoff+2 (SignedTrimPayment26-106,198-244). The actual signed summand is never defined as the positive rational kernel, and no favorable sign of the finite residual is assumed.
+
+The final guarded theorem is stronger than its intermediate unguarded helpers. `actualGuardedDiscardedResidual` evaluates the original `CurrentParentGuard`; on failure, the new exponent equals current, making the residual exactly zero. `literal_source_keeps_original_current_gate` proves that this conditional agrees with `familyNextExponent` on literal source points. The final payment quantifies over arbitrary current functions, with no CurrentParentGuard or current<=R hypothesis on discarded tuples (SignedTrimPayment250-337). The earlier `ResidualSource` and unguarded helper theorems retain explicit guard/log interfaces; their assumptions are not silently credited as discharged global history obligations.
+
+The beta work reuses the existing production supplier for width and paired attachment errors. The width keeps the signed difference of absolute rough masses. The stopped-charge specialization uses the actual14 policy on its sixth parent and an even-retaining base; its center is V(w) times the independently defined positive-w charge. It is not an identification with the w=0 integral. `exists_common_actual14_trim_beta_payment` fixes n and beta before max(Nt,Nb), then covers every later even N, arbitrary current and policy, and covering cap (SignedTrimPayment344-429). It pays separate defects and does not claim their complete compiler aggregate is established.
+
+The remaining internal ports are material:
+
+- Complete common old-policy construction, all prior branches and adopted gain preservation.
+- Literal-source/complete-selector exhaustion and stopped-frontier-to-tuple ownership and multiplicity.
+- Retained-source prime integral passage and same-current comparison.
+- Positive-w projection and omitted-source payment relating V(w)*charge(w) to the unpresieved ordinary integral.
+- Full endpoint box compiler rough-coefficient error and support, full87/all22 assembly, and allocation of the two separate original reserves.
+- Complete original cell geometry, triangulation, Jensen/Q96 floors and historical endpoint1222997719565324892497827/2^96.
+- Validation of inherited decisive finite row identities, exact dependency installation, elaboration and kernel checking.
+
+All32 registered source/dependency/reference/report pins and six direct-import pins matched; the50 public and three private declaration names match the registry. The K and relevant J modules remain absent at their intended production installation paths, as recorded. Existing J narrow source reviews are preserved and convey no compiler or complete finite-data credit. I read the actual `setIntegral_sdiff`, `integral_indicator` and dominated-convergence APIs in the available native Mathlib source; its exact checkout revision was not independently authenticated. No new mathematical source defect or mandatory correction was found within the stated narrow scope.
+
+Only static source inspection, text/declaration scans and raw hashing were performed. No compiler, build, CI, numeric replay, producer, finite decision, Git action, subagent or quota call was used. Only `K/reviews/saving16_trim.json` and this file were written.

@@ -1,0 +1,37 @@
+# Original compact Q80 selected Jensen candidate — source-only delivery
+
+Status: proof source written; **uncompiled, not kernel verified, formal credit 0**. No Lean, Lake, compiler, elaborator, producer, numerical replay, finite checker, generator, or endpoint computation was executed. All concrete finite guards remain **UNEVALUATED**. The four Lean files contain complete proposed proof bodies with no `sorry`, `admit`, new axiom, `native_decide`, or execution directive. This report does not certify that the files elaborate.
+
+The exported theorem is `P2OriginalCompactQ80JensenBoundsSourceOnly.jensenDifferenceUpper_sound`. For the actual original raw box, `Geometry box`, `inside box`, and the literal result `jensenDifferenceUpper box = some j`, it concludes both `0 ≤ val j` and
+
+```lean
+(∫ t in rootCell box, compactKernel t) ≤ val j * realChargedMass box
+```
+
+Here `realChargedMass` is the original reciprocal-density mass, including factor 4, and is half the complete square mass only when `symmetricHalf box` holds. The theorem has no assumed Jensen estimate, mean interval, query bound, cap minorant, old argument range, chord-slope sign, or per-leaf allowance. The successful option equation identifies the original selected candidate; it does not assume that candidate is sound.
+
+The companion `source_jensenAssertions box g` derives the entire current Jensen assertion inventory from `Geometry`. Thus the final parent composition need not retain these internal division guards as external assumptions. `source_old_chord_rounding` supplies the signed rounded old chord, and `source_new_upper` supplies the actual new-factor Q80 query.
+
+The source was read against `EXTRA_TASKS.json` and its complete `shared_interface_policy`, the public and original `certify_extended_prefix.py`, its actual `certify_conservative_chen.py` dependency, and `replay_extended_prefix_full_driver.py`. The manuscript positions read were `manuscript-body.tex` 360–509 and 1310–1435 and `extended-prefix-upper.tex` 8–40. The parameter values, zero extension at two, full actual gated cap at `x = μ`, ordered domain, and factor `4/(x*y*z^2)` are retained. No historical replay output is used as a proof premise.
+
+`P2OriginalCompactQ80JensenMoments.lean` proves containment for the literal raw-coordinate x/y reciprocal-log means, inverse-z mean, new mean, maximum-coordinate mean, and old mean using the actual max12 Q80 table and original 32-term logarithm interpreter. It preserves every intermediate interval operation. Python’s scalar `__rmul__` places the interval operand first; `mul_comm_exact`, `maxMean_python_operand_order`, and `oldMean_python_operand_order` prove exact equality to the stable encloser ABI through the same four integer corner products and both outward roundings. This is an integer equality, not a replacement by a merely enclosing expression. Clipping to `[0,1]` is justified by the true mean range, and the signed product permits either order of the two lower-query endpoints.
+
+`P2OriginalCompactQ80JensenSelection.lean` extracts the row from the actual `find?`, theta filter, and strict midpoint fold. Its order is **x, y, xy, xyz, xz, yz, B**. The newer P160 selector is not used. The first active rising side and strict `>` midpoint tie behavior remain in the source function. Every selected row has `0 < e ≤ 256` and `b < e`, `c < e`. The original positive residual guard and one integer lattice step give
+
+```lean
+1 / Q ≤ oldHigh box p - oldLow box p
+```
+
+via the stronger intermediate lower bound `1/(e*z1)`. Therefore the old span is strict and the rounded chord denominator is positive. The source equal-endpoint chord return is unreachable on these positive-width reachable boxes; no separate equal-endpoint assumption is made. Zero-width/null domains remain the symmetry companion’s separately proved cases.
+
+`P2OriginalCompactQ80JensenGeometry.lean` proves raw-to-physical mean identities, the true old support range, and the ordinary selected cap minorant. For ordinary boxes it uses the actual normalized rectangle probability. Above μ on a symmetric square it uses the actual ordered prism and the exact maximum-coordinate mean. It does not assert that the literal asymmetric cap/history kernel is symmetric. The ordinary old mean range is derived from the true affine moment integral; the above-μ symmetric range comes from the true prism argument range and its exact moment.
+
+`P2OriginalCompactQ80JensenBounds.lean` composes the analytic cases. NEW uses concavity on `[2,∞)` in the upper direction, with support supplied by the original full-cell corner inequality. OLD uses a lower endpoint chord and is subtracted. `oldHigh ≤ 2`, including equality, uses nonnegativity of the actual old factor. The noncrossing guard forces `oldLow ≥ 2` in the other branch. Ordinary boxes use their true affine minorant. Symmetric below-μ tent branches use the average of the selected tent and its x/y-swapped **true ordered chords**; their endpoint values and original square mean agree exactly, without an endpoint-order premise. B has its actual symmetric sum moment. Above μ uses the exact max moment. The final result is the original max-with-zero candidate in Q80 units.
+
+The parent-owned `P2OriginalCompactQ80LogGuards` supplies uniform original log and squared-log denominator positivity from integer geometry, with no evaluated cell guard. The parent-owned `P2OriginalCompactQ80Symmetry` supplies mass and domain geometry. The dependency graph is acyclic: Moments → Selection → Geometry → Bounds, while Geometry imports the separate Symmetry definitions/analytics and Bounds imports LogGuards. Parent `CompleteSoundness` may import all companions. This work did not edit the encloser, table, symmetry, phi, driver, or any peer file.
+
+The remaining work is explicit. The proposed theorems and their import closure need user-owned installation, elaboration, and kernel checking. This companion alone does not certify the final minimum of all enclosure candidates, final mass multiplication/ceiling, a complete reachable forest, the table initialization assertions, the concrete adaptive run, or the historical endpoint. Those remain parent/other-companion obligations until their source is composed and the required finite guards are checked. No conclusion about the full number-theoretic density theorem follows from this local candidate alone.
+
+The actual external mathematical definitions are the already existing `actualExtendedThirdLowerFactor = thirdTailLowerFactor ∘ max 2`, the genuine Suzuki/Jurkat–Richert normalized source, the gated `actualExtendedThirdEnvelope` and `actualExtendedThirdBufferedCap`, and the actual compact domain/kernel. Their analytical suppliers are recorded by exact source hash in `REGISTRY.json`; none is replaced by a caller-supplied continuous function, synthetic DDE, phi estimate, leaf budget, P112/P160 query, or replay endpoint. The local native Mathlib source and goldbach source were read through their actual UNC paths. Their HEAD pins match the repository manifest (`e4c91783…` and `09b97db5…`), and the Lean source/toolchain is v4.33.0-rc1. This is source provenance, not inherited verification.
+
+`REGISTRY.json` records the four install targets, all direct import bindings, upstream source pins, actual Mathlib/Lean API pins, manuscript/producer pins, theorem APIs, eliminated source obligations, remaining work, and false/zero verification fields. It deliberately does not self-hash.

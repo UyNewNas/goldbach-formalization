@@ -1,0 +1,188 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_HARMONIC_SLICES_NO_TARGET_ISSUES_FOUND",
+  "reviewer": "/root/tail_resume/greedy_review independent of owner",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9HarmonicSlices",
+  "source_sha256": "fc4aea309c1a7fdf444696553cbf399f519a38bd9eb5d0c51cf7f01f751cc17a",
+  "complete_declarations": [
+    {
+      "name": "currentChenUpsilon9HarmonicDomain_vec_iff",
+      "kind": "theorem",
+      "line": 20,
+      "complete_signature": "theorem currentChenUpsilon9HarmonicDomain_vec_iff (x y : ℝ) :\n    ![x, y] ∈ logPrimeBox (fun _ : Fin 2 => (19 / 125 : ℝ))\n        (fun _ => (1 / 2 : ℝ)) ∩ currentChenUpsilon9HarmonicRegion ↔\n      x ∈ Ico (19 / 125 : ℝ) (59 / 250 : ℝ) ∧\n        y ∈ Ico (59 / 250 : ℝ) ((1 - x) / 2)",
+      "independent_assessment": "Pointwise exact domain equivalence. x lower weak19/125 and upper strict59/250; y lower weak59/250 and upper strict(1-x)/2. These imply the original cube upper1/2 on both coordinates. All original mixed walls remain unchanged."
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicIntegrand_vec",
+      "kind": "theorem",
+      "line": 42,
+      "complete_signature": "theorem currentChenUpsilon9HarmonicIntegrand_vec {x y : ℝ}\n    (hxy : ![x, y] ∈ logPrimeBox (fun _ : Fin 2 => (19 / 125 : ℝ))\n        (fun _ => (1 / 2 : ℝ)) ∩ currentChenUpsilon9HarmonicRegion) :\n    currentChenUpsilon9HarmonicKernel ![x, y] * (∏ i, 1 / (![x, y] i)) =\n      1 / (x * y * (1 - x - y))",
+      "independent_assessment": "On actual domain the existing clamped harmonic kernel equals1/(1-x-y); finite product density gives exactly1/(x*y*(1-x-y)). It is an algebraic reciprocal identity, with no replacement count or density premise."
+    },
+    {
+      "name": "integrableOn_currentChenUpsilon9HarmonicIntegrand",
+      "kind": "theorem",
+      "line": 52,
+      "complete_signature": "theorem integrableOn_currentChenUpsilon9HarmonicIntegrand :\n    IntegrableOn (fun x : Fin 2 → ℝ => currentChenUpsilon9HarmonicKernel x * ∏ i, 1 / x i)\n      (logPrimeBox (fun _ : Fin 2 => (19 / 125 : ℝ)) (fun _ => (1 / 2 : ℝ)) ∩\n        currentChenUpsilon9HarmonicRegion)",
+      "independent_assessment": "Compact-positive-cube test integrability is already proved for the continuous extended kernel; mono_set restricts it to the actual mixed domain. No integrability/Fubini premise is asked from caller."
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicIntegral_eq_nested",
+      "kind": "theorem",
+      "line": 62,
+      "complete_signature": "theorem currentChenUpsilon9HarmonicIntegral_eq_nested :\n    currentChenUpsilon9HarmonicIntegral =\n      ∫ x in Ico (19 / 125 : ℝ) (59 / 250 : ℝ),\n        ∫ y in Ico (59 / 250 : ℝ) ((1 - x) / 2),\n          1 / (x * y * (1 - x - y))",
+      "independent_assessment": "Measurable actual-domain indicator F is globally integrable. Volume-preserving piFinTwo transfers its integrability and integral to R x R, then genuine integral_prod applies. Global pointwise nested indicators identify the exact moving Ico slice. No null-wall deletion or caller integral identity is used."
+    }
+  ],
+  "explicit_declaration_count": 4,
+  "definition_count": 0,
+  "caller_analytic_premises": [],
+  "exact_result": "Literal original two-dimensional J equals integral x in Ico(19/125,59/250), integral y in Ico(59/250,(1-x)/2),1/(x*y*(1-x-y)).",
+  "fixed_native_api_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Constructions/Pi.lean",
+      "sha256": "8751b21ac855f1a7b7c63258e8325f75b6fc236d360758b822ddf54597b118bf",
+      "line": 858,
+      "interface": "volume_preserving_piFinTwo (alpha:Fin2->Type) [MeasureSpace each] [SigmaFinite each]:MeasurePreserving (MeasurableEquiv.piFinTwo alpha) volume volume.",
+      "assessment": "Real volume sigma-finiteness pays both coordinates; the inverse map returns ![x,y]."
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Function/L1Space/Integrable.lean",
+      "sha256": "024ed7aebf24a39f0b68d85f9b184addd5c58fb60c7833c2f8da42093f4ad731",
+      "line": 392,
+      "interface": "MeasurePreserving.integrable_comp_emb(hMP)(hEmbedding):Integrable(g comp f) mu iff Integrable g nu.",
+      "assessment": "With f=E.symm and g=F, .mpr hF gives exactly transported actual integrability."
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Integral/Bochner/Basic.lean",
+      "sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "line": 1082,
+      "interface": "MeasurePreserving.integral_comp' (h:MeasurePreserving e mu nu)(g):integral(g comp e)mu=integral g nu.",
+      "assessment": "The source uses its symmetric equality for E.symm, moving the vector integral to product volume."
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Integral/Prod.lean",
+      "sha256": "c7d4d23349591c5c65aa5b1b6024331fb0b7f22e9b2b08d6a1fe19b1c258ec5b",
+      "line": 444,
+      "interface": "integral_prod(f)(hf:Integrable f (mu.prod nu)):integral f=integral x, integral y,f(x,y).",
+      "assessment": "The actual transported hPF is supplied before applying Fubini; no absolute integrability assumption is hidden in the final theorem."
+    }
+  ],
+  "direct_dependency": {
+    "module": "ImbalancedChen.CurrentChenUpsilon9HarmonicMean",
+    "source_sha256": "1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35",
+    "current_header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.CurrentChenUpsilon9TrueLiMass",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        },
+        {
+          "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        },
+        {
+          "module": "ImbalancedChen.ChenPairHarmonicFinite",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    }
+  },
+  "relative_header_dag": {
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "leaf_header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.CurrentChenUpsilon9HarmonicMean",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    },
+    "new_project_vs_parent_closure": [
+      "ImbalancedChen.CurrentChenUpsilon9HarmonicSlices"
+    ],
+    "new_foreign": [],
+    "method": "Fresh current leaf and parent header parse. Leaf only imports its current project parent plus implicit Init; exact relative source delta is this leaf alone. Existing owner full-DAG traversal remains advisory, not an independently replayed imported closure.",
+    "fresh_full_dag_recomputed": false
+  },
+  "owner_reports_advisory_only": [
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9HarmonicSlices-semantics.json",
+      "sha256": "c6195acd3734a510f68d0b5a1b7c245768f3c967318c37e5aa32271b2d68c508"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9HarmonicSlices-proper-dag.json",
+      "sha256": "8ce377de0602ed50e3b22479e8a26b46f3d6ec50c3d2fa1c10880627b24623b5"
+    }
+  ],
+  "issues": [],
+  "remaining_gates": [
+    "Exact fc4a source requires separately owned elaboration and complete owned acceptance. No runtime PASS is inferred.",
+    "The nested representation does not yet prove a logarithmic antiderivative, one-dimensional expression, numerical enclosure or adopted manuscript K."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_source_modified": false,
+    "checker_modified": false,
+    "python_bytecode_generated": false,
+    "kernel_or_axiom_execution": false,
+    "runtime_pass_claim": false
+  }
+}

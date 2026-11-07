@@ -1,0 +1,252 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_AND_FRESH_DAG_NO_TARGET_ISSUES_FOUND",
+  "reviewer": "/root/tail_resume/greedy_review, independent of lower_resume self-review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+  "source_sha256": "453dff2b760f9e4e7b18f7e708cb4d17f4a072654b1fd5e7eb6832c621651221",
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9PanAggregate",
+      "source_sha256": "96ee69812a2197d283e187369fe3076fdf41c8567b5261f7423db381fa20d5f8"
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9UnitBudget",
+      "source_sha256": "03ed6eb057259ebb5fd5092a8689c543273f67cce404c833bda299ef7e652b06"
+    }
+  ],
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9PrefixPrimeFibre",
+      "line": 33,
+      "signature": "def currentChenUpsilon9PrefixPrimeFibre (N a : ℕ) : Finset ℕ",
+      "semantic_scope": "Literal closed carrier",
+      "premises_and_assessment": "All N,a; q is prime, q<=N, and a*q<=N. No a>0 premise is silently inserted; the broader prime carrier is well-defined even at a=0."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9PrefixPrimeFibre_divisor_card",
+      "line": 38,
+      "signature": "theorem currentChenUpsilon9PrefixPrimeFibre_divisor_card (N a d : ℕ) :\n    ((currentChenUpsilon9PrefixPrimeFibre N a).filter\n      (fun q => d ∣ N - a * q)).card = primesInAPBelow N a d N",
+      "semantic_scope": "Exact closed-domain congruence",
+      "premises_and_assessment": "All N,a,d. Under a*q<=N, natural subtraction has d | N-a*q iff a*q congruent N mod d, including a*q=N and receiver zero."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_prefix_sum_upperDivisorSum",
+      "line": 53,
+      "signature": "theorem currentChenUpsilon9_prefix_sum_upperDivisorSum\n    (N a cap : ℕ) (z L : ℝ) :\n    (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n      supportedDivisorSum (actualSmallRosserSupport N cap z)\n        (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * (primesInAPBelow N a d N : ℝ)",
+      "semantic_scope": "Signed finite Fubini",
+      "premises_and_assessment": "All N,a,cap,z,L. No sign, sieve, primitive residue or asymptotic premise is used for this finite identity."
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_upperDivisorSum_nonneg",
+      "line": 69,
+      "signature": "private theorem currentChenUpsilon9_upperDivisorSum_nonneg\n    (N cap : ℕ) (z L : ℝ) (hL : 1 < L) (hzL : z ≤ L) (n : ℕ) :\n    0 ≤ supportedDivisorSum (actualSmallRosserSupport N cap z)\n      (actualSmallRosserPlus N cap z L) n",
+      "semantic_scope": "Complete divisor-sum nonnegativity",
+      "premises_and_assessment": "Only 1<L and z<=L. Actual Rosser sandwich supplies nonnegativity for every n including n=0; it does not assert the individual signed coefficients are nonnegative."
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_prime_coprime_actualProduct",
+      "line": 78,
+      "signature": "private theorem currentChenUpsilon9_prime_coprime_actualProduct\n    (N cap : ℕ) (z : ℝ) {P : ℕ} (hP : Nat.Prime P) (hzP : z ≤ (P : ℝ)) :\n    Nat.Coprime (actualSmallPrimeProduct N cap z) P",
+      "semantic_scope": "Large prime avoids actual small product",
+      "premises_and_assessment": "P prime and z<=P suffice because each actual product prime p is strictly below z. No full enumeration cap or centre-coprimality premise is needed."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap",
+      "line": 93,
+      "signature": "theorem currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap\n    (N a cap : ℕ) (ha : 0 < a) (z L : ℝ) (hL : 1 < L) (hzL : z ≤ L) :\n    ((currentChenUpsilon9SwitchedPrimeFibre N a).card : ℝ) ≤\n      (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) + (Nat.ceil z : ℝ)",
+      "semantic_scope": "Strict source enlarged after nonnegativity",
+      "premises_and_assessment": "0<a,1<L,z<=L. Large original receiver prime lies in closed Pan carrier and contributes at most its full upper divisor sum. Small q maps injectively to N-a*q<ceil(z) because both original products are strictly below N and a>0. Expansion to additional q, including receiver zero, uses full-sum nonnegativity only."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_product_sum_upperDivisorSum",
+      "line": 149,
+      "signature": "theorem currentChenUpsilon9_product_sum_upperDivisorSum\n    (N cap : ℕ) (z L : ℝ) :\n    (∑ a ∈ currentChenUpsilon9PrefixProducts N,\n      ∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * currentChenUpsilon9PrefixAPCount N d",
+      "semantic_scope": "Same multiplier counted once",
+      "premises_and_assessment": "Exact finite reordering over the actual product image and exact closed AP count. No tuple/factorization factorial or new zero-one coefficient is introduced."
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_upper_sum_eq_active",
+      "line": 163,
+      "signature": "private theorem currentChenUpsilon9_upper_sum_eq_active\n    (B : ℝ) (N cap : ℕ) (z : ℝ) (G : ℕ → ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d) =\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d",
+      "semantic_scope": "Exact active restriction",
+      "premises_and_assessment": "Arbitrary B,N,cap,z,G. Actual upper Rosser level Q+1 gives d<Q+1 whenever weight nonzero, so terms with d>Q vanish identically. No termwise inequality or sign assumption is used."
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9SwitchedUpperDensity",
+      "line": 183,
+      "signature": "def currentChenUpsilon9SwitchedUpperDensity (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ",
+      "semantic_scope": "Explicit full same-coefficient density",
+      "premises_and_assessment": "Definition is the full support sum lambdaPlus(d)/phi(d), not an assumed density constant or a restricted lower main term."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_upper_AP_sum_eq_main_errors",
+      "line": 190,
+      "signature": "theorem currentChenUpsilon9_upper_AP_sum_eq_main_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n        currentChenUpsilon9PrefixAPCount N d) =\n      currentChenUpsilon9LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon9CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon9PanRosserError B N cap z",
+      "semantic_scope": "Exact main minus gate plus signed Pan",
+      "premises_and_assessment": "N>=1. Every actual support modulus is coprime to N, paying the Pan decomposition primitive-target condition. The signed full noncoprime li defect is kept and its zero-weight inactive moduli are removed by exact identity. Scalar mass factors out of exactly the displayed density."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_le_upper_density_main_add_errors",
+      "line": 226,
+      "signature": "theorem currentChenUpsilon9_le_upper_density_main_add_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ)\n    (hL : 1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ))\n    (hzL : z ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ)) :\n    currentChenUpsilon9 N ≤\n      currentChenUpsilon9LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon9CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon9PanRosserError B N cap z +\n        ((currentChenUpsilon9PrefixProducts N).card : ℝ) * (Nat.ceil z : ℝ) +\n        ((currentChenUpsilon9UnitFibres N).card : ℝ)",
+      "semantic_scope": "Actual ninth finite upper bound",
+      "premises_and_assessment": "N>=1,1<Q+1,z<=Q+1. Actual switched-prime plus unit-fibre source inequality and per-positive-multiplier cap supply exactly main - signed gate + signed Pan + cardinality*ceil(z) + actual unit count."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_small_prime_cost_le_power",
+      "line": 256,
+      "signature": "theorem currentChenUpsilon9_small_prime_cost_le_power {N : ℕ} (hN : (1 : ℝ) ≤ N) :\n    ((currentChenUpsilon9PrefixProducts N).card : ℝ) *\n      (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) ≤\n        4 * (N : ℝ) ^ (409 / 500 : ℝ)",
+      "semantic_scope": "Small-P cost and both ceilings",
+      "premises_and_assessment": "N>=1. Original product image is a subset of range ceil(N^(309/500)); both ceiling factors are at most twice their powers, so cost <=4*N^(309/500+1/5)=4*N^(409/500). No prime counting estimate or unproved harmonic approximation is used."
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "eventually_currentChenUpsilon9_panLevel_sieveCutoff",
+      "line": 289,
+      "signature": "private theorem eventually_currentChenUpsilon9_panLevel_sieveCutoff\n    (B : ℝ) (hB : 0 ≤ B) :\n    ∀ᶠ N : ℕ in atTop,\n      1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      panModulusCutoff N B ≤ N",
+      "semantic_scope": "Automatic Pan sieve level gates",
+      "premises_and_assessment": "For each B>=0, pinned conductor bounds and log(N)^B<=N^(3/10) imply 1<Q+1, N^(1/5)<=Q+1, Q<=N eventually. Q=floor(N^(1/2)/log(N)^B); the strict floor+1 inequality and logarithm positivity remain explicit."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "exists_currentChenUpsilon9_le_switched_density_main",
+      "line": 322,
+      "signature": "theorem exists_currentChenUpsilon9_le_switched_density_main :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ ε : ℝ, 0 < ε →\n      ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ,\n        currentChenUpsilon9 N ≤\n          currentChenUpsilon9LiMainMass N *\n            currentChenUpsilon9SwitchedUpperDensity B N cap ((N : ℝ) ^ (1 / 5 : ℝ)) +\n              ε * singularNormalization N",
+      "semantic_scope": "Four paid errors, fixed B before epsilon",
+      "premises_and_assessment": "Pan supplies exists B>=0 before all epsilon>0 and all sufficiently large N; cap is universally quantified after N. The same epsilon/4 pays signed Pan absolute error, signed gate absolute error on active S subset Icc 1 N, small-P cap and actual unit fibres. Remaining main is literal LiMainMass times full SwitchedUpperDensity. No factor eight, density asymptotic, current K or hLower is assumed or concluded."
+    }
+  ],
+  "fixed_source_api_checks": [
+    {
+      "interface": "AnalyticNumberTheory.Sieve.primesInAPBelow",
+      "source": "goldbach/AnalyticNumberTheory/Sieve/WeightedPan.lean:445",
+      "assessment": "Exactly range(N+1), prime q, a*q<=N, product congruence a*q congruent N. The source d|N-a*q filter identity supplies a*q<=N before using dvd_sub_iff_modEq_of_le."
+    },
+    {
+      "interface": "actualSmallRosser_sandwich_nat",
+      "source": "ImbalancedChen/ActualSmallRosser.lean:160",
+      "assessment": "Requires only 1<L and z<=L. Produces complete lower/upper supported divisor sums at every natural n, including zero. No cap>=z premise is required here."
+    },
+    {
+      "interface": "Nat.eq_of_mul_eq_mul_left",
+      "source": "Lean Init/Data/Nat/Basic.lean:784",
+      "signature": "{m k n : Nat} (hn : 0<n) (h : n*m=n*k) : m=k",
+      "assessment": "Matches original multiplier positivity and a*q=a*r. The equality before cancellation follows from strict domain and equality of natural complements."
+    },
+    {
+      "interface": "Finset.card_le_card_of_injOn and card_filter_add_card_filter_not",
+      "source": "Mathlib/Data/Finset/Card.lean:427,647",
+      "assessment": "MapsTo complement in range(ceil z) and InjOn on the original small fibre match exact arguments. The cardinal partition uses the theorem in reverse."
+    },
+    {
+      "interface": "Finset.sum_le_sum_of_subset_of_nonneg",
+      "assessment": "The extra-carrier summands are full supported divisor sums proven nonnegative; no signed Rosser coefficient comparison occurs."
+    },
+    {
+      "interface": "eventually_pan_conductor_bounds; eventually_pan_log_rpow_le_rpow",
+      "source": "goldbach/MathlibNt/SieveTheory/Distribution/LiuPan/LiuPanPrimitiveLedgerAssembly.lean:60,52",
+      "source_sha256": "5757f8a8079ab77252b30ed0ea258fb05407c1225dd68f9528bf5c76e6673896",
+      "assessment": "Conductor tuple explicitly supplies log>=1, floor(low)>=1, floor(low)<=Q, cast(Q)<=sqrt N, Q<=N. The projection hb.2.2.2.2 is Q<=N. The logarithmic helper permits arbitrary real B and positive 3/10."
+    },
+    {
+      "interface": "eventually_currentChenUpsilon9_abs_coprimeGateError_le_singularNormalization",
+      "source": "ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:320",
+      "assessment": "Threshold precedes arbitrary cap,z,L and S; only S subset Icc 1 N is required. Active subset Icc 1 Q and eventual Q<=N pay it."
+    },
+    {
+      "interface": "exists_currentChenUpsilon9_panRosserError_budget",
+      "source": "ImbalancedChen/CurrentChenUpsilon9PanAggregate.lean",
+      "assessment": "Fixed B>=0 before epsilon,N,cap,z; every cap and real z is uniform. Runtime validation of this exact dependency is separate and pending at review snapshot."
+    },
+    {
+      "interface": "eventually_currentChenUpsilon9_unitFibres_le_singularNormalization; eventually_powerLog_le_singularNormalization",
+      "source": "ImbalancedChen/CurrentChenUpsilon9UnitBudget.lean:95; ImbalancedChen/PowerErrorBudget.lean:52",
+      "assessment": "Each epsilon/4 bound matches exactly. 409/500<1 and k=0 pay the finite small-prime cost without logarithmic or parity assumptions."
+    }
+  ],
+  "mathematical_findings": {
+    "literal_original_count": true,
+    "closed_receiver_zero_preserved": true,
+    "only_whole_divisor_sum_nonnegativity_used_for_enlargement": true,
+    "no_individual_signed_coefficient_monotonicity": true,
+    "positive_multiplier_small_prime_injection": true,
+    "small_prime_cost": "4*N^(409/500), with 409/500=309/500+1/5<1",
+    "same_actual_signed_rosser_coefficient_through_fubini_density_gate_pan": true,
+    "true_coprime_defect_retained": true,
+    "B_before_epsilon_N_cap": true,
+    "four_epsilon_quarters_paid": true,
+    "full_true_li_mass_times_full_actual_density_retained": true,
+    "no_hidden_density_factor_eight_K_or_lower_bound_premise": true
+  },
+  "issues": [],
+  "fresh_source_dag": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-U9FiniteMean-independent-proper-dag.json",
+    "sha256": "11ba75e15adff96fb4211c772ba0a27cf5505b18d5d81756cd962d8af1274424",
+    "candidate_resolved": 6688,
+    "baseline_union_resolved": 6687,
+    "new_project": [
+      "ImbalancedChen.CurrentChenUpsilon9FiniteMean"
+    ],
+    "new_foreign": [],
+    "unresolved": [],
+    "parser_findings": [],
+    "all_nodes_freshly_read_and_hashed": true,
+    "boundary": "Independent source-header graph only; no imported-object acceptance, compiler execution or kernel replay."
+  },
+  "owner_advisory_artifacts": [
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9FiniteMean-semantics.json",
+      "sha256": "b751717e22847c8f80097107781b87cdbe2fadbba23197c0428a52ff1116cea8",
+      "scope": "Owner source-only evidence only; not substituted for independent review or fresh source DAG."
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9FiniteMean-proper-dag.json",
+      "sha256": "9cee8736060491b39b50192374b47e05d1e5b8f45b559a4704f8839d647aaf42",
+      "scope": "Owner source-only evidence only; not substituted for independent review or fresh source DAG."
+    }
+  ],
+  "remaining_gates": [
+    "Exact target must undergo separately owned Lean elaboration and import/object checks. Source agreement does not guarantee tactic elaboration or linter acceptance.",
+    "The imported Pan source is bound to 96ee6981 after d331 real failure; reviewer performed only its source exact rebind. No runtime PASS for that dependency is assumed here.",
+    "The actual full upper density asymptotic and true-li harmonic main-mass limit remain separate.",
+    "The ordinary switched factor eight, adopted K, complete hLower and final theorem assembly remain separate."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "bytecode_writes_disabled": true,
+    "imported_object_acceptance": false,
+    "kernel_replay": false,
+    "axiom_audit": false,
+    "runtime_pass_claim": false
+  }
+}

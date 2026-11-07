@@ -1,0 +1,218 @@
+[
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.attachedUpperCoefficient",
+    "type": "\u211d \u2192 \u211d \u2192 \u211d \u2192 (\u2115 \u2192 List \u2115 \u2192 Bool) \u2192 (\u2115 \u2192 \u2115) \u2192 \u2115 \u2192 \u2115 \u2192 \u211d"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.attachedUpperCoefficient_majorant",
+    "type": "\u2200 {nu r epsilon : \u211d},\n  0 < nu \u2192\n    0 < epsilon \u2192\n      epsilon \u2264 1 \u2192\n        epsilon ^ 2 \u2264 r \u2192\n          \u2200 (retain : \u2115 \u2192 List \u2115 \u2192 Bool) (cap : \u2115 \u2192 \u2115) {N : \u2115},\n            2 \u2264 N \u2192\n              \u2191N ^ (nu * r) \u2264 \u2191(cap N) \u2192\n                \u2200 (n : \u2115),\n                  (if n.Coprime (ImbalancedChen.sieveProduct N \u2308\u2191N ^ (nu * r)\u2309\u208a) then 1 else 0) \u2264\n                    ImbalancedChen.physicalDivisorSum (ImbalancedChen.attachedUpperModuli nu r epsilon retain cap N)\n                      (ImbalancedChen.attachedUpperCoefficient nu r epsilon retain cap N) n"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.attachedUpperModuli",
+    "type": "\u211d \u2192 \u211d \u2192 \u211d \u2192 (\u2115 \u2192 List \u2115 \u2192 Bool) \u2192 (\u2115 \u2192 \u2115) \u2192 \u2115 \u2192 Finset \u2115"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.eventually_RealB_le_currentK_log_of_actual_density_distribution",
+    "type": "\u2200 {b kappa nu r : \u211d},\n  0 < b \u2192\n    b < 1 \u2192\n      0 < kappa \u2192\n        0 < nu \u2192\n          0 < r \u2192\n            nu * r < 1 \u2192\n              nu * r < (1 - kappa) * (b / (1 + b)) \u2192\n                \u2200 (epsilon : \u211d \u2192 \u211d) (retain : \u211d \u2192 \u2115 \u2192 List \u2115 \u2192 Bool) (cap : \u211d \u2192 \u2115 \u2192 \u2115),\n                  (\u2200 (delta : \u211d), 0 < delta \u2192 0 < epsilon delta \u2227 epsilon delta \u2264 1 \u2227 epsilon delta ^ 2 \u2264 r) \u2192\n                    (\u2200 (delta : \u211d), 0 < delta \u2192 \u2200\u1da0 (N : \u2115) in Filter.atTop, \u2191N ^ (nu * r) \u2264 \u2191(cap delta N)) \u2192\n                      (\u2200 (delta : \u211d),\n                          0 < delta \u2192\n                            \u2200\u1da0 (N : \u2115) in Filter.atTop,\n                              Even N \u2192\n                                ImbalancedChen.physicalDensitySum\n                                    (ImbalancedChen.attachedUpperModuli nu r (epsilon delta) (retain delta) (cap delta)\n                                      N)\n                                    (ImbalancedChen.attachedUpperCoefficient nu r (epsilon delta) (retain delta)\n                                      (cap delta) N) \u2264\n                                  (ImbalancedChen.currentK + delta) * (ImbalancedChen.singularSeries N / Real.log \u2191N)) \u2192\n                        (\u2200 (delta : \u211d),\n                            0 < delta \u2192\n                              \u2200\u1da0 (N : \u2115) in Filter.atTop,\n                                Even N \u2192\n                                  |ImbalancedChen.realPhysicalDistributionError b N\n                                        (ImbalancedChen.manuscriptHalfProductCutoff kappa N)\n                                        (ImbalancedChen.attachedUpperModuli nu r (epsilon delta) (retain delta)\n                                          (cap delta) N)\n                                        (ImbalancedChen.attachedUpperCoefficient nu r (epsilon delta) (retain delta)\n                                          (cap delta) N)| \u2264\n                                    delta * ImbalancedChen.singularNormalization N) \u2192\n                          \u2200 (tolerance : \u211d),\n                            0 < tolerance \u2192\n                              \u2200\u1da0 (N : \u2115) in Filter.atTop,\n                                Even N \u2192\n                                  \u2191(ImbalancedChen.RealB b N) \u2264\n                                    (ImbalancedChen.currentK * Real.log (1 / b) + tolerance) *\n                                      ImbalancedChen.singularNormalization N"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.eventually_attachedUpper_coprimeCorrection_eq_zero",
+    "type": "\u2200 {b kappa nu r epsilon : \u211d},\n  0 < b \u2192\n    0 < nu \u2192\n      0 \u2264 r \u2192\n        epsilon ^ 2 \u2264 r \u2192\n          nu * r < (1 - kappa) * (b / (1 + b)) \u2192\n            \u2200 (retain : \u2115 \u2192 List \u2115 \u2192 Bool) (cap : \u2115 \u2192 \u2115),\n              \u2200\u1da0 (N : \u2115) in Filter.atTop,\n                ImbalancedChen.realPhysicalCoprimeCorrection b N (ImbalancedChen.manuscriptHalfProductCutoff kappa N)\n                    (ImbalancedChen.attachedUpperModuli nu r epsilon retain cap N)\n                    (ImbalancedChen.attachedUpperCoefficient nu r epsilon retain cap N) =\n                  0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.eventually_manuscript_sieve_gate",
+    "type": "\u2200 {b kappa theta : \u211d},\n  0 < b \u2192\n    0 \u2264 theta \u2192\n      theta < (1 - kappa) * (b / (1 + b)) \u2192\n        \u2200\u1da0 (N : \u2115) in Filter.atTop,\n          0 < ImbalancedChen.manuscriptHalfProductCutoff kappa N \u2227\n            \u2191\u2308\u2191N ^ theta\u2309\u208a \u2264 ImbalancedChen.manuscriptHalfProductCutoff kappa N ^ (b / (1 + b))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget",
+    "type": "\u2203 B,\n  0 < B \u2227\n    \u2200 (nu : \u211d),\n      0 < nu \u2192\n        \u2200 (epsilon : \u211d),\n          0 < epsilon \u2192\n            epsilon < 1 / 8 \u2192\n              \u2203 N\u2080,\n                2 \u2264 N\u2080 \u2227\n                  \u2200 (N : \u2115),\n                    N\u2080 \u2264 N \u2192\n                      Even N \u2192\n                        \u2200 (cap : \u2115),\n                          \u2191N ^ (nu * epsilon ^ 2) \u2264 \u2191cap \u2192\n                            \u2200 (rough : Finset \u2115),\n                              (\u2200 d \u2208 rough, ImbalancedChen.RoughPrimeSupportedAt (\u2191N ^ (nu * epsilon ^ 2)) d) \u2192\n                                \u2200 (compiled raw : \u2115 \u2192 \u211d) (rawBound reserve : \u211d),\n                                  have w := \u2191N ^ (nu * epsilon ^ 2);\n                                  have L := \u2191N ^ (nu * epsilon);\n                                  have small := ImbalancedChen.actualSmallRosserSupport N cap w;\n                                  have density := fun c =>\n                                    ImbalancedChen.physicalDensitySum (ImbalancedChen.smallRoughModuli small rough)\n                                      (ImbalancedChen.smallRoughRho small rough c\n                                        (ImbalancedChen.actualSmallRosserMinus N cap w L)\n                                        (ImbalancedChen.actualSmallRosserPlus N cap w L));\n                                  density raw \u2264 rawBound * (ImbalancedChen.singularSeries N / Real.log \u2191N) \u2192\n                                    (ImbalancedChen.reciprocalTotientDensity rough fun d => |compiled d - raw d|) \u2264\n                                        reserve * (nu * epsilon ^ 2) / B \u2192\n                                      rawBound + reserve \u2264 ImbalancedChen.currentK \u2192\n                                        density compiled \u2264\n                                          ImbalancedChen.currentK * (ImbalancedChen.singularSeries N / Real.log \u2191N)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_difference_bound",
+    "type": "\u2203 C K,\n  0 < C \u2227\n    1 < K \u2227\n      \u2200 (epsilon : \u211d),\n        0 < epsilon \u2192\n          epsilon < 1 / 8 \u2192\n            \u2203 D\u2080,\n              2 \u2264 D\u2080 \u2227\n                \u2200 (D : \u211d),\n                  D\u2080 \u2264 D \u2192\n                    \u2200 (N cap : \u2115),\n                      Even N \u2192\n                        \u2200 (rough : Finset \u2115),\n                          (\u2200 d \u2208 rough, ImbalancedChen.RoughPrimeSupportedAt (D ^ epsilon ^ 2) d) \u2192\n                            \u2200 (compiled raw : \u2115 \u2192 \u211d),\n                              have w := D ^ epsilon ^ 2;\n                              have L := D ^ epsilon;\n                              have small := ImbalancedChen.actualSmallRosserSupport N cap w;\n                              have density := fun c =>\n                                ImbalancedChen.physicalDensitySum (ImbalancedChen.smallRoughModuli small rough)\n                                  (ImbalancedChen.smallRoughRho small rough c\n                                    (ImbalancedChen.actualSmallRosserMinus N cap w L)\n                                    (ImbalancedChen.actualSmallRosserPlus N cap w L));\n                              |density compiled - density raw| \u2264\n                                ImbalancedChen.actualSmallEulerProduct N cap w *\n                                    (1 + ImbalancedChen.actualSmallRosserDensityError C K D epsilon) *\n                                  ImbalancedChen.reciprocalTotientDensity rough fun d => |compiled d - raw d|"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_normalized_density_difference_bound",
+    "type": "\u2203 B,\n  0 < B \u2227\n    \u2200 (epsilon : \u211d),\n      0 < epsilon \u2192\n        epsilon < 1 / 8 \u2192\n          \u2203 D\u2080,\n            2 \u2264 D\u2080 \u2227\n              \u2200 (D : \u211d),\n                D\u2080 \u2264 D \u2192\n                  \u2200 (N cap : \u2115),\n                    0 < N \u2192\n                      Even N \u2192\n                        D ^ epsilon ^ 2 \u2264 \u2191cap \u2192\n                          \u2200 (rough : Finset \u2115),\n                            (\u2200 d \u2208 rough, ImbalancedChen.RoughPrimeSupportedAt (D ^ epsilon ^ 2) d) \u2192\n                              \u2200 (compiled raw : \u2115 \u2192 \u211d),\n                                have w := D ^ epsilon ^ 2;\n                                have L := D ^ epsilon;\n                                have small := ImbalancedChen.actualSmallRosserSupport N cap w;\n                                have density := fun c =>\n                                  ImbalancedChen.physicalDensitySum (ImbalancedChen.smallRoughModuli small rough)\n                                    (ImbalancedChen.smallRoughRho small rough c\n                                      (ImbalancedChen.actualSmallRosserMinus N cap w L)\n                                      (ImbalancedChen.actualSmallRosserPlus N cap w L));\n                                |density compiled - density raw| \u2264\n                                  (B / epsilon ^ 2 *\n                                      ImbalancedChen.reciprocalTotientDensity rough fun d => |compiled d - raw d|) *\n                                    (ImbalancedChen.singularSeries N / Real.log D)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_target_density_difference_bound",
+    "type": "\u2203 B,\n  0 < B \u2227\n    \u2200 (nu : \u211d),\n      0 < nu \u2192\n        \u2200 (epsilon : \u211d),\n          0 < epsilon \u2192\n            epsilon < 1 / 8 \u2192\n              \u2203 N\u2080,\n                2 \u2264 N\u2080 \u2227\n                  \u2200 (N : \u2115),\n                    N\u2080 \u2264 N \u2192\n                      Even N \u2192\n                        \u2200 (cap : \u2115),\n                          \u2191N ^ (nu * epsilon ^ 2) \u2264 \u2191cap \u2192\n                            \u2200 (rough : Finset \u2115),\n                              (\u2200 d \u2208 rough, ImbalancedChen.RoughPrimeSupportedAt (\u2191N ^ (nu * epsilon ^ 2)) d) \u2192\n                                \u2200 (compiled raw : \u2115 \u2192 \u211d),\n                                  have w := \u2191N ^ (nu * epsilon ^ 2);\n                                  have L := \u2191N ^ (nu * epsilon);\n                                  have small := ImbalancedChen.actualSmallRosserSupport N cap w;\n                                  have density := fun c =>\n                                    ImbalancedChen.physicalDensitySum (ImbalancedChen.smallRoughModuli small rough)\n                                      (ImbalancedChen.smallRoughRho small rough c\n                                        (ImbalancedChen.actualSmallRosserMinus N cap w L)\n                                        (ImbalancedChen.actualSmallRosserPlus N cap w L));\n                                  |density compiled - density raw| \u2264\n                                    (B / (nu * epsilon ^ 2) *\n                                        ImbalancedChen.reciprocalTotientDensity rough fun d => |compiled d - raw d|) *\n                                      (ImbalancedChen.singularSeries N / Real.log \u2191N)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "_private.ImbalancedChen.ActualCompilerDensityReserve.0.ImbalancedChen.abs_slopes_le_of_density_sandwich",
+    "type": "\u2200 {V E lo hi : \u211d},\n  0 \u2264 V \u2192 0 \u2264 E \u2192 V * (1 - E) \u2264 lo \u2192 lo \u2264 V \u2192 V \u2264 hi \u2192 hi \u2264 V * (1 + E) \u2192 |lo| \u2264 V * (1 + E) \u2227 |hi| \u2264 V * (1 + E)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.attachedUpperCoefficient_majorant._proof_1_1",
+    "type": "\u2200 {N : \u2115}, 2 \u2264 N \u2192 \u00ac1 < N \u2192 False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualUpperCountingInputs",
+    "name": "ImbalancedChen.eventually_manuscript_sieve_gate._proof_1_1",
+    "type": "\u2200 (N : \u2115), 1 \u2264 N \u2192 \u00ac0 < N \u2192 False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_1",
+    "type": "\u2200 {\u03b1 : Type u_2} [inst : Zero \u03b1] [inst_1 : OfNat \u03b1 2] [NeZero 2], (2 = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_2",
+    "type": "\u2200 {\u03b1 : Type u_2} [inst : Zero \u03b1] [inst_1 : OfNat \u03b1 3] [NeZero 3], (3 = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_3",
+    "type": "\u2200 {\u03b1 : Type u_2} [inst : Zero \u03b1] [inst_1 : OfNat \u03b1 4] [NeZero 4], (4 = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_4",
+    "type": "\u2200 {M\u2080 : Type u_1} [inst : Mul M\u2080] [inst_1 : Zero M\u2080] [NoZeroDivisors M\u2080] {a b : M\u2080}, a \u2260 0 \u2192 b \u2260 0 \u2192 (a * b = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_5",
+    "type": "\u2200 {M\u2080 : Type u_1} [inst : MonoidWithZero M\u2080] {a : M\u2080} [IsReduced M\u2080] (n : \u2115), a \u2260 0 \u2192 (a ^ n = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_6",
+    "type": "\u2200 {G\u2080 : Type u_3} [inst : GroupWithZero G\u2080] {a : G\u2080} (n : \u2124), a \u2260 0 \u2192 (a ^ n = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_density_budget._simp_1_7",
+    "type": "\u2200 {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] (n : \u2115), (\u2191n + 1 = 0) = False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualCompilerDensityReserve",
+    "name": "ImbalancedChen.exists_actualCompiledRho_target_density_difference_bound._proof_1_1",
+    "type": "\u2200 (Nlarge N : \u2115), 2 \u2264 N \u2192 \u00ac0 < N \u2192 False"
+  }
+]

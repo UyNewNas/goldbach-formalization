@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_ACTUAL_FIRST_DIAGNOSTIC_ONE_PRIVATE_TYPE_REBIND_PENDING_INDEPENDENT_AND_NEW_ROOT_GATE",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T23:32:20.842047+00:00",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorPairCount.lean",
+  "old_sha256": "44cdaf188f35435f8956d19c2701abbcf69101b4cfb491679761d19080f96fe7",
+  "new_sha256": "a242f14dc4d4ace3c59718b1f6a8064e781ebdd1af9c67c1db4329e0576b4b74",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3SharedFirstFactorPairCount.44cdaf188f35435f8956d19c2701abbcf69101b4cfb491679761d19080f96fe7.lean",
+  "failed_stdout": ".lake\\proof-continuation\\runs\\20261015T232741202880Z-ImbalancedChen.Part3SharedFirstFactorPairCount\\stdout.log",
+  "failed_stdout_sha256": "b13c5f5eec9bcccd569e170d63c272e0a943d1e7ebfb073347165e56209b3fdd",
+  "root_authorized_scope": "One private card_le_sum_divisible full type now specifies intended Nat filter binder; ten other complete headers and all three definitions unchanged. No all-eleven-header-byte-equality claim. Image beta, two finite-sum scope corrections, both local G Nat annotations, qualified carrier endpoint are proof changes.",
+  "edits": [
+    {
+      "old": "        have hfirst : z.1 = w.1 := congrArg Prod.fst he\n        have hquot : z.2 / p = w.2 / p := congrArg Prod.snd he",
+      "new": "        have hfirst : z.1 = w.1 := by\n          simpa only using congrArg (fun t : ℕ × ℕ ↦ t.1) he\n        have hquot : z.2 / p = w.2 / p := by\n          simpa only using congrArg (fun t : ℕ × ℕ ↦ t.2) he",
+      "occurrences": 1
+    },
+    {
+      "old": "have hneg : (∑ g ∈ Icc M K, ((g : ℝ) + 1)⁻¹ - (g : ℝ)⁻¹) =\n            -(∑ g ∈ Icc M K, (g : ℝ)⁻¹ - ((g : ℝ) + 1)⁻¹)",
+      "new": "have hneg : (∑ g ∈ Icc M K, (((g : ℝ) + 1)⁻¹ - (g : ℝ)⁻¹)) =\n            -(∑ g ∈ Icc M K, ((g : ℝ)⁻¹ - ((g : ℝ) + 1)⁻¹))",
+      "occurrences": 1
+    },
+    {
+      "old": "(fun g ↦ Y < (g : ℝ) ∧ g.Coprime p)",
+      "new": "(fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p)",
+      "occurrences": 3
+    },
+    {
+      "old": "_ ≤ ∑ g ∈ G, (T ^ 2 / p) * ((g : ℝ)⁻¹) ^ 2 + T * (g : ℝ)⁻¹ := sum_le_sum hpoint",
+      "new": "_ ≤ ∑ g ∈ G, ((T ^ 2 / p) * ((g : ℝ)⁻¹) ^ 2 + T * (g : ℝ)⁻¹) := sum_le_sum hpoint",
+      "occurrences": 1
+    },
+    {
+      "old": "  have h := card_sharedPrimitiveLargeGCDPairs_le\n    (T := 2 * d.U)",
+      "new": "  have h := ImbalancedChen.Part3.card_sharedPrimitiveLargeGCDPairs_le\n    (T := 2 * d.U)",
+      "occurrences": 1
+    }
+  ],
+  "forward_and_reverse_exact_bytes": true,
+  "original_line_endings_preserved": "LF",
+  "declaration_count": 11,
+  "definition_count": 3,
+  "changed_complete_headers": [
+    {
+      "name": "card_le_sum_divisible",
+      "old_header": "private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)\n    (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    (sharedPrimitiveLargeGCDPairs N p Y).card ≤\n      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g ↦ Y < (g : ℝ) ∧ g.Coprime p),\n        (divisibleCongruentPairs (Nat.floor T) p g).card",
+      "new_header": "private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)\n    (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    (sharedPrimitiveLargeGCDPairs N p Y).card ≤\n      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p),\n        (divisibleCongruentPairs (Nat.floor T) p g).card"
+    }
+  ],
+  "all_complete_declarations": [
+    {
+      "name": "sharedPrimitiveLargeGCDPairs",
+      "complete_header": "def sharedPrimitiveLargeGCDPairs (N : Finset ℕ) (p : ℕ) (Y : ℝ) :\n    Finset (ℕ × ℕ)",
+      "kind": "def",
+      "complete_definition": "def sharedPrimitiveLargeGCDPairs (N : Finset ℕ) (p : ℕ) (Y : ℝ) :\n    Finset (ℕ × ℕ) :=\n  (N ×ˢ N).filter (fun z ↦ z.1.Coprime p ∧ z.2.Coprime p ∧\n    Nat.ModEq p z.1 z.2 ∧ Y < (z.1.gcd z.2 : ℝ))"
+    },
+    {
+      "name": "congruentPairs",
+      "complete_header": "private def congruentPairs (K p : ℕ) : Finset (ℕ × ℕ)",
+      "kind": "def",
+      "complete_definition": "private def congruentPairs (K p : ℕ) : Finset (ℕ × ℕ) :=\n  (Ioc 0 K ×ˢ Ioc 0 K).filter (fun z ↦ Nat.ModEq p z.1 z.2)"
+    },
+    {
+      "name": "divisibleCongruentPairs",
+      "complete_header": "private def divisibleCongruentPairs (K p g : ℕ) : Finset (ℕ × ℕ)",
+      "kind": "def",
+      "complete_definition": "private def divisibleCongruentPairs (K p g : ℕ) : Finset (ℕ × ℕ) :=\n  (Ioc 0 K ×ˢ Ioc 0 K).filter (fun z ↦\n    g ∣ z.1 ∧ g ∣ z.2 ∧ Nat.ModEq p z.1 z.2)"
+    },
+    {
+      "name": "card_congruentPairs_le",
+      "complete_header": "private theorem card_congruentPairs_le (K p : ℕ) :\n    (congruentPairs K p).card ≤ K * (K / p + 1)",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "card_divisibleCongruentPairs_le",
+      "complete_header": "private theorem card_divisibleCongruentPairs_le (K p g : ℕ)\n    (hg : 0 < g) (hgp : g.Coprime p) :\n    (divisibleCongruentPairs K p g).card ≤ (K / g) * ((K / g) / p + 1)",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_sq_Icc_le",
+      "complete_header": "private theorem sum_inv_sq_Icc_le (M K : ℕ) (hM : 0 < M) :\n    (∑ g ∈ Icc M K, ((g : ℝ)⁻¹) ^ 2) ≤ 2 / M",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_sq_large_le",
+      "complete_header": "private theorem sum_inv_sq_large_le (T Y : ℝ) (hY : 1 ≤ Y)\n    (G : Finset ℕ) (hG : ∀ g ∈ G, g ≤ Nat.floor T ∧ Y < (g : ℝ)) :\n    (∑ g ∈ G, ((g : ℝ)⁻¹) ^ 2) ≤ 2 / Y",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "sum_inv_le_log",
+      "complete_header": "private theorem sum_inv_le_log {T : ℝ} (hT : 1 ≤ T)\n    (G : Finset ℕ) (hG : G ⊆ Ioc 0 (Nat.floor T)) :\n    (∑ g ∈ G, (g : ℝ)⁻¹) ≤ 1 + Real.log T",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "card_le_sum_divisible",
+      "complete_header": "private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)\n    (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    (sharedPrimitiveLargeGCDPairs N p Y).card ≤\n      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p),\n        (divisibleCongruentPairs (Nat.floor T) p g).card",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "card_sharedPrimitiveLargeGCDPairs_le",
+      "complete_header": "theorem card_sharedPrimitiveLargeGCDPairs_le\n    {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) {p : ℕ} (hp : 0 < p)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 (Nat.floor T)) :\n    ((sharedPrimitiveLargeGCDPairs N p Y).card : ℝ) ≤\n      2 * T ^ 2 / ((p : ℝ) * Y) + T * (1 + Real.log T)",
+      "kind": "theorem",
+      "complete_definition": null
+    },
+    {
+      "name": "MediumAtom.card_sharedPrimitiveLargeGCDPairs_le",
+      "complete_header": "theorem MediumAtom.card_sharedPrimitiveLargeGCDPairs_le\n    {d : MediumAtom} (hU : 1 ≤ d.U) {Y : ℝ} (hY : 1 ≤ Y)\n    {p : ℕ} (hp : 0 < p) :\n    ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\n      8 * d.U ^ 2 / ((p : ℝ) * Y) + 2 * d.U * (1 + Real.log (2 * d.U))",
+      "kind": "theorem",
+      "complete_definition": null
+    }
+  ],
+  "other_ten_complete_headers_unchanged": true,
+  "all_three_complete_definitions_unchanged": true,
+  "same_direct_imports": true,
+  "new_foreign_imports": 0,
+  "mathematics_preserved": [
+    "Original ordered primitive-pair set, both unit gates, actual shared congruence and gcd>Y",
+    "Composite positive p, actual gcd coprime cancellation, full diagonal",
+    "Strict floorY+1 telescope, coefficient2/Y and T(1+logT)",
+    "Original-alpha carrier T=2U, constants8/2, no W/payment"
+  ],
+  "not_run": [
+    "Lean",
+    "lake",
+    "compiler",
+    "bootstrap",
+    "runtime audit"
+  ],
+  "acceptance_claim": false
+}

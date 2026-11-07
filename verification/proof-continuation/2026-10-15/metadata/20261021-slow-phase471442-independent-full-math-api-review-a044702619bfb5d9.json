@@ -1,0 +1,1128 @@
+{
+  "status": "INDEPENDENT_COMPLETE_MATHEMATICAL_API_REVIEW_PASS_ONE_UNIFORM_SLOW_PHASE_LEMMA_WITH_APPLICATION_CLARIFICATIONS_NO_LEAN_NO_COMPILER_HOLD",
+  "created_utc": "2026-10-21T02:37:46.446537+00:00",
+  "reviewer": "/root/spectral_complement_oct21",
+  "independence": "Reviewer did not author the slow-phase proposal; separate Finite source remains frozen and unchanged. Only this one ignored review is written.",
+  "proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-slow-phase-uniform-Schwartz-derivative-one-lemma-proposal.json",
+    "sha256": "4714424708611af201a844cead249aa2dc90438395eca36eb795822783e9f31b",
+    "bytes": 128559
+  },
+  "decision": {
+    "one_complete_public_type_mathematically_true": true,
+    "native_API_route_has_no_identified_blocking_gap": true,
+    "ready_for_root_to_consider_one_source_authoring_scope": true,
+    "not_a_compilation_or_ownership_acceptance": true,
+    "blocking_findings": [],
+    "application_clarifications_required_before_using_as_joint_Mellin_estimate": true
+  },
+  "one_complete_literal_definition_reviewed": "def CommonSmoothCutoff.smoothReciprocityProfile (Z rho u : ℝ) : ℂ :=\n  (CommonSmoothCutoff.poissonSmoothLowPass (u / Z) : ℂ) *\n    (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) u *\n      fourier (1 : ℤ) ((rho * u : ℝ) : UnitAddCircle)\n",
+  "one_complete_literal_public_type_reviewed": "theorem CommonSmoothCutoff.smoothReciprocityProfile_iteratedDeriv_uniform\n    (r J : ℕ) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z rho : ℝ, 1 ≤ Z →\n        ∀ u : ℝ,\n          (1 + |u|) ^ r *\n              ‖iteratedDeriv J\n                (CommonSmoothCutoff.smoothReciprocityProfile Z rho) u‖ ≤\n            C * (1 + |rho|) ^ J\n",
+  "quantifier_and_object_review": {
+    "context": "namespace ImbalancedChen.Part3; noncomputable section. CommonSmoothCutoff prefix is the real project namespace, fourier is the actual AddCircle character, FourierTransform notation is the actual bundled Schwartz transform evaluated at u. No replacement by a norm-valued profile.",
+    "orders": "r,J range over every natural, including0. C is chosen after r,J and before all Z,rho,u; only fixed psi, r,J and fixed normalization enter C.",
+    "domain": "Z,rho are arbitrary real binders; the implication 1<=Z yields positive Z uniformly with no order-dependent threshold. rho has no sign, integrality, upper, or lower constraint. u ranges over all real numbers, not just the low-pass support.",
+    "public_type_unchanged": "The reviewed literal type is suitable as stated. No hypotheses on unknown transforms, supplier bounds, arithmetic roots, or asymptotic closure are needed.",
+    "small_Z": "Z>=1 is essential for J>=1. No modification of Smooth/Squared all-Z>0 statements follows from this analytic specialization.",
+    "rho_cost": "The exact allowed cost is C(r,J)*(1+|rho|)^J. It cannot be absorbed into C, and it cannot be assigned a universal derivative count5."
+  },
+  "exact_phase_and_row_review": {
+    "character_formula": "For T=1, fourier 1 ((rho*u):UnitAddCircle)=Complex.exp(2*pi*I*(rho*u)), with the positive sign. fourier h (a/(N1*L)) has exponent2*pi*I*h*a/(N1*L). Both formulas are the actual native fourier_coe_apply, not an analogy between differently normalized transforms.",
+    "algebra": "For N1,V,L>0, rho=a/(N1*V), u=(V/L)*h give rho*u=(a*h)/(N1*L) by ordinary field algebra and V!=0. Therefore the character equality is exact for signed a and signed integer h, including0, and arbitrary physical p. No prime assumption is used.",
+    "Fourier_sign": "F=Fourier(psi) remains the original negative Fourier-kernel transform; actual owned scaledDyadicCutoff_fourier and native original extraction use Real.fourierChar (-(x*w)). F is neither conjugated nor replaced by its norm.",
+    "literal_h_nonzero_row": "At h!=0, let t=V/L, R be the original first root phase fourier h(-a*z/A), and Delta be the original final difference phase fourier h(a*f*t_inverse/(n1*w0)). Multiplying the original Poisson identity by chi(u/Z) gives exactly (t • profile Z rho u)*R*Delta, after commutative complex factor association. Here t_inverse is the original integer inverse label, not the real t=V/L. Original Re is applied after the same signed finite frequency sum, and original gamma/beta/masks remain outside.",
+    "zero_frequency": "The profile at u=0 need not vanish, so the h=0 branch of poissonNonzeroFrequency must remain explicitly0. The new theorem is a bound on one actual factor, not an identity removing that branch.",
+    "parameter_instantiation": "Actual MediumAdmissible has (residue.natAbs:Real)<=X^(1+kappa). Actual N1 carrier membership implies N1>=U>0, V>=1, and scale is literallyU*V. Thus |a|/(N1*V)<=X^(1+kappa)/X=X^kappa for any real kappa and X>0. If X>1 and eta>0 then Z=X^eta>=1. No merely one-sided signed bound a<=... is substituted.",
+    "resulting_cost": "C(r,J)*(1+X^kappa)^J. For X>=1 this is at most C(r,J)*2^J*X^(J*max(kappa,0)); only for kappa>=0 may max(kappa,0) be replaced by kappa."
+  },
+  "independent_twelve_step_budget_review": [
+    {
+      "step": 1,
+      "result": "PASS",
+      "complete_argument": "With psi(x)=(dyadicBump x:Complex), chi_Z(u)=(poissonSmoothLowPass(u/Z):Complex)=psi(3/2+u/(2Z))=psi(3/2+lambda*u), lambda=(2Z)^(-1). The complex cast is on the whole real cutoff, exactly as the proposed definition. dyadicCutoffSchwartz_apply and dyadicCutoff/poissonSmoothLowPass definitions supply this identity."
+    },
+    {
+      "step": 2,
+      "result": "PASS",
+      "complete_argument": "Let g(x)=psi(3/2+x). g is C-infinity. Actual iteratedDeriv_comp_const_smul specialized to Real->Complex gives D^a(g(lambda*u))=lambda^a • D^a g(lambda*u). Actual iteratedDeriv_comp_const_add identifies D^a g at lambda*u with D^a psi(3/2+lambda*u). No product/chain derivative is omitted. Z>=1 implies0<lambda<=1/2<=1."
+    },
+    {
+      "step": 3,
+      "result": "PASS",
+      "complete_argument": "For a<=J, native le_seminorm Real 0 a psi (or its scalar-domain prime version) gives norm(D^a psi(x))<=seminorm Real 0 a psi because |x|^0=1. Set A_J=1+sum_{a in range(J+1)} seminorm Real 0 a psi. All seminorms are nonnegative, so A_J>0 and each term<=A_J. Hence norm(D^a chi_Z(u))<=A_J*lambda^a<=A_J. Writing lambda^a, or ((2*Z)^a)^(-1), avoids any ambiguous negative natural exponent in eventual Lean code."
+    },
+    {
+      "step": 4,
+      "result": "PASS",
+      "complete_argument": "F is the actual SchwartzMap Fourier transform of the fixed psi. For b<=J, one_add_le_sup_seminorm_apply with m=(r,J),k=r,n=b gives (1+|u|)^r norm(D^b F(u))<=2^r*(Iic(r,J)).sup(seminorm Real m1 m2) F after native norm_iteratedFDeriv_eq_norm_iteratedDeriv and Real.norm_eq_abs. Taking B_(r,J)=1 plus this right side is positive and independent of Z,rho,u. The Iic is a finite rectangle in the product order, so b<=J is the correct condition."
+    },
+    {
+      "step": 5,
+      "result": "PASS",
+      "complete_argument": "Actual hasDerivAt_fourier at period1/index1 composed with u->rho*u gives D E_rho=(2*pi*I*rho)*E_rho. Real-chain derivative scalar action must be converted faithfully to the same complex product. Smoothness follows from actual Complex.contDiff_exp and the real-to-complex continuous linear map plus scalar multiplication. Induction using iteratedDeriv_succ and constant multiplication yields D^c E_rho=(2*pi*I*rho)^c*E_rho for every c."
+    },
+    {
+      "step": 6,
+      "result": "PASS",
+      "complete_argument": "fourier_apply is an actual Circle-valued exponential character followed by coercion, and native Circle.norm_coe gives norm(E)=1. norm_mul/pow and pi>0 give norm(D^c E)=(2*pi)^c*|rho|^c exactly. rho=0,c=0 is valid because the natural power0 is1, so no division by rho or nonzero assumption is introduced."
+    },
+    {
+      "step": 7,
+      "result": "PASS",
+      "complete_argument": "The proposed literal association is (chi_Z*F)*E. Native iteratedDeriv_mul first gives i in range(J+1), coefficient choose J i, derivative i of chi_Z*F and derivative J-i of E. A second application at orderi gives a in range(i+1), coefficient choose i a and derivatives a of chi_Z and i-a of F. a<=i<=J ensures a+(i-a)+(J-i)=J, including boundary terms0. Native Complex normed Real algebra satisfies the generic theorem hypotheses. The nat coefficients are cast into Complex in the identity, then their nonnegative real norms are the stated choose coefficients."
+    },
+    {
+      "step": 8,
+      "result": "PASS",
+      "complete_argument": "Set b=i-a,c=J-i. The weighted norm of a nested term is bounded by choose(J,i)*choose(i,a)*A_J*B_(r,J)*lambda^a*(2*pi)^c*|rho|^c. The whole factor (1+|u|)^r is allocated to D^b F. No estimate |u|<=2Z is used and no Z^r is spent. All real bounds are nonnegative, so multiplication and the finite norm triangle inequality preserve directions."
+    },
+    {
+      "step": 9,
+      "result": "PASS",
+      "complete_argument": "For c<=J, |rho|^c<=(1+|rho|)^c<=(1+|rho|)^J because |rho|>=0 and1+|rho|>=1. lambda^a<=1. Let T_J=sum_{i in range(J+1)} sum_{a in range(i+1)} (choose J i:Real)*(choose i a:Real)*(2*pi)^(J-i). T_J>=0 and is finite. The total is<=A_J*B_(r,J)*T_J*(1+|rho|)^J<=(1+A_J*B_(r,J)*T_J)*(1+|rho|)^J. This C>0 covers J=0 and all r. Optional binomial identity T_J=(2+2*pi)^J is true but unnecessary and should not create an extra implementation obligation."
+    },
+    {
+      "step": 10,
+      "result": "PASS_OPTIONAL_BUNDLING_ONLY",
+      "complete_argument": "All factors are smooth. The exact raw dyadicBump has center3/2 and outer radius1. Therefore chi(u/Z)=0 for |u|>=2Z when Z>0, giving tsupport(profile)<=Icc(-2Z,2Z) by continuity/closure. This sharp statement uses dyadicBump.tsupport_eq, not only the looser existing dyadicCutoff_tsupport_subset<=Icc(1/2,3). HasCompactSupport.toSchwartzMap is a real native constructor requiring an actual support and smoothness proof. Alternatively all-(r,J) bounds fill smooth/decay fields via norm derivative equality, and seminorm_le_bound prime transfers |u|^r<= (1+|u|)^r. Neither bundling is necessary for the ONE public derivative theorem."
+    },
+    {
+      "step": 11,
+      "result": "PASS_IMPLEMENTATION_ORDER",
+      "complete_argument": "First prove literal cutoff identity and C-infinity for cutoff, fixed F and phase. Then exact phase derivatives and uniform cutoff/fixed Fourier estimates. Then apply nested Leibniz with finite degree arithmetic and weighted triangle inequality; finally construct the explicit finite C and prove public type. All intermediate interfaces must be actual private proofs. No general Fourier transform, Schwartz infrastructure, or conditional growth operator must be rebuilt or assumed."
+    },
+    {
+      "step": 12,
+      "result": "PASS_NO_HIDDEN_COST",
+      "complete_argument": "Only cutoff derivatives paylambda^a=(2Z)^(-a); only fixed F derivatives are paid by fixed Schwartz seminorms; only phase derivatives pay(2*pi)^c|rho|^c withc<=J. No roots/moduli/gamma/beta/outer moments are summed here, and no prime gate or arithmetic dependency enters C. This leaf has an actual analytic proof, not a supplier premise."
+    }
+  ],
+  "Euler_joint_and_future_cost_review": {
+    "u_Euler": "For every natural K, (u*d/du)^K=sum_{j=0}^K S2(K,j)u^j D^j. Smoothness suffices; boundary K=0 uses S2(0,0)=1. Apply the public theorem at orders(r+j,j), bound |u|^j by(1+|u|)^j, then (1+|rho|)^j<=(1+|rho|)^K. A positive C_E(r,K)=1+sum_j S2(K,j)*C(r+j,j) works. This is a genuine mathematical consequence, not an already compiled Euler API or an independent supplier.",
+    "fixed_Z_V_cancellation": "Holding a,N1,L,h and Z fixed, u=Vh/L, rho=a/(N1V) gives normalized V chain operator E_u-E_rho on functions of(u,rho). Its action on exp(2*pi*I*rho*u) is0 exactly. Every higher application also annihilates the same phase. The profile as a whole is not constant: its Fourier and cutoff factors still vary.",
+    "required_application_clarification": "When the actual prescribed Z=(U*V)^eta also varies with V, with U,a,N1,L,h,eta fixed, the full profile chain operator is E_u-E_rho+eta*E_Z. If the real prefactor t=V/L is included, E_V[t*profile]=t*(1+E_u-E_rho+eta*E_Z)profile. This additional eta*E_Z and the prefactor1 must be retained in any future physical joint derivative theorem. They do not affect annihilation of the slow exponential because E_Z of that exponential is0. The proposal correctly restricts its displayed E_u-E_rho statement to a function of(u,rho), but its future actual application should state this extension explicitly.",
+    "other_partial_directions": "With a,V,L,h,Z fixed, E_N1=-E_rho on the profile. With a,V,N1,h,Z fixed, E_L=-E_u, and the t prefactor additionally contributes-1. If Z or another physical parameter is coupled in a different chosen chart, add its chain component. Arithmetic root/inverse labels are not silently differentiated.",
+    "Z_derivatives": "Put y=u/Z. E_Z=-y D_y on chi(y). Repeated EulerZ derivatives are finite fixed combinations y^j chi^(j)(y), with |y|<=2 on their support. Thus no positive Z power is forced. Ordinary Z derivatives have an additional factorZ^(-k), harmless onZ>=1. The bound still needs a genuine future mixed-family proof; the current public theorem contains no Z derivative.",
+    "rho_derivatives": "D_rho^k E=(2*pi*I*u)^k E. Powers|u|^k are paid by increasing fixed Fourier Schwartz weight, while Euler rho derivatives also contain rho powers up to their order. Once mixed u,rho derivatives are chosen, their precise total rho degree must be computed; this one-variable theorem alone does not certify the total.",
+    "Mellin_L1": "The number of required mixed derivatives depends on the actual positive-variable localization, number of variables, inversion and integration-by-parts scheme. Neither a Mellin identity nor its L1 cost follows solely from a pointwise univariate seminorm estimate. No derivative count5, X^(5*kappa) budget, or free joint cutoff separation is accepted."
+  },
+  "counterexample_checks": {
+    "all_positive_Z": "For r=0,J=1,rho=0 choose y0 with chi_prime(y0)!=0 by nonconstancy of the fixed cutoff. At u=Z*y0, derivative=(1/Z)*chi_prime(y0)*F(Z*y0)+chi(y0)*F_prime(Z*y0). F(0) is a positive real complex value: its real integral is positive because the fixed real nonnegative bump is1 on[1,2]; imaginary part is0. Thus asZ->0+ the first term is unbounded in norm while the second remains bounded. This is a sound mathematical nonuniformity argument, but not an extra proved source declaration. In Lean, say F(0).re>0 and F(0).im=0, rather than writing an order on Complex.",
+    "rho_independent": "At u=0, chi=1 and E=1, and the J=1 derivative is F_prime(0)+(2*pi*I*rho)*F(0), with nonzero F(0). It cannot remain uniformly bounded as real rho tends to either infinity. For higher J the leading polynomial coefficient inrho is(2*pi*I)^J F(0), so derivative-order dependence is intrinsic.",
+    "signed_a": "Only the actual natAbs residue bound supports |rho|<=X^kappa. Merely a<=X^(1+kappa) with signed a would fail for unbounded negative a. Actual source is correct, so no extra arithmetic assumption is needed."
+  },
+  "API_implementation_notes": {
+    "smooth_notation": "Native ContDiff order is WithTop NatInfinity (WithTop ENat in displayed source), and SchwartzMap.smooth n takes n:NatInfinity then coerces. Use open scoped ContDiff or explicit correct type annotations where needed; no theorem type change is implied.",
+    "chain_shift_order": "Use translated psi as g, first iteratedDeriv_comp_const_smul on g, then iteratedDeriv_comp_const_add on psi; both actual native signatures are included in this review source spans. Avoid treating one as a derivative-chain assumption.",
+    "product_order": "Apply iteratedDeriv_mul twice using the literal association to preserve native range(J+1), range(i+1) coefficients. Reindexing to a three-dimensional multinomial carrier is unnecessary.",
+    "deriv_phase": "Native hasDerivAt_fourier T=1,index1 plus real chain multiplication yields the positive coefficient; native Complex.contDiff_exp handles real scalar restriction. Constant derivative multiplication can use actual iteratedDeriv_const_mul_field or elementary deriv_const_mul with differentiability.",
+    "Schwartz_native_transform": "The pinned native SchwartzMap.instFourierTransform really maps the fixed psi to another SchwartzMap, with fourier_coe=rfl to function Fourier. No transform-membership assumption is required.",
+    "growth_operator": "Actual SchwartzMap.smulLeftCLM has an if HasTemperateGrowth branch else0. The explicit complex function proof avoids this conditional operator entirely; do not exploit its zero default or assume a phase growth wrapper.",
+    "import_availability": "Actual project CommonPoisson imports native PoissonSummation, which publicly imports Fourier.AddCircle and SchwartzSpace.Fourier. AddCircle publicly imports ExpDeriv, which publicly imports IteratedDeriv.Lemmas. Therefore the inspected derivative/phase/Schwartz infrastructure is available in the existing common-Poisson ancestry; authoring must still use an explicitly authorized import and later actual compile gate.",
+    "new_theorem_needed": "No missing external theorem blocks this one-dimensional family bound. Remaining private algebra/calculus inequalities are routine ordinary consequences of the inspected APIs, and must be proved, not added as parameters."
+  },
+  "actual_source_and_complete_type_evidence": [
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+      "bytes": 28093,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2021 Heather Macbeth. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Heather Macbeth, David Loeffler\n-/\n",
+          "normalized_utf8_sha256": "09986ad4e6ea0df3186b1e38f586a7645dfcec0c0b4ac9e64607a5e10a3dd741",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 117,
+          "last_line": 143,
+          "actual_complete_source_text_read": "open AddCircle\n\nsection Monomials\n\n/-- The family of exponential monomials `fun x => exp (2 π i n x / T)`, parametrized by `n : ℤ` and\nconsidered as bundled continuous maps from `ℝ / ℤ • T` to `ℂ`. -/\ndef fourier (n : ℤ) : C(AddCircle T, ℂ) where\n  toFun x := toCircle (n • x :)\n  continuous_toFun := continuous_induced_dom.comp <| continuous_toCircle.comp <| continuous_zsmul _\n\n@[simp]\ntheorem fourier_apply {n : ℤ} {x : AddCircle T} : fourier n x = toCircle (n • x :) :=\n  rfl\n\n-- simp normal form is `fourier_coe_apply'`\ntheorem fourier_coe_apply {n : ℤ} {x : ℝ} :\n    fourier n (x : AddCircle T) = Complex.exp (2 * π * Complex.I * n * x / T) := by\n  rw [fourier_apply, ← QuotientAddGroup.mk_zsmul, toCircle, Function.Periodic.lift_coe,\n    Circle.coe_exp, Complex.ofReal_mul, Complex.ofReal_div, Complex.ofReal_mul, zsmul_eq_mul,\n    Complex.ofReal_mul, Complex.ofReal_intCast]\n  norm_num\n  congr 1; ring\n\n@[simp]\ntheorem fourier_coe_apply' {n : ℤ} {x : ℝ} :\n    toCircle (n • (x : AddCircle T) :) = Complex.exp (2 * π * Complex.I * n * x / T) := by\n  rw [← fourier_apply]; exact fourier_coe_apply\n",
+          "normalized_utf8_sha256": "2d132e8bc797c224397305ebc430529d995c233f90d03db3fa5fbdd333cc5e45",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 525,
+          "last_line": 546,
+          "actual_complete_source_text_read": "section deriv\n\nopen Complex intervalIntegral\n\nopen scoped Interval\n\nvariable (T)\n\ntheorem hasDerivAt_fourier (n : ℤ) (x : ℝ) :\n    HasDerivAt (fun y : ℝ => fourier n (y : AddCircle T))\n      (2 * π * I * n / T * fourier n (x : AddCircle T)) x := by\n  simp_rw [fourier_coe_apply]\n  refine (?_ : HasDerivAt (fun y => exp (2 * π * I * n * y / T)) _ _).comp_ofReal\n  rw [(fun α β => by ring : ∀ α β : ℂ, α * exp β = exp β * α)]\n  refine (hasDerivAt_exp _).comp (x : ℂ) ?_\n  convert! hasDerivAt_mul_const (2 * ↑π * I * ↑n / T) using 1\n  ext1 y; ring\n\ntheorem hasDerivAt_fourier_neg (n : ℤ) (x : ℝ) :\n    HasDerivAt (fun y : ℝ => fourier (-n) (y : AddCircle T))\n      (-2 * π * I * n / T * fourier (-n) (x : AddCircle T)) x := by\n  simpa using hasDerivAt_fourier T (-n) x\n",
+          "normalized_utf8_sha256": "b495f7c17081feadceb9e9a318fc32738092b6de63555d1746803f0e415beb81",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Complex\\Circle.lean",
+      "sha256": "d8fdd76a13827e30a64d6642627c77b04bfad6569c295feb64330bba69449b54",
+      "bytes": 10406,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2021 Heather Macbeth. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Heather Macbeth\n-/\n",
+          "normalized_utf8_sha256": "803bd0769c58d0167a4a31a4f4061193de589495182904bc0bf4e6e6ae676c46",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 53,
+          "last_line": 70,
+          "actual_complete_source_text_read": "namespace Circle\nvariable {x y : Circle}\n\ninstance instCoeOut : CoeOut Circle ℂ := subtypeCoe\n\ninstance instCommGroup : CommGroup Circle := inferInstanceAs <| CommGroup (sphere _ _)\ninstance : HasDistribNeg Circle := inferInstanceAs <| HasDistribNeg (sphere _ _)\ninstance : ContinuousNeg Circle := inferInstanceAs <| ContinuousNeg (sphere _ _)\ninstance instMetricSpace : MetricSpace Circle := inferInstanceAs <| MetricSpace (sphere _ _)\n\n@[ext] lemma ext : (x : ℂ) = y → x = y := Subtype.ext\n\nlemma coe_injective : Injective ((↑) : Circle → ℂ) := fun _ _ ↦ ext\n\n-- Not simp because `SetLike.coe_eq_coe` already proves it\nlemma coe_inj : (x : ℂ) = y ↔ x = y := coe_injective.eq_iff\n\nlemma norm_coe (z : Circle) : ‖(z : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.1 z.2\n",
+          "normalized_utf8_sha256": "0d06ac55bcfbc68ee4fde15f01a6b52d63e5a462a89068dbb0c6aced0dfb56a9",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\ExpDeriv.lean",
+      "sha256": "7678c4712458f4129eb9b29ea7eb332467501cc8a6688547d1ed1b25f8849722",
+      "bytes": 13994,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2018 Chris Hughes. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Chris Hughes, Abhimanyu Pallavi Sudhir, Jean Lo, Calle Sönne\n-/\n",
+          "normalized_utf8_sha256": "eeb5e395c5981d9f5b5998ff20be28a271f04aa86895b07858612809c6739082",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 83,
+          "last_line": 115,
+          "actual_complete_source_text_read": "namespace Complex\n\nvariable {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedAlgebra 𝕜 ℂ]\n\n/-- The complex exponential is everywhere differentiable, with the derivative `exp x`. -/\ntheorem hasDerivAt_exp (x : ℂ) : HasDerivAt exp (exp x) x := by\n  rw [hasDerivAt_iff_isLittleO_nhds_zero]\n  have : (1 : ℕ) < 2 := by simp\n  refine (IsBigO.of_bound ‖exp x‖ ?_).trans_isLittleO (isLittleO_pow_id this)\n  filter_upwards [Metric.ball_mem_nhds (0 : ℂ) zero_lt_one]\n  simp only [Metric.mem_ball, dist_zero_right, norm_pow]\n  exact fun z hz => exp_bound_sq x z hz.le\n\n@[simp]\ntheorem differentiable_exp : Differentiable 𝕜 exp := fun x =>\n  (hasDerivAt_exp x).differentiableAt.restrictScalars 𝕜\n\n@[simp]\ntheorem differentiableAt_exp {x : ℂ} : DifferentiableAt 𝕜 exp x :=\n  differentiable_exp x\n\n@[simp]\ntheorem deriv_exp : deriv exp = exp :=\n  funext fun x => (hasDerivAt_exp x).deriv\n\n@[simp]\ntheorem iter_deriv_exp : ∀ n : ℕ, deriv^[n] exp = exp\n  | 0 => rfl\n  | n + 1 => by rw [iterate_succ_apply, deriv_exp, iter_deriv_exp n]\n\n@[fun_prop]\ntheorem contDiff_exp {n : WithTop ℕ∞} : ContDiff 𝕜 n exp :=\n  analyticOnNhd_cexp.restrictScalars.contDiff\n",
+          "normalized_utf8_sha256": "601de16bd46a7192707f59b4426638e4bfbd0ee92a165e6b9de4bf680f437f6a",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 186,
+          "last_line": 188,
+          "actual_complete_source_text_read": "@[fun_prop]\ntheorem ContDiff.cexp {n} (h : ContDiff 𝕜 n f) : ContDiff 𝕜 n fun x => Complex.exp (f x) :=\n  Complex.contDiff_exp.comp h\n",
+          "normalized_utf8_sha256": "d59faa98102d66c131e3a9c86f25cfa990746f8f98e43115a957ea674434ec2c",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\IteratedDeriv\\Lemmas.lean",
+      "sha256": "2938694d3f8f120a8c47d905efe4f8ab06579a3235d1a5a7d5a026c76e3bb797",
+      "bytes": 24303,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2023 Chris Birkbeck. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Chris Birkbeck, Ruben Van de Velde\n-/\n",
+          "normalized_utf8_sha256": "6968ceef3780f345cfef6baad78c2610b071b886f1002d0172e27476ad5f0d06",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 23,
+          "last_line": 39,
+          "actual_complete_source_text_read": "variable\n  {𝕜 : Type*} [NontriviallyNormedField 𝕜]\n  {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]\n  {n : ℕ} {x : 𝕜} {s : Set 𝕜} (hx : x ∈ s) (h : UniqueDiffOn 𝕜 s) {f g : 𝕜 → F}\n  -- For maximum generality, results about `smul` involve a second type besides `𝕜`,\n  -- with varying hypotheses.\n  -- * `R`: general type.\n  {R : Type*} [DistribSMul R F] [SMulCommClass 𝕜 R F] [ContinuousConstSMul R F]\n  -- * `𝕝`: division semiring. (Addition in `𝕝` is not used, so the results would work with a\n  -- `GroupWithZero` if we had a `DistribSMulWithZero` typeclass.)\n  {𝕝 : Type*} [DivisionSemiring 𝕝] [Module 𝕝 F] [SMulCommClass 𝕜 𝕝 F] [ContinuousConstSMul 𝕝 F]\n  -- * `𝔸`: normed `𝕜`-algebra.\n  {𝔸 : Type*} [NormedRing 𝔸] [NormedAlgebra 𝕜 𝔸] [Module 𝔸 F] [IsBoundedSMul 𝔸 F]\n    [IsScalarTower 𝕜 𝔸 F]\n  -- * `𝕜'`: normed `𝕜`-division algebra.\n  {𝕜' : Type*} [NormedDivisionRing 𝕜'] [NormedAlgebra 𝕜 𝕜']\n    [Module 𝕜' F] [SMulCommClass 𝕜 𝕜' F] [ContinuousSMul 𝕜' F]\n",
+          "normalized_utf8_sha256": "7753d70d7738e6dfb06d1bf935bbd7ec5a56123be17babc2812620cd3dd4aeb6",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 368,
+          "last_line": 399,
+          "actual_complete_source_text_read": "theorem iteratedDeriv_const_mul {n : ℕ} {f : 𝕜 → 𝔸} (c : 𝔸) (hf : ContDiffAt 𝕜 n f x) :\n    iteratedDeriv n (c * f ·) x = c * iteratedDeriv n f x := by\n  simpa only [iteratedDerivWithin_univ] using\n    iteratedDerivWithin_const_mul (Set.mem_univ x) uniqueDiffOn_univ c hf\n\n/-- A variant of `iteratedDeriv_const_mul` without differentiability assumption when\nthe multiplication is in a division ring. -/\n@[simp]\ntheorem iteratedDeriv_const_mul_field {n : ℕ} (c : 𝕜') (f : 𝕜 → 𝕜') :\n    iteratedDeriv n (c * f ·) x = c * iteratedDeriv n f x := by\n  simpa only [iteratedDerivWithin_univ] using\n    iteratedDerivWithin_const_mul_field (s := .univ) c f\n\n/-- A variant of `iteratedDeriv_mul_const` without differentiability assumption when\nthe multiplication is in a division ring. -/\n@[simp]\ntheorem iteratedDeriv_mul_const_field {n : ℕ} (f : 𝕜 → 𝕜') (c : 𝕜') :\n    iteratedDeriv n (f · * c) x = iteratedDeriv n f x * c := by\n  simpa only [iteratedDerivWithin_univ] using\n    iteratedDerivWithin_mul_const_field (s := .univ) f c\n\n@[simp]\ntheorem iteratedDeriv_div_const {n : ℕ} (f : 𝕜 → 𝕜') (c : 𝕜') :\n    iteratedDeriv n (f · / c) x = iteratedDeriv n f x / c := by\n  simp [div_eq_mul_inv]\n\ntheorem iteratedDeriv_comp_const_smul {n : ℕ} {f : 𝕜 → F} (h : ContDiff 𝕜 n f) (c : 𝕜) :\n    iteratedDeriv n (fun x => f (c * x)) = fun x => c ^ n • iteratedDeriv n f (c * x) := by\n  funext x\n  simpa only [iteratedDerivWithin_univ] using\n    iteratedDerivWithin_comp_const_smul (Set.mem_univ x) uniqueDiffOn_univ (contDiffOn_univ.mpr h)\n      c (Set.mapsTo_univ _ _)\n",
+          "normalized_utf8_sha256": "e55ba64a3a97f2911e7ac89e259e08307c0af2ea73ae35e1749352ea3d14f8c2",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 419,
+          "last_line": 424,
+          "actual_complete_source_text_read": "@[to_fun iteratedDeriv_fun_mul]\nlemma iteratedDeriv_mul {f g : 𝕜 → 𝔸} (hf : ContDiffAt 𝕜 n f x) (hg : ContDiffAt 𝕜 n g x) :\n    iteratedDeriv n (f * g) x = ∑ i ∈ .range (n + 1),\n      n.choose i * iteratedDeriv i f x * iteratedDeriv (n - i) g x := by\n  simpa using iteratedDerivWithin_mul\n    (Set.mem_univ x) uniqueDiffOn_univ hf.contDiffWithinAt hg.contDiffWithinAt\n",
+          "normalized_utf8_sha256": "a815f0221edf97b0ea4c337d68640cec0e5b88eeef9779734ec5a1fb2f32a2ee",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 453,
+          "last_line": 463,
+          "actual_complete_source_text_read": "section shift_invariance\n\nvariable (n : ℕ) (f : 𝕜 → F) (s : 𝕜)\n\n/-- The iterated derivative commutes with shifting the function by a constant on the left. -/\nlemma iteratedDeriv_comp_const_add :\n    iteratedDeriv n (fun z ↦ f (s + z)) = fun t ↦ iteratedDeriv n f (s + t) := by\n  induction n with\n  | zero => simp only [iteratedDeriv_zero]\n  | succ n IH =>\n    simpa only [iteratedDeriv_succ, IH] using funext <| deriv_comp_const_add _ s\n",
+          "normalized_utf8_sha256": "48b7c1945fd68b782668ae3a1569967c6ab63de7aa29e814c3351b65b88b1cb4",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\IteratedDeriv\\Defs.lean",
+      "sha256": "9a920a1f8c42f6f3eafb628b18f6a5a59f72f5de73e77b8b23294782e8c17536",
+      "bytes": 20210,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2020 Sébastien Gouëzel. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Sébastien Gouëzel\n-/\n",
+          "normalized_utf8_sha256": "b6852b7234cc9768438a1ffd90b840ac893f7d8a84749bd8a9b08c9c8951fb22",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 208,
+          "last_line": 220,
+          "actual_complete_source_text_read": "    exact derivWithin_congr (fun y hy => IH) IH\n\n/-- The `n+1`-th iterated derivative within a set with unique derivatives can be obtained by\ntaking the `n`-th derivative of the derivative. -/\ntheorem iteratedDerivWithin_succ' :\n    iteratedDerivWithin (n + 1) f s = (iteratedDerivWithin n (derivWithin f s) s) := by\n  ext x; rw [iteratedDerivWithin_eq_iterate, iteratedDerivWithin_eq_iterate]; rfl\n\n/-- `C^{n + 1}` is equivalent to `C^n` and the `n`-th derivative being `C^1`. -/\ntheorem contDiffOn_nat_succ_iff_contDiffOn_one_iteratedDerivWithin {n : ℕ}\n    (hs : UniqueDiffOn 𝕜 s) : ContDiffOn 𝕜 (n + 1 : ℕ) f s ↔\n      ContDiffOn 𝕜 n f s ∧ ContDiffOn 𝕜 1 (iteratedDerivWithin n f s) s := by\n  simp only [contDiffOn_nat_iff_continuousOn_differentiableOn_deriv, hs,\n",
+          "normalized_utf8_sha256": "95e31aef4ec2ec5ce6f2c2a4fb453d302f3814058c5bfdab3e55149e74784a2b",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 244,
+          "last_line": 258,
+          "actual_complete_source_text_read": "/-- The `n`-th Fréchet derivative applied to a vector `(m 0, ..., m (n-1))` is the derivative\nmultiplied by the product of the `m i`s. -/\ntheorem iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod {m : Fin n → 𝕜} :\n    (iteratedFDeriv 𝕜 n f x : (Fin n → 𝕜) → F) m = (∏ i, m i) • iteratedDeriv n f x := by\n  rw [iteratedDeriv_eq_iteratedFDeriv, ← ContinuousMultilinearMap.map_smul_univ]; simp\n\ntheorem norm_iteratedFDeriv_eq_norm_iteratedDeriv :\n    ‖iteratedFDeriv 𝕜 n f x‖ = ‖iteratedDeriv n f x‖ := by\n  rw [iteratedDeriv_eq_equiv_comp, Function.comp_apply, LinearIsometryEquiv.norm_map]\n\n@[simp]\ntheorem iteratedDeriv_zero : iteratedDeriv 0 f = f := by ext x; simp [iteratedDeriv]\n\n@[simp]\ntheorem iteratedDeriv_one : iteratedDeriv 1 f = deriv f := by ext x; simp [iteratedDeriv]\n",
+          "normalized_utf8_sha256": "bd830e47fb2c0992260193bec06b5083c23ebab7672be904621be074294eaf18",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 304,
+          "last_line": 308,
+          "actual_complete_source_text_read": "/-- The `n+1`-th iterated derivative can be obtained by differentiating the `n`-th\niterated derivative. -/\ntheorem iteratedDeriv_succ : iteratedDeriv (n + 1) f = deriv (iteratedDeriv n f) := by\n  rw [← iteratedDerivWithin_univ, ← iteratedDerivWithin_univ, ← derivWithin_univ]\n  exact iteratedDerivWithin_succ\n",
+          "normalized_utf8_sha256": "557227f4d775ed1f51426a596ef10faccea66a3b8758ff9182c47d7aba74e397",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Basic.lean",
+      "sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+      "bytes": 58607,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2022 Moritz Doll. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Moritz Doll\n-/\n",
+          "normalized_utf8_sha256": "62953e0d3cacc4606e895bb56bcd38774e3e87ebe1bd5ed67e6afd6e003ffd85",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 67,
+          "last_line": 100,
+          "actual_complete_source_text_read": "@[expose] public noncomputable section\n\nopen scoped Nat NNReal ContDiff\n\nvariable {ι 𝕜 𝕜' D E F G H V : Type*}\nvariable [NormedAddCommGroup E] [NormedSpace ℝ E]\nvariable [NormedAddCommGroup F] [NormedSpace ℝ F]\n\nvariable (E F) in\n/-- A function is a Schwartz function if it is smooth and all derivatives decay faster than\n  any power of `‖x‖`. -/\nstructure SchwartzMap where\n  /-- The underlying function.\n\n  Do NOT use directly. Use the coercion instead. -/\n  toFun : E → F\n  smooth' : ContDiff ℝ ∞ toFun\n  decay' : ∀ k n : ℕ, ∃ C : ℝ, ∀ x, ‖x‖ ^ k * ‖iteratedFDeriv ℝ n toFun x‖ ≤ C\n\n/-- A function is a Schwartz function if it is smooth and all derivatives decay faster than\n  any power of `‖x‖`. -/\nscoped[SchwartzMap] notation \"𝓢(\" E \", \" F \")\" => SchwartzMap E F\n\nnamespace SchwartzMap\n\ninstance instFunLike : FunLike 𝓢(E, F) E F where\n  coe f := f.toFun\n  coe_injective f g h := by cases f; cases g; congr\n\n/-- All derivatives of a Schwartz function are rapidly decaying. -/\ntheorem decay (f : 𝓢(E, F)) (k n : ℕ) :\n    ∃ C : ℝ, 0 < C ∧ ∀ x, ‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤ C := by\n  rcases f.decay' k n with ⟨C, hC⟩\n  exact ⟨max C 1, by positivity, fun x => (hC x).trans (le_max_left _ _)⟩\n",
+          "normalized_utf8_sha256": "f6272f3a05d3ed7a78c8e6aea7641c54123a373d4b13b0d1a8d731b3098c9568",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 415,
+          "last_line": 445,
+          "actual_complete_source_text_read": "`‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤ c` holds.\n\nNote that it is usually better to use `seminorm_le_bound` or `le_seminorm` instead of this lemma. -/\ntheorem seminorm_apply {k n : ℕ} (f : 𝓢(E, F)) : SchwartzMap.seminorm 𝕜 k n f =\n    sInf { c | 0 ≤ c ∧ ∀ x, ‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤ c } := by rfl\n\n/-- If one controls the seminorm for every `x`, then one controls the seminorm. -/\ntheorem seminorm_le_bound (k n : ℕ) (f : 𝓢(E, F)) {M : ℝ} (hMp : 0 ≤ M)\n    (hM : ∀ x, ‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤ M) : SchwartzMap.seminorm 𝕜 k n f ≤ M :=\n  f.seminormAux_le_bound k n hMp hM\n\n/-- If one controls the seminorm for every `x`, then one controls the seminorm.\n\nVariant for functions `𝓢(ℝ, F)`. -/\ntheorem seminorm_le_bound' (k n : ℕ) (f : 𝓢(ℝ, F)) {M : ℝ} (hMp : 0 ≤ M)\n    (hM : ∀ x, |x| ^ k * ‖iteratedDeriv n f x‖ ≤ M) : SchwartzMap.seminorm 𝕜 k n f ≤ M := by\n  refine seminorm_le_bound 𝕜 k n f hMp ?_\n  simpa only [Real.norm_eq_abs, norm_iteratedFDeriv_eq_norm_iteratedDeriv]\n\n/-- The seminorm controls the Schwartz estimate for any fixed `x`. -/\ntheorem le_seminorm (k n : ℕ) (f : 𝓢(E, F)) (x : E) :\n    ‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤ SchwartzMap.seminorm 𝕜 k n f :=\n  f.le_seminormAux k n x\n\n/-- The seminorm controls the Schwartz estimate for any fixed `x`.\n\nVariant for functions `𝓢(ℝ, F)`. -/\ntheorem le_seminorm' (k n : ℕ) (f : 𝓢(ℝ, F)) (x : ℝ) :\n    |x| ^ k * ‖iteratedDeriv n f x‖ ≤ SchwartzMap.seminorm 𝕜 k n f := by\n  have := le_seminorm 𝕜 k n f x\n  rwa [← Real.norm_eq_abs, ← norm_iteratedFDeriv_eq_norm_iteratedDeriv]\n",
+          "normalized_utf8_sha256": "c6e1b8d55973e942ad842b5cfd9e6225aff89d7f459f0485d26c647889d60277",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 477,
+          "last_line": 505,
+          "actual_complete_source_text_read": "variable {𝕜 E F}\n\n/-- A more convenient version of `le_sup_seminorm_apply`.\n\nThe set `Finset.Iic m` is the set of all pairs `(k', n')` with `k' ≤ m.1` and `n' ≤ m.2`.\nNote that the constant is far from optimal. -/\ntheorem one_add_le_sup_seminorm_apply {m : ℕ × ℕ} {k n : ℕ} (hk : k ≤ m.1) (hn : n ≤ m.2)\n    (f : 𝓢(E, F)) (x : E) :\n    (1 + ‖x‖) ^ k * ‖iteratedFDeriv ℝ n f x‖ ≤\n      2 ^ m.1 * (Finset.Iic m).sup (fun m => SchwartzMap.seminorm 𝕜 m.1 m.2) f := by\n  rw [add_comm, add_pow]\n  simp only [one_pow, mul_one, Finset.sum_mul]\n  norm_cast\n  rw [← Nat.sum_range_choose m.1]\n  push_cast\n  rw [Finset.sum_mul]\n  have hk' : Finset.range (k + 1) ⊆ Finset.range (m.1 + 1) := by grind\n  grw [hk']\n  gcongr ∑ _i ∈ Finset.range (m.1 + 1), ?_ with i hi\n  move_mul [(Nat.choose k i : ℝ), (Nat.choose m.1 i : ℝ)]\n  gcongr\n  grw [le_seminorm 𝕜 i n f x]\n  apply Seminorm.le_def.1\n  exact Finset.le_sup_of_le (Finset.mem_Iic.2 <|\n    Prod.mk_le_mk.2 ⟨Finset.mem_range_succ_iff.mp hi, hn⟩) le_rfl\n\nend Seminorms\n\nsection Topology\n",
+          "normalized_utf8_sha256": "337d5f9e5b62cc365166567c1356f1534eb6fbc8a49e3c1c27c5944a1cb195af",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 551,
+          "last_line": 566,
+          "actual_complete_source_text_read": "section HasCompactSupport\n\n/-- A smooth compactly supported function is a Schwartz function. -/\n@[simps]\ndef _root_.HasCompactSupport.toSchwartzMap {f : E → F} (h₁ : HasCompactSupport f)\n    (h₂ : ContDiff ℝ ∞ f) : 𝓢(E, F) where\n  toFun := f\n  smooth' := h₂\n  decay' k n := by\n    set g := fun x ↦ ‖x‖ ^ k * ‖iteratedFDeriv ℝ n f x‖\n    have hg₁ : Continuous g := by\n      apply Continuous.mul (by fun_prop)\n      exact (h₂.of_le (mod_cast le_top)).continuous_iteratedFDeriv'.norm\n    have hg₂ : HasCompactSupport g := (h₁.iteratedFDeriv _).norm.mul_left\n    obtain ⟨x₀, hx₀⟩ := hg₁.exists_forall_ge_of_hasCompactSupport hg₂\n    exact ⟨g x₀, hx₀⟩\n",
+          "normalized_utf8_sha256": "39403dc23ec7c7634a08a52abbd98b78f736962d066a530e6373285855d0361c",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Fourier.lean",
+      "sha256": "8f74642098d0390e08eae980f72ba29801c46b03446dae2fd20eff9ba0f08737",
+      "bytes": 15347,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2024 Sébastien Gouëzel. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Sébastien Gouëzel, Moritz Doll\n-/\n",
+          "normalized_utf8_sha256": "169306e78076c3891c13393f8150140f71078bf444e3717a401215962cc60318",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 35,
+          "last_line": 105,
+          "actual_complete_source_text_read": "\nnamespace SchwartzMap\n\nvariable\n  (𝕜 : Type*) [RCLike 𝕜]\n  {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [NormedSpace 𝕜 E] [SMulCommClass ℂ 𝕜 E]\n  {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]\n  [MeasurableSpace V] [BorelSpace V]\n\nsection definition\n\n/-- The Fourier transform on a real inner product space, as a continuous linear map on the\nSchwartz space.\n\nThis definition is only to define the Fourier transform, use `FourierTransform.fourierCLM` instead.\n-/\ndef fourierTransformCLM : 𝓢(V, E) →L[𝕜] 𝓢(V, E) := by\n  refine mkCLM ((𝓕 : (V → E) → (V → E)) ·) ?_ ?_ ?_ ?_\n  · intro f g\n    simp [fourier_eq, integral_add ((fourierIntegral_convergent_iff _).mpr f.integrable)\n      ((fourierIntegral_convergent_iff _).mpr g.integrable)]\n  · simp [fourier_eq, smul_comm, integral_smul]\n  · exact fun f ↦ contDiff_fourier (fun n _ ↦ integrable_pow_mul volume f n)\n  · rintro ⟨k, n⟩\n    refine ⟨Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1),\n      (2 * π) ^ n * (2 * n + 2) ^ k * (Finset.range (n + 1) ×ˢ Finset.range (k + 1)).card *\n        2 ^ integrablePower (volume : Measure V) *\n        (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : ℝ)) * 2, by positivity,\n      fun f x ↦ ?_⟩\n    apply (pow_mul_norm_iteratedFDeriv_fourier_le (f.smooth ⊤)\n      (fun k n _hk _hn ↦ integrable_pow_mul_iteratedFDeriv _ f k n) le_top le_top x).trans\n    simp only [mul_assoc]\n    gcongr\n    calc\n    _ ≤ ∑ _ ∈ Finset.range (n + 1) ×ˢ Finset.range (k + 1),\n        2 ^ integrablePower (volume : Measure V) *\n          (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : ℝ)) * 2 *\n          (Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1)).sup\n          (schwartzSeminormFamily 𝕜 V E) f := by\n      gcongr with p\n      apply (f.integral_pow_mul_iteratedFDeriv_le 𝕜 ..).trans\n      simp only [mul_assoc, two_mul]\n      gcongr\n      · have : (0, p.2) ∈ Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ\n            Finset.range (k + 1) := by simp_all\n        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p ↦ SchwartzMap.seminorm 𝕜 p.1 p.2) this)\n      · have : (p.1 + integrablePower (volume : Measure V), p.2) ∈ Finset.range\n            (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1) := by simp_all\n        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p ↦ SchwartzMap.seminorm 𝕜 p.1 p.2) this)\n    _ = _ := by simp [mul_assoc]\n\ninstance instFourierTransform : FourierTransform 𝓢(V, E) 𝓢(V, E) where\n  fourier f := fourierTransformCLM ℂ f\n\ninstance instFourierAdd : FourierAdd 𝓢(V, E) 𝓢(V, E) where\n  fourier_add := ContinuousLinearMap.map_add _\n\ninstance instFourierSMul : FourierSMul 𝕜 𝓢(V, E) 𝓢(V, E) where\n  fourier_smul := (fourierTransformCLM 𝕜).map_smul\n\ninstance instContinuousFourier : ContinuousFourier 𝓢(V, E) 𝓢(V, E) where\n  continuous_fourier := ContinuousLinearMap.continuous _\n\nlemma fourier_coe (f : 𝓢(V, E)) : 𝓕 f = 𝓕 (f : V → E) := rfl\n\n@[simp]\ntheorem fourierTransformCLM_apply (f : 𝓢(V, E)) :\n    fourierTransformCLM 𝕜 f = 𝓕 f := rfl\n\ninstance instFourierTransformInv : FourierTransformInv 𝓢(V, E) 𝓢(V, E) where\n  fourierInv := (compCLMOfContinuousLinearEquiv ℂ (LinearIsometryEquiv.neg ℝ (E := V)))\n",
+          "normalized_utf8_sha256": "766bced373a01b330a744c185969519b4416a865578da1ce55d53b2d37712231",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "native",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+      "sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+      "bytes": 15188,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 5,
+          "actual_complete_source_text_read": "/-\nCopyright (c) 2026 Moritz Doll. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Moritz Doll\n-/\n",
+          "normalized_utf8_sha256": "e752858a46c654b8debefe3292863153775bbf27d4434c433d4bfcf6b02c124c",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 69,
+          "last_line": 105,
+          "actual_complete_source_text_read": "@[simp]\ntheorem derivCLM_apply (f : 𝓢(ℝ, F)) (x : ℝ) : derivCLM 𝕜 F f x = deriv f x :=\n  rfl\n\ntheorem hasDerivAt (f : 𝓢(ℝ, F)) (x : ℝ) : HasDerivAt f (deriv f x) x :=\n  f.differentiableAt.hasDerivAt\n\nopen LineDeriv\n\nsection fderiv\n\nvariable [SMulCommClass ℝ 𝕜 F]\n\nvariable (E F) in\n/-- The Fréchet derivative on Schwartz space as a continuous `𝕜`-linear map. -/\ndef fderivCLM : 𝓢(E, F) →L[𝕜] 𝓢(E, E →L[ℝ] F) :=\n  mkCLM (fderiv ℝ ·) (fun f g _ => fderiv_add f.differentiableAt g.differentiableAt)\n    (fun a f _ => fderiv_const_smul f.differentiableAt a)\n    (fun f => (contDiff_succ_iff_fderiv.mp (f.smooth ⊤)).2.2) fun ⟨k, n⟩ =>\n    ⟨{⟨k, n + 1⟩}, 1, zero_le_one, fun f x => by\n      simpa only [schwartzSeminormFamily_apply, Seminorm.comp_apply, Finset.sup_singleton,\n        one_smul, norm_iteratedFDeriv_fderiv, one_mul] using f.le_seminorm 𝕜 k (n + 1) x⟩\n\n@[simp]\ntheorem fderivCLM_apply (f : 𝓢(E, F)) (x : E) : fderivCLM 𝕜 E F f x = fderiv ℝ f x :=\n  rfl\n\ntheorem hasFDerivAt (f : 𝓢(E, F)) (x : E) : HasFDerivAt f (fderiv ℝ f x) x :=\n  f.differentiableAt.hasFDerivAt\n\n/-- The partial derivative (or directional derivative) in the direction `m : E` as a\ncontinuous linear map on Schwartz space. -/\ninstance : LineDeriv E 𝓢(E, F) 𝓢(E, F) where\n  lineDerivOp m f := (SchwartzMap.evalCLM ℝ E F m ∘L fderivCLM ℝ E F) f\n\ntheorem lineDerivOp_apply_eq_fderiv (m : E) (f : 𝓢(E, F)) (x : E) :\n    ∂_{m} f x = fderiv ℝ f x m := rfl\n",
+          "normalized_utf8_sha256": "78c34ad4cf36bf42be25482299ea24df5d33c643a582fbdf11ec23b576fff3b5",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "project",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "bytes": 9757,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 16,
+          "actual_complete_source_text_read": "import ImbalancedChen.Part3ComplexDispersion\nimport Mathlib.Analysis.Calculus.BumpFunction.InnerProduct\nimport Mathlib.Analysis.Distribution.SchwartzSpace.Fourier\nimport Mathlib.MeasureTheory.Measure.Lebesgue.Integral\n\n/-!\n# One actual smooth weight for every modulus and frequency of an atom\n\nThe fixed cutoff, Schwartz realization and Fourier decay below are a\nnamespace-isolated extraction of LiLiuPrereqFouvrySmoothCutoff.lean from\ngoldbach commit 09b97db5764ade1246bfb77206baa1b124760958, source SHA256\nbf26cc38e366696cab636f34c61741a525d784026aaacaf98a13c7dcd40abd76.\nThe original explicit Mathlib aggregate import is replaced by the three\ntargeted Mathlib imports above. This adds no goldbach dependency.\n\nFor one actual MediumAtom, U determines both S_U and w_U once, before\n",
+          "normalized_utf8_sha256": "09e02620ab4e075911c870cb7bacee62158360f9fec599d30e084d8f4344026b",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 34,
+          "last_line": 66,
+          "actual_complete_source_text_read": "namespace CommonSmoothCutoff\n\ndef dyadicBump : ContDiffBump (3 / 2 : ℝ) where\n  rIn := 1 / 2\n  rOut := 1\n  rIn_pos := by norm_num\n  rIn_lt_rOut := by norm_num\n\ndef dyadicCutoff (x : ℝ) : ℝ := dyadicBump x\n\ntheorem dyadicCutoff_contDiff : ContDiff ℝ ∞ dyadicCutoff := dyadicBump.contDiff\n\ntheorem dyadicCutoff_nonneg (x : ℝ) : 0 ≤ dyadicCutoff x := dyadicBump.nonneg\n\ntheorem dyadicCutoff_le_one (x : ℝ) : dyadicCutoff x ≤ 1 := dyadicBump.le_one\n\ntheorem dyadicCutoff_eq_one {x : ℝ} (hx : x ∈ Icc (1 : ℝ) 2) :\n    dyadicCutoff x = 1 := by\n  apply dyadicBump.one_of_mem_closedBall\n  change |x - 3 / 2| ≤ 1 / 2\n  rw [abs_le]\n  constructor <;> linarith [hx.1, hx.2]\n\ntheorem dyadicCutoff_tsupport_subset : tsupport dyadicCutoff ⊆ Icc (1 / 2 : ℝ) 3 := by\n  change tsupport (dyadicBump : ℝ → ℝ) ⊆ _\n  rw [dyadicBump.tsupport_eq]\n  intro x hx\n  change |x - 3 / 2| ≤ 1 at hx\n  obtain ⟨h1, h2⟩ := abs_le.mp hx\n  constructor <;> linarith\n\ntheorem dyadicCutoff_hasCompactSupport : HasCompactSupport dyadicCutoff :=\n  dyadicBump.hasCompactSupport\n",
+          "normalized_utf8_sha256": "2b65a9ac1906fb86ef24e4957862b3d6d4a599eb9b82f117f6a8aa7e46ec54e9",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 100,
+          "last_line": 105,
+          "actual_complete_source_text_read": "def dyadicCutoffSchwartz : 𝓢(ℝ, ℂ) :=\n  (dyadicCutoff_hasCompactSupport.comp_left (g := Complex.ofRealCLM) (map_zero _)).toSchwartzMap\n    (by exact Complex.ofRealCLM.contDiff.comp dyadicCutoff_contDiff)\n\n@[simp] theorem dyadicCutoffSchwartz_apply (x : ℝ) :\n    dyadicCutoffSchwartz x = (dyadicCutoff x : ℂ) := rfl\n",
+          "normalized_utf8_sha256": "0edaa8e6f8d3835e904f8d11778ed9551ccb31f74dca32779f3c994916cb698d",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 130,
+          "last_line": 141,
+          "actual_complete_source_text_read": "theorem schwartz_norm_le_rapidDecay (f : 𝓢(ℝ, ℂ)) (k : ℕ) :\n    ∃ C : ℝ, 0 < C ∧ ∀ x : ℝ, ‖f x‖ ≤ C / (1 + |x|) ^ k := by\n  let bound : ℝ := 2 ^ k *\n    (Finset.Iic (k, 0)).sup (fun m ↦ SchwartzMap.seminorm ℝ m.1 m.2) f\n  have hbound : 0 ≤ bound := by dsimp [bound]; positivity\n  refine ⟨bound + 1, by linarith, fun x ↦ ?_⟩\n  apply (le_div_iff₀ (by positivity)).mpr\n  have h := SchwartzMap.one_add_le_sup_seminorm_apply\n    (𝕜 := ℝ) (m := (k, 0)) le_rfl le_rfl f x\n  simp only [norm_iteratedFDeriv_zero, Real.norm_eq_abs] at h\n  change (1 + |x|) ^ k * ‖f x‖ ≤ bound at h\n  nlinarith\n",
+          "normalized_utf8_sha256": "1b112ee87442a4a2bafcf5ec32d12e27aa16db7a10c38e05a5e7b078e4c3516a",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "project",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDifferenceReciprocity.lean",
+      "sha256": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e",
+      "bytes": 21558,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 1,
+          "last_line": 14,
+          "actual_complete_source_text_read": "import ImbalancedChen.Part3CanonicalReciprocalPhase\nimport ImbalancedChen.Part3SharedFirstFactorDispersion\nimport Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar\n\n/-!\n# Exact difference reciprocity on the original shared first factor\n\nAll arithmetic data are constructed from the original positive tuple and its\nactual CRT compatibility. The proof combines the two divisibilities with common\n`w₀`, then those with common `delta`; it allows `delta` and `w₀` to overlap.\nThe resulting three phases retain the signed difference quotient, the complete\nroot modulo `g*d₁`, and the slow denominator `N₁*L`.\n\nThe six public statements are finite identities. They include arbitrary signed\n",
+          "normalized_utf8_sha256": "a0954b5b57a27e3e98328eb1ef77c557d55fe590ec3e68ba1ca2956cf8c4ae80",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 354,
+          "last_line": 381,
+          "actual_complete_source_text_read": "/-- Fourier transport retains every signed integer frequency and all three phases. -/\ntheorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    fourier h (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n      fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle) := by\n  have he := sharedDifferenceReciprocity_circle hp hv hw hN₁ hN₂ hc a\n  dsimp only at he ⊢\n  rw [he, SharedDifferenceReciprocity.fourier_add,\n    SharedDifferenceReciprocity.fourier_add]\n",
+          "normalized_utf8_sha256": "a1978b361ae2d144e9f05789426648a08790f066e9cff5c898078a8e29db7228",
+          "literal_proposal_span_match": true
+        },
+        {
+          "first_line": 410,
+          "last_line": 458,
+          "actual_complete_source_text_read": "/-- The original shared-row Poisson frequency uses original `V`, literal cutoff and all h. -/\ntheorem MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2) (h : ℤ) :\n    let v := l.1.1 * l.1.2\n    let w := l'.1.1 * l'.1.2\n    let N₁ := l.2\n    let N₂ := l'.2\n    let a := d.residue\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.V / (L : ℝ)) ((b : ℝ) / (L : ℝ)) h =\n      if h = 0 then 0 else\n        (d.V / (L : ℝ)) •\n          (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) ((d.V / (L : ℝ)) * h) *\n          fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n            fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n              fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle) := by\n  have hpp : 0 < p := SharedDifferenceReciprocity.factor_pos hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  have hleft := SharedDifferenceReciprocity.row_pos hd hl\n  have hright := SharedDifferenceReciprocity.row_pos hd hl'\n  have he := sharedDifferenceReciprocity_fourier hpp hleft.1 hright.1\n    hleft.2 hright.2 hc d.residue h\n  dsimp only at he ⊢\n  unfold CommonSmoothCutoff.poissonNonzeroFrequency\n  by_cases hh : h = 0\n  · simp only [hh, if_true]\n  · simp only [if_neg hh]\n    rw [he]\n    ring\n",
+          "normalized_utf8_sha256": "6d40badf08c8a468a10e2fdbdf508c7f6136c6501c0ba238bf1d89c6a8214e60",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "project",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPoisson.lean",
+      "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "bytes": 13235,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 125,
+          "last_line": 138,
+          "actual_complete_source_text_read": "      (𝓕 f) (h : ℝ) = t • (𝓕 dyadicCutoffSchwartz) (t * h) := by\n    rw [SchwartzMap.fourier_coe]\n    exact scaledDyadicCutoff_fourier ht h\n  apply hnorm.congr\n  intro h\n  rw [hcoef]\n  simp only [norm_mul, fourier_apply, Circle.norm_coe, mul_one]\n\ndef poissonNonzeroFrequency (t x : ℝ) (h : ℤ) : ℂ :=\n  if h = 0 then 0 else\n    t • (𝓕 dyadicCutoffSchwartz) (t * h) * fourier h (x : UnitAddCircle)\n\n@[simp] theorem poissonNonzeroFrequency_zero (t x : ℝ) :\n    poissonNonzeroFrequency t x 0 = 0 := rfl\n",
+          "normalized_utf8_sha256": "b9e6c647173d4b628e589d10519797ad19b456a3b29d22f1ab915e8ac29ff0eb",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "project",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "bytes": 8889,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 124,
+          "last_line": 148,
+          "actual_complete_source_text_read": "/-- Precisely the geometric and coefficient gates of the frozen restricted\nmedium proposition.  `scale` is the complete convolution product. -/\ndef MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n",
+          "normalized_utf8_sha256": "508679dd6be652ed38cfad4a2b64c14f2139858bbf7001db2192a51084b9d249",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "project",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-smooth-fe532-first-actual-failure-owner-proposed-seven-private-repair\\proposed-after.lean.txt",
+      "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+      "bytes": 40367,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 25,
+          "last_line": 60,
+          "actual_complete_source_text_read": "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)\n\ndef MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))\n\ndef MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)\n\ndef MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0\n",
+          "normalized_utf8_sha256": "a916ca3743aa988fffe5a793daa9c29015e7672186d161972104751cea8e2e46",
+          "literal_proposal_span_match": true
+        }
+      ]
+    },
+    {
+      "category": "fixed_native_goldbach",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvrySmoothCutoff.lean",
+      "sha256": "bf26cc38e366696cab636f34c61741a525d784026aaacaf98a13c7dcd40abd76",
+      "bytes": 6186,
+      "all_selected_spans_read_from_actual_file_and_match": true,
+      "source_spans": [
+        {
+          "first_line": 112,
+          "last_line": 141,
+          "actual_complete_source_text_read": "/-- Fourier normalization is Mathlib's `exp (-2 * π * I * x * w)`. -/\ntheorem scaledDyadicCutoff_fourier {M : ℝ} (hM : 0 < M) (w : ℝ) :\n    𝓕 (fun x ↦ (scaledDyadicCutoff M x : ℂ)) w =\n      M • (𝓕 dyadicCutoffSchwartz) (M * w) := by\n  rw [SchwartzMap.fourier_coe, Real.fourier_real_eq, Real.fourier_real_eq]\n  have hphase (x : ℝ) : x / M * (M * w) = x * w := by\n    field_simp\n  calc\n    _ = ∫ x : ℝ, Real.fourierChar (-(x / M * (M * w))) •\n        dyadicCutoffSchwartz (x / M) := by\n      simp only [hphase, dyadicCutoffSchwartz_apply, scaledDyadicCutoff]\n    _ = |M| • ∫ x : ℝ, Real.fourierChar (-(x * (M * w))) •\n        dyadicCutoffSchwartz x :=\n      MeasureTheory.Measure.integral_comp_div\n        (fun x : ℝ ↦ Real.fourierChar (-(x * (M * w))) • dyadicCutoffSchwartz x) M\n    _ = _ := by rw [abs_of_pos hM]\n\n/-- A global rapid-decay bound, including frequency zero. -/\ntheorem schwartz_norm_le_rapidDecay (f : 𝓢(ℝ, ℂ)) (k : ℕ) :\n    ∃ C : ℝ, 0 < C ∧ ∀ x : ℝ, ‖f x‖ ≤ C / (1 + |x|) ^ k := by\n  let B : ℝ := 2 ^ k *\n    (Finset.Iic (k, 0)).sup (fun m ↦ SchwartzMap.seminorm ℝ m.1 m.2) f\n  have hB : 0 ≤ B := by dsimp [B]; positivity\n  refine ⟨B + 1, by linarith, fun x ↦ ?_⟩\n  apply (le_div_iff₀ (by positivity)).mpr\n  have h := SchwartzMap.one_add_le_sup_seminorm_apply\n    (𝕜 := ℝ) (m := (k, 0)) le_rfl le_rfl f x\n  simp only [norm_iteratedFDeriv_zero, Real.norm_eq_abs] at h\n  change (1 + |x|) ^ k * ‖f x‖ ≤ B at h\n  nlinarith\n",
+          "normalized_utf8_sha256": "ebee400c8a62cccdd6c03c6ae0ea1592b0e4a1e0f35502e860a09ebfa6da8b2b",
+          "literal_proposal_span_match": true
+        }
+      ]
+    }
+  ],
+  "additional_actual_source_context_read": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\IteratedDeriv\\Defs.lean",
+      "sha256": "9a920a1f8c42f6f3eafb628b18f6a5a59f72f5de73e77b8b23294782e8c17536",
+      "actual_extra_spans": [
+        {
+          "first_line": 49,
+          "last_line": 65,
+          "text": "open Filter Asymptotics Set\n\nvariable {𝕜 : Type*} [NontriviallyNormedField 𝕜]\nvariable {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]\n\n/-- The `n`-th iterated derivative of a function from `𝕜` to `F`, as a function from `𝕜` to `F`. -/\ndef iteratedDeriv (n : ℕ) (f : 𝕜 → F) (x : 𝕜) : F :=\n  (iteratedFDeriv 𝕜 n f x : (Fin n → 𝕜) → F) fun _ : Fin n => 1\n\n/-- The `n`-th iterated derivative of a function from `𝕜` to `F` within a set `s`, as a function\nfrom `𝕜` to `F`. -/\ndef iteratedDerivWithin (n : ℕ) (f : 𝕜 → F) (s : Set 𝕜) (x : 𝕜) : F :=\n  (iteratedFDerivWithin 𝕜 n f s x : (Fin n → 𝕜) → F) fun _ : Fin n => 1\n\nvariable {n : ℕ} {f : 𝕜 → F} {s : Set 𝕜} {x : 𝕜}\n\n@[simp]\n"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Basic.lean",
+      "sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+      "actual_extra_spans": [
+        {
+          "first_line": 102,
+          "last_line": 112,
+          "text": "/-- Every Schwartz function is smooth. -/\n@[fun_prop]\ntheorem smooth (f : 𝓢(E, F)) (n : ℕ∞) : ContDiff ℝ n f :=\n  f.smooth'.of_le (mod_cast le_top)\n\n/-- Every Schwartz function is smooth at any point. -/\n@[fun_prop]\ntheorem contDiffAt (f : 𝓢(E, F)) (n : ℕ∞) {x : E} : ContDiffAt ℝ n f x :=\n  (f.smooth n).contDiffAt\n\n/-- Every Schwartz function is continuous. -/\n"
+        },
+        {
+          "first_line": 735,
+          "last_line": 748,
+          "text": "open scoped Classical in\n/-- The map `f ↦ (x ↦ g x • f x)` as a continuous `𝕜`-linear map on Schwartz space,\nwhere `g` is a function of temperate growth. -/\ndef smulLeftCLM (g : E → 𝕜) : 𝓢(E, F) →L[𝕜] 𝓢(E, F) :=\n  if hg : g.HasTemperateGrowth then\n    SchwartzMap.bilinLeftCLM (ContinuousLinearMap.lsmul 𝕜 𝕜).flip hg\n  else 0\n\ntheorem smulLeftCLM_apply {g : E → 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F)) :\n    smulLeftCLM F g f = fun x ↦ g x • f x := by\n  simp [smulLeftCLM, hg]\n\n@[simp]\ntheorem smulLeftCLM_apply_apply {g : E → 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F)) (x : E) :\n"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\PoissonSummation.lean",
+      "sha256": "6d28aec09e89b574b7f9c03badd38793901a2609feceeb061efac7d884258cbd",
+      "actual_extra_spans": [
+        {
+          "first_line": 1,
+          "last_line": 13,
+          "text": "/-\nCopyright (c) 2023 David Loeffler. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: David Loeffler\n-/\nmodule\n\npublic import Mathlib.Analysis.Fourier.AddCircle\npublic import Mathlib.Analysis.Fourier.FourierTransform\npublic import Mathlib.Analysis.PSeries\npublic import Mathlib.Analysis.Distribution.SchwartzSpace.Fourier\npublic import Mathlib.MeasureTheory.Measure.Lebesgue.Integral\npublic import Mathlib.Topology.ContinuousMap.Periodic\n"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPoisson.lean",
+      "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "actual_extra_spans": [
+        {
+          "first_line": 1,
+          "last_line": 3,
+          "text": "import ImbalancedChen.Part3CommonSmoothCutoff\nimport ImbalancedChen.Part3ComplexCRTConsumer\nimport Mathlib.Analysis.Fourier.PoissonSummation\n"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "actual_extra_spans": [
+        {
+          "first_line": 50,
+          "last_line": 67,
+          "text": "\ndef MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V\n\ndef MediumAtom.alphaCarrier (d : MediumAtom) : Finset ℕ :=\n  (Finset.Icc (Nat.ceil d.U) (Nat.floor (2 * d.U))).filter\n    (fun n => d.intervalLo < (n : ℝ) ∧ (n : ℝ) ≤ d.intervalHi)\n\ndef MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))\n\n/-- Concrete dyadic support `Q ≤ q ≤ 2Q`, including the trivial factor\n`q=1` at `Q=1`. The manuscript writes `q ≍ Q`; the compiler must assign\noverlapping endpoints without multiplicity loss when it chooses its atoms. -/\ndef factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n\n/-- The returned variable has ONE interval and ONE phase, shared by all\nlevels. There is deliberately no level-indexed interval or phase field. -/\n"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "actual_extra_spans": [
+        {
+          "first_line": 107,
+          "last_line": 128,
+          "text": "def scaledDyadicCutoffSchwartz (M : ℝ) (hM : 0 < M) : 𝓢(ℝ, ℂ) :=\n  ((scaledDyadicCutoff_hasCompactSupport hM).comp_left\n    (g := Complex.ofRealCLM) (map_zero _)).toSchwartzMap\n      (Complex.ofRealCLM.contDiff.comp (scaledDyadicCutoff_contDiff M))\n\n@[simp] theorem scaledDyadicCutoffSchwartz_apply (M : ℝ) (hM : 0 < M) (x : ℝ) :\n    scaledDyadicCutoffSchwartz M hM x = (scaledDyadicCutoff M x : ℂ) := rfl\n\ntheorem scaledDyadicCutoff_fourier {M : ℝ} (hM : 0 < M) (frequency : ℝ) :\n    𝓕 (fun x ↦ (scaledDyadicCutoff M x : ℂ)) frequency =\n      M • (𝓕 dyadicCutoffSchwartz) (M * frequency) := by\n  rw [SchwartzMap.fourier_coe, Real.fourier_real_eq, Real.fourier_real_eq]\n  have hphase (x : ℝ) : x / M * (M * frequency) = x * frequency := by field_simp\n  calc\n    _ = ∫ x : ℝ, Real.fourierChar (-(x / M * (M * frequency))) •\n        dyadicCutoffSchwartz (x / M) := by\n      simp only [hphase, dyadicCutoffSchwartz_apply, scaledDyadicCutoff]\n    _ = |M| • ∫ x : ℝ, Real.fourierChar (-(x * (M * frequency))) •\n        dyadicCutoffSchwartz x :=\n      MeasureTheory.Measure.integral_comp_div\n        (fun x : ℝ ↦ Real.fourierChar (-(x * (M * frequency))) • dyadicCutoffSchwartz x) M\n    _ = _ := by rw [abs_of_pos hM]\n"
+        }
+      ]
+    }
+  ],
+  "actual_owned_parent_receipt_object_type_bindings": [
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+      "actual_bindings": {
+        "original_receipt_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261020T091418335571Z\\receipt.json",
+          "actual_sha256": "a607263c6e94dbe044715d4f69eff8bd7aa9ce1051d0fc92723d7b2d6163c1f9",
+          "proposal_bound_hash_match": true
+        },
+        "object_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\Part3SharedFirstFactorDifferenceReciprocity.olean",
+          "actual_sha256": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d",
+          "proposal_bound_hash_match": true
+        },
+        "declarations_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261020T091418335571Z\\declarations.json",
+          "actual_sha256": "2516b2e707950ecfb916f07993d393a841c8c67dbea721e384746aed81e75e43",
+          "proposal_bound_hash_match": true
+        }
+      },
+      "actual_original_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity"
+              ],
+              "resource_reason": "root-6951ea9f-Phased421-actualstrictPASS-originalobject-allgenerated-fulltypes-safety-threeaxioms-quota95",
+              "child_pid": 505,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 825,
+                "max_observed_rss_kib": 4128452,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4127480,
+              "guard_error": null,
+              "seconds": 41.531,
+              "log_sha256": "8d0140b7099771ce8daeda1da815fc94742d4b520ebfcb61160bec6a795d7915"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 15.375,
+            "max_rss_kib": 4618252,
+            "log_sha256": "ef60795453c6892989e6176745a2871cc281f8f8a322f7fd14b09e33ea9e8ac9",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261020T091418335571Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": {
+              ".olean": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "60de1786d32b9ee257bf2b97348cde63eb51ad62e34d690e5c6a314eec71dfc5",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": {
+              ".olean": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": 19
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      },
+      "full_selected_actual_kernel_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+          "name": "ImbalancedChen.Part3.sharedDifferenceReciprocity_fourier",
+          "partial": false,
+          "type": "∀ {p v w N₁ N₂ : Nat} (hp : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) p)\n  (hv : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) v)\n  (hw : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) w)\n  (hN₁ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₁)\n  (hN₂ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₂)\n  (hc :\n    ImbalancedChen.Part3.ComplexCRT.Compatible (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w) N₁ N₂)\n  (a h : Int),\n  have g : Nat := Nat.gcd N₁ N₂;\n  have D : Nat := Nat.gcd v w;\n  have v₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) v D;\n  have w₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) w D;\n  have delta : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D;\n  have d₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₂ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₂ g;\n  have A : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g d₁;\n  have L : Nat :=\n    Nat.lcm (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w);\n  have f : Int :=\n    @HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)\n      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt d₁)\n          (@Nat.cast.{0} Int instNatCastInt n₁))\n        (@Nat.cast.{0} Int instNatCastInt n₂))\n      (@Nat.cast.{0} Int instNatCastInt delta);\n  have t : Int :=\n    ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A n₂) v₀)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ w₀);\n  have z : Int :=\n    ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ L) A;\n  have b : Int :=\n    ImbalancedChen.Part3.ComplexCRT.residue (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w) N₁ N₂ a;\n  @Eq.{1} Complex\n    (@DFunLike.coe.{1, 1, 1}\n      (@ContinuousMap.{0, 0}\n        (@AddCircle.{0} Real Real.instAddCommGroup\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n        Complex\n        (@QuotientAddGroup.instTopologicalSpace.{0} Real\n          (@UniformSpace.toTopologicalSpace.{0} Real\n            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n          (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n          (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n        (@UniformSpace.toTopologicalSpace.{0} Complex\n          (@PseudoMetricSpace.toUniformSpace.{0} Complex\n            (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n              (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n      (@AddCircle.{0} Real Real.instAddCommGroup\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n      (fun\n          (x :\n            @AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n        Complex)\n      (@ContinuousMap.instFunLike.{0, 0}\n        (@AddCircle.{0} Real Real.instAddCommGroup\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n        Complex\n        (@QuotientAddGroup.instTopologicalSpace.{0} Real\n          (@UniformSpace.toTopologicalSpace.{0} Real\n            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n          (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n          (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n        (@UniformSpace.toTopologicalSpace.{0} Complex\n          (@PseudoMetricSpace.toUniformSpace.{0} Complex\n            (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n              (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n      (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n      (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n        (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@Int.cast.{0} Real Real.instIntCast b) (@Nat.cast.{0} Real Real.instNatCast L))))\n    (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n      (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n        (@DFunLike.coe.{1, 1, 1}\n          (@ContinuousMap.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@AddCircle.{0} Real Real.instAddCommGroup\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          (fun\n              (x :\n                @AddCircle.{0} Real Real.instAddCommGroup\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n            Complex)\n          (@ContinuousMap.instFunLike.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n          (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@Neg.neg.{0} Real Real.instNeg (@Int.cast.{0} Real Real.instIntCast a))\n                (@Int.cast.{0} Real Real.instIntCast z))\n              (@Nat.cast.{0} Real Real.instNatCast A))))\n        (@DFunLike.coe.{1, 1, 1}\n          (@ContinuousMap.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@AddCircle.{0} Real Real.instAddCommGroup\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          (fun\n              (x :\n                @AddCircle.{0} Real Real.instAddCommGroup\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n            Complex)\n          (@ContinuousMap.instFunLike.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n          (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@Int.cast.{0} Real Real.instIntCast a)\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@Nat.cast.{0} Real Real.instNatCast N₁) (@Nat.cast.{0} Real Real.instNatCast L))))))\n      (@DFunLike.coe.{1, 1, 1}\n        (@ContinuousMap.{0, 0}\n          (@AddCircle.{0} Real Real.instAddCommGroup\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          Complex\n          (@QuotientAddGroup.instTopologicalSpace.{0} Real\n            (@UniformSpace.toTopologicalSpace.{0} Real\n              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n            (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n          (@UniformSpace.toTopologicalSpace.{0} Complex\n            (@PseudoMetricSpace.toUniformSpace.{0} Complex\n              (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                  (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                    (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n        (@AddCircle.{0} Real Real.instAddCommGroup\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n        (fun\n            (x :\n              @AddCircle.{0} Real Real.instAddCommGroup\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n          Complex)\n        (@ContinuousMap.instFunLike.{0, 0}\n          (@AddCircle.{0} Real Real.instAddCommGroup\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          Complex\n          (@QuotientAddGroup.instTopologicalSpace.{0} Real\n            (@UniformSpace.toTopologicalSpace.{0} Real\n              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n            (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n          (@UniformSpace.toTopologicalSpace.{0} Complex\n            (@PseudoMetricSpace.toUniformSpace.{0} Complex\n              (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                  (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                    (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n        (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n        (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n          (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@Int.cast.{0} Real Real.instIntCast a) (@Int.cast.{0} Real Real.instIntCast f))\n              (@Int.cast.{0} Real Real.instIntCast t))\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@Nat.cast.{0} Real Real.instNatCast n₁) (@Nat.cast.{0} Real Real.instNatCast w₀))))))",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+          "name": "ImbalancedChen.Part3.MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) {p : Nat}\n  (hp :\n    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) p)\n  {l l' : Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat}\n  (hl :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.sharedFirstFactorRows d) l)\n  (hl' :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.sharedFirstFactorRows d) l')\n  (hc :\n    ImbalancedChen.Part3.ComplexCRT.Compatible\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n          (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))\n          (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))))\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n          (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n          (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))))\n      (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n  (h : Int),\n  have v : Nat :=\n    @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n      (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))\n      (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l));\n  have w : Nat :=\n    @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n      (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n      (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'));\n  have N₁ : Nat := @Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l;\n  have N₂ : Nat := @Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l';\n  have a : Int := ImbalancedChen.Part3.MediumAtom.residue d;\n  have g : Nat := Nat.gcd N₁ N₂;\n  have D : Nat := Nat.gcd v w;\n  have v₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) v D;\n  have w₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) w D;\n  have delta : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D;\n  have d₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₂ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₂ g;\n  have A : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g d₁;\n  have L : Nat :=\n    Nat.lcm (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w);\n  have f : Int :=\n    @HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)\n      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt d₁)\n          (@Nat.cast.{0} Int instNatCastInt n₁))\n        (@Nat.cast.{0} Int instNatCastInt n₂))\n      (@Nat.cast.{0} Int instNatCastInt delta);\n  have t : Int :=\n    ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A n₂) v₀)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ w₀);\n  have z : Int :=\n    ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ L) A;\n  have b : Int :=\n    ImbalancedChen.Part3.ComplexCRT.residue (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w) N₁ N₂ a;\n  @Eq.{1} Complex\n    (ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequency\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (ImbalancedChen.Part3.MediumAtom.V d) (@Nat.cast.{0} Real Real.instNatCast L))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@Int.cast.{0} Real Real.instIntCast b) (@Nat.cast.{0} Real Real.instNatCast L))\n      h)\n    (@ite.{1} Complex (@Eq.{1} Int h (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))\n      (Int.instDecidableEq h (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))\n      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))\n      (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n            (@HSMul.hSMul.{0, 0, 0} Real Complex Complex\n              (@instHSMul.{0, 0} Real Complex\n                (@Algebra.toSMul.{0, 0} Real Complex\n                  (@Semifield.toCommSemiring.{0} Real\n                    (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField)))\n                  (@Ring.toSemiring.{0} Complex\n                    (@SeminormedRing.toRing.{0} Complex\n                      (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                        (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                          (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))))\n                  (@NormedAlgebra.toAlgebra.{0, 0} Real Complex Real.normedField\n                    (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                      (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                        (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))\n                    (@RCLike.toNormedAlgebra.{0} Complex Complex.instRCLike))))\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (ImbalancedChen.Part3.MediumAtom.V d) (@Nat.cast.{0} Real Real.instNatCast L))\n              (@DFunLike.coe.{1, 1, 1}\n                (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                  Complex.instNormedAddCommGroup\n                  (@NormedSpace.complexToReal.{0} Complex\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Complex Complex Complex.instRCLike\n                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex\n                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex\n                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex\n                            (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                              (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))\n                      (@RCLike.innerProductSpace.{0} Complex Complex.instRCLike))))\n                Real (fun (x : Real) => Complex)\n                (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup\n                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                  Complex.instNormedAddCommGroup\n                  (@NormedSpace.complexToReal.{0} Complex\n                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Complex Complex Complex.instRCLike\n                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex\n                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex\n                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex\n                            (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                              (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))\n                      (@RCLike.innerProductSpace.{0} Complex Complex.instRCLike))))\n                (@FourierTransform.fourier.{0, 0}\n                  (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                    Complex.instNormedAddCommGroup\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                      instInnerProductSpaceRealComplex))\n                  (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                    Complex.instNormedAddCommGroup\n                    (@NormedSpace.complexToReal.{0} Complex\n                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                      (@InnerProductSpace.toNormedSpace.{0, 0} Complex Complex Complex.instRCLike\n                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex\n                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex\n                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex\n                              (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                                (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))\n                        (@RCLike.innerProductSpace.{0} Complex Complex.instRCLike))))\n                  (@SchwartzMap.instFourierTransform.{0, 0} Complex Complex.instNormedAddCommGroup\n                    (@InnerProductSpace.toNormedSpace.{0, 0} Complex Complex Complex.instRCLike\n                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex\n                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex\n                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex\n                            (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                              (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))\n                      (@RCLike.innerProductSpace.{0} Complex Complex.instRCLike))\n                    Real Real.normedAddCommGroup (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)\n                    (@FiniteDimensional.rclike_to_real.{0} Real Real.instRCLike) Real.measurableSpace Real.borelSpace)\n                  ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                    (ImbalancedChen.Part3.MediumAtom.V d) (@Nat.cast.{0} Real Real.instNatCast L))\n                  (@Int.cast.{0} Real Real.instIntCast h))))\n            (@DFunLike.coe.{1, 1, 1}\n              (@ContinuousMap.{0, 0}\n                (@AddCircle.{0} Real Real.instAddCommGroup\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n                Complex\n                (@QuotientAddGroup.instTopologicalSpace.{0} Real\n                  (@UniformSpace.toTopologicalSpace.{0} Real\n                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                  (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                  (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n                (@UniformSpace.toTopologicalSpace.{0} Complex\n                  (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                    (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                      (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                        (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                          (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n              (@AddCircle.{0} Real Real.instAddCommGroup\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n              (fun\n                  (x :\n                    @AddCircle.{0} Real Real.instAddCommGroup\n                      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n                Complex)\n              (@ContinuousMap.instFunLike.{0, 0}\n                (@AddCircle.{0} Real Real.instAddCommGroup\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n                Complex\n                (@QuotientAddGroup.instTopologicalSpace.{0} Real\n                  (@UniformSpace.toTopologicalSpace.{0} Real\n                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                  (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                  (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n                (@UniformSpace.toTopologicalSpace.{0} Complex\n                  (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                    (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                      (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                        (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                          (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n              (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n              (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                    (@Neg.neg.{0} Real Real.instNeg (@Int.cast.{0} Real Real.instIntCast a))\n                    (@Int.cast.{0} Real Real.instIntCast z))\n                  (@Nat.cast.{0} Real Real.instNatCast A)))))\n          (@DFunLike.coe.{1, 1, 1}\n            (@ContinuousMap.{0, 0}\n              (@AddCircle.{0} Real Real.instAddCommGroup\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n              Complex\n              (@QuotientAddGroup.instTopologicalSpace.{0} Real\n                (@UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n              (@UniformSpace.toTopologicalSpace.{0} Complex\n                (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                  (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                    (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                      (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                        (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            (fun\n                (x :\n                  @AddCircle.{0} Real Real.instAddCommGroup\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n              Complex)\n            (@ContinuousMap.instFunLike.{0, 0}\n              (@AddCircle.{0} Real Real.instAddCommGroup\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n              Complex\n              (@QuotientAddGroup.instTopologicalSpace.{0} Real\n                (@UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n              (@UniformSpace.toTopologicalSpace.{0} Complex\n                (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                  (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                    (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                      (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                        (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n            (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n            (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@Int.cast.{0} Real Real.instIntCast a)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@Nat.cast.{0} Real Real.instNatCast N₁) (@Nat.cast.{0} Real Real.instNatCast L))))))\n        (@DFunLike.coe.{1, 1, 1}\n          (@ContinuousMap.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@AddCircle.{0} Real Real.instAddCommGroup\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n          (fun\n              (x :\n                @AddCircle.{0} Real Real.instAddCommGroup\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) =>\n            Complex)\n          (@ContinuousMap.instFunLike.{0, 0}\n            (@AddCircle.{0} Real Real.instAddCommGroup\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            Complex\n            (@QuotientAddGroup.instTopologicalSpace.{0} Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n            (@UniformSpace.toTopologicalSpace.{0} Complex\n              (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                  (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                    (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                      (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))\n          (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) h)\n          (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n            (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@Int.cast.{0} Real Real.instIntCast a) (@Int.cast.{0} Real Real.instIntCast f))\n                (@Int.cast.{0} Real Real.instIntCast t))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@Nat.cast.{0} Real Real.instNatCast n₁) (@Nat.cast.{0} Real Real.instNatCast w₀)))))))",
+          "unsafe": false
+        }
+      ],
+      "all_selected_full_records_match_proposal": true,
+      "new_kernel_replay_run": false,
+      "external_closure_replay_claimed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+      "actual_bindings": {
+        "original_receipt_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T103752259559Z\\receipt.json",
+          "actual_sha256": "799b975312dd0474e38fb12b8e7bdc830d52507539d9040505bcd9b47f070a19",
+          "proposal_bound_hash_match": true
+        },
+        "object_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\Part3CommonSmoothCutoff.olean",
+          "actual_sha256": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec",
+          "proposal_bound_hash_match": true
+        },
+        "declarations_path": {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T103752259559Z\\declarations.json",
+          "actual_sha256": "09e7bc600ec9a4fc710b9d230d2bf081b6dc2e1d9c947af8d0d784b2300297d1",
+          "proposal_bound_hash_match": true
+        }
+      },
+      "actual_original_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.Part3ComplexCRTFiniteFourier": "6bef41b20bcea58d0cef32f971ebf7ba3446fdf484c4bf9394363442f03891b7",
+          "ImbalancedChen.Part3CommonSmoothCutoff": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+          "ImbalancedChen.Part3CommonPoisson": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+          "ImbalancedChen.Part3FactorFiberDivisor": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+          "ImbalancedChen.Part3RealComponentReduction": "749b3fa937e0e44ca6a17343585d069c65dea469a19766f62bd2c8406bcac321"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3ComplexCRTFiniteFourier",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3ComplexCRTFiniteFourier"
+              ],
+              "resource_reason": "Root-authorized frozen P3 five-leaf owned batch after true strict sourcePASS for all actual finite Fourier same-weight smooth Poisson fiber and32-real-component proofs; original stock independently per module then complete serialized defining-module fulltypes flags and transitiveaxioms inventory; no full external closure or main theorem claim, unchanged sole shared slot0 and6144-MiB Lean6656-MiB observed RSS budget.",
+              "child_pid": 297,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1554,
+                "max_observed_rss_kib": 4094972,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4093440,
+              "guard_error": null,
+              "seconds": 78.146,
+              "log_sha256": "dddc0fd780dbb99df7cf5d96aeaa47ab96dd80304da33039df240fc5cb2d0438"
+            }
+          },
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3CommonSmoothCutoff"
+              ],
+              "resource_reason": "Root-authorized frozen P3 five-leaf owned batch after true strict sourcePASS for all actual finite Fourier same-weight smooth Poisson fiber and32-real-component proofs; original stock independently per module then complete serialized defining-module fulltypes flags and transitiveaxioms inventory; no full external closure or main theorem claim, unchanged sole shared slot0 and6144-MiB Lean6656-MiB observed RSS budget.",
+              "child_pid": 544,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1054,
+                "max_observed_rss_kib": 4113644,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4113388,
+              "guard_error": null,
+              "seconds": 53.032,
+              "log_sha256": "c8a804850f301719c9e02043ade690a32f9fb2257a0e118d20913372d99ccde0"
+            }
+          },
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3CommonPoisson",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3CommonPoisson"
+              ],
+              "resource_reason": "Root-authorized frozen P3 five-leaf owned batch after true strict sourcePASS for all actual finite Fourier same-weight smooth Poisson fiber and32-real-component proofs; original stock independently per module then complete serialized defining-module fulltypes flags and transitiveaxioms inventory; no full external closure or main theorem claim, unchanged sole shared slot0 and6144-MiB Lean6656-MiB observed RSS budget.",
+              "child_pid": 701,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1285,
+                "max_observed_rss_kib": 4116064,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4115356,
+              "guard_error": null,
+              "seconds": 64.636,
+              "log_sha256": "60a6bf011b19f9c75cc65c68aff92815c0d637382182df57f1fd046f2e3bf99d"
+            }
+          },
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3FactorFiberDivisor",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3FactorFiberDivisor"
+              ],
+              "resource_reason": "Root-authorized frozen P3 five-leaf owned batch after true strict sourcePASS for all actual finite Fourier same-weight smooth Poisson fiber and32-real-component proofs; original stock independently per module then complete serialized defining-module fulltypes flags and transitiveaxioms inventory; no full external closure or main theorem claim, unchanged sole shared slot0 and6144-MiB Lean6656-MiB observed RSS budget.",
+              "child_pid": 835,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1275,
+                "max_observed_rss_kib": 4114172,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4112808,
+              "guard_error": null,
+              "seconds": 64.148,
+              "log_sha256": "2a4dc02207de6071fc6cc5760a410b6c1c27843fce9df37e2fc462e1d270ff0b"
+            }
+          },
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3RealComponentReduction",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3RealComponentReduction"
+              ],
+              "resource_reason": "Root-authorized frozen P3 five-leaf owned batch after true strict sourcePASS for all actual finite Fourier same-weight smooth Poisson fiber and32-real-component proofs; original stock independently per module then complete serialized defining-module fulltypes flags and transitiveaxioms inventory; no full external closure or main theorem claim, unchanged sole shared slot0 and6144-MiB Lean6656-MiB observed RSS budget.",
+              "child_pid": 955,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1180,
+                "max_observed_rss_kib": 4114292,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4113220,
+              "guard_error": null,
+              "seconds": 59.347,
+              "log_sha256": "1f4df3573f485ab6b9e0c006cbb511c6658d4d0c75ef7e0fc514fc0f343d43f8"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 26.874,
+            "max_rss_kib": 4623176,
+            "log_sha256": "44318155974f95b180684347b9b43989ef679dc8e3db95d183552077ecc8c738",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261015T103752259559Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3ComplexCRTFiniteFourier": "6bef41b20bcea58d0cef32f971ebf7ba3446fdf484c4bf9394363442f03891b7",
+            "ImbalancedChen.Part3CommonSmoothCutoff": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+            "ImbalancedChen.Part3CommonPoisson": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+            "ImbalancedChen.Part3FactorFiberDivisor": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+            "ImbalancedChen.Part3RealComponentReduction": "749b3fa937e0e44ca6a17343585d069c65dea469a19766f62bd2c8406bcac321"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3ComplexCRTFiniteFourier": {
+              ".olean": "350f725c729a421a08d7cc00c1e47c08576416331cbc5835947ddbd157bf51b9"
+            },
+            "ImbalancedChen.Part3CommonSmoothCutoff": {
+              ".olean": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec"
+            },
+            "ImbalancedChen.Part3CommonPoisson": {
+              ".olean": "3e0b5afde4cc4655adefa76700f88ed5286543b305ea86b3df9f64d60d3a90ae"
+            },
+            "ImbalancedChen.Part3FactorFiberDivisor": {
+              ".olean": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2"
+            },
+            "ImbalancedChen.Part3RealComponentReduction": {
+              ".olean": "cc626b31e7293f4422479a2cc1bd4e6b1e958c1890d74664a6c08a0e5d57d224"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "67a73c8d92ef5b3a1b6757a9f99fff541f5f72d5d705476faf14444df8007f5b",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3ComplexCRTFiniteFourier": "6bef41b20bcea58d0cef32f971ebf7ba3446fdf484c4bf9394363442f03891b7",
+            "ImbalancedChen.Part3CommonSmoothCutoff": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+            "ImbalancedChen.Part3CommonPoisson": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+            "ImbalancedChen.Part3FactorFiberDivisor": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+            "ImbalancedChen.Part3RealComponentReduction": "749b3fa937e0e44ca6a17343585d069c65dea469a19766f62bd2c8406bcac321"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3ComplexCRTFiniteFourier": {
+              ".olean": "350f725c729a421a08d7cc00c1e47c08576416331cbc5835947ddbd157bf51b9"
+            },
+            "ImbalancedChen.Part3CommonSmoothCutoff": {
+              ".olean": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec"
+            },
+            "ImbalancedChen.Part3CommonPoisson": {
+              ".olean": "3e0b5afde4cc4655adefa76700f88ed5286543b305ea86b3df9f64d60d3a90ae"
+            },
+            "ImbalancedChen.Part3FactorFiberDivisor": {
+              ".olean": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2"
+            },
+            "ImbalancedChen.Part3RealComponentReduction": {
+              ".olean": "cc626b31e7293f4422479a2cc1bd4e6b1e958c1890d74664a6c08a0e5d57d224"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.Part3ComplexCRTFiniteFourier": 17,
+          "ImbalancedChen.Part3CommonSmoothCutoff": 46,
+          "ImbalancedChen.Part3CommonPoisson": 31,
+          "ImbalancedChen.Part3FactorFiberDivisor": 30,
+          "ImbalancedChen.Part3RealComponentReduction": 37
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      },
+      "full_selected_actual_kernel_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicBump",
+          "partial": false,
+          "type": "@ContDiffBump.{0} Real\n  (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n    (@OfNat.ofNat.{0} Real (nat_lit 3)\n      (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))\n    (@OfNat.ofNat.{0} Real (nat_lit 2)\n      (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff",
+          "partial": false,
+          "type": "(x : Real) → Real",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz",
+          "partial": false,
+          "type": "@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n  Complex.instNormedAddCommGroup\n  (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n    instInnerProductSpaceRealComplex)",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_apply",
+          "partial": false,
+          "type": "∀ (x : Real),\n  @Eq.{1} Complex\n    (@DFunLike.coe.{1, 1, 1}\n      (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n        Complex.instNormedAddCommGroup\n        (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n          instInnerProductSpaceRealComplex))\n      Real (fun (x : Real) => Complex)\n      (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup\n        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n        Complex.instNormedAddCommGroup\n        (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n          instInnerProductSpaceRealComplex))\n      ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz x)\n    (Complex.ofReal (ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff x))",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff_contDiff",
+          "partial": false,
+          "type": "@ContDiff.{0, 0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) Real\n  Real.normedAddCommGroup\n  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n  Real Real.normedAddCommGroup\n  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n  (@WithTop.some.{0} ENat (@Top.top.{0} ENat instTopENat)) ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff_hasCompactSupport",
+          "partial": false,
+          "type": "@HasCompactSupport.{0, 0} Real Real\n  (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n  Real.instZero ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.schwartz_norm_le_rapidDecay",
+          "partial": false,
+          "type": "∀\n  (f :\n    @SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n      Complex.instNormedAddCommGroup\n      (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n        instInnerProductSpaceRealComplex))\n  (k : Nat),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (∀ (x : Real),\n        @LE.le.{0} Real Real.instLE\n          (@Norm.norm.{0} Complex Complex.instNorm\n            (@DFunLike.coe.{1, 1, 1}\n              (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup\n                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                Complex.instNormedAddCommGroup\n                (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                  instInnerProductSpaceRealComplex))\n              Real (fun (x : Real) => Complex)\n              (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup\n                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n                Complex.instNormedAddCommGroup\n                (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike\n                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)\n                  instInnerProductSpaceRealComplex))\n              f x))\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            C\n            (@HPow.hPow.{0, 0, 0} Real Nat Real\n              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                (@abs.{0} Real Real.lattice Real.instAddGroup x))\n              k)))",
+          "unsafe": false
+        }
+      ],
+      "all_selected_full_records_match_proposal": true,
+      "new_kernel_replay_run": false,
+      "external_closure_replay_claimed": false
+    }
+  ],
+  "actual_pin_checks": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lean-toolchain",
+      "actual_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "matches_proposal": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lakefile.toml",
+      "actual_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "matches_proposal": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lake-manifest.json",
+      "actual_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "matches_proposal": true
+    }
+  ],
+  "licenses": "Both selected fixed package sources are Apache2.0 according to proposal local LICENSE bindings; this review relies on actual inspected fixed native source under ordinary library trust. It neither newly replays nor claims the complete external kernel closure.",
+  "not_claimed_and_still_required": [
+    "No Lean implementation/elaboration/compiler/stock checker or ALL safety acceptance of the new profile/theorem yet.",
+    "No proof of all actual mixed physical-variable normalized derivatives, moving root phase, reciprocal inverse dependence or arithmetic row/gcd/compatibility cutoff separation.",
+    "No multivariable Mellin inversion/separation identity or transform L1 bound and derivative-order loss payment.",
+    "No actual root-indexed periodic operator/Kloosterman cancellation or theta7/32 complementary estimate.",
+    "No complete signed resonance log payment with original outside moments and both meshes.",
+    "No original distribution, lower-density bridge, exactC/K main Theorem1.1 or three-count Corollary1.2 closure."
+  ],
+  "mutation_validation": {
+    "one_new_atomic_ignored_review_only": true,
+    "Lean_written_or_edited": false,
+    "compiler_checker_lake_or_lint_run": false,
+    "tools_catalog_pins_CI_cache_resources_automations_edited": false,
+    "agents_spawned": false,
+    "Finite_source_sha256_still": "4f815510a2c5dd12f94c75472ef60d0082a865f73ade1e96755060704d941a97",
+    "no_ownership_census_change": true,
+    "ending": "HOLD"
+  },
+  "quota_actual_latest": {
+    "primary_used_percent": 20,
+    "primary_remaining_percent": 80,
+    "secondary": "null/unavailable, not zero",
+    "stop_any_available_remaining_le_percent": 50
+  },
+  "next_action": "HOLD. Root may issue a separate ONE-source authorization if desired; this independent proposal review is not permission to write Lean or start a compiler."
+}

@@ -1,0 +1,76 @@
+ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:421:51: error: typeclass instance problem is stuck
+  Preorder ?m.661
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Preorder` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:421:45: error: Type mismatch
+  le_rfl
+has type
+  ?m.663 ≤ ?m.663
+but is expected to have type
+  ‖0 * (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤ 0
+ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:451:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?s, ∑ y ∈ ?t, ?f (x, y)
+in the target expression
+  (∑ n₁ ∈ d.transposedAtom.betaCarrier,
+      ∑ n₂ ∈ d.transposedAtom.betaCarrier,
+        if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] ∧ Y < ↑(n₁.gcd n₂) then
+          C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)
+        else 0) =
+    C * d.scale ^ epsilon * (4 * d.V / ↑p + 1) * ↑(#(sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y))
+
+kappa epsilon : ℝ
+hepsilon : 0 < epsilon
+C : ℝ
+hC : 0 < C
+hfactor :
+  ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),
+    MediumAdmissible B sigma kappa c0 d →
+      ∀ p ∈ d.primitiveFirstFactorCarrier,
+        ∀ (n₁ n₂ : ℕ),
+          n₁ ∈ d.transposedAtom.betaCarrier →
+            n₂ ∈ d.transposedAtom.betaCarrier →
+              ¬↑n₁ ∣ d.residue →
+                ¬↑n₂ ∣ d.residue →
+                  ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤
+                    C * d.scale ^ epsilon *
+                      if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] then 4 * d.V / ↑p + 1 else 0
+B : ℕ
+sigma c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+Y : ℝ
+hY : 1 ≤ Y
+hx : 1 ≤ d.scale
+hXeps : 0 ≤ C * d.scale ^ epsilon
+hU0 : 0 ≤ d.U
+hV0 : 0 ≤ d.V
+hQpos : 0 < d.Q1
+hYpos : 0 < Y
+hH : 0 ≤ 1 + Real.log (2 * d.U)
+p : ℕ
+hp : p ∈ d.primitiveFirstFactorCarrier
+hpR : 0 < ↑p
+hA : 0 ≤ C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)
+hExpand :
+  (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y =
+    ∑ n₁ ∈ d.transposedAtom.betaCarrier,
+      ∑ n₂ ∈ d.transposedAtom.betaCarrier,
+        if Y < ↑(n₁.gcd n₂) then
+          d.cleanedAlphaAtom.transposedAtom.beta n₁ * star (d.cleanedAlphaAtom.transposedAtom.beta n₂) *
+            (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂
+        else 0
+⊢ (∑ n₁ ∈ d.transposedAtom.betaCarrier,
+      ∑ n₂ ∈ d.transposedAtom.betaCarrier,
+        if n₁.Coprime p ∧ n₂.Coprime p ∧ n₁ ≡ n₂ [MOD p] ∧ Y < ↑(n₁.gcd n₂) then
+          C * d.scale ^ epsilon * (4 * d.V / ↑p + 1)
+        else 0) =
+    C * d.scale ^ epsilon * (4 * d.V / ↑p + 1) * ↑(#(sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y))
+ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:420:48: error: This simp argument is unused:
+  norm_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [h₂, star_zero, mul_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

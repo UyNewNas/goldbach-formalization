@@ -1,0 +1,349 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_SELF_REVIEW_CANDIDATE_NOT_COMPILED",
+  "reviewer": "/root/tail_resume/greedy_review source author; not independent review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualExtendedThirdOwnedLabelOrder",
+  "source_sha256": "d262f95877de7fc234760cc90622e6b68809d8db22249c257cdd49746733ca28",
+  "complete_declarations": [
+    {
+      "name": "actualExtendedThirdDyadicHi_le_lo_of_label_lt",
+      "kind": "theorem",
+      "line": 26,
+      "complete_signature": "theorem actualExtendedThirdDyadicHi_le_lo_of_label_lt {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {i k : Fin 3} (h : j i < j k) :\n    actualExtendedThirdDyadicHi m j i ≤ actualExtendedThirdDyadicLo m j k",
+      "author_assessment": "If one integer label is strictly smaller, its label+1 is <= the other label. Multiply the cast inequality by rho>=0 and divide by positive 2^m. Adjacent equal real endpoints are permitted."
+    },
+    {
+      "name": "actualExtendedThirdOwnedCell_labelOrder",
+      "kind": "theorem",
+      "line": 38,
+      "complete_signature": "theorem actualExtendedThirdOwnedCell_labelOrder {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    j 1 ≤ j 0 ∧ j 2 ≤ j 1",
+      "author_assessment": "For any reversed adjacent labels, Hi of the earlier coordinate <= Lo of the later coordinate, whereas owned Ico gives t_earlier<Hi_earlier and Lo_later<=t_later. Weak actual coordinate order then contradicts t_earlier<t_earlier. Strict upper ownership is essential; closed PhysicalCell nonemptiness is never used."
+    },
+    {
+      "name": "actualExtendedThirdOwnedCell_nonempty_labelOrder",
+      "kind": "theorem",
+      "line": 51,
+      "complete_signature": "theorem actualExtendedThirdOwnedCell_nonempty_labelOrder {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : (actualExtendedThirdOwnedCell m j).Nonempty) :\n    j 1 ≤ j 0 ∧ j 2 ≤ j 1",
+      "author_assessment": "Take the actual owned point from Nonempty, then apply the pointwise label theorem."
+    },
+    {
+      "name": "actualExtendedThirdOwnedCell_empty_of_label_lt",
+      "kind": "theorem",
+      "line": 58,
+      "complete_signature": "theorem actualExtendedThirdOwnedCell_empty_of_label_lt {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    actualExtendedThirdOwnedCell m j = ∅",
+      "author_assessment": "Contrapositive of actual pointwise label order. Either j0<j1 or j1<j2 makes owned cell exactly empty, including boundary cases."
+    },
+    {
+      "name": "actualExtendedThirdOwnedPrimeAtoms_empty_of_label_lt",
+      "kind": "theorem",
+      "line": 73,
+      "complete_signature": "theorem actualExtendedThirdOwnedPrimeAtoms_empty_of_label_lt {N m : ℕ}\n    (a b : Fin 3 → ℝ) {j : ActualExtendedThirdDyadicLabel m}\n    (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    ((actualPrimeBoxTuples N a b).filter\n      (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j)) = ∅",
+      "author_assessment": "The literal existing actualPrimeBoxTuples(N,a,b) filter with original log coordinates and same target exclusion is empty because the owned target set is empty. No source carrier is replaced."
+    },
+    {
+      "name": "actualExtendedThirdRetainedCellIntegral_zero_of_label_lt",
+      "kind": "theorem",
+      "line": 81,
+      "complete_signature": "theorem actualExtendedThirdRetainedCellIntegral_zero_of_label_lt {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    actualExtendedThirdRetainedCellIntegral e m j = 0",
+      "author_assessment": "The existing actual RetainedCellIntegral integrates on OwnedCell intersect ClosedOrderRegion. Empty OwnedCell makes the integral zero, without a separate integrability or null-wall premise."
+    },
+    {
+      "name": "actualExtendedThirdIntegerUpper",
+      "kind": "def",
+      "line": 89,
+      "complete_signature": "def actualExtendedThirdIntegerUpper (X : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Fin 3 → ℕ",
+      "complete_definition": "def actualExtendedThirdIntegerUpper (X : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Fin 3 → ℕ :=\n  fun i => Nat.floor (X ^ actualExtendedThirdDyadicHi m j i)",
+      "author_assessment": "Literal natural floor of X^Hi_i. It is an upper integer endpoint only; no ceil enlargement or claim of exact equality between all integer-box tuples and owned prime tuples."
+    },
+    {
+      "name": "actualExtendedThirdIntegerUpper_order_and_bound",
+      "kind": "theorem",
+      "line": 93,
+      "complete_signature": "theorem actualExtendedThirdIntegerUpper_order_and_bound {X : ℝ} (hX : 1 ≤ X)\n    {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j 1 ≤ j 0 ∧ j 2 ≤ j 1) :\n    (actualExtendedThirdIntegerUpper X m j 1 ≤ actualExtendedThirdIntegerUpper X m j 0 ∧\n      actualExtendedThirdIntegerUpper X m j 2 ≤ actualExtendedThirdIntegerUpper X m j 1) ∧\n      ∀ i, (actualExtendedThirdIntegerUpper X m j i : ℝ) ≤\n        X ^ actualExtendedThirdDyadicHi m j i",
+      "author_assessment": "Weak labels imply weak Hi exponents. X>=1 gives monotone real powers, then Nat.floor_mono preserves order. Nonnegative real power gives (floor power:Real)<=power exactly. No endpoint overshoot is budgeted away."
+    },
+    {
+      "name": "actualExtendedThirdOwnedCell_prime_integer_box",
+      "kind": "theorem",
+      "line": 116,
+      "complete_signature": "theorem actualExtendedThirdOwnedCell_prime_integer_box {N m : ℕ} (hN : 1 < N)\n    {j : ActualExtendedThirdDyadicLabel m} (p : Fin 3 → ℕ)\n    (hp : ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N)\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n    p ∈ actualPrimeBoxTuples N (actualExtendedThirdDyadicLo m j)\n        (actualExtendedThirdDyadicHi m j) ∧\n      p ∈ Fintype.piFinset (fun i => Finset.Icc 1\n        (actualExtendedThirdIntegerUpper (N : ℝ) m j i)) ∧\n      (actualExtendedThirdIntegerUpper (N : ℝ) m j 1 ≤\n          actualExtendedThirdIntegerUpper (N : ℝ) m j 0 ∧\n        actualExtendedThirdIntegerUpper (N : ℝ) m j 2 ≤\n          actualExtendedThirdIntegerUpper (N : ℝ) m j 1) ∧\n      ∀ i, (actualExtendedThirdIntegerUpper (N : ℝ) m j i : ℝ) ≤\n        (N : ℝ) ^ actualExtendedThirdDyadicHi m j i",
+      "author_assessment": "Actual prime coordinates in the original owned cell yield membership in original exact power box via existing log dictionary; primality and nondivisibility by the same N remain inputs. Each p>=1 and p<real upper imply p<=floor(real upper), hence membership in the explicit product of integer Icc(1,U_i). Label/floor sorting and floor<=power are derived internally. This is a cover of owned atoms, not a converse Cartesian identity."
+    }
+  ],
+  "theorem_count": 8,
+  "definition_count": 1,
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral",
+      "source_sha256": "b4ce361d78d02ff88d8800d9a129b70092bc31231508a0554007e1c8b1405df3",
+      "header": {
+        "module_header": false,
+        "prelude": false,
+        "imports": [
+          {
+            "module": "Init",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "Init",
+            "is_meta": true,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "ImbalancedChen.ActualExtendedThirdFunctionalConvergence",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          }
+        ],
+        "parser_findings": []
+      },
+      "existing_runtime_cache": {
+        "path": ".lake/proof-continuation/cache/ImbalancedChen.ActualExtendedThirdFiniteCellIntegral.json",
+        "sha256": "d300961bf67c01ce4a30c5f3fef8efbda8416036b670ee0b83ac70d9da6aebf4",
+        "status": "PASS",
+        "current_object_sha256": "c33d192ec084fff42368920c438e868c09a695d2210a65bf5efda4e8d5bd4fef",
+        "boundary": "Existing runtime-owned cache read as parent-binding evidence; not an independent rerun or imported closure replay."
+      }
+    },
+    {
+      "module": "ImbalancedChen.FinitePrimeGeometryCore",
+      "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "header": {
+        "module_header": false,
+        "prelude": false,
+        "imports": [
+          {
+            "module": "Init",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "Init",
+            "is_meta": true,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "ImbalancedChen.FirstExitDepthSplice",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "ImbalancedChen.FirstExitPresieveProjection",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "ImbalancedChen.RoughPrimeUniverse",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "ImbalancedChen.LogPrimeBoxMesh",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Data.List.GetD",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Data.List.OfFn",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Order.Fin.Basic",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Algebra.BigOperators.Fin",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          }
+        ],
+        "parser_findings": []
+      },
+      "existing_runtime_cache": {
+        "path": ".lake/proof-continuation/cache/ImbalancedChen.FinitePrimeGeometryCore.json",
+        "sha256": "be4d43f1d950f00635067583be847499ff6c3633addb7defd3191c9def5e4975",
+        "status": "PASS",
+        "current_object_sha256": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48",
+        "boundary": "Existing runtime-owned cache read as parent-binding evidence; not an independent rerun or imported closure replay."
+      }
+    }
+  ],
+  "fixed_native_api_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Defs.lean",
+      "sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+      "line": 143,
+      "interface": "Nat.le_floor (h:(n:Real)<=a):n<=Nat.floor a"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Semiring.lean",
+      "sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "interfaces": [
+        "Nat.floor_mono:Monotone(Nat.floor:Real->Nat)",
+        "Nat.floor_le (0<=a):(Nat.floor a:Real)<=a"
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Fintype/Pi.lean",
+      "sha256": "3621d016ef00906a9538347e3565bc44f5fe22210006ba64009b183c8ff6338f",
+      "line": 37,
+      "interface": "Fintype.mem_piFinset:f in piFinset t iff forall i,f i in t i"
+    },
+    {
+      "module": "ImbalancedChen.FinitePrimeGeometryCore",
+      "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "declaration": "mem_actualPrimeBoxTuples_log_iff",
+      "assessment": "Actual existing dictionary retains primality, same N exclusion and exact half-open power endpoints; final theorem supplies these exact inputs."
+    }
+  ],
+  "relative_header_scope": {
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "leaf_header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        },
+        {
+          "module": "ImbalancedChen.FinitePrimeGeometryCore",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    },
+    "new_project_vs_current_parent_union": [
+      "ImbalancedChen.ActualExtendedThirdOwnedLabelOrder"
+    ],
+    "new_foreign": [],
+    "method": "Fresh current leaf and direct parent header parses. Only the two existing project parents plus implicit Init are imported. No fresh full provider traversal is claimed."
+  },
+  "pin_files": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    }
+  ],
+  "caller_gates_retained": [
+    "Real endpoint ordering requires X>=1.",
+    "Prime integer box consumer requires N>1, each actual prime not dividing the same N, and its actual log tuple in original OwnedCell.",
+    "No ordered-label premise is asked from PhysicalCell nonemptiness or from the actual prime consumer."
+  ],
+  "remaining_gates": [
+    "Independent source review by root or another non-author reviewer.",
+    "Exact-source strict Lean elaboration and complete owned type/axiom acceptance; no Lean was invoked by author.",
+    "The integer box is a pointwise cover. No converse Cartesian fiber identity, ordered-box coefficient reconstruction, multi-label Moebius dictionary, factorial normalization or same arithmetic rho mean is proved."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "old_frozen_lean_modified": false,
+    "checker_modified": false,
+    "pins_modified": false,
+    "python_bytecode_generated": false,
+    "fresh_full_dag_recomputed": false,
+    "independent_review_claimed": false,
+    "kernel_or_axiom_execution": false,
+    "runtime_pass_claim": false
+  }
+}

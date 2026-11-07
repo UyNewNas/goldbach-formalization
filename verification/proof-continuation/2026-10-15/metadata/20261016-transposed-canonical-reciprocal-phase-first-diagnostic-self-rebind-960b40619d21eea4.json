@@ -1,0 +1,116 @@
+{
+  "status": "SOURCE_ONLY_ACTUAL_FIRST_PROOF_API_DIAGNOSTIC_REBIND_PENDING_INDEPENDENT",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T22:41:26.047005+00:00",
+  "candidate": "ImbalancedChen/Part3TransposedCanonicalReciprocalPhase.lean",
+  "old_sha256": "2563abd3424faacc8a17c1c15a7804dfca4e8c850413701a58bb9c89c39878b2",
+  "new_sha256": "df3bcceb9a8ff572490b6686da21d94c0c9fa683177c20b8d579ee1111e98cc0",
+  "old_snapshot": ".lake/proof-continuation/source-reviews/drafts/Part3TransposedCanonicalReciprocalPhase.2563abd3424faacc8a17c1c15a7804dfca4e8c850413701a58bb9c89c39878b2.lean",
+  "failed_stdout": ".lake/proof-continuation/runs/20261015T224000262208Z-ImbalancedChen.Part3TransposedCanonicalReciprocalPhase/stdout.log",
+  "failed_stdout_sha256": "3fb7d0db654badeb05e04aaa1e344fea8e34e3fc11ecb0fa2289764f948d9437",
+  "edits": [
+    {
+      "old": "  · simp only [if_neg hh]\r\n    rw [MediumAtom.transposed_actualCRT_fourier_eq_canonicalPhases hd hl hl' hc]",
+      "new": "  · simp only [if_neg hh]\r\n    rw [show d.transposedAtom.residue = d.residue from rfl]\r\n    rw [MediumAtom.transposed_actualCRT_fourier_eq_canonicalPhases hd hl hl' hc]",
+      "occurrences": 1
+    }
+  ],
+  "forward_and_reverse_exact_bytes": true,
+  "all_complete_headers_and_definitions_unchanged": [
+    {
+      "name": "positive_carrier",
+      "private": true,
+      "kind": "theorem",
+      "line": 35,
+      "complete_header": "private theorem positive_carrier {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))) : 0 < n"
+    },
+    {
+      "name": "actual_transposed_row_positive",
+      "private": true,
+      "kind": "theorem",
+      "line": 41,
+      "complete_header": "private theorem actual_transposed_row_positive\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ × ℕ) × ℕ} (hl : l ∈ d.transposedAtom.complexRowLabels) :\n    0 < complexFactorModulus l.1 ∧ 0 < l.2"
+    },
+    {
+      "name": "wPhase_three_congruences",
+      "private": true,
+      "kind": "theorem",
+      "line": 53,
+      "complete_header": "private theorem wPhase_three_congruences\n    (d d₁ D k₁ k₂ n₁ n₂ a b A B C : ℤ)\n    (hA : Int.ModEq D (k₁ * k₂ * A) 1)\n    (hB : Int.ModEq (d * d₁ * D) (n₁ * k₁ * k₂ * B) 1)\n    (hC : Int.ModEq (n₁ * k₂) (d * d₁ * D * n₂ * k₁ * C) 1)\n    (hb₁ : Int.ModEq k₁ (b * (d * d₁ * n₁)) a)\n    (hb₂ : Int.ModEq k₂ (b * (d * n₂)) a) :\n    let Z := b * A * d * d₁ * n₁ * k₁ * k₂ -\n      a * B * n₁ * k₁ * k₂ + a +\n        a * (d₁ * n₁ - n₂) * C * (d * d₁ * D) * k₁\n    Int.ModEq (d * d₁ * D) (b * (d * d₁ * n₁)) Z ∧\n      Int.ModEq k₁ (b * (d * d₁ * n₁)) Z ∧\n      Int.ModEq (n₁ * k₂) (b * (d * d₁ * n₁)) Z"
+    },
+    {
+      "name": "productCRTResidue_phase_threeFactor",
+      "private": true,
+      "kind": "theorem",
+      "line": 89,
+      "complete_header": "private theorem productCRTResidue_phase_threeFactor\n    {q r d d₁ D k₁ k₂ n₁ n₂ : ℕ}\n    (hd : 0 < d) (hd₁ : 0 < d₁) (hDpos : 0 < D)\n    (hk₁ : 0 < k₁) (hk₂ : 0 < k₂) (hn₁ : 0 < n₁)\n    (hL : q.lcm r = D * k₁ * k₂) (hk₁q : k₁ ∣ q) (hk₂r : k₂ ∣ r)\n    (hD : (k₁ * k₂).Coprime D)\n    (hD' : (n₁ * k₁ * k₂).Coprime (d * d₁ * D))\n    (hk : k₁.Coprime (n₁ * k₂)) (hn₂ : n₂.Coprime (n₁ * k₂))\n    (hc : ComplexCRT.Compatible q r (d * d₁ * n₁) (d * n₂)) (a : ℤ) :\n    let D' := d * d₁ * D\n    let b := ComplexCRT.residue q r (d * d₁ * n₁) (d * n₂) a\n    (((b : ℝ) / (q.lcm r) : ℝ) : UnitAddCircle) =\n      (((b : ℝ) * wPhaseInverse (k₁ * k₂) D / D -\n        (a : ℝ) * wPhaseInverse (n₁ * k₁ * k₂) D' / D' : ℝ) : UnitAddCircle) +\n      (((a : ℝ) / ((n₁ : ℝ) * k₁ * k₂ * D') : ℝ) : UnitAddCircle) +\n      (((a : ℝ) * ((d₁ : ℝ) * n₁ - n₂) *\n        wPhaseInverse (D' * n₂ * k₁) (n₁ * k₂) / ((n₁ : ℝ) * k₂) : ℝ) :\n          UnitAddCircle)"
+    },
+    {
+      "name": "circle_eq_threePhase",
+      "private": true,
+      "kind": "theorem",
+      "line": 164,
+      "complete_header": "private theorem circle_eq_threePhase\n    {v : CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : ℕ}\n    (hv : v.Valid q r N₁ N₂) (hc : ComplexCRT.Compatible q r N₁ N₂) (a : ℤ) :\n    (((ComplexCRT.residue q r N₁ N₂ a : ℝ) / (q.lcm r) : ℝ) : UnitAddCircle) =\n      rootPhase v (ComplexCRT.residue q r N₁ N₂ a) a + slowPhase v a +\n        reciprocalPhase v a"
+    },
+    {
+      "name": "fourier_add",
+      "private": true,
+      "kind": "theorem",
+      "line": 179,
+      "complete_header": "private theorem fourier_add (h : ℤ) (x y : UnitAddCircle) :\n    fourier h (x + y) = fourier h x * fourier h y"
+    },
+    {
+      "name": "MediumAtom.transposed_canonicalReciprocalData_valid",
+      "private": false,
+      "kind": "theorem",
+      "line": 186,
+      "complete_header": "theorem MediumAtom.transposed_canonicalReciprocalData_valid\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.transposedAtom.complexRowLabels)\n    (hl' : l' ∈ d.transposedAtom.complexRowLabels) :\n    (d.transposedAtom.canonicalReciprocalData l l').Valid\n      (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2"
+    },
+    {
+      "name": "MediumAtom.transposed_actualCRT_circle_eq_canonicalPhases",
+      "private": false,
+      "kind": "theorem",
+      "line": 199,
+      "complete_header": "theorem MediumAtom.transposed_actualCRT_circle_eq_canonicalPhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.transposedAtom.complexRowLabels)\n    (hl' : l' ∈ d.transposedAtom.complexRowLabels)\n    (hc : ComplexCRT.Compatible (complexFactorModulus l.1)\n      (complexFactorModulus l'.1) l.2 l'.2) :\n    let v := d.transposedAtom.canonicalReciprocalData l l'\n    let b := ComplexCRT.residue (complexFactorModulus l.1)\n      (complexFactorModulus l'.1) l.2 l'.2 d.residue\n    (((b : ℝ) / (complexFactorModulus l.1).lcm (complexFactorModulus l'.1) : ℝ) :\n      UnitAddCircle) =\n        CanonicalReciprocalPhase.rootPhase v b d.residue +\n          CanonicalReciprocalPhase.slowPhase v d.residue +\n            CanonicalReciprocalPhase.reciprocalPhase v d.residue"
+    },
+    {
+      "name": "MediumAtom.transposed_actualCRT_fourier_eq_canonicalPhases",
+      "private": false,
+      "kind": "theorem",
+      "line": 219,
+      "complete_header": "theorem MediumAtom.transposed_actualCRT_fourier_eq_canonicalPhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.transposedAtom.complexRowLabels)\n    (hl' : l' ∈ d.transposedAtom.complexRowLabels)\n    (hc : ComplexCRT.Compatible (complexFactorModulus l.1)\n      (complexFactorModulus l'.1) l.2 l'.2) (h : ℤ) :\n    let v := d.transposedAtom.canonicalReciprocalData l l'\n    let b := ComplexCRT.residue (complexFactorModulus l.1)\n      (complexFactorModulus l'.1) l.2 l'.2 d.residue\n    fourier h (((b : ℝ) /\n      (complexFactorModulus l.1).lcm (complexFactorModulus l'.1) : ℝ) : UnitAddCircle) =\n      fourier h (CanonicalReciprocalPhase.rootPhase v b d.residue) *\n        fourier h (CanonicalReciprocalPhase.slowPhase v d.residue) *\n          fourier h (CanonicalReciprocalPhase.reciprocalPhase v d.residue)"
+    },
+    {
+      "name": "MediumAtom.transposed_poissonNonzeroFrequency_eq_canonicalPhases",
+      "private": false,
+      "kind": "theorem",
+      "line": 241,
+      "complete_header": "theorem MediumAtom.transposed_poissonNonzeroFrequency_eq_canonicalPhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.transposedAtom.complexRowLabels)\n    (hl' : l' ∈ d.transposedAtom.complexRowLabels)\n    (hc : ComplexCRT.Compatible (complexFactorModulus l.1)\n      (complexFactorModulus l'.1) l.2 l'.2) (h : ℤ) :\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.transposedAtom.U / (complexFactorModulus l.1).lcm (complexFactorModulus l'.1))\n      ((ComplexCRT.residue (complexFactorModulus l.1)\n        (complexFactorModulus l'.1) l.2 l'.2 d.transposedAtom.residue : ℝ) /\n          (complexFactorModulus l.1).lcm (complexFactorModulus l'.1)) h =\n      d.transposedAtom.canonicalPoissonFrequency l l' h"
+    },
+    {
+      "name": "MediumAtom.transposed_complexCRTSmoothNonzeroPart_eq_canonicalPhases",
+      "private": false,
+      "kind": "theorem",
+      "line": 264,
+      "complete_header": "theorem MediumAtom.transposed_complexCRTSmoothNonzeroPart_eq_canonicalPhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.transposedAtom.complexCRTSmoothNonzeroPart =\n      ∑ l ∈ d.transposedAtom.complexRowLabels,\n        ∑ l' ∈ d.transposedAtom.complexRowLabels,\n          d.transposedAtom.complexBetaCoefficient l *\n            star (d.transposedAtom.complexBetaCoefficient l') *\n              (if ComplexCRT.Compatible (complexFactorModulus l.1)\n                (complexFactorModulus l'.1) l.2 l'.2 then\n                  (∑' h : ℤ, d.transposedAtom.canonicalPoissonFrequency l l' h).re\n                else 0 : ℝ)"
+    }
+  ],
+  "declaration_count": 11,
+  "definition_count": 0,
+  "imports_unchanged": [
+    "ImbalancedChen.Part3CanonicalReciprocalPhase",
+    "ImbalancedChen.Part3TransposedDispersion"
+  ],
+  "owned_parent_bindings_fresh": {
+    "ImbalancedChen\\Part3CanonicalReciprocalPhase.lean": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+    "ImbalancedChen\\Part3TransposedDispersion.lean": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786"
+  },
+  "pins_fresh": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "mathematics_thresholds_and_phase_definitions_unchanged": true,
+  "diagnostic_mapping": "Only actual line260 rewrite failed: nonzero branch Fourier argument and canonical root/slow/reciprocal arguments still contain d.transposedAtom.residue; explicit rfl residue projection rewrite first puts all into the exact original signed residue used by public Fourier theorem. No record unfold beneath a Decidable kernel.",
+  "no_Lean_or_build_invocation": true
+}

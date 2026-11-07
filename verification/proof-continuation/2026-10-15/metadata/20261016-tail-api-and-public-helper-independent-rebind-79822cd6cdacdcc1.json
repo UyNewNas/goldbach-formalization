@@ -1,0 +1,300 @@
+{
+  "status": "SOURCE_ONLY_EXACT_SIX_SOURCE_REBIND_NO_NEW_SEMANTIC_FINDINGS",
+  "review_date": "2026-10-16",
+  "reviewer": "independent /root/tail_resume/greedy_review",
+  "input_report": ".lake/proof-continuation/source-reviews/20261016-tail-api-and-public-helper-rebind.json",
+  "input_report_sha256": "66057620ffaad6c72a784ce5249f7f0b71fdacebaf8df558b573dfa475d1e4b7",
+  "method": "Freshly read each candidate; invert only documented identifier/privacy substitutions; require exact old and new SHA256 equality. Inspect all changed binder/use sites. Search current project ImbalancedChen and all pinned native-packages plus Lean/Lake source text for both exposed helper names. No Lean invocation and no bytecode generation.",
+  "files": [
+    {
+      "file": "ImbalancedChen/ActualExtendedThirdActionParameters.lean",
+      "old_sha256": "ffd2909a32d1739b8326061000d7bff3c5d6db713d92958a0e7c32a7273246e5",
+      "new_sha256": "8fd85cb021b94038567ded305e374415e0d3c96f5f8c9adb70da0f9543bbd962",
+      "h_lambda_occurrences": 5,
+      "only_change": "identifier hλ -> hlevel",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "hlevel",
+          "old": "hλ",
+          "new_occurrences": 5
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -104,3 +104,3 @@\n",
+        " private theorem rescue_split {e lam θ a W : ℝ} (he : 0 < e)",
+        "-    (hθlo : 1 / 2 ≤ θ) (hθhi : θ < 5 / 8) (hλ : lam + e ≤ θ)",
+        "+    (hθlo : 1 / 2 ≤ θ) (hθhi : θ < 5 / 8) (hlevel : lam + e ≤ θ)",
+        "     (hp : θ + e ≤ max a W) (hW : W ≤ cap) :",
+        "@@ -112,3 +112,3 @@\n",
+        "   · have hm : max a W ≤ a + e / 4 := max_le (by linarith) (by linarith)",
+        "-    exact Or.inl ⟨hclose, hθlo, hθhi, hλ, by linarith⟩",
+        "+    exact Or.inl ⟨hclose, hθlo, hθhi, hlevel, by linarith⟩",
+        "   · have hgap : e / 4 < W - a := lt_of_not_ge hclose",
+        "@@ -121,3 +121,3 @@\n",
+        "     exact Or.inr ⟨hgap, hθlo.trans (le_max_left _ _), hrange,",
+        "-      hλ.trans (le_max_left _ _), le_max_right _ _, by linarith⟩",
+        "+      hlevel.trans (le_max_left _ _), le_max_right _ _, by linarith⟩",
+        " ",
+        "@@ -161,3 +161,3 @@\n",
+        " private theorem pair_parameter {e lam θ a g : ℝ} (he : 0 < e)",
+        "-    (hθlo : 1 / 2 ≤ θ) (hλ : lam + e ≤ θ) (ha : θ + e ≤ a)",
+        "+    (hθlo : 1 / 2 ≤ θ) (hlevel : lam + e ≤ θ) (ha : θ + e ≤ a)",
+        "     (hg : e ≤ a - g) (hcap : a ≤ cap) :",
+        "@@ -168,3 +168,3 @@\n",
+        "   have hhi : max θ (g + e / 2) < 5 / 8 := by dsimp [cap] at hcap; linarith",
+        "-  exact ⟨hθlo.trans (le_max_left _ _), hhi, hλ.trans (le_max_left _ _),",
+        "+  exact ⟨hθlo.trans (le_max_left _ _), hhi, hlevel.trans (le_max_left _ _),",
+        "     le_max_right _ _, by linarith⟩"
+      ],
+      "public_helper_signatures": []
+    },
+    {
+      "file": "ImbalancedChen/ActualExtendedThirdWholeCellActions.lean",
+      "old_sha256": "5648cc322923148fcdbabebf2dcc8859df71b8b8cc2252f2b27b3b0cecd3ea72",
+      "new_sha256": "d9fc584cb788dc7fbe9d90c2e4ab837420d403fc654733b8fcc05e231ec03867",
+      "h_lambda_occurrences": 6,
+      "only_change": "identifier hλ -> hlevel",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "hlevel",
+          "old": "hλ",
+          "new_occurrences": 6
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -62,4 +62,4 @@\n",
+        "   have haction := actualExtendedThirdSelectedRescue_action he0 he hfull ht swapped hk",
+        "-  rcases haction with ⟨hclose, hθlo, hθhi, hλ, hp⟩ | ⟨hgap, hθlo, hθhi, hλ, hgate, hp⟩",
+        "-  · refine Or.inl ⟨hclose, hθlo, hθhi, hλ, ?_⟩",
+        "+  rcases haction with ⟨hclose, hθlo, hθhi, hlevel, hp⟩ | ⟨hgap, hθlo, hθhi, hlevel, hgate, hp⟩",
+        "+  · refine Or.inl ⟨hclose, hθlo, hθhi, hlevel, ?_⟩",
+        "     intro s hs",
+        "@@ -68,3 +68,3 @@\n",
+        "     linarith",
+        "-  · refine Or.inr ⟨hgap, hθlo, hθhi, hλ, ?_⟩",
+        "+  · refine Or.inr ⟨hgap, hθlo, hθhi, hlevel, ?_⟩",
+        "     intro s hs",
+        "@@ -96,4 +96,4 @@\n",
+        "           v (if yz then s 1 + s 2 else s 0 + s 2) := by",
+        "-  obtain ⟨hθlo, hθhi, hλ, hgate, hp⟩ := actualExtendedThirdSelectedPair_action he0 he hfull ht yz hk",
+        "-  refine ⟨hθlo, hθhi, hλ, ?_⟩",
+        "+  obtain ⟨hθlo, hθhi, hlevel, hgate, hp⟩ := actualExtendedThirdSelectedPair_action he0 he hfull ht yz hk",
+        "+  refine ⟨hθlo, hθhi, hlevel, ?_⟩",
+        "   intro s hs"
+      ],
+      "public_helper_signatures": []
+    },
+    {
+      "file": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+      "old_sha256": "08d68e395361fda004968ea81bc54188409e77fb7ed6541355133cd904f91df4",
+      "new_sha256": "7bb4f5b5113fcfb03ff77813d953c110f8c86a1e02a27c6c702e1799f3d8d4fb",
+      "h_lambda_occurrences": 3,
+      "only_change": "identifiers hλ -> hlevel, λ₀ -> lam0, λ₁ -> lam1",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "hlevel",
+          "old": "hλ",
+          "new_occurrences": 3
+        },
+        {
+          "new": "lam0",
+          "old": "λ₀",
+          "new_occurrences": 8
+        },
+        {
+          "new": "lam1",
+          "old": "λ₁",
+          "new_occurrences": 4
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -47,4 +47,4 @@\n",
+        " distinctness is needed later for squarefreeness, not for this length bound. -/",
+        "-theorem actualRoughPrimeVector_length_le {x ρ λ₀ : ℝ}",
+        "-    (hx : 1 < x) (hρ : 0 < ρ) (hλ : λ₀ ≤ 5 / 8)",
+        "+theorem actualRoughPrimeVector_length_le {x ρ lam0 : ℝ}",
+        "+    (hx : 1 < x) (hρ : 0 < ρ) (hlevel : lam0 ≤ 5 / 8)",
+        "     (input : List ℕ) (hne : input ≠ [])",
+        "@@ -52,3 +52,3 @@\n",
+        "     (hrough : ∀ p ∈ input, x ^ ρ ≤ (p : ℝ))",
+        "-    (hfull : actualDwellSupport (x ^ λ₀) input) :",
+        "+    (hfull : actualDwellSupport (x ^ lam0) input) :",
+        "     input.length ≤ actualRoughVectorRankBound ρ := by",
+        "@@ -61,3 +61,3 @@\n",
+        "     rw [Real.rpow_mul hxpos.le, Real.rpow_natCast]",
+        "-    apply le_trans ?_ (hprod.trans (Real.rpow_le_rpow_of_exponent_le hx.le hλ))",
+        "+    apply le_trans ?_ (hprod.trans (Real.rpow_le_rpow_of_exponent_le hx.le hlevel))",
+        "     simpa only [List.map_const, List.prod_replicate, actualNatList_cast_prod] using hlower",
+        "@@ -91,3 +91,3 @@\n",
+        " the cost is (i+2)*tau, bounded by (R+1)*tau for all original slots. -/",
+        "-theorem actualDwellSupport_upper_inflation {α : Type*} {x τ λ₀ λ₁ : ℝ} {R : ℕ}",
+        "+theorem actualDwellSupport_upper_inflation {α : Type*} {x τ lam0 lam1 : ℝ} {R : ℕ}",
+        "     (hx : 1 < x) (hτ : 0 ≤ τ) (actual upper : α → ℕ) (input : List α)",
+        "@@ -95,5 +95,5 @@\n",
+        "     (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))",
+        "-    (hfull : actualDwellSupport (x ^ λ₀) (input.map actual))",
+        "-    (hbudget : λ₀ + τ * (R + 1) ≤ λ₁) :",
+        "-    actualDwellSupport (x ^ λ₁) (input.map upper) := by",
+        "+    (hfull : actualDwellSupport (x ^ lam0) (input.map actual))",
+        "+    (hbudget : lam0 + τ * (R + 1) ≤ lam1) :",
+        "+    actualDwellSupport (x ^ lam1) (input.map upper) := by",
+        "   have hxpos : 0 < x := zero_lt_one.trans hx",
+        "@@ -119,7 +119,7 @@\n",
+        "       ring",
+        "-    _ ≤ (x ^ τ) ^ (i + 2) * x ^ λ₀ :=",
+        "+    _ ≤ (x ^ τ) ^ (i + 2) * x ^ lam0 :=",
+        "       mul_le_mul_of_nonneg_left hs (pow_nonneg (Real.rpow_nonneg hxpos.le _) _)",
+        "-    _ = x ^ (τ * (i + 2 : ℕ) + λ₀) := by",
+        "+    _ = x ^ (τ * (i + 2 : ℕ) + lam0) := by",
+        "       rw [Real.rpow_add hxpos, Real.rpow_mul_natCast hxpos.le]",
+        "-    _ ≤ x ^ λ₁ := by",
+        "+    _ ≤ x ^ lam1 := by",
+        "       apply Real.rpow_le_rpow_of_exponent_le hx.le",
+        "@@ -148,3 +148,3 @@\n",
+        "       (input.map upper) := by",
+        "-  obtain ⟨_, hθhi, hλ, _⟩ := actualExtendedThirdSelectedPair_wholeCell",
+        "+  obtain ⟨_, hθhi, hlevel, _⟩ := actualExtendedThirdSelectedPair_wholeCell",
+        "     he0 he hmesh hfull ht yz hk"
+      ],
+      "public_helper_signatures": []
+    },
+    {
+      "file": "ImbalancedChen/ActualSelectedSubproductParameters.lean",
+      "old_sha256": "42742771b5b83586c5f37f7a85bb83e8003e0cdde5ad0e012157c74fa336ac1b",
+      "new_sha256": "5b2338db289c220df3f9ff86d94d1d7801d7f05b68f87992f54946ec4e6cbea5",
+      "h_lambda_occurrences": 1,
+      "only_change": "identifier hλ -> hlevel",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "hlevel",
+          "old": "hλ",
+          "new_occurrences": 1
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -145,3 +145,3 @@\n",
+        "         x ^ actualSelectedSubproductUpper (1 + 3 * κ) θ := by",
+        "-  obtain ⟨_, _, hλ, hcell⟩ := actualExtendedThirdSelectedPair_wholeCell",
+        "+  obtain ⟨_, _, hlevel, hcell⟩ := actualExtendedThirdSelectedPair_wholeCell",
+        "     he0 he hmesh hfull ht yz hk"
+      ],
+      "public_helper_signatures": []
+    },
+    {
+      "file": "ImbalancedChen/ActualTwoFactorRepairMonomials.lean",
+      "old_sha256": "b27db395ffdac69d7914a580bb2f4c6e8fd9ca29c9dcf01257c046dcb64aea68",
+      "new_sha256": "0cc308bae28411e0ac14e4f5231aeeab31624bb6ae6cc6e58e0f6138868f0925",
+      "only_change": "remove private from existing twoFactorRepair_monomials",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "theorem twoFactorRepair_monomials",
+          "old": "private theorem twoFactorRepair_monomials",
+          "new_occurrences": 1
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -22,3 +22,3 @@\n",
+        " ",
+        "-private theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}",
+        "+theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}",
+        "     (hx : 1 < x) (hδ : δ ≤ 1 / 12) (hθ : θ ≤ 5 / 8)"
+      ],
+      "public_helper_signatures": [
+        "theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}\n    (hx : 1 < x) (hδ : δ ≤ 1 / 12) (hθ : θ ≤ 5 / 8)\n    (hApos : 0 < A) (hBpos : 0 < B) (hapos : 0 < a) (hbpos : 0 < b)\n    (hAB : A * B = x ^ (θ - 2 * δ))\n    (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (hBupper : B ≤ x ^ actualSelectedSubproductUpper α θ)\n    (ha : a ≤ A) (hb : b ≤ B) :\n    A ^ 2 * b ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * α / 32) * A * a * b ^ 5 ≤ x ^ (2 - 4 * δ) ∧\n      (A / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 ≤ x ^ (2 - 39 * δ / 8)"
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+      "old_sha256": "92636fed625d1e42d5f93492d567f8c88e37a48b3177b26904cb2f36d7d1a65f",
+      "new_sha256": "fb6aa43a36f7a5c7b0d4f0a63261cc4f9728ff7b221143c16b4e217443f2de7c",
+      "only_change": "remove private from existing selectedPair_monomials",
+      "current_matches_new_sha": true,
+      "reverse_changes_reproduce_old_sha_exact_bytes": true,
+      "reverse_changes": [
+        {
+          "new": "theorem selectedPair_monomials",
+          "old": "private theorem selectedPair_monomials",
+          "new_occurrences": 1
+        }
+      ],
+      "diff": [
+        "--- frozen_old\n",
+        "+++ frozen_new\n",
+        "@@ -32,3 +32,3 @@\n",
+        " ",
+        "-private theorem selectedPair_monomials {x δ θ α A a b c : ℝ}",
+        "+theorem selectedPair_monomials {x δ θ α A a b c : ℝ}",
+        "     (hx : 1 < x) (hApos : 0 < A) (hapos : 0 < a) (hbpos : 0 < b) (hcpos : 0 < c)"
+      ],
+      "public_helper_signatures": [
+        "theorem selectedPair_monomials {x δ θ α A a b c : ℝ}\n    (hx : 1 < x) (hApos : 0 < A) (hapos : 0 < a) (hbpos : 0 < b) (hcpos : 0 < c)\n    (hcap : A * b * c ≤ x ^ (θ - 2 * δ))\n    (hblower : x ^ (2 * θ - 1) ≤ b)\n    (hbupper : b ≤ x ^ actualSelectedSubproductUpper α θ) (ha : a ≤ A) :\n    A ^ 2 * b * c ^ 2 ≤ x ^ (1 - 4 * δ) ∧\n      x ^ (7 * α / 32) * A * a * b ^ 5 * c ^ 2 ≤ x ^ (2 - 4 * δ) ∧\n      (A * c / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 * c ^ 2 ≤\n        x ^ (2 - 39 * δ / 8)"
+      ]
+    }
+  ],
+  "semantic_conclusions": [
+    "Every candidate matches its frozen new SHA and reverses to the declared old SHA byte-for-byte. There are no additional proof-body, formula, import, quantifier, or premise changes.",
+    "The four identifier-only edits are alpha-renames at the shown local binders and uses. Replacing h-lambda, lambda-zero, and lambda-one by ASCII names does not change their types or dependency structure. This is a source-only rebind of earlier semantic conclusions, not proof elaboration acceptance.",
+    "The two monomial declarations expose the existing theorem as ImbalancedChen.twoFactorRepair_monomials and ImbalancedChen.selectedPair_monomials. Their theorem signatures and proof bodies are byte-identical after removing the private modifier.",
+    "The new public helper names have no competing source declaration in 19840 scanned Lean source files. Only their two declarations and their existing local call sites occur. No new automatic attribute or automation registration is introduced."
+  ],
+  "name_collision_scan": {
+    "source_files_scanned": 19840,
+    "roots": [
+      "current ImbalancedChen",
+      "/home/slava/codex-lean-ve/native-packages",
+      "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean"
+    ],
+    "tokens": [
+      "twoFactorRepair_monomials",
+      "selectedPair_monomials"
+    ],
+    "matching_declarations": [
+      {
+        "name": "ImbalancedChen.twoFactorRepair_monomials",
+        "file": "ImbalancedChen/ActualTwoFactorRepairMonomials.lean",
+        "line": 23
+      },
+      {
+        "name": "ImbalancedChen.selectedPair_monomials",
+        "file": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+        "line": 33
+      }
+    ],
+    "other_occurrences": "Existing use at RepairMonomials:105 and Factorization:133 only.",
+    "boundary": "Textual source collision audit, not an elaborated environment lookup."
+  },
+  "remaining_gates": [
+    "Runtime must elaborate each exact candidate and validate owned imported objects separately.",
+    "Earlier semantic reports retain their exact historical hashes; this report documents only the six listed source changes. It does not rebind or replay their imported closures.",
+    "Public monomial helpers do not discharge whole-box factorization, original coefficient regrouping, or arithmetic mean gates."
+  ],
+  "issues": [],
+  "evidence_boundary": {
+    "lean_executed": false,
+    "lake_or_build_executed": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "lean_pass_claim": false
+  }
+}

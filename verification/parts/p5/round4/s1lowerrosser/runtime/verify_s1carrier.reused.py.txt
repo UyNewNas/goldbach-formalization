@@ -1,0 +1,282 @@
+"""One Part 5 target, with hash-bound imports and the existing stock frontend.
+
+There is deliberately no dependency build loop and no InitialMean queue.
+Every output written by this controller is inside Part 5's workspace.
+"""
+from pathlib import Path
+import datetime, hashlib, importlib.util, json, os, subprocess, sys, time
+
+OLD = Path('/workspace/scratch/cd30ec11ea1d/p5-round2/runtime')
+HERE = Path(__file__).resolve().parent
+LOGS = HERE / 'logs'
+spec = importlib.util.spec_from_file_location('p5_existing_driver', OLD / 'verify_batch.py')
+d = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(d)
+TARGET = 'MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier'
+AUDIT = 'verification.parts.p5.S1CarrierAudit'
+TYPES = 'verification.parts.p5.S1CarrierPublicTypes'
+SOURCE_SHA = '757bdcea11195c48ed5814f95a70737326853e68bfaa093711a4f6161e1a896a'
+BASELINE = '1a80c1bcce67886f699d097fc37fd245cd3620bf'
+START_HEAD = 'a03a57265a49d542e6fac8ba72094dd673e5ed7d'
+LEAN_GIT = '62eed1db4d67327ec8120be05f1a1b0847d74561'
+P1 = Path('/workspace/scratch/127408f63891/lean-runtime/logs')
+P0 = Path('/workspace/scratch/535d89efd063/p0-round2/runtime/logs')
+PROTECTED = ['lean-toolchain', 'lakefile.toml', 'lake-manifest.json',
+             'ImbalancedChen.lean', 'ImbalancedChen/CurrentMainTheorem.lean',
+             'ImbalancedChen/CurrentNumericalTransfer.lean', 'docs/CURRENT_MANUSCRIPT_MAP.md']
+
+def save(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + '.tmp')
+    tmp.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n')
+    os.replace(tmp, path)
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+def git(root, *args):
+    return subprocess.run(['git', *args], cwd=root, check=True, capture_output=True).stdout
+
+def sha_bytes(data):
+    return hashlib.sha256(data).hexdigest()
+
+def pinned_file(module):
+    p = d.INDEX[module]
+    root = next(r for r in d.ROOTS if p.is_relative_to(r))
+    rel = p.relative_to(root)
+    revision = START_HEAD if root == d.REPO else next(x['rev'] for x in d.PACKAGES if x['name'] == root.name)
+    raw = git(root, 'show', revision + ':' + rel.as_posix())
+    current = d.digest(p)
+    assert current == sha_bytes(raw), ('source differs from fixed commit', module)
+    return {'module': module, 'path': str(p), 'sha256': current,
+            'package_root': str(root), 'revision': revision,
+            'git_blob': sha_bytes(raw), 'equals_pinned_git_bytes': True}
+
+def resolved_object(module):
+    # Match Lean.Util.Path.findWithExt: the first root containing the root
+    # namespace owns that namespace; do not fall through on a missing leaf.
+    rel = d.rel_object(module)
+    top = module.split('.')[0]
+    for root in d.SEARCH + [d.TOOLROOT / 'lib/lean']:
+        if (root / top).is_dir() or (root / (top + '.olean')).is_file():
+            p = root / rel
+            return p if p.is_file() else None
+    return None
+
+def files(module):
+    p = resolved_object(module)
+    if p is None:
+        raise RuntimeError('missing resolver-visible object: ' + module)
+    out = []
+    for suffix in ['.olean', '.olean.private', '.olean.server', '.ir', '.ir.sig', '.trace']:
+        f = p.with_name(p.stem + suffix)
+        if f.is_file():
+            out.append({'path': str(f), 'sha256': d.digest(f), 'bytes': f.stat().st_size})
+    return out
+
+def import_snapshot(module):
+    return [{'module': m, 'source': pinned_file(m) if m in d.INDEX and m != TARGET else
+             ({'path': str(d.INDEX[m]), 'sha256': d.digest(d.INDEX[m])} if m in d.INDEX else None),
+             'objects': files(m)} for m in d.imports(module)]
+
+def guards():
+    tool = json.loads((P1 / 'toolchain-binary-hashes.json').read_text())
+    for n, record in tool['binaries'].items():
+        assert d.digest(d.TOOLROOT / 'bin' / n) == record['sha256'], ('tool changed', n)
+    assert tool['lean_githash'] == LEAN_GIT
+    protected = []
+    for rel in PROTECTED:
+        cur = d.digest(d.REPO / rel)
+        original = sha_bytes(git(d.REPO, 'show', BASELINE + ':' + rel))
+        assert cur == original, ('protected file changed', rel)
+        protected.append({'path': rel, 'sha256': cur, 'equals_common_baseline': True})
+    return {'toolchain': tool, 'protected': protected,
+            'frontend_driver_sha256': d.digest(d.DRIVER / 'lakefile.lean'),
+            'existing_controller_sha256': d.digest(OLD / 'verify_batch.py')}
+
+def completed_records():
+    rows = {}
+    inputs = [P1 / 'closure/results.jsonl', P1 / 'suppliers/results.jsonl',
+              P0 / 'results.jsonl', OLD / 'logs/results.jsonl']
+    state_path = P1 / 'closure/state.json'
+    state = json.loads(state_path.read_text())
+    for p in inputs:
+        raw = p.read_text()
+        for line in raw.splitlines():
+            r = json.loads(line)
+            if r.get('action', 'compile') != 'compile' or r.get('returncode') != 0:
+                continue
+            if r.get('trustLevel') != 0 or r.get('metadata_adapter', False):
+                continue
+            if r.get('source_sha256_before') != r.get('source_sha256_after'):
+                continue
+            r = dict(r, result_file=str(p))
+            st = state.get(r['module'], {})
+            if st.get('olean_sha256') == r.get('olean_sha256') and st.get('source_sha256_after') == r.get('source_sha256_after'):
+                r['import_olean_sha256'] = st.get('import_olean_sha256', {})
+                r['state_file'] = str(state_path)
+            rows.setdefault(r['module'], []).append(r)
+    return rows
+
+def completed_certificate(module, rows, source, obj_hash):
+    for r in reversed(rows.get(module, [])):
+        if r.get('source_sha256_after') != source or r.get('olean_sha256') != obj_hash:
+            continue
+        log = Path(r['log'])
+        raw = log.read_text()
+        if 'FRONTEND_OK module=' + module + ' trustLevel=0' not in raw:
+            continue
+        if 'Lean.githash=' + LEAN_GIT not in raw:
+            continue
+        assert d.digest(Path(r['source'])) == source
+        imports = r.get('import_olean_sha256', {})
+        matched = []
+        for dep, expected in imports.items():
+            p = resolved_object(dep)
+            assert p and d.digest(p) == expected, ('completed import identity changed', module, dep)
+            matched.append({'module': dep, 'sha256': expected})
+        return {'kind': 'completed_trust_zero_frontend', 'result': r,
+                'raw_log_sha256': d.digest(log), 'recorded_imports_matched': matched}
+    raise RuntimeError('no matching completed source/object certificate: ' + module)
+
+def preflight():
+    LOGS.mkdir(parents=True, exist_ok=True)
+    assert git(d.REPO, 'rev-parse', 'HEAD').decode().strip() == START_HEAD
+    source = pinned_file(TARGET)
+    assert source['sha256'] == SOURCE_SHA
+    pins = []
+    for package in d.PACKAGES:
+        root = d.SHARED / '.lake/packages' / package['name']
+        head = git(root, 'rev-parse', 'HEAD').decode().strip()
+        changed = git(root, 'diff', '--name-only', 'HEAD').decode().splitlines()
+        assert head == package['rev'] and not changed, ('dependency pin or tracked change', package['name'])
+        pins.append({'package': package['name'], 'revision': head, 'tracked_changes': changed})
+    guard = guards()
+    rows = completed_records()
+    closure = d.closure(d.imports(TARGET))
+    missing = [m for m in closure if resolved_object(m) is None]
+    if missing:
+        save(LOGS / 'blocked-preflight.json', {'target': TARGET, 'missing': missing, 'utc': now()})
+        raise RuntimeError('missing direct-import closure: ' + repr(missing))
+    cache_result = json.loads((P1 / 'cache/result.json').read_text())
+    assert cache_result['exit_code'] == 0
+    assert 'CACHE_API_COMPLETE' in (P1 / 'cache/get.log').read_text()
+    local = []
+    cached = []
+    for m in closure:
+        p = d.INDEX[m]
+        root = next(r for r in d.ROOTS if p.is_relative_to(r))
+        if root.name in ['goldbach', 'LeanArchitect'] or root == d.REPO:
+            src = pinned_file(m)
+            obj = resolved_object(m)
+            certificate = completed_certificate(m, rows, src['sha256'], d.digest(obj))
+            local.append({'module': m, 'source': src, 'objects': files(m), 'certificate': certificate})
+        else:
+            cached.append(m)
+    direct = import_snapshot(TARGET)
+    for item in direct:
+        m = item['module']
+        if m.startswith('Mathlib.'):
+            obj_hash = item['objects'][0]['sha256']
+            witnesses = [r for rs in rows.values() for r in rs
+                         if r.get('import_olean_sha256', {}).get(m) == obj_hash]
+            assert witnesses, ('cache object lacks historical successful import hash', m)
+            w = witnesses[0]
+            item['cache_evidence'] = {
+                'kind': 'pinned_official_cache_with_completed_import_hash_witness',
+                'cache_result': str(P1 / 'cache/result.json'),
+                'cache_result_sha256': d.digest(P1 / 'cache/result.json'),
+                'cache_log': str(P1 / 'cache/get.log'),
+                'cache_log_sha256': d.digest(P1 / 'cache/get.log'),
+                'witness': w,
+                'witness_log_sha256': d.digest(Path(w['log']))}
+        else:
+            item['certificate'] = next(x['certificate'] for x in local if x['module'] == m)
+    result = {'observed_utc': now(), 'target': TARGET, 'starting_head': START_HEAD,
+              'common_baseline': BASELINE, 'source': source, 'guards': guard,
+              'packages': pins, 'direct_imports': direct,
+              'direct_import_closure_source_modules': len(closure),
+              'missing_import_objects': missing, 'local_compiled_import_count': len(local),
+              'official_cache_import_count': len(cached),
+              'official_cache_scope': 'Existing successful official content-hash Cache run, all pinned packages tracked clean; no cache fetch or build performed in this batch.',
+              'official_cache_modules': cached,
+              'local_compiled_imports': local,
+              'LEAN_PATH': d.environment()['LEAN_PATH'],
+              'target_existing_before': files(TARGET) if resolved_object(TARGET) else [],
+              'no_dependency_compilation_requested': True}
+    save(LOGS / 'preflight.json', result)
+    print(json.dumps({k: result[k] for k in ['target', 'direct_import_closure_source_modules',
+          'missing_import_objects', 'local_compiled_import_count', 'official_cache_import_count',
+          'target_existing_before']}, ensure_ascii=False), flush=True)
+
+def run_one(action):
+    LOGS.mkdir(parents=True, exist_ok=True)
+    pre = json.loads((LOGS / 'preflight.json').read_text())
+    guard = guards()
+    assert guard == pre['guards']
+    module = {'audit': AUDIT, 'types': TYPES}.get(action, TARGET)
+    # A diagnostic repair may be selected explicitly, in this Part's overlay.
+    overlay = HERE / 'overlay' / Path(*TARGET.split('.')).with_suffix('.lean')
+    if overlay.exists():
+        d.INDEX[TARGET] = overlay
+    assert d.digest(d.SHARED / '.lake/packages/goldbach' / Path(*TARGET.split('.')).with_suffix('.lean')) == SOURCE_SHA
+    source = d.INDEX[module]
+    before_source = d.digest(source)
+    before_imports = import_snapshot(module)
+    target = d.OUTPUT / d.rel_object(module)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if action in ['compile', 'audit', 'types']:
+        cmd = [str(d.TOOLROOT / 'bin/lake'), '-d', str(d.DRIVER), '-f', 'lakefile.lean',
+               'script', 'run', 'compileOne', str(source), module, str(target), 'strict']
+    elif action == 'replay':
+        cmd = [str(d.TOOLROOT / 'bin/leanchecker'), '--verbose', module]
+    else:
+        raise RuntimeError('unsupported action')
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    log = LOGS / (stamp + '-' + action + '.log')
+    rec = {'action': action, 'module': module, 'source': str(source),
+           'source_sha256_before': before_source, 'imports_before': before_imports,
+           'objects_before': files(module) if resolved_object(module) else [],
+           'command': cmd, 'cwd': str(d.REPO), 'started_utc': now(),
+           'trustLevel': 0 if action != 'replay' else None,
+           'warningAsError': action != 'replay', 'metadata_adapter': False,
+           'LEAN_SYSROOT': str(d.TOOLROOT), 'LEAN_PATH': d.environment()['LEAN_PATH'],
+           'LEAN_NUM_THREADS': '1', 'log': str(log),
+           'preflight_sha256': d.digest(LOGS / 'preflight.json')}
+    save(LOGS / 'active.json', rec)
+    print('START ' + action + ' ' + module, flush=True)
+    start = time.monotonic()
+    with log.open('w') as out:
+        out.write(json.dumps(rec, ensure_ascii=False) + '\n')
+        out.flush()
+        proc = subprocess.run(cmd, cwd=d.REPO, env=d.environment(), stdout=out, stderr=subprocess.STDOUT)
+    rec.update(returncode=proc.returncode, elapsed_seconds=round(time.monotonic() - start, 3), completed_utc=now())
+    rec['source_sha256_after'] = d.digest(source)
+    rec['imports_after'] = import_snapshot(module)
+    rec['objects_after'] = files(module) if resolved_object(module) else []
+    rec['raw_log_sha256'] = d.digest(log)
+    rec['source_unchanged'] = rec['source_sha256_after'] == before_source
+    rec['imports_unchanged'] = rec['imports_after'] == before_imports
+    rec['guards_unchanged'] = guards() == guard
+    save(LOGS / (stamp + '-' + action + '-result.json'), rec)
+    with (LOGS / 'results.jsonl').open('a') as out:
+        out.write(json.dumps(rec, ensure_ascii=False) + '\n')
+    save(LOGS / 'active.json', dict(rec, status='COMPLETED'))
+    print(json.dumps({k: rec[k] for k in ['action', 'module', 'returncode', 'elapsed_seconds',
+          'source_unchanged', 'imports_unchanged', 'guards_unchanged', 'log']}, ensure_ascii=False), flush=True)
+    if proc.returncode:
+        print(log.read_text().split('\n', 1)[1], flush=True)
+        raise SystemExit(proc.returncode)
+    assert rec['source_unchanged'] and rec['imports_unchanged'] and rec['guards_unchanged']
+
+if __name__ == '__main__':
+    action = sys.argv[1]
+    if action == 'preflight':
+        preflight()
+    else:
+        # Advisory lock confines this controller to one heavyweight process.
+        import fcntl
+        HERE.mkdir(parents=True, exist_ok=True)
+        with (HERE / 'single-module.lock').open('w') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            run_one(action)

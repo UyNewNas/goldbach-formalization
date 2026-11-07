@@ -1,0 +1,64 @@
+import sys
+sys.dont_write_bytecode=True
+from pathlib import Path
+import ast,json,hashlib,re,importlib.util,subprocess
+from datetime import datetime,timezone
+root=Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation');state=root/'.lake/proof-continuation';out=state/'source-reviews';module='ImbalancedChen.CurrentChenUpsilon8HarmonicMean';p=root/'ImbalancedChen/CurrentChenUpsilon8HarmonicMean.lean'
+helper=out/'drafts/20261016-TupleNormalization-DistinctProduct-lower-independent-rebind.py';tree=ast.parse(helper.read_text());wanted={'sha','uncomment','imports','assignment_at_top','declarations'};exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in wanted],type_ignores=[]),str(helper),'exec'))
+source_sha=sha(p);assert source_sha=='1a8603ea81187b6b84202cc0dbdb1e5ab69a9ebb5e2aaf94aafe7c1c975d4394';text=p.read_text();ds=declarations(text)
+assert len(ds)==12 and sum(d['kind']=='def' for d in ds)==4 and sum(d['kind']=='theorem' for d in ds)==8
+parents=['ImbalancedChen.CurrentChenUpsilon8TrueLiMass','ImbalancedChen.CurrentChenUpsilon9HarmonicMean'];expected=['9f009161174abeb734c21154ebc368a9ae3354b157fc2da42e199e76d307554c','1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35'];assert imports(text)==parents
+pp=state/'import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py';assert sha(pp)=='e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914';spec=importlib.util.spec_from_file_location('u8_harmonic_owner_frozen_parser',pp);parser=importlib.util.module_from_spec(spec);spec.loader.exec_module(parser)
+packages=json.loads((root/'lake-manifest.json').read_text())['packages'];providers=Path('/home/slava/codex-lean-ve/native-packages');std=Path('/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux');paths={};heads={};hashes={};wp=out/'drafts/20261016-U8CoprimeGateBudget-owner-review.py';tree=ast.parse(wp.read_text());exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in {'locate','read','walk'}],type_ignores=[]),str(wp),'exec'))
+parentsets=[];parent_records=[]
+for name,h in zip(parents,expected):
+ seen,missing,findings=walk(name);assert not missing and not findings and hashes[name]==h;parentsets.append(seen);parent_records.append({'module':name,'source_sha256':h,'full_source_closure_resolved':len(seen)})
+baseline=parentsets[0]|parentsets[1];candidate,missing,findings=walk(module);assert not missing and not findings and candidate-baseline=={module}
+pins={n:sha(root/n) for n in ['lean-toolchain','lakefile.toml','lake-manifest.json']}
+for n,h in pins.items():assert sha(root/'verification/proof-continuation/2026-10-15/pins'/n)==h
+provider_checks=[]
+for name in ['goldbach','mathlib']:
+ q=providers/name;actual=subprocess.check_output(['git','-C',str(q),'rev-parse','HEAD'],text=True).strip();expectedpin=next(v['rev'] for v in packages if v['name']==name);diff=subprocess.run(['git','-C',str(q),'diff','--quiet','HEAD','--'],capture_output=True,text=True);assert actual==expectedpin and diff.returncode==0;provider_checks.append({'name':name,'actual_HEAD':actual,'manifest_pin':expectedpin,'tracked_diff_HEAD_exit_code':diff.returncode})
+auditp=state/'audits/20261015T203514598065Z/receipt.json';audit=json.loads(auditp.read_text());assert audit['status']=='PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS' and audit['targets'][parents[1]]==expected[1]
+objp=state/'lib/lean/ImbalancedChen/CurrentChenUpsilon9HarmonicMean.olean';assert sha(objp)==audit['inputs_before']['owned_object_parts'][parents[1]]['.olean']
+strictp=state/'runs/20261015T233823169915Z-ImbalancedChen.CurrentChenUpsilon8TrueLiMass/receipt.json';strict=json.loads(strictp.read_text());assert strict['status']=='PASS' and strict['binding']['source_sha256']==strict['binding_after']['source_sha256']==expected[0] and strict['binding']['pins']==strict['binding_after']['pins']==pins
+parent_records[0].update({'actual_strict_receipt':str(strictp),'receipt_sha256':sha(strictp),'actual_strict_status':strict['status'],'full_owned_gate':'Runtime has reported strict PASS; this report does not infer full-owned acceptance from that receipt.'})
+parent_records[1].update({'actual_owned_receipt':str(auditp),'receipt_sha256':sha(auditp),'owned_declarations':audit['declaration_counts'][parents[1]],'current_object_sha256':sha(objp)})
+forbidden=[]
+for pat in [r'\bsorry\b',r'\badmit\b',r'(?m)^\s*(?:axiom|opaque|unsafe)\b',r'\bnative_decide\b',r'(?m)^\s*set_option\b']:
+ forbidden += [m.group(0) for m in re.finditer(pat,uncomment(text))]
+assert not forbidden
+api_specs=[
+(root/'ImbalancedChen/CurrentChenUpsilon8TrueLiMass.lean',29,35,'Exact existing eighth logarithmic reciprocal-totient mass; no change of support or coefficient'),
+(root/'ImbalancedChen/CurrentChenMeanLedger.lean',113,125,'Literal eighth and generic ninth selectors are definitionally the same predicate at specified endpoints'),
+(root/'ImbalancedChen/CurrentChenUpsilon8ProductPan.lean',27,36,'Proved actual eighth product injection and literal original product image'),
+(root/'ImbalancedChen/CurrentChenUpsilon9ProductCoefficient.lean',26,45,'Generic ordered-prime data and prime-factor uniqueness, instantiated at actual eighth bands'),
+(root/'ImbalancedChen/ChenPairHarmonicFinite.lean',68,73,'Exact phi(p*q) cast product for actual distinct primes'),
+(root/'ImbalancedChen/CurrentChenUpsilon9HarmonicMean.lean',37,50,'Owned source-independent affine forms and their genuine nonzero proof; no ninth-region assertion reused'),
+(root/'ImbalancedChen/CurrentChenUpsilon9HarmonicMean.lean',114,134,'Owned generic moving sqrt-to-log equivalence on positive coordinates'),
+(root/'ImbalancedChen/FinitePrimeGeometryCore.lean',157,169,'Actual target-prime-deleted box carrier with weak lower and strict upper endpoints'),
+(root/'ImbalancedChen/ActualPrimeIcoCellTestFunctions.lean',71,81,'Genuine affine sandwich prime-test limit with measurable mixed-wall domain and continuous ambient kernel'),
+(root/'ImbalancedChen/LogPrimeBoxIntegral.lean',24,43,'Literal logPrimeBox and measurable box API')]
+api=[]
+for q,lo,hi,role in api_specs:api.append({'path':str(q),'sha256':sha(q),'lines':[lo,hi],'role':role,'literal_source_excerpt':'\n'.join(q.read_text().splitlines()[lo-1:hi])})
+q=providers/'mathlib/Mathlib/MeasureTheory/Integral/Bochner/Set.lean';lines=q.read_text().splitlines();idx=next(i for i,s in enumerate(lines) if s.startswith('theorem setIntegral_congr_fun ('))
+api.append({'path':str(q),'sha256':sha(q),'lines':[idx+1,idx+3],'role':'Exact pointwise equality on a measurable integration set; no integrability premise or measure-zero replacement of an arithmetic wall','literal_source_excerpt':'\n'.join(lines[idx:idx+3])})
+claims=[
+'The source defines the actual U8 mixed affine region x0<1/3, 1/3<=x1, x0+2*x1<1, and its new bound vector. It reuses ONLY the already owned generic U9 affine forms/proved nonzero fact and generic sqrt-log equivalence; no U9 geometric region, kernel cutoff or harmonic limit is transferred.',
+'The lower open affine gate is contained in the actual mixed region, and that region is contained in the closed affine constraints. This preserves the weak x1>=1/3 wall arithmetically. The existing proved affine sandwich treats such walls before any integral null-wall argument; no prime atom is discarded as a measure-zero event.',
+'The ambient eighth kernel is 1/max(1/3,1-x0-x1), continuous because its denominator is >=1/3>0. The actual region gives 1-x0-x1>1/3 by x0<1/3 and x0+2*x1<1, so it agrees pointwise with the unmodified original gap reciprocal. The ninth cutoff191/500 would be invalid here and is not used.',
+'For actual positive coordinates and N>=2, exponent monotonicity plus the owned generic sqrt-log iff proves the exact selector region dictionary. The actual cube [417/5000,1/2) adds no arithmetic restriction: p1<N^(1/3)<N^(1/2) and p2<sqrt(N/p1)<=sqrt(N). Conversely this cube puts both primes below N, restoring the actual additive prime carrier with its same target-coprimality mask.',
+'The original p1 lower cutoff is weak and retained, p1 upper cutoff1/3 strict, p2 lower cutoff1/3 weak, and the moving square-root cutoff strict. The actual source/product image is used throughout, with no artificial rectangle or permutation multiplicity substituted.',
+'Owned actual U8 product injection pays Finset.sum_image. The pair-to-Fin2 bijection is explicit on the actual selector/filtered box. Original band separation supplies p1<p2, so the proven exact prime-pair totient product and genuine log(p1*p2) identity give precisely the original reciprocal-totient/log-gap summand. No caller injection, phi approximation or product coefficient bound is assumed.',
+'The final theorem obtains the genuine prime-box test limit from the existing public affine-sandwich theorem with the actual eighth constants. Set-integral congruence replaces the continuous extension pointwise on the exact measurable intersection, so the target J8 is literally integral[1/((1-x0-x1)*x0*x1)] on the actual original two-dimensional domain, without any clipped kernel in its definition.',
+'The final quantifiers are a Tendsto statement for the actual LogTotientMass8 itself. It assumes no harmonic limit, count bound, density mean, Pan aggregate budget or hUpper/hLower. It neither assembles an ordinary U8 count mean nor proves an adopted numerical row/current C/K. Those remain later separately gated work.',
+'Exactly12decl4defs8proof and exactly two approved direct parents are present. Relative to their fresh full proper source union only this one new project module is added and no foreign module is added. The imported U9 harmonic parent itself is genuinely owned with exact current object; U8TrueLi has actual strict PASS but full-owned acceptance is an independent runtime gate.'
+]
+common={'status':'SOURCE_ONLY_AUTHOR_REVIEW_PENDING_NONAUTHOR_AND_RUNTIME_GATES','author':'/root/lower_resume','created_utc':datetime.now(timezone.utc).isoformat(),'module':module,'source_sha256':source_sha,'no_Lean_or_build_invoked':True,'no_kernel_owned_or_cache_acceptance_claimed':True,'bytecode_writes_disabled':True}
+report=dict(common,full_source=text,complete_declarations=ds,declaration_count=12,definition_count=4,proof_count=8,direct_imports=parents,parent_records=parent_records,mathematical_review=claims,findings=[],fixed_public_API=api,pins=pins,provider_HEAD_and_tracked_clean_checks=provider_checks,forbidden_source_matches=forbidden,copied_proof_scope={'origin':'ImbalancedChen.CurrentChenUpsilon9HarmonicMean','source_sha256':expected[1],'scope':'Adapt the previously owned measurable mixed-wall, continuous-gap extension, exact selector dictionary and finite sum_bij skeleton to the genuinely different eighth constants. Reuse generic forms/nonzero and sqrt-log API instead of duplicating them. New final pointwise set-integral congruence makes the J8 definition literal, not the extension integral.','mathematical_changes':'h=417/5000, split1/3, max cutoff1/3, original eighth product image and selector. No claim the old U9 kernel equals the new kernel or its domain.'},runtime_gate='No compile authorized by this source report. Require source nonauthor/root gate and actual full-owned U8TrueLi9f parent plus runtime fresh source/object/cache binding; sole runtime owner performs strict/full-owned work.')
+rp=out/'20261016-U8HarmonicMean-owner-semantics.json';assert not rp.exists();rp.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+inventory={n:{'sha256':hashes[n],'header':heads[n]} for n in sorted(candidate)}
+dg=dict(common,header_parser_path=str(pp),header_parser_sha256=sha(pp),direct_imports=parents,baseline_parents=parent_records,baseline_union_resolved=len(baseline),candidate_resolved=len(candidate),new_project_vs_union=sorted(n for n in candidate-baseline if n.startswith('ImbalancedChen.')),new_foreign_vs_union=sorted(n for n in candidate-baseline if not n.startswith('ImbalancedChen.')),candidate_unresolved=missing,parser_findings=findings,full_source_inventory=inventory,method='Frozen proper header parser including public/meta/import-all and implicit Init, all manifest provider roots plus Lean/Lake sources. Source advisory only; no object installation, foreign bootstrap, cache acceptance or kernel replay.')
+dp=out/'20261016-U8HarmonicMean-owner-proper-dag.json';assert not dp.exists();dp.write_text(json.dumps(dg,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+assert sha(p)==source_sha
+print(json.dumps({'source_sha256':source_sha,'declarations':len(ds),'defs':4,'proofs':8,'semantics_path':str(rp),'semantics_sha256':sha(rp),'DAG_path':str(dp),'DAG_sha256':sha(dp),'closure':[len(candidate),len(baseline)],'newforeign':dg['new_foreign_vs_union'],'status':'SOURCE_ONLY'},indent=2))

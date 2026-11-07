@@ -1,0 +1,554 @@
+{
+  "audit_id": "20261022-common-p-finite-reduction-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T18:13:04.7358912Z",
+  "reviewer": "/root/weighted_refinement_review_sol_high_oct22",
+  "status": "INDEPENDENT_FULL124_TWO_TYPES_ACTUAL_ARITHMETIC_API_REVIEW_NO_CLEAR_BLOCKER_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Smallest nonduplicate actual cleaned common-p occupied-row geometry/cardinality lemma serving M2 finite-R reduction. Independent source-only read; no full R reduction, shifted moment or analytic supplier is claimed.",
+  "draft": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-common-p-finite-reduction-source-proposal.txt",
+    "sha256": "4b2d7e668fa944acd4ac4bf0d9bf2cb18dd0b31d69b679c69fa223e35605c86c",
+    "bytes": 5672,
+    "lines": 124,
+    "actual_source_read": true,
+    "spans": [
+      {
+        "first": 1,
+        "last": 124,
+        "literal_source": "import ImbalancedChen.Part3PairedAlphaDeletion\nimport ImbalancedChen.Part3SharedFirstFactorDispersion\nimport ImbalancedChen.Part3SmoothCoprimeError\nimport Mathlib.Analysis.SpecialFunctions.Pow.Real\n\n/-!\n# The actual cleaned common-p row has one uniformly short progression\n\nThe row is the literal cleaned/transposed beta carrier with the signed\ntarget-divisor deletion and the original product congruence. Its modulus\nis an arbitrary integer factor from the primitive first-factor carrier.\nNo primality of p or admissibility of the transposed atom is assumed.\n\nNonzero common smoothing supplies the real endpoints V/2 <= m <= 3V,\nincluding positivity even though its finite carrier contains zero. An\noccupied row supplies coprimality, and the original Q1 geometry supplies\nthe uniform 3U/Q1 cardinal bound for the later common-p row Cauchy step.\nNo divisor-fiber sum, shifted moment or analytic estimate is proved here.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset Set\n\ndef MediumAtom.cleanedCommonPProgression (d : MediumAtom) (p m : ℕ) : Finset ℕ :=\n  d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n    (fun n => ¬(n : ℤ) ∣ d.residue ∧\n      Int.ModEq p ((m : ℤ) * n) d.residue)\n\nnamespace CommonPFiniteReduction\n\nprivate theorem q1_lt_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.Q1 < d.U := by\n  have hU0 : 0 ≤ d.U := zero_le_one.trans hd.1\n  have hx : 1 ≤ d.scale := by\n    change 1 ≤ d.U * d.V\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one hU0\n  have hpow : d.scale ^ (-sigma) ≤ 1 :=\n    Real.rpow_le_one_of_one_le_of_nonpos hx (neg_nonpos.mpr hsigma.le)\n  have hgeom : d.Q1 < d.U * d.scale ^ (-sigma) :=\n    hd.2.2.2.2.2.2.2.2.1\n  exact hgeom.trans_le (by\n    simpa only [mul_one] using mul_le_mul_of_nonneg_left hpow hU0)\n\nend CommonPFiniteReduction\n\n/-- The occupied original cleaned row retains its signed residue and\ndeletion gate. A nonzero common smooth weight gives its true physical\nendpoints; the original primitive factor and full admissibility give\nthe coprimality and 3U/Q1 count, without a restriction on kappa. -/\ntheorem MediumAtom.cleaned_commonP_progression_geometry\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ)\n    (hpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0)\n    (hrow : (d.cleanedCommonPProgression p m).Nonempty) :\n    d.V / 2 ≤ (m : ℝ) ∧ (m : ℝ) ≤ 3 * d.V ∧ 0 < m ∧\n      m.Coprime p ∧\n        ((d.cleanedCommonPProgression p m).card : ℝ) ≤ 3 * d.U / d.Q1 := by\n  have hU0 : 0 ≤ d.U := zero_le_one.trans hd.1\n  have hVpos : 0 < d.V := zero_lt_one.trans_le hd.2.1\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hweight : CommonSmoothCutoff.scaledDyadicCutoff d.V (m : ℝ) ≠ 0 := by\n    simpa only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom,\n      MediumAtom.cleanedAlphaAtom] using hpsi\n  have hmSupport : (m : ℝ) ∈\n      tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.V) :=\n    subset_closure hweight\n  have hmBounds := CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset hVpos hmSupport\n  have hmpos : 0 < m := by\n    have hmReal : (0 : ℝ) < m := (half_pos hVpos).trans_le hmBounds.1\n    exact_mod_cast hmReal\n  have hpCarrier : p ∈ factorCarrier d.Q1 := (Finset.mem_filter.mp hp).1\n  have hpLower : d.Q1 ≤ (p : ℝ) :=\n    (Nat.le_ceil d.Q1).trans (by\n      exact_mod_cast (Finset.mem_Icc.mp hpCarrier).1)\n  have hppos : 0 < p := by\n    exact_mod_cast hQpos.trans_le hpLower\n  have ha : Int.gcd d.residue p = 1 := by\n    simpa only [Int.gcd, Int.natAbs_natCast] using (Finset.mem_filter.mp hp).2.symm\n  obtain ⟨n0, hn0⟩ := hrow\n  have hmod : Int.ModEq p ((m : ℤ) * n0) d.residue :=\n    (Finset.mem_filter.mp hn0).2.2\n  have hunit : m.Coprime p :=\n    (CommonSmoothCutoff.coprime_of_product_congruent ha hmod).1\n  have hsub : d.cleanedCommonPProgression p m ⊆\n      d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n        (fun n : ℕ => Int.ModEq p ((n : ℤ) * m) d.residue) := by\n    intro n hn\n    obtain ⟨hnCarrier, _hdelete, hnmod⟩ := Finset.mem_filter.mp hn\n    exact Finset.mem_filter.mpr ⟨hnCarrier, by simpa only [mul_comm] using hnmod⟩\n  have hprogression :\n      ((d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n        (fun n : ℕ => Int.ModEq p ((n : ℤ) * m) d.residue)).card : ℝ) ≤\n          2 * d.U / (p : ℝ) + 1 := by\n    exact PairedAlphaDeletion.betaCarrier_progression_card_le\n      (d := d.cleanedAlphaAtom.transposedAtom)\n      (show 1 ≤ d.cleanedAlphaAtom.transposedAtom.V from hd.1) hppos hunit\n  have hQU : d.Q1 < d.U := CommonPFiniteReduction.q1_lt_U hd hsigma\n  have hone : (1 : ℝ) ≤ d.U / d.Q1 := by\n    apply (le_div_iff₀ hQpos).mpr\n    simpa only [one_mul] using hQU.le\n  have hdiv : 2 * d.U / (p : ℝ) ≤ 2 * d.U / d.Q1 :=\n    div_le_div_of_nonneg_left\n      (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hU0) hQpos hpLower\n  refine ⟨hmBounds.1, hmBounds.2, hmpos, hunit, ?_⟩\n  calc\n    _ ≤ ((d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n        (fun n : ℕ => Int.ModEq p ((n : ℤ) * m) d.residue)).card : ℝ) := by\n      exact_mod_cast Finset.card_le_card hsub\n    _ ≤ 2 * d.U / (p : ℝ) + 1 := hprogression\n    _ ≤ 2 * d.U / d.Q1 + 1 := add_le_add hdiv le_rfl\n    _ ≤ 2 * d.U / d.Q1 + d.U / d.Q1 := add_le_add_left hone _\n    _ = 3 * d.U / d.Q1 := by ring\n\nend\n\nend ImbalancedChen.Part3\n",
+        "normalized_lf_utf8_sha256": "4b2d7e668fa944acd4ac4bf0d9bf2cb18dd0b31d69b679c69fa223e35605c86c"
+      }
+    ]
+  },
+  "author_checkpoint": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-common-p-finite-reduction-source-proposal-author-HOLD.json",
+    "sha256": "7fc7a19e6cad9b184bd8862933d1d3b06da84c43b3c7e1588da0e6c50701cbb9",
+    "role": "Identity, scope and final exact written-type comparison; not substituted for actual source/API reading."
+  },
+  "complete_written_theorem_types": [
+    {
+      "name_as_written": "q1_lt_U",
+      "visibility": "private",
+      "complete_written_type_through_proof_delimiter": "private theorem q1_lt_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.Q1 < d.U := by\n",
+      "normalized_lf_utf8_sha256": "9760ff9a7eb3b5c7eb70483d0eeefbc83027ec5246e2bf06f0c317c731fce5a0",
+      "type_span": "34-37",
+      "proof_span": "38-49",
+      "independent_assessment": "The original complete MediumAdmissible and sigma>0 are the only hypotheses. kappa and c0 remain arbitrary. U,V>=1 imply scale>=1; real rpow with exponent -sigma is <=1. The ninth geometric conjunction gives Q1<U*scale^(-sigma), hence Q1<U. No stronger admissibility or target analytic conclusion is introduced."
+    },
+    {
+      "name_as_written": "MediumAtom.cleaned_commonP_progression_geometry",
+      "visibility": "public",
+      "complete_written_type_through_proof_delimiter": "theorem MediumAtom.cleaned_commonP_progression_geometry\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ)\n    (hpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0)\n    (hrow : (d.cleanedCommonPProgression p m).Nonempty) :\n    d.V / 2 ≤ (m : ℝ) ∧ (m : ℝ) ≤ 3 * d.V ∧ 0 < m ∧\n      m.Coprime p ∧\n        ((d.cleanedCommonPProgression p m).card : ℝ) ≤ 3 * d.U / d.Q1 := by\n",
+      "normalized_lf_utf8_sha256": "08940865901187561f42fb33320f72b46438619c77394e13873d1933e8bb2fc9",
+      "type_span": "57-65",
+      "proof_span": "66-120",
+      "independent_assessment": "Exact original atom d, full hd, sigma>0, arbitrary natural primitive factor p, actual cleaned/transposed commonSmoothWeight nonzero at m, and the exact deleted product row Nonempty imply V/2<=m<=3V, m>0, m.Coprime p and exact row-card<=3U/Q1. No primality, transposed MediumAdmissible, kappa cap, shifted-moment estimate or M2 norm estimate is assumed."
+    }
+  ],
+  "types_independently_read_through_complete_proof_delimiter": true,
+  "author_type_comparisons": [
+    {
+      "name": "q1_lt_U",
+      "complete_written_type_matches_author": true,
+      "type_span_hash_matches_author": true
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_progression_geometry",
+      "complete_written_type_matches_author": true,
+      "type_span_hash_matches_author": true
+    }
+  ],
+  "row_definition": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-common-p-finite-reduction-source-proposal.txt",
+    "sha256": "4b2d7e668fa944acd4ac4bf0d9bf2cb18dd0b31d69b679c69fa223e35605c86c",
+    "bytes": 5672,
+    "lines": 124,
+    "actual_source_read": true,
+    "spans": [
+      {
+        "first": 27,
+        "last": 30,
+        "literal_source": "def MediumAtom.cleanedCommonPProgression (d : MediumAtom) (p m : ℕ) : Finset ℕ :=\n  d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n    (fun n => ¬(n : ℤ) ∣ d.residue ∧\n      Int.ModEq p ((m : ℤ) * n) d.residue)\n",
+        "normalized_lf_utf8_sha256": "2a06f73e1656e0cffecb9ea67a051dabe590e27c54303f4b9a685508d594acb4"
+      }
+    ]
+  },
+  "actual_pinned_API_source_hashes_and_spans": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "bytes": 8889,
+      "lines": 197,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 36,
+          "last": 64,
+          "literal_source": "structure MediumAtom where\n  U : ℝ\n  V : ℝ\n  Q1 : ℝ\n  Q2 : ℝ\n  Q3 : ℝ\n  residue : ℤ\n  intervalLo : ℝ\n  intervalHi : ℝ\n  alpha : ℕ → ℂ\n  beta : ℕ → ℂ\n  gamma1 : ℕ → ℂ\n  gamma2 : ℕ → ℂ\n  gamma3 : ℕ → ℂ\n\ndef MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V\n\ndef MediumAtom.alphaCarrier (d : MediumAtom) : Finset ℕ :=\n  (Finset.Icc (Nat.ceil d.U) (Nat.floor (2 * d.U))).filter\n    (fun n => d.intervalLo < (n : ℝ) ∧ (n : ℝ) ≤ d.intervalHi)\n\ndef MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))\n\n/-- Concrete dyadic support `Q ≤ q ≤ 2Q`, including the trivial factor\n`q=1` at `Q=1`. The manuscript writes `q ≍ Q`; the compiler must assign\noverlapping endpoints without multiplicity loss when it chooses its atoms. -/\ndef factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n",
+          "normalized_lf_utf8_sha256": "d3a07eab7f8be1b84c27d9a1c18f5e42e6d39642a3111d4c8aeb205f9f494a0a"
+        },
+        {
+          "first": 126,
+          "last": 148,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n",
+          "normalized_lf_utf8_sha256": "6c6ad1c398c235af394a2a4b6232e405ebc5c2de648cc448ad97074af7bf1b0a"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3PairedAlphaDeletion.lean",
+      "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "bytes": 40715,
+      "lines": 786,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 10,
+          "literal_source": "import ImbalancedChen.Part3SignedDivisorDeletion\nimport ImbalancedChen.Part3TransposedDispersion\n\n/-!\n# Actual original-alpha divisor deletion before transposed dispersion\n\nThe signed-divisor part is removed from original alpha, the paired\ncoefficient of the transposed dispersion. All original physical labels,\nthe signed moving residue, the common interval and primitive mean remain.\n\n",
+          "normalized_lf_utf8_sha256": "411f93d05c4b0806e95f35e2faf5a25e35755aa71cb93b636bce1c53234e742f"
+        },
+        {
+          "first": 38,
+          "last": 45,
+          "literal_source": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n\n\ndef MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0\n\ndef MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }\n",
+          "normalized_lf_utf8_sha256": "c8a813898599a468edab1fd166514964497535eda723074b926d2d492c14ddf2"
+        },
+        {
+          "first": 71,
+          "last": 112,
+          "literal_source": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom := by\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    ?_, ?_, hBeta, hGamma1, hGamma2, hGamma3⟩\n  · intro n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1\n    by_cases h : (n : ℤ) ∣ d.residue\n    · simp only [MediumAtom.cleanedAlpha, if_pos h, norm_zero, zero_le_one]\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hAlpha n hn\n  · intro n hn hnz p hp hpn\n    apply hRough n hn _ p hp hpn\n    change d.cleanedAlpha n ≠ 0 at hnz\n    by_cases h : (n : ℤ) ∣ d.residue\n    · exact (hnz (by simp only [MediumAtom.cleanedAlpha, if_pos h])).elim\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hnz\n\ntheorem MediumAtom.cleanedAlpha_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlpha n ≠ 0) : ¬(n : ℤ) ∣ d.residue := by\n  intro h\n  exact hn (by simp only [MediumAtom.cleanedAlpha, if_pos h])\n\n/-- This is the actual coefficient paired by the new dispersion. -/\ntheorem MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlphaAtom.transposedAtom.beta n ≠ 0) : ¬(n : ℤ) ∣ d.residue := by\n  change (if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0) ≠ 0 at hn\n  by_cases hm : n ∈ d.alphaCarrier\n  · exact d.cleanedAlpha_ne_zero_not_dvd (by simpa only [if_pos hm] using hn)\n  · exact (hn (by simp only [if_neg hm])).elim\n\nnamespace PairedAlphaDeletion\n\nprivate theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\n  unfold MediumAtom.scale\n  calc\n    1 = (1 : ℝ) * 1 := by norm_num\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\n",
+          "normalized_lf_utf8_sha256": "b0cd9d801ea6c9e1fdcccdf3f66786e62071c3191cfee1df3cb7f1ef89d1e1c7"
+        },
+        {
+          "first": 116,
+          "last": 156,
+          "literal_source": "theorem card_product_modEq_le (K q n : ℕ) (a : ℤ) (hn : n.Coprime q) :\n    ((Icc 0 K).filter (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) a)).card ≤\n      K / q + 1 := by\n  calc\n    _ ≤ (range (K / q + 1)).card := by\n      apply card_le_card_of_injOn (fun m : ℕ ↦ m / q)\n      · intro m hm\n        exact mem_range.mpr (Nat.lt_succ_of_le\n          (Nat.div_le_div_right (mem_Icc.mp (mem_filter.mp hm).1).2))\n      · intro m hm b hb he\n        apply Nat.ext_div_modEq he\n        apply Nat.ModEq.cancel_right_of_coprime hn.symm\n        apply Int.natCast_modEq_iff.mp\n        simpa only [Nat.cast_mul] using\n          (mem_filter.mp hm).2.trans (mem_filter.mp hb).2.symm\n    _ = _ := card_range _\n\ntheorem betaCarrier_progression_card_le\n    {d : MediumAtom} (hV : 1 ≤ d.V) {q n : ℕ} (hq : 0 < q) (hn : n.Coprime q) :\n    ((d.betaCarrier.filter\n      (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue)).card : ℝ) ≤\n        2 * d.V / q + 1 := by\n  have hsub : d.betaCarrier.filter\n      (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue) ⊆\n      (Icc 0 (Nat.floor (2 * d.V))).filter\n        (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue) := by\n    intro m hm\n    obtain ⟨hm, hap⟩ := mem_filter.mp hm\n    exact mem_filter.mpr ⟨mem_Icc.mpr ⟨Nat.zero_le _, (mem_Icc.mp hm).2⟩, hap⟩\n  calc\n    _ ≤ ((Nat.floor (2 * d.V) / q + 1 : ℕ) : ℝ) := by\n      exact_mod_cast (Finset.card_le_card hsub).trans\n        (card_product_modEq_le (Nat.floor (2 * d.V)) q n d.residue hn)\n    _ ≤ (Nat.floor (2 * d.V) : ℝ) / q + 1 := by\n      push_cast\n      have hh : ((Nat.floor (2 * d.V) / q : ℕ) : ℝ) ≤\n          (Nat.floor (2 * d.V) : ℝ) / (q : ℝ) := Nat.cast_div_le\n      exact add_le_add hh le_rfl\n    _ ≤ _ := add_le_add\n      (div_le_div_of_nonneg_right (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))\n        (show (0 : ℝ) ≤ (q : ℝ) by exact_mod_cast hq.le)) le_rfl\n",
+          "normalized_lf_utf8_sha256": "3f155cbda9269f5b0bcff2d45b98e31afb4d0ac2092fee3d214b35e72963e2a7"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedDispersion.lean",
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "bytes": 18832,
+      "lines": 379,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 8,
+          "literal_source": "import ImbalancedChen.Part3CommonPoisson\nimport ImbalancedChen.Part3FactorFiberDivisor\n\n/-!\n# Actual transposed complex dispersion, with SW on the paired side\n\nThis is a new dispersion object. Its smooth variable has length original V,\nand its paired coefficient is original alpha, extended by zero from the\n",
+          "normalized_lf_utf8_sha256": "279c8b29d72c938850dd19ea99e861023faf9b2d877bcc5b2946a670582e84d4"
+        },
+        {
+          "first": 34,
+          "last": 41,
+          "literal_source": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }\n",
+          "normalized_lf_utf8_sha256": "a50dc8ed44617f5f26008dd2d22ab4e927fb85337738bea459640193023e5833"
+        },
+        {
+          "first": 63,
+          "last": 64,
+          "literal_source": "theorem MediumAtom.transposedAtom_betaCarrier (d : MediumAtom) :\n    d.transposedAtom.betaCarrier = factorCarrier d.U := rfl\n",
+          "normalized_lf_utf8_sha256": "b7652472d56a3abfc933a54d27c0858be6940aa6d2752b8c048c71ecfffc50d5"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "bytes": 29327,
+      "lines": 592,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 8,
+          "literal_source": "import ImbalancedChen.Part3TransposedDispersion\n\n/-!\n# Actual Cauchy in original beta and the first physical factor\n\nThe first factor remains outside the squared row. Its full primitive\ndyadic carrier is used, so no coefficient-dependent subset becomes an\narbitrary weight in the later first-factor sum. The original gamma1 is\n",
+          "normalized_lf_utf8_sha256": "91e985604d538602fb5aebbb0ddc98bbcc3613fb1900a31c0200effdf9090907"
+        },
+        {
+          "first": 22,
+          "last": 33,
+          "literal_source": "namespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset Filter\nopen scoped BigOperators Topology\n\ndef MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\ndef MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n",
+          "normalized_lf_utf8_sha256": "0cadf7ee43188591c7efc1855807ac559edf7d57264b5638092f524d138cca7f"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "bytes": 9757,
+      "lines": 220,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 12,
+          "literal_source": "import ImbalancedChen.Part3ComplexDispersion\nimport Mathlib.Analysis.Calculus.BumpFunction.InnerProduct\nimport Mathlib.Analysis.Distribution.SchwartzSpace.Fourier\nimport Mathlib.MeasureTheory.Measure.Lebesgue.Integral\n\n/-!\n# One actual smooth weight for every modulus and frequency of an atom\n\nThe fixed cutoff, Schwartz realization and Fourier decay below are a\nnamespace-isolated extraction of LiLiuPrereqFouvrySmoothCutoff.lean from\ngoldbach commit 09b97db5764ade1246bfb77206baa1b124760958, source SHA256\nbf26cc38e366696cab636f34c61741a525d784026aaacaf98a13c7dcd40abd76.\n",
+          "normalized_lf_utf8_sha256": "7f906c6101786591250c0a466ac0f8870582399c4bc5f4fca0ff24d0857105e5"
+        },
+        {
+          "first": 57,
+          "last": 94,
+          "literal_source": "theorem dyadicCutoff_tsupport_subset : tsupport dyadicCutoff ⊆ Icc (1 / 2 : ℝ) 3 := by\n  change tsupport (dyadicBump : ℝ → ℝ) ⊆ _\n  rw [dyadicBump.tsupport_eq]\n  intro x hx\n  change |x - 3 / 2| ≤ 1 at hx\n  obtain ⟨h1, h2⟩ := abs_le.mp hx\n  constructor <;> linarith\n\ntheorem dyadicCutoff_hasCompactSupport : HasCompactSupport dyadicCutoff :=\n  dyadicBump.hasCompactSupport\n\ndef scaledDyadicCutoff (M x : ℝ) : ℝ := dyadicCutoff (x / M)\n\ntheorem scaledDyadicCutoff_contDiff (M : ℝ) : ContDiff ℝ ∞ (scaledDyadicCutoff M) :=\n  dyadicCutoff_contDiff.comp (contDiff_id.div_const M)\n\ntheorem scaledDyadicCutoff_nonneg (M x : ℝ) : 0 ≤ scaledDyadicCutoff M x :=\n  dyadicCutoff_nonneg _\n\ntheorem scaledDyadicCutoff_le_one (M x : ℝ) : scaledDyadicCutoff M x ≤ 1 :=\n  dyadicCutoff_le_one _\n\ntheorem scaledDyadicCutoff_eq_one {M x : ℝ} (hM : 0 < M)\n    (hx : x ∈ Icc M (2 * M)) : scaledDyadicCutoff M x = 1 := by\n  apply dyadicCutoff_eq_one\n  exact ⟨(le_div_iff₀ hM).mpr (by simpa using hx.1), (div_le_iff₀ hM).mpr hx.2⟩\n\ntheorem scaledDyadicCutoff_tsupport_subset {M : ℝ} (hM : 0 < M) :\n    tsupport (scaledDyadicCutoff M) ⊆ Icc (M / 2) (3 * M) := by\n  apply closure_minimal _ isClosed_Icc\n  intro x hx\n  have hx' : x / M ∈ tsupport dyadicCutoff :=\n    subset_closure (show x / M ∈ Function.support dyadicCutoff from hx)\n  obtain ⟨h1, h2⟩ := dyadicCutoff_tsupport_subset hx'\n  constructor\n  · have := (le_div_iff₀ hM).mp h1\n    linarith\n  · exact (div_le_iff₀ hM).mp h2\n",
+          "normalized_lf_utf8_sha256": "a2a12e25aceba6146f1be9225fea45f094ddde5d4f7053e6dcf82eacc47a93b1"
+        },
+        {
+          "first": 157,
+          "last": 164,
+          "literal_source": "def MediumAtom.commonSmoothCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc 0 (Nat.ceil (3 * d.U))\n\ndef MediumAtom.commonSmoothWeight (d : MediumAtom) (n : ℕ) : ℝ :=\n  CommonSmoothCutoff.scaledDyadicCutoff d.U (n : ℝ)\n\ntheorem MediumAtom.commonSmoothWeight_nonneg (d : MediumAtom) (n : ℕ) :\n    0 ≤ d.commonSmoothWeight n := CommonSmoothCutoff.scaledDyadicCutoff_nonneg _ _\n",
+          "normalized_lf_utf8_sha256": "204e92bcacd5bdf275fea31073fd774f720231b1a4a7cdc329f9347eaa834049"
+        },
+        {
+          "first": 179,
+          "last": 189,
+          "literal_source": "theorem MediumAtom.commonSmoothWeight_support_subset\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {n : ℕ}\n    (hn : d.commonSmoothWeight n ≠ 0) : n ∈ d.commonSmoothCarrier := by\n  have hU : 0 < d.U := lt_of_lt_of_le zero_lt_one hd.1\n  have hs : (n : ℝ) ∈ tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.U) :=\n    subset_closure hn\n  have hupper := (CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset hU hs).2\n  apply Finset.mem_Icc.mpr\n  refine ⟨Nat.zero_le _, ?_⟩\n  exact_mod_cast hupper.trans (Nat.le_ceil (3 * d.U))\n",
+          "normalized_lf_utf8_sha256": "2b9de25b9bf9f89942300ed93dc65a11d8212e672c741c8fa26de7c93fff366c"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SmoothCoprimeError.lean",
+      "sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "bytes": 16259,
+      "lines": 353,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 25,
+          "literal_source": "import ImbalancedChen.Part3SmoothProgressionError\nimport Mathlib.NumberTheory.ArithmeticFunction.Moebius\nimport Mathlib.Data.Nat.Factorization.Basic\n\n/-!\n# Actual coprime and mixed progression gates for the common cutoff\n\nThese finite Mobius identities and CRT constructions are namespace-local\nextractions of fixed goldbach 09b97db5764ade1246bfb77206baa1b124760958:\nLiLiuPrereqFouvryMainTerm, CoprimeCount, Dispersion, ArithmeticPoisson and SmoothMainTerm.\nNo provider module from that smoothing chain is imported. All uniform\nbounds use the proved local progression bound and local cutoffMass.\n\nThe scale, finite support, both moduli, invertible multiplier and reduced\nsigned residue are arbitrary. No error or coefficient budget is assumed.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\n\nnamespace CommonSmoothCutoff\n",
+          "normalized_lf_utf8_sha256": "2df366e8dbda753f8c7cd19b1de97140df8cb6164f4adde2d236b19320c82485"
+        },
+        {
+          "first": 132,
+          "last": 139,
+          "literal_source": "theorem coprime_of_product_congruent {a : ℤ} {q m n : ℕ}\n    (ha : Int.gcd a q = 1) (h : Int.ModEq q ((m : ℤ) * n) a) :\n    m.Coprime q ∧ n.Coprime q := by\n  have hg : Int.gcd ((m : ℤ) * n) q = 1 := by\n    rw [← Int.gcd_emod ((m : ℤ) * n) q, h.eq, Int.gcd_emod, ha]\n  have hmn : (m * n).Coprime q := by\n    simpa [Int.gcd, Int.natAbs_mul] using hg\n  exact Nat.coprime_mul_iff_left.mp hmn\n",
+          "normalized_lf_utf8_sha256": "6bf3b986655772cf9e2e808b2c9579d3e898340a6fe807fdfe682ebf671b036b"
+        },
+        {
+          "first": 349,
+          "last": 349,
+          "literal_source": "end CommonSmoothCutoff\n",
+          "normalized_lf_utf8_sha256": "d4fc3efddb3bd534fa6cc4f6837dd9da58ec3dfefce457a49edec22aefe089bb"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorLargePairedGCDW.lean",
+      "sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "bytes": 26714,
+      "lines": 501,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 145,
+          "last": 184,
+          "literal_source": "private theorem p_coprime_residue\n    {d : MediumAtom} {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    Int.gcd d.residue p = 1 := by\n  simpa only [Int.gcd, Int.natAbs_natCast] using (mem_filter.mp hp).2.symm\n\nprivate theorem slice_gamma (d : MediumAtom) (p : ℕ) (r : ℕ × ℕ × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexFactorGamma r =\n      (if r.1 = p then (1 : ℂ) else 0) * d.gamma2 r.2.1 * d.gamma3 r.2.2 := rfl\n\n/-- This is the actual p-divisibility support, with all complex labels. -/\nprivate theorem absoluteRow_eq_zero_of_not_product (d : MediumAtom) (p m n : ℕ)\n    (hnot : ¬Int.ModEq p ((m : ℤ) * n) d.residue) :\n    (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n = 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  rw [show (d.q1SliceAtom p).transposedAtom.residue = d.residue from rfl]\n  apply sum_eq_zero\n  intro r _\n  by_cases hq : r.1 = p\n  · by_cases hr : Int.ModEq (complexFactorModulus r) ((m : ℤ) * n) d.residue\n    · have hdiv : (p : ℤ) ∣ (complexFactorModulus r : ℤ) := by\n        refine ⟨((r.2.1 * r.2.2 : ℕ) : ℤ), ?_⟩\n        simp only [complexFactorModulus]\n        rw [hq]\n        push_cast\n        ring\n      exact (hnot (hr.of_dvd hdiv)).elim\n    · simp only [if_neg hr]\n  · simp only [slice_gamma, if_neg hq, zero_mul, norm_zero, ite_self]\n\n/- Exact primitive-product and congruence cancellation from the owned\nComplexCRTConsumer, specialized to the same p. The original numerator\nis signed and no size condition is used. -/\nprivate theorem coprime_of_product_congruent {a : ℤ} {p n m : ℕ}\n    (ha : Int.gcd a p = 1) (h : Int.ModEq p ((n : ℤ) * m) a) :\n    n.Coprime p ∧ m.Coprime p := by\n  have hg : Int.gcd ((n : ℤ) * m) p = 1 := by\n    rw [← Int.gcd_emod ((n : ℤ) * m) p, h.eq, Int.gcd_emod, ha]\n  have hnm : (n * m).Coprime p := by\n    simpa [Int.gcd, Int.natAbs_mul] using hg\n  exact Nat.coprime_mul_iff_left.mp hnm\n",
+          "normalized_lf_utf8_sha256": "a9b22d60d8dbc28c8f974f126d4b99779bf4fafc3c8b2bd4dd6025bfbb644152"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "bytes": 50301,
+      "lines": 1149,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 664,
+          "last": 670,
+          "literal_source": "theorem rpow_lt_one_of_one_lt_of_neg {x z : ℝ} (hx : 1 < x) (hz : z < 0) : x ^ z < 1 := by\n  convert! rpow_lt_rpow_of_exponent_lt hx hz\n  exact (rpow_zero x).symm\n\ntheorem rpow_le_one_of_one_le_of_nonpos {x z : ℝ} (hx : 1 ≤ x) (hz : z ≤ 0) : x ^ z ≤ 1 := by\n  convert! rpow_le_rpow_of_exponent_le hx hz\n  exact (rpow_zero x).symm\n",
+          "normalized_lf_utf8_sha256": "34c040a31a581c95608b8534071dbb8a329b20add216365e158e45fe53212e72"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "bytes": 63984,
+      "lines": 1480,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1133,
+          "last": 1135,
+          "literal_source": "/-- See `le_div_iff₀'` for a version with multiplication on the other side. -/\nlemma le_div_iff₀ (hc : 0 < c) : a ≤ b / c ↔ a * c ≤ b := by\n  rw [div_eq_mul_inv, le_mul_inv_iff₀ hc]\n",
+          "normalized_lf_utf8_sha256": "43e2b621986a8c9de42690b22e14bdbdcea0eb546293ebec563c6180790ccb71"
+        },
+        {
+          "first": 1274,
+          "last": 1278,
+          "literal_source": "-- Not a `mono` lemma b/c `div_le_div₀` is strictly more general\nlemma div_le_div_of_nonneg_left (ha : 0 ≤ a) (hc : 0 < c) (h : c ≤ b) : a / b ≤ a / c := by\n  rw [div_eq_mul_inv, div_eq_mul_inv]\n  gcongr\n  exacts [ha, hc]\n",
+          "normalized_lf_utf8_sha256": "9890e7a50ead7155aa92e0a937b67945342d2fba29c3ae1e362468bf6929a441"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+      "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+      "bytes": 22609,
+      "lines": 472,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 312,
+          "last": 318,
+          "literal_source": "theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)\n\ntheorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)\n",
+          "normalized_lf_utf8_sha256": "8541e13359503b9d65764f7cb140ae0fcddd3d13900f18b4689ccdcf006b4783"
+        },
+        {
+          "first": 352,
+          "last": 353,
+          "literal_source": "alias mul_le_mul := mul_le_mul_of_nonneg'\nattribute [gcongr] mul_le_mul\n",
+          "normalized_lf_utf8_sha256": "fc12eec7d062a25f33baa4c29d79e257eb98a234126333930a9f180a640f7c7f"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "bytes": 15993,
+      "lines": 450,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 177,
+          "last": 179,
+          "literal_source": "@[bound]\ntheorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=\n  ceil_le.1 le_rfl\n",
+          "normalized_lf_utf8_sha256": "a584964ae3ecd602ae26f7a739af084b7c3261308bce03e268ac01475ad96b16"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Filter.lean",
+      "sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+      "bytes": 8897,
+      "lines": 236,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 126,
+          "last": 128,
+          "literal_source": "@[simp, grind =]\ntheorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=\n  Multiset.mem_filter\n",
+          "normalized_lf_utf8_sha256": "00dbc8f7f6f684494646df8ab01d82ad0f14c50aa610ae5a6d4842fb31ac5d3f"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Finset\\Defs.lean",
+      "sha256": "1955182f4d5efe48b58fdd3c5a2498b7a148807dccbe61d0c5a3937084b91f9b",
+      "bytes": 43652,
+      "lines": 1141,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 300,
+          "last": 302,
+          "literal_source": "@[simp, grind =]\ntheorem mem_Icc : x ∈ Icc a b ↔ a ≤ x ∧ x ≤ b :=\n  LocallyFiniteOrder.finset_mem_Icc a b x\n",
+          "normalized_lf_utf8_sha256": "b1b751ffcd45f1fce6e161924f7aa6404485595e292333294cce71c51ca74a5a"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Algebra\\Support.lean",
+      "sha256": "aab196644260f0c77d8aab52c3151df9c49880c1e9b8ee08cb97193a6ef994a9",
+      "bytes": 22345,
+      "lines": 568,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 38,
+          "last": 54,
+          "literal_source": "open Function Set Filter Topology\n\nvariable {X α α' β γ δ M R : Type*}\n\nsection One\n\nvariable [One α] [TopologicalSpace X]\n\n/-- The topological support of a function is the closure of its support, i.e. the closure of the\nset of all elements where the function is not equal to 1. -/\n@[to_additive /-- The topological support of a function is the closure of its support. i.e. the\nclosure of the set of all elements where the function is nonzero. -/]\ndef mulTSupport (f : X → α) : Set X := closure (mulSupport f)\n\n@[to_additive]\ntheorem subset_mulTSupport (f : X → α) : mulSupport f ⊆ mulTSupport f :=\n  subset_closure\n",
+          "normalized_lf_utf8_sha256": "71036ea8c99464b16f57ac60092abdd30b8efaeff656f2062d0ece8fb5c897ef"
+        }
+      ]
+    }
+  ],
+  "public_stock_API_complete_types": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T203924194305Z\\declarations.json",
+      "sha256": "8fc156d9671c3d0406359d104819155b1f0add09b56c1b9d34758bfdcef9035b",
+      "selected_complete_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SmoothCoprimeError",
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprime_of_product_congruent",
+        "partial": false,
+        "type": "∀ {a : Int} {q m n : Nat}\n  (ha :\n    @Eq.{1} Nat (Int.gcd a (@Nat.cast.{0} Int instNatCastInt q))\n      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n  (h :\n    Int.ModEq (@Nat.cast.{0} Int instNatCastInt q)\n      (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt m)\n        (@Nat.cast.{0} Int instNatCastInt n))\n      a),\n  And (Nat.Coprime m q) (Nat.Coprime n q)",
+        "unsafe": false
+      },
+      "complete_type_actually_read": true,
+      "historical_evidence_only": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T215420005455Z\\declarations.json",
+      "sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "selected_complete_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.PairedAlphaDeletion.betaCarrier_progression_card_le",
+        "partial": false,
+        "type": "∀ {d : ImbalancedChen.Part3.MediumAtom}\n  (hV :\n    @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n      (ImbalancedChen.Part3.MediumAtom.V d))\n  {q n : Nat} (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)\n  (hn : Nat.Coprime n q),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@Finset.card.{0} Nat\n        (@Finset.filter.{0} Nat\n          (fun (m : Nat) =>\n            Int.ModEq (@Nat.cast.{0} Int instNatCastInt q)\n              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt m)\n                (@Nat.cast.{0} Int instNatCastInt n))\n              (ImbalancedChen.Part3.MediumAtom.residue d))\n          (fun (a : Nat) =>\n            @Int.instDecidableModEq (@Nat.cast.{0} Int instNatCastInt q)\n              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt a)\n                (@Nat.cast.{0} Int instNatCastInt n))\n              (ImbalancedChen.Part3.MediumAtom.residue d))\n          (ImbalancedChen.Part3.MediumAtom.betaCarrier d))))\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 2)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n          (ImbalancedChen.Part3.MediumAtom.V d))\n        (@Nat.cast.{0} Real Real.instNatCast q))\n      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))",
+        "unsafe": false
+      },
+      "complete_type_actually_read": true,
+      "historical_evidence_only": true
+    }
+  ],
+  "direct_project_import_current_bindings": [
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.Part3PairedAlphaDeletion.json",
+      "receipt_sha256": "1ded35f0da417d2ed868a5813ec71ad9734a2679efa541a35ea605fc73984bcd",
+      "existing_status": "PASS",
+      "existing_exit_code": 0,
+      "existing_bound_source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "current_source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "current_source_matches_existing_bound_source": true,
+      "object_parts_as_recorded": {
+        ".olean": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+      },
+      "fresh_compilation_performed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.Part3SharedFirstFactorDispersion.json",
+      "receipt_sha256": "3c66dbaef9f452446648160c0a910e7e3175ea5102764e8913cf31bfef1d08c3",
+      "existing_status": "PASS",
+      "existing_exit_code": 0,
+      "existing_bound_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "current_source_matches_existing_bound_source": true,
+      "object_parts_as_recorded": {
+        ".olean": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc"
+      },
+      "fresh_compilation_performed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SmoothCoprimeError",
+      "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.Part3SmoothCoprimeError.json",
+      "receipt_sha256": "cfebfbd9ffdd83c48cb3e417187fdafc7c146e526abad2520b3e0e270fc109fc",
+      "existing_status": "PASS",
+      "existing_exit_code": 0,
+      "existing_bound_source_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "current_source_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "current_source_matches_existing_bound_source": true,
+      "object_parts_as_recorded": {
+        ".olean": "37f6a7107eec73494925f691acf23924fc2b5615800fff72c2115a6fabc69b71"
+      },
+      "fresh_compilation_performed": false
+    }
+  ],
+  "native_mathlib_import": "Mathlib.Analysis.SpecialFunctions.Pow.Real; actual native source hash and rpow theorem spans recorded above.",
+  "API_parameter_and_elaboration_checks": [
+    {
+      "draft_span": "34-49",
+      "result": "No clear issue",
+      "details": "MediumAdmissible contains 18 right-associated conjunctions. Q1<U*scale^(-sigma) is item9, obtained by eight .2 projections then .1 exactly as written. mul_le_mul is the nonneg-prime alias: sign arguments are 0<=second-left factor and 0<=first-right factor, here zero_le_one and hU0. Real.rpow_le_one_of_one_le_of_nonpos takes scale>=1 then -sigma<=0. No kappa assumption is used."
+    },
+    {
+      "draft_span": "66-78",
+      "result": "No clear issue",
+      "details": "Cleaning changes only alpha; transposition sets U=old V and V=old U. commonSmoothWeight uses the receiver U. Simplifying these definitions turns actual cleaned/transposed psi into scaledDyadicCutoff original V. The proof uses only scaled cutoff support at V>0, not MediumAtom.commonSmoothWeight_support_subset with an unproved transposed hd. Nonzero psi gives support membership, subset_closure gives tsupport membership, and the public scaled support theorem gives both closed real endpoints. V/2>0 gives natural m>0 by exact_mod_cast; the common carrier zero endpoint is excluded by actual psi, not by silently shrinking a finite carrier."
+    },
+    {
+      "draft_span": "79-91",
+      "result": "No clear issue",
+      "details": "primitiveFirstFactorCarrier is exactly factorCarrier(Q1).filter(p.Coprime residue.natAbs). Its first component and the ceil/Icc lower bound yield Q1<=p; Q1>=1 yields p>0. Its second component after symmetry gives Int.gcd residue p=1. This simpa is identical to the already existing private p_coprime_residue proof, without citing its private name. A witness n0 from the exact row supplies the required signed ModEq. Public CommonSmoothCutoff.coprime_of_product_congruent has implicit q,m,n and yields m.Coprime p in its first conjunct, with no Prime p hypothesis."
+    },
+    {
+      "draft_span": "92-104",
+      "result": "No clear issue",
+      "details": "The comparison subset keeps the same cleaned/transposed betaCarrier and signed residue. It drops only the extra deletion predicate to enlarge the comparison set and reverses product order with integer mul_comm. betaCarrier_progression_card_le takes numeric 1<=receiver.V, positive modulus, then multiplier.Coprime modulus; these are hd.1 by definitional V=original U, hppos, hunit. Its result is exactly 2*original U/p+1. No transposed MediumAdmissible is supplied or needed."
+    },
+    {
+      "draft_span": "105-120",
+      "result": "No clear issue",
+      "details": "Q1<U and Q1>0 give 1<=U/Q1 via le_div_iff₀. div_le_div_of_nonneg_left takes nonnegative numerator, positive smaller denominator Q1, then Q1<=p, in the actual API order. card_le_card on hsub is cast to reals; additive comparisons give 2U/p+1<=2U/Q1+U/Q1, and ring rearranges to3U/Q1. No floor/ceil upper endpoint is altered."
+    }
+  ],
+  "exact_semantics": {
+    "p_domain": "p : Nat, arbitrary integer-valued factor in the primitive first-factor carrier; no primality assumption.",
+    "original_hd_retained": true,
+    "sigma_positive_retained": true,
+    "kappa_unrestricted": true,
+    "c0_unrestricted": true,
+    "original_signed_residue_retained": true,
+    "signed_target_divisor_deletion": "The row explicitly filters by NOT ((n : Int) divides d.residue); no natAbs replacement.",
+    "actual_cleaned_transposed_beta_carrier_retained": true,
+    "actual_hpsi": "d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m != 0",
+    "closed_real_endpoints": "original V/2 <= (m : Real) <= 3*original V",
+    "m_positive_derived": true,
+    "original_ceil_lower_endpoint_retained": true,
+    "row_nonempty_assumption_explicit": true,
+    "zero_psi_and_empty_rows": "No claim of positivity or invertibility is made for zero-psi or empty rows. Such rows must be treated separately in a subsequent finite-sum reduction; this statement does not silently discard or prove that later reduction.",
+    "alpha_interval_and_roughness": "Transposed beta n is still original cleaned alpha n extended by zero outside original alphaCarrier, preserving its original interval and roughness support from hd. The progression row is a carrier-level superset; its Nonempty does not assert beta n nonzero or alpha support. A cardinal upper bound on this full row also bounds any later coefficient-support restriction. No alphaCarrier membership or roughness conclusion is falsely inferred from the row witness.",
+    "target_not_assumed": "Neither the target M2 norm bound nor a shifted moment/spectral/distribution estimate is a hypothesis."
+  },
+  "nonduplication": {
+    "bounded_search": "rg on existing ImbalancedChen/Part3*.lean for the complete new theorem/row names, Q1<U geometry and common-smooth occupied-row combinations.",
+    "existing_public_API_reused": [
+      "CommonSmoothCutoff.coprime_of_product_congruent",
+      "PairedAlphaDeletion.betaCarrier_progression_card_le"
+    ],
+    "private_names_cited": false,
+    "assessment": "Generic product-coprimality and progression cardinality results already exist and are reused. The new actual-domain combination deriving support endpoints, positivity, invertibility and a uniform Q1-normalized count from original hd plus occupied actual cleaned row is not an existing complete public API located by the bounded search."
+  },
+  "findings": {
+    "blocking": [],
+    "concrete_source_repairs": [],
+    "nonblocking": [
+      {
+        "id": "N1",
+        "location": "draft:1-124",
+        "kind": "verification_limit",
+        "detail": "Source/API review is consistent and no definite code defect was found. No elaboration/compiler/kernel execution was authorized. Lack of compilation is not classified as a code blocker."
+      },
+      {
+        "id": "N2",
+        "location": "draft:14-18,57-65",
+        "kind": "remaining_route_scope",
+        "detail": "This is an occupied-row geometry/count input only. The finite weighted R Cauchy step, product/divisor fibers, zero-row bookkeeping and shifted moment composition remain separate authorized future obligations; no M2 completion is claimed."
+      }
+    ]
+  },
+  "trust_and_execution": {
+    "full124_source_read": true,
+    "full2_written_types_read": true,
+    "hidden_supplier_found": false,
+    "sorry_axiom_admit_unsafe_partial_extern_implemented_by_found": false,
+    "new_prime_or_transposed_admissibility_assumption_found": false,
+    "heavy_work_count": 0,
+    "actual_project_Lean_written": false,
+    "compiler_executed": false,
+    "checker_executed": false,
+    "proper_executed": false,
+    "classifier_executed": false,
+    "collect_executed": false,
+    "census_executed": false,
+    "cache_modified": false,
+    "Git_executed": false,
+    "draft_or_author_CP_modified": false,
+    "subagents_spawned": false,
+    "only_new_file": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-common-p-finite-reduction-independent-source-review-HOLD.json",
+    "quota_last_used_percent": 41,
+    "quota_last_remaining_percent": 59,
+    "stop_remaining_lte_percent": 40,
+    "quota_stop_threshold_reached": false
+  },
+  "hash_convention": "Whole-file SHA256 covers actual raw bytes. Actual source spans and complete written types use actual read lines joined by LF plus final LF, UTF-8 without BOM. No compiled declaration inventory/count is predicted.",
+  "final_state": "HOLD"
+}

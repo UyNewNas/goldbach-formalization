@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "status": "RETAINED_VARIANCE_FINITE_COMPARISON_INDEPENDENT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-22T00:51:59.916036+00:00",
+  "source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPRetainedVarianceComparison-module-source.txt",
+    "sha256": "f6166cb435888a9168b027af969317060eee2bc6df06acc057a789549c0d5de7",
+    "bytes": 5933,
+    "LF": 121
+  },
+  "author_CP": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-retained-variance-finite-comparison-source-proposal-author-HOLD.json",
+    "sha256": "ea0e44884e46f11a7957da89e496c992d2ce6be21bdaf89b6edf2dc23a765717",
+    "bytes": 25541,
+    "LF": 339
+  },
+  "all121LF_source_and_complete_types_bodies_read": true,
+  "counts": {
+    "definitions": 1,
+    "theorem_proofs": 5,
+    "public_theorems": 4,
+    "private_theorems": 1,
+    "generated_declarations_predicted": null
+  },
+  "complete_written_declarations": [
+    {
+      "name": "tailEnergy",
+      "kind": "def",
+      "private": false,
+      "first": 15,
+      "last": 18,
+      "complete_type": "def tailEnergy (d : MediumAtom) (H : ℝ) : ℝ",
+      "type_sha256": "6193e7677d9f776722c36fc9b67c6eed266b5fecf48cdbad6283fbe3fe686c46",
+      "complete_body": ":=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * ‖tailRow d H p m‖ ^ 2",
+      "body_sha256": "5e720500db72de36b0a24549117259f2395f21b939160fd44f23c8c382732237",
+      "full_declaration_sha256": "9d3861204d4b86d89b6ea7a631eea8f73f14caeffbb9ac0030d685f7c7985c89",
+      "full_type_body_read": true
+    },
+    {
+      "name": "norm_add_sq_le_twice",
+      "kind": "theorem",
+      "private": true,
+      "first": 20,
+      "last": 24,
+      "complete_type": "private theorem norm_add_sq_le_twice (z w : ℂ) :\n    ‖z + w‖ ^ 2 ≤ 2 * ‖z‖ ^ 2 + 2 * ‖w‖ ^ 2",
+      "type_sha256": "9283c599ce77776b06d9f450826a276855e25b393ff2dde0306d1943e64e1aef",
+      "complete_body": ":= by\n  have hs := (sq_le_sq₀ (norm_nonneg (z + w))\n    (add_nonneg (norm_nonneg z) (norm_nonneg w))).2 (norm_add_le z w)\n  nlinarith [sq_nonneg (‖z‖ - ‖w‖)]",
+      "body_sha256": "137afa6073c602ba768016f9f9bc9f3ed13c42aea67dff12d8f24570b93fbeae",
+      "full_declaration_sha256": "57a4b3ac34e48c832c16671f79dc3938fc637cfa77f1bc70ff60d09087e8735d",
+      "full_type_body_read": true
+    },
+    {
+      "name": "tailEnergy_le_moment_div_sq",
+      "kind": "theorem",
+      "private": false,
+      "first": 27,
+      "last": 44,
+      "complete_type": "theorem tailEnergy_le_moment_div_sq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H) :\n    tailEnergy d H ≤ CommonPM2FiniteFold.moment d / H ^ 2",
+      "type_sha256": "9925e6ae30dc4bce1d49b56ae0c7e8c34a272602a7eb1c7a9e848f4fe66e3569",
+      "complete_body": ":= by\n  unfold tailEnergy CommonPM2FiniteFold.moment\n  simp only [Finset.sum_div, mul_div_assoc]\n  apply Finset.sum_le_sum\n  intro p hp\n  apply Finset.sum_le_sum\n  intro m _hm\n  apply mul_le_mul_of_nonneg_left _\n    (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n  have hrow : 0 ≤ CommonPM2FiniteFold.rowSum d p m := by\n    unfold CommonPM2FiniteFold.rowSum\n    exact Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _) (sq_nonneg _))\n  have hs := (sq_le_sq₀ (norm_nonneg (tailRow d H p m))\n    (div_nonneg hrow hH.le)).2 (tailRow_norm_le hd hH hp m)\n  simpa only [div_pow] using hs",
+      "body_sha256": "12bc1bcecdda2a2439d169c2cfb09cf810a6aedc298762edabf971c806cd5ad3",
+      "full_declaration_sha256": "42ce1926546b787968ae28b46078c12f6dc1cb41518577bc3e9e4b847062dd33",
+      "full_type_body_read": true
+    },
+    {
+      "name": "centered_retained_row_comparisons",
+      "kind": "theorem",
+      "private": false,
+      "first": 47,
+      "last": 71,
+      "complete_type": "theorem centered_retained_row_comparisons\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (H : ℝ)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 ≤\n      2 * ‖truncatedCenteredRow d H p m‖ ^ 2 + 2 * ‖tailRow d H p m‖ ^ 2) ∧\n    (‖truncatedCenteredRow d H p m‖ ^ 2 ≤\n      2 * ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 +\n        2 * ‖tailRow d H p m‖ ^ 2)",
+      "type_sha256": "14c1130cc5e2c970bcc31e36fa19286f43659de7aaad1826eb617f9171bd5987",
+      "complete_body": ":= by\n  have ht := centeredRow_sub_truncated_eq_tail hd H hp m\n  have hf : (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m =\n      truncatedCenteredRow d H p m + tailRow d H p m := by linear_combination ht\n  have hr : truncatedCenteredRow d H p m =\n      (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m +\n        (-tailRow d H p m) := by linear_combination -ht\n  constructor\n  · calc\n      _ = ‖truncatedCenteredRow d H p m + tailRow d H p m‖ ^ 2 := by rw [hf]\n      _ ≤ _ := norm_add_sq_le_twice _ _\n  · calc\n      _ = ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m +\n          (-tailRow d H p m)‖ ^ 2 := by rw [hr]\n      _ ≤ _ := by simpa only [norm_neg] using norm_add_sq_le_twice\n        ((d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m)\n        (-tailRow d H p m)",
+      "body_sha256": "e9ba2ffe82eca40cda6175fb3cdf2388a4147de6fc1288b3e78b975bbdad50f4",
+      "full_declaration_sha256": "a46b4a0757bfe337683d839be4670f8f30e223631c42d0dfe6c445e13ab3a6e2",
+      "full_type_body_read": true
+    },
+    {
+      "name": "variance_comparisons_tailEnergy",
+      "kind": "theorem",
+      "private": false,
+      "first": 74,
+      "last": 104,
+      "complete_type": "theorem variance_comparisons_tailEnergy\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (H : ℝ) :\n    (originalVariance d ≤ 2 * retainedVariance d H + 2 * tailEnergy d H) ∧\n    (retainedVariance d H ≤ 2 * originalVariance d + 2 * tailEnergy d H)",
+      "type_sha256": "fdb95555a6a74037044d3a45f73141761a4559e35419e72c399848377353bdfd",
+      "complete_body": ":= by\n  constructor\n  · unfold originalVariance retainedVariance tailEnergy\n    simp only [Finset.mul_sum, ← Finset.sum_add_distrib]\n    apply Finset.sum_le_sum\n    intro p hp\n    apply Finset.sum_le_sum\n    intro m _hm\n    calc\n      _ ≤ d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n          (2 * ‖truncatedCenteredRow d H p m‖ ^ 2 + 2 * ‖tailRow d H p m‖ ^ 2) :=\n        mul_le_mul_of_nonneg_left (centered_retained_row_comparisons hd H hp m).1\n          (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      _ = _ := by ring\n  · unfold originalVariance retainedVariance tailEnergy\n    simp only [Finset.mul_sum, ← Finset.sum_add_distrib]\n    apply Finset.sum_le_sum\n    intro p hp\n    apply Finset.sum_le_sum\n    intro m _hm\n    calc\n      _ ≤ d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n          (2 * ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 +\n            2 * ‖tailRow d H p m‖ ^ 2) :=\n        mul_le_mul_of_nonneg_left (centered_retained_row_comparisons hd H hp m).2\n          (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      _ = _ := by ring",
+      "body_sha256": "9d8d1b11a8b02b145fe377f3c227eb7e4ed229865dd4e5ae69f4eb51db74507c",
+      "full_declaration_sha256": "f40cc82b47ff836b258cf261d8a782841c951a0cfbb277dc8a87398a04835c1a",
+      "full_type_body_read": true
+    },
+    {
+      "name": "variance_comparisons_moment",
+      "kind": "theorem",
+      "private": false,
+      "first": 107,
+      "last": 118,
+      "complete_type": "theorem variance_comparisons_moment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H) :\n    (originalVariance d ≤ 2 * retainedVariance d H +\n      2 * (CommonPM2FiniteFold.moment d / H ^ 2)) ∧\n    (retainedVariance d H ≤ 2 * originalVariance d +\n      2 * (CommonPM2FiniteFold.moment d / H ^ 2))",
+      "type_sha256": "d738279bb01e99c4109eef2f00949ee0746ba106953d2a5c09738cc4968f2a88",
+      "complete_body": ":= by\n  have htail := mul_le_mul_of_nonneg_left (tailEnergy_le_moment_div_sq hd hH)\n    (show (0 : ℝ) ≤ 2 by norm_num)\n  obtain ⟨hf, hr⟩ := variance_comparisons_tailEnergy hd H\n  exact ⟨hf.trans (add_le_add (le_refl _) htail),\n    hr.trans (add_le_add (le_refl _) htail)⟩",
+      "body_sha256": "a2365d8081c743978cdc7fc58ca11c0a424e4ac53096480772b217edacb89bae",
+      "full_declaration_sha256": "20c51eae143f4f7acf6e5165ccf55940a559bdeb60539dd8593f76cb2391ebab",
+      "full_type_body_read": true
+    }
+  ],
+  "parent_independent_review": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-retained-variance-identity-independent-source-review-HOLD.json",
+    "sha256": "d6533b94d2755dbb23adbef3b6e524615e1782f88f41dd59db71856cfb170e85",
+    "bytes": 21031,
+    "LF": 349
+  },
+  "future_parent_source_bindings": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPRetainedVarianceIdentity-module-source.txt",
+      "sha256": "100408e5e1db1ec6341d91f4dfa41619da8f9f932b99171fa383a77b411ff753",
+      "bytes": 3927,
+      "LF": 87,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPWVarianceBridge-module-source.txt",
+      "sha256": "31a1264a2727681448e3ca97cbd0c92ba823d47de3dc52279cdee4ed5f635905",
+      "bytes": 7243,
+      "LF": 153,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPPairMaskRestoration-module-source.txt",
+      "sha256": "30ff8c812dd011de3af11e34c0ddaaa14411f0455f633ad0069c76931d3dc516",
+      "bytes": 13023,
+      "LF": 219,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailCutoff-module-source.txt",
+      "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+      "bytes": 15908,
+      "LF": 334,
+      "kernel_status": "FUTURE_SOURCE_ONLY_UNCOMPILED_HOLD"
+    }
+  ],
+  "future_parent_API_bindings_read": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailCutoff-module-source.txt",
+      "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+      "bytes": 15908,
+      "LF": 334,
+      "API_spans_read": [
+        {
+          "first": 240,
+          "last": 246
+        },
+        {
+          "first": 277,
+          "last": 290
+        },
+        {
+          "first": 292,
+          "last": 331
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPWVarianceBridge-module-source.txt",
+      "sha256": "31a1264a2727681448e3ca97cbd0c92ba823d47de3dc52279cdee4ed5f635905",
+      "bytes": 7243,
+      "LF": 153,
+      "API_spans_read": [
+        {
+          "first": 17,
+          "last": 21
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPRetainedVarianceIdentity-module-source.txt",
+      "sha256": "100408e5e1db1ec6341d91f4dfa41619da8f9f932b99171fa383a77b411ff753",
+      "bytes": 3927,
+      "LF": 87,
+      "API_spans_read": [
+        {
+          "first": 16,
+          "last": 20
+        }
+      ]
+    }
+  ],
+  "actual_project_API_bindings_read": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2FiniteFold.lean",
+      "sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+      "bytes": 15172,
+      "LF": 314,
+      "API_spans_read": [
+        {
+          "first": 27,
+          "last": 36
+        },
+        {
+          "first": 51,
+          "last": 54
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "bytes": 9757,
+      "LF": 220,
+      "API_spans_read": [
+        {
+          "first": 160,
+          "last": 166
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "bytes": 13464,
+      "LF": 287,
+      "API_spans_read": [
+        {
+          "first": 128,
+          "last": 139
+        }
+      ]
+    }
+  ],
+  "native_actual_API_bindings_read": [
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Normed/Group/Basic.lean",
+      "sha256": "e92959e9926534225cb4ae284cb22662dacca17a9c3996b57d31c51a0e856c94",
+      "bytes": 44531,
+      "LF": 1115,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 96,
+          "last": 105,
+          "literal_source": "/-- **Triangle inequality** for the norm. -/\n@[to_additive norm_add_le /-- **Triangle inequality** for the norm. -/]\ntheorem norm_mul_le' (a b : E) : ‖a * b‖ ≤ ‖a‖ + ‖b‖ := by\n  simpa [dist_eq_norm_inv_mul] using dist_triangle a⁻¹ 1 b\n\n/-- **Triangle inequality** for the norm. -/\n@[to_additive norm_add_le_of_le /-- **Triangle inequality** for the norm. -/]\ntheorem norm_mul_le_of_le' (h₁ : ‖a₁‖ ≤ r₁) (h₂ : ‖a₂‖ ≤ r₂) : ‖a₁ * a₂‖ ≤ r₁ + r₂ :=\n  (norm_mul_le' a₁ a₂).trans <| add_le_add h₁ h₂\n\n",
+          "sha256": "96ef7c15f1a66a453428ba650473f6c7d02b29fe26bf32b009d5afd3d386aab5"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Basic.lean",
+      "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "bytes": 63984,
+      "LF": 1480,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 712,
+          "last": 716,
+          "literal_source": "lemma sq_lt_sq₀ (ha : 0 ≤ a) (hb : 0 ≤ b) : a ^ 2 < b ^ 2 ↔ a < b :=\n  pow_lt_pow_iff_left₀ ha hb two_ne_zero\n\nlemma sq_le_sq₀ (ha : 0 ≤ a) (hb : 0 ≤ b) : a ^ 2 ≤ b ^ 2 ↔ a ≤ b :=\n  pow_le_pow_iff_left₀ ha hb two_ne_zero\n",
+          "sha256": "06972e6c2dfbcfc8af5e146b087b9f6590c29aee653bd1acce2d514efd53efbc"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Field.lean",
+      "sha256": "ea6805b6e04e1a10e4f1800fbf6f645af1b3fbe7b7bc9db5c014508a4b9f528f",
+      "bytes": 2002,
+      "LF": 58,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 26,
+          "last": 27,
+          "literal_source": "lemma Finset.sum_div (s : Finset ι) (f : ι → K) (a : K) :\n    (∑ i ∈ s, f i) / a = ∑ i ∈ s, f i / a := by simp only [div_eq_mul_inv, sum_mul]\n",
+          "sha256": "0ba6fe598dcf9f7a7214526456762895234a7d407aa109de81282bee345a25a1"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Ring/Finset.lean",
+      "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+      "bytes": 16305,
+      "LF": 386,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 56,
+          "last": 60,
+          "literal_source": "lemma sum_mul (s : Finset ι) (f : ι → R) (a : R) :\n    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := map_sum (AddMonoidHom.mulRight a) _ s\n\nlemma mul_sum (s : Finset ι) (f : ι → R) (a : R) :\n    a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i := map_sum (AddMonoidHom.mulLeft a) _ s\n",
+          "sha256": "0bcf51ba6a360dde5d3860df10915e9d03caec60d9c9c5baa795aa2e3cc36276"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/BigOperators/Group/Finset.lean",
+      "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+      "bytes": 36509,
+      "LF": 752,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 104,
+          "last": 117,
+          "literal_source": "\n/-- In an ordered commutative monoid, if each factor `f i` of one finite product is less than or\nequal to the corresponding factor `g i` of another finite product, then\n`∏ i ∈ s, f i ≤ ∏ i ∈ s, g i`. -/\n@[to_additive (attr := gcongr) sum_le_sum]\ntheorem prod_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, f i ≤ g i) : ∏ i ∈ s, f i ≤ ∏ i ∈ s, g i :=\n  Multiset.prod_map_le_prod_map f g h\n\nattribute [bound] sum_le_sum\n\n/-- In an ordered additive commutative monoid, if each summand `f i` of one finite sum is less than\nor equal to the corresponding summand `g i` of another finite sum, then\n`∑ i ∈ s, f i ≤ ∑ i ∈ s, g i`. -/\nadd_decl_doc sum_le_sum\n",
+          "sha256": "21410772be5ba6c588c3daacf496dc015642dde56b0cfad680c6e49507aa5a42"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Normed/Group/Basic.lean",
+      "sha256": "e92959e9926534225cb4ae284cb22662dacca17a9c3996b57d31c51a0e856c94",
+      "bytes": 44531,
+      "LF": 1115,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 69,
+          "last": 70,
+          "literal_source": "@[to_additive (attr := simp) norm_neg]\ntheorem norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖ := by simpa using norm_div_rev 1 a\n",
+          "sha256": "67ca13e1aea9e515071ac76c75335747a363f7e594d439d0c623ae0c57780b02"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Group/Defs.lean",
+      "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+      "bytes": 62382,
+      "LF": 1483,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 1117,
+          "last": 1121,
+          "literal_source": "\n@[to_additive]\ntheorem mul_div_assoc (a b c : G) : a * b / c = a * (b / c) := by\n  rw [div_eq_mul_inv, div_eq_mul_inv, mul_assoc]\n\n",
+          "sha256": "f53c794ad2846c187ca04eb46823f413300ef428c8a39c7293901ce7304202a3"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Group/Basic.lean",
+      "sha256": "1ba194c84c72d56d485334bb05b2a943627c3a73de91a0b939ab6fd5ea17d1b1",
+      "bytes": 38365,
+      "LF": 1096,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 584,
+          "last": 586,
+          "literal_source": "@[to_additive nsmul_sub]\nlemma div_pow (a b : α) (n : ℕ) : (a / b) ^ n = a ^ n / b ^ n := by\n  simp only [div_eq_mul_inv, mul_pow, inv_pow]\n",
+          "sha256": "bfbcd9dcbf382afd65db6367b06e24e38799448e6f372490d5b20b9caf8fc18c"
+        }
+      ]
+    },
+    {
+      "path": "//wsl.localhost/Debian/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Monoid/Unbundled/Basic.lean",
+      "sha256": "5e294a0e96698d3537095d94dda4ccf3bc7304ad8772f39e25d712a390281337",
+      "bytes": 51997,
+      "LF": 1471,
+      "exact_API_spans_independently_read": [
+        {
+          "first": 202,
+          "last": 205,
+          "literal_source": "@[to_additive (attr := gcongr high) add_le_add]\ntheorem mul_le_mul' [MulLeftMono α] [MulRightMono α]\n    {a b c d : α} (h₁ : a ≤ b) (h₂ : c ≤ d) :\n    a * c ≤ b * d := by grw [h₁, h₂]\n",
+          "sha256": "12b8fbc9cceb85c308e58e42efc2fa4a87d8c077baa682376763859b3069e4c7"
+        }
+      ]
+    }
+  ],
+  "proof_audit": [
+    {
+      "name": "norm_add_sq_le_twice",
+      "argument": "norm_add_le has the exact generated native type ||z+w||<=||z||+||w||. Both sides nonnegative, so (sq_le_sq_zero ...).2 squares forward. With a=||z||,b=||w||, real nonnegativity(a-b)^2 proves(a+b)^2<=2a^2+2b^2; nlinarith combines these. No complex positivity is asserted."
+    },
+    {
+      "name": "tailEnergy_le_moment_div_sq",
+      "argument": "After unfolding tailEnergy and the literal moment, sum_div distributes division through the identical two finite sums, and mul_div_assoc moves w*rowSum^2/H^2 to w*(rowSum^2/H^2). Nonnegative actual commonSmoothWeight permits termwise multiplication. rowSum>=0 is the finite sum of norm(beta)*tau4^2. hH gives rowSum/H>=0; squared public tailRow_norm_le yields ||T||^2<=(rowSum/H)^2. Native div_pow rewrites RHS exactly rowSum^2/H^2. Nested sum_le_sum proves R<=M/H^2 directly. E never occurs or is cancelled."
+    },
+    {
+      "name": "centered_retained_row_comparisons",
+      "argument": "Public centeredRow_sub_truncated_eq_tail gives C-Kc=T where C=P-J and Kc=K-J use the SAME original J. Linear combinations produce C=Kc+T and Kc=C+(-T). The helper squared triangle gives both comparisons, and native norm_neg makes the reverse tail energy identical. No H>0 is needed here."
+    },
+    {
+      "name": "variance_comparisons_tailEnergy",
+      "argument": "Unfold D,Dret,R; mul_sum distributes2 and reverse sum_add_distrib combines matching p/m sums. Same primitive p and original common-smoothing m carriers remain. Multiply each row comparison by actual nonnegative weight, and ring only reassociates2,w and squared norms. Both inequality directions are correct."
+    },
+    {
+      "name": "variance_comparisons_moment",
+      "argument": "Multiplying R<=M/H^2 by nonnegative real2 gives htail. For each direction add_le_add(le_refl unchanged_variance)htail has exactly 2Dret+2R<=2Dret+2(M/H^2), or symmetric2D. hf.trans/hr.trans give the stated conjunction. Native add_le_add generated type a+c<=b+d confirms right summand order."
+    }
+  ],
+  "exact_targets": {
+    "tail_energy": "R=sum_(p,m)w(m)*||T_H(p,m)||^2 <= M/H^2",
+    "forward": "D <= 2*D_H^J + 2*(M/H^2)",
+    "reverse": "D_H^J <= 2*D + 2*(M/H^2)",
+    "constants": "Literal2 in both comparisons; no altered log powers,rounding,cutoff,scale,coefficient or original C/K parameter."
+  },
+  "scope_audit": {
+    "only_original_hd_and_Hpositive_for_moment": true,
+    "original_J_U": "Retained definition from identity1004 is ||K-J||² with literal original full primitive principal J; hence its decomposition uses V_H^J and original U. No masked J_H or principal-energy redefinition.",
+    "labels": "Every primitive-p label and original commonSmooth m carrier/weight retained. TailRow still contains ordered(n,r,s),full modulus congruence and original signed shiftDifference mask from its parent. Arbitrary complex physical coefficients remain unchanged.",
+    "outsideEnergy_E": "Not used or divided. E=0 causes no missing case.",
+    "analytic_hypotheses_inserted": false,
+    "variance_bound_assumed": false,
+    "EU_bound_assumed": false,
+    "absolute_difference_sqrt_error_theorem_written": false,
+    "Cauchy_or_spectral_saving_claimed": false,
+    "what_this_supplies": "Finite transfer between two true variances plus a computable finite moment payment; no analytic upper bound on either variance itself.",
+    "row_and_variance_comparisons_with_tailEnergy_allow_arbitrary_real_H": true
+  },
+  "static_blockers": [],
+  "acceptance_boundary": "No scope gap or precise static API mismatch found in this121LF source. Identity1004,W bridge31a126,PairMask30ff,TailCutoffb83a remain uncompiled future imports. Import resolution,elaboration,tactic execution,strict linter and kernel acceptance are unperformed. No sqrt(MU) error theorem,analytic EU supply,spectral7/32,masked smooth-Poisson separation,uniform x/q M2 estimate or main closure follows.",
+  "freeze": "Root-reported actual560-source freeze and P5 soleheavy respected; this review makes no new whole-source snapshot or census claim. Only specified actual/native/parent files were read/hashed.",
+  "actions": {
+    "only_this_new_review_CP_written": true,
+    "actual_TeX_source_cache_old_evidence_mutated": false,
+    "Lean_Runtime_proper_compiler_checker_classifier_operator_census_Git_Site_run": false,
+    "heavy_lock_root_gate_touched": false
+  },
+  "quota": {
+    "active_stop_remaining_lte": 5
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-commonp-mixed-moment-cauchy-source-proposal-author-HOLD",
+  "created_utc": "2026-10-21T20:20:50.1518518Z",
+  "author": "/root/native_mixed_moment_cauchy_sol_high_oct22",
+  "status": "COMPLETE_WRITTEN_FINITE_CAUCHY_AND_EXACT_PAYMENTS_UNCOMPILED_FUTURE_SHIFTED_DEPENDENCY_HOLD",
+  "HOLD": true,
+  "scope": "Source-only bounded finite mixed-divisor Cauchy integration. Four definitions and twelve complete written proofs; no actual Lean source integration or proof execution.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-mixed-moment-cauchy-source-proposal.txt",
+    "sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+    "bytes": 9571,
+    "lf_lines": 208,
+    "definitions": 4,
+    "complete_written_proofs": 12,
+    "compiled": false,
+    "kernel_acceptance": "NOT_CHECKED",
+    "engineering_admission": false,
+    "complete_written_lean_source": "import ImbalancedChen.Part3ShiftedTauFiniteInterval\nimport MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean\nimport Mathlib.Algebra.Order.BigOperators.Ring.Finset\n\n/-!\nFINITE COMMON-p MIXED DIVISOR MOMENT -- SOURCE ONLY -- UNCOMPILED -- HOLD\n\nThe first import is the exact future shifted-interval module specified by\nroot. Its source is the separate proposal\n20261022-shifted-tau-finite-interval-source-proposal.txt, SHA256\n3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298.\nThat dependency and this file have not been compiled here. Import resolution,\nkernel acceptance and engineering admission are not asserted.\n\nThe sum is literally tau(v)*tau(t)*d4(t)^4 with t=natAbs((v:Int)-a),\non the original positive Ioc carrier with v=a deleted before evaluating the\nnonzero-shift moment API. No quotient, factorization relabelling, enlargement\nof the shift range, kappa cap or outside-energy replacement occurs.\n\nThe purely finite Cauchy proof first pays tau(t)*d4(t)^4 <= d512(t),\nthen d512(t)^2 <= d(512^2)(t) and tau(v)^2 <= d4(v).\nThe final bound consumes the actual native unshifted-prefix mean and the\nwritten shifted_tau_Ioc_sum_le declaration, rather than assuming either the\nCauchy target or the shifted payment as a hypothesis.\n\nThis file contains no BigO, capped-kappa absorption, full M2 estimate,\nspectral/7/32 result or main-theorem completion claim. In the independent\nfinite-fold source, mixedSum d.scale d.residue is definitionally the original\nCommonPM2FiniteFold.foldedSum d after unfolding that draft's definitions.\nNo import of, or acceptance claim for, the separate finite-fold draft is made.\n-/\n\nnamespace ImbalancedChen.Part3.ElementaryCommonPMixedMoment\nnoncomputable section\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\n/-- Ordinary divisor count, retaining exactly the weight in the finite fold. -/\ndef tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n\n/-- Keep the large shifted order symbolic throughout the Cauchy calculation. -/\ndef kshift : ℕ := 512 ^ 2\n\ndef mixedCarrier (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n\ndef mixedSum (x : ℝ) (a : ℤ) : ℝ :=\n  ∑ v ∈ mixedCarrier x a,\n    tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4\n\ntheorem kshift_eq : kshift = 262144 := by\n  norm_num only [kshift]\n\ntheorem kshift_ge_two : 2 ≤ kshift := by\n  rw [kshift_eq]\n  exact Nat.le_of_lt (by decide : 2 < 262144)\n\n/-- Both zero endpoints are excluded by the unchanged original carrier. -/\ntheorem mixedCarrier_nonzero {x : ℝ} {a : ℤ} {v : ℕ}\n    (hv : v ∈ mixedCarrier x a) :\n    v ≠ 0 ∧ ((v : ℤ) - a).natAbs ≠ 0 := by\n  obtain ⟨hvI, hva⟩ := Finset.mem_filter.mp hv\n  exact ⟨(Finset.mem_Ioc.mp hvI).1.ne',\n    Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr hva)⟩\n\n/-- Native d2*d4^4 is paid by d512 without a squarefree hypothesis. -/\ntheorem shifted_weight_le (t : ℕ) (ht : t ≠ 0) :\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau 512 t : ℝ) := by\n  have hp : (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau (4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_pow_le 4 4 ht\n  have hm : (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) ≤\n      (fouvryTau (2 * 4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_mul_le 2 (4 ^ 4) t\n  have hord : 2 * (4 : ℕ) ^ 4 = 512 := by norm_num\n  calc\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤\n        tau t * (fouvryTau (4 ^ 4) t : ℝ) :=\n      mul_le_mul_of_nonneg_left hp (Nat.cast_nonneg _)\n    _ = (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) := by\n      rw [tau, fouvryTau_two]\n    _ ≤ (fouvryTau (2 * 4 ^ 4) t : ℝ) := hm\n    _ = (fouvryTau 512 t : ℝ) := by rw [hord]\n\ntheorem tau_sq_le_four (v : ℕ) : tau v ^ 2 ≤ (fouvryTau 4 v : ℝ) := by\n  have h : fouvryTau 2 v ^ 2 ≤ fouvryTau 4 v := by\n    simpa only [show (2 : ℕ) ^ 2 = 4 from rfl] using fouvryTau_sq_le 2 v\n  rw [tau, ← fouvryTau_two v]\n  exact_mod_cast h\n\ntheorem shifted_weight_sq_le (t : ℕ) (ht : t ≠ 0) :\n    (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau kshift t : ℝ) := by\n  have h0 : 0 ≤ tau t * (fouvryTau 4 t : ℝ) ^ 4 :=\n    mul_nonneg (Nat.cast_nonneg _) (pow_nonneg (Nat.cast_nonneg _) _)\n  have hsq : (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau 512 t : ℝ) ^ 2 :=\n    (sq_le_sq₀ h0 (Nat.cast_nonneg _)).2 (shifted_weight_le t ht)\n  have hn : (fouvryTau 512 t : ℝ) ^ 2 ≤\n      (fouvryTau (512 ^ 2) t : ℝ) := by\n    exact_mod_cast fouvryTau_sq_le 512 t\n  exact hsq.trans hn\n\n/-- Genuine finite Cauchy on the supplied ordered carrier. No bound is a premise. -/\ntheorem mixed_sum_sq_le (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≠ a) :\n    (∑ v ∈ S, tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 ≤\n      (∑ v ∈ S, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n  have hleft : (∑ v ∈ S, tau v ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau 4 v : ℝ) :=\n    Finset.sum_le_sum (fun v _ => tau_sq_le_four v)\n  have hright :\n      (∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n        (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n    apply Finset.sum_le_sum\n    intro v hv\n    exact shifted_weight_sq_le _\n      (Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr (hS v hv)))\n  calc\n    _ = (∑ v ∈ S, tau v * (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)) ^ 2 := by\n      simp only [mul_assoc]\n    _ ≤ (∑ v ∈ S, tau v ^ 2) *\n        ∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 :=\n      Finset.sum_mul_sq_le_sq_mul_sq S (fun v => tau v)\n        (fun v => tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)\n    _ ≤ _ := mul_le_mul hleft hright\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _))\n\n/-- The original positive filtered Ioc version of the exact finite inequality. -/\ntheorem mixedSum_sq_le (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n  exact mixed_sum_sq_le (mixedCarrier x a) a\n    (fun _ hv => (Finset.mem_filter.mp hv).2)\n\n/-- The same finite Cauchy conclusion with the shifted order displayed literally. -/\ntheorem mixedSum_sq_le_262144_sums (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau 262144 ((v : ℤ) - a).natAbs : ℝ) := by\n  simpa only [kshift_eq] using mixedSum_sq_le x a\n\n/-- Consume the native global prefix theorem on the unchanged filtered carrier. -/\ntheorem unshifted_sum_le {x : ℝ} (hx : 1 ≤ x) (a : ℤ) :\n    (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) ≤\n      6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n  calc\n    _ ≤ ∑ v ∈ Ioc 0 ⌊6 * x⌋₊, (fouvryTau 4 v : ℝ) :=\n      Finset.sum_le_sum_of_subset_of_nonneg\n        (Finset.filter_subset _ _) (fun _ _ _ => Nat.cast_nonneg _)\n    _ ≤ _ := by\n      simpa only [show (4 : ℕ) - 1 = 3 from rfl] using\n        sum_fouvryTau_le_real (k := 4) (by decide) (by linarith : 1 ≤ 6 * x)\n\n/-- Exact finite payment for every nonnegative kappa; no power absorption. -/\ntheorem mixedSum_sq_le_exact {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (kshift : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2))) := by\n  have hs :\n      (∑ v ∈ mixedCarrier x a,\n        (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (kshift : ℝ) *\n        (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n          (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n            (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2)) :=\n    ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le\n      kshift_ge_two hx hκ a ha\n  have hbase : 0 ≤ 6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n    have h6x : 0 ≤ 6 * x := by linarith\n    have hlog : 0 ≤ 1 + Real.log (6 * x) := by\n      have := Real.log_nonneg (by linarith : 1 ≤ 6 * x)\n      linarith\n    exact mul_nonneg h6x (pow_nonneg hlog _)\n  exact (mixedSum_sq_le x a).trans (mul_le_mul (unshifted_sum_le hx a) hs\n    (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)) hbase)\n\n/-- The requested literal order/exponent version; no large power is expanded. -/\ntheorem mixedSum_sq_le_262144 {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (262144 : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ 262143 +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (262144 : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ 262142)) := by\n  simpa only [kshift_eq,\n    show (262144 : ℕ) - 1 = 262143 from rfl,\n    show (262144 : ℕ) - 2 = 262142 from rfl] using\n      mixedSum_sq_le_exact hx hκ a ha\n\nend\nend ImbalancedChen.Part3.ElementaryCommonPMixedMoment\n"
+  },
+  "exact_mathematics": {
+    "carrier": "S=(Ioc 0 floor(6*x)).filter(fun v:Nat => (v:Int)!=a), unchanged.",
+    "shift": "t=Int.natAbs((v:Int)-a); t!=0 follows from filter; v!=0 follows from Ioc.",
+    "H": "sum v in S, tau(v)*tau(t)*(fouvryTau 4 t:Real)^4",
+    "finite_target": "H^2 <= (sum v in S,d4(v))*(sum v in S,d262144(t))",
+    "payment": "H^2 <= [6*x*(1+log(6*x))^3]*[2*262144*(6*x*LZ^262143+Z^(1-1/262144)*LZ^262142)]",
+    "Z": "7*x^(1+kappa)",
+    "LZ": "1+Real.log Z",
+    "parameters": "x>=1,kappa>=0,a:Int,abs(a:Real)<=x^(1+kappa). No upper cap on kappa.",
+    "route": "native d4(t)^4<=d256(t); d2(t)*d256(t)<=d512(t); nonnegative-square monotonicity gives shiftWeight^2<=d512(t)^2<=d262144(t); tau(v)^2<=d4(v); actual Finset Cauchy; nonnegative sum/product monotonicity; actual native prefix mean; exact written shifted Ioc theorem.",
+    "large_power_policy": "kshift=512^2 symbolic internally; only elementary numeral equalities normalized. No 7^large or logarithm power expansion.",
+    "ordered_carrier_preserved": true,
+    "target_bound_is_not_assumed": true,
+    "shifted_bound_is_not_assumed": true
+  },
+  "dependencies": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "native_pin_verification": "Read-only actual source SHA256 comparison; no Git run in this task.",
+    "future_shifted_module": "ImbalancedChen.Part3ShiftedTauFiniteInterval",
+    "future_shifted_exact_theorem": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le",
+    "future_shifted_source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-finite-interval-source-proposal.txt",
+    "future_shifted_sha256": "3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298",
+    "future_shifted_author_CP_sha256": "12d723c0e836fe697f43a3f1367478988a1ddd373129a5698aff06f55f9bb0ab",
+    "future_shifted_acceptance": "Uncompiled dependency, independently reviewed by another task. No admission/integration inferred.",
+    "finite_fold_source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-m2-finite-fold-pure-lean.txt",
+    "finite_fold_sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "finite_fold_binding": "With x=d.scale,a=d.residue, mixedSum is definitionally foldedSum from the named finite-fold source after unfolding tau, productCarrier, shiftDifference, fourthDivisorWeight. Separate draft is not imported or modified.",
+    "imports": [
+      "ImbalancedChen.Part3ShiftedTauFiniteInterval",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset"
+    ]
+  },
+  "actual_source_APIs": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "file_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 37,
+      "last": 42,
+      "role": "Actual fouvryTau_two and complete written proof.",
+      "literal_source": "theorem fouvryTau_two (n : ℕ) : fouvryTau 2 n = n.divisors.card := by\n  rw [show 2 = 1 + 1 from rfl, fouvryTau_succ]\n  trans ∑ _d ∈ n.divisors, 1\n  · exact sum_congr rfl (fun d hd => fouvryTau_order_one (Nat.pos_of_mem_divisors hd).ne')\n  · simp\n\n",
+      "literal_span_sha256": "e80e9eb4228c68bf4685f5422c71ec576a2a5409b579495db432c1402f3e2b3b"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "file_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 104,
+      "last": 116,
+      "role": "Actual fouvryTau_mul_le and complete written proof; k=2,l=4^4.",
+      "literal_source": "theorem fouvryTau_mul_le (k l n : ℕ) :\n    fouvryTau k n * fouvryTau l n ≤ fouvryTau (k * l) n := by\n  obtain rfl | hn := eq_or_ne n 0\n  · simp\n  rw [(fouvryTau_multiplicative k).multiplicative_factorization _ hn,\n    (fouvryTau_multiplicative l).multiplicative_factorization _ hn,\n    (fouvryTau_multiplicative (k * l)).multiplicative_factorization _ hn]\n  simp only [Finsupp.prod, Nat.support_factorization]\n  rw [← Finset.prod_mul_distrib]\n  apply Finset.prod_le_prod'\n  intro p hp\n  simp only [fouvryTau_prime_pow (Nat.prime_of_mem_primeFactors hp)]\n  exact multichoose_mul_le _ _ _\n",
+      "literal_span_sha256": "6365851bd8f278a0663138b51959d57b6261a69564180671560cbc3a8dd6d113"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "file_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 120,
+      "last": 121,
+      "role": "Actual fouvryTau_sq_le and complete written proof; k=2 and k=512.",
+      "literal_source": "theorem fouvryTau_sq_le (k n : ℕ) : fouvryTau k n ^ 2 ≤ fouvryTau (k ^ 2) n := by\n  simpa only [pow_two] using fouvryTau_mul_le k k n\n",
+      "literal_span_sha256": "6209c4bc54a5db8ebf6c88773c6d17b1c4b07d38d8f1c269fdd88093bb847b5f"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "file_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 125,
+      "last": 134,
+      "role": "Actual fouvryTau_pow_le and complete written proof; nonzero t established before applying k=4,r=4.",
+      "literal_source": "theorem fouvryTau_pow_le (k r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    fouvryTau k n ^ r ≤ fouvryTau (k ^ r) n := by\n  induction r with\n  | zero => simp [fouvryTau_order_one hn]\n  | succ r ih =>\n    calc\n      _ = fouvryTau k n ^ r * fouvryTau k n := pow_succ _ _\n      _ ≤ fouvryTau (k ^ r) n * fouvryTau k n := Nat.mul_le_mul_right _ ih\n      _ ≤ fouvryTau (k ^ r * k) n := fouvryTau_mul_le _ _ _\n      _ = _ := by rw [pow_succ]\n",
+      "literal_span_sha256": "e50ed2d7288f5cda166c3a068db2b05219274f04d452e91009475659933cba63"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "file_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 335,
+      "last": 350,
+      "role": "Actual unshifted real-prefix mean and complete written proof; k=4,x=6*x.",
+      "literal_source": "theorem sum_fouvryTau_le_real {k : ℕ} (hk : 1 ≤ k) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ)) ≤\n      x * (1 + Real.log x) ^ (k - 1) := by\n  obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : k ≠ 0)\n  have hfloor : 1 ≤ ⌊x⌋₊ := Nat.le_floor (by simpa using hx)\n  have hlog : 1 + Real.log (⌊x⌋₊ : ℝ) ≤ 1 + Real.log x := by\n    have := Real.log_le_log (by exact_mod_cast (show 0 < ⌊x⌋₊ by omega))\n      (Nat.floor_le (by linarith : 0 ≤ x))\n    linarith\n  have hnonneg : 0 ≤ 1 + Real.log (⌊x⌋₊ : ℝ) := by\n    have := Real.log_nonneg (show (1 : ℝ) ≤ ⌊x⌋₊ by exact_mod_cast hfloor)\n    linarith\n  simpa only [Nat.succ_sub_one] using\n    (sum_fouvryTau_le j ⌊x⌋₊).trans\n      (mul_le_mul (Nat.floor_le (by linarith)) (pow_le_pow_left₀ hnonneg hlog j)\n        (pow_nonneg hnonneg j) (by linarith : 0 ≤ x))\n",
+      "literal_span_sha256": "8185e66d87b3485937a9919fa3254918aca6c57178f7d45cea5e6c9786e21407"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Ring\\Finset.lean",
+      "file_sha256": "c89a7463df5acd6485e64d14b958daaedf6b857aad2808a4ead0570b52220568",
+      "first": 159,
+      "last": 165,
+      "role": "Actual Finset.sum_mul_sq_le_sq_mul_sq signature and full proof.",
+      "literal_source": "lemma sum_mul_sq_le_sq_mul_sq [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]\n    [ExistsAddOfLE R] (s : Finset ι)\n    (f g : ι → R) : (∑ i ∈ s, f i * g i) ^ 2 ≤ (∑ i ∈ s, f i ^ 2) * ∑ i ∈ s, g i ^ 2 :=\n  sum_sq_le_sum_mul_sum_of_sq_le_mul s\n    (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ (mul_pow ..).le)\n\n/-- **Sedrakyan's lemma**, aka **Titu's lemma** or **Engel's form**.\n",
+      "literal_span_sha256": "386b1544e163dcf6fb810042657b2f353c896e745695eaf94c9f08d2c14eb321"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+      "file_sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+      "first": 159,
+      "last": 168,
+      "role": "Actual additive-generation source of Finset.sum_le_sum_of_subset_of_nonneg.",
+      "literal_source": "@[to_additive (attr := gcongr) sum_le_sum_of_subset_of_nonneg]\ntheorem prod_le_prod_of_subset_of_one_le' [MulLeftMono N] (h : s ⊆ t)\n    (hf : ∀ i ∈ t, i ∉ s → 1 ≤ f i) : ∏ i ∈ s, f i ≤ ∏ i ∈ t, f i := by\n  classical calc\n      ∏ i ∈ s, f i ≤ (∏ i ∈ t \\ s, f i) * ∏ i ∈ s, f i :=\n        le_mul_of_one_le_left' <| one_le_prod' <| by simpa only [mem_sdiff, and_imp]\n      _ = ∏ i ∈ t \\ s ∪ s, f i := (prod_union sdiff_disjoint).symm\n      _ = ∏ i ∈ t, f i := by rw [sdiff_union_of_subset h]\n\n@[to_additive]\n",
+      "literal_span_sha256": "6e228354e4b78483b8b27fe228eb62f9b4ce18244c1446eb524de9dfc1d482cd"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-finite-interval-source-proposal.txt",
+      "file_sha256": "3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298",
+      "first": 197,
+      "last": 209,
+      "role": "Complete actual written future shifted_tau_Ioc_sum_le type and proof; module is uncompiled dependency.",
+      "literal_source": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  have hI : Ioc 0 ⌊6 * x⌋₊ = Icc 1 ⌊6 * x⌋₊ := by\n    ext v\n    simp only [Finset.mem_Ioc, Finset.mem_Icc]\n    omega\n  rw [hI]\n  exact shifted_tau_Icc_sum_le hK hx hκ a ha\n",
+      "literal_span_sha256": "c55ec828f667da8367a5a5520914a3fe7904c1da7fb35738b4abfc03863e6f17"
+    }
+  ],
+  "definitions": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-mixed-moment-cauchy-source-proposal.txt",
+      "file_sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+      "first": 40,
+      "last": 40,
+      "role": "tau definition",
+      "literal_source": "def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n",
+      "literal_span_sha256": "1ff26ebee61f9d8fa7689e58c57ecc320d031d4d8dfc500852035e6bd47fc37f"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-mixed-moment-cauchy-source-proposal.txt",
+      "file_sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+      "first": 43,
+      "last": 43,
+      "role": "symbolic kshift definition",
+      "literal_source": "def kshift : ℕ := 512 ^ 2\n",
+      "literal_span_sha256": "e3491bbfbb91973586eb2e8e63832e8a80a9248a33262998d327a0a2425a9fa5"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-mixed-moment-cauchy-source-proposal.txt",
+      "file_sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+      "first": 45,
+      "last": 46,
+      "role": "original filtered Ioc carrier",
+      "literal_source": "def mixedCarrier (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n",
+      "literal_span_sha256": "b5c9484edeb0cf8de5f6905e388aa2c15a5043b76c2b9ac44c51a2c15a9107e2"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-mixed-moment-cauchy-source-proposal.txt",
+      "file_sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+      "first": 48,
+      "last": 51,
+      "role": "literal mixed divisor moment",
+      "literal_source": "def mixedSum (x : ℝ) (a : ℤ) : ℝ :=\n  ∑ v ∈ mixedCarrier x a,\n    tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4\n",
+      "literal_span_sha256": "4a851e6c148f98220ad71a6131028903295201e6fbc40e6c855f8bafc7214348"
+    }
+  ],
+  "complete_written_theorem_types_and_proof_bodies": [
+    {
+      "name": "kshift_eq",
+      "first": 53,
+      "last": 54,
+      "complete_written_type": "theorem kshift_eq : kshift = 262144",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "norm_num only [kshift]",
+      "complete_written_declaration": "theorem kshift_eq : kshift = 262144 := by\n  norm_num only [kshift]\n",
+      "declaration_sha256": "184594f29e0f52df7754e8bed75aa02bd525350e2cb4b79217a4a04f5b47742c"
+    },
+    {
+      "name": "kshift_ge_two",
+      "first": 56,
+      "last": 58,
+      "complete_written_type": "theorem kshift_ge_two : 2 ≤ kshift",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "rw [kshift_eq]\n  exact Nat.le_of_lt (by decide : 2 < 262144)",
+      "complete_written_declaration": "theorem kshift_ge_two : 2 ≤ kshift := by\n  rw [kshift_eq]\n  exact Nat.le_of_lt (by decide : 2 < 262144)\n",
+      "declaration_sha256": "0d9609f00eb7e2d4f5a272028d5046927f4e582d8b7fb0e47f0dabf4bd10eda2"
+    },
+    {
+      "name": "mixedCarrier_nonzero",
+      "first": 61,
+      "last": 66,
+      "complete_written_type": "theorem mixedCarrier_nonzero {x : ℝ} {a : ℤ} {v : ℕ}\n    (hv : v ∈ mixedCarrier x a) :\n    v ≠ 0 ∧ ((v : ℤ) - a).natAbs ≠ 0",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "obtain ⟨hvI, hva⟩ := Finset.mem_filter.mp hv\n  exact ⟨(Finset.mem_Ioc.mp hvI).1.ne',\n    Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr hva)⟩",
+      "complete_written_declaration": "theorem mixedCarrier_nonzero {x : ℝ} {a : ℤ} {v : ℕ}\n    (hv : v ∈ mixedCarrier x a) :\n    v ≠ 0 ∧ ((v : ℤ) - a).natAbs ≠ 0 := by\n  obtain ⟨hvI, hva⟩ := Finset.mem_filter.mp hv\n  exact ⟨(Finset.mem_Ioc.mp hvI).1.ne',\n    Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr hva)⟩\n",
+      "declaration_sha256": "6b2fb5115fb54b167d4300fe3ed889ece580aa84ec6974c43c2c713cb21909bf"
+    },
+    {
+      "name": "shifted_weight_le",
+      "first": 69,
+      "last": 84,
+      "complete_written_type": "theorem shifted_weight_le (t : ℕ) (ht : t ≠ 0) :\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau 512 t : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "have hp : (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau (4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_pow_le 4 4 ht\n  have hm : (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) ≤\n      (fouvryTau (2 * 4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_mul_le 2 (4 ^ 4) t\n  have hord : 2 * (4 : ℕ) ^ 4 = 512 := by norm_num\n  calc\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤\n        tau t * (fouvryTau (4 ^ 4) t : ℝ) :=\n      mul_le_mul_of_nonneg_left hp (Nat.cast_nonneg _)\n    _ = (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) := by\n      rw [tau, fouvryTau_two]\n    _ ≤ (fouvryTau (2 * 4 ^ 4) t : ℝ) := hm\n    _ = (fouvryTau 512 t : ℝ) := by rw [hord]",
+      "complete_written_declaration": "theorem shifted_weight_le (t : ℕ) (ht : t ≠ 0) :\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau 512 t : ℝ) := by\n  have hp : (fouvryTau 4 t : ℝ) ^ 4 ≤ (fouvryTau (4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_pow_le 4 4 ht\n  have hm : (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) ≤\n      (fouvryTau (2 * 4 ^ 4) t : ℝ) := by\n    exact_mod_cast fouvryTau_mul_le 2 (4 ^ 4) t\n  have hord : 2 * (4 : ℕ) ^ 4 = 512 := by norm_num\n  calc\n    tau t * (fouvryTau 4 t : ℝ) ^ 4 ≤\n        tau t * (fouvryTau (4 ^ 4) t : ℝ) :=\n      mul_le_mul_of_nonneg_left hp (Nat.cast_nonneg _)\n    _ = (fouvryTau 2 t : ℝ) * (fouvryTau (4 ^ 4) t : ℝ) := by\n      rw [tau, fouvryTau_two]\n    _ ≤ (fouvryTau (2 * 4 ^ 4) t : ℝ) := hm\n    _ = (fouvryTau 512 t : ℝ) := by rw [hord]\n",
+      "declaration_sha256": "418dfab57f8e7110abd3ab03498f060464e7726093daf518b19f809a49d5cb8f"
+    },
+    {
+      "name": "tau_sq_le_four",
+      "first": 86,
+      "last": 90,
+      "complete_written_type": "theorem tau_sq_le_four (v : ℕ) : tau v ^ 2 ≤ (fouvryTau 4 v : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "have h : fouvryTau 2 v ^ 2 ≤ fouvryTau 4 v := by\n    simpa only [show (2 : ℕ) ^ 2 = 4 from rfl] using fouvryTau_sq_le 2 v\n  rw [tau, ← fouvryTau_two v]\n  exact_mod_cast h",
+      "complete_written_declaration": "theorem tau_sq_le_four (v : ℕ) : tau v ^ 2 ≤ (fouvryTau 4 v : ℝ) := by\n  have h : fouvryTau 2 v ^ 2 ≤ fouvryTau 4 v := by\n    simpa only [show (2 : ℕ) ^ 2 = 4 from rfl] using fouvryTau_sq_le 2 v\n  rw [tau, ← fouvryTau_two v]\n  exact_mod_cast h\n",
+      "declaration_sha256": "38d91849379cca597cc4ced06125471416dc7f5cd086c4dabfedf7b04b8a8a11"
+    },
+    {
+      "name": "shifted_weight_sq_le",
+      "first": 92,
+      "last": 103,
+      "complete_written_type": "theorem shifted_weight_sq_le (t : ℕ) (ht : t ≠ 0) :\n    (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau kshift t : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "have h0 : 0 ≤ tau t * (fouvryTau 4 t : ℝ) ^ 4 :=\n    mul_nonneg (Nat.cast_nonneg _) (pow_nonneg (Nat.cast_nonneg _) _)\n  have hsq : (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau 512 t : ℝ) ^ 2 :=\n    (sq_le_sq₀ h0 (Nat.cast_nonneg _)).2 (shifted_weight_le t ht)\n  have hn : (fouvryTau 512 t : ℝ) ^ 2 ≤\n      (fouvryTau (512 ^ 2) t : ℝ) := by\n    exact_mod_cast fouvryTau_sq_le 512 t\n  exact hsq.trans hn",
+      "complete_written_declaration": "theorem shifted_weight_sq_le (t : ℕ) (ht : t ≠ 0) :\n    (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau kshift t : ℝ) := by\n  have h0 : 0 ≤ tau t * (fouvryTau 4 t : ℝ) ^ 4 :=\n    mul_nonneg (Nat.cast_nonneg _) (pow_nonneg (Nat.cast_nonneg _) _)\n  have hsq : (tau t * (fouvryTau 4 t : ℝ) ^ 4) ^ 2 ≤\n      (fouvryTau 512 t : ℝ) ^ 2 :=\n    (sq_le_sq₀ h0 (Nat.cast_nonneg _)).2 (shifted_weight_le t ht)\n  have hn : (fouvryTau 512 t : ℝ) ^ 2 ≤\n      (fouvryTau (512 ^ 2) t : ℝ) := by\n    exact_mod_cast fouvryTau_sq_le 512 t\n  exact hsq.trans hn\n",
+      "declaration_sha256": "c3b6357d168bb474b5aba54a81925b7b9d3a83eef7c339deb88c359f885d17e4"
+    },
+    {
+      "name": "mixed_sum_sq_le",
+      "first": 106,
+      "last": 135,
+      "complete_written_type": "theorem mixed_sum_sq_le (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≠ a) :\n    (∑ v ∈ S, tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 ≤\n      (∑ v ∈ S, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "have hleft : (∑ v ∈ S, tau v ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau 4 v : ℝ) :=\n    Finset.sum_le_sum (fun v _ => tau_sq_le_four v)\n  have hright :\n      (∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n        (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n    apply Finset.sum_le_sum\n    intro v hv\n    exact shifted_weight_sq_le _\n      (Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr (hS v hv)))\n  calc\n    _ = (∑ v ∈ S, tau v * (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)) ^ 2 := by\n      simp only [mul_assoc]\n    _ ≤ (∑ v ∈ S, tau v ^ 2) *\n        ∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 :=\n      Finset.sum_mul_sq_le_sq_mul_sq S (fun v => tau v)\n        (fun v => tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)\n    _ ≤ _ := mul_le_mul hleft hright\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _))",
+      "complete_written_declaration": "theorem mixed_sum_sq_le (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≠ a) :\n    (∑ v ∈ S, tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 ≤\n      (∑ v ∈ S, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n  have hleft : (∑ v ∈ S, tau v ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau 4 v : ℝ) :=\n    Finset.sum_le_sum (fun v _ => tau_sq_le_four v)\n  have hright :\n      (∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n        (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2) ≤\n      ∑ v ∈ S, (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n    apply Finset.sum_le_sum\n    intro v hv\n    exact shifted_weight_sq_le _\n      (Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr (hS v hv)))\n  calc\n    _ = (∑ v ∈ S, tau v * (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)) ^ 2 := by\n      simp only [mul_assoc]\n    _ ≤ (∑ v ∈ S, tau v ^ 2) *\n        ∑ v ∈ S, (tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4) ^ 2 :=\n      Finset.sum_mul_sq_le_sq_mul_sq S (fun v => tau v)\n        (fun v => tau ((v : ℤ) - a).natAbs *\n          (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4)\n    _ ≤ _ := mul_le_mul hleft hright\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _))\n",
+      "declaration_sha256": "4df96a7176b3d3582d0bea566ea864269934859a0381f6173e2aec9d402aedbf"
+    },
+    {
+      "name": "mixedSum_sq_le",
+      "first": 138,
+      "last": 144,
+      "complete_written_type": "theorem mixedSum_sq_le (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "exact mixed_sum_sq_le (mixedCarrier x a) a\n    (fun _ hv => (Finset.mem_filter.mp hv).2)",
+      "complete_written_declaration": "theorem mixedSum_sq_le (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n  exact mixed_sum_sq_le (mixedCarrier x a) a\n    (fun _ hv => (Finset.mem_filter.mp hv).2)\n",
+      "declaration_sha256": "c921271e77dc465b990dc48b1c0c9a790a5911e543e87785dcc3ba2dd534bad6"
+    },
+    {
+      "name": "mixedSum_sq_le_262144_sums",
+      "first": 147,
+      "last": 152,
+      "complete_written_type": "theorem mixedSum_sq_le_262144_sums (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau 262144 ((v : ℤ) - a).natAbs : ℝ)",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "simpa only [kshift_eq] using mixedSum_sq_le x a",
+      "complete_written_declaration": "theorem mixedSum_sq_le_262144_sums (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau 262144 ((v : ℤ) - a).natAbs : ℝ) := by\n  simpa only [kshift_eq] using mixedSum_sq_le x a\n",
+      "declaration_sha256": "3906b9a768b3bf4bf2a619e51612fa96ff50087f7beedb611ebb4f7e6e252356"
+    },
+    {
+      "name": "unshifted_sum_le",
+      "first": 155,
+      "last": 164,
+      "complete_written_type": "theorem unshifted_sum_le {x : ℝ} (hx : 1 ≤ x) (a : ℤ) :\n    (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) ≤\n      6 * x * (1 + Real.log (6 * x)) ^ 3",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "calc\n    _ ≤ ∑ v ∈ Ioc 0 ⌊6 * x⌋₊, (fouvryTau 4 v : ℝ) :=\n      Finset.sum_le_sum_of_subset_of_nonneg\n        (Finset.filter_subset _ _) (fun _ _ _ => Nat.cast_nonneg _)\n    _ ≤ _ := by\n      simpa only [show (4 : ℕ) - 1 = 3 from rfl] using\n        sum_fouvryTau_le_real (k := 4) (by decide) (by linarith : 1 ≤ 6 * x)",
+      "complete_written_declaration": "theorem unshifted_sum_le {x : ℝ} (hx : 1 ≤ x) (a : ℤ) :\n    (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) ≤\n      6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n  calc\n    _ ≤ ∑ v ∈ Ioc 0 ⌊6 * x⌋₊, (fouvryTau 4 v : ℝ) :=\n      Finset.sum_le_sum_of_subset_of_nonneg\n        (Finset.filter_subset _ _) (fun _ _ _ => Nat.cast_nonneg _)\n    _ ≤ _ := by\n      simpa only [show (4 : ℕ) - 1 = 3 from rfl] using\n        sum_fouvryTau_le_real (k := 4) (by decide) (by linarith : 1 ≤ 6 * x)\n",
+      "declaration_sha256": "6709c3f5365a2b770d2747201c6b80fa72976b23000bbe526a8860eadd1b4020"
+    },
+    {
+      "name": "mixedSum_sq_le_exact",
+      "first": 167,
+      "last": 191,
+      "complete_written_type": "theorem mixedSum_sq_le_exact {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (kshift : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2)))",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "have hs :\n      (∑ v ∈ mixedCarrier x a,\n        (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (kshift : ℝ) *\n        (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n          (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n            (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2)) :=\n    ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le\n      kshift_ge_two hx hκ a ha\n  have hbase : 0 ≤ 6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n    have h6x : 0 ≤ 6 * x := by linarith\n    have hlog : 0 ≤ 1 + Real.log (6 * x) := by\n      have := Real.log_nonneg (by linarith : 1 ≤ 6 * x)\n      linarith\n    exact mul_nonneg h6x (pow_nonneg hlog _)\n  exact (mixedSum_sq_le x a).trans (mul_le_mul (unshifted_sum_le hx a) hs\n    (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)) hbase)",
+      "complete_written_declaration": "theorem mixedSum_sq_le_exact {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (kshift : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2))) := by\n  have hs :\n      (∑ v ∈ mixedCarrier x a,\n        (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (kshift : ℝ) *\n        (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 1) +\n          (7 * x ^ (1 + κ)) ^ (1 - 1 / (kshift : ℝ)) *\n            (1 + Real.log (7 * x ^ (1 + κ))) ^ (kshift - 2)) :=\n    ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le\n      kshift_ge_two hx hκ a ha\n  have hbase : 0 ≤ 6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n    have h6x : 0 ≤ 6 * x := by linarith\n    have hlog : 0 ≤ 1 + Real.log (6 * x) := by\n      have := Real.log_nonneg (by linarith : 1 ≤ 6 * x)\n      linarith\n    exact mul_nonneg h6x (pow_nonneg hlog _)\n  exact (mixedSum_sq_le x a).trans (mul_le_mul (unshifted_sum_le hx a) hs\n    (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)) hbase)\n",
+      "declaration_sha256": "a042a97e8f300e9fe1db0316705dc8013b200338a58e764d4460329533b9e704"
+    },
+    {
+      "name": "mixedSum_sq_le_262144",
+      "first": 194,
+      "last": 205,
+      "complete_written_type": "theorem mixedSum_sq_le_262144 {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (262144 : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ 262143 +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (262144 : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ 262142))",
+      "proof_separator": ":= by",
+      "complete_written_proof_body": "simpa only [kshift_eq,\n    show (262144 : ℕ) - 1 = 262143 from rfl,\n    show (262144 : ℕ) - 2 = 262142 from rfl] using\n      mixedSum_sq_le_exact hx hκ a ha",
+      "complete_written_declaration": "theorem mixedSum_sq_le_262144 {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      (6 * x * (1 + Real.log (6 * x)) ^ 3) *\n        (2 * (262144 : ℝ) *\n          (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ 262143 +\n            (7 * x ^ (1 + κ)) ^ (1 - 1 / (262144 : ℝ)) *\n              (1 + Real.log (7 * x ^ (1 + κ))) ^ 262142)) := by\n  simpa only [kshift_eq,\n    show (262144 : ℕ) - 1 = 262143 from rfl,\n    show (262144 : ℕ) - 2 = 262142 from rfl] using\n      mixedSum_sq_le_exact hx hκ a ha\n",
+      "declaration_sha256": "3a40616a94bf86e203d52989f78afeecf64283ba303f2b1781ad9ddf47c0b6e2"
+    }
+  ],
+  "review": {
+    "mathematical_gap_identified": "None in the finite argument as written; this is source reasoning, not Lean acceptance.",
+    "formal_limit": "The future shifted module and this proposal remain uncompiled. Elaboration, import resolution and kernel acceptance require later root-authorized execution; no compiler/checker was run.",
+    "excluded_claims": [
+      "No capped-kappa absorption",
+      "No BigO",
+      "No full M2 bound or outside-energy composition",
+      "No spectral/7/32 estimate",
+      "No main theorem completion"
+    ],
+    "actual_source_runtime_pins": "Frozen; no mutations."
+  },
+  "discipline": {
+    "proof_tools": 0,
+    "compiler": 0,
+    "checker": 0,
+    "proper": 0,
+    "classifier": 0,
+    "census": 0,
+    "git": 0,
+    "new_agents": 0,
+    "actual_lean_edits": 0,
+    "runtime_or_pin_edits": 0,
+    "ordinary_actions": "Read-only PowerShell text/rg/hash and source TXT + CP writing only.",
+    "fresh_quota": "used45%,remaining55%,both initial and last reads; stop if any effective remaining<=40%."
+  },
+  "final_action": "HOLD. Return source TXT/CP and hashes to root; do not integrate or execute."
+}

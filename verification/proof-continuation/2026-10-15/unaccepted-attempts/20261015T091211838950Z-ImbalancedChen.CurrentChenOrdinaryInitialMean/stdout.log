@@ -1,0 +1,47 @@
+ImbalancedChen/CurrentChenOrdinaryInitialMean.lean:102:74: error: unexpected identifier; expected ')', ',' or ':'
+ImbalancedChen/CurrentChenOrdinaryInitialMean.lean:102:21: error: unsolved goals
+B a : ℝ
+hB : 0 ≤ B
+ha : 0 < a
+haQuarter : a < 1 / 4
+epsilon : ℝ
+hepsilon : 0 < epsilon
+A : ℝ := 2 * Real.exp (-Real.eulerMascheroniConstant) / a
+s0 : ℝ := 1 / (2 * a)
+eta : ℝ := epsilon / (2 * (A + 1))
+hA : 0 < A
+heta : 0 < eta
+hs0 : 2 < s0
+hf :
+  Tendsto (fun N => suzukiContinuousLowerFactor (chenInitialRosserT B a N)) atTop (𝓝 (suzukiContinuousLowerFactor s0))
+e : ℕ → ℝ := fun N => actualSmallEulerProduct N ⌈↑N ^ a⌉₊ (↑N ^ a) * Real.log ↑N / singularSeries N
+he : Tendsto e (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 A)
+⊢ ?m.302 < suzukiContinuousLowerFactor (1 / (2 * a)) * (2 * Real.exp (-Real.eulerMascheroniConstant) / a)
+ImbalancedChen/CurrentChenOrdinaryInitialMean.lean:80:51: error: unsolved goals
+B a : ℝ
+hB : 0 ≤ B
+ha : 0 < a
+haQuarter : a < 1 / 4
+epsilon : ℝ
+hepsilon : 0 < epsilon
+A : ℝ := 2 * Real.exp (-Real.eulerMascheroniConstant) / a
+s0 : ℝ := 1 / (2 * a)
+eta : ℝ := epsilon / (2 * (A + 1))
+hA : 0 < A
+heta : 0 < eta
+hs0 : 2 < s0
+hf :
+  Tendsto (fun N => suzukiContinuousLowerFactor (chenInitialRosserT B a N)) atTop (𝓝 (suzukiContinuousLowerFactor s0))
+e : ℕ → ℝ := fun N => actualSmallEulerProduct N ⌈↑N ^ a⌉₊ (↑N ^ a) * Real.log ↑N / singularSeries N
+he : Tendsto e (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 A)
+hnear :
+  ∀ᶠ (N : ℕ) in atTop,
+    0 < N ∧ Even N →
+      currentChenOrdinaryInitialConstant a - epsilon / 2 < suzukiContinuousLowerFactor (chenInitialRosserT B a N) * e N
+⊢ ∀ᶠ (N : ℕ) in atTop,
+    Even N →
+      currentChenOrdinaryInitialConstant a - epsilon ≤
+        actualSmallRosserMinusDensity N ⌈↑N ^ a⌉₊ (↑N ^ a) ↑(chenInitialRosserD B N) * Real.log ↑N / singularSeries N
+ImbalancedChen/CurrentChenOrdinaryInitialMean.lean:191:14: error: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`

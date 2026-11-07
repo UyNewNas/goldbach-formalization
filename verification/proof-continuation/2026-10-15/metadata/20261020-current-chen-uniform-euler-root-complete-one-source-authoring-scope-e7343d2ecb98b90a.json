@@ -1,0 +1,62 @@
+{
+  "status": "ROOT_COMPLETE_LITERAL_TYPE_FOUR_LOCAL_CONTRACTS_AND_PROOF_ROUTE_REVIEW_ONE_NEW_SOURCE_AUTHORING_SCOPE",
+  "created_utc": "2026-10-20T11:39:12.354854+00:00",
+  "unique_author": "/root/phase_oct20",
+  "source": "ImbalancedChen/CurrentChenUniformEulerNormalization.lean",
+  "namespace": "ImbalancedChen",
+  "only_imports": [
+    "ImbalancedChen.CurrentChenFixedEulerNormalization",
+    "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+    "Mathlib.Topology.Order.Compact"
+  ],
+  "exact_ONE_complete_public_type": "theorem exists_currentChen_actualEuler_power_uniform_threshold\n    (a0 a1 eta : ℝ) (ha0 : 0 < a0) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ a : ℝ, a ∈ Set.Icc a0 a1 → ∀ cap : ℕ,\n        (N : ℝ) ^ a ≤ (cap : ℝ) →\n          |actualSmallEulerProduct N cap ((N : ℝ) ^ a) * Real.log (N : ℝ) /\n              singularSeries N -\n            2 * Real.exp (-Real.eulerMascheroniConstant) / a| < eta",
+  "new_defs": 0,
+  "new_top_private": 0,
+  "complete_readonly_proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261020-current-chen-uniform-euler-one-actual-density-readonly-proposal-v2.json",
+    "sha256": "442c183bea57fab38be6a97b586be392b9502698262e8014fa4c699ac14731cc"
+  },
+  "root_actually_read_entire_four_local_proof_contracts_and_math_route": true,
+  "root_actually_read_all7_native_complete_spans_and_parent_public_types": true,
+  "root_original3_full_owned_records_receipts_before_after_flags_current_source_objects_exact": true,
+  "actual_owned_module_counts": {
+    "ImbalancedChen.CurrentChenFixedEulerNormalization": 39,
+    "ImbalancedChen.CurrentChenRosserEndpointDictionary": 9,
+    "ImbalancedChen.ActualPrimeBoxTestFunctions": 27,
+    "ImbalancedChen.ActualPrimeIcoCellTestFunctions": 17
+  },
+  "root_independent_math_review": [
+    "Actual finite prime-deleted Euler factors for evenN lie in(0,1], so cutoffexponent antitone at all real exponents. Arbitrary cap identity is exact at strict real wall includingintegerpowers.",
+    "Two actual owned fixed-positive endpoint limits and continuity of c/a supply an ambient interval with one threshold for every intermediate exponent. This does not assume finite prime products continuous or turn pointwise convergence into uniformity without monotonicity.",
+    "Compact finite nhdsWithin subcover with thresholds chosen per actual interval point yields max(2,sup threshold) BEFORE N,a,cap. Empty interval vacuous; no a1 positivity/order new hypothesis.",
+    "Actual samepolicy Euler factor uniformity only. No two-sided Rosser ratio or signedmeanC/K/currentmain claim."
+  ],
+  "four_local_contracts_and_routes": [
+    {
+      "name": "canonical_cap_identity",
+      "full_contract": "∀ (N cap : ℕ) (a : ℝ), (N : ℝ) ^ a ≤ (cap : ℝ) →\n  actualSmallEulerProduct N cap ((N : ℝ) ^ a) =\n    actualSmallEulerProduct N (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a)",
+      "proof": "Rewrite both sides by the owned currentChen_model_actualEuler_eq_finite, using caller hcap and Nat.le_ceil. This retains strict real endpoint exactly, including integral N^a; no limit or evenness is needed."
+    },
+    {
+      "name": "finite_normalized_antitone",
+      "full_contract": "∀ (N : ℕ), 2 ≤ N → Even N →\n  Antitone (fun a : ℝ =>\n    actualSmallEulerProduct N (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) *\n      Real.log (N : ℝ) / singularSeries N)",
+      "proof": "For a<=b, Real.rpow_le_rpow_of_exponent_le and Nat.ceil_mono give nested natural strict prime carriers. Unfold sievePrimes and finiteSieveDensity (or their source-exact membership equivalence). Since N is even, no allowed prime equals2; primality gives p>2, hence 0<1-1/(p-1)<=1. Apply the actual non-primed GroupWithZero Finset.prod_le_prod_of_subset_of_le_one with its required nonnegativity argument. Rewrite the canonical actual products through the owned exact dictionary. Multiply by logN>=0 and divide by singularSeries N>0. This is true for all real a,b, not only positive ones."
+    },
+    {
+      "name": "local_common_threshold",
+      "full_contract": "∀ x : ℝ, 0 < x →\n  ∃ n : ℕ, 2 ≤ n ∧\n    ∀ᶠ a : ℝ in 𝓝 x, ∀ N : ℕ, n ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ a ≤ (cap : ℝ) →\n        |actualSmallEulerProduct N cap ((N : ℝ) ^ a) * Real.log (N : ℝ) /\n            singularSeries N -\n          2 * Real.exp (-Real.eulerMascheroniConstant) / a| < eta",
+      "proof": "Let c=2exp(-gamma)>0,f(a)=c/a. ContinuityAt f x supplies delta>0 making both nearby endpoint values within eta/8 of f(x). Let d=min(x/2,delta/2), l=x-d,u=x+d; both endpoints are positive. The owned fixed-power limit at l and u gives one threshold n>=2 for endpoint errors<eta/4 for every later even N. Convert the positive-even filter using Filter.eventually_inf_principal and eventually_atTop, preserving N>=2. For a in Ioo l u, finite antitonicity brackets F_N(a) between F_N(u),F_N(l), while f is antitone on positive reals and f(l)-f(u)<eta/4. Each signed error is<eta/4+eta/4<eta. Canonical_cap_identity transfers to every covering cap. Thus one entire ambient neighborhood shares one threshold; pointwise convergence alone is not substituted for uniformity."
+    },
+    {
+      "name": "finite_compact_maximum",
+      "full_contract": "Set.Icc a0 a1 is covered by finitely many local_common_threshold neighborhoods, and max 2 of their finite Nat.sup thresholds works for all a in that interval.",
+      "proof": "Use S=Icc a0 a1, P N a := Even N -> forall cap, N^a<=cap -> literal absolute normalized actual Euler error<eta. For each subtype x:S choose local_common_threshold n x and let U x={a | forall N>=n x,P N a}. The local result gives U x in nhdsWithin S x. Apply exactly IsCompact.elim_nhdsWithin_subcover' to isCompact_Icc and these U; obtain t:Finset S covering S. Set N0=max 2 (t.sup n). For a in S choose x in t with a in U x; Finset.le_sup bounds n x by N0 and supplies P N a. Empty S gives vacuous conclusion with the same sup construction and N0=2.",
+      "native_API": "IsCompact.elim_nhdsWithin_subcover'"
+    }
+  ],
+  "foreign_boundary": "Two explicit Mathlib modules from readonly actual native sources may be used; current proper+fullnative parts preflight must later establish needed objects, no blanket old foreign replay/owned claim. No restoring old FullPowerEulerNormalization/SieveDimensionComparison chain.",
+  "authoring_only": "Exactly ONEnewsource and its ignored freeze evidence; no old Lean/CI/tool/pin/resources edits. No compiler/checker/lake permission. Return fullsource/allcompleteAPI/native/parent bindings and freezeSHA, then root plus nonauthor implementationreview and separate firstgate required.",
+  "quota_latest_remaining": 90,
+  "hard_stop_remaining_at_most": 50,
+  "unconditional_main_proved": false
+}

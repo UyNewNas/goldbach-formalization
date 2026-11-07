@@ -1,0 +1,2459 @@
+{
+  "status": "ROOT_COMPLETE_SPECIFIC_FIRST_GATE_AFTER_ENTIRE340_SOURCE_17_DECLARATIONS_INDEPENDENT_REVIEW_AND27_ACTUAL_OWNED_API_RECORDS",
+  "created_utc": "2026-10-20T11:06:05.439562+00:00",
+  "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+  "source": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+  "source_sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+  "root_actual_source_read_chunks": [
+    [
+      1,
+      180
+    ],
+    [
+      181,
+      340
+    ]
+  ],
+  "all17_complete_declarations": [
+    {
+      "name": "actualPrimeBoxTestSum",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 25,
+      "complete_header": "def actualPrimeBoxTestSum {k : ℕ} (N : ℕ) (a b : Fin k → ℝ)\n    (f : (Fin k → ℝ) → ℝ) : ℝ",
+      "complete_header_sha256_utf8": "f8b39000cbe66e132512aa652106ab6af37a071e3311795338cb9666b6faed79",
+      "complete_body_or_proof_and_following_interstitial": " :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p)\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "dcbdac612f9f2eb46e96133b8ef0e2dae4857dc198f109235247e5d403ac0887",
+      "complete_source_declaration_span": "def actualPrimeBoxTestSum {k : ℕ} (N : ℕ) (a b : Fin k → ℝ)\n    (f : (Fin k → ℝ) → ℝ) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p)\n\n",
+      "complete_source_declaration_span_sha256_utf8": "876e937701e19e40ba138141baec833a0fd1a6b894fcb8012cd3e96e18dea7ad"
+    },
+    {
+      "name": "actualPrimeBox_mesh_partition",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 30,
+      "complete_header": "private theorem actualPrimeBox_mesh_partition {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    actualPrimeBoxTuples N (fun _ : Fin k => a) (fun _ => b) =\n      Finset.univ.biUnion (fun j : Fin k → Fin (m + 1) =>\n        actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j))",
+      "complete_header_sha256_utf8": "422aef07daa56c20c0074a679907bd42ff1008b14ab6b068b5997092d979851f",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  ext p\n  simp only [Finset.mem_biUnion, Finset.mem_univ, true_and]\n  constructor\n  · intro hp\n    obtain ⟨hprime, hx⟩ := (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp\n    obtain ⟨j, hj⟩ := exists_logPrimeMeshCell a b m hx\n    exact ⟨j, (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr ⟨hprime, hj⟩⟩\n  · rintro ⟨j, hj⟩\n    obtain ⟨hprime, hx⟩ := (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hj\n    exact (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr\n      ⟨hprime, logPrimeMeshCell_subset_box hab m j hx⟩\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "82efd5342501e3888bbb1aab1fc0f91143ce4fbffdc5741e90a49aec3950db93",
+      "complete_source_declaration_span": "private theorem actualPrimeBox_mesh_partition {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    actualPrimeBoxTuples N (fun _ : Fin k => a) (fun _ => b) =\n      Finset.univ.biUnion (fun j : Fin k → Fin (m + 1) =>\n        actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) := by\n  ext p\n  simp only [Finset.mem_biUnion, Finset.mem_univ, true_and]\n  constructor\n  · intro hp\n    obtain ⟨hprime, hx⟩ := (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp\n    obtain ⟨j, hj⟩ := exists_logPrimeMeshCell a b m hx\n    exact ⟨j, (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr ⟨hprime, hj⟩⟩\n  · rintro ⟨j, hj⟩\n    obtain ⟨hprime, hx⟩ := (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hj\n    exact (mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr\n      ⟨hprime, logPrimeMeshCell_subset_box hab m j hx⟩\n\n",
+      "complete_source_declaration_span_sha256_utf8": "bef7cf8cc5e092028e295d2427cdb95e92a22e3f7122ebc0076b184debe544fb"
+    },
+    {
+      "name": "actualPrimeBox_mesh_disjoint",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 47,
+      "complete_header": "private theorem actualPrimeBox_mesh_disjoint {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    (Set.univ : Set (Fin k → Fin (m + 1))).Pairwise (fun j r =>\n      Disjoint (actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j))\n        (actualPrimeBoxTuples N (logPrimeMeshLo a b m r) (logPrimeMeshHi a b m r)))",
+      "complete_header_sha256_utf8": "f7ecce9f887768c314a4532a02a6e201ec87ae0bc13240a2b77ef7c5257814c0",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  intro j _ r _ hne\n  rw [Finset.disjoint_left]\n  intro p hpj hpr\n  exact hne (logPrimeMeshCell_unique hab.le\n    ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hpj).2\n    ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hpr).2)\n\n/-- Exact finite subdivision, before any asymptotic argument. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "02d70be4be11a5e4d2492be47ab907126e4fe579eb4965379e4503141c15536f",
+      "complete_source_declaration_span": "private theorem actualPrimeBox_mesh_disjoint {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    (Set.univ : Set (Fin k → Fin (m + 1))).Pairwise (fun j r =>\n      Disjoint (actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j))\n        (actualPrimeBoxTuples N (logPrimeMeshLo a b m r) (logPrimeMeshHi a b m r))) := by\n  intro j _ r _ hne\n  rw [Finset.disjoint_left]\n  intro p hpj hpr\n  exact hne (logPrimeMeshCell_unique hab.le\n    ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hpj).2\n    ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hpr).2)\n\n/-- Exact finite subdivision, before any asymptotic argument. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "c487a81dc03c3d54271560e272fb222d15c7eb0b01b4e2583dadb47976f854fd"
+    },
+    {
+      "name": "actualPrimeBoxTestSum_mesh",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 60,
+      "complete_header": "theorem actualPrimeBoxTestSum_mesh {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ) :\n    actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f =\n      ∑ j : Fin k → Fin (m + 1),\n        actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f",
+      "complete_header_sha256_utf8": "8c18a95a7211c63febfddd9be676e6441875d2b8a057b27e1c4963d6e92d1f59",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  unfold actualPrimeBoxTestSum\n  rw [actualPrimeBox_mesh_partition hN hab m, Finset.sum_biUnion]\n  simpa only [Finset.coe_univ, Set.PairwiseDisjoint, Function.onFun] using\n    actualPrimeBox_mesh_disjoint (k := k) hN hab m\n\n/-- The mass itself has the identical exact subdivision. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "00771c526db8b537972a4de8ff9b08a2284ec198ac98e6575773bd6f750d156a",
+      "complete_source_declaration_span": "theorem actualPrimeBoxTestSum_mesh {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ) :\n    actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f =\n      ∑ j : Fin k → Fin (m + 1),\n        actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f := by\n  unfold actualPrimeBoxTestSum\n  rw [actualPrimeBox_mesh_partition hN hab m, Finset.sum_biUnion]\n  simpa only [Finset.coe_univ, Set.PairwiseDisjoint, Function.onFun] using\n    actualPrimeBox_mesh_disjoint (k := k) hN hab m\n\n/-- The mass itself has the identical exact subdivision. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "95f70cbe9f823a2910406b6febdaf6c735603f04fa596d3a405daaed23245b2e"
+    },
+    {
+      "name": "actualPrimeBoxMass_mesh",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 71,
+      "complete_header": "theorem actualPrimeBoxMass_mesh {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) =\n      ∑ j : Fin k → Fin (m + 1),\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)",
+      "complete_header_sha256_utf8": "6f3f958733f5c934256f51180351707fb59fdeb5bbc729ad9e79ce05cb66fa4b",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  unfold actualPrimeBoxMass\n  rw [actualPrimeBox_mesh_partition hN hab m, Finset.sum_biUnion]\n  simpa only [Finset.coe_univ, Set.PairwiseDisjoint, Function.onFun] using\n    actualPrimeBox_mesh_disjoint (k := k) hN hab m\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "874d4bea2fdb3fe55f26018af1c2839543bcafc8faa7a462f34436edd58c2dff",
+      "complete_source_declaration_span": "theorem actualPrimeBoxMass_mesh {k N : ℕ} {a b : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) :\n    actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) =\n      ∑ j : Fin k → Fin (m + 1),\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) := by\n  unfold actualPrimeBoxMass\n  rw [actualPrimeBox_mesh_partition hN hab m, Finset.sum_biUnion]\n  simpa only [Finset.coe_univ, Set.PairwiseDisjoint, Function.onFun] using\n    actualPrimeBox_mesh_disjoint (k := k) hN hab m\n\n",
+      "complete_source_declaration_span_sha256_utf8": "f3d8e2d7e8e8d2f6c1ce9d6db26911d77f044d6347b543c73044cfe1de3c600b"
+    },
+    {
+      "name": "logPrimeMesh_lo_mem_closure",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 81,
+      "complete_header": "private theorem logPrimeMesh_lo_mem_closure {k : ℕ} {a b : ℝ} (hab : a < b)\n    (m : ℕ) (j : Fin k → Fin (m + 1)) :\n    logPrimeMeshLo a b m j ∈ Set.univ.pi (fun _ : Fin k => Set.Icc a b)",
+      "complete_header_sha256_utf8": "034de46a1ba4e856c199e691e5294e471bdabfab7fd95b21beb7b7441256a5ed",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  simp only [Set.mem_pi, Set.mem_univ, forall_const, Set.mem_Icc]\n  exact fun i => ⟨(logPrimeMeshLoHi_bounds hab m j i).1,\n    (logPrimeMeshLoHi_bounds hab m j i).2.1.le.trans\n      (logPrimeMeshLoHi_bounds hab m j i).2.2⟩\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "751da372c465a14430fb42983c95d3038226de1283983ff02aefc0887cf3e040",
+      "complete_source_declaration_span": "private theorem logPrimeMesh_lo_mem_closure {k : ℕ} {a b : ℝ} (hab : a < b)\n    (m : ℕ) (j : Fin k → Fin (m + 1)) :\n    logPrimeMeshLo a b m j ∈ Set.univ.pi (fun _ : Fin k => Set.Icc a b) := by\n  simp only [Set.mem_pi, Set.mem_univ, forall_const, Set.mem_Icc]\n  exact fun i => ⟨(logPrimeMeshLoHi_bounds hab m j i).1,\n    (logPrimeMeshLoHi_bounds hab m j i).2.1.le.trans\n      (logPrimeMeshLoHi_bounds hab m j i).2.2⟩\n\n",
+      "complete_source_declaration_span_sha256_utf8": "2d664669f1a591d9c175068645800faa07617ec80d0fa3553280c4c02206acd9"
+    },
+    {
+      "name": "logPrimeBox_mem_closure",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 89,
+      "complete_header": "private theorem logPrimeBox_mem_closure {k : ℕ} {a b : ℝ} {x : Fin k → ℝ}\n    (hx : x ∈ logPrimeBox (fun _ => a) (fun _ => b)) :\n    x ∈ Set.univ.pi (fun _ : Fin k => Set.Icc a b)",
+      "complete_header_sha256_utf8": "fe51b0282aa9eb65736dcc4c2cb26a2f5cfeaadb7041dd629a5055c14f865009",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  simp only [Set.mem_pi, Set.mem_univ, forall_const, Set.mem_Icc]\n  exact fun i => ⟨(mem_logPrimeBox.mp hx i).1, (mem_logPrimeBox.mp hx i).2.le⟩\n\n/-- Uniform continuity supplies one finite mesh with a uniform absolute\noscillation bound on every cell, also for signed test functions. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "201012ac411b167a789ef0289a7df1fef4c70e3a9913b24dff061dcbeaac7c3b",
+      "complete_source_declaration_span": "private theorem logPrimeBox_mem_closure {k : ℕ} {a b : ℝ} {x : Fin k → ℝ}\n    (hx : x ∈ logPrimeBox (fun _ => a) (fun _ => b)) :\n    x ∈ Set.univ.pi (fun _ : Fin k => Set.Icc a b) := by\n  simp only [Set.mem_pi, Set.mem_univ, forall_const, Set.mem_Icc]\n  exact fun i => ⟨(mem_logPrimeBox.mp hx i).1, (mem_logPrimeBox.mp hx i).2.le⟩\n\n/-- Uniform continuity supplies one finite mesh with a uniform absolute\noscillation bound on every cell, also for signed test functions. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "2620366e298831c0df3e92496d6f19762246b276e982027415b328bfc4d1e414"
+    },
+    {
+      "name": "exists_logPrimeMesh_test_oscillation",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 97,
+      "complete_header": "theorem exists_logPrimeMesh_test_oscillation {k : ℕ} {a b : ℝ} (hab : a < b)\n    (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ m : ℕ, ∀ (j : Fin k → Fin (m + 1)) (x : Fin k → ℝ),\n      x ∈ logPrimeMeshCell a b m j → |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon",
+      "complete_header_sha256_utf8": "24a5ad7270583d929815e130a81b1d3b1a97482bd0e683d26f8d10a7ee20af81",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  have hc : IsCompact (Set.univ.pi (fun _ : Fin k => Set.Icc a b)) :=\n    isCompact_univ_pi (fun _ => isCompact_Icc)\n  obtain ⟨delta, hdelta, hosc⟩ := Metric.uniformContinuousOn_iff.mp\n    (hc.uniformContinuousOn_of_continuous hf) epsilon hepsilon\n  obtain ⟨m, hm⟩ := ((tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hdelta)).exists\n  refine ⟨m, fun j x hx => ?_⟩\n  have hd : dist x (logPrimeMeshLo a b m j) ≤ logPrimeMeshStep a b m := by\n    apply (dist_pi_le_iff (logPrimeMeshStep_pos hab m).le).mpr\n    intro i\n    have hi := mem_logPrimeMeshCell.mp hx i\n    rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr hi.1)]\n    linarith [logPrimeMeshHi_eq_lo_add_step a b m j i]\n  have hh := hosc x (logPrimeBox_mem_closure (logPrimeMeshCell_subset_box hab m j hx))\n    (logPrimeMeshLo a b m j) (logPrimeMesh_lo_mem_closure hab m j) (hd.trans_lt hm)\n  exact (by simpa only [Real.dist_eq] using hh.le)\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "e493290b7208ee002be2bba052561c8f9c697a0b5fcc690dde4483d12e5b9a45",
+      "complete_source_declaration_span": "theorem exists_logPrimeMesh_test_oscillation {k : ℕ} {a b : ℝ} (hab : a < b)\n    (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ m : ℕ, ∀ (j : Fin k → Fin (m + 1)) (x : Fin k → ℝ),\n      x ∈ logPrimeMeshCell a b m j → |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon := by\n  have hc : IsCompact (Set.univ.pi (fun _ : Fin k => Set.Icc a b)) :=\n    isCompact_univ_pi (fun _ => isCompact_Icc)\n  obtain ⟨delta, hdelta, hosc⟩ := Metric.uniformContinuousOn_iff.mp\n    (hc.uniformContinuousOn_of_continuous hf) epsilon hepsilon\n  obtain ⟨m, hm⟩ := ((tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hdelta)).exists\n  refine ⟨m, fun j x hx => ?_⟩\n  have hd : dist x (logPrimeMeshLo a b m j) ≤ logPrimeMeshStep a b m := by\n    apply (dist_pi_le_iff (logPrimeMeshStep_pos hab m).le).mpr\n    intro i\n    have hi := mem_logPrimeMeshCell.mp hx i\n    rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr hi.1)]\n    linarith [logPrimeMeshHi_eq_lo_add_step a b m j i]\n  have hh := hosc x (logPrimeBox_mem_closure (logPrimeMeshCell_subset_box hab m j hx))\n    (logPrimeMeshLo a b m j) (logPrimeMesh_lo_mem_closure hab m j) (hd.trans_lt hm)\n  exact (by simpa only [Real.dist_eq] using hh.le)\n\n",
+      "complete_source_declaration_span_sha256_utf8": "d530f549819b1c02f80187b1bbf6a48a30e40d0d3b1417b4fea74bc453de00ce"
+    },
+    {
+      "name": "actualPrimeBoxTestSum_cell_error",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 119,
+      "complete_header": "private theorem actualPrimeBoxTestSum_cell_error {k N m : ℕ} {a b epsilon : ℝ}\n    (hN : 1 < N) (f : (Fin k → ℝ) → ℝ) (j : Fin k → Fin (m + 1))\n    (hosc : ∀ x ∈ logPrimeMeshCell a b m j,\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f -\n      f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| ≤\n      epsilon * actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)",
+      "complete_header_sha256_utf8": "6a5770c89bca06276f4a0be0ca2a5406783ed84ead3331065d0d90b06f10d95e",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  unfold actualPrimeBoxTestSum actualPrimeBoxMass\n  rw [Finset.mul_sum, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ p ∈ actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j),\n        |(∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p) -\n          f (logPrimeMeshLo a b m j) * (∏ i, 1 / ((p i : ℝ) - 1))| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ p ∈ actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j),\n        epsilon * (∏ i, 1 / ((p i : ℝ) - 1)) := by\n      apply Finset.sum_le_sum\n      intro p hp\n      have hw := actualPrimeBoxWeight_nonneg hp\n      have he := hosc (actualPrimeTupleLog N p)\n        ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n      calc\n        _ = (∏ i, 1 / ((p i : ℝ) - 1)) *\n            |f (actualPrimeTupleLog N p) - f (logPrimeMeshLo a b m j)| := by\n          rw [mul_comm (f (logPrimeMeshLo a b m j)), ← mul_sub, abs_mul, abs_of_nonneg hw]\n        _ ≤ _ := by simpa only [mul_comm] using mul_le_mul_of_nonneg_left he hw\n    _ = _ := (Finset.mul_sum _ _ _).symm\n\n/-- The arithmetic mesh error is paid by the actual total box mass.\nIts proof is a finite exact partition and positive weights, not an asymptotic assumption. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "ef8302bb176d6572032ebcb93d180afe171a2610a25ccbaaf7f51e71448cc25a",
+      "complete_source_declaration_span": "private theorem actualPrimeBoxTestSum_cell_error {k N m : ℕ} {a b epsilon : ℝ}\n    (hN : 1 < N) (f : (Fin k → ℝ) → ℝ) (j : Fin k → Fin (m + 1))\n    (hosc : ∀ x ∈ logPrimeMeshCell a b m j,\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f -\n      f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| ≤\n      epsilon * actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) := by\n  unfold actualPrimeBoxTestSum actualPrimeBoxMass\n  rw [Finset.mul_sum, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ p ∈ actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j),\n        |(∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p) -\n          f (logPrimeMeshLo a b m j) * (∏ i, 1 / ((p i : ℝ) - 1))| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ p ∈ actualPrimeBoxTuples N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j),\n        epsilon * (∏ i, 1 / ((p i : ℝ) - 1)) := by\n      apply Finset.sum_le_sum\n      intro p hp\n      have hw := actualPrimeBoxWeight_nonneg hp\n      have he := hosc (actualPrimeTupleLog N p)\n        ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n      calc\n        _ = (∏ i, 1 / ((p i : ℝ) - 1)) *\n            |f (actualPrimeTupleLog N p) - f (logPrimeMeshLo a b m j)| := by\n          rw [mul_comm (f (logPrimeMeshLo a b m j)), ← mul_sub, abs_mul, abs_of_nonneg hw]\n        _ ≤ _ := by simpa only [mul_comm] using mul_le_mul_of_nonneg_left he hw\n    _ = _ := (Finset.mul_sum _ _ _).symm\n\n/-- The arithmetic mesh error is paid by the actual total box mass.\nIts proof is a finite exact partition and positive weights, not an asymptotic assumption. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "a6cfe2dcfc8d9f671f19b20d190c9a2aec3a15e519ac30844cdb9a56bddf05c9"
+    },
+    {
+      "name": "actualPrimeBoxTestSum_mesh_error",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 150,
+      "complete_header": "theorem actualPrimeBoxTestSum_mesh_error {k N : ℕ} {a b epsilon : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ)\n    (hosc : ∀ (j : Fin k → Fin (m + 1)) x, x ∈ logPrimeMeshCell a b m j →\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f -\n      ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| ≤\n      epsilon * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b)",
+      "complete_header_sha256_utf8": "5931bcb543dfe5766d06156f73c7df2e1f5bec53a2e59e4e34a20b968d6fde8b",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  rw [actualPrimeBoxTestSum_mesh hN hab m, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ j : Fin k → Fin (m + 1),\n        |actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f -\n          f (logPrimeMeshLo a b m j) *\n            actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ j : Fin k → Fin (m + 1), epsilon *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) :=\n      Finset.sum_le_sum (fun j _ => actualPrimeBoxTestSum_cell_error hN f j (hosc j))\n    _ = _ := by rw [← Finset.mul_sum, ← actualPrimeBoxMass_mesh hN hab m]\n\n/-- For a fixed finite mesh the genuine arithmetic step sum tends to the\ncorresponding product-logarithm sum. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "719ed90338cf6ee2b7b5b86996b2f83b7f309b6fff2fec5dd1816bf661d92d88",
+      "complete_source_declaration_span": "theorem actualPrimeBoxTestSum_mesh_error {k N : ℕ} {a b epsilon : ℝ}\n    (hN : 1 < N) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ)\n    (hosc : ∀ (j : Fin k → Fin (m + 1)) x, x ∈ logPrimeMeshCell a b m j →\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f -\n      ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| ≤\n      epsilon * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) := by\n  rw [actualPrimeBoxTestSum_mesh hN hab m, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ j : Fin k → Fin (m + 1),\n        |actualPrimeBoxTestSum N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) f -\n          f (logPrimeMeshLo a b m j) *\n            actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ j : Fin k → Fin (m + 1), epsilon *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j) :=\n      Finset.sum_le_sum (fun j _ => actualPrimeBoxTestSum_cell_error hN f j (hosc j))\n    _ = _ := by rw [← Finset.mul_sum, ← actualPrimeBoxMass_mesh hN hab m]\n\n/-- For a fixed finite mesh the genuine arithmetic step sum tends to the\ncorresponding product-logarithm sum. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "b3b7fd33b14d60bdc12db9e2d1259e830980414461fb22547f90bbc7c6f0aaf9"
+    },
+    {
+      "name": "tendsto_actualPrimeBoxTestMesh",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 172,
+      "complete_header": "theorem tendsto_actualPrimeBoxTestMesh {k : ℕ} {a b : ℝ} (ha : 0 < a) (hab : a < b)\n    (m : ℕ) (f : (Fin k → ℝ) → ℝ) :\n    Tendsto (fun N : ℕ => ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n      actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) atTop\n      (𝓝 (∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)))",
+      "complete_header_sha256_utf8": "6e712ca0e0114f83bb70c0c1335f64f6eef580fdca6258d9c463536a31ce470a",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  apply tendsto_finsetSum\n  intro j _\n  exact (tendsto_actualPrimeBoxMass _ _\n    (fun i => ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1)\n    (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1)).const_mul _\n\n/-- The signed continuous test function times the reciprocal-coordinate\ndensity is integrable on the half-open cube, by its compact closure. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "9b3778e43f6bd3e1b3e03ec6098797a7e54729e41fa28f58c913901f397579c8",
+      "complete_source_declaration_span": "theorem tendsto_actualPrimeBoxTestMesh {k : ℕ} {a b : ℝ} (ha : 0 < a) (hab : a < b)\n    (m : ℕ) (f : (Fin k → ℝ) → ℝ) :\n    Tendsto (fun N : ℕ => ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n      actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) atTop\n      (𝓝 (∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i))) := by\n  apply tendsto_finsetSum\n  intro j _\n  exact (tendsto_actualPrimeBoxMass _ _\n    (fun i => ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1)\n    (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1)).const_mul _\n\n/-- The signed continuous test function times the reciprocal-coordinate\ndensity is integrable on the half-open cube, by its compact closure. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "09fe17c06cc0adaac1f9c387bb055bd2051df4914a87dc9936e3b466246728b9"
+    },
+    {
+      "name": "integrableOn_logPrimeBox_test_cube",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 186,
+      "complete_header": "theorem integrableOn_logPrimeBox_test_cube {k : ℕ} {a b : ℝ} (ha : 0 < a)\n    (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    IntegrableOn (fun x => f x * ∏ i, 1 / x i)\n      (logPrimeBox (fun _ : Fin k => a) (fun _ => b))",
+      "complete_header_sha256_utf8": "b3d69f437ace10a07653a9096fd1a3b569108b0deaf1f469fa1be4350d8aa75c",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  have hd : ContinuousOn (fun x : Fin k → ℝ => ∏ i, 1 / x i)\n      (Set.univ.pi (fun _ : Fin k => Set.Icc a b)) := by\n    apply continuousOn_finsetProd\n    intro i _\n    apply continuousOn_const.div (continuous_apply i).continuousOn\n    intro x hx\n    exact (ha.trans_le (hx i (Set.mem_univ _)).1).ne'\n  apply ((hf.mul hd).integrableOn_compact\n    (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set\n  exact fun _ hx => logPrimeBox_mem_closure hx\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "7e1a26fbff0abfc9244ec98c49eb857e88b7830c3746a06e94351664ea089b1d",
+      "complete_source_declaration_span": "theorem integrableOn_logPrimeBox_test_cube {k : ℕ} {a b : ℝ} (ha : 0 < a)\n    (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    IntegrableOn (fun x => f x * ∏ i, 1 / x i)\n      (logPrimeBox (fun _ : Fin k => a) (fun _ => b)) := by\n  have hd : ContinuousOn (fun x : Fin k → ℝ => ∏ i, 1 / x i)\n      (Set.univ.pi (fun _ : Fin k => Set.Icc a b)) := by\n    apply continuousOn_finsetProd\n    intro i _\n    apply continuousOn_const.div (continuous_apply i).continuousOn\n    intro x hx\n    exact (ha.trans_le (hx i (Set.mem_univ _)).1).ne'\n  apply ((hf.mul hd).integrableOn_compact\n    (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set\n  exact fun _ hx => logPrimeBox_mem_closure hx\n\n",
+      "complete_source_declaration_span_sha256_utf8": "5abd82b689c3ddf04ee166d5526cdfa464098475a86d34aeb7e71a8143754e88"
+    },
+    {
+      "name": "integral_logPrimeBox_mesh",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 202,
+      "complete_header": "private theorem integral_logPrimeBox_mesh {k : ℕ} {a b : ℝ} (hab : a < b)\n    (m : ℕ) (g : (Fin k → ℝ) → ℝ)\n    (hg : IntegrableOn g (logPrimeBox (fun _ : Fin k => a) (fun _ => b))) :\n    (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), g x) =\n      ∑ j : Fin k → Fin (m + 1), ∫ x in logPrimeMeshCell a b m j, g x",
+      "complete_header_sha256_utf8": "1f4f7fe131c02756627ef5af8bc28f942901ba24b4b4bfafb9ed7e7afc341671",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  calc\n    _ = ∫ x in ⋃ j : Fin k → Fin (m + 1), logPrimeMeshCell a b m j, g x := by\n      rw [logPrimeMeshCells_union hab m]\n    _ = _ := integral_iUnion_fintype (measurableSet_logPrimeMeshCell a b m)\n      (fun j r hjr => logPrimeMeshCell_pairwiseDisjoint hab.le m\n        (Set.mem_univ j) (Set.mem_univ r) hjr)\n      (fun j => hg.mono_set (logPrimeMeshCell_subset_box hab m j))\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "23590769f623a1963f35bf7a63b2fecae0a8b86b8655e49cc0968809704d7bd1",
+      "complete_source_declaration_span": "private theorem integral_logPrimeBox_mesh {k : ℕ} {a b : ℝ} (hab : a < b)\n    (m : ℕ) (g : (Fin k → ℝ) → ℝ)\n    (hg : IntegrableOn g (logPrimeBox (fun _ : Fin k => a) (fun _ => b))) :\n    (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), g x) =\n      ∑ j : Fin k → Fin (m + 1), ∫ x in logPrimeMeshCell a b m j, g x := by\n  calc\n    _ = ∫ x in ⋃ j : Fin k → Fin (m + 1), logPrimeMeshCell a b m j, g x := by\n      rw [logPrimeMeshCells_union hab m]\n    _ = _ := integral_iUnion_fintype (measurableSet_logPrimeMeshCell a b m)\n      (fun j r hjr => logPrimeMeshCell_pairwiseDisjoint hab.le m\n        (Set.mem_univ j) (Set.mem_univ r) hjr)\n      (fun j => hg.mono_set (logPrimeMeshCell_subset_box hab m j))\n\n",
+      "complete_source_declaration_span_sha256_utf8": "893f53aeb9f7de3d1eee5343fe9ef859dd3e60456cf828ad9febab276984ea13"
+    },
+    {
+      "name": "logPrimeBox_mesh_logMass",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 215,
+      "complete_header": "private theorem logPrimeBox_mesh_logMass {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (m : ℕ) :\n    (∑ j : Fin k → Fin (m + 1),\n      ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)) =\n      ∏ _i : Fin k, Real.log (b / a)",
+      "complete_header_sha256_utf8": "8ecd4db48b57dfd0f28ccac72331b18146d719e4533bbfe118990a9e91b81603",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  rw [← integral_logPrimeBox_one_div (fun _ : Fin k => a) (fun _ => b)\n    (fun _ => ha) (fun _ => hab.le), integral_logPrimeBox_mesh hab m _\n      (integrableOn_logPrimeBox_one_div _ _ (fun _ => ha))]\n  apply Finset.sum_congr rfl\n  intro j _\n  exact (integral_logPrimeBox_one_div _ _\n    (fun i => ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1)\n    (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1.le)).symm\n\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "7b55de13067e5f69f3af31a75365deb7b5ff5a8a48a65c8242d17c435b78d36b",
+      "complete_source_declaration_span": "private theorem logPrimeBox_mesh_logMass {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (m : ℕ) :\n    (∑ j : Fin k → Fin (m + 1),\n      ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)) =\n      ∏ _i : Fin k, Real.log (b / a) := by\n  rw [← integral_logPrimeBox_one_div (fun _ : Fin k => a) (fun _ => b)\n    (fun _ => ha) (fun _ => hab.le), integral_logPrimeBox_mesh hab m _\n      (integrableOn_logPrimeBox_one_div _ _ (fun _ => ha))]\n  apply Finset.sum_congr rfl\n  intro j _\n  exact (integral_logPrimeBox_one_div _ _\n    (fun i => ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1)\n    (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1.le)).symm\n\n",
+      "complete_source_declaration_span_sha256_utf8": "703a800ad84c3557cb51cbddb61fec2087142ca284189229ab8f5989b2ad3a1e"
+    },
+    {
+      "name": "integral_logPrimeBox_test_cell_error",
+      "kind": "theorem",
+      "visibility": "private",
+      "first_line": 229,
+      "complete_header": "private theorem integral_logPrimeBox_test_cell_error {k m : ℕ} {a b epsilon : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    (j : Fin k → Fin (m + 1))\n    (hosc : ∀ x ∈ logPrimeMeshCell a b m j,\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |(∫ x in logPrimeMeshCell a b m j, f x * ∏ i, 1 / x i) -\n      f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| ≤\n      epsilon * ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)",
+      "complete_header_sha256_utf8": "a0f0594c3058956ea8026c6bd52d5c78966353b07caf6cb4d05a94c3fb770423",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  have hlo (i : Fin k) : 0 < logPrimeMeshLo a b m j i :=\n    ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1\n  have hd := integrableOn_logPrimeBox_one_div (logPrimeMeshLo a b m j)\n    (logPrimeMeshHi a b m j) hlo\n  change IntegrableOn (fun x : Fin k → ℝ => ∏ i, 1 / x i) (logPrimeMeshCell a b m j) at hd\n  have hfc := (integrableOn_logPrimeBox_test_cube ha f hf).mono_set\n    (logPrimeMeshCell_subset_box hab m j)\n  have hmass : (∫ x in logPrimeMeshCell a b m j, ∏ i, 1 / x i) =\n      ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i) :=\n    integral_logPrimeBox_one_div _ _ hlo (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1.le)\n  rw [← hmass, ← integral_const_mul, ← integral_sub hfc (hd.const_mul _)]\n  have hh := norm_integral_le_of_norm_le (hd.const_mul epsilon) (show\n      ∀ᵐ x ∂volume.restrict (logPrimeMeshCell a b m j),\n        ‖f x * (∏ i, 1 / x i) - f (logPrimeMeshLo a b m j) * (∏ i, 1 / x i)‖ ≤\n          epsilon * (∏ i, 1 / x i) from by\n    filter_upwards [ae_restrict_mem (measurableSet_logPrimeMeshCell a b m j)] with x hx\n    have hnonneg : 0 ≤ ∏ i, 1 / x i := Finset.prod_nonneg (fun i _ =>\n      (one_div_pos.mpr ((hlo i).trans_le (mem_logPrimeMeshCell.mp hx i).1)).le)\n    rw [Real.norm_eq_abs, ← sub_mul, abs_mul, abs_of_nonneg hnonneg]\n    exact mul_le_mul_of_nonneg_right (hosc x hx) hnonneg)\n  rw [Real.norm_eq_abs, integral_const_mul] at hh\n  exact hh\n\n/-- The same finite mesh approximates the genuine signed Lebesgue integral\nwith error at most epsilon times its exact positive box mass. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "6e8d9389a7f87af85e937c81174598ec79d2e1ebeb0792db5077d6eac224e45f",
+      "complete_source_declaration_span": "private theorem integral_logPrimeBox_test_cell_error {k m : ℕ} {a b epsilon : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    (j : Fin k → Fin (m + 1))\n    (hosc : ∀ x ∈ logPrimeMeshCell a b m j,\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |(∫ x in logPrimeMeshCell a b m j, f x * ∏ i, 1 / x i) -\n      f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| ≤\n      epsilon * ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i) := by\n  have hlo (i : Fin k) : 0 < logPrimeMeshLo a b m j i :=\n    ha.trans_le (logPrimeMeshLoHi_bounds hab m j i).1\n  have hd := integrableOn_logPrimeBox_one_div (logPrimeMeshLo a b m j)\n    (logPrimeMeshHi a b m j) hlo\n  change IntegrableOn (fun x : Fin k → ℝ => ∏ i, 1 / x i) (logPrimeMeshCell a b m j) at hd\n  have hfc := (integrableOn_logPrimeBox_test_cube ha f hf).mono_set\n    (logPrimeMeshCell_subset_box hab m j)\n  have hmass : (∫ x in logPrimeMeshCell a b m j, ∏ i, 1 / x i) =\n      ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i) :=\n    integral_logPrimeBox_one_div _ _ hlo (fun i => (logPrimeMeshLoHi_bounds hab m j i).2.1.le)\n  rw [← hmass, ← integral_const_mul, ← integral_sub hfc (hd.const_mul _)]\n  have hh := norm_integral_le_of_norm_le (hd.const_mul epsilon) (show\n      ∀ᵐ x ∂volume.restrict (logPrimeMeshCell a b m j),\n        ‖f x * (∏ i, 1 / x i) - f (logPrimeMeshLo a b m j) * (∏ i, 1 / x i)‖ ≤\n          epsilon * (∏ i, 1 / x i) from by\n    filter_upwards [ae_restrict_mem (measurableSet_logPrimeMeshCell a b m j)] with x hx\n    have hnonneg : 0 ≤ ∏ i, 1 / x i := Finset.prod_nonneg (fun i _ =>\n      (one_div_pos.mpr ((hlo i).trans_le (mem_logPrimeMeshCell.mp hx i).1)).le)\n    rw [Real.norm_eq_abs, ← sub_mul, abs_mul, abs_of_nonneg hnonneg]\n    exact mul_le_mul_of_nonneg_right (hosc x hx) hnonneg)\n  rw [Real.norm_eq_abs, integral_const_mul] at hh\n  exact hh\n\n/-- The same finite mesh approximates the genuine signed Lebesgue integral\nwith error at most epsilon times its exact positive box mass. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "c429eeb746a67ebc5bbe09b26c0fa9c1908cda09518a3817cb5d557eb68294d8"
+    },
+    {
+      "name": "integral_logPrimeBox_test_mesh_error",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 264,
+      "complete_header": "theorem integral_logPrimeBox_test_mesh_error {k : ℕ} {a b epsilon : ℝ}\n    (ha : 0 < a) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    (hosc : ∀ (j : Fin k → Fin (m + 1)) x, x ∈ logPrimeMeshCell a b m j →\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |(∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i) -\n      ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| ≤\n      epsilon * ∏ _i : Fin k, Real.log (b / a)",
+      "complete_header_sha256_utf8": "61f1961abfa5ebe6e175a4f06ac7b280a545e255bc59bf6b0ebfc9434ca9103d",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  rw [integral_logPrimeBox_mesh hab m _ (integrableOn_logPrimeBox_test_cube ha f hf),\n    ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ j : Fin k → Fin (m + 1),\n        |(∫ x in logPrimeMeshCell a b m j, f x * ∏ i, 1 / x i) -\n          f (logPrimeMeshLo a b m j) *\n            ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ j : Fin k → Fin (m + 1), epsilon *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i) :=\n      Finset.sum_le_sum (fun j _ => integral_logPrimeBox_test_cell_error ha hab f hf j (hosc j))\n    _ = _ := by rw [← Finset.mul_sum, logPrimeBox_mesh_logMass ha hab m]\n\n/-- Every real continuous test function on the compact closure transfers\nfrom the actual target-linked prime tuples to the true logarithmic-cube\nLebesgue integral. No sign condition on the function and no arithmetic\nordering of tuple coordinates is imposed. -/\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "91d23fabd46c949ae1da0304954764ed2ddb0ad3a4023a2be822573e3adfc2fe",
+      "complete_source_declaration_span": "theorem integral_logPrimeBox_test_mesh_error {k : ℕ} {a b epsilon : ℝ}\n    (ha : 0 < a) (hab : a < b) (m : ℕ) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    (hosc : ∀ (j : Fin k → Fin (m + 1)) x, x ∈ logPrimeMeshCell a b m j →\n      |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon) :\n    |(∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i) -\n      ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| ≤\n      epsilon * ∏ _i : Fin k, Real.log (b / a) := by\n  rw [integral_logPrimeBox_mesh hab m _ (integrableOn_logPrimeBox_test_cube ha f hf),\n    ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ j : Fin k → Fin (m + 1),\n        |(∫ x in logPrimeMeshCell a b m j, f x * ∏ i, 1 / x i) -\n          f (logPrimeMeshLo a b m j) *\n            ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ j : Fin k → Fin (m + 1), epsilon *\n        ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i) :=\n      Finset.sum_le_sum (fun j _ => integral_logPrimeBox_test_cell_error ha hab f hf j (hosc j))\n    _ = _ := by rw [← Finset.mul_sum, logPrimeBox_mesh_logMass ha hab m]\n\n/-- Every real continuous test function on the compact closure transfers\nfrom the actual target-linked prime tuples to the true logarithmic-cube\nLebesgue integral. No sign condition on the function and no arithmetic\nordering of tuple coordinates is imposed. -/\n",
+      "complete_source_declaration_span_sha256_utf8": "18b5579f406915f223e31f7a0f1acf5b9d0e88d2161607d6b56274cf6efb2079"
+    },
+    {
+      "name": "tendsto_actualPrimeBoxTestSum_cube",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 290,
+      "complete_header": "theorem tendsto_actualPrimeBoxTestSum_cube {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f)\n      atTop (𝓝 (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b),\n        f x * ∏ i, 1 / x i))",
+      "complete_header_sha256_utf8": "7dfde569c2fcaa42e90db40a01415fda3cae564a67b5e19f7e5891e066f5fa49",
+      "complete_body_or_proof_and_following_interstitial": " := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  let M : ℝ := ∏ _i : Fin k, Real.log (b / a)\n  have hM : 0 ≤ M := Finset.prod_nonneg (fun _ _ =>\n    Real.log_nonneg ((one_le_div ha).mpr hab.le))\n  let eta : ℝ := epsilon / (4 * (M + 1))\n  have heta : 0 < eta := div_pos hepsilon (by positivity)\n  have hbudget : eta * (M + 1) = epsilon / 4 := by\n    dsimp [eta]\n    field_simp\n  obtain ⟨m, hosc⟩ := exists_logPrimeMesh_test_oscillation hab f hf heta\n  have hmass : ∀ᶠ N : ℕ in atTop,\n      actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) < M + 1 :=\n    (tendsto_actualPrimeBoxMass _ _ (fun _ => ha) (fun _ => hab)).eventually\n      (gt_mem_nhds (lt_add_one M))\n  have hstep : ∀ᶠ N : ℕ in atTop,\n      |(∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) -\n        ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n          ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| < epsilon / 2 := by\n    simpa only [Real.dist_eq] using Metric.tendsto_nhds.mp\n      (tendsto_actualPrimeBoxTestMesh ha hab m f) (epsilon / 2) (by positivity)\n  have hi := integral_logPrimeBox_test_mesh_error ha hab m f hf hosc\n  filter_upwards [eventually_gt_atTop (1 : ℕ), hmass, hstep] with N hN hmassN hstepN\n  have he := actualPrimeBoxTestSum_mesh_error hN hab m f hosc\n  let A := actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f\n  let B := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)\n  let C := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)\n  let I := ∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i\n  change |A - B| ≤ eta * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) at he\n  change |B - C| < epsilon / 2 at hstepN\n  change |I - C| ≤ eta * M at hi\n  have hic : |C - I| ≤ eta * M := by simpa only [abs_sub_comm] using hi\n  have hm := mul_lt_mul_of_pos_left hmassN heta\n  rw [Real.dist_eq]\n  change |A - I| < epsilon\n  have htriangle : |A - I| ≤ |A - B| + (|B - C| + |C - I|) :=\n    (abs_sub_le A B I).trans (add_le_add le_rfl (abs_sub_le B C I))\n  nlinarith only [htriangle, he, hstepN, hic, hm, hbudget, heta]\n\nend\n\nend ImbalancedChen\n",
+      "complete_body_or_proof_and_following_interstitial_sha256_utf8": "1a29e01819b26c500573745bebb54f8fce078a234b71cff6861f55932cf9404a",
+      "complete_source_declaration_span": "theorem tendsto_actualPrimeBoxTestSum_cube {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f)\n      atTop (𝓝 (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b),\n        f x * ∏ i, 1 / x i)) := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  let M : ℝ := ∏ _i : Fin k, Real.log (b / a)\n  have hM : 0 ≤ M := Finset.prod_nonneg (fun _ _ =>\n    Real.log_nonneg ((one_le_div ha).mpr hab.le))\n  let eta : ℝ := epsilon / (4 * (M + 1))\n  have heta : 0 < eta := div_pos hepsilon (by positivity)\n  have hbudget : eta * (M + 1) = epsilon / 4 := by\n    dsimp [eta]\n    field_simp\n  obtain ⟨m, hosc⟩ := exists_logPrimeMesh_test_oscillation hab f hf heta\n  have hmass : ∀ᶠ N : ℕ in atTop,\n      actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) < M + 1 :=\n    (tendsto_actualPrimeBoxMass _ _ (fun _ => ha) (fun _ => hab)).eventually\n      (gt_mem_nhds (lt_add_one M))\n  have hstep : ∀ᶠ N : ℕ in atTop,\n      |(∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) -\n        ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n          ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| < epsilon / 2 := by\n    simpa only [Real.dist_eq] using Metric.tendsto_nhds.mp\n      (tendsto_actualPrimeBoxTestMesh ha hab m f) (epsilon / 2) (by positivity)\n  have hi := integral_logPrimeBox_test_mesh_error ha hab m f hf hosc\n  filter_upwards [eventually_gt_atTop (1 : ℕ), hmass, hstep] with N hN hmassN hstepN\n  have he := actualPrimeBoxTestSum_mesh_error hN hab m f hosc\n  let A := actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f\n  let B := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)\n  let C := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)\n  let I := ∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i\n  change |A - B| ≤ eta * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) at he\n  change |B - C| < epsilon / 2 at hstepN\n  change |I - C| ≤ eta * M at hi\n  have hic : |C - I| ≤ eta * M := by simpa only [abs_sub_comm] using hi\n  have hm := mul_lt_mul_of_pos_left hmassN heta\n  rw [Real.dist_eq]\n  change |A - I| < epsilon\n  have htriangle : |A - I| ≤ |A - B| + (|B - C| + |C - I|) :=\n    (abs_sub_le A B I).trans (add_le_add le_rfl (abs_sub_le B C I))\n  nlinarith only [htriangle, he, hstepN, hic, hm, hbudget, heta]\n\nend\n\nend ImbalancedChen\n",
+      "complete_source_declaration_span_sha256_utf8": "f180a7b36c0decce5a5b580c860da275147aa7322b6309658766503aba55ab80"
+    }
+  ],
+  "literal_definition": {
+    "name": "actualPrimeBoxTestSum",
+    "kind": "def",
+    "visibility": "public",
+    "first_line": 25,
+    "complete_header": "def actualPrimeBoxTestSum {k : ℕ} (N : ℕ) (a b : Fin k → ℝ)\n    (f : (Fin k → ℝ) → ℝ) : ℝ",
+    "complete_header_sha256_utf8": "f8b39000cbe66e132512aa652106ab6af37a071e3311795338cb9666b6faed79",
+    "complete_body_or_proof_and_following_interstitial": " :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p)\n\n",
+    "complete_body_or_proof_and_following_interstitial_sha256_utf8": "dcbdac612f9f2eb46e96133b8ef0e2dae4857dc198f109235247e5d403ac0887",
+    "complete_source_declaration_span": "def actualPrimeBoxTestSum {k : ℕ} (N : ℕ) (a b : Fin k → ℝ)\n    (f : (Fin k → ℝ) → ℝ) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p)\n\n",
+    "complete_source_declaration_span_sha256_utf8": "876e937701e19e40ba138141baec833a0fd1a6b894fcb8012cd3e96e18dea7ad"
+  },
+  "one_selected_actual_endpoint": {
+    "name": "tendsto_actualPrimeBoxTestSum_cube",
+    "kind": "theorem",
+    "visibility": "public",
+    "first_line": 290,
+    "complete_header": "theorem tendsto_actualPrimeBoxTestSum_cube {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f)\n      atTop (𝓝 (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b),\n        f x * ∏ i, 1 / x i))",
+    "complete_header_sha256_utf8": "7dfde569c2fcaa42e90db40a01415fda3cae564a67b5e19f7e5891e066f5fa49",
+    "complete_body_or_proof_and_following_interstitial": " := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  let M : ℝ := ∏ _i : Fin k, Real.log (b / a)\n  have hM : 0 ≤ M := Finset.prod_nonneg (fun _ _ =>\n    Real.log_nonneg ((one_le_div ha).mpr hab.le))\n  let eta : ℝ := epsilon / (4 * (M + 1))\n  have heta : 0 < eta := div_pos hepsilon (by positivity)\n  have hbudget : eta * (M + 1) = epsilon / 4 := by\n    dsimp [eta]\n    field_simp\n  obtain ⟨m, hosc⟩ := exists_logPrimeMesh_test_oscillation hab f hf heta\n  have hmass : ∀ᶠ N : ℕ in atTop,\n      actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) < M + 1 :=\n    (tendsto_actualPrimeBoxMass _ _ (fun _ => ha) (fun _ => hab)).eventually\n      (gt_mem_nhds (lt_add_one M))\n  have hstep : ∀ᶠ N : ℕ in atTop,\n      |(∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) -\n        ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n          ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| < epsilon / 2 := by\n    simpa only [Real.dist_eq] using Metric.tendsto_nhds.mp\n      (tendsto_actualPrimeBoxTestMesh ha hab m f) (epsilon / 2) (by positivity)\n  have hi := integral_logPrimeBox_test_mesh_error ha hab m f hf hosc\n  filter_upwards [eventually_gt_atTop (1 : ℕ), hmass, hstep] with N hN hmassN hstepN\n  have he := actualPrimeBoxTestSum_mesh_error hN hab m f hosc\n  let A := actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f\n  let B := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)\n  let C := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)\n  let I := ∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i\n  change |A - B| ≤ eta * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) at he\n  change |B - C| < epsilon / 2 at hstepN\n  change |I - C| ≤ eta * M at hi\n  have hic : |C - I| ≤ eta * M := by simpa only [abs_sub_comm] using hi\n  have hm := mul_lt_mul_of_pos_left hmassN heta\n  rw [Real.dist_eq]\n  change |A - I| < epsilon\n  have htriangle : |A - I| ≤ |A - B| + (|B - C| + |C - I|) :=\n    (abs_sub_le A B I).trans (add_le_add le_rfl (abs_sub_le B C I))\n  nlinarith only [htriangle, he, hstepN, hic, hm, hbudget, heta]\n\nend\n\nend ImbalancedChen\n",
+    "complete_body_or_proof_and_following_interstitial_sha256_utf8": "1a29e01819b26c500573745bebb54f8fce078a234b71cff6861f55932cf9404a",
+    "complete_source_declaration_span": "theorem tendsto_actualPrimeBoxTestSum_cube {k : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f)\n      atTop (𝓝 (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b),\n        f x * ∏ i, 1 / x i)) := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  let M : ℝ := ∏ _i : Fin k, Real.log (b / a)\n  have hM : 0 ≤ M := Finset.prod_nonneg (fun _ _ =>\n    Real.log_nonneg ((one_le_div ha).mpr hab.le))\n  let eta : ℝ := epsilon / (4 * (M + 1))\n  have heta : 0 < eta := div_pos hepsilon (by positivity)\n  have hbudget : eta * (M + 1) = epsilon / 4 := by\n    dsimp [eta]\n    field_simp\n  obtain ⟨m, hosc⟩ := exists_logPrimeMesh_test_oscillation hab f hf heta\n  have hmass : ∀ᶠ N : ℕ in atTop,\n      actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) < M + 1 :=\n    (tendsto_actualPrimeBoxMass _ _ (fun _ => ha) (fun _ => hab)).eventually\n      (gt_mem_nhds (lt_add_one M))\n  have hstep : ∀ᶠ N : ℕ in atTop,\n      |(∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n        actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)) -\n        ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n          ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)| < epsilon / 2 := by\n    simpa only [Real.dist_eq] using Metric.tendsto_nhds.mp\n      (tendsto_actualPrimeBoxTestMesh ha hab m f) (epsilon / 2) (by positivity)\n  have hi := integral_logPrimeBox_test_mesh_error ha hab m f hf hosc\n  filter_upwards [eventually_gt_atTop (1 : ℕ), hmass, hstep] with N hN hmassN hstepN\n  have he := actualPrimeBoxTestSum_mesh_error hN hab m f hosc\n  let A := actualPrimeBoxTestSum N (fun _ : Fin k => a) (fun _ => b) f\n  let B := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    actualPrimeBoxMass N (logPrimeMeshLo a b m j) (logPrimeMeshHi a b m j)\n  let C := ∑ j : Fin k → Fin (m + 1), f (logPrimeMeshLo a b m j) *\n    ∏ i, Real.log (logPrimeMeshHi a b m j i / logPrimeMeshLo a b m j i)\n  let I := ∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), f x * ∏ i, 1 / x i\n  change |A - B| ≤ eta * actualPrimeBoxMass N (fun _ : Fin k => a) (fun _ => b) at he\n  change |B - C| < epsilon / 2 at hstepN\n  change |I - C| ≤ eta * M at hi\n  have hic : |C - I| ≤ eta * M := by simpa only [abs_sub_comm] using hi\n  have hm := mul_lt_mul_of_pos_left hmassN heta\n  rw [Real.dist_eq]\n  change |A - I| < epsilon\n  have htriangle : |A - I| ≤ |A - B| + (|B - C| + |C - I|) :=\n    (abs_sub_le A B I).trans (add_le_add le_rfl (abs_sub_le B C I))\n  nlinarith only [htriangle, he, hstepN, hic, hm, hbudget, heta]\n\nend\n\nend ImbalancedChen\n",
+    "complete_source_declaration_span_sha256_utf8": "f180a7b36c0decce5a5b580c860da275147aa7322b6309658766503aba55ab80"
+  },
+  "independent_review": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-actual-prime-box-test-functions-phase-full-readonly-review.json",
+  "independent_review_sha256": "40f0a9f6794fc1e4ef24c27211dfdcde793b96a55ab8490e830b459af9351b76",
+  "root_verified_actual27_owned_full_type_flags_three_axioms_and_receipts": [
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "name": "ImbalancedChen.actualPrimeBoxTuples",
+        "partial": false,
+        "type": "(N : Nat) → {k : Nat} → (a b : Fin k → Real) → Finset.{0} (Fin k → Nat)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "object_parts": {
+          ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+        "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+        "complete_serialized_declarations": 70
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "name": "ImbalancedChen.mem_actualPrimeBoxTuples_iff",
+        "partial": false,
+        "type": "∀ {N k : Nat} {a b : Fin k → Real} {p : Fin k → Nat},\n  Iff\n    (@Membership.mem.{0, 0} (Fin k → Nat) (Finset.{0} (Fin k → Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Fin k → Nat)) (Fin k → Nat) (@Finset.instSetLike.{0} (Fin k → Nat)))\n      (@ImbalancedChen.actualPrimeBoxTuples N k a b) p)\n    (∀ (i : Fin k),\n      And (Nat.Prime (p i))\n        (And (Not (@Dvd.dvd.{0} Nat Nat.instDvd (p i) N))\n          (And\n            (@LE.le.{0} Real Real.instLE\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N) (a i))\n              (@Nat.cast.{0} Real Real.instNatCast (p i)))\n            (@LT.lt.{0} Real Real.instLT (@Nat.cast.{0} Real Real.instNatCast (p i))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N) (b i))))))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "object_parts": {
+          ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+        "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+        "complete_serialized_declarations": 70
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "name": "ImbalancedChen.actualPrimeTupleLog",
+        "partial": false,
+        "type": "{k : Nat} → (N : Nat) → (p : Fin k → Nat) → Fin k → Real",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "object_parts": {
+          ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+        "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+        "complete_serialized_declarations": 70
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "name": "ImbalancedChen.actualPrimeTupleLog_rpow",
+        "partial": false,
+        "type": "∀ {k N : Nat} (hN : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)\n  (p : Fin k → Nat)\n  (hp : ∀ (i : Fin k), @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (p i))\n  (i : Fin k),\n  @Eq.{1} Real\n    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n      (@Nat.cast.{0} Real Real.instNatCast N) (@ImbalancedChen.actualPrimeTupleLog k N p i))\n    (@Nat.cast.{0} Real Real.instNatCast (p i))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "object_parts": {
+          ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+        "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+        "complete_serialized_declarations": 70
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "name": "ImbalancedChen.mem_actualPrimeBoxTuples_log_iff",
+        "partial": false,
+        "type": "∀ {k N : Nat} (hN : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)\n  (a b : Fin k → Real) (p : Fin k → Nat),\n  Iff\n    (@Membership.mem.{0, 0} (Fin k → Nat) (Finset.{0} (Fin k → Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Fin k → Nat)) (Fin k → Nat) (@Finset.instSetLike.{0} (Fin k → Nat)))\n      (@ImbalancedChen.actualPrimeBoxTuples N k a b) p)\n    (And (∀ (i : Fin k), And (Nat.Prime (p i)) (Not (@Dvd.dvd.{0} Nat Nat.instDvd (p i) N)))\n      (@Membership.mem.{0, 0} (Fin k → Real) (Set.{0} (Fin k → Real)) (@Set.instMembership.{0} (Fin k → Real))\n        (@ImbalancedChen.logPrimeBox k a b) (@ImbalancedChen.actualPrimeTupleLog k N p)))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "object_parts": {
+          ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+        "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+        "complete_serialized_declarations": 70
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "name": "ImbalancedChen.actualPrimeBoxMass",
+        "partial": false,
+        "type": "(N : Nat) → {k : Nat} → (a b : Fin k → Real) → Real",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "object_parts": {
+          ".olean": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T034306935493Z/receipt.json",
+        "owned_receipt_sha256": "b55942277a5eabd482e44c667dafac506e8207a8f5c663907640c9607d63c6c0",
+        "declarations_json_sha256": "5c1fe92e1cdddd29d7517faa9d5c710fa580c3555e79777ddd84894ce35d2ade",
+        "complete_serialized_declarations": 13
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "name": "ImbalancedChen.actualPrimeBoxWeight_nonneg",
+        "partial": false,
+        "type": "∀ {N k : Nat} {a b : Fin k → Real} {p : Fin k → Nat}\n  (hp :\n    @Membership.mem.{0, 0} (Fin k → Nat) (Finset.{0} (Fin k → Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Fin k → Nat)) (Fin k → Nat) (@Finset.instSetLike.{0} (Fin k → Nat)))\n      (@ImbalancedChen.actualPrimeBoxTuples N k a b) p),\n  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))\n    (@Finset.prod.{0, 0} (Fin k) Real Real.instCommMonoid (@Finset.univ.{0} (Fin k) (Fin.fintype k)) fun (i : Fin k) =>\n      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n          (@Nat.cast.{0} Real Real.instNatCast (p i))\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "object_parts": {
+          ".olean": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T034306935493Z/receipt.json",
+        "owned_receipt_sha256": "b55942277a5eabd482e44c667dafac506e8207a8f5c663907640c9607d63c6c0",
+        "declarations_json_sha256": "5c1fe92e1cdddd29d7517faa9d5c710fa580c3555e79777ddd84894ce35d2ade",
+        "complete_serialized_declarations": 13
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "name": "ImbalancedChen.tendsto_actualPrimeBoxMass",
+        "partial": false,
+        "type": "∀ {k : Nat} (a b : Fin k → Real)\n  (ha :\n    ∀ (i : Fin k),\n      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) (a i))\n  (hab : ∀ (i : Fin k), @LT.lt.{0} Real Real.instLT (a i) (b i)),\n  @Filter.Tendsto.{0, 0} Nat Real (fun (N : Nat) => @ImbalancedChen.actualPrimeBoxMass N k a b)\n    (@Filter.atTop.{0} Nat Nat.instPreorder)\n    (@nhds.{0} Real\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n      (@Finset.prod.{0, 0} (Fin k) Real Real.instCommMonoid (@Finset.univ.{0} (Fin k) (Fin.fintype k))\n        fun (i : Fin k) =>\n        Real.log\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (b i) (a i))))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "object_parts": {
+          ".olean": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T034306935493Z/receipt.json",
+        "owned_receipt_sha256": "b55942277a5eabd482e44c667dafac506e8207a8f5c663907640c9607d63c6c0",
+        "declarations_json_sha256": "5c1fe92e1cdddd29d7517faa9d5c710fa580c3555e79777ddd84894ce35d2ade",
+        "complete_serialized_declarations": 13
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshStep",
+        "partial": false,
+        "type": "(a b : Real) → (n : Nat) → Real",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshLo",
+        "partial": false,
+        "type": "{d : Nat} →\n  (a b : Real) →\n    (n : Nat) →\n      (j :\n          Fin d →\n            Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →\n        Fin d → Real",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshHi",
+        "partial": false,
+        "type": "{d : Nat} →\n  (a b : Real) →\n    (n : Nat) →\n      (j :\n          Fin d →\n            Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →\n        Fin d → Real",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshCell",
+        "partial": false,
+        "type": "{d : Nat} →\n  (a b : Real) →\n    (n : Nat) →\n      (j :\n          Fin d →\n            Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →\n        Set.{0} (Fin d → Real)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.mem_logPrimeMeshCell",
+        "partial": false,
+        "type": "∀ {d n : Nat} {a b : Real}\n  {j :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))}\n  {x : Fin d → Real},\n  Iff\n    (@Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real))\n      (@ImbalancedChen.logPrimeMeshCell d a b n j) x)\n    (∀ (i : Fin d),\n      And (@LE.le.{0} Real Real.instLE (@ImbalancedChen.logPrimeMeshLo d a b n j i) (x i))\n        (@LT.lt.{0} Real Real.instLT (x i) (@ImbalancedChen.logPrimeMeshHi d a b n j i)))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.measurableSet_logPrimeMeshCell",
+        "partial": false,
+        "type": "∀ {d : Nat} (a b : Real) (n : Nat)\n  (j :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),\n  @MeasurableSet.{0} (Fin d → Real)\n    (@MeasurableSpace.pi.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (a : Fin d) => Real.measurableSpace)\n    (@ImbalancedChen.logPrimeMeshCell d a b n j)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshStep_pos",
+        "partial": false,
+        "type": "∀ {a b : Real} (hab : @LT.lt.{0} Real Real.instLT a b) (n : Nat),\n  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))\n    (ImbalancedChen.logPrimeMeshStep a b n)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshHi_eq_lo_add_step",
+        "partial": false,
+        "type": "∀ {d : Nat} (a b : Real) (n : Nat)\n  (j :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n  (i : Fin d),\n  @Eq.{1} Real (@ImbalancedChen.logPrimeMeshHi d a b n j i)\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (@ImbalancedChen.logPrimeMeshLo d a b n j i)\n      (ImbalancedChen.logPrimeMeshStep a b n))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshLoHi_bounds",
+        "partial": false,
+        "type": "∀ {d : Nat} {a b : Real} (hab : @LT.lt.{0} Real Real.instLT a b) (n : Nat)\n  (j :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n  (i : Fin d),\n  And (@LE.le.{0} Real Real.instLE a (@ImbalancedChen.logPrimeMeshLo d a b n j i))\n    (And\n      (@LT.lt.{0} Real Real.instLT (@ImbalancedChen.logPrimeMeshLo d a b n j i)\n        (@ImbalancedChen.logPrimeMeshHi d a b n j i))\n      (@LE.le.{0} Real Real.instLE (@ImbalancedChen.logPrimeMeshHi d a b n j i) b))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshCell_unique",
+        "partial": false,
+        "type": "∀ {d n : Nat} {a b : Real} (hab : @LE.le.{0} Real Real.instLE a b)\n  {j k :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))}\n  {x : Fin d → Real}\n  (hj :\n    @Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real))\n      (@ImbalancedChen.logPrimeMeshCell d a b n j) x)\n  (hk :\n    @Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real))\n      (@ImbalancedChen.logPrimeMeshCell d a b n k) x),\n  @Eq.{1}\n    (Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n    j k",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshCell_pairwiseDisjoint",
+        "partial": false,
+        "type": "∀ {d : Nat} {a b : Real} (hab : @LE.le.{0} Real Real.instLE a b) (n : Nat),\n  @Set.PairwiseDisjoint.{0, 0} (Set.{0} (Fin d → Real))\n    (Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n    (@ChainCompletePartialOrder.toPartialOrder.{0} (Set.{0} (Fin d → Real))\n      (@ChainCompletePartialOrder.instOfCompleteLattice.{0} (Set.{0} (Fin d → Real))\n        (@CompleteBooleanAlgebra.toCompleteLattice.{0} (Set.{0} (Fin d → Real))\n          (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} (Fin d → Real))\n            (@Set.instCompleteAtomicBooleanAlgebra.{0} (Fin d → Real))))))\n    (@HeytingAlgebra.toOrderBot.{0} (Set.{0} (Fin d → Real))\n      (@Order.Frame.toHeytingAlgebra.{0} (Set.{0} (Fin d → Real))\n        (@CompleteDistribLattice.toFrame.{0} (Set.{0} (Fin d → Real))\n          (@CompleteBooleanAlgebra.toCompleteDistribLattice.{0} (Set.{0} (Fin d → Real))\n            (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} (Fin d → Real))\n              (@Set.instCompleteAtomicBooleanAlgebra.{0} (Fin d → Real)))))))\n    (@Set.univ.{0}\n      (Fin d →\n        Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))\n    (@ImbalancedChen.logPrimeMeshCell d a b n)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshCell_subset_box",
+        "partial": false,
+        "type": "∀ {d : Nat} {a b : Real} (hab : @LT.lt.{0} Real Real.instLT a b) (n : Nat)\n  (j :\n    Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),\n  @LE.le.{0} (Set.{0} (Fin d → Real)) (@Set.instLE.{0} (Fin d → Real)) (@ImbalancedChen.logPrimeMeshCell d a b n j)\n    (@ImbalancedChen.logPrimeBox d (fun (x : Fin d) => a) fun (x : Fin d) => b)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.exists_logPrimeMeshCell",
+        "partial": false,
+        "type": "∀ {d : Nat} (a b : Real) (n : Nat) {x : Fin d → Real}\n  (hx :\n    @Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real))\n      (@ImbalancedChen.logPrimeBox d (fun (x : Fin d) => a) fun (x : Fin d) => b) x),\n  @Exists.{1}\n    (Fin d →\n      Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n    fun\n      (j :\n        Fin d →\n          Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) =>\n    @Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real))\n      (@ImbalancedChen.logPrimeMeshCell d a b n j) x",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.logPrimeMeshCells_union",
+        "partial": false,
+        "type": "∀ {d : Nat} {a b : Real} (hab : @LT.lt.{0} Real Real.instLT a b) (n : Nat),\n  @Eq.{1} (Set.{0} (Fin d → Real))\n    (@Set.iUnion.{0, 1} (Fin d → Real)\n      (Fin d →\n        Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n      fun\n        (j :\n          Fin d →\n            Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) =>\n      @ImbalancedChen.logPrimeMeshCell d a b n j)\n    (@ImbalancedChen.logPrimeBox d (fun (x : Fin d) => a) fun (x : Fin d) => b)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "name": "ImbalancedChen.tendsto_logPrimeMeshStep",
+        "partial": false,
+        "type": "∀ (a b : Real),\n  @Filter.Tendsto.{0, 0} Nat Real (ImbalancedChen.logPrimeMeshStep a b) (@Filter.atTop.{0} Nat Nat.instPreorder)\n    (@nhds.{0} Real\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "object_parts": {
+          ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+        "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+        "complete_serialized_declarations": 30
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "name": "ImbalancedChen.logPrimeBox",
+        "partial": false,
+        "type": "{k : Nat} → (a b : Fin k → Real) → Set.{0} (Fin k → Real)",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "object_parts": {
+          ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+        "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+        "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+        "complete_serialized_declarations": 12
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "name": "ImbalancedChen.mem_logPrimeBox",
+        "partial": false,
+        "type": "∀ {k : Nat} {a b x : Fin k → Real},\n  Iff\n    (@Membership.mem.{0, 0} (Fin k → Real) (Set.{0} (Fin k → Real)) (@Set.instMembership.{0} (Fin k → Real))\n      (@ImbalancedChen.logPrimeBox k a b) x)\n    (∀ (i : Fin k), And (@LE.le.{0} Real Real.instLE (a i) (x i)) (@LT.lt.{0} Real Real.instLT (x i) (b i)))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "object_parts": {
+          ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+        "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+        "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+        "complete_serialized_declarations": 12
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "name": "ImbalancedChen.integrableOn_logPrimeBox_one_div",
+        "partial": false,
+        "type": "∀ {k : Nat} (a b : Fin k → Real)\n  (ha :\n    ∀ (i : Fin k),\n      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) (a i)),\n  @MeasureTheory.IntegrableOn.{0, 0} (Fin k → Real) Real\n    (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (Fin k → Real)\n      (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin k) (Fin.fintype k) (fun (a : Fin k) => Real) fun (i : Fin k) =>\n        Real.measureSpace))\n    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n    (@SeminormedAddGroup.toContinuousENorm.{0} Real\n      (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real\n        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real\n          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real\n            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real\n              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))\n    (fun (x : Fin k → Real) =>\n      @Finset.prod.{0, 0} (Fin k) Real Real.instCommMonoid (@Finset.univ.{0} (Fin k) (Fin.fintype k)) fun (i : Fin k) =>\n        @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) (x i))\n    (@ImbalancedChen.logPrimeBox k a b)\n    (@MeasureTheory.MeasureSpace.volume.{0} (Fin k → Real)\n      (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin k) (Fin.fintype k) (fun (a : Fin k) => Real) fun (i : Fin k) =>\n        Real.measureSpace))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "object_parts": {
+          ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+        "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+        "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+        "complete_serialized_declarations": 12
+      }
+    },
+    {
+      "record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "name": "ImbalancedChen.integral_logPrimeBox_one_div",
+        "partial": false,
+        "type": "∀ {k : Nat} (a b : Fin k → Real)\n  (ha :\n    ∀ (i : Fin k),\n      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) (a i))\n  (hab : ∀ (i : Fin k), @LE.le.{0} Real Real.instLE (a i) (b i)),\n  @Eq.{1} Real\n    (@MeasureTheory.integral.{0, 0} (Fin k → Real) Real Real.normedAddCommGroup\n      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n      (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (Fin k → Real)\n        (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin k) (Fin.fintype k) (fun (a : Fin k) => Real) fun (i : Fin k) =>\n          Real.measureSpace))\n      (@MeasureTheory.Measure.restrict.{0} (Fin k → Real)\n        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (Fin k → Real)\n          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin k) (Fin.fintype k) (fun (a : Fin k) => Real) fun (i : Fin k) =>\n            Real.measureSpace))\n        (@MeasureTheory.MeasureSpace.volume.{0} (Fin k → Real)\n          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin k) (Fin.fintype k) (fun (a : Fin k) => Real) fun (i : Fin k) =>\n            Real.measureSpace))\n        (@ImbalancedChen.logPrimeBox k a b))\n      fun (x : Fin k → Real) =>\n      @Finset.prod.{0, 0} (Fin k) Real Real.instCommMonoid (@Finset.univ.{0} (Fin k) (Fin.fintype k)) fun (i : Fin k) =>\n        @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) (x i))\n    (@Finset.prod.{0, 0} (Fin k) Real Real.instCommMonoid (@Finset.univ.{0} (Fin k) (Fin.fintype k)) fun (i : Fin k) =>\n      Real.log\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (b i) (a i)))",
+        "unsafe": false
+      },
+      "binding": {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "object_parts": {
+          ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+        "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+        "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+        "complete_serialized_declarations": 12
+      }
+    }
+  ],
+  "all4_consumed_module_actual_owned_bindings": [
+    {
+      "module": "ImbalancedChen.FinitePrimeGeometryCore",
+      "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "object_parts": {
+        ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+      "owned_receipt_sha256": "d877725fe0076249bd504a269dc1465967c0c57ab355e82ee93e2efd043d4333",
+      "declarations_json_sha256": "1dbbf60f3f6eeaaa5fd05771d4853be6d4fd7d8f2ab539c51fda4fd68a0307fb",
+      "complete_serialized_declarations": 70
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "object_parts": {
+        ".olean": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261018T034306935493Z/receipt.json",
+      "owned_receipt_sha256": "b55942277a5eabd482e44c667dafac506e8207a8f5c663907640c9607d63c6c0",
+      "declarations_json_sha256": "5c1fe92e1cdddd29d7517faa9d5c710fa580c3555e79777ddd84894ce35d2ade",
+      "complete_serialized_declarations": 13
+    },
+    {
+      "module": "ImbalancedChen.LogPrimeBoxMesh",
+      "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+      "object_parts": {
+        ".olean": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+      "owned_receipt_sha256": "c26848e9183d409164feb3ca9eba9f689538eef2e2da5d02d94d93339949ec9a",
+      "declarations_json_sha256": "31a745f93a9c603832054ae9679376e7163c59fd35c46e808217cd88b039a1c7",
+      "complete_serialized_declarations": 30
+    },
+    {
+      "module": "ImbalancedChen.LogPrimeBoxIntegral",
+      "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+      "object_parts": {
+        ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+      "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+      "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+      "complete_serialized_declarations": 12
+    }
+  ],
+  "root_all10_actual_native_full_header_and_proof_spans_read_hashchecked": [
+    {
+      "API": "IsCompact.uniformContinuousOn_of_continuous",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\UniformSpace\\HeineCantor.lean",
+      "source_sha256": "307718982cda076dc252c6506dc9ab94a3c84e3eb92516dda94e364afc0bf07a",
+      "first_line": 47,
+      "last_line": 52,
+      "complete_source_header": "theorem IsCompact.uniformContinuousOn_of_continuous {s : Set α} {f : α → β} (hs : IsCompact s)\n    (hf : ContinuousOn f s) : UniformContinuousOn f s",
+      "complete_source_proof_span": " := by\n  rw [uniformContinuousOn_iff_restrict]\n  rw [isCompact_iff_compactSpace] at hs\n  rw [continuousOn_iff_continuous_domRestrict] at hf\n  exact CompactSpace.uniformContinuous_of_continuous hf\n",
+      "complete_header_and_proof_source_text": "theorem IsCompact.uniformContinuousOn_of_continuous {s : Set α} {f : α → β} (hs : IsCompact s)\n    (hf : ContinuousOn f s) : UniformContinuousOn f s := by\n  rw [uniformContinuousOn_iff_restrict]\n  rw [isCompact_iff_compactSpace] at hs\n  rw [continuousOn_iff_continuous_domRestrict] at hf\n  exact CompactSpace.uniformContinuous_of_continuous hf\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "88eeb53214f680d3315837685f8172cce771d398f9f67fc8edb058174570aeee",
+      "actual_parameter_and_use_review": "The compact closure and the actual ContinuousOn f hypothesis yield one modulus on the entire fixed closure; both point arguments must lie there."
+    },
+    {
+      "API": "Metric.uniformContinuousOn_iff",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\MetricSpace\\Pseudo\\Defs.lean",
+      "source_sha256": "7cbe6a3f08199e77596b05ae5e5215ce5dc1e5dc131d29ecde6e974c308aa374",
+      "first_line": 762,
+      "last_line": 765,
+      "complete_source_header": "theorem uniformContinuousOn_iff [PseudoMetricSpace β] {f : α → β} {s : Set α} :\n    UniformContinuousOn f s ↔\n      ∀ ε > 0, ∃ δ > 0, ∀ x ∈ s, ∀ y ∈ s, dist x y < δ → dist (f x) (f y) < ε",
+      "complete_source_proof_span": " :=\n  uniformity_basis_dist.uniformContinuousOn_iff uniformity_basis_dist\n",
+      "complete_header_and_proof_source_text": "theorem uniformContinuousOn_iff [PseudoMetricSpace β] {f : α → β} {s : Set α} :\n    UniformContinuousOn f s ↔\n      ∀ ε > 0, ∃ δ > 0, ∀ x ∈ s, ∀ y ∈ s, dist x y < δ → dist (f x) (f y) < ε :=\n  uniformity_basis_dist.uniformContinuousOn_iff uniformity_basis_dist\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "27e58b8bb42e4391b34e9004242efa40bffc85f1b9bab2c6ffeb94dab9446cbe",
+      "actual_parameter_and_use_review": "For eta>0, first choose delta>0, then uniformly control all x,y in the same compact closure."
+    },
+    {
+      "API": "dist_pi_le_iff",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\MetricSpace\\Pseudo\\Pi.lean",
+      "source_sha256": "b859fdb2bb1d9328ea892e39614c688c087d033c99a96744e5f3fba3d0f20c4b",
+      "first_line": 72,
+      "last_line": 75,
+      "complete_source_header": "lemma dist_pi_le_iff {f g : ∀ b, X b} {r : ℝ} (hr : 0 ≤ r) :\n    dist f g ≤ r ↔ ∀ b, dist (f b) (g b) ≤ r",
+      "complete_source_proof_span": " := by\n  lift r to ℝ≥0 using hr\n  exact nndist_pi_le_iff\n",
+      "complete_header_and_proof_source_text": "lemma dist_pi_le_iff {f g : ∀ b, X b} {r : ℝ} (hr : 0 ≤ r) :\n    dist f g ≤ r ↔ ∀ b, dist (f b) (g b) ≤ r := by\n  lift r to ℝ≥0 using hr\n  exact nndist_pi_le_iff\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "fa245a68fabebae113c2ce6f36e6244dd27105387b272a5c17686d9df891a089",
+      "actual_parameter_and_use_review": "The nonnegative common step is supplied explicitly. This version does not assume the finite coordinate type is nonempty, so k=0 remains valid."
+    },
+    {
+      "API": "Finset.prod_biUnion -> generated Finset.sum_biUnion",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "source_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "first_line": 219,
+      "last_line": 224,
+      "complete_source_header": "@[to_additive /-- Given a finite family of pairwise disjoint finsets, the sum over their union is\nthe sum of the sums over the sets.\nSee also `sum_biUnion_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_biUnion [DecidableEq ι] {s : Finset κ} {t : κ → Finset ι}\n    (hs : Set.PairwiseDisjoint (↑s) t) : ∏ x ∈ s.biUnion t, f x = ∏ x ∈ s, ∏ i ∈ t x, f i",
+      "complete_source_proof_span": " := by\n  rw [← disjiUnion_eq_biUnion _ _ hs, prod_disjiUnion]\n",
+      "complete_header_and_proof_source_text": "@[to_additive /-- Given a finite family of pairwise disjoint finsets, the sum over their union is\nthe sum of the sums over the sets.\nSee also `sum_biUnion_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_biUnion [DecidableEq ι] {s : Finset κ} {t : κ → Finset ι}\n    (hs : Set.PairwiseDisjoint (↑s) t) : ∏ x ∈ s.biUnion t, f x = ∏ x ∈ s, ∏ i ∈ t x, f i := by\n  rw [← disjiUnion_eq_biUnion _ _ hs, prod_disjiUnion]\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "7b4a3d5b853e02195e39892ba97c3c461c2e65d4f38db6425baac2f87de7ed62",
+      "actual_parameter_and_use_review": "The actual source hypothesis is Set.PairwiseDisjoint (coe s) t. The candidate proves exactly this by tuple log coordinates and literal Ico uniqueness; generated additive identity is used for both the actual sum and actual mass.",
+      "generated_additive_name_from_to_additive": "Finset.sum_biUnion",
+      "no_Lean_query_or_elaboration_performed": true
+    },
+    {
+      "API": "integral_iUnion_fintype",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "first_line": 136,
+      "last_line": 141,
+      "complete_source_header": "theorem integral_iUnion_fintype {ι : Type*} [Fintype ι] {s : ι → Set X}\n    (hs : ∀ i, MeasurableSet (s i)) (h's : Pairwise (Disjoint on s))\n    (hf : ∀ i, IntegrableOn f (s i) μ) : ∫ x in ⋃ i, s i, f x ∂μ = ∑ i, ∫ x in s i, f x ∂μ",
+      "complete_source_proof_span": " := by\n  convert! integral_biUnion_finset Finset.univ (fun i _ => hs i) _ fun i _ => hf i\n  · simp\n  · simp [pairwise_univ, h's]\n",
+      "complete_header_and_proof_source_text": "theorem integral_iUnion_fintype {ι : Type*} [Fintype ι] {s : ι → Set X}\n    (hs : ∀ i, MeasurableSet (s i)) (h's : Pairwise (Disjoint on s))\n    (hf : ∀ i, IntegrableOn f (s i) μ) : ∫ x in ⋃ i, s i, f x ∂μ = ∑ i, ∫ x in s i, f x ∂μ := by\n  convert! integral_biUnion_finset Finset.univ (fun i _ => hs i) _ fun i _ => hf i\n  · simp\n  · simp [pairwise_univ, h's]\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "6e3686769945f35519aed1fe0b770b2914ed61370ffcd889e18fbe58e4289627",
+      "actual_parameter_and_use_review": "Explicit arguments are cell measurability, Pairwise disjointness, and integrability on each cell. The candidate supplies these in that exact order."
+    },
+    {
+      "API": "norm_integral_le_of_norm_le",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Basic.lean",
+      "source_sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "first_line": 947,
+      "last_line": 951,
+      "complete_source_header": "theorem norm_integral_le_of_norm_le {f : α → G} {g : α → ℝ} (hg : Integrable g μ)\n    (h : ∀ᵐ x ∂μ, ‖f x‖ ≤ g x) : ‖∫ x, f x ∂μ‖ ≤ ∫ x, g x ∂μ",
+      "complete_source_proof_span": " :=\n  calc\n    ‖∫ x, f x ∂μ‖ ≤ ∫ x, ‖f x‖ ∂μ := norm_integral_le_integral_norm f\n    _ ≤ ∫ x, g x ∂μ := integral_mono_of_nonneg (Eventually.of_forall fun _ => norm_nonneg _) hg h\n",
+      "complete_header_and_proof_source_text": "theorem norm_integral_le_of_norm_le {f : α → G} {g : α → ℝ} (hg : Integrable g μ)\n    (h : ∀ᵐ x ∂μ, ‖f x‖ ≤ g x) : ‖∫ x, f x ∂μ‖ ≤ ∫ x, g x ∂μ :=\n  calc\n    ‖∫ x, f x ∂μ‖ ≤ ∫ x, ‖f x‖ ∂μ := norm_integral_le_integral_norm f\n    _ ≤ ∫ x, g x ∂μ := integral_mono_of_nonneg (Eventually.of_forall fun _ => norm_nonneg _) hg h\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "8a3209b86ce2d46b82ecc68974143ee938d02664f92cfa6143871461a64b5128",
+      "actual_parameter_and_use_review": "The dominating function eta times the positive reciprocal-coordinate density is genuinely integrable; the a.e. absolute difference bound is proved on the actual restricted cell."
+    },
+    {
+      "API": "ContinuousOn.integrableOn_compact",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Function\\LocallyIntegrable.lean",
+      "source_sha256": "2cd67083449e90bba0496652de0448e2678e80cb6a362390c74f5f2cbdb09e4f",
+      "first_line": 592,
+      "last_line": 594,
+      "complete_source_header": "theorem ContinuousOn.integrableOn_compact [T2Space X]\n    (hK : IsCompact K) (hf : ContinuousOn f K) : IntegrableOn f K μ",
+      "complete_source_proof_span": " :=\n  hf.integrableOn_compact' hK hK.measurableSet\n",
+      "complete_header_and_proof_source_text": "theorem ContinuousOn.integrableOn_compact [T2Space X]\n    (hK : IsCompact K) (hf : ContinuousOn f K) : IntegrableOn f K μ :=\n  hf.integrableOn_compact' hK hK.measurableSet\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "a41efc0755dc74bd4904fda44dfa0fb2cc82bd7190fca7c8e847acfac3507142",
+      "actual_parameter_and_use_review": "The compact closure and continuity of f times the reciprocal density yield integrability for Lebesgue measure, then mono_set restricts to the original half-open cube. Local context uses IsFiniteMeasureOnCompacts and T2Space; the real finite product has these standard instances."
+    },
+    {
+      "API": "isCompact_univ_pi",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Compactness\\Compact.lean",
+      "source_sha256": "bc2873632e7d2edf8b4ffaf8959ada4c93c673d97c13d6f6533510c70bfb4241",
+      "first_line": 1178,
+      "last_line": 1181,
+      "complete_source_header": "theorem isCompact_univ_pi {s : ∀ i, Set (X i)} (h : ∀ i, IsCompact (s i)) :\n    IsCompact (pi univ s)",
+      "complete_source_proof_span": " := by\n  convert! isCompact_pi_infinite h\n  simp only [← mem_univ_pi, ofPred_mem_eq]\n",
+      "complete_header_and_proof_source_text": "theorem isCompact_univ_pi {s : ∀ i, Set (X i)} (h : ∀ i, IsCompact (s i)) :\n    IsCompact (pi univ s) := by\n  convert! isCompact_pi_infinite h\n  simp only [← mem_univ_pi, ofPred_mem_eq]\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "e31a7696fa2c57729445762722f138caf907bb1dcb2e6123432f53f4d67abfc5",
+      "actual_parameter_and_use_review": "Uses the compact Icc family in arbitrary finite dimension; no chosen mesh or N appears in the compact set."
+    },
+    {
+      "API": "ae_restrict_mem",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Measure\\Restrict.lean",
+      "source_sha256": "2ec6fbe3a70ebf57a895a47779b63994f97edb0dc0b709faf9ff400f59c92511",
+      "first_line": 641,
+      "last_line": 642,
+      "complete_source_header": "theorem ae_restrict_mem (hs : MeasurableSet s) : ∀ᵐ x ∂μ.restrict s, x ∈ s",
+      "complete_source_proof_span": " :=\n  ae_restrict_mem₀ hs.nullMeasurableSet\n",
+      "complete_header_and_proof_source_text": "theorem ae_restrict_mem (hs : MeasurableSet s) : ∀ᵐ x ∂μ.restrict s, x ∈ s :=\n  ae_restrict_mem₀ hs.nullMeasurableSet\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "12ed06287e6f576a91205a2bc5a811d4235e48bdead758a9868be1a7adfe7d85",
+      "actual_parameter_and_use_review": "Actual measurable cell membership holds almost everywhere for its restricted volume; it is used only to bound integrands, not to replace the arithmetic Ico partition by an a.e. partition."
+    },
+    {
+      "API": "tendsto_finsetProd -> generated tendsto_finsetSum",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Algebra\\Monoid.lean",
+      "source_sha256": "cf858f52c0f84ad0f0f950ddc0c76128c4893ced7620d0c7a4cef1c9c3ddab56",
+      "first_line": 926,
+      "last_line": 930,
+      "complete_source_header": "@[to_additive]\ntheorem tendsto_finsetProd {f : ι → α → M} {x : Filter α} {a : ι → M} (s : Finset ι) :\n    (∀ i ∈ s, Tendsto (f i) x (𝓝 (a i))) →\n      Tendsto (fun b => ∏ c ∈ s, f c b) x (𝓝 (∏ c ∈ s, a c))",
+      "complete_source_proof_span": " :=\n  tendsto_multiset_prod _\n",
+      "complete_header_and_proof_source_text": "@[to_additive]\ntheorem tendsto_finsetProd {f : ι → α → M} {x : Filter α} {a : ι → M} (s : Finset ι) :\n    (∀ i ∈ s, Tendsto (f i) x (𝓝 (a i))) →\n      Tendsto (fun b => ∏ c ∈ s, f c b) x (𝓝 (∏ c ∈ s, a c)) :=\n  tendsto_multiset_prod _\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "6b606f047e93586d9159678d338040ea98ab32a7e2eaf2b530eb0a31efd752b5",
+      "actual_parameter_and_use_review": "The finite label set is fixed after choosing m. Every cell mass limit is multiplied by the fixed signed coefficient f(lo_j), and only then summed over the fixed finite label set.",
+      "generated_additive_name_from_to_additive": "tendsto_finsetSum",
+      "no_Lean_query_or_elaboration_performed": true
+    }
+  ],
+  "direct_imports": [
+    "ImbalancedChen.ActualPrimeBoxMass",
+    "ImbalancedChen.LogPrimeBoxMesh",
+    "Mathlib.Topology.UniformSpace.HeineCantor",
+    "Mathlib.MeasureTheory.Integral.Bochner.Set",
+    "ImbalancedChen.FinitePrimeGeometryCore"
+  ],
+  "direct_native_bindings": [
+    {
+      "module": "Mathlib.Topology.UniformSpace.HeineCantor",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\UniformSpace\\HeineCantor.lean",
+      "current_source_sha256": "307718982cda076dc252c6506dc9ab94a3c84e3eb92516dda94e364afc0bf07a"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.Bochner.Set",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+      "current_source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9"
+    }
+  ],
+  "proper_literal_header_closure_review": {
+    "proper_node_count": 50,
+    "node_count_in_provided_continuation_census": 4,
+    "node_count_not_listed_in_that_census": 46,
+    "all_node_source_bytes_stable_during_read": true,
+    "all_nodes_and_actual_current_source_imports": [
+      {
+        "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+        "source": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+        "source_sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualPrimeBoxMass",
+          "ImbalancedChen.LogPrimeBoxMesh",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "source": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitDepthSplice",
+          "ImbalancedChen.FirstExitPresieveProjection",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.LogPrimeBoxMesh"
+        ],
+        "in_provided_continuation_census": true,
+        "current_census_source_matches": true,
+        "continuation_owned_count": 70,
+        "continuation_owned_receipt": ".lake/proof-continuation/audits/20261018T044229874450Z/receipt.json",
+        "status": "PRESENT_IN_PROVIDED_CONTINUATION_OWNED_CENSUS"
+      },
+      {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "source": "ImbalancedChen/LogPrimeBoxMesh.lean",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.LogPrimeBoxIntegral"
+        ],
+        "in_provided_continuation_census": true,
+        "current_census_source_matches": true,
+        "continuation_owned_count": 30,
+        "continuation_owned_receipt": ".lake/proof-continuation/audits/20261020T104643433936Z/receipt.json",
+        "status": "PRESENT_IN_PROVIDED_CONTINUATION_OWNED_CENSUS"
+      },
+      {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "source": "ImbalancedChen/LogPrimeBoxIntegral.lean",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": true,
+        "current_census_source_matches": true,
+        "continuation_owned_count": 12,
+        "continuation_owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+        "status": "PRESENT_IN_PROVIDED_CONTINUATION_OWNED_CENSUS"
+      },
+      {
+        "module": "ImbalancedChen.RoughPrimeUniverse",
+        "source": "ImbalancedChen/RoughPrimeUniverse.lean",
+        "source_sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RetainedModuli"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RetainedModuli",
+        "source": "ImbalancedChen/RetainedModuli.lean",
+        "source_sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitTree",
+        "source": "ImbalancedChen/FirstExitTree.lean",
+        "source_sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitPresieveProjection",
+        "source": "ImbalancedChen/FirstExitPresieveProjection.lean",
+        "source_sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitDepthSplice",
+        "source": "ImbalancedChen/FirstExitDepthSplice.lean",
+        "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "source": "ImbalancedChen/ActualPrimeBoxMass.lean",
+        "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualPrimeReciprocalMass",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ],
+        "in_provided_continuation_census": true,
+        "current_census_source_matches": true,
+        "continuation_owned_count": 13,
+        "continuation_owned_receipt": ".lake/proof-continuation/audits/20261018T034306935493Z/receipt.json",
+        "status": "PRESENT_IN_PROVIDED_CONTINUATION_OWNED_CENSUS"
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeReciprocalMass",
+        "source": "ImbalancedChen/ActualPrimeReciprocalMass.lean",
+        "source_sha256": "f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenPrimeHarmonicFinite",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.PowerErrorBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.PowerErrorBudget",
+        "source": "ImbalancedChen/PowerErrorBudget.lean",
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SingularSeries"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.SingularSeries",
+        "source": "ImbalancedChen/SingularSeries.lean",
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.NormalizationGrowth"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.NormalizationGrowth",
+        "source": "ImbalancedChen/NormalizationGrowth.lean",
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenPrimeHarmonicFinite",
+        "source": "ImbalancedChen/ChenPrimeHarmonicFinite.lean",
+        "source_sha256": "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenQuotientPrimeSource",
+          "ImbalancedChen.ChenInitialCorrectionBudget",
+          "ImbalancedChen.RoughSquareException"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RoughSquareException",
+        "source": "ImbalancedChen/RoughSquareException.lean",
+        "source_sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+        "source": "ImbalancedChen/ChenInitialCorrectionBudget.lean",
+        "source_sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenInitialPrimeSource",
+          "ImbalancedChen.TotientReciprocalBudget",
+          "ImbalancedChen.BoundaryArbitraryLog"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryArbitraryLog",
+        "source": "ImbalancedChen/BoundaryArbitraryLog.lean",
+        "source_sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedDiscrepancyReduction",
+          "ImbalancedChen.LogMeshGridCount"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.LogMeshGridCount",
+        "source": "ImbalancedChen/LogMeshGridCount.lean",
+        "source_sha256": "b71b3e65f1ede581fbd881843b45cdeea9196ac15aa2fb7623eb7636bf366aaf",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryLogMesh"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryLogMesh",
+        "source": "ImbalancedChen/BoundaryLogMesh.lean",
+        "source_sha256": "364d2571fcbf6c00e5aaa9b70a04c9ddee49a12d5725f70b0a13571fdfa3be81",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.TotientReciprocalBudget",
+        "source": "ImbalancedChen/TotientReciprocalBudget.lean",
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+        "source": "ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FiniteSieveModel"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveModel",
+        "source": "ImbalancedChen/FiniteSieveModel.lean",
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SieveSourceCoprimality"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.SieveSourceCoprimality",
+        "source": "ImbalancedChen/SieveSourceCoprimality.lean",
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.HalfProductSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.HalfProductSource",
+        "source": "ImbalancedChen/HalfProductSource.lean",
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BadSourceLocalization"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BadSourceLocalization",
+        "source": "ImbalancedChen/BadSourceLocalization.lean",
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.HalfProductGeometry"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.HalfProductGeometry",
+        "source": "ImbalancedChen/HalfProductGeometry.lean",
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.OrderedBad"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.OrderedBad",
+        "source": "ImbalancedChen/OrderedBad.lean",
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RationalPowers"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RationalPowers",
+        "source": "ImbalancedChen/RationalPowers.lean",
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.Counting"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.Counting",
+        "source": "ImbalancedChen/Counting.lean",
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ActualGridEnvelopes",
+        "source": "ImbalancedChen/ActualGridEnvelopes.lean",
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGlobalCaps",
+        "source": "ImbalancedChen/BoundaryGlobalCaps.lean",
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryCellContainment",
+        "source": "ImbalancedChen/BoundaryCellContainment.lean",
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGridBudget",
+        "source": "ImbalancedChen/BoundaryGridBudget.lean",
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.MultiplicativeGridPartition",
+        "source": "ImbalancedChen/MultiplicativeGridPartition.lean",
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CurvedDiscrepancyReduction",
+        "source": "ImbalancedChen/CurvedDiscrepancyReduction.lean",
+        "source_sha256": "cb277ada2fb933a5c8a6908978e72973ec703f281a678a87f39d58591a36e0d6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.BoundaryLogMesh",
+          "ImbalancedChen.LogCutoffError"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.LogCutoffError",
+        "source": "ImbalancedChen/LogCutoffError.lean",
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+        "source": "ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialPrimeSource",
+        "source": "ImbalancedChen/ChenInitialPrimeSource.lean",
+        "source_sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenElevenSum",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.CoprimeRecentering"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CoprimeRecentering",
+        "source": "ImbalancedChen/CoprimeRecentering.lean",
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenElevenSum",
+        "source": "ImbalancedChen/QuotientChenElevenSum.lean",
+        "source_sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenSummedBridge"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSummedBridge",
+        "source": "ImbalancedChen/QuotientChenSummedBridge.lean",
+        "source_sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenPositiveBound",
+          "ImbalancedChen.RoughSquareException"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenPositiveBound",
+        "source": "ImbalancedChen/QuotientChenPositiveBound.lean",
+        "source_sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenWeightCases"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenWeightCases",
+        "source": "ImbalancedChen/QuotientChenWeightCases.lean",
+        "source_sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenNinthSwitch",
+          "ImbalancedChen.Multiplicity"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.Multiplicity",
+        "source": "ImbalancedChen/Multiplicity.lean",
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.Counting"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenNinthSwitch",
+        "source": "ImbalancedChen/QuotientChenNinthSwitch.lean",
+        "source_sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenInitialCounts",
+          "ImbalancedChen.QuotientChenSwitchGeometry"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSwitchGeometry",
+        "source": "ImbalancedChen/QuotientChenSwitchGeometry.lean",
+        "source_sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourCounts"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourCounts",
+        "source": "ImbalancedChen/QuotientChenFourCounts.lean",
+        "source_sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourPrime"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourPrime",
+        "source": "ImbalancedChen/QuotientChenFourPrime.lean",
+        "source_sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenInitialCounts",
+        "source": "ImbalancedChen/QuotientChenInitialCounts.lean",
+        "source_sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourCounts"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenQuotientPrimeSource",
+        "source": "ImbalancedChen/ChenQuotientPrimeSource.lean",
+        "source_sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenInitialPrimeSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      }
+    ],
+    "proper_nodes_not_listed_in_that_continuation_census": [
+      {
+        "module": "ImbalancedChen.RoughPrimeUniverse",
+        "source": "ImbalancedChen/RoughPrimeUniverse.lean",
+        "source_sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RetainedModuli"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RetainedModuli",
+        "source": "ImbalancedChen/RetainedModuli.lean",
+        "source_sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitTree",
+        "source": "ImbalancedChen/FirstExitTree.lean",
+        "source_sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitPresieveProjection",
+        "source": "ImbalancedChen/FirstExitPresieveProjection.lean",
+        "source_sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FirstExitDepthSplice",
+        "source": "ImbalancedChen/FirstExitDepthSplice.lean",
+        "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeReciprocalMass",
+        "source": "ImbalancedChen/ActualPrimeReciprocalMass.lean",
+        "source_sha256": "f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenPrimeHarmonicFinite",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.PowerErrorBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.PowerErrorBudget",
+        "source": "ImbalancedChen/PowerErrorBudget.lean",
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SingularSeries"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.SingularSeries",
+        "source": "ImbalancedChen/SingularSeries.lean",
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.NormalizationGrowth"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.NormalizationGrowth",
+        "source": "ImbalancedChen/NormalizationGrowth.lean",
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenPrimeHarmonicFinite",
+        "source": "ImbalancedChen/ChenPrimeHarmonicFinite.lean",
+        "source_sha256": "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenQuotientPrimeSource",
+          "ImbalancedChen.ChenInitialCorrectionBudget",
+          "ImbalancedChen.RoughSquareException"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RoughSquareException",
+        "source": "ImbalancedChen/RoughSquareException.lean",
+        "source_sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+        "source": "ImbalancedChen/ChenInitialCorrectionBudget.lean",
+        "source_sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenInitialPrimeSource",
+          "ImbalancedChen.TotientReciprocalBudget",
+          "ImbalancedChen.BoundaryArbitraryLog"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryArbitraryLog",
+        "source": "ImbalancedChen/BoundaryArbitraryLog.lean",
+        "source_sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedDiscrepancyReduction",
+          "ImbalancedChen.LogMeshGridCount"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.LogMeshGridCount",
+        "source": "ImbalancedChen/LogMeshGridCount.lean",
+        "source_sha256": "b71b3e65f1ede581fbd881843b45cdeea9196ac15aa2fb7623eb7636bf366aaf",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryLogMesh"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryLogMesh",
+        "source": "ImbalancedChen/BoundaryLogMesh.lean",
+        "source_sha256": "364d2571fcbf6c00e5aaa9b70a04c9ddee49a12d5725f70b0a13571fdfa3be81",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.TotientReciprocalBudget",
+        "source": "ImbalancedChen/TotientReciprocalBudget.lean",
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+        "source": "ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.FiniteSieveModel"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveModel",
+        "source": "ImbalancedChen/FiniteSieveModel.lean",
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SieveSourceCoprimality"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.SieveSourceCoprimality",
+        "source": "ImbalancedChen/SieveSourceCoprimality.lean",
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.HalfProductSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.HalfProductSource",
+        "source": "ImbalancedChen/HalfProductSource.lean",
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BadSourceLocalization"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BadSourceLocalization",
+        "source": "ImbalancedChen/BadSourceLocalization.lean",
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.HalfProductGeometry"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.HalfProductGeometry",
+        "source": "ImbalancedChen/HalfProductGeometry.lean",
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.OrderedBad"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.OrderedBad",
+        "source": "ImbalancedChen/OrderedBad.lean",
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RationalPowers"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RationalPowers",
+        "source": "ImbalancedChen/RationalPowers.lean",
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.Counting"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.Counting",
+        "source": "ImbalancedChen/Counting.lean",
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ActualGridEnvelopes",
+        "source": "ImbalancedChen/ActualGridEnvelopes.lean",
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGlobalCaps",
+        "source": "ImbalancedChen/BoundaryGlobalCaps.lean",
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryCellContainment",
+        "source": "ImbalancedChen/BoundaryCellContainment.lean",
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGridBudget",
+        "source": "ImbalancedChen/BoundaryGridBudget.lean",
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.MultiplicativeGridPartition",
+        "source": "ImbalancedChen/MultiplicativeGridPartition.lean",
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CurvedDiscrepancyReduction",
+        "source": "ImbalancedChen/CurvedDiscrepancyReduction.lean",
+        "source_sha256": "cb277ada2fb933a5c8a6908978e72973ec703f281a678a87f39d58591a36e0d6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.BoundaryLogMesh",
+          "ImbalancedChen.LogCutoffError"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.LogCutoffError",
+        "source": "ImbalancedChen/LogCutoffError.lean",
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+        "source": "ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialPrimeSource",
+        "source": "ImbalancedChen/ChenInitialPrimeSource.lean",
+        "source_sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenElevenSum",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.CoprimeRecentering"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.CoprimeRecentering",
+        "source": "ImbalancedChen/CoprimeRecentering.lean",
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenElevenSum",
+        "source": "ImbalancedChen/QuotientChenElevenSum.lean",
+        "source_sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenSummedBridge"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSummedBridge",
+        "source": "ImbalancedChen/QuotientChenSummedBridge.lean",
+        "source_sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenPositiveBound",
+          "ImbalancedChen.RoughSquareException"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenPositiveBound",
+        "source": "ImbalancedChen/QuotientChenPositiveBound.lean",
+        "source_sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenWeightCases"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenWeightCases",
+        "source": "ImbalancedChen/QuotientChenWeightCases.lean",
+        "source_sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenNinthSwitch",
+          "ImbalancedChen.Multiplicity"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.Multiplicity",
+        "source": "ImbalancedChen/Multiplicity.lean",
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.Counting"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenNinthSwitch",
+        "source": "ImbalancedChen/QuotientChenNinthSwitch.lean",
+        "source_sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenInitialCounts",
+          "ImbalancedChen.QuotientChenSwitchGeometry"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSwitchGeometry",
+        "source": "ImbalancedChen/QuotientChenSwitchGeometry.lean",
+        "source_sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourCounts"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourCounts",
+        "source": "ImbalancedChen/QuotientChenFourCounts.lean",
+        "source_sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourPrime"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourPrime",
+        "source": "ImbalancedChen/QuotientChenFourPrime.lean",
+        "source_sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "literal_current_direct_project_imports": [],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenInitialCounts",
+        "source": "ImbalancedChen/QuotientChenInitialCounts.lean",
+        "source_sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.QuotientChenFourCounts"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      },
+      {
+        "module": "ImbalancedChen.ChenQuotientPrimeSource",
+        "source": "ImbalancedChen/ChenQuotientPrimeSource.lean",
+        "source_sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "literal_current_direct_project_imports": [
+          "ImbalancedChen.ChenInitialPrimeSource"
+        ],
+        "in_provided_continuation_census": false,
+        "current_census_source_matches": null,
+        "continuation_owned_count": null,
+        "continuation_owned_receipt": null,
+        "status": "NOT_LISTED_IN_PROVIDED_CONTINUATION_CENSUS_NO_GLOBAL_OWNERSHIP_INFERENCE"
+      }
+    ],
+    "interpretation": "Only the three directly consumed defining-module parents, plus LogPrimeBoxIntegral, have records in this continuation census. Absence of existing baseline/header nodes from this census does not establish global absence of historical ownership or a new mathematical gap. No blanket proper-project ownership claim and no bulk bootstrap proposal is made. Runtime must freshly bind the actual complete source/object closure under the existing normal-trust process.",
+    "not_a_Lean_parser_or_runtime_preflight": true,
+    "no_aggregate_external_closure_replay_claim": true
+  },
+  "mathematical_review": [
+    "Literal target-linked prime tuples, p notdividesN, exact halfopen power/log walls, repeated coordinates and zero dimension preserved",
+    "Actual positive reciprocal p-1 weights permit absolute uniform error for signed testf",
+    "ONE finite mesh uniformly allcells/allpoints fixed BEFORE N tends toinfinity",
+    "Already owned actual arithmetic mass limit for each fixed cell; finite sum limit is productlogarithm mesh",
+    "Exact restricted Lebesgue finite partition and positive density pay genuine signed integral error",
+    "eta=epsilon/(4(M+1)), eventual actualmass<M+1, and three errors give strict epsilon budget; no hidden convergence or error supplier"
+  ],
+  "boundary": "Direct Mass13/Mesh30/Core70 actuallyowned. Literal proper50 includes46baseline projectmodules not listed incontinuation census: NOT implicitlyowned, no bootstrap. Runtime must bind actual fullsource/cache/objectserialized closure and compare original known metadata beforecompiler.",
+  "permission": "Sole runtime actualnoheavy and actualquota; fresh full project/native source/cache/all serializedparts and directowned13/30/70. Missing/inconsistent/unrecorded dependency boundary must report BEFORE compiler, no install/bootstrap. If exactknown then ONE unchanged original strict; iffPASS original fullowned stockreplay plus ALL serialized/generated/environment fulltypes/safety/transitive3axioms; after exactinputs/freshcensus/noheavy/HOLD.",
+  "no_source_edits_allowed": true,
+  "resource": "fixed j2 M6144 RSS6656MiB originalcompiler0lock oneheavy",
+  "quota_latest_remaining": 91,
+  "hard_stop_remaining_at_most": 50,
+  "strict_or_owned_acceptance_claimed": false,
+  "external_fullclosure_replayed": false,
+  "unconditional_main_proved": false
+}

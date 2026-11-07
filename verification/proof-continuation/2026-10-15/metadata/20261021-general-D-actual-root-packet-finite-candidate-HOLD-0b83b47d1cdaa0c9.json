@@ -1,0 +1,212 @@
+{
+  "status": "ONE_GENERAL_D_ACTUAL_ROOT_PACKET_FINITE_SOURCE_CANDIDATE_UNCOMPILED_HOLD",
+  "date": "2026-10-21",
+  "author": "/root/nonresonant_kernel_astra_high_oct21",
+  "scope": "ONE coherent finite actual-row dictionary: normalization of the general-D tail, its derived unit gates, and transport of the complete existing Fourier three-phase identity. One new Lean source and this ONE atomic JSON CP; no existing project source edits, compiler/checker/proper/helper/classifier/cache/catalog/Git/CI/publication or subagents.",
+  "quota": {
+    "fresh_used_percent": 34,
+    "remaining_percent": 66,
+    "stop_remaining_lte": 40
+  },
+  "parent_context": {
+    "accepted_before_candidate": "173/4024/121",
+    "root_cp_sha256": "24b40ee3b85971e77da540d18ef1887824464dfe3b77890f33294c4894ac9c04",
+    "certification": "Parent-reported context only. Candidate adds nothing to accepted totals until root checks it."
+  },
+  "starting_audit": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-nonresonant-next-lemma-audit-HOLD.json",
+    "sha256": "35d325541803ce9bc31651cadb2785aca241a383071baf04cf599c313d0980a3"
+  },
+  "artifact": {
+    "path": "ImbalancedChen/Part3SharedFirstFactorGeneralDRootPacket.lean",
+    "sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+    "lines": 182,
+    "public_declaration": "ImbalancedChen.Part3.sharedGeneralDRootPacket_fourier",
+    "private_helper": "ImbalancedChen.Part3.SharedGeneralDRootPacket.normalized_tail",
+    "imports": [
+      "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+      "ImbalancedChen.Part3SharedFirstFactorSmallCoreSquaredFinite"
+    ],
+    "check_status": "SOURCE CANDIDATE ONLY. No Lean process was run; elaboration and axioms await root's sole heavy queue. Text has no sorry/admit/axiom declarations, but this is not a compiled zero-sorry or axiom certificate.",
+    "full_source": "import ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity\nimport ImbalancedChen.Part3SharedFirstFactorSmallCoreSquaredFinite\n\n/-!\n# The actual general-D row has one root packet\n\nThis is a finite arithmetic dictionary on the literal compatible branch of\n`smallCoreSquaredRowTerm`. The quotient `t` is constructed from the original\n`s`; no factorization, inverse phase, or unit condition is supplied by a caller.\nThe root modulus is the actual `g * supportedPart (N1 / g) g`.\n\nThe complete slow phase and every signed frequency are retained. This file\ndoes not merge a pair of frequencies, rearrange by `(y,z)`, enlarge a carrier,\nor prove a spectral estimate. Its result can be applied separately to `h,h'`.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen scoped FourierTransform\n\nnamespace SharedGeneralDRootPacket\n\n/-- Reduction of the actual gcd mask, with no assumption that `D` divides `r`. -/\nprivate theorem normalized_tail {r s w : ℕ}\n    (hr : 0 < r) (hs : 0 < s) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ r0.Coprime q ∧\n      s = q * t ∧ (r * s) / D = r0 * t := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  change 0 < q ∧ 0 < r0 ∧ 0 < t ∧ r0.Coprime q ∧\n    s = q * t ∧ (r * s) / D = r0 * t\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left w (Nat.mul_pos hr hs)\n  have hd : 0 < d := Nat.gcd_pos_of_pos_left D hr\n  have hdD : d ∣ D := Nat.gcd_dvd_right r D\n  have hdr : d ∣ r := Nat.gcd_dvd_left r D\n  have hDdiv : D ∣ r * s := Nat.gcd_dvd_left (r * s) w\n  have hq : 0 < q := Nat.div_pos (Nat.le_of_dvd hD hdD) hd\n  have hr0 : 0 < r0 := Nat.div_pos (Nat.le_of_dvd hr hdr) hd\n  have hDfact : d * q = D := Nat.mul_div_cancel' hdD\n  have hrfact : d * r0 = r := Nat.mul_div_cancel' hdr\n  have hcop : r0.Coprime q := Nat.coprime_div_gcd_div_gcd hd\n  have hqdiv : q ∣ r0 * s := by\n    apply Nat.dvd_of_mul_dvd_mul_left hd\n    simpa only [← mul_assoc, hDfact, hrfact] using hDdiv\n  have hqs : q ∣ s := hcop.symm.dvd_of_dvd_mul_left hqdiv\n  have hsfact : q * t = s := Nat.mul_div_cancel' hqs\n  have ht : 0 < t := Nat.div_pos (Nat.le_of_dvd hs hqs) hq\n  refine ⟨hq, hr0, ht, hcop, hsfact.symm, ?_⟩\n  apply Nat.mul_left_cancel hD\n  rw [Nat.mul_div_cancel' hDdiv]\n  calc\n    r * s = (d * r0) * (q * t) := by rw [hrfact, hsfact]\n    _ = D * (r0 * t) := by rw [← hDfact]; ring\n\nend SharedGeneralDRootPacket\n\n/-- Exact actual-row root/reciprocal dictionary for general `D`.\n\nFor an active squared row take `r=o.2.1.1`, `s=u.1`,\n`w=o.2.1.2.1*o.2.1.2.2`, and the literal original `p,N1,N2`.\nThe row's gcd gate identifies its stored `D` with the `D` constructed here.\nNo coefficient, support, cutoff, or signed-frequency condition is changed.\n-/\ntheorem sharedGeneralDRootPacket_fourier\n    {p r s w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (a h : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let L := (p * (r * s)).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ (r * s) / D = r0 * t ∧ r0.Coprime q ∧\n      b.Coprime c ∧ zeta.Coprime A ∧ t.Coprime (A * c) ∧\n      n1 * L = zeta * t ∧ A * n2 * ((r * s) / D) = b * t ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) =\n        fourier h\n          (((-(a : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h\n            (((((a : ℝ) * (f : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ)) / c) : ℝ) :\n                UnitAddCircle) := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  let g := N1.gcd N2\n  let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n  let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n  let n2 := N2 / g\n  let A := g * d1\n  let w0 := w / D\n  let b := A * n2 * r0\n  let c := n1 * w0\n  let zeta := c * p * D * r0\n  let L := (p * (r * s)).lcm (p * w)\n  let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n  obtain ⟨hq, hr0, ht, hrq, hst, hvt⟩ :=\n    SharedGeneralDRootPacket.normalized_tail (w := w) hr hs\n  change 0 < q at hq\n  change 0 < r0 at hr0\n  change 0 < t at ht\n  change r0.Coprime q at hrq\n  change s = q * t at hst\n  change (r * s) / D = r0 * t at hvt\n  have hlic := sharedDifferenceData_licenses hp (Nat.mul_pos hr hs) hw hN1 hN2 hc a\n  dsimp only at hlic\n  obtain ⟨_hg, _hD, _hd1, hn1, _hn2, _hv0, hw0, hA, _hL,\n    _hN1eq, _hN2eq, _hv_eq, _hw_eq, hLeq, _hvw, _hnD, _hvc,\n    hbc, hroot, _rest⟩ := hlic\n  change 0 < n1 at hn1\n  change 0 < w0 at hw0\n  change 0 < A at hA\n  change L = (p * D) * ((r * s) / D) * w0 at hLeq\n  change (A * n2 * ((r * s) / D)).Coprime c at hbc\n  change (n1 * L).Coprime A at hroot\n  have hrecip : A * n2 * ((r * s) / D) = b * t := by\n    rw [hvt]\n    dsimp only [b]\n    ring\n  have hrootden : n1 * L = zeta * t := by\n    rw [hLeq, hvt]\n    dsimp only [zeta, c]\n    ring\n  rw [hrecip] at hbc\n  rw [hrootden] at hroot\n  have h_b : b.Coprime c := hbc.of_dvd_left (dvd_mul_right b t)\n  have h_tc : t.Coprime c := hbc.of_dvd_left (dvd_mul_left t b)\n  have h_zeta : zeta.Coprime A := hroot.of_dvd_left (dvd_mul_right zeta t)\n  have h_tA : t.Coprime A := hroot.of_dvd_left (dvd_mul_left t zeta)\n  refine ⟨hq, hr0, ht, hA, Nat.mul_pos hn1 hw0, hst, hvt, hrq,\n    h_b, h_zeta, h_tA.mul_right h_tc, hrootden, hrecip, ?_⟩\n  have he := sharedDifferenceReciprocity_fourier hp (Nat.mul_pos hr hs) hw hN1 hN2 hc a h\n  change fourier h\n      (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n        UnitAddCircle) =\n      fourier h\n        (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n1 * L) A : ℝ) / A) : ℝ) :\n            UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        fourier h\n          (((((a : ℝ) * (f : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse\n              (A * n2 * ((r * s) / D)) c : ℝ)) / ((n1 : ℝ) * w0)) : ℝ) :\n              UnitAddCircle) at he\n  have hcR : (c : ℝ) = (n1 : ℝ) * w0 := Nat.cast_mul n1 w0\n  simpa only [hrootden, hrecip, hcR] using he\n\nend\n\nend ImbalancedChen.Part3\n",
+    "public_type_source": "theorem sharedGeneralDRootPacket_fourier\n    {p r s w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (a h : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let L := (p * (r * s)).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ (r * s) / D = r0 * t ∧ r0.Coprime q ∧\n      b.Coprime c ∧ zeta.Coprime A ∧ t.Coprime (A * c) ∧\n      n1 * L = zeta * t ∧ A * n2 * ((r * s) / D) = b * t ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) =\n        fourier h\n          (((-(a : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h\n            (((((a : ℝ) * (f : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ)) / c) : ℝ) :\n                UnitAddCircle) := by",
+    "private_type_source": "private theorem normalized_tail {r s w : ℕ}\n    (hr : 0 < r) (hs : 0 < s) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ r0.Coprime q ∧\n      s = q * t ∧ (r * s) / D = r0 * t := by"
+  },
+  "precise_quantifiers": {
+    "raw_data": "For all positive naturals p,r,s,w,N1,N2 and all signed integers a,h, assuming only ComplexCRT.Compatible (p*(r*s)) (p*w) N1 N2.",
+    "constructed": "D=gcd(r*s,w), d=gcd(r,D), q=D/d, r0=r/d, t=s/q; g=gcd(N1,N2), d1=supportedPart(N1/g,g), n1=coprimePart(N1/g,g), n2=N2/g, A=g*d1; w0=w/D, b=A*n2*r0, c=n1*w0, zeta=c*p*D*r0, L=lcm(p*(r*s),p*w), f=((d1:Z)*n1-n2)/(p*D).",
+    "conclusions": [
+      "q,r0,t,A,c are positive.",
+      "s=q*t, (r*s)/D=r0*t and gcd(r0,q)=1.",
+      "gcd(b,c)=1, gcd(zeta,A)=1, gcd(t,A*c)=1.",
+      "n1*L=zeta*t and A*n2*((r*s)/D)=b*t.",
+      "The original CRT Fourier character equals the product of the root phase using wPhaseInverse(zeta*t,A), the original slow phase a/(N1*L), and the reciprocal phase using wPhaseInverse(b*t,c) and signed numerator a*f, with the SAME arbitrary signed frequency h."
+    ],
+    "no_premise_substitution": "A,b,c,zeta,t and f are all definitions, not caller-supplied dictionaries. No phase identity, coprimality supplier, target bound, positivity of a complementary Gram or generic analytic hypothesis appears."
+  },
+  "proof_outline": [
+    "D divides r*s. Put d=gcd(r,D), so r=d*r0 and D=d*q with gcd(r0,q)=1. Cancel d in D|r*s, then coprimality gives q|s. Thus s=q*t with t>0 and (r*s)/D=r0*t. The proof permits D not dividing r.",
+    "Invoke the existing actual-tuple sharedDifferenceData_licenses with v=r*s. It supplies L=(p*D)*((r*s)/D)*w0, (A*n2*((r*s)/D)).Coprime c, (n1*L).Coprime A, and positivity of A,n1,w0.",
+    "Ring normalization gives A*n2*((r*s)/D)=b*t and n1*L=zeta*t. Coprimality descends to factors, giving b coprime c, zeta coprime A, and t coprime both A,c; combine to t coprime A*c.",
+    "Invoke sharedDifferenceReciprocity_fourier on the same tuple. Rewrite only the two integer inverse arguments and the real denominator c=n1*w0. The root sign, the original signed h and f, and the complete slow denominator N1*L are unchanged."
+  ],
+  "actual_row_binding": {
+    "source": "Part3SharedFirstFactorSmallCoreSquaredFinite.lean 25-84",
+    "mapping": "p=o.1.1, N1=o.1.2.1, N2=o.1.2.2, r=o.2.1.1, s=u.1, w=o.2.1.2.1*o.2.1.2.2. The literal row guard supplies gcd(r*s,w)=o.2.2 and the exact Compatible hypothesis. Positive physical lengths and actual carrier membership supply positivity. The new theorem is on this raw tuple; no new finset integration theorem is asserted.",
+    "support": "The original Co support gates use exactly g and supportedPart(N1/g,g), so this A equals the actual supported root modulus. The separate supported Cauchy candidate's product bound can later show A<=Ybeta*Ysupport. This file imports accepted SquaredFinite rather than depending on the still-uncompiled SupportedCoreCauchy candidate.",
+    "preserved": "All alpha/gamma coefficients, common lambda_s/omega_h, original signed h,h', cutoff/window, gcd mask, actual CRT branch, support O_C, small-gcd gates and outside energy remain in the consumer. This finite pointwise identity neither removes nor estimates any of them.",
+    "minus_conjugate": "The theorem allows every signed h and a, including zero. Apply it separately with h and h' (and conjugate the latter in the Gram). No positivity restriction on frequencies or absolute-value replacement is introduced."
+  },
+  "why_this_is_next": {
+    "fixed_packet": "After fixing the actual outer tuple and its literal D, g,d1,n1,n2,q,r0,w0,b,c,zeta,f are independent of the varying s. Only t=s/q changes. The two inverse arguments now both factor as fixed multiplier times t, the required form for a later t,t' product z=t*t'.",
+    "relation_to_yz": "The later exact inverse-difference merger should turn h/t-h'/t' into k/(t*t'), k=h*t'-h'*t, with y=f*k,z=t*t'. This artifact licenses that next step through its derived units, but does not assert the merger or shared-coefficient finite reindexing is proved.",
+    "minimality": "One public lemma combines the actual unit gates and complete phase transport; the sole private lemma proves the unavoidable general-D quotient construction. No independent resonance, q=1, U/Q, smooth-envelope or spectral audit is included."
+  },
+  "cost_and_limits": {
+    "cost": "Exact pointwise arithmetic equalities; no multiplicative constant, logarithmic loss, x power, new Cauchy, support extension or discarded root. No D=1 or D|r assumption.",
+    "original_range": "Valid throughout the original admissible range whenever the literal row is active; in fact no scale inequalities are needed. It does not imply the original 7/32 estimate.",
+    "remaining": [
+      "Root must compile the exact candidate and inspect the complete theorem type/axioms before acceptance.",
+      "Typed connection from literal actual supported row membership to raw positivity/gcd/CRT facts is not bundled as a new public adapter.",
+      "Pairwise inverse character merging, shared (y,z) coefficient map, exact masks/reindexing and all analytic spectral costs remain open.",
+      "No claim that this artifact completes the nonresonant operator or closes hLower/hUpper."
+    ]
+  },
+  "HOLD": true,
+  "source_bindings": [
+    {
+      "spans": [
+        {
+          "first": 1,
+          "last": 182,
+          "normalized_lf_utf8_sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af"
+        },
+        {
+          "first": 26,
+          "last": 34,
+          "normalized_lf_utf8_sha256": "86f6b2a96663cd118cc9097bcdefdbdddb6efbf492332f972feaab2ff3aa8efb"
+        },
+        {
+          "first": 74,
+          "last": 111,
+          "normalized_lf_utf8_sha256": "67e78a636a400cfc2d502d16774f212a7ad843f5bce647e531026162cddfc352"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDRootPacket.lean",
+      "sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+      "line_count": 182
+    },
+    {
+      "spans": [
+        {
+          "first": 25,
+          "last": 84,
+          "normalized_lf_utf8_sha256": "8f7b3ca26ec05fd8dc949893005efcc85273f74100e689343ce896c72ce1847f"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21",
+      "line_count": 619
+    },
+    {
+      "spans": [
+        {
+          "first": 116,
+          "last": 142,
+          "normalized_lf_utf8_sha256": "449f16aae56fa1f2c8fb22c3b62bce0bae996dd941236899effd8ed6d074dd40"
+        },
+        {
+          "first": 354,
+          "last": 408,
+          "normalized_lf_utf8_sha256": "5d3d2e5c734936c88a0922354cf7555ebf913a772aa4ad3045dab08f80508b08"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDifferenceReciprocity.lean",
+      "sha256": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e",
+      "line_count": 462
+    },
+    {
+      "spans": [
+        {
+          "first": 40,
+          "last": 69,
+          "normalized_lf_utf8_sha256": "bd471aced4b6fdf684af293a1d6f4124c3116a3f80e8d412e207e5852f822b4c"
+        },
+        {
+          "first": 153,
+          "last": 161,
+          "normalized_lf_utf8_sha256": "d07d0bda3a6cad79e0075800c3fa776dd6de4e38d7480d2245ede5a451614a41"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CanonicalReciprocalData.lean",
+      "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line_count": 354
+    },
+    {
+      "spans": [
+        {
+          "first": 35,
+          "last": 59,
+          "normalized_lf_utf8_sha256": "ada51d7a9f1010f398b1ccdc3a62aa1049aa76baf2536135787d18ab6a3540ba"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CanonicalReciprocalPhase.lean",
+      "sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+      "line_count": 326
+    },
+    {
+      "spans": [
+        {
+          "first": 81,
+          "last": 82,
+          "normalized_lf_utf8_sha256": "4850bd2bd9b2213d86f283719bb195f019d9d66cabd4df122d03452658bed810"
+        },
+        {
+          "first": 120,
+          "last": 138,
+          "normalized_lf_utf8_sha256": "e6e14ba9c419926b821153395fb8ca323ab42c9c15ad75d13216d74419aa6919"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "line_count": 313
+    },
+    {
+      "spans": [
+        {
+          "first": 25,
+          "last": 93,
+          "normalized_lf_utf8_sha256": "c6cc79472eba47d25acf99e16e628d020b16e62abb462478436488b98a7c34a5"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSupportedCoreCauchy.lean",
+      "sha256": "13a0733609f30d51af3649566b4d85053f866ab785fd35bac3c2f317c95a794e",
+      "line_count": 183
+    },
+    {
+      "spans": [
+        {
+          "first": 214,
+          "last": 227,
+          "normalized_lf_utf8_sha256": "3bb93b10b4dec866b9abbf47a7767103a2ed48872d9472aa5350ba8ccc9f96ca"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3LichtmanSignedDifferenceMultiplicity.lean",
+      "sha256": "0f41b856a9f52fa9618f0a10538e9b4cdfd46b3c1c795323da11727b5a92632f",
+      "line_count": 1457
+    },
+    {
+      "spans": [
+        {
+          "first": 1,
+          "last": 14,
+          "normalized_lf_utf8_sha256": "238a6caac45d20522024de33721db7e93eec05510f7dc83a12976e822444ffd4"
+        }
+      ],
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "line_count": 16
+    }
+  ],
+  "hash_convention": "Whole-file SHA256 covers exact bytes; line-span hashes cover inclusive one-based lines normalized to UTF-8 LF with one terminal LF."
+}

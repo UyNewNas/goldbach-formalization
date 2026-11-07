@@ -1,0 +1,1586 @@
+[
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "inductive",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData",
+    "type": "Type"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.actualSelectedPrefixLowerDensity",
+    "type": "ℕ → ℕ → Finset (Fin 4) → ℚ → ℚ → ℚ → ℚ → (m : ℕ) → Finset (Fin 4 → Fin (m + 1)) → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.actualSelectedPrefixLowerOwnCubeSum_eq_cells",
+    "type": "∀ (N cap : ℕ) (I : Finset (Fin 4)) (old nu a b : ℚ),\n  a < b →\n    1 < N →\n      ↑N ^ ↑b ≤ ↑cap →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          ImbalancedChen.actualSelectedPrefixOwnCubeSum true N cap (↑N ^ ↑b) I old nu a b m J * Real.log ↑N /\n              ImbalancedChen.singularSeries N =\n            ∑ j ∈ J,\n              (ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap (↑a) (↑b)\n                  (↑(ImbalancedChen.selectedPrefixCellCap I old nu a b m j))\n                  (ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                    ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                      (ImbalancedChen.ordinaryLowerFourGateBounds ↑old)) -\n                ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap (↑a) (↑b) (↑old)\n                  (ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                    ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                      (ImbalancedChen.ordinaryLowerFourGateBounds ↑old)))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixAncestorCell_unique",
+    "type": "∀ {r d m : ℕ} (hrd : r ≤ d) {a b : ℝ},\n  a ≤ b →\n    ∀ {j : Fin d → Fin (m + 1)} {q : Fin r → Fin (m + 1)} {t : Fin d → ℝ},\n      t ∈ ImbalancedChen.logPrimeMeshCell a b m j →\n        ImbalancedChen.historicalPrefixProject hrd t ∈ ImbalancedChen.logPrimeMeshCell a b m q →\n          q = ImbalancedChen.historicalPrefixProject hrd j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup",
+    "type": "{d : ℕ} → ℚ → ℚ → (m : ℕ) → Finset (Fin d → Fin (m + 1)) → ((Fin d → Fin (m + 1)) → ℚ) → ℚ → (Fin d → ℝ) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_apply_sub",
+    "type": "∀ {d : ℕ} (a b : ℚ),\n  a ≤ b →\n    ∀ (m : ℕ) (J : Finset (Fin d → Fin (m + 1))) (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n      (f : ℚ → ℝ),\n      f (ImbalancedChen.historicalPrefixLookup a b m J cap fallback t) - f fallback =\n        ∑ j ∈ J, if t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j then f (cap j) - f fallback else 0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_ge_fallback",
+    "type": "∀ {d : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin d → Fin (m + 1))) (old cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ)\n  (t : Fin d → ℝ),\n  (∀ j ∈ J, old j ≤ cap j) →\n    (∀ j ∈ J, t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j → fallback = old j) →\n      fallback ≤ ImbalancedChen.historicalPrefixLookup a b m J cap fallback t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_on_any_cell",
+    "type": "∀ {d : ℕ} (a b : ℚ),\n  a ≤ b →\n    ∀ (m : ℕ) (J : Finset (Fin d → Fin (m + 1))) (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n      (j : Fin d → Fin (m + 1)),\n      t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j →\n        ImbalancedChen.historicalPrefixLookup a b m J cap fallback t = if j ∈ J then cap j else fallback"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_on_cell",
+    "type": "∀ {d : ℕ} (a b : ℚ),\n  a ≤ b →\n    ∀ (m : ℕ) (J : Finset (Fin d → Fin (m + 1))) (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ),\n      ∀ j ∈ J,\n        t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j →\n          ImbalancedChen.historicalPrefixLookup a b m J cap fallback t = cap j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_outside",
+    "type": "∀ {d : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin d → Fin (m + 1))) (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ)\n  (t : Fin d → ℝ),\n  (∀ j ∈ J, t ∉ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j) →\n    ImbalancedChen.historicalPrefixLookup a b m J cap fallback t = fallback"
+  },
+  {
+    "axioms": [],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixProject",
+    "type": "{α : Type u_1} → {r d : ℕ} → r ≤ d → (Fin d → α) → Fin r → α"
+  },
+  {
+    "axioms": [
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixProject_comp",
+    "type": "∀ {α : Type u_1} {r d e : ℕ} (hrd : r ≤ d) (hde : d ≤ e) (t : Fin e → α),\n  ImbalancedChen.historicalPrefixProject hrd (ImbalancedChen.historicalPrefixProject hde t) =\n    ImbalancedChen.historicalPrefixProject ⋯ t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.mem_logPrimeMeshCell_historicalPrefixProject",
+    "type": "∀ {r d m : ℕ} (hrd : r ≤ d) {a b : ℝ} {j : Fin d → Fin (m + 1)} {t : Fin d → ℝ},\n  t ∈ ImbalancedChen.logPrimeMeshCell a b m j →\n    ImbalancedChen.historicalPrefixProject hrd t ∈\n      ImbalancedChen.logPrimeMeshCell a b m (ImbalancedChen.historicalPrefixProject hrd j)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourFrontierTuples_iff",
+    "type": "∀ (Q : ℝ) (N cap : ℕ) (w z : ℝ) (p : Fin 4 → ℕ),\n  p ∈\n      ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true Q)\n        (ImbalancedChen.roughPrimeUniverse N cap w z) ↔\n    StrictAnti p ∧\n      (∀ (i : Fin 4), p i < cap ∧ Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ ↑(p i) ∧ ↑(p i) < z) ∧ ↑(p 0) * ↑(p 1) ^ 3 < Q"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourFrontierTuples_iff_log",
+    "type": "∀ (N cap : ℕ) (old w z : ℝ),\n  1 < N →\n    z ≤ ↑cap →\n      ∀ (p : Fin 4 → ℕ),\n        p ∈\n            ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n              (ImbalancedChen.roughPrimeUniverse N cap w z) ↔\n          StrictAnti p ∧\n            (∀ (i : Fin 4), Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ ↑(p i) ∧ ↑(p i) < z) ∧\n              ImbalancedChen.actualPrimeTupleLog N p 0 + 3 * ImbalancedChen.actualPrimeTupleLog N p 1 < old"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourFrontierTuples_iff_of_cutoff_le_cap",
+    "type": "∀ (Q : ℝ) (N cap : ℕ) (w z : ℝ),\n  z ≤ ↑cap →\n    ∀ (p : Fin 4 → ℕ),\n      p ∈\n          ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true Q)\n            (ImbalancedChen.roughPrimeUniverse N cap w z) ↔\n        StrictAnti p ∧ (∀ (i : Fin 4), Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ ↑(p i) ∧ ↑(p i) < z) ∧ ↑(p 0) * ↑(p 1) ^ 3 < Q"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourGateRegion",
+    "type": "∀ (old : ℝ) (t : Fin 4 → ℝ),\n  t ∈\n      ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n        (ImbalancedChen.ordinaryLowerFourGateBounds old) ↔\n    StrictAnti t ∧ t 0 + 3 * t 1 < old"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontierTuples_cell_filter",
+    "type": "∀ (N cap : ℕ) (a b old : ℝ),\n  a < b →\n    1 < N →\n      ↑N ^ b ≤ ↑cap →\n        ∀ (m : ℕ) (j : Fin 4 → Fin (m + 1)),\n          {p ∈\n                ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ b)) |\n              ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell a b m j} =\n            {p ∈ ImbalancedChen.actualPrimeBoxTuples N (fun x => a) fun x => b |\n              ImbalancedChen.actualPrimeTupleLog N p ∈\n                ImbalancedChen.logPrimeMeshCell a b m j ∩\n                  ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                    (ImbalancedChen.ordinaryLowerFourGateBounds old)}"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontierTuples_cube_filter",
+    "type": "∀ (N cap : ℕ) (a b old : ℝ),\n  1 < N →\n    ↑N ^ b ≤ ↑cap →\n      {p ∈\n            ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n              (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ b)) |\n          p ∈ ImbalancedChen.actualPrimeBoxTuples N (fun x => a) fun x => b} =\n        {p ∈ ImbalancedChen.actualPrimeBoxTuples N (fun x => a) fun x => b |\n          ImbalancedChen.actualPrimeTupleLog N p ∈\n            ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n              (ImbalancedChen.ordinaryLowerFourGateBounds old)}"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontier_cell_ownCube_difference",
+    "type": "∀ (N cap : ℕ) (a b old lambda : ℝ),\n  a < b →\n    1 < N →\n      ↑N ^ b ≤ ↑cap →\n        ∀ (m : ℕ) (j : Fin 4 → Fin (m + 1)),\n          (∑\n              p ∈\n                ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ b)),\n              (∏ i, 1 / (↑(p i) - 1)) *\n                if ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell a b m j then\n                  ImbalancedChen.actualPrimeTupleOwnCubeMinus N cap lambda p -\n                    ImbalancedChen.actualPrimeTupleOwnCubeMinus N cap old p\n                else 0) =\n            ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap a b lambda\n                (ImbalancedChen.logPrimeMeshCell a b m j ∩\n                  ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                    (ImbalancedChen.ordinaryLowerFourGateBounds old)) -\n              ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap a b old\n                (ImbalancedChen.logPrimeMeshCell a b m j ∩\n                  ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                    (ImbalancedChen.ordinaryLowerFourGateBounds old))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontier_cell_weighted_sum",
+    "type": "∀ (N cap : ℕ) (a b old : ℝ),\n  a < b →\n    1 < N →\n      ↑N ^ b ≤ ↑cap →\n        ∀ (m : ℕ) (j : Fin 4 → Fin (m + 1)) (f : (Fin 4 → ℕ) → ℝ),\n          (∑\n              p ∈\n                ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ b)),\n              (∏ i, 1 / (↑(p i) - 1)) *\n                if ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell a b m j then f p else 0) =\n            ∑ p ∈ ImbalancedChen.actualPrimeBoxTuples N (fun x => a) fun x => b,\n              (∏ i, 1 / (↑(p i) - 1)) *\n                if\n                    ImbalancedChen.actualPrimeTupleLog N p ∈\n                      ImbalancedChen.logPrimeMeshCell a b m j ∩\n                        ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                          (ImbalancedChen.ordinaryLowerFourGateBounds old) then\n                  f p\n                else 0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateBounds",
+    "type": "ℝ → Fin 4 → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms",
+    "type": "Fin 4 → (Fin 4 → ℝ) →L[ℝ] ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms_ne_zero",
+    "type": "∀ (j : Fin 4), ImbalancedChen.ordinaryLowerFourGateForms j ≠ 0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFour_cube_test_iff_log",
+    "type": "∀ {N : ℕ},\n  1 < N →\n    ∀ (old : ℝ) (p : Fin 4 → ℕ),\n      (∀ (i : Fin 4), 0 < p i) →\n        (↑(p 0) * ↑(p 1) ^ 3 < ↑N ^ old ↔\n          ImbalancedChen.actualPrimeTupleLog N p 0 + 3 * ImbalancedChen.actualPrimeTupleLog N p 1 < old)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFour_parent_valid_iff",
+    "type": "∀ (Q : ℝ) (p : Fin 4 → ℕ),\n  (∀ (i : Fin 4), Nat.Prime (p i)) →\n    StrictAnti p →\n      (ImbalancedChen.FirstExitValidSelection (ImbalancedChen.ordinaryParityRosserPolicy true Q) [] true\n          (List.ofFn p).dropLast ↔\n        ↑(p 0) * ↑(p 1) ^ 3 < Q)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryRosserPrefixAdmissible_lower_two_iff",
+    "type": "∀ (Q : ℝ) (p1 p2 : ℕ),\n  0 < p2 → p2 < p1 → (ImbalancedChen.ordinaryRosserPrefixAdmissible true Q [p2, p1] ↔ ↑p1 * ↑p2 ^ 3 < Q)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.primeHistoryLogCoordinates_eq_historicalPrefixProject",
+    "type": "∀ (N : ℝ) {r d : ℕ} (hrd : r ≤ d) {history : List ℕ},\n  history.length = d →\n    ImbalancedChen.primeHistoryLogCoordinates N r (ImbalancedChen.rosserAncestor r history) =\n      ImbalancedChen.historicalPrefixProject hrd (ImbalancedChen.primeHistoryLogCoordinates N d history)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.selectedPrefixLowerRestorationIntegral",
+    "type": "Finset (Fin 4) → ℚ → ℚ → ℚ → ℚ → (m : ℕ) → Finset (Fin 4 → Fin (m + 1)) → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.selectedPrefixLowerRestorationIntegral_eq_integrals",
+    "type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n        ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J =\n          ∑ j ∈ J,\n            ∫ (t : Fin 4 → ℝ) in\n              ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                  (ImbalancedChen.ordinaryLowerFourGateBounds ↑old),\n              (ImbalancedChen.primeOwnCubeGatedProfile (↑(ImbalancedChen.selectedPrefixCellCap I old nu a b m j)) t -\n                  ImbalancedChen.primeOwnCubeGatedProfile (↑old) t) *\n                ∏ i, 1 / t i"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_ceil_normalized",
+    "type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      2 * b ≤ old →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          (∀ j ∈ J,\n              ImbalancedChen.selectedBoxCapCheck I old nu (ImbalancedChen.qLogPrimeMeshLo a b m j)\n                  (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n                true) →\n            Filter.Tendsto\n              (fun N =>\n                ImbalancedChen.actualSelectedPrefixLowerDensity N ⌈↑N ^ ↑b⌉₊ I old nu a b m J * Real.log ↑N /\n                  ImbalancedChen.singularSeries N)\n              (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n              (nhds\n                (2 * Real.exp (-Real.eulerMascheroniConstant) / ↑b *\n                    MathlibNt.SieveTheory.suzukiContinuousLowerFactor (↑old / ↑b) +\n                  ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_normalized",
+    "type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      2 * b ≤ old →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          (∀ j ∈ J,\n              ImbalancedChen.selectedBoxCapCheck I old nu (ImbalancedChen.qLogPrimeMeshLo a b m j)\n                  (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n                true) →\n            ∀ (cap : ℕ → ℕ),\n              (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑b ≤ ↑(cap N)) →\n                Filter.Tendsto\n                  (fun N =>\n                    ImbalancedChen.actualSelectedPrefixLowerDensity N (cap N) I old nu a b m J * Real.log ↑N /\n                      ImbalancedChen.singularSeries N)\n                  (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n                  (nhds\n                    (2 * Real.exp (-Real.eulerMascheroniConstant) / ↑b *\n                        MathlibNt.SieveTheory.suzukiContinuousLowerFactor (↑old / ↑b) +\n                      ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_restoration",
+    "type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      b ≤ old →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          (∀ j ∈ J,\n              ImbalancedChen.selectedBoxCapCheck I old nu (ImbalancedChen.qLogPrimeMeshLo a b m j)\n                  (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n                true) →\n            ∀ (cap : ℕ → ℕ),\n              (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑b ≤ ↑(cap N)) →\n                Filter.Tendsto\n                  (fun N =>\n                    (ImbalancedChen.actualSelectedPrefixLowerDensity N (cap N) I old nu a b m J -\n                          ImbalancedChen.actualSmallRosserMinusDensity N (cap N) (↑N ^ ↑b) (↑N ^ ↑old)) *\n                        Real.log ↑N /\n                      ImbalancedChen.singularSeries N)\n                  (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n                  (nhds (ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerOwnCubeSum",
+    "type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))) (cap : ℕ → ℕ),\n        (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑b ≤ ↑(cap N)) →\n          Filter.Tendsto\n            (fun N =>\n              ImbalancedChen.actualSelectedPrefixOwnCubeSum true N (cap N) (↑N ^ ↑b) I old nu a b m J * Real.log ↑N /\n                ImbalancedChen.singularSeries N)\n            (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n            (nhds (ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFifth",
+    "type": "ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFifth_check",
+    "type": "P1LevelCheckProbe.fallingFifth.levelCheck = false"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFourth",
+    "type": "ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFourth_check",
+    "type": "P1LevelCheckProbe.fallingFourth.levelCheck = false"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.increasing",
+    "type": "ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.increasing_check",
+    "type": "P1LevelCheckProbe.increasing.levelCheck = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff",
+    "type": "∀ (Q : ℝ) (p1 p2 : ℕ),\n  p2 < p1 → (MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser.LowerAdmissibleSet Q [p2, p1].toFinset ↔ ↑p1 * ↑p2 ^ 3 < Q)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData._sizeOf_1",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℕ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData._sizeOf_inst",
+    "type": "SizeOf ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.a",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.actual_thirdToFifthSaving_eq",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (base : Bool → List ℕ → Bool) (N cap : ℕ),\n        1 < ↑N →\n          ∀ (z : ℝ),\n            ImbalancedChen.firstExitRetainedPolynomial (ImbalancedChen.thirdCappedUpperPolicy base (D.level3 ↑N))\n                  (fun p => 1 / (↑p - 1)) [] true 1 (ImbalancedChen.roughPrimeUniverse N cap 0 z) -\n                ImbalancedChen.firstExitRetainedPolynomial\n                  (ImbalancedChen.fifthCappedUpperPolicy base (D.level3 ↑N) (D.level5 ↑N)) (fun p => 1 / (↑p - 1)) []\n                  true 1 (ImbalancedChen.roughPrimeUniverse N cap 0 z) =\n              ImbalancedChen.actualHistoricalFourthSaving base (D.level3 ↑N) (D.level4 ↑N) N cap z +\n                ImbalancedChen.actualHistoricalFifthSaving base (D.level3 ↑N) (D.level4 ↑N) (D.level5 ↑N) N cap z"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.b",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cap3",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → (Fin 3 → Fin (self.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cap4",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → (Fin 4 → Fin (self.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cap5",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → (Fin 5 → Fin (self.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.casesOn",
+    "type": "{motive : ImbalancedChen.HistoricalPrefixCapData → Sort u} →\n  (t : ImbalancedChen.HistoricalPrefixCapData) →\n    ((a b : ℚ) →\n        (m : ℕ) →\n          (old : ℚ) →\n            (cells3 : Finset (Fin 3 → Fin (m + 1))) →\n              (cap3 : (Fin 3 → Fin (m + 1)) → ℚ) →\n                (cells4 : Finset (Fin 4 → Fin (m + 1))) →\n                  (cap4 : (Fin 4 → Fin (m + 1)) → ℚ) →\n                    (cells5 : Finset (Fin 5 → Fin (m + 1))) →\n                      (cap5 : (Fin 5 → Fin (m + 1)) → ℚ) →\n                        motive\n                          { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4,\n                            cap4 := cap4, cells5 := cells5, cap5 := cap5 }) →\n      motive t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cell3",
+    "type": "(D : ImbalancedChen.HistoricalPrefixCapData) → (Fin 3 → Fin (D.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cell4",
+    "type": "(D : ImbalancedChen.HistoricalPrefixCapData) → (Fin 4 → Fin (D.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cell5",
+    "type": "(D : ImbalancedChen.HistoricalPrefixCapData) → (Fin 5 → Fin (D.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cells3",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → Finset (Fin 3 → Fin (self.m + 1))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cells4",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → Finset (Fin 4 → Fin (self.m + 1))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.cells5",
+    "type": "(self : ImbalancedChen.HistoricalPrefixCapData) → Finset (Fin 5 → Fin (self.m + 1))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.ctorIdx",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℕ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → (Fin 3 → ℝ) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3_le_exponent4",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true → ∀ (t : Fin 4 → ℝ), D.exponent3 (ImbalancedChen.historicalPrefixProject ⋯ t) ≤ D.exponent4 t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3_on_cell",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 3 → ℝ) (j : Fin 3 → Fin (D.m + 1)),\n      t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j → D.exponent3 t = D.cell3 j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (t : Fin 3 → ℝ),\n  (∀ j ∈ D.cells3, t ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) → D.exponent3 t = D.old"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → (Fin 4 → ℝ) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4_apply_sub",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 4 → ℝ) (f : ℚ → ℝ),\n      f (D.exponent4 t) - f (D.exponent3 (ImbalancedChen.historicalPrefixProject ⋯ t)) =\n        ∑ j ∈ D.cells4,\n          if t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j then f (D.cap4 j) - f (D.old4 j) else 0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4_le_exponent5",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true → ∀ (t : Fin 5 → ℝ), D.exponent4 (ImbalancedChen.historicalPrefixProject ⋯ t) ≤ D.exponent5 t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4_on_cell",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 4 → ℝ) (j : Fin 4 → Fin (D.m + 1)),\n      t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j → D.exponent4 t = D.cell4 j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (t : Fin 4 → ℝ),\n  (∀ j ∈ D.cells4, t ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n    D.exponent4 t = D.exponent3 (ImbalancedChen.historicalPrefixProject ⋯ t)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → (Fin 5 → ℝ) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5_apply_sub",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 5 → ℝ) (f : ℚ → ℝ),\n      f (D.exponent5 t) - f (D.exponent4 (ImbalancedChen.historicalPrefixProject ⋯ t)) =\n        ∑ j ∈ D.cells5,\n          if t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j then f (D.cap5 j) - f (D.old5 j) else 0"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5_on_cell",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 5 → ℝ) (j : Fin 5 → Fin (D.m + 1)),\n      t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j → D.exponent5 t = D.cell5 j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (t : Fin 5 → ℝ),\n  (∀ j ∈ D.cells5, t ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n    D.exponent5 t = D.exponent4 (ImbalancedChen.historicalPrefixProject ⋯ t)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level3",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → List ℕ → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level3_ancestor_le_level4",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (N : ℝ),\n        1 < N →\n          ∀ (history : List ℕ),\n            history.length = 4 → D.level3 N (ImbalancedChen.rosserAncestor 3 history) ≤ D.level4 N history"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level3_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (history : List ℕ),\n  (∀ j ∈ D.cells3,\n      ImbalancedChen.primeHistoryLogCoordinates N 3 history ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n    D.level3 N history = N ^ ↑D.old"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → List ℕ → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4_ancestor_le_level5",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (N : ℝ),\n        1 < N →\n          ∀ (history : List ℕ),\n            history.length = 5 → D.level4 N (ImbalancedChen.rosserAncestor 4 history) ≤ D.level5 N history"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (history : List ℕ),\n  history.length = 4 →\n    (∀ j ∈ D.cells4,\n        ImbalancedChen.primeHistoryLogCoordinates N 4 history ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n      D.level4 N history = D.level3 N (ImbalancedChen.rosserAncestor 3 history)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level5",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → List ℕ → ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level5_outside",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (history : List ℕ),\n  history.length = 5 →\n    (∀ j ∈ D.cells5,\n        ImbalancedChen.primeHistoryLogCoordinates N 5 history ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n      D.level5 N history = D.level4 N (ImbalancedChen.rosserAncestor 4 history)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.levelCheck",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → Bool"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.levelCheck_of_selectedBoxCapChecks",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (I3 : (Fin 3 → Fin (D.m + 1)) → Finset (Fin 3))\n  (I4 : (Fin 4 → Fin (D.m + 1)) → Finset (Fin 4)) (I5 : (Fin 5 → Fin (D.m + 1)) → Finset (Fin 5))\n  (nu3 : (Fin 3 → Fin (D.m + 1)) → ℚ) (nu4 : (Fin 4 → Fin (D.m + 1)) → ℚ) (nu5 : (Fin 5 → Fin (D.m + 1)) → ℚ),\n  (∀ j ∈ D.cells3,\n      D.cap3 j =\n          ImbalancedChen.selectedBoxCap (I3 j) D.old (nu3 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n            (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n        ImbalancedChen.selectedBoxCapCheck (I3 j) D.old (nu3 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n            (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n          true) →\n    (∀ j ∈ D.cells4,\n        D.cap4 j =\n            ImbalancedChen.selectedBoxCap (I4 j) (D.old4 j) (nu4 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n              (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n          ImbalancedChen.selectedBoxCapCheck (I4 j) (D.old4 j) (nu4 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n              (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n            true) →\n      (∀ j ∈ D.cells5,\n          D.cap5 j =\n              ImbalancedChen.selectedBoxCap (I5 j) (D.old5 j) (nu5 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n                (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n            ImbalancedChen.selectedBoxCapCheck (I5 j) (D.old5 j) (nu5 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n                (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n              true) →\n        D.levelCheck = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.levelCheck_sound",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.levelCheck = true →\n    (∀ j ∈ D.cells3, D.old ≤ D.cap3 j) ∧ (∀ j ∈ D.cells4, D.old4 j ≤ D.cap4 j) ∧ ∀ j ∈ D.cells5, D.old5 j ≤ D.cap5 j"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.m",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℕ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "constructor",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk",
+    "type": "ℚ →\n  ℚ →\n    (m : ℕ) →\n      ℚ →\n        Finset (Fin 3 → Fin (m + 1)) →\n          ((Fin 3 → Fin (m + 1)) → ℚ) →\n            Finset (Fin 4 → Fin (m + 1)) →\n              ((Fin 4 → Fin (m + 1)) → ℚ) →\n                Finset (Fin 5 → Fin (m + 1)) → ((Fin 5 → Fin (m + 1)) → ℚ) → ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.noConfusion",
+    "type": "{P : Sort u} →\n  {t t' : ImbalancedChen.HistoricalPrefixCapData} →\n    t = t' → ImbalancedChen.HistoricalPrefixCapData.noConfusionType P t t'"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.noConfusionType",
+    "type": "Sort u → ImbalancedChen.HistoricalPrefixCapData → ImbalancedChen.HistoricalPrefixCapData → Sort u"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old4",
+    "type": "(D : ImbalancedChen.HistoricalPrefixCapData) → (Fin 4 → Fin (D.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old5",
+    "type": "(D : ImbalancedChen.HistoricalPrefixCapData) → (Fin 5 → Fin (D.m + 1)) → ℚ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old_le_exponent3",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData), D.levelCheck = true → ∀ (t : Fin 3 → ℝ), D.old ≤ D.exponent3 t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "recursor",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.rec",
+    "type": "{motive : ImbalancedChen.HistoricalPrefixCapData → Sort u} →\n  ((a b : ℚ) →\n      (m : ℕ) →\n        (old : ℚ) →\n          (cells3 : Finset (Fin 3 → Fin (m + 1))) →\n            (cap3 : (Fin 3 → Fin (m + 1)) → ℚ) →\n              (cells4 : Finset (Fin 4 → Fin (m + 1))) →\n                (cap4 : (Fin 4 → Fin (m + 1)) → ℚ) →\n                  (cells5 : Finset (Fin 5 → Fin (m + 1))) →\n                    (cap5 : (Fin 5 → Fin (m + 1)) → ℚ) →\n                      motive\n                        { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4,\n                          cap4 := cap4, cells5 := cells5, cap5 := cap5 }) →\n    (t : ImbalancedChen.HistoricalPrefixCapData) → motive t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.recOn",
+    "type": "{motive : ImbalancedChen.HistoricalPrefixCapData → Sort u} →\n  (t : ImbalancedChen.HistoricalPrefixCapData) →\n    ((a b : ℚ) →\n        (m : ℕ) →\n          (old : ℚ) →\n            (cells3 : Finset (Fin 3 → Fin (m + 1))) →\n              (cap3 : (Fin 3 → Fin (m + 1)) → ℚ) →\n                (cells4 : Finset (Fin 4 → Fin (m + 1))) →\n                  (cap4 : (Fin 4 → Fin (m + 1)) → ℚ) →\n                    (cells5 : Finset (Fin 5 → Fin (m + 1))) →\n                      (cap5 : (Fin 5 → Fin (m + 1)) → ℚ) →\n                        motive\n                          { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4,\n                            cap4 := cap4, cells5 := cells5, cap5 := cap5 }) →\n      motive t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFifthPolicy",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → Bool → List ℕ → Bool"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFifthPolicy_eq_oddFirstExitPolicy",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ),\n  D.upperFifthPolicy N = ImbalancedChen.oddFirstExitPolicy fun pre => D.upperFifthPolicy N false pre"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFifthPolicy_even",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (pre : List ℕ), D.upperFifthPolicy N true pre = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFourthPolicy",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → Bool → List ℕ → Bool"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFourthPolicy_even",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (pre : List ℕ), D.upperFourthPolicy N true pre = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdPolicy",
+    "type": "ImbalancedChen.HistoricalPrefixCapData → ℝ → Bool → List ℕ → Bool"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdPolicy_even",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (pre : List ℕ), D.upperThirdPolicy N true pre = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdToFifthSaving_eq",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (N cap : ℕ),\n        1 < ↑N →\n          ∀ (z : ℝ),\n            ImbalancedChen.firstExitRetainedPolynomial (D.upperThirdPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) -\n                ImbalancedChen.firstExitRetainedPolynomial (D.upperFifthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) =\n              ImbalancedChen.actualHistoricalFourthSaving\n                  (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N) N cap z +\n                ImbalancedChen.actualHistoricalFifthSaving\n                  (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N)\n                  (D.level5 ↑N) N cap z"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "name": "ImbalancedChen.actualSelectedPrefixLowerDensity.eq_1",
+    "type": "∀ (N cap : ℕ) (I : Finset (Fin 4)) (old nu a b : ℚ) (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n  ImbalancedChen.actualSelectedPrefixLowerDensity N cap I old nu a b m J =\n    ImbalancedChen.firstExitRetainedPolynomial\n      (ImbalancedChen.actualSelectedPrefixSplicePolicy true (↑N) I old nu a b m J) (fun p => 1 / (↑p - 1)) [] true 1\n      (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ ↑b))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.fifthCappedUpperPolicy.eq_1",
+    "type": "∀ (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ),\n  ImbalancedChen.fifthCappedUpperPolicy base Q3 Q5 =\n    ImbalancedChen.firstExitDepthSplicePolicy 4 (ImbalancedChen.thirdCappedUpperPolicy base Q3)\n      (ImbalancedChen.frozenParityRosserPolicy false 5 Q5)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.fourthCappedUpperPolicy.eq_1",
+    "type": "∀ (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ),\n  ImbalancedChen.fourthCappedUpperPolicy base Q3 Q4 =\n    ImbalancedChen.firstExitDepthSplicePolicy 4 (ImbalancedChen.thirdCappedUpperPolicy base Q3)\n      (ImbalancedChen.frozenParityRosserPolicy false 4 Q4)"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_apply_sub._simp_1_1",
+    "type": "∀ {α : Sort u_1} {p : α → Prop}, (¬∃ x, p x) = ∀ (x : α), ¬p x"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixLookup_apply_sub._simp_1_2",
+    "type": "∀ {a b : Prop}, (¬(a ∧ b)) = (a → ¬b)"
+  },
+  {
+    "axioms": [],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixProject.congr_simp",
+    "type": "∀ {α : Type u_1} {r d : ℕ} (hrd : r ≤ d) (t t_1 : Fin d → α),\n  t = t_1 →\n    ∀ (a a_1 : Fin r),\n      a = a_1 → ImbalancedChen.historicalPrefixProject hrd t a = ImbalancedChen.historicalPrefixProject hrd t_1 a_1"
+  },
+  {
+    "axioms": [],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.historicalPrefixProject.eq_1",
+    "type": "∀ {α : Type u_1} {r d : ℕ} (hrd : r ≤ d) (t : Fin d → α) (i : Fin r),\n  ImbalancedChen.historicalPrefixProject hrd t i = t (Fin.castLE hrd i)"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourGateRegion._simp_1_3",
+    "type": "∀ {n : ℕ} {P : Fin (n + 1) → Prop}, (∀ (i : Fin (n + 1)), P i) = (P 0 ∧ ∀ (i : Fin n), P i.succ)"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.mem_ordinaryLowerFourGateRegion._simp_1_4",
+    "type": "∀ {a b c : Prop}, ((a ∧ b) ∧ c) = (a ∧ b ∧ c)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontierTuples_cell_filter._simp_1_1",
+    "type": "∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α} {a : α}, (a ∈ Finset.filter p s) = (a ∈ s ∧ p a)"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontierTuples_cell_filter._simp_1_2",
+    "type": "∀ {α : Type u} (x : α) (a b : Set α), (x ∈ a ∩ b) = (x ∈ a ∧ x ∈ b)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontierTuples_cube_filter._simp_1_1",
+    "type": "∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α} {a : α}, (a ∈ Finset.filter p s) = (a ∈ s ∧ p a)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "name": "ImbalancedChen.ordinaryLowerFourFrontier_cell_ownCube_difference._simp_1_1",
+    "type": "∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [inst : SubtractionCommMonoid G] (f g : ι → G),\n  ∑ x ∈ s, f x - ∑ x ∈ s, g x = ∑ x ∈ s, (f x - g x)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateBounds.eq_1",
+    "type": "∀ (old : ℝ), ImbalancedChen.ordinaryLowerFourGateBounds old = ![0, 0, 0, old]"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms._proof_1",
+    "type": "NeZero (3 + 1)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms._proof_2",
+    "type": "ContinuousAdd ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms._proof_3",
+    "type": "SMulCommClass ℝ ℝ ℝ"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms._proof_4",
+    "type": "ContinuousConstSMul ℝ ℝ"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms._proof_5",
+    "type": "(2 + 1).AtLeastTwo"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "ImbalancedChen.ordinaryLowerFourGateForms.eq_1",
+    "type": "ImbalancedChen.ordinaryLowerFourGateForms =\n  ![(fun i => ContinuousLinearMap.proj i) 1 - (fun i => ContinuousLinearMap.proj i) 0,\n    (fun i => ContinuousLinearMap.proj i) 2 - (fun i => ContinuousLinearMap.proj i) 1,\n    (fun i => ContinuousLinearMap.proj i) 3 - (fun i => ContinuousLinearMap.proj i) 2,\n    (fun i => ContinuousLinearMap.proj i) 0 + 3 • (fun i => ContinuousLinearMap.proj i) 1]"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFifth_check._proof_1_1",
+    "type": "P1LevelCheckProbe.fallingFifth.levelCheck = false"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.fallingFourth_check._proof_1_1",
+    "type": "P1LevelCheckProbe.fallingFourth.levelCheck = false"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.increasing._proof_1",
+    "type": "NeZero (0 + 1)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "verification.parts.p1.LevelCheckProbe",
+    "name": "P1LevelCheckProbe.increasing_check._proof_1_1",
+    "type": "P1LevelCheckProbe.increasing.levelCheck = true"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._proof_1_4",
+    "type": "∀ (p1 p2 : ℕ), p2 < p1 → ∀ (p : ℕ), ¬((p = p2 ∨ p = p1) ∧ p1 ≤ p ↔ p = p1) → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._proof_1_5",
+    "type": "∀ (p1 p2 : ℕ), p2 < p1 → ∀ (p : ℕ), ¬((p = p2 ∨ p = p1) ∧ p2 ≤ p ↔ p = p2 ∨ p = p1) → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._simp_1_1",
+    "type": "∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α} {a : α}, (a ∈ Finset.filter p s) = (a ∈ s ∧ p a)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._simp_1_2",
+    "type": "∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset α} {a b : α}, (a ∈ insert b s) = (a = b ∨ a ∈ s)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._simp_1_3",
+    "type": "∀ {α : Type u_1} {a b : α}, (b ∈ {a}) = (b = a)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._simp_1_6",
+    "type": "∀ {α : Type u_1} [inst : DecidableEq α] (a : α) (s : Finset α) (p : α → Prop),\n  (∀ x ∈ insert a s, p x) = (p a ∧ ∀ x ∈ s, p x)"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "name": "_private.ImbalancedChen.OrdinaryLowerFourFrontier.0.ImbalancedChen.lowerRosserAdmissibleSet_two_iff._simp_1_7",
+    "type": "∀ {α : Sort u_1} {p : α → Prop} {a' : α}, (∀ (a : α), a = a' → p a) = p a'"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.actual_thirdToFifthSaving_eq._proof_1_1",
+    "type": "∀ (frontier : ImbalancedChen.FirstExitDepthState ℕ),\n  frontier.selectedPrefix.length = 4 → ∀ (q : ℕ), ¬4 ≤ frontier.selectedPrefix.length → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent4.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (t : Fin 4 → ℝ),\n  D.exponent4 t =\n    ImbalancedChen.historicalPrefixLookup D.a D.b D.m D.cells4 D.cap4\n      (D.exponent3 (ImbalancedChen.historicalPrefixProject ImbalancedChen.HistoricalPrefixCapData.old4._proof_2 t)) t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (t : Fin 5 → ℝ),\n  D.exponent5 t =\n    ImbalancedChen.historicalPrefixLookup D.a D.b D.m D.cells5 D.cap5\n      (D.exponent4 (ImbalancedChen.historicalPrefixProject ImbalancedChen.HistoricalPrefixCapData.old5._proof_2 t)) t"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level3_ancestor_le_level4._proof_1_1",
+    "type": "∀ (history : List ℕ), ¬3 ≤ 4 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4_ancestor_le_level5._proof_1_1",
+    "type": "∀ (history : List ℕ), ¬4 ≤ 5 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4_outside._proof_1_1",
+    "type": "∀ (history : List ℕ), ¬3 ≤ 4 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level5_outside._proof_1_1",
+    "type": "∀ (history : List ℕ), ¬4 ≤ 5 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.levelCheck.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.levelCheck =\n    (decide (∀ a ∈ D.cells3, D.old ≤ D.cap3 a) &&\n      (decide (∀ a ∈ D.cells4, D.old4 a ≤ D.cap4 a) && decide (∀ a ∈ D.cells5, D.old5 a ≤ D.cap5 a)))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk._flat_ctor",
+    "type": "ℚ →\n  ℚ →\n    (m : ℕ) →\n      ℚ →\n        Finset (Fin 3 → Fin (m + 1)) →\n          ((Fin 3 → Fin (m + 1)) → ℚ) →\n            Finset (Fin 4 → Fin (m + 1)) →\n              ((Fin 4 → Fin (m + 1)) → ℚ) →\n                Finset (Fin 5 → Fin (m + 1)) → ((Fin 5 → Fin (m + 1)) → ℚ) → ImbalancedChen.HistoricalPrefixCapData"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk.inj",
+    "type": "∀ {a b : ℚ} {m : ℕ} {old : ℚ} {cells3 : Finset (Fin 3 → Fin (m + 1))} {cap3 : (Fin 3 → Fin (m + 1)) → ℚ}\n  {cells4 : Finset (Fin 4 → Fin (m + 1))} {cap4 : (Fin 4 → Fin (m + 1)) → ℚ} {cells5 : Finset (Fin 5 → Fin (m + 1))}\n  {cap5 : (Fin 5 → Fin (m + 1)) → ℚ} {a_1 b_1 : ℚ} {m_1 : ℕ} {old_1 : ℚ} {cells3_1 : Finset (Fin 3 → Fin (m_1 + 1))}\n  {cap3_1 : (Fin 3 → Fin (m_1 + 1)) → ℚ} {cells4_1 : Finset (Fin 4 → Fin (m_1 + 1))}\n  {cap4_1 : (Fin 4 → Fin (m_1 + 1)) → ℚ} {cells5_1 : Finset (Fin 5 → Fin (m_1 + 1))}\n  {cap5_1 : (Fin 5 → Fin (m_1 + 1)) → ℚ},\n  { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4, cap4 := cap4,\n        cells5 := cells5, cap5 := cap5 } =\n      { a := a_1, b := b_1, m := m_1, old := old_1, cells3 := cells3_1, cap3 := cap3_1, cells4 := cells4_1,\n        cap4 := cap4_1, cells5 := cells5_1, cap5 := cap5_1 } →\n    a = a_1 ∧\n      b = b_1 ∧\n        m = m_1 ∧\n          old = old_1 ∧\n            cells3 ≍ cells3_1 ∧ cap3 ≍ cap3_1 ∧ cells4 ≍ cells4_1 ∧ cap4 ≍ cap4_1 ∧ cells5 ≍ cells5_1 ∧ cap5 ≍ cap5_1"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk.injEq",
+    "type": "∀ (a b : ℚ) (m : ℕ) (old : ℚ) (cells3 : Finset (Fin 3 → Fin (m + 1))) (cap3 : (Fin 3 → Fin (m + 1)) → ℚ)\n  (cells4 : Finset (Fin 4 → Fin (m + 1))) (cap4 : (Fin 4 → Fin (m + 1)) → ℚ) (cells5 : Finset (Fin 5 → Fin (m + 1)))\n  (cap5 : (Fin 5 → Fin (m + 1)) → ℚ) (a_1 b_1 : ℚ) (m_1 : ℕ) (old_1 : ℚ) (cells3_1 : Finset (Fin 3 → Fin (m_1 + 1)))\n  (cap3_1 : (Fin 3 → Fin (m_1 + 1)) → ℚ) (cells4_1 : Finset (Fin 4 → Fin (m_1 + 1)))\n  (cap4_1 : (Fin 4 → Fin (m_1 + 1)) → ℚ) (cells5_1 : Finset (Fin 5 → Fin (m_1 + 1)))\n  (cap5_1 : (Fin 5 → Fin (m_1 + 1)) → ℚ),\n  ({ a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4, cap4 := cap4,\n        cells5 := cells5, cap5 := cap5 } =\n      { a := a_1, b := b_1, m := m_1, old := old_1, cells3 := cells3_1, cap3 := cap3_1, cells4 := cells4_1,\n        cap4 := cap4_1, cells5 := cells5_1, cap5 := cap5_1 }) =\n    (a = a_1 ∧\n      b = b_1 ∧\n        m = m_1 ∧\n          old = old_1 ∧\n            cells3 ≍ cells3_1 ∧ cap3 ≍ cap3_1 ∧ cells4 ≍ cells4_1 ∧ cap4 ≍ cap4_1 ∧ cells5 ≍ cells5_1 ∧ cap5 ≍ cap5_1)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk.noConfusion",
+    "type": "{P : Sort u} →\n  {a b : ℚ} →\n    {m : ℕ} →\n      {old : ℚ} →\n        {cells3 : Finset (Fin 3 → Fin (m + 1))} →\n          {cap3 : (Fin 3 → Fin (m + 1)) → ℚ} →\n            {cells4 : Finset (Fin 4 → Fin (m + 1))} →\n              {cap4 : (Fin 4 → Fin (m + 1)) → ℚ} →\n                {cells5 : Finset (Fin 5 → Fin (m + 1))} →\n                  {cap5 : (Fin 5 → Fin (m + 1)) → ℚ} →\n                    {a' b' : ℚ} →\n                      {m' : ℕ} →\n                        {old' : ℚ} →\n                          {cells3' : Finset (Fin 3 → Fin (m' + 1))} →\n                            {cap3' : (Fin 3 → Fin (m' + 1)) → ℚ} →\n                              {cells4' : Finset (Fin 4 → Fin (m' + 1))} →\n                                {cap4' : (Fin 4 → Fin (m' + 1)) → ℚ} →\n                                  {cells5' : Finset (Fin 5 → Fin (m' + 1))} →\n                                    {cap5' : (Fin 5 → Fin (m' + 1)) → ℚ} →\n                                      { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3,\n                                            cells4 := cells4, cap4 := cap4, cells5 := cells5, cap5 := cap5 } =\n                                          { a := a', b := b', m := m', old := old', cells3 := cells3', cap3 := cap3',\n                                            cells4 := cells4', cap4 := cap4', cells5 := cells5', cap5 := cap5' } →\n                                        (a = a' →\n                                            b = b' →\n                                              m = m' →\n                                                old = old' →\n                                                  cells3 ≍ cells3' →\n                                                    cap3 ≍ cap3' →\n                                                      cells4 ≍ cells4' →\n                                                        cap4 ≍ cap4' → cells5 ≍ cells5' → cap5 ≍ cap5' → P) →\n                                          P"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.mk.sizeOf_spec",
+    "type": "∀ (a b : ℚ) (m : ℕ) (old : ℚ) (cells3 : Finset (Fin 3 → Fin (m + 1))) (cap3 : (Fin 3 → Fin (m + 1)) → ℚ)\n  (cells4 : Finset (Fin 4 → Fin (m + 1))) (cap4 : (Fin 4 → Fin (m + 1)) → ℚ) (cells5 : Finset (Fin 5 → Fin (m + 1)))\n  (cap5 : (Fin 5 → Fin (m + 1)) → ℚ),\n  sizeOf\n      { a := a, b := b, m := m, old := old, cells3 := cells3, cap3 := cap3, cells4 := cells4, cap4 := cap4,\n        cells5 := cells5, cap5 := cap5 } =\n    1 + sizeOf a + sizeOf b + sizeOf m + sizeOf old + sizeOf cells3 + sizeOf cells4 + sizeOf cells5"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old4._proof_1",
+    "type": "¬3 ≤ 4 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old4._proof_2",
+    "type": "3 ≤ 4"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old5._proof_1",
+    "type": "¬4 ≤ 5 → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.old5._proof_2",
+    "type": "4 ≤ 5"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFifthPolicy.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ),\n  D.upperFifthPolicy N =\n    ImbalancedChen.fifthCappedUpperPolicy (ImbalancedChen.ordinaryParityRosserPolicy false (N ^ ↑D.old)) (D.level3 N)\n      (D.level5 N)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFourthPolicy.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ),\n  D.upperFourthPolicy N =\n    ImbalancedChen.fourthCappedUpperPolicy (ImbalancedChen.ordinaryParityRosserPolicy false (N ^ ↑D.old)) (D.level3 N)\n      (D.level4 N)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdPolicy.eq_1",
+    "type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ),\n  D.upperThirdPolicy N =\n    ImbalancedChen.thirdCappedUpperPolicy (ImbalancedChen.ordinaryParityRosserPolicy false (N ^ ↑D.old)) (D.level3 N)"
+  }
+]

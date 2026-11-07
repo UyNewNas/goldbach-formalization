@@ -1,0 +1,156 @@
+import ImbalancedChen.Part3ActualCompletedHorocycleMeanDerivative
+import ImbalancedChen.Part3GammaZeroSeedCompactLiftContinuity
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Local raw-height L2 of the actual completed-form mean and its produced
+ordinary dy-gradient mean. Finite-interval Hilbert Cauchy and actual
+Fubini provide L2 averaging. Periodicity identifies the VALUE average
+with the original zero Fourier integral. No global automorphic L2 or
+regularity of a band adjoint is assumed.
+-/
+namespace ImbalancedChen.Part3.ActualHorocycleMeanLocalL220261026b
+noncomputable section
+open Set MeasureTheory Filter
+open scoped UpperHalfPlane
+open ActualCompletedHorocycleMeanDerivative20261026b GammaZeroSeedCompactLiftContinuity20261026b
+open SmoothZeroHeightSeedProfiles20261026b SmoothIntegerUnitPartition20261026b
+open PeriodicCompactPartitionUnfolding20261026b
+open Gamma0ActualEnergyCompletion20261025a NormalizedCuspCompletedWeakH120261026b
+open ActualPullbackLocalH1Transfer20261026b ProductConvolutionSecondDerivatives20261026a
+open CanonicalTensorHyperbolicLaplacianForm20261024z
+
+def horizontalCompactMeasure : Measure ℝ := volume.restrict (Icc (-1 : ℝ) 1)
+local instance : IsFiniteMeasure horizontalCompactMeasure := ⟨by simp [horizontalCompactMeasure]⟩
+
+private theorem toLp_norm_sq {X : Type*} [MeasurableSpace X] (μ : Measure X)
+    (F : X → ℂ) (hF : MemLp F 2 μ) : ‖hF.toLp F‖^2 = ∫ x, ‖F x‖^2 ∂μ := by
+  rw [InnerProductSpace.norm_sq_eq_re_inner (𝕜 := ℂ),L2.inner_def,
+    ← integral_re (L2.integrable_inner (hF.toLp F) (hF.toLp F))]
+  apply integral_congr_ae
+  filter_upwards [hF.coeFn_toLp] with x hx
+  rw [hx]
+  simp only [inner_self_eq_norm_sq_to_K,Complex.ofReal_re]
+
+theorem compact_horizontal_cauchy (f : ℝ → ℂ) (hf : MemLp f 2 horizontalCompactMeasure) :
+    ‖∫ x, f x ∂horizontalCompactMeasure‖^2 ≤
+      2 * ∫ x, ‖f x‖^2 ∂horizontalCompactMeasure := by
+  have h1 : MemLp (fun _ : ℝ => (1 : ℂ)) 2 horizontalCompactMeasure := memLp_const 1
+  let u := h1.toLp (fun _ => (1 : ℂ))
+  let v := hf.toLp f
+  have hi : inner ℂ u v = ∫ x, f x ∂horizontalCompactMeasure := by
+    rw [L2.inner_def]
+    apply integral_congr_ae
+    filter_upwards [h1.coeFn_toLp,hf.coeFn_toLp] with x hux hvx
+    simp only [u,v,hux,hvx,RCLike.inner_apply',star_one,one_mul]
+  have hu : ‖u‖^2 = (2 : ℝ) := by
+    rw [toLp_norm_sq horizontalCompactMeasure _ h1]
+    norm_num [horizontalCompactMeasure]
+  have hv : ‖v‖^2 = ∫ x, ‖f x‖^2 ∂horizontalCompactMeasure :=
+    toLp_norm_sq horizontalCompactMeasure f hf
+  have hh := pow_le_pow_left₀ (norm_nonneg (inner ℂ u v)) (norm_inner_le_norm u v) 2
+  simpa only [hi,mul_pow,hu,hv] using hh
+
+def partitionAverage (H : Plane → ℂ) (y : ℝ) : ℂ :=
+  ∫ x : ℝ, complexHorizontalPartition x * H (x,y)
+
+private theorem partition_zero_outside {x : ℝ} (hx : x ∉ Icc (-1 : ℝ) 1) :
+    complexHorizontalPartition x = 0 := by
+  have ht : x ∉ tsupport horizontalUnitPartition :=
+    fun h => hx (horizontalUnitPartition_tsupport h)
+  simp only [complexHorizontalPartition,image_eq_zero_of_notMem_tsupport ht,Complex.ofReal_zero]
+
+theorem partitionAverage_eq_compact (H : Plane → ℂ) (y : ℝ) :
+    partitionAverage H y = ∫ x, complexHorizontalPartition x * H (x,y)
+      ∂horizontalCompactMeasure := by
+  symm
+  apply setIntegral_eq_integral_of_forall_compl_eq_zero
+  intro x hx
+  simp only [partition_zero_outside hx,zero_mul]
+
+theorem partitionAverage_memLp_two (H : Plane → ℂ) (c d : ℝ)
+    (hH : MemLp H 2 ((volume : Measure Plane).restrict (Icc (-1 : ℝ) 1 ×ˢ Icc c d))) :
+    MemLp (partitionAverage H) 2 ((volume : Measure ℝ).restrict (Icc c d)) := by
+  let ν : Measure ℝ := volume.restrict (Icc c d)
+  letI : IsFiniteMeasure ν := ⟨by simp [ν]⟩
+  have hprod : MemLp H 2 (horizontalCompactMeasure.prod ν) := by
+    simpa only [horizontalCompactMeasure,ν,Measure.prod_restrict,← Measure.volume_eq_prod] using hH
+  let W : Plane → ℂ := fun p => complexHorizontalPartition p.1 * H p
+  have hW : MemLp W 2 (horizontalCompactMeasure.prod ν) := by
+    apply hprod.of_le
+      ((complexHorizontalPartition_cinfty.continuous.comp continuous_fst).aestronglyMeasurable.mul
+        hprod.aestronglyMeasurable)
+    exact Eventually.of_forall (fun p => by
+      rw [W,norm_mul]
+      exact (mul_le_mul_of_nonneg_right (complexHorizontalPartition_norm_le_one p.1)
+        (norm_nonneg _)).trans_eq (one_mul _))
+  have hW1 : Integrable W (horizontalCompactMeasure.prod ν) := hW.integrable (by norm_num)
+  have hW2 := hW.integrable_norm_pow (by decide : (2 : ℕ) ≠ 0)
+  have hm := hW1.integral_prod_right
+  have hbound : ∀ᵐ y ∂ν,
+      ‖∫ x, W (x,y) ∂horizontalCompactMeasure‖^2 ≤
+        2 * ∫ x, ‖W (x,y)‖^2 ∂horizontalCompactMeasure := by
+    filter_upwards [hW1.prod_left_ae,hW2.prod_left_ae] with y hy1 hy2
+    have hs : MemLp (fun x => W (x,y)) 2 horizontalCompactMeasure :=
+      (memLp_two_iff_integrable_sq_norm hy1.aestronglyMeasurable).mpr hy2
+    exact compact_horizontal_cauchy _ hs
+  have hsquare : Integrable (fun y => ‖∫ x, W (x,y) ∂horizontalCompactMeasure‖^2) ν := by
+    apply (hW2.integral_prod_right.const_mul 2).mono'
+      (hm.aestronglyMeasurable.norm.pow 2)
+    filter_upwards [hbound] with y hy
+    simpa only [Real.norm_eq_abs,abs_of_nonneg (sq_nonneg _)] using hy
+  have hmean : MemLp (fun y => ∫ x, W (x,y) ∂horizontalCompactMeasure) 2 ν :=
+    (memLp_two_iff_integrable_sq_norm hm.aestronglyMeasurable).mpr hsquare
+  convert hmean using 1
+  funext y
+  exact partitionAverage_eq_compact H y
+
+/-- The actual value's compact average is its literal one-period mean
+on the AE height set provided by genuine rectangular Fubini. -/
+theorem partitionAverage_value_eq_actualMean_ae (N : ℕ) [NeZero N]
+    (e : EnergyCompletion N) (c d : ℝ) (hc : 0 < c) :
+    partitionAverage (actualPlanePullback N (physicalProjection N e)) =ᵐ[volume.restrict (Icc c d)]
+      actualFormMean N e := by
+  let H := actualPlanePullback N (physicalProjection N e)
+  let K : Set Plane := Icc (-1 : ℝ) 1 ×ˢ Icc c d
+  have hK : IsCompact K := isCompact_Icc.prod isCompact_Icc
+  have hp : K ⊆ upperChart := fun p hp => hc.trans_le hp.2.1
+  have hH := ((completedCuspRawData N e).local_memLp K hK hp).1
+  have hprod : MemLp H 2 (horizontalCompactMeasure.prod (volume.restrict (Icc c d))) := by
+    simpa only [horizontalCompactMeasure,K,Measure.prod_restrict,← Measure.volume_eq_prod] using hH
+  letI : IsFiniteMeasure ((volume : Measure ℝ).restrict (Icc c d)) := ⟨by simp⟩
+  have hi : Integrable H (horizontalCompactMeasure.prod (volume.restrict (Icc c d))) :=
+    hprod.integrable (by norm_num)
+  filter_upwards [hi.prod_left_ae] with y hy
+  have hw : IntegrableOn (fun x => complexHorizontalPartition x * H (x,y)) (Icc (-1 : ℝ) 1) :=
+    IntegrableOn.continuousOn_mul complexHorizontalPartition_cinfty.continuous.continuousOn
+      hy isCompact_Icc
+  have hs : Function.support (fun x => complexHorizontalPartition x * H (x,y)) ⊆
+      Icc (-1 : ℝ) 1 := by
+    intro x hx
+    by_contra hn
+    exact hx (by simp only [partition_zero_outside hn,zero_mul])
+  have hu := partition_unfold_periodic (fun x => H (x,y))
+    (actualPlanePullback_horizontal_periodic N (physicalProjection N e) y)
+    ((integrableOn_iff_integrable_of_support_subset hs).mp hw)
+  simpa only [partitionAverage,complexHorizontalPartition,actualFormMean_eq_interval,H] using hu
+
+/-- Both actual fields required by the weak Euler pair have local
+ordinary dy L2, without using regularity of any local band adjoint. -/
+theorem actual_completed_mean_gradient_localL2 (N : ℕ) [NeZero N]
+    (e : EnergyCompletion N) (a b : ℝ) (ha : 0 < a) :
+    MemLp (actualFormMean N e) 2 (volume.restrict (Ioo a b)) ∧
+    MemLp (actualFormGradientMean N e) 2 (volume.restrict (Ioo a b)) := by
+  let K : Set Plane := Icc (-1 : ℝ) 1 ×ˢ Icc a b
+  have hK : IsCompact K := isCompact_Icc.prod isCompact_Icc
+  have hp : K ⊆ upperChart := fun p hp => ha.trans_le hp.2.1
+  have hdata := (completedCuspRawData N e).local_memLp K hK hp
+  have hM := partitionAverage_memLp_two _ a b hdata.1
+  have hG := partitionAverage_memLp_two _ a b hdata.2.2
+  have hMa := (memLp_congr_ae (partitionAverage_value_eq_actualMean_ae N e a b ha)).mp hM
+  have hle : (volume : Measure ℝ).restrict (Ioo a b) ≤ volume.restrict (Icc a b) :=
+    Measure.restrict_mono (fun y hy => ⟨hy.1.le,hy.2.le⟩) le_rfl
+  exact ⟨hMa.mono_measure hle,hG.mono_measure hle⟩
+
+end
+end ImbalancedChen.Part3.ActualHorocycleMeanLocalL220261026b

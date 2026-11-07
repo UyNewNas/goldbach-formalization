@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:14:43.764691+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_SELF_REVIEW_LOCAL_UNIFORM_SMOOTH_PROGRESSION_ERROR",
+  "candidate": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SmoothProgressionError.lean",
+    "sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+    "source_declaration_count": 9
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3CommonPoisson"
+  ],
+  "all_complete_source_headers": [
+    {
+      "name": "poisson_decay_step",
+      "kind": "theorem",
+      "private": false,
+      "line": 27,
+      "complete_source_header": "theorem poisson_decay_step {t : ℝ} (ht : 0 < t) (n : ℕ) :\n    t / (1 + t * (n + 1)) ^ 2 ≤\n      1 / (1 + t * n) - 1 / (1 + t * (n + 1))"
+    },
+    {
+      "name": "poisson_decay_sum_range_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 38,
+      "complete_source_header": "theorem poisson_decay_sum_range_le {t : ℝ} (ht : 0 < t) (N : ℕ) :\n    (∑ n ∈ Finset.range N, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1"
+    },
+    {
+      "name": "poisson_decay_summable_nat",
+      "kind": "theorem",
+      "private": false,
+      "line": 49,
+      "complete_source_header": "theorem poisson_decay_summable_nat {t : ℝ} (ht : 0 < t) :\n    Summable (fun n : ℕ ↦ t / (1 + t * ((n : ℝ) + 1)) ^ 2)"
+    },
+    {
+      "name": "poisson_decay_tsum_nat_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 53,
+      "complete_source_header": "theorem poisson_decay_tsum_nat_le {t : ℝ} (ht : 0 < t) :\n    (∑' n : ℕ, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1"
+    },
+    {
+      "name": "poissonNonzeroDecay",
+      "kind": "def",
+      "private": false,
+      "line": 57,
+      "complete_source_header": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ",
+      "complete_definition": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ :=\n  if h = 0 then 0 else t / (1 + |t * h|) ^ 2"
+    },
+    {
+      "name": "poissonNonzeroDecay_summable_tsum_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 60,
+      "complete_source_header": "theorem poissonNonzeroDecay_summable_tsum_le {t : ℝ} (ht : 0 < t) :\n    Summable (poissonNonzeroDecay t) ∧ (∑' h : ℤ, poissonNonzeroDecay t h) ≤ 2"
+    },
+    {
+      "name": "poissonNonzeroFrequency_uniform",
+      "kind": "theorem",
+      "private": false,
+      "line": 85,
+      "complete_source_header": "theorem poissonNonzeroFrequency_uniform :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x : ℝ,\n      ‖∑' h : ℤ, poissonNonzeroFrequency t x h‖ ≤ C"
+    },
+    {
+      "name": "scaledDyadicCutoff_finset_progression_uniform_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 113,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_progression_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q → ∀ b : ℤ,\n      |(∑ m ∈ S, if Int.ModEq q (m : ℤ) b then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C"
+    },
+    {
+      "name": "scaledDyadicCutoff_finset_multiples_uniform_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 126,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_multiples_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q →\n      |(∑ m ∈ S, if q ∣ m then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C"
+    }
+  ],
+  "full_definition_bodies_reviewed": true,
+  "source_semantic_review": {
+    "scope": "All finite support-containing carriers, all M>0, q>0, integer residues, and local Fourier-zero cutoffMass; uniform constant chosen first.",
+    "normalization": "local exact CommonPoisson main_add_fourier theorem only; no provider scalar or integral substitution.",
+    "proof": "Telescoping t/(1+t(n+1))^2 majorant bounds both integer half-lattices by 2; local Schwartz Fourier decay then gives the global uniform remainder bound.",
+    "no_new_premises": true,
+    "no_sorry_custom_axiom_native_decide": true
+  },
+  "proper_parent_union_sourceDAG_delta": {
+    "relative_to": "current parent union containing owned ImbalancedChen.Part3CommonPoisson",
+    "local_added_modules": [
+      "ImbalancedChen.Part3SmoothProgressionError"
+    ],
+    "foreign_added_modules": [],
+    "justification": "The only direct import is the already owned Part3CommonPoisson. Every transitive import is already in that parent union; no foreign import is introduced."
+  },
+  "fixed_provider_provenance": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "Poisson.lean_sha256": "a365f5a2cc1f33fb38dbeeb57206b8c8958b49b0f60ce0713172e94360d0e974",
+    "ArithmeticPoisson.lean_sha256": "77b57886ffe1f40e80f3e53de860323fff67d0705cabf342afeacd1ddc1dd72c"
+  },
+  "lean_validation": "NOT RUN; runtime owner only"
+}

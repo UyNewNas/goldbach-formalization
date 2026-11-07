@@ -1,0 +1,15 @@
+# H continuation: mathematical source work only
+
+Read C:/Users/timot/.codex/attachments/705e46e2-117e-4793-a98b-fa346a69ec53/goal-objective.md and your TASKS.json row before work. Root has read the objective; the human subsequently temporarily instructed continuing below10% and using a reset card at0%. Only root checks quota. Do not check quota or self-stop on an old PAUSE_STATE. Stop only on an explicit current root stop or human stop.
+
+The current user worktree is authoritative and contains extensive user compilation/fix changes since Oct28. Read actual current original production declarations, original manuscript, G draft and F independent review before choosing the next concrete proof. Do not assume old source pins still match. Current manuscript-body.tex SHA ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd; relevant modules are in ../chen-imbalanced-semiprimes/paper/source/modules. Baseline branch codex/proof-continuation-20261015, HEAD25afcbff11562df51ef7ac5113c879123fcd64c6; user staged and unstaged modifications are preserved.
+
+Write only your assigned H directory. All older A-G batches and production/current user files are read-only. Do not compile Lean/lake/build/CI, repair compiler errors, execute numeric/finite certificate replay or decision bodies, or generate new bulk data transcriptions. Do not spawn agents; propose a split to root. No commits by authors.
+
+First identify a genuinely missing original manuscript-internal obligation after the actual existing G work. Prove it in Lean bodies and attach it to the independently defined original caller/count/physical density. Do not repackage a remaining estimate as a premise or simply rename/strengthen/weaken the target. Named genuine foundational external inputs can remain precise documented interfaces; P1/P2, dispersion assembly, internal K/PP and source/count connections are internal work.
+
+Reuse exact current declarations and record source SHA/import/module/installation targets. Do not silently choose a mirror with different bytes. A predecessor uncompiled but with an actual implemented interface can be used; pending predecessor mathematical obligations must remain explicit. Do not fix user-owned compiler problems or alter frozen prior artifacts.
+
+Prefer 1-3 focused modules, shared lemmas and actual obligation elimination. REGISTRY must separate local_step_complete, broad task_complete, compiled:false, kernel_verified:false, formal_credit:0; include chosen model/effort, exact source/import pins, original theorem/parameters, eliminated obligations and remaining internal/external obligations. REPORT must identify manuscript lines/module, original hypotheses, exact source consumer, static scope and genuine gaps. No full original-target completion claim unless every original obligation is actually eliminated.
+
+On a true gap, send root the original passage, strongest derived statement, failed conditions, affected nodes and attempted repair routes. Continue unaffected work. On completion send exact hashes and wait for independent review; do not modify delivered bytes without root/reviewer coordination.

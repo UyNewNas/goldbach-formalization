@@ -1,0 +1,115 @@
+--- source-reviews/drafts/20261024-after221-root-full-graph-capture-V1-SOURCEONLY.py.txt
++++ source-reviews/drafts/20261024-after221-root-full-graph-capture-R2-V1-SOURCEONLY.py.txt
+@@ -1,6 +1,9 @@
+-"""SOURCEONLY / UNEXECUTED ROOT after221 V1 full-input capture candidate.
+-
+-Adapted from immutable fcc4ec76 capture. Requires ROOT's separate hash-bound
++"""SOURCEONLY / UNEXECUTED ROOT after221 R2 V1 full-input capture candidate.
++
++Adapted from immutable after221 capture1e47dfe0; keeps it and originalfcc4ec76
++hash-pinned as history. Old audit9c6a79b0 is history only; ROOT must specify the
++new completed-three original audit spec matching the current final intake.
++Requires ROOT's separate hash-bound
+ pre-capture authorization, complete final-five original evidence intake and
+ three absent ROOT-selected output paths. No pending source is assumed passed.
+ Preserves all old full-source/native/compiler/cachelib graph and protected,
+@@ -16,12 +19,15 @@
+ 
+ COLLECTOR_REL = 'source-reviews/drafts/20261024-after221-terminal-collector-V1-SOURCEONLY.py.txt'
+ COLLECTOR_SHA = '25b96881ca14029395cf22e842321b65336debd815452a451d55800548d3a933'
+-SOURCE_PARENT_REL = 'source-reviews/drafts/20261023-root-next-five-after216-full-graph-capture-V1-SOURCEONLY.py.txt'
+-SOURCE_PARENT_SHA = 'fcc4ec765152eb9c2dd9c07114fa1a1b52508600f52b2deae5a359f21913ae21'
++SOURCE_PARENT_REL = 'source-reviews/drafts/20261024-after221-root-full-graph-capture-V1-SOURCEONLY.py.txt'
++SOURCE_PARENT_SHA = '1e47dfe0417d74679a7edd195433a75b751975498078882b555d3e74845ca44a'
+ BASELINE_SHA = '2986ecf75914ddecef7c8fe106a642a691b119371ffdb27df36c833734c8498e'
+ ACCEPTANCE_SHA = '59a715d3e6f288d7042288e7a595c9103468348aefe387b705ac4e1456f5d59b'
+ BASELINE_RECORDS_SHA = '3d2a61b28bb328d27b08c93fabab0624e1b12162695f2a96311ebbc0f8b22098'
+ HISTORICAL_FREEZE_SHA = '79775daf826592d7c917e5b9f90ce5d31a4b8c471cad1cf63735553bb3d6d98f'
++
++ORIGINAL_CAPTURE_PARENT = {'path': 'source-reviews/drafts/20261023-root-next-five-after216-full-graph-capture-V1-SOURCEONLY.py.txt',
++                           'sha256': 'fcc4ec765152eb9c2dd9c07114fa1a1b52508600f52b2deae5a359f21913ae21'}
+ 
+ EXPECTED_THREE = ('ImbalancedChen.Part3ActualLogTagBetaRestriction',
+                   'ImbalancedChen.Part3ActualChartTagHeightCount',
+@@ -60,7 +66,9 @@
+     state = root / '.lake/proof-continuation'
+     collector_path = state / COLLECTOR_REL
+     need(sha(collector_path) == COLLECTOR_SHA, 'Pinned after221 collector draft changed')
+-    need(sha(state / SOURCE_PARENT_REL) == SOURCE_PARENT_SHA, 'Pinned full-graph source parent changed')
++    need(sha(state / SOURCE_PARENT_REL) == SOURCE_PARENT_SHA, 'Immutable after221 V1 capture parent changed')
++    need(sha(state / ORIGINAL_CAPTURE_PARENT['path']) == ORIGINAL_CAPTURE_PARENT['sha256'],
++         'Immutable original full-graph capture parent changed')
+     x = load_collector(collector_path)
+     qp = state / x.QUALIFIER
+     need(sha(qp) == x.QUALIFIER_SHA, 'Pinned normal-import qualifier changed')
+@@ -82,6 +90,7 @@
+         return path
+     authority = c.read(pin(authority_ref))
+     need(authority['status'] == 'ROOT_AUTHORIZED_AFTER221_FULL_GRAPH_CAPTURE_V1'
++         and authority['capture_revision'] == 'R2_V1'
+          and authority['capture_output_authorized'] is True
+          and authority['no_compiler_or_audit_invocation'] is True,
+          'Fresh ROOT pre-capture authority required')
+@@ -92,6 +101,13 @@
+     pin(authority['collector'])
+     need(x.same_ref(c, authority['baseline_acceptance'], x.ACCEPTANCE), 'Pre-capture accepted ROOT221 binding')
+     pin(authority['baseline_acceptance'])
++    need(x.same_ref(c, authority['historical_three_audit'], KNOWN_THREE_AUDIT),
++         'Historical completed-three original audit9c6 must remain separately identified and immutable')
++    pin(authority['historical_three_audit'])
++    need(x.same_ref(c, authority['historical_capture_source'],
++                    {'path': SOURCE_PARENT_REL, 'sha256': SOURCE_PARENT_SHA}),
++         'Historical after221 V1 capture source must remain separately identified and immutable')
++    pin(authority['historical_capture_source'])
+     need(isinstance(authority['resource_reason'], str) and authority['resource_reason'].strip(),
+          'ROOT pre-capture resource reason required')
+     resource_reason = authority['resource_reason']
+@@ -103,7 +119,7 @@
+     for key, value, suffix in output_specs:
+         output = c.path(value).resolve()
+         need(output.parent == (state / 'rounds').resolve()
+-             and output.name.startswith('20261024-root-after221-') and output.name.endswith(suffix)
++             and output.name.startswith('20261024-root-after221-r2-') and output.name.endswith(suffix)
+              and not output.exists() and c.path(authority['outputs'][key]).resolve() == output,
+              'Only fresh absent ROOT-selected direct rounds outputs may be created: ' + key)
+         outputs[key] = output
+@@ -132,7 +148,14 @@
+     for key, spec in intake['audit_receipts'].items():
+         rp = pin(spec['ref'])
+         if set(groups[key]) == set(EXPECTED_THREE):
+-            need(x.same_ref(c, spec['ref'], KNOWN_THREE_AUDIT), 'Original completed-three audit is immutable; no replacement')
++            expected_three = authority['expected_completed_three_audit']
++            need(isinstance(expected_three, dict) and set(expected_three) == {'ref', 'targets', 'sidecars'}
++                 and expected_three == spec and x.same_ref(c, expected_three['ref'], spec['ref'])
++                 and expected_three['targets'] == {m: targets[m] for m in groups[key]},
++                 'ROOT current completed-three audit spec must exactly bind new intake/current final hashes')
++            need(not x.same_ref(c, spec['ref'], KNOWN_THREE_AUDIT),
++                 'Historical audit9c6 cannot stand in for current repaired-source original audit')
++            pin(expected_three['ref'])
+         for filename, digest in spec['sidecars'].items():
+             pin({'path': str(rp.parent / filename), 'sha256': digest})
+ 
+@@ -234,7 +257,10 @@
+         'status': 'ROOT_FROZEN_COMPILER_CACHELIB_INPUTS',
+         'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+         'scope': 'ROOT read-only exact final-five after221 source and full imported compiler/cachelib graph capture; normal imported-environment trust; no compiler/checker/audit invocation',
+-        'targets': targets, 'capture_authority': authority_ref,
++        'targets': targets, 'capture_authority': authority_ref, 'capture_revision': 'R2_V1',
++        'historical_three_audit': authority['historical_three_audit'],
++        'expected_completed_three_audit': authority['expected_completed_three_audit'],
++        'historical_capture_source': authority['historical_capture_source'],
+         'strict_producers_verified': strict_checked,
+         'complete_original_evidence_intake': intake_ref,
+         'audit_inputs': audit_inputs,
+@@ -259,7 +285,10 @@
+         'graph_modules': len(graph_stable['graph']),
+         'resource_reason': resource_reason,
+         'classification': classification,
+-        'capture_script': c.ref(Path(__file__)), 'capture_authority': authority_ref,
++        'capture_script': c.ref(Path(__file__)), 'capture_authority': authority_ref, 'capture_revision': 'R2_V1',
++        'historical_three_audit': authority['historical_three_audit'],
++        'expected_completed_three_audit': authority['expected_completed_three_audit'],
++        'historical_capture_source': authority['historical_capture_source'],
+         'baseline_acceptance': x.ACCEPTANCE,
+         'terminal_acceptance': None,
+         'authority_created': False,

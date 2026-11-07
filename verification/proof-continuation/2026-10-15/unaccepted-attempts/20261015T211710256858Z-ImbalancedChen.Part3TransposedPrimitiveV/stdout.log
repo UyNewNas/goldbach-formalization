@@ -1,0 +1,193 @@
+ImbalancedChen/Part3TransposedPrimitiveV.lean:66:59: error: unsolved goals
+d : MediumAtom
+m q : ℕ
+⊢ (∑ x ∈ d.alphaCarrier, if ↑m * ↑x % ↑q = d.residue % ↑q then d.alpha x else 0) =
+    ∑ n ∈ d.alphaCarrier, if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:84:36: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedPrimitiveV.lean:123:4: error: unsolved goals
+case pos
+d : MediumAtom
+m q : ℕ
+a✝² : q ∈ d.physicalFactorModuli
+r : ℕ
+a✝¹ : r ∈ d.physicalFactorModuli
+hm : m.Coprime r
+n : ℕ
+a✝ : n ∈ d.alphaCarrier
+hc : ↑m * ↑n ≡ d.residue [ZMOD ↑q]
+⊢ d.groupedFactorGamma q * d.alpha n * star (if m.Coprime r then coprimeMass d.alphaCarrier d.alpha r else 0) *
+        star (d.groupedFactorGamma r) *
+      (↑r.totient)⁻¹ =
+    d.groupedFactorGamma q * d.alpha n * star (d.groupedFactorGamma r) * (↑r.totient)⁻¹ *
+        star (coprimeMass d.alphaCarrier d.alpha r) *
+      if m.Coprime r ∧ True then 1 else 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:126:4: error: unsolved goals
+case neg
+d : MediumAtom
+m q : ℕ
+a✝² : q ∈ d.physicalFactorModuli
+r : ℕ
+a✝¹ : r ∈ d.physicalFactorModuli
+hm : m.Coprime r
+n : ℕ
+a✝ : n ∈ d.alphaCarrier
+hc : ¬↑m * ↑n ≡ d.residue [ZMOD ↑q]
+⊢ 0 = mixedPairCoefficient d q r * (d.alpha n * if m.Coprime r ∧ False then 1 else 0)
+ImbalancedChen/Part3TransposedPrimitiveV.lean:117:15: error: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [if_true, true_and, star_div₀, star_mul, star_natCast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:117:19: error: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hm, true_and, star_div₀, star_mul, star_natCast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:117:28: error: This simp argument is unused:
+  true_and
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hm, if_true, star_div₀, star_mul, star_natCast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:123:30: error: This simp argument is unused:
+  mul_one
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_true, mixedPairCoefficient]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:124:33: error: This simp argument is unused:
+  mul_inv_rev
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [div_eq_mul_inv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:127:71: error: This simp argument is unused:
+  zero_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hm, if_false, false_and, mul_zero, zero_div, star_zero, Finset.sum_const_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedPrimitiveV.lean:153:2: error: unsolved goals
+case pos
+d : MediumAtom
+q : ℕ
+a✝³ : q ∈ d.physicalFactorModuli
+r : ℕ
+a✝² : r ∈ d.physicalFactorModuli
+n : ℕ
+a✝¹ : n ∈ d.alphaCarrier
+m : ℕ
+a✝ : m ∈ d.transposedAtom.commonSmoothCarrier
+hc : m.Coprime r ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑q]
+⊢ (↑(d.transposedAtom.commonSmoothWeight m) * mixedPairCoefficient d q r * d.alpha n *
+      if m.Coprime r ∧ True then 1 else 0) =
+    mixedPairCoefficient d q r * d.alpha n * ↑(if m.Coprime r ∧ True then d.transposedAtom.commonSmoothWeight m else 0)
+ImbalancedChen/Part3TransposedPrimitiveV.lean:153:19: error: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, mul_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:153:28: error: This simp argument is unused:
+  mul_one
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:155:60: error: This simp argument is unused:
+  zero_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_false, mul_zero, Complex.ofReal_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedPrimitiveV.lean:263:8: error: `simp` made no progress
+ImbalancedChen/Part3TransposedPrimitiveV.lean:278:6: error: unsolved goals
+case neg
+C : ℝ
+hC : 0 < C
+hbound :
+  ∀ (M : ℝ),
+    0 < M →
+      ∀ (S : Finset ℕ),
+        (∀ (m : ℕ), CommonSmoothCutoff.scaledDyadicCutoff M ↑m ≠ 0 → m ∈ S) →
+          ∀ (q r n : ℕ),
+            0 < q →
+              r ≠ 0 →
+                n.Coprime q →
+                  ∀ (a : ℤ),
+                    a.gcd ↑q = 1 →
+                      |(∑ m ∈ S,
+                              if m.Coprime r ∧ ↑m * ↑n ≡ a [ZMOD ↑q] then CommonSmoothCutoff.scaledDyadicCutoff M ↑m
+                              else 0) -
+                            M * CommonSmoothCutoff.cutoffMass / ↑q *
+                              ∑ d ∈ r.divisors with d.Coprime q, ↑(ArithmeticFunction.moebius d) / ↑d| ≤
+                        C * ↑(#r.divisors)
+d : MediumAtom
+hV : 1 ≤ d.V
+q r : ℕ
+hq : 0 < q
+hr : r ≠ 0
+ha : d.residue.gcd ↑q = 1
+z : ℝ :=
+  d.V * CommonSmoothCutoff.cutoffMass / ↑q * ∑ e ∈ r.divisors with e.Coprime q, ↑(ArithmeticFunction.moebius e) / ↑e
+n : ℕ
+a✝ : n ∈ d.alphaCarrier
+hn : ¬n.Coprime q
+hz :
+  (∑ m ∈ d.transposedAtom.commonSmoothCarrier,
+      if m.Coprime r ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑q] then d.transposedAtom.commonSmoothWeight m else 0) =
+    0
+⊢ 0 ≤ 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:317:6: error: unsolved goals
+case pos
+C : ℝ
+hC : 0 < C
+hbound :
+  ∀ (d : MediumAtom),
+    1 ≤ d.V →
+      ∀ (q r : ℕ),
+        0 < q →
+          r ≠ 0 →
+            d.residue.gcd ↑q = 1 →
+              ‖mixedProgressionMass d q r -
+                    coprimeMass d.alphaCarrier d.alpha q *
+                      ↑(d.V * CommonSmoothCutoff.cutoffMass / ↑q *
+                          ∑ e ∈ r.divisors with e.Coprime q, ↑(ArithmeticFunction.moebius e) / ↑e)‖ ≤
+                C * coprimeMass d.alphaCarrier (fun n => ‖d.alpha n‖) q * ↑(#r.divisors)
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+q : ℕ
+hq : q ∈ d.physicalFactorModuli
+r : ℕ
+hr : r ∈ d.physicalFactorModuli
+hG : d.groupedFactorGamma q = 0
+⊢ 0 ≤ 0

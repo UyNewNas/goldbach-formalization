@@ -1,0 +1,239 @@
+{
+  "status": "SOURCE_ONLY_ACTUAL_DIAGNOSTIC_PROOF_API_REBIND_PENDING_INDEPENDENT_REVIEW",
+  "candidate": "ImbalancedChen\\Part3PairedAlphaDeletion.lean",
+  "old_sha256": "1748776f2ace970f03ed0277d825ef62cf1699eff0163f54098708836b2e405a",
+  "new_sha256": "fd0ad3141c385e0daec07d1e8b334cafb2fd2895bb9f13990b550cf7f7646742",
+  "failed_stdout": ".lake/proof-continuation/runs/20261015T211024028732Z-ImbalancedChen.Part3PairedAlphaDeletion/stdout.log",
+  "failed_stdout_sha256": "27ab8e34e691ef22b78fb195cdc3e56d732c1249cacd6d39b0718cdcd59e3d54",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3PairedAlphaDeletion.1748776f2ace970f03ed0277d825ef62cf1699eff0163f54098708836b2e405a.lean",
+  "edits": [
+    {
+      "old": "_ ≤ (Nat.floor (2 * d.V) / q + 1 : ℕ) := by",
+      "new": "_ ≤ ((Nat.floor (2 * d.V) / q + 1 : ℕ) : ℝ) := by",
+      "occurrences": 1
+    },
+    {
+      "old": "    simp only [mul_sub, mul_div_assoc, mul_ite, mul_one, mul_zero]\n    congr 1\n    exact if_congr he rfl rfl\n  simp_rw [hterm, Finset.sum_sub_distrib, Finset.sum_div]",
+      "new": "    simp only [mul_sub, mul_ite, mul_one, mul_zero]\n    congr 1\n    · exact if_congr he rfl rfl\n    · by_cases hc : (n * m).Coprime q <;> simp [hc]\n  simp_rw [hterm]\n  rw [Finset.sum_sub_distrib, ← Finset.sum_div]",
+      "occurrences": 1
+    },
+    {
+      "old": "  obtain ⟨_, _, _, _, _, _, _, hres, _⟩ := hd\n",
+      "new": "  have hdKeep := hd\n  obtain ⟨_, _, _, _, _, _, _, hres, _⟩ := hdKeep\n",
+      "occurrences": 1
+    },
+    {
+      "old": "  obtain ⟨hU, hV, hQ1, _, _, _, _, _, hg1, _⟩ := hd\n",
+      "new": "  have hdKeep := hd\n  obtain ⟨hU, hV, hQ1, _, _, _, _, _, hg1, _⟩ := hdKeep\n",
+      "occurrences": 1
+    },
+    {
+      "old": "hx2 ((le_max_right x1 x2).trans",
+      "new": "hx2 d.scale ((le_max_right x1 x2).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "by rw [mul_pow, Real.rpow_natCast]",
+      "new": "by rw [mul_pow]",
+      "occurrences": 1
+    },
+    {
+      "old": "hx1 ((le_max_left x1 x2).trans",
+      "new": "hx1 d.scale ((le_max_left x1 x2).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "  have hbracket :\n",
+      "new": "  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\n  have hbracket :\n",
+      "occurrences": 1
+    },
+    {
+      "old": "hx3 ((le_max_right x2 x3).trans",
+      "new": "hx3 d.scale ((le_max_right x2 x3).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "hx2 ((le_max_left x2 x3).trans",
+      "new": "hx2 d.scale ((le_max_left x2 x3).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "hx3 ((le_max_right x2 x3).trans",
+      "new": "hx3 (F i).scale ((le_max_right x2 x3).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "hx2 ((le_max_left x2 x3).trans",
+      "new": "hx2 (F i).scale ((le_max_left x2 x3).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "      add_le_add_left (div_le_div_of_nonneg_right (le_mul_of_one_le_right hU htau)\n        (by positivity)) _",
+      "new": "      add_le_add le_rfl (div_le_div_of_nonneg_right (le_mul_of_one_le_right hU htau)\n        (Real.rpow_nonneg (by linarith : 0 ≤ Real.log (F i).scale) A))",
+      "occurrences": 1
+    }
+  ],
+  "reverse_all_edits_reconstructs_exact_old_bytes": true,
+  "headers_definitions_imports_thresholds_pins_mathematics_changed": false,
+  "lean_invoked": false,
+  "notes": [
+    "Explicit real cast for Nat cardinal step.",
+    "Primitive kernel splits progression and primitive-mean congruences, and sum_div is applied in the correct reverse direction.",
+    "Preserve admissibility before destructuring a copy.",
+    "Explicit scalar argument for eventually_atTop witnesses.",
+    "Remove redundant rpow_natCast after numeral defeq.",
+    "Expose already given V nonnegativity.",
+    "Use add_le_add le_rfl and the explicit actual log denominator."
+  ],
+  "all_34_complete_headers_and_4_definitions_unchanged": [
+    {
+      "name": "MediumAtom.cleanedAlpha",
+      "complete_header": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ",
+      "complete_definition": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n"
+    },
+    {
+      "name": "MediumAtom.divisorAlpha",
+      "complete_header": "def MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ",
+      "complete_definition": "def MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0"
+    },
+    {
+      "name": "MediumAtom.cleanedAlphaAtom",
+      "complete_header": "def MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom",
+      "complete_definition": "def MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }"
+    },
+    {
+      "name": "MediumAtom.divisorAlphaAtom",
+      "complete_header": "def MediumAtom.divisorAlphaAtom (d : MediumAtom) : MediumAtom",
+      "complete_definition": "def MediumAtom.divisorAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.divisorAlpha }"
+    },
+    {
+      "name": "MediumAtom.alpha_eq_clean_add_divisorAlpha",
+      "complete_header": "theorem MediumAtom.alpha_eq_clean_add_divisorAlpha (d : MediumAtom) (n : ℕ) :\n    d.alpha n = d.cleanedAlpha n + d.divisorAlpha n"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_clean_add_divisorAlpha",
+      "complete_header": "theorem MediumAtom.signedError_eq_clean_add_divisorAlpha (d : MediumAtom) :\n    d.signedError = d.cleanedAlphaAtom.signedError + d.divisorAlphaAtom.signedError"
+    },
+    {
+      "name": "MediumAtom.signedError_sub_cleanAlpha_eq_divisorAlpha",
+      "complete_header": "theorem MediumAtom.signedError_sub_cleanAlpha_eq_divisorAlpha (d : MediumAtom) :\n    d.signedError - d.cleanedAlphaAtom.signedError = d.divisorAlphaAtom.signedError"
+    },
+    {
+      "name": "mediumAdmissible_cleanedAlphaAtom",
+      "complete_header": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom"
+    },
+    {
+      "name": "MediumAtom.cleanedAlpha_ne_zero_not_dvd",
+      "complete_header": "theorem MediumAtom.cleanedAlpha_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlpha n ≠ 0) : ¬(n : ℤ) ∣ d.residue"
+    },
+    {
+      "name": "MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd",
+      "complete_header": "theorem MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlphaAtom.transposedAtom.beta n ≠ 0) : ¬(n : ℤ) ∣ d.residue"
+    },
+    {
+      "name": "one_le_scale",
+      "complete_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale"
+    },
+    {
+      "name": "card_product_modEq_le",
+      "complete_header": "theorem card_product_modEq_le (K q n : ℕ) (a : ℤ) (hn : n.Coprime q) :\n    ((Icc 0 K).filter (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) a)).card ≤\n      K / q + 1"
+    },
+    {
+      "name": "betaCarrier_progression_card_le",
+      "complete_header": "theorem betaCarrier_progression_card_le\n    {d : MediumAtom} (hV : 1 ≤ d.V) {q n : ℕ} (hq : 0 < q) (hn : n.Coprime q) :\n    ((d.betaCarrier.filter\n      (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue)).card : ℝ) ≤\n        2 * d.V / q + 1"
+    },
+    {
+      "name": "active_factor_coprime_residue",
+      "complete_header": "private theorem active_factor_coprime_residue\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) (hgamma : d.complexFactorGamma a ≠ 0) :\n    (complexFactorModulus a).Coprime d.residue.natAbs"
+    },
+    {
+      "name": "active_grouped_coprime_residue",
+      "complete_header": "private theorem active_grouped_coprime_residue\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hg : d.groupedFactorGamma q ≠ 0) : q.Coprime d.residue.natAbs"
+    },
+    {
+      "name": "divisorAlphaMass_le_tau",
+      "complete_header": "theorem divisorAlphaMass_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (ha : d.residue ≠ 0) :\n    (∑ n ∈ d.alphaCarrier, ‖d.divisorAlpha n‖) ≤\n      (fouvryTau 2 d.residue.natAbs : ℝ)"
+    },
+    {
+      "name": "betaCarrier_card_le",
+      "complete_header": "private theorem betaCarrier_card_le {d : MediumAtom} (hV : 1 ≤ d.V) :\n    (d.betaCarrier.card : ℝ) ≤ 2 * d.V"
+    },
+    {
+      "name": "norm_sum_ite_le_card",
+      "complete_header": "private theorem norm_sum_ite_le_card (S : Finset ℕ) (beta : ℕ → ℂ)\n    (p : ℕ → Prop) [DecidablePred p] {A : ℝ}\n    (hbeta : ∀ m ∈ S, ‖beta m‖ ≤ A) :\n    ‖∑ m ∈ S, if p m then beta m else 0‖ ≤ A * ((S.filter p).card : ℝ)"
+    },
+    {
+      "name": "betaKernelMass_norm_le",
+      "complete_header": "private theorem betaKernelMass_norm_le\n    {d : MediumAtom} (hV : 1 ≤ d.V) {q n : ℕ} (hq : 0 < q) (hn : n.Coprime q)\n    {A : ℝ} (hA : 0 ≤ A) (hbeta : ∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ A) :\n    ‖∑ m ∈ d.betaCarrier, d.beta m * complexPrimitiveKernel d.residue q n m‖ ≤\n      A * (2 * d.V / q + 1 + 2 * d.V / q.totient)"
+    },
+    {
+      "name": "grouped_weight_sums",
+      "complete_header": "private theorem grouped_weight_sums\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖ / q) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 3 ∧\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) ≤\n        d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 ∧\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖ / q.totient) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 6"
+    },
+    {
+      "name": "centeredRow_norm_le_on_signed_divisor",
+      "complete_header": "theorem centeredRow_norm_le_on_signed_divisor\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {n : ℕ}\n    (hn : (n : ℤ) ∣ d.residue) {A : ℝ} (hA : 0 ≤ A)\n    (hbeta : ∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ A) :\n    ‖d.complexCenteredRow n‖ ≤ A *\n      (2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 3 +\n        d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 +\n          2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 6)"
+    },
+    {
+      "name": "signedError_sub_cleanAlpha_norm_le_finite",
+      "complete_header": "theorem signedError_sub_cleanAlpha_norm_le_finite\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {A : ℝ} (hA : 0 ≤ A)\n    (hbeta : ∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ A) :\n    ‖d.signedError - d.cleanedAlphaAtom.signedError‖ ≤\n      (∑ n ∈ d.alphaCarrier, ‖d.divisorAlpha n‖) * A *\n        (2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 3 +\n          d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 +\n            2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 6)"
+    },
+    {
+      "name": "divisorAlphaMass_subpower",
+      "complete_header": "theorem divisorAlphaMass_subpower (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      0 < c0 → MediumAdmissible B sigma kappa c0 d →\n        (∑ n ∈ d.alphaCarrier, ‖d.divisorAlpha n‖) ≤ C * d.scale ^ epsilon"
+    },
+    {
+      "name": "beta_norm_subpower",
+      "complete_header": "private theorem beta_norm_subpower (B : ℕ) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ m ∈ d.betaCarrier,\n        ‖d.beta m‖ ≤ C * d.scale ^ epsilon"
+    },
+    {
+      "name": "actual_geometry_bounds",
+      "complete_header": "theorem actual_geometry_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.scale ^ sigma ≤ d.U ∧ d.V ≤ d.scale ^ (1 - sigma) ∧\n      d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 10 * sigma)"
+    },
+    {
+      "name": "eventually_const_log_rpow_le_rpow",
+      "complete_header": "private theorem eventually_const_log_rpow_le_rpow (C A : ℝ) (hC : 0 ≤ C)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∀ᶠ x : ℝ in atTop, C * Real.log x ^ A ≤ x ^ epsilon"
+    },
+    {
+      "name": "eventually_cap_log_cost_le",
+      "complete_header": "private theorem eventually_cap_log_cost_le (sigma : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        (1 + Real.log d.physicalFactorCap) ^ 6 ≤ d.scale ^ (sigma / 4)"
+    },
+    {
+      "name": "signedError_sub_cleanAlpha_power_bound",
+      "complete_header": "theorem signedError_sub_cleanAlpha_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ‖d.signedError - d.cleanedAlphaAtom.signedError‖ ≤\n          C * d.scale ^ (1 - sigma / 2)"
+    },
+    {
+      "name": "signedError_sub_cleanAlpha_log_payment",
+      "complete_header": "theorem signedError_sub_cleanAlpha_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ‖d.signedError - d.cleanedAlphaAtom.signedError‖ ≤\n          d.scale / Real.log d.scale ^ A"
+    },
+    {
+      "name": "auxSWError_eq_clean_add_divisorAlpha",
+      "complete_header": "private theorem auxSWError_eq_clean_add_divisorAlpha (d : MediumAtom) (k q b : ℕ) :\n    d.auxSWError k q b =\n      d.cleanedAlphaAtom.auxSWError k q b + d.divisorAlphaAtom.auxSWError k q b"
+    },
+    {
+      "name": "norm_sum_ite_le_l1",
+      "complete_header": "private theorem norm_sum_ite_le_l1 (S : Finset ℕ) (beta : ℕ → ℂ)\n    (p : ℕ → Prop) [DecidablePred p] :\n    ‖∑ n ∈ S, if p n then beta n else 0‖ ≤ ∑ n ∈ S, ‖beta n‖"
+    },
+    {
+      "name": "auxSWError_sub_cleanAlpha_norm_le",
+      "complete_header": "theorem auxSWError_sub_cleanAlpha_norm_le (d : MediumAtom) (k q b : ℕ) (hq : 0 < q) :\n    ‖d.auxSWError k q b - d.cleanedAlphaAtom.auxSWError k q b‖ ≤\n      2 * ∑ n ∈ d.alphaCarrier, ‖d.divisorAlpha n‖"
+    },
+    {
+      "name": "uniformAuxiliarySW_cleanedAlphaAtom",
+      "complete_header": "theorem uniformAuxiliarySW_cleanedAlphaAtom {ι : Type*}\n    (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun i ↦ (F i).cleanedAlphaAtom) C0"
+    },
+    {
+      "name": "restrictedMediumTarget_of_cleanedAlphaAtom",
+      "complete_header": "theorem restrictedMediumTarget_of_cleanedAlphaAtom {ι : Type*}\n    (F : ι → MediumAtom) (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hclean : RestrictedMediumTarget (fun i ↦ (F i).cleanedAlphaAtom)) :\n    RestrictedMediumTarget F"
+    }
+  ],
+  "imports_unchanged": [
+    "import ImbalancedChen.Part3SignedDivisorDeletion",
+    "import ImbalancedChen.Part3TransposedDispersion"
+  ],
+  "pins_unchanged_snapshot": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  }
+}

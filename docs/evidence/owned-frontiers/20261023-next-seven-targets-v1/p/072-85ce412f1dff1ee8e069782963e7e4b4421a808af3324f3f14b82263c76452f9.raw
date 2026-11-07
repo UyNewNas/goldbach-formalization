@@ -1,0 +1,149 @@
+"""ROOT saved-evidence verification, independent of collector implementation.
+
+No compiler, Runtime, checker or native graph recapture is invoked. Native graph
+current binding uses ROOT's actual full freeze and the observed collector's
+exact before/after gates. This is not an independent native closure replay.
+"""
+from pathlib import Path
+import json, hashlib, importlib.util, argparse
+from datetime import datetime, timezone
+
+ROOT = Path(__file__).resolve().parents[3]
+STATE = ROOT / '.lake/proof-continuation'
+ap = argparse.ArgumentParser()
+ap.add_argument('--proposal', required=True)
+ap.add_argument('--proposal-sha256', required=True)
+ap.add_argument('--witness', required=True)
+ap.add_argument('--witness-sha256', required=True)
+a = ap.parse_args()
+common_path = STATE / 'rounds/20261022-EU-asym-ordered-power-current196-common-SOURCE-ONLY.py'
+assert hashlib.sha256(common_path.read_bytes()).hexdigest() == 'cefd2285e0472fa825b371bf7abfcc105ab809db7c2aa3e485b92a6521efcba0'
+spec = importlib.util.spec_from_file_location('root216_readonly_common', common_path)
+c = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(c)
+assert c.ROOT.resolve() == ROOT
+verified = {}
+
+def bind(reference):
+    p = c.bound(reference)
+    verified[str(p.resolve())] = reference['sha256']
+    return p
+
+def read(reference):
+    return c.read(bind(reference))
+
+def ref(p):
+    p = c.path(p)
+    return {'path': str(p), 'sha256': c.sha(p)}
+
+proposal_ref = {'path': a.proposal, 'sha256': a.proposal_sha256}
+witness_ref = {'path': a.witness, 'sha256': a.witness_sha256}
+p, w = read(proposal_ref), read(witness_ref)
+assert p['status'] == 'PROPOSAL_ONLY_ROOT_ACCEPTANCE_REQUIRED'
+assert w['observed_exit_code'] == 0
+assert w['observed_stdout_json']['status'] == 'SOURCEONLY_PROPOSAL_WRITTEN_PENDING_ROOT_ACCEPTANCE'
+for k, v in [('acceptance_proposal', proposal_ref), ('candidate_census', p['candidate_census'])]:
+    assert bind(w['observed_stdout_json'][k]).resolve() == bind(v).resolve()
+assert not w['compiler_checker_started_by_collector'] and not w['root_terminal_acceptance_created_by_collector']
+authority = read(p['authority'])
+assert authority['status'] == 'ROOT_AUTHORIZED_NEXT_SEVEN_TERMINAL_PROPOSAL_V2'
+assert authority['no_compiler_or_audit_invocation'] and authority['proposal_output_authorized']
+assert authority['complete_original_evidence_intake'] == p['complete_original_evidence_intake']
+collector = bind(authority['collector'])
+assert w['command'][0:2] == ['/usr/bin/python3', '-B']
+assert c.path(w['command'][2]).resolve() == collector.resolve()
+assert w['command'][3:5] == ['--root', str(ROOT)]
+assert w['command'][5] == '--authority' and c.path(w['command'][6]).resolve() == bind(p['authority']).resolve()
+assert w['command'][7:] == ['--authority-sha256', p['authority']['sha256']]
+source_peer = read(authority['collector_independent_peer'])
+assert source_peer['status'].startswith('PASS_SOURCEONLY_')
+assert source_peer['reviewed_collector_sha256'] == authority['collector']['sha256']
+intake = read(p['complete_original_evidence_intake'])
+assert intake['status'] == 'ROOT_COMPLETE_SEVEN_TARGET_ORIGINAL_EVIDENCE_INTAKE_V2'
+assert authority['targets'] == intake['targets'] and len(intake['targets']) == 7
+assert authority['strict_producers'] == intake['strict_producers']
+assert authority['audit_receipts'] == intake['audit_receipts']
+manifest = read(p['candidate_manifest'])
+assert manifest['targets'] == intake['targets']
+old = read(p['baseline_acceptance'])
+assert old['status'] == 'ROOT_NEXT_THREE_ACTUAL209_TERMINAL_ACCEPTED'
+oldc, oldrows = read(old['current_census']), read(old['complete_declarations'])
+census, rows = read(p['candidate_census']), read(p['complete_declarations'])
+assert all(census['modules'][k] == v for k, v in oldc['modules'].items())
+row_map = {(r['module'], r['name']): r for r in rows}
+assert len(row_map) == len(rows)
+assert all(row_map[(r['module'], r['name'])] == r for r in oldrows)
+targets = set(intake['targets'])
+assert set(census['modules']) - set(oldc['modules']) == targets
+assert not (targets & set(oldc['modules']))
+sources = {q.relative_to(ROOT).as_posix(): c.sha(q) for q in sorted((ROOT/'ImbalancedChen').rglob('*.lean'))}
+assert sources == read(p['fresh_all_current_source_freeze'])
+graph_freeze = read(p['compiler_cachelib_freeze'])
+assert graph_freeze['status'] == 'ROOT_FROZEN_COMPILER_CACHELIB_INPUTS'
+assert graph_freeze['targets'] == intake['targets']
+assert graph_freeze['source_count'] == len(sources)
+assert graph_freeze['graph_modules'] == len(graph_freeze['graph_stable']['graph'])
+for path, digest in c.PROTECTED.items(): assert c.sha(path) == digest
+all_records, receipts = [], set()
+for module, entry in census['modules'].items():
+    assert c.sha(ROOT/(module.replace('.', '/')+'.lean')) == entry['source_sha256']
+    rp = bind({'path':entry['owned_receipt'], 'sha256':entry['owned_receipt_sha256']})
+    _, records, _ = c.validate_records(rp, module, entry['source_sha256'], entry['object_parts'])
+    assert len(records) == entry['complete_serialized_declarations']
+    assert c.sha(rp.parent/'declarations.json') == entry['declarations_json_sha256']
+    all_records.extend(records)
+    receipts.add(str(rp.resolve()))
+assert sorted(all_records, key=lambda r:(r['module'],r['name'])) == rows
+new_counts = {m:sum(r['module']==m for r in rows) for m in intake['targets']}
+assert new_counts == p['complete_counts_computed_from_actual_records']
+for module, proof in intake['strict_producers'].items():
+    cache, original = read(proof['cache']), read(proof['receipt'])
+    bind(proof['stdout'])
+    assert cache == original and original['status'] == 'PASS' and original['exit_code'] == 0
+    b = original['binding']
+    assert b == original['binding_after'] and b['source_sha256'] == intake['targets'][module]
+    assert original['object_parts'] == census['modules'][module]['object_parts']
+    assert original['lean_memory_mib'] == 6144 and original['warnings_as_errors']
+    assert original['runtime_sha256'] == original['runtime_sha256_after'] == c.PROTECTED['runtime.py']
+    assert original['command'][1:4] == ['-j2','-M6144','-DwarningAsError=true']
+    assert original['guard_error'] is None and original['rss_guard']['limit_mib'] == 6656
+    assert not original['rss_guard']['signals'] and original['max_rss_kib'] <= 6656*1024
+    for dep, digest in b['direct_source_sha256'].items():
+        provider = graph_freeze['graph_stable']['graph'][dep]
+        assert provider['source_sha256'] == digest
+        assert c.sha(c.path(provider['source_path'])) == digest
+    for pin, digest in b['pins'].items(): assert c.sha(ROOT/pin) == digest
+audit_inputs = []
+covered = set()
+for key, audit_spec in intake['audit_receipts'].items():
+    rp = bind(audit_spec['ref']); audit = c.read(rp)
+    assert audit['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'
+    assert audit['inputs_before'] == audit['inputs_after'] and audit['targets'] == audit_spec['targets']
+    assert not (covered & set(audit['targets'])); covered.update(audit['targets'])
+    assert audit['declaration_counts'] == {m:new_counts[m] for m in audit['targets']}
+    for n, digest in audit_spec['sidecars'].items(): assert c.sha(rp.parent/n) == digest
+    assert c.sha(rp.parent/'OwnedAudit.lean') == audit['generated_audit_sha256']
+    process = c.read(rp.parent/'audit-process.json')
+    assert process['status']=='PASS' and process['returncode']==0 and process['guard_error'] is None
+    assert process['command'][1:4] == ['-j2','-M6144','-DwarningAsError=true']
+    assert process['rss_guard']['limit_mib']==6656 and not process['rss_guard']['signals'] and process['max_rss_kib']<=6656*1024
+    for stage in audit['stages']:
+        if stage['kind']=='stock_replay':
+            r=stage['result'];m=stage['module']
+            assert r==c.read(rp.parent/('replay-'+m+'.json'))
+            assert r['status']=='PASS' and r['returncode']==0 and r['guard_error'] is None
+            assert r['command'][-2:]==['--verbose',m] and r['rss_guard']['limit_mib']==6656
+            assert not r['rss_guard']['signals'] and r['max_rss_kib']<=6656*1024
+    audit_inputs.append(audit['inputs_after'])
+assert covered==targets and graph_freeze['audit_inputs']==audit_inputs
+totals={'owned_modules':len(census['modules']),'declaration_records':len(rows),'distinct_fullnames':len({r['name'] for r in rows}),'original_owned_receipts':len(receipts)}
+assert totals=={'owned_modules':census['owned_modules'],'declaration_records':census['complete_serialized_declarations'],'distinct_fullnames':census['distinct_constant_fullnames'],'original_owned_receipts':census['original_owned_receipts_rehashed']}
+assert (census['historical_duplicate_names'],census['historical_duplicate_record_excess'],census['new_fullname_collisions'])==(11,19,0)
+assert not census['supplemental_metadata_counted_as_owned_receipt']
+assert p['main_1_plus_1_75']=='OPEN' and not census['unconditional_main_proved']
+assert not census['external_closure_replayed'] and not census['project_import_closure_replayed']
+assert {q.relative_to(ROOT).as_posix():c.sha(q) for q in sorted((ROOT/'ImbalancedChen').rglob('*.lean'))}==sources
+result={'status':'ROOT_NEXT_SEVEN_INDEPENDENT_TERMINAL_PROTOCOL_PASS_PENDING_FINAL_ACCEPTANCE','created_utc':datetime.now(timezone.utc).isoformat(),**totals,'derived_counts':{'owned_modules':totals['owned_modules'],'complete_serialized_declarations':totals['declaration_records'],'distinct_constant_fullnames':totals['distinct_fullnames'],'original_owned_receipts_rehashed':totals['original_owned_receipts']},'added_modules':len(targets),'added_records':len(rows)-len(oldrows),'old209_entries_deep_equal':True,'old5511_records_deep_equal':True,'all_complete_types_safety_std3_and_original_stock_logs_verified':True,'all_current_source_freeze_entries':len(sources),'graph_modules':graph_freeze['graph_modules'],'native_graph_basis':'ROOT actual full freeze plus observed collector exact before/after comparisons; no independent native graph rehash in this verifier','verified_inputs':verified,'actual_new_module_record_counts':new_counts,'external_closure_replayed':False,'unconditional_main_proved':False,'scope':'Owned defining modules and normal imported-environment trust; main OPEN30','census':p['candidate_census'],'complete_records':p['complete_declarations'],'proposal':proposal_ref,'project_import_closure_replayed':False,'trust_mode':'NORMAL_IMPORTED_ENVIRONMENT_TRUST','verifier':ref(Path(__file__))}
+out=STATE/'source-reviews/20261023-root-next-seven-v2-independent-terminal-verification.json'
+with out.open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'status':result['status'],'verification':ref(out),'derived_counts':totals}))

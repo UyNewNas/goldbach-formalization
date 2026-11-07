@@ -1,0 +1,152 @@
+{
+  "status": "ONE_SOURCE_CANDIDATE_SOURCE_ONLY_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T07:36:10.2327390Z",
+  "author": "/root/chen1011_route_sol_xhigh_oct21",
+  "source": {
+    "path": "ImbalancedChen/CurrentChenUpsilon1011JointSource.lean",
+    "sha256": "ae613c076c12d5b74d7e7e6a94b2ff67144e42e03be80538c7e4beeb1e945043",
+    "line_count": 120,
+    "initially_absent": true,
+    "imports": [
+      "ImbalancedChen.CurrentChenMeanLedger"
+    ],
+    "definitions": 1,
+    "public_theorems": 5,
+    "private_declarations": 0,
+    "complete_public_literal_headers": [
+      {
+        "kind": "def",
+        "name": "ImbalancedChen.chenY1011JointPrimeSelector",
+        "line_1based": 25,
+        "complete_literal_header": "def chenY1011JointPrimeSelector (N : ℕ) (A H D : ℝ)\n    (E : ℕ × ℕ → Prop) : Finset ((ℕ × ℕ) × (ℕ × ℕ))"
+      },
+      {
+        "kind": "theorem",
+        "name": "ImbalancedChen.chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector",
+        "line_1based": 35,
+        "complete_literal_header": "theorem chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector\n    (N : ℕ) (A H D : ℝ) :\n    Disjoint (chenY10PrimeSelector N A H) (chenY11FullPrimeSelector N A H D)"
+      },
+      {
+        "kind": "theorem",
+        "name": "ImbalancedChen.chenY1011JointPrimeSelector_eq_union",
+        "line_1based": 47,
+        "complete_literal_header": "theorem chenY1011JointPrimeSelector_eq_union (N : ℕ) (A H D : ℝ)\n    (E : ℕ × ℕ → Prop) (hHD : H ≤ D) :\n    chenY1011JointPrimeSelector N A H D E =\n      chenY10PrimeSelector N A H ∪\n        (chenY11FullPrimeSelector N A H D).filter (fun t => ¬ E t.2)"
+      },
+      {
+        "kind": "theorem",
+        "name": "ImbalancedChen.sum_chenY1011JointPrimeSelector",
+        "line_1based": 72,
+        "complete_literal_header": "theorem sum_chenY1011JointPrimeSelector (N : ℕ) (A H D : ℝ)\n    (E : ℕ × ℕ → Prop) (hHD : H ≤ D)\n    (f : ((ℕ × ℕ) × (ℕ × ℕ)) → ℝ) :\n    (∑ t ∈ chenY1011JointPrimeSelector N A H D E, f t) =\n      (∑ t ∈ chenY10PrimeSelector N A H, f t) +\n        ∑ t ∈ (chenY11FullPrimeSelector N A H D).filter (fun t => ¬ E t.2),\n          f t"
+      },
+      {
+        "kind": "theorem",
+        "name": "ImbalancedChen.sum_chenY10_add_chenY11_compl_eq_joint_source",
+        "line_1based": 90,
+        "complete_literal_header": "theorem sum_chenY10_add_chenY11_compl_eq_joint_source\n    (N : ℕ) (A H D : ℝ) (E : ℕ × ℕ → Prop) (hHD : H ≤ D) :\n    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY10 (N - P) A H : ℝ)) +\n      (∑ P ∈ chenAdditivePrimeCarrier N,\n        (chenY11Selected (N - P) A H D (fun t => ¬ E t) : ℝ)) =\n      ∑ t ∈ chenY1011JointPrimeSelector N A H D E,\n        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)\n          (t.1.2 : ℝ)).card : ℝ)"
+      },
+      {
+        "kind": "theorem",
+        "name": "ImbalancedChen.currentChenUpsilon10_add_11_eq_joint_source",
+        "line_1based": 104,
+        "complete_literal_header": "theorem currentChenUpsilon10_add_11_eq_joint_source (N : ℕ)\n    (E : ℕ × ℕ → Prop) (hN : 1 ≤ (N : ℝ)) :\n    currentChenUpsilon10 N + currentChenUpsilon11 N E =\n      ∑ t ∈ chenY1011JointPrimeSelector N\n          ((N : ℝ) ^ (417 / 5000 : ℝ)) ((N : ℝ) ^ (19 / 125 : ℝ))\n          ((N : ℝ) ^ (59 / 250 : ℝ)) E,\n        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)\n          (t.1.2 : ℝ)).card : ℝ)"
+      }
+    ],
+    "forbidden_token_matches": []
+  },
+  "binding": {
+    "toolchain": "leanprover/lean4:v4.33.0-rc1",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "current_ledger_sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8",
+    "quotient_four_prime_sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+    "paired_deletion_sha256": "6101bf1057504895d2413bf814249deabdd12a3e53a0b21067a68df03dee4794"
+  },
+  "prior_source_reviews_reused": [
+    ".lake/proof-continuation/source-reviews/20261016-chen-lower-reuse-scope.json",
+    "verification/proof-continuation/2026-10-15/metadata/20261016-U10-Wu2004-current-selector-readonly-assessment-3acb0ed4a8615698.json",
+    ".lake/proof-continuation/source-reviews/20261018-current-chen-eleven-row-audit-and-eighth-ordinary-consumer-proposal.json"
+  ],
+  "existing_API_reuse": [
+    {
+      "source": "ImbalancedChen/CurrentChenMeanLedger.lean",
+      "api": "chenY10PrimeSelector; chenY11FullPrimeSelector",
+      "exact_domain": "All four additive-prime labels; row10 A<=p1<p2<p3<p4<H; row11 A<=p1<p2<p3<H<=p4<D."
+    },
+    {
+      "source": "ImbalancedChen/CurrentChenMeanLedger.lean",
+      "api": "sum_chenY10_eq_siftedQuotientPrimeSource; sum_chenY11Selected_eq_siftedQuotientPrimeSource",
+      "exact_role": "Finite Fubini, preserving all four factors and the literal second-prime roughness cutoff; valid without receiver squarefreeness."
+    },
+    {
+      "source": "ImbalancedChen/CurrentChenMeanLedger.lean",
+      "api": "currentChenUpsilon10_eq_siftedQuotientPrimeSource; currentChenUpsilon11_eq_siftedQuotientPrimeSource",
+      "exact_role": "Current cutoffs417/5000,19/125,59/250; the eleventh retains precisely not E on the last pair."
+    },
+    {
+      "source": "Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "native_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "line_1based": 138,
+      "exact_API": "Finset.sum_union, generated by @[to_additive] on prod_union",
+      "complete_additive_type": "[AddCommMonoid M] [DecidableEq iota] (s1 s2 : Finset iota) (f : iota -> M) (h : Disjoint s1 s2) : (sum x in s1 union s2, f x) = (sum x in s1, f x) + sum x in s2, f x"
+    },
+    {
+      "source": "Mathlib/Data/Finset/Disjoint.lean",
+      "native_sha256": "4d7540200cdf4caa969ec0804ed2a21ed3623d25595204bfa8899bb58a96270f",
+      "line_1based": 47,
+      "exact_API": "theorem disjoint_left : Disjoint s t <-> forall {a}, a in s -> a notin t"
+    }
+  ],
+  "local_reuse_search": {
+    "scope": "Current top-level ImbalancedChen source, existing named Chen source-reviews and the pinned-provider Wu04/Wu08 research status.",
+    "finding": "Existing currentChenPairedPrimeSum_ge_of_joint_last_bounds already consumes one joint cost. No second algebraic joint-bound consumer is introduced. Existing ordinary Wu2004 provider offers square-root level and coefficient8; its prior reviewed endpoint is insufficient to restore the selected sharp budget. Historical Wu2008 rows have different cutoffs and are not a directly reusable current-mask mean.",
+    "native_readme": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\research\\wu2008\\README.md",
+    "whole_repository_nonexistence_claim": false,
+    "independent_external_object_acceptance": false
+  },
+  "mathematics": {
+    "exact_common_support": "A<=p1<p2<p3<p4, p3<H, p4<D, and (p4<H or not E(p3,p4)), on the original fourfold additive-prime carrier.",
+    "partition": "Under H<=D this equals row10 union row11 filtered by not E on the last pair. The two supports are disjoint because p4<H and H<=p4 cannot coexist.",
+    "signed_identity": "Arbitrary real f gives exact sum over the joint support equal to both original sums; no absolute values, monotonicity or factor2 is inserted.",
+    "current_identity": "For1<=N the original rpow cutoffs imply H<=D, and Upsilon10(N)+Upsilon11(N,E) equals one exact sum of chenSiftedQuotientPrimeSource(N,p1*p2*p3*p4,p2).card.",
+    "endpoints": "Equality p4=H belongs only to row11; the original upper p4<D is strict and complete; no extra factor or product restriction is imposed.",
+    "mask": "The tenth row stays unmasked. The eleventh row retains precisely the same complement not E(p3,p4) as the current ledger; no property of E is assumed.",
+    "multiplicity": "All four labels remain explicit and are counted once on the disjoint union; no squarefreeness or prime-cofactor premise is added."
+  },
+  "minimal_remaining_obstacle": "A genuine analytic upper mean for this same joint source at the adopted sharp budget, including the complete distribution and rough-cofactor errors, remains missing. The exact finite identity does not supply its own analytic bound.",
+  "candidate_critical_path": [
+    "Execute strict elaboration and complete owned declaration/type/axiom and stock-kernel checks for this exact source through the designated heavy-process owner.",
+    "Construct the switched arithmetic source and a genuine single joint bound on the displayed support with original four-factor physical moduli and last-pair complement. A pair of independent sharp row bounds is not imposed as the unique route.",
+    "Pay the actual remainder and harmonic-integral budgets and consume the resulting joint certificate through the existing currentChenPairedPrimeSum_ge_of_normalized_joint_last_bounds."
+  ],
+  "preserved_targets": {
+    "currentC": "49044063/25000000=1.96176252",
+    "currentK": "8452171/1250000=6.7617368",
+    "original_selected_masks": true,
+    "weakened_target": false
+  },
+  "validation_scope": {
+    "source_read_and_finite_proof_review": true,
+    "complete_literal_header_inventory": true,
+    "Lean_or_Lake_invoked": false,
+    "compiler_or_checker_invoked": false,
+    "proper_helper_cache_catalog_or_Git_invoked": false,
+    "strict_elaboration_pass_claim": false,
+    "stock_kernel_replay_claim": false,
+    "transitive_axiom_audit_performed": false,
+    "permitted_logical_axioms_for_future_audit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "actual_new_axiom_inventory": "No axiom declaration occurs in this source; actual transitive theorem axioms remain unexecuted and must not be inferred from textual inspection.",
+    "main_theorem_proved": false
+  },
+  "mutations": "Only one new Lean candidate and this new JSON source-review; no existing source, pin, helper, catalog, resource, automation, CI or Git mutation.",
+  "quota": {
+    "used_percent": 28,
+    "remaining_percent": 72,
+    "secondary": "unavailable/null, not zero",
+    "stop_threshold_remaining_lte": 50
+  },
+  "ending_state": "HOLD"
+}

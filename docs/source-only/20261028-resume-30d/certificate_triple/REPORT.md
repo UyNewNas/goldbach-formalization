@@ -1,0 +1,15 @@
+Fourth batch certificate_triple: real singleton-source reverse coverage.
+
+This removes ParentTests as an assumed source licence for a concrete class of actual integer paths. IntegerStep uses the existing production BH/W1/W2-singleton SingleRule and Fin(N+1)prime. Each query is computed by its original rule,not passed as a free scalar. SourceEdge consists of actual singleChildren membership plus the original compact-policy rank,physicalmesh and own-cube inequality against the already frozen incoming H.cap. It contains no final admission,H/h,K,countbound or exporter-result premise.
+
+The induction source_steps_sound proves computed acceptance,full/selected squares,primeword/Qalignment,parentWindow and residual>=rootResidual/2^length. single_child_cutoff and source_steps_cutoff_admitted identify the real child physical cutoff and its actual prime ceiling. The rank gates imply pathlength<=plan depth; depth<=440 then gives the uniform gamma0/2^440 floor used by the exporter.
+
+P2Selected430W1ScalarTargets binds the actual literal70target arrays to the source grid prefix. This derives the chosen action's target gate from selectedW1_source andquerycell; its ceiling follows from physical cutoff admission. These were previously tests in the filter and are now conclusions from actual source-domain data. The finite70row target equalities remain unexecuted proof proposals.
+
+The actual integer prefix encoding has exact oldword and History.advance identities. sourceReceiver uses the original admittedChildPredicate at each oldB; actual_source_mask_eq proves this recursively frozen receiver equals the batch30c computed mask as a function. The original root E/rootB is retained. actual_source_occurrence_mass identifies the entire actual repeated-label source mass with the exported occurrence mass at outerweight1.
+
+actual_selected_triple_covered supplies the reverse: a real selected W1 source triple at such a constructed parent yields an occurrence in the430exporter with exactly the same oldword,target,anchor,frozenmask andtriple. Its ParentTests are all derived. Thus this source term cannot be hidden by an empty exporter. No arbitrary hParentTests or final policy-result licence is assumed.
+
+The complete task remains OPEN. This is the original singleton-domain class,not all eleven-root mixed selected430sources. Pair-child branches,retains/argument transports,actual11root instantiation,finiteparent-list/Pbound andsource-to-selected-program ownership are still needed. The input root physical gates andeach exact source-edge support condition must be established for those actual families; they have not been rebranded as classical primitives. Scalar430replay,count/action seed soundness,positiveKand any actualH248correction/signedenhancement also remain open. task_complete=false,batch_target_source_complete=false,local_step_complete=true.
+
+Only the fourth-batch task directory was written. Earlier source andregister bytes remain frozen. All sources are uncompiled andhavezeroformalcredit; no Lean,Lake,compiler,numericchecker/replay,Git orCI was run. No new manuscript mathematical gap is asserted.

@@ -1,0 +1,68 @@
+# saving16_pulling_ownership — P deduplication and source audit
+
+Disposition: **REUSE_O_WITH_MINIMAL_INHERITED_REPAIR_SOURCE_ONLY**. The frozen O files already contain the requested actual14/39741 within-cell separator, null-overlap, owned-union and source-integral comparison proof bodies. This audit found no additional geometrical fact necessary for that positive-saving argument. P therefore does not duplicate those proofs. Independent review subsequently identified a definite rewrite-direction error in the inherited canonical-moment module. Under root's explicit same-task follow-up, P adds **one minimal repaired copy of that inherited module**, changing only the rewrite direction at line 124; it adds no declaration or mathematical assumption. This is not a compilation or kernel-verification result: `compiled=false`, `kernel_verified=false`, `formal_credit=0`; all finite proof bodies remain **UNEVALUATED**, and the broad yellow nodes `P2.5.cells14` and `P2.5.integral` remain **OPEN**.
+
+The O directory contained exactly three Lean files and no local REPORT/REGISTRY at inspection. M's older report correctly described its own then-missing ownership step; that description must not be used to commission the same proof again after O supplied it.
+
+## Exact reused sources
+
+Paths below are relative to `goldbach-proof-continuation`. Full paths, direct imports, declaration lines, raw hashes and installation modules are also recorded in `REGISTRY.json`.
+
+| Existing source | Reused declarations | Raw SHA256 |
+| --- | --- | --- |
+| `docs/source-only/20261102-resume-30o/saving16_pulling_ownership/P2OriginalSaving16PullingFaceInduction.lean` | `supporting_child` (91), `pull_pair_separated` (120), with `pull_row_subset` (61) and `evalQ_combine` (82) | `8be89f68730007dd2a59f5afde0ed532deeb65f05a9f3115159cf0176b0d26b8` |
+| `docs/source-only/20261102-resume-30o/saving16_pulling_ownership/P2OriginalSaving16PullingOwnership.lean` | `original_face_incidence_shape` (99), `original_pulling_bindings` (105), `original_row_separator` (154), `original_within_cell_null_overlap` (206), `original_within_cell_ae_pairwise` (220) | `a291896dc3ee13823ae1fe18326dbbe07583aa04e3304dacfc9353c814fa5ecb` |
+| `docs/source-only/20261102-resume-30o/saving16_pulling_ownership/P2OriginalSaving16OwnedIntegral.lean` | `ownedSupport_pairwise_disjoint` (96), `ownedSupport_ae_eq` (107), `ownedUnion_integral` (129), `original_simplex_integral_sum_le_source_integral` (140), `historical_endpoint_le_source_integral` (153) | `5aa1cfb7b3080e4bc3ff0152901ac234d7451da4788fee364a7d5bcc1aeb8047` |
+| `docs/source-only/20261102-resume-30m/saving16_q96_endpoint/P2OriginalSaving16OriginalArchive.lean` | Original records, `original_vertices_all96` (257), `original_facet_incidence` (295), `original_counts` (317) | `f5de0816bacd63ceaaf34b0b2480f006da3de2a2542b915bcac837fa3e09b24d` |
+| `docs/source-only/20261102-resume-30m/saving16_q96_endpoint/P2OriginalSaving16SimplexBinding.lean` | Actual physical `rowSupport` (114), `rowSupport_subset_closure` (117), `historical_endpoint_le_sum_simplex_integrals` (141) | `ac37f3946a487402b6743bf579490bbcf9ca2fc42e5914cdce48921feee7ff51` |
+| `docs/source-only/20261102-resume-30m/saving16_q96_endpoint/P2OriginalSaving16CellOwnership.lean` | Original-cell separation, convex-frontier nullity and strict-cell/closure conversion | `36f72344aee23b7e5cad4829ec4ca9f033729d02fbcb2efbbe089bab31ddebbf` |
+| `docs/source-only/20261102-resume-30m/saving19_owned_integral/P2OriginalSaving19OwnedSource.lean` | Only the neutral affine evaluation/interpolation and proper-affine-wall theorem `affine_zero_volume` (102) | `e18f481c54879b7a51346db7f3549c1ac12f393a194b79322a600e7bf89c1c8b` |
+
+The neutral M19 reuse is preceded by O's `evalRow_eq_generic` (172). No saving19 row, 13-cell archive, 28918-simplex ownership theorem, lifting certificate or endpoint is substituted for saving16 data. The actual supports throughout remain M's original14 `rowSupport c s`. **The whole M19 module is nevertheless imported:** its direct `P2OriginalSaving19Original28918` and `AffinePrimeGates` dependencies, and all their transitive source obligations and finite guards, remain actual compilation dependencies. Neutral theorem use does not prune those module imports or their HOLDs. `REGISTRY.json` explicitly records this distinction.
+
+## Manuscript and original producer audit
+
+The manuscript at `../chen-imbalanced-semiprimes/paper/source/manuscript-body.tex` has the expected SHA256 `ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd`. Lines 435–449 give the same density `4*(M-R6)/((R6-S8)*(M-S8)*prod(t))`, the conservative parent, no Chen quarter or ordering factorial, cutoff `t8>53/13824`, and the full/selected-complement square restrictions. Lines 1354–1356 explicitly permit discarding the complement of a legal subset for a positive saving. Lines 1364–1369 describe the stronger exact-polytope/face-lattice/pulling method.
+
+The original source note `../chen-imbalanced-semiprimes/proof-library/source/eighth-prefix-family-20261009.tex:74–103` describes 96 original rows, reverse-pulling nonoverlap, and separate Q96 floors. Its raw SHA256 is `d8e63ef277a7d6ac9163283948445287b879c0c6134908950678bd053e2005a8`.
+
+The independent verifier `../goldbach-research/eighth-prefix-cell-independent-20261009.py:104–150` checks original vertex/facet data and a max-pivot pulling recursion. Its line 149 compares unordered vertex sets. That line alone would not justify O's stronger *ordered* list binding. The actual author producer supplies the missing provenance for that choice: `../goldbach-research/eighth-prefix-family-20261009-exact.py:59–68` recursively visits the sorted maximal intersections omitting `max(face)`; lines 76–85 enumerate that returned `tri` in order and save `vertex_ids=list(ss)`; line 89 saves the sorted face ledger. Thus O's `children`, `pivot`, nine-step `originalPull` and `savedRows` are a faithful expression of the original producer's order, rather than an unmotivated order assertion. This is static source correspondence only. The closed theorem `original_pulling_bindings` still has not been evaluated on any witness.
+
+The author producer hash is `e9a38f9f370bccc69613ccbe1da7a81114891e7965a138ec9ebe33f07e55818a`; the independent verifier hash is `fc972c3ed33a0b0679c3373ef767b8443582821b6c12adafed848d3191935a35`. Neither Python source was executed or imported. The fourteen witness texts were not parsed or replayed in this audit.
+
+## Why the existing geometry suffices
+
+O's `Shape` (36) uses primitive vertex-ID incidence: a shared pivot belongs to the face and is maximal; each child omits it and is the parent-face intersection with one original facet; distinct children form an inclusion antichain; the same conditions recurse. It neither assumes coverage nor tests geometric nonoverlap.
+
+M supplies nonnegativity of every original gate at every original vertex and equivalence between facet membership and a zero gate value. O's `supporting_child` therefore proves strict positivity at an omitted pivot. The separation induction then has the two necessary branches:
+
+- For a shared child supported by `g=0`, extend its separator `a` to `g(p)*a-a(p)*g`. This vanishes at the new pivot, preserves both sign inequalities on the child, and remains nonzero at the old witness vertex.
+- For distinct children supported by `g=0` and `h=0`, use `h(p)*g-g(p)*h`. The antichain supplies a vertex of one child outside the other, so this separator is not identically zero. Its signs separate the two coned rows.
+
+The resulting separator is bound to the original saved row ordinals through the ordered pulling identity and `Nodup`. Barycentric interpolation propagates the vertex signs to the **actual physical** supports. Their intersection is contained in a proper affine zero set, hence is null. No within-cell disjointness, geometric coverage or integral estimate is an input to the concrete result.
+
+The owned supports delete only the cell frontier and the finite union of within-cell overlaps. Those sets are proved null; the remaining supports are measurable, pairwise disjoint, contained in the original open cells, and AE equal to their original simplices. Finite integral additivity and positivity on the original region then give the comparison at O:140. Composing M's original Q96 endpoint gives O:153 with the unchanged numerator `1222997719565324892497827` and denominator `2^96`.
+
+Consequently P eliminates **zero new mathematical obligations**: the requested ownership and integral comparison already have O source proof bodies. The only code change addresses the inherited expression/API defect detailed below. This report identifies exact reuse and prevents duplicate credit. No assertion is made that those proof bodies elaborate or that their finite certificates are true.
+
+## Minimal inherited repair, within the same task
+
+Independent reviewer `/root/t23_review_compact_s16` located a definite error in the frozen `P2Winner9ActualEightSimplexMoment.lean`, pinned by K's `saving19_moments/REGISTRY.json`. The exact source is `docs/source-only/20261028-paper-first/cohort04/certificate/sources/2a511a7246bf9dd54d79649c171c34cf741ca4a0fbd10b2701ba42e6e615239e/P2Winner9ActualEightSimplexMoment.lean`, raw SHA256 `2a511a7246bf9dd54d79649c171c34cf741ca4a0fbd10b2701ba42e6e615239e` (7420 bytes). This is a concrete source blocker in the pinned endpoint dependency chain, not merely an unevaluated-guard status.
+
+In `actualMomentN_eq_nested` (104), line 123 applies `monomial_cons`; the resulting left side integrates a product whose first factor is independent of the integration variable. Line 124 previously read `rw [← integral_const_mul]`, while the following `change` (125–126) requires the factor already outside the integral. The inspected Mathlib source `Mathlib/MeasureTheory/Integral/Bochner/Basic.lean:288–290` states `integral_const_mul` in the direction `integral (r * f) = r * integral f`. The required rewrite is therefore **forward**.
+
+The new P file `P2Winner9ActualEightSimplexMoment.lean` differs only by replacing that single `rw [← integral_const_mul]` with `rw [integral_const_mul]`. The repaired raw SHA256 is `6c50d79875f94da6d89d6485fa553647496a2cdaf661ebe138e07fe0782f6834` (7416 bytes). The four UTF-8 bytes for the arrow and following space were removed; all other bytes, including comments, imports, declarations, line endings and proof text, were preserved. The frozen source was not modified.
+
+The intended replacement module is **`ImbalancedChen.P2Winner9ActualEightSimplexMoment`**, installation target **`ImbalancedChen/P2Winner9ActualEightSimplexMoment.lean`**. It is a replacement source for the existing module name, not an extra wrapper imported alongside the faulty source. Retaining only the old pinned import would retain the erroneous rewrite in the inherited K canonical moments, M simplex/Jensen and O endpoint dependency chain. No installation or production-file edit was performed. The registry records the old/new pins, the exact substitution and the inherited direct imports.
+
+This repair addresses only the identified tactic direction at source level. All other canonical-moment and source-only HOLDs, finite guards, compilation obligations and resource concerns remain. The local O geometric argument remains reusable under static review; the complete transitive endpoint chain is still **SOURCE_REVIEW_HOLD**, and no whole-chain closure is claimed.
+
+## Difficulty classification and remaining work
+
+1. **Lean expression/API:** the definite inherited `integral_const_mul` direction error is addressed by the minimal P replacement above. The whole chain remains uncompiled. Static signature inspection also covered Lean `List.getElem_inj`, `Array.getElem_eq_getD`, `Array.getElem_mem_toList` and Mathlib `AEDisjoint`, `integral_iUnion_fintype`, `setIntegral_congr_set`, `setIntegral_mono_set`, `Fintype.sum_sigma`. No concrete incompatibility was established inside O's three local modules that would justify replacing them. Other elaboration errors in the dependency closure remain possible.
+2. **Fillable omitted deduction:** M's missing reverse-pulling separation and finite-integral bridge are already supplied by O. The stronger boundedness/active-eight completeness/full face-lattice coverage story is not reconstructed by these three O modules. It is unnecessary for the manuscript's legal-inner-subset positive lower bound, so adding it here would exceed the required dependency chain.
+3. **Possible substantive manuscript gap:** none established for the scoped nonoverlap/lower-integral step. This audit neither certifies the manuscript as a whole nor upgrades the broader full-cell claims.
+
+Remaining obligations include compilation of the exact transitive source chain; truth, elaboration and resource feasibility of every original finite guard (including face parsing, `Shape`, ordered rows and `Nodup`); inherited K canonical-moment and J/M source-only HOLDs; original full-cell completeness if that stronger claim is required elsewhere; and the separate weak-face, common-history, signed-compiler and final reserve/K assembly tasks. The original IDs `0..14 except 7`, dimension 8, 96 proper rows, mask129, factor4, cutoff and Q96 endpoint remain unchanged.
+
+Validation used only source reads, text searches, local API signature inspection, file existence, raw SHA256 metadata and byte-level comparison of the minimal replacement. No Lean/lake/compiler, Git operation, finite decision procedure, CI dispatch, producer/solver execution, numerical replay or child agent was used. Only this assigned P directory was written.

@@ -1,0 +1,136 @@
+{
+  "status": "ONE_BOUNDED_SOURCE_CANDIDATE_COMPLETE_PROOF_TEXT_NOT_ELABORATED_HOLD",
+  "created_utc": "2026-10-21T07:38:03.9915124Z",
+  "author": "/root/sharp_k_route_sol_max_oct21",
+  "scope": "P4 original sharp-K route; only finite admitted third-frontier to own-cube prime-tuple arithmetic bridge.",
+  "source": {
+    "path": "ImbalancedChen\\ActualExtendedThirdAdmittedOwnCubeBridge.lean",
+    "sha256": "90d72df9c9f1bcea79c3ec01a3471a98ce220c15c3993317ff5dd6cbfa596165",
+    "complete_source": "import ImbalancedChen.FirstExitAdmittedFrontierTuples\nimport ImbalancedChen.ActualExtendedThirdCompactUpperRho\n\n/-!\n# The same compact policy's admitted third frontier\n\nThe depth-three frontier has tested the third prime itself. It is exactly\nthe original depth-two next-candidate tuple set filtered by that last\npolicy decision. On an adopted compact cell this last decision is the\nstrict original third own-cube inequality.\n\nThe finite weighted sum keeps the original rough carrier, cap, target\nprime deletion and all three reciprocal-totient prime weights. No signed\ndensity limit, numerical coefficient or progression estimate is assumed.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Set\nopen scoped Classical BigOperators\n\n/-- Testing the third candidate completes precisely the same selected\nhistory; the first two policy decisions are retained on both sides. -/\ntheorem firstExitAdmittedTuples_three_eq_candidate_filter\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) :\n    firstExitAdmittedTuples 3 retained carrier =\n      (firstExitFrontierTuples 2 retained carrier).filter\n        (fun p => retained false [p 2, p 1, p 0] = true) := by\n  ext p\n  rw [mem_firstExitAdmittedTuples_iff, Finset.mem_filter,\n    mem_firstExitFrontierTuples_iff]\n  have hp : List.ofFn p = [p 0, p 1, p 2] := by\n    simp [List.ofFn_succ]\n  simp [hp, FirstExitValidSelection, and_assoc]\n\n/-- The same actual admitted frontier on an owned cell uses exactly the\nstrict physical third own cube. Neither inherited admission nor the\noriginal rough enumeration and target-prime gates are discarded. -/\ntheorem actualExtendedThirdCompactAdmitted_cell_filter\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitAdmittedTuples 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n          (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n            (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j) := by\n  have hgate (p : Fin 3 → ℕ)\n      (hp : p ∈ firstExitFrontierTuples 2\n        (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z))\n      (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n      actualExtendedThirdCompactUpperPolicy e h m N false [p 2, p 1, p 0] = true ↔\n        (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n          (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j := by\n    obtain ⟨hanti, hprime, _hparent⟩ :=\n      (mem_actualPrimeFrontierTuples_iff 2\n        (actualExtendedThirdCompactUpperPolicy e h m N) N cap w z p).mp hp\n    have hlog : primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] =\n        actualPrimeTupleLog N p := by\n      funext i\n      fin_cases i <;>\n        simp [primeHistoryLogCoordinates, primeHistoryTuple, actualPrimeTupleLog]\n    exact actualExtendedThirdCompactUpperPolicy_third_iff hN he0 he hmesh\n      (p 0) (p 1) (p 2) (hprime 2).2.1.pos\n      (hanti (by decide : (1 : Fin 3) < 2))\n      (hanti (by decide : (0 : Fin 3) < 1)) hj (by rw [hlog]; exact ht)\n  rw [firstExitAdmittedTuples_three_eq_candidate_filter]\n  ext p\n  simp only [Finset.mem_filter]\n  constructor\n  · rintro ⟨⟨hp, hown⟩, ht⟩\n    exact ⟨hp, ht, (hgate p hp ht).mp hown⟩\n  · rintro ⟨hp, ht, hown⟩\n    exact ⟨⟨hp, (hgate p hp ht).mpr hown⟩, ht⟩\n\n/-- An arbitrary signed test on the genuine depth-three frontier is the\nsame strict-own-cube filtered prime tuple sum, with every original\nreciprocal-totient prime weight counted once. -/\ntheorem actualExtendedThirdCompactAdmittedCell_weighted_sum\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    ((firstExitDepthFrontier 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n      (roughPrimeUniverse N cap w z)).map (fun state =>\n        (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n          (if primeHistoryLogCoordinates (N : ℝ) 3 state.selectedPrefix ∈\n              actualExtendedThirdOwnedCell m j then\n            G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum =\n      ∑ p ∈ (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z)).filter\n          (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n            (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n              (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j),\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p := by\n  change ((firstExitDepthFrontier 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n    (roughPrimeUniverse N cap w z)).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (if actualPrimeTupleLog N (primeHistoryTuple 3 state.selectedPrefix) ∈\n            actualExtendedThirdOwnedCell m j then\n          G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum = _\n  rw [firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum 3\n    (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1)) _ (roughPrimeUniverse_nodup N cap w z)]\n  simp_rw [mul_ite, mul_zero]\n  rw [← Finset.sum_filter,\n    actualExtendedThirdCompactAdmitted_cell_filter hN he0 he hmesh w z hj]\n\nend\n\nend ImbalancedChen\n"
+  },
+  "declarations": [
+    {
+      "name": "ImbalancedChen.firstExitAdmittedTuples_three_eq_candidate_filter",
+      "line": 26,
+      "purpose": "For every literal policy and carrier, fully admitted triples are precisely original next-candidate triples with the actual final false-sign test."
+    },
+    {
+      "name": "ImbalancedChen.actualExtendedThirdCompactAdmitted_cell_filter",
+      "line": 41,
+      "purpose": "On the same adopted cell, replace only that final policy decision by the proved strict original physical own-cube inequality; all original parent/cap/prime/target gates stay."
+    },
+    {
+      "name": "ImbalancedChen.actualExtendedThirdCompactAdmittedCell_weighted_sum",
+      "line": 87,
+      "purpose": "The actual stopped depth-three frontier, with an arbitrary signed test, equals the exact own-cube-filtered original tuple sum with all three reciprocal-totient prime weights."
+    }
+  ],
+  "selected_finite_gap": "Existing CompactFrontier proves BEFORE-own-admission candidate-to-prime/product identities. This candidate proves the distinct AFTER-own-admission depth-three identity and transfers its actual weighted sum, without importing CompactFrontier or any residual limit supplier.",
+  "deduplication": {
+    "inspected": [
+      "FirstExitValidSelection.lean",
+      "FirstExitFrontierTupleReindex.lean",
+      "FirstExitAdmittedFrontierTuples.lean",
+      "ActualExtendedThirdCompactFrontier.lean",
+      "ActualExtendedThirdCompactPolicySaving.lean",
+      "ActualExtendedThirdCompactSignedDensityLimit.lean",
+      "ActualUpperPolicyFiniteBridge.lean",
+      "ActualUpperCountingInputs.lean"
+    ],
+    "existing_not_rewritten": [
+      "actualExtendedThirdCompactFrontier_cell_filter",
+      "actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum",
+      "actualExtendedThirdCompactFrontierCellSum_eq_product_sum",
+      "actualExtendedThirdCompactPolicySaving",
+      "tendsto_actualExtendedThirdCompactSignedDensityCorrection"
+    ],
+    "local_search_result": "No prior admitted compact triple own-cube carrier/filter or weighted-sum declaration located. Generic admitted API exists and is reused, not copied."
+  },
+  "direct_imports": [
+    "ImbalancedChen.FirstExitAdmittedFrontierTuples",
+    "ImbalancedChen.ActualExtendedThirdCompactUpperRho"
+  ],
+  "exact_dependency_source_bindings": [
+    {
+      "path": "ImbalancedChen\\FirstExitAdmittedFrontierTuples.lean",
+      "sha256": "6d68ca9c79d8fdca0ee88f764f1abbf0bff8f9ac38b47d1c26a56ba860fa9e9a"
+    },
+    {
+      "path": "ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001"
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+      "sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6"
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitValidSelection.lean",
+      "sha256": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232"
+    },
+    {
+      "path": "ImbalancedChen\\CurrentMainTheorem.lean",
+      "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d"
+    },
+    {
+      "path": "ImbalancedChen\\CurrentNumericalTransfer.lean",
+      "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a"
+    },
+    {
+      "path": "ImbalancedChen\\ActualUpperCountingInputs.lean",
+      "sha256": "b89d2c71bc253103320fa5296e9583f77fca365f842dac1502116a98b62826e8"
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    }
+  ],
+  "dependency_api_full_types": [
+    "theorem mem_firstExitAdmittedTuples_iff (k : ℕ) (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin k → ℕ) : p ∈ firstExitAdmittedTuples k parent carrier ↔ List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p)",
+    "theorem mem_firstExitFrontierTuples_iff (k : ℕ) (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin (k + 1) → ℕ) : p ∈ firstExitFrontierTuples k parent carrier ↔ List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+    "theorem mem_actualPrimeFrontierTuples_iff (k : ℕ) (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (p : Fin (k + 1) → ℕ) : p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔ StrictAnti p ∧ (∀ i, p i < cap ∧ Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧ FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+    "theorem firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ) (hc : carrier.Nodup) (f : (Fin k → ℕ) → ℝ) : ((firstExitDepthFrontier k parent h [] true 1 carrier).map (fun state => (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod * f (primeHistoryTuple k state.selectedPrefix))).sum = ∑ p ∈ firstExitAdmittedTuples k parent carrier, (∏ i, 1 / ((p i : ℝ) - 1)) * f p",
+    "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ} (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384) (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0) {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m) (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) : actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔ (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+  ],
+  "proof_outline": [
+    "Expand the existing admitted/frontier membership equivalences. List.ofFn of Fin 3 is the three processing-order labels. Expanding the exact recursive valid-selection predicate isolates the final test; no generic monotonicity assumption is needed.",
+    "Recover strict descending order and positivity from the exact original prime candidate membership API. Apply the existing physical-cell third-test iff at the same reverse history.",
+    "Apply the existing actual stopped-frontier weighted-sum identity, distribute the cell indicator through the weight, and use finite sum_filter plus the exact new carrier equality."
+  ],
+  "source_review_limit": "Only file reads, local textual searches, new-file writes and SHA256 binding were performed. No Lean/lake/compiler/checker/proper/helper/cache/catalog/Git execution or edits. These are complete candidate proofs, not a kernel acceptance claim.",
+  "compile_executed": false,
+  "checker_executed": false,
+  "axioms_audit_executed": false,
+  "transitive_axioms": null,
+  "axiom_evidence": "Not generated: runtime and transitive axiom inspection are reserved to the separate authorized heavy channel. No new axiom declaration or proof placeholder appears in this candidate.",
+  "dependencies_acceptance": "Not promoted or inferred. In particular generic FirstExitAdmittedFrontierTuples and its imported current parents require their own genuine acceptance evidence before a strict one-self candidate gate. No old source-review-only result is treated as accepted.",
+  "external_formalization_reuse": "No new external formalization is imported. Existing local finite Lean APIs are cited with complete types and current source hashes. Lean/mathlib/goldbach pins are recorded below; no unsupported external zero-placeholder or axiom claim is made.",
+  "versions": {
+    "lean": "leanprover/lean4:v4.33.0-rc1",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958"
+  },
+  "original_goal": {
+    "status": "OPEN",
+    "hUpper_full_quantifier": "For every b : ℝ fixed first with (1 : ℝ)/2 < b and b < 1: ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N in Filter.atTop, Even N → (RealB b N : ℝ) ≤ (currentK * Real.log (1 / b) + epsilon) * singularNormalization N.",
+    "currentK": "8452171 / 1250000 = 6.7617368",
+    "currentC": "49044063 / 25000000",
+    "statement_source": "ImbalancedChen/CurrentMainTheorem.lean: current_theorem_1_1_of_manuscript_bounds",
+    "remaining": [
+      "Same complete original signed-policy sharp density with all required causal stages and original constant.",
+      "Actual arithmetic mean and progression/distribution error for that same physical coefficient.",
+      "Independent hLower and complete original Chen ledger."
+    ],
+    "mathematical_limit": "This finite exact identification closes neither the old-minus-new residual approximation direction nor the complete signed counting error. Ordinary coefficient eight and a different b range are not used as substitutes."
+  },
+  "next_verifiable_step": "Review the three complete new proof bodies against the exact five local API types recorded here. Only after genuine parent acceptance, the separately authorized runtime agent may consider this single source; this package issues no runtime authorization.",
+  "quota_latest": {
+    "used_percent": 28,
+    "remaining_percent": 72,
+    "stop_at_remaining_le": 50
+  },
+  "disposition": "HOLD after this ONE package; no successor source, agent or thread created."
+}

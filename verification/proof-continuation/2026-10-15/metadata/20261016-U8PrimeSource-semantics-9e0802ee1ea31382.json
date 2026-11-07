@@ -1,0 +1,47 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T21:01:49.669969+00:00",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon8PrimeSource",
+  "source_sha256": "71fea921e7484f5e9fb64606d163e116f9c0b48eca341e5ea1091d494d07b93b",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "reviewer": "lower_resume self-review, not independent validation",
+  "declaration_count": 7,
+  "complete_declaration_headers": [
+    "theorem currentChenUpsilon8_second_cube_ge {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) :\n    (N : ℝ) ≤ (t.2 : ℝ) ^ 3 ",
+    "theorem currentChenUpsilon8_quotient_prime_or_one {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) {q : ℕ}\n    (hq : q ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)) :\n    q = 1 ∨ Nat.Prime q ",
+    "def currentChenUpsilon8PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) ",
+    "def currentChenUpsilon8UnitFibres (N : ℕ) : Finset (ℕ × ℕ) ",
+    "theorem mem_currentChenUpsilon8PrimeTriples_iff {N p₁ p₂ q : ℕ} :\n    (⟨(p₁, p₂), q⟩ : Σ _ : ℕ × ℕ, ℕ) ∈ currentChenUpsilon8PrimeTriples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (417 / 5000 : ℝ) ≤ (p₁ : ℝ) ∧\n      (p₁ : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) ∧\n      (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p₂ : ℝ) ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime q ∧ p₁ * p₂ * q < N ∧\n      N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N ∧ (p₂ : ℝ) ≤ q ",
+    "theorem currentChenUpsilon8_row_card_partition {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) :\n    let F ",
+    "theorem currentChenUpsilon8_eq_primeTriples_add_unitFibres (N : ℕ) :\n    currentChenUpsilon8 N =\n      ((currentChenUpsilon8PrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ) "
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "From literal eighth selector membership the actual second prime satisfies p2>=N^(1/3), so the real natural-cast cube identity gives p2^3>=N without an extra asymptotic assumption or an N lower-threshold hypothesis.",
+    "The original actual quotient witness is reused with arbitrary N,b=p1*p2,q. It pays actual b*q<N and q>0 before the composite contradiction; the imported theorem has no ninth-selector or ninth-cutoff hypothesis.",
+    "If q is composite and not one, its true prime minFac has minFac^2<=q. Actual original roughness at p2 gives p2<=minFac, hence p2^2<=q. Actual p1 is prime, so p1>1; thus N<=p2^3<p1*p2^3<=p1*p2*q<N, contradiction.",
+    "The new actual sigma PrimeTriples retains the complete outer pair label and filters only the actual quotient source by Nat.Prime. UnitFibres are the actual outer pairs with one in that same original source. No multiplicity is replaced by an indicator.",
+    "The explicit triple membership dictionary retains both original strict/inclusive bands, original moving sqrt(N/p1) selector wall, actual target prime N-p1*p2*q including its coprimality carrier, and the original inclusive roughness q>=p2.",
+    "The already proved general prime_mem_iff is reused at z=p2; no square-root quotient cutoff from the ninth source is imported into the eighth statement.",
+    "The actual row cardinality partitions the original finite source into prime quotients and the possible unit quotient, using the proved actual prime-or-unit result. Finite sigma cardinalities and exact sums then give current Upsilon8 = actual PrimeTriples.card + actual UnitFibres.card.",
+    "No generic Pan/finite count/density/harmonic wrappers are cloned. This leaf imports only the owned ninth source and reuses its two genuinely general finite arithmetic lemmas. No owned source changes."
+  ],
+  "future_Pan_scope_read_only_not_a_result": {
+    "provider": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPanBoundedAggregate.lean",
+    "provider_source_sha256": "87f7f80dbc1808505d85160e0bdb89a08a3304f1558b8ad625d5e63a66c6c753",
+    "full_declaration_header": "theorem liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving\n    (U : ℝ) (hU : 0 < U) :\n    ∃ C : ℝ, 0 < C ∧ ∃ B : ℝ, 0 ≤ B ∧ ∃ N₀ : ℕ,\n      ∀ N ≥ N₀, ∀ A₁ A₂ : ℕ, ∀ f : ℕ → ℝ,\n        (A₂ : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ) →\n        Real.log (N : ℝ) ^ (2 * B) ≤ A₁ →\n        (∀ a, |f a| ≤ 1) →\n        ∑ d ∈ Icc 1 (panModulusCutoff N B),\n          liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n            N A₁ A₂ d f ≤\n          C * (N : ℝ) / Real.log (N : ℝ) ^ U ",
+    "checked": "The actual existing theorem allows A2<=N^(2/3), with exists C,B,N0 before N/window/f and abs(f)<=1. This is inclusive 2/3, not a ninth .618 restriction.",
+    "not_yet_proved_in_this_leaf": [
+      "Actual eighth prefix product strict upper bound N^(2/3) and exact ceil endpoint A2<=N^(2/3).",
+      "Actual same modulus-independent zero-one coefficient with ordered-prime injection and support.",
+      "Actual finite count, coprime gate, signed Pan aggregate, unit/small-P errors and ordinary density factor."
+    ]
+  },
+  "remaining": [
+    "No Lean elaboration, kernel replay or owned-object acceptance claimed.",
+    "Independent full source review and exact first runtime authorization are separate.",
+    "No adopted K, ordinary eighth upper mean or full current hLower is asserted."
+  ]
+}

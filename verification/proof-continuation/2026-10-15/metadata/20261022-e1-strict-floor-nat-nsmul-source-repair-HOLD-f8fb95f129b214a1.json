@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-e1-strict-floor-nat-nsmul-source-repair-HOLD",
+  "created_utc": "2026-10-21T20:53:47.2420317Z",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "status": "SINGLE_TOKEN_NAT_NSMUL_SPECIALIZATION_SOURCE_REPAIR_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Only actual StrictFloor31e919 L121 generic nsmul_eq_mul specialization. One token replacement, four ASCII bytes added. No public type, definition, import, cutoff or other proof changes. Existing complete source review is not repeated.",
+  "actual_before": {
+    "path": "ImbalancedChen/Part3ElementaryE1StrictFloor.lean",
+    "sha256": "31e919a0003188364a842901c8373ebc08ee8763210484ccaa81af3910c7db70",
+    "bytes": 13509,
+    "lf_lines": 273
+  },
+  "artifact": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261022-e1-strict-floor-nat-nsmul-source-repair.txt",
+    "sha256": "8e5581efd2a50ee73b40a256a37526d3a020482b66256a0117a131dcc5e398c9",
+    "bytes": 13513,
+    "lf_lines": 273
+  },
+  "exact_changed_site": {
+    "line": 121,
+    "declaration": "fouvryTau_le_truncated_divisor_sum_strict",
+    "old_token": "nsmul_eq_mul",
+    "new_token": "Nat.nsmul_eq_mul",
+    "old_line": "      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,",
+    "new_line": "      simp only [Finset.sum_const, Nat.nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,",
+    "complete_old_declaration": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n  have hfin : (orderedFactorTuples K n).card ≤\n      ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := by\n    apply card_le_sum_deletionFibers_strict (hn := by omega)\n    · simpa only [Fintype.card_fin] using hK\n    · intro a ha\n      exact (Finset.mem_filter.mp ha).2\n    · simpa only [Fintype.card_fin] using hcut\n  calc\n    fouvryTau K n = (orderedFactorTuples K n).card :=\n      (card_orderedFactorTuples_eq_fouvryTau K n (by omega)).symm\n    _ ≤ ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := hfin\n    _ ≤ ∑ _i : Fin K, ∑ d ∈ truncatedDivisors n D, fouvryTau (K - 1) d := by\n      apply Finset.sum_le_sum\n      intro i _hi\n      apply Finset.sum_le_sum\n      intro d hd\n      exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n        (Finset.mem_filter.mp hd).1 i\n    _ = _ := by\n      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n        truncatedDivisors]\n",
+    "complete_new_declaration": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n  have hfin : (orderedFactorTuples K n).card ≤\n      ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := by\n    apply card_le_sum_deletionFibers_strict (hn := by omega)\n    · simpa only [Fintype.card_fin] using hK\n    · intro a ha\n      exact (Finset.mem_filter.mp ha).2\n    · simpa only [Fintype.card_fin] using hcut\n  calc\n    fouvryTau K n = (orderedFactorTuples K n).card :=\n      (card_orderedFactorTuples_eq_fouvryTau K n (by omega)).symm\n    _ ≤ ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n        (deletionFiber (orderedFactorTuples K n) i d).card := hfin\n    _ ≤ ∑ _i : Fin K, ∑ d ∈ truncatedDivisors n D, fouvryTau (K - 1) d := by\n      apply Finset.sum_le_sum\n      intro i _hi\n      apply Finset.sum_le_sum\n      intro d hd\n      exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n        (Finset.mem_filter.mp hd).1 i\n    _ = _ := by\n      simp only [Finset.sum_const, Nat.nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n        truncatedDivisors]\n"
+  },
+  "complete_readable_unified_diff": "--- a/ImbalancedChen/Part3ElementaryE1StrictFloor.lean\n+++ b/ImbalancedChen/Part3ElementaryE1StrictFloor.lean\n@@ -118,6 +118,6 @@\n       exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n         (Finset.mem_filter.mp hd).1 i\n     _ = _ := by\n-      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n+      simp only [Finset.sum_const, Nat.nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n         truncatedDivisors]\n \n",
+  "unique_byte_offset_inverse": {
+    "encoding": "UTF8 without BOM; LF",
+    "byte_offset_zero_based": 5976,
+    "old_token": "nsmul_eq_mul",
+    "old_token_raw_base64": "bnNtdWxfZXFfbXVs",
+    "old_token_bytes": 12,
+    "new_token": "Nat.nsmul_eq_mul",
+    "new_token_raw_base64": "TmF0Lm5zbXVsX2VxX211bA==",
+    "new_token_bytes": 16,
+    "byte_length_delta": 4,
+    "old_token_occurrences_in_original": 1,
+    "new_token_occurrences_in_proposal": 1,
+    "unchanged_prefix_bytes": 5976,
+    "unchanged_prefix_sha256": "b3d6052e0f4864227c4e31d463606dff5764e53647c7abc72c6515489c506893",
+    "unchanged_suffix_bytes": 7521,
+    "unchanged_suffix_sha256": "46039804b218490303784c58f9bfef0118a03c8feb26e285e1f20b98551b35cc",
+    "forward": "At the unique recorded byte offset, replace raw old_token by new_token; prefix and suffix unchanged.",
+    "inverse": "At the same byte offset in the proposal, replace raw new_token by old_token; prefix and suffix unchanged.",
+    "inverse_raw_sha256": "31e919a0003188364a842901c8373ebc08ee8763210484ccaa81af3910c7db70",
+    "inverse_matches_complete_original_raw_bytes": true,
+    "source_utf8_roundtrip_exact": true,
+    "unique_changed_line": 121,
+    "no_line_count_change": true
+  },
+  "all12_complete_public_type_and_declaration_hashes": [
+    {
+      "name": "exists_deletedProduct_le_strict",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.exists_deletedProduct_le_strict",
+      "first": 16,
+      "type_last": 19,
+      "last": 42,
+      "complete_public_type": "theorem exists_deletedProduct_le_strict (a : ι → ℕ) {n D : ℕ}\n    (hcard : 2 ≤ Fintype.card ι) (hprod : (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    ∃ i : ι, deletedProduct a i ≤ D := by\n",
+      "old_type_sha256": "5167a341f771736b6b88f26765c5fbe745983ab9ff27610650bc39f36cb84a17",
+      "new_type_sha256": "5167a341f771736b6b88f26765c5fbe745983ab9ff27610650bc39f36cb84a17",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "20e660d880811ff0b2c450899370f03d613afc1fdd0e0c987021c44a05f699ff",
+      "new_full_declaration_sha256": "20e660d880811ff0b2c450899370f03d613afc1fdd0e0c987021c44a05f699ff",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_smallCover_eq_sum_deletionFibers",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_smallCover_eq_sum_deletionFibers",
+      "first": 45,
+      "type_last": 48,
+      "last": 75,
+      "complete_public_type": "theorem card_smallCover_eq_sum_deletionFibers (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hprod : ∀ a ∈ S, (∏ j, a j) = n) (i : ι) :\n    (S.filter (fun a => deletedProduct a i ≤ D)).card =\n      ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+      "old_type_sha256": "2d4a1374408810b1e155573349f6d5933d1595a52f837fddb9b0e8fa5cf424a3",
+      "new_type_sha256": "2d4a1374408810b1e155573349f6d5933d1595a52f837fddb9b0e8fa5cf424a3",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "34c68ae0c851ed9e7a85de38256c8bf07cd083ab6db039f0713a3a8fb676a377",
+      "new_full_declaration_sha256": "34c68ae0c851ed9e7a85de38256c8bf07cd083ab6db039f0713a3a8fb676a377",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_le_sum_deletionFibers_strict",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_le_sum_deletionFibers_strict",
+      "first": 78,
+      "type_last": 82,
+      "last": 91,
+      "complete_public_type": "theorem card_le_sum_deletionFibers_strict (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hcard : 2 ≤ Fintype.card ι)\n    (hprod : ∀ a ∈ S, (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    S.card ≤ ∑ i : ι, ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+      "old_type_sha256": "7cf1c539dae048681f8eef890d224ae9ef0501b79aa7ee1818828c59745a8e44",
+      "new_type_sha256": "7cf1c539dae048681f8eef890d224ae9ef0501b79aa7ee1818828c59745a8e44",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "7f0be3a5a825b295ad12732a7d1fbe9c2f1bfc02541ad5018918b8b1bbb87bdf",
+      "new_full_declaration_sha256": "7f0be3a5a825b295ad12732a7d1fbe9c2f1bfc02541ad5018918b8b1bbb87bdf",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "fouvryTau_le_truncated_divisor_sum_strict",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.fouvryTau_le_truncated_divisor_sum_strict",
+      "first": 96,
+      "type_last": 99,
+      "last": 122,
+      "complete_public_type": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n",
+      "old_type_sha256": "8fe7636cb2d61dbadc743efe39e7452212bfb394cc45a974af9624d42bdb6a77",
+      "new_type_sha256": "8fe7636cb2d61dbadc743efe39e7452212bfb394cc45a974af9624d42bdb6a77",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "6ad02b128d8a1676dfec975e4dcfb5f6276c9ac182be8d3842525bd9d58c8d13",
+      "new_full_declaration_sha256": "0cb57f4f11873667581d807925a0613feb14192b44293d866a6df2c29cd13556",
+      "full_declaration_byte_identical": false
+    },
+    {
+      "name": "sum_fouvryTau_interval_payment_strict",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict",
+      "first": 133,
+      "type_last": 137,
+      "last": 162,
+      "complete_public_type": "theorem sum_fouvryTau_interval_payment_strict {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+      "old_type_sha256": "38826d300783e3fc85d099844cf89613c8ebb0bf3d259472cb594f30d2997901",
+      "new_type_sha256": "38826d300783e3fc85d099844cf89613c8ebb0bf3d259472cb594f30d2997901",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "1e6641770bb20aa3d33d14757b8957105597aabc39e471af39dadfa15096899e",
+      "new_full_declaration_sha256": "1e6641770bb20aa3d33d14757b8957105597aabc39e471af39dadfa15096899e",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "sum_fouvryTau_interval_payment_strict_split",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict_split",
+      "first": 165,
+      "type_last": 170,
+      "last": 186,
+      "complete_public_type": "theorem sum_fouvryTau_interval_payment_strict_split {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n",
+      "old_type_sha256": "ffa6c7d7e624476bb091d55051fea41509c2323e50cebfab20ed739b640ccc5c",
+      "new_type_sha256": "ffa6c7d7e624476bb091d55051fea41509c2323e50cebfab20ed739b640ccc5c",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "65071d5bf3d8a1d0bc51eb4a837b8c5071a25387e0a661ac8abc0d60dae47ba1",
+      "new_full_declaration_sha256": "65071d5bf3d8a1d0bc51eb4a837b8c5071a25387e0a661ac8abc0d60dae47ba1",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "realDeletionRadius_eq_manuscript",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_eq_manuscript",
+      "first": 191,
+      "type_last": 192,
+      "last": 200,
+      "complete_public_type": "theorem realDeletionRadius_eq_manuscript {K : ℕ} (hK : 2 ≤ K) (Z : ℝ) :\n    realDeletionRadius K Z = Z ^ (1 - 1 / (K : ℝ)) := by\n",
+      "old_type_sha256": "65c4734eeeef75047242e6f92b69eec9519448f11f07d09b9ee2f52747e0927a",
+      "new_type_sha256": "65c4734eeeef75047242e6f92b69eec9519448f11f07d09b9ee2f52747e0927a",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "c805f53d583a4711a588cae6e2f0841b8f6775bca55d5b08ff0a61f201503538",
+      "new_full_declaration_sha256": "c805f53d583a4711a588cae6e2f0841b8f6775bca55d5b08ff0a61f201503538",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "realDeletionRadius_pow",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_pow",
+      "first": 202,
+      "type_last": 203,
+      "last": 206,
+      "complete_public_type": "theorem realDeletionRadius_pow {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 0 ≤ Z) :\n    realDeletionRadius K Z ^ K = Z ^ (K - 1) := by\n",
+      "old_type_sha256": "c59fa6a37e22956dfd31dae26fc7e672af9cb834c32f424ffc0c2c702261f4af",
+      "new_type_sha256": "c59fa6a37e22956dfd31dae26fc7e672af9cb834c32f424ffc0c2c702261f4af",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "7a07c68ce32733edc99c15a199ce43657d2813f650790e1b6c38ab879b15d0c1",
+      "new_full_declaration_sha256": "7a07c68ce32733edc99c15a199ce43657d2813f650790e1b6c38ab879b15d0c1",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "realDeletionRadius_bounds",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_bounds",
+      "first": 208,
+      "type_last": 209,
+      "last": 214,
+      "complete_public_type": "theorem realDeletionRadius_bounds {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 1 ≤ Z) :\n    1 ≤ realDeletionRadius K Z ∧ realDeletionRadius K Z ≤ Z := by\n",
+      "old_type_sha256": "39517e96cd68b75d6a051ad3bb0d571402f10ffa5dbe10a12d71a608bd95df1e",
+      "new_type_sha256": "39517e96cd68b75d6a051ad3bb0d571402f10ffa5dbe10a12d71a608bd95df1e",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "7a391a33b34df26323fb37af6ba62fb821a67cc864bff1528e90eb411c269e1f",
+      "new_full_declaration_sha256": "7a391a33b34df26323fb37af6ba62fb821a67cc864bff1528e90eb411c269e1f",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "floor_radius_strict_cutoff",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.floor_radius_strict_cutoff",
+      "first": 217,
+      "type_last": 219,
+      "last": 227,
+      "complete_public_type": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n",
+      "old_type_sha256": "6267b634a9a75def166ae70680fb763ca289aeb02257fdc41c4a572df75a65f0",
+      "new_type_sha256": "6267b634a9a75def166ae70680fb763ca289aeb02257fdc41c4a572df75a65f0",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "c2f82153f9949886b6d1730324fdc1a9773702580aa44fa37665276c23631ae0",
+      "new_full_declaration_sha256": "c2f82153f9949886b6d1730324fdc1a9773702580aa44fa37665276c23631ae0",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "native_floor_tau_payment",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.native_floor_tau_payment",
+      "first": 230,
+      "type_last": 234,
+      "last": 255,
+      "complete_public_type": "theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}\n    (hR : 1 ≤ R) (hRZ : R ≤ Z) (hY : 0 ≤ Y) :\n    Y * (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ)) ≤\n      Y * (1 + Real.log Z) ^ (K - 1) + R * (1 + Real.log Z) ^ (K - 2) := by\n",
+      "old_type_sha256": "4aeaa3ab120b0e5b029b6d7b572fc324215832ca992b080a8f10fbb489c5ea2c",
+      "new_type_sha256": "4aeaa3ab120b0e5b029b6d7b572fc324215832ca992b080a8f10fbb489c5ea2c",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "f8272bb0da42e8f93680d280e300d66a7ec6a864a690883b91b2c3353af4098d",
+      "new_full_declaration_sha256": "f8272bb0da42e8f93680d280e300d66a7ec6a864a690883b91b2c3353af4098d",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "sum_fouvryTau_E1_nat_endpoints",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_E1_nat_endpoints",
+      "first": 258,
+      "type_last": 262,
+      "last": 270,
+      "complete_public_type": "theorem sum_fouvryTau_E1_nat_endpoints {K A B : ℕ} (hK : 2 ≤ K)\n    (hAB : A ≤ B) {Z : ℝ} (hZ : 2 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+      "old_type_sha256": "6e50200237a2dea45a9c01d4eed1ef2fc943a9b78c9c76b0d37342dc1283f3ca",
+      "new_type_sha256": "6e50200237a2dea45a9c01d4eed1ef2fc943a9b78c9c76b0d37342dc1283f3ca",
+      "type_byte_identical": true,
+      "old_full_declaration_sha256": "f17de216e426ba02fcc250baafc6f58ca0160956c35f84bc29ad987a79587631",
+      "new_full_declaration_sha256": "f17de216e426ba02fcc250baafc6f58ca0160956c35f84bc29ad987a79587631",
+      "full_declaration_byte_identical": true
+    }
+  ],
+  "definition_preservation": {
+    "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius",
+    "line": 189,
+    "literal_source": "def realDeletionRadius (K : ℕ) (Z : ℝ) : ℝ := Z ^ (((K - 1 : ℕ) : ℝ) / (K : ℝ))\n",
+    "old_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054",
+    "new_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054",
+    "raw_byte_identical": true
+  },
+  "import_preservation": {
+    "complete_import_source": "import ImbalancedChen.Part3ElementaryIntervalDivisibility\nimport Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Algebra.Order.Floor.Semiring\n",
+    "old_sha256": "7eb369351c13b3770e14f3fc689acf8029f8e348de30466b2dcbb3b17da8d182",
+    "new_sha256": "7eb369351c13b3770e14f3fc689acf8029f8e348de30466b2dcbb3b17da8d182",
+    "raw_byte_identical": true
+  },
+  "prior_extraction_inventory": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-e1-module-extraction-source-preparation-HOLD.json",
+    "sha256": "38a49f9c691e7b3268edc71a832c274da0d908c4cf22fd3607a20caf7e206aff",
+    "bytes": 146229,
+    "lf_lines": 859
+  },
+  "actual_pinned_API_spans": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Ring/Defs.lean",
+      "raw_sha256": "1855822f484b47ad4c31fbdd545f02041e80d19621f52645ef485ac3ac131d26",
+      "first": 178,
+      "last": 192,
+      "role": "Generic nsmul_eq_mul under NonAssocSemiring alpha; natural coefficient cast occurs on RHS.",
+      "literal_source": "section NonAssocSemiring\n\nvariable [NonAssocSemiring α]\n\ntheorem two_mul (n : α) : 2 * n = n + n :=\n  (congrArg₂ _ one_add_one_eq_two.symm rfl).trans <| (right_distrib 1 1 n).trans (by rw [one_mul])\n\ntheorem mul_two (n : α) : n * 2 = n + n :=\n  (congrArg₂ _ rfl one_add_one_eq_two.symm).trans <| (left_distrib n 1 1).trans (by rw [mul_one])\n\n@[simp] lemma nsmul_eq_mul (n : ℕ) (a : α) : n • a = n * a := by\n  induction n with\n  | zero => rw [zero_nsmul, Nat.cast_zero, zero_mul]\n  | succ n ih => rw [succ_nsmul, ih, Nat.cast_succ, add_mul, one_mul]\n\n",
+      "span_sha256": "2935273d253ce83217629efd161977e3a5c757c43022d4b4ebdcecd187f8dc07",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Group/Nat/Defs.lean",
+      "raw_sha256": "17bee4169c02f700e10b9f0201c8bd2fc893dfb4e039f6c722f8bcef6d3254aa",
+      "first": 71,
+      "last": 87,
+      "role": "Actual protected Nat.nsmul_eq_mul on two Nat values, rfl.",
+      "literal_source": "instance instAddCommMonoid    : AddCommMonoid ℕ    := by infer_instance\ninstance instAddMonoid        : AddMonoid ℕ        := by infer_instance\ninstance instMonoid           : Monoid ℕ           := by infer_instance\ninstance instCommSemigroup    : CommSemigroup ℕ    := by infer_instance\ninstance instSemigroup        : Semigroup ℕ        := by infer_instance\ninstance instAddCommSemigroup : AddCommSemigroup ℕ := by infer_instance\ninstance instAddSemigroup     : AddSemigroup ℕ     := by infer_instance\ninstance instOne              : One ℕ              := inferInstance\n\nset_option linter.style.whitespace true\n\n/-! ### Miscellaneous lemmas -/\n\n-- We set the simp priority slightly lower than default; later more general lemmas will replace it.\n@[simp 900] protected lemma nsmul_eq_mul (m n : ℕ) : m • n = m * n := rfl\n\nend Nat\n",
+      "span_sha256": "d00f9422d597bfb46e386969cfd79658950eaf11ee700fe1db0ce227e4059334",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "raw_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "first": 628,
+      "last": 630,
+      "role": "Generated sum_const gives card nsmul constant.",
+      "literal_source": "@[to_additive (attr := simp)]\ntheorem prod_const (b : M) : ∏ _x ∈ s, b = b ^ #s :=\n  (congr_arg _ <| s.val.map_const b).trans <| Multiset.prod_replicate #s b\n",
+      "span_sha256": "cc7a9d0b293a6e259e88d0ea4b8660d858f934c3ed5fb843ede273cf8a1f7760",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "raw_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "first": 955,
+      "last": 963,
+      "role": "Actual native sum_const_nat uses Nat.nsmul_eq_mul with sum_const.",
+      "literal_source": "\nsection Nat\n\nlemma card_eq_sum_ones (s : Finset ι) : #s = ∑ _ ∈ s, 1 := by simp\n\ntheorem sum_const_nat {m : ℕ} {f : ι → ℕ} (h₁ : ∀ x ∈ s, f x = m) : ∑ x ∈ s, f x = #s * m := by\n  rw [← Nat.nsmul_eq_mul, ← sum_const]\n  apply sum_congr rfl h₁\n\n",
+      "span_sha256": "2a289c51e362a216c9bb3b8cf6d96fa6165c7488cbae29e4a8306d2960610c43",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/NumberTheory/ArithmeticFunction/Defs.lean",
+      "raw_sha256": "f15e3b760f86bbe779ad5ac38bf4d47f7be276fe22261bd51b98cc8c652fbe2b",
+      "first": 45,
+      "last": 69,
+      "role": "ArithmeticFunction R is ZeroHom Nat R and coerces from Nat to R.",
+      "literal_source": "\n/-- An arithmetic function is a function from `ℕ` that maps 0 to 0. In the literature, they are\n  often instead defined as functions from `ℕ+`. Multiplication on `ArithmeticFunctions` is by\n  Dirichlet convolution. -/\ndef ArithmeticFunction [Zero R] :=\n  ZeroHom ℕ R\n\ninstance ArithmeticFunction.zero [Zero R] : Zero (ArithmeticFunction R) :=\n  inferInstanceAs (Zero (ZeroHom ℕ R))\n\ninstance [Zero R] : Inhabited (ArithmeticFunction R) := inferInstanceAs (Inhabited (ZeroHom ℕ R))\n\nvariable {R}\n\nnamespace ArithmeticFunction\n\nsection Zero\n\nvariable [Zero R]\n\ninstance : FunLike (ArithmeticFunction R) ℕ R :=\n  inferInstanceAs (FunLike (ZeroHom ℕ R) ℕ R)\n\n@[simp]\ntheorem toFun_eq (f : ArithmeticFunction R) : f.toFun = f := rfl\n",
+      "span_sha256": "7deb2d210eb44d4502a00938357dcb1f1916e7bbdf6c943c6b7dc605da838554",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve/LiLiuPrereqFouvryDivisorMean.lean",
+      "raw_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "first": 14,
+      "last": 35,
+      "role": "Actual fouvryTau k has codomain Nat, not Real.",
+      "literal_source": "namespace MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\nopen Finset\n\n/-- The ordered `k`-fold divisor function, with the usual value zero at zero. -/\ndef fouvryTau (k : ℕ) : ArithmeticFunction ℕ := ArithmeticFunction.zeta ^ k\n\n@[simp] theorem fouvryTau_zero (k : ℕ) : fouvryTau k 0 = 0 :=\n  ArithmeticFunction.map_zero\n\ntheorem fouvryTau_multiplicative (k : ℕ) : (fouvryTau k).IsMultiplicative :=\n  ArithmeticFunction.isMultiplicative_zeta.pow\n\n@[simp] theorem fouvryTau_one (k : ℕ) : fouvryTau k 1 = 1 :=\n  (fouvryTau_multiplicative k).map_one\n\ntheorem fouvryTau_order_one {n : ℕ} (hn : n ≠ 0) : fouvryTau 1 n = 1 := by\n  simp [fouvryTau, ArithmeticFunction.zeta_apply, hn]\n\ntheorem fouvryTau_succ (k n : ℕ) :\n    fouvryTau (k + 1) n = ∑ d ∈ n.divisors, fouvryTau k d := by\n  exact ArithmeticFunction.coe_mul_zeta_apply (f := fouvryTau k)\n",
+      "span_sha256": "7e1d42bb994e2a8222b5c04aca6bddab420af5e9b3d7714763fc49ace13fed6e",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Fintype/Card.lean",
+      "raw_sha256": "c0646c3ea4a87f80a91e604a55595c45f51226320e88953333b4d067a5315b24",
+      "first": 103,
+      "last": 104,
+      "role": "Finset.card_univ is Fintype.card.",
+      "literal_source": "@[simp, grind =]\ntheorem Finset.card_univ [Fintype α] : #(univ : Finset α) = Fintype.card α := rfl\n",
+      "span_sha256": "004119edbd05ec6c39e790d4324277d1b4ccd15374c6045a9ac91449a4003e29",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Fintype/Card.lean",
+      "raw_sha256": "c0646c3ea4a87f80a91e604a55595c45f51226320e88953333b4d067a5315b24",
+      "first": 493,
+      "last": 499,
+      "role": "Fintype.card_fin n is n.",
+      "literal_source": "\nsection Fin\n\n@[simp]\ntheorem Fintype.card_fin (n : ℕ) : Fintype.card (Fin n) = n :=\n  List.length_finRange\n\n",
+      "span_sha256": "e8479e45966f5b109836ee9a37d3a08866e7586bc2b9c57d6b731c41ad91bfa2",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryTauTruncation.lean",
+      "raw_sha256": "8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f",
+      "first": 89,
+      "last": 91,
+      "role": "Actual truncatedDivisors is the exact Nat finite divisor filter.",
+      "literal_source": "/-- The actual truncated divisor carrier, with the zero convention of Nat.divisors. -/\ndef truncatedDivisors (n D : ℕ) : Finset ℕ :=\n  n.divisors.filter (fun d => d ≤ D)\n",
+      "span_sha256": "19225b2f7b880952d81985fc67133d08c5894fcc3ac8d290d72cd370bafa578e",
+      "actual_source_read": true
+    }
+  ],
+  "analogous_TauDeletion_evidence": {
+    "source_only_repair_CP": {
+      "path": ".lake/proof-continuation/source-reviews/20261022-taufiber8bf0-sourceonly-strict-repair-author-HOLD.json",
+      "sha256": "d0793443bf774694cf1f27e81dd8134e959fd7e15cd2374f96db37c62a6a2a2c",
+      "bytes": 75845,
+      "lf_lines": 506
+    },
+    "original_observed_stdout": {
+      "path": ".lake/proof-continuation/runs/20261021T202927312895Z-ImbalancedChen.Part3ElementaryTauDeletionFiber/stdout.log",
+      "sha256": "610ff1b1fa7b43838708ef2b0328f2cded9cac1b84908a7041d2d83d00e8784e",
+      "bytes": 902,
+      "lf_lines": 20
+    },
+    "original_stdout_verbatim": "ImbalancedChen/Part3ElementaryTauDeletionFiber.lean:174:51: error: This simp argument is unused:\n  ArithmeticFunction.one_apply\n\nHint: Omit it from the simp argument list.\n  [apply] simp [orderedFactorTuples_zero, fouvryTau, hn1]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3ElementaryTauDeletionFiber.lean:175:51: error: This simp argument is unused:\n  ArithmeticFunction.one_apply\n\nHint: Omit it from the simp argument list.\n  [apply] simp [orderedFactorTuples_zero, fouvryTau, hn1]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3ElementaryTauDeletionFiber.lean:298:79: error: unsolved goals\nK n D : ℕ\nhK : 2 ≤ K\nhn : 1 ≤ n\nhcut : n ^ (K - 1) ≤ D ^ K\n⊢ ↑K * ∑ d ∈ n.divisors with d ≤ D, (fouvryTau (K - 1)) d = K * ∑ d ∈ n.divisors with d ≤ D, (fouvryTau (K - 1)) d\n",
+    "relevance": "Actual previously observed analogous Nat constant-sum residual is cast(K)*S=K*S after generic nsmul_eq_mul. This is contextual evidence for the same local specialization, not an observed StrictFloor run.",
+    "StrictFloor_actual_diagnostic_run": false
+  },
+  "local_repair_argument": {
+    "target_type": "fouvryTau k : ArithmeticFunction Nat, hence every fouvryTau(K-1)d and both inner and outer finite sums in L113-L122 are Nat. The public goal is a Nat inequality with exact strict successor cutoff.",
+    "generic_issue": "The generic [NonAssocSemiring alpha] nsmul_eq_mul gives n•a=(Nat.cast n:alpha)*a. Under alpha=Nat this can leave the self-cast visible under the present restricted simp-only list, exactly as observed in the analogous TauDeletion strict diagnostic.",
+    "specialized_API": "Actual protected Nat.nsmul_eq_mul(m n:Nat):m•n=m*n is rfl and contains no Nat.cast. The actual native Finset.sum_const_nat source uses this same specialized lemma.",
+    "resulting_normal_form": "sum_const gives card(univ:Finset(Fin K)) • innerSum. Nat.nsmul_eq_mul gives Nat cardinal multiplication. card_univ and card_fin reduce cardinal to K, and truncatedDivisors unfolds to the same explicit divisor filter on the RHS. The displayed Nat equality is reflexive after these rewrites.",
+    "minimality": "Only add Nat. before the single generic simp argument. No additional simp lemma, cast lemma, linter suppression, hypothesis or target alteration.",
+    "author_static_verdict": "no_static_blocker_for_the_single_site_repair",
+    "exact_compilation_or_linter_result": "NOT_CHECKED"
+  },
+  "preservation": {
+    "all12_public_types_byte_identical": true,
+    "other11_complete_proofs_byte_identical": true,
+    "only_one_full_declaration_body_changed": true,
+    "all_definition_bytes_identical": true,
+    "all_import_bytes_identical": true,
+    "all_namespace_section_open_end_bytes_identical": true,
+    "all_other_source_bytes_preserved_by_unique_inverse": true,
+    "actual_source_hash_after": "31e919a0003188364a842901c8373ebc08ee8763210484ccaa81af3910c7db70"
+  },
+  "claim_boundaries": {
+    "actual_source_applied": false,
+    "compilation": "NOT_RUN",
+    "kernel": "NOT_CHECKED",
+    "engineering_admission": false,
+    "E1_M2_spectrum_main": "NO_NEW_MATHEMATICAL_CLAIM"
+  },
+  "quota": {
+    "fresh_used_percent": 46,
+    "fresh_remaining_percent": 54,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/drafts/20261022-e1-strict-floor-nat-nsmul-source-repair.txt",
+      ".lake/proof-continuation/source-reviews/20261022-e1-strict-floor-nat-nsmul-source-repair-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "old_draft_edits": 0,
+    "helper_files": 0,
+    "proof_tools": 0,
+    "Lean_runs": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "runtime_operations": 0,
+    "Git_operations": 0,
+    "Site_operations": 0,
+    "new_subagents": 0
+  },
+  "stop_condition": "Single bounded source-only Nat specialization proposal complete. HOLD for root exact-diff review; no actual edit or run."
+}

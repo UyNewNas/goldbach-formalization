@@ -1,0 +1,157 @@
+{
+  "status": "SOURCE_ONLY_REUSABLE_API_AND_REMAINING_BRIDGE_INVENTORY",
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "provider_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+  "provider_source_hashes": [
+    {
+      "module": "MathlibNt.SieveTheory.LiLiuPrereqWFBoxFamily",
+      "sha256": "28567cafea82718e9bc3d3873b2850e6cf81420cfb6ad8503bc3fa060c7e8387"
+    },
+    {
+      "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSeparated",
+      "sha256": "0a6106b86914178f16d67b095db54c6fe0dce960c719b9114ac495daa38a6930"
+    },
+    {
+      "module": "MathlibNt.SieveTheory.LiLiuPrereqWFDividedPowers",
+      "sha256": "f43ef5fc482d6c5343996e6354f8ea6f031f16184d455c6f7d89635f5a93aae3"
+    },
+    {
+      "module": "MathlibNt.SieveTheory.LiLiuPrereqWFBoxCoefficients",
+      "sha256": "39c52878d8492028c5420161ccff69bbeab72014ea1a68591a02534d28f1f49f"
+    },
+    {
+      "module": "MathlibNt.SieveTheory.LiLiuPrereqWFTagCardinality",
+      "sha256": "525128857dc07f54f295d1c282ad4b230d1b53d2da41db4f1fad42145c5cc821"
+    }
+  ],
+  "project_source_hashes": [
+    {
+      "path": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+      "sha256": "b3836f95dce0a4652901ef20e5f1b7468aa19ec4e1e1f621d28f81ff36c5d90e"
+    },
+    {
+      "path": "ImbalancedChen/ActualTwoCapacityGreedy.lean",
+      "sha256": "0f9c111854e81e3286f3b723b90306babd33def530d272a9852ede423aa0a525"
+    },
+    {
+      "path": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+      "sha256": "92636fed625d1e42d5f93492d567f8c88e37a48b3177b26904cb2f36d7d1a65f"
+    },
+    {
+      "path": "ImbalancedChen/FirstExitTree.lean",
+      "sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b"
+    },
+    {
+      "path": "ImbalancedChen/QuotientChenPositiveBound.lean",
+      "sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6"
+    },
+    {
+      "path": "ImbalancedChen/Part3FactorFiberDivisor.lean",
+      "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159"
+    }
+  ],
+  "direct_reuse": [
+    {
+      "api": "MathlibNt.SieveTheory.LiLiuPrereqWF.list_boxProduct_factors",
+      "source": "LiLiuPrereqWFBoxFamily.lean:60",
+      "interface": "input:List labels; B:label->Finset primes; U:label->Real; nonnegative U and prime sizes<=U; distinct label boxes pairwise disjoint; PrefixSquareBound U Q input; Q1,Q2>=1 and Q1*Q2=Q. Produces f,g arithmetic functions, each BoundedOne and supported at Q1/Q2, with fixed original normalized boxProduct(input.toFinset,B,input.count)=f*g.",
+      "gate": "Its endpoint PrefixSquareBound is an input that the actual consumer must derive from original support, length and box-width margins. Distinct-label disjointness is mandatory; same-label repeated occurrences are retained by counts."
+    },
+    {
+      "api": "boxProduct_split, boxLeftProduct_boundedOne, boxProduct_boundedOne",
+      "source": "LiLiuPrereqWFSeparated.lean:170-200",
+      "interface": "For per-label counts a+b=k, boxProduct k = boxLeftProduct a b * boxProduct b. boxLeftProduct explicitly includes a! b!/(a+b)! at each label. One-bound uses pairwise disjoint distinct prime supports.",
+      "gate": "This is an exact existing coefficient identity; do not divide by factorials a second time."
+    },
+    {
+      "api": "boxProduct_squarefree_eq_indicator, smallWeight_boxProduct_squarefree_eq_indicator",
+      "source": "LiLiuPrereqWFBoxCoefficients.lean:164,245",
+      "interface": "Original squarefree integer is represented exactly once by its full box prime support and prescribed multiplicities. With a separated small-prime coefficient, that original coefficient is retained at the canonical small-prime product.",
+      "gate": "Requires Squarefree n plus pairwise disjoint distinct boxes; the small-weight version additionally requires actual PrimeSupported small weight and support separation."
+    },
+    {
+      "api": "factorial_mul_boxProduct, sum_copies_boxProduct",
+      "source": "LiLiuPrereqWFSeparated.lean:230,239",
+      "interface": "Multiplying the normalized boxProduct by product_i(k_i!) recovers the full original product of labeled prime-box convolution powers at every integer, including nonsquarefree ones.",
+      "gate": "Original repeated-label symmetry factor in the scalar must remain unchanged."
+    },
+    {
+      "api": "actualPrimeTupleCoefficient_le_factorial, actualNormalizedPrimeTupleCoefficient_abs_le_one, actualPrimeTuple_threeGroup_scalar_identity",
+      "source": "ImbalancedChen/ActualPrimeTupleNormalization.lean:35,70,92",
+      "interface": "For an actual finite ordered-prime-list carrier T of fixed length m, the literal product fiber has size<=m!, even with overlapping/repeated interval labels and repeated prime factors. Normalization by m! is one-bounded. The original scalar times three original group coefficients equals that same scalar times the three group factorials times the three normalized coefficients.",
+      "gate": "Needs the actual group carriers and a proved exact group decomposition. The theorem does not make an assignment fiber Cartesian."
+    },
+    {
+      "api": "TagCardinality.words, mem_words, card_words_le",
+      "source": "LiLiuPrereqWFTagCardinality.lean:21,25,40",
+      "interface": "Words over labels<J of length<=R lie in one explicit finite carrier with cardinal<= (J+1)^R. J=3 bounds three-group assignment words by 4^R. A fixed-length Fin R->Fin 3 carrier alternatively has cardinal 3^R.",
+      "gate": "The rough length bound must be proved first. accepted_length_le in this same file requires the stronger geometric SignedTagAccepted data and is not a ready theorem for arbitrary actualDwellSupport."
+    },
+    {
+      "api": "list_prod_squarefree_of_nodup_primes, cardFactors_list_prod_eq_length_of_primes",
+      "source": "ImbalancedChen/FirstExitTree.lean:458,497",
+      "interface": "Prime+Nodup input gives squarefree product; all-prime input gives cardFactors(product)=length even with repetitions.",
+      "gate": "The separate chen_pow_primeFactors_card_le theorem controls distinct factors only, so without Squarefree/Nodup it cannot alone bound list length."
+    },
+    {
+      "api": "Part3.MediumAtom.sum_factorLabels_eq_grouped, groupedFactorGamma_norm_le_tauThree",
+      "source": "ImbalancedChen/Part3FactorFiberDivisor.lean:69,158",
+      "interface": "Original signed complex three-factor labels are regrouped exactly by their physical modulus before norms. Multiplicity is bounded by genuine tau_3 through the actual factor-label injection.",
+      "gate": "This supplies a tau_3 bound, not a one-bound; MediumAdmissible conditions and actual gamma construction remain necessary."
+    }
+  ],
+  "minimal_new_actual_bridges": [
+    {
+      "name": "rough full-vector length",
+      "requirements": [
+        "x>1",
+        "omega>0 fixed before x and all boxes",
+        "every original slot p has x^omega<=cast p",
+        "original indexed Dwell support at D",
+        "D<=x; handle empty input separately or also use D>=1"
+      ],
+      "conclusion": "length<=floor(1/omega). No Nodup is needed for this numerical length bound.",
+      "proof": "For nonempty input the final square test and last slot>=1 give original product<=D. List.prod_map_le_prod_map\u2080 bounds that product below by (x^omega)^length. Real.rpow_mul_natCast and rpow_le_rpow_left_iff cancel x>1, giving omega*length<=1; Nat.le_floor_iff finishes."
+    },
+    {
+      "name": "fixed box endpoint Dwell",
+      "requirements": [
+        "original actual source support at x^lambda",
+        "all coordinate upper endpoints satisfy U_i<=p_i*x^tau for one original support tuple in the same box",
+        "length<=R",
+        "(R+1)*tau<=theta-2delta-lambda"
+      ],
+      "conclusion": "Original complete endpoint vector satisfies PrefixSquareBound at x^(theta-2delta).",
+      "proof": "The i-th square test uses i preceding factors and two copies of its current factor, so endpoint inflation is at most x^((i+2)tau)<=x^((R+1)tau). Existing lambda+e<=theta and delta<=e/32 allow the uniform sufficient bound (R+1)tau<=e/2."
+    },
+    {
+      "name": "fixed selected pair endpoint gates",
+      "requirements": [
+        "same actual selected pair/parameter and original coarse cell",
+        "coordinate endpoint perturbation bound tau",
+        "remaining whole-cell pair-gate slack after 2delta exceeds 4tau"
+      ],
+      "conclusion": "The endpoint pair+remaining-prime square gate is paid before applying generic real-weight allocation.",
+      "proof": "Both pair gate coefficient sums are four. The same bound must cover the endpoint product, rather than silently using the smaller product of an individual tuple."
+    }
+  ],
+  "important_nonimplications": [
+    "Finite many individual-greedy decision words do not make the corresponding tuple fibers Cartesian prime boxes. Conditions coupling group products can remain inside a fiber.",
+    "Upper-endpoint greedy gives a valid common auxiliary allocation when its budgets are paid, but generally differs from the literal per-tuple actualSelectedPairFactors decisions. An equality between these actions requires stable fit comparisons or a separate exact reorganization of the unchanged source coefficient.",
+    "One common box assignment plus real endpoint support bounds still does not prove a distribution theorem or same-policy arithmetic mean.",
+    "Existing fixed rough cutoffs giving <=11 distinct factors are specialized and should not replace the arbitrary fixed omega bound."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified": false,
+    "bytecode_writes_disabled": true,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false,
+    "full_imported_closure_validation_claimed": false
+  }
+}

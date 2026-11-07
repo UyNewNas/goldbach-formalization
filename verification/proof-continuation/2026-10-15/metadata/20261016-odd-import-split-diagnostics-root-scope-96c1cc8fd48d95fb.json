@@ -1,0 +1,45 @@
+{
+  "status": "ROOT_AUTHORIZED_TWO_SEQUENTIAL_IMPORT_ONLY_DIAGNOSTICS_NOT_PROOF",
+  "reviewer": "/root",
+  "created_utc": "2026-10-15T22:48:48.076689+00:00",
+  "cause": {
+    "prior_run": ".lake\\proof-continuation\\runs\\20261015T224657524735Z-ImbalancedChen.Diagnostics.OddBoundaryImportLoadProbe",
+    "receipt_sha256": "2c4904d01515823dc621a813e79a0f7814605889f23ff59a132ac4fec8a2916d",
+    "stdout_sha256": "48bc2200174632932b9ea98fd0a0c30e6dc353ce535531045f1c7efc7b79940a",
+    "finding": "The exact original five imports without any declarations hit interpreter memory_exception at M6144 in one actual run. No original proof location was exposed."
+  },
+  "probes": [
+    {
+      "module": "ImbalancedChen.Diagnostics.OddBoundaryOnlyImportProbe",
+      "source_path": "ImbalancedChen\\Diagnostics\\OddBoundaryOnlyImportProbe.lean",
+      "source_sha256": "a6c6956694e25685fdfafdd129c92a9f44f768c1ebba7c7b919e7abddabb57ff",
+      "literal_source": "import ImbalancedChen.ActualRosserBoundaryExpansion\n",
+      "direct_parent": "ImbalancedChen.ActualRosserBoundaryExpansion",
+      "parent_source_sha256": "be0f26dc2405d3ae48d82cf70a72b31105014b8915c2098a1abdf279cdfa6768",
+      "declarations": 0
+    },
+    {
+      "module": "ImbalancedChen.Diagnostics.OddPrimeMassOnlyImportProbe",
+      "source_path": "ImbalancedChen\\Diagnostics\\OddPrimeMassOnlyImportProbe.lean",
+      "source_sha256": "88ef3a53655c29af2dd4f176efe98b34ede7961c3c3f37bab473d54c544822a7",
+      "literal_source": "import ImbalancedChen.ActualPrimeBoxMass\n",
+      "direct_parent": "ImbalancedChen.ActualPrimeBoxMass",
+      "parent_source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "declarations": 0
+    }
+  ],
+  "purpose": "Distinguish the two existing primary import loads from their union before considering a concrete narrowed finite dependency change. No claim that either load will fit.",
+  "gate": "For each exact one-import target, after its current recursive caches are exact/self-only and missing_external empty, authorize exactly one sequential M6144/RSS6656/j2 strict import-load diagnostic with original runtime/monitor/before-after. Original shared slot, no other heavy job.",
+  "excluded": [
+    "No owned audit or accepted proof count for diagnostic zero-declaration modules",
+    "No original Odd unchanged-byte rerun",
+    "No source/pin/checker/resource or linter changes",
+    "No foreign installs or broad prerequisite build",
+    "No theorem or aggregate imported-closure claim"
+  ],
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  }
+}

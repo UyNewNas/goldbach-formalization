@@ -1,0 +1,246 @@
+"""Root-only read-only protocol/census verification; creates one new report.
+No compiler, import bootstrap, collector, proof mutation, Git or publication.
+V3 only resolves eight measured WSL directory symlinks for Windows native I/O;
+pre/post readlink observations must remain exact. V1/V2 and both HOLDs are retained.
+"""
+from pathlib import Path
+import datetime
+import hashlib
+import importlib.util
+import json
+import subprocess
+
+ROOT = Path(__file__).resolve().parents[3]
+STATE = ROOT / '.lake/proof-continuation'
+RUN = STATE / 'rounds/three-frontiers-run-20261022-next-three-current193'
+WSL_ROOT = '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+WSL_STATE = WSL_ROOT + '/.lake/proof-continuation'
+GATE_REL = 'rounds/20261022-EU-next-three-current193-root-SERIAL-gate.json'
+GATE_SHA = '3adc379850b0b7c724ca9d302e574c801881772cc655ffbe58a82f89c4c603a6'
+PARTS = {'.olean', '.olean.private', '.olean.server', '.ilean', '.ir'}
+TARGETS = ['ImbalancedChen.Multiplicity', 'ImbalancedChen.RationalPowers', 'ImbalancedChen.SingularSeries']
+REPORT = STATE / 'source-reviews/20261022-root-next-three-actual-terminal-protocol-census-verification-v3-all-native-realpaths.json'
+NATIVE_ALIASES = {
+    '/home/slava/codex-lean-ve/native-packages/aesop/.lake': '/home/slava/codex-lean-ve/package-builds/aesop',
+    '/home/slava/codex-lean-ve/native-packages/batteries/.lake': '/home/slava/codex-lean-ve/package-builds/batteries',
+    '/home/slava/codex-lean-ve/native-packages/importGraph/.lake': '/home/slava/codex-lean-ve/package-builds/importGraph',
+    '/home/slava/codex-lean-ve/native-packages/LeanSearchClient/.lake': '/home/slava/codex-lean-ve/package-builds/LeanSearchClient',
+    '/home/slava/codex-lean-ve/native-packages/mathlib/.lake': '/home/slava/codex-lean-ve/mathlib-lake',
+    '/home/slava/codex-lean-ve/native-packages/plausible/.lake': '/home/slava/codex-lean-ve/package-builds/plausible',
+    '/home/slava/codex-lean-ve/native-packages/proofwidgets/.lake': '/home/slava/codex-lean-ve/package-builds/proofwidgets',
+    '/home/slava/codex-lean-ve/native-packages/Qq/.lake': '/home/slava/codex-lean-ve/package-builds/Qq',
+}
+PREDECESSORS = {
+    'v1_checker': {'path':'publication-integrity/20261022-root-next-three-terminal-independent-check.py', 'sha256':'2b43404ea26ce2cd1c016fb75b20b4b6013bd09ca39c8caf636dcb5c0f40d8a6'},
+    'v2_checker': {'path':'publication-integrity/20261022-root-next-three-terminal-independent-check-v2-native-realpath.py', 'sha256':'500d058eeff15d55c1d5f6bc0938951bacc7033edc1c9ff18b2b49caadef4cf6'},
+    'v1_HOLD': {'path':'source-reviews/20261022-root-next-three-independent-native-check-FIRSTFAIL-HOLD.json', 'sha256':'b88dba77a185741f92552fabf28321ca897b35162e905d6abe4cada791138971'},
+    'v2_HOLD': {'path':'source-reviews/20261022-root-next-three-native-realpath-v2-FIRSTFAIL-HOLD.json', 'sha256':'4a932255e186fe87755a9f731b2f3a1c77d78780ac3f80ffed593ee9956859ae'},
+    'alias_diagnosis': {'path':'source-reviews/20261022-root-next-three-all-native-package-lake-aliases-readonly-diagnosis.json', 'sha256':'63cf0f725d74860337b7d7c3f02ba21b73f40cd8c5ff1781e2a0c032a3150ff8'},
+}
+
+def alias_targets():
+    observed = []
+    for logical, physical in NATIVE_ALIASES.items():
+        result = subprocess.run(['wsl.exe', '-d', 'Debian', '-u', 'slava', '--',
+            'readlink', '-f', logical], check=True, capture_output=True, text=True)
+        assert result.stderr == ''
+        assert result.stdout.strip() == physical
+        observed.append({'logical_directory':logical, 'physical_directory':result.stdout.strip()})
+    return observed
+
+def actual(value):
+    s = str(value).replace('\\', '/')
+    for logical, physical in NATIVE_ALIASES.items():
+        if s.startswith(logical + '/'):
+            s = physical + s[len(logical):]
+            break
+    if s.startswith('/mnt/e/'):
+        return Path('E:/' + s[7:])
+    if s.startswith('/mnt/c/'):
+        return Path('C:/' + s[7:])
+    if s.startswith('/home/'):
+        return Path(r'\\?\UNC\wsl.localhost\Debian' + s.replace('/', '\\'))
+    p = Path(s)
+    return p if p.is_absolute() else STATE / p
+
+def sha(value):
+    return hashlib.sha256(actual(value).read_bytes()).hexdigest()
+
+def read(value):
+    return json.loads(actual(value).read_bytes())
+
+def bound(ref):
+    assert set(ref) == {'path', 'sha256'}
+    assert sha(ref['path']) == ref['sha256'], ref['path']
+    return actual(ref['path'])
+
+def reference(value):
+    return {'path': str(actual(value)), 'sha256': sha(value)}
+
+assert not REPORT.exists(), 'Never overwrite a root verification report'
+assert (STATE / 'source-reviews/20261022-root-next-three-independent-native-check-FIRSTFAIL-HOLD.json').is_file()
+assert sha(STATE / 'publication-integrity/20261022-root-next-three-terminal-independent-check.py') == '2b43404ea26ce2cd1c016fb75b20b4b6013bd09ca39c8caf636dcb5c0f40d8a6'
+for ref in PREDECESSORS.values():
+    bound(ref)
+alias_diagnosis = read(PREDECESSORS['alias_diagnosis']['path'])
+assert alias_diagnosis['alias_count'] == len(NATIVE_ALIASES) == 8
+assert alias_diagnosis['aliases'] == [dict(logical_directory=k, physical_directory=v) for k,v in NATIVE_ALIASES.items()]
+native_alias_before = alias_targets()
+assert not (RUN / 'HOLD.json').exists(), 'Preserve original FIRSTFAIL HOLD'
+assert sha(STATE / GATE_REL) == GATE_SHA
+gate = read(STATE / GATE_REL)
+gate_ref = {'path': GATE_REL, 'sha256': GATE_SHA}
+terminal = read(RUN / 'TERMINAL.json')
+assert terminal['status'] == 'ACTUAL_PIPELINE_PASS_PENDING_ROOT_ACCEPTANCE'
+assert terminal['retries'] == 0 and terminal['main_1_plus_1_75'] == 'OPEN'
+assert gate['threads'] == 2 and gate['memory_mib'] == 6144 and gate['rss_limit_mib'] == 6656
+assert gate['heavy_concurrency_limit'] == 1 and gate['quota_stop_remaining_lte'] == 5
+for name, digest in gate['protected'].items():
+    assert sha(STATE / name) == digest, name
+freeze_ref = gate['all562_source_freeze']
+freeze = read(bound(freeze_ref))
+assert len(freeze) == 562
+current_sources = {p.relative_to(ROOT).as_posix(): sha(p) for p in sorted((ROOT / 'ImbalancedChen').rglob('*.lean'))}
+assert current_sources == freeze, 'Actual source inventory or bytes changed'
+phases = ('proper-before', 'full-before', 'strict', 'stock-ALL', 'proper-after', 'full-after')
+expected_stages = ['batch-before'] + [m + ':' + p for m in TARGETS for p in phases] + ['terminal']
+assert len(list(RUN.glob('???-started.json'))) == len(expected_stages)
+assert len(list(RUN.glob('???-finished.json'))) == len(expected_stages)
+events, previous, earlier_artifacts, native_evidence = [], None, None, None
+for i, stage in enumerate(expected_stages):
+    event_path = RUN / f'{i:03d}-finished.json'
+    event = read(event_path)
+    started = read(bound(event['started']))
+    assert event['status'] == 'PASS' and event['stage'] == stage
+    assert started['status'] == 'RUNNING' and started['stage'] == stage
+    assert event['previous'] == previous == started['previous']
+    assert event['gate'] == gate_ref == started['gate']
+    assert event['heavy_owner'] == gate['heavy_owner'] == started['heavy_owner']
+    quota = read(bound(started['quota']))
+    assert quota == started['observed_quota']
+    assert quota['previous_event'] == previous and quota['remaining_percent'] > 5
+    assert quota['stage'] == stage and quota['gate_sha256'] == GATE_SHA
+    for idle in (started['idle_before'], event['idle_after']):
+        assert idle['compiler_processes'] == [] and idle['matching_proc_locks'] == []
+        assert idle['no_lock_acquired'] is True
+        assert idle['original_lock_path'] == gate['shared_lock']
+    assert event['native_before'] == event['native_after']
+    if native_evidence is None:
+        native_evidence = event['native_before']
+    assert event['native_before'] == native_evidence
+    assert event['source_map_after'] == freeze
+    artifacts = event['artifact_map_after']
+    if earlier_artifacts is not None:
+        allowed = set()
+        if stage.endswith(':strict'):
+            target = stage.split(':')[0]
+            allowed = {'cache/' + target + '.json'} | {'lib/lean/' + target.replace('.', '/') + suffix for suffix in PARTS}
+        assert {p:h for p,h in earlier_artifacts.items() if p not in allowed} == {p:h for p,h in artifacts.items() if p not in allowed}
+    earlier_artifacts = artifacts
+    result = event['result']
+    if 'command' in result:
+        assert result['command']['exit_code'] == 0
+        bound(result['command']['stdout'])
+        bound(result['command']['stderr'])
+    if 'capture' in result:
+        bound(result['capture'])
+    if stage.endswith(':strict'):
+        assert result['execution_counts']['runtime_check_invocations'] == 1
+        assert result['execution_counts']['actual_new_strict_compilations'] == 1
+        assert result['execution_counts']['matching_strict_evidence_reuses'] == 0
+        strict = read(bound(result['strict']))
+        assert strict['status'] == 'PASS' and strict['warnings_as_errors'] is True
+        assert strict['binding'] == strict['binding_after']
+    if stage.endswith(':stock-ALL'):
+        assert result['stock_ALL_invocations'] == 1
+        bound(result['audit'])
+        for ref in result['evidence'].values():
+            bound(ref)
+    events.append(event)
+    previous = {'path': WSL_STATE + '/rounds/three-frontiers-run-20261022-next-three-current193/' + f'{i:03d}-finished.json', 'sha256': sha(event_path)}
+assert terminal['final_event'] == previous
+assert terminal['result'] == events[-1]['result']
+artifact_paths = list((STATE / 'cache').glob('*.json')) + [p for p in (STATE / 'lib/lean').rglob('*') if p.is_file()]
+current_artifacts = {p.relative_to(STATE).as_posix(): sha(p) for p in sorted(artifact_paths)}
+assert current_artifacts == earlier_artifacts
+
+# Reconstruct the same logical Linux-path union independently, then hash all
+# physical paths through Windows/WSL UNC. No native records are sampled.
+expected_native, absent_sources = {}, set()
+native_alias_prefixes = set()
+def add(value, digest):
+    key = str(value).replace('\\', '/')
+    assert key not in expected_native or expected_native[key] == digest
+    expected_native[key] = digest
+for module, ref in gate['prepared'].items():
+    stable = read(bound(ref))['stable_inputs']
+    for row in [*stable['foreign_graph'].values(), *stable['owned_project_parents'].values()]:
+        for value in (row['source_path'], row['object_path']):
+            if value is not None:
+                logical_path = str(value).replace('\\', '/')
+                native_root = '/home/slava/codex-lean-ve/native-packages/'
+                if logical_path.startswith(native_root):
+                    package, separator, tail = logical_path[len(native_root):].partition('/')
+                    if tail == '.lake' or tail.startswith('.lake/'):
+                        native_alias_prefixes.add(native_root + package + '/.lake')
+        if row['source_path'] is None:
+            absent_sources.update(row['absent_source_candidates'])
+        else:
+            add(row['source_path'], row['source_sha256'])
+        assert set(row['all_five_slots']) == PARTS
+        stem = row['object_path'][:-len('.olean')]
+        for suffix, digest in row['all_five_slots'].items():
+            add(stem + suffix, digest)
+    for row in stable['owned_project_parents'].values():
+        add(row['cache']['path'], row['cache']['sha256'])
+    for name, digest in stable['native_bins'].items():
+        add('/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/' + name, digest)
+    add(WSL_STATE + '/verified-remote-producers.json', stable['registry']['sha256'] if stable['registry'] else None)
+    old_base = '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0'
+    add(old_base + '/cache/' + module + '.json', stable['old_cache']['sha256'] if stable['old_cache'] else None)
+    for suffix, digest in stable['old_object_all_five_slots'].items():
+        add(old_base + '/direct/lib/lean/' + module.replace('.', '/') + suffix, digest)
+assert native_alias_prefixes == set(NATIVE_ALIASES), 'Prepared native package .lake alias set differs'
+for p in absent_sources:
+    assert not actual(p).is_file(), p
+for p, expected in expected_native.items():
+    assert (sha(p) if actual(p).is_file() else None) == expected, p
+native_map_sha = hashlib.sha256(json.dumps({'paths':expected_native, 'absent_sources':sorted(absent_sources)}, sort_keys=True).encode()).hexdigest()
+assert native_map_sha == native_evidence['map_sha256']
+assert len(expected_native) == native_evidence['paths_checked']
+
+verifier_path = STATE / 'publication-integrity/root_owned_census_oct22.py'
+assert sha(verifier_path) == '9ca33b2f92a209dfb0e7abcca970433a9d93d7a9a14a1fb706b19fb2f20e4cd0'
+spec = importlib.util.spec_from_file_location('root_independent_owned_census_oct22', verifier_path)
+v = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(v)
+candidate_ref = events[-1]['result']['candidate_census']
+candidate, counts = v.verify(str(bound(candidate_ref)), candidate_ref['sha256'])
+baseline, baseline_counts = v.verify(str(bound(gate['baseline_census'])), gate['baseline_census']['sha256'])
+assert all(candidate['modules'][m] == entry for m, entry in baseline['modules'].items())
+assert set(candidate['modules']) - set(baseline['modules']) == set(TARGETS)
+assert counts['owned_modules'] == baseline_counts['owned_modules'] + len(TARGETS)
+actual_delta = {m:candidate['modules'][m]['complete_serialized_declarations'] for m in TARGETS}
+assert counts['declarations'] == baseline_counts['declarations'] + sum(actual_delta.values())
+assert counts == events[-1]['result']['actual_counts']
+native_alias_after = alias_targets()
+assert native_alias_before == native_alias_after
+report = dict(status='ROOT_INDEPENDENT_ALL20_PROTOCOL_NATIVE_AND_CURRENT_CENSUS_PASS_PENDING_SEMANTIC_SCOPE_ACCEPTANCE',
+    created_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    gate=gate_ref, terminal=reference(RUN / 'TERMINAL.json'), current_census=candidate_ref,
+    baseline_census=gate['baseline_census'], actual_counts=counts, baseline_counts=baseline_counts,
+    actual_new_module_record_counts=actual_delta, all20_stage_chain_original_logs_and_input_maps_exact=True,
+    current562_sources_exact=True, current_entire_artifact_map_exact=True,
+    original_native_union_reconstructed_and_all_paths_rehashed=dict(paths=len(expected_native),absent_sources=len(absent_sources),map_sha256=native_map_sha),
+    native_alias_before=native_alias_before, native_alias_after=native_alias_after,
+    prepared_native_alias_prefixes=sorted(native_alias_prefixes), predecessors=PREDECESSORS,
+    retained_v1_HOLD='source-reviews/20261022-root-next-three-independent-native-check-FIRSTFAIL-HOLD.json',
+    retained_v2_HOLD='source-reviews/20261022-root-next-three-native-realpath-v2-FIRSTFAIL-HOLD.json',
+    root_independent_census_verifier_sha256=sha(verifier_path), baseline_whole_module_entries_unchanged=True,
+    per_target_new_strict=1, per_target_singleton_stock_ALL=1, retries=0,
+    current_native_trust_boundary_not_entire_closure_fresh_replay=True,
+    semantic_scope_review_required=True, main_1_plus_1_75='OPEN', weighted_main=30)
+with REPORT.open('x', encoding='utf-8', newline='\n') as f:
+    json.dump(report,f,ensure_ascii=False,indent=2)
+    f.write('\n')
+print(json.dumps({'status':report['status'],'report':str(REPORT),'sha256':sha(REPORT),'actual_counts':counts}))

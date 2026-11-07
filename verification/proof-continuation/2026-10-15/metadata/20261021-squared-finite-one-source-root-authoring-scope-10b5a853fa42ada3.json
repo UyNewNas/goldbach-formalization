@@ -1,0 +1,92 @@
+{
+  "status": "ROOT_ONE_NEW_SQUARED_FINITE_SOURCE_AUTHORING_ONLY_EXPLICIT_QUEUE_REFINEMENT_NO_COMPILER_BEFORE_ACTUAL_OWNED_SMOOTH",
+  "created_utc": "2026-10-21T02:06:33.387710+00:00",
+  "author": "/root/spectral_complement_oct21",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+  "namespace": "ImbalancedChen.Part3",
+  "entire_source_noncomputable_section_required": true,
+  "root_math_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-squared-split10ce-root-complete-finite806-full1113-review.json",
+    "sha256": "563025bf4f50b7acabd0ced63c41230ebd75e6a74f5b1fb0f85d58399a5a8062"
+  },
+  "independent_nonauthor_split_math_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-squared-split10ce-independent-complete-math-eight-interface-source-order-review.json",
+    "sha256": "5720e4476b205859feab3baa231ed5d19743ee5f23c0b325940a3d84a8da6e1d"
+  },
+  "original_split_proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-squared63411-two-module-finite-payment-implementation-split-proposal.json",
+    "sha256": "10cece78394513b0807e4cbe111ec8b957769d75bade468c564109e654d1dc64"
+  },
+  "six_complete_literal_public_definitions": [
+    "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+    "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+    "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+    "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+    "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+    "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re"
+  ],
+  "ONE_complete_literal_public_theorem_header": "theorem actual_smallSupported_squared_resonance_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false)",
+  "four_suggested_private_complete_interfaces_and_routes": [
+    {
+      "module": 1,
+      "name": "cleaned_squared_outerCoefficient_norm_le_one",
+      "suggested_complete_unelaborated_header": "private theorem cleaned_squared_outerCoefficient_norm_le_one\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredOuterCarrier) :\n    ‖d.cleanedAlphaAtom.smallCoreSquaredOuterCoefficient Ybeta Ysupport o‖ ≤ 1",
+      "proof_route": "Unfold only OuterCoefficient. In the active branch use actual cleaned-alpha transposed-beta norm<=1 and original gamma2/gamma3 carrier norm<=1 from admissibility, norm_mul, norm_star. The outer membership gives the three original factor memberships. Inactive masks give0. No threshold, frequency sum, original outside W, or asymptotic premise is involved.",
+      "private_boundary": "Prove inside file1 from accepted public ancestors; no mangled private Smooth helper or invented cleaned-supplier premise.",
+      "header_utf8_sha256": "98bb3cdc3d7df70b78e7041f12a5ea2a3e3a9e1d2bcdf274455f0d7ee9cee069"
+    },
+    {
+      "module": 1,
+      "name": "cleaned_actualSmooth_squared_reindex",
+      "suggested_complete_unelaborated_header": "private theorem cleaned_actualSmooth_squared_reindex\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d)\n    (Z : ℝ) (hZ : 0 < Z) :\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u)))",
+      "proof_route": "Unfold the exact four frozen Smooth definitions and the corresponding squared finite definitions. Finite Re linearity is used inside arbitrary complex gamma/beta coefficients. Remove diagonal N1=N2 by the actual small-gcd gate and existing geometry; Compatible implies modp. Reindex only the unique positive D=gcd(rs,w) among divisors of positive w. Split conjugate gamma2(sprime)*gamma3(rprime) by multiplicativity while retaining order of all complex factors. On gcdD-active rows the old shared H_(gcd(rs,w)) is exactly the one outer-D H_D. Zero rows remain zero. All transformations are finite equalities.",
+      "no_new_threshold": "MediumAdmissible already supplies X>1. Q1>=1 and Q1/U<X^(-sigma) imply U>X^sigma>X^(sigma/4)=Y; the N-carrier has N>=U, so N1=N2 contradicts gcd(N1,N2)<=Y. Nothing tends to infinity here.",
+      "header_utf8_sha256": "4b6f1386a035c4133673eaca098b33f46d77a916ba64157eafcd70bac03e929d"
+    },
+    {
+      "module": 1,
+      "name": "squared_row_gram_partition",
+      "suggested_complete_unelaborated_header": "private theorem squared_row_gram_partition\n    (d : MediumAtom) (hQ2 : 1 ≤ d.Q2) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :\n    (0 ≤ (d.smallCoreSquaredBlock Z true o).re) ∧\n      ((d.smallCoreSquaredBlock Z true o).re +\n          (d.smallCoreSquaredBlock Z false o).re =\n        ‖∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n            d.smallCoreSquaredRowTerm Z o u‖ ^ 2)",
+      "proof_route": "Every inner s is positive and every window h is nonzero. Partition the actual finite carrier by the positive rational label natAbs(h)/s. Equality of this label is exactly the literal same-slope OR opposite-slope predicate. The two signs are disjoint. Sum each fiber z*conj(z), whose real part is norm(z)^2, to get PSD. Split each double pair by the literal Bool predicate to obtain the true+false exact complete Gram square. This works for arbitrary complex RowTerm and any Z because the carrier is finite; no Fourier bound, parity or Hermitian relation is used.",
+      "scope": "False Block is not claimed nonnegative. No new public slope definition is needed; the slope map can be a local let.",
+      "header_utf8_sha256": "41a68fa20ca4ec9670626a18707628f698e60f95c96f0f7a73512d1edfb5b2f9"
+    },
+    {
+      "module": 1,
+      "name": "cleaned_squared_outer_Cauchy",
+      "suggested_complete_unelaborated_header": "private theorem cleaned_squared_outer_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport Z : ℝ) :\n    let e := d.cleanedAlphaAtom\n    ‖∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Ybeta Ysupport o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n            e.smallCoreSquaredRowTerm Z o u)‖ ^ 2 ≤\n      e.smallCoreSquaredCauchyMass Z true +\n        e.smallCoreSquaredCauchyMass Z false",
+      "proof_route": "Use helper1 and finite complex Cauchy only over o to get card(O)*sum_o norm(I_o)^2. Replace each norm-square by helper3 true+false Gram identity and distribute the same card(O). Public finite nonnegativity follows separately from helper3 and nonnegative card(O). There is no Cauchy over h/s and no W factor. Apply cleaned admissibility via its existing actual public proof to obtain e.Q2>=1.",
+      "implementation_scope": "The finite public endpoint is assembled from helpers2,3,4, with Y=X^(sigma/4); all statements have ordinary finite proofs, not added public assumptions.",
+      "header_utf8_sha256": "0204cb4350301844a3b619052eab5a2ebc43b83f1d2d4274cd041bb4540f4371"
+    }
+  ],
+  "frozen_parent_source": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-fe532-first-actual-failure-owner-proposed-seven-private-repair\\proposed-after.lean.txt",
+    "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+    "current_fourdefs_byteexact_original634_scope": true,
+    "parent_actual_owned_claimed": false
+  },
+  "explicit_authoring_queue_refinement": "Supersedes ONLY timing of SOURCE writing in previous roota4a71 and split/peer suggestions. Root and independent5720 confirmed finite proofs use the same immutable four public definitions and actual alreadyowned transitive ancestors, not Smooth new theorem/private proofs. Thus one source may be authored in parallel with parent runtime. EVERY dependent compiler/owned gate remains blocked until root actually accepts full strict/stock/ALL Smooth parent; ownership is never inferred from this scope.",
+  "allowed": "Write ONE new Lean file with genuine full proofs of exact six literal definitions and ONE finite806 public endpoint, plus necessary private finite proof helpers. Faithful coercion/type/namespace annotations allowed only if semantically equivalent and all deviations reported in complete freeze inventory. Suggested private interfaces are proof guidance, not assumptions or mandatory count; new necessary private helpers must be ordinary proved and fully inventoried. Read frozen parent snapshot and actual alreadyowned ancestor/native sources for genuine APIs.",
+  "deny": [
+    "No compiler/lake/checker process or subagents",
+    "No existing Lean edits or additional imports without new root scope",
+    "No tools/catalog/pins/cache/resources/CI/automation/LaTeX changes",
+    "No sorry/customaxioms/unsafe/partial/hidden analytic or finite reindex/PSD/Cauchy suppliers",
+    "No cross-module mangled private parent helper calls",
+    "No second payment source authoring/compiling in this scope",
+    "No claim finite3conj proves original full4conj endpoint or main1+1.75"
+  ],
+  "freeze_deliverable": "ONE atomic ignored complete source-freeze JSON with fullsource hash/bytes/lines, all true complete declaration headers including every binder/let chain and completeproof bodies/byte-char coords; exact6defs/finite806 matches or every faithful deviation, mathematical proof route, known API assumptions and no acceptance claim. Freeze source and HOLD for root+nonauthor complete source review and later accepted-parent specific runtime gate.",
+  "full_target_retained": {
+    "future_source": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredResonance.lean",
+    "original_complete1113_header_preserved": "theorem actual_smallSupported_squared_resonance_Cauchy_and_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) ∧\n            ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n                Real.sqrt (e.smallCoreSquaredCauchyMass Z true) ≤\n                  d.scale ^ 2 / (Real.log d.scale) ^ A)",
+    "still_required": "Actual both-mesh signed resonance payment via16/1024/2^16/W²2^20 andtau³/log originalgeometry, plus full nonzero complement/root/Mellin; main exactC/K and3countCor/hLower/hUpper remain open."
+  },
+  "quota_actual_latest": {
+    "used": 16,
+    "remaining": 84,
+    "stop_remaining_le": 50
+  }
+}

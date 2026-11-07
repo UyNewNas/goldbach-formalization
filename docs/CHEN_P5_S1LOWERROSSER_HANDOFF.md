@@ -1,0 +1,195 @@
+# Part 5：S1LowerRosser 独立供应节点验收
+
+## 结果、范围与固定身份
+
+本检查点只验收 `MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser`。
+固定 goldbach 原始证明源码已通过严格编译、原装 `leanchecker` 重放和实际定义模块全部声明的传递公理审计。
+证明源码没有补丁，定理语义、假设、依赖版本及 CI 门槛没有变化。
+验收提交是包含本交接与回执的独立提交，发布时提供完整 SHA。
+
+| 身份 | 固定值 |
+| --- | --- |
+| 分支 | `chatgpt/chen-p5-lower` |
+| 续接及 S1Carrier 验收检查点 | `bf54caeb5e708474cacefac13a171d307b4c64f2` |
+| 共同证明基线 | `1a80c1bcce67886f699d097fc37fd245cd3620bf` |
+| Lean | `leanprover/lean4:v4.33.0-rc1` |
+| Lean githash | `62eed1db4d67327ec8120be05f1a1b0847d74561` |
+| goldbach | `09b97db5764ade1246bfb77206baa1b124760958` |
+| Mathlib | `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` |
+| 原始及实际编译源码 SHA256 | `c07c0704c975bef4d772090ce03d7536f28edd319c700c4d9feb27c9f111ef62` |
+| 目标 `.olean` SHA256 | `005d9ac78bbd5e65386511bd975758f4fa8ed955e327c794569ab4a538be4988` |
+| 唯一显式直接导入 | `MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier` |
+| Carrier 源码 SHA256 | `757bdcea11195c48ed5814f95a70737326853e68bfaa093711a4f6161e1a896a` |
+| Carrier `.olean` SHA256 | `6bd8d1615d37f2db31e57c57ed66672f5fd646a0dc7a73eaa0badcac24ac16bd` |
+
+完整十一项锁定依赖、工具二进制和对象身份见 [receipt.json](../verification/parts/p5/round4/s1lowerrosser/receipt.json)。
+所有依赖保持固定 HEAD 且 tracked clean；受保护的工具链、锁文件、根导入、主定理、数值转移和手稿地图保持共同基线字节。
+原始源码快照见 [upstream-LiLiuGoldbachS1LowerRosser.lean.txt](../verification/parts/p5/round4/s1lowerrosser/source/upstream-LiLiuGoldbachS1LowerRosser.lean.txt)。
+目标已验证对象另有 [编码压缩快照及哈希清单](../verification/parts/p5/round4/s1lowerrosser/objects/manifest.json)，用于后续按相同源码、工具链和导入身份复用。
+
+## 三项实际验证
+
+| 本批目标门槛 | 实际退出码 | 实际秒数 | 范围 |
+| --- | ---: | ---: | --- |
+| 官方 frontend，经原装 Lake；`trustLevel=0`、`warningAsError=true` | 0 | 259.896 | 固定原始目标源码，单模块、单线程 |
+| 原装 `leanchecker --verbose MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser` | 0 | 95.498 | 目标模块重放，对照现有导入环境 |
+| 严格编译 `verification.parts.p5.S1LowerRosserAudit` | 0 | 358.243 | 实际 defining-module 全部声明审计及类型导出 |
+
+实际枚举 **8 个声明**，种类为 `{'theorem': 7, 'definition': 1}`；
+带 private 名称的声明为 4 个，两个指定公开定理都在实际清单中。
+清单来自 `env.constants` 和 `getModuleIdxFor?`，没有命名空间或源码 theorem 过滤，覆盖 private/generated 声明。
+逐声明 `isUnsafe=false`、`isAxiom=false`，原装 `collectAxioms` 的传递公理并集为
+`Classical.choice, Quot.sound, propext`，没有其他公理。
+空清单、任意非法声明或缺失公开定理均使审计报错，只有完整循环后才输出完成计数。
+
+源码、目标对象、导入对象及工具/配置在每次调用前后的身份均已核对。
+使用既有正常 frontend 驱动，实际证明由官方 `Lean.Elab.runFrontend` 在 trust level 0 检查；驱动未换工具链或注入证明。
+checker 没有使用 `--fresh`：导入缓存没有被描述为本批全部重新重放。
+
+辅助审计脚本首次编译退出 1、耗时 81.689 秒，原因是 `withOptions` 置于 `CommandElabM` 层及一处链式选项写法。
+最小修复将其移入 `liftTermElabM`，逐项设置四个打印选项。原始诊断、修复前后源码哈希及补丁见
+[audit-helper-diagnostic.json](../verification/parts/p5/round4/s1lowerrosser/audit-helper-diagnostic.json)。
+这是辅助脚本修复；固定目标证明源码、已通过的严格编译和重放均不受影响。
+最终预检在该辅助修复后刷新；早期命令保留原先预检摘要及完整的直接导入/源码/对象快照，未将新预检文件冒充旧摘要对应的原始文件。
+
+- [实际命令、退出码、耗时与前后哈希](../verification/parts/p5/round4/s1lowerrosser/commands-and-results.json)
+- [可阅读命令清单](../verification/parts/p5/round4/s1lowerrosser/commands.sh)
+- [全部声明的编译器类型](../verification/parts/p5/round4/s1lowerrosser/compiler-types.txt)
+- [逐声明公理清单](../verification/parts/p5/round4/s1lowerrosser/declaration-axioms.jsonl)
+- [包含 explicit 类型及原始 Expr 的完整声明数据](../verification/parts/p5/round4/s1lowerrosser/declarations.json)
+
+## 两个公开定理：编译器确认的完整类型
+
+以下是实际环境中 `Meta.ppExpr info.type` 的可读输出。名字和量词均来自编译器，而非只从源码抄取。
+默认打印隐藏的实例和转换参数，另由同次审计中的 `pp.explicit`、`pp.universes`、`pp.fullNames`、`pp.proofs` 及原始 `Expr` 完整记录。
+详见 [public-theorem-types.lean.txt](../verification/parts/p5/round4/s1lowerrosser/public-theorem-types.lean.txt) 和 [JSON](../verification/parts/p5/round4/s1lowerrosser/public-theorem-types.json)。
+
+```lean
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_lowerErrSum_le_prefixSum :
+∀ {N : ℕ} (hEven : Even N) {ε z : ℝ},
+  0 ≤ ε →
+    2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+      ∀ {D Q0 : ℕ},
+        D ≤ Q0 + 1 →
+          MathlibNt.SieveTheory.LinearSieve.lowerErrSum
+              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve N hEven ε z) D
+              (MathlibNt.SieveTheory.LinearSieve.lowerRosserWeight
+                (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z) D) ≤
+            ∑ q ∈ Finset.Icc 1 Q0, MathlibNt.SieveTheory.BombieriVinogradov.standardPrimeAPPrefixMaxError N q
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_lowerRosser_mainTerm_sub_prefix_le :
+∀ {N : ℕ} {ε z : ℝ},
+  0 < ε →
+    ε < 1 →
+      Even N →
+        2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+          2 ≤ z →
+            ∀ {D Q0 : ℕ},
+              (∀ p ∈ (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).primeFactors,
+                  p < D) →
+                D ≤ Q0 + 1 →
+                  MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral
+                          ↑(MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε) *
+                        ∑ d ∈ (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).divisors,
+                          MathlibNt.SieveTheory.LinearSieve.lowerRosserWeight
+                              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z) D d /
+                            ↑d.totient -
+                      ∑ q ∈ Finset.Icc 1 Q0,
+                        MathlibNt.SieveTheory.BombieriVinogradov.standardPrimeAPPrefixMaxError N q ≤
+                    ↑(MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1
+                        (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N ε) N z)
+```
+
+## 真实有限下界及全部条件
+
+令 `m = goldbachS1Endpoint N ε = Nat.ceil ((1-ε)*(N:ℝ))-1`，
+`P = goldbachS1ProdPrimes N z`，`λ⁻ d = LinearSieve.lowerRosserWeight P D d`。
+`P` 的筛素数精确为素数 `p` 满足 `(p:ℝ)<z` 且 `p ∤ N`。
+实际载体保持 `goldbachDifferenceCarrier N ε`，即真实严格素数范围经 `p ↦ N-p` 得到的有限像。
+
+第二个定理给出：
+
+```text
+trueLogarithmicIntegral(m) * ∑ d ∈ P.divisors, λ⁻ d / φ(d)
+  - ∑ q ∈ Icc 1 Q0, standardPrimeAPPrefixMaxError N q
+≤ (goldbachS1 (goldbachDifferenceCarrier N ε) N z : ℝ).
+```
+
+`goldbachS1` 的定义返回 `ℤ`，右端是该真实有限筛计数的实数转换；同次完整类型明确出现 `@Int.cast`。
+主项保持既有 `trueLogarithmicIntegral` 规范化函数和真实 Rosser/totient 有限和，未换成抽象主项或另定义的权。
+主和遍历全部 `P.divisors`，严格 `d<D` 由原有 Rosser 权的支撑处理。
+AP 前缀误差遍历 `q∈Icc 1 Q0`，控制全部整数前缀 `y≤N` 的规范既约剩余类误差。
+
+| 定理 | 保留的全部非类型假设 |
+| --- | --- |
+| `goldbachS1BoundingSieve_lowerErrSum_le_prefixSum` | `Even N`、`0≤ε`、`2≤m`、`D≤Q0+1`；`N,D,Q0:ℕ`、`ε,z:ℝ` |
+| `goldbachS1_lowerRosser_mainTerm_sub_prefix_le` | `0<ε`、`ε<1`、`Even N`、`2≤m`、`2≤z`、`∀ p∈P.primeFactors, p<D`、`D≤Q0+1`；同样的类型量词 |
+
+原始 `_hε1`、`_hz` 即使未在证明体中引用，仍保留在公开类型中。
+`D≤Q0+1` 把正因子的严格 `d<D` 精确送入 `1≤d≤Q0`。
+证明先用 `|λ⁻ d|≤1` 与实际 AP 余项识别得到 `lowerErrSum≤E`，再由 `M-lowerErrSum≤S1`
+推出 `M-E≤S1`；负号方向和端点没有反转或放松。
+
+本批供应真实有限 Rosser 下界。**AP 误差在最终归一化尺度上的支付仍是后续任务。**
+到 `currentChenUpsilon1` 的额外 primeFactors 删除成本仍按既有 `CurrentChenInitialSource` 保留。
+
+## S1Carrier 复用及最小环境恢复
+
+先按固定 `bf54cae…` 读取了上一批 handoff、receipt、context、preflight 和 commands-and-results。
+S1Carrier 源码、对象、六个直接导入的源码/对象、工具链与原始成功日志均匹配，三项验收记录直接复用；
+本批没有再次编译、重放或审计 S1Carrier。
+
+当前恢复中的环境初见 911 个缺失导入对象，其中 849 个属于官方缓存，62 个属于既有 goldbach 本地闭包。
+P1 随后完成了独立官方缓存恢复（退出 0，8679 个源码模块）；本批只读取并复用其成功回执及原始日志。
+余下 62 个对象限定为 S1Carrier 已验收闭包中的历史缺失项，按源码拓扑顺序恢复至 P5 自有输出目录：
+**本批成功补编 37 个，哈希核对后复制 P1 对象 25 个**。
+每项都要求固定源码、记录过的导入哈希和最终对象 SHA256 与旧记录完全一致；没有展开旧 319 项后继供应队列。
+这些依赖恢复沿用各自历史诊断选项（包含 `strict=false`），实际 frontend trust level 为 0；
+它们不是本批目标的严格三项门槛，也没有被统称为逐模块重新重放/完整审计通过。
+
+恢复中曾因 P5 新建命名空间遮蔽 P1 路径，使 `PrimeNumberTheoremAnd.Wiener` 在第 1 行导入阶段报缺对象。
+该原始报错及控制器退出 1 已保存；当时 post-check 异常使 frontend 数字返回码未落盘，回执明确留空，未推定为成功或编造数值。
+修复仅补齐 P5 命名空间中的相同哈希对象，没有修改证明源码。
+当前预检缺项为零，全部 8776 个源码导入节点的可用性、96 个历史本地模块的源码/对象及既有导入哈希见证均已核对。
+
+- [最终预检与导入身份](../verification/parts/p5/round4/s1lowerrosser/preflight.json)
+- [固定恢复清单](../verification/parts/p5/round4/s1lowerrosser/restoration/plan.json)
+- [逐对象实际恢复记录](../verification/parts/p5/round4/s1lowerrosser/restoration/results.jsonl)
+- [恢复导入报错与修复范围](../verification/parts/p5/round4/s1lowerrosser/restoration/namespace-import-diagnostic.json)
+
+## 根 CI：独立报告
+
+所观察的根 CI 是 `bf54caeb5e708474cacefac13a171d307b4c64f2` 的
+[Lean core verification 38229846294](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38229846294)。
+
+| 根 CI 阶段 | GitHub 实际结果 | 配置限时 | API 实际阶段时长 |
+| --- | --- | ---: | ---: |
+| Build the full project | success | 90 分钟 | 6 秒 |
+| 根 `ImbalancedChen` leanchecker | failure | 25 分钟 | 1513 秒 |
+| 根声明及传递公理审计 | failure | 10 分钟 | 613 秒 |
+
+用户报告的重放 25 分钟、审计 10 分钟超时，与实际步骤失败及上述时长相符。
+本批独立核对了 API 结果和未改动的 workflow 限时；原始 timeout annotations 的 URL 被 GitHub Fetch 端点白名单拒绝，未假称取得原始超时日志。
+总体根 CI 为 failure，本批单模块三项通过不构成全项目通过。
+CI 配置、门槛和现有超时保持原样，没有手动重跑 CI。
+原始 API 数据见 [root-ci-jobs.json](../verification/parts/p5/round4/s1lowerrosser/context/root-ci-jobs.json)。
+
+## 解除的供应边、下一小批与接收 Part
+
+`S1BetaPaidLower` 直接导入本模块，并实际调用本次第二个定理；本批解除了其**真实有限 Rosser 主项减 AP 前缀误差下界**的验收阻塞。
+`S1BetaLowerDensity` 对本模块的直接导入供应边也已解除，但其密度结论尚未由本批验收。
+`S1BetaPaidLower` 仍需 `S1BetaGeometry`、`S1MainMass`、`Bombieri1965Richert418Unconditional` 等输入；
+密度分支还需各自 Mertens、Jurkat–Richert、Suzuki 供应模块。
+
+下一小批候选为 `MathlibNt.SieveTheory.LiLiuGoldbachS1MainMass`，唯一直接导入 `MathlibNt.SieveTheory.BombieriVinogradov`，
+源码 SHA256 为 `4fdcdd6001278a1c7636a40ba8f2e2e6c685a20331a4b0c803c0146f516a4533`。
+本批只读检查其依赖，没有启动编译或验收；完整相邻源码图见 [context.json](../verification/parts/p5/round4/s1lowerrosser/context.json)。
+
+**接收 Part：P5 首项均值供应链、P0 集成验证。**
+
+beta 误差支付、密度、主尺度、`S1BetaFixedNormalizedLower` 及 `CurrentChenInitialMean` 仍按各自未验收状态保留。
+`CurrentChenInitialMean` 的 `(33/4) * Real.log 3` 是独立第一项候选下界，源码尚未编译验收；
+它不等于手稿采用的 L1，也不闭合完整十一项均值或 `hLower`。
+其源码 SHA256 仍为 `5358e4dbbda436b335620de19884624df3260386d5ab5e478a85f70599da6137`。
+本批不改变 `W_N≤4 D12(N)+error`；完整均值仍需 `4c=49044063/6250000=7.84705008`，
+完整 hLower 的 P1/P2/P3/P4-A 输入仍需另行闭合，无需等待 P4-B。

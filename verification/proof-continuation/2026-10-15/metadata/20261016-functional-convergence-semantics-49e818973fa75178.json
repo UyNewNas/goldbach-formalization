@@ -1,0 +1,204 @@
+{
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "status": "SOURCE_ONLY_SEMANTIC_REVIEW_NO_TARGET_ISSUES_FOUND",
+  "target": "ImbalancedChen/ActualExtendedThirdFunctionalConvergence.lean",
+  "source_sha256": "3e387b884b00a6aec44b9f960530c2bf32800ca9b2f2205a1cf267da162b2526",
+  "direct_dependency": {
+    "module": "ImbalancedChen.ActualExtendedThirdKernelL1Convergence",
+    "source_sha256": "5eb9c7c8147e23f88a70daab3934bfde5d47f58625d545a6f06862ec18735d44"
+  },
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "integrableOn_actualExtendedThirdWallKernel_full",
+      "signature": "theorem integrableOn_actualExtendedThirdWallKernel_full (physical : Bool)\n    {e : \u211d} (he0 : 0 \u2264 e) (he : e \u2264 1 / 384) (m : \u2115) :\n    IntegrableOn (actualExtendedThirdWallKernel physical e m)\n      (actualExtendedThirdClosedOrderRegion thirdPrefixRho)",
+      "line": 25
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "integrableOn_actualExtendedThirdFiniteKernel_full",
+      "signature": "theorem integrableOn_actualExtendedThirdFiniteKernel_full {e : \u211d}\n    (he0 : 0 \u2264 e) (he : e \u2264 1 / 384) (m : \u2115) :\n    IntegrableOn (actualExtendedThirdFiniteKernel e m)\n      (actualExtendedThirdClosedOrderRegion thirdPrefixRho)",
+      "line": 51
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "integrableOn_actualExtendedThirdGatedKernel_full",
+      "signature": "theorem integrableOn_actualExtendedThirdGatedKernel_full {e : \u211d}\n    (he0 : 0 \u2264 e) (he : e \u2264 1 / 384) :\n    IntegrableOn (fun t : Fin 3 \u2192 \u211d => actualExtendedThirdGatedKernel e (t 0) (t 1) (t 2))\n      (actualExtendedThirdClosedOrderRegion thirdPrefixRho)",
+      "line": 57
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualExtendedThirdFiniteFunctional",
+      "signature": "def actualExtendedThirdFiniteFunctional (e : \u211d) (m : \u2115) : \u211d",
+      "line": 63
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualExtendedThirdIdealFunctional",
+      "signature": "def actualExtendedThirdIdealFunctional : \u211d",
+      "line": 68
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdIdealFunctional_eq_gated",
+      "signature": "theorem actualExtendedThirdIdealFunctional_eq_gated :\n    actualExtendedThirdIdealFunctional =\n      \u222b t in actualExtendedThirdClosedOrderRegion thirdPrefixRho,\n        actualExtendedThirdGatedKernel 0 (t 0) (t 1) (t 2)",
+      "line": 72
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdFiniteFunctional_abs_sub_le",
+      "signature": "theorem actualExtendedThirdFiniteFunctional_abs_sub_le {e : \u211d}\n    (he0 : 0 \u2264 e) (he : e \u2264 1 / 384) (m : \u2115) :\n    |actualExtendedThirdFiniteFunctional e m - actualExtendedThirdIdealFunctional| \u2264\n      (actualExtendedThirdKernelDifferenceMassOn e m\n        (actualExtendedThirdClosedOrderRegion thirdPrefixRho)).toReal",
+      "line": 83
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdFiniteFunctional_uniform_approx",
+      "signature": "theorem actualExtendedThirdFiniteFunctional_uniform_approx {\u03b5 : \u211d} (h\u03b5 : 0 < \u03b5) :\n    \u2203 e\u2080 : \u211d, 0 < e\u2080 \u2227 e\u2080 \u2264 1 / 384 \u2227 \u2203 m\u2080 : \u2115,\n      \u2200 e : \u211d, 0 \u2264 e \u2192 e \u2264 e\u2080 \u2192 \u2200 m : \u2115, m\u2080 \u2264 m \u2192\n        |actualExtendedThirdFiniteFunctional e m - actualExtendedThirdIdealFunctional| \u2264 \u03b5",
+      "line": 100
+    }
+  ],
+  "mathematical_findings": [
+    {
+      "lines": "26-52",
+      "finding": "Full-domain IntegrableOn is a conclusion. A tolerance-1 invocation of the proved uniform actual closed small-z tail supplies a cutoff with finite integral of the absolute actual kernel. Measurability gives AEStronglyMeasurable. The complement above h has finite volume and the actual compact pointwise bound. The two sets cover every original closed ordered point; overlap at z=h is harmless for integrability union."
+    },
+    {
+      "lines": "54-65",
+      "finding": "The public physical and ideal integrability wrappers reduce to the two literal WallKernel branches. Physical quantifies all m and e in [0,1/384]; the ideal is the true GatedKernel with its supplied buffer, and the later limit instantiates buffer zero."
+    },
+    {
+      "lines": "67-86",
+      "finding": "FiniteFunctional integrates the actual finite lookup over the complete original closed order region. IdealFunctional is the literal OrderedKernel at buffer zero on the closed manuscript old-cube tail region. Their bridge uses the existing pointwise manuscript indicator identity, including the proved zero equality face, rather than assuming a null wall or identifying different kernels."
+    },
+    {
+      "lines": "89-103",
+      "finding": "The difference of real integrals is legally rewritten as the integral of the difference using the newly derived full-domain IntegrableOn facts. The fixed Mathlib norm-integral inequality then bounds its absolute value by the toReal of precisely the existing full absolute difference mass."
+    },
+    {
+      "lines": "107-119",
+      "finding": "For every positive epsilon, the inherited full L1 theorem constructs e0 and m0 before all later e,m. The e0 cap supplies the integrability range. ENNReal.toReal_mono uses the finite upper bound ofReal epsilon, so infinity is not silently mapped to zero. The result is a uniform analytic functional approximation."
+    }
+  ],
+  "assumption_audit": {
+    "no_integrability_caller_premise": true,
+    "no_uniform_tail_caller_premise": true,
+    "no_selector_limit_caller_premise": true,
+    "no_null_wall_caller_premise": true,
+    "no_arithmetic_hUpper_claim": true,
+    "no_new_axiom_or_license_structure": true,
+    "final_public_theorem_only_caller_premise": "epsilon > 0",
+    "integrability_caller_premises": "0 <= e, e <= 1/384; physical branch and m are ordinary parameters"
+  },
+  "fixed_mathlib_api_source_checks": [
+    {
+      "module": "Mathlib.MeasureTheory.Integral.IntegrableOn",
+      "name": "Measure.integrableOn_of_bounded",
+      "source_line": 686,
+      "source_sha256": "2f4ee8c4d6e1bd57d413217acac437512fc8f92fd1696fb2267effb0718fb7c4",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "mu s != top, AEStronglyMeasurable f mu, ae restricted norm bound => IntegrableOn f s mu"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Function.L1Space.HasFiniteIntegral",
+      "name": "hasFiniteIntegral_iff_norm",
+      "source_line": 91,
+      "source_sha256": "fb76154a7834149fd2583b79715ba82ae0c4889c689a4a13c1dfd32202181c75",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "HasFiniteIntegral f mu iff lintegral ofReal norm f < top"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.Bochner.Set",
+      "name": "integral_indicator",
+      "source_line": 172,
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "MeasurableSet s => integral indicator s f = set integral f s; no integrability premise"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.Bochner.Basic",
+      "name": "integral_sub",
+      "source_line": 261,
+      "source_sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "Integrable f mu and Integrable g mu => integral(f-g)=integral f-integral g"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.Bochner.Basic",
+      "name": "norm_integral_le_lintegral_norm",
+      "source_line": 326,
+      "source_sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "norm(integral f) <= toReal(lintegral ofReal norm f)"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Measure.Restrict",
+      "name": "ae_restrict_mem",
+      "source_line": 641,
+      "source_sha256": "2ec6fbe3a70ebf57a895a47779b63994f97edb0dc0b709faf9ff400f59c92511",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "MeasurableSet s => ae x under restrict mu s, x belongs to s"
+    },
+    {
+      "module": "Mathlib.Data.ENNReal.Real",
+      "name": "ENNReal.toReal_mono",
+      "source_line": 67,
+      "source_sha256": "d0a0778e60ecadea09e8233f5a9228f0aa1b94e85745b4d86f59268ce4b863fd",
+      "matches_frozen_fixed_mathlib_hash": true,
+      "signature_summary": "b != top and a <= b => a.toReal <= b.toReal"
+    }
+  ],
+  "proper_dag": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-functional-convergence-proper-dag.json",
+    "sha256": "cf8c00e4bf3635a1360114fb61fd23987b5a091eae2e50d0eb89630d95068f3b",
+    "baseline_nodes": 6607,
+    "target_nodes": 6608,
+    "added": [
+      "ImbalancedChen.ActualExtendedThirdFunctionalConvergence"
+    ],
+    "removed": [],
+    "added_foreign": [],
+    "missing_target": [],
+    "parser_findings_target": [],
+    "foreign_reuse_scope": "Frozen v2 headers including public/meta/import-all and implicit Init reused. Current project headers and hashes reread. No fresh complete foreign-source or object-graph validation claimed.",
+    "direct_dependency_sha256": "5eb9c7c8147e23f88a70daab3934bfde5d47f58625d545a6f06862ec18735d44"
+  },
+  "issues_found_in_target": [],
+  "dependency_watch_items": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdBoundaryLoss",
+      "location": "actualExtendedThirdWallClosedTailMass_uniform_small",
+      "kind": "Inherited potential elaboration risk, not a confirmed failure of the new target",
+      "detail": "Source still uses membership-dot .and/.exists. A related finite-physical-kernel membership-dot spelling was rejected by runtime elsewhere in this session. Explicit Filter.Eventually.and/exists would avoid that ambiguity. No Lean process was run by this reviewer."
+    }
+  ],
+  "optional_improvement": "An explicit IntegrableOn theorem for OrderedKernel on the manuscript tail region would make its well-definedness directly reusable. It already follows from the pointwise indicator identity and derived GatedKernel integrability; it is not a missing assumption of the proof.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified": false,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false,
+    "complete_foreign_closure_revalidated": false,
+    "static_api_match_is_not_compilation_evidence": true
+  },
+  "pending_dependency_validation": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdBoundaryLoss",
+      "source_sha256_at_reviewed_graph": "6236736705199d074b2552072c68ea7f148c06fe2af0d29ad1d62c934ab99120",
+      "status": "PENDING_RUNTIME_VALIDATION",
+      "note": "This review does not certify elaboration of this dependency. The known analogous membership-dot API repair and subsequent runtime validation are handled separately. If its bytes change, this graph remains a historical source snapshot and must not be called a current imported closure."
+    }
+  ]
+}

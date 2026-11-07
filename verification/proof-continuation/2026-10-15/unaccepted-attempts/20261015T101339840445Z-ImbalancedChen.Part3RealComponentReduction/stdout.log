@@ -1,0 +1,33 @@
+ImbalancedChen/Part3RealComponentReduction.lean:70:2: error: Type mismatch: After simplification, term
+  Complex.re_add_im z
+ has type
+  ↑z.re + Complex.I * ↑z.im = z
+but is expected to have type
+  Complex.I * ↑z.im + ↑z.re = z
+ImbalancedChen/Part3RealComponentReduction.lean:223:13: error: unsolved goals
+d : MediumAtom
+hterm :
+  ∀ (n : ℕ) (l : (ℕ × ℕ × ℕ) × ℕ),
+    (∏ i, d.fiveCoefficients n l i) * complexPrimitiveKernel d.residue (complexFactorModulus l.1) n l.2 =
+      ∑ eta,
+        (mediumRealChoicePhase eta * ∏ i, complexRealComponent (eta i) (d.fiveCoefficients n l i)) *
+          complexPrimitiveKernel d.residue (complexFactorModulus l.1) n l.2
+eta : MediumRealChoice
+a✝² : eta ∈ Finset.univ
+n : ℕ
+a✝¹ : n ∈ d.alphaCarrier
+l : (ℕ × ℕ × ℕ) × ℕ
+a✝ : l ∈ d.complexRowLabels
+⊢ mediumRealChoicePhase eta *
+      ((∏ i, complexRealComponent (eta i) (d.fiveCoefficients n l i)) *
+        complexPrimitiveKernel d.residue (complexFactorModulus l.1) n l.2) =
+    mediumRealChoicePhase eta *
+      ((∏ i, complexRealComponent (eta i) (d.fiveCoefficients n l i)) *
+        complexPrimitiveKernel (d.realComponentAtom eta).residue (complexFactorModulus l.1) n l.2)
+ImbalancedChen/Part3RealComponentReduction.lean:255:22: error: This simp argument is unused:
+  mediumRealChoice_card
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,742 @@
+{
+  "status": "ONE_READONLY_ACTUAL_UNIFORM_EULER_DENSITY_PROPOSAL_NO_SOURCE_AUTHORING_OR_GATE_AUTHORIZATION",
+  "created_utc": "2026-10-20T11:32:47.4153460Z",
+  "reviewer": "/root/phase_oct20",
+  "choice": "ONE thin actual arithmetic Euler normalization theorem, using current owned fixed-power theorem and a new complete finite-antitone/compact-cover proof. No new generic convergence interface or supplied uniform-error hypothesis.",
+  "proposed_new_source": "ImbalancedChen/CurrentChenUniformEulerNormalization.lean",
+  "file_currently_absent": true,
+  "proposed_exact_imports": [
+    "ImbalancedChen.CurrentChenFixedEulerNormalization",
+    "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+    "Mathlib.Topology.Order.Compact"
+  ],
+  "proposed_project_parent": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+  "proposed_direct_foreign_scope_note": "The two Mathlib direct imports are explicit proposed source scope. They have pinned source/API below and historical native part records below; this review does not authorize bootstrap/compile or claim a fresh object preflight.",
+  "proposed_namespace": "ImbalancedChen",
+  "proposed_declaration_counts": {
+    "public_theorems": 1,
+    "defs": 0,
+    "private_top_level_helpers": 0,
+    "local_have_contracts": 4
+  },
+  "ONE_complete_literal_public_type": "theorem exists_currentChen_actualEuler_power_uniform_threshold\n    (a0 a1 eta : ℝ) (ha0 : 0 < a0) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ a : ℝ, a ∈ Set.Icc a0 a1 → ∀ cap : ℕ,\n        (N : ℝ) ^ a ≤ (cap : ℝ) →\n          |actualSmallEulerProduct N cap ((N : ℝ) ^ a) * Real.log (N : ℝ) /\n              singularSeries N -\n            2 * Real.exp (-Real.eulerMascheroniConstant) / a| < eta",
+  "all_four_complete_proof_local_contracts_and_no_supplier_proofs": [
+    {
+      "name": "canonical_cap_identity",
+      "full_contract": "∀ (N cap : ℕ) (a : ℝ), (N : ℝ) ^ a ≤ (cap : ℝ) →\n  actualSmallEulerProduct N cap ((N : ℝ) ^ a) =\n    actualSmallEulerProduct N (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a)",
+      "proof": "Rewrite both sides by the owned currentChen_model_actualEuler_eq_finite, using caller hcap and Nat.le_ceil. This retains strict real endpoint exactly, including integral N^a; no limit or evenness is needed."
+    },
+    {
+      "name": "finite_normalized_antitone",
+      "full_contract": "∀ (N : ℕ), 2 ≤ N → Even N →\n  Antitone (fun a : ℝ =>\n    actualSmallEulerProduct N (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) *\n      Real.log (N : ℝ) / singularSeries N)",
+      "proof": "For a<=b, Real.rpow_le_rpow_of_exponent_le and Nat.ceil_mono give nested natural strict prime carriers. Unfold sievePrimes and finiteSieveDensity (or their source-exact membership equivalence). Since N is even, no allowed prime equals2; primality gives p>2, hence 0<1-1/(p-1)<=1. Apply the actual non-primed GroupWithZero Finset.prod_le_prod_of_subset_of_le_one with its required nonnegativity argument. Rewrite the canonical actual products through the owned exact dictionary. Multiply by logN>=0 and divide by singularSeries N>0. This is true for all real a,b, not only positive ones."
+    },
+    {
+      "name": "local_common_threshold",
+      "full_contract": "∀ x : ℝ, 0 < x →\n  ∃ n : ℕ, 2 ≤ n ∧\n    ∀ᶠ a : ℝ in 𝓝 x, ∀ N : ℕ, n ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ a ≤ (cap : ℝ) →\n        |actualSmallEulerProduct N cap ((N : ℝ) ^ a) * Real.log (N : ℝ) /\n            singularSeries N -\n          2 * Real.exp (-Real.eulerMascheroniConstant) / a| < eta",
+      "proof": "Let c=2exp(-gamma)>0,f(a)=c/a. ContinuityAt f x supplies delta>0 making both nearby endpoint values within eta/8 of f(x). Let d=min(x/2,delta/2), l=x-d,u=x+d; both endpoints are positive. The owned fixed-power limit at l and u gives one threshold n>=2 for endpoint errors<eta/4 for every later even N. Convert the positive-even filter using Filter.eventually_inf_principal and eventually_atTop, preserving N>=2. For a in Ioo l u, finite antitonicity brackets F_N(a) between F_N(u),F_N(l), while f is antitone on positive reals and f(l)-f(u)<eta/4. Each signed error is<eta/4+eta/4<eta. Canonical_cap_identity transfers to every covering cap. Thus one entire ambient neighborhood shares one threshold; pointwise convergence alone is not substituted for uniformity."
+    },
+    {
+      "name": "finite_compact_maximum",
+      "full_contract": "Set.Icc a0 a1 is covered by finitely many local_common_threshold neighborhoods, and max 2 of their finite Nat.sup thresholds works for all a in that interval.",
+      "proof": "Specialize x>=a0>0. Choose one neighborhood threshold n x for each subtype x:Icc a0 a1. Let U x={a | forall N>=n x, EvenN -> forall covering cap, actual absolute error<eta}; the proved local estimate gives U x in nhdsWithin(Icc)a. Apply actual IsCompact.elim_nhdsWithin_subcover_prime API (Lean name IsCompact.elim_nhdsWithin_subcover') to obtain t:Finset(Icc a0 a1) covering the interval. Use N0=max 2 (t.sup n) and Finset.le_sup. An empty interval gives a vacuous cover and N0=2; no a0<=a1 assumption or arbitrary inhabited-point choice is required.",
+      "native_API": "IsCompact.elim_nhdsWithin_subcover'"
+    }
+  ],
+  "no_new_analytic_input_needed_for_this_ONE_theorem": true,
+  "quantifier_order": "a0,a1,eta fixed first with a0>0,eta>0; then one N0>=2; then every later N, Even N, every a in Icc(a0,a1), every cap with N^a<=cap. Cap and exponent may depend arbitrarily on N after N0 is fixed. Empty interval allowed.",
+  "exact_physical_primitives": [
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualSmallRosserDensity.lean",
+        "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+        "lines": 205,
+        "bytes": 9533
+      },
+      "line_start": 44,
+      "line_end": 48,
+      "complete_actual_source_span": "    (actualSmallRosserPlus N cap w L)\n\n/-- The actual target-prime-deleted Goldbach Euler product. For even\ntargets the carrier automatically excludes the prime two. -/\ndef actualSmallEulerProduct (N cap : ℕ) (w : ℝ) : ℝ :="
+    },
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FiniteSieveEuler.lean",
+        "sha256": "d1eb27002ef3da1327a4574067241a26fd825a6e50c1cd9b530b4ace21db42f7",
+        "lines": 241,
+        "bytes": 10516
+      },
+      "line_start": 59,
+      "line_end": 62,
+      "complete_actual_source_span": "\n/-- The literal `V_N(z)` of the actual sieve, with real subtraction. -/\ndef finiteSieveDensity (N z : ℕ) : ℝ :=\n  ∏ p ∈ sievePrimes N z, (1 - 1 / ((p : ℝ) - 1))"
+    },
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\SieveSourceCoprimality.lean",
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "lines": 291,
+        "bytes": 13819
+      },
+      "line_start": 35,
+      "line_end": 44,
+      "complete_actual_source_span": "/-- Allowed sieving primes, with the literal strict natural cap. -/\ndef sievePrimes (N z : ℕ) : Finset ℕ := by\n  classical\n  exact (Finset.range z).filter (fun ell : ℕ => Nat.Prime ell ∧ ¬ell ∣ N)\n\n@[simp] theorem mem_sievePrimes {N z ell : ℕ} :\n    ell ∈ sievePrimes N z ↔ ell < z ∧ Nat.Prime ell ∧ ¬ell ∣ N := by\n  classical\n  simp only [sievePrimes, Finset.mem_filter, Finset.mem_range]\n"
+    },
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualSmallRosser.lean",
+        "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "lines": 238,
+        "bytes": 11252
+      },
+      "line_start": 39,
+      "line_end": 52,
+      "complete_actual_source_span": "def actualSmallPrimeFinset (N cap : ℕ) (w : ℝ) : Finset ℕ :=\n  roughPrimeFinset N cap 0 w\n\n@[simp] theorem mem_actualSmallPrimeFinset {N cap p : ℕ} {w : ℝ} :\n    p ∈ actualSmallPrimeFinset N cap w ↔\n      p < cap ∧ Nat.Prime p ∧ ¬p ∣ N ∧ (p : ℝ) < w := by\n  simp [actualSmallPrimeFinset, Nat.cast_nonneg]\n\ntheorem mem_actualSmallPrimeFinset_iff_of_cutoff_le_cap\n    {N cap p : ℕ} {w : ℝ} (hwcap : w ≤ (cap : ℝ)) :\n    p ∈ actualSmallPrimeFinset N cap w ↔\n      Nat.Prime p ∧ ¬p ∣ N ∧ (p : ℝ) < w := by\n  simpa only [actualSmallPrimeFinset, Nat.cast_nonneg, true_and] using\n    (mem_roughPrimeFinset_iff_of_cutoff_le_cap"
+    },
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\SingularSeries.lean",
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "lines": 156,
+        "bytes": 6842
+      },
+      "line_start": 99,
+      "line_end": 101,
+      "complete_actual_source_span": "finite product `(p - 1) / (p - 2)` over its odd prime divisors. -/\nnoncomputable def singularSeries (N : ℕ) : ℝ :=\n  twinPrimeConstant * ∏ p ∈ oddPrimeDivisors N, ((p : ℝ) - 1) / ((p : ℝ) - 2)"
+    },
+    {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\SingularSeries.lean",
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "lines": 156,
+        "bytes": 6842
+      },
+      "line_start": 120,
+      "line_end": 121,
+      "complete_actual_source_span": "theorem singularSeries_pos (N : ℕ) : 0 < singularSeries N :=\n  twinPrimeConstant_pos.trans_le (twinPrimeConstant_le_singularSeries N)"
+    }
+  ],
+  "owned_census": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020T111428115780Z-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "98096ed834a3c6e83c240ade21db189fb6424b81bfd84ce1fc6df4bc259986e9",
+    "lines": 1730,
+    "bytes": 106167
+  },
+  "owned_status_counts": {
+    "modules": 156,
+    "complete_serialized_declarations": 3556,
+    "scope": "Provided exact current continuation census snapshot, not a global classification of all baseline project modules."
+  },
+  "actual_owned_records_and_current_binding_checks": [
+    {
+      "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "census_record": {
+        "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+        "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+        "object_parts": {
+          ".olean": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T091648772742Z/receipt.json",
+        "owned_receipt_sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "declarations_json_sha256": "2bbe12bc1a65f466d5dc565f2082a877304d9ffa83fa9b8417d1d89c595a49d0",
+        "complete_serialized_declarations": 39
+      },
+      "current_source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenFixedEulerNormalization.lean",
+        "sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+        "lines": 213,
+        "bytes": 11518
+      },
+      "current_main_object_sha256": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8",
+      "current_receipt": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T091648772742Z\\receipt.json",
+        "sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "lines": 240,
+        "bytes": 11632
+      },
+      "current_declarations": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T091648772742Z\\declarations.json",
+        "sha256": "2bbe12bc1a65f466d5dc565f2082a877304d9ffa83fa9b8417d1d89c595a49d0",
+        "lines": 1108,
+        "bytes": 127676
+      }
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+      "census_record": {
+        "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+        "source_sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+        "object_parts": {
+          ".olean": "bac99ff78d252de18f806a371eaa8d2b93a2218dac192c520755357ff868a087"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T091648772742Z/receipt.json",
+        "owned_receipt_sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "declarations_json_sha256": "2bbe12bc1a65f466d5dc565f2082a877304d9ffa83fa9b8417d1d89c595a49d0",
+        "complete_serialized_declarations": 9
+      },
+      "current_source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenRosserEndpointDictionary.lean",
+        "sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+        "lines": 140,
+        "bytes": 6275
+      },
+      "current_main_object_sha256": "bac99ff78d252de18f806a371eaa8d2b93a2218dac192c520755357ff868a087",
+      "current_receipt": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T091648772742Z\\receipt.json",
+        "sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "lines": 240,
+        "bytes": 11632
+      },
+      "current_declarations": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T091648772742Z\\declarations.json",
+        "sha256": "2bbe12bc1a65f466d5dc565f2082a877304d9ffa83fa9b8417d1d89c595a49d0",
+        "lines": 1108,
+        "bytes": 127676
+      }
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+      "census_record": {
+        "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+        "source_sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+        "object_parts": {
+          ".olean": "aa0b9712b2127578e22c941d23b23f5093a9b9eead4c26200e55fecf11501fb5"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261020T111246043521Z/receipt.json",
+        "owned_receipt_sha256": "595b16682b38afe6f96d227e0f81cec14bf96f48d15922e8a9e6d6bd3325ccd1",
+        "declarations_json_sha256": "938366de1a2a7da8ed5c6dc36c6399f3af6c8c918c35c415d40b81da6bf47cb4",
+        "complete_serialized_declarations": 27
+      },
+      "current_source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeBoxTestFunctions.lean",
+        "sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+        "lines": 340,
+        "bytes": 18700
+      },
+      "current_main_object_sha256": "aa0b9712b2127578e22c941d23b23f5093a9b9eead4c26200e55fecf11501fb5",
+      "current_receipt": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261020T111246043521Z\\receipt.json",
+        "sha256": "595b16682b38afe6f96d227e0f81cec14bf96f48d15922e8a9e6d6bd3325ccd1",
+        "lines": 92,
+        "bytes": 3834
+      },
+      "current_declarations": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261020T111246043521Z\\declarations.json",
+        "sha256": "938366de1a2a7da8ed5c6dc36c6399f3af6c8c918c35c415d40b81da6bf47cb4",
+        "lines": 337,
+        "bytes": 52146
+      }
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+      "census_record": {
+        "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+        "source_sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+        "object_parts": {
+          ".olean": "31c11947924ff99de22228cec79f3704dc531520c823ea477d05f2a32da9d731"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T202018926686Z/receipt.json",
+        "owned_receipt_sha256": "777e766c8c17d123a0efbaefff992d3b5580a9418c9210d03845447edb3a3a9f",
+        "declarations_json_sha256": "b6b5d441972096500bc52dd00759900900e54827605e4c7a124d27d4fbecdcce",
+        "complete_serialized_declarations": 17
+      },
+      "current_source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeIcoCellTestFunctions.lean",
+        "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+        "lines": 209,
+        "bytes": 11453
+      },
+      "current_main_object_sha256": "31c11947924ff99de22228cec79f3704dc531520c823ea477d05f2a32da9d731",
+      "current_receipt": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T202018926686Z\\receipt.json",
+        "sha256": "777e766c8c17d123a0efbaefff992d3b5580a9418c9210d03845447edb3a3a9f",
+        "lines": 129,
+        "bytes": 6060
+      },
+      "current_declarations": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T202018926686Z\\declarations.json",
+        "sha256": "b6b5d441972096500bc52dd00759900900e54827605e4c7a124d27d4fbecdcce",
+        "lines": 517,
+        "bytes": 122519
+      }
+    }
+  ],
+  "three_complete_consumed_owned_API_records": [
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+      "name": "ImbalancedChen.currentChen_model_actualEuler_eq_finite",
+      "partial": false,
+      "type": "∀ (N cap : Nat) (z : Real) (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap)),\n  @Eq.{1} Real (ImbalancedChen.actualSmallEulerProduct N cap z)\n    (ImbalancedChen.finiteSieveDensity N\n      (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n        (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) z))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+      "name": "ImbalancedChen.currentChen_model_actualEuler_pos",
+      "partial": false,
+      "type": "∀ (N cap : Nat) (z : Real) (hEven : @Even.{0} Nat instAddNat N),\n  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))\n    (ImbalancedChen.actualSmallEulerProduct N cap z)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "name": "ImbalancedChen.tendsto_currentChen_actualEuler_fixed_normalized",
+      "partial": false,
+      "type": "∀ {a : Real}\n  (ha : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) a),\n  @Filter.Tendsto.{0, 0} Nat Real\n    (fun (N : Nat) =>\n      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (ImbalancedChen.actualSmallEulerProduct N\n            (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n              (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N) a))\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N) a))\n          (Real.log (@Nat.cast.{0} Real Real.instNatCast N)))\n        (ImbalancedChen.singularSeries N))\n    (@Min.min.{0} (Filter.{0} Nat) (@Filter.instInf.{0} Nat) (@Filter.atTop.{0} Nat Nat.instPreorder)\n      (@Filter.principal.{0} Nat\n        (@Set.ofPred.{0} Nat fun (N : Nat) =>\n          And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N)\n            (@Even.{0} Nat instAddNat N))))\n    (@nhds.{0} Real\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 2)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n          (Real.exp (@Neg.neg.{0} Real Real.instNeg Real.eulerMascheroniConstant)))\n        a))",
+      "unsafe": false
+    }
+  ],
+  "selected_owned_public_source": {
+    "file": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenFixedEulerNormalization.lean",
+      "sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+      "lines": 213,
+      "bytes": 11518
+    },
+    "line_start": 193,
+    "line_end": 209,
+    "complete_actual_source_span": "/-- Exact leading normalization of the literal target-prime-deleted Euler\nproduct at each fixed positive power cutoff. The enumeration cap is the\nactual ceiling of the real power, so the endpoint dictionary applies even\nwhen the power is an integer. No uniform-in-exponent or sieve-density\nasymptotic is assumed by the caller. -/\ntheorem tendsto_currentChen_actualEuler_fixed_normalized {a : ℝ} (ha : 0 < a) :\n    Tendsto (fun N : ℕ =>\n      actualSmallEulerProduct N (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (2 * Real.exp (-Real.eulerMascheroniConstant) / a)) := by\n  have hlim := currentChenFixedEuler_tendsto_finiteSieveDensity_power_normalized ha\n  apply hlim.congr'\n  exact Filter.Eventually.of_forall fun N => by\n    dsimp only\n    rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) (Nat.le_ceil _)]"
+  },
+  "selected_owned_dictionary_source": {
+    "file": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenRosserEndpointDictionary.lean",
+      "sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+      "lines": 140,
+      "bytes": 6275
+    },
+    "line_start": 47,
+    "line_end": 59,
+    "complete_actual_source_span": "  change (∏ p ∈ sievePrimes N (Nat.ceil z), p).primeFactors = _\n  exact Nat.primeFactors_prod (fun p hp => (mem_sievePrimes.mp hp).2.1)\n\ntheorem currentChen_model_actualEuler_eq_finite\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap z = finiteSieveDensity N (Nat.ceil z) := by\n  unfold actualSmallEulerProduct finiteSieveDensity\n  rw [currentChen_model_primeFinset_eq_sievePrimes N cap z hzcap]\n\ntheorem currentChen_model_actualEuler_pos (N cap : ℕ) (z : ℝ) (hEven : Even N) :\n    0 < actualSmallEulerProduct N cap z := by\n  unfold actualSmallEulerProduct\n  apply Finset.prod_pos"
+  },
+  "all_selected_parent211lines_actually_read": true,
+  "actual_native_API_complete_headers_and_proof_spans": [
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\GroupWithZero\\Finset.lean",
+        "sha256": "3be238a809840f7dff49a99a02fd83fd5fc93d3efd5f8f34354c5e5c4e796e7d",
+        "lines": 161,
+        "bytes": 7616
+      },
+      "line_start": 108,
+      "line_end": 119,
+      "complete_actual_source_span": "\ntheorem prod_le_prod_of_subset_of_le_one (h : s ⊆ t) (hf0 : ∀ i ∈ t, 0 ≤ f i)\n    (hf : ∀ i ∈ t, i ∉ s → f i ≤ 1) :\n    ∏ i ∈ t, f i ≤ ∏ i ∈ s, f i := by\n  have := posMulMono_iff_mulPosMono.1 ‹PosMulMono R›\n  classical\n  calc\n    ∏ i ∈ t, f i = ∏ i ∈ t \\ s ∪ s, f i := by rw [sdiff_union_of_subset h]\n    _ = (∏ i ∈ t \\ s, f i) * ∏ i ∈ s, f i := prod_union sdiff_disjoint\n    _ ≤ ∏ i ∈ s, f i :=\n      mul_le_of_le_one_left (prod_nonneg (by grind)) (prod_le_one (by grind) (by grind))\n"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Compactness\\Compact.lean",
+        "sha256": "bc2873632e7d2edf8b4ffaf8959ada4c93c673d97c13d6f6533510c70bfb4241",
+        "lines": 1263,
+        "bytes": 65724
+      },
+      "line_start": 226,
+      "line_end": 240,
+      "complete_actual_source_span": "theorem IsCompact.elim_nhds_subcover' (hs : IsCompact s) (U : ∀ x ∈ s, Set X)\n    (hU : ∀ x (hx : x ∈ s), U x ‹x ∈ s› ∈ 𝓝 x) : ∃ t : Finset s, s ⊆ ⋃ x ∈ t, U (x : s) x.2 :=\n  (hs.elim_nhds_subcover_nhdsSet' U hU).imp fun _ ↦ subset_of_mem_nhdsSet\n\ntheorem IsCompact.elim_nhds_subcover (hs : IsCompact s) (U : X → Set X) (hU : ∀ x ∈ s, U x ∈ 𝓝 x) :\n    ∃ t : Finset X, (∀ x ∈ t, x ∈ s) ∧ s ⊆ ⋃ x ∈ t, U x :=\n  (hs.elim_nhds_subcover_nhdsSet hU).imp fun _ h ↦ h.imp_right subset_of_mem_nhdsSet\n\ntheorem IsCompact.elim_nhdsWithin_subcover' (hs : IsCompact s) (U : ∀ x ∈ s, Set X)\n    (hU : ∀ x (hx : x ∈ s), U x hx ∈ 𝓝[s] x) : ∃ t : Finset s, s ⊆ ⋃ x ∈ t, U x x.2 := by\n  choose V V_nhds hV using fun x hx => mem_nhdsWithin_iff_exists_mem_nhds_inter.1 (hU x hx)\n  refine (hs.elim_nhds_subcover' V V_nhds).imp fun t ht =>\n    subset_trans ?_ (iUnion₂_mono fun x _ => hV x x.2)\n  simpa [← iUnion_inter, ← iUnion_coe_set]\n"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\MetricSpace\\Pseudo\\Defs.lean",
+        "sha256": "7cbe6a3f08199e77596b05ae5e5215ce5dc1e5dc131d29ecde6e974c308aa374",
+        "lines": 1297,
+        "bytes": 60134
+      },
+      "line_start": 874,
+      "line_end": 897,
+      "complete_actual_source_span": "theorem continuousAt_iff [PseudoMetricSpace β] {f : α → β} {a : α} :\n    ContinuousAt f a ↔ ∀ ε > 0, ∃ δ > 0, ∀ ⦃x : α⦄, dist x a < δ → dist (f x) (f a) < ε := by\n  rw [ContinuousAt, tendsto_nhds_nhds]\n\ntheorem continuousWithinAt_iff [PseudoMetricSpace β] {f : α → β} {a : α} {s : Set α} :\n    ContinuousWithinAt f s a ↔\n      ∀ ε > 0, ∃ δ > 0, ∀ ⦃x : α⦄, x ∈ s → dist x a < δ → dist (f x) (f a) < ε := by\n  rw [ContinuousWithinAt, tendsto_nhdsWithin_nhds]\n\ntheorem continuousOn_iff [PseudoMetricSpace β] {f : α → β} {s : Set α} :\n    ContinuousOn f s ↔ ∀ b ∈ s, ∀ ε > 0, ∃ δ > 0, ∀ a ∈ s, dist a b < δ → dist (f a) (f b) < ε := by\n  simp [ContinuousOn, continuousWithinAt_iff]\n\ntheorem continuous_iff [PseudoMetricSpace β] {f : α → β} :\n    Continuous f ↔ ∀ b, ∀ ε > 0, ∃ δ > 0, ∀ a, dist a b < δ → dist (f a) (f b) < ε :=\n  continuous_iff_continuousAt.trans <| forall_congr' fun _ => tendsto_nhds_nhds\n\ntheorem tendsto_nhds {f : Filter β} {u : β → α} {a : α} :\n    Tendsto u f (𝓝 a) ↔ ∀ ε > 0, ∀ᶠ x in f, dist (u x) a < ε :=\n  nhds_basis_ball.tendsto_right_iff\n\ntheorem continuousAt_iff' [TopologicalSpace β] {f : β → α} {b : β} :\n    ContinuousAt f b ↔ ∀ ε > 0, ∀ᶠ x in 𝓝 b, dist (f x) (f b) < ε := by\n  rw [ContinuousAt, tendsto_nhds]"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Lattice\\Fold.lean",
+        "sha256": "79b80dd5aa12886d31c582ab00585627dc4e7f1d7607c7b707484f38d95ce2f4",
+        "lines": 813,
+        "bytes": 32514
+      },
+      "line_start": 109,
+      "line_end": 116,
+      "complete_actual_source_span": "  Finset.sup_le fun _ _ => le_rfl\n\n@[deprecated (since := \"2026-03-25\")] alias le_inf_const_le := le_inf_const\n\n@[to_dual inf_le]\ntheorem le_sup {b : β} (hb : b ∈ s) : f b ≤ s.sup f :=\n  Finset.sup_le_iff.1 le_rfl _ hb\n"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+        "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+        "lines": 1149,
+        "bytes": 50301
+      },
+      "line_start": 609,
+      "line_end": 617,
+      "complete_actual_source_span": "\ntheorem rpow_lt_rpow_of_exponent_lt (hx : 1 < x) (hyz : y < z) : x ^ y < x ^ z := by\n  repeat' rw [rpow_def_of_pos (lt_trans zero_lt_one hx)]\n  rw [exp_lt_exp]; exact mul_lt_mul_of_pos_left hyz (log_pos hx)\n\n@[gcongr]\ntheorem rpow_le_rpow_of_exponent_le (hx : 1 ≤ x) (hyz : y ≤ z) : x ^ y ≤ x ^ z := by\n  repeat' rw [rpow_def_of_pos (lt_of_lt_of_le zero_lt_one hx)]\n  rw [exp_le_exp]; gcongr; exact log_nonneg hx"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Filter\\AtTopBot\\Basic.lean",
+        "sha256": "d8892fb4e13028202cfc7e7df66e2ef2b52db8f5a935a516236e2676cf43484d",
+        "lines": 401,
+        "bytes": 18077
+      },
+      "line_start": 74,
+      "line_end": 79,
+      "complete_actual_source_span": "@[to_dual (attr := simp)]\nlemma mem_atTop_sets {s : Set α} : s ∈ (atTop : Filter α) ↔ ∃ a : α, ∀ b, a ≤ b → b ∈ s :=\n  atTop_basis.mem_iff.trans <| exists_congr fun _ => iff_of_eq (true_and _)\n\n@[to_dual (attr := simp)]\nlemma eventually_atTop : (∀ᶠ x in atTop, p x) ↔ ∃ a, ∀ b, a ≤ b → p b := mem_atTop_sets"
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Order\\Compact.lean",
+        "sha256": "002eb018e5c875f619438d68c26293ef1fd75267dc94327f23fba430c9d526e5",
+        "lines": 548,
+        "bytes": 26482
+      },
+      "line_start": 47,
+      "line_end": 56,
+      "complete_actual_source_span": "\n\n/-- This typeclass says that all closed intervals in `α` are compact. This is true for all\nconditionally complete linear orders with order topology and products (finite or infinite)\nof such spaces. -/\nclass CompactIccSpace (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where\n  /-- A closed interval `Set.Icc a b` is a compact set for all `a` and `b`. -/\n  isCompact_Icc : ∀ {a b : α}, IsCompact (Icc a b)\n\nexport CompactIccSpace (isCompact_Icc)"
+    }
+  ],
+  "critical_native_API_correction": "For Real Euler factors use non-primed Finset.prod_le_prod_of_subset_of_le_one in GroupWithZero/Finset: arguments are carrier inclusion, nonnegativity on the larger carrier, and <=1 on omitted factors. The primed ordered-monoid lemma does not supply the needed Real PosMulMono argument contract; do not guess from its similar name.",
+  "historical_native_parts_not_new_preflight": {
+    "record": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\preflights\\20261020T102814520376Z-log0880-native-fullparts.json",
+      "sha256": "badccf95e48efafcad6e6e09a1fced808eff5fde2838a3f0b46a762c61c7eb9a",
+      "lines": 29674,
+      "bytes": 2027696
+    },
+    "GroupWithZeroFinset": {
+      ".olean": "15e3dd2957f269351690eea75c7775734d3ea242a8969e11058c881ef08d5432",
+      ".olean.private": "70bb09073b7b1bfc5c3540e7546b566e58951927017ac5387b4420299954c05a",
+      ".olean.server": "948c65d5c2cd5fd885a08115b73ee602d08f4182756d66684a704390cb7177f9",
+      ".ilean": "207f0409a08cf887628af082bcd860da9df3eb6eb656b5c36e5b3120d54de971",
+      ".ir": "875aeca1ab843a15005d78c7507b1990d41a192925d1a7c6d5a98590d8d2180e"
+    },
+    "TopologyOrderCompact": {
+      ".olean": "964d7301a458917d86f22e8908220968abf751e1638f81c33680a068479183b0",
+      ".olean.private": "9e316296b28748867a5fdcabab42e937c7fba90057794d9636a16b4a61743079",
+      ".olean.server": "e01e13c3d4d02e35cc616b6393a45694a79797cd2eef9b252863139f5add3f34",
+      ".ilean": "02f3a696822fbb9fbca5e16768dc843eb7b7832536187caf54963f1d60a5beac",
+      ".ir": "f87f887085712d433f122f4345d2ca700f4daccea811106c645741daeeccd24d"
+    },
+    "fresh_runtime_required": true,
+    "no_bootstrap_authorized": true
+  },
+  "avoid_reinventing_polyhedral_limit": {
+    "current_Ico_source": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeIcoCellTestFunctions.lean",
+      "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+      "lines": 209,
+      "bytes": 11453
+    },
+    "whole212lines_read": true,
+    "already_owned_count": 17,
+    "existing_complete_signed_mixed_wall_record": {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+      "name": "ImbalancedChen.tendsto_actualPrimeBoxTestSum_cube_affineSandwich",
+      "partial": false,
+      "type": "∀ {d r : Nat} {a b : Real}\n  (ha : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) a)\n  (hab : @LT.lt.{0} Real Real.instLT a b)\n  (L :\n    Fin r →\n      @ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n        (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n          @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n        (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid) Real\n        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n        Real.instAddCommMonoid\n        (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n          (@Semiring.toModule.{0} Real Real.semiring))\n        (@Semiring.toModule.{0} Real Real.semiring))\n  (c : Fin r → Real)\n  (hL :\n    ∀ (j : Fin r),\n      @Ne.{1}\n        (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n          (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n          (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n            @UniformSpace.toTopologicalSpace.{0} Real\n              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n          (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid) Real\n          (@UniformSpace.toTopologicalSpace.{0} Real\n            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n          Real.instAddCommMonoid\n          (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n            (@Semiring.toModule.{0} Real Real.semiring))\n          (@Semiring.toModule.{0} Real Real.semiring))\n        (L j)\n        (@OfNat.ofNat.{0}\n          (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n            (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n            (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n              @UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n            (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid) Real\n            (@UniformSpace.toTopologicalSpace.{0} Real\n              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n            Real.instAddCommMonoid\n            (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n              (@Semiring.toModule.{0} Real Real.semiring))\n            (@Semiring.toModule.{0} Real Real.semiring))\n          (nat_lit 0)\n          (@Zero.toOfNat0.{0}\n            (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n              (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n              (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n                @UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)\n              Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              Real.instAddCommMonoid\n              (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n                (@Semiring.toModule.{0} Real Real.semiring))\n              (@Semiring.toModule.{0} Real Real.semiring))\n            (@ContinuousLinearMap.zero.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n              (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n              (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n                @UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)\n              Real\n              (@UniformSpace.toTopologicalSpace.{0} Real\n                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n              Real.instAddCommMonoid\n              (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n                (@Semiring.toModule.{0} Real Real.semiring))\n              (@Semiring.toModule.{0} Real Real.semiring)))))\n  (R : Set.{0} (Fin d → Real))\n  (hR :\n    @MeasurableSet.{0} (Fin d → Real)\n      (@MeasurableSpace.pi.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (a : Fin d) => Real.measurableSpace) R)\n  (hlo :\n    @LE.le.{0} (Set.{0} (Fin d → Real)) (@Set.instLE.{0} (Fin d → Real)) (@ImbalancedChen.primeAffineGateRegion d r L c)\n      R)\n  (hhi :\n    ∀ (x : Fin d → Real),\n      @Membership.mem.{0, 0} (Fin d → Real) (Set.{0} (Fin d → Real)) (@Set.instMembership.{0} (Fin d → Real)) R x →\n        ∀ (j : Fin r),\n          @LE.le.{0} Real Real.instLE\n            (@DFunLike.coe.{1, 1, 1}\n              (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n                (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n                (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n                  @UniformSpace.toTopologicalSpace.{0} Real\n                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)\n                Real\n                (@UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                Real.instAddCommMonoid\n                (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n                  (@Semiring.toModule.{0} Real Real.semiring))\n                (@Semiring.toModule.{0} Real Real.semiring))\n              (Fin d → Real) (fun (x : Fin d → Real) => Real)\n              (@ContinuousLinearMap.funLike.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n                (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) (Fin d → Real)\n                (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n                  @UniformSpace.toTopologicalSpace.{0} Real\n                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)\n                Real\n                (@UniformSpace.toTopologicalSpace.{0} Real\n                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n                Real.instAddCommMonoid\n                (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid\n                  (@Semiring.toModule.{0} Real Real.semiring))\n                (@Semiring.toModule.{0} Real Real.semiring))\n              (L j) x)\n            (c j))\n  (f : (Fin d → Real) → Real)\n  (hf :\n    @ContinuousOn.{0, 0} (Fin d → Real) Real\n      (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n        @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)) f\n      (@Set.pi.{0, 0} (Fin d) (fun (a : Fin d) => Real) (@Set.univ.{0} (Fin d)) fun (x : Fin d) =>\n        @Set.Icc.{0} Real Real.instPreorder a b)),\n  @Filter.Tendsto.{0, 0} Nat Real\n    (fun (N : Nat) =>\n      @ImbalancedChen.actualPrimeBoxTestSum d N (fun (x : Fin d) => a) (fun (x : Fin d) => b)\n        (@Set.indicator.{0, 0} (Fin d → Real) Real Real.instZero R f))\n    (@Filter.atTop.{0} Nat Nat.instPreorder)\n    (@nhds.{0} Real\n      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))\n      (@MeasureTheory.integral.{0, 0} (Fin d → Real) Real Real.normedAddCommGroup\n        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike\n          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)\n          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))\n        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (Fin d → Real)\n          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin d) (Fin.fintype d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n            Real.measureSpace))\n        (@MeasureTheory.Measure.restrict.{0} (Fin d → Real)\n          (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (Fin d → Real)\n            (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin d) (Fin.fintype d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n              Real.measureSpace))\n          (@MeasureTheory.MeasureSpace.volume.{0} (Fin d → Real)\n            (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin d) (Fin.fintype d) (fun (a : Fin d) => Real) fun (i : Fin d) =>\n              Real.measureSpace))\n          (@Inter.inter.{0} (Set.{0} (Fin d → Real)) (@Set.instInter.{0} (Fin d → Real))\n            (@ImbalancedChen.logPrimeBox d (fun (x : Fin d) => a) fun (x : Fin d) => b) R))\n        fun (x : Fin d → Real) =>\n        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (f x)\n          (@Finset.prod.{0, 0} (Fin d) Real Real.instCommMonoid (@Finset.univ.{0} (Fin d) (Fin.fintype d))\n            fun (i : Fin d) =>\n            @HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) (x i))))",
+      "unsafe": false
+    },
+    "actual_public_header": {
+      "file": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeIcoCellTestFunctions.lean",
+        "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+        "lines": 209,
+        "bytes": 11453
+      },
+      "line_start": 71,
+      "line_end": 81,
+      "complete_actual_source_span": "theorem tendsto_actualPrimeBoxTestSum_cube_affineSandwich {d r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b)\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ j, L j ≠ 0)\n    (R : Set (Fin d → ℝ)) (hR : MeasurableSet R)\n    (hlo : primeAffineGateRegion L c ⊆ R) (hhi : ∀ x ∈ R, ∀ j, L j x ≤ c j)\n    (f : (Fin d → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin d => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin d => a) (fun _ => b)\n      (R.indicator f)) atTop\n      (𝓝 (∫ x in logPrimeBox (fun _ : Fin d => a) (fun _ => b) ∩ R,\n        f x * ∏ i, 1 / x i)) := by"
+    },
+    "reason": "This existing owned theorem already transfers actual prime atoms with signed continuous f on any measurable region sandwiched between strict and weak finite nonzero affine gates. The separate owned Ico-cell theorem fixes mesh before N and retains exact boundary atoms pointwise. A new cube-to-polytope theorem here would duplicate available mathematics."
+  },
+  "inspected_actual_source_hashes_imports_and_ownership_locators": [
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenFixedEulerNormalization.lean",
+        "sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+        "lines": 213,
+        "bytes": 11518
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.EulerNormalizationLimit",
+        "import ImbalancedChen.CenterEulerTail",
+        "import MathlibNt.SieveTheory.Arithmetic.MertensTheorem",
+        "import ImbalancedChen.CurrentChenRosserEndpointDictionary"
+      ],
+      "in_provided_continuation_owned_census": true,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenRosserEndpointDictionary.lean",
+        "sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+        "lines": 140,
+        "bytes": 6275
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualSmallRosserDensity",
+        "import ImbalancedChen.ChenInitialPrimeSource",
+        "import ImbalancedChen.FiniteSieveEuler",
+        "import MathlibNt.SieveTheory.Switching.SuzukiPrimeSums",
+        "import MathlibNt.SieveTheory.Arithmetic.MertensTheorem"
+      ],
+      "in_provided_continuation_owned_census": true,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeBoxTestFunctions.lean",
+        "sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+        "lines": 340,
+        "bytes": 18700
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualPrimeBoxMass",
+        "import ImbalancedChen.LogPrimeBoxMesh",
+        "import Mathlib.Topology.UniformSpace.HeineCantor",
+        "import Mathlib.MeasureTheory.Integral.Bochner.Set",
+        "import ImbalancedChen.FinitePrimeGeometryCore"
+      ],
+      "in_provided_continuation_owned_census": true,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeIcoCellTestFunctions.lean",
+        "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+        "lines": 209,
+        "bytes": 11453
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+        "import ImbalancedChen.LogPrimeBoxMesh"
+      ],
+      "in_provided_continuation_owned_census": true,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\AffinePrimeGates.lean",
+        "sha256": "3dbc9a6ddf2ee158a9b179239da2870c6fb8f0dfaaa5a49dc417c05042e091fc",
+        "lines": 190,
+        "bytes": 8888
+      },
+      "literal_import_lines": [
+        "import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+        "import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic",
+        "import Mathlib.MeasureTheory.Integral.DominatedConvergence",
+        "import Mathlib.Topology.Instances.Real.Lemmas"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimePolyhedralTestFunctions.lean",
+        "sha256": "7281ad47406ad7eb48c5f50c24fa037880778aeb59d79a32f25855ab0dd17ad6",
+        "lines": 184,
+        "bytes": 10245
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualPrimeBoxTestFunctions",
+        "import ImbalancedChen.AffinePrimeGates"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\UniformPowerEulerNormalization.lean",
+        "sha256": "8888d8d4df618d3504c6fbf08f1b6a132bba16b2a378e68906d2f17240d76475",
+        "lines": 193,
+        "bytes": 9734
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.FullPowerEulerNormalization",
+        "import ImbalancedChen.SieveDimensionComparison",
+        "import Mathlib.Topology.UniformSpace.LocallyUniformConvergence",
+        "import Mathlib.Topology.MetricSpace.Pseudo.Basic"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FullPowerEulerNormalization.lean",
+        "sha256": "32f6fba88d1e9bcb40bd2865013187c24d25cd06d72e2b6dacc367a863150371",
+        "lines": 204,
+        "bytes": 10292
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualSmallEulerNormalization",
+        "import ImbalancedChen.CenterEulerTail",
+        "import Mathlib.Analysis.SpecificLimits.Basic"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualCompactEulerNormalization.lean",
+        "sha256": "e6c7374ffd684f3c6bc926e839a430dc931a421cc6e84fd431c9a0ab9becd629",
+        "lines": 74,
+        "bytes": 3560
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.UniformPowerEulerNormalization",
+        "import ImbalancedChen.RosserCompactParameterBounds"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": "PASS",
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeBoxInitialSavingIntegral.lean",
+        "sha256": "71dcac6ff550921467241071fbd86a5e90025ca27bd0292cb2f6f5b6ceda25e0",
+        "lines": 207,
+        "bytes": 10991
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualPrimeBoxTestFunctions",
+        "import ImbalancedChen.ActualRosserInitialResidualSaving",
+        "import ImbalancedChen.MovingWeightTransport"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRosserInitialResidualSaving.lean",
+        "sha256": "f47716ff1b570b6c87846548e74f9c0286d0d99a65d9dd9ee20f213ff86c683c",
+        "lines": 144,
+        "bytes": 7382
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualRosserResidualDensity",
+        "import ImbalancedChen.ActualRosserCubeLimit",
+        "import ImbalancedChen.ActualRosserUpperGeneralLimit"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRosserResidualDensity.lean",
+        "sha256": "1bf3036c8c2e60114035696dbb1216fc66316fc3f8796435fe784410b1f45843",
+        "lines": 413,
+        "bytes": 23093
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualRosserCompactNormalization"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRosserCubeLimit.lean",
+        "sha256": "a2a2d04ca6fe2d1e53e311bdb880f945ce30e27a71203b8590c90aa498aef7a4",
+        "lines": 132,
+        "bytes": 6888
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualRosserAtThreeLimit",
+        "import ImbalancedChen.ActualRosserCubeReduction"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRosserUpperGeneralLimit.lean",
+        "sha256": "46ad77f78ea908f1ac7a7b203274b223b2cf68a5789fb99a816133ac7d1cf77d",
+        "lines": 109,
+        "bytes": 5469
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualRosserOddGeneralLayers",
+        "import ImbalancedChen.ActualRosserUpperGeneralUpper",
+        "import ImbalancedChen.FullPowerEulerNormalization"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeBoxOwnCubeResidual.lean",
+        "sha256": "dd140158236b1d012384e790cf9e62f6bd24f02494f554bae7402c96f4bfd559",
+        "lines": 199,
+        "bytes": 10755
+      },
+      "literal_import_lines": [
+        "import ImbalancedChen.ActualPrimeBoxInitialSavingIntegral",
+        "import ImbalancedChen.ActualRosserResidualDensity",
+        "import ImbalancedChen.RosserContinuousSourceUniformity"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    },
+    {
+      "source": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CompactLocalThreshold.lean",
+        "sha256": "bac41a819e3196063b2e28fa390dc0a5ba22fa75cb88d93687f1cc63ccbba4d6",
+        "lines": 42,
+        "bytes": 1841
+      },
+      "literal_import_lines": [
+        "import Mathlib.Topology.Compactness.Compact"
+      ],
+      "in_provided_continuation_owned_census": false,
+      "development_cache_status": null,
+      "cache_does_not_imply_owned": true
+    }
+  ],
+  "old_chain_not_restored": "Existing UniformPowerEulerNormalization has the desired arithmetic conclusion but imports FullPowerEulerNormalization and SieveDimensionComparison. No current owned record for that old chain was inferred from any cache. The new thin candidate proves the actual uniform theorem from the separately owned current fixed-power theorem, with all local finite arithmetic and compact-cover work explicit.",
+  "relation_to_adopted_initial_and_C_K": [
+    "Initial4716 already identifies the physical adopted initial policy with the actual ordinary plus density at its exact floor-grid first cutoff. The proposed Euler theorem preserves the same target-prime-deleted carrier and original singularSeries normalization.",
+    "ActualRosserResidualDensity normalizes actual ratios uniformly in varying (beta,u), and ActualPrimeBoxOwnCubeResidual requires that uniformity before every actual tuple. The proposed one threshold supplies the Euler factor of exactly this normalization without assuming finite products are continuous in the exponent.",
+    "The arithmetic signed Rosser ratio still needs genuinely proved two-sided compact estimates for the same coefficient, including lower legal s=2 boundary and upper s>1 domain. Existing owned one-sided Chen rectangles cannot be subtracted or promoted into two-sided convergence.",
+    "ActualPrimeBoxInitialSavingIntegral71dc needs ActualRosserInitialResidualSaving f477, which currently has neither a continuation owned record nor cache; literal direct parents ResidualDensity1bf3,CubeLimit a2a2,UpperGeneralLimit46ad likewise cannot be assumed restored.",
+    "After uniform ratios and exact first-cube factor identification are proved, quotient parameter compactness, rational difference4*(lambdaNew-lambdaOld)/(betaOld*betaNew), original own-cube indicators, selected-prefix/parent admission identities and arithmetic error budgets still have to be attached to the same fixed policy.",
+    "Original signed mean C/K,hLower,hUpper and final numerical evaluation are not discharged by this theorem. The finite Euler result is necessary normalization progress, not a sieve-density estimate or full main theorem."
+  ],
+  "no_changed_wall_or_signed_budget": "No policy, cube gate, Ico wall, target exclusion, C/K parameter or signed coefficient is modified. The selected new theorem introduces no sign assumption on a density and does not posit a positive residual sieve mean.",
+  "mathematical_static_findings": [],
+  "Lean_elaboration_acceptance_claimed": false,
+  "compiler_cache_checker_lake_install_resource_pin_CI_or_source_mutation": false,
+  "only_new_artifact_written": "This ignored readonly proposal JSON",
+  "quota": {
+    "actual_tool_used_percent": 10,
+    "remaining_percent": 90,
+    "hard_stop_remaining_at_most": 50,
+    "unavailable_means_hold": true
+  },
+  "next_action": "HOLD after delivering this complete one-theorem proposal; wait for root specific source scope. No gate or Lean authoring requested by this report."
+}

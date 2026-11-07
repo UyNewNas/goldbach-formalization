@@ -1,0 +1,255 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_MULTI_LABEL_FINITE_NORMALIZATION_CANDIDATE_NOT_COMPILED",
+  "reviewer": "/root/tail_resume/greedy_review source author; not independent review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualPrimeMultiLabelNormalization",
+  "source_sha256": "14a4404a11f1e3b915c54d5aebbda6e22e2c2919e5931943b1ac8eb11d4c770f",
+  "complete_declarations": [
+    {
+      "name": "actualPrimeLabelBlocksWord",
+      "kind": "def",
+      "line": 24,
+      "complete_signature": "def actualPrimeLabelBlocksWord {ι : Type*} (blocks : List (ι × ℕ)) : List ι",
+      "complete_definition": "def actualPrimeLabelBlocksWord {ι : Type*} (blocks : List (ι × ℕ)) : List ι :=\n  blocks.flatMap (fun b => List.replicate b.2 b.1)"
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial",
+      "kind": "def",
+      "line": 27,
+      "complete_signature": "def actualPrimeLabelBlocksFactorial {ι : Type*} (blocks : List (ι × ℕ)) : ℕ",
+      "complete_definition": "def actualPrimeLabelBlocksFactorial {ι : Type*} (blocks : List (ι × ℕ)) : ℕ :=\n  (blocks.map (fun b => b.2.factorial)).prod"
+    },
+    {
+      "name": "actualPrimeLabelBlockProductSum",
+      "kind": "def",
+      "line": 32,
+      "complete_signature": "def actualPrimeLabelBlockProductSum {ι : Type*} (B : ι → Finset ℕ) :\n    List (ι × ℕ) → (ℕ → ℝ) → ℝ",
+      "complete_definition": "def actualPrimeLabelBlockProductSum {ι : Type*} (B : ι → Finset ℕ) :\n    List (ι × ℕ) → (ℕ → ℝ) → ℝ\n  | [], H => H 1\n  | (i, m) :: blocks, H =>\n      ∑ n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod,\n        actualPrimeLabelBlockProductSum B blocks (fun r => H (n * r))"
+    },
+    {
+      "name": "actualPrimeSlotBox_replicate_label_eq",
+      "kind": "theorem",
+      "line": 39,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_label_eq {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (m : ℕ) :\n    actualPrimeSlotBox B (List.replicate m i) =\n      actualPrimeSlotBox (fun _ : Unit => B i) (List.replicate m ())"
+    },
+    {
+      "name": "actualPrimeSlotBox_replicate_squarefree_coefficient",
+      "kind": "theorem",
+      "line": 48,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_squarefree_coefficient {ι : Type*}\n    (B : ι → Finset ℕ) (i : ι) (m n : ℕ)\n    (hprime : ∀ q ∈ B i, Nat.Prime q)\n    (hn : n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod)\n    (hsquarefree : Squarefree n) :\n    actualPrimeTupleCoefficient (actualPrimeSlotBox B (List.replicate m i)) n =\n      m.factorial"
+    },
+    {
+      "name": "actualPrimeVector_moebius_mul_eq_zero",
+      "kind": "theorem",
+      "line": 67,
+      "complete_signature": "theorem actualPrimeVector_moebius_mul_eq_zero {n r : ℕ}\n    (hn : ¬Squarefree n) : ArithmeticFunction.moebius (r * n) = 0"
+    },
+    {
+      "name": "actualPrimeSlotBox_replicate_moebius_sum",
+      "kind": "theorem",
+      "line": 73,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_moebius_sum {ι : Type*}\n    (B : ι → Finset ℕ) (i : ι) (m r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ q ∈ B i, Nat.Prime q) :\n    (∑ ps ∈ actualPrimeSlotBox B (List.replicate m i),\n      (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      (m.factorial : ℝ) *\n        ∑ n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod,\n          (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial_pos",
+      "kind": "theorem",
+      "line": 89,
+      "complete_signature": "theorem actualPrimeLabelBlocksFactorial_pos {ι : Type*} (blocks : List (ι × ℕ)) :\n    0 < actualPrimeLabelBlocksFactorial blocks"
+    },
+    {
+      "name": "actualPrimeLabelBlockProductSum_const_mul",
+      "kind": "theorem",
+      "line": 97,
+      "complete_signature": "theorem actualPrimeLabelBlockProductSum_const_mul {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (c : ℝ) (H : ℕ → ℝ) :\n    actualPrimeLabelBlockProductSum B blocks (fun n => c * H n) =\n      c * actualPrimeLabelBlockProductSum B blocks H"
+    },
+    {
+      "name": "actualPrimeLabelBlockProductSum_finsetSum",
+      "kind": "theorem",
+      "line": 109,
+      "complete_signature": "theorem actualPrimeLabelBlockProductSum_finsetSum {ι α : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (S : Finset α) (F : α → ℕ → ℝ) :\n    (∑ a ∈ S, actualPrimeLabelBlockProductSum B blocks (F a)) =\n      actualPrimeLabelBlockProductSum B blocks (fun n => ∑ a ∈ S, F a n)"
+    },
+    {
+      "name": "actualPrimeLabelBlocks_moebius_sum",
+      "kind": "theorem",
+      "line": 126,
+      "complete_signature": "theorem actualPrimeLabelBlocks_moebius_sum {ι : Type*} (B : ι → Finset ℕ) :\n    ∀ (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ),\n      (∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) →\n      (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) *\n          actualPrimeLabelBlockProductSum B blocks\n            (fun n => (ArithmeticFunction.moebius (r * n) : ℝ) * H n)"
+    },
+    {
+      "name": "actualPrimeLabelBlocks_moebius_sum_normalized",
+      "kind": "theorem",
+      "line": 192,
+      "complete_signature": "theorem actualPrimeLabelBlocks_moebius_sum_normalized {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) :\n    (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      actualPrimeLabelBlockProductSum B blocks\n        (fun n => (ArithmeticFunction.moebius (r * n) : ℝ) * H n)"
+    },
+    {
+      "name": "actualPrimeLabelBlocks_moebius_fibre_normalized",
+      "kind": "theorem",
+      "line": 208,
+      "complete_signature": "theorem actualPrimeLabelBlocks_moebius_fibre_normalized {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r n : ℕ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeTupleCoefficient\n          (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      (ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeLabelBlockProductSum B blocks (fun k => if k = n then 1 else 0)"
+    }
+  ],
+  "theorem_count": 10,
+  "definition_count": 3,
+  "mathematical_checks": [
+    "Original labelled slot word concatenates each repeated-label block. Factorial is the product of those exact block factorials, not the total-slot factorial or later three-group factorials.",
+    "BlockProductSum is an explicit recursive finite sum over each complete block product-image. Different vectors with the same full product remain separate summands.",
+    "Existing single-label m! coefficient applies only when block product is squarefree. Nonsquarefree n divides r*n, so literal moebius(r*n)=0, before any absolute value or normalization. No equal-prime tuple is dropped by a factorial.",
+    "One-block signed identity follows by the existing exact product-fibre grouping; it has no squarefree hypothesis in its conclusion.",
+    "Finite induction commutes only finite sums, factors constants, and applies the one-block identity to each block. B supports may overlap, block labels may repeat, r is arbitrary, and H may have either sign.",
+    "The normalized full-product fibre theorem retains literal moebius(r*n) and the exact original tuple coefficient on the left, with an exact block-product-vector fibre indicator on the right. It does not assume injectivity of vector-to-full-product.",
+    "A fixed original scalar depending on the label word can be included in H; no identity for arbitrary coordinate-dependent weights is asserted."
+  ],
+  "direct_parent": {
+    "module": "ImbalancedChen.ActualPrimeSlotSquarefreeSymmetry",
+    "source_sha256": "e3f4e00e2dfc3face13688da430c2b499155fa5e592ef14cfefc9028c2b590c8",
+    "header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.ActualFrozenSlotCoefficientRegrouping",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        },
+        {
+          "module": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    },
+    "current_project_cache_present": false,
+    "scope": "Parent has existing source-only API; current project runtime receipt absent at author scope check. Exact parent-chain runtime validation remains necessary."
+  },
+  "actual_native_api_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Squarefree/Basic.lean",
+      "sha256": "4a86e3cf8e9930194cd7db5b881864dbbeb9fe3ff93016453787cbfc12936d13",
+      "line": 84,
+      "interface": "Squarefree.squarefree_of_dvd(hdvd:x divides y)(hsq:Squarefree y):Squarefree x",
+      "assessment": "Applied to n divides r*n via dvd_mul_left n r."
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeSlotSquarefreeSymmetry",
+      "reused": [
+        "mem_actualPrimeSlotBox_replicate",
+        "actualPrimeVector_nodup_of_squarefree",
+        "actualPrimeSlotBox_replicate_coefficient"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualFrozenSlotCoefficientRegrouping",
+      "reused": [
+        "actualPrimeTuple_sum_by_product",
+        "actualPrimeSlotBox_product_sum_append"
+      ]
+    }
+  ],
+  "foreign_scope": {
+    "new_direct_foreign_imports": [],
+    "existing_parent_foreign": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+    "native_object_exists": true,
+    "native_object_path": "/home/slava/codex-lean-ve/native-packages/mathlib/.lake/build/lib/lean/Mathlib/NumberTheory/ArithmeticFunction/Moebius.olean",
+    "observed_object_sha256": "132d589b35b3f19f4610cb0ca51ca4d3fc1578e8d672535c892bf535b3a532fc",
+    "boundary": "Presence/hash is read-only inventory, not independent acceptance or permission to bootstrap/reuse an unvalidated imported closure."
+  },
+  "relative_header_scope": {
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "leaf_header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.ActualPrimeSlotSquarefreeSymmetry",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    },
+    "new_project_vs_parent_closure": [
+      "ImbalancedChen.ActualPrimeMultiLabelNormalization"
+    ],
+    "new_foreign": [],
+    "fresh_full_dag_recomputed": false,
+    "method": "Only existing project parent plus implicit Init; relative graph delta follows from current headers. No complete closure validation inferred."
+  },
+  "pin_files": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    }
+  ],
+  "remaining_gates": [
+    "Non-author independent source review and exact-source strict/owned Lean validation. No Lean was run by author.",
+    "Actual fine-label sets and weakly ordered source selector must be identified with these complete repeated-label blocks; their real endpoint/order-wall conditions must be preserved.",
+    "For disjoint distinct fine labels, prove full product determines its block-product vector before replacing the vector fibre by a single original product carrier. This is not assumed here.",
+    "Original same-policy coefficients, canonical ordered histories, any later three-group regrouping, arithmetic distribution and rho mean still require their own exact source dictionary."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "old_frozen_lean_modified": false,
+    "checker_modified": false,
+    "pins_modified": false,
+    "python_bytecode_generated": false,
+    "fresh_full_dag_recomputed": false,
+    "independent_review_claimed": false,
+    "imported_object_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

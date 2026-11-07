@@ -1,0 +1,64 @@
+{
+  "status": "PROPOSED_V2_DISPLAY_SCOPE_REPAIR_UNEXECUTED_HOLD",
+  "created_utc": "2026-10-21T06:28:21.891472+00:00",
+  "target": "ImbalancedChen.Part3SchwartzFourierL1Sobolev",
+  "source_sha256": "bb99945a37040ebe36d0202e69ecc533078e043dc4c3ea0e2a22f6fab7363a65",
+  "old_script": {
+    "path": "rounds/20261021-schwartzbb999-readonly-classification.py",
+    "sha256": "f5d97adb2c6d5136064fc0d671d3a4e9892bfa87389a1e453accec90a9418a1a",
+    "bytes": 17390
+  },
+  "proposed_v2": {
+    "path": "rounds/20261021-schwartzbb999-readonly-classification-v2.py",
+    "sha256": "40a45bb580f5956752236b7622b90fa287d042d4e3a3edfb459b50e5cb3251c7",
+    "bytes": 18281
+  },
+  "complete_diff": {
+    "path": "rounds/20261021-schwartzbb999-readonly-classification-v2.diff",
+    "sha256": "a98cb180785ac0b63dff5a9f2c72bfc62e520e2b3fbbe8f21efe9d762f5868fa",
+    "bytes": 1691,
+    "raw_utf8": "--- 20261021-schwartzbb999-readonly-classification.py\n+++ 20261021-schwartzbb999-readonly-classification-v2.py\n@@ -179,7 +179,20 @@\n         assert literal == '\\n'.join(text.splitlines()[item['first'] - 1:item['last']]).split(' :=', 1)[0]\n         header_bindings.append(dict(item, literal_header_utf8_sha256=hashlib.sha256(literal.encode()).hexdigest()))\n     assert sum(not x['private'] for x in headers) == 3\n-    assert text.count(author['public_definitions_literal']) == 1 and text.count(author['public_theorem_literal']) == 1\n+    # The author display omits the actual doccomment between these complete definitions.\n+    display = author['public_definitions_literal']\n+    first_definition, display_separator, second_tail = display.partition('\\n\\ndef normalizedFourth')\n+    assert display_separator == '\\n\\ndef normalizedFourth'\n+    joining_separator = display_separator[:-len('def normalizedFourth')]\n+    second_definition = 'def normalizedFourth' + second_tail\n+    assert first_definition.startswith('def normalizedStep ')\n+    assert text.count(first_definition) == text.count(second_definition) == 1\n+    first_start, second_start = text.index(first_definition), text.index(second_definition)\n+    assert first_start + len(first_definition) < second_start\n+    actual_first = text[first_start:first_start + len(first_definition)]\n+    actual_second = text[second_start:second_start + len(second_definition)]\n+    assert actual_first + joining_separator + actual_second == display\n+    assert text.count(author['public_theorem_literal']) == 1\n     imports = runtime.imports(source)\n     assert imports == IMPORTS\n     foreign = {x['module']: x for x in proper['foreign_nodes']}\n"
+  },
+  "scope_repair": {
+    "old_guard_raw_utf8": "    assert text.count(author['public_definitions_literal']) == 1 and text.count(author['public_theorem_literal']) == 1\n",
+    "new_guard_raw_utf8": "    # The author display omits the actual doccomment between these complete definitions.\n    display = author['public_definitions_literal']\n    first_definition, display_separator, second_tail = display.partition('\\n\\ndef normalizedFourth')\n    assert display_separator == '\\n\\ndef normalizedFourth'\n    joining_separator = display_separator[:-len('def normalizedFourth')]\n    second_definition = 'def normalizedFourth' + second_tail\n    assert first_definition.startswith('def normalizedStep ')\n    assert text.count(first_definition) == text.count(second_definition) == 1\n    first_start, second_start = text.index(first_definition), text.index(second_definition)\n    assert first_start + len(first_definition) < second_start\n    actual_first = text[first_start:first_start + len(first_definition)]\n    actual_second = text[second_start:second_start + len(second_definition)]\n    assert actual_first + joining_separator + actual_second == display\n    assert text.count(author['public_theorem_literal']) == 1\n",
+    "reason": "Author display concatenates two complete public definitions while actual source has an intervening documentation comment. Bind each exact complete definition once, preserve order, reconstruct unchanged display with its original separator. Whole-source SHA, all14 headers, generic context and theorem unique checks remain intact.",
+    "whole_definition_occurrences": [
+      1,
+      1
+    ],
+    "source_start_utf8_byte_offsets": [
+      1258,
+      1446
+    ],
+    "original_joining_separator": "\n\n",
+    "reconstruction_exact": true
+  },
+  "static_checks": {
+    "AST_parse_only": true,
+    "single_old_guard_replaced": true,
+    "raw_inverse_restores_original_f5d97_exact": true,
+    "rest_of_script_byte_exact": true,
+    "v2_not_executed": true,
+    "native_checks_and_baseline_checks_unchanged": true
+  },
+  "preserved_failure": {
+    "handle": 13641,
+    "exit_code": 1,
+    "log_sha256": "6e9a1193a4ea2a4899b85a3d7a500e4b73a6daaa8a9b67e7524dcf62efa3c812",
+    "checkpoint_sha256": "94d7ef8bfe538a2061525b4a8993b199fae556f07a314ed93225e15f78f8a308"
+  },
+  "process_snapshot": {
+    "path": "preflights/20261021T062751415157Z-schwartzbb999-v2-proposal-before-actual-process-and-lock.json",
+    "status": "NO_PROJECT_COMPILER_AND_ORIGINAL_SHARED_LOCK_NOT_HELD"
+  },
+  "quota": {
+    "used_percent": 26,
+    "remaining_percent": 74,
+    "hold_lte_remaining": 50
+  },
+  "compiler_checker_invoked": false,
+  "source_or_frozen_files_changed": false,
+  "fullhelper_census_prepared_or_executed": false,
+  "next": "HOLD. Root full v2 source/diff review and separate ONE readonly run authorization required."
+}

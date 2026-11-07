@@ -1,0 +1,485 @@
+{
+  "status": "ONE_SOURCE_CANDIDATE_HOLD_NOT_COMPILED",
+  "date_utc": "2026-10-21",
+  "author": "/root/resonance_finite_sol_xhigh_oct21",
+  "objective": "ONE finite arithmetic lemma: ordered distinct congruent natural pairs in the exact inclusive real dyadic carrier have cardinality at most 4*U^2/m, with no additive +1.",
+  "source_only": true,
+  "HOLD": true,
+  "quota": {
+    "last_fresh_used_percent": 28,
+    "last_fresh_remaining_percent": 72,
+    "last_fresh_check_utc": "2026-10-21 07:35:50 UTC",
+    "stop_if_remaining_lte": 50
+  },
+  "scope": {
+    "files_written": [
+      "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+      ".lake/proof-continuation/source-reviews/20261021-resonance-offdiagonal-count-one-source-candidate.json"
+    ],
+    "no_compiler_or_checker_run": true,
+    "no_proper_helper_cache_git_catalog_operations": true,
+    "no_threads_or_agents_created": true,
+    "no_claim_of_compilation_or_acceptance": true,
+    "metadata_operations": "Read source, compute SHA256, and write this one JSON; no proof-checking process is launched."
+  },
+  "pins": {
+    "lean": "leanprover/lean4:v4.33.0-rc1",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "lakefile": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lakefile.toml",
+      "file_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254"
+    },
+    "lean_toolchain": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lean-toolchain",
+      "file_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef"
+    },
+    "manifest": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lake-manifest.json",
+      "file_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    }
+  },
+  "prior_audit": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-bare-resonance-feasibility-decay-correction-astra-high-HOLD.json",
+    "file_sha256": "7e617107a4c3988fe758117ae480802a85f4951ac678601c51c5fc221e492d20",
+    "relative_path": ".lake/proof-continuation/source-reviews/20261021-bare-resonance-feasibility-decay-correction-astra-high-HOLD.json",
+    "classification": "Route audit and mathematical feasibility evidence only; not a Lean accepted theorem."
+  },
+  "candidate": {
+    "relative_path": "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+    "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ResonanceOffDiagonalCount.lean",
+    "file_sha256": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+    "source_sha256_lf_utf8": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+    "line_count": 167,
+    "public_theorem_count": 1,
+    "private_elementary_helper_count": 2,
+    "full_declarations": [
+      {
+        "source_name": "increasing_count_le",
+        "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+        "visibility": "private",
+        "public_fully_qualified_name": null,
+        "first_line": 32,
+        "full_declaration_header_and_type": "private theorem increasing_count_le (S : Finset ℕ) (U : ℝ)\n    (hS : ∀ n ∈ S, U ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * U)\n    (m : ℕ) (hm : 0 < m) :\n    ((S ×ˢ S).filter (fun z => z.1 < z.2 ∧ Nat.ModEq m z.1 z.2)).card ≤\n      S.card * Nat.floor (U / (m : ℝ))",
+        "dependencies": [
+          "Finset.card_le_card_of_injOn",
+          "Finset.mem_filter",
+          "Finset.mem_product",
+          "Nat.modEq_iff_dvd'",
+          "Nat.sub_pos_of_lt",
+          "Nat.le_of_dvd",
+          "Nat.div_pos",
+          "Nat.div_mul_cancel",
+          "Nat.sub_add_cancel",
+          "le_div_iff₀",
+          "Nat.le_floor",
+          "Finset.card_product",
+          "Nat.card_Icc",
+          "Prod.ext"
+        ]
+      },
+      {
+        "source_name": "finite_count_le",
+        "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+        "visibility": "private",
+        "public_fully_qualified_name": null,
+        "first_line": 85,
+        "full_declaration_header_and_type": "private theorem finite_count_le (S : Finset ℕ) (U : ℝ) (hU : 1 ≤ U)\n    (hS : ∀ n ∈ S, U ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * U)\n    (m : ℕ) (hm : 0 < m) :\n    (((S ×ˢ S).filter (fun z => z.1 ≠ z.2 ∧ Nat.ModEq m z.1 z.2)).card : ℝ) ≤\n      4 * U ^ 2 / (m : ℝ)",
+        "dependencies": [
+          "increasing_count_le",
+          "Finset.card_le_card_of_injOn",
+          "Nat.ModEq.symm",
+          "lt_or_gt_of_ne",
+          "Finset.card_union_le",
+          "Nat.add_le_add",
+          "Finset.card_le_card",
+          "Nat.card_Ioc",
+          "Nat.floor_le",
+          "mul_le_mul"
+        ]
+      },
+      {
+        "source_name": "dyadic_ordered_offDiagonal_modEq_count_le",
+        "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+        "visibility": "public",
+        "public_fully_qualified_name": "ImbalancedChen.Part3.ResonanceOffDiagonalCount.dyadic_ordered_offDiagonal_modEq_count_le",
+        "first_line": 151,
+        "full_declaration_header_and_type": "theorem dyadic_ordered_offDiagonal_modEq_count_le (U : ℝ) (hU : 1 ≤ U)\n    (m : ℕ) (hm : 0 < m) :\n    (((Icc (Nat.ceil U) (Nat.floor (2 * U)) ×ˢ\n        Icc (Nat.ceil U) (Nat.floor (2 * U))).filter\n      (fun z => z.1 ≠ z.2 ∧ Nat.ModEq m z.1 z.2)).card : ℝ) ≤\n        4 * U ^ 2 / (m : ℝ)",
+        "dependencies": [
+          "finite_count_le",
+          "Nat.le_ceil",
+          "Nat.floor_le",
+          "Finset.mem_Icc"
+        ]
+      }
+    ],
+    "direct_imports": [
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Archimedean\\Real\\Basic.lean",
+        "file_sha256": "ba51e7d1078ee669a1b5e95968163937113d8ba729e9f2fb7e6ed0ebd66acfd0",
+        "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+        "file_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+        "module": "Mathlib.Algebra.Order.Floor.Semiring",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Prod.lean",
+        "file_sha256": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+        "module": "Mathlib.Data.Finset.Prod",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+        "file_sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+        "module": "Mathlib.Data.Nat.ModEq",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Finset\\Nat.lean",
+        "file_sha256": "90339c927a9c62f2bed05fd25089b1570397415d65bfc09def8b8e536a4019c9",
+        "module": "Mathlib.Order.Interval.Finset.Nat",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Tactic\\Linarith.lean",
+        "file_sha256": "0581fd9f80f34d728ad628e7c1fb5a93d36cb9cb48d469fbc797869e83ebe0a6",
+        "module": "Mathlib.Tactic.Linarith",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Tactic\\NormNum.lean",
+        "file_sha256": "dca9500572c6d887000f3de17c7145b53bf35233afc1ad8026cca908cec7a2fe",
+        "module": "Mathlib.Tactic.NormNum",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Tactic\\Positivity.lean",
+        "file_sha256": "74549078792cb4bef7b904577b94f0e206912935507b6f2f39eb73b7a15927d6",
+        "module": "Mathlib.Tactic.Positivity",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Tactic\\Ring.lean",
+        "file_sha256": "d3ef5c49ebbd1108ce3f935e5ad95485e143abf02f28c027dba4bb6f3be8196e",
+        "module": "Mathlib.Tactic.Ring",
+        "kind": "pinned_mathlib_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Lean\\Elab\\Tactic\\NormCast.lean",
+        "file_sha256": "a5e7d3446b0ff46a38505683ee935d939a4884c3e409a5e2e96be051c5e2e708",
+        "module": "Lean.Elab.Tactic.NormCast",
+        "kind": "pinned_lean_core_source"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Lean\\Elab\\Tactic\\Omega.lean",
+        "file_sha256": "7a81cef2ff724f9f690993d01aef906b200ca11c36f72fb57f9e6e5eaf4ec45e",
+        "module": "Lean.Elab.Tactic.Omega",
+        "kind": "pinned_lean_core_source"
+      }
+    ],
+    "new_axioms": false,
+    "admitted_proofs": false,
+    "supplied_target_estimate_hypothesis": false,
+    "elaboration_status": "UNRUN, delegated to the one authorized heavy channel outside this subtask"
+  },
+  "native_api": {
+    "source_location": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib",
+    "source_read_directly": true,
+    "external_web_sources_used": false,
+    "bindings": [
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+        "relative_path": "Mathlib/Data/Nat/ModEq.lean",
+        "first_line": 87,
+        "last_line": 93,
+        "names": [
+          "Nat.ModEq.symm"
+        ],
+        "file_sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+        "span_sha256_lf_utf8": "e7a57c7c2121e804c2b11eb5a78fdb6fea322ab85ad042c75825d3aa2b56391c",
+        "exact_source_excerpt": "@[symm]\nprotected theorem symm : a ≡ b [MOD n] → b ≡ a [MOD n] :=\n  Eq.symm\n\n@[trans]\nprotected theorem trans : a ≡ b [MOD n] → b ≡ c [MOD n] → a ≡ c [MOD n] :=\n  Eq.trans\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+        "relative_path": "Mathlib/Data/Nat/ModEq.lean",
+        "first_line": 117,
+        "last_line": 119,
+        "names": [
+          "Nat.modEq_iff_dvd'"
+        ],
+        "file_sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+        "span_sha256_lf_utf8": "0a5883894694ce7f1bb2be40ec6b3a891c732cb8c339978d0b5505ad68a298cb",
+        "exact_source_excerpt": "/-- A variant of `modEq_iff_dvd` with `Nat` divisibility -/\ntheorem modEq_iff_dvd' (h : a ≤ b) : a ≡ b [MOD n] ↔ n ∣ b - a := by\n  rw [modEq_iff_dvd, ← Int.natCast_dvd_natCast, Int.ofNat_sub h]\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+        "relative_path": "Mathlib/Data/Finset/Card.lean",
+        "first_line": 427,
+        "last_line": 432,
+        "names": [
+          "Finset.card_le_card_of_injOn"
+        ],
+        "file_sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+        "span_sha256_lf_utf8": "11c401a65812e6d18a01c623ba3ce05b5ac7a4e707a007cfee8a013613e84b1e",
+        "exact_source_excerpt": "lemma card_le_card_of_injOn (f : α → β) (hf : Set.MapsTo f s t) (f_inj : (s : Set α).InjOn f) :\n    #s ≤ #t := by\n  classical\n  calc\n    #s = #(s.image f) := (card_image_of_injOn f_inj).symm\n    _ ≤ #t := card_le_card <| image_subset_iff.2 hf\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+        "relative_path": "Mathlib/Data/Finset/Card.lean",
+        "first_line": 576,
+        "last_line": 576,
+        "names": [
+          "Finset.card_union_le"
+        ],
+        "file_sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+        "span_sha256_lf_utf8": "beaa8c1ed6dbfac4dce096731b11d1f1dde0a05160e6e113d01eddd39ad5322e",
+        "exact_source_excerpt": "theorem card_union_le (s t : Finset α) : #(s ∪ t) ≤ #s + #t := by grind\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Prod.lean",
+        "relative_path": "Mathlib/Data/Finset/Prod.lean",
+        "first_line": 61,
+        "last_line": 62,
+        "names": [
+          "Finset.mem_product"
+        ],
+        "file_sha256": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+        "span_sha256_lf_utf8": "fcd01ba5a9babf7aa92bfd3b25e38ea8320ef3797c32149bf6cd9d1fff9cb650",
+        "exact_source_excerpt": "theorem mem_product {p : α × β} : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t :=\n  Multiset.mem_product\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Prod.lean",
+        "relative_path": "Mathlib/Data/Finset/Prod.lean",
+        "first_line": 141,
+        "last_line": 142,
+        "names": [
+          "Finset.card_product"
+        ],
+        "file_sha256": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+        "span_sha256_lf_utf8": "1c6ce8eae2f3b944499b47c307ad862093129704035a8aacd93b799bbf57b5cb",
+        "exact_source_excerpt": "theorem card_product (s : Finset α) (t : Finset β) : card (s ×ˢ t) = card s * card t :=\n  Multiset.card_product _ _\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Finset\\Nat.lean",
+        "relative_path": "Mathlib/Order/Interval/Finset/Nat.lean",
+        "first_line": 83,
+        "last_line": 85,
+        "names": [
+          "Nat.card_Icc",
+          "Nat.card_Ioc"
+        ],
+        "file_sha256": "90339c927a9c62f2bed05fd25089b1570397415d65bfc09def8b8e536a4019c9",
+        "span_sha256_lf_utf8": "d27f801753eec50214498f3e54d7304eb7b72aeff5976a089df37565f2b54612",
+        "exact_source_excerpt": "@[simp] lemma card_Icc : #(Icc a b) = b + 1 - a := List.length_range' ..\n@[simp] lemma card_Ico : #(Ico a b) = b - a := List.length_range' ..\n@[simp] lemma card_Ioc : #(Ioc a b) = b - a := List.length_range' ..\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Defs.lean",
+        "relative_path": "Mathlib/Algebra/Order/Floor/Defs.lean",
+        "first_line": 140,
+        "last_line": 144,
+        "names": [
+          "Nat.le_floor_iff",
+          "Nat.le_floor"
+        ],
+        "file_sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+        "span_sha256_lf_utf8": "68bd88a831b25726bd05670e09df599ff98973685d95625a732d97fa052c0244",
+        "exact_source_excerpt": "theorem le_floor_iff (ha : 0 ≤ a) : n ≤ ⌊a⌋₊ ↔ (n : α) ≤ a :=\n  FloorSemiring.gc_floor ha\n\ntheorem le_floor (h : (n : α) ≤ a) : n ≤ ⌊a⌋₊ :=\n  (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+        "relative_path": "Mathlib/Algebra/Order/Floor/Semiring.lean",
+        "first_line": 47,
+        "last_line": 48,
+        "names": [
+          "Nat.floor_le"
+        ],
+        "file_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+        "span_sha256_lf_utf8": "f61ac8b4c392fba9e977a64fdebfb5f1d3fe334ca6be41d38d819b22adc01bf6",
+        "exact_source_excerpt": "theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a :=\n  (le_floor_iff ha).1 le_rfl\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+        "relative_path": "Mathlib/Algebra/Order/Floor/Semiring.lean",
+        "first_line": 178,
+        "last_line": 179,
+        "names": [
+          "Nat.le_ceil"
+        ],
+        "file_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+        "span_sha256_lf_utf8": "18b71915eab2fae07fb63f8299a4c5180905e669c21b51636d7da95ce934e5d1",
+        "exact_source_excerpt": "theorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=\n  ceil_le.1 le_rfl\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "relative_path": "Mathlib/Algebra/Order/GroupWithZero/Basic.lean",
+        "first_line": 1134,
+        "last_line": 1135,
+        "names": [
+          "le_div_iff₀"
+        ],
+        "file_sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "span_sha256_lf_utf8": "1d6958b31c32c7c7b383a1b29d2d24947b63f4cdcfb219d3c61a68c809760b2d",
+        "exact_source_excerpt": "lemma le_div_iff₀ (hc : 0 < c) : a ≤ b / c ↔ a * c ≤ b := by\n  rw [div_eq_mul_inv, le_mul_inv_iff₀ hc]\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Defs\\LinearOrder.lean",
+        "relative_path": "Mathlib/Order/Defs/LinearOrder.lean",
+        "first_line": 110,
+        "last_line": 111,
+        "names": [
+          "lt_or_gt_of_ne"
+        ],
+        "file_sha256": "837dba1e44eb02eb7837e8e7b72b59c277e85899454f45d3be66de44ecd98632",
+        "span_sha256_lf_utf8": "518757d3efeb8593b5404d05c00314de3bbf32b5bf37d4c3a8765659a6a074b3",
+        "exact_source_excerpt": "lemma lt_or_gt_of_ne (h : a ≠ b) : a < b ∨ b < a :=\n  (lt_trichotomy a b).imp_right (fun h' ↦ h'.resolve_left h)\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+        "relative_path": "Init/Data/Nat/Dvd.lean",
+        "first_line": 65,
+        "last_line": 70,
+        "names": [
+          "Nat.le_of_dvd"
+        ],
+        "file_sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+        "span_sha256_lf_utf8": "41ed5db4301618957736b6f63e56afa9551b1b439a652e35bcf808751c2f4ccd",
+        "exact_source_excerpt": "theorem le_of_dvd {m n : Nat} (h : 0 < n) : m ∣ n → m ≤ n\n  | ⟨k, e⟩ => by\n    revert h\n    rw [e]\n    match k with\n    | 0 => intro hn; simp at hn\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+        "relative_path": "Init/Data/Nat/Dvd.lean",
+        "first_line": 110,
+        "last_line": 111,
+        "names": [
+          "Nat.div_mul_cancel"
+        ],
+        "file_sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+        "span_sha256_lf_utf8": "c636c0266956b96a429f69c6e00f60bf71c744eca10074131e1b9630df874984",
+        "exact_source_excerpt": "protected theorem div_mul_cancel {n m : Nat} (H : n ∣ m) : m / n * n = m := by\n  rw [Nat.mul_comm, Nat.mul_div_cancel' H]\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Div\\Lemmas.lean",
+        "relative_path": "Init/Data/Nat/Div/Lemmas.lean",
+        "first_line": 96,
+        "last_line": 99,
+        "names": [
+          "Nat.div_pos"
+        ],
+        "file_sha256": "3046e785238fe8afe1f0b40f02902ee1cef13589ba8fcb045bc48f16ad4412c0",
+        "span_sha256_lf_utf8": "807d69d93eaa5f3ffeec2057ecc46d6a99539f1cc1c7254e892167503204c529",
+        "exact_source_excerpt": "theorem div_pos (hba : b ≤ a) (hb : 0 < b) : 0 < a / b := by\n  cases b\n  · contradiction\n  · simp [Nat.pos_iff_ne_zero, hba]\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+        "relative_path": "Init/Data/Nat/Basic.lean",
+        "first_line": 991,
+        "last_line": 992,
+        "names": [
+          "Nat.sub_add_cancel"
+        ],
+        "file_sha256": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+        "span_sha256_lf_utf8": "c9aafcafdcc262cfacee296138e5b5257ff97273d736dfcc7911cc6753a467e5",
+        "exact_source_excerpt": "@[simp] protected theorem sub_add_cancel {n m : Nat} (h : m ≤ n) : n - m + m = n := by\n  rw [Nat.add_comm, Nat.add_sub_of_le h]\n"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+        "relative_path": "Init/Data/Nat/Basic.lean",
+        "first_line": 1115,
+        "last_line": 1116,
+        "names": [
+          "Nat.sub_pos_of_lt"
+        ],
+        "file_sha256": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+        "span_sha256_lf_utf8": "c7b107c1b731153181f3e34e9c4d85deeda6a40f9adc0094d85e593f171cdd00",
+        "exact_source_excerpt": "protected theorem sub_pos_of_lt (h : m < n) : 0 < n - m :=\n  Nat.pos_iff_ne_zero.2 (Nat.sub_ne_zero_of_lt h)\n"
+      }
+    ],
+    "tactics": [
+      "simp only",
+      "rw",
+      "exact_mod_cast",
+      "linarith",
+      "omega",
+      "ring",
+      "norm_num"
+    ],
+    "dependency_precision": "Direct import source hashes and the nontrivial finite-counting, division and floor API signatures are bound here. Standard logical constructors, projections, transitivity and positivity lemmas remain ordinary pinned Lean/mathlib dependencies; no claim is made to enumerate all transitive declarations."
+  },
+  "mathematical_proof": [
+    "Let S be any finite subset of naturals with U <= n <= 2U for all n in S. Split the ordered off-diagonal congruent carrier into A: N1<N2 and B: N2<N1. Trichotomy with N1!=N2 proves the union identity, without discarding either order.",
+    "For A, congruence and N1<=N2 imply m divides d=N2-N1 by Nat.modEq_iff_dvd'. Since d>0 and m>0, q=d/m is a strictly positive natural and q*m=d.",
+    "The dyadic bounds imply d<=U. Casting q*m=d to reals and using m>0 gives q<=U/m, hence q belongs to Icc 1 (Nat.floor (U/m)). The map (N1,N2) -> (N1,q) lands in S times that interval.",
+    "This map is injective: equal first coordinates and equal q give equal exact differences q*m, then equal second coordinates. Therefore card A <= card S * Nat.floor (U/m). The quotient interval starts at one precisely because the diagonal was removed.",
+    "Swapping the two coordinates injects B into A because Nat.ModEq is symmetric. Consequently the full ordered count is at most 2*card S*Nat.floor(U/m).",
+    "When U>=1, S is contained in the positive prefix Ioc 0 (Nat.floor (2U)), whose cardinality is Nat.floor (2U). Hence card S <=2U. This avoids any dyadic interval-cardinality endpoint manipulation or additive term.",
+    "Nat.floor(U/m)<=U/m, and all factors are nonnegative. Thus 2*card S*Nat.floor(U/m)<=2*(2U)*(U/m)=4*U^2/m.",
+    "For the public theorem take S=Icc (Nat.ceil U) (Nat.floor (2U)); Nat.le_ceil and Nat.floor_le give the exact real bounds, including both original endpoints."
+  ],
+  "original_range_connection": {
+    "source_bindings": [
+      {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "relative_path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "first_line": 63,
+        "last_line": 64,
+        "names": [
+          "ImbalancedChen.Part3.factorCarrier"
+        ],
+        "file_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "span_sha256_lf_utf8": "68758e91db9d0375f8ff63dbbfd7b5f8eee7299484e9883f3b5fdcd65bb91880",
+        "exact_source_excerpt": "def factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n"
+      },
+      {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "relative_path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "first_line": 126,
+        "last_line": 128,
+        "names": [
+          "ImbalancedChen.Part3.MediumAdmissible"
+        ],
+        "file_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "span_sha256_lf_utf8": "c27d31b339666a0b7b4e54b71702fec8df4d819a72dc6d3134e0b4dcfee29ab0",
+        "exact_source_excerpt": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n"
+      },
+      {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedDispersion.lean",
+        "relative_path": "ImbalancedChen/Part3TransposedDispersion.lean",
+        "first_line": 63,
+        "last_line": 64,
+        "names": [
+          "ImbalancedChen.Part3.MediumAtom.transposedAtom_betaCarrier"
+        ],
+        "file_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "span_sha256_lf_utf8": "b7652472d56a3abfc933a54d27c0858be6940aa6d2752b8c048c71ecfffc50d5",
+        "exact_source_excerpt": "theorem MediumAtom.transposedAtom_betaCarrier (d : MediumAtom) :\n    d.transposedAtom.betaCarrier = factorCarrier d.U := rfl\n"
+      },
+      {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+        "relative_path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+        "first_line": 25,
+        "last_line": 36,
+        "names": [
+          "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredOuterCarrier"
+        ],
+        "file_sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21",
+        "span_sha256_lf_utf8": "acf3d97196f0ccb0888922952ebcfd6fd7cdec1df2727127a38f077f822ad2e1",
+        "exact_source_excerpt": "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))\n\ndef MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n"
+      }
+    ],
+    "carrier": "The public theorem uses Icc (Nat.ceil U) (Nat.floor (2*U)), definitionally factorCarrier U; transposedAtom_betaCarrier proves the original paired carrier is factorCarrier d.U.",
+    "scale_assumption": "MediumAdmissible begins with 1 <= d.U, so the theorem does not shrink the original admissible parameter range.",
+    "modulus": "m is an arbitrary positive natural, with no primality or coprimality restriction. It can be p or p*D once their actual positivity is supplied.",
+    "downstream_application_example_not_executed": "by\n  simpa only [MediumAtom.transposedAtom_betaCarrier, factorCarrier] using\n    ResonanceOffDiagonalCount.dyadic_ordered_offDiagonal_modEq_count_le d.U hd.1 m hm",
+    "ordered_and_diagonal": "Ordered product S times S retained literally; predicate is N1 != N2 and Nat.ModEq m N1 N2. The reversal branch is counted separately.",
+    "endpoints": "Inclusive U and 2U whenever integral; U=1 is allowed. No half-open change, integrality premise on U, or strict endpoint condition is used.",
+    "small_or_large_m": "For m>U the positive quotient carrier is empty and the same argument gives zero off-diagonal pairs. For m=1 all ordered distinct pairs are counted. No +1 term appears in either case."
+  },
+  "limits": [
+    "This is a complete source candidate, not a claim of Lean compilation or acceptance.",
+    "This arithmetic leaf does not establish retained-decay envelope bounds, complete outer-carrier estimates, resonance payment, spectral 7/32 estimates, or the original main theorem.",
+    "Any Lean elaboration diagnostic must be handled through the single authorized heavy channel; no local substitute checker, helper or compiler has been run."
+  ]
+}

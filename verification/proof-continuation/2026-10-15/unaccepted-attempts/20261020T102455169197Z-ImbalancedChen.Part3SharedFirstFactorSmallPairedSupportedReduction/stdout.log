@@ -1,0 +1,85 @@
+ImbalancedChen/Part3SharedFirstFactorSmallPairedSupportedReduction.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?m.77, ?m.79 x + ∑ x ∈ ?m.77, ?m.80 x
+in the target expression
+  ∑ N1 ∈ d.transposedAtom.betaCarrier,
+      ∑ N2 ∈ d.transposedAtom.betaCarrier,
+        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 =
+    ((∑ n₁ ∈ (d.q1SliceAtom p).transposedAtom.betaCarrier,
+          ∑ n₂ ∈ (d.q1SliceAtom p).transposedAtom.betaCarrier,
+            if Ybeta < ↑(n₁.gcd n₂) then
+              (d.q1SliceAtom p).transposedAtom.beta n₁ * star ((d.q1SliceAtom p).transposedAtom.beta n₂) *
+                (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight n₁ n₂
+            else 0) +
+        ∑ N1 ∈ d.transposedAtom.betaCarrier,
+          ∑ N2 ∈ d.transposedAtom.betaCarrier,
+            if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then
+              d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+                (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2
+            else 0) +
+      ∑ N1 ∈ d.transposedAtom.betaCarrier,
+        ∑ N2 ∈ d.transposedAtom.betaCarrier,
+          if
+              ↑(N1.gcd N2) ≤ Ybeta ∧
+                ↑(CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2)) ≤ Ysupport then
+            d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+              (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2
+          else 0
+
+d : MediumAtom
+Ybeta Ysupport : ℝ
+p : ℕ
+a✝ : p ∈ d.primitiveFirstFactorCarrier
+⊢ ∑ N1 ∈ d.transposedAtom.betaCarrier,
+      ∑ N2 ∈ d.transposedAtom.betaCarrier,
+        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 =
+    ((∑ n₁ ∈ (d.q1SliceAtom p).transposedAtom.betaCarrier,
+          ∑ n₂ ∈ (d.q1SliceAtom p).transposedAtom.betaCarrier,
+            if Ybeta < ↑(n₁.gcd n₂) then
+              (d.q1SliceAtom p).transposedAtom.beta n₁ * star ((d.q1SliceAtom p).transposedAtom.beta n₂) *
+                (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight n₁ n₂
+            else 0) +
+        ∑ N1 ∈ d.transposedAtom.betaCarrier,
+          ∑ N2 ∈ d.transposedAtom.betaCarrier,
+            if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then
+              d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+                (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2
+            else 0) +
+      ∑ N1 ∈ d.transposedAtom.betaCarrier,
+        ∑ N2 ∈ d.transposedAtom.betaCarrier,
+          if
+              ↑(N1.gcd N2) ≤ Ybeta ∧
+                ↑(CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2)) ≤ Ysupport then
+            d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *
+              (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2
+          else 0
+ImbalancedChen/Part3SharedFirstFactorSmallPairedSupportedReduction.lean:189:46: error(lean.invalidField): Invalid field `le`: The environment does not contain `Real.le.le`, so it is not possible to project the field `le` from an expression
+  hx
+of type `Real.le✝ 1 d.scale`
+ImbalancedChen/Part3SharedFirstFactorSmallPairedSupportedReduction.lean:218:73: error(lean.invalidField): Invalid field `le`: The environment does not contain `Real.le.le`, so it is not possible to project the field `le` from an expression
+  hx
+of type `Real.le✝ 1 d.scale`
+ImbalancedChen/Part3SharedFirstFactorSmallPairedSupportedReduction.lean:217:13: error: unsolved goals
+kappa epsilon : ℝ
+hepsilon : 0 < epsilon
+K : ℝ := max 1 (1 + kappa)
+hK : 1 ≤ K
+hKpos : 0 < K
+eta : ℝ := epsilon / K
+heta : 0 < eta
+hKeta : K * eta = epsilon
+D : ℝ
+hD : 0 < D
+hbound : ∀ (n : ℕ), 0 < n → ↑((fouvryTau 4) n) ≤ D * ↑n ^ eta
+B : ℕ
+sigma c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+m n : ℕ
+hm : m ∈ d.betaCarrier
+hn : n ∈ d.alphaCarrier
+hndiv : ¬↑n ∣ d.residue
+hne : ↑m * ↑n - d.residue ≠ 0
+hx : 1 ≤ d.scale
+⊢ D * (7 * d.scale ^ K) ^ eta = D * 7 ^ eta * d.scale ^ epsilon

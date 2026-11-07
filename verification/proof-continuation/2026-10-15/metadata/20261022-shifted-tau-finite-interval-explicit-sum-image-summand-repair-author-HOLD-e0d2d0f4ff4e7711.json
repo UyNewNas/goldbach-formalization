@@ -1,0 +1,206 @@
+{
+  "status": "SOURCE_ONLY_EXPLICIT_SUM_IMAGE_SUMMAND_SINGLE_EXPRESSION_REPAIR_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-22T00:44:55.593174+00:00",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "original": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ShiftedTauFiniteInterval.lean",
+    "sha256": "5be137eef6bcf78b29fc29188e9158fd2f15b577eca7d72be6671c750ebceb82",
+    "bytes": 10584,
+    "LF": 213
+  },
+  "draft": {
+    "path": "source-reviews/drafts/20261022-shifted-tau-finite-interval-explicit-sum-image-summand-repair.txt",
+    "sha256": "d006abee2c8dd632d9fd9712b29030dbff0a70f6c95ade6ffec92955a37444c2",
+    "bytes": 10628,
+    "LF": 213
+  },
+  "exact_single_expression_hunk": {
+    "old_offset": 6013,
+    "old_end": 6041,
+    "new_offset": 6013,
+    "new_end": 6085,
+    "old_base64": "KEZpbnNldC5zdW1faW1hZ2UgaGluaikuc3ltbQ==",
+    "new_base64": "KEZpbnNldC5zdW1faW1hZ2UgKGYgOj0gZnVuIG4gOiDihJUgPT4gKGZvdXZyeVRhdSBLIG4gOiDihJ0pKSBoaW5qKS5zeW1t",
+    "old_literal": "(Finset.sum_image hinj).symm",
+    "new_literal": "(Finset.sum_image (f := fun n : ℕ => (fouvryTau K n : ℝ)) hinj).symm"
+  },
+  "full_raw_diff": {
+    "path": "source-reviews/drafts/20261022-shifted-tau-finite-interval-explicit-sum-image-summand-repair.txt.full.raw.diff",
+    "sha256": "f8c3cc22aa5c3ddb3d61b01bf5f250d43bc35a475c26a6b28c3917d3d4f46ba2"
+  },
+  "unique_byte_forward_inverse": {
+    "path": "source-reviews/drafts/20261022-shifted-tau-finite-interval-explicit-sum-image-summand-repair.txt.byte-offset-inverse.json",
+    "sha256": "7f905f392884d6fb5c7d69a45c37bd3394c9ff9bb3514637df489b1904764157"
+  },
+  "actual_native_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+    "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+    "bytes": 51600,
+    "spans": [
+      {
+        "first": 25,
+        "last": 32,
+        "literal_source": "open Fin Function\n\nvariable {ι κ G M : Type*} {s s₁ s₂ : Finset ι} {a : ι}\n\nnamespace Finset\n\nsection CommMonoid\nvariable [CommMonoid M] {f g : ι → M}\n",
+        "normalized_lf_utf8_sha256": "72b858479e3eba84b9d375f99e518a491b64ab674319effb61903bf534bbf64d"
+      },
+      {
+        "first": 89,
+        "last": 98,
+        "literal_source": "\n/-- If a function is injective on a finset, products over the original finset or its image coincide.\nSee also `prod_image_of_pairwise_eq_one` for a version with weaker assumptions. -/\n@[to_additive (attr := simp) /-- If a function is injective on a finset, sums over the original\nfinset or its image coincide.\nSee also `sum_image_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_image [DecidableEq ι] {s : Finset κ} {g : κ → ι} :\n    Set.InjOn g s → ∏ x ∈ s.image g, f x = ∏ x ∈ s, f (g x) :=\n  fold_image\n\n",
+        "normalized_lf_utf8_sha256": "03895ae636af8177bec593aa92e42c55fe311b238c90bf6de15acc6c3be81903"
+      }
+    ],
+    "actual_source_declaration": "Finset.prod_image [DecidableEq iota] {s : Finset kappa} {g : kappa -> iota} : Set.InjOn g s -> product_image f = product_original (f composed g); f is the section-implicit summand at line32. The exact to_additive attribute generates Finset.sum_image and retains named f/g/s binders.",
+    "instantiation": "iota=Nat,kappa=Nat,M=Real,s=S,g=local f:Nat->Nat, implicit summand parameter f=(fun n:Nat => (fouvryTau K n:Real)), proof=hinj. The result is image sum = original sum, so symm is original sum = image sum.",
+    "why_minimal": "The failed metavariable was precisely the implicit summand. Naming f resolves it without changing the injected map or adding a proof premise. s/g are already fixed by hinj; no unverified guessed argument name is used."
+  },
+  "all11_declarations": [
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedSource_info",
+      "kind": "theorem",
+      "complete_written_type": "theorem shiftedSource_info {x : ℝ} (hx : 1 ≤ x) {a : ℤ} {v : ℕ}\n    (hv : v ∈ shiftedSource x a) :\n    1 ≤ (v : ℝ) ∧ (v : ℝ) ≤ 6 * x ∧ (v : ℤ) ≠ a ∧\n      1 ≤ (shiftedAbs a v : ℝ) := by\n",
+      "old_new_type_sha256": "978fecef9975657574307199609e7f70e55638dff704daafe3162a8b4dc6a0e2",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "1d8044b8600b6c9c639cc9783908caca8eb0fe2d7fb4e184efbe41083b551392",
+      "new_declaration_sha256": "1d8044b8600b6c9c639cc9783908caca8eb0fe2d7fb4e184efbe41083b551392",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shiftedSource_info {x : ℝ} (hx : 1 ≤ x) {a : ℤ} {v : ℕ}\n    (hv : v ∈ shiftedSource x a) :\n    1 ≤ (v : ℝ) ∧ (v : ℝ) ≤ 6 * x ∧ (v : ℤ) ≠ a ∧\n      1 ≤ (shiftedAbs a v : ℝ) := by\n  obtain ⟨hvI, hvne⟩ := Finset.mem_filter.mp hv\n  obtain ⟨hv1, hvH⟩ := Finset.mem_Icc.mp hvI\n  have hvR : (v : ℝ) ≤ (⌊6 * x⌋₊ : ℝ) := by exact_mod_cast hvH\n  have hn0 : shiftedAbs a v ≠ 0 := Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr hvne)\n  have hn1 : 1 ≤ shiftedAbs a v := by omega\n  exact ⟨by exact_mod_cast hv1, hvR.trans (Nat.floor_le (by linarith)), hvne,\n    by exact_mod_cast hn1⟩\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_real_of_le",
+      "kind": "theorem",
+      "complete_written_type": "theorem shiftedAbs_real_of_le {a : ℤ} {v : ℕ} (h : a ≤ (v : ℤ)) :\n    (shiftedAbs a v : ℝ) = (v : ℝ) - (a : ℝ) := by\n",
+      "old_new_type_sha256": "2e36f1799a864bb5b3a26b1d1fd2d31907c83c39e9669f89597bdfe7bd595ee2",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "97d22348f54214cae6c3fc5a9be572a49959cfbb9c9ad3a35cfcba9729ec8c14",
+      "new_declaration_sha256": "97d22348f54214cae6c3fc5a9be572a49959cfbb9c9ad3a35cfcba9729ec8c14",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shiftedAbs_real_of_le {a : ℤ} {v : ℕ} (h : a ≤ (v : ℤ)) :\n    (shiftedAbs a v : ℝ) = (v : ℝ) - (a : ℝ) := by\n  have hz : (shiftedAbs a v : ℤ) = (v : ℤ) - a :=\n    Int.natAbs_of_nonneg (sub_nonneg.mpr h)\n  exact_mod_cast hz\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_real_of_ge",
+      "kind": "theorem",
+      "complete_written_type": "theorem shiftedAbs_real_of_ge {a : ℤ} {v : ℕ} (h : (v : ℤ) ≤ a) :\n    (shiftedAbs a v : ℝ) = (a : ℝ) - (v : ℝ) := by\n",
+      "old_new_type_sha256": "63f8ad4417b17eb39919f8f169cc8c5777a86d1ffb0c49e4fa2ae490bc73e2f4",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "d5dfd19919be030c20d1b1fa8c351c076e1565089c326bc1203fc84d6ca53ef1",
+      "new_declaration_sha256": "d5dfd19919be030c20d1b1fa8c351c076e1565089c326bc1203fc84d6ca53ef1",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shiftedAbs_real_of_ge {a : ℤ} {v : ℕ} (h : (v : ℤ) ≤ a) :\n    (shiftedAbs a v : ℝ) = (a : ℝ) - (v : ℝ) := by\n  have hz : (shiftedAbs a v : ℤ) = -((v : ℤ) - a) :=\n    Int.ofNat_natAbs_of_nonpos (sub_nonpos.mpr h)\n  have hR : (shiftedAbs a v : ℝ) = -((v : ℝ) - (a : ℝ)) := by exact_mod_cast hz\n  linarith\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_injOn_nonneg",
+      "kind": "theorem",
+      "complete_written_type": "theorem shiftedAbs_injOn_nonneg (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, a ≤ (v : ℤ)) : Set.InjOn (shiftedAbs a) S := by\n",
+      "old_new_type_sha256": "b03fedb03ec60c96631442111371a3bec87d2a9ef1df52e87816096788cf18f9",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "1d03d73db8195fe2d5f10f4aee55f75ec12a2a0874e8554aca16efeac4547189",
+      "new_declaration_sha256": "1d03d73db8195fe2d5f10f4aee55f75ec12a2a0874e8554aca16efeac4547189",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shiftedAbs_injOn_nonneg (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, a ≤ (v : ℤ)) : Set.InjOn (shiftedAbs a) S := by\n  intro v hv w hw heq\n  have hdiff : (v : ℤ) - a = (w : ℤ) - a :=\n    (Int.natAbs_inj_of_nonneg_of_nonneg\n      (sub_nonneg.mpr (hS v hv)) (sub_nonneg.mpr (hS w hw))).mp heq\n  exact_mod_cast ((Int.sub_left_inj a).mp hdiff)\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_injOn_nonpos",
+      "kind": "theorem",
+      "complete_written_type": "theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≤ a) : Set.InjOn (shiftedAbs a) S := by\n",
+      "old_new_type_sha256": "d2baca3179108f2af03889eea4d91d297cabf6465de35d2048f71d841151fc2b",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "fd245d4601dd1c1c25a524f43204b6c5fd786380516561677b8d8c4ca6887156",
+      "new_declaration_sha256": "fd245d4601dd1c1c25a524f43204b6c5fd786380516561677b8d8c4ca6887156",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≤ a) : Set.InjOn (shiftedAbs a) S := by\n  intro v hv w hw heq\n  have hdiff : (v : ℤ) - a = (w : ℤ) - a :=\n    (Int.natAbs_inj_of_nonpos_of_nonpos\n      (sub_nonpos.mpr (hS v hv)) (sub_nonpos.mpr (hS w hw))).mp heq\n  exact_mod_cast ((Int.sub_left_inj a).mp hdiff)\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.clamped_interval_geometry",
+      "kind": "theorem",
+      "complete_written_type": "theorem clamped_interval_geometry {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 1 ≤ Z)\n    (hcZ : c + H ≤ Z) :\n    1 ≤ max 1 c ∧ max 1 c ≤ max 1 (c + H) ∧\n      max 1 (c + H) ≤ Z ∧ max 1 (c + H) - max 1 c ≤ H := by\n",
+      "old_new_type_sha256": "6958d10cb7e5460da0222749eac0d2f88fa658beb3b3b4f61aa07e499d8d54e4",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "a8aa96f2518f066de1a9330e85f31bc900570d6f01b5c1055ba5c6fab9492eea",
+      "new_declaration_sha256": "a8aa96f2518f066de1a9330e85f31bc900570d6f01b5c1055ba5c6fab9492eea",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem clamped_interval_geometry {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 1 ≤ Z)\n    (hcZ : c + H ≤ Z) :\n    1 ≤ max 1 c ∧ max 1 c ≤ max 1 (c + H) ∧\n      max 1 (c + H) ≤ Z ∧ max 1 (c + H) - max 1 c ≤ H := by\n  have hlo : 1 ≤ max 1 c := le_max_left _ _\n  have hc : c ≤ max 1 c := le_max_right _ _\n  have horder : max 1 c ≤ max 1 (c + H) := by\n    apply max_le\n    · exact le_max_left _ _\n    · exact (by linarith : c ≤ c + H).trans (le_max_right _ _)\n  have hupper : max 1 (c + H) ≤ max 1 c + H := by\n    apply max_le <;> linarith\n  exact ⟨hlo, horder, max_le hZ hcZ, by linarith⟩\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.sum_image_in_clamped_interval_le",
+      "kind": "theorem",
+      "complete_written_type": "theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)\n    {K : ℕ} (hK : 2 ≤ K) {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 2 ≤ Z)\n    (hcZ : c + H ≤ Z) (hinj : Set.InjOn f S)\n    (hS : ∀ v ∈ S, max 1 c ≤ (f v : ℝ) ∧ (f v : ℝ) ≤ max 1 (c + H)) :\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) ≤\n      (K : ℝ) * (H * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+      "old_new_type_sha256": "a36a0126c05b9efc1ffd5aa167520c9828417ad2c00a2abb3280b6900eec8f92",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "21688e009fcf2667f59199b74693143cebdb1dace1ff96bc1588b151d4576f94",
+      "new_declaration_sha256": "77cd0a2ed52a3ad735f5ca194dea6a71edeae12c718cb124ef50f100e4cbb697",
+      "declaration_bytes_unchanged": false,
+      "complete_new_declaration": "theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)\n    {K : ℕ} (hK : 2 ≤ K) {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 2 ≤ Z)\n    (hcZ : c + H ≤ Z) (hinj : Set.InjOn f S)\n    (hS : ∀ v ∈ S, max 1 c ≤ (f v : ℝ) ∧ (f v : ℝ) ≤ max 1 (c + H)) :\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) ≤\n      (K : ℝ) * (H * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n  have hg := clamped_interval_geometry hH (by linarith : 1 ≤ Z) hcZ\n  have himage : ∀ n ∈ S.image f,\n      max 1 c ≤ (n : ℝ) ∧ (n : ℝ) ≤ max 1 (c + H) := by\n    intro n hn\n    obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hn\n    exact hS v hv\n  have he1 := sum_fouvryTau_E1_real_support (S.image f) hK hg.1 hg.2.1 hZ hg.2.2.1 himage\n  have hL : 0 ≤ 1 + Real.log Z := by\n    have := Real.log_nonneg (by linarith : 1 ≤ Z)\n    linarith\n  calc\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) =\n        ∑ n ∈ S.image f, (fouvryTau K n : ℝ) := (Finset.sum_image (f := fun n : ℕ => (fouvryTau K n : ℝ)) hinj).symm\n    _ ≤ (K : ℝ) * ((max 1 (c + H) - max 1 c) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := he1\n    _ ≤ _ := mul_le_mul_of_nonneg_left\n      (add_le_add\n        (mul_le_mul_of_nonneg_right hg.2.2.2 (pow_nonneg hL (K - 1)))\n        (le_refl (Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2))))\n      (Nat.cast_nonneg K)\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Icc_sum_le",
+      "kind": "theorem",
+      "complete_written_type": "theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n",
+      "old_new_type_sha256": "af92f3235891e922698bd4b5f9c0133d7528fe1016e7f01017543598ac3bffcb",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "704e6573c3b34eb89e2d1ab2306a74848b566c1770d5db2ff42ab4c24830e485",
+      "new_declaration_sha256": "704e6573c3b34eb89e2d1ab2306a74848b566c1770d5db2ff42ab4c24830e485",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  let T : ℝ := x ^ (1 + κ)\n  let Z : ℝ := 7 * T\n  let M : ℝ := 6 * x * (1 + Real.log Z) ^ (K - 1) +\n    Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)\n  let S := shiftedSource x a\n  let P := S.filter (fun (v : ℕ) => a < (v : ℤ))\n  let N := S.filter (fun (v : ℕ) => ¬a < (v : ℤ))\n  change (∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ 2 * (K : ℝ) * M\n  have hxT : x ≤ T := by\n    calc\n      x = x ^ (1 : ℝ) := (Real.rpow_one x).symm\n      _ ≤ T := Real.rpow_le_rpow_of_exponent_le hx (by linarith)\n  have hT1 : 1 ≤ T := hx.trans hxT\n  have hZ : 2 ≤ Z := by dsimp [Z]; linarith\n  have haT : -T ≤ (a : ℝ) ∧ (a : ℝ) ≤ T := abs_le.mp ha\n  have hPsign : ∀ v ∈ P, a ≤ (v : ℤ) := by\n    intro v hv\n    exact (Finset.mem_filter.mp hv).2.le\n  have hNsign : ∀ v ∈ N, (v : ℤ) ≤ a := by\n    intro v hv\n    exact le_of_not_gt (Finset.mem_filter.mp hv).2\n  have hp : (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ (K : ℝ) * M := by\n    apply sum_image_in_clamped_interval_le P (shiftedAbs a) hK\n      (c := -(a : ℝ)) (H := 6 * x) (Z := Z) (by linarith) hZ\n      (by dsimp [Z]; linarith [haT.1]) (shiftedAbs_injOn_nonneg P a hPsign)\n    intro v hv\n    have hi := shiftedSource_info hx (Finset.mem_filter.mp hv).1\n    have he := shiftedAbs_real_of_le (hPsign v hv)\n    constructor\n    · exact max_le hi.2.2.2 (by linarith [hi.1])\n    · exact (by linarith [hi.2.1] : (shiftedAbs a v : ℝ) ≤ -(a : ℝ) + 6 * x).trans\n        (le_max_right _ _)\n  have hn : (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ (K : ℝ) * M := by\n    apply sum_image_in_clamped_interval_le N (shiftedAbs a) hK\n      (c := (a : ℝ) - 6 * x) (H := 6 * x) (Z := Z) (by linarith) hZ\n      (by dsimp [Z]; linarith [haT.2]) (shiftedAbs_injOn_nonpos N a hNsign)\n    intro v hv\n    have hi := shiftedSource_info hx (Finset.mem_filter.mp hv).1\n    have he := shiftedAbs_real_of_ge (hNsign v hv)\n    constructor\n    · exact max_le hi.2.2.2 (by linarith [hi.2.1])\n    · have hu : (shiftedAbs a v : ℝ) ≤ (a : ℝ) := by linarith [hi.1]\n      exact hu.trans (by simpa only [sub_add_cancel] using\n        (le_max_right (1 : ℝ) (a : ℝ)))\n  have hsplit :\n      (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) +\n        (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) =\n      ∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ) :=\n    Finset.sum_filter_add_sum_filter_not S (fun v => a < (v : ℤ))\n      (fun v => (fouvryTau K (shiftedAbs a v) : ℝ))\n  calc\n    (∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ)) =\n        (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) +\n          (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) := hsplit.symm\n    _ ≤ (K : ℝ) * M + (K : ℝ) * M := add_le_add hp hn\n    _ = 2 * (K : ℝ) * M := by ring\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le",
+      "kind": "theorem",
+      "complete_written_type": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n",
+      "old_new_type_sha256": "d7a1b22ec12361c8dbae934daf1cb8f9bfb30aa78186da6323b4473357c30fc3",
+      "type_bytes_unchanged": true,
+      "old_declaration_sha256": "dbc80eb93cfd9176af3389c5f6b2a2109e94da964eccb071317caaf7b9478256",
+      "new_declaration_sha256": "dbc80eb93cfd9176af3389c5f6b2a2109e94da964eccb071317caaf7b9478256",
+      "declaration_bytes_unchanged": true,
+      "complete_new_declaration": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  have hI : Ioc 0 ⌊6 * x⌋₊ = Icc 1 ⌊6 * x⌋₊ := by\n    ext v\n    simp only [Finset.mem_Ioc, Finset.mem_Icc]\n    omega\n  rw [hI]\n  exact shifted_tau_Icc_sum_le hK hx hκ a ha\n"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs",
+      "kind": "def",
+      "complete_declaration": "def shiftedAbs (a : ℤ) (v : ℕ) : ℕ := ((v : ℤ) - a).natAbs\n",
+      "old_new_sha256": "455f5d42e836ffa82507976490a5184bd62d6fb43b0052fa2f9be2e650b287e1",
+      "declaration_bytes_unchanged": true
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedSource",
+      "kind": "def",
+      "complete_declaration": "def shiftedSource (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n",
+      "old_new_sha256": "f4264b1df4527bcf68f766a26b5385cc7d0b7ea5f931abc3bfa0b14591e2ff7f",
+      "declaration_bytes_unchanged": true
+    }
+  ],
+  "invariants": {
+    "all9_written_theorem_types_bytes_exact": true,
+    "both_definitions_bytes_exact": true,
+    "ten11_full_declarations_bytes_exact": true,
+    "imports_namespace_sections_comments_bytes_exact": true,
+    "original_K_kappa_x_shift_domain_2K_Natcarriers_and_v_ne_a_unchanged": true,
+    "no_new_assumptions_or_targets": true
+  },
+  "preserved_failure": {
+    "terminal": {
+      "path": "source-reviews/20261022-shifted5be137-current187-operator-terminal-HOLD.json",
+      "sha256": "188c3aec723132e83f2d575e1fcdae0f8c2af91199389e9da8a897294bcb209b"
+    },
+    "receipt": {
+      "path": "runs/20261022T004226265537Z-ImbalancedChen.Part3ShiftedTauFiniteInterval/receipt.json",
+      "sha256": "5bab8c325de596ce153487ed1be3256bbeae62d0d1a34fbedd852344e3e6b920"
+    },
+    "stdout": {
+      "path": "runs/20261022T004226265537Z-ImbalancedChen.Part3ShiftedTauFiniteInterval/stdout.log",
+      "sha256": "ead5363822c1a1f8d48666b32d7aacb80d84160f6c35cbcb4a5c8e3969cfd7dd",
+      "complete_literal": "ImbalancedChen/Part3ShiftedTauFiniteInterval.lean:123:48: error: Type mismatch\n  Eq.symm (sum_image hinj)\nhas type\n  ∑ x ∈ S, ?m.286 (f x) = ∑ x ∈ image f S, ?m.286 x\nbut is expected to have type\n  ∑ v ∈ S, ↑((fouvryTau K) (f v)) = ∑ n ∈ image f S, ↑((fouvryTau K) n)\n"
+    }
+  },
+  "actual_source_unchanged_after": true,
+  "execution": {
+    "actual_edits": 0,
+    "Lean_Runtime_proper_capture_classifier_census_operator_Git_Site": 0,
+    "retry_or_restore": 0
+  },
+  "kernel_accepted": false,
+  "analytic_M2_spectrum_C_K_main": "OPEN",
+  "quota_stop_remaining_lte": 5,
+  "requires_independent_review_and_separate_root_apply_preparation_gate": true,
+  "HOLD": true
+}

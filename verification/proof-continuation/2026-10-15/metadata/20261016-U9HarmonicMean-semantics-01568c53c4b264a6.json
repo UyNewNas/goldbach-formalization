@@ -1,0 +1,134 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T19:30:03.171126+00:00",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9HarmonicMean",
+  "source_sha256": "353f495c1a9c031de0371a46c3cccdd00097959c5a8402cc6c45f7b379a28d5e",
+  "reviewer": "lower_resume self-review, not independent validation",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "declarations": [
+    {
+      "name": "currentChenUpsilon9HarmonicRegion",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9HarmonicRegion : Set (Fin 2 → ℝ)",
+      "line": 28
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicForms",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9HarmonicForms : Fin 3 → (Fin 2 → ℝ) →L[ℝ] ℝ",
+      "line": 31
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicBounds",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9HarmonicBounds : Fin 3 → ℝ",
+      "line": 35
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicForms_ne_zero",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9HarmonicForms_ne_zero :\n    ∀ j, currentChenUpsilon9HarmonicForms j ≠ 0",
+      "line": 37
+    },
+    {
+      "name": "measurableSet_currentChenUpsilon9HarmonicRegion",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem measurableSet_currentChenUpsilon9HarmonicRegion :\n    MeasurableSet currentChenUpsilon9HarmonicRegion",
+      "line": 43
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicRegion_sandwich",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9HarmonicRegion_sandwich :\n    primeAffineGateRegion currentChenUpsilon9HarmonicForms\n        currentChenUpsilon9HarmonicBounds ⊆ currentChenUpsilon9HarmonicRegion ∧\n      ∀ x ∈ currentChenUpsilon9HarmonicRegion, ∀ j,\n        currentChenUpsilon9HarmonicForms j x ≤ currentChenUpsilon9HarmonicBounds j",
+      "line": 51
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicKernel",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9HarmonicKernel (x : Fin 2 → ℝ) : ℝ",
+      "line": 77
+    },
+    {
+      "name": "continuous_currentChenUpsilon9HarmonicKernel",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem continuous_currentChenUpsilon9HarmonicKernel :\n    Continuous currentChenUpsilon9HarmonicKernel",
+      "line": 80
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicKernel_eq",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9HarmonicKernel_eq {x : Fin 2 → ℝ}\n    (hx : x ∈ currentChenUpsilon9HarmonicRegion) :\n    currentChenUpsilon9HarmonicKernel x = 1 / (1 - x 0 - x 1)",
+      "line": 87
+    },
+    {
+      "name": "currentChenUpsilon9_sqrt_log_iff",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_sqrt_log_iff {N a b : ℕ}\n    (hN : 2 ≤ N) (ha : 0 < a) (hb : 0 < b) :\n    (b : ℝ) < Real.sqrt ((N : ℝ) / (a : ℝ)) ↔\n      Real.log (a : ℝ) / Real.log (N : ℝ) +\n        2 * (Real.log (b : ℝ) / Real.log (N : ℝ)) < 1",
+      "line": 98
+    },
+    {
+      "name": "currentChenUpsilon9_log_region_iff",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9_log_region_iff {N : ℕ} (hN : 2 ≤ N)\n    (p : Fin 2 → ℕ) (hp : ∀ i, 0 < p i) :\n    actualPrimeTupleLog N p ∈ currentChenUpsilon9HarmonicRegion ↔\n      (p 0 : ℝ) < (N : ℝ) ^ (59 / 250 : ℝ) ∧\n        (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p 1 : ℝ) ∧\n          (p 1 : ℝ) < Real.sqrt ((N : ℝ) / (p 0 : ℝ))",
+      "line": 116
+    },
+    {
+      "name": "currentChenUpsilon9_tuple_mem_iff",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N) (p : Fin 2 → ℕ) :\n    (p 0, p 1) ∈ chenY9PrimeSelector N ((N : ℝ) ^ (19 / 125 : ℝ))\n        ((N : ℝ) ^ (59 / 250 : ℝ)) ↔\n      p ∈ (actualPrimeBoxTuples N (fun _ : Fin 2 => (19 / 125 : ℝ))\n        (fun _ => (1 / 2 : ℝ))).filter\n          (fun p => actualPrimeTupleLog N p ∈ currentChenUpsilon9HarmonicRegion)",
+      "line": 138
+    },
+    {
+      "name": "currentChenUpsilon9LogTotientMass_eq_actualPrimeBox",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9LogTotientMass_eq_actualPrimeBox {N : ℕ} (hN : 2 ≤ N) :\n    currentChenUpsilon9LogTotientMass N =\n      actualPrimeBoxTestSum N (fun _ : Fin 2 => (19 / 125 : ℝ)) (fun _ => (1 / 2 : ℝ))\n        (currentChenUpsilon9HarmonicRegion.indicator currentChenUpsilon9HarmonicKernel)",
+      "line": 191
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicIntegral",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9HarmonicIntegral : ℝ",
+      "line": 235
+    },
+    {
+      "name": "tendsto_currentChenUpsilon9LogTotientMass",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem tendsto_currentChenUpsilon9LogTotientMass :\n    Tendsto currentChenUpsilon9LogTotientMass atTop (𝓝 currentChenUpsilon9HarmonicIntegral)",
+      "line": 240
+    }
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "The literal actual ninth selector H<=p1<D<=p2<sqrt(N/p1) is in exact bijection with prime tuples in the common half-open cube [19/125,1/2) carrying R=(x0<59/250 and 59/250<=x1 and x0+2*x1<1). Target-prime exclusions are retained on both sides.",
+    "The square-root wall and the affine logarithmic wall are proved equivalent for positive actual prime coordinates, using log(sqrt(N/p1))=(log N-log p1)/2 and log N>0. No wall atom is discarded in this finite dictionary.",
+    "The original weak D<=p2 wall remains weak in R. The three proper affine forms sandwich R between their strict and weak regions pointwise, so the proved actual prime-sum sandwich handles arithmetic atoms before continuous null-wall integration.",
+    "The kernel 1/max(191/500,1-x0-x1) is continuous on the full ambient space, since the denominator is >=191/500>0. R itself gives 191/500<=1-x0-x1, so the extension equals the exact desired logarithmic profile there.",
+    "The actual product-image reciprocal-totient sum is reindexed using the previously proved ordered-prime-factor injection. Actual separated prime labels give phi(p1*p2)=(p1-1)*(p2-1). No multiplicity, supplied injection or coefficient-bound premise is introduced.",
+    "The exact pair-to-Fin2 tuple bijection then identifies the actual harmonic mass with the modulus-independent true prime-box test sum, including every strict and weak endpoint.",
+    "The final unconditional actual LogTotientMass limit follows from tendsto_actualPrimeBoxTestSum_cube_affineSandwich and the proved continuous extension, not from a caller prime-sum or harmonic asymptotic.",
+    "The resulting integral is a genuine two-dimensional Lebesgue integral on the actual half-open cube intersected with R. No unproved one-dimensional collapse, quadrature enclosure, density factor, adopted K or hLower is claimed."
+  ],
+  "remaining": [
+    "No Lean elaboration or owned-object evidence for this new leaf yet.",
+    "Its TrueLiMass parent is still a source candidate pending separate strict compilation.",
+    "The actual switched density factor eight and the one-dimensional integral dictionary remain separate work."
+  ],
+  "evidence_boundary": "Source-only self-review, no compiler/kernel/object/axiom acceptance claim."
+}

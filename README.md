@@ -1,0 +1,683 @@
+# Imbalanced Chen formalization
+
+Work toward a Lean formalization of *Imbalanced semiprime representations of even integers* (current manuscript: 10 October 2026).
+
+The active goal is a complete proof of the manuscript's Theorem 1.1 and
+Corollary 1.2, called the **1+1.75 main theorem** in the research task.
+The source is pinned to
+[`chen-imbalanced-semiprimes@ba6ec11`](https://github.com/UyNewNas/chen-imbalanced-semiprimes/tree/ba6ec11d800eccc54406490631895e174de85766).
+This means the arbitrary-real-exponent lower-limit statement and all three
+common-threshold endpoints, with the analytic premises discharged, not just
+an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md).
+
+External proof reuse is a standing requirement of this goal. Before proving a
+major missing ingredient, search Mathlib and relevant external formalizations;
+prefer a matching completed proof. Record its source, exact revision, license,
+full statement and premises, toolchain and verification evidence. Check the
+selected theorem's transitive proof dependencies for `sorryAx`, custom axioms
+and trust bypasses, and prove the adapter to the manuscript's actual objects.
+The standard axioms `propext`, `Classical.choice` and `Quot.sound` are allowed.
+Reuse must preserve the constants, quantifiers and unconditional completion
+requirement. See [the external reuse record](docs/EXTERNAL_REUSE.md).
+
+The 13 October continuation uses `codex/chen-parts-integration`, starting from
+P0's `59d338b93b2347021237eb51293bb934a316909d`. The six parts retain separate
+owners: P0 integration and validation, P1 historical integrals, P2 numerical
+certificates, P3 distribution, P4 the actual upper bound, and P5 Chen's lower
+bound. Production files have exclusive writers; P0 coordinates shared build
+outputs. The earlier local uncommitted work is preserved in its original
+worktree. The former schedule was superseded by the owner-authorized hourly
+resumption on 15 October from checkpoint `1337e2d`. P0 alone runs validation.
+See [the resumed status and exact evidence](docs/PROOF_STATUS.md#resumed-development--15-october-2026).
+The finite core and actual seven-gate leaf have scoped full audit acceptance;
+the overall theorem and actual lower/upper premises remain unfinished.
+
+## Verification status
+
+### Current integration baseline — 13 October
+
+The received P0 root `59d338b93b2347021237eb51293bb934a316909d` passed
+[core verification](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841383)
+and [variable-envelope verification](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841389).
+The core run includes the full build, bundled root kernel replay, root
+transitive-axiom audit, and required Round3/Round4 type exports. Its accepted
+sources include the four fifth-history modules, the first 128 adopted integral
+cells, and the five physical upper-sieve interfaces. The upper-count interface
+still requires actual density and distribution suppliers.
+
+The dedicated P0 Round6, Prefix128 and P4 complete-type receipts were not
+part of that core run. This continuation adds the existing Round6 export to
+the required workflow; execution of the new gate remains to be verified.
+New P1–P5 candidate proofs in the integration worktree are undergoing separate
+compilation and audits and are not covered by the baseline's CI success.
+Both final counting bounds, `hLower` and `hUpper`, remain open.
+
+The entries below record earlier checkpoints, not the latest inventory.
+
+### Part 0 round 4 batch acceptance
+
+Four fixed production modules extend the received inventory to 23 modules and
+1,005 defining-module declarations: P1's stored-cap permit and P2's actual
+same-mask-v2 rows 4–63 plus their 64-row cumulative integral. Original component
+compilation, object-bound stock replay and full declaration audits passed.
+The pinned S1LowerRosser's eight declarations are accepted separately as
+upstream evidence. The two now-fixed P1 fifth-layer candidates remain uncompiled.
+
+Parent `28fd630ef7cc38eba86beb6c0ba123336b5d05f2` passed the full 9,798-job
+build, root replay, 5,458-declaration root axiom audit and 198-declaration
+Round3 type export. The new root must pass its own exact-commit gates, including
+four explicit production targets and a further 414-declaration type export.
+See [round 4 sources, evidence, interfaces and remaining inputs](docs/PART0_ROUND4_VERIFICATION.md).
+The actual same-rho K bound, complete Chen means/c, hLower and hUpper remain open.
+
+### Part 0 round 3 batch acceptance
+
+Eight further production modules are now explicitly imported: four P1 lower-fourth/history modules, three P2 same-mask-v2 prefix4 modules, and P3 long-slot normalization. Fixed producer source/object records and all three component gates were checked before reception. The accepted component inventory is now 19 modules and 591 defining-module declarations; P1 probe declarations and the pinned upstream S1Carrier audit are counted separately.
+
+The actual parent `cce2334906f068fda2f58c400646366f2aa2d417` passed the complete 9,790-job build, bundled root replay and 5,260-declaration root axiom audit. The new root must pass its own exact-commit CI, which also exports the new 198 declarations and conditional main theorem in full. See [round 3 verification and remaining inputs](docs/PART0_ROUND3_VERIFICATION.md). The full historical certificate, actual K/c suppliers, hLower and hUpper remain open.
+
+### Part 0 round 2 component acceptance
+
+Commit `278f949444748a30b5165ff47bfa283ab0bad0d8` contains the verified
+Buchstab refinement, the adopted paired certificate's actual first cell,
+its Buchstab bridge, the adopted coarse two-chart integral lower bound,
+the finite integer long-slot remainder bound, and the finite eleven-term
+Chen ledger with factor-four count conversion. All eleven production
+modules passed strict compilation, matching-object bundled kernel replay,
+and complete defining-module audits for **393 declarations**, including
+private and generated declarations, using only the standard three axioms.
+The full 17,572-cell certificate, actual arithmetic K/c suppliers and both
+final counting bounds remain open. Component checks and complete-root CI
+are recorded separately in [the round 2 receipts](docs/PART0_ROUND2_VERIFICATION.md).
+Toolchain, dependency pins, manuscript, actual count definitions and both
+conditional final bridges are unchanged.
+
+### Earlier finite-selector checkpoint
+
+The latest extension integrates the complete saving of the actual finite
+fifth-prefix selector over its owned half-open cells. Outside their union,
+the selected and old levels agree exactly, so their actual gated density
+difference cancels. The result retains the ordinary parent's first and
+third tests and both separate fifth own-cube indicators. For checked cells,
+this is the actual retained tree's saving. In the legal ordinary upper
+range, subtracting it gives the normalized selected density limit itself.
+The proof handles the discrete prime mass on cell boundaries explicitly.
+
+A separate finite extension now preserves the same historical third-level
+tree through its fourth and fifth updates. The active third admission and
+the actual sorted prime recursion prove complete inherited validity.
+The two density differences telescope on one common rank-four frontier,
+with only finite level comparisons remaining. Its arbitrary level tables
+have not yet been identified with the manuscript's certified tables.
+
+All six new modules have passed strict individual compilation and independent
+review. The full aggregate build passed with 9,776 jobs; all six final objects
+passed kernel replay, and all 87 owned declarations passed the canonical
+safety and transitive-axiom audit using only `propext`, `Classical.choice`
+and `Quot.sound`. The main theorem is still incomplete: the historical joint-cell
+integrals and certificate values, the physical signed distribution estimate,
+and both final counting bounds remain to be proved. This checkpoint does not
+turn those obligations into assumptions of a claimed complete theorem.
+
+The preceding affine extension proves genuine prime-sum integrals on finite strict
+affine regions, including signed continuous tests. Nonzero affine walls
+are proved null, and their closed strips have arbitrarily small actual
+prime weight after one fixed strip width and target threshold are chosen.
+The actual stopped frontier is reindexed with its multiplicities intact:
+only the proper parent selections are tested, and the last candidate is
+not filtered by the old own-cube gate.
+
+For the ordinary upper parent, the fifth-candidate region is now proved
+to be strict decreasing order together with its inherited first and third
+cube tests. On any fixed positive logarithmic cube, the actual history
+sum of gated lower residuals converges to the corresponding integral.
+The new-minus-old saving retains the two separate own-cube indicators.
+The literal natural product and quotient level are preserved, and the
+proved compact residual theorem supplies the uniform summand error.
+
+That checkpoint closed a localized ordinary-parent integral. The complete
+finite ordinary-parent selector is now integrated above; the manuscript's
+causal multistage selected-cap integrals, numerical certificates, physical
+signed distribution and both final counting bounds remain open. No complete
+untruncated frontier integral is claimed.
+Theorem 1.1 and Corollary 1.2 are still incomplete. All eleven new sources
+passed strict individual compilation and independent review. The full
+aggregate build passed with 9,770 jobs, all eleven final objects passed
+kernel replay, and all 151 owned declarations passed the canonical safety
+and transitive-axiom audit, using only the standard three axioms below.
+
+The preceding extension constructs a finite rational-grid cap selector on
+the logarithms of actual selected primes. It uses the unique adopted
+half-open cell and inherits the old cap outside the adopted union. A
+licensed compact set has a fixed finite covering family whose whole-box
+checks pass. The selector supplies literal integer square gates and
+nondecreasing levels, and later selections preserve its chosen ancestor.
+For ordinary upper and lower parents, recursion proves complete prefix
+validity. Consequently the concrete fifth-upper and fourth-lower updates
+start from actual ordinary densities without prefix-validity or
+level-comparison hypotheses. They retain `N>1`, `old>0`, and the lower
+cutoff condition `z<=N^old`.
+
+Actual target-deleted prime tuple sums now also converge against every
+continuous real test function on a positive logarithmic cube. The limit
+is the genuine Lebesgue integral with density `prod_i 1/t_i`, including
+signed test functions. Exact half-open subdivision and separate arithmetic
+and integral error bounds prove the transfer. These cube sums do not
+include an ordering or a retained-frontier filter.
+
+On cubes satisfying explicit initial-branch inequalities, the actual
+normalized Rosser residual saving at the tuple product and last prime now
+also converges to its rational-profile integral. The proved compact
+density theorem supplies the uniform error, and the actual box-mass limit
+pays its sum. No density-error or integral-convergence premise is added.
+This earlier result remains a cube result. The newer ordinary fifth-prefix
+integration above does not evaluate its distinct initial-branch domain or
+the manuscript's numerical certificates.
+
+All seven new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,759 jobs; all seven final
+Lake-built objects passed bundled kernel replay. The canonical audit
+passed for all 119 owned declarations, including private and generated
+ones, with only `propext`, `Classical.choice` and `Quot.sound` as
+transitive axioms. The manuscript's main theorem remains incomplete.
+
+The preceding finite extension sums the actual own-cube density changes over
+every candidate of the same parent frontier. Upper rank four-to-five
+gives the old upper tree minus the new tree; lower rank three-to-four
+gives the new lower tree minus the old tree. Both old and new admission
+indicators are retained, so previously rejected branches are included.
+Inherited prefix validity and monotonicity of the chosen levels remain
+explicit conditions to prove for the manuscript's selectors.
+
+A rational whole-box cap is now constructed between the strict prefix
+tests and the selected-subproduct envelope. Its exponent bounds imply
+the literal integer subproduct square tests. Pointwise strict licenses
+on a compact set give one refinement radius before all points and box
+endpoints. This does not yet import or verify the certificate coverage.
+The complete local product's trimmed scale also supplies the moving
+residue range, uniformly across cells; it is not a distribution estimate.
+
+All five new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,752 jobs; the five final
+Lake-built objects passed bundled kernel replay. The canonical audit
+passed for all 76 owned declarations, including private and generated
+ones, using only `propext`, `Classical.choice` and `Quot.sound` as
+transitive axioms. The main theorem remains incomplete.
+
+The preceding finite extension freezes a continuation level at the actual
+selected ancestor and derives its residual density directly from the
+tree recursion. On the actual prime frontier, its sign, mass and strict
+cutoff are proved; changing the frozen level below the same parent rank
+gives an exact sum of actual density differences at the real quotient
+`Q/P`. Prefix validity at each chosen level remains explicit.
+
+For upper rank four, that validity is exactly the inherited first and
+third cube tests. For upper rank five it also includes the fifth own
+cube; its contribution is the gated negative lower density. The lower
+fourth own-cube contribution is the gated positive lower density.
+Rejected branches contribute zero before any limiting estimate is used.
+Buffered coarse-cap geometry pays the first cube on whole rational and
+integer boxes, including rounding error and the transition-strip fallback.
+The actual certified cap selector, physical support, prefix integrals and
+signed distribution estimates are still required for the main theorem.
+
+All five new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,747 jobs, the five final
+Lake-built objects passed bundled kernel replay, and the canonical audit
+passed for all 137 owned declarations, including generated and private
+ones. Only `propext`, `Classical.choice` and `Quot.sound` occur as
+transitive axioms. The manuscript's main theorem remains incomplete.
+
+The preceding nonempty-continuation extension's three modules passed strict individual compilation, the full
+aggregate build (9,736 jobs), final-object kernel replay and a joint audit
+of all 64 owned declarations, including private and generated declarations.
+Their only transitive axioms are the standard three listed in the proof
+status. Independent reviews cover each final source.
+
+The preceding extension connects the actual full and presieved first-exit
+densities, with opposite projection directions for upper and lower trees.
+It also constructs the actual lower physical coefficient: positive rough
+coefficients select beta-minus, negative ones select beta-plus. The same
+coefficient minorizes the prime-roughness indicator at every integer,
+including zero, is bounded in absolute value by one and has squarefree,
+target-coprime support. Its density is at least its full raw-policy density
+minus any prescribed `eta*C_N/log N`, with the precision and threshold
+chosen before the target, cap and retention policy. The upper counterpart
+is at most its full raw-policy density plus that reserve. These statements
+do not evaluate the full density or supply its support exponent.
+
+The compact density theorem now applies directly to real residuals
+`y, N^lambda/P`: the common threshold precedes all varying `P,y,lambda`
+whose logarithmic parameters lie in the fixed legal compact set. Actual
+prefix primes at or above `y` are already absent from the strict residual
+carrier, as proved by exact coefficient and density identities.
+
+On the initial upper branch, the actual normalized density tends uniformly
+to `4/beta`. Subtracting two such estimates gives the actual residual saving
+`4*(lambdaNew-lambdaOld)/((lambdaOld-log P/log N)*(lambdaNew-log P/log N))`.
+A separate finite identity expresses a change below a retained rank as a
+sum of continuation differences over the same parent frontier. The ordinary
+first-exit policy is also identified coefficient by coefficient with the
+literal Rosser weight. Its parity-safe lower version requires `y<=R`.
+The generic history-dependent continuation is now proved as stated above.
+Integrating prefix masses and proving the causal compiler remain open.
+
+This seventeen-module checkpoint passed strict individual compilation,
+the standard full aggregate build (9,733 jobs), kernel replay of all
+seventeen final objects and a joint audit of all 286 owned declarations.
+Ten independent review records cover the new sources. An additional
+whole-library warning-as-failure check did not pass because it replayed
+existing linter warnings; no new module produced a diagnostic. The proof
+status records both results and the remaining main-theorem obligations.
+
+The preceding 12 October extension proves two-sided convergence of the same
+actual Rosser density divided by its own target-deleted Euler product,
+uniformly on every compact set of parameters `(u,s)` with `u>0,s>1` for
+the upper weight and `u>0,s>=2` for the lower weight. The limits are the
+canonical Suzuki continuous factors. The common threshold precedes both
+real parameters and every enumeration cap covering `N^u`; the level remains
+the literal `ceil (N^(s*u))`. Pointwise convergence is not used as a substitute
+for uniform convergence: actual strict-margin boxes give local thresholds,
+and a finite subcover supplies the compact result. A separate compact
+all-depth error bound supplies the other side.
+
+Both actual densities also converge uniformly after multiplication by
+`log N/C_N`, with limits `(2*exp(-gamma)/u)` times their respective
+canonical factor. Here the covering cap may depend on both the target
+and the parameters, and need only cover the whole compact set eventually.
+
+This eighteen-module extension passed the full aggregate build (9,716 jobs),
+kernel replay of all eighteen final objects, and an audit of all 147 owned
+declarations, including private and generated ones. The audit permits only
+`propext`, `Classical.choice`, and `Quot.sound` as transitive axioms.
+
+The earlier fixed-parameter formulas remain valid: on `0<s<=4` the upper
+factor is the proved Jurkat-Richert factor, and on `2<=s<=4` the normalized
+lower limit is `4*log(s-1)/(s*u)`. No additional global identification with
+a separately defined classical factor is claimed. The causal boxed compiler,
+sharp signed density, restricted signed distribution, current Chen mean,
+certificate semantics and main analytic theorem remain open. Verification
+scope, pins and the existing private-provider interface for the global odd
+source identity are recorded in the proof status.
+See [proof status](docs/PROOF_STATUS.md).
+
+The current-parameter Chen pointwise and paired-deletion modules, together
+with their actual additive-prime count bridge, are described in
+[the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md). The older
+`chenFixedElevenWeight` remains a historical result at different exponents;
+it is not used as the current weight under a renamed alias.
+
+At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root (85 targets), and the transitive axiom audit passed for 2043 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful PR CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [same-head push CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970) passed all three proof gates before optional cache handling. This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+
+- `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
+- `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
+- `ImbalancedChen/Multiplicity.lean`: exact multiplicity and receiver-one correction.
+- `ImbalancedChen/AsymptoticTransfer.lean`: conditional epsilon transfer, with all analytic estimates explicit.
+- `ImbalancedChen/RationalPowers.lean`: exact real-exponent equivalence and literal additive representation witnesses.
+- `ImbalancedChen/OrderedBad.lean`: unique ordered prime factors and exact identification of the bad count.
+- `ImbalancedChen/NumericalTransfer.lean`: numerical applications with explicit analytic lower/upper estimates.
+- `ImbalancedChen/NormalizationGrowth.lean`: proved analytic growth of positive multiples of `N / (log N)^2`.
+- `ImbalancedChen/SingularSeries.lean`: convergence and strict positivity of the manuscript's actual Euler product (without a leading factor two), finite correction, and normalization growth.
+- `ImbalancedChen/ManuscriptTransfer.lean`: concrete-normalization conditional count and representation endpoints, removing the former growth premise while retaining both analytic count estimates.
+- `ImbalancedChen/HalfProductGeometry.lean`: actual bad-factor roughness localization and the exact integral coefficient `log(1/b)`.
+- `ImbalancedChen/BadSourceLocalization.lean`: exact bad-source reindexing, retained/discarded cutoff partition, and ceiling-correct real cutoff.
+- `ImbalancedChen/LogCutoffError.lean`: proved negligible loss from the historical auxiliary cutoff `N / (log N)^10`, including the full ceiling error, composed with the retained prime-partner source; the current manuscript's power cutoff is handled separately below.
+- `ImbalancedChen/HalfProductSource.lean`: exact inclusive half-product sieve source, unique ordered-pair counting including squares, and its prime-partner filter.
+- `ImbalancedChen/RealHalfProductSource.lean`: arbitrary-real-exponent reindexing and cutoff localization of the current bad count, with exact prime-partner filtering and multiplicity-one ordered pairs.
+- `ImbalancedChen/PowerErrorBudget.lean`: fixed sublinear power-logarithm errors and exact floor/ceiling losses are negligible in the genuine normalization.
+- `ImbalancedChen/SieveSourceCoprimality.lean`: actual strict-cap sieve product, primitive congruence and rough-source coprimality, with explicit small-prime-partner correction.
+- `ImbalancedChen/ActualSieveGate.lean`: the historical logarithmic auxiliary cutoff eventually clears the exact fifth-root sieve cap, discharging rough-source coprimality conditions.
+- `ImbalancedChen/FiniteSieveModel.lean`: genuine mathlib `BoundingSieve` on the actual shifted source, exact reciprocal-totient remainder, and finite upper-Möbius/λ² inequalities.
+- `ImbalancedChen/TruncatedSieveLevel.lean`: exact level-squared truncation of the actual λ² main/error sums and a divisor-count coefficient bound.
+- `ImbalancedChen/FiniteSieveEuler.lean`: exact finite Euler factorization with the explicit prime-two normalization, and actual Selberg terms on allowed squarefree divisors.
+- `ImbalancedChen/CenterPrimeTail.lean`: exact center-prime correction tail, at most five omitted primes at the actual fifth-root cap, and uniform error at most `62 / N^(1/5)` for `N ≥ 1024`.
+- `ImbalancedChen/EulerNormalizationLimit.lean`: genuine strict-cap product exhaustion, correction-tail ratios tending to one, and actual sieve-density normalization along positive even centers with the ordinary prime Euler product left explicit.
+- `ImbalancedChen/SieveDimensionComparison.lean`: exact density quotients on half-open prime intervals and uniform comparison after excluding center divisors; no logarithmic dimension estimate is assumed.
+- `ImbalancedChen/CurvedRegionDiscrepancy.lean`: exact finite discrepancy partitions and a full-carrier curved-boundary transfer with reciprocal-totient mass cost. This does not prove rectangle distribution or boundary lattice-point estimates.
+- `ImbalancedChen/TotientReciprocalBudget.lean`: unconditional finite reciprocal-totient sum bound with explicit constant four, applied to the actual curved-boundary logarithmic mass cost.
+- `ImbalancedChen/BoundaryGridBudget.lean`: four actual integer-pair collar bounds with explicit rounding and product-fibre multiplicities on a full carrier. Grid containment and rectangle distribution remain open.
+- `ImbalancedChen/BoundaryCellContainment.lean`: genuine inside/outside cell witnesses imply all four collars with width `3δ`; includes exact ceiling endpoints and the derived smaller diagonal cap.
+- `ImbalancedChen/BoundaryGlobalCaps.lean`: derives actual global ceiling caps from crossing cells and an explicit full-support boundary mass bound with all rounding terms.
+- `ImbalancedChen/MultiplicativeGridPartition.lean`: exact finite half-open multiplicative grid, unique cell ownership, full exterior carrier and squared logarithmic rectangle count.
+- `ImbalancedChen/ActualGridEnvelopes.lean`: literal full prime rectangles, exact lower/upper sandwich, boundary-fibre mass and source discrepancy bridge.
+- `ImbalancedChen/BoundaryLogMesh.lean`: the full actual geometric boundary cost is negligible for logarithmic mesh exponent k > 4, uniformly in cutoff and modulus cap.
+- `ImbalancedChen/RectangleDiscrepancyAssembly.lean`: exact actual rectangle discrepancy sum and full explicit boundary cost.
+- `ImbalancedChen/CoprimeRecentering.lean`: exact reduced-residue partition and arbitrary common-main cancellation, yielding a factor-two error transfer.
+- `ImbalancedChen/LogMeshGridCount.lean`: explicit polylogarithmic count of the complete grid and selected families, including final cells.
+- `ImbalancedChen/SelectedGridRanges.lean`: exact selected rectangle endpoints and eventual fixed-log lower gates, uniform over all selected cells.
+- `ImbalancedChen/CurvedDiscrepancyReduction.lean`: full actual curved discrepancy reduces to literal rectangle discrepancies plus an arbitrarily small normalized boundary remainder.
+- `ImbalancedChen/PrimeRectanglePrefixes.lean`: exact full rectangle prefix subtraction, prime-indicator form and literal coprime recentering identities.
+- `ImbalancedChen/ResidueSelectorBudget.lean`: finite maximizing residue selectors and factor-two recentering of a selector-uniform sum budget, with no modulus-count loss.
+- `ImbalancedChen/RectanglePrefixBudget.lean`: actual full-rectangle discrepancy budget from two explicit selector-uniform prefix budgets, with cost 2Bhi + 2Blo and no modulus-count loss.
+- `ImbalancedChen/ScaledRectangleBudget.lean`: fixed N-to-4N modulus-cap transfer with literal floor, and full polylogarithmic cell-count/recentering budget absorption.
+- `ImbalancedChen/WeightedSieveError.lean`: actual progression caps and finite Cauchy transfer to the genuine lambda-square sieve error, retaining primitive modulus support.
+- `ImbalancedChen/DivisorMomentBudget.lean`: unconditional squarefree fourth-divisor moment bounded by an explicit sixteenth logarithmic power, via finite Dirichlet convolution.
+- `ImbalancedChen/BoundaryArbitraryLog.lean`: arbitrary fixed logarithmic accuracy for the actual geometric boundary cost, uniform in cutoff and selected moduli.
+- `ImbalancedChen/WeightedSieveLogBudget.lean`: explicit logarithmic precision loss when transferring an unweighted primitive discrepancy estimate to the actual weighted sieve error.
+- `ImbalancedChen/ActualSelbergCoefficients.lean`: explicit actual finite weights, support, normalization and coefficient bound by a proved positive injection.
+- `ImbalancedChen/ActualSelbergMain.lean`: Mobius cancellation and exact optimized lambda-square main term 1/G.
+- `ImbalancedChen/ActualOptimizedSieveBound.lean`: actual sifted count bound with the finite normalizer and literal primitive discrepancy.
+- `ImbalancedChen/FullNormalizerCarrier.lean`: exact full squarefree, centre-coprime carrier at strict cap L+1.
+- `ImbalancedChen/EnlargedSelbergCap.lean`: actual level, roughness, and negligible discarded-count gates for the enlarged cap.
+- `ImbalancedChen/SingularProductIdentity.lean`: genuinely convergent natural-index Euler products, exact centre correction and the prime-two factor.
+- `ImbalancedChen/HalfProductMassFibres.lean`: exact prime-counting fibres of the original half-product source, preserving strict power boundaries, squares and the real cutoff.
+- `ImbalancedChen/HalfProductPanFinite.lean`: exact arbitrary-cutoff decomposition of the actual congruence mass, coprime mass, bounding-sieve divisor sum and primitive discrepancy into smaller-prime moving-residue fibres; the prime-indicator coefficient is proved bounded by one.
+- `ImbalancedChen/PanProductStrips.lean`: exact `A₁ < r ≤ A₂`, `Y₀ < r*q ≤ Y₁` product strips as differences of closed Pan prefixes, including the primitive outer coprimality gate, normalized endpoint `q ≤ Y/r`, bounded prime-indicator coefficient and upper-minus-lower prefix-error identity.
+- `ImbalancedChen/PanProductResidueBudget.lean`: canonical reduction of the physical target to `N % d`, with selector-uniform prefix budgets and the exact two-prefix strip cost.
+- `ImbalancedChen/PanProductLiuBridge.lean`: audited identification of the product-prefix error with the pinned Liu--Pan interval sum and pointwise control by its primitive-residue `MaxL`, including the two-endpoint strip bound.
+- `ImbalancedChen/PanProductAggregateBudget.lean`: enlarges the actual coprime physical modulus set into both full nonnegative Liu--Pan cutoff aggregates and proves the two-endpoint logarithmic-saving bound for the literal product-strip error, while retaining all eight endpoint gates.
+- `ImbalancedChen/PanProductGrid.lean`: constructs the required dynamic grid in exact `(r,m=r*q)` coordinates, identifies every cell with a strict-lower/closed-upper Pan strip, proves unique source-pair coverage and pairwise disjointness without dropping squares or ordered multiplicity, and exposes the selected-cell witness predicate and finite logarithmic cardinality budget needed for later error summation.
+- `ImbalancedChen/PanProductGridRanges.lean`: transfers each selected cell's literal source witness to the exact dynamic-grid endpoints, proving `T/2-1 < Y₀`, `Y₁ < 2N`, `A₂ < 2√N`, and the roughness-driven first-endpoint bound with the full grid-width and integer-rounding losses visible; at the current cutoff it proves that both product endpoints eventually clear every fixed Liu--Pan supplier threshold and satisfy both `A₂ ≤ Yᵢ^(2/3)` and `log(Yᵢ)^(2B) ≤ A₁` gates under the manuscript's licensed `κ₀` relation.
+- `ImbalancedChen/PanProductGridModulus.lean`: proves the two endpoint-dependent Pan modulus gates for an honest physical layer `D ≤ floor(N^theta)` under the necessary strict exponent condition `theta < (1-κ₀)/2`, and specializes this to the existing exact squared Selberg level. This is an auxiliary weak route: its `4/theta` normalization cannot yield the current `K`, and it deliberately does not transfer a global square-root cutoff to the smaller product endpoints.
+- `ImbalancedChen/RetainedModuli.lean`: natural-number support and literal integer coefficient `lambda(d) = mu(d)` on retained first-exit moduli, including `lambda(1) = 1`, support uniqueness, squarefreeness and leaf-value lookup through the actual prime-factor finset. The recursive leaf list and its selected-product image are proved `Nodup` before the exact multiplicity-preserving `List.sum` to modulus `Finset.sum` reindex.
+- `ImbalancedChen/RoughPrimeUniverse.lean`: exact finite construction of primes `p ∤ N` in the real half-open range `w ≤ p < z`, sorted strictly decreasing. An explicit enumeration cap disappears from membership once `z ≤ cap`; no unproved floor/ceiling convention is substituted. The generic pointwise majorant and retained-coefficient lookup are specialized to this concrete universe.
+- `ImbalancedChen/SmallRoughAttachment.lean`: the strict `p < w` small support and inclusive `w ≤ p` rough support are cross-coprime, so multiplication is injective on the displayed small/rough pair carrier (prime powers included). The existing `signSensitiveAttachment` is proved literally equal to the divisor sum of one total coefficient `smallRoughRho` on a multiplicity-free physical modulus support; occupied fibres contain exactly one coefficient, scalar physical sums pull back without a fibre factor, and the unit absolute bound is preserved.
+- `ImbalancedChen/SmallRoughMainTerm.lean`: for that same literal `smallRoughRho`, the reciprocal-totient physical density is pulled back without multiplicity and factored using totient multiplicativity. Each nonnegative rough coefficient selects the upper small-weight density and each negative coefficient selects the lower one. The exact coprime-source correction and signed primitive-residue error are reindexed to the same pair carrier as well; no density or distribution estimate is assumed.
+- `ImbalancedChen/FixedRoughCoefficients.lean`: proves that retained selections and natural modulus support do not depend on local test weights. One fixed Mobius coefficient therefore gives the rough divisor-sum majorant for every integer, with squarefree, target-coprime, cutoff-separated support.
+- `ImbalancedChen/ActualSmallRosser.lean`: instantiates the literal lower/upper Rosser weights on primes `p < w`, `p ∤ N`; proves their pointwise sandwich for every integer, including zero, via the nonzero sieve product's gcd. Active coefficients satisfy the strict level `d < L` and have absolute value at most one.
+- `ImbalancedChen/ActualSmallRosserDensity.lean`: supplies the reciprocal-totient densities of those same weights from the proved fundamental lemma and a uniform progression-density dimension constant. The full error at `L=D^epsilon`, `w=D^(epsilon^2)` remains explicit; no fixed-epsilon little-o is asserted.
+- `ImbalancedChen/SmallRoughDensityError.lean`: proves that the sign-sensitive physical density error is nonnegative and at most the common small-weight error times the absolute rough density, without replacing that multiplier by a signed sum.
+- `ImbalancedChen/ActualSmallRoughAttachment.lean`: attaches the actual small weights to fixed raw rough coefficients and proves the same physical rho's integer majorant, one-bound, squarefree/coprime support, active small-factor level, and density-error estimate. The causal boxed policy and sharp current `K` remain open.
+- `ImbalancedChen/RosserEndpointBridge.lean`: identifies the literal small carriers, lower/upper coefficients, densities and Euler product with the pinned Goldbach sieve at `Nat.ceil R`, preserving strict tests even at integral levels.
+- `ImbalancedChen/RoughAbsoluteDensity.lean` and `RoughPowerParameters.lean`: bound the actual absolute rough density by a finite Euler product and then uniformly by `(log z/log w)*(1+Krough/log w)`, including truncated caps. The small Euler product is positive for even targets.
+- `ImbalancedChen/SmallRosserErrorLimit.lean` and `ActualSmallRoughErrorAbsorption.lean`: choose epsilon before the large threshold, uniformly in the even target, cap and rough policy, to bound the same physical rho's attachment error by any prescribed multiple of its literal small Euler product. This does not assert the final normalized sharp density.
+- `ImbalancedChen/ActualSmallEulerNormalization.lean`: proves a uniform bound for the literal full small Euler product by `B*C_N/log w`, retaining strict real endpoints through the inclusive Mertens product at `ceil w - 1`. It requires a positive even target and a cap covering `w`.
+- `ImbalancedChen/NormalizedSmallRosserError.lean` and `ActualNormalizedRhoError.lean`: directly absorb the fourth-power epsilon loss, then bound the same raw-policy rho's attachment error by `eta*C_N/log D` and, at `D=N^nu`, by `eta*C_N/log N`. Epsilon satisfies any earlier positive upper bound and is chosen before the common threshold. The signed rough main term and boxed compiler remain open.
+- `ImbalancedChen/UpperRosserCubeCarrier.lean`, `PrimeCubeCutoff.lean` and `ActualRosserCubeReduction.lean`: prove the strict `p^3<R` carrier reduction for the same actual upper coefficient, every weighted divisor sum, its density and its integer divisor polynomial. In the range `beta<=3*u`, the exact cutoff is `D^(beta/3)`, with the Euler-product ratio retained explicitly.
+- `ImbalancedChen/FullPowerEulerNormalization.lean`: proves `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` and `V_N(N^a)/V_N(N^b) -> b/a` along positive even targets, for each fixed `a,b>0`, from the actual Mertens and target-prime-tail suppliers. These concern full prime carriers, not truncated caps or a uniform varying-exponent limit. Subsequent modules connect the same-weight upper density for fixed `0<s<=4`.
+- `ImbalancedChen/UniformPowerEulerNormalization.lean`: upgrades the proved leading constant to locally uniform convergence for positive exponents and uniform convergence on every positive compact interval. One threshold works for all exponents in the interval and all covering caps. Moving exponents converging to a positive limit are also covered, without assuming continuity of the finite Euler products.
+- `ImbalancedChen/ActualPrimeReciprocalMass.lean`: proves the actual target-deleted prime mass on `[N^a,N^b)` with summand `1/(p-1)` tends to `log(b/a)` for every fixed `0<a<b`, including `b>1`. The target and enumeration cap are kept separate; endpoint, target-prime and denominator corrections are explicitly paid. This is a single-prime interval result, not a multi-prime Rosser layer limit.
+- `ImbalancedChen/ActualPrimeEulerSplit.lean` and `ActualRosserBoundaryExpansion.lean`: prove the exact positive boundary expansion for the same actual upper Rosser density at `ceil R`, with every term expressed through `1/(p-1)` and the strict Euler ratio `V_N(q)/V_N(y)`. Any actual selected subcarrier gives a proved lower bound.
+- `ImbalancedChen/ActualPrimeBoxMass.lean`: proves exact factorization and limiting mass for genuine prime-tuple boxes; adjacent separated boxes have distinct ordered coordinates and the same reciprocal-totient mass. The common target exclusions and every half-open endpoint are retained.
+- `ImbalancedChen/ActualPrimeBoxEulerLower.lean`: supplies an eventual lower bound for actual tuple boxes carrying the boundary Euler ratio, with one threshold uniform in every covering cap. It separately requires a geometric inclusion before a box can contribute to a Rosser boundary sum.
+- `ImbalancedChen/ActualRosserTripleBox.lean`: proves explicit power gates put a separated three-prime box inside the actual Rosser boundary, with an injective tuple-to-boundary map. A concrete rational box proves the same raw density ratio at `y=N^(1/3), R=N` is eventually at least `1+1/2000`, uniformly in all covering caps, with every geometric and analytic input discharged. This is one box contribution, not the full fixed-s density limit.
+- `ImbalancedChen/ActualRosserTripleBoxFamily.lean`: combines finite coordinate-separated boxes through disjoint actual tuple carriers and one injective boundary map. The base term is counted once; a common threshold supplies the sum of their gains, including the empty family.
+- `ImbalancedChen/LogPrimeBoxIntegral.lean`: proves genuine Lebesgue integrability and the product-of-logarithms formula on finite-dimensional half-open boxes, including degenerate and zero-dimensional boxes, and their constant-weighted versions.
+- `ImbalancedChen/RosserTripleMesh.lean`: constructs strict inner half-open mesh boxes in the normalized three-prime boundary region. It proves cross-cell separation, unique ownership and eventual coverage of every region point.
+- `ImbalancedChen/RosserTripleMeshIntegral.lean`: proves the actual mesh lower sums converge to the actual region integral by everywhere pointwise convergence and an integrable compact-box bound of 81. The integral is not defined as the mesh limit.
+- `ImbalancedChen/RosserTripleLayerIdentity.lean`: identifies the actual three-dimensional integral with the pinned first positive boundary mass and Suzuki source layer three, using measure-preserving coordinate maps, Fubini and the proved supplier identity.
+- `ImbalancedChen/ActualRosserTripleLayerLower.lean`: scales the normalized mesh into genuine prime boxes and chooses the mesh before the target threshold, proving the same raw density at `y=N^u, R=N^(3*u)` is eventually at least one plus the continuous three-prime layer integral minus any positive error, uniformly in covering caps.
+- `ImbalancedChen/ActualRosserOddBox.lean`: maps every fixed decreasing `2*k+1` prime tuple through all alternating prefix gates into the same literal ceiling-level boundary. The tail has cardinality `2*k`, and the boundary map is injective within a rank, including the empty tail.
+- `ImbalancedChen/ActualRosserOddBoxFamily.lean`: combines all disjoint boxes of any fixed rank in one actual boundary sum and supplies a common eventual threshold for their logarithmic gains. The base term one is counted once.
+- `ImbalancedChen/LogPrimeBoxMesh.lean`: constructs separated half-open grids in arbitrary finite dimension, with exact coverage and convergence of both endpoint vectors.
+- `ImbalancedChen/RosserOddLogRegion.lean`: defines the strict odd boundary region, embeds it in the provider's region, derives the redundant total-tail budget, and proves openness and the positive coordinate cutoff `s/3^(k+1)`.
+- `ImbalancedChen/RosserOddMesh.lean`: proves every selected cell satisfies all strict region tests and every point of the region is eventually covered, using finite endpoint tests and vector convergence.
+- `ImbalancedChen/RosserOddMeshIntegral.lean`: proves the actual lower mesh sums converge to the genuine `2*k+1` dimensional region integral, using an explicit compact dominator at every fixed rank.
+- `ImbalancedChen/ActualRosserOddLayerLower.lean`: proves the same raw density is eventually at least `1 + rosserOddLayerIntegral k s - eta` for each fixed admissible rank, uniformly in later even targets and covering caps. In particular this holds for every `k>=1` at `s=3`, and at `u=1/3, R=N`.
+- `ImbalancedChen/ActualRosserOddBoxUnion.lean`: uses exact tail cardinality to make the boundary images of different ranks disjoint, and includes all boxes from a finite set of ranks in the same positive boundary expansion with one base term. A threshold chosen from the finite dependent family supplies their summed logarithmic gains.
+- `ImbalancedChen/ActualRosserOddFiniteLayers.lean`: chooses one common mesh for a fixed finite set of ranks, then a common target threshold, proving the actual raw ratio is at least `1 + sum_{k in K} rosserOddLayerIntegral k s - eta`. Empty rank sets are supported.
+- `ImbalancedChen/FinitePiIntegral.lean`: extracts first, paired or last coordinates by measure-preserving Fubini; the zero-dimensional volume is one and the second extraction only needs almost-everywhere integrable slices.
+- `ImbalancedChen/RosserOddTailRegion.lean` and `RosserOddTailIntegral.lean`: prove the strict pair-removal geometry, compact-box integrability and exact identity between the genuine tail-region integral and the recursive boundary mass, for every positive terminal coordinate.
+- `ImbalancedChen/RosserOddLayerIdentity.lean`: identifies every actual odd-layer integral with its boundary-mass integral, and with Suzuki source index `2*k+1` on `3/2<=s<=4`, including the zero layer.
+- `ImbalancedChen/ActualRosserAtThreeLower.lean`: uses the proved continuous source series and one finite prefix to obtain the complete lower threshold `2*exp(gamma)/3-eta`, without assuming a discrete-tail estimate.
+- `ImbalancedChen/ActualRosserAtThreeUpper.lean`: applies the proved all-depth estimate at the literal natural level `ceil R`, the target-deleted local product bound, and an error bound uniform in odd depth to obtain the matching upper threshold.
+- `ImbalancedChen/ActualRosserAtThreeLimit.lean`: combines both sides for a common cap-uniform threshold and the genuine same-weight limit at three; Mertens normalization gives `4/(3*u)`, or four when `R=N`.
+- `ImbalancedChen/ActualRosserCubeLimit.lean`: combines the exact cube reduction with the proved Euler ratio to obtain the fixed-parameter upper raw-density limit for `beta<=3*u`, including the manuscript's `1<s<=3` range. No compact-parameter uniform convergence is asserted.
+- `ImbalancedChen/ActualRosserUpperWindowLower.lean`: selects a finite prefix of the proved source series to obtain the actual cap-uniform lower threshold on `3<=s<=4`.
+- `ImbalancedChen/ActualRosserUpperWindowUpper.lean`: proves one actual upper threshold uniform for `u>=a>0` and `3/2<=s<=4`, including all adaptive odd depths.
+- `ImbalancedChen/ActualRosserUpperWindowLimit.lean`: combines both bounds with cube reduction for the fixed-parameter raw and normalized upper density limits through residual four.
+- `ImbalancedChen/ActualRosserLowerThreshold.lean`: proves the actual lower-weight lower threshold for every fixed `s>=2`, with explicit factor `2*exp(gamma)*log(s-1)/s` for `2<=s<=4`.
+- `ImbalancedChen/ActualLowerRosserBoundaryExpansion.lean`: proves the exact finite negative-boundary expansion and the selected-loss upper interface for the same actual lower weight.
+- `ImbalancedChen/RosserGlobalSourceIdentity.lean`: exposes the pinned provider's already-proved private global odd-source identity for all `s>0`; its internal-name dependency is documented explicitly.
+- `ImbalancedChen/RosserEvenLogRegion.lean`: proves the literal even-region geometry, exact first/last-coordinate slices, and compact positive containment for `s>1`.
+- `ImbalancedChen/RosserEvenLayerIntegral.lean`: proves integrability and the exact inherited boundary-source integral identity by measure-preserving Fubini.
+- `ImbalancedChen/RosserEvenMesh.lean` and `RosserEvenMeshIntegral.lean`: prove strict inner-cell inclusion, eventual coverage, and convergence of actual mesh lower sums to each genuine even-region integral.
+- `ImbalancedChen/RosserEvenLayerIdentity.lean` and `ActualRosserEvenSourceSeries.lean`: identify every even integral with the Suzuki layer for `s>=2` and prove the concrete real finite-prefix limit to one minus the continuous lower factor.
+- `ImbalancedChen/ActualRosserEvenBox.lean`, `ActualRosserEvenBoxFamily.lean` and `ActualRosserEvenBoxUnion.lean`: inject actual prime boxes into the same negative boundary expansion, preserving the literal ceiling, singleton tails, disjoint ranks and a common target/cap threshold.
+- `ImbalancedChen/ActualRosserEvenFiniteLayers.lean`: scales the proved meshes and removes collapsed support boxes as genuinely empty regions, obtaining the finite continuous-loss upper bound for arbitrary finite rank sets.
+- `ImbalancedChen/ActualRosserLowerLimit.lean`: proves the two-sided same-weight lower density limit for fixed `u>0,s>=2`, plus Euler normalization and the explicit first-interval constants.
+- `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
+- `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
+- `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
+- `ImbalancedChen/HalfProductMassError.lean`: negligible original-source approximation error, conditional only on that real PNT.
+- `ImbalancedChen/HalfProductMassLimit.lean`: original cutoff-source mass limit from the explicit real PNT and literal fixed-test weighted-prime Mertens limit.
+- `ImbalancedChen/RealHalfProductMassSuppliers.lean`: exact adapter to the pinned proved real PNT and weighted-prime Mertens theorems, yielding the current arbitrary-real manuscript-cutoff source mass limit without analytic premises.
+- `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
+
+Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.
+
+No custom analytic axioms or proof placeholders belong in the verified core. A green core build is not a complete proof of the manuscript or a claim of a new frontier record.
+
+- `ImbalancedChen/QuotientChenFourPrime.lean`: actual squarefree four-prime quotient roughness is equivalent to selecting the smallest two prime factors; literal Y10 and full Y11 support retain all strict endpoints.
+- `ImbalancedChen/QuotientChenFourCounts.lean`: exact tuple-image bijections prove Y10 = choose(r−2,2) and full Y11 = (r−2)(s−r), with r,s the actual prime-divisor counts.
+- `ImbalancedChen/RoughSquareException.lean`: actual positive integers at most N with a prime square divisor p², p≥z, have cardinality at most N/(z−1) for z>1, with no per-prime floor loss.
+
+- `ImbalancedChen/QuotientChenInitialCounts.lean`: literal first-six quotient supports and actual finite count identities, including the unit receiver and exact second-prime band.
+- `ImbalancedChen/QuotientChenSwitchGeometry.lean`: constructs the actual smallest prime pair and a third divisor, proves the strict square-root switching cap, and counts the genuine Y7/Y8 supports as indicators.
+
+- `ImbalancedChen/QuotientChenNinthSwitch.lean`: literal Y9 support and its required lower bound from original squarefree source conditions and actual factor counts; four-factor exclusion and triple reconstruction are proved.
+
+- `ImbalancedChen/QuotientChenWeightCases.lean`: complete actual repaired eleven-term pointwise weight inequality on the original squarefree size band, with exact fixed exponents, full Y11, multiplicity-count convention, and receiver one. This finite inequality supplies no analytic mean estimate.
+
+- `ImbalancedChen/QuotientChenPositiveBound.lean`: uniform upper bound 246 for the actual weight on all positive receivers at most N, including nonsquarefree receivers.
+- `ImbalancedChen/QuotientChenSummedBridge.lean`: original prime-indexed weight sum, once-only exceptional union, literal ceiling and square-divisor error, and explicit 984 N^(1-a) loss.
+- `ImbalancedChen/QuotientChenElevenSum.lean`: exact eleven actual Upsilon sums, full Y11, manuscript endpoint equivalence, and explicit receiver-one correction.
+
+- `ImbalancedChen/ChenWeightErrorBudget.lean`: proved eventual size gate and absorption of the exact 984 N^(1-a)+4 loss in the actual singular normalization, followed by a conditional transfer retaining the lower mean estimate on all eleven literal Upsilon terms.
+
+- `ImbalancedChen/ChenInitialPrimeSource.lean`: actual initial additive-prime BoundingSieve, exact Upsilon1/2 sifted counts with strict real caps, literal prime AP fibres and both centre-prime/modulus-prime remainder corrections. No analytic lower sieve is assumed or proved.
+
+- `ImbalancedChen/ChenInitialCorrectionBudget.lean`: explicit logarithmic prime-divisor bounds and complete centre/modulus-prime correction payment below the square-root level, at arbitrary fixed logarithmic accuracy; the literal ordinary prime-AP budget remains an explicit input.
+
+- `ImbalancedChen/ChenLogLevelGeometry.lean`: literal floor-valued logarithmic distribution cap, strict Rosser level Q+1, limiting logarithmic ratios, and one common threshold for the numerical lower-sieve gates. Verified in the seventy-two-module checkpoint.
+
+## Reproducibility
+
+Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. The attachment reviewed has SHA-256 `e89d35f219acfbc6018db56b99d7a5c6c70eeeba0a98723fbe1046041ca90fbe`. The companion certificate archive and all 249 payload hashes were preserved and verified. Nine numerical replays, including the full 2,000,000-split extended run, reproduce the stored mathematical results. This confirms numerical reproducibility, not the analytic interpretation or a Lean proof of the certificates. The extended run establishes an upper endpoint below 6.81, not below 6.809; the final 6.786 recombination additionally uses all three disjoint quoted gains.
+
+- `ImbalancedChen/CenterEulerTail.lean`: strict real-cutoff centre Euler correction, explicit uniform exponential tail bound, and tail/relative-normalization convergence at every fixed positive real-power cutoff. Verified in the seventy-two-module checkpoint; no Mertens estimate is assumed.
+
+## Verified quotient source and finite sieve remainders
+
+`ChenQuotientPrimeSource.lean` passed the 73-module checkpoint above. It identifies the actual quotient receivers for selected multipliers with prime AP fibres at modulus `b*d`, retaining centre-prime corrections, repeated factors, quotient one, strict endpoints and the original Upsilon 3–6 outer multiplicities.
+
+The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `BoundingSieve`, proves the selected multiplier is coprime to the strict sieve product, and transfers its exact remainder to ordinary prime-AP errors plus both explicit centre correction costs. The reciprocal-totient density is justified only on proved allowed divisors. This extension passed the 74-module checkpoint above. No analytic bound for the selected-multiplier error sums or the full eleven-term mean is supplied.
+
+## Verified pooled centre correction budget
+
+`ChenQuotientCentreBudget.lean` pools the actual selected-multiplier centre-prime incidences before bounding them. For all four literal Upsilon 3–6 selectors and arbitrary row-dependent positive divisor sets capped by sqrt(N), the complete positive correction cost is at most 8/(log 2)^3 times sqrt(N) log(N)^3 for sufficiently large even N. The candidate derives arbitrary fixed logarithmic accuracy without a prime-distribution premise. It retains both centre counts, all outer labels and strict bands; only this correction cost is estimated. This extension passed the 75-module checkpoint above.
+
+## Verified product-modulus pooling
+
+`ChenPooledQuotientAP.lean` proves that the full product modulus b*d recovers its allowed sieve divisor as gcd(b*d,P). With actual ordered-prime label uniqueness this gives exact multiplicity-one pooling within each original Upsilon 3–6 term, for arbitrary row-dependent divisor sets satisfying b*d <= Q. The secondary base-modulus error and both centre costs are retained separately; the existing fourth-divisor moment is also transferred to the proved squarefree pooled support. The four terms are not claimed jointly disjoint. The candidate passed the 76-module checkpoint above; no analytic AP bound is assumed or supplied.
+
+## Verified active-row four-term assembly
+
+`ChenQuotientBVFinite.lean` additionally pools the secondary base-modulus errors only over nonempty rows. This retains arbitrary unused rows, while the actual product cap forces each active multiplier below Q. All four original absolute remainder sums are bounded by 4[1+4(1+log(max(1,Q)))] times the primitive AP-error pool, plus the complete paid centre cost. No analytic error bound is assumed. This finite module passed the 77-module checkpoint above. Supplier-backed ordinary-BV consumers remain outside the owned core and have separate runtime verification.
+
+
+## Verified quotient geometry, density transport and finite weighted mass
+
+The following three owned-only modules passed the 80-module checkpoint above. The single geometry repair made natural successor positivity explicit; their mathematical statements and the verification gates were unchanged.
+
+- `ImbalancedChen/ChenQuotientLevelGeometry.lean`: literal natural row level D_b = Q / b + 1, with d < D_b equivalent to b*d <= Q for b > 0; uniform moving-multiplier logarithmic profiles and eventual inclusion of every original Upsilon 3–6 multiplier in the global logarithmic square-root cap. The eventual threshold precedes the multiplier choice. Lower-parameter gates require an explicit fixed gap; no s >= 2 gate is asserted for the full sixth band.
+- `ImbalancedChen/ChenQuotientDensityTransport.lean`: exact equality of the quotient and initial sieve prime products, reciprocal-totient densities, Euler products and local dimension products at the same strict real cutoff, retaining the constructor's coprimality gate. Support, total mass and remainders are not identified, and no new analytic normalization or dimension estimate is supplied.
+- `ImbalancedChen/ChenQuotientMassFinite.lean`: finite bounded-weight replacement of the actual quotient masses AP(N,N,b) minus the centre-prime count, for arbitrary signed label-dependent coefficients bounded by a fixed C >= 0. Exact injective pooling gives C(4 E_Q + C_36), with E_Q the primitive AP-error pool and C_36 the full centre mass, without an outer-cardinality factor; the centre cost receives an unconditional polylogarithmic budget and eventual fixed-logarithmic-accuracy payment. The AP-error estimate remains explicit.
+
+These are inputs to later sieve assembly with moving row levels and genuine weighted masses. They preserve all original bands and multiplicities. No foreign consumer enters the core root; no lower-sieve mean, evaluated weighted prime/pair main term, coefficient 1.8271, or complete Chen theorem is established by these additions.
+
+
+## Verified prime-window corrections and moving-weight transport
+
+The following three owned-only modules passed the 83-module checkpoint above. The harmonic endpoint repair made natural lambda types, negated-equality symmetry and the final reflexive inequality explicit. All mandatory proof gates remained unchanged; the successful push retry changed no code or workflow.
+
+- `ImbalancedChen/ChenPrimeHarmonicFinite.lean`: exact finite correction from the original centre-masked prime window [A,U) with 1/(p-1) to the opposite half-open window (A,U] with 1/p. The centre-divisor mask, reciprocal shift and both possible endpoint atoms are paid explicitly; for N > 0, 2 <= A < U and |f| <= M with M >= 0, the total error is at most (2M log(N)/log(2) + 6M)/A. It supplies no analytic prime-sum limit.
+- `ImbalancedChen/MovingWeightTransport.lean`: finite perturbation costs and transport under uniformly close coordinates on one fixed compact set, for a fixed continuous test and eventually bounded nonnegative carrier weights. The test may have either sign. Uniformity, compact membership and bounded total weight remain explicit; a fixed-profile limit is a separate premise when used to derive a moving-profile limit.
+- `ImbalancedChen/ChenQuotientMovingWeight.lean`: a positively padded fixed interval contains both the actual quotient row parameter and its logarithmic profile uniformly over a fixed multiplier power range. The generic transport then applies without dropping prime or ordered-pair labels, with the nonnegative weighted-mass bound and any fixed-profile limit still explicit. No full-sixth-band s >= 2 gate is asserted.
+
+Supplier-backed prime harmonic and moving-prime adapters remain outside the core root. These elementary interfaces do not evaluate an actual prime/pair main term, supply an upper/lower sieve, establish coefficient 1.8271, or complete the Chen theorem.
+
+
+## Verified finite pair-harmonic geometry
+
+`ImbalancedChen/ChenPairHarmonicFinite.lean` passed the 84-module checkpoint above. Its finite identities and bounds are covered by the complete root/module replay and 2043-declaration transitive axiom audit.
+
+It identifies the literal sixth selector with its disjoint-band rectangle and the fifth selector with the strictly ordered part of the masked square. The fifth harmonic sum is exactly one half of the tensor square minus one half of its diagonal. Totient multiplicativity is used only for distinct prime labels; the artificial diagonal has denominator (p-1)^2. Separated-test factorization and exact logarithmic coordinates retain all centre masks and endpoints. For A >= 2 and a nonnegative diagonal test bound M, the full diagonal costs at most 8M/A and the half-square replacement error at most 4M/A.
+
+These are finite identities for the harmonic main sums. They do not replace the original sifted Upsilon counts or prove a continuous-test prime-pair limit, an upper/lower sieve, coefficient 1.8271, or the full Chen theorem. Supplier-backed pair consumers remain separate from the owned root.
+
+
+## Symmetric square-to-triangle integral candidate
+
+`ImbalancedChen/SymmetricTriangleIntegral.lean` is the next owned-only addition, targeting an 85-module checkpoint and 86 root/module replay targets. Compilation, kernel replay and the transitive axiom audit are pending; the verified checkpoint remains 84 modules and 2043 declarations.
+
+The candidate proves rectangular integration-order exchange for a continuous real kernel on a closed rectangle. For a continuous symmetric real kernel on a closed square, it proves that one half of the square integral equals the iterated lower-triangle integral. A more general version assumes integrability on the genuine square. All statements allow weak endpoint inequalities, signed kernels and nonzero diagonal values. The diagonal is null for Lebesgue product measure by the null-singleton property and Fubini; an integral identity is not assumed.
+
+These analytic identities are separate from the finite prime-pair diagonal estimate. A manuscript application must supply continuity and symmetry of its full weighted integrand on the actual square, or continuity on the actual rectangle. This module does not supply a prime-pair limit, moving-kernel approximation, upper/lower sieve, coefficient 1.8271, or the full Chen theorem. No foreign consumer, existing proof body, dependency configuration or verification workflow changes in this addition.
+
+## Arbitrary-real half-product mass coefficient candidate
+
+`ImbalancedChen/RealHalfProductMass.lean` proves the exact split
+`b/(1+b), 1/(1+b)` for every real `0 < b < 1`, both elementary prime-variable
+walls, and the fixed-test integral `log(1/b)`. It also proves exact agreement
+with the existing rational mass definitions, identifies the literal sum with
+the standard strict-left/inclusive-right logarithmic prime interval, and exposes a weighted-prime
+Mertens adapter whose premise ends at the integral rather than at the desired
+bad-count theorem. The moving product-boundary source envelope and current
+power-cutoff tail are handled by `RealHalfProductMassSplit`; the actual
+PNT/Mertens suppliers are connected by `RealHalfProductMassSuppliers`, while
+the additive-prime positive-upper-sieve transfer remains open. This candidate
+alone does not complete the ordered bad-semiprime asymptotic.
+
+## Arbitrary-real source mass-split candidate
+
+`ImbalancedChen/RealHalfProductMassSplit.lean` proves the exact finite
+high/low envelope for the literal arbitrary-real ordered source, including
+the moving product boundary, strict power split, prime squares, square-root
+endpoint and exact real cutoff ceiling. It instantiates the current
+manuscript lower wall as `2*N^(1-κ)` and proves, for every fixed `κ > 0`, that
+this wall plus the exact ceiling unit is `o(N/log N)`. With the repository's
+explicit real-PNT witness it proves the full finite discrepancy at that
+literal power cutoff is `o(N/log N)`, and with the standard weighted-prime
+Mertens integral it derives the conditional source limit `log(1/b)`. The
+historical logarithmic auxiliary cutoff remains available as a separately
+named theorem. `RealHalfProductMassSuppliers` now discharges both analytic
+premises from pinned proved theorems. The actual additive-prime upper-sieve
+transfer remains open, so this is not yet the `RealB` bound or the
+completed manuscript theorem.
+
+## Arbitrary-real source to rational finite-sieve bridge candidate
+
+`ImbalancedChen/RealHalfProductSieveBridge.lean` proves that the ordered bad
+region and its literal finite source are antitone in the real exponent.  At a
+positive-denominator rational exponent, that real source is definitionally the
+existing natural-power `halfProductSource`.  Thus every rational minorant
+`num/den ≤ b` bounds the arbitrary-real source at `b`, even after retaining
+the exact `m < N ∧ Nat.Prime (N-m)` filter.
+
+The bridge feeds this filtered count into the existing rational
+`siftedHalfProductSource`, retaining the explicit small-prime-partner loss
+`+z`.  Its optimized composition keeps the actual finite normalizer and the
+unweighted primitive-residue discrepancy premise visible; the complete
+`RealB` version also retains the exact cutoff loss `T+1`.  No density constant,
+distribution estimate or final bad-count asymptotic is hidden in these
+statements.  In particular, the existing generic finite Selberg bound has not
+been identified with the manuscript's current physical positive weight and
+does not by itself yield `K = 8452171/1250000`.
+
+## Same physical positive-weight interface candidate
+
+`ImbalancedChen/SignSensitiveAttachment.lean` proves the finite
+sign-sensitive attachment required by the current manuscript: nonnegative
+rough coefficients use the upper small-prime weight, while negative rough
+coefficients use the lower one so that multiplication reverses the bound in
+the correct direction.  `ImbalancedChen/PhysicalUpperWeightBridge.lean`
+then proves finite Fubini and the exact density + coprime-correction + signed
+distribution decomposition for one and the same explicit coefficient
+`rho` on the literal shifted half-product source.
+
+These modules deliberately do not postulate the physical density or
+distribution estimates. `FirstExitTree` supplies the generic raw-tree
+identity and pointwise rough majorant, while `SmallRoughAttachment` proves
+the strict-boundary cross-coprimality, unique product decomposition and exact
+pointwise sign-sensitive-attachment-to-physical-divisor-sum identity for one
+total `rho`, together with generic scalar and rho-weighted sum reindexing. The remaining
+current-`K` work is to instantiate the manuscript's actual causal policy and
+actual small weights, then prove both analytic estimates for that exact
+constructed `rho_N`.
+
+`SmallRoughMainTerm` now closes the finite main-term algebra for this same
+physical coefficient.  It proves the exact sign-sensitive factorization
+
+`sum rho(q) / phi(q) = sum_b c(b) / phi(b) * (if 0 <= c(b) then Dplus else Dminus)`
+
+with `Dminus` and `Dplus` the reciprocal-totient densities of the displayed
+small lower and upper weights.  The coprime correction and the signed
+primitive-residue error are also pulled back to the identical small/rough
+pair carrier. The literal small Rosser weights now have a proved density
+sandwich. Their attachment error, including the absolute rough-mass cost,
+can be made arbitrarily small relative to the actual small Euler product
+by choosing epsilon before the large threshold. The full small-product
+normalization and direct fourth-power absorption now give the corresponding
+reserve on the manuscript's `C_N/log N` scale. The remaining current-`K`
+obligations include the sharp signed rough density, the restricted
+moving-residue distribution theorem for this `rho`, and the still-
+uninstantiated causal retained policy and boxed compiler.
+
+## Finite odd-first-exit tree candidate
+
+`ImbalancedChen/FirstExitTree.lean` now proves the raw finite identity behind
+the manuscript's physical positive weight. Labels are scanned in their given
+order (the manuscript application will supply decreasing primes), all
+even-rank prefixes are retained, and only an odd-rank selected prefix may be
+the first rejected prefix. The retained alternating polynomial is exactly
+the complete Euler product plus the residual product at every first exit.
+
+For arbitrary local weights in `[0,1]`, every exit term is nonnegative, so
+the retained polynomial majorizes the Euler product. At the literal integer
+divisibility specialization this product is proved equal to the `0`/`1`
+predicate that no label in the finite universe divides the integer. The
+statement is over `ℤ`, so zero and negative integers are covered rather than
+excluded by an implicit natural-number convention.
+
+This module proves the finite tree algebra and pointwise rough majorant only.
+It does not identify an actual causal box policy, perform the unique
+small/rough decomposition, or prove the
+density and signed factorized distribution estimates for the resulting
+physical `rho_N`. In particular it does not yet establish the current
+coefficient `K = 8452171/1250000`.
+
+The same module now also enumerates the retained terminal branches explicitly.
+`oddFirstExitRetainedPolynomial_eq_leaves_sum` identifies the recursive
+polynomial with that literal finite branch sum.  Membership lemmas prove that
+each leaf's stored mass is exactly the product of its selected local weights
+and that its sign bit is exactly the parity of the selected-list length.
+`mem_oddFirstExitRetainedLeaves_selected_reverse_sublist` additionally proves
+that reversing the tree's accumulator gives a sublist of the original ordered
+universe. Given a duplicate-free universe, every retained selection is now
+proved duplicate-free; when every universe entry is prime, equality of two
+selected products forces equality of the selected lists and of the entire
+leaves. Thus the selected-prime product is injective on the actual retained
+leaves. The module also proves that every such product is squarefree, that its
+prime-factor count is exactly the selected-list length, and that its Möbius
+value is the existing parity sign. Consequently each leaf value is literally
+`(moebius d : ℝ)` times its selected local-weight product. The all-skip leaf is
+proved present explicitly, preserving the unit modulus `d = 1` with value one.
+This removes the evaluator-to-branch-sum, carrier-order, product uniqueness,
+squarefree and sign-identification gaps. The recursive retained leaf list is
+also proved `Nodup`: at every append, the skip subtree omits the current label
+while every select-subtree leaf contains it.
+
+`ImbalancedChen/RetainedModuli.lean` now defines the natural support of those
+selected products and the literal integer coefficient
+`oddFirstExitRetainedCoefficient`: it is `moebius d` on the retained support
+and zero off it. The unit branch gives coefficient one, every support element
+has a unique retained leaf as a value in a duplicate-free prime universe,
+and each leaf value is recovered as this coefficient times the local-weight
+product over `d.primeFactors`. Source-list `Nodup` and selected-product
+injectivity imply that the modulus list is `Nodup`; consequently
+`oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum` performs the exact
+multiplicity-preserving modulus reindex.
+
+`ImbalancedChen/RoughPrimeUniverse.lean` instantiates the carrier as the
+literal primes satisfying `p ∤ N` and the real inequalities `w ≤ p < z`, then
+sorts the finite carrier strictly decreasing. `Nodup`, strict order, exact
+membership, the original Finset after forgetting order, the concrete
+Möbius/coefficient leaf formula, and the integer pointwise majorant are
+proved. Finiteness is witnessed by an explicit natural enumeration cap; a
+proof `z ≤ cap` removes that cap from membership, so neither endpoint is
+silently rounded. The concrete theorem
+`roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum` supplies the same exact
+modulus reindex on this carrier. The actual causal retention predicate and
+small/rough attachment into the final `rho_N` remain open.
+

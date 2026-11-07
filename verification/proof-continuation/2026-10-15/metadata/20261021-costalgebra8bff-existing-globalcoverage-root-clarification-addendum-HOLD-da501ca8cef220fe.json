@@ -1,0 +1,159 @@
+{
+  "status": "EXISTING_ORIGINAL_GLOBAL_COVERAGE_CERTIFIED_STATIC_ONLY_HOLD",
+  "authoritative_original_CP": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-costalgebra8bff-classifier-census-proposals-HOLD.json",
+    "sha256": "8362087f91b77c1ba02d1450db185c64887564d59c50d6518c5f6c296c3d0a42"
+  },
+  "root_clarification": "Do not add duplicate equivalent checks. Actual source already covers both requirements; retain original f0db/7f50 proposals. No v2 is needed.",
+  "existing_original_evidence": [
+    {
+      "path": ".lake/proof-continuation/rounds/20261021-costalgebra8bff-readonly-classification-baseline172.py",
+      "sha256": "f0dbca0df453b0084e76381e5cff2548ffb2f888c2e886c96eb1c922b23d56b4",
+      "verify_baseline_first_line": 64,
+      "verify_baseline_last_line": 121,
+      "spans": [
+        {
+          "requirement": "raw_stock_replay_log_sha",
+          "first_line": 117,
+          "last_line": 117,
+          "source_text": "        assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']",
+          "UTF8_span_sha256": "8563e3458f04e3be7c30ec1f276ce894268d372971f8b7a1b2abb0841042b8fc"
+        },
+        {
+          "requirement": "environment_cardinality_and_uniqueness",
+          "first_line": 116,
+          "last_line": 116,
+          "source_text": "        assert len(names) == len(inventory['environment']) == len(set(inventory['environment']))",
+          "UTF8_span_sha256": "69eae852c3f34f231db83fda22e506d25da62a3da4ead37ef6d32e17f6970694"
+        },
+        {
+          "requirement": "inventory_set_equality",
+          "first_line": 118,
+          "last_line": 118,
+          "source_text": "        assert names == set(inventory['serialized']) == set(inventory['environment'])",
+          "UTF8_span_sha256": "355d5df341a82c31946e06532639204ef6ff777603a524eccff27b3740c1eeb3"
+        },
+        {
+          "requirement": "serialized_uniqueness",
+          "first_line": 115,
+          "last_line": 115,
+          "source_text": "        assert len(inventory['serialized']) == len(set(inventory['serialized']))",
+          "UTF8_span_sha256": "cf5194dc631bea8102cc1f2c034250bb4b95946eb94524fd126352418afac539"
+        },
+        {
+          "requirement": "actual_record_count",
+          "first_line": 106,
+          "last_line": 106,
+          "source_text": "        assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]",
+          "UTF8_span_sha256": "d64b8763f6bcfbba87adfb497273b6bbfcbf8681630ae47219e2463605601618"
+        },
+        {
+          "requirement": "baseline_totals",
+          "first_line": 120,
+          "last_line": 120,
+          "source_text": "    assert total == 4007 and len(receipts) == 120",
+          "UTF8_span_sha256": "e008f6efa7f97554528993eb7df750598da542b6dc425741efb9ecfd3df47b56"
+        },
+        {
+          "requirement": "each_actual_record_adds_exactly_one_new_name",
+          "first_line": 108,
+          "last_line": 113,
+          "source_text": "        for record in records:\n            assert record['name'] not in names\n            names.add(record['name'])\n            assert record['type'] and '\u22ef' not in record['type']\n            assert not record['unsafe'] and not record['partial'] and not record['axiom']\n            assert set(record['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'}",
+          "UTF8_span_sha256": "ba0554f2914283b29f4d7f59081cb1c461d9cf01648016e49f897d7eca15b71c"
+        }
+      ],
+      "derivation": "names starts empty; every actual record must have a previously unseen name and adds that name once. Therefore len(names)==len(records). Existing environment length==len(names)==environment unique length therefore enforces actual-record cardinality and uniqueness; exact set equality prevents omission or extra names. Every module stock log is raw-SHA checked in the same historical module loop."
+    },
+    {
+      "path": ".lake/proof-continuation/rounds/20261021-costalgebra8bff-owned-census-baseline172.py",
+      "sha256": "7f5013c40d380bddd96d937ac7c876f4f189edea898ef959e09334da07991ae6",
+      "verify_baseline_first_line": 66,
+      "verify_baseline_last_line": 123,
+      "spans": [
+        {
+          "requirement": "raw_stock_replay_log_sha",
+          "first_line": 119,
+          "last_line": 119,
+          "source_text": "        assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']",
+          "UTF8_span_sha256": "8563e3458f04e3be7c30ec1f276ce894268d372971f8b7a1b2abb0841042b8fc"
+        },
+        {
+          "requirement": "environment_cardinality_and_uniqueness",
+          "first_line": 118,
+          "last_line": 118,
+          "source_text": "        assert len(names) == len(inventory['environment']) == len(set(inventory['environment']))",
+          "UTF8_span_sha256": "69eae852c3f34f231db83fda22e506d25da62a3da4ead37ef6d32e17f6970694"
+        },
+        {
+          "requirement": "inventory_set_equality",
+          "first_line": 120,
+          "last_line": 120,
+          "source_text": "        assert names == set(inventory['serialized']) == set(inventory['environment'])",
+          "UTF8_span_sha256": "355d5df341a82c31946e06532639204ef6ff777603a524eccff27b3740c1eeb3"
+        },
+        {
+          "requirement": "serialized_uniqueness",
+          "first_line": 117,
+          "last_line": 117,
+          "source_text": "        assert len(inventory['serialized']) == len(set(inventory['serialized']))",
+          "UTF8_span_sha256": "cf5194dc631bea8102cc1f2c034250bb4b95946eb94524fd126352418afac539"
+        },
+        {
+          "requirement": "actual_record_count",
+          "first_line": 108,
+          "last_line": 108,
+          "source_text": "        assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]",
+          "UTF8_span_sha256": "d64b8763f6bcfbba87adfb497273b6bbfcbf8681630ae47219e2463605601618"
+        },
+        {
+          "requirement": "baseline_totals",
+          "first_line": 122,
+          "last_line": 122,
+          "source_text": "    assert total == 4007 and len(receipts) == 120",
+          "UTF8_span_sha256": "e008f6efa7f97554528993eb7df750598da542b6dc425741efb9ecfd3df47b56"
+        },
+        {
+          "requirement": "each_actual_record_adds_exactly_one_new_name",
+          "first_line": 110,
+          "last_line": 115,
+          "source_text": "        for record in records:\n            assert record['name'] not in names\n            names.add(record['name'])\n            assert record['type'] and '\u22ef' not in record['type']\n            assert not record['unsafe'] and not record['partial'] and not record['axiom']\n            assert set(record['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'}",
+          "UTF8_span_sha256": "ba0554f2914283b29f4d7f59081cb1c461d9cf01648016e49f897d7eca15b71c"
+        }
+      ],
+      "derivation": "names starts empty; every actual record must have a previously unseen name and adds that name once. Therefore len(names)==len(records). Existing environment length==len(names)==environment unique length therefore enforces actual-record cardinality and uniqueness; exact set equality prevents omission or extra names. Every module stock log is raw-SHA checked in the same historical module loop."
+    }
+  ],
+  "requirements_already_held": {
+    "every_historical_stock_replay_log_raw_SHA": true,
+    "every_environment_inventory_actual_record_cardinality_and_uniqueness": true,
+    "no_missing_or_extra_names": true,
+    "baseline172_4007_120_preserved": true
+  },
+  "original_predicate_changes": false,
+  "all_originals_immutable_and_exact": true,
+  "race_disposition": {
+    "explanation": "Root clarification arrived after redundant v2 artifacts and CP had been finalized. Preserve completed records without mutation; redundant v2 artifacts are superseded and must not be selected for execution. Originals remain authoritative.",
+    "superseded_CP": "source-reviews/20261021-costalgebra8bff-globalcoverage-v2-proposals-HOLD.json",
+    "superseded_CP_sha256": "f56a28e66b599b20c5f170c84d0463ecbd428d4aef9296db85facbb4a2125324",
+    "superseded_classifier_sha256": "8689dedfa9ae40e4dcd1311545b4d082839e4d1a456243b597d7863e35e9b93f",
+    "superseded_census_sha256": "5caf6ced3befbd9cb79e1b5a6e1a0a6c0aafe39e98dd6ce8137d1762b39f8fb0",
+    "executed": false
+  },
+  "execution": {
+    "static_source_AST_and_hash_inspection_only": true,
+    "proper_rerun": false,
+    "classifier": false,
+    "census": false,
+    "helper": false,
+    "compiler": false,
+    "checker": false,
+    "Lean_source_catalog_Git_mutation": false
+  },
+  "quota": {
+    "fresh_used_percent": 33,
+    "remaining_percent": 67,
+    "stop_remaining_lte": 40,
+    "stop_used_gte": 60
+  },
+  "decision": "HOLD. No validation execution authorized. Weightedprofile remains sole heavy owner."
+}

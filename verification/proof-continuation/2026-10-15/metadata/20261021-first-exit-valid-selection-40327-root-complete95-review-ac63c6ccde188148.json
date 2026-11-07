@@ -1,0 +1,93 @@
+{
+  "status": "ROOT_COMPLETE95_SOURCE4_TRUE_HEADERS_AND_3_PROOFS_READ_NO_MATH_BLOCK_NOT_COMPILED",
+  "created_utc": "2026-10-21T00:34:07.490572+00:00",
+  "module": "ImbalancedChen.FirstExitValidSelection",
+  "source_sha256": "40327d64b355ee84c652ad11f1d1697610c8edb29b1bdc354e34e35bc5d2417f",
+  "whole_source": "import ImbalancedChen.FirstExitGenericModuli\n\n/-!\n# Constructive retained selections\n\nAn ordered chosen sublist is valid exactly when each successive selected\nprefix passes the actual policy. This module constructs the corresponding\nretained leaf, and recovers a valid chosen sublist from every retained leaf.\nIt is finite tree algebra and imposes no density or distribution hypothesis.\n-/\n\nnamespace ImbalancedChen\n\nopen scoped List\n\n/-- Chosen labels are listed in their processing order; the incoming prefix\nis stored in the tree's reverse processing order. -/\ndef FirstExitValidSelection {α : Type*}\n    (retained : Bool → List α → Bool) (pre : List α) (positive : Bool) : List α → Prop\n  | [] => True\n  | p :: ps => retained (!positive) (p :: pre) = true ∧\n      FirstExitValidSelection retained (p :: pre) (!positive) ps\n\ntheorem exists_firstExitRetainedLeaf_of_validSelection\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    {chosen remaining : List α} (hsub : chosen <+ remaining)\n    (pre : List α) (positive : Bool) (mass : ℝ)\n    (hvalid : FirstExitValidSelection retained pre positive chosen) :\n    ∃ leaf ∈ firstExitRetainedLeaves retained h pre positive mass remaining,\n      leaf.selected = chosen.reverse ++ pre := by\n  induction hsub generalizing pre positive mass with\n  | slnil =>\n      exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves], by simp⟩\n  | cons p hsub ih =>\n      obtain ⟨leaf, hleaf, heq⟩ := ih pre positive mass hvalid\n      refine ⟨leaf, ?_, heq⟩\n      rw [firstExitRetainedLeaves]\n      exact List.mem_append_left _ hleaf\n  | cons_cons p hsub ih =>\n      obtain ⟨hleafTest, htail⟩ := hvalid\n      obtain ⟨leaf, hleaf, heq⟩ := ih (p :: pre) (!positive) (mass * h p) htail\n      refine ⟨leaf, ?_, ?_⟩\n      · rw [firstExitRetainedLeaves, if_pos hleafTest]\n        exact List.mem_append_right _ hleaf\n      · simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using heq\n\ntheorem exists_validSelection_of_mem_firstExitRetainedLeaves\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRetainedLeaves retained h pre positive mass remaining) :\n    ∃ chosen : List α, chosen <+ remaining ∧\n      FirstExitValidSelection retained pre positive chosen ∧\n        leaf.selected = chosen.reverse ++ pre := by\n  induction remaining generalizing pre positive mass with\n  | nil =>\n      simp only [firstExitRetainedLeaves, List.mem_singleton] at hleaf\n      subst leaf\n      exact ⟨[], List.Sublist.refl [], trivial, by simp⟩\n  | cons p ps ih =>\n      rw [firstExitRetainedLeaves, List.mem_append] at hleaf\n      rcases hleaf with hskip | hselect\n      · obtain ⟨chosen, hsub, hvalid, heq⟩ := ih pre positive mass hskip\n        exact ⟨chosen, hsub.cons p, hvalid, heq⟩\n      · by_cases hp : retained (!positive) (p :: pre) = true\n        · rw [if_pos hp] at hselect\n          obtain ⟨chosen, hsub, hvalid, heq⟩ :=\n            ih (p :: pre) (!positive) (mass * h p) hselect\n          refine ⟨p :: chosen, hsub.cons_cons p, ⟨hp, hvalid⟩, ?_⟩\n          simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using heq\n        · simp only [if_neg hp, List.not_mem_nil] at hselect\n\n/-- At the root, the actual retained modulus support is precisely the\nproducts of valid chosen sublists. This supplies both directions. -/\ntheorem mem_firstExitRetainedModuli_iff_validSelection\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    d ∈ firstExitRetainedModuli retained carrier ↔\n      ∃ chosen : List ℕ, chosen <+ carrier ∧\n        FirstExitValidSelection retained [] true chosen ∧ chosen.prod = d := by\n  classical\n  unfold firstExitRetainedModuli firstExitRootLeaves\n  simp only [List.mem_toFinset, List.mem_map]\n  constructor\n  · rintro ⟨leaf, hleaf, hprod⟩\n    obtain ⟨chosen, hsub, hvalid, heq⟩ :=\n      exists_validSelection_of_mem_firstExitRetainedLeaves retained (fun _ => 1)\n        [] carrier true 1 leaf hleaf\n    refine ⟨chosen, hsub, hvalid, ?_⟩\n    simpa only [heq, List.append_nil, List.prod_reverse] using hprod\n  · rintro ⟨chosen, hsub, hvalid, hprod⟩\n    obtain ⟨leaf, hleaf, heq⟩ := exists_firstExitRetainedLeaf_of_validSelection\n      retained (fun _ => 1) hsub [] true 1 hvalid\n    exact ⟨leaf, hleaf, by simpa only [heq, List.append_nil, List.prod_reverse] using hprod⟩\n\nend ImbalancedChen\n",
+  "all_literal_headers": [
+    {
+      "name": "FirstExitValidSelection",
+      "kind": "def",
+      "line": 18,
+      "complete_literal_header": "def FirstExitValidSelection {α : Type*}\n    (retained : Bool → List α → Bool) (pre : List α) (positive : Bool) : List α → Prop\n  | [] => True\n  | p :: ps => retained (!positive) (p :: pre) = true ∧\n      FirstExitValidSelection retained (p :: pre) (!positive) ps",
+      "note": "Recursive equation definition has no := delimiter; complete primitive equations are included."
+    },
+    {
+      "name": "exists_firstExitRetainedLeaf_of_validSelection",
+      "kind": "theorem",
+      "line": 24,
+      "complete_literal_header": "theorem exists_firstExitRetainedLeaf_of_validSelection\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    {chosen remaining : List α} (hsub : chosen <+ remaining)\n    (pre : List α) (positive : Bool) (mass : ℝ)\n    (hvalid : FirstExitValidSelection retained pre positive chosen) :\n    ∃ leaf ∈ firstExitRetainedLeaves retained h pre positive mass remaining,\n      leaf.selected = chosen.reverse ++ pre"
+    },
+    {
+      "name": "exists_validSelection_of_mem_firstExitRetainedLeaves",
+      "kind": "theorem",
+      "line": 47,
+      "complete_literal_header": "theorem exists_validSelection_of_mem_firstExitRetainedLeaves\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRetainedLeaves retained h pre positive mass remaining) :\n    ∃ chosen : List α, chosen <+ remaining ∧\n      FirstExitValidSelection retained pre positive chosen ∧\n        leaf.selected = chosen.reverse ++ pre"
+    },
+    {
+      "name": "mem_firstExitRetainedModuli_iff_validSelection",
+      "kind": "theorem",
+      "line": 75,
+      "complete_literal_header": "theorem mem_firstExitRetainedModuli_iff_validSelection\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    d ∈ firstExitRetainedModuli retained carrier ↔\n      ∃ chosen : List ℕ, chosen <+ carrier ∧\n        FirstExitValidSelection retained [] true chosen ∧ chosen.prod = d"
+    }
+  ],
+  "sole_direct_owned_parent": {
+    "module": "ImbalancedChen.FirstExitGenericModuli",
+    "source_sha256": "aeb5adad90208c1e09e186c1008529b113c6b0f8b0870fb82d3b8056bee6efaf",
+    "object_parts": {
+      ".olean": "6800549261e69b52efa1a24cc8709a2f2658c7fb95c1138192964f8401aa4b3c"
+    },
+    "owned_receipt": ".lake/proof-continuation/audits/20261018T033607642793Z/receipt.json",
+    "owned_receipt_sha256": "e9ea439f81a81faf5f3d2be47cf20db105af8986547e482bfc32f214aca013c3",
+    "declarations_json_sha256": "80de69ae86e1829f136b9ef5372b5fe3d0061d41c712e365cff50689817f961e",
+    "complete_serialized_declarations": 28
+  },
+  "actual_generic_source_object_receipt_declaration_identities_rechecked": true,
+  "actual_all28_parent_safety_flags_checked": true,
+  "two_used_generic_fulltypes": [
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.FirstExitGenericModuli",
+      "name": "ImbalancedChen.firstExitRetainedModuli",
+      "partial": false,
+      "type": "(retained : Bool → List.{0} Nat → Bool) → (carrier : List.{0} Nat) → Finset.{0} Nat",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.FirstExitGenericModuli",
+      "name": "ImbalancedChen.firstExitRootLeaves",
+      "partial": false,
+      "type": "{α : Type u_1} →\n  (retained : Bool → List.{u_1} α → Bool) →\n    (h : α → Real) → (carrier : List.{u_1} α) → List.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} α)",
+      "unsafe": false
+    }
+  ],
+  "proof_review": {
+    "definition": "True at empty, recursive parity-flipped policy check before each selected cons; chosen order retained exactly and no density supplier.",
+    "forward": "Induct actual Sublist witness; skip appends left, select checks policy and recurses on prepended prefix with flipped sign and multiplied mass; reverse_cons gives exact selected equality.",
+    "reverse": "Induct actual remaining list; split append skip/select, empty false branch impossible, reconstruct chosen sublist and same recursive validity; equality preserves processing order.",
+    "moduli": "Unfold literal root leaf product image and toFinset; both constructed directions use selected=reverse chosen with empty prefix, List.prod_reverse yields exact natural modulus.",
+    "boundary": "Constructive finite tree equivalence only; no chosen-prime assumption is needed or added, no mean, residual profile, current C/K or main theorem claim."
+  },
+  "census": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021T002833334283Z-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "8070ecd734429cfcaddbee38b4649c65a22f299a9799faa90818e3aba6b8c3f1"
+  },
+  "followup_order": [
+    "FirstExitValidSelection actual original strict+stock+all declarations",
+    "FirstExitFrontierTupleReindex source/actual imports review",
+    "ActualExtendedThirdCompactFrontier explicit TupleReindex import review, old DAG inapplicable"
+  ],
+  "no_source_or_compiler_mutation": true,
+  "independent_review_pending": true
+}

@@ -1,0 +1,143 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "scope": "P3单一最小定量步骤：真实general-D packet按root余类细分后的系数平方和，以及c余类转移成本。数学审阅；heavy=0；无编译/检查/重建；未新增Lean；主目标未完成。",
+  "conclusion": "可闭合的是带任意复权、原门和root标签的有限系数L2界；不能据此宣称原7/32谱界。固定原稿和当前实际行之间尚缺一个可精确陈述的c同余子和谱定理。这里没有发现原稿定理的反例；发现的是两种不合法的接口简化及其精确成本。",
+  "source_binding": {
+    "root": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation",
+    "manuscript_pin": "ba6ec11d800eccc54406490631895e174de85766",
+    "manuscript_body": {
+      "path": "../chen-imbalanced-semiprimes/paper/source/manuscript-body.tex",
+      "git_blob": "d529bea2ecfcc74d64fc1664ac770a3becaa7c79",
+      "sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd"
+    },
+    "appendix": {
+      "path": "../chen-imbalanced-semiprimes/paper/source/modules/distribution-medium-completion-20261010.txt",
+      "git_blob": "19f9672bc9b6d455045213c5e23e10433a9569d2",
+      "sha256": "93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7",
+      "sections": "7, equations (21)-(28); section 4 rough common-factor deletions"
+    },
+    "verification": "两份原稿的native git hash-object等于上述pin的git blob；先从git show阅读固定源。",
+    "files": [
+      [
+        "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+        "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21"
+      ],
+      [
+        "ImbalancedChen/Part3SharedFirstFactorGeneralDRootPacket.lean",
+        "c165d106c362e091d2bd5af56fb5b504b6f8358a79566b8b27f8142a2ec09189"
+      ],
+      [
+        "ImbalancedChen/Part3SharedFirstFactorGeneralDPairedFourier.lean",
+        "26108146f0c7b36e941b2805538ed6a1921bdb4a8fdf3a27eda09d09e28b659a"
+      ],
+      [
+        "ImbalancedChen/Part3SharedFirstFactorGeneralDRowAdapter.lean",
+        "8fbd321c661ca7896978cc3f099288b120b8dcff37d3f076e2cbdc352be0f2ba"
+      ],
+      [
+        "ImbalancedChen/Part3SharedFirstFactorSupportedCoreCauchy.lean",
+        "13a0733609f30d51af3649566b4d85053f866ab785fd35bac3c2f317c95a794e"
+      ],
+      [
+        "ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean",
+        "0f41b856a9f52fa9618f0a10538e9b4cdfd46b3c1c795323da11727b5a92632f"
+      ],
+      [
+        "ImbalancedChen/Part3SmoothReciprocityLogDecayingFourierEnvelope.lean",
+        "1d09f151f7756050003b5ec73c49898f08d747ccce267f77db185d954219c5af"
+      ],
+      [
+        "ImbalancedChen/Part3SharedFirstFactorSmallPairedSupportedReduction.lean",
+        "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13"
+      ],
+      [
+        "ImbalancedChen/Part3NonresonantManuscriptCostAlgebra.lean",
+        "dc943c841bc0d570c9a90d5009d2e05b95ee288209f9a60cb6490142849c5cd2"
+      ]
+    ],
+    "acceptance": "依root状态，RootPacket/SupportedCoreCauchy/Multiplicity/DecayingEnvelope/CostAlgebra为已有已验收输入。PairedFourier/RowAdapter/SupportedRowConsumer仍仅source-reviewed，不能当kernel已验证API。本review不改变该分类。"
+  },
+  "exact_packet": {
+    "definitions": "D=gcd(rs,w), d=gcd(r,D), q=D/d, r0=r/d, t=s/q,t'=s'/q; g=gcd(N1,N2), d1=supportedPart(N1/g,g), n1=coprimePart(N1/g,g),n2=N2/g,A=g*d1; w0=w/D,b=A*n2*r0,c=n1*w0,J=p*D*r0,K=J*w0,f=(d1*n1-n2)/(pD),z=t*t'.",
+    "phase": "对每个signed分支k=epsilon*h*t' - epsilon'*h'*t，packet=e(-a*k*inverse(J*c*z;A)/A) * e(a*k/(A*J*c*z)) * e(a*f*k*inverse(b*z;c)/c)。这里N1*K=A*J*c。该改写保留全部三个因子。",
+    "licensing": "RootPacket实际CRT分支给出(J*c,A)=1、(t*t',A*c)=1、(b,c)=1；故c,J,z均为mod A单位。A=1按平凡余类处理。",
+    "gates_and_amplitudes": "两个gcd=D门、两个Compatible门、h=0振幅归零、gamma2(s)*conj(gamma2(s'))、低通和复Poisson振幅均保持。四分支振幅分别为alpha*conj(beta), alpha*beta, conj(alpha)*conj(beta), conj(alpha)*beta，统一外系数1/4。原nonresonant门排除h*s'=±h'*s，故四个k均非零。不得先把signed非共振Gram当PSD。"
+  },
+  "candidates": [
+    {
+      "name": "直接合并为一个与c无关的beta(y,z)",
+      "verdict": "不成立，除非先固定f并处理c依赖；不能只用|root|=1删除振荡核中的root。",
+      "obstruction": "y=f*k，跨f碰撞时k不是(y,z)的函数；即使固定f，root仍依赖c mod A。原slow也依赖c，只有在正确的共同Fourier表示后才可转成标量权。",
+      "exact_arithmetic_counterexample": "p=r=D=1,N1=3,N2=6,t=7,t'=8,h=h'=1,a=1。则A=3,J=1,f=-1,k=1,z=56,b=6。取w=c=11或13，两行全部CRT/gcd门成立，t,t'为A*c单位；root分别e(-1/3)、e(-2/3)，而(y,z)=(-1,56)相同。这反驳无c标签的直接吸收，不是原稿全局admissible定理反例。两种slow分别e(1/(3*11*56))、e(1/(3*13*56))，也不得抹去。"
+    },
+    {
+      "name": "固定p,D,r0,N1,N2，按c mod A单位类分组，并保留k标签",
+      "verdict": "有限分组和以下定量系数界成立；到谱估计仍HOLD。",
+      "transfer": "在c≡j mod A的原子和中root变为R_j(k,z)=e(-a*k*inverse(J*j*z;A)/A)，只依赖j,k,z；slow仍为e(a*k/(A*J*c*z))。固定f时k=y/f，可入beta_j(y,z)；合并f时须保留k mod A的标签r，root只依赖j,r,z。实际c同余mask不能删除。",
+      "cost": "设m为出现的单位类数≤phi(A)，K_j为完整保留门和slow的实际子核。无条件有|sum_j K_j|²≤m*sum_j|K_j|²。若以后每类同一谱成本为T，则每类|K_j|≤sqrt(T)只推出|K|≤m*sqrt(T)，不是sqrt(m)*sqrt(T)。这是未来成本核对，不把该谱界列作本轮引理假设。一个(y,z)系数可在所有j重复：beta_j=root_j*beta时sum_j||beta_j||²=m||beta||²，故第二个sqrt(m)不能凭分区消失。"
+    }
+  ],
+  "selected_quantitative_lemma": {
+    "name": "weighted_refined_signedDifference_L2",
+    "full_statement": "S,H,F≥1, nu≥1。令T=sourceCarrier S H F，out(v)=(z,y)为既有output，任意U⊆T，任意映射ell:U→有限标签集R，任意w:U→C及M≥0满足|w(v)|≤M。定义B(r,z,y)=sum_{v∈U:ell(v)=r,out(v)=(z,y)} w(v)。则 sum_{r∈ell(U)} sum_{(z,y)∈out(T),nu|y}|B(r,z,y)|² ≤ M²*576*divisorMaximum(S,H,F)^5*harmonic(floor(2S))*(1+H/S)*(HS)²*F/nu。若nu≥8FHS则左边=0。ell可取原signed branch之外的k mod A、原门的额外分块或其组合；没有额外F或|R|损失。",
+    "proof": [
+      "对每个(r,z,y)，三角不等式给|B|≤M*m_r，其中m_r是该真子纤维基数；这一步仍使用完整复权，未改变实际振荡和。",
+      "固定(z,y)，标签子纤维不交，sum_r m_r=m_U≤m_T=multiplicity(S,H,F,z,y)。非负数满足sum_r m_r²≤(sum_r m_r)²≤m_T²。",
+      "乘M²并仅对nu|y求和，得到左边≤M²*multiplicityL2(S,H,F,nu)。调用已有signedDifference_multiplicityL2_bound，得到所述576显式界；它已包含跨f碰撞且F只出现一次。",
+      "原nonzero y支持给0<|y|<8FHS；若nu≥8FHS且nu|y不可能，所以所有对应B为0。也可调用已有multiplicityL2端点归零。",
+      "四signed分支分别用同一界。若四权经同一M归一，完整1/4平均满足|(B1+B2+B3+B4)/4|²≤(sum_i|Bi|²)/4；因此四分支整体不会凭空多付16。若振幅上界不同，逐项保留Mi，不能把它们当一界。"
+    ],
+    "actual_use_and_boundary": "w可包含原gcd/CRT零一门、gamma2、全部root/slow及复振幅，界对每个外部(b,c)和Fourier参数逐点有效。若已有共同点态包络E(xi)则取M=E(xi)，保持积分次序；不使用sup∫代∫sup。但这不自动产生与b,c独立的beta。实际s=q*t的闭端点carrier、signed f→正f重标记及公共Fourier表示仍需显式构造；不能把T的半开dyadicCarrier直接认作当前闭区间factorCarrier。此引理是最小可实现定量子步骤，不声称完整实际核已嵌入T。",
+    "no_hidden_supplier": "仅假设逐项复权界和明确有限集合包含关系；不假设原谱界、目标operator norm、PSD非共振比较或已有数值结论。"
+  },
+  "complete_cost_audit": {
+    "threshold": "当前deletedPairedSupportedNonzero_log_payment及SupportedRowConsumer确用Ybeta=Ysupport=x^(sigma/4)。在Co≠0支持，A≤Ybeta*Ysupport=x^(sigma/2)。这不是x^o(1)，也不能由roughness直接令A=1。",
+    "place_of_loss": "假定未来c类谱定理以原(25)同一多项式、常数对A,j一致，先在未分组原carrier支付共振Diag，非零二次核K类和保守收费phi(A)≤A。W=P*sqrt(Diag+|K|)中的谱项因此增加A^(1/2)≤x^(sigma/4)，Diag不收费。若在更早的未分离平方上分组，Diag亦须收费，本audit没有采用该方案。",
+    "exponents": [
+      "原diag：-4sigma+5kappa+epsilon。未受此次root分组影响；kappa≤sigma/100后≤-79sigma/20+epsilon。",
+      "原spectral：-15sigma/4+21kappa/4+epsilon。增加sigma/4后为-7sigma/2+21kappa/4+epsilon≤-1379sigma/400+epsilon。",
+      "依原稿(27)后的同一总预算，所有可选epsilon、genuine subpowers和那一个D归一化因子合计≤sigma/10，则diag≤-77sigma/20，spectral≤-1339sigma/400；二者均严格小于-sigma/2。",
+      "所以若上述c类谱定理成立且没有额外未计的A损失，原E3目标N²/Q*x^(-sigma/2)仍可达；sum_{d~D}1/d=O(1)及已列一次D给原E2=N²/(DQ)*x^(-sigma/2)。不再另收D或5kappa。",
+      "E1(20)未变；代入原dispersion仍保有文中x^(1-sigma/4)指数项，exact-product恢复x^(1-sigma/6+o(1))未变。固定sigma>0的任一正幂节省可支付任意固定log精度及固定有限dyadic/log次数；预备SW/截断误差须仍用其单独任意log界，不能声称全误差统一幂节省。"
+    ],
+    "limits": "这只是把新增phi(A)成本逐项放回原参数范围，不能据此宣布原证明或当前实现已闭合。原Diag和Spec均已含F=U/Q，以上未重复收费。未缩小kappa范围，未把>N^(1/2)区间改为经典BV。"
+  },
+  "exact_remaining_theorem": {
+    "statement": "须对Appendix(25)的实际平滑互逆核，在1≤A≤x^(sigma/2)、(J,A)=1、j∈(Z/AZ)^×时，保留1_{c≡j mod A}、(b z,c)=1、(a,z)=1、原复beta及root标签，并在完整slow的合法共同Fourier分离后，证明与(25)相同的二次多项式界，常数对A,j一致（或给出明确可支付的额外A幂）。共同completed m区间和共同additive phase必须保持。该定理还须与真实外层gcd/CRT结构兼容；仅有点态系数L2界不够。",
+    "why_not_restriction": "c和是带符号振荡和。未受限核的界不蕴含任何同余子和界：两个c标签取贡献1,-1时全和0而一个类子和1。不能用full positive row Gram的正性替代这个signed非零核，也不能把同余指示当固定光滑权，其归一化导数并无已有统一界。",
+    "manuscript_distinction": "固定原稿第4节先用rough common-factor删除(n1,n2)>1，再处理其bare sum。当前general-D路径保留小g和supported part，尚未重现那个删除。因此上述新增c类谱需求属于这条实现路线的明确障碍；它本身不是原稿第7节已经被反驳。"
+  },
+  "native_api_review": {
+    "resolution": "实际runtime-81635b52f3b62dfe.py的rt.packages来自本工程lake-manifest.json，provider根为/home/slava/codex-lean-ve/native-packages；本轮经UNC读取，未运行Runtime构造或任何compiler/checker。",
+    "pins": {
+      "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+      "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "verification": "native Windows git rev-parse HEAD均相符"
+    },
+    "usable": [
+      "ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity.signedDifference_multiplicityL2_bound：完整signed频率、positive f、所有nu的576显式界及真实端点归零。",
+      "Mathlib/Analysis/Normed/Group/Basic.lean:829 norm_sum_le；Mathlib/Algebra/Order/BigOperators/Ring/Finset.lean:35 Finset.sum_sq_le_sq_sum_of_nonneg；Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean:985 Finset.card_eq_sum_card_fiberwise。均直接支持选中引理。",
+      "已有smallCoreSquared_supported_Cauchy和supported product_le保留真实Co≠0支持；已有decaying_fourier_pointwise_envelope及kernel_integrable给共同点态包络。不能把source-only三文件算已验证前提。"
+    ],
+    "insufficient": [
+      "native goldbach MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCompleteWeil.lean:31 completeKloosterman_weil、:48 reciprocalInterval_fouvry确为无外加Weil假设的by证明（该文件sha256=25088c4a18042c9da4d0673e048c2a2d14555b60bdc0c847de0d91b085b95baf）。它们给单个modulus的sqrt(q*gcd)界，既无level-average theta=7/32收益，也无上述c类平均；不能冒充(25)。",
+      "LiLiuPrereqFouvryGramAggregateBound.wSeparatedCorrelationEnergy_fouvry给其特定同first-index、共同modulus=n*r*s*s'的逐项Fouvry成本。当前packet的modulus、三相及外层mask不同，源码没有本任务所需supplier。",
+      "限定搜索native goldbach/MathlibNt与mathlib/Mathlib/NumberTheory中的Kuznetsov/Pascadi/Assing-Blomer/Kim-Sarnak/spectral large sieve未找到接口。该搜索结果不是全库不存在定理的kernel证明；本轮未找到可直接复用的可靠0sorry强谱producer，也未作外部未核验声明。"
+    ]
+  },
+  "next_bounded_lean_task": {
+    "target": "仅实现weighted_refined_signedDifference_L2及其nu端点归零，使用现有sourceCarrier/output与任意有限label，证明上述明确576界。可另在同一小文件陈述实际packet的c余类精确重写作为应用接口，但不把它当谱进展。",
+    "implementation": "先证norm加权纤维≤M*card；用card_eq_sum_card_fiberwise及sum_sq_le_sq_sum_of_nonneg把细分能量压到multiplicityL2；最后调用既有signedDifference_multiplicityL2_bound。无需新axiom/sorry、无目标谱norm假设。只依赖已验收Multiplicity和mathlib；不导入三个source-only适配器。",
+    "stop_condition": "有限系数界实现后停止。下一真正分析任务只应是上述c类谱定理，或独立验证原稿rough common-factor删除能否在当前门和阈值下消除A；本review没有授权展开第三路线。",
+    "status": "仅完整数学陈述和证明；未生成Lean源码，uncompiled，待root另授。"
+  },
+  "accounting": {
+    "heavy": 0,
+    "quota_last_used_percent": 39,
+    "quota_last_remaining_percent": 61,
+    "stop_threshold_remaining_percent": 40,
+    "main_completion": false,
+    "manual_completion_percent_unchanged": 30
+  }
+}

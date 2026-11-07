@@ -1,0 +1,338 @@
+{
+  "kind": "source_text_extraction_not_compiler_verification",
+  "fixed_commit": "3d5dd058cf6bef5fe90719ee277580baf8b5bf41",
+  "source_proof_checkpoint": "262f69822a386a9d44efc059bceba11049668d68",
+  "extracted_at_utc": "2026-10-12T12:01:44.646129+00:00",
+  "files": [
+    {
+      "module": "ActualUpperPolicyDensity",
+      "path": "ImbalancedChen/ActualUpperPolicyDensity.lean",
+      "sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6",
+      "git_blob_sha1": "487f13707ee13159cd7f161879b5a2e44ffb8c19",
+      "imports": [
+        "import ImbalancedChen.ActualFirstExitDensityProjection",
+        "import ImbalancedChen.ActualSelectedPrefixOwnCubeIntegral",
+        "import ImbalancedChen.FirstExitHistoricalLevels"
+      ],
+      "signatures": [
+        {
+          "name": "oddFirstExitPolicy_eq_of_even_retained",
+          "line": 27,
+          "signature": "theorem oddFirstExitPolicy_eq_of_even_retained {α : Type*}\n    (retained : Bool → List α → Bool)\n    (heven : ∀ pre, retained true pre = true) :\n    oddFirstExitPolicy (retained false) = retained"
+        },
+        {
+          "name": "fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained",
+          "line": 36,
+          "signature": "theorem fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    fixedRoughSupport (retained false) N cap w z =\n      firstExitRetainedModuli retained (roughPrimeUniverse N cap w z)"
+        },
+        {
+          "name": "fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained",
+          "line": 48,
+          "signature": "theorem fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    fixedRoughCoefficient (retained false) N cap w z d =\n      (firstExitRetainedCoefficient retained (roughPrimeUniverse N cap w z) d : ℝ)"
+        },
+        {
+          "name": "actualSmallRoughModuli_eq_firstExitAttachment",
+          "line": 62,
+          "signature": "theorem actualSmallRoughModuli_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    actualSmallRoughModuli (retained false) N cap w z =\n      smallRoughModuli (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))"
+        },
+        {
+          "name": "actualSmallRoughRho_eq_firstExitAttachment",
+          "line": 76,
+          "signature": "theorem actualSmallRoughRho_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z L : ℝ) :\n    actualSmallRoughRho (retained false) N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient retained\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained",
+          "line": 95,
+          "signature": "theorem firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    firstExitRetainedPolynomial retained\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N cap w z) =\n      reciprocalTotientDensity (fixedRoughSupport (retained false) N cap w z)\n        (fixedRoughCoefficient (retained false) N cap w z)"
+        },
+        {
+          "name": "fixedRoughDensity_nonneg",
+          "line": 112,
+          "signature": "theorem fixedRoughDensity_nonneg\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    0 ≤ reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)\n      (fixedRoughCoefficient retainOdd N cap w z)"
+        },
+        {
+          "name": "firstExitDepthSplicePolicy_even_retained",
+          "line": 127,
+          "signature": "theorem firstExitDepthSplicePolicy_even_retained {α : Type*} (k : ℕ)\n    (parent replacement : Bool → List α → Bool)\n    (hparent : ∀ pre, parent true pre = true)\n    (hreplacement : ∀ pre, replacement true pre = true) (pre : List α) :\n    firstExitDepthSplicePolicy k parent replacement true pre = true"
+        },
+        {
+          "name": "actualSelectedPrefixSplicePolicy_upper_even",
+          "line": 136,
+          "signature": "@[simp] theorem actualSelectedPrefixSplicePolicy_upper_even {d : ℕ} (N : ℝ)\n    (I : Finset (Fin d)) (old nu a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1))) (pre : List ℕ) :\n    actualSelectedPrefixSplicePolicy false N I old nu a b m J true pre = true"
+        },
+        {
+          "name": "thirdCappedUpperPolicy_even_retained",
+          "line": 147,
+          "signature": "theorem thirdCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    thirdCappedUpperPolicy base Q3 true pre = true"
+        },
+        {
+          "name": "fourthCappedUpperPolicy_even_retained",
+          "line": 156,
+          "signature": "theorem fourthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fourthCappedUpperPolicy base Q3 Q4 true pre = true"
+        },
+        {
+          "name": "fifthCappedUpperPolicy_even_retained",
+          "line": 167,
+          "signature": "theorem fifthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fifthCappedUpperPolicy base Q3 Q5 true pre = true"
+        },
+        {
+          "name": "actualSelectedPrefixUpperDensity_eq_fixedRoughDensity",
+          "line": 180,
+          "signature": "theorem actualSelectedPrefixUpperDensity_eq_fixedRoughDensity\n    (N cap : ℕ) (I : Finset (Fin 5)) (old nu a b : ℚ)\n    (m : ℕ) (J : Finset (Fin 5 → Fin (m + 1))) :\n    actualSelectedPrefixUpperDensity N cap I old nu a b m J =\n      reciprocalTotientDensity\n        (fixedRoughSupport\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))\n        (fixedRoughCoefficient\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))"
+        }
+      ]
+    },
+    {
+      "module": "UpperCoefficientPerturbation",
+      "path": "ImbalancedChen/UpperCoefficientPerturbation.lean",
+      "sha256": "59b45cfb13444beee297beec05b6d2153d7207db4f9bd96a8652260eaa57bcef",
+      "git_blob_sha1": "498d09cf1bb960fc5cdd5d811e84f947a651bdc4",
+      "imports": [
+        "import ImbalancedChen.ActualSmallRoughAttachment"
+      ],
+      "signatures": [
+        {
+          "name": "abs_signAttachedValue_sub_le",
+          "line": 40,
+          "signature": "theorem abs_signAttachedValue_sub_le\n    {c d lo hi M : ℝ} (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signAttachedValue c lo hi - signAttachedValue d lo hi| ≤ M * |c - d|"
+        },
+        {
+          "name": "signSensitiveReciprocalTotientDensity_eq_sum_attached",
+          "line": 56,
+          "signature": "theorem signSensitiveReciprocalTotientDensity_eq_sum_attached\n    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi : ℝ) :\n    signSensitiveReciprocalTotientDensity rough c lo hi =\n      ∑ d ∈ rough, signAttachedValue (c d) lo hi / (Nat.totient d : ℝ)"
+        },
+        {
+          "name": "abs_signSensitiveReciprocalTotientDensity_sub_le",
+          "line": 67,
+          "signature": "theorem abs_signSensitiveReciprocalTotientDensity_sub_le\n    (rough : Finset ℕ) (compiled raw : ℕ → ℝ) {lo hi M : ℝ}\n    (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signSensitiveReciprocalTotientDensity rough compiled lo hi -\n        signSensitiveReciprocalTotientDensity rough raw lo hi| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)"
+        },
+        {
+          "name": "abs_physicalDensitySum_smallRoughRho_sub_le",
+          "line": 96,
+          "signature": "theorem abs_physicalDensitySum_smallRoughRho_sub_le\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) {M : ℝ}\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M) :\n    |physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough compiled betaMinus betaPlus) -\n        physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough raw betaMinus betaPlus)| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)"
+        },
+        {
+          "name": "supportedDivisorSum_le_of_coefficient_le",
+          "line": 114,
+          "signature": "theorem supportedDivisorSum_le_of_coefficient_le\n    (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d) (n : ℕ) :\n    supportedDivisorSum rough raw n ≤ supportedDivisorSum rough compiled n"
+        },
+        {
+          "name": "actualAttachedRho_majorant_of_rough_domination",
+          "line": 126,
+          "signature": "theorem actualAttachedRho_majorant_of_rough_domination\n    (N cap : ℕ) (w z L : ℝ) (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (hraw : ∀ n : ℤ, actualIntervalRoughIndicator N w z n ≤\n      supportedDivisorSum rough raw n.natAbs)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ))\n    (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough compiled\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n.natAbs"
+        }
+      ]
+    },
+    {
+      "module": "ActualUpperDensityAssembly",
+      "path": "ImbalancedChen/ActualUpperDensityAssembly.lean",
+      "sha256": "241eaf65d39385e9f556a80184b25b0b2c2f67503922ec03f6a55b15c646ef3d",
+      "git_blob_sha1": "80ec53545eeb91ccdc172d7072c6568c1dc01c5d",
+      "imports": [
+        "import ImbalancedChen.ActualFirstExitDensityProjection",
+        "import ImbalancedChen.UpperCoefficientPerturbation",
+        "import ImbalancedChen.CurrentNumericalTransfer"
+      ],
+      "signatures": [
+        {
+          "name": "sourceMassScale_mul_densityScale",
+          "line": 29,
+          "signature": "theorem sourceMassScale_mul_densityScale (N : ℕ) :\n    ((N : ℝ) / Real.log (N : ℝ)) *\n        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N"
+        },
+        {
+          "name": "densityScale_pos",
+          "line": 35,
+          "signature": "theorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :\n    0 < singularSeries N / Real.log (N : ℝ)"
+        },
+        {
+          "name": "density_le_manuscriptScale_iff_normalized",
+          "line": 41,
+          "signature": "theorem density_le_manuscriptScale_iff_normalized {N : ℕ}\n    (hN : 2 ≤ N) (density coefficient : ℝ) :\n    density ≤ coefficient * (singularSeries N / Real.log (N : ℝ)) ↔\n      density * Real.log (N : ℝ) / singularSeries N ≤ coefficient"
+        },
+        {
+          "name": "same_rho_normalized_mainTerm",
+          "line": 51,
+          "signature": "theorem same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)\n    (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (mass * physicalDensitySum Q rho) / singularNormalization N =\n      (mass * Real.log (N : ℝ) / (N : ℝ)) *\n        (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N)"
+        },
+        {
+          "name": "exists_actualSmallRoughRho_density_le_of_full_policy_limits",
+          "line": 69,
+          "signature": "theorem exists_actualSmallRoughRho_density_le_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound densityCap : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < densityCap) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          densityCap * (singularSeries N / Real.log (N : ℝ))"
+        },
+        {
+          "name": "exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits",
+          "line": 147,
+          "signature": "theorem exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < currentK) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          currentK * (singularSeries N / Real.log (N : ℝ))"
+        },
+        {
+          "name": "compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget",
+          "line": 183,
+          "signature": "theorem compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget\n    {N : ℕ} (hN : 2 ≤ N) {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) (M rawBound compilerReserve : ℝ)\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M)\n    (hraw : physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough raw betaMinus betaPlus) ≤\n      rawBound * (singularSeries N / Real.log (N : ℝ)))\n    (hcompiler : M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤\n      compilerReserve * (singularSeries N / Real.log (N : ℝ)))\n    (hbudget : rawBound + compilerReserve ≤ currentK) :\n    physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough compiled betaMinus betaPlus) *\n        Real.log (N : ℝ) / singularSeries N ≤ currentK"
+        }
+      ]
+    },
+    {
+      "module": "RealPhysicalUpperWeightBridge",
+      "path": "ImbalancedChen/RealPhysicalUpperWeightBridge.lean",
+      "sha256": "f82e567435a61125c6972da1f2c1430ff946bbd44bd9b5538bd9a6003382ea9d",
+      "git_blob_sha1": "9fcdf562291c27cb75c8a102e6dcafddf1200905",
+      "imports": [
+        "import ImbalancedChen.PhysicalUpperWeightBridge",
+        "import ImbalancedChen.RealHalfProductSource",
+        "import ImbalancedChen.CurvedRegionDiscrepancy",
+        "import ImbalancedChen.ActualSmallRoughAttachment"
+      ],
+      "signatures": [
+        {
+          "name": "realHalfProductSource_filter_dvd_eq_filter_modEq",
+          "line": 55,
+          "signature": "theorem realHalfProductSource_filter_dvd_eq_filter_modEq\n    (b : ℝ) (N d : ℕ) (T : ℝ) :\n    (realHalfProductSource b N T).filter (fun m : ℕ => d ∣ N - m) =\n      (realHalfProductSource b N T).filter (fun m : ℕ => Nat.ModEq d m N)"
+        },
+        {
+          "name": "sum_physicalDivisorSum_realHalfProductSource",
+          "line": 65,
+          "signature": "theorem sum_physicalDivisorSum_realHalfProductSource\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ m ∈ realHalfProductSource b N T,\n      physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d"
+        },
+        {
+          "name": "sum_rho_mul_realHalfProductCongruenceMass_eq",
+          "line": 83,
+          "signature": "theorem sum_rho_mul_realHalfProductCongruenceMass_eq\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d) =\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho"
+        },
+        {
+          "name": "mem_realSiftedHalfProductSource",
+          "line": 101,
+          "signature": "@[simp] theorem mem_realSiftedHalfProductSource {b T : ℝ} {N m z : ℕ} :\n    m ∈ realSiftedHalfProductSource b N T z ↔\n      m ∈ realHalfProductSource b N T ∧\n        Nat.Coprime (N - m) (sieveProduct N z)"
+        },
+        {
+          "name": "realSiftedHalfProductSource_card_le_sum_physicalDivisorSum",
+          "line": 110,
+          "signature": "theorem realSiftedHalfProductSource_card_le_sum_physicalDivisorSum\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)"
+        },
+        {
+          "name": "realSiftedHalfProductSource_card_le_same_rho_main_add_errors",
+          "line": 127,
+          "signature": "theorem realSiftedHalfProductSource_card_le_same_rho_main_add_errors\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho"
+        },
+        {
+          "name": "realHalfProductSource_primePartner_card_le_realSifted_add_cap",
+          "line": 146,
+          "signature": "theorem realHalfProductSource_primePartner_card_le_realSifted_add_cap\n    (b : ℝ) (N z : ℕ) (T : ℝ) :\n    ((realHalfProductSource b N T).filter\n      (fun m => m < N ∧ Nat.Prime (N - m))).card ≤\n      (realSiftedHalfProductSource b N T z).card + z"
+        },
+        {
+          "name": "RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff",
+          "line": 183,
+          "signature": "theorem RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (hb : b < 1) (hT : 0 ≤ T) :\n    (RealB b N : ℝ) ≤\n      ((realSiftedHalfProductSource b N T z).card : ℝ) + (z : ℝ) + (T + 1)"
+        },
+        {
+          "name": "RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff",
+          "line": 197,
+          "signature": "theorem RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1)"
+        },
+        {
+          "name": "RealB_cast_le_same_rho_main_add_errors",
+          "line": 213,
+          "signature": "theorem RealB_cast_le_same_rho_main_add_errors\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)"
+        },
+        {
+          "name": "realHalfProductSource_prime_divisor_rough",
+          "line": 230,
+          "signature": "theorem realHalfProductSource_prime_divisor_rough\n    {b T : ℝ} {N m ell : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hm : m ∈ realHalfProductSource b N T)\n    (hell : Nat.Prime ell) (hdvd : ell ∣ m) :\n    T ^ (b / (1 + b)) < (ell : ℝ)"
+        },
+        {
+          "name": "realHalfProductSource_coprime_of_dvd_sieveProduct",
+          "line": 247,
+          "signature": "theorem realHalfProductSource_coprime_of_dvd_sieveProduct\n    {b T : ℝ} {N m z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hm : m ∈ realHalfProductSource b N T) (hd : d ∣ sieveProduct N z) :\n    Nat.Coprime m d"
+        },
+        {
+          "name": "realHalfProductCoprimeMass_eq_card_of_gate",
+          "line": 266,
+          "signature": "theorem realHalfProductCoprimeMass_eq_card_of_gate\n    {b T : ℝ} {N z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b))) (hd : d ∣ sieveProduct N z) :\n    realHalfProductCoprimeMass b N T d =\n      ((realHalfProductSource b N T).card : ℝ)"
+        },
+        {
+          "name": "realPhysicalCoprimeCorrection_eq_zero_of_gate",
+          "line": 281,
+          "signature": "theorem realPhysicalCoprimeCorrection_eq_zero_of_gate\n    {b T : ℝ} {N z : ℕ} (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hT : 0 < T) (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z) :\n    realPhysicalCoprimeCorrection b N T Q rho = 0"
+        },
+        {
+          "name": "RealB_cast_le_same_rho_main_add_distribution_of_gate",
+          "line": 296,
+          "signature": "theorem RealB_cast_le_same_rho_main_add_distribution_of_gate\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hb1 : b < 1) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)"
+        },
+        {
+          "name": "sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass",
+          "line": 314,
+          "signature": "theorem sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d"
+        },
+        {
+          "name": "sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors",
+          "line": 337,
+          "signature": "theorem sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d"
+        },
+        {
+          "name": "RealB_cast_le_same_rho_outer_main_add_errors",
+          "line": 358,
+          "signature": "theorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1)"
+        },
+        {
+          "name": "actualSmallPrimeFinset_eq_sievePrimes_ceil",
+          "line": 414,
+          "signature": "theorem actualSmallPrimeFinset_eq_sievePrimes_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeFinset N cap z = sievePrimes N (Nat.ceil z)"
+        },
+        {
+          "name": "actualSmallPrimeProduct_eq_sieveProduct_ceil",
+          "line": 427,
+          "signature": "theorem actualSmallPrimeProduct_eq_sieveProduct_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeProduct N cap z = sieveProduct N (Nat.ceil z)"
+        },
+        {
+          "name": "actualSmallRoughIndicator_eq_sieveProduct_natAbs",
+          "line": 436,
+          "signature": "theorem actualSmallRoughIndicator_eq_sieveProduct_natAbs\n    (N : ℕ) (z : ℝ) (n : ℤ) :\n    actualSmallRoughIndicator N z n =\n      if Nat.Coprime n.natAbs (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0"
+        },
+        {
+          "name": "actualSmallRoughRho_sieveProduct_majorant",
+          "line": 451,
+          "signature": "theorem actualSmallRoughRho_sieveProduct_majorant\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)\n    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :\n    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n"
+        },
+        {
+          "name": "actualSmallRosserSupport_dvd_sieveProduct_ceil",
+          "line": 466,
+          "signature": "theorem actualSmallRosserSupport_dvd_sieveProduct_ceil\n    (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRosserSupport N cap w) :\n    d ∣ sieveProduct N (Nat.ceil z)"
+        },
+        {
+          "name": "fixedRoughSupport_dvd_sieveProduct_ceil",
+          "line": 487,
+          "signature": "theorem fixedRoughSupport_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)"
+        },
+        {
+          "name": "actualSmallRoughModuli_dvd_sieveProduct_ceil",
+          "line": 505,
+          "signature": "theorem actualSmallRoughModuli_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRoughModuli retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)"
+        },
+        {
+          "name": "RealB_cast_le_actualSmallRoughRho_main_add_errors",
+          "line": 523,
+          "signature": "theorem RealB_cast_le_actualSmallRoughRho_main_add_errors\n    {b T : ℝ} (N cap : ℕ) (retainOdd : List ℕ → Bool) (w z L : ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) *\n        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n          (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) + (Nat.ceil z : ℝ) + (T + 1)"
+        }
+      ]
+    },
+    {
+      "module": "RealUpperCountingAssembly",
+      "path": "ImbalancedChen/RealUpperCountingAssembly.lean",
+      "sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
+      "git_blob_sha1": "6e6843444cafa0e1d51a903981da0092983d2ac0",
+      "imports": [
+        "import ImbalancedChen.ActualUpperDensityAssembly",
+        "import ImbalancedChen.RealPhysicalUpperWeightBridge",
+        "import ImbalancedChen.RealHalfProductMassSuppliers",
+        "import ImbalancedChen.PowerErrorBudget"
+      ],
+      "signatures": [
+        {
+          "name": "eventually_RealB_le_currentK_log_of_same_rho_inputs",
+          "line": 39,
+          "signature": "theorem eventually_RealB_le_currentK_log_of_same_rho_inputs\n    {b kappa sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)\n    (hsieve : sieveExponent < 1)\n    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)\n    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)\n    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      physicalDensitySum (Q delta N) (rho delta N) ≤\n        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))\n    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)\n    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →\n      (RealB b N : ℝ) ≤\n        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N"
+        }
+      ]
+    }
+  ]
+}

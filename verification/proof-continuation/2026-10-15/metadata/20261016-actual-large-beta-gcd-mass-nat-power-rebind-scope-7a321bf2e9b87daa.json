@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T19:06:19.877205+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_PROOF_REBIND_PASS",
+  "candidate": {
+    "path": "ImbalancedChen/Part3ActualLargeGCDBetaMass.lean",
+    "sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+    "source_declaration_count": 13
+  },
+  "rebind": {
+    "prior_source_sha256": "cd729a9dccde853db97d0e95318aaf4c19602646c0b8f87f29ee03d601b88e4a",
+    "prior_report": ".lake/proof-continuation/source-reviews/20261016-actual-large-beta-gcd-mass-proof-repair-scope.json",
+    "prior_report_sha256": "9fc0ed3dca4e41335cea75fa8075df5389adb46080cfc43ec7f0507892c03952",
+    "exact_single_proof_edit_reverse_reconstruction": true,
+    "all_13_declaration_headers_identical": true,
+    "imports_identical": true,
+    "all_other_source_bytes_identical": true,
+    "repair": "Replaces the k=2^B positivity tactic argument by Nat.one_le_iff_ne_zero.mpr (pow_ne_zero B (by norm_num)); wraps the unchanged next argument onto its own line. No statement or mathematical definition is changed.",
+    "author_reported_runtime_trigger": "The author reports first owned runtime diagnostic at the prior positivity proof of 1 <= 2^B. This review did not independently invoke runtime or validate the diagnostic."
+  },
+  "all_source_headers": [
+    {
+      "kind": "theorem",
+      "name": "gcd_le_divisor_sum",
+      "private": false,
+      "line": 37,
+      "header": "theorem gcd_le_divisor_sum {a : ℕ} (ha : a ≠ 0) (n : ℕ) :\n    a.gcd n ≤ ∑ d ∈ a.divisors, if d ∣ n then d else 0"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_divisor_majorant",
+      "private": false,
+      "line": 48,
+      "header": "theorem sum_divisor_majorant (a N : ℕ) :\n    (∑ n ∈ Ioc 0 N, ∑ d ∈ a.divisors, if d ∣ n then d else 0) =\n      ∑ d ∈ a.divisors, d * (N / d)"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_gcd_le_divisor_floor",
+      "private": false,
+      "line": 57,
+      "header": "theorem sum_gcd_le_divisor_floor {a : ℕ} (ha : a ≠ 0) (N : ℕ) :\n    (∑ n ∈ Ioc 0 N, a.gcd n) ≤ ∑ d ∈ a.divisors, d * (N / d)"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_gcd_le",
+      "private": false,
+      "line": 64,
+      "header": "theorem sum_gcd_le {a : ℕ} (ha : a ≠ 0) (N : ℕ) :\n    (∑ n ∈ Ioc 0 N, a.gcd n) ≤ N * a.divisors.card"
+    },
+    {
+      "kind": "def",
+      "name": "largeGCDPairs",
+      "private": false,
+      "line": 73,
+      "header": "def largeGCDPairs (N : Finset ℕ) (Y : ℝ) : Finset (ℕ × ℕ)"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_gcd_pairs_le_log",
+      "private": false,
+      "line": 77,
+      "header": "theorem sum_gcd_pairs_le_log {T : ℝ} (hT : 1 ≤ T)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊) :\n    (∑ p ∈ N ×ˢ N, (p.1.gcd p.2 : ℝ)) ≤ T ^ 2 * (1 + Real.log T)"
+    },
+    {
+      "kind": "theorem",
+      "name": "card_largeGCDPairs_le",
+      "private": false,
+      "line": 104,
+      "header": "theorem card_largeGCDPairs_le {T Y : ℝ} (hT : 1 ≤ T) (hY : 0 < Y)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊) :\n    ((largeGCDPairs N Y).card : ℝ) ≤ T ^ 2 * (1 + Real.log T) / Y"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_abs_pair_mul_le_sqrt_card",
+      "private": false,
+      "line": 120,
+      "header": "theorem sum_abs_pair_mul_le_sqrt_card {ι : Type*}\n    (N : Finset ι) (S : Finset (ι × ι)) (hS : S ⊆ N ×ˢ N) (β : ι → ℝ) :\n    (∑ p ∈ S, |β p.1 * β p.2|) ≤\n      Real.sqrt (S.card : ℝ) * ∑ n ∈ N, β n ^ 2"
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_abs_largeGCDPairs_le",
+      "private": false,
+      "line": 147,
+      "header": "theorem sum_abs_largeGCDPairs_le {k : ℕ} (hk : 1 ≤ k) {T Y : ℝ}\n    (hT : 1 ≤ T) (hY : 0 < Y)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊) (β : ℕ → ℝ)\n    (hβ : ∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ)) :\n    (∑ p ∈ largeGCDPairs N Y, |β p.1 * β p.2|) ≤\n      T ^ 2 * (1 + Real.log T) ^ (k ^ 2 - 1) *\n        Real.sqrt ((1 + Real.log T) / Y)"
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.betaCarrier_subset_twiceV",
+      "private": false,
+      "line": 175,
+      "header": "theorem MediumAtom.betaCarrier_subset_twiceV {d : MediumAtom} (hV : 1 ≤ d.V) :\n    d.betaCarrier ⊆ Ioc 0 (Nat.floor (2 * d.V))"
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.cleanedBeta_norm_le_tauPow",
+      "private": false,
+      "line": 185,
+      "header": "theorem MediumAtom.cleanedBeta_norm_le_tauPow\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {n : ℕ} (hn : n ∈ d.betaCarrier) :\n    ‖d.cleanedBeta n‖ ≤ (fouvryTau (2 ^ B) n : ℝ)"
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.commonLargeBetaGCDCleanMass_le",
+      "private": false,
+      "line": 204,
+      "header": "theorem MediumAtom.commonLargeBetaGCDCleanMass_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    d.commonLargeBetaGCDCleanMass Y ≤\n      (2 * d.V) ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n        Real.sqrt ((1 + Real.log (2 * d.V)) / Y)"
+    },
+    {
+      "kind": "theorem",
+      "name": "commonLargeBetaGCDW_polynomial_residue_largeGCD_bound",
+      "private": false,
+      "line": 220,
+      "header": "theorem commonLargeBetaGCDW_polynomial_residue_largeGCD_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 0 < Y →\n        ‖d.commonLargeBetaGCDW Y‖ ≤\n          C * d.U * d.scale ^ epsilon *\n            ((2 * d.V) ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n              Real.sqrt ((1 + Real.log (2 * d.V)) / Y)) +\n            ‖d.commonLargeBetaGCDException Y‖"
+    }
+  ],
+  "extraction_invariance": {
+    "method": "Exact reverse reconstruction recovers the previously reviewed cd729 bytes; the unique changed proof argument is below both extraction blocks.",
+    "prior_extraction_checks": [
+      {
+        "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryGcdMean.lean",
+        "provider_sha256": "ec6cba59e9db4a2d6cdd9a8596884e56efce6cf0fec342168fddccfa4c2003a2",
+        "provider_bytes_equal_pin_blob": true,
+        "origin_lines": [
+          17,
+          50
+        ],
+        "candidate_lines": [
+          37,
+          70
+        ],
+        "extracted_bytes_equal": true,
+        "extracted_sha256": "ee998e5e690eeac503066b2b58c591e4ac2121d5665c1dbe56c5a7104e4a9f4e"
+      },
+      {
+        "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryLargeGCDBetaMass.lean",
+        "provider_sha256": "241c5e5877ea7acae90a47a53c8d382c09ea6b17104601844e839859d71dc100",
+        "provider_bytes_equal_pin_blob": true,
+        "origin_lines": [
+          20,
+          119
+        ],
+        "candidate_lines": [
+          72,
+          171
+        ],
+        "extracted_bytes_equal": true,
+        "extracted_sha256": "79593f806728525d4add467536ca1b93748cf1a9b211ff3bdbee3c02985b49d5"
+      }
+    ]
+  },
+  "semantic_review": {
+    "nat_order_bound": "Natural 2^B is nonzero for every B including zero; Nat.one_le_iff_ne_zero converts this to the unchanged 1 <= 2^B obligation.",
+    "statement_scope": "Actual clean beta mass, T=2V carrier, strict Y<gcd mask and final original-W exception norm are unchanged.",
+    "source_visible_issues_found": []
+  },
+  "import_scope": {
+    "method": "Advisory direct-root reachability against the existing matching-baseline recursive source snapshot; no new full source-DAG census was run.",
+    "baseline_module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+    "baseline_source_sha256": "0118337da1a461d73323825af25bd69bc232894fac0f64ebe9395a7d612ad319",
+    "snapshot_path": ".lake/proof-continuation/source-reviews/20261015T103619410827Z-Part3PolynomialResidueDivisorBound/source-review.json",
+    "snapshot_sha256": "1f03a9c148b2941179ac5f063dd2fc0f8f6f87bb193ab16d578c555a0ff4341d",
+    "candidate_direct_imports": [
+      "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+      "Mathlib.Data.Nat.Factorization.Basic",
+      "Mathlib.NumberTheory.Divisors",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Analysis.Real.Sqrt"
+    ],
+    "extra_direct_imports_already_recorded_reachable": {
+      "Mathlib.Data.Nat.Factorization.Basic": true,
+      "Mathlib.NumberTheory.Divisors": true,
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic": true,
+      "Mathlib.Analysis.Real.Sqrt": true
+    },
+    "new_foreign_direct_roots": [],
+    "snapshot_scope_limit": "Source-DAG comparison only; no compiler, object, declaration, axiom or analytic-estimate acceptance. Only these three source roots are resolved; equal unresolved roots are preserved, not claimed inspected.",
+    "claim_limit": "All four extra Mathlib direct roots were already resolved in the recorded closure for the unchanged baseline source. This checks no added foreign root relative to that snapshot; it is not a fresh complete imported-source/object graph or acceptance census."
+  },
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "object_files_used_as_evidence": false,
+    "compiled_type_export_performed": false,
+    "axiom_audit_performed": false,
+    "acceptance_mutated": false,
+    "mathematical_source_modified_by_reviewer": false,
+    "claim": "SOURCE_ONLY; no elaboration, object, type, axiom, kernel or build acceptance."
+  }
+}

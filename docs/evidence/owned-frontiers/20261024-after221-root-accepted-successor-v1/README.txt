@@ -1,0 +1,1 @@
+ROOT-admitted after221 targets; raw/gzip original evidence; normal imported-environment trust. Main 1+1.75 OPEN, weighted estimate 30. No external/full-project replay, unconditional main proof, or CI claim. No Git commands performed.

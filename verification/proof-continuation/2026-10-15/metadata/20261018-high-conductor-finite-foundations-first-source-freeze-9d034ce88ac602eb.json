@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-18T03:21:32.945203+00:00",
+  "author": "/root/high_conductor_oct18",
+  "status": "FROZEN_FIRST_FINITE_FOUNDATIONS_SOURCE_ONLY_NOT_HIGH_CONDUCTOR_THEOREM",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorHighConductor.lean",
+    "sha256": "084a8e5cf134fcc2f0213681aeff9602b3a10f3c23c787a6e79f6bb8fac0515f",
+    "bytes": 17346,
+    "lines": 381,
+    "direct_imports": [
+      "import ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "import ImbalancedChen.Part3PolynomialResidueDivisorBound"
+    ]
+  },
+  "declarations": [
+    {
+      "name": "divisorTau",
+      "start_line": 25,
+      "header": "private def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+      "full_declaration_source": "private def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "start_line": 27,
+      "header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n := by",
+      "full_declaration_source": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n := by\n  exact Nat.cast_nonneg _\n\n/-- Local finite extraction of `Mathlib/Data/Finset/NatDivisors`, which\nis not imported by either parent. Its pointwise-finset dependencies are\nalready reachable through the complex-number parent. -/"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "start_line": 33,
+      "header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors := by",
+      "full_declaration_source": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors := by\n  ext n\n  simp_rw [Finset.mem_mul, Nat.mem_divisors, Nat.dvd_mul, mul_ne_zero_iff,\n    ← exists_and_left, ← exists_and_right]\n  simp only [and_assoc, and_comm, and_left_comm]\n"
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "start_line": 40,
+      "header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b := by",
+      "full_declaration_source": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b := by\n  unfold divisorTau\n  rw [divisors_mul_eq]\n  exact_mod_cast (Finset.card_mul_le (s := a.divisors) (t := b.divisors))\n"
+    },
+    {
+      "name": "sum_moebius_divisors_complex",
+      "start_line": 46,
+      "header": "private theorem sum_moebius_divisors_complex (n : ℕ) :\n    (∑ e ∈ n.divisors, (ArithmeticFunction.moebius e : ℂ)) =\n      if n = 1 then 1 else 0 := by",
+      "full_declaration_source": "private theorem sum_moebius_divisors_complex (n : ℕ) :\n    (∑ e ∈ n.divisors, (ArithmeticFunction.moebius e : ℂ)) =\n      if n = 1 then 1 else 0 := by\n  have h := congrArg (fun f : ArithmeticFunction ℂ ↦ f n)\n    (ArithmeticFunction.coe_zeta_mul_coe_moebius (R := ℂ))\n  simpa only [ArithmeticFunction.coe_zeta_mul_apply,\n    ArithmeticFunction.intCoe_apply, ArithmeticFunction.one_apply] using h\n"
+    },
+    {
+      "name": "coprime_indicator_complex",
+      "start_line": 54,
+      "header": "private theorem coprime_indicator_complex {q : ℕ} (hq : q ≠ 0) (n : ℕ) :\n    (if n.Coprime q then (1 : ℂ) else 0) =\n      ∑ e ∈ q.divisors,\n        if e ∣ n then (ArithmeticFunction.moebius e : ℂ) else 0 := by",
+      "full_declaration_source": "private theorem coprime_indicator_complex {q : ℕ} (hq : q ≠ 0) (n : ℕ) :\n    (if n.Coprime q then (1 : ℂ) else 0) =\n      ∑ e ∈ q.divisors,\n        if e ∣ n then (ArithmeticFunction.moebius e : ℂ) else 0 := by\n  have hg : n.gcd q ≠ 0 :=\n    (Nat.gcd_pos_of_pos_right n (Nat.pos_of_ne_zero hq)).ne'\n  have heq : q.divisors.filter (fun e ↦ e ∣ n) = (n.gcd q).divisors := by\n    ext e\n    simp [Nat.mem_divisors, hq, hg, Nat.dvd_gcd_iff, and_comm]\n  rw [← Finset.sum_filter, heq, sum_moebius_divisors_complex]\n"
+    },
+    {
+      "name": "moebius_norm_sq_le_one",
+      "start_line": 65,
+      "header": "private theorem moebius_norm_sq_le_one (e : ℕ) :\n    ‖(ArithmeticFunction.moebius e : ℂ)‖ ^ 2 ≤ 1 := by",
+      "full_declaration_source": "private theorem moebius_norm_sq_le_one (e : ℕ) :\n    ‖(ArithmeticFunction.moebius e : ℂ)‖ ^ 2 ≤ 1 := by\n  have habs := ArithmeticFunction.abs_moebius_le_one (n := e)\n  have hcases : ArithmeticFunction.moebius e = -1 ∨\n      ArithmeticFunction.moebius e = 0 ∨ ArithmeticFunction.moebius e = 1 := by\n    rcases abs_le.mp habs with ⟨hlo, hhi⟩\n    omega\n  rcases hcases with h | h | h <;> simp [h]\n"
+    },
+    {
+      "name": "character_eq_primitive_indicator",
+      "start_line": 74,
+      "header": "private theorem character_eq_primitive_indicator {q : ℕ} (hq : 0 < q)\n    (chi : DirichletCharacter ℂ q) (n : ℕ) :\n    chi (n : ZMod q) =\n      chi.primitiveCharacter (n : ZMod chi.conductor) *\n        (if n.Coprime q then (1 : ℂ) else 0) := by",
+      "full_declaration_source": "private theorem character_eq_primitive_indicator {q : ℕ} (hq : 0 < q)\n    (chi : DirichletCharacter ℂ q) (n : ℕ) :\n    chi (n : ZMod q) =\n      chi.primitiveCharacter (n : ZMod chi.conductor) *\n        (if n.Coprime q then (1 : ℂ) else 0) := by\n  letI : NeZero q := ⟨hq.ne'⟩\n  by_cases hn : n.Coprime q\n  · rw [if_pos hn, mul_one]\n    symm\n    simpa only [Int.cast_natCast] using\n      chi.primitiveCharacter_apply_of_isCoprime (Nat.isCoprime_iff_coprime.mpr hn)\n  · rw [if_neg hn, mul_zero]\n    exact MulChar.map_nonunit chi\n      (fun h ↦ hn ((ZMod.isUnit_iff_coprime n q).mp h))\n\n/-- This bijection preserves the complete divisor fibre and has no\ncoprimality assumption between the scale and the quotient. -/"
+    },
+    {
+      "name": "sum_multiples",
+      "start_line": 91,
+      "header": "private theorem sum_multiples (N e : ℕ) (he : 0 < e) (f : ℕ → ℂ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m) := by",
+      "full_declaration_source": "private theorem sum_multiples (N e : ℕ) (he : 0 < e) (f : ℕ → ℂ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m) := by\n  symm\n  refine Finset.sum_bij (fun m _ ↦ e * m) ?_ ?_ ?_ ?_\n  · intro m hm\n    rw [Finset.mem_filter, Finset.mem_Icc]\n    have hm' := Finset.mem_Icc.mp hm\n    exact ⟨⟨Nat.mul_pos he hm'.1,\n      (Nat.mul_le_mul_left e hm'.2).trans (Nat.mul_div_le N e)⟩,\n      dvd_mul_right e m⟩\n  · intro m₁ hm₁ m₂ hm₂ h\n    exact Nat.eq_of_mul_eq_mul_left he h\n  · intro n hn\n    have hn' := Finset.mem_filter.mp hn\n    refine ⟨n / e, ?_, ?_⟩\n    · rw [Finset.mem_Icc]\n      exact ⟨Nat.div_pos (Nat.le_of_dvd (Finset.mem_Icc.mp hn'.1).1 hn'.2) he,\n        Nat.div_le_div_right (Finset.mem_Icc.mp hn'.1).2⟩\n    · exact Nat.mul_div_cancel' hn'.2\n  · intro m hm\n    rfl\n"
+    },
+    {
+      "name": "sum_multiples_real",
+      "start_line": 114,
+      "header": "private theorem sum_multiples_real (N e : ℕ) (he : 0 < e) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m) := by",
+      "full_declaration_source": "private theorem sum_multiples_real (N e : ℕ) (he : 0 < e) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m) := by\n  have h := sum_multiples N e he (fun n ↦ (f n : ℂ))\n  exact_mod_cast h\n\n/-- The auxiliary factor is not combined with the conductor or removed. -/"
+    },
+    {
+      "name": "divisible_auxiliary_sum",
+      "start_line": 121,
+      "header": "private theorem divisible_auxiliary_sum (N k e c : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (psi : DirichletCharacter ℂ c) :\n    (∑ n ∈ Finset.Icc 1 N,\n      if e ∣ n then (if n.Coprime k then b n else 0) * psi (n : ZMod c) else 0) =\n      if e.Coprime k then\n        psi (e : ZMod c) *\n          ∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) * psi (m : ZMod c)\n      else 0 := by",
+      "full_declaration_source": "private theorem divisible_auxiliary_sum (N k e c : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (psi : DirichletCharacter ℂ c) :\n    (∑ n ∈ Finset.Icc 1 N,\n      if e ∣ n then (if n.Coprime k then b n else 0) * psi (n : ZMod c) else 0) =\n      if e.Coprime k then\n        psi (e : ZMod c) *\n          ∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) * psi (m : ZMod c)\n      else 0 := by\n  rw [← Finset.sum_filter, sum_multiples N e he]\n  by_cases hek : e.Coprime k\n  · rw [if_pos hek, Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro m hm\n    by_cases hmk : m.Coprime k\n    · rw [if_pos (Nat.coprime_mul_iff_left.mpr ⟨hek, hmk⟩), if_pos hmk,\n        Nat.cast_mul, map_mul]\n      ring\n    · have hem : ¬(e * m).Coprime k :=\n        fun h ↦ hmk (Nat.coprime_mul_iff_left.mp h).2\n      rw [if_neg hem, if_neg hmk, zero_mul, zero_mul, mul_zero]\n  · rw [if_neg hek]\n    apply Finset.sum_eq_zero\n    intro m hm\n    have hem : ¬(e * m).Coprime k :=\n      fun h ↦ hek (Nat.coprime_mul_iff_left.mp h).1\n    rw [if_neg hem, zero_mul]\n\n/-- Exact complex Mobius expansion at the full physical character level. -/"
+    },
+    {
+      "name": "auxiliary_character_sum_eq_moebius",
+      "start_line": 150,
+      "header": "private theorem auxiliary_character_sum_eq_moebius {q : ℕ} (hq : 0 < q)\n    (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors, (ArithmeticFunction.moebius e : ℂ) *\n        ∑ n ∈ Finset.Icc 1 N,\n          if e ∣ n then\n            (if n.Coprime k then b n else 0) *\n              chi.primitiveCharacter (n : ZMod chi.conductor)\n          else 0 := by",
+      "full_declaration_source": "private theorem auxiliary_character_sum_eq_moebius {q : ℕ} (hq : 0 < q)\n    (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors, (ArithmeticFunction.moebius e : ℂ) *\n        ∑ n ∈ Finset.Icc 1 N,\n          if e ∣ n then\n            (if n.Coprime k then b n else 0) *\n              chi.primitiveCharacter (n : ZMod chi.conductor)\n          else 0 := by\n  calc\n    _ = ∑ n ∈ Finset.Icc 1 N, ∑ e ∈ q.divisors,\n        if e ∣ n then (ArithmeticFunction.moebius e : ℂ) *\n          ((if n.Coprime k then b n else 0) *\n            chi.primitiveCharacter (n : ZMod chi.conductor)) else 0 := by\n      apply Finset.sum_congr rfl\n      intro n hn\n      rw [character_eq_primitive_indicator hq chi n, coprime_indicator_complex hq.ne']\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro e he\n      by_cases hen : e ∣ n <;> simp only [if_pos, if_neg, hen, mul_zero]\n      ring\n    _ = _ := by\n      rw [Finset.sum_comm]\n      apply Finset.sum_congr rfl\n      intro e he\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro n hn\n      by_cases hen : e ∣ n <;> simp only [if_pos, if_neg, hen, mul_zero]\n\n/-- Both coprimality gates survive the multiple substitution. In\nparticular `(e, conductor)=1` is available before changing the level\nfibre from `q` to `q/e`. -/"
+    },
+    {
+      "name": "auxiliary_character_sum_eq_moebius_quotient",
+      "start_line": 185,
+      "header": "private theorem auxiliary_character_sum_eq_moebius_quotient {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          (ArithmeticFunction.moebius e : ℂ) *\n            chi.primitiveCharacter (e : ZMod chi.conductor) *\n              ∑ m ∈ Finset.Icc 1 (N / e),\n                (if m.Coprime k then b (e * m) else 0) *\n                  chi.primitiveCharacter (m : ZMod chi.conductor)\n        else 0 := by",
+      "full_declaration_source": "private theorem auxiliary_character_sum_eq_moebius_quotient {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          (ArithmeticFunction.moebius e : ℂ) *\n            chi.primitiveCharacter (e : ZMod chi.conductor) *\n              ∑ m ∈ Finset.Icc 1 (N / e),\n                (if m.Coprime k then b (e * m) else 0) *\n                  chi.primitiveCharacter (m : ZMod chi.conductor)\n        else 0 := by\n  rw [auxiliary_character_sum_eq_moebius hq N k b chi]\n  apply Finset.sum_congr rfl\n  intro e he\n  have hepos : 0 < e := Nat.pos_of_mem_divisors he\n  rw [divisible_auxiliary_sum N k e chi.conductor hepos b chi.primitiveCharacter]\n  by_cases hek : e.Coprime k\n  · rw [if_pos hek]\n    by_cases hec : e.Coprime chi.conductor\n    · rw [if_pos (hec.mul_right hek)]\n      ring\n    · have hegate : ¬e.Coprime (chi.conductor * k) :=\n        fun h ↦ hec (Nat.coprime_mul_iff_right.mp h).1\n      have hz : chi.primitiveCharacter (e : ZMod chi.conductor) = 0 :=\n        MulChar.map_nonunit _\n          (fun h ↦ hec ((ZMod.isUnit_iff_coprime e chi.conductor).mp h))\n      rw [if_neg hegate, hz, zero_mul, mul_zero]\n  · have hegate : ¬e.Coprime (chi.conductor * k) :=\n      fun h ↦ hek (Nat.coprime_mul_iff_right.mp h).2\n    rw [if_neg hek, if_neg hegate, mul_zero]\n\n/-- The actual Mobius Cauchy loss is the divisor count at the full level;\nneither the full-level nonunit mask nor the auxiliary gate is omitted. -/"
+    },
+    {
+      "name": "auxiliary_character_sum_sq_le_moebius",
+      "start_line": 219,
+      "header": "private theorem auxiliary_character_sum_sq_le_moebius {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    ‖∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)‖ ^ 2 ≤\n      divisorTau q * ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          ‖∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) *\n              chi.primitiveCharacter (m : ZMod chi.conductor)‖ ^ 2\n        else 0 := by",
+      "full_declaration_source": "private theorem auxiliary_character_sum_sq_le_moebius {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    ‖∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)‖ ^ 2 ≤\n      divisorTau q * ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          ‖∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) *\n              chi.primitiveCharacter (m : ZMod chi.conductor)‖ ^ 2\n        else 0 := by\n  rw [auxiliary_character_sum_eq_moebius_quotient hq N k b chi]\n  refine (norm_finset_sum_sq_le_card_mul_sum_norm_sq q.divisors _).trans ?_\n  apply mul_le_mul_of_nonneg_left _ (divisorTau_nonneg q)\n  apply Finset.sum_le_sum\n  intro e he\n  by_cases hegate : e.Coprime (chi.conductor * k)\n  · rw [if_pos hegate, if_pos hegate, norm_mul, norm_mul, mul_pow, mul_pow]\n    have hpsi : ‖chi.primitiveCharacter (e : ZMod chi.conductor)‖ ^ 2 ≤ 1 := by\n      simpa only [one_pow] using pow_le_pow_left₀ (norm_nonneg _)\n        (chi.primitiveCharacter.norm_le_one (e : ZMod chi.conductor)) 2\n    have hprod : ‖(ArithmeticFunction.moebius e : ℂ)‖ ^ 2 *\n        ‖chi.primitiveCharacter (e : ZMod chi.conductor)‖ ^ 2 ≤ 1 := by\n      simpa only [one_mul] using mul_le_mul (moebius_norm_sq_le_one e) hpsi\n        (sq_nonneg _) (by norm_num : (0 : ℝ) ≤ 1)\n    exact mul_le_of_le_one_left (sq_nonneg _) hprod\n  · simp only [if_neg hegate, norm_zero, zero_pow (by decide : 2 ≠ 0)]\n"
+    },
+    {
+      "name": "auxiliary_multiple_energy_le",
+      "start_line": 246,
+      "header": "private theorem auxiliary_multiple_energy_le (N e k : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (hb : ∀ n ∈ Finset.Icc 1 N, ‖b n‖ ≤ 1) :\n    (∑ m ∈ Finset.Icc 1 (N / e),\n      ‖if m.Coprime k then b (e * m) else 0‖ ^ 2) ≤ ((N / e : ℕ) : ℝ) := by",
+      "full_declaration_source": "private theorem auxiliary_multiple_energy_le (N e k : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (hb : ∀ n ∈ Finset.Icc 1 N, ‖b n‖ ≤ 1) :\n    (∑ m ∈ Finset.Icc 1 (N / e),\n      ‖if m.Coprime k then b (e * m) else 0‖ ^ 2) ≤ ((N / e : ℕ) : ℝ) := by\n  calc\n    _ ≤ ∑ _m ∈ Finset.Icc 1 (N / e), (1 : ℝ) := by\n      apply Finset.sum_le_sum\n      intro m hm\n      by_cases hmk : m.Coprime k\n      · rw [if_pos hmk]\n        have hem : e * m ∈ Finset.Icc 1 N := by\n          have hm' := Finset.mem_Icc.mp hm\n          exact Finset.mem_Icc.mpr ⟨Nat.mul_pos he hm'.1,\n            (Nat.mul_le_mul_left e hm'.2).trans (Nat.mul_div_le N e)⟩\n        simpa only [one_pow] using pow_le_pow_left₀ (norm_nonneg _) (hb _ hem) 2\n      · simp only [if_neg hmk, norm_zero, zero_pow (by decide : 2 ≠ 0)]\n        norm_num\n    _ = _ := by simp\n"
+    },
+    {
+      "name": "sum_tau_ratio_le",
+      "start_line": 265,
+      "header": "private theorem sum_tau_ratio_le (T : ℕ) :\n    (∑ r ∈ Finset.Icc 1 T, divisorTau r * ((r : ℝ) / (r.totient : ℝ))) ≤\n      (T : ℝ) * (1 + Real.log (T : ℝ)) ^ 3 := by",
+      "full_declaration_source": "private theorem sum_tau_ratio_le (T : ℕ) :\n    (∑ r ∈ Finset.Icc 1 T, divisorTau r * ((r : ℝ) / (r.totient : ℝ))) ≤\n      (T : ℝ) * (1 + Real.log (T : ℝ)) ^ 3 := by\n  by_cases hT : T = 0\n  · subst T\n    simp\n  have hT1 : (1 : ℝ) ≤ T := by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hT\n  have hI : Finset.Icc 1 T = Finset.Ioc 0 T := by\n    ext r\n    simp only [Finset.mem_Icc, Finset.mem_Ioc]\n    omega\n  calc\n    _ ≤ ∑ r ∈ Finset.Icc 1 T, divisorTau r ^ 2 := by\n      apply Finset.sum_le_sum\n      intro r hr\n      have hrpos : 0 < r := (Finset.mem_Icc.mp hr).1\n      have hratio : (r : ℝ) / (r.totient : ℝ) ≤ divisorTau r :=\n        totientRatio_le_card_divisors r hrpos\n      simpa only [pow_two] using\n        mul_le_mul_of_nonneg_left hratio (divisorTau_nonneg r)\n    _ ≤ _ := by\n      rw [hI]\n      have h := sum_fouvryTau_sq_le_real (k := 2) (by norm_num) hT1\n      simpa only [Nat.floor_natCast, fouvryTau_two, divisorTau] using h\n\n/-- The extra divisor multiplicity has a fixed second-moment cost in the\nmultiple fibre, rather than a global subpower in the full modulus. -/"
+    },
+    {
+      "name": "tau_weighted_multiples_le",
+      "start_line": 292,
+      "header": "private theorem tau_weighted_multiples_le (Q c : ℕ) (hc : 0 < c) :\n    (∑ q ∈ Finset.Icc 1 Q with c ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        divisorTau c * ((c : ℝ) / (c.totient : ℝ)) *\n          ((Q / c : ℕ) : ℝ) * (1 + Real.log ((Q / c : ℕ) : ℝ)) ^ 3 := by",
+      "full_declaration_source": "private theorem tau_weighted_multiples_le (Q c : ℕ) (hc : 0 < c) :\n    (∑ q ∈ Finset.Icc 1 Q with c ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        divisorTau c * ((c : ℝ) / (c.totient : ℝ)) *\n          ((Q / c : ℕ) : ℝ) * (1 + Real.log ((Q / c : ℕ) : ℝ)) ^ 3 := by\n  rw [sum_multiples_real Q c hc]\n  calc\n    _ ≤ ∑ r ∈ Finset.Icc 1 (Q / c),\n        (divisorTau c * divisorTau r) *\n          (((c : ℝ) / (c.totient : ℝ)) * ((r : ℝ) / (r.totient : ℝ))) := by\n      apply Finset.sum_le_sum\n      intro r hr\n      apply mul_le_mul\n      · exact divisorTau_mul_le c r\n      · exact multiple_totient_ratio_le_product c r hc (Finset.mem_Icc.mp hr).1\n      · positivity\n      · exact mul_nonneg (divisorTau_nonneg c) (divisorTau_nonneg r)\n    _ = (divisorTau c * ((c : ℝ) / (c.totient : ℝ))) *\n        ∑ r ∈ Finset.Icc 1 (Q / c),\n          divisorTau r * ((r : ℝ) / (r.totient : ℝ)) := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r hr\n      ring\n    _ ≤ _ := by\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left (sum_tau_ratio_le (Q / c))\n        (mul_nonneg (divisorTau_nonneg c) (div_nonneg (by positivity) (by positivity)))\n\n/-- A conductor and a Mobius divisor share one full-level fibre. The\nfactor `tau(c)` is kept at the conductor scale, not replaced by `Q^eta`. -/"
+    },
+    {
+      "name": "tau_weighted_product_fibre_le",
+      "start_line": 322,
+      "header": "private theorem tau_weighted_product_fibre_le (Q c e : ℕ)\n    (hQ : 0 < Q) (hc : 0 < c) (he : 0 < e) :\n    (∑ q ∈ Finset.Icc 1 Q with c * e ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        (divisorTau c * ((c : ℝ) / (c.totient : ℝ))) *\n          (divisorTau e / (e.totient : ℝ)) * ((Q : ℝ) / (c : ℝ)) *\n            (1 + Real.log (Q : ℝ)) ^ 3 := by",
+      "full_declaration_source": "private theorem tau_weighted_product_fibre_le (Q c e : ℕ)\n    (hQ : 0 < Q) (hc : 0 < c) (he : 0 < e) :\n    (∑ q ∈ Finset.Icc 1 Q with c * e ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        (divisorTau c * ((c : ℝ) / (c.totient : ℝ))) *\n          (divisorTau e / (e.totient : ℝ)) * ((Q : ℝ) / (c : ℝ)) *\n            (1 + Real.log (Q : ℝ)) ^ 3 := by\n  have hcR : (0 : ℝ) < c := by exact_mod_cast hc\n  have heR : (0 : ℝ) < e := by exact_mod_cast he\n  have hphiC : (0 : ℝ) < c.totient := by exact_mod_cast Nat.totient_pos.mpr hc\n  have hphiE : (0 : ℝ) < e.totient := by exact_mod_cast Nat.totient_pos.mpr he\n  have hQR : (1 : ℝ) ≤ Q := by exact_mod_cast hQ\n  let T : ℕ := Q / (c * e)\n  have hTdiv : (T : ℝ) ≤ (Q : ℝ) / ((c : ℝ) * (e : ℝ)) := by\n    apply (le_div_iff₀ (mul_pos hcR heR)).mpr\n    have hnat : (c * e) * (Q / (c * e)) ≤ Q := Nat.mul_div_le Q (c * e)\n    have hreal : (c : ℝ) * (e : ℝ) * (T : ℝ) ≤ Q := by exact_mod_cast hnat\n    simpa only [mul_comm] using hreal\n  have hlogT : 0 ≤ 1 + Real.log (T : ℝ) := by\n    by_cases hT : T = 0\n    · simp only [hT, Nat.cast_zero, Real.log_zero, add_zero]\n      norm_num\n    · have hT1 : (1 : ℝ) ≤ T := by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hT\n      linarith [Real.log_nonneg hT1]\n  have hlog : 1 + Real.log (T : ℝ) ≤ 1 + Real.log (Q : ℝ) := by\n    by_cases hT : T = 0\n    · simp only [hT, Nat.cast_zero, Real.log_zero, add_zero]\n      linarith [Real.log_nonneg hQR]\n    · have hTpos : (0 : ℝ) < T := by exact_mod_cast Nat.pos_of_ne_zero hT\n      have hTQ : T ≤ Q := Nat.div_le_self Q (c * e)\n      exact add_le_add le_rfl (Real.log_le_log hTpos (by exact_mod_cast hTQ))\n  have hA : divisorTau (c * e) *\n      (((c * e : ℕ) : ℝ) / ((c * e).totient : ℝ)) ≤\n        (divisorTau c * divisorTau e) *\n          (((c : ℝ) / (c.totient : ℝ)) * ((e : ℝ) / (e.totient : ℝ))) := by\n    exact mul_le_mul (divisorTau_mul_le c e)\n      (multiple_totient_ratio_le_product c e hc he) (by positivity)\n      (mul_nonneg (divisorTau_nonneg c) (divisorTau_nonneg e))\n  calc\n    _ ≤ divisorTau (c * e) *\n        (((c * e : ℕ) : ℝ) / ((c * e).totient : ℝ)) * (T : ℝ) *\n          (1 + Real.log (T : ℝ)) ^ 3 :=\n      tau_weighted_multiples_le Q (c * e) (Nat.mul_pos hc he)\n    _ ≤ ((divisorTau c * divisorTau e) *\n        (((c : ℝ) / (c.totient : ℝ)) * ((e : ℝ) / (e.totient : ℝ)))) *\n          ((Q : ℝ) / ((c : ℝ) * (e : ℝ))) * (1 + Real.log (Q : ℝ)) ^ 3 := by\n      have hupper : 0 ≤ (divisorTau c * divisorTau e) *\n          (((c : ℝ) / (c.totient : ℝ)) * ((e : ℝ) / (e.totient : ℝ))) :=\n        mul_nonneg (mul_nonneg (divisorTau_nonneg c) (divisorTau_nonneg e))\n          (mul_nonneg (div_nonneg hcR.le hphiC.le) (div_nonneg heR.le hphiE.le))\n      exact mul_le_mul (mul_le_mul hA hTdiv (Nat.cast_nonneg _) hupper)\n        (pow_le_pow_left₀ hlogT hlog 3) (pow_nonneg hlogT 3)\n        (mul_nonneg hupper (div_nonneg (Nat.cast_nonneg _) (mul_nonneg hcR.le heR.le)))\n    _ = _ := by\n      field_simp [hcR.ne', heR.ne', hphiC.ne', hphiE.ne']\n      <;> ring"
+    }
+  ],
+  "decl_count": 18,
+  "math_review": [
+    "The auxiliary mask remains literal in exact Mobius expansion and all multiple sums.",
+    "Cauchy introduces tau at original full level, then divisor product / totient fibre retains tau(c) at conductor before any subpower step.",
+    "No full high conductor mean theorem is asserted; primitive-character regrouping, conductor-window LS and logarithmic bounds remain unproved in this file."
+  ],
+  "compiler_claim": false,
+  "owned_acceptance_claim": false,
+  "frozen_for": "Root complete nonauthor source/API/math review, then one original pinned strict compile under runtime only. No Lean invocation by author.",
+  "next_authored_patch_location": "Author will continue in ignored draft only while current source is frozen; no active-source change until runtime terminal release."
+}

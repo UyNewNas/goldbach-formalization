@@ -1,0 +1,488 @@
+{
+  "audit_id": "20261021-generalD-paired-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T10:13:19.3249694Z",
+  "reviewer": "/root/general_pair_review_sol_high_oct21",
+  "status": "PASS_FINITE_SOURCE_REVIEW_UNCOMPILED_HOLD",
+  "verdict": "PASS for the stated finite source identity only; no concrete mathematical or API-signature defect found. HOLD for all elaboration, kernel acceptance, actual row adaptation and analytic claims.",
+  "required_changes": [],
+  "source_edit_required": false,
+  "HOLD": true,
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDPairedFourier.lean",
+    "sha256": "024842983e6a72164d07d06685ea7b18f49833bc6b6dcfc4e1997fc63fd53a6e",
+    "line_count": 303,
+    "full_source_exact": "import ImbalancedChen.Part3SharedFirstFactorGeneralDRootPacket\n\n/-!\n# Exact paired phases on one actual general-D packet\n\nThe two original tails share their actual gcd with the fixed right tail.\nAll factors and unit gates are derived by applying the original root packet\ntwice. The difference k is signed, the root has its original negative sign,\nand the complete slow phase has denominator N1*K*t*t'. Modulus one is allowed.\n\nThe separate real-projection identity retains all four complex branches,\nincluding their original amplitudes and coefficients. No finite carrier is\nchanged and no spectral estimate, (y,z) reindexing, or 7/32 bound is asserted.\nThe imported root-packet source is still a candidate pending root acceptance.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen scoped FourierTransform\n\nnamespace SharedGeneralDPairedFourier\n\nprivate theorem inverse_pair_modEq {m n t t' : ℕ}\n    (hn : n.Coprime m) (ht : t.Coprime m) (ht' : t'.Coprime m)\n    (h h' : ℤ) :\n    Int.ModEq m\n      (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m)\n      ((h * (t' : ℤ) - h' * (t : ℤ)) *\n        CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m) := by\n  let x := CanonicalReciprocalPhase.wPhaseInverse (n * t) m\n  let x' := CanonicalReciprocalPhase.wPhaseInverse (n * t') m\n  let j := CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m\n  have hx : Int.ModEq m (((n * t : ℕ) : ℤ) * x) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left ht)\n  have hx' : Int.ModEq m (((n * t' : ℕ) : ℤ) * x') 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left ht')\n  have hj : Int.ModEq m (((n * (t * t') : ℕ) : ℤ) * j) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left (ht.mul_left ht'))\n  have hleft : Int.ModEq m x ((t' : ℤ) * j) := by\n    calc\n      x ≡ x * (((n * (t * t') : ℕ) : ℤ) * j) [ZMOD m] := by\n        simpa only [mul_one] using (hj.mul_left x).symm\n      _ = ((t' : ℤ) * j) * (((n * t : ℕ) : ℤ) * x) := by\n        push_cast\n        ring\n      _ ≡ (t' : ℤ) * j [ZMOD m] := by\n        simpa only [mul_one] using hx.mul_left ((t' : ℤ) * j)\n  have hright : Int.ModEq m x' ((t : ℤ) * j) := by\n    calc\n      x' ≡ x' * (((n * (t * t') : ℕ) : ℤ) * j) [ZMOD m] := by\n        simpa only [mul_one] using (hj.mul_left x').symm\n      _ = ((t : ℤ) * j) * (((n * t' : ℕ) : ℤ) * x') := by\n        push_cast\n        ring\n      _ ≡ (t : ℤ) * j [ZMOD m] := by\n        simpa only [mul_one] using hx'.mul_left ((t : ℤ) * j)\n  have hdifference := (hleft.mul_left h).sub (hright.mul_left h')\n  convert hdifference using 1 <;> ring\n\nprivate theorem fourier_pair_real (h h' : ℤ) (x x' : ℝ) :\n    fourier h (x : UnitAddCircle) * star (fourier h' (x' : UnitAddCircle)) =\n      fourier 1 ((((h : ℝ) * x - (h' : ℝ) * x') : ℝ) : UnitAddCircle) := by\n  simp only [Complex.star_def]\n  rw [← fourier_neg]\n  simp only [fourier_coe_apply, div_one]\n  rw [← Complex.exp_add]\n  congr 1\n  push_cast\n  ring\n\nprivate theorem inverse_fourier_pair {m n t t' : ℕ}\n    (hm : 0 < m) (hn : n.Coprime m)\n    (ht : t.Coprime m) (ht' : t'.Coprime m) (a h h' : ℤ) :\n    fourier h\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) *\n      star (fourier h'\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : ℝ) / m) : ℝ) :\n            UnitAddCircle)) =\n      fourier 1\n        ((((a : ℝ) * ((h * (t' : ℤ) - h' * (t : ℤ) : ℤ) : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) := by\n  have hcircle := CanonicalReciprocalPhase.wPhase_circle_eq_of_modEq hm\n    ((inverse_pair_modEq hn ht ht' h h').mul_left a)\n  rw [fourier_pair_real]\n  have hreal :\n      (h : ℝ) * ((a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : ℝ) / m) -\n      (h' : ℝ) * ((a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : ℝ) / m) =\n      ((a * (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m) : ℤ) : ℝ) / m := by\n    push_cast\n    ring\n  rw [hreal]\n  simpa only [Int.cast_mul, Int.cast_sub, mul_assoc] using\n    congrArg (fourier 1) hcircle\n\nend SharedGeneralDPairedFourier\n\n/-- The actual pair of CRT phases on the same original general-D row.\nOnly original positivity, two original CRT branches and equality of the two\nactual gcds are premises. No packet factors, units or phase identities are\nprovided by a caller. The original signed frequencies and full slow phase\nsurvive, before any real projection or finite regrouping. -/\ntheorem sharedGeneralD_paired_fourier\n    {p r s s' w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hs' : 0 < s') (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (hc' : ComplexCRT.Compatible (p * (r * s')) (p * w) N1 N2)\n    (hsame : (r * s').gcd w = (r * s).gcd w) (a h h' : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let t' := s' / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let K := (p * D) * r0 * w0\n    let L := (p * (r * s)).lcm (p * w)\n    let L' := (p * (r * s')).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n    let z := t * t'\n    0 < K ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ s' = q * t' ∧\n      b.Coprime c ∧ zeta.Coprime A ∧\n      t.Coprime (A * c) ∧ t'.Coprime (A * c) ∧\n      L = K * t ∧ L' = K * t' ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) *\n        star (fourier h'\n          (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n            UnitAddCircle)) =\n        fourier 1\n          (((-(a : ℝ) * (k : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier 1 ((((a : ℝ) * (k : ℝ) /\n            ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) *\n          fourier 1\n            ((((a : ℝ) * (f : ℝ) * (k : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : ℝ) / c) : ℝ) :\n                UnitAddCircle) := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  let t' := s' / q\n  let g := N1.gcd N2\n  let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n  let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n  let n2 := N2 / g\n  let A := g * d1\n  let w0 := w / D\n  let b := A * n2 * r0\n  let c := n1 * w0\n  let zeta := c * p * D * r0\n  let K := (p * D) * r0 * w0\n  let L := (p * (r * s)).lcm (p * w)\n  let L' := (p * (r * s')).lcm (p * w)\n  let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n  let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n  let z := t * t'\n  have hdata := sharedGeneralDRootPacket_fourier hp hr hs hw hN1 hN2 hc a h\n  have hdata' := sharedGeneralDRootPacket_fourier hp hr hs' hw hN1 hN2 hc' a h'\n  dsimp only at hdata hdata'\n  rw [hsame] at hdata'\n  obtain ⟨_hq, hr0, ht, hA, hcpos, hst, _hvt, _hrq,\n    hb, hzeta, htAc, hroot, _hrecip, hphase⟩ := hdata\n  obtain ⟨_hq', _hr0', ht', _hA', _hcpos', hst', _hvt', _hrq',\n    _hb', _hzeta', htAc', hroot', _hrecip', hphase'⟩ := hdata'\n  change 0 < r0 at hr0\n  change 0 < t at ht\n  change 0 < t' at ht'\n  change 0 < A at hA\n  change 0 < c at hcpos\n  change s = q * t at hst\n  change s' = q * t' at hst'\n  change b.Coprime c at hb\n  change zeta.Coprime A at hzeta\n  change t.Coprime (A * c) at htAc\n  change t'.Coprime (A * c) at htAc'\n  change n1 * L = zeta * t at hroot\n  change n1 * L' = zeta * t' at hroot'\n  have hn1 : 0 < n1 := CanonicalReciprocalData.coprimePart_pos _ _\n  have hL : L = K * t := by\n    apply Nat.mul_left_cancel hn1\n    calc\n      n1 * L = zeta * t := hroot\n      _ = n1 * (K * t) := by dsimp only [zeta, c, K]; ring\n  have hL' : L' = K * t' := by\n    apply Nat.mul_left_cancel hn1\n    calc\n      n1 * L' = zeta * t' := hroot'\n      _ = n1 * (K * t') := by dsimp only [zeta, c, K]; ring\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left w (Nat.mul_pos hr hs)\n  have hw0 : 0 < w0 :=\n    Nat.div_pos (Nat.le_of_dvd hw (Nat.gcd_dvd_right (r * s) w)) hD\n  have hK : 0 < K := Nat.mul_pos (Nat.mul_pos (Nat.mul_pos hp hD) hr0) hw0\n  have htA : t.Coprime A := htAc.of_dvd_right (dvd_mul_right A c)\n  have htA' : t'.Coprime A := htAc'.of_dvd_right (dvd_mul_right A c)\n  have htc : t.Coprime c := htAc.of_dvd_right (dvd_mul_left c A)\n  have htc' : t'.Coprime c := htAc'.of_dvd_right (dvd_mul_left c A)\n  change fourier h\n      (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n        UnitAddCircle) =\n      fourier h (((-(a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n          UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ) / c) : ℝ) :\n            UnitAddCircle) at hphase\n  change fourier h'\n      (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n        UnitAddCircle) =\n      fourier h' (((-(a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (zeta * t') A : ℝ) / A) : ℝ) :\n          UnitAddCircle) *\n        fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle) *\n        fourier h' ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t') c : ℝ) / c) : ℝ) :\n            UnitAddCircle) at hphase'\n  have hrootpair := SharedGeneralDPairedFourier.inverse_fourier_pair\n    hA hzeta htA htA' (-a) h h'\n  have hrecippair := SharedGeneralDPairedFourier.inverse_fourier_pair\n    hcpos hb htc htc' (a * f) h h'\n  simp only [Int.cast_neg, Int.cast_mul, mul_assoc] at hrootpair hrecippair\n  have hslowpair :\n      fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle)) =\n      fourier 1 ((((a : ℝ) * (k : ℝ) /\n        ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) := by\n    rw [SharedGeneralDPairedFourier.fourier_pair_real]\n    have hreal :\n        (h : ℝ) * ((a : ℝ) / ((N1 : ℝ) * L)) -\n          (h' : ℝ) * ((a : ℝ) / ((N1 : ℝ) * L')) =\n        (a : ℝ) * (k : ℝ) / ((N1 : ℝ) * K * z) := by\n      rw [hL, hL']\n      dsimp only [k, z]\n      push_cast\n      have hN10 : (N1 : ℝ) ≠ 0 := by positivity\n      have hK0 : (K : ℝ) ≠ 0 := by positivity\n      have ht0 : (t : ℝ) ≠ 0 := by positivity\n      have ht'0 : (t' : ℝ) ≠ 0 := by positivity\n      field_simp [hN10, hK0, ht0, ht'0] <;> ring\n    rw [hreal]\n  refine ⟨hK, hA, hcpos, hst, hst', hb, hzeta, htAc, htAc', hL, hL', ?_⟩\n  rw [hphase, hphase']\n  simp only [star_mul]\n  calc\n    _ =\n      (fourier h (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n            UnitAddCircle) *\n        star (fourier h' (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (zeta * t') A : ℝ) / A) : ℝ) :\n            UnitAddCircle))) *\n      (fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle))) *\n      (fourier h ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ) / c) : ℝ) :\n            UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t') c : ℝ) / c) : ℝ) :\n            UnitAddCircle))) := by ring\n    _ = _ := by\n      simpa only [k, z, mul_assoc] using\n        congrArg₂ (fun x y : ℂ => x * y)\n          (congrArg₂ (fun x y : ℂ => x * y) hrootpair hslowpair) hrecippair\n\n/-- Apply this to the complete smooth Fourier atoms F,G, including their\nlow pass and Poisson amplitudes. It is the exact real-projection Gram,\nwith all four branches and arbitrary original complex coefficients. -/\ntheorem sharedGeneralD_realProjection_four_branches (lambda mu F G : ℂ) :\n    (lambda * (F.re : ℂ)) * star (mu * (G.re : ℂ)) =\n      (lambda * star mu) / 4 *\n        (F * star G + F * G + star F * star G + star F * G) := by\n  simp only [star_mul, Complex.star_def, Complex.conj_ofReal]\n  rw [Complex.re_eq_add_conj F, Complex.re_eq_add_conj G]\n  ring\n\nend\n\nend ImbalancedChen.Part3\n",
+    "entire_source_read": true,
+    "complete_headers_count": 5,
+    "all_complete_headers_as_written": [
+      {
+        "name": "inverse_pair_modEq",
+        "first": 25,
+        "last": 32,
+        "complete_header_as_written": "private theorem inverse_pair_modEq {m n t t' : ℕ}\n    (hn : n.Coprime m) (ht : t.Coprime m) (ht' : t'.Coprime m)\n    (h h' : ℤ) :\n    Int.ModEq m\n      (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m)\n      ((h * (t' : ℤ) - h' * (t : ℤ)) *\n        CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m) := by",
+        "normalized_lf_utf8_sha256": "73f3ceb5449d34429c465d56a5b24cf0ace85b4428c32df2bf121a341c56d787"
+      },
+      {
+        "name": "fourier_pair_real",
+        "first": 63,
+        "last": 65,
+        "complete_header_as_written": "private theorem fourier_pair_real (h h' : ℤ) (x x' : ℝ) :\n    fourier h (x : UnitAddCircle) * star (fourier h' (x' : UnitAddCircle)) =\n      fourier 1 ((((h : ℝ) * x - (h' : ℝ) * x') : ℝ) : UnitAddCircle) := by",
+        "normalized_lf_utf8_sha256": "d5b421c1be25809797dd9f522d164437dd1afa24e726725aa6fe52f4f1ff8a9a"
+      },
+      {
+        "name": "inverse_fourier_pair",
+        "first": 74,
+        "last": 88,
+        "complete_header_as_written": "private theorem inverse_fourier_pair {m n t t' : ℕ}\n    (hm : 0 < m) (hn : n.Coprime m)\n    (ht : t.Coprime m) (ht' : t'.Coprime m) (a h h' : ℤ) :\n    fourier h\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) *\n      star (fourier h'\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : ℝ) / m) : ℝ) :\n            UnitAddCircle)) =\n      fourier 1\n        ((((a : ℝ) * ((h * (t' : ℤ) - h' * (t : ℤ) : ℤ) : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) := by",
+        "normalized_lf_utf8_sha256": "ebefb08ace2a20bad33e06f58566456b59ba7ec292c8547f530f20e09764efe2"
+      },
+      {
+        "name": "sharedGeneralD_paired_fourier",
+        "first": 112,
+        "last": 160,
+        "complete_header_as_written": "theorem sharedGeneralD_paired_fourier\n    {p r s s' w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hs' : 0 < s') (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (hc' : ComplexCRT.Compatible (p * (r * s')) (p * w) N1 N2)\n    (hsame : (r * s').gcd w = (r * s).gcd w) (a h h' : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let t' := s' / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let K := (p * D) * r0 * w0\n    let L := (p * (r * s)).lcm (p * w)\n    let L' := (p * (r * s')).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n    let z := t * t'\n    0 < K ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ s' = q * t' ∧\n      b.Coprime c ∧ zeta.Coprime A ∧\n      t.Coprime (A * c) ∧ t'.Coprime (A * c) ∧\n      L = K * t ∧ L' = K * t' ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) *\n        star (fourier h'\n          (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n            UnitAddCircle)) =\n        fourier 1\n          (((-(a : ℝ) * (k : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier 1 ((((a : ℝ) * (k : ℝ) /\n            ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) *\n          fourier 1\n            ((((a : ℝ) * (f : ℝ) * (k : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : ℝ) / c) : ℝ) :\n                UnitAddCircle) := by",
+        "normalized_lf_utf8_sha256": "6fbb0c4b94b5c04802715c00f43aa430ce22199ebaed1bb061a5b3a32782f716"
+      },
+      {
+        "name": "sharedGeneralD_realProjection_four_branches",
+        "first": 293,
+        "last": 296,
+        "complete_header_as_written": "theorem sharedGeneralD_realProjection_four_branches (lambda mu F G : ℂ) :\n    (lambda * (F.re : ℂ)) * star (mu * (G.re : ℂ)) =\n      (lambda * star mu) / 4 *\n        (F * star G + F * G + star F * star G + star F * G) := by",
+        "normalized_lf_utf8_sha256": "3f13a5e26e2a78d764856c8a2213230d1ba3559e662853e951da35beb371bbfd"
+      }
+    ]
+  },
+  "author_checkpoint": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-general-D-actual-paired-fourier-finite-candidate-HOLD.json",
+    "sha256": "cfd84fed23d9cbb6963187f7d8eb38843877d449e118d9b4f01045e2d3c42cf9",
+    "expected_sha256": "cfd84fed23d9cbb6963187f7d8eb38843877d449e118d9b4f01045e2d3c42cf9"
+  },
+  "dependency": {
+    "path": "ImbalancedChen/Part3SharedFirstFactorGeneralDRootPacket.lean",
+    "sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+    "entire_182_line_source_read": true,
+    "state": "Independently source-reviewed, still UNCOMPILED and unaccepted in the review input. Original proper is parent-reported done; no acceptance is inferred.",
+    "root_checkpoint": "20261021-generalD7e28-root-complete-source-review-ONE-proper-gate.json",
+    "root_checkpoint_sha256": "1e421e9337ddd2777a9f3072ccd69c4a78a5f67d961b2e518bacbb47652111bf"
+  },
+  "mathematical_review": [
+    {
+      "declaration": "inverse_pair_modEq",
+      "result": "PASS_SOURCE",
+      "reason": "The inverse of n*t*tPrime modulo m is multiplied by tPrime or t to recover the two inverses. Integer congruence subtraction produces (h*tPrime-hPrime*t)*inverse(n*t*tPrime,m). Every inverse is the actual gcdA inverse, with unit licenses proved from the supplied helper-level coprimalities. No modular cancellation is assumed."
+    },
+    {
+      "declaration": "fourier_pair_real",
+      "result": "PASS_SOURCE",
+      "reason": "Native fourier_neg makes conjugation frequency negation. The exponential formula and exp_add give the exact signed real difference h*x-hPrime*xPrime."
+    },
+    {
+      "declaration": "inverse_fourier_pair",
+      "result": "PASS_SOURCE",
+      "reason": "Scale the integer congruence by a, transport via wPhase_circle_eq_of_modEq for a positive modulus, and use the preceding character identity. Arbitrary signed a,h,hPrime are retained; positive modulus one is covered."
+    },
+    {
+      "declaration": "sharedGeneralD_paired_fourier",
+      "result": "PASS_SOURCE",
+      "reason": "Only original positivity, two literal Compatible branches, and equality of the actual gcds occur as premises. Both packet instances construct t=s/q and tPrime=sPrime/q on the same actual D; no D|r premise appears. Root data yield n1*L=zeta*t and n1*LPrime=zeta*tPrime, and positive n1 cancels to L=K*t and LPrime=K*tPrime. All required units are derived from the packet conclusions. Root numerator is -a*k, slow phase is a*k/(N1*K*z), reciprocal numerator is a*f*k with z=t*tPrime and signed k=h*tPrime-hPrime*t. The complete slow phase and f are retained."
+    },
+    {
+      "declaration": "sharedGeneralD_realProjection_four_branches",
+      "result": "PASS_SOURCE",
+      "reason": "Expanding each real projection gives exactly (lambda*star(mu))/4 times F*star(G)+F*G+star(F)*star(G)+star(F)*G, for arbitrary complex lambda,mu,F,G. The branch coefficient is correct even for non-real amplitudes. No single-phase Gram assertion occurs."
+    }
+  ],
+  "actual_row_boundary": {
+    "source_checked": "Part3SharedFirstFactorSmallCoreSquaredFinite.lean:25-84, Part3CommonPoisson.lean:133-138, Part3SharedFirstFactorSmallCoreSmoothFrequency.lean:25-30",
+    "same_outer_data": "Use p=o.1.1,N1=o.1.2.1,N2=o.1.2.2,r=o.2.1.1,w=o.2.1.2.1*o.2.1.2.2,s=u.1,sPrime=v.1,h=u.2,hPrime=v.2,a=d.residue. Two active row guards identify their actual gcds with the stored outer D and supply both CRT branches.",
+    "complete_atoms": "lambda=d.gamma2 s, mu=d.gamma2 sPrime. F and G must each be the original poissonSmoothLowPass factor times the complete poissonNonzeroFrequency atom, retaining the h=0 conditional, V/L scalar, Schwartz Fourier coefficient, and actual CRT character. Their real projections are precisely what the row definition uses.",
+    "four_phase_branches": "F*star(G) uses signed difference kMinus=h*tPrime-hPrime*t. F*G uses the same raw theorem at h,-hPrime and retains kPlus=h*tPrime+hPrime*t. star(F)*star(G) is the conjugate of F*G; star(F)*G is the conjugate of F*star(G). Each complete complex amplitude is retained separately.",
+    "masks_and_window": "Candidate changes no finite carrier and asserts no row adapter. Any future adapter must preserve both original gcd/CRT guards, exact original smallCoreSquaredInnerCarrier and signed window, resonant boolean gate, outer coefficient, and both complete amplitudes. These are OPEN integration obligations, not missing hypotheses in this finite identity.",
+    "yz": "No y variable, coefficient map, multiplicity estimate or (y,z) reindexing is asserted. Both k and f remain explicit and cannot be discarded before later regrouping."
+  },
+  "api_review": {
+    "actual_native_signatures_read": true,
+    "concrete_mismatch_found": false,
+    "checks": [
+      "Nat.Coprime.mul_left combines coprimality in its left argument; the three inverse specs have the required product units.",
+      "Int.ModEq.mul_left and sub have the expected signed integer scaling and subtraction orientation.",
+      "coprimePart_pos is unconditional for its two natural arguments and justifies the local hn1.",
+      "Nat.mul_left_cancel explicitly takes positivity first, matching hn1.",
+      "Nat.Coprime.of_dvd_right takes the divisibility proof and accepts method notation on the coprimality proof. dvd_mul_right A c is A|A*c; dvd_mul_left c A is c|A*c.",
+      "fourier_neg has conjugate on its right side; fourier_coe_apply has the expected exp(2*pi*i*n*x/T).",
+      "Complex.re_eq_add_conj states ofReal(Re z)=(z+conj z)/2; Complex.star_def and conj_ofReal support the four-branch expansion.",
+      "Native star_mul reverses factors. The regrouping and projection proofs use commutative ring arithmetic, so reversal causes no mathematical error."
+    ],
+    "nonblocking_elaboration_uncertainties": [
+      "No tactic was executed. Definitional reduction through dsimp/change, congruence conversion, push_cast/ring normalization and field_simp remain untested. These are ordinary proof-script elaboration obligations; no specific failing tactic or repair is claimed."
+    ]
+  },
+  "source_bindings": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDPairedFourier.lean",
+      "sha256": "024842983e6a72164d07d06685ea7b18f49833bc6b6dcfc4e1997fc63fd53a6e",
+      "line_count": 303,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 303,
+          "normalized_lf_utf8_sha256": "024842983e6a72164d07d06685ea7b18f49833bc6b6dcfc4e1997fc63fd53a6e",
+          "literal_source": "import ImbalancedChen.Part3SharedFirstFactorGeneralDRootPacket\n\n/-!\n# Exact paired phases on one actual general-D packet\n\nThe two original tails share their actual gcd with the fixed right tail.\nAll factors and unit gates are derived by applying the original root packet\ntwice. The difference k is signed, the root has its original negative sign,\nand the complete slow phase has denominator N1*K*t*t'. Modulus one is allowed.\n\nThe separate real-projection identity retains all four complex branches,\nincluding their original amplitudes and coefficients. No finite carrier is\nchanged and no spectral estimate, (y,z) reindexing, or 7/32 bound is asserted.\nThe imported root-packet source is still a candidate pending root acceptance.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen scoped FourierTransform\n\nnamespace SharedGeneralDPairedFourier\n\nprivate theorem inverse_pair_modEq {m n t t' : ℕ}\n    (hn : n.Coprime m) (ht : t.Coprime m) (ht' : t'.Coprime m)\n    (h h' : ℤ) :\n    Int.ModEq m\n      (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m)\n      ((h * (t' : ℤ) - h' * (t : ℤ)) *\n        CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m) := by\n  let x := CanonicalReciprocalPhase.wPhaseInverse (n * t) m\n  let x' := CanonicalReciprocalPhase.wPhaseInverse (n * t') m\n  let j := CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m\n  have hx : Int.ModEq m (((n * t : ℕ) : ℤ) * x) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left ht)\n  have hx' : Int.ModEq m (((n * t' : ℕ) : ℤ) * x') 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left ht')\n  have hj : Int.ModEq m (((n * (t * t') : ℕ) : ℤ) * j) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec (hn.mul_left (ht.mul_left ht'))\n  have hleft : Int.ModEq m x ((t' : ℤ) * j) := by\n    calc\n      x ≡ x * (((n * (t * t') : ℕ) : ℤ) * j) [ZMOD m] := by\n        simpa only [mul_one] using (hj.mul_left x).symm\n      _ = ((t' : ℤ) * j) * (((n * t : ℕ) : ℤ) * x) := by\n        push_cast\n        ring\n      _ ≡ (t' : ℤ) * j [ZMOD m] := by\n        simpa only [mul_one] using hx.mul_left ((t' : ℤ) * j)\n  have hright : Int.ModEq m x' ((t : ℤ) * j) := by\n    calc\n      x' ≡ x' * (((n * (t * t') : ℕ) : ℤ) * j) [ZMOD m] := by\n        simpa only [mul_one] using (hj.mul_left x').symm\n      _ = ((t : ℤ) * j) * (((n * t' : ℕ) : ℤ) * x') := by\n        push_cast\n        ring\n      _ ≡ (t : ℤ) * j [ZMOD m] := by\n        simpa only [mul_one] using hx'.mul_left ((t : ℤ) * j)\n  have hdifference := (hleft.mul_left h).sub (hright.mul_left h')\n  convert hdifference using 1 <;> ring\n\nprivate theorem fourier_pair_real (h h' : ℤ) (x x' : ℝ) :\n    fourier h (x : UnitAddCircle) * star (fourier h' (x' : UnitAddCircle)) =\n      fourier 1 ((((h : ℝ) * x - (h' : ℝ) * x') : ℝ) : UnitAddCircle) := by\n  simp only [Complex.star_def]\n  rw [← fourier_neg]\n  simp only [fourier_coe_apply, div_one]\n  rw [← Complex.exp_add]\n  congr 1\n  push_cast\n  ring\n\nprivate theorem inverse_fourier_pair {m n t t' : ℕ}\n    (hm : 0 < m) (hn : n.Coprime m)\n    (ht : t.Coprime m) (ht' : t'.Coprime m) (a h h' : ℤ) :\n    fourier h\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) *\n      star (fourier h'\n        ((((a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : ℝ) / m) : ℝ) :\n            UnitAddCircle)) =\n      fourier 1\n        ((((a : ℝ) * ((h * (t' : ℤ) - h' * (t : ℤ) : ℤ) : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m : ℝ) / m) : ℝ) :\n            UnitAddCircle) := by\n  have hcircle := CanonicalReciprocalPhase.wPhase_circle_eq_of_modEq hm\n    ((inverse_pair_modEq hn ht ht' h h').mul_left a)\n  rw [fourier_pair_real]\n  have hreal :\n      (h : ℝ) * ((a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : ℝ) / m) -\n      (h' : ℝ) * ((a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : ℝ) / m) =\n      ((a * (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m) : ℤ) : ℝ) / m := by\n    push_cast\n    ring\n  rw [hreal]\n  simpa only [Int.cast_mul, Int.cast_sub, mul_assoc] using\n    congrArg (fourier 1) hcircle\n\nend SharedGeneralDPairedFourier\n\n/-- The actual pair of CRT phases on the same original general-D row.\nOnly original positivity, two original CRT branches and equality of the two\nactual gcds are premises. No packet factors, units or phase identities are\nprovided by a caller. The original signed frequencies and full slow phase\nsurvive, before any real projection or finite regrouping. -/\ntheorem sharedGeneralD_paired_fourier\n    {p r s s' w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hs' : 0 < s') (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (hc' : ComplexCRT.Compatible (p * (r * s')) (p * w) N1 N2)\n    (hsame : (r * s').gcd w = (r * s).gcd w) (a h h' : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let t' := s' / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let K := (p * D) * r0 * w0\n    let L := (p * (r * s)).lcm (p * w)\n    let L' := (p * (r * s')).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n    let z := t * t'\n    0 < K ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ s' = q * t' ∧\n      b.Coprime c ∧ zeta.Coprime A ∧\n      t.Coprime (A * c) ∧ t'.Coprime (A * c) ∧\n      L = K * t ∧ L' = K * t' ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) *\n        star (fourier h'\n          (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n            UnitAddCircle)) =\n        fourier 1\n          (((-(a : ℝ) * (k : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier 1 ((((a : ℝ) * (k : ℝ) /\n            ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) *\n          fourier 1\n            ((((a : ℝ) * (f : ℝ) * (k : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : ℝ) / c) : ℝ) :\n                UnitAddCircle) := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  let t' := s' / q\n  let g := N1.gcd N2\n  let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n  let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n  let n2 := N2 / g\n  let A := g * d1\n  let w0 := w / D\n  let b := A * n2 * r0\n  let c := n1 * w0\n  let zeta := c * p * D * r0\n  let K := (p * D) * r0 * w0\n  let L := (p * (r * s)).lcm (p * w)\n  let L' := (p * (r * s')).lcm (p * w)\n  let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n  let k : ℤ := h * (t' : ℤ) - h' * (t : ℤ)\n  let z := t * t'\n  have hdata := sharedGeneralDRootPacket_fourier hp hr hs hw hN1 hN2 hc a h\n  have hdata' := sharedGeneralDRootPacket_fourier hp hr hs' hw hN1 hN2 hc' a h'\n  dsimp only at hdata hdata'\n  rw [hsame] at hdata'\n  obtain ⟨_hq, hr0, ht, hA, hcpos, hst, _hvt, _hrq,\n    hb, hzeta, htAc, hroot, _hrecip, hphase⟩ := hdata\n  obtain ⟨_hq', _hr0', ht', _hA', _hcpos', hst', _hvt', _hrq',\n    _hb', _hzeta', htAc', hroot', _hrecip', hphase'⟩ := hdata'\n  change 0 < r0 at hr0\n  change 0 < t at ht\n  change 0 < t' at ht'\n  change 0 < A at hA\n  change 0 < c at hcpos\n  change s = q * t at hst\n  change s' = q * t' at hst'\n  change b.Coprime c at hb\n  change zeta.Coprime A at hzeta\n  change t.Coprime (A * c) at htAc\n  change t'.Coprime (A * c) at htAc'\n  change n1 * L = zeta * t at hroot\n  change n1 * L' = zeta * t' at hroot'\n  have hn1 : 0 < n1 := CanonicalReciprocalData.coprimePart_pos _ _\n  have hL : L = K * t := by\n    apply Nat.mul_left_cancel hn1\n    calc\n      n1 * L = zeta * t := hroot\n      _ = n1 * (K * t) := by dsimp only [zeta, c, K]; ring\n  have hL' : L' = K * t' := by\n    apply Nat.mul_left_cancel hn1\n    calc\n      n1 * L' = zeta * t' := hroot'\n      _ = n1 * (K * t') := by dsimp only [zeta, c, K]; ring\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left w (Nat.mul_pos hr hs)\n  have hw0 : 0 < w0 :=\n    Nat.div_pos (Nat.le_of_dvd hw (Nat.gcd_dvd_right (r * s) w)) hD\n  have hK : 0 < K := Nat.mul_pos (Nat.mul_pos (Nat.mul_pos hp hD) hr0) hw0\n  have htA : t.Coprime A := htAc.of_dvd_right (dvd_mul_right A c)\n  have htA' : t'.Coprime A := htAc'.of_dvd_right (dvd_mul_right A c)\n  have htc : t.Coprime c := htAc.of_dvd_right (dvd_mul_left c A)\n  have htc' : t'.Coprime c := htAc'.of_dvd_right (dvd_mul_left c A)\n  change fourier h\n      (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n        UnitAddCircle) =\n      fourier h (((-(a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n          UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ) / c) : ℝ) :\n            UnitAddCircle) at hphase\n  change fourier h'\n      (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : ℝ) / L' : ℝ) :\n        UnitAddCircle) =\n      fourier h' (((-(a : ℝ) *\n        (CanonicalReciprocalPhase.wPhaseInverse (zeta * t') A : ℝ) / A) : ℝ) :\n          UnitAddCircle) *\n        fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle) *\n        fourier h' ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t') c : ℝ) / c) : ℝ) :\n            UnitAddCircle) at hphase'\n  have hrootpair := SharedGeneralDPairedFourier.inverse_fourier_pair\n    hA hzeta htA htA' (-a) h h'\n  have hrecippair := SharedGeneralDPairedFourier.inverse_fourier_pair\n    hcpos hb htc htc' (a * f) h h'\n  simp only [Int.cast_neg, Int.cast_mul, mul_assoc] at hrootpair hrecippair\n  have hslowpair :\n      fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle)) =\n      fourier 1 ((((a : ℝ) * (k : ℝ) /\n        ((N1 : ℝ) * K * z)) : ℝ) : UnitAddCircle) := by\n    rw [SharedGeneralDPairedFourier.fourier_pair_real]\n    have hreal :\n        (h : ℝ) * ((a : ℝ) / ((N1 : ℝ) * L)) -\n          (h' : ℝ) * ((a : ℝ) / ((N1 : ℝ) * L')) =\n        (a : ℝ) * (k : ℝ) / ((N1 : ℝ) * K * z) := by\n      rw [hL, hL']\n      dsimp only [k, z]\n      push_cast\n      have hN10 : (N1 : ℝ) ≠ 0 := by positivity\n      have hK0 : (K : ℝ) ≠ 0 := by positivity\n      have ht0 : (t : ℝ) ≠ 0 := by positivity\n      have ht'0 : (t' : ℝ) ≠ 0 := by positivity\n      field_simp [hN10, hK0, ht0, ht'0] <;> ring\n    rw [hreal]\n  refine ⟨hK, hA, hcpos, hst, hst', hb, hzeta, htAc, htAc', hL, hL', ?_⟩\n  rw [hphase, hphase']\n  simp only [star_mul]\n  calc\n    _ =\n      (fourier h (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n            UnitAddCircle) *\n        star (fourier h' (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (zeta * t') A : ℝ) / A) : ℝ) :\n            UnitAddCircle))) *\n      (fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) / ((N1 : ℝ) * L')) : ℝ) : UnitAddCircle))) *\n      (fourier h ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ) / c) : ℝ) :\n            UnitAddCircle) *\n        star (fourier h' ((((a : ℝ) * (f : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (b * t') c : ℝ) / c) : ℝ) :\n            UnitAddCircle))) := by ring\n    _ = _ := by\n      simpa only [k, z, mul_assoc] using\n        congrArg₂ (fun x y : ℂ => x * y)\n          (congrArg₂ (fun x y : ℂ => x * y) hrootpair hslowpair) hrecippair\n\n/-- Apply this to the complete smooth Fourier atoms F,G, including their\nlow pass and Poisson amplitudes. It is the exact real-projection Gram,\nwith all four branches and arbitrary original complex coefficients. -/\ntheorem sharedGeneralD_realProjection_four_branches (lambda mu F G : ℂ) :\n    (lambda * (F.re : ℂ)) * star (mu * (G.re : ℂ)) =\n      (lambda * star mu) / 4 *\n        (F * star G + F * G + star F * star G + star F * G) := by\n  simp only [star_mul, Complex.star_def, Complex.conj_ofReal]\n  rw [Complex.re_eq_add_conj F, Complex.re_eq_add_conj G]\n  ring\n\nend\n\nend ImbalancedChen.Part3\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorGeneralDRootPacket.lean",
+      "sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+      "line_count": 182,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 26,
+          "last": 63,
+          "normalized_lf_utf8_sha256": "55741bee238e3f49b87c9b8ca0e39b8845de78f1c6679513e67b4dddb1d3db04",
+          "literal_source": "private theorem normalized_tail {r s w : ℕ}\n    (hr : 0 < r) (hs : 0 < s) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ r0.Coprime q ∧\n      s = q * t ∧ (r * s) / D = r0 * t := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  change 0 < q ∧ 0 < r0 ∧ 0 < t ∧ r0.Coprime q ∧\n    s = q * t ∧ (r * s) / D = r0 * t\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left w (Nat.mul_pos hr hs)\n  have hd : 0 < d := Nat.gcd_pos_of_pos_left D hr\n  have hdD : d ∣ D := Nat.gcd_dvd_right r D\n  have hdr : d ∣ r := Nat.gcd_dvd_left r D\n  have hDdiv : D ∣ r * s := Nat.gcd_dvd_left (r * s) w\n  have hq : 0 < q := Nat.div_pos (Nat.le_of_dvd hD hdD) hd\n  have hr0 : 0 < r0 := Nat.div_pos (Nat.le_of_dvd hr hdr) hd\n  have hDfact : d * q = D := Nat.mul_div_cancel' hdD\n  have hrfact : d * r0 = r := Nat.mul_div_cancel' hdr\n  have hcop : r0.Coprime q := Nat.coprime_div_gcd_div_gcd hd\n  have hqdiv : q ∣ r0 * s := by\n    apply Nat.dvd_of_mul_dvd_mul_left hd\n    simpa only [← mul_assoc, hDfact, hrfact] using hDdiv\n  have hqs : q ∣ s := hcop.symm.dvd_of_dvd_mul_left hqdiv\n  have hsfact : q * t = s := Nat.mul_div_cancel' hqs\n  have ht : 0 < t := Nat.div_pos (Nat.le_of_dvd hs hqs) hq\n  refine ⟨hq, hr0, ht, hcop, hsfact.symm, ?_⟩\n  apply Nat.mul_left_cancel hD\n  rw [Nat.mul_div_cancel' hDdiv]\n  calc\n    r * s = (d * r0) * (q * t) := by rw [hrfact, hsfact]\n    _ = D * (r0 * t) := by rw [← hDfact]; ring\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 74,
+          "last": 178,
+          "normalized_lf_utf8_sha256": "1ffc9dba1837bf775991e18d2645a8e3e1761764be49df0f50ee2a233ae2fb36",
+          "literal_source": "theorem sharedGeneralDRootPacket_fourier\n    {p r s w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (a h : ℤ) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let L := (p * (r * s)).lcm (p * w)\n    let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n    0 < q ∧ 0 < r0 ∧ 0 < t ∧ 0 < A ∧ 0 < c ∧\n      s = q * t ∧ (r * s) / D = r0 * t ∧ r0.Coprime q ∧\n      b.Coprime c ∧ zeta.Coprime A ∧ t.Coprime (A * c) ∧\n      n1 * L = zeta * t ∧ A * n2 * ((r * s) / D) = b * t ∧\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n          UnitAddCircle) =\n        fourier h\n          (((-(a : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * t) A : ℝ) / A) : ℝ) :\n              UnitAddCircle) *\n          fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h\n            (((((a : ℝ) * (f : ℝ) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * t) c : ℝ)) / c) : ℝ) :\n                UnitAddCircle) := by\n  let D := (r * s).gcd w\n  let d := r.gcd D\n  let q := D / d\n  let r0 := r / d\n  let t := s / q\n  let g := N1.gcd N2\n  let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n  let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n  let n2 := N2 / g\n  let A := g * d1\n  let w0 := w / D\n  let b := A * n2 * r0\n  let c := n1 * w0\n  let zeta := c * p * D * r0\n  let L := (p * (r * s)).lcm (p * w)\n  let f : ℤ := ((d1 : ℤ) * n1 - n2) / (p * D : ℕ)\n  obtain ⟨hq, hr0, ht, hrq, hst, hvt⟩ :=\n    SharedGeneralDRootPacket.normalized_tail (w := w) hr hs\n  change 0 < q at hq\n  change 0 < r0 at hr0\n  change 0 < t at ht\n  change r0.Coprime q at hrq\n  change s = q * t at hst\n  change (r * s) / D = r0 * t at hvt\n  have hlic := sharedDifferenceData_licenses hp (Nat.mul_pos hr hs) hw hN1 hN2 hc a\n  dsimp only at hlic\n  obtain ⟨_hg, _hD, _hd1, hn1, _hn2, _hv0, hw0, hA, _hL,\n    _hN1eq, _hN2eq, _hv_eq, _hw_eq, hLeq, _hvw, _hnD, _hvc,\n    hbc, hroot, _rest⟩ := hlic\n  change 0 < n1 at hn1\n  change 0 < w0 at hw0\n  change 0 < A at hA\n  change L = (p * D) * ((r * s) / D) * w0 at hLeq\n  change (A * n2 * ((r * s) / D)).Coprime c at hbc\n  change (n1 * L).Coprime A at hroot\n  have hrecip : A * n2 * ((r * s) / D) = b * t := by\n    rw [hvt]\n    dsimp only [b]\n    ring\n  have hrootden : n1 * L = zeta * t := by\n    rw [hLeq, hvt]\n    dsimp only [zeta, c]\n    ring\n  rw [hrecip] at hbc\n  rw [hrootden] at hroot\n  have h_b : b.Coprime c := hbc.of_dvd_left (dvd_mul_right b t)\n  have h_tc : t.Coprime c := hbc.of_dvd_left (dvd_mul_left t b)\n  have h_zeta : zeta.Coprime A := hroot.of_dvd_left (dvd_mul_right zeta t)\n  have h_tA : t.Coprime A := hroot.of_dvd_left (dvd_mul_left t zeta)\n  refine ⟨hq, hr0, ht, hA, Nat.mul_pos hn1 hw0, hst, hvt, hrq,\n    h_b, h_zeta, h_tA.mul_right h_tc, hrootden, hrecip, ?_⟩\n  have he := sharedDifferenceReciprocity_fourier hp (Nat.mul_pos hr hs) hw hN1 hN2 hc a h\n  change fourier h\n      (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : ℝ) / L : ℝ) :\n        UnitAddCircle) =\n      fourier h\n        (((-(a : ℝ) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n1 * L) A : ℝ) / A) : ℝ) :\n            UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N1 : ℝ) * L)) : ℝ) : UnitAddCircle) *\n        fourier h\n          (((((a : ℝ) * (f : ℝ) *\n            (CanonicalReciprocalPhase.wPhaseInverse\n              (A * n2 * ((r * s) / D)) c : ℝ)) / ((n1 : ℝ) * w0)) : ℝ) :\n              UnitAddCircle) at he\n  have hcR : (c : ℝ) = (n1 : ℝ) * w0 := Nat.cast_mul n1 w0\n  simpa only [hrootden, hrecip, hcR] using he\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CanonicalReciprocalPhase.lean",
+      "sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+      "line_count": 326,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 35,
+          "last": 59,
+          "normalized_lf_utf8_sha256": "ada51d7a9f1010f398b1ccdc3a62aa1049aa76baf2536135787d18ab6a3540ba",
+          "literal_source": "\ndef wPhaseInverse (n m : ℕ) : ℤ := n.gcdA m\n\ntheorem wPhaseInverse_spec {n m : ℕ} (h : n.Coprime m) :\n    Int.ModEq m ((n : ℤ) * wPhaseInverse n m) 1 := by\n  apply Int.modEq_iff_dvd.mpr\n  refine ⟨n.gcdB m, ?_⟩\n  have hb := Nat.gcd_eq_gcd_ab n m\n  rw [h.gcd_eq_one, Nat.cast_one] at hb\n  dsimp [wPhaseInverse]\n  linarith\n\n/-- Integer congruences give equal normalized phases, also for modulus one. -/\ntheorem wPhase_circle_eq_of_modEq {m : ℕ} (hm : 0 < m) {x y : ℤ}\n    (h : Int.ModEq m x y) :\n    (((x : ℝ) / m : ℝ) : UnitAddCircle) = ((y : ℝ) / m : ℝ) := by\n  obtain ⟨z, hz⟩ := h.dvd\n  apply sub_eq_zero.mp\n  rw [← AddCircle.coe_sub, AddCircle.coe_eq_zero_iff]\n  refine ⟨-z, ?_⟩\n  have hm' : (m : ℝ) ≠ 0 := by positivity\n  have hz' : (y : ℝ) - x = m * (z : ℝ) := by exact_mod_cast hz\n  simp only [zsmul_eq_mul, Int.cast_neg, mul_one]\n  field_simp\n  nlinarith\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CanonicalReciprocalData.lean",
+      "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line_count": 354,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 40,
+          "last": 56,
+          "normalized_lf_utf8_sha256": "b874c960bd3cbbdab72cdcd3dcb53158b1a8c6efa6853ed191e88365d0b38a3d",
+          "literal_source": "\n/-- The complementary factor of `n`, containing primes not dividing `d`. -/\ndef coprimePart (n d : ℕ) : ℕ :=\n  ∏ p ∈ n.primeFactors.filter (fun p => ¬p ∣ d), p ^ n.factorization p\n\ntheorem supportedPart_pos (n d : ℕ) : 0 < supportedPart n d := by\n  apply Nat.pos_of_ne_zero\n  apply Finset.prod_ne_zero_iff.mpr\n  intro p hp\n  exact pow_ne_zero _ (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hp).1).ne_zero\n\ntheorem coprimePart_pos (n d : ℕ) : 0 < coprimePart n d := by\n  apply Nat.pos_of_ne_zero\n  apply Finset.prod_ne_zero_iff.mpr\n  intro p hp\n  exact pow_ne_zero _ (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hp).1).ne_zero\n\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21",
+      "line_count": 619,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 25,
+          "last": 84,
+          "normalized_lf_utf8_sha256": "8f7b3ca26ec05fd8dc949893005efcc85273f74100e689343ce896c72ce1847f",
+          "literal_source": "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))\n\ndef MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)\n\ndef MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0\n\ndef MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0\n\ndef MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0\n\ndef MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPoisson.lean",
+      "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "line_count": 280,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 133,
+          "last": 138,
+          "normalized_lf_utf8_sha256": "f4ed3fc255d33380cd469c96881a0034632649a0256db4c6fb25297be0959fad",
+          "literal_source": "def poissonNonzeroFrequency (t x : ℝ) (h : ℤ) : ℂ :=\n  if h = 0 then 0 else\n    t • (𝓕 dyadicCutoffSchwartz) (t * h) * fourier h (x : UnitAddCircle)\n\n@[simp] theorem poissonNonzeroFrequency_zero (t x : ℝ) :\n    poissonNonzeroFrequency t x 0 = 0 := rfl\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+      "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+      "line_count": 813,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 25,
+          "last": 30,
+          "normalized_lf_utf8_sha256": "95e72b3719a36e3f8967f3cf14be1adb7020213acea3d6ddc2f4cec821e995d2",
+          "literal_source": "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)\n\ndef MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))\n\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "line_count": 313,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 81,
+          "last": 82,
+          "normalized_lf_utf8_sha256": "4850bd2bd9b2213d86f283719bb195f019d9d66cabd4df122d03452658bed810",
+          "literal_source": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 120,
+          "last": 138,
+          "normalized_lf_utf8_sha256": "e6e14ba9c419926b821153395fb8ca323ab42c9c15ad75d13216d74419aa6919",
+          "literal_source": "\ntheorem residue_spec {q r m1 m2 : ℕ} (a : ℤ) (hc : Compatible q r m1 m2) :\n    Int.ModEq q (residue q r m1 m2 a * m1) a ∧\n      Int.ModEq r (residue q r m1 m2 a * m2) a ∧\n        ∀ n : ℤ, (Int.ModEq q (n * m1) a ∧ Int.ModEq r (n * m2) a) ↔\n          Int.ModEq (q.lcm r) n (residue q r m1 m2 a) := by\n  simpa only [residue, dif_pos hc] using\n    Classical.choose_spec (exists_product_crt_residue hc.1 hc.2.1 hc.2.2 a)\n\ndef productProgressionWeight (S : Finset ℕ) (w : ℕ → ℝ) (a : ℤ)\n    (q r m1 m2 : ℕ) : ℝ :=\n  ∑ n ∈ S, if Int.ModEq q ((n : ℤ) * m1) a ∧\n    Int.ModEq r ((n : ℤ) * m2) a then w n else 0\n\ndef constructedProgressionWeight (S : Finset ℕ) (w : ℕ → ℝ) (a : ℤ)\n    (q r m1 m2 : ℕ) : ℝ :=\n  if Compatible q r m1 m2 then\n    ∑ n ∈ S, if Int.ModEq (q.lcm r) (n : ℤ) (residue q r m1 m2 a)\n      then w n else 0\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\ModEq.lean",
+      "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+      "line_count": 410,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 173,
+          "last": 195,
+          "normalized_lf_utf8_sha256": "4d94ff4b6e14b37409d043f49e703dccd94210c99f6c64ef6ad8c72a0a594fc6",
+          "literal_source": "  h.add_left_cancel (by simp_rw [← sub_eq_add_neg, sub_self]; rfl)\n\n@[gcongr]\nprotected theorem sub (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n]) : a - c ≡ b - d [ZMOD n] := by\n  rw [sub_eq_add_neg, sub_eq_add_neg]\n  exact h₁.add h₂.neg\n\nprotected theorem sub_left (c : ℤ) (h : a ≡ b [ZMOD n]) : c - a ≡ c - b [ZMOD n] :=\n  ModEq.rfl.sub h\n\nprotected theorem sub_right (c : ℤ) (h : a ≡ b [ZMOD n]) : a - c ≡ b - c [ZMOD n] :=\n  h.sub ModEq.rfl\n\nprotected theorem mul_left (c : ℤ) (h : a ≡ b [ZMOD n]) : c * a ≡ c * b [ZMOD n] :=\n  h.mul_left'.of_dvd <| dvd_mul_left _ _\n\nprotected theorem mul_right (c : ℤ) (h : a ≡ b [ZMOD n]) : a * c ≡ b * c [ZMOD n] :=\n  h.mul_right'.of_dvd <| dvd_mul_right _ _\n\n@[gcongr]\nprotected theorem mul (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n]) : a * c ≡ b * d [ZMOD n] :=\n  (h₂.mul_left _).trans (h₁.mul_right _)\n\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+      "line_count": 605,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 122,
+          "last": 138,
+          "normalized_lf_utf8_sha256": "88300b285cce78ee10ebdd84ad73b12bb690e16d1504cdbce479202fd440e351",
+          "literal_source": "considered as bundled continuous maps from `ℝ / ℤ • T` to `ℂ`. -/\ndef fourier (n : ℤ) : C(AddCircle T, ℂ) where\n  toFun x := toCircle (n • x :)\n  continuous_toFun := continuous_induced_dom.comp <| continuous_toCircle.comp <| continuous_zsmul _\n\n@[simp]\ntheorem fourier_apply {n : ℤ} {x : AddCircle T} : fourier n x = toCircle (n • x :) :=\n  rfl\n\n-- simp normal form is `fourier_coe_apply'`\ntheorem fourier_coe_apply {n : ℤ} {x : ℝ} :\n    fourier n (x : AddCircle T) = Complex.exp (2 * π * Complex.I * n * x / T) := by\n  rw [fourier_apply, ← QuotientAddGroup.mk_zsmul, toCircle, Function.Periodic.lift_coe,\n    Circle.coe_exp, Complex.ofReal_mul, Complex.ofReal_div, Complex.ofReal_mul, zsmul_eq_mul,\n    Complex.ofReal_mul, Complex.ofReal_intCast]\n  norm_num\n  congr 1; ring\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 159,
+          "last": 165,
+          "normalized_lf_utf8_sha256": "71153e970bff35665a941f22c8e99892439d4a6e878ff0b1c81f5ac2f6cb739a",
+          "literal_source": "-- simp normal form is `fourier_neg'`\ntheorem fourier_neg {n : ℤ} {x : AddCircle T} : fourier (-n) x = conj (fourier n x) := by\n  induction x using QuotientAddGroup.induction_on\n  simp_rw [fourier_apply, toCircle]\n  rw [← QuotientAddGroup.mk_zsmul, ← QuotientAddGroup.mk_zsmul]\n  simp_rw [Function.Periodic.lift_coe, ← Circle.coe_inv_eq_conj, ← Circle.exp_neg,\n    neg_smul, mul_neg]\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Complex\\Basic.lean",
+      "sha256": "e279bd6369e83ebf6716e17a8f38c81c812020753472cac5e7ae2a501790b760",
+      "line_count": 881,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 474,
+          "last": 477,
+          "normalized_lf_utf8_sha256": "8711869c4ae27a8ae6bfbd7977264af280adfca44826637d4c2b8cc89010d1a0",
+          "literal_source": "@[simp]\ntheorem conj_ofReal (r : ℝ) : conj (r : ℂ) = r :=\n  Complex.ext_iff.2 <| by simp\n\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 500,
+          "last": 502,
+          "normalized_lf_utf8_sha256": "b65f6ed7c77838636a711b819118c838c00f7394a885668d85477840c11be5f8",
+          "literal_source": "@[simp]\ntheorem star_def : (Star.star : ℂ → ℂ) = conj :=\n  rfl\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 795,
+          "last": 797,
+          "normalized_lf_utf8_sha256": "d563e191a869cee45a14dc41c8c04f46a955405cabf9f91bf0ecce3e7e59a604",
+          "literal_source": "/-- A complex number `z` plus its conjugate `conj z` is `2` times its real part. -/\ntheorem re_eq_add_conj (z : ℂ) : (z.re : ℂ) = (z + conj z) / 2 := by\n  simp only [add_conj, ofReal_mul, ofReal_ofNat, mul_div_cancel_left₀ (z.re : ℂ) two_ne_zero]\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Complex\\Exponential.lean",
+      "sha256": "78ca88512755a04b7346806b8e74fb3930bf14c0ec289107694a33c1947b7821",
+      "line_count": 714,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 110,
+          "last": 120,
+          "normalized_lf_utf8_sha256": "5f6ad9e4e09363ab60f4f7f73b1377c9f33888fd10d8728c8a8be0765dbb312e",
+          "literal_source": "set_option backward.isDefEq.respectTransparency false in\ntheorem exp_add : exp (x + y) = exp x * exp y := by\n  have hj : ∀ j : ℕ, (∑ m ∈ range j, (x + y) ^ m / m.factorial) =\n        ∑ i ∈ range j, ∑ k ∈ range (i + 1), x ^ k / k.factorial *\n          (y ^ (i - k) / (i - k).factorial) := by\n    intro j\n    refine Finset.sum_congr rfl fun m _ => ?_\n    rw [add_pow, div_eq_mul_inv, sum_mul]\n    refine Finset.sum_congr rfl fun I hi => ?_\n    have h₁ : (m.choose I : ℂ) ≠ 0 :=\n      Nat.cast_ne_zero.2 (pos_iff_ne_zero.1 (Nat.choose_pos (Nat.le_of_lt_succ (mem_range.1 hi))))\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\GCD\\Basic.lean",
+      "sha256": "c46b9173200adac93cefa0f8d9ee02306930771a1960796335c32455f719c3ac",
+      "line_count": 278,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 168,
+          "last": 172,
+          "normalized_lf_utf8_sha256": "2a0fe7cef2b2d964c1c22e645573aac3c3a9387a73d2eb48129b2bcef549c8c3",
+          "literal_source": "lemma Coprime.of_dvd_left (ha : a₁ ∣ a₂) (h : Coprime a₂ b) : Coprime a₁ b := h.coprime_dvd_left ha\n\n-- TODO: Replace `Nat.Coprime.coprime_dvd_right`\nlemma Coprime.of_dvd_right (hb : b₁ ∣ b₂) (h : Coprime a b₂) : Coprime a b₁ :=\n  h.coprime_dvd_right hb\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Coprime.lean",
+      "sha256": "05b67b9e50bb0b92ba80dc4a8074580c14a8bdcdbdc150486f4796d104c8426a",
+      "line_count": 195,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 87,
+          "last": 91,
+          "normalized_lf_utf8_sha256": "d963088a84a3e0f24280f797de2ab409fb2b53ce9b27f04c9903a69e4aaf96d1",
+          "literal_source": "theorem Coprime.mul_left (H1 : Coprime m k) (H2 : Coprime n k) : Coprime (m * n) k :=\n  (H1.gcd_mul_left_cancel n).trans H2\n\ntheorem Coprime.mul_right (H1 : Coprime k m) (H2 : Coprime k n) : Coprime k (m * n) :=\n  (H1.symm.mul_left H2.symm).symm\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lemmas.lean",
+      "sha256": "8259037db9a9bf223c4d57eb7811ff0b65e4439f98ed0bf3cd301565ff46daad",
+      "line_count": 1958,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 582,
+          "last": 585,
+          "normalized_lf_utf8_sha256": "b32eeb654f896fbd230ee5ffa7d88898a3ad20da15023a27408d893e19ff13c8",
+          "literal_source": "protected theorem mul_left_cancel {n m k : Nat} (np : 0 < n) (h : n * m = n * k) : m = k := by\n  match Nat.lt_trichotomy m k with\n  | Or.inl p =>\n    have r : n * m < n * k := Nat.mul_lt_mul_of_pos_left p np\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "line_count": 467,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 94,
+          "last": 94,
+          "normalized_lf_utf8_sha256": "6f1879360b6d69a50f41dda6350284ca22db56530e3c670b7eb86eb3d24d2e1d",
+          "literal_source": "theorem gcd_dvd_right (m n : Nat) : gcd m n ∣ n := (gcd_dvd m n).right\n",
+          "independently_read_actual_source": true
+        },
+        {
+          "first": 147,
+          "last": 148,
+          "normalized_lf_utf8_sha256": "c84aeec7da4da90cf7a51857c5d8d2a14e9f91089d7541b21d5acf80cb03fddc",
+          "literal_source": "theorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_left m n) mpos\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Div\\Lemmas.lean",
+      "sha256": "3046e785238fe8afe1f0b40f02902ee1cef13589ba8fcb045bc48f16ad4412c0",
+      "line_count": 268,
+      "matches_author_hash_and_spans": true,
+      "spans": [
+        {
+          "first": 96,
+          "last": 100,
+          "normalized_lf_utf8_sha256": "a41111e7d8fbf40622beff50c921311fa69271060d83566a8681e4455e3b907d",
+          "literal_source": "theorem div_pos (hba : b ≤ a) (hb : 0 < b) : 0 < a / b := by\n  cases b\n  · contradiction\n  · simp [Nat.pos_iff_ne_zero, hba]\n\n",
+          "independently_read_actual_source": true
+        }
+      ]
+    }
+  ],
+  "additional_native_api_bindings": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Star\\Basic.lean",
+      "sha256": "cdfcab3077ba3a210ef23a201906ab90fe738fc6d84724ce11f616b291a6ed4e",
+      "first": 127,
+      "last": 136,
+      "normalized_lf_utf8_sha256": "35482e06922f6d685307267cb282d46b03b5bf91455a88c3fde93a3a0bd134cc",
+      "literal_source": "such that `star (r * s) = star s * star r`.\n-/\nclass StarMul (R : Type u) [Mul R] extends InvolutiveStar R where\n  /-- `star` skew-distributes over multiplication. -/\n  star_mul : ∀ r s : R, star (r * s) = star s * star r\n\nexport StarMul (star_mul)\n\nattribute [simp 900] star_mul\n\n"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Divisibility\\Basic.lean",
+      "sha256": "dc3e41682b147b1938eda99eb6056605fe59f77de9db713deac694f4f0709100",
+      "first": 77,
+      "last": 81,
+      "normalized_lf_utf8_sha256": "8a0109909c09fb23315520a188ba7db714a606e17f5f3ad8f83b5e4ca4b8f0d2",
+      "literal_source": "\n@[simp]\ntheorem dvd_mul_right (a b : α) : a ∣ a * b :=\n  Dvd.intro b rfl\n\n"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Divisibility\\Basic.lean",
+      "sha256": "dc3e41682b147b1938eda99eb6056605fe59f77de9db713deac694f4f0709100",
+      "first": 230,
+      "last": 234,
+      "normalized_lf_utf8_sha256": "0a2006b15404cf191172032f1d722a6589c44bf116f3159d77d43bfb6dca56d8",
+      "literal_source": "\n@[simp]\ntheorem dvd_mul_left (a b : α) : a ∣ b * a :=\n  Dvd.intro b (mul_comm a b)\n\n"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "first": 63,
+      "last": 69,
+      "normalized_lf_utf8_sha256": "814c2d8667d7582a2af1d3fbea9bbd81edfe11470c7ad811a69552fd396fac5f",
+      "literal_source": "  rwa [mod_add_div] at this\n\ntheorem le_of_dvd {m n : Nat} (h : 0 < n) : m ∣ n → m ≤ n\n  | ⟨k, e⟩ => by\n    revert h\n    rw [e]\n    match k with\n"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Prelude.lean",
+      "sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+      "first": 2066,
+      "last": 2075,
+      "normalized_lf_utf8_sha256": "c526bbe70d6c4bee105c4fd1c527ebdc07551385222aa82c582396b67fafc748",
+      "literal_source": "\nprotected theorem Nat.mul_pos :\n    {n m : Nat} → (hn : LT.lt 0 n) → (hm : LT.lt 0 m) → LT.lt 0 (HMul.hMul n m)\n  | _, zero, _, hb => (Nat.not_succ_le_zero _ hb).elim\n  | _, succ _, ha, _ => Nat.add_pos_right _ ha\n\nprotected theorem Nat.pow_pos {a : Nat} : {n : Nat} → (h : LT.lt 0 a) → LT.lt 0 (HPow.hPow a n)\n  | zero, _ => Nat.zero_lt_succ _\n  | succ _, h => Nat.mul_pos (Nat.pow_pos h) h\n\n"
+    }
+  ],
+  "open_work": [
+    "Elaborate and inspect exact declaration types and axioms only after the parent authorizes the next gate and resolves dependency acceptance.",
+    "Prove the typed complete guarded-row adapter and all four phase/amplitude branches on original finite membership.",
+    "Prove exact coefficient maps, multiplicities, masks and (y,z) reindexing while retaining k and f.",
+    "All nonresonant spectral bounds, the original 7/32 estimate, hLower/hUpper and the unconditional main theorem remain OPEN."
+  ],
+  "execution_scope": {
+    "lean_source_edits": false,
+    "compiler_executed": false,
+    "checker_executed": false,
+    "proper_executed": false,
+    "helper_executed": false,
+    "git_executed": false,
+    "pins_changed": false,
+    "catalog_changed": false,
+    "kernel_acceptance": false,
+    "actual_generated_declarations": null,
+    "baseline": "Parent-reported accepted 173/4024/121; unchanged by this review.",
+    "operations": "Read-only PowerShell file reads, source searches, SHA256 calculations and JSON serialization; one atomic review JSON write only."
+  },
+  "quota": {
+    "parent_reported_used_percent": 35,
+    "parent_reported_remaining_percent": 65,
+    "independently_queried": false,
+    "stop_remaining_lte": 40
+  },
+  "hash_convention": "Whole-file SHA256 covers exact bytes. Literal inclusive source spans are reconstructed from actual files as UTF-8 LF with one terminal LF. Complete headers end at the actual proof assignment := by, including every preceding local let :=."
+}

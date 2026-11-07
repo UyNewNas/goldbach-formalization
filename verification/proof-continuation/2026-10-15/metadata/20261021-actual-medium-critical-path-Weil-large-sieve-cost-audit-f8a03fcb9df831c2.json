@@ -1,0 +1,668 @@
+{
+  "status": "READONLY_ACTUAL_GEOMETRY_CRITICAL_PATH_COST_AUDIT_NOT_ANALYTIC_CLOSURE_NOT_NEW_SUPPLIER",
+  "author": "/root/density_gap_oct21",
+  "created_utc": "2026-10-21T01:24:53.094829+00:00",
+  "main_conclusion": [
+    "A full all-scale7/32 inverse-fraction large sieve is stronger than the logically required actual MediumAdmissible complement estimate. It is one sufficient route, not proved logically necessary.",
+    "No complete actual nonzero complement branch was closed in this audit using the currently owned high-conductor/individual-modulus APIs. The missing common-weight/root operator transport is real, and even the optimistic standard modulus-square or individual-Weil off-diagonal envelopes fail at a geometrically and arithmetically nonempty allowed scale point below.",
+    "The calculation is a diagnosis of specified upper-bound routes, not a lower bound on the actual exponential sum or a proof that all refinements, external work or restricted-parameter methods are impossible. No new broad external search was performed."
+  ],
+  "exact_goal_preserved": {
+    "manuscript_HEAD": "ba6ec11d800eccc54406490631895e174de85766",
+    "Theorem1_1": "all fixed 1/2<b<1, liminf_even D_b/H_N >= 49044063/25000000 - (8452171/1250000)*log(1/b)",
+    "Corollary1_2": "simultaneous eventual D_.74816964>=H/100000, D_.74816865>=H/1000000, D_.9>=1.24889H",
+    "selectors_constants_quantifiers_unchanged": true
+  },
+  "actual_structures_geometry_and_phase_sources_read": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line_start": 38,
+      "line_end": 55,
+      "complete_excerpt": "  V : ℝ\n  Q1 : ℝ\n  Q2 : ℝ\n  Q3 : ℝ\n  residue : ℤ\n  intervalLo : ℝ\n  intervalHi : ℝ\n  alpha : ℕ → ℂ\n  beta : ℕ → ℂ\n  gamma1 : ℕ → ℂ\n  gamma2 : ℕ → ℂ\n  gamma3 : ℕ → ℂ\n\ndef MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V\n\ndef MediumAtom.alphaCarrier (d : MediumAtom) : Finset ℕ :=\n  (Finset.Icc (Nat.ceil d.U) (Nat.floor (2 * d.U))).filter\n    (fun n => d.intervalLo < (n : ℝ) ∧ (n : ℝ) ≤ d.intervalHi)"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line_start": 57,
+      "line_end": 78,
+      "complete_excerpt": "def MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))\n\n/-- Concrete dyadic support `Q ≤ q ≤ 2Q`, including the trivial factor\n`q=1` at `Q=1`. The manuscript writes `q ≍ Q`; the compiler must assign\noverlapping endpoints without multiplicity loss when it chooses its atoms. -/\ndef factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n\n/-- The returned variable has ONE interval and ONE phase, shared by all\nlevels. There is deliberately no level-indexed interval or phase field. -/\nstructure CommonCompletedVariable where\n  intervalLo : ℕ\n  intervalHi : ℕ\n  additivePhase : ℝ\n\ndef CommonCompletedVariable.weight (d : CommonCompletedVariable) (m : ℕ) : ℂ :=\n  if m ∈ Finset.Ico d.intervalLo d.intervalHi then\n    Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (d.additivePhase : ℂ) * (m : ℂ))\n  else 0\n\n/-- The ABL transformed coefficient has no spectral-height argument."
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line_start": 125,
+      "line_end": 168,
+      "complete_excerpt": "medium proposition.  `scale` is the complete convolution product. -/\ndef MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n\n/-- Missing uniform signed medium estimate.  This proposition is not proved\nby the low-rank BV or one-long integer-slot results in this Part. -/\ndef RestrictedMediumTarget {ι : Type*} (F : ι → MediumAtom) : Prop :=\n  ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n    ∀ i : ι, x0 ≤ (F i).scale →\n      ‖(F i).signedError‖ ≤ C * (F i).scale / (Real.log (F i).scale) ^ A\n\n/-- Exact unclosed theorem type, including the fixed family SW constants. -/\ndef RestrictedMediumObligation {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (σ κ c0 : ℝ) : Prop :=\n  0 < σ → σ < 1 / 100 → 0 < c0 → 0 ≤ κ → κ ≤ σ / 100 →\n  (∀ i : ι, MediumAdmissible B σ κ c0 (F i)) →\n  UniformAuxiliarySW F C0 → RestrictedMediumTarget F\n\n/-- Labelled prime tuples, retaining repeated primes and their slot order. -/\ndef labelledPrimeTuples (k P : ℕ) : Finset (Fin k → Fin (P + 1)) :=\n  Finset.univ.filter (fun t => ∀ i : Fin k, Nat.Prime (t i).val)\n\ndef labelledProduct {k P : ℕ} (t : Fin k → Fin (P + 1)) : ℕ :="
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "line_start": 31,
+      "line_end": 45,
+      "complete_excerpt": "\n/-- The original complete physical modulus, with its three labels. -/\ndef complexFactorModulus (r : ℕ × ℕ × ℕ) : ℕ := r.1 * r.2.1 * r.2.2\n\n/-- The original complex factor coefficient, with no absolute value or\nnormalization by a number of factorizations. -/\ndef MediumAtom.complexFactorGamma (d : MediumAtom) (r : ℕ × ℕ × ℕ) : ℂ :=\n  d.gamma1 r.1 * d.gamma2 r.2.1 * d.gamma3 r.2.2\n\ndef MediumAtom.complexFactorLabels (d : MediumAtom) : Finset (ℕ × ℕ × ℕ) :=\n  factorCarrier d.Q1 ×ˢ (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3)\n\n/-- A complete factor label together with the original beta integer. -/\ndef MediumAtom.complexRowLabels (d : MediumAtom) : Finset ((ℕ × ℕ × ℕ) × ℕ) :=\n  d.complexFactorLabels ×ˢ d.betaCarrier"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedDispersion.lean",
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "line_start": 32,
+      "line_end": 41,
+      "complete_excerpt": "/-- The interval is moved into the paired coefficient, without losing any\noriginal alpha point or adding a nonzero coefficient outside that interval. -/\ndef MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "line_start": 27,
+      "line_end": 40,
+      "complete_excerpt": "open scoped BigOperators Topology\n\ndef MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\ndef MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n\ndef MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier\n\ndef MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "line_start": 81,
+      "line_end": 83,
+      "complete_excerpt": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2\n"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3PairedAlphaDeletion.lean",
+      "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "line_start": 38,
+      "line_end": 45,
+      "complete_excerpt": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n\n\ndef MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0\n\ndef MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line_start": 104,
+      "line_end": 161,
+      "complete_excerpt": "@[ext] structure WGCDData where\n  d : ℕ\n  d₁ : ℕ\n  δ : ℕ\n  δ₁ : ℕ\n  δ₂ : ℕ\n  k₁ : ℕ\n  k₂ : ℕ\n  n₁ : ℕ\n  n₂ : ℕ\n  deriving DecidableEq\n\ndef wGCDData (q r N₁ N₂ : ℕ) : WGCDData :=\n  let d := N₁.gcd N₂\n  let δ := q.gcd r\n  { d := d, d₁ := supportedPart (N₁ / d) d\n    δ := δ, δ₁ := supportedPart (q / δ) δ, δ₂ := supportedPart (r / δ) δ\n    k₁ := coprimePart (q / δ) δ, k₂ := coprimePart (r / δ) δ\n    n₁ := coprimePart (N₁ / d) d, n₂ := N₂ / d }\n\ndef WGCDData.D (v : WGCDData) : ℕ := v.δ * v.δ₁ * v.δ₂\n\ndef WGCDData.D' (v : WGCDData) : ℕ := v.d * v.d₁ * v.D\n\n/-- Arithmetic facts, not distribution or phase estimates. -/\nstructure WGCDData.Valid (v : WGCDData) (q r N₁ N₂ : ℕ) : Prop where\n  d_pos : 0 < v.d\n  d₁_pos : 0 < v.d₁\n  δ_pos : 0 < v.δ\n  δ₁_pos : 0 < v.δ₁\n  δ₂_pos : 0 < v.δ₂\n  k₁_pos : 0 < v.k₁\n  k₂_pos : 0 < v.k₂\n  n₁_pos : 0 < v.n₁\n  n₂_pos : 0 < v.n₂\n  q_eq : q = v.δ * v.δ₁ * v.k₁\n  r_eq : r = v.δ * v.δ₂ * v.k₂\n  N₁_eq : N₁ = v.d * v.d₁ * v.n₁\n  N₂_eq : N₂ = v.d * v.n₂\n  d_eq : v.d = N₁.gcd N₂\n  δ_eq : v.δ = q.gcd r\n  d₁_support : ∀ p : ℕ, p.Prime → p ∣ v.d₁ → p ∣ v.d\n  δ₁_support : ∀ p : ℕ, p.Prime → p ∣ v.δ₁ → p ∣ v.δ\n  δ₂_support : ∀ p : ℕ, p.Prime → p ∣ v.δ₂ → p ∣ v.δ\n  n₁_d : v.n₁.Coprime v.d\n  k₁_δ : v.k₁.Coprime v.δ\n  k₂_δ : v.k₂.Coprime v.δ\n  n_primitive : (v.d₁ * v.n₁).Coprime v.n₂\n  k_primitive : (v.δ₁ * v.k₁).Coprime (v.δ₂ * v.k₂)\n\nprivate theorem gcd_quotients_coprime {u v : ℕ} (hu : 0 < u) :\n    (u / u.gcd v).Coprime (v / u.gcd v) := by\n  have hg := Nat.gcd_pos_of_pos_left v hu\n  change (u / u.gcd v).gcd (v / u.gcd v) = 1\n  apply Nat.mul_left_cancel hg\n  rw [← Nat.gcd_mul_left, Nat.mul_div_cancel' (Nat.gcd_dvd_left u v),\n    Nat.mul_div_cancel' (Nat.gcd_dvd_right u v), mul_one]\n"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CanonicalReciprocalPhase.lean",
+      "sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+      "line_start": 172,
+      "line_end": 197,
+      "complete_excerpt": "def rootPhase (v : CanonicalReciprocalData.WGCDData) (b a : ℤ) : UnitAddCircle :=\n  (((b : ℝ) * wPhaseInverse (v.k₁ * v.k₂) v.D / v.D -\n    (a : ℝ) * wPhaseInverse (v.n₁ * v.k₁ * v.k₂) v.D' / v.D' : ℝ) : UnitAddCircle)\n\ndef slowPhase (v : CanonicalReciprocalData.WGCDData) (a : ℤ) : UnitAddCircle :=\n  (((a : ℝ) / ((v.n₁ : ℝ) * v.k₁ * v.k₂ * v.D') : ℝ) : UnitAddCircle)\n\ndef reciprocalPhase (v : CanonicalReciprocalData.WGCDData) (a : ℤ) : UnitAddCircle :=\n  (((a : ℝ) * ((v.d₁ : ℝ) * v.n₁ - v.n₂) *\n    wPhaseInverse (v.D' * v.n₂ * v.k₁) (v.n₁ * v.k₂) /\n      ((v.n₁ : ℝ) * v.k₂) : ℝ) : UnitAddCircle)\n\nprivate theorem circle_eq_threePhase\n    {v : CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : ℕ}\n    (hv : v.Valid q r N₁ N₂) (hc : ComplexCRT.Compatible q r N₁ N₂) (a : ℤ) :\n    (((ComplexCRT.residue q r N₁ N₂ a : ℝ) / (q.lcm r) : ℝ) : UnitAddCircle) =\n      rootPhase v (ComplexCRT.residue q r N₁ N₂ a) a + slowPhase v a +\n        reciprocalPhase v a := by\n  have hp := hv.phase_coprime hc\n  have hc' : ComplexCRT.Compatible q r (v.d * v.d₁ * v.n₁) (v.d * v.n₂) := by\n    simpa only [← hv.N₁_eq, ← hv.N₂_eq] using hc\n  have he := productCRTResidue_phase_threeFactor hv.d_pos hv.d₁_pos hv.D_pos\n    hv.k₁_pos hv.k₂_pos hv.n₁_pos hv.lcm_eq hv.k₁_dvd hv.k₂_dvd hv.k_D\n    hp.1 hp.2.1 hp.2.2 hc' a\n  simpa only [rootPhase, slowPhase, reciprocalPhase,\n    CanonicalReciprocalData.WGCDData.D', ← hv.N₁_eq, ← hv.N₂_eq] using he"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorHighConductor.lean",
+      "sha256": "2a2f1f4677b5e1210117284cd446a19683be1bfa08eec5bd99247a1be33bfae1",
+      "line_start": 556,
+      "line_end": 581,
+      "complete_excerpt": "\n/-- The native sharp primitive large sieve at spectral parameter zero,\napplied to the complete auxiliary masked polynomial and its actual energy. -/\nprivate theorem auxiliary_primitive_cell_mean_le\n    (N e k D : ℕ) (he : 0 < e) (hD : 0 < D)\n    (b : ℕ → ℂ) (hb : ∀ n ∈ Finset.Icc 1 N, ‖b n‖ ≤ 1) :\n    (∑ c ∈ Finset.Ioc D (2 * D), (c.totient : ℝ)⁻¹ *\n      ∑ psi : PrimitiveCharacter c,\n        ‖∑ m ∈ Finset.Icc 1 (N / e),\n          (if m.Coprime k then b (e * m) else 0) *\n            psi.1 (m : ZMod c)‖ ^ 2) ≤\n      (2 * chen1973Lemma6Eq19SharpConstant) *\n        ((D : ℝ) + ((N / e : ℕ) : ℝ) / (D : ℝ)) * ((N / e : ℕ) : ℝ) := by\n  have hDR : (1 : ℝ) ≤ D := by exact_mod_cast hD\n  have h := ChenLiuCoprimeProducer.polynomial_second_moment_energy\n    (Finset.Icc 1 (N / e)) (fun m ↦ if m.Coprime k then b (e * m) else 0)\n    (N / e) (fun _ h ↦ h) hDR (0 : ℂ)\n  have hcell : ChenLiuCoprimeProducer.conductorCell (D : ℝ) =\n      Finset.Ioc D (2 * D) := by\n    have hcast : (2 : ℝ) * (D : ℝ) = ((2 * D : ℕ) : ℝ) := by norm_cast\n    simp only [ChenLiuCoprimeProducer.conductorCell, hcast, Nat.floor_natCast]\n  simp only [hcell, ChenLiuCoprimeProducer.polynomial, Complex.cpow_zero,\n    div_one] at h\n  exact h.trans (mul_le_mul_of_nonneg_left\n    (auxiliary_multiple_energy_le N e k he b hb)\n    (by have hC := chen1973Lemma6_eq19SharpConstant_pos; positivity))"
+    }
+  ],
+  "no_hidden_factorization_relation": {
+    "checked": "MediumAtom has U,V,Q1,Q2,Q3,residue,interval and five coefficient fields only. MediumAdmissible has the four scalar geometry inequalities plus separate rough-alpha/beta/gamma gates. complexFactorLabels is the Cartesian product of three independent factorCarrier values; transposition only swaps U,V and zero-pads alpha into beta; primitivep is a coprime factorCarrier, not necessarily a prime. There is NO Q1*Q2*Q3≈V requirement in these actual definitions.",
+    "manuscript_primary_match": {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/chen-imbalanced-semiprimes/paper/source/manuscript-body.tex",
+      "sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd",
+      "line_start": 125,
+      "line_end": 174,
+      "complete_excerpt": "\\begin{proposition}[Restricted medium convolution]\n\\label{prop:current-medium}\nFix $\\vartheta=7/32$, $0<\\sigma<1/100$, $c_0>0$, a divisor order\n$B$, and $0\\le\\kappa\\le\\sigma/100$. Let $U,V,Q_1,Q_2,Q_3\\ge1$. Suppose\n\\begin{align}\n c_0x&\\le |\\mathfrak a|\\le x^{1+\\kappa},&\n Q_1&<Ux^{-\\sigma}, \\notag\\\\\n U^2Q_2Q_3^2&<x^{1-8\\sigma},&\n |\\mathfrak a|^{\\vartheta}UQ_1Q_2^5Q_3^2&<x^{2-15\\sigma},\n       \\label{eq:current-medium-ranges}\\\\\n U^{1+2\\vartheta}Q_1Q_2^{5-2\\vartheta}Q_3^{2+2\\vartheta}\n      &<x^{2-15\\sigma}.&&\\notag\n\\end{align}\nLet $\\alpha$ be one-bounded, supported on an individual interval in\n$[U,2U]$ and on\n$P^-(n)>x^{1/(\\log\\log x)^3}$.  Assume its auxiliary-coprimality\nSiegel--Walfisz estimate: for every $A>0$, every $k,q\\ge1$ and\n$(b_0,q)=1$,\n\\begin{equation}\n \\left|\\sum_{\\substack{n\\equiv b_0\\pmod q\\\\(n,k)=1}}\\alpha_n\n -\\frac1{\\varphi(q)}\\sum_{(n,kq)=1}\\alpha_n\\right|\n \\le C_AU\\tau(k)^{C_0}(\\log x)^{-A},\n \\label{eq:current-aux-sw}\n\\end{equation}\nwith fixed $C_0$ and uniform family constants.  Let\n$|\\beta_m|\\le\\tau(m)^B$, $m\\in[V,2V]$, and let each $\\gamma_i$ be a\nseparate one-bounded sequence on $q_i\\asymp Q_i$, supported on\n$(q_i,\\mathfrak a)=1$.  For\n\\[\n \\Delta_l=\\sum_{n,m}\\alpha_n\\beta_m\n \\left({\\bf1}_{nm\\equiv\\mathfrak a\\pmod l}\n       -\\frac{{\\bf1}_{(nm,l)=1}}{\\varphi(l)}\\right),\n\\]\nthe stated classical inputs of Appendix~\\ref{app:classical} give\n\\begin{equation}\n \\sum_{q_1,q_2,q_3}\\gamma_1(q_1)\\gamma_2(q_2)\\gamma_3(q_3)\n                    \\Delta_{q_1q_2q_3}\n       =O_A\\bigl(x(\\log x)^{-A}\\bigr).\n \\label{eq:current-medium-conclusion}\n\\end{equation}\nThe constant is uniform in the residue and families satisfying these\nconditions.  Fixed endpoint multiples are absorbed by the strict\npower margins.\n\\end{proposition}\n\nThis is a signed estimate for factorized modulus coefficients.  It is\nnot an absolute discrepancy sum over arbitrary moduli.  In its actual\nuse, $\\alpha$ is a chart-rough $1$ or M\\\"obius slot, with a permitted\nMellin twist; the proof derives \\eqref{eq:current-aux-sw} for those\nslots.  Arbitrary rough coefficients are not declared to satisfy that"
+    }
+  },
+  "owned_complete_API_bindings_current_checked": {
+    "ImbalancedChen.Part3SharedFirstFactorHighConductor": {
+      "module": "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+      "source_sha256": "2a2f1f4677b5e1210117284cd446a19683be1bfa08eec5bd99247a1be33bfae1",
+      "object_parts": {
+        ".olean": "aa79482d2d52605cfdc60a70b7eeceff1300b0984a24edbbf3ac3c6aa41ba6f6"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261018T041314399171Z/receipt.json",
+      "owned_receipt_sha256": "e3504a735032d56d47fdf348f500e0f581df5b96157f1f0ddfb085d2128b6875",
+      "declarations_json_sha256": "4f3e6aa37adcd91f28666c614ca5ab3ab74acbe17908dbc3978d037acc08228d",
+      "complete_serialized_declarations": 85,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+          "name": "ImbalancedChen.Part3.SharedFirstFactorHighConductor.auxiliary_highConductor_mean_le",
+          "partial": false,
+          "type": "∀ {eta : Real}\n  (heta : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) eta)\n  (heta1 : @LT.lt.{0} Real Real.instLT eta (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (∀ (N Q R k : Nat),\n        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N →\n          @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) Q →\n            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) R →\n              @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) k →\n                ∀ (b : Nat → Complex),\n                  (∀ (n : Nat),\n                      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n                          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n                          (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder\n                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)\n                          n →\n                        @LE.le.{0} Real Real.instLE (@Norm.norm.{0} Complex Complex.instNorm (b n))\n                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))) →\n                    @LE.le.{0} Real Real.instLE\n                      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                        (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder\n                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) Q)\n                        fun (q : Nat) =>\n                        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                            (@Nat.cast.{0} Real Real.instNatCast q)\n                            (@Nat.cast.{0} Real Real.instNatCast (Nat.totient q)))\n                          (@Finset.sum.{0, 0}\n                            (@DirichletCharacter.{0} Complex\n                              (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                (@Semifield.toCommGroupWithZero.{0} Complex\n                                  (@Field.toSemifield.{0} Complex Complex.instField)))\n                              q)\n                            Real Real.instAddCommMonoid\n                            (@Finset.filter.{0}\n                              (@DirichletCharacter.{0} Complex\n                                (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                  (@Semifield.toCommGroupWithZero.{0} Complex\n                                    (@Field.toSemifield.{0} Complex Complex.instField)))\n                                q)\n                              (fun\n                                  (χ :\n                                    @DirichletCharacter.{0} Complex\n                                      (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                        (@Semifield.toCommGroupWithZero.{0} Complex\n                                          (@Field.toSemifield.{0} Complex Complex.instField)))\n                                      q) =>\n                                @LT.lt.{0} Nat instLTNat R\n                                  (@DirichletCharacter.conductor.{0} Complex\n                                    (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                      (@Semifield.toCommGroupWithZero.{0} Complex\n                                        (@Field.toSemifield.{0} Complex Complex.instField)))\n                                    q χ))\n                              (fun\n                                  (a :\n                                    @DirichletCharacter.{0} Complex\n                                      (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                        (@Semifield.toCommGroupWithZero.{0} Complex\n                                          (@Field.toSemifield.{0} Complex Complex.instField)))\n                                      q) =>\n                                Nat.decLt R\n                                  (@DirichletCharacter.conductor.{0} Complex\n                                    (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                      (@Semifield.toCommGroupWithZero.{0} Complex\n                                        (@Field.toSemifield.{0} Complex Complex.instField)))\n                                    q a))\n                              (@Finset.univ.{0}\n                                (@DirichletCharacter.{0} Complex\n                                  (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                    (@Semifield.toCommGroupWithZero.{0} Complex\n                                      (@Field.toSemifield.{0} Complex Complex.instField)))\n                                  q)\n                                (@DirichletCharacter.fintype.{0} Complex Complex.commRing\n                                  (@instIsDomain.{0} Complex (@Field.toSemifield.{0} Complex Complex.instField)) q)))\n                            fun\n                              (χ :\n                                @DirichletCharacter.{0} Complex\n                                  (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                    (@Semifield.toCommGroupWithZero.{0} Complex\n                                      (@Field.toSemifield.{0} Complex Complex.instField)))\n                                  q) =>\n                            @HPow.hPow.{0, 0, 0} Real Nat Real\n                              (@instHPow.{0, 0} Real Nat\n                                (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                              (@Norm.norm.{0} Complex Complex.instNorm\n                                (@Finset.sum.{0, 0} Nat Complex Complex.instAddCommMonoid\n                                  (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)\n                                  fun (n : Nat) =>\n                                  @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n                                    (@ite.{1} Complex (Nat.Coprime n k) (Nat.instDecidableCoprime n k) (b n)\n                                      (@OfNat.ofNat.{0} Complex (nat_lit 0)\n                                        (@Zero.toOfNat0.{0} Complex Complex.instZero)))\n                                    (@DFunLike.coe.{1, 1, 1}\n                                      (@DirichletCharacter.{0} Complex\n                                        (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                          (@Semifield.toCommGroupWithZero.{0} Complex\n                                            (@Field.toSemifield.{0} Complex Complex.instField)))\n                                        q)\n                                      (ZMod q) (fun (x : ZMod q) => Complex)\n                                      (@MulChar.instFunLike.{0, 0} (ZMod q)\n                                        (@CommRing.toCommMonoid.{0} (ZMod q) (ZMod.commRing q)) Complex\n                                        (@CommGroupWithZero.toCommMonoidWithZero.{0} Complex\n                                          (@Semifield.toCommGroupWithZero.{0} Complex\n                                            (@Field.toSemifield.{0} Complex Complex.instField))))\n                                      χ\n                                      (@Nat.cast.{0} (ZMod q)\n                                        (@AddMonoidWithOne.toNatCast.{0} (ZMod q)\n                                          (@AddGroupWithOne.toAddMonoidWithOne.{0} (ZMod q)\n                                            (@Ring.toAddGroupWithOne.{0} (ZMod q)\n                                              (@CommRing.toRing.{0} (ZMod q) (ZMod.commRing q)))))\n                                        n))))\n                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n                          (@HPow.hPow.{0, 0, 0} Real Nat Real\n                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                              (Real.log\n                                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                    (@OfNat.ofNat.{0} Real (nat_lit 2)\n                                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                                        (@Nat.instAtLeastTwoHAddOfNat\n                                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                                          (@Nat.instNeZeroSucc\n                                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                                    (@Nat.cast.{0} Real Real.instNatCast N))\n                                  (@Nat.cast.{0} Real Real.instNatCast Q))))\n                            (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))\n                        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                              (@Nat.cast.{0} Real Real.instNatCast Q)\n                              (@HPow.hPow.{0, 0, 0} Real Nat Real\n                                (@instHPow.{0, 0} Real Nat\n                                  (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                                (@Nat.cast.{0} Real Real.instNatCast N)\n                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                              (@Nat.cast.{0} Real Real.instNatCast R)\n                              (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n                                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) eta)))\n                          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                              (@Nat.cast.{0} Real Real.instNatCast Q)\n                              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                                (@OfNat.ofNat.{0} Real (nat_lit 2)\n                                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                                    (@Nat.instAtLeastTwoHAddOfNat\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                                      (@Nat.instNeZeroSucc\n                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                                eta))\n                            (@Nat.cast.{0} Real Real.instNatCast N)))))",
+          "unsafe": false
+        }
+      ]
+    },
+    "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero": {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+      "source_sha256": "cb10abb7e651b3c03a94b589f6c4df4174dad45f6f34fe490bb46aea3225b687",
+      "object_parts": {
+        ".olean": "f391ece014df7449a36555990c01784577777f72fac3d6e72dcc5996426e857d"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261018T045037631244Z/receipt.json",
+      "owned_receipt_sha256": "1fc329137e21665fc8f253b7006804586f74aec567513c6cdaa1c8e050ce3255",
+      "declarations_json_sha256": "a957b1aec8f330fb4d749235628fe25882d73672f0b0f9e84dd11496e08ca670",
+      "complete_serialized_declarations": 99,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+          "name": "ImbalancedChen.Part3.actual_outside_mul_smallResidualHighConductorZero_bound",
+          "partial": false,
+          "type": "∀ {eta : Real}\n  (heta : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) eta)\n  (heta1 : @LT.lt.{0} Real Real.instLT eta (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (∀ (B : Nat) (sigma kappa c0 : Real) (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          ∀ (Y R : Real),\n            @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) Y →\n              @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) R →\n                @LE.le.{0} Real Real.instLE\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                        (ImbalancedChen.Part3.MediumAtom.betaCarrier d) fun (m : Nat) =>\n                        @HPow.hPow.{0, 0, 0} Real Nat Real\n                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta d m))\n                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n                        (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) fun (p : Nat) =>\n                        @HPow.hPow.{0, 0, 0} Real Nat Real\n                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 d p))\n                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                    (@Norm.norm.{0} Complex Complex.instNorm\n                      (ImbalancedChen.Part3.MediumAtom.sharedFirstFactorSmallResidualHighConductorZero d Y R)))\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n                          (@HPow.hPow.{0, 0, 0} Real Nat Real\n                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                            (ImbalancedChen.Part3.MediumAtom.scale d)\n                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                        (@HPow.hPow.{0, 0, 0} Real Nat Real\n                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                            (Real.log\n                              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                (@OfNat.ofNat.{0} Real (nat_lit 2)\n                                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                                    (@Nat.instAtLeastTwoHAddOfNat\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                                      (@Nat.instNeZeroSucc\n                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                                (ImbalancedChen.Part3.MediumAtom.V d))))\n                          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)\n                            (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n                              (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n                              (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n                                (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) B)\n                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))\n                      (@HPow.hPow.{0, 0, 0} Real Nat Real\n                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                          (Real.log\n                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                    (@OfNat.ofNat.{0} Real (nat_lit 32)\n                                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 32) Real.instNatCast\n                                        (@Nat.instAtLeastTwoHAddOfNat\n                                          (@OfNat.ofNat.{0} Nat (nat_lit 31) (instOfNatNat (nat_lit 31)))\n                                          (@Nat.instNeZeroSucc\n                                            (@OfNat.ofNat.{0} Nat (nat_lit 30) (instOfNatNat (nat_lit 30)))))))\n                                    (ImbalancedChen.Part3.MediumAtom.U d))\n                                  (ImbalancedChen.Part3.MediumAtom.Q1 d))\n                                (ImbalancedChen.Part3.MediumAtom.Q2 d))\n                              (ImbalancedChen.Part3.MediumAtom.Q3 d))))\n                        (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))))\n                    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                      (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) R\n                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n                            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) eta)))\n                      (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                            (ImbalancedChen.Part3.MediumAtom.Q1 d)\n                            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) eta))\n                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) Y\n                            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) eta)))\n                        (ImbalancedChen.Part3.MediumAtom.U d)))))",
+          "unsafe": false
+        }
+      ]
+    },
+    "ImbalancedChen.Part3SharedFirstFactorSmallCorePrimeDifferenceReindex": {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallCorePrimeDifferenceReindex",
+      "source_sha256": "11f1d6e2b8d27a5e1c93eba1f65cbe2f669f33a63f4d6a1b945e60ac9bd4c5bd",
+      "object_parts": {
+        ".olean": "bdeb9430131acd9a16fd61bf1fad8dc809955d96a9e9ed95ae7b993012c74dc8"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261020T115358943432Z/receipt.json",
+      "owned_receipt_sha256": "728d31fcd814a0e0b583ab99a820b614cec686cc0f5f9a5124ea21cc9e21faa6",
+      "declarations_json_sha256": "676a13d1a1b6916aff98ffbf2074f0cb2dbbeb876e5ad9020adac6072f010718",
+      "complete_serialized_declarations": 7,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCorePrimeDifferenceReindex",
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCore_prime_to_signed_difference_licenses",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) {l l' : Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat}\n  (hl :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.sharedFirstFactorRows d) l)\n  (hl' :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat) (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.sharedFirstFactorRows d) l')\n  (hsmall :\n    @LE.le.{0} Real Real.instLE\n      (@Nat.cast.{0} Real Real.instNatCast\n        (Nat.gcd (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l')))\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (ImbalancedChen.Part3.MediumAtom.scale d)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          sigma\n          (@OfNat.ofNat.{0} Real (nat_lit 4)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))))),\n  have g : Nat :=\n    Nat.gcd (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l');\n  have D : Nat :=\n    Nat.gcd\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))\n        (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l)))\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n        (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l')));\n  have Delta : Int :=\n    @HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n      (@Nat.cast.{0} Int instNatCastInt\n        (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l)\n          g))\n      (@Nat.cast.{0} Int instNatCastInt\n        (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv)\n          (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l') g));\n  have P : Finset.{0} Nat :=\n    @Finset.filter.{0} Nat\n      (fun (p : Nat) =>\n        ImbalancedChen.Part3.ComplexCRT.Compatible\n          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n              (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))\n              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))))\n          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n              (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))))\n          (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n      (fun (a : Nat) =>\n        Classical.propDecidable\n          (ImbalancedChen.Part3.ComplexCRT.Compatible\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a\n              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))\n                (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l))))\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a\n              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))\n                (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Nat l'))))\n            (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l) (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Nat l')))\n      (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d);\n  have f : Nat → Int := fun (p : Nat) =>\n    @HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv) Delta\n      (@Nat.cast.{0} Int instNatCastInt (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D));\n  And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) g)\n    (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) D)\n      (And (@Ne.{1} Int Delta (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))\n        (And\n          (∀ (p : Nat),\n            @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n                (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) P p →\n              And (@Ne.{1} Int (f p) (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))\n                (And\n                  (@Eq.{1} Int\n                    (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                      (@Nat.cast.{0} Int instNatCastInt\n                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D))\n                      (f p))\n                    Delta)\n                  (And\n                    (@Eq.{1} Nat (Int.natAbs Delta)\n                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D) (Int.natAbs (f p))))\n                    (And\n                      (@Eq.{1} Nat p\n                        (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) (Int.natAbs Delta)\n                          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) D (Int.natAbs (f p)))))\n                      (And\n                        (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast (Int.natAbs (f p)))\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                            (ImbalancedChen.Part3.MediumAtom.U d)\n                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                                (@Nat.cast.{0} Real Real.instNatCast g) (@Nat.cast.{0} Real Real.instNatCast D))\n                              (ImbalancedChen.Part3.MediumAtom.Q1 d))))\n                        (And\n                          (Iff\n                            (@LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))\n                              (f p))\n                            (@LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))\n                              Delta))\n                          (Iff\n                            (@LT.lt.{0} Int Int.instLTInt (f p)\n                              (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))\n                            (@LT.lt.{0} Int Int.instLTInt Delta\n                              (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))))))))))\n          (@Set.InjOn.{0, 0} Nat Int f (@SetLike.coe.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat) P)))))",
+          "unsafe": false
+        }
+      ]
+    },
+    "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity": {
+      "module": "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity",
+      "source_sha256": "0f41b856a9f52fa9618f0a10538e9b4cdfd46b3c1c795323da11727b5a92632f",
+      "object_parts": {
+        ".olean": "d810a41bcba785d24afede051796a73a64177071fa5bfc8b21876e1f84d01e9e"
+      },
+      "owned_receipt": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261021T002425593316Z\\receipt.json",
+      "owned_receipt_sha256": "3248f6b0cdaa711210fa4191f5d4fa69a8ea34c83f0d7c1a9d53b6c6e6068af4",
+      "declarations_json_sha256": "746de0197f4d12b46324988fa1419c1431e6cd071c3784c9ae5d0a7d70ce874c",
+      "complete_serialized_declarations": 95,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity",
+          "name": "ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity.signedDifference_multiplicityL2_bound",
+          "partial": false,
+          "type": "∀ (S H F : Real)\n  (hS : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) S)\n  (hH : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) H)\n  (hF : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) F)\n  (nu : Nat) (hnu : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu),\n  And\n    (@LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity.multiplicityL2 S H F nu)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@OfNat.ofNat.{0} Real (nat_lit 576)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 576) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 575) (instOfNatNat (nat_lit 575)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 574) (instOfNatNat (nat_lit 574)))))))\n                  (@HPow.hPow.{0, 0, 0} Real Nat Real\n                    (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                    (@Nat.cast.{0} Real Real.instNatCast\n                      (ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity.divisorMaximum S H F))\n                    (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))))\n                (@Rat.cast.{0} Real Real.instRatCast\n                  (harmonic\n                    (@Nat.floor.{0} Real Real.semiring Real.partialOrder\n                      (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@OfNat.ofNat.{0} Real (nat_lit 2)\n                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                        S)))))\n              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) H S)))\n            (@HPow.hPow.{0, 0, 0} Real Nat Real\n              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) H S)\n              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n          F)\n        (@Nat.cast.{0} Real Real.instNatCast nu)))\n    (@LE.le.{0} Real Real.instLE\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@OfNat.ofNat.{0} Real (nat_lit 8)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))\n              F)\n            H)\n          S)\n        (@Nat.cast.{0} Real Real.instNatCast nu) →\n      @Eq.{1} Real (ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity.multiplicityL2 S H F nu)\n        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))",
+          "unsafe": false
+        }
+      ]
+    },
+    "ImbalancedChen.Part3SharedFirstFactorDispersion": {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "object_parts": {
+        ".olean": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261015T230927740441Z/receipt.json",
+      "owned_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "complete_serialized_declarations": 46,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "name": "ImbalancedChen.Part3.MediumAtom.sharedFirstFactor_outside_le",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LE.le.{0} Real Real.instLE\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n        fun (m : Nat) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta d m))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n        (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) fun (p : Nat) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 d p))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 4)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))\n          (ImbalancedChen.Part3.MediumAtom.V d))\n        (ImbalancedChen.Part3.MediumAtom.Q1 d))\n      (@HPow.hPow.{0, 0, 0} Real Nat Real\n        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n          (Real.log\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@OfNat.ofNat.{0} Real (nat_lit 2)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n              (ImbalancedChen.Part3.MediumAtom.V d))))\n        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)\n          (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n            (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n            (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n              (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) B)\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))",
+          "unsafe": false
+        }
+      ]
+    },
+    "ImbalancedChen.Part3TransposedCanonicalReciprocalPhase": {
+      "module": "ImbalancedChen.Part3TransposedCanonicalReciprocalPhase",
+      "source_sha256": "df3bcceb9a8ff572490b6686da21d94c0c9fa683177c20b8d579ee1111e98cc0",
+      "object_parts": {
+        ".olean": "002e08ac9f5151620de945ab9eb195526b208f4f27f1391540f32e58dfc04b30"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261015T224527359580Z/receipt.json",
+      "owned_receipt_sha256": "419034fcf281ad6e068a5922ceecb4a083a9c2eec22b28f020dc76937cbbee6d",
+      "declarations_json_sha256": "bdbcd77de4c450621910ee1aaafdd3e3885da03a9a76d6f42c7bb7025b2890df",
+      "complete_serialized_declarations": 19,
+      "actually_rehashed_unchanged": true,
+      "selected_complete_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3TransposedCanonicalReciprocalPhase",
+          "name": "ImbalancedChen.Part3.MediumAtom.transposed_complexCRTSmoothNonzeroPart_eq_canonicalPhases",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @Eq.{1} Complex\n    (ImbalancedChen.Part3.MediumAtom.complexCRTSmoothNonzeroPart (ImbalancedChen.Part3.MediumAtom.transposedAtom d))\n    (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat) Complex Complex.instAddCommMonoid\n      (ImbalancedChen.Part3.MediumAtom.complexRowLabels (ImbalancedChen.Part3.MediumAtom.transposedAtom d))\n      fun (l : Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat) =>\n      @Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat) Complex Complex.instAddCommMonoid\n        (ImbalancedChen.Part3.MediumAtom.complexRowLabels (ImbalancedChen.Part3.MediumAtom.transposedAtom d))\n        fun (l' : Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat) =>\n        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)\n            (ImbalancedChen.Part3.MediumAtom.complexBetaCoefficient (ImbalancedChen.Part3.MediumAtom.transposedAtom d)\n              l)\n            (@Star.star.{0} Complex\n              (@InvolutiveStar.toStar.{0} Complex\n                (@StarAddMonoid.toInvolutiveStar.{0} Complex\n                  (@AddCommMonoid.toAddMonoid.{0} Complex\n                    (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Complex\n                      (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))))\n                  (@StarRing.toStarAddMonoid.{0} Complex\n                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))\n                    Complex.instStarRing)))\n              (ImbalancedChen.Part3.MediumAtom.complexBetaCoefficient (ImbalancedChen.Part3.MediumAtom.transposedAtom d)\n                l')))\n          (Complex.ofReal\n            (@ite.{1} Real\n              (ImbalancedChen.Part3.ComplexCRT.Compatible\n                (ImbalancedChen.Part3.complexFactorModulus\n                  (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n                (ImbalancedChen.Part3.complexFactorModulus\n                  (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n                (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l)\n                (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n              (Classical.propDecidable\n                (ImbalancedChen.Part3.ComplexCRT.Compatible\n                  (ImbalancedChen.Part3.complexFactorModulus\n                    (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n                  (ImbalancedChen.Part3.complexFactorModulus\n                    (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n                  (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l)\n                  (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l')))\n              (Complex.re\n                (@tsum.{0, 0} Complex Int Complex.instAddCommMonoid\n                  (@UniformSpace.toTopologicalSpace.{0} Complex\n                    (@PseudoMetricSpace.toUniformSpace.{0} Complex\n                      (@SeminormedRing.toPseudoMetricSpace.{0} Complex\n                        (@SeminormedCommRing.toSeminormedRing.{0} Complex\n                          (@NormedCommRing.toSeminormedCommRing.{0} Complex\n                            (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex))))))\n                  (fun (h : Int) =>\n                    ImbalancedChen.Part3.MediumAtom.canonicalPoissonFrequency\n                      (ImbalancedChen.Part3.MediumAtom.transposedAtom d) l l' h)\n                  (SummationFilter.unconditional.{0} Int)))\n              (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))))",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3TransposedCanonicalReciprocalPhase",
+          "name": "ImbalancedChen.Part3.MediumAtom.transposed_poissonNonzeroFrequency_eq_canonicalPhases",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d)\n  {l l' : Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat}\n  (hl :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)\n      (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)\n        (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.complexRowLabels (ImbalancedChen.Part3.MediumAtom.transposedAtom d)) l)\n  (hl' :\n    @Membership.mem.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)\n      (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat))\n        (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)\n        (@Finset.instSetLike.{0} (Prod.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat)))\n      (ImbalancedChen.Part3.MediumAtom.complexRowLabels (ImbalancedChen.Part3.MediumAtom.transposedAtom d)) l')\n  (hc :\n    ImbalancedChen.Part3.ComplexCRT.Compatible\n      (ImbalancedChen.Part3.complexFactorModulus (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n      (ImbalancedChen.Part3.complexFactorModulus (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n      (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l)\n      (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n  (h : Int),\n  @Eq.{1} Complex\n    (ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequency\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (ImbalancedChen.Part3.MediumAtom.U (ImbalancedChen.Part3.MediumAtom.transposedAtom d))\n        (@Nat.cast.{0} Real Real.instNatCast\n          (Nat.lcm\n            (ImbalancedChen.Part3.complexFactorModulus (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n            (ImbalancedChen.Part3.complexFactorModulus\n              (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l')))))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@Int.cast.{0} Real Real.instIntCast\n          (ImbalancedChen.Part3.ComplexCRT.residue\n            (ImbalancedChen.Part3.complexFactorModulus (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n            (ImbalancedChen.Part3.complexFactorModulus\n              (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l'))\n            (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l)\n            (@Prod.snd.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l')\n            (ImbalancedChen.Part3.MediumAtom.residue (ImbalancedChen.Part3.MediumAtom.transposedAtom d))))\n        (@Nat.cast.{0} Real Real.instNatCast\n          (Nat.lcm\n            (ImbalancedChen.Part3.complexFactorModulus (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l))\n            (ImbalancedChen.Part3.complexFactorModulus\n              (@Prod.fst.{0, 0} (Prod.{0, 0} Nat (Prod.{0, 0} Nat Nat)) Nat l')))))\n      h)\n    (ImbalancedChen.Part3.MediumAtom.canonicalPoissonFrequency (ImbalancedChen.Part3.MediumAtom.transposedAtom d) l l'\n      h)",
+          "unsafe": false
+        }
+      ]
+    }
+  },
+  "fixed_native_primary_API_types_current_git_blob_checked": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCompleteWeil.lean",
+      "sha256": "25088c4a18042c9da4d0673e048c2a2d14555b60bdc0c847de0d91b085b95baf",
+      "fixed_revision": "09b97db5764ade1246bfb77206baa1b124760958",
+      "exact_git_blob_equal": true,
+      "complete_selected_source_types": [
+        {
+          "name": "completeKloosterman_weil",
+          "line": 31,
+          "complete_literal_source_header": "theorem completeKloosterman_weil (q : ℕ) [NeZero q] (a d : ℤ) :\n    ‖completeKloosterman q (a : ZMod q) d‖ ≤\n      (q.divisors.card : ℝ) * Real.sqrt (q.gcd (a.natAbs.gcd d.natAbs)) *\n        Real.sqrt q"
+        },
+        {
+          "name": "reciprocalInterval_fouvry",
+          "line": 48,
+          "complete_literal_source_header": "theorem reciprocalInterval_fouvry {ε : ℝ} (hε : 0 < ε) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (q : ℕ) (_ : NeZero q) (d : ℤ) (X Y : ℝ),\n      X ≤ Y → Y - X ≤ q →\n      ‖reciprocalInterval q d X Y‖ ≤\n        C * Real.sqrt (q.gcd d.natAbs) * (q : ℝ) ^ (1 / 2 + ε : ℝ)"
+        }
+      ],
+      "scope": "Fixed native proved source API. No new native full-closure replay or separate serialized declaration export is claimed by this read-only audit."
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryProgressionWeil.lean",
+      "sha256": "7b014bbddb2950a329223a2f52ecb261f3b4c4b19763c79ddee36803a7077830",
+      "fixed_revision": "09b97db5764ade1246bfb77206baa1b124760958",
+      "exact_git_blob_equal": true,
+      "complete_selected_source_types": [
+        {
+          "name": "reciprocalProgression_fouvry",
+          "line": 114,
+          "complete_literal_source_header": "theorem reciprocalProgression_fouvry {ε : ℝ} (hε : 0 < ε) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (q : ℕ) (_ : NeZero q) (d b : ℤ) (v : ℕ) (X Y : ℤ),\n      v.Coprime q → X ≤ Y →\n      ‖reciprocalProgression q d b v X Y‖ ≤\n        C * (1 + ((Y : ℝ) - X) / q) * Real.sqrt (q.gcd d.natAbs) *\n          (q : ℝ) ^ (1 / 2 + ε : ℝ)"
+        },
+        {
+          "name": "iv3CorrelationProgression_fouvry",
+          "line": 214,
+          "complete_literal_source_header": "theorem iv3CorrelationProgression_fouvry {ε : ℝ} (hε : 0 < ε) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (D d₁ n n₂ n₂' r s s' : ℕ) (a h h' : ℤ) (b v X Y : ℕ),\n        0 < n → 0 < r → 0 < s → 0 < s' →\n        (D * n₂ * n₂').Coprime (n * r * s * s') →\n        v.Coprime (n * r * s * s') → X ≤ Y →\n        ‖iv3CorrelationProgression D d₁ n n₂ n₂' r s s' a h h' b v X Y‖ ≤\n          C * (1 + ((Y : ℝ) - X) / (n * r * s * s' : ℕ)) *\n            Real.sqrt ((n * r * s * s').gcd\n              (iv3CorrelationNumerator d₁ n n₂ n₂' s s' a h h').natAbs) *\n            (n * r * s * s' : ℕ) ^ (1 / 2 + ε : ℝ)"
+        }
+      ],
+      "scope": "Fixed native proved source API. No new native full-closure replay or separate serialized declaration export is claimed by this read-only audit."
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/ChenLiuCoprimeProducerShort.lean",
+      "sha256": "4a5003a6c2bd26526d455bd1f6526a0304d088a2ebc6c52d91fbd37796b89ede",
+      "fixed_revision": "09b97db5764ade1246bfb77206baa1b124760958",
+      "exact_git_blob_equal": true,
+      "complete_selected_source_types": [
+        {
+          "name": "polynomial_second_moment_energy",
+          "line": 88,
+          "complete_literal_source_header": "theorem polynomial_second_moment_energy (S : Finset ℕ) (c : ℕ → ℂ) (N : ℕ)\n    (hS : S ⊆ Icc 1 N) {R : ℝ} (hR : 1 ≤ R) (s : ℂ) :\n    (∑ q ∈ conductorCell R, (q.totient : ℝ)⁻¹ *\n      ∑ χ : PrimitiveCharacter q, ‖polynomial S c χ s‖ ^ 2) ≤\n      (2 * chen1973Lemma6Eq19SharpConstant) * (R + (N : ℝ) / R) *\n        ∑ n ∈ S, ‖c n / (n : ℂ) ^ s‖ ^ 2"
+        }
+      ],
+      "scope": "Fixed native proved source API. No new native full-closure replay or separate serialized declaration export is claimed by this read-only audit."
+    }
+  ],
+  "frozen_Smooth_and_SmoothSquared_not_owned": {
+    "Smooth575b": {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021-spectral-complement-smooth-D-packet-frequency-one-leaf-proposal.json",
+      "sha256": "575b5f38a092a504bfedb985a58ee436a25752adf6c815f051176acbc60e3f5a",
+      "four_exact_definitions": [
+        "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)",
+        "def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))",
+        "def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)",
+        "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0"
+      ],
+      "public_type": "theorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A"
+    },
+    "Squared63411": {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021-smooth-core-squared-resonance-six-defs-one-type-rebinding-proposal.json",
+      "sha256": "63411c4ff0c774660ef68f2541e71aa4d8b5b6ee7a22ccedc7ba14b76241d9d5",
+      "six_exact_definitions": [
+        "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+        "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+        "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+        "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+        "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+        "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re"
+      ],
+      "full_type": "theorem actual_smallSupported_squared_resonance_Cauchy_and_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) ∧\n            ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n                Real.sqrt (e.smallCoreSquaredCauchyMass Z true) ≤\n                  d.scale ^ 2 / (Real.log d.scale) ^ A)"
+    },
+    "boundary": "Immutable proposals only. Neither moving Smooth implementation nor moving SmoothSquared source was opened, hashed or promoted to owned. Source-approximation and positive resonance payment do not supply the nonresonant complement."
+  },
+  "actual_cost_ledger": [
+    {
+      "step": "Original norm square reduction",
+      "cost": "One and only one W=(sum original beta norm²)*(sum primitivep original gamma1 norm²). Owned W<=4 V Q1 L_B. All calculations below multiply this once; no second beta/gamma1 energy is inserted."
+    },
+    {
+      "step": "Positive deletion and smoothing tails",
+      "cost": "Owned largeg/supported deletion theorem bounds its two separate norms with W. Frozen575b, once truly accepted, would similarly pay only the original-to-smooth error after selecting Schwartz order before d. These steps do not bound the retained smooth core."
+    },
+    {
+      "step": "Actual common-p frequency",
+      "cost": "L=p*v*w/D and t=V/L. Frozen chi active implies |h|<2Ztail L/V. FixedD shared carrier H_D=ceil(64 Ztail Q R²S²/(D V)); retain t and chi inside Re. At baseD1,H0=Q R²S²/V, not the unsliced Q²R²S²/V. Each raw Fourier row retains mesh t; after a square the two meshes multiply, not cardinal-counted away."
+    },
+    {
+      "step": "Canonical arithmetic and f",
+      "cost": "N1=g*d1*n1,N2=g*n2,Aroot=g*d1,Delta=(N1-N2)/g,pD f=Delta. Owned exact injection p->signed nonzero f with |f|<=U/(g D Q). It costs no extra independent Q count, but does not imply f is positive or far from zero at scale U."
+    },
+    {
+      "step": "Second Cauchy and multiplicity",
+      "cost": "For the base g=d1=D1 scales Bsp=UR,Csp=URS,F=U/Q,Zsp=S²,Ysp=F H S=U R²S³/V. The owned signedDifference multiplicity theorem gives energy <=576 Dmax^5 harmonic(floor2S)*(1+H/S)*(HS)²F/nu after actual coefficient domination is proved. It includes exact zero above8FHS, no additive+1. It does not by itself prove that the actual joint Smooth weights have been separated from b,c."
+    },
+    {
+      "step": "Re, signs, repeated tails",
+      "cost": "Keep C*(Re sum P) rather than Re(C sum P). Re can be split into two signed phase branches with their explicit1/2. f>0/f<0 are separate actual carriers; merging signs can cost4 in squared coefficient energy. Both signs of h remain. Repeated tail labels are allowed and no ordering factorial or prime-modulus gate is introduced. The crossed-copy identity k=h1*s2-h2*s1 must be the actual finite bijection."
+    },
+    {
+      "step": "D and supported packets",
+      "cost": "g,d1<=X^(sigma/4) individually; naive number of(g,d1) packets can cost X^(sigma/2) at a triangle stage. D is deterministic on each actual tail pair; partitioning requires exact Poisson1/D factors and divisibility counts. At most tau(D)^2 deterministic dr/drprime split patterns is a subpower only after actual polynomial cap and divisor estimate. No independent D-count is dropped."
+    },
+    {
+      "step": "Root and moving-a operators",
+      "cost": "Root=e(-a h inverse(n1 L modAroot)/Aroot), Aroot<=X^(sigma/2), is joint in inner variables. Naively four residues cost Aroot^4<=X^(2sigma); whether square/fourth-root reduces that depends on a proved placement of Cauchy. Root modulus is not X^o(1). Slow phase has rho=a/(N1 V), |rho|<=X^kappa, and normalized derivatives cost(1+X^kappa)^J. J/operator L1 must actually be proved; no unjustified5kappa assertion is adopted here."
+    },
+    {
+      "step": "Positive resonance versus modular resonance",
+      "cost": "Frozen63411 pays same/opposite real slope k=0 branches with retained meshes and all signed h, no H/Z loss. It does not exclude a*y=0 modc for nonzero y, nor new rational-ratio diagonals created by an extra alternative Cauchy. a is nonzero by c0>0, but may vanish modulo c; gamma gates control a versus factor labels, not necessarily a versus n1. Native Weil retains sqrt(gcd(c,a*Delta)); it must be summed/isolated on the actual coefficient support."
+    }
+  ],
+  "actual_scalar_and_finite_nonzero_feasibility_point": {
+    "sigma": "1/1000",
+    "kappa": "0",
+    "c0": "1",
+    "divisor_order_B": "0",
+    "exponents": {
+      "u": "1/4",
+      "v": "3/4",
+      "q1": "6/25",
+      "q2_S": "19/100",
+      "q3_R": "3/20",
+      "a": "1"
+    },
+    "all_four_strict_geometry_checks": [
+      {
+        "gate": "Q1 gate",
+        "lhs": {
+          "exact": "6/25",
+          "decimal": 0.24
+        },
+        "rhs": {
+          "exact": "249/1000",
+          "decimal": 0.249
+        },
+        "positive_margin": {
+          "exact": "9/1000",
+          "decimal": 0.009
+        }
+      },
+      {
+        "gate": "U² S R² gate",
+        "lhs": {
+          "exact": "99/100",
+          "decimal": 0.99
+        },
+        "rhs": {
+          "exact": "124/125",
+          "decimal": 0.992
+        },
+        "positive_margin": {
+          "exact": "1/500",
+          "decimal": 0.002
+        }
+      },
+      {
+        "gate": "signed-a theta gate",
+        "lhs": {
+          "exact": "1567/800",
+          "decimal": 1.95875
+        },
+        "rhs": {
+          "exact": "397/200",
+          "decimal": 1.985
+        },
+        "positive_margin": {
+          "exact": "21/800",
+          "decimal": 0.02625
+        }
+      },
+      {
+        "gate": "second theta gate",
+        "lhs": {
+          "exact": "2931/1600",
+          "decimal": 1.831875
+        },
+        "rhs": {
+          "exact": "397/200",
+          "decimal": 1.985
+        },
+        "positive_margin": {
+          "exact": "49/320",
+          "decimal": 0.153125
+        }
+      }
+    ],
+    "physical_modulus_exponent": "29/50",
+    "shared_lcm_exponent": "23/25",
+    "shared_H_exponent": "17/100",
+    "obsolete_unsliced_H_exponent": "41/100",
+    "finite_witness": {
+      "X": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "U": "10000000000000000000000000",
+      "V": "1000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "Q1": "1000000000000000000000000",
+      "Q2": "10000000000000000000",
+      "Q3": "1000000000000000",
+      "a": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "intervalLo": "U-1",
+      "intervalHi": "2U",
+      "alpha": "1 at N1,N2,0 elsewhere",
+      "beta": "1 on original betaCarrier",
+      "gamma_i": "1 if gcd(q,10)=1,0 otherwise",
+      "N1": "10000000000000000000000001",
+      "N2": "12000000000000000000000007",
+      "p": "1000000000000000000000003",
+      "r": "1000000000000003",
+      "rprime": "1000000000000007",
+      "s": "10000000000000000003",
+      "sprime": "10000000000000000007",
+      "g": 1,
+      "D": 1,
+      "d1": 1,
+      "Aroot": 1,
+      "f": -2,
+      "checked_integer_facts": {
+        "all_actual_factor_and_alpha_ranges": true,
+        "gamma_coprime_moving_a": true,
+        "N1_coprime_p_r_s": true,
+        "N2_coprime_p_rprime_sprime": true,
+        "congruence_mod_gcd_of_physical_moduli": true,
+        "original_Compatible": true,
+        "smallg_andsupported": true,
+        "both_alpha_survive_cleaned_not_dividing_a": true,
+        "both_alpha_not_divisible2or3": true,
+        "rough_cutoff_numeric": 4.182471225870339,
+        "rough_gate_reason": "All prime factors of N1,N2 are>=5 because each is coprime6; threshold≈4.18247<5. This numerical finite witness is arithmetic evidence, not a new Lean certificate."
+      },
+      "nonzero_scope": "Actual coefficients, W, and a literal compatible smallg/smallSupported p-tail pair are nonzero; geometry/support does not force an empty atom. No assertion that the entire complex Fourier sum is nonzero or has a lower bound.",
+      "asymptotic_limitation": "This explicit finite witness is not an arbitrarily-large-X dense rough-alpha/SW construction. The exponent comparison evaluates universal existing norm envelopes at allowed scales; it is not a distribution counterexample. A sparse finite alpha has auxiliary SW error<=4, but this does not supply an asymptotic lower-bound obstruction."
+    }
+  },
+  "base_packet_exact_scale_and_energy_exponents": {
+    "Bsp=UR": {
+      "exact": "2/5",
+      "decimal": 0.4
+    },
+    "Csp=URS": {
+      "exact": "59/100",
+      "decimal": 0.59
+    },
+    "F=U/Q": {
+      "exact": "1/100",
+      "decimal": 0.01
+    },
+    "H=QR²S²/V": {
+      "exact": "17/100",
+      "decimal": 0.17
+    },
+    "Zsp=S²": {
+      "exact": "19/50",
+      "decimal": 0.38
+    },
+    "Ysp=FHS": {
+      "exact": "37/100",
+      "decimal": 0.37
+    },
+    "E=(HS)²F": {
+      "exact": "73/100",
+      "decimal": 0.73
+    },
+    "allowed_P=UX²/Q": {
+      "exact": "201/100",
+      "decimal": 2.01
+    },
+    "D0": {
+      "exact": "-1/100",
+      "decimal": -0.01
+    },
+    "D1": {
+      "exact": "-33/800",
+      "decimal": -0.04125
+    },
+    "D2": {
+      "exact": "-269/1600",
+      "decimal": -0.168125
+    }
+  },
+  "explicit_individual_Weil_and_large_sieve_envelope_comparison": {
+    "scope": "Best-case diagnostic comparison AFTER granting exact lossless common-weight separation, baseg=d1=D1/root1, coprime a and completedmoduli where needed, all divisor/log factors as X^epsilon, and all extra diagonals separately paid. These grants make the comparison more favorable than the current actual proof. They are not new assumed suppliers or implemented APIs.",
+    "generic_inverse_model": "J=sum_b~Bsp,c~Csp omega(b,c)*sum_z~Zsp,y~Ysp beta(z,y)1_(bz,c)=1 e(a*y*inverse(bz modc)/c). |omega|<=1 may be arbitrary joint in b,c; it is removed by Cauchy with its BC cost, never claimed to cancel. The actual Smooth coefficient has more joint variables, so arriving here itself needs the unpaid operator proof.",
+    "Weil_derivation": "For each c, Cauchy in b costs Bsp; expand the coefficient square. Off-diagonal unweighted b reciprocal correlations cost Csp^(1/2+epsilon)*sqrt(gcd(c,a*(y1*z2-y2*z1))) by fixed native interval/progression Weil after actual coprimality and interval alignment. Grant unit/averaged gcd and paid ratio diagonals; L1(beta)^2<=Ysp*Zsp*E and Cauchy over c yields J²_off <=X^epsilon *[Bsp*Csp^(5/2)*Ysp*Zsp]*E. This is a specified off-diagonal envelope, not a complete actual-source theorem.",
+    "modulus_square_LS_benchmark": "Even grant the usual ideal reduced-fraction energy operator(Csp²+Ysp) at each fixedz, with no conductor, Gauss, auxiliary-mask or moving-a loss. Cauchy over BC rows and Zsp z-values gives J²<=X^epsilon*[Bsp*Csp*Zsp*(Csp²+Ysp)]*E. The owned primitive-character energy theorem has the corresponding modulus-square term but is not automatically this inverse-kernel transport; this stronger optimistic benchmark is diagnostic only.",
+    "native_high_conductor_limit": "Owned auxiliary_highConductor_mean_le is a character polynomial mean, not a nonzero inverse/Poisson bound. Its RHS has Q*N²/R^(1-eta)+Q^(2+eta)*N. Increasing the high-conductor cutoff improves the first term but leaves the modulus-square term. Neither its public type nor native primitive-cell energy has a joint CRT/additive-frequency argument. An exact expansion plus costs is needed before use.",
+    "P_critical_identity": "On the frozen base-packet normalization, J²<=E*P gives (W*V*T)^4 <=constant*X^epsilon *U^5*V^6*Q*P, where W~VQ once and T is the unsmoothed arithmetic return. Hence relative to X^8 the required ratio is Q*P/(U*X²), so P must save against U*X²/Q. This is an algebraic audit of the proposed reduction, not a proved actual common-weight/Cauchy transport theorem.",
+    "spectral_comparison_only": {
+      "P1": {
+        "exact": "63/32",
+        "decimal": 1.96875
+      },
+      "P2": {
+        "exact": "2947/1600",
+        "decimal": 1.841875
+      },
+      "P3": {
+        "exact": "31/20",
+        "decimal": 1.55
+      },
+      "offdiag_weighted_exponent": {
+        "exact": "6367/3200",
+        "decimal": 1.9896875
+      },
+      "separate_bare_D0_half_branch_weighted_exponent": {
+        "exact": "399/200",
+        "decimal": 1.995
+      },
+      "combined_bare_spectral_exponent": {
+        "exact": "399/200",
+        "decimal": 1.995
+      },
+      "not_owned_or_proved_here": true
+    },
+    "individual_Weil_best_offdiag": {
+      "P_exponent": {
+        "exact": "21/8",
+        "decimal": 2.625
+      },
+      "P_excess_over_allowed": {
+        "exact": "123/200",
+        "decimal": 0.615
+      },
+      "weighted_X_exponent": {
+        "exact": "1723/800",
+        "decimal": 2.15375
+      },
+      "power_loss_over_X²": {
+        "exact": "123/800",
+        "decimal": 0.15375
+      }
+    },
+    "ideal_modulus_square_LS": {
+      "P_exponent": {
+        "exact": "51/20",
+        "decimal": 2.55
+      },
+      "P_excess_over_allowed": {
+        "exact": "27/50",
+        "decimal": 0.54
+      },
+      "weighted_X_exponent": {
+        "exact": "427/200",
+        "decimal": 2.135
+      },
+      "power_loss_over_X²": {
+        "exact": "27/200",
+        "decimal": 0.135
+      }
+    },
+    "stronger_restricted_conditions_that_would_be_needed_by_this_LS_benchmark": [
+      "U^3*Q*R^4*S^5 < X^(2-delta) for the Csp² term",
+      "Q*R^4*S^6 < V^3*X^(-delta) for its Ysp term",
+      "These are stronger extra branch gates, not consequences of original MediumAdmissible. The point above violates the first by X^(27/50), producing the explicit X^(27/200)=X^.135 weighted loss. Such branches may be worth a later real operator proof, but are not closed by this report."
+    ],
+    "what_the_gap_does_and_does_not_show": "At the allowed scales even these optimistic standard envelopes exceed the exact unit squared-error scale by positive powers. It does NOT show no direct restricted proof exists: actual coupled averaging, special coefficient structure, a different Cauchy order or a better matrix estimate could beat these envelopes. It specifically rules out declaring the current displayed Weil/high-conductor upper bounds already pay the entire actual complement."
+  },
+  "modular_and_sign_resonance_facts": [
+    "Native completeWeil handles signed a,d including zero modulo q but then sqrt(gcd) can reach sqrtq. Nonzero actual f and nonzero squared k do not imply a*y is nonzero modulo every c. No modular resonance is silently removed.",
+    "For a nonzero integer M with polynomial bound, divisor incidence permits sum_{c<=C}sqrt(gcd(c,M))<=C*tau(|M|) by summing d|M and floor(C/d); this suggests a possible inexpensive gcd envelope when exact maps and weights license it. It is not a proof of the actual coupled complementary sum, and M=0/new ratio diagonals must be separated.",
+    "Actualgamma gates do enforce(z,a)=1 when z is a product of the two actual s-copy labels; they do not enforce(n1,a)=1. At the finitewitness Aroot1 removes root cost, making the unfavorable benchmark comparison independent of root-packet concerns."
+  ],
+  "no_finished_branch_or_new_supplier": {
+    "new_Lean_lemma_authored": false,
+    "complete_actual_complement_proved": false,
+    "unconditional_general_spectral_theorem_claimed_necessary": false,
+    "concrete_next_scope_recommendation": "A next mathematical scope should target the exact MediumAdmissible restricted inverse operator/common-weight return, with original W and signed a, or prove and pay a genuinely smaller geometry branch. Do not wrap a generic spectral supplier as a result, and do not spend compiler slots on another finite density interface merely to bypass this analytic gap."
+  },
+  "quota": {
+    "latest_used_percent": 15,
+    "remaining_percent": 85,
+    "hard_stop_remaining_at_most_percent": 50
+  },
+  "restrictions_observed": {
+    "no_compiler_no_subagents_no_source_tools_catalog_resources_pins_CI_edits": true,
+    "no_new_external_broad_search": true,
+    "moving_Smooth_sources_not_read": true,
+    "only_ONE_ignored_JSON_via_atomic_tmp_rename": true
+  },
+  "HOLD": true
+}

@@ -1,0 +1,165 @@
+from pathlib import Path
+from functools import lru_cache
+import datetime, hashlib, json, os, re, subprocess, sys, time
+
+BASE = Path('/workspace/scratch/cd30ec11ea1d/p5-round2')
+REPO = Path('/workspace/scratch/cd30ec11ea1d/goldbach-formalization')
+SHARED = Path('/workspace/scratch/127408f63891/goldbach-formalization')
+TOOLROOT = Path('/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux')
+DRIVER = BASE / 'runtime/frontend-driver'
+LOGS = BASE / 'runtime/logs'
+OUTPUT = REPO / '.lake/build/lib/lean'
+PACKAGES = json.loads((REPO / 'lake-manifest.json').read_text())['packages']
+ROOTS = [REPO] + [SHARED / '.lake/packages' / p['name'] for p in PACKAGES]
+SEARCH = [OUTPUT, Path('/workspace/scratch/535d89efd063/p0-round2/validation/.lake/build/lib/lean'), SHARED / '.lake/build/lib/lean'] + [r / '.lake/build/lib/lean' for r in ROOTS[1:]]
+INDEX = {}
+for root in ROOTS:
+    source_paths = subprocess.run(['rg', '--files', '-g', '*.lean', str(root)],
+                                  check=True, capture_output=True, text=True).stdout.splitlines()
+    for source_path in source_paths:
+        source = Path(source_path)
+        rel = source.relative_to(root)
+        if any(p.startswith('.') for p in rel.parts):
+            continue
+        name = '.'.join(rel.with_suffix('').parts)
+        if name == 'lakefile':
+            continue
+        if name in INDEX:
+            raise RuntimeError('duplicate source module: ' + name)
+        INDEX[name] = source
+
+def digest(path):
+    with path.open('rb') as f:
+        return hashlib.file_digest(f, 'sha256').hexdigest()
+
+def clean_comments(s):
+    out=[]; i=0; depth=0; quoted=False
+    while i<len(s):
+        if depth:
+            if s[i:i+2]=='/-': depth+=1; i+=2
+            elif s[i:i+2]=='-/': depth-=1; i+=2
+            else:
+                if s[i]=='\n': out.append('\n')
+                i+=1
+        elif quoted:
+            out.append(s[i])
+            if s[i]=='\\' and i+1<len(s): out.append(s[i+1]); i+=2
+            else:
+                if s[i]=='"': quoted=False
+                i+=1
+        elif s[i:i+2]=='/-': depth=1; i+=2
+        elif s[i:i+2]=='--':
+            j=s.find('\n',i); i=len(s) if j<0 else j
+        else:
+            out.append(s[i]); quoted=s[i]=='"'; i+=1
+    return ''.join(out)
+
+@lru_cache(None)
+def imports(module):
+    result=[]
+    for line in clean_comments(INDEX[module].read_text()).splitlines():
+        line=line.strip()
+        if not line or line in ('module','prelude'): continue
+        m=re.match(r'^(?:(?:public|private|meta)\s+)*import\s+(?:all\s+)?(.+)$',line)
+        if not m: break
+        result.extend(re.findall(r'[A-Za-z_][A-Za-z0-9_.]*',m[1]))
+    return result
+
+def rel_object(module): return Path(*module.split('.')).with_suffix('.olean')
+
+def available(module):
+    for root in SEARCH+[TOOLROOT/'lib/lean']:
+        path=root/rel_object(module)
+        if path.exists(): return path
+    return None
+
+def closure(targets):
+    order=[]; seen=set(); active=set()
+    def visit(m):
+        if m in seen: return
+        if m in active: raise RuntimeError('import cycle: '+m)
+        if m not in INDEX:
+            if not available(m): raise RuntimeError('unknown import: '+m)
+            seen.add(m); return
+        active.add(m)
+        for dep in imports(m): visit(dep)
+        active.remove(m); seen.add(m); order.append(m)
+    for m in targets: visit(m)
+    return order
+
+def environment():
+    env=os.environ.copy()
+    env['LEAN_SYSROOT']=str(TOOLROOT)
+    env['LAKE_HOME']=str(TOOLROOT)
+    env['LEAN_NUM_THREADS']='1'
+    env['LEAN_PATH']=os.pathsep.join(map(str,SEARCH))
+    env['LEAN_SRC_PATH']=os.pathsep.join(map(str,ROOTS+[TOOLROOT/'src/lean/lake',TOOLROOT/'src/lean']))
+    env['PATH']=str(TOOLROOT/'bin')+os.pathsep+env.get('PATH','')
+    return env
+
+def record(action,module,cmd,strict=False):
+    LOGS.mkdir(parents=True,exist_ok=True)
+    stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    log=LOGS/(stamp+'-'+action+'-'+module+'.log')
+    source=INDEX.get(module)
+    before=digest(source) if source else None
+    meta={'action':action,'module':module,'source':str(source) if source else None,
+          'source_sha256_before':before,'command':cmd,'cwd':str(REPO),
+          'started_utc':stamp,'trustLevel':0 if action=='compile' else None,
+          'strict':strict,'metadata_adapter':False,
+          'LEAN_SYSROOT':str(TOOLROOT),'LEAN_PATH':environment()['LEAN_PATH']}
+    print('START '+action+' '+module,flush=True)
+    started=time.monotonic()
+    with log.open('w') as f:
+        f.write(json.dumps(meta)+'\n'); f.flush()
+        run=subprocess.run(cmd,cwd=REPO,env=environment(),stdout=f,stderr=subprocess.STDOUT)
+    meta.update(returncode=run.returncode,elapsed_seconds=round(time.monotonic()-started,3),log=str(log))
+    meta['source_sha256_after']=digest(source) if source else None
+    obj=OUTPUT/rel_object(module)
+    if obj.exists(): meta['olean_sha256']=digest(obj)
+    with (LOGS/'results.jsonl').open('a') as f: f.write(json.dumps(meta)+'\n')
+    print('RESULT '+json.dumps(meta),flush=True)
+    if run.returncode or before!=meta['source_sha256_after']:
+        first=LOGS/'FIRST_FAILURE.json'
+        if not first.exists(): first.write_text(json.dumps(meta,indent=2)+'\n')
+        print(log.read_text(),flush=True)
+        raise SystemExit(run.returncode or 1)
+
+def compile_one(module,strict):
+    target=OUTPUT/rel_object(module)
+    target.parent.mkdir(parents=True,exist_ok=True)
+    cmd=[str(TOOLROOT/'bin/lake'),'-d',str(DRIVER),'-f','lakefile.lean','script','run','compileOne',
+         str(INDEX[module]),module,str(target),'strict' if strict else 'normal']
+    record('compile',module,cmd,strict)
+
+def plan(targets):
+    order=closure(targets)
+    pending=[]; reuse=[]
+    for m in order:
+        obj=available(m)
+        if m in targets or obj is None: pending.append(m)
+        else: reuse.append({'module':m,'source':str(INDEX[m]),'object':str(obj)})
+    p1plan=Path('/workspace/scratch/127408f63891/lean-runtime/logs/closure/plan.json')
+    p1=json.loads(p1plan.read_text()) if p1plan.exists() else {}
+    planned=set(p1.get('local_modules',p1.get('compile_modules',[])))
+    blocked=[m for m in pending if m in planned and available(m) is None]
+    result={'targets':targets,'ordered_modules':order,'compile':pending,'reuse':reuse,'p1_same_version_pending':blocked}
+    LOGS.mkdir(parents=True,exist_ok=True)
+    (LOGS/('plan-'+targets[0]+'.json')).write_text(json.dumps(result,indent=2)+'\n')
+    return result
+
+if __name__=='__main__':
+    action=sys.argv[1]; targets=sys.argv[2:]
+    if not targets: raise SystemExit('need explicit modules')
+    if action in ('plan','build'):
+        p=plan(targets)
+        print(json.dumps({k:p[k] for k in ('targets','compile','p1_same_version_pending')}) ,flush=True)
+        if action=='build':
+            if p['p1_same_version_pending']: raise SystemExit('shared P1 build owns pending dependencies; do not duplicate')
+            for m in p['compile']: compile_one(m,m in targets)
+    elif action=='compile':
+        for m in targets: compile_one(m,True)
+    elif action=='replay':
+        for m in targets:
+            record('replay',m,[str(TOOLROOT/'bin/leanchecker'),'--verbose',m])
+    else: raise SystemExit('unknown action')

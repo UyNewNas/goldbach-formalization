@@ -1,0 +1,20 @@
+--- a/verification/parts/p5/S1CarrierPublicTypes.lean
++++ b/verification/parts/p5/S1CarrierPublicTypes.lean
+@@ -18,7 +18,7 @@
+ run_cmd do
+   let env ← getEnv
+   let moduleName := `MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier
+-  let prefix := `MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig
++  let declarationRoot := `MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig
+   let publicNames := #[
+     `mem_goldbachS1SiftingPrimes_iff,
+     `goldbachS1ProdPrimes_squarefree,
+@@ -38,7 +38,7 @@
+     `goldbachS1BoundingSieve_mainSum_eq_totientSum,
+     `goldbachS1BoundingSieve_rem_eq_standardPrimeAPError]
+   for suffix in publicNames do
+-    let name := prefix ++ suffix
++    let name := declarationRoot ++ suffix
+     let some (.thmInfo info) := env.find? name
+       | throwError "Public theorem not found: {name}"
+     let some idx := env.getModuleIdxFor? name

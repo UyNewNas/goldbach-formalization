@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:30:45.8310624Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_DIAGNOSTIC_PROOF_API_REBIND_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "definition_count": 0,
+    "path": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean",
+    "sha256": "d185fff8c550641124da40f477758c2839b6e78f15c8c5700b7179896ca1eb0d",
+    "complete_current_source_and_proofs_reviewed": "import ImbalancedChen.Part3TransposedPrimitiveUMoment\nimport ImbalancedChen.Part3SignedDivisorDeletion\n\n/-!\n# Actual power and logarithmic payment for the transposed U residual\n\nThe logarithms of the original beta length and the complete physical cap\nare bounded by one fixed multiple of log X. Their fixed natural powers are\nthen absorbed by Mathlib's proved logarithm-versus-positive-power limit.\nThe original medium monomial gives U squared < X^(1-8 sigma), hence U at\nmost X^(1/2). Together with X=UV this pays the actual original-beta L2 times\nthe literal U-P0 error with an X^(7/4) bound, then every requested log power.\n\nOnly sigma>0 is added at payment, exactly a gate of the final obligation.\nNo small-sigma strengthening, remaining error budget or coefficient premise\nis used. The signed residue, original scales and local cutoff mass persist.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Filter Topology\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveUMoment\n\nnamespace TransposedPrimitiveUPayment\n\ntheorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\n  unfold MediumAtom.scale\n  calc\n    1 = (1 : ℝ) * 1 := by norm_num\n    _ ≤ _ := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\n\ntheorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale := by\n  change d.V ≤ d.U * d.V\n  exact le_mul_of_one_le_left (by linarith [hd.2.1]) hd.1\n\ntheorem physicalFactorCap_le_eight_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorCap ≤ 8 * d.scale := by\n  calc\n    _ ≤ d.U * d.physicalFactorCap :=\n      le_mul_of_one_le_left (by linarith [d.one_le_physicalFactorCap hd]) hd.1\n    _ ≤ 8 * d.scale ^ (1 - 9 * sigma) := d.U_mul_physicalFactorCap_le hd\n    _ ≤ _ := mul_le_mul_of_nonneg_left\n      (by\n        simpa only [Real.rpow_one] using\n          Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)\n            (show 1 - 9 * sigma ≤ 1 by linarith)) (by norm_num)\n\ntheorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ) := by\n  have hx : 0 ≤ d.scale := zero_le_one.trans (one_le_scale hd)\n  have hsq : d.U ^ 2 ≤ d.scale := by\n    apply (U_sq_lt_scale_rpow hd).le.trans\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)\n        (show 1 - 8 * sigma ≤ 1 by linarith)\n  have hp : (d.scale ^ (1 / 2 : ℝ)) ^ 2 = d.scale := by\n    simpa using Real.rpow_inv_natCast_pow (n := 2) hx (by norm_num : (2 : ℕ) ≠ 0)\n  exact (sq_le_sq₀ (by linarith [hd.1] : 0 ≤ d.U)\n    (Real.rpow_nonneg hx (1 / 2 : ℝ))).mp (by rw [hp]; exact hsq)\n\ntheorem eventually_const_log_rpow_le_rpow (C A : ℝ) (hC : 0 ≤ C)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∀ᶠ x : ℝ in atTop, C * Real.log x ^ A ≤ x ^ epsilon := by\n  have hb := ((isLittleO_log_rpow_rpow_atTop A hepsilon).const_mul_left C).bound\n    (by norm_num : (0 : ℝ) < 1)\n  filter_upwards [hb, eventually_ge_atTop (1 : ℝ),\n    Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ)] with x hx hx1 hlog\n  simpa only [Real.norm_eq_abs, one_mul, abs_of_nonneg (by positivity :\n    0 ≤ C * Real.log x ^ A), abs_of_nonneg (Real.rpow_nonneg (by linarith : 0 ≤ x) _)]\n      using hx\n\n/-- One threshold pays both actual logarithm costs, uniformly before atoms. -/\ntheorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  obtain ⟨x1, hx1⟩ := eventually_atTop.mp\n    (eventually_const_log_rpow_le_rpow (D ^ (p + s)) (p + s) (by positivity) hepsilon)\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))\n  refine ⟨max 2 (max x1 x2), lt_of_lt_of_le (by norm_num) (le_max_left _ _), ?_⟩\n  intro B kappa c0 d hd hx\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlog : 1 ≤ Real.log d.scale :=\n    hx2 d.scale ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    dsimp [D]\n    nlinarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = D ^ (p + s) * Real.log d.scale ^ ((p + s : ℕ) : ℝ) := by\n      rw [← pow_add, mul_pow, Real.rpow_natCast]\n    _ ≤ _ := hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n\ntheorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A := by\n  filter_upwards [eventually_const_log_rpow_le_rpow C A hC hdelta,\n    eventually_ge_atTop (1 : ℝ),\n    Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ)] with x hpay hx1 hlog\n  have hx0 : 0 < x := zero_lt_one.trans_le hx1\n  apply (le_div_iff₀ (Real.rpow_pos_of_pos (by linarith : 0 < Real.log x) A)).mpr\n  calc\n    _ = (C * (Real.log x) ^ A) * x ^ (2 - delta) := by ring\n    _ ≤ x ^ delta * x ^ (2 - delta) :=\n      mul_le_mul_of_nonneg_right hpay (Real.rpow_nonneg hx0.le _)\n    _ = x ^ (2 : ℝ) := by\n      rw [← Real.rpow_add hx0, show delta + (2 - delta) = 2 by ring]\n    _ = _ := Real.rpow_natCast _ 2\n\n/-- Genuine power saving after multiplication by the actual beta L2 cost. -/\ntheorem actual_betaL2_mul_U_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (7 / 4 : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ := actual_betaL2_mul_U_error_bound\n  obtain ⟨x0, hx0, hcost⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 24 sigma hsigma (by norm_num : (0 : ℝ) < 1 / 4)\n  refine ⟨C, hC, x0, hx0, fun d hd hx ↦ ?_⟩\n  have hxpos : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlogV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hlogCap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ C * d.V * d.U ^ 2 *\n        (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 24 := hbound B sigma kappa c0 d hd\n    _ = C * d.scale * d.U *\n        ((1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 24) := by\n      unfold MediumAtom.scale\n      ring\n    _ ≤ C * d.scale * (d.scale ^ (1 / 2 : ℝ)) * d.scale ^ (1 / 4 : ℝ) :=\n      mul_le_mul\n        (mul_le_mul_of_nonneg_left (U_le_scale_half hsigma hd) (by positivity))\n        (hcost B kappa c0 d hd hx) (by positivity) (by positivity)\n    _ = C * (d.scale ^ (1 : ℝ) * d.scale ^ (1 / 2 : ℝ) *\n        d.scale ^ (1 / 4 : ℝ)) := by rw [Real.rpow_one]; ring\n    _ = _ := by rw [← Real.rpow_add hxpos, ← Real.rpow_add hxpos]; norm_num\n\n/-- Every requested logarithmic decay is paid, before the actual atom. -/\ntheorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_U_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le\n      (by norm_num : (0 : ℝ) < 1 / 4))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  apply (hbound d hd ((le_max_left _ _).trans hx)).trans\n  convert hx2 d.scale ((le_max_right _ _).trans hx) using 1 <;> norm_num\n\nend TransposedPrimitiveUPayment\n\nend\n\nend ImbalancedChen.Part3\n",
+    "declaration_count": 9,
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "one_le_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 29,
+        "complete_source_header": "theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale"
+      },
+      {
+        "name": "V_le_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 37,
+        "complete_source_header": "theorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale"
+      },
+      {
+        "name": "physicalFactorCap_le_eight_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 43,
+        "complete_source_header": "theorem physicalFactorCap_le_eight_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorCap ≤ 8 * d.scale"
+      },
+      {
+        "name": "U_le_scale_half",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 57,
+        "complete_source_header": "theorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ)"
+      },
+      {
+        "name": "eventually_const_log_rpow_le_rpow",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 72,
+        "complete_source_header": "theorem eventually_const_log_rpow_le_rpow (C A : ℝ) (hC : 0 ≤ C)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∀ᶠ x : ℝ in atTop, C * Real.log x ^ A ≤ x ^ epsilon"
+      },
+      {
+        "name": "eventually_actual_log_cost_le_rpow",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 84,
+        "complete_source_header": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon"
+      },
+      {
+        "name": "eventually_const_rpow_two_le_logBudget",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 129,
+        "complete_source_header": "theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A"
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_power_bound",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 146,
+        "complete_source_header": "theorem actual_betaL2_mul_U_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (7 / 4 : ℝ)"
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_log_payment",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 181,
+        "complete_source_header": "theorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A"
+      }
+    ]
+  },
+  "baseline": {
+    "only_changed_proof_declarations": [
+      "physicalFactorCap_le_eight_scale",
+      "eventually_actual_log_cost_le_rpow",
+      "actual_betaL2_mul_U_error_log_payment"
+    ],
+    "complete_actual_diff_read": true,
+    "imports_exact_equal": true,
+    "sha256": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d",
+    "other_blocks_exact_equal": true,
+    "complete_header_definition_comparisons": [
+      {
+        "name": "one_le_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "V_le_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "physicalFactorCap_le_eight_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "name": "U_le_scale_half",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "eventually_const_log_rpow_le_rpow",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "eventually_actual_log_cost_le_rpow",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "name": "eventually_const_rpow_two_le_logBudget",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_power_bound",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_log_payment",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": false
+      }
+    ],
+    "exact_old_snapshot": "20261016-UPayment-first-diag-original-9ece.lean.txt"
+  },
+  "author_report": {
+    "sha256": "e40069297a5d3672800be53bc4e119769b9c0ab23509015fafed7bfebc035a92",
+    "path": "20261016-transposed-primitive-U-payment-first-diag-owner-rebind.json"
+  },
+  "actual_failed_stdout": {
+    "complete_text": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean:54:33: error: unexpected token 'by'; expected ')'\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:51:13: error: Type mismatch\n  mul_le_mul_of_nonneg_left ?m.77\nhas type\n  0 ≤ ?m.73 → ?m.73 * ?m.74 ≤ ?m.73 * ?m.75\nbut is expected to have type\n  8 * d.scale ^ (1 - 9 * sigma) ≤ ?m.66\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:52:10: error: Type mismatch: After simplification, term\n  Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)\n has type\n  ?m.92 ≤ ?m.93 → d.scale ^ ?m.92 ≤ d.scale ^ ?m.93\nbut is expected to have type\n  ?m.74 ≤ ?m.75\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:101:8: error: Application type mismatch: The argument\n  LE.le.trans (le_max_right x1 x2) (LE.le.trans (le_max_right 2 (max x1 x2)) hx)\nhas type\n  x2 ≤ d.scale\nof sort `Prop` but is expected to have type\n  ℝ\nof sort `Type` in the application\n  hx2 (LE.le.trans (le_max_right x1 x2) (LE.le.trans (le_max_right 2 (max x1 x2)) hx))\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:126:17: error: Application type mismatch: The argument\n  LE.le.trans (le_max_left x1 x2) (LE.le.trans (le_max_right 2 (max x1 x2)) hx)\nhas type\n  x1 ≤ d.scale\nof sort `Prop` but is expected to have type\n  ℝ\nof sort `Type` in the application\n  hx1 (LE.le.trans (le_max_left x1 x2) (LE.le.trans (le_max_right 2 (max x1 x2)) hx))\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:195:14: error: Application type mismatch: The argument\n  LE.le.trans (le_max_right x1 x2) hx\nhas type\n  x2 ≤ d.scale\nof sort `Prop` but is expected to have type\n  ℝ\nof sort `Type` in the application\n  hx2 (LE.le.trans (le_max_right x1 x2) hx)\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:187:52: error: unsolved goals\nB : ℕ\nsigma kappa c0 A : ℝ\nhsigma : 0 < sigma\nC : ℝ\nhC : 0 < C\nx1 : ℝ\nhx1 : 1 < x1\nhbound :\n  ∀ (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      x1 ≤ d.scale →\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n            ‖↑(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n                    d.transposedAtom.commonSmoothWeight) -\n                primitiveZeroMain d‖ ≤\n          C * d.scale ^ (7 / 4)\nx2 : ℝ\nhx2 : ∀ (b : ℝ), x2 ≤ b → C * b ^ (2 - 1 / 4) ≤ b ^ 2 / Real.log b ^ A\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nhx : max x1 x2 ≤ d.scale\n⊢ C * d.scale ^ (7 / 4) ≤ d.scale ^ 2 / Real.log d.scale ^ A ↔\n    x2 ≤ sorry () → C * sorry () ^ (7 / 4) ≤ sorry () ^ 2 / Real.log (sorry ()) ^ A\n",
+    "path": ".lake/proof-continuation/runs/20261015T212615111265Z-ImbalancedChen.Part3TransposedPrimitiveUPayment/stdout.log",
+    "fully_read": true,
+    "sha256": "e034305490dfacdf7a51afcd122a964f3300610ad172f5757d22f0b49cefaa01"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+    "ImbalancedChen.Part3SignedDivisorDeletion"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "current_hash_matches_expected": true,
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310"
+    },
+    {
+      "current_hash_matches_expected": true,
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1"
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false,
+    "imports_changed": false,
+    "local_module_delta": 0
+  },
+  "diagnostic_and_mathematical_review": [
+    {
+      "site": "physicalFactorCap_le_eight_scale",
+      "assessment": "Actual stdout reports an unexpected nested by token and ensuing partial-application cascades. The repair only lays out the existing nested proof as a proper multiline by block; the very same rpow monotonicity term, exponent 1-9sigma<=1, fixed multiplier 8, existing hd and positivity proof remain. No mathematical change."
+    },
+    {
+      "site": "eventually_actual_log_cost_le_rpow",
+      "assessment": "The two eventual_atTop witness functions have explicit scalar b:Real arguments in the actual stdout. They now receive the same actual d.scale before the unchanged threshold inequalities; the max2/maxx1x2 threshold and all p,s,sigma,epsilon quantifiers remain unchanged."
+    },
+    {
+      "site": "actual_betaL2_mul_U_error_log_payment",
+      "assessment": "The final eventual witness now also receives d.scale. Its bound C*X^(2-1/4)<=X²/logX^A is then converted by the same numerical exponent normalization to 7/4. This removes the compiler-generated metavariable/sorry() shown in the failed diagnostic; neither source contains sorry."
+    },
+    {
+      "site": "complete mathematical review",
+      "assessment": "All nine complete headers are identical to exact9ece, and only the listed three proof declarations differ at the four actual diagnostic sites. The existing original geometry gives U²<X^(1-8sigma), U<=X^(1/2), actual outside betaL2 VU² cost, log cost X^(1/4), and final X^(7/4) then arbitrary-real logarithmic decay. Fixed rpow/log little-o APIs and all original signed data are unchanged."
+    }
+  ],
+  "scope_invariants": {
+    "all_9_types_unchanged": true,
+    "zero_defs": true,
+    "all_imports_same": true,
+    "no_new_sigma_upper_bound": true,
+    "only_original_sigma_positive_payment_gate": true,
+    "all_real_A": true,
+    "all_thresholds_before_actual_atom": true,
+    "all_actual_carriers_coefficients_and_local_cutoffMass_preserved": true,
+    "literal_U_minus_P0_preserved": true,
+    "no_budget_or_domain_premise_added": true,
+    "no_limit_or_linter_change": true,
+    "actual_changes": "Exactly one nested by layout edit and three explicit d.scale arguments."
+  },
+  "bidirectional_byte_certificate": {
+    "replacement": {
+      "new_inserted_byte_count": 7845,
+      "new_inserted_bytes_base64": "CiAgICAgICAgc2ltcGEgb25seSBbUmVhbC5ycG93X29uZV0gdXNpbmcKICAgICAgICAgIFJlYWwucnBvd19sZV9ycG93X29mX2V4cG9uZW50X2xlIChvbmVfbGVfc2NhbGUgaGQpCiAgICAgICAgICAgIChzaG93IDEgLSA5ICogc2lnbWEg4omkIDEgYnkgbGluYXJpdGgpKSAoYnkgbm9ybV9udW0pCgp0aGVvcmVtIFVfbGVfc2NhbGVfaGFsZgogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIDoKICAgIGQuVSDiiaQgZC5zY2FsZSBeICgxIC8gMiA6IOKEnSkgOj0gYnkKICBoYXZlIGh4IDogMCDiiaQgZC5zY2FsZSA6PSB6ZXJvX2xlX29uZS50cmFucyAob25lX2xlX3NjYWxlIGhkKQogIGhhdmUgaHNxIDogZC5VIF4gMiDiiaQgZC5zY2FsZSA6PSBieQogICAgYXBwbHkgKFVfc3FfbHRfc2NhbGVfcnBvdyBoZCkubGUudHJhbnMKICAgIHNpbXBhIG9ubHkgW1JlYWwucnBvd19vbmVdIHVzaW5nCiAgICAgIFJlYWwucnBvd19sZV9ycG93X29mX2V4cG9uZW50X2xlIChvbmVfbGVfc2NhbGUgaGQpCiAgICAgICAgKHNob3cgMSAtIDggKiBzaWdtYSDiiaQgMSBieSBsaW5hcml0aCkKICBoYXZlIGhwIDogKGQuc2NhbGUgXiAoMSAvIDIgOiDihJ0pKSBeIDIgPSBkLnNjYWxlIDo9IGJ5CiAgICBzaW1wYSB1c2luZyBSZWFsLnJwb3dfaW52X25hdENhc3RfcG93IChuIDo9IDIpIGh4IChieSBub3JtX251bSA6ICgyIDog4oSVKSDiiaAgMCkKICBleGFjdCAoc3FfbGVfc3HigoAgKGJ5IGxpbmFyaXRoIFtoZC4xXSA6IDAg4omkIGQuVSkKICAgIChSZWFsLnJwb3dfbm9ubmVnIGh4ICgxIC8gMiA6IOKEnSkpKS5tcCAoYnkgcncgW2hwXTsgZXhhY3QgaHNxKQoKdGhlb3JlbSBldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgKEMgQSA6IOKEnSkgKGhDIDogMCDiiaQgQykKICAgIHtlcHNpbG9uIDog4oSdfSAoaGVwc2lsb24gOiAwIDwgZXBzaWxvbikgOgogICAg4oiA4bagIHggOiDihJ0gaW4gYXRUb3AsIEMgKiBSZWFsLmxvZyB4IF4gQSDiiaQgeCBeIGVwc2lsb24gOj0gYnkKICBoYXZlIGhiIDo9ICgoaXNMaXR0bGVPX2xvZ19ycG93X3Jwb3dfYXRUb3AgQSBoZXBzaWxvbikuY29uc3RfbXVsX2xlZnQgQykuYm91bmQKICAgIChieSBub3JtX251bSA6ICgwIDog4oSdKSA8IDEpCiAgZmlsdGVyX3Vwd2FyZHMgW2hiLCBldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKSwKICAgIFJlYWwudGVuZHN0b19sb2dfYXRUb3AuZXZlbnR1YWxseV9nZV9hdFRvcCAoMSA6IOKEnSldIHdpdGggeCBoeCBoeDEgaGxvZwogIHNpbXBhIG9ubHkgW1JlYWwubm9ybV9lcV9hYnMsIG9uZV9tdWwsIGFic19vZl9ub25uZWcgKGJ5IHBvc2l0aXZpdHkgOgogICAgMCDiiaQgQyAqIFJlYWwubG9nIHggXiBBKSwgYWJzX29mX25vbm5lZyAoUmVhbC5ycG93X25vbm5lZyAoYnkgbGluYXJpdGggOiAwIOKJpCB4KSBfKV0KICAgICAgdXNpbmcgaHgKCi8tLSBPbmUgdGhyZXNob2xkIHBheXMgYm90aCBhY3R1YWwgbG9nYXJpdGhtIGNvc3RzLCB1bmlmb3JtbHkgYmVmb3JlIGF0b21zLiAtLwp0aGVvcmVtIGV2ZW50dWFsbHlfYWN0dWFsX2xvZ19jb3N0X2xlX3Jwb3cgKHAgcyA6IOKElSkgKHNpZ21hIDog4oSdKQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkge2Vwc2lsb24gOiDihJ19IChoZXBzaWxvbiA6IDAgPCBlcHNpbG9uKSA6CiAgICDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIChCIDog4oSVKSAoa2FwcGEgYzAgOiDihJ0pIChkIDogTWVkaXVtQXRvbSksCiAgICAgIE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkIOKGkiB4MCDiiaQgZC5zY2FsZSDihpIKICAgICAgKDEgKyBSZWFsLmxvZyAoMiAqIGQuVikpIF4gcCAqCiAgICAgICAgKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIHMg4omkIGQuc2NhbGUgXiBlcHNpbG9uIDo9IGJ5CiAgbGV0IEQgOiDihJ0gOj0gMiArIFJlYWwubG9nIDgKICBoYXZlIGhEIDogMCA8IEQgOj0gYnkKICAgIGRzaW1wIFtEXQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoYnkgbm9ybV9udW0gOiAoMSA6IOKEnSkg4omkIDgpXQogIG9idGFpbiDin6h4MSwgaHgx4p+pIDo9IGV2ZW50dWFsbHlfYXRUb3AubXAKICAgIChldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgKEQgXiAocCArIHMpKSAocCArIHMpIChieSBwb3NpdGl2aXR5KSBoZXBzaWxvbikKICBvYnRhaW4g4p+oeDIsIGh4MuKfqSA6PSBldmVudHVhbGx5X2F0VG9wLm1wCiAgICAoUmVhbC50ZW5kc3RvX2xvZ19hdFRvcC5ldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKSkKICByZWZpbmUg4p+obWF4IDIgKG1heCB4MSB4MiksIGx0X29mX2x0X29mX2xlIChieSBub3JtX251bSkgKGxlX21heF9sZWZ0IF8gXyksID9f4p+pCiAgaW50cm8gQiBrYXBwYSBjMCBkIGhkIGh4CiAgaGF2ZSBoeDAgOiAwIDwgZC5zY2FsZSA6PSB6ZXJvX2x0X29uZS50cmFuc19sZSAob25lX2xlX3NjYWxlIGhkKQogIGhhdmUgaGxvZyA6IDEg4omkIFJlYWwubG9nIGQuc2NhbGUgOj0KICAgIGh4MiBkLnNjYWxlICgobGVfbWF4X3JpZ2h0IHgxIHgyKS50cmFucyAoKGxlX21heF9yaWdodCAyIChtYXggeDEgeDIpKS50cmFucyBoeCkpCiAgaGF2ZSBoYmFzZSAoeSA6IOKEnSkgKGh5IDogMCA8IHkpIChoeVggOiB5IOKJpCA4ICogZC5zY2FsZSkgOgogICAgICAxICsgUmVhbC5sb2cgeSDiiaQgRCAqIFJlYWwubG9nIGQuc2NhbGUgOj0gYnkKICAgIGhhdmUgaGggOj0gUmVhbC5sb2dfbGVfbG9nIGh5IGh5WAogICAgcncgW1JlYWwubG9nX211bCAoYnkgbm9ybV9udW0gOiAoOCA6IOKEnSkg4omgIDApIGh4MC5uZSddIGF0IGhoCiAgICBkc2ltcCBbRF0KICAgIG5saW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChieSBub3JtX251bSA6ICgxIDog4oSdKSDiiaQgOCldCiAgaGF2ZSBobG9nViA6IDEgKyBSZWFsLmxvZyAoMiAqIGQuVikg4omkIEQgKiBSZWFsLmxvZyBkLnNjYWxlIDo9IGJ5CiAgICBhcHBseSBoYmFzZSBfIChieSBsaW5hcml0aCBbaGQuMi4xXSkKICAgIGNhbGMKICAgICAgMiAqIGQuViDiiaQgMiAqIGQuc2NhbGUgOj0gbXVsX2xlX211bF9vZl9ub25uZWdfbGVmdCAoVl9sZV9zY2FsZSBoZCkgKGJ5IG5vcm1fbnVtKQogICAgICBfIOKJpCBfIDo9IGJ5IG5saW5hcml0aCBbaHgwXQogIGhhdmUgaGxvZ0NhcCA6IDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwIOKJpCBEICogUmVhbC5sb2cgZC5zY2FsZSA6PQogICAgaGJhc2UgXyAoemVyb19sdF9vbmUudHJhbnNfbGUgKGQub25lX2xlX3BoeXNpY2FsRmFjdG9yQ2FwIGhkKSkKICAgICAgKHBoeXNpY2FsRmFjdG9yQ2FwX2xlX2VpZ2h0X3NjYWxlIGhzaWdtYSBoZCkKICBoYXZlIGhWMCA6IDAg4omkIDEgKyBSZWFsLmxvZyAoMiAqIGQuVikgOj0gYnkKICAgIGxpbmFyaXRoIFtSZWFsLmxvZ19ub25uZWcgKHNob3cgMSDiiaQgMiAqIGQuViBieSBsaW5hcml0aCBbaGQuMi4xXSldCiAgaGF2ZSBoY2FwMCA6IDAg4omkIDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwIDo9IGJ5CiAgICBsaW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChkLm9uZV9sZV9waHlzaWNhbEZhY3RvckNhcCBoZCldCiAgY2FsYwogICAgXyDiiaQgKEQgKiBSZWFsLmxvZyBkLnNjYWxlKSBeIHAgKiAoRCAqIFJlYWwubG9nIGQuc2NhbGUpIF4gcyA6PQogICAgICBtdWxfbGVfbXVsIChwb3dfbGVfcG93X2xlZnTigoAgaFYwIGhsb2dWIHApIChwb3dfbGVfcG93X2xlZnTigoAgaGNhcDAgaGxvZ0NhcCBzKQogICAgICAgIChwb3dfbm9ubmVnIGhjYXAwIHMpIChieSBwb3NpdGl2aXR5KQogICAgXyA9IEQgXiAocCArIHMpICogUmVhbC5sb2cgZC5zY2FsZSBeICgocCArIHMgOiDihJUpIDog4oSdKSA6PSBieQogICAgICBydyBb4oaQIHBvd19hZGQsIG11bF9wb3csIFJlYWwucnBvd19uYXRDYXN0XQogICAgXyDiiaQgXyA6PSBoeDEgZC5zY2FsZSAoKGxlX21heF9sZWZ0IHgxIHgyKS50cmFucyAoKGxlX21heF9yaWdodCAyIChtYXggeDEgeDIpKS50cmFucyBoeCkpCgp0aGVvcmVtIGV2ZW50dWFsbHlfY29uc3RfcnBvd190d29fbGVfbG9nQnVkZ2V0IChDIEEgOiDihJ0pIChoQyA6IDAg4omkIEMpCiAgICB7ZGVsdGEgOiDihJ19IChoZGVsdGEgOiAwIDwgZGVsdGEpIDoKICAgIOKIgOG2oCB4IDog4oSdIGluIGF0VG9wLCBDICogeCBeICgyIC0gZGVsdGEpIOKJpCB4IF4gMiAvIChSZWFsLmxvZyB4KSBeIEEgOj0gYnkKICBmaWx0ZXJfdXB3YXJkcyBbZXZlbnR1YWxseV9jb25zdF9sb2dfcnBvd19sZV9ycG93IEMgQSBoQyBoZGVsdGEsCiAgICBldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKSwKICAgIFJlYWwudGVuZHN0b19sb2dfYXRUb3AuZXZlbnR1YWxseV9nZV9hdFRvcCAoMSA6IOKEnSldIHdpdGggeCBocGF5IGh4MSBobG9nCiAgaGF2ZSBoeDAgOiAwIDwgeCA6PSB6ZXJvX2x0X29uZS50cmFuc19sZSBoeDEKICBhcHBseSAobGVfZGl2X2lmZuKCgCAoUmVhbC5ycG93X3Bvc19vZl9wb3MgKGJ5IGxpbmFyaXRoIDogMCA8IFJlYWwubG9nIHgpIEEpKS5tcHIKICBjYWxjCiAgICBfID0gKEMgKiAoUmVhbC5sb2cgeCkgXiBBKSAqIHggXiAoMiAtIGRlbHRhKSA6PSBieSByaW5nCiAgICBfIOKJpCB4IF4gZGVsdGEgKiB4IF4gKDIgLSBkZWx0YSkgOj0KICAgICAgbXVsX2xlX211bF9vZl9ub25uZWdfcmlnaHQgaHBheSAoUmVhbC5ycG93X25vbm5lZyBoeDAubGUgXykKICAgIF8gPSB4IF4gKDIgOiDihJ0pIDo9IGJ5CiAgICAgIHJ3IFvihpAgUmVhbC5ycG93X2FkZCBoeDAsIHNob3cgZGVsdGEgKyAoMiAtIGRlbHRhKSA9IDIgYnkgcmluZ10KICAgIF8gPSBfIDo9IFJlYWwucnBvd19uYXRDYXN0IF8gMgoKLy0tIEdlbnVpbmUgcG93ZXIgc2F2aW5nIGFmdGVyIG11bHRpcGxpY2F0aW9uIGJ5IHRoZSBhY3R1YWwgYmV0YSBMMiBjb3N0LiAtLwp0aGVvcmVtIGFjdHVhbF9iZXRhTDJfbXVsX1VfZXJyb3JfcG93ZXJfYm91bmQgKEIgOiDihJUpIChzaWdtYSBrYXBwYSBjMCA6IOKEnSkKICAgIChoc2lnbWEgOiAwIDwgc2lnbWEpIDoKICAgIOKIgyBDIDog4oSdLCAwIDwgQyDiiKcg4oiDIHgwIDog4oSdLCAxIDwgeDAg4oinIOKIgCBkIDogTWVkaXVtQXRvbSwKICAgICAgTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQg4oaSIHgwIOKJpCBkLnNjYWxlIOKGkgogICAgICAo4oiRIG4g4oiIIGQuYmV0YUNhcnJpZXIsIOKAlmQuYmV0YSBu4oCWIF4gMikgKgogICAgICAgIOKAlihkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhEaXNwZXJzaW9uVSBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IDog4oSCKSAtIHByaW1pdGl2ZVplcm9NYWluIGTigJYg4omkCiAgICAgICAgICAgIEMgKiBkLnNjYWxlIF4gKDcgLyA0IDog4oSdKSA6PSBieQogIG9idGFpbiDin6hDLCBoQywgaGJvdW5k4p+pIDo9IGFjdHVhbF9iZXRhTDJfbXVsX1VfZXJyb3JfYm91bmQKICBvYnRhaW4g4p+oeDAsIGh4MCwgaGNvc3Tin6kgOj0gZXZlbnR1YWxseV9hY3R1YWxfbG9nX2Nvc3RfbGVfcnBvdwogICAgKCgyIF4gQikgXiAyIC0gMSkgMjQgc2lnbWEgaHNpZ21hIChieSBub3JtX251bSA6ICgwIDog4oSdKSA8IDEgLyA0KQogIHJlZmluZSDin6hDLCBoQywgeDAsIGh4MCwgZnVuIGQgaGQgaHgg4oamID9f4p+pCiAgaGF2ZSBoeHBvcyA6IDAgPCBkLnNjYWxlIDo9IHplcm9fbHRfb25lLnRyYW5zX2xlIChvbmVfbGVfc2NhbGUgaGQpCiAgaGF2ZSBobG9nVjAgOiAwIOKJpCAxICsgUmVhbC5sb2cgKDIgKiBkLlYpIDo9IGJ5CiAgICBsaW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChzaG93IDEg4omkIDIgKiBkLlYgYnkgbGluYXJpdGggW2hkLjIuMV0pXQogIGhhdmUgaGxvZ0NhcDAgOiAwIOKJpCAxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCA6PSBieQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoZC5vbmVfbGVfcGh5c2ljYWxGYWN0b3JDYXAgaGQpXQogIGNhbGMKICAgIF8g4omkIEMgKiBkLlYgKiBkLlUgXiAyICoKICAgICAgICAoMSArIFJlYWwubG9nICgyICogZC5WKSkgXiAoKDIgXiBCKSBeIDIgLSAxKSAqCiAgICAgICAgICAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMjQgOj0gaGJvdW5kIEIgc2lnbWEga2FwcGEgYzAgZCBoZAogICAgXyA9IEMgKiBkLnNjYWxlICogZC5VICoKICAgICAgICAoKDEgKyBSZWFsLmxvZyAoMiAqIGQuVikpIF4gKCgyIF4gQikgXiAyIC0gMSkgKgogICAgICAgICAgKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIDI0KSA6PSBieQogICAgICB1bmZvbGQgTWVkaXVtQXRvbS5zY2FsZQogICAgICByaW5nCiAgICBfIOKJpCBDICogZC5zY2FsZSAqIChkLnNjYWxlIF4gKDEgLyAyIDog4oSdKSkgKiBkLnNjYWxlIF4gKDEgLyA0IDog4oSdKSA6PQogICAgICBtdWxfbGVfbXVsCiAgICAgICAgKG11bF9sZV9tdWxfb2Zfbm9ubmVnX2xlZnQgKFVfbGVfc2NhbGVfaGFsZiBoc2lnbWEgaGQpIChieSBwb3NpdGl2aXR5KSkKICAgICAgICAoaGNvc3QgQiBrYXBwYSBjMCBkIGhkIGh4KSAoYnkgcG9zaXRpdml0eSkgKGJ5IHBvc2l0aXZpdHkpCiAgICBfID0gQyAqIChkLnNjYWxlIF4gKDEgOiDihJ0pICogZC5zY2FsZSBeICgxIC8gMiA6IOKEnSkgKgogICAgICAgIGQuc2NhbGUgXiAoMSAvIDQgOiDihJ0pKSA6PSBieSBydyBbUmVhbC5ycG93X29uZV07IHJpbmcKICAgIF8gPSBfIDo9IGJ5IHJ3IFvihpAgUmVhbC5ycG93X2FkZCBoeHBvcywg4oaQIFJlYWwucnBvd19hZGQgaHhwb3NdOyBub3JtX251bQoKLy0tIEV2ZXJ5IHJlcXVlc3RlZCBsb2dhcml0aG1pYyBkZWNheSBpcyBwYWlkLCBiZWZvcmUgdGhlIGFjdHVhbCBhdG9tLiAtLwp0aGVvcmVtIGFjdHVhbF9iZXRhTDJfbXVsX1VfZXJyb3JfbG9nX3BheW1lbnQgKEIgOiDihJUpIChzaWdtYSBrYXBwYSBjMCBBIDog4oSdKQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkgOgogICAg4oiDIHgwIDog4oSdLCAxIDwgeDAg4oinIOKIgCBkIDogTWVkaXVtQXRvbSwKICAgICAgTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQg4oaSIHgwIOKJpCBkLnNjYWxlIOKGkgogICAgICAo4oiRIG4g4oiIIGQuYmV0YUNhcnJpZXIsIOKAlmQuYmV0YSBu4oCWIF4gMikgKgogICAgICAgIOKAlihkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhEaXNwZXJzaW9uVSBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IDog4oSCKSAtIHByaW1pdGl2ZVplcm9NYWluIGTigJYg4omkCiAgICAgICAgICAgIGQuc2NhbGUgXiAyIC8gKFJlYWwubG9nIGQuc2NhbGUpIF4gQSA6PSBieQogIG9idGFpbiDin6hDLCBoQywgeDEsIGh4MSwgaGJvdW5k4p+pIDo9CiAgICBhY3R1YWxfYmV0YUwyX211bF9VX2Vycm9yX3Bvd2VyX2JvdW5kIEIgc2lnbWEga2FwcGEgYzAgaHNpZ21hCiAgb2J0YWluIOKfqHgyLCBoeDLin6kgOj0gZXZlbnR1YWxseV9hdFRvcC5tcAogICAgKGV2ZW50dWFsbHlfY29uc3RfcnBvd190d29fbGVfbG9nQnVkZ2V0IEMgQSBoQy5sZQogICAgICAoYnkgbm9ybV9udW0gOiAoMCA6IOKEnSkgPCAxIC8gNCkpCiAgcmVmaW5lIOKfqG1heCB4MSB4MiwgbHRfb2ZfbHRfb2ZfbGUgaHgxIChsZV9tYXhfbGVmdCBfIF8pLCBmdW4gZCBoZCBoeCDihqYgP1/in6kKICBhcHBseSAoaGJvdW5kIGQgaGQgKChsZV9tYXhfbGVmdCBfIF8pLnRyYW5zIGh4KSkudHJhbnMKICBjb252ZXJ0IGh4MiBkLnNjYWxl",
+      "old_removed_byte_count": 7809,
+      "old_removed_bytes_base64": "IHNpbXBhIG9ubHkgW1JlYWwucnBvd19vbmVdIHVzaW5nCiAgICAgICAgUmVhbC5ycG93X2xlX3Jwb3dfb2ZfZXhwb25lbnRfbGUgKG9uZV9sZV9zY2FsZSBoZCkKICAgICAgICAgIChzaG93IDEgLSA5ICogc2lnbWEg4omkIDEgYnkgbGluYXJpdGgpKSAoYnkgbm9ybV9udW0pCgp0aGVvcmVtIFVfbGVfc2NhbGVfaGFsZgogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIDoKICAgIGQuVSDiiaQgZC5zY2FsZSBeICgxIC8gMiA6IOKEnSkgOj0gYnkKICBoYXZlIGh4IDogMCDiiaQgZC5zY2FsZSA6PSB6ZXJvX2xlX29uZS50cmFucyAob25lX2xlX3NjYWxlIGhkKQogIGhhdmUgaHNxIDogZC5VIF4gMiDiiaQgZC5zY2FsZSA6PSBieQogICAgYXBwbHkgKFVfc3FfbHRfc2NhbGVfcnBvdyBoZCkubGUudHJhbnMKICAgIHNpbXBhIG9ubHkgW1JlYWwucnBvd19vbmVdIHVzaW5nCiAgICAgIFJlYWwucnBvd19sZV9ycG93X29mX2V4cG9uZW50X2xlIChvbmVfbGVfc2NhbGUgaGQpCiAgICAgICAgKHNob3cgMSAtIDggKiBzaWdtYSDiiaQgMSBieSBsaW5hcml0aCkKICBoYXZlIGhwIDogKGQuc2NhbGUgXiAoMSAvIDIgOiDihJ0pKSBeIDIgPSBkLnNjYWxlIDo9IGJ5CiAgICBzaW1wYSB1c2luZyBSZWFsLnJwb3dfaW52X25hdENhc3RfcG93IChuIDo9IDIpIGh4IChieSBub3JtX251bSA6ICgyIDog4oSVKSDiiaAgMCkKICBleGFjdCAoc3FfbGVfc3HigoAgKGJ5IGxpbmFyaXRoIFtoZC4xXSA6IDAg4omkIGQuVSkKICAgIChSZWFsLnJwb3dfbm9ubmVnIGh4ICgxIC8gMiA6IOKEnSkpKS5tcCAoYnkgcncgW2hwXTsgZXhhY3QgaHNxKQoKdGhlb3JlbSBldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgKEMgQSA6IOKEnSkgKGhDIDogMCDiiaQgQykKICAgIHtlcHNpbG9uIDog4oSdfSAoaGVwc2lsb24gOiAwIDwgZXBzaWxvbikgOgogICAg4oiA4bagIHggOiDihJ0gaW4gYXRUb3AsIEMgKiBSZWFsLmxvZyB4IF4gQSDiiaQgeCBeIGVwc2lsb24gOj0gYnkKICBoYXZlIGhiIDo9ICgoaXNMaXR0bGVPX2xvZ19ycG93X3Jwb3dfYXRUb3AgQSBoZXBzaWxvbikuY29uc3RfbXVsX2xlZnQgQykuYm91bmQKICAgIChieSBub3JtX251bSA6ICgwIDog4oSdKSA8IDEpCiAgZmlsdGVyX3Vwd2FyZHMgW2hiLCBldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKSwKICAgIFJlYWwudGVuZHN0b19sb2dfYXRUb3AuZXZlbnR1YWxseV9nZV9hdFRvcCAoMSA6IOKEnSldIHdpdGggeCBoeCBoeDEgaGxvZwogIHNpbXBhIG9ubHkgW1JlYWwubm9ybV9lcV9hYnMsIG9uZV9tdWwsIGFic19vZl9ub25uZWcgKGJ5IHBvc2l0aXZpdHkgOgogICAgMCDiiaQgQyAqIFJlYWwubG9nIHggXiBBKSwgYWJzX29mX25vbm5lZyAoUmVhbC5ycG93X25vbm5lZyAoYnkgbGluYXJpdGggOiAwIOKJpCB4KSBfKV0KICAgICAgdXNpbmcgaHgKCi8tLSBPbmUgdGhyZXNob2xkIHBheXMgYm90aCBhY3R1YWwgbG9nYXJpdGhtIGNvc3RzLCB1bmlmb3JtbHkgYmVmb3JlIGF0b21zLiAtLwp0aGVvcmVtIGV2ZW50dWFsbHlfYWN0dWFsX2xvZ19jb3N0X2xlX3Jwb3cgKHAgcyA6IOKElSkgKHNpZ21hIDog4oSdKQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkge2Vwc2lsb24gOiDihJ19IChoZXBzaWxvbiA6IDAgPCBlcHNpbG9uKSA6CiAgICDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIChCIDog4oSVKSAoa2FwcGEgYzAgOiDihJ0pIChkIDogTWVkaXVtQXRvbSksCiAgICAgIE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkIOKGkiB4MCDiiaQgZC5zY2FsZSDihpIKICAgICAgKDEgKyBSZWFsLmxvZyAoMiAqIGQuVikpIF4gcCAqCiAgICAgICAgKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIHMg4omkIGQuc2NhbGUgXiBlcHNpbG9uIDo9IGJ5CiAgbGV0IEQgOiDihJ0gOj0gMiArIFJlYWwubG9nIDgKICBoYXZlIGhEIDogMCA8IEQgOj0gYnkKICAgIGRzaW1wIFtEXQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoYnkgbm9ybV9udW0gOiAoMSA6IOKEnSkg4omkIDgpXQogIG9idGFpbiDin6h4MSwgaHgx4p+pIDo9IGV2ZW50dWFsbHlfYXRUb3AubXAKICAgIChldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgKEQgXiAocCArIHMpKSAocCArIHMpIChieSBwb3NpdGl2aXR5KSBoZXBzaWxvbikKICBvYnRhaW4g4p+oeDIsIGh4MuKfqSA6PSBldmVudHVhbGx5X2F0VG9wLm1wCiAgICAoUmVhbC50ZW5kc3RvX2xvZ19hdFRvcC5ldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKSkKICByZWZpbmUg4p+obWF4IDIgKG1heCB4MSB4MiksIGx0X29mX2x0X29mX2xlIChieSBub3JtX251bSkgKGxlX21heF9sZWZ0IF8gXyksID9f4p+pCiAgaW50cm8gQiBrYXBwYSBjMCBkIGhkIGh4CiAgaGF2ZSBoeDAgOiAwIDwgZC5zY2FsZSA6PSB6ZXJvX2x0X29uZS50cmFuc19sZSAob25lX2xlX3NjYWxlIGhkKQogIGhhdmUgaGxvZyA6IDEg4omkIFJlYWwubG9nIGQuc2NhbGUgOj0KICAgIGh4MiAoKGxlX21heF9yaWdodCB4MSB4MikudHJhbnMgKChsZV9tYXhfcmlnaHQgMiAobWF4IHgxIHgyKSkudHJhbnMgaHgpKQogIGhhdmUgaGJhc2UgKHkgOiDihJ0pIChoeSA6IDAgPCB5KSAoaHlYIDogeSDiiaQgOCAqIGQuc2NhbGUpIDoKICAgICAgMSArIFJlYWwubG9nIHkg4omkIEQgKiBSZWFsLmxvZyBkLnNjYWxlIDo9IGJ5CiAgICBoYXZlIGhoIDo9IFJlYWwubG9nX2xlX2xvZyBoeSBoeVgKICAgIHJ3IFtSZWFsLmxvZ19tdWwgKGJ5IG5vcm1fbnVtIDogKDggOiDihJ0pIOKJoCAwKSBoeDAubmUnXSBhdCBoaAogICAgZHNpbXAgW0RdCiAgICBubGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoYnkgbm9ybV9udW0gOiAoMSA6IOKEnSkg4omkIDgpXQogIGhhdmUgaGxvZ1YgOiAxICsgUmVhbC5sb2cgKDIgKiBkLlYpIOKJpCBEICogUmVhbC5sb2cgZC5zY2FsZSA6PSBieQogICAgYXBwbHkgaGJhc2UgXyAoYnkgbGluYXJpdGggW2hkLjIuMV0pCiAgICBjYWxjCiAgICAgIDIgKiBkLlYg4omkIDIgKiBkLnNjYWxlIDo9IG11bF9sZV9tdWxfb2Zfbm9ubmVnX2xlZnQgKFZfbGVfc2NhbGUgaGQpIChieSBub3JtX251bSkKICAgICAgXyDiiaQgXyA6PSBieSBubGluYXJpdGggW2h4MF0KICBoYXZlIGhsb2dDYXAgOiAxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCDiiaQgRCAqIFJlYWwubG9nIGQuc2NhbGUgOj0KICAgIGhiYXNlIF8gKHplcm9fbHRfb25lLnRyYW5zX2xlIChkLm9uZV9sZV9waHlzaWNhbEZhY3RvckNhcCBoZCkpCiAgICAgIChwaHlzaWNhbEZhY3RvckNhcF9sZV9laWdodF9zY2FsZSBoc2lnbWEgaGQpCiAgaGF2ZSBoVjAgOiAwIOKJpCAxICsgUmVhbC5sb2cgKDIgKiBkLlYpIDo9IGJ5CiAgICBsaW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChzaG93IDEg4omkIDIgKiBkLlYgYnkgbGluYXJpdGggW2hkLjIuMV0pXQogIGhhdmUgaGNhcDAgOiAwIOKJpCAxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCA6PSBieQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoZC5vbmVfbGVfcGh5c2ljYWxGYWN0b3JDYXAgaGQpXQogIGNhbGMKICAgIF8g4omkIChEICogUmVhbC5sb2cgZC5zY2FsZSkgXiBwICogKEQgKiBSZWFsLmxvZyBkLnNjYWxlKSBeIHMgOj0KICAgICAgbXVsX2xlX211bCAocG93X2xlX3Bvd19sZWZ04oKAIGhWMCBobG9nViBwKSAocG93X2xlX3Bvd19sZWZ04oKAIGhjYXAwIGhsb2dDYXAgcykKICAgICAgICAocG93X25vbm5lZyBoY2FwMCBzKSAoYnkgcG9zaXRpdml0eSkKICAgIF8gPSBEIF4gKHAgKyBzKSAqIFJlYWwubG9nIGQuc2NhbGUgXiAoKHAgKyBzIDog4oSVKSA6IOKEnSkgOj0gYnkKICAgICAgcncgW+KGkCBwb3dfYWRkLCBtdWxfcG93LCBSZWFsLnJwb3dfbmF0Q2FzdF0KICAgIF8g4omkIF8gOj0gaHgxICgobGVfbWF4X2xlZnQgeDEgeDIpLnRyYW5zICgobGVfbWF4X3JpZ2h0IDIgKG1heCB4MSB4MikpLnRyYW5zIGh4KSkKCnRoZW9yZW0gZXZlbnR1YWxseV9jb25zdF9ycG93X3R3b19sZV9sb2dCdWRnZXQgKEMgQSA6IOKEnSkgKGhDIDogMCDiiaQgQykKICAgIHtkZWx0YSA6IOKEnX0gKGhkZWx0YSA6IDAgPCBkZWx0YSkgOgogICAg4oiA4bagIHggOiDihJ0gaW4gYXRUb3AsIEMgKiB4IF4gKDIgLSBkZWx0YSkg4omkIHggXiAyIC8gKFJlYWwubG9nIHgpIF4gQSA6PSBieQogIGZpbHRlcl91cHdhcmRzIFtldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgQyBBIGhDIGhkZWx0YSwKICAgIGV2ZW50dWFsbHlfZ2VfYXRUb3AgKDEgOiDihJ0pLAogICAgUmVhbC50ZW5kc3RvX2xvZ19hdFRvcC5ldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKV0gd2l0aCB4IGhwYXkgaHgxIGhsb2cKICBoYXZlIGh4MCA6IDAgPCB4IDo9IHplcm9fbHRfb25lLnRyYW5zX2xlIGh4MQogIGFwcGx5IChsZV9kaXZfaWZm4oKAIChSZWFsLnJwb3dfcG9zX29mX3BvcyAoYnkgbGluYXJpdGggOiAwIDwgUmVhbC5sb2cgeCkgQSkpLm1wcgogIGNhbGMKICAgIF8gPSAoQyAqIChSZWFsLmxvZyB4KSBeIEEpICogeCBeICgyIC0gZGVsdGEpIDo9IGJ5IHJpbmcKICAgIF8g4omkIHggXiBkZWx0YSAqIHggXiAoMiAtIGRlbHRhKSA6PQogICAgICBtdWxfbGVfbXVsX29mX25vbm5lZ19yaWdodCBocGF5IChSZWFsLnJwb3dfbm9ubmVnIGh4MC5sZSBfKQogICAgXyA9IHggXiAoMiA6IOKEnSkgOj0gYnkKICAgICAgcncgW+KGkCBSZWFsLnJwb3dfYWRkIGh4MCwgc2hvdyBkZWx0YSArICgyIC0gZGVsdGEpID0gMiBieSByaW5nXQogICAgXyA9IF8gOj0gUmVhbC5ycG93X25hdENhc3QgXyAyCgovLS0gR2VudWluZSBwb3dlciBzYXZpbmcgYWZ0ZXIgbXVsdGlwbGljYXRpb24gYnkgdGhlIGFjdHVhbCBiZXRhIEwyIGNvc3QuIC0vCnRoZW9yZW0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9wb3dlcl9ib3VuZCAoQiA6IOKElSkgKHNpZ21hIGthcHBhIGMwIDog4oSdKQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkgOgogICAg4oiDIEMgOiDihJ0sIDAgPCBDIOKIpyDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIGQgOiBNZWRpdW1BdG9tLAogICAgICBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCDihpIgeDAg4omkIGQuc2NhbGUg4oaSCiAgICAgICjiiJEgbiDiiIggZC5iZXRhQ2Fycmllciwg4oCWZC5iZXRhIG7igJYgXiAyKSAqCiAgICAgICAg4oCWKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25VIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliDiiaQKICAgICAgICAgICAgQyAqIGQuc2NhbGUgXiAoNyAvIDQgOiDihJ0pIDo9IGJ5CiAgb2J0YWluIOKfqEMsIGhDLCBoYm91bmTin6kgOj0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9ib3VuZAogIG9idGFpbiDin6h4MCwgaHgwLCBoY29zdOKfqSA6PSBldmVudHVhbGx5X2FjdHVhbF9sb2dfY29zdF9sZV9ycG93CiAgICAoKDIgXiBCKSBeIDIgLSAxKSAyNCBzaWdtYSBoc2lnbWEgKGJ5IG5vcm1fbnVtIDogKDAgOiDihJ0pIDwgMSAvIDQpCiAgcmVmaW5lIOKfqEMsIGhDLCB4MCwgaHgwLCBmdW4gZCBoZCBoeCDihqYgP1/in6kKICBoYXZlIGh4cG9zIDogMCA8IGQuc2NhbGUgOj0gemVyb19sdF9vbmUudHJhbnNfbGUgKG9uZV9sZV9zY2FsZSBoZCkKICBoYXZlIGhsb2dWMCA6IDAg4omkIDEgKyBSZWFsLmxvZyAoMiAqIGQuVikgOj0gYnkKICAgIGxpbmFyaXRoIFtSZWFsLmxvZ19ub25uZWcgKHNob3cgMSDiiaQgMiAqIGQuViBieSBsaW5hcml0aCBbaGQuMi4xXSldCiAgaGF2ZSBobG9nQ2FwMCA6IDAg4omkIDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwIDo9IGJ5CiAgICBsaW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChkLm9uZV9sZV9waHlzaWNhbEZhY3RvckNhcCBoZCldCiAgY2FsYwogICAgXyDiiaQgQyAqIGQuViAqIGQuVSBeIDIgKgogICAgICAgICgxICsgUmVhbC5sb2cgKDIgKiBkLlYpKSBeICgoMiBeIEIpIF4gMiAtIDEpICoKICAgICAgICAgICgxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCkgXiAyNCA6PSBoYm91bmQgQiBzaWdtYSBrYXBwYSBjMCBkIGhkCiAgICBfID0gQyAqIGQuc2NhbGUgKiBkLlUgKgogICAgICAgICgoMSArIFJlYWwubG9nICgyICogZC5WKSkgXiAoKDIgXiBCKSBeIDIgLSAxKSAqCiAgICAgICAgICAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMjQpIDo9IGJ5CiAgICAgIHVuZm9sZCBNZWRpdW1BdG9tLnNjYWxlCiAgICAgIHJpbmcKICAgIF8g4omkIEMgKiBkLnNjYWxlICogKGQuc2NhbGUgXiAoMSAvIDIgOiDihJ0pKSAqIGQuc2NhbGUgXiAoMSAvIDQgOiDihJ0pIDo9CiAgICAgIG11bF9sZV9tdWwKICAgICAgICAobXVsX2xlX211bF9vZl9ub25uZWdfbGVmdCAoVV9sZV9zY2FsZV9oYWxmIGhzaWdtYSBoZCkgKGJ5IHBvc2l0aXZpdHkpKQogICAgICAgIChoY29zdCBCIGthcHBhIGMwIGQgaGQgaHgpIChieSBwb3NpdGl2aXR5KSAoYnkgcG9zaXRpdml0eSkKICAgIF8gPSBDICogKGQuc2NhbGUgXiAoMSA6IOKEnSkgKiBkLnNjYWxlIF4gKDEgLyAyIDog4oSdKSAqCiAgICAgICAgZC5zY2FsZSBeICgxIC8gNCA6IOKEnSkpIDo9IGJ5IHJ3IFtSZWFsLnJwb3dfb25lXTsgcmluZwogICAgXyA9IF8gOj0gYnkgcncgW+KGkCBSZWFsLnJwb3dfYWRkIGh4cG9zLCDihpAgUmVhbC5ycG93X2FkZCBoeHBvc107IG5vcm1fbnVtCgovLS0gRXZlcnkgcmVxdWVzdGVkIGxvZ2FyaXRobWljIGRlY2F5IGlzIHBhaWQsIGJlZm9yZSB0aGUgYWN0dWFsIGF0b20uIC0vCnRoZW9yZW0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9sb2dfcGF5bWVudCAoQiA6IOKElSkgKHNpZ21hIGthcHBhIGMwIEEgOiDihJ0pCiAgICAoaHNpZ21hIDogMCA8IHNpZ21hKSA6CiAgICDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIGQgOiBNZWRpdW1BdG9tLAogICAgICBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCDihpIgeDAg4omkIGQuc2NhbGUg4oaSCiAgICAgICjiiJEgbiDiiIggZC5iZXRhQ2Fycmllciwg4oCWZC5iZXRhIG7igJYgXiAyKSAqCiAgICAgICAg4oCWKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25VIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliDiiaQKICAgICAgICAgICAgZC5zY2FsZSBeIDIgLyAoUmVhbC5sb2cgZC5zY2FsZSkgXiBBIDo9IGJ5CiAgb2J0YWluIOKfqEMsIGhDLCB4MSwgaHgxLCBoYm91bmTin6kgOj0KICAgIGFjdHVhbF9iZXRhTDJfbXVsX1VfZXJyb3JfcG93ZXJfYm91bmQgQiBzaWdtYSBrYXBwYSBjMCBoc2lnbWEKICBvYnRhaW4g4p+oeDIsIGh4MuKfqSA6PSBldmVudHVhbGx5X2F0VG9wLm1wCiAgICAoZXZlbnR1YWxseV9jb25zdF9ycG93X3R3b19sZV9sb2dCdWRnZXQgQyBBIGhDLmxlCiAgICAgIChieSBub3JtX251bSA6ICgwIDog4oSdKSA8IDEgLyA0KSkKICByZWZpbmUg4p+obWF4IHgxIHgyLCBsdF9vZl9sdF9vZl9sZSBoeDEgKGxlX21heF9sZWZ0IF8gXyksIGZ1biBkIGhkIGh4IOKGpiA/X+KfqQogIGFwcGx5IChoYm91bmQgZCBoZCAoKGxlX21heF9sZWZ0IF8gXykudHJhbnMgaHgpKS50cmFucwogIGNvbnZlcnQgaHgy",
+      "byte_offset_zero_based": 2043,
+      "unchanged_suffix_byte_count": 116
+    },
+    "forward_old_snapshot_to_current": {
+      "byte_for_byte_equal_current": true,
+      "reconstructed_sha256": "d185fff8c550641124da40f477758c2839b6e78f15c8c5700b7179896ca1eb0d"
+    },
+    "inverse_current_to_exact_old": {
+      "byte_for_byte_equal_exact_old_snapshot": true,
+      "reconstructed_sha256": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d"
+    },
+    "in_memory_only": true,
+    "all_checks_pass": true
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_limits_or_linter_change": true
+  },
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "source_modified": false,
+    "pins_or_checkers_modified": false,
+    "kernel_replay_performed": false,
+    "publication_freeze_respected": true,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-U-payment-first-diag-independent-rebind.json"
+    ],
+    "build_invoked": false,
+    "axiom_audit_performed": false,
+    "bootstrap_invoked": false,
+    "source_only": true,
+    "runtime_pass_claimed": false
+  },
+  "remaining_gate": "Only root/runtime owner may perform the original specific bounded exact-source validation; source-only rebind asserts no runtime PASS or ownership."
+}

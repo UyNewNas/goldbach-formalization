@@ -1,0 +1,217 @@
+{
+  "checkpoint_kind": "bounded_P5_PairedFibreIntegral_independent_actual_source_review",
+  "review_actor": "/root/p5_fibre_integral_review_sol_high_oct22",
+  "created_utc": "2026-10-21T22:14:46.8256811Z",
+  "status": "HOLD_SOURCE_REVIEW_ONLY",
+  "result": "no_static_blocker",
+  "acceptance": "No Lean elaboration, strict compilation, stock replay, declaration/axiom audit or root ownership is asserted. This review cannot promote an inherited development object to kernel evidence.",
+  "input": {
+    "path": "ImbalancedChen/Certificates/PairedFibreIntegral.lean",
+    "sha256": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+    "bytes": 5736,
+    "complete_source_read": true,
+    "written_declarations": "3 definitions, 1 private theorem, 6 public theorems; complete written types and proof bodies preserved below",
+    "complete_actual_source": "import Mathlib.Analysis.SpecialFunctions.Integrals.Basic\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Ring\n\n/-!\nVerification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.\n\n# Genuine integrals for the adopted paired positive fibre\n\nThe local certificate has coordinates `(t, u, z, w)` with\n`tl < t < tr`, `ul < u < ur`, and `a < w < z < Z`.\nIts integrand is `K / (80 * t * u * z^2 * w)`.\n\nThis file defines the literal iterated Lebesgue integral and evaluates it\nusing the fundamental theorem of calculus. The definitions contain no\nstored certificate bounds. Endpoints are finite interval endpoints; for\nLebesgue measure, changing a finite set of one-dimensional endpoints does\nnot change these integrals.\n\nThe equality proved here does not assert that the local fibre has passed\nthe manuscript's region and mask checks, or that a family of such fibres\nhas been combined with its error ledger. Those are separate obligations.\n-/\n\nnamespace ImbalancedChen.Certificates\n\nnoncomputable section\n\nopen MeasureTheory Set\nopen scoped Interval\n\n/-- The remaining genuine one-dimensional fibre integral after integrating\n`1 / w` over the actual interval from `a` to `z`. -/\ndef pairedFibreIntegral (a Z : ℝ) : ℝ :=\n  ∫ z in a..Z, Real.log (z / a) / z ^ 2\n\nprivate theorem hasDerivAt_pairedFibrePrimitive {a z : ℝ}\n    (ha : 0 < a) (hz : 0 < z) :\n    HasDerivAt (fun x : ℝ => -((1 + Real.log x - Real.log a) / x))\n      (Real.log (z / a) / z ^ 2) z := by\n  have hd := (((hasDerivAt_const z (1 : ℝ)).add\n    (Real.hasDerivAt_log hz.ne')).sub_const (Real.log a)).div\n      (hasDerivAt_id z) hz.ne'\n  apply hd.neg.congr_deriv\n  dsimp\n  rw [Real.log_div hz.ne' ha.ne']\n  field_simp [hz.ne']\n  ring\n\n/-- The fibre kernel is integrable on the complete closed interval.\nIts logarithm and denominator stay within their actual domains. -/\ntheorem intervalIntegrable_pairedFibreKernel {a Z : ℝ}\n    (ha : 0 < a) (hAZ : a ≤ Z) :\n    IntervalIntegrable (fun z : ℝ => Real.log (z / a) / z ^ 2)\n      volume a Z := by\n  have hzpos : ∀ z ∈ Set.uIcc a Z, 0 < z := by\n    intro z hz\n    rw [Set.uIcc_of_le hAZ] at hz\n    exact ha.trans_le hz.1\n  apply ContinuousOn.intervalIntegrable\n  refine ((continuousOn_id.div_const a).log ?_).div (continuousOn_id.pow 2) ?_\n  · intro z hz\n    exact (div_pos (hzpos z hz) ha).ne'\n  · intro z hz\n    exact pow_ne_zero 2 (hzpos z hz).ne'\n\n/-- Exact analytic evaluation of the positive triangular fibre.\nThe hypotheses allow the degenerate endpoint `a = Z`, when both sides\nare zero. -/\ntheorem pairedFibreIntegral_eq {a Z : ℝ} (ha : 0 < a) (hAZ : a ≤ Z) :\n    pairedFibreIntegral a Z =\n      1 / a - (1 + Real.log (Z / a)) / Z := by\n  let F : ℝ → ℝ := fun z => -((1 + Real.log z - Real.log a) / z)\n  have hzpos : ∀ z ∈ Set.uIcc a Z, 0 < z := by\n    intro z hz\n    rw [Set.uIcc_of_le hAZ] at hz\n    exact ha.trans_le hz.1\n  have hd : ∀ z ∈ Set.uIcc a Z,\n      HasDerivAt F (Real.log (z / a) / z ^ 2) z := by\n    intro z hz\n    exact hasDerivAt_pairedFibrePrimitive ha (hzpos z hz)\n  calc\n    pairedFibreIntegral a Z = F Z - F a :=\n      intervalIntegral.integral_eq_sub_of_hasDerivAt hd\n        (intervalIntegrable_pairedFibreKernel ha hAZ)\n    _ = 1 / a - (1 + Real.log (Z / a)) / Z := by\n      dsimp [F]\n      rw [Real.log_div (ha.trans_le hAZ).ne' ha.ne']\n      ring\n\n/-- The actual rational kernel, written in factored form to expose Fubini\ncoordinates without introducing an external numerical approximation. -/\ndef pairedFibreKernel (t u z w : ℝ) : ℝ :=\n  (1 / t) * ((1 / u) * ((1 / z ^ 2) * (1 / w)))\n\ntheorem pairedFibreKernel_eq (t u z w : ℝ) :\n    pairedFibreKernel t u z w = 1 / (t * u * z ^ 2 * w) := by\n  simp [pairedFibreKernel, one_div, mul_inv_rev, mul_comm, mul_left_comm, mul_assoc]\n\n/-- The complete local contribution is a genuine four-variable iterated\nintegral over `a < w < z < Z`, with the literal manuscript coefficient.\nIt is independent of any claimed stored lower or upper endpoint. -/\ndef pairedLocalIntegral (K a tl tr ul ur Z : ℝ) : ℝ :=\n  (K / 80) * ∫ t in tl..tr, ∫ u in ul..ur,\n    ∫ z in a..Z, ∫ w in a..z, pairedFibreKernel t u z w\n\n/-- No alternate model is hidden by the factored kernel notation. -/\ntheorem pairedLocalIntegral_eq_literal (K a tl tr ul ur Z : ℝ) :\n    pairedLocalIntegral K a tl tr ul ur Z =\n      (K / 80) * ∫ t in tl..tr, ∫ u in ul..ur,\n        ∫ z in a..Z, ∫ w in a..z, 1 / (t * u * z ^ 2 * w) := by\n  simp only [pairedLocalIntegral, pairedFibreKernel_eq]\n\n/-- Integrating the actual inner `w` coordinate gives the logarithmic\nfibre profile. -/\ntheorem pairedFibreIntegral_eq_iterated {a Z : ℝ}\n    (ha : 0 < a) (hAZ : a ≤ Z) :\n    (∫ z in a..Z, (1 / z ^ 2) * (∫ w in a..z, 1 / w)) =\n      pairedFibreIntegral a Z := by\n  apply intervalIntegral.integral_congr\n  intro z hz\n  rw [Set.uIcc_of_le hAZ] at hz\n  dsimp only\n  rw [integral_one_div_of_pos ha (ha.trans_le hz.1)]\n  ring\n\n/-- The exact logarithmic expression for the actual local integral.\nAll three logarithms arise from proved real integration identities. -/\ntheorem pairedLocalIntegral_eq (K : ℝ) {a tl tr ul ur Z : ℝ}\n    (ha : 0 < a) (hAZ : a ≤ Z)\n    (htl : 0 < tl) (htr : 0 < tr) (hul : 0 < ul) (hur : 0 < ur) :\n    pairedLocalIntegral K a tl tr ul ur Z =\n      (K / 80) * Real.log (tr / tl) * Real.log (ur / ul) *\n        (1 / a - (1 + Real.log (Z / a)) / Z) := by\n  unfold pairedLocalIntegral pairedFibreKernel\n  simp only [intervalIntegral.integral_const_mul, intervalIntegral.integral_mul_const]\n  rw [integral_one_div_of_pos htl htr,\n    integral_one_div_of_pos hul hur,\n    pairedFibreIntegral_eq_iterated ha hAZ,\n    pairedFibreIntegral_eq ha hAZ]\n  ring\n\nend\n\nend ImbalancedChen.Certificates\n"
+  },
+  "declarations": [
+    {
+      "name": "pairedFibreIntegral",
+      "lines": "34-35",
+      "kind": "definition",
+      "review": "Literal volume interval integral of log(z/a)/z^2, not an endpoint output"
+    },
+    {
+      "name": "hasDerivAt_pairedFibrePrimitive",
+      "lines": "37-48",
+      "kind": "private theorem",
+      "review": "Differentiate F(x)=-((1+log x-log a)/x). Quotient rule and negation yield -(z inverse*z-(1+log z-log a))/z^2 = log(z/a)/z^2. ha,hz provide the nonzero arguments for log_div and field_simp. No equality of functions is silently assumed: congr_deriv changes only derivative value."
+    },
+    {
+      "name": "intervalIntegrable_pairedFibreKernel",
+      "lines": "52-65",
+      "kind": "theorem",
+      "review": "On uIcc a Z=Icc a Z, ha and hAZ yield z>=a>0. Thus z/a>0 and z^2!=0. ContinuousOn.log and division give continuity on the complete closed interval; ContinuousOn.intervalIntegrable supplies volume integrability."
+    },
+    {
+      "name": "pairedFibreIntegral_eq",
+      "lines": "70-89",
+      "kind": "theorem",
+      "review": "FTC has exactly its required derivative and integrable derivative hypotheses. F(Z)-F(a)=1/a-(1+log(Z/a))/Z follows by log_div and ring. Z>0 follows from ha.trans_le hAZ. At a=Z both sides are zero."
+    },
+    {
+      "name": "pairedFibreKernel",
+      "lines": "93-94",
+      "kind": "definition",
+      "review": "Factored reciprocal t,u,z^2,w kernel"
+    },
+    {
+      "name": "pairedFibreKernel_eq",
+      "lines": "96-98",
+      "kind": "theorem",
+      "review": "Total-field inverse identities prove exact equality with 1/(t*u*z^2*w), without positivity assumptions and without replacing the model"
+    },
+    {
+      "name": "pairedLocalIntegral",
+      "lines": "103-105",
+      "kind": "definition",
+      "review": "Literal nested volume interval integrals, fixed order t,u,z,w, triangular w in a..z and z in a..Z, times K/80 once"
+    },
+    {
+      "name": "pairedLocalIntegral_eq_literal",
+      "lines": "108-112",
+      "kind": "theorem",
+      "review": "Definition unfolding and pointwise kernel equality only. This written theorem keeps K/80 outside the integral; by linearity and elementary division algebra its intended positive-domain mathematical value is the iterated integral of K/(80*t*u*z^2*w). No extra wrapper theorem is needed."
+    },
+    {
+      "name": "pairedFibreIntegral_eq_iterated",
+      "lines": "116-125",
+      "kind": "theorem",
+      "review": "integral_congr requires EqOn on uIcc a Z. hAZ converts it to Icc and ha.trans_le hz.1 proves z>0. integral_one_div_of_pos ha hz integrates w exactly to log(z/a); ring changes multiplication by reciprocal square to division."
+    },
+    {
+      "name": "pairedLocalIntegral_eq",
+      "lines": "129-144",
+      "kind": "theorem",
+      "review": "simp only extracts constants in the existing nested order with integral_const_mul/integral_mul_const. Remaining scalar factors are integral(1/t), integral(1/u) and integral(z^-2*integral(1/w)). The first two use the actual positive-endpoint API, the third uses the previous iterated identity and FTC endpoint identity. ring only reassociates the resulting factors. No Fubini exchange or product-measure assertion is used."
+    }
+  ],
+  "domain_and_normalization": {
+    "intended_strict_domain": "0<tl<tr, 0<ul<ur, 0<a<Z, a<w<z<Z. Every reciprocal denominator is nonzero and positive. If K>0, the pointwise manuscript integrand is positive.",
+    "theorem_hypotheses": "Exactly ha:0<a, hAZ:a<=Z, htl:0<tl, htr:0<tr, hul:0<ul, hur:0<ur, and arbitrary real K. No assumptions are added, removed or weakened in source.",
+    "endpoint_order": "The written local evaluation does not require tl<=tr or ul<=ur: positive reverse intervals are oriented Lebesgue interval integrals and log(right/left) has the matching sign. Thus the original strict domain is covered, with additional valid oriented cases. Checker.Valid supplies tl<=tr and ul<=ur and proves upper endpoints positive in its consumer.",
+    "degenerate_cases": "a=Z, tl=tr or ul=ur give zero through the integral and matching log/bracket factor; no strictly positive result is claimed for arbitrary K or degenerate endpoints.",
+    "open_boundary": "Mathlib interval notation is volume over Ioc for forward endpoints. Null singleton endpoints identify this with the stated strict open coordinate domain; the nonzero/continuous formulas also hold at all included endpoints, including z=a,w=a.",
+    "actual_integrability": "For each fixed positive t,u,z, w reciprocal is continuous on [a,z]; after integration the z profile is a scalar times log(z/a)/z^2, explicitly proved integrable. The resulting outer u and t profiles are scalar multiples of positive-interval reciprocals. This explains genuine integrability of the iterated construction; the module does not need to exchange integration order.",
+    "exact_formula": "(K/80)*log(tr/tl)*log(ur/ul)*(1/a-(1+log(Z/a))/Z)",
+    "coefficient": "K/80 appears once in the definition and once in the exact evaluation. No second factor 4 or 20 occurs.",
+    "stored_outputs": "No lower/upper certificate fields, numerical approximations, adopted-mask substitutes or stored output definitions appear in this module.",
+    "boundary": "This is local analytic evaluation. It does not certify mask membership, row disjointness, arithmetic mean licensing or the final C; original adopted source, K, C, selectors and quantifiers remain unchanged."
+  },
+  "actual_mathlib_api": [
+    {
+      "module": "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "sha256": "58a81e8137bddf5cc43ae28f08ffa75ea3aa086e607cf70e70f70c3c8e935e81",
+      "spans": [
+        "213-230: integral_inv, integral_inv_of_pos, integral_one_div_of_pos; both endpoint positive hypotheses, no order hypothesis"
+      ],
+      "role": "Integral of 1/x equals log(b/a), applied to w, t, u",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Integrals/Basic.lean"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic",
+      "sha256": "543c9927916958d2480b83148095de97f4beed5239b65214df71c502e3121d78",
+      "spans": [
+        "137-153: intervalIntegrable_iff_integrableOn_Icc/Ioo_of_le and null-singleton endpoint conventions",
+        "502-504: ContinuousOn.intervalIntegrable",
+        "653-687: literal volume intervalIntegral definition, notation, integral_of_le, integral_same and integral_of_ge",
+        "817-825: integral_const_mul and integral_mul_const, no integrability hypotheses",
+        "1077-1081: integral_congr on uIcc",
+        "1246-1254: integral_congr_uIoo and integral_congr_Ioo_of_le"
+      ],
+      "role": "Actual iterated Lebesgue integrals, endpoint treatment, continuity integrability, same-order factor extraction and pointwise congruence",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Integral/IntervalIntegral/Basic.lean"
+    },
+    {
+      "module": "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "sha256": "5fd64054d9ae8bfce585ff809933a756bcf2d224ef144ae24c8fe8870c68050c",
+      "spans": [
+        "1148-1152: integral_eq_sub_of_hasDerivAt, derivative on uIcc plus IntervalIntegrable derivative"
+      ],
+      "role": "FTC for the explicitly differentiated fibre primitive",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Integral/IntervalIntegral/FundThmCalculus.lean"
+    },
+    {
+      "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "spans": [
+        "138-141: Real.log_div for two nonzero arguments",
+        "555-556: ContinuousOn.log for pointwise nonzero argument"
+      ],
+      "role": "Exact endpoint algebra and continuity of log(z/a)",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean"
+    },
+    {
+      "module": "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "sha256": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+      "spans": [
+        "52-53: Real.hasDerivAt_log (hx : x != 0), derivative x inverse"
+      ],
+      "role": "Derivative of log z",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean"
+    },
+    {
+      "module": "Mathlib.Analysis.Calculus.Deriv.Basic",
+      "sha256": "da1d29570f45bd14f5a37aa5b024d46b3076a47f04e9315bf72cd65f6505d55b",
+      "spans": [
+        "602-603: HasDerivAt.congr_deriv",
+        "675-679: hasDerivAt_id and primed variant",
+        "768-769: hasDerivAt_const"
+      ],
+      "role": "Derivative constants, identity and final algebraic derivative equality",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Basic.lean"
+    },
+    {
+      "module": "Mathlib.Analysis.Calculus.Deriv.Inv",
+      "sha256": "728a55b0c00e62076563a9018c801d6f61ff491ab040b923c7235879060f3477",
+      "spans": [
+        "173-175: HasDerivAt.div with denominator nonzero"
+      ],
+      "role": "Derivative of (1+log z-log a)/z",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Inv.lean"
+    },
+    {
+      "module": "Mathlib.Analysis.Calculus.Deriv.Add",
+      "sha256": "9208b59d49bcd81d464de04591c4dbd43bf0d244e6a484b1bad8b4c9d26897b8",
+      "spans": [
+        "264-265: HasDerivAt.neg"
+      ],
+      "role": "Negated primitive derivative",
+      "actual_source_path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Add.lean"
+    }
+  ],
+  "api_provenance": {
+    "inspection": "Read-only WSL sed/grep/sha256sum of the actual pinned native-packages Mathlib source files. Windows rg was tried first; WSL rg was unavailable, so grep/sed was used. No Git command or Lean executable was invoked.",
+    "manifest_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "existing_measurement_path": ".lake/proof-continuation/source-reviews/20261022-p5-paired454c-proper184-complete-parent-native-measurement.json",
+    "all_eight_read_actual_source_hashes_match_existing_measurement": true,
+    "measurement_not_rerun": true
+  },
+  "direct_consumer": {
+    "path": "ImbalancedChen/Certificates/PairedCertificateChecker.lean",
+    "sha256": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+    "complete_source_read": true,
+    "actual_direct_imports": [
+      "ImbalancedChen.Certificates.PairedFibreIntegral",
+      "ImbalancedChen.Certificates.RationalLogCertificate",
+      "Mathlib.Data.Rat.BigOperators"
+    ],
+    "use": "check_sound rewrites pairedLocalIntegral via pairedLocalIntegral_eq with haR, haZR, htlR, htlR.trans_le htR, hulR and hulR.trans_le huR. It then bounds the actual integral using separately certified logs; it does not redefine the integral as stored output.",
+    "review_scope": "Consumer checked only to confirm dependency, endpoint hypothesis supply and normalization; independent RationalLogCertificate review is outside this package."
+  },
+  "trust_boundary": {
+    "inherited_status": "UNOWNED_INHERITED_DEVELOPMENT_CACHE",
+    "original_stage_bound_in_this_artifact": false,
+    "final_acceptance_complete": false,
+    "ownership_reference": ".lake/proof-continuation/source-reviews/20261022-p5-paired454c-actualONE-proper184-frontier-HOLD.json",
+    "ownership_reference_sha256": "88912a48c170d56de8efabcfaed02f3c29700f4aef0a885d23fd11714de5cbc9",
+    "presence_of_object_is_kernel_acceptance": false
+  },
+  "static_issues": [],
+  "source_repair_proposal": null,
+  "duplicate_wrapper_created": false,
+  "restrictions": {
+    "only_new_source_review_checkpoint_written": true,
+    "no_Lean_Runtime_proper_classifier_census_export_Git_Site": true,
+    "no_actual_source_or_manuscript_modified": true,
+    "no_agents_spawned": true,
+    "sole_heavy_queue_left_to_root_Tau": true
+  },
+  "quota": {
+    "used_percent_before": 49,
+    "remaining_percent_before": 51,
+    "used_percent_last": 49,
+    "remaining_percent_last": 51,
+    "stop_if_any_available_window_remaining_lte": 40
+  },
+  "hold": true
+}

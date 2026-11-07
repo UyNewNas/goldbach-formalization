@@ -1,0 +1,183 @@
+{
+  "status": "ROOT_RECOVERED_COMPLETE_SOURCE_CANDIDATE_AFTER_AUTHOR_CAPACITY_INTERRUPTION",
+  "created_utc": "2026-10-21T07:13:35.330123+00:00",
+  "source": {
+    "path": "ImbalancedChen\\Part3SmoothReciprocityLogDecayJet.lean",
+    "sha256": "7629b96caa79a368e728c66906a9d257a41366f64f3310832ae3d25af4895407",
+    "bytes": 14582,
+    "LF": 286,
+    "compiled": false,
+    "owned": false
+  },
+  "author_agent": "/root/chen7_error_sol_high_oct21",
+  "handoff_note": "Author task errored Selected model is at capacity after writing a complete source; no final author checkpoint arrived. Root inspected current full286LF source and preserves it as an uncompiled candidate, not an accepted proof.",
+  "all12_literal_headers": [
+    {
+      "line": 20,
+      "private": true,
+      "kind": "def",
+      "name": "monomial",
+      "literal_header": "private def monomial (A : E →L[ℝ] ℝ) (u₀ : ℝ) (t : E) : ℝ",
+      "literal_sha256": "df80d1c036358e469d62e70818f43872c1b4582510a79a2aa2e87524f2e41de7"
+    },
+    {
+      "line": 23,
+      "private": true,
+      "kind": "theorem",
+      "name": "monomial_smooth",
+      "literal_header": "private theorem monomial_smooth (A : E →L[ℝ] ℝ) (u₀ : ℝ) :\n    ContDiff ℝ ∞ (monomial A u₀)",
+      "literal_sha256": "8a5b712726ee2dffd1b04f3f82f812a866f309b8f754523a9b915a8f44f2c9c6"
+    },
+    {
+      "line": 27,
+      "private": true,
+      "kind": "theorem",
+      "name": "monomial_deriv_le",
+      "literal_header": "private theorem monomial_deriv_le (A : E →L[ℝ] ℝ) (u₀ : ℝ)\n    (i : ℕ) (t : E) :\n    ‖iteratedFDeriv ℝ i (monomial A u₀) t‖ ≤\n      |monomial A u₀ t| * ‖A‖ ^ i",
+      "literal_sha256": "0dc7c0885dbe2537c98b59563fee9d69fbb4d217d017b0d9f25d21e79119eafd"
+    },
+    {
+      "line": 49,
+      "private": true,
+      "kind": "theorem",
+      "name": "monomial_deriv_power",
+      "literal_header": "private theorem monomial_deriv_power (A : E →L[ℝ] ℝ) (u₀ : ℝ)\n    (i : ℕ) (hi : 1 ≤ i) (t : E) :\n    ‖iteratedFDeriv ℝ i (monomial A u₀) t‖ ≤\n      ((1 + ‖A‖) * (1 + |monomial A u₀ t|)) ^ i",
+      "literal_sha256": "a2c25f535391c67b77f7023a8f89c55fcfa0fb7f517671c33679b519502c6284"
+    },
+    {
+      "line": 68,
+      "private": true,
+      "kind": "theorem",
+      "name": "profile_smooth",
+      "literal_header": "private theorem profile_smooth (Z rho : ℝ) :\n    ContDiff ℝ ∞ (smoothReciprocityProfile Z rho)",
+      "literal_sha256": "f572cffe01045b768f57c596d50fb5519446ca80d3f8bb57744af0e837af1179"
+    },
+    {
+      "line": 88,
+      "private": true,
+      "kind": "theorem",
+      "name": "profile_outer_uniform",
+      "literal_header": "private theorem profile_outer_uniform :\n    ∃ B : ℝ, 0 < B ∧ ∀ Z rho R : ℝ, 1 ≤ Z → 0 ≤ R → |rho| ≤ R →\n      ∀ k : ℕ, k ≤ 4 → ∀ u : ℝ,\n        (1 + |u|) ^ 5 * ‖iteratedDeriv k (smoothReciprocityProfile Z rho) u‖ ≤\n          B * (1 + R) ^ 4",
+      "literal_sha256": "12b75918455df1cfa8968bb993c9a96cff5d404fef849bdb5af82c2d38ecd258"
+    },
+    {
+      "line": 112,
+      "private": true,
+      "kind": "theorem",
+      "name": "profile_monomial_weighted",
+      "literal_header": "private theorem profile_monomial_weighted (A : E →L[ℝ] ℝ)\n    (B : ℝ) (hB : 0 ≤ B) (Z rho u₀ R : ℝ) (hR : 0 ≤ R)\n    (houter : ∀ k : ℕ, k ≤ 4 → ∀ u : ℝ,\n      (1 + |u|) ^ 5 * ‖iteratedDeriv k (smoothReciprocityProfile Z rho) u‖ ≤\n        B * (1 + R) ^ 4)\n    (j : ℕ) (hj : j ≤ 4) (t : E) :\n    (1 + |monomial A u₀ t|) *\n      ‖iteratedFDeriv ℝ j (fun s ↦ smoothReciprocityProfile Z rho (monomial A u₀ s)) t‖ ≤\n        (4 : ℕ).factorial * B * (1 + ‖A‖) ^ 4 * (1 + R) ^ 4",
+      "literal_sha256": "afa9f536a6a1c12b4be11698be90a7624926f32922d1bcdac8ad4b30f3a328dc"
+    },
+    {
+      "line": 149,
+      "private": true,
+      "kind": "theorem",
+      "name": "weighted_mul_bound",
+      "literal_header": "private theorem weighted_mul_bound {f g : E → ℂ}\n    (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)\n    (J r : ℕ) (w Cf Cg : ℝ) (hw : 0 ≤ w) (hCf : 0 ≤ Cf) (hCg : 0 ≤ Cg)\n    (t : E) (hleft : ∀ i ≤ J, ‖iteratedFDeriv ℝ i f t‖ ≤ Cf)\n    (hright : ∀ i ≤ J, w ^ r * ‖iteratedFDeriv ℝ i g t‖ ≤ Cg)\n    (j : ℕ) (hj : j ≤ J) :\n    w ^ r * ‖iteratedFDeriv ℝ j (fun s ↦ f s * g s) t‖ ≤\n      2 ^ J * Cf * Cg",
+      "literal_sha256": "b2bdf318a6b7a40f7f7f880b36bc5b7fa3d23397f332bd0744b3ad2c87c705be"
+    },
+    {
+      "line": 185,
+      "private": true,
+      "kind": "def",
+      "name": "localizerBound",
+      "literal_header": "private def localizerBound (L : 𝓢(E, ℂ)) (J : ℕ) : ℝ",
+      "literal_sha256": "d71f71dd7fc6efb02897e95415777cf20b21f5ce0ee2b33dcf498f5a24097225"
+    },
+    {
+      "line": 188,
+      "private": true,
+      "kind": "theorem",
+      "name": "localizerBound_nonneg",
+      "literal_header": "private theorem localizerBound_nonneg (L : 𝓢(E, ℂ)) (J : ℕ) :\n    0 ≤ localizerBound L J",
+      "literal_sha256": "d7de17b0935113447be05f6c97879ef1449cc81593d632cd399e6b40dd4cbb34"
+    },
+    {
+      "line": 191,
+      "private": true,
+      "kind": "theorem",
+      "name": "localizer_deriv_le",
+      "literal_header": "private theorem localizer_deriv_le (L : 𝓢(E, ℂ)) (J i : ℕ) (hi : i ≤ J) (t : E) :\n    ‖iteratedFDeriv ℝ i L t‖ ≤ localizerBound L J",
+      "literal_sha256": "c9cdab074b335faf129ee0502ca3d9834cf2f15072543b1df633a4b5cef30c50"
+    },
+    {
+      "line": 202,
+      "private": false,
+      "kind": "theorem",
+      "name": "CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decayJet_uniform",
+      "literal_header": "theorem CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decayJet_uniform\n    {d : ℕ} (a c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z u₀ rho₀ R : ℝ, 1 ≤ Z → 0 ≤ R → |rho₀| ≤ R →\n        ∀ j : ℕ, j ≤ 4 → ∀ t : EuclideanSpace ℝ (Fin d),\n          (1 + |u₀|) *\n            ‖iteratedFDeriv ℝ j (smoothReciprocityLogWeight a 0 c Q Z u₀ rho₀) t‖ ≤\n              C * (1 + R) ^ 4",
+      "literal_sha256": "c41e8f902c92cfeaf83dd4bbe8bbe3683d943a800b92815504022a1713ff6e84"
+    }
+  ],
+  "public_quantifier_order": "fixed d,a,c,Q,hQ,hQc; exists C>0 BEFORE all Z,u0,rho0,R,j,t; Z>=1,R>=0,|rho0|<=R,j<=4; actual b=0 weight",
+  "mathematical_review": [
+    "Native public ordinary profile moment5 at orders0..4 supplies fixed B before all atom parameters",
+    "Native FaadiBruno norm composition with monomial exp jets retains one power of1+|u(t)|",
+    "Finite product with fixed smooth localizer keeps weighted jet through4",
+    "Compact support bounds exp(-<a,t>) and compares1+|u0| with1+|u(t)| uniformly",
+    "Offsupport actual iterated derivatives zero by support inclusion",
+    "Constant1+H*16*Cl*(4!*B*(1+normA)^4) independent of all varying parameters",
+    "No weightedjet/Fourier/spectral target supplied as public premise"
+  ],
+  "complete_source_freshly_read": true,
+  "native_decisive_bindings": [
+    {
+      "path": "Mathlib/Analysis/Calculus/ContDiff/Bounds.lean",
+      "source_sha256": "9c1288887ac7e973a0d0d80c55174ad9eda2be30025fb7f34cefa7d6ec6e97ef",
+      "first": 500,
+      "last": 519,
+      "normalized_lf_span_sha256": "456d2ad5adb519ed0ecb5376b571bb38227602cf0c3c3a95125f8b4330b39fd8"
+    },
+    {
+      "path": "Mathlib/Analysis/Calculus/IteratedDeriv/Defs.lean",
+      "source_sha256": "9a920a1f8c42f6f3eafb628b18f6a5a59f72f5de73e77b8b23294782e8c17536",
+      "first": 244,
+      "last": 256,
+      "normalized_lf_span_sha256": "49a529a7f47df1924216dc666bfdb3662bcb1d2f0d70762e18427a7709977b7c"
+    },
+    {
+      "path": "Mathlib/Topology/Order/Compact.lean",
+      "source_sha256": "002eb018e5c875f619438d68c26293ef1fd75267dc94327f23fba430c9d526e5",
+      "first": 328,
+      "last": 342,
+      "normalized_lf_span_sha256": "5c804aa51e60e9d101a5321f8ca1eee67a1405ad3cbd6fe626eb85857df15ff8"
+    }
+  ],
+  "accepted_project_source_provenance": [
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityProfile.lean",
+      "source_sha256": "4b67e10465db25f2360b3af0f7ba4e14985c1f0621fdf11669f738230ed8cc09",
+      "first": 324,
+      "last": 346,
+      "normalized_lf_span_sha256": "3089f1c2fad408c34ebd20b73aae141359633c9ad8686fc4478fda63002fcb34"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogMixed.lean",
+      "source_sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d",
+      "first": 26,
+      "last": 81,
+      "normalized_lf_span_sha256": "6a89cc27309675393683a15e9b0c7b12050967e950d92353f97a67e26bb06bed"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogMixed.lean",
+      "source_sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d",
+      "first": 249,
+      "last": 285,
+      "normalized_lf_span_sha256": "7a56a1f2ac86a6179219d5b4814b29f7c4256f1b8d7c38fe73c058c26f656072"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogRegularity.lean",
+      "source_sha256": "23b01c7001aa23174075e46d15ceedfaf58e7b3f9d97080f5ec428fbba0df629",
+      "first": 20,
+      "last": 80,
+      "normalized_lf_span_sha256": "892dd96872b1691c4db5add13779c268c2b6640ea6a30097f57cf2437cfb13bf"
+    }
+  ],
+  "native_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "compiled": false,
+  "owned": false,
+  "generated_count_predicted": null,
+  "forbidden_placeholders_present": false,
+  "next": "Prepare native/source exact review and proper graph, then strict/stock/ALL gate. Fourier decay extension and finite resonance payment remain separate work.",
+  "main_CK_hLower_hUpper_proved": false
+}

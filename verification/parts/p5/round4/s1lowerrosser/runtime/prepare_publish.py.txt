@@ -1,0 +1,49 @@
+"""Stage only this Part's completed single-module acceptance artifacts."""
+from pathlib import Path
+import hashlib, json, subprocess
+
+REPO=Path('/workspace/scratch/cd30ec11ea1d/goldbach-formalization')
+HERE=Path(__file__).resolve().parent
+PARENT='bf54caeb5e708474cacefac13a171d307b4c64f2'
+BASE_TREE='3401b11f5299cea2d7351f7d6d164c817d12da4b'
+SCOPE=['docs/CHEN_P5_S1LOWERROSSER_HANDOFF.md',
+       'verification/parts/p5/S1LowerRosserAudit.lean',
+       'verification/parts/p5/round4/s1lowerrosser']
+
+def git(*args):
+    return subprocess.run(['git',*args],cwd=REPO,check=True,capture_output=True).stdout
+
+assert git('rev-parse','HEAD').decode().strip()==PARENT
+assert git('rev-parse','HEAD^{tree}').decode().strip()==BASE_TREE
+assert git('branch','--show-current').decode().strip()=='chatgpt/chen-p5-lower'
+scoped=lambda p:p in SCOPE or p.startswith(SCOPE[-1]+'/')
+assert all(scoped(p) for p in git('diff','--cached','--name-only').decode().splitlines()),'preserve unrelated staged work'
+r=json.loads((REPO/SCOPE[-1]/'receipt.json').read_text())
+assert r['status']=='STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED'
+assert all(x['returncode']==0 for x in r['gates'].values())
+assert r['gates']['compile']['trustLevel']==0 and r['gates']['compile']['warningAsError']
+assert r['audit']['requested_public_theorem_count']==2 and r['audit']['declaration_count']>0
+assert not r['audit']['unsafe_declarations'] and not r['audit']['own_axiom_declarations'] and not r['audit']['forbidden_axioms']
+assert not r['production_source_changes'] and r['source_patch'] is None
+assert not r['next_target_started'] and not r['root_ci']['whole_project_success_claimed']
+assert r['initial_mean']['status']=='SOURCE_CANDIDATE_NOT_LEAN_VERIFIED'
+for x in r['compiled_objects']:
+    assert hashlib.sha256(Path(x['path']).read_bytes()).hexdigest()==x['sha256']
+for x in r['protected_files']+r['root_ci_files']:
+    assert hashlib.sha256((REPO/x['path']).read_bytes()).hexdigest()==x['sha256']
+assert not git('diff',PARENT,'--','ImbalancedChen','.github'),'no production or CI edits'
+git('add','--',*SCOPE)
+paths=[p for p in git('diff','--cached','--name-only','-z').decode().split('\0') if p]
+assert all(scoped(p) for p in paths)
+git('diff','--cached','--check','--','*.lean','*.md','*.json','*.txt','*.sh')
+entries=[{'path':p,'mode':'100644','type':'blob','content':git('show',':'+p).decode()} for p in paths]
+payload=json.dumps(entries,ensure_ascii=False)
+parts=[]
+for i,start in enumerate(range(0,len(payload),60000)):
+    p=HERE/f'publish-payload-{i:02}.txt'
+    p.write_text(payload[start:start+60000]);parts.append(str(p))
+result={'parent':PARENT,'base_tree':BASE_TREE,'tree':git('write-tree').decode().strip(),
+    'paths':paths,'entry_count':len(entries),'pieces':parts,
+    'payload_bytes':len(payload.encode()),'payload_sha256':hashlib.sha256(payload.encode()).hexdigest()}
+(HERE/'publish-index.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k not in ['paths','pieces']}))

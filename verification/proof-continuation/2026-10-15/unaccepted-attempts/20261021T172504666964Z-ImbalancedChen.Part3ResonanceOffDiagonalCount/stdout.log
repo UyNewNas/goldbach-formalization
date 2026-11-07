@@ -1,0 +1,60 @@
+ImbalancedChen/Part3ResonanceOffDiagonalCount.lean:78:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((fun z => (z.1, (z.2 - z.1) / m)) z).2
+in the target expression
+  (z.2 - z.1) / m * m = (w.2 - w.1) / m * m
+
+S : Finset ℕ
+U : ℝ
+hS : ∀ n ∈ S, U ≤ ↑n ∧ ↑n ≤ 2 * U
+m : ℕ
+hm : 0 < m
+hmR : 0 < ↑m
+z : ℕ × ℕ
+hz : z ∈ ↑({z ∈ S ×ˢ S | z.1 < z.2 ∧ z.1 ≡ z.2 [MOD m]})
+w : ℕ × ℕ
+hw : w ∈ ↑({z ∈ S ×ˢ S | z.1 < z.2 ∧ z.1 ≡ z.2 [MOD m]})
+he : (fun z => (z.1, (z.2 - z.1) / m)) z = (fun z => (z.1, (z.2 - z.1) / m)) w
+left✝¹ : z ∈ S ×ˢ S
+hzlt : z.1 < z.2
+hzmod : z.1 ≡ z.2 [MOD m]
+left✝ : w ∈ S ×ˢ S
+hwlt : w.1 < w.2
+hwmod : w.1 ≡ w.2 [MOD m]
+hfirst : ((fun z => (z.1, (z.2 - z.1) / m)) z).1 = ((fun z => (z.1, (z.2 - z.1) / m)) w).1
+hquot : ((fun z => (z.1, (z.2 - z.1) / m)) z).2 = ((fun z => (z.1, (z.2 - z.1) / m)) w).2
+hzdvd : m ∣ z.2 - z.1
+hwdvd : m ∣ w.2 - w.1
+⊢ (z.2 - z.1) / m * m = (w.2 - w.1) / m * m
+ImbalancedChen/Part3ResonanceOffDiagonalCount.lean:80:8: error: Tactic `apply` failed: could not unify the conclusion of `Prod.ext hfirst`
+  (fun z => (z.1, (z.2 - z.1) / m)) z = (fun z => (z.1, (z.2 - z.1) / m)) w
+with the goal
+  z = w
+
+Note: The full type of `Prod.ext hfirst` is
+  ((fun z => (z.1, (z.2 - z.1) / m)) z).2 = ((fun z => (z.1, (z.2 - z.1) / m)) w).2 →
+    (fun z => (z.1, (z.2 - z.1) / m)) z = (fun z => (z.1, (z.2 - z.1) / m)) w
+
+case f_inj
+S : Finset ℕ
+U : ℝ
+hS : ∀ n ∈ S, U ≤ ↑n ∧ ↑n ≤ 2 * U
+m : ℕ
+hm : 0 < m
+hmR : 0 < ↑m
+z : ℕ × ℕ
+hz : z ∈ ↑({z ∈ S ×ˢ S | z.1 < z.2 ∧ z.1 ≡ z.2 [MOD m]})
+w : ℕ × ℕ
+hw : w ∈ ↑({z ∈ S ×ˢ S | z.1 < z.2 ∧ z.1 ≡ z.2 [MOD m]})
+he : (fun z => (z.1, (z.2 - z.1) / m)) z = (fun z => (z.1, (z.2 - z.1) / m)) w
+left✝¹ : z ∈ S ×ˢ S
+hzlt : z.1 < z.2
+hzmod : z.1 ≡ z.2 [MOD m]
+left✝ : w ∈ S ×ˢ S
+hwlt : w.1 < w.2
+hwmod : w.1 ≡ w.2 [MOD m]
+hfirst : ((fun z => (z.1, (z.2 - z.1) / m)) z).1 = ((fun z => (z.1, (z.2 - z.1) / m)) w).1
+hquot : ((fun z => (z.1, (z.2 - z.1) / m)) z).2 = ((fun z => (z.1, (z.2 - z.1) / m)) w).2
+hzdvd : m ∣ z.2 - z.1
+hwdvd : m ∣ w.2 - w.1
+hdiff : z.2 - z.1 = w.2 - w.1
+⊢ z = w

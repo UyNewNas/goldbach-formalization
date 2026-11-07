@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T22:50:40.5651558Z",
+  "author": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_ROOT_AUTHORIZED_OWNER_ACTUAL_FIRST_DIAGNOSTIC_PROOF_ONLY_REBIND_PENDING_ROOT_INDEPENDENT_REVIEW",
+  "authorization": "Explicit root delegation after live-agent inventory confirmed primitive_center had no live editing slot; repair ONLY these two actual failed candidate sources. No new agent slot or runtime invocation.",
+  "module": "ImbalancedChen.Part3TransposedPrimitiveVPayment",
+  "previous_source_sha256": "6ed4c389c3338dd898043d2bbe5b34c7a914b38817b0307341ff4fb3c98ad0b1",
+  "current_source_sha256": "fd11a4e09110eb357cdf28515c5a467c9990236231ede5faa090ca0007f0e200",
+  "declaration_count": 3,
+  "definition_count": 0,
+  "all_complete_current_declarations_and_proofs": [
+    {
+      "name": "actual_betaL2_mul_V_error_power_bound",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 28,
+      "complete_source_header": "theorem actual_betaL2_mul_V_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (2 - 8 * sigma)",
+      "complete_definition": null,
+      "complete_declaration_block": "theorem actual_betaL2_mul_V_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (2 - 8 * sigma) := by\n  obtain ⟨C, hC, hbound⟩ := actual_betaL2_mul_V_error_bound\n  obtain ⟨x0, hx0, hcost⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 14 sigma hsigma hsigma\n  refine ⟨8 * C, by positivity, x0, hx0, fun d hd hx ↦ ?_⟩\n  have hxpos : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlogV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hlogCap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ C * d.V * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 14 := hbound B sigma kappa c0 d hd\n    _ = C * d.scale * (d.U * d.physicalFactorCap) *\n        ((1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 14) := by\n      unfold MediumAtom.scale\n      ring\n    _ ≤ (C * d.scale * (8 * d.scale ^ (1 - 9 * sigma))) * d.scale ^ sigma :=\n      mul_le_mul\n        (mul_le_mul_of_nonneg_left (d.U_mul_physicalFactorCap_le hd) (by positivity))\n        (hcost B kappa c0 d hd hx) (by positivity) (by positivity)\n    _ = (8 * C) * (d.scale ^ (1 : ℝ) * d.scale ^ (1 - 9 * sigma) *\n        d.scale ^ sigma) := by rw [Real.rpow_one]; ring\n    _ = _ := by\n      rw [← Real.rpow_add hxpos, ← Real.rpow_add hxpos]\n      congr 2\n      ring\n\n"
+    },
+    {
+      "name": "actual_betaL2_mul_V_error_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 65,
+      "complete_source_header": "theorem actual_betaL2_mul_V_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "complete_definition": null,
+      "complete_declaration_block": "theorem actual_betaL2_mul_V_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_V_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le (by linarith : 0 < 8 * sigma))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  exact (hbound d hd ((le_max_left _ _).trans hx)).trans\n    (hx2 d.scale ((le_max_right _ _).trans hx))\n\n/-- Both literal primitive-center remainders are genuinely paid after the\nactual original-beta moment. The full centered identity can use this bound\nwithout a new remaining-budget premise. -/\n"
+    },
+    {
+      "name": "actual_betaL2_mul_UV_error_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 84,
+      "complete_source_header": "theorem actual_betaL2_mul_UV_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) ≤\n              3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+      "complete_definition": null,
+      "complete_declaration_block": "theorem actual_betaL2_mul_UV_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) ≤\n              3 * (d.scale ^ 2 / (Real.log d.scale) ^ A) := by\n  obtain ⟨xU, hxU, hU⟩ :=\n    actual_betaL2_mul_U_error_log_payment B sigma kappa c0 A hsigma\n  obtain ⟨xV, _hxV, hV⟩ :=\n    actual_betaL2_mul_V_error_log_payment B sigma kappa c0 A hsigma\n  refine ⟨max xU xV, lt_of_lt_of_le hxU (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  have hu := hU d hd ((le_max_left _ _).trans hx)\n  have hv := hV d hd ((le_max_right _ _).trans hx)\n  calc\n    _ = (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n            ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) := by ring\n    _ ≤ d.scale ^ 2 / (Real.log d.scale) ^ A +\n        2 * (d.scale ^ 2 / (Real.log d.scale) ^ A) :=\n      add_le_add hu (mul_le_mul_of_nonneg_left hv (by norm_num))\n    _ = _ := by ring\n\nend TransposedPrimitiveVPayment\n\nend\n\nend ImbalancedChen.Part3\n"
+    }
+  ],
+  "complete_current_source_read": "import ImbalancedChen.Part3TransposedPrimitiveVMoment\nimport ImbalancedChen.Part3TransposedPrimitiveUPayment\n\n/-!\n# Actual power and logarithmic payment for the transposed mixed residual\n\nThe honest mixed-term error contains both original-alpha masses and costs\nU squared times the complete physical cap. After the actual original-beta\nL2 moment its scale is V U squared cap = X (U cap). The owned medium\ngeometry bounds U cap by 8 X^(1-9 sigma). Absorbing all fixed logarithms\nby X^sigma leaves the proved power saving X^(2-8 sigma).\n\nThe resulting threshold precedes every actual atom. Only the sigma>0 gate\nalready in RestrictedMediumObligation is used. No missing residual budget,\nextra alpha cancellation, smaller carrier or mass normalization is assumed.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Filter Topology\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveVMoment TransposedPrimitiveUPayment\n\nnamespace TransposedPrimitiveVPayment\n\ntheorem actual_betaL2_mul_V_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (2 - 8 * sigma) := by\n  obtain ⟨C, hC, hbound⟩ := actual_betaL2_mul_V_error_bound\n  obtain ⟨x0, hx0, hcost⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 14 sigma hsigma hsigma\n  refine ⟨8 * C, by positivity, x0, hx0, fun d hd hx ↦ ?_⟩\n  have hxpos : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlogV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hlogCap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ C * d.V * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 14 := hbound B sigma kappa c0 d hd\n    _ = C * d.scale * (d.U * d.physicalFactorCap) *\n        ((1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 14) := by\n      unfold MediumAtom.scale\n      ring\n    _ ≤ (C * d.scale * (8 * d.scale ^ (1 - 9 * sigma))) * d.scale ^ sigma :=\n      mul_le_mul\n        (mul_le_mul_of_nonneg_left (d.U_mul_physicalFactorCap_le hd) (by positivity))\n        (hcost B kappa c0 d hd hx) (by positivity) (by positivity)\n    _ = (8 * C) * (d.scale ^ (1 : ℝ) * d.scale ^ (1 - 9 * sigma) *\n        d.scale ^ sigma) := by rw [Real.rpow_one]; ring\n    _ = _ := by\n      rw [← Real.rpow_add hxpos, ← Real.rpow_add hxpos]\n      congr 2\n      ring\n\ntheorem actual_betaL2_mul_V_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_V_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le (by linarith : 0 < 8 * sigma))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  exact (hbound d hd ((le_max_left _ _).trans hx)).trans\n    (hx2 d.scale ((le_max_right _ _).trans hx))\n\n/-- Both literal primitive-center remainders are genuinely paid after the\nactual original-beta moment. The full centered identity can use this bound\nwithout a new remaining-budget premise. -/\ntheorem actual_betaL2_mul_UV_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) ≤\n              3 * (d.scale ^ 2 / (Real.log d.scale) ^ A) := by\n  obtain ⟨xU, hxU, hU⟩ :=\n    actual_betaL2_mul_U_error_log_payment B sigma kappa c0 A hsigma\n  obtain ⟨xV, _hxV, hV⟩ :=\n    actual_betaL2_mul_V_error_log_payment B sigma kappa c0 A hsigma\n  refine ⟨max xU xV, lt_of_lt_of_le hxU (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  have hu := hU d hd ((le_max_left _ _).trans hx)\n  have hv := hV d hd ((le_max_right _ _).trans hx)\n  calc\n    _ = (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n            ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) := by ring\n    _ ≤ d.scale ^ 2 / (Real.log d.scale) ^ A +\n        2 * (d.scale ^ 2 / (Real.log d.scale) ^ A) :=\n      add_le_add hu (mul_le_mul_of_nonneg_left hv (by norm_num))\n    _ = _ := by ring\n\nend TransposedPrimitiveVPayment\n\nend\n\nend ImbalancedChen.Part3\n",
+  "baseline": {
+    "exact_old_snapshot": "drafts/Part3TransposedPrimitiveVPayment.6ed4c389c3338dd898043d2bbe5b34c7a914b38817b0307341ff4fb3c98ad0b1.lean",
+    "sha256": "6ed4c389c3338dd898043d2bbe5b34c7a914b38817b0307341ff4fb3c98ad0b1",
+    "complete_type_definition_comparisons": [
+      {
+        "name": "actual_betaL2_mul_V_error_power_bound",
+        "complete_type_exact_equal": true,
+        "complete_definition_exact_equal": true,
+        "complete_proof_block_exact_equal": true
+      },
+      {
+        "name": "actual_betaL2_mul_V_error_log_payment",
+        "complete_type_exact_equal": true,
+        "complete_definition_exact_equal": true,
+        "complete_proof_block_exact_equal": false
+      },
+      {
+        "name": "actual_betaL2_mul_UV_error_log_payment",
+        "complete_type_exact_equal": true,
+        "complete_definition_exact_equal": true,
+        "complete_proof_block_exact_equal": true
+      }
+    ],
+    "only_changed_proofs": [
+      "actual_betaL2_mul_V_error_log_payment"
+    ],
+    "all_other_complete_blocks_exact_equal": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "direct_imports_exact_unchanged": true,
+  "current_direct_parent_hash_bindings": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+      "sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8"
+    }
+  ],
+  "actual_failed_stdout": {
+    "path": ".lake/proof-continuation/runs/20261015T224052503605Z-ImbalancedChen.Part3TransposedPrimitiveVPayment/stdout.log",
+    "sha256": "5fce53e52201e92eae207e1e9ea1e868a8ca95194c9c9d2676b278220943d17c",
+    "entire_stdout_read": true,
+    "full_text": "ImbalancedChen/Part3TransposedPrimitiveVPayment.lean:79:9: error: Application type mismatch: The argument\n  LE.le.trans (le_max_right x1 x2) hx\nhas type\n  x2 ≤ d.scale\nof sort `Prop` but is expected to have type\n  ℝ\nof sort `Type` in the application\n  hx2 (LE.le.trans (le_max_right x1 x2) hx)\n"
+  },
+  "exact_literal_edits": [
+    {
+      "old": "(hx2 ((le_max_right _ _).trans hx))",
+      "new": "(hx2 d.scale ((le_max_right _ _).trans hx))",
+      "occurrences": 1
+    }
+  ],
+  "diagnostic_mapping_and_API_review": [
+    "Complete actual stdout sole79 shows hx2 expects an explicit real argument before x2<=d.scale. Supply d.scale, preserving the already chosen delta=8sigma log-budget theorem, the identical maximum-threshold inequality and exact displayed endpoint. No other source text changes."
+  ],
+  "mathematics_quantifiers_thresholds_domain_unchanged": "All THREE complete theorem types, zero definitions and two direct imports unchanged. The honest actual V error bound retains both original-alpha masses U^2 and one full physical cap. Actual original betaL2 makes VU^2cap=X*(Ucap); original geometryUcap<=8X^(1-9sigma) and fixed log cost<=X^sigma give the SAME C X^(2-8sigma). Only the original hsigma>0 payment gate remains; no sigma upper bound, extra admissibility or residual budget. Every real A is then paid by the existing positive8sigma power-to-log theorem before the actuald, and the last endpoint combines actualU+2actualV errors with the SAME3X^2/logX^A. All original signed residue/full carriers/primitive main/localmass data are unchanged.",
+  "fixed_real_power_API_actually_read": {
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+    "historical_source_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+    "historical_hash_evidence": {
+      "report": "20261016-disjoint-label-products-independent-scope.json",
+      "report_sha256": "f66a590faf5824b949b53cbf436508d356877e457b08ae077f5d51a0d6a9ab94"
+    },
+    "rpow_natCast": "theorem rpow_natCast (x : ℝ) (n : ℕ) : x ^ (n : ℝ) = x ^ n",
+    "rpow_two": "theorem rpow_two (x : ℝ) : x ^ (2 : ℝ) = x ^ 2 := by simp",
+    "lines_read_this_turn_using_readonly_rg": "58-71 and470-471",
+    "fresh_whole_file_rehash_boundary": "A later redundant UNC ReadAllText attempt returned semaphore timeout before ANY source/snapshot/report writes. Source declarations above had already been successfully read with rg in this turn. No fresh whole-file hash is claimed; exact prior independent hash is identified separately.",
+    "foreign_import_delta": 0
+  },
+  "bidirectional_byte_certificate": {
+    "replacement": {
+      "offset_zero_based": 3837,
+      "old_removed_count": 0,
+      "new_inserted_count": 8,
+      "unchanged_suffix_count": 2014,
+      "old_removed_bytes_base64": "",
+      "new_inserted_bytes_base64": "ZC5zY2FsZSA="
+    },
+    "forward_byte_equal_current": true,
+    "forward_reconstructed_sha256": "fd11a4e09110eb357cdf28515c5a467c9990236231ede5faa090ca0007f0e200",
+    "inverse_byte_equal_exact_old": true,
+    "inverse_reconstructed_sha256": "6ed4c389c3338dd898043d2bbe5b34c7a914b38817b0307341ff4fb3c98ad0b1",
+    "reconstruction_in_memory_only": true
+  },
+  "sourceDAG_proof_rebind_delta": {
+    "added_local": [],
+    "added_foreign": [],
+    "imports_unchanged": true
+  },
+  "pin_snapshots": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "exact_expected": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "exact_expected": true
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "exact_expected": true
+    }
+  ],
+  "limits_and_linter_unchanged": true,
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "bootstrap_invoked": false,
+    "kernel_replay_performed": false,
+    "pins_or_checkers_modified": false,
+    "only_requested_candidate_proof_sites_modified": true,
+    "runtime_pass_claimed": false,
+    "publication_freeze_released_before_write": true,
+    "owned_or_unrequested_sources_modified": false
+  },
+  "remaining_gate": "Root must independently review exact new source/types/proofs/diagnostic and both byte reconstruction directions, then runtime owner alone may use the original specifically authorized6144/RSS6656/j2 validation. No compile, PASS or ownership is asserted here."
+}

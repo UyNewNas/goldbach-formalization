@@ -1,0 +1,624 @@
+[
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChenQuotientUpperRosserActive",
+    "partial": false,
+    "type": "(N b cap Q : Nat) \u2192 (z : Real) \u2192 Finset.{0} Nat",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChenQuotientUpperRosserActive_divisor",
+    "partial": false,
+    "type": "\u2200 {N b cap Q d : Nat} {z : Real} (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap))\n  (hd :\n    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.currentChenQuotientUpperRosserActive N b cap Q z) d),\n  @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n    (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n    (Nat.divisors\n      (ImbalancedChen.sieveProduct N\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) z)))\n    d",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChenQuotientUpperRosserActive_physical_cap",
+    "partial": false,
+    "type": "\u2200 {N b cap Q d : Nat} {z : Real}\n  (hb : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) b)\n  (hd :\n    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.currentChenQuotientUpperRosserActive N b cap Q z) d),\n  @LE.le.{0} Nat instLENat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d) Q",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotientUpperRosser_sum_eq_active",
+    "partial": false,
+    "type": "\u2200 (N b cap Q : Nat) (z : Real) (f : Nat \u2192 Real),\n  @Eq.{1} Real\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n      fun (d : Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (ImbalancedChen.actualSmallRosserPlus N cap z\n          (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRowLevel Q b)) d)\n        (f d))\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n      (ImbalancedChen.currentChenQuotientUpperRosserActive N b cap Q z) fun (d : Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (ImbalancedChen.actualSmallRosserPlus N cap z\n          (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRowLevel Q b)) d)\n        (f d))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_density_upper",
+    "partial": false,
+    "type": "\u2200 (N b cap : Nat) (z L : Real) (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap))\n  (hb :\n    Nat.Coprime b\n      (ImbalancedChen.sieveProduct N\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) z)))\n  (hL : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) L)\n  (hzL : @LE.le.{0} Real Real.instLE z L),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast (@Finset.card.{0} Nat (ImbalancedChen.chenSiftedQuotientPrimeSource N b z)))\n    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n            (@Nat.cast.{0} Real Real.instNatCast (Nat.totient b)))\n          (ImbalancedChen.actualSmallRosserPlusDensity N cap z L))\n        (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n          fun (d : Nat) =>\n          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n            (ImbalancedChen.chenQuotientPrimeAPError N\n              (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n        fun (d : Nat) =>\n        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n          (ImbalancedChen.chenCentrePrimeAPCount N N\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_plus_main_and_errors",
+    "partial": false,
+    "type": "\u2200 (N b cap : Nat) (z L : Real) (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap))\n  (hb :\n    Nat.Coprime b\n      (ImbalancedChen.sieveProduct N\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) z))),\n  @Eq.{1} Real\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n      fun (d : Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n          (ImbalancedChen.chenPrimeAPCount N N (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))\n          (ImbalancedChen.chenCentrePrimeAPCount N N\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))\n    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n            (@Nat.cast.{0} Real Real.instNatCast (Nat.totient b)))\n          (ImbalancedChen.actualSmallRosserPlusDensity N cap z L))\n        (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n          fun (d : Nat) =>\n          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n            (ImbalancedChen.chenQuotientPrimeAPError N\n              (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n        fun (d : Nat) =>\n        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n          (ImbalancedChen.chenCentrePrimeAPCount N N\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_upper",
+    "partial": false,
+    "type": "\u2200 (N b cap : Nat) (z L : Real) (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap))\n  (hL : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) L)\n  (hzL : @LE.le.{0} Real Real.instLE z L),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast (@Finset.card.{0} Nat (ImbalancedChen.chenSiftedQuotientPrimeSource N b z)))\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.actualSmallRosserSupport N cap z)\n      fun (d : Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (ImbalancedChen.actualSmallRosserPlus N cap z L d)\n        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n          (ImbalancedChen.chenPrimeAPCount N N (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))\n          (ImbalancedChen.chenCentrePrimeAPCount N N\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b d))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.actualSmallRosserPlusDensity.eq_1",
+    "partial": false,
+    "type": "\u2200 (N cap : Nat) (w L : Real),\n  @Eq.{1} Real (ImbalancedChen.actualSmallRosserPlusDensity N cap w L)\n    (ImbalancedChen.reciprocalTotientDensity (ImbalancedChen.actualSmallRosserSupport N cap w)\n      (ImbalancedChen.actualSmallRosserPlus N cap w L))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChenQuotientUpperRosserActive.eq_1",
+    "partial": false,
+    "type": "\u2200 (N b cap Q : Nat) (z : Real),\n  @Eq.{1} (Finset.{0} Nat) (ImbalancedChen.currentChenQuotientUpperRosserActive N b cap Q z)\n    (@Finset.filter.{0} Nat\n      (fun (d : Nat) =>\n        @Ne.{1} Real\n          (ImbalancedChen.actualSmallRosserPlus N cap z\n            (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRowLevel Q b)) d)\n          (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))\n      (fun (a : Nat) =>\n        @instDecidableNot\n          (@Eq.{1} Real\n            (ImbalancedChen.actualSmallRosserPlus N cap z\n              (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRowLevel Q b)) a)\n            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))\n          (Real.decidableEq\n            (ImbalancedChen.actualSmallRosserPlus N cap z\n              (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRowLevel Q b)) a)\n            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))\n      (ImbalancedChen.actualSmallRosserSupport N cap z))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_plus_main_and_errors._simp_1_2",
+    "partial": false,
+    "type": "\u2200 {\u03b9 : Type u_1} {M : Type u_4} {s : Finset.{u_1} \u03b9} [inst : AddCommMonoid.{u_4} M] {f g : \u03b9 \u2192 M},\n  @Eq.{u_4 + 1} M\n    (@HAdd.hAdd.{u_4, u_4, u_4} M M M\n      (@instHAdd.{u_4} M\n        (@AddZero.toAdd.{u_4} M\n          (@AddZeroClass.toAddZero.{u_4} M\n            (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))\n      (@Finset.sum.{u_1, u_4} \u03b9 M inst s fun (x : \u03b9) => f x) (@Finset.sum.{u_1, u_4} \u03b9 M inst s fun (x : \u03b9) => g x))\n    (@Finset.sum.{u_1, u_4} \u03b9 M inst s fun (x : \u03b9) =>\n      @HAdd.hAdd.{u_4, u_4, u_4} M M M\n        (@instHAdd.{u_4} M\n          (@AddZero.toAdd.{u_4} M\n            (@AddZeroClass.toAddZero.{u_4} M\n              (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))\n        (f x) (g x))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_plus_main_and_errors._simp_1_3",
+    "partial": false,
+    "type": "\u2200 {\u03b9 : Type u_1} {G : Type u_5} {s : Finset.{u_1} \u03b9} [inst : SubtractionCommMonoid.{u_5} G] (f g : \u03b9 \u2192 G),\n  @Eq.{u_5 + 1} G\n    (@HSub.hSub.{u_5, u_5, u_5} G G G\n      (@instHSub.{u_5} G\n        (@SubNegMonoid.toSub.{u_5} G\n          (@SubtractionMonoid.toSubNegMonoid.{u_5} G (@SubtractionCommMonoid.toSubtractionMonoid.{u_5} G inst))))\n      (@Finset.sum.{u_1, u_5} \u03b9 G (@SubtractionCommMonoid.toAddCommMonoid.{u_5} G inst) s fun (x : \u03b9) => f x)\n      (@Finset.sum.{u_1, u_5} \u03b9 G (@SubtractionCommMonoid.toAddCommMonoid.{u_5} G inst) s fun (x : \u03b9) => g x))\n    (@Finset.sum.{u_1, u_5} \u03b9 G (@SubtractionCommMonoid.toAddCommMonoid.{u_5} G inst) s fun (x : \u03b9) =>\n      @HSub.hSub.{u_5, u_5, u_5} G G G\n        (@instHSub.{u_5} G\n          (@SubNegMonoid.toSub.{u_5} G\n            (@SubtractionMonoid.toSubNegMonoid.{u_5} G (@SubtractionCommMonoid.toSubtractionMonoid.{u_5} G inst))))\n        (f x) (g x))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenQuotientUpperRosser",
+    "name": "ImbalancedChen.currentChen_quotient_actualRosser_upper._simp_1_1",
+    "partial": false,
+    "type": "\u2200 {n m : Nat}, @Eq.{1} Prop (Nat.Coprime n m) (Nat.Coprime m n)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperDensitySum",
+    "partial": false,
+    "type": "(B : Real) \u2192 (N : Nat) \u2192 (T : Finset.{0} Nat) \u2192 Real",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows",
+    "partial": false,
+    "type": "(N Q : Nat) \u2192 (T : Finset.{0} Nat) \u2192 Nat \u2192 Finset.{0} Nat",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows_APError_eq",
+    "partial": false,
+    "type": "\u2200 (N Q : Nat) (T : Finset.{0} Nat)\n  (hT :\n    @LE.le.{0} (Finset.{0} Nat)\n      (@Preorder.toLE.{0} (Finset.{0} Nat)\n        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n      T\n      (ImbalancedChen.chenSinglePrimeSelector N\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@OfNat.ofNat.{0} Real (nat_lit 3)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))),\n  @Eq.{1} Real\n    (ImbalancedChen.part3CurrentLowerAPError N (ImbalancedChen.currentChenSinglePrimeUpperRows N Q T)\n      (fun (x : Nat) => @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n      (fun (x : Prod.{0, 0} Nat Nat) =>\n        @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n      fun (x : Prod.{0, 0} Nat Nat) =>\n      @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n      @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n        (ImbalancedChen.currentChenQuotientUpperRosserActive N p\n          (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n          Q\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n        fun (d : Nat) =>\n        @abs.{0} Real Real.lattice Real.instAddGroup\n          (ImbalancedChen.chenQuotientPrimeAPError N\n            (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p d)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows_CentreCost_eq",
+    "partial": false,
+    "type": "\u2200 (N Q : Nat) (T : Finset.{0} Nat)\n  (hT :\n    @LE.le.{0} (Finset.{0} Nat)\n      (@Preorder.toLE.{0} (Finset.{0} Nat)\n        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n      T\n      (ImbalancedChen.chenSinglePrimeSelector N\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@OfNat.ofNat.{0} Real (nat_lit 3)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))),\n  @Eq.{1} Real\n    (ImbalancedChen.part3CurrentLowerCentreCost N (ImbalancedChen.currentChenSinglePrimeUpperRows N Q T)\n      (fun (x : Nat) => @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n      (fun (x : Prod.{0, 0} Nat Nat) =>\n        @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n      fun (x : Prod.{0, 0} Nat Nat) =>\n      @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n      @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n        (ImbalancedChen.currentChenQuotientUpperRosserActive N p\n          (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n          Q\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n        fun (d : Nat) => ImbalancedChen.chenQuotientCentreCost N p d)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows_admissible",
+    "partial": false,
+    "type": "\u2200 (N Q : Nat) (T : Finset.{0} Nat),\n  ImbalancedChen.Part3CurrentLowerRows N Q (ImbalancedChen.currentChenSinglePrimeUpperRows N Q T)\n    (fun (x : Nat) => @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n    (fun (x : Prod.{0, 0} Nat Nat) =>\n      @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n    fun (x : Prod.{0, 0} Nat Nat) =>\n    @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows_sum",
+    "partial": false,
+    "type": "\u2200 (N Q : Nat) (T : Finset.{0} Nat)\n  (hT :\n    @LE.le.{0} (Finset.{0} Nat)\n      (@Preorder.toLE.{0} (Finset.{0} Nat)\n        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n      T\n      (ImbalancedChen.chenSinglePrimeSelector N\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@OfNat.ofNat.{0} Real (nat_lit 3)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))))))\n  (F : Nat \u2192 Nat \u2192 Real),\n  @Eq.{1} Real\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n      (ImbalancedChen.chenSinglePrimeSelector N\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@OfNat.ofNat.{0} Real (nat_lit 3)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))\n      fun (p : Nat) =>\n      @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.currentChenSinglePrimeUpperRows N Q T p)\n        fun (d : Nat) => F p d)\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n      @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n        (ImbalancedChen.currentChenQuotientUpperRosserActive N p\n          (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n          Q\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))\n        fun (d : Nat) => F p d)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrime_le_upper_density_add_costs",
+    "partial": false,
+    "type": "\u2200 (B : Real) (N : Nat) (T : Finset.{0} Nat)\n  (hT :\n    @LE.le.{0} (Finset.{0} Nat)\n      (@Preorder.toLE.{0} (Finset.{0} Nat)\n        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n      T\n      (ImbalancedChen.chenSinglePrimeSelector N\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@OfNat.ofNat.{0} Real (nat_lit 3)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))))))\n  (hlevels :\n    \u2200 (p : Nat),\n      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) T p \u2192\n        And\n          (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRosserD B N p)))\n          (@LE.le.{0} Real Real.instLE\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n            (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRosserD B N p)))),\n  @LE.le.{0} Real Real.instLE\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n      @Nat.cast.{0} Real Real.instNatCast\n        (@Finset.card.{0} Nat\n          (ImbalancedChen.chenSiftedQuotientPrimeSource N p\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))))\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (ImbalancedChen.currentChenSinglePrimeUpperDensitySum B N T)\n        (ImbalancedChen.part3CurrentLowerAPError N\n          (ImbalancedChen.currentChenSinglePrimeUpperRows N (ImbalancedChen.chenInitialLevelCap B N) T)\n          (fun (x : Nat) => @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n          (fun (x : Prod.{0, 0} Nat Nat) =>\n            @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n          fun (x : Prod.{0, 0} Nat Nat) =>\n          @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat)))\n      (ImbalancedChen.part3CurrentLowerCentreCost N\n        (ImbalancedChen.currentChenSinglePrimeUpperRows N (ImbalancedChen.chenInitialLevelCap B N) T)\n        (fun (x : Nat) => @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n        (fun (x : Prod.{0, 0} Nat Nat) =>\n          @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat))\n        fun (x : Prod.{0, 0} Nat Nat) =>\n        @EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon3OrdinaryUpperDensitySum",
+    "partial": false,
+    "type": "(B : Real) \u2192 (N : Nat) \u2192 Real",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon4OrdinaryUpperDensitySum",
+    "partial": false,
+    "type": "(B : Real) \u2192 (N : Nat) \u2192 Real",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon4_selector_subset_Upsilon3",
+    "partial": false,
+    "type": "\u2200 {N : Nat} (hN : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N),\n  @LE.le.{0} (Finset.{0} Nat)\n    (@Preorder.toLE.{0} (Finset.{0} Nat)\n      (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n    (ImbalancedChen.chenSinglePrimeSelector N\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (@Nat.cast.{0} Real Real.instNatCast N)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 417)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n          (@OfNat.ofNat.{0} Real (nat_lit 5000)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (@Nat.cast.{0} Real Real.instNatCast N)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 59)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 58) (instOfNatNat (nat_lit 58)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 57) (instOfNatNat (nat_lit 57)))))))\n          (@OfNat.ofNat.{0} Real (nat_lit 250)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 249) (instOfNatNat (nat_lit 249)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 248) (instOfNatNat (nat_lit 248))))))))))\n    (ImbalancedChen.chenSinglePrimeSelector N\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (@Nat.cast.{0} Real Real.instNatCast N)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 417)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n          (@OfNat.ofNat.{0} Real (nat_lit 5000)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (@Nat.cast.{0} Real Real.instNatCast N)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n          (@OfNat.ofNat.{0} Real (nat_lit 3)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.eventually_currentChenSinglePrime_subselector_le_upper_density_sum",
+    "partial": false,
+    "type": "@Exists.{1} Real fun (B : Real) =>\n  And (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) B)\n    (\u2200 (epsilon : Real),\n      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon \u2192\n        @Filter.Eventually.{0} Nat\n          (fun (N : Nat) =>\n            @Even.{0} Nat instAddNat N \u2192\n              \u2200 (T : Finset.{0} Nat),\n                @LE.le.{0} (Finset.{0} Nat)\n                    (@Preorder.toLE.{0} (Finset.{0} Nat)\n                      (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))\n                    T\n                    (ImbalancedChen.chenSinglePrimeSelector N\n                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                        (@Nat.cast.{0} Real Real.instNatCast N)\n                        (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                          (@OfNat.ofNat.{0} Real (nat_lit 417)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                                (@Nat.instNeZeroSucc\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                          (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                                (@Nat.instNeZeroSucc\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                        (@Nat.cast.{0} Real Real.instNatCast N)\n                        (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                          (@OfNat.ofNat.{0} Real (nat_lit 3)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                                (@Nat.instNeZeroSucc\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))))) \u2192\n                  @LE.le.{0} Real Real.instLE\n                    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n                      @Nat.cast.{0} Real Real.instNatCast\n                        (@Finset.card.{0} Nat\n                          (ImbalancedChen.chenSiftedQuotientPrimeSource N p\n                            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                              (@Nat.cast.{0} Real Real.instNatCast N)\n                              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                                    (@Nat.instAtLeastTwoHAddOfNat\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                                      (@Nat.instNeZeroSucc\n                                        (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                                    (@Nat.instAtLeastTwoHAddOfNat\n                                      (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                                      (@Nat.instNeZeroSucc\n                                        (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998))))))))))))\n                    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                      (ImbalancedChen.currentChenSinglePrimeUpperDensitySum B N T)\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) epsilon\n                        (ImbalancedChen.singularNormalization N))))\n          (@Filter.atTop.{0} Nat Nat.instPreorder))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.eventually_currentChenSinglePrime_upper_row_level",
+    "partial": false,
+    "type": "\u2200 (B : Real),\n  @Filter.Eventually.{0} Nat\n    (fun (N : Nat) =>\n      \u2200 (p : Nat),\n        @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n            (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n            (ImbalancedChen.chenSinglePrimeSelector N\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                  (@OfNat.ofNat.{0} Real (nat_lit 3)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))))\n            p \u2192\n          And\n            (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n              (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRosserD B N p)))\n            (@LE.le.{0} Real Real.instLE\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))\n              (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRosserD B N p))))\n    (@Filter.atTop.{0} Nat Nat.instPreorder)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.eventually_currentChenUpsilon3_Upsilon4_le_ordinary_upper_density_sum",
+    "partial": false,
+    "type": "@Exists.{1} Real fun (B : Real) =>\n  And (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) B)\n    (\u2200 (epsilon : Real),\n      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon \u2192\n        @Filter.Eventually.{0} Nat\n          (fun (N : Nat) =>\n            @Even.{0} Nat instAddNat N \u2192\n              And\n                (@LE.le.{0} Real Real.instLE (ImbalancedChen.currentChenUpsilon3 N)\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (ImbalancedChen.currentChenUpsilon3OrdinaryUpperDensitySum B N)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) epsilon\n                      (ImbalancedChen.singularNormalization N))))\n                (@LE.le.{0} Real Real.instLE (ImbalancedChen.currentChenUpsilon4 N)\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (ImbalancedChen.currentChenUpsilon4OrdinaryUpperDensitySum B N)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) epsilon\n                      (ImbalancedChen.singularNormalization N)))))\n          (@Filter.atTop.{0} Nat Nat.instPreorder))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.chenQuotientRosserD.eq_1",
+    "partial": false,
+    "type": "\u2200 (B : Real) (N b : Nat),\n  @Eq.{1} Nat (ImbalancedChen.chenQuotientRosserD B N b)\n    (ImbalancedChen.chenQuotientRowLevel (ImbalancedChen.chenInitialLevelCap B N) b)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.chenSelectedCentreCost.eq_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (N : Nat) (T : Finset.{u_1} \u03b1) (b : \u03b1 \u2192 Nat) (S : \u03b1 \u2192 Finset.{0} Nat),\n  @Eq.{1} Real (@ImbalancedChen.chenSelectedCentreCost.{u_1} \u03b1 N T b S)\n    (@Finset.sum.{u_1, 0} \u03b1 Real Real.instAddCommMonoid T fun (t : \u03b1) =>\n      @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (S t) fun (d : Nat) =>\n        ImbalancedChen.chenQuotientCentreCost N (b t) d)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_1",
+    "partial": false,
+    "type": "Nat.AtLeastTwo\n  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n    (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))\n    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_2",
+    "partial": false,
+    "type": "Nat.AtLeastTwo\n  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n    (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))\n    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperDensitySum.eq_1",
+    "partial": false,
+    "type": "\u2200 (B : Real) (N : Nat) (T : Finset.{0} Nat),\n  @Eq.{1} Real (ImbalancedChen.currentChenSinglePrimeUpperDensitySum B N T)\n    (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid T fun (p : Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n          (@Nat.cast.{0} Real Real.instNatCast (Nat.totient p)))\n        (ImbalancedChen.actualSmallRosserPlusDensity N\n          (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_1))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_2)))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_1))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_2))))\n          (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.chenQuotientRosserD B N p))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows.eq_1",
+    "partial": false,
+    "type": "\u2200 (N Q : Nat) (T : Finset.{0} Nat) (p : Nat),\n  @Eq.{1} (Finset.{0} Nat) (ImbalancedChen.currentChenSinglePrimeUpperRows N Q T p)\n    (@ite.{1} (Finset.{0} Nat)\n      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) T p)\n      (@Finset.decidableMem.{0} Nat instDecidableEqNat p T)\n      (ImbalancedChen.currentChenQuotientUpperRosserActive N p\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_1))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_2)))))\n        Q\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast N)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 417)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_1))\n            (@OfNat.ofNat.{0} Real (nat_lit 5000)\n              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                ImbalancedChen.currentChenSinglePrimeUpperDensitySum._proof_2)))))\n      (@EmptyCollection.emptyCollection.{0} (Finset.{0} Nat) (@Finset.instEmptyCollection.{0} Nat)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenSinglePrimeUpperRows_admissible._simp_1_2",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (a : \u03b1),\n  @Eq.{1} Prop\n    (@Membership.mem.{u_1, u_1} \u03b1 (Finset.{u_1} \u03b1)\n      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} \u03b1) \u03b1 (@Finset.instSetLike.{u_1} \u03b1))\n      (@EmptyCollection.emptyCollection.{u_1} (Finset.{u_1} \u03b1) (@Finset.instEmptyCollection.{u_1} \u03b1)) a)\n    False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon3OrdinaryUpperDensitySum._proof_1",
+    "partial": false,
+    "type": "Nat.AtLeastTwo\n  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon4OrdinaryUpperDensitySum._proof_1",
+    "partial": false,
+    "type": "Nat.AtLeastTwo\n  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n    (@OfNat.ofNat.{0} Nat (nat_lit 58) (instOfNatNat (nat_lit 58)))\n    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.currentChenUpsilon4OrdinaryUpperDensitySum._proof_2",
+    "partial": false,
+    "type": "Nat.AtLeastTwo\n  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n    (@OfNat.ofNat.{0} Nat (nat_lit 249) (instOfNatNat (nat_lit 249)))\n    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.eventually_currentChenSinglePrime_upper_row_level._proof_1_1",
+    "partial": false,
+    "type": "\u2200 (N : Nat)\n  (hN :\n    @LE.le.{0} Nat (@Preorder.toLE.{0} Nat Nat.instPreorder)\n      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N),\n  Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N) \u2192 False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.part3CurrentLowerAPError.eq_1",
+    "partial": false,
+    "type": "\u2200 (N : Nat) (S3 S4 : Nat \u2192 Finset.{0} Nat) (S5 S6 : Prod.{0, 0} Nat Nat \u2192 Finset.{0} Nat),\n  @Eq.{1} Real (ImbalancedChen.part3CurrentLowerAPError N S3 S4 S5 S6)\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n          (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n            (ImbalancedChen.chenSinglePrimeSelector N\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                  (@OfNat.ofNat.{0} Real (nat_lit 3)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_3)))))\n            fun (p : Nat) =>\n            @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (S3 p) fun (e : Nat) =>\n              @abs.{0} Real Real.lattice Real.instAddGroup\n                (ImbalancedChen.chenQuotientPrimeAPError N\n                  (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral\n                    (@Nat.cast.{0} Real Real.instNatCast N))\n                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p e)))\n          (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n            (ImbalancedChen.chenSinglePrimeSelector N\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 59)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_4))\n                  (@OfNat.ofNat.{0} Real (nat_lit 250)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_5)))))\n            fun (p : Nat) =>\n            @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (S4 p) fun (e : Nat) =>\n              @abs.{0} Real Real.lattice Real.instAddGroup\n                (ImbalancedChen.chenQuotientPrimeAPError N\n                  (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral\n                    (@Nat.cast.{0} Real Real.instNatCast N))\n                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p e))))\n        (@Finset.sum.{0, 0} (Prod.{0, 0} Nat Nat) Real Real.instAddCommMonoid\n          (ImbalancedChen.chenY5PrimeSelector N\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 19)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 19) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_6))\n                (@OfNat.ofNat.{0} Real (nat_lit 125)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 125) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_7)))))\n          fun (t : Prod.{0, 0} Nat Nat) =>\n          @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (S5 t) fun (e : Nat) =>\n            @abs.{0} Real Real.lattice Real.instAddGroup\n              (ImbalancedChen.chenQuotientPrimeAPError N\n                (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral\n                  (@Nat.cast.{0} Real Real.instNatCast N))\n                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@Prod.fst.{0, 0} Nat Nat t)\n                    (@Prod.snd.{0, 0} Nat Nat t))\n                  e))))\n      (@Finset.sum.{0, 0} (Prod.{0, 0} Nat Nat) Real Real.instAddCommMonoid\n        (ImbalancedChen.chenY6PrimeSelector N\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_1))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 19)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 19) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_6))\n              (@OfNat.ofNat.{0} Real (nat_lit 125)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 125) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_7))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 59)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_4))\n              (@OfNat.ofNat.{0} Real (nat_lit 250)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_5)))))\n        fun (t : Prod.{0, 0} Nat Nat) =>\n        @Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (S6 t) fun (e : Nat) =>\n          @abs.{0} Real Real.lattice Real.instAddGroup\n            (ImbalancedChen.chenQuotientPrimeAPError N\n              (MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral (@Nat.cast.{0} Real Real.instNatCast N))\n              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@Prod.fst.{0, 0} Nat Nat t)\n                  (@Prod.snd.{0, 0} Nat Nat t))\n                e))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenSinglePrimeUpperFiniteMean",
+    "name": "ImbalancedChen.part3CurrentLowerCentreCost.eq_1",
+    "partial": false,
+    "type": "\u2200 (N : Nat) (S3 S4 : Nat \u2192 Finset.{0} Nat) (S5 S6 : Prod.{0, 0} Nat Nat \u2192 Finset.{0} Nat),\n  @Eq.{1} Real (ImbalancedChen.part3CurrentLowerCentreCost N S3 S4 S5 S6)\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n          (@ImbalancedChen.chenSelectedCentreCost.{0} Nat N\n            (ImbalancedChen.chenSinglePrimeSelector N\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                  (@OfNat.ofNat.{0} Real (nat_lit 3)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_3)))))\n            (@id.{1} Nat) S3)\n          (@ImbalancedChen.chenSelectedCentreCost.{0} Nat N\n            (ImbalancedChen.chenSinglePrimeSelector N\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 417)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                  (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                  (@OfNat.ofNat.{0} Real (nat_lit 59)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_4))\n                  (@OfNat.ofNat.{0} Real (nat_lit 250)\n                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast\n                      ImbalancedChen.Part3CurrentLowerRows._proof_5)))))\n            (@id.{1} Nat) S4))\n        (@ImbalancedChen.chenSelectedCentreCost.{0} (Prod.{0, 0} Nat Nat) N\n          (ImbalancedChen.chenY5PrimeSelector N\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 417)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_1))\n                (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast N)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 19)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 19) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_6))\n                (@OfNat.ofNat.{0} Real (nat_lit 125)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 125) Real.instNatCast\n                    ImbalancedChen.Part3CurrentLowerRows._proof_7)))))\n          (fun (t : Prod.{0, 0} Nat Nat) =>\n            @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@Prod.fst.{0, 0} Nat Nat t)\n              (@Prod.snd.{0, 0} Nat Nat t))\n          S5))\n      (@ImbalancedChen.chenSelectedCentreCost.{0} (Prod.{0, 0} Nat Nat) N\n        (ImbalancedChen.chenY6PrimeSelector N\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 417)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_1))\n              (@OfNat.ofNat.{0} Real (nat_lit 5000)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_2))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 19)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 19) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_6))\n              (@OfNat.ofNat.{0} Real (nat_lit 125)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 125) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_7))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast N)\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 59)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_4))\n              (@OfNat.ofNat.{0} Real (nat_lit 250)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast\n                  ImbalancedChen.Part3CurrentLowerRows._proof_5)))))\n        (fun (t : Prod.{0, 0} Nat Nat) =>\n          @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@Prod.fst.{0, 0} Nat Nat t)\n            (@Prod.snd.{0, 0} Nat Nat t))\n        S6))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperEndpointDictionary",
+    "name": "ImbalancedChen.currentChen_model_plusDensity_eq_mainSum",
+    "partial": false,
+    "type": "\u2200 (N cap : Nat) (z L : Real) (hEven : @Even.{0} Nat instAddNat N)\n  (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap)),\n  @Eq.{1} Real (ImbalancedChen.actualSmallRosserPlusDensity N cap z L)\n    (@BoundingSieve.mainSum (ImbalancedChen.chenInitialBoundingSieve N z hEven)\n      (MathlibNt.SieveTheory.LinearSieve.upperRosserWeight\n        (BoundingSieve.prodPrimes (ImbalancedChen.chenInitialBoundingSieve N z hEven))\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) L)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperEndpointDictionary",
+    "name": "ImbalancedChen.currentChen_model_plus_natCeil",
+    "partial": false,
+    "type": "\u2200 (N cap : Nat) (z L : Real) (hzcap : @LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast cap)),\n  @Eq.{1} (Nat \u2192 Real) (ImbalancedChen.actualSmallRosserPlus N cap z L)\n    (MathlibNt.SieveTheory.LinearSieve.upperRosserWeight\n      (ImbalancedChen.sieveProduct N\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) z))\n      (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n        (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing) L))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "ImbalancedChen.exists_currentChen_model_plusDensity_rectangle_upper_threshold",
+    "partial": false,
+    "type": "\u2200 (a : Real)\n  (ha : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) a)\n  (sigma : Real)\n  (hsigma : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) sigma)\n  (B eta : Real)\n  (heta : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) eta),\n  @Exists.{1} Nat fun (N0 : Nat) =>\n    And (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N0)\n      (\u2200 (N : Nat),\n        @LE.le.{0} Nat instLENat N0 N \u2192\n          @Even.{0} Nat instAddNat N \u2192\n            \u2200 (u : Real),\n              @LE.le.{0} Real Real.instLE a u \u2192\n                \u2200 (s : Real),\n                  @LE.le.{0} Real Real.instLE sigma s \u2192\n                    @LE.le.{0} Real Real.instLE s B \u2192\n                      \u2200 (cap : Nat),\n                        @LE.le.{0} Real Real.instLE\n                            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                              (@Nat.cast.{0} Real Real.instNatCast N) u)\n                            (@Nat.cast.{0} Real Real.instNatCast cap) \u2192\n                          @LE.le.{0} Real Real.instLE\n                            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                              (ImbalancedChen.actualSmallRosserPlusDensity N cap\n                                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                                  (@Nat.cast.{0} Real Real.instNatCast N) u)\n                                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                                  (@Nat.cast.{0} Real Real.instNatCast N)\n                                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) s u)))\n                              (ImbalancedChen.actualSmallEulerProduct N cap\n                                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                                  (@Nat.cast.{0} Real Real.instNatCast N) u)))\n                            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                              (MathlibNt.SieveTheory.suzukiContinuousUpperFactor s) eta))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt",
+    "partial": false,
+    "type": "\u2200 (H : MathlibNt.SieveTheory.SwitchingPrinciple.SuzukiLemma144KappaOne.Section13HatLayers)\n  (hH : MathlibNt.SieveTheory.SwitchingPrinciple.SuzukiLemma144KappaOne.Section13HatSourceContract H)\n  (S : BoundingSieve) {C K d \u0394 : Real}\n  (hall :\n    \u2200 (N : Nat),\n      @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N \u2192\n        MathlibNt.SieveTheory.Lemma144MovingDomainNatCeilAt S H C K d \u0394 N\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n  (D : Nat) (s : Real) (hD : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) D)\n  (hs : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) s)\n  (hsSigma :\n    @LE.le.{0} Real Real.instLE s\n      (MathlibNt.SieveTheory.SwitchingPrinciple.SuzukiLemma144KappaOne.sourceSigma\n        (@Nat.cast.{0} Real Real.instNatCast D) d))\n  (hz2 :\n    @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n      (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n        (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast D)\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) s))))\n  (hcut :\n    \u2200 (p : Nat),\n      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n          (Nat.primeFactors (BoundingSieve.prodPrimes S)) p \u2192\n        @LT.lt.{0} Nat instLTNat p\n          (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n            (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n              (@Nat.cast.{0} Real Real.instNatCast D)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) s)))),\n  @LE.le.{0} Real Real.instLE\n    (@BoundingSieve.mainSum S (MathlibNt.SieveTheory.LinearSieve.upperRosserWeight (BoundingSieve.prodPrimes S) D))\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (AnalyticNumberTheory.Sieve.sieveProductPrimeFactors S)\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        (MathlibNt.SieveTheory.suzukiContinuousUpperFactor s)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C (Real.exp (Real.sqrt K)))\n            (MathlibNt.SieveTheory.SwitchingPrinciple.SuzukiLemma144KappaOne.errorEnvelope H\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n                  (@Finset.card.{0} Nat (Nat.primeFactors (BoundingSieve.prodPrimes S))))\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n              (@Nat.cast.{0} Real Real.instNatCast D) d s))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (Real.log (@Nat.cast.{0} Real Real.instNatCast D)) (@Neg.neg.{0} Real Real.instNeg \u0394)))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "ImbalancedChen.exists_currentChen_model_plusDensity_rectangle_upper_threshold._proof_1_1",
+    "partial": false,
+    "type": "\u2200 (N1 N : Nat) (hN2 : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N),\n  Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N) \u2192 False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "ImbalancedChen.exists_currentChen_model_plusDensity_rectangle_upper_threshold._proof_1_2",
+    "partial": false,
+    "type": "\u2200 (N1 N : Nat) (u s : Real)\n  (h :\n    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n      (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n        (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (@Nat.cast.{0} Real Real.instNatCast\n            (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n              (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (@Nat.cast.{0} Real Real.instNatCast N)\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) s u))))\n          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) s)))),\n  Not\n      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n        (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n          (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (@Nat.cast.{0} Real Real.instNatCast\n              (@Nat.ceil.{0} Real Real.semiring Real.partialOrder\n                (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)\n                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                  (@Nat.cast.{0} Real Real.instNatCast N)\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) s u))))\n            (@HDiv.hDiv.{0, 0, 0} Real Real Real\n              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) s)))) \u2192\n    False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt._proof_1_1",
+    "partial": false,
+    "type": "\u2200 (S : BoundingSieve) (D : Nat) (s : Real),\n  Not\n      (@Eq.{1} Nat\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n            (@Finset.card.{0} Nat (Nat.primeFactors (BoundingSieve.prodPrimes S))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat\n          (@instHAdd.{0} Nat (@Distrib.toAdd.{0} Nat (@instDistribOfSemiring.{0} Nat Nat.instSemiring)))\n          (@HMul.hMul.{0, 0, 0} Nat Nat Nat\n            (@instHMul.{0} Nat (@Distrib.toMul.{0} Nat (@instDistribOfSemiring.{0} Nat Nat.instSemiring)))\n            (@OfNat.ofNat.{0} Nat (nat_lit 2)\n              (@instOfNatAtLeastTwo.{0} Nat (nat_lit 2)\n                (@AddMonoidWithOne.toNatCast.{0} Nat\n                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} Nat\n                    (@NonAssocSemiring.toAddCommMonoidWithOne.{0} Nat\n                      (@Semiring.toNonAssocSemiring.{0} Nat Nat.instSemiring))))\n                Odd._proof_1))\n            (@Finset.card.{0} Nat (Nat.primeFactors (BoundingSieve.prodPrimes S))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 1)\n            (@One.toOfNat1.{0} Nat\n              (@AddMonoidWithOne.toOne.{0} Nat\n                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} Nat\n                  (@NonAssocSemiring.toAddCommMonoidWithOne.{0} Nat\n                    (@Semiring.toNonAssocSemiring.{0} Nat Nat.instSemiring)))))))) \u2192\n    False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt._proof_1_2",
+    "partial": false,
+    "type": "\u2200 (S : BoundingSieve) (D : Nat) (s : Real),\n  Not\n      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)\n          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))\n            (@Finset.card.{0} Nat (Nat.primeFactors (BoundingSieve.prodPrimes S))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) \u2192\n    False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt._proof_1_4",
+    "partial": false,
+    "type": "\u2200 (S : BoundingSieve) (D : Nat) (s : Real)\n  (hD : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) D),\n  Not (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) D) \u2192 False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt._proof_1_5",
+    "partial": false,
+    "type": "\u2200 (S : BoundingSieve) (D : Nat) (s : Real)\n  (hD : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) D),\n  Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) D) \u2192 False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.CurrentChenRosserUpperRectangle",
+    "name": "_private.ImbalancedChen.CurrentChenRosserUpperRectangle.0.ImbalancedChen.currentChen_model_upper_at_natCeil_allDepth_one_lt._simp_1_3",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {p : \u03b1 \u2192 Prop} [inst : @DecidablePred.{u_1 + 1} \u03b1 p] {s : Finset.{u_1} \u03b1} {a : \u03b1},\n  @Eq.{1} Prop\n    (@Membership.mem.{u_1, u_1} \u03b1 (Finset.{u_1} \u03b1)\n      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} \u03b1) \u03b1 (@Finset.instSetLike.{u_1} \u03b1))\n      (@Finset.filter.{u_1} \u03b1 p inst s) a)\n    (And\n      (@Membership.mem.{u_1, u_1} \u03b1 (Finset.{u_1} \u03b1)\n        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} \u03b1) \u03b1 (@Finset.instSetLike.{u_1} \u03b1)) s a)\n      (p a))",
+    "unsafe": false
+  }
+]

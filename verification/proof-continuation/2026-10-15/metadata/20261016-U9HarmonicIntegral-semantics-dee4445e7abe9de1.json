@@ -1,0 +1,31 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T20:39:25.641133+00:00",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9HarmonicIntegral",
+  "source_sha256": "62b7ac7d605a9b57721b7ab0ed5163bedd45f44554138165c6e67617caea3716",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "reviewer": "lower_resume self-review, not independent validation",
+  "declaration_count": 3,
+  "complete_declaration_headers": [
+    "private theorem hasDerivAt_currentChenUpsilon9HarmonicPrimitive {x y : ℝ}\n    (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) (hgap : 0 < 1 - x - y) :\n    HasDerivAt (fun u : ℝ =>\n        (Real.log u - Real.log (1 - x - u)) / (x * (1 - x)))\n      (1 / (x * y * (1 - x - y))) y ",
+    "theorem currentChenUpsilon9Harmonic_inner_integral {x d : ℝ}\n    (hx : 0 < x) (hx1 : x < 1) (hd : 0 < d) (hdcap : d ≤ (1 - x) / 2) :\n    (∫ y in Ico d ((1 - x) / 2), 1 / (x * y * (1 - x - y))) =\n      Real.log ((1 - x - d) / d) / (x * (1 - x)) ",
+    "theorem currentChenUpsilon9HarmonicIntegral_eq_logIntegral :\n    currentChenUpsilon9HarmonicIntegral =\n      ∫ x in Ico (19 / 125 : ℝ) (59 / 250 : ℝ),\n        Real.log ((1 - x - 59 / 250) / (59 / 250)) / (x * (1 - x)) "
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "The primitive is explicitly (log(u)-log(1-x-u))/(x*(1-x)). The derivative follows from actual log derivative, the affine chain derivative -1 and a constant denominator. Its stated derivative is exactly the actual inner integrand 1/(x*y*(1-x-y)).",
+    "For actual general slice parameters x>0,x<1,d>0,d<=(1-x)/2, all y in the full closed interval satisfy y>0 and 1-x-y>0. The actual rational integrand is continuous there, paying IntervalIntegrable rather than assuming an FTC hypothesis.",
+    "Genuine interval FTC gives the inner integral, allowing the degenerate d=(1-x)/2 case. The equality of half-open Ico and Ioc integrals uses the standard atomless Lebesgue theorem, not an assumed endpoint deletion.",
+    "At the moving upper endpoint (1-x)/2 both positive log arguments coincide, so the primitive is exactly zero. At the lower endpoint d, log division with two positive arguments gives log((1-x-d)/d)/(x*(1-x)).",
+    "The final theorem rewrites the original two-dimensional J with the actual Slices Fubini theorem and applies the paid inner integral on every actual outer x in Ico(19/125,59/250). This preserves the actual rational endpoints and gives the literal one-dimensional logarithmic expression.",
+    "No direct Mathlib import is added; Log.Deriv and interval FTC already have positive source paths through the parent closure.",
+    "No caller derivative, integrability, Fubini, J equality, numeric enclosure, adopted constant or current hLower is a premise."
+  ],
+  "remaining": [
+    "No Lean elaboration, kernel replay or owned-object acceptance is claimed for this new leaf.",
+    "The actual rational identity in the derivative proof uses field_simp; any residual algebra or strict lint diagnostic will require an actual compiler response and a minimal independently rebound repair.",
+    "The Slices parent is a separate source candidate requiring its own review and runtime acceptance."
+  ]
+}

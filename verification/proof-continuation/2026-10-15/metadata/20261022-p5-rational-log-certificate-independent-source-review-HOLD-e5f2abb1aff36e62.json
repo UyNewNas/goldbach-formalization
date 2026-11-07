@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-p5-rational-log-certificate-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T22:14:33.6234224Z",
+  "reviewer": "/root/signed_precision_review_sol_high_oct22",
+  "status": "ACTUAL_RATIONAL_LOG_CERTIFICATE_COMPLETE_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNOWNED_KERNEL_UNVERIFIED_HOLD",
+  "verdict": "no_static_blocker",
+  "HOLD": true,
+  "scope": "Read all106LF, all explicit definitions/structure, the decidability instance and all3 complete theorems. Direct native source/API review only; inherited development cache is not a kernel or ownership certificate.",
+  "actual_source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Certificates/RationalLogCertificate.lean",
+    "sha256": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+    "bytes": 4217,
+    "lf_lines": 106
+  },
+  "imports": [
+    "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+    "Mathlib.Tactic"
+  ],
+  "counts": {
+    "explicit_definitions": 5,
+    "structures": 1,
+    "decidability_instances": 1,
+    "private_theorems": 2,
+    "public_theorems": 1,
+    "all_source_lf_lines": 106
+  },
+  "complete_written_definitions": [
+    {
+      "name": "logParameter",
+      "complete_written_definition": {
+        "first": 21,
+        "last": 21,
+        "literal_source": "def logParameter (q : ℚ) : ℚ := (q - 1) / (q + 1)\n",
+        "normalized_lf_utf8_sha256": "138c6aab35143bbf11837575c6927eb872d8080f6c2b56732a8c2942a87a0262"
+      },
+      "fully_read": true
+    },
+    {
+      "name": "logSeriesLower",
+      "complete_written_definition": {
+        "first": 24,
+        "last": 26,
+        "literal_source": "def logSeriesLower (q : ℚ) (n : ℕ) : ℚ :=\n  2 * ∑ i ∈ Finset.range n,\n    logParameter q ^ (2 * i + 1) / ((2 * i + 1 : ℕ) : ℚ)\n",
+        "normalized_lf_utf8_sha256": "858e651e2b471e8da8d52bbd26cbb4a01435f9527f5a41196a0ebd3945638db1"
+      },
+      "fully_read": true
+    },
+    {
+      "name": "logSeriesUpper",
+      "complete_written_definition": {
+        "first": 29,
+        "last": 31,
+        "literal_source": "def logSeriesUpper (q : ℚ) (n : ℕ) : ℚ :=\n  logSeriesLower q n +\n    2 * logParameter q ^ (2 * n + 1) / (1 - logParameter q ^ 2)\n",
+        "normalized_lf_utf8_sha256": "835e8aeca0d4c5e64e9cd21ae6a15ea9bd613a6da64b9e5e5548848effababe7"
+      },
+      "fully_read": true
+    },
+    {
+      "name": "RationalLogCertificate",
+      "complete_written_definition": {
+        "first": 34,
+        "last": 39,
+        "literal_source": "structure RationalLogCertificate where\n  argument : ℚ\n  terms : ℕ\n  lower : ℚ\n  upper : ℚ\n  deriving DecidableEq, Repr\n",
+        "normalized_lf_utf8_sha256": "46039d88feaa34673b111e53013bedbe01a8e8c373113009714195aad817ddc4"
+      },
+      "fully_read": true
+    },
+    {
+      "name": "RationalLogCertificate.Valid",
+      "complete_written_definition": {
+        "first": 41,
+        "last": 44,
+        "literal_source": "def RationalLogCertificate.Valid (c : RationalLogCertificate) : Prop :=\n  1 ≤ c.argument ∧\n    c.lower ≤ logSeriesLower c.argument c.terms ∧\n    logSeriesUpper c.argument c.terms ≤ c.upper\n",
+        "normalized_lf_utf8_sha256": "b21923d325058a0b4ba49da204170cd0995db855beff9993ec446587b71618f2"
+      },
+      "fully_read": true
+    },
+    {
+      "name": "RationalLogCertificate.check",
+      "complete_written_definition": {
+        "first": 51,
+        "last": 52,
+        "literal_source": "def RationalLogCertificate.check (c : RationalLogCertificate) : Bool :=\n  decide c.Valid\n",
+        "normalized_lf_utf8_sha256": "9db82f5104139d2cb015e3fb3f593ee7e15b02a91006af8fb5fd4f959e92b1ca"
+      },
+      "fully_read": true
+    }
+  ],
+  "complete_written_types_and_proofs": [
+    {
+      "name": "Decidable_RationalLogCertificate_Valid_instance",
+      "first": 46,
+      "type_last": 46,
+      "last": 48,
+      "complete_written_type": "instance (c : RationalLogCertificate) : Decidable c.Valid := by\n",
+      "complete_written_proof_body": "  unfold RationalLogCertificate.Valid\n  infer_instance\n",
+      "type_normalized_lf_utf8_sha256": "78871f6fb7a8409e8c70250680fba81fc6ec24ff7aff0acabba1cd308b623849",
+      "proof_body_normalized_lf_utf8_sha256": "c49afd621520bc1ea5491d2df234543beb50221b373198d8d725d2e7a0a101e3",
+      "full_declaration_normalized_lf_utf8_sha256": "f72e626a8caa81d80131714877eb90363811b853beb019e41b1fdba99c7817ca",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "name": "private logParameter_bounds",
+      "first": 54,
+      "type_last": 55,
+      "last": 60,
+      "complete_written_type": "private theorem logParameter_bounds {q : ℚ} (hq : 1 ≤ q) :\n    0 ≤ logParameter q ∧ logParameter q < 1 := by\n",
+      "complete_written_proof_body": "  have hden : 0 < q + 1 := by linarith\n  constructor\n  · exact div_nonneg (sub_nonneg.mpr hq) hden.le\n  · change (q - 1) / (q + 1) < 1\n    exact (div_lt_one hden).mpr (by linarith)\n",
+      "type_normalized_lf_utf8_sha256": "8639da7d7335f921d8875ec740a756c8430eba4509d6f655208a464832781e6d",
+      "proof_body_normalized_lf_utf8_sha256": "e32822fa5e9f349763223d37aafd785cd4ec60de8f85fd8dc788bf7d14680538",
+      "full_declaration_normalized_lf_utf8_sha256": "149155a4101419f495aee39ecff721e27420a27873484b69a5132033b2b80ad1",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "name": "private logParameter_identity",
+      "first": 62,
+      "type_last": 63,
+      "last": 67,
+      "complete_written_type": "private theorem logParameter_identity {q : ℚ} (hq : 1 ≤ q) :\n    (1 + logParameter q) / (1 - logParameter q) = q := by\n",
+      "complete_written_proof_body": "  have hden : q + 1 ≠ 0 := ne_of_gt (by linarith : 0 < q + 1)\n  unfold logParameter\n  field_simp [hden]\n  ring\n",
+      "type_normalized_lf_utf8_sha256": "5801023bce245442597f92b48e90f5d2db6ffd0023d5831b146efed1b25dc861",
+      "proof_body_normalized_lf_utf8_sha256": "ec27320f883a4ddbb4f99c17328e9e433ab52ddbdd14b021e3b7224ce922f30b",
+      "full_declaration_normalized_lf_utf8_sha256": "0f6e29547544466d3a245f365ada8875e79d0a803b5e437f7095cdeda3d2186a",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "name": "RationalLogCertificate.check_sound",
+      "first": 72,
+      "type_last": 75,
+      "last": 104,
+      "complete_written_type": "theorem RationalLogCertificate.check_sound (c : RationalLogCertificate)\n    (hcheck : c.check = true) :\n    (c.lower : ℝ) ≤ Real.log (c.argument : ℝ) ∧\n      Real.log (c.argument : ℝ) ≤ (c.upper : ℝ) := by\n",
+      "complete_written_proof_body": "  have hv : c.Valid := of_decide_eq_true hcheck\n  rcases hv with ⟨hq, hlo, hhi⟩\n  obtain ⟨hx0, hx1⟩ := logParameter_bounds hq\n  have hx0R : (0 : ℝ) ≤ (logParameter c.argument : ℝ) := by exact_mod_cast hx0\n  have hx1R : (logParameter c.argument : ℝ) < (1 : ℝ) := by exact_mod_cast hx1\n  have heq : (1 + (logParameter c.argument : ℝ)) /\n      (1 - (logParameter c.argument : ℝ)) = (c.argument : ℝ) := by\n    exact_mod_cast logParameter_identity hq\n  have hl := Real.sum_range_le_log_div hx0R hx1R c.terms\n  have hu := Real.log_div_le_sum_range_add hx0R hx1R c.terms\n  rw [heq] at hl hu\n  have hlCast : (logSeriesLower c.argument c.terms : ℝ) =\n      2 * ∑ i ∈ Finset.range c.terms,\n        (logParameter c.argument : ℝ) ^ (2 * i + 1) /\n          (2 * (i : ℝ) + 1) := by\n    simp [logSeriesLower]\n  have huCast : (logSeriesUpper c.argument c.terms : ℝ) =\n      (logSeriesLower c.argument c.terms : ℝ) +\n        2 * (logParameter c.argument : ℝ) ^ (2 * c.terms + 1) /\n          (1 - (logParameter c.argument : ℝ) ^ 2) := by\n    simp [logSeriesUpper]\n  have hloR : (c.lower : ℝ) ≤ (logSeriesLower c.argument c.terms : ℝ) := by\n    exact_mod_cast hlo\n  have hhiR : (logSeriesUpper c.argument c.terms : ℝ) ≤ (c.upper : ℝ) := by\n    exact_mod_cast hhi\n  rw [hlCast] at hloR\n  rw [huCast, hlCast] at hhiR\n  simp only [mul_div_assoc] at hhiR\n  constructor <;> linarith\n",
+      "type_normalized_lf_utf8_sha256": "74dfa792bf90293a3acf245b3d50e3df5bd011a489b02d7a014e081faf566c1a",
+      "proof_body_normalized_lf_utf8_sha256": "edd0afd3c21151ff5c3788b4565ede3737ea7b34433be5a893ba656a4ad8941b",
+      "full_declaration_normalized_lf_utf8_sha256": "9db651ee380f0c8e9830c66057df5b40d5a84b075521789fcf8952e53a6e988e",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    }
+  ],
+  "necessary_direct_native_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean",
+        "sha256": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+        "bytes": 18831,
+        "lf_lines": 424
+      },
+      "role": "Actual unsharpened odd-series remainder and the two directly invoked logarithm bounds",
+      "spans": [
+        {
+          "first": 288,
+          "last": 290,
+          "literal_source": "lemma sum_range_sub_log_div_le {x : ℝ} (h : |x| < 1) (n : ℕ) :\n    |1 / 2 * log ((1 + x) / (1 - x)) - ∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1)| ≤\n      |x| ^ (2 * n + 1) / (1 - x ^ 2) := by\n",
+          "normalized_lf_utf8_sha256": "76bc142aa23a8a8a83d98fe8780fd5ac6decc9a4dd2ad2cfcea0d9de5f779d70"
+        },
+        {
+          "first": 320,
+          "last": 321,
+          "literal_source": "lemma sum_range_le_log_div {x : ℝ} (h₀ : 0 ≤ x) (h : x < 1) (n : ℕ) :\n    ∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1) ≤ 1 / 2 * log ((1 + x) / (1 - x)) := by\n",
+          "normalized_lf_utf8_sha256": "078bc73e4475f7d686294c4e71571a4f4a4c8c4fc447bfa52a74ef928459abb0"
+        },
+        {
+          "first": 342,
+          "last": 347,
+          "literal_source": "lemma log_div_le_sum_range_add {x : ℝ} (h₀ : 0 ≤ x) (h : x < 1) (n : ℕ) :\n    1 / 2 * log ((1 + x) / (1 - x)) ≤\n      (∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1)) + x ^ (2 * n + 1) / (1 - x ^ 2) := by\n  have h₁ := sum_range_sub_log_div_le (by rwa [abs_of_nonneg h₀]) n\n  rwa [abs_of_nonneg (sub_nonneg_of_le (sum_range_le_log_div h₀ h n)), abs_of_nonneg h₀,\n    sub_le_iff_le_add'] at h₁\n",
+          "normalized_lf_utf8_sha256": "3c6f118351f768d03556c514e7cfca50bb4c539d3b81be75a94a327611a6f698"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/CharZero.lean",
+        "sha256": "39c30fd995f1c9f0b8e74b8d494ee14295763c6d290c46b81af97a15d6bc3764",
+        "bytes": 4584,
+        "lf_lines": 121
+      },
+      "role": "Exact rational-to-real addition,subtraction,multiplication and totalized division",
+      "spans": [
+        {
+          "first": 42,
+          "last": 49,
+          "literal_source": "@[simp, norm_cast] lemma cast_add (p q : ℚ) : ↑(p + q) = (p + q : α) :=\n  cast_add_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')\n\n@[simp, norm_cast] lemma cast_sub (p q : ℚ) : ↑(p - q) = (p - q : α) :=\n  cast_sub_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')\n\n@[simp, norm_cast] lemma cast_mul (p q : ℚ) : ↑(p * q) = (p * q : α) :=\n  cast_mul_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')\n",
+          "normalized_lf_utf8_sha256": "11a5f6d23bee57e9b976b655791d6924b36c32124b6dae8256a35d523e1e00e7"
+        },
+        {
+          "first": 62,
+          "last": 63,
+          "literal_source": "@[simp, norm_cast] lemma cast_inv (p : ℚ) : ↑(p⁻¹) = (p⁻¹ : α) := map_inv₀ (castHom α) _\n@[simp, norm_cast] lemma cast_div (p q : ℚ) : ↑(p / q) = (p / q : α) := map_div₀ (castHom α) ..\n",
+          "normalized_lf_utf8_sha256": "b80f960cdac68cd3c6c093f866f670c4de36c391552f354512ff7d37aa3dba78"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/Lemmas.lean",
+        "sha256": "58f8f967f66d5c1ed48a5231b7112247bb12ef2af4a79343a5db0300268770f4",
+        "bytes": 3480,
+        "lf_lines": 93
+      },
+      "role": "Natural powers commute with rational cast",
+      "spans": [
+        {
+          "first": 28,
+          "last": 32,
+          "literal_source": "-- Note that this is more general than `(Rat.castHom α).map_pow`.\n@[simp, norm_cast]\nlemma cast_pow (p : ℚ) (n : ℕ) : ↑(p ^ n) = (p ^ n : α) := by\n  rw [cast_def, cast_def, den_pow, num_pow, Nat.cast_pow, Int.cast_pow, div_eq_mul_inv, ← inv_pow,\n    ← (Int.cast_commute _ _).mul_pow, ← div_eq_mul_inv]\n",
+          "normalized_lf_utf8_sha256": "4be9dd024ebdc7fc2911c1599270e345424b303532d58999f40ad67adcfb59d3"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/Order.lean",
+        "sha256": "2df1dcb5ad5bcac62adc9def0ffe5f8fc4da13f1c8f1dc89c0ff84bc41253cb8",
+        "bytes": 10804,
+        "lf_lines": 312
+      },
+      "role": "Rational inequalities and strict inequalities preserved by ordered real cast",
+      "spans": [
+        {
+          "first": 48,
+          "last": 50,
+          "literal_source": "@[simp, norm_cast] lemma cast_le : (p : K) ≤ q ↔ p ≤ q := castOrderEmbedding.le_iff_le\n\n@[simp, norm_cast] lemma cast_lt : (p : K) < q ↔ p < q := cast_strictMono.lt_iff_lt\n",
+          "normalized_lf_utf8_sha256": "197dc412f4da3c5a58776448c5f82057da5772100624246c6854efb8f726f93b"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/BigOperators.lean",
+        "sha256": "4024ae991e95d72610ab8ee928d61d16afafcb6433468bbba306b433377bac33",
+        "bytes": 1427,
+        "lf_lines": 56
+      },
+      "role": "Finite rational sum cast, including empty range",
+      "spans": [
+        {
+          "first": 32,
+          "last": 34,
+          "literal_source": "@[simp, norm_cast]\ntheorem cast_sum (s : Finset ι) (f : ι → ℚ) : ∑ i ∈ s, f i = ∑ i ∈ s, (f i : α) :=\n  map_sum (Rat.castHom α) _ s\n",
+          "normalized_lf_utf8_sha256": "eec84d189baaba56992537200866c6b449bd37ecc4df305a060dd638e652d0dc"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean/Init/Prelude.lean",
+        "sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+        "bytes": 235820,
+        "lf_lines": 6016
+      },
+      "role": "of_decide_eq_true converts an exact Bool check proof to its decidable proposition",
+      "spans": [
+        {
+          "first": 1030,
+          "last": 1033,
+          "literal_source": "theorem of_decide_eq_true [inst : Decidable p] : Eq (decide p) true → p := fun h =>\n  match (generalizing := false) inst with\n  | isTrue  h₁ => h₁\n  | isFalse h₁ => absurd h (ne_true_of_eq_false (decide_eq_false h₁))\n",
+          "normalized_lf_utf8_sha256": "2edf8499936c741c072d8407092ea1037d93cdf93822630f4beac9c3761d58c4"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Order/Field/Basic.lean",
+        "sha256": "1d6672beae57890d355067ff20de13b715bece8e87e0d088b7e959e773025f57",
+        "bytes": 34578,
+        "lf_lines": 812
+      },
+      "role": "Exact positive-denominator div_lt_one used in parameter bound",
+      "spans": [
+        {
+          "first": 47,
+          "last": 47,
+          "literal_source": "theorem div_lt_one (hb : 0 < b) : a / b < 1 ↔ a < b := by rw [div_lt_iff₀ hb, one_mul]\n",
+          "normalized_lf_utf8_sha256": "a66d61cf68e96cd38c221b7582381656a065767f7f293610c5aa59e1d34bbd5c"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Group/Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "role": "mul_div_assoc aligns2*xpower/denominator with2*(xpower/denominator) before linarith",
+      "spans": [
+        {
+          "first": 1118,
+          "last": 1120,
+          "literal_source": "@[to_additive]\ntheorem mul_div_assoc (a b c : G) : a * b / c = a * (b / c) := by\n  rw [div_eq_mul_inv, div_eq_mul_inv, mul_assoc]\n",
+          "normalized_lf_utf8_sha256": "86ddc60e07fe04a14361da557eccab98423ebbc16aa85b16c5422fe9251d231a"
+        }
+      ],
+      "actual_native_source_read": true,
+      "kernel_acceptance_inferred": false
+    }
+  ],
+  "ownership_evidence": {
+    "frontier_checkpoint": {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-p5-paired454c-actualONE-proper184-frontier-HOLD.json",
+      "sha256": "88912a48c170d56de8efabcfaed02f3c29700f4aef0a885d23fd11714de5cbc9",
+      "bytes": 4691,
+      "lf_lines": 106
+    },
+    "reported_classification": "UNOWNED_INHERITED_DEVELOPMENT_CACHE",
+    "reported_warnings_as_errors": false,
+    "reported_verification_level": "INHERITED_DEVELOPMENT_CACHE_ONLY",
+    "reported_final_acceptance_complete": false,
+    "owned_or_kernel_acceptance_inferred": false,
+    "current_source_hash_matches_frontier": true,
+    "meaning": "The pre-existing actual source is present, but P5 reports only UNOWNED_INHERITED_DEVELOPMENT_CACHE. This source review neither promotes that cache nor claims a fresh strict build."
+  },
+  "independent_soundness_audit": {
+    "exact_finite_definitions": "argument,lower,upper are rational numbers;terms is Nat. logParameter=(q-1)/(q+1), lower=2*sum_{i<n}x^(2i+1)/(2i+1), upper=lower+2*x^(2n+1)/(1-x^2). No float,Real.log value,producer output,external oracle,native_decide,or opaque numerical assertion occurs in those definitions.",
+    "validity_and_check": "Valid requires1<=q, stored lower<=the exact rational finite lower, and exact rational finite upper<=stored upper. The local Decidable instance follows rational order and finite expressions. check=decide Valid; of_decide_eq_true unfolds check definitionally and recovers those exact premises. Soundness is conditional on a proof of check=true, not on trusting a producer.",
+    "argument_and_parameter_domains": "q>=1 implies q>0 and q+1>=2>0. Therefore x=(q-1)/(q+1) satisfies0<=x<1. Strict x>0 is unnecessary and would wrongly exclude q=1; both actual Real.sum_range_le_log_div and Real.log_div_le_sum_range_add require exactly0<=x and x<1.",
+    "denominator_signs": "For every i,n in Nat,2*i+1 and2*n+1 are positive. From0<=x<1 follow1-x>0,1+x>0,x^2<1,and1-x^2>0. Thus the logarithm ratio is positive and the tail denominator is positive. The source uses the direct native bounds with precisely their required parameter hypotheses; it does not need to add ad hoc positivity premises to the public theorem.",
+    "parameter_identity": "With q+1!=0 from q>=1, the private identity proves(1+x)/(1-x)=q by exact rational algebra. Its rational equality casts to the identical real equality, and rw[heq] replaces the native logarithm argument by the supplied rational q.",
+    "native_lower": "The actual API is S_n<=1/2*Real.log((1+x)/(1-x)). Combining this with lower<=2*S_n yields the desired stored lower<=Real.log q. The factor2 is accounted for only by linear arithmetic, with no extra series assumption.",
+    "native_upper": "The actual API is1/2*Real.log((1+x)/(1-x))<=S_n+x^(2n+1)/(1-x^2). The rational upper uses exactly twice this unsharpened tail. No omitted(2n+1) divisor or improved external tail is smuggled into the certificate.",
+    "casts_and_final_linear_step": "Rat.cast_sum,cast_pow,cast_div,cast_add/sub/mul and ordered casts give hlCast,huCast,hloR,hhiR. Natural odd denominators become2*(i:Real)+1. mul_div_assoc aligns2*xpower/denom with2*(xpower/denom); final linarith then combines the two half-log native inequalities with the exact twice-series endpoint inequalities.",
+    "no_log_oracle": "Real.log appears only in the semantic theorem conclusion and native Mathlib bounds, never in Valid or check. Stored endpoints can be arbitrary producer suggestions; they become useful only through proved exact rational comparisons. deriving Repr/DecidableEq supplies representations/decisions, not a real-number oracle."
+  },
+  "edge_cases": {
+    "q_one": "x=0, both series endpoints are0 for every n, and log1=0; both direct native APIs include this boundary.",
+    "terms_zero": "Empty lower sum is0, upper tail is2*x/(1-x^2); native APIs quantify all Nat n including0.",
+    "q_nonpositive": "Rejected by Valid since1<=q is required.",
+    "x_close_to_one": "Allowed only strictly below1; denominator remains positive and the complete native remainder is retained.",
+    "stored_endpoints": "No assumption that they are accurate real-log outputs; the exact checker inequalities are the sole certificate obligations."
+  },
+  "proof_obstructions": [],
+  "minimal_source_proposal": null,
+  "minimum_repair": "NONE_IDENTIFIED_STATICALLY",
+  "validation_limits": {
+    "all106_source_lines_read": true,
+    "all_explicit_types_definitions_and_proofs_read": true,
+    "native_API_types_match_exact_applications": true,
+    "source_no_sorry_axiom_native_decide": true,
+    "compiler": "NOT_RUN",
+    "Runtime": "NOT_RUN",
+    "proper_classifier_census_export": "NOT_RUN",
+    "elaboration": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "warning_free_claim": false,
+    "kernel": "NOT_CHECKED",
+    "ownership": "NOT_GRANTED",
+    "source_comment_kernel_checked_title": "Not treated as evidence; the actual module also states uncompiled candidate."
+  },
+  "claim_boundaries": {
+    "rational_log_check_soundness": "SOURCE_NO_STATIC_BLOCKER",
+    "fresh_strict_module_verification": "PENDING_ROOT_QUEUE",
+    "owned_acceptance": "NOT_GRANTED",
+    "P5_integral_and_all_row_checks": "NOT_CLOSED_BY_THIS_REVIEW",
+    "analytic_E1_M2_spectrum_main": "OPEN"
+  },
+  "quota": {
+    "fresh_primary_used_percent": 49,
+    "fresh_primary_remaining_percent": 51,
+    "secondary": null,
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "continued_only_above_stop": true
+  },
+  "actions": {
+    "written_files": [
+      "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-p5-rational-log-certificate-independent-source-review-HOLD.json"
+    ],
+    "actual_source_edits": 0,
+    "prior_artifact_edits": 0,
+    "new_agents": 0,
+    "Lean_proof_Runtime_proper_classifier_census_export_Git_Site_calls": 0,
+    "allowed_operations": "Only read existing source/evidence, hash direct native API spans, and write this compact independent review checkpoint."
+  },
+  "stop_condition": "P5 RationalLogCertificate bounded source review complete; HOLD and return to root. No compilation or autonomous continuation."
+}

@@ -1,0 +1,652 @@
+{
+  "status": "ROOT_COMPLETE347_SOURCE24_TRUE_DECLARATIONS14_PARENT9_NATIVE_API_REVIEW_NO_MATH_BLOCKER_FUTURE_FIRST_GATE_NOT_RUN",
+  "created_utc": "2026-10-21T01:43:15.636713+00:00",
+  "independent_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-frontier-tuple-c42a94-independent-complete-source-api-first-gate-review.json",
+    "sha256": "6b1fc0b6ff1bf71cf8b75e9e2fd7dba93b5a4d2c39ee017b9311e2e2b35e81cb"
+  },
+  "source": {
+    "path": "ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+    "sha256": "c42a94ac4802e8114667a4f3282e316746fd9b8beef9dce363440aee33f74452",
+    "bytes": 18370,
+    "lines": 347
+  },
+  "root_actual_all_source_untruncated_read_ranges": [
+    [
+      1,
+      140
+    ],
+    [
+      141,
+      270
+    ],
+    [
+      271,
+      347
+    ]
+  ],
+  "all24_actual_true_declarations_byte_char_body_header_checked": [
+    {
+      "name": "firstExitFrontierCandidates",
+      "kind": "def",
+      "private": false,
+      "start_line": 24,
+      "end_line": 29,
+      "char_range": [
+        854,
+        1195
+      ],
+      "utf8_byte_range": [
+        854,
+        1210
+      ],
+      "true_complete_source_header": "def firstExitFrontierCandidates {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    List (FirstExitDepthState α)",
+      "definition_body_or_complete_proof_after_colon_equals": "\n  (firstExitDepthFrontier k parent h [] true 1 carrier).flatMap fun state =>\n    firstExitNextSelectionCandidates h state.selectedPrefix state.positive state.mass\n      state.remaining",
+      "complete_literal_declaration": "def firstExitFrontierCandidates {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    List (FirstExitDepthState α) :=\n  (firstExitDepthFrontier k parent h [] true 1 carrier).flatMap fun state =>\n    firstExitNextSelectionCandidates h state.selectedPrefix state.positive state.mass\n      state.remaining",
+      "complete_declaration_sha256": "62e4a91b70219d3aa470779fe65ffd57d63d98ef2ea570857017c16ae5b78c71",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Literal rank-k frontier flatMap of actual next-selection candidates, starting pre=[],positive=true,mass1. This is before candidate own tests; no support surrogate or density hypothesis."
+    },
+    {
+      "name": "firstExitParentChoices",
+      "kind": "def",
+      "private": false,
+      "start_line": 32,
+      "end_line": 36,
+      "char_range": [
+        1277,
+        1560
+      ],
+      "utf8_byte_range": [
+        1292,
+        1586
+      ],
+      "true_complete_source_header": "def firstExitParentChoices {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre : List α) (positive : Bool)\n    (carrier : List α) : List (List α)",
+      "definition_body_or_complete_proof_after_colon_equals": "\n  (carrier.sublistsLen (k + 1)).filter fun chosen =>\n    decide (FirstExitValidSelection parent pre positive chosen.dropLast)",
+      "complete_literal_declaration": "def firstExitParentChoices {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre : List α) (positive : Bool)\n    (carrier : List α) : List (List α) :=\n  (carrier.sublistsLen (k + 1)).filter fun chosen =>\n    decide (FirstExitValidSelection parent pre positive chosen.dropLast)",
+      "complete_declaration_sha256": "ae54592adebcd6f1e5d68bfeee9bb38a1052572ddd4b1d901485837270af02bf",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Original carrier.sublistsLen(k+1) list, retaining multiplicities, filtered solely by validity of chosen.dropLast. Processing order chosen is distinct from stored reversed prefix. At k0 dropLast empty gives no policy test."
+    },
+    {
+      "name": "nextCandidates_reverse_history",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 38,
+      "end_line": 45,
+      "char_range": [
+        1562,
+        1973
+      ],
+      "utf8_byte_range": [
+        1588,
+        2008
+      ],
+      "true_complete_source_header": "private theorem nextCandidates_reverse_history {α : Type*} (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (firstExitNextSelectionCandidates h pre positive mass carrier).map\n        (fun state => state.selectedPrefix.reverse) =\n      carrier.map (fun p => pre.reverse ++ [p])",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  induction carrier with\n  | nil => rfl\n  | cons p ps ih => simp [firstExitNextSelectionCandidates, ih]",
+      "complete_literal_declaration": "private theorem nextCandidates_reverse_history {α : Type*} (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (firstExitNextSelectionCandidates h pre positive mass carrier).map\n        (fun state => state.selectedPrefix.reverse) =\n      carrier.map (fun p => pre.reverse ++ [p]) := by\n  induction carrier with\n  | nil => rfl\n  | cons p ps ih => simp [firstExitNextSelectionCandidates, ih]",
+      "complete_declaration_sha256": "30aa5fed47d2e532fd0cc94b7fa3514c3d3ccc7872c0814a11a5c7accd770a8b",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Induction on exact candidate recursion: each candidate has selectedPrefix=p::pre, so reverse is pre.reverse++[p]. Remaining labels and mass irrelevant to this exact history map, not discarded as assumptions."
+    },
+    {
+      "name": "parentChoices_zero",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 47,
+      "end_line": 51,
+      "char_range": [
+        1975,
+        2319
+      ],
+      "utf8_byte_range": [
+        2010,
+        2361
+      ],
+      "true_complete_source_header": "private theorem parentChoices_zero {α : Type*}\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) :\n    firstExitParentChoices 0 parent pre positive carrier = carrier.reverse.map (fun p => [p])",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simp [firstExitParentChoices, List.sublistsLen_one, List.filter_map,\n    Function.comp_def, FirstExitValidSelection]",
+      "complete_literal_declaration": "private theorem parentChoices_zero {α : Type*}\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) :\n    firstExitParentChoices 0 parent pre positive carrier = carrier.reverse.map (fun p => [p]) := by\n  simp [firstExitParentChoices, List.sublistsLen_one, List.filter_map,\n    Function.comp_def, FirstExitValidSelection]",
+      "complete_declaration_sha256": "a9a2b672bf34a69a2c5dcd22feb9189d6b4d0c33b1bf081cdc224fd64656c9b5",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Native sublistsLen1 is carrier.reverse.map singleton, not carrier.map. Filter is identically true since singleton.dropLast empty. Correct reversed enumeration needed for base-case Perm."
+    },
+    {
+      "name": "parentChoices_cons",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 53,
+      "end_line": 86,
+      "char_range": [
+        2321,
+        3886
+      ],
+      "utf8_byte_range": [
+        2363,
+        3945
+      ],
+      "true_complete_source_header": "private theorem parentChoices_cons {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) (p : α) :\n    firstExitParentChoices (k + 1) parent pre positive (p :: carrier) =\n      firstExitParentChoices (k + 1) parent pre positive carrier ++\n        if parent (!positive) (p :: pre) = true then\n          (firstExitParentChoices k parent (p :: pre) (!positive) carrier).map (List.cons p)\n        else []",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  unfold firstExitParentChoices\n  rw [List.sublistsLen_succ_cons, List.filter_append]\n  congr 1\n  have hfilter (xs : List (List α)) (hne : ∀ x ∈ xs, x ≠ []) :\n      (xs.map (List.cons p)).filter (fun x =>\n          decide (FirstExitValidSelection parent pre positive x.dropLast)) =\n        if parent (!positive) (p :: pre) = true then\n          (xs.filter (fun x => decide\n            (FirstExitValidSelection parent (p :: pre) (!positive) x.dropLast))).map (List.cons p)\n        else [] := by\n    induction xs with\n    | nil => simp\n    | cons x xs ih =>\n        have hx := hne x (by simp)\n        have hxs := ih (fun y hy => hne y (by simp [hy]))\n        cases x with\n        | nil => exact (hx rfl).elim\n        | cons q qs =>\n            by_cases hp : parent (!positive) (p :: pre) = true <;>\n              by_cases hv : FirstExitValidSelection parent (p :: pre) (!positive)\n                (q :: qs).dropLast <;>\n              simp [List.dropLast_cons_cons,\n                FirstExitValidSelection, hp, hxs, hv]\n  apply hfilter\n  intro x hx heq\n  have hlen := List.length_of_sublistsLen hx\n  simp [heq] at hlen",
+      "complete_literal_declaration": "private theorem parentChoices_cons {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) (p : α) :\n    firstExitParentChoices (k + 1) parent pre positive (p :: carrier) =\n      firstExitParentChoices (k + 1) parent pre positive carrier ++\n        if parent (!positive) (p :: pre) = true then\n          (firstExitParentChoices k parent (p :: pre) (!positive) carrier).map (List.cons p)\n        else [] := by\n  unfold firstExitParentChoices\n  rw [List.sublistsLen_succ_cons, List.filter_append]\n  congr 1\n  have hfilter (xs : List (List α)) (hne : ∀ x ∈ xs, x ≠ []) :\n      (xs.map (List.cons p)).filter (fun x =>\n          decide (FirstExitValidSelection parent pre positive x.dropLast)) =\n        if parent (!positive) (p :: pre) = true then\n          (xs.filter (fun x => decide\n            (FirstExitValidSelection parent (p :: pre) (!positive) x.dropLast))).map (List.cons p)\n        else [] := by\n    induction xs with\n    | nil => simp\n    | cons x xs ih =>\n        have hx := hne x (by simp)\n        have hxs := ih (fun y hy => hne y (by simp [hy]))\n        cases x with\n        | nil => exact (hx rfl).elim\n        | cons q qs =>\n            by_cases hp : parent (!positive) (p :: pre) = true <;>\n              by_cases hv : FirstExitValidSelection parent (p :: pre) (!positive)\n                (q :: qs).dropLast <;>\n              simp [List.dropLast_cons_cons,\n                FirstExitValidSelection, hp, hxs, hv]\n  apply hfilter\n  intro x hx heq\n  have hlen := List.length_of_sublistsLen hx\n  simp [heq] at hlen",
+      "complete_declaration_sha256": "7c3edeae428c6ec72d8ef501adb46aa86e36480a25fd3264679a33efe9251175",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "For output lengthk+2, sublistsLen splits skip p then select p. Selected tail is nonempty lengthk+1; dropLast(p::x)=p::dropLast(x), so validSelection exactly first parent(!positive)(p::pre) and recursive proper-prefix validity. Local hfilter induction handles both Boolean cases; no last-candidate gate added."
+    },
+    {
+      "name": "firstExitDepthFrontier_candidates_history_perm",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 90,
+      "end_line": 121,
+      "char_range": [
+        4027,
+        6020
+      ],
+      "utf8_byte_range": [
+        4086,
+        6100
+      ],
+      "true_complete_source_header": "theorem firstExitDepthFrontier_candidates_history_perm\n    {α : Type*} (r : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (((firstExitDepthFrontier (pre.length + r) parent h pre positive mass carrier).flatMap\n      (fun state => firstExitNextSelectionCandidates h state.selectedPrefix state.positive\n        state.mass state.remaining)).map (fun state => state.selectedPrefix.reverse)).Perm\n      ((firstExitParentChoices r parent pre positive carrier).map\n        (fun chosen => pre.reverse ++ chosen))",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  induction carrier generalizing r pre positive mass with\n  | nil => cases r <;> simp [firstExitDepthFrontier, firstExitNextSelectionCandidates,\n      firstExitParentChoices]\n  | cons p ps ih =>\n      cases r with\n      | zero =>\n          rw [Nat.add_zero, firstExitDepthFrontier_of_rank_le_length _ _ _ _ _ _ _ le_rfl]\n          simp only [List.flatMap_singleton, nextCandidates_reverse_history, parentChoices_zero,\n            List.map_map, Function.comp_def, List.reverse_cons]\n          simpa only [List.reverse_cons] using (List.reverse_perm (p :: ps)).symm.map\n            (fun p => pre.reverse ++ [p])\n      | succ r =>\n          have hk : ¬ pre.length + (r + 1) ≤ pre.length := by omega\n          rw [firstExitDepthFrontier, if_neg hk, parentChoices_cons,\n            List.flatMap_append, List.map_append, List.map_append]\n          by_cases hp : parent (!positive) (p :: pre) = true\n          · rw [if_pos hp, if_pos hp]\n            apply List.Perm.append (ih (r + 1) pre positive mass)\n            have hh := ih r (p :: pre) (!positive) (mass * h p)\n            simpa only [List.length_cons, List.reverse_cons, List.map_map,\n              Function.comp_def, List.append_assoc, List.singleton_append,\n              show pre.length + 1 + r = pre.length + (r + 1) by omega] using hh\n          · simp only [if_neg hp, List.flatMap_nil, List.map_nil, List.append_nil]\n            exact ih (r + 1) pre positive mass",
+      "complete_literal_declaration": "theorem firstExitDepthFrontier_candidates_history_perm\n    {α : Type*} (r : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (((firstExitDepthFrontier (pre.length + r) parent h pre positive mass carrier).flatMap\n      (fun state => firstExitNextSelectionCandidates h state.selectedPrefix state.positive\n        state.mass state.remaining)).map (fun state => state.selectedPrefix.reverse)).Perm\n      ((firstExitParentChoices r parent pre positive carrier).map\n        (fun chosen => pre.reverse ++ chosen)) := by\n  induction carrier generalizing r pre positive mass with\n  | nil => cases r <;> simp [firstExitDepthFrontier, firstExitNextSelectionCandidates,\n      firstExitParentChoices]\n  | cons p ps ih =>\n      cases r with\n      | zero =>\n          rw [Nat.add_zero, firstExitDepthFrontier_of_rank_le_length _ _ _ _ _ _ _ le_rfl]\n          simp only [List.flatMap_singleton, nextCandidates_reverse_history, parentChoices_zero,\n            List.map_map, Function.comp_def, List.reverse_cons]\n          simpa only [List.reverse_cons] using (List.reverse_perm (p :: ps)).symm.map\n            (fun p => pre.reverse ++ [p])\n      | succ r =>\n          have hk : ¬ pre.length + (r + 1) ≤ pre.length := by omega\n          rw [firstExitDepthFrontier, if_neg hk, parentChoices_cons,\n            List.flatMap_append, List.map_append, List.map_append]\n          by_cases hp : parent (!positive) (p :: pre) = true\n          · rw [if_pos hp, if_pos hp]\n            apply List.Perm.append (ih (r + 1) pre positive mass)\n            have hh := ih r (p :: pre) (!positive) (mass * h p)\n            simpa only [List.length_cons, List.reverse_cons, List.map_map,\n              Function.comp_def, List.append_assoc, List.singleton_append,\n              show pre.length + 1 + r = pre.length + (r + 1) by omega] using hh\n          · simp only [if_neg hp, List.flatMap_nil, List.map_nil, List.append_nil]\n            exact ih (r + 1) pre positive mass",
+      "complete_declaration_sha256": "01b19d464d61e1433e420937bca1f739a32de800d13eb47dac5f1dee041276d7",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Induction over carrier, generalizing r,pre,positive,mass. Empty and r0 cases stop exactly at rankpre.length; next candidates enumerate remaining carrier while sublistsLen1 reverses order, handled by reverse_perm. Successor skip/select branches use identical original parent test, actual mass*h(p), parity flip, length arithmetic and reversed-prefix append. Thus full list multiplicities preserved for arbitrary carrier, even repeats."
+    },
+    {
+      "name": "firstExitFrontierCandidates_history_perm",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 123,
+      "end_line": 129,
+      "char_range": [
+        6022,
+        6463
+      ],
+      "utf8_byte_range": [
+        6102,
+        6557
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_history_perm {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n        (firstExitParentChoices k parent [] true carrier)",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simpa [firstExitFrontierCandidates] using\n      firstExitDepthFrontier_candidates_history_perm k parent h [] carrier true 1",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_history_perm {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n        (firstExitParentChoices k parent [] true carrier) := by\n  simpa [firstExitFrontierCandidates] using\n      firstExitDepthFrontier_candidates_history_perm k parent h [] carrier true 1",
+      "complete_declaration_sha256": "960363a5e83ed7cff4a9750fdb90bddbfc1124e24944add83059c18a985d520a",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Root specialization of full generalized permutation at pre=[],positive=true,mass1. Original weights arbitrary and no nodup assumption needed for list Perm."
+    },
+    {
+      "name": "firstExitFrontierCandidates_history_nodup",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 133,
+      "end_line": 139,
+      "char_range": [
+        6576,
+        6991
+      ],
+      "utf8_byte_range": [
+        6670,
+        7099
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_history_nodup {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α)\n    (hc : carrier.Nodup) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => state.selectedPrefix.reverse)).Nodup",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  apply (firstExitFrontierCandidates_history_perm k parent h carrier).nodup_iff.mpr\n  exact (List.nodup_sublistsLen _ hc).filter _",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_history_nodup {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α)\n    (hc : carrier.Nodup) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => state.selectedPrefix.reverse)).Nodup := by\n  apply (firstExitFrontierCandidates_history_perm k parent h carrier).nodup_iff.mpr\n  exact (List.nodup_sublistsLen _ hc).filter _",
+      "complete_declaration_sha256": "45bf2307587b652b96c11d0fe02da9ac15e38c1543adeba7ac4cb52a74bf5e34",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Only here carrier.Nodup is introduced. Native nodup_sublistsLen followed by policy filter and exact Perm transfers no repetition to actual histories."
+    },
+    {
+      "name": "mem_firstExitFrontierCandidates_history_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 141,
+      "end_line": 149,
+      "char_range": [
+        6993,
+        7559
+      ],
+      "utf8_byte_range": [
+        7101,
+        7689
+      ],
+      "true_complete_source_header": "theorem mem_firstExitFrontierCandidates_history_iff {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier chosen : List α) :\n    chosen ∈ (firstExitFrontierCandidates k parent h carrier).map\n        (fun state => state.selectedPrefix.reverse) ↔\n      chosen <+ carrier ∧ chosen.length = k + 1 ∧\n        FirstExitValidSelection parent [] true chosen.dropLast",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [(firstExitFrontierCandidates_history_perm k parent h carrier).mem_iff]\n  simp only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen, decide_eq_true_eq]\n  tauto",
+      "complete_literal_declaration": "theorem mem_firstExitFrontierCandidates_history_iff {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier chosen : List α) :\n    chosen ∈ (firstExitFrontierCandidates k parent h carrier).map\n        (fun state => state.selectedPrefix.reverse) ↔\n      chosen <+ carrier ∧ chosen.length = k + 1 ∧\n        FirstExitValidSelection parent [] true chosen.dropLast := by\n  rw [(firstExitFrontierCandidates_history_perm k parent h carrier).mem_iff]\n  simp only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen, decide_eq_true_eq]\n  tauto",
+      "complete_declaration_sha256": "9fe5eb1aa9540e559e473403961b03e6769d3333e1ded0b9c86e99b83ab1e53c",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Perm membership plus exact native mem_sublistsLen and decide equivalence gives chosen sublist, lengthk+1 and valid proper parent prefix, with no admission on final chosen label."
+    },
+    {
+      "name": "firstExitFrontierCandidates_selected_length",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 151,
+      "end_line": 158,
+      "char_range": [
+        7561,
+        8047
+      ],
+      "utf8_byte_range": [
+        7691,
+        8198
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_selected_length {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α)\n    (state : FirstExitDepthState α)\n    (hs : state ∈ firstExitFrontierCandidates k parent h carrier) :\n    state.selectedPrefix.length = k + 1",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  have hh := (mem_firstExitFrontierCandidates_history_iff k parent h carrier\n    state.selectedPrefix.reverse).mp (List.mem_map.mpr ⟨state, hs, rfl⟩)\n  simpa only [List.length_reverse] using hh.2.1",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_selected_length {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α)\n    (state : FirstExitDepthState α)\n    (hs : state ∈ firstExitFrontierCandidates k parent h carrier) :\n    state.selectedPrefix.length = k + 1 := by\n  have hh := (mem_firstExitFrontierCandidates_history_iff k parent h carrier\n    state.selectedPrefix.reverse).mp (List.mem_map.mpr ⟨state, hs, rfl⟩)\n  simpa only [List.length_reverse] using hh.2.1",
+      "complete_declaration_sha256": "dccea3878781cc1a3bf2b273eed319b15ac066a46c006a6fc5e457ccf4a16482",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Actual state membership maps to its reversed selectedPrefix; prior iff gives reverse.length=k+1, hence stored length. This supplies every later tuple inverse hypothesis."
+    },
+    {
+      "name": "firstExitFrontierTuples",
+      "kind": "def",
+      "private": false,
+      "start_line": 162,
+      "end_line": 165,
+      "char_range": [
+        8208,
+        8456
+      ],
+      "utf8_byte_range": [
+        8359,
+        8621
+      ],
+      "true_complete_source_header": "def firstExitFrontierTuples (k : ℕ) (parent : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset (Fin (k + 1) → ℕ)",
+      "definition_body_or_complete_proof_after_colon_equals": "\n  ((firstExitParentChoices k parent [] true carrier).map\n    (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)).toFinset",
+      "complete_literal_declaration": "def firstExitFrontierTuples (k : ℕ) (parent : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset (Fin (k + 1) → ℕ) :=\n  ((firstExitParentChoices k parent [] true carrier).map\n    (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)).toFinset",
+      "complete_declaration_sha256": "bb418f8cca3b785e6dc41e874445706b94fb5b5696338d4f21cd3758b41a99ab",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Parent-choice list mapped via primeHistoryTuple(k+1)(chosen.reverse), then toFinset. No weight enters tuple carrier. Deduplication is paid by separate exact Nodup proof before sum transfer."
+    },
+    {
+      "name": "selectionTuple_ofFn",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 167,
+      "end_line": 171,
+      "char_range": [
+        8458,
+        8750
+      ],
+      "utf8_byte_range": [
+        8623,
+        8919
+      ],
+      "true_complete_source_header": "private theorem selectionTuple_ofFn {k : ℕ} {chosen : List ℕ}\n    (hc : chosen.length = k + 1) :\n    List.ofFn (primeHistoryTuple (k + 1) chosen.reverse) = chosen",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simpa only [List.reverse_reverse] using primeHistoryTuple_ofFn\n    (show chosen.reverse.length = k + 1 by simpa using hc)",
+      "complete_literal_declaration": "private theorem selectionTuple_ofFn {k : ℕ} {chosen : List ℕ}\n    (hc : chosen.length = k + 1) :\n    List.ofFn (primeHistoryTuple (k + 1) chosen.reverse) = chosen := by\n  simpa only [List.reverse_reverse] using primeHistoryTuple_ofFn\n    (show chosen.reverse.length = k + 1 by simpa using hc)",
+      "complete_declaration_sha256": "b1ddad37409c03b9d8019f8695faf3d91936d7ad266465288e15ae0346bf2d4a",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Owned primeHistoryTuple_ofFn on chosen.reverse lengthk+1 returns reverse_reverse=chosen. No sorting or padding active because length is exact."
+    },
+    {
+      "name": "selectionTuple_injective",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 173,
+      "end_line": 177,
+      "char_range": [
+        8752,
+        9060
+      ],
+      "utf8_byte_range": [
+        8921,
+        9233
+      ],
+      "true_complete_source_header": "private theorem selectionTuple_injective {k : ℕ} {x y : List ℕ}\n    (hx : x.length = k + 1) (hy : y.length = k + 1)\n    (he : primeHistoryTuple (k + 1) x.reverse = primeHistoryTuple (k + 1) y.reverse) :\n    x = y",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simpa only [selectionTuple_ofFn hx, selectionTuple_ofFn hy] using congrArg List.ofFn he",
+      "complete_literal_declaration": "private theorem selectionTuple_injective {k : ℕ} {x y : List ℕ}\n    (hx : x.length = k + 1) (hy : y.length = k + 1)\n    (he : primeHistoryTuple (k + 1) x.reverse = primeHistoryTuple (k + 1) y.reverse) :\n    x = y := by\n  simpa only [selectionTuple_ofFn hx, selectionTuple_ofFn hy] using congrArg List.ofFn he",
+      "complete_declaration_sha256": "5586dbbdf03dacdfe65d2965a83f805d72c4646454a3727d4a429ad1570fba4f",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Applying List.ofFn to equal tuples and the proved exact inverses recovers x=y on the fixed-length parent-choice domain."
+    },
+    {
+      "name": "mem_firstExitFrontierTuples_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 179,
+      "end_line": 198,
+      "char_range": [
+        9062,
+        10054
+      ],
+      "utf8_byte_range": [
+        9235,
+        10279
+      ],
+      "true_complete_source_header": "theorem mem_firstExitFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent carrier ↔\n      List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simp only [firstExitFrontierTuples, List.mem_toFinset, List.mem_map]\n  constructor\n  · rintro ⟨chosen, hc, rfl⟩\n    have hh : chosen <+ carrier ∧ chosen.length = k + 1 ∧\n        FirstExitValidSelection parent [] true chosen.dropLast := by\n      simpa only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq, and_assoc] using hc\n    rw [selectionTuple_ofFn hh.2.1]\n    exact ⟨hh.1, hh.2.2⟩\n  · rintro ⟨hsub, hv⟩\n    refine ⟨List.ofFn p, ?_, ?_⟩\n    · simp only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq]\n      exact ⟨⟨hsub, List.length_ofFn⟩, hv⟩\n    · apply List.ofFn_injective\n      exact selectionTuple_ofFn List.length_ofFn",
+      "complete_literal_declaration": "theorem mem_firstExitFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent carrier ↔\n      List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p).dropLast := by\n  simp only [firstExitFrontierTuples, List.mem_toFinset, List.mem_map]\n  constructor\n  · rintro ⟨chosen, hc, rfl⟩\n    have hh : chosen <+ carrier ∧ chosen.length = k + 1 ∧\n        FirstExitValidSelection parent [] true chosen.dropLast := by\n      simpa only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq, and_assoc] using hc\n    rw [selectionTuple_ofFn hh.2.1]\n    exact ⟨hh.1, hh.2.2⟩\n  · rintro ⟨hsub, hv⟩\n    refine ⟨List.ofFn p, ?_, ?_⟩\n    · simp only [firstExitParentChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq]\n      exact ⟨⟨hsub, List.length_ofFn⟩, hv⟩\n    · apply List.ofFn_injective\n      exact selectionTuple_ofFn List.length_ofFn",
+      "complete_declaration_sha256": "2c510940736ea746669c792a691c736686377ed6bd4f22c24cee137a655c8248",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Forward membership recovers chosen and its exact sublist/length/prefix-validity; reverse chooses List.ofFn p whose length is definitionallyk+1. List.ofFn injectivity recovers same p. Exact order, no multiplicity claim hidden in membership."
+    },
+    {
+      "name": "parentChoices_tuple_nodup",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 200,
+      "end_line": 208,
+      "char_range": [
+        10056,
+        10633
+      ],
+      "utf8_byte_range": [
+        10281,
+        10868
+      ],
+      "true_complete_source_header": "private theorem parentChoices_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (hc : carrier.Nodup) :\n    ((firstExitParentChoices k parent [] true carrier).map\n      (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)).Nodup",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  apply ((List.nodup_sublistsLen (k + 1) hc).filter\n    (fun chosen => decide (FirstExitValidSelection parent [] true chosen.dropLast))).map_on\n  intro x hx y hy he\n  exact selectionTuple_injective (List.length_of_sublistsLen (List.mem_filter.mp hx).1)\n    (List.length_of_sublistsLen (List.mem_filter.mp hy).1) he",
+      "complete_literal_declaration": "private theorem parentChoices_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (hc : carrier.Nodup) :\n    ((firstExitParentChoices k parent [] true carrier).map\n      (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)).Nodup := by\n  apply ((List.nodup_sublistsLen (k + 1) hc).filter\n    (fun chosen => decide (FirstExitValidSelection parent [] true chosen.dropLast))).map_on\n  intro x hx y hy he\n  exact selectionTuple_injective (List.length_of_sublistsLen (List.mem_filter.mp hx).1)\n    (List.length_of_sublistsLen (List.mem_filter.mp hy).1) he",
+      "complete_declaration_sha256": "a5e0b1acdf7f5c9095fc3ea82245dc515d652e6a462a517e7a7ac06b26ef6848",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Nodup sublistsLen and filter plus map_on injectivity restricted to actual fixed-length members prove tuple list Nodup. Correct hypotheses passed from native List.length_of_sublistsLen; no blanket injectivity on padded arbitrary lists claimed."
+    },
+    {
+      "name": "firstExitFrontierCandidates_tuple_perm",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 210,
+      "end_line": 218,
+      "char_range": [
+        10635,
+        11231
+      ],
+      "utf8_byte_range": [
+        10870,
+        11482
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_tuple_perm (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => primeHistoryTuple (k + 1) state.selectedPrefix)).Perm\n      ((firstExitParentChoices k parent [] true carrier).map\n        (fun chosen => primeHistoryTuple (k + 1) chosen.reverse))",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  simpa only [List.map_map, Function.comp_def, List.reverse_reverse] using\n    (firstExitFrontierCandidates_history_perm k parent h carrier).map\n      (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_tuple_perm (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => primeHistoryTuple (k + 1) state.selectedPrefix)).Perm\n      ((firstExitParentChoices k parent [] true carrier).map\n        (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)) := by\n  simpa only [List.map_map, Function.comp_def, List.reverse_reverse] using\n    (firstExitFrontierCandidates_history_perm k parent h carrier).map\n      (fun chosen => primeHistoryTuple (k + 1) chosen.reverse)",
+      "complete_declaration_sha256": "99182c2acc59964579907b0e1abc100bd0cf81bc409e1177729de4cf6e13a570",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Map previous history Perm by chosen->primeHistoryTuple(k+1)chosen.reverse and use reverse_reverse on actual stored prefixes. Keeps candidate tuple list multiplicities."
+    },
+    {
+      "name": "firstExitFrontierCandidates_tuple_nodup",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 220,
+      "end_line": 226,
+      "char_range": [
+        11233,
+        11646
+      ],
+      "utf8_byte_range": [
+        11484,
+        11913
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => primeHistoryTuple (k + 1) state.selectedPrefix)).Nodup",
+      "definition_body_or_complete_proof_after_colon_equals": "\n  (firstExitFrontierCandidates_tuple_perm k parent h carrier).nodup_iff.mpr\n    (parentChoices_tuple_nodup k parent carrier hc)",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => primeHistoryTuple (k + 1) state.selectedPrefix)).Nodup :=\n  (firstExitFrontierCandidates_tuple_perm k parent h carrier).nodup_iff.mpr\n    (parentChoices_tuple_nodup k parent carrier hc)",
+      "complete_declaration_sha256": "b39858b1344fa3e131e8e6d79c24066f079f516a5b59860a61e75aef3f91206e",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Exact tuple Perm transfers already proved parent-choice tuple Nodup, under actual carrier.Nodup."
+    },
+    {
+      "name": "firstExitFrontierCandidates_sum_eq_tuple_sum",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 229,
+      "end_line": 239,
+      "char_range": [
+        11728,
+        12418
+      ],
+      "utf8_byte_range": [
+        11995,
+        12713
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_sum_eq_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => f (primeHistoryTuple (k + 1) state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier, f p",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  have he := ((firstExitFrontierCandidates_tuple_perm k parent h carrier).map f).sum_eq\n  simp only [List.map_map, Function.comp_def] at he\n  rw [he]\n  simpa only [List.map_map, Function.comp_def, firstExitFrontierTuples] using\n    (List.sum_toFinset f (parentChoices_tuple_nodup k parent carrier hc)).symm",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_sum_eq_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map\n      (fun state => f (primeHistoryTuple (k + 1) state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier, f p := by\n  have he := ((firstExitFrontierCandidates_tuple_perm k parent h carrier).map f).sum_eq\n  simp only [List.map_map, Function.comp_def] at he\n  rw [he]\n  simpa only [List.map_map, Function.comp_def, firstExitFrontierTuples] using\n    (List.sum_toFinset f (parentChoices_tuple_nodup k parent carrier hc)).symm",
+      "complete_declaration_sha256": "f0b5306f015a027ac62b7442f02180e7aa18979df8b1579ff2eebdf38b3ec17a",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Map tuple Perm through arbitrary real f, then genuine List.sum_toFinset with proved Nodup. Finset conversion does not silently erase multiplicity."
+    },
+    {
+      "name": "firstExitFrontierCandidates_weighted_sum_eq_tuple_sum",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 242,
+      "end_line": 256,
+      "char_range": [
+        12498,
+        13300
+      ],
+      "utf8_byte_range": [
+        12793,
+        13637
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_weighted_sum_eq_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        f (primeHistoryTuple (k + 1) state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [← firstExitFrontierCandidates_sum_eq_tuple_sum k parent h carrier hc\n    (fun p => (∏ i, 1 / ((p i : ℝ) - 1)) * f p)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reciprocal_mass\n    (firstExitFrontierCandidates_selected_length k parent h carrier state hs)]",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_weighted_sum_eq_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        f (primeHistoryTuple (k + 1) state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p := by\n  rw [← firstExitFrontierCandidates_sum_eq_tuple_sum k parent h carrier hc\n    (fun p => (∏ i, 1 / ((p i : ℝ) - 1)) * f p)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reciprocal_mass\n    (firstExitFrontierCandidates_selected_length k parent h carrier state hs)]",
+      "complete_declaration_sha256": "d9b72bc49673d01d7bde5284adaa43c9c45d12106e68163541d23fce583e9aaa",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Specializes arbitrary f to tuple reciprocal product timesf; owned primeHistoryTuple_reciprocal_mass uses actual candidate lengthk+1. Equality does not identify state.mass with this product for arbitrary h and does not assume positivity or prime labels."
+    },
+    {
+      "name": "mem_firstExitFrontierTuples_iff_of_decreasing",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 260,
+      "end_line": 278,
+      "char_range": [
+        13449,
+        14302
+      ],
+      "utf8_byte_range": [
+        13786,
+        14697
+      ],
+      "true_complete_source_header": "theorem mem_firstExitFrontierTuples_iff_of_decreasing (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hc : carrier.Pairwise (· > ·)) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent carrier ↔\n      StrictAnti p ∧ (∀ i, p i ∈ carrier) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [mem_firstExitFrontierTuples_iff]\n  constructor\n  · rintro ⟨hs, hv⟩\n    exact ⟨List.pairwise_ofFn.mp (hc.sublist hs),\n      fun i => hs.subset (List.mem_ofFn.mpr ⟨i, rfl⟩), hv⟩\n  · rintro ⟨ha, hm, hv⟩\n    have hp : (List.ofFn p).Pairwise (· > ·) := List.pairwise_ofFn.mpr ha\n    have hsub : List.ofFn p ⊆ carrier := by\n      intro q hq\n      obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hq\n      exact hm i\n    exact ⟨List.sublist_of_subperm_of_pairwise\n      (List.subperm_of_subset hp.nodup hsub) hp hc, hv⟩",
+      "complete_literal_declaration": "theorem mem_firstExitFrontierTuples_iff_of_decreasing (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hc : carrier.Pairwise (· > ·)) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent carrier ↔\n      StrictAnti p ∧ (∀ i, p i ∈ carrier) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast := by\n  rw [mem_firstExitFrontierTuples_iff]\n  constructor\n  · rintro ⟨hs, hv⟩\n    exact ⟨List.pairwise_ofFn.mp (hc.sublist hs),\n      fun i => hs.subset (List.mem_ofFn.mpr ⟨i, rfl⟩), hv⟩\n  · rintro ⟨ha, hm, hv⟩\n    have hp : (List.ofFn p).Pairwise (· > ·) := List.pairwise_ofFn.mpr ha\n    have hsub : List.ofFn p ⊆ carrier := by\n      intro q hq\n      obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hq\n      exact hm i\n    exact ⟨List.sublist_of_subperm_of_pairwise\n      (List.subperm_of_subset hp.nodup hsub) hp hc, hv⟩",
+      "complete_declaration_sha256": "3e38da9c9071acd1718491c35a4871ae2dc30ba5948fc99f50c523e91869ee48",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Forward sublist of descending carrier gives strict anti tuple and coordinate membership. Reverse uses pairwise_ofFn, Nodup subset=>Subperm, and sorted Subperm=>Sublist, recovering processing order; proper-prefix validity retained."
+    },
+    {
+      "name": "mem_actualPrimeFrontierTuples_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 281,
+      "end_line": 291,
+      "char_range": [
+        14384,
+        14936
+      ],
+      "utf8_byte_range": [
+        14779,
+        15374
+      ],
+      "true_complete_source_header": "theorem mem_actualPrimeFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, p i < cap ∧ Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [mem_firstExitFrontierTuples_iff_of_decreasing k parent _\n    (roughPrimeUniverse_pairwise_gt N cap w z)]\n  simp only [mem_roughPrimeUniverse]",
+      "complete_literal_declaration": "theorem mem_actualPrimeFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, p i < cap ∧ Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast := by\n  rw [mem_firstExitFrontierTuples_iff_of_decreasing k parent _\n    (roughPrimeUniverse_pairwise_gt N cap w z)]\n  simp only [mem_roughPrimeUniverse]",
+      "complete_declaration_sha256": "b7fefdbd5371a493c201964c36de500a9ae3881d2124c59956eb94ebae78351c",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Actual roughPrimeUniverse is descending and exact native-source membership retains p<cap, primality, p not dividing literalN, closed lower realw and open upper realz. No cap or endpoint lost."
+    },
+    {
+      "name": "mem_actualPrimeFrontierTuples_iff_of_cutoff_le_cap",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 293,
+      "end_line": 303,
+      "char_range": [
+        14938,
+        15546
+      ],
+      "utf8_byte_range": [
+        15376,
+        16029
+      ],
+      "true_complete_source_header": "theorem mem_actualPrimeFrontierTuples_iff_of_cutoff_le_cap (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (hzcap : z ≤ (cap : ℝ)) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [mem_firstExitFrontierTuples_iff_of_decreasing k parent _\n    (roughPrimeUniverse_pairwise_gt N cap w z)]\n  simp only [mem_roughPrimeUniverse_iff_of_cutoff_le_cap hzcap]",
+      "complete_literal_declaration": "theorem mem_actualPrimeFrontierTuples_iff_of_cutoff_le_cap (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (hzcap : z ≤ (cap : ℝ)) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast := by\n  rw [mem_firstExitFrontierTuples_iff_of_decreasing k parent _\n    (roughPrimeUniverse_pairwise_gt N cap w z)]\n  simp only [mem_roughPrimeUniverse_iff_of_cutoff_le_cap hzcap]",
+      "complete_declaration_sha256": "92766a693cc98a22cc9abbe553072636de8ad10db408797539495c19167401f6",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "With explicitz<=cap, p<z<=cap derives omitted cap condition exactly; otherwise the fullcap version remains available. OriginalN,real endpoints and prefix validity unchanged."
+    },
+    {
+      "name": "actualPrimeFrontier_candidates_weighted_sum_eq_tuple_sum",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 307,
+      "end_line": 325,
+      "char_range": [
+        15693,
+        16837
+      ],
+      "utf8_byte_range": [
+        16176,
+        17360
+      ],
+      "true_complete_source_header": "theorem actualPrimeFrontier_candidates_weighted_sum_eq_tuple_sum\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (N cap : ℕ) (w z : ℝ) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 (roughPrimeUniverse N cap w z)).map\n      (fun frontier => ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n        frontier.positive frontier.mass frontier.remaining).map (fun candidate =>\n          (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n            f (primeHistoryTuple (k + 1) candidate.selectedPrefix))).sum)).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [← firstExitFrontierCandidates_weighted_sum_eq_tuple_sum k parent h _\n    (roughPrimeUniverse_nodup N cap w z)]\n  unfold firstExitFrontierCandidates\n  generalize firstExitDepthFrontier k parent h [] true 1 (roughPrimeUniverse N cap w z) = states\n  induction states with\n  | nil => rfl\n  | cons state states ih =>\n      simp only [List.map_cons, List.sum_cons, List.flatMap_cons,\n        List.map_append, List.sum_append, ih]",
+      "complete_literal_declaration": "theorem actualPrimeFrontier_candidates_weighted_sum_eq_tuple_sum\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (N cap : ℕ) (w z : ℝ) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 (roughPrimeUniverse N cap w z)).map\n      (fun frontier => ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n        frontier.positive frontier.mass frontier.remaining).map (fun candidate =>\n          (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n            f (primeHistoryTuple (k + 1) candidate.selectedPrefix))).sum)).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p := by\n  rw [← firstExitFrontierCandidates_weighted_sum_eq_tuple_sum k parent h _\n    (roughPrimeUniverse_nodup N cap w z)]\n  unfold firstExitFrontierCandidates\n  generalize firstExitDepthFrontier k parent h [] true 1 (roughPrimeUniverse N cap w z) = states\n  induction states with\n  | nil => rfl\n  | cons state states ih =>\n      simp only [List.map_cons, List.sum_cons, List.flatMap_cons,\n        List.map_append, List.sum_append, ih]",
+      "complete_declaration_sha256": "3f54d488cc0f05d28057f7b27012dce93074e6df6ae1bad5d96d16468f31e57e",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Actual rough prime universe Nodup supplies finite sum transfer. Separate induction on frontier state list expands nested map/sum into flatMap sum exactly; arbitraryh and all history weights retained."
+    },
+    {
+      "name": "firstExitFrontierCandidates_history_sum_eq_tuple_sum",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 329,
+      "end_line": 343,
+      "char_range": [
+        16994,
+        17785
+      ],
+      "utf8_byte_range": [
+        17517,
+        18344
+      ],
+      "true_complete_source_header": "theorem firstExitFrontierCandidates_history_sum_eq_tuple_sum\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hc : carrier.Nodup) (F : List ℕ → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map (fun candidate =>\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        F candidate.selectedPrefix)).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * F (List.ofFn p).reverse",
+      "definition_body_or_complete_proof_after_colon_equals": " by\n  rw [← firstExitFrontierCandidates_weighted_sum_eq_tuple_sum k parent h carrier hc\n    (fun p => F (List.ofFn p).reverse)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reverse_ofFn\n    (firstExitFrontierCandidates_selected_length k parent h carrier state hs)]",
+      "complete_literal_declaration": "theorem firstExitFrontierCandidates_history_sum_eq_tuple_sum\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hc : carrier.Nodup) (F : List ℕ → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map (fun candidate =>\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        F candidate.selectedPrefix)).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * F (List.ofFn p).reverse := by\n  rw [← firstExitFrontierCandidates_weighted_sum_eq_tuple_sum k parent h carrier hc\n    (fun p => F (List.ofFn p).reverse)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reverse_ofFn\n    (firstExitFrontierCandidates_selected_length k parent h carrier state hs)]",
+      "complete_declaration_sha256": "3fc7ddaf5f643a70cf4bdf554228bef72659627b9bca57dd2015a4d3c9f21a29",
+      "all_binders_let_chains_preserved": true,
+      "whole_declaration_proof_read": true,
+      "independent_review": "Choose tuple summand F(ofFn p).reverse, then owned reverse_ofFn at actual candidate length recovers exact stored selectedPrefix. Applies to arbitrary history-dependent F without any replacement density theorem or final candidate gate."
+    }
+  ],
+  "original_owned7_all180_fulltype_safe_total_3axioms_current_rechecked": true,
+  "direct_owned4_all110_records_current_rechecked": true,
+  "actual14_complete_parent_API_source_spans_and9_complete_native_spans_read_untruncated_and_live_hash_text_matched": true,
+  "current24_parent_cache_source_object_bindings_checked": true,
+  "root_math_review": [
+    "Actual rank-frontier flatMap list reverse histories preserve multiplicities by structural carrier induction and parentChoices_cons. The last candidate is untested: only chosen.dropLast uses the policy.",
+    "Base rank0 uses Perm for reversed sublist enumeration; general pre-prefix reverse concatenation and parity/mass recursion retained.",
+    "Only after actual list Perm plus carrierNodup obtain history and tuple Nodup; finite toFinset sum has no lost multiplicity.",
+    "primeHistoryTuple/ofFn and actual length recover precisely chosen or reversed selectedPrefix. Weighted variant uses explicit selectedPrefix reciprocal product; never equates state.mass with reciprocal product for arbitrary h.",
+    "Decreasing carrier exact tuple iff preserves target deletion, literal cap, weak lower/strict upper real endpoints and proper prefix validity. Cap removed only with explicit z<=cap.",
+    "Nested arithmetic frontier sum is genuine flattening, arbitrary history F recovers (ofFn p).reverse. No analytic density/distribution premise or main bound supplied."
+  ],
+  "known_math_or_clear_API_blockers": [],
+  "new_definitions": "3 public nonrecursive compositions in whole noncomputable section; no predicted generated inventory acceptance",
+  "future_first_scope": {
+    "direct_parents_exact": [
+      "ImbalancedChen.FirstExitOwnCubeSplice",
+      "ImbalancedChen.FirstExitFrontierInvariants",
+      "ImbalancedChen.FirstExitValidSelection",
+      "ImbalancedChen.FinitePrimeGeometryCore"
+    ],
+    "direct_parents_actual_owned": true,
+    "project_nodes_including_target": 25,
+    "inherited_project_nodes": 24,
+    "inherited_explicit_owned": 7,
+    "inherited_cache_only_not_owned": 17,
+    "new_project_nodes_relative_to_union_of_four_parent_closures": [
+      "ImbalancedChen.FirstExitFrontierTupleReindex"
+    ],
+    "bootstrap_project_nodes": [],
+    "bootstrap_count": 0,
+    "inherited_foreign_boundary": [
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Fin",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Group.List",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Analysis.SpecificLimits.Basic",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Interval",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Finset.Sort",
+      "Mathlib.Data.List.GetD",
+      "Mathlib.Data.List.OfFn",
+      "Mathlib.Data.List.Prime",
+      "Mathlib.Data.List.Sublists",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Integral.Pi",
+      "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Fin.Basic",
+      "Mathlib.Order.Interval.Set.Union",
+      "Mathlib.Tactic",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Ring",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser"
+    ],
+    "new_foreign_boundary_relative_to_parent_union": [],
+    "new_foreign_count": 0,
+    "target_cache_exists": false,
+    "target_owned": false,
+    "current_local_binding_result": "All24 inherited source/cache/project-direct-source/project-object-part/current pin bindings are exact. Every inherited object part actually hashed; no PASS string substituted for equality.",
+    "what_zero_bootstrap_means": "The one future target is the only new project node; no inherited17 cached module needs compiling merely to add it. This does not relabel inherited caches as owned and does not claim full foreign kernel replay.",
+    "necessary_root_specific_first_gate": "Root must finish its independent fullsource review and explicitly select exact c42a94 ONE target with its actual24 inherited closure and existing pinned foreign boundary. Registration, if needed, must be data-only and explicitly scoped; this reviewer made none. Runtime must perform the normal fresh full proper/native source/cache/object/allparts/pin preflight before and after, then ONE original strict warningAsError compilation. Only actual strictPASS may proceed to original stock checker and unmodified ALL serialized/generated declarations fulltype/safety/transitive-axiom audit, original receipt stability/fullafter/fresh owned census, then HOLD. No successor bootstrap or speculative source retry.",
+    "first_gate_authorized_by_this_reviewer": false,
+    "compiler_invoked": false,
+    "future_elaboration_and_generated_safety": "UNKNOWN until actual full compiler/checker/collector; source-level whole noncomputable section removes the specific new computable recursive Prop-definition risk but does not pre-accept future generated names."
+  },
+  "trust_boundary": "7 actualowned vs17 inherited-bound-cached NOTowned, not full imported closure kernel replay",
+  "current_gate": "NO compiler authorization. Sole runtime Smooth must first be all-terminal; new separate exact root gate and fresh fullnative source/parts checks, quota and noheavy/lockfree required. Original strict/stock/ALL unchanged.",
+  "ad_hoc_read_diagnostic_correction": "Report actual_object_parts is structured {path,sha256,bytes}, not flat cache suffix/hash map. Exact fields normalized for equality only; all hashes actually re-read. No source/cache/receipt/checker changed.",
+  "main_hLower_hUpper": "OPEN",
+  "quota_latest_actual": {
+    "used": 15,
+    "remaining": 85,
+    "stop_remaining_le": 50
+  }
+}

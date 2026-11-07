@@ -1,0 +1,138 @@
+{
+  "status": "SOURCE_ONLY_ROOT_NONAUTHOR_LEGACY_FRONTIER_MATHEMATICAL_REVIEW_PENDING_RUNTIME_AND_SECOND_REVIEW",
+  "reviewer": "/root (not source author)",
+  "created_at_utc": "2026-10-15T22:05:01.972838+00:00",
+  "candidate": "ImbalancedChen/FiniteUpperCarrierCore.lean",
+  "source_sha256": "5bb08b49bf20551e996afbafd92a90ce6aa17941424fa55485d9fa9f69ce98b7",
+  "all_complete_types_and_definitions": [
+    {
+      "name": "actualSmallRoughModuli",
+      "kind": "def",
+      "complete_type": "def actualSmallRoughModuli (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : Finset ℕ",
+      "complete_definition": "def actualSmallRoughModuli (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  smallRoughModuli (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)"
+    },
+    {
+      "name": "actualSmallRoughRho",
+      "kind": "def",
+      "complete_type": "def actualSmallRoughRho (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+      "complete_definition": "def actualSmallRoughRho (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  smallRoughRho (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)\n    (fixedRoughCoefficient retainOdd N cap w z)\n    (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)"
+    },
+    {
+      "name": "realHalfProductCongruenceMass",
+      "kind": "def",
+      "complete_type": "def realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ",
+      "complete_definition": "def realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n  (((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.ModEq d m N)).card : ℝ)"
+    },
+    {
+      "name": "realHalfProductCoprimeMass",
+      "kind": "def",
+      "complete_type": "def realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ",
+      "complete_definition": "def realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n  (((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.Coprime m d)).card : ℝ)"
+    },
+    {
+      "name": "realPhysicalCoprimeCorrection",
+      "kind": "def",
+      "complete_type": "def realPhysicalCoprimeCorrection\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ",
+      "complete_definition": "def realPhysicalCoprimeCorrection\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ d ∈ Q, rho d *\n    ((realHalfProductCoprimeMass b N T d -\n      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient d : ℝ))"
+    },
+    {
+      "name": "realPhysicalDistributionError",
+      "kind": "def",
+      "complete_type": "def realPhysicalDistributionError\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ",
+      "complete_definition": "def realPhysicalDistributionError\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ d ∈ Q, rho d *\n    (realHalfProductCongruenceMass b N T d -\n      realHalfProductCoprimeMass b N T d / (Nat.totient d : ℝ))"
+    },
+    {
+      "name": "smallRoughModuli_subset_of_rough_subset",
+      "kind": "theorem",
+      "complete_type": "theorem smallRoughModuli_subset_of_rough_subset\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough) :\n    smallRoughModuli small raw ⊆ smallRoughModuli small rough"
+    },
+    {
+      "name": "smallRoughRho_eq_of_rough_enlargement",
+      "kind": "theorem",
+      "complete_type": "theorem smallRoughRho_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) :\n    smallRoughRho small rough c betaMinus betaPlus =\n      smallRoughRho small raw c betaMinus betaPlus"
+    },
+    {
+      "name": "sum_smallRoughRho_mul_eq_of_rough_enlargement",
+      "kind": "theorem",
+      "complete_type": "theorem sum_smallRoughRho_mul_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli small rough,\n      smallRoughRho small rough c betaMinus betaPlus q * F q) =\n        ∑ q ∈ smallRoughModuli small raw,\n          smallRoughRho small raw c betaMinus betaPlus q * F q"
+    },
+    {
+      "name": "fixedRoughCoefficient_eq_zero_of_not_mem",
+      "kind": "theorem",
+      "complete_type": "theorem fixedRoughCoefficient_eq_zero_of_not_mem\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∉ fixedRoughSupport retainOdd N cap w z) :\n    fixedRoughCoefficient retainOdd N cap w z d = 0"
+    },
+    {
+      "name": "actualUpperCommonRoughSupport",
+      "kind": "def",
+      "complete_type": "def actualUpperCommonRoughSupport\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ) : Finset ℕ",
+      "complete_definition": "def actualUpperCommonRoughSupport\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ) : Finset ℕ :=\n  fixedRoughSupport retainOdd N cap w z ∪ compilerSupport"
+    },
+    {
+      "name": "actualUpperCommonRoughSupport_roughPrimeSupportedAt",
+      "kind": "theorem",
+      "complete_type": "theorem actualUpperCommonRoughSupport_roughPrimeSupportedAt\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ)\n    (hcompiler : ∀ d ∈ compilerSupport, RoughPrimeSupportedAt w d)\n    {d : ℕ} (hd : d ∈ actualUpperCommonRoughSupport\n      retainOdd N cap w z compilerSupport) : RoughPrimeSupportedAt w d"
+    },
+    {
+      "name": "actualSmallRoughRho_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem actualSmallRoughRho_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) =\n      actualSmallRoughRho retainOdd N cap w z L"
+    },
+    {
+      "name": "sum_actualSmallRoughRho_mul_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem sum_actualSmallRoughRho_mul_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli (actualSmallRosserSupport N cap w) rough,\n      smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) q * F q) =\n      ∑ q ∈ actualSmallRoughModuli retainOdd N cap w z,\n        actualSmallRoughRho retainOdd N cap w z L q * F q"
+    },
+    {
+      "name": "actualSmallRoughRho_divisorSum_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem actualSmallRoughRho_divisorSum_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (n : ℕ) :\n    physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n =\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n"
+    },
+    {
+      "name": "actualSmallRoughRho_density_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem actualSmallRoughRho_density_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    physicalDensitySum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)"
+    },
+    {
+      "name": "actualSmallRoughRho_coprimeCorrection_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem actualSmallRoughRho_coprimeCorrection_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalCoprimeCorrection b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)"
+    },
+    {
+      "name": "actualSmallRoughRho_distribution_eq_on_common_carrier",
+      "kind": "theorem",
+      "complete_type": "theorem actualSmallRoughRho_distribution_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalDistributionError b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)"
+    }
+  ],
+  "declaration_count": 18,
+  "definition_count": 7,
+  "direct_project_parent_source_bindings": [
+    {
+      "module": "ImbalancedChen.ActualSmallRosser",
+      "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf"
+    },
+    {
+      "module": "ImbalancedChen.FixedRoughCoefficients",
+      "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b"
+    },
+    {
+      "module": "ImbalancedChen.RealHalfProductSource",
+      "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7"
+    }
+  ],
+  "mathematical_assessment": [
+    "The same actual small support, fixed rough support and actual plus/minus coefficients define one physical coefficient independent of test integer. No analytic bound is asserted.",
+    "Product-carrier inclusion follows from the actual rough subset. Zero extension is exact on every modulus: actual added rough products have coefficient zero, and the same signed fibre sum is unchanged.",
+    "Every signed linear functional transfers on the enlarged physical carrier because the raw coefficient vanishes off its actual product support. No cutoff separation, positivity, absolute loss or replacement coefficient is introduced.",
+    "The actual common rough support is the literal union; its rough-prime support requires the displayed genuine compiler support premise. This finite premise is not an analytic distribution supplier.",
+    "Divisor sum including n=0, reciprocal-totient density, actual real-source coprime correction and full signed distribution discrepancy all preserve the exact same coefficient by the single finite functional identity. These equalities do not pay those errors."
+  ],
+  "runtime_gate": "Only this exact real unmet frontier, after sole runtime owner current direct-parent cache and source-object binding verification and second independent full review; no blanket build/reuse/install authorization. M6144/RSS6656/j2, unchanged pins, no foreign bootstrap.",
+  "source_modified": false,
+  "lean_invoked": false,
+  "owned_or_imported_closure_acceptance_claimed": false,
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  }
+}

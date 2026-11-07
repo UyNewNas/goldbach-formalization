@@ -1,0 +1,121 @@
+{
+  "status": "SOURCE_ONLY_ACTUAL_DIAGNOSTIC_MINIMAL_PROOF_API_EXACT_REBIND",
+  "reviewer": "/root/tail_resume (source owner)",
+  "created_utc": "2026-10-15T22:28:26.576228+00:00",
+  "candidate": "ImbalancedChen.ActualFrozenCapacitySlots",
+  "old_source_sha256": "37ca1336b0aec630518c03288fe00cf2dade688c7d5cbd16053ac84a651f1e6a",
+  "new_source_sha256": "40b5e534d7fbd180c69cc33e2ae75d1c9a854712f4832f19c5b6ebc3fc251007",
+  "old_snapshot": ".lake/proof-continuation/source-reviews/20261016-capacity-37ca-before-map-take-api.lean",
+  "only_change": {
+    "old": "List.take_map",
+    "new": "← List.map_take"
+  },
+  "forward_byte_exact": true,
+  "inverse_byte_exact": true,
+  "complete_declaration_count": 11,
+  "definition_count": 2,
+  "complete_declarations": [
+    {
+      "name": "prefixSquareBound_map",
+      "kind": "theorem",
+      "private": true,
+      "complete_source_header": "private theorem prefixSquareBound_map {α : Type*} (upper : α → ℕ)\n    (D : ℝ) (input : List α)\n    (hfull : actualDwellSupport D (input.map upper)) :\n    PrefixSquareBound (fun i => (upper i : ℝ)) D input"
+    },
+    {
+      "name": "actualTwoCapacityGreedy_map",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualTwoCapacityGreedy_map {α β : Type*} (f : α → β) (weight : β → ℝ)\n    (A : ℝ) (input : List α) :\n    actualTwoCapacityGreedy weight A (input.map f) =\n      ((actualTwoCapacityGreedy (fun i => weight (f i)) A input).1.map f,\n        (actualTwoCapacityGreedy (fun i => weight (f i)) A input).2.map f)"
+    },
+    {
+      "name": "actualFrozenCapacityFactors",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualFrozenCapacityFactors {α : Type*} (A : ℝ) (upper actual : α → ℕ)\n    (input : List α) : ℕ × ℕ",
+      "complete_definition": "def actualFrozenCapacityFactors {α : Type*} (A : ℝ) (upper actual : α → ℕ)\n    (input : List α) : ℕ × ℕ :=\n  (((actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A input).1.map actual).prod,\n    ((actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A input).2.map actual).prod)"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_at_upper",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityFactors_at_upper {α : Type*} (A : ℝ) (upper : α → ℕ)\n    (input : List α) :\n    actualFrozenCapacityFactors A upper upper input =\n      actualTwoCapacityFactors A (input.map upper)"
+    },
+    {
+      "name": "mapped_prod_le_upper_prod",
+      "kind": "theorem",
+      "private": true,
+      "complete_source_header": "private theorem mapped_prod_le_upper_prod {α : Type*} (upper actual : α → ℕ)\n    (input : List α) (hsize : ∀ i ∈ input, actual i ≤ upper i) :\n    (((input.map actual).prod : ℕ) : ℝ) ≤ (input.map (fun i => (upper i : ℝ))).prod"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_correct",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityFactors_correct {α : Type*} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper actual : α → ℕ) (input : List α)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : ∀ i ∈ input, actual i ≤ upper i) :\n    (actualFrozenCapacityFactors A upper actual input).1 *\n        (actualFrozenCapacityFactors A upper actual input).2 = (input.map actual).prod ∧\n      ((actualFrozenCapacityFactors A upper actual input).1 : ℝ) ≤ A ∧\n      ((actualFrozenCapacityFactors A upper actual input).2 : ℝ) ≤ B"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_coprime",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityFactors_coprime {α : Type*} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper actual : α → ℕ) (input : List α)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : ∀ i ∈ input, actual i ≤ upper i)\n    (hprime : ∀ p ∈ input.map actual, Nat.Prime p) (hnodup : (input.map actual).Nodup) :\n    Nat.Coprime (actualFrozenCapacityFactors A upper actual input).1\n      (actualFrozenCapacityFactors A upper actual input).2"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_on_box",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityFactors_on_box {n : ℕ} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper : Fin n → ℕ)\n    (hfull : actualDwellSupport (A * B) (List.ofFn upper)) :\n    ∀ actual : Fin n → ℕ, (∀ i, actual i ≤ upper i) →\n      (actualFrozenCapacityFactors A upper actual (List.finRange n)).1 *\n          (actualFrozenCapacityFactors A upper actual (List.finRange n)).2 =\n          (List.ofFn actual).prod ∧\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).1 : ℝ) ≤ A ∧\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).2 : ℝ) ≤ B"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualFrozenCapacityAssignment {n : ℕ} (A : ℝ) (upper : Fin n → ℕ) : Fin n → Bool",
+      "complete_definition": "def actualFrozenCapacityAssignment {n : ℕ} (A : ℝ) (upper : Fin n → ℕ) : Fin n → Bool :=\n  fun i => decide (i ∈ (actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A (List.finRange n)).1)"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment_card",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityAssignment_card (n : ℕ) :\n    Fintype.card (Fin n → Bool) = 2 ^ n"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment_sum_partition",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualFrozenCapacityAssignment_sum_partition {ι M : Type*}\n    [DecidableEq ι] [AddCommMonoid M] {n : ℕ} (J : Finset ι)\n    (A : ℝ) (upper : ι → Fin n → ℕ) (F : ι → M) :\n    (∑ mask : Fin n → Bool,\n      ∑ j ∈ J.filter (fun j => actualFrozenCapacityAssignment A (upper j) = mask), F j) =\n      ∑ j ∈ J, F j"
+    }
+  ],
+  "all_complete_headers_and_definitions_identical": true,
+  "imports_identical": true,
+  "direct_parents": [
+    {
+      "module": "ImbalancedChen.ActualPrimeTupleNormalization",
+      "current_source_sha256": "c5c280a89f5bb833bbfc68ffbe07fea70f43330bf2c35ab81568274dd3de2ee7"
+    },
+    {
+      "module": "Mathlib.Data.List.FinRange",
+      "source_sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3"
+    }
+  ],
+  "actual_diagnostic": {
+    "stdout_path": ".lake/proof-continuation/runs/20261015T222623804829Z-ImbalancedChen.ActualFrozenCapacitySlots/stdout.log",
+    "stdout_sha256": "edbe88eb79ef57580a606eab1152ed8ff167fb795efc83d669f31d3cf6af86c0",
+    "receipt_path": ".lake/proof-continuation/runs/20261015T222623804829Z-ImbalancedChen.ActualFrozenCapacitySlots/receipt.json",
+    "receipt_sha256": "4c56183052109f8f202dc9001502eb695ddc97d293be97c05e67d6572f262123",
+    "failure": "Unknown List.take_map at33; inherited support remains on take(map upper input), while target is map upper (take input). No other proof diagnostic reported."
+  },
+  "fixed_api": {
+    "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/TakeDrop.lean",
+    "sha256": "16c0418c733f7ef8f331cd6bf6848ca343bda50766494292e80c438755942ac5",
+    "line": 248,
+    "declaration": "@[simp] theorem map_take {f : α → β} : ∀ {l : List α} {i : Nat}, (l.take i).map f = (l.map f).take i",
+    "assessment": "The actual API is oriented map-after-take to take-after-map. Reverse rewriting converts the inherited natural upper vector take/map into the identical labelled prefix; existing map_map/getElem_map then compose casts without changing any support or threshold."
+  },
+  "resource_profile_change": false,
+  "imports_definitions_types_quantifiers_thresholds_pins_changed": false,
+  "old_failed_attempt_preserved": true,
+  "lean_invoked": false,
+  "lake_invoked": false,
+  "owned_sources_modified": false,
+  "imported_closure_acceptance_claimed": false,
+  "acceptance_claimed": false
+}

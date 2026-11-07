@@ -1,0 +1,75 @@
+{
+  "created_utc": "2026-10-18T03:48:43.630084+00:00",
+  "reviewer": "/root/high_conductor_oct18",
+  "independent_of_root_author": true,
+  "status": "INDEPENDENT_EXACT_PROOF_ONLY_REBIND_PASS_NOT_COMPILE_NOT_OWNED",
+  "module": "ImbalancedChen.SieveDimensionComparison",
+  "source_sha256": "3e4cae7ae08d4b10992947b3eb453bfc65757afa969c704ec07ea064e7693d7e",
+  "old_source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+  "source_lines": 299,
+  "read_scope": "Complete current303 source lines/all23 headers includingtwo @[simp] theorems/all3 primitive definitions/all proof bodies/imports; original cf236 whole bytes independently read and compared; complete actual034549 stdout and receipt read.",
+  "source_declarations": 23,
+  "primitive_defs": 3,
+  "complete_headers": [
+    "def oddPrimesInInterval (w v : ℕ) : Finset ℕ",
+    "def sievePrimesInInterval (N w v : ℕ) : Finset ℕ",
+    "def oddPrimeSieveDensity (z : ℕ) : ℝ",
+    "@[simp] theorem mem_oddPrimesInInterval {w v p : ℕ} :\n    p ∈ oddPrimesInInterval w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ 2 < p",
+    "@[simp] theorem mem_sievePrimesInInterval {N w v p : ℕ} :\n    p ∈ sievePrimesInInterval N w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ ¬p ∣ N",
+    "theorem two_lt_of_mem_sievePrimes {N z p : ℕ}\n    (hN : Even N) (hp : p ∈ sievePrimes N z) : 2 < p",
+    "theorem odd_sieve_factor_pos {p : ℕ} (hp : 2 < p) :\n    (0 : ℝ) < 1 - 1 / ((p : ℝ) - 1)",
+    "theorem one_le_odd_sieve_ratio_factor {p : ℕ} (hp : 2 < p) :\n    (1 : ℝ) ≤ ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+    "theorem odd_sieve_factor_mul_ratio {p : ℕ} (hp : 2 < p) :\n    (1 - 1 / ((p : ℝ) - 1)) *\n      (((p : ℝ) - 1) / ((p : ℝ) - 2)) = 1",
+    "theorem finite_prod_le_prod_of_subset_of_one_le\n    {α : Type*} {s t : Finset α} {f : α → ℝ}\n    (hst : s ⊆ t) (hf : ∀ a ∈ t, 1 ≤ f a) :\n    (∏ a ∈ s, f a) ≤ ∏ a ∈ t, f a",
+    "theorem finite_prod_ratio_of_split\n    {α : Type*} (s t u : Finset α) (f g : α → ℝ)\n    (ht : 0 < ∏ a ∈ t, f a)\n    (hsplit : (∏ a ∈ t, f a) = (∏ a ∈ s, f a) * ∏ a ∈ u, f a)\n    (hfg : ∀ a ∈ u, f a * g a = 1) :\n    (∏ a ∈ s, f a) / (∏ a ∈ t, f a) = ∏ a ∈ u, g a",
+    "theorem finiteSieveDensity_pos {N : ℕ} (hN : Even N) (z : ℕ) :\n    0 < finiteSieveDensity N z",
+    "theorem oddPrimeSieveDensity_pos (z : ℕ) : 0 < oddPrimeSieveDensity z",
+    "theorem finiteSieveDensity_split {N w v : ℕ} (hwv : w ≤ v) :\n    finiteSieveDensity N v = finiteSieveDensity N w *\n      ∏ p ∈ sievePrimesInInterval N w v, (1 - 1 / ((p : ℝ) - 1))",
+    "theorem oddPrimeSieveDensity_split {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity v = oddPrimeSieveDensity w *\n      ∏ p ∈ oddPrimesInInterval w v, (1 - 1 / ((p : ℝ) - 1))",
+    "theorem finiteSieveDensity_ratio_eq_interval_product\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v =\n      ∏ p ∈ sievePrimesInInterval N w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+    "theorem oddPrimeSieveDensity_ratio_eq_interval_product\n    {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity w / oddPrimeSieveDensity v =\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+    "theorem sievePrimesInInterval_eq_filter {N w v : ℕ} (hN : Even N) :\n    sievePrimesInInterval N w v =\n      (oddPrimesInInterval w v).filter (fun p : ℕ => ¬p ∣ N)",
+    "theorem finiteSieveDensity_ratio_le_all_odd_primes\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+    "theorem finiteSieveDensity_ratio_le_baseline\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      oddPrimeSieveDensity w / oddPrimeSieveDensity v",
+    "theorem one_le_finiteSieveDensity_ratio\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    1 ≤ finiteSieveDensity N w / finiteSieveDensity N v",
+    "theorem finiteSieveDensity_antitone {N : ℕ} (hN : Even N) :\n    Antitone (finiteSieveDensity N)",
+    "theorem finiteSieveDensity_ratio_antitone_center_dvd\n    {M N w v : ℕ} (hM : Even M) (hN : Even N)\n    (hMN : M ∣ N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      finiteSieveDensity M w / finiteSieveDensity M v"
+  ],
+  "primitive_definition_sources": [
+    "def oddPrimesInInterval (w v : ℕ) : Finset ℕ :=\n  (oddPrimesBelowCap v).filter (fun p : ℕ => w ≤ p)\n\n/-- The actual allowed sieve primes in the same half-open interval. -/\n",
+    "def sievePrimesInInterval (N w v : ℕ) : Finset ℕ :=\n  (sievePrimes N v).filter (fun p : ℕ => w ≤ p)\n\n/-- The baseline density uses every odd prime below the strict cap. -/\n",
+    "def oddPrimeSieveDensity (z : ℕ) : ℝ :=\n  ∏ p ∈ oddPrimesBelowCap z, (1 - 1 / ((p : ℝ) - 1))\n\n"
+  ],
+  "all_23_headers_byte_identical": true,
+  "all_3_definitions_byte_identical": true,
+  "imports_byte_identical": true,
+  "only_edit": {
+    "before": "  field_simp [hp1, hp2] <;> ring",
+    "after": "  field_simp [hp1, hp2]; ring",
+    "byte_offset": 3872,
+    "old_byte_length": 32,
+    "new_byte_length": 29,
+    "exact_forward_and_inverse_replayed": true
+  },
+  "mathematical_scope": "Exact finite positivity, cap splitting and uniform product comparison for literal finite sieve density at even N including zero; strict upper prime cap and real subtraction unchanged. No Mertens, logarithmic dimension or analytic bound asserted.",
+  "proof_review": "The actual stdout flags only unnecessary SeqFocus. Replacing <;> by ; sequences the same ring tactic after the same field_simp invocation for the same exact odd prime factor identity. No condition, endpoint, constant, choice, supplier or theorem statement is changed.",
+  "owner": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-sieve-dimension-actual-sequencing-linter-root-owner-rebind.json",
+    "sha256": "4c5e1e8fc33668d89c6d4e5c9505b2cd49ced309e933261f264474b0a4ff8f58"
+  },
+  "actual_receipt": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T034549883094Z-ImbalancedChen.SieveDimensionComparison\\receipt.json",
+    "sha256": "f28e4575cc607859233769e71423b61cd1b969fbed9e604f0919f089538ad862",
+    "binding_before_after_exact": true,
+    "status": "FAILED",
+    "guard_error": null
+  },
+  "actual_stdout": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T034549883094Z-ImbalancedChen.SieveDimensionComparison\\stdout.log",
+    "sha256": "35ef1301f12fc143bd21d217e2e896944c62eb7861d6463d01b240ff8ade9c7d",
+    "full_text": "ImbalancedChen/SieveDimensionComparison.lean:94:24: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n"
+  },
+  "recommendation": "Rebind only existing root6289 fair M6144/j2/RSS6656 strict gate to current3e4cae source; fullowned only after strict PASS. No new target or foreign imports and no pin/resource/checker/CI changes authorized by this report.",
+  "Lean_or_checker_executed": false,
+  "Lean_source_cache_git_pins_edited": false
+}

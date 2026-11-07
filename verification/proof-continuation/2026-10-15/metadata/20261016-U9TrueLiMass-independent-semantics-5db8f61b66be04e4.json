@@ -1,0 +1,161 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_AND_FRESH_DAG_NO_TARGET_ISSUES_FOUND",
+  "reviewer": "/root/tail_resume/greedy_review, independent of lower_resume self-review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9TrueLiMass",
+  "source_sha256": "18cefc082ad643712c55ce96a5da77fe0521a47c46e89ac1c0b098f25509a9bc",
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9CoprimeGateBudget",
+      "source_sha256": "26412eaa03d9ea681c2726dd955ea7d5848d7f9342fd6804f00cc881e97ba821"
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenTrueLiNormalization",
+      "source_sha256": "5ba063153c38848c91146b21dfcc46fbf77a0911af4b691137bffcb0055bafc7"
+    }
+  ],
+  "declarations": [
+    {
+      "name": "tendsto_currentChenUpsilon9_trueLi_normalized_real",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 27,
+      "signature": "theorem tendsto_currentChenUpsilon9_trueLi_normalized_real :\n    Tendsto (fun x : ℝ => trueLogarithmicIntegral x * Real.log x / x)\n      atTop (𝓝 1)",
+      "independent_assessment": "Unconditional real-variable limit. Both eventual squeeze bounds are the existing exact real currentChen_trueLi_normalized_bounds for x>=4. log(x)/sqrt(x)->0 follows from the fixed real little-o theorem at exponent 1/2; 4/log(x)->0. Does not infer a real limit from a natural-target result."
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_trueLi_real_le",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 45,
+      "signature": "theorem eventually_currentChenUpsilon9_trueLi_real_le (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ x : ℝ in atTop,\n      trueLogarithmicIntegral x ≤ (1 + η) * x / Real.log x",
+      "independent_assessment": "For every eta>0, the real limit produces one eventual real upper bound trueLi(x)<=(1+eta)*x/log x. Restriction x>=4 pays positive x and log x before multiplying/dividing."
+    },
+    {
+      "name": "currentChenUpsilon9_li_argument_power_lower",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 60,
+      "signature": "theorem currentChenUpsilon9_li_argument_power_lower {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon9PrefixProducts N) :\n    (N : ℝ) ^ (191 / 500 : ℝ) ≤ (N : ℝ) / (a : ℝ)",
+      "independent_assessment": "For every actual product a, positivity comes from PrefixProducts_data and actual a<N^(309/500) gives N/a>=N^(191/500). N>=1 suffices; all quotients are real division, not Nat.div."
+    },
+    {
+      "name": "currentChenUpsilon9_log_gap_pos",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 77,
+      "signature": "theorem currentChenUpsilon9_log_gap_pos {N a : ℕ} (hN : 2 ≤ N)\n    (ha : a ∈ currentChenUpsilon9PrefixProducts N) :\n    0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ)",
+      "independent_assessment": "On N>=2 and actual product a, log(a)/log(N)<=309/500, hence the literal gap is at least 191/500>0. No free product-window premise or approximation is supplied."
+    },
+    {
+      "name": "currentChenUpsilon9LogTotientMass",
+      "kind": "def",
+      "visibility": "public",
+      "line": 93,
+      "signature": "def currentChenUpsilon9LogTotientMass (N : ℕ) : ℝ",
+      "independent_assessment": "The mass is exactly the original product-image sum of (1/phi(a))/(1-log(a)/log(N)), independent of any sieve modulus. It is not a multiplicity-weighted factorization sum."
+    },
+    {
+      "name": "currentChenUpsilon9LogTotientMass_nonneg",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 98,
+      "signature": "theorem currentChenUpsilon9LogTotientMass_nonneg {N : ℕ} (hN : 2 ≤ N) :\n    0 ≤ currentChenUpsilon9LogTotientMass N",
+      "independent_assessment": "For N>=2 every log gap is positive; phi(a) reciprocal is nonnegative. Nonnegativity holds for the full displayed mass with no density assumption."
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_liMainMass_le_logTotientMass",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 108,
+      "signature": "theorem eventually_currentChenUpsilon9_liMainMass_le_logTotientMass\n    (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ N : ℕ in atTop,\n      currentChenUpsilon9LiMainMass N * Real.log (N : ℝ) / (N : ℝ) ≤\n        (1 + η) * currentChenUpsilon9LogTotientMass N",
+      "independent_assessment": "One real threshold X is selected first from eta, then N^(191/500)>=X pays it for every actual a simultaneously. Exact log(N/a)=log(N)*(1-log(a)/log(N)) normalizes the original Li mass. Positivity of a pays phi(a)>0 and 1/a<=1/phi(a), an upper estimate only. The conclusion retains the same actual image harmonic mass, with coefficient (1+eta) and no false equivalence."
+    }
+  ],
+  "fixed_api_checks": [
+    {
+      "name": "currentChen_trueLi_normalized_bounds",
+      "file": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "source_sha256": "5ba063153c38848c91146b21dfcc46fbf77a0911af4b691137bffcb0055bafc7",
+      "line": 85,
+      "complete_interface": "For real x with 4<=x: 1<=trueLi(x)*log(x)/x and trueLi(x)*log(x)/x<=1+(1/log(2)^2)*(log(x)/sqrt(x))+4/log(x).",
+      "assessment": "Read the actual existing proof: trueLi is liuLogarithmicIntegral normalized by 2/log2; exact integration-by-parts squared-log remainder is used, with no caller asymptotic. The new real theorem consumes this real interface directly."
+    },
+    {
+      "name": "isLittleO_log_rpow_atTop; tendsto_rpow_atTop",
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Asymptotics.lean",
+      "source_sha256": "004e4d6013b20f95feedfcb23b257c07eb1ee4c7645b9d81fd6e4cb684a116d6",
+      "interfaces": [
+        "r>0 -> Real.log =o[atTop] (fun x:Real=>x^r)",
+        "y>0 -> Tendsto (fun x:Real=>x^y) atTop atTop"
+      ],
+      "assessment": "Both are global declarations, so the unqualified names used in the new file resolve at source level. They accept real variables and exactly the positive 1/2 and 191/500 exponents."
+    },
+    {
+      "name": "Real.log_div; Real.log_rpow; Real.log_le_log",
+      "assessment": "Actual a>0 and N>=2 pay nonzero/positive logarithm arguments. The target log quotient identity uses real arithmetic and field_simp with log(N)!=0."
+    },
+    {
+      "name": "Nat.totient_pos; Nat.totient_le; one_div_le_one_div_of_le",
+      "assessment": "totient_pos is iff 0<a; actual positivity pays it. totient_le is phi(a)<=a. Positive phi(a) gives reciprocal order 1/a<=1/phi(a); the positive log-gap reciprocal and 1+eta>0 preserve direction. No phi(a)~a equivalence is asserted."
+    },
+    {
+      "name": "currentChenUpsilon9LiMainMass and trueLogarithmicIntegral",
+      "assessment": "The original main mass uses liuLogarithmicIntegral (2/log2), definitionally the same genuine trueLi function; summation and scaling preserve the exact original product image."
+    }
+  ],
+  "mathematical_findings": {
+    "real_leading_one_proved_internally": true,
+    "single_threshold_uniform_over_actual_products": true,
+    "all_actual_quotients_real_not_nat": true,
+    "quotient_power_lower": "N^(191/500), from actual upper a<N^(309/500)",
+    "logarithmic_gap_uniform_floor": "191/500",
+    "phi_denominator_transport": "upper bound only, 1/a<=1/phi(a)",
+    "same_original_product_image": true,
+    "hidden_asymptotic_premises": []
+  },
+  "issues": [],
+  "fresh_source_dag": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-U9TrueLiMass-independent-proper-dag.json",
+    "sha256": "80ba1d01c334d95c7121bcf70fa39b57fa002b8f21a66f4b61ab473b25648a6d",
+    "candidate_resolved": 6316,
+    "baseline_union_resolved": 6315,
+    "new_project": [
+      "ImbalancedChen.CurrentChenUpsilon9TrueLiMass"
+    ],
+    "new_foreign": [],
+    "unresolved": [],
+    "parser_findings": [],
+    "all_reachable_sources_freshly_read_and_hashed": true,
+    "boundary": "Source-header graph only, not imported-object, kernel replay or axiom acceptance."
+  },
+  "owner_advisory_reports": [
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9TrueLiMass-semantics.json",
+      "sha256": "bd6d8ff5d18b8fba738a9f575e248a9cc4d4f3d2e7e813b1128b7c65e66e7467",
+      "scope": "Owner source-only evidence; not reused as independent imported closure validation."
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-U9TrueLiMass-proper-dag.json",
+      "sha256": "77c713ed2420ac398ed6e6a505e1a9e0084bbc6b7c3be4600c69b16071292dfb",
+      "scope": "Owner source-only evidence; not reused as independent imported closure validation."
+    }
+  ],
+  "remaining_gates": [
+    "Exact 18cefc08 requires separately owned Lean elaboration and dependency object validation; no compiler or linter result is inferred here.",
+    "The actual LogTotientMass harmonic asymptotic remains unproved by this leaf.",
+    "The finite mean still contains the actual full switched upper density. A later product-bound assembly needs its own correct sign and density estimate.",
+    "The ordinary switched factor eight, adopted K, final lower bound and final theorem assembly remain separate."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "kernel_replay_or_axiom_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "status": "ROOT_ONE_NEW_LEAN_SOURCE_AUTHORING_ONLY_EXACT_ORIGINAL_CORE_SMOOTH_ENDPOINT_NOT_COMPILER_GATE",
+  "created_utc": "2026-10-21T00:59:12.223266+00:00",
+  "author": "/root/spectral_complement_oct21",
+  "source": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation",
+  "root_math_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-D-packet-575b-root-complete-math-and-critical-path-review.json",
+    "sha256": "63d1b80f9cb2309db629d4d67d1365030b5dc87101bff1c0cbf07930cc416b4e"
+  },
+  "independent_math_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-D-packet-575b-independent-complete-review-and-resonance-order.json",
+    "sha256": "fddef513d9271a6a07365df4e1273023d64452c8006712c5bef3d5769447e5ef"
+  },
+  "complete_four_literal_definitions": [
+    "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)",
+    "def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))",
+    "def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)",
+    "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0"
+  ],
+  "ONE_complete_public_theorem": "theorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A",
+  "complete_required_private_support_helper_type": "private theorem smooth_shared_frequency_support\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Z : ℝ} (hZ : 0 < Z)\n    {p r s r' s' : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2)\n    (x : ℝ) (h : ℤ)\n    (hactive :\n      (CommonSmoothCutoff.poissonSmoothLowPass\n        ((d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) x h ≠ 0) :\n    h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s')))",
+  "complete8step_cost_route": [
+    {
+      "step": 1,
+      "name": "Fixed genuine smooth cutoff",
+      "proof": "Define chi(u)=dyadicBump(3/2+u/2), using the existing project bump with centre3/2, rIn1/2, rOut1. Native ContDiffBump contDiff/nonneg/le_one/one_of_mem_closedBall/zero_of_le_dist give chi C-infinity, 0<=chi<=1, chi=1 for |u|<=1 and chi=0 for |u|>=2. Both signs remain; no reality or Hermitian symmetry of Fourier psi is used."
+    },
+    {
+      "step": 2,
+      "name": "Positive actual labels and physical shared lcm",
+      "proof": "On the original admissible carriers p>=ceil Q1>=1, r,rprime>=ceil R>=1, s,sprime>=ceil S>=1. With v=r*s,w=rprime*sprime,D=gcd(v,w), D>=1 and D|v,w. Exact lcm(p*v,p*w)=p*lcm(v,w)=p*v*w/D, equivalently D*L=p*v*w. This holds for every positive composite or prime p and does not invoke gcd(p,v*w)=1. For exact finite arithmetic, first use Nat.gcd_mul_lcm and cancellation/divisibility; then cast to positive reals."
+    },
+    {
+      "step": 3,
+      "name": "One genuine D-packet frequency carrier, constant64",
+      "proof": "Original p<=2Q1, r,rprime<=2R, s,sprime<=2S imply L<=32 Q1 R^2 S^2/D. A nonzero chi(Vh/(ZL)) requires |Vh/L|<2Z and hence |h|<2ZL/V<=64 Z Q1 R^2 S^2/(D V). Thus h is in the proposed symmetric signed nonzero window at its ceiling unless h=0, for which original poissonNonzeroFrequency is0. For every FIXED actual D, that finite carrier depends only on original atom scales,Z,D, not the summed p,r,s,rprime,sprime,N1,N2. The upper ceiling in this OUTER carrier is not a joint coefficient; terms outside the row-dependent smooth support vanish exactly."
+    },
+    {
+      "step": 4,
+      "name": "Uniform analytic row tail with no frequency count",
+      "proof": "Write t=V/L>0, P_h=poissonNonzeroFrequency(t,x,h), F=Fourier psi. Fix rnat>=0 and choose C>0 with |F(u)|<=C/(1+|u|)^(rnat+2). If (1-chi(th/Z))*P_h is nonzero, h!=0 and Z<|th|. Since 0<=1-chi<=1, for Z>=1 its norm is <=C*Z^(-rnat)*poissonNonzeroDecay(t,h). Owned summability plus tsum<=2 gives norm(sum_h P_h - sum_h chi(th/Z)*P_h)<=2C/Z^rnat, uniformly all t>0,x, all signed residues and both signs h. The smooth weighted series is exactly its proposed finite D-window by Step3, not merely bounded by it. Its real projection error has the same bound. No crude number of frequencies or extra 1/t enters."
+    },
+    {
+      "step": 5,
+      "name": "Exact actual shared first-factor source",
+      "proof": "Expand the literal original sharedSmallPairedSmallSupportedNonzero and commonFactorPairNonzeroWeight. In q1SliceAtom(p), both original gamma1 indicators force the two full first labels to equal this same original p, leaving exactly the displayed gamma2(s)gamma3(r) conjugate right coefficient. Commutativity only reorders those scalar factors; the original real projection remains BEFORE the arbitrary complex outer coefficient. All original N carriers, primitive(p,a) gate, actual Compatible condition, small gcd and supportedPart masks are unchanged. Replace each row Poisson series by the smooth finite sum. This equality is elementary original finite algebra, not an assumed dictionary or a signed-subsum enlargement."
+    },
+    {
+      "step": 6,
+      "name": "Complete finite outer counting",
+      "proof": "For e=cleanedAlphaAtom(d), owned admissibility preserves geometry; all transposed beta and gamma2/gamma3 labels in the core have norms<=1. Finite original closed carriers have card<=2 times their scale. Therefore p,N1,N2,r,s,rprime,sprime row count is <=(2Q1)(2U)^2(2R)^2(2S)^2=128 Q1 U^2 R^2 S^2. Times row error2C/Z^rnat gives <=256 C Q1 U^2 R^2 S^2/Z^rnat. All signed frequency norms were already charged in the summable row bound; there is no frozen D/g/d1/p/root cell multiplier. D is a deterministic function of each original ordered tail pair and its finite window only gives exact support."
+    },
+    {
+      "step": 7,
+      "name": "Coarse original-X budget with every outside factor once",
+      "proof": "For sigma>0, original medium U^2 R^2 S<X^(1-8sigma)<=X and Q1<U X^-sigma, U,V,R,S,Q1>=1 imply each U,V,Q1,R,S<=X. Hence the last finite core error is <=256 C X^7/Z^rnat<=512 C X^9/Z^rnat for X>=1. Owned original outside moment W<=4VQ1(1+log(2V))^pB, pB=((2^B)^2-1). Choose the owned uniform log threshold with exponent1, so (1+log(2V))^pB<=X; then W<=4X^3. Thus W*core-error<=2048 C X^12/Z^rnat. W is the ORIGINAL d betaL2*gamma1L2, inserted exactly once; no cleaned beta moment is substituted for it."
+    },
+    {
+      "step": 8,
+      "name": "Unit final logarithmic payment before every atom",
+      "proof": "Fix rnat=ceil(11/eta)+1 before d. Since eta>0, eta*rnat>11. At Z=X^eta and X>=1, X^12/Z^rnat<=X. Use owned scalar eventually_const_rpow_two_le_logBudget with Cscalar=2048 C and delta=1 to obtain Cscalar X<=X^2/(log X)^A. Take one maximum of its threshold, the log threshold,1 and any harmless positivity threshold before every varying atom. This proves the exact proposed public type for arbitrary kappa,c0; it requires only original MediumAdmissible and sigma,eta>0, no SW or spectral supplier."
+    }
+  ],
+  "allowed": "Write ONE new Lean file with genuine proofs,4actualdefs andONEpublicendpoint plus private necessary finite/Schwartz helpers. Faithful coercion/type annotations/namespace syntax can be adjusted and every literal deviation reported at freeze. Internal fixed positive constants may be safely enlarged with full paid ledger, unit endpoint unchanged. No new analytic supplier assumptions. Read owned sources and the frozen14e7 Tail snapshot for API/patterns; no movingTailsource reads.",
+  "explicit_authoring_queue_refinement": "Root now authorizes parallel SOURCE AUTHORING before Tail owned acceptance, rather than waiting idle: all24Tailheaders/4defs already independently byteexact under its one9B proof-only repair, frozen14e7 source snapshot stable. This does NOT accept Tail or permit compilation of the new source. Any compiler gate still REQUIRES actual Tail strict+stock+ALLsafe terminal PASS and fullsource root+independent implementation review. Earlier proposal wait condition is refined only for authoring, no required proof checks dropped.",
+  "frozen_parent_snapshot": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-tail-b25d-actual-one-warning-root-proposed-repair/proposed-after.lean.txt",
+    "sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+    "current_status": "Exact14e7 runtime retry in progress, notowned yet"
+  },
+  "deny": [
+    "No compiler/lake/checker invocation or subagents",
+    "No existingLean edits/extraimports without scope",
+    "No tools/catalog/pins/cache/CI/LaTeX/automation edits",
+    "No sorry/customaxioms/unsafe/partial/genericjointweight/supplier",
+    "No claim smooth equals hardTruncated or spectral/common-gamma/moving-a/root costs solved"
+  ],
+  "freeze_deliverable": "Whole finalsource hash and all real declaration names/true fullheaders; all4 primitive literal semantics; ONEpublictype proof; privatehelper types; exactdifferences fromproposal and complete actualcost ledger, allunverified status, thenHOLD. No catalogue registration untilrootreview.",
+  "quota_remaining_latest_actual": 86,
+  "hard_stop_remaining_at_most": 50
+}

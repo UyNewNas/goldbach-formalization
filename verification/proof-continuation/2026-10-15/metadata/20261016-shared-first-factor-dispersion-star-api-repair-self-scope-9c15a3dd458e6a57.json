@@ -1,0 +1,314 @@
+{
+  "status": "SOURCE_ONLY_SHARED_FIRST_FACTOR_STATIC_API_REPAIR_PENDING_INDEPENDENT",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T22:42:08.484398+00:00",
+  "candidate": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+  "old_sha256": "149c0c4eaa04a704e1be5667004bc5f14430112399766a086e5862e2b39d22cc",
+  "new_sha256": "3b26f71ad633e904c2f8b5967a51d46ba84bd4b17c70bf578724a415e4a838ef",
+  "old_snapshot": ".lake/proof-continuation/source-reviews/drafts/Part3SharedFirstFactorDispersion.149c0c4eaa04a704e1be5667004bc5f14430112399766a086e5862e2b39d22cc.lean",
+  "baseline_author_report": ".lake/proof-continuation/source-reviews/20261016-shared-first-factor-dispersion-self-scope.json",
+  "baseline_author_report_sha256": "e8fae04e5cfe0423830ea01f3b3db6c9e8deef4ef0bff01088ae0f424658f329",
+  "edits": [
+    {
+      "old": "[star_sum, star_mul, star_star]",
+      "new": "[star_sum, star_mul', star_star]",
+      "occurrences": 2
+    }
+  ],
+  "forward_and_inverse_exact_bytes": true,
+  "complete_declarations_unchanged": [
+    {
+      "name": "MediumAtom.q1SliceAtom",
+      "kind": "def",
+      "private": false,
+      "line": 29,
+      "complete_header": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom",
+      "complete_definition": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }"
+    },
+    {
+      "name": "MediumAtom.primitiveFirstFactorCarrier",
+      "kind": "def",
+      "private": false,
+      "line": 32,
+      "complete_header": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ",
+      "complete_definition": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorRows",
+      "kind": "def",
+      "private": false,
+      "line": 35,
+      "complete_header": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ)",
+      "complete_definition": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorCoefficient",
+      "kind": "def",
+      "private": false,
+      "line": 38,
+      "complete_header": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ",
+      "complete_definition": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2"
+    },
+    {
+      "name": "gamma1_gate",
+      "kind": "theorem",
+      "private": true,
+      "line": 44,
+      "complete_header": "private theorem gamma1_gate\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    ‖d.gamma1 p‖ ≤ 1 ∧ (d.gamma1 p ≠ 0 → p.Coprime d.residue.natAbs)"
+    },
+    {
+      "name": "factor_pos",
+      "kind": "theorem",
+      "private": true,
+      "line": 52,
+      "complete_header": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p"
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 58,
+      "complete_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_scale",
+      "kind": "theorem",
+      "private": false,
+      "line": 72,
+      "complete_header": "@[simp] theorem MediumAtom.q1SliceAtom_scale (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).scale = d.scale"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_auxSWError",
+      "kind": "theorem",
+      "private": false,
+      "line": 75,
+      "complete_header": "@[simp] theorem MediumAtom.q1SliceAtom_auxSWError (d : MediumAtom)\n    (p k q b : ℕ) : (d.q1SliceAtom p).auxSWError k q b = d.auxSWError k q b"
+    },
+    {
+      "name": "uniformAuxiliarySW_q1SliceFamily",
+      "kind": "theorem",
+      "private": false,
+      "line": 79,
+      "complete_header": "theorem uniformAuxiliarySW_q1SliceFamily {ι : Type*} (F : ι → MediumAtom)\n    {C0 : ℕ} (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun ip : ι × ℕ ↦ (F ip.1).q1SliceAtom ip.2) C0"
+    },
+    {
+      "name": "mediumAdmissible_q1SliceAtom",
+      "kind": "theorem",
+      "private": false,
+      "line": 89,
+      "complete_header": "theorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p)"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_signedError",
+      "kind": "theorem",
+      "private": false,
+      "line": 112,
+      "complete_header": "theorem MediumAtom.q1SliceAtom_signedError (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    (d.q1SliceAtom p).signedError =\n      ∑ q2 ∈ factorCarrier d.Q2, ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3)"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_q1Slice_sum",
+      "kind": "theorem",
+      "private": false,
+      "line": 129,
+      "complete_header": "theorem MediumAtom.signedError_eq_q1Slice_sum\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier,\n      d.gamma1 p * (d.q1SliceAtom p).signedError"
+    },
+    {
+      "name": "q1Slice_signedError_eq_rows",
+      "kind": "theorem",
+      "private": true,
+      "line": 158,
+      "complete_header": "private theorem q1Slice_signedError_eq_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).signedError = ∑ m ∈ d.betaCarrier,\n      d.beta m * (d.q1SliceAtom p).transposedAtom.complexCenteredRow m"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_sharedFirstFactorRows",
+      "kind": "theorem",
+      "private": false,
+      "line": 166,
+      "complete_header": "theorem MediumAtom.signedError_eq_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n      (d.gamma1 p * d.beta m) *\n        (d.q1SliceAtom p).transposedAtom.complexCenteredRow m"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows",
+      "kind": "theorem",
+      "private": false,
+      "line": 180,
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2"
+    },
+    {
+      "name": "q1Slice_rows_le_commonSmooth",
+      "kind": "theorem",
+      "private": true,
+      "line": 203,
+      "complete_header": "private theorem q1Slice_rows_le_commonSmooth (d : MediumAtom) (hV : 1 ≤ d.V) (p : ℕ) :\n    (∑ m ∈ d.betaCarrier,\n      ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) ≤\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m *\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows",
+      "kind": "theorem",
+      "private": false,
+      "line": 224,
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion",
+      "kind": "theorem",
+      "private": false,
+      "line": 238,
+      "complete_header": "theorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_outside_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 255,
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)"
+    },
+    {
+      "name": "MediumAtom.gamma1L2_primitive_eq",
+      "kind": "theorem",
+      "private": false,
+      "line": 282,
+      "complete_header": "theorem MediumAtom.gamma1L2_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) =\n      ∑ p ∈ factorCarrier d.Q1, ‖d.gamma1 p‖ ^ 2"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion",
+      "kind": "theorem",
+      "private": false,
+      "line": 296,
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        ∑ p ∈ d.primitiveFirstFactorCarrier,\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n            2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n            (d.q1SliceAtom p).transposedAtom.complexDispersionU\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight)"
+    },
+    {
+      "name": "slice_rows",
+      "kind": "theorem",
+      "private": true,
+      "line": 318,
+      "complete_header": "private theorem slice_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexRowLabels =\n      d.transposedAtom.complexRowLabels"
+    },
+    {
+      "name": "slice_coefficient",
+      "kind": "theorem",
+      "private": true,
+      "line": 322,
+      "complete_header": "private theorem slice_coefficient (d : MediumAtom) (p : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l =\n      (if l.1.1 = p then (1 : ℂ) else 0) *\n        d.gamma2 l.1.2.1 * d.gamma3 l.1.2.2 * d.transposedAtom.beta l.2"
+    },
+    {
+      "name": "sum_slice_coefficient",
+      "kind": "theorem",
+      "private": true,
+      "line": 329,
+      "complete_header": "private theorem sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * f ((p, l.1.1, l.1.2), l.2)"
+    },
+    {
+      "name": "sum_star_slice_coefficient",
+      "kind": "theorem",
+      "private": true,
+      "line": 351,
+      "complete_header": "private theorem sum_star_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l) * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        star (d.sharedFirstFactorCoefficient l) * f ((p, l.1.1, l.1.2), l.2)"
+    },
+    {
+      "name": "pair_sum_slice_coefficient",
+      "kind": "theorem",
+      "private": true,
+      "line": 367,
+      "complete_header": "private theorem pair_sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : ((ℕ × ℕ × ℕ) × ℕ) → ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l') =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          K ((p, l.1.1, l.1.2), l.2) ((p, l'.1.1, l'.1.2), l'.2)"
+    },
+    {
+      "name": "sharedFirstFactor_gcd",
+      "kind": "theorem",
+      "private": false,
+      "line": 399,
+      "complete_header": "theorem sharedFirstFactor_gcd (p v1 v2 : ℕ) :\n    (p * v1).gcd (p * v2) = p * v1.gcd v2"
+    },
+    {
+      "name": "sharedFirstFactor_lcm",
+      "kind": "theorem",
+      "private": false,
+      "line": 402,
+      "complete_header": "theorem sharedFirstFactor_lcm (p v1 v2 : ℕ) :\n    (p * v1).lcm (p * v2) = p * v1.lcm v2"
+    },
+    {
+      "name": "sharedFirstFactor_compatible_iff",
+      "kind": "theorem",
+      "private": false,
+      "line": 405,
+      "complete_header": "theorem sharedFirstFactor_compatible_iff (p v1 v2 n1 n2 : ℕ) :\n    ComplexCRT.Compatible (p * v1) (p * v2) n1 n2 ↔\n      n1.Coprime (p * v1) ∧ n2.Coprime (p * v2) ∧\n        Nat.ModEq (p * v1.gcd v2) n1 n2"
+    },
+    {
+      "name": "MediumAtom.q1SliceDispersionW_eq_sharedCRT",
+      "kind": "theorem",
+      "private": false,
+      "line": 412,
+      "complete_header": "theorem MediumAtom.q1SliceDispersionW_eq_sharedCRT\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (S : Finset ℕ) (w : ℕ → ℝ) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW S w : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          (ComplexCRT.constructedProgressionWeight S w d.residue\n            (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ)"
+    },
+    {
+      "name": "reduced_modulus_pos",
+      "kind": "theorem",
+      "private": true,
+      "line": 431,
+      "complete_header": "private theorem reduced_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) : 0 < l.1.1 * l.1.2"
+    },
+    {
+      "name": "shared_progression_poisson",
+      "kind": "theorem",
+      "private": true,
+      "line": 439,
+      "complete_header": "private theorem shared_progression_poisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n      (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) =\n      ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n          (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n        (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n          CommonSmoothCutoff.cutoffMass +\n            (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n              (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n              ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                l.2 l'.2 d.residue : ℝ) /\n                  ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n      else 0 : ℝ) : ℂ)"
+    },
+    {
+      "name": "factor_le_twice",
+      "kind": "theorem",
+      "private": true,
+      "line": 477,
+      "complete_header": "private theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : (p : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "reduced_modulus_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 481,
+      "complete_header": "private theorem reduced_modulus_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) :\n    ((l.1.1 * l.1.2 : ℕ) : ℝ) ≤ 4 * d.Q2 * d.Q3"
+    },
+    {
+      "name": "MediumAtom.q1SliceDispersionW_eq_sharedPoisson",
+      "kind": "theorem",
+      "private": false,
+      "line": 498,
+      "complete_header": "theorem MediumAtom.q1SliceDispersionW_eq_sharedPoisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n      d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n              (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n            (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n              CommonSmoothCutoff.cutoffMass +\n                (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n                  (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n                  ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                    l.2 l'.2 d.residue : ℝ) /\n                      ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n          else 0 : ℝ) : ℂ)"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_centered_identity",
+      "kind": "theorem",
+      "private": false,
+      "line": 524,
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_lcm_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 545,
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_frequency_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 575,
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_frequency_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) {Z : ℝ} (hZ : 0 ≤ Z) (h : ℤ)\n    (hh : |(h : ℝ)| ≤\n      (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ) * Z) / d.V) :\n    |(h : ℝ)| ≤ 32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 * Z / d.V"
+    }
+  ],
+  "declaration_count": 39,
+  "definition_count": 4,
+  "imports_unchanged": [
+    "ImbalancedChen.Part3TransposedDispersion"
+  ],
+  "owned_parent_bindings_fresh": {
+    "ImbalancedChen/Part3TransposedDispersion.lean": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786"
+  },
+  "pins_fresh": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "mathematics_thresholds_definitions_unchanged": true,
+  "api_finding": "Independent reviewer found two conjugation sum equalities using anti-multiplicative star_mul reverse the factors while the equality requires Complex multiplicative order. Use commutative star_mulprime already consumed by owned PrimitiveZeroReal:38 and TransposedPrimitiveV:125; no theorem/type/def/import change.",
+  "no_Lean_or_build_invocation": true
+}

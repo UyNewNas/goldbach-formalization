@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:16:50.4272242Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_SCOPE_AND_MATHEMATICAL_REVIEW_APPROVED_PENDING_RUNTIME",
+  "target": {
+    "path": "ImbalancedChen\\Part3SmoothProgressionError.lean",
+    "sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+    "expected_sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+    "frozen_hash_matches": true,
+    "imports": [
+      "ImbalancedChen.Part3CommonPoisson"
+    ],
+    "declaration_count": 9,
+    "definition_count": 1,
+    "declarations": [
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poisson_decay_step",
+        "kind": "theorem",
+        "start_line": 27,
+        "signature_last_line": 29,
+        "complete_source_header": "theorem poisson_decay_step {t : ℝ} (ht : 0 < t) (n : ℕ) :\n    t / (1 + t * (n + 1)) ^ 2 ≤\n      1 / (1 + t * n) - 1 / (1 + t * (n + 1))",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poisson_decay_sum_range_le",
+        "kind": "theorem",
+        "start_line": 38,
+        "signature_last_line": 39,
+        "complete_source_header": "theorem poisson_decay_sum_range_le {t : ℝ} (ht : 0 < t) (N : ℕ) :\n    (∑ n ∈ Finset.range N, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poisson_decay_summable_nat",
+        "kind": "theorem",
+        "start_line": 49,
+        "signature_last_line": 50,
+        "complete_source_header": "theorem poisson_decay_summable_nat {t : ℝ} (ht : 0 < t) :\n    Summable (fun n : ℕ ↦ t / (1 + t * ((n : ℝ) + 1)) ^ 2)",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poisson_decay_tsum_nat_le",
+        "kind": "theorem",
+        "start_line": 53,
+        "signature_last_line": 54,
+        "complete_source_header": "theorem poisson_decay_tsum_nat_le {t : ℝ} (ht : 0 < t) :\n    (∑' n : ℕ, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroDecay",
+        "kind": "def",
+        "start_line": 57,
+        "signature_last_line": 57,
+        "complete_source_header": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ",
+        "visibility": "public",
+        "complete_source_definition": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ :=\n  if h = 0 then 0 else t / (1 + |t * h|) ^ 2"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroDecay_summable_tsum_le",
+        "kind": "theorem",
+        "start_line": 60,
+        "signature_last_line": 61,
+        "complete_source_header": "theorem poissonNonzeroDecay_summable_tsum_le {t : ℝ} (ht : 0 < t) :\n    Summable (poissonNonzeroDecay t) ∧ (∑' h : ℤ, poissonNonzeroDecay t h) ≤ 2",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequency_uniform",
+        "kind": "theorem",
+        "start_line": 85,
+        "signature_last_line": 87,
+        "complete_source_header": "theorem poissonNonzeroFrequency_uniform :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x : ℝ,\n      ‖∑' h : ℤ, poissonNonzeroFrequency t x h‖ ≤ C",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_uniform_error",
+        "kind": "theorem",
+        "start_line": 113,
+        "signature_last_line": 118,
+        "complete_source_header": "theorem scaledDyadicCutoff_finset_progression_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q → ∀ b : ℤ,\n      |(∑ m ∈ S, if Int.ModEq q (m : ℤ) b then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C",
+        "visibility": "public"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff_finset_multiples_uniform_error",
+        "kind": "theorem",
+        "start_line": 126,
+        "signature_last_line": 131,
+        "complete_source_header": "theorem scaledDyadicCutoff_finset_multiples_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q →\n      |(∑ m ∈ S, if q ∣ m then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C",
+        "visibility": "public"
+      }
+    ]
+  },
+  "source_dag_delta": {
+    "basis": "Direct source/import review against the owner-supplied parent union, in which ImbalancedChen.Part3CommonPoisson and its transitive imports are already reachable. No full-tree rescan was performed.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3SmoothProgressionError"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "new_direct_imports_already_in_parent_union": [
+      "ImbalancedChen.Part3CommonPoisson"
+    ],
+    "new_external_bootstrap_required": false
+  },
+  "quantifier_audit": [
+    "poissonNonzeroFrequency_uniform: one strictly positive C precedes every real t>0 and every real shift x; no modulus/scale comparison or arithmetic coefficient hypothesis.",
+    "scaledDyadicCutoff_finset_progression_uniform_error: one strictly positive C precedes every M>0, every finite S containing all nonzero local cutoff values, every natural q>0, and every signed integer b. No q<=M restriction, reduced-residue gate, exceptional domain, budget premise, or caller-supplied error estimate.",
+    "scaledDyadicCutoff_finset_multiples_uniform_error: the same quantifier scope and all positive natural q; derived by signed residue b=0 and exact Int/nat divisibility equivalences.",
+    "All normalization references resolve to the local CommonSmoothCutoff.cutoffMass, whose definition is the real part of the Fourier transform of the local dyadicCutoffSchwartz at zero."
+  ],
+  "proof_audit": [
+    {
+      "site": "poisson_decay_step and poisson_decay_sum_range_le",
+      "assessment": "For t>0, A=1+t*n and B=A+t are positive and A<=B, so t/B^2<=t/(A*B)=1/A-1/B. Summing telescopes to 1-1/(1+t*N)<=1. All n and N are unrestricted natural numbers."
+    },
+    {
+      "site": "poisson_decay_summable_nat and poisson_decay_tsum_nat_le",
+      "assessment": "Nonnegative finite partial sums bounded by one supply actual summability and infinite-sum bound. No convergence is assumed."
+    },
+    {
+      "site": "poissonNonzeroDecay definition and poissonNonzeroDecay_summable_tsum_le",
+      "assessment": "The zero term is exactly zero; positive and negative nonzero integers have identical natural-indexed terms t/(1+t*(n+1))^2. The disjoint integer decomposition proves summability and total bound two."
+    },
+    {
+      "site": "poissonNonzeroFrequency_uniform",
+      "assessment": "The already reachable local Schwartz rapid-decay lemma at order two gives C independent of mesh and shift. The Fourier character has norm one and the scalar t is positive, so each nonzero Fourier term is bounded by C*poissonNonzeroDecay. Existing local summability of the normed series legitimizes norm_tsum_le_tsum_norm and termwise comparison, giving total norm <=2*C."
+    },
+    {
+      "site": "scaledDyadicCutoff_finset_progression_uniform_error",
+      "assessment": "Uses the already proved local finite Poisson equality, cancels exactly (M/q)*cutoffMass, then applies abs(real part)<=complex norm to the actual Fourier remainder with positive mesh M/q. The signed integer residue is retained as the real shift b/q."
+    },
+    {
+      "site": "scaledDyadicCutoff_finset_multiples_uniform_error",
+      "assessment": "Specializes the proven progression error to b=0 using exact integer ModEq/divisibility and natural-cast divisibility identities. No carrier or modulus domain is changed."
+    }
+  ],
+  "pinned_reference": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "source": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryPoisson.lean",
+    "role": "Read-only finite telescoping-majorant proof template; target imports no external Poisson/SmoothCutoff chain.",
+    "target_adaptation": "The external dyadicCutoffPoissonRemainder is replaced by the existing local poissonNonzeroFrequency; its required summability is reused from Part3CommonPoisson. The target finite progression statement is derived from the local finite Poisson identity and retains local cutoffMass."
+  },
+  "source_checks": {
+    "only_import_is_CommonPoisson": true,
+    "all_nine_complete_headers_captured": true,
+    "one_definition_captured": true,
+    "contains_sorry_or_admit": false,
+    "contains_axiom_or_opaque": false,
+    "contains_universal_Mathlib_import": false,
+    "source_file_unchanged_after_read": true
+  },
+  "issues_identified": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "frozen_lean_modified": false,
+    "full_tree_rescanned": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-smooth-progression-error-independent-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Owner-controlled runtime elaboration of the exact frozen target.",
+    "Any separately required kernel replay, axiom audit, and source/import acceptance. This source-only review is not runtime acceptance."
+  ]
+}

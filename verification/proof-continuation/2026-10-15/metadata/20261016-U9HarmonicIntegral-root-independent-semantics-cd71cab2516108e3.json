@@ -1,0 +1,63 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_FTC_DICTIONARY_REVIEW_NO_VISIBLE_MATHEMATICAL_BLOCKER",
+  "reviewer": "/root, independent of lower_resume",
+  "reviewed_at_utc": "2026-10-15T20:42:55.784791+00:00",
+  "candidate": {
+    "module": "ImbalancedChen.CurrentChenUpsilon9HarmonicIntegral",
+    "sha256": "62b7ac7d605a9b57721b7ab0ed5163bedd45f44554138165c6e67617caea3716",
+    "declarations": 3,
+    "definitions": 0
+  },
+  "all_complete_headers": [
+    {
+      "name": "hasDerivAt_currentChenUpsilon9HarmonicPrimitive",
+      "private": true,
+      "complete_source_header": "private theorem hasDerivAt_currentChenUpsilon9HarmonicPrimitive {x y : ℝ}\n    (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) (hgap : 0 < 1 - x - y) :\n    HasDerivAt (fun u : ℝ =>\n        (Real.log u - Real.log (1 - x - u)) / (x * (1 - x)))\n      (1 / (x * y * (1 - x - y))) y"
+    },
+    {
+      "name": "currentChenUpsilon9Harmonic_inner_integral",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon9Harmonic_inner_integral {x d : ℝ}\n    (hx : 0 < x) (hx1 : x < 1) (hd : 0 < d) (hdcap : d ≤ (1 - x) / 2) :\n    (∫ y in Ico d ((1 - x) / 2), 1 / (x * y * (1 - x - y))) =\n      Real.log ((1 - x - d) / d) / (x * (1 - x))"
+    },
+    {
+      "name": "currentChenUpsilon9HarmonicIntegral_eq_logIntegral",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon9HarmonicIntegral_eq_logIntegral :\n    currentChenUpsilon9HarmonicIntegral =\n      ∫ x in Ico (19 / 125 : ℝ) (59 / 250 : ℝ),\n        Real.log ((1 - x - 59 / 250) / (59 / 250)) / (x * (1 - x))"
+    }
+  ],
+  "all_proof_bodies_read": true,
+  "independent_mathematical_findings": [
+    "For positive x,y and 1-x-y, differentiating [log(y)-log(1-x-y)]/[x(1-x)] gives (1/y+1/(1-x-y))/[x(1-x)]=1/[xy(1-x-y)]. All divisions are legitimate under the displayed conditions.",
+    "The actual interval is d<=y<=(1-x)/2, with d>0 and x<1. Both y and 1-x-y are strictly positive throughout its closure. The rational integrand is continuous there; actual interval integrability is derived in the proof.",
+    "The existing closed-interval derivative FTC applies even when d=(1-x)/2. Only the Lebesgue integral endpoints are exchanged from Ico to Ioc, using the standard atomless identity. No prime arithmetic atoms are changed by this calculus leaf.",
+    "At y=(1-x)/2 the two positive log arguments agree, so the primitive is zero exactly; at y=d its negative gives log((1-x-d)/d)/[x(1-x)].",
+    "The actual outer band [19/125,59/250) implies all inner theorem hypotheses including d=59/250<=(1-x)/2. Pointwise integral congruence gives the stated exact original two-dimensional J to one-dimensional logarithmic integral dictionary. No numerical bound, adopted constant, Fubini premise or derivative premise is supplied by a caller."
+  ],
+  "actual_pinned_API_source_bindings": {
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Deriv.lean": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\IntervalIntegral\\FundThmCalculus.lean": "5fd64054d9ae8bfce585ff809933a756bcf2d224ef144ae24c8fe8870c68050c",
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\IntervalIntegral\\Basic.lean": "543c9927916958d2480b83148095de97f4beed5239b65214df71c502e3121d78"
+  },
+  "API_interfaces_read": [
+    "Real.hasDerivAt_log: x!=0 -> HasDerivAt log (x^-1) x; HasDerivAt.log hf hx differentiates the composition as fprime/fx.",
+    "intervalIntegral.integral_eq_sub_of_hasDerivAt: closed uIcc pointwise derivative plus IntervalIntegrable derivative -> exact endpoint difference.",
+    "intervalIntegral.integral_of_le: actual interval integral equals Ioc set integral when lower<=upper."
+  ],
+  "parent_source_bindings": {
+    "ImbalancedChen.CurrentChenUpsilon9HarmonicSlices": "fc4aea309c1a7fdf444696553cbf399f519a38bd9eb5d0c51cf7f01f751cc17a"
+  },
+  "relative_source_delta": {
+    "new_local": [
+      "ImbalancedChen.CurrentChenUpsilon9HarmonicIntegral"
+    ],
+    "new_foreign": [],
+    "method": "Only direct import is the existing staged Slices parent; no fresh full traversal or imported-object replay claimed."
+  },
+  "issues_identified": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "compiler_or_kernel_or_axiom_audit_run": false,
+    "source_modified": false,
+    "elaboration_or_linter_acceptance_claimed": false
+  }
+}

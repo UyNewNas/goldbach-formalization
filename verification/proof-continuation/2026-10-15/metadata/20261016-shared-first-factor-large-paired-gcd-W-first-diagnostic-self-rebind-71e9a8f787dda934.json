@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_ACTUAL_FIRST_PROOF_API_DIAGNOSTIC_REBIND_PENDING_NONAUTHOR",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-16T00:03:18.454799+00:00",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorLargePairedGCDW.lean",
+  "old_sha256": "645531ed78523f0c5e2be9ec8a8200fc24a2a30ad115766b020993330d278c1d",
+  "new_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3SharedFirstFactorLargePairedGCDW.645531ed78523f0c5e2be9ec8a8200fc24a2a30ad115766b020993330d278c1d.lean",
+  "failed_stdout": ".lake\\proof-continuation\\runs\\20261015T235913820331Z-ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW\\stdout.log",
+  "failed_stdout_sha256": "5c81e2512cd125eb0ab0a283bdb1d56e4885e56ad0ce735b6e588747d012b517",
+  "failed_receipt_sha256": "e86d56b8df0fd85690ce252a710ebf406d62ab5be57080aa13e2c7c3bed8b740",
+  "literal_edits": [
+    {
+      "old": "simp only [h₂, star_zero, mul_zero, norm_zero]",
+      "new": "simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]"
+    },
+    {
+      "old": "rw [← sum_product, ← sum_filter]",
+      "new": "rw [← sum_product', ← sum_filter]"
+    }
+  ],
+  "offset_byte_patches": [
+    {
+      "old_start": 21870,
+      "old_end": 21870,
+      "new_start": 21870,
+      "new_end": 21880,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "7a65726f5f6d756c2c20"
+    },
+    {
+      "old_start": 23880,
+      "old_end": 23880,
+      "new_start": 23890,
+      "new_end": 23891,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "27"
+    }
+  ],
+  "literal_and_offset_forward_inverse_exact_bytes": true,
+  "declaration_count": 17,
+  "definition_count": 1,
+  "all_seventeen_complete_headers_unchanged": true,
+  "sole_sharedLargePairedGCDW_complete_definition_unchanged": true,
+  "complete_declarations": [
+    {
+      "name": "MediumAtom.sharedLargePairedGCDW",
+      "kind": "def",
+      "private": false,
+      "line": 25,
+      "complete_header": "def MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ",
+      "body_delimiter": "assignment",
+      "proof_style": "assignment",
+      "complete_definition": "def MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ :=\r\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y\r\n\r\nnamespace SharedFirstFactorLargePairedGCDW",
+      "full_source": "def MediumAtom.sharedLargePairedGCDW (d : MediumAtom) (Y : ℝ) : ℂ :=\r\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y\r\n\r\nnamespace SharedFirstFactorLargePairedGCDW",
+      "full_source_sha256": "bbaaae81b1c368a524f4deb4b2d1c8912d84e67188dbdb0852235f7e4fc44679"
+    },
+    {
+      "name": "absoluteRow_le_tauFour_of_not_dvd",
+      "kind": "theorem",
+      "private": true,
+      "line": 33,
+      "complete_header": "private theorem absoluteRow_le_tauFour_of_not_dvd\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\r\n    (hn : ¬(n : ℤ) ∣ d.residue) :\r\n    d.absoluteFactorModulusRow m n ≤\r\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem absoluteRow_le_tauFour_of_not_dvd\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\r\n    (hn : ¬(n : ℤ) ∣ d.residue) :\r\n    d.absoluteFactorModulusRow m n ≤\r\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\r\n  let e : MediumAtom := { d with beta := fun _ ↦ 1 }\r\n  have he : MediumAdmissible 0 sigma kappa c0 e := by\r\n    obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, _hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\r\n    refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\r\n      hAlpha, hRough, ?_, hGamma1, hGamma2, hGamma3⟩\r\n    intro k _\r\n    change ‖(1 : ℂ)‖ ≤ (k.divisors.card : ℝ) ^ 0\r\n    norm_num\r\n  have hgood : e.cleanedBeta n ≠ 0 := by\r\n    change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0\r\n    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)\r\n  exact e.absoluteFactorModulusRow_le_tauFour he m n hgood",
+      "full_source_sha256": "5e5e0e9cf3c2819162b17b50436d5eeb992688840f685c8a2a4330a524e9a888"
+    },
+    {
+      "name": "one_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "line": 55,
+      "complete_header": "private theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\r\n  unfold MediumAtom.scale\r\n  calc\r\n    1 = (1 : ℝ) * 1 := by norm_num\r\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])",
+      "full_source_sha256": "751712f5e78eb5124e12323e525aca6ec17110cc5b67d7906a5919bcea59e07a"
+    },
+    {
+      "name": "actual_difference_le_polynomial",
+      "kind": "theorem",
+      "private": true,
+      "line": 63,
+      "complete_header": "private theorem actual_difference_le_polynomial\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\r\n    (hn : n ∈ d.transposedAtom.betaCarrier)\r\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\r\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\r\n      7 * d.scale ^ (max 1 (1 + kappa))",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem actual_difference_le_polynomial\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\r\n    (hn : n ∈ d.transposedAtom.betaCarrier)\r\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\r\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\r\n      7 * d.scale ^ (max 1 (1 + kappa)) := by\r\n  have hx := one_le_scale hd\r\n  obtain ⟨hU, hV, _, _, _, _, _, ha, _⟩ := hd\r\n  have hxK : d.scale ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    simpa only [Real.rpow_one] using\r\n      Real.rpow_le_rpow_of_exponent_le hx (le_max_left (1 : ℝ) (1 + kappa))\r\n  have haK : |(d.residue : ℝ)| ≤ d.scale ^ (max 1 (1 + kappa)) := by\r\n    have ha' : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\r\n      simpa only [Nat.cast_natAbs, Int.cast_abs] using ha\r\n    exact ha'.trans (Real.rpow_le_rpow_of_exponent_le hx (le_max_right 1 (1 + kappa)))\r\n  have hms : (m : ℝ) ∈ tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.V) :=\r\n    subset_closure hm\r\n  have hmhi := (CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset\r\n    (lt_of_lt_of_le zero_lt_one hV) hms).2\r\n  have hnhi : (n : ℝ) ≤ 2 * d.U :=\r\n    (show (n : ℝ) ≤ (Nat.floor (2 * d.U) : ℝ) by\r\n      exact_mod_cast (Finset.mem_Icc.mp hn).2).trans\r\n        (Nat.floor_le (by linarith : 0 ≤ 2 * d.U))\r\n  have hmn : (m : ℝ) * n ≤ 6 * d.scale := by\r\n    calc\r\n      _ ≤ (3 * d.V) * (2 * d.U) :=\r\n        mul_le_mul hmhi hnhi (Nat.cast_nonneg _) (by linarith)\r\n      _ = _ := by unfold MediumAtom.scale; ring\r\n  calc\r\n    _ = |(m : ℝ) * n - d.residue| := by\r\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\r\n      push_cast\r\n      rfl\r\n    _ ≤ |(m : ℝ) * n| + |(d.residue : ℝ)| := abs_sub _ _\r\n    _ ≤ 6 * d.scale + d.scale ^ (max 1 (1 + kappa)) := by\r\n      rw [abs_of_nonneg (by positivity : 0 ≤ (m : ℝ) * n)]\r\n      exact add_le_add hmn haK\r\n    _ ≤ _ := by linarith",
+      "full_source_sha256": "e46477b8f53500aef181379ea162922dba1c4a98702e488d3154a373284ae6c0"
+    },
+    {
+      "name": "tauFour_difference_subpower",
+      "kind": "theorem",
+      "private": true,
+      "line": 103,
+      "complete_header": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\r\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\r\n          ¬(n : ℤ) ∣ d.residue →\r\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\r\n              C * d.scale ^ (epsilon / 2)",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\r\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\r\n          ¬(n : ℤ) ∣ d.residue →\r\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\r\n              C * d.scale ^ (epsilon / 2) := by\r\n  let K : ℝ := max 1 (1 + kappa)\r\n  have hK : 1 ≤ K := le_max_left _ _\r\n  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK\r\n  let eta : ℝ := epsilon / (2 * K)\r\n  have heta : 0 < eta := div_pos hepsilon (mul_pos (by norm_num) hKpos)\r\n  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']\r\n  obtain ⟨D, hD, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow\r\n    (k := 4) (by norm_num) heta\r\n  refine ⟨D * (7 : ℝ) ^ eta, by positivity, fun B sigma c0 d hd m n hn hm hndiv ↦ ?_⟩\r\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\r\n    intro h\r\n    exact hndiv ⟨m, by nlinarith⟩\r\n  have hx := one_le_scale hd\r\n  calc\r\n    _ ≤ D * (((m : ℤ) * n - d.residue).natAbs : ℝ) ^ eta :=\r\n      hbound _ (Nat.pos_of_ne_zero (Int.natAbs_ne_zero.mpr hne))\r\n    _ ≤ D * (7 * d.scale ^ K) ^ eta :=\r\n      mul_le_mul_of_nonneg_left (Real.rpow_le_rpow (Nat.cast_nonneg _)\r\n        (actual_difference_le_polynomial hd hn hm) heta.le) hD.le\r\n    _ = _ := by\r\n      rw [Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 7) (Real.rpow_nonneg (by linarith) _),\r\n        ← Real.rpow_mul (by linarith : 0 ≤ d.scale), hKeta]\r\n      ring",
+      "full_source_sha256": "f1ed233454a7b9d26c6f615dfcd133d38db73517eaf6dbc016533354a09dd6b7"
+    },
+    {
+      "name": "p_pos_lower",
+      "kind": "theorem",
+      "private": true,
+      "line": 136,
+      "complete_header": "private theorem p_pos_lower\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\r\n    (hp : p ∈ d.primitiveFirstFactorCarrier) : 0 < p ∧ d.Q1 ≤ (p : ℝ)",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem p_pos_lower\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\r\n    (hp : p ∈ d.primitiveFirstFactorCarrier) : 0 < p ∧ d.Q1 ≤ (p : ℝ) := by\r\n  have hlo := (mem_Icc.mp (mem_filter.mp hp).1).1\r\n  have hlower : d.Q1 ≤ (p : ℝ) := (Nat.le_ceil d.Q1).trans (by exact_mod_cast hlo)\r\n  have hpos : (0 : ℝ) < p := (zero_lt_one.trans_le hd.2.2.1).trans_le hlower\r\n  exact ⟨by exact_mod_cast hpos, hlower⟩",
+      "full_source_sha256": "b69d7221293d67c099d86bbca4ef000477169efd0ec8a35244d7cb57e5b6f994"
+    },
+    {
+      "name": "p_coprime_residue",
+      "kind": "theorem",
+      "private": true,
+      "line": 145,
+      "complete_header": "private theorem p_coprime_residue\r\n    {d : MediumAtom} {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n    Int.gcd d.residue p = 1",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem p_coprime_residue\r\n    {d : MediumAtom} {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n    Int.gcd d.residue p = 1 := by\r\n  simpa only [Int.gcd, Int.natAbs_natCast] using (mem_filter.mp hp).2.symm",
+      "full_source_sha256": "cabf56134452e44fd9e514ba1f52a3f4acc4e439f62a28d02e5dcd8e8dcb23f8"
+    },
+    {
+      "name": "slice_gamma",
+      "kind": "theorem",
+      "private": true,
+      "line": 150,
+      "complete_header": "private theorem slice_gamma (d : MediumAtom) (p : ℕ) (r : ℕ × ℕ × ℕ) :\r\n    (d.q1SliceAtom p).transposedAtom.complexFactorGamma r =\r\n      (if r.1 = p then (1 : ℂ) else 0) * d.gamma2 r.2.1 * d.gamma3 r.2.2",
+      "body_delimiter": "assignment",
+      "proof_style": "direct_term",
+      "complete_definition": null,
+      "full_source": "private theorem slice_gamma (d : MediumAtom) (p : ℕ) (r : ℕ × ℕ × ℕ) :\r\n    (d.q1SliceAtom p).transposedAtom.complexFactorGamma r =\r\n      (if r.1 = p then (1 : ℂ) else 0) * d.gamma2 r.2.1 * d.gamma3 r.2.2 := rfl",
+      "full_source_sha256": "0bbacc28b232d42928203ad9fe08e8e396568b24ee8c624df456eb72fbd2e1ea"
+    },
+    {
+      "name": "absoluteRow_eq_zero_of_not_product",
+      "kind": "theorem",
+      "private": true,
+      "line": 155,
+      "complete_header": "private theorem absoluteRow_eq_zero_of_not_product (d : MediumAtom) (p m n : ℕ)\r\n    (hnot : ¬Int.ModEq p ((m : ℤ) * n) d.residue) :\r\n    (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n = 0",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem absoluteRow_eq_zero_of_not_product (d : MediumAtom) (p m n : ℕ)\r\n    (hnot : ¬Int.ModEq p ((m : ℤ) * n) d.residue) :\r\n    (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n = 0 := by\r\n  unfold MediumAtom.absoluteFactorModulusRow\r\n  rw [show (d.q1SliceAtom p).transposedAtom.residue = d.residue from rfl]\r\n  apply sum_eq_zero\r\n  intro r _\r\n  by_cases hq : r.1 = p\r\n  · by_cases hr : Int.ModEq (complexFactorModulus r) ((m : ℤ) * n) d.residue\r\n    · have hdiv : (p : ℤ) ∣ (complexFactorModulus r : ℤ) := by\r\n        refine ⟨((r.2.1 * r.2.2 : ℕ) : ℤ), ?_⟩\r\n        simp only [complexFactorModulus]\r\n        rw [hq]\r\n        push_cast\r\n        ring\r\n      exact (hnot (hr.of_dvd hdiv)).elim\r\n    · simp only [if_neg hr]\r\n  · simp only [slice_gamma, if_neg hq, zero_mul, norm_zero, ite_self]",
+      "full_source_sha256": "9412da75907c592de5c7fea5574ca225efd72d41dfcfd5562ddac4a58acb90b1"
+    },
+    {
+      "name": "coprime_of_product_congruent",
+      "kind": "theorem",
+      "private": true,
+      "line": 177,
+      "complete_header": "private theorem coprime_of_product_congruent {a : ℤ} {p n m : ℕ}\r\n    (ha : Int.gcd a p = 1) (h : Int.ModEq p ((n : ℤ) * m) a) :\r\n    n.Coprime p ∧ m.Coprime p",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem coprime_of_product_congruent {a : ℤ} {p n m : ℕ}\r\n    (ha : Int.gcd a p = 1) (h : Int.ModEq p ((n : ℤ) * m) a) :\r\n    n.Coprime p ∧ m.Coprime p := by\r\n  have hg : Int.gcd ((n : ℤ) * m) p = 1 := by\r\n    rw [← Int.gcd_emod ((n : ℤ) * m) p, h.eq, Int.gcd_emod, ha]\r\n  have hnm : (n * m).Coprime p := by\r\n    simpa [Int.gcd, Int.natAbs_mul] using hg\r\n  exact Nat.coprime_mul_iff_left.mp hnm",
+      "full_source_sha256": "73ac54ac9a73e32b74f509b8ce0e0fa5b49fe1b338fdbe9ee767f16d1cd1bc8f"
+    },
+    {
+      "name": "shared_conditions_of_products",
+      "kind": "theorem",
+      "private": true,
+      "line": 186,
+      "complete_header": "private theorem shared_conditions_of_products {a : ℤ} {p m n₁ n₂ : ℕ}\r\n    (hp : 0 < p) (ha : Int.gcd a p = 1)\r\n    (h₁ : Int.ModEq p ((m : ℤ) * n₁) a)\r\n    (h₂ : Int.ModEq p ((m : ℤ) * n₂) a) :\r\n    n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem shared_conditions_of_products {a : ℤ} {p m n₁ n₂ : ℕ}\r\n    (hp : 0 < p) (ha : Int.gcd a p = 1)\r\n    (h₁ : Int.ModEq p ((m : ℤ) * n₁) a)\r\n    (h₂ : Int.ModEq p ((m : ℤ) * n₂) a) :\r\n    n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ := by\r\n  refine ⟨(coprime_of_product_congruent ha h₁).2,\r\n    (coprime_of_product_congruent ha h₂).2, ?_⟩\r\n  have hcross : Int.ModEq p (a * n₁) (a * n₂) :=\r\n    (h₂.mul_right (n₁ : ℤ)).symm.trans\r\n      (by simpa [mul_assoc, mul_comm, mul_left_comm] using h₁.mul_right (n₂ : ℤ))\r\n  apply Int.natCast_modEq_iff.mp\r\n  simpa only [Int.gcd_comm (p : ℤ) a, ha, Nat.cast_one, Int.ediv_one]\r\n    using hcross.cancel_left_div_gcd (by exact_mod_cast hp : (0 : ℤ) < p)",
+      "full_source_sha256": "51376a4bd058337c3432a6ecdd992c63560ed6446ebd1c128a4dd278ba925c9a"
+    },
+    {
+      "name": "sum_weight_product_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 201,
+      "complete_header": "private theorem sum_weight_product_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p n : ℕ}\r\n    (hp : 0 < p) (hn : n.Coprime p) (a : ℤ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n) a then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / p + 1",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem sum_weight_product_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p n : ℕ}\r\n    (hp : 0 < p) (hn : n.Coprime p) (a : ℤ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n) a then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / p + 1 := by\r\n  have hpR : (0 : ℝ) < p := by exact_mod_cast hp\r\n  have hceil : (Nat.ceil (3 * d.V) : ℝ) ≤ 4 * d.V := by\r\n    have hh := Nat.ceil_lt_add_one (by linarith : 0 ≤ 3 * d.V)\r\n    linarith\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n) a then (1 : ℝ) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      split_ifs\r\n      · exact CommonSmoothCutoff.scaledDyadicCutoff_le_one _ _\r\n      · exact le_rfl\r\n    _ = (((Icc 0 (Nat.ceil (3 * d.V))).filter\r\n        (fun m : ℕ ↦ Int.ModEq p ((m : ℤ) * n) a)).card : ℝ) := by\r\n      rw [← sum_filter]\r\n      simp [MediumAtom.commonSmoothCarrier, MediumAtom.transposedAtom]\r\n    _ ≤ ((Nat.ceil (3 * d.V) / p + 1 : ℕ) : ℝ) := by\r\n      exact_mod_cast PairedAlphaDeletion.card_product_modEq_le (Nat.ceil (3 * d.V)) p n a hn\r\n    _ ≤ (Nat.ceil (3 * d.V) : ℝ) / p + 1 := by\r\n      push_cast\r\n      have hh : ((Nat.ceil (3 * d.V) / p : ℕ) : ℝ) ≤\r\n          (Nat.ceil (3 * d.V) : ℝ) / p := Nat.cast_div_le\r\n      exact add_le_add hh le_rfl\r\n    _ ≤ _ := add_le_add (div_le_div_of_nonneg_right hceil hpR.le) le_rfl",
+      "full_source_sha256": "f95b2f403b8a15715c280ced6c0ba637cd63dc24f51f25992426ff7f53bb3b08"
+    },
+    {
+      "name": "sum_weight_two_products_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 232,
+      "complete_header": "private theorem sum_weight_two_products_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p : ℕ} (hp : 0 < p)\r\n    (ha : Int.gcd d.residue p = 1) (n₁ n₂ : ℕ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n          Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\r\n      if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n        4 * d.V / p + 1 else 0",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem sum_weight_two_products_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {p : ℕ} (hp : 0 < p)\r\n    (ha : Int.gcd d.residue p = 1) (n₁ n₂ : ℕ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n          Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\r\n      if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n        4 * d.V / p + 1 else 0 := by\r\n  by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n  · rw [if_pos hc]\r\n    apply le_trans _ (sum_weight_product_le hV hp hc.1 d.residue)\r\n    apply sum_le_sum\r\n    intro m _\r\n    by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n    · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n      · simp only [h₁, h₂, and_self, if_true, le_refl]\r\n      · simpa only [h₁, h₂, and_false, if_false, if_true] using\r\n          d.transposedAtom.commonSmoothWeight_nonneg m\r\n    · simp only [h₁, false_and, if_false, le_refl]\r\n  · rw [if_neg hc]\r\n    have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m else 0) = 0 := by\r\n      apply sum_eq_zero\r\n      intro m _\r\n      apply if_neg\r\n      exact fun hm ↦ hc (shared_conditions_of_products hp ha hm.1 hm.2)\r\n    exact hz.le",
+      "full_source_sha256": "ea6eb800088c5b3fe39d372596659b5437fd1999f643e422820ca4761fb035c1"
+    },
+    {
+      "name": "slice_factorPair_norm_subpower",
+      "kind": "theorem",
+      "private": true,
+      "line": 264,
+      "complete_header": "private theorem slice_factorPair_norm_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ p : ℕ,\r\n        p ∈ d.primitiveFirstFactorCarrier → ∀ n₁ n₂ : ℕ,\r\n          n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\r\n            ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\r\n              ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\r\n                C * d.scale ^ epsilon *\r\n                  (if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n                    4 * d.V / p + 1 else 0)",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem slice_factorPair_norm_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ p : ℕ,\r\n        p ∈ d.primitiveFirstFactorCarrier → ∀ n₁ n₂ : ℕ,\r\n          n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\r\n            ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\r\n              ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\r\n                C * d.scale ^ epsilon *\r\n                  (if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ then\r\n                    4 * d.V / p + 1 else 0) := by\r\n  obtain ⟨C, hC, hbound⟩ := tauFour_difference_subpower kappa hepsilon\r\n  refine ⟨C ^ 2, by positivity, fun B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂ hnd₁ hnd₂ ↦ ?_⟩\r\n  have hs := mediumAdmissible_q1SliceAtom hd hp\r\n  have hx := one_le_scale hd\r\n  have hp0 := (p_pos_lower hd hp).1\r\n  have hsum := ((d.q1SliceAtom p).transposedAtom.commonFactorPairWeight_norm_le n₁ n₂)\r\n  have hcar : (d.q1SliceAtom p).transposedAtom.commonSmoothCarrier =\r\n      d.transposedAtom.commonSmoothCarrier := rfl\r\n  have hweight (m : ℕ) : (d.q1SliceAtom p).transposedAtom.commonSmoothWeight m =\r\n      d.transposedAtom.commonSmoothWeight m := rfl\r\n  rw [hcar] at hsum\r\n  simp only [hweight] at hsum\r\n  apply hsum.trans\r\n  calc\r\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n        if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n          d.transposedAtom.commonSmoothWeight m * (C ^ 2 * d.scale ^ epsilon) else 0 := by\r\n      apply sum_le_sum\r\n      intro m _\r\n      by_cases hm : d.transposedAtom.commonSmoothWeight m = 0\r\n      · simp only [hm, zero_mul, ite_self, le_refl]\r\n      by_cases h₁ : Int.ModEq p ((m : ℤ) * n₁) d.residue\r\n      · by_cases h₂ : Int.ModEq p ((m : ℤ) * n₂) d.residue\r\n        · rw [if_pos ⟨h₁, h₂⟩]\r\n          have ha₁ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₁ hnd₁).trans\r\n              (hbound B sigma c0 d hd m n₁ hn₁ hm hnd₁)\r\n          have ha₂ : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n              C * d.scale ^ (epsilon / 2) :=\r\n            (absoluteRow_le_tauFour_of_not_dvd hs m n₂ hnd₂).trans\r\n              (hbound B sigma c0 d hd m n₂ hn₂ hm hnd₂)\r\n          have hh : (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂ ≤\r\n                C ^ 2 * d.scale ^ epsilon := by\r\n            calc\r\n              _ ≤ (C * d.scale ^ (epsilon / 2)) * (C * d.scale ^ (epsilon / 2)) :=\r\n                mul_le_mul ha₁ ha₂\r\n                  ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow_nonneg m n₂)\r\n                  (mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _))\r\n              _ = _ := by\r\n                rw [mul_mul_mul_comm, ← Real.rpow_add (zero_lt_one.trans_le hx),\r\n                  show epsilon / 2 + epsilon / 2 = epsilon by ring, pow_two]\r\n          exact (show _ = d.transposedAtom.commonSmoothWeight m *\r\n            ((d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₁ *\r\n              (d.q1SliceAtom p).transposedAtom.absoluteFactorModulusRow m n₂) by ring).trans_le\r\n                (mul_le_mul_of_nonneg_left hh (d.transposedAtom.commonSmoothWeight_nonneg m))\r\n        · rw [absoluteRow_eq_zero_of_not_product d p m n₂ h₂, mul_zero]\r\n          simp only [h₂, and_false, if_false, le_refl]\r\n      · rw [absoluteRow_eq_zero_of_not_product d p m n₁ h₁, mul_zero, zero_mul]\r\n        simp only [h₁, false_and, if_false, le_refl]\r\n    _ = (C ^ 2 * d.scale ^ epsilon) *\r\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n          if Int.ModEq p ((m : ℤ) * n₁) d.residue ∧\r\n              Int.ModEq p ((m : ℤ) * n₂) d.residue then\r\n            d.transposedAtom.commonSmoothWeight m else 0 := by\r\n      rw [mul_sum]\r\n      apply sum_congr rfl\r\n      intro m _\r\n      split_ifs <;> ring\r\n    _ ≤ _ := mul_le_mul_of_nonneg_left\r\n      (sum_weight_two_products_le hd.2.1 hp0 (p_coprime_residue hp) n₁ n₂)\r\n      (mul_nonneg (sq_nonneg C) (Real.rpow_nonneg (zero_le_one.trans hx) _))",
+      "full_source_sha256": "c95ead33b69adf3f0c3b87545d6d21c7c2ca66e821923b151a50cede47ef590b"
+    },
+    {
+      "name": "cleaned_beta_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "line": 340,
+      "complete_header": "private theorem cleaned_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem cleaned_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\r\n  have hclean := mediumAdmissible_cleanedAlphaAtom hd\r\n  have hAlpha : ∀ n ∈ d.cleanedAlphaAtom.alphaCarrier, ‖d.cleanedAlphaAtom.alpha n‖ ≤ 1 := by\r\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hclean\r\n    exact hAlpha\r\n  change ‖if n ∈ d.cleanedAlphaAtom.alphaCarrier then d.cleanedAlphaAtom.alpha n else 0‖ ≤ 1\r\n  by_cases hn : n ∈ d.cleanedAlphaAtom.alphaCarrier\r\n  · simpa only [if_pos hn] using hAlpha n hn\r\n  · simp only [if_neg hn, norm_zero, zero_le_one]",
+      "full_source_sha256": "b5afecdab6711b1214c1156186f640a81fad4738360a89365921535c4ded03c0"
+    },
+    {
+      "name": "card_primitiveCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 353,
+      "complete_header": "private theorem card_primitiveCarrier_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "private theorem card_primitiveCarrier_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1 := by\r\n  have hsub : d.primitiveFirstFactorCarrier ⊆ Ioc 0 (Nat.floor (2 * d.Q1)) := by\r\n    intro p hp\r\n    have hlo := (mem_Icc.mp (mem_filter.mp hp).1).2\r\n    exact mem_Ioc.mpr ⟨(p_pos_lower hd hp).1, hlo⟩\r\n  have hc := card_le_card hsub\r\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hc\r\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤ (Nat.floor (2 * d.Q1) : ℝ) by\r\n    exact_mod_cast hc).trans (Nat.floor_le (by linarith [hd.2.2.1]))",
+      "full_source_sha256": "14f0a04ae9d0257bb81b27c65b5ca219f5ddbd976d9aebe4fc60085f003bb490"
+    },
+    {
+      "name": "cleanedAlpha_sharedLargePairedGCDW_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 370,
+      "complete_header": "theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\r\n        ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\r\n          C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n            (16 * d.U ^ 2 / Y + 4 * d.Q1 * d.U * (1 + Real.log (2 * d.U)))",
+      "body_delimiter": "assignment",
+      "proof_style": "tactic_by",
+      "complete_definition": null,
+      "full_source": "theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\r\n        ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\r\n          C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n            (16 * d.U ^ 2 / Y + 4 * d.Q1 * d.U * (1 + Real.log (2 * d.U))) := by\r\n  obtain ⟨C, hC, hfactor⟩ :=\r\n    SharedFirstFactorLargePairedGCDW.slice_factorPair_norm_subpower kappa hepsilon\r\n  refine ⟨C, hC, fun B sigma c0 d hd Y hY ↦ ?_⟩\r\n  have hx := SharedFirstFactorLargePairedGCDW.one_le_scale hd\r\n  have hXeps : 0 ≤ C * d.scale ^ epsilon :=\r\n    mul_nonneg hC.le (Real.rpow_nonneg (zero_le_one.trans hx) _)\r\n  have hU0 : 0 ≤ d.U := zero_le_one.trans hd.1\r\n  have hV0 : 0 ≤ d.V := zero_le_one.trans hd.2.1\r\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\r\n  have hYpos : 0 < Y := zero_lt_one.trans_le hY\r\n  have hH : 0 ≤ 1 + Real.log (2 * d.U) := by\r\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.U by linarith [hd.1])]\r\n  have hSlice (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) :\r\n      ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ ≤\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) := by\r\n    have hpR : (0 : ℝ) < p := by\r\n      exact_mod_cast (SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp).1\r\n    have hA : 0 ≤ C * d.scale ^ epsilon * (4 * d.V / p + 1) :=\r\n      mul_nonneg hXeps (by positivity)\r\n    have hExpand : (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y =\r\n        ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if Y < (n₁.gcd n₂ : ℝ) then\r\n            d.cleanedAlphaAtom.transposedAtom.beta n₁ *\r\n              star (d.cleanedAlphaAtom.transposedAtom.beta n₂) *\r\n                (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ else 0 := rfl\r\n    rw [hExpand]\r\n    calc\r\n      _ ≤ ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n          if n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧ Y < (n₁.gcd n₂ : ℝ) then\r\n            C * d.scale ^ epsilon * (4 * d.V / p + 1) else 0 := by\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₁ hn₁\r\n        apply (norm_sum_le _ _).trans\r\n        apply sum_le_sum\r\n        intro n₂ hn₂\r\n        by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n        · rw [if_pos hy]\r\n          by_cases h₁ : d.cleanedAlphaAtom.transposedAtom.beta n₁ = 0\r\n          · simp only [h₁, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          by_cases h₂ : d.cleanedAlphaAtom.transposedAtom.beta n₂ = 0\r\n          · simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]\r\n            split_ifs <;> first | exact hA | exact le_rfl\r\n          have hb := hfactor B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₁)\r\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₂)\r\n          by_cases hc : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂\r\n          · have hfull : n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ) := ⟨hc.1, hc.2.1, hc.2.2, hy⟩\r\n            rw [if_pos hc] at hb\r\n            rw [if_pos hfull]\r\n            simp only [norm_mul, norm_star]\r\n            have hcoef : ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\r\n                ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ ≤ 1 := by\r\n              simpa only [one_mul] using mul_le_mul\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₁)\r\n                (SharedFirstFactorLargePairedGCDW.cleaned_beta_norm_le_one hd n₂)\r\n                (norm_nonneg _) zero_le_one\r\n            calc\r\n              _ ≤ 1 * (C * d.scale ^ epsilon * (4 * d.V / p + 1)) :=\r\n                mul_le_mul hcoef hb (norm_nonneg _) zero_le_one\r\n              _ = _ := one_mul _\r\n          · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n                Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hc ⟨h.1, h.2.1, h.2.2.1⟩\r\n            have hzero : (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight n₁ n₂ = 0 := by\r\n              apply norm_eq_zero.mp\r\n              exact le_antisymm (by simpa only [if_neg hc, mul_zero] using hb) (norm_nonneg _)\r\n            simp only [hzero, mul_zero, norm_zero, if_neg hnot, le_refl]\r\n        · have hnot : ¬(n₁.Coprime p ∧ n₂.Coprime p ∧ Nat.ModEq p n₁ n₂ ∧\r\n              Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hy h.2.2.2\r\n          simp only [if_neg hy, if_neg hnot, norm_zero, le_refl]\r\n      _ = _ := by\r\n        rw [← sum_product', ← sum_filter]\r\n        simp only [sharedPrimitiveLargeGCDPairs, sum_const, nsmul_eq_mul]\r\n        ring\r\n  have hRect : ∀ p ∈ d.primitiveFirstFactorCarrier,\r\n      (4 * d.V / p + 1) * ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n    intro p hp\r\n    obtain ⟨hp0, hpQ⟩ := SharedFirstFactorLargePairedGCDW.p_pos_lower hd hp\r\n    have hpR : (0 : ℝ) < p := by exact_mod_cast hp0\r\n    have hA : 4 * d.V / p + 1 ≤ 4 * d.V / d.Q1 + 1 :=\r\n      add_le_add (div_le_div_of_nonneg_left (by positivity) hQpos hpQ) le_rfl\r\n    have hCount := d.card_sharedPrimitiveLargeGCDPairs_le hd.1 hY hp0\r\n    have hden : d.Q1 * Y ≤ (p : ℝ) * Y := mul_le_mul_of_nonneg_right hpQ hYpos.le\r\n    have hCount' : ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) ≤\r\n        8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)) := hCount.trans\r\n      (add_le_add (div_le_div_of_nonneg_left (by positivity) (mul_pos hQpos hYpos) hden) le_rfl)\r\n    exact mul_le_mul hA hCount' (Nat.cast_nonneg _) (by positivity)\r\n  unfold MediumAtom.sharedLargePairedGCDW\r\n  rw [show d.cleanedAlphaAtom.primitiveFirstFactorCarrier = d.primitiveFirstFactorCarrier from rfl]\r\n  calc\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.commonLargeBetaGCDW Y‖ := norm_sum_le _ _\r\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / p + 1) *\r\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ) :=\r\n      sum_le_sum hSlice\r\n    _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier,\r\n        C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U))) := by\r\n      apply sum_le_sum\r\n      intro p hp\r\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left (hRect p hp) hXeps\r\n    _ = (d.primitiveFirstFactorCarrier.card : ℝ) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) := by\r\n      rw [sum_const, nsmul_eq_mul]\r\n    _ ≤ (2 * d.Q1) *\r\n        (C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\r\n          (8 * d.U ^ 2 / (d.Q1 * Y) + 2 * d.U * (1 + Real.log (2 * d.U)))) :=\r\n      mul_le_mul_of_nonneg_right (SharedFirstFactorLargePairedGCDW.card_primitiveCarrier_le hd)\r\n        (mul_nonneg (mul_nonneg hXeps (by positivity))\r\n          (add_nonneg (div_nonneg (by positivity) (mul_nonneg hQpos.le hYpos.le))\r\n            (mul_nonneg (mul_nonneg (by norm_num) hU0) hH)))\r\n    _ = _ := by\r\n      field_simp [hQpos.ne', hYpos.ne']\r\n      ring\r\n\r\nend",
+      "full_source_sha256": "3af47c9d504fc06d57c75217aa585d413891660b30168f18cdb2efa644a540bb"
+    }
+  ],
+  "same_imports": true,
+  "current_owned_direct_parents_source_binding": {
+    "ImbalancedChen.Part3SharedFirstFactorDispersion": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+    "ImbalancedChen.Part3SharedFirstFactorPairCount": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30"
+  },
+  "actual_failed_object_binding": {
+    "ImbalancedChen.Part3SharedFirstFactorDispersion": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+    "ImbalancedChen.Part3SharedFirstFactorPairCount": "0e6e985e7c2b514ed1d84ca349a39a2367b4a147ecf2b2f7a55033cc60b1a935"
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "actual_fixed_API": {
+    "file": "Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+    "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+    "current_equals_pinned_blob": true,
+    "literal_source_lines_75_90": "\n/-- The product over a product set equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_product'`. -/\n@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product'` -/]\ntheorem prod_product (s : Finset γ) (t : Finset α) (f : γ × α → β) :\n    ∏ x ∈ s ×ˢ t, f x = ∏ x ∈ s, ∏ y ∈ t, f (x, y) :=\n  prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product\n\n/-- The product over a product set equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_product`. -/\n@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product` -/]\ntheorem prod_product' (s : Finset γ) (t : Finset α) (f : γ → α → β) :\n    ∏ x ∈ s ×ˢ t, f x.1 x.2 = ∏ x ∈ s, ∏ y ∈ t, f x y :=\n  prod_product ..",
+    "scope": "Generated Finset.sum_product prime variant takes a curried f:gamma->alpha->beta; exact reverse reindexer for this actual nested pair sum. No foreign import is added."
+  },
+  "diagnostic_mapping": [
+    "420/421 h2=0 branch needs zero_mul after mul_zero, so the original norm_zero now applies to the real remaining zero*weight. Branch hA and le_rfl then have actual Real goals; no bound is weakened.",
+    "451 replace reverse sum_product by its public curried-function variant sum_product prime, as expressly instructed in fixed Sigma source documentation. Same ordered n1,n2 product carrier, same two unit gates/shared congruence/Y<actualgcd mask and unchanged finite card bound."
+  ],
+  "mathematics_unchanged": "Only actual whole-W paired-gcd norm bound. Original cleaned-alpha nondivisor gate, signed moving residue, original gamma/star, beta outside, original U,V/hd, arbitrary real kappa including0, epsilon>0,Y>=1 and exact16/4 constants all retained. No rawzero/NZ/payment claim.",
+  "no_new_foreign": true,
+  "no_Lean_or_build_or_limits_change": true,
+  "not_acceptance": true
+}

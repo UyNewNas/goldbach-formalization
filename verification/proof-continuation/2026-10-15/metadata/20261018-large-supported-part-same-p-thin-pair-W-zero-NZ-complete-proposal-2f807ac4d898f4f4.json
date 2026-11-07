@@ -1,0 +1,208 @@
+{
+  "status": "READONLY_COMPLETE_FINITE_LARGE_SUPPORTED_PART_SAME_PAIR_MASK_W_ZERO_NONZERO_PROPOSAL_NOT_LEAN_IMPLEMENTATION",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T05:15:38.117764+00:00",
+  "proposed_one_module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+  "typed_exact_mask": "def smallPairedLargeSupportedMask (Ybeta Ysupport : ℝ) (N1 N2 : ℕ) : Prop :=\n  ((N1.gcd N2 : ℝ) ≤ Ybeta) ∧\n    Ysupport < (CanonicalReciprocalData.supportedPart\n      (N1 / N1.gcd N2) (N1.gcd N2) : ℝ)",
+  "all_three_literal_proposed_objects": [
+    "def MediumAtom.sharedSmallPairedLargeSupportedW (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight N1 N2\n        else 0)))",
+    "def MediumAtom.sharedSmallPairedLargeSupportedZero (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairZeroWeight N1 N2\n        else 0)))",
+    "def MediumAtom.sharedSmallPairedLargeSupportedNonzero (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2\n        else 0)))"
+  ],
+  "six_complete_proposed_finite_public_types": [
+    "theorem canonicalSupportedPart_square_witness (N2 : ℕ) {N1 : ℕ} (hN1 : 0 < N1) :\n  ∃ b : ℕ, 0 < b ∧\n    CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) ≤ b ^ 2 ∧\n      b ^ 2 ∣ N1",
+    "theorem card_squareDivisorThinCarrier_le {T Y : ℝ} (hT : 0 ≤ T) (hY : 0 < Y)\n    (N : Finset ℕ) (hN : N ⊆ Finset.Ioc 0 (Nat.floor T)) :\n    (((N.filter (fun n => ∃ b : ℕ, 0 < b ∧ b ^ 2 ∣ n ∧ Y < (b : ℝ) ^ 2)).card : ℝ)) ≤\n      2 * T / Real.sqrt Y",
+    "theorem card_sharedPrimitiveLargeSupportedPairs_le {T Y : ℝ}\n    (hT : 0 ≤ T) (hY : 0 < Y) {p : ℕ} (hp : 0 < p)\n    (N : Finset ℕ) (hN : N ⊆ Finset.Ioc 0 (Nat.floor T)) (Ybeta : ℝ) :\n    (((N ×ˢ N).filter (fun z => z.1.Coprime p ∧ z.2.Coprime p ∧\n      Nat.ModEq p z.1 z.2 ∧ smallPairedLargeSupportedMask Ybeta Y z.1 z.2)).card : ℝ) ≤\n        (2 * T / Real.sqrt Y) * (T / (p : ℝ) + 1)",
+    "theorem sharedSmallPairedLargeSupportedZero_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Ybeta : ℝ) {Ysupport : ℝ}\n    (hY : 0 < Ysupport) :\n    ‖d.sharedSmallPairedLargeSupportedZero Ybeta Ysupport‖ ≤\n      16 * |CommonSmoothCutoff.cutoffMass| * d.V *\n        (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 9 *\n          (d.U ^ 2 / d.Q1 + d.U) / Real.sqrt Ysupport",
+    "theorem cleanedAlpha_sharedSmallPairedLargeSupportedW_bound (kappa : ℝ)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Ybeta Ysupport : ℝ,\n        0 < Ysupport →\n          ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedW Ybeta Ysupport‖ ≤\n            C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\n              (d.U ^ 2 + d.Q1 * d.U) / Real.sqrt Ysupport",
+    "theorem sharedSmallPairedLargeSupportedW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Ybeta Ysupport : ℝ) :\n    d.sharedSmallPairedLargeSupportedW Ybeta Ysupport =\n      d.sharedSmallPairedLargeSupportedZero Ybeta Ysupport +\n        d.sharedSmallPairedLargeSupportedNonzero Ybeta Ysupport"
+  ],
+  "complete_final_public_target": "theorem actual_betaL2_gamma1L2_cleaned_sharedLargeSupported_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Ybeta : ℝ,\n      (∑ n ∈ d.betaCarrier, (‖d.beta n‖ ^ 2)) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, (‖d.gamma1 p‖ ^ 2)) *\n          (‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedW\n              Ybeta (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedZero\n              Ybeta (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedNonzero\n              Ybeta (d.scale ^ (sigma / 4))‖) ≤\n              d.scale ^ 2 / (Real.log d.scale) ^ A",
+  "native_formal_source_reuse": {
+    "repository_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "native_HEAD_matches_pin": true,
+    "LargeSupport": {
+      "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryLargeSupport.lean",
+      "sha256": "ef580af4abaac65d7db868c3cc060414a19af89ad6c0ca1af006edfe98753276",
+      "complete_source_read": true,
+      "current_bytes_match_exact_pinned_git_blob": true,
+      "native_olean_exists": false
+    },
+    "LargeSupportDensity": {
+      "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryLargeSupportDensity.lean",
+      "sha256": "09e327646a4c68a197bc02970018f6dc4b52b65b02c94262d32753df98d221c4",
+      "complete_source_read": true,
+      "current_bytes_match_exact_pinned_git_blob": true,
+      "native_olean_exists": false
+    },
+    "reuse_method": "Prefer namespace-local extraction of the three generic prime-support square-witness proofs and the finite square-divisor set/cardinality proofs from these exact pinned source blobs. Instantiate with the already-owned LOCAL CanonicalReciprocalData.supportedPart. Do not import their old WGCD/phase family, install new objects, call original provider WGCD types, or claim original object kernel replay/0-sorry closure from source presence.",
+    "native_existing_full_headers": [
+      "theorem Nat.sq_mul_squarefree_of_pos {n : ℕ} (hn : 0 < n) : ∃ a b : ℕ, 0 < a ∧ 0 < b ∧ b ^ 2 * a = n ∧ Squarefree a",
+      "theorem squarefree_dvd_of_prime_support {a d : ℕ} (ha : Squarefree a) (hd : 0 < d) (hs : ∀ p : ℕ, p.Prime → p ∣ a → p ∣ d) : a ∣ d",
+      "theorem exists_square_dvd_of_supported_mul_dvd {s d n : ℕ} (hs : 0 < s) (hd : 0 < d) (hsd : ∀ p : ℕ, p.Prime → p ∣ s → p ∣ d) (hn : d * s ∣ n) : ∃ b : ℕ, 0 < b ∧ s ≤ b ^ 2 ∧ b ^ 2 ∣ n",
+      "theorem card_largeSquareDivisorSet_le_real {T Z : ℝ} (hT : 0 ≤ T) (hZ : 0 < Z) : ((largeSquareDivisorSet (Nat.floor T) Z).card : ℝ) ≤ 2 * T / Z",
+      "theorem Nat.Ioc_filter_dvd_card_eq_div (n p : ℕ) : #{x ∈ Ioc 0 n | p ∣ x} = n / p",
+      "theorem LcmWeightBounds.sum_abs_lcm_weight_le_log (j : ℕ) {L : ℝ} (hL : 1 ≤ L) (Q : Finset ℕ) (hQ : Q ⊆ Ioc 0 (Nat.floor L)) (c : ℕ → ℝ) (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) : (∑ q ∈ Q, ∑ r ∈ Q, |c q * c r / (q.lcm r : ℝ)|) ≤ (1 + Real.log L) ^ (2 * j ^ 2 + 1)"
+    ]
+  },
+  "actual_existing_project_full_public_APIs": [
+    {
+      "source_module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 38,
+      "name": "supportedPart",
+      "full_header": "def supportedPart (n d : ℕ) : ℕ"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 45,
+      "name": "supportedPart_pos",
+      "full_header": "theorem supportedPart_pos (n d : ℕ) : 0 < supportedPart n d"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 62,
+      "name": "supportedPart_dvd",
+      "full_header": "theorem supportedPart_dvd {n : ℕ} (hn : 0 < n) (d : ℕ) :\n    supportedPart n d ∣ n"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 73,
+      "name": "prime_dvd_supportedPart",
+      "full_header": "theorem prime_dvd_supportedPart {n d p : ℕ} (hp : p.Prime)\n    (hps : p ∣ supportedPart n d) : p ∣ d"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 164,
+      "name": "wGCDData_valid",
+      "full_header": "theorem wGCDData_valid {q r N₁ N₂ : ℕ}\n    (hq : 0 < q) (hr : 0 < r) (hN₁ : 0 < N₁) (hN₂ : 0 < N₂) :\n    (wGCDData q r N₁ N₂).Valid q r N₁ N₂"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "line": 122,
+      "name": "transposed_factorPair_eq_zero_add_nonzero",
+      "full_header": "theorem transposed_factorPair_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonFactorPairWeight n₁ n₂ =\n      d.transposedAtom.commonFactorPairZeroWeight n₁ n₂ +\n        d.transposedAtom.commonFactorPairNonzeroWeight n₁ n₂"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "line": 370,
+      "name": "cleanedAlpha_sharedLargePairedGCDW_bound",
+      "full_header": "theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\n        ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\n          C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\n            (16 * d.U ^ 2 / Y + 4 * d.Q1 * d.U * (1 + Real.log (2 * d.U)))"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "line": 255,
+      "name": "MediumAtom.sharedFirstFactor_outside_le",
+      "full_header": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "line": 71,
+      "name": "mediumAdmissible_cleanedAlphaAtom",
+      "full_header": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "line": 97,
+      "name": "MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd",
+      "full_header": "theorem MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlphaAtom.transposedAtom.beta n ≠ 0) : ¬(n : ℤ) ∣ d.residue"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "line": 252,
+      "name": "MediumAtom.commonFactorPairWeight_norm_le",
+      "full_header": "theorem MediumAtom.commonFactorPairWeight_norm_le (d : MediumAtom) (n₁ n₂ : ℕ) :\n    ‖d.commonFactorPairWeight n₁ n₂‖ ≤\n      ∑ m ∈ d.commonSmoothCarrier, d.commonSmoothWeight m *\n        d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "line": 186,
+      "name": "MediumAtom.absoluteFactorModulusRow_le_tauFour",
+      "full_header": "theorem MediumAtom.absoluteFactorModulusRow_le_tauFour\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hn : d.cleanedBeta n ≠ 0) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "line": 84,
+      "name": "eventually_actual_log_cost_le_rpow",
+      "full_header": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon"
+    },
+    {
+      "source_module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "line": 131,
+      "name": "eventually_const_rpow_two_le_logBudget",
+      "full_header": "theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A"
+    }
+  ],
+  "complete_finite_route": {
+    "step1_arithmetic": "For positive N1 let g=gcd(N1,N2), s=local supportedPart(N1/g,g). Public local APIs give g>0,s>0,s|(N1/g), every prime of s divides g, and g*s|N1. The pinned generic proof writes s=c^2*a with a positive squarefree, proves a|g by prime-support, and sets b=c*a. Then b^2=a*s>=s and b^2|g*s|N1. Equality b^2=s can occur, e.g. g=2,s=4; never assert strict b^2>s. Ysupport<s gives b^2>Ysupport, hence b>sqrt(Ysupport). No individually large prime is necessary.",
+    "step2_thin_density": "The positive finite carrier with some b^2|n and Ysupport<b^2 lies in native-shaped largeSquareDivisorSet floor(T) sqrt(Ysupport). The pinned density proof gives cardinal<=2T/sqrtY. It uses exact finite biUnion roots b∈Ioc floor(sqrtY) Nat.sqrt(floorT), Nat.Ioc_filter_dvd_card_eq_div, natural cast_div_le, and the already-reachable PSeries inverse-square finite tail. Thus no endpoint epsilon or missing +1 term occurs. N⊆Ioc0floorT is indispensable: including n=0 would invalidate this thin argument.",
+    "step3_same_p_count": "Keep both full N1.Coprime p and N2.Coprime p plus Nat.ModEq p N1 N2 and EXACT g<=Ybeta ∧Ysupport<s. Every such N1 is thin. Inject the full ordered pair into (thin N)×range(floor(T)/p+1) by (N1,N2/p). First-coordinate equality and Nat.ext_div_modEq prove injectivity from the literal same-p congruence. Hence card<=#thin*(floorT/p+1)<=2T/sqrtY*(T/p+1). No gcd cancellation, prime-p premise, symmetric mask, diagonal omission or original interval replacement is needed. For T=2U this is4U/sqrtY*(2U/p+1).",
+    "step4_wholeW_point": "Use the actual unchanged commonFactorPairWeight and the same coefficient product. Under cleaned alpha nonzero coefficients imply n does not divide signed residue, so the already-owned SharedW local finite/pointwise proof yields norm kernel<=Ceps Xeps*(if pairGate then4V/p+1 else0). That proof is PRIVATE in existing SharedW: new author may reproduce its finite extraction locally under explicit scope using public row/tauFour and original polynomial residue bounds; cannot cite a mangled private name or use its final large-gcd norm bound for a different mask. Take triangle BEFORE dropping the pair mask and insert the exact cardinal bound. p>=Q1 and card primitiveP<=2Q1 then give the proposed whole-W bound. No hypothesis on original beta is added; original beta remains only outside.",
+    "step5_raw_zero_point": "Regroup the original two tail slots EXACTLY into G(v)=sum_{u2*u3=v} gamma2(u2)*gamma3(u3) before taking norm. Prove norm G(v)<=tau(v), preserving every ordered fiber. The actual full zero kernel is V*cutoffMass/lcm(pv,pw) times the full original CRT-compatible gate. shared lcm=p*lcm(v,w), even for composite p or overlapping factors. Compatibility implies only the original same-p pairGate when enlarging the NONNEGATIVE envelope. Existing native lcm moment at j=2 gives Htail^9. Thus norm zero kernel<=absMass*V/p*Htail^9*1_pairGate. There is no totient here: this is RAW Poisson zero, not centered primitive covariance. No P0 is subtracted.",
+    "step6_zero_aggregate": "Multiply the zero point bound by4U/sqrtY*(2U/p+1), then sum the entire primitive p carrier using p>=Q1 and card<=2Q1. This is<=16absMass*V*Htail^9*(U^2/Q1+U)/sqrtY. The original physical p remains in the denominator before summation. All tail complex signs/fibers, unit gates and alpha interval stay in the actual object; only after norms do nonnegative enlargements occur.",
+    "step7_same_mask_identity": "For every actual p,N1,N2 and same pair mask, call the PUBLIC owned TransposedGCDPoissonMask.transposed_factorPair_eq_zero_add_nonzero on the actual admissible q1SliceAtom. Multiplying by the identical alpha pair coefficients and SAME mask then summing gives Wmask=rawZeromask+NZmask. Hence norm NZmask<=norm Wmask+norm rawZeromask. Do not claim a signed sub-sum norm is bounded by the full sum norm. The asymmetric d1 mask may give a complex Wmask; no Wmask>=0 assertion is made.",
+    "step8_original_geometry_and_outside": "Let Woutside=betaL2(d)*primitiveGamma1L2(d)<=4VQ1*Hbeta^eB. With sigma>0, original geometry gives Q1<=U, U^2<=X=UV, so U<=V and Q1<=V. The W estimate multiplied by Woutside is<=640Ceps*X^(2+epsilon)/sqrtY*Hbeta^eB; the rawZero estimate is<=128absMass*X^2/sqrtY*Hbeta^eB*Htail^9. Constants are fixed before every d,Ybeta,label. Cleaning changes only alpha, so original beta/gamma outside equals its cleaned counterpart.",
+    "step9_power_and_log_payment": "Choose Ysupport=X^(sigma/4), epsilon=sigma/32. Then sqrtY=X^(sigma/8). Bound the two fixed logarithm products by X^(sigma/32), using already-owned scalar log-power APIs (or a separate local scalar proof on the minimal three-parent alternative). W is<=C X^(2-sigma/16); rawZero is<=C X^(2-3sigma/32)<=C X^(2-sigma/16). Same-mask identity bounds the sum of all three norms by twice the W and rawZero norm sum. One final already-owned const-rpow-to-logBudget limit pays every fixed real A. The threshold precedes every actual d AND every Ybeta, with no F-tendsto/SW/NZ supplier or strengthened geometry."
+  },
+  "all_boundary_and_mask_rules": [
+    "Final mask uses ONLY the original paired integers: g<=Ybeta and Ysupport<d1. It must be deleted BEFORE splitting tail D=gcd(v,w), because an arbitrary tail-label mask cannot be inserted into commonFactorPairWeight and then bounded by the full signed kernel.",
+    "Ysupport>0 is enough for finite count/finite bounds, including values below1 and empty root intervals; the final power choice hasYsupport>=1. Ybeta is any real, with no lower bound needed.",
+    "The complement within small-g is g<=Ybeta and d1<=Ysupport, including equality; large-g usesYbeta<g. Thus full NZ partitions exactly into large-g NZ + small-g/large-d1 NZ + small-g/small-d1 NZ before tail manipulations. This is an exact finite partition, not a norm comparison.",
+    "All p are positive NATURAL primitive first-factor labels, including composite p and p=1 if the original carrier contains it. No primality, squarefree-p assumption or restriction to actual gamma1 nonzero support is made.",
+    "Zero retains full CRT units in p*v and p*w; the phase and full integer Fourier series in NZ are unchanged. The primitive p residue gate is used only in the genuine whole-W row argument.",
+    "At n=0 the square-divisor thin bound is false; all count lemmas explicitly retain N⊆Ioc0floorT. Original admissibility U>=1 supplies positivity of the actual dyadic alpha carrier.",
+    "The canonical s function is total at zero, but the square-witness proof is only invoked on positive original N1. N2 need not be assumed prime or positive for the arithmetic witness, though actual N2 is positive.",
+    "The original alpha interval survives as zero-extended transposed beta; replacing it by the enclosing dyadic count carrier occurs only after a nonnegative absolute envelope.",
+    "The exact mask is generally asymmetric in N1,N2; no symmetry, reality or positivity of its signed W sum is assumed.",
+    "A stronger all-g large-d1 mask can be bounded by the SAME termwise argument separately, but its norm bound never implies the guarded mask by signed sub-sum monotonicity.",
+    "No same-mask primitive center P0 is introduced in this deletion route; the Fourier raw zero is paid independently."
+  ],
+  "High_route_binding": {
+    "proposal_path": "20261018-shared-small-core-difference-reciprocity-three-scale-complete-route-proposal.json",
+    "sha256": "8ffd9d4a5ba6f9379c7012d72e6858a048cbd297eca92a9f7816b2fefb1652e1",
+    "author_direct_confirmation": "High agrees the deletion mask should be g<=Ybeta ∧Ysupport<d1, before tail-D split. No arbitrary tail mask may be paid by the full factorPair kernel norm.",
+    "native_slight_wording_correction": "High text said b^2>d1; actual correct native bound is d1<=b^2, enough for b^2>Ysupport."
+  },
+  "minimal_DAG": {
+    "recommended_existing_roots": [
+      "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "ImbalancedChen.Part3CanonicalReciprocalData",
+      "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+    ],
+    "proper_existing_projects": 69,
+    "candidate_inclusive": 70,
+    "foreign_header_roots_including_Init": 66,
+    "new_foreign_beyond_existing_four_parent_closure": [],
+    "missing_project": [],
+    "separate_graph_report": ".lake\\proof-continuation\\source-reviews\\20261018-large-supported-deletion-proposal-proper-project-DAG.json",
+    "separate_graph_sha256": "0361f1984bf0657764fde44b9f876784e9beefa517901ba32de27691aa100ad2",
+    "narrow_three_parent_alternative": {
+      "existing_projects": 64,
+      "candidate_inclusive": 65,
+      "foreign_roots_including_Init": 65,
+      "tradeoff": "Requires local copies of scalar log-versus-power and U<=V proofs; all used native finite modules already reachable. No new foreign provider object needed."
+    }
+  },
+  "required_actual_new_finite_work": [
+    "Namespace-isolated reuse of pinned generic square-support witness and square-divisor density proofs (not import their unbuilt WGCD chain).",
+    "New same-p thin-first-coordinate quotient/remainder pair injection with exact guarded mask.",
+    "Local finite extraction of owned private SharedW same-p row bound under original residue/cleaning licenses.",
+    "Exact two-factor tail grouping and lcm H^9 raw-zero proof from public native lcm bound; may use the candidate e390 source ONLY as readable finite proof pattern, not as accepted API or extra parent.",
+    "Same-mask W=Zero+NZ assembly, both actual outside factors, genuine power/log threshold."
+  ],
+  "no_Lean_source_compiler_checker_cache_pin_CI_resource_or_parent_mutation": true,
+  "acceptance_scope": "Read-only complete mathematics/API/public-type proposal. No new module, theorem kernel acceptance, small-d1 reciprocal estimate, full nonzero bound, distribution endpoint or1+1.75 main theorem is claimed."
+}

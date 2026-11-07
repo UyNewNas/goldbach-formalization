@@ -1,0 +1,80 @@
+{
+  "status": "ROOT_NONAUTHOR_ACTUAL_SINGLE_PROOF_API_REBIND",
+  "created_utc": "2026-10-18T03:41:43.257716+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+  "source_sha256": "58e0af9d08e30b9b56b68451107dc24676c6e38c94d8d3610ea33a56b1aa37a2",
+  "owner_report_sha256": "f9c367093ca9a171323d1549e20c5502496b94730057922b922c731da454e84d",
+  "all_thirteen_complete_headers": [
+    {
+      "name": "MediumAtom.sharedFirstFactorLowConductorZero",
+      "kind": "def",
+      "header": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ"
+    },
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "header": "private def divisorTau (n : ℕ) : ℝ"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b"
+    },
+    {
+      "name": "divisorTau_le_of_dvd",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_le_of_dvd {a b : ℕ} (hb : b ≠ 0) (hab : a ∣ b) :\n    divisorTau a ≤ divisorTau b"
+    },
+    {
+      "name": "divisorTau_pow_le",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "factor_subset_Ioc",
+      "kind": "theorem",
+      "header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))"
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "kind": "theorem",
+      "header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)"
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "kind": "theorem",
+      "header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1"
+    },
+    {
+      "name": "two_label_harmonic",
+      "kind": "theorem",
+      "header": "private theorem two_label_harmonic {Q2 Q3 : ℝ}\n    (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3) (r : ℕ) :\n    (∑ u ∈ factorCarrier Q2 ×ˢ factorCarrier Q3,\n      divisorTau (u.1 * u.2) ^ r / ((u.1 * u.2 : ℕ) : ℝ)) ≤\n      (1 + Real.log (2 * Q2)) ^ (2 ^ r) *\n        (1 + Real.log (2 * Q3)) ^ (2 ^ r)"
+    },
+    {
+      "name": "card_low_conductor_le",
+      "kind": "theorem",
+      "header": "private theorem card_low_conductor_le {delta r : ℕ} (hdelta : 0 < delta) :\n    ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter\n      (fun chi => chi.conductor ≤ r)).card ≤ r * r"
+    }
+  ],
+  "definitions_unchanged": true,
+  "literal_forward_inverse_exact": true,
+  "actual_full_stdout": "ImbalancedChen/Part3SharedFirstFactorLowConductorAggregate.lean:129:50: error: Application type mismatch: The argument\n  filter_subset\nhas type\n  ∀ (p : ?m.355 → Prop) [inst : DecidablePred p] (s : Finset ?m.355), filter p s ⊆ s\nbut is expected to have type\n  d.primitiveFirstFactorCarrier ⊆ factorCarrier d.Q1\nin the application\n  sum_le_sum_of_subset_of_nonneg filter_subset\n",
+  "assessment": "Root previously read full217 and now exact218 with single explicit filter predicate/carrier proof argument; this is literally primitiveFirstFactorCarrier by its parent definition, no unit or fullcarrier condition lost. ParentLow5df stillactuallyowned. Complete13headers2defs/import/math unchanged, no public uniform aggregate target asserted by prefix.",
+  "runtime_gate": "Originalb7cd STRICTONLY fair6144 feedback current58e after fullowner/root/actualAPI reads and fresh recursiveexact parentLow5df owned/cache/missingforeign0; no prefixowned/count/newimports/resources/checker changes. Oldee91FAILED preserved.",
+  "not_acceptance": true
+}

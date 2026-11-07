@@ -1,0 +1,83 @@
+{
+  "status": "ROOT_COMPLETE_ONE_SLOW_PHASE_FUNCTION_UNIFORM_DERIVATIVE_MATH_AND_FIXED_NATIVE_API_REVIEW_NOT_FORMALIZED",
+  "created_utc": "2026-10-21T02:38:18.286327+00:00",
+  "proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-slow-phase-uniform-Schwartz-derivative-one-lemma-proposal.json",
+    "sha256": "4714424708611af201a844cead249aa2dc90438395eca36eb795822783e9f31b"
+  },
+  "conclusion_literal": {
+    "candidate_uniform_bound_is_mathematically_true": true,
+    "one_exact_function_definition": "def CommonSmoothCutoff.smoothReciprocityProfile (Z rho u : ℝ) : ℂ :=\n  (CommonSmoothCutoff.poissonSmoothLowPass (u / Z) : ℂ) *\n    (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) u *\n      fourier (1 : ℤ) ((rho * u : ℝ) : UnitAddCircle)\n",
+    "one_complete_proposed_public_type": "theorem CommonSmoothCutoff.smoothReciprocityProfile_iteratedDeriv_uniform\n    (r J : ℕ) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z rho : ℝ, 1 ≤ Z →\n        ∀ u : ℝ,\n          (1 + |u|) ^ r *\n              ‖iteratedDeriv J\n                (CommonSmoothCutoff.smoothReciprocityProfile Z rho) u‖ ≤\n            C * (1 + |rho|) ^ J\n",
+    "declaration_context": "Inside namespace ImbalancedChen.Part3, noncomputable section; open scoped FourierTransform and ContDiff as needed. The definition and type above are a proposal written into this JSON only; no Lean source was authored or elaborated. Output is the actual complex spectral factor, not a norm replacement or assumed supplier.",
+    "constant_dependence": "C depends only on the two fixed natural orders r,J and on the already fixed bump/Fourier normalization. It is independent of Z,rho,u, all atom parameters, p,N1,N2,D,L,h, gamma and beta.",
+    "source_interface_change_required": "One new genuine complex function definition and one uniform ordinary-derivative theorem. No change to any existing Smooth four definitions, finite endpoints, all-Z>0 domain, reciprocity three-phase type, or arithmetic hypothesis."
+  },
+  "full_mathematical_proof_reviewed": {
+    "fixed_objects": "psi := CommonSmoothCutoff.dyadicCutoffSchwartz : 𝓢(ℝ,ℂ); F := 𝓕 psi : 𝓢(ℝ,ℂ). SchwartzMap.instFourierTransform supplies the actual Schwartz transform; no assumption on unknown Fourier output is introduced.",
+    "step_1_literal_cutoff_identity": "Let chi_Z(u):=(poissonSmoothLowPass (u/Z):ℂ). From the two literal definitions and owned dyadicCutoffSchwartz_apply, chi_Z(u)=psi(3/2+u/(2Z))=psi(3/2+lambda*u), where lambda=(2Z)^(-1). This reuses the original fixed smooth compact bump rather than proving a new cutoff supplier.",
+    "step_2_cutoff_derivatives": "For a∈ℕ, D^a chi_Z(u)=lambda^a • (D^a psi)(3/2+lambda*u). Use iteratedDeriv_comp_const_add on psi and then iteratedDeriv_comp_const_smul on the translated smooth psi; specializing the native domain to ℝ and range to ℂ is valid. With Z≥1, 0<lambda≤1/2≤1, so every scale cost is exactly (2Z)^(-a), never a positive power of Z.",
+    "step_3_cutoff_constant": "Set A_J:=1+sum_{a=0}^J SchwartzMap.seminorm ℝ 0 a psi. Native le_seminorm' gives ‖D^a psi(x)‖≤p_(0,a)(psi), because |x|^0=1 even at zero. Hence for a≤J, ‖D^a chi_Z(u)‖≤A_J*(2Z)^(-a)≤A_J. A_J>0.",
+    "step_4_fixed_spectrum_constant": "Set B_(r,J):=1+2^r * (Finset.Iic (r,J)).sup (fun m => SchwartzMap.seminorm ℝ m.1 m.2) F. Native one_add_le_sup_seminorm_apply with m=(r,J), k=r, n=b≤J, and norm_iteratedFDeriv_eq_norm_iteratedDeriv yields (1+|u|)^r*‖D^b F(u)‖≤B_(r,J). B_(r,J)>0 and depends on no varying parameter.",
+    "step_5_exact_phase_derivatives": "E_rho(u):=fourier (1:ℤ) ((rho*u:ℝ):UnitAddCircle). It is smooth: fourier_coe_apply rewrites it to Complex.exp composed with the real-to-complex linear map u↦2π I rho u; Complex.contDiff_exp and Complex.ofRealCLM.contDiff give C∞. Native hasDerivAt_fourier at T=1,n=1 followed by the real-linear rho*u chain rule gives D E_rho=(2π I rho)*E_rho. Induction with iteratedDeriv_succ and constant multiplication gives D^c E_rho=(2π I rho)^c*E_rho.",
+    "step_6_phase_norm_and_sign": "fourier_apply and Circle.norm_coe give ‖E_rho(u)‖=1. Thus ‖D^c E_rho(u)‖=(2π)^c*|rho|^c. This remains exact for negative rho, rho=0 and c=0; the natural exponent zero convention handles 0^0=1. The 2π normalization is retained explicitly in the finite constant.",
+    "step_7_leibniz_in_literal_association": "The literal profile is (chi_Z*F)*E_rho. Apply iteratedDeriv_mul first at order J to this product, and then at order i to chi_Z*F. The exact double sum is i=0..J, a=0..i, with b=i-a,c=J-i and coefficient choose(J,i)*choose(i,a). The sum of orders a+b+c is exactly J. This follows the native nested sum without an extra combinatorial reindex proof.",
+    "step_8_every_term_budget": "For each such (i,a), weighted norm of its term is at most choose(J,i)*choose(i,a)*A_J*B_(r,J)*(2Z)^(-a)*(2π)^(J-i)*|rho|^(J-i). The entire weight (1+|u|)^r is assigned to the F derivative; no use of |u|≤2Z is made in this estimate, so no Z^r or H/Z factor is lost.",
+    "step_9_rho_power_and_finite_constant": "Since 0≤J-i≤J and 1+|rho|≥1, |rho|^(J-i)≤(1+|rho|)^J. Since Z≥1, (2Z)^(-a)≤1. Define T_J:=sum_{i=0}^J sum_{a=0}^i (choose(J,i):ℝ)*(choose(i,a):ℝ)*(2π)^(J-i). Taking C(r,J):=1+A_J*B_(r,J)*T_J makes C>0 and summing the weighted triangle inequality gives exactly the proposed public conclusion. Optionally T_J=(2+2π)^J; this identity is unnecessary for implementation.",
+    "step_10_smoothness_and_Schwartz_membership": "All three factors are C∞. The cutoff vanishes for |u|≥2Z because the original dyadicBump has outer radius1 about3/2. Thus the profile has tsupport⊆[-2Z,2Z] for Z>0 and is compact supported. Native HasCompactSupport.toSchwartzMap bundles this actual function if desired. Alternatively its explicit C∞ proof and the proved all-(r,J) derivative bounds directly fill SchwartzMap.smooth'/decay' using the native iteratedFDeriv/iteratedDeriv norm equality. Native seminorm_le_bound' then gives p_(r,J)(profile)≤C(r,J)*(1+|rho|)^J; |u|^r≤(1+|u|)^r. No assumed temperate-growth wrapper, selected classical supplier, or axiomatic seminorm package is needed.",
+    "step_11_implementation_order": "Prove private literal-cutoff identity; private C∞ of actual phase/profile; private exact phase-derivative identity; private cutoff derivative bound; private fixed Fourier weighted-derivative bound; private nested Leibniz bound; conclude ONE public uniform theorem. All smoothness facts used by Leibniz are proved before the expansion. Existing native calculus/Schwartz APIs supply the infrastructure; do not rebuild Fourier transform or Schwartz space.",
+    "step_12_no_hidden_parameters": "Every derivative allocated to chi contributes only Z^{-a}; every derivative allocated to F is charged to fixed B_(r,J); every derivative allocated to slow phase contributes exactly |rho|^c with c≤J and a fixed (2π)^c. The theorem does not sum roots or moduli and does not estimate gamma/beta masks. No primitive-centre replacement, modulus-dependent threshold, prime gate, custom axiom or analytic supplier appears."
+  },
+  "phase_dictionary_reviewed": {
+    "owned_slow_phase_exact": "fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle)",
+    "original_three_factors_in_order": [
+      "fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle)",
+      "fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle)",
+      "fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)"
+    ],
+    "sign_and_normalization": "fourier 1 on UnitAddCircle is exp(+2π I rho u), exactly the positive slow factor. Schwartz Fourier transform keeps the original negative Fourier-kernel convention and is not conjugated. Negative signs are represented by signed rho, not by replacing this with an absolute phase.",
+    "substitution": {
+      "t": "V / (L : ℝ)",
+      "u": "(V / (L : ℝ)) * (h : ℝ)",
+      "rho": "(a : ℝ) / ((N₁ : ℝ) * V)",
+      "Z": "X ^ eta"
+    },
+    "exact_identity": "For positive N1,V,L: fourier (1:ℤ) ((rho*u:ℝ):UnitAddCircle) = fourier h (((a:ℝ)/((N1:ℝ)*(L:ℝ)):ℝ):UnitAddCircle). Expand both by fourier_coe_apply, use rho*u=(a:ℝ)*(h:ℝ)/((N1:ℝ)*(L:ℝ)), then field algebra. This is valid for signed a,h, including zero, and for arbitrary positive p; primality is never used.",
+    "original_row_recombination": "For h≠0, chi(u/Z)*poissonNonzeroFrequency after owned reciprocity is exactly t • smoothReciprocityProfile Z rho u times the original root-indexed first phase and the original difference final phase, up to associativity/commutativity of complex multiplication. Re is taken after the original frequency sum; gamma/beta and original masks remain outside exactly as in frozen Smooth. For h=0, original poissonNonzeroFrequency is zero and remains a separate branch. The new profile itself need not vanish at u=0 and is not the entire Poisson frequency.",
+    "actual_parameter_size_proof": [
+      "The actual MediumAdmissible definition controls (d.residue.natAbs:ℝ)≤X^(1+kappa), which equals |(d.residue:ℝ)|. A bound only a≤X^(1+kappa) would be insufficient for negative a; the source has the correct absolute bound.",
+      "With N1≥U>0,V>0 and X=U*V, N1*V≥X. Therefore |rho|=|a|/(N1*V)≤X^(1+kappa)/X=X^kappa, for arbitrary signed real kappa when X>0. This algebraic instantiation uses the original N1 carrier bound and original scale identity; it introduces no new supplier.",
+      "For X>1 and eta>0, Z=X^eta≥1. The proposed new estimate applies on this actual range only. The finite Smooth/Squared all-Z>0 endpoints are not restricted or rewritten."
+    ],
+    "resulting_cost": "C(r,J)*(1+X^kappa)^J. One may further use 2^J*X^(J*max(kappa,0)) for X≥1. Only if kappa≥0 does this specialize to 2^J*X^(J*kappa). There is no order-independent replacement by X^(5*kappa)."
+  },
+  "actual_native8files_all_listed_full_source_spans_and_project5files_spans_rehashed_and_read": true,
+  "actual_owned_bindings_two_modules": {
+    "DifferenceReciprocity": {
+      "all_records": 19,
+      "selected_complete_records": 2
+    },
+    "CommonSmoothCutoff": {
+      "whole_multi_module_receipt_records": 161,
+      "actual_module_records": 46,
+      "selected_complete_records": 7
+    },
+    "original_receipts_objects_declarations_rehashed": true,
+    "all_selected_records_equal_original_JSON": true,
+    "full_flags_on_each_module_checked": true,
+    "source_fulltypes_read_not_claiming_untruncated_all_serialized_type_rendering": true
+  },
+  "pins_mathlib_e4c917_goldbach09b97_license_APACHE2_rehashed": true,
+  "mathematical_resolution": [
+    "Complex original positive fourier1 phase equals original fourier h under u=Vh/L rho=a/(N1V), including signed a,h; no conjugation or zero-frequency suppression hidden.",
+    "Exact cutoff derivative factor(2Z)^(-a) bounded by1 on Z>=1. Fixed Fourier seminorm pays entire u^r; never replace by compact-support sizeZ^r.",
+    "Double Leibniz in literal association i=0..J,a=0..i yields a+b+c=J and choose(J,i)choose(i,a). Positive finite constants depend only(r,J). Each phase derivative cost(2pi)^c|rho|^c<=fixed(1+|rho|)^J.",
+    "Source MediumAdmissible uses residue.natAbs. N1V>=UV=X yields signed |rho|<=X^kappa with no kappa>=0 requirement. Subsequent2^J X^(Jkappa) needs kappa>=0, max(kappa,0) otherwise.",
+    "Ordinary derivatives do not supply complete mixed/joint Mellin L1 or periodic root operator estimates. True Z>0 small-scale derivative blowup and rho-independent false bound are excluded only for this new genuine lemma.",
+    "Joint physicalV fixedZ vectorfield Eu-Erho cancels exp phase. Actual Z=X^eta total path adds eta EZ (with other physical quantities genuinely fixed); cutoff cost must be accounted even though slow exponential still cancels exactly."
+  ],
+  "new_Lean_authoring_requires_non_author_review_and_literal_scope": true,
+  "new_Lean_compilation_allowed": false,
+  "main_theorem_proved": false,
+  "external_closure_replay_claimed": false
+}

@@ -1,0 +1,124 @@
+[
+  {
+    "axiom": false,
+    "axioms": [],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.FirstExitValidSelection",
+    "partial": false,
+    "type": "{\u03b1 : Type u_1} \u2192\n  (retained : Bool \u2192 List.{u_1} \u03b1 \u2192 Bool) \u2192 (pre : List.{u_1} \u03b1) \u2192 (positive : Bool) \u2192 List.{u_1} \u03b1 \u2192 Prop",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.exists_firstExitRetainedLeaf_of_validSelection",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (retained : Bool \u2192 List.{u_1} \u03b1 \u2192 Bool) (h : \u03b1 \u2192 Real) {chosen remaining : List.{u_1} \u03b1}\n  (hsub : @List.Sublist.{u_1} \u03b1 chosen remaining) (pre : List.{u_1} \u03b1) (positive : Bool) (mass : Real)\n  (hvalid : @ImbalancedChen.FirstExitValidSelection.{u_1} \u03b1 retained pre positive chosen),\n  @Exists.{u_1 + 1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1) fun (leaf : ImbalancedChen.FirstExitLeaf.{u_1} \u03b1) =>\n    And\n      (@Membership.mem.{u_1, u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1)\n        (List.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1))\n        (@List.instMembership.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1))\n        (@ImbalancedChen.firstExitRetainedLeaves.{u_1} \u03b1 retained h pre positive mass remaining) leaf)\n      (@Eq.{u_1 + 1} (List.{u_1} \u03b1) (@ImbalancedChen.FirstExitLeaf.selected.{u_1} \u03b1 leaf)\n        (@HAppend.hAppend.{u_1, u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n          (@instHAppendOfAppend.{u_1} (List.{u_1} \u03b1) (@List.instAppend.{u_1} \u03b1)) (@List.reverse.{u_1} \u03b1 chosen) pre))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.exists_validSelection_of_mem_firstExitRetainedLeaves",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (retained : Bool \u2192 List.{u_1} \u03b1 \u2192 Bool) (h : \u03b1 \u2192 Real) (pre remaining : List.{u_1} \u03b1) (positive : Bool)\n  (mass : Real) (leaf : ImbalancedChen.FirstExitLeaf.{u_1} \u03b1)\n  (hleaf :\n    @Membership.mem.{u_1, u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1)\n      (List.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1))\n      (@List.instMembership.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} \u03b1))\n      (@ImbalancedChen.firstExitRetainedLeaves.{u_1} \u03b1 retained h pre positive mass remaining) leaf),\n  @Exists.{u_1 + 1} (List.{u_1} \u03b1) fun (chosen : List.{u_1} \u03b1) =>\n    And (@List.Sublist.{u_1} \u03b1 chosen remaining)\n      (And (@ImbalancedChen.FirstExitValidSelection.{u_1} \u03b1 retained pre positive chosen)\n        (@Eq.{u_1 + 1} (List.{u_1} \u03b1) (@ImbalancedChen.FirstExitLeaf.selected.{u_1} \u03b1 leaf)\n          (@HAppend.hAppend.{u_1, u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n            (@instHAppendOfAppend.{u_1} (List.{u_1} \u03b1) (@List.instAppend.{u_1} \u03b1)) (@List.reverse.{u_1} \u03b1 chosen) pre)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.mem_firstExitRetainedModuli_iff_validSelection",
+    "partial": false,
+    "type": "\u2200 (retained : Bool \u2192 List.{0} Nat \u2192 Bool) (carrier : List.{0} Nat) (d : Nat),\n  Iff\n    (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.firstExitRetainedModuli retained carrier) d)\n    (@Exists.{1} (List.{0} Nat) fun (chosen : List.{0} Nat) =>\n      And (@List.Sublist.{0} Nat chosen carrier)\n        (And (@ImbalancedChen.FirstExitValidSelection.{0} Nat retained (@List.nil.{0} Nat) Bool.true chosen)\n          (@Eq.{1} Nat (@List.prod.{0} Nat instMulNat Nat.instOne chosen) d)))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.FirstExitValidSelection._f",
+    "partial": false,
+    "type": "{\u03b1 : Type u_1} \u2192\n  (retained : Bool \u2192 List.{u_1} \u03b1 \u2192 Bool) \u2192\n    (x : List.{u_1} \u03b1) \u2192\n      (f : @List.below.{u_1 + 1, u_1} \u03b1 (fun (x : List.{u_1} \u03b1) => (pre : List.{u_1} \u03b1) \u2192 (positive : Bool) \u2192 Prop) x) \u2192\n        (pre : List.{u_1} \u03b1) \u2192 (positive : Bool) \u2192 Prop",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.FirstExitValidSelection._sunfold",
+    "partial": false,
+    "type": "{\u03b1 : Type u_1} \u2192\n  (retained : Bool \u2192 List.{u_1} \u03b1 \u2192 Bool) \u2192 (pre : List.{u_1} \u03b1) \u2192 (positive : Bool) \u2192 List.{u_1} \u03b1 \u2192 Prop",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.FirstExitValidSelection.match_1",
+    "partial": false,
+    "type": "{\u03b1 : Type u_1} \u2192\n  (motive : List.{u_1} \u03b1 \u2192 Sort u_2) \u2192\n    (x : List.{u_1} \u03b1) \u2192\n      (h_1 : (_ : Unit) \u2192 motive (@List.nil.{u_1} \u03b1)) \u2192\n        (h_2 : (p : \u03b1) \u2192 (ps : List.{u_1} \u03b1) \u2192 motive (@List.cons.{u_1} \u03b1 p ps)) \u2192 motive x",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.exists_validSelection_of_mem_firstExitRetainedLeaves._simp_1_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {a b : \u03b1},\n  @Eq.{1} Prop\n    (@Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1)\n      (@List.cons.{u_1} \u03b1 b (@List.nil.{u_1} \u03b1)) a)\n    (@Eq.{u_1 + 1} \u03b1 a b)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.exists_validSelection_of_mem_firstExitRetainedLeaves._simp_1_2",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {a : \u03b1},\n  @Eq.{1} Prop (@Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) (@List.nil.{u_1} \u03b1) a) False",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.mem_firstExitRetainedModuli_iff_validSelection._simp_1_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} [inst : DecidableEq.{u_1 + 1} \u03b1] {l : List.{u_1} \u03b1} {a : \u03b1},\n  @Eq.{1} Prop\n    (@Membership.mem.{u_1, u_1} \u03b1 (Finset.{u_1} \u03b1)\n      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} \u03b1) \u03b1 (@Finset.instSetLike.{u_1} \u03b1))\n      (@List.toFinset.{u_1} \u03b1 inst l) a)\n    (@Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) l a)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.FirstExitValidSelection",
+    "name": "ImbalancedChen.mem_firstExitRetainedModuli_iff_validSelection._simp_1_2",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {\u03b2 : Type u_2} {b : \u03b2} {f : \u03b1 \u2192 \u03b2} {l : List.{u_1} \u03b1},\n  @Eq.{1} Prop\n    (@Membership.mem.{u_2, u_2} \u03b2 (List.{u_2} \u03b2) (@List.instMembership.{u_2} \u03b2) (@List.map.{u_1, u_2} \u03b1 \u03b2 f l) b)\n    (@Exists.{u_1 + 1} \u03b1 fun (a : \u03b1) =>\n      And (@Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) l a) (@Eq.{u_2 + 1} \u03b2 (f a) b))",
+    "unsafe": false
+  }
+]

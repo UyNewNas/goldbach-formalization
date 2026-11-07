@@ -1,0 +1,309 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_PROGRESSION_FIRST_DIAGNOSTIC_EXACT_REBIND_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author of repair",
+  "created_utc": "2026-10-15T22:47:21.486829+00:00",
+  "module": "ImbalancedChen.Part3TransposedModulusProgression",
+  "old_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\Part3TransposedModulusProgression.b9300cf15133a7ebcb9eb1efee9e8b86889425c1d1a4d860188bc7a5f28f1a53.lean",
+    "sha256": "b9300cf15133a7ebcb9eb1efee9e8b86889425c1d1a4d860188bc7a5f28f1a53"
+  },
+  "new_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedModulusProgression.lean",
+    "sha256": "3605840b55a1c1c4e1b0cbddbaffeee18325d92006f62e30a6d70224d994c5a0"
+  },
+  "patches": [
+    {
+      "old": "          exact_mod_cast Finset.card_filter_le _ _",
+      "new": "          have hcard : S.card ≤ ((n₁ : ℤ) - n₂).natAbs.divisors.card := by\r\n            dsimp only [S]\r\n            exact Finset.card_filter_le _ _\r\n          exact_mod_cast hcard"
+    },
+    {
+      "old": "    simp only [if_neg hn, one_ne_zero]",
+      "new": "    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)"
+    }
+  ],
+  "forward_and_inverse_bytes_exact": true,
+  "proof_sites_changed": [
+    "transposed_sum_weight_witness_le",
+    "absoluteRow_le_tauFour_of_not_dvd"
+  ],
+  "complete_declaration_count": 18,
+  "definition_count": 2,
+  "complete_declarations": [
+    {
+      "name": "LargeModulusWitness",
+      "kind": "def",
+      "private": false,
+      "line": 29,
+      "complete_header": "def LargeModulusWitness (D : ℝ) (a : ℤ) (n₁ n₂ m : ℕ) : Prop",
+      "complete_definition": "def LargeModulusWitness (D : ℝ) (a : ℤ) (n₁ n₂ m : ℕ) : Prop :=\n  n₁ = n₂ ∨ ∃ delta ∈ ((n₁ : ℤ) - n₂).natAbs.divisors,\n    D < (delta : ℝ) ∧ n₁.Coprime delta ∧ Int.ModEq delta ((m : ℤ) * n₁) a"
+    },
+    {
+      "name": "witness_of_compatible",
+      "kind": "theorem",
+      "private": false,
+      "line": 33,
+      "complete_header": "theorem witness_of_compatible {D : ℝ} {a : ℤ} {q r n₁ n₂ m : ℕ}\n    (hc : ComplexCRT.Compatible q r n₁ n₂) (hD : D < (q.gcd r : ℝ))\n    (hm : Int.ModEq q ((m : ℤ) * n₁) a) :\n    LargeModulusWitness D a n₁ n₂ m",
+      "complete_proof": "by_cases he : n₁ = n₂\n  · exact Or.inl he\n  · apply Or.inr\n    refine ⟨q.gcd r, Nat.mem_divisors.mpr ⟨?_, ?_⟩, hD,\n      hc.1.of_dvd_right (Nat.gcd_dvd_left q r), ?_⟩\n    · have hd := Int.modEq_iff_dvd.mp (Int.natCast_modEq_iff.mpr hc.2.2.symm)\n      exact_mod_cast Int.natAbs_dvd_natAbs.mpr hd\n    · apply Int.natAbs_ne_zero.mpr\n      exact sub_ne_zero.mpr (by exact_mod_cast he)\n    · exact hm.of_dvd (by exact_mod_cast Nat.gcd_dvd_left q r)"
+    },
+    {
+      "name": "transposed_sum_weight_product_modEq_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 48,
+      "complete_header": "theorem transposed_sum_weight_product_modEq_le\n    {d : MediumAtom} (hV : 1 ≤ d.V) {delta n : ℕ}\n    (hdelta : 0 < delta) (hn : n.Coprime delta) (a : ℤ) :\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if Int.ModEq delta ((m : ℤ) * n) a then\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / delta + 1",
+      "complete_proof": "have hdeltaR : (0 : ℝ) < delta := by exact_mod_cast hdelta\n  have hceil : (Nat.ceil (3 * d.V) : ℝ) ≤ 4 * d.V := by\n    have hh := Nat.ceil_lt_add_one (by linarith : 0 ≤ 3 * d.V)\n    linarith\n  calc\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        if Int.ModEq delta ((m : ℤ) * n) a then (1 : ℝ) else 0 := by\n      apply Finset.sum_le_sum\n      intro m _\n      split_ifs\n      · exact CommonSmoothCutoff.scaledDyadicCutoff_le_one _ _\n      · exact le_rfl\n    _ = (((Icc 0 (Nat.ceil (3 * d.V))).filter\n        (fun m : ℕ ↦ Int.ModEq delta ((m : ℤ) * n) a)).card : ℝ) := by\n      rw [← Finset.sum_filter]\n      simp [MediumAtom.commonSmoothCarrier, MediumAtom.transposedAtom]\n    _ ≤ ((Nat.ceil (3 * d.V) / delta + 1 : ℕ) : ℝ) := by\n      exact_mod_cast PairedAlphaDeletion.card_product_modEq_le (Nat.ceil (3 * d.V)) delta n a hn\n    _ ≤ (Nat.ceil (3 * d.V) : ℝ) / delta + 1 := by\n      push_cast\n      have hh : ((Nat.ceil (3 * d.V) / delta : ℕ) : ℝ) ≤\n          (Nat.ceil (3 * d.V) : ℝ) / (delta : ℝ) := Nat.cast_div_le\n      exact add_le_add hh le_rfl\n    _ ≤ _ := add_le_add (div_le_div_of_nonneg_right hceil hdeltaR.le) le_rfl"
+    },
+    {
+      "name": "transposed_sum_weight_witness_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 81,
+      "complete_header": "theorem transposed_sum_weight_witness_le\n    {d : MediumAtom} (hV : 1 ≤ d.V) {D : ℝ} (hD : 0 < D)\n    (n₁ n₂ : ℕ) (hne : n₁ ≠ n₂) :\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if LargeModulusWitness D d.residue n₁ n₂ m then\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\n      (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ)",
+      "complete_proof": "have hV0 : 0 ≤ d.V := by linarith\n  let S := ((n₁ : ℤ) - n₂).natAbs.divisors.filter\n    (fun delta : ℕ ↦ D < (delta : ℝ) ∧ n₁.Coprime delta)\n  calc\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier, ∑ delta ∈ S,\n        if Int.ModEq delta ((m : ℤ) * n₁) d.residue then\n          d.transposedAtom.commonSmoothWeight m else 0 := by\n      apply Finset.sum_le_sum\n      intro m _\n      split_ifs with hw\n      · obtain ⟨delta, hdelta, hDdelta, hndelta, hmdelta⟩ := hw.resolve_left hne\n        have hs := Finset.single_le_sum (s := S)\n          (f := fun delta : ℕ ↦\n            if Int.ModEq delta ((m : ℤ) * n₁) d.residue then\n              d.transposedAtom.commonSmoothWeight m else 0)\n          (fun e _ ↦ by split_ifs <;>\n            first | exact le_rfl | exact d.transposedAtom.commonSmoothWeight_nonneg m)\n          (Finset.mem_filter.mpr ⟨hdelta, hDdelta, hndelta⟩)\n        simpa only [if_pos hmdelta] using hs\n      · exact Finset.sum_nonneg (fun delta _ ↦ by\n          split_ifs <;> first | exact le_rfl | exact d.transposedAtom.commonSmoothWeight_nonneg m)\n    _ = ∑ delta ∈ S, ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        if Int.ModEq delta ((m : ℤ) * n₁) d.residue then\n          d.transposedAtom.commonSmoothWeight m else 0 := Finset.sum_comm\n    _ ≤ ∑ _delta ∈ S, (4 * d.V / D + 1) := by\n      apply Finset.sum_le_sum\n      intro delta hdelta\n      obtain ⟨_, hDdelta, hndelta⟩ := Finset.mem_filter.mp hdelta\n      have hdeltaR : (0 : ℝ) < delta := hD.trans hDdelta\n      exact (transposed_sum_weight_product_modEq_le hV (by exact_mod_cast hdeltaR)\n        hndelta d.residue).trans\n          (add_le_add (div_le_div_of_nonneg_left (by linarith : 0 ≤ 4 * d.V)\n            hD hDdelta.le) le_rfl)\n    _ ≤ _ := by\n      rw [Finset.sum_const, nsmul_eq_mul, mul_comm, fouvryTau_two]\n      exact mul_le_mul_of_nonneg_left\n        (show (S.card : ℝ) ≤ (((n₁ : ℤ) - n₂).natAbs.divisors.card : ℝ) by\n          have hcard : S.card ≤ ((n₁ : ℤ) - n₂).natAbs.divisors.card := by\n            dsimp only [S]\n            exact Finset.card_filter_le _ _\n          exact_mod_cast hcard)\n        (by positivity)"
+    },
+    {
+      "name": "constructedWeight_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "line": 131,
+      "complete_header": "private theorem constructedWeight_nonneg (d : MediumAtom) (q r n₁ n₂ : ℕ) :\n    0 ≤ ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\n      d.residue q r n₁ n₂",
+      "complete_proof": "unfold ComplexCRT.constructedProgressionWeight\n  split_ifs\n  · apply Finset.sum_nonneg\n    intro m _\n    split_ifs\n    · exact d.commonSmoothWeight_nonneg m\n    · exact le_rfl\n  · exact le_rfl"
+    },
+    {
+      "name": "constructedLargeWeight_le_witness",
+      "kind": "theorem",
+      "private": true,
+      "line": 145,
+      "complete_header": "private theorem constructedLargeWeight_le_witness (d : MediumAtom) (D : ℝ)\n    (q r n₁ n₂ : ℕ) :\n    (if D < (q.gcd r : ℝ) then\n      ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\n        d.residue q r n₁ n₂ else 0) ≤\n      ∑ m ∈ d.commonSmoothCarrier,\n        if Int.ModEq q ((m : ℤ) * n₁) d.residue ∧\n            Int.ModEq r ((m : ℤ) * n₂) d.residue then\n          d.commonSmoothWeight m *\n            (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0) else 0",
+      "complete_proof": "have hrhs : 0 ≤ ∑ m ∈ d.commonSmoothCarrier,\n      if Int.ModEq q ((m : ℤ) * n₁) d.residue ∧\n          Int.ModEq r ((m : ℤ) * n₂) d.residue then\n        d.commonSmoothWeight m *\n          (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0) else 0 := by\n    apply Finset.sum_nonneg\n    intro m _\n    split_ifs <;> simp [d.commonSmoothWeight_nonneg]\n  by_cases hD : D < (q.gcd r : ℝ)\n  · rw [if_pos hD]\n    unfold ComplexCRT.constructedProgressionWeight\n    by_cases hc : ComplexCRT.Compatible q r n₁ n₂\n    · rw [if_pos hc]\n      apply le_of_eq\n      simp_rw [← (ComplexCRT.residue_spec d.residue hc).2.2]\n      apply Finset.sum_congr rfl\n      intro m _\n      by_cases hm : Int.ModEq q ((m : ℤ) * n₁) d.residue ∧\n          Int.ModEq r ((m : ℤ) * n₂) d.residue\n      · simp only [if_pos hm, if_pos (witness_of_compatible hc hD hm.1), mul_one]\n      · simp only [if_neg hm]\n    · simpa only [if_neg hc] using hrhs\n  · simpa only [if_neg hD] using hrhs"
+    },
+    {
+      "name": "commonLargeModulusWeight_norm_le_witness",
+      "kind": "theorem",
+      "private": false,
+      "line": 182,
+      "complete_header": "theorem commonLargeModulusWeight_norm_le_witness (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) :\n    ‖d.commonLargeModulusGCDWeight D n₁ n₂‖ ≤\n      ∑ m ∈ d.commonSmoothCarrier, d.commonSmoothWeight m *\n        d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂ *\n          (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0)",
+      "complete_proof": "unfold MediumAtom.commonLargeModulusGCDWeight\n  calc\n    _ ≤ ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n        ‖d.complexFactorGamma a‖ * ‖d.complexFactorGamma b‖ *\n          (if D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) then\n            ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\n              d.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ else 0) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro a _\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro b _\n      by_cases hD : D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)\n      · simp only [if_pos hD, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs,\n          abs_of_nonneg (constructedWeight_nonneg d _ _ _ _), le_refl]\n      · simp only [if_neg hD, mul_zero, norm_zero, le_refl]\n    _ ≤ ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n        ‖d.complexFactorGamma a‖ * ‖d.complexFactorGamma b‖ *\n          ∑ m ∈ d.commonSmoothCarrier,\n            if Int.ModEq (complexFactorModulus a) ((m : ℤ) * n₁) d.residue ∧\n                Int.ModEq (complexFactorModulus b) ((m : ℤ) * n₂) d.residue then\n              d.commonSmoothWeight m *\n                (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0) else 0 := by\n      apply Finset.sum_le_sum\n      intro a _\n      apply Finset.sum_le_sum\n      intro b _\n      exact mul_le_mul_of_nonneg_left (constructedLargeWeight_le_witness d D _ _ n₁ n₂)\n        (mul_nonneg (norm_nonneg _) (norm_nonneg _))\n    _ = _ := by\n      unfold MediumAtom.absoluteFactorModulusRow\n      simp only [Finset.mul_sum]\n      simp_rw [Finset.sum_comm (s := d.complexFactorLabels) (t := d.commonSmoothCarrier)]\n      simp only [Finset.sum_mul]\n      apply Finset.sum_congr rfl\n      intro m _\n      conv_rhs => rw [Finset.sum_comm]\n      apply Finset.sum_congr rfl\n      intro a _\n      apply Finset.sum_congr rfl\n      intro b _\n      split_ifs <;> simp_all\n      all_goals ring"
+    },
+    {
+      "name": "transposed_smallBeta_largeModulusW_norm_le_witness",
+      "kind": "theorem",
+      "private": false,
+      "line": 235,
+      "complete_header": "theorem transposed_smallBeta_largeModulusW_norm_le_witness\n    (d : MediumAtom) (Y D : ℝ) :\n    ‖d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        if Y < (n₁.gcd n₂ : ℝ) then 0 else\n          ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ *\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                d.transposedAtom.absoluteFactorModulusRow m n₁ *\n                  d.transposedAtom.absoluteFactorModulusRow m n₂ *\n                    (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0)",
+      "complete_proof": "unfold MediumAtom.commonSmallBetaLargeModulusGCDW\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₁ _\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₂ _\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, norm_zero, le_refl]\n  · simp only [if_neg hy, norm_mul, norm_star]\n    exact mul_le_mul_of_nonneg_left\n      (commonLargeModulusWeight_norm_le_witness d.transposedAtom D n₁ n₂)\n      (mul_nonneg (norm_nonneg _) (norm_nonneg _))"
+    },
+    {
+      "name": "unitBetaAtom",
+      "kind": "def",
+      "private": true,
+      "line": 260,
+      "complete_header": "private def unitBetaAtom (d : MediumAtom) : MediumAtom",
+      "complete_definition": "private def unitBetaAtom (d : MediumAtom) : MediumAtom :=\n  { d with beta := fun _ ↦ 1 }"
+    },
+    {
+      "name": "unitBetaAtom_admissible",
+      "kind": "theorem",
+      "private": true,
+      "line": 263,
+      "complete_header": "private theorem unitBetaAtom_admissible\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible 0 sigma kappa c0 (unitBetaAtom d)",
+      "complete_proof": "obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, _hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, ?_, hGamma1, hGamma2, hGamma3⟩\n  intro n _\n  change ‖(1 : ℂ)‖ ≤ (n.divisors.card : ℝ) ^ 0\n  norm_num"
+    },
+    {
+      "name": "absoluteRow_le_tauFour_of_not_dvd",
+      "kind": "theorem",
+      "private": true,
+      "line": 277,
+      "complete_header": "private theorem absoluteRow_le_tauFour_of_not_dvd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hn : ¬(n : ℤ) ∣ d.residue) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)",
+      "complete_proof": "have hgood : (unitBetaAtom d).cleanedBeta n ≠ 0 := by\n    change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0\n    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)\n  exact (unitBetaAtom d).absoluteFactorModulusRow_le_tauFour\n    (unitBetaAtom_admissible hd) m n hgood"
+    },
+    {
+      "name": "one_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "line": 289,
+      "complete_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+      "complete_proof": "unfold MediumAtom.scale\n  calc\n    1 = (1 : ℝ) * 1 := by norm_num\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])"
+    },
+    {
+      "name": "actual_difference_le_polynomial",
+      "kind": "theorem",
+      "private": true,
+      "line": 297,
+      "complete_header": "private theorem actual_difference_le_polynomial\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\n    (hn : n ∈ d.transposedAtom.betaCarrier)\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\n      7 * d.scale ^ (max 1 (1 + kappa))",
+      "complete_proof": "have hx := one_le_scale hd\n  obtain ⟨hU, hV, _, _, _, _, _, ha, _⟩ := hd\n  have hxK : d.scale ≤ d.scale ^ (max 1 (1 + kappa)) := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le hx (le_max_left (1 : ℝ) (1 + kappa))\n  have haK : |(d.residue : ℝ)| ≤ d.scale ^ (max 1 (1 + kappa)) := by\n    have ha' : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n      simpa only [Nat.cast_natAbs, Int.cast_abs] using ha\n    exact ha'.trans (Real.rpow_le_rpow_of_exponent_le hx (le_max_right 1 (1 + kappa)))\n  have hms : (m : ℝ) ∈ tsupport (CommonSmoothCutoff.scaledDyadicCutoff d.V) :=\n    subset_closure hm\n  have hmhi := (CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset\n    (lt_of_lt_of_le zero_lt_one hV) hms).2\n  have hnhi : (n : ℝ) ≤ 2 * d.U :=\n    (show (n : ℝ) ≤ (Nat.floor (2 * d.U) : ℝ) by\n      exact_mod_cast (Finset.mem_Icc.mp hn).2).trans\n        (Nat.floor_le (by linarith : 0 ≤ 2 * d.U))\n  have hmn : (m : ℝ) * n ≤ 6 * d.scale := by\n    calc\n      _ ≤ (3 * d.V) * (2 * d.U) :=\n        mul_le_mul hmhi hnhi (Nat.cast_nonneg _) (by linarith)\n      _ = _ := by unfold MediumAtom.scale; ring\n  calc\n    _ = |(m : ℝ) * n - d.residue| := by\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n      push_cast\n      rfl\n    _ ≤ |(m : ℝ) * n| + |(d.residue : ℝ)| := abs_sub _ _\n    _ ≤ 6 * d.scale + d.scale ^ (max 1 (1 + kappa)) := by\n      rw [abs_of_nonneg (by positivity : 0 ≤ (m : ℝ) * n)]\n      exact add_le_add hmn haK\n    _ ≤ _ := by linarith"
+    },
+    {
+      "name": "tauFour_difference_subpower",
+      "kind": "theorem",
+      "private": true,
+      "line": 337,
+      "complete_header": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\n          ¬(n : ℤ) ∣ d.residue →\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\n              C * d.scale ^ (epsilon / 2)",
+      "complete_proof": "let K : ℝ := max 1 (1 + kappa)\n  have hK : 1 ≤ K := le_max_left _ _\n  have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK\n  let eta : ℝ := epsilon / (2 * K)\n  have heta : 0 < eta := div_pos hepsilon (mul_pos (by norm_num) hKpos)\n  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']\n  obtain ⟨D, hD, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow\n    (k := 4) (by norm_num) heta\n  refine ⟨D * (7 : ℝ) ^ eta, by positivity, fun B sigma c0 d hd m n hn hm hndiv ↦ ?_⟩\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\n    intro h\n    exact hndiv ⟨m, by nlinarith⟩\n  have hx := one_le_scale hd\n  calc\n    _ ≤ D * (((m : ℤ) * n - d.residue).natAbs : ℝ) ^ eta :=\n      hbound _ (Nat.pos_of_ne_zero (Int.natAbs_ne_zero.mpr hne))\n    _ ≤ D * (7 * d.scale ^ K) ^ eta :=\n      mul_le_mul_of_nonneg_left (Real.rpow_le_rpow (Nat.cast_nonneg _)\n        (actual_difference_le_polynomial hd hn hm) heta.le) hD.le\n    _ = _ := by\n      rw [Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 7) (Real.rpow_nonneg (by linarith) _),\n        ← Real.rpow_mul (by linarith : 0 ≤ d.scale), hKeta]\n      ring"
+    },
+    {
+      "name": "transposed_smoothWeight_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 369,
+      "complete_header": "private theorem transposed_smoothWeight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier, d.transposedAtom.commonSmoothWeight m) ≤\n      5 * d.V",
+      "complete_proof": "calc\n    _ ≤ ∑ _m ∈ d.transposedAtom.commonSmoothCarrier, (1 : ℝ) :=\n      Finset.sum_le_sum (fun _ _ ↦ CommonSmoothCutoff.scaledDyadicCutoff_le_one _ _)\n    _ = (Nat.ceil (3 * d.V) : ℝ) + 1 := by\n      simp [MediumAtom.commonSmoothCarrier, MediumAtom.transposedAtom]\n    _ ≤ _ := by\n      have := Nat.ceil_lt_add_one (by linarith [hd.2.1] : 0 ≤ 3 * d.V)\n      linarith [hd.2.1]"
+    },
+    {
+      "name": "transposed_largeModulusWeight_divisor_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 386,
+      "complete_header": "theorem transposed_largeModulusWeight_divisor_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ D : ℝ, 0 < D → ∀ n₁ n₂ : ℕ,\n        n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\n          ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\n            ‖d.transposedAtom.commonLargeModulusGCDWeight D n₁ n₂‖ ≤\n              C * d.scale ^ epsilon *\n                (if n₁ = n₂ then 5 * d.V else\n                  (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))",
+      "complete_proof": "obtain ⟨C, hC, hbound⟩ := tauFour_difference_subpower kappa hepsilon\n  refine ⟨C ^ 2, by positivity, fun B sigma c0 d hd D hD n₁ n₂ hn₁ hn₂ hnd₁ hnd₂ ↦ ?_⟩\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  calc\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier, d.transposedAtom.commonSmoothWeight m *\n        d.transposedAtom.absoluteFactorModulusRow m n₁ *\n          d.transposedAtom.absoluteFactorModulusRow m n₂ *\n            (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0) :=\n      commonLargeModulusWeight_norm_le_witness d.transposedAtom D n₁ n₂\n    _ ≤ ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (C ^ 2 * d.scale ^ epsilon) *\n          (if LargeModulusWitness D d.residue n₁ n₂ m then\n            d.transposedAtom.commonSmoothWeight m else 0) := by\n      apply Finset.sum_le_sum\n      intro m _\n      by_cases hw : LargeModulusWitness D d.residue n₁ n₂ m\n      · simp only [if_pos hw, mul_one]\n        by_cases hm : d.transposedAtom.commonSmoothWeight m = 0\n        · simp only [hm, zero_mul, mul_zero, le_refl]\n        · have hrow₁ := (absoluteRow_le_tauFour_of_not_dvd hd m n₁ hnd₁).trans\n            (hbound B sigma c0 d hd m n₁ hn₁ hm hnd₁)\n          have hrow₂ := (absoluteRow_le_tauFour_of_not_dvd hd m n₂ hnd₂).trans\n            (hbound B sigma c0 d hd m n₂ hn₂ hm hnd₂)\n          have hp : d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂ ≤\n              C ^ 2 * d.scale ^ epsilon := by\n            calc\n              _ ≤ (C * d.scale ^ (epsilon / 2)) * (C * d.scale ^ (epsilon / 2)) :=\n                mul_le_mul hrow₁ hrow₂ (d.absoluteFactorModulusRow_nonneg m n₂) (by positivity)\n              _ = _ := by\n                rw [mul_mul_mul_comm, ← Real.rpow_add hx0,\n                  show epsilon / 2 + epsilon / 2 = epsilon by ring, pow_two]\n          change d.transposedAtom.commonSmoothWeight m *\n            d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂ ≤ _\n          calc\n            _ = d.transposedAtom.commonSmoothWeight m *\n                (d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂) := by ring\n            _ ≤ d.transposedAtom.commonSmoothWeight m * (C ^ 2 * d.scale ^ epsilon) :=\n              mul_le_mul_of_nonneg_left hp (d.transposedAtom.commonSmoothWeight_nonneg m)\n            _ = _ := by ring\n      · simp only [if_neg hw, mul_zero, le_refl]\n    _ = (C ^ 2 * d.scale ^ epsilon) *\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          if LargeModulusWitness D d.residue n₁ n₂ m then\n            d.transposedAtom.commonSmoothWeight m else 0 := (Finset.mul_sum _ _ _).symm\n    _ ≤ _ := by\n      apply mul_le_mul_of_nonneg_left _ (by positivity)\n      by_cases he : n₁ = n₂\n      · simpa only [LargeModulusWitness, he, true_or, if_true] using transposed_smoothWeight_sum_le hd\n      · simpa only [if_neg he] using transposed_sum_weight_witness_le hd.2.1 hD n₁ n₂ he"
+    },
+    {
+      "name": "cleanedAlpha_transposed_smallBeta_largeModulusW_divisor_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 449,
+      "complete_header": "theorem cleanedAlpha_transposed_smallBeta_largeModulusW_divisor_bound\n    (kappa : ℝ) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y D : ℝ, 0 < D →\n        ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\n          C * d.scale ^ epsilon *\n            ∑ n₁ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n              ∑ n₂ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n                if Y < (n₁.gcd n₂ : ℝ) then 0 else\n                  ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\n                    ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ *\n                      (if n₁ = n₂ then 5 * d.V else\n                        (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))",
+      "complete_proof": "obtain ⟨C, hC, hbound⟩ := transposed_largeModulusWeight_divisor_bound kappa hepsilon\n  refine ⟨C, hC, fun B sigma c0 d hd Y D hD ↦ ?_⟩\n  have hclean := mediumAdmissible_cleanedAlphaAtom hd\n  unfold MediumAtom.commonSmallBetaLargeModulusGCDW\n  simp only [Finset.mul_sum]\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₁ hn₁\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₂ hn₂\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, norm_zero, mul_zero, le_refl]\n  · simp only [if_neg hy, norm_mul, norm_star]\n    by_cases h1 : d.cleanedAlphaAtom.transposedAtom.beta n₁ = 0\n    · simp only [h1, norm_zero, zero_mul, mul_zero, le_refl]\n    by_cases h2 : d.cleanedAlphaAtom.transposedAtom.beta n₂ = 0\n    · simp only [h2, norm_zero, mul_zero, zero_mul, le_refl]\n    calc\n      _ ≤ (‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\n          ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖) *\n            (C * d.scale ^ epsilon * (if n₁ = n₂ then 5 * d.V else\n              (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))) :=\n        mul_le_mul_of_nonneg_left\n          (hbound B sigma c0 d.cleanedAlphaAtom hclean D hD n₁ n₂ hn₁ hn₂\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h1)\n            (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h2))\n          (mul_nonneg (norm_nonneg _) (norm_nonneg _))\n      _ = _ := by ring"
+    },
+    {
+      "name": "betaL2_mul_largeModulusNonzero_le_witness_add_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 495,
+      "complete_header": "theorem betaL2_mul_largeModulusNonzero_le_witness_add_log_payment\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          ‖d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y (d.scale ^ delta) true‖ ≤\n            (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n              (∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n                if Y < (n₁.gcd n₂ : ℝ) then 0 else\n                  ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ *\n                    ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n                      d.transposedAtom.commonSmoothWeight m *\n                        d.transposedAtom.absoluteFactorModulusRow m n₁ *\n                          d.transposedAtom.absoluteFactorModulusRow m n₂ *\n                            (if LargeModulusWitness (d.scale ^ delta) d.residue n₁ n₂ m\n                              then 1 else 0)) +\n              d.scale ^ 2 / Real.log d.scale ^ A",
+      "complete_proof": "obtain ⟨x0, hx0, hzero⟩ :=\n    TransposedModulusGCDZero.betaL2_mul_transposed_largeModulusZero_log_payment\n      B sigma kappa c0 A delta hsigma hdelta\n  refine ⟨x0, hx0, fun d hd hx Y ↦ ?_⟩\n  have hbeta : 0 ≤ ∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2 :=\n    Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)\n  apply (mul_le_mul_of_nonneg_left\n    (TransposedModulusGCDZero.transposed_largeModulusNonzero_norm_le_W_add_zero\n      hd Y (d.scale ^ delta)) hbeta).trans\n  rw [mul_add]\n  exact add_le_add\n    (mul_le_mul_of_nonneg_left\n      (transposed_smallBeta_largeModulusW_norm_le_witness d Y (d.scale ^ delta)) hbeta)\n    (hzero d hd hx Y)"
+    }
+  ],
+  "all_complete_types_definitions_imports_quantifiers_thresholds_identical": true,
+  "header": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedModulusGCDZero",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "actual_first_failure": {
+    "full_stdout_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T224300860903Z-ImbalancedChen.Part3TransposedModulusProgression\\stdout.log",
+    "sha256": "c4b8a5ebbd781b89c7d65ce8a0c804b61bd11bfdfc402326f0cbf8d4fa617eff",
+    "read_in_full": true,
+    "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T224300860903Z-ImbalancedChen.Part3TransposedModulusProgression\\receipt.json",
+    "receipt_sha256": "36ebd0760ad0570232f0ba28b9789037c28a17ff733828ba3f6e2f1e0dafbf6a",
+    "status": "FAILED",
+    "bound_old_source_sha256": "b9300cf15133a7ebcb9eb1efee9e8b86889425c1d1a4d860188bc7a5f28f1a53",
+    "diagnostics": "Old125 exact_mod_cast had not instantiated the filtered finite set in Nat; old280 complex 1!=0 remained, plus old282 unused one_ne_zero simp argument. These are the only logged sites; original FAILED evidence remains unchanged."
+  },
+  "fixed_API_and_proof_assessment": [
+    {
+      "site": "transposed_sum_weight_witness_le",
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Card.lean",
+      "sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "line": 275,
+      "signature": "Finset.card_filter_le (s:Finset α)(p:α→Prop)[DecidablePred p]: (s.filter p).card<=s.card",
+      "assessment": "Explicit Nat hcard fixes both the original S and the same nonzero actual difference divisor set; dsimp only[S] exposes exactly this filter. Only then cast the fully instantiated inequality to Real. Same witness, divisor multiplicity and bound; no new hypothesis."
+    },
+    {
+      "site": "absoluteRow_le_tauFour_of_not_dvd",
+      "assessment": "After the existing explicit complex cleanedBeta if-expression, if_neg hn reduces to (1:Complex)!=0. Supplying typed one_ne_zero proves precisely that goal and removes the unused simp argument. The beta=1 atom, its admissibility and original actual difference remain unchanged.",
+      "existing_project_same_typed_API_pattern": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedLargeGCDFourier.lean",
+        "sha256": "af26666f0ce87b5aaf1ad87f7f1c6d46f8678ab0d1ef5dad25d728953fb3ea40",
+        "line": 62,
+        "scope": "Read-only existing source pattern, not imported anew and not used as imported-closure acceptance."
+      }
+    }
+  ],
+  "historical_complete_review_preserved": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-transposed-modulus-progression-independent-semantics-parent6d79.json",
+    "sha256": "a75efb6c21205dd432458746e33d60832cfe3d573ba32760df0faacd58ade767",
+    "scope": "Complete18 types/2definitions/proofs and source math/API reviewed against historical6d79. Source b930 bytes now match the exact retained snapshot; only the two explicit current proof patches change."
+  },
+  "current_parent_proof_rebind_preserved": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-transposed-modulus-progression-parent971-independent-rebind.json",
+    "sha256": "83f56e0a7f3d833b8890f768cecb14db91534ed1857662de06b511cd02adb053",
+    "scope": "Earlier complete971 parent proof-only addendum retained; not overwritten or repurposed as current imported-closure replay."
+  },
+  "mathematical_and_scope_rebind": "Actual compatibility/gcd divides signed paired difference; offdiagonal divisor/progression witness with real4V/D+1 and genuine5V diagonal; complete complex Gamma labels, alpha-clean nondivisor support, original admissibility and tau4 subpower, same two gcd masks, whole W and exact signed nonzero-part subtraction, original outside betaL2 all remain literally unchanged. The final theorem leaves the explicit whole-W progression majorant to be paid; it does not discharge fullNZ or replace it by a caller row-cap budget.",
+  "current_parent_binding": {
+    "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedModulusGCDZero.lean",
+    "source_sha256": "97176372a836b901735814809adb769cb0bd02299f995a8348a54071bd3e2224",
+    "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\Part3TransposedModulusGCDZero.olean",
+    "object_sha256": "53b7acf58acc9695b0c727e4b9e1665a5bb76524adc7831c9fecdab8f286575e",
+    "existing_cache_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.Part3TransposedModulusGCDZero.json",
+    "cache_sha256": "8e434c1bc3083799ef0ddf2667af558ead00c4bf614fc4e44183cc4ee6b88457",
+    "cache_status": "PASS",
+    "source_object_failed_run_dependency_exact": true,
+    "existing_leanchecker_receipt": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T222234734363Z\\replay-ImbalancedChen.Part3TransposedModulusGCDZero.json",
+      "sha256": "b9a9a4646ec674c34552b3e84c498622095de06f9a94053d0aa36510cf96aae4",
+      "status": "PASS"
+    },
+    "scope": "Current exact971 source/object/cache and existing checker PASS receipt read only. No parent proof/checker invocation or independent imported closure replay by this reviewer. Runtime remains responsible for complete owned gate."
+  },
+  "relative_DAG": {
+    "same_sole_project_parent": "ImbalancedChen.Part3TransposedModulusGCDZero",
+    "imports_identical": true,
+    "new_project_imports": 0,
+    "new_foreign_roots": 0,
+    "historical_DAG_remains_historical": true,
+    "full_imported_closure_replay_claimed": false
+  },
+  "owner_report_reference": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-transposed-modulus-progression-first-diagnostic-self-rebind.json",
+    "sha256": "85c47984fa8f98f3d3317c9603caca712073eea386471ea99b7a123eb4683f55"
+  },
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "resource_profile": {
+    "source_options_identical": true,
+    "resource_or_linter_options_added": false,
+    "runtime_policy_modified": false,
+    "scope": "Existing concrete6144 bounded retry only; no new runtime authorization created by report."
+  },
+  "findings": [],
+  "no_determined_mathematical_or_fixed_API_blocker": true,
+  "remaining_gates": [
+    "Actual exact3605 bounded retry and complete owned audit; this source review is not an elaboration PASS.",
+    "Quantitative payment of the explicit whole-W majorant and original betaL2 remains a mathematical gate for the full target."
+  ],
+  "lean_invoked": false,
+  "lake_build_checker_invoked": false,
+  "source_checker_pin_modified": false,
+  "bytecode_written": false,
+  "Lean_PASS_or_imported_closure_acceptance_claimed": false
+}

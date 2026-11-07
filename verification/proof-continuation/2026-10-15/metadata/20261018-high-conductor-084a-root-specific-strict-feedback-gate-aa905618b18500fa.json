@@ -1,0 +1,161 @@
+{
+  "status": "ROOT_ONE_SPECIFIC_FINITE_PREFIX_STRICT_FEEDBACK_GATE_NOT_ANALYTIC_ACCEPTANCE",
+  "created_utc": "2026-10-18T03:25:34.282522+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+  "source_sha256": "084a8e5cf134fcc2f0213681aeff9602b3a10f3c23c787a6e79f6bb8fac0515f",
+  "root_non_author_full_source_read": "All381 current source lines independently read by root; all18 real declarations/one divisorTau definition/17 finite proofs. Public strong high-conductor mean is deliberately absent, not assumed as a new premise.",
+  "independent_report": {
+    "path": "20261018-high-conductor-084a-finite-foundations-full-independent-review.json",
+    "sha256": "baf1d068699a63433d5207d24481201afc9c91ab2b61bb59402708fd1b592ee1"
+  },
+  "all_complete_headers": [
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "line": 25,
+      "complete_header": "private def divisorTau (n : ℕ) : ℝ"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "line": 27,
+      "complete_header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "line": 33,
+      "complete_header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "line": 40,
+      "complete_header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b"
+    },
+    {
+      "name": "sum_moebius_divisors_complex",
+      "kind": "theorem",
+      "line": 46,
+      "complete_header": "private theorem sum_moebius_divisors_complex (n : ℕ) :\n    (∑ e ∈ n.divisors, (ArithmeticFunction.moebius e : ℂ)) =\n      if n = 1 then 1 else 0"
+    },
+    {
+      "name": "coprime_indicator_complex",
+      "kind": "theorem",
+      "line": 54,
+      "complete_header": "private theorem coprime_indicator_complex {q : ℕ} (hq : q ≠ 0) (n : ℕ) :\n    (if n.Coprime q then (1 : ℂ) else 0) =\n      ∑ e ∈ q.divisors,\n        if e ∣ n then (ArithmeticFunction.moebius e : ℂ) else 0"
+    },
+    {
+      "name": "moebius_norm_sq_le_one",
+      "kind": "theorem",
+      "line": 65,
+      "complete_header": "private theorem moebius_norm_sq_le_one (e : ℕ) :\n    ‖(ArithmeticFunction.moebius e : ℂ)‖ ^ 2 ≤ 1"
+    },
+    {
+      "name": "character_eq_primitive_indicator",
+      "kind": "theorem",
+      "line": 74,
+      "complete_header": "private theorem character_eq_primitive_indicator {q : ℕ} (hq : 0 < q)\n    (chi : DirichletCharacter ℂ q) (n : ℕ) :\n    chi (n : ZMod q) =\n      chi.primitiveCharacter (n : ZMod chi.conductor) *\n        (if n.Coprime q then (1 : ℂ) else 0)"
+    },
+    {
+      "name": "sum_multiples",
+      "kind": "theorem",
+      "line": 91,
+      "complete_header": "private theorem sum_multiples (N e : ℕ) (he : 0 < e) (f : ℕ → ℂ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m)"
+    },
+    {
+      "name": "sum_multiples_real",
+      "kind": "theorem",
+      "line": 114,
+      "complete_header": "private theorem sum_multiples_real (N e : ℕ) (he : 0 < e) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Icc 1 N with e ∣ n, f n) =\n      ∑ m ∈ Finset.Icc 1 (N / e), f (e * m)"
+    },
+    {
+      "name": "divisible_auxiliary_sum",
+      "kind": "theorem",
+      "line": 121,
+      "complete_header": "private theorem divisible_auxiliary_sum (N k e c : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (psi : DirichletCharacter ℂ c) :\n    (∑ n ∈ Finset.Icc 1 N,\n      if e ∣ n then (if n.Coprime k then b n else 0) * psi (n : ZMod c) else 0) =\n      if e.Coprime k then\n        psi (e : ZMod c) *\n          ∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) * psi (m : ZMod c)\n      else 0"
+    },
+    {
+      "name": "auxiliary_character_sum_eq_moebius",
+      "kind": "theorem",
+      "line": 150,
+      "complete_header": "private theorem auxiliary_character_sum_eq_moebius {q : ℕ} (hq : 0 < q)\n    (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors, (ArithmeticFunction.moebius e : ℂ) *\n        ∑ n ∈ Finset.Icc 1 N,\n          if e ∣ n then\n            (if n.Coprime k then b n else 0) *\n              chi.primitiveCharacter (n : ZMod chi.conductor)\n          else 0"
+    },
+    {
+      "name": "auxiliary_character_sum_eq_moebius_quotient",
+      "kind": "theorem",
+      "line": 185,
+      "complete_header": "private theorem auxiliary_character_sum_eq_moebius_quotient {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    (∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)) =\n      ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          (ArithmeticFunction.moebius e : ℂ) *\n            chi.primitiveCharacter (e : ZMod chi.conductor) *\n              ∑ m ∈ Finset.Icc 1 (N / e),\n                (if m.Coprime k then b (e * m) else 0) *\n                  chi.primitiveCharacter (m : ZMod chi.conductor)\n        else 0"
+    },
+    {
+      "name": "auxiliary_character_sum_sq_le_moebius",
+      "kind": "theorem",
+      "line": 219,
+      "complete_header": "private theorem auxiliary_character_sum_sq_le_moebius {q : ℕ}\n    (hq : 0 < q) (N k : ℕ) (b : ℕ → ℂ) (chi : DirichletCharacter ℂ q) :\n    ‖∑ n ∈ Finset.Icc 1 N,\n      (if n.Coprime k then b n else 0) * chi (n : ZMod q)‖ ^ 2 ≤\n      divisorTau q * ∑ e ∈ q.divisors,\n        if e.Coprime (chi.conductor * k) then\n          ‖∑ m ∈ Finset.Icc 1 (N / e),\n            (if m.Coprime k then b (e * m) else 0) *\n              chi.primitiveCharacter (m : ZMod chi.conductor)‖ ^ 2\n        else 0"
+    },
+    {
+      "name": "auxiliary_multiple_energy_le",
+      "kind": "theorem",
+      "line": 246,
+      "complete_header": "private theorem auxiliary_multiple_energy_le (N e k : ℕ) (he : 0 < e)\n    (b : ℕ → ℂ) (hb : ∀ n ∈ Finset.Icc 1 N, ‖b n‖ ≤ 1) :\n    (∑ m ∈ Finset.Icc 1 (N / e),\n      ‖if m.Coprime k then b (e * m) else 0‖ ^ 2) ≤ ((N / e : ℕ) : ℝ)"
+    },
+    {
+      "name": "sum_tau_ratio_le",
+      "kind": "theorem",
+      "line": 265,
+      "complete_header": "private theorem sum_tau_ratio_le (T : ℕ) :\n    (∑ r ∈ Finset.Icc 1 T, divisorTau r * ((r : ℝ) / (r.totient : ℝ))) ≤\n      (T : ℝ) * (1 + Real.log (T : ℝ)) ^ 3"
+    },
+    {
+      "name": "tau_weighted_multiples_le",
+      "kind": "theorem",
+      "line": 292,
+      "complete_header": "private theorem tau_weighted_multiples_le (Q c : ℕ) (hc : 0 < c) :\n    (∑ q ∈ Finset.Icc 1 Q with c ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        divisorTau c * ((c : ℝ) / (c.totient : ℝ)) *\n          ((Q / c : ℕ) : ℝ) * (1 + Real.log ((Q / c : ℕ) : ℝ)) ^ 3"
+    },
+    {
+      "name": "tau_weighted_product_fibre_le",
+      "kind": "theorem",
+      "line": 322,
+      "complete_header": "private theorem tau_weighted_product_fibre_le (Q c e : ℕ)\n    (hQ : 0 < Q) (hc : 0 < c) (he : 0 < e) :\n    (∑ q ∈ Finset.Icc 1 Q with c * e ∣ q,\n      divisorTau q * ((q : ℝ) / (q.totient : ℝ))) ≤\n        (divisorTau c * ((c : ℝ) / (c.totient : ℝ))) *\n          (divisorTau e / (e.totient : ℝ)) * ((Q : ℝ) / (c : ℝ)) *\n            (1 + Real.log (Q : ℝ)) ^ 3"
+    }
+  ],
+  "primitive_definition": "private def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+  "math_review": [
+    {
+      "component": "Full character level",
+      "finding": "chi(n)=primitiveCharacter(n)*1_(n,q)=1 uses original positive q; nonunits are zero, so no support is discarded as an unproved error."
+    },
+    {
+      "component": "Exact Mobius expansion",
+      "finding": "Every e|q retained. Original auxiliary mask (n,k)=1 remains in each term; positive e multiple bijection keeps exactly 1<=m<=floor(N/e), including N=0 and empty intervals."
+    },
+    {
+      "component": "Both coprimality gates",
+      "finding": "After n=e*m, e coprime k is necessary from literal auxiliary mask. When e is not coprime conductor, primitiveCharacter(e)=0. Thus exact gate e coprime (conductor*k), with no replacement of k by a smaller parameter and no missing bad-support supplier."
+    },
+    {
+      "component": "Cauchy",
+      "finding": "Full-level divisor cardinality tau(q) pays actual Mobius sum squared; |mu(e)|<=1 and |primitiveCharacter(e)|<=1 are explicit. No character mean or analytic estimate is assumed."
+    },
+    {
+      "component": "Coefficient energy",
+      "finding": "For |b(n)|<=1 on actual 1..N, the masked b(e*m) square energy <=floor(N/e); e*m<=N and positivity are proved, with all k and e retained."
+    },
+    {
+      "component": "Divisor/totient fibre",
+      "finding": "Finite tau(ab)<=tau(a)tau(b) and supermultiplicative phi give tau(q)*q/phi(q) multiple-fibre control. Existing actual divisor second-moment exponent for k=2 is 3; zero-length interval handled separately."
+    },
+    {
+      "component": "Product fibre",
+      "finding": "For positive c,e,Q and c*e|q, retained bound (tau(c)c/phi(c))*(tau(e)/phi(e))*(Q/c)*log^3(Q) is algebraically correct. No coprimality is required for the standalone inequality; later actual q/e regroup must use the already-retained e coprime c gate before inferring c*e|q."
+    }
+  ],
+  "exact_scope": "After runtime complete381source/all18headers/def/report/actualusedpublicAPI reads, actualowned Shared6d+Polynomial7cbc rechecked and freshrecursive exactexistingcache/selfonly/missingforeign0, ONE serial originalM6144/j2/RSS6656 strict compile of084 finite prefix to obtain actual proof/API/lint diagnostics. No new imports/otherprerequisites/foreign/resource/checker mutation.",
+  "acceptance_boundary": "STRICT FEEDBACK ONLY: do not launch fullowned/count this as analytic completion. Author is continuing the actual stronger public target in ignored draft and will append it only after prefix frozen run terminal+root explicit release. Future complete-source/fullowned gate remains separate. Preserve actualFAILED if any.",
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "not_acceptance": true,
+  "main_theorem_proved": false
+}

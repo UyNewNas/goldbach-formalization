@@ -1,0 +1,27 @@
+{
+  "status": "SOURCE_ONLY_OWNER_ACTUAL_DIAGNOSTIC_PROOF_REPAIR",
+  "reviewer": "/root, author",
+  "old_sha256": "4aeac70bd0292b7e4c4b9ba1c0b5778ed77fdeb070a9a96815a3851e66965f7a",
+  "candidate_sha256": "34f7cceee29e4cc1f029f0dff33042319297875efc58f78609bdb55cbe301620",
+  "actual_failed_log": ".lake/proof-continuation/runs/20261015T204222208947Z-ImbalancedChen.ActualExtendedThirdCompactHarmonicProfile/stdout.log",
+  "actual_diagnostic": "Only the second row nonzero proof remains, with he: ![0,1,2] 2 - 1 = 0.",
+  "only_mutation": "Split Fin2 cases, change each exact evaluation to the corresponding explicit real numeral equality, then norm_num at he.",
+  "all_complete_headers_unchanged": [
+    "def actualExtendedThirdCompactHarmonicProfile (e h lam : ℝ) (t : Fin 3 → ℝ) : ℝ",
+    "theorem continuous_actualExtendedThirdCompactHarmonicProfile {h : ℝ}\n    (hh : 0 < h) (e lam : ℝ) :\n    Continuous (actualExtendedThirdCompactHarmonicProfile e h lam)",
+    "def actualExtendedThirdCompactCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Set (Fin 3 → ℝ)",
+    "theorem measurableSet_actualExtendedThirdCompactCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) :\n    MeasurableSet (actualExtendedThirdCompactCellPrimeRegion m j)",
+    "def actualExtendedThirdCompactOrderForms : Fin 2 → (Fin 3 → ℝ) →L[ℝ] ℝ",
+    "theorem actualExtendedThirdCompactOrderForms_ne_zero :\n    ∀ i, actualExtendedThirdCompactOrderForms i ≠ 0",
+    "def actualExtendedThirdCompactCellForms : Fin (3 + (3 + 2)) → (Fin 3 → ℝ) →L[ℝ] ℝ",
+    "def actualExtendedThirdCompactCellBounds (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    Fin (3 + (3 + 2)) → ℝ",
+    "theorem actualExtendedThirdCompactCellForms_ne_zero :\n    ∀ i, actualExtendedThirdCompactCellForms i ≠ 0",
+    "theorem actualExtendedThirdCompactCellPrimeRegion_sandwich {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    primeAffineGateRegion actualExtendedThirdCompactCellForms\n        (actualExtendedThirdCompactCellBounds m j) ⊆ actualExtendedThirdCompactCellPrimeRegion m j ∧\n      ∀ t ∈ actualExtendedThirdCompactCellPrimeRegion m j, ∀ i,\n        actualExtendedThirdCompactCellForms i t ≤ actualExtendedThirdCompactCellBounds m j i",
+    "theorem actualExtendedThirdCompactCellPrimeRegion_subset_cube {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    actualExtendedThirdCompactCellPrimeRegion m j ⊆\n      logPrimeBox (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)",
+    "theorem actualExtendedThirdCompactHarmonicProfile_density {e h lam : ℝ}\n    (hh : 0 < h) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdClosedOrderRegion thirdPrefixRho) (hz : h ≤ t 2) :\n    actualExtendedThirdCompactHarmonicProfile e h lam t * (∏ i : Fin 3, 1 / t i) =\n      actualExtendedThirdCapKernel e lam (t 0) (t 1) (t 2)"
+  ],
+  "definitions_imports_thresholds_unchanged": true,
+  "full_source_inverse_checked": true,
+  "diff": "--- \n+++ \n@@ -65,7 +65,11 @@\n     ∀ i, actualExtendedThirdCompactOrderForms i ≠ 0 := by\n   intro i h\n   have he := congrArg (fun L : (Fin 3 → ℝ) →L[ℝ] ℝ => L ![0, 1, 2]) h\n-  fin_cases i <;> norm_num [actualExtendedThirdCompactOrderForms] at he\n+  fin_cases i\n+  · change (1 : ℝ) - 0 = 0 at he\n+    norm_num at he\n+  · change (2 : ℝ) - 1 = 0 at he\n+    norm_num at he\n \n def actualExtendedThirdCompactCellForms : Fin (3 + (3 + 2)) → (Fin 3 → ℝ) →L[ℝ] ℝ :=\n   primeIcoBoxGateForms actualExtendedThirdCompactOrderForms\n",
+  "kernel_or_acceptance_claimed": false
+}

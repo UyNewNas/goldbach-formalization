@@ -1,0 +1,119 @@
+{
+  "status": "ROOT_COMPLETE_SMOOTH_REBOUND_SIX_DEFINITIONS_ONE1113_PUBLIC_TYPE_TWELVE_STEP_MATH_AND22_ORIGINAL_API_REVIEW_NO_MATH_BLOCKER_NO_AUTHORING_YET",
+  "created_utc": "2026-10-21T01:33:57.325348+00:00",
+  "proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-core-squared-resonance-six-defs-one-type-rebinding-proposal.json",
+    "sha256": "63411c4ff0c774660ef68f2541e71aa4d8b5b6ee7a22ccedc7ba14b76241d9d5"
+  },
+  "entire_six_definitions_full_type_twelve_steps_actually_read_untruncated": true,
+  "all_six_complete_definitions": [
+    "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+    "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+    "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+    "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+    "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+    "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re"
+  ],
+  "ONE_complete_unelaborated_public_type": "theorem actual_smallSupported_squared_resonance_Cauchy_and_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) ∧\n            ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n                Real.sqrt (e.smallCoreSquaredCauchyMass Z true) ≤\n                  d.scale ^ 2 / (Real.log d.scale) ^ A)",
+  "complete_twelve_steps": [
+    {
+      "step": 1,
+      "name": "Exact actual Smooth source and real projection reindex",
+      "proof": "Use the four literal Smooth definitions in frozen scope e25355684, never the moving implementation. The parent Smooth kernel sums over original p,N1,N2,r,s,rprime,sprime and signed h in H_(gcd(r*s,w)), where w=rprime*sprime, with real projection of the chi-weighted Poisson sum BEFORE arbitrary complex outer coefficients. Finite Re linearity gives sum_h Re(chi_h*P_h). Put r,rprime,sprime outside and keep gamma2(s) inside. The outside coefficient is exactly cleaned transposed beta(N1)*conj(beta(N2))*gamma3(r)*conj(gamma3(rprime))*conj(gamma2(sprime)), with the original small gcd/supportedPart mask; this is the unchanged literal OuterCoefficient. Re must never move past these arbitrary complex factors. Each active tail pair has the unique positive D=gcd(r*s,w), a divisor of positive w, and only this D survives the RowTerm mask. Thus finite divisor reindex is equality, with no triangle or multiplicity. Actual Compatible implies N1 congruent N2 modulo p for any positive p. On the retained original small gate, N1=N2 would force gcd(N1,N2)=N1>=U>=X^sigma>X^(sigma/4), impossible for X>1,sigma>0. Consequently exactly the unchanged off-diagonal mod-p OuterCarrier suffices. This is an equality to the actual SMOOTH core, not to hardTruncated; no p primality is used."
+    },
+    {
+      "step": 2,
+      "name": "One common fixed-D inner carrier and exact union PSD",
+      "proof": "For fixed o, take H_D=d.sharedSmoothFrequencyBound Z D and I_o=sum_{(s,h) in factorCarrier(S) product nonzeroWindow(H_D)} RowTerm_Z(o,s,h). This is exactly the parent Smooth carrier on active gcd(r*s,w)=D rows, with the actual chi(Vh/(ZL)) and both zero masks retained. Inactive D rows contribute0, so their use of H_D is harmless. Expand norm(I_o)^2 as the full finite double RowTerm(u)*conj(RowTerm(v)) sum and split the literal Boolean predicate h1*s2=h2*s1 OR h1*s2=-(h2*s1). On the inner carrier s1,s2>0 and h1,h2 nonzero. The two branches are disjoint and their union is equivalence of positive rational |h|/s; partition by ((natAbs h):Q)/(s:Q). The resonant block is a sum over fibers of norm(sum RowTerm)^2, hence real and nonnegative, even though gamma2 and Poisson terms are arbitrary complex. The false block completes the exact square and need not be nonnegative. No Hermitian relation or chi parity is assumed."
+    },
+    {
+      "step": 3,
+      "name": "Coefficient-one outer Cauchy for actual Smooth core",
+      "proof": "Owned cleaned admissibility bounds each cleaned transposed beta coefficient by1 on the original full N carrier and each gamma2,gamma3 coefficient by1 on its original carrier. The unchanged OuterCoefficient therefore has norm<=1, including its two original masks. Finite Cauchy gives norm(sum_o C_o I_o)^2 <= card(O)*sum_o norm(I_o)^2. The exact split of Step2 then gives norm(actualSmoothCore)^2 <= Mass_true+Mass_false with coefficient1. The original outside W=(sum original beta normsquared)*(sum original gamma1 normsquared) is absent from this finite Cauchy and is multiplied once only in the final payment. Neither an H_D cardinality nor Z enters: Cauchy is only over outer o, not over frequencies."
+    },
+    {
+      "step": 4,
+      "name": "Deterministic D/dr split and exact closed reduced carrier",
+      "proof": "Fix a genuine positive p,r,w,D with D|w. Set dr=gcd(D,r), ds=D/dr, r0=r/dr, w0=w/D. On an active row D=gcd(r*s,w), D|r*s and gcd(ds,r0)=1 force ds|s. The unique positive t=s/ds then satisfies r=dr*r0,D=dr*ds,w=D*w0 and gcd(r0*t,w0)=1. Hence L=lcm(p*r*s,p*w)=p*D*r0*w0*t=K*t with K=p*r*w/dr>0, for every positive p, composite allowed. Original s in the closed [S,2S] becomes an exact finite subset of closed [S/ds,2S/ds], without a dyadic shell or second divisor label. If ds>2S this active packet is empty. Otherwise 2S/ds>=1, which is the required hypothesis for the owned gcd mean; never apply that mean below1."
+    },
+    {
+      "step": 5,
+      "name": "Both t prefactors, signed k, and actual smooth factors",
+      "proof": "Write T=V/K>0. For reduced t1,t2 let g0=gcd(t1,t2), a1=t1/g0,a2=t2/g0, with a1,a2 coprime. Each same-slope pair has the unique signed k!=0 with h1=k*a1,h2=k*a2; each opposite-slope pair has h1=k*a1,h2=-k*a2. Thus the actual Poisson meshes are T/t1 and T/t2, their product is T^2/(t1*t2), and Fourier arguments are u=T*k/g0 and respectively u or -u. The actual smooth weights are chi(u/Z) and chi(+/-u/Z), both real in [0,1]. The original row is gamma2(s)*Re(chi*P), not Re(gamma2*chi*P); consequently norm(Row1*conj(Row2)) <= chi1*chi2*norm(P1)*norm(P2) <= norm(P1)*norm(P2), using coefficient norms<=1. Keep all original compatibility, gcdD, and common H_D masks in the equality. Only after taking norms may these nonnegative indicators and the two smooth factors be dropped to a complete signed k!=0 majorant. This step neither counts H_D nor differentiates chi, and incurs no H_D or Z loss. It does not assert chi(u/Z)=chi(-u/Z), nor any equality with the old hard window."
+    },
+    {
+      "step": 6,
+      "name": "Owned signed decay bound and fixed-outer packet constant16",
+      "proof": "Choose one fixed Cpsi>0 from the owned rapidDecay2 estimate of Fourier(dyadicCutoffSchwartz). Both norm(F(u))^2 and norm(F(u))*norm(F(-u)) are <=Cpsi^2/(1+|u|)^4 <=Cpsi^2/(1+|u|)^2, with no Hermitian assumption. Owned poissonNonzeroDecay summability and full signed tsum<=2 at t0=T/g0 give sum_{k!=0}(1+|t0*k|)^(-2)<=2/t0. Multiplying BOTH original Poisson factors T^2/(t1*t2), each slope branch costs <=2 Cpsi^2*T*g0/(t1*t2); the disjoint +/- union costs <=4 Cpsi^2*T*g0/(t1*t2). For nonempty reduced t carrier in [Sprime,2Sprime], Sprime=S/ds>0 and 2Sprime>=1. The owned pair gcd mean at closed cap2Sprime, divided by Sprime^2, gives sum gcd(t1,t2)/(t1*t2)<=4*(1+log(2Sprime)). Hence the literal resonant block has real part <=16 Cpsi^2*V*dr/(p*r*w)*(1+log(2S/ds)) <=16 Cpsi^2*V*dr/(p*r*w)*L_S, L_S=1+log(2S). Empty ds>2S packets are0. The signed k factor2 was already paid by owned decay and the two slope branches add exactly2; no extra factor2 or4 from Re, smooth support, or common-window cardinality appears."
+    },
+    {
+      "step": 7,
+      "name": "Actual nonprime p off-diagonal pair count without plus-one",
+      "proof": "For a fixed original N2 in [U,2U] and p>0, any distinct N1 in that interval congruent to N2 modulo p has signed difference +/-p*j with 1<=j<=floor(U/p). Split the two signs and use injectivity, obtaining rowcard<=2floor(U/p)<=2U/p. The original beta carrier has card<=2U, so the actual off-diagonal mod-p paircard<=4U^2/p. This is valid for arbitrary composite p and p=1. If p>U, the signed nonzero difference cannot fit in an interval of width U, so the fiber is genuinely empty. There is no discarded +1. The exact core still has its primitive(p,a) and Compatible gates; only this nonnegative count uses an enlarged mod-p set."
+    },
+    {
+      "step": 8,
+      "name": "Every original outer label, divisor, and reciprocal cost",
+      "proof": "Let Tstar=max_{1<=n<=floor(4RS)}tau(n)>=1. Positive w=rprime*sprime lies in that range. Since p>=Q and card(P)<=2Q, sum_P 1/p<=2 and sum_P 1/p^2<=2/Q. The unchanged outer carrier counts at most4U^2/p N-pairs, two R carriers and one S carrier, and tau(w)<=Tstar divisor labels D. Thus card(O)<=64*Tstar*U^2*R^2*S. To sum the packet bound, sum_{D|w} gcd(D,r)<=tau(w)*gcd(w,r). The owned sum_gcd_le(w,floor(2R)), together with r>=R, gives sum_r gcd(w,r)/r<=2tau(w). Finally sum_{rprime,sprime}1/(rprime*sprime)<=4 on the original closed factor carriers. Combining packet16, Npair4 and p-square sum2/Q with the r/w/D cost8Tstar^2 gives sum_o Block_true(o).re <=1024*Cpsi^2*Tstar^2*U^2*V*L_S/Q. No free g,d1,root packet or extra divisor choice has been introduced. Fixed H_D and the two chi factors had already been removed only as nonnegative bounds, so these counts do not acquire frequency cardinality or Z."
+    },
+    {
+      "step": 9,
+      "name": "Final finite mass and original outside produce 2^20",
+      "proof": "Multiply card(O)<=64*Tstar*U^2*R^2*S by the last Gram sum: 0<=Mass_true<=65536*Cpsi^2*Tstar^3*U^4*V*R^2*S*L_S/Q =2^16 times the displayed monomial. Owned original outside W<=4*V*Q*L_B is used exactly once, where L_B=(1+log(2V))^p_B and p_B=((2^B)^2-1). Squaring W*sqrt(Mass_true) yields W^2*Mass_true<=1048576*Cpsi^2*Tstar^3*X^4*(Q*R^2*S/V)*L_B^2*L_S, with X=UV, so the constant is exactly2^20. This pays both Poisson prefactors, the signed k sum, both resonances, all original p/N/r/w/D labels, and original outside moments. Smooth changes add no factor at any stage because 0<=chi<=1 and no frequency counting occurred."
+    },
+    {
+      "step": 10,
+      "name": "Original geometry and tau cube",
+      "proof": "Original admissibility gives Q/U<X^(-sigma) and U^2*R^2*S/X<X^(-8sigma). Their product is Q*R^2*S/V<X^(-9sigma), using X=UV, with no 7/32 input. Since U,R>=1 and U^2*R^2*S<X^(1-8sigma)<=X for X>1,sigma>0, RS<=X. The previously owned global divisor subpower theorem at k=2,epsilon=sigma and fouvryTau_two=tau implies tau(n)<=C_sigma*n^sigma for positive n. Therefore Tstar<=K_sigma*X^sigma uniformly on n<=4RS<=4X, absorbing 4^sigma into one positive constant before d. Its cube costs exactly X^(3sigma). There is no a-smooth nu sum and no replacement of a by a bounded parameter."
+    },
+    {
+      "step": 11,
+      "name": "Actual log API bridge and uniform unit final payment",
+      "proof": "Do not invent a square-root version of the owned log API. Since S>=1, L_S=1+log(2S)>=1; hence sqrt(L_S)<=L_S. Original physicalFactorCap=8QRS>=2S gives L_S<=Lcap=1+log(physicalFactorCap). Owned eventually_actual_log_cost_le_rpow(p_B,1,sigma,epsilon=sigma) bounds L_B*Lcap<=X^sigma at one threshold before varying atoms. Thus L_B*sqrt(L_S)<=L_B*L_S<=L_B*Lcap<=X^sigma, and L_B^2*L_S<=X^(2sigma). Combined with Steps9-10, W^2*Mass_true<=C_sigma*X^(4-4sigma); nonnegativity and monotonicity of sqrt give W*sqrt(Mass_true)<=sqrt(C_sigma)*X^(2-2sigma). The owned scalar log-budget lemma at positive delta=2sigma and constant sqrt(C_sigma) yields <=X^2/(log X)^A. Take one maximum of its threshold, the actual log threshold and1 before d. All estimates are independent of Z, so the final complete theorem retains forall Z>0 with no eta, SW, spectral supplier, kappa>=0 or c0>0 premise."
+    },
+    {
+      "step": 12,
+      "name": "Exact future scope and remaining analytic gap",
+      "proof": "This proposed leaf proves an exact finite reindex of the actual Smooth core, PSD of its +/- resonant union, coefficient-one Cauchy, and unit logarithmic payment of the original W times sqrt(resonant mass), uniformly for ALL Z>0. It does not identify Smooth with hardTruncated, prove the false block nonnegative, or prove the actual complement bound. In a future expansion of the two real parts, the union predicate removes zero reciprocal numerators in all four +/- orientation products. It does not remove every modular resonance (for example a*k divisible by the modulus), establish root-indexed periodic operator estimates, produce a bounded Mellin L1 separation for the genuine joint weight, or prove averaged inverse-fraction/Kloosterman 7/32 cancellation. For the future smooth Fourier/slow-phase derivative route retain the true factor (1+X^kappa)^J; it cannot silently become5kappa. Parent Smooth authoring/runtime status is not owned evidence. No new analytic supplier is assumed, and MainC/K and the original three-counting Corollary remain untouched and unproved by this proposal."
+    }
+  ],
+  "parent_four_definitions_actual_fe5322_match_frozen_scope": true,
+  "parent_actual_owned_claimed": false,
+  "prior_root_complete22API15primitive_review_reused": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-squared-resonance-d0dc-root-complete-math22API-review.json",
+    "sha256": "359075758e9a7081a013070e87b252143941e0bd423f21637656877c52a347e8"
+  },
+  "current22_original_records_source_object_binding_rechecked": true,
+  "current10_original_receipts_all437_complete_type_flags_rechecked": 437,
+  "current11_source_cache_object_bindings_rechecked": true,
+  "independent_root_mathematical_checks": [
+    "PSD uses exact equivalence of |h|/s on s>0,h!=0; +/- branches disjoint. False block can have either sign; never posit PSD for false.",
+    "Original Compatible implies modp; cleaned smallgcd excludes N1=N2 because Q>=1 and Q<U X^-sigma imply U>X^sigma>X^(sigma/4). Unique D=gcd(rs,w) divisorw with correct Re-before-arbitraryC gives exact Smooth reindex.",
+    "dr=gcd(D,r),ds=D/dr coprime r/dr and divides active s; s=ds*t and lcm=K*t exact any composite p. If ds>2S active set empty; else cap2S/ds>=1 licenses closed gcd theorem.",
+    "Both T/t factors retained. For signed k!=0, Fourier +/- arguments and chi factors in[0,1] give same norm majorant without evenness or Hermitian assumptions. Drop cutoffs only under nonnegative majorants. Signed2*branches2*gcd4=packet16, no H orZ count.",
+    "Offdiag modp count4U²/p from signed nonzero multiples has no+1, including p>U empty. OuterCard64T U²R²S; GramSum1024C²T²U²VLS/Q; Mass2^16; original W once implies W²Mass constant2^20 X^4(QR²S/V)LB²LS.",
+    "Original geometry pays X^-9sigma, divisor maximum cubed costs X3sigma; LS>=1, sqrtLS<=LS<=Lcap and owned LB*Lcap threshold imply LB²LS<=X2sigma. Squared weighted exponent4-4sigma, sqrt and actual delta2sigma pay requested unit budget.",
+    "All Z>0 retained after atom, since estimates independent ofZ; no SW, kappa/c0 sign or generic spectral supplier inserted."
+  ],
+  "necessary_before_authoring": [
+    "Fresh quota remaining>50",
+    "Independent complete Smooth-rebinding math review terminal",
+    "Parent Smooth actual strict stock ALL fulltypes/safety/transitive3axioms fullafter/census accepted",
+    "Separate exact one-source authoring scope"
+  ],
+  "compiler_authorization": false,
+  "authoring_authorization": false,
+  "known_math_blockers": [],
+  "boundaries": [
+    "No hardTruncated=Smooth equality",
+    "Does not eliminate a*k=0modc or alternative-Cauchy modular ratio diagonals",
+    "No root-periodic operator, jointweight MellinL1/seminorm or actual7/32 cancellation proof",
+    "Original main C/K and hLower/hUpper remain open"
+  ],
+  "review_script_diagnostic_correction": "Initial ad-hoc read assertion incorrectly expected receipt status PASS; actual all10 byte-frozen statuses PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS. No receipt/checker/source changed, exact status now checked.",
+  "quota_latest_actual": {
+    "used": 15,
+    "remaining": 85,
+    "hard_stop_remaining_le": 50
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:00:21.252128+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_OWNER_ACTUAL_LEAN_FIRST_DIAGNOSTIC_PROOF_REBIND",
+  "module": "ImbalancedChen.Part3PrimitiveZeroReal",
+  "previous_source_sha256": "bdc6a0b30068c1b842555baf94911f151a31eab37250985c05ef6fc3f631c36b",
+  "current_source_sha256": "8faee595518d1e2c11866b9cdf34995edb4804151e779fdfd9408a9b900de4a0",
+  "actual_failed_log": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T204943585617Z-ImbalancedChen.Part3PrimitiveZeroReal/stdout.log",
+    "sha256": "00ed3b9d5da8adb0222b9347f77a346a260a4108f2fb2af9a145c6793d402d87",
+    "entire_log_read": true,
+    "text": "ImbalancedChen/Part3PrimitiveZeroReal.lean:44:2: error: Tactic `apply` failed: could not unify the conclusion of `@star_sum_pair_eq_of_hermitian`\n  star (∑ a ∈ ?S, ∑ b ∈ ?S, ?f a b) = ∑ a ∈ ?S, ∑ b ∈ ?S, ?f a b\nwith the goal\n  star\n      (∑ a ∈ d.complexFactorLabels,\n        ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n                coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *\n              star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *\n            (↑(complexFactorModulus a * complexFactorModulus b).totient /\n              (↑(complexFactorModulus a).totient * ↑(complexFactorModulus b).totient *\n                ↑(complexFactorModulus a * complexFactorModulus b)))) =\n    ↑(d.V * CommonSmoothCutoff.cutoffMass)\n\nNote: The full type of `@star_sum_pair_eq_of_hermitian` is\n  ∀ {ι : Type ?u.19} (S : Finset ι) (f : ι → ι → ℂ),\n    (∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) → star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b\n\ncase e_a\nd : MediumAtom\nhs : star ↑(d.V * CommonSmoothCutoff.cutoffMass) = ↑(d.V * CommonSmoothCutoff.cutoffMass)\n⊢ star\n      (∑ a ∈ d.complexFactorLabels,\n        ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n                coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *\n              star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *\n            (↑(complexFactorModulus a * complexFactorModulus b).totient /\n              (↑(complexFactorModulus a).totient * ↑(complexFactorModulus b).totient *\n                ↑(complexFactorModulus a * complexFactorModulus b)))) =\n    ↑(d.V * CommonSmoothCutoff.cutoffMass)\n"
+  },
+  "comparison_basis": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-P0Real-first-diag-original-bdc6.lean.txt",
+    "sha256": "bdc6a0b30068c1b842555baf94911f151a31eab37250985c05ef6fc3f631c36b",
+    "provenance": "Native git show HEAD blob, UTF8 LF snapshot; hash exactly matches failed original source."
+  },
+  "all_complete_source_headers": [
+    {
+      "name": "star_sum_pair_eq_of_hermitian",
+      "kind": "theorem",
+      "private": false,
+      "line": 21,
+      "complete_source_header": "theorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b"
+    },
+    {
+      "name": "primitiveZeroMain_star",
+      "kind": "theorem",
+      "private": false,
+      "line": 35,
+      "complete_source_header": "theorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d"
+    },
+    {
+      "name": "primitiveZeroMain_ofReal_re",
+      "kind": "theorem",
+      "private": false,
+      "line": 49,
+      "complete_source_header": "theorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d"
+    }
+  ],
+  "source_declaration_count": 3,
+  "definition_count": 0,
+  "all_complete_headers_exact_unchanged": true,
+  "all_complete_definition_bodies_exact_unchanged": true,
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance"
+  ],
+  "direct_imports_exact_unchanged": true,
+  "no_tactic_or_runtime_limit_change": true,
+  "mathematics_and_quantifier_scope": "All actual data, generic carrier/scale/modulus domains, original alpha/gamma signs, literal U/P0 and complete error envelope remain unchanged. No premise, coefficient, geometry, threshold or budget alteration.",
+  "proof_only_repairs": [
+    "Replace order-reversing star_mul with commutative star_mul-prime for the fixed real scalar factor",
+    "Use explicit congrArg of multiplication by that same scalar rather than congr decomposing mismatched factors"
+  ],
+  "sourceDAG_delta": {
+    "relative_to": "same module at exact prior failed hash",
+    "local_added_modules": [],
+    "foreign_added_modules": [],
+    "imports_and_full_types_unchanged": true
+  },
+  "lean_validation": "NOT RUN after repair; only runtime_resume may run same authorized 6144/RSS6656/j2 checks; original FAILED retained"
+}

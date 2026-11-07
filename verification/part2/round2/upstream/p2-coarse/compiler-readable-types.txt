@@ -1,0 +1,432 @@
+ImbalancedChen.Certificates.AboveMuSecondCoarse.adopted_coarse_lower
+LE.le.{0} (640339 / 15210735000) ImbalancedChen.Certificates.AboveMuSecondCoarse.totalChartIntegral
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator
+ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator_pos
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        LT.lt.{0} 0 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator k u v)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral
+ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral_eq_literal
+∀ (k : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral k)
+    (HMul.hMul.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 6 (abs.{0} k))
+        (HPow.hPow.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.step 3))
+      (∫ (u : ℝ) (v : ℝ) in 0..1,
+        HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} u 2) (HSub.hSub.{0, 0, 0} 1 v))
+          (HMul.hMul.{0, 0, 0}
+            (HMul.hMul.{0, 0, 0}
+              (HMul.hMul.{0, 0, 0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+              (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual k u v))
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual k u v))))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral_lower_of_denominatorCap
+∀ {k D : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    (∀ (u : ℝ),
+        Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+          ∀ (v : ℝ),
+            Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+              LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator k u v) D) →
+      LE.le.{0}
+        (HDiv.hDiv.{0, 0, 0}
+          (HMul.hMul.{0, 0, 0} (abs.{0} k) (HPow.hPow.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.step 3))
+          D)
+        (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral k)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartInterior_gates
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Ioo.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Ioo.{0} 0 1) v →
+        LT.lt.{0} (HMul.hMul.{0, 0, 0} 2 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+              (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)) ∧
+          LT.lt.{0}
+              (HAdd.hAdd.{0, 0, 0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+                (HMul.hMul.{0, 0, 0} 2 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v)))
+              (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)) ∧
+            LT.lt.{0}
+                (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)) ∧
+              LT.lt.{0}
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartInterior_mem_physicalDomain
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Ioo.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Ioo.{0} 0 1) v →
+        Membership.mem.{0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.physicalDomain
+          (Prod.mk.{0, 0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel
+ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel_eq_physical_pullback
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel k u v)
+          (HMul.hMul.{0, 0, 0}
+            (HDiv.hDiv.{0, 0, 0}
+              (HMul.hMul.{0, 0, 0} 4
+                (HSub.hSub.{0, 0, 0}
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))))
+              (HMul.hMul.{0, 0, 0}
+                (HMul.hMul.{0, 0, 0}
+                  (HMul.hMul.{0, 0, 0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+                  (HSub.hSub.{0, 0, 0}
+                    (HSub.hSub.{0, 0, 0}
+                      (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                        (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+                      (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v)))
+                (HSub.hSub.{0, 0, 0}
+                  (HSub.hSub.{0, 0, 0}
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                      (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+                  (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))))
+            (HMul.hMul.{0, 0, 0}
+              (HMul.hMul.{0, 0, 0} (abs.{0} k)
+                (HPow.hPow.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.step 2))
+              u))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX
+ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX_eq
+∀ (u : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.mu
+      (HMul.hMul.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.step u))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY
+ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY_eq
+∀ (k u v : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.mu
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} k ImbalancedChen.Certificates.AboveMuSecondCoarse.step) u) v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chart_bounds
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        LE.le.{0} ImbalancedChen.Certificates.AboveMuSecondCoarse.mu
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u) ∧
+          LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+              ImbalancedChen.Certificates.AboveMuSecondCoarse.rho ∧
+            LE.le.{0} (3 / 16) (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v) ∧
+              LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v)
+                  ImbalancedChen.Certificates.AboveMuSecondCoarse.rho ∧
+                LE.le.{0} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual k u v) ∧
+                  LE.le.{0} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho
+                    (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual k u v)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chart_factors_pos
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        LT.lt.{0} 0 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u) ∧
+          LT.lt.{0} 0 (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v) ∧
+            LT.lt.{0} 0 (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual k u v) ∧
+              LT.lt.{0} 0 (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual k u v)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.continuousOn_chartKernel
+∀ {k : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    ContinuousOn.{0, 0} (fun p => ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel k p.1 p.2)
+      (SProd.sprod.{0, 0, 0} (Set.Icc.{0} 0 1) (Set.Icc.{0} 0 1))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope_chartX
+∀ {u : ℝ},
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Eq.{1}
+      (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+        (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+      (HSub.hSub.{0, 0, 0} (153 / 256)
+        (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (3 / 2) ImbalancedChen.Certificates.AboveMuSecondCoarse.step) u))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope_chartY
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        Eq.{1}
+          (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+          (HSub.hSub.{0, 0, 0} (153 / 256)
+            (HMul.hMul.{0, 0, 0}
+              (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (3 / 2) ImbalancedChen.Certificates.AboveMuSecondCoarse.step) u)
+              v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.mu
+ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negativeDenominatorCap
+ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negative_chart_lower
+LE.le.{0} (3 / 95000) (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral (-3))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negative_chart_upper_bounds
+∀ {u v : ℝ},
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+      LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY (-3) u v)
+          ImbalancedChen.Certificates.AboveMuSecondCoarse.mu ∧
+        LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual (-3) u v) (5 / 24) ∧
+          LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual (-3) u v) (5 / 24)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negative_denominator_le
+∀ {u v : ℝ},
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+      LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator (-3) u v)
+        ImbalancedChen.Certificates.AboveMuSecondCoarse.negativeDenominatorCap
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual
+ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual_semantics
+∀ {k u v : ℝ},
+  Eq.{1} k (-3) ∨ Eq.{1} k 1 →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+      Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+        Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual k u v)
+          (HSub.hSub.{0, 0, 0}
+            (HSub.hSub.{0, 0, 0}
+              (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+                (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+              (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual
+ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual_semantics
+∀ {k u : ℝ} (v : ℝ),
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual k u v)
+      (HSub.hSub.{0, 0, 0}
+        (HSub.hSub.{0, 0, 0}
+          (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope
+            (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+          (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u))
+        (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.physicalDomain
+Set.{0} (Prod.{0, 0} ℝ ℝ)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap
+ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positive_chart_lower
+LE.le.{0} (32 / 3042147) (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral 1)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positive_chart_upper_bounds
+∀ {u v : ℝ},
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+      LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual 1 u v) (53 / 256) ∧
+        LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual 1 u v) (53 / 256)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positive_denominator_le
+∀ {u v : ℝ},
+  Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+    Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v →
+      LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator 1 u v)
+        ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.rho
+ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral
+(ℝ → ℝ → ℝ) → ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral_weightedMass
+∀ (C : ℝ),
+  Eq.{1}
+    (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral fun u v =>
+      HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} C (HPow.hPow.{0, 0, 0} u 2)) (HSub.hSub.{0, 0, 0} 1 v))
+    (HDiv.hDiv.{0, 0, 0} C 6)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.step
+ℝ
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.step_eq
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.step
+  (HSub.hSub.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho
+    ImbalancedChen.Certificates.AboveMuSecondCoarse.mu)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.totalChartIntegral
+ℝ
+
+_private.ImbalancedChen.Certificates.AboveMuSecondCoarse.0.ImbalancedChen.Certificates.AboveMuSecondCoarse.envelope_of_ge_mu
+∀ {t : ℝ},
+  LE.le.{0} ImbalancedChen.Certificates.AboveMuSecondCoarse.mu t →
+    Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope t)
+      (HSub.hSub.{0, 0, 0} (57 / 64) (HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} 3 t) 2))
+
+_private.ImbalancedChen.Certificates.AboveMuSecondCoarse.0.ImbalancedChen.Certificates.AboveMuSecondCoarse.envelope_of_le_mu
+∀ {t : ℝ},
+  LE.le.{0} t ImbalancedChen.Certificates.AboveMuSecondCoarse.mu →
+    Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope t)
+      (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 t) 2)
+
+_private.ImbalancedChen.Certificates.AboveMuSecondCoarse.0.ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral_eq_setIntegral
+∀ (f : ℝ → ℝ → ℝ),
+  ContinuousOn.{0, 0} (fun p => f p.1 p.2) (SProd.sprod.{0, 0, 0} (Set.Icc.{0} 0 1) (Set.Icc.{0} 0 1)) →
+    Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral f)
+      (∫ (p : Prod.{0, 0} ℝ ℝ) in SProd.sprod.{0, 0, 0} (Set.Ioc.{0} 0 1) (Set.Ioc.{0} 0 1),
+        f p.1
+          p.2 ∂MeasureTheory.Measure.prod.{0, 0} MeasureTheory.MeasureSpace.volume.{0}
+          MeasureTheory.MeasureSpace.volume.{0})
+
+_private.ImbalancedChen.Certificates.AboveMuSecondCoarse.0.ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral_mono
+∀ {f g : ℝ → ℝ → ℝ},
+  ContinuousOn.{0, 0} (fun p => f p.1 p.2) (SProd.sprod.{0, 0, 0} (Set.Icc.{0} 0 1) (Set.Icc.{0} 0 1)) →
+    ContinuousOn.{0, 0} (fun p => g p.1 p.2) (SProd.sprod.{0, 0, 0} (Set.Icc.{0} 0 1) (Set.Icc.{0} 0 1)) →
+      (∀ (u : ℝ),
+          Membership.mem.{0, 0} (Set.Icc.{0} 0 1) u →
+            ∀ (v : ℝ), Membership.mem.{0, 0} (Set.Icc.{0} 0 1) v → LE.le.{0} (f u v) (g u v)) →
+        LE.le.{0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral f)
+          (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral g)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator.eq_1
+∀ (k u v : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator k u v)
+    (HMul.hMul.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX u)
+          (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartY k u v))
+        (ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual k u v))
+      (ImbalancedChen.Certificates.AboveMuSecondCoarse.newResidual k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral.eq_1
+∀ (k : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartIntegral k)
+    (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral
+      (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel k))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel._proof_1
+(HAdd.hAdd.{0, 0, 0} 5 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel.eq_1
+∀ (k u v : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartKernel k u v)
+    (HDiv.hDiv.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 6 (abs.{0} k))
+            (HPow.hPow.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.step 3))
+          (HPow.hPow.{0, 0, 0} u 2))
+        (HSub.hSub.{0, 0, 0} 1 v))
+      (ImbalancedChen.Certificates.AboveMuSecondCoarse.chartDenominator k u v))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.chartX._proof_1
+(HAdd.hAdd.{0, 0, 0} 74 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope._proof_1
+(HAdd.hAdd.{0, 0, 0} 1 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope._proof_2
+(HAdd.hAdd.{0, 0, 0} 56 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope._proof_3
+(HAdd.hAdd.{0, 0, 0} 63 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.endpointEnvelope._proof_4
+(HAdd.hAdd.{0, 0, 0} 2 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.mu._proof_1
+(HAdd.hAdd.{0, 0, 0} 24 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.mu._proof_2
+(HAdd.hAdd.{0, 0, 0} 127 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.mu.eq_1
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.mu (25 / 128)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negativeDenominatorCap._proof_1
+(HAdd.hAdd.{0, 0, 0} 23 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.negativeDenominatorCap.eq_1
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.negativeDenominatorCap
+  (HMul.hMul.{0, 0, 0}
+    (HMul.hMul.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho
+      ImbalancedChen.Certificates.AboveMuSecondCoarse.mu)
+    (HPow.hPow.{0, 0, 0} (5 / 24) 2))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual._proof_1
+(HAdd.hAdd.{0, 0, 0} 158 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual._proof_2
+(HAdd.hAdd.{0, 0, 0} 4 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.oldResidual._proof_3
+(HAdd.hAdd.{0, 0, 0} 767 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.physicalDomain._proof_1
+(HAdd.hAdd.{0, 0, 0} 31 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap._proof_1
+(HAdd.hAdd.{0, 0, 0} 52 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap._proof_2
+(HAdd.hAdd.{0, 0, 0} 255 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap.eq_1
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.positiveDenominatorCap
+  (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho 2)
+    (HPow.hPow.{0, 0, 0} (53 / 256) 2))
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.rho._proof_1
+(HAdd.hAdd.{0, 0, 0} 18 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.rho._proof_2
+(HAdd.hAdd.{0, 0, 0} 95 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.rho.eq_1
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.rho (19 / 96)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral.eq_1
+∀ (f : ℝ → ℝ → ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.AboveMuSecondCoarse.squareIntegral f) (∫ (u : ℝ) (v : ℝ) in 0..1, f u v)
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.step._proof_1
+(HAdd.hAdd.{0, 0, 0} 383 1).AtLeastTwo
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.step.eq_1
+Eq.{1} ImbalancedChen.Certificates.AboveMuSecondCoarse.step (1 / 384)

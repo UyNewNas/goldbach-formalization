@@ -1,0 +1,67 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "author": "/root/p3_quantitative_step_astra_high_oct22",
+  "verdict": "Independent mathematical review: the specified common-p M2 bound is valid using the fixed manuscript's classical Shiu input. The finite reduction preserves the actual weights and all relevant gates. This establishes a paper proof for this M2 only, not a certified Lean theorem, completed rough deletion, or the nonzero 7/32 spectral estimate.",
+  "source_binding": {
+    "reviewed_report": ".lake/proof-continuation/source-reviews/20261022-p3-common-p-shifted-moment-route-review-HOLD.json",
+    "independently_verified_sha256": "d99731e786235016c3326fcee1e48b11fafba24774b3973d371d58ee0720d806",
+    "exact_target_report": ".lake/proof-continuation/source-reviews/20261022-p3-rough-common-factor-deletion-feasibility-HOLD.json",
+    "independently_verified_target_sha256": "d2b0e7bdc504f69519bd0966fdef0810ccc792eed2caea0598bb193690f258cc",
+    "manuscript_pin": "ba6ec11d800eccc54406490631895e174de85766",
+    "fixed_appendix": "paper/source/modules/distribution-medium-completion-20261010.txt, section 4 equation (10) and S3 truncation paragraph; read by native Windows git show",
+    "appendix_blob": "19f9672bc9b6d455045213c5e23e10433a9569d2",
+    "actual_sources_read": [
+      "ImbalancedChen/Part3DistributionTargets.lean",
+      "ImbalancedChen/Part3TransposedDispersion.lean",
+      "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "ImbalancedChen/Part3PairedAlphaDeletion.lean",
+      "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean"
+    ]
+  },
+  "exact_statement": {
+    "parameters": "Fix B in Nat, 0<sigma<1/100, 0<=kappa<=sigma/100 and c0>0. There exist C>0 and x0>1, before choosing d, such that every hd:MediumAdmissible B sigma kappa c0 d with x=d.scale>=x0 satisfies M2<=C*x^2*(1+log x)^E. E=((2^B)^2-1)+33554433 is admissible. Constants are uniform in residue, dyadic scales, interval endpoints and coefficients.",
+    "notation": "U=d.U,V=d.V,Q=d.Q1,x=UV,a=d.residue,e=d.cleanedAlphaAtom,b(n)=norm(e.transposedAtom.beta n),P=d.primitiveFirstFactorCarrier,M=e.transposedAtom.commonSmoothCarrier,psi=e.transposedAtom.commonSmoothWeight,T(m,n)=fouvryTau 4 (natAbs((m:Z)*n-a)); tau(t)=t.divisors.card for t>0.",
+    "literal_R": "R=sum_{p in P} sum_{m in M} psi(m)*(sum_{n in e.transposedAtom.betaCarrier, not((n:Z) divides a), Int.ModEq p ((m:Z)*n) a} b(n)*T(m,n)^2)^2.",
+    "literal_M2": "Eout=(sum_{m in d.betaCarrier} norm(d.beta m)^2)*(sum_{p in P} norm(d.gamma1 p)^2); M2=Eout*R. This is precisely the earlier missing moment, not a differently weighted surrogate."
+  },
+  "proof": [
+    "1. Cleaning only changes alpha. On the transposed betaCarrier, 0<=b<=1: membership in original alphaCarrier invokes hd's complex norm bound, and its complement has coefficient zero. This does not assume original beta is bounded by one. The transposed betaCarrier is Icc(ceil U,floor(2U)), hence n>=1 and n<=2U. M includes 0, but 0<=psi<=1 and psi(m)!=0 imply V/2<=m<=3V by the generic scaled cutoff support theorem. Since V>=1, such an integer m is positive. Thus active products v=mn satisfy 1<=v<=floor(6x). Do not replace ceil(3V) by 3V for every carrier point; first discard zero-weight points.",
+    "2. Fix p,m and let A(p,m) be the exact inner filtered n-carrier. P consists of distinct positive integers with p>=Q and gcd(p,|a|)=1; primality is not required. If A is empty its contribution is zero. Otherwise any n0 in A gives gcd(mn0,p)=1 and therefore gcd(m,p)=1. Multiplication by m is invertible modulo p, so A lies in one residue class. Its cardinality is at most floor(2U)/p+1<=2U/Q+1. Since x>1,sigma>0 and hd gives Q<U*x^(-sigma), Q<U. Consequently #A<=3U/Q. This also covers p=1.",
+    "3. Finite Cauchy gives (sum_A b*T^2)^2 <= #A*sum_A b^2*T^4 <= (3U/Q)*sum_A T^4. This is an inequality for a nonnegative weighted sum, so complex phases cause no issue. It includes diagonal n1=n2 and every ordered pair from the original square; there is no uncounted second n or extra p factor.",
+    "4. Multiply by psi and sum. A's n-not-divides-a gate ensures mn-a!=0. Replace psi by 1 only on its active support. For fixed positive v, positive ordered factorizations mn=v inject into v's positive divisors via m, so there are at most tau(v). For each such pair, ModEq says p divides v-a. Since v-a!=0, the distinct p in P inject into the positive divisors of |v-a|, giving at most tau(|v-a|). This remains true for composite p, p=1, and intersecting p-carriers. All other restrictions can now be dropped while v!=a remains. Therefore R <= (3U/Q)*sum_{1<=v<=floor(6x),v!=a} tau(v)*tau(|v-a|)*tau4(|v-a|)^4.",
+    "5. On a prime power l^j, tau4=(j+1)(j+2)(j+3)/6 <= (j+1)^3, because 6(j+1)^2-(j+2)(j+3)=5j^2+7j>=0. Multiplicativity yields tau4(t)<=tau(t)^3 for positive t. Thus R <= (3U/Q)*H, H=sum_{1<=v<=floor(6x),v!=a} tau(v)*tau(|v-a|)^13. Cauchy bounds H by the square root of the product of the ordinary tau-square sum and the shifted tau-26 sum.",
+    "6. The ordinary sum is O(x*(1+log x)^3). One elementary route is tau^2<=tau4 and sum_{n<=Y}tau_k(n)<=Y*(1+log Y)^(k-1), obtained by summing the first k-1 ordered factors and bounding the last factor count by Y divided by their product. More generally tau(n)^r<=tau_(2^r)(n): for a prime exponent j, each r-tuple in {0,...,j}^r determines counts of the 2^r subset patterns at levels 1,...,j, summing to j; these counts recover the tuple. This proves the needed prime-power inequality and then its multiplicative version.",
+    "7. Original kappa<1 gives |a|<=x^2 without reducing its allowed range, including kappa=0. Split v!=a into v<a and v>a. The map v to |v-a| is injective on each part and gives at most two positive integer intervals. Each has diameter <6x and upper endpoint <=x^2+6x<=7x^2. For an interval with smallest integer X<8x, enlarge to [1,14x]; step 6 with r=26 gives O(x*L^(2^26-1)), L=1+log x. For X>=8x, contain it in [X,X+8x); the strict endpoint is safe even when 6x is integral. Set Y=8x and apply classical Shiu with fixed parameters alpha=1/4, eta=1/8 and modulus 1 to F(t)=tau(t)^26. For sufficiently large x, X^(1/8)<=8x<=X, since X<=7x^2. Also 1<Y^(3/4). F is fixed, nonnegative and multiplicative, F(l^j)<=(2^26)^j, and satisfies every fixed positive-power bound. Shiu plus the prime harmonic bound gives O(Y*(log X)^(2^26-1))=O(x*L^(2^26-1)). The threshold and constant are uniform in X,a and d. At most two intervals only double the constant.",
+    "8. Hence H=O(x*L^((3+2^26-1)/2))=O(x*L^33554433). The actual public outside bound is Eout<=4*V*Q*(1+log(2V))^KB, KB=(2^B)^2-1. Since U>=1, V<=x, and 1+log(2V)<=(1+log 2)*L. Multiplying gives M2=O(VQ*(U/Q)*x*L^(KB+33554433))=O(x^2*L^E). The two outside energies each appear exactly once, and Q cancels exactly once. Roughness and SW were not needed for this moment."
+  ],
+  "classical_input_audit": {
+    "appendix_10": "For existence of a fixed logarithmic exponent, its modulus f=1 case suffices: take length 6x, fixed K=3,delta=1/2, and x large enough that 7x^2<=x^3. No cap from the separate elementary E3 branch is invoked. The explicit exponent above additionally uses the precise classical Shiu formula.",
+    "independently_read_research_source": "Thomas Wright, A Shiu Theorem for Larger and Smoother Functions, arXiv:2508.17217v1, section 1, Theorem 1.1 (the explicit restatement of Shiu 1980).",
+    "url": "https://arxiv.org/html/2508.17217v1#S1",
+    "source_precision": "The restated theorem permits fixed positive alpha,eta<1/2, X^eta<=Y<=X and q<Y^(1-alpha), and bounds the primitive progression sum by Y/(phi(q)log X) times exp(sum_{prime l<=X,l not dividing q} F(l)/l). Its threshold depends only on the fixed function and parameters. The 1980 publisher full text was not independently inspected. No claim uses Wright's newer variable-function theorem.",
+    "limitation": "This certifies the paper argument against the manuscript's declared classical boundary; it is not evidence that classical Shiu or its uniform shifted-26 consequence already exists as an accepted native Lean supplier."
+  },
+  "next_bounded_lean_task": {
+    "only_new_function": "Define commonPShiftedTauMoment d literally as R above, with cleaned/transposed carriers and weights; define shiftedMixedDivisorSum x a as H using Finset.Ioc 0 (Nat.floor(6*x)), filtered by (v:Z)!=a.",
+    "minimal_finite_theorem": "For hd:MediumAdmissible B sigma kappa c0 d and 0<sigma, prove commonPShiftedTauMoment d <= (3*d.U/d.Q1)*shiftedMixedDivisorSum d.scale d.residue. No Shiu, M2-bound, spectral norm, asymptotic supplier, extra roughness, or kappa cap is a hypothesis.",
+    "existing_public_junctions": [
+      "PairedAlphaDeletion.betaCarrier_progression_card_le(hV,hq,hn) applies directly to e.transposedAtom using its V=original U; it does NOT require transposed MediumAdmissible. Alternatively use card_product_modEq_le.",
+      "CommonSmoothCutoff.scaledDyadicCutoff_nonneg, scaledDyadicCutoff_le_one and scaledDyadicCutoff_tsupport_subset apply with original V>0. Do NOT apply the admissibility-dependent commonSmoothWeight_support_subset to an unproved transposed admissible atom.",
+      "MediumAtom.sharedFirstFactor_outside_le provides the exact final original beta/gamma1 bound.",
+      "Cleaning and transposed definitions preserve scale, residue, carriers and outside coefficients. Existing coprime_of_product_congruent helpers inspected in ComplexCRTConsumer are private; make a small public integer lemma rather than cite private mangled names."
+    ],
+    "finite_obligations": "Prove the nonempty-row coprimality lemma, filtered-row Cauchy/card bound, product and modulus divisor-fiber bounds, and tau4<=tau^3. These are finite arithmetic obligations; they are not claimed implemented or compiled here.",
+    "separate_analytic_supplier": "Required certified statement: exists C26>0,x26>1, for every real x>=x26 and integer a with (a.natAbs:R)<=x^2, sum_{v in Ioc 0 (floor(6x)),(v:Z)!=a} tau(natAbs((v:Z)-a))^26 <= C26*x*(1+log x)^(2^26-1). Step 7 proves it on paper. Ordinary tau-square mean and scalar Cauchy then compose with the finite theorem and outside bound.",
+    "scope_boundary": "This removes the precise paper-level M2 obstruction identified in d2b0..., conditional only on the already declared classical input. It does not itself implement cutoff deletion, change the sigma/4 intermediate contracts, prove A=1 spectral control, or establish the main theorem."
+  },
+  "discipline": {
+    "heavy": 0,
+    "actual_Lean_changes": 0,
+    "other_artifact_changes": 0,
+    "subagents": 0,
+    "quota": "Observed used40%, remaining60%; stop threshold not reached.",
+    "status": "One new JSON review only; no compiler/checker/proper/classifier/census/cache/build or Git mutation. HOLD."
+  }
+}

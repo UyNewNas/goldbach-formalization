@@ -1,0 +1,120 @@
+"""ROOT adoption of the actually checked finite batch, under normal import trust."""
+from pathlib import Path
+import collections
+import datetime
+import hashlib
+import json
+
+ROOT = Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation')
+STATE = ROOT / '.lake/proof-continuation'
+
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def path(name):
+    raw = str(name).replace(chr(92), '/')
+    win = 'E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/'
+    if raw.startswith(win):
+        return ROOT / raw[len(win):]
+    p = Path(raw)
+    return p if p.is_absolute() else ROOT / p
+
+
+def ref(name):
+    p = path(name)
+    return {'path': str(p), 'sha256': sha(p)}
+
+
+def bound(reference):
+    p = path(reference['path'])
+    assert sha(p) == reference['sha256']
+    return p
+
+
+def main():
+    proposal_path = STATE / 'rounds/after226-record-proposal-20261024d-v2/acceptance-PROPOSAL.json'
+    assert sha(proposal_path) == '6f008480d40dc46880a8dda195168d50788f499466992ff7dece901b0b84d670'
+    p = json.loads(proposal_path.read_text())
+    census = json.loads(bound(p['candidate_census']).read_text())
+    rows = json.loads(bound(p['complete_declarations']).read_text())
+    intake = json.loads(bound(p['complete_original_evidence_intake']).read_text())
+    baseline = json.loads(bound(p['baseline_acceptance']).read_text())
+    old_census = json.loads(bound(baseline['current_census']).read_text())
+    old_rows = json.loads(bound(baseline['complete_declarations']).read_text())
+    peer_path = STATE / 'source-reviews/20261024d-after226-independent-terminal-review-V3-actual.stdout.json'
+    peer_cp = STATE / 'source-reviews/20261024d-after226-independent-terminal-review-V3-actual-CP.md'
+    assert sha(peer_path) == '2283943cfa2974e0d323ff03734bd232d47b9a197742efb9439856c3706acd8c'
+    assert sha(peer_cp) == 'c4ab1b8ba92b44245ed0438a7988248a497198df6219d0925b82519b951ccbfa'
+    peer = json.loads(peer_path.read_text())
+    assert peer['status'] == 'FINITE_RECORD_STAGE_TERMINAL_REVIEW_PASS_NOT_ROOT_ACCEPTANCE'
+    assert peer['reviewed_collector_sha256'] == p['collector_source']['sha256']
+    assert peer['original_stock_replays'] == 3 and peer['original_ALL_stages'] == 1
+    assert peer['current_owned_module_slot_sets_rehashed'] == 229
+    assert all(value == 'PASS' for value in peer['strict_producers'].values())
+    assert all(census['modules'][m] == entry for m, entry in old_census['modules'].items())
+    targets = intake['targets']
+    assert [row for row in rows if row['module'] not in targets] == old_rows
+    new = [row for row in rows if row['module'] in targets]
+    assert len({row['name'] for row in new}) == len(new)
+    assert not {row['name'] for row in new} & {row['name'] for row in old_rows}
+    assert all(row['type'] and '\u22ef' not in row['type'] and not row['unsafe'] and not row['partial'] and not row['axiom']
+               and set(row['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'} for row in rows)
+    capture = STATE / 'rounds/20261024d-root-after226-finite-normal-import-capture-v1.json'
+    assert sha(capture) == '76567db86580471f7542cb88bcd043bbe97094510fce7440930bdb6feb5879c0'
+    snapshot = json.loads(capture.read_text())
+    for item in snapshot['files']:
+        bound(item)
+    counts = dict(peer['artifact_derived_counts'])
+    assert [counts[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'unique_owned_receipt_paths')]
+    assert [len(census['modules']), len(rows), len({row['name'] for row in rows})] == [229, 6310, 6291]
+    assert counts['unique_owned_receipt_paths'] == 161 and len(new) == 91
+    result = {
+        'status': 'ROOT_AFTER226_THREE_TERMINAL_ACCEPTED',
+        'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'previous_root_acceptance': p['baseline_acceptance'],
+        'collector_acceptance_proposal': ref(proposal_path),
+        'current_census': p['candidate_census'],
+        'complete_declarations': p['complete_declarations'],
+        'complete_original_evidence_intake': p['complete_original_evidence_intake'],
+        'collector_source': p['collector_source'],
+        'collector_source_peer': ref(STATE / 'source-reviews/drafts/20261024c-after226-three-record-append-peer-V5-SOURCEONLY.md'),
+        'terminal_independent_review': ref(peer_path),
+        'terminal_independent_execution_cp': ref(peer_cp),
+        'normal_import_trust_capture': ref(capture),
+        'execution_witness': ref(STATE / 'publication-integrity/20261024d-root-after226-actual-execution-witness-v1.json'),
+        'root_adoption_source': ref(Path(__file__)),
+        'actual_audits': {'next3': intake['audit_receipts'][0]['ref']},
+        'strict_producers': intake['strict_producers'],
+        'targets': targets,
+        'owned_modules': len(census['modules']), 'declarations': len(rows),
+        'distinct_constant_fullnames': len({row['name'] for row in rows}),
+        'original_receipts': counts['unique_owned_receipt_paths'],
+        'added_modules': 3, 'added_complete_serialized_declarations': len(new),
+        'added_distinct_constant_fullnames': len(new), 'added_original_receipts': 1,
+        'actual_new_module_record_counts': dict(collections.Counter(row['module'] for row in new)),
+        'historical_duplicate_names': len([v for v in collections.Counter(row['name'] for row in old_rows).values() if v > 1]),
+        'historical_duplicate_record_excess': len(old_rows) - len({row['name'] for row in old_rows}),
+        'new_fullname_collisions': 0,
+        'stock_replays_passed': 3, 'all_inventory_modules': 3,
+        'all_old_entries_and_records_deep_equal': True,
+        'all_complete_types_safety_std3_and_current_slots_verified': True,
+        'trust_mode': 'NORMAL_IMPORTED_ENVIRONMENT_TRUST',
+        'scope': snapshot['scope'],
+        'terminal_peer_scope': peer['normal_import_trust_scope'],
+        'terminal_peer_shared_gate_disclosed': peer['collector_gate_reuse'],
+        'external_closure_replayed': False, 'project_import_closure_replayed': False,
+        'unconditional_main_proved': False, 'main_1_plus_1_75': 'OPEN', 'weighted_estimate': 30,
+    }
+    out = STATE / 'source-reviews/20261024d-root-after226-three-terminal-acceptance.json'
+    with out.open('x') as stream:
+        json.dump(result, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps({'status': result['status'], 'acceptance': ref(out), 'owned_modules': 229,
+                      'declarations': 6310, 'distinct_constant_fullnames': 6291, 'original_receipts': 161}))
+
+
+if __name__ == '__main__':
+    main()

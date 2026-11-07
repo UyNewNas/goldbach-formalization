@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:01:37.5868861Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_FIRST_RUNTIME_DIAGNOSTIC_PROOF_REPAIR_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+    "complete_source_proof_bodies_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\nimport ImbalancedChen.Part3SmoothCoprimeError\n\n/-!\n# The literal transposed primitive energy minus its actual zero main term\n\nEvery coefficient is from the original atom. The exact finite identities\nfirst retain every factor label and every original alpha integer, and only\nthen use the already proved exact grouping by physical modulus. The smooth\nscale is original V and the mass is the local Fourier-zero cutoffMass.\n\nThe final bound in this leaf has the explicit finite coefficient envelope.\nIt is a proved consequence of the uniform coprime progression error; that\nenvelope is not an assumption. Its divisor moment payment is separate.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen TransposedZeroCovariance\n\nnamespace TransposedPrimitiveU\n\ntheorem alpha_l1_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖) ≤ 2 * d.U := by\n  have hAlpha : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1 := by\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hd\n    exact hAlpha\n  have hsub : d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U)) := by\n    intro n hn\n    obtain ⟨hn, _⟩ := Finset.mem_filter.mp hn\n    obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n    have hceil : 1 ≤ Nat.ceil d.U := by exact_mod_cast hd.1.trans (Nat.le_ceil d.U)\n    exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩\n  have hcard := Finset.card_le_card hsub\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hcard\n  calc\n    _ ≤ ∑ _n ∈ d.alphaCarrier, (1 : ℝ) := Finset.sum_le_sum hAlpha\n    _ = (d.alphaCarrier.card : ℝ) := by simp\n    _ ≤ (Nat.floor (2 * d.U) : ℝ) := by exact_mod_cast hcard\n    _ ≤ _ := Nat.floor_le (by linarith [hd.1])\n\ntheorem coprimeMass_norm_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U := by\n  unfold coprimeMass\n  calc\n    _ ≤ ∑ n ∈ d.alphaCarrier, ‖if n.Coprime q then d.alpha n else 0‖ := norm_sum_le _ _\n    _ ≤ ∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ := by\n      apply Finset.sum_le_sum\n      intro n _\n      by_cases hn : n.Coprime q\n      · rw [if_pos hn]\n      · rw [if_neg hn, norm_zero]\n        exact norm_nonneg _\n    _ ≤ _ := alpha_l1_le_twice_U hd\n\n/-- Exact grouping of the literal principal row, including the original\ninterval restriction inside the paired coefficient. No admissibility is used. -/\ntheorem actual_principalRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexPrincipalRow m =\n      ∑ q ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q *\n          (if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /\n            (q.totient : ℂ) := by\n  have hmass (q : ℕ) :\n      (∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n        (if (m * n).Coprime q then (1 : ℂ) else 0)) =\n      if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0 := by\n    rw [d.sum_transposedBeta_mul]\n    by_cases hm : m.Coprime q\n    · rw [if_pos hm]\n      unfold coprimeMass\n      apply Finset.sum_congr rfl\n      intro n _\n      by_cases hn : n.Coprime q\n      · rw [if_pos (Nat.coprime_mul_iff_left.mpr ⟨hm, hn⟩), if_pos hn, mul_one]\n      · have hmn : ¬(m * n).Coprime q := fun h ↦ hn (Nat.coprime_mul_iff_left.mp h).2\n        rw [if_neg hmn, if_neg hn, mul_zero]\n    · rw [if_neg hm]\n      apply Finset.sum_eq_zero\n      intro n _\n      have hmn : ¬(m * n).Coprime q := fun h ↦ hm (Nat.coprime_mul_iff_left.mp h).1\n      rw [if_neg hmn, mul_zero]\n  calc\n    _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *\n        ((∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n          (if (m * n).Coprime (complexFactorModulus a) then (1 : ℂ) else 0)) /\n            ((complexFactorModulus a).totient : ℂ)) := by\n      unfold MediumAtom.complexPrincipalRow MediumAtom.complexRowLabels\n      simp only [Finset.sum_product]\n      change (∑ a ∈ d.complexFactorLabels, ∑ n ∈ d.transposedAtom.betaCarrier,\n        d.complexFactorGamma a * d.transposedAtom.beta n *\n          (if (m * n).Coprime (complexFactorModulus a) then (1 : ℂ) else 0) /\n            ((complexFactorModulus a).totient : ℂ)) = _\n      simp only [Finset.mul_sum, Finset.sum_div, mul_div_assoc, mul_assoc]\n    _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *\n        ((if m.Coprime (complexFactorModulus a) then\n          coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) else 0) /\n            ((complexFactorModulus a).totient : ℂ)) := by simp only [hmass]\n    _ = ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q *\n        ((if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /\n          (q.totient : ℂ)) :=\n      d.sum_factorLabels_eq_grouped (fun q : ℕ ↦\n        (if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /\n          (q.totient : ℂ))\n    _ = _ := by simp only [mul_div_assoc]\n\ndef primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    coprimeMass d.alphaCarrier d.alpha q * star (coprimeMass d.alphaCarrier d.alpha r) /\n      ((q.totient : ℂ) * (r.totient : ℂ))\n\ntheorem actual_principalRow_norm_sq_eq (d : MediumAtom) (m : ℕ) :\n    ((‖d.transposedAtom.complexPrincipalRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (if m.Coprime (q * r) then (1 : ℂ) else 0) := by\n  rw [actual_principalRow_eq_grouped, complex_norm_sq_sum_eq_double_star]\n  apply Finset.sum_congr rfl\n  intro q _\n  apply Finset.sum_congr rfl\n  intro r _\n  by_cases hq : m.Coprime q\n  · rw [if_pos hq]\n    by_cases hr : m.Coprime r\n    · rw [if_pos hr, if_pos (Nat.coprime_mul_iff_right.mpr ⟨hq, hr⟩),\n        star_div₀, star_mul', star_natCast, mul_one]\n      unfold primitivePairCoefficient\n      simp only [div_eq_mul_inv, mul_inv_rev]\n      ring\n    · have hqr : ¬m.Coprime (q * r) := fun h ↦ hr (Nat.coprime_mul_iff_right.mp h).2\n      rw [if_neg hr, if_neg hqr]\n      simp only [mul_zero, zero_div, star_zero]\n  · have hqr : ¬m.Coprime (q * r) := fun h ↦ hq (Nat.coprime_mul_iff_right.mp h).1\n    rw [if_neg hq, if_neg hqr]\n    simp only [mul_zero, zero_div, zero_mul]\n\n/-- Exact U expansion on the actual common finite carrier and smoothing. -/\ntheorem actualU_eq_coprime_sum (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ) := by\n  unfold MediumAtom.complexDispersionU\n  rw [Complex.ofReal_sum]\n  simp_rw [Complex.ofReal_mul, actual_principalRow_norm_sq_eq, Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Complex.ofReal_sum, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro m _\n  split_ifs <;> push_cast <;> ring\n\ntheorem primitiveZeroMain_eq_grouped (d : MediumAtom) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n            (q * r : ℕ) : ℝ) : ℂ) := by\n  have hgroup := factor_pair_sum_eq_grouped d (fun q r ↦\n    coprimeMass d.alphaCarrier d.alpha q * star (coprimeMass d.alphaCarrier d.alpha r) *\n      (((q * r).totient : ℂ) /\n        ((q.totient : ℂ) * (r.totient : ℂ) * (q * r : ℕ))))\n  have halign : primitiveZeroMain d =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n            (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *\n              star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *\n                (((complexFactorModulus a * complexFactorModulus b).totient : ℂ) /\n                  (((complexFactorModulus a).totient : ℂ) *\n                    ((complexFactorModulus b).totient : ℂ) *\n                      (complexFactorModulus a * complexFactorModulus b : ℕ)))) := by\n    unfold primitiveZeroMain\n    congr 1\n    apply Finset.sum_congr rfl\n    intro a _\n    apply Finset.sum_congr rfl\n    intro b _\n    ring\n  rw [halign, hgroup]\n  simp only [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro q _\n  apply Finset.sum_congr rfl\n  intro r _\n  unfold primitivePairCoefficient\n  push_cast\n  simp only [div_eq_mul_inv, mul_inv_rev]\n  ring\n\n/-- The actual discrepancy is a finite sum of coprime counting errors.\nNo equality between the literal U term and its zero main term is presumed. -/\ntheorem actualU_sub_primitive_eq (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0) -\n            (d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n              (q * r : ℕ) : ℝ) : ℂ) := by\n  rw [actualU_eq_coprime_sum, primitiveZeroMain_eq_grouped, ← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Complex.ofReal_sub, mul_sub]\n\n/-- A proved envelope with a universal constant, before all atoms and data. -/\ntheorem actualU_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n            ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ := CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_uniform_error\n  refine ⟨C, hC, fun B sigma kappa c0 d hd ↦ ?_⟩\n  rw [actualU_sub_primitive_eq]\n  have hp {q : ℕ} (hq : q ∈ d.physicalFactorModuli) : q ≠ 0 :=\n    (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1.ne'\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        C * (‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro q hq\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro r hr\n      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]\n      have he := hbound d.V (lt_of_lt_of_le zero_lt_one hd.2.1)\n        d.transposedAtom.commonSmoothCarrier\n        (fun m hm ↦ MediumAtom.transposedSmoothWeight_support_subset hd.2.1 hm)\n        (q * r) (mul_ne_zero (hp hq) (hp hr))\n      calc\n        _ ≤ ‖primitivePairCoefficient d q r‖ *\n            (C * ((q * r).divisors.card : ℝ)) :=\n          mul_le_mul_of_nonneg_left he (norm_nonneg _)\n        _ = _ := by ring\n    _ = _ := by simp only [Finset.mul_sum]\n\nend TransposedPrimitiveU\n\nend\n\nend ImbalancedChen.Part3\n",
+    "source_declaration_count": 9,
+    "frozen_hash_matches": true,
+    "path": "ImbalancedChen/Part3TransposedPrimitiveU.lean",
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "alpha_l1_le_twice_U",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 27,
+        "complete_source_header": "theorem alpha_l1_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖) ≤ 2 * d.U"
+      },
+      {
+        "name": "coprimeMass_norm_le_twice_U",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 48,
+        "complete_source_header": "theorem coprimeMass_norm_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U"
+      },
+      {
+        "name": "actual_principalRow_eq_grouped",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 66,
+        "complete_source_header": "theorem actual_principalRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexPrincipalRow m =\n      ∑ q ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q *\n          (if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /\n            (q.totient : ℂ)"
+      },
+      {
+        "name": "primitivePairCoefficient",
+        "kind": "def",
+        "private": false,
+        "start_line": 115,
+        "complete_source_header": "def primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ",
+        "complete_source_definition": "def primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    coprimeMass d.alphaCarrier d.alpha q * star (coprimeMass d.alphaCarrier d.alpha r) /\n      ((q.totient : ℂ) * (r.totient : ℂ))"
+      },
+      {
+        "name": "actual_principalRow_norm_sq_eq",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 120,
+        "complete_source_header": "theorem actual_principalRow_norm_sq_eq (d : MediumAtom) (m : ℕ) :\n    ((‖d.transposedAtom.complexPrincipalRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (if m.Coprime (q * r) then (1 : ℂ) else 0)"
+      },
+      {
+        "name": "actualU_eq_coprime_sum",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 146,
+        "complete_source_header": "theorem actualU_eq_coprime_sum (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)"
+      },
+      {
+        "name": "primitiveZeroMain_eq_grouped",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 167,
+        "complete_source_header": "theorem primitiveZeroMain_eq_grouped (d : MediumAtom) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n            (q * r : ℕ) : ℝ) : ℂ)"
+      },
+      {
+        "name": "actualU_sub_primitive_eq",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 207,
+        "complete_source_header": "theorem actualU_sub_primitive_eq (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0) -\n            (d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n              (q * r : ℕ) : ℝ) : ℂ)"
+      },
+      {
+        "name": "actualU_sub_primitive_finite_bound",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 225,
+        "complete_source_header": "theorem actualU_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n            ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)"
+      }
+    ],
+    "definition_count": 1
+  },
+  "baseline": {
+    "owner_report": "20261016-transposed-primitive-U-first-diag-owner-rebind.json",
+    "exact_old_source_snapshot": "20261016-U-first-diag-original-170c.lean.txt",
+    "owner_report_sha256": "2a8fea2955e2d5cd0bf173e2315586cb3d5573b50bf3feb64c1411ed3a1646bb",
+    "proof_only_diff": true,
+    "sha256": "170c1fe16a9f5ed1a930cdca8ff590a1ed8c0789b34369669fd1ee604dc8e701",
+    "imports_exact_equal": true,
+    "complete_header_and_definition_comparisons": [
+      {
+        "definition_body_exact_equal": true,
+        "name": "alpha_l1_le_twice_U",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "coprimeMass_norm_le_twice_U",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "actual_principalRow_eq_grouped",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "primitivePairCoefficient",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "actual_principalRow_norm_sq_eq",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "actualU_eq_coprime_sum",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "primitiveZeroMain_eq_grouped",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "actualU_sub_primitive_eq",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "actualU_sub_primitive_finite_bound",
+        "complete_header_exact_equal": true
+      }
+    ]
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3SmoothCoprimeError"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "direct_imports": [
+        "ImbalancedChen.Part3TransposedDispersion"
+      ],
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance"
+    },
+    {
+      "direct_imports": [
+        "ImbalancedChen.Part3SmoothProgressionError",
+        "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+        "Mathlib.Data.Nat.Factorization.Basic"
+      ],
+      "sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "module": "ImbalancedChen.Part3SmoothCoprimeError"
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "basis": "Exact proof-only rebind of the previously reviewed leaf; the prior leaf addition remains +1 local/0 foreign relative to its original parent union.",
+    "imports_changed": false,
+    "definitions_changed": false,
+    "foreign_module_delta": 0,
+    "local_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "actual_runtime_diagnostic_log_fully_read": ".lake/proof-continuation/runs/20261015T204507503581Z-ImbalancedChen.Part3TransposedPrimitiveU/stdout.log",
+  "no_new_premises_or_quantifiers": true,
+  "no_carrier_or_coefficient_changes": true,
+  "no_resource_limit_or_linter_changes": true,
+  "source_checks": {
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_set_option": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "pins_modified": false,
+    "lake_invoked": false,
+    "source_modified_by_reviewer": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "lean_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-U-first-diag-independent-rebind.json"
+    ],
+    "bootstrap_invoked": false,
+    "axiom_audit_performed": false,
+    "dependencies_modified": false,
+    "source_only": true
+  },
+  "remaining_gate": "Runtime owner elaboration and required kernel/axiom checks of this exact frozen SHA; source review does not assert the new tactic proof elaborates.",
+  "proof_repair_review": [
+    {
+      "assessment": "Unfolds the actual finite coprime mass before using a typed norm_sum_le. The positive coprime branch is reflexive; the negative branch uses norm_zero and norm_nonneg. This directly removes the failing no-progress simp and preserves the 2U conclusion.",
+      "site": "coprimeMass_norm_le_twice_U"
+    },
+    {
+      "assessment": "Rewrites the outer m.Coprime q conditional first. Each original-alpha summand then uses the explicit product-coprimality equivalence and typed if_pos/if_neg. The negative outer branch is sum_eq_zero. Thus sum_congr is applied only after the goal is an equality of actual finite sums.",
+      "site": "actual_principalRow_eq_grouped / hmass"
+    },
+    {
+      "assessment": "First proves the exact per-label hmass substitution, then passes the explicit small function q ↦ (if m.Coprime q then coprimeMass ... q else 0)/(q.totient:Complex) to the unchanged exact grouping theorem. This removes the former large implicit elaboration problem without changing any carrier or algebra.",
+      "site": "actual_principalRow_eq_grouped / factor grouping"
+    },
+    {
+      "assessment": "The three explicit branches cover q-coprime with r-coprime, q-coprime with r-noncoprime, and q-noncoprime (any r). Product-coprimality is explicitly proved from the source iff. In the positive branch star_div₀, commutative star_mul and natural-cast reality leave only a commutative-ring identity after division expansion. In the zero branches the actual corresponding row and product indicator both vanish.",
+      "site": "actual_principalRow_norm_sq_eq"
+    },
+    {
+      "assessment": "The final summand equality splits only on the literal m.Coprime(q*r) condition; casting real weights and zero/one indicators reduces to ring algebra. The finite Fubini, full physical q/r carriers, original common weight and literal complex U remain unchanged.",
+      "site": "actualU_eq_coprime_sum"
+    },
+    {
+      "assessment": "alpha_l1, primitiveZeroMain_eq_grouped, actualU_sub_primitive_eq and the universal finite-envelope theorem retain their reviewed proofs. The last theorem still places a single positive constant before B,sigma,kappa,c0,d and derives its envelope from the existing uniform coprime error under hd.2.1; no new budget gate appears.",
+      "site": "unchanged remaining proof bodies"
+    }
+  ],
+  "source_api_checks": {
+    "star_div_zero": "Mathlib/Algebra/Star/Basic.lean:390, star(x/y)=star x/star y in commutative group with zero",
+    "grouping": "MediumAtom.sum_factorLabels_eq_grouped accepts explicit Nat-to-Complex F; no foreign import added",
+    "star_mul_prime": "Mathlib/Algebra/Star/Basic.lean:167, star(x*y)=star x*star y in commutative magma",
+    "coprimality": "Nat.coprime_mul_iff_left and right orientation also confirmed by the original actual diagnostics: (m*n).Coprime q iff m.Coprime q and n.Coprime q; m.Coprime(q*r) iff m.Coprime q and m.Coprime r",
+    "rw_closes_reflexive_LE": "Fresh read of exact Lean4.33 source Init/Tactics.lean:610-616: rw expands to rewrite followed by try(with_reducible rfl). Lean/Meta/Tactic/Rfl.lean:67-119 applies registered reflexivity lemmas to non-equality relations. Fresh Mathlib/Order/Defs/PartialOrder.lean:64 has @[refl] lemma le_refl. Therefore norm(alpha)<=norm(alpha) after rw[if_pos hn] is closed by the actual rw macro; no le_rfl patch is necessary."
+  }
+}

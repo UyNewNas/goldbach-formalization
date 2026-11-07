@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-commonp-m2-tail-log-saving-source-proposal",
+  "created_utc": "2026-10-21T22:23:08.8445507Z",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "status": "COMPLETE_WRITTEN_COROLLARY_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "One compact composition of the exact two parent inequality conclusions. Natural requested precision A only. No parent proof/history duplication, real-log denominator transfer, retained-row saving or spectral work.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2TailLogSaving-module-source.txt",
+    "sha256": "1955c521eb0e8eca3c619d4bb69f777903c3659e0a8a2e79ab6b56585ad23615",
+    "bytes": 4368,
+    "lf_lines": 87
+  },
+  "intended_actual_module": "ImbalancedChen.Part3CommonPM2TailLogSaving",
+  "imports": [
+    "import ImbalancedChen.Part3CommonPM2PolylogMajorant",
+    "import ImbalancedChen.Part3CommonPM2TailCutoff",
+    "import Mathlib.Algebra.Order.Field.Basic"
+  ],
+  "declaration_counts": {
+    "definitions": 1,
+    "complete_proofs": 2,
+    "lines": 87
+  },
+  "complete_written_declarations": [
+    {
+      "kind": "definition",
+      "name": "cutoffExponent",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2TailLogSaving.cutoffExponent",
+      "first": 24,
+      "type_last": 24,
+      "last": 24,
+      "complete_written_type": "def cutoffExponent (B A : ℕ) : ℕ\n",
+      "complete_written_body": " 131073 + betaLogExponent B + 2 * A\n",
+      "type_normalized_lf_utf8_sha256": "8975549972f8658b3d80c9a58ced67c42c385d600cf5a1c757f989f2e926ae38",
+      "body_normalized_lf_utf8_sha256": "83b8a19444d323acb96ed1e4950ce669f182630d3e68c434dddbebbcb89fc522",
+      "full_declaration_normalized_lf_utf8_sha256": "2b77bf73bbfaf2a7a75aa5ea4075eee251390484054158036e5503e2d486738a",
+      "full_type_body_read": true
+    },
+    {
+      "kind": "theorem",
+      "name": "centered_tail_energy_le_log_budget",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2TailLogSaving.centered_tail_energy_le_log_budget",
+      "first": 26,
+      "type_last": 37,
+      "last": 66,
+      "complete_written_type": "theorem centered_tail_energy_le_log_budget\n    {B A : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d\n                ((1 + Real.log d.scale) ^ cutoffExponent B A) p m‖ ^ 2) ≤\n      m2PolylogConstant B * d.scale ^ 2 / (1 + Real.log d.scale) ^ (2 * A) := by\n",
+      "complete_written_body": "  let L : ℝ := 1 + Real.log d.scale\n  let P : ℕ := 131073 + betaLogExponent B\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hL : 1 ≤ L := by\n    dsimp [L]\n    linarith [Real.log_nonneg hx]\n  have hLpos : 0 < L := zero_lt_one.trans_le hL\n  have hH : 0 < L ^ cutoffExponent B A := pow_pos hLpos _\n  have hden : L ^ P * L ^ (2 * A) ≤ (L ^ cutoffExponent B A) ^ 2 := by\n    rw [← pow_add L P (2 * A), ← pow_mul L (cutoffExponent B A) 2]\n    apply pow_le_pow_right₀ hL\n    dsimp [P, cutoffExponent]\n    omega\n  have hcoefficient : 0 ≤ m2PolylogConstant B * d.scale ^ 2 :=\n    mul_nonneg (m2PolylogConstant_pos B).le (sq_nonneg _)\n  calc\n    _ ≤ (CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d) /\n        (L ^ cutoffExponent B A) ^ 2 :=\n      centered_tail_energy_le_M2 hd (H := L ^ cutoffExponent B A) hH\n    _ ≤ (m2PolylogConstant B * d.scale ^ 2 * L ^ P) /\n        (L ^ cutoffExponent B A) ^ 2 :=\n      div_le_div_of_nonneg_right\n        (d.cleaned_commonP_M2_le_capped_polylog hd hsigma hkappa hcap) (sq_nonneg _)\n    _ ≤ m2PolylogConstant B * d.scale ^ 2 / L ^ (2 * A) := by\n      apply (div_le_div_iff₀ (pow_pos hH 2) (pow_pos hLpos (2 * A))).2\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hden hcoefficient\n",
+      "type_normalized_lf_utf8_sha256": "015fa15f5a0e44c0f9f4e6d8569f1f7099fe0607af5a796c2cfd221c237fd0b8",
+      "body_normalized_lf_utf8_sha256": "35034748142ec238528f9f0e1e8be90a5e1987ae546bbc347a51fbd41814b92c",
+      "full_declaration_normalized_lf_utf8_sha256": "51aae3e488cb7f5236da6b93a7c956188a41e6e63199e3971de3ab2a31c9cb06",
+      "full_type_body_read": true
+    },
+    {
+      "kind": "theorem",
+      "name": "constant_pos_and_uniform",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2TailLogSaving.constant_pos_and_uniform",
+      "first": 69,
+      "type_last": 81,
+      "last": 84,
+      "complete_written_type": "theorem constant_pos_and_uniform (B : ℕ) :\n    0 < m2PolylogConstant B ∧\n      ∀ (A : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 < sigma → 0 ≤ kappa →\n          kappa ≤ 1 / (2 * (kshift : ℝ)) →\n        CommonPM2FiniteFold.outsideEnergy d *\n          (∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n              d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n                ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n                  truncatedCenteredRow d\n                    ((1 + Real.log d.scale) ^ cutoffExponent B A) p m‖ ^ 2) ≤\n          m2PolylogConstant B * d.scale ^ 2 / (1 + Real.log d.scale) ^ (2 * A) := by\n",
+      "complete_written_body": "  refine ⟨m2PolylogConstant_pos B, ?_⟩\n  intro A sigma kappa c0 d hd hsigma hkappa hcap\n  exact centered_tail_energy_le_log_budget hd hsigma hkappa hcap\n",
+      "type_normalized_lf_utf8_sha256": "985d6c3e7751ab082b17653d1bc70d87c0d6365ff5bdecd71824712cfdcc3785",
+      "body_normalized_lf_utf8_sha256": "9842bc1632aca3fa745b32c4543679d6ba01bdcbbfdd517e34cb817cc3f1596a",
+      "full_declaration_normalized_lf_utf8_sha256": "115b95314d834b5cb10fc396bce57f81d3945fd9d06bbb7ecf66c8cb57e5c0ae",
+      "full_type_body_read": true
+    }
+  ],
+  "exact_parent_APIs": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2PolylogMajorant-module-source.txt",
+        "sha256": "f6502dc7f0084f729f817ebd244de18b6b6ef015d7aca92a038e9e20ea646a39",
+        "bytes": 7736,
+        "lf_lines": 165
+      },
+      "evidence_kind": "EXACT_WRITTEN_PARENT_API_UNCOMPILED",
+      "spans": [
+        {
+          "first": 24,
+          "last": 29,
+          "literal_source": "def betaLogExponent (B : ℕ) : ℕ := (2 ^ B) ^ 2 - 1\n\ndef m2PolylogConstant (B : ℕ) : ℝ :=\n  12 * mixedMomentConstant * (2 : ℝ) ^ betaLogExponent B\n\ntheorem m2PolylogConstant_pos (B : ℕ) : 0 < m2PolylogConstant B := by\n",
+          "normalized_lf_utf8_sha256": "76d3894e8ce569fba3c3909ab28f587a97674a4ea558413218e408cb97d72df1"
+        },
+        {
+          "first": 110,
+          "last": 116,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_M2_le_capped_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      m2PolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n",
+          "normalized_lf_utf8_sha256": "e568069782bac2d3f2e95c18a87d0d3b2a6e97bbf94319dbe54fda7d08c03a05"
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2TailCutoff-module-source.txt",
+        "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+        "bytes": 15908,
+        "lf_lines": 334
+      },
+      "evidence_kind": "EXACT_WRITTEN_PARENT_API_UNCOMPILED",
+      "spans": [
+        {
+          "first": 40,
+          "last": 42,
+          "literal_source": "def truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m\n",
+          "normalized_lf_utf8_sha256": "2f5d7daee66cb303385b1812f13f26fd4444611c5421bc231a33089a389fc5d6"
+        },
+        {
+          "first": 292,
+          "last": 303,
+          "literal_source": "theorem centered_tail_energy_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d H p m‖ ^ 2) ≤\n      (CommonPM2FiniteFold.outsideEnergy d *\n        CommonPM2FiniteFold.moment d) / H ^ 2 := by\n",
+          "normalized_lf_utf8_sha256": "19b3a03ca720b7f5566dfc807ff74f52b4547dced02596fae26c94e74e76e941"
+        }
+      ]
+    }
+  ],
+  "parent_author_checkpoint_refs": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-polylog-majorant-source-proposal-author-HOLD.json",
+      "sha256": "f5a6f739ad77d855ea4c00a2dc3de52c1b83f7128a4db1eb53707815e386d8ac",
+      "bytes": 61661,
+      "lf_lines": 585
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-tail-cutoff-source-proposal-author-HOLD.json",
+      "sha256": "d2903f371ccc5e8d6dfb767cd87ee1840b3ff9b4dc3c264569ac917aefebf9ca",
+      "bytes": 120593,
+      "lf_lines": 949
+    }
+  ],
+  "future_import_boundary": "Both imported ImbalancedChen modules are written future source dependencies, not kernel certificates. Import resolution and all elaboration remain unchecked; neither parent is edited here.",
+  "actual_pinned_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "spans": [
+        {
+          "first": 455,
+          "last": 458,
+          "literal_source": "\n@[gcongr]\nlemma pow_le_pow_right₀ [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 ≤ a) (hmn : m ≤ n) :\n    a ^ m ≤ a ^ n :=\n",
+          "normalized_lf_utf8_sha256": "a275da5be7dfa8ac0ef672562c4fa913c254763683ae3f63c7d10e3fdad63cd1",
+          "actual_source_read": true
+        },
+        {
+          "first": 541,
+          "last": 543,
+          "literal_source": "@[simp] lemma pow_pos [ZeroLEOneClass M₀] (ha : 0 < a) : ∀ n, 0 < a ^ n\n  | 0 => by nontriviality; rw [pow_zero]; exact zero_lt_one\n  | _ + 1 => pow_succ a _ ▸ mul_pos (pow_pos ha _) ha\n",
+          "normalized_lf_utf8_sha256": "96a3b6f8b8a06d7dcd87ada66e01b731ec0d3a9c25c607a461d33aed1b118664",
+          "actual_source_read": true
+        },
+        {
+          "first": 1199,
+          "last": 1201,
+          "literal_source": "lemma div_le_div_of_nonneg_right (hab : a ≤ b) (hc : 0 ≤ c) : a / c ≤ b / c := by\n  rw [div_eq_mul_inv a c, div_eq_mul_inv b c]\n  gcongr; exact Right.inv_nonneg.2 hc\n",
+          "normalized_lf_utf8_sha256": "63b2e85883f39e5337007f040d7e17915acaaf18a61c94e84940423cc3f222cc",
+          "actual_source_read": true
+        },
+        {
+          "first": 1430,
+          "last": 1431,
+          "literal_source": "lemma div_le_div_iff₀ (hb : 0 < b) (hd : 0 < d) : a / b ≤ c / d ↔ a * d ≤ c * b := by\n  rw [div_le_iff₀ hb, ← mul_div_right_comm, le_div_iff₀ hd]\n",
+          "normalized_lf_utf8_sha256": "d5bb99edb177a78d49d3cd5022c752369d46c457e3037bbf83f5014ac73a39bf",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "spans": [
+        {
+          "first": 733,
+          "last": 735,
+          "literal_source": "lemma pow_add (a : M) (m : ℕ) : ∀ n, a ^ (m + n) = a ^ m * a ^ n\n  | 0 => by rw [Nat.add_zero, pow_zero, mul_one]\n  | n + 1 => by rw [pow_succ, ← mul_assoc, ← pow_add, ← pow_succ, Nat.add_assoc]\n",
+          "normalized_lf_utf8_sha256": "5b952e5f71d41596ac01ff31148e050694c8f40d8f856fc9214691290cd67b48",
+          "actual_source_read": true
+        },
+        {
+          "first": 740,
+          "last": 742,
+          "literal_source": "@[to_additive mul_nsmul] lemma pow_mul (a : M) (m : ℕ) : ∀ n, a ^ (m * n) = (a ^ m) ^ n\n  | 0 => by rw [Nat.mul_zero, pow_zero, pow_zero]\n  | n + 1 => by rw [Nat.mul_succ, pow_add, pow_succ, pow_mul]\n",
+          "normalized_lf_utf8_sha256": "1ee2ced52f8e67d93eb7ea43f7993bedb90bf5c1d0dd0a6916e3a126a65e807a",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+        "sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+        "bytes": 28230,
+        "lf_lines": 713
+      },
+      "spans": [
+        {
+          "first": 212,
+          "last": 214,
+          "literal_source": "@[bound]\ntheorem log_nonneg (hx : 1 ≤ x) : 0 ≤ log x :=\n  (log_nonneg_iff (zero_lt_one.trans_le hx)).2 hx\n",
+          "normalized_lf_utf8_sha256": "d58117374bfb81b052a790afa82d819188a8e94cadc8227c7f66d8cb8b7fac79",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "spans": [
+        {
+          "first": 225,
+          "last": 231,
+          "literal_source": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=\n  PosMulMono.mul_le_mul_of_nonneg_left ha hbc\n\n@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+          "normalized_lf_utf8_sha256": "b151334e68d43e5c7cec9be7f0c0305cbbb685dd04f0d9690e3c6ae8d6a91a35",
+          "actual_source_read": true
+        },
+        {
+          "first": 312,
+          "last": 318,
+          "literal_source": "theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)\n\ntheorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)\n",
+          "normalized_lf_utf8_sha256": "8541e13359503b9d65764f7cb140ae0fcddd3d13900f18b4689ccdcf006b4783",
+          "actual_source_read": true
+        },
+        {
+          "first": 352,
+          "last": 352,
+          "literal_source": "alias mul_le_mul := mul_le_mul_of_nonneg'\n",
+          "normalized_lf_utf8_sha256": "7379346d13e6977cf410e451a9377cdcac63bd948a54503af7ef100973a0eae6",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Unbundled\\Basic.lean",
+        "sha256": "85232d08ea50e7fb03dbcdb4738d9ed47ae3671c045fb9cd3bc377576cd4ea60",
+        "bytes": 34159,
+        "lf_lines": 788
+      },
+      "spans": [
+        {
+          "first": 606,
+          "last": 609,
+          "literal_source": "lemma sq_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R]\n    (a : R) : 0 ≤ a ^ 2 := by\n  obtain ha | ha := le_or_gt 0 a\n  · exact pow_succ_nonneg ha _\n",
+          "normalized_lf_utf8_sha256": "c89340f9542fdfb75c913ab6505e1f03592978a213abf2d339c738e0dee42c5e",
+          "actual_source_read": true
+        }
+      ]
+    }
+  ],
+  "preserved_premise_block": {
+    "new_first": 28,
+    "new_last": 29,
+    "parent_first": 112,
+    "parent_last": 113,
+    "literal_source": "    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n",
+    "normalized_lf_utf8_sha256": "c47aee3d759814c7e9dd73df1da778ff563c33cc3f800df4eb9a33091169ae1b",
+    "byte_equal_under_LF": true,
+    "additional_parameter": "A:Nat is a requested logarithmic precision, not a domain restriction on the original atom."
+  },
+  "complete_mathematical_argument": [
+    "Fix B and C_B=m2PolylogConstant B>0 from the existing parent before every A,sigma,kappa,c0,d. Set P=131073+betaLogExponent B,Ccut=P+2*A,L=1+log d.scale,H=L^Ccut. Ccut depends only on fixed B,A; the constant depends only on B.",
+    "Original hd gives U,V>=1 and scale=UV>=1. Actual Real.log_nonneg then proves L>=1, hence L>0 and H>0 by the actual natural pow_pos API. No new lower scale or residue hypothesis is introduced.",
+    "Actual pow_add,pow_mul rewrite L^P*L^(2*A)<=H^2 to L^(P+2*A)<=L^(Ccut*2). The natural exponent inequality P+2*A<=(P+2*A)*2 is proved by omega, and actual pow_le_pow_right0 applies at base L>=1. This includes A=0.",
+    "Invoke the literal parent centered_tail_energy_le_M2 at H to bound exactly the displayed original Eout,psi,carriers and centered-minus-truncated row difference by M2/H^2.",
+    "Divide the exact parent cleaned_commonP_M2_le_capped_polylog by the same nonnegative H^2, obtaining the bound(C_B*scale^2*L^P)/H^2. No outsideEnergy or3U/Q1 is multiplied again.",
+    "C_B*scale^2>=0. Actual div_le_div_iff0 is used only after proving H^2>0 and L^(2*A)>0; cross multiplication reduces to the preceding denominator inequality multiplied by this nonnegative coefficient. The result is C_B*scale^2/L^(2*A).",
+    "The final theorem places C_B>0 before forall A,sigma,kappa,c0,d, then applies this proof with unchanged hd,hsigma,hkappa,hcap. No variance bound or conclusion is accepted as an input."
+  ],
+  "literal_support_and_mean": {
+    "outsideEnergy": "Exactly CommonPM2FiniteFold.outsideEnergy d, once.",
+    "carriers": "Exactly d.primitiveFirstFactorCarrier and d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier, with their complete finite supports.",
+    "weight": "Exactly d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m.",
+    "difference": "Exactly actual (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m minus the same imported truncatedCenteredRow at H.",
+    "principal": "No new principal definition. The parent truncatedCenteredRow continues to subtract the unchanged original complexPrincipalRow; its exact definition is bound in parent API spans.",
+    "powers": "All exponents are Nat. H=L^(P+2A), target denominator L^(2A). C_B and the large7-power inside its closed parent definition are never unfolded or evaluated."
+  },
+  "static_review": {
+    "author_verdict": "no_static_blocker",
+    "all87_source_lines_and3_full_declarations_read": true,
+    "two_parent_full_public_inequality_types_read": true,
+    "relevant_actual_power_and_division_APIs_read": true,
+    "no_sorry_admit_axiom": true,
+    "no_new_namespace_collision_found_in_actual_sources": true,
+    "compiler": "NOT_RUN",
+    "elaboration": "NOT_CHECKED",
+    "import_resolution": "NOT_TESTED",
+    "kernel": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "independent_review": "PENDING_FOR_NEW_TWO_PROOFS",
+    "engineering_admission": false
+  },
+  "claim_boundaries": {
+    "literal_squared_tail_difference_L_budget": "Complete written source argument; UNCOMPILED/HOLD",
+    "natural_A_zero": "Included; denominator L^0=1 remains strictly positive.",
+    "real_A_or_log_without_one": "NOT_DERIVED_HERE",
+    "difference_of_squared_variances": "NOT_IDENTIFIED_WITH_SQUARED_NORM_DIFFERENCE",
+    "retained_truncated_centered_row": "OPEN",
+    "general_q_M2": "NOT_SUPPLIED",
+    "original_forall_kappa_medium": "OPEN",
+    "spectral_and_same_policy_provider": "OPEN",
+    "main": "OPEN"
+  },
+  "quota": {
+    "fresh_used_percent": 50,
+    "fresh_remaining_percent": 50,
+    "effective_window_minutes": 10080,
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "reset_not_consumed": true
+  },
+  "actions": {
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2TailLogSaving-module-source.txt",
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-tail-log-saving-source-proposal-author-HOLD.json"
+    ],
+    "old_parent_sources_or_CP_written": false,
+    "actual_Lean_written": false,
+    "Lean_or_proof_tools_run": false,
+    "Runtime_proper_classifier_census_run": false,
+    "Git_Site_run": false,
+    "new_agent_spawned": false
+  },
+  "stop_condition": "Bounded corollary source package complete. HOLD for independent review; no further analytic or spectral work."
+}

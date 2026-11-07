@@ -1,0 +1,174 @@
+{
+  "status": "READ_ONLY_ONE_LOW_PHYSICAL_AGGREGATE_PROPOSAL_NOT_IMPLEMENTED_NOT_COMPILED_NOT_ACCEPTED",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T03:23:51.595110+00:00",
+  "proposed_module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+  "parent_sha256": "99a2bd6083d9430755b94438fe6dab8e9996d7f892b850dfdcfebc8548c8ec73",
+  "actual_char_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+  "old_exact_physical_plan": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261016-low-conductor-full-physical-divisor-moment-route.json",
+    "sha256": "44794ced563ef239bab425068cc4a48c00cbe09ec3e5f0ce884a23fc6fbb7508"
+  },
+  "pointwise_full_nonauthor_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261016-SharedFirstFactorLowConductorSW-lower-independent-semantics.json",
+    "sha256": "ee21d563d360513a18104aff2c4cc0d93950f99bc5c03f1b5d39eb71e03ba0f5"
+  },
+  "new_definition_complete_text": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n          (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n            ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n          (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n          (∑ chi ∈ ((Finset.univ : Finset\n              (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                (fun chi => (chi.conductor : ℝ) ≤ R),\n            auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n            star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))",
+  "one_public_theorem_complete_type": "theorem uniformAuxiliarySW_sharedFirstFactorLowConductorZero\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A L : ℝ, 0 < A → 0 ≤ L →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).sharedFirstFactorLowConductorZero\n              ((Real.log (F i).scale) ^ L)‖ ≤\n            C * (F i).V * (F i).U ^ 2 /\n              ((F i).Q1 * (Real.log (F i).scale) ^ A)",
+  "private_finite_API_plan": [
+    {
+      "name": "card_divisors_mul_le",
+      "type": "(q r : ℕ) : (q*r).divisors.card ≤ q.divisors.card*r.divisors.card",
+      "proof": "Extract the existing literal 7-line finite argument via equality of divisor pointwise products and Finset.card_mul_le. Local private helper only; no import of High or UMoment or new foreign NatDivisors."
+    },
+    {
+      "name": "low_character_count",
+      "type": "{delta : ℕ} (hdelta : 0 < delta) {R : ℝ} (hR : 1 ≤ R) : (((Finset.univ : Finset (DirichletCharacter ℂ delta)).erase 1).filter (fun chi => (chi.conductor : ℝ) ≤ R)).card ≤ Nat.floor R ^ 2",
+      "proof": "Simpler finite union-image proof (no dependent primitive subtype transport): for r=floor R define T f := if hf : f∣delta then univ.image (DirichletCharacter.changeLevel hf) else ∅. conductor_ne_zero, conductor_dvd_level and changeLevel_primitiveCharacter cover ALL ambient characters with conductor≤r by (Icc 1 r).biUnion T. card_biUnion_le and card_image_le bound this by Σ f∈Icc1r phi(f)≤Σ f∈Icc1r r=r*r. Erasing principal only shrinks the carrier. No primitivity or coprimality of delta beyond positivity."
+    },
+    {
+      "name": "physical_divisor_weight",
+      "type": "For p,v1,v2>0, tau(p*v1)^C0*tau(p*v2)^C0/[p*lcm(v1,v2)*phi(p*gcd(v1,v2))] ≤ tau(p)^(2*C0+1)/p^2 * (tau(v1)^(C0+1)/v1) * (tau(v2)^C0/v2).",
+      "proof": "Use tau(ab) submultiplicativity, n≤phi(n)tau(n), gcd*lcm=v1*v2, divisors(gcd)⊆divisors(v1). This is asymmetric but valid; all p factors may be composite."
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "type": "{Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) : (∑ n ∈ factorCarrier Q, ((n.divisors.card : ℝ)^r)/n) ≤ (1+Real.log (2*Q))^(2^r)",
+      "proof": "On n>0 apply fouvryTau_two + fouvryTau_pow_le 2 r, extend the nonnegative terms into Ioc 0 floor(2Q), and apply sum_fouvryTau_div_le_real (2^r)."
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "type": "{d : MediumAtom} (hQ : 1 ≤ d.Q1) (r : ℕ) : (∑ p ∈ d.primitiveFirstFactorCarrier, ((p.divisors.card : ℝ)^r)/(p:ℝ)^2) ≤ (1+Real.log (2*d.Q1))^(2^r)/d.Q1",
+      "proof": "The actual p-carrier is a subset of the full factorCarrier Q1. Keep the second inverse p and use Q1≤p before extending the nonnegative harmonic moment. No prime-only or coprime-modulus replacement."
+    },
+    {
+      "name": "two_label_harmonic",
+      "type": "For Q2,Q3≥1 and r : ℕ, Σu∈factorCarrier Q2×factorCarrier Q3 tau(u1*u2)^r/(u1*u2) ≤ H2^(2^r)*H3^(2^r), Hj=1+log(2Qj).",
+      "proof": "Submultiplicativity then literal original product carrier factorization; no grouped-fiber one-boundedness assumption."
+    },
+    {
+      "name": "finite_low_dictionary_budget",
+      "type": "From uniform pointwise actual S bounds E*U*tau(p*vj)^C0 on the low-character filter, norm(literal low zero) ≤ abs(cutoffMass)*V*E^2*U^2*R^2/Q1 * H1^(2^(2*C0+1))*H2^(2^(C0+1)+2^C0)*H3^(2^(C0+1)+2^C0).",
+      "proof": "Finite norm_sum_le at original p/u/v/chi labels; retain gamma product and gamma stars before using exactly admissible norms≤1. hLow is an internal proof-helper hypothesis discharged by the actual Low99 public theorem, never a public analytic supplier."
+    },
+    {
+      "name": "admissible_scale_log_payment",
+      "type": "Under the actual MediumAdmissible and hsigma>0, each Qj≤X and log X≥1; Hj≤3 log X.",
+      "proof": "Q1<U*X^(-sigma)≤U≤X. Q2 and Q3 are each ≤U^2*Q2*Q3^2<X^(1-8sigma)≤X. With X>exp(exp1), log X>1 and 1+log(2Qj)≤3 log X. sigma<1/100 matches the caller scope but is stronger than this local derivation needs."
+    }
+  ],
+  "SW_exponent_payment": {
+    "D": "2^(2*C0+1) + 2*(2^(C0+1)+2^C0) : ℕ",
+    "requested_pointwise_exponent": "E0=(A+(D:ℝ)+2*L)/2>0; apply actual uniformAuxiliarySW_lowConductor_auxiliaryCharacterSum F B C0 sigma kappa c0 hadmissible hSW at E0 and L.",
+    "physical_auxiliary_identity": "k=(v1/gcd(v1,v2)), delta=p*gcd(v1,v2) gives k*delta=p*v1 exactly; same for v2. Both tau(p*vj)^C0 stay until genuine harmonic divisor moment payment.",
+    "finite_count_cost": "R=(log X)^L≥1, ambient nonprincipal low-character count≤floor(R)^2≤R^2=(log X)^(2*L).",
+    "log_cost": "H1^a H2^b H3^b≤3^D*(log X)^D, 2*E0=A+D+2L, so no power-of-X loss and the second inverse p yields literal 1/Q1.",
+    "constant_choice": "For Csw>0 from the pointwise theorem, C=(1+abs(CommonSmoothCutoff.cutoffMass))*Csw^2*3^D>0 suffices; use max x0 with exp(exp1) if needed. Both C and x0 precede i and all physical labels."
+  },
+  "pinned_native_API_read": [
+    {
+      "module": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "types": [
+        "fouvryTau_two (n : ℕ) : fouvryTau 2 n = n.divisors.card",
+        "fouvryTau_pow_le (k r : ℕ) {n : ℕ} (hn : n ≠ 0) : fouvryTau k n ^ r ≤ fouvryTau (k ^ r) n",
+        "le_totient_mul_fouvryTau_two (n : ℕ) : n ≤ n.totient * fouvryTau 2 n",
+        "sum_fouvryTau_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) : (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n) ≤ (1 + Real.log x) ^ k"
+      ],
+      "proofs_read": true
+    },
+    {
+      "module": "Mathlib.NumberTheory.Divisors",
+      "sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+      "types": [
+        "Nat.divisors_subset_of_dvd {m : ℕ} (hzero : n ≠ 0) (h : m ∣ n) : divisors m ⊆ divisors n"
+      ]
+    },
+    {
+      "module": "Mathlib.Algebra.Group.Pointwise.Finset.Basic",
+      "sha256": "68b39fff5b1b4d4b01e5b84b49d0cf441f098eaa9d3fe0481d5bd6be298163fd",
+      "types": [
+        "Finset.mem_mul",
+        "Finset.card_mul_le"
+      ]
+    },
+    {
+      "module": "Init.Data.Nat.Lcm",
+      "types": [
+        "Nat.gcd_mul_lcm (m n : Nat) : gcd m n * lcm m n = m*n"
+      ]
+    },
+    {
+      "module": "Mathlib.NumberTheory.DirichletCharacter.Basic",
+      "sha256": "f004670a9bedc23c4dfaeb61b90d5e613a6b604f9486640eb1ce4ae3699ef64e",
+      "types": [
+        "DirichletCharacter.conductor_ne_zero",
+        "DirichletCharacter.conductor_dvd_level",
+        "DirichletCharacter.primitiveCharacter",
+        "DirichletCharacter.changeLevel_primitiveCharacter"
+      ]
+    },
+    {
+      "module": "Mathlib.NumberTheory.DirichletCharacter.Orthogonality",
+      "sha256": "8c28bee61c275be882f91a7d90b8745fd8945186718df7d844b9acdb9fd9341b",
+      "types": [
+        "DirichletCharacter.card_eq_totient_of_hasEnoughRootsOfUnity (R : Type*) [CommRing R] (n : ℕ) [NeZero n] [HasEnoughRootsOfUnity R (Monoid.exponent (ZMod n)ˣ)] : Nat.card (DirichletCharacter R n) = n.totient"
+      ]
+    }
+  ],
+  "pinned_API_blob_verification": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261018-low-aggregate-proposal-pinned-api-check.json",
+    "sha256": "164b1c0b91cbbf2c1bcc9139311ed77ef029d687945f667a1cf204c463683fce",
+    "all_five_actual_working_files_equal_fixed_pin_blobs": true
+  },
+  "relative_DAG": {
+    "fresh_parent_report": ".lake\\proof-continuation\\source-reviews\\20261018-low-aggregate-proposal-parent-project-dag.json",
+    "fresh_parent_report_sha256": "1c9dfff242e5befe4277f6ad475330d84443518a0f7c7811984f38068803952b",
+    "parent_project_count": 57,
+    "parent_foreign_boundary_count": 62,
+    "missing_project": [],
+    "proposed_candidate_project_count": 58,
+    "new_project": [
+      "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate"
+    ],
+    "new_foreign": [],
+    "new_foreign_reason": "Sole existing Low99 import. Native count/divisor finite APIs already reachable; local 7-line divisor product proof avoids a new NatDivisors/UMoment import. This is proposed header closure plus an actual current parent graph, not a candidate source or object census."
+  },
+  "mathematical_boundary": [
+    "Full literal low-conductor physical p/u/v zero covariance only. Does not claim whole zero mode, high-conductor complement, nonzero-frequency estimate or RestrictedMediumTarget.",
+    "All original gamma2/gamma3 complex signs and their conjugates, moving residue carrier and composite p remain.",
+    "No pointwise divisor subpower X^epsilon payment; all tau(p*v)^C0 costs are discharged by fixed-log means.",
+    "Root scope authorization is still needed before any new Lean source; compilation additionally requires the current Char and Low true owned."
+  ],
+  "no_Lean_source_written": true,
+  "no_build_cache_resource_CI_or_pin_mutation": true,
+  "character_count_independent_readonly_API_audit": {
+    "reviewer": "/root/low_aggregate_oct18/character_count_api",
+    "stronger_natural_type": "{delta r : ℕ} (hdelta : 0 < delta) : ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter (fun chi => chi.conductor ≤ r)).card ≤ r*r",
+    "finite_API": [
+      "Finset.card_biUnion_le (Algebra/BigOperators/Group/Finset/Basic.lean:977)",
+      "Finset.card_image_le (Data/Finset/Card.lean:230)",
+      "Nat.totient_le (Data/Nat/Totient.lean:61)",
+      "Nat.card_Icc (Order/Interval/Finset/Nat.lean:83)",
+      "Nat.le_floor_iff; Nat.floor_le"
+    ],
+    "Orthogonality_actual_reachability": [
+      "ImbalancedChen.Part3ComplexDispersion",
+      "ImbalancedChen.Part3DistributionTargets",
+      "ImbalancedChen.RestrictedResidueScale",
+      "ImbalancedChen.PanProductGridRanges",
+      "ImbalancedChen.PanProductGrid",
+      "ImbalancedChen.PanProductAggregateBudget",
+      "ImbalancedChen.PanProductLiuBridge",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedPrincipal",
+      "MathlibNt.SieveTheory.LiuPanActualCountCharacters",
+      "MathlibNt.Distribution.LiuPan.LiuPanActualCountCharacters",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.CharacterIndicators",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.Multiplicative",
+      "Mathlib.NumberTheory.DirichletCharacter.Orthogonality"
+    ],
+    "scope": "Child used the frozen import_walker_v2 pure header parser to confirm all needed API modules already reachable. No new foreign import, Lean process, source edit, or acceptance."
+  }
+}

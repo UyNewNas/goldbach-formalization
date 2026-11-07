@@ -1,0 +1,560 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-real-physical-signed-shift-outer-bridge-independent-source-review",
+  "created_utc": "2026-10-21T21:20:05.0909647Z",
+  "reviewer": "/root/e1_interval_review_sol_high_oct22",
+  "status": "no_static_blocker_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Independent source-only review of all 147 lines and all seven complete proof types/bodies; no integration or proof-tool execution",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-RealPhysicalSignedShiftOuterBridge-module-source.txt",
+    "sha256": "41c6c53b665afdd57f19cb001e81c34ec816a48f5defb3d441acbae05f8e65a6",
+    "bytes": 6586,
+    "lf_lines": 147
+  },
+  "author_checkpoint": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-real-physical-signed-shift-outer-bridge-source-proposal-author-HOLD.json",
+    "sha256": "cfb0fbf1ce155c7c3b833c86d449ad9050ddfae9e6c35462685e8535d421c03f",
+    "bytes": 55531,
+    "lf_lines": 561
+  },
+  "imports": [
+    "import ImbalancedChen.RealPhysicalUpperWeightBridge",
+    "import Mathlib.Data.Nat.ModEq"
+  ],
+  "complete_written_declarations": [
+    {
+      "name": "dvd_signedShift_natAbs_iff_modEq",
+      "fully_qualified_name": "ImbalancedChen.dvd_signedShift_natAbs_iff_modEq",
+      "first": 21,
+      "type_last": 22,
+      "last": 23,
+      "complete_written_type": "theorem dvd_signedShift_natAbs_iff_modEq (N m d : ℕ) :\n    d ∣ ((N : ℤ) - (m : ℤ)).natAbs ↔ Nat.ModEq d m N := by\n",
+      "complete_written_declaration": "theorem dvd_signedShift_natAbs_iff_modEq (N m d : ℕ) :\n    d ∣ ((N : ℤ) - (m : ℤ)).natAbs ↔ Nat.ModEq d m N := by\n  rw [Nat.modEq_iff_dvd, Int.ofNat_dvd_left]\n",
+      "type_normalized_lf_utf8_sha256": "274181a108449cb477a14d9ea48efdae4ed076b2b4648912c472c6ae0d9f1521",
+      "full_declaration_normalized_lf_utf8_sha256": "b7d6718057b9258099e43bf379c9df1bb66b429a93b58d0421312f0ca212ddbf",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Nat.modEq_iff_dvd at a=m,b=N yields integer divisibility of N-m, not m-N; Int.ofNat_dvd_left rewrites that to natural divisibility of natAbs with no nonzero/positive modulus condition. Both rewrites close identical propositions."
+    },
+    {
+      "name": "signedShift_natAbs_eq_nat_sub",
+      "fully_qualified_name": "ImbalancedChen.signedShift_natAbs_eq_nat_sub",
+      "first": 26,
+      "type_last": 27,
+      "last": 28,
+      "complete_written_type": "theorem signedShift_natAbs_eq_nat_sub {N m : ℕ} (hm : m ≤ N) :\n    ((N : ℤ) - (m : ℤ)).natAbs = N - m := by\n",
+      "complete_written_declaration": "theorem signedShift_natAbs_eq_nat_sub {N m : ℕ} (hm : m ≤ N) :\n    ((N : ℤ) - (m : ℤ)).natAbs = N - m := by\n  rw [← Int.ofNat_sub hm, Int.natAbs_natCast]\n",
+      "type_normalized_lf_utf8_sha256": "25755f4fe9d7dc69e39e31a40c704ef7f4cfa089d9d6783b53803bd5a38b4454",
+      "full_declaration_normalized_lf_utf8_sha256": "7e59cc204cfbe6d26d1ffc81b8bf2341ea515a8eac66fb774b0eecc165a30634",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Int.ofNat_sub hm rewrites the integer difference to the cast of genuine natural subtraction only under m<=N; Int.natAbs_natCast then gives exact equality. No claim of natural subtraction equality is made for m>N."
+    },
+    {
+      "name": "physicalDivisorSum_natAbs_nonneg_of_majorant",
+      "fully_qualified_name": "ImbalancedChen.physicalDivisorSum_natAbs_nonneg_of_majorant",
+      "first": 31,
+      "type_last": 36,
+      "last": 40,
+      "complete_written_type": "theorem physicalDivisorSum_natAbs_nonneg_of_majorant\n    (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) (n : ℤ) :\n    0 ≤ physicalDivisorSum Q rho n.natAbs := by\n",
+      "complete_written_declaration": "theorem physicalDivisorSum_natAbs_nonneg_of_majorant\n    (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) (n : ℤ) :\n    0 ≤ physicalDivisorSum Q rho n.natAbs := by\n  have h := hmajor n.natAbs\n  split_ifs at h with hcop\n  · exact zero_le_one.trans h\n  · exact h\n",
+      "type_normalized_lf_utf8_sha256": "118c2a7864f740b3f81bb2118d4ac280180e3d9357eeabaac060ae2388865597",
+      "full_declaration_normalized_lf_utf8_sha256": "18cb4d598e38ae20b0a106412e9fea2b51405b4a93981a519d30cda20e70e8b1",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Evaluate the given all-natural majorant at n.natAbs. If coprime, 0<=1<=divisor sum; otherwise 0<=divisor sum directly. No coefficientwise positivity of rho is needed."
+    },
+    {
+      "name": "sum_weight_mul_physicalDivisorSum_signedShift_eq_rho_mul_finiteCongruenceMass",
+      "fully_qualified_name": "ImbalancedChen.sum_weight_mul_physicalDivisorSum_signedShift_eq_rho_mul_finiteCongruenceMass",
+      "first": 43,
+      "type_last": 47,
+      "last": 63,
+      "complete_written_type": "theorem sum_weight_mul_physicalDivisorSum_signedShift_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ) :\n    (∑ m ∈ S, weight m *\n      physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d := by\n",
+      "complete_written_declaration": "theorem sum_weight_mul_physicalDivisorSum_signedShift_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ) :\n    (∑ m ∈ S, weight m *\n      physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d := by\n  classical\n  unfold physicalDivisorSum\n  simp_rw [Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro d _hd\n  unfold finiteCongruenceMass\n  rw [Finset.mul_sum, Finset.sum_filter]\n  apply Finset.sum_congr rfl\n  intro m _hm\n  have hiff : d ∣ ((N : ℤ) - (m : ℤ)).natAbs ↔ Nat.ModEq d m N :=\n    dvd_signedShift_natAbs_iff_modEq N m d\n  by_cases hmod : Nat.ModEq d m N\n  · simp only [if_pos (hiff.mpr hmod), if_pos hmod, mul_comm]\n  · have hdvd : ¬d ∣ ((N : ℤ) - (m : ℤ)).natAbs := fun h => hmod (hiff.mp h)\n    simp only [if_neg hdvd, if_neg hmod, mul_zero]\n",
+      "type_normalized_lf_utf8_sha256": "eb880ba989527d969205a019607e29e07c569a296def46e749bb33f0bf99bea5",
+      "full_declaration_normalized_lf_utf8_sha256": "474b50e77071f800ba15065a51cee0a301bf58948a7e2dfdc7d94293b566ca1e",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Expand the literal physicalDivisorSum, distribute the real weight, exchange two finite sums, and use the exact original Nat.ModEq d m N filter. The scalar factors commute. On the false congruence branch both summands vanish. There is no support restriction, positivity assumption, multiplicity change or analytic convergence step."
+    },
+    {
+      "name": "sum_weight_mul_physicalDivisorSum_signedShift_eq_same_rho_main_add_errors",
+      "fully_qualified_name": "ImbalancedChen.sum_weight_mul_physicalDivisorSum_signedShift_eq_same_rho_main_add_errors",
+      "first": 66,
+      "type_last": 74,
+      "last": 81,
+      "complete_written_type": "theorem sum_weight_mul_physicalDivisorSum_signedShift_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ) :\n    (∑ m ∈ S, weight m *\n      physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d := by\n",
+      "complete_written_declaration": "theorem sum_weight_mul_physicalDivisorSum_signedShift_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ) :\n    (∑ m ∈ S, weight m *\n      physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d := by\n  rw [sum_weight_mul_physicalDivisorSum_signedShift_eq_rho_mul_finiteCongruenceMass\n    N S Q weight rho]\n  unfold physicalDensitySum finitePrimitiveDiscrepancy\n  rw [Finset.mul_sum, ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro d _hd\n  ring\n",
+      "type_normalized_lf_utf8_sha256": "91c34d0270d458b7352acaa9da30faae01e5286e0960c78615bee87ff7fe447b",
+      "full_declaration_normalized_lf_utf8_sha256": "3934ae93b0e11da83108724bf62cd3556e082338cf1424d260dc0362b4ae1a5c",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "The previously proved finite identity is rewritten using the exact actual density/discrepancy definitions. At each modulus the identity is M*r/phi+r*(C-M)/phi+r*(A-C/phi)=r*A. Ring normalization uses a common inverse phi; it does not divide by an assumed nonzero totient, and remains valid at d=0. Both signed errors and rho are preserved."
+    },
+    {
+      "name": "sum_physicalDivisorSum_realHalfProductSource_eq_signedShift",
+      "fully_qualified_name": "ImbalancedChen.sum_physicalDivisorSum_realHalfProductSource_eq_signedShift",
+      "first": 84,
+      "type_last": 88,
+      "last": 91,
+      "complete_written_type": "theorem sum_physicalDivisorSum_realHalfProductSource_eq_signedShift\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)) =\n      ∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n",
+      "complete_written_declaration": "theorem sum_physicalDivisorSum_realHalfProductSource_eq_signedShift\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)) =\n      ∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n  apply Finset.sum_congr rfl\n  intro m hm\n  rw [signedShift_natAbs_eq_nat_sub (mem_realHalfProductSource.mp hm).1]\n",
+      "type_normalized_lf_utf8_sha256": "5d17cf284b82c3226748986567b144c7981864959c806c895e0ef4dcffcebd25",
+      "full_declaration_normalized_lf_utf8_sha256": "ca02ca9ec79bc533d0f98b1fae15e9c193a37f1162373eb2371a8618be801a28",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Actual mem_realHalfProductSource gives m<=N as its first conjunct. Pointwise replacement by proof 2 preserves every original source term, including m=N and the zero receiver. No source truncation or enlargement occurs in this equality."
+    },
+    {
+      "name": "RealB_cast_le_same_rho_signedShift_outer_main_add_errors",
+      "fully_qualified_name": "ImbalancedChen.RealB_cast_le_same_rho_signedShift_outer_main_add_errors",
+      "first": 95,
+      "type_last": 110,
+      "last": 144,
+      "complete_written_type": "theorem RealB_cast_le_same_rho_signedShift_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n",
+      "complete_written_declaration": "theorem RealB_cast_le_same_rho_signedShift_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n  classical\n  have hnonneg : ∀ m : ℕ,\n      0 ≤ physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n    intro m\n    exact physicalDivisorSum_natAbs_nonneg_of_majorant N z Q rho hmajor\n      ((N : ℤ) - (m : ℤ))\n  have hsum :\n      (∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)) ≤\n        ∑ m ∈ S, weight m *\n          physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n    rw [sum_physicalDivisorSum_realHalfProductSource_eq_signedShift b N T Q rho]\n    calc\n      (∑ m ∈ realHalfProductSource b N T,\n          physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs) =\n          ∑ m ∈ realHalfProductSource b N T,\n            (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n              physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n        apply Finset.sum_congr rfl\n        intro m hm\n        simp only [hm, if_pos, one_mul]\n      _ = ∑ m ∈ S,\n          (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n            physicalDivisorSum Q rho ((N : ℤ) - (m : ℤ)).natAbs := by\n        apply Finset.sum_subset hsource\n        intro m _hmS hmSource\n        simp only [if_neg hmSource, zero_mul]\n      _ ≤ _ := Finset.sum_le_sum fun m hm =>\n        mul_le_mul_of_nonneg_right (houter m hm) (hnonneg m)\n  have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    N z Q rho hb hT hmajor).trans\n      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))\n  rw [sum_weight_mul_physicalDivisorSum_signedShift_eq_same_rho_main_add_errors\n    N S Q weight rho] at h\n  exact h\n",
+      "type_normalized_lf_utf8_sha256": "90c267a9ef926d87fa0701180285f522105b8c92242a1a5a0b475dd80b3c60cd",
+      "full_declaration_normalized_lf_utf8_sha256": "dd67077c625254bb93eb2b7828371379a03f10f15ac1fb79a13e3ab8a1f73857",
+      "matches_author_hashes": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "The given all-natural majorant supplies nonnegativity for every signed receiver. Rewrite only the original source to signed shifts, insert its indicator, extend to S by Finset.sum_subset with zero terms off source, then multiply houter by the nonnegative signed divisor sum and sum. Transitivity with the existing RealB finite upper bridge preserves z+(T+1). Substitute the exact same-rho decomposition only after the positive comparison. No hSN, no new target premise, and no assumption of coefficientwise rho positivity is introduced."
+    }
+  ],
+  "actual_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PhysicalUpperWeightBridge.lean",
+        "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "bytes": 5049,
+        "lf_lines": 119
+      },
+      "spans": [
+        {
+          "first": 24,
+          "last": 26,
+          "literal_source": "/-- The divisor sum of one finitely supported physical coefficient. -/\ndef physicalDivisorSum (Q : Finset ℕ) (rho : ℕ → ℝ) (n : ℕ) : ℝ :=\n  ∑ q ∈ Q, if q ∣ n then rho q else 0\n",
+          "normalized_lf_utf8_sha256": "37c65227a1a9541c5e38bed52dbf67247ecbaa1bf9c493ce98bbe921cec3971d",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 46,
+          "last": 48,
+          "literal_source": "/-- The reciprocal-totient density of the displayed physical coefficient. -/\ndef physicalDensitySum (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ q ∈ Q, rho q / (Nat.totient q : ℝ)\n",
+          "normalized_lf_utf8_sha256": "1a87c42ddf365a94feae5a73ed09e539b32460a5f031226803a3f225c96faa87",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 68,
+          "last": 81,
+          "literal_source": "/-- Exact three-term decomposition: density, coprime correction, and signed\ndistribution error.  All three terms contain the identical `rho`. -/\ntheorem sum_rho_mul_halfProductCongruenceMass_eq\n    (num den N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ q ∈ Q, rho q * halfProductCongruenceMass num den N T q) =\n      ((halfProductSource num den N T).card : ℝ) *\n          physicalDensitySum Q rho +\n        physicalCoprimeCorrection num den N T Q rho +\n        physicalDistributionError num den N T Q rho := by\n  unfold physicalDensitySum physicalCoprimeCorrection physicalDistributionError\n  rw [Finset.mul_sum, ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro q hq\n  ring\n",
+          "normalized_lf_utf8_sha256": "f5646e57b952240401a9d8774d2d32180313181989c7769715cc343d9fd5860a",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurvedRegionDiscrepancy.lean",
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "bytes": 16096,
+        "lf_lines": 329
+      },
+      "spans": [
+        {
+          "first": 35,
+          "last": 52,
+          "literal_source": "\n/-- The total weight on the common finite carrier. -/\ndef finiteSourceMass (S : Finset ℕ) (w : ℕ → ℝ) : ℝ :=\n  ∑ m ∈ S, w m\n\n/-- The literal weighted sum in the residue class `a` modulo `d`. -/\ndef finiteCongruenceMass (S : Finset ℕ) (w : ℕ → ℝ) (a d : ℕ) : ℝ :=\n  ∑ m ∈ S with Nat.ModEq d m a, w m\n\n/-- The literal weighted sum restricted to integers coprime to `d`. -/\ndef finiteCoprimeMass (S : Finset ℕ) (w : ℕ → ℝ) (d : ℕ) : ℝ :=\n  ∑ m ∈ S with Nat.Coprime m d, w m\n\n/-- The actual coprime-normalized discrepancy. Its definition also makes\nsense for nonprimitive classes and for Lean's totalized division at zero. -/\ndef finitePrimitiveDiscrepancy\n    (S : Finset ℕ) (w : ℕ → ℝ) (a d : ℕ) : ℝ :=\n  finiteCongruenceMass S w a d - finiteCoprimeMass S w d / (Nat.totient d : ℝ)\n",
+          "normalized_lf_utf8_sha256": "107ba5f34d8a83a66b0a090679a960169fd085bf3ad0f54683ac9829e1c2f492",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealPhysicalUpperWeightBridge.lean",
+        "sha256": "d12f225b912eae31c725341abab2a97ea7cce7b87998c630472e99f7bf2c1561",
+        "bytes": 25051,
+        "lf_lines": 520
+      },
+      "spans": [
+        {
+          "first": 174,
+          "last": 186,
+          "literal_source": "theorem RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1) := by\n  exact (RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff N z hb hT).trans\n    (add_le_add (add_le_add\n      (realSiftedHalfProductSource_card_le_sum_physicalDivisorSum b N z T Q rho hmajor)\n      (le_refl (z : ℝ))) (le_refl (T + 1)))\n",
+          "normalized_lf_utf8_sha256": "f006edab4f8456fe6c2a41391a9cfc1dcb1ae27f5455bd5c33c4db60dc09ef90",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 291,
+          "last": 330,
+          "literal_source": "theorem sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d := by\n  classical\n  unfold physicalDivisorSum\n  simp_rw [Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro d hd\n  unfold finiteCongruenceMass\n  rw [Finset.mul_sum, Finset.sum_filter]\n  apply Finset.sum_congr rfl\n  intro m hm\n  have hiff : d ∣ N - m ↔ Nat.ModEq d m N := dvd_sub_iff_modEq_of_le (hSN m hm)\n  by_cases hmod : Nat.ModEq d m N\n  · simp only [if_pos (hiff.mpr hmod), if_pos hmod, mul_comm]\n  · have hdvd : ¬d ∣ N - m := fun h => hmod (hiff.mp h)\n    simp only [if_neg hdvd, if_neg hmod, mul_zero]\n\n/-- The weighted outer-source decomposition keeps the sign of rho until\nafter the complete physical modulus sum. No absolute discrepancy sum is\nintroduced by the outer comparison. -/\ntheorem sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d := by\n  rw [sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass\n    N S Q weight rho hSN]\n  unfold physicalDensitySum finitePrimitiveDiscrepancy\n  rw [Finset.mul_sum, ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro d hd\n  ring\n",
+          "normalized_lf_utf8_sha256": "94b1b8bc7bebdf63ce2259fe0c9d21ca01d73d7a87fa76b7217b60eff7fd3b4b",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 332,
+          "last": 386,
+          "literal_source": "/-- Positive outer approximation is performed before the signed\ndistribution decomposition. This finite implication does not assert that\nan arbitrary outer weight is admissible in an analytic supplier. The\ncarrier here stays below N; an extension beyond N needs an integer shift. -/\ntheorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n  classical\n  have hnonneg : ∀ n : ℕ, 0 ≤ physicalDivisorSum Q rho n := by\n    intro n\n    have h := hmajor n\n    split_ifs at h with hcop\n    · exact zero_le_one.trans h\n    · exact h\n  have hsum :\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) ≤\n      ∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m) := by\n    calc\n      (∑ m ∈ realHalfProductSource b N T,\n          physicalDivisorSum Q rho (N - m)) =\n          ∑ m ∈ realHalfProductSource b N T,\n            (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n              physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_congr rfl\n        intro m hm\n        simp only [hm, if_pos, one_mul]\n      _ = ∑ m ∈ S,\n          (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n            physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_subset hsource\n        intro m hmS hmSource\n        simp only [if_neg hmSource, zero_mul]\n      _ ≤ _ := Finset.sum_le_sum fun m hm =>\n        mul_le_mul_of_nonneg_right (houter m hm) (hnonneg (N - m))\n  have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    N z Q rho hb hT hmajor).trans\n      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))\n  rw [sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    N S Q weight rho hSN] at h\n  exact h\n",
+          "normalized_lf_utf8_sha256": "5b065f24cdb9cb5a2bb7c73223b9b44f9940c684536dc250bb8c0e160eda091a",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 411,
+          "last": 439,
+          "literal_source": "/-- The actual all-integer roughness indicator is the literal finite\nsieve-product indicator. This includes zero and negative test integers\nand every target, without an evenness or target-positivity restriction. -/\ntheorem actualSmallRoughIndicator_eq_sieveProduct_natAbs\n    (N : ℕ) (z : ℝ) (n : ℤ) :\n    actualSmallRoughIndicator N z n =\n      if Nat.Coprime n.natAbs (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0 := by\n  classical\n  have hiff := actualSmallPrimeProduct_coprime_natAbs_iff\n    N (Nat.ceil z) z (Nat.le_ceil z) n\n  rw [actualSmallPrimeProduct_eq_sieveProduct_ceil N (Nat.ceil z) z\n    (Nat.le_ceil z)] at hiff\n  rw [actualSmallRoughIndicator, ← hiff]\n  simp only [Nat.coprime_comm]\n\n/-- The proved majorant of the literal small/rough coefficient supplies\nthe exact premise of the real-source finite bridge. The natural sieve cap\nis the ceiling of the same real z used by this coefficient. -/\ntheorem actualSmallRoughRho_sieveProduct_majorant\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)\n    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :\n    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n := by\n  have h := actualSmallRoughRho_majorant retainOdd N cap w z L\n    hL hwL hwz hzcap (n : ℤ)\n  rw [actualSmallRoughIndicator_eq_sieveProduct_natAbs] at h\n  simpa only [Int.natAbs_natCast] using h\n",
+          "normalized_lf_utf8_sha256": "ac6be5eaba2738385ab9b1cd8bc0dd42173a637bad2995f0d46dbb93992d7a78",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealHalfProductSource.lean",
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "bytes": 11004,
+        "lf_lines": 255
+      },
+      "spans": [
+        {
+          "first": 131,
+          "last": 136,
+          "literal_source": "@[simp] theorem mem_realHalfProductSource {b T : ℝ} {N m : ℕ} :\n    m ∈ realHalfProductSource b N T ↔\n      m ≤ N ∧ T ≤ (m : ℝ) ∧ RealOrderedBadReceiver b m := by\n  classical\n  simp only [realHalfProductSource, Finset.mem_filter, Finset.mem_range,\n    Nat.lt_succ_iff]\n",
+          "normalized_lf_utf8_sha256": "a8276c66f1d02b6f4b902ecc661c552e1f3d3c7be58969c4050162ca32a6478c",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\ModEq.lean",
+        "sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+        "bytes": 24161,
+        "lf_lines": 600
+      },
+      "spans": [
+        {
+          "first": 34,
+          "last": 38,
+          "literal_source": "\n/-- Modular equality. `n.ModEq a b`, or `a ≡ b [MOD n]`, means that `a % n = b % n`. -/\ndef Nat.ModEq (n a b : ℕ) :=\n  a % n = b % n\n\n",
+          "normalized_lf_utf8_sha256": "6f82a4591c6beb388969720a837b20e6d14194a370b9ba23b20cef852ff3766e",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 111,
+          "last": 119,
+          "literal_source": "theorem modEq_iff_dvd : a ≡ b [MOD n] ↔ (n : ℤ) ∣ b - a := by\n  rw [ModEq, eq_comm, ← Int.natCast_inj, Int.natCast_mod, Int.natCast_mod,\n    Int.emod_eq_emod_iff_emod_sub_eq_zero, Int.dvd_iff_emod_eq_zero]\n\nalias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd\n\n/-- A variant of `modEq_iff_dvd` with `Nat` divisibility -/\ntheorem modEq_iff_dvd' (h : a ≤ b) : a ≡ b [MOD n] ↔ n ∣ b - a := by\n  rw [modEq_iff_dvd, ← Int.natCast_dvd_natCast, Int.ofNat_sub h]\n",
+          "normalized_lf_utf8_sha256": "e099de0abd2031b96f934b57de1474b2ff54339b48383bdfa73b1b9bbb382912",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\DivMod\\Bootstrap.lean",
+        "sha256": "bd55b51820dbc53925d34190fcb5de38afc5d6b3528759101fe6da87973026c1",
+        "bytes": 14105,
+        "lf_lines": 346
+      },
+      "spans": [
+        {
+          "first": 66,
+          "last": 74,
+          "literal_source": "@[simp] theorem natAbs_dvd_natAbs {a b : Int} : natAbs a ∣ natAbs b ↔ a ∣ b := by\n  refine ⟨fun ⟨k, hk⟩ => ?_, fun ⟨k, hk⟩ => ⟨natAbs k, hk.symm ▸ natAbs_mul a k⟩⟩\n  rw [← natAbs_natCast k, ← natAbs_mul, natAbs_eq_natAbs_iff] at hk\n  cases hk <;> subst b\n  · apply Int.dvd_mul_right\n  · rw [← Int.mul_neg]; apply Int.dvd_mul_right\n\ntheorem ofNat_dvd_left {n : Nat} {z : Int} : (↑n : Int) ∣ z ↔ n ∣ z.natAbs := by\n  rw [← natAbs_dvd_natAbs, natAbs_natCast]\n",
+          "normalized_lf_utf8_sha256": "c874941de6b7fad4cc8c3b0a9cf7028b9e506d15a52a5ec72202555f7e3182d1",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Lemmas.lean",
+        "sha256": "84a9cbfa60b94eafdf86b23bc15d710386767930aa3e3c0a273ddbd99b55e01f",
+        "bytes": 25806,
+        "lf_lines": 605
+      },
+      "spans": [
+        {
+          "first": 344,
+          "last": 349,
+          "literal_source": "  rw [Int.sub_eq_add_neg, Int.add_assoc, Int.add_neg_eq_sub]\n\n@[norm_cast] theorem ofNat_sub (h : m ≤ n) : ((n - m : Nat) : Int) = n - m := by\n  match m with\n  | 0 => rfl\n  | succ m =>\n",
+          "normalized_lf_utf8_sha256": "0ac9a4c770916573c0e30cf4bf3341757a3e53d8bbce98b425a22e04de67a048",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Order.lean",
+        "sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+        "bytes": 60947,
+        "lf_lines": 1475
+      },
+      "spans": [
+        {
+          "first": 591,
+          "last": 595,
+          "literal_source": "/- ## natAbs -/\n\n@[simp, norm_cast] theorem natAbs_natCast (n : Nat) : natAbs ↑n = n := rfl\n\n@[deprecated natAbs_natCast (since := \"2025-10-26\")]\n",
+          "normalized_lf_utf8_sha256": "bbb99811c814dc23aa5d69261d098231d317b5ab080d8c3439bfac8637a498f2",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+        "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+        "bytes": 51600,
+        "lf_lines": 1138
+      },
+      "spans": [
+        {
+          "first": 103,
+          "last": 105,
+          "literal_source": "@[to_additive (attr := congr)]\ntheorem prod_congr (h : s₁ = s₂) : (∀ x ∈ s₂, f x = g x) → s₁.prod f = s₂.prod g := by\n  rw [h]; exact fold_congr\n",
+          "normalized_lf_utf8_sha256": "02ec8b917404c105ead9ff1f4a92df80726f6e0dfad8fd4bb5968d8d926ae3e4",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 194,
+          "last": 199,
+          "literal_source": "@[to_additive]\ntheorem prod_subset (h : s₁ ⊆ s₂) (hf : ∀ x ∈ s₂, x ∉ s₁ → f x = 1) :\n    ∏ x ∈ s₁, f x = ∏ x ∈ s₂, f x :=\n  haveI := Classical.decEq ι\n  prod_subset_one_on_sdiff h (by simpa) fun _ _ => rfl\n\n",
+          "normalized_lf_utf8_sha256": "090e5c4556abdb51297ed3de65cfae3f599c9e7782c64a89341ae0307dd097c0",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 300,
+          "last": 303,
+          "literal_source": "\n@[to_additive]\ntheorem prod_mul_distrib : ∏ x ∈ s, f x * g x = (∏ x ∈ s, f x) * ∏ x ∈ s, g x :=\n  Eq.trans (by rw [one_mul]; rfl) fold_op_distrib\n",
+          "normalized_lf_utf8_sha256": "6541174b8a527b8e72286873aac5a44fbd0a238ed83e7e87aacb7519982cb059",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        },
+        {
+          "first": 324,
+          "last": 333,
+          "literal_source": "@[to_additive]\ntheorem prod_filter (p : ι → Prop) [DecidablePred p] (f : ι → M) :\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s, if p a then f a else 1 :=\n  calc\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s with p a, if p a then f a else 1 :=\n      prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2\n    _ = ∏ a ∈ s, if p a then f a else 1 := by\n      { refine prod_subset (filter_subset _ s) fun x hs h => ?_\n        rw [mem_filter, not_and] at h\n        exact if_neg (by simpa using h hs) }\n",
+          "normalized_lf_utf8_sha256": "b851efd98220aeb3d9a3e33bc8354740212fced8c50cf5640dd73f2e88898913",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Sigma.lean",
+        "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+        "bytes": 6475,
+        "lf_lines": 138
+      },
+      "spans": [
+        {
+          "first": 120,
+          "last": 124,
+          "literal_source": "@[to_additive]\ntheorem prod_comm {s : Finset γ} {t : Finset α} {f : γ → α → β} :\n    (∏ x ∈ s, ∏ y ∈ t, f x y) = ∏ y ∈ t, ∏ x ∈ s, f x y :=\n  prod_comm' fun _ _ => Iff.rfl\n\n",
+          "normalized_lf_utf8_sha256": "eba9cfd837ff0a365aad1fca6b279140a2b18603db0478a696d4e46f4e5b952f",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean",
+        "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+        "bytes": 16305,
+        "lf_lines": 386
+      },
+      "spans": [
+        {
+          "first": 56,
+          "last": 60,
+          "literal_source": "lemma sum_mul (s : Finset ι) (f : ι → R) (a : R) :\n    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := map_sum (AddMonoidHom.mulRight a) _ s\n\nlemma mul_sum (s : Finset ι) (f : ι → R) (a : R) :\n    a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i := map_sum (AddMonoidHom.mulLeft a) _ s\n",
+          "normalized_lf_utf8_sha256": "0bcf51ba6a360dde5d3860df10915e9d03caec60d9c9c5baa795aa2e3cc36276",
+          "directly_read_from_actual_source": true,
+          "author_span_hash_match": true
+        }
+      ],
+      "actual_source_independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+        "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+        "bytes": 36509,
+        "lf_lines": 752
+      },
+      "role": "Actual to_additive generator explicitly named Finset.sum_le_sum",
+      "actual_source_independently_read": true,
+      "spans": [
+        {
+          "first": 103,
+          "last": 112,
+          "literal_source": "variable {f g : ι → N} {s t : Finset ι}\n\n/-- In an ordered commutative monoid, if each factor `f i` of one finite product is less than or\nequal to the corresponding factor `g i` of another finite product, then\n`∏ i ∈ s, f i ≤ ∏ i ∈ s, g i`. -/\n@[to_additive (attr := gcongr) sum_le_sum]\ntheorem prod_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, f i ≤ g i) : ∏ i ∈ s, f i ≤ ∏ i ∈ s, g i :=\n  Multiset.prod_map_le_prod_map f g h\n\nattribute [bound] sum_le_sum\n",
+          "normalized_lf_utf8_sha256": "8177939c9cb3e5bf4b9590abde8df85f28791698177fb6d2d822239160698b3e",
+          "directly_read_from_actual_source": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "role": "Actual ordered multiplication by a nonnegative right factor",
+      "actual_source_independently_read": true,
+      "spans": [
+        {
+          "first": 225,
+          "last": 231,
+          "literal_source": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=\n  PosMulMono.mul_le_mul_of_nonneg_left ha hbc\n\n@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+          "normalized_lf_utf8_sha256": "b151334e68d43e5c7cec9be7f0c0305cbbb685dd04f0d9690e3c6ae8d6a91a35",
+          "directly_read_from_actual_source": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentMainTheorem.lean",
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "bytes": 12898,
+        "lf_lines": 305
+      },
+      "role": "Unchanged literal RealB definition",
+      "actual_source_independently_read": true,
+      "spans": [
+        {
+          "first": 102,
+          "last": 102,
+          "literal_source": "def RealB (b : ℝ) (N : ℕ) : ℕ := (realBadPrimes b N).card\n",
+          "normalized_lf_utf8_sha256": "d9e37fac63027301b45afc9ae61ab2c7ca156efc389d779ab9f05bef0f438146",
+          "directly_read_from_actual_source": true
+        }
+      ]
+    }
+  ],
+  "API_binding_notes": [
+    "Finset.sum_congr, sum_subset, sum_add_distrib and sum_filter are generated additive declarations of the displayed prod_congr/prod_subset/prod_mul_distrib/prod_filter APIs via their actual to_additive attributes.",
+    "Finset.sum_comm is generated by actual prod_comm; Finset.mul_sum is read as a direct declaration.",
+    "Generic le transitivity, le_refl, add_le_add, zero_le_one and if_pos/if_neg simplification are ordinary real ordered-ring/logic operations; ring and split_ifs remain unexecuted tactic source.",
+    "The old actual outer-bridge proof provides an existing identical Finset/order composition pattern; that source is read evidence, not a claim of its kernel status."
+  ],
+  "original_target_comparison": {
+    "actual_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealPhysicalUpperWeightBridge.lean",
+    "actual_first": 336,
+    "actual_last": 352,
+    "actual_complete_written_type": "theorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n",
+    "actual_type_normalized_lf_utf8_sha256": "10a1d3f5f0e34da4bf48e8db736c9adf594d5ceb027dcfb588b937444b002651",
+    "new_first": 95,
+    "new_last": 110,
+    "new_complete_written_type": "theorem RealB_cast_le_same_rho_signedShift_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n",
+    "new_type_normalized_lf_utf8_sha256": "90c267a9ef926d87fa0701180285f522105b8c92242a1a5a0b475dd80b3c60cd",
+    "unique_type_text_operations": [
+      "Rename theorem to RealB_cast_le_same_rho_signedShift_outer_main_add_errors",
+      "Delete the single whole hSN binder line (hSN : ∀ m ∈ S, m ≤ N)"
+    ],
+    "mapped_type_byte_equal_after_lf_normalization": true,
+    "all_other_parameters_hypotheses_and_conclusion_verbatim_preserved": true
+  },
+  "edge_case_audit": {
+    "modulus_zero": "No hidden exclusion: Nat.ModEq 0 m N means m=N; 0 divides natAbs(N-m) iff N=m. The actual integer/natural divisor equivalence is unconditional. If d=0 is in Q, its congruence contribution is retained exactly.",
+    "zero_difference": "When m=N, receiver=0 and all d divide it, including 0; every d-filter agrees with m congruent N. No zero receiver term is dropped.",
+    "m_greater_than_N": "Receiver becomes m-N in absolute value, not truncated natural N-m=0. Actual integer divisibility still characterizes precisely the original congruence Nat.ModEq d m N.",
+    "N_zero": "Allowed. Original source membership may force m=0; arbitrary added m>0 is still covered by the signed identity and positivity argument.",
+    "empty_carriers": "Finite identities and comparisons include empty S or Q. Any inconsistent majorant/source hypotheses remain explicit premises; no nonemptiness is silently inferred.",
+    "signed_rho_and_weights": "rho may be signed. Nonnegativity is for the whole physicalDivisorSum from hmajor. houter implies weight>=1 on source and weight>=0 elsewhere in S; no unjustified multiplication by a signed coefficient occurs.",
+    "totient_zero": "Real division is totalized. Three-term algebra is a polynomial identity in inverse totient with no cancellation premise; phi(0)=0 does not break it.",
+    "source_endpoint": "Actual source membership gives inclusive m<=N and the original real cutoff T. This is used only on the original source, never imposed on outer S."
+  },
+  "finite_support_restriction_result": "The finite outer bridge genuinely removes hSN: every finite S containing the original source is permitted under the retained pointwise outer weight and all-natural majorant hypotheses. It does not show that any such S/weight is admissible for an analytic distribution supplier.",
+  "preserved_quantities": [
+    "Literal RealB b N, with b<1",
+    "Original realHalfProductSource b N T and hT:0<=T",
+    "Same natural sieveProduct N z and all-natural majorant",
+    "Same S, Q, weight, rho across the exact finite decomposition",
+    "Same finiteSourceMass, finiteCoprimeMass and finitePrimitiveDiscrepancy with residue N",
+    "Signed coprime correction and signed distribution sum, without abs or coefficient splitting",
+    "Exact additive (z:real)+(T+1) endpoint costs"
+  ],
+  "independent_static_review": {
+    "verdict": "no_static_blocker",
+    "all147_source_lines_read": true,
+    "all7_full_types_bodies_read": true,
+    "source_has_no_sorry_admit_axiom": true,
+    "new_target_conclusion_not_assumed": true,
+    "hSN_absent_from_new_signature": true,
+    "no_new_global_name_collision_found_in_actual_ImbalancedChen_sources": true,
+    "mathematical_proof_gap_found": false,
+    "elaboration": "NOT_CHECKED",
+    "compiler": "NOT_RUN",
+    "kernel": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "engineering_admission": false
+  },
+  "claim_boundaries": {
+    "finite_signed_shift_bridge": "WRITTEN_COMPLETE; no_static_blocker; UNCOMPILED/HOLD",
+    "actual_source_integration": "NOT_PERFORMED",
+    "old_one_precision_hSN_removal": "NOT_PERFORMED_IN_THIS_REVIEW",
+    "analytic_density_distribution_and_outer_mass_suppliers": "OPEN",
+    "same_policy_supplier_licensing": "OPEN",
+    "M2": "NOT_PROVED_BY_THIS_PACKAGE",
+    "currentK_normalization_epsilon_and_main": "UNCHANGED; no new global analytic conclusion",
+    "main": "OPEN"
+  },
+  "quota": {
+    "fresh_used_percent": 47,
+    "fresh_remaining_percent": 53,
+    "effective_window_minutes": 10080,
+    "secondary": null,
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "reset_not_consumed": true
+  },
+  "actions": {
+    "ordinary_read_hash_scripts_only": true,
+    "new_file_only": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-real-physical-signed-shift-outer-bridge-independent-source-review-HOLD.json",
+    "actual_Lean_files_written": false,
+    "original_draft_written": false,
+    "proof_tools_run": false,
+    "runtime_run": false,
+    "Git_run": false,
+    "site_run": false,
+    "new_agent_spawned": false
+  },
+  "stop_condition": "Completed bounded independent source review; HOLD pending authorized next task. This report does not assert kernel success."
+}

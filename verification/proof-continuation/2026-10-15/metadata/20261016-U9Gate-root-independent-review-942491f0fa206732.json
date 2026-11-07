@@ -1,0 +1,38 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_MATH_REVIEW",
+  "target": "ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean",
+  "source_sha256": "724c2e42193808ba17c6de19cae6c64c119723f253f84e0beb462b81ddfe8b59",
+  "declaration_headers": [
+    "theorem currentChenUpsilon9_li_le_linear {x : \u211d} (hx : 2 \u2264 x) :\n    liuLogarithmicIntegral (2 / Real.log 2) x \u2264 x / Real.log 2",
+    "theorem currentChenUpsilon9_dvd_reciprocalTotient_sum_le\n    (S : Finset \u2115) (Q p : \u2115) (hp : Nat.Prime p)\n    (hS : S \u2286 Finset.Icc 1 Q) :\n    (\u2211 d \u2208 S, if p \u2223 d then 1 / (Nat.totient d : \u211d) else 0) \u2264\n      (4 / ((p : \u211d) - 1)) * (1 + Real.log (max 1 (Q : \u211d)))",
+    "private theorem currentChenUpsilon9_prime_inverse_totient_le\n    {p : \u2115} (hp : Nat.Prime p) {H : \u211d} (hH : 0 < H) (hHp : H \u2264 p) :\n    1 / ((p : \u211d) - 1) \u2264 2 / H",
+    "theorem currentChenUpsilon9_noncoprime_reciprocalTotient_sum_le\n    {N a : \u2115} (hN : (1 : \u211d) \u2264 N)\n    (ha : a \u2208 currentChenUpsilon9PrefixProducts N)\n    (S : Finset \u2115) (Q : \u2115) (hS : S \u2286 Finset.Icc 1 Q) :\n    (\u2211 d \u2208 S, if Nat.Coprime a d then 0 else 1 / (Nat.totient d : \u211d)) \u2264\n      (16 / (N : \u211d) ^ (19 / 125 : \u211d)) * (1 + Real.log (max 1 (Q : \u211d)))",
+    "def currentChenUpsilon9LiMainMass (N : \u2115) : \u211d",
+    "def currentChenUpsilon9CoprimeMainDefect (N d : \u2115) : \u211d",
+    "def currentChenUpsilon9CoprimeGateError (N cap : \u2115) (z L : \u211d) (S : Finset \u2115) : \u211d",
+    "theorem currentChenUpsilon9CoprimeMainDefect_eq_same_coefficient {N : \u2115}\n    (hN : (1 : \u211d) \u2264 N) (d : \u2115) :\n    currentChenUpsilon9CoprimeMainDefect N d =\n      \u2211 a \u2208 Finset.Ioc (currentChenUpsilon9PanLower N) (currentChenUpsilon9PanUpper N),\n        currentChenUpsilon9ProductCoefficient N a *\n          (if Nat.Coprime a d then 0 else\n            liuLogarithmicIntegral (2 / Real.log 2) ((N : \u211d) / (a : \u211d)))",
+    "theorem currentChenUpsilon9_abs_coprimeGateError_le_mass\n    {N : \u2115} (hN : (1 : \u211d) \u2264 N)\n    (hquot : \u2200 a \u2208 currentChenUpsilon9PrefixProducts N, 2 \u2264 (N : \u211d) / (a : \u211d))\n    (cap : \u2115) (z L : \u211d) (S : Finset \u2115) (Q : \u2115) (hS : S \u2286 Finset.Icc 1 Q) :\n    |currentChenUpsilon9CoprimeGateError N cap z L S| \u2264\n      ((16 / (N : \u211d) ^ (19 / 125 : \u211d)) * (1 + Real.log (max 1 (Q : \u211d)))) *\n        currentChenUpsilon9LiMainMass N",
+    "theorem eventually_currentChenUpsilon9_li_arguments_two :\n    \u2200\u1da0 N : \u2115 in atTop, \u2200 a \u2208 currentChenUpsilon9PrefixProducts N,\n      2 \u2264 (N : \u211d) / (a : \u211d)",
+    "theorem currentChenUpsilon9_liMainMass_le_linear_log {N : \u2115}\n    (hN : (1 : \u211d) \u2264 N)\n    (hquot : \u2200 a \u2208 currentChenUpsilon9PrefixProducts N, 2 \u2264 (N : \u211d) / (a : \u211d)) :\n    currentChenUpsilon9LiMainMass N \u2264\n      (4 / Real.log 2) * (N : \u211d) * (1 + Real.log (N : \u211d))",
+    "theorem eventually_currentChenUpsilon9_abs_coprimeGateError_le_singularNormalization\n    (\u03b5 : \u211d) (h\u03b5 : 0 < \u03b5) :\n    \u2200\u1da0 N : \u2115 in atTop, \u2200 cap : \u2115, \u2200 z L : \u211d, \u2200 S : Finset \u2115,\n      S \u2286 Finset.Icc 1 N \u2192\n      |currentChenUpsilon9CoprimeGateError N cap z L S| \u2264\n        \u03b5 * singularNormalization N"
+  ],
+  "reviewer": "root (not source author)",
+  "mathematics": [
+    "The actual product-image zero-one coefficient is retained. Finite statements expose the li-argument condition; the same file proves that condition eventually from the original product exponent 309/500.",
+    "The map d to d/p is injective on positive p-divisible moduli; supermultiplicativity of phi gives the correct reciprocal inequality without assuming squarefreeness or coprimality of the cofactor.",
+    "The two actual prime factors are at least N^(19/125); their union costs 16 N^(-19/125) (1+log Q).",
+    "The signed actual Rosser coefficient is bounded in absolute value; it is never assumed nonnegative.",
+    "The true normalized li mass is at most (4/log 2) N (1+log N), so the absolute defect is at most (256/log 2) N^(106/125) log(N)^2 eventually. The actual power-log budget pays this by every epsilon times singularNormalization."
+  ],
+  "fixed_api_reads": [
+    "mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 Mathlib/Data/Nat/Totient.lean:347",
+    "goldbach 09b97db5764ade1246bfb77206baa1b124760958 MathlibNt/SieveTheory/Arithmetic/LiuLogarithmicIntegral.lean integrability and nonnegativity signatures",
+    "project TotientReciprocalBudget.lean:236, ActualSmallRosser.lean:123, PowerErrorBudget.lean:52"
+  ],
+  "scope_limits": [
+    "No Lean or Lake execution, stock object replay, complete imported closure or axiom audit was performed by this review.",
+    "The Pan aggregate, actual switched count mean, ordinary prefactor 8 and adopted lower-ledger constants remain separate obligations.",
+    "The source-DAG comparison is advisory. Relative to Product alone this introduces foreign source modules; the author compares against the union including already used li and reciprocal-totient prerequisites."
+  ],
+  "findings": []
+}

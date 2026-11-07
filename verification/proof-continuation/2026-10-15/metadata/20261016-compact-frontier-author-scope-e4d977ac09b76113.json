@@ -1,0 +1,106 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_COMPLETE_SCOPE_PENDING_INDEPENDENT_REVIEW_AND_RUNTIME",
+  "reviewer": "/root/tail_resume (source author)",
+  "created_at_utc": "2026-10-15T21:38:16.052870+00:00",
+  "candidate": {
+    "path": "ImbalancedChen/ActualExtendedThirdCompactFrontier.lean",
+    "sha256": "8e15c650d9e5e0b7f72aa16589a4dbf2049687558482d096f48f7fee1635dbe7",
+    "declaration_count": 9,
+    "definition_count": 1,
+    "complete_headers_and_definitions": [
+      {
+        "name": "actualExtendedThirdCompactOwnedCell_primeRegion",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactOwnedCell_primeRegion {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    t ∈ actualExtendedThirdCompactCellPrimeRegion m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactOwnedCell_log_bounds",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactOwnedCell_log_bounds {e h : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) (i : Fin 3) :\n    h ≤ t i ∧ t i < thirdPrefixRho"
+      },
+      {
+        "name": "actualExtendedThirdCompactHistoryLog",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactHistoryLog (N : ℕ) (p : Fin 3 → ℕ) :\n    primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] = actualPrimeTupleLog N p"
+      },
+      {
+        "name": "actualExtendedThirdCompactParent_valid_iff",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactParent_valid_iff (e h : ℝ) (m N : ℕ)\n    (p : Fin 3 → ℕ) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n        [] true (List.ofFn p).dropLast ↔\n      actualExtendedThirdCompactInitialPolicy e m N false [p 0] = true"
+      },
+      {
+        "name": "actualExtendedThirdCompactParent_valid_of_cell",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactParent_valid_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p : Fin 3 → ℕ) (hp0 : 0 < p 0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n      [] true (List.ofFn p).dropLast"
+      },
+      {
+        "name": "actualExtendedThirdCompactFrontier_cell_filter",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactFrontier_cell_filter {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      actualExtendedThirdDistinctCellPrimeTuples N h m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactFrontierCellSum",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ",
+        "complete_definition": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ :=\n  ((firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1))\n    (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).map (fun candidate =>\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (if primeHistoryLogCoordinates (N : ℝ) 3 candidate.selectedPrefix ∈\n            actualExtendedThirdOwnedCell m j then\n          G (primeHistoryTuple 3 candidate.selectedPrefix) else 0))).sum"
+      },
+      {
+        "name": "actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j,\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p"
+      },
+      {
+        "name": "actualExtendedThirdCompactFrontierCellSum_eq_product_sum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactFrontierCellSum_eq_product_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n        1 / (Nat.totient n : ℝ) * G (actualExtendedThirdDistinctCellProductTuple N h m j n)"
+      }
+    ]
+  },
+  "direct_imports": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+      "source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic",
+      "source_sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064"
+    }
+  ],
+  "actual_caller": [
+    "The literal compact upper policy has the common initial decisions through rank two. Its own-test difference must enumerate this actual parent frontier before the third own cube is tested.",
+    "The root CompactResidualProfile actual old/new minus-density difference may be substituted for arbitrary signed G after its real policy continuation identity is proved.",
+    "The already defined DistinctCellPrimeTuples/Products and canonical product tuple are reused exactly, so the same original cells, target primes, product image and totient weights reach the root harmonic leaf."
+  ],
+  "mathematical_review": [
+    "An adopted cell has third coordinate at least h. Closed order supplies the same lower bound to both preceding coordinates. All three upper endpoints are at most rho, with strict actual Ico right inequalities.",
+    "Its actual initial first-prime admission is derived by the prior literal policy lemma, not provided by the caller. The second selection has upper-even parity and always passes. Thus the rank-two proper-prefix test is genuinely discharged on the adopted cell.",
+    "The original cap condition is N^rho <= cap. The analytic cube upper exponent rho+1 is used solely to identify the already defined box selector and is not substituted into the original cap condition.",
+    "The small rough lower cutoff has the numerical condition w <= N^h; adopted cell primes satisfy it by their actual logarithmic coordinates. The later ordinary actual residual identity uses the full w=0 polynomial supplied by the existing presieve projection; this generic carrier equality does not claim residual densities with lower cutoff w equal the w=0 densities.",
+    "Forward membership retains strict order, actual prime membership and target deletion from the real firstExitFrontierTuples. The converse obtains actual prime upper/lower cutoffs from the same Ico coordinates and the proved initial admission.",
+    "The exact candidate list, including original candidate histories and reciprocal prime mass, is reindexed by the existing proved no-repetition tuple theorem. Any real signed tuple test is preserved.",
+    "Strict order gives the already proved original product-image injectivity and one literal reciprocal totient weight. No added factorial or coefficient bound is introduced."
+  ],
+  "remaining_gates": [
+    "This module does not identify an admitted candidate continuation with actualOwnCubeGatedMinusDensity or flatten the entire new-minus-old first-exit polynomial into the displayed cell sums.",
+    "The exact whole signed first-exit density saving still requires the before-test splice identity, the inherited first cube at each actual cap, exact ordinary residual continuations and inactive cancellation.",
+    "The first-stop initial-policy normalized density still needs its manuscript baseline estimate.",
+    "The actual original physical signed progression counting error and support/distribution estimates remain unpaid."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "imported_closure_acceptance_claimed": false,
+    "pins_modified": false,
+    "owned_sources_modified": false,
+    "acceptance_claimed": false
+  }
+}

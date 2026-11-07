@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T19:29:21.627988+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_ACTUAL_DIAGNOSTIC_PROOF_REBIND_PASS",
+  "candidate": {
+    "path": "ImbalancedChen/Part3SignedDivisorDeletion.lean",
+    "sha256": "f5dc98c3b6450a797f4967ac6ef2eba6bb53103da00fb76b8cb41c7fc8f6e0bc",
+    "source_declaration_count": 27
+  },
+  "rebind": {
+    "prior_source_sha256": "c5b1fc7a5d29824a34db28b26e56ddea8992c7133475de246dabfb24a2264131",
+    "prior_report": ".lake/proof-continuation/source-reviews/20261016-signed-divisor-deletion-cleaned-bridges-scope.json",
+    "prior_report_sha256": "4ac217aecbb9fb557d36db43c0d596aab028d148816decdc79d9880a5a21e5a9",
+    "all_seven_proof_hunks_reverse_to_exact_prior_bytes": true,
+    "independent_Git_HEAD_bytes_equal_reconstructed_prior": true,
+    "all_27_headers_identical": true,
+    "all_definition_blocks_identical": true,
+    "direct_imports_identical": true,
+    "all_other_bytes_identical": true
+  },
+  "all_complete_source_headers": [
+    {
+      "name": "MediumAtom.divisorBeta",
+      "kind": "def",
+      "private": false,
+      "start_line": 36,
+      "complete_source_header": "def MediumAtom.divisorBeta (d : MediumAtom) (n : ℕ) : ℂ"
+    },
+    {
+      "name": "MediumAtom.divisorBetaAtom",
+      "kind": "def",
+      "private": false,
+      "start_line": 39,
+      "complete_source_header": "def MediumAtom.divisorBetaAtom (d : MediumAtom) : MediumAtom"
+    },
+    {
+      "name": "MediumAtom.beta_eq_clean_add_divisorBeta",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 42,
+      "complete_source_header": "theorem MediumAtom.beta_eq_clean_add_divisorBeta (d : MediumAtom) (n : ℕ) :\n    d.beta n = d.cleanedBeta n + d.divisorBeta n"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_clean_add_divisorBeta",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 48,
+      "complete_source_header": "theorem MediumAtom.signedError_eq_clean_add_divisorBeta (d : MediumAtom) :\n    d.signedError = d.cleanedBetaAtom.signedError + d.divisorBetaAtom.signedError"
+    },
+    {
+      "name": "MediumAtom.signedError_sub_clean_eq_divisorBeta",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 57,
+      "complete_source_header": "theorem MediumAtom.signedError_sub_clean_eq_divisorBeta (d : MediumAtom) :\n    d.signedError - d.cleanedBetaAtom.signedError = d.divisorBetaAtom.signedError"
+    },
+    {
+      "name": "mediumAdmissible_cleanedBetaAtom",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 62,
+      "complete_source_header": "theorem mediumAdmissible_cleanedBetaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedBetaAtom"
+    },
+    {
+      "name": "mediumAdmissible_divisorBetaAtom",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 77,
+      "complete_source_header": "theorem mediumAdmissible_divisorBetaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.divisorBetaAtom"
+    },
+    {
+      "name": "uniformAuxiliarySW_cleanedBetaAtom",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 93,
+      "complete_source_header": "theorem uniformAuxiliarySW_cleanedBetaAtom {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ)\n    (h : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun i ↦ (F i).cleanedBetaAtom) C0"
+    },
+    {
+      "name": "one_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 97,
+      "complete_source_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale"
+    },
+    {
+      "name": "mediumAdmissible_residue_ne_zero",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 106,
+      "complete_source_header": "theorem mediumAdmissible_residue_ne_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hc0 : 0 < c0) (hd : MediumAdmissible B sigma kappa c0 d) : d.residue ≠ 0"
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 115,
+      "complete_source_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "card_alphaCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 127,
+      "complete_source_header": "private theorem card_alphaCarrier_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : (d.alphaCarrier.card : ℝ) ≤ 2 * d.U"
+    },
+    {
+      "name": "card_complexFactorLabels_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 134,
+      "complete_source_header": "private theorem card_complexFactorLabels_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.complexFactorLabels.card : ℝ) ≤ d.physicalFactorCap"
+    },
+    {
+      "name": "gamma_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 148,
+      "complete_source_header": "private theorem gamma_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {r : ℕ × ℕ × ℕ}\n    (hr : r ∈ d.complexFactorLabels) : ‖d.complexFactorGamma r‖ ≤ 1"
+    },
+    {
+      "name": "primitiveKernel_norm_le_two",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 163,
+      "complete_source_header": "private theorem primitiveKernel_norm_le_two (a : ℤ) (q m n : ℕ) :\n    ‖complexPrimitiveKernel a q m n‖ ≤ 2"
+    },
+    {
+      "name": "signedError_norm_le_finite_betaMass",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 178,
+      "complete_source_header": "private theorem signedError_norm_le_finite_betaMass\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ≤ 2 * (d.alphaCarrier.card : ℝ) * (d.complexFactorLabels.card : ℝ) *\n      ∑ n ∈ d.betaCarrier, ‖d.beta n‖"
+    },
+    {
+      "name": "MediumAtom.signedError_sub_clean_norm_le_finite",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 213,
+      "complete_source_header": "theorem MediumAtom.signedError_sub_clean_norm_le_finite\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError - d.cleanedBetaAtom.signedError‖ ≤\n      4 * d.U * d.physicalFactorCap * ∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖"
+    },
+    {
+      "name": "MediumAtom.divisorBetaMass_le_tau",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 233,
+      "complete_source_header": "theorem MediumAtom.divisorBetaMass_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (ha : d.residue ≠ 0) :\n    (∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖) ≤\n      (fouvryTau (2 ^ B + 1) d.residue.natAbs : ℝ)"
+    },
+    {
+      "name": "MediumAtom.U_mul_physicalFactorCap_le",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 264,
+      "complete_source_header": "theorem MediumAtom.U_mul_physicalFactorCap_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U * d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 9 * sigma)"
+    },
+    {
+      "name": "divisorBetaMass_subpower",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 294,
+      "complete_source_header": "theorem divisorBetaMass_subpower (B : ℕ) (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (sigma c0 : ℝ) (d : MediumAtom),\n      0 < c0 → MediumAdmissible B sigma kappa c0 d →\n        (∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖) ≤ C * d.scale ^ epsilon"
+    },
+    {
+      "name": "signedError_sub_clean_power_bound",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 325,
+      "complete_source_header": "theorem signedError_sub_clean_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d →\n        ‖d.signedError - d.cleanedBetaAtom.signedError‖ ≤\n          C * d.scale ^ (1 - 8 * sigma)"
+    },
+    {
+      "name": "eventually_const_rpow_le_logBudget",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 347,
+      "complete_source_header": "private theorem eventually_const_rpow_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (1 - delta) ≤ x / (Real.log x) ^ A"
+    },
+    {
+      "name": "signedError_sub_clean_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 368,
+      "complete_source_header": "theorem signedError_sub_clean_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ‖d.signedError - d.cleanedBetaAtom.signedError‖ ≤\n          d.scale / (Real.log d.scale) ^ A"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_cleanedDispersion_add_deletion",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 383,
+      "complete_source_header": "theorem MediumAtom.signedError_norm_sq_le_cleanedDispersion_add_deletion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      2 * (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ ^ 2) *\n        (d.cleanedBetaAtom.complexDispersionW d.commonSmoothCarrier d.commonSmoothWeight -\n          2 * d.cleanedBetaAtom.complexDispersionV d.commonSmoothCarrier d.commonSmoothWeight +\n            d.cleanedBetaAtom.complexDispersionU d.commonSmoothCarrier d.commonSmoothWeight) +\n        2 * ‖d.signedError - d.cleanedBetaAtom.signedError‖ ^ 2"
+    },
+    {
+      "name": "restrictedMediumTarget_of_cleanedBetaTarget",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 412,
+      "complete_source_header": "theorem restrictedMediumTarget_of_cleanedBetaTarget {ι : Type*}\n    (F : ι → MediumAtom) (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hc0 : 0 < c0)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hclean : RestrictedMediumTarget (fun i ↦ (F i).cleanedBetaAtom)) :\n    RestrictedMediumTarget F"
+    },
+    {
+      "name": "MediumAtom.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 438,
+      "complete_source_header": "theorem MediumAtom.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero\n    (d : MediumAtom) (Y : ℝ) :\n    d.cleanedBetaAtom.commonLargeBetaGCDException Y = 0"
+    },
+    {
+      "name": "commonLargeBetaGCDW_cleaned_polynomial_residue_bound",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 455,
+      "complete_source_header": "theorem commonLargeBetaGCDW_cleaned_polynomial_residue_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 0 < Y →\n        ‖d.cleanedBetaAtom.commonLargeBetaGCDW Y‖ ≤\n          C * d.U * d.scale ^ epsilon *\n            ((2 * d.V) ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n              Real.sqrt ((1 + Real.log (2 * d.V)) / Y))"
+    }
+  ],
+  "proof_repairs": [
+    {
+      "declaration": "MediumAtom.signedError_eq_clean_add_divisorBeta",
+      "edit": "conv simp_rw -> simp only",
+      "review": "Uses supported conv simplification for the same exact coefficient linearity; neither signed kernel nor summation changes."
+    },
+    {
+      "declaration": "MediumAtom.signedError_sub_clean_norm_le_finite",
+      "edit": "gcongr -> explicit nested mul_le_mul, with nonnegative deleted mass and card factors",
+      "review": "Supplies the same alpha-card and full-factor-label-card bounds to their actual factors. The literal 4*U*physicalCap*deletedMass bound is unchanged."
+    },
+    {
+      "declaration": "MediumAtom.U_mul_physicalFactorCap_le",
+      "edit": "Wrap strict calc in le_of_lt",
+      "review": "The existing strict product bound is explicitly weakened to the already declared <= result; geometry assumptions and exponent 1-9*sigma stay identical."
+    },
+    {
+      "declaration": "divisorBetaMass_subpower",
+      "edit": "omega -> Nat.succ_le_succ (Nat.zero_le (2^B))",
+      "review": "Supplies 1<=2^B+1 uniformly including B=0; no divisor order or subpower exponent changes."
+    },
+    {
+      "declaration": "signedError_sub_clean_power_bound",
+      "edit": "gcongr -> explicit mul_le_mul with positive multipliers",
+      "review": "Applies unchanged U*cap geometry and actual deleted-mass bound to the correct factors. Constant 32*C and exponent 1-8*sigma stay identical."
+    },
+    {
+      "declaration": "MediumAtom.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero",
+      "edit": "dsimp record projection before simp-only negative nested-if branch",
+      "review": "Exposes the unchanged original residue so the negated signed-divisibility union applies. The strict gcd mask and cleaned coefficient are unchanged."
+    },
+    {
+      "declaration": "commonLargeBetaGCDW_cleaned_polynomial_residue_bound",
+      "edit": "Introduce rfl equalities for cleaned U,V,scale and include them in simp-only",
+      "review": "Identifies unchanged record fields explicitly. The same cleaned W, all original geometric factors, same exponent/logarithm/sqrt budget and same universal constants remain."
+    }
+  ],
+  "diagnostic_provenance": {
+    "log_path": ".lake/proof-continuation/runs/20261015T192042819889Z-ImbalancedChen.Part3SignedDivisorDeletion/stdout.log",
+    "log_sha256": "d2603a11372418242a86354adbd57a6fff821f155a09a902c03497fd59c6af47",
+    "receipt_path": ".lake/proof-continuation/runs/20261015T192042819889Z-ImbalancedChen.Part3SignedDivisorDeletion/receipt.json",
+    "receipt_sha256": "be7c89c6139725d0b069c8da6f5808e60215304c5dae157850bae5b49ca69202",
+    "recorded_status": "FAILED",
+    "source_binding_before_and_after": "c5b1fc7a5d29824a34db28b26e56ddea8992c7133475de246dabfb24a2264131",
+    "current_pins_equal_recorded": [
+      {
+        "path": "lean-toolchain",
+        "recorded_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+        "current_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+        "matches": true
+      },
+      {
+        "path": "lakefile.toml",
+        "recorded_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+        "current_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+        "matches": true
+      },
+      {
+        "path": "lake-manifest.json",
+        "recorded_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+        "current_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+        "matches": true
+      }
+    ],
+    "current_direct_sources_equal_recorded": [
+      {
+        "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+        "sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+        "matches_recorded_source": true
+      }
+    ],
+    "scope": "Existing failed-run source diagnostic metadata only. No compiler invocation, successful build, object-content examination or acceptance inferred."
+  },
+  "provider_pins": [
+    {
+      "name": "goldbach",
+      "required_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "actual_head": "09b97db5764ade1246bfb77206baa1b124760958",
+      "matches": true
+    },
+    {
+      "name": "mathlib",
+      "required_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "actual_head": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "matches": true
+    }
+  ],
+  "source_provenance": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "finite_divisor_inclusion_reference": {
+      "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryBetaClean.lean",
+      "sha256": "c4678d4d8bd0dbb2f014f8dfd0285a1995e3d5286fde9f8bf830a397f54b3891",
+      "bytes_equal_pin_blob": true,
+      "lines": [
+        73,
+        95
+      ],
+      "adaptation": "Finite divisor inclusion is adapted to norms of actual complex beta; no byte-identical extraction is claimed."
+    }
+  },
+  "semantic_scope_rebound": [
+    {
+      "lines": [
+        36,
+        59
+      ],
+      "finding": "Exact complex linear preprocessing: original beta equals cleanedBeta+divisorBeta, with signed Int divisibility. Consequently original signedError equals the sum of the two literal atom errors. Alpha, interval, residue, complex gamma and full factor labels, and the primitive-coprime kernel are unchanged."
+    },
+    {
+      "lines": [
+        62,
+        95
+      ],
+      "finding": "Both beta projections inherit MediumAdmissible by the original beta norm bound. Alpha norm and roughness, all geometry, gamma norms and active-residue gates are inherited. UniformAuxiliarySW is definitionally unchanged because it depends on alpha, not beta."
+    },
+    {
+      "lines": [
+        97,
+        112
+      ],
+      "finding": "Residue nonzero explicitly uses the genuine caller gate 0<c0, scale>=1 and c0*scale<=natAbs(residue). It is not inferred from MediumAdmissible with arbitrary c0."
+    },
+    {
+      "lines": [
+        115,
+        160
+      ],
+      "finding": "Q>=1 gives positive factorCarrier subset Ioc(0,floor(2Q)), hence card<=2Q. The filtered alpha interval has card<=2U. The Cartesian three-factor label set has card<=8Q1Q2Q3=physicalFactorCap, retaining repeated moduli with their label multiplicity. Actual gamma-product norm<=1."
+    },
+    {
+      "lines": [
+        163,
+        229
+      ],
+      "finding": "The complete kernel norm<=2 includes totient-zero total division and every exact product. Triangle gives norm(original signedError-clean signedError)<=4*U*physicalFactorCap*deletedBetaL1. No zero-difference divisor bound or quadratic W-exception bound is used."
+    },
+    {
+      "lines": [
+        232,
+        260
+      ],
+      "finding": "On the original positive beta carrier, norm(beta)<=tau_2^B<=tau_(2^B). With residue!=0, its signed-divisor filter embeds into natAbs(residue).divisors, giving deletedBetaL1<=tau_(2^B+1)(natAbs residue)."
+    },
+    {
+      "lines": [
+        263,
+        288
+      ],
+      "finding": "Q1<U X^(-sigma), U^2 Q2 Q3^2<X^(1-8sigma), and Q3>=1 imply UQ1Q2Q3<=X^(1-9sigma), so U*physicalFactorCap<=8X^(1-9sigma). X is the unchanged original scale, and each multiplied factor is positive."
+    },
+    {
+      "lines": [
+        292,
+        319
+      ],
+      "finding": "B,kappa,epsilon>0 precede the subpower constant. K=max(1,1+kappa)>=1 and eta=epsilon/K cover the original polynomial residue range. The same C works for all sigma,c0,atoms; hc0 pays residue nonzero. No constant depends on a varying family member."
+    },
+    {
+      "lines": [
+        323,
+        341
+      ],
+      "finding": "At fixed B,sigma,kappa,c0 with sigma>0,c0>0, choose deleted-mass epsilon=sigma to obtain C X^(1-8sigma). This uses no SW or signed-distribution estimate."
+    },
+    {
+      "lines": [
+        345,
+        377
+      ],
+      "finding": "The little-o proof accepts arbitrary real A and delta>0. Applying delta=8sigma yields coefficient-one log payment at one x0>1 before all atoms and moving residues."
+    },
+    {
+      "lines": [
+        381,
+        406
+      ],
+      "finding": "Squared estimate keeps the same cleaned atom, original commonSmoothCarrier/commonSmoothWeight, and its literal complex W-2V+U, multiplied by twice the original alpha norm-square sum. Only twice the actual linear deletion norm squared is added."
+    },
+    {
+      "lines": [
+        410,
+        433
+      ],
+      "finding": "The caller bridge assumes the actual cleaned-family RestrictedMediumTarget, uses its constants at real A>0, and combines the paid deletion with C+1 and max(x1,x2). One threshold precedes the family index. It does not assert the missing cleaned-family target."
+    },
+    {
+      "lines": [
+        436,
+        448
+      ],
+      "finding": "For the actual cleaned atom, the old quadratic union exception is identically zero at every real Y, without admissibility or residue-nonzero hypotheses. If either signed beta index divides the unchanged residue, the corresponding actual cleaned beta coefficient is zero; the whole pair vanishes. If neither divides it, the original exception OR mask is false. The strict Y<gcd mask and original factor-pair coefficient are retained."
+    },
+    {
+      "lines": [
+        452,
+        465
+      ],
+      "finding": "The existing actual commonLargeBetaGCDW_polynomial_residue_largeGCD_bound is instantiated at d.cleanedBetaAtom using the already-proved inherited MediumAdmissible. Its C is still chosen before B,sigma,c0,d,Y, and all B dependence remains in the explicit logarithm exponent. U,V,scale,residue,full gamma/factor labels and smoothing are unchanged. The preceding zero theorem removes exactly the cleaned atom exception norm, yielding a genuine bound for the same cleaned large-beta-gcd W, without asserting any bound on the original beta exception. The imported endpoint RHS is only geometry/B/Y, so no double-clean mass identity is needed."
+    }
+  ],
+  "caller_and_quantifier_scope_unchanged": {
+    "subpower": "B,kappa,epsilon -> exists C>0 -> all sigma,c0,d -> c0>0 -> MediumAdmissible -> deleted mass bound",
+    "power": "B,sigma,kappa,c0 and sigma>0,c0>0 -> exists C>0 -> all d -> MediumAdmissible -> actual deletion bound",
+    "log_payment": "B,sigma,kappa,c0,A(real) and sigma>0,c0>0 -> exists x0>1 -> all d -> MediumAdmissible -> x0<=scale -> actual deletion bound",
+    "caller_bridge": "F,B,sigma,kappa,c0, sigma>0,c0>0, admissible family, cleaned-family target -> original-family target",
+    "no_new_analytic_supply_premise_in_deletion_estimates": true,
+    "cleaned_exception_zero": "all d,Y -> cleaned atom original union exception =0; no hypotheses",
+    "cleaned_large_beta_gcd": "kappa,epsilon>0 -> exists C>0 -> all B,sigma,c0,d -> MediumAdmissible -> all Y>0 -> bound for the same cleaned W with explicit B logarithm exponent"
+  },
+  "threshold_and_caller_claim": "Every theorem source header is byte-identical, including fixed B,kappa,sigma,c0 constants, sigma>0,c0>0, arbitrary real A, eventual x0 before atoms and actual RestrictedMediumTarget bridge. No analytic supply premise or weakened threshold added.",
+  "imports": {
+    "direct": [
+      "ImbalancedChen.Part3ActualLargeGCDBetaMass"
+    ],
+    "new_foreign_direct_roots": [],
+    "limit": "Source direct roots only; no full graph census or object graph."
+  },
+  "not_supplied": [
+    "No estimate of the original-beta quadratic commonLargeBetaGCDException is asserted; it is zero only on the cleaned atom.",
+    "No proof of the cleaned-family RestrictedMediumTarget or RestrictedMediumObligation.",
+    "No payment of the remaining reciprocal-phase, other-gcd, zero-mode or primitive-center analytic obligations."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "heavy_runtime_invoked": false,
+    "object_content_examined": false,
+    "compiled_type_export_performed": false,
+    "axiom_audit_performed": false,
+    "acceptance_mutated": false,
+    "mathematical_source_modified_by_reviewer": false,
+    "claim": "SOURCE_ONLY actual-diagnostic proof rebind. No object, elaborated type, axiom, kernel, linter or build acceptance."
+  }
+}

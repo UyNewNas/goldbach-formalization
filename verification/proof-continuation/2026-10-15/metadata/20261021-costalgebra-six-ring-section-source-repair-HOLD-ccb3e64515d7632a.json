@@ -1,0 +1,258 @@
+{
+  "status": "SOURCE_ONLY_MECHANICAL_STRICT_DIAGNOSTIC_REPAIR_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T10:06:50.839072+00:00",
+  "target": "ImbalancedChen.Part3NonresonantManuscriptCostAlgebra",
+  "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3NonresonantManuscriptCostAlgebra.lean",
+  "backup": {
+    "path": "source-reviews/drafts/20261021-costalgebra8bff-original146-before-six-ring-and-section-repair.lean",
+    "sha256": "8bff5342036282f3308de59159f21c27a6ea07eb6bd9e20344a6e5d7b1c3a341",
+    "bytes": 6154
+  },
+  "original_source": {
+    "sha256": "8bff5342036282f3308de59159f21c27a6ea07eb6bd9e20344a6e5d7b1c3a341",
+    "bytes": 6154,
+    "LF": 146,
+    "full_source": "import Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\n\n/-!\n# Finite completed-box manuscript cost algebra\n\nSOURCE-ONLY CANDIDATE; HOLD. No compiler, checker, or build was run for this file.\n\nSource binding: `.lake/proof-continuation/source-reviews/\n20261021-manuscript-cost-gap-audit-HOLD.json`, SHA256\ne0f6d0c61280b3b8937fa2fe0479d2efc7381fc6e763c140cfb3c53d88d37f0b.\nIts bound Appendix A is `../goldbach-research/\ndistribution-medium-completion-20261010.txt`, SHA256\n93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7.\nLines 323--333 specify P and the completed-box resonance; lines 335--347\nretain F in the squared coefficient norm; lines 382--400 specify the spectral\npolynomial and its substitution. The audit states the resulting finite cost\nlemma explicitly. This file proves only that scalar algebra.\n\nHere x = U*V, F = U/Q, B = U*R, C = U*R*S, Z = S^2,\nH = Q*R^2*S^2/V and Y = F*H*S. The prefactor is represented by its\nexact squared normalization U^2/(Q^2*R^2*S^3). Thus the resonance theorem\nis the squared version of P*sqrt(Diag) = (U^2/Q)*sqrt(D0).\nThe spectral theorem retains the actual real powers in all four monomials.\n\nNo assertion here supplies a coefficient norm, spectral estimate, supported\nCauchy inequality, general-D packet bridge, ceil-frequency comparison, or\nanalytic kernel. In particular this file does not connect to hLower/hUpper\nor certify the full manuscript theorem. Fourth roots and analytic losses\nare outside this candidate.\n-/\n\nnamespace ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n\nnoncomputable section\n\ndef prefactorSq (U Q R S : \u211d) : \u211d :=\n  U ^ 2 / (Q ^ 2 * R ^ 2 * S ^ 3)\n\ndef normalizer (U R S : \u211d) : \u211d := U ^ 4 * R ^ 4 * S ^ 6\n\ndef D0 (U V R S : \u211d) : \u211d := U ^ 2 * R ^ 2 * S / (U * V)\n\ndef D1 (U V Q R S a \u03b8 : \u211d) : \u211d :=\n  a ^ \u03b8 * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef D2 (U V Q R S \u03b8 : \u211d) : \u211d :=\n  (U * R / S) ^ (2 * \u03b8) * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef zeroModeCost (V Q R S : \u211d) : \u211d := Q * R ^ 4 * S ^ 5 / V ^ 3\n\ndef diagonalCost (U V Q R S : \u211d) : \u211d :=\n  (Q * R ^ 2 * S ^ 2 / V) * S * (U * R) * (U / Q) * (U * R * S)\n\ndef spectralCost (U V Q R S a \u03b8 : \u211d) : \u211d :=\n  let H := Q * R ^ 2 * S ^ 2 / V\n  let F := U / Q\n  let B := U * R\n  let C := U * R * S\n  let Z := S ^ 2\n  let Y := F * H * S\n  (a ^ \u03b8 * (C * B * Z + a * Y) * Z +\n    C ^ (1 + 2 * \u03b8) * B * Z ^ ((2 : \u211d) - 2 * \u03b8) +\n    B ^ 2 * Y * Z) * (H * S) ^ 2 * F\n\n/-- Exact squared resonance normalization, with the completed F = U/Q count. -/\ntheorem completed_diagonal_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    prefactorSq U Q R S * diagonalCost U V Q R S =\n      (U ^ 2 / Q) ^ 2 * D0 U V R S := by\n  unfold prefactorSq diagonalCost D0\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- P^4/(U^2/Q)^4 is the reciprocal spectral normalizer. -/\ntheorem prefactor_fourth_normalization\n    {U Q R S : \u211d} (hU : 0 < U) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n      1 / normalizer U R S := by\n  unfold prefactorSq normalizer\n  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- An exact real-power rewrite of the source's exceptional monomial. -/\ntheorem spectral_second_monomial\n    {C Z : \u211d} (hC : 0 < C) (hZ : 0 < Z) (B \u03b8 : \u211d) :\n    C ^ (1 + 2 * \u03b8) * B * Z ^ ((2 : \u211d) - 2 * \u03b8) =\n      C * B * Z ^ 2 * (C / Z) ^ (2 * \u03b8) := by\n  rw [Real.rpow_add hC 1 (2 * \u03b8), Real.rpow_sub hZ 2 (2 * \u03b8),\n    Real.rpow_one, Real.rpow_two, Real.div_rpow hC.le hZ.le (2 * \u03b8)]\n  field_simp [(Real.rpow_pos_of_pos hZ (2 * \u03b8)).ne'] <;> ring\n\n/-- All four source monomials are retained: D1, (a/x)D1, D2 and the zero mode. -/\ntheorem completed_spectral_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (a \u03b8 : \u211d) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S =\n      (1 + a / (U * V)) * D1 U V Q R S a \u03b8 +\n        D2 U V Q R S \u03b8 + zeroModeCost V Q R S := by\n  unfold spectralCost\n  dsimp only\n  rw [spectral_second_monomial (by positivity) (by positivity)]\n  have hratio : U * R * S / S ^ 2 = U * R / S := by\n    field_simp [hS.ne'] <;> ring\n  rw [hratio]\n  unfold normalizer D1 D2 zeroModeCost\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n\n/-- The original geometry and a^theta >= 1 pay the zero Poisson mode. -/\ntheorem zero_mode_le_D1\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    zeroModeCost V Q R S \u2264 D1 U V Q R S a \u03b8 := by\n  let base := U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n  have hbase : 0 \u2264 base := by dsimp [base]; positivity\n  have hratio : (U * R) ^ 2 / (U * V) \u2264 1 :=\n    (div_le_one (by positivity)).mpr hgeom\n  calc\n    zeroModeCost V Q R S = (U * R) ^ 2 / (U * V) * base := by\n      dsimp [zeroModeCost, base]\n      field_simp [hU.ne', hV.ne'] <;> ring\n    _ \u2264 1 * base := mul_le_mul_of_nonneg_right hratio hbase\n    _ \u2264 a ^ \u03b8 * base :=\n      mul_le_mul_of_nonneg_right (Real.one_le_rpow ha h\u03b8) hbase\n    _ = D1 U V Q R S a \u03b8 := by dsimp [base, D1]; ring\n\n/-- The finite normalized polynomial bound before taking fourth roots. -/\ntheorem completed_spectral_upper_bound\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S \u2264\n      2 * ((1 + a / (U * V)) * D1 U V Q R S a \u03b8 + D2 U V Q R S \u03b8) := by\n  rw [completed_spectral_normalization hU hV hQ hR hS]\n  have hzero := zero_mode_le_D1 hU hV hQ hR hS ha h\u03b8 hgeom\n  have ha0 : 0 \u2264 a := by linarith\n  have hD1 : 0 \u2264 D1 U V Q R S a \u03b8 := by unfold D1; positivity\n  have hD2 : 0 \u2264 D2 U V Q R S \u03b8 := by unfold D2; positivity\n  have hproduct : 0 \u2264 a / (U * V) * D1 U V Q R S a \u03b8 := by positivity\n  nlinarith\n\nend ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n"
+  },
+  "repaired_source": {
+    "sha256": "dc943c841bc0d570c9a90d5009d2e05b95ee288209f9a60cb6490142849c5cd2",
+    "bytes": 6104,
+    "LF": 147,
+    "full_source": "import Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\n\n/-!\n# Finite completed-box manuscript cost algebra\n\nSOURCE-ONLY CANDIDATE; HOLD. No compiler, checker, or build was run for this file.\n\nSource binding: `.lake/proof-continuation/source-reviews/\n20261021-manuscript-cost-gap-audit-HOLD.json`, SHA256\ne0f6d0c61280b3b8937fa2fe0479d2efc7381fc6e763c140cfb3c53d88d37f0b.\nIts bound Appendix A is `../goldbach-research/\ndistribution-medium-completion-20261010.txt`, SHA256\n93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7.\nLines 323--333 specify P and the completed-box resonance; lines 335--347\nretain F in the squared coefficient norm; lines 382--400 specify the spectral\npolynomial and its substitution. The audit states the resulting finite cost\nlemma explicitly. This file proves only that scalar algebra.\n\nHere x = U*V, F = U/Q, B = U*R, C = U*R*S, Z = S^2,\nH = Q*R^2*S^2/V and Y = F*H*S. The prefactor is represented by its\nexact squared normalization U^2/(Q^2*R^2*S^3). Thus the resonance theorem\nis the squared version of P*sqrt(Diag) = (U^2/Q)*sqrt(D0).\nThe spectral theorem retains the actual real powers in all four monomials.\n\nNo assertion here supplies a coefficient norm, spectral estimate, supported\nCauchy inequality, general-D packet bridge, ceil-frequency comparison, or\nanalytic kernel. In particular this file does not connect to hLower/hUpper\nor certify the full manuscript theorem. Fourth roots and analytic losses\nare outside this candidate.\n-/\n\nnamespace ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n\nnoncomputable section\n\ndef prefactorSq (U Q R S : \u211d) : \u211d :=\n  U ^ 2 / (Q ^ 2 * R ^ 2 * S ^ 3)\n\ndef normalizer (U R S : \u211d) : \u211d := U ^ 4 * R ^ 4 * S ^ 6\n\ndef D0 (U V R S : \u211d) : \u211d := U ^ 2 * R ^ 2 * S / (U * V)\n\ndef D1 (U V Q R S a \u03b8 : \u211d) : \u211d :=\n  a ^ \u03b8 * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef D2 (U V Q R S \u03b8 : \u211d) : \u211d :=\n  (U * R / S) ^ (2 * \u03b8) * U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n\ndef zeroModeCost (V Q R S : \u211d) : \u211d := Q * R ^ 4 * S ^ 5 / V ^ 3\n\ndef diagonalCost (U V Q R S : \u211d) : \u211d :=\n  (Q * R ^ 2 * S ^ 2 / V) * S * (U * R) * (U / Q) * (U * R * S)\n\ndef spectralCost (U V Q R S a \u03b8 : \u211d) : \u211d :=\n  let H := Q * R ^ 2 * S ^ 2 / V\n  let F := U / Q\n  let B := U * R\n  let C := U * R * S\n  let Z := S ^ 2\n  let Y := F * H * S\n  (a ^ \u03b8 * (C * B * Z + a * Y) * Z +\n    C ^ (1 + 2 * \u03b8) * B * Z ^ ((2 : \u211d) - 2 * \u03b8) +\n    B ^ 2 * Y * Z) * (H * S) ^ 2 * F\n\n/-- Exact squared resonance normalization, with the completed F = U/Q count. -/\ntheorem completed_diagonal_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    prefactorSq U Q R S * diagonalCost U V Q R S =\n      (U ^ 2 / Q) ^ 2 * D0 U V R S := by\n  unfold prefactorSq diagonalCost D0\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']\n\n/-- P^4/(U^2/Q)^4 is the reciprocal spectral normalizer. -/\ntheorem prefactor_fourth_normalization\n    {U Q R S : \u211d} (hU : 0 < U) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n      1 / normalizer U R S := by\n  unfold prefactorSq normalizer\n  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne']\n\n/-- An exact real-power rewrite of the source's exceptional monomial. -/\ntheorem spectral_second_monomial\n    {C Z : \u211d} (hC : 0 < C) (hZ : 0 < Z) (B \u03b8 : \u211d) :\n    C ^ (1 + 2 * \u03b8) * B * Z ^ ((2 : \u211d) - 2 * \u03b8) =\n      C * B * Z ^ 2 * (C / Z) ^ (2 * \u03b8) := by\n  rw [Real.rpow_add hC 1 (2 * \u03b8), Real.rpow_sub hZ 2 (2 * \u03b8),\n    Real.rpow_one, Real.rpow_two, Real.div_rpow hC.le hZ.le (2 * \u03b8)]\n  field_simp [(Real.rpow_pos_of_pos hZ (2 * \u03b8)).ne']\n\n/-- All four source monomials are retained: D1, (a/x)D1, D2 and the zero mode. -/\ntheorem completed_spectral_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (a \u03b8 : \u211d) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S =\n      (1 + a / (U * V)) * D1 U V Q R S a \u03b8 +\n        D2 U V Q R S \u03b8 + zeroModeCost V Q R S := by\n  unfold spectralCost\n  dsimp only\n  rw [spectral_second_monomial (by positivity) (by positivity)]\n  have hratio : U * R * S / S ^ 2 = U * R / S := by\n    field_simp [hS.ne']\n  rw [hratio]\n  unfold normalizer D1 D2 zeroModeCost\n  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']\n\n/-- The original geometry and a^theta >= 1 pay the zero Poisson mode. -/\ntheorem zero_mode_le_D1\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    zeroModeCost V Q R S \u2264 D1 U V Q R S a \u03b8 := by\n  let base := U * Q * R ^ 2 * S ^ 5 / (U * V) ^ 2\n  have hbase : 0 \u2264 base := by dsimp [base]; positivity\n  have hratio : (U * R) ^ 2 / (U * V) \u2264 1 :=\n    (div_le_one (by positivity)).mpr hgeom\n  calc\n    zeroModeCost V Q R S = (U * R) ^ 2 / (U * V) * base := by\n      dsimp [zeroModeCost, base]\n      field_simp [hU.ne', hV.ne']\n    _ \u2264 1 * base := mul_le_mul_of_nonneg_right hratio hbase\n    _ \u2264 a ^ \u03b8 * base :=\n      mul_le_mul_of_nonneg_right (Real.one_le_rpow ha h\u03b8) hbase\n    _ = D1 U V Q R S a \u03b8 := by dsimp [base, D1]; ring\n\n/-- The finite normalized polynomial bound before taking fourth roots. -/\ntheorem completed_spectral_upper_bound\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S \u2264\n      2 * ((1 + a / (U * V)) * D1 U V Q R S a \u03b8 + D2 U V Q R S \u03b8) := by\n  rw [completed_spectral_normalization hU hV hQ hR hS]\n  have hzero := zero_mode_le_D1 hU hV hQ hR hS ha h\u03b8 hgeom\n  have ha0 : 0 \u2264 a := by linarith\n  have hD1 : 0 \u2264 D1 U V Q R S a \u03b8 := by unfold D1; positivity\n  have hD2 : 0 \u2264 D2 U V Q R S \u03b8 := by unfold D2; positivity\n  have hproduct : 0 \u2264 a / (U * V) * D1 U V Q R S a \u03b8 := by positivity\n  nlinarith\n\nend\nend ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n"
+  },
+  "original_failed_evidence": {
+    "operator_CP_path": "source-reviews/20261021-costalgebra8bff-v3-soleheavy-operator-terminal-HOLD.json",
+    "operator_CP_sha256": "549431b625a2a4dc21708c37439f11b14b53453a69bc3c6606d447b72b72f202",
+    "receipt_path": "runs/20261021T100327076654Z-ImbalancedChen.Part3NonresonantManuscriptCostAlgebra/receipt.json",
+    "receipt_sha256": "1a63f66bdfa045a90a49749b9d3129410c07ad384e525f5319ea3b40737c774c",
+    "strict_log_sha256": "d41e3aee1c388b815ae538ac8eb2792f274c745f4189c3619176e102afbe71b5",
+    "actual_diagnostics": [
+      {
+        "line": 76,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 85,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 94,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 107,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 110,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 125,
+        "error": "'ring' tactic does nothing under warningAsError"
+      },
+      {
+        "line": 146,
+        "error": "Named namespace end met unclosed unnamed noncomputable section"
+      }
+    ]
+  },
+  "edits": [
+    {
+      "old_start": 2953,
+      "old_end": 2962,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 2953,
+      "new_end": 2953
+    },
+    {
+      "old_start": 3301,
+      "old_end": 3310,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 3292,
+      "new_end": 3292
+    },
+    {
+      "old_start": 3763,
+      "old_end": 3772,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 3745,
+      "new_end": 3745
+    },
+    {
+      "old_start": 4329,
+      "old_end": 4338,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 4302,
+      "new_end": 4302
+    },
+    {
+      "old_start": 4445,
+      "old_end": 4454,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 4409,
+      "new_end": 4409
+    },
+    {
+      "old_start": 5104,
+      "old_end": 5113,
+      "old_hex": "203c3b3e2072696e67",
+      "new_hex": "",
+      "new_start": 5059,
+      "new_end": 5059
+    },
+    {
+      "old_start": 6097,
+      "old_end": 6097,
+      "old_hex": "",
+      "new_hex": "656e640a",
+      "new_start": 6043,
+      "new_end": 6047
+    }
+  ],
+  "whole_raw_forward_reverse_exact": true,
+  "outside_seven_exact_edits_byte_identical": true,
+  "full_raw_diff": "--- original146.lean\n+++ repaired147.lean\n@@ -73,7 +73,7 @@\n     prefactorSq U Q R S * diagonalCost U V Q R S =\n       (U ^ 2 / Q) ^ 2 * D0 U V R S := by\n   unfold prefactorSq diagonalCost D0\n-  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n+  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']\n \n /-- P^4/(U^2/Q)^4 is the reciprocal spectral normalizer. -/\n theorem prefactor_fourth_normalization\n@@ -82,7 +82,7 @@\n     (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n       1 / normalizer U R S := by\n   unfold prefactorSq normalizer\n-  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n+  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne']\n \n /-- An exact real-power rewrite of the source's exceptional monomial. -/\n theorem spectral_second_monomial\n@@ -91,7 +91,7 @@\n       C * B * Z ^ 2 * (C / Z) ^ (2 * \u03b8) := by\n   rw [Real.rpow_add hC 1 (2 * \u03b8), Real.rpow_sub hZ 2 (2 * \u03b8),\n     Real.rpow_one, Real.rpow_two, Real.div_rpow hC.le hZ.le (2 * \u03b8)]\n-  field_simp [(Real.rpow_pos_of_pos hZ (2 * \u03b8)).ne'] <;> ring\n+  field_simp [(Real.rpow_pos_of_pos hZ (2 * \u03b8)).ne']\n \n /-- All four source monomials are retained: D1, (a/x)D1, D2 and the zero mode. -/\n theorem completed_spectral_normalization\n@@ -104,10 +104,10 @@\n   dsimp only\n   rw [spectral_second_monomial (by positivity) (by positivity)]\n   have hratio : U * R * S / S ^ 2 = U * R / S := by\n-    field_simp [hS.ne'] <;> ring\n+    field_simp [hS.ne']\n   rw [hratio]\n   unfold normalizer D1 D2 zeroModeCost\n-  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring\n+  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']\n \n /-- The original geometry and a^theta >= 1 pay the zero Poisson mode. -/\n theorem zero_mode_le_D1\n@@ -122,7 +122,7 @@\n   calc\n     zeroModeCost V Q R S = (U * R) ^ 2 / (U * V) * base := by\n       dsimp [zeroModeCost, base]\n-      field_simp [hU.ne', hV.ne'] <;> ring\n+      field_simp [hU.ne', hV.ne']\n     _ \u2264 1 * base := mul_le_mul_of_nonneg_right hratio hbase\n     _ \u2264 a ^ \u03b8 * base :=\n       mul_le_mul_of_nonneg_right (Real.one_le_rpow ha h\u03b8) hbase\n@@ -143,4 +143,5 @@\n   have hproduct : 0 \u2264 a / (U * V) * D1 U V Q R S a \u03b8 := by positivity\n   nlinarith\n \n+end\n end ImbalancedChen.Part3NonresonantManuscriptCostAlgebra\n",
+  "all14_complete_source_headers": [
+    {
+      "kind": "def",
+      "name": "prefactorSq",
+      "first_line": 40,
+      "header_and_type_as_written": "def prefactorSq (U Q R S : \u211d) : \u211d ",
+      "header_utf8_sha256": "49cb29913f1e51f72993a16170806a5a43154d11144b0433192b4711024289a8",
+      "after_first_line": 40,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "normalizer",
+      "first_line": 43,
+      "header_and_type_as_written": "def normalizer (U R S : \u211d) : \u211d ",
+      "header_utf8_sha256": "59dd1d51bc284818d50e899fd6034f5335542e42d975fc642edec6bd1c8b9554",
+      "after_first_line": 43,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "D0",
+      "first_line": 45,
+      "header_and_type_as_written": "def D0 (U V R S : \u211d) : \u211d ",
+      "header_utf8_sha256": "c00d7b2f017a7a7f0e38724b6aa9728ee7c4c61b2d060ff3eab7ef765d8e475a",
+      "after_first_line": 45,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "D1",
+      "first_line": 47,
+      "header_and_type_as_written": "def D1 (U V Q R S a \u03b8 : \u211d) : \u211d ",
+      "header_utf8_sha256": "709a98793174ee696c4e0b703d69f72cfffbc237e6baa0606f416d1f43661e29",
+      "after_first_line": 47,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "D2",
+      "first_line": 50,
+      "header_and_type_as_written": "def D2 (U V Q R S \u03b8 : \u211d) : \u211d ",
+      "header_utf8_sha256": "3745ae47dfc74e5682ddc292a4a70c589b6fb1a874263f7bd77601b6709fea2b",
+      "after_first_line": 50,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "zeroModeCost",
+      "first_line": 53,
+      "header_and_type_as_written": "def zeroModeCost (V Q R S : \u211d) : \u211d ",
+      "header_utf8_sha256": "bb38fd1930a1280c059a5d62e9d5a7295743be46396cfed142a7bcafec8ce16b",
+      "after_first_line": 53,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "diagonalCost",
+      "first_line": 55,
+      "header_and_type_as_written": "def diagonalCost (U V Q R S : \u211d) : \u211d ",
+      "header_utf8_sha256": "758d468fad23e62500b04072cbef6221e18fc10556c52a3f191b7ce6d7c73912",
+      "after_first_line": 55,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "spectralCost",
+      "first_line": 58,
+      "header_and_type_as_written": "def spectralCost (U V Q R S a \u03b8 : \u211d) : \u211d ",
+      "header_utf8_sha256": "ff077bd18973922499fd277100a0410631960956e43b3dd765a97dc2f9da68e4",
+      "after_first_line": 58,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "completed_diagonal_normalization",
+      "first_line": 70,
+      "header_and_type_as_written": "theorem completed_diagonal_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    prefactorSq U Q R S * diagonalCost U V Q R S =\n      (U ^ 2 / Q) ^ 2 * D0 U V R S ",
+      "header_utf8_sha256": "6db78d1dfda5607fe43debd54bc81cd599b2531f467d3b0eafcc8fb8589dc99b",
+      "after_first_line": 70,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "prefactor_fourth_normalization",
+      "first_line": 79,
+      "header_and_type_as_written": "theorem prefactor_fourth_normalization\n    {U Q R S : \u211d} (hU : 0 < U) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) :\n    (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =\n      1 / normalizer U R S ",
+      "header_utf8_sha256": "3d83b98cdf0a2ec6c87d7cea31b67b44d04639b29848e814f5690bb299c3bded",
+      "after_first_line": 79,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "spectral_second_monomial",
+      "first_line": 88,
+      "header_and_type_as_written": "theorem spectral_second_monomial\n    {C Z : \u211d} (hC : 0 < C) (hZ : 0 < Z) (B \u03b8 : \u211d) :\n    C ^ (1 + 2 * \u03b8) * B * Z ^ ((2 : \u211d) - 2 * \u03b8) =\n      C * B * Z ^ 2 * (C / Z) ^ (2 * \u03b8) ",
+      "header_utf8_sha256": "d5105b9afffd36d68d6dda8e4c8f1a1371a18a5bd81e79e4c4c535709f730324",
+      "after_first_line": 88,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "completed_spectral_normalization",
+      "first_line": 97,
+      "header_and_type_as_written": "theorem completed_spectral_normalization\n    {U V Q R S : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (a \u03b8 : \u211d) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S =\n      (1 + a / (U * V)) * D1 U V Q R S a \u03b8 +\n        D2 U V Q R S \u03b8 + zeroModeCost V Q R S ",
+      "header_utf8_sha256": "cdcb35f512a8c3dc5260ab2b3a0b08f4b5dbcc5e73afd3f1c76bb605f808dc91",
+      "after_first_line": 97,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "zero_mode_le_D1",
+      "first_line": 113,
+      "header_and_type_as_written": "theorem zero_mode_le_D1\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    zeroModeCost V Q R S \u2264 D1 U V Q R S a \u03b8 ",
+      "header_utf8_sha256": "6b649ab7d759ebb7f79d9f51e1623d223bab3b9447f88683712ee14d6be7de10",
+      "after_first_line": 113,
+      "before_after_header_bytes_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "completed_spectral_upper_bound",
+      "first_line": 132,
+      "header_and_type_as_written": "theorem completed_spectral_upper_bound\n    {U V Q R S a \u03b8 : \u211d} (hU : 0 < U) (hV : 0 < V) (hQ : 0 < Q)\n    (hR : 0 < R) (hS : 0 < S) (ha : 1 \u2264 a) (h\u03b8 : 0 \u2264 \u03b8)\n    (hgeom : (U * R) ^ 2 \u2264 U * V) :\n    spectralCost U V Q R S a \u03b8 / normalizer U R S \u2264\n      2 * ((1 + a / (U * V)) * D1 U V Q R S a \u03b8 + D2 U V Q R S \u03b8) ",
+      "header_utf8_sha256": "7a2b01900bf2d25d8894b2faef2839fc204cdeb28d78027c899c4d8651fc33b3",
+      "after_first_line": 132,
+      "before_after_header_bytes_identical": true
+    }
+  ],
+  "all14_headers_types_imports_hypotheses_unchanged": true,
+  "final_dsimp_base_D1_ring_retained": true,
+  "original_comment_text_preserved_with_historical_failure_explained_here": true,
+  "new_classifier_metadata_proper_prepared": false,
+  "compiler_checker_run": false,
+  "frozen_helpers_pins_Git_modified": false,
+  "new_generated_count": null,
+  "target_unowned": true,
+  "final_state": "HOLD"
+}

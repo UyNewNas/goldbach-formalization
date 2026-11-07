@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/signed_density_oct18",
+  "status": "READONLY_COMPLETE_ZERO_COVARIANCE_ASSEMBLY_PROPOSAL_NO_NEW_LEAN_NO_PARENT_ACCEPTANCE_ASSUMED",
+  "suggested_one_module": "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment",
+  "sole_three_imports": [
+    "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+    "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+    "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero"
+  ],
+  "parent_source_snapshots": {
+    "Part3SharedFirstFactorLowConductorAggregate": {
+      "sha256": "3ad7d6d94141db6d3e7c52aeefbff3fc96b9ea59eadd0b69df16fd57304e8d63",
+      "lines": 744,
+      "status": "candidate source snapshot, not acceptance; Small source authoring in progress and final definition/public endpoint must be rebound"
+    },
+    "Part3SharedFirstFactorSmallResidualHighConductorZero": {
+      "sha256": "7bda5ed146d6f8089a32c6ebf9b959f47f0ca6f1d875e9ceebfec10577ce288e",
+      "lines": 860,
+      "status": "candidate source snapshot, not acceptance; Small source authoring in progress and final definition/public endpoint must be rebound"
+    },
+    "Part3SharedFirstFactorLargeResidualZero": {
+      "sha256": "b7cf7307dc299bd5117e8f16d8b249f65b67aa63001bd31f7f3815328b16ef69",
+      "lines": 1023,
+      "status": "candidate source snapshot, not acceptance; Small source authoring in progress and final definition/public endpoint must be rebound"
+    }
+  },
+  "complete_proposed_public_endpoint": "theorem uniformAuxiliarySW_sharedFirstFactorZeroCovariance\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ((∑ m ∈ (F i).betaCarrier, ‖(F i).beta m‖ ^ 2) *\n            (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2)) *\n            ‖∑ p ∈ (F i).primitiveFirstFactorCarrier,\n              ((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p)‖ ≤\n              C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A",
+  "complete_finite_partition_type": "theorem MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)) =\n      d.sharedFirstFactorLowConductorZero R +\n        d.sharedFirstFactorSmallResidualHighConductorZero Y R +\n          d.sharedFirstFactorLargeResidualHighConductorZero Y R",
+  "endpoint_quantifier_audit": {
+    "fixed_before_output_A": "family F, B, C0, sigma,kappa,c0; genuine original admissibility for every i; original UniformAuxiliarySW F C0. Domain includes original c0>0 and 0<=kappa<=sigma/100 and 0<sigma<1/100, though zero proof needs only the sigma gates.",
+    "fixed_after_A_before_i": "eta, Y exponent, H0 cutoff exponent, output/parent constants, SW precision budgets, scalar common threshold x0.",
+    "allowed_after_i": "X=(F i).scale, Y_i=X^(sigma/4), R_i=(log X)^H0, actual interval/residue and exact physical labels already belonging to F i.",
+    "does_not_require_scale_tendsto_for_family": "Real atTop eventual power/log statements are converted to scalar thresholds and evaluated at any X>=x0. No convergence of i or F.scale is a new premise.",
+    "forbidden_extra_hypotheses": [
+      "No hSupplier, hSignedMean, hRawZeroBound, hPhysicalDensity or hLS premise.",
+      "No pointwise/per-atom constant or threshold before only that atom.",
+      "No one-bounded assumption for collected two-factor G; parent finite modules pay true divisor multiplicities."
+    ]
+  },
+  "actual_parent_API_types": {
+    "Low_complete_current_public_type": "theorem uniformAuxiliarySW_sharedFirstFactorLowConductorZero\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A L : ℝ, 0 < A → 0 ≤ L →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).sharedFirstFactorLowConductorZero\n              ((Real.log (F i).scale) ^ L)‖ ≤\n            C * (F i).V * (F i).U ^ 2 /\n              ((F i).Q1 * (Real.log (F i).scale) ^ A)",
+    "Small_future_API_complete_type_from_current_reviewed_proposal": "theorem actual_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ (20 : ℕ) *\n              (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) +\n                d.Q1 ^ eta * Y ^ (1 + eta) * d.U)",
+    "Small_definition_must_be_literal_current_reviewed_proposal": "def MediumAtom.sharedFirstFactorSmallResidualHighConductorZero (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) ≤ Y then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi => R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0",
+    "Small_proposal_sha256": "d27dbe02b9ddff26b0bd92ea89d8fdfad5c2ff3f0189ea241a4544c92e759717",
+    "Large_complete_current_public_type": "theorem actual_outside_mul_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n                (1 / Y + d.Q1 / d.U)",
+    "Shared_dictionary": "MediumAtom.q1SliceZero_sub_primitive_eq_characters, actual Char3b056 source346-365, is the exact unnormalized V*cutoffMass/[p*lcm(v,w)*phi(p*gcd(v,w))] identity needed.",
+    "outside": "MediumAtom.sharedFirstFactor_outside_le bounds actual betaL2*primitive gamma1L2 by 4 V Q1 (1+log(2V))^eB.",
+    "small_parent_not_finished": "At first review Small source snapshot was601lines and had no public actual_smallResidualHighConductorZero_bound yet. Later snapshot in this report is informational. The final complete type/primitive must be independently reread and rebound after author freezes it."
+  },
+  "exact_partition_before_norm": {
+    "level": "At every original p,u,v use C=(univ:Finset DirichletCharacter C (p*gcd(v,w))).erase1, unchanged auxiliary v/D,w/D and exact physical prefactor.",
+    "character_partition": "Partition C by (cond chi : real)<=R versus R<(cond chi : real). Equality at R belongs to Low. Finset.sum_filter_add_sum_filter_not and not_le give an exact finite complex identity.",
+    "residual_partition": "In high part split D<=Y versus Y<D. Equality at Y belongs to Small; large uses strict Y<D. Low covers ALL D. No overlap or omitted low-large-D region.",
+    "multiplication": "Distribute the same complex prefactor and gamma2/gamma3/star product through the exact character sum identity, then sum original v,u,p and identify the three literal objects. Only AFTER the full identity use norm_add_le twice.",
+    "normalization": "All three public definitions use the SAME unnormalized V*mass/[p*L*phi(pD)] weight as q1SliceZero_sub_primitive_eq_characters. No phi(pD) factorization, p-coprime-D or outside modulus change is needed. If using parent weighted-characters alternative, sharedCharacterWeight_normalization gives exact z/[pL phi(pD)] = z/[p^2 D L]*(pD/phi(pD)); it must be rewritten algebraically, not treated as an estimate."
+  },
+  "explicit_parameter_and_cost_ledger": {
+    "notation": "X=U*V; t=log X; eB=((2^B)^2-1):Nat fixed; take X sufficiently large so t>=1.",
+    "eta": "eta=sigma/16, hence 0<eta<1 from0<sigma<1/100.",
+    "Y": "Y=X^(sigma/4)>=1 for X>=1.",
+    "H0": "H0=(A+(eB:Real)+21)/(1-eta)>0. Thus H0*(1-eta)=A+eB+21 exactly. This is an ENERGY log budget A; if a later signed-error square-root requires2A, call this theorem at2A rather than silently identifying the exponents.",
+    "R": "R=t^H0>=1. The real R is passed directly to the future Small API, which itself must prove the exact floor transport and r>=R/2; assembly must not pretend floorR=R.",
+    "Low": "Invoke uniformAuxiliarySW_sharedFirstFactorLowConductorZero at Araw=A+eB+1>0 and L=H0>=0. Its raw norm<=CLow*V*U^2/(Q1*t^Araw). Multiplying by actual outside<=4VQ1*(3t)^eB gives <=4CLow*3^eB*X^2/t^(A+1)<=constant*X^2/t^A. C0 is paid inside Low via the genuine UniformAuxiliarySW, not by dropping tau(kdelta).",
+    "Small": "After its raw endpoint and outside multiplication, exact second relative term is (Q1Y/U)*(Q1Y)^eta, first R^(-(1-eta)), times fixed log^(eB+20). Q1/U<X^-sigma implies Q1Y/U<X^(-3sigma/4); U<=X gives Q1Y<=X^(1-3sigma/4)<=X. Thus second<=X^(-11sigma/16).",
+    "Small_first": "R^(1-eta)=(t^H0)^(1-eta)=t^(A+eB+21), using positive real rpow multiplication. Combined log exponent eB+20 leaves t^(-A-1), enough for t^-A. No X^epsilon loss introduced.",
+    "Large": "Use actual_outside_mul_largeResidualHighConductorZero_bound at same Y,R. Relative1/Y+Q1/U<=X^(-sigma/4)+X^-sigma<=2X^(-sigma/4). Its log exponent eB+8 is <=eB+20 for t>=1.",
+    "uniform_log_envelopes": "From original sigma-positive MediumAdmissible derive U,V,Q1,Q2,Q3<=X. Consequently 1+log(2V)<=3t, 1+log(4Q2Q3)<=5t, and1+log(32UQ1Q2Q3)<=10t for t>=1 (log2<=1). These are fixed numeric constants and preserve all physical Q fields.",
+    "power_log_payment": "Use actual mathlib isLittleO_log_rpow_rpow_atTop (A+eB+20) (sigma/4>0); a positive sufficiently large scalar threshold gives t^(A+eB+20)<=X^(sigma/4). Then X^(-sigma/4)t^(eB+20)<=t^-A. Since11sigma/16>=sigma/4, this same threshold pays the Small second power term.",
+    "common_threshold_and_C": "After choosing H0, obtain Low constants/threshold. High finite C_eta and Large universal C already precede all atoms. Combine t>=1 threshold and genuine real power/log threshold with the Low threshold by maximum, then choose C as a positive sum of fixed three region constants. No threshold or C depends on i."
+  },
+  "actual_power_log_API": {
+    "source": "Mathlib/Analysis/SpecialFunctions/Pow/Asymptotics.lean:371",
+    "complete_type": "theorem isLittleO_log_rpow_rpow_atTop {s : ℝ} (r : ℝ) (hs : 0 < s) :\n    (fun x => Real.log x ^ r) =o[atTop] fun x => x ^ s",
+    "actual_source_read_range": [
+      371,
+      385
+    ],
+    "already_reachable": "Yes: existing parent closures reach PowerErrorBudget and High via PolynomialResidueDivisorBound; no new foreign import required.",
+    "local_new_proof_obligations": "A local finite geometry/log-envelope proof and a scalar eventual power/log lemma may be authored inside the ONE assembly module. Do not reference private Low.admissible_factor_scale_bounds or private Low.harmonic_envelope_log_bound by mangled names; prove the simple actual inequalities locally or use a genuinely public already-reachable equivalent."
+  },
+  "primitive_center_and_energy_boundary": {
+    "primitiveZeroMain_definition": "Original parent P0 is the exact coprime mass/totient-density quadratic main term, not literal smoothed V or U. Each slice uses P0(q1SliceAtom p), not P0(d) pulled outside.",
+    "remaining_shared_UV": "Shared centered identity still contains sum_p[(U_p-P0_p)-2(V_p-P0_p)] in addition to the raw-zero covariance and full signed nonzero Fourier remainder. The proposed endpoint pays ONLY sum_p(rawZero_p-P0_p).",
+    "existing_old_API_does_not_automatically_pay_shared_UV": "Part3TransposedZeroUVPayment.actual_betaL2_mul_zero_UV_log_payment and energy reduction concern original full independent-first-factor transposed atom with outside betaL2 only. Naively applying per slice, summing p and multiplying full primitive gamma1L2 can incur polynomial Q1 factors. Its arbitrary log saving alone cannot absorb such powers. A real shared-factor U/V aggregation/payment is separate work.",
+    "no_overclaim": "Even accepted zero assembly would NOT prove complete shared centered energy, nonzero-frequency bound, RestrictedMediumTarget or Theorem1.1."
+  },
+  "relative_project_DAG_scope": {
+    "kind": "frozen proper header parser bounded current parent project-source union, not cache or foreign closure replay",
+    "walker_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "existing_parent_project_nodes": 63,
+    "external_header_roots": 62,
+    "new_self_delta": 1,
+    "new_foreign_delta": 0,
+    "parser_findings": [],
+    "closure_module_names": [
+      "ImbalancedChen.ActualGridEnvelopes",
+      "ImbalancedChen.ActualSieveGate",
+      "ImbalancedChen.AsymptoticTransfer",
+      "ImbalancedChen.BadSourceLocalization",
+      "ImbalancedChen.BoundaryCellContainment",
+      "ImbalancedChen.BoundaryGlobalCaps",
+      "ImbalancedChen.BoundaryGridBudget",
+      "ImbalancedChen.CoprimeRecentering",
+      "ImbalancedChen.Counting",
+      "ImbalancedChen.CurrentMainTheorem",
+      "ImbalancedChen.CurrentNumericalTransfer",
+      "ImbalancedChen.CurvedRegionDiscrepancy",
+      "ImbalancedChen.FiniteSieveModel",
+      "ImbalancedChen.HalfProductGeometry",
+      "ImbalancedChen.HalfProductMassError",
+      "ImbalancedChen.HalfProductMassFibres",
+      "ImbalancedChen.HalfProductMassLimit",
+      "ImbalancedChen.HalfProductMassSplit",
+      "ImbalancedChen.HalfProductPanFinite",
+      "ImbalancedChen.HalfProductSource",
+      "ImbalancedChen.LogCutoffError",
+      "ImbalancedChen.MassLogIntegral",
+      "ImbalancedChen.MultiplicativeGridPartition",
+      "ImbalancedChen.Multiplicity",
+      "ImbalancedChen.NormalizationGrowth",
+      "ImbalancedChen.OrderedBad",
+      "ImbalancedChen.PanProductAggregateBudget",
+      "ImbalancedChen.PanProductGrid",
+      "ImbalancedChen.PanProductGridRanges",
+      "ImbalancedChen.PanProductLiuBridge",
+      "ImbalancedChen.PanProductResidueBudget",
+      "ImbalancedChen.PanProductStrips",
+      "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "ImbalancedChen.Part3CommonPoisson",
+      "ImbalancedChen.Part3CommonSmoothCutoff",
+      "ImbalancedChen.Part3ComplexCRTConsumer",
+      "ImbalancedChen.Part3ComplexDispersion",
+      "ImbalancedChen.Part3DistributionTargets",
+      "ImbalancedChen.Part3FactorFiberDivisor",
+      "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+      "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+      "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+      "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero",
+      "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+      "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+      "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+      "ImbalancedChen.Part3TransposedDispersion",
+      "ImbalancedChen.Part3TransposedZeroCovariance",
+      "ImbalancedChen.PowerErrorBudget",
+      "ImbalancedChen.PrimeRectanglePrefixes",
+      "ImbalancedChen.RationalPowers",
+      "ImbalancedChen.RealHalfProductMass",
+      "ImbalancedChen.RealHalfProductMassSplit",
+      "ImbalancedChen.RealHalfProductSource",
+      "ImbalancedChen.RectangleDiscrepancyAssembly",
+      "ImbalancedChen.ResidueSelectorBudget",
+      "ImbalancedChen.RestrictedResidueScale",
+      "ImbalancedChen.SelectedGridRanges",
+      "ImbalancedChen.SieveSourceCoprimality",
+      "ImbalancedChen.SingularSeries",
+      "ImbalancedChen.TotientReciprocalBudget",
+      "ImbalancedChen.UniformPrimeTail"
+    ]
+  },
+  "pending_gates": [
+    "Root must review this proposal before any new Lean source is authored.",
+    "Small future source must finish and its full public object/type prove the quoted endpoint without supplier assumptions. Its current candidate state is not a proved theorem.",
+    "Low and Large and Small parents must individually become true-owned and current exact dependency bindings/cache checked before assembly runtime gate.",
+    "Assembly needs full independent complete source/API review, strict serial compilation, stock kernel and complete declaration/type/axiom audit."
+  ],
+  "no_Lean_cache_pins_CI_runtime_or_owned_source_mutation": true,
+  "no_Lean_compiler_checker_or_new_agent_started": true
+}

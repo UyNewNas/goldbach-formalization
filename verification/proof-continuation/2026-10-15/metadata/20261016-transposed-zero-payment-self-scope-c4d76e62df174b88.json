@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:39:18.520681+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_SELF_REVIEW_ACTUAL_TRANSPOSED_ZERO_LOG_PAYMENT",
+  "candidate": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedZeroPayment.lean",
+    "sha256": "ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8",
+    "source_declaration_count": 2
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "sha256": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d"
+    }
+  ],
+  "all_complete_source_headers": [
+    {
+      "name": "actual_log_cost_le_log_pow",
+      "kind": "theorem",
+      "private": false,
+      "line": 32,
+      "complete_source_header": "theorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s)"
+    },
+    {
+      "name": "actual_betaL2_mul_rawZero_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 74,
+      "complete_source_header": "theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A"
+    }
+  ],
+  "definition_count": 0,
+  "semantic_review": {
+    "scope": "Original arbitrary family F, fixed original B and C0, sigma/kappa/c0, target real A>0, current UniformAuxiliarySW F C0. Only existing sigma>0 payment gate.",
+    "actual_SW_exponent": "R=A+(p+s:Real)+2, where p=(2^B)^2-1 and s=2*(3*(2^C0+1))^2+1. R>0 is proved using hA. R is selected before obtaining SW constant and threshold, and before every family index.",
+    "fixed_log_cost": "Proved actual Lbeta^p Lcap^s <= D^(p+s)*(logX)^(p+s), D=2+log8, from actual V<=X and cap<=8X.",
+    "fixed_constant_absorption": "K=C*abs(local cutoffMass)*D^(p+s). One threshold ensures logX>=max(1,K), so K<=logX^2. Cross multiplication of positive rpow denominators and exact rpow_add pays all logs.",
+    "final_endpoint": "actual original beta L2 * norm(actual transposed rawZero - actual primitiveZeroMain) <= X^2/logX^A, one threshold before every i.",
+    "no_spare_X_power_used": true,
+    "no_budget_mass_bridge_or_domain_restriction": true,
+    "forbidden_scan": true
+  },
+  "sourceDAG_delta": {
+    "relative_to": "parent union containing owned ZeroCovariance 2c96 and staged UPayment9ece",
+    "local_added_modules": [
+      "ImbalancedChen.Part3TransposedZeroPayment"
+    ],
+    "foreign_added_modules": [],
+    "scope_limit": "Two local imports only; no fresh full closure/cache or Lean acceptance claimed. UPayment true runtime ownership remains a prerequisite."
+  },
+  "lean_validation": "NOT RUN; runtime owner only"
+}

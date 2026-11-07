@@ -1,0 +1,27 @@
+ImbalancedChen/ActualDwellSelectedRemainder.lean:38:46: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => tail[_a] = tail[i]
+Error: Application type mismatch: The argument
+  List.getElem_append_right._proof_1
+    (Decidable.byContradiction fun a => actualDwell_original_tail_square._proof_1_2 front tail i a)
+has type
+  front.length + i - front.length < tail.length
+but is expected to have type
+  _a < tail.length
+in the application
+  tail[_a]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+D : ℝ
+front tail : List ℕ
+hfull : actualDwellSupport D (front ++ tail)
+i : ℕ
+hi : i < tail.length
+hs :
+  (List.map (fun p => ↑p) (List.take (front.length + i) (front ++ tail))).prod *
+      (fun p => ↑p) (front ++ tail)[front.length + i] ^ 2 ≤
+    D
+htake : List.take (front.length + i) (front ++ tail) = front ++ List.take i tail
+⊢ tail[front.length + i - front.length] = tail[i]

@@ -1,0 +1,1 @@
+Finite original seven-module P4 evidence under normal imported-environment trust. No Lean/checker rerun, full historical/project/external closure, mathematical certification, or CI green is claimed. The inherited published baseline archive remains required. Apply only the exact staged paths and the proposed eight-rule attributes addition.

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "author": "/root/spectral_reuse_oct20",
+  "created_utc": "2026-10-20T09:12:52.780855+00:00",
+  "status": "READONLY_ONE_COMPLETE_GENERIC_FINITE_PACKET_LEMMA_PROPOSAL_WITH_EXACT_ACTUAL_DICTIONARY_NOT_LEAN_SOURCE_OR_SPECTRAL_ESTIMATE",
+  "quota": {
+    "actual_read_at_batch_start_and_refresh": true,
+    "last_used_percent": 5,
+    "remaining_percent": 95,
+    "guard_stop_threshold_triggered": false
+  },
+  "purpose": "Prove exact finite residue packet separation for the retained small root phase only, on each explicitly fixed p,D,g,d1 fiber. It neither suppresses outer summation costs nor bounds any spectral exponential sum.",
+  "one_complete_unelaborated_public_type": "theorem shared_root_fixed_outer_packet_identity_and_cauchy\n    {ι : Type*} [DecidableEq ι] (T : Finset ι)\n    (p D g d₁ : ℕ) [NeZero (g * d₁)] (a : ℤ)\n    (n v w : ι → ℕ) (h : ι → ℤ) (c : ι → ℂ) :\n    let A := g * d₁\n    let root := fun x : ι =>\n      ZMod.stdAddChar (((-a * h x : ℤ) : ZMod A) *\n        ((n x : ZMod A) * (p : ZMod A) * (D : ZMod A) *\n          (v x : ZMod A) * (w x : ZMod A))⁻¹)\n    let packet := fun r : ZMod A × ZMod A × ZMod A =>\n      ∑ x ∈ T.filter (fun x => (n x : ZMod A) = r.1 ∧\n        (v x : ZMod A) = r.2.1 ∧ (w x : ZMod A) = r.2.2),\n        c x * ZMod.stdAddChar (((-a * h x : ℤ) : ZMod A) *\n          (r.1 * (p : ZMod A) * (D : ZMod A) * r.2.1 * r.2.2)⁻¹)\n    let S := ∑ x ∈ T, c x * root x\n    S = ∑ r : ZMod A × ZMod A × ZMod A, packet r ∧\n      ‖S‖ ^ 2 ≤ (A : ℝ) ^ 3 *\n        ∑ r : ZMod A × ZMod A × ZMod A, ‖packet r‖ ^ 2",
+  "public_definition_count": 0,
+  "public_theorem_count": 1,
+  "parameter_fidelity": {
+    "outer_parameters": "p,D,g,d1 and original signed a are fixed explicitly BEFORE the finite T,c,n,v,w,h. A=g*d1 is positive by NeZero(g*d1); p,D need no positivity for this pure finite identity, but their actual application positivity comes from admissibility and gcd licenses.",
+    "finite_index": "ι and T are arbitrary, so the original row-pair/frequency/orientation labels may be retained without passing to a quotient or image that collapses multiplicity. c is an arbitrary complex coefficient; no one-bounded, real, positive, separable, or smooth assumption is used.",
+    "frequency": "h:ι→Int is arbitrary signed, including zero. In actual NZ the h=0 term remains zero exactly, or is excluded by the finite carrier.",
+    "root_product": "The root denominator product is n1*p*D*v0*w0=n1*L; p and D are not erased or replaced by their small residues before the fixed outer fiber is formed.",
+    "A_equals_one": "Included. ZMod1 has a singleton triple-label type, the character equals1, and the A^3 cost is1. No division by phi(A), no A>1 condition."
+  },
+  "elementary_full_proof_route": [
+    "For any x in T there is exactly one residue triple ((n x:ZMod A),(v x:ZMod A),(w x:ZMod A)). Partition the finite T by that exact label map using a finite fiber sum identity. This is an index partition, not a new support restriction.",
+    "On the packet predicate, rewrite each of the three ZMod coordinates in the exact product. Applying inverse and then stdAddChar yields the pointwise root-factor identity without a coprimality assumption. The original arithmetic-to-ZMod inverse bridge separately requires and already states its genuine coprimality license.",
+    "Thus S equals the finite sum of the defined complex packet values. Triangle gives norm(S)<=sum_r norm(packet r).",
+    "Apply the finite real sum-square Cauchy inequality with f(r)=1 and g(r)=norm(packet r). All sums are finite; cardinality of (ZMod A)^3 is A^3. This gives exactly the proposed squared norm bound. There is no norm monotonicity for signed subsums.",
+    "Keep every complex c x unchanged within its packet. Removing root variation does not prove that the remaining arbitrary c x has the factorizability or derivative bounds demanded by a spectral theorem. Such an application requires a separate actual coefficient/endpoint dictionary."
+  ],
+  "actual_application_dictionary": {
+    "source_guards": {
+      "Part3SharedFirstFactorDifferenceReciprocity.lean": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e",
+      "Part3SharedFirstFactorDispersion.lean": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "Part3TransposedGCDPoissonMask.lean": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "Part3SharedFirstFactorEnergyNonzeroReduction.lean": "c6fc9f63e91c676226f1a858173f75dfa4ce05b38defed4ec8060b802a8c442d"
+    },
+    "actual_rows": "Row=(Nat×Nat)×Nat; R=d.sharedFirstFactorRows=(factorCarrier Q2×factorCarrier Q3)×d.transposedAtom.betaCarrier. Keep l,lprime as original Row labels, including separate Q2/Q3 slots.",
+    "actual_outer_dictionary": "p∈d.primitiveFirstFactorCarrier; N1=l.2, N2=lprime.2; full residual products v=l.1.1*l.1.2, w=lprime.1.1*lprime.1.2; D=gcd(v,w); g=gcd(N1,N2); d1=supportedPart(N1/g,g); n1=coprimePart(N1/g,g); v0=v/D; w0=w/D; A=g*d1; L=lcm(p*v,p*w)=p*D*v0*w0.",
+    "actual_finite_frequency_carrier": "For any explicit natural cutoff function H(l,lprime), use the dependent sum over (l,lprime)∈R×R of h∈Icc(-H(l,lprime),H(l,lprime)), with h!=0 if desired. This retains the exact row-dependent cutoff and all label multiplicities; do not replace it by a common H without proving the enlargement/tail equality.",
+    "fixed_outer_fiber": "Within that original finite index, FILTER by exact equalities gcd(v,w)=D0, gcd(N1,N2)=g0 and supportedPart(N1/g0,g0)=d10, and fix original p=p0 as an outer summand. The generic theorem uses p0,D0,g0,d10, with n=n1,v=v0,w=w0. Membership must also retain actual CRT compatibility and the original small-paired/small-supported mask. The equality L=p0*D0*v0*w0 and (n1*L).Coprime A follow only from the actual DifferenceReciprocity licenses.",
+    "why_not_finset_image": "Mapping all original rows to only (n1,v0,w0,h) may identify different Q2/Q3 factorizations or N2 data. Use arbitrary original ι and coordinate functions; never collapse such multiplicities with Finset.image.",
+    "root_scalar_on_packet": "ZMod.stdAddChar((-a*h)*inverse(r_n*p0*D0*r_v*r_w)) depends only on h, original a and fixed residue/outer labels. It is independent of the remaining arithmetic denominator coordinates inside this packet; this statement alone supplies no further coefficient separation."
+  },
+  "mandatory_actual_real_projection_transport": {
+    "literal_source": "Part3TransposedGCDPoissonMask.lean lines39–47: complexFactorGamma(a)*star(complexFactorGamma(b)) multiplies the REAL PART of the Poisson sum, with arbitrary complex beta pair outside. SharedFirstFactorDispersion.lean lines500–516 has the same actual orientation.",
+    "forbidden_rewrite": "Never change sum c*(Re z:Complex) to Re(sum c*z). This is false for arbitrary complex c.",
+    "exact_finite_identity": "Let outer coefficient C=sharedFirstFactorCoefficient(l)*star(sharedFirstFactorCoefficient(lprime)); let G_h contain original V/L smooth Fourier transform and retained slow/reciprocal phases; root R_h=e_A(-a*h*inverse(n1L)). Then C*(Re(sum_h G_h*R_h):Complex) = sum_h [(C/2)*G_h*R_h + (C/2)*star(G_h)*star(R_h)]. The same C occurs in both branches; it is NOT conjugated in the second branch.",
+    "orientation_index": "Include a two-element direct/conjugate orientation in the ORIGINAL finite ι. Direct branch uses c=(C/2)*G_h and generic frequency h; conjugate branch uses c=(C/2)*star(G_h) and generic frequency -h. AddChar.map_neg_eq_conj gives star(R_h)=e_A(-a*(-h)*inverse(n1L)). Both orientations have the same n1,v0,w0 residue label, so retain them together in each packet. No extra factor2 in the packet-label cardinality A^3 is necessary.",
+    "slow_phase_retained": "G_h includes fourier h(a/(N1*L)), signed-difference a*f*inverse(A*n2*v0)/(n1*w0), original V/L prefactor and Fourier transform at V*h/L. Conjugate all of G_h in the second branch. No large-a phase is dropped."
+  },
+  "outer_sum_cost_not_paid": {
+    "exact_linear_reassembly": "Partition the original finite truncated core by the tuple (p,D,g,d1), using its finite set of occurring labels and the ORIGINAL finite index fibers. Reassembling these complex sums is an exact finite identity. Neither p nor residual tail gcd D is globally constant.",
+    "safe_global_cauchy_if_chosen": "If J is the finite actual outer-label set and S_j the fixed-fiber sum, then ||sum_j S_j||^2 <= (sum_j A_j^3) * sum_j sum_residue_packets ||Packet_j||^2, by one Cauchy over the dependent outer×packet label set. Thus a #J-type cost remains. It is NOT bounded by X^(6eta) alone merely because every A_j^3<=X^(6eta).",
+    "alternative": "Retain p,D,g,d1 sums explicitly for later norm/weighted Cauchy and spectral estimates; state their actual weights and account for every finite sum. No packet proof supplies their savings.",
+    "primitive_first_factor": "Original energy has full original p carrier outside the inner smooth-row norm and original gamma1L2 outside. Do not freeze p globally, sparsify its carrier, or convert p to an arbitrary coefficient without proving the resulting cost/valid spectral input.",
+    "residual_D": "The proposed three-mask small core contains every residual tail gcd D. There is currently no D<=X^eta guard there. A large-D deletion or its payment and the ensuing exact split are separate mathematical obligations; zero-mode large-residual acceptance alone is not a nonzero spectral-core bound."
+  },
+  "cutoff_cost_fidelity": {
+    "pure_conditional_scalar_fact": "If the actual fixed fiber additionally satisfies g<=X^eta and d1<=X^eta with X>=1,eta>=0, then A^3<=X^(6eta). This is only arithmetic conversion of already proved guards.",
+    "current_interface_cost": "The current three-mask proposal fixes both g,d1 cutoffs at X^(sigma/4). It therefore supplies A<=X^(sigma/2), and the corresponding per-fiber squared packet cost is at most X^(3sigma/2). It does NOT supply the stronger g,d1<=X^eta guards for an arbitrarily tiny eta.",
+    "what_new_eta_requires": "To select eta after the complete finite-loss exponent Cg, prove a new exact mask refinement and actual complementary nonzero payments at the finer cutoffs, preserving original B,sigma,kappa,c0 and moving-a geometry. Do not silently rescale sigma or assume a stronger kappa<=eta/100 hypothesis.",
+    "no_power_saving_claim": "No choice of eta/rho, finite packet inequality or complex norm bound here proves the missing spectral polynomial or original full-core log payment."
+  },
+  "connection_to_three_mask_energy_reduction": {
+    "proposal_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-shared-three-mask-small-supported-next-interface-complete-readonly-proposal.json",
+    "proposal_sha256": "07f27b7a992bd48fe4fab7b5c4a74767e4f58d61f93bad01c65192bdc69683cc",
+    "actual_literal_core_definition": [
+      "def MediumAtom.sharedSmallPairedSmallSupportedNonzero (d : MediumAtom)\n    (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2\n      else 0"
+    ],
+    "four_proposed_endpoint_headers_read": [
+      "theorem MediumAtom.sharedFirstFactorNonzero_eq_threePairedSupportMasks\n    (d : MediumAtom) (Ybeta Ysupport : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) =\n        d.sharedLargePairedGCDNonzero Ybeta +\n          d.sharedSmallPairedLargeSupportedNonzero Ybeta Ysupport +\n            d.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport",
+      "theorem actual_signedError_sq_cleanedAlpha_sq_difference_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        |‖d.signedError‖ ^ 2 - ‖d.cleanedAlphaAtom.signedError‖ ^ 2| ≤\n          d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "theorem actual_betaL2_gamma1L2_cleaned_deletedPairedSupportedNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero\n              (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedNonzero\n              (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))‖) ≤\n                2 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+      "theorem uniformAuxiliarySW_signedError_sq_le_cleanedSmallPairedSupportedNonzero_add_log_payment\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).signedError‖ ^ 2 ≤\n            (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n              (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2) *\n                ((F i).cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n                  ((F i).scale ^ (sigma / 4)) ((F i).scale ^ (sigma / 4))).re +\n                    C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A"
+    ],
+    "integration_order": [
+      "First genuinely accept Support and the exact three-mask/cleaned-square energy reduction at their existing full types; this proposal does not assume those future proofs as new Lean premises.",
+      "Expand the retained small-paired/small-supported core with original shared-p row labels and literal original-V Poisson frequencies. Keep all residual D and CRT gates.",
+      "Prove and bound a literal finite frequency-tail truncation before applying this finite packet lemma. Alternatively leave this lemma explicitly about a finite truncation and make no claim for the infinite series.",
+      "Form exact outer (p,D,g,d1) fibers, perform the real-projection direct/conjugate transport, and apply this finite packet lemma independently on each fixed fiber.",
+      "Then prove actual coefficient separation, tail-D/fine-cutoff payments, nonzero multiplicity bound and genuine spectral estimate. Sum every remaining outer label with explicit costs and multiply original outside L2 factors. Only after that can a full original energy error estimate be claimed."
+    ],
+    "unchanged_original_energy_normalization": "Outside betaL2*gamma1L2 remains literal; desired family energy endpoint involves Re(core) plus log budget. The generic packet bound is a squared complex norm statement about a finite subexpression, not a substitute for that final energy estimate.",
+    "parent_status_boundary": "The linked three-mask report and current DifferenceReciprocity/Support sources may still be pending proof repairs/owned acceptance. Their source texts and intended interfaces are dictionary context only, not accepted import premises."
+  },
+  "local_API_review": {
+    "finite_cauchy": {
+      "path": "Mathlib/Algebra/Order/BigOperators/Ring/Finset.lean",
+      "actual_lines_read": [
+        154,
+        163
+      ],
+      "complete_source_header": "lemma sum_mul_sq_le_sq_mul_sq [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]\n    [ExistsAddOfLE R] (s : Finset ι)\n    (f g : ι → R) : (∑ i ∈ s, f i * g i) ^ 2 ≤ (∑ i ∈ s, f i ^ 2) * ∑ i ∈ s, g i ^ 2"
+    },
+    "phase_bridge": "Current DifferenceReciprocity source has fourier_inverse_phase_eq_stdAddChar with n.Coprime m and signed h,a. The actual full root licenses (n1*L).Coprime A and L=pD v0w0 must be used.",
+    "future_import_scope": "A finite generic proof can use existing complex character, finite norm-sum and Cauchy APIs. A later actual-module proposal should prefer sole direct DifferenceReciprocity only AFTER its exact owned acceptance and a fresh header-aware closure/visibility check. No import addition/bootstrap is authorized by this report."
+  },
+  "implementation_boundary": {
+    "proposed_Lean_source_written": false,
+    "any_existing_Lean_changed": false,
+    "compiler_lake_checker_cache_invoked": false,
+    "source_pin_CI_manuscript_or_automation_mutation": false,
+    "spawned_agents": false,
+    "only_written_file": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-shared-fixed-outer-root-packet-minimal-complete-proposal.json"
+  }
+}

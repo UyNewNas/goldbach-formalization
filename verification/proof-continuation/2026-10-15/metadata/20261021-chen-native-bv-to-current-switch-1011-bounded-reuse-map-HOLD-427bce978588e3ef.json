@@ -1,0 +1,158 @@
+{
+  "audit_id": "20261021-chen-native-bv-to-current-switch-1011-bounded-reuse-map-HOLD",
+  "date": "2026-10-21",
+  "status": "HOLD_EXACT_NATIVE_REUSE_MAP_NO_NEW_ANALYTIC_GAP_CLOSED",
+  "scope": {
+    "bounded_passes": 1,
+    "outcome": "One prerequisite/reuse map; no Lean candidate because no exact unmatched mean obligation is closed by the inspected existing primitive.",
+    "no_compiler": true,
+    "no_build": true,
+    "no_clone_download_or_pin_change": true,
+    "no_old_source_checker_helper_git_catalog_ci_edits": true
+  },
+  "external_evidence": {
+    "prior_cp": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-external-chen-fixedcommit-evidence-review-HOLD.json",
+    "expected_sha256": "38094be23909eda137b64e6c645935cab3e3daeff92a5652e6cdae20a9cf81a4",
+    "observed_sha256": "38094be23909eda137b64e6c645935cab3e3daeff92a5652e6cdae20a9cf81a4",
+    "accepted_sha": "947f7990ef9b9a0f1bd021f5ed489020d42e0d5b",
+    "accepted_scope": "Official CI accepted final fixed-shift2 prime/semiprime infinitude in both Lean and nanoda kernels. This is genuine external evidence, but neither Goldbach1+1.75 nor all declarations at11dcca.",
+    "external_source_port_attempted": false,
+    "version_correction": "The prior checkpoint records947f accepted variant Lean4.33.0/mathlib6f1ef4e, while11dcca is Lean4.32.2/mathlib905b958. Neither equals local4.33rc1/mathlibe4c91783."
+  },
+  "pinned_native": {
+    "provider_root": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach",
+    "observed_git_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+    "expected_goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "runtime_provider_resolution": "runtime.py:75-95 resolves provider by native-packages/<manifest-package-name>, source by module path, compiled objects by .lake/build/lib/lean.",
+    "source_files": [
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\Distribution\\BombieriVinogradov.lean",
+        "sha256": "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc",
+        "olean_exists": true
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\BombieriVinogradov\\Bombieri1965Richert418Unconditional.lean",
+        "sha256": "26de321b7b9ad1f3259c61461cd7259486c72a3404a9e32edabffd0cb9fb2f10",
+        "olean_exists": true
+      }
+    ],
+    "trust": "Actual source and existing olean files inspected; no fresh compiler/kernel/axiom audit was run by this task."
+  },
+  "native_primitive": {
+    "name": "AnalyticNumberTheory.LargeSieve.Bombieri1965Richert418.standardBombieriVinogradov",
+    "import": "MathlibNt.AnalyticNumberTheory.BombieriVinogradov.Bombieri1965Richert418Unconditional",
+    "full_header": "theorem standardBombieriVinogradov :\n    MathlibNt.SieveTheory.BombieriVinogradov.StandardBombieriVinogradov",
+    "expanded_proposition": "def StandardBombieriVinogradov : Prop :=\n  ∀ A : ℝ, 0 < A →\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, 2 ≤ N →\n        ∑ q ∈ Finset.Icc 1 (LiuWeight.panModulusCutoff N B),\n          standardPrimeAPPrefixMaxError N q ≤\n            C * (N : ℝ) / Real.log N ^ A",
+    "count_and_error_definitions": "/-- A normalized genuine logarithmic integral:\n`2 / log 2 + ∫ t in 2..x, 1 / log t`.  Thus it differs from the literal\nintegral from `2` to `x` by the fixed additive constant `2 / log 2`; the two\nnormalizations are asymptotically interchangeable.  This normalization is\nchosen so that it dominates `x / log x` for `x ≥ 2`. -/\nnoncomputable def trueLogarithmicIntegral (x : ℝ) : ℝ :=\n  LiuWeight.liuLogarithmicIntegral (2 / Real.log 2) x\n\n/-- The usual prime count through the integer endpoint `x` in the residue\nclass `l` modulo `q`. -/\ndef primesInAP (x q l : ℕ) : ℕ :=\n  ((range (x + 1)).filter (fun p => p.Prime ∧ p ≡ l [MOD q])).card\n\n/-- The ordinary prime-AP error centered at the genuine logarithmic integral. -/\nnoncomputable def standardPrimeAPError (x q l : ℕ) : ℝ :=\n  (primesInAP x q l : ℝ) - trueLogarithmicIntegral x / Nat.totient q\n\n/-- The maximum standard AP error over canonical reduced residues.  It is\ndefined as `0` for the empty modulus-zero residue set; modulo `1` its unique\ncanonical reduced residue is `0`. -/\nnoncomputable def standardPrimeAPMaxError (x q : ℕ) : ℝ :=\n  let S := AnalyticNumberTheory.Sieve.unitResidues q\n  if h : S.Nonempty then\n    (S.image (fun l => |standardPrimeAPError x q l|)).max'",
+    "prefix_max_definition": "noncomputable def standardPrimeAPPrefixMaxError (x q : ℕ) : ℝ :=\n  ((range (x + 1)).image (fun y => standardPrimeAPMaxError y q)).max'\n    (Finset.image_nonempty.mpr ⟨0, by simp⟩)\n",
+    "cutoff": "noncomputable def panModulusCutoff (N : ℕ) (B : ℝ) : ℕ := Nat.floor ((N : ℝ) ^ (1 / 2 : ℝ) / Real.log N ^ B)",
+    "assumptions": "No analytic supplier argument. Proof obtains conductor-uniform quadratic L-value lower bound, constructs canonical smoothing, then applies existing nonprincipal primitive Siegel-Walfisz/large-sieve/Vaughan producer. The actual proposition requires A>0, chooses B>=0,C>0 before N, sums every physical q<=floor(N^.5/log(N)^B), and uses nested endpoint/reduced-residue maxima."
+  },
+  "already_existing_local_bridge": {
+    "file": "ImbalancedChen/Part3PrimeAPDistribution.lean",
+    "full_header": "theorem part3_abs_sum_mul_primeAPError_log_saving (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S : Finset ℕ, S ⊆ Finset.Icc 1 Q →\n          ∀ Y : ℕ, Y ≤ N → ∀ a : ℕ → ℕ,\n            (∀ d ∈ S, Nat.Coprime (a d) d) →\n            ∀ w : ℕ → ℝ, (∀ d ∈ S, |w d| ≤ 1) →\n            |∑ d ∈ S, w d * part3PrimeAPError Y (a d) d| ≤\n              C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+    "exact_count_identity": "theorem part3_chenPrimeAPCount_eq_primesInAP (Y a d : ℕ) :\n    chenPrimeAPCount Y a d = (primesInAP Y d a : ℝ)",
+    "status": "Already present with proof using the same pinned producer. Rewrapping it would add no missing mean proof.",
+    "already_consumed_initial_mean": "theorem eventually_currentChen_initialRosser_density_lower :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ cap : ℕ, ∀ z L : ℝ,\n          z ≤ (cap : ℝ) → 1 < L → z ≤ L → L ≤ (Q : ℝ) + 1 →\n          trueLogarithmicIntegral N * actualSmallRosserMinusDensity N cap z L -\n            epsilon * singularNormalization N ≤\n              ((chenSiftedPrimeSource N z).card : ℝ)"
+  },
+  "seventh_exact_required_source": {
+    "file": "ImbalancedChen/CurrentChenUpsilon7LargePrimeSwitch.lean",
+    "line_count": 174,
+    "source_definition": "def currentChenUpsilon7LargePrimeSemiprimeAPSource (N : ℕ)\n    (x : Σ _ : ℕ × ℕ, ℕ) : Finset ℕ :=\n  (chenAdditivePrimeCarrier N).filter fun P =>\n    (x.1.1 * x.1.2 * x.2) ∣ N - P ∧\n      Nat.Prime ((N - P) / (x.1.1 * x.1.2 * x.2)) ∧\n      x.2 ≤ (N - P) / (x.1.1 * x.1.2 * x.2) ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) < (P : ℝ)",
+    "sum_definition": "def currentChenUpsilon7LargePrimeSemiprimeAPSum (N : ℕ) : ℝ :=\n  ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n    ∑ r ∈ (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r),\n      ((currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩).card : ℝ)",
+    "remaining_transfer_full_header": "theorem eventually_two_currentChenUpsilon7_le_largePrime_counts\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∀ᶠ N : ℕ in atTop,\n      2 * currentChenUpsilon7 N ≤\n        2 * ((((currentChenUpsilon7PrimeTriples N).filter (fun x =>\n          (N : ℝ) ^ (1 / 5 : ℝ) <\n            ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ))).card : ℝ) +\n          currentChenUpsilon7LargePrimeSemiprimeAPSum N) +\n          epsilon * singularNormalization N",
+    "exact_switch_header": "theorem currentChenUpsilon7_largePrime_semiprime_card_eq_APSum (N : ℕ) :\n    (((currentChenUpsilon7SemiprimeQuadruples N).filter (fun x =>\n      (N : ℝ) ^ (1 / 5 : ℝ) <\n        ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ))).card : ℝ) =\n      currentChenUpsilon7LargePrimeSemiprimeAPSum N",
+    "countercheck": "Outer membership has N^(59/250)<=p1<p2 and inner r>=p2. Therefore physical q=p1*p2*r>=N^(177/250)>sqrt(N) for N>1. For eventually log(N)>=1 and B>=0, panModulusCutoff<=sqrt(N). Hence no nonempty switched semiprime label can enter the classical BV physical range.",
+    "weight_obstruction": "The source also tests Prime((N-P)/q) and r<=(N-P)/q after switching. This is an additional P-dependent sieve/primality weight, not an endpoint or one residue-dependent coefficient w(q). Prefix-maximal ordinary AP distribution does not control its centered error. Dropping primality gives a crude upper count but does not preserve its required density or analytic coefficient.",
+    "preserved": "N^(1/5)<P, all outer labels, r=p2 and r=s allowed, original coefficient2, and epsilon*singularNormalization retained.",
+    "no_regional_claim": "Regional ordinary BV with q<=N^.5/log^B does not cover this switched semiprime branch at all. A different switching/dispersion or an actual large-modulus weighted estimate remains necessary."
+  },
+  "joint1011_exact_required_source": {
+    "file": "ImbalancedChen/CurrentChenUpsilon1011JointSource.lean",
+    "joint_selector": "def chenY1011JointPrimeSelector (N : ℕ) (A H D : ℝ)\n    (E : ℕ × ℕ → Prop) : Finset ((ℕ × ℕ) × (ℕ × ℕ)) :=\n  ((chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N) ×ˢ\n    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)).filter fun t =>\n    A ≤ (t.1.1 : ℝ) ∧ t.1.1 < t.1.2 ∧ t.1.2 < t.2.1 ∧ t.2.1 < t.2.2 ∧\n    (t.2.1 : ℝ) < H ∧ (t.2.2 : ℝ) < D ∧\n    ((t.2.2 : ℝ) < H ∨ ¬ E t.2)",
+    "exact_identity_full_header": "theorem currentChenUpsilon10_add_11_eq_joint_source (N : ℕ)\n    (E : ℕ × ℕ → Prop) (hN : 1 ≤ (N : ℝ)) :\n    currentChenUpsilon10 N + currentChenUpsilon11 N E =\n      ∑ t ∈ chenY1011JointPrimeSelector N\n          ((N : ℝ) ^ (417 / 5000 : ℝ)) ((N : ℝ) ^ (19 / 125 : ℝ))\n          ((N : ℝ) ^ (59 / 250 : ℝ)) E,\n        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)\n          (t.1.2 : ℝ)).card : ℝ)",
+    "ledger_consumer_full_header": "theorem currentChenPairedPrimeSum_ge_of_normalized_joint_last_bounds\n    (N : ℕ) (E : ℕ × ℕ → Prop)\n    (b₁ b₂ b₃ b₄ b₅ b₆ b₇ b₈ b₉ b₁₀₁₁ delta : ℝ)\n    (h₁ : (b₁ - delta) * singularNormalization N ≤ currentChenUpsilon1 N)\n    (h₂ : (b₂ - delta) * singularNormalization N ≤ currentChenUpsilon2 N)\n    (h₃ : currentChenUpsilon3 N ≤ (b₃ + delta) * singularNormalization N)\n    (h₄ : currentChenUpsilon4 N ≤ (b₄ + delta) * singularNormalization N)\n    (h₅ : (b₅ - delta) * singularNormalization N ≤ currentChenUpsilon5 N)\n    (h₆ : (b₆ - delta) * singularNormalization N ≤ currentChenUpsilon6 N E)\n    (h₇ : currentChenUpsilon7 N ≤ (b₇ + delta) * singularNormalization N)\n    (h₈ : currentChenUpsilon8 N ≤ (b₈ + delta) * singularNormalization N)\n    (h₉ : currentChenUpsilon9 N ≤ (b₉ + delta) * singularNormalization N)\n    (h₁₀₁₁ : currentChenUpsilon10 N + currentChenUpsilon11 N E ≤\n      (b₁₀₁₁ + 2 * delta) * singularNormalization N) :\n    (3 * b₁ + b₂ - b₃ - b₄ + b₅ + b₆ - 2 * b₇ - b₈ - b₉ - b₁₀₁₁ -\n      14 * delta) * singularNormalization N ≤ currentChenPairedPrimeSum N E",
+    "constants": "A=N^(417/5000),H=N^(19/125),D=N^(59/250), strict ordered four primes, fourth-prime low band unmasked, high band same complement ¬E(t.2), quotient cutoff=t.1.2.",
+    "range_countercheck": "Original joint b=p1*p2*p3*p4 can extend as high as H^3*D=N^(173/250), while row10 b<H^4=N^(76/125). Neither implies b<=N^.5/log^B, and sieve divisors would enlarge to physical b*d.",
+    "concrete_selector_counterexample": {
+      "N": "1000000000000",
+      "A_approx": 10.018437657240261,
+      "H_approx": 66.6806769213622,
+      "D_approx": 679.2036326171843,
+      "E": "const False",
+      "tuple": [
+        31,
+        37,
+        41,
+        601
+      ],
+      "b": 28263227,
+      "sqrtN": 1000000,
+      "meaning": "All four labels are increasing primes coprime to N; p3<H<=p4<D and A<=p1. Thus this actual row11 selector label has b>sqrt(N). Floating rpow values are an arithmetic diagnostic; the general exponent mismatch above is the reusable range obstruction."
+    },
+    "sieve_gate_full_header": "def chenQuotientBoundingSieve (N b : ℕ) (A : ℝ) (hN : Even N)\n    (_hb : Nat.Coprime b (sieveProduct N (Nat.ceil A))) : BoundingSieve where\n  support",
+    "gate_countercheck": "At cutoff p2, multiplier b contains the smaller prime p1<p2. Since p1 belongs to chenAdditivePrimeCarrier N, it is an actual prime in the strict sieveProduct N (ceil p2), and also divides b. Thus Nat.Coprime b sieveProduct fails, including the concrete row11 example p1=31,p2=37. The existing 3-6 quotient-sieve reciprocal-totient gate cannot be instantiated.",
+    "regional_scope": "One could retain only physical b*d<=panModulusCutoff N B and develop the correct overlapping-prime density and multiplicity bridge. That would be a new regional input. Existing Part3PrimeAPDistribution covers ordinary errors on that region only; it supplies neither the omitted full-range tail nor the sharp joint last-row coefficient."
+  },
+  "decision": {
+    "new_lean_source": false,
+    "new_analytic_subobligation_closed": false,
+    "original_target_closed": false,
+    "no_target_estimate_supplied_as_hypothesis": true,
+    "no_original7over32_or_same_policy_supplier": true,
+    "next_exact_prerequisite": "For seventh: a theorem controlling the actual prime-quotient-weighted AP sum at q=p1*p2*r>=N^.708, retaining diagonal/equality cases and coefficient2. For joint1011: an actual sieve with overlapping factors below cutoff p2, its correct local densities and full physical b*d error mean, preserving the same E mask; or an exact alternative switching with both regional and complementary tails proved.",
+    "HOLD": true
+  },
+  "usage": {
+    "before": {
+      "used_percent": 34,
+      "remaining_percent": 66,
+      "secondary": null
+    },
+    "after_read": {
+      "used_percent": 34,
+      "remaining_percent": 66,
+      "secondary": null
+    },
+    "secondary_null_means_unavailable": true,
+    "stop_threshold": "Stop if remaining<=40 or used>=60; neither reached.",
+    "after": {
+      "used_percent": 34,
+      "remaining_percent": 66,
+      "secondary": null
+    }
+  },
+  "local_source_hashes": [
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon7LargePrimeSwitch.lean",
+      "sha256": "edb5cdb4f50cbed9014dba0a829a2eb4a95615c307cc270d4403d4cb613c09d4"
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenMeanLedger.lean",
+      "sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8"
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon1011JointSource.lean",
+      "sha256": "ae613c076c12d5b74d7e7e6a94b2ff67144e42e03be80538c7e4beeb1e945043"
+    },
+    {
+      "path": "ImbalancedChen/Part3PrimeAPDistribution.lean",
+      "sha256": "c317d422e93b4f0bd6bde7ef28306de2fcd65fe4b0e34854117a10a87f0ef316"
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenInitialRosserRemainder.lean",
+      "sha256": "6abb052c0c5a3b0204377eaa78f32525ec5bd560757da221c497243a13f705a3"
+    },
+    {
+      "path": "ImbalancedChen/ChenQuotientSieveRemainders.lean",
+      "sha256": "caaca61f7e87eab1fe60b82b09d1f3438ebcace6b16f9ed7eac2d2411646664e"
+    }
+  ],
+  "verification": {
+    "json_parsed": true,
+    "all_recorded_local_source_hashes_unchanged": true,
+    "native_existing_oleans_present": true,
+    "no_lean_compiler_or_checker_run": true,
+    "temporary_null_artifact": "A PowerShell boolean syntax error first produced a null .json artifact. Its exact hash and contents were verified and that task-owned leaf removed. Only the intended checkpoint remains."
+  }
+}

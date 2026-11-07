@@ -1,0 +1,660 @@
+--- a/rounds/20261022-three-frontiers-operator-v2-SOURCE-ONLY.py
++++ b/rounds/20261022-EU-next-three-current193-SOURCE-ONLY/20261022-EU-next-three-current193-operator-SOURCE-ONLY.txt
+@@ -1,326 +1,331 @@
+-"""Unexecuted staged canonical-tool operator. No default/root execution authority.
+-
+-Each invocation advances exactly one root-gated stage with fresh quota evidence.
+-Incomplete started stages, existing HOLD, reordered stages and retries stop.
+-"""
+-from pathlib import Path
+-import argparse
+-import datetime
+-import importlib.util
+-import json
+-import os
+-import subprocess
+-import sys
+-import traceback
+-
+-COMMON = Path(__file__).with_name('20261022-three-frontiers-common-v2-SOURCE-ONLY.py')
+-
+-
+-def import_common(expected):
+-    import hashlib
+-    with COMMON.open('rb') as stream:
+-        digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+-    if digest != expected:
+-        raise ValueError('Unbound shared helper')
+-    spec = importlib.util.spec_from_file_location('frontier_shared', COMMON)
+-    module = importlib.util.module_from_spec(spec)
+-    spec.loader.exec_module(module)
+-    return module
+-
+-
+-def order(c):
+-    return ['batch-before'] + [module + ':' + phase for module in c.TARGETS
+-        for phase in ('proper-before', 'full-before', 'strict', 'stock-ALL', 'proper-after', 'full-after')] + ['terminal']
+-
+-
+-def gate_check(c, reference, authority):
+-    gate = c.read(c.bound(reference))
+-    c.require(gate['status'] == authority and gate['execution_authorized'] == (authority == 'ROOT_AUTHORIZED_THREE_FRONTIERS_SERIAL_ADMISSION'), 'Gate authority')
+-    c.require(gate['targets'] == c.TARGETS and gate['target_order'] == list(c.TARGETS), 'Exact three target order')
+-    c.require(gate['protected'] == c.PROTECTED, 'Canonical tool bindings')
+-    c.require(gate['reviews'] == {m: {'path': p, 'sha256': h} for m, (p, h) in c.REVIEWS.items()}, 'Review bindings')
+-    c.require(gate['heavy_owner'] and gate['heavy_concurrency_limit'] == 1, 'Sole owner absent')
+-    c.require(isinstance(gate['resource_reason'], str) and gate['resource_reason'].strip(), 'Missing root resource authorization reason')
+-    c.require((gate['threads'], gate['memory_mib'], gate['rss_limit_mib'], gate['quota_stop_remaining_lte']) == (2, 6144, 6656, 5), 'Resources/quota policy')
+-    c.require(gate['shared_lock'] == '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/locks/compiler-0.lock', 'Wrong original lock')
+-    c.require(gate['failure_policy'] == 'FIRSTFAIL_HOLD_NO_RETRY_REPAIR_RESTORE_OR_SKIP', 'Failure policy')
+-    c.require(gate['generated_count_predicted'] is None and not gate['unconditional_main_proved'], 'Predicted/inflated claim')
+-    c.require(c.sha(__file__) == gate['operator_sha256'] and c.sha(COMMON) == gate['common_sha256'], 'Source binding')
+-    for reference in gate['additional_bindings']:
+-        c.bound(reference)
+-    c.protected()
+-    baseline, counts = c.verify_census(gate['baseline_census'])
+-    c.require(counts == gate['baseline_counts'], 'Actual baseline counts')
+-    acceptance = c.read(c.bound(gate['baseline_acceptance']))
+-    c.require(acceptance['current_census_sha256'] == gate['baseline_census']['sha256'], 'Acceptance/census mismatch')
+-    c.require(acceptance['owned_modules'] == counts['owned_modules'] and acceptance['declarations'] == counts['declarations'] and
+-        acceptance['original_receipts'] == counts['original_receipts'], 'Acceptance counts')
+-    c.require(acceptance['status'].startswith('ROOT_') and acceptance['status'].endswith('_ACCEPTED'), 'No root acceptance')
+-    c.require(not acceptance['unconditional_main_proved'] and not acceptance['external_closure_replayed'], 'Acceptance claims')
+-    c.require(not (set(c.TARGETS) & set(baseline['modules'])), 'Target already in bound baseline')
+-    freeze = c.read(c.bound(gate['all562_source_freeze']))
+-    c.require(freeze == c.frozen_sources(), 'Root source freeze mismatch')
+-    return gate
+-
+-
+-def quota_check(c, quota_ref, stage, gate_ref):
+-    value = c.read(c.bound(quota_ref))
+-    c.require(value['source'] == 'root-fresh-quota-tool-result' and value['stage'] == stage, 'Fresh quota provenance/stage')
+-    c.require(value['gate_sha256'] == gate_ref['sha256'], 'Quota/gate mismatch')
+-    remaining = value['remaining_percent']
+-    c.require(isinstance(remaining, (int, float)) and 5 < remaining <= 100, 'Quota safe-boundary stop')
+-    observed = datetime.datetime.fromisoformat(value['observed_utc'])
+-    c.require(observed.tzinfo is not None, 'Quota timestamp lacks timezone')
+-    age = (datetime.datetime.now(datetime.timezone.utc) - observed).total_seconds()
+-    c.require(0 <= age <= 120, 'Quota evidence stale')
+-    return value
+-
+-
+-def journal_load(c, run):
+-    events = sorted(run.glob('[0-9][0-9][0-9]-finished.json'))
+-    result, prior = [], None
+-    for index, p in enumerate(events):
+-        c.require(p.name == f'{index:03d}-finished.json', 'Journal gap')
+-        event = c.read(p)
+-        c.require(event['previous'] == prior and event['status'] == 'PASS', 'Journal chain/status')
+-        start_ref = event['started']
+-        started = c.read(c.bound(start_ref))
+-        c.require(started['stage'] == event['stage'] and started['previous'] == prior, 'Started/finished chain')
+-        c.require(event['stage'] == order(c)[index], 'Journal stage order')
+-        result.append(event)
+-        prior = c.ref(p)
+-    starts = sorted(run.glob('[0-9][0-9][0-9]-started.json'))
+-    c.require(len(starts) == len(events), 'Prior stage started but not terminal; no automatic retry')
+-    return result, prior
+-
+-
+-def command(c, run, index, argv):
+-    """Only caller-provided canonical CLI argv, exact one invocation; reap child."""
+-    c.require(argv[0] == '/usr/bin/python3' and Path(argv[1]).resolve() in {
+-        (c.STATE / name).resolve() for name in ('preflight_current_oct20.py', 'runtime.py', 'audit_owned.py')}, 'Noncanonical executable')
+-    out_path, err_path = run / f'{index:03d}-stdout.log', run / f'{index:03d}-stderr.log'
+-    with out_path.open('xb') as out, err_path.open('xb') as err:
+-        proc = subprocess.Popen(argv, cwd=c.ROOT, stdout=out, stderr=err, start_new_session=True)
+-        interrupted = None
+-        while True:
+-            try:
+-                code = proc.wait()
+-                break
+-            except BaseException as error:
+-                # Original runtime/stock guard owns compiler termination. Do not
+-                # abandon its live child/lock or spawn a retry after interruption.
+-                interrupted = error
+-        if interrupted is not None:
+-            raise RuntimeError('Operator interrupted; original child reaped; HOLD') from interrupted
+-    output = []
+-    for line in out_path.read_text().splitlines():
+-        try:
+-            output.append(json.loads(line))
+-        except json.JSONDecodeError:
+-            continue
+-    c.require(code == 0, 'Canonical command failed; inspect preserved logs')
+-    return {'argv': argv, 'pid': proc.pid, 'exit_code': code, 'stdout': c.ref(out_path),
+-        'stderr': c.ref(err_path), 'json_output': output}
+-
+-
+-def only_output(c, result, key):
+-    values = [row for row in result['json_output'] if isinstance(row, dict) and key in row]
+-    c.require(len(values) == 1, 'Expected exactly one actual canonical output reference')
+-    return c.ref(values[0][key])
+-
+-
+-def original_runtime_branch(c, target):
+-    runtime = c.load('frontier_branch_original_runtime', c.STATE / 'runtime.py')
+-    rt = runtime.Runtime(c.ROOT)
+-    deps = {name: c.sha(rt.paths(name)[1]) for name in runtime.imports(rt.paths(target)[0])}
+-    cache = c.read(c.STATE / 'cache' / (target + '.json'))
+-    c.require(not cache.get('warnings_as_errors'), 'Current strict cache requires separately reviewed strict-evidence reuse')
+-    c.require(rt.old_candidate(target, deps, True) is None, 'Old strict reuse requires separate provenance gate')
+-    c.require(rt.remote_candidate(target, deps, True) is None, 'Remote strict reuse requires separate provenance gate')
+-    return {'runtime_check_invocations': 0, 'actual_new_strict_compilations': 0,
+-        'matching_strict_evidence_reuses': 0, 'expected_mode': 'NEW_CANONICAL_STRICT'}
+-
+-
+-def strict_validate(c, reference, target, before):
+-    receipt = c.read(c.bound(reference))
+-    c.require(receipt['status'] == 'PASS' and receipt['module'] == target and receipt['warnings_as_errors'] is True, 'Strict status/policy')
+-    c.require(receipt['binding'] == receipt['binding_after'] == before['stable_inputs']['target_binding'], 'Strict bindings')
+-    c.require(receipt['binding']['source_sha256'] == c.TARGETS[target], 'Strict source')
+-    c.require(receipt['command'][1:4] == ['-j2', '-M6144', '-DwarningAsError=true'], 'Strict resource command')
+-    c.require(receipt['runtime_sha256'] == receipt['runtime_sha256_after'] == c.PROTECTED['runtime.py'], 'Runtime changed')
+-    c.require(receipt['exit_code'] == 0 and receipt['guard_error'] is None, 'Strict guard/exit')
+-    c.require(receipt['rss_guard']['limit_mib'] == 6656 and receipt['max_rss_kib'] <= 6656 * 1024, 'Strict RSS')
+-    c.require(receipt['object_parts'] == {k: v for k, v in c.all_slots(c.STATE / 'lib/lean' / (target.replace('.', '/') + '.olean')).items() if v is not None}, 'Strict current slots')
+-    c.require(c.read(c.STATE / 'cache' / (target + '.json')) == receipt, 'Strict/cache mismatch')
+-    return receipt
+-
+-
+-def evidence_refs(c, audit_ref):
+-    rp = c.bound(audit_ref)
+-    # Exact artifacts produced by original singleton stock-ALL command.
+-    receipt = c.read(rp)
+-    target = next(iter(receipt['targets']))
+-    return {name: c.ref(rp.parent / name) for name in ('receipt.json', 'declarations.json',
+-        'declarations.log', 'audit-process.json', 'OwnedAudit.lean',
+-        'replay-' + target + '.json', 'replay-' + target + '.log')}
+-
+-
+-def advance(c, gate_ref, quota_ref, stage, run):
+-    c.require(not (run / 'HOLD.json').exists() and not (run / 'TERMINAL.json').exists(), 'Run already terminal')
+-    gate = gate_check(c, gate_ref, 'ROOT_AUTHORIZED_THREE_FRONTIERS_SERIAL_ADMISSION')
+-    c.require(str(run.resolve()) == str(c.path(gate['run_directory']).resolve()), 'Run directory gate mismatch')
+-    c.require(gate['pipeline'] == order(c), 'Stage machine gate mismatch')
+-    events, prior = journal_load(c, run)
+-    index = len(events)
+-    c.require(index < len(order(c)) and stage == order(c)[index], 'No skipping/reordering/retry')
+-    quota = quota_check(c, quota_ref, stage, gate_ref)
+-    c.require(quota.get('previous_event') == prior, 'Fresh root quota must bind exact preceding event hash')
+-    idle_before = c.physical_idle()
+-    native_before = c.native_union_check(gate['prepared'])
+-    before_artifacts, before_sources = c.artifacts(), c.frozen_sources()
+-    if events:
+-        c.require(before_artifacts == events[-1]['artifact_map_after'], 'Between-stage artifact mutation')
+-        c.require(before_sources == events[-1]['source_map_after'], 'Between-stage source mutation')
+-    for event in events:
+-        c.require(event['gate'] == gate_ref and event['heavy_owner'] == gate['heavy_owner'], 'Owner/gate changed')
+-    started = c.write_new(run / f'{index:03d}-started.json', {'status': 'RUNNING', 'stage': stage,
+-        'previous': prior, 'gate': gate_ref, 'quota': quota_ref, 'observed_quota': quota,
+-        'idle_before': idle_before, 'started_utc': c.now(), 'heavy_owner': gate['heavy_owner']})
+-    value, active = {}, None
+-    resources = ['--memory-mib', '6144', '--rss-limit-mib', '6656', '--resource-reason', gate['resource_reason']]
+-
+-    def previous(target, phase):
+-        return next(e['result'] for e in events if e['stage'] == target + ':' + phase)
+-
+-    if stage == 'batch-before':
+-        c.require(set(gate['prepared']) == set(c.TARGETS), 'Missing prepared inputs')
+-        for target in c.TARGETS:
+-            prepared = c.read(c.bound(gate['prepared'][target]))
+-            c.require(prepared['target'] == target and prepared['source_sha256'] == c.TARGETS[target], 'Preparation target')
+-            c.require(prepared['artifact_map'] == before_artifacts, 'Preparation artifact snapshot stale')
+-            actual = c.collect(target, prepared['proper'])
+-            c.require(actual == prepared, 'Actual inputs differ from root-bound preparation')
+-            original_runtime_branch(c, target)
+-        value = {'baseline': gate['baseline_census'], 'no_compilation': True}
+-    elif stage == 'terminal':
+-        audits = {target: previous(target, 'stock-ALL')['audit'] for target in c.TARGETS}
+-        for target in c.TARGETS:
+-            end = previous(target, 'full-after')
+-            c.bound(end['capture'])
+-            strict_validate(c, previous(target, 'strict')['strict'], target, c.read(previous(target, 'full-before')['capture']['path']))
+-        candidate = c.candidate_census(gate['baseline_census'], audits)
+-        candidate_ref = c.write_new(run / 'candidate-census.json', candidate)
+-        _, counts = c.verify_census(candidate_ref)
+-        value = {'candidate_census': candidate_ref, 'actual_counts': counts,
+-            'acceptance_status': 'PENDING_ROOT_INDEPENDENT_ACCEPTANCE',
+-            'audits': audits, 'generated_count_predicted': None, 'unconditional_main_proved': False}
+-    else:
+-        active, phase = stage.split(':', 1)
+-        c.require(active in c.TARGETS, 'Unapproved target')
+-        source_sha = c.TARGETS[active]
+-        if phase.startswith('proper-'):
+-            argv = ['/usr/bin/python3', str(c.STATE / 'preflight_current_oct20.py'), active, source_sha]
+-            result = command(c, run, index, argv)
+-            report_ref = only_output(c, result, 'report')
+-            report = c.validate_proper(report_ref, active)
+-            if phase == 'proper-after':
+-                before_ref = previous(active, 'proper-before')['proper']
+-                c.require(report == c.read(c.bound(before_ref)) and report_ref['sha256'] == before_ref['sha256'], 'Proper before/after differs')
+-            value = {'command': result, 'proper': report_ref}
+-        elif phase in ('full-before', 'full-after'):
+-            proper_ref = previous(active, 'proper-before' if phase == 'full-before' else 'proper-after')['proper']
+-            capture = c.collect(active, proper_ref)
+-            prepared = c.read(c.bound(gate['prepared'][active]))
+-            c.require(capture['stable_inputs'] == prepared['stable_inputs'], 'Native/full stable inputs changed')
+-            if phase == 'full-before':
+-                c.require(capture['target_state'] == prepared['target_state'], 'Pre-strict target changed')
+-            else:
+-                first = c.read(c.bound(previous(active, 'full-before')['capture']))
+-                c.require(capture['stable_inputs'] == first['stable_inputs'], 'Full before/after differs')
+-                strict = strict_validate(c, previous(active, 'strict')['strict'], active, first)
+-                audit_ref = previous(active, 'stock-ALL')['audit']
+-                receipt, records, _ = c.validate_records(c.bound(audit_ref), active, source_sha, strict['object_parts'])
+-                c.require(receipt['targets'] == {active: source_sha}, 'Non-singleton stock target')
+-                c.require(c.written_names(active) <= {r['name'] for r in records}, 'Written scope omitted')
+-            value = {'capture': c.write_new(run / f'{index:03d}-full-inputs.json', capture)}
+-        elif phase == 'strict':
+-            first = c.read(c.bound(previous(active, 'full-before')['capture']))
+-            actual = c.collect(active, first['proper'])
+-            c.require(actual == first, 'Inputs changed before strict')
+-            counters = original_runtime_branch(c, active)
+-            result = command(c, run, index, ['/usr/bin/python3', str(c.STATE / 'runtime.py'), active, '--compile'] + resources)
+-            strict_ref = only_output(c, result, 'receipt')
+-            strict_validate(c, strict_ref, active, first)
+-            counters.update(runtime_check_invocations=1, actual_new_strict_compilations=1)
+-            value = {'command': result, 'strict': strict_ref,
+-                'strict_stdout': c.ref(c.bound(strict_ref).parent / 'stdout.log'), 'execution_counts': counters}
+-        elif phase == 'stock-ALL':
+-            first = c.read(c.bound(previous(active, 'full-before')['capture']))
+-            strict = strict_validate(c, previous(active, 'strict')['strict'], active, first)
+-            result = command(c, run, index, ['/usr/bin/python3', str(c.STATE / 'audit_owned.py'), '--target', active + '=' + source_sha] + resources)
+-            audit_ref = only_output(c, result, 'receipt')
+-            receipt, records, _ = c.validate_records(c.bound(audit_ref), active, source_sha, strict['object_parts'])
+-            c.require(receipt['targets'] == {active: source_sha}, 'Audit target not singleton')
+-            c.require(c.written_names(active) <= {r['name'] for r in records}, 'Written scope omitted')
+-            c.require(receipt['audit_runner_sha256'] == c.PROTECTED['audit_owned.py'], 'Audit runner changed')
+-            c.require(receipt['source_template_sha256'] == c.PROTECTED['../../verification/parts/p0/queue/AuditTemplate.lean'], 'Audit template changed')
+-            c.require(c.sha(c.bound(audit_ref).parent / 'OwnedAudit.lean') == receipt['generated_audit_sha256'], 'Generated audit changed')
+-            stock = next(s['result'] for s in receipt['stages'] if s['kind'] == 'stock_replay')
+-            c.require(stock['guard_error'] is None and stock['rss_guard']['limit_mib'] == 6656 and
+-                stock['max_rss_kib'] <= 6656 * 1024, 'Stock original RSS guard')
+-            process = c.read(c.bound(evidence_refs(c, audit_ref)['audit-process.json']))
+-            c.require(process['status'] == 'PASS' and process['returncode'] == 0 and process['guard_error'] is None, 'Audit process failed')
+-            c.require(process['command'][1:4] == ['-j2', '-M6144', '-DwarningAsError=true'], 'Audit resources')
+-            c.require(process['rss_guard']['limit_mib'] == 6656 and process['max_rss_kib'] <= 6656 * 1024, 'Audit RSS')
+-            value = {'command': result, 'audit': audit_ref, 'evidence': evidence_refs(c, audit_ref),
+-                'stock_ALL_invocations': 1, 'actual_complete_records': len(records)}
+-        else:
+-            raise ValueError('Unknown phase')
+-    after_artifacts, after_sources = c.artifacts(), c.frozen_sources()
+-    c.unchanged_non_target(before_artifacts, after_artifacts, active if stage.endswith(':strict') else None)
+-    c.require(before_sources == after_sources, 'Actual source mutation')
+-    c.protected()
+-    idle_after = c.physical_idle()
+-    native_after = c.native_union_check(gate['prepared'])
+-    c.require(native_before == native_after, 'Per-stage native union changed')
+-    event = {'status': 'PASS', 'stage': stage, 'previous': prior, 'started': started,
+-        'gate': gate_ref, 'heavy_owner': gate['heavy_owner'], 'result': value,
+-        'artifact_map_after': after_artifacts, 'source_map_after': after_sources,
+-        'idle_after': idle_after, 'native_before': native_before, 'native_after': native_after,
+-        'finished_utc': c.now()}
+-    event_ref = c.write_new(run / f'{index:03d}-finished.json', event)
+-    if stage == 'terminal':
+-        c.write_new(run / 'TERMINAL.json', {'status': 'ACTUAL_PIPELINE_PASS_PENDING_ROOT_ACCEPTANCE',
+-            'final_event': event_ref, 'result': value, 'retries': 0, 'main_1_plus_1_75': 'OPEN'})
+-    return event_ref
+-
+-
+-def main():
+-    p = argparse.ArgumentParser()
+-    p.add_argument('--common-sha256', required=True)
+-    p.add_argument('--gate', required=True)
+-    p.add_argument('--gate-sha256', required=True)
+-    p.add_argument('--quota', required=True)
+-    p.add_argument('--quota-sha256', required=True)
+-    p.add_argument('--stage', required=True)
+-    p.add_argument('--run-directory', required=True)
+-    args = p.parse_args()
+-    c = import_common(args.common_sha256)
+-    run = c.path(args.run_directory).resolve()
+-    c.require(run.parent == (c.STATE / 'rounds').resolve() and run.name.startswith('three-frontiers-run-'), 'Unsafe run directory')
+-    run.mkdir(exist_ok=True)
+-    try:
+-        event = advance(c, {'path': args.gate, 'sha256': args.gate_sha256},
+-            {'path': args.quota, 'sha256': args.quota_sha256}, args.stage, run)
+-        print(json.dumps({'stage': args.stage, 'event': event, 'status': 'PASS_PENDING_ROOT_ACCEPTANCE'}))
+-    except BaseException as error:
+-        hold = run / 'HOLD.json'
+-        if not hold.exists():
+-            c.write_new(hold, {'status': 'FIRSTFAIL_HOLD_NO_RETRY', 'stage': args.stage,
+-                'error_type': type(error).__name__, 'error': str(error), 'traceback': traceback.format_exc(),
+-                'observed_utc': c.now(), 'no_automatic_retry_repair_restore_or_skip': True})
+-        raise
+-
+-
+-if __name__ == '__main__':
+-    main()
++"""Unexecuted staged canonical-tool operator. No default/root execution authority.
++
++Each invocation advances exactly one root-gated stage with fresh quota evidence.
++Incomplete started stages, existing HOLD, reordered stages and retries stop.
++"""
++from pathlib import Path
++import argparse
++import datetime
++import importlib.util
++import json
++import os
++import subprocess
++import sys
++import traceback
++
++COMMON = Path(__file__).with_name('20261022-EU-next-three-current193-common-SOURCE-ONLY.py')
++
++
++def import_common(expected):
++    import hashlib
++    with COMMON.open('rb') as stream:
++        digest = hashlib.file_digest(stream, 'sha256').hexdigest()
++    if digest != expected:
++        raise ValueError('Unbound shared helper')
++    spec = importlib.util.spec_from_file_location('frontier_shared', COMMON)
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def order(c):
++    return ['batch-before'] + [module + ':' + phase for module in c.TARGETS
++        for phase in ('proper-before', 'full-before', 'strict', 'stock-ALL', 'proper-after', 'full-after')] + ['terminal']
++
++
++def gate_check(c, reference, authority):
++    gate = c.read(c.bound(reference))
++    c.require(gate['status'] == authority and gate['execution_authorized'] == (authority == 'ROOT_AUTHORIZED_THREE_FRONTIERS_SERIAL_ADMISSION'), 'Gate authority')
++    c.require(gate['targets'] == c.TARGETS and gate['target_order'] == list(c.TARGETS), 'Exact three target order')
++    c.require(gate['protected'] == c.PROTECTED, 'Canonical tool bindings')
++    c.require(gate['reviews'] == {m: {'path': p, 'sha256': h} for m, (p, h) in c.REVIEWS.items()}, 'Review bindings')
++    c.require(gate['heavy_owner'] and gate['heavy_concurrency_limit'] == 1, 'Sole owner absent')
++    c.require(isinstance(gate['resource_reason'], str) and gate['resource_reason'].strip(), 'Missing root resource authorization reason')
++    c.require((gate['threads'], gate['memory_mib'], gate['rss_limit_mib'], gate['quota_stop_remaining_lte']) == (2, 6144, 6656, 5), 'Resources/quota policy')
++    c.require(gate['shared_lock'] == '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/locks/compiler-0.lock', 'Wrong original lock')
++    c.require(gate['failure_policy'] == 'FIRSTFAIL_HOLD_NO_RETRY_REPAIR_RESTORE_OR_SKIP', 'Failure policy')
++    c.require(gate['generated_count_predicted'] is None and not gate['unconditional_main_proved'], 'Predicted/inflated claim')
++    c.require(c.sha(__file__) == gate['operator_sha256'] and c.sha(COMMON) == gate['common_sha256'], 'Source binding')
++    for reference in gate['additional_bindings']:
++        c.bound(reference)
++    c.protected()
++    c.require(gate['baseline_census'] == c.BASELINE and gate['baseline_acceptance'] == c.BASELINE_ACCEPTANCE, 'Fixed accepted193 baseline')
++    c.require(gate['baseline_counts'] == {'owned_modules': 193, 'declarations': 4371, 'original_receipts': 141}, 'Fixed193 counts')
++    baseline, counts = c.verify_census(gate['baseline_census'])
++    c.require(counts == gate['baseline_counts'], 'Actual baseline counts')
++    acceptance = c.read(c.bound(gate['baseline_acceptance']))
++    c.require(acceptance['current_census_sha256'] == gate['baseline_census']['sha256'], 'Acceptance/census mismatch')
++    c.require(acceptance['owned_modules'] == counts['owned_modules'] and acceptance['declarations'] == counts['declarations'] and
++        acceptance['original_receipts'] == counts['original_receipts'], 'Acceptance counts')
++    c.require(acceptance['status'].startswith('ROOT_') and acceptance['status'].endswith('_ACCEPTED'), 'No root acceptance')
++    c.require(not acceptance['unconditional_main_proved'] and not acceptance['external_closure_replayed'], 'Acceptance claims')
++    c.require(not (set(c.TARGETS) & set(baseline['modules'])), 'Target already in bound baseline')
++    freeze = c.read(c.bound(gate['all562_source_freeze']))
++    c.require(freeze == c.frozen_sources(), 'Root source freeze mismatch')
++    return gate
++
++
++def quota_check(c, quota_ref, stage, gate_ref):
++    value = c.read(c.bound(quota_ref))
++    c.require(value['source'] == 'root-fresh-quota-tool-result' and value['stage'] == stage, 'Fresh quota provenance/stage')
++    c.require(value['gate_sha256'] == gate_ref['sha256'], 'Quota/gate mismatch')
++    remaining = value['remaining_percent']
++    c.require(isinstance(remaining, (int, float)) and 5 < remaining <= 100, 'Quota safe-boundary stop')
++    observed = datetime.datetime.fromisoformat(value['observed_utc'])
++    c.require(observed.tzinfo is not None, 'Quota timestamp lacks timezone')
++    age = (datetime.datetime.now(datetime.timezone.utc) - observed).total_seconds()
++    c.require(0 <= age <= 120, 'Quota evidence stale')
++    return value
++
++
++def journal_load(c, run):
++    events = sorted(run.glob('[0-9][0-9][0-9]-finished.json'))
++    result, prior = [], None
++    for index, p in enumerate(events):
++        c.require(p.name == f'{index:03d}-finished.json', 'Journal gap')
++        event = c.read(p)
++        c.require(event['previous'] == prior and event['status'] == 'PASS', 'Journal chain/status')
++        start_ref = event['started']
++        started = c.read(c.bound(start_ref))
++        c.require(started['stage'] == event['stage'] and started['previous'] == prior, 'Started/finished chain')
++        c.require(event['stage'] == order(c)[index], 'Journal stage order')
++        result.append(event)
++        prior = c.ref(p)
++    starts = sorted(run.glob('[0-9][0-9][0-9]-started.json'))
++    c.require(len(starts) == len(events), 'Prior stage started but not terminal; no automatic retry')
++    return result, prior
++
++
++def command(c, run, index, argv):
++    """Only caller-provided canonical CLI argv, exact one invocation; reap child."""
++    c.require(argv[0] == '/usr/bin/python3' and Path(argv[1]).resolve() in {
++        (c.STATE / name).resolve() for name in ('preflight_current_oct20.py', 'runtime.py', 'audit_owned.py')}, 'Noncanonical executable')
++    out_path, err_path = run / f'{index:03d}-stdout.log', run / f'{index:03d}-stderr.log'
++    with out_path.open('xb') as out, err_path.open('xb') as err:
++        proc = subprocess.Popen(argv, cwd=c.ROOT, stdout=out, stderr=err, start_new_session=True)
++        interrupted = None
++        while True:
++            try:
++                code = proc.wait()
++                break
++            except BaseException as error:
++                # Original runtime/stock guard owns compiler termination. Do not
++                # abandon its live child/lock or spawn a retry after interruption.
++                interrupted = error
++        if interrupted is not None:
++            raise RuntimeError('Operator interrupted; original child reaped; HOLD') from interrupted
++    output = []
++    for line in out_path.read_text().splitlines():
++        try:
++            output.append(json.loads(line))
++        except json.JSONDecodeError:
++            continue
++    c.require(code == 0, 'Canonical command failed; inspect preserved logs')
++    return {'argv': argv, 'pid': proc.pid, 'exit_code': code, 'stdout': c.ref(out_path),
++        'stderr': c.ref(err_path), 'json_output': output}
++
++
++def only_output(c, result, key):
++    values = [row for row in result['json_output'] if isinstance(row, dict) and key in row]
++    c.require(len(values) == 1, 'Expected exactly one actual canonical output reference')
++    return c.ref(values[0][key])
++
++
++def original_runtime_branch(c, target):
++    runtime = c.load('frontier_branch_original_runtime', c.STATE / 'runtime.py')
++    rt = runtime.Runtime(c.ROOT)
++    deps = {name: c.sha(rt.paths(name)[1]) for name in runtime.imports(rt.paths(target)[0])}
++    cache_path = c.STATE / 'cache' / (target + '.json')
++    cache = c.read(cache_path) if cache_path.is_file() else None
++    obj = rt.paths(target)[1]
++    reusable = cache is not None and obj.is_file() and cache.get('status') == 'PASS' and cache.get('binding') == rt.binding(target, deps) and cache.get('warnings_as_errors') and cache.get('object_parts') == rt.parts(obj)
++    c.require(not reusable, 'Current reusable strict cache requires separate provenance gate; this batch permits NEW_STRICT only')
++    c.require(rt.old_candidate(target, deps, True) is None, 'Old strict reuse requires separate provenance gate')
++    c.require(rt.remote_candidate(target, deps, True) is None, 'Remote strict reuse requires separate provenance gate')
++    return {'runtime_check_invocations': 0, 'actual_new_strict_compilations': 0,
++        'matching_strict_evidence_reuses': 0, 'expected_mode': 'NEW_CANONICAL_STRICT'}
++
++
++def strict_validate(c, reference, target, before):
++    receipt = c.read(c.bound(reference))
++    c.require(receipt['status'] == 'PASS' and receipt['module'] == target and receipt['warnings_as_errors'] is True, 'Strict status/policy')
++    c.require(receipt['binding'] == receipt['binding_after'] == before['stable_inputs']['target_binding'], 'Strict bindings')
++    c.require(receipt['binding']['source_sha256'] == c.TARGETS[target], 'Strict source')
++    c.require(receipt['command'][1:4] == ['-j2', '-M6144', '-DwarningAsError=true'], 'Strict resource command')
++    c.require(receipt['runtime_sha256'] == receipt['runtime_sha256_after'] == c.PROTECTED['runtime.py'], 'Runtime changed')
++    c.require(receipt['exit_code'] == 0 and receipt['guard_error'] is None, 'Strict guard/exit')
++    c.require(receipt['rss_guard']['limit_mib'] == 6656 and receipt['max_rss_kib'] <= 6656 * 1024, 'Strict RSS')
++    c.require(receipt['object_parts'] == {k: v for k, v in c.all_slots(c.STATE / 'lib/lean' / (target.replace('.', '/') + '.olean')).items() if v is not None}, 'Strict current slots')
++    c.require(c.read(c.STATE / 'cache' / (target + '.json')) == receipt, 'Strict/cache mismatch')
++    return receipt
++
++
++def evidence_refs(c, audit_ref):
++    rp = c.bound(audit_ref)
++    # Exact artifacts produced by original singleton stock-ALL command.
++    receipt = c.read(rp)
++    target = next(iter(receipt['targets']))
++    return {name: c.ref(rp.parent / name) for name in ('receipt.json', 'declarations.json',
++        'declarations.log', 'audit-process.json', 'OwnedAudit.lean',
++        'replay-' + target + '.json', 'replay-' + target + '.log')}
++
++
++def advance(c, gate_ref, quota_ref, stage, run):
++    c.require(not (run / 'HOLD.json').exists() and not (run / 'TERMINAL.json').exists(), 'Run already terminal')
++    gate = gate_check(c, gate_ref, 'ROOT_AUTHORIZED_THREE_FRONTIERS_SERIAL_ADMISSION')
++    c.require(str(run.resolve()) == str(c.path(gate['run_directory']).resolve()), 'Run directory gate mismatch')
++    c.require(gate['pipeline'] == order(c), 'Stage machine gate mismatch')
++    events, prior = journal_load(c, run)
++    index = len(events)
++    c.require(index < len(order(c)) and stage == order(c)[index], 'No skipping/reordering/retry')
++    quota = quota_check(c, quota_ref, stage, gate_ref)
++    c.require(quota.get('previous_event') == prior, 'Fresh root quota must bind exact preceding event hash')
++    idle_before = c.physical_idle()
++    native_before = c.native_union_check(gate['prepared'])
++    before_artifacts, before_sources = c.artifacts(), c.frozen_sources()
++    if events:
++        c.require(before_artifacts == events[-1]['artifact_map_after'], 'Between-stage artifact mutation')
++        c.require(before_sources == events[-1]['source_map_after'], 'Between-stage source mutation')
++    for event in events:
++        c.require(event['gate'] == gate_ref and event['heavy_owner'] == gate['heavy_owner'], 'Owner/gate changed')
++    started = c.write_new(run / f'{index:03d}-started.json', {'status': 'RUNNING', 'stage': stage,
++        'previous': prior, 'gate': gate_ref, 'quota': quota_ref, 'observed_quota': quota,
++        'idle_before': idle_before, 'started_utc': c.now(), 'heavy_owner': gate['heavy_owner']})
++    value, active = {}, None
++    resources = ['--memory-mib', '6144', '--rss-limit-mib', '6656', '--resource-reason', gate['resource_reason']]
++
++    def previous(target, phase):
++        return next(e['result'] for e in events if e['stage'] == target + ':' + phase)
++
++    if stage == 'batch-before':
++        c.require(set(gate['prepared']) == set(c.TARGETS), 'Missing prepared inputs')
++        for target in c.TARGETS:
++            prepared = c.read(c.bound(gate['prepared'][target]))
++            c.require(prepared['target'] == target and prepared['source_sha256'] == c.TARGETS[target], 'Preparation target')
++            c.require(prepared['artifact_map'] == before_artifacts, 'Preparation artifact snapshot stale')
++            actual = c.collect(target, prepared['proper'])
++            c.require(actual == prepared, 'Actual inputs differ from root-bound preparation')
++            original_runtime_branch(c, target)
++        value = {'baseline': gate['baseline_census'], 'no_compilation': True}
++    elif stage == 'terminal':
++        audits = {target: previous(target, 'stock-ALL')['audit'] for target in c.TARGETS}
++        for target in c.TARGETS:
++            end = previous(target, 'full-after')
++            c.bound(end['capture'])
++            strict_validate(c, previous(target, 'strict')['strict'], target, c.read(previous(target, 'full-before')['capture']['path']))
++        candidate = c.candidate_census(gate['baseline_census'], audits)
++        candidate_ref = c.write_new(run / 'candidate-census.json', candidate)
++        _, counts = c.verify_census(candidate_ref)
++        value = {'candidate_census': candidate_ref, 'actual_counts': counts,
++            'acceptance_status': 'PENDING_ROOT_INDEPENDENT_ACCEPTANCE',
++            'audits': audits, 'generated_count_predicted': None, 'unconditional_main_proved': False}
++    else:
++        active, phase = stage.split(':', 1)
++        c.require(active in c.TARGETS, 'Unapproved target')
++        source_sha = c.TARGETS[active]
++        if phase.startswith('proper-'):
++            argv = ['/usr/bin/python3', str(c.STATE / 'preflight_current_oct20.py'), active, source_sha]
++            result = command(c, run, index, argv)
++            report_ref = only_output(c, result, 'report')
++            report = c.validate_proper(report_ref, active)
++            if phase == 'proper-after':
++                before_ref = previous(active, 'proper-before')['proper']
++                c.require(report == c.read(c.bound(before_ref)) and report_ref['sha256'] == before_ref['sha256'], 'Proper before/after differs')
++            value = {'command': result, 'proper': report_ref}
++        elif phase in ('full-before', 'full-after'):
++            proper_ref = previous(active, 'proper-before' if phase == 'full-before' else 'proper-after')['proper']
++            capture = c.collect(active, proper_ref)
++            prepared = c.read(c.bound(gate['prepared'][active]))
++            c.require(capture['stable_inputs'] == prepared['stable_inputs'], 'Native/full stable inputs changed')
++            if phase == 'full-before':
++                c.require(capture['target_state'] == prepared['target_state'], 'Pre-strict target changed')
++            else:
++                first = c.read(c.bound(previous(active, 'full-before')['capture']))
++                c.require(capture['stable_inputs'] == first['stable_inputs'], 'Full before/after differs')
++                strict = strict_validate(c, previous(active, 'strict')['strict'], active, first)
++                audit_ref = previous(active, 'stock-ALL')['audit']
++                receipt, records, _ = c.validate_records(c.bound(audit_ref), active, source_sha, strict['object_parts'])
++                c.require(receipt['targets'] == {active: source_sha}, 'Non-singleton stock target')
++                c.require(c.written_names(active) <= {r['name'] for r in records}, 'Written scope omitted')
++            value = {'capture': c.write_new(run / f'{index:03d}-full-inputs.json', capture)}
++        elif phase == 'strict':
++            first = c.read(c.bound(previous(active, 'full-before')['capture']))
++            actual = c.collect(active, first['proper'])
++            c.require(actual == first, 'Inputs changed before strict')
++            counters = original_runtime_branch(c, active)
++            result = command(c, run, index, ['/usr/bin/python3', str(c.STATE / 'runtime.py'), active, '--compile'] + resources)
++            strict_ref = only_output(c, result, 'receipt')
++            strict_validate(c, strict_ref, active, first)
++            counters.update(runtime_check_invocations=1, actual_new_strict_compilations=1)
++            value = {'command': result, 'strict': strict_ref,
++                'strict_stdout': c.ref(c.bound(strict_ref).parent / 'stdout.log'), 'execution_counts': counters}
++        elif phase == 'stock-ALL':
++            first = c.read(c.bound(previous(active, 'full-before')['capture']))
++            strict = strict_validate(c, previous(active, 'strict')['strict'], active, first)
++            result = command(c, run, index, ['/usr/bin/python3', str(c.STATE / 'audit_owned.py'), '--target', active + '=' + source_sha] + resources)
++            audit_ref = only_output(c, result, 'receipt')
++            receipt, records, _ = c.validate_records(c.bound(audit_ref), active, source_sha, strict['object_parts'])
++            c.require(receipt['targets'] == {active: source_sha}, 'Audit target not singleton')
++            c.require(c.written_names(active) <= {r['name'] for r in records}, 'Written scope omitted')
++            c.require(receipt['audit_runner_sha256'] == c.PROTECTED['audit_owned.py'], 'Audit runner changed')
++            c.require(receipt['source_template_sha256'] == c.PROTECTED['../../verification/parts/p0/queue/AuditTemplate.lean'], 'Audit template changed')
++            c.require(c.sha(c.bound(audit_ref).parent / 'OwnedAudit.lean') == receipt['generated_audit_sha256'], 'Generated audit changed')
++            stock = next(s['result'] for s in receipt['stages'] if s['kind'] == 'stock_replay')
++            c.require(stock['guard_error'] is None and stock['rss_guard']['limit_mib'] == 6656 and
++                stock['max_rss_kib'] <= 6656 * 1024, 'Stock original RSS guard')
++            process = c.read(c.bound(evidence_refs(c, audit_ref)['audit-process.json']))
++            c.require(process['status'] == 'PASS' and process['returncode'] == 0 and process['guard_error'] is None, 'Audit process failed')
++            c.require(process['command'][1:4] == ['-j2', '-M6144', '-DwarningAsError=true'], 'Audit resources')
++            c.require(process['rss_guard']['limit_mib'] == 6656 and process['max_rss_kib'] <= 6656 * 1024, 'Audit RSS')
++            value = {'command': result, 'audit': audit_ref, 'evidence': evidence_refs(c, audit_ref),
++                'stock_ALL_invocations': 1, 'actual_complete_records': len(records)}
++        else:
++            raise ValueError('Unknown phase')
++    after_artifacts, after_sources = c.artifacts(), c.frozen_sources()
++    c.unchanged_non_target(before_artifacts, after_artifacts, active if stage.endswith(':strict') else None)
++    c.require(before_sources == after_sources, 'Actual source mutation')
++    c.protected()
++    idle_after = c.physical_idle()
++    native_after = c.native_union_check(gate['prepared'])
++    c.require(native_before == native_after, 'Per-stage native union changed')
++    event = {'status': 'PASS', 'stage': stage, 'previous': prior, 'started': started,
++        'gate': gate_ref, 'heavy_owner': gate['heavy_owner'], 'result': value,
++        'artifact_map_after': after_artifacts, 'source_map_after': after_sources,
++        'idle_after': idle_after, 'native_before': native_before, 'native_after': native_after,
++        'finished_utc': c.now()}
++    event_ref = c.write_new(run / f'{index:03d}-finished.json', event)
++    if stage == 'terminal':
++        c.write_new(run / 'TERMINAL.json', {'status': 'ACTUAL_PIPELINE_PASS_PENDING_ROOT_ACCEPTANCE',
++            'final_event': event_ref, 'result': value, 'retries': 0, 'main_1_plus_1_75': 'OPEN'})
++    return event_ref
++
++
++def main():
++    p = argparse.ArgumentParser()
++    p.add_argument('--common-sha256', required=True)
++    p.add_argument('--gate', required=True)
++    p.add_argument('--gate-sha256', required=True)
++    p.add_argument('--quota', required=True)
++    p.add_argument('--quota-sha256', required=True)
++    p.add_argument('--stage', required=True)
++    p.add_argument('--run-directory', required=True)
++    args = p.parse_args()
++    c = import_common(args.common_sha256)
++    run = c.path(args.run_directory).resolve()
++    c.require(run.parent == (c.STATE / 'rounds').resolve() and run.name.startswith('three-frontiers-run-'), 'Unsafe run directory')
++    run.mkdir(exist_ok=True)
++    try:
++        event = advance(c, {'path': args.gate, 'sha256': args.gate_sha256},
++            {'path': args.quota, 'sha256': args.quota_sha256}, args.stage, run)
++        print(json.dumps({'stage': args.stage, 'event': event, 'status': 'PASS_PENDING_ROOT_ACCEPTANCE'}))
++    except BaseException as error:
++        hold = run / 'HOLD.json'
++        if not hold.exists():
++            c.write_new(hold, {'status': 'FIRSTFAIL_HOLD_NO_RETRY', 'stage': args.stage,
++                'error_type': type(error).__name__, 'error': str(error), 'traceback': traceback.format_exc(),
++                'observed_utc': c.now(), 'no_automatic_retry_repair_restore_or_skip': True})
++        raise
++
++
++if __name__ == '__main__':
++    main()

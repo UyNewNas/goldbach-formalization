@@ -1,0 +1,100 @@
+import ImbalancedChen.Certificates.PairedV2Prefix4Data
+import ImbalancedChen.Certificates.PairedV2Geometry
+
+/-!
+Actual first 4 adopted E0 cells. Each numerical check has its own
+proof term, then the accepted checker bounds the sum of real integrals.
+This prefix includes row 0; it is not an additional gain to add to row 0.
+The finite sum is not asserted equal to the full mask or to a union integral.
+-/
+
+namespace ImbalancedChen.Certificates.PairedV2.Prefix4
+
+open MeasureTheory Set
+open scoped BigOperators Interval
+
+theorem row0000_checked : certificate0000.check = true := by
+  norm_num [certificate0000, PairedIntegralCertificate.check, PairedIntegralCertificate.Valid, RationalLogCertificate.check, RationalLogCertificate.Valid, PairedIntegralCertificate.productLower, PairedIntegralCertificate.productUpper, PairedIntegralCertificate.bracketLower, PairedIntegralCertificate.bracketUpper, logSeriesLower, logSeriesUpper, logParameter, Finset.sum_range_succ, tLower, tUpper, uLower, uUpper, a, h, d, mu, K]
+
+theorem row0001_checked : certificate0001.check = true := by
+  norm_num [certificate0001, PairedIntegralCertificate.check, PairedIntegralCertificate.Valid, RationalLogCertificate.check, RationalLogCertificate.Valid, PairedIntegralCertificate.productLower, PairedIntegralCertificate.productUpper, PairedIntegralCertificate.bracketLower, PairedIntegralCertificate.bracketUpper, logSeriesLower, logSeriesUpper, logParameter, Finset.sum_range_succ, tLower, tUpper, uLower, uUpper, a, h, d, mu, K]
+
+theorem row0002_checked : certificate0002.check = true := by
+  norm_num [certificate0002, PairedIntegralCertificate.check, PairedIntegralCertificate.Valid, RationalLogCertificate.check, RationalLogCertificate.Valid, PairedIntegralCertificate.productLower, PairedIntegralCertificate.productUpper, PairedIntegralCertificate.bracketLower, PairedIntegralCertificate.bracketUpper, logSeriesLower, logSeriesUpper, logParameter, Finset.sum_range_succ, tLower, tUpper, uLower, uUpper, a, h, d, mu, K]
+
+theorem row0003_checked : certificate0003.check = true := by
+  norm_num [certificate0003, PairedIntegralCertificate.check, PairedIntegralCertificate.Valid, RationalLogCertificate.check, RationalLogCertificate.Valid, PairedIntegralCertificate.productLower, PairedIntegralCertificate.productUpper, PairedIntegralCertificate.bracketLower, PairedIntegralCertificate.bracketUpper, logSeriesLower, logSeriesUpper, logParameter, Finset.sum_range_succ, tLower, tUpper, uLower, uUpper, a, h, d, mu, K]
+
+theorem certificates_checked (i : Fin 4) : (certificates i).check = true := by
+  fin_cases i
+  · exact row0000_checked
+  · exact row0001_checked
+  · exact row0002_checked
+  · exact row0003_checked
+
+theorem geometry_checked (i : Fin 4) :
+    E0Geometry (rowIndices i).1 (rowIndices i).2 (rowZ i) := by
+  fin_cases i <;>
+    norm_num [E0Geometry, rowIndices, rowZ, tLower, tUpper, uLower, uUpper, a, h, d, mu]
+
+theorem certificate_inputs (i : Fin 4) :
+    (certificates i).K = K ∧ (certificates i).a = a ∧
+      (certificates i).tl = tLower (rowIndices i).1 ∧
+      (certificates i).tr = tUpper (rowIndices i).1 ∧
+      (certificates i).ul = uLower (rowIndices i).2 ∧
+      (certificates i).ur = uUpper (rowIndices i).2 ∧
+      (certificates i).Z = rowZ i := by
+  fin_cases i <;> norm_num [certificates, rowIndices, rowZ, certificate0000, certificate0001, certificate0002, certificate0003]
+
+theorem fibre_argument (i : Fin 4) {t u z w : ℝ}
+    (hs : openFibreSupport (rowIndices i).1 (rowIndices i).2 (rowZ i) t u z w) :
+    (a : ℝ) < w ∧ w < z ∧ z < u ∧ u < (h : ℝ) ∧
+      (h : ℝ) < t ∧ t < (d : ℝ) ∧
+      (7 / 3 : ℝ) ≤ (1 - t - u - z - w) / z :=
+  (geometry_checked i).fibre_argument hs
+
+theorem fibre_nonempty (i : Fin 4) :
+    ∃ t u z w : ℝ, openFibreSupport (rowIndices i).1 (rowIndices i).2 (rowZ i) t u z w :=
+  (geometry_checked i).fibre_nonempty
+
+noncomputable def rowIntegral (i : Fin 4) : ℝ :=
+  pairedLocalIntegral (K : ℝ) a (tLower (rowIndices i).1)
+    (tUpper (rowIndices i).1) (uLower (rowIndices i).2)
+    (uUpper (rowIndices i).2) (rowZ i)
+
+noncomputable def integral : ℝ := ∑ i : Fin 4, rowIntegral i
+
+theorem rowIntegral_eq_certificate (i : Fin 4) :
+    rowIntegral i = pairedLocalIntegral ((certificates i).K : ℝ)
+      (certificates i).a (certificates i).tl (certificates i).tr
+      (certificates i).ul (certificates i).ur (certificates i).Z := by
+  rcases certificate_inputs i with ⟨hK, ha, htl, htr, hul, hur, hZ⟩
+  rw [hK, ha, htl, htr, hul, hur, hZ]
+  rfl
+
+/-- The finite sum exposes the actual fourfold manuscript kernel. -/
+theorem integral_semantics :
+    integral = ((K : ℝ) / 80) * ∑ i : Fin 4,
+      ∫ t in (tLower (rowIndices i).1 : ℝ)..(tUpper (rowIndices i).1 : ℝ),
+      ∫ u in (uLower (rowIndices i).2 : ℝ)..(uUpper (rowIndices i).2 : ℝ),
+      ∫ z in (a : ℝ)..(rowZ i : ℝ), ∫ w in (a : ℝ)..z,
+        1 / (t * u * z ^ 2 * w) := by
+  simp only [integral, rowIntegral, pairedLocalIntegral, pairedFibreKernel_eq, Finset.mul_sum]
+
+theorem lower_sum : (∑ i : Fin 4, (certificates i).lower) = lowerBound := by
+  norm_num [certificates, lowerBound, Fin.sum_univ_succ, certificate0000, certificate0001, certificate0002, certificate0003]
+
+theorem upper_sum : (∑ i : Fin 4, (certificates i).upper) = upperBound := by
+  norm_num [certificates, upperBound, Fin.sum_univ_succ, certificate0000, certificate0001, certificate0002, certificate0003]
+
+/-- Concrete acceptance, checker soundness, and actual-object equality. -/
+theorem integral_bounds : (lowerBound : ℝ) ≤ integral ∧ integral ≤ (upperBound : ℝ) := by
+  have hs := PairedIntegralCertificate.sum_check_sound Finset.univ certificates
+    (fun i _ => certificates_checked i)
+  rw [lower_sum, upper_sum] at hs
+  simpa only [← rowIntegral_eq_certificate, ← integral] using hs
+
+theorem integral_pos : 0 < integral := by
+  exact lt_of_lt_of_le (by norm_num [lowerBound]) integral_bounds.1
+
+end ImbalancedChen.Certificates.PairedV2.Prefix4

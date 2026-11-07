@@ -1,0 +1,115 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_ORIGINAL_WORD_SAME_SLOT_GROUP_NORMALIZATION_CANDIDATE_NOT_COMPILED",
+  "reviewer": "/root/tail_resume/greedy_review; source author, not independent review",
+  "module": "ImbalancedChen.ActualPrimeFineWordSlotRegrouping",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeFineWordSlotRegrouping.lean",
+  "source_sha256": "aaac370cb65571fe24c15e5f7bbcfe2eafd966274d9220efaa954c60eba92f30",
+  "complete_declarations": [
+    {
+      "name": "actualPrimeFineLabelIntegerUpper",
+      "kind": "def",
+      "line": 24,
+      "complete_signature": "def actualPrimeFineLabelIntegerUpper (N : ℕ) (τ : ℝ) (j : ℕ) : ℕ",
+      "complete_definition": "def actualPrimeFineLabelIntegerUpper (N : ℕ) (τ : ℝ) (j : ℕ) : ℕ :=\n  Nat.floor ((N : ℝ) ^ (τ * ((j : ℝ) + 1)))"
+    },
+    {
+      "name": "actualPrimeFineLabelFinset_le_integerUpper",
+      "kind": "theorem",
+      "line": 27,
+      "complete_signature": "theorem actualPrimeFineLabelFinset_le_integerUpper {N j q : ℕ} {τ : ℝ}\n    (hq : q ∈ actualPrimeFineLabelFinset N τ j) :\n    q ≤ actualPrimeFineLabelIntegerUpper N τ j"
+    },
+    {
+      "name": "actualPrimeFineLabelIntegerUpper_le_power",
+      "kind": "theorem",
+      "line": 32,
+      "complete_signature": "theorem actualPrimeFineLabelIntegerUpper_le_power (N j : ℕ) (τ : ℝ) :\n    (actualPrimeFineLabelIntegerUpper N τ j : ℝ) ≤\n      (N : ℝ) ^ (τ * ((j : ℝ) + 1))"
+    },
+    {
+      "name": "actualPrimeFineWord_normalized_abs_le_one",
+      "kind": "theorem",
+      "line": 39,
+      "complete_signature": "theorem actualPrimeFineWord_normalized_abs_le_one (N : ℕ) (τ : ℝ)\n    (input : List ℕ) (n : ℕ) :\n    |actualNormalizedPrimeTupleCoefficient\n      (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input) input.length n| ≤ 1"
+    },
+    {
+      "name": "actualPrimeFineWord_sameSlots_original_scalar",
+      "kind": "theorem",
+      "line": 48,
+      "complete_signature": "theorem actualPrimeFineWord_sameSlots_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (D A : ℝ) (yz : Bool)\n    (p : Fin 3 → ℕ) (tail : List ℕ)\n    (horder : (p 0 :: p 1 :: p 2 :: tail).Pairwise (· ≥ ·))\n    (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    let input := p 0 :: p 1 :: p 2 :: tail\n    let upper := actualPrimeFineLabelIntegerUpper N τ\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    let T₁ := actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.1\n    let T₂ := actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.2.1\n    let T₃ := actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.2.2\n    c * (∑ n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n        List.SortedGT).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n) =\n      ∑ a ∈ T₁.image List.prod, ∑ b ∈ T₂.image List.prod, ∑ d ∈ T₃.image List.prod,\n        ((c / (actualPrimeFineWordMultiplicity input : ℝ)) *\n          (slots.1.length.factorial : ℝ) * (slots.2.1.length.factorial : ℝ) *\n          (slots.2.2.length.factorial : ℝ)) *\n          actualNormalizedPrimeTupleCoefficient T₁ slots.1.length a *\n          actualNormalizedPrimeTupleCoefficient T₂ slots.2.1.length b *\n          actualNormalizedPrimeTupleCoefficient T₃ slots.2.2.length d *\n          ((ArithmeticFunction.moebius (r * (a * b * d)) : ℝ) * H (a * b * d))"
+    },
+    {
+      "name": "actualPrimeFineWord_sameSlots_group_support",
+      "kind": "theorem",
+      "line": 90,
+      "complete_signature": "theorem actualPrimeFineWord_sameSlots_group_support (N : ℕ) (τ : ℝ)\n    (D A : ℝ) (yz : Bool) (p : Fin 3 → ℕ) (tail : List ℕ) :\n    let upper := actualPrimeFineLabelIntegerUpper N τ\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    let abc := actualFrozenSelectedPairFactors D A yz upper upper p tail\n    (∀ a ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.1).image List.prod,\n      a ≤ abc.1) ∧\n      (∀ b ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.2.1).image List.prod,\n        b ≤ abc.2.1) ∧\n      (∀ d ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) slots.2.2).image List.prod,\n        d ≤ abc.2.2)"
+    }
+  ],
+  "theorem_count": 5,
+  "definition_count": 1,
+  "source_lines": 107,
+  "direct_project_parent": {
+    "module": "ImbalancedChen.ActualPrimeFineWordMultiplicity",
+    "sha256": "9f8128f0c717b6748908d2f9f3fb67159ca9346d5a1477267065f62365118c74",
+    "acceptance": "source candidate, not inferred owned"
+  },
+  "new_direct_foreign_imports": [],
+  "relative_scope": "Exactly new self relative to the9f8 parent-source union and implicit Init; no new imported provider or full closure proof replay.",
+  "mathematical_audit": [
+    "The actual fine interval proves q<=floor(N^(tau*(j+1))) internally. Each such natural upper endpoint is at most the original real endpoint, with no ceil overshoot.",
+    "Every original group-box normalized coefficient has abs<=1 on all integers, directly reusing the actual prime slot coefficient provider, including repeated-prime products.",
+    "The main endpoint slots are computed by the existing actualFrozenSelectedPairSlots from the concrete fine-label floor endpoints, original prefix-label triple, original tail, D,A,yz. No caller supplies a slot partition, action licence or arbitrary upper endpoint dictionary.",
+    "The original sorted squarefree selector sum c*sum mu(r*n)H(n) equals the original Cartesian tuple sum with scalar c/M_J, using the exact canonical original-word multiplicity from9f8.",
+    "The existing exact same-slot whole-box regrouping is then applied, restoring K_i=slotcount_i! exactly once. The final scalar is (c/M_J)*K1*K2*K3 multiplying the three actual normalized original group fibre coefficients.",
+    "The full Mobius coefficient remains mu(r*(a*b*d)), not a product of group Mobius functions. Therefore equal-prime diagonals and collisions across groups or with r are retained as literal zero terms before abs.",
+    "The exact same computed slots supply the actual group product support bounds, with fine interval q<=floorupper proved internally. No tuple decision fibre is treated as a Cartesian box."
+  ],
+  "reused_existing_API": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualFrozenSlotCoefficientRegrouping.lean",
+    "sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c",
+    "names": [
+      "actualFrozenSelectedPair_signed_regroup",
+      "actualFrozenSelectedPair_group_support",
+      "actualPrimeSlotBox_normalized_abs_le_one"
+    ],
+    "scope": "Whole Cartesian fixed original slot words, not the tuplewise9263 policy action."
+  },
+  "fixed_scalar_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Ring/Finset.lean",
+    "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+    "lines": "59-60",
+    "API": "Finset.mul_sum s f a has exactly3 explicit arguments and the needed left-scalar orientation."
+  },
+  "complete_type_extraction": "Main theorem retains all6 actual let bindings and the full triple sum; group support retains its3 actual let bindings. The non-by first floor proof uses the actual first := terminator.",
+  "manuscript_reference": {
+    "repository": "../chen-imbalanced-semiprimes",
+    "commit": "ba6ec11d800eccc54406490631895e174de85766",
+    "path": "proof-library/source/imbalanced-chen-transfer.tex",
+    "lines": "1086-1118",
+    "scope": "Original M_J retained; three later group K_i factorials restored exactly once."
+  },
+  "remaining_gates": [
+    "Actual strict proof/API compilation and complete owned acceptance of this entire pending source chain.",
+    "Assemble actual original retained J family and prove the same-cell computed floor endpoints meet original Dwell inflation and selected-pair monomial targets; this leaf states group support endpoints, not all numerical targets.",
+    "The D,A,yz data are actual action inputs here; no claim that this auxiliary fixed endpoint algorithm equals the9263 tuplewise action.",
+    "Distribution endpoint, physical counting remainder, signed rho/density mean, numerical integral and final Chen constant remain unproved by this finite normalization."
+  ],
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "public_names": "All6 new names searched in other current project sources; no collision.",
+  "lean_invoked": false,
+  "build_invoked": false,
+  "checker_or_pins_modified": false,
+  "frozen_source_modified": false,
+  "candidate_freeze": "aaac370cb65571fe24c15e5f7bbcfe2eafd966274d9220efaa954c60eba92f30; no edits without independent finding or actual diagnostic."
+}

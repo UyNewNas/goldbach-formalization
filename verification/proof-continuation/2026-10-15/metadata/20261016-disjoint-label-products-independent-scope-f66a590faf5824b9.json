@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:37:26.1768658Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_DISJOINT_LABEL_PRODUCTS_NO_MATHEMATICAL_OR_SCOPE_BLOCKER_PENDING_RUNTIME",
+  "candidate": {
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "ImbalancedChen.actualPrimeSlotBox_mem_append",
+        "short_name": "actualPrimeSlotBox_mem_append",
+        "kind": "theorem",
+        "start_line": 20,
+        "complete_source_header": "theorem actualPrimeSlotBox_mem_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (ps : List ℕ) :\n    ps ∈ actualPrimeSlotBox B (left ++ right) ↔\n      ∃ qs ∈ actualPrimeSlotBox B left, ∃ rs ∈ actualPrimeSlotBox B right,\n        ps = qs ++ rs"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeSlotBox_product_image_append",
+        "short_name": "actualPrimeSlotBox_product_image_append",
+        "kind": "theorem",
+        "start_line": 43,
+        "complete_source_header": "theorem actualPrimeSlotBox_product_image_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) :\n    (actualPrimeSlotBox B (left ++ right)).image List.prod =\n      (((actualPrimeSlotBox B left).image List.prod).product\n        ((actualPrimeSlotBox B right).image List.prod)).image (fun p => p.1 * p.2)"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeSlotBox_forall",
+        "short_name": "actualPrimeSlotBox_forall",
+        "kind": "theorem",
+        "start_line": 65,
+        "complete_source_header": "theorem actualPrimeSlotBox_forall {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (P : ℕ → Prop) (hP : ∀ i ∈ input, ∀ q ∈ B i, P q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, P q"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeLabelBlocksWord_mem",
+        "short_name": "actualPrimeLabelBlocksWord_mem",
+        "kind": "theorem",
+        "start_line": 79,
+        "complete_source_header": "theorem actualPrimeLabelBlocksWord_mem {ι : Type*} {blocks : List (ι × ℕ)} {i : ι}\n    (hi : i ∈ actualPrimeLabelBlocksWord blocks) : ∃ b ∈ blocks, i = b.1"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeVector_split_product_eq",
+        "short_name": "actualPrimeVector_split_product_eq",
+        "kind": "theorem",
+        "start_line": 86,
+        "complete_source_header": "theorem actualPrimeVector_split_product_eq (C : Finset ℕ)\n    (as bs cs ds : List ℕ)\n    (hprime₁ : ∀ q ∈ as ++ bs, Nat.Prime q)\n    (hprime₂ : ∀ q ∈ cs ++ ds, Nat.Prime q)\n    (ha : ∀ q ∈ as, q ∈ C) (hb : ∀ q ∈ bs, q ∉ C)\n    (hc : ∀ q ∈ cs, q ∈ C) (hd : ∀ q ∈ ds, q ∉ C)\n    (hprod : as.prod * bs.prod = cs.prod * ds.prod) :\n    as.prod = cs.prod ∧ bs.prod = ds.prod"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeTuple_product_injective_of_disjoint",
+        "short_name": "actualPrimeTuple_product_injective_of_disjoint",
+        "kind": "theorem",
+        "start_line": 115,
+        "complete_source_header": "theorem actualPrimeTuple_product_injective_of_disjoint (C : Finset ℕ)\n    (T U : Finset (List ℕ))\n    (hTprime : ∀ ps ∈ T, ∀ q ∈ ps, Nat.Prime q)\n    (hUprime : ∀ ps ∈ U, ∀ q ∈ ps, Nat.Prime q)\n    (hTin : ∀ ps ∈ T, ∀ q ∈ ps, q ∈ C)\n    (hUout : ∀ ps ∈ U, ∀ q ∈ ps, q ∉ C) :\n    ∀ a ∈ (T.image List.prod).product (U.image List.prod),\n      ∀ b ∈ (T.image List.prod).product (U.image List.prod),\n        a.1 * a.2 = b.1 * b.2 → a = b"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeLabelBlockProductSum_eq_product_sum",
+        "short_name": "actualPrimeLabelBlockProductSum_eq_product_sum",
+        "kind": "theorem",
+        "start_line": 140,
+        "complete_source_header": "theorem actualPrimeLabelBlockProductSum_eq_product_sum {ι : Type*} (B : ι → Finset ℕ) :\n    ∀ (blocks : List (ι × ℕ)) (H : ℕ → ℝ),\n      (∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) →\n      blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1)) →\n      actualPrimeLabelBlockProductSum B blocks H =\n        ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod, H n"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeLabelBlocks_moebius_sum_disjoint",
+        "short_name": "actualPrimeLabelBlocks_moebius_sum_disjoint",
+        "kind": "theorem",
+        "start_line": 195,
+        "complete_source_header": "theorem actualPrimeLabelBlocks_moebius_sum_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeLabelBlocks_moebius_fibre_disjoint",
+        "short_name": "actualPrimeLabelBlocks_moebius_fibre_disjoint",
+        "kind": "theorem",
+        "start_line": 207,
+        "complete_source_header": "theorem actualPrimeLabelBlocks_moebius_fibre_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r n : ℕ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeFineLabelFinset",
+        "short_name": "actualPrimeFineLabelFinset",
+        "kind": "def",
+        "start_line": 225,
+        "complete_source_header": "def actualPrimeFineLabelFinset (N : ℕ) (τ : ℝ) (j : ℕ) : Finset ℕ",
+        "complete_source_definition": "def actualPrimeFineLabelFinset (N : ℕ) (τ : ℝ) (j : ℕ) : Finset ℕ :=\n  roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ (τ * ((j : ℝ) + 1))))\n    ((N : ℝ) ^ (τ * j)) ((N : ℝ) ^ (τ * ((j : ℝ) + 1)))"
+      },
+      {
+        "name": "ImbalancedChen.mem_actualPrimeFineLabelFinset",
+        "short_name": "mem_actualPrimeFineLabelFinset",
+        "kind": "theorem",
+        "start_line": 229,
+        "complete_source_header": "theorem mem_actualPrimeFineLabelFinset {N j p : ℕ} {τ : ℝ} :\n    p ∈ actualPrimeFineLabelFinset N τ j ↔\n      p.Prime ∧ ¬p ∣ N ∧ (N : ℝ) ^ (τ * j) ≤ (p : ℝ) ∧\n        (p : ℝ) < (N : ℝ) ^ (τ * ((j : ℝ) + 1))"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeFineLabelFinset_disjoint",
+        "short_name": "actualPrimeFineLabelFinset_disjoint",
+        "kind": "theorem",
+        "start_line": 235,
+        "complete_source_header": "theorem actualPrimeFineLabelFinset_disjoint {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j : ℕ} (hij : i ≠ j) :\n    Disjoint (actualPrimeFineLabelFinset N τ i) (actualPrimeFineLabelFinset N τ j)"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeFineLabelBlocks_moebius_sum",
+        "short_name": "actualPrimeFineLabelBlocks_moebius_sum",
+        "kind": "theorem",
+        "start_line": 254,
+        "complete_source_header": "theorem actualPrimeFineLabelBlocks_moebius_sum {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeFineLabelBlocks_moebius_fibre",
+        "short_name": "actualPrimeFineLabelBlocks_moebius_fibre",
+        "kind": "theorem",
+        "start_line": 269,
+        "complete_source_header": "theorem actualPrimeFineLabelBlocks_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r n : ℕ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0"
+      },
+      {
+        "name": "ImbalancedChen.actualPrimeFineLabelBlocks_original_scalar",
+        "short_name": "actualPrimeFineLabelBlocks_original_scalar",
+        "kind": "theorem",
+        "start_line": 287,
+        "complete_source_header": "theorem actualPrimeFineLabelBlocks_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ)\n    (c : ℝ) (H : ℕ → ℝ) (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+      }
+    ],
+    "path": "ImbalancedChen/ActualPrimeDisjointLabelProducts.lean",
+    "sha256": "30c9cc4ae1f639481f981b73f9b910d0d09edfd45d5c020cb55fa10c808e2906",
+    "definition_count": 1,
+    "theorem_count": 14,
+    "complete_source_and_all_proof_bodies_reviewed": "import ImbalancedChen.ActualPrimeMultiLabelNormalization\nimport ImbalancedChen.RoughPrimeUniverse\n\n/-!\n# Unique full products for disjoint original prime-label blocks\n\nUnique prime factorization and filtering by a label separate its block\nproduct from all remaining block products. Thus the preceding explicit\nproduct-vector sum is exactly a sum over its full product image when the\ndistinct label supports are disjoint. Repeated values inside a block\nremain present; their literal Mobius coefficient still pays the diagonal.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped Classical BigOperators\n\ntheorem actualPrimeSlotBox_mem_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (ps : List ℕ) :\n    ps ∈ actualPrimeSlotBox B (left ++ right) ↔\n      ∃ qs ∈ actualPrimeSlotBox B left, ∃ rs ∈ actualPrimeSlotBox B right,\n        ps = qs ++ rs := by\n  induction left generalizing ps with\n  | nil => simp [actualPrimeSlotBox]\n  | cons i left ih =>\n      constructor\n      · intro hps\n        rw [List.cons_append, actualPrimeSlotBox] at hps\n        obtain ⟨⟨q, qs⟩, hmem, rfl⟩ := Finset.mem_image.mp hps\n        obtain ⟨hq, hqs⟩ := Finset.mem_product.mp hmem\n        obtain ⟨as, has, bs, hbs, rfl⟩ := (ih qs).mp hqs\n        refine ⟨q :: as, ?_, bs, hbs, rfl⟩\n        exact Finset.mem_image.mpr ⟨(q, as), Finset.mem_product.mpr ⟨hq, has⟩, rfl⟩\n      · rintro ⟨as, has, bs, hbs, rfl⟩\n        obtain ⟨⟨q, qs⟩, hmem, rfl⟩ := Finset.mem_image.mp has\n        obtain ⟨hq, hqs⟩ := Finset.mem_product.mp hmem\n        rw [List.cons_append, actualPrimeSlotBox]\n        exact Finset.mem_image.mpr ⟨(q, qs ++ bs), Finset.mem_product.mpr\n          ⟨hq, (ih _).mpr ⟨qs, hqs, bs, hbs, rfl⟩⟩, rfl⟩\n\ntheorem actualPrimeSlotBox_product_image_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) :\n    (actualPrimeSlotBox B (left ++ right)).image List.prod =\n      (((actualPrimeSlotBox B left).image List.prod).product\n        ((actualPrimeSlotBox B right).image List.prod)).image (fun p => p.1 * p.2) := by\n  ext n\n  constructor\n  · intro hn\n    obtain ⟨ps, hps, hprod⟩ := Finset.mem_image.mp hn\n    obtain ⟨qs, hqs, rs, hrs, rfl⟩ := (actualPrimeSlotBox_mem_append B left right ps).mp hps\n    refine Finset.mem_image.mpr ⟨(qs.prod, rs.prod), Finset.mem_product.mpr\n      ⟨Finset.mem_image_of_mem _ hqs, Finset.mem_image_of_mem _ hrs⟩, ?_⟩\n    simpa only [List.prod_append] using hprod\n  · intro hn\n    obtain ⟨⟨a, b⟩, hab, hprod⟩ := Finset.mem_image.mp hn\n    obtain ⟨ha, hb⟩ := Finset.mem_product.mp hab\n    obtain ⟨qs, hqs, rfl⟩ := Finset.mem_image.mp ha\n    obtain ⟨rs, hrs, rfl⟩ := Finset.mem_image.mp hb\n    refine Finset.mem_image.mpr ⟨qs ++ rs,\n      (actualPrimeSlotBox_mem_append B left right _).mpr ⟨qs, hqs, rs, hrs, rfl⟩, ?_⟩\n    simpa only [List.prod_append] using hprod\n\ntheorem actualPrimeSlotBox_forall {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (P : ℕ → Prop) (hP : ∀ i ∈ input, ∀ q ∈ B i, P q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, P q := by\n  induction input with\n  | nil => simp [actualPrimeSlotBox]\n  | cons i input ih =>\n      intro ps hps\n      obtain ⟨⟨q, qs⟩, hmem, rfl⟩ := Finset.mem_image.mp hps\n      obtain ⟨hq, hqs⟩ := Finset.mem_product.mp hmem\n      intro r hr\n      rcases List.mem_cons.mp hr with rfl | hr\n      · exact hP i (by simp) q hq\n      · exact ih (fun j hj => hP j (List.mem_cons_of_mem i hj)) qs hqs r hr\n\ntheorem actualPrimeLabelBlocksWord_mem {ι : Type*} {blocks : List (ι × ℕ)} {i : ι}\n    (hi : i ∈ actualPrimeLabelBlocksWord blocks) : ∃ b ∈ blocks, i = b.1 := by\n  obtain ⟨b, hb, hi⟩ := List.mem_flatMap.mp hi\n  exact ⟨b, hb, (List.mem_replicate.mp hi).2⟩\n\n/-- The equality of full prime products separates the two original label\nsupports. The conclusion holds even before a squarefree restriction. -/\ntheorem actualPrimeVector_split_product_eq (C : Finset ℕ)\n    (as bs cs ds : List ℕ)\n    (hprime₁ : ∀ q ∈ as ++ bs, Nat.Prime q)\n    (hprime₂ : ∀ q ∈ cs ++ ds, Nat.Prime q)\n    (ha : ∀ q ∈ as, q ∈ C) (hb : ∀ q ∈ bs, q ∉ C)\n    (hc : ∀ q ∈ cs, q ∈ C) (hd : ∀ q ∈ ds, q ∉ C)\n    (hprod : as.prod * bs.prod = cs.prod * ds.prod) :\n    as.prod = cs.prod ∧ bs.prod = ds.prod := by\n  have hfull : (as ++ bs).prod = (cs ++ ds).prod := by\n    simpa only [List.prod_append] using hprod\n  have hperm := (Nat.primeFactorsList_unique hfull hprime₁).trans\n    (Nat.primeFactorsList_unique (rfl : (cs ++ ds).prod = (cs ++ ds).prod) hprime₂).symm\n  have hkeep (P : ℕ → Prop) (l : List ℕ) (h : ∀ q ∈ l, P q) :\n      l.filter (fun q => decide (P q)) = l :=\n    List.filter_eq_self.mpr (fun q hq => by simpa using h q hq)\n  have hdrop (P : ℕ → Prop) (l : List ℕ) (h : ∀ q ∈ l, ¬P q) :\n      l.filter (fun q => decide (P q)) = [] :=\n    List.filter_eq_nil_iff.mpr (fun q hq => by simpa using h q hq)\n  have hhead : as.Perm cs := by\n    simpa only [List.filter_append, hkeep _ as ha, hdrop _ bs hb,\n      hkeep _ cs hc, hdrop _ ds hd, List.append_nil] using\n        List.Perm.filter (fun q => decide (q ∈ C)) hperm\n  have htail : bs.Perm ds := by\n    simpa only [List.filter_append,\n      hdrop _ as (fun q hq hn => hn (ha q hq)), hkeep _ bs hb,\n      hdrop _ cs (fun q hq hn => hn (hc q hq)), hkeep _ ds hd,\n      List.nil_append] using List.Perm.filter (fun q => decide (q ∉ C)) hperm\n  exact ⟨hhead.prod_eq, htail.prod_eq⟩\n\ntheorem actualPrimeTuple_product_injective_of_disjoint (C : Finset ℕ)\n    (T U : Finset (List ℕ))\n    (hTprime : ∀ ps ∈ T, ∀ q ∈ ps, Nat.Prime q)\n    (hUprime : ∀ ps ∈ U, ∀ q ∈ ps, Nat.Prime q)\n    (hTin : ∀ ps ∈ T, ∀ q ∈ ps, q ∈ C)\n    (hUout : ∀ ps ∈ U, ∀ q ∈ ps, q ∉ C) :\n    ∀ a ∈ (T.image List.prod).product (U.image List.prod),\n      ∀ b ∈ (T.image List.prod).product (U.image List.prod),\n        a.1 * a.2 = b.1 * b.2 → a = b := by\n  rintro ⟨a, b⟩ hab ⟨c, d⟩ hcd hprod\n  obtain ⟨ha, hb⟩ := Finset.mem_product.mp hab\n  obtain ⟨hc, hd⟩ := Finset.mem_product.mp hcd\n  obtain ⟨as, has, rfl⟩ := Finset.mem_image.mp ha\n  obtain ⟨bs, hbs, rfl⟩ := Finset.mem_image.mp hb\n  obtain ⟨cs, hcs, rfl⟩ := Finset.mem_image.mp hc\n  obtain ⟨ds, hds, rfl⟩ := Finset.mem_image.mp hd\n  have hsplit := actualPrimeVector_split_product_eq C as bs cs ds\n    (fun q hq => (List.mem_append.mp hq).elim (hTprime as has q) (hUprime bs hbs q))\n    (fun q hq => (List.mem_append.mp hq).elim (hTprime cs hcs q) (hUprime ds hds q))\n    (hTin as has) (hUout bs hbs) (hTin cs hcs) (hUout ds hds) hprod\n  exact Prod.ext hsplit.1 hsplit.2\n\n/-- Disjoint distinct label supports make the full product-vector map\ninjective. This is proved from actual prime factorization, not supplied as\na coefficient or fibre-uniqueness premise. -/\ntheorem actualPrimeLabelBlockProductSum_eq_product_sum {ι : Type*} (B : ι → Finset ℕ) :\n    ∀ (blocks : List (ι × ℕ)) (H : ℕ → ℝ),\n      (∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) →\n      blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1)) →\n      actualPrimeLabelBlockProductSum B blocks H =\n        ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod, H n := by\n  intro blocks\n  induction blocks with\n  | nil =>\n      intro H _hprime _hdisjoint\n      simp [actualPrimeLabelBlockProductSum, actualPrimeLabelBlocksWord, actualPrimeSlotBox]\n  | cons b blocks ih =>\n      rcases b with ⟨i, m⟩\n      intro H hprime hdisjoint\n      have hhead := hprime (i, m) (by simp)\n      have htail : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q :=\n        fun b hb => hprime b (List.mem_cons_of_mem (i, m) hb)\n      obtain ⟨hcross, hdisjointTail⟩ := List.pairwise_cons.mp hdisjoint\n      let T := actualPrimeSlotBox B (List.replicate m i)\n      let U := actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)\n      have hTin : ∀ ps ∈ T, ∀ q ∈ ps, q ∈ B i := by\n        intro ps hps\n        have hps' := (actualPrimeSlotBox_replicate_label_eq B i m) ▸ hps\n        exact ((mem_actualPrimeSlotBox_replicate (B i) m ps).mp hps').2\n      have hUprime : ∀ ps ∈ U, ∀ q ∈ ps, Nat.Prime q :=\n        actualPrimeSlotBox_prime B _ (fun j hj => by\n          obtain ⟨b, hb, rfl⟩ := actualPrimeLabelBlocksWord_mem hj\n          exact htail b hb)\n      have hUout : ∀ ps ∈ U, ∀ q ∈ ps, q ∉ B i :=\n        actualPrimeSlotBox_forall B _ (fun q => q ∉ B i) (by\n          intro j hj q hq hqi\n          obtain ⟨b, hb, rfl⟩ := actualPrimeLabelBlocksWord_mem hj\n          exact Finset.disjoint_left.mp (hcross b hb) hqi hq)\n      have hinj := actualPrimeTuple_product_injective_of_disjoint (B i) T U\n        (fun ps hps q hq => hhead q (hTin ps hps q hq)) hUprime hTin hUout\n      have himage :\n          (actualPrimeSlotBox B (actualPrimeLabelBlocksWord ((i, m) :: blocks))).image List.prod =\n            ((T.image List.prod).product (U.image List.prod)).image (fun p => p.1 * p.2) :=\n        actualPrimeSlotBox_product_image_append B (List.replicate m i)\n          (actualPrimeLabelBlocksWord blocks)\n      calc\n        _ = ∑ a ∈ T.image List.prod,\n            actualPrimeLabelBlockProductSum B blocks (fun b => H (a * b)) := rfl\n        _ = ∑ a ∈ T.image List.prod, ∑ b ∈ U.image List.prod, H (a * b) := by\n          apply Finset.sum_congr rfl\n          intro a _\n          exact ih (fun b => H (a * b)) htail hdisjointTail\n        _ = ∑ p ∈ (T.image List.prod).product (U.image List.prod), H (p.1 * p.2) :=\n          (Finset.sum_product _ _ _).symm\n        _ = ∑ n ∈ ((T.image List.prod).product (U.image List.prod)).image\n              (fun p => p.1 * p.2), H n := by\n          rw [Finset.sum_image]\n          exact hinj\n        _ = _ := by rw [← himage]\n\ntheorem actualPrimeLabelBlocks_moebius_sum_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n := by\n  rw [actualPrimeLabelBlocks_moebius_sum_normalized B blocks r H hprime]\n  exact actualPrimeLabelBlockProductSum_eq_product_sum B blocks _ hprime hdisjoint\n\ntheorem actualPrimeLabelBlocks_moebius_fibre_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r n : ℕ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0 := by\n  rw [actualPrimeLabelBlocks_moebius_fibre_normalized B blocks r n hprime,\n    actualPrimeLabelBlockProductSum_eq_product_sum B blocks _ hprime hdisjoint]\n  by_cases hn : n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod\n  · simp [hn]\n  · simp [hn]\n\n/-- The original half-open fine interval, with exclusion of divisors of\nthe same target. The ceiling only enumerates the finite set: membership\nbelow removes it and retains the literal real endpoints. -/\ndef actualPrimeFineLabelFinset (N : ℕ) (τ : ℝ) (j : ℕ) : Finset ℕ :=\n  roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ (τ * ((j : ℝ) + 1))))\n    ((N : ℝ) ^ (τ * j)) ((N : ℝ) ^ (τ * ((j : ℝ) + 1)))\n\ntheorem mem_actualPrimeFineLabelFinset {N j p : ℕ} {τ : ℝ} :\n    p ∈ actualPrimeFineLabelFinset N τ j ↔\n      p.Prime ∧ ¬p ∣ N ∧ (N : ℝ) ^ (τ * j) ≤ (p : ℝ) ∧\n        (p : ℝ) < (N : ℝ) ^ (τ * ((j : ℝ) + 1)) := by\n  exact mem_roughPrimeFinset_iff_of_cutoff_le_cap (Nat.le_ceil _)\n\ntheorem actualPrimeFineLabelFinset_disjoint {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j : ℕ} (hij : i ≠ j) :\n    Disjoint (actualPrimeFineLabelFinset N τ i) (actualPrimeFineLabelFinset N τ j) := by\n  have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hsep {i j : ℕ} (h : i < j) :\n      (N : ℝ) ^ (τ * ((i : ℝ) + 1)) ≤ (N : ℝ) ^ (τ * j) := by\n    have hcast : (i : ℝ) + 1 ≤ (j : ℝ) := by\n      exact_mod_cast Nat.succ_le_of_lt h\n    exact Real.rpow_le_rpow_of_exponent_le hNreal (mul_le_mul_of_nonneg_left hcast hτ)\n  apply Finset.disjoint_left.mpr\n  intro p hp hq\n  have hp' := mem_actualPrimeFineLabelFinset.mp hp\n  have hq' := mem_actualPrimeFineLabelFinset.mp hq\n  rcases lt_or_gt_of_ne hij with hij | hji\n  · exact (not_lt_of_ge ((hsep hij).trans hq'.2.2.1)) hp'.2.2.2\n  · exact (not_lt_of_ge ((hsep hji).trans hp'.2.2.1)) hq'.2.2.2\n\n/-- The actual fine-interval geometry supplies disjointness. There is no\ncaller premise asserting fibre uniqueness or an assigned coefficient. -/\ntheorem actualPrimeFineLabelBlocks_moebius_sum {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n := by\n  apply actualPrimeLabelBlocks_moebius_sum_disjoint\n  · intro b _hb p hp\n    exact (mem_actualPrimeFineLabelFinset.mp hp).1\n  · exact hlabels.imp (fun h => actualPrimeFineLabelFinset_disjoint hN hτ h)\n\ntheorem actualPrimeFineLabelBlocks_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r n : ℕ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0 := by\n  apply actualPrimeLabelBlocks_moebius_fibre_disjoint\n  · intro b _hb p hp\n    exact (mem_actualPrimeFineLabelFinset.mp hp).1\n  · exact hlabels.imp (fun h => actualPrimeFineLabelFinset_disjoint hN hτ h)\n\n/-- The original fixed signed scalar is restored once, along with the\nliteral product of repeated-label factorials. No later group factorial is\ninserted into this fine-label identity. -/\ntheorem actualPrimeFineLabelBlocks_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ)\n    (c : ℝ) (H : ℕ → ℝ) (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n := by\n  calc\n    _ = c * ((∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ)) := by ring\n    _ = _ := by rw [actualPrimeFineLabelBlocks_moebius_sum hN hτ blocks r H hlabels]\n\nend\n\nend ImbalancedChen\n",
+    "declaration_count": 15
+  },
+  "author_report": {
+    "sha256": "d1824416a0d5404801ac8dcf9a80452372691c320354501caed08e162240ba4b",
+    "path": "20261016-disjoint-label-products-author-scope.json",
+    "complete_type_definition_census_matches": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.ActualPrimeMultiLabelNormalization",
+    "ImbalancedChen.RoughPrimeUniverse"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.ActualPrimeMultiLabelNormalization",
+      "direct_imports": [
+        "ImbalancedChen.ActualPrimeSlotSquarefreeSymmetry"
+      ],
+      "sha256": "14a4404a11f1e3b915c54d5aebbda6e22e2c2919e5931943b1ac8eb11d4c770f",
+      "current_expected_hash_matches": true
+    },
+    {
+      "module": "ImbalancedChen.RoughPrimeUniverse",
+      "direct_imports": [
+        "ImbalancedChen.RetainedModuli",
+        "Mathlib.Data.Finset.Interval",
+        "Mathlib.Data.Finset.Sort",
+        "Mathlib.Tactic"
+      ],
+      "sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+      "current_expected_hash_matches": true
+    }
+  ],
+  "sourceDAG_delta": {
+    "local_module_delta": 1,
+    "candidate_parent_owned_status_not_inferred": true,
+    "full_tree_rescanned": false,
+    "added_local_modules": [
+      "ImbalancedChen.ActualPrimeDisjointLabelProducts"
+    ],
+    "basis": "Exact two local parent source unions; current leaf imports only MultiLabel14a and RoughPrimeUniverse3d716, already existing. No fresh full-tree rescan or imported closure acceptance inferred.",
+    "foreign_module_delta": 0,
+    "added_foreign_modules": []
+  },
+  "fixed_API_source_snapshots": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\Factors.lean",
+      "sha256": "3e64e2c8ba907c05209966a7bba8754cf2ab33f328a3010667ffe58c95e0bca3"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\List\\Perm.lean",
+      "sha256": "c778ecb634cad13616e994adb18f7028a0ea3c229e747a0fee02e033108a8d39"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\List\\Lemmas.lean",
+      "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2"
+    }
+  ],
+  "pin_snapshots": [
+    {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "path": "lake-manifest.json",
+      "matches_author_frozen_snapshot": true
+    },
+    {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "path": "lakefile.toml",
+      "matches_author_frozen_snapshot": true
+    },
+    {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "path": "lean-toolchain",
+      "matches_author_frozen_snapshot": true
+    }
+  ],
+  "definition_review": "actualPrimeFineLabelFinset N tau j uses exactly roughPrimeFinset with the SAME N, literal lower endpoint N^(tau*j), strict upper endpoint N^(tau*(j+1)), and only ceil(upper) as an enumeration cap. Primality and p-not-dividing-the-same-N remain in membership. No sorted selector or alternate source coefficient is defined.",
+  "theorem_by_theorem_review": [
+    {
+      "name": "actualPrimeSlotBox_mem_append",
+      "assessment": "Induction on the original left slot word proves exact list concatenation membership in the full Cartesian box. Both directions preserve every ordered coordinate and allow repeated values; no injectivity or prime premise enters."
+    },
+    {
+      "name": "actualPrimeSlotBox_product_image_append",
+      "assessment": "The exact append membership plus List.prod_append identifies the product image with the image of multiplication on the pair of group product images. This is a carrier identity only; uniqueness is deliberately proved later."
+    },
+    {
+      "name": "actualPrimeSlotBox_forall",
+      "assessment": "Structural induction transports any property of all prime-set entries at every labelled slot to all entries of every actual tuple. The complete Cartesian box is retained."
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_mem",
+      "assessment": "List.mem_flatMap and the fixed mem_replicate equality recover an actual listed block whose label equals a word entry. A zero-multiplicity block creates no entries; none is invented."
+    },
+    {
+      "name": "actualPrimeVector_split_product_eq",
+      "assessment": "Prime-factor uniqueness gives a permutation between as++bs and cs++ds from equality of their full products. Filtering by membership in C retains exactly as/cs and drops bs/ds; filtering by nonmembership retains exactly bs/ds. Both product equalities follow from those permutations. Repeated primes are handled with multiplicity and no squarefree premise is used."
+    },
+    {
+      "name": "actualPrimeTuple_product_injective_of_disjoint",
+      "assessment": "Representatives in T and U are extracted only to apply the proved split-product theorem. It proves injectivity of the PAIR OF PRODUCT VALUES (head product,tail product) on the actual product-image Cartesian pair. It does not assert injectivity of ordered tuples or unique list representations."
+    },
+    {
+      "name": "actualPrimeLabelBlockProductSum_eq_product_sum",
+      "assessment": "Induction uses Pairwise disjoint head/tail prime supports, obtains the actual tail outside the head support via word membership, and invokes the proved product-pair injection. Finset.sum_image is used only after that proof, while the tail vector sum has already been collapsed by induction. Thus the entire recursive vector sum becomes exactly one full-product-image sum. No core product-injectivity hypothesis is supplied by the caller."
+    },
+    {
+      "name": "actualPrimeLabelBlocks_moebius_sum_disjoint",
+      "assessment": "The previously reviewed literal Mobius normalization is combined with the newly proved vector-to-full-product sum equality. The coefficient is still mu(r*n), H is arbitrary signed product-only weight, and the same product of per-block m! divides the actual original tuple sum."
+    },
+    {
+      "name": "actualPrimeLabelBlocks_moebius_fibre_disjoint",
+      "assessment": "Applying the parent normalized full-product fibre identity to the proved image collapse gives an actual support indicator times literal mu(r*n). It includes both n in/out of the product image and all nonsquarefree zero diagonal cases. No bare nonsquarefree tuple-cardinality-one claim is made."
+    },
+    {
+      "name": "mem_actualPrimeFineLabelFinset",
+      "assessment": "The existing RoughPrimeUniverse exact cap-removal theorem takes z<=ceil(z), furnished by Nat.le_ceil. Consequently the exact membership has primality, exclusion of divisors of N, lower<=p and p<upper, with no auxiliary cap premise or changed endpoints."
+    },
+    {
+      "name": "actualPrimeFineLabelFinset_disjoint",
+      "assessment": "For i<j, natural successor order gives i+1<=j in Real. With tau>=0 and the SAME base N>=1, fixed-source rpow exponent monotonicity gives upper(i)<=lower(j). The original strict upper and weak lower inequalities contradict common membership. The opposite order is handled symmetrically. Neither support disjointness nor a width/separation constant is a caller licence."
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_moebius_sum",
+      "assessment": "For the concrete same-N fine sets, all prime support facts follow from exact membership and all pairwise support disjointness follows from the just-proved interval theorem. The only structural block hypothesis is pairwise distinct natural labels, in addition to N>=1 and tau>=0. No core product uniqueness or disjoint-support premise remains in this concrete wrapper."
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_moebius_fibre",
+      "assessment": "The same concrete derived prime/disjoint facts instantiate the generic signed fibre identity. The resulting exact full-product-image indicator retains literal mu(r*n) and the original factorial denominator."
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_original_scalar",
+      "assessment": "Pure real-field ring algebra changes (c/M)*original_sum into c*(original_sum/M), then the proved concrete normalization is substituted. The same arbitrary fixed signed c and exact M=product(block m!) appear once on each corresponding side. No later group factorial, absolute value or replacement coefficient is inserted."
+    }
+  ],
+  "critical_fixed_API_review": {
+    "list_filter": "Fresh Lean Init/Data/List/Perm.lean:233 List.Perm.filter takes the Bool predicate FIRST and permutation SECOND, matching this source. Fresh Init/Data/List/Lemmas.lean:1286 filter_eq_self, :1318 filter_eq_nil_iff and :2205 mem_replicate have exactly the directions used.",
+    "sum_image": "Fresh Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean:95 prod_image and its to_additive sum_image require Set.InjOn on the actual source finset. The source supplies precisely the proved multiplication injection on the pair of product images.",
+    "rough_membership": "Current RoughPrimeUniverse3d716 source fully read: mem_roughPrimeFinset_iff_of_cutoff_le_cap requires only upper<=cap and retains prime, not-dividing-N, lower<=p and p<upper. Nat.le_ceil removes the new cap exactly.",
+    "rpow": "Fresh Mathlib/Analysis/SpecialFunctions/Pow/Real.lean:615 rpow_le_rpow_of_exponent_le requires base>=1 and exponent comparison; supplied by hN and tau>=0*(i+1<=j).",
+    "unique_factorization": "Fresh Mathlib/Data/Nat/Factors.lean:168 Nat.primeFactorsList_unique(h:prod l=n)(all_prime):l.Perm n.primeFactorsList. Applied to both concatenated actual vectors; no squarefree or nonzero premise is added because primality pays nonzero internally.",
+    "normalization_parent": "Current MultiLabel14a full source previously independently reviewed in 20261016-multi-label-normalization-independent-scope.json SHA02143aa40232a665f8ff3955aa28703db551203979ce34c227b6cfcb2851c02d. Its mu(r*n) vanishing pays nonsquarefree blocks before any m! cancellation."
+  },
+  "endpoint_and_multiplicity_scope": {
+    "repeated_prime_values_within_block_retained": true,
+    "no_ordered_tuple_injectivity_claim": true,
+    "concrete_wrapper_has_no_disjoint_or_core_uniqueness_assumption": true,
+    "UF_injection_valid_before_squarefree_restriction": true,
+    "same_N_in_all_labels": true,
+    "literal_Ico_endpoints_preserved": true,
+    "later_group_factorials_not_inserted": true,
+    "per_listed_label_block_factorial_once": true,
+    "full_product_vector_uniqueness_actually_proved_from_prime_disjointness": true,
+    "N_one_allowed": true,
+    "tau_zero_allowed": true,
+    "literal_mu_r_times_product_preserved": true,
+    "degenerate_endpoint_case": "At tau=0 or N=1, all intervals collapse to [1,1), hence are empty; the non-strict hypotheses and disjoint proof remain valid.",
+    "original_fixed_signed_c_once": true
+  },
+  "original_source_crosscheck": {
+    "lines_read": "1086-1118",
+    "sha256": "06ecf0c7a8d767115dd0ef595e52844d49486b4b98d5979300faf47f4e09ff78",
+    "path": "E:/timot/Documents/FilesForGPT/Myath/chen-imbalanced-semiprimes/proof-library/source/imbalanced-chen-transfer.tex",
+    "manuscript_commit": "ba6ec11d800eccc54406490631895e174de85766",
+    "assessment": "Actual manuscript defines M_J=product_I m_I!, retains its original reciprocal exactly once, and keeps later K_i=group slot-count factorials separate. This leaf matches that literal per-block factor accounting but does not yet identify its product image with the manuscript sorted squarefree selector A_J or choose the actual source scalar for a retained family."
+  },
+  "remaining_target_obligations": [
+    "Identify the actual full product image under its squarefree restriction with the original sorted/weak-label selector A_J, preserving all real endpoint and order-wall conditions. This leaf does not claim that dictionary.",
+    "Instantiate the original retained J family, same-policy scalar and fixed group-slot assignments; H here depends only on the full product, not arbitrary tuple-coordinate conditions.",
+    "Combine this original M_J normalization with the separately restored three group factorials exactly once.",
+    "Arithmetic distribution, physical remainders, rho mean and the final Chen target remain outside this finite identity."
+  ],
+  "source_checks": {
+    "all_15_complete_headers_and_1_def_captured": true,
+    "all_14_complete_proofs_read": true,
+    "no_limit_or_linter_suppression": true,
+    "issues_identified": [],
+    "no_placeholder_axiom_or_opaque": true
+  },
+  "evidence_boundary": {
+    "kernel_replay_performed": false,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "full_tree_rescanned": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-disjoint-label-products-independent-scope.json"
+    ],
+    "publication_freeze_respected": "First written only after root release at commit6d8f6c9.",
+    "pins_or_checkers_modified": false,
+    "owned_parent_modified": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "source_only": true,
+    "axiom_audit_performed": false,
+    "runtime_owned_status_claimed": false,
+    "source_modified": false
+  },
+  "remaining_runtime_gate": "Root/runtime owner separately establishes candidate parent-chain acceptance and specifically authorizes strict bounded validation of this exact30c9 source. No runtime validation is initiated or inferred here."
+}

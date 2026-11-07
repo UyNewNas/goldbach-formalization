@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:39:11.0328964Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_DIAGNOSTIC_PROOF_API_REBIND_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "path": "ImbalancedChen/Part3TransposedPrimitiveV.lean",
+    "definition_count": 4,
+    "complete_current_source_and_proofs_reviewed": "import ImbalancedChen.Part3TransposedPrimitiveU\nimport ImbalancedChen.Part3PrimitiveZeroReal\n\n/-!\n# The literal transposed mixed term minus the actual primitive zero main term\n\nThe full complex mixed sum retains every physical modulus and every\noriginal alpha integer. The actual real dispersion V is its real part.\nThe primitive zero main term is proved real, so taking that real part\ncannot increase the norm of the difference.\n\nPrimitive residues are used only when a grouped factor coefficient is\nnonzero. That gate is proved from the original active gamma factors;\ninactive grouped coefficients contribute zero on the unchanged carrier.\nThe finite error envelope is paid by the actual local mixed progression\nbound, with its constant preceding every atom and arithmetic parameter.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveU\n\nnamespace TransposedPrimitiveV\n\n/-- A nonzero grouped coefficient has an original active factor label,\nand hence inherits the original primitive-residue gate. -/\ntheorem active_grouped_residue_gcd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hG : d.groupedFactorGamma q ≠ 0) : Int.gcd d.residue q = 1 := by\n  by_contra hbad\n  apply hG\n  unfold MediumAtom.groupedFactorGamma\n  apply Finset.sum_eq_zero\n  intro a ha\n  obtain ⟨ha, hqa⟩ := Finset.mem_filter.mp ha\n  by_contra hgamma\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h1, h2, h3⟩ := hd\n  obtain ⟨ha1, ha23⟩ := Finset.mem_product.mp ha\n  obtain ⟨ha2, ha3⟩ := Finset.mem_product.mp ha23\n  have hg : d.gamma1 a.1 * d.gamma2 a.2.1 * d.gamma3 a.2.2 ≠ 0 := hgamma\n  obtain ⟨hg12, hg3⟩ := mul_ne_zero_iff.mp hg\n  obtain ⟨hg1, hg2⟩ := mul_ne_zero_iff.mp hg12\n  have hcop : (complexFactorModulus a).Coprime d.residue.natAbs :=\n    (((h1 a.1 ha1).2 hg1).mul_left ((h2 a.2.1 ha2).2 hg2)).mul_left\n      ((h3 a.2.2 ha3).2 hg3)\n  have hgcd : Int.gcd d.residue (complexFactorModulus a) = 1 := by\n    simpa only [Int.gcd, Int.natAbs_natCast, Nat.gcd_comm] using hcop.gcd_eq_one\n  exact hbad (hqa ▸ hgcd)\n\ndef progressionMass (d : MediumAtom) (m q : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier,\n    if Int.ModEq q ((m : ℤ) * n) d.residue then d.alpha n else 0\n\n/-- Exact progression-row grouping before any primitive-residue assumption. -/\ntheorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * progressionMass d m q := by\n  have hmass (q : ℕ) :\n      (∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n        (if (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ))\n          then (1 : ℂ) else 0)) = progressionMass d m q := by\n    rw [d.sum_transposedBeta_mul]\n    simp only [progressionMass, Int.ModEq, Nat.cast_mul, mul_ite, mul_one, mul_zero]\n    apply Finset.sum_congr rfl\n    intro n _\n    by_cases hc : (m : ℤ) * n % (q : ℤ) = d.residue % (q : ℤ)\n    · simp only [if_pos hc]\n    · simp only [if_neg hc]\n  calc\n    _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *\n        ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n          (if (((m * n : ℕ) : ℤ) % (complexFactorModulus a : ℤ) =\n            d.residue % (complexFactorModulus a : ℤ)) then (1 : ℂ) else 0) := by\n      unfold MediumAtom.complexProgressionRow MediumAtom.complexRowLabels\n      simp only [Finset.sum_product]\n      change (∑ a ∈ d.complexFactorLabels, ∑ n ∈ d.transposedAtom.betaCarrier,\n        d.complexFactorGamma a * d.transposedAtom.beta n *\n          (if (((m * n : ℕ) : ℤ) % (complexFactorModulus a : ℤ) =\n            d.residue % (complexFactorModulus a : ℤ)) then (1 : ℂ) else 0)) = _\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ a ∈ d.complexFactorLabels,\n        d.complexFactorGamma a * progressionMass d m (complexFactorModulus a) := by\n      simp only [hmass]\n    _ = _ := d.sum_factorLabels_eq_grouped (fun q : ℕ ↦ progressionMass d m q)\n\ndef mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    star (coprimeMass d.alphaCarrier d.alpha r) / (r.totient : ℂ)\n\ndef mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier, d.alpha n *\n    ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n        then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)\n\ndef actualMixedTerm (d : MediumAtom) : ℂ :=\n  ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n    mixedPairCoefficient d q r * mixedProgressionMass d q r\n\ntheorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m *\n        star (d.transposedAtom.complexPrincipalRow m) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          ∑ n ∈ d.alphaCarrier, d.alpha n *\n            (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then (1 : ℂ) else 0) := by\n  rw [actual_progressionRow_eq_grouped, actual_principalRow_eq_grouped,\n    star_sum, Finset.sum_mul]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro r _\n  by_cases hm : m.Coprime r\n  · rw [if_pos hm, star_div₀, star_mul', star_natCast]\n    unfold progressionMass\n    simp only [Finset.mul_sum, Finset.sum_mul]\n    apply Finset.sum_congr rfl\n    intro n _\n    by_cases hc : Int.ModEq q ((m : ℤ) * n) d.residue\n    · rw [if_pos hc, if_pos ⟨hm, hc⟩]\n      unfold mixedPairCoefficient\n      simp only [div_eq_mul_inv]\n      ring\n    · rw [if_neg hc, if_neg (fun h ↦ hc h.2)]\n      ring\n  · rw [if_neg hm]\n    have hsum : (∑ n ∈ d.alphaCarrier, d.alpha n *\n        (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n          then (1 : ℂ) else 0)) = 0 := by\n      apply Finset.sum_eq_zero\n      intro n _\n      rw [if_neg (fun h ↦ hm h.1), mul_zero]\n    rw [hsum]\n    simp only [mul_zero, zero_div, star_zero]\n\n/-- The pair sum is the full complex row product, not its real surrogate. -/\ntheorem actualMixedTerm_eq_row_sum (d : MediumAtom) :\n    actualMixedTerm d =\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (d.transposedAtom.commonSmoothWeight m : ℂ) *\n          (d.transposedAtom.complexProgressionRow m *\n            star (d.transposedAtom.complexPrincipalRow m)) := by\n  symm\n  simp_rw [actual_row_product_eq_pair, Finset.mul_sum]\n  unfold actualMixedTerm mixedProgressionMass\n  simp only [Complex.ofReal_sum, Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro n _\n  apply Finset.sum_congr rfl\n  intro m _\n  split_ifs <;> push_cast <;> ring\n\ntheorem actualV_eq_re (d : MediumAtom) :\n    d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight = (actualMixedTerm d).re := by\n  rw [actualMixedTerm_eq_row_sum]\n  unfold MediumAtom.complexDispersionV\n  simp only [Complex.re_sum, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,\n    zero_mul, sub_zero]\n\n/-- The actual V difference is controlled by the complex mixed difference\nbecause the literal primitive zero main term has already been proved real. -/\ntheorem actualV_sub_primitive_norm_le (d : MediumAtom) :\n    ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        ‖actualMixedTerm d - primitiveZeroMain d‖ := by\n  calc\n    _ = ‖((actualMixedTerm d).re : ℂ) - ((primitiveZeroMain d).re : ℂ)‖ := by\n      rw [actualV_eq_re, primitiveZeroMain_ofReal_re]\n    _ = |(actualMixedTerm d - primitiveZeroMain d).re| := by\n      rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs, Complex.sub_re]\n    _ ≤ _ := Complex.abs_re_le_norm _\n\n/-- The mixed arithmetic zero mode is exactly the actual primitive main\nterm. This identity approximates neither the literal U nor the literal V. -/\ntheorem primitiveZeroMain_eq_mixed_main\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)) := by\n  rw [primitiveZeroMain_eq_grouped]\n  apply Finset.sum_congr rfl\n  intro q hq\n  apply Finset.sum_congr rfl\n  intro r hr\n  have hq0 : q ≠ 0 :=\n    (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1.ne'\n  have hr0 : r ≠ 0 :=\n    (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hr)).1.ne'\n  have hdensity := CommonSmoothCutoff.restricted_moebius_density hq0 hr0\n  have hz : (d.V * CommonSmoothCutoff.cutoffMass / q) *\n        (∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n          (ArithmeticFunction.moebius e : ℝ) / e) =\n      (d.V * CommonSmoothCutoff.cutoffMass) *\n        (((q * r).totient : ℝ) / ((q.totient : ℝ) * (q * r : ℕ))) := by\n    rw [div_mul_eq_mul_div, mul_div_assoc, hdensity]\n  rw [hz]\n  unfold mixedPairCoefficient primitivePairCoefficient\n  push_cast\n  simp only [div_eq_mul_inv, mul_inv_rev]\n  ring\n\ntheorem actualMixedTerm_sub_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    actualMixedTerm d - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)) := by\n  rw [actualMixedTerm, primitiveZeroMain_eq_mixed_main hd, ← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [mul_sub]\n\n/-- The actual alpha-weighted complex mixed error. Its universal constant\nis inherited from the proved local mixed progression error. -/\ntheorem mixedProgressionMass_sub_main_uniform_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom, 1 ≤ d.V → ∀ q r : ℕ,\n      0 < q → r ≠ 0 → Int.gcd d.residue q = 1 →\n      ‖mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n        (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n          ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n            (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)‖ ≤\n        C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ :=\n    CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_progression_uniform_error\n  refine ⟨C, hC, fun d hV q r hq hr ha ↦ ?_⟩\n  let z : ℝ := (d.V * CommonSmoothCutoff.cutoffMass / q) *\n    ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n      (ArithmeticFunction.moebius e : ℝ) / e\n  unfold mixedProgressionMass coprimeMass\n  change ‖(∑ n ∈ d.alphaCarrier, d.alpha n *\n      ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n          then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)) -\n      (∑ n ∈ d.alphaCarrier, if n.Coprime q then d.alpha n else 0) * (z : ℂ)‖ ≤\n    C * (∑ n ∈ d.alphaCarrier, if n.Coprime q then ‖d.alpha n‖ else 0) *\n      (r.divisors.card : ℝ)\n  rw [Finset.sum_mul, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ n ∈ d.alphaCarrier,\n        C * (if n.Coprime q then ‖d.alpha n‖ else 0) * (r.divisors.card : ℝ) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro n _\n      by_cases hn : n.Coprime q\n      · rw [if_pos hn]\n        rw [← mul_sub, ← Complex.ofReal_sub, norm_mul, Complex.norm_real,\n          Real.norm_eq_abs]\n        have he := hbound d.V (lt_of_lt_of_le zero_lt_one hV)\n          d.transposedAtom.commonSmoothCarrier\n          (fun m hm ↦ MediumAtom.transposedSmoothWeight_support_subset hV hm)\n          q r n hq hr hn d.residue ha\n        change |(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n            then d.transposedAtom.commonSmoothWeight m else 0) - z| ≤\n          C * (r.divisors.card : ℝ) at he\n        calc\n          _ ≤ ‖d.alpha n‖ * (C * (r.divisors.card : ℝ)) :=\n            mul_le_mul_of_nonneg_left he (norm_nonneg _)\n          _ = _ := by\n            rw [if_pos hn]\n            ring\n      · have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) = 0 := by\n          apply Finset.sum_eq_zero\n          intro m _\n          apply if_neg\n          intro hm\n          exact hn (CommonSmoothCutoff.coprime_of_product_congruent ha hm.2).2\n        simp only [if_neg hn, hz, Complex.ofReal_zero, mul_zero, zero_mul,\n          sub_zero, norm_zero]\n        exact le_rfl\n    _ = _ := by simp only [Finset.mul_sum, Finset.sum_mul]\n\n/-- The finite actual V envelope is a conclusion, not an assumed budget.\nOnly active q coefficients use a primitive-residue gate. -/\ntheorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ := mixedProgressionMass_sub_main_uniform_bound\n  refine ⟨C, hC, fun B sigma kappa c0 d hd ↦ ?_⟩\n  apply (actualV_sub_primitive_norm_le d).trans\n  rw [actualMixedTerm_sub_primitive_eq hd]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        C * (‖mixedPairCoefficient d q r‖ *\n          coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n            (r.divisors.card : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro q hq\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro r hr\n      by_cases hG : d.groupedFactorGamma q = 0\n      · simp only [mixedPairCoefficient, hG, zero_mul, zero_div, norm_zero, mul_zero]\n        exact le_rfl\n      · have hq0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1\n        have hr0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hr)).1.ne'\n        rw [norm_mul]\n        calc\n          _ ≤ ‖mixedPairCoefficient d q r‖ *\n              (C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n                (r.divisors.card : ℝ)) :=\n            mul_le_mul_of_nonneg_left (hbound d hd.2.1 q r hq0 hr0\n              (active_grouped_residue_gcd hd hG)) (norm_nonneg _)\n          _ = _ := by ring\n    _ = _ := by simp only [Finset.mul_sum]\n\nend TransposedPrimitiveV\n\nend\n\nend ImbalancedChen.Part3\n",
+    "sha256": "ded50814e41dd21a5b1e95494050adb4979bf6c8263c677917dd9e6f4cadef0f",
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "active_grouped_residue_gcd",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 31,
+        "complete_source_header": "theorem active_grouped_residue_gcd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hG : d.groupedFactorGamma q ≠ 0) : Int.gcd d.residue q = 1"
+      },
+      {
+        "name": "progressionMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 55,
+        "complete_source_header": "def progressionMass (d : MediumAtom) (m q : ℕ) : ℂ",
+        "complete_source_definition": "def progressionMass (d : MediumAtom) (m q : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier,\n    if Int.ModEq q ((m : ℤ) * n) d.residue then d.alpha n else 0"
+      },
+      {
+        "name": "actual_progressionRow_eq_grouped",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 60,
+        "complete_source_header": "theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * progressionMass d m q"
+      },
+      {
+        "name": "mixedPairCoefficient",
+        "kind": "def",
+        "private": false,
+        "start_line": 91,
+        "complete_source_header": "def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ",
+        "complete_source_definition": "def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    star (coprimeMass d.alphaCarrier d.alpha r) / (r.totient : ℂ)"
+      },
+      {
+        "name": "mixedProgressionMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 95,
+        "complete_source_header": "def mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ",
+        "complete_source_definition": "def mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier, d.alpha n *\n    ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n        then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)"
+      },
+      {
+        "name": "actualMixedTerm",
+        "kind": "def",
+        "private": false,
+        "start_line": 101,
+        "complete_source_header": "def actualMixedTerm (d : MediumAtom) : ℂ",
+        "complete_source_definition": "def actualMixedTerm (d : MediumAtom) : ℂ :=\n  ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n    mixedPairCoefficient d q r * mixedProgressionMass d q r"
+      },
+      {
+        "name": "actual_row_product_eq_pair",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 105,
+        "complete_source_header": "theorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m *\n        star (d.transposedAtom.complexPrincipalRow m) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          ∑ n ∈ d.alphaCarrier, d.alpha n *\n            (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then (1 : ℂ) else 0)"
+      },
+      {
+        "name": "actualMixedTerm_eq_row_sum",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 144,
+        "complete_source_header": "theorem actualMixedTerm_eq_row_sum (d : MediumAtom) :\n    actualMixedTerm d =\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (d.transposedAtom.commonSmoothWeight m : ℂ) *\n          (d.transposedAtom.complexProgressionRow m *\n            star (d.transposedAtom.complexPrincipalRow m))"
+      },
+      {
+        "name": "actualV_eq_re",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 167,
+        "complete_source_header": "theorem actualV_eq_re (d : MediumAtom) :\n    d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight = (actualMixedTerm d).re"
+      },
+      {
+        "name": "actualV_sub_primitive_norm_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 177,
+        "complete_source_header": "theorem actualV_sub_primitive_norm_le (d : MediumAtom) :\n    ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        ‖actualMixedTerm d - primitiveZeroMain d‖"
+      },
+      {
+        "name": "primitiveZeroMain_eq_mixed_main",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 190,
+        "complete_source_header": "theorem primitiveZeroMain_eq_mixed_main\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))"
+      },
+      {
+        "name": "actualMixedTerm_sub_primitive_eq",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 222,
+        "complete_source_header": "theorem actualMixedTerm_sub_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    actualMixedTerm d - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))"
+      },
+      {
+        "name": "mixedProgressionMass_sub_main_uniform_bound",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 242,
+        "complete_source_header": "theorem mixedProgressionMass_sub_main_uniform_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom, 1 ≤ d.V → ∀ q r : ℕ,\n      0 < q → r ≠ 0 → Int.gcd d.residue q = 1 →\n      ‖mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n        (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n          ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n            (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)‖ ≤\n        C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)"
+      },
+      {
+        "name": "actualV_sub_primitive_finite_bound",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 305,
+        "complete_source_header": "theorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ)"
+      }
+    ],
+    "declaration_count": 14
+  },
+  "baseline": {
+    "only_changed_proof_declarations": [
+      "actual_progressionRow_eq_grouped",
+      "mixedProgressionMass_sub_main_uniform_bound"
+    ],
+    "complete_actual_diff_read": true,
+    "imports_exact_equal": true,
+    "exact_old_snapshot": "20261016-V-second-diag-original-1b62.lean.txt",
+    "sha256": "1b62d8e6b5d7ff0f4fdce5c359ba2677dafbf9d32113ffcb81e2386ca347099c",
+    "complete_header_definition_comparisons": [
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "active_grouped_residue_gcd",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "progressionMass",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": false,
+        "complete_header_exact_equal": true,
+        "name": "actual_progressionRow_eq_grouped",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "mixedPairCoefficient",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "mixedProgressionMass",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualMixedTerm",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actual_row_product_eq_pair",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualMixedTerm_eq_row_sum",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualV_eq_re",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualV_sub_primitive_norm_le",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "primitiveZeroMain_eq_mixed_main",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualMixedTerm_sub_primitive_eq",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": false,
+        "complete_header_exact_equal": true,
+        "name": "mixedProgressionMass_sub_main_uniform_bound",
+        "definition_body_exact_equal": true
+      },
+      {
+        "complete_block_equal": true,
+        "complete_header_exact_equal": true,
+        "name": "actualV_sub_primitive_finite_bound",
+        "definition_body_exact_equal": true
+      }
+    ],
+    "other_blocks_exact_equal": true
+  },
+  "author_report": {
+    "sha256": "2dfa235a431832516d09d9db400e8cf11a34dfc8a05756bf2470ba535370efad",
+    "path": "20261016-transposed-primitive-V-second-diag-owner-rebind.json"
+  },
+  "actual_failed_stdout": {
+    "path": ".lake/proof-continuation/runs/20261015T213539651576Z-ImbalancedChen.Part3TransposedPrimitiveV/stdout.log",
+    "fully_read": true,
+    "complete_text": "ImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side\n  d.alpha n\nis not definitionally equal to the right-hand side\n  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\n\ncase pos\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nh✝¹ : ↑m * ↑n % ↑q = d.residue % ↑q\nh✝ : ↑m * ↑n % ↑q = d.residue % ↑q\n⊢ d.alpha n = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\nImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side\n  d.alpha n\nis not definitionally equal to the right-hand side\n  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\n\ncase neg\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nh✝¹ : ↑m * ↑n % ↑q = d.residue % ↑q\nh✝ : ¬↑m * ↑n % ↑q = d.residue % ↑q\n⊢ d.alpha n = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\nImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side\n  0\nis not definitionally equal to the right-hand side\n  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\n\ncase pos\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nh✝¹ : ¬↑m * ↑n % ↑q = d.residue % ↑q\nh✝ : ↑m * ↑n % ↑q = d.residue % ↑q\n⊢ 0 = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\nImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side\n  0\nis not definitionally equal to the right-hand side\n  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\n\ncase neg\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nh✝¹ : ¬↑m * ↑n % ↑q = d.residue % ↑q\nh✝ : ¬↑m * ↑n % ↑q = d.residue % ↑q\n⊢ 0 = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/Part3TransposedPrimitiveV.lean:285:19: error: unsolved goals\nC : ℝ\nhC : 0 < C\nhbound :\n  ∀ (M : ℝ),\n    0 < M →\n      ∀ (S : Finset ℕ),\n        (∀ (m : ℕ), CommonSmoothCutoff.scaledDyadicCutoff M ↑m ≠ 0 → m ∈ S) →\n          ∀ (q r n : ℕ),\n            0 < q →\n              r ≠ 0 →\n                n.Coprime q →\n                  ∀ (a : ℤ),\n                    a.gcd ↑q = 1 →\n                      |(∑ m ∈ S,\n                              if m.Coprime r ∧ ↑m * ↑n ≡ a [ZMOD ↑q] then CommonSmoothCutoff.scaledDyadicCutoff M ↑m\n                              else 0) -\n                            M * CommonSmoothCutoff.cutoffMass / ↑q *\n                              ∑ d ∈ r.divisors with d.Coprime q, ↑(ArithmeticFunction.moebius d) / ↑d| ≤\n                        C * ↑(#r.divisors)\nd : MediumAtom\nhV : 1 ≤ d.V\nq r : ℕ\nhq : 0 < q\nhr : r ≠ 0\nha : d.residue.gcd ↑q = 1\nz : ℝ :=\n  d.V * CommonSmoothCutoff.cutoffMass / ↑q * ∑ e ∈ r.divisors with e.Coprime q, ↑(ArithmeticFunction.moebius e) / ↑e\nn : ℕ\na✝ : n ∈ d.alphaCarrier\nhn : n.Coprime q\nhe :\n  |(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          if m.Coprime r ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑q] then d.transposedAtom.commonSmoothWeight m else 0) -\n        z| ≤\n    C * ↑(#r.divisors)\n⊢ ‖d.alpha n‖ * C * ↑(#r.divisors) = C * ↑(#r.divisors) * if n.Coprime q then ‖d.alpha n‖ else 0\n",
+    "sha256": "5ed75ab0029ea72b0155a335595c4f63054e2fc34a995a2fa13cf441a94d905e"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveU",
+    "ImbalancedChen.Part3PrimitiveZeroReal"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "current_hash_matches_expected": true,
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb"
+    },
+    {
+      "current_hash_matches_expected": true,
+      "module": "ImbalancedChen.Part3PrimitiveZeroReal",
+      "sha256": "ef3396f5130f06a4a8068a3bd5e070bb91c7f260a60a3ff524c67c6e8dfd9741"
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "foreign_module_delta": 0,
+    "local_module_delta": 0,
+    "imports_changed": false,
+    "full_tree_rescanned": false
+  },
+  "diagnostic_and_mathematical_review": [
+    {
+      "site": "actual_progressionRow_eq_grouped / hmass",
+      "assessment": "The complete actual second stdout leaves four cases where split_ifs did not simplify the same-printed right-hand congruence indicator; two branches even contain both the guard and its negation. The repair supplies one explicitly typed actual integer-modulus equality hc, then simp only[if_pos hc] or simp only[if_neg hc] on both pointwise summands. It proves the same literal alpha-sum equality without adding a congruence or support hypothesis, following the already used explicit-guard pattern."
+    },
+    {
+      "site": "mixedProgressionMass_sub_main_uniform_bound / positive alpha branch",
+      "assessment": "The first if_pos hn rewrite cleared the Complex-valued alpha indicator, while the Real-valued norm-alpha indicator remained at the final ring equality, exactly as the complete actual stdout shows. Adding rw[if_pos hn] in that final Real equality removes the remaining actual guard. Ring then only reassociates norm(alpha)*C*tau(r), with no changed estimate, hypothesis or constant."
+    },
+    {
+      "site": "complete exact-source audit",
+      "assessment": "All fourteen complete generic types, four full definition blocks and the two imports are exact1b62 matches. Only the two listed proof declarations differ, at the actual two residual diagnostics; all other proof blocks retain their fully reviewed first-repair source. Original alpha/gamma coefficients, all physical q/r, original signed residue and common weight remain literal. P0 reality, the active-gamma-only primitive gate and the universal finite envelope are unchanged."
+    }
+  ],
+  "scope_invariants": {
+    "all_14_types_and_4_defs_same": true,
+    "imports_same": true,
+    "all_original_physical_q_r_and_alpha_carriers_preserved": true,
+    "actual_complex_mixed_term_and_V_equals_real_part_preserved": true,
+    "P0_reality_api_preserved": true,
+    "no_U_or_V_equals_P0_assumption": true,
+    "no_new_primitive_q_domain": true,
+    "finite_envelope_remains_conclusion": true,
+    "constant_before_atoms_and_moduli_same": true,
+    "no_budget_or_threshold_change": true,
+    "no_limits_or_linter_change": true
+  },
+  "bidirectional_byte_certificate": {
+    "replacement": {
+      "byte_offset_zero_based": 3046,
+      "new_inserted_bytes_base64": "YnlfY2FzZXMgaGMgOiAobSA6IOKEpCkgKiBuICUgKHEgOiDihKQpID0gZC5yZXNpZHVlICUgKHEgOiDihKQpCiAgICDCtyBzaW1wIG9ubHkgW2lmX3BvcyBoY10KICAgIMK3IHNpbXAgb25seSBbaWZfbmVnIGhjXQogIGNhbGMKICAgIF8gPSDiiJEgYSDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLCBkLmNvbXBsZXhGYWN0b3JHYW1tYSBhICoKICAgICAgICDiiJEgbiDiiIggZC50cmFuc3Bvc2VkQXRvbS5iZXRhQ2FycmllciwgZC50cmFuc3Bvc2VkQXRvbS5iZXRhIG4gKgogICAgICAgICAgKGlmICgoKG0gKiBuIDog4oSVKSA6IOKEpCkgJSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSA6IOKEpCkgPQogICAgICAgICAgICBkLnJlc2lkdWUgJSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSA6IOKEpCkpIHRoZW4gKDEgOiDihIIpIGVsc2UgMCkgOj0gYnkKICAgICAgdW5mb2xkIE1lZGl1bUF0b20uY29tcGxleFByb2dyZXNzaW9uUm93IE1lZGl1bUF0b20uY29tcGxleFJvd0xhYmVscwogICAgICBzaW1wIG9ubHkgW0ZpbnNldC5zdW1fcHJvZHVjdF0KICAgICAgY2hhbmdlICjiiJEgYSDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLCDiiJEgbiDiiIggZC50cmFuc3Bvc2VkQXRvbS5iZXRhQ2FycmllciwKICAgICAgICBkLmNvbXBsZXhGYWN0b3JHYW1tYSBhICogZC50cmFuc3Bvc2VkQXRvbS5iZXRhIG4gKgogICAgICAgICAgKGlmICgoKG0gKiBuIDog4oSVKSA6IOKEpCkgJSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSA6IOKEpCkgPQogICAgICAgICAgICBkLnJlc2lkdWUgJSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSA6IOKEpCkpIHRoZW4gKDEgOiDihIIpIGVsc2UgMCkpID0gXwogICAgICBzaW1wIG9ubHkgW0ZpbnNldC5tdWxfc3VtLCBtdWxfYXNzb2NdCiAgICBfID0g4oiRIGEg4oiIIGQuY29tcGxleEZhY3RvckxhYmVscywKICAgICAgICBkLmNvbXBsZXhGYWN0b3JHYW1tYSBhICogcHJvZ3Jlc3Npb25NYXNzIGQgbSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkgOj0gYnkKICAgICAgc2ltcCBvbmx5IFtobWFzc10KICAgIF8gPSBfIDo9IGQuc3VtX2ZhY3RvckxhYmVsc19lcV9ncm91cGVkIChmdW4gcSA6IOKElSDihqYgcHJvZ3Jlc3Npb25NYXNzIGQgbSBxKQoKZGVmIG1peGVkUGFpckNvZWZmaWNpZW50IChkIDogTWVkaXVtQXRvbSkgKHEgciA6IOKElSkgOiDihIIgOj0KICBkLmdyb3VwZWRGYWN0b3JHYW1tYSBxICogc3RhciAoZC5ncm91cGVkRmFjdG9yR2FtbWEgcikgKgogICAgc3RhciAoY29wcmltZU1hc3MgZC5hbHBoYUNhcnJpZXIgZC5hbHBoYSByKSAvIChyLnRvdGllbnQgOiDihIIpCgpkZWYgbWl4ZWRQcm9ncmVzc2lvbk1hc3MgKGQgOiBNZWRpdW1BdG9tKSAocSByIDog4oSVKSA6IOKEgiA6PQogIOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwgZC5hbHBoYSBuICoKICAgICgo4oiRIG0g4oiIIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllciwKICAgICAgaWYgbS5Db3ByaW1lIHIg4oinIEludC5Nb2RFcSBxICgobSA6IOKEpCkgKiBuKSBkLnJlc2lkdWUKICAgICAgICB0aGVuIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IG0gZWxzZSAwIDog4oSdKSA6IOKEgikKCmRlZiBhY3R1YWxNaXhlZFRlcm0gKGQgOiBNZWRpdW1BdG9tKSA6IOKEgiA6PQogIOKIkSBxIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLCDiiJEgciDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwKICAgIG1peGVkUGFpckNvZWZmaWNpZW50IGQgcSByICogbWl4ZWRQcm9ncmVzc2lvbk1hc3MgZCBxIHIKCnRoZW9yZW0gYWN0dWFsX3Jvd19wcm9kdWN0X2VxX3BhaXIgKGQgOiBNZWRpdW1BdG9tKSAobSA6IOKElSkgOgogICAgZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4UHJvZ3Jlc3Npb25Sb3cgbSAqCiAgICAgICAgc3RhciAoZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4UHJpbmNpcGFsUm93IG0pID0KICAgICAg4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICAgIG1peGVkUGFpckNvZWZmaWNpZW50IGQgcSByICoKICAgICAgICAgIOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwgZC5hbHBoYSBuICoKICAgICAgICAgICAgKGlmIG0uQ29wcmltZSByIOKIpyBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICAgICAgICAgICAgdGhlbiAoMSA6IOKEgikgZWxzZSAwKSA6PSBieQogIHJ3IFthY3R1YWxfcHJvZ3Jlc3Npb25Sb3dfZXFfZ3JvdXBlZCwgYWN0dWFsX3ByaW5jaXBhbFJvd19lcV9ncm91cGVkLAogICAgc3Rhcl9zdW0sIEZpbnNldC5zdW1fbXVsXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gcSBfCiAgcncgW0ZpbnNldC5tdWxfc3VtXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gciBfCiAgYnlfY2FzZXMgaG0gOiBtLkNvcHJpbWUgcgogIMK3IHJ3IFtpZl9wb3MgaG0sIHN0YXJfZGl24oKALCBzdGFyX211bCcsIHN0YXJfbmF0Q2FzdF0KICAgIHVuZm9sZCBwcm9ncmVzc2lvbk1hc3MKICAgIHNpbXAgb25seSBbRmluc2V0Lm11bF9zdW0sIEZpbnNldC5zdW1fbXVsXQogICAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICAgIGludHJvIG4gXwogICAgYnlfY2FzZXMgaGMgOiBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICDCtyBydyBbaWZfcG9zIGhjLCBpZl9wb3Mg4p+oaG0sIGhj4p+pXQogICAgICB1bmZvbGQgbWl4ZWRQYWlyQ29lZmZpY2llbnQKICAgICAgc2ltcCBvbmx5IFtkaXZfZXFfbXVsX2ludl0KICAgICAgcmluZwogICAgwrcgcncgW2lmX25lZyBoYywgaWZfbmVnIChmdW4gaCDihqYgaGMgaC4yKV0KICAgICAgcmluZwogIMK3IHJ3IFtpZl9uZWcgaG1dCiAgICBoYXZlIGhzdW0gOiAo4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCBkLmFscGhhIG4gKgogICAgICAgIChpZiBtLkNvcHJpbWUgciDiiKcgSW50Lk1vZEVxIHEgKChtIDog4oSkKSAqIG4pIGQucmVzaWR1ZQogICAgICAgICAgdGhlbiAoMSA6IOKEgikgZWxzZSAwKSkgPSAwIDo9IGJ5CiAgICAgIGFwcGx5IEZpbnNldC5zdW1fZXFfemVybwogICAgICBpbnRybyBuIF8KICAgICAgcncgW2lmX25lZyAoZnVuIGgg4oamIGhtIGguMSksIG11bF96ZXJvXQogICAgcncgW2hzdW1dCiAgICBzaW1wIG9ubHkgW211bF96ZXJvLCB6ZXJvX2Rpdiwgc3Rhcl96ZXJvXQoKLy0tIFRoZSBwYWlyIHN1bSBpcyB0aGUgZnVsbCBjb21wbGV4IHJvdyBwcm9kdWN0LCBub3QgaXRzIHJlYWwgc3Vycm9nYXRlLiAtLwp0aGVvcmVtIGFjdHVhbE1peGVkVGVybV9lcV9yb3dfc3VtIChkIDogTWVkaXVtQXRvbSkgOgogICAgYWN0dWFsTWl4ZWRUZXJtIGQgPQogICAgICDiiJEgbSDiiIggZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyLAogICAgICAgIChkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCBtIDog4oSCKSAqCiAgICAgICAgICAoZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4UHJvZ3Jlc3Npb25Sb3cgbSAqCiAgICAgICAgICAgIHN0YXIgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleFByaW5jaXBhbFJvdyBtKSkgOj0gYnkKICBzeW1tCiAgc2ltcF9ydyBbYWN0dWFsX3Jvd19wcm9kdWN0X2VxX3BhaXIsIEZpbnNldC5tdWxfc3VtXQogIHVuZm9sZCBhY3R1YWxNaXhlZFRlcm0gbWl4ZWRQcm9ncmVzc2lvbk1hc3MKICBzaW1wIG9ubHkgW0NvbXBsZXgub2ZSZWFsX3N1bSwgRmluc2V0Lm11bF9zdW1dCiAgcncgW0ZpbnNldC5zdW1fY29tbV0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHEgXwogIHJ3IFtGaW5zZXQuc3VtX2NvbW1dCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyByIF8KICBydyBbRmluc2V0LnN1bV9jb21tXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbiBfCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBtIF8KICBzcGxpdF9pZnMgPDs+IHB1c2hfY2FzdCA8Oz4gcmluZwoKdGhlb3JlbSBhY3R1YWxWX2VxX3JlIChkIDogTWVkaXVtQXRvbSkgOgogICAgZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4RGlzcGVyc2lvblYgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyCiAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0ID0gKGFjdHVhbE1peGVkVGVybSBkKS5yZSA6PSBieQogIHJ3IFthY3R1YWxNaXhlZFRlcm1fZXFfcm93X3N1bV0KICB1bmZvbGQgTWVkaXVtQXRvbS5jb21wbGV4RGlzcGVyc2lvblYKICBzaW1wIG9ubHkgW0NvbXBsZXgucmVfc3VtLCBDb21wbGV4Lm11bF9yZSwgQ29tcGxleC5vZlJlYWxfcmUsIENvbXBsZXgub2ZSZWFsX2ltLAogICAgemVyb19tdWwsIHN1Yl96ZXJvXQoKLy0tIFRoZSBhY3R1YWwgViBkaWZmZXJlbmNlIGlzIGNvbnRyb2xsZWQgYnkgdGhlIGNvbXBsZXggbWl4ZWQgZGlmZmVyZW5jZQpiZWNhdXNlIHRoZSBsaXRlcmFsIHByaW1pdGl2ZSB6ZXJvIG1haW4gdGVybSBoYXMgYWxyZWFkeSBiZWVuIHByb3ZlZCByZWFsLiAtLwp0aGVvcmVtIGFjdHVhbFZfc3ViX3ByaW1pdGl2ZV9ub3JtX2xlIChkIDogTWVkaXVtQXRvbSkgOgogICAg4oCWKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25WIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA6IOKEgikgLSBwcmltaXRpdmVaZXJvTWFpbiBk4oCWIOKJpAogICAgICAgIOKAlmFjdHVhbE1peGVkVGVybSBkIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliA6PSBieQogIGNhbGMKICAgIF8gPSDigJYoKGFjdHVhbE1peGVkVGVybSBkKS5yZSA6IOKEgikgLSAoKHByaW1pdGl2ZVplcm9NYWluIGQpLnJlIDog4oSCKeKAliA6PSBieQogICAgICBydyBbYWN0dWFsVl9lcV9yZSwgcHJpbWl0aXZlWmVyb01haW5fb2ZSZWFsX3JlXQogICAgXyA9IHwoYWN0dWFsTWl4ZWRUZXJtIGQgLSBwcmltaXRpdmVaZXJvTWFpbiBkKS5yZXwgOj0gYnkKICAgICAgcncgW+KGkCBDb21wbGV4Lm9mUmVhbF9zdWIsIENvbXBsZXgubm9ybV9yZWFsLCBSZWFsLm5vcm1fZXFfYWJzLCBDb21wbGV4LnN1Yl9yZV0KICAgIF8g4omkIF8gOj0gQ29tcGxleC5hYnNfcmVfbGVfbm9ybSBfCgovLS0gVGhlIG1peGVkIGFyaXRobWV0aWMgemVybyBtb2RlIGlzIGV4YWN0bHkgdGhlIGFjdHVhbCBwcmltaXRpdmUgbWFpbgp0ZXJtLiBUaGlzIGlkZW50aXR5IGFwcHJveGltYXRlcyBuZWl0aGVyIHRoZSBsaXRlcmFsIFUgbm9yIHRoZSBsaXRlcmFsIFYuIC0vCnRoZW9yZW0gcHJpbWl0aXZlWmVyb01haW5fZXFfbWl4ZWRfbWFpbgogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIDoKICAgIHByaW1pdGl2ZVplcm9NYWluIGQgPQogICAgICDiiJEgcSDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwg4oiRIHIg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksCiAgICAgICAgbWl4ZWRQYWlyQ29lZmZpY2llbnQgZCBxIHIgKgogICAgICAgICAgKGNvcHJpbWVNYXNzIGQuYWxwaGFDYXJyaWVyIGQuYWxwaGEgcSAqCiAgICAgICAgICAgICgoKGQuViAqIENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzIC8gcSkgKgogICAgICAgICAgICAgIOKIkSBlIOKIiCByLmRpdmlzb3JzLmZpbHRlciAoZnVuIGUg4oamIGUuQ29wcmltZSBxKSwKICAgICAgICAgICAgICAgIChBcml0aG1ldGljRnVuY3Rpb24ubW9lYml1cyBlIDog4oSdKSAvIGUgOiDihJ0pIDog4oSCKSkgOj0gYnkKICBydyBbcHJpbWl0aXZlWmVyb01haW5fZXFfZ3JvdXBlZF0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHEgaHEKICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHIgaHIKICBoYXZlIGhxMCA6IHEg4omgIDAgOj0KICAgIChGaW5zZXQubWVtX0lvYy5tcCAoZC5waHlzaWNhbEZhY3Rvck1vZHVsaV9zdWJzZXRfY2FwIGhkIGhxKSkuMS5uZScKICBoYXZlIGhyMCA6IHIg4omgIDAgOj0KICAgIChGaW5zZXQubWVtX0lvYy5tcCAoZC5waHlzaWNhbEZhY3Rvck1vZHVsaV9zdWJzZXRfY2FwIGhkIGhyKSkuMS5uZScKICBoYXZlIGhkZW5zaXR5IDo9IENvbW1vblNtb290aEN1dG9mZi5yZXN0cmljdGVkX21vZWJpdXNfZGVuc2l0eSBocTAgaHIwCiAgaGF2ZSBoeiA6IChkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyAvIHEpICoKICAgICAgICAo4oiRIGUg4oiIIHIuZGl2aXNvcnMuZmlsdGVyIChmdW4gZSDihqYgZS5Db3ByaW1lIHEpLAogICAgICAgICAgKEFyaXRobWV0aWNGdW5jdGlvbi5tb2ViaXVzIGUgOiDihJ0pIC8gZSkgPQogICAgICAoZC5WICogQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MpICoKICAgICAgICAoKChxICogcikudG90aWVudCA6IOKEnSkgLyAoKHEudG90aWVudCA6IOKEnSkgKiAocSAqIHIgOiDihJUpKSkgOj0gYnkKICAgIHJ3IFtkaXZfbXVsX2VxX211bF9kaXYsIG11bF9kaXZfYXNzb2MsIGhkZW5zaXR5XQogIHJ3IFtoel0KICB1bmZvbGQgbWl4ZWRQYWlyQ29lZmZpY2llbnQgcHJpbWl0aXZlUGFpckNvZWZmaWNpZW50CiAgcHVzaF9jYXN0CiAgc2ltcCBvbmx5IFtkaXZfZXFfbXVsX2ludiwgbXVsX2ludl9yZXZdCiAgcmluZwoKdGhlb3JlbSBhY3R1YWxNaXhlZFRlcm1fc3ViX3ByaW1pdGl2ZV9lcQogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIDoKICAgIGFjdHVhbE1peGVkVGVybSBkIC0gcHJpbWl0aXZlWmVyb01haW4gZCA9CiAgICAgIOKIkSBxIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLCDiiJEgciDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwKICAgICAgICBtaXhlZFBhaXJDb2VmZmljaWVudCBkIHEgciAqCiAgICAgICAgICAobWl4ZWRQcm9ncmVzc2lvbk1hc3MgZCBxIHIgLSBjb3ByaW1lTWFzcyBkLmFscGhhQ2FycmllciBkLmFscGhhIHEgKgogICAgICAgICAgICAoKChkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyAvIHEpICoKICAgICAgICAgICAgICDiiJEgZSDiiIggci5kaXZpc29ycy5maWx0ZXIgKGZ1biBlIOKGpiBlLkNvcHJpbWUgcSksCiAgICAgICAgICAgICAgICAoQXJpdGhtZXRpY0Z1bmN0aW9uLm1vZWJpdXMgZSA6IOKEnSkgLyBlIDog4oSdKSA6IOKEgikpIDo9IGJ5CiAgcncgW2FjdHVhbE1peGVkVGVybSwgcHJpbWl0aXZlWmVyb01haW5fZXFfbWl4ZWRfbWFpbiBoZCwg4oaQIEZpbnNldC5zdW1fc3ViX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBxIF8KICBydyBb4oaQIEZpbnNldC5zdW1fc3ViX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyByIF8KICBydyBbbXVsX3N1Yl0KCi8tLSBUaGUgYWN0dWFsIGFscGhhLXdlaWdodGVkIGNvbXBsZXggbWl4ZWQgZXJyb3IuIEl0cyB1bml2ZXJzYWwgY29uc3RhbnQKaXMgaW5oZXJpdGVkIGZyb20gdGhlIHByb3ZlZCBsb2NhbCBtaXhlZCBwcm9ncmVzc2lvbiBlcnJvci4gLS8KdGhlb3JlbSBtaXhlZFByb2dyZXNzaW9uTWFzc19zdWJfbWFpbl91bmlmb3JtX2JvdW5kIDoKICAgIOKIgyBDIDog4oSdLCAwIDwgQyDiiKcg4oiAIGQgOiBNZWRpdW1BdG9tLCAxIOKJpCBkLlYg4oaSIOKIgCBxIHIgOiDihJUsCiAgICAgIDAgPCBxIOKGkiByIOKJoCAwIOKGkiBJbnQuZ2NkIGQucmVzaWR1ZSBxID0gMSDihpIKICAgICAg4oCWbWl4ZWRQcm9ncmVzc2lvbk1hc3MgZCBxIHIgLSBjb3ByaW1lTWFzcyBkLmFscGhhQ2FycmllciBkLmFscGhhIHEgKgogICAgICAgICgoKGQuViAqIENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzIC8gcSkgKgogICAgICAgICAg4oiRIGUg4oiIIHIuZGl2aXNvcnMuZmlsdGVyIChmdW4gZSDihqYgZS5Db3ByaW1lIHEpLAogICAgICAgICAgICAoQXJpdGhtZXRpY0Z1bmN0aW9uLm1vZWJpdXMgZSA6IOKEnSkgLyBlIDog4oSdKSA6IOKEginigJYg4omkCiAgICAgICAgQyAqIGNvcHJpbWVNYXNzIGQuYWxwaGFDYXJyaWVyIChmdW4gbiDihqYg4oCWZC5hbHBoYSBu4oCWKSBxICoKICAgICAgICAgIChyLmRpdmlzb3JzLmNhcmQgOiDihJ0pIDo9IGJ5CiAgb2J0YWluIOKfqEMsIGhDLCBoYm91bmTin6kgOj0KICAgIENvbW1vblNtb290aEN1dG9mZi5zY2FsZWREeWFkaWNDdXRvZmZfZmluc2V0X2NvcHJpbWVfcHJvZ3Jlc3Npb25fdW5pZm9ybV9lcnJvcgogIHJlZmluZSDin6hDLCBoQywgZnVuIGQgaFYgcSByIGhxIGhyIGhhIOKGpiA/X+KfqQogIGxldCB6IDog4oSdIDo9IChkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyAvIHEpICoKICAgIOKIkSBlIOKIiCByLmRpdmlzb3JzLmZpbHRlciAoZnVuIGUg4oamIGUuQ29wcmltZSBxKSwKICAgICAgKEFyaXRobWV0aWNGdW5jdGlvbi5tb2ViaXVzIGUgOiDihJ0pIC8gZQogIHVuZm9sZCBtaXhlZFByb2dyZXNzaW9uTWFzcyBjb3ByaW1lTWFzcwogIGNoYW5nZSDigJYo4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCBkLmFscGhhIG4gKgogICAgICAoKOKIkSBtIOKIiCBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIsCiAgICAgICAgaWYgbS5Db3ByaW1lIHIg4oinIEludC5Nb2RFcSBxICgobSA6IOKEpCkgKiBuKSBkLnJlc2lkdWUKICAgICAgICAgIHRoZW4gZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgbSBlbHNlIDAgOiDihJ0pIDog4oSCKSkgLQogICAgICAo4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCBpZiBuLkNvcHJpbWUgcSB0aGVuIGQuYWxwaGEgbiBlbHNlIDApICogKHogOiDihIIp4oCWIOKJpAogICAgQyAqICjiiJEgbiDiiIggZC5hbHBoYUNhcnJpZXIsIGlmIG4uQ29wcmltZSBxIHRoZW4g4oCWZC5hbHBoYSBu4oCWIGVsc2UgMCkgKgogICAgICAoci5kaXZpc29ycy5jYXJkIDog4oSdKQogIHJ3IFtGaW5zZXQuc3VtX211bCwg4oaQIEZpbnNldC5zdW1fc3ViX2Rpc3RyaWJdCiAgY2FsYwogICAgXyDiiaQg4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLAogICAgICAgIEMgKiAoaWYgbi5Db3ByaW1lIHEgdGhlbiDigJZkLmFscGhhIG7igJYgZWxzZSAwKSAqIChyLmRpdmlzb3JzLmNhcmQgOiDihJ0pIDo9IGJ5CiAgICAgIGFwcGx5IChub3JtX3N1bV9sZSBfIF8pLnRyYW5zCiAgICAgIGFwcGx5IEZpbnNldC5zdW1fbGVfc3VtCiAgICAgIGludHJvIG4gXwogICAgICBieV9jYXNlcyBobiA6IG4uQ29wcmltZSBxCiAgICAgIMK3IHJ3IFtpZl9wb3MgaG5dCiAgICAgICAgcncgW+KGkCBtdWxfc3ViLCDihpAgQ29tcGxleC5vZlJlYWxfc3ViLCBub3JtX211bCwgQ29tcGxleC5ub3JtX3JlYWwsCiAgICAgICAgICBSZWFsLm5vcm1fZXFfYWJzXQogICAgICAgIGhhdmUgaGUgOj0gaGJvdW5kIGQuViAobHRfb2ZfbHRfb2ZfbGUgemVyb19sdF9vbmUgaFYpCiAgICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgICAgIChmdW4gbSBobSDihqYgTWVkaXVtQXRvbS50cmFuc3Bvc2VkU21vb3RoV2VpZ2h0X3N1cHBvcnRfc3Vic2V0IGhWIGhtKQogICAgICAgICAgcSByIG4gaHEgaHIgaG4gZC5yZXNpZHVlIGhhCiAgICAgICAgY2hhbmdlIHwo4oiRIG0g4oiIIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllciwKICAgICAgICAgIGlmIG0uQ29wcmltZSByIOKIpyBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICAgICAgICAgIHRoZW4gZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgbSBlbHNlIDApIC0genwg4omkCiAgICAgICAgICBDICogKHIuZGl2aXNvcnMuY2FyZCA6IOKEnSkgYXQgaGUKICAgICAgICBjYWxjCiAgICAgICAgICBfIOKJpCDigJZkLmFscGhhIG7igJYgKiAoQyAqIChyLmRpdmlzb3JzLmNhcmQgOiDihJ0pKSA6PQogICAgICAgICAgICBtdWxfbGVfbXVsX29mX25vbm5lZ19sZWZ0IGhlIChub3JtX25vbm5lZyBfKQogICAgICAgICAgXyA9IF8gOj0gYnkKICAgICAgICAgICAgcncgW2lmX3BvcyBobl0KICAgICAgICAgICA=",
+      "old_removed_bytes_base64": "c3BsaXRfaWZzIDw7PiByZmwKICBjYWxjCiAgICBfID0g4oiRIGEg4oiIIGQuY29tcGxleEZhY3RvckxhYmVscywgZC5jb21wbGV4RmFjdG9yR2FtbWEgYSAqCiAgICAgICAg4oiRIG4g4oiIIGQudHJhbnNwb3NlZEF0b20uYmV0YUNhcnJpZXIsIGQudHJhbnNwb3NlZEF0b20uYmV0YSBuICoKICAgICAgICAgIChpZiAoKChtICogbiA6IOKElSkgOiDihKQpICUgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEgOiDihKQpID0KICAgICAgICAgICAgZC5yZXNpZHVlICUgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEgOiDihKQpKSB0aGVuICgxIDog4oSCKSBlbHNlIDApIDo9IGJ5CiAgICAgIHVuZm9sZCBNZWRpdW1BdG9tLmNvbXBsZXhQcm9ncmVzc2lvblJvdyBNZWRpdW1BdG9tLmNvbXBsZXhSb3dMYWJlbHMKICAgICAgc2ltcCBvbmx5IFtGaW5zZXQuc3VtX3Byb2R1Y3RdCiAgICAgIGNoYW5nZSAo4oiRIGEg4oiIIGQuY29tcGxleEZhY3RvckxhYmVscywg4oiRIG4g4oiIIGQudHJhbnNwb3NlZEF0b20uYmV0YUNhcnJpZXIsCiAgICAgICAgZC5jb21wbGV4RmFjdG9yR2FtbWEgYSAqIGQudHJhbnNwb3NlZEF0b20uYmV0YSBuICoKICAgICAgICAgIChpZiAoKChtICogbiA6IOKElSkgOiDihKQpICUgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEgOiDihKQpID0KICAgICAgICAgICAgZC5yZXNpZHVlICUgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEgOiDihKQpKSB0aGVuICgxIDog4oSCKSBlbHNlIDApKSA9IF8KICAgICAgc2ltcCBvbmx5IFtGaW5zZXQubXVsX3N1bSwgbXVsX2Fzc29jXQogICAgXyA9IOKIkSBhIOKIiCBkLmNvbXBsZXhGYWN0b3JMYWJlbHMsCiAgICAgICAgZC5jb21wbGV4RmFjdG9yR2FtbWEgYSAqIHByb2dyZXNzaW9uTWFzcyBkIG0gKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEpIDo9IGJ5CiAgICAgIHNpbXAgb25seSBbaG1hc3NdCiAgICBfID0gXyA6PSBkLnN1bV9mYWN0b3JMYWJlbHNfZXFfZ3JvdXBlZCAoZnVuIHEgOiDihJUg4oamIHByb2dyZXNzaW9uTWFzcyBkIG0gcSkKCmRlZiBtaXhlZFBhaXJDb2VmZmljaWVudCAoZCA6IE1lZGl1bUF0b20pIChxIHIgOiDihJUpIDog4oSCIDo9CiAgZC5ncm91cGVkRmFjdG9yR2FtbWEgcSAqIHN0YXIgKGQuZ3JvdXBlZEZhY3RvckdhbW1hIHIpICoKICAgIHN0YXIgKGNvcHJpbWVNYXNzIGQuYWxwaGFDYXJyaWVyIGQuYWxwaGEgcikgLyAoci50b3RpZW50IDog4oSCKQoKZGVmIG1peGVkUHJvZ3Jlc3Npb25NYXNzIChkIDogTWVkaXVtQXRvbSkgKHEgciA6IOKElSkgOiDihIIgOj0KICDiiJEgbiDiiIggZC5hbHBoYUNhcnJpZXIsIGQuYWxwaGEgbiAqCiAgICAoKOKIkSBtIOKIiCBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIsCiAgICAgIGlmIG0uQ29wcmltZSByIOKIpyBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICAgICAgdGhlbiBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCBtIGVsc2UgMCA6IOKEnSkgOiDihIIpCgpkZWYgYWN0dWFsTWl4ZWRUZXJtIChkIDogTWVkaXVtQXRvbSkgOiDihIIgOj0KICDiiJEgcSDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwg4oiRIHIg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksCiAgICBtaXhlZFBhaXJDb2VmZmljaWVudCBkIHEgciAqIG1peGVkUHJvZ3Jlc3Npb25NYXNzIGQgcSByCgp0aGVvcmVtIGFjdHVhbF9yb3dfcHJvZHVjdF9lcV9wYWlyIChkIDogTWVkaXVtQXRvbSkgKG0gOiDihJUpIDoKICAgIGQudHJhbnNwb3NlZEF0b20uY29tcGxleFByb2dyZXNzaW9uUm93IG0gKgogICAgICAgIHN0YXIgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleFByaW5jaXBhbFJvdyBtKSA9CiAgICAgIOKIkSBxIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLCDiiJEgciDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwKICAgICAgICBtaXhlZFBhaXJDb2VmZmljaWVudCBkIHEgciAqCiAgICAgICAgICDiiJEgbiDiiIggZC5hbHBoYUNhcnJpZXIsIGQuYWxwaGEgbiAqCiAgICAgICAgICAgIChpZiBtLkNvcHJpbWUgciDiiKcgSW50Lk1vZEVxIHEgKChtIDog4oSkKSAqIG4pIGQucmVzaWR1ZQogICAgICAgICAgICAgIHRoZW4gKDEgOiDihIIpIGVsc2UgMCkgOj0gYnkKICBydyBbYWN0dWFsX3Byb2dyZXNzaW9uUm93X2VxX2dyb3VwZWQsIGFjdHVhbF9wcmluY2lwYWxSb3dfZXFfZ3JvdXBlZCwKICAgIHN0YXJfc3VtLCBGaW5zZXQuc3VtX211bF0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHEgXwogIHJ3IFtGaW5zZXQubXVsX3N1bV0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHIgXwogIGJ5X2Nhc2VzIGhtIDogbS5Db3ByaW1lIHIKICDCtyBydyBbaWZfcG9zIGhtLCBzdGFyX2RpduKCgCwgc3Rhcl9tdWwnLCBzdGFyX25hdENhc3RdCiAgICB1bmZvbGQgcHJvZ3Jlc3Npb25NYXNzCiAgICBzaW1wIG9ubHkgW0ZpbnNldC5tdWxfc3VtLCBGaW5zZXQuc3VtX211bF0KICAgIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgICBpbnRybyBuIF8KICAgIGJ5X2Nhc2VzIGhjIDogSW50Lk1vZEVxIHEgKChtIDog4oSkKSAqIG4pIGQucmVzaWR1ZQogICAgwrcgcncgW2lmX3BvcyBoYywgaWZfcG9zIOKfqGhtLCBoY+KfqV0KICAgICAgdW5mb2xkIG1peGVkUGFpckNvZWZmaWNpZW50CiAgICAgIHNpbXAgb25seSBbZGl2X2VxX211bF9pbnZdCiAgICAgIHJpbmcKICAgIMK3IHJ3IFtpZl9uZWcgaGMsIGlmX25lZyAoZnVuIGgg4oamIGhjIGguMildCiAgICAgIHJpbmcKICDCtyBydyBbaWZfbmVnIGhtXQogICAgaGF2ZSBoc3VtIDogKOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwgZC5hbHBoYSBuICoKICAgICAgICAoaWYgbS5Db3ByaW1lIHIg4oinIEludC5Nb2RFcSBxICgobSA6IOKEpCkgKiBuKSBkLnJlc2lkdWUKICAgICAgICAgIHRoZW4gKDEgOiDihIIpIGVsc2UgMCkpID0gMCA6PSBieQogICAgICBhcHBseSBGaW5zZXQuc3VtX2VxX3plcm8KICAgICAgaW50cm8gbiBfCiAgICAgIHJ3IFtpZl9uZWcgKGZ1biBoIOKGpiBobSBoLjEpLCBtdWxfemVyb10KICAgIHJ3IFtoc3VtXQogICAgc2ltcCBvbmx5IFttdWxfemVybywgemVyb19kaXYsIHN0YXJfemVyb10KCi8tLSBUaGUgcGFpciBzdW0gaXMgdGhlIGZ1bGwgY29tcGxleCByb3cgcHJvZHVjdCwgbm90IGl0cyByZWFsIHN1cnJvZ2F0ZS4gLS8KdGhlb3JlbSBhY3R1YWxNaXhlZFRlcm1fZXFfcm93X3N1bSAoZCA6IE1lZGl1bUF0b20pIDoKICAgIGFjdHVhbE1peGVkVGVybSBkID0KICAgICAg4oiRIG0g4oiIIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllciwKICAgICAgICAoZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgbSA6IOKEgikgKgogICAgICAgICAgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleFByb2dyZXNzaW9uUm93IG0gKgogICAgICAgICAgICBzdGFyIChkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhQcmluY2lwYWxSb3cgbSkpIDo9IGJ5CiAgc3ltbQogIHNpbXBfcncgW2FjdHVhbF9yb3dfcHJvZHVjdF9lcV9wYWlyLCBGaW5zZXQubXVsX3N1bV0KICB1bmZvbGQgYWN0dWFsTWl4ZWRUZXJtIG1peGVkUHJvZ3Jlc3Npb25NYXNzCiAgc2ltcCBvbmx5IFtDb21wbGV4Lm9mUmVhbF9zdW0sIEZpbnNldC5tdWxfc3VtXQogIHJ3IFtGaW5zZXQuc3VtX2NvbW1dCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBxIF8KICBydyBbRmluc2V0LnN1bV9jb21tXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gciBfCiAgcncgW0ZpbnNldC5zdW1fY29tbV0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIG4gXwogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbSBfCiAgc3BsaXRfaWZzIDw7PiBwdXNoX2Nhc3QgPDs+IHJpbmcKCnRoZW9yZW0gYWN0dWFsVl9lcV9yZSAoZCA6IE1lZGl1bUF0b20pIDoKICAgIGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25WIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA9IChhY3R1YWxNaXhlZFRlcm0gZCkucmUgOj0gYnkKICBydyBbYWN0dWFsTWl4ZWRUZXJtX2VxX3Jvd19zdW1dCiAgdW5mb2xkIE1lZGl1bUF0b20uY29tcGxleERpc3BlcnNpb25WCiAgc2ltcCBvbmx5IFtDb21wbGV4LnJlX3N1bSwgQ29tcGxleC5tdWxfcmUsIENvbXBsZXgub2ZSZWFsX3JlLCBDb21wbGV4Lm9mUmVhbF9pbSwKICAgIHplcm9fbXVsLCBzdWJfemVyb10KCi8tLSBUaGUgYWN0dWFsIFYgZGlmZmVyZW5jZSBpcyBjb250cm9sbGVkIGJ5IHRoZSBjb21wbGV4IG1peGVkIGRpZmZlcmVuY2UKYmVjYXVzZSB0aGUgbGl0ZXJhbCBwcmltaXRpdmUgemVybyBtYWluIHRlcm0gaGFzIGFscmVhZHkgYmVlbiBwcm92ZWQgcmVhbC4gLS8KdGhlb3JlbSBhY3R1YWxWX3N1Yl9wcmltaXRpdmVfbm9ybV9sZSAoZCA6IE1lZGl1bUF0b20pIDoKICAgIOKAlihkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhEaXNwZXJzaW9uViBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliDiiaQKICAgICAgICDigJZhY3R1YWxNaXhlZFRlcm0gZCAtIHByaW1pdGl2ZVplcm9NYWluIGTigJYgOj0gYnkKICBjYWxjCiAgICBfID0g4oCWKChhY3R1YWxNaXhlZFRlcm0gZCkucmUgOiDihIIpIC0gKChwcmltaXRpdmVaZXJvTWFpbiBkKS5yZSA6IOKEginigJYgOj0gYnkKICAgICAgcncgW2FjdHVhbFZfZXFfcmUsIHByaW1pdGl2ZVplcm9NYWluX29mUmVhbF9yZV0KICAgIF8gPSB8KGFjdHVhbE1peGVkVGVybSBkIC0gcHJpbWl0aXZlWmVyb01haW4gZCkucmV8IDo9IGJ5CiAgICAgIHJ3IFvihpAgQ29tcGxleC5vZlJlYWxfc3ViLCBDb21wbGV4Lm5vcm1fcmVhbCwgUmVhbC5ub3JtX2VxX2FicywgQ29tcGxleC5zdWJfcmVdCiAgICBfIOKJpCBfIDo9IENvbXBsZXguYWJzX3JlX2xlX25vcm0gXwoKLy0tIFRoZSBtaXhlZCBhcml0aG1ldGljIHplcm8gbW9kZSBpcyBleGFjdGx5IHRoZSBhY3R1YWwgcHJpbWl0aXZlIG1haW4KdGVybS4gVGhpcyBpZGVudGl0eSBhcHByb3hpbWF0ZXMgbmVpdGhlciB0aGUgbGl0ZXJhbCBVIG5vciB0aGUgbGl0ZXJhbCBWLiAtLwp0aGVvcmVtIHByaW1pdGl2ZVplcm9NYWluX2VxX21peGVkX21haW4KICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSA6CiAgICBwcmltaXRpdmVaZXJvTWFpbiBkID0KICAgICAg4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICAgIG1peGVkUGFpckNvZWZmaWNpZW50IGQgcSByICoKICAgICAgICAgIChjb3ByaW1lTWFzcyBkLmFscGhhQ2FycmllciBkLmFscGhhIHEgKgogICAgICAgICAgICAoKChkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyAvIHEpICoKICAgICAgICAgICAgICDiiJEgZSDiiIggci5kaXZpc29ycy5maWx0ZXIgKGZ1biBlIOKGpiBlLkNvcHJpbWUgcSksCiAgICAgICAgICAgICAgICAoQXJpdGhtZXRpY0Z1bmN0aW9uLm1vZWJpdXMgZSA6IOKEnSkgLyBlIDog4oSdKSA6IOKEgikpIDo9IGJ5CiAgcncgW3ByaW1pdGl2ZVplcm9NYWluX2VxX2dyb3VwZWRdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBxIGhxCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyByIGhyCiAgaGF2ZSBocTAgOiBxIOKJoCAwIDo9CiAgICAoRmluc2V0Lm1lbV9Jb2MubXAgKGQucGh5c2ljYWxGYWN0b3JNb2R1bGlfc3Vic2V0X2NhcCBoZCBocSkpLjEubmUnCiAgaGF2ZSBocjAgOiByIOKJoCAwIDo9CiAgICAoRmluc2V0Lm1lbV9Jb2MubXAgKGQucGh5c2ljYWxGYWN0b3JNb2R1bGlfc3Vic2V0X2NhcCBoZCBocikpLjEubmUnCiAgaGF2ZSBoZGVuc2l0eSA6PSBDb21tb25TbW9vdGhDdXRvZmYucmVzdHJpY3RlZF9tb2ViaXVzX2RlbnNpdHkgaHEwIGhyMAogIGhhdmUgaHogOiAoZC5WICogQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MgLyBxKSAqCiAgICAgICAgKOKIkSBlIOKIiCByLmRpdmlzb3JzLmZpbHRlciAoZnVuIGUg4oamIGUuQ29wcmltZSBxKSwKICAgICAgICAgIChBcml0aG1ldGljRnVuY3Rpb24ubW9lYml1cyBlIDog4oSdKSAvIGUpID0KICAgICAgKGQuViAqIENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzKSAqCiAgICAgICAgKCgocSAqIHIpLnRvdGllbnQgOiDihJ0pIC8gKChxLnRvdGllbnQgOiDihJ0pICogKHEgKiByIDog4oSVKSkpIDo9IGJ5CiAgICBydyBbZGl2X211bF9lcV9tdWxfZGl2LCBtdWxfZGl2X2Fzc29jLCBoZGVuc2l0eV0KICBydyBbaHpdCiAgdW5mb2xkIG1peGVkUGFpckNvZWZmaWNpZW50IHByaW1pdGl2ZVBhaXJDb2VmZmljaWVudAogIHB1c2hfY2FzdAogIHNpbXAgb25seSBbZGl2X2VxX211bF9pbnYsIG11bF9pbnZfcmV2XQogIHJpbmcKCnRoZW9yZW0gYWN0dWFsTWl4ZWRUZXJtX3N1Yl9wcmltaXRpdmVfZXEKICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSA6CiAgICBhY3R1YWxNaXhlZFRlcm0gZCAtIHByaW1pdGl2ZVplcm9NYWluIGQgPQogICAgICDiiJEgcSDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwg4oiRIHIg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksCiAgICAgICAgbWl4ZWRQYWlyQ29lZmZpY2llbnQgZCBxIHIgKgogICAgICAgICAgKG1peGVkUHJvZ3Jlc3Npb25NYXNzIGQgcSByIC0gY29wcmltZU1hc3MgZC5hbHBoYUNhcnJpZXIgZC5hbHBoYSBxICoKICAgICAgICAgICAgKCgoZC5WICogQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MgLyBxKSAqCiAgICAgICAgICAgICAg4oiRIGUg4oiIIHIuZGl2aXNvcnMuZmlsdGVyIChmdW4gZSDihqYgZS5Db3ByaW1lIHEpLAogICAgICAgICAgICAgICAgKEFyaXRobWV0aWNGdW5jdGlvbi5tb2ViaXVzIGUgOiDihJ0pIC8gZSA6IOKEnSkgOiDihIIpKSA6PSBieQogIHJ3IFthY3R1YWxNaXhlZFRlcm0sIHByaW1pdGl2ZVplcm9NYWluX2VxX21peGVkX21haW4gaGQsIOKGkCBGaW5zZXQuc3VtX3N1Yl9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gcSBfCiAgcncgW+KGkCBGaW5zZXQuc3VtX3N1Yl9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gciBfCiAgcncgW211bF9zdWJdCgovLS0gVGhlIGFjdHVhbCBhbHBoYS13ZWlnaHRlZCBjb21wbGV4IG1peGVkIGVycm9yLiBJdHMgdW5pdmVyc2FsIGNvbnN0YW50CmlzIGluaGVyaXRlZCBmcm9tIHRoZSBwcm92ZWQgbG9jYWwgbWl4ZWQgcHJvZ3Jlc3Npb24gZXJyb3IuIC0vCnRoZW9yZW0gbWl4ZWRQcm9ncmVzc2lvbk1hc3Nfc3ViX21haW5fdW5pZm9ybV9ib3VuZCA6CiAgICDiiIMgQyA6IOKEnSwgMCA8IEMg4oinIOKIgCBkIDogTWVkaXVtQXRvbSwgMSDiiaQgZC5WIOKGkiDiiIAgcSByIDog4oSVLAogICAgICAwIDwgcSDihpIgciDiiaAgMCDihpIgSW50LmdjZCBkLnJlc2lkdWUgcSA9IDEg4oaSCiAgICAgIOKAlm1peGVkUHJvZ3Jlc3Npb25NYXNzIGQgcSByIC0gY29wcmltZU1hc3MgZC5hbHBoYUNhcnJpZXIgZC5hbHBoYSBxICoKICAgICAgICAoKChkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyAvIHEpICoKICAgICAgICAgIOKIkSBlIOKIiCByLmRpdmlzb3JzLmZpbHRlciAoZnVuIGUg4oamIGUuQ29wcmltZSBxKSwKICAgICAgICAgICAgKEFyaXRobWV0aWNGdW5jdGlvbi5tb2ViaXVzIGUgOiDihJ0pIC8gZSA6IOKEnSkgOiDihIIp4oCWIOKJpAogICAgICAgIEMgKiBjb3ByaW1lTWFzcyBkLmFscGhhQ2FycmllciAoZnVuIG4g4oamIOKAlmQuYWxwaGEgbuKAlikgcSAqCiAgICAgICAgICAoci5kaXZpc29ycy5jYXJkIDog4oSdKSA6PSBieQogIG9idGFpbiDin6hDLCBoQywgaGJvdW5k4p+pIDo9CiAgICBDb21tb25TbW9vdGhDdXRvZmYuc2NhbGVkRHlhZGljQ3V0b2ZmX2ZpbnNldF9jb3ByaW1lX3Byb2dyZXNzaW9uX3VuaWZvcm1fZXJyb3IKICByZWZpbmUg4p+oQywgaEMsIGZ1biBkIGhWIHEgciBocSBociBoYSDihqYgP1/in6kKICBsZXQgeiA6IOKEnSA6PSAoZC5WICogQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MgLyBxKSAqCiAgICDiiJEgZSDiiIggci5kaXZpc29ycy5maWx0ZXIgKGZ1biBlIOKGpiBlLkNvcHJpbWUgcSksCiAgICAgIChBcml0aG1ldGljRnVuY3Rpb24ubW9lYml1cyBlIDog4oSdKSAvIGUKICB1bmZvbGQgbWl4ZWRQcm9ncmVzc2lvbk1hc3MgY29wcmltZU1hc3MKICBjaGFuZ2Ug4oCWKOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwgZC5hbHBoYSBuICoKICAgICAgKCjiiJEgbSDiiIggZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyLAogICAgICAgIGlmIG0uQ29wcmltZSByIOKIpyBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICAgICAgICB0aGVuIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IG0gZWxzZSAwIDog4oSdKSA6IOKEgikpIC0KICAgICAgKOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwgaWYgbi5Db3ByaW1lIHEgdGhlbiBkLmFscGhhIG4gZWxzZSAwKSAqICh6IDog4oSCKeKAliDiiaQKICAgIEMgKiAo4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCBpZiBuLkNvcHJpbWUgcSB0aGVuIOKAlmQuYWxwaGEgbuKAliBlbHNlIDApICoKICAgICAgKHIuZGl2aXNvcnMuY2FyZCA6IOKEnSkKICBydyBbRmluc2V0LnN1bV9tdWwsIOKGkCBGaW5zZXQuc3VtX3N1Yl9kaXN0cmliXQogIGNhbGMKICAgIF8g4omkIOKIkSBuIOKIiCBkLmFscGhhQ2FycmllciwKICAgICAgICBDICogKGlmIG4uQ29wcmltZSBxIHRoZW4g4oCWZC5hbHBoYSBu4oCWIGVsc2UgMCkgKiAoci5kaXZpc29ycy5jYXJkIDog4oSdKSA6PSBieQogICAgICBhcHBseSAobm9ybV9zdW1fbGUgXyBfKS50cmFucwogICAgICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogICAgICBpbnRybyBuIF8KICAgICAgYnlfY2FzZXMgaG4gOiBuLkNvcHJpbWUgcQogICAgICDCtyBydyBbaWZfcG9zIGhuXQogICAgICAgIHJ3IFvihpAgbXVsX3N1Yiwg4oaQIENvbXBsZXgub2ZSZWFsX3N1Yiwgbm9ybV9tdWwsIENvbXBsZXgubm9ybV9yZWFsLAogICAgICAgICAgUmVhbC5ub3JtX2VxX2Fic10KICAgICAgICBoYXZlIGhlIDo9IGhib3VuZCBkLlYgKGx0X29mX2x0X29mX2xlIHplcm9fbHRfb25lIGhWKQogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyCiAgICAgICAgICAoZnVuIG0gaG0g4oamIE1lZGl1bUF0b20udHJhbnNwb3NlZFNtb290aFdlaWdodF9zdXBwb3J0X3N1YnNldCBoViBobSkKICAgICAgICAgIHEgciBuIGhxIGhyIGhuIGQucmVzaWR1ZSBoYQogICAgICAgIGNoYW5nZSB8KOKIkSBtIOKIiCBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIsCiAgICAgICAgICBpZiBtLkNvcHJpbWUgciDiiKcgSW50Lk1vZEVxIHEgKChtIDog4oSkKSAqIG4pIGQucmVzaWR1ZQogICAgICAgICAgICB0aGVuIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IG0gZWxzZSAwKSAtIHp8IOKJpAogICAgICAgICAgQyAqIChyLmRpdmlzb3JzLmNhcmQgOiDihJ0pIGF0IGhlCiAgICAgICAgY2FsYwogICAgICAgICAgXyDiiaQg4oCWZC5hbHBoYSBu4oCWICogKEMgKiAoci5kaXZpc29ycy5jYXJkIDog4oSdKSkgOj0KICAgICAgICAgICAgbXVsX2xlX211bF9vZl9ub25uZWdfbGVmdCBoZSAobm9ybV9ub25uZWcgXykKICAgICAgICAgIF8gPSBfIDo9IGJ5",
+      "unchanged_suffix_byte_count": 2725,
+      "new_inserted_byte_count": 10118,
+      "old_removed_byte_count": 9975
+    },
+    "forward_old_snapshot_to_current": {
+      "reconstructed_sha256": "ded50814e41dd21a5b1e95494050adb4979bf6c8263c677917dd9e6f4cadef0f",
+      "byte_for_byte_equal_current": true
+    },
+    "in_memory_only": true,
+    "inverse_current_to_exact_old": {
+      "reconstructed_sha256": "1b62d8e6b5d7ff0f4fdce5c359ba2677dafbf9d32113ffcb81e2386ca347099c",
+      "byte_for_byte_equal_exact_old_snapshot": true
+    },
+    "all_checks_pass": true
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_limits_or_linter_change": true
+  },
+  "evidence_boundary": {
+    "source_modified": false,
+    "publication_freeze_respected": true,
+    "bootstrap_invoked": false,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "axiom_audit_performed": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-V-second-diag-independent-rebind.json"
+    ],
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "source_only": true,
+    "pins_or_checkers_modified": false,
+    "runtime_pass_claimed": false
+  },
+  "remaining_gate": "Only root/runtime owner may perform the original specific bounded exact-source validation; source-only rebind asserts no runtime PASS or ownership."
+}

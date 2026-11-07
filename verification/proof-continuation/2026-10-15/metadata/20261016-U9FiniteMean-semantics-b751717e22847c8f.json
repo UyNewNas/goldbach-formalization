@@ -1,0 +1,128 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T19:17:51.880949+00:00",
+  "reviewer": "lower_resume self-review, not independent Lean validation",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+  "source_sha256": "453dff2b760f9e4e7b18f7e708cb4d17f4a072654b1fd5e7eb6832c621651221",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "declarations": [
+    {
+      "name": "currentChenUpsilon9PrefixPrimeFibre",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9PrefixPrimeFibre (N a : ℕ) : Finset ℕ",
+      "line": 33
+    },
+    {
+      "name": "currentChenUpsilon9PrefixPrimeFibre_divisor_card",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9PrefixPrimeFibre_divisor_card (N a d : ℕ) :\n    ((currentChenUpsilon9PrefixPrimeFibre N a).filter\n      (fun q => d ∣ N - a * q)).card = primesInAPBelow N a d N",
+      "line": 38
+    },
+    {
+      "name": "currentChenUpsilon9_prefix_sum_upperDivisorSum",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_prefix_sum_upperDivisorSum\n    (N a cap : ℕ) (z L : ℝ) :\n    (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n      supportedDivisorSum (actualSmallRosserSupport N cap z)\n        (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * (primesInAPBelow N a d N : ℝ)",
+      "line": 53
+    },
+    {
+      "name": "currentChenUpsilon9_upperDivisorSum_nonneg",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9_upperDivisorSum_nonneg\n    (N cap : ℕ) (z L : ℝ) (hL : 1 < L) (hzL : z ≤ L) (n : ℕ) :\n    0 ≤ supportedDivisorSum (actualSmallRosserSupport N cap z)\n      (actualSmallRosserPlus N cap z L) n",
+      "line": 69
+    },
+    {
+      "name": "currentChenUpsilon9_prime_coprime_actualProduct",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9_prime_coprime_actualProduct\n    (N cap : ℕ) (z : ℝ) {P : ℕ} (hP : Nat.Prime P) (hzP : z ≤ (P : ℝ)) :\n    Nat.Coprime (actualSmallPrimeProduct N cap z) P",
+      "line": 78
+    },
+    {
+      "name": "currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap\n    (N a cap : ℕ) (ha : 0 < a) (z L : ℝ) (hL : 1 < L) (hzL : z ≤ L) :\n    ((currentChenUpsilon9SwitchedPrimeFibre N a).card : ℝ) ≤\n      (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) + (Nat.ceil z : ℝ)",
+      "line": 93
+    },
+    {
+      "name": "currentChenUpsilon9_product_sum_upperDivisorSum",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_product_sum_upperDivisorSum\n    (N cap : ℕ) (z L : ℝ) :\n    (∑ a ∈ currentChenUpsilon9PrefixProducts N,\n      ∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * currentChenUpsilon9PrefixAPCount N d",
+      "line": 149
+    },
+    {
+      "name": "currentChenUpsilon9_upper_sum_eq_active",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9_upper_sum_eq_active\n    (B : ℝ) (N cap : ℕ) (z : ℝ) (G : ℕ → ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d) =\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d",
+      "line": 163
+    },
+    {
+      "name": "currentChenUpsilon9SwitchedUpperDensity",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9SwitchedUpperDensity (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ",
+      "line": 183
+    },
+    {
+      "name": "currentChenUpsilon9_upper_AP_sum_eq_main_errors",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_upper_AP_sum_eq_main_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n        currentChenUpsilon9PrefixAPCount N d) =\n      currentChenUpsilon9LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon9CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon9PanRosserError B N cap z",
+      "line": 190
+    },
+    {
+      "name": "currentChenUpsilon9_le_upper_density_main_add_errors",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_le_upper_density_main_add_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ)\n    (hL : 1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ))\n    (hzL : z ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ)) :\n    currentChenUpsilon9 N ≤\n      currentChenUpsilon9LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon9CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon9PanRosserError B N cap z +\n        ((currentChenUpsilon9PrefixProducts N).card : ℝ) * (Nat.ceil z : ℝ) +\n        ((currentChenUpsilon9UnitFibres N).card : ℝ)",
+      "line": 226
+    },
+    {
+      "name": "currentChenUpsilon9_small_prime_cost_le_power",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_small_prime_cost_le_power {N : ℕ} (hN : (1 : ℝ) ≤ N) :\n    ((currentChenUpsilon9PrefixProducts N).card : ℝ) *\n      (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) ≤\n        4 * (N : ℝ) ^ (409 / 500 : ℝ)",
+      "line": 256
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_panLevel_sieveCutoff",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem eventually_currentChenUpsilon9_panLevel_sieveCutoff\n    (B : ℝ) (hB : 0 ≤ B) :\n    ∀ᶠ N : ℕ in atTop,\n      1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      panModulusCutoff N B ≤ N",
+      "line": 289
+    },
+    {
+      "name": "exists_currentChenUpsilon9_le_switched_density_main",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem exists_currentChenUpsilon9_le_switched_density_main :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ ε : ℝ, 0 < ε →\n      ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ,\n        currentChenUpsilon9 N ≤\n          currentChenUpsilon9LiMainMass N *\n            currentChenUpsilon9SwitchedUpperDensity B N cap ((N : ℝ) ^ (1 / 5 : ℝ)) +\n              ε * singularNormalization N",
+      "line": 322
+    }
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "The actual prime quotient fibre is changed to the native closed a*q<=N carrier only by an upper bound; the q=N/a receiver-zero endpoint remains in the closed AP count. The natural-subtraction congruence is proved on that actual closed domain.",
+    "Large original receiver primes P=N-a*q satisfy P>=z, hence survive the literal actual prime product by primality and strict product factors p<z. No centre-coprimality or coprime-gate identity is supplied.",
+    "The full supported upper Rosser divisor sum is nonnegative at every natural receiver including zero, by its actual sandwich. Enlargement from the large original fibre to the closed prefix carrier uses this total nonnegativity, never sign of individual coefficients.",
+    "Small original receiver primes are counted by q->N-a*q on the original strict domain a*q<N. Positivity of actual a gives cancellation, and the natural complement is injective there. Their per-fibre cost is ceil(z).",
+    "The exact prefix Fubini and AP decomposition use the same complete signed upper Rosser coefficient. Actual support yields primitive target coprimality; the true noncoprime li defect remains explicitly subtracted. Full gate support is exactly the active d<=Q support because actual level is Q+1.",
+    "The actual product-image cardinality is at most ceil(N^(309/500)); with z=N^(1/5), both ceiling losses give 4*N^(409/500). No unproved prime-count bound or factorization multiplicity is introduced.",
+    "The pinned conductor bounds and fixed-log-power bound give 1<Q+1, N^(1/5)<=Q+1, Q<=N eventually for each proved B>=0. Rounding of Q=floor(N^(1/2)/log(N)^B) is retained.",
+    "The final B is supplied by the unconditional actual Pan budget before epsilon and N. Signed Pan absolute error, signed gate absolute error, small-P cap and actual unit-fibre cost each receive epsilon/4 of the same singularNormalization.",
+    "The remaining main is the actual true-li mass times the explicitly displayed full reciprocal-totient upper Rosser density, with cap universally quantified after N. No actual density bound, hLower, adopted K or main upper-count estimate is a premise."
+  ],
+  "remaining": [
+    "No Lean elaboration or owned-object evidence for this new leaf yet.",
+    "The actual upper density asymptotic and harmonic true-li main-mass limit remain separate work. Ordinary switched prefactor eight and adopted K are neither assumed nor concluded here.",
+    "The first compile depends on the parent Pan leaf obtaining strict PASS."
+  ],
+  "evidence_boundary": "Source-only self-review; no kernel/object/axiom acceptance claim."
+}

@@ -1,0 +1,135 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_NO_TARGET_ISSUES_FOUND",
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "target": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+  "source_sha256": "08d68e395361fda004968ea81bc54188409e77fb7ed6541355133cd904f91df4",
+  "direct_dependency": {
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "sha256": "37ca1336b0aec630518c03288fe00cf2dade688c7d5cbd16053ac84a651f1e6a"
+  },
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualRoughVectorRankBound",
+      "line": 25,
+      "signature": "def actualRoughVectorRankBound (\u03c1 : \u211d) : \u2115"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualDwellSupport_prod_le",
+      "line": 27,
+      "signature": "theorem actualDwellSupport_prod_le {D : \u211d} (input : List \u2115) (hne : input \u2260 [])\n    (hpositive : \u2200 p \u2208 input, 0 < p) (hfull : actualDwellSupport D input) :\n    (input.prod : \u211d) \u2264 D"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualRoughPrimeVector_length_le",
+      "line": 48,
+      "signature": "theorem actualRoughPrimeVector_length_le {x \u03c1 \u03bb\u2080 : \u211d}\n    (hx : 1 < x) (h\u03c1 : 0 < \u03c1) (h\u03bb : \u03bb\u2080 \u2264 5 / 8)\n    (input : List \u2115) (hne : input \u2260 [])\n    (hpositive : \u2200 p \u2208 input, 0 < p)\n    (hrough : \u2200 p \u2208 input, x ^ \u03c1 \u2264 (p : \u211d))\n    (hfull : actualDwellSupport (x ^ \u03bb\u2080) input) :\n    input.length \u2264 actualRoughVectorRankBound \u03c1"
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "mapped_upper_prod_le_inflation",
+      "line": 70,
+      "signature": "private theorem mapped_upper_prod_le_inflation {\u03b1 : Type*} (x \u03c4 : \u211d) (hx : 0 < x)\n    (actual upper : \u03b1 \u2192 \u2115) (input : List \u03b1)\n    (hsize : \u2200 i \u2208 input, (upper i : \u211d) \u2264 x ^ \u03c4 * (actual i : \u211d)) :\n    (input.map (fun i => (upper i : \u211d))).prod \u2264\n      (x ^ \u03c4) ^ input.length * (input.map (fun i => (actual i : \u211d))).prod"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualDwellSupport_upper_inflation",
+      "line": 92,
+      "signature": "theorem actualDwellSupport_upper_inflation {\u03b1 : Type*} {x \u03c4 \u03bb\u2080 \u03bb\u2081 : \u211d} {R : \u2115}\n    (hx : 1 < x) (h\u03c4 : 0 \u2264 \u03c4) (actual upper : \u03b1 \u2192 \u2115) (input : List \u03b1)\n    (hlen : input.length \u2264 R)\n    (hsize : \u2200 i \u2208 input, (upper i : \u211d) \u2264 x ^ \u03c4 * (actual i : \u211d))\n    (hfull : actualDwellSupport (x ^ \u03bb\u2080) (input.map actual))\n    (hbudget : \u03bb\u2080 + \u03c4 * (R + 1) \u2264 \u03bb\u2081) :\n    actualDwellSupport (x ^ \u03bb\u2081) (input.map upper)"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdSelectedPair_upperSupport",
+      "line": 132,
+      "signature": "theorem actualExtendedThirdSelectedPair_upperSupport\n    {\u03b1 : Type*} {e \u03b4 \u03c1 \u03c4 x : \u211d} {m : \u2115} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e \u2264 1 / 384) (h\u03b4 : \u03b4 \u2264 e / 32)\n    (h\u03c1 : 0 < \u03c1) (h\u03c4 : 0 \u2264 \u03c4)\n    (hwidth : \u03c4 * (actualRoughVectorRankBound \u03c1 + 1) \u2264 e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m \u2264 e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 \u2264 VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 \u2192 \u211d} (ht : t \u2208 actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : \u03b1 \u2192 \u2115) (input : List \u03b1) (hne : input \u2260 [])\n    (hpositive : \u2200 i \u2208 input, 0 < actual i)\n    (hrough : \u2200 i \u2208 input, x ^ \u03c1 \u2264 (actual i : \u211d))\n    (hsize : \u2200 i \u2208 input, (upper i : \u211d) \u2264 x ^ \u03c4 * (actual i : \u211d))\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (input.map actual)) :\n    actualDwellSupport (x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * \u03b4))\n      (input.map upper)"
+    }
+  ],
+  "mathematical_findings": [
+    {
+      "scope": "full original product bound",
+      "detail": "The explicit nonempty hypothesis permits snoc decomposition and the original final indexed square test. Positive natural last slot is at least one, hence p<=p^2. Its nonnegative original prefix product preserves this inequality. Original mapped/natural product casting gives input.prod<=D. No bound is asserted for an empty vector with arbitrary D."
+    },
+    {
+      "scope": "uniform original length",
+      "detail": "Every original occurrence, including repeats, is at least x^rho. Nonnegative list product monotonicity gives (x^rho)^length<=original product<=x^lambda0<=x^(5/8). Positive base x>1 allows exponent cancellation, giving rho*length<=5/8. Since rho>0, division and Nat.le_floor_iff yield length<=floor((5/8)/rho). Neither primality nor Nodup is hidden in this purely numerical statement."
+    },
+    {
+      "scope": "generic label product inflation",
+      "detail": "Induction over the original label list multiplies one x^tau per occurrence. Both lower product factors used by mul_le_mul are nonnegative because upper and actual values are natural, and the inflation factor is nonnegative for any real tau at positive x. Associative/commutative product rewriting yields exactly (x^tau)^length times original actual product."
+    },
+    {
+      "scope": "indexed full upper support",
+      "detail": "The upper and actual map lists have identical lengths and their take/get operations refer to the same original index i. Prefix product inflation costs i copies of x^tau; monotone squaring of the current natural upper bound costs two more. The full term is therefore at most (x^tau)^(i+2) times the original actual indexed square term. The source hypothesis is precisely original full support, not support on a replacement remainder."
+    },
+    {
+      "scope": "rank and real-power budget",
+      "detail": "i<length<=R implies i+2<=R+1. Nonnegative tau preserves that inequality. Real.rpow_mul_natCast and Real.rpow_add identify the resulting bound with x^(tau*(i+2)+lambda0), and the explicit budget lambda0+tau*(R+1)<=lambda1 completes it. Natural casts and the real-floor ratio have matching directions."
+    },
+    {
+      "scope": "actual selected pair specialization",
+      "detail": "The same previously chosen pair parameter at t supplies lambda+e<=theta and theta<5/8 on the same physical cell. Thus the actual original source level is <=5/8, and the rough length theorem supplies the uniform rank bound for input.map actual. Width cost<=e/2 and delta<=e/32 imply lambda+cost<=theta-2delta with positive spare e. This pays the original entire upper vector without asking for a remaining-square or assignment predicate."
+    }
+  ],
+  "source_api_checks": {
+    "mathlib_files": [
+      {
+        "path": "Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+        "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3"
+      },
+      {
+        "path": "Mathlib/Algebra/Order/BigOperators/GroupWithZero/List.lean",
+        "sha256": "93dd065687bc4cf18d3fdab010880177865ed2713d31ebe45ef68941a0f78f4c"
+      },
+      {
+        "path": "Mathlib/Algebra/Order/Floor/Semiring.lean",
+        "sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3"
+      },
+      {
+        "path": "Mathlib/Algebra/BigOperators/Group/List/Defs.lean",
+        "sha256": "766cfa60d8424b97370517fbe4052c65a8860f3875811bc50d2d484c04b91a44"
+      }
+    ],
+    "signatures": [
+      "List.prod_map_le_prod_map\u2080: nonnegative lower entries plus pointwise comparison imply mapped product comparison.",
+      "List.prod_replicate n a: (replicate n a).prod=a^n.",
+      "Real.rpow_mul takes a nonnegative base; Real.rpow_natCast converts the natural-length real exponent to a natural power.",
+      "Real.rpow_le_rpow_left_iff requires x>1 and cancels the fixed base from a non-strict inequality.",
+      "Nat.le_floor_iff takes a nonnegative real argument; the argument (5/8)/rho is nonnegative from rho>0.",
+      "pow_le_pow_left\u2080 takes nonnegative smaller base and its comparison, then a natural exponent.",
+      "List.forall_mem_map converts the exact mapped-value positivity and roughness statements back to original label membership."
+    ],
+    "core_source_read_only_checks": [
+      "Init/Data/List/Lemmas.lean:1134 forall_mem_map",
+      "Init/Data/List/Lemmas.lean:2285 map_const (Function.const form; the lambda form is definitionally equal)"
+    ]
+  },
+  "issues_found": [],
+  "remaining_caller_obligations": [
+    "The inflation premise upper<=x^tau*actual is one-sided. To apply the frozen capacity factor theorem, separately prove actual<=upper from the actual prime-box membership; it is not concluded here.",
+    "Prime/Nodup or squarefreeness conditions remain separate when later coprimality or exact source-coefficient representations require them.",
+    "A concrete selected-pair remaining-vector dictionary and its endpoint pair square gate are still required for the complete three-factor box action.",
+    "No common three-group convolution, original coefficient reindexing, distribution estimate, arithmetic mean or final hUpper theorem is supplied here.",
+    "This endpoint vector is for an auxiliary common allocation; the module does not identify it with the previous per-tuple actualSelectedPairFactors decisions."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified_by_reviewer": false,
+    "bytecode_writes_disabled": true,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false,
+    "full_imported_closure_validation_claimed": false,
+    "tactic_elaboration_success_claimed": false
+  }
+}

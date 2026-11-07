@@ -1,0 +1,103 @@
+{
+  "status": "SOURCE_ONLY_TARGET_PROOF_REPAIR_REBIND",
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "target": "ImbalancedChen/ActualExtendedThirdKernelL1Convergence.lean",
+  "old_sha256": "24e8e52de1fe1b62ccd2488cfe1ac4f5e8363b21f88a70a9bb9f43ddf27803bf",
+  "new_sha256": "5eb9c7c8147e23f88a70daab3934bfde5d47f58625d545a6f06862ec18735d44",
+  "old_semantic_report": {
+    "path": ".lake/proof-continuation/source-reviews/20261015-kernel-l1-semantics.json",
+    "sha256": "4c432fc6712c94dd41ca4a1872afa490747ddc1b0f9f2b588cf1672e4eaa0abc",
+    "preserved_unchanged": true
+  },
+  "exact_two_substitutions_reproduce_current_bytes": true,
+  "changes": [
+    {
+      "location": "compactRectangle_volume proof",
+      "old": "simp with Fin.prod_univ_succ",
+      "new": "explicit rw volume_pi_pi/Fin.prod_univ_three, change to product of three Icc volumes, simp only Real.volume_Icc/sub_zero",
+      "semantic_check": "Three finite coordinates each have interval volume ofReal rho; product is rho cubed."
+    },
+    {
+      "location": "good-region lintegral bound proof",
+      "old": "mul_le_mul_left' hv _",
+      "new": "mul_le_mul_right hv _",
+      "semantic_check": "Monotonicity multiplies volume inequality by the fixed nonnegative ENNReal.ofReal nu on the left."
+    }
+  ],
+  "imports_unchanged": true,
+  "declaration_signatures_unchanged": true,
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualExtendedThirdKernelDifferenceMassOn",
+      "signature": "def actualExtendedThirdKernelDifferenceMassOn (e : \u211d) (m : \u2115)\n    (s : Set (Fin 3 \u2192 \u211d)) : \u211d\u22650\u221e"
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "differenceMass_le_two_masses",
+      "signature": "private theorem differenceMass_le_two_masses (e : \u211d) (m : \u2115) (s : Set (Fin 3 \u2192 \u211d)) :\n    actualExtendedThirdKernelDifferenceMassOn e m s \u2264\n      (\u222b\u207b t in s, ENNReal.ofReal |actualExtendedThirdFiniteKernel e m t|) +\n        \u222b\u207b t in s, ENNReal.ofReal |actualExtendedThirdGatedKernel 0 (t 0) (t 1) (t 2)|"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdKernelDifferenceWallMass_le",
+      "signature": "theorem actualExtendedThirdKernelDifferenceWallMass_le\n    {e h a \u03b4 : \u211d} {m : \u2115} (hh : 0 < h) (h\u03b4 : 0 \u2264 \u03b4) :\n    actualExtendedThirdKernelDifferenceMassOn e m (actualExtendedThirdWallStrip h a \u03b4) \u2264\n      ENNReal.ofReal (2 * actualExtendedThirdCompactKernelBound h * (\u03b4 * thirdPrefixRho ^ 2))"
+    },
+    {
+      "visibility": "private",
+      "kind": "def",
+      "name": "compactRectangle",
+      "signature": "private def compactRectangle : Set (Fin 3 \u2192 \u211d)"
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "compactRectangle_volume",
+      "signature": "private theorem compactRectangle_volume :\n    volume compactRectangle = ENNReal.ofReal (thirdPrefixRho ^ 3)"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactOrder_volume_le",
+      "signature": "theorem actualExtendedThirdCompactOrder_volume_le {h : \u211d} (hh : 0 < h) :\n    volume (actualExtendedThirdCompactOrder h) \u2264 ENNReal.ofReal (thirdPrefixRho ^ 3)"
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualExtendedThirdCompactGoodRegion",
+      "signature": "def actualExtendedThirdCompactGoodRegion (h \u03b4 : \u211d) : Set (Fin 3 \u2192 \u211d)"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "measurableSet_actualExtendedThirdCompactGoodRegion",
+      "signature": "theorem measurableSet_actualExtendedThirdCompactGoodRegion (h \u03b4 : \u211d) :\n    MeasurableSet (actualExtendedThirdCompactGoodRegion h \u03b4)"
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "differenceMass_cover",
+      "signature": "private theorem differenceMass_cover (e h \u03b4 : \u211d) (m : \u2115) :\n    actualExtendedThirdKernelDifferenceMassOn e m\n        (actualExtendedThirdClosedOrderRegion thirdPrefixRho) \u2264\n      ((actualExtendedThirdKernelDifferenceMassOn e m (actualExtendedThirdClosedOrderRegion h) +\n        actualExtendedThirdKernelDifferenceMassOn e m (actualExtendedThirdCompactGoodRegion h \u03b4)) +\n          actualExtendedThirdKernelDifferenceMassOn e m (actualExtendedThirdWallStrip h mu \u03b4)) +\n        actualExtendedThirdKernelDifferenceMassOn e m\n          (actualExtendedThirdWallStrip h thirdPrefixRho \u03b4)"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdKernelDifferenceMass_uniform_small",
+      "signature": "theorem actualExtendedThirdKernelDifferenceMass_uniform_small {\u03b5 : \u211d} (h\u03b5 : 0 < \u03b5) :\n    \u2203 h : \u211d, 0 < h \u2227 h \u2264 thirdPrefixTailMargin / 4 \u2227\n      \u2203 e\u2080 : \u211d, 0 < e\u2080 \u2227 e\u2080 \u2264 1 / 384 \u2227 \u2203 m\u2080 : \u2115,\n        \u2200 e : \u211d, 0 \u2264 e \u2192 e \u2264 e\u2080 \u2192 \u2200 m : \u2115, m\u2080 \u2264 m \u2192\n          actualExtendedThirdKernelDifferenceMassOn e m\n            (actualExtendedThirdClosedOrderRegion thirdPrefixRho) \u2264 ENNReal.ofReal \u03b5"
+    }
+  ],
+  "scope": "Target theorem statements and mathematics are rebound through two fully enumerated proof-only repairs. This does not rebind the old imported closure or proper-DAG report.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified": false,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false
+  }
+}

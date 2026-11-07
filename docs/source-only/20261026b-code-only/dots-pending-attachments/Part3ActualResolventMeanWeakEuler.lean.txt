@@ -1,0 +1,121 @@
+import ImbalancedChen.Part3ActualHorocycleMeanLocalL2
+import ImbalancedChen.Part3ActualInfinityL2Pairing
+import ImbalancedChen.Part3ActualBandAdjointMean
+import ImbalancedChen.Part3WeakEulerClassicalPair
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+The literal ORIGINAL zero Fourier mean of an actual resolvent output
+satisfies the inverse-square weak Euler equation when its input belongs
+to the genuine full infinity-cusp annihilator. This follows directly
+from the native smooth zeroSeed graph and original arbitrary-L2 unfolding;
+the y^-2*(-y^2 phi'') cancellation is pointwise at positive height.
+Actual completed-form local L2 and the independently derived first weak
+identity then supply a SAME-AE classical C2/C1 mean/gradient pair. No
+band-adjoint regularity, mean derivative, ODE, or spectral invariance is
+assumed. Endpoint selection and tail L2 remain separate inputs.
+-/
+namespace ImbalancedChen.Part3.ActualResolventMeanWeakEuler20261026b
+noncomputable section
+open Set MeasureTheory Filter
+open ActualCompletedHorocycleMeanDerivative20261026b ActualHorocycleMeanLocalL220261026b
+open ActualInfinityL2Pairing20261026b ActualInfinityCuspAnnihilator20261026b
+open ActualPoincareSpectralCoefficient20261026a ActualBandAdjointMean20261026b
+open SmoothZeroHeightSeedProfiles20261026b
+open Gamma0ActualEnergyCompletion20261025a Gamma0ActualWeakRieszResolvent20261025a
+open WeakEulerClassicalPair20261026b
+
+theorem actual_resolvent_mean_second_weak (N : ℕ) [NeZero N] (f : QuotientL2 N)
+    (hf : f ∈ infinityCuspSubspace N) (φ : ℝ → ℂ) (hφ : ContDiff ℝ ∞ φ)
+    (hc : HasCompactSupport φ) (hs : tsupport φ ⊆ Ioi (0 : ℝ)) :
+    Integrable (fun y => star (deriv (deriv φ) y) * actualTestFourier N (actualGammaResolvent N f) 0 y) ∧
+    Integrable (fun y => star (φ y) *
+      (actualTestFourier N (actualGammaResolvent N f) 0 y / (y : ℂ)^2)) ∧
+    (∫ y, star (deriv (deriv φ) y) * actualTestFourier N (actualGammaResolvent N f) 0 y) =
+      ∫ y, star (φ y) * (actualTestFourier N (actualGammaResolvent N f) 0 y / (y : ℂ)^2) := by
+  let u := actualGammaResolvent N f
+  let M : ℝ → ℂ := actualTestFourier N u 0
+  let s : SmoothHeightSeed :=
+    { toFun := φ
+      continuous := hφ.continuous
+      compact := hc
+      positive := hs
+      cinfty := hφ }
+  have hp (q : HeightSeed) : inner ℂ (zeroSeedL2 N q) u =
+      ∫ y in Ioi (0 : ℝ), ((y⁻¹)^2 : ℝ) • (star (q.toFun y) * M y) := by
+    simpa only [zeroSeedL2,M] using actualL2_poincare_inner_eq_fourier N 0 q u
+  have hw := actual_cusp_resolvent_smooth_zeroSeed_identity N f hf s
+  change inner ℂ (zeroSeedL2 N s.maass.toHeightSeed) u +
+    inner ℂ (zeroSeedL2 N s.toHeightSeed) u = 0 at hw
+  rw [hp,hp] at hw
+  have ha (y : ℝ) (hy : 0 < y) :
+      ((y⁻¹)^2 : ℝ) • (star (s.maass.toFun y) * M y) =
+        -(star (deriv (deriv φ) y) * M y) := by
+    have hyC : (y : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hy.ne'
+    simp [s,SmoothHeightSeed.maass,Complex.real_smul,Complex.ofReal_inv,Complex.ofReal_pow]
+      <;> field_simp [hyC] <;> ring
+  have hb (y : ℝ) (hy : 0 < y) :
+      ((y⁻¹)^2 : ℝ) • (star (s.toFun y) * M y) =
+        star (φ y) * (M y / (y : ℂ)^2) := by
+    have hyC : (y : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hy.ne'
+    simp [s,Complex.real_smul,Complex.ofReal_inv,Complex.ofReal_pow]
+      <;> field_simp [hyC] <;> ring
+  have hia0 := l2_fourier_pairing_integrable N 0 s.maass.toHeightSeed u u.memLp
+  have hib0 := l2_fourier_pairing_integrable N 0 s.toHeightSeed u u.memLp
+  have hiaNeg : IntegrableOn (fun y => -(star (deriv (deriv φ) y) * M y)) (Ioi (0 : ℝ)) := by
+    apply hia0.congr
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with y hy
+    exact ha y hy
+  have hia : IntegrableOn (fun y => star (deriv (deriv φ) y) * M y) (Ioi (0 : ℝ)) := by
+    simpa only [neg_neg] using hiaNeg.neg
+  have hib : IntegrableOn (fun y => star (φ y) * (M y / (y : ℂ)^2)) (Ioi (0 : ℝ)) := by
+    apply hib0.congr
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with y hy
+    exact hb y hy
+  have hdd : tsupport (deriv (deriv φ)) ⊆ Ioi (0 : ℝ) :=
+    tsupport_deriv_subset.trans (tsupport_deriv_subset.trans hs)
+  have hsa : Function.support (fun y => star (deriv (deriv φ) y) * M y) ⊆ Ioi (0 : ℝ) := by
+    intro y hy
+    exact hdd (subset_tsupport _ (fun hz => hy (by simp [hz])))
+  have hsb : Function.support (fun y => star (φ y) * (M y / (y : ℂ)^2)) ⊆ Ioi (0 : ℝ) := by
+    intro y hy
+    exact hs (subset_tsupport _ (fun hz => hy (by simp [hz])))
+  have hea : (∫ y in Ioi (0 : ℝ), ((y⁻¹)^2 : ℝ) • (star (s.maass.toFun y) * M y)) =
+      -(∫ y, star (deriv (deriv φ) y) * M y) := by
+    calc
+      _ = ∫ y in Ioi (0 : ℝ), -(star (deriv (deriv φ) y) * M y) :=
+        setIntegral_congr_fun measurableSet_Ioi ha
+      _ = -(∫ y in Ioi (0 : ℝ), star (deriv (deriv φ) y) * M y) := integral_neg _
+      _ = _ := by
+        congr 1
+        exact setIntegral_eq_integral_of_forall_compl_eq_zero
+          (fun y hy => notMem_support.mp (fun h => hy (hsa h)))
+  have heb : (∫ y in Ioi (0 : ℝ), ((y⁻¹)^2 : ℝ) • (star (s.toFun y) * M y)) =
+      ∫ y, star (φ y) * (M y / (y : ℂ)^2) := by
+    calc
+      _ = ∫ y in Ioi (0 : ℝ), star (φ y) * (M y / (y : ℂ)^2) :=
+        setIntegral_congr_fun measurableSet_Ioi hb
+      _ = _ := setIntegral_eq_integral_of_forall_compl_eq_zero
+        (fun y hy => notMem_support.mp (fun h => hy (hsb h)))
+  rw [hea,heb] at hw
+  exact ⟨(integrableOn_iff_integrable_of_support_subset hsa).mp hia,
+    (integrableOn_iff_integrable_of_support_subset hsb).mp hib,by linear_combination -hw⟩
+
+/-- Actual same-AE classical pair on the OPEN positive half-line. The
+actual mean and gradient are the produced fields, with no regularity
+or weak derivative conclusion inserted as a hypothesis. -/
+theorem actual_cusp_resolvent_nonempty_classical_mean_pair (N : ℕ) [NeZero N]
+    (f : QuotientL2 N) (hf : f ∈ infinityCuspSubspace N) :
+    Nonempty (ClassicalWeakEulerPair 0
+      (actualFormMean N (actualRieszLift N f)) (actualFormGradientMean N (actualRieszLift N f))) := by
+  apply nonempty_classicalWeakEulerPair_of_first_and_second (by norm_num : (0 : ℝ) ≤ 0)
+  · intro a b ha hab
+    exact actual_completed_mean_gradient_localL2 N (actualRieszLift N f) a b ha
+  · intro φ hφ hc hs
+    exact (actual_completed_mean_first_weak N (actualRieszLift N f) φ hφ hc hs).2.2
+  · intro φ hφ hc hs
+    simpa only [actualFormMean,← actualGammaResolvent_apply] using
+      (actual_resolvent_mean_second_weak N f hf φ hφ hc hs).2.2
+
+end
+end ImbalancedChen.Part3.ActualResolventMeanWeakEuler20261026b

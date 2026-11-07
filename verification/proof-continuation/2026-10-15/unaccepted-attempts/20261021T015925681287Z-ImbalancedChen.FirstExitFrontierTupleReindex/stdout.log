@@ -1,0 +1,25 @@
+ImbalancedChen/FirstExitFrontierTupleReindex.lean:45:17: error: unsolved goals
+case cons
+α : Type u_1
+h : α → ℝ
+pre : List α
+positive : Bool
+mass : ℝ
+p : α
+ps : List α
+ih :
+  List.map (fun state => state.selectedPrefix.reverse) (firstExitNextSelectionCandidates h pre positive mass ps) =
+    List.map (fun p => pre.reverse ++ [p]) ps
+⊢ List.map (fun state => state.selectedPrefix.reverse)
+      (List.rec []
+        (fun q qs rest =>
+          { selectedPrefix := q :: pre, positive := !positive, mass := mass * h q, remaining := qs } :: rest)
+        ps) =
+    List.map (fun p => pre.reverse ++ [p]) ps
+ImbalancedChen/FirstExitFrontierTupleReindex.lean:45:60: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [firstExitNextSelectionCandidates]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,827 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-commonp-capped-mixed-moment-independent-source-review",
+  "created_utc": "2026-10-21T21:29:02.4835374Z",
+  "reviewer": "/root/e1_interval_review_sol_high_oct22",
+  "status": "no_static_blocker_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Independent source-only audit of all169 lines, all6complete proofs, onecloseddefinition and actual/written dependency interfaces. No original forall-kappa analytic M2 completion is claimed.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPCappedMixedMoment-module-source.txt",
+    "sha256": "aad0b9c32ec449b054f5d59561810255ad028e05d9ebf7bccc38e67582a4b622",
+    "bytes": 7458,
+    "lf_lines": 169
+  },
+  "author_checkpoint": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-capped-mixed-moment-source-proposal-author-HOLD.json",
+    "sha256": "c16afb01f1953abe51e8f05c19789766be1b3a903c17e25cdba8bb113d1ae41d",
+    "bytes": 51543,
+    "lf_lines": 543
+  },
+  "imports": [
+    "import ImbalancedChen.Part3CommonPM2FiniteFold",
+    "import ImbalancedChen.Part3CommonPMixedMomentCauchy",
+    "import ImbalancedChen.Part3ShiftedTauCappedLog",
+    "import Mathlib.Analysis.Real.Sqrt",
+    "import Mathlib.Algebra.Order.Ring.Cast"
+  ],
+  "complete_written_declarations": [
+    {
+      "name": "foldedSum_eq_mixedSum",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.foldedSum_eq_mixedSum",
+      "first": 27,
+      "type_last": 28,
+      "last": 29,
+      "complete_written_type": "theorem foldedSum_eq_mixedSum (d : MediumAtom) :\n    CommonPM2FiniteFold.foldedSum d = mixedSum d.scale d.residue := by\n",
+      "complete_written_declaration": "theorem foldedSum_eq_mixedSum (d : MediumAtom) :\n    CommonPM2FiniteFold.foldedSum d = mixedSum d.scale d.residue := by\n  rfl\n",
+      "type_normalized_lf_utf8_sha256": "ca6b890a6c6d41a464590a3274589e5557a38a01103aaf54b14059ab1fdd8790",
+      "full_declaration_normalized_lf_utf8_sha256": "761eff8b530c6e186fbf6b62c05405a8aa957bd24c9d1268269107804b425aac",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Actual foldedSum unfolds to the sum over productCarrier. Actual shiftDifference is natAbs(v-residue), tau is divisors.card cast to real, fourthDivisorWeight is fouvryTau 4 of the same receiver to the fourth power. Written mixedCarrier/mixedSum/tau unfold to the identical positive Ioc floor(6*scale) filter and identical ordered products. Hence rfl is definitionally justified; no multiplicity, endpoint, floor or zero-deletion change is required."
+    },
+    {
+      "name": "mixedSum_nonneg",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedSum_nonneg",
+      "first": 32,
+      "type_last": 32,
+      "last": 37,
+      "complete_written_type": "theorem mixedSum_nonneg (x : ℝ) (a : ℤ) : 0 ≤ mixedSum x a := by\n",
+      "complete_written_declaration": "theorem mixedSum_nonneg (x : ℝ) (a : ℤ) : 0 ≤ mixedSum x a := by\n  unfold mixedSum\n  apply Finset.sum_nonneg\n  intro v _hv\n  exact mul_nonneg (mul_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n    (pow_nonneg (Nat.cast_nonneg _) _)\n",
+      "type_normalized_lf_utf8_sha256": "759b0346b25d3c7d1065672259c3b0e115c438438b7ed41c59d8938ac0e42e48",
+      "full_declaration_normalized_lf_utf8_sha256": "9157dac36d91de472c8f112382eae7d9b92c3075b7694df6dca63d7e09095828",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Every term is a product of two natural divisor-count casts and a fourth power of a natural fouvryTau cast. All factors are nonnegative, for every x and a and even an empty mixedCarrier. The reducible tau definition supplies the cast target to mul_nonneg."
+    },
+    {
+      "name": "log_six_mul_bounds",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.log_six_mul_bounds",
+      "first": 40,
+      "type_last": 42,
+      "last": 52,
+      "complete_written_type": "theorem log_six_mul_bounds {x : ℝ} (hx : 1 ≤ x) :\n    0 ≤ 1 + Real.log (6 * x) ∧\n      1 + Real.log (6 * x) ≤ 6 * (1 + Real.log x) := by\n",
+      "complete_written_declaration": "theorem log_six_mul_bounds {x : ℝ} (hx : 1 ≤ x) :\n    0 ≤ 1 + Real.log (6 * x) ∧\n      1 + Real.log (6 * x) ≤ 6 * (1 + Real.log x) := by\n  have hxpos : 0 < x := by linarith\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog6 : Real.log (6 : ℝ) ≤ 5 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 6)\n    linarith\n  constructor\n  · have h := Real.log_nonneg (by linarith : 1 ≤ 6 * x)\n    linarith\n  · rw [Real.log_mul (by norm_num : (6 : ℝ) ≠ 0) hxpos.ne']\n    linarith\n",
+      "type_normalized_lf_utf8_sha256": "839b43e7247ea497c78e28ffe0e06fb528e297ee59bf6096bd04338b253b6db6",
+      "full_declaration_normalized_lf_utf8_sha256": "bf15fe1f3ce7efab8cc35d21cc9bcf6f2aac00c96449e0bb2870afddba92c117",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "From x>=1 obtain x>0 and log x>=0. The actual log_le_sub_one_of_pos at 6 gives log 6<=5. Also 6*x>=1, so 1+log(6*x)>=0. The actual log_mul API applies because 6 and x are nonzero. Then 1+log6+logx<=6*(1+logx) follows from log6<=5 and logx>=0. No additive constant or exponent is silently omitted."
+    },
+    {
+      "name": "mixedSum_sq_le_capped",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedSum_sq_le_capped",
+      "first": 55,
+      "type_last": 60,
+      "last": 90,
+      "complete_written_type": "theorem mixedSum_sq_le_capped {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (hcap : κ ≤ 1 / (2 * (kshift : ℝ))) (a : ℤ)\n    (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      1296 * shiftedTauLogConstant kshift * x ^ 2 *\n        (1 + Real.log x) ^ 262146 := by\n",
+      "complete_written_declaration": "theorem mixedSum_sq_le_capped {x κ : ℝ} (hx : 1 ≤ x) (hκ : 0 ≤ κ)\n    (hcap : κ ≤ 1 / (2 * (kshift : ℝ))) (a : ℤ)\n    (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    mixedSum x a ^ 2 ≤\n      1296 * shiftedTauLogConstant kshift * x ^ 2 *\n        (1 + Real.log x) ^ 262146 := by\n  let L : ℝ := 1 + Real.log x\n  have hx0 : 0 ≤ x := by linarith\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hlogs := log_six_mul_bounds hx\n  have hu : (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) ≤\n      1296 * x * L ^ 3 := by\n    calc\n      _ ≤ 6 * x * (1 + Real.log (6 * x)) ^ 3 := unshifted_sum_le hx a\n      _ ≤ 6 * x * (6 * L) ^ 3 :=\n        mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hlogs.1 hlogs.2 3) (by linarith)\n      _ = 1296 * x * L ^ 3 := by ring\n  have hexp : kshift - 1 = 262143 := by rw [kshift_eq]\n  have hs : (∑ v ∈ mixedCarrier x a,\n      (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant kshift * x * L ^ 262143 := by\n    simpa only [mixedCarrier, hexp] using\n      shifted_tau_Ioc_capped_log_sum_le kshift_ge_two hx hκ hcap a ha\n  have hu0 : 0 ≤ 1296 * x * L ^ 3 :=\n    mul_nonneg (mul_nonneg (by norm_num) hx0) (pow_nonneg hL _)\n  calc\n    mixedSum x a ^ 2 ≤\n        (1296 * x * L ^ 3) * (shiftedTauLogConstant kshift * x * L ^ 262143) :=\n      (mixedSum_sq_le x a).trans (mul_le_mul hu hs\n        (Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)) hu0)\n    _ = (1296 * shiftedTauLogConstant kshift) * (x * x) *\n        (L ^ 3 * L ^ 262143) := by ac_rfl\n    _ = _ := by rw [← pow_two x, ← pow_add L 3 262143]\n",
+      "type_normalized_lf_utf8_sha256": "b3a9b08e156051edc81bcb721f58ddf78f420c8cb82e7724ebb99a263f5d9a1f",
+      "full_declaration_normalized_lf_utf8_sha256": "1f0c7e54b31586b4d979f895c0f2d8d5d8503eeb3af611bebf5e34c6ae48889a",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Set L=1+log x>=0. The unchanged unshifted source mean is <=6*x*(1+log(6*x))^3<=6*x*(6*L)^3=1296*x*L^3. The capped shifted source API is used on the identical filtered mixedCarrier and exact same ha, with kshift-1=262143. Actual mul_le_mul takes nonnegative original shifted sum and nonnegative upper unshifted bound; those exact obligations are supplied. Multiply the two means using the existing mixedSum_sq_le, rearrange by ac_rfl, and combine L powers to 3+262143=262146. C_k stays symbolic."
+    },
+    {
+      "name": "mixedMomentConstant_pos_and_mixedSum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedMomentConstant_pos_and_mixedSum_le",
+      "first": 97,
+      "type_last": 101,
+      "last": 126,
+      "complete_written_type": "theorem mixedMomentConstant_pos_and_mixedSum_le :\n    0 < mixedMomentConstant ∧\n      ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (kshift : ℝ)) →\n        ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n          mixedSum x a ≤ mixedMomentConstant * x * (1 + Real.log x) ^ 131073 := by\n",
+      "complete_written_declaration": "theorem mixedMomentConstant_pos_and_mixedSum_le :\n    0 < mixedMomentConstant ∧\n      ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (kshift : ℝ)) →\n        ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n          mixedSum x a ≤ mixedMomentConstant * x * (1 + Real.log x) ^ 131073 := by\n  have hc : 0 < 1296 * shiftedTauLogConstant kshift :=\n    mul_pos (by norm_num) (shiftedTauLogConstant_pos kshift_ge_two)\n  have hD : 0 < mixedMomentConstant := by\n    exact Real.sqrt_pos.mpr hc\n  refine ⟨hD, ?_⟩\n  intro x κ hx hκ hcap a ha\n  let L : ℝ := 1 + Real.log x\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hx0 : 0 ≤ x := by linarith\n  have hright : 0 ≤ mixedMomentConstant * x * L ^ 131073 :=\n    mul_nonneg (mul_nonneg hD.le hx0) (pow_nonneg hL _)\n  have hright_sq : (mixedMomentConstant * x * L ^ 131073) ^ 2 =\n      1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 := by\n    rw [mul_pow, mul_pow, ← pow_mul L 131073 2,\n      show (131073 : ℕ) * 2 = 262146 from rfl,\n      mixedMomentConstant, Real.sq_sqrt hc.le]\n  apply (sq_le_sq₀ (mixedSum_nonneg x a) hright).mp\n  calc\n    mixedSum x a ^ 2 ≤\n        1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 :=\n      mixedSum_sq_le_capped hx hκ hcap a ha\n    _ = (mixedMomentConstant * x * L ^ 131073) ^ 2 := hright_sq.symm\n",
+      "type_normalized_lf_utf8_sha256": "c9f3fd4b107b466e736da3a0f887ba720ccc00811d088bdb03348dff77428c3f",
+      "full_declaration_normalized_lf_utf8_sha256": "006005619346e0459236cb9aa9aed916097686896b02ae0032f9de13f9f47ce5",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "D is a closed definition sqrt(1296*C_k), with C_k>0 from kshift>=2; hence D>0 before introducing all x,kappa,a. The right side D*x*L^131073 is nonnegative. The actual mul_pow/pow_mul and sq_sqrt under positivity give its square exactly 1296*C_k*x^2*L^262146. Apply actual sq_le_sq0 using mixedSum_nonneg and right-side nonnegativity, then the previously proved square bound. No unjustified square-root monotonicity, sign choice, variable-dependent constant or extra restriction is present."
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment",
+      "fully_qualified_name": "ImbalancedChen.Part3.MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment",
+      "first": 137,
+      "type_last": 144,
+      "last": 166,
+      "complete_written_type": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) := by\n",
+      "complete_written_declaration": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have ha : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n    simpa only [Nat.cast_natAbs, Int.cast_abs] using\n      (hd.2.2.2.2.2.2.2.1 :\n        (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + kappa))\n  have hfold : CommonPM2FiniteFold.foldedSum d ≤\n      mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073 := by\n    rw [foldedSum_eq_mixedSum]\n    exact mixedMomentConstant_pos_and_mixedSum_le.2\n      d.scale kappa hx hkappa hcap d.residue ha\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n      (zero_le_one.trans hd.2.2.1)\n  have henergy : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  exact (d.cleaned_commonP_M2_le_finite_divisor_fold hd hsigma).trans\n    (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hfold hfactor) henergy)\n",
+      "type_normalized_lf_utf8_sha256": "9a908ac382b71cd82bbfd10e155c99b0463e84f9e995ff7a03cc65fea9b1d8f2",
+      "full_declaration_normalized_lf_utf8_sha256": "9388b7f5193219ea2a2a4cb86103233c05f916a353bb8ab7b63419202a9de50c",
+      "author_hashes_match": true,
+      "independent_full_type_and_body_read": true,
+      "independent_static_verdict": "no_static_blocker",
+      "independent_reason": "Keep the entire original MediumAdmissible hd and hsigma. Its first two conjuncts give scale=U*V>=1 via actual mul_le_mul. Its eighth conjunct hd.2.2.2.2.2.2.2.1 is the exact original natAbs shift upper bound; actual Nat.cast_natAbs and Int.cast_abs turn it into the required real abs bound with no reduced shift domain. Q1>=1 and U>=1 ensure 3*U/Q1>=0. Both factors of outsideEnergy are finite sums of norm squares and nonnegative. Apply the actual finite-fold theorem once and multiply the new foldedSum bound by 3*U/Q1 and outsideEnergy, each once. The added kappa cap is explicit and only licenses this internal capped auxiliary result."
+    }
+  ],
+  "complete_written_definition": {
+    "name": "mixedMomentConstant",
+    "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedMomentConstant",
+    "first": 93,
+    "last": 94,
+    "literal_source": "def mixedMomentConstant : ℝ :=\n  Real.sqrt (1296 * shiftedTauLogConstant kshift)\n",
+    "normalized_lf_utf8_sha256": "ee3e930231cea6474db0030e5ff42ae81efff357316d94a01db60b72942727bf",
+    "independently_read": true,
+    "depends_only_on_fixed_kshift": true
+  },
+  "actual_and_written_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+        "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+        "bytes": 14829,
+        "lf_lines": 306
+      },
+      "author_serialized_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 14,
+          "last": 23,
+          "literal_source": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n",
+          "normalized_lf_utf8_sha256": "33c70879b02726b18d40fcf6dc9f29ccbc4f6c690bb3ac6f824612fb7a046eab",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 46,
+          "last": 53,
+          "literal_source": "def foldedSum (d : MediumAtom) : ℝ :=\n  ∑ v ∈ productCarrier d,\n    tau v * tau (shiftDifference d v) * fourthDivisorWeight d v\n\n/-- Original outside energies occur exactly once. -/\ndef outsideEnergy (d : MediumAtom) : ℝ :=\n  (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n",
+          "normalized_lf_utf8_sha256": "caa79940b53e7a0eb336fee5cc0c22f6bad8c7233867a579e91a20bbc6471b17",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 277,
+          "last": 302,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.moment d ≤ (3 * d.U / d.Q1) *\n      CommonPM2FiniteFold.foldedSum d := by\n  apply (CommonPM2FiniteFold.moment_le_activeLabels hd hsigma).trans\n  apply mul_le_mul_of_nonneg_left\n    (CommonPM2FiniteFold.sum_activeLabels_le_divisorFold hd hsigma\n      (CommonPM2FiniteFold.fourthDivisorWeight d)\n      (fun _ => by unfold CommonPM2FiniteFold.fourthDivisorWeight; positivity))\n  exact div_nonneg\n    (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n    (zero_le_one.trans hd.2.2.1)\n\n/-- The literal M2 outside factor is retained exactly once. -/\ntheorem MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) * CommonPM2FiniteFold.foldedSum d) := by\n  apply mul_le_mul_of_nonneg_left\n    (d.cleaned_commonP_moment_le_finite_divisor_fold hd hsigma)\n  unfold CommonPM2FiniteFold.outsideEnergy\n  exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n    (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n",
+          "normalized_lf_utf8_sha256": "d4e15e7163c640529235ec4dc06427d9ed93d73a05aa4ee852c2d882c3def757",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPMixedMomentCauchy-module-source.txt",
+        "sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+        "bytes": 9571,
+        "lf_lines": 208
+      },
+      "author_serialized_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPMixedMomentCauchy-module-source.txt",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "written_uncompiled_source_dependency",
+      "spans": [
+        {
+          "first": 39,
+          "last": 58,
+          "literal_source": "/-- Ordinary divisor count, retaining exactly the weight in the finite fold. -/\ndef tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n\n/-- Keep the large shifted order symbolic throughout the Cauchy calculation. -/\ndef kshift : ℕ := 512 ^ 2\n\ndef mixedCarrier (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n\ndef mixedSum (x : ℝ) (a : ℤ) : ℝ :=\n  ∑ v ∈ mixedCarrier x a,\n    tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4\n\ntheorem kshift_eq : kshift = 262144 := by\n  norm_num only [kshift]\n\ntheorem kshift_ge_two : 2 ≤ kshift := by\n  rw [kshift_eq]\n  exact Nat.le_of_lt (by decide : 2 < 262144)\n",
+          "normalized_lf_utf8_sha256": "05d6b591029f3cb98f1b3af38361b54a4b4d0199e261a6894640cfdd07261965",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 138,
+          "last": 164,
+          "literal_source": "theorem mixedSum_sq_le (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau kshift ((v : ℤ) - a).natAbs : ℝ) := by\n  exact mixed_sum_sq_le (mixedCarrier x a) a\n    (fun _ hv => (Finset.mem_filter.mp hv).2)\n\n/-- The same finite Cauchy conclusion with the shifted order displayed literally. -/\ntheorem mixedSum_sq_le_262144_sums (x : ℝ) (a : ℤ) :\n    mixedSum x a ^ 2 ≤\n      (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) *\n        ∑ v ∈ mixedCarrier x a,\n          (fouvryTau 262144 ((v : ℤ) - a).natAbs : ℝ) := by\n  simpa only [kshift_eq] using mixedSum_sq_le x a\n\n/-- Consume the native global prefix theorem on the unchanged filtered carrier. -/\ntheorem unshifted_sum_le {x : ℝ} (hx : 1 ≤ x) (a : ℤ) :\n    (∑ v ∈ mixedCarrier x a, (fouvryTau 4 v : ℝ)) ≤\n      6 * x * (1 + Real.log (6 * x)) ^ 3 := by\n  calc\n    _ ≤ ∑ v ∈ Ioc 0 ⌊6 * x⌋₊, (fouvryTau 4 v : ℝ) :=\n      Finset.sum_le_sum_of_subset_of_nonneg\n        (Finset.filter_subset _ _) (fun _ _ _ => Nat.cast_nonneg _)\n    _ ≤ _ := by\n      simpa only [show (4 : ℕ) - 1 = 3 from rfl] using\n        sum_fouvryTau_le_real (k := 4) (by decide) (by linarith : 1 ≤ 6 * x)\n",
+          "normalized_lf_utf8_sha256": "0cbae7d0c79b935c509c77a5652a16fbfa67d3ecd2633c7fde76f2dbaa1ece36",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-capped-log-pure-module-proposal.txt",
+        "sha256": "0c3d8e24bd1467cb3bb127c9c35e5dd6a0ef04a1f5a658ead2c5c820f22b1842",
+        "bytes": 8460,
+        "lf_lines": 168
+      },
+      "author_serialized_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-capped-log-pure-module-proposal.txt",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "written_uncompiled_source_dependency",
+      "spans": [
+        {
+          "first": 95,
+          "last": 102,
+          "literal_source": "/-- Auxiliary fixed-order constant; unrelated to the main theorem's currentC/currentK. -/\ndef shiftedTauLogConstant (K : ℕ) : ℝ := 26 * (K : ℝ) * (7 : ℝ) ^ (K - 1)\n\ntheorem shiftedTauLogConstant_pos {K : ℕ} (hK : 2 ≤ K) :\n    0 < shiftedTauLogConstant K := by\n  have hKR : (0 : ℝ) < K := by exact_mod_cast (by omega : 0 < K)\n  unfold shiftedTauLogConstant\n  exact mul_pos (mul_pos (by norm_num) hKR) (pow_pos (by norm_num) _)\n",
+          "normalized_lf_utf8_sha256": "8754f2ed70e414aa33d52aa50ba606e56bd47eb12ddc1986791cb205c22b807b",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 138,
+          "last": 145,
+          "literal_source": "theorem shifted_tau_Ioc_capped_log_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ)))\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n  exact (shifted_tau_Ioc_sum_le hK hx hκ a ha).trans\n    (capped_shift_payment_le_constant hK hx hκ hcap)\n",
+          "normalized_lf_utf8_sha256": "5e03690dda06a75684dd9ba652e87b17c6a4f0efec67810cec7b2357a3e75c8e",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "bytes": 8889,
+        "lf_lines": 197
+      },
+      "author_serialized_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 49,
+          "last": 51,
+          "literal_source": "  gamma3 : ℕ → ℂ\n\ndef MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V\n",
+          "normalized_lf_utf8_sha256": "2e3695cf2dbc6c23b075454cd29f8b0daeca9cbb098f1b0990d289f9205604e1",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 126,
+          "last": 147,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n",
+          "normalized_lf_utf8_sha256": "0491a45f2a18fada7696261830a6e3f558b198f875615f780aa43c2ce49f3e9c",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Real\\Sqrt.lean",
+        "sha256": "1935b1e2996b58fde92e5150455c1b5c22766baa22a5167566acf06bc3391a05",
+        "bytes": 18610,
+        "lf_lines": 510
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Real\\Sqrt.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 144,
+          "last": 146,
+          "literal_source": "@[simp] theorem sqrt_nonneg (x : ℝ) : 0 ≤ √x := by\n  unfold sqrt\n  exact NNReal.coe_nonneg _\n",
+          "normalized_lf_utf8_sha256": "b255e395ad6e5bc0eaf7effa7448e6107c5a5b5c34302cfa4f0faedfc426ccad",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 176,
+          "last": 182,
+          "literal_source": "\n@[simp]\ntheorem sq_sqrt (h : 0 ≤ x) : √x ^ 2 = x := by rw [sq, mul_self_sqrt h]\n\n@[simp]\ntheorem sqrt_sq (h : 0 ≤ x) : √(x ^ 2) = x := by rw [sq, sqrt_mul_self h]\n\n",
+          "normalized_lf_utf8_sha256": "c760a5fbd8bf6d5f6b6b2db4d3642fbd27b0c0e91f6d309e9f16ae7ac294eebc",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 285,
+          "last": 289,
+          "literal_source": "@[simp]\ntheorem sqrt_pos : 0 < √x ↔ 0 < x :=\n  lt_iff_lt_of_le_iff_le (Iff.trans (by simp [le_antisymm_iff, sqrt_nonneg]) sqrt_eq_zero')\n\nalias ⟨_, sqrt_pos_of_pos⟩ := sqrt_pos\n",
+          "normalized_lf_utf8_sha256": "82e0f2469289c516aa3721c64845ce4d10d6063a0b135cba1ad225305e8d49ac",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+        "sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+        "bytes": 28230,
+        "lf_lines": 713
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 133,
+          "last": 135,
+          "literal_source": "theorem log_mul (hx : x ≠ 0) (hy : y ≠ 0) : log (x * y) = log x + log y :=\n  exp_injective <| by\n    rw [exp_log_eq_abs (mul_ne_zero hx hy), exp_add, exp_log_eq_abs hx, exp_log_eq_abs hy, abs_mul]\n",
+          "normalized_lf_utf8_sha256": "9a44f9eefa77145efe6a5076e28ee992c49d796f0957d3ce6cf99596bf1d5b4d",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 212,
+          "last": 214,
+          "literal_source": "@[bound]\ntheorem log_nonneg (hx : 1 ≤ x) : 0 ≤ log x :=\n  (log_nonneg_iff (zero_lt_one.trans_le hx)).2 hx\n",
+          "normalized_lf_utf8_sha256": "d58117374bfb81b052a790afa82d819188a8e94cadc8227c7f66d8cb8b7fac79",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 307,
+          "last": 310,
+          "literal_source": "theorem log_le_sub_one_of_pos {x : ℝ} (hx : 0 < x) : log x ≤ x - 1 := by\n  rw [le_sub_iff_add_le]\n  convert! add_one_le_exp (log x)\n  rw [exp_log hx]\n",
+          "normalized_lf_utf8_sha256": "ab01aa45ff76500576c449f0722266ebe1fbcb2e2e4c105c097b5b25b9a2c993",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 469,
+          "last": 475,
+          "literal_source": "@[mono, gcongr, bound]\ntheorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]\n    (ha : 0 ≤ a) (hab : a ≤ b) : ∀ n, a ^ n ≤ b ^ n\n  | 0 => by simp\n  | 1 => by simpa using hab\n  | n + 2 => by simpa only [pow_succ']\n      using mul_le_mul hab (pow_le_pow_left₀ ha hab _) (pow_succ_nonneg ha _) (ha.trans hab)\n",
+          "normalized_lf_utf8_sha256": "780d8849fc108a1c6ea540be3a03d43fd77afc7dcf43a1ecaffe76d6de637cd5",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 715,
+          "last": 717,
+          "literal_source": "lemma sq_le_sq₀ (ha : 0 ≤ a) (hb : 0 ≤ b) : a ^ 2 ≤ b ^ 2 ↔ a ≤ b :=\n  pow_le_pow_iff_left₀ ha hb two_ne_zero\n\n",
+          "normalized_lf_utf8_sha256": "88bab13469e0c7bfb4a03151289e8c50958fde434cfe2c8b81c618681ccfff30",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 733,
+          "last": 743,
+          "literal_source": "lemma pow_add (a : M) (m : ℕ) : ∀ n, a ^ (m + n) = a ^ m * a ^ n\n  | 0 => by rw [Nat.add_zero, pow_zero, mul_one]\n  | n + 1 => by rw [pow_succ, ← mul_assoc, ← pow_add, ← pow_succ, Nat.add_assoc]\n\n@[to_additive] lemma pow_mul_comm (a : M) (m n : ℕ) : a ^ m * a ^ n = a ^ n * a ^ m := by\n  rw [← pow_add, ← pow_add, Nat.add_comm]\n\n@[to_additive mul_nsmul] lemma pow_mul (a : M) (m : ℕ) : ∀ n, a ^ (m * n) = (a ^ m) ^ n\n  | 0 => by rw [Nat.mul_zero, pow_zero, pow_zero]\n  | n + 1 => by rw [Nat.mul_succ, pow_add, pow_succ, pow_mul]\n\n",
+          "normalized_lf_utf8_sha256": "c8df39b365466db618bc9c5fb6ef3eafdbebd22485cc002fee0aea417f3c749b",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Basic.lean",
+        "sha256": "1ba194c84c72d56d485334bb05b2a943627c3a73de91a0b939ab6fd5ea17d1b1",
+        "bytes": 38365,
+        "lf_lines": 1096
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Basic.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 219,
+          "last": 221,
+          "literal_source": "@[to_additive nsmul_add] lemma mul_pow (a b : M) : ∀ n, (a * b) ^ n = a ^ n * b ^ n\n  | 0 => by rw [pow_zero, pow_zero, pow_zero, one_mul]\n  | n + 1 => by rw [pow_succ', pow_succ', pow_succ', mul_pow, mul_mul_mul_comm]\n",
+          "normalized_lf_utf8_sha256": "e0f7213a1b6355357d4760ad33f2a637b4227ab885839cd4a9db91fe6e0af13a",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Int.lean",
+        "sha256": "f2f77b89730c05abc6dc89511b039fe7c9dcc7a4bfe64a01d110daecda72ca71",
+        "bytes": 3973,
+        "lf_lines": 95
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Int.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 49,
+          "last": 51,
+          "literal_source": "@[simp]\nlemma _root_.Nat.cast_natAbs {α : Type*} [AddGroupWithOne α] (n : ℤ) : (n.natAbs : α) = |n| := by\n  rw [← natCast_natAbs, Int.cast_natCast]\n",
+          "normalized_lf_utf8_sha256": "356e45f71ea9e25b1d443b7ceaa21abbef2566a423556f6439fea63c4fa266da",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Cast.lean",
+        "sha256": "9a251f799c3fbae7e6fa42cce52ef3408482a9d06e0eb2a3e296236aef97c6ba",
+        "bytes": 3723,
+        "lf_lines": 108
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Cast.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 8,
+          "last": 10,
+          "literal_source": "public import Mathlib.Algebra.Order.Group.Abs\npublic import Mathlib.Algebra.Order.Ring.Int\npublic import Mathlib.Data.Nat.Cast.Order.Ring\n",
+          "normalized_lf_utf8_sha256": "eb61f151383a42b55cf839303be964485a62f770f1ba2aa7325e05748b4f9997",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        },
+        {
+          "first": 73,
+          "last": 82,
+          "literal_source": "variable [Ring R] [LinearOrder R] [IsStrictOrderedRing R] {a b n : ℤ} {x : R}\n\n@[simp, norm_cast]\nlemma cast_min : ↑(min a b) = (min a b : R) := Monotone.map_min cast_mono\n\n@[simp, norm_cast]\nlemma cast_max : (↑(max a b) : R) = max (a : R) (b : R) := Monotone.map_max cast_mono\n\n@[simp, norm_cast]\nlemma cast_abs : (↑|a| : R) = |(a : R)| := by simp [abs_eq_max_neg]\n",
+          "normalized_lf_utf8_sha256": "bcdb6076214603843ea1afe46df1bf7c9b9b1a11d13fb0c853443567920442a2",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+        "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+        "bytes": 36509,
+        "lf_lines": 752
+      },
+      "author_serialized_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+      "path_serialization_note": "No path normalization needed.",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "spans": [
+        {
+          "first": 147,
+          "last": 153,
+          "literal_source": "@[to_additive sum_nonneg]\ntheorem one_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  le_trans (by rw [prod_const_one]) (prod_le_prod' h)\n\n@[to_additive Finset.sum_nonneg']\ntheorem one_le_prod'' [MulLeftMono N] (h : ∀ i : ι, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  Finset.one_le_prod' fun i _ ↦ h i\n",
+          "normalized_lf_utf8_sha256": "1638a93e34bd81b68d4f094bf88d3d879ea8c9b10fa5481e600a1dee621f3dec",
+          "actual_file_direct_read": true,
+          "author_hash_match": true
+        }
+      ],
+      "independently_read": true
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+        "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+        "bytes": 14829,
+        "lf_lines": 306
+      },
+      "role": "Original fold definitions, unchanged carrier, moment and two outside energies",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 53,
+          "literal_source": "import ImbalancedChen.Part3CommonPFiniteReduction\nimport MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\nnamespace CommonPM2FiniteFold\n\ndef shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n\n/-- The literal actual row, including its signed divisor-deletion gate. -/\ndef rowSum (d : MediumAtom) (p m : ℕ) : ℝ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n      (fouvryTau 4 (shiftDifference d (m * n)) : ℝ) ^ 2\n\ndef moment (d : MediumAtom) : ℝ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * rowSum d p m ^ 2\n\n/-- Every label is (p,m,n), not an unlabelled modulus or a pair quotient. -/\ndef activeLabels (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  ((d.primitiveFirstFactorCarrier ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier) ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.betaCarrier).filter\n    (fun z => d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight z.1.2 ≠ 0 ∧\n      z.2 ∈ d.cleanedCommonPProgression z.1.1 z.1.2)\n\ndef labelProduct (z : (ℕ × ℕ) × ℕ) : ℕ := z.1.2 * z.2\n\ndef foldedSum (d : MediumAtom) : ℝ :=\n  ∑ v ∈ productCarrier d,\n    tau v * tau (shiftDifference d v) * fourthDivisorWeight d v\n\n/-- Original outside energies occur exactly once. -/\ndef outsideEnergy (d : MediumAtom) : ℝ :=\n  (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n",
+          "normalized_lf_utf8_sha256": "b1ab1fdc5551b816ce76f22f4c4a6b83eed7db884b5d8710278d37982dee8905",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-capped-log-pure-module-proposal.txt",
+        "sha256": "0c3d8e24bd1467cb3bb127c9c35e5dd6a0ef04a1f5a658ead2c5c820f22b1842",
+        "bytes": 8460,
+        "lf_lines": 168
+      },
+      "role": "Future capped source namespace/open bindings",
+      "evidence_kind": "written_uncompiled_source_dependency",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 33,
+          "last": 38,
+          "literal_source": "namespace ImbalancedChen.Part3.ElementaryShiftedTau\nnoncomputable section\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\n",
+          "normalized_lf_utf8_sha256": "c41dd7ad167e9e225a9425e235bd5c88379d70314370f0f6500e5a63926409e7",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPMixedMomentCauchy-module-source.txt",
+        "sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+        "bytes": 9571,
+        "lf_lines": 208
+      },
+      "role": "Future mixed source namespace/open bindings",
+      "evidence_kind": "written_uncompiled_source_dependency",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 33,
+          "last": 38,
+          "literal_source": "namespace ImbalancedChen.Part3.ElementaryCommonPMixedMoment\nnoncomputable section\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\n",
+          "normalized_lf_utf8_sha256": "2ce20632ad490413dc5b8c971f92f2fa0fb5827968536f6e1494df0b4b835063",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "bytes": 8889,
+        "lf_lines": 197
+      },
+      "role": "Full actual MediumAdmissible conjunction and exact projection count",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 126,
+          "last": 148,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n",
+          "normalized_lf_utf8_sha256": "6c6ad1c398c235af394a2a4b6232e405ebc5c2de648cc448ad97074af7bf1b0a",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "role": "Actual pow_nonneg",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 374,
+          "last": 380,
+          "literal_source": "@[simp] lemma pow_succ_nonneg [PosMulMono M₀] (ha : 0 ≤ a) : ∀ n, 0 ≤ a ^ (n + 1)\n  | 0 => (pow_one a).symm ▸ ha\n  | _ + 1 => pow_succ a _ ▸ mul_nonneg (pow_succ_nonneg ha _) ha\n\n@[simp] lemma pow_nonneg [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 0 ≤ a) : ∀ n, 0 ≤ a ^ n\n  | 0 => pow_zero a ▸ zero_le_one\n  | n + 1 => pow_succ a n ▸ mul_nonneg (pow_nonneg ha _) ha\n",
+          "normalized_lf_utf8_sha256": "dc22ac89b3bf2275753e9915d18b739ba0a594f7b832a9e58bf12a01ebe359c7",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "role": "Actual multiplication by nonnegative factors",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 225,
+          "last": 231,
+          "literal_source": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=\n  PosMulMono.mul_le_mul_of_nonneg_left ha hbc\n\n@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+          "normalized_lf_utf8_sha256": "b151334e68d43e5c7cec9be7f0c0305cbbb685dd04f0d9690e3c6ae8d6a91a35",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "role": "Actual two-factor ordered multiplication, with c>=0 and b>=0",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 312,
+          "last": 318,
+          "literal_source": "theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)\n\ntheorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)\n",
+          "normalized_lf_utf8_sha256": "8541e13359503b9d65764f7cb140ae0fcddd3d13900f18b4689ccdcf006b4783",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "role": "Actual mul_le_mul alias to mul_le_mul_of_nonneg prime",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 352,
+          "last": 352,
+          "literal_source": "alias mul_le_mul := mul_le_mul_of_nonneg'\n",
+          "normalized_lf_utf8_sha256": "7379346d13e6977cf410e451a9377cdcac63bd948a54503af7ef100973a0eae6",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Unbundled\\Basic.lean",
+        "sha256": "85232d08ea50e7fb03dbcdb4738d9ed47ae3671c045fb9cd3bc377576cd4ea60",
+        "bytes": 34159,
+        "lf_lines": 788
+      },
+      "role": "Actual real square nonnegativity API",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 606,
+          "last": 609,
+          "literal_source": "lemma sq_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R]\n    (a : R) : 0 ≤ a ^ 2 := by\n  obtain ha | ha := le_or_gt 0 a\n  · exact pow_succ_nonneg ha _\n",
+          "normalized_lf_utf8_sha256": "c89340f9542fdfb75c913ab6505e1f03592978a213abf2d339c738e0dee42c5e",
+          "actual_file_direct_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "role": "Actual pow_two rewriting rule",
+      "evidence_kind": "actual_source_read_kernel_not_rechecked",
+      "independently_read": true,
+      "spans": [
+        {
+          "first": 715,
+          "last": 716,
+          "literal_source": "/-- Note that most of the lemmas about powers of two refer to it as `sq`. -/\n@[to_additive two_nsmul] lemma pow_two (a : M) : a ^ 2 = a * a := by rw [pow_succ, pow_one]\n",
+          "normalized_lf_utf8_sha256": "d20e9441bb5b476ff3f78b16e8e0de0e3d6227b627f382842f399c460c2af2e0",
+          "actual_file_direct_read": true
+        }
+      ]
+    }
+  ],
+  "previous_dependency_independent_reviews": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-mixed-moment-cauchy-independent-source-review-HOLD.json",
+      "sha256": "f4377bbabccd753e0966e7f89675b422791aa76723d884d3f23a4248941900e7",
+      "bytes": 48420,
+      "lf_lines": 494
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-shifted-tau-capped-log-independent-source-review-HOLD.json",
+      "sha256": "cd6ee6c5e372de838d02d02fa04e0449fa0cf7534d4b2159b42731780cfa7b15",
+      "bytes": 38974,
+      "lf_lines": 471
+    }
+  ],
+  "dependency_review_limit": "Cauchy and capped source dependency proofs have existing independent source reviews referenced by matching full hashes. This package independently checks their used full signatures/definitions; neither prior source review is a kernel certificate.",
+  "future_import_audit": {
+    "mixed_module": "ImbalancedChen.Part3CommonPMixedMomentCauchy",
+    "mixed_pure_source": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPMixedMomentCauchy-module-source.txt",
+      "sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+      "bytes": 9571,
+      "lf_lines": 208
+    },
+    "mixed_preparation_checkpoint": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-mixed-cauchy-module-extraction-author-HOLD.json",
+      "sha256": "06a76e5e10b0ef67d57bfdf9358e420df362f129cf988b4b74a285ad714dc26d",
+      "bytes": 62244,
+      "lf_lines": 821
+    },
+    "mixed_preparation_name_matches": true,
+    "mixed_actual_file_exists": false,
+    "capped_module": "ImbalancedChen.Part3ShiftedTauCappedLog",
+    "capped_pure_source": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-capped-log-pure-module-proposal.txt",
+      "sha256": "0c3d8e24bd1467cb3bb127c9c35e5dd6a0ef04a1f5a658ead2c5c820f22b1842",
+      "bytes": 8460,
+      "lf_lines": 168
+    },
+    "capped_preparation_checkpoint": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-shifted-tau-capped-log-pure-module-proposal-HOLD.json",
+      "sha256": "042763628177f1d32b8eef7f53f1f6759c5bcc30dd71a8ca9a7cc031fc31796a",
+      "bytes": 13400,
+      "lf_lines": 216
+    },
+    "capped_preparation_name_matches": true,
+    "capped_actual_file_exists": false,
+    "namespace_names_match": true,
+    "no_conflicting_new_names_found_in_actual_ImbalancedChen_sources": true,
+    "import_resolution": "NOT_TESTED; both named future actual modules absent at review"
+  },
+  "arithmetic_audit": {
+    "kshift": "512^2=262144",
+    "kshift_minus_one": 262143,
+    "unshifted_log_coefficient": "6*6^3=1296",
+    "square_log_exponent": "3+262143=262146",
+    "half_log_exponent": "2*131073=262146",
+    "explicit_auxiliary_kappa_cap": "0<=kappa<=1/(2*262144)=1/524288",
+    "fixed_constant": "D=sqrt(1296*C_k), C_k=26*k*7^(k-1), k=262144",
+    "large_seven_power_expanded": false,
+    "D_chosen_before_forall_x_kappa_a": true,
+    "sum_H_nonnegative_before_sq_comparison": true,
+    "upper_side_nonnegative_before_sq_comparison": true
+  },
+  "MediumAdmissible_audit": {
+    "full_hd_retained": true,
+    "hsigma_positive_retained": true,
+    "U_lower_projection": "hd.1:1<=d.U",
+    "V_lower_projection": "hd.2.1:1<=d.V",
+    "Q1_lower_projection": "hd.2.2.1:1<=d.Q1",
+    "shift_upper_projection": "hd.2.2.2.2.2.2.2.1 (eighth conjunct): natAbs residue <= scale^(1+kappa)",
+    "derived_scale_bound": "1<=d.U*d.V=d.scale, using only existing conjuncts",
+    "derived_shift_bound": "|castReal d.residue|<=d.scale^(1+kappa), exact Nat.cast_natAbs then Int.cast_abs",
+    "no_new_c0_shift_lower_condition": true,
+    "no_reduction_of_shift_upper_domain": true,
+    "only_new_parameter_restrictions": "hkappa:0<=kappa and explicit hcap for internal capped auxiliary estimate"
+  },
+  "energy_and_factor_audit": {
+    "actual_outsideEnergy": "(sum m in d.betaCarrier, norm(d.beta m)^2)*(sum p in d.primitiveFirstFactorCarrier, norm(d.gamma1 p)^2)",
+    "outsideEnergy_nonnegative_from_squares": true,
+    "actual_ratio": "3*d.U/d.Q1",
+    "ratio_nonnegative_from_original_hd": true,
+    "original_finite_fold_used_once": true,
+    "outsideEnergy_occurs_once_on_each_side": true,
+    "ratio_3U_over_Q1_occurs_once_on_final_rhs": true,
+    "no_outsideEnergy_bound_derived": true,
+    "final_written_rhs": "outsideEnergy d * ((3*d.U/d.Q1)*(D*d.scale*(1+log d.scale)^131073))"
+  },
+  "edge_cases": {
+    "x_one": "Allowed. L=1, logarithm bounds and both square signs hold; shifted source API still has the same x>=1 premise.",
+    "kappa_zero_and_cap_endpoint": "Both included by non-strict inequalities; no endpoint is dropped.",
+    "empty_mixedCarrier": "H and both finite means may vanish; Finset.sum_nonneg and Cauchy remain valid.",
+    "zero_shift_difference": "The original mixedCarrier excludes v=a; rfl preserves exactly this filter. No shifted tau at zero is inserted.",
+    "negative_integer_a": "The abs-cast shift hypothesis and natAbs receiver are unchanged; no positivity assumption on a is added.",
+    "Q1_zero": "Excluded by retained original hd conjunct 1<=Q1; division sign is justified without weakening hd.",
+    "outsideEnergy_zero": "Allowed; final multiplication uses nonnegativity, not strict positivity or cancellation.",
+    "large_constant": "Strict positivity is established symbolically; no giant seven-power numeral is computed."
+  },
+  "independent_static_review": {
+    "verdict": "no_static_blocker",
+    "all169_source_lines_read": true,
+    "all6_full_types_and_bodies_read": true,
+    "closed_definition_read": true,
+    "source_no_sorry_admit_axiom": true,
+    "no_new_target_conclusion_as_premise": true,
+    "all_direct_API_hash_spans_bound": true,
+    "elaboration": "NOT_CHECKED",
+    "compiler": "NOT_RUN",
+    "kernel": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "engineering_admission": false
+  },
+  "claim_boundaries": {
+    "capped_uniform_mixed_H_bound": "Written complete, no_static_blocker, UNCOMPILED/HOLD",
+    "capped_literal_M2_finite_composition": "Written complete retaining original outsideEnergy and3U/Q1, UNCOMPILED/HOLD",
+    "original_forall_kappa_medium_M2": "OPEN; hcap is internal only and cannot replace the original forall-kappa obligation",
+    "outsideEnergy_log_estimate": "NOT_DERIVED",
+    "full_BigO_uniform_medium_provider": "OPEN",
+    "seven_over_32": "OPEN",
+    "spectrum": "OPEN",
+    "same_policy_density_distribution": "OPEN",
+    "currentC_currentK_epsilon": "UNCHANGED",
+    "main": "OPEN"
+  },
+  "quota": {
+    "fresh_used_percent": 47,
+    "fresh_remaining_percent": 53,
+    "effective_window_minutes": 10080,
+    "secondary": null,
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "reset_not_consumed": true
+  },
+  "actions": {
+    "ordinary_read_hash_scripts_only": true,
+    "new_file_only": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-capped-mixed-moment-independent-source-review-HOLD.json",
+    "actual_Lean_files_written": false,
+    "original_draft_written": false,
+    "proof_tools_run": false,
+    "runtime_run": false,
+    "Git_run": false,
+    "site_run": false,
+    "new_agent_spawned": false
+  },
+  "stop_condition": "Bounded independent review complete. HOLD pending next authorized task; no kernel/import-resolution acceptance asserted."
+}

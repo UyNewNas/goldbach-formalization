@@ -1,0 +1,234 @@
+/-
+PHASE3 SCALAR METADATA BINDING ONLY | 2026-10-28 | UNCOMPILED_ZERO_CREDIT
+Fixed source: fifth-prefix-subdivision-refinement.json SHA256
+21a44be0ba929ca95c3dbb687a31a09d5968c5cab7c4145e5e85e619a842ea07
+Independent source: independent_fifth_subdivision_replay.json SHA256
+9566bd3499d8333c1d95c3576b342017827a506d65828dba901214a7ca1c527d
+This proves arithmetic of the recorded 72 block summaries only. It does not
+prove the saved block floors enclose ordinary integrals or identify actual owners.
+-/
+import Mathlib
+
+namespace ImbalancedChen.P5RecordedOldFifthBlockTotals
+
+structure AuthorBlock where
+  start : Nat
+  stop : Nat
+  oldFloor : Nat
+  retainedFloor : Nat
+  deriving DecidableEq, Repr
+
+structure IndependentBlock where
+  start : Nat
+  stop : Nat
+  oldFloor : Nat
+  storedFloor : Nat
+  independentFloor : Nat
+  deriving DecidableEq, Repr
+
+/-- The 72 old/new block numerators, exactly as printed by the author finalizer. -/
+def authorBlocks : Array AuthorBlock := #[
+  { start := 0, stop := 4096, oldFloor := 21212939664885341759, retainedFloor := 29863143063412720456 },
+  { start := 4096, stop := 8192, oldFloor := 22591002556422091425, retainedFloor := 33943258603122816208 },
+  { start := 8192, stop := 12288, oldFloor := 31445124481079674771, retainedFloor := 45192811503222378074 },
+  { start := 12288, stop := 16384, oldFloor := 56342066602927160826, retainedFloor := 75973808365027765607 },
+  { start := 16384, stop := 20480, oldFloor := 51268209525638774444, retainedFloor := 71576313750538055372 },
+  { start := 20480, stop := 24576, oldFloor := 78084948991492300906, retainedFloor := 103411445190941383532 },
+  { start := 24576, stop := 28672, oldFloor := 63886606903234957078, retainedFloor := 86283210502668752576 },
+  { start := 28672, stop := 32768, oldFloor := 78133047546468699632, retainedFloor := 104288681009870312654 },
+  { start := 32768, stop := 36864, oldFloor := 94407913686059641211, retainedFloor := 124707529241344713484 },
+  { start := 36864, stop := 40960, oldFloor := 79369649389156729066, retainedFloor := 112485552972466770672 },
+  { start := 40960, stop := 45056, oldFloor := 87001167088360614453, retainedFloor := 121833060450628781516 },
+  { start := 45056, stop := 49152, oldFloor := 105919443624695211118, retainedFloor := 135139403981626638814 },
+  { start := 49152, stop := 53248, oldFloor := 74324662122524479105, retainedFloor := 95111568310127192819 },
+  { start := 53248, stop := 57344, oldFloor := 127222112778039428135, retainedFloor := 171028500460338229403 },
+  { start := 57344, stop := 61440, oldFloor := 78340464990747662322, retainedFloor := 111606839455784844496 },
+  { start := 61440, stop := 65536, oldFloor := 97006229907053977822, retainedFloor := 137422741199211361120 },
+  { start := 65536, stop := 69632, oldFloor := 108502272510563666986, retainedFloor := 151906361265334817551 },
+  { start := 69632, stop := 73728, oldFloor := 123227735658326663296, retainedFloor := 165674363430400356256 },
+  { start := 73728, stop := 77824, oldFloor := 111715397553675392162, retainedFloor := 151002079849607942708 },
+  { start := 77824, stop := 81920, oldFloor := 141129515660226712705, retainedFloor := 184378874978805574922 },
+  { start := 81920, stop := 86016, oldFloor := 82681274278378088520, retainedFloor := 117632030096654530631 },
+  { start := 86016, stop := 90112, oldFloor := 136896011444582437886, retainedFloor := 192436274877072667120 },
+  { start := 90112, stop := 94208, oldFloor := 98148248421290465678, retainedFloor := 143681118541825034756 },
+  { start := 94208, stop := 98304, oldFloor := 121875261404805242661, retainedFloor := 164310939364028098146 },
+  { start := 98304, stop := 102400, oldFloor := 129817814428851237660, retainedFloor := 192648284423561784296 },
+  { start := 102400, stop := 106496, oldFloor := 206470724510704167699, retainedFloor := 282191945242339796803 },
+  { start := 106496, stop := 110592, oldFloor := 84949538121033858652, retainedFloor := 117841168635810263190 },
+  { start := 110592, stop := 114688, oldFloor := 151446120876537638173, retainedFloor := 219311261359916082141 },
+  { start := 114688, stop := 118784, oldFloor := 158422644477871753761, retainedFloor := 229975443031496077354 },
+  { start := 118784, stop := 122880, oldFloor := 119522971276792464514, retainedFloor := 167682002290610202438 },
+  { start := 122880, stop := 126976, oldFloor := 119647244033302435158, retainedFloor := 171064313686753697038 },
+  { start := 126976, stop := 131072, oldFloor := 153618441951828093230, retainedFloor := 198793904635157692210 },
+  { start := 131072, stop := 135168, oldFloor := 182293187964523744469, retainedFloor := 280995417765400431347 },
+  { start := 135168, stop := 139264, oldFloor := 154603316012725186413, retainedFloor := 233229116164857701963 },
+  { start := 139264, stop := 143360, oldFloor := 187261266799376646767, retainedFloor := 278735613740547780816 },
+  { start := 143360, stop := 147456, oldFloor := 186529483993735274268, retainedFloor := 265432956033297775024 },
+  { start := 147456, stop := 151552, oldFloor := 162284542689592914815, retainedFloor := 239734452349110674015 },
+  { start := 151552, stop := 155648, oldFloor := 139083456168320943706, retainedFloor := 196062722743640124492 },
+  { start := 155648, stop := 159744, oldFloor := 135276714495680088550, retainedFloor := 175246580099774215706 },
+  { start := 159744, stop := 163840, oldFloor := 203802866424734842983, retainedFloor := 312404565223115271579 },
+  { start := 163840, stop := 167936, oldFloor := 164866770116498224013, retainedFloor := 260567864711380089107 },
+  { start := 167936, stop := 172032, oldFloor := 254300557936263291062, retainedFloor := 362900868486048701123 },
+  { start := 172032, stop := 176128, oldFloor := 197301514185035444263, retainedFloor := 278748670927717605209 },
+  { start := 176128, stop := 180224, oldFloor := 150824874501150617866, retainedFloor := 215787197545290093522 },
+  { start := 180224, stop := 184320, oldFloor := 116941548793170921351, retainedFloor := 163575796979980472155 },
+  { start := 184320, stop := 188416, oldFloor := 168557863952272450326, retainedFloor := 210806895418372852462 },
+  { start := 188416, stop := 192512, oldFloor := 195910847953384377740, retainedFloor := 314175129582090486607 },
+  { start := 192512, stop := 196608, oldFloor := 189308238987331957002, retainedFloor := 277670949367811409528 },
+  { start := 196608, stop := 200704, oldFloor := 191305475277362699802, retainedFloor := 266141570057245617297 },
+  { start := 200704, stop := 204800, oldFloor := 163069550391733288150, retainedFloor := 231661807684124240845 },
+  { start := 204800, stop := 208896, oldFloor := 112945583139006248259, retainedFloor := 159958951966604467140 },
+  { start := 208896, stop := 212992, oldFloor := 127307765862895306259, retainedFloor := 163244307589761700653 },
+  { start := 212992, stop := 217088, oldFloor := 149402242281122791625, retainedFloor := 221936238917236507693 },
+  { start := 217088, stop := 221184, oldFloor := 156331369471914706088, retainedFloor := 231863487894570164398 },
+  { start := 221184, stop := 225280, oldFloor := 181861500533580166320, retainedFloor := 252494968507910677884 },
+  { start := 225280, stop := 229376, oldFloor := 134136621063343747609, retainedFloor := 194139552818090579662 },
+  { start := 229376, stop := 233472, oldFloor := 95414112267147291571, retainedFloor := 138635161289540490726 },
+  { start := 233472, stop := 237568, oldFloor := 110206068183044351583, retainedFloor := 143236059929986118491 },
+  { start := 237568, stop := 241664, oldFloor := 132858626211493083163, retainedFloor := 187724921245466814056 },
+  { start := 241664, stop := 245760, oldFloor := 118038202556536015202, retainedFloor := 178560900762732870102 },
+  { start := 245760, stop := 249856, oldFloor := 130193259347504249402, retainedFloor := 185241571348840561719 },
+  { start := 249856, stop := 253952, oldFloor := 98696368216612644643, retainedFloor := 145318016588685900262 },
+  { start := 253952, stop := 258048, oldFloor := 77089903858534410177, retainedFloor := 111555856813835079126 },
+  { start := 258048, stop := 262144, oldFloor := 121492651926611374968, retainedFloor := 153712498498106629249 },
+  { start := 262144, stop := 266240, oldFloor := 86429695876016820067, retainedFloor := 137487811038607918477 },
+  { start := 266240, stop := 270336, oldFloor := 81487628534995465635, retainedFloor := 122507455642697873025 },
+  { start := 270336, stop := 274432, oldFloor := 62779276006258510988, retainedFloor := 95206915010767238012 },
+  { start := 274432, stop := 278528, oldFloor := 65539241698714768338, retainedFloor := 91405358484026961990 },
+  { start := 278528, stop := 282624, oldFloor := 70192052291842602702, retainedFloor := 105295648564097497160 },
+  { start := 282624, stop := 286720, oldFloor := 43906674559645203370, retainedFloor := 73379616638147734929 },
+  { start := 286720, stop := 290816, oldFloor := 35341136305012206241, retainedFloor := 55901058483826122623 },
+  { start := 290816, stop := 292633, oldFloor := 16386919297294826503, retainedFloor := 28601500567877374939 }
+]
+
+/-- The independent replay summary is transcribed separately from its own JSON. -/
+def independentBlocks : Array IndependentBlock := #[
+  { start := 0, stop := 4096, oldFloor := 21212939664885341759, storedFloor := 29863143063412720456, independentFloor := 29863580163148592105 },
+  { start := 4096, stop := 8192, oldFloor := 22591002556422091425, storedFloor := 33943258603122816208, independentFloor := 33943594194903785046 },
+  { start := 8192, stop := 12288, oldFloor := 31445124481079674771, storedFloor := 45192811503222378074, independentFloor := 45193044812946467101 },
+  { start := 12288, stop := 16384, oldFloor := 56342066602927160826, storedFloor := 75973808365027765607, independentFloor := 75973936538249824670 },
+  { start := 16384, stop := 20480, oldFloor := 51268209525638774444, storedFloor := 71576313750538055372, independentFloor := 71576450386915050642 },
+  { start := 20480, stop := 24576, oldFloor := 78084948991492300906, storedFloor := 103411445190941383532, independentFloor := 103411450096671822481 },
+  { start := 24576, stop := 28672, oldFloor := 63886606903234957078, storedFloor := 86283210502668752576, independentFloor := 86283382643474942381 },
+  { start := 28672, stop := 32768, oldFloor := 78133047546468699632, storedFloor := 104288681009870312654, independentFloor := 104288848712317487793 },
+  { start := 32768, stop := 36864, oldFloor := 94407913686059641211, storedFloor := 124707529241344713484, independentFloor := 124707576191141394375 },
+  { start := 36864, stop := 40960, oldFloor := 79369649389156729066, storedFloor := 112485552972466770672, independentFloor := 112485571793346610587 },
+  { start := 40960, stop := 45056, oldFloor := 87001167088360614453, storedFloor := 121833060450628781516, independentFloor := 121833221655086007103 },
+  { start := 45056, stop := 49152, oldFloor := 105919443624695211118, storedFloor := 135139403981626638814, independentFloor := 135139573695004142259 },
+  { start := 49152, stop := 53248, oldFloor := 74324662122524479105, storedFloor := 95111568310127192819, independentFloor := 95111821057116314593 },
+  { start := 53248, stop := 57344, oldFloor := 127222112778039428135, storedFloor := 171028500460338229403, independentFloor := 171028619252863568834 },
+  { start := 57344, stop := 61440, oldFloor := 78340464990747662322, storedFloor := 111606839455784844496, independentFloor := 111606959503700935527 },
+  { start := 61440, stop := 65536, oldFloor := 97006229907053977822, storedFloor := 137422741199211361120, independentFloor := 137422763358366773109 },
+  { start := 65536, stop := 69632, oldFloor := 108502272510563666986, storedFloor := 151906361265334817551, independentFloor := 151906529957427688884 },
+  { start := 69632, stop := 73728, oldFloor := 123227735658326663296, storedFloor := 165674363430400356256, independentFloor := 165674634834043525905 },
+  { start := 73728, stop := 77824, oldFloor := 111715397553675392162, storedFloor := 151002079849607942708, independentFloor := 151002397343336528892 },
+  { start := 77824, stop := 81920, oldFloor := 141129515660226712705, storedFloor := 184378874978805574922, independentFloor := 184379116527016897157 },
+  { start := 81920, stop := 86016, oldFloor := 82681274278378088520, storedFloor := 117632030096654530631, independentFloor := 117632291015642398832 },
+  { start := 86016, stop := 90112, oldFloor := 136896011444582437886, storedFloor := 192436274877072667120, independentFloor := 192436442410965693967 },
+  { start := 90112, stop := 94208, oldFloor := 98148248421290465678, storedFloor := 143681118541825034756, independentFloor := 143681267663110694621 },
+  { start := 94208, stop := 98304, oldFloor := 121875261404805242661, storedFloor := 164310939364028098146, independentFloor := 164310981612332508423 },
+  { start := 98304, stop := 102400, oldFloor := 129817814428851237660, storedFloor := 192648284423561784296, independentFloor := 192648715417757581534 },
+  { start := 102400, stop := 106496, oldFloor := 206470724510704167699, storedFloor := 282191945242339796803, independentFloor := 282192412491384209293 },
+  { start := 106496, stop := 110592, oldFloor := 84949538121033858652, storedFloor := 117841168635810263190, independentFloor := 117841431632753501849 },
+  { start := 110592, stop := 114688, oldFloor := 151446120876537638173, storedFloor := 219311261359916082141, independentFloor := 219311691403674326824 },
+  { start := 114688, stop := 118784, oldFloor := 158422644477871753761, storedFloor := 229975443031496077354, independentFloor := 229975758535122473685 },
+  { start := 118784, stop := 122880, oldFloor := 119522971276792464514, storedFloor := 167682002290610202438, independentFloor := 167682311452705724979 },
+  { start := 122880, stop := 126976, oldFloor := 119647244033302435158, storedFloor := 171064313686753697038, independentFloor := 171064484317051715660 },
+  { start := 126976, stop := 131072, oldFloor := 153618441951828093230, storedFloor := 198793904635157692210, independentFloor := 198793951610813256868 },
+  { start := 131072, stop := 135168, oldFloor := 182293187964523744469, storedFloor := 280995417765400431347, independentFloor := 280995983559089244012 },
+  { start := 135168, stop := 139264, oldFloor := 154603316012725186413, storedFloor := 233229116164857701963, independentFloor := 233229682265697090400 },
+  { start := 139264, stop := 143360, oldFloor := 187261266799376646767, storedFloor := 278735613740547780816, independentFloor := 278736043824845786809 },
+  { start := 143360, stop := 147456, oldFloor := 186529483993735274268, storedFloor := 265432956033297775024, independentFloor := 265433276486060994945 },
+  { start := 147456, stop := 151552, oldFloor := 162284542689592914815, storedFloor := 239734452349110674015, independentFloor := 239734773439580967366 },
+  { start := 151552, stop := 155648, oldFloor := 139083456168320943706, storedFloor := 196062722743640124492, independentFloor := 196062934462629771448 },
+  { start := 155648, stop := 159744, oldFloor := 135276714495680088550, storedFloor := 175246580099774215706, independentFloor := 175246642633187190598 },
+  { start := 159744, stop := 163840, oldFloor := 203802866424734842983, storedFloor := 312404565223115271579, independentFloor := 312405029272331915683 },
+  { start := 163840, stop := 167936, oldFloor := 164866770116498224013, storedFloor := 260567864711380089107, independentFloor := 260568333020412335134 },
+  { start := 167936, stop := 172032, oldFloor := 254300557936263291062, storedFloor := 362900868486048701123, independentFloor := 362901147416776824949 },
+  { start := 172032, stop := 176128, oldFloor := 197301514185035444263, storedFloor := 278748670927717605209, independentFloor := 278748928074004172558 },
+  { start := 176128, stop := 180224, oldFloor := 150824874501150617866, storedFloor := 215787197545290093522, independentFloor := 215787516681190004808 },
+  { start := 180224, stop := 184320, oldFloor := 116941548793170921351, storedFloor := 163575796979980472155, independentFloor := 163575930976750203035 },
+  { start := 184320, stop := 188416, oldFloor := 168557863952272450326, storedFloor := 210806895418372852462, independentFloor := 210806913565324818246 },
+  { start := 188416, stop := 192512, oldFloor := 195910847953384377740, storedFloor := 314175129582090486607, independentFloor := 314175640558189352773 },
+  { start := 192512, stop := 196608, oldFloor := 189308238987331957002, storedFloor := 277670949367811409528, independentFloor := 277671215706767207210 },
+  { start := 196608, stop := 200704, oldFloor := 191305475277362699802, storedFloor := 266141570057245617297, independentFloor := 266141842979103316783 },
+  { start := 200704, stop := 204800, oldFloor := 163069550391733288150, storedFloor := 231661807684124240845, independentFloor := 231662068224065967233 },
+  { start := 204800, stop := 208896, oldFloor := 112945583139006248259, storedFloor := 159958951966604467140, independentFloor := 159959200876462528319 },
+  { start := 208896, stop := 212992, oldFloor := 127307765862895306259, storedFloor := 163244307589761700653, independentFloor := 163244340499111206805 },
+  { start := 212992, stop := 217088, oldFloor := 149402242281122791625, storedFloor := 221936238917236507693, independentFloor := 221936673748487369956 },
+  { start := 217088, stop := 221184, oldFloor := 156331369471914706088, storedFloor := 231863487894570164398, independentFloor := 231863769706620966186 },
+  { start := 221184, stop := 225280, oldFloor := 181861500533580166320, storedFloor := 252494968507910677884, independentFloor := 252495145540158737305 },
+  { start := 225280, stop := 229376, oldFloor := 134136621063343747609, storedFloor := 194139552818090579662, independentFloor := 194139885600320682977 },
+  { start := 229376, stop := 233472, oldFloor := 95414112267147291571, storedFloor := 138635161289540490726, independentFloor := 138635437184039715493 },
+  { start := 233472, stop := 237568, oldFloor := 110206068183044351583, storedFloor := 143236059929986118491, independentFloor := 143236105463477449477 },
+  { start := 237568, stop := 241664, oldFloor := 132858626211493083163, storedFloor := 187724921245466814056, independentFloor := 187725230298424471104 },
+  { start := 241664, stop := 245760, oldFloor := 118038202556536015202, storedFloor := 178560900762732870102, independentFloor := 178561202454694133279 },
+  { start := 245760, stop := 249856, oldFloor := 130193259347504249402, storedFloor := 185241571348840561719, independentFloor := 185241786489759907352 },
+  { start := 249856, stop := 253952, oldFloor := 98696368216612644643, storedFloor := 145318016588685900262, independentFloor := 145318342107108907460 },
+  { start := 253952, stop := 258048, oldFloor := 77089903858534410177, storedFloor := 111555856813835079126, independentFloor := 111556037542150112068 },
+  { start := 258048, stop := 262144, oldFloor := 121492651926611374968, storedFloor := 153712498498106629249, independentFloor := 153712509029294658659 },
+  { start := 262144, stop := 266240, oldFloor := 86429695876016820067, storedFloor := 137487811038607918477, independentFloor := 137488199748548621591 },
+  { start := 266240, stop := 270336, oldFloor := 81487628534995465635, storedFloor := 122507455642697873025, independentFloor := 122507712862330374401 },
+  { start := 270336, stop := 274432, oldFloor := 62779276006258510988, storedFloor := 95206915010767238012, independentFloor := 95207151952428721506 },
+  { start := 274432, stop := 278528, oldFloor := 65539241698714768338, storedFloor := 91405358484026961990, independentFloor := 91405420974592107139 },
+  { start := 278528, stop := 282624, oldFloor := 70192052291842602702, storedFloor := 105295648564097497160, independentFloor := 105295835451507100045 },
+  { start := 282624, stop := 286720, oldFloor := 43906674559645203370, storedFloor := 73379616638147734929, independentFloor := 73379829140739201250 },
+  { start := 286720, stop := 290816, oldFloor := 35341136305012206241, storedFloor := 55901058483826122623, independentFloor := 55901130131843432034 },
+  { start := 290816, stop := 292633, oldFloor := 16386919297294826503, storedFloor := 28601500567877374939, independentFloor := 28601524587272574499 }
+]
+
+/-- Both source files record exactly 72 typed block positions. -/
+theorem authorBlocks_size : authorBlocks.size = 72 := by decide
+theorem independentBlocks_size : independentBlocks.size = 72 := by decide
+
+/-- The printed block intervals cover [0,292633) in their recorded order. -/
+theorem authorCoverage :
+    (authorBlocks[0]!).start = 0 ∧
+    (authorBlocks[71]!).stop = 292633 ∧
+    (∀ i : Fin 71, (authorBlocks[i.val]!).stop = (authorBlocks[i.val + 1]!).start) := by
+  decide
+
+/-- The two distinct summaries agree on the archived old and retained numerators. -/
+theorem blockSummaryAgreement :
+    ∀ i : Fin 72,
+      (authorBlocks[i.val]!).start = (independentBlocks[i.val]!).start ∧
+      (authorBlocks[i.val]!).stop = (independentBlocks[i.val]!).stop ∧
+      (authorBlocks[i.val]!).oldFloor = (independentBlocks[i.val]!).oldFloor ∧
+      (authorBlocks[i.val]!).retainedFloor = (independentBlocks[i.val]!).storedFloor := by
+  decide
+
+/-- Recorded independent floors dominate the corresponding stored floors. -/
+theorem independentDominatesStored :
+    ∀ i : Fin 72,
+      (independentBlocks[i.val]!).storedFloor ≤
+        (independentBlocks[i.val]!).independentFloor := by
+  decide
+
+def authorOldSum : Nat := authorBlocks.foldl (fun s b => s + b.oldFloor) 0
+def authorRetainedSum : Nat := authorBlocks.foldl (fun s b => s + b.retainedFloor) 0
+def replayStoredSum : Nat := independentBlocks.foldl (fun s b => s + b.storedFloor) 0
+
+theorem authorOldSum_eq : authorOldSum = 8546185782599576767073 := by decide
+theorem authorRetainedSum_eq : authorRetainedSum = 12151684267250930159476 := by decide
+theorem replayStoredSum_eq : replayStoredSum = 12151684267250930159476 := by decide
+theorem stored_summaries_agree : replayStoredSum = authorRetainedSum := by
+  rw [replayStoredSum_eq, authorRetainedSum_eq]
+
+/-- Literal selected22 entry 2. Its denominator is 2^78 = 302231454903657293676544. -/
+def selected22Entry2Recorded : ℚ := 3037921066812732539869 / (2^78 : ℚ)
+
+theorem retained_metadata_equals_selected22_entry2 :
+    (authorRetainedSum : ℚ) / (2^80 : ℚ) = selected22Entry2Recorded := by
+  rw [authorRetainedSum_eq]
+  norm_num [selected22Entry2Recorded]
+
+/-- Replacement identity of the printed numerators, not an extra saving to add twice. -/
+theorem retained_replaces_old_metadata :
+    (authorOldSum : ℚ) / (2^80 : ℚ) +
+      (3605498484651353392403 : ℚ) / (2^80 : ℚ) =
+        (authorRetainedSum : ℚ) / (2^80 : ℚ) := by
+  rw [authorOldSum_eq, authorRetainedSum_eq]
+  norm_num
+
+end ImbalancedChen.P5RecordedOldFifthBlockTotals

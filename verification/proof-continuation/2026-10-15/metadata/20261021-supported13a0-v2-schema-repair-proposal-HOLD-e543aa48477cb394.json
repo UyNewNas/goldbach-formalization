@@ -1,0 +1,111 @@
+{
+  "status": "NATIVE_REFERENCE_SCHEMA4_TO_STABLE_PAIR2_EXPLICIT_VALIDATION_V2_PROPOSAL_UNEXECUTED_HOLD",
+  "created_utc": "2026-10-21T10:00:15.443936+00:00",
+  "target": "ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy",
+  "source_sha256": "13a0733609f30d51af3649566b4d85053f866ab785fd35bac3c2f317c95a794e",
+  "root_authorization_scope": "New v2 proposal only. Replace sole failing line222 equality by complete historical four-key schema/module/resolved path/digest/parts/missing checks. Preserve stable pair2. Only docstring and distinct v2 output paths otherwise change. No execution gate granted.",
+  "artifact": {
+    "path": "rounds/20261021-supported13a0-readonly-classification-v2-baseline173.py",
+    "sha256": "d2c7e221ed892e7bba86ebac39707dac266345cbd0bbe96a84ad1228f8e65c7b",
+    "bytes": 24831,
+    "old_path": "rounds/20261021-supported13a0-readonly-classification-baseline173.py",
+    "old_sha256": "3dcab20ee22fdbd2e2e4567fbd55e6b935d8636c3e5edcf9875c2abad7b5ed1e",
+    "diff_path": "rounds/20261021-supported13a0-readonly-classification-v2-baseline173.diff",
+    "diff_sha256": "fe7d591f24f09b3aeed2470fb682b918ae6613722aad5db2551bf1c6ffa253b6",
+    "raw_inverse_path": "rounds/20261021-supported13a0-readonly-classification-v2-baseline173.raw-inverse.json",
+    "raw_inverse_sha256": "30bb718f134371ce75301bbcadecc2b54736478d3922c6f8f71421887896abee",
+    "AST_parse": true,
+    "raw_forward_reverse_exact": true,
+    "only_schema_block_and_three_constants_changed": true
+  },
+  "full_raw_diff_utf8": "--- rounds/20261021-supported13a0-readonly-classification-baseline173.py\n+++ rounds/20261021-supported13a0-readonly-classification-v2-baseline173.py\n@@ -1,4 +1,4 @@\n-\"\"\"Unexecuted supported-core classifier proposal. Separate root authorization required.\"\"\"\n+\"\"\"Unexecuted supported-core classifier v2 schema repair proposal. Separate root authorization required.\"\"\"\n from pathlib import Path\n import collections,datetime,hashlib,importlib.util,json\n STATE = Path(__file__).resolve().parent.parent\n@@ -219,7 +219,12 @@\n         missing = [suffix for suffix in PARTS if suffix not in parts]\n         pair = {'source_sha256': sd, 'object_sha256': od}\n         assert parts['.olean'] == od and set(parts) <= set(PARTS)\n-        assert references_native[module] == {'pair': pair, 'parts': parts, 'missing': missing}\n+        ref = references_native[module]\n+        assert set(ref['pair']) == {'module', 'source_sha256', 'object_sha256', 'object_path'}\n+        assert ref['pair']['module'] == module\n+        assert path(ref['pair']['object_path']).resolve() == obj.resolve()\n+        assert {k: ref['pair'][k] for k in ('source_sha256', 'object_sha256')} == pair\n+        assert ref['parts'] == parts and ref['missing'] == missing\n         present_counts.update(parts.keys())\n         missing_counts.update(missing)\n         native_parts[module], native_missing[module], pairs[module] = parts, missing, pair\n@@ -344,8 +349,8 @@\n     summary, rows, stable = collect(PROPER)\n     summary['status'] = 'READONLY_SUPPORTED_CORE_ALL_CURRENT_PROJECT_AND_NATIVE_INPUTS_EXACT'\n     summary['read_only_script_sha256'] = sha(__file__)\n-    output = STATE / 'rounds/20261021-supported13a0-baseline173-dependency-classification.json'\n-    data_output = STATE / 'rounds/20261021-supported13a0-baseline173-dependency-classification-data.json'\n+    output = STATE / 'rounds/20261021-supported13a0-v2-baseline173-dependency-classification.json'\n+    data_output = STATE / 'rounds/20261021-supported13a0-v2-baseline173-dependency-classification-data.json'\n     assert not output.exists() and not data_output.exists()\n     for out, value in [(data_output, {'summary': summary, 'native_rows': rows, 'stable_inputs': stable}), (output, summary)]:\n         temporary = out.with_suffix('.json.tmp')\n",
+  "full_raw_inverse": {
+    "original_path": "rounds/20261021-supported13a0-readonly-classification-baseline173.py",
+    "original_sha256": "3dcab20ee22fdbd2e2e4567fbd55e6b935d8636c3e5edcf9875c2abad7b5ed1e",
+    "proposal_path": "rounds/20261021-supported13a0-readonly-classification-v2-baseline173.py",
+    "proposal_sha256": "d2c7e221ed892e7bba86ebac39707dac266345cbd0bbe96a84ad1228f8e65c7b",
+    "edits": [
+      {
+        "old_start": 3,
+        "old_end": 87,
+        "old_hex": "556e657865637574656420737570706f727465642d636f726520636c61737369666965722070726f706f73616c2e20536570617261746520726f6f7420617574686f72697a6174696f6e2072657175697265642e",
+        "new_hex": "556e657865637574656420737570706f727465642d636f726520636c617373696669657220763220736368656d61207265706169722070726f706f73616c2e20536570617261746520726f6f7420617574686f72697a6174696f6e2072657175697265642e",
+        "expected_occurrences": 1,
+        "new_start": 3,
+        "new_end": 104
+      },
+      {
+        "old_start": 13952,
+        "old_end": 14047,
+        "old_hex": "2020202020202020617373657274207265666572656e6365735f6e61746976655b6d6f64756c655d203d3d207b2770616972273a20706169722c20277061727473273a2070617274732c20276d697373696e67273a206d697373696e677d0a",
+        "new_hex": "2020202020202020726566203d207265666572656e6365735f6e61746976655b6d6f64756c655d0a202020202020202061737365727420736574287265665b2770616972275d29203d3d207b276d6f64756c65272c2027736f757263655f736861323536272c20276f626a6563745f736861323536272c20276f626a6563745f70617468277d0a2020202020202020617373657274207265665b2770616972275d5b276d6f64756c65275d203d3d206d6f64756c650a20202020202020206173736572742070617468287265665b2770616972275d5b276f626a6563745f70617468275d292e7265736f6c76652829203d3d206f626a2e7265736f6c766528290a2020202020202020617373657274207b6b3a207265665b2770616972275d5b6b5d20666f72206b20696e202827736f757263655f736861323536272c20276f626a6563745f73686132353627297d203d3d20706169720a2020202020202020617373657274207265665b277061727473275d203d3d20706172747320616e64207265665b276d697373696e67275d203d3d206d697373696e670a",
+        "expected_occurrences": 1,
+        "new_start": 13969,
+        "new_end": 14380
+      },
+      {
+        "old_start": 23782,
+        "old_end": 23854,
+        "old_hex": "726f756e64732f32303236313032312d737570706f72746564313361302d626173656c696e653137332d646570656e64656e63792d636c617373696669636174696f6e2e6a736f6e",
+        "new_hex": "726f756e64732f32303236313032312d737570706f72746564313361302d76322d626173656c696e653137332d646570656e64656e63792d636c617373696669636174696f6e2e6a736f6e",
+        "expected_occurrences": 1,
+        "new_start": 24115,
+        "new_end": 24190
+      },
+      {
+        "old_start": 23883,
+        "old_end": 23960,
+        "old_hex": "726f756e64732f32303236313032312d737570706f72746564313361302d626173656c696e653137332d646570656e64656e63792d636c617373696669636174696f6e2d646174612e6a736f6e",
+        "new_hex": "726f756e64732f32303236313032312d737570706f72746564313361302d76322d626173656c696e653137332d646570656e64656e63792d636c617373696669636174696f6e2d646174612e6a736f6e",
+        "expected_occurrences": 1,
+        "new_start": 24219,
+        "new_end": 24299
+      }
+    ],
+    "raw_forward_exact": true,
+    "raw_reverse_exact": true,
+    "AST_changes": "One old Assert replaced by one Assign and five Asserts for complete native reference schema/path/digests/parts/missing validation; docstring and two output-path Constant values only other AST changes."
+  },
+  "frozen_artifacts_rehashed_unchanged": {
+    "source-reviews/20261021-supported13a0-baseline173-ONE-readonly-failed-terminal-HOLD.json": "28aa71c46389812e7fd27e5723aba77786e754d4771e64e0817df43884ef9907",
+    "source-reviews/20261021-supported13a0-line222-first-native-difference-diagnosis-HOLD.json": "68ac7185463005162c582e218774bef384fe56fdc5f28433e763e8d6d3197afb",
+    "rounds/20261021-supported13a0-baseline173-classification-exec.stderr.log": "628c96d720445d4c32dcf6cbdc467d0d426a3fddf04c63bfb1aad739dd4a2276",
+    "rounds/20261021-supported13a0-baseline173-classification-exec.log": "628c96d720445d4c32dcf6cbdc467d0d426a3fddf04c63bfb1aad739dd4a2276",
+    "rounds/20261021-supported13a0-baseline173-classification-exec.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rounds/20261021-supported13a0-owned-census-v2-baseline173.py": "b36b652f94e2fe046f1e7038697db6758030fcaca70de03fa94955ec33cde4c0",
+    "runtime.py": "81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be"
+  },
+  "AST_change_description": "One old Assert replaced by one Assign and five Asserts for complete native reference schema/path/digests/parts/missing validation; docstring and two output-path Constant values only other AST changes.",
+  "static_verification": {
+    "inverse_bytes_exact": true,
+    "inverse_AST_exact": true,
+    "explicit_schema_AST_replaced_back_and_three_constants_reversed_AST_equals_original": true,
+    "actual_stable_pair_two_fields_unchanged": true,
+    "all_other_predicates_byte_exact": true,
+    "unique_literal_anchor_counts_each_one": true,
+    "original_failed_script_logs_diagnosis_preserved": true,
+    "frozen_runtime_census_source_cache_pins_Git_unchanged": true,
+    "all173_and88parents41owned1477flags47inherited_native6634_checks_retained": true,
+    "original_author_two_escape_and_derived_hash_chain_retained": true,
+    "v2_output_paths_absent": true
+  },
+  "execution_scope": {
+    "v2_executed": false,
+    "original_failed_classifier_rerun": false,
+    "proper_rerun": false,
+    "helper_wrapper_census_compiler_checker_build_executed": false,
+    "heavy_executed": false,
+    "generated_count_predicted": null
+  },
+  "quota": {
+    "before_used_percent": 34,
+    "before_remaining_percent": 66,
+    "after_used_percent": 34,
+    "after_remaining_percent": 66,
+    "secondary": null,
+    "stop_remaining_lte": 40
+  },
+  "publication": "New proposal/diff/raw inverse and this sole checkpoint atomically published .tmp -> replace.",
+  "HOLD": true,
+  "next": "Root read new schema block and complete diff, then separate ONE readonly gate."
+}

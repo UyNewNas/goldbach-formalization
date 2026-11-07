@@ -1,0 +1,57 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T19:34:21.466059+00:00",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9SwitchedUpperDensity",
+  "source_sha256": "b37fc62975c14b78bc0c22b7216c7efd4c73dda8047c2466411f14786bd4fd30",
+  "reviewer": "lower_resume self-review, not independent validation",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "declarations": [
+    {
+      "name": "currentChenUpsilon9_panCutoff_eq_initialLevel",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_panCutoff_eq_initialLevel (B : ℝ) (N : ℕ) :\n    panModulusCutoff N B = chenInitialLevelCap B N",
+      "line": 27
+    },
+    {
+      "name": "currentChenUpsilon9_switched_level_rpow",
+      "private": true,
+      "kind": "theorem",
+      "signature": "private theorem currentChenUpsilon9_switched_level_rpow (B : ℝ)\n    {N : ℕ} (hN : 2 ≤ N) :\n    (N : ℝ) ^ (chenInitialRosserT B (1 / 5) N * (1 / 5 : ℝ)) =\n      ((panModulusCutoff N B + 1 : ℕ) : ℝ)",
+      "line": 31
+    },
+    {
+      "name": "currentChenUpsilon9_switched_source_factor_eight",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_switched_source_factor_eight :\n    suzukiContinuousUpperFactor (5 / 2) *\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / (1 / 5 : ℝ)) = 8",
+      "line": 52
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_switched_density_le_eight",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem eventually_currentChenUpsilon9_switched_density_le_eight\n    (B ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N →\n      currentChenUpsilon9SwitchedUpperDensity B N\n          (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ))) ((N : ℝ) ^ (1 / 5 : ℝ)) *\n        Real.log (N : ℝ) / singularSeries N ≤ 8 + ε",
+      "line": 71
+    }
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "The native actual Pan modulus cutoff and existing initial Chen floor are exactly equal by sqrt_eq_rpow; strict actual Rosser level is Q+1 throughout, with no D<=sqrt(N) assertion.",
+    "The actual logarithmic parameter is the existing chenInitialRosserT at a=1/5 and its proved limit is 5/2. The proof recovers the very same level as N^(s/5) exactly, including natural rounding.",
+    "The fixed source-series pairing theorem at s=5/2 and the produced canonical amplitude 2*exp(gamma) prove F(5/2)=2*exp(gamma)/(5/2). Combined with the actual Euler normalization 2*exp(-gamma)/(1/5), the resulting ordinary factor is exactly eight. No first-interval or density premise is supplied.",
+    "The actual full signed reciprocal-totient density is definitionally the same actualSmallRosserPlusDensity, at z=N^(1/5), cap=ceil(z), level Q+1. No selector, coefficient or presieve gate is replaced.",
+    "The already proved canonical upper-factor continuity and fixed-power actual Euler limit give F(s_N)*e_N->8 along positive even targets. A compact true parameter interval 2<s_N<3 is paid before applying the uniform upper rectangle.",
+    "Every hypothesis of the actual upper rectangle is paid: positive lower cutoff exponent, sigma=2>1, s_N in [2,3], actual full cap>=z, even N, and the actual exact rpow level.",
+    "Multiplication uses e_N>=0 from the proved actual Euler positivity and positive normalization. The eta*e_N cost is bounded through e_N<A+1, with eta=epsilon/(2*(A+1)). No nonnegativity of individual Rosser coefficients is assumed.",
+    "The final estimate is for arbitrary fixed B and all sufficiently large even N, of the same complete actual signed density times log(N)/singularSeries(N) <=8+epsilon. No adopted K, actual Upsilon9 mean or complete hLower is claimed."
+  ],
+  "remaining": [
+    "No Lean compile or owned-object evidence for this source candidate yet.",
+    "Its FiniteMean parent is pending separate first compilation.",
+    "Combining the actual finite count, true-li leading-one transport, harmonic limit and this density bound into an ordinary Upsilon9 count mean remains a separate assembly."
+  ],
+  "evidence_boundary": "Source-only self-review, no compiler/kernel/object/axiom acceptance claim."
+}

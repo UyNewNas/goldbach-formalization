@@ -1,0 +1,620 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/signed_density_oct18",
+  "independence": "Reviewer did not author or edit this source, its owner report, its proposal or its owned parent.",
+  "status": "COMPLETE_CURRENT_SOURCE_REVIEW_NO_MATHEMATICAL_BLOCKER_FOUND_PENDING_NEW_FULL_STRICT_AND_OWNED_GATE",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorLargeResidualZero.lean",
+    "sha256": "b7cf7307dc299bd5117e8f16d8b249f65b67aa63001bd31f7f3815328b16ef69",
+    "bytes": 47262,
+    "lines": 1023,
+    "complete_nontruncated_read_ranges": [
+      [
+        1,
+        260
+      ],
+      [
+        261,
+        520
+      ],
+      [
+        521,
+        780
+      ],
+      [
+        781,
+        1023
+      ]
+    ],
+    "declarations": 52,
+    "primitive_definitions": 11,
+    "proofs": 41,
+    "public_declarations": 3,
+    "explicit_imports": [
+      "import ImbalancedChen.Part3SharedFirstFactorCharacterDictionary"
+    ],
+    "outer_variable_declarations": []
+  },
+  "all52_complete_source_headers_independently_matched_owner": [
+    {
+      "name": "characterTransform",
+      "kind": "def",
+      "visibility": "private",
+      "line": 28,
+      "complete_header": "private def characterTransform (N : Finset ℕ) (a : ℕ → ℂ) (delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ"
+    },
+    {
+      "name": "character_star_inverse",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 32,
+      "complete_header": "private theorem character_star_inverse {delta : ℕ} [NeZero delta]\n    (chi : DirichletCharacter ℂ delta) {a : ZMod delta} (ha : IsUnit a) :\n    star (chi a) = chi a⁻¹"
+    },
+    {
+      "name": "character_orthogonality",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 38,
+      "complete_header": "private theorem character_orthogonality {delta : ℕ} (hdelta : 0 < delta)\n    (n m : ℕ) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      star (chi (n : ZMod delta)) * chi (m : ZMod delta)) =\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        (delta.totient : ℂ) else 0"
+    },
+    {
+      "name": "transform_parseval",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 78,
+      "complete_header": "private theorem transform_parseval (N : Finset ℕ) (a : ℕ → ℂ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      characterTransform N a delta chi * star (characterTransform N a delta chi)) =\n      (delta.totient : ℂ) *\n        ∑ n ∈ N, ∑ m ∈ N,\n          if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n            a n * star (a m) else 0"
+    },
+    {
+      "name": "progression_card_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 107,
+      "complete_header": "private theorem progression_card_le (N : Finset ℕ) (H delta b : ℕ)\n    (hN : N ⊆ Finset.Ioc 0 H) :\n    ((N.filter (fun n ↦ Nat.ModEq delta n b)).card : ℝ) ≤\n      (H : ℝ) / delta + 1"
+    },
+    {
+      "name": "unit_pair_mass_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 126,
+      "complete_header": "private theorem unit_pair_mass_norm_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H delta : ℕ) (hN : N ⊆ Finset.Ioc 0 H)\n    (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    ‖∑ n ∈ N, ∑ m ∈ N,\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        a n * star (a m) else 0‖ ≤\n      (H : ℝ) * ((H : ℝ) / delta + 1)"
+    },
+    {
+      "name": "transform_square_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 161,
+      "complete_header": "private theorem transform_square_sum_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H : ℕ) {delta : ℕ} (hdelta : 0 < delta)\n    (hN : N ⊆ Finset.Ioc 0 H) (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖characterTransform N a delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * ((H : ℝ) * ((H : ℝ) / delta + 1))"
+    },
+    {
+      "name": "auxiliary_eq_transform",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 190,
+      "complete_header": "private theorem auxiliary_eq_transform (N : Finset ℕ) (a : ℕ → ℂ)\n    (k delta : ℕ) (chi : DirichletCharacter ℂ delta) :\n    auxiliaryCharacterSum N a k delta chi =\n      characterTransform N (fun n ↦ if n.Coprime k then a n else 0) delta chi"
+    },
+    {
+      "name": "alpha_subset_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 199,
+      "complete_header": "private theorem alpha_subset_prefix {d : MediumAtom} (hU : 1 ≤ d.U) :\n    d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U))"
+    },
+    {
+      "name": "actual_auxiliary_square_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 207,
+      "complete_header": "private theorem actual_auxiliary_square_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * (2 * d.U * (2 * d.U / delta + 1))"
+    },
+    {
+      "name": "auxiliary_cross_div_totient_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 234,
+      "complete_header": "private theorem auxiliary_cross_div_totient_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k l : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta)\n    (C : Finset (DirichletCharacter ℂ delta)) :\n    ‖(∑ chi ∈ C,\n      auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n        star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi)) /\n          (delta.totient : ℂ)‖ ≤ 2 * d.U * (2 * d.U / delta + 1)"
+    },
+    {
+      "name": "tailLabels",
+      "kind": "def",
+      "visibility": "private",
+      "line": 280,
+      "complete_header": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ)"
+    },
+    {
+      "name": "tailProducts",
+      "kind": "def",
+      "visibility": "private",
+      "line": 283,
+      "complete_header": "private def tailProducts (d : MediumAtom) : Finset ℕ"
+    },
+    {
+      "name": "tailGamma",
+      "kind": "def",
+      "visibility": "private",
+      "line": 286,
+      "complete_header": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ"
+    },
+    {
+      "name": "tailCap",
+      "kind": "def",
+      "visibility": "private",
+      "line": 289,
+      "complete_header": "private def tailCap (d : MediumAtom) : ℝ"
+    },
+    {
+      "name": "tau",
+      "kind": "def",
+      "visibility": "private",
+      "line": 291,
+      "complete_header": "private def tau (n : ℕ) : ℝ"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 293,
+      "complete_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "one_le_tailCap",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 303,
+      "complete_header": "private theorem one_le_tailCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ tailCap d"
+    },
+    {
+      "name": "tail_product_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 311,
+      "complete_header": "private theorem tail_product_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {u : ℕ × ℕ}\n    (hu : u ∈ tailLabels d) : 0 < u.1 * u.2 ∧ (u.1 * u.2 : ℕ) ≤ Nat.floor (tailCap d)"
+    },
+    {
+      "name": "tailProducts_subset_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 325,
+      "complete_header": "private theorem tailProducts_subset_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    tailProducts d ⊆ Finset.Ioc 0 (Nat.floor (tailCap d))"
+    },
+    {
+      "name": "tailGamma_zero_off_products",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 333,
+      "complete_header": "private theorem tailGamma_zero_off_products (d : MediumAtom) {v : ℕ}\n    (hv : v ∉ tailProducts d) : tailGamma d v = 0"
+    },
+    {
+      "name": "tailGamma_norm_le_tau",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 341,
+      "complete_header": "private theorem tailGamma_norm_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (v : ℕ) :\n    ‖tailGamma d v‖ ≤ tau v"
+    },
+    {
+      "name": "tail_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 371,
+      "complete_header": "private theorem tail_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, tailGamma d v * F v"
+    },
+    {
+      "name": "tail_star_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 386,
+      "complete_header": "private theorem tail_star_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, star (tailGamma d v) * F v"
+    },
+    {
+      "name": "tail_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 397,
+      "complete_header": "private theorem tail_pair_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ tailProducts d, ∑ b ∈ tailProducts d,\n        tailGamma d a * star (tailGamma d b) * F a b"
+    },
+    {
+      "name": "tail_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 421,
+      "complete_header": "private theorem tail_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℂ) :\n    (∑ v ∈ tailProducts d, tailGamma d v * F v) =\n      ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tailGamma d v * F v"
+    },
+    {
+      "name": "tail_pair_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 430,
+      "complete_header": "private theorem tail_pair_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ b ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          tailGamma d a * star (tailGamma d b) * F a b"
+    },
+    {
+      "name": "pair_sum_by_gcd",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 462,
+      "complete_header": "private theorem pair_sum_by_gcd (N : ℕ) (F : ℕ → ℕ → ℂ) :\n    (∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N, F a b) =\n      ∑ D ∈ Finset.Ioc 0 N, ∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N,\n        if a.gcd b = D then F a b else 0"
+    },
+    {
+      "name": "characterKernel",
+      "kind": "def",
+      "visibility": "private",
+      "line": 483,
+      "complete_header": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ"
+    },
+    {
+      "name": "gcdSlice",
+      "kind": "def",
+      "visibility": "private",
+      "line": 493,
+      "complete_header": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ"
+    },
+    {
+      "name": "largeDivisors",
+      "kind": "def",
+      "visibility": "private",
+      "line": 500,
+      "complete_header": "private def largeDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorLargeResidualHighConductorZero",
+      "kind": "def",
+      "visibility": "public",
+      "line": 509,
+      "complete_header": "def MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ"
+    },
+    {
+      "name": "actual_eq_gcd_slices",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 534,
+      "complete_header": "private theorem actual_eq_gcd_slices\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    d.sharedFirstFactorLargeResidualHighConductorZero Y R =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ D ∈ largeDivisors d Y, gcdSlice d p D R"
+    },
+    {
+      "name": "characterKernel_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 589,
+      "complete_header": "private theorem characterKernel_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p v w : ℕ} (hp : 0 < p) (hv : 0 < v) (hw : 0 < w) (R : ℝ) :\n    ‖characterKernel d p v w R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * v * w) +\n          2 * d.U * (v.gcd w : ℝ) / ((p : ℝ) * v * w))"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 624,
+      "complete_header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "name": "tau_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 631,
+      "complete_header": "private theorem tau_nonneg (n : ℕ) : 0 ≤ tau n"
+    },
+    {
+      "name": "tau_mul_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 633,
+      "complete_header": "private theorem tau_mul_le (a b : ℕ) : tau (a * b) ≤ tau a * tau b"
+    },
+    {
+      "name": "multipleWeight",
+      "kind": "def",
+      "visibility": "private",
+      "line": 638,
+      "complete_header": "private def multipleWeight (D n : ℕ) : ℝ"
+    },
+    {
+      "name": "multipleWeight_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 640,
+      "complete_header": "private theorem multipleWeight_nonneg (D n : ℕ) : 0 ≤ multipleWeight D n"
+    },
+    {
+      "name": "sum_multiples_real",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 646,
+      "complete_header": "private theorem sum_multiples_real (N D : ℕ) (hD : 0 < D) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Ioc 0 N, if D ∣ n then f n else 0) =\n      ∑ k ∈ Finset.Ioc 0 (N / D), f (D * k)"
+    },
+    {
+      "name": "multiple_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 669,
+      "complete_header": "private theorem multiple_harmonic_le {T : ℝ} (hT : 1 ≤ T)\n    {D : ℕ} (hD : 0 < D) :\n    (∑ n ∈ Finset.Ioc 0 (Nat.floor T), multipleWeight D n) ≤\n      tau D / (D : ℝ) * (1 + Real.log T) ^ 2"
+    },
+    {
+      "name": "gcdSlice_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 704,
+      "complete_header": "private theorem gcdSlice_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p D : ℕ} (hp : 0 < p) (hD : 0 < D) (R : ℝ) :\n    ‖gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n        (4 * d.U ^ 2 / (p : ℝ) ^ 2 * (tau D ^ 2 / (D : ℝ) ^ 2) +\n          2 * d.U / (p : ℝ) * (tau D ^ 2 / (D : ℝ)))"
+    },
+    {
+      "name": "tau_square_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 769,
+      "complete_header": "private theorem tau_square_harmonic_le {T : ℝ} (hT : 1 ≤ T) :\n    (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log T) ^ 4"
+    },
+    {
+      "name": "reciprocal_square_tail_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 776,
+      "complete_header": "private theorem reciprocal_square_tail_le\n    {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) :\n    (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D ↦ Y < (D : ℝ)),\n      tau D ^ 2 / (D : ℝ) ^ 2) ≤ (1 + Real.log T) ^ 4 / Y"
+    },
+    {
+      "name": "large_divisor_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 803,
+      "complete_header": "private theorem large_divisor_harmonic_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log (tailCap d)) ^ 4"
+    },
+    {
+      "name": "one_p_large_divisor_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 812,
+      "complete_header": "private theorem one_p_large_divisor_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p : ℕ} (hp : 0 < p) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖∑ D ∈ largeDivisors d Y, gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * Y) + 2 * d.U / (p : ℝ))"
+    },
+    {
+      "name": "primitive_factor_card_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 856,
+      "complete_header": "private theorem primitive_factor_card_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1"
+    },
+    {
+      "name": "primitive_reciprocal_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 870,
+      "complete_header": "private theorem primitive_reciprocal_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ)) ≤ 2"
+    },
+    {
+      "name": "primitive_reciprocal_square_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 887,
+      "complete_header": "private theorem primitive_reciprocal_square_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ) ^ 2) ≤ 2 / d.Q1"
+    },
+    {
+      "name": "actual_finite_bound",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 905,
+      "complete_header": "private theorem actual_finite_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U)"
+    },
+    {
+      "name": "actual_largeResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 952,
+      "complete_header": "theorem actual_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n              (d.U ^ 2 / (d.Q1 * Y) + d.U)"
+    },
+    {
+      "name": "actual_outside_mul_largeResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 992,
+      "complete_header": "theorem actual_outside_mul_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n                (1 / Y + d.Q1 / d.U)"
+    }
+  ],
+  "all11_full_primitive_definitions_independently_matched_actual_source": [
+    {
+      "name": "characterTransform",
+      "full_definition": "private def characterTransform (N : Finset ℕ) (a : ℕ → ℂ) (delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, a n * star (chi (n : ZMod delta))",
+      "sha256": "b47fe90cee0236ab29f41fd46735687596c1c097ae52fc652aee2b6de5a35d91"
+    },
+    {
+      "name": "tailLabels",
+      "full_definition": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ) :=\n  factorCarrier d.Q2 ×ˢ factorCarrier d.Q3",
+      "sha256": "0c688a2ab5d8cc7cd3dfc31142e6aac46ae45d1872617aace45dfee83ab00a6d"
+    },
+    {
+      "name": "tailProducts",
+      "full_definition": "private def tailProducts (d : MediumAtom) : Finset ℕ :=\n  (tailLabels d).image (fun u ↦ u.1 * u.2)",
+      "sha256": "188f791c17e6e192f9b0cb2754e02f51b5b18317178c0b993cf4d82ac31bcbab"
+    },
+    {
+      "name": "tailGamma",
+      "full_definition": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ :=\n  ∑ u ∈ (tailLabels d).filter (fun u ↦ u.1 * u.2 = v), d.gamma2 u.1 * d.gamma3 u.2",
+      "sha256": "04f6c40339dd63459f639f4b398544fb61c8f460ab5f32f63ca9967cd032af28"
+    },
+    {
+      "name": "tailCap",
+      "full_definition": "private def tailCap (d : MediumAtom) : ℝ := 4 * d.Q2 * d.Q3",
+      "sha256": "7e11ed968dc33ccb0d235267f3752e93b9004432a7b4641e3ab7188df2c781d3"
+    },
+    {
+      "name": "tau",
+      "full_definition": "private def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+      "sha256": "93d72abb5c853bb9ebd7be5bd5324e69e4446279d62469382e78da48b273cbf8"
+    },
+    {
+      "name": "characterKernel",
+      "full_definition": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ :=\n  (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n    ((p * v.lcm w : ℕ) : ℂ)) *\n      ((∑ chi ∈ ((Finset.univ : Finset\n          (DirichletCharacter ℂ (p * v.gcd w))).erase 1).filter\n            (fun chi ↦ R < (chi.conductor : ℝ)),\n        auxiliaryCharacterSum d.alphaCarrier d.alpha (v / v.gcd w) (p * v.gcd w) chi *\n          star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n            (w / v.gcd w) (p * v.gcd w) chi)) / ((p * v.gcd w).totient : ℂ))",
+      "sha256": "e271c075eece6f452cbd4e35d4351fffaa7fa3ccb7bfa407fb581daeb67b4beb"
+    },
+    {
+      "name": "gcdSlice",
+      "full_definition": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ :=\n  ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n    ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n      if v.gcd w = D then\n        tailGamma d v * star (tailGamma d w) * characterKernel d p v w R\n      else 0",
+      "sha256": "a35adc5d75eaf552db3a990249a15d13f8bbdd4541b149804b7eb01b3b84fec0"
+    },
+    {
+      "name": "largeDivisors",
+      "full_definition": "private def largeDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (tailCap d))).filter (fun D ↦ Y < (D : ℝ))",
+      "sha256": "c199f29186a58c6d43fc38ff99308e75ecf629f474718bc1ac65c31cd666b070"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorLargeResidualHighConductorZero",
+      "full_definition": "def MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if Y < ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0",
+      "sha256": "b15b488f461396e63a54f617366768a643d4e15ffc76a54b41555e8325341d20"
+    },
+    {
+      "name": "multipleWeight",
+      "full_definition": "private def multipleWeight (D n : ℕ) : ℝ := if D ∣ n then tau n / (n : ℝ) else 0",
+      "sha256": "cacec833cdce7970eb8f46a146b0959a7c0d8bc8994f8548ccdb2aa3924c4508"
+    }
+  ],
+  "owner": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\20261018-large-residual-zero-full-source-owner-scope.json",
+    "sha256": "e3278efe341339facf92f3e68ed996be5a2d8df5ddf6ca4300113ce54611c9bb"
+  },
+  "original_proposal": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\20261018-large-residual-zero-readonly-mathematical-api-proposal.json",
+    "sha256": "bf698c7a82a8c1b2620e239f3b7ec9982ee88bdcc5d696f10edf7f177b1082e2"
+  },
+  "parent": {
+    "module": "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+    "source_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+    "strict_cache_current_source_binding_exact": true,
+    "owned_receipt": ".lake/proof-continuation/audits/20261018T032246754165Z/receipt.json",
+    "owned_receipt_sha256": "867f75fc7b6e85c3f59a925ba5c408fc3803cc5691fa61e22c5d66e4ab7b92b7",
+    "owned_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "serialized_declarations": 35,
+    "actual_parent_API_read": "Actual q1Slice factor-covariance/characters and weighted-characters public types and bodies, source lines281-440, plus earlier auxiliaryCharacterSum primitive. Existing shared outside API and primitive carrier definition also read."
+  },
+  "proper_project_DAG": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-large-residual-zero-b7cf-independent-proper-project-dag.json",
+    "sha256": "1980f7d79aaf87fe02ecce77ca31d96103e8566840e15298f5dd7d32ce806229",
+    "parent_project_modules": 56,
+    "with_self_project_modules": 57,
+    "foreign_header_roots": 62,
+    "new_foreign_delta": 0
+  },
+  "actual_native_API": {
+    "mathlib/Mathlib/NumberTheory/DirichletCharacter/Orthogonality.lean": {
+      "sha256": "8c28bee61c275be882f91a7d90b8745fd8945186718df7d844b9acdb9fd9341b",
+      "actual_selected_API_ranges": [
+        [
+          23,
+          84
+        ]
+      ],
+      "current_bytes_equal_pinned_git_blob_checked_this_review": true
+    },
+    "mathlib/Mathlib/Data/Nat/ModEq.lean": {
+      "sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+      "actual_selected_API_ranges": [
+        [
+          591,
+          594
+        ]
+      ],
+      "current_bytes_equal_pinned_git_blob_checked_this_review": true
+    },
+    "mathlib/Mathlib/NumberTheory/Divisors.lean": {
+      "sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+      "actual_selected_API_ranges": [
+        [
+          124,
+          126
+        ],
+        [
+          365,
+          369
+        ]
+      ],
+      "current_bytes_equal_pinned_git_blob_checked_this_review": true
+    },
+    "goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDivisorMean.lean": {
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "actual_selected_API_ranges": [
+        [
+          37,
+          41
+        ],
+        [
+          245,
+          275
+        ]
+      ],
+      "current_bytes_equal_pinned_git_blob_checked_this_review": true
+    }
+  },
+  "mathematical_review": [
+    {
+      "range": [
+        28,
+        105
+      ],
+      "finding": "Complete complex character orthogonality is local and exact, with full n,m unit conditions at positive delta. Enough-roots/NeZero instances are constructed as in owned parent; Parseval expands star twice correctly. No principal-character or nonunit contribution is silently discarded."
+    },
+    {
+      "range": [
+        107,
+        230
+      ],
+      "finding": "Progression cardinal uses actual support subset Ioc0H and quotient n/delta injection; equal quotient+ModEq forces n=m via actual Nat.ext_div_modEq. It gives H/delta+1, not a supplied class bound. Full unit-pair mass <=H*(H/delta+1). Original alpha carrier is only extended upward to floor2U, auxiliary k mask stays INSIDE the transformed coefficient and pointwise bound follows from actual hd."
+    },
+    {
+      "range": [
+        232,
+        278
+      ],
+      "finding": "Arbitrary same character subset C used in both factors is bounded by termwise 2ab<=a^2+b^2. Only NONNEGATIVE square sums are enlarged from C to all characters before exact Parseval, giving cross/phi <=2U*(2U/delta+1). It does NOT infer monotonicity of the norm of a signed character subsum. No SW, LS or class-mass supplier."
+    },
+    {
+      "range": [
+        280,
+        481
+      ],
+      "finding": "The exact original two-factor product coefficient G(v) is a COMPLEX fiberwise sum, with exact star/pair grouping before every norm. Actual positive ordered tail fibers inject into divisor-antidiagonal, so norm G(v)<=tau_2(v). No unit bound for collected coefficient, no squarefree/distinct-factor assumption. Extending product image to full finite prefix is exact by zero off-image coefficients. The complex pair sum is exactly disintegrated by positive gcd D before taking norms."
+    },
+    {
+      "range": [
+        483,
+        587
+      ],
+      "finding": "Public object is LITERAL original parent character sum restricted ONLY by residual gcd(v,w)>Y and high conductor R<cond chi inside univ.erase1. It keeps real arbitrary R, original alpha interval/function, quotient auxiliary v/D,w/D, full physical delta=pD, physical lcm p*lcm(v,w), local cutoffMass, original gamma2/gamma3 complex signs and stars. No p coprime D or factorization phi(pD) is assumed. Exact actual_eq_gcd_slices follows the double complex grouping and gcd decomposition before norms."
+    },
+    {
+      "range": [
+        589,
+        767
+      ],
+      "finding": "At fixed p,v,w the actual cross/phi bound and gcd*lcm=v*w yield V*abs(mass)*(4U^2/(p^2*v*w)+2U*gcd(v,w)/(p*v*w)). After nonnegative termwise norm bounds, gcd(v,w)=D is relaxed only to D|v,w. Exact multiples reindex n=Dk is used in a finite REAL harmonic sum; tau(Dk)<=tau(D)tau(k) retains tau(D)/D. This is a valid proof alternative to proposal full complex D,k,l reindex; no identity for a larger signed carrier is asserted."
+    },
+    {
+      "range": [
+        769,
+        854
+      ],
+      "finding": "Order2 square-harmonic mean gives log^4T; positive finite tail D>Y>=1 retains 1/D^2<=1/(Y*D) BEFORE nonnegative interval enlargement, so genuine inverse Y remains. Fixed p sum costs log^8T*[4U^2/(p^2Y)+2U/p]. No X^epsilon loss or infinite-tail integrability assumption."
+    },
+    {
+      "range": [
+        856,
+        946
+      ],
+      "finding": "Actual full primitive first-factor carrier cardinal<=2Q1 and p>=Q1 imply sum1/p^2<=2/Q1 and sum1/p<=2, without primality or coprimality(p,D). Thus actual complex total raw norm <=abs(mass)*V*log^8T*(8U^2/(Q1Y)+4U). The required 1/Q1 and 1/Y are intact."
+    },
+    {
+      "range": [
+        950,
+        1019
+      ],
+      "finding": "First public theorem chooses universal C=8*(1+abs(local cutoffMass)) BEFORE B,sigma,kappa,c0,d,Y,R and all coefficient functions/moving residue. Second chooses4C at same universal scope and uses OWNED actual sharedFirstFactor_outside_le for literal betaL2*primitive gamma1L2, yielding scale^2*logBeta^(((2^B)^2)-1)*logTail^8*(1/Y+Q1/U). No outside budget premise, no narrowed geometry/fixed residue, no replacement of original beta or gamma1."
+    }
+  ],
+  "public_endpoint_alignment": {
+    "same_public_object_as_proposal": true,
+    "raw_bound_and_universal_constant_scope_match_proposal": true,
+    "finite_outside_endpoint_adds_derived_actual_weighted_bound_not_an_assumption": true,
+    "extra_analytic_premises": [],
+    "high_conductor_filter_kept_to_avoid_overlap_with_low_all_D": true,
+    "residual_D_not_paired_alpha_gcd": true
+  },
+  "scope_limits": [
+    "This is full source/API/mathematical review for ONE specific b7cf source, not proof that its Lean scripts already elaborate or pass strict warning lint.",
+    "No Lean/lake/compiler/checker or serialized environment/axiom replay executed. Runtime must perform fresh source/cache checks and the specifically authorized full strict/owned gates.",
+    "Only the single owned parent is imported, and the proper relative source-header walk adds one self and zero external headers. Native API snapshots were compared to fixed goldbach09b97/mathlibe4c917 source blobs via Linuxgitshow, not a full external closure replay.",
+    "No full same-policy low/high and residual-D partition is claimed here. The object must not be added to an all-conductor large-D object with overlapping regions.",
+    "This proves a finite bound only if compiled/accepted. Eventual arbitrary-log payment at Y=X^(sigma/4), small-D high-conductor aggregation, remaining nonzero-frequency energy and final 1+1.75 still need work."
+  ],
+  "no_Lean_source_cache_pins_CI_owned_objects_modified": true,
+  "only_new_independent_report_and_DAG_written": true,
+  "compiler_or_checker_executed": false
+}

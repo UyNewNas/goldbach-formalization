@@ -1,0 +1,98 @@
+{
+  "status": "CURRENT6520_SOURCE_METADATA_PROJECTION_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T17:11:15.146821+00:00",
+  "historical_author_cp": ".lake\\proof-continuation\\source-reviews\\20261021-current-chen-seventh-large-prime-switch-one-source-candidate.json",
+  "historical_author_cp_sha256": "6ce1394e1d6764216883033dd5d50da70c5121ddaa0f62432f82cbeb6bfc7f26",
+  "historical_source_sha256": "edb5cdb4f50cbed9014dba0a829a2eb4a95615c307cc270d4403d4cb613c09d4",
+  "current_root_application_cp": ".lake\\proof-continuation\\source-reviews\\20261022-chen7switch6520-root-sum-sigma-source-only-applied-HOLD.json",
+  "current_root_application_cp_sha256": "76fa75d9c40814a5f395d9de1f7e998d05c4cff60d9529b02ff622d0213c282c",
+  "source": {
+    "path": "ImbalancedChen/CurrentChenUpsilon7LargePrimeSwitch.lean",
+    "sha256": "652017e95d6da0d5dbc38e62b715e71d44414d9cb85cde94d5bf4efaca0b7001",
+    "utf8_bytes": 8852
+  },
+  "imports": [
+    "ImbalancedChen.CurrentChenUpsilon7SourceErrorBudget"
+  ],
+  "all_authored_declarations": [
+    {
+      "name": "currentChenUpsilon7LargePrimeSemiprimeAPSource",
+      "visibility": "public",
+      "complete_source_header": "def currentChenUpsilon7LargePrimeSemiprimeAPSource (N : ℕ)\n    (x : Σ _ : ℕ × ℕ, ℕ) : Finset ℕ",
+      "complete_declaration_source": "def currentChenUpsilon7LargePrimeSemiprimeAPSource (N : ℕ)\n    (x : Σ _ : ℕ × ℕ, ℕ) : Finset ℕ :=\n  (chenAdditivePrimeCarrier N).filter fun P =>\n    (x.1.1 * x.1.2 * x.2) ∣ N - P ∧\n      Nat.Prime ((N - P) / (x.1.1 * x.1.2 * x.2)) ∧\n      x.2 ≤ (N - P) / (x.1.1 * x.1.2 * x.2) ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) < (P : ℝ)\n\n/-- The actual finite switched count, retaining every original outer\nlabel.  This is a count, not an asymptotic density or a supplied mean. -/"
+    },
+    {
+      "name": "currentChenUpsilon7LargePrimeSemiprimeAPSum",
+      "visibility": "public",
+      "complete_source_header": "def currentChenUpsilon7LargePrimeSemiprimeAPSum (N : ℕ) : ℝ",
+      "complete_declaration_source": "def currentChenUpsilon7LargePrimeSemiprimeAPSum (N : ℕ) : ℝ :=\n  ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n    ∑ r ∈ (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r),\n      ((currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩).card : ℝ)"
+    },
+    {
+      "name": "seventh_switch_forward",
+      "visibility": "private",
+      "complete_source_header": "private theorem seventh_switch_forward {N p₁ p₂ r s : ℕ}\n    (hx : (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n      currentChenUpsilon7SemiprimeQuadruples N)\n    (hlarge : (N : ℝ) ^ (1 / 5 : ℝ) <\n      ((N - p₁ * p₂ * (r * s) : ℕ) : ℝ)) :\n    (p₁, p₂) ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)) ∧\n      r ∈ (chenAdditivePrimeCarrier N).filter (fun r => p₂ ≤ r) ∧\n      N - p₁ * p₂ * (r * s) ∈\n        currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨(p₁, p₂), r⟩",
+      "complete_declaration_source": "private theorem seventh_switch_forward {N p₁ p₂ r s : ℕ}\n    (hx : (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n      currentChenUpsilon7SemiprimeQuadruples N)\n    (hlarge : (N : ℝ) ^ (1 / 5 : ℝ) <\n      ((N - p₁ * p₂ * (r * s) : ℕ) : ℝ)) :\n    (p₁, p₂) ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)) ∧\n      r ∈ (chenAdditivePrimeCarrier N).filter (fun r => p₂ ≤ r) ∧\n      N - p₁ * p₂ * (r * s) ∈\n        currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨(p₁, p₂), r⟩ := by\n  have houter := (Finset.mem_sigma.mp hx).1\n  have hrc := (Finset.mem_product.mp\n    (Finset.mem_filter.mp (Finset.mem_sigma.mp hx).2).1).1\n  obtain ⟨h₁, h₂, _hD, _ho, _hc, hr, hs, hcut, hrs, hlt, hP⟩ :=\n    mem_currentChenUpsilon7SemiprimeQuadruples_iff.mp hx\n  have ha : 0 < p₁ * p₂ * r := mul_pos\n    (mul_pos (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos) hr.pos\n  have hreceiver : N - (N - p₁ * p₂ * (r * s)) = (p₁ * p₂ * r) * s := by\n    rw [Nat.sub_sub_self hlt.le]\n    ac_rfl\n  have hquot : (N - (N - p₁ * p₂ * (r * s))) / (p₁ * p₂ * r) = s := by\n    rw [hreceiver]\n    exact Nat.mul_div_cancel_left s ha\n  refine ⟨houter, Finset.mem_filter.mpr ⟨hrc, hcut⟩, ?_⟩\n  apply Finset.mem_filter.mpr\n  refine ⟨hP, ?_, ?_, ?_, hlarge⟩\n  · rw [hreceiver]\n    exact dvd_mul_right _ _\n  · simpa only [hquot] using hs\n  · simpa only [hquot] using hrs"
+    },
+    {
+      "name": "seventh_switch_backward",
+      "visibility": "private",
+      "complete_source_header": "private theorem seventh_switch_backward {N : ℕ} {t : ℕ × ℕ} {r P : ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)))\n    (hr : r ∈ (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r))\n    (hP : P ∈ currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩) :\n    (⟨t, (r, (N - P) / (t.1 * t.2 * r))⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ∧\n      N - t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) = P ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) < (P : ℝ)",
+      "complete_declaration_source": "private theorem seventh_switch_backward {N : ℕ} {t : ℕ × ℕ} {r P : ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)))\n    (hr : r ∈ (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r))\n    (hP : P ∈ currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩) :\n    (⟨t, (r, (N - P) / (t.1 * t.2 * r))⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ∧\n      N - t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) = P ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) < (P : ℝ) := by\n  obtain ⟨hc, hD, ho, hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨h₁, h₂⟩ := Finset.mem_product.mp hc\n  obtain ⟨hrc, hcut⟩ := Finset.mem_filter.mp hr\n  obtain ⟨hPc, hd, hs, hrs, hlarge⟩ := Finset.mem_filter.mp hP\n  have hPN := (mem_chenAdditivePrimeCarrier.mp hPc).1\n  have hPpos := (mem_chenAdditivePrimeCarrier.mp hPc).2.1.pos\n  have hmul : t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) = N - P := by\n    simpa only [← Nat.mul_assoc] using Nat.mul_div_cancel' hd\n  have hlt : t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) < N := by\n    omega\n  have hrecover : N - t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) = P := by\n    omega\n  refine ⟨mem_currentChenUpsilon7SemiprimeQuadruples_iff.mpr ?_, hrecover, hlarge⟩\n  exact ⟨h₁, h₂, hD, ho, hcap, (mem_chenAdditivePrimeCarrier.mp hrc).2.1,\n    hs, hcut, hrs, hlt, by simpa only [hrecover] using hPc⟩\n\n/-- Exact switching of the complete large-original-prime semiprime\nbranch.  There is no omission of equal prime factors or outer labels. -/"
+    },
+    {
+      "name": "currentChenUpsilon7_largePrime_semiprime_card_eq_APSum",
+      "visibility": "public",
+      "complete_source_header": "theorem currentChenUpsilon7_largePrime_semiprime_card_eq_APSum (N : ℕ) :\n    (((currentChenUpsilon7SemiprimeQuadruples N).filter (fun x =>\n      (N : ℝ) ^ (1 / 5 : ℝ) <\n        ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ))).card : ℝ) =\n      currentChenUpsilon7LargePrimeSemiprimeAPSum N",
+      "complete_declaration_source": "theorem currentChenUpsilon7_largePrime_semiprime_card_eq_APSum (N : ℕ) :\n    (((currentChenUpsilon7SemiprimeQuadruples N).filter (fun x =>\n      (N : ℝ) ^ (1 / 5 : ℝ) <\n        ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ))).card : ℝ) =\n      currentChenUpsilon7LargePrimeSemiprimeAPSum N := by\n  let T : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n    (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n      (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r)\n  have hcard : ((currentChenUpsilon7SemiprimeQuadruples N).filter (fun x =>\n      (N : ℝ) ^ (1 / 5 : ℝ) <\n        ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ))).card =\n      (T.sigma (currentChenUpsilon7LargePrimeSemiprimeAPSource N)).card := by\n    refine Finset.card_bij'\n      (fun x _ => ⟨⟨x.1, x.2.1⟩, N - x.1.1 * x.1.2 * (x.2.1 * x.2.2)⟩)\n      (fun y _ => ⟨y.1.1, (y.1.2, (N - y.2) /\n        (y.1.1.1 * y.1.1.2 * y.1.2))⟩) ?_ ?_ ?_ ?_\n    · rintro ⟨⟨p₁, p₂⟩, ⟨r, s⟩⟩ hx\n      obtain ⟨hx, hlarge⟩ := Finset.mem_filter.mp hx\n      obtain ⟨ht, hr, hP⟩ := seventh_switch_forward hx hlarge\n      exact Finset.mem_sigma.mpr ⟨Finset.mem_sigma.mpr ⟨ht, hr⟩, hP⟩\n    · rintro ⟨⟨t, r⟩, P⟩ hy\n      obtain ⟨htr, hP⟩ := Finset.mem_sigma.mp hy\n      obtain ⟨ht, hr⟩ := Finset.mem_sigma.mp htr\n      obtain ⟨hx, heq, hlarge⟩ := seventh_switch_backward ht hr hP\n      exact Finset.mem_filter.mpr ⟨hx, by simpa only [heq] using hlarge⟩\n    · rintro ⟨⟨p₁, p₂⟩, ⟨r, s⟩⟩ hx\n      obtain ⟨hx, _⟩ := Finset.mem_filter.mp hx\n      obtain ⟨h₁, h₂, _hD, _ho, _hc, hr, _hs, _hcut, _hrs, hlt, _hP⟩ :=\n        mem_currentChenUpsilon7SemiprimeQuadruples_iff.mp hx\n      have ha : 0 < p₁ * p₂ * r := mul_pos\n        (mul_pos (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n          (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos) hr.pos\n      have heq : (N - (N - p₁ * p₂ * (r * s))) / (p₁ * p₂ * r) = s := by\n        rw [Nat.sub_sub_self hlt.le]\n        simpa only [← Nat.mul_assoc] using Nat.mul_div_cancel_left s ha\n      simp only [heq]\n    · rintro ⟨⟨t, r⟩, P⟩ hy\n      obtain ⟨htr, hP⟩ := Finset.mem_sigma.mp hy\n      obtain ⟨ht, hr⟩ := Finset.mem_sigma.mp htr\n      have heq := (seventh_switch_backward ht hr hP).2.1\n      simp only [heq]\n  have hreal := congrArg (fun n : ℕ => (n : ℝ)) hcard\n  simpa only [T, Finset.card_sigma, Nat.cast_sum, Finset.sum_sigma,\n    currentChenUpsilon7LargePrimeSemiprimeAPSum] using hreal\n\n/-- The accepted error budget leaves exactly the two large-original-prime\ncounts, with the original coefficient two.  The switched AP sum still\nrequires a genuine analytic upper mean. -/"
+    },
+    {
+      "name": "eventually_two_currentChenUpsilon7_le_largePrime_counts",
+      "visibility": "public",
+      "complete_source_header": "theorem eventually_two_currentChenUpsilon7_le_largePrime_counts\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∀ᶠ N : ℕ in atTop,\n      2 * currentChenUpsilon7 N ≤\n        2 * ((((currentChenUpsilon7PrimeTriples N).filter (fun x =>\n          (N : ℝ) ^ (1 / 5 : ℝ) <\n            ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ))).card : ℝ) +\n          currentChenUpsilon7LargePrimeSemiprimeAPSum N) +\n          epsilon * singularNormalization N",
+      "complete_declaration_source": "theorem eventually_two_currentChenUpsilon7_le_largePrime_counts\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∀ᶠ N : ℕ in atTop,\n      2 * currentChenUpsilon7 N ≤\n        2 * ((((currentChenUpsilon7PrimeTriples N).filter (fun x =>\n          (N : ℝ) ^ (1 / 5 : ℝ) <\n            ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ))).card : ℝ) +\n          currentChenUpsilon7LargePrimeSemiprimeAPSum N) +\n          epsilon * singularNormalization N := by\n  filter_upwards [eventually_currentChenUpsilon7_unit_smallGoldbach_error_le\n    epsilon hepsilon] with N herr\n  have hp := Finset.card_filter_add_card_filter_not\n    (s := currentChenUpsilon7PrimeTriples N) (fun x =>\n      ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ) ≤ (N : ℝ) ^ (1 / 5 : ℝ))\n  have hs := Finset.card_filter_add_card_filter_not\n    (s := currentChenUpsilon7SemiprimeQuadruples N) (fun x =>\n      ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ) ≤\n        (N : ℝ) ^ (1 / 5 : ℝ))\n  have hpR := congrArg (fun n : ℕ => (n : ℝ)) hp\n  have hsR := congrArg (fun n : ℕ => (n : ℝ)) hs\n  simp only [not_le, Nat.cast_add] at hpR hsR\n  rw [currentChenUpsilon7_largePrime_semiprime_card_eq_APSum] at hsR\n  rw [currentChenUpsilon7_eq_primeTriples_add_semiprimeQuadruples_add_unitFibres]\n  linarith only [hpR, hsR, herr]"
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon7SourceErrorBudget.lean",
+      "sha256": "1ff66f9ba19d01208dc48749b2c0507f29f86dd752460769b7c4f3548133938d"
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon7PrimeSemiprimeSource.lean",
+      "sha256": "8a292edb6fa1c27a537595fbd3c905a59a36487756eab479e454d4a29b7019bd"
+    },
+    {
+      "path": "ImbalancedChen/ChenQuotientPrimeSource.lean",
+      "sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c"
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenMeanLedger.lean",
+      "sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-chen-lower-reuse-scope.json",
+      "sha256": "90dbe4089745386cd4bbbf11a38a0280079da1bcbecb687b04a879285d2d65d4"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261021-four-upstream-HEAD-bounded-incremental-external-reuse-review.json",
+      "sha256": "6aaa7e3b66e8711a98e5cb4259d82ccc79d8146b5b85ee3d3165909386632b71"
+    },
+    {
+      "path": ".lake\\proof-continuation\\source-reviews\\20261022-chen7switch6520-root-sum-sigma-source-only-applied-HOLD.json",
+      "sha256": "76fa75d9c40814a5f395d9de1f7e998d05c4cff60d9529b02ff622d0213c282c"
+    },
+    {
+      "path": ".lake\\proof-continuation\\rounds\\20261022-chen7switch-edb5-original-before-root-sum-sigma-repair.lean.txt",
+      "sha256": "edb5cdb4f50cbed9014dba0a829a2eb4a95615c307cc270d4403d4cb613c09d4"
+    }
+  ],
+  "all_six_header_types_and_imports_unchanged": true,
+  "one_proof_line_repair_only": true,
+  "new_source_compiled": false,
+  "new_actual_generated_declarations": null,
+  "AP_main_mean": "OPEN"
+}

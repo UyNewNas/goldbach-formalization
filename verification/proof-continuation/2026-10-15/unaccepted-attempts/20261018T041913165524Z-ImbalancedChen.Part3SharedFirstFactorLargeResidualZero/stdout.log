@@ -1,0 +1,255 @@
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:91:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?m.75, ∑ y ∈ ?m.76, ?m.77 x y
+in the target expression
+  ∑ x, (∑ n ∈ N, a n * star (x ↑n)) * star (a n * star (x ↑n)) =
+    ∑ i ∈ N, ↑delta.totient * if n.Coprime delta ∧ i.Coprime delta ∧ n ≡ i [MOD delta] then a n * star (a i) else 0
+
+N : Finset ℕ
+a : ℕ → ℂ
+delta : ℕ
+hdelta : 0 < delta
+n : ℕ
+a✝ : n ∈ N
+⊢ ∑ x, (∑ n ∈ N, a n * star (x ↑n)) * star (a n * star (x ↑n)) =
+    ∑ i ∈ N, ↑delta.totient * if n.Coprime delta ∧ i.Coprime delta ∧ n ≡ i [MOD delta] then a n * star (a i) else 0
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:87:23: error: This simp argument is unused:
+  Finset.sum_mul_sum
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [star_sum, Finset.mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:179:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  |?m.262|
+in the target expression
+  ∑ chi, ‖characterTransform N a delta chi‖ ^ 2 = ‖∑ chi, ‖characterTransform N a delta chi‖ ^ 2‖
+
+N : Finset ℕ
+a : ℕ → ℂ
+H delta : ℕ
+hdelta : 0 < delta
+hN : N ⊆ Ioc 0 H
+ha : ∀ n ∈ N, ‖a n‖ ≤ 1
+hcast :
+  ↑(∑ chi, ‖characterTransform N a delta chi‖ ^ 2) =
+    ∑ chi, characterTransform N a delta chi * star (characterTransform N a delta chi)
+⊢ ∑ chi, ‖characterTransform N a delta chi‖ ^ 2 = ‖∑ chi, ‖characterTransform N a delta chi‖ ^ 2‖
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:193:81: error: unsolved goals
+case pos
+N : Finset ℕ
+a : ℕ → ℂ
+k delta : ℕ
+chi : DirichletCharacter ℂ delta
+n : ℕ
+a✝ : n ∈ N
+h✝ : n.Coprime k
+⊢ ¬n.gcd k = 1 → a n = 0 ∨ chi ↑n = 0
+
+case neg
+N : Finset ℕ
+a : ℕ → ℂ
+k delta : ℕ
+chi : DirichletCharacter ℂ delta
+n : ℕ
+a✝ : n ∈ N
+h✝ : ¬n.Coprime k
+⊢ n.Coprime k → a n = 0 ∨ chi ↑n = 0
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:271:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (∑ i ∈ ?s, ?f i) / ?a
+in the target expression
+  ∑ chi ∈ C,
+      (‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2 +
+          ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2) /
+        2 =
+    (∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2 +
+        ∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2) /
+      2
+
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+k l delta : ℕ
+hdelta : 0 < delta
+C : Finset (DirichletCharacter ℂ delta)
+E : ℝ := ↑delta.totient * (2 * d.U * (2 * d.U / ↑delta + 1))
+hsq : ∀ (j : ℕ), ∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha j delta chi‖ ^ 2 ≤ E
+⊢ ∑ chi ∈ C,
+      (‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2 +
+          ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2) /
+        2 =
+    (∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2 +
+        ∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2) /
+      2
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:586:8: error: unsolved goals
+case pos
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+Y R : ℝ
+p : ℕ
+a✝³ : p ∈ d.primitiveFirstFactorCarrier
+D : ℕ
+a✝² : D ∈ Ioc 0 ⌊tailCap d⌋₊
+hY : ¬Y < ↑D
+v : ℕ
+a✝¹ : v ∈ Ioc 0 ⌊tailCap d⌋₊
+w : ℕ
+a✝ : w ∈ Ioc 0 ⌊tailCap d⌋₊
+hD : v.gcd w = D
+⊢ (if True then 0 else 0) = 0
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:578:21: error: This simp argument is unused:
+  if_pos hD
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hD, if_pos hY]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:586:21: error: This simp argument is unused:
+  if_pos hD
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hD, if_neg hY, mul_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:615:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  |?a * ?b|
+in the target expression
+  ‖d.V * CommonSmoothCutoff.cutoffMass‖ / ‖↑(p * v.lcm w)‖ = d.V * |CommonSmoothCutoff.cutoffMass| / (↑p * ↑(v.lcm w))
+
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+p v w : ℕ
+hp : 0 < p
+hv : 0 < v
+hw : 0 < w
+R : ℝ
+hD : 0 < v.gcd w
+hL : 0 < v.lcm w
+hpR : 0 < ↑p
+hvR : 0 < ↑v
+hwR : 0 < ↑w
+hDR : 0 < ↑(v.gcd w)
+hLR : 0 < ↑(v.lcm w)
+hprod : ↑(v.gcd w) * ↑(v.lcm w) = ↑v * ↑w
+he : ↑(v.lcm w) = ↑v * ↑w / ↑(v.gcd w)
+⊢ ‖d.V * CommonSmoothCutoff.cutoffMass‖ / ‖↑(p * v.lcm w)‖ = d.V * |CommonSmoothCutoff.cutoffMass| / (↑p * ↑(v.lcm w))
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:620:33: error: failed to prove positivity/nonnegativity/nonzeroness
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:687:44: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:714:51: error: failed to prove positivity/nonnegativity/nonzeroness
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:772:2: error: Type mismatch: After simplification, term
+  sum_fouvryTau_sq_div_le_real 2 hT
+ has type
+  @LE.le ℝ Real.instLE (∑ x ∈ Ioc 0 ⌊T⌋₊, ↑(#x.divisors) ^ 2 / ↑x) ((1 + Real.log T) ^ 2 ^ 2)
+but is expected to have type
+  @LE.le ℝ Real.instLE (∑ D ∈ Ioc 0 ⌊T⌋₊, ↑(#D.divisors) ^ 2 / ↑D) ((1 + Real.log T) ^ 4)
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:778:11: error: Application type mismatch: The argument
+  Ioc 0 ⌊T⌋₊
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℝ
+in the application
+  {D ∈ Ioc 0 ⌊T⌋₊ | Y < D}
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:779:10: error: Application type mismatch: The argument
+  D
+has type
+  ℝ
+but is expected to have type
+  ℕ
+in the application
+  tau D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:782:14: error: Application type mismatch: The argument
+  Ioc 0 ⌊T⌋₊
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℝ
+in the application
+  {D ∈ Ioc 0 ⌊T⌋₊ | Y < D}
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:783:13: error: Application type mismatch: The argument
+  D
+has type
+  ℝ
+but is expected to have type
+  ℕ
+in the application
+  tau D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:795:15: error: Application type mismatch: The argument
+  Ioc 0 ⌊T⌋₊
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℝ
+in the application
+  {D ∈ Ioc 0 ⌊T⌋₊ | Y < D}
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:796:12: error: Application type mismatch: The argument
+  D
+has type
+  ℝ
+but is expected to have type
+  ℕ
+in the application
+  tau D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:789:17: error: Application type mismatch: The argument
+  D
+has type
+  ℝ
+but is expected to have type
+  ℕ
+in the application
+  tau D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:791:17: error: Application type mismatch: The argument
+  D
+has type
+  ℝ
+but is expected to have type
+  ℕ
+in the application
+  tau D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:800:21: error: Type mismatch
+  div_nonneg ?m.452 ?m.458
+has type
+  @OfNat.ofNat ?m.439 0 (@Zero.toOfNat0 ?m.439 GroupWithZero.toMonoidWithZero.toMulZeroOneClass.toMulZeroClass.toZero) ≤
+    ?m.443 / ?m.444
+but is expected to have type
+  @OfNat.ofNat ?m.427 0 (@Zero.toOfNat0 ?m.427 AddCommMonoid.toAddMonoid.toAddZeroClass.toZero) ≤ ?m.430 D
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:808:48: error: Application type mismatch: The argument
+  filter_subset
+has type
+  ∀ (p : ?m.59 → Prop) [inst : DecidablePred p] (s : Finset ?m.59), filter p s ⊆ s
+but is expected to have type
+  largeDivisors d Y ⊆ ?m.57
+in the application
+  sum_le_sum_of_subset_of_nonneg filter_subset
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:812:16: error: declaration uses `sorry`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:903:47: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:946:36: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:975:45: error: linarith failed to find a contradiction
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+Y R : ℝ
+hY : 1 ≤ Y
+hU : 0 ≤ d.U
+hV : 0 ≤ d.V
+hQ : 0 < d.Q1
+hY0 : 0 < Y
+hL : 0 ≤ 1 + Real.log (4 * d.Q2 * d.Q3)
+ht : 0 ≤ d.U ^ 2 / (d.Q1 * Y)
+a✝ : 8 * (d.U ^ 2 / (d.Q1 * Y) + d.U) < 8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U
+⊢ False
+failed
+ImbalancedChen/Part3SharedFirstFactorLargeResidualZero.lean:1019:43: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`

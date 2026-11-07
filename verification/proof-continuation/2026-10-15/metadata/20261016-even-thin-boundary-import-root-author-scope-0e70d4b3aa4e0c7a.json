@@ -1,0 +1,3417 @@
+{
+  "status": "ROOT_AUTHOR_NEW_THIN_EVEN_IMPORT_AND_DEFINITIONAL_ALIAS_TYPE_SCOPE_PENDING_NONAUTHOR_RUNTIME",
+  "created_utc": "2026-10-15T23:37:50.429430+00:00",
+  "author": "/root",
+  "module": "ImbalancedChen.ActualRosserEvenBox",
+  "old_sha256": "55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52",
+  "new_sha256": "8fa0519aaf72041f2178911edd13ef7ae8f5d18cbb1d0bc2eaf1a2599f94e31d",
+  "old_snapshot": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\ActualRosserEvenBox.55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52.lean",
+  "full_current_source": "import ImbalancedChen.ActualSmallRosser\nimport ImbalancedChen.ActualPrimeBoxMass\nimport Mathlib.Algebra.BigOperators.Fin\nimport Mathlib.Data.List.FinRange\nimport Mathlib.Order.WellFounded\n\n/-!\n# Fixed even prime boxes in the actual lower Rosser boundary\n\nA decreasing tuple of length `2*k+2` is sent to its least prime and the\nfinset of the other `2*k+1` primes. Odd-index cubic tests and the terminal\ncrossing are proved at the literal natural level `ceil (N ^ beta)`.\nThe lowest rank is a genuine two-prime box with a singleton boundary tail;\nit has no internal cubic test. Tail cardinality separates different ranks.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped Classical BigOperators\nopen MathlibNt.SieveTheory\n\n/-- The primes preceding the terminal least coordinate. -/\ndef actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)\n\n/-- The actual terminal-prime/boundary-tail map. -/\ndef actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩\n\n/-- Distinct tuple labels preserve the exact tail rank. -/\ntheorem actualRosserEvenTail_card {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) : (actualRosserEvenTail p).card = 2 * k + 1 := by\n  rw [actualRosserEvenTail, Finset.card_image_of_injective]\n  · simp\n  · exact hp.comp (Fin.castSucc_injective (2 * k + 1))\n\n/-- Product weights on the actual tail have no multiplicities. -/\ntheorem actualRosserEvenTail_prod {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserEvenTail p, g r) = ∏ i : Fin (2 * k + 1), g (p i.castSucc) := by\n  rw [actualRosserEvenTail, Finset.prod_image]\n  exact fun _ _ _ _ h => Fin.castSucc_injective (2 * k + 1) (hp h)\n\ntheorem actualRosserEvenTail_range {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Set.range p = (↑(actualRosserEvenTail p) : Set ℕ) ∪ {p (Fin.last (2 * k + 1))} := by\n  ext r\n  constructor\n  · rintro ⟨i, rfl⟩\n    rcases Fin.eq_castSucc_or_eq_last i with ⟨j, rfl⟩ | rfl\n    · exact Or.inl (Finset.mem_image.mpr ⟨j, Finset.mem_univ _, rfl⟩)\n    · exact Or.inr rfl\n  · rintro (hr | hr)\n    · obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n      exact ⟨i.castSucc, rfl⟩\n    · exact ⟨Fin.last (2 * k + 1), hr.symm⟩\n\n/-- The map is injective on every collection of decreasing tuples of one\nfixed rank, including the singleton-tail rank. -/\ntheorem actualRosserEvenBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 2) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserEvenBoundaryMap (k := k)) (T : Set (Fin (2 * k + 2) → ℕ)) := by\n  intro p hp r hr heq\n  have hq : p (Fin.last (2 * k + 1)) = r (Fin.last (2 * k + 1)) := congrArg Sigma.fst heq\n  have hs : actualRosserEvenTail p = actualRosserEvenTail r :=\n    congrArg (fun z : Sigma (fun _ : ℕ => Finset ℕ) => z.2) heq\n  apply ((hT p hp).range_inj (hT r hr)).mp\n  rw [actualRosserEvenTail_range p, actualRosserEvenTail_range r, hs, hq]\n\n/-- Equal actual boundary tails from injective tuples force equal ranks.\nThis is the disjointness certificate needed before combining different layers. -/\ntheorem actualRosserEvenTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 2) → ℕ} {r : Fin (2 * l + 2) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserEvenTail p = actualRosserEvenTail r) : k = l := by\n  have hc := congrArg Finset.card heq\n  rw [actualRosserEvenTail_card hp, actualRosserEvenTail_card hr] at hc\n  omega\n\nprivate theorem even_box_upper_le {k : ℕ} {a b : Fin (2 * k + 2) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u := by\n  have hb : Antitone b := Fin.antitone_iff_succ_le.mpr\n    (fun i => (hsep i).trans (hab i.castSucc).le)\n  exact fun i => (hb (Fin.zero_le i)).trans hbu\n\n/-- All prefix tests and the terminal crossing are verified at the same\nliteral `ceil (N ^ beta)` used by the actual small Rosser coefficient.\nOnly finite geometric inequalities are assumed; no density estimate is used. -/\ntheorem actualRosserEvenBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 2) → ℝ) (u beta : ℝ)\n    (_hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k + 1), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k + 1), Odd i.val →\n      (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k + 1), a i.castSucc) +\n      3 * a (Fin.last (2 * k + 1)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserEvenTail p ∈\n        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter\n          (fun q => p (Fin.last (2 * k + 1)) < q)).powerset.filter\n            (LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n              (p (Fin.last (2 * k + 1))))) ∧\n      (actualRosserEvenTail p).card = 2 * k + 1 := by\n  have hNreal : (1 : ℝ) < N := by exact_mod_cast hN\n  have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal\n  have hm := mem_actualPrimeBoxTuples_iff.mp hp\n  have hanti := actualPrimeBoxTuples_strictAnti (by omega : 1 ≤ N) hsep hp\n  have hP (i : Fin (2 * k + 2)) :\n      p i ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) := by\n    rw [mem_actualSmallPrimeFinset_iff_of_cutoff_le_cap hcap]\n    exact ⟨(hm i).1, (hm i).2.1, (hm i).2.2.2.trans_le\n      (Real.rpow_le_rpow_of_exponent_le hNreal.le (even_box_upper_le hab hsep hbu i))⟩\n  have hpPos (i : Fin (2 * k + 2)) : (0 : ℝ) < p i := by\n    exact_mod_cast (hm i).1.pos\n  have hprodLE (S : Finset (Fin (2 * k + 1))) :\n      (∏ i ∈ S, (p i.castSucc : ℝ)) ≤\n        (N : ℝ) ^ (∑ i ∈ S, b i.castSucc) := by\n    rw [Real.rpow_sum_of_pos hNpos]\n    exact Finset.prod_le_prod (fun i _ => (hpPos _).le)\n      (fun i _ => (hm i.castSucc).2.2.2.le)\n  have htotalReal : (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) < (N : ℝ) ^ beta := by\n    calc\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) <\n          ∏ i : Fin (2 * k + 1), (N : ℝ) ^ b i.castSucc := by\n        exact Finset.prod_lt_prod_of_nonempty (fun i _ => hpPos _)\n          (fun i _ => (hm i.castSucc).2.2.2)\n          ⟨⟨0, by omega⟩, Finset.mem_univ _⟩\n      _ = (N : ℝ) ^ (∑ i : Fin (2 * k + 1), b i.castSucc) :=\n        (Real.rpow_sum_of_pos hNpos _ _).symm\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le hprod\n  have hprefixReal (i : Fin (2 * k + 1)) (hi : Odd i.val) :\n      (∏ j : Fin (2 * k + 1) with j.val < i.val, (p j.castSucc : ℝ)) *\n          (p i.castSucc : ℝ) ^ 3 < (N : ℝ) ^ beta := by\n    have hcube : (p i.castSucc : ℝ) ^ 3 < ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n      pow_lt_pow_left₀ (hm i.castSucc).2.2.2 (hpPos _).le (by decide)\n    calc\n      _ ≤ ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          (p i.castSucc : ℝ) ^ 3 :=\n        mul_le_mul_of_nonneg_right (hprodLE _) (by positivity)\n      _ < ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n        mul_lt_mul_of_pos_left hcube (Real.rpow_pos_of_pos hNpos _)\n      _ = (N : ℝ) ^ ((∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) +\n          3 * b i.castSucc) := by\n        rw [Real.rpow_add hNpos, show 3 * b i.castSucc = b i.castSucc * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le (hprefix i hi)\n  have hshellReal : (N : ℝ) ^ beta ≤\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) * (p (Fin.last (2 * k + 1)) : ℝ) ^ 3 := by\n    calc\n      (N : ℝ) ^ beta ≤ (N : ℝ) ^ ((∑ i : Fin (2 * k + 1), a i.castSucc) +\n          3 * a (Fin.last (2 * k + 1))) :=\n        Real.rpow_le_rpow_of_exponent_le hNreal.le hshell\n      _ = (∏ i : Fin (2 * k + 1), (N : ℝ) ^ a i.castSucc) *\n          ((N : ℝ) ^ a (Fin.last (2 * k + 1))) ^ 3 := by\n        rw [Real.rpow_add hNpos, Real.rpow_sum_of_pos hNpos,\n          show 3 * a (Fin.last (2 * k + 1)) = a (Fin.last (2 * k + 1)) * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ _ := mul_le_mul\n        (Finset.prod_le_prod (fun _ _ => (Real.rpow_pos_of_pos hNpos _).le)\n          (fun i _ => (hm i.castSucc).2.2.1))\n        (pow_le_pow_left₀ (Real.rpow_nonneg hNpos.le _)\n          (hm (Fin.last (2 * k + 1))).2.2.1 3) (by positivity) (by positivity)\n  let l := List.ofFn (fun i : Fin (2 * k + 1) => p i.castSucc)\n  have hlinj : Function.Injective (fun i : Fin (2 * k + 1) => p i.castSucc) :=\n    hanti.injective.comp (Fin.castSucc_injective (2 * k + 1))\n  have hlsorted : l.SortedGT := by\n    apply List.sortedGT_iff_pairwise.mpr\n    exact List.pairwise_ofFn.mpr (fun _ _ hij => hanti (Fin.castSucc_lt_castSucc_iff.mpr hij))\n  have hlfinset : l.toFinset = actualRosserEvenTail p := by\n    ext r\n    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserEvenTail,\n      Finset.mem_image, Finset.mem_univ, true_and]\n  have hsort : (actualRosserEvenTail p).sort (· ≥ ·) = l := by\n    rw [← hlfinset]\n    exact (List.toFinset_sort (r := (· ≥ ·)) (List.nodup_ofFn.mpr hlinj)).mpr\n      hlsorted.sortedGE.pairwise\n  have hchain : LinearSieve.LowerRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) l := by\n    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n    · simp [l]\n    · apply Nat.lt_ceil.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod] using htotalReal\n    · intro i hi\n      have hil : i.val < 2 * k + 1 := by simpa [l] using i.isLt\n      apply Nat.lt_ceil.mpr\n      simp only [l, List.prod_take_ofFn, List.get_ofFn,\n        Nat.cast_mul, Nat.cast_pow, Nat.cast_prod]\n      convert hprefixReal ⟨i.val, hil⟩ (Nat.odd_iff.mpr (Nat.not_even_iff.mp hi)) using 1\n      all_goals rfl\n    · apply Nat.ceil_le.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal\n  have hqnot : p (Fin.last (2 * k + 1)) ∉ actualRosserEvenTail p := by\n    intro hq\n    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hq\n    exact (Fin.castSucc_ne_last i) (hanti.injective hi)\n  have hqmin : ∀ r ∈ actualRosserEvenTail p, p (Fin.last (2 * k + 1)) ≤ r := by\n    intro r hr\n    obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n    exact (hanti i.castSucc_lt_last).le\n  have hboundary : LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) (actualRosserEvenTail p) := by\n    apply (LinearSieve.lowerRosserBoundarySet_iff_sorted_chain hqnot\n      (hm (Fin.last (2 * k + 1))).1 hqmin).mpr\n    rwa [hsort]\n  refine ⟨hP _, Finset.mem_filter.mpr ⟨Finset.mem_powerset.mpr ?_, hboundary⟩,\n    actualRosserEvenTail_card hanti.injective⟩\n  intro r hr\n  obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n  exact Finset.mem_filter.mpr ⟨hP _, hanti i.castSucc_lt_last⟩\n\nend\n\nend ImbalancedChen\n",
+  "all_nine_complete_declarations": [
+    {
+      "name": "actualRosserEvenTail",
+      "kind": "def",
+      "header": "def actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ",
+      "proof_or_definition_body": ":=\n  Finset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)\n\n/-- The actual terminal-prime/boundary-tail map. -/\n"
+    },
+    {
+      "name": "actualRosserEvenBoundaryMap",
+      "kind": "def",
+      "header": "def actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+      "proof_or_definition_body": ":=\n  ⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩\n\n/-- Distinct tuple labels preserve the exact tail rank. -/\n"
+    },
+    {
+      "name": "actualRosserEvenTail_card",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenTail_card {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) : (actualRosserEvenTail p).card = 2 * k + 1",
+      "proof_or_definition_body": ":= by\n  rw [actualRosserEvenTail, Finset.card_image_of_injective]\n  · simp\n  · exact hp.comp (Fin.castSucc_injective (2 * k + 1))\n\n/-- Product weights on the actual tail have no multiplicities. -/\n"
+    },
+    {
+      "name": "actualRosserEvenTail_prod",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenTail_prod {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserEvenTail p, g r) = ∏ i : Fin (2 * k + 1), g (p i.castSucc)",
+      "proof_or_definition_body": ":= by\n  rw [actualRosserEvenTail, Finset.prod_image]\n  exact fun _ _ _ _ h => Fin.castSucc_injective (2 * k + 1) (hp h)\n\n"
+    },
+    {
+      "name": "actualRosserEvenTail_range",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenTail_range {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Set.range p = (↑(actualRosserEvenTail p) : Set ℕ) ∪ {p (Fin.last (2 * k + 1))}",
+      "proof_or_definition_body": ":= by\n  ext r\n  constructor\n  · rintro ⟨i, rfl⟩\n    rcases Fin.eq_castSucc_or_eq_last i with ⟨j, rfl⟩ | rfl\n    · exact Or.inl (Finset.mem_image.mpr ⟨j, Finset.mem_univ _, rfl⟩)\n    · exact Or.inr rfl\n  · rintro (hr | hr)\n    · obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n      exact ⟨i.castSucc, rfl⟩\n    · exact ⟨Fin.last (2 * k + 1), hr.symm⟩\n\n/-- The map is injective on every collection of decreasing tuples of one\nfixed rank, including the singleton-tail rank. -/\n"
+    },
+    {
+      "name": "actualRosserEvenBoundaryMap_injOn_strictAnti",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 2) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserEvenBoundaryMap (k := k)) (T : Set (Fin (2 * k + 2) → ℕ))",
+      "proof_or_definition_body": ":= by\n  intro p hp r hr heq\n  have hq : p (Fin.last (2 * k + 1)) = r (Fin.last (2 * k + 1)) := congrArg Sigma.fst heq\n  have hs : actualRosserEvenTail p = actualRosserEvenTail r :=\n    congrArg (fun z : Sigma (fun _ : ℕ => Finset ℕ) => z.2) heq\n  apply ((hT p hp).range_inj (hT r hr)).mp\n  rw [actualRosserEvenTail_range p, actualRosserEvenTail_range r, hs, hq]\n\n/-- Equal actual boundary tails from injective tuples force equal ranks.\nThis is the disjointness certificate needed before combining different layers. -/\n"
+    },
+    {
+      "name": "actualRosserEvenTail_rank_eq",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 2) → ℕ} {r : Fin (2 * l + 2) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserEvenTail p = actualRosserEvenTail r) : k = l",
+      "proof_or_definition_body": ":= by\n  have hc := congrArg Finset.card heq\n  rw [actualRosserEvenTail_card hp, actualRosserEvenTail_card hr] at hc\n  omega\n\n"
+    },
+    {
+      "name": "even_box_upper_le",
+      "kind": "theorem",
+      "header": "private theorem even_box_upper_le {k : ℕ} {a b : Fin (2 * k + 2) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u",
+      "proof_or_definition_body": ":= by\n  have hb : Antitone b := Fin.antitone_iff_succ_le.mpr\n    (fun i => (hsep i).trans (hab i.castSucc).le)\n  exact fun i => (hb (Fin.zero_le i)).trans hbu\n\n/-- All prefix tests and the terminal crossing are verified at the same\nliteral `ceil (N ^ beta)` used by the actual small Rosser coefficient.\nOnly finite geometric inequalities are assumed; no density estimate is used. -/\n"
+    },
+    {
+      "name": "actualRosserEvenBox_mem_boundary",
+      "kind": "theorem",
+      "header": "theorem actualRosserEvenBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 2) → ℝ) (u beta : ℝ)\n    (_hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k + 1), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k + 1), Odd i.val →\n      (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k + 1), a i.castSucc) +\n      3 * a (Fin.last (2 * k + 1)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserEvenTail p ∈\n        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter\n          (fun q => p (Fin.last (2 * k + 1)) < q)).powerset.filter\n            (LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n              (p (Fin.last (2 * k + 1))))) ∧\n      (actualRosserEvenTail p).card = 2 * k + 1",
+      "proof_or_definition_body": ":= by\n  have hNreal : (1 : ℝ) < N := by exact_mod_cast hN\n  have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal\n  have hm := mem_actualPrimeBoxTuples_iff.mp hp\n  have hanti := actualPrimeBoxTuples_strictAnti (by omega : 1 ≤ N) hsep hp\n  have hP (i : Fin (2 * k + 2)) :\n      p i ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) := by\n    rw [mem_actualSmallPrimeFinset_iff_of_cutoff_le_cap hcap]\n    exact ⟨(hm i).1, (hm i).2.1, (hm i).2.2.2.trans_le\n      (Real.rpow_le_rpow_of_exponent_le hNreal.le (even_box_upper_le hab hsep hbu i))⟩\n  have hpPos (i : Fin (2 * k + 2)) : (0 : ℝ) < p i := by\n    exact_mod_cast (hm i).1.pos\n  have hprodLE (S : Finset (Fin (2 * k + 1))) :\n      (∏ i ∈ S, (p i.castSucc : ℝ)) ≤\n        (N : ℝ) ^ (∑ i ∈ S, b i.castSucc) := by\n    rw [Real.rpow_sum_of_pos hNpos]\n    exact Finset.prod_le_prod (fun i _ => (hpPos _).le)\n      (fun i _ => (hm i.castSucc).2.2.2.le)\n  have htotalReal : (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) < (N : ℝ) ^ beta := by\n    calc\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) <\n          ∏ i : Fin (2 * k + 1), (N : ℝ) ^ b i.castSucc := by\n        exact Finset.prod_lt_prod_of_nonempty (fun i _ => hpPos _)\n          (fun i _ => (hm i.castSucc).2.2.2)\n          ⟨⟨0, by omega⟩, Finset.mem_univ _⟩\n      _ = (N : ℝ) ^ (∑ i : Fin (2 * k + 1), b i.castSucc) :=\n        (Real.rpow_sum_of_pos hNpos _ _).symm\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le hprod\n  have hprefixReal (i : Fin (2 * k + 1)) (hi : Odd i.val) :\n      (∏ j : Fin (2 * k + 1) with j.val < i.val, (p j.castSucc : ℝ)) *\n          (p i.castSucc : ℝ) ^ 3 < (N : ℝ) ^ beta := by\n    have hcube : (p i.castSucc : ℝ) ^ 3 < ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n      pow_lt_pow_left₀ (hm i.castSucc).2.2.2 (hpPos _).le (by decide)\n    calc\n      _ ≤ ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          (p i.castSucc : ℝ) ^ 3 :=\n        mul_le_mul_of_nonneg_right (hprodLE _) (by positivity)\n      _ < ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n        mul_lt_mul_of_pos_left hcube (Real.rpow_pos_of_pos hNpos _)\n      _ = (N : ℝ) ^ ((∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) +\n          3 * b i.castSucc) := by\n        rw [Real.rpow_add hNpos, show 3 * b i.castSucc = b i.castSucc * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le (hprefix i hi)\n  have hshellReal : (N : ℝ) ^ beta ≤\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) * (p (Fin.last (2 * k + 1)) : ℝ) ^ 3 := by\n    calc\n      (N : ℝ) ^ beta ≤ (N : ℝ) ^ ((∑ i : Fin (2 * k + 1), a i.castSucc) +\n          3 * a (Fin.last (2 * k + 1))) :=\n        Real.rpow_le_rpow_of_exponent_le hNreal.le hshell\n      _ = (∏ i : Fin (2 * k + 1), (N : ℝ) ^ a i.castSucc) *\n          ((N : ℝ) ^ a (Fin.last (2 * k + 1))) ^ 3 := by\n        rw [Real.rpow_add hNpos, Real.rpow_sum_of_pos hNpos,\n          show 3 * a (Fin.last (2 * k + 1)) = a (Fin.last (2 * k + 1)) * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ _ := mul_le_mul\n        (Finset.prod_le_prod (fun _ _ => (Real.rpow_pos_of_pos hNpos _).le)\n          (fun i _ => (hm i.castSucc).2.2.1))\n        (pow_le_pow_left₀ (Real.rpow_nonneg hNpos.le _)\n          (hm (Fin.last (2 * k + 1))).2.2.1 3) (by positivity) (by positivity)\n  let l := List.ofFn (fun i : Fin (2 * k + 1) => p i.castSucc)\n  have hlinj : Function.Injective (fun i : Fin (2 * k + 1) => p i.castSucc) :=\n    hanti.injective.comp (Fin.castSucc_injective (2 * k + 1))\n  have hlsorted : l.SortedGT := by\n    apply List.sortedGT_iff_pairwise.mpr\n    exact List.pairwise_ofFn.mpr (fun _ _ hij => hanti (Fin.castSucc_lt_castSucc_iff.mpr hij))\n  have hlfinset : l.toFinset = actualRosserEvenTail p := by\n    ext r\n    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserEvenTail,\n      Finset.mem_image, Finset.mem_univ, true_and]\n  have hsort : (actualRosserEvenTail p).sort (· ≥ ·) = l := by\n    rw [← hlfinset]\n    exact (List.toFinset_sort (r := (· ≥ ·)) (List.nodup_ofFn.mpr hlinj)).mpr\n      hlsorted.sortedGE.pairwise\n  have hchain : LinearSieve.LowerRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) l := by\n    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n    · simp [l]\n    · apply Nat.lt_ceil.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod] using htotalReal\n    · intro i hi\n      have hil : i.val < 2 * k + 1 := by simpa [l] using i.isLt\n      apply Nat.lt_ceil.mpr\n      simp only [l, List.prod_take_ofFn, List.get_ofFn,\n        Nat.cast_mul, Nat.cast_pow, Nat.cast_prod]\n      convert hprefixReal ⟨i.val, hil⟩ (Nat.odd_iff.mpr (Nat.not_even_iff.mp hi)) using 1\n      all_goals rfl\n    · apply Nat.ceil_le.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal\n  have hqnot : p (Fin.last (2 * k + 1)) ∉ actualRosserEvenTail p := by\n    intro hq\n    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hq\n    exact (Fin.castSucc_ne_last i) (hanti.injective hi)\n  have hqmin : ∀ r ∈ actualRosserEvenTail p, p (Fin.last (2 * k + 1)) ≤ r := by\n    intro r hr\n    obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n    exact (hanti i.castSucc_lt_last).le\n  have hboundary : LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) (actualRosserEvenTail p) := by\n    apply (LinearSieve.lowerRosserBoundarySet_iff_sorted_chain hqnot\n      (hm (Fin.last (2 * k + 1))).1 hqmin).mpr\n    rwa [hsort]\n  refine ⟨hP _, Finset.mem_filter.mpr ⟨Finset.mem_powerset.mpr ?_, hboundary⟩,\n    actualRosserEvenTail_card hanti.injective⟩\n  intro r hr\n  obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n  exact Finset.mem_filter.mpr ⟨hP _, hanti i.castSucc_lt_last⟩\n\nend\n\nend ImbalancedChen\n"
+    }
+  ],
+  "all_bodies_byte_identical": true,
+  "other_eight_headers_identical": true,
+  "one_public_type_change": "Only delta expansion of exact actualLowerRosserBoundarySets alias; lower Nat.ceil level, actual target-deleted prime finset strict least-prime filter, powerset and native LowerRosserBoundarySet unchanged.",
+  "edits": [
+    {
+      "old": "import ImbalancedChen.ActualLowerRosserBoundaryExpansion",
+      "new": "import ImbalancedChen.ActualSmallRosser"
+    },
+    {
+      "old": "      actualRosserEvenTail p ∈ actualLowerRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k + 1))) ∧",
+      "new": "      actualRosserEvenTail p ∈\n        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter\n          (fun q => p (Fin.last (2 * k + 1)) < q)).powerset.filter\n            (LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n              (p (Fin.last (2 * k + 1))))) ∧"
+    }
+  ],
+  "forward_reverse_exact_bytes": true,
+  "LF_preserved": true,
+  "fixed_native_API": {
+    "MathlibNt/SieveTheory/LiLiuPrereqWFSmallRosser.lean": {
+      "sha256": "e455e327e217b4d0df3331a07e8e5e5aec90d0b89408aafddfa71a416297bbd7",
+      "lines": [
+        1,
+        15
+      ],
+      "literal_source": "import MathlibNt.SieveTheory.LiLiuPrereqWFGeometricBoxes\nimport MathlibNt.SieveTheory.LinearSieve\n\n/-!\n# Concrete lower and upper small-prime Rosser weights\n\nIwaniec, *A new form of the error term in the linear sieve* (1980), p.313,\ndefines the lower coefficient by the even-prefix cubic tests and the upper\ncoefficient by the odd-prefix tests. Here a prefix ending in `p` is the set\nof prime factors at least `p`: its product times `p²` is the displayed cubic\nexpression. The level is real, so the cutoff at `D^ε` is strict, without rounding.\n\nThe small weight of p.316, Lemma 4, is this coefficient restricted to the\nsmall sieve prime product. The finite cancellation argument is independent\nof the density assertion in that lemma. No density or asymptotic estimate"
+    },
+    "MathlibNt/SieveTheory/LinearSieve.lean": {
+      "sha256": "f7ce98fbbcf3d7baca1ef6a0a3829c0ee6de85c39e7d1a6935b8f013557c5d03",
+      "lines": [
+        1,
+        8
+      ],
+      "literal_source": "import MathlibNt.SieveTheory.LinearSieve.FiniteWeights\nimport MathlibNt.SieveTheory.LinearSieve.RosserChains\nimport MathlibNt.SieveTheory.LinearSieve.BoundaryMass\nimport MathlibNt.SieveTheory.LinearSieve.BoundaryRegularity\nimport MathlibNt.SieveTheory.LinearSieve.BoundaryIntegrals\nimport MathlibNt.SieveTheory.LinearSieve.UpperRosserDensity\nimport MathlibNt.SieveTheory.LinearSieve.SieveApplications\n"
+    },
+    "MathlibNt/SieveTheory/LinearSieve/RosserChains.lean": {
+      "sha256": "5db7add095b645da430b7bc751e05dcc9a0e1b03ad2bf0d7403236d39254cdea",
+      "lines": [
+        183,
+        216
+      ],
+      "literal_source": "def LowerRosserBoundaryChain (D q : ℕ) (l : List ℕ) : Prop :=\n  l.SortedGT ∧ ¬Even l.length ∧ l.prod < D ∧\n    (∀ i : Fin l.length, ¬Even i.val →\n      (l.take i.val).prod * (l.get i) ^ 3 < D) ∧\n    D ≤ l.prod * q ^ 3\n\n/-- A lower boundary subset is equivalent to its canonical strictly decreasing,\nodd-length boundary chain. -/\ntheorem lowerRosserBoundarySet_iff_sorted_chain\n    {D q : ℕ} {s : Finset ℕ} (hqs : q ∉ s) (hqprime : q.Prime)\n    (hqmin : ∀ p ∈ s, q ≤ p) :\n    LowerRosserBoundarySet D q s ↔\n      LowerRosserBoundaryChain D q (s.sort (· ≥ ·)) := by\n  rw [lowerRosserBoundarySet_iff_cube_le hqs hqprime hqmin]\n  have hprod : (s.sort (· ≥ ·)).prod = s.prod id := by\n    simpa using\n      (List.prod_toFinset id (Finset.sort_nodup s (· ≥ ·))).symm\n  constructor\n  · rintro ⟨hodd, hprodD, hadm, hcube⟩\n    refine ⟨Finset.sortedGT_sort s, ?_, ?_, ?_, ?_⟩\n    · simpa using hodd\n    · simpa [hprod] using hprodD\n    · intro i hi\n      exact lowerRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mp hadm\n        i.val i.isLt hi\n    · simpa [hprod] using hcube\n  · rintro ⟨hsorted, hodd, hprodD, hadm, hcube⟩\n    refine ⟨?_, ?_, ?_, ?_⟩\n    · simpa using hodd\n    · simpa [hprod] using hprodD\n    · apply lowerRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mpr\n      intro i hi hiOdd\n      exact hadm ⟨i, hi⟩ hiOdd\n    · simpa [hprod] using hcube"
+    }
+  },
+  "alias_definition": {
+    "path": "ImbalancedChen/ActualLowerRosserBoundaryExpansion.lean",
+    "sha256": "9b012143bf99e7e411bc002c2adb90aee7ea06db6add34b405c495b4f4c32d56",
+    "literal": "def actualLowerRosserBoundarySets (N cap : ℕ) (y R : ℝ) (q : ℕ) : Finset (Finset ℕ) := ((actualSmallPrimeFinset N cap y).filter (fun p => q < p)).powerset.filter (LinearSieve.LowerRosserBoundarySet (Nat.ceil R) q)"
+  },
+  "relative_project_header_DAG": {
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "old_local_count": 64,
+    "new_local_count": 55,
+    "removed_local": [
+      "ImbalancedChen.ActualLowerRosserBoundaryExpansion",
+      "ImbalancedChen.ActualPrimeEulerSplit",
+      "ImbalancedChen.ActualRosserBoundaryExpansion",
+      "ImbalancedChen.ActualSmallRosserDensity",
+      "ImbalancedChen.FixedRoughCoefficients",
+      "ImbalancedChen.RosserEndpointBridge",
+      "ImbalancedChen.RoughAbsoluteDensity",
+      "ImbalancedChen.RoughPowerParameters",
+      "ImbalancedChen.SmallRoughMainTerm"
+    ],
+    "added_local": [],
+    "added_foreign_roots": [],
+    "removed_foreign_roots": [
+      "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension",
+      "MathlibNt.SieveTheory.LiLiuGoldbachB8FibreSieve",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma"
+    ],
+    "current_local": {
+      "ImbalancedChen.ActualRosserEvenBox": {
+        "sha256": "8fa0519aaf72041f2178911edd13ef7ae8f5d18cbb1d0bc2eaf1a2599f94e31d",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ActualPrimeBoxMass",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Fin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.FinRange",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.WellFounded",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ActualPrimeBoxMass": {
+        "sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualPrimeReciprocalMass",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Fin.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FinitePrimeGeometryCore",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.FinitePrimeGeometryCore": {
+        "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitDepthSplice",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FirstExitPresieveProjection",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogPrimeBoxMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.GetD",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.OfFn",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Fin.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Fin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.LogPrimeBoxMesh": {
+        "sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.LogPrimeBoxIntegral",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecificLimits.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Set.Union",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.LogPrimeBoxIntegral": {
+        "sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Integral.Pi",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.RoughPrimeUniverse": {
+        "sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RetainedModuli",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Interval",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Sort",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.RetainedModuli": {
+        "sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.FirstExitTree": {
+        "sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.List",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.Prime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.Sublists",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.FirstExitPresieveProjection": {
+        "sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.FirstExitDepthSplice": {
+        "sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ActualPrimeReciprocalMass": {
+        "sha256": "f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenPrimeHarmonicFinite",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.Arithmetic.PrimeReciprocalLogScale",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.SingularSeries": {
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.NormalizationGrowth",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.PSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.PrimeFin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Ring.Parity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ChenPrimeHarmonicFinite": {
+        "sha256": "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenQuotientPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughSquareException",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.RoughSquareException": {
+        "sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Intervals",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Positivity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ChenInitialCorrectionBudget": {
+        "sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryArbitraryLog",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BoundaryArbitraryLog": {
+        "sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedDiscrepancyReduction",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogMeshGridCount",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.LogMeshGridCount": {
+        "sha256": "b71b3e65f1ede581fbd881843b45cdeea9196ac15aa2fb7623eb7636bf366aaf",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryLogMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BoundaryLogMesh": {
+        "sha256": "364d2571fcbf6c00e5aaa9b70a04c9ddee49a12d5725f70b0a13571fdfa3be81",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Intervals",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Positivity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SieveSourceCoprimality",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.SelbergSieve",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Squarefree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.ModEq",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.OrderedBad",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Convert",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.OrderedBad": {
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RationalPowers",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.RationalPowers": {
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.Counting": {
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.MultiplicativeGridPartition",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGlobalCaps",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Real.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGridBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Max",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Base",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.CurvedDiscrepancyReduction": {
+        "sha256": "cb277ada2fb933a5c8a6908978e72973ec703f281a678a87f39d58591a36e0d6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryLogMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogCutoffError",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.Algebra.Order.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ChenInitialPrimeSource": {
+        "sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenElevenSum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CoprimeRecentering",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenElevenSum": {
+        "sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenSummedBridge",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenSummedBridge": {
+        "sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenPositiveBound",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughSquareException",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenPositiveBound": {
+        "sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenWeightCases",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenWeightCases": {
+        "sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenNinthSwitch",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Multiplicity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Choose.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.Multiplicity": {
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.AlmostPrime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.SplitIfs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenNinthSwitch": {
+        "sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenInitialCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenSwitchGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenSwitchGeometry": {
+        "sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Find",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenFourCounts": {
+        "sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourPrime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenFourPrime": {
+        "sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Data.Nat.Squarefree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.QuotientChenInitialCounts": {
+        "sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ChenQuotientPrimeSource": {
+        "sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.ActualSmallRosser": {
+        "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SmallRoughAttachment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Int.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.SmallRoughAttachment": {
+        "sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PhysicalUpperWeightBridge",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.PrimeFin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.PhysicalUpperWeightBridge": {
+        "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SignSensitiveAttachment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      "ImbalancedChen.SignSensitiveAttachment": {
+        "sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      }
+    },
+    "scope": "All bounded project source/header edges and reachable native header roots only. No full foreign walk/kernel replay/runtime memory claim."
+  },
+  "root_mathematical_review": "Entire source original/new read. Even tuple keeps actual length2k+2, lower odd-index cubic gates at ceil Nbeta, strict product and strict prime endpoints, terminal closed crossing, original cap target exclusions, genuine rank/injection, no squarefree premise. Only import and one conclusion definitional expansion changed. Public API is already via actualSmallRosser->WFSmallRosser->LinearSieve->RosserChains.",
+  "prior_failure": "Original5528 realOOM20261015T222112 remains failed, no unchanged-byte retry. Oddnew641bstrictPASS only supports concrete import-reduction motivation, does not accept Even or predict fit.",
+  "old_independent_metadata_caution": "Old Even lower review had first:= parser cut in injOn (k:=k), so do not cite its header extraction as complete. New report uses actual:=by for every theorem and explicitly includes entire namedarg.",
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "proposed_runtime_scope": "After full new nonauthor review/root gate+runtime fresh exact existing recursive cache no missingexternal, one NEW-source6144/j2/RSS6656 strict andifPASScompleteowned; no Euler/widechain/foreign/bootstrap/higherlimits. No Lean executed now."
+}

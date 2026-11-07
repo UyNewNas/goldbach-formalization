@@ -1,0 +1,15 @@
+# certificate_rows G交验
+
+本批保留完整G目标，batch_target_complete=false、batch_target_source_complete=false，原始goal/task=false。完成的是实际完整winner9 seed源族、其真实正域、source owner/max记账及F两行端口；没有把这些局部结果改名为全族解析/c完成。全部未编译，正式信用0。
+
+原稿层级必须分清：F的simplex_id21/22是11026族内两条simplex；上界22项中的ledger slot21/22是同一完整winner9 seed的curvature-max减adopted-log、mixed-max减current-curvature两次全族替换。root此前也只验收两条simplex解析链。global-selected-numeric-completion原文section1 items21/22明确此归属，本批不混同。
+
+真正完整原始数据已逐字转为Lean：201个真实八维顶点、11026个未过滤ordinal；每条保留27个parent/log/curvature/mixed字段，包括volume、10means、Jensen、各阶段raw/selected值和全部70项mixed moment floors。为编译专员后续独立处理，数据拆44个最多256行leaf模块。所有来源ordinal、27字段JSON路径和每个源raw SHA均逐块登记；没有运行计算、checker或重放。
+
+CompleteSeedData直接由实际44块构成Fin11026表，提供闭合但未执行的全arity/ID/max chronology源检查。CompleteSeedChronology给真实source ordinal唯一owner及整族literal totals到原ledger slots21/22的连接；max替换只减旧值一次，plain P10和raw curvature不另加。这里owner唯一只是四条原始流的ID唯一，绝非物理support互不相交证明。
+
+CompleteSeedPositiveDomains从实际201顶点的统一factor正下界和gap非负源guards，把正性推广到每个真实九顶点image支持，证明全部11026实际density在各自compact可测域上可积。这些是真实全族解析前提，未以抽象selected set或row enclosure作前提。CompleteSeedAnalyticPorts又把F两条完整解析链按原数组ordinal21/22、真实vertex/means/floor精确接回族中。
+
+剩余11024条实际解析/primitive reconstruction/Jacobian和directed floor还未完成；全pulling triangulation覆盖、null-overlap/additive几何owner、97策略约束和winner9物理cap licence也尚待。上界其他slots/87域、paired下界mask/fibre/count/mean及current-c装配保持独立OPEN；certificate_floor与certificate_enhanced均确认没有可借用的冻结actual current-c owner接口，不能把纯endpoint算术当真实装配。
+
+前F及更早全部文件/metadata/review未改。原稿数学缺口未发现；本批显示的仍为形式化实现/实际对象绑定缺口。所有闭合源检查仅写证明项，未执行。具体文件、raw SHA、原字段身份、安装import图与remaining见REGISTRY.json。

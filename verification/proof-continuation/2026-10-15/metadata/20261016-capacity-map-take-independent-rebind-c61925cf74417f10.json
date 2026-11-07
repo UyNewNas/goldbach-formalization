@@ -1,0 +1,192 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_CAPACITY_MAP_TAKE_DIAGNOSTIC_REBIND_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author of repair",
+  "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+  "old_source": {
+    "snapshot": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-capacity-37ca-before-map-take-api.lean",
+    "sha256": "37ca1336b0aec630518c03288fe00cf2dade688c7d5cbd16053ac84a651f1e6a"
+  },
+  "new_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualFrozenCapacitySlots.lean",
+    "sha256": "40b5e534d7fbd180c69cc33e2ae75d1c9a854712f4832f19c5b6ebc3fc251007"
+  },
+  "change_scope": "Exactly one literal occurrence List.take_map -> reverse List.map_take in private prefixSquareBound_map proof; no other bytes change.",
+  "forward_inverse_bytes_exact": true,
+  "complete11_headers_and2_defs": [
+    {
+      "name": "prefixSquareBound_map",
+      "kind": "theorem",
+      "private": true,
+      "line": 27,
+      "complete_header": "private theorem prefixSquareBound_map {α : Type*} (upper : α → ℕ)\n    (D : ℝ) (input : List α)\n    (hfull : actualDwellSupport D (input.map upper)) :\n    PrefixSquareBound (fun i => (upper i : ℝ)) D input"
+    },
+    {
+      "name": "actualTwoCapacityGreedy_map",
+      "kind": "theorem",
+      "private": false,
+      "line": 37,
+      "complete_header": "theorem actualTwoCapacityGreedy_map {α β : Type*} (f : α → β) (weight : β → ℝ)\n    (A : ℝ) (input : List α) :\n    actualTwoCapacityGreedy weight A (input.map f) =\n      ((actualTwoCapacityGreedy (fun i => weight (f i)) A input).1.map f,\n        (actualTwoCapacityGreedy (fun i => weight (f i)) A input).2.map f)"
+    },
+    {
+      "name": "actualFrozenCapacityFactors",
+      "kind": "def",
+      "private": false,
+      "line": 52,
+      "complete_header": "def actualFrozenCapacityFactors {α : Type*} (A : ℝ) (upper actual : α → ℕ)\n    (input : List α) : ℕ × ℕ",
+      "complete_definition": "def actualFrozenCapacityFactors {α : Type*} (A : ℝ) (upper actual : α → ℕ)\n    (input : List α) : ℕ × ℕ :=\n  (((actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A input).1.map actual).prod,\n    ((actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A input).2.map actual).prod)"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_at_upper",
+      "kind": "theorem",
+      "private": false,
+      "line": 57,
+      "complete_header": "theorem actualFrozenCapacityFactors_at_upper {α : Type*} (A : ℝ) (upper : α → ℕ)\n    (input : List α) :\n    actualFrozenCapacityFactors A upper upper input =\n      actualTwoCapacityFactors A (input.map upper)"
+    },
+    {
+      "name": "mapped_prod_le_upper_prod",
+      "kind": "theorem",
+      "private": true,
+      "line": 64,
+      "complete_header": "private theorem mapped_prod_le_upper_prod {α : Type*} (upper actual : α → ℕ)\n    (input : List α) (hsize : ∀ i ∈ input, actual i ≤ upper i) :\n    (((input.map actual).prod : ℕ) : ℝ) ≤ (input.map (fun i => (upper i : ℝ))).prod"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_correct",
+      "kind": "theorem",
+      "private": false,
+      "line": 74,
+      "complete_header": "theorem actualFrozenCapacityFactors_correct {α : Type*} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper actual : α → ℕ) (input : List α)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : ∀ i ∈ input, actual i ≤ upper i) :\n    (actualFrozenCapacityFactors A upper actual input).1 *\n        (actualFrozenCapacityFactors A upper actual input).2 = (input.map actual).prod ∧\n      ((actualFrozenCapacityFactors A upper actual input).1 : ℝ) ≤ A ∧\n      ((actualFrozenCapacityFactors A upper actual input).2 : ℝ) ≤ B"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_coprime",
+      "kind": "theorem",
+      "private": false,
+      "line": 94,
+      "complete_header": "theorem actualFrozenCapacityFactors_coprime {α : Type*} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper actual : α → ℕ) (input : List α)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : ∀ i ∈ input, actual i ≤ upper i)\n    (hprime : ∀ p ∈ input.map actual, Nat.Prime p) (hnodup : (input.map actual).Nodup) :\n    Nat.Coprime (actualFrozenCapacityFactors A upper actual input).1\n      (actualFrozenCapacityFactors A upper actual input).2"
+    },
+    {
+      "name": "actualFrozenCapacityFactors_on_box",
+      "kind": "theorem",
+      "private": false,
+      "line": 108,
+      "complete_header": "theorem actualFrozenCapacityFactors_on_box {n : ℕ} {A B : ℝ}\n    (hA : 1 ≤ A) (hB : 1 ≤ B) (upper : Fin n → ℕ)\n    (hfull : actualDwellSupport (A * B) (List.ofFn upper)) :\n    ∀ actual : Fin n → ℕ, (∀ i, actual i ≤ upper i) →\n      (actualFrozenCapacityFactors A upper actual (List.finRange n)).1 *\n          (actualFrozenCapacityFactors A upper actual (List.finRange n)).2 =\n          (List.ofFn actual).prod ∧\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).1 : ℝ) ≤ A ∧\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).2 : ℝ) ≤ B"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment",
+      "kind": "def",
+      "private": false,
+      "line": 124,
+      "complete_header": "def actualFrozenCapacityAssignment {n : ℕ} (A : ℝ) (upper : Fin n → ℕ) : Fin n → Bool",
+      "complete_definition": "def actualFrozenCapacityAssignment {n : ℕ} (A : ℝ) (upper : Fin n → ℕ) : Fin n → Bool :=\n  fun i => decide (i ∈ (actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A (List.finRange n)).1)"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment_card",
+      "kind": "theorem",
+      "private": false,
+      "line": 127,
+      "complete_header": "theorem actualFrozenCapacityAssignment_card (n : ℕ) :\n    Fintype.card (Fin n → Bool) = 2 ^ n"
+    },
+    {
+      "name": "actualFrozenCapacityAssignment_sum_partition",
+      "kind": "theorem",
+      "private": false,
+      "line": 133,
+      "complete_header": "theorem actualFrozenCapacityAssignment_sum_partition {ι M : Type*}\n    [DecidableEq ι] [AddCommMonoid M] {n : ℕ} (J : Finset ι)\n    (A : ℝ) (upper : ι → Fin n → ℕ) (F : ι → M) :\n    (∑ mask : Fin n → Bool,\n      ∑ j ∈ J.filter (fun j => actualFrozenCapacityAssignment A (upper j) = mask), F j) =\n      ∑ j ∈ J, F j"
+    }
+  ],
+  "all_complete_headers_definitions_imports_quantifiers_thresholds_unchanged": true,
+  "header": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeTupleNormalization",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      },
+      {
+        "module": "Mathlib.Data.List.FinRange",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "fixed_API": {
+    "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/TakeDrop.lean",
+    "sha256": "16c0418c733f7ef8f331cd6bf6848ca343bda50766494292e80c438755942ac5",
+    "lines": "248-252",
+    "signature": "@[simp] List.map_take {f}: (l.take i).map f = (l.map f).take i. Reverse direction changes take i (input.map upper) into (input.take i).map upper; then existing map_map/getElem_map reduces exactly to slot PrefixSquareBound."
+  },
+  "actual_failure_log": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T222623804829Z-ImbalancedChen.ActualFrozenCapacitySlots\\stdout.log",
+    "sha256": "edbe88eb79ef57580a606eab1152ed8ff167fb795efc83d669f31d3cf6af86c0",
+    "read_in_full": true,
+    "diagnostic": "Old line33 unknown List.take_map and consequential mapped-prefix type mismatch; no other errors shown. Old failure retained; this source-only report is not a successful retry."
+  },
+  "mathematical_rebind": "Both lemma sides are the same original mapped-prefix product and same actual indexed upper coordinate. No extra support premise, changed assignment, regrouping, degree, bound or resource assumption is introduced. All other allocation/product/coprimality/whole-box signed partition declarations are unchanged.",
+  "current_owned_parent_binding": {
+    "module": "ImbalancedChen.ActualPrimeTupleNormalization",
+    "source_sha256": "c5c280a89f5bb833bbfc68ffbe07fea70f43330bf2c35ab81568274dd3de2ee7",
+    "object_sha256": "81dee151dde0693d77557ab8ea9bc48e6f87865b5d3bb62c2f49d52f30ac609a",
+    "existing_cache": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.ActualPrimeTupleNormalization.json",
+      "sha256": "859c303101aefb65aa155aef603d10323a7a56735373e166ac5ea22ff3422fb1",
+      "status": "PASS",
+      "exact_source_object_match": true
+    },
+    "direct_pair_source_sha256": "7be80dba6eeb2914036052df24512c4d0bd28722f108112eac0a6fcd3811fa69",
+    "scope": "Root identifies current c5c parent as owned; existing strict PASS binding/current object were read and hash-checked. No parent or imported-closure proof execution was repeated by reviewer."
+  },
+  "resource_change": {
+    "source_options_identical": true,
+    "new_resource_or_linter_options": false,
+    "runtime_policy_modified": false,
+    "scope": "Root previously authorized the concrete original6144 bounded retry; this rebind changes no source/checker/resource controls and does not create new runtime authorization."
+  },
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "owned_frozen_sources_modified_by_reviewer": false,
+  "source_or_checker_or_pin_modified": false,
+  "lean_invoked": false,
+  "build_or_checker_invoked": false,
+  "bytecode_written": false,
+  "remaining_gates": [
+    "Actual exact40b5 bounded retry and full owned audit; source-only API inspection does not imply elaboration PASS.",
+    "This auxiliary endpoint whole-box allocation is not asserted equal to tuplewise selected-pair policy and supplies no distribution or arithmetic mean."
+  ],
+  "Lean_PASS_or_imported_closure_acceptance_claimed": false
+}

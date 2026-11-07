@@ -1,0 +1,46 @@
+# S16 — original bad Gamma5 and grouped Gamma9–15 costs
+
+**CHECKPOINT / SIX SOURCE CANDIDATES / UNCOMPILED / KERNEL UNVERIFIED / ZERO FORMAL CREDIT.** Work stopped at the root checkpoint instruction. No local Lean, Lake, compiler, guard, numerical producer/replay, Git or CI mutation was run. No child agents or quota/usage/credits tools were used.
+
+The six candidate files supply the previously missing fixed-original-parameter cost deductions and an inclusive ordinary-mass assembly. This is not closure of the whole yellow bank-licence node. Independent final review and remote elaboration remain required; no green claim is made.
+
+## Exact mathematical object and source alignment
+
+The source object is O's `P2EnhancedSwitchedUnsiftedSource.labels` and `pairLabels`, with the original target deletion `primeWindow N`, strictly ordered complete prime LISTS, common physical Q, and d-dependent `trueAlpha`. The fixed original parameters are s0=227/50, phi1=353/100, phi2=29/10, phi3=61/25, s=11/5, hence a0=50/227 and a2=10/29. The actual hypothesis `2 ≤ trueAlpha N Q d` is independent of the fixed floor `(N:Real)^eta ≤ Q/d`; it is never inferred from positive residual level alone.
+
+The manuscript anchor is `chen-imbalanced-semiprimes/paper/source/manuscript-body.tex:795–855`, especially the positive marked Theta normalization, unchanged Q, increasing actual alpha, excluded D5 positive cost, retained units, and envelope 70893/125000. Raw manuscript SHA256 is `ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd`. The original global c=49044063/25000000 and K=8452171/1250000 are unchanged. The new raw-mass statements do not use or alter K. The inherited literal seed fibre also contains a conservative K=681/100 declaration; it is not substituted for the global K by these files.
+
+Read the frozen R12 REPORT/REGISTRY and R27 independent review, the Q nonunit suppliers, O original source/normalization, the exact native quadrature source, production original literal masses, and hidden four-switch supplier evidence. Full hidden/source-only reuse search preceded writing. The GitHub connector was unavailable; the public tree API returned a rate-limit error. These were not treated as absence of proof. Exact known primary import paths were then read from the pinned raw upstream, and snapshots are recorded in REGISTRY.
+
+## Supplied candidate declarations
+
+1. `P2EnhancedGroupedTripleDictionary.lean`: `original_grouped_integral` identifies each of the seven original Gamma9–15 grouped masses with the sum of its complete colour-word integrals. Shared a2/a3 coordinate faces are null for genuine product Lebesgue measure. Arithmetic endpoints are not erased. `original_Gamma9_to_15_literal_cap` then consumes the existing first-three and M12–M15 analytic suppliers.
+2. `P2EnhancedGroupedTripleCostTheta.lean`: `original_Gamma9_to_15_nonunit_cost_theta` pays the literal grouped cost for the fourteen triple-word occurrences with epsilon/14 per occurrence. The groups contain 4+2+1+1+2+3+1 words. Both 112 and 122 occur twice across different original Gamma groups and remain twice in every arithmetic sum.
+3. `P2EnhancedBadGamma5PrimeQuadrature.lean`: `reciprocal_quadrature` treats the actual closed bad square `corner ≤ u ≤ a2`, `max(u,1−2u) ≤ v ≤ a2`. It compares the actual reciprocal-prime sum with `badMassLog`. The section is the integral of 1/v, bounded by 4 and Lipschitz with constant 20 after a harmless extension. This reuses the native interval quadrature, endpoint payment, and Lipschitz APIs; it does NOT rename native `gamma5MassH=1/(1−u−v)` into the constant-a0 kernel. Equality `2u+v=1` stays in the finite sum.
+4. `P2EnhancedBadGamma5ArithmeticGeometry.lean`: injects the actual complete bad prime LISTS into that closed-square sum, proves the actual ordinary/unit/nonunit partition, and supplies `actual_bad_unit_upper`. Units are arithmetic cardinalities. Their product bound and existing short-word power-gap absorption give one pre-Q,d threshold and epsilon times rawScale; no continuous-null argument deletes a unit atom.
+5. `P2EnhancedBadGamma5CostTheta.lean`: `actual_bad_nonunit_upper` applies the genuine scalar nonunit rough estimate at the inherited constant a0 cutoff and the existing global Buchstab cap. Its scalar error uses the reciprocal mass bound; its leading term uses the actual bad-square quadrature. `original_badGamma5_cost_theta` rejoins units and supplies the positive marked inclusive ordinary cost `(omegaCap/a0)*badMassLog` plus epsilon times the same Theta. It does not assert an exact variable-alpha Buchstab asymptotic; the supplied upper quadrature is sufficient for the original envelope cost.
+6. `P2EnhancedBadAndShortCostAssembly.lean`: `original_badGamma5_Gamma9_to_19_cost_theta` combines the new Gamma5 and triple costs with R12's already supplied four-word costs and eighteen units, using epsilon/4 for each of the four categories. The result bounds `convertedBad + originalShortOrdinary` by `originalCost*Theta + epsilon*Theta`.
+
+The terminal quantifier order is: fix eta>0 and epsilon>0; choose T≥4; then allow every N≥T, physical Q, finite D, and nonnegative sigma with positive d, the original scale floor, and the independent true-alpha gate. Empty support and zero Theta are included without dividing by total mass. The installed literal-li Theta normalization is retained. Its existing true-li comparison is not reproved.
+
+## Reuse and payment ledger
+
+Q's actual ordinary nonunit source, complete list injection, moving-Q threshold and twenty-occurrence theorem are reused. R12's eighteen Gamma9–19 unit atoms, exact Gamma16–19 dictionary and hidden analytic four-switch caps are reused. No repeat/center/collision payment is duplicated. The old N-window is not replaced by `Coprime(N*oldProduct)`.
+
+Gamma20 word 23333 and Gamma21 word 333333 remain the existing Q full-dimensional nonunit K20/K21 suppliers plus the two distinct P unit suppliers. They are not folded into the eighteen short units, and this six-file terminal does not claim to assemble their separate high-dimensional joint tail cost. S17/S18 and S23 were informed of the exact fixed-parameter scope and licence boundary.
+
+Removed as mathematical inputs in these candidates: a presumed Gamma9–15 grouped integral equality; a presumed shared-face payment; a presumed original Gamma9–15 cost; a presumed bad-Gamma5 reciprocal quadrature; a presumed bad-Gamma5 scalar/unit error; and a presumed same-Theta lift for those fixed original raw masses. No axiom, sorry/admit, target-equivalent licence field, or estimate defined by subtraction was introduced.
+
+## Remaining obligations and classification
+
+The fixed original Gamma5/Gamma9–15 mathematical deductions are written as strict candidate proofs, with no extra mass-bound premise. Their source completeness is provisional pending the independent final static review and remote elaboration. Six files contain unevaluated finite tactics and imported source-only dependencies. Lean API/tactic acceptance and recursive installation are class I obligations; no local build was allowed.
+
+The WHOLE original yellow bank-licence scope remains open: actual causal selected/inherited support; all other original bank-action parameter instances; same-rho positive-product density and K/4 count licensing; the adopted seed/preceding-generation count induction; Gamma20/21 complete high-dimensional cost assembly where required by the consumer; and terminal hLower/hUpper. The new source concerns ordinary rough masses and does not identify these with the larger Sifted(d*N) source without the existing exception/licence machinery. These are explicit external source obligations, not newly assumed fields and not a demonstrated manuscript contradiction.
+
+The new constructions are class II omitted deductions (closed-word grouping, actual reciprocal quadrature, arithmetic unit payment, and positive marked assembly). No class III manuscript counterexample is asserted. In particular, the feedback-kernel mismatch is an object-conversion issue, resolved by using the reciprocal quadrature APIs rather than the wrong kernel.
+
+## Review and remote target
+
+S28 read all six modules and reported that the seven groups, fourteen occurrences, a2/a3 AE boundary treatment, restriction orientation, closed bad affine reciprocal square, N-window list injection, separate unit, true-alpha global cap, and one same-Theta error budget match the original scope. No mathematical mismatch was found in that narrow static review. Native API/elaboration and all proof bodies remain unchecked. REGISTRY is the exact freeze inventory.
+
+Root's concrete remote target is `ImbalancedChen.P2EnhancedBadAndShortCostAssembly`, installing these six sources at their intended module names together with their exact O/Q/R/production/native import closure. Check the exported terminal and its axioms, plus `original_grouped_integral`, `reciprocal_quadrature`, `actual_bad_unit_upper`, and `original_badGamma5_cost_theta`. Pins: Lean `leanprover/lean4:v4.33.0-rc1`; mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`; public parent `e2a05f73d5f169fff847d72dcfcc66ec54ad4f87`. Root owns all remote dispatch, source repair after feedback, and any eventual tracker colour change.

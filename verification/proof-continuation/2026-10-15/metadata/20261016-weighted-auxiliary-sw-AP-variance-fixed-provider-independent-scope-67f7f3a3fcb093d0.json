@@ -1,0 +1,846 @@
+{
+  "schema": "independent-source-only-provider-reuse-audit-v1",
+  "scope": "Arbitrary complex auxiliary-SW coefficient family to weighted centered AP mean-square; shared original first factor p",
+  "created_utc": "2026-10-15T23:05:05.143909+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "assurance": "SOURCE_ONLY. No Lean/lake/compiler/checker/runtime execution; no object, elaboration, type, kernel, axiom, linter, sorry-transitive, or acceptance claim. Complete lexical source headers below are not elaborated theorem types.",
+  "mutation_scope": "Only this new unique audit JSON. No mathematics source/import/pin/bootstrap/CI edits; no foreign expansion; frozen PairCount bytes freshly observed unchanged.",
+  "fixed_provider": {
+    "root": "/home/slava/codex-lean-ve/native-packages/goldbach",
+    "requested_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "observed_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "observed_mathlib_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "all_recorded_working_files_equal_fixed_git_blobs": true
+  },
+  "project_pins_sha256": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_files": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "git_path": "AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "sha256": "5fd263929dcbe95e7c59eb6812bcf36cbc24f8c88af12d8e4e49415408a356b6",
+      "bytes": 75402,
+      "fixed_pin_blob_sha256": "5fd263929dcbe95e7c59eb6812bcf36cbc24f8c88af12d8e4e49415408a356b6",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import AnalyticNumberTheory.LargeSieve.Multiplicative",
+        "import AnalyticNumberTheory.Sieve.PanMeanValueBody",
+        "import Mathlib.NumberTheory.DirichletCharacter.GaussSum",
+        "import Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "name": "charParseval_units",
+          "kind": "lemma",
+          "line": 498,
+          "complete_lexical_header": "lemma charParseval_units {q : ℕ} [NeZero q] (T : ZMod q → ℂ) :\n    (∑ χ : DirichletCharacter ℂ q, ‖∑ x : ZMod q, star (χ x) * T x‖ ^ 2) =\n      (q.totient : ℝ) * ∑ x : ZMod q, (if IsUnit x then ‖T x‖ ^ 2 else 0)",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "bombieriDavenport_le",
+          "kind": "theorem",
+          "line": 719,
+          "complete_lexical_header": "theorem bombieriDavenport_le (Q : ℕ) (hQ : 0 < Q) (a : ℤ → ℂ) (M : ℤ) (N : ℕ) :\n    (∑ q ∈ Finset.Icc 1 Q,\n        ((q : ℝ) / (q.totient : ℝ)) *\n        (∑ χ ∈ (Finset.univ : Finset (DirichletCharacter ℂ q)).filter (fun χ => χ.IsPrimitive),\n          ‖∑ n ∈ Finset.Icc (M + 1) (M + N), a n * χ (n : ZMod q)‖ ^ 2))\n      ≤ largeSieveBound N (1 / (Q : ℝ) ^ 2) * (∑ n ∈ Finset.Icc (M + 1) (M + N), ‖a n‖ ^ 2)",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/Multiplicative.lean",
+      "git_path": "AnalyticNumberTheory/LargeSieve/Multiplicative.lean",
+      "sha256": "0fda13811a9ca36a342c8f7b15caeef0e6e35dd1ce6daa3baf42953b226da2e6",
+      "bytes": 81921,
+      "fixed_pin_blob_sha256": "0fda13811a9ca36a342c8f7b15caeef0e6e35dd1ce6daa3baf42953b226da2e6",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import AnalyticNumberTheory.LargeSieve.WellSpaced",
+        "import Mathlib.NumberTheory.DirichletCharacter.Orthogonality",
+        "import Mathlib.NumberTheory.DirichletCharacter.Bounds",
+        "import Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar",
+        "import Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "name": "charOrthSum",
+          "kind": "theorem",
+          "line": 403,
+          "complete_lexical_header": "theorem charOrthSum {q : ℕ} (hq : 0 < q) (m n : ZMod q) :\n    (∑ χ : DirichletCharacter ℂ q, χ m * star (χ n)) =\n      if IsUnit m ∧ IsUnit n ∧ m = n then (q.totient : ℂ) else 0",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "zmodParseval_character",
+          "kind": "theorem",
+          "line": 1405,
+          "complete_lexical_header": "theorem zmodParseval_character {q : ℕ} [NeZero q] (a : ℤ → ℂ) (M : ℤ) (N : ℕ) :\n    (∑ x : ZMod q, ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n        a n * if (n : ZMod q) = x then 1 else 0‖ ^ 2) =\n      (1 / (q : ℝ)) * ∑ r ∈ Finset.range q,\n        ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n          (charReal ((n : ℝ) * (r : ℝ) / (q : ℝ)) : ℂ) * a n‖ ^ 2",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "characterSieveModulus_le",
+          "kind": "theorem",
+          "line": 1539,
+          "complete_lexical_header": "theorem characterSieveModulus_le {q : ℕ} [NeZero q] (a : ℤ → ℂ) (M : ℤ) (N : ℕ) :\n    ((q : ℝ) / (q.totient : ℝ)) *\n        ∑ χ : DirichletCharacter ℂ q, ‖∑ n ∈ Finset.Icc (M + 1) (M + N), a n * χ (n : ZMod q)‖ ^ 2\n      ≤ ∑ r ∈ Finset.range q,\n          ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n            (charReal ((n : ℝ) * (r : ℝ) / (q : ℝ)) : ℂ) * a n‖ ^ 2",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/WellSpaced.lean",
+      "git_path": "AnalyticNumberTheory/LargeSieve/WellSpaced.lean",
+      "sha256": "842281e35b38a57e5061ec925d18d4367e067cd4e7dba3217b063acb982afdcd",
+      "bytes": 45960,
+      "fixed_pin_blob_sha256": "842281e35b38a57e5061ec925d18d4367e067cd4e7dba3217b063acb982afdcd",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import AnalyticNumberTheory.LargeSieve.Duality",
+        "import Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "name": "largeSieveBound",
+          "kind": "def",
+          "line": 473,
+          "complete_lexical_header": "noncomputable def largeSieveBound (N : ℕ) (δ : ℝ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "noncomputable def largeSieveBound (N : ℕ) (δ : ℝ) : ℝ :=\n  (N : ℝ) + (2 * (Nat.ceil (Real.log (1 / δ) / Real.log 2) : ℝ) + 12) / δ"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "sha256": "5eef5c96d39f9404237c70a6e3d66c58a9cceeca46228d0eb4b8f3adf5d910ba",
+      "bytes": 12626,
+      "fixed_pin_blob_sha256": "5eef5c96d39f9404237c70a6e3d66c58a9cceeca46228d0eb4b8f3adf5d910ba",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.ReducedFareyGauss"
+      ],
+      "declarations": [
+        {
+          "name": "weighted_primitive_bombieri_davenport",
+          "kind": "theorem",
+          "line": 234,
+          "complete_lexical_header": "theorem weighted_primitive_bombieri_davenport (b : ℤ → ℂ) (M : ℤ)\n    (N Q : ℕ) (hQ : 0 < Q) :\n    (∑ q ∈ Finset.Icc 1 Q,\n      ((q : ℝ) / (q.totient : ℝ)) *\n        ∑ χ : PrimitiveCharacter q,\n          ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n            b n * χ.1 (n : ZMod q)‖ ^ 2) ≤\n      largeSieveBound N (1 / (Q : ℝ) ^ 2) *\n        ∑ n ∈ Finset.Icc (M + 1) (M + N), ‖b n‖ ^ 2",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "weighted_primitive_bombieri_davenport_explicit",
+          "kind": "theorem",
+          "line": 259,
+          "complete_lexical_header": "theorem weighted_primitive_bombieri_davenport_explicit (b : ℤ → ℂ) (M : ℤ)\n    (N Q : ℕ) (hQ : 0 < Q) :\n    (∑ q ∈ Finset.Icc 1 Q,\n      ((q : ℝ) / (q.totient : ℝ)) *\n        ∑ χ : PrimitiveCharacter q,\n          ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n            b n * χ.1 (n : ZMod q)‖ ^ 2) ≤\n      ((N : ℝ) +\n        (2 * (Nat.ceil (Real.log ((Q : ℝ) ^ 2) / Real.log 2) : ℝ) + 12) *\n          (Q : ℝ) ^ 2) *\n        ∑ n ∈ Finset.Icc (M + 1) (M + N), ‖b n‖ ^ 2",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/PrimitiveCharacters.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/PrimitiveCharacters.lean",
+      "sha256": "b126e68a8ac10753fcda10ebee9e8e711354ddf5419e3f0c4f3be5ac7774d9ee",
+      "bytes": 12231,
+      "fixed_pin_blob_sha256": "b126e68a8ac10753fcda10ebee9e8e711354ddf5419e3f0c4f3be5ac7774d9ee",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import AnalyticNumberTheory.LargeSieve.Multiplicative",
+        "import AnalyticNumberTheory.LargeSieve.BombieriDavenport",
+        "import Mathlib.NumberTheory.DirichletCharacter.GaussSum"
+      ],
+      "declarations": [
+        {
+          "name": "PrimitiveCharacter",
+          "kind": "abbrev",
+          "line": 36,
+          "complete_lexical_header": "abbrev PrimitiveCharacter (q : ℕ)",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "abbrev PrimitiveCharacter (q : ℕ) :=\n  {χ : DirichletCharacter ℂ q // χ.IsPrimitive}"
+        },
+        {
+          "name": "conductorPrimitiveCharacter",
+          "kind": "def",
+          "line": 73,
+          "complete_lexical_header": "noncomputable def conductorPrimitiveCharacter {q : ℕ}\n    (χ : DirichletCharacter ℂ q) : PrimitiveCharacter χ.conductor",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "noncomputable def conductorPrimitiveCharacter {q : ℕ}\n    (χ : DirichletCharacter ℂ q) : PrimitiveCharacter χ.conductor :=\n  ⟨χ.primitiveCharacter, χ.primitiveCharacter_isPrimitive⟩"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/ReducedFareyGauss.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/ReducedFareyGauss.lean",
+      "sha256": "143848983c362d62941888534f7627ba61f15cca1e2abfa78c61ffb8e2b5145c",
+      "bytes": 8897,
+      "fixed_pin_blob_sha256": "143848983c362d62941888534f7627ba61f15cca1e2abfa78c61ffb8e2b5145c",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.PrimitiveCharacters"
+      ],
+      "declarations": [
+        {
+          "name": "reducedResidues",
+          "kind": "def",
+          "line": 29,
+          "complete_lexical_header": "def reducedResidues (q : ℕ) : Finset ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def reducedResidues (q : ℕ) : Finset ℕ :=\n  (Finset.range q).filter fun a => Nat.Coprime a q"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/PrefixMaximal.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/PrefixMaximal.lean",
+      "sha256": "36951d02a566fc5fbbf9bb0ac81702d2d1bbf1e6dbc8aee843461ac72f32ab67",
+      "bytes": 13800,
+      "fixed_pin_blob_sha256": "36951d02a566fc5fbbf9bb0ac81702d2d1bbf1e6dbc8aee843461ac72f32ab67",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.BombieriDavenport",
+        "import Mathlib.Analysis.InnerProductSpace.PiL2"
+      ],
+      "declarations": [
+        {
+          "name": "primitiveLargeSieveConstant",
+          "kind": "def",
+          "line": 31,
+          "complete_lexical_header": "def primitiveLargeSieveConstant (N Q : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def primitiveLargeSieveConstant (N Q : ℕ) : ℝ :=\n  (N : ℝ) +\n    (2 * (Nat.ceil (Real.log ((Q : ℝ) ^ 2) / Real.log 2) : ℝ) + 12) *\n      (Q : ℝ) ^ 2"
+        },
+        {
+          "name": "primitiveCharacterPrefixSquare",
+          "kind": "def",
+          "line": 101,
+          "complete_lexical_header": "def primitiveCharacterPrefixSquare (b : ℤ → ℂ) (M : ℤ) (y q : ℕ)\n    (χ : PrimitiveCharacter q) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def primitiveCharacterPrefixSquare (b : ℤ → ℂ) (M : ℤ) (y q : ℕ)\n    (χ : PrimitiveCharacter q) : ℝ :=\n  ‖∑ n ∈ Finset.Icc (M + 1) (M + y), b n * χ.1 (n : ZMod q)‖ ^ 2"
+        },
+        {
+          "name": "primitiveCharacterPrefixMaxSquare",
+          "kind": "def",
+          "line": 107,
+          "complete_lexical_header": "def primitiveCharacterPrefixMaxSquare (b : ℤ → ℂ) (M : ℤ) (N q : ℕ)\n    (χ : PrimitiveCharacter q) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def primitiveCharacterPrefixMaxSquare (b : ℤ → ℂ) (M : ℤ) (N q : ℕ)\n    (χ : PrimitiveCharacter q) : ℝ :=\n  ((Finset.range (N + 1)).image\n      (fun y => primitiveCharacterPrefixSquare b M y q χ)).max'\n    (Finset.image_nonempty.mpr ⟨0, by simp⟩)"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDispersion.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDispersion.lean",
+      "sha256": "3937deeacd7077cd44582408bf7b3a155f3f299a2e89bb2893e0dff35457e3cb",
+      "bytes": 7583,
+      "fixed_pin_blob_sha256": "3937deeacd7077cd44582408bf7b3a155f3f299a2e89bb2893e0dff35457e3cb",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import Mathlib.Data.Int.ModEq",
+        "import Mathlib.Data.Nat.Totient",
+        "import Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "import Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "name": "coprimeMass",
+          "kind": "def",
+          "line": 26,
+          "complete_lexical_header": "def coprimeMass (N : Finset ℕ) (β : ℕ → ℝ) (q : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def coprimeMass (N : Finset ℕ) (β : ℕ → ℝ) (q : ℕ) : ℝ :=\n  ∑ n ∈ N, if n.Coprime q then β n else 0"
+        },
+        {
+          "name": "reducedModuli",
+          "kind": "def",
+          "line": 35,
+          "complete_lexical_header": "def reducedModuli (Q : Finset ℕ) (a : ℤ) : Finset ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def reducedModuli (Q : Finset ℕ) (a : ℤ) : Finset ℕ :=\n  Q.filter (fun q => Int.gcd a q = 1)"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDivisorMean.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDivisorMean.lean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "bytes": 17917,
+      "fixed_pin_blob_sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import Mathlib.NumberTheory.ArithmeticFunction.Misc",
+        "import Mathlib.NumberTheory.Harmonic.Bounds",
+        "import Mathlib.Data.Nat.Choose.Sum",
+        "import Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "name": "fouvryTau",
+          "kind": "def",
+          "line": 19,
+          "complete_lexical_header": "def fouvryTau (k : ℕ) : ArithmeticFunction ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def fouvryTau (k : ℕ) : ArithmeticFunction ℕ := ArithmeticFunction.zeta ^ k"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryBetaCovariance.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryBetaCovariance.lean",
+      "sha256": "bc86c7b0bf6db7de3575083cd17da8bb7036c4dfc1fe845bf4666f73d745fc4d",
+      "bytes": 16164,
+      "fixed_pin_blob_sha256": "bc86c7b0bf6db7de3575083cd17da8bb7036c4dfc1fe845bf4666f73d745fc4d",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothMainTerm",
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryWZeroMode"
+      ],
+      "declarations": [
+        {
+          "name": "betaReducedResidues",
+          "kind": "def",
+          "line": 24,
+          "complete_lexical_header": "def betaReducedResidues (δ : ℕ) : Finset ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def betaReducedResidues (δ : ℕ) : Finset ℕ :=\n  (Finset.range δ).filter (fun b ↦ b.Coprime δ)"
+        },
+        {
+          "name": "betaResidueMass",
+          "kind": "def",
+          "line": 33,
+          "complete_lexical_header": "def betaResidueMass (N : Finset ℕ) (β : ℕ → ℝ) (q δ b : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def betaResidueMass (N : Finset ℕ) (β : ℕ → ℝ) (q δ b : ℕ) : ℝ :=\n  ∑ n ∈ N, if n.Coprime q ∧ Nat.ModEq δ n b then β n else 0"
+        },
+        {
+          "name": "betaCovariance",
+          "kind": "def",
+          "line": 123,
+          "complete_lexical_header": "def betaCovariance (N : Finset ℕ) (β : ℕ → ℝ) (q r : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def betaCovariance (N : Finset ℕ) (β : ℕ → ℝ) (q r : ℕ) : ℝ :=\n  ∑ b ∈ betaReducedResidues (q.gcd r),\n    (betaResidueMass N β q (q.gcd r) b -\n      coprimeMass N β q / ((q.gcd r).totient : ℝ)) *\n    (betaResidueMass N β r (q.gcd r) b -\n      coprimeMass N β r / ((q.gcd r).totient : ℝ))"
+        },
+        {
+          "name": "betaCoprimeAPDiscrepancy",
+          "kind": "def",
+          "line": 270,
+          "complete_lexical_header": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ :=\n  (∑ n ∈ N, if n.Coprime h ∧ Nat.ModEq d n b then β n else 0) -\n    coprimeMass N β (d * h) / (d.totient : ℝ)"
+        },
+        {
+          "name": "betaResidueMass_centered_eq_coprimeAPDiscrepancy",
+          "kind": "theorem",
+          "line": 297,
+          "complete_lexical_header": "theorem betaResidueMass_centered_eq_coprimeAPDiscrepancy\n    (N : Finset ℕ) (β : ℕ → ℝ) {q δ b : ℕ}\n    (hdq : δ ∣ q) (hb : b.Coprime δ) :\n    betaResidueMass N β q δ b - coprimeMass N β q / (δ.totient : ℝ) =\n      betaCoprimeAPDiscrepancy N β δ (q / δ) b",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "betaCovariance_abs_le_of_coprimeAP",
+          "kind": "theorem",
+          "line": 307,
+          "complete_lexical_header": "theorem betaCovariance_abs_le_of_coprimeAP\n    (N : Finset ℕ) (β : ℕ → ℝ) (q r : ℕ) (Eq Er : ℝ)\n    (hEq : ∀ b ∈ betaReducedResidues (q.gcd r),\n      |betaCoprimeAPDiscrepancy N β (q.gcd r) (q / q.gcd r) b| ≤ Eq)\n    (hEr : ∀ b ∈ betaReducedResidues (q.gcd r),\n      |betaCoprimeAPDiscrepancy N β (q.gcd r) (r / q.gcd r) b| ≤ Er) :\n    |betaCovariance N β q r| ≤ ((q.gcd r).totient : ℝ) * Eq * Er",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "smoothWMain_sub_smoothUMain_abs_le_of_coprimeAP",
+          "kind": "theorem",
+          "line": 327,
+          "complete_lexical_header": "theorem smoothWMain_sub_smoothUMain_abs_le_of_coprimeAP\n    (M : ℝ) (N Q : Finset ℕ) (β c : ℕ → ℝ) (a : ℤ)\n    (hQ : ∀ q ∈ Q, q ≠ 0) (E : ℕ → ℕ → ℝ)\n    (hE : ∀ q ∈ Q, ∀ d : ℕ, d ∣ q → 0 < d →\n      ∀ b ∈ betaReducedResidues d,\n        |betaCoprimeAPDiscrepancy N β d (q / d) b| ≤ E q d) :\n    |smoothWMain M N Q β c a - smoothUMain M N Q β c a| ≤\n      |M * dyadicCutoffMass| *\n        ∑ q ∈ reducedModuli Q a, ∑ r ∈ reducedModuli Q a,\n          |c q * c r / (q.lcm r : ℝ)| *\n            (((q.gcd r).totient : ℝ) * E q (q.gcd r) * E r (q.gcd r))",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDelta.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDelta.lean",
+      "sha256": "08d4ab419a64dd4bbadc975fcac8036b6ac60fa301da02791275e2e862f803b4",
+      "bytes": 11608,
+      "fixed_pin_blob_sha256": "08d4ab419a64dd4bbadc975fcac8036b6ac60fa301da02791275e2e862f803b4",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryBetaCovariance",
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothErrorBounds"
+      ],
+      "declarations": [
+        {
+          "name": "sum_abs_betaResidueMass_centered_le",
+          "kind": "theorem",
+          "line": 29,
+          "complete_lexical_header": "theorem sum_abs_betaResidueMass_centered_le\n    (N : Finset ℕ) (β : ℕ → ℝ) {q δ : ℕ}\n    (hδ : 0 < δ) (hdq : δ ∣ q) :\n    (∑ b ∈ betaReducedResidues δ,\n      |betaResidueMass N β q δ b - coprimeMass N β q / (δ.totient : ℝ)|) ≤\n        2 * ∑ n ∈ N, |β n|",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "betaCovariance_abs_le_coprimeAP_lone",
+          "kind": "theorem",
+          "line": 55,
+          "complete_lexical_header": "theorem betaCovariance_abs_le_coprimeAP_lone\n    (N : Finset ℕ) (β : ℕ → ℝ) {q r : ℕ} (hq : 0 < q)\n    {E : ℝ} (hE : 0 ≤ E)\n    (hAP : ∀ b ∈ betaReducedResidues (q.gcd r),\n      |betaCoprimeAPDiscrepancy N β (q.gcd r) (q / q.gcd r) b| ≤ E) :\n    |betaCovariance N β q r| ≤ 2 * E * ∑ n ∈ N, |β n|",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDeltaPayment.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDeltaPayment.lean",
+      "sha256": "1b51a295c66fa3b8d333c4277357ee55563c22923d2f015098419f159aa4e30f",
+      "bytes": 11744,
+      "fixed_pin_blob_sha256": "1b51a295c66fa3b8d333c4277357ee55563c22923d2f015098419f159aa4e30f",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmallDelta",
+        "import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+      ],
+      "declarations": [
+        {
+          "name": "BetaCoprimeSWFamily",
+          "kind": "def",
+          "line": 24,
+          "complete_lexical_header": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop :=\n  ∀ B : ℕ, ∃ C : ℝ, 0 < C ∧\n    ∀ i : ι, ∀ d h : ℕ, 0 < d → 0 < h → ∀ b : ℕ, b.Coprime d →\n      |betaCoprimeAPDiscrepancy (N i) (β i) d h b| ≤\n        C * T i * (fouvryTau κ h : ℝ) / Real.log (2 * T i) ^ B"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModePayment.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModePayment.lean",
+      "sha256": "48c3765c4f25906097a7cd9e95691040903aaa3399c0de9744b0eeaf2fab5479",
+      "bytes": 7727,
+      "fixed_pin_blob_sha256": "48c3765c4f25906097a7cd9e95691040903aaa3399c0de9744b0eeaf2fab5479",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryZeroModeBound",
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmallDeltaPayment"
+      ],
+      "declarations": [
+        {
+          "name": "smoothWMain_sub_smoothUMain_abs_le_SW",
+          "kind": "theorem",
+          "line": 20,
+          "complete_lexical_header": "theorem smoothWMain_sub_smoothUMain_abs_le_SW\n    {k : ℕ} (hk : 1 ≤ k) (j κ B : ℕ)\n    {T L C : ℝ} (hT : 1 ≤ T) (hL : 1 ≤ L) (hC : 0 ≤ C)\n    (M : ℝ) (N Q : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊)\n    (hQ : Q ⊆ Ioc 0 ⌊L⌋₊) (β c : ℕ → ℝ)\n    (hβ : ∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ))\n    (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) (a : ℤ)\n    (hSW : ∀ d h : ℕ, 0 < d → 0 < h → ∀ b : ℕ, b.Coprime d →\n      |betaCoprimeAPDiscrepancy N β d h b| ≤\n        C * T * (fouvryTau κ h : ℝ) / Real.log (2 * T) ^ B) :\n    |smoothWMain M N Q β c a - smoothUMain M N Q β c a| ≤\n      2 * |M * dyadicCutoffMass| * C * T ^ 2 *\n        ((1 + Real.log T) ^ (k - 1) *\n          (1 + Real.log L) ^ (2 * (j * (κ + 1)) ^ 2 + 1) /\n            Real.log (2 * T) ^ B)",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "smoothWU_SWFamily_log_payment",
+          "kind": "theorem",
+          "line": 47,
+          "complete_lexical_header": "theorem smoothWU_SWFamily_log_payment\n    {ι : Type*} {κ k : ℕ} (hk : 1 ≤ k) (j A : ℕ)\n    {T : ι → ℝ} {N : ι → Finset ℕ} {β : ι → ℕ → ℝ}\n    (hSW : BetaCoprimeSWFamily κ T N β)\n    (hT : ∀ i, 1 ≤ T i) (hN : ∀ i, N i ⊆ Ioc 0 ⌊T i⌋₊)\n    (hβ : ∀ i, ∀ n ∈ N i, |β i n| ≤ (fouvryTau k n : ℝ))\n    {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ x : ℝ in atTop, ∀ i : ι, T i ≤ x → x ^ ε ≤ T i →\n      ∀ M L : ℝ, 1 ≤ L → L ≤ x →\n      ∀ Q : Finset ℕ, Q ⊆ Ioc 0 ⌊L⌋₊ →\n      ∀ c : ℕ → ℝ, (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) →\n      ∀ a : ℤ,\n        |smoothWMain M (N i) Q (β i) c a - smoothUMain M (N i) Q (β i) c a| ≤\n          |M| * T i ^ 2 / Real.log x ^ A",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "alpha_sq_mul_smoothWU_SWFamily_log_payment",
+          "kind": "theorem",
+          "line": 99,
+          "complete_lexical_header": "theorem alpha_sq_mul_smoothWU_SWFamily_log_payment\n    {ι : Type*} {κ k ℓ : ℕ} (hk : 1 ≤ k) (hℓ : 1 ≤ ℓ) (j A : ℕ)\n    {T : ι → ℝ} {N : ι → Finset ℕ} {β : ι → ℕ → ℝ}\n    (hSW : BetaCoprimeSWFamily κ T N β)\n    (hT : ∀ i, 1 ≤ T i) (hN : ∀ i, N i ⊆ Ioc 0 ⌊T i⌋₊)\n    (hβ : ∀ i, ∀ n ∈ N i, |β i n| ≤ (fouvryTau k n : ℝ))\n    {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ x : ℝ in atTop, ∀ i : ι, ∀ M L : ℝ,\n      1 ≤ M → 1 ≤ L → M * T i ≤ x → L ≤ x → x ^ ε ≤ T i →\n      ∀ S Q : Finset ℕ,\n      (∀ m ∈ S, M ≤ (m : ℝ) ∧ (m : ℝ) ≤ 2 * M) →\n      Q ⊆ Ioc 0 ⌊L⌋₊ → ∀ α c : ℕ → ℝ,\n      (∀ m ∈ S, |α m| ≤ (fouvryTau ℓ m : ℝ)) →\n      (∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) → ∀ a : ℤ,\n      (∑ m ∈ S, α m ^ 2) *\n        |smoothWMain M (N i) Q (β i) c a - smoothUMain M (N i) Q (β i) c a| ≤\n        x ^ 2 / Real.log x ^ A",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryHighDelta.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryHighDelta.lean",
+      "sha256": "ff58cf0a0f47d66f932af4c1ab60e0cc48d45d80021b0c87cdb0e7643cb4b40e",
+      "bytes": 4933,
+      "fixed_pin_blob_sha256": "ff58cf0a0f47d66f932af4c1ab60e0cc48d45d80021b0c87cdb0e7643cb4b40e",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmallDelta"
+      ],
+      "declarations": [
+        {
+          "name": "sum_betaResidueMass_centered_sq_le_highDelta",
+          "kind": "theorem",
+          "line": 50,
+          "complete_lexical_header": "theorem sum_betaResidueMass_centered_sq_le_highDelta\n    (N : Finset ℕ) (β : ℕ → ℝ) {q δ : ℕ}\n    (hδ : 0 < δ) (hdq : δ ∣ q) (hN : ∀ n ∈ N, n < δ) :\n    (∑ b ∈ betaReducedResidues δ,\n      (betaResidueMass N β q δ b - coprimeMass N β q / (δ.totient : ℝ)) ^ 2) ≤\n        ∑ n ∈ N, β n ^ 2",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "betaCovariance_abs_le_highDelta",
+          "kind": "theorem",
+          "line": 84,
+          "complete_lexical_header": "theorem betaCovariance_abs_le_highDelta\n    {T : ℝ} (hT : 0 ≤ T) (N : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊)\n    (β : ℕ → ℝ) {q r : ℕ} (hδ : T < (q.gcd r : ℝ)) :\n    |betaCovariance N β q r| ≤ ∑ n ∈ N, β n ^ 2",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/ConductorChangeLevelLedger.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/ConductorChangeLevelLedger.lean",
+      "sha256": "285d65909de5b2ec5e88d900c7820c86822cb9fa4d611eca76e21cb55ee8b0be",
+      "bytes": 17535,
+      "fixed_pin_blob_sha256": "285d65909de5b2ec5e88d900c7820c86822cb9fa4d611eca76e21cb55ee8b0be",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.Vaughan.VaughanSmallRangeAndCharacters"
+      ],
+      "declarations": [
+        {
+          "name": "conductorBadSupport",
+          "kind": "def",
+          "line": 22,
+          "complete_lexical_header": "def conductorBadSupport (q : ℕ) (M : ℤ) (N : ℕ) : Finset ℤ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def conductorBadSupport (q : ℕ) (M : ℤ) (N : ℕ) : Finset ℤ :=\n  (Finset.Icc (M + 1) (M + N)).filter (fun n => ¬ IsCoprime n q)"
+        },
+        {
+          "name": "characterPrefixSquare",
+          "kind": "def",
+          "line": 153,
+          "complete_lexical_header": "def characterPrefixSquare {q : ℕ} (χ : DirichletCharacter ℂ q)\n    (b : ℤ → ℂ) (M : ℤ) (y : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def characterPrefixSquare {q : ℕ} (χ : DirichletCharacter ℂ q)\n    (b : ℤ → ℂ) (M : ℤ) (y : ℕ) : ℝ :=\n  ‖∑ n ∈ Finset.Icc (M + 1) (M + y), b n * χ (n : ZMod q)‖ ^ 2"
+        },
+        {
+          "name": "characterPrefixMaxSquare",
+          "kind": "def",
+          "line": 158,
+          "complete_lexical_header": "def characterPrefixMaxSquare {q : ℕ} (χ : DirichletCharacter ℂ q)\n    (b : ℤ → ℂ) (M : ℤ) (N : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def characterPrefixMaxSquare {q : ℕ} (χ : DirichletCharacter ℂ q)\n    (b : ℤ → ℂ) (M : ℤ) (N : ℕ) : ℝ :=\n  ((Finset.range (N + 1)).image (fun y => characterPrefixSquare χ b M y)).max'\n    (Finset.image_nonempty.mpr ⟨0, by simp⟩)"
+        },
+        {
+          "name": "nonprincipalConductors",
+          "kind": "def",
+          "line": 193,
+          "complete_lexical_header": "def nonprincipalConductors (q : ℕ) : Finset ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def nonprincipalConductors (q : ℕ) : Finset ℕ :=\n  q.divisors.filter (fun d => 2 ≤ d)"
+        },
+        {
+          "name": "imprimitiveConductorWeight",
+          "kind": "def",
+          "line": 199,
+          "complete_lexical_header": "def imprimitiveConductorWeight (Q d : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def imprimitiveConductorWeight (Q d : ℕ) : ℝ :=\n  ∑ q ∈ Finset.Icc 1 Q with d ∣ q, (q : ℝ) / (q.totient : ℝ)"
+        },
+        {
+          "name": "sum_nonprincipal_by_conductor",
+          "kind": "theorem",
+          "line": 204,
+          "complete_lexical_header": "theorem sum_nonprincipal_by_conductor\n    {q : ℕ} (hq : 0 < q)\n    (F : (d : ℕ) → PrimitiveCharacter d → ℝ) :\n    (∑ χ ∈ nonprincipalCharacters q,\n        F χ.conductor (conductorPrimitiveCharacter χ)) =\n      ∑ d ∈ nonprincipalConductors q, ∑ ψ : PrimitiveCharacter d, F d ψ",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "weighted_sum_nonprincipal_by_conductor",
+          "kind": "theorem",
+          "line": 279,
+          "complete_lexical_header": "theorem weighted_sum_nonprincipal_by_conductor\n    (Q : ℕ) (F : (d : ℕ) → PrimitiveCharacter d → ℝ) :\n    (∑ q ∈ Finset.Icc 1 Q,\n        ((q : ℝ) / (q.totient : ℝ)) *\n          ∑ χ ∈ nonprincipalCharacters q,\n            F χ.conductor (conductorPrimitiveCharacter χ)) =\n      ∑ d ∈ Finset.Icc 2 Q,\n        imprimitiveConductorWeight Q d * ∑ ψ : PrimitiveCharacter d, F d ψ",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "weighted_allCharacter_nonprincipal_prefix_ledger",
+          "kind": "theorem",
+          "line": 332,
+          "complete_lexical_header": "theorem weighted_allCharacter_nonprincipal_prefix_ledger\n    (b : ℤ → ℂ) (M : ℤ) (N Q : ℕ) :\n    (∑ q ∈ Finset.Icc 1 Q,\n      ((q : ℝ) / (q.totient : ℝ)) *\n        ∑ χ ∈ nonprincipalCharacters q, characterPrefixMaxSquare χ b M N) ≤\n      2 * (∑ d ∈ Finset.Icc 2 Q,\n        imprimitiveConductorWeight Q d *\n          ∑ ψ : PrimitiveCharacter d,\n            primitiveCharacterPrefixMaxSquare b M N d ψ) +\n      8 * (N : ℝ) *\n        ∑ q ∈ Finset.Icc 1 Q,\n          ((q : ℝ) / (q.totient : ℝ)) *\n            ∑ _χ ∈ nonprincipalCharacters q,\n              ∑ n ∈ conductorBadSupport q M N, ‖b n‖ ^ 2",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/ImprimitiveConductorWeightLinear.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/ImprimitiveConductorWeightLinear.lean",
+      "sha256": "6678d20c00f98855f733490ff485d954f5f61e8ce7801df9f5752c29940cc5f6",
+      "bytes": 14869,
+      "fixed_pin_blob_sha256": "6678d20c00f98855f733490ff485d954f5f61e8ce7801df9f5752c29940cc5f6",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.ImprimitiveConductorWeight"
+      ],
+      "declarations": [
+        {
+          "name": "conductorHarmonicFactor",
+          "kind": "def",
+          "line": 23,
+          "complete_lexical_header": "def conductorHarmonicFactor (R : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def conductorHarmonicFactor (R : ℕ) : ℝ :=\n  ∑ e ∈ Finset.Icc 1 R, (e : ℝ)⁻¹"
+        },
+        {
+          "name": "imprimitiveConductorWeight_le_linear_harmonic",
+          "kind": "theorem",
+          "line": 180,
+          "complete_lexical_header": "theorem imprimitiveConductorWeight_le_linear_harmonic\n    (Q d : ℕ) (hd : 0 < d) :\n    imprimitiveConductorWeight Q d ≤\n      ((d : ℝ) / (d.totient : ℝ)) *\n        ((Q / d : ℕ) : ℝ) * conductorHarmonicFactor (Q / d)",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "imprimitive_conductor_window_prefix_large_sieve_linear",
+          "kind": "theorem",
+          "line": 282,
+          "complete_lexical_header": "theorem imprimitive_conductor_window_prefix_large_sieve_linear\n    (b : ℤ → ℂ) (M : ℤ) (N Q D : ℕ) (hD : 0 < D) :\n    (∑ d ∈ Finset.Icc D (2 * D),\n      imprimitiveConductorWeight Q d *\n        ∑ ψ : PrimitiveCharacter d,\n          primitiveCharacterPrefixMaxSquare b M N d ψ) ≤\n      ((Q / D : ℕ) : ℝ) * conductorHarmonicFactor (Q / D) *\n        ((((Nat.log2 N + 1 : ℕ) : ℝ) ^ 2) *\n          primitiveLargeSieveConstant N (2 * D) *\n            ∑ n ∈ Finset.Icc (M + 1) (M + N), ‖b n‖ ^ 2)",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/HighConductorDyadicPrimitive.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/HighConductorDyadicPrimitive.lean",
+      "sha256": "1ea1d40cb2d620b93ff6d8f040d4b7c76190c12e7978f87b07df3aceb44ac010",
+      "bytes": 11169,
+      "fixed_pin_blob_sha256": "1ea1d40cb2d620b93ff6d8f040d4b7c76190c12e7978f87b07df3aceb44ac010",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.PrefixMaximal",
+        "import Mathlib.NumberTheory.DirichletCharacter.Orthogonality"
+      ],
+      "declarations": [
+        {
+          "name": "highConductorPrimitiveMean",
+          "kind": "def",
+          "line": 27,
+          "complete_lexical_header": "def highConductorPrimitiveMean\n    (R Q : ℕ) (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def highConductorPrimitiveMean\n    (R Q : ℕ) (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : ℝ :=\n  ∑ d ∈ Finset.Ioc R Q,\n    (1 / (d.totient : ℝ)) * ∑ χ : PrimitiveCharacter d, A d χ"
+        },
+        {
+          "name": "highConductorPrimitiveSquareLedger",
+          "kind": "def",
+          "line": 33,
+          "complete_lexical_header": "def highConductorPrimitiveSquareLedger\n    (R Q : ℕ) (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def highConductorPrimitiveSquareLedger\n    (R Q : ℕ) (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : ℝ :=\n  ∑ d ∈ Finset.Ioc R Q,\n    ((d : ℝ) / (d.totient : ℝ)) * ∑ χ : PrimitiveCharacter d, (A d χ) ^ 2"
+        },
+        {
+          "name": "highConductorHarmonicTail",
+          "kind": "def",
+          "line": 39,
+          "complete_lexical_header": "def highConductorHarmonicTail (R Q : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def highConductorHarmonicTail (R Q : ℕ) : ℝ :=\n  ∑ d ∈ Finset.Ioc R Q, (1 : ℝ) / d"
+        },
+        {
+          "name": "highConductorPrimitiveMean_sq_le_harmonic_mul_squareLedger",
+          "kind": "theorem",
+          "line": 79,
+          "complete_lexical_header": "theorem highConductorPrimitiveMean_sq_le_harmonic_mul_squareLedger\n    (R Q : ℕ) (A : (d : ℕ) → PrimitiveCharacter d → ℝ) :\n    (highConductorPrimitiveMean R Q A) ^ 2 ≤\n      highConductorHarmonicTail R Q *\n        highConductorPrimitiveSquareLedger R Q A",
+          "section_variable_or_include_context": []
+        },
+        {
+          "name": "HighConductorTypeISquareSaving",
+          "kind": "def",
+          "line": 164,
+          "complete_lexical_header": "def HighConductorTypeISquareSaving\n    (R Q N : ℕ) (K : ℝ)\n    (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : Prop",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def HighConductorTypeISquareSaving\n    (R Q N : ℕ) (K : ℝ)\n    (A : (d : ℕ) → PrimitiveCharacter d → ℝ) : Prop :=\n  highConductorHarmonicTail R Q *\n      highConductorPrimitiveSquareLedger R Q A ≤\n    (K * N / Real.sqrt R) ^ 2"
+        },
+        {
+          "name": "highConductorTypeI_le",
+          "kind": "theorem",
+          "line": 189,
+          "complete_lexical_header": "theorem highConductorTypeI_le\n    {R Q N : ℕ} {K : ℝ}\n    (A : (d : ℕ) → PrimitiveCharacter d → ℝ)\n    (hA : ∀ d χ, 0 ≤ A d χ) (hK : 0 ≤ K)\n    (h : HighConductorTypeISquareSaving R Q N K A) :\n    highConductorPrimitiveMean R Q A ≤ K * N / Real.sqrt R",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/ConductorLocalPrimitiveLargeSieve.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/ConductorLocalPrimitiveLargeSieve.lean",
+      "sha256": "046fbc9038d08a39dd749ed646a5bf91739cd7f36cb32d1aaf68356f5f980d02",
+      "bytes": 4539,
+      "fixed_pin_blob_sha256": "046fbc9038d08a39dd749ed646a5bf91739cd7f36cb32d1aaf68356f5f980d02",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.Vaughan.HighConductorVaughanTypeIRow"
+      ],
+      "declarations": [
+        {
+          "name": "conductorLocalRowEnergy",
+          "kind": "def",
+          "line": 21,
+          "complete_lexical_header": "def conductorLocalRowEnergy (b : ℤ → ℂ) (M : ℤ) (L : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def conductorLocalRowEnergy (b : ℤ → ℂ) (M : ℤ) (L : ℕ) : ℝ :=\n  ∑ n ∈ Finset.Icc (M + 1) (M + L), ‖b n‖ ^ 2"
+        },
+        {
+          "name": "ConductorLocalPrimitiveLargeSieve",
+          "kind": "def",
+          "line": 30,
+          "complete_lexical_header": "def ConductorLocalPrimitiveLargeSieve (K : ℝ) : Prop",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def ConductorLocalPrimitiveLargeSieve (K : ℝ) : Prop :=\n  ∀ (R Q L : ℕ) (b : ℤ → ℂ) (M : ℤ), 0 < R → 0 < Q →\n    highConductorHarmonicTail R Q *\n        highConductorPrimitiveSquareLedger R Q\n          (fun d χ => Real.sqrt\n            (primitiveCharacterPrefixMaxSquare b M L d χ)) ≤\n      K ^ 2 * (((Nat.log2 L + 1 : ℕ) : ℝ) ^ 2) *\n        (((L : ℝ) * conductorLocalRowEnergy b M L) / R +\n          (Q : ℝ) ^ 2 * conductorLocalRowEnergy b M L)"
+        },
+        {
+          "name": "highConductorPrimitiveRowMean_le_of_conductorLocal",
+          "kind": "theorem",
+          "line": 48,
+          "complete_lexical_header": "theorem highConductorPrimitiveRowMean_le_of_conductorLocal\n    {K : ℝ} (hK : 0 ≤ K) (hLS : ConductorLocalPrimitiveLargeSieve K)\n    (R Q L N : ℕ) (b : ℤ → ℂ) (M : ℤ)\n    (hR : 0 < R) (hQ : 0 < Q)\n    (hdiag : (L : ℝ) * conductorLocalRowEnergy b M L ≤ (N : ℝ) ^ 2)\n    (henergy : conductorLocalRowEnergy b M L ≤ (N : ℝ)) :\n    highConductorPrimitiveMean R Q\n        (fun d χ => Real.sqrt\n          (primitiveCharacterPrefixMaxSquare b M L d χ)) ≤\n      K * ((Nat.log2 L + 1 : ℕ) : ℝ) *\n        ((N : ℝ) / Real.sqrt R + (Q : ℝ) * Real.sqrt N)",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/StandardBVLowHighConductor.lean",
+      "git_path": "MathlibNt/AnalyticNumberTheory/LargeSieve/StandardBVLowHighConductor.lean",
+      "sha256": "ef85d6f98d481506b1efc882232b50362acb5730d2d6379193e370a370ba4314",
+      "bytes": 19283,
+      "fixed_pin_blob_sha256": "ef85d6f98d481506b1efc882232b50362acb5730d2d6379193e370a370ba4314",
+      "working_bytes_equal_pin_blob": true,
+      "direct_import_lines": [
+        "import MathlibNt.AnalyticNumberTheory.LargeSieve.PrincipalLambdaGlobalReduction",
+        "import MathlibNt.AnalyticNumberTheory.Vaughan.VaughanDirectAPNormalizedAssembly"
+      ],
+      "declarations": [
+        {
+          "name": "apNormalizedPrimitiveMeanOn",
+          "kind": "def",
+          "line": 131,
+          "complete_lexical_header": "def apNormalizedPrimitiveMeanOn\n    (a : ℤ → ℂ) (N : ℕ) (S : Finset ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def apNormalizedPrimitiveMeanOn\n    (a : ℤ → ℂ) (N : ℕ) (S : Finset ℕ) : ℝ :=\n  ∑ d ∈ S, ((d.totient : ℝ)⁻¹) *\n    ∑ ψ : PrimitiveCharacter d, primitivePrefixAmplitude a N d ψ"
+        },
+        {
+          "name": "primitivePrefixSquareLedgerOn",
+          "kind": "def",
+          "line": 137,
+          "complete_lexical_header": "def primitivePrefixSquareLedgerOn\n    (a : ℤ → ℂ) (N : ℕ) (S : Finset ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def primitivePrefixSquareLedgerOn\n    (a : ℤ → ℂ) (N : ℕ) (S : Finset ℕ) : ℝ :=\n  ∑ d ∈ S, ((d : ℝ) / (d.totient : ℝ)) *\n    ∑ ψ : PrimitiveCharacter d,\n      primitiveCharacterPrefixMaxSquare a 0 N d ψ"
+        },
+        {
+          "name": "highConductorHarmonicFactor",
+          "kind": "def",
+          "line": 144,
+          "complete_lexical_header": "def highConductorHarmonicFactor (Q R : ℕ) : ℝ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def highConductorHarmonicFactor (Q R : ℕ) : ℝ :=\n  ∑ d ∈ Finset.Icc (R + 1) Q, ((d : ℝ)⁻¹)"
+        },
+        {
+          "name": "apNormalizedPrimitiveMeanOn_high_sq_le",
+          "kind": "theorem",
+          "line": 149,
+          "complete_lexical_header": "theorem apNormalizedPrimitiveMeanOn_high_sq_le\n    (a : ℤ → ℂ) (N Q R : ℕ)\n    (hcard : ∀ d ∈ Finset.Icc (R + 1) Q,\n      Fintype.card (PrimitiveCharacter d) ≤ d.totient) :\n    apNormalizedPrimitiveMeanOn a N (Finset.Icc (R + 1) Q) ^ 2 ≤\n      highConductorHarmonicFactor Q R *\n        primitivePrefixSquareLedgerOn a N (Finset.Icc (R + 1) Q)",
+          "section_variable_or_include_context": []
+        }
+      ]
+    }
+  ],
+  "actual_project_source_bindings": {
+    "ImbalancedChen/Part3DistributionTargets.lean": {
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "declarations": [
+        {
+          "name": "MediumAtom.auxSWError",
+          "kind": "def",
+          "line": 95,
+          "complete_lexical_header": "def MediumAtom.auxSWError (d : MediumAtom) (k q b : ℕ) : ℂ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def MediumAtom.auxSWError (d : MediumAtom) (k q b : ℕ) : ℂ :=\n  (∑ n ∈ d.alphaCarrier,\n    if Nat.ModEq q n b ∧ Nat.Coprime n k then d.alpha n else 0) -\n  (∑ n ∈ d.alphaCarrier,\n    if Nat.Coprime n (k * q) then d.alpha n else 0) / (Nat.totient q : ℂ)"
+        },
+        {
+          "name": "UniformAuxiliarySW",
+          "kind": "def",
+          "line": 103,
+          "complete_lexical_header": "def UniformAuxiliarySW {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ) : Prop",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def UniformAuxiliarySW {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ) : Prop :=\n  ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n    ∀ i : ι, x0 ≤ (F i).scale → ∀ k q b : ℕ,\n      1 ≤ k → 1 ≤ q → Nat.Coprime b q →\n      ‖(F i).auxSWError k q b‖ ≤\n        C * (F i).U * ((k.divisors.card : ℝ) ^ C0) /\n          (Real.log (F i).scale) ^ A"
+        }
+      ]
+    },
+    "ImbalancedChen/Part3TransposedDispersion.lean": {
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "declarations": [
+        {
+          "name": "MediumAtom.transposedPairedSWError",
+          "kind": "def",
+          "line": 127,
+          "complete_lexical_header": "def MediumAtom.transposedPairedSWError (d : MediumAtom) (k q b : ℕ) : ℂ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def MediumAtom.transposedPairedSWError (d : MediumAtom) (k q b : ℕ) : ℂ :=\n  (∑ n ∈ d.transposedAtom.betaCarrier,\n    if Nat.ModEq q n b ∧ Nat.Coprime n k then d.transposedAtom.beta n else 0) -\n  (∑ n ∈ d.transposedAtom.betaCarrier,\n    if Nat.Coprime n (k * q) then d.transposedAtom.beta n else 0) / (Nat.totient q : ℂ)"
+        },
+        {
+          "name": "MediumAtom.transposedPairedSWError_eq_auxSWError",
+          "kind": "theorem",
+          "line": 140,
+          "complete_lexical_header": "theorem MediumAtom.transposedPairedSWError_eq_auxSWError (d : MediumAtom) (k q b : ℕ) :\n    d.transposedPairedSWError k q b = d.auxSWError k q b",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    "ImbalancedChen/Part3SharedFirstFactorDispersion.lean": {
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "declarations": [
+        {
+          "name": "MediumAtom.primitiveFirstFactorCarrier",
+          "kind": "def",
+          "line": 32,
+          "complete_lexical_header": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)"
+        },
+        {
+          "name": "MediumAtom.sharedFirstFactorRows",
+          "kind": "def",
+          "line": 35,
+          "complete_lexical_header": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ)",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier"
+        },
+        {
+          "name": "MediumAtom.sharedFirstFactorCoefficient",
+          "kind": "def",
+          "line": 38,
+          "complete_lexical_header": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ",
+          "section_variable_or_include_context": [],
+          "complete_primitive_definition": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2"
+        },
+        {
+          "name": "uniformAuxiliarySW_q1SliceFamily",
+          "kind": "theorem",
+          "line": 79,
+          "complete_lexical_header": "theorem uniformAuxiliarySW_q1SliceFamily {ι : Type*} (F : ι → MediumAtom)\n    {C0 : ℕ} (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun ip : ι × ℕ ↦ (F ip.1).q1SliceAtom ip.2) C0",
+          "section_variable_or_include_context": []
+        }
+      ]
+    },
+    "ImbalancedChen/Part3SharedFirstFactorPairCount.lean": {
+      "sha256": "44cdaf188f35435f8956d19c2701abbcf69101b4cfb491679761d19080f96fe7",
+      "observed_only": true
+    }
+  },
+  "discovery_method": {
+    "initial": "Directed rg for AP discrepancy/mean-square/SW/BDH/conductor interfaces in primary source roots. Names, search nonmatches, olean files, and previous PASS labels are not theorem evidence.",
+    "semantic_followthrough": "Read full relevant BombieriDavenport proof through 278; all finite covariance/AP definitions and covariance estimates through 350; SmallDelta through 215; full HighDelta; all ZeroModePayment types/proof payment; full ConductorLocalPrimitiveLargeSieve; conductor regrouping and weighted ledger through 367; linear imprimitive transport through 322; HighConductorDyadicPrimitive square/consumer proofs through 218. Remaining raw declaration discovery was used only to select candidates.",
+    "coverage_limit": "No claim of a formally exhaustive theorem-nonexistence proof for every provider module. No suitable complete endpoint was identified in the inspected generic SW, AP covariance, conductor decomposition, and large-sieve chains. Specialized prime/Lambda distribution endpoints do not quantify over actual arbitrary complex alpha.",
+    "DAG": "No foreign or global source-DAG census rerun. This audit changes no .lean imports. Reachability or prior owned status is not used to certify an external result."
+  },
+  "conclusion": {
+    "direct_completed_weighted_auxSW_to_BDH_endpoint_identified": false,
+    "decision": "Do not insert a generic mean-square supplier or count a source interface as payment. The desired composite-modulus, auxiliary-sieved weighted AP variance remains a new proved analytic step, unless the shared-p consumer is reorganized to avoid it.",
+    "genuine_unconditional_results": [
+      "weighted_primitive_bombieri_davenport_explicit controls primitive characters for arbitrary complex interval coefficients with [N+(2ceil(log(Q^2)/log2)+12)Q^2] times coefficient L2. It has only Q>0; no residue support, roughness, a-size, or hidden analytic-supply premise appears in its lexical theorem type.",
+      "charParseval_units is exact all-character Parseval on units. Taking centered residue masses as T and removing its zero principal transform is finite algebra still to be connected to the actual AP variance; it is not a modulus-average analytic estimate.",
+      "sum_betaResidueMass_centered_sq_le_highDelta proves per-modulus centered variance <= coefficient L2 only under every supported n<delta. This cannot cover the remaining small physical gcd coordinate delta=p*d<=support endpoint 2U.",
+      "weighted_sum_nonprincipal_by_conductor exactly groups by primitive conductor. weighted_allCharacter_nonprincipal_prefix_ledger additionally retains the honest conductorBadSupport error. No estimate in that theorem pays this error from arbitrary auxiliary-SW data.",
+      "imprimitive_conductor_window_prefix_large_sieve_linear is a genuine unconditional dyadic conductor transport, but its output remains (Q/D) H(Q/D) (log2 N+1)^2 [N+O(D^2 log D)] times coefficient energy. It is not a completed log-saving centered-AP theorem."
+    ],
+    "conditional_non_suppliers": [
+      "BetaCoprimeSWFamily is pointwise in every positive modulus d, auxiliary h, and reduced b; it is not a mean-square conclusion.",
+      "betaCovariance_abs_le_of_coprimeAP and betaCovariance_abs_le_coprimeAP_lone consume supplied AP error bounds. Their aggregate and SW logarithmic payment use all-positive-modulus pointwise input and ordinary complete-modulus lcm weights, not the new shared-p covariance sum.",
+      "ConductorLocalPrimitiveLargeSieve K is a Prop definition imposing the desired L/R square-ledger strengthening for every arbitrary row. highConductorPrimitiveRowMean_le_of_conductorLocal requires hLS plus explicit energy inequalities. It is not a theorem proving that Prop.",
+      "highConductorTypeI_le requires HighConductorTypeISquareSaving; the inverse sqrt R comes from that premise. The unconditional harmonic-Cauchy inequality supplies a harmonic tail, not an upper bound 1/R."
+    ]
+  },
+  "actual_dictionary_and_gap": {
+    "coefficient": "The paired sequence is original complex alpha on original alphaCarrier inside [U,2U]; transposed beta is its interval-zero extension. The exact transposedPairedSWError_eq_auxSWError keeps the same auxiliary k, AP modulus q, and residue b.",
+    "uniform_quantifiers": "Actual UniformAuxiliarySW chooses C and threshold before every family atom, k,q,b; error <= C U tau_2(k)^C0/log(scale)^A for all k,q>=1 and b coprime q. Provider BetaCoprimeSWFamily is real-valued and log(2T), so real/imag and upper-endpoint dictionaries must remain proved rather than silently substituted.",
+    "shared_moduli": "At fixed tails v1=q2*q3 and v2=r2*r3 let d=gcd(v1,v2). The physical moduli are p*v1,p*v2, with gcd=p*d and lcm=p*lcm(v1,v2), for arbitrary positive/composite p. The two relevant auxiliary sieves are h1=v1/d and h2=v2/d, independent of p for those fixed tails.",
+    "requested_error_sum": "The useful new object is a weighted sum over the full primitive first-factor carrier p~Q1 of reduced b modulo p*d of ||auxSWError(h_j,p*d,b)||^2, or its two-sided covariance counterpart, retaining h_j and all physical labels. Pointwise SW followed by summing p does not itself supply the missing Q1 normalization.",
+    "primitive_gate": "primitiveFirstFactorCarrier only imposes p coprime |a|; p is not required prime. The original gamma2/gamma3 gates and reduced class b guarantee needed unit conditions. Replacing p by primes discards authorized physical labels.",
+    "residue": "No signed a appears in the AP variance error itself. A theorem uniform over reduced b would accommodate moving signed a after the actual unit/CRT dictionary, without a separate |a| bound; none of the inspected finite LS types imposes an a-range.",
+    "range": "For an intended Maynard13.8-style theorem one must prove its exact Q<N/log(N)^C range after replacing modulus by p*d and length by 2U, with all d and auxiliary costs. The primary-paper range is not a Lean theorem in the inspected provider chain. No nu<=.1 gate arises in the genuine primitive LS theorem itself.",
+    "why_primitive_LS_alone_fails": "Centered AP variance contains every nonprincipal character of composite p*d, including characters induced from smaller conductors. The primitive LS does not control that entire set without a conductor decomposition and honest correction/payment. Neither p primitive-to-a nor paired coefficient roughness automatically makes those characters primitive.",
+    "normalization_observation_not_a_provider_theorem": "For prime p and d=1, exact nonprincipal Parseval plus 1/p<=1/Q on p~Q and primitive LS suggests (U/Q+Q)*alphaL2 up to logs. This is only a hand-derived special-case route, not an existing selected source theorem, and does not match arbitrary composite p, d, auxiliary h, or divisor weights.",
+    "remaining_proof_lanes": [
+      "exact complex principal-subtracted residue Parseval for actual interval-zero coefficient and auxiliary coprime mask",
+      "composite p*d conductor/Mobius decomposition that preserves the true auxiliary sieve and controls its correction",
+      "uniform low-conductor payment from actual auxiliary-SW with constants before all atom/tail parameters",
+      "high-conductor dyadic LS normalization with a genuine inverse modulus factor and the permissible q-range",
+      "fixed divisor-weight payment and aggregation over the actual remaining tail/d coordinates without restoring the lost Q1"
+    ]
+  },
+  "explicit_exclusions": [
+    "No new theorem, analytic supplier, or desired-energy hypothesis has been added to the actual target.",
+    "No claim that a primary-paper citation supplies formal Lean proof.",
+    "No use of disputed Lichtman slow-phase deletion.",
+    "No reuse of independent-first-factor wGram as the shared-p row.",
+    "No claim that the surviving scalar bound proves an impossibility theorem for stronger local estimates."
+  ]
+}

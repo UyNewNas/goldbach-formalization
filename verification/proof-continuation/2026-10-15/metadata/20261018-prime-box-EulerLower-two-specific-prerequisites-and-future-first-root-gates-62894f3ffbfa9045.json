@@ -1,0 +1,466 @@
+{
+  "status": "ROOT_EXACT_TWO_EULER_PREREQUISITE_TARGET_GATES_AND_FUTURE_THIN_EULER_FIRST",
+  "created_utc": "2026-10-18T03:21:01.079390+00:00",
+  "reviewer": "/root",
+  "author_scope": {
+    "path": "20261016-prime-box-EulerLower-thin-normalizer-root-author-scope.json",
+    "sha256": "002543ae53fd737e08b74013dc1e2f1fc3487fb4990ed2b2e95cc7c3b19db370"
+  },
+  "complete_non_author_review": {
+    "path": "20261016-prime-box-EulerLower-thin-normalizer-independent-semantics-and-parent-review.json",
+    "sha256": "73b7cd67948d03230814bd051879173fde6d242ae29fc949a0c163fa54c585e8"
+  },
+  "root_complete_source_read": "Root actually read all458 parent source lines (Mass155,Dimension303), all36 declarations/five definitions including inline attributes/direct proofterms, and full original/current Euler139 lines/five declarations/one definition. Revalidated allthree exact source hashes now; no mathematical source changed.",
+  "exact_two_prerequisite_targets": [
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxMass.lean",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "line_count": 159,
+      "entire_source_read": true,
+      "complete_declaration_count": 13,
+      "definition_count": 2,
+      "complete_declarations": [
+        {
+          "name": "actualPrimeBoxMass",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def actualPrimeBoxMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ",
+          "complete_source": "def actualPrimeBoxMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b, ∏ i, 1 / ((p i : ℝ) - 1)"
+        },
+        {
+          "name": "actualPrimeBoxWeight_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxWeight_nonneg {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    0 ≤ ∏ i, 1 / ((p i : ℝ) - 1)",
+          "complete_source": "theorem actualPrimeBoxWeight_nonneg {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    0 ≤ ∏ i, 1 / ((p i : ℝ) - 1) := by\n  apply Finset.prod_nonneg\n  intro i _\n  have hpi : (1 : ℝ) < p i := by\n    exact_mod_cast (mem_actualPrimeBoxTuples_iff.mp hp i).1.one_lt\n  exact le_of_lt (one_div_pos.mpr (sub_pos.mpr hpi))"
+        },
+        {
+          "name": "actualPrimeBoxMass_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxMass_nonneg (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    0 ≤ actualPrimeBoxMass N a b",
+          "complete_source": "theorem actualPrimeBoxMass_nonneg (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    0 ≤ actualPrimeBoxMass N a b := by\n  exact Finset.sum_nonneg (fun _ hp => actualPrimeBoxWeight_nonneg hp)"
+        },
+        {
+          "name": "actualPrimeBoxMass_eq_prod",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxMass_eq_prod (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    actualPrimeBoxMass N a b = ∏ i, actualPrimeReciprocalMass N (a i) (b i)",
+          "complete_source": "theorem actualPrimeBoxMass_eq_prod (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    actualPrimeBoxMass N a b = ∏ i, actualPrimeReciprocalMass N (a i) (b i) := by\n  classical\n  exact (Finset.prod_univ_sum\n    (fun i => roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))\n      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))\n    (fun _ p => 1 / ((p : ℝ) - 1))).symm"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxMass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem tendsto_actualPrimeBoxMass {k : ℕ} (a b : Fin k → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i) :\n    Tendsto (fun N : ℕ => actualPrimeBoxMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i)))",
+          "complete_source": "theorem tendsto_actualPrimeBoxMass {k : ℕ} (a b : Fin k → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i) :\n    Tendsto (fun N : ℕ => actualPrimeBoxMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i))) := by\n  simp only [actualPrimeBoxMass_eq_prod]\n  exact tendsto_finsetProd Finset.univ (fun i _ =>\n    tendsto_actualPrimeReciprocalMass (ha i) (hab i))"
+        },
+        {
+          "name": "actualPrimeBoxTuples_strictAnti",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuples_strictAnti {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : StrictAnti p",
+          "complete_source": "theorem actualPrimeBoxTuples_strictAnti {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : StrictAnti p := by\n  apply Fin.strictAnti_iff_succ_lt.mpr\n  intro i\n  have hp' := mem_actualPrimeBoxTuples_iff.mp hp\n  have hN' : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hexp := Real.rpow_le_rpow_of_exponent_le hN' (hsep i)\n  have hlt := (hp' i.succ).2.2.2.trans_le\n    (hexp.trans (hp' i.castSucc).2.2.1)\n  exact_mod_cast hlt"
+        },
+        {
+          "name": "actualPrimeBoxTuples_injective",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuples_injective {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : Function.Injective p",
+          "complete_source": "theorem actualPrimeBoxTuples_injective {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : Function.Injective p :=\n  (actualPrimeBoxTuples_strictAnti hN hsep hp).injective"
+        },
+        {
+          "name": "totient_primeTuple_cast",
+          "kind": "theorem",
+          "private": true,
+          "complete_header": "private theorem totient_primeTuple_cast {k : ℕ} (p : Fin k → ℕ)\n    (hprime : ∀ i, Nat.Prime (p i)) (hinj : Function.Injective p)\n    (s : Finset (Fin k)) :\n    (Nat.totient (∏ i ∈ s, p i) : ℝ) = ∏ i ∈ s, ((p i : ℝ) - 1)",
+          "complete_source": "private theorem totient_primeTuple_cast {k : ℕ} (p : Fin k → ℕ)\n    (hprime : ∀ i, Nat.Prime (p i)) (hinj : Function.Injective p)\n    (s : Finset (Fin k)) :\n    (Nat.totient (∏ i ∈ s, p i) : ℝ) = ∏ i ∈ s, ((p i : ℝ) - 1) := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert i s hi ih =>\n    have hcop : (p i).Coprime (∏ j ∈ s, p j) := by\n      apply Nat.coprime_prod_right_iff.mpr\n      intro j hj\n      apply (Nat.coprime_primes (hprime i) (hprime j)).mpr\n      intro heq\n      have hij := hinj heq\n      exact hi (hij ▸ hj)\n    rw [Finset.prod_insert hi, Nat.totient_mul hcop, Nat.cast_mul,\n      ih, Finset.prod_insert hi, Nat.totient_prime (hprime i)]\n    rw [Nat.cast_sub (hprime i).one_lt.le, Nat.cast_one]"
+        },
+        {
+          "name": "actualPrimeBoxTuple_reciprocalTotient",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuple_reciprocalTotient {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b)\n    (hinj : Function.Injective p) :\n    1 / (Nat.totient (∏ i, p i) : ℝ) = ∏ i, 1 / ((p i : ℝ) - 1)",
+          "complete_source": "theorem actualPrimeBoxTuple_reciprocalTotient {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b)\n    (hinj : Function.Injective p) :\n    1 / (Nat.totient (∏ i, p i) : ℝ) = ∏ i, 1 / ((p i : ℝ) - 1) := by\n  classical\n  rw [totient_primeTuple_cast p (fun i => (mem_actualPrimeBoxTuples_iff.mp hp i).1)\n    hinj Finset.univ, Finset.prod_div_distrib]\n  simp"
+        },
+        {
+          "name": "actualPrimeBoxTuple_product_coprime_target",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuple_product_coprime_target {N k : ℕ}\n    {a b : Fin k → ℝ} {p : Fin k → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) : (∏ i, p i).Coprime N",
+          "complete_source": "theorem actualPrimeBoxTuple_product_coprime_target {N k : ℕ}\n    {a b : Fin k → ℝ} {p : Fin k → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) : (∏ i, p i).Coprime N := by\n  rw [Nat.coprime_fintype_prod_left_iff]\n  intro i\n  have hi := mem_actualPrimeBoxTuples_iff.mp hp i\n  exact hi.1.coprime_iff_not_dvd.mpr hi.2.1"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def actualPrimeBoxTotientMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ",
+          "complete_source": "def actualPrimeBoxTotientMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b, 1 / (Nat.totient (∏ i, p i) : ℝ)"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass_eq_mass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTotientMass_eq_mass {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    (hN : 1 ≤ N) (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    actualPrimeBoxTotientMass N a b = actualPrimeBoxMass N a b",
+          "complete_source": "theorem actualPrimeBoxTotientMass_eq_mass {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    (hN : 1 ≤ N) (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    actualPrimeBoxTotientMass N a b = actualPrimeBoxMass N a b := by\n  classical\n  apply Finset.sum_congr rfl\n  intro p hp\n  exact actualPrimeBoxTuple_reciprocalTotient hp\n    (actualPrimeBoxTuples_injective hN hsep hp)"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxTotientMass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem tendsto_actualPrimeBoxTotientMass {k : ℕ} (a b : Fin (k + 1) → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTotientMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i)))",
+          "complete_source": "theorem tendsto_actualPrimeBoxTotientMass {k : ℕ} (a b : Fin (k + 1) → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTotientMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i))) := by\n  apply (tendsto_actualPrimeBoxMass a b ha hab).congr'\n  filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN\n  exact (actualPrimeBoxTotientMass_eq_mass hN hsep).symm"
+        }
+      ],
+      "full_math_and_API_review": [
+        "True finite actual tuple sum on [N^a_i,N^b_i), preserving target-prime exclusions. Factorization is a proved finite pi-sum distributive law, not the definition.",
+        "Prime>=2 proves actual1/(p-1) weight nonnegative. Fixed positive-exponent tuple mass limit follows by finite product of real actual one-prime limits, with no b<=1/parity restriction.",
+        "Adjacent separated boxes force strict decreasing primes even at equal exponent boundaries, by the strict upper cutoff. The reciprocal-totient identity separately requires actual injectivity; no such equality is asserted for overlapping boxes.",
+        "Private totient product induction proves coprimality of distinct primes and uses Nat.cast_sub only with prime>=2. Product is coprime to the target by each real prime exclusion.",
+        "Separated totient mass equality uses N>=1, and its limit pays that eventual gate. The zero-coordinate mass/limit is1. No distribution/count mean is supplied."
+      ],
+      "determined_static_blockers": [],
+      "forbidden_source_commands": []
+    },
+    {
+      "module": "ImbalancedChen.SieveDimensionComparison",
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SieveDimensionComparison.lean",
+      "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+      "line_count": 299,
+      "entire_source_read": true,
+      "complete_declaration_count": 23,
+      "definition_count": 3,
+      "complete_declarations": [
+        {
+          "name": "oddPrimesInInterval",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def oddPrimesInInterval (w v : ℕ) : Finset ℕ",
+          "complete_source": "def oddPrimesInInterval (w v : ℕ) : Finset ℕ :=\n  (oddPrimesBelowCap v).filter (fun p : ℕ => w ≤ p)"
+        },
+        {
+          "name": "sievePrimesInInterval",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def sievePrimesInInterval (N w v : ℕ) : Finset ℕ",
+          "complete_source": "def sievePrimesInInterval (N w v : ℕ) : Finset ℕ :=\n  (sievePrimes N v).filter (fun p : ℕ => w ≤ p)"
+        },
+        {
+          "name": "oddPrimeSieveDensity",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def oddPrimeSieveDensity (z : ℕ) : ℝ",
+          "complete_source": "def oddPrimeSieveDensity (z : ℕ) : ℝ :=\n  ∏ p ∈ oddPrimesBelowCap z, (1 - 1 / ((p : ℝ) - 1))"
+        },
+        {
+          "name": "mem_oddPrimesInInterval",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "@[simp] theorem mem_oddPrimesInInterval {w v p : ℕ} :\n    p ∈ oddPrimesInInterval w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ 2 < p",
+          "complete_source": "@[simp] theorem mem_oddPrimesInInterval {w v p : ℕ} :\n    p ∈ oddPrimesInInterval w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ 2 < p := by\n  simp only [oddPrimesInInterval, Finset.mem_filter, mem_oddPrimesBelowCap]\n  constructor\n  · rintro ⟨⟨hpv, hp, hp2⟩, hwp⟩\n    exact ⟨hwp, hpv, hp, hp2⟩\n  · rintro ⟨hwp, hpv, hp, hp2⟩\n    exact ⟨⟨hpv, hp, hp2⟩, hwp⟩"
+        },
+        {
+          "name": "mem_sievePrimesInInterval",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "@[simp] theorem mem_sievePrimesInInterval {N w v p : ℕ} :\n    p ∈ sievePrimesInInterval N w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ ¬p ∣ N",
+          "complete_source": "@[simp] theorem mem_sievePrimesInInterval {N w v p : ℕ} :\n    p ∈ sievePrimesInInterval N w v ↔\n      w ≤ p ∧ p < v ∧ Nat.Prime p ∧ ¬p ∣ N := by\n  simp only [sievePrimesInInterval, Finset.mem_filter, mem_sievePrimes]\n  constructor\n  · rintro ⟨⟨hpv, hp, hpN⟩, hwp⟩\n    exact ⟨hwp, hpv, hp, hpN⟩\n  · rintro ⟨hwp, hpv, hp, hpN⟩\n    exact ⟨⟨hpv, hp, hpN⟩, hwp⟩"
+        },
+        {
+          "name": "two_lt_of_mem_sievePrimes",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem two_lt_of_mem_sievePrimes {N z p : ℕ}\n    (hN : Even N) (hp : p ∈ sievePrimes N z) : 2 < p",
+          "complete_source": "theorem two_lt_of_mem_sievePrimes {N z p : ℕ}\n    (hN : Even N) (hp : p ∈ sievePrimes N z) : 2 < p := by\n  rw [sievePrimes_eq_oddPrimesBelowCap_filter hN] at hp\n  exact (mem_oddPrimesBelowCap.mp (Finset.mem_filter.mp hp).1).2.2"
+        },
+        {
+          "name": "odd_sieve_factor_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem odd_sieve_factor_pos {p : ℕ} (hp : 2 < p) :\n    (0 : ℝ) < 1 - 1 / ((p : ℝ) - 1)",
+          "complete_source": "theorem odd_sieve_factor_pos {p : ℕ} (hp : 2 < p) :\n    (0 : ℝ) < 1 - 1 / ((p : ℝ) - 1) := by\n  have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp\n  have hden : (0 : ℝ) < (p : ℝ) - 1 := by linarith\n  have hlt : 1 / ((p : ℝ) - 1) < (1 : ℝ) :=\n    (div_lt_one hden).mpr (by linarith)\n  linarith"
+        },
+        {
+          "name": "one_le_odd_sieve_ratio_factor",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem one_le_odd_sieve_ratio_factor {p : ℕ} (hp : 2 < p) :\n    (1 : ℝ) ≤ ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+          "complete_source": "theorem one_le_odd_sieve_ratio_factor {p : ℕ} (hp : 2 < p) :\n    (1 : ℝ) ≤ ((p : ℝ) - 1) / ((p : ℝ) - 2) := by\n  have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp\n  apply (le_div_iff₀ (by linarith : (0 : ℝ) < (p : ℝ) - 2)).mpr\n  linarith"
+        },
+        {
+          "name": "odd_sieve_factor_mul_ratio",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem odd_sieve_factor_mul_ratio {p : ℕ} (hp : 2 < p) :\n    (1 - 1 / ((p : ℝ) - 1)) *\n      (((p : ℝ) - 1) / ((p : ℝ) - 2)) = 1",
+          "complete_source": "theorem odd_sieve_factor_mul_ratio {p : ℕ} (hp : 2 < p) :\n    (1 - 1 / ((p : ℝ) - 1)) *\n      (((p : ℝ) - 1) / ((p : ℝ) - 2)) = 1 := by\n  have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp\n  have hp1 : (p : ℝ) - 1 ≠ 0 := by linarith\n  have hp2 : (p : ℝ) - 2 ≠ 0 := by linarith\n  field_simp [hp1, hp2] <;> ring"
+        },
+        {
+          "name": "finite_prod_le_prod_of_subset_of_one_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finite_prod_le_prod_of_subset_of_one_le\n    {α : Type*} {s t : Finset α} {f : α → ℝ}\n    (hst : s ⊆ t) (hf : ∀ a ∈ t, 1 ≤ f a) :\n    (∏ a ∈ s, f a) ≤ ∏ a ∈ t, f a",
+          "complete_source": "theorem finite_prod_le_prod_of_subset_of_one_le\n    {α : Type*} {s t : Finset α} {f : α → ℝ}\n    (hst : s ⊆ t) (hf : ∀ a ∈ t, 1 ≤ f a) :\n    (∏ a ∈ s, f a) ≤ ∏ a ∈ t, f a := by\n  classical\n  have hfilter : t.filter (fun a => a ∈ s) = s := by\n    ext a\n    simp only [Finset.mem_filter]\n    constructor\n    · exact fun h => h.2\n    · exact fun h => ⟨hst h, h⟩\n  rw [← hfilter, Finset.prod_filter]\n  apply Finset.prod_le_prod\n  · intro a ha\n    by_cases hs : a ∈ s\n    · simpa only [hs, if_true] using (zero_le_one.trans (hf a ha))\n    · simpa only [hs, if_false] using (zero_le_one : (0 : ℝ) ≤ 1)\n  · intro a ha\n    by_cases hs : a ∈ s\n    · simpa only [hs, if_true] using (le_rfl : f a ≤ f a)\n    · simpa only [hs, if_false] using (hf a ha)"
+        },
+        {
+          "name": "finite_prod_ratio_of_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finite_prod_ratio_of_split\n    {α : Type*} (s t u : Finset α) (f g : α → ℝ)\n    (ht : 0 < ∏ a ∈ t, f a)\n    (hsplit : (∏ a ∈ t, f a) = (∏ a ∈ s, f a) * ∏ a ∈ u, f a)\n    (hfg : ∀ a ∈ u, f a * g a = 1) :\n    (∏ a ∈ s, f a) / (∏ a ∈ t, f a) = ∏ a ∈ u, g a",
+          "complete_source": "theorem finite_prod_ratio_of_split\n    {α : Type*} (s t u : Finset α) (f g : α → ℝ)\n    (ht : 0 < ∏ a ∈ t, f a)\n    (hsplit : (∏ a ∈ t, f a) = (∏ a ∈ s, f a) * ∏ a ∈ u, f a)\n    (hfg : ∀ a ∈ u, f a * g a = 1) :\n    (∏ a ∈ s, f a) / (∏ a ∈ t, f a) = ∏ a ∈ u, g a := by\n  have hcancel : (∏ a ∈ u, f a) * (∏ a ∈ u, g a) = 1 := by\n    rw [← Finset.prod_mul_distrib]\n    calc\n      (∏ a ∈ u, f a * g a) = ∏ _a ∈ u, (1 : ℝ) := by\n        apply Finset.prod_congr rfl\n        exact hfg\n      _ = 1 := by simp\n  apply (div_eq_iff ht.ne').mpr\n  rw [hsplit]\n  calc\n    (∏ a ∈ s, f a) = (∏ a ∈ s, f a) * 1 := by ring\n    _ = (∏ a ∈ s, f a) * ((∏ a ∈ u, f a) * (∏ a ∈ u, g a)) := by\n      rw [hcancel]\n    _ = (∏ a ∈ u, g a) * ((∏ a ∈ s, f a) * (∏ a ∈ u, f a)) := by ring"
+        },
+        {
+          "name": "finiteSieveDensity_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_pos {N : ℕ} (hN : Even N) (z : ℕ) :\n    0 < finiteSieveDensity N z",
+          "complete_source": "theorem finiteSieveDensity_pos {N : ℕ} (hN : Even N) (z : ℕ) :\n    0 < finiteSieveDensity N z := by\n  apply Finset.prod_pos\n  intro p hp\n  exact odd_sieve_factor_pos (two_lt_of_mem_sievePrimes hN hp)"
+        },
+        {
+          "name": "oddPrimeSieveDensity_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_pos (z : ℕ) : 0 < oddPrimeSieveDensity z",
+          "complete_source": "theorem oddPrimeSieveDensity_pos (z : ℕ) : 0 < oddPrimeSieveDensity z := by\n  apply Finset.prod_pos\n  intro p hp\n  exact odd_sieve_factor_pos (mem_oddPrimesBelowCap.mp hp).2.2"
+        },
+        {
+          "name": "finiteSieveDensity_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_split {N w v : ℕ} (hwv : w ≤ v) :\n    finiteSieveDensity N v = finiteSieveDensity N w *\n      ∏ p ∈ sievePrimesInInterval N w v, (1 - 1 / ((p : ℝ) - 1))",
+          "complete_source": "theorem finiteSieveDensity_split {N w v : ℕ} (hwv : w ≤ v) :\n    finiteSieveDensity N v = finiteSieveDensity N w *\n      ∏ p ∈ sievePrimesInInterval N w v, (1 - 1 / ((p : ℝ) - 1)) := by\n  have hbelow : (sievePrimes N v).filter (fun p : ℕ => p < w) =\n      sievePrimes N w := by\n    ext p\n    simp only [Finset.mem_filter, mem_sievePrimes]\n    constructor\n    · rintro ⟨⟨_, hp, hpN⟩, hpw⟩\n      exact ⟨hpw, hp, hpN⟩\n    · rintro ⟨hpw, hp, hpN⟩\n      exact ⟨⟨lt_of_lt_of_le hpw hwv, hp, hpN⟩, hpw⟩\n  simpa only [finiteSieveDensity, sievePrimesInInterval, hbelow, not_lt] using\n    (Finset.prod_filter_mul_prod_filter_not (sievePrimes N v)\n      (fun p : ℕ => p < w)\n      (fun p : ℕ => (1 : ℝ) - 1 / ((p : ℝ) - 1))).symm"
+        },
+        {
+          "name": "oddPrimeSieveDensity_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_split {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity v = oddPrimeSieveDensity w *\n      ∏ p ∈ oddPrimesInInterval w v, (1 - 1 / ((p : ℝ) - 1))",
+          "complete_source": "theorem oddPrimeSieveDensity_split {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity v = oddPrimeSieveDensity w *\n      ∏ p ∈ oddPrimesInInterval w v, (1 - 1 / ((p : ℝ) - 1)) := by\n  have hbelow : (oddPrimesBelowCap v).filter (fun p : ℕ => p < w) =\n      oddPrimesBelowCap w := by\n    ext p\n    simp only [Finset.mem_filter, mem_oddPrimesBelowCap]\n    constructor\n    · rintro ⟨⟨_, hp, hp2⟩, hpw⟩\n      exact ⟨hpw, hp, hp2⟩\n    · rintro ⟨hpw, hp, hp2⟩\n      exact ⟨⟨lt_of_lt_of_le hpw hwv, hp, hp2⟩, hpw⟩\n  simpa only [oddPrimeSieveDensity, oddPrimesInInterval, hbelow, not_lt] using\n    (Finset.prod_filter_mul_prod_filter_not (oddPrimesBelowCap v)\n      (fun p : ℕ => p < w)\n      (fun p : ℕ => (1 : ℝ) - 1 / ((p : ℝ) - 1))).symm"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_eq_interval_product",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_eq_interval_product\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v =\n      ∏ p ∈ sievePrimesInInterval N w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+          "complete_source": "theorem finiteSieveDensity_ratio_eq_interval_product\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v =\n      ∏ p ∈ sievePrimesInInterval N w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2) := by\n  apply finite_prod_ratio_of_split\n    (sievePrimes N w) (sievePrimes N v) (sievePrimesInInterval N w v)\n    (fun p : ℕ => (1 : ℝ) - 1 / ((p : ℝ) - 1))\n    (fun p : ℕ => ((p : ℝ) - 1) / ((p : ℝ) - 2))\n    (finiteSieveDensity_pos hN v) (finiteSieveDensity_split hwv)\n  intro p hp\n  exact odd_sieve_factor_mul_ratio\n    (two_lt_of_mem_sievePrimes hN (Finset.mem_filter.mp hp).1)"
+        },
+        {
+          "name": "oddPrimeSieveDensity_ratio_eq_interval_product",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_ratio_eq_interval_product\n    {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity w / oddPrimeSieveDensity v =\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+          "complete_source": "theorem oddPrimeSieveDensity_ratio_eq_interval_product\n    {w v : ℕ} (hwv : w ≤ v) :\n    oddPrimeSieveDensity w / oddPrimeSieveDensity v =\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2) := by\n  apply finite_prod_ratio_of_split\n    (oddPrimesBelowCap w) (oddPrimesBelowCap v) (oddPrimesInInterval w v)\n    (fun p : ℕ => (1 : ℝ) - 1 / ((p : ℝ) - 1))\n    (fun p : ℕ => ((p : ℝ) - 1) / ((p : ℝ) - 2))\n    (oddPrimeSieveDensity_pos v) (oddPrimeSieveDensity_split hwv)\n  intro p hp\n  exact odd_sieve_factor_mul_ratio (mem_oddPrimesInInterval.mp hp).2.2.2"
+        },
+        {
+          "name": "sievePrimesInInterval_eq_filter",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem sievePrimesInInterval_eq_filter {N w v : ℕ} (hN : Even N) :\n    sievePrimesInInterval N w v =\n      (oddPrimesInInterval w v).filter (fun p : ℕ => ¬p ∣ N)",
+          "complete_source": "theorem sievePrimesInInterval_eq_filter {N w v : ℕ} (hN : Even N) :\n    sievePrimesInInterval N w v =\n      (oddPrimesInInterval w v).filter (fun p : ℕ => ¬p ∣ N) := by\n  ext p\n  simp only [Finset.mem_filter, mem_sievePrimesInInterval, mem_oddPrimesInInterval]\n  constructor\n  · rintro ⟨hwp, hpv, hp, hpN⟩\n    have hp2 : 2 < p := two_lt_of_mem_sievePrimes hN\n      (mem_sievePrimes.mpr ⟨hpv, hp, hpN⟩)\n    exact ⟨⟨hwp, hpv, hp, hp2⟩, hpN⟩\n  · rintro ⟨⟨hwp, hpv, hp, _⟩, hpN⟩\n    exact ⟨hwp, hpv, hp, hpN⟩"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_le_all_odd_primes",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_le_all_odd_primes\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2)",
+          "complete_source": "theorem finiteSieveDensity_ratio_le_all_odd_primes\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      ∏ p ∈ oddPrimesInInterval w v,\n        ((p : ℝ) - 1) / ((p : ℝ) - 2) := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv]\n  apply finite_prod_le_prod_of_subset_of_one_le\n  · rw [sievePrimesInInterval_eq_filter hN]\n    exact Finset.filter_subset _ _\n  · intro p hp\n    exact one_le_odd_sieve_ratio_factor (mem_oddPrimesInInterval.mp hp).2.2.2"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_le_baseline",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_le_baseline\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      oddPrimeSieveDensity w / oddPrimeSieveDensity v",
+          "complete_source": "theorem finiteSieveDensity_ratio_le_baseline\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      oddPrimeSieveDensity w / oddPrimeSieveDensity v := by\n  rw [oddPrimeSieveDensity_ratio_eq_interval_product hwv]\n  exact finiteSieveDensity_ratio_le_all_odd_primes hN hwv"
+        },
+        {
+          "name": "one_le_finiteSieveDensity_ratio",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem one_le_finiteSieveDensity_ratio\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    1 ≤ finiteSieveDensity N w / finiteSieveDensity N v",
+          "complete_source": "theorem one_le_finiteSieveDensity_ratio\n    {N w v : ℕ} (hN : Even N) (hwv : w ≤ v) :\n    1 ≤ finiteSieveDensity N w / finiteSieveDensity N v := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv]\n  apply Finset.one_le_prod\n  intro p hp\n  exact one_le_odd_sieve_ratio_factor\n    (two_lt_of_mem_sievePrimes hN (Finset.mem_filter.mp hp).1)"
+        },
+        {
+          "name": "finiteSieveDensity_antitone",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_antitone {N : ℕ} (hN : Even N) :\n    Antitone (finiteSieveDensity N)",
+          "complete_source": "theorem finiteSieveDensity_antitone {N : ℕ} (hN : Even N) :\n    Antitone (finiteSieveDensity N) := by\n  intro w v hwv\n  have h := (le_div_iff₀ (finiteSieveDensity_pos hN v)).mp\n    (one_le_finiteSieveDensity_ratio hN hwv)\n  simpa only [one_mul] using h"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_antitone_center_dvd",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_antitone_center_dvd\n    {M N w v : ℕ} (hM : Even M) (hN : Even N)\n    (hMN : M ∣ N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      finiteSieveDensity M w / finiteSieveDensity M v",
+          "complete_source": "theorem finiteSieveDensity_ratio_antitone_center_dvd\n    {M N w v : ℕ} (hM : Even M) (hN : Even N)\n    (hMN : M ∣ N) (hwv : w ≤ v) :\n    finiteSieveDensity N w / finiteSieveDensity N v ≤\n      finiteSieveDensity M w / finiteSieveDensity M v := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv,\n    finiteSieveDensity_ratio_eq_interval_product hM hwv]\n  apply finite_prod_le_prod_of_subset_of_one_le\n  · intro p hp\n    obtain ⟨hwp, hpv, hpprime, hpN⟩ := mem_sievePrimesInInterval.mp hp\n    apply mem_sievePrimesInInterval.mpr\n    exact ⟨hwp, hpv, hpprime, fun hpM => hpN (hpM.trans hMN)⟩\n  · intro p hp\n    exact one_le_odd_sieve_ratio_factor\n      (two_lt_of_mem_sievePrimes hM (Finset.mem_filter.mp hp).1)"
+        }
+      ],
+      "full_math_and_API_review": [
+        "All intervals are exactly[w,v): p=w retained, p=v excluded. Evenness excludes2 before positivity; all subtractions are real. No unrecorded lower cutoff w>=2 is used.",
+        "Subset product comparison inserts only factors>=1 and separately proves nonnegativity. Ratio-of-split has an actual positive denominator and exact local f*g=1.",
+        "Filter partitions give actual and all-odd finite density splits. Removing center-prime factors decreases the reciprocal ratio. No Mertens, infinite product or analytic dimension supplier is assumed.",
+        "Cutoff antitone follows from ratio>=1 and denominator positive. For M|N, allowed primes for N form a subset of those for M, giving quotient_N<=quotient_M in the correct direction.",
+        "N=0 even and empty/below2 intervals are retained: all primes dividing0 are excluded, actual density is1, and every ratio is defined and correct."
+      ],
+      "determined_static_blockers": [],
+      "forbidden_source_commands": []
+    }
+  ],
+  "parent_scope": "ONLY Mass94c518 and Dimensioncf2369, each individually ONE serial fair strict-M6144/j2/RSS6656 first after runtime fullsource/reports/actualpublicAPI read and fresh all existing direct+recursive cache/object exact, missingexternal0. IfPASS complete original-object stock replay/allserialized inventory/environment/types/flags/transitiveaxioms whitelist. Existing development objects and sources are not claimed previously strict or owned. No further prerequisite target, newforeign, oldmissing28chain, resource or checker modification implicitly authorized. If resolver reports other unmet dependencies, return exact blocker without bootstrap.",
+  "future_Euler_target": {
+    "module": "ImbalancedChen.ActualPrimeBoxEulerLower",
+    "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxEulerLower.lean",
+    "source_sha256": "c5a5b3d160d00556eaec65c78f7f6bebc7144f7fe76ab2e5ddf772f7adbe7dab",
+    "line_count": 139,
+    "entire_source_read": true,
+    "complete_5_declarations": [
+      {
+        "name": "actualSmallEulerProduct_antitone_cutoff",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : ℕ) (hEven : Even N) (x y : ℝ)\n    (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x",
+        "complete_source": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : ℕ) (hEven : Even N) (x y : ℝ)\n    (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x := by\n  rw [currentChen_model_actualEuler_eq_finite N cap y hycap,\n    currentChen_model_actualEuler_eq_finite N cap x (hxy.trans hycap)]\n  exact finiteSieveDensity_antitone hEven (Nat.ceil_mono hxy)"
+      },
+      {
+        "name": "actualPrimeBoxEulerMass",
+        "kind": "def",
+        "private": false,
+        "complete_header": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ",
+        "complete_source": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (actualSmallEulerProduct N cap (p j : ℝ) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u))"
+      },
+      {
+        "name": "actualPrimeBoxEulerMass_ge_endpoint_ratio",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : ℕ} (N cap : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k → ℝ) (u : ℝ) (j : Fin k)\n    (hbu : b j ≤ u) (hcap : (N : ℝ) ^ u ≤ (cap : ℝ)) :\n    (actualSmallEulerProduct N cap ((N : ℝ) ^ b j) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u)) *\n      actualPrimeBoxMass N a b ≤ actualPrimeBoxEulerMass N cap a b u j",
+        "complete_source": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : ℕ} (N cap : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k → ℝ) (u : ℝ) (j : Fin k)\n    (hbu : b j ≤ u) (hcap : (N : ℝ) ^ u ≤ (cap : ℝ)) :\n    (actualSmallEulerProduct N cap ((N : ℝ) ^ b j) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u)) *\n      actualPrimeBoxMass N a b ≤ actualPrimeBoxEulerMass N cap a b u j := by\n  have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)\n  have hbcap : (N : ℝ) ^ b j ≤ (cap : ℝ) :=\n    (Real.rpow_le_rpow_of_exponent_le hN1 hbu).trans hcap\n  rw [actualPrimeBoxMass, actualPrimeBoxEulerMass, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro p hp\n  have hpb : (p j : ℝ) ≤ (N : ℝ) ^ b j :=\n    ((mem_actualPrimeBoxTuples_iff.mp hp) j).2.2.2.le\n  have hV := actualSmallEulerProduct_antitone_cutoff N cap hEven\n    (p j : ℝ) ((N : ℝ) ^ b j) hpb hbcap\n  have hratio := div_le_div_of_nonneg_right hV\n    (currentChen_model_actualEuler_pos N cap ((N : ℝ) ^ u) hEven).le\n  simpa only [mul_comm] using\n    mul_le_mul_of_nonneg_right hratio (actualPrimeBoxWeight_nonneg hp)"
+      },
+      {
+        "name": "primeBoxEuler_tendsto_finiteDensity_power_ratio",
+        "kind": "theorem",
+        "private": true,
+        "complete_header": "private theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : ℝ}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : ℕ =>\n      finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (b / a))",
+        "complete_source": "private theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : ℝ}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : ℕ =>\n      finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (b / a)) := by\n  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b ≠ 0 := by positivity\n  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div\n    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden\n  have hconstant :\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /\n        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by\n    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]\n  rw [hconstant] at hlim\n  apply hlim.congr'\n  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]\n  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN\n  intro _hEven\n  have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) (Nat.le_ceil _),\n    currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ b)) ((N : ℝ) ^ b) (Nat.le_ceil _),\n    div_div_div_cancel_right₀ (singularSeries_pos N).ne',\n    mul_div_mul_right _ _ (Real.log_pos hN1).ne']"
+      },
+      {
+        "name": "exists_actualPrimeBoxEulerMass_lower_threshold",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : ℕ} (a b : Fin k → ℝ) (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (u : ℝ) (hu : 0 < u) (j : Fin k) (hbu : b j ≤ u)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ u ≤ (cap : ℝ) →\n        (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤\n          actualPrimeBoxEulerMass N cap a b u j",
+        "complete_source": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : ℕ} (a b : Fin k → ℝ) (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (u : ℝ) (hu : 0 < u) (j : Fin k) (hbu : b j ≤ u)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ u ≤ (cap : ℝ) →\n        (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤\n          actualPrimeBoxEulerMass N cap a b u j := by\n  have hbj : 0 < b j := (ha j).trans (hab j)\n  have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu\n  have hmass := (tendsto_actualPrimeBoxMass a b ha hab).mono_left\n    (inf_le_left :\n      atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N} ≤ atTop)\n  have hlim := hratio.mul hmass\n  have hnear : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (u / b j) * (∏ i, Real.log (b i / a i)) - eta <\n        (finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b j)) /\n          finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ u))) *\n          actualPrimeBoxMass N a b :=\n    (tendsto_order.mp hlim).1 _ (by linarith)\n  rw [Filter.eventually_inf_principal] at hnear\n  obtain ⟨N1, hN1⟩ := eventually_atTop.mp hnear\n  refine ⟨max N1 2, le_max_right _ _, ?_⟩\n  intro N hN hEven cap hcap\n  have hN2 : 2 ≤ N := (le_max_right _ _).trans hN\n  have hNpos : 0 < N := by omega\n  have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)\n  have hbcap : (N : ℝ) ^ b j ≤ (cap : ℝ) :=\n    (Real.rpow_le_rpow_of_exponent_le hNreal hbu).trans hcap\n  have hbound := actualPrimeBoxEulerMass_ge_endpoint_ratio N cap (by omega)\n    hEven a b u j hbu hcap\n  rw [currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ b j) hbcap,\n    currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ u) hcap] at hbound\n  exact (hN1 N ((le_max_left _ _).trans hN) ⟨hNpos, hEven⟩).le.trans hbound"
+      }
+    ]
+  },
+  "future_Euler_gate": "Only after actualexact Mass94c+Dimensioncf236 strict/completeowned terminalPASS and currentFixeda136 existingactualowned rechecked, and runtime full source/all5types/API/independent73b report read, fresh recursive caches exact/selfonly/missingexternal0: ONE fair strict c5a5 newimport scope M6144/j2/RSS6656 thenifPASS fulloriginalobject owned stock/inventory/alltypes/flags/transitiveaxioms. This permits newc5a source, not repeating unchanged oldadc065 OOM. No automatic descendants or external builds.",
+  "math_scope": [
+    "Covered actual Euler product equals the literal finite density at ceil(real cutoff), including integer endpoints. Existing even-center finite antitone theorem gives the correct direction.",
+    "For each actual tuple p_j<N^(b_j), V(p_j)>=V(N^(b_j)); the common denominator is actually positive and tuple weight nonnegative. Only b_j<=u is required for this numerical comparison.",
+    "New private ratio divides the two proved public fixed-exponent normalized Tendsto endpoints at a,b>0. Denominator limit2exp(-gamma)/b is nonzero and constant ratio cancels to b/a. This is no caller Euler-ratio/density assumption.",
+    "Eventually N>=2 gives logN!=0; singularSeries_pos N gives a nonzero common series. Public endpoint dictionary at each coveringceil and actual fixed mathlib cancellation lemmas remove SS/log exactly.",
+    "Final ratio with a=b_j,b=u tends to u/b_j; multiply by genuine tuple mass limit, restrict to positive even targets, take one threshold before N and all covering caps, then transport endpoints by the exact cap dictionary.",
+    "The theorem does not prove least-prime/order/Rosser boundary geometry or count/distribution means. Overlapping boxes remain allowed; no reciprocal-totient identity without injectivity is used."
+  ],
+  "import_scope": {
+    "old_project_count": 68,
+    "new_project_count": 64,
+    "relative_to_parent_union": [
+      "ImbalancedChen.ActualPrimeBoxEulerLower"
+    ],
+    "new_foreign_vs_parent_union": 0,
+    "scope": "Source header graph only, not full foreign importedclosure replay."
+  },
+  "actual_prior_parent_evidence": [
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/ActualPrimeBoxMass.olean",
+      "object_sha256": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.ActualPrimeBoxMass.json",
+      "cache_sha256": "0b9c04aa23408fb268e8ae8b13225f6732ad0c70ea44f8421d0406c3f7525a6e",
+      "cache_status": "PASS",
+      "warnings_as_errors": false,
+      "command": [
+        "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+        "-j2",
+        "-M6144",
+        "-o",
+        "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/ActualPrimeBoxMass.olean",
+        "ImbalancedChen/ActualPrimeBoxMass.lean"
+      ],
+      "scope": "Normal-trust development compilation only; no final acceptance claim",
+      "reused_receipt": null,
+      "observed_owned_evidence": null,
+      "owned_gate": "OPEN_NOT_ESTABLISHED_BY_DEVELOPMENT_CACHE",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/CurrentChenFixedEulerNormalization.olean",
+      "object_sha256": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.CurrentChenFixedEulerNormalization.json",
+      "cache_sha256": "5ea27cbabde4e48133b83f8eddd4c6523a73b3e2bae2dcaac0ae2b7bd7c7b61c",
+      "cache_status": "PASS",
+      "warnings_as_errors": true,
+      "command": [
+        "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+        "-j2",
+        "-M6144",
+        "-DwarningAsError=true",
+        "-o",
+        "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/CurrentChenFixedEulerNormalization.olean",
+        "ImbalancedChen/CurrentChenFixedEulerNormalization.lean"
+      ],
+      "scope": "Normal-trust development compilation only; no final acceptance claim",
+      "reused_receipt": null,
+      "observed_owned_evidence": {
+        "manifest_entry": {
+          "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+          "declarations": 39,
+          "audit": "audits/20261015T091648772742Z/receipt.json",
+          "audited_object_parts": {
+            ".olean": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8"
+          },
+          "audited_pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "audited_lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "compile": "compilation/20261015T090216804916Z-ImbalancedChen.CurrentChenFixedEulerNormalization/receipt.json",
+          "object_parts": {
+            ".olean": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8"
+          }
+        },
+        "receipt_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T091648772742Z/receipt.json",
+        "receipt_sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "owned_gate": "EXISTING_OWNED_RECEIPT_HASH_MATCHED",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    },
+    {
+      "module": "ImbalancedChen.SieveDimensionComparison",
+      "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/SieveDimensionComparison.olean",
+      "object_sha256": "8136cc98b2cf18b4856ad5f85f03909085b80cebe38c3de5905ae98cd79e653d",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.SieveDimensionComparison.json",
+      "cache_sha256": "1ba8e341fa8ec4eeba03602fe8b1178c8a2ded27a65c954d390ed041d7f03cb1",
+      "cache_status": "PASS",
+      "warnings_as_errors": false,
+      "command": null,
+      "scope": "Exact-source/direct-object development reuse only",
+      "reused_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/cache/ImbalancedChen.SieveDimensionComparison.json",
+      "observed_owned_evidence": null,
+      "owned_gate": "OPEN_NOT_ESTABLISHED_BY_DEVELOPMENT_CACHE",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    }
+  ],
+  "old_OOM_and_false_warnings_cache_preserved": true,
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "not_acceptance": true,
+  "main_theorem_proved": false
+}

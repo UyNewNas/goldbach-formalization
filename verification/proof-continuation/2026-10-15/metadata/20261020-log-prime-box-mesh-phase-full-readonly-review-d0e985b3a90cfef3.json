@@ -1,0 +1,692 @@
+{
+  "schema_version": 1,
+  "status": "INDEPENDENT_COMPLETE_CURRENT_MESH_SOURCE_AND_API_READONLY_REVIEW_NOT_COMPILATION_OR_OWNED_ACCEPTANCE",
+  "created_utc": "2026-10-20T10:41:59.7277858Z",
+  "author": "/root/phase_oct20",
+  "scope": "Only the next unchanged LogPrimeBoxMesh candidate; this NEW JSON is the sole write. No source, old metadata, compiler, checker, cache, tools, pins, CI, automation or resource changes.",
+  "source": "ImbalancedChen/LogPrimeBoxMesh.lean",
+  "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+  "source_lines": 205,
+  "full_source_read": true,
+  "complete_source_utf8": "import ImbalancedChen.LogPrimeBoxIntegral\nimport Mathlib.Analysis.SpecificLimits.Basic\nimport Mathlib.Order.Interval.Set.Union\nimport Mathlib.Tactic\n\n/-!\n# Half-open logarithmic meshes in arbitrary finite dimension\n\nThe same finite mesh works in any fixed dimension and on any real interval.\nIt retains exact Ico ownership, explicit coordinate separation between cells,\nand convergence of both endpoint vectors to every point in their cells.\nThese are geometric suppliers for fixed-rank Rosser boundary integrals.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Set\nopen scoped Classical Topology\n\ndef logPrimeMeshStep (a b : ℝ) (n : ℕ) : ℝ := (b - a) / (n + 1)\n\ndef logPrimeMeshPoint (a b : ℝ) (n i : ℕ) : ℝ :=\n  a + (i : ℝ) * logPrimeMeshStep a b n\n\ndef logPrimeMeshLo {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n (j i)\n\ndef logPrimeMeshHi {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n ((j i).val + 1)\n\ndef logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Set (Fin d → ℝ) :=\n  logPrimeBox (logPrimeMeshLo a b n j) (logPrimeMeshHi a b n j)\n\n@[simp] theorem mem_logPrimeMeshCell {d n : ℕ} {a b : ℝ}\n    {j : Fin d → Fin (n + 1)} {x : Fin d → ℝ} :\n    x ∈ logPrimeMeshCell a b n j ↔\n      ∀ i, logPrimeMeshLo a b n j i ≤ x i ∧ x i < logPrimeMeshHi a b n j i :=\n  mem_logPrimeBox\n\ntheorem measurableSet_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : MeasurableSet (logPrimeMeshCell a b n j) :=\n  measurableSet_logPrimeBox _ _\n\ntheorem logPrimeMeshStep_pos {a b : ℝ} (hab : a < b) (n : ℕ) :\n    0 < logPrimeMeshStep a b n := div_pos (sub_pos.mpr hab) (by positivity)\n\ntheorem logPrimeMeshPoint_mono {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    Monotone (logPrimeMeshPoint a b n) := by\n  intro i j hij\n  change a + (i : ℝ) * logPrimeMeshStep a b n ≤ a + (j : ℝ) * logPrimeMeshStep a b n\n  apply add_le_add_right\n  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hij)\n    (div_nonneg (sub_nonneg.mpr hab) (by positivity))\n\n@[simp] theorem logPrimeMeshPoint_zero (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n 0 = a := by simp [logPrimeMeshPoint]\n\n@[simp] theorem logPrimeMeshPoint_last (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n (n + 1) = b := by\n  unfold logPrimeMeshPoint logPrimeMeshStep\n  push_cast\n  field_simp\n  ring\n\ntheorem logPrimeMeshPoint_succ (a b : ℝ) (n i : ℕ) :\n    logPrimeMeshPoint a b n (i + 1) =\n      logPrimeMeshPoint a b n i + logPrimeMeshStep a b n := by\n  simp only [logPrimeMeshPoint, Nat.cast_add, Nat.cast_one]\n  ring\n\ntheorem logPrimeMeshHi_eq_lo_add_step {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    logPrimeMeshHi a b n j i = logPrimeMeshLo a b n j i + logPrimeMeshStep a b n :=\n  logPrimeMeshPoint_succ a b n (j i)\n\ntheorem logPrimeMeshLoHi_bounds {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    a ≤ logPrimeMeshLo a b n j i ∧\n      logPrimeMeshLo a b n j i < logPrimeMeshHi a b n j i ∧\n      logPrimeMeshHi a b n j i ≤ b := by\n  refine ⟨?_, ?_, ?_⟩\n  · simpa [logPrimeMeshLo] using logPrimeMeshPoint_mono hab.le n (Nat.zero_le (j i).val)\n  · rw [logPrimeMeshHi_eq_lo_add_step]\n    exact lt_add_of_pos_right _ (logPrimeMeshStep_pos hab n)\n  · simpa [logPrimeMeshHi] using\n      logPrimeMeshPoint_mono hab.le n (Nat.succ_le_of_lt (j i).isLt)\n\n/-- Distinct grid labels have a separating coordinate, including when the\ntwo half-open intervals meet at their common endpoint. -/\ntheorem logPrimeMesh_separated {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} (hjk : j ≠ k) : ∃ i,\n      logPrimeMeshHi a b n j i ≤ logPrimeMeshLo a b n k i ∨\n      logPrimeMeshHi a b n k i ≤ logPrimeMeshLo a b n j i := by\n  obtain ⟨i, hi⟩ : ∃ i, j i ≠ k i := by\n    by_contra h\n    push Not at h\n    exact hjk (funext h)\n  refine ⟨i, ?_⟩\n  rcases lt_or_gt_of_ne hi with h | h\n  · exact Or.inl (logPrimeMeshPoint_mono hab n (show (j i).val + 1 ≤ (k i).val from h))\n  · exact Or.inr (logPrimeMeshPoint_mono hab n (show (k i).val + 1 ≤ (j i).val from h))\n\ntheorem logPrimeMeshCell_unique {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} {x : Fin d → ℝ}\n    (hj : x ∈ logPrimeMeshCell a b n j) (hk : x ∈ logPrimeMeshCell a b n k) : j = k := by\n  by_contra h\n  obtain ⟨i, hi | hi⟩ := logPrimeMesh_separated hab h\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hk) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hj) i).2)\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hj) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hk) i).2)\n\ntheorem logPrimeMeshCell_pairwiseDisjoint {d : ℕ} {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    (Set.univ : Set (Fin d → Fin (n + 1))).PairwiseDisjoint (logPrimeMeshCell a b n) := by\n  intro j _ k _ hjk\n  change Disjoint (logPrimeMeshCell a b n j) (logPrimeMeshCell a b n k)\n  rw [Set.disjoint_left]\n  intro x hxj hxk\n  exact hjk (logPrimeMeshCell_unique hab hxj hxk)\n\ntheorem logPrimeMeshCell_subset_box {d : ℕ} {a b : ℝ} (hab : a < b)\n    (n : ℕ) (j : Fin d → Fin (n + 1)) :\n    logPrimeMeshCell a b n j ⊆ logPrimeBox (fun _ => a) (fun _ => b) := by\n  intro x hx\n  refine mem_logPrimeBox.mpr (fun i => ?_)\n  have hi := mem_logPrimeMeshCell.mp hx i\n  exact ⟨(logPrimeMeshLoHi_bounds hab n j i).1.trans hi.1,\n    hi.2.trans_le (logPrimeMeshLoHi_bounds hab n j i).2.2⟩\n\ntheorem exists_logPrimeMeshInterval (a b : ℝ) (n : ℕ) {x : ℝ}\n    (hx : x ∈ Set.Ico a b) :\n    ∃ i : Fin (n + 1), x ∈ Set.Ico\n      (logPrimeMeshPoint a b n i) (logPrimeMeshPoint a b n (i.val + 1)) := by\n  have hx' : x ∈ Set.Ico (logPrimeMeshPoint a b n 0)\n      (logPrimeMeshPoint a b n (n + 1)) := by simpa using hx\n  obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp\n    (Ico_subset_biUnion_Ico (n + 1) (logPrimeMeshPoint a b n) hx')\n  exact ⟨⟨i, Finset.mem_range.mp hi⟩, hxi⟩\n\ntheorem exists_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ) {x : Fin d → ℝ}\n    (hx : x ∈ logPrimeBox (fun _ => a) (fun _ => b)) :\n    ∃ j : Fin d → Fin (n + 1), x ∈ logPrimeMeshCell a b n j := by\n  choose j hj using fun i => exists_logPrimeMeshInterval a b n (mem_logPrimeBox.mp hx i)\n  exact ⟨j, mem_logPrimeMeshCell.mpr hj⟩\n\ntheorem logPrimeMeshCells_union {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ) :\n    (⋃ j : Fin d → Fin (n + 1), logPrimeMeshCell a b n j) =\n      logPrimeBox (fun _ => a) (fun _ => b) := by\n  ext x\n  constructor\n  · intro hx\n    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx\n    exact logPrimeMeshCell_subset_box hab n j hj\n  · intro hx\n    obtain ⟨j, hj⟩ := exists_logPrimeMeshCell a b n hx\n    exact Set.mem_iUnion.mpr ⟨j, hj⟩\n\ntheorem tendsto_logPrimeMeshStep (a b : ℝ) :\n    Tendsto (logPrimeMeshStep a b) atTop (nhds 0) := by\n  change Tendsto (fun n : ℕ => (b - a) / ((n : ℝ) + 1)) atTop (nhds 0)\n  simpa only [div_eq_mul_inv, one_div, one_mul, mul_zero] using\n    (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).const_mul (b - a)\n\ntheorem tendsto_logPrimeMeshHi_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n) i) atTop (nhds (x i)) := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  filter_upwards [(tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hepsilon)] with n hn\n  have hxi := mem_logPrimeMeshCell.mp (hx n) i\n  have he := logPrimeMeshHi_eq_lo_add_step a b n (j n) i\n  rw [Real.dist_eq]\n  exact abs_lt.mpr ⟨by linarith [hxi.2], by linarith [hxi.1]⟩\n\ntheorem tendsto_logPrimeMeshLo_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n) i) atTop (nhds (x i)) := by\n  have h := (tendsto_logPrimeMeshHi_apply a b j hx i).sub (tendsto_logPrimeMeshStep a b)\n  simpa only [sub_zero, logPrimeMeshHi_eq_lo_add_step, add_sub_cancel_right] using h\n\n/-- Both endpoint vectors converge, so every finite family of strict\ncontinuous endpoint tests eventually holds without choosing a new mesh\nfor each coordinate. -/\ntheorem tendsto_logPrimeMeshLo {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n)) atTop (nhds x) :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshLo_apply a b j hx i)\n\ntheorem tendsto_logPrimeMeshHi {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n)) atTop (nhds x) :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshHi_apply a b j hx i)\n\nend\n\nend ImbalancedChen\n",
+  "source_declarations": 26,
+  "public_definitions": 5,
+  "public_theorems": 21,
+  "private_declarations": 0,
+  "complete_source_inventory": [
+    {
+      "name": "logPrimeMeshStep",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 22,
+      "complete_header": "def logPrimeMeshStep (a b : ℝ) (n : ℕ) : ℝ",
+      "complete_header_sha256_utf8": "49e95c858219ade4c1dcf1532a0c413854523e8263ec2fd62736941bdb473ddd",
+      "complete_proof_or_body_and_following_interstitial": " := (b - a) / (n + 1)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "1de8e5064ee15f25f044cdca3a202a778c88e649b795c6d131a3432f0605f0ef",
+      "complete_declaration_span": "def logPrimeMeshStep (a b : ℝ) (n : ℕ) : ℝ := (b - a) / (n + 1)\n\n",
+      "complete_declaration_span_sha256_utf8": "92ebea603c8dfc32ac5517c3227c7e948912dc6a23f359f345db49720431e374"
+    },
+    {
+      "name": "logPrimeMeshPoint",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 24,
+      "complete_header": "def logPrimeMeshPoint (a b : ℝ) (n i : ℕ) : ℝ",
+      "complete_header_sha256_utf8": "046cbdae2ef32b0314888862fb960919aa56aa5fd6f87f30846ae772bd572912",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  a + (i : ℝ) * logPrimeMeshStep a b n\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "c25b72cf105157b0d16a8ce17c1918f4c0200f3d8e2dfedfe03859612785956c",
+      "complete_declaration_span": "def logPrimeMeshPoint (a b : ℝ) (n i : ℕ) : ℝ :=\n  a + (i : ℝ) * logPrimeMeshStep a b n\n\n",
+      "complete_declaration_span_sha256_utf8": "aeafa0fa2c0b262481c30d7c8684387652f8195f7e0c1e83ff3902c619f7b2f6"
+    },
+    {
+      "name": "logPrimeMeshLo",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 27,
+      "complete_header": "def logPrimeMeshLo {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ",
+      "complete_header_sha256_utf8": "c34c345bdf09ff43641bdc6c869d43be6fe83efdf8f97c4f0fc8de78eb01769d",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  fun i => logPrimeMeshPoint a b n (j i)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "62fed8ad220ed02df88d64f25ce10089c60c1241cd072a376aff0ee9404453d6",
+      "complete_declaration_span": "def logPrimeMeshLo {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n (j i)\n\n",
+      "complete_declaration_span_sha256_utf8": "13728a990ef669744825e6d6b0c0fc127be12f670e5a94ca2de4d6b0984c202d"
+    },
+    {
+      "name": "logPrimeMeshHi",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 31,
+      "complete_header": "def logPrimeMeshHi {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ",
+      "complete_header_sha256_utf8": "062d35c8a53639d7c43c36386b9ba3c20e309acb5c8087ab7a511e5ebcbc87b5",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  fun i => logPrimeMeshPoint a b n ((j i).val + 1)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "c2124000a83d69e745b13896c44e55cc587c6676df88f948f551f0edaa189b73",
+      "complete_declaration_span": "def logPrimeMeshHi {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n ((j i).val + 1)\n\n",
+      "complete_declaration_span_sha256_utf8": "0aa5c8540d99466f3a215d9db91d6a3cbf1417e91df622a0ddd13fe8bc5efff4"
+    },
+    {
+      "name": "logPrimeMeshCell",
+      "kind": "def",
+      "visibility": "public",
+      "first_line": 35,
+      "complete_header": "def logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Set (Fin d → ℝ)",
+      "complete_header_sha256_utf8": "6109ac532653129d4b885ddd06b08907932bf39f1062c67c66532ad49ef324ca",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  logPrimeBox (logPrimeMeshLo a b n j) (logPrimeMeshHi a b n j)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "c1da79ca17d6ba73276adf55096220314759b4086b2b75171c95d7194f1de013",
+      "complete_declaration_span": "def logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Set (Fin d → ℝ) :=\n  logPrimeBox (logPrimeMeshLo a b n j) (logPrimeMeshHi a b n j)\n\n",
+      "complete_declaration_span_sha256_utf8": "63639759ba03e0eb66921b9c4c10b14aea7171a15b5b3536cee8c212c9698ad0"
+    },
+    {
+      "name": "mem_logPrimeMeshCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 39,
+      "complete_header": "@[simp] theorem mem_logPrimeMeshCell {d n : ℕ} {a b : ℝ}\n    {j : Fin d → Fin (n + 1)} {x : Fin d → ℝ} :\n    x ∈ logPrimeMeshCell a b n j ↔\n      ∀ i, logPrimeMeshLo a b n j i ≤ x i ∧ x i < logPrimeMeshHi a b n j i",
+      "complete_header_sha256_utf8": "955c7c71adbd05c092ad379415bdcfe7419d4a5d8686df43efbb1c2c59749a8f",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  mem_logPrimeBox\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "02e7036ce394229b16842ee4f4d620665dad5813a9ef7c4f1b5effbbd964e764",
+      "complete_declaration_span": "@[simp] theorem mem_logPrimeMeshCell {d n : ℕ} {a b : ℝ}\n    {j : Fin d → Fin (n + 1)} {x : Fin d → ℝ} :\n    x ∈ logPrimeMeshCell a b n j ↔\n      ∀ i, logPrimeMeshLo a b n j i ≤ x i ∧ x i < logPrimeMeshHi a b n j i :=\n  mem_logPrimeBox\n\n",
+      "complete_declaration_span_sha256_utf8": "68aeb02e77a2933bfa9811bc2de182b78c8afef984edb5cff0a0ecb6a0bed1cf"
+    },
+    {
+      "name": "measurableSet_logPrimeMeshCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 45,
+      "complete_header": "theorem measurableSet_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : MeasurableSet (logPrimeMeshCell a b n j)",
+      "complete_header_sha256_utf8": "363175a29ae906ee582d6c682522cc54a01b246f202689982ce1fdd7d472c671",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  measurableSet_logPrimeBox _ _\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "98ae1756995f968894add821a6e0a43e23e91a7ddac9eb697ba8e993e03ce8f8",
+      "complete_declaration_span": "theorem measurableSet_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : MeasurableSet (logPrimeMeshCell a b n j) :=\n  measurableSet_logPrimeBox _ _\n\n",
+      "complete_declaration_span_sha256_utf8": "6c1b417215804406baf8e2bd801655112912b938ff1cf159aa940577c4660277"
+    },
+    {
+      "name": "logPrimeMeshStep_pos",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 49,
+      "complete_header": "theorem logPrimeMeshStep_pos {a b : ℝ} (hab : a < b) (n : ℕ) :\n    0 < logPrimeMeshStep a b n",
+      "complete_header_sha256_utf8": "85308cafb5aa3d4979738cbad61f6d72daee244b7753ba80c6e365d5d5c9c0eb",
+      "complete_proof_or_body_and_following_interstitial": " := div_pos (sub_pos.mpr hab) (by positivity)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "d153ea3be1344f630475f4711124753deb3645811dfb218f69a02d02b245ad6f",
+      "complete_declaration_span": "theorem logPrimeMeshStep_pos {a b : ℝ} (hab : a < b) (n : ℕ) :\n    0 < logPrimeMeshStep a b n := div_pos (sub_pos.mpr hab) (by positivity)\n\n",
+      "complete_declaration_span_sha256_utf8": "4efc9e385a303191375a8d5652f22e82049107cc91586a9205defbb93f117466"
+    },
+    {
+      "name": "logPrimeMeshPoint_mono",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 52,
+      "complete_header": "theorem logPrimeMeshPoint_mono {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    Monotone (logPrimeMeshPoint a b n)",
+      "complete_header_sha256_utf8": "3830c3eafcf8e520751b8bb94631beac188f4d628fac70c19b2681f068c1aa79",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  intro i j hij\n  change a + (i : ℝ) * logPrimeMeshStep a b n ≤ a + (j : ℝ) * logPrimeMeshStep a b n\n  apply add_le_add_right\n  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hij)\n    (div_nonneg (sub_nonneg.mpr hab) (by positivity))\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "2e59c1f5bfee4aabad83f800862bd64add3c3cc49cc8c900a80892fc0a1efd38",
+      "complete_declaration_span": "theorem logPrimeMeshPoint_mono {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    Monotone (logPrimeMeshPoint a b n) := by\n  intro i j hij\n  change a + (i : ℝ) * logPrimeMeshStep a b n ≤ a + (j : ℝ) * logPrimeMeshStep a b n\n  apply add_le_add_right\n  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hij)\n    (div_nonneg (sub_nonneg.mpr hab) (by positivity))\n\n",
+      "complete_declaration_span_sha256_utf8": "490c2a7bc4954e278fec635941122fb8a23af9069ae430a06de470c19e61d32c"
+    },
+    {
+      "name": "logPrimeMeshPoint_zero",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 60,
+      "complete_header": "@[simp] theorem logPrimeMeshPoint_zero (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n 0 = a",
+      "complete_header_sha256_utf8": "5b90bbc745facdc95073fd51a8eb45697192c6dd00fe57bd5e02e47f7baed123",
+      "complete_proof_or_body_and_following_interstitial": " := by simp [logPrimeMeshPoint]\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "9d1dea54c75b8676ff45f6341ca205ecd32e4ba2f666862ff8b233676e17a9a7",
+      "complete_declaration_span": "@[simp] theorem logPrimeMeshPoint_zero (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n 0 = a := by simp [logPrimeMeshPoint]\n\n",
+      "complete_declaration_span_sha256_utf8": "d2564c207940baf453bff062c466b5b14ed4ac626c3f9a7f0007182698fbf558"
+    },
+    {
+      "name": "logPrimeMeshPoint_last",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 63,
+      "complete_header": "@[simp] theorem logPrimeMeshPoint_last (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n (n + 1) = b",
+      "complete_header_sha256_utf8": "f9857010f5be2eabb5b035a8282f116f49c475ed90c86eac8bd777d2d9a10774",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  unfold logPrimeMeshPoint logPrimeMeshStep\n  push_cast\n  field_simp\n  ring\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "3d222ea1b7cf159fcc85b50cc73f67677867e382e77d391ff662ec5075b97348",
+      "complete_declaration_span": "@[simp] theorem logPrimeMeshPoint_last (a b : ℝ) (n : ℕ) :\n    logPrimeMeshPoint a b n (n + 1) = b := by\n  unfold logPrimeMeshPoint logPrimeMeshStep\n  push_cast\n  field_simp\n  ring\n\n",
+      "complete_declaration_span_sha256_utf8": "08e18eaf9ced48a21319d6516579c5cb828f921a00d53db4d6fcc1772ff67d6d"
+    },
+    {
+      "name": "logPrimeMeshPoint_succ",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 70,
+      "complete_header": "theorem logPrimeMeshPoint_succ (a b : ℝ) (n i : ℕ) :\n    logPrimeMeshPoint a b n (i + 1) =\n      logPrimeMeshPoint a b n i + logPrimeMeshStep a b n",
+      "complete_header_sha256_utf8": "f717334851bf5f4d604c12e2b5eb5c8fbe493a2095a98d7e291fb1a5f1ed8b62",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  simp only [logPrimeMeshPoint, Nat.cast_add, Nat.cast_one]\n  ring\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "d7f3c79512c82cb4c05eb99c00716f3ffd08532eb346df2e7306b5d4ec9b0f32",
+      "complete_declaration_span": "theorem logPrimeMeshPoint_succ (a b : ℝ) (n i : ℕ) :\n    logPrimeMeshPoint a b n (i + 1) =\n      logPrimeMeshPoint a b n i + logPrimeMeshStep a b n := by\n  simp only [logPrimeMeshPoint, Nat.cast_add, Nat.cast_one]\n  ring\n\n",
+      "complete_declaration_span_sha256_utf8": "6ad1e66d3c89c3fcf8b9796f898240fe13b46872ff45507845e2888c9a0c6e1b"
+    },
+    {
+      "name": "logPrimeMeshHi_eq_lo_add_step",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 76,
+      "complete_header": "theorem logPrimeMeshHi_eq_lo_add_step {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    logPrimeMeshHi a b n j i = logPrimeMeshLo a b n j i + logPrimeMeshStep a b n",
+      "complete_header_sha256_utf8": "d989324bae28e3f3a82149b83334440c4d9d88d9de69727bedc7a6fc669504f4",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  logPrimeMeshPoint_succ a b n (j i)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "94587eb1f1bf50041bf478155798a6fbcc4d17f0ae1e432787d555d6669ae754",
+      "complete_declaration_span": "theorem logPrimeMeshHi_eq_lo_add_step {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    logPrimeMeshHi a b n j i = logPrimeMeshLo a b n j i + logPrimeMeshStep a b n :=\n  logPrimeMeshPoint_succ a b n (j i)\n\n",
+      "complete_declaration_span_sha256_utf8": "688e1fd36b078aa7ea1142a69cb3d58e7590885160a2e26f7a2dae681d7e3877"
+    },
+    {
+      "name": "logPrimeMeshLoHi_bounds",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 81,
+      "complete_header": "theorem logPrimeMeshLoHi_bounds {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    a ≤ logPrimeMeshLo a b n j i ∧\n      logPrimeMeshLo a b n j i < logPrimeMeshHi a b n j i ∧\n      logPrimeMeshHi a b n j i ≤ b",
+      "complete_header_sha256_utf8": "edc02d665a68208d3ac698b56e743acf2d1ff0423d086b015600483741aaa7f3",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  refine ⟨?_, ?_, ?_⟩\n  · simpa [logPrimeMeshLo] using logPrimeMeshPoint_mono hab.le n (Nat.zero_le (j i).val)\n  · rw [logPrimeMeshHi_eq_lo_add_step]\n    exact lt_add_of_pos_right _ (logPrimeMeshStep_pos hab n)\n  · simpa [logPrimeMeshHi] using\n      logPrimeMeshPoint_mono hab.le n (Nat.succ_le_of_lt (j i).isLt)\n\n/-- Distinct grid labels have a separating coordinate, including when the\ntwo half-open intervals meet at their common endpoint. -/\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "1eccf637d97cf381f001af771ae832317aca3208b72f857d43f0e738b9072911",
+      "complete_declaration_span": "theorem logPrimeMeshLoHi_bounds {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) (i : Fin d) :\n    a ≤ logPrimeMeshLo a b n j i ∧\n      logPrimeMeshLo a b n j i < logPrimeMeshHi a b n j i ∧\n      logPrimeMeshHi a b n j i ≤ b := by\n  refine ⟨?_, ?_, ?_⟩\n  · simpa [logPrimeMeshLo] using logPrimeMeshPoint_mono hab.le n (Nat.zero_le (j i).val)\n  · rw [logPrimeMeshHi_eq_lo_add_step]\n    exact lt_add_of_pos_right _ (logPrimeMeshStep_pos hab n)\n  · simpa [logPrimeMeshHi] using\n      logPrimeMeshPoint_mono hab.le n (Nat.succ_le_of_lt (j i).isLt)\n\n/-- Distinct grid labels have a separating coordinate, including when the\ntwo half-open intervals meet at their common endpoint. -/\n",
+      "complete_declaration_span_sha256_utf8": "e47cce8e038078a0f2853beb1bb2cb6d6ca8718d99244cca66e4ce8b65a92e42"
+    },
+    {
+      "name": "logPrimeMesh_separated",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 95,
+      "complete_header": "theorem logPrimeMesh_separated {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} (hjk : j ≠ k) : ∃ i,\n      logPrimeMeshHi a b n j i ≤ logPrimeMeshLo a b n k i ∨\n      logPrimeMeshHi a b n k i ≤ logPrimeMeshLo a b n j i",
+      "complete_header_sha256_utf8": "bab5bfd6f16511fa8add0f71600cbacdc133bd9081ac2a85ea2eb82038ecbfd8",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  obtain ⟨i, hi⟩ : ∃ i, j i ≠ k i := by\n    by_contra h\n    push Not at h\n    exact hjk (funext h)\n  refine ⟨i, ?_⟩\n  rcases lt_or_gt_of_ne hi with h | h\n  · exact Or.inl (logPrimeMeshPoint_mono hab n (show (j i).val + 1 ≤ (k i).val from h))\n  · exact Or.inr (logPrimeMeshPoint_mono hab n (show (k i).val + 1 ≤ (j i).val from h))\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "6c902baf4d7f8626184b863e712a58239b1fb0ca3698f914b12cbbbfc67cef30",
+      "complete_declaration_span": "theorem logPrimeMesh_separated {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} (hjk : j ≠ k) : ∃ i,\n      logPrimeMeshHi a b n j i ≤ logPrimeMeshLo a b n k i ∨\n      logPrimeMeshHi a b n k i ≤ logPrimeMeshLo a b n j i := by\n  obtain ⟨i, hi⟩ : ∃ i, j i ≠ k i := by\n    by_contra h\n    push Not at h\n    exact hjk (funext h)\n  refine ⟨i, ?_⟩\n  rcases lt_or_gt_of_ne hi with h | h\n  · exact Or.inl (logPrimeMeshPoint_mono hab n (show (j i).val + 1 ≤ (k i).val from h))\n  · exact Or.inr (logPrimeMeshPoint_mono hab n (show (k i).val + 1 ≤ (j i).val from h))\n\n",
+      "complete_declaration_span_sha256_utf8": "525ef5c4295a482113285165f36738acb9f8e8654e37044f31df17d61f2a101b"
+    },
+    {
+      "name": "logPrimeMeshCell_unique",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 108,
+      "complete_header": "theorem logPrimeMeshCell_unique {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} {x : Fin d → ℝ}\n    (hj : x ∈ logPrimeMeshCell a b n j) (hk : x ∈ logPrimeMeshCell a b n k) : j = k",
+      "complete_header_sha256_utf8": "23fae45658c512972121023edee70124af0e36b51f95987ce685361ea40ff903",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  by_contra h\n  obtain ⟨i, hi | hi⟩ := logPrimeMesh_separated hab h\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hk) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hj) i).2)\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hj) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hk) i).2)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "5cde6cd2948116ee9e05b802be2affc4772a4e393d7c1e9d6a9efd795f298077",
+      "complete_declaration_span": "theorem logPrimeMeshCell_unique {d n : ℕ} {a b : ℝ} (hab : a ≤ b)\n    {j k : Fin d → Fin (n + 1)} {x : Fin d → ℝ}\n    (hj : x ∈ logPrimeMeshCell a b n j) (hk : x ∈ logPrimeMeshCell a b n k) : j = k := by\n  by_contra h\n  obtain ⟨i, hi | hi⟩ := logPrimeMesh_separated hab h\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hk) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hj) i).2)\n  · exact (not_lt_of_ge hi) (((mem_logPrimeMeshCell.mp hj) i).1.trans_lt\n      ((mem_logPrimeMeshCell.mp hk) i).2)\n\n",
+      "complete_declaration_span_sha256_utf8": "724617310e6a34def91ebae3af565483ec12eb06f4d46fd588833a9bd9f1b5c2"
+    },
+    {
+      "name": "logPrimeMeshCell_pairwiseDisjoint",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 118,
+      "complete_header": "theorem logPrimeMeshCell_pairwiseDisjoint {d : ℕ} {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    (Set.univ : Set (Fin d → Fin (n + 1))).PairwiseDisjoint (logPrimeMeshCell a b n)",
+      "complete_header_sha256_utf8": "b62ea3cfbcf403fa9f6c327bd2e4e9b555caa3dbfdc84cdc6c8401989eb4e0c8",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  intro j _ k _ hjk\n  change Disjoint (logPrimeMeshCell a b n j) (logPrimeMeshCell a b n k)\n  rw [Set.disjoint_left]\n  intro x hxj hxk\n  exact hjk (logPrimeMeshCell_unique hab hxj hxk)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "311eaf43d0e4e01c62afb7df820946091f773018af552d529a6d944a06f287e9",
+      "complete_declaration_span": "theorem logPrimeMeshCell_pairwiseDisjoint {d : ℕ} {a b : ℝ} (hab : a ≤ b) (n : ℕ) :\n    (Set.univ : Set (Fin d → Fin (n + 1))).PairwiseDisjoint (logPrimeMeshCell a b n) := by\n  intro j _ k _ hjk\n  change Disjoint (logPrimeMeshCell a b n j) (logPrimeMeshCell a b n k)\n  rw [Set.disjoint_left]\n  intro x hxj hxk\n  exact hjk (logPrimeMeshCell_unique hab hxj hxk)\n\n",
+      "complete_declaration_span_sha256_utf8": "dc7e85bea5dc366011ae27ea4a30d135829294e13027bb600c61fd2fbf6888aa"
+    },
+    {
+      "name": "logPrimeMeshCell_subset_box",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 126,
+      "complete_header": "theorem logPrimeMeshCell_subset_box {d : ℕ} {a b : ℝ} (hab : a < b)\n    (n : ℕ) (j : Fin d → Fin (n + 1)) :\n    logPrimeMeshCell a b n j ⊆ logPrimeBox (fun _ => a) (fun _ => b)",
+      "complete_header_sha256_utf8": "014a740f3fd9a71da84e8c90040e823278030afebfcbdd5d52deb0f9d89b65b1",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  intro x hx\n  refine mem_logPrimeBox.mpr (fun i => ?_)\n  have hi := mem_logPrimeMeshCell.mp hx i\n  exact ⟨(logPrimeMeshLoHi_bounds hab n j i).1.trans hi.1,\n    hi.2.trans_le (logPrimeMeshLoHi_bounds hab n j i).2.2⟩\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "e0376b32c908dbc98b83e239466e133b5f6189ef171f64682f2b3834fa15925b",
+      "complete_declaration_span": "theorem logPrimeMeshCell_subset_box {d : ℕ} {a b : ℝ} (hab : a < b)\n    (n : ℕ) (j : Fin d → Fin (n + 1)) :\n    logPrimeMeshCell a b n j ⊆ logPrimeBox (fun _ => a) (fun _ => b) := by\n  intro x hx\n  refine mem_logPrimeBox.mpr (fun i => ?_)\n  have hi := mem_logPrimeMeshCell.mp hx i\n  exact ⟨(logPrimeMeshLoHi_bounds hab n j i).1.trans hi.1,\n    hi.2.trans_le (logPrimeMeshLoHi_bounds hab n j i).2.2⟩\n\n",
+      "complete_declaration_span_sha256_utf8": "5e6910f7eb088116c398c1e9c0b84859bd207cd83733b93f53d26c183d42dc3a"
+    },
+    {
+      "name": "exists_logPrimeMeshInterval",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 135,
+      "complete_header": "theorem exists_logPrimeMeshInterval (a b : ℝ) (n : ℕ) {x : ℝ}\n    (hx : x ∈ Set.Ico a b) :\n    ∃ i : Fin (n + 1), x ∈ Set.Ico\n      (logPrimeMeshPoint a b n i) (logPrimeMeshPoint a b n (i.val + 1))",
+      "complete_header_sha256_utf8": "f7daf4331c4434a24af889d7cb4ee1f5ea8dc28f0e2ec0d6fc6d0c52faf8f288",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  have hx' : x ∈ Set.Ico (logPrimeMeshPoint a b n 0)\n      (logPrimeMeshPoint a b n (n + 1)) := by simpa using hx\n  obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp\n    (Ico_subset_biUnion_Ico (n + 1) (logPrimeMeshPoint a b n) hx')\n  exact ⟨⟨i, Finset.mem_range.mp hi⟩, hxi⟩\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "08c09f1871b4f45a93f9d6d925c4ebf63c27f2f1396aab101c64b9052a2b12e2",
+      "complete_declaration_span": "theorem exists_logPrimeMeshInterval (a b : ℝ) (n : ℕ) {x : ℝ}\n    (hx : x ∈ Set.Ico a b) :\n    ∃ i : Fin (n + 1), x ∈ Set.Ico\n      (logPrimeMeshPoint a b n i) (logPrimeMeshPoint a b n (i.val + 1)) := by\n  have hx' : x ∈ Set.Ico (logPrimeMeshPoint a b n 0)\n      (logPrimeMeshPoint a b n (n + 1)) := by simpa using hx\n  obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp\n    (Ico_subset_biUnion_Ico (n + 1) (logPrimeMeshPoint a b n) hx')\n  exact ⟨⟨i, Finset.mem_range.mp hi⟩, hxi⟩\n\n",
+      "complete_declaration_span_sha256_utf8": "1a6a7d9c49959e72f651ef316b69f82927bc8902f42086f6523055cd135f8986"
+    },
+    {
+      "name": "exists_logPrimeMeshCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 145,
+      "complete_header": "theorem exists_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ) {x : Fin d → ℝ}\n    (hx : x ∈ logPrimeBox (fun _ => a) (fun _ => b)) :\n    ∃ j : Fin d → Fin (n + 1), x ∈ logPrimeMeshCell a b n j",
+      "complete_header_sha256_utf8": "890a314ec4580defd98d758ffbb18d9efae8a88df357fe1993ae2bd8db4e16af",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  choose j hj using fun i => exists_logPrimeMeshInterval a b n (mem_logPrimeBox.mp hx i)\n  exact ⟨j, mem_logPrimeMeshCell.mpr hj⟩\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "e312b10f30c8b0b29bc2dc2d5a58a98135fde015d70730bcc8b1e5dc4d7ea05d",
+      "complete_declaration_span": "theorem exists_logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ) {x : Fin d → ℝ}\n    (hx : x ∈ logPrimeBox (fun _ => a) (fun _ => b)) :\n    ∃ j : Fin d → Fin (n + 1), x ∈ logPrimeMeshCell a b n j := by\n  choose j hj using fun i => exists_logPrimeMeshInterval a b n (mem_logPrimeBox.mp hx i)\n  exact ⟨j, mem_logPrimeMeshCell.mpr hj⟩\n\n",
+      "complete_declaration_span_sha256_utf8": "5e498c4274ef6147c237c45374624006c030ca0ff544a14f96582b1334163f4b"
+    },
+    {
+      "name": "logPrimeMeshCells_union",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 151,
+      "complete_header": "theorem logPrimeMeshCells_union {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ) :\n    (⋃ j : Fin d → Fin (n + 1), logPrimeMeshCell a b n j) =\n      logPrimeBox (fun _ => a) (fun _ => b)",
+      "complete_header_sha256_utf8": "f47642faabbe39cd452bc8c2f9940b6cc341ecaf7fbe60065dc6ce96f3788931",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  ext x\n  constructor\n  · intro hx\n    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx\n    exact logPrimeMeshCell_subset_box hab n j hj\n  · intro hx\n    obtain ⟨j, hj⟩ := exists_logPrimeMeshCell a b n hx\n    exact Set.mem_iUnion.mpr ⟨j, hj⟩\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "8f149271b2250c281a4fba2bebc1abab57cb6b2e262483c8f28fafb0314f54bc",
+      "complete_declaration_span": "theorem logPrimeMeshCells_union {d : ℕ} {a b : ℝ} (hab : a < b) (n : ℕ) :\n    (⋃ j : Fin d → Fin (n + 1), logPrimeMeshCell a b n j) =\n      logPrimeBox (fun _ => a) (fun _ => b) := by\n  ext x\n  constructor\n  · intro hx\n    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx\n    exact logPrimeMeshCell_subset_box hab n j hj\n  · intro hx\n    obtain ⟨j, hj⟩ := exists_logPrimeMeshCell a b n hx\n    exact Set.mem_iUnion.mpr ⟨j, hj⟩\n\n",
+      "complete_declaration_span_sha256_utf8": "a9b6996ba69db70c2f1163d34ce6bda8f9fc1b1a7cbf76baf6477a046ea66103"
+    },
+    {
+      "name": "tendsto_logPrimeMeshStep",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 163,
+      "complete_header": "theorem tendsto_logPrimeMeshStep (a b : ℝ) :\n    Tendsto (logPrimeMeshStep a b) atTop (nhds 0)",
+      "complete_header_sha256_utf8": "f94a53743a46453618b6334bfccf0fcf703fdd17865d12bd3fa8aebe37a6618b",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  change Tendsto (fun n : ℕ => (b - a) / ((n : ℝ) + 1)) atTop (nhds 0)\n  simpa only [div_eq_mul_inv, one_div, one_mul, mul_zero] using\n    (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).const_mul (b - a)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "4049cf6703df491d2cb803a5757611ababbf8c603d6efe0f30ef2be0440d8c73",
+      "complete_declaration_span": "theorem tendsto_logPrimeMeshStep (a b : ℝ) :\n    Tendsto (logPrimeMeshStep a b) atTop (nhds 0) := by\n  change Tendsto (fun n : ℕ => (b - a) / ((n : ℝ) + 1)) atTop (nhds 0)\n  simpa only [div_eq_mul_inv, one_div, one_mul, mul_zero] using\n    (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).const_mul (b - a)\n\n",
+      "complete_declaration_span_sha256_utf8": "6552accc1150416caccf8d9776530d6195c2d8b94489f28dde80a4785e85b7e9"
+    },
+    {
+      "name": "tendsto_logPrimeMeshHi_apply",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 169,
+      "complete_header": "theorem tendsto_logPrimeMeshHi_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n) i) atTop (nhds (x i))",
+      "complete_header_sha256_utf8": "95789b2dd2bcacffe780bacca16f808fbe4fb79d8966abb8be1d934f3b5d4de5",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  filter_upwards [(tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hepsilon)] with n hn\n  have hxi := mem_logPrimeMeshCell.mp (hx n) i\n  have he := logPrimeMeshHi_eq_lo_add_step a b n (j n) i\n  rw [Real.dist_eq]\n  exact abs_lt.mpr ⟨by linarith [hxi.2], by linarith [hxi.1]⟩\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "c826e087bf379d0aba71b0411938adb6ea79189a617730242b7321aa99b42653",
+      "complete_declaration_span": "theorem tendsto_logPrimeMeshHi_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n) i) atTop (nhds (x i)) := by\n  rw [Metric.tendsto_nhds]\n  intro epsilon hepsilon\n  filter_upwards [(tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hepsilon)] with n hn\n  have hxi := mem_logPrimeMeshCell.mp (hx n) i\n  have he := logPrimeMeshHi_eq_lo_add_step a b n (j n) i\n  rw [Real.dist_eq]\n  exact abs_lt.mpr ⟨by linarith [hxi.2], by linarith [hxi.1]⟩\n\n",
+      "complete_declaration_span_sha256_utf8": "80ea7c0074f7245071bd14534a284d0946577af8d0f128924598d3e74d3cfbd9"
+    },
+    {
+      "name": "tendsto_logPrimeMeshLo_apply",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 181,
+      "complete_header": "theorem tendsto_logPrimeMeshLo_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n) i) atTop (nhds (x i))",
+      "complete_header_sha256_utf8": "b65a1786ceed57e305fe18a8d8729459c5abc313c8f9edb0fc60aca23deebaf3",
+      "complete_proof_or_body_and_following_interstitial": " := by\n  have h := (tendsto_logPrimeMeshHi_apply a b j hx i).sub (tendsto_logPrimeMeshStep a b)\n  simpa only [sub_zero, logPrimeMeshHi_eq_lo_add_step, add_sub_cancel_right] using h\n\n/-- Both endpoint vectors converge, so every finite family of strict\ncontinuous endpoint tests eventually holds without choosing a new mesh\nfor each coordinate. -/\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "f3cf688ed1fc7cacd307d8b5cacbafa38eb2b991a837b2a1b92627bf7e3e412c",
+      "complete_declaration_span": "theorem tendsto_logPrimeMeshLo_apply {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) (i : Fin d) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n) i) atTop (nhds (x i)) := by\n  have h := (tendsto_logPrimeMeshHi_apply a b j hx i).sub (tendsto_logPrimeMeshStep a b)\n  simpa only [sub_zero, logPrimeMeshHi_eq_lo_add_step, add_sub_cancel_right] using h\n\n/-- Both endpoint vectors converge, so every finite family of strict\ncontinuous endpoint tests eventually holds without choosing a new mesh\nfor each coordinate. -/\n",
+      "complete_declaration_span_sha256_utf8": "3725501c75fdb695ad9b7d6cb30a07d133173a52616be70e70d43e3c4c334d8e"
+    },
+    {
+      "name": "tendsto_logPrimeMeshLo",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 191,
+      "complete_header": "theorem tendsto_logPrimeMeshLo {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n)) atTop (nhds x)",
+      "complete_header_sha256_utf8": "1e4def8931d98d6bbc923516acad0b129c96a078a8e609006e3b99ecb95bba06",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshLo_apply a b j hx i)\n\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "591b1c3ff10d37dac569e9ff5610c5d8ab6d75590171546e0092e6cfb5235ac3",
+      "complete_declaration_span": "theorem tendsto_logPrimeMeshLo {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshLo a b n (j n)) atTop (nhds x) :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshLo_apply a b j hx i)\n\n",
+      "complete_declaration_span_sha256_utf8": "22d0b14962a5de8527d78d1fe3c7227f7663b2cf306a41f0b9b70d09f8eeb8b5"
+    },
+    {
+      "name": "tendsto_logPrimeMeshHi",
+      "kind": "theorem",
+      "visibility": "public",
+      "first_line": 197,
+      "complete_header": "theorem tendsto_logPrimeMeshHi {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n)) atTop (nhds x)",
+      "complete_header_sha256_utf8": "6440489511218e483a82448a6f87e48bfb3233dece41fd390077fdb37d94c761",
+      "complete_proof_or_body_and_following_interstitial": " :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshHi_apply a b j hx i)\n\nend\n\nend ImbalancedChen\n",
+      "complete_proof_or_body_and_following_interstitial_sha256_utf8": "4a7828545b65ceda19eaf79d0878d05d1a38c373cdadac5fdaf520c5cfbdbb60",
+      "complete_declaration_span": "theorem tendsto_logPrimeMeshHi {d : ℕ} (a b : ℝ)\n    (j : ∀ n : ℕ, Fin d → Fin (n + 1)) {x : Fin d → ℝ}\n    (hx : ∀ n, x ∈ logPrimeMeshCell a b n (j n)) :\n    Tendsto (fun n => logPrimeMeshHi a b n (j n)) atTop (nhds x) :=\n  tendsto_pi_nhds.mpr (fun i => tendsto_logPrimeMeshHi_apply a b j hx i)\n\nend\n\nend ImbalancedChen\n",
+      "complete_declaration_span_sha256_utf8": "25b0cd248f922ce1447d75e58a2d3dce394c5eebb34a4756ece5b15df86d9c54"
+    }
+  ],
+  "all_five_complete_primitive_definitions": [
+    {
+      "name": "logPrimeMeshStep",
+      "first_line": 22,
+      "complete_header": "def logPrimeMeshStep (a b : ℝ) (n : ℕ) : ℝ",
+      "complete_definition_utf8": "def logPrimeMeshStep (a b : ℝ) (n : ℕ) : ℝ := (b - a) / (n + 1)\n\n",
+      "complete_definition_sha256_utf8": "92ebea603c8dfc32ac5517c3227c7e948912dc6a23f359f345db49720431e374"
+    },
+    {
+      "name": "logPrimeMeshPoint",
+      "first_line": 24,
+      "complete_header": "def logPrimeMeshPoint (a b : ℝ) (n i : ℕ) : ℝ",
+      "complete_definition_utf8": "def logPrimeMeshPoint (a b : ℝ) (n i : ℕ) : ℝ :=\n  a + (i : ℝ) * logPrimeMeshStep a b n\n\n",
+      "complete_definition_sha256_utf8": "aeafa0fa2c0b262481c30d7c8684387652f8195f7e0c1e83ff3902c619f7b2f6"
+    },
+    {
+      "name": "logPrimeMeshLo",
+      "first_line": 27,
+      "complete_header": "def logPrimeMeshLo {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ",
+      "complete_definition_utf8": "def logPrimeMeshLo {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n (j i)\n\n",
+      "complete_definition_sha256_utf8": "13728a990ef669744825e6d6b0c0fc127be12f670e5a94ca2de4d6b0984c202d"
+    },
+    {
+      "name": "logPrimeMeshHi",
+      "first_line": 31,
+      "complete_header": "def logPrimeMeshHi {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ",
+      "complete_definition_utf8": "def logPrimeMeshHi {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Fin d → ℝ :=\n  fun i => logPrimeMeshPoint a b n ((j i).val + 1)\n\n",
+      "complete_definition_sha256_utf8": "0aa5c8540d99466f3a215d9db91d6a3cbf1417e91df622a0ddd13fe8bc5efff4"
+    },
+    {
+      "name": "logPrimeMeshCell",
+      "first_line": 35,
+      "complete_header": "def logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Set (Fin d → ℝ)",
+      "complete_definition_utf8": "def logPrimeMeshCell {d : ℕ} (a b : ℝ) (n : ℕ)\n    (j : Fin d → Fin (n + 1)) : Set (Fin d → ℝ) :=\n  logPrimeBox (logPrimeMeshLo a b n j) (logPrimeMeshHi a b n j)\n\n",
+      "complete_definition_sha256_utf8": "63639759ba03e0eb66921b9c4c10b14aea7171a15b5b3536cee8c212c9698ad0"
+    }
+  ],
+  "inventory_boundary_note": "Each lexical source declaration span runs from its optional same-line attribute through the next source declaration, and includes following blank lines or comments. The final span also includes existing closing section/namespace text. Every full header and actual proof/body is preserved; this is not an elaborated declaration census.",
+  "direct_imports": [
+    "ImbalancedChen.LogPrimeBoxIntegral",
+    "Mathlib.Analysis.SpecificLimits.Basic",
+    "Mathlib.Order.Interval.Set.Union",
+    "Mathlib.Tactic"
+  ],
+  "proper_project_parent_count": 1,
+  "unowned_proper_project_parents": [],
+  "observed_fresh_owned_census": {
+    "path": ".lake/proof-continuation/source-reviews/20261020T103144036379Z-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "2cac848bcec87753cef6796126a4720d5ff960bc4abfb34058a3adac7bd899eb",
+    "status": "FRESH_CURRENT_SOURCE_ALL_OBJECT_PARTS_COMPLETE_OWNED_CENSUS",
+    "owned_modules": 153,
+    "complete_serialized_declarations": 3478,
+    "candidate_present": false,
+    "snapshot_not_claim_of_latest_after_parallel_root_work": true
+  },
+  "sole_owned_parent": {
+    "module": "ImbalancedChen.LogPrimeBoxIntegral",
+    "source": "ImbalancedChen/LogPrimeBoxIntegral.lean",
+    "current_source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+    "source_imports": [
+      "Mathlib.MeasureTheory.Integral.Pi",
+      "Mathlib.Analysis.SpecialFunctions.Integrals.Basic"
+    ],
+    "source_project_imports": [],
+    "current_census_record": {
+      "module": "ImbalancedChen.LogPrimeBoxIntegral",
+      "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+      "object_parts": {
+        ".olean": "180f95221c2b31758c88d27f1cd42c6086170e02d79092d86a3be541bc7f60d2"
+      },
+      "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+      "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+      "declarations_json_sha256": "3a4bc99edc2653c761adac0f8a941ba43f6b4adf52f42520db2603263ed79814",
+      "complete_serialized_declarations": 12
+    },
+    "owned_receipt": ".lake/proof-continuation/audits/20261020T103002592883Z/receipt.json",
+    "owned_receipt_sha256": "fb7bd5f8acf63fc13ec2a41f98fffe337f8a2d8ac20c4876222f7810d24affc8",
+    "actual_receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "actual_receipt_targets": {
+      "ImbalancedChen.LogPrimeBoxIntegral": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28"
+    },
+    "actual_receipt_declaration_counts": {
+      "ImbalancedChen.LogPrimeBoxIntegral": 12
+    },
+    "complete_owned_declarations": 12,
+    "actual_parent_interfaces_consumed": [
+      {
+        "name": "logPrimeBox",
+        "kind": "def",
+        "visibility": "public",
+        "first_line": 28,
+        "complete_header": "def logPrimeBox {k : ℕ} (a b : Fin k → ℝ) : Set (Fin k → ℝ)",
+        "complete_header_sha256_utf8": "529d6de509234502051c5281b69fe4af8ef2e44dd834d8ef6b2a1019d0ad8fde",
+        "complete_proof_or_body_and_following_interstitial": " :=\n  Set.univ.pi (fun i => Set.Ico (a i) (b i))\n\n",
+        "complete_proof_or_body_and_following_interstitial_sha256_utf8": "acc3d13d0ab5b68012cfbc99152eab44c4b92079570cd690b38a8985790f568e",
+        "complete_declaration_span": "def logPrimeBox {k : ℕ} (a b : Fin k → ℝ) : Set (Fin k → ℝ) :=\n  Set.univ.pi (fun i => Set.Ico (a i) (b i))\n\n",
+        "complete_declaration_span_sha256_utf8": "53acb15964f1daa578d6f1376cec21af259ed0db4157789adfd3a749f7f5945f"
+      },
+      {
+        "name": "mem_logPrimeBox",
+        "kind": "theorem",
+        "visibility": "public",
+        "first_line": 31,
+        "complete_header": "@[simp] theorem mem_logPrimeBox {k : ℕ} {a b x : Fin k → ℝ} :\n    x ∈ logPrimeBox a b ↔ ∀ i, a i ≤ x i ∧ x i < b i",
+        "complete_header_sha256_utf8": "3b34125923749331fa2622cf290ab64ed5f3c08d56297037fbaf1995fca23139",
+        "complete_proof_or_body_and_following_interstitial": " := by\n  simp [logPrimeBox]\n\n",
+        "complete_proof_or_body_and_following_interstitial_sha256_utf8": "0d471ef5a80f3f252694d139602c1fddb87ba0a183261e4b8fdf04d8ea3f55b2",
+        "complete_declaration_span": "@[simp] theorem mem_logPrimeBox {k : ℕ} {a b x : Fin k → ℝ} :\n    x ∈ logPrimeBox a b ↔ ∀ i, a i ≤ x i ∧ x i < b i := by\n  simp [logPrimeBox]\n\n",
+        "complete_declaration_span_sha256_utf8": "4a1a929d88da032b922b0f1807cdb6082e7b4efedaebbe4e54ec7e0d7e850912"
+      },
+      {
+        "name": "measurableSet_logPrimeBox",
+        "kind": "theorem",
+        "visibility": "public",
+        "first_line": 35,
+        "complete_header": "theorem measurableSet_logPrimeBox {k : ℕ} (a b : Fin k → ℝ) :\n    MeasurableSet (logPrimeBox a b)",
+        "complete_header_sha256_utf8": "9b3c4429fda71e1e7c516a6699ac27793870313a400c4ca51e1bc396de26aad0",
+        "complete_proof_or_body_and_following_interstitial": " :=\n  MeasurableSet.univ_pi (fun _ => measurableSet_Ico)\n\n/-- The one-dimensional density is integrable on every interval with a\npositive lower endpoint, also when that interval is empty. -/\n",
+        "complete_proof_or_body_and_following_interstitial_sha256_utf8": "fe5381d7c5d6c69a155ddb4324d395ccbf6ce988720e2b826d0bf3bdae7e215d",
+        "complete_declaration_span": "theorem measurableSet_logPrimeBox {k : ℕ} (a b : Fin k → ℝ) :\n    MeasurableSet (logPrimeBox a b) :=\n  MeasurableSet.univ_pi (fun _ => measurableSet_Ico)\n\n/-- The one-dimensional density is integrable on every interval with a\npositive lower endpoint, also when that interval is empty. -/\n",
+        "complete_declaration_span_sha256_utf8": "96e9192854f43200381450915e24f80cba11ab620a74dab40534f5389a002783"
+      }
+    ],
+    "parent_actual_owned_receipt_read": true
+  },
+  "direct_native_source_bindings": [
+    {
+      "module": "Mathlib.Analysis.SpecificLimits.Basic",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecificLimits\\Basic.lean",
+      "source_sha256": "2e397149f39d3258efbbcfa3c272a5148cc622d9a4eb3cfca4ff5d5b73cd5a7d"
+    },
+    {
+      "module": "Mathlib.Order.Interval.Set.Union",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Set\\Union.lean",
+      "source_sha256": "0609bc9d79421b5690dca5429a67571ab70d1ca9db34b7e4c3dbe920598d0eb2"
+    },
+    {
+      "module": "Mathlib.Tactic",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Tactic.lean",
+      "source_sha256": "be54715469fab9b2696aa222dbc37c0a7fb34b773701919972d349e1799d3041"
+    }
+  ],
+  "sole_parent_direct_native_source_bindings": [
+    {
+      "module": "Mathlib.MeasureTheory.Integral.Pi",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Pi.lean",
+      "source_sha256": "43c50a9d9a683b2050e145154410a7260c3dd84f3ec3010630cc6b90572afcd9"
+    },
+    {
+      "module": "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Integrals\\Basic.lean",
+      "source_sha256": "58a81e8137bddf5cc43ae28f08ffa75ea3aa086e607cf70e70f70c3c8e935e81"
+    }
+  ],
+  "actual_current_project_source_graph": {
+    "ImbalancedChen.LogPrimeBoxMesh": [
+      "ImbalancedChen.LogPrimeBoxIntegral"
+    ],
+    "ImbalancedChen.LogPrimeBoxIntegral": []
+  },
+  "actual_native_header_and_complete_proof_source_evidence": [
+    {
+      "API": "Ico_subset_biUnion_Ico",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Order\\Interval\\Set\\Union.lean",
+      "source_sha256": "0609bc9d79421b5690dca5429a67571ab70d1ca9db34b7e4c3dbe920598d0eb2",
+      "first_line": 35,
+      "last_line": 42,
+      "complete_source_header": "theorem Ico_subset_biUnion_Ico {X : Type*} [LinearOrder X] (N : ℕ) (a : ℕ → X) :\n    Ico (a 0) (a N) ⊆ ⋃ i ∈ Finset.range N, Ico (a i) (a (i + 1))",
+      "complete_source_proof_span": " := by\n  induction N with\n  | zero => simp\n  | succ N ih => calc\n    _ ⊆ Ico (a 0) (a N) ∪ Ico (a N) (a (N + 1)) := Ico_subset_Ico_union_Ico\n    _ ⊆ _ := by simpa [Finset.range_add_one] using\n                  union_subset_union_right (Ico (a N) (a (N + 1))) ih\n",
+      "complete_header_and_proof_source_text": "theorem Ico_subset_biUnion_Ico {X : Type*} [LinearOrder X] (N : ℕ) (a : ℕ → X) :\n    Ico (a 0) (a N) ⊆ ⋃ i ∈ Finset.range N, Ico (a i) (a (i + 1)) := by\n  induction N with\n  | zero => simp\n  | succ N ih => calc\n    _ ⊆ Ico (a 0) (a N) ∪ Ico (a N) (a (N + 1)) := Ico_subset_Ico_union_Ico\n    _ ⊆ _ := by simpa [Finset.range_add_one] using\n                  union_subset_union_right (Ico (a N) (a (N + 1))) ih\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "b03b73d04bad5577f7cb64a781f37ccc65d2ab01c843023ed8163bdd6a0e3f71",
+      "enclosing_context_source_blocks": [],
+      "actual_parameter_and_use_review": "Explicit N=n+1 and a=logPrimeMeshPoint a b n; set inclusion consumes hx directly and produces the two-index finite union. No monotonicity or positive-endpoint hypothesis is required by this native theorem."
+    },
+    {
+      "API": "tendsto_one_div_add_atTop_nhds_zero_nat",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecificLimits\\Basic.lean",
+      "source_sha256": "2e397149f39d3258efbbcfa3c272a5148cc622d9a4eb3cfca4ff5d5b73cd5a7d",
+      "first_line": 69,
+      "last_line": 73,
+      "complete_source_header": "theorem tendsto_one_div_add_atTop_nhds_zero_nat {𝕜 : Type*} [DivisionSemiring 𝕜] [CharZero 𝕜]\n    [TopologicalSpace 𝕜] [ContinuousSMul ℚ≥0 𝕜] :\n    Tendsto (fun n : ℕ ↦ 1 / ((n : 𝕜) + 1)) atTop (𝓝 0)",
+      "complete_source_proof_span": " :=\n  suffices Tendsto (fun n : ℕ ↦ 1 / (↑(n + 1) : 𝕜)) atTop (𝓝 0) by simpa\n  (tendsto_add_atTop_iff_nat 1).2 tendsto_one_div_atTop_nhds_zero_nat\n",
+      "complete_header_and_proof_source_text": "theorem tendsto_one_div_add_atTop_nhds_zero_nat {𝕜 : Type*} [DivisionSemiring 𝕜] [CharZero 𝕜]\n    [TopologicalSpace 𝕜] [ContinuousSMul ℚ≥0 𝕜] :\n    Tendsto (fun n : ℕ ↦ 1 / ((n : 𝕜) + 1)) atTop (𝓝 0) :=\n  suffices Tendsto (fun n : ℕ ↦ 1 / (↑(n + 1) : 𝕜)) atTop (𝓝 0) by simpa\n  (tendsto_add_atTop_iff_nat 1).2 tendsto_one_div_atTop_nhds_zero_nat\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "7215aa307cdfe4d9b8c8ab44d0d80b6d8472cf100c3794bdf0a8eda2fc210069",
+      "enclosing_context_source_blocks": [],
+      "actual_parameter_and_use_review": "Instantiate kappa=Real and multiply the scalar limit by b-a. This proves the common mesh step tends to zero for arbitrary real a,b."
+    },
+    {
+      "API": "mul_le_mul_right -> generated add_le_add_right",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Monoid\\Unbundled\\Basic.lean",
+      "source_sha256": "5e294a0e96698d3537095d94dda4ccf3bc7304ad8772f39e25d712a390281337",
+      "first_line": 69,
+      "last_line": 71,
+      "complete_source_header": "@[to_additive (attr",
+      "complete_source_proof_span": " := gcongr high - 1)]\ntheorem mul_le_mul_right [MulLeftMono α] {b c : α} (bc : b ≤ c) (a : α) : a * b ≤ a * c :=\n  CovariantClass.elim _ bc\n",
+      "complete_header_and_proof_source_text": "@[to_additive (attr := gcongr high - 1)]\ntheorem mul_le_mul_right [MulLeftMono α] {b c : α} (bc : b ≤ c) (a : α) : a * b ≤ a * c :=\n  CovariantClass.elim _ bc\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "3f597030d63cd6945754d1c5f48463ede56df5425cbdd29d85f4a554ac98f3fc",
+      "enclosing_context_source_blocks": [
+        {
+          "source": "Mathlib/Algebra/Order/Monoid/Unbundled/Basic.lean",
+          "first_line": 56,
+          "last_line": 64,
+          "actual_source_text": "variable {α β : Type*}\n\nsection Mul\n\nvariable [Mul α]\n\nsection LE\n\nvariable [LE α]\n"
+        }
+      ],
+      "actual_parameter_and_use_review": "The actual @to_additive source places the common factor on the left. Its additive form therefore has conclusion a+b <= a+c. The mesh proof apply add_le_add_right adds the common left endpoint correctly.",
+      "generated_additive_interface_reconstructed_from_source": "{α : Type*} [Add α] [LE α] [AddLeftMono α] {b c : α} (bc : b ≤ c) (a : α) : a + b ≤ a + c",
+      "generated_interface_not_elaborated_or_queried_with_Lean": true
+    },
+    {
+      "API": "mul_le_mul_of_nonneg_right",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+      "source_sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+      "first_line": 229,
+      "last_line": 231,
+      "complete_source_header": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a",
+      "complete_source_proof_span": " :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+      "complete_header_and_proof_source_text": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "580f67c7844d2166998908c07acb03c94d268278a0ce4b465c6c83c9a8db8082",
+      "enclosing_context_source_blocks": [
+        {
+          "first_line": 160,
+          "last_line": 165,
+          "actual_source_text": "variable {α}\nvariable [Mul α] [Zero α]\n\nsection Preorder\n\nvariable [Preorder α] {a b c d : α}\n"
+        }
+      ],
+      "actual_parameter_and_use_review": "The cast natural index inequality is multiplied by the common nonnegative step. The context supplies Mul/Zero/Preorder; the Real instance is already imported."
+    },
+    {
+      "API": "tendsto_pi_nhds",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Constructions.lean",
+      "source_sha256": "1b2099fa575c72263e2d512bf166ed78cc483fb09100b0e56a923e9b8dc31048",
+      "first_line": 807,
+      "last_line": 809,
+      "complete_source_header": "theorem tendsto_pi_nhds {f : Y → ∀ i, A i} {g : ∀ i, A i} {u : Filter Y} :\n    Tendsto f u (𝓝 g) ↔ ∀ x, Tendsto (fun i => f i x) u (𝓝 (g x))",
+      "complete_source_proof_span": " := by\n  rw [nhds_pi, Filter.tendsto_pi]\n",
+      "complete_header_and_proof_source_text": "theorem tendsto_pi_nhds {f : Y → ∀ i, A i} {g : ∀ i, A i} {u : Filter Y} :\n    Tendsto f u (𝓝 g) ↔ ∀ x, Tendsto (fun i => f i x) u (𝓝 (g x)) := by\n  rw [nhds_pi, Filter.tendsto_pi]\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "9eb08c4a5bdf8360be75ddc4a7da415af5519f6d9b87ccd32f7a702fcaee1c34",
+      "enclosing_context_source_blocks": [
+        {
+          "first_line": 51,
+          "last_line": 51,
+          "actual_source_text": "variable {X : Type u} {Y : Type v} {Z W ε ζ : Type*}\n"
+        },
+        {
+          "first_line": 759,
+          "last_line": 763,
+          "actual_source_text": "section Pi\n\nvariable {ι : Type*} {A B : ι → Type*} {κ : Type*} [TopologicalSpace X]\n  [T : ∀ i, TopologicalSpace (A i)] [∀ i, TopologicalSpace (B i)] {f : X → ∀ i : ι, A i}\n\n"
+        }
+      ],
+      "actual_parameter_and_use_review": "The exact iff converts every coordinate limit into convergence of the complete finite endpoint vector. No stronger uniform-over-moving-x statement is silently assumed."
+    },
+    {
+      "API": "Metric.tendsto_nhds",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\MetricSpace\\Pseudo\\Defs.lean",
+      "source_sha256": "7cbe6a3f08199e77596b05ae5e5215ce5dc1e5dc131d29ecde6e974c308aa374",
+      "first_line": 891,
+      "last_line": 893,
+      "complete_source_header": "theorem tendsto_nhds {f : Filter β} {u : β → α} {a : α} :\n    Tendsto u f (𝓝 a) ↔ ∀ ε > 0, ∀ᶠ x in f, dist (u x) a < ε",
+      "complete_source_proof_span": " :=\n  nhds_basis_ball.tendsto_right_iff\n",
+      "complete_header_and_proof_source_text": "theorem tendsto_nhds {f : Filter β} {u : β → α} {a : α} :\n    Tendsto u f (𝓝 a) ↔ ∀ ε > 0, ∀ᶠ x in f, dist (u x) a < ε :=\n  nhds_basis_ball.tendsto_right_iff\n",
+      "complete_header_and_proof_source_text_sha256_utf8": "a26c9fc9bc13a50dc17388767db980554eadc6998e7808fea4bb6ed96d4f340e",
+      "enclosing_context_source_blocks": [
+        {
+          "first_line": 69,
+          "last_line": 69,
+          "actual_source_text": "variable {α : Type u} {β : Type v} {X ι : Type*}\n"
+        },
+        {
+          "first_line": 171,
+          "last_line": 171,
+          "actual_source_text": "variable [PseudoMetricSpace α]\n"
+        },
+        {
+          "first_line": 363,
+          "last_line": 366,
+          "actual_source_text": "namespace Metric\n\n-- instantiate pseudometric space as a topology\nvariable {x y z : α} {δ ε ε₁ ε₂ : ℝ} {s : Set α}\n"
+        }
+      ],
+      "actual_parameter_and_use_review": "This exact epsilon/eventual-distance iff is used in the upper endpoint proof. The two absolute-value inequalities follow from literal cell membership and common step."
+    }
+  ],
+  "routine_native_core_interfaces_consumed": [
+    "Nat.zero_le",
+    "Nat.succ_le_of_lt",
+    "Fin.isLt",
+    "Finset.mem_range",
+    "Set.mem_iUnion",
+    "Set.mem_iUnion₂",
+    "Set.disjoint_left",
+    "lt_or_gt_of_ne",
+    "not_lt_of_ge",
+    "Filter.Tendsto.const_mul",
+    "Filter.Tendsto.sub",
+    "Filter.Tendsto.eventually",
+    "gt_mem_nhds",
+    "Real.dist_eq",
+    "abs_lt",
+    "sub_nonneg",
+    "div_pos",
+    "div_nonneg",
+    "sub_pos",
+    "lt_add_of_pos_right"
+  ],
+  "routine_interface_note": "These are the elementary order/set/filter interfaces appearing explicitly in the preserved complete 205-line source. The separate native evidence blocks bind the nontrivial cover, reciprocal-limit, generated additive-order, nonnegative-multiplication, metric-limit and product-topology interfaces. No private project API or analytic supplier is used.",
+  "closure_current_read_information": {
+    "target_and_sole_parent_headers_actually_read": true,
+    "sole_project_parent_source_matches_actual_owned_census_and_receipt": true,
+    "proper_project_DAG_is_exactly_one_module": true,
+    "all_three_direct_native_source_hashes_freshly_read": true,
+    "no_old_191_module_bootstrap": true,
+    "no_fresh_runtime_preflight_executed": true,
+    "full_transitive_foreign_object_graph_not_reenumerated_or_replayed": true,
+    "next_runtime_gate_must_independently_recheck_native_objects_and_all_current_inputs": true
+  },
+  "existing_development_cache_locator": {
+    "path": ".lake/proof-continuation/cache/ImbalancedChen.LogPrimeBoxMesh.json",
+    "sha256": "79e5ac69d05b2eb4c5b31f139a1aeffda2461118d098b1c1e62cdb3337769401",
+    "status": "PASS",
+    "scope": "Inherited development cache only; original producer stage absent from this artifact; final acceptance incomplete",
+    "bound_source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+    "not_owned_acceptance": true,
+    "no_cache_object_promoted_or_mutated": true
+  },
+  "mathematical_review": {
+    "definitions": "The n-th refinement has n+1 intervals per coordinate, step=(b-a)/(n+1), lower endpoint at label j_i and upper endpoint at j_i+1. Cells remain literal logPrimeBox Ico products.",
+    "endpoints_and_monotonicity": "For a<b the step is positive. For a<=b the grid is monotone. Index 0 gives a; index n+1 gives b; successive points differ by the same step. Bounds hold in every coordinate with strict interior upper endpoint.",
+    "separation_and_literal_boundary_ownership": "Distinct labels have a coordinate with different natural values. The smaller index plus one is at most the larger index, so one upper endpoint is <= the other lower endpoint. Ico membership then makes common membership impossible, including equality at the shared wall.",
+    "coverage": "The actual native Ico_subset_biUnion_Ico with N=n+1 covers the one-dimensional interval. Selecting a label for every finite coordinate gives a cell for every original box point. Cell subset and existence yield exact union equality; no measure-zero replacement is used.",
+    "common_step_and_endpoint_limits": "The native reciprocal-n+1 limit, scaled by b-a, proves step->0 for arbitrary real endpoints. For fixed x and any label family j_n containing x for all n, membership bounds both endpoint-coordinate errors by the common step. Metric.tendsto_nhds and tendsto_pi_nhds prove coordinate and complete vector convergence.",
+    "edge_cases": "Dimension zero is retained. The weak endpoint hypothesis for monotonicity/separation/uniqueness stays weak; coverage-union retains its existing strict a<b premise. No positive a assumption is added here; positivity needed for reciprocal integrals belongs to downstream theorems.",
+    "uniform_quantifier_boundary": "The endpoint limits quantify over fixed x and arbitrary n-dependent label families. They are not silently strengthened to uniform convergence over moving x. The existing bounds separately give, for a<b, one step bound for every n, every label, every point of its cell and every coordinate.",
+    "no_missing_mathematical_input": "All 26 declarations close mathematically using the five literal primitives, the sole already-owned parent and the actual native APIs. No source/body/header repair is proposed before an actual diagnostic."
+  },
+  "downstream_density_integral_significance": {
+    "source": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+    "source_sha256": "2f2bee793b8d5054999bd0e71532f1f07ecf4ba69ba6cf98a0f840e4403e1203",
+    "uniform_oscillation_source_span": {
+      "first_line": 97,
+      "last_line": 117,
+      "complete_source_text": "theorem exists_logPrimeMesh_test_oscillation {k : ℕ} {a b : ℝ} (hab : a < b)\n    (f : (Fin k → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin k => Set.Icc a b)))\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ m : ℕ, ∀ (j : Fin k → Fin (m + 1)) (x : Fin k → ℝ),\n      x ∈ logPrimeMeshCell a b m j → |f x - f (logPrimeMeshLo a b m j)| ≤ epsilon := by\n  have hc : IsCompact (Set.univ.pi (fun _ : Fin k => Set.Icc a b)) :=\n    isCompact_univ_pi (fun _ => isCompact_Icc)\n  obtain ⟨delta, hdelta, hosc⟩ := Metric.uniformContinuousOn_iff.mp\n    (hc.uniformContinuousOn_of_continuous hf) epsilon hepsilon\n  obtain ⟨m, hm⟩ := ((tendsto_logPrimeMeshStep a b).eventually (gt_mem_nhds hdelta)).exists\n  refine ⟨m, fun j x hx => ?_⟩\n  have hd : dist x (logPrimeMeshLo a b m j) ≤ logPrimeMeshStep a b m := by\n    apply (dist_pi_le_iff (logPrimeMeshStep_pos hab m).le).mpr\n    intro i\n    have hi := mem_logPrimeMeshCell.mp hx i\n    rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr hi.1)]\n    linarith [logPrimeMeshHi_eq_lo_add_step a b m j i]\n  have hh := hosc x (logPrimeBox_mem_closure (logPrimeMeshCell_subset_box hab m j hx))\n    (logPrimeMeshLo a b m j) (logPrimeMesh_lo_mem_closure hab m j) (hd.trans_lt hm)\n  exact (by simpa only [Real.dist_eq] using hh.le)\n"
+    },
+    "exact_finite_integral_partition_source_span": {
+      "first_line": 202,
+      "last_line": 213,
+      "complete_source_text": "private theorem integral_logPrimeBox_mesh {k : ℕ} {a b : ℝ} (hab : a < b)\n    (m : ℕ) (g : (Fin k → ℝ) → ℝ)\n    (hg : IntegrableOn g (logPrimeBox (fun _ : Fin k => a) (fun _ => b))) :\n    (∫ x in logPrimeBox (fun _ : Fin k => a) (fun _ => b), g x) =\n      ∑ j : Fin k → Fin (m + 1), ∫ x in logPrimeMeshCell a b m j, g x := by\n  calc\n    _ = ∫ x in ⋃ j : Fin k → Fin (m + 1), logPrimeMeshCell a b m j, g x := by\n      rw [logPrimeMeshCells_union hab m]\n    _ = _ := integral_iUnion_fintype (measurableSet_logPrimeMeshCell a b m)\n      (fun j r hjr => logPrimeMeshCell_pairwiseDisjoint hab.le m\n        (Set.mem_univ j) (Set.mem_univ r) hjr)\n      (fun j => hg.mono_set (logPrimeMeshCell_subset_box hab m j))\n"
+    },
+    "explanation": "The common mesh size supplies a single compact-uniform-continuity oscillation bound across every cell before the arithmetic target N varies. Exact measurable disjoint covering permits actual Lebesgue integral decomposition; owned LogPrimeBoxIntegral evaluates positive cell masses. This is the geometric proof input for the later literal signed prime-tuple sum integral limit, then InitialSaving/OwnCube density work; it is not a claim that those unowned endpoints are already accepted."
+  },
+  "unchanged_frozen_source_hashes": {
+    "ImbalancedChen/ActualExtendedThirdInitialCutoff.lean": "47165dcc0f73cdeb8fad5f970382b934ccd58b4e8c71ec8ba47c2a6043afb7c6",
+    "ImbalancedChen/Part3SharedFirstFactorDifferenceReciprocity.lean": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+  },
+  "recommendation": "Only the whole unchanged LogPrimeBoxMesh source SHA87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d is proposed for the next separately authorized fresh strict and full owned gate after root nonauthor review.",
+  "next_gate_not_run": true,
+  "no_source_or_old_report_edited": true,
+  "no_compiler_checker_cache_install_or_scope_change": true,
+  "no_external_closure_replay_claim": true,
+  "no_main_or_hUpper_or_CK_completion_claim": true,
+  "quota_observed_used_percent": 8,
+  "quota_observed_remaining_percent": 92,
+  "hard_stop_remaining_at_most": 50
+}

@@ -1,0 +1,686 @@
+{
+  "status": "ONE_NEW_LEAN_SOURCE_COMPLETE_AUTHOR_FROZEN_PROOFS_UNCOMPILED_NOT_OWNED_REQUIRES_ROOT_AND_INDEPENDENT_IMPLEMENTATION_REVIEW",
+  "author": "/root/spectral_complement_oct21",
+  "created_utc": "2026-10-21T01:11:24.504405+00:00",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+  "source_sha256": "fe5322e5610599b0ba8840aa25481a2a29fe4a696cd81c29f0160dd3818e16bb",
+  "source_bytes": 40070,
+  "source_lines": 808,
+  "format": "UTF-8 noBOM LF singleEOF",
+  "root_authoring_scope": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-smooth-D-packet-one-source-root-authoring-scope.json",
+    "sha256": "e25355684adad5b53a25b1fd80a991cc0d303b0e02bfd26414ed9f8d18bb01e9"
+  },
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation",
+  "noncomputable_section_covers_all_source": true,
+  "counts": {
+    "explicit_declarations": 34,
+    "public_definitions": 4,
+    "public_theorems": 1,
+    "private_definitions": 0,
+    "private_theorems": 29
+  },
+  "complete_source_utf8": "import ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation\n\n/-!\n# Smooth frequency support for the literal original small core\n\nThe fixed smooth low pass keeps the real projection before each complex\ncoefficient. Its omitted Schwartz tail is paid after the original outside\nmoments exactly once. For a fixed actual tail gcd D, all rows use one signed\nfrequency carrier, independent of the other row labels. The physical shared\nfirst factor is an arbitrary positive integer, with no primality assumption.\n\nThis is a smooth approximation of the original full core. No equality with\nits sharp row truncation, Mellin separation, root-phase operator estimate,\nor reciprocal spectral cancellation is asserted here.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset Filter Topology\nopen scoped BigOperators SchwartzMap FourierTransform\nopen CommonSmoothCutoff TransposedPrimitiveUPayment\n\ndef CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)\n\ndef MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))\n\ndef MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)\n\ndef MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0\n\nnamespace SharedFirstFactorSmallCoreSmoothFrequency\n\nprivate theorem mem_window_iff (H : ℕ) (h : ℤ) :\n    h ∈ poissonNonzeroFrequencyWindow H ↔ h ≠ 0 ∧ h.natAbs ≤ H := by\n  unfold poissonNonzeroFrequencyWindow\n  rw [Finset.mem_union]\n  constructor\n  · rintro (hp | hnegImage)\n    · obtain ⟨n, hn, rfl⟩ := Finset.mem_image.mp hp\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hn).1; omega\n      exact ⟨by exact_mod_cast hn0, by simpa using (Finset.mem_Icc.mp hn).2⟩\n    · obtain ⟨n, hnMem, rfl⟩ := Finset.mem_image.mp hnegImage\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hnMem).1; omega\n      exact ⟨neg_ne_zero.mpr (by exact_mod_cast hn0), by simpa using (Finset.mem_Icc.mp hnMem).2⟩\n  · rintro ⟨hne, hH⟩\n    have hn : 1 ≤ h.natAbs := Nat.one_le_iff_ne_zero.mpr (Int.natAbs_ne_zero.mpr hne)\n    rcases le_total 0 h with hp | hm\n    · left\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonneg hp]\n    · right\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonpos hm, neg_neg]\n\nprivate theorem norm_sum_sub_le_card {ι : Type*} (S : Finset ι) (f g : ι → ℂ)\n    (E : ℝ) (h : ∀ i ∈ S, ‖f i - g i‖ ≤ E) :\n    ‖(∑ i ∈ S, f i) - ∑ i ∈ S, g i‖ ≤ (S.card : ℝ) * E := by\n  rw [← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ i ∈ S, ‖f i - g i‖ := norm_sum_le _ _\n    _ ≤ ∑ _i ∈ S, E := Finset.sum_le_sum h\n    _ = _ := by rw [Finset.sum_const, nsmul_eq_mul]\n\nprivate theorem coeff_real_tail_norm_le (a b z w : ℂ) (E : ℝ)\n    (ha : ‖a‖ ≤ 1) (hb : ‖b‖ ≤ 1) (_hE : 0 ≤ E) (hzw : ‖z - w‖ ≤ E) :\n    ‖a * star b * (z.re : ℂ) - a * star b * (w.re : ℂ)‖ ≤ E := by\n  rw [← mul_sub, ← Complex.ofReal_sub, ← Complex.sub_re,\n    norm_mul, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs]\n  calc\n    _ ≤ (1 * 1) * E := mul_le_mul\n      (mul_le_mul ha hb (norm_nonneg _) zero_le_one)\n      ((Complex.abs_re_le_norm (z - w)).trans hzw) (abs_nonneg _) (by norm_num)\n    _ = _ := by ring\n\nprivate theorem factorCarrier_prefix {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q)) := by\n  intro q hq\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hq\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩\n\nprivate theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {q : ℕ}\n    (hq : q ∈ factorCarrier Q) : 0 < q := by\n  exact (Finset.mem_Ioc.mp (factorCarrier_prefix hQ hq)).1\n\nprivate theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q := by\n  have h := Finset.card_le_card (factorCarrier_prefix hQ)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show ((factorCarrier Q).card : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n\nprivate theorem betaCarrier_card_le {d : MediumAtom} (hV : 1 ≤ d.V) :\n    (d.betaCarrier.card : ℝ) ≤ 2 * d.V := by\n  have h := Finset.card_le_card (d.betaCarrier_subset_twiceV hV)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show (d.betaCarrier.card : ℝ) ≤ (Nat.floor (2 * d.V) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))\n\nprivate theorem primitive_card_le {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1 := by\n  have hc : d.primitiveFirstFactorCarrier.card ≤ (factorCarrier d.Q1).card :=\n    Finset.card_le_card (Finset.filter_subset _ _)\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤\n    ((factorCarrier d.Q1).card : ℝ) by exact_mod_cast hc).trans\n      (card_factorCarrier_le hd.2.2.1)\n\nprivate theorem geometry_le_scale {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.U ≤ d.scale ∧ d.V ≤ d.scale ∧ d.Q1 ≤ d.scale ∧\n      d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale := by\n  have hdKeep := hd\n  obtain ⟨hU, hV, _hQ1, hQ2, hQ3, _, _, _, hg1, hg2, _⟩ := hdKeep\n  have hX := one_le_scale hd\n  have hUx : d.U ≤ d.scale := by unfold MediumAtom.scale; nlinarith\n  have hVx : d.V ≤ d.scale := V_le_scale hd\n  have hn : d.scale ^ (-sigma) ≤ 1 := by\n    simpa only [Real.rpow_zero] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : -sigma ≤ 0)\n  have hQ1x : d.Q1 ≤ d.scale := by\n    calc\n      _ ≤ d.U * d.scale ^ (-sigma) := hg1.le\n      _ ≤ d.U * 1 := mul_le_mul_of_nonneg_left hn (by linarith)\n      _ = d.U := mul_one _\n      _ ≤ _ := hUx\n  have hpow : d.scale ^ (1 - 8 * sigma) ≤ d.scale := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : 1 - 8 * sigma ≤ 1)\n  have hU2 : 1 ≤ d.U ^ 2 := by nlinarith\n  have hQ32 : 1 ≤ d.Q3 ^ 2 := by nlinarith\n  have hprod : 1 ≤ d.U ^ 2 * d.Q3 ^ 2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q3 ^ 2 := mul_le_mul hU2 hQ32 zero_le_one (sq_nonneg _)\n  have hQ2x : d.Q2 ≤ d.scale := by\n    calc\n      _ = d.Q2 * 1 := by ring\n      _ ≤ d.Q2 * (d.U ^ 2 * d.Q3 ^ 2) :=\n        mul_le_mul_of_nonneg_left hprod (by linarith)\n      _ = d.U ^ 2 * d.Q2 * d.Q3 ^ 2 := by ring\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  have hprod2 : 1 ≤ d.U ^ 2 * d.Q2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q2 := mul_le_mul hU2 hQ2 zero_le_one (sq_nonneg _)\n  have hQ3x : d.Q3 ≤ d.scale := by\n    calc\n      _ ≤ d.Q3 ^ 2 := by nlinarith\n      _ = 1 * d.Q3 ^ 2 := by ring\n      _ ≤ (d.U ^ 2 * d.Q2) * d.Q3 ^ 2 :=\n        mul_le_mul_of_nonneg_right hprod2 (sq_nonneg _)\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  exact ⟨hUx, hVx, hQ1x, hQ2x, hQ3x⟩\n\nprivate theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]\n\nprivate theorem lowPass_contDiff : ContDiff ℝ ∞ poissonSmoothLowPass := by\n  exact dyadicBump.contDiff.comp (contDiff_const.add (contDiff_id.div_const 2))\n\nprivate theorem lowPass_nonneg (u : ℝ) : 0 ≤ poissonSmoothLowPass u :=\n  dyadicBump.nonneg\n\nprivate theorem lowPass_le_one (u : ℝ) : poissonSmoothLowPass u ≤ 1 :=\n  dyadicBump.le_one\n\nprivate theorem lowPass_eq_one {u : ℝ} (hu : |u| ≤ 1) :\n    poissonSmoothLowPass u = 1 := by\n  apply dyadicBump.one_of_mem_closedBall\n  change |(3 / 2 + u / 2) - 3 / 2| ≤ 1 / 2\n  rw [abs_le] at hu ⊢\n  constructor <;> linarith [hu.1, hu.2]\n\nprivate theorem lowPass_eq_zero {u : ℝ} (hu : 2 ≤ |u|) :\n    poissonSmoothLowPass u = 0 := by\n  apply dyadicBump.zero_of_le_dist\n  change (1 : ℝ) ≤ |(3 / 2 + u / 2) - 3 / 2|\n  have he : (3 / 2 + u / 2) - 3 / 2 = u / 2 := by ring\n  rw [he, abs_div]\n  rw [abs_of_pos (by norm_num : (0 : ℝ) < 2)]\n  exact (le_div_iff₀ (by norm_num : (0 : ℝ) < 2)).mpr (by linarith)\n\nprivate theorem lowPass_ne_zero_abs_lt_two {u : ℝ}\n    (hu : poissonSmoothLowPass u ≠ 0) : |u| < 2 := by\n  by_contra hn\n  exact hu (lowPass_eq_zero (le_of_not_gt hn))\n\nprivate theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : (n : ℝ) ≤ 2 * Q :=\n  (Nat.cast_le.mpr (Finset.mem_Icc.mp hn).2).trans\n    (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n\nprivate theorem tail_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {r s : ℕ}\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2) :\n    ‖d.gamma2 s * d.gamma3 r‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h2, h3⟩ := hd\n  rw [norm_mul]\n  calc\n    _ ≤ 1 * 1 := mul_le_mul (h2 s hs).1 (h3 r hr).1 (norm_nonneg _) zero_le_one\n    _ = _ := by norm_num\n\nprivate theorem gcd_mul_shared_lcm (p v w : ℕ) :\n    v.gcd w * ((p * v).lcm (p * w)) = p * v * w := by\n  rw [sharedFirstFactor_lcm]\n  calc\n    _ = p * (v.gcd w * v.lcm w) := by ring\n    _ = _ := by rw [Nat.gcd_mul_lcm]; ring\n\nprivate theorem gcd_mul_shared_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p r s r' s' : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2) :\n    (((r * s).gcd (r' * s') : ℕ) : ℝ) *\n        (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 := by\n  have hpn := factor_le_twice hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hrn := factor_le_twice hd.2.2.2.2.1 hr\n  have hsn := factor_le_twice hd.2.2.2.1 hs\n  have hrn' := factor_le_twice hd.2.2.2.2.1 hr'\n  have hsn' := factor_le_twice hd.2.2.2.1 hs'\n  rw [← Nat.cast_mul, gcd_mul_shared_lcm]\n  push_cast\n  calc\n    _ ≤ (2 * d.Q1) * ((2 * d.Q3) * (2 * d.Q2)) *\n        ((2 * d.Q3) * (2 * d.Q2)) := by gcongr\n    _ = _ := by ring\n\nprivate theorem smooth_shared_frequency_support\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Z : ℝ} (hZ : 0 < Z)\n    {p r s r' s' : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2)\n    (x : ℝ) (h : ℤ)\n    (hactive :\n      (CommonSmoothCutoff.poissonSmoothLowPass\n        ((d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) x h ≠ 0) :\n    h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))) := by\n  let D : ℕ := (r * s).gcd (r' * s')\n  let L : ℕ := (p * (r * s)).lcm (p * (r' * s'))\n  have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hr0 := factor_pos hd.2.2.2.2.1 hr\n  have hs0 := factor_pos hd.2.2.2.1 hs\n  have hr0' := factor_pos hd.2.2.2.2.1 hr'\n  have hs0' := factor_pos hd.2.2.2.1 hs'\n  have hD0 : 0 < D := Nat.gcd_pos_of_pos_left _ (Nat.mul_pos hr0 hs0)\n  have hL0 : 0 < L := Nat.lcm_pos\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0 hs0))\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0' hs0'))\n  have hD : 0 < (D : ℝ) := by exact_mod_cast hD0\n  have hL : 0 < (L : ℝ) := by exact_mod_cast hL0\n  have hV : 0 < d.V := zero_lt_one.trans_le hd.2.1\n  have ht : 0 < d.V / (L : ℝ) := div_pos hV hL\n  have hh0 : h ≠ 0 := by\n    intro he\n    subst h\n    simp [poissonNonzeroFrequency] at hactive\n  have hchi : poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) ≠ 0 := by\n    intro he\n    apply hactive\n    change (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n      poissonNonzeroFrequency (d.V / (L : ℝ)) x h = 0\n    rw [he, Complex.ofReal_zero, zero_mul]\n  have hsmall := lowPass_ne_zero_abs_lt_two hchi\n  rw [abs_div, abs_mul, abs_of_pos ht, abs_of_pos hZ] at hsmall\n  have hsmall' : d.V * |(h : ℝ)| < (2 * Z) * (L : ℝ) := by\n    have he := mul_lt_mul_of_pos_right ((div_lt_iff₀ hZ).mp hsmall) hL\n    have hid : (d.V / (L : ℝ) * |(h : ℝ)|) * (L : ℝ) =\n        d.V * |(h : ℝ)| := by field_simp\n    rw [hid] at he\n    exact he\n  have hDL := gcd_mul_shared_lcm_le hd hp hr hs hr' hs'\n  change (D : ℝ) * (L : ℝ) ≤ 32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 at hDL\n  have hbound : |(h : ℝ)| ≤\n      64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V) := by\n    apply (le_div_iff₀ (mul_pos hD hV)).mpr\n    have he := mul_lt_mul_of_pos_left hsmall' hD\n    have hb := mul_le_mul_of_nonneg_left hDL (show 0 ≤ 2 * Z by positivity)\n    nlinarith\n  apply (mem_window_iff _ h).mpr\n  refine ⟨hh0, ?_⟩\n  have habs : (h.natAbs : ℝ) = |(h : ℝ)| := by\n    rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n  have hc : (h.natAbs : ℝ) ≤ (d.sharedSmoothFrequencyBound Z D : ℝ) := by\n    rw [habs]\n    exact hbound.trans (Nat.le_ceil _)\n  exact_mod_cast hc\n\nprivate theorem high_decay_le_product (r : ℕ) (hr : 2 ≤ r)\n    {t C Z K : ℝ} (ht : 0 ≤ t) (hC : 0 ≤ C) (hZ : 0 < Z)\n    (hK : 0 < K) (hZK : Z ≤ K) :\n    t * (C / K ^ (r + 1)) ≤\n      (C / Z ^ (r - 1)) * (t / K ^ 2) := by\n  have hpow : Z ^ (r - 1) * K ^ 2 ≤ K ^ (r + 1) := by\n    calc\n      _ ≤ K ^ (r - 1) * K ^ 2 :=\n        mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hZ.le hZK _) (sq_nonneg _)\n      _ = _ := by rw [← pow_add, show (r - 1) + 2 = r + 1 by omega]\n  calc\n    _ ≤ t * (C / (Z ^ (r - 1) * K ^ 2)) :=\n      mul_le_mul_of_nonneg_left\n        (div_le_div_of_nonneg_left hC (by positivity) hpow) ht\n    _ = _ := by field_simp [hZ.ne', hK.ne']; ring\n\nprivate theorem smooth_row_tail (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x Z : ℝ, 0 < Z →\n      ∀ H : ℕ,\n        (∀ h : ℤ,\n          (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h ≠ 0 →\n            h ∈ poissonNonzeroFrequencyWindow H) →\n        ‖(∑' h : ℤ, poissonNonzeroFrequency t x h) -\n          ∑ h ∈ poissonNonzeroFrequencyWindow H,\n            (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h‖ ≤ C / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hdecay⟩ := schwartz_norm_le_rapidDecay (𝓕 dyadicCutoffSchwartz) (r + 1)\n  refine ⟨2 * C, by positivity, fun t ht x Z hZ H hsupport => ?_⟩\n  let f : ℤ → ℂ := poissonNonzeroFrequency t x\n  let g : ℤ → ℂ := fun h => (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) * f h\n  have hf : Summable f := (poissonNonzeroFrequency_summable_norm ht x).of_norm\n  have hg : Summable g := by\n    apply summable_of_ne_finset_zero (s := poissonNonzeroFrequencyWindow H)\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  have hsumg : (∑' h : ℤ, g h) =\n      ∑ h ∈ poissonNonzeroFrequencyWindow H,\n        (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency t x h := by\n    apply tsum_eq_sum\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  obtain ⟨hmajor, hmajorBound⟩ := poissonNonzeroDecay_summable_tsum_le ht\n  have hpoint (h : ℤ) : ‖f h - g h‖ ≤\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h := by\n    by_cases hh0 : h = 0\n    · subst h\n      simp [f, g, poissonNonzeroFrequency, poissonNonzeroDecay]\n    · by_cases hsmall : |t * (h : ℝ)| ≤ Z\n      · have hone : poissonSmoothLowPass (t * (h : ℝ) / Z) = 1 := by\n          apply lowPass_eq_one\n          rw [abs_div, abs_of_pos hZ]\n          exact (div_le_one hZ).mpr hsmall\n        simp only [g, hone, Complex.ofReal_one, one_mul, sub_self, norm_zero]\n        exact mul_nonneg (by positivity) (by unfold poissonNonzeroDecay; split_ifs <;> positivity)\n      · have hZK : Z ≤ 1 + |t * (h : ℝ)| := by linarith [lt_of_not_ge hsmall]\n        have hchi0 := lowPass_nonneg (t * (h : ℝ) / Z)\n        have hchi1 := lowPass_le_one (t * (h : ℝ) / Z)\n        have hfactor : ‖(1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)‖ ≤ 1 := by\n          rw [← Complex.ofReal_one, ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]\n          rw [abs_of_nonneg (by linarith : 0 ≤ 1 - poissonSmoothLowPass (t * (h : ℝ) / Z))]\n          linarith\n        have hnorm : ‖f h‖ ≤ t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := by\n          dsimp only [f]\n          simp only [poissonNonzeroFrequency, if_neg hh0, norm_mul, norm_smul,\n            Real.norm_eq_abs, abs_of_pos ht, fourier_apply, Circle.norm_coe, mul_one]\n          exact mul_le_mul_of_nonneg_left (hdecay (t * (h : ℝ))) ht.le\n        calc\n          _ = ‖((1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)) * f h‖ := by\n            congr 1\n            dsimp only [g]\n            ring\n          _ ≤ 1 * (t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1))) := by\n            rw [norm_mul]\n            exact mul_le_mul hfactor hnorm (norm_nonneg _) (by norm_num)\n          _ = t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := one_mul _\n          _ ≤ (C / Z ^ (r - 1)) * (t / (1 + |t * (h : ℝ)|) ^ 2) :=\n            high_decay_le_product r hr ht.le hC.le hZ (by positivity) hZK\n          _ = _ := by rw [poissonNonzeroDecay, if_neg hh0]\n  have hmajorS : Summable (fun h : ℤ =>\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h) := hmajor.mul_left _\n  have hnorm : Summable (fun h : ℤ => ‖f h - g h‖) :=\n    hmajorS.of_nonneg_of_le (fun _ => norm_nonneg _) hpoint\n  rw [← hsumg, ← hf.tsum_sub hg]\n  calc\n    _ ≤ ∑' h : ℤ, ‖f h - g h‖ := norm_tsum_le_tsum_norm hnorm\n    _ ≤ ∑' h : ℤ, (C / Z ^ (r - 1)) * poissonNonzeroDecay t h :=\n      hnorm.tsum_le_tsum hpoint hmajorS\n    _ = (C / Z ^ (r - 1)) * ∑' h : ℤ, poissonNonzeroDecay t h := tsum_mul_left\n    _ ≤ (C / Z ^ (r - 1)) * 2 :=\n      mul_le_mul_of_nonneg_left hmajorBound (by positivity)\n    _ = _ := by ring\n\nprivate theorem sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * f (p, s, r) := by\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r ∈ factorCarrier d.Q3,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 s * d.gamma3 r) * f (q, s, r)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hn\n    exact (hn hp).elim\n\nprivate theorem sum_star_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma a) * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        star (d.gamma2 s * d.gamma3 r) * f (p, s, r) := by\n  calc\n    _ = star (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * star (f a)) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * star (f (p, s, r))) :=\n      congrArg star (sum_slice_factor d hp _)\n    _ = _ := by simp only [star_sum, star_mul', star_star]\n\nprivate theorem pair_sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ r' ∈ factorCarrier d.Q3,\n          (d.gamma2 s * d.gamma3 r) * star (d.gamma2 s' * d.gamma3 r') *\n            K (p, s, r) (p, s', r') := by\n  calc\n    _ = ∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K (p, s, r) b :=\n      sum_slice_factor d hp _\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r _\n      rw [sum_star_slice_factor d hp]\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro s' _\n      apply Finset.sum_congr rfl\n      intro r' _\n      ring\n\nprivate theorem slice_pair_eq_shared_series (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (N1 N2 : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              (∑' h : ℤ, poissonNonzeroFrequency\n                (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ))\n                ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n                  (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) h).re\n            else 0 : ℝ) := by\n  let K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ := fun a b =>\n    (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ))\n        ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n          N1 N2 d.residue : ℝ) /\n            ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ)) h).re\n    else 0 : ℝ)\n  change (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n    ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n        star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) = _\n  rw [pair_sum_slice_factor d hp]\n  simp_rw [Finset.sum_comm (s := factorCarrier d.Q2) (t := factorCarrier d.Q3)]\n  apply Finset.sum_congr rfl\n  intro r _\n  apply Finset.sum_congr rfl\n  intro s _\n  apply Finset.sum_congr rfl\n  intro r' _\n  apply Finset.sum_congr rfl\n  intro s' _\n  have hl : complexFactorModulus (p, s, r) = p * (r * s) := by\n    unfold complexFactorModulus\n    ring\n  have hr : complexFactorModulus (p, s', r') = p * (r' * s') := by\n    unfold complexFactorModulus\n    ring\n  dsimp only [K]\n  rw [hl, hr]\n\nprivate theorem pair_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ p ∈ d.primitiveFirstFactorCarrier,\n      ∀ Z : ℝ, 0 < Z → ∀ N1 N2 : ℕ,\n        ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤\n            (((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)) ^ 2 *\n              C / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hrow⟩ := smooth_row_tail r hr\n  refine ⟨C, hC, fun B sigma kappa c0 d hd p hp Z hZ N1 N2 => ?_⟩\n  let E : ℝ := C / Z ^ (r - 1)\n  let T : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑ h ∈ poissonNonzeroFrequencyWindow\n          (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b'))),\n        (poissonSmoothLowPass\n          ((d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency\n            (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n            ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n              (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  let F : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  have hterm (a : ℕ) (ha : a ∈ factorCarrier d.Q3)\n      (b : ℕ) (hb : b ∈ factorCarrier d.Q2)\n      (a' : ℕ) (ha' : a' ∈ factorCarrier d.Q3)\n      (b' : ℕ) (hb' : b' ∈ factorCarrier d.Q2) :\n      ‖d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ) -\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ E := by\n    by_cases hc : ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2\n    · have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n      have hL : 0 < (p * (a * b)).lcm (p * (a' * b')) :=\n        Nat.lcm_pos (Nat.mul_pos hp0 (Nat.mul_pos\n          (factor_pos hd.2.2.2.2.1 ha) (factor_pos hd.2.2.2.1 hb)))\n          (Nat.mul_pos hp0 (Nat.mul_pos\n            (factor_pos hd.2.2.2.2.1 ha') (factor_pos hd.2.2.2.1 hb')))\n      have hLreal : 0 < (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ) := by\n        exact_mod_cast hL\n      have he := hrow\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        (div_pos (zero_lt_one.trans_le hd.2.1) hLreal)\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) Z hZ\n        (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b')))\n        (fun h hh => smooth_shared_frequency_support hd hZ hp ha hb ha' hb' _ h hh)\n      dsimp only [F, T]\n      rw [if_pos hc, if_pos hc]\n      exact coeff_real_tail_norm_le _ _ _ _ E\n        (tail_gamma_norm_le hd ha hb) (tail_gamma_norm_le hd ha' hb')\n        (by dsimp [E]; positivity) he\n    · simpa [F, T, hc] using (show (0 : ℝ) ≤ E by dsimp only [E]; positivity)\n  rw [slice_pair_eq_shared_series d (Finset.mem_filter.mp hp).1]\n  change ‖(∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ)) -\n    ∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ _\n  calc\n    _ ≤ ((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) *\n        (((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) * E))) :=\n      norm_sum_sub_le_card _ _ _ _ (fun a ha =>\n        norm_sum_sub_le_card _ _ _ _ (fun b hb =>\n          norm_sum_sub_le_card _ _ _ _ (fun a' ha' =>\n            norm_sum_sub_le_card _ _ _ _ (fun b' hb' => hterm a ha b hb a' ha' b' hb'))))\n    _ = _ := by dsimp only [E]; ring\n\nprivate theorem cleaned_core_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ), 0 < sigma →\n      ∀ d : MediumAtom, MediumAdmissible B sigma kappa c0 d →\n        ∀ Ybeta Ysupport Z : ℝ, 0 < Z →\n          ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n            d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n              512 * C * d.scale ^ 9 / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hpairs⟩ := pair_smooth_tail_bound r hr\n  refine ⟨C, hC, fun B sigma kappa c0 hsigma d hd Ybeta Ysupport Z hZ => ?_⟩\n  let e := d.cleanedAlphaAtom\n  let M : ℝ := ((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)\n  let E : ℝ := M ^ 2 * C / Z ^ (r - 1)\n  have hE : 0 ≤ E := by dsimp only [E, M]; positivity\n  have hpair (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖(e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤ E := by\n    exact hpairs B sigma kappa c0 e (mediumAdmissible_cleanedAlphaAtom hd) p hp Z hZ N1 N2\n  let f : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        (e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 else 0\n  let g : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0\n  have hterm (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖f p N1 N2 - g p N1 N2‖ ≤ E := by\n    dsimp only [f, g]\n    split_ifs with hmask\n    · rw [← mul_sub, norm_mul, norm_mul, norm_star]\n      calc\n        _ ≤ (1 * 1) * E := mul_le_mul\n          (mul_le_mul (clean_transposed_beta_norm_le hd N1)\n            (clean_transposed_beta_norm_le hd N2) (norm_nonneg _) zero_le_one)\n          (hpair p hp N1 N2) (norm_nonneg _) (by norm_num)\n        _ = _ := by ring\n    · simpa only [sub_self, norm_zero] using hE\n  have hfinite : ‖e.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n      e.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n      (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := by\n    change ‖(∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, f p N1 N2) -\n      ∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, g p N1 N2‖ ≤ _\n    exact norm_sum_sub_le_card _ _ _ _ (fun p hp =>\n      norm_sum_sub_le_card _ _ _ _ (fun N1 _ =>\n        norm_sum_sub_le_card _ _ _ _ (fun N2 _ => hterm p hp N1 N2)))\n  obtain ⟨hUx, _hVx, hQ1x, hQ2x, hQ3x⟩ := geometry_le_scale hd hsigma\n  have hX := one_le_scale hd\n  have hX0 : 0 ≤ d.scale := zero_le_one.trans hX\n  have hP : (e.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (primitive_card_le hd).trans (mul_le_mul_of_nonneg_left hQ1x (by norm_num))\n  have hN : (e.transposedAtom.betaCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (betaCarrier_card_le (d := e.transposedAtom) hd.1).trans\n      (mul_le_mul_of_nonneg_left hUx (by norm_num))\n  have hM : M ≤ 8 * d.scale ^ 3 := by\n    calc\n      _ ≤ (2 * d.Q3) * (2 * d.Q2) :=\n        mul_le_mul (card_factorCarrier_le hd.2.2.2.2.1)\n          (card_factorCarrier_le hd.2.2.2.1) (Nat.cast_nonneg _)\n          (by linarith [hd.2.2.2.2.1])\n      _ ≤ (2 * d.scale) * (2 * d.scale) := by gcongr\n      _ = 4 * d.scale ^ 2 := by ring\n      _ ≤ 4 * d.scale ^ 3 := by\n        have he := mul_le_mul_of_nonneg_left hX (show 0 ≤ 4 * d.scale ^ 2 by positivity)\n        nlinarith\n      _ ≤ 8 * d.scale ^ 3 := by positivity\n  have hmass : (e.primitiveFirstFactorCarrier.card : ℝ) *\n      (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2 ≤ 512 * d.scale ^ 9 := by\n    calc\n      _ ≤ (2 * d.scale) * (2 * d.scale) ^ 2 * (8 * d.scale ^ 3) ^ 2 :=\n        mul_le_mul\n          (mul_le_mul hP (pow_le_pow_left₀ (Nat.cast_nonneg _) hN 2)\n            (sq_nonneg _) (by positivity))\n          (pow_le_pow_left₀ (by dsimp only [M]; positivity) hM 2) (sq_nonneg _) (by positivity)\n      _ = _ := by ring\n  calc\n    _ ≤ (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := hfinite\n    _ = ((e.primitiveFirstFactorCarrier.card : ℝ) *\n          (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2) * (C / Z ^ (r - 1)) := by\n      dsimp only [E]\n      ring\n    _ ≤ (512 * d.scale ^ 9) * (C / Z ^ (r - 1)) :=\n      mul_le_mul_of_nonneg_right hmass (by positivity)\n    _ = _ := by ring\n\nend SharedFirstFactorSmallCoreSmoothFrequency\n\nopen SharedFirstFactorSmallCoreSmoothFrequency\n\ntheorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  dsimp only\n  let r : ℕ := Nat.ceil (11 / eta) + 1\n  have hr : 2 ≤ r := by\n    have hc : 0 < Nat.ceil (11 / eta) := Nat.ceil_pos.mpr (div_pos (by norm_num) heta)\n    dsimp only [r]\n    omega\n  have horder : (11 : ℝ) ≤ eta * ((r - 1 : ℕ) : ℝ) := by\n    have hc := (div_le_iff₀ heta).mp (Nat.le_ceil (11 / eta))\n    have he : r - 1 = Nat.ceil (11 / eta) := by dsimp only [r]; omega\n    rw [he]\n    nlinarith\n  obtain ⟨C, hC, htail⟩ := cleaned_core_smooth_tail_bound r hr\n  obtain ⟨xL, _hxL, hlogs⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 0 sigma hsigma (by norm_num : 0 < (1 : ℝ))\n  obtain ⟨xP, hxP⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget (2048 * C) A\n      (by positivity) (by norm_num : 0 < (1 : ℝ)))\n  refine ⟨max 2 (max xL xP), (by norm_num : (1 : ℝ) < 2).trans_le\n    (le_max_left _ _), fun d hd hx => ?_⟩\n  have hX1 := one_le_scale hd\n  have hX : 0 < d.scale := zero_lt_one.trans_le hX1\n  have hZ : 0 < d.scale ^ eta := Real.rpow_pos_of_pos hX _\n  have hxL' : xL ≤ d.scale :=\n    (le_max_left xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hxP' : xP ≤ d.scale :=\n    (le_max_right xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hlog : (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) ≤ d.scale := by\n    simpa only [pow_zero, mul_one, Real.rpow_one] using hlogs B kappa c0 d hd hxL'\n  obtain ⟨_, hVx, hQ1x, _, _⟩ := geometry_le_scale hd hsigma\n  let W : ℝ := (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n  have hW : 0 ≤ W := by dsimp only [W]; positivity\n  have hcoef : 4 * d.V * d.Q1 ≤ 4 * d.scale ^ 2 := by\n    calc\n      _ ≤ (4 * d.scale) * d.scale := mul_le_mul\n        (mul_le_mul_of_nonneg_left hVx (by norm_num)) hQ1x\n        (by linarith [hd.2.2.1]) (by positivity)\n      _ = _ := by ring\n  have hH : 0 ≤ (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n    have hh := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    positivity\n  have houtside : W ≤ 4 * d.scale ^ 3 := by\n    calc\n      _ ≤ 4 * d.V * d.Q1 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n        d.sharedFirstFactor_outside_le hd\n      _ ≤ (4 * d.scale ^ 2) * d.scale := mul_le_mul hcoef hlog hH (by positivity)\n      _ = _ := by ring\n  have hden : (d.scale ^ eta) ^ (r - 1) =\n      d.scale ^ (eta * ((r - 1 : ℕ) : ℝ)) := by\n    rw [← Real.rpow_natCast, ← Real.rpow_mul hX.le]\n  have hdenLower : d.scale ^ 11 ≤ (d.scale ^ eta) ^ (r - 1) := by\n    rw [hden, ← Real.rpow_natCast d.scale 11]\n    exact Real.rpow_le_rpow_of_exponent_le hX1 horder\n  have ht := htail B sigma kappa c0 hsigma d hd\n    (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta) hZ\n  have hweighted : W *\n      ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) -\n        d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta)‖ ≤\n            (2048 * C) * d.scale := by\n    calc\n      _ ≤ W * (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_left ht hW\n      _ ≤ (4 * d.scale ^ 3) *\n          (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_right houtside (by positivity)\n      _ = (2048 * C) * d.scale ^ 12 / (d.scale ^ eta) ^ (r - 1) := by ring\n      _ ≤ (2048 * C) * d.scale ^ 12 / d.scale ^ 11 :=\n        div_le_div_of_nonneg_left (by positivity) (pow_pos hX _) hdenLower\n      _ = _ := by field_simp [hX.ne']\n  have hpayment : (2048 * C) * d.scale ≤ d.scale ^ 2 / (Real.log d.scale) ^ A := by\n    simpa only [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]\n      using hxP d.scale hxP'\n  exact hweighted.trans hpayment\n\nend\n\nend ImbalancedChen.Part3\n",
+  "all_declarations_with_true_full_headers_and_byte_offsets": [
+    {
+      "name": "CommonSmoothCutoff.poissonSmoothLowPass",
+      "kind": "def",
+      "private": false,
+      "start_line": 25,
+      "char_range": [
+        925,
+        1031
+      ],
+      "byte_range": [
+        925,
+        1035
+      ],
+      "true_full_header": "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)",
+      "complete_declaration": "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)"
+    },
+    {
+      "name": "MediumAtom.sharedSmoothFrequencyBound",
+      "kind": "def",
+      "private": false,
+      "start_line": 28,
+      "char_range": [
+        1033,
+        1181
+      ],
+      "byte_range": [
+        1037,
+        1193
+      ],
+      "true_full_header": "def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))",
+      "complete_declaration": "def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))"
+    },
+    {
+      "name": "MediumAtom.sharedSmallPairSmoothFrequencyKernel",
+      "kind": "def",
+      "private": false,
+      "start_line": 31,
+      "char_range": [
+        1183,
+        2066
+      ],
+      "byte_range": [
+        1195,
+        2118
+      ],
+      "true_full_header": "def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)",
+      "complete_declaration": "def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)"
+    },
+    {
+      "name": "MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth",
+      "kind": "def",
+      "private": false,
+      "start_line": 51,
+      "char_range": [
+        2068,
+        2582
+      ],
+      "byte_range": [
+        2120,
+        2660
+      ],
+      "true_full_header": "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0",
+      "complete_declaration": "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0"
+    },
+    {
+      "name": "mem_window_iff",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 64,
+      "char_range": [
+        2637,
+        3741
+      ],
+      "byte_range": [
+        2715,
+        3881
+      ],
+      "true_full_header": "private theorem mem_window_iff (H : ℕ) (h : ℤ) :\n    h ∈ poissonNonzeroFrequencyWindow H ↔ h ≠ 0 ∧ h.natAbs ≤ H",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  unfold poissonNonzeroFrequencyWindow\n  rw [Finset.mem_union]\n  constructor\n  · rintro (hp | hnegImage)\n    · obtain ⟨n, hn, rfl⟩ := Finset.mem_image.mp hp\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hn).1; omega\n      exact ⟨by exact_mod_cast hn0, by simpa using (Finset.mem_Icc.mp hn).2⟩\n    · obtain ⟨n, hnMem, rfl⟩ := Finset.mem_image.mp hnegImage\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hnMem).1; omega\n      exact ⟨neg_ne_zero.mpr (by exact_mod_cast hn0), by simpa using (Finset.mem_Icc.mp hnMem).2⟩\n  · rintro ⟨hne, hH⟩\n    have hn : 1 ≤ h.natAbs := Nat.one_le_iff_ne_zero.mpr (Int.natAbs_ne_zero.mpr hne)\n    rcases le_total 0 h with hp | hm\n    · left\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonneg hp]\n    · right\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonpos hm, neg_neg]",
+      "complete_declaration": "private theorem mem_window_iff (H : ℕ) (h : ℤ) :\n    h ∈ poissonNonzeroFrequencyWindow H ↔ h ≠ 0 ∧ h.natAbs ≤ H := by\n  unfold poissonNonzeroFrequencyWindow\n  rw [Finset.mem_union]\n  constructor\n  · rintro (hp | hnegImage)\n    · obtain ⟨n, hn, rfl⟩ := Finset.mem_image.mp hp\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hn).1; omega\n      exact ⟨by exact_mod_cast hn0, by simpa using (Finset.mem_Icc.mp hn).2⟩\n    · obtain ⟨n, hnMem, rfl⟩ := Finset.mem_image.mp hnegImage\n      have hn0 : n ≠ 0 := by have := (Finset.mem_Icc.mp hnMem).1; omega\n      exact ⟨neg_ne_zero.mpr (by exact_mod_cast hn0), by simpa using (Finset.mem_Icc.mp hnMem).2⟩\n  · rintro ⟨hne, hH⟩\n    have hn : 1 ≤ h.natAbs := Nat.one_le_iff_ne_zero.mpr (Int.natAbs_ne_zero.mpr hne)\n    rcases le_total 0 h with hp | hm\n    · left\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonneg hp]\n    · right\n      apply Finset.mem_image.mpr\n      refine ⟨h.natAbs, Finset.mem_Icc.mpr ⟨hn, hH⟩, ?_⟩\n      rw [Int.natCast_natAbs, abs_of_nonpos hm, neg_neg]"
+    },
+    {
+      "name": "norm_sum_sub_le_card",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 88,
+      "char_range": [
+        3743,
+        4108
+      ],
+      "byte_range": [
+        3883,
+        4301
+      ],
+      "true_full_header": "private theorem norm_sum_sub_le_card {ι : Type*} (S : Finset ι) (f g : ι → ℂ)\n    (E : ℝ) (h : ∀ i ∈ S, ‖f i - g i‖ ≤ E) :\n    ‖(∑ i ∈ S, f i) - ∑ i ∈ S, g i‖ ≤ (S.card : ℝ) * E",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  rw [← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ i ∈ S, ‖f i - g i‖ := norm_sum_le _ _\n    _ ≤ ∑ _i ∈ S, E := Finset.sum_le_sum h\n    _ = _ := by rw [Finset.sum_const, nsmul_eq_mul]",
+      "complete_declaration": "private theorem norm_sum_sub_le_card {ι : Type*} (S : Finset ι) (f g : ι → ℂ)\n    (E : ℝ) (h : ∀ i ∈ S, ‖f i - g i‖ ≤ E) :\n    ‖(∑ i ∈ S, f i) - ∑ i ∈ S, g i‖ ≤ (S.card : ℝ) * E := by\n  rw [← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ i ∈ S, ‖f i - g i‖ := norm_sum_le _ _\n    _ ≤ ∑ _i ∈ S, E := Finset.sum_le_sum h\n    _ = _ := by rw [Finset.sum_const, nsmul_eq_mul]"
+    },
+    {
+      "name": "coeff_real_tail_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 97,
+      "char_range": [
+        4110,
+        4631
+      ],
+      "byte_range": [
+        4303,
+        4866
+      ],
+      "true_full_header": "private theorem coeff_real_tail_norm_le (a b z w : ℂ) (E : ℝ)\n    (ha : ‖a‖ ≤ 1) (hb : ‖b‖ ≤ 1) (_hE : 0 ≤ E) (hzw : ‖z - w‖ ≤ E) :\n    ‖a * star b * (z.re : ℂ) - a * star b * (w.re : ℂ)‖ ≤ E",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  rw [← mul_sub, ← Complex.ofReal_sub, ← Complex.sub_re,\n    norm_mul, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs]\n  calc\n    _ ≤ (1 * 1) * E := mul_le_mul\n      (mul_le_mul ha hb (norm_nonneg _) zero_le_one)\n      ((Complex.abs_re_le_norm (z - w)).trans hzw) (abs_nonneg _) (by norm_num)\n    _ = _ := by ring",
+      "complete_declaration": "private theorem coeff_real_tail_norm_le (a b z w : ℂ) (E : ℝ)\n    (ha : ‖a‖ ≤ 1) (hb : ‖b‖ ≤ 1) (_hE : 0 ≤ E) (hzw : ‖z - w‖ ≤ E) :\n    ‖a * star b * (z.re : ℂ) - a * star b * (w.re : ℂ)‖ ≤ E := by\n  rw [← mul_sub, ← Complex.ofReal_sub, ← Complex.sub_re,\n    norm_mul, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs]\n  calc\n    _ ≤ (1 * 1) * E := mul_le_mul\n      (mul_le_mul ha hb (norm_nonneg _) zero_le_one)\n      ((Complex.abs_re_le_norm (z - w)).trans hzw) (abs_nonneg _) (by norm_num)\n    _ = _ := by ring"
+    },
+    {
+      "name": "factorCarrier_prefix",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 108,
+      "char_range": [
+        4633,
+        4926
+      ],
+      "byte_range": [
+        4868,
+        5177
+      ],
+      "true_full_header": "private theorem factorCarrier_prefix {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  intro q hq\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hq\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩",
+      "complete_declaration": "private theorem factorCarrier_prefix {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q)) := by\n  intro q hq\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hq\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩"
+    },
+    {
+      "name": "factor_pos",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 115,
+      "char_range": [
+        4928,
+        5087
+      ],
+      "byte_range": [
+        5179,
+        5346
+      ],
+      "true_full_header": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {q : ℕ}\n    (hq : q ∈ factorCarrier Q) : 0 < q",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  exact (Finset.mem_Ioc.mp (factorCarrier_prefix hQ hq)).1",
+      "complete_declaration": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {q : ℕ}\n    (hq : q ∈ factorCarrier Q) : 0 < q := by\n  exact (Finset.mem_Ioc.mp (factorCarrier_prefix hQ hq)).1"
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 119,
+      "char_range": [
+        5089,
+        5441
+      ],
+      "byte_range": [
+        5348,
+        5716
+      ],
+      "true_full_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have h := Finset.card_le_card (factorCarrier_prefix hQ)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show ((factorCarrier Q).card : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * Q))",
+      "complete_declaration": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q := by\n  have h := Finset.card_le_card (factorCarrier_prefix hQ)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show ((factorCarrier Q).card : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * Q))"
+    },
+    {
+      "name": "betaCarrier_card_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 126,
+      "char_range": [
+        5443,
+        5809
+      ],
+      "byte_range": [
+        5718,
+        6098
+      ],
+      "true_full_header": "private theorem betaCarrier_card_le {d : MediumAtom} (hV : 1 ≤ d.V) :\n    (d.betaCarrier.card : ℝ) ≤ 2 * d.V",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have h := Finset.card_le_card (d.betaCarrier_subset_twiceV hV)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show (d.betaCarrier.card : ℝ) ≤ (Nat.floor (2 * d.V) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))",
+      "complete_declaration": "private theorem betaCarrier_card_le {d : MediumAtom} (hV : 1 ≤ d.V) :\n    (d.betaCarrier.card : ℝ) ≤ 2 * d.V := by\n  have h := Finset.card_le_card (d.betaCarrier_subset_twiceV hV)\n  simp only [Nat.card_Ioc, Nat.sub_zero] at h\n  exact (show (d.betaCarrier.card : ℝ) ≤ (Nat.floor (2 * d.V) : ℝ) by\n    exact_mod_cast h).trans (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))"
+    },
+    {
+      "name": "primitive_card_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 133,
+      "char_range": [
+        5811,
+        6290
+      ],
+      "byte_range": [
+        6100,
+        6595
+      ],
+      "true_full_header": "private theorem primitive_card_le {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have hc : d.primitiveFirstFactorCarrier.card ≤ (factorCarrier d.Q1).card :=\n    Finset.card_le_card (Finset.filter_subset _ _)\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤\n    ((factorCarrier d.Q1).card : ℝ) by exact_mod_cast hc).trans\n      (card_factorCarrier_le hd.2.2.1)",
+      "complete_declaration": "private theorem primitive_card_le {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1 := by\n  have hc : d.primitiveFirstFactorCarrier.card ≤ (factorCarrier d.Q1).card :=\n    Finset.card_le_card (Finset.filter_subset _ _)\n  exact (show (d.primitiveFirstFactorCarrier.card : ℝ) ≤\n    ((factorCarrier d.Q1).card : ℝ) by exact_mod_cast hc).trans\n      (card_factorCarrier_le hd.2.2.1)"
+    },
+    {
+      "name": "geometry_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 142,
+      "char_range": [
+        6292,
+        8288
+      ],
+      "byte_range": [
+        6597,
+        8677
+      ],
+      "true_full_header": "private theorem geometry_le_scale {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.U ≤ d.scale ∧ d.V ≤ d.scale ∧ d.Q1 ≤ d.scale ∧\n      d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have hdKeep := hd\n  obtain ⟨hU, hV, _hQ1, hQ2, hQ3, _, _, _, hg1, hg2, _⟩ := hdKeep\n  have hX := one_le_scale hd\n  have hUx : d.U ≤ d.scale := by unfold MediumAtom.scale; nlinarith\n  have hVx : d.V ≤ d.scale := V_le_scale hd\n  have hn : d.scale ^ (-sigma) ≤ 1 := by\n    simpa only [Real.rpow_zero] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : -sigma ≤ 0)\n  have hQ1x : d.Q1 ≤ d.scale := by\n    calc\n      _ ≤ d.U * d.scale ^ (-sigma) := hg1.le\n      _ ≤ d.U * 1 := mul_le_mul_of_nonneg_left hn (by linarith)\n      _ = d.U := mul_one _\n      _ ≤ _ := hUx\n  have hpow : d.scale ^ (1 - 8 * sigma) ≤ d.scale := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : 1 - 8 * sigma ≤ 1)\n  have hU2 : 1 ≤ d.U ^ 2 := by nlinarith\n  have hQ32 : 1 ≤ d.Q3 ^ 2 := by nlinarith\n  have hprod : 1 ≤ d.U ^ 2 * d.Q3 ^ 2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q3 ^ 2 := mul_le_mul hU2 hQ32 zero_le_one (sq_nonneg _)\n  have hQ2x : d.Q2 ≤ d.scale := by\n    calc\n      _ = d.Q2 * 1 := by ring\n      _ ≤ d.Q2 * (d.U ^ 2 * d.Q3 ^ 2) :=\n        mul_le_mul_of_nonneg_left hprod (by linarith)\n      _ = d.U ^ 2 * d.Q2 * d.Q3 ^ 2 := by ring\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  have hprod2 : 1 ≤ d.U ^ 2 * d.Q2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q2 := mul_le_mul hU2 hQ2 zero_le_one (sq_nonneg _)\n  have hQ3x : d.Q3 ≤ d.scale := by\n    calc\n      _ ≤ d.Q3 ^ 2 := by nlinarith\n      _ = 1 * d.Q3 ^ 2 := by ring\n      _ ≤ (d.U ^ 2 * d.Q2) * d.Q3 ^ 2 :=\n        mul_le_mul_of_nonneg_right hprod2 (sq_nonneg _)\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  exact ⟨hUx, hVx, hQ1x, hQ2x, hQ3x⟩",
+      "complete_declaration": "private theorem geometry_le_scale {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.U ≤ d.scale ∧ d.V ≤ d.scale ∧ d.Q1 ≤ d.scale ∧\n      d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale := by\n  have hdKeep := hd\n  obtain ⟨hU, hV, _hQ1, hQ2, hQ3, _, _, _, hg1, hg2, _⟩ := hdKeep\n  have hX := one_le_scale hd\n  have hUx : d.U ≤ d.scale := by unfold MediumAtom.scale; nlinarith\n  have hVx : d.V ≤ d.scale := V_le_scale hd\n  have hn : d.scale ^ (-sigma) ≤ 1 := by\n    simpa only [Real.rpow_zero] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : -sigma ≤ 0)\n  have hQ1x : d.Q1 ≤ d.scale := by\n    calc\n      _ ≤ d.U * d.scale ^ (-sigma) := hg1.le\n      _ ≤ d.U * 1 := mul_le_mul_of_nonneg_left hn (by linarith)\n      _ = d.U := mul_one _\n      _ ≤ _ := hUx\n  have hpow : d.scale ^ (1 - 8 * sigma) ≤ d.scale := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : 1 - 8 * sigma ≤ 1)\n  have hU2 : 1 ≤ d.U ^ 2 := by nlinarith\n  have hQ32 : 1 ≤ d.Q3 ^ 2 := by nlinarith\n  have hprod : 1 ≤ d.U ^ 2 * d.Q3 ^ 2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q3 ^ 2 := mul_le_mul hU2 hQ32 zero_le_one (sq_nonneg _)\n  have hQ2x : d.Q2 ≤ d.scale := by\n    calc\n      _ = d.Q2 * 1 := by ring\n      _ ≤ d.Q2 * (d.U ^ 2 * d.Q3 ^ 2) :=\n        mul_le_mul_of_nonneg_left hprod (by linarith)\n      _ = d.U ^ 2 * d.Q2 * d.Q3 ^ 2 := by ring\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  have hprod2 : 1 ≤ d.U ^ 2 * d.Q2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q2 := mul_le_mul hU2 hQ2 zero_le_one (sq_nonneg _)\n  have hQ3x : d.Q3 ≤ d.scale := by\n    calc\n      _ ≤ d.Q3 ^ 2 := by nlinarith\n      _ = 1 * d.Q3 ^ 2 := by ring\n      _ ≤ (d.U ^ 2 * d.Q2) * d.Q3 ^ 2 :=\n        mul_le_mul_of_nonneg_right hprod2 (sq_nonneg _)\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  exact ⟨hUx, hVx, hQ1x, hQ2x, hQ3x⟩"
+    },
+    {
+      "name": "clean_transposed_beta_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 191,
+      "char_range": [
+        8290,
+        8865
+      ],
+      "byte_range": [
+        8679,
+        9288
+      ],
+      "true_full_header": "private theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]",
+      "complete_declaration": "private theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]"
+    },
+    {
+      "name": "lowPass_contDiff",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 203,
+      "char_range": [
+        8867,
+        9021
+      ],
+      "byte_range": [
+        9290,
+        9448
+      ],
+      "true_full_header": "private theorem lowPass_contDiff : ContDiff ℝ ∞ poissonSmoothLowPass",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  exact dyadicBump.contDiff.comp (contDiff_const.add (contDiff_id.div_const 2))",
+      "complete_declaration": "private theorem lowPass_contDiff : ContDiff ℝ ∞ poissonSmoothLowPass := by\n  exact dyadicBump.contDiff.comp (contDiff_const.add (contDiff_id.div_const 2))"
+    },
+    {
+      "name": "lowPass_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 206,
+      "char_range": [
+        9023,
+        9113
+      ],
+      "byte_range": [
+        9450,
+        9544
+      ],
+      "true_full_header": "private theorem lowPass_nonneg (u : ℝ) : 0 ≤ poissonSmoothLowPass u",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  dyadicBump.nonneg",
+      "complete_declaration": "private theorem lowPass_nonneg (u : ℝ) : 0 ≤ poissonSmoothLowPass u :=\n  dyadicBump.nonneg"
+    },
+    {
+      "name": "lowPass_le_one",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 209,
+      "char_range": [
+        9115,
+        9205
+      ],
+      "byte_range": [
+        9546,
+        9640
+      ],
+      "true_full_header": "private theorem lowPass_le_one (u : ℝ) : poissonSmoothLowPass u ≤ 1",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  dyadicBump.le_one",
+      "complete_declaration": "private theorem lowPass_le_one (u : ℝ) : poissonSmoothLowPass u ≤ 1 :=\n  dyadicBump.le_one"
+    },
+    {
+      "name": "lowPass_eq_one",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 212,
+      "char_range": [
+        9207,
+        9445
+      ],
+      "byte_range": [
+        9642,
+        9888
+      ],
+      "true_full_header": "private theorem lowPass_eq_one {u : ℝ} (hu : |u| ≤ 1) :\n    poissonSmoothLowPass u = 1",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  apply dyadicBump.one_of_mem_closedBall\n  change |(3 / 2 + u / 2) - 3 / 2| ≤ 1 / 2\n  rw [abs_le] at hu ⊢\n  constructor <;> linarith [hu.1, hu.2]",
+      "complete_declaration": "private theorem lowPass_eq_one {u : ℝ} (hu : |u| ≤ 1) :\n    poissonSmoothLowPass u = 1 := by\n  apply dyadicBump.one_of_mem_closedBall\n  change |(3 / 2 + u / 2) - 3 / 2| ≤ 1 / 2\n  rw [abs_le] at hu ⊢\n  constructor <;> linarith [hu.1, hu.2]"
+    },
+    {
+      "name": "lowPass_eq_zero",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 219,
+      "char_range": [
+        9447,
+        9808
+      ],
+      "byte_range": [
+        9890,
+        10265
+      ],
+      "true_full_header": "private theorem lowPass_eq_zero {u : ℝ} (hu : 2 ≤ |u|) :\n    poissonSmoothLowPass u = 0",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  apply dyadicBump.zero_of_le_dist\n  change (1 : ℝ) ≤ |(3 / 2 + u / 2) - 3 / 2|\n  have he : (3 / 2 + u / 2) - 3 / 2 = u / 2 := by ring\n  rw [he, abs_div]\n  rw [abs_of_pos (by norm_num : (0 : ℝ) < 2)]\n  exact (le_div_iff₀ (by norm_num : (0 : ℝ) < 2)).mpr (by linarith)",
+      "complete_declaration": "private theorem lowPass_eq_zero {u : ℝ} (hu : 2 ≤ |u|) :\n    poissonSmoothLowPass u = 0 := by\n  apply dyadicBump.zero_of_le_dist\n  change (1 : ℝ) ≤ |(3 / 2 + u / 2) - 3 / 2|\n  have he : (3 / 2 + u / 2) - 3 / 2 = u / 2 := by ring\n  rw [he, abs_div]\n  rw [abs_of_pos (by norm_num : (0 : ℝ) < 2)]\n  exact (le_div_iff₀ (by norm_num : (0 : ℝ) < 2)).mpr (by linarith)"
+    },
+    {
+      "name": "lowPass_ne_zero_abs_lt_two",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 228,
+      "char_range": [
+        9810,
+        9976
+      ],
+      "byte_range": [
+        10267,
+        10437
+      ],
+      "true_full_header": "private theorem lowPass_ne_zero_abs_lt_two {u : ℝ}\n    (hu : poissonSmoothLowPass u ≠ 0) : |u| < 2",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  by_contra hn\n  exact hu (lowPass_eq_zero (le_of_not_gt hn))",
+      "complete_declaration": "private theorem lowPass_ne_zero_abs_lt_two {u : ℝ}\n    (hu : poissonSmoothLowPass u ≠ 0) : |u| < 2 := by\n  by_contra hn\n  exact hu (lowPass_eq_zero (le_of_not_gt hn))"
+    },
+    {
+      "name": "factor_le_twice",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 233,
+      "char_range": [
+        9978,
+        10186
+      ],
+      "byte_range": [
+        10439,
+        10661
+      ],
+      "true_full_header": "private theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : (n : ℝ) ≤ 2 * Q",
+      "proof_or_body_delimiter": " :=",
+      "complete_body_after_delimiter": "\n  (Nat.cast_le.mpr (Finset.mem_Icc.mp hn).2).trans\n    (Nat.floor_le (by linarith : 0 ≤ 2 * Q))",
+      "complete_declaration": "private theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : (n : ℝ) ≤ 2 * Q :=\n  (Nat.cast_le.mpr (Finset.mem_Icc.mp hn).2).trans\n    (Nat.floor_le (by linarith : 0 ≤ 2 * Q))"
+    },
+    {
+      "name": "tail_gamma_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 238,
+      "char_range": [
+        10188,
+        10635
+      ],
+      "byte_range": [
+        10663,
+        11132
+      ],
+      "true_full_header": "private theorem tail_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {r s : ℕ}\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2) :\n    ‖d.gamma2 s * d.gamma3 r‖ ≤ 1",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h2, h3⟩ := hd\n  rw [norm_mul]\n  calc\n    _ ≤ 1 * 1 := mul_le_mul (h2 s hs).1 (h3 r hr).1 (norm_nonneg _) zero_le_one\n    _ = _ := by norm_num",
+      "complete_declaration": "private theorem tail_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {r s : ℕ}\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2) :\n    ‖d.gamma2 s * d.gamma3 r‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h2, h3⟩ := hd\n  rw [norm_mul]\n  calc\n    _ ≤ 1 * 1 := mul_le_mul (h2 s hs).1 (h3 r hr).1 (norm_nonneg _) zero_le_one\n    _ = _ := by norm_num"
+    },
+    {
+      "name": "gcd_mul_shared_lcm",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 249,
+      "char_range": [
+        10637,
+        10861
+      ],
+      "byte_range": [
+        11134,
+        11360
+      ],
+      "true_full_header": "private theorem gcd_mul_shared_lcm (p v w : ℕ) :\n    v.gcd w * ((p * v).lcm (p * w)) = p * v * w",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  rw [sharedFirstFactor_lcm]\n  calc\n    _ = p * (v.gcd w * v.lcm w) := by ring\n    _ = _ := by rw [Nat.gcd_mul_lcm]; ring",
+      "complete_declaration": "private theorem gcd_mul_shared_lcm (p v w : ℕ) :\n    v.gcd w * ((p * v).lcm (p * w)) = p * v * w := by\n  rw [sharedFirstFactor_lcm]\n  calc\n    _ = p * (v.gcd w * v.lcm w) := by ring\n    _ = _ := by rw [Nat.gcd_mul_lcm]; ring"
+    },
+    {
+      "name": "gcd_mul_shared_lcm_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 256,
+      "char_range": [
+        10863,
+        11763
+      ],
+      "byte_range": [
+        11362,
+        12292
+      ],
+      "true_full_header": "private theorem gcd_mul_shared_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p r s r' s' : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2) :\n    (((r * s).gcd (r' * s') : ℕ) : ℝ) *\n        (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have hpn := factor_le_twice hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hrn := factor_le_twice hd.2.2.2.2.1 hr\n  have hsn := factor_le_twice hd.2.2.2.1 hs\n  have hrn' := factor_le_twice hd.2.2.2.2.1 hr'\n  have hsn' := factor_le_twice hd.2.2.2.1 hs'\n  rw [← Nat.cast_mul, gcd_mul_shared_lcm]\n  push_cast\n  calc\n    _ ≤ (2 * d.Q1) * ((2 * d.Q3) * (2 * d.Q2)) *\n        ((2 * d.Q3) * (2 * d.Q2)) := by gcongr\n    _ = _ := by ring",
+      "complete_declaration": "private theorem gcd_mul_shared_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p r s r' s' : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2) :\n    (((r * s).gcd (r' * s') : ℕ) : ℝ) *\n        (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 := by\n  have hpn := factor_le_twice hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hrn := factor_le_twice hd.2.2.2.2.1 hr\n  have hsn := factor_le_twice hd.2.2.2.1 hs\n  have hrn' := factor_le_twice hd.2.2.2.2.1 hr'\n  have hsn' := factor_le_twice hd.2.2.2.1 hs'\n  rw [← Nat.cast_mul, gcd_mul_shared_lcm]\n  push_cast\n  calc\n    _ ≤ (2 * d.Q1) * ((2 * d.Q3) * (2 * d.Q2)) *\n        ((2 * d.Q3) * (2 * d.Q2)) := by gcongr\n    _ = _ := by ring"
+    },
+    {
+      "name": "smooth_shared_frequency_support",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 277,
+      "char_range": [
+        11765,
+        14703
+      ],
+      "byte_range": [
+        12294,
+        15342
+      ],
+      "true_full_header": "private theorem smooth_shared_frequency_support\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Z : ℝ} (hZ : 0 < Z)\n    {p r s r' s' : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2)\n    (x : ℝ) (h : ℤ)\n    (hactive :\n      (CommonSmoothCutoff.poissonSmoothLowPass\n        ((d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) x h ≠ 0) :\n    h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s')))",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  let D : ℕ := (r * s).gcd (r' * s')\n  let L : ℕ := (p * (r * s)).lcm (p * (r' * s'))\n  have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hr0 := factor_pos hd.2.2.2.2.1 hr\n  have hs0 := factor_pos hd.2.2.2.1 hs\n  have hr0' := factor_pos hd.2.2.2.2.1 hr'\n  have hs0' := factor_pos hd.2.2.2.1 hs'\n  have hD0 : 0 < D := Nat.gcd_pos_of_pos_left _ (Nat.mul_pos hr0 hs0)\n  have hL0 : 0 < L := Nat.lcm_pos\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0 hs0))\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0' hs0'))\n  have hD : 0 < (D : ℝ) := by exact_mod_cast hD0\n  have hL : 0 < (L : ℝ) := by exact_mod_cast hL0\n  have hV : 0 < d.V := zero_lt_one.trans_le hd.2.1\n  have ht : 0 < d.V / (L : ℝ) := div_pos hV hL\n  have hh0 : h ≠ 0 := by\n    intro he\n    subst h\n    simp [poissonNonzeroFrequency] at hactive\n  have hchi : poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) ≠ 0 := by\n    intro he\n    apply hactive\n    change (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n      poissonNonzeroFrequency (d.V / (L : ℝ)) x h = 0\n    rw [he, Complex.ofReal_zero, zero_mul]\n  have hsmall := lowPass_ne_zero_abs_lt_two hchi\n  rw [abs_div, abs_mul, abs_of_pos ht, abs_of_pos hZ] at hsmall\n  have hsmall' : d.V * |(h : ℝ)| < (2 * Z) * (L : ℝ) := by\n    have he := mul_lt_mul_of_pos_right ((div_lt_iff₀ hZ).mp hsmall) hL\n    have hid : (d.V / (L : ℝ) * |(h : ℝ)|) * (L : ℝ) =\n        d.V * |(h : ℝ)| := by field_simp\n    rw [hid] at he\n    exact he\n  have hDL := gcd_mul_shared_lcm_le hd hp hr hs hr' hs'\n  change (D : ℝ) * (L : ℝ) ≤ 32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 at hDL\n  have hbound : |(h : ℝ)| ≤\n      64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V) := by\n    apply (le_div_iff₀ (mul_pos hD hV)).mpr\n    have he := mul_lt_mul_of_pos_left hsmall' hD\n    have hb := mul_le_mul_of_nonneg_left hDL (show 0 ≤ 2 * Z by positivity)\n    nlinarith\n  apply (mem_window_iff _ h).mpr\n  refine ⟨hh0, ?_⟩\n  have habs : (h.natAbs : ℝ) = |(h : ℝ)| := by\n    rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n  have hc : (h.natAbs : ℝ) ≤ (d.sharedSmoothFrequencyBound Z D : ℝ) := by\n    rw [habs]\n    exact hbound.trans (Nat.le_ceil _)\n  exact_mod_cast hc",
+      "complete_declaration": "private theorem smooth_shared_frequency_support\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Z : ℝ} (hZ : 0 < Z)\n    {p r s r' s' : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    (hr : r ∈ factorCarrier d.Q3) (hs : s ∈ factorCarrier d.Q2)\n    (hr' : r' ∈ factorCarrier d.Q3) (hs' : s' ∈ factorCarrier d.Q2)\n    (x : ℝ) (h : ℤ)\n    (hactive :\n      (CommonSmoothCutoff.poissonSmoothLowPass\n        ((d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) x h ≠ 0) :\n    h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))) := by\n  let D : ℕ := (r * s).gcd (r' * s')\n  let L : ℕ := (p * (r * s)).lcm (p * (r' * s'))\n  have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hr0 := factor_pos hd.2.2.2.2.1 hr\n  have hs0 := factor_pos hd.2.2.2.1 hs\n  have hr0' := factor_pos hd.2.2.2.2.1 hr'\n  have hs0' := factor_pos hd.2.2.2.1 hs'\n  have hD0 : 0 < D := Nat.gcd_pos_of_pos_left _ (Nat.mul_pos hr0 hs0)\n  have hL0 : 0 < L := Nat.lcm_pos\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0 hs0))\n    (Nat.mul_pos hp0 (Nat.mul_pos hr0' hs0'))\n  have hD : 0 < (D : ℝ) := by exact_mod_cast hD0\n  have hL : 0 < (L : ℝ) := by exact_mod_cast hL0\n  have hV : 0 < d.V := zero_lt_one.trans_le hd.2.1\n  have ht : 0 < d.V / (L : ℝ) := div_pos hV hL\n  have hh0 : h ≠ 0 := by\n    intro he\n    subst h\n    simp [poissonNonzeroFrequency] at hactive\n  have hchi : poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) ≠ 0 := by\n    intro he\n    apply hactive\n    change (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n      poissonNonzeroFrequency (d.V / (L : ℝ)) x h = 0\n    rw [he, Complex.ofReal_zero, zero_mul]\n  have hsmall := lowPass_ne_zero_abs_lt_two hchi\n  rw [abs_div, abs_mul, abs_of_pos ht, abs_of_pos hZ] at hsmall\n  have hsmall' : d.V * |(h : ℝ)| < (2 * Z) * (L : ℝ) := by\n    have he := mul_lt_mul_of_pos_right ((div_lt_iff₀ hZ).mp hsmall) hL\n    have hid : (d.V / (L : ℝ) * |(h : ℝ)|) * (L : ℝ) =\n        d.V * |(h : ℝ)| := by field_simp\n    rw [hid] at he\n    exact he\n  have hDL := gcd_mul_shared_lcm_le hd hp hr hs hr' hs'\n  change (D : ℝ) * (L : ℝ) ≤ 32 * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 at hDL\n  have hbound : |(h : ℝ)| ≤\n      64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V) := by\n    apply (le_div_iff₀ (mul_pos hD hV)).mpr\n    have he := mul_lt_mul_of_pos_left hsmall' hD\n    have hb := mul_le_mul_of_nonneg_left hDL (show 0 ≤ 2 * Z by positivity)\n    nlinarith\n  apply (mem_window_iff _ h).mpr\n  refine ⟨hh0, ?_⟩\n  have habs : (h.natAbs : ℝ) = |(h : ℝ)| := by\n    rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n  have hc : (h.natAbs : ℝ) ≤ (d.sharedSmoothFrequencyBound Z D : ℝ) := by\n    rw [habs]\n    exact hbound.trans (Nat.le_ceil _)\n  exact_mod_cast hc"
+    },
+    {
+      "name": "high_decay_le_product",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 342,
+      "char_range": [
+        14705,
+        15364
+      ],
+      "byte_range": [
+        15344,
+        16027
+      ],
+      "true_full_header": "private theorem high_decay_le_product (r : ℕ) (hr : 2 ≤ r)\n    {t C Z K : ℝ} (ht : 0 ≤ t) (hC : 0 ≤ C) (hZ : 0 < Z)\n    (hK : 0 < K) (hZK : Z ≤ K) :\n    t * (C / K ^ (r + 1)) ≤\n      (C / Z ^ (r - 1)) * (t / K ^ 2)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  have hpow : Z ^ (r - 1) * K ^ 2 ≤ K ^ (r + 1) := by\n    calc\n      _ ≤ K ^ (r - 1) * K ^ 2 :=\n        mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hZ.le hZK _) (sq_nonneg _)\n      _ = _ := by rw [← pow_add, show (r - 1) + 2 = r + 1 by omega]\n  calc\n    _ ≤ t * (C / (Z ^ (r - 1) * K ^ 2)) :=\n      mul_le_mul_of_nonneg_left\n        (div_le_div_of_nonneg_left hC (by positivity) hpow) ht\n    _ = _ := by field_simp [hZ.ne', hK.ne']; ring",
+      "complete_declaration": "private theorem high_decay_le_product (r : ℕ) (hr : 2 ≤ r)\n    {t C Z K : ℝ} (ht : 0 ≤ t) (hC : 0 ≤ C) (hZ : 0 < Z)\n    (hK : 0 < K) (hZK : Z ≤ K) :\n    t * (C / K ^ (r + 1)) ≤\n      (C / Z ^ (r - 1)) * (t / K ^ 2) := by\n  have hpow : Z ^ (r - 1) * K ^ 2 ≤ K ^ (r + 1) := by\n    calc\n      _ ≤ K ^ (r - 1) * K ^ 2 :=\n        mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hZ.le hZK _) (sq_nonneg _)\n      _ = _ := by rw [← pow_add, show (r - 1) + 2 = r + 1 by omega]\n  calc\n    _ ≤ t * (C / (Z ^ (r - 1) * K ^ 2)) :=\n      mul_le_mul_of_nonneg_left\n        (div_le_div_of_nonneg_left hC (by positivity) hpow) ht\n    _ = _ := by field_simp [hZ.ne', hK.ne']; ring"
+    },
+    {
+      "name": "smooth_row_tail",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 358,
+      "char_range": [
+        15366,
+        19401
+      ],
+      "byte_range": [
+        16029,
+        20277
+      ],
+      "true_full_header": "private theorem smooth_row_tail (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x Z : ℝ, 0 < Z →\n      ∀ H : ℕ,\n        (∀ h : ℤ,\n          (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h ≠ 0 →\n            h ∈ poissonNonzeroFrequencyWindow H) →\n        ‖(∑' h : ℤ, poissonNonzeroFrequency t x h) -\n          ∑ h ∈ poissonNonzeroFrequencyWindow H,\n            (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h‖ ≤ C / Z ^ (r - 1)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  obtain ⟨C, hC, hdecay⟩ := schwartz_norm_le_rapidDecay (𝓕 dyadicCutoffSchwartz) (r + 1)\n  refine ⟨2 * C, by positivity, fun t ht x Z hZ H hsupport => ?_⟩\n  let f : ℤ → ℂ := poissonNonzeroFrequency t x\n  let g : ℤ → ℂ := fun h => (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) * f h\n  have hf : Summable f := (poissonNonzeroFrequency_summable_norm ht x).of_norm\n  have hg : Summable g := by\n    apply summable_of_ne_finset_zero (s := poissonNonzeroFrequencyWindow H)\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  have hsumg : (∑' h : ℤ, g h) =\n      ∑ h ∈ poissonNonzeroFrequencyWindow H,\n        (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency t x h := by\n    apply tsum_eq_sum\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  obtain ⟨hmajor, hmajorBound⟩ := poissonNonzeroDecay_summable_tsum_le ht\n  have hpoint (h : ℤ) : ‖f h - g h‖ ≤\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h := by\n    by_cases hh0 : h = 0\n    · subst h\n      simp [f, g, poissonNonzeroFrequency, poissonNonzeroDecay]\n    · by_cases hsmall : |t * (h : ℝ)| ≤ Z\n      · have hone : poissonSmoothLowPass (t * (h : ℝ) / Z) = 1 := by\n          apply lowPass_eq_one\n          rw [abs_div, abs_of_pos hZ]\n          exact (div_le_one hZ).mpr hsmall\n        simp only [g, hone, Complex.ofReal_one, one_mul, sub_self, norm_zero]\n        exact mul_nonneg (by positivity) (by unfold poissonNonzeroDecay; split_ifs <;> positivity)\n      · have hZK : Z ≤ 1 + |t * (h : ℝ)| := by linarith [lt_of_not_ge hsmall]\n        have hchi0 := lowPass_nonneg (t * (h : ℝ) / Z)\n        have hchi1 := lowPass_le_one (t * (h : ℝ) / Z)\n        have hfactor : ‖(1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)‖ ≤ 1 := by\n          rw [← Complex.ofReal_one, ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]\n          rw [abs_of_nonneg (by linarith : 0 ≤ 1 - poissonSmoothLowPass (t * (h : ℝ) / Z))]\n          linarith\n        have hnorm : ‖f h‖ ≤ t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := by\n          dsimp only [f]\n          simp only [poissonNonzeroFrequency, if_neg hh0, norm_mul, norm_smul,\n            Real.norm_eq_abs, abs_of_pos ht, fourier_apply, Circle.norm_coe, mul_one]\n          exact mul_le_mul_of_nonneg_left (hdecay (t * (h : ℝ))) ht.le\n        calc\n          _ = ‖((1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)) * f h‖ := by\n            congr 1\n            dsimp only [g]\n            ring\n          _ ≤ 1 * (t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1))) := by\n            rw [norm_mul]\n            exact mul_le_mul hfactor hnorm (norm_nonneg _) (by norm_num)\n          _ = t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := one_mul _\n          _ ≤ (C / Z ^ (r - 1)) * (t / (1 + |t * (h : ℝ)|) ^ 2) :=\n            high_decay_le_product r hr ht.le hC.le hZ (by positivity) hZK\n          _ = _ := by rw [poissonNonzeroDecay, if_neg hh0]\n  have hmajorS : Summable (fun h : ℤ =>\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h) := hmajor.mul_left _\n  have hnorm : Summable (fun h : ℤ => ‖f h - g h‖) :=\n    hmajorS.of_nonneg_of_le (fun _ => norm_nonneg _) hpoint\n  rw [← hsumg, ← hf.tsum_sub hg]\n  calc\n    _ ≤ ∑' h : ℤ, ‖f h - g h‖ := norm_tsum_le_tsum_norm hnorm\n    _ ≤ ∑' h : ℤ, (C / Z ^ (r - 1)) * poissonNonzeroDecay t h :=\n      hnorm.tsum_le_tsum hpoint hmajorS\n    _ = (C / Z ^ (r - 1)) * ∑' h : ℤ, poissonNonzeroDecay t h := tsum_mul_left\n    _ ≤ (C / Z ^ (r - 1)) * 2 :=\n      mul_le_mul_of_nonneg_left hmajorBound (by positivity)\n    _ = _ := by ring",
+      "complete_declaration": "private theorem smooth_row_tail (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x Z : ℝ, 0 < Z →\n      ∀ H : ℕ,\n        (∀ h : ℤ,\n          (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h ≠ 0 →\n            h ∈ poissonNonzeroFrequencyWindow H) →\n        ‖(∑' h : ℤ, poissonNonzeroFrequency t x h) -\n          ∑ h ∈ poissonNonzeroFrequencyWindow H,\n            (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n              poissonNonzeroFrequency t x h‖ ≤ C / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hdecay⟩ := schwartz_norm_le_rapidDecay (𝓕 dyadicCutoffSchwartz) (r + 1)\n  refine ⟨2 * C, by positivity, fun t ht x Z hZ H hsupport => ?_⟩\n  let f : ℤ → ℂ := poissonNonzeroFrequency t x\n  let g : ℤ → ℂ := fun h => (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) * f h\n  have hf : Summable f := (poissonNonzeroFrequency_summable_norm ht x).of_norm\n  have hg : Summable g := by\n    apply summable_of_ne_finset_zero (s := poissonNonzeroFrequencyWindow H)\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  have hsumg : (∑' h : ℤ, g h) =\n      ∑ h ∈ poissonNonzeroFrequencyWindow H,\n        (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency t x h := by\n    apply tsum_eq_sum\n    intro h hh\n    by_contra hne\n    exact hh (hsupport h hne)\n  obtain ⟨hmajor, hmajorBound⟩ := poissonNonzeroDecay_summable_tsum_le ht\n  have hpoint (h : ℤ) : ‖f h - g h‖ ≤\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h := by\n    by_cases hh0 : h = 0\n    · subst h\n      simp [f, g, poissonNonzeroFrequency, poissonNonzeroDecay]\n    · by_cases hsmall : |t * (h : ℝ)| ≤ Z\n      · have hone : poissonSmoothLowPass (t * (h : ℝ) / Z) = 1 := by\n          apply lowPass_eq_one\n          rw [abs_div, abs_of_pos hZ]\n          exact (div_le_one hZ).mpr hsmall\n        simp only [g, hone, Complex.ofReal_one, one_mul, sub_self, norm_zero]\n        exact mul_nonneg (by positivity) (by unfold poissonNonzeroDecay; split_ifs <;> positivity)\n      · have hZK : Z ≤ 1 + |t * (h : ℝ)| := by linarith [lt_of_not_ge hsmall]\n        have hchi0 := lowPass_nonneg (t * (h : ℝ) / Z)\n        have hchi1 := lowPass_le_one (t * (h : ℝ) / Z)\n        have hfactor : ‖(1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)‖ ≤ 1 := by\n          rw [← Complex.ofReal_one, ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]\n          rw [abs_of_nonneg (by linarith : 0 ≤ 1 - poissonSmoothLowPass (t * (h : ℝ) / Z))]\n          linarith\n        have hnorm : ‖f h‖ ≤ t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := by\n          dsimp only [f]\n          simp only [poissonNonzeroFrequency, if_neg hh0, norm_mul, norm_smul,\n            Real.norm_eq_abs, abs_of_pos ht, fourier_apply, Circle.norm_coe, mul_one]\n          exact mul_le_mul_of_nonneg_left (hdecay (t * (h : ℝ))) ht.le\n        calc\n          _ = ‖((1 : ℂ) - (poissonSmoothLowPass (t * (h : ℝ) / Z) : ℂ)) * f h‖ := by\n            congr 1\n            dsimp only [g]\n            ring\n          _ ≤ 1 * (t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1))) := by\n            rw [norm_mul]\n            exact mul_le_mul hfactor hnorm (norm_nonneg _) (by norm_num)\n          _ = t * (C / (1 + |t * (h : ℝ)|) ^ (r + 1)) := one_mul _\n          _ ≤ (C / Z ^ (r - 1)) * (t / (1 + |t * (h : ℝ)|) ^ 2) :=\n            high_decay_le_product r hr ht.le hC.le hZ (by positivity) hZK\n          _ = _ := by rw [poissonNonzeroDecay, if_neg hh0]\n  have hmajorS : Summable (fun h : ℤ =>\n      (C / Z ^ (r - 1)) * poissonNonzeroDecay t h) := hmajor.mul_left _\n  have hnorm : Summable (fun h : ℤ => ‖f h - g h‖) :=\n    hmajorS.of_nonneg_of_le (fun _ => norm_nonneg _) hpoint\n  rw [← hsumg, ← hf.tsum_sub hg]\n  calc\n    _ ≤ ∑' h : ℤ, ‖f h - g h‖ := norm_tsum_le_tsum_norm hnorm\n    _ ≤ ∑' h : ℤ, (C / Z ^ (r - 1)) * poissonNonzeroDecay t h :=\n      hnorm.tsum_le_tsum hpoint hmajorS\n    _ = (C / Z ^ (r - 1)) * ∑' h : ℤ, poissonNonzeroDecay t h := tsum_mul_left\n    _ ≤ (C / Z ^ (r - 1)) * 2 :=\n      mul_le_mul_of_nonneg_left hmajorBound (by positivity)\n    _ = _ := by ring"
+    },
+    {
+      "name": "sum_slice_factor",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 438,
+      "char_range": [
+        19403,
+        20185
+      ],
+      "byte_range": [
+        20279,
+        21106
+      ],
+      "true_full_header": "private theorem sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * f (p, s, r)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r ∈ factorCarrier d.Q3,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 s * d.gamma3 r) * f (q, s, r)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hn\n    exact (hn hp).elim",
+      "complete_declaration": "private theorem sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * f (p, s, r) := by\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r ∈ factorCarrier d.Q3,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 s * d.gamma3 r) * f (q, s, r)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hn\n    exact (hn hp).elim"
+    },
+    {
+      "name": "sum_star_slice_factor",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 455,
+      "char_range": [
+        20187,
+        21007
+      ],
+      "byte_range": [
+        21108,
+        21968
+      ],
+      "true_full_header": "private theorem sum_star_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma a) * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        star (d.gamma2 s * d.gamma3 r) * f (p, s, r)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  calc\n    _ = star (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * star (f a)) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * star (f (p, s, r))) :=\n      congrArg star (sum_slice_factor d hp _)\n    _ = _ := by simp only [star_sum, star_mul', star_star]",
+      "complete_declaration": "private theorem sum_star_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma a) * f a) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        star (d.gamma2 s * d.gamma3 r) * f (p, s, r) := by\n  calc\n    _ = star (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * star (f a)) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) * star (f (p, s, r))) :=\n      congrArg star (sum_slice_factor d hp _)\n    _ = _ := by simp only [star_sum, star_mul', star_star]"
+    },
+    {
+      "name": "pair_sum_slice_factor",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 470,
+      "char_range": [
+        21009,
+        22583
+      ],
+      "byte_range": [
+        21970,
+        23614
+      ],
+      "true_full_header": "private theorem pair_sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ r' ∈ factorCarrier d.Q3,\n          (d.gamma2 s * d.gamma3 r) * star (d.gamma2 s' * d.gamma3 r') *\n            K (p, s, r) (p, s', r')",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  calc\n    _ = ∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K (p, s, r) b :=\n      sum_slice_factor d hp _\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r _\n      rw [sum_star_slice_factor d hp]\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro s' _\n      apply Finset.sum_congr rfl\n      intro r' _\n      ring",
+      "complete_declaration": "private theorem pair_sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) =\n      ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ r' ∈ factorCarrier d.Q3,\n          (d.gamma2 s * d.gamma3 r) * star (d.gamma2 s' * d.gamma3 r') *\n            K (p, s, r) (p, s', r') := by\n  calc\n    _ = ∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ s ∈ factorCarrier d.Q2, ∑ r ∈ factorCarrier d.Q3,\n        (d.gamma2 s * d.gamma3 r) *\n          ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K (p, s, r) b :=\n      sum_slice_factor d hp _\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r _\n      rw [sum_star_slice_factor d hp]\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro s' _\n      apply Finset.sum_congr rfl\n      intro r' _\n      ring"
+    },
+    {
+      "name": "slice_pair_eq_shared_series",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 505,
+      "char_range": [
+        22585,
+        24626
+      ],
+      "byte_range": [
+        23616,
+        25737
+      ],
+      "true_full_header": "private theorem slice_pair_eq_shared_series (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (N1 N2 : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              (∑' h : ℤ, poissonNonzeroFrequency\n                (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ))\n                ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n                  (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) h).re\n            else 0 : ℝ)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  let K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ := fun a b =>\n    (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ))\n        ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n          N1 N2 d.residue : ℝ) /\n            ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ)) h).re\n    else 0 : ℝ)\n  change (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n    ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n        star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) = _\n  rw [pair_sum_slice_factor d hp]\n  simp_rw [Finset.sum_comm (s := factorCarrier d.Q2) (t := factorCarrier d.Q3)]\n  apply Finset.sum_congr rfl\n  intro r _\n  apply Finset.sum_congr rfl\n  intro s _\n  apply Finset.sum_congr rfl\n  intro r' _\n  apply Finset.sum_congr rfl\n  intro s' _\n  have hl : complexFactorModulus (p, s, r) = p * (r * s) := by\n    unfold complexFactorModulus\n    ring\n  have hr : complexFactorModulus (p, s', r') = p * (r' * s') := by\n    unfold complexFactorModulus\n    ring\n  dsimp only [K]\n  rw [hl, hr]",
+      "complete_declaration": "private theorem slice_pair_eq_shared_series (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (N1 N2 : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              (∑' h : ℤ, poissonNonzeroFrequency\n                (d.V / (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ))\n                ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n                  (((p * (r * s)).lcm (p * (r' * s')) : ℕ) : ℝ)) h).re\n            else 0 : ℝ) := by\n  let K : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ := fun a b =>\n    (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ))\n        ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n          N1 N2 d.residue : ℝ) /\n            ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ)) h).re\n    else 0 : ℝ)\n  change (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n    ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n        star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * K a b) = _\n  rw [pair_sum_slice_factor d hp]\n  simp_rw [Finset.sum_comm (s := factorCarrier d.Q2) (t := factorCarrier d.Q3)]\n  apply Finset.sum_congr rfl\n  intro r _\n  apply Finset.sum_congr rfl\n  intro s _\n  apply Finset.sum_congr rfl\n  intro r' _\n  apply Finset.sum_congr rfl\n  intro s' _\n  have hl : complexFactorModulus (p, s, r) = p * (r * s) := by\n    unfold complexFactorModulus\n    ring\n  have hr : complexFactorModulus (p, s', r') = p * (r' * s') := by\n    unfold complexFactorModulus\n    ring\n  dsimp only [K]\n  rw [hl, hr]"
+    },
+    {
+      "name": "pair_smooth_tail_bound",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 548,
+      "char_range": [
+        24628,
+        28834
+      ],
+      "byte_range": [
+        25739,
+        30167
+      ],
+      "true_full_header": "private theorem pair_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ p ∈ d.primitiveFirstFactorCarrier,\n      ∀ Z : ℝ, 0 < Z → ∀ N1 N2 : ℕ,\n        ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤\n            (((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)) ^ 2 *\n              C / Z ^ (r - 1)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  obtain ⟨C, hC, hrow⟩ := smooth_row_tail r hr\n  refine ⟨C, hC, fun B sigma kappa c0 d hd p hp Z hZ N1 N2 => ?_⟩\n  let E : ℝ := C / Z ^ (r - 1)\n  let T : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑ h ∈ poissonNonzeroFrequencyWindow\n          (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b'))),\n        (poissonSmoothLowPass\n          ((d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency\n            (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n            ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n              (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  let F : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  have hterm (a : ℕ) (ha : a ∈ factorCarrier d.Q3)\n      (b : ℕ) (hb : b ∈ factorCarrier d.Q2)\n      (a' : ℕ) (ha' : a' ∈ factorCarrier d.Q3)\n      (b' : ℕ) (hb' : b' ∈ factorCarrier d.Q2) :\n      ‖d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ) -\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ E := by\n    by_cases hc : ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2\n    · have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n      have hL : 0 < (p * (a * b)).lcm (p * (a' * b')) :=\n        Nat.lcm_pos (Nat.mul_pos hp0 (Nat.mul_pos\n          (factor_pos hd.2.2.2.2.1 ha) (factor_pos hd.2.2.2.1 hb)))\n          (Nat.mul_pos hp0 (Nat.mul_pos\n            (factor_pos hd.2.2.2.2.1 ha') (factor_pos hd.2.2.2.1 hb')))\n      have hLreal : 0 < (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ) := by\n        exact_mod_cast hL\n      have he := hrow\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        (div_pos (zero_lt_one.trans_le hd.2.1) hLreal)\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) Z hZ\n        (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b')))\n        (fun h hh => smooth_shared_frequency_support hd hZ hp ha hb ha' hb' _ h hh)\n      dsimp only [F, T]\n      rw [if_pos hc, if_pos hc]\n      exact coeff_real_tail_norm_le _ _ _ _ E\n        (tail_gamma_norm_le hd ha hb) (tail_gamma_norm_le hd ha' hb')\n        (by dsimp [E]; positivity) he\n    · simpa [F, T, hc] using (show (0 : ℝ) ≤ E by dsimp only [E]; positivity)\n  rw [slice_pair_eq_shared_series d (Finset.mem_filter.mp hp).1]\n  change ‖(∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ)) -\n    ∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ _\n  calc\n    _ ≤ ((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) *\n        (((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) * E))) :=\n      norm_sum_sub_le_card _ _ _ _ (fun a ha =>\n        norm_sum_sub_le_card _ _ _ _ (fun b hb =>\n          norm_sum_sub_le_card _ _ _ _ (fun a' ha' =>\n            norm_sum_sub_le_card _ _ _ _ (fun b' hb' => hterm a ha b hb a' ha' b' hb'))))\n    _ = _ := by dsimp only [E]; ring",
+      "complete_declaration": "private theorem pair_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ p ∈ d.primitiveFirstFactorCarrier,\n      ∀ Z : ℝ, 0 < Z → ∀ N1 N2 : ℕ,\n        ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤\n            (((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)) ^ 2 *\n              C / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hrow⟩ := smooth_row_tail r hr\n  refine ⟨C, hC, fun B sigma kappa c0 d hd p hp Z hZ N1 N2 => ?_⟩\n  let E : ℝ := C / Z ^ (r - 1)\n  let T : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑ h ∈ poissonNonzeroFrequencyWindow\n          (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b'))),\n        (poissonSmoothLowPass\n          ((d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) * (h : ℝ) / Z) : ℂ) *\n          poissonNonzeroFrequency\n            (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n            ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n              (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  let F : ℕ → ℕ → ℕ → ℕ → ℝ := fun a b a' b' =>\n    if ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2 then\n      (∑' h : ℤ, poissonNonzeroFrequency\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) h).re\n    else 0\n  have hterm (a : ℕ) (ha : a ∈ factorCarrier d.Q3)\n      (b : ℕ) (hb : b ∈ factorCarrier d.Q2)\n      (a' : ℕ) (ha' : a' ∈ factorCarrier d.Q3)\n      (b' : ℕ) (hb' : b' ∈ factorCarrier d.Q2) :\n      ‖d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ) -\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ E := by\n    by_cases hc : ComplexCRT.Compatible (p * (a * b)) (p * (a' * b')) N1 N2\n    · have hp0 := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n      have hL : 0 < (p * (a * b)).lcm (p * (a' * b')) :=\n        Nat.lcm_pos (Nat.mul_pos hp0 (Nat.mul_pos\n          (factor_pos hd.2.2.2.2.1 ha) (factor_pos hd.2.2.2.1 hb)))\n          (Nat.mul_pos hp0 (Nat.mul_pos\n            (factor_pos hd.2.2.2.2.1 ha') (factor_pos hd.2.2.2.1 hb')))\n      have hLreal : 0 < (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ) := by\n        exact_mod_cast hL\n      have he := hrow\n        (d.V / (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ))\n        (div_pos (zero_lt_one.trans_le hd.2.1) hLreal)\n        ((ComplexCRT.residue (p * (a * b)) (p * (a' * b')) N1 N2 d.residue : ℝ) /\n          (((p * (a * b)).lcm (p * (a' * b')) : ℕ) : ℝ)) Z hZ\n        (d.sharedSmoothFrequencyBound Z ((a * b).gcd (a' * b')))\n        (fun h hh => smooth_shared_frequency_support hd hZ hp ha hb ha' hb' _ h hh)\n      dsimp only [F, T]\n      rw [if_pos hc, if_pos hc]\n      exact coeff_real_tail_norm_le _ _ _ _ E\n        (tail_gamma_norm_le hd ha hb) (tail_gamma_norm_le hd ha' hb')\n        (by dsimp [E]; positivity) he\n    · simpa [F, T, hc] using (show (0 : ℝ) ≤ E by dsimp only [E]; positivity)\n  rw [slice_pair_eq_shared_series d (Finset.mem_filter.mp hp).1]\n  change ‖(∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (F a b a' b' : ℂ)) -\n    ∑ a ∈ factorCarrier d.Q3, ∑ b ∈ factorCarrier d.Q2,\n      ∑ a' ∈ factorCarrier d.Q3, ∑ b' ∈ factorCarrier d.Q2,\n        d.gamma2 b * d.gamma3 a * star (d.gamma2 b' * d.gamma3 a') * (T a b a' b' : ℂ)‖ ≤ _\n  calc\n    _ ≤ ((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) *\n        (((factorCarrier d.Q3).card : ℝ) * (((factorCarrier d.Q2).card : ℝ) * E))) :=\n      norm_sum_sub_le_card _ _ _ _ (fun a ha =>\n        norm_sum_sub_le_card _ _ _ _ (fun b hb =>\n          norm_sum_sub_le_card _ _ _ _ (fun a' ha' =>\n            norm_sum_sub_le_card _ _ _ _ (fun b' hb' => hterm a ha b hb a' ha' b' hb'))))\n    _ = _ := by dsimp only [E]; ring"
+    },
+    {
+      "name": "cleaned_core_smooth_tail_bound",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 621,
+      "char_range": [
+        28836,
+        33829
+      ],
+      "byte_range": [
+        30169,
+        35386
+      ],
+      "true_full_header": "private theorem cleaned_core_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ), 0 < sigma →\n      ∀ d : MediumAtom, MediumAdmissible B sigma kappa c0 d →\n        ∀ Ybeta Ysupport Z : ℝ, 0 < Z →\n          ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n            d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n              512 * C * d.scale ^ 9 / Z ^ (r - 1)",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  obtain ⟨C, hC, hpairs⟩ := pair_smooth_tail_bound r hr\n  refine ⟨C, hC, fun B sigma kappa c0 hsigma d hd Ybeta Ysupport Z hZ => ?_⟩\n  let e := d.cleanedAlphaAtom\n  let M : ℝ := ((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)\n  let E : ℝ := M ^ 2 * C / Z ^ (r - 1)\n  have hE : 0 ≤ E := by dsimp only [E, M]; positivity\n  have hpair (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖(e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤ E := by\n    exact hpairs B sigma kappa c0 e (mediumAdmissible_cleanedAlphaAtom hd) p hp Z hZ N1 N2\n  let f : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        (e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 else 0\n  let g : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0\n  have hterm (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖f p N1 N2 - g p N1 N2‖ ≤ E := by\n    dsimp only [f, g]\n    split_ifs with hmask\n    · rw [← mul_sub, norm_mul, norm_mul, norm_star]\n      calc\n        _ ≤ (1 * 1) * E := mul_le_mul\n          (mul_le_mul (clean_transposed_beta_norm_le hd N1)\n            (clean_transposed_beta_norm_le hd N2) (norm_nonneg _) zero_le_one)\n          (hpair p hp N1 N2) (norm_nonneg _) (by norm_num)\n        _ = _ := by ring\n    · simpa only [sub_self, norm_zero] using hE\n  have hfinite : ‖e.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n      e.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n      (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := by\n    change ‖(∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, f p N1 N2) -\n      ∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, g p N1 N2‖ ≤ _\n    exact norm_sum_sub_le_card _ _ _ _ (fun p hp =>\n      norm_sum_sub_le_card _ _ _ _ (fun N1 _ =>\n        norm_sum_sub_le_card _ _ _ _ (fun N2 _ => hterm p hp N1 N2)))\n  obtain ⟨hUx, _hVx, hQ1x, hQ2x, hQ3x⟩ := geometry_le_scale hd hsigma\n  have hX := one_le_scale hd\n  have hX0 : 0 ≤ d.scale := zero_le_one.trans hX\n  have hP : (e.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (primitive_card_le hd).trans (mul_le_mul_of_nonneg_left hQ1x (by norm_num))\n  have hN : (e.transposedAtom.betaCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (betaCarrier_card_le (d := e.transposedAtom) hd.1).trans\n      (mul_le_mul_of_nonneg_left hUx (by norm_num))\n  have hM : M ≤ 8 * d.scale ^ 3 := by\n    calc\n      _ ≤ (2 * d.Q3) * (2 * d.Q2) :=\n        mul_le_mul (card_factorCarrier_le hd.2.2.2.2.1)\n          (card_factorCarrier_le hd.2.2.2.1) (Nat.cast_nonneg _)\n          (by linarith [hd.2.2.2.2.1])\n      _ ≤ (2 * d.scale) * (2 * d.scale) := by gcongr\n      _ = 4 * d.scale ^ 2 := by ring\n      _ ≤ 4 * d.scale ^ 3 := by\n        have he := mul_le_mul_of_nonneg_left hX (show 0 ≤ 4 * d.scale ^ 2 by positivity)\n        nlinarith\n      _ ≤ 8 * d.scale ^ 3 := by positivity\n  have hmass : (e.primitiveFirstFactorCarrier.card : ℝ) *\n      (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2 ≤ 512 * d.scale ^ 9 := by\n    calc\n      _ ≤ (2 * d.scale) * (2 * d.scale) ^ 2 * (8 * d.scale ^ 3) ^ 2 :=\n        mul_le_mul\n          (mul_le_mul hP (pow_le_pow_left₀ (Nat.cast_nonneg _) hN 2)\n            (sq_nonneg _) (by positivity))\n          (pow_le_pow_left₀ (by dsimp only [M]; positivity) hM 2) (sq_nonneg _) (by positivity)\n      _ = _ := by ring\n  calc\n    _ ≤ (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := hfinite\n    _ = ((e.primitiveFirstFactorCarrier.card : ℝ) *\n          (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2) * (C / Z ^ (r - 1)) := by\n      dsimp only [E]\n      ring\n    _ ≤ (512 * d.scale ^ 9) * (C / Z ^ (r - 1)) :=\n      mul_le_mul_of_nonneg_right hmass (by positivity)\n    _ = _ := by ring",
+      "complete_declaration": "private theorem cleaned_core_smooth_tail_bound (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ), 0 < sigma →\n      ∀ d : MediumAtom, MediumAdmissible B sigma kappa c0 d →\n        ∀ Ybeta Ysupport Z : ℝ, 0 < Z →\n          ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n            d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n              512 * C * d.scale ^ 9 / Z ^ (r - 1) := by\n  obtain ⟨C, hC, hpairs⟩ := pair_smooth_tail_bound r hr\n  refine ⟨C, hC, fun B sigma kappa c0 hsigma d hd Ybeta Ysupport Z hZ => ?_⟩\n  let e := d.cleanedAlphaAtom\n  let M : ℝ := ((factorCarrier d.Q3).card : ℝ) * ((factorCarrier d.Q2).card : ℝ)\n  let E : ℝ := M ^ 2 * C / Z ^ (r - 1)\n  have hE : 0 ≤ E := by dsimp only [E, M]; positivity\n  have hpair (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖(e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 -\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2‖ ≤ E := by\n    exact hpairs B sigma kappa c0 e (mediumAdmissible_cleanedAlphaAtom hd) p hp Z hZ N1 N2\n  let f : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        (e.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2 else 0\n  let g : ℕ → ℕ → ℕ → ℂ := fun p N1 N2 =>\n    if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0\n  have hterm (p : ℕ) (hp : p ∈ e.primitiveFirstFactorCarrier) (N1 N2 : ℕ) :\n      ‖f p N1 N2 - g p N1 N2‖ ≤ E := by\n    dsimp only [f, g]\n    split_ifs with hmask\n    · rw [← mul_sub, norm_mul, norm_mul, norm_star]\n      calc\n        _ ≤ (1 * 1) * E := mul_le_mul\n          (mul_le_mul (clean_transposed_beta_norm_le hd N1)\n            (clean_transposed_beta_norm_le hd N2) (norm_nonneg _) zero_le_one)\n          (hpair p hp N1 N2) (norm_nonneg _) (by norm_num)\n        _ = _ := by ring\n    · simpa only [sub_self, norm_zero] using hE\n  have hfinite : ‖e.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport -\n      e.sharedSmallPairedSmallSupportedNonzeroSmooth Ybeta Ysupport Z‖ ≤\n      (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := by\n    change ‖(∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, f p N1 N2) -\n      ∑ p ∈ e.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier, g p N1 N2‖ ≤ _\n    exact norm_sum_sub_le_card _ _ _ _ (fun p hp =>\n      norm_sum_sub_le_card _ _ _ _ (fun N1 _ =>\n        norm_sum_sub_le_card _ _ _ _ (fun N2 _ => hterm p hp N1 N2)))\n  obtain ⟨hUx, _hVx, hQ1x, hQ2x, hQ3x⟩ := geometry_le_scale hd hsigma\n  have hX := one_le_scale hd\n  have hX0 : 0 ≤ d.scale := zero_le_one.trans hX\n  have hP : (e.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (primitive_card_le hd).trans (mul_le_mul_of_nonneg_left hQ1x (by norm_num))\n  have hN : (e.transposedAtom.betaCarrier.card : ℝ) ≤ 2 * d.scale :=\n    (betaCarrier_card_le (d := e.transposedAtom) hd.1).trans\n      (mul_le_mul_of_nonneg_left hUx (by norm_num))\n  have hM : M ≤ 8 * d.scale ^ 3 := by\n    calc\n      _ ≤ (2 * d.Q3) * (2 * d.Q2) :=\n        mul_le_mul (card_factorCarrier_le hd.2.2.2.2.1)\n          (card_factorCarrier_le hd.2.2.2.1) (Nat.cast_nonneg _)\n          (by linarith [hd.2.2.2.2.1])\n      _ ≤ (2 * d.scale) * (2 * d.scale) := by gcongr\n      _ = 4 * d.scale ^ 2 := by ring\n      _ ≤ 4 * d.scale ^ 3 := by\n        have he := mul_le_mul_of_nonneg_left hX (show 0 ≤ 4 * d.scale ^ 2 by positivity)\n        nlinarith\n      _ ≤ 8 * d.scale ^ 3 := by positivity\n  have hmass : (e.primitiveFirstFactorCarrier.card : ℝ) *\n      (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2 ≤ 512 * d.scale ^ 9 := by\n    calc\n      _ ≤ (2 * d.scale) * (2 * d.scale) ^ 2 * (8 * d.scale ^ 3) ^ 2 :=\n        mul_le_mul\n          (mul_le_mul hP (pow_le_pow_left₀ (Nat.cast_nonneg _) hN 2)\n            (sq_nonneg _) (by positivity))\n          (pow_le_pow_left₀ (by dsimp only [M]; positivity) hM 2) (sq_nonneg _) (by positivity)\n      _ = _ := by ring\n  calc\n    _ ≤ (e.primitiveFirstFactorCarrier.card : ℝ) *\n        ((e.transposedAtom.betaCarrier.card : ℝ) *\n          ((e.transposedAtom.betaCarrier.card : ℝ) * E)) := hfinite\n    _ = ((e.primitiveFirstFactorCarrier.card : ℝ) *\n          (e.transposedAtom.betaCarrier.card : ℝ) ^ 2 * M ^ 2) * (C / Z ^ (r - 1)) := by\n      dsimp only [E]\n      ring\n    _ ≤ (512 * d.scale ^ 9) * (C / Z ^ (r - 1)) :=\n      mul_le_mul_of_nonneg_right hmass (by positivity)\n    _ = _ := by ring"
+    },
+    {
+      "name": "actual_smallSupported_smoothFiniteFrequency_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 717,
+      "char_range": [
+        33926,
+        38333
+      ],
+      "byte_range": [
+        35483,
+        40038
+      ],
+      "true_full_header": "theorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "proof_or_body_delimiter": " := by",
+      "complete_body_after_delimiter": "\n  dsimp only\n  let r : ℕ := Nat.ceil (11 / eta) + 1\n  have hr : 2 ≤ r := by\n    have hc : 0 < Nat.ceil (11 / eta) := Nat.ceil_pos.mpr (div_pos (by norm_num) heta)\n    dsimp only [r]\n    omega\n  have horder : (11 : ℝ) ≤ eta * ((r - 1 : ℕ) : ℝ) := by\n    have hc := (div_le_iff₀ heta).mp (Nat.le_ceil (11 / eta))\n    have he : r - 1 = Nat.ceil (11 / eta) := by dsimp only [r]; omega\n    rw [he]\n    nlinarith\n  obtain ⟨C, hC, htail⟩ := cleaned_core_smooth_tail_bound r hr\n  obtain ⟨xL, _hxL, hlogs⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 0 sigma hsigma (by norm_num : 0 < (1 : ℝ))\n  obtain ⟨xP, hxP⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget (2048 * C) A\n      (by positivity) (by norm_num : 0 < (1 : ℝ)))\n  refine ⟨max 2 (max xL xP), (by norm_num : (1 : ℝ) < 2).trans_le\n    (le_max_left _ _), fun d hd hx => ?_⟩\n  have hX1 := one_le_scale hd\n  have hX : 0 < d.scale := zero_lt_one.trans_le hX1\n  have hZ : 0 < d.scale ^ eta := Real.rpow_pos_of_pos hX _\n  have hxL' : xL ≤ d.scale :=\n    (le_max_left xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hxP' : xP ≤ d.scale :=\n    (le_max_right xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hlog : (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) ≤ d.scale := by\n    simpa only [pow_zero, mul_one, Real.rpow_one] using hlogs B kappa c0 d hd hxL'\n  obtain ⟨_, hVx, hQ1x, _, _⟩ := geometry_le_scale hd hsigma\n  let W : ℝ := (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n  have hW : 0 ≤ W := by dsimp only [W]; positivity\n  have hcoef : 4 * d.V * d.Q1 ≤ 4 * d.scale ^ 2 := by\n    calc\n      _ ≤ (4 * d.scale) * d.scale := mul_le_mul\n        (mul_le_mul_of_nonneg_left hVx (by norm_num)) hQ1x\n        (by linarith [hd.2.2.1]) (by positivity)\n      _ = _ := by ring\n  have hH : 0 ≤ (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n    have hh := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    positivity\n  have houtside : W ≤ 4 * d.scale ^ 3 := by\n    calc\n      _ ≤ 4 * d.V * d.Q1 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n        d.sharedFirstFactor_outside_le hd\n      _ ≤ (4 * d.scale ^ 2) * d.scale := mul_le_mul hcoef hlog hH (by positivity)\n      _ = _ := by ring\n  have hden : (d.scale ^ eta) ^ (r - 1) =\n      d.scale ^ (eta * ((r - 1 : ℕ) : ℝ)) := by\n    rw [← Real.rpow_natCast, ← Real.rpow_mul hX.le]\n  have hdenLower : d.scale ^ 11 ≤ (d.scale ^ eta) ^ (r - 1) := by\n    rw [hden, ← Real.rpow_natCast d.scale 11]\n    exact Real.rpow_le_rpow_of_exponent_le hX1 horder\n  have ht := htail B sigma kappa c0 hsigma d hd\n    (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta) hZ\n  have hweighted : W *\n      ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) -\n        d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta)‖ ≤\n            (2048 * C) * d.scale := by\n    calc\n      _ ≤ W * (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_left ht hW\n      _ ≤ (4 * d.scale ^ 3) *\n          (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_right houtside (by positivity)\n      _ = (2048 * C) * d.scale ^ 12 / (d.scale ^ eta) ^ (r - 1) := by ring\n      _ ≤ (2048 * C) * d.scale ^ 12 / d.scale ^ 11 :=\n        div_le_div_of_nonneg_left (by positivity) (pow_pos hX _) hdenLower\n      _ = _ := by field_simp [hX.ne']\n  have hpayment : (2048 * C) * d.scale ≤ d.scale ^ 2 / (Real.log d.scale) ^ A := by\n    simpa only [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]\n      using hxP d.scale hxP'\n  exact hweighted.trans hpayment",
+      "complete_declaration": "theorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  dsimp only\n  let r : ℕ := Nat.ceil (11 / eta) + 1\n  have hr : 2 ≤ r := by\n    have hc : 0 < Nat.ceil (11 / eta) := Nat.ceil_pos.mpr (div_pos (by norm_num) heta)\n    dsimp only [r]\n    omega\n  have horder : (11 : ℝ) ≤ eta * ((r - 1 : ℕ) : ℝ) := by\n    have hc := (div_le_iff₀ heta).mp (Nat.le_ceil (11 / eta))\n    have he : r - 1 = Nat.ceil (11 / eta) := by dsimp only [r]; omega\n    rw [he]\n    nlinarith\n  obtain ⟨C, hC, htail⟩ := cleaned_core_smooth_tail_bound r hr\n  obtain ⟨xL, _hxL, hlogs⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 0 sigma hsigma (by norm_num : 0 < (1 : ℝ))\n  obtain ⟨xP, hxP⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget (2048 * C) A\n      (by positivity) (by norm_num : 0 < (1 : ℝ)))\n  refine ⟨max 2 (max xL xP), (by norm_num : (1 : ℝ) < 2).trans_le\n    (le_max_left _ _), fun d hd hx => ?_⟩\n  have hX1 := one_le_scale hd\n  have hX : 0 < d.scale := zero_lt_one.trans_le hX1\n  have hZ : 0 < d.scale ^ eta := Real.rpow_pos_of_pos hX _\n  have hxL' : xL ≤ d.scale :=\n    (le_max_left xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hxP' : xP ≤ d.scale :=\n    (le_max_right xL xP).trans ((le_max_right 2 (max xL xP)).trans hx)\n  have hlog : (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) ≤ d.scale := by\n    simpa only [pow_zero, mul_one, Real.rpow_one] using hlogs B kappa c0 d hd hxL'\n  obtain ⟨_, hVx, hQ1x, _, _⟩ := geometry_le_scale hd hsigma\n  let W : ℝ := (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n  have hW : 0 ≤ W := by dsimp only [W]; positivity\n  have hcoef : 4 * d.V * d.Q1 ≤ 4 * d.scale ^ 2 := by\n    calc\n      _ ≤ (4 * d.scale) * d.scale := mul_le_mul\n        (mul_le_mul_of_nonneg_left hVx (by norm_num)) hQ1x\n        (by linarith [hd.2.2.1]) (by positivity)\n      _ = _ := by ring\n  have hH : 0 ≤ (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n    have hh := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    positivity\n  have houtside : W ≤ 4 * d.scale ^ 3 := by\n    calc\n      _ ≤ 4 * d.V * d.Q1 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n        d.sharedFirstFactor_outside_le hd\n      _ ≤ (4 * d.scale ^ 2) * d.scale := mul_le_mul hcoef hlog hH (by positivity)\n      _ = _ := by ring\n  have hden : (d.scale ^ eta) ^ (r - 1) =\n      d.scale ^ (eta * ((r - 1 : ℕ) : ℝ)) := by\n    rw [← Real.rpow_natCast, ← Real.rpow_mul hX.le]\n  have hdenLower : d.scale ^ 11 ≤ (d.scale ^ eta) ^ (r - 1) := by\n    rw [hden, ← Real.rpow_natCast d.scale 11]\n    exact Real.rpow_le_rpow_of_exponent_le hX1 horder\n  have ht := htail B sigma kappa c0 hsigma d hd\n    (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta) hZ\n  have hweighted : W *\n      ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) -\n        d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroSmooth\n          (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta)‖ ≤\n            (2048 * C) * d.scale := by\n    calc\n      _ ≤ W * (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_left ht hW\n      _ ≤ (4 * d.scale ^ 3) *\n          (512 * C * d.scale ^ 9 / (d.scale ^ eta) ^ (r - 1)) :=\n        mul_le_mul_of_nonneg_right houtside (by positivity)\n      _ = (2048 * C) * d.scale ^ 12 / (d.scale ^ eta) ^ (r - 1) := by ring\n      _ ≤ (2048 * C) * d.scale ^ 12 / d.scale ^ 11 :=\n        div_le_div_of_nonneg_left (by positivity) (pow_pos hX _) hdenLower\n      _ = _ := by field_simp [hX.ne']\n  have hpayment : (2048 * C) * d.scale ≤ d.scale ^ 2 / (Real.log d.scale) ^ A := by\n    simpa only [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]\n      using hxP d.scale hxP'\n  exact hweighted.trans hpayment"
+    }
+  ],
+  "four_literal_primitives_byteexact": true,
+  "ONE_literal_public_type_byteexact": true,
+  "private_support_helper_literal_full_type_byteexact": true,
+  "literal_deviations_from_scope": "No deviation in four complete definition texts, ONE public true header or required private support helper true header. Added only file/namespace/open/noncomputable scaffolding and necessary29private actual proofs. Internal order r>=2 uses rapid decayr+1 and errorr-1, equivalent to proposal rnat=r-1. No public constants/quantifiers or actual source gates changed.",
+  "genuine_complete_proof_route": {
+    "low_pass": "Actual existing bump affine map; private ContDiff, [0,1], plateau|u|<=1, zero|u|>=2 proved directly.",
+    "support": "Exact gcd(v,w)*lcm(pv,pw)=p*v*w for arbitrary positive p. Original positive carriers bound the left by32Q1R²S²; cutoff support gives64 and signed h.natAbs ceil membership in the same D packet.",
+    "row_tail": "Finite support equality plus actual signed nonzero Poisson majorant. High rapidDecay orderr+1 bounds (1-chi)*P by C/Z^(r-1)*poissonNonzeroDecay. Signed tsum2 gives row2C/Z^(r-1). No H-card or L/V loss.",
+    "literal_source_dictionary": "Both q1Slice indicators are actually collapsed by sum_eq_single and star. Full common pair series equals literal ordered4tail source, Re before arbitrary complex coefficients.",
+    "complete_finite_count": "Each tail gamma2*gamma3 norm<=1; four tail sums yield (cardR*cardS)^2*Crow/Z^(r-1). Actual Pcard*Ncard²*(cardR*cardS)^2<=512X^9 with all original paired masks. No p/D/g/d1/root label frozen for free.",
+    "original_outside_once": "Original d W<=4VQ1*logmoment<=4X³ at a fixed log threshold; W*error<=2048Crow X^12/(X^eta)^(r-1). No replacement by cleaned beta moment.",
+    "unit_budget": "r=ceil(11/eta)+1 before d ensures eta*(r-1)>=11; weighted remainder<=2048Crow X. Owned scalar delta1 threshold gives unit X²/log^A. One max threshold precedes all varying d."
+  },
+  "reused_frozen_private_patterns": {
+    "snapshot": {
+      "path": ".lake/proof-continuation/source-reviews/20261021-tail-b25d-actual-one-warning-root-proposed-repair/proposed-after.lean.txt",
+      "sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+      "current_status": "Exact14e7 runtime retry in progress, notowned yet"
+    },
+    "complete_helpers_copied": [
+      "mem_window_iff",
+      "norm_sum_sub_le_card",
+      "coeff_real_tail_norm_le",
+      "factorCarrier_prefix",
+      "factor_pos",
+      "card_factorCarrier_le",
+      "betaCarrier_card_le",
+      "primitive_card_le",
+      "geometry_le_scale",
+      "clean_transposed_beta_norm_le"
+    ],
+    "public_payment_proof_pattern": "Frozen original Tail payment adapted to newcore helper and target, initial dsimp for literal let chain; no private imported names called.",
+    "parent_latest_root_report": "Root explicitly reports actual14e7 strict/stock/all33/fullafter owned; original receipt3b00cd2e4e3eee050a073642179e6acc7c636e50e9ed888517cb8d5007c7f155, declarationsa00f62597c59af814bbfc44e0809344a3f5081bf969687c9c11729d0966bbdd5. Author did not rerun or infer acceptance from a cache."
+  },
+  "analytic_boundaries": [
+    "No equality of smooth and sharp truncated cores.",
+    "Private cutoff ContDiff proved in new source; prior proposed normalized mixed-derivative/modulated-Schwartz estimates are not added as owned or assumed APIs here.",
+    "Mellin/Fourier operatorL1 separation, root residue/character costs, actual moving-a seminorm costs and genuine7/32 spectral cancellation remain separate unproved goals.",
+    "No currentC/K, original exactCor1.2 or hLower/hUpper closure claim."
+  ],
+  "guard": {
+    "latest_actual_used_percent": 14,
+    "remaining_percent": 86,
+    "stop_any_valid_remaining_at_most_percent": 50,
+    "no_compiler_lake_checker_or_subagents": true,
+    "no_existing_Lean_catalog_tools_CI_pins_cache_latex_automation_modified": true
+  },
+  "next": "HOLD for entire source root and non-author implementation/API review; author issues no compiler gate."
+}

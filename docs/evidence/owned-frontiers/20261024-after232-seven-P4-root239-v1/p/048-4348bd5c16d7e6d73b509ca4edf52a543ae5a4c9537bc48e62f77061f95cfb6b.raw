@@ -1,0 +1,533 @@
+"""UNEXECUTED SOURCEONLY finite record-append stage, not terminal acceptance.
+
+No compiler/checker/helper execution or historical JSON traversal.
+Future ROOT CLI calls may write fresh intake/proposal JSON only; unexecuted here.
+ROOT must supply actual completed strict and stock+ALL originals before calling.
+Returned proposals require separate independent terminal review and ROOT signing.
+The intake schema is a proposed local contract, not an observed ROOT receipt.
+"""
+import copy
+import hashlib
+import json
+from pathlib import Path
+
+TARGET_MODULES = (
+    'ImbalancedChen.ActualThirdOriginalCoupledRecurrence',
+    'ImbalancedChen.ActualThirdOriginalLocalCurvature',
+    'ImbalancedChen.ActualThirdOriginalSharpChord',
+    'ImbalancedChen.ActualThirdOriginalWeights',
+    'ImbalancedChen.ActualThirdOriginalWeightedCurvature',
+    'ImbalancedChen.ActualThirdOriginalLiteralNodes',
+    'ImbalancedChen.ActualThirdOriginalRationalQuery',
+)
+BASELINE_ACCEPTANCE = '.lake/proof-continuation/source-reviews/20261024e-root-after229-three-P3-terminal-acceptance.json'
+BASELINE_ACCEPTANCE_SHA256 = '97c98ad57b4f77e48e12b27d9476364f952a7e1efe04734356aeb99245d27b37'
+BASELINE_PUBLICATION = '.lake/proof-continuation/publication-integrity/20261024i-root232-GITHUB-PUBLICATION.json'
+BASELINE_PUBLICATION_SHA256 = '93cdb3e0c3d62e685568a9c1d2783fda25b99460437c1c5ae8731e359c31dabd'
+SLOTS = {'.olean', '.olean.private', '.olean.server', '.ilean', '.ir'}
+STD3 = {'propext', 'Classical.choice', 'Quot.sound'}
+
+
+def need(ok, why):
+    if not ok:
+        raise ValueError(why)
+
+
+class FinitePaths:
+    """Fixed-repository aliases and exact runtime provider files, not broad roots."""
+    WINDOWS_ROOT = 'E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+    WSL_ROOT = '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+    PROVIDERS = Path('/home/slava/codex-lean-ve/native-packages')
+    BIN = Path('/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin')
+    RUNTIME_SHA = '81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be'
+
+    def __init__(self, root):
+        self.root = Path(root).resolve(strict=True)
+        need(self.root == Path(self.WSL_ROOT).resolve(strict=True), 'Use the fixed original WSL repository')
+        self.runtime = self.root / '.lake/proof-continuation/runtime.py'
+        need(hashlib.sha256(self.runtime.read_bytes()).hexdigest() == self.RUNTIME_SHA, 'Pinned runtime changed')
+        self.manifest = self.root / 'lake-manifest.json'
+        self.manifest_sha = hashlib.sha256(self.manifest.read_bytes()).hexdigest()
+        self.packages = json.loads(self.manifest.read_text(encoding='utf-8'))['packages']
+        self.expected, self.provider_files, self.checked, self.slot_paths = {}, set(), {}, {}
+
+    def normalize(self, name):
+        need(isinstance(name, (str, Path)), 'Path string required')
+        raw = str(name).replace(chr(92), '/')
+        if len(raw) >= 3 and raw[1:3] == ':/':
+            need(raw == self.WINDOWS_ROOT or raw.startswith(self.WINDOWS_ROOT + '/'), 'Windows path outside fixed repository')
+            path = self.root / raw[len(self.WINDOWS_ROOT):].lstrip('/')
+            need(path.resolve().is_relative_to(self.root), 'Windows path escapes fixed repository')
+            return path
+        path = Path(raw)
+        return path if path.is_absolute() else self.root / path
+
+    def provider_gate(self, package):
+        import subprocess
+        name, rev = package['name'], package['rev']
+        need(isinstance(name, str) and name.isidentifier() and isinstance(rev, str)
+             and len(rev) == 40 and set(rev) <= set('0123456789abcdef'), 'Malformed pinned provider')
+        provider = self.PROVIDERS / name
+        head = subprocess.run(['git', '-C', str(provider), 'rev-parse', 'HEAD'], check=True,
+                              capture_output=True, text=True).stdout.strip()
+        need(head == rev, 'Provider HEAD differs from pinned manifest: ' + name)
+        subprocess.run(['git', '-C', str(provider), 'diff', '--quiet', 'HEAD', '--'], check=True)
+        self.checked[name] = package
+
+    def tracked_source_gate(self, package, relative_source):
+        import subprocess
+        result = subprocess.run(['git', '-C', str(self.PROVIDERS / package['name']),
+                                 'ls-files', '--error-unmatch', '--', relative_source],
+                                check=True, capture_output=True, text=True)
+        need(result.stdout.strip() == relative_source, 'Selected logical provider source is not tracked: ' + relative_source)
+
+    def prepare(self, modules):
+        # Match pinned Runtime.paths: project first; providers in manifest order.
+        for module in sorted(modules):
+            need(isinstance(module, str) and all(p.isidentifier() for p in module.split('.')), 'Malformed module')
+            rel = module.replace('.', '/')
+            if module == 'ImbalancedChen' or module.startswith('ImbalancedChen.'):
+                source = self.root / (rel + '.lean')
+                base = self.root / '.lake/proof-continuation/lib/lean' / (rel + '.olean')
+            else:
+                selected = None
+                for package in self.packages:
+                    name = package['name']
+                    need(isinstance(name, str) and name.isidentifier(), 'Unsafe package path')
+                    candidate = self.PROVIDERS / name / (rel + '.lean')
+                    if candidate.is_file():
+                        selected = package
+                        source = candidate
+                        base = self.PROVIDERS / name / '.lake/build/lib/lean' / (rel + '.olean')
+                        break
+                need(selected is not None, 'No pinned runtime source provider for current module: ' + module)
+                if selected['name'] not in self.checked:
+                    self.provider_gate(selected)
+                self.tracked_source_gate(selected, rel + '.lean')
+                self.provider_files.add(source.resolve(strict=True))
+                self.provider_files.update(base.with_name(base.name[:-6] + suffix).resolve(strict=True)
+                                           for suffix in SLOTS if base.with_name(base.name[:-6] + suffix).is_file())
+            self.expected[module] = (source.resolve(strict=True), base.resolve(strict=True))
+            self.slot_paths[module] = {suffix: base.with_name(base.name[:-6] + suffix).resolve(strict=True)
+                                       for suffix in SLOTS if base.with_name(base.name[:-6] + suffix).is_file()}
+
+    def bound_path(self, name, external_tool=False):
+        path = self.normalize(name).resolve(strict=True)
+        allowed_tool = external_tool and path in {(self.BIN / name).resolve(strict=True)
+                                                   for name in ('lean', 'lean.real', 'leanchecker')}
+        need(path.is_file() and (allowed_tool or path.is_relative_to(self.root) or path in self.provider_files),
+             'Outside fixed repository and exact current runtime provider file set')
+        return path
+
+    def finish(self):
+        need(hashlib.sha256(self.runtime.read_bytes()).hexdigest() == self.RUNTIME_SHA
+             and hashlib.sha256(self.manifest.read_bytes()).hexdigest() == self.manifest_sha, 'Runtime/manifest drift')
+        for package in list(self.checked.values()):
+            self.provider_gate(package)
+        for module, (source, base) in self.expected.items():
+            # Re-resolve original provider spellings to catch a changed symlink.
+            rel = module.replace('.', '/')
+            if module == 'ImbalancedChen' or module.startswith('ImbalancedChen.'):
+                current_source = self.root / (rel + '.lean')
+                current_base = self.root / '.lake/proof-continuation/lib/lean' / (rel + '.olean')
+            else:
+                package = next(p for p in self.packages if (self.PROVIDERS / p['name'] / (rel + '.lean')).is_file())
+                self.tracked_source_gate(package, rel + '.lean')
+                current_source = self.PROVIDERS / package['name'] / (rel + '.lean')
+                current_base = self.PROVIDERS / package['name'] / '.lake/build/lib/lean' / (rel + '.olean')
+            need(current_source.resolve(strict=True) == source and current_base.resolve(strict=True) == base,
+                 'Runtime module path/symlink drift')
+            current_slots = {suffix: current_base.with_name(current_base.name[:-6] + suffix).resolve(strict=True)
+                             for suffix in SLOTS if current_base.with_name(current_base.name[:-6] + suffix).is_file()}
+            need(current_slots == self.slot_paths[module], 'Runtime object slot/symlink drift')
+
+
+def validate_target_map(expected_targets):
+    need(isinstance(expected_targets, dict) and set(expected_targets) == set(TARGET_MODULES),
+         'Exactly the seven named P4 targets and no others are required')
+    need(all(isinstance(sha, str) and len(sha) == 64 and set(sha) <= set('0123456789abcdef')
+             for sha in expected_targets.values()), 'Each target requires an explicit lowercase final source SHA256')
+
+
+def parse_target_sources(values):
+    result = {}
+    for value in values:
+        need(isinstance(value, str) and value.count('=') == 1, '--target-source must be MODULE=LOWERCASE_SHA256')
+        module, sha = value.split('=', 1)
+        need(module in TARGET_MODULES and module not in result, 'Unknown or duplicate --target-source module')
+        result[module] = sha
+    validate_target_map(result)
+    return result
+
+
+def verify_published_baseline(read, baseline_acceptance_sha256):
+    need(baseline_acceptance_sha256 == BASELINE_ACCEPTANCE_SHA256, 'Exact ROOT232 acceptance SHA required')
+    acceptance = read({'path': BASELINE_ACCEPTANCE, 'sha256': baseline_acceptance_sha256})
+    publication = read({'path': BASELINE_PUBLICATION, 'sha256': BASELINE_PUBLICATION_SHA256})
+    need(publication['status'] == 'ROOT_AFTER229_THREE_P3_GITHUB_PUBLISHED_AND_REMOTE_BRANCH_VERIFIED'
+         and publication['rootAcceptance'] == {'path': BASELINE_ACCEPTANCE, 'sha256': baseline_acceptance_sha256}
+         and publication['owned_modules'] == 232 and publication['complete_declaration_records'] == 6406
+         and publication['distinct_constant_fullnames'] == 6387 and publication['original_owned_receipts'] == 162
+         and publication['pushed'] is True and publication['remote_branch_verified'] is True,
+         'ROOT232 publication must bind the exact acceptance and verified push')
+    need(acceptance['status'] == 'ROOT_AFTER229_THREE_P3_TERMINAL_ACCEPTED'
+         and [acceptance[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')]
+         == [232, 6406, 6387, 162], 'Exact accepted ROOT232 baseline required')
+    return acceptance
+
+
+def propose(root, intake_ref, baseline_acceptance_sha256, expected_targets):
+    validate_target_map(expected_targets)
+    """Return in-memory record proposals; never create accepted evidence."""
+    root = Path(root).resolve(strict=True)
+    paths = FinitePaths(root)
+    pinned = {}
+
+    def bound(reference, external_tool=False):
+        need(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'Exact reference pair required')
+        name, expected = reference['path'], reference['sha256']
+        need(isinstance(name, str) and isinstance(expected, str) and len(expected) == 64
+             and set(expected) <= set('0123456789abcdef'), 'Malformed reference')
+        path = paths.bound_path(name, external_tool)
+        need(hashlib.sha256(path.read_bytes()).hexdigest() == expected, 'Original bytes changed: ' + name)
+        need(path not in pinned or pinned[path] == expected, 'Conflicting reference hashes')
+        pinned[path] = expected
+        return path
+
+    def read(reference):
+        return json.loads(bound(reference).read_text(encoding='utf-8'))
+
+    def source_and_parts(module, source_sha, parts, files):
+        need(module in files and set(files[module]) == {'source', 'object_parts'}, 'Explicit module files required')
+        spec = files[module]
+        need(spec['source']['sha256'] == source_sha
+             and bound(spec['source']) == paths.expected[module][0], 'Source/module/runtime-provider binding')
+        need(isinstance(parts, dict) and '.olean' in parts and set(parts) <= SLOTS, 'Object slots required')
+        need(set(spec['object_parts']) == set(parts), 'Current object slot set differs')
+        for suffix, sha in parts.items():
+            ref = spec['object_parts'][suffix]
+            path = bound(ref)
+            expected_base = paths.expected[module][1]
+            need(ref['sha256'] == sha and path == expected_base.with_name(expected_base.name[:-6] + suffix).resolve(strict=True), 'Object/module/runtime-provider binding')
+        base = bound(spec['object_parts']['.olean'])
+        actual = {suffix for suffix in SLOTS if base.with_name(base.name[:-6] + suffix).exists()}
+        need(actual == set(parts), 'Unbound current object slot exists')
+
+    def guarded(result, exit_key):
+        need(result['status'] == 'PASS' and type(result[exit_key]) is int and result[exit_key] == 0
+             and result['guard_error'] is None and result['rss_guard']['limit_mib'] == 6656
+             and result['rss_guard']['signals'] == [] and type(result['max_rss_kib']) is int
+             and 0 <= result['max_rss_kib'] <= 6656 * 1024
+             and isinstance(result['resource_reason'], str) and bool(result['resource_reason'].strip()), 'Original process failed/resource mismatch')
+
+    acceptance = verify_published_baseline(read, baseline_acceptance_sha256)
+    baseline = read(acceptance['current_census'])
+    old_rows = read(acceptance['complete_declarations'])
+    need(len(baseline['modules']) == 232 and len(old_rows) == 6406
+         and len({r['name'] for r in old_rows}) == 6387
+         and len({(r['module'], r['name']) for r in old_rows}) == 6406, 'Baseline record counts/identity')
+    intake = read(intake_ref)
+    need(intake['schema'] == 'after232-seven-finite-record-append-draft-input-v1'
+         and intake['targets'] == expected_targets and set(intake['strict_producers']) == set(expected_targets), 'Exact seven final sources required')
+    need(intake['baseline_acceptance'] == {'path': BASELINE_ACCEPTANCE, 'sha256': baseline_acceptance_sha256}, 'Intake baseline binding')
+    files = intake['current_module_files']
+    paths.prepare(files)
+    # Explicit finite current files only: never descend through referenced JSON.
+    pins = {name: bound(ref) for name, ref in intake['pins'].items()}
+    need(set(pins) == {'lean-toolchain', 'lakefile.toml', 'lake-manifest.json'}
+         and all(pins[name] == root / name for name in pins), 'Project pins required')
+    pin_hashes = {name: intake['pins'][name]['sha256'] for name in pins}
+    tools = intake['tools']
+    need(set(tools) == {'lean', 'lean_real', 'leanchecker', 'runtime', 'audit_runner', 'audit_template'}, 'Current tool refs required')
+    tool_paths = {name: bound(ref, external_tool=name in {'lean', 'lean_real', 'leanchecker'})
+                  for name, ref in tools.items()}
+    command_paths = intake['producer_command_paths']
+    need(set(command_paths) == {'lean', 'leanchecker'} and all(isinstance(p, str) and p for p in command_paths.values()), 'Actual producer command paths required')
+    for name in ('lean', 'leanchecker'):
+        need(command_paths[name].replace('\\', '/').endswith('/' + name), 'Producer command executable name')
+        need(Path(command_paths[name]).resolve(strict=True) == tool_paths[name], 'Actual command executable/reference binding')
+    strict_parts = {}
+    finite_modules = set(expected_targets)
+    for module in expected_targets:
+        spec = intake['strict_producers'][module]
+        need(set(spec) == {'receipt', 'stdout'}, 'Original strict receipt/stdout required')
+        receipt = read(spec['receipt'])
+        guarded(receipt, 'exit_code')
+        need(receipt['module'] == module and receipt['warnings_as_errors'] is True
+             and receipt['lean_memory_mib'] == 6144 and receipt['binding'] == receipt['binding_after']
+             and receipt['runtime_sha256'] == receipt['runtime_sha256_after'] == tools['runtime']['sha256'], 'Strict original binding/policy')
+        need(bound(spec['receipt']).parent.parent == root / '.lake/proof-continuation/runs', 'Original strict run provenance')
+        need(bound(spec['stdout']) == (bound(spec['receipt']).parent / 'stdout.log').resolve(strict=True), 'Original strict stdout.log location')
+        binding = receipt['binding']
+        need(binding['source_sha256'] == expected_targets[module] and binding['pins'] == pin_hashes
+             and binding['lean_real_sha256'] == tools['lean_real']['sha256']
+             and binding['lean_wrapper_sha256'] == tools['lean']['sha256'], 'Strict source/pins/compiler')
+        command = receipt['command']
+        need(command[0] == command_paths['lean'] and command[1:5] == ['-j2', '-M6144', '-DwarningAsError=true', '-o']
+             and len(command) == 7 and command[-1] == module.replace('.', '/') + '.lean', 'Strict compiler arguments')
+        need(Path(command[5]).resolve(strict=True) == bound(files[module]['object_parts']['.olean'])
+             and Path(receipt['cwd']).resolve(strict=True) == root, 'Strict output/cwd binding')
+        strict_parts[module] = receipt['object_parts']
+        source_and_parts(module, expected_targets[module], strict_parts[module], files)
+        need(set(binding['direct_source_sha256']) == set(binding['dependency_parts']) == set(binding['dependencies']), 'Direct dependency maps differ')
+        for dep, sha in binding['direct_source_sha256'].items():
+            finite_modules.add(dep)
+            source_and_parts(dep, sha, binding['dependency_parts'][dep], files)
+            need(binding['dependencies'][dep] == binding['dependency_parts'][dep]['.olean'], 'Direct primary object binding')
+    need(set(files) == finite_modules, 'Only target/direct current dependency module files belong in this record-stage intake')
+    entries = copy.deepcopy(baseline['modules'])
+    need(not set(expected_targets) & set(entries), 'Seven modules must append, never replace')
+    # Preserve accepted primary baseline entries/records without replaying their ancestry.
+    old_primary_rows = []
+    for module, entry in entries.items():
+        need(entry['module'] == module, 'Baseline key mismatch')
+        need(hashlib.sha256((root / (module.replace('.', '/') + '.lean')).read_bytes()).hexdigest() == entry['source_sha256'], 'Baseline source drift')
+        receipt_path = bound({'path': entry['owned_receipt'], 'sha256': entry['owned_receipt_sha256']})
+        declarations_path = bound({'path': str(receipt_path.parent / 'declarations.json'),
+                                   'sha256': entry['declarations_json_sha256']})
+        module_rows = [r for r in json.loads(declarations_path.read_text(encoding='utf-8')) if r['module'] == module]
+        need(len(module_rows) == entry['complete_serialized_declarations'], 'Baseline primary record count drift')
+        old_primary_rows.extend(module_rows)
+        base = root / '.lake/proof-continuation/lib/lean' / (module.replace('.', '/') + '.olean')
+        actual_parts = {suffix: hashlib.sha256(base.with_name(base.name[:-6] + suffix).read_bytes()).hexdigest()
+                        for suffix in SLOTS if base.with_name(base.name[:-6] + suffix).exists()}
+        need(actual_parts == entry['object_parts'], 'Baseline current object slot drift')
+        for suffix, sha in actual_parts.items():
+            bound({'path': str(base.with_name(base.name[:-6] + suffix)), 'sha256': sha})
+        bound({'path': module.replace('.', '/') + '.lean', 'sha256': entry['source_sha256']})
+    need(sorted(old_primary_rows, key=lambda r: (r['module'], r['name'])) == old_rows, 'Baseline 6406 primary records differ')
+    audit_specs = intake['audit_receipts']
+    need(isinstance(audit_specs, list) and len(audit_specs) == 1, 'Exactly one completed original stock+ALL audit triple required')
+    new_rows, covered = [], set()
+    for spec in audit_specs:
+        need(set(spec) == {'ref', 'targets', 'sidecars'} and spec['targets']
+             and set(spec['targets']) <= set(expected_targets) and not covered & set(spec['targets']), 'Audit groups must partition targets')
+        expected = {m: expected_targets[m] for m in spec['targets']}
+        need(spec['targets'] == expected, 'Audit final source hash mismatch')
+        path = bound(spec['ref'])
+        need(path.name == 'receipt.json' and path.parent.parent == root / '.lake/proof-continuation/audits', 'Original audit provenance')
+        audit = read(spec['ref'])
+        side_names = {'OwnedAudit.lean', 'declarations.json', 'declarations.log', 'audit-process.json'}
+        side_names.update('replay-' + m + '.' + ext for m in expected for ext in ('json', 'log'))
+        need(set(spec['sidecars']) == side_names, 'Every original audit sidecar required')
+        for name, sha in spec['sidecars'].items():
+            bound({'path': str(path.parent / name), 'sha256': sha})
+        need(audit['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS' and audit['targets'] == expected
+             and audit['inputs_before'] == audit['inputs_after'] and audit['external_closure_replay_claimed'] is False
+             and audit['unconditional_main_claimed'] is False, 'Original stock+ALL audit failed or inflated')
+        inputs = audit['inputs_before']
+        need(inputs['sources'] == expected and inputs['pins'] == pin_hashes
+             and inputs['owned_object_parts'] == {m: strict_parts[m] for m in expected}
+             and inputs['lean_real_sha256'] == tools['lean_real']['sha256']
+             and inputs['checker_sha256'] == tools['leanchecker']['sha256'], 'Audit current strict/compiler/pins binding')
+        need(audit['audit_runner_sha256'] == tools['audit_runner']['sha256']
+             and audit['source_template_sha256'] == tools['audit_template']['sha256']
+             and audit['generated_audit_sha256'] == spec['sidecars']['OwnedAudit.lean'], 'Original runner/template/generated source binding')
+        process = json.loads((path.parent / 'audit-process.json').read_text(encoding='utf-8'))
+        guarded(process, 'returncode')
+        need(len(process['command']) == 5 and process['command'][:4] == [command_paths['lean'], '-j2', '-M6144', '-DwarningAsError=true']
+             and paths.normalize(process['command'][4]).resolve(strict=True) == (path.parent / 'OwnedAudit.lean').resolve(strict=True), 'ALL compiler command exact source')
+        if 'cwd' in process:
+            need(paths.normalize(process['cwd']).resolve(strict=True) == root, 'ALL process cwd')
+        stages = audit['stages']
+        full = [s for s in stages if s['kind'] == 'full_inventory_type_axioms']
+        need(len(full) == 1 and full[0]['exit_code'] == 0 and full[0]['command'] == process['command']
+             and full[0]['log_sha256'] == spec['sidecars']['declarations.log'], 'Exactly one completed ALL stage')
+        stocks = [s for s in stages if s['kind'] == 'stock_replay']
+        need(len(stocks) == len(expected) and {s['module'] for s in stocks} == set(expected), 'Stock replay coverage')
+        for stage in stocks:
+            module, result = stage['module'], stage['result']
+            guarded(result, 'returncode')
+            need(result['command'] == [command_paths['leanchecker'], '--verbose', module]
+                 and result['log_sha256'] == spec['sidecars']['replay-' + module + '.log']
+                 and json.loads((path.parent / ('replay-' + module + '.json')).read_text(encoding='utf-8')) == result, 'Original stock sidecar/command')
+        emitted, inventories = [], {}
+        for line in (path.parent / 'declarations.log').read_text(encoding='utf-8').splitlines():
+            if line.startswith('P0_QUEUE_DECL '):
+                emitted.append(json.loads(line.split(' ', 1)[1]))
+            elif line.startswith('P0_QUEUE_INVENTORY '):
+                inv = json.loads(line.split(' ', 1)[1])
+                need(inv['module'] not in inventories, 'Duplicate inventory')
+                inventories[inv['module']] = inv
+        rows = json.loads((path.parent / 'declarations.json').read_text(encoding='utf-8'))
+        key = lambda r: (r['module'], r['name'])
+        need(sorted(rows, key=key) == sorted(emitted, key=key)
+             and len({key(r) for r in rows}) == len(rows)
+             and {r['module'] for r in rows} == set(expected) == set(inventories), 'Original emitted/JSON record identity')
+        for row in rows:
+            need(isinstance(row['name'], str) and bool(row['name']) and isinstance(row['type'], str) and bool(row['type'])
+                 and '\u22ef' not in row['type'] and all(row[k] is False for k in ('unsafe', 'partial', 'axiom'))
+                 and isinstance(row['axioms'], list) and set(row['axioms']) <= STD3, 'Unsafe/truncated/non-std3 record')
+        for module in expected:
+            names = [r['name'] for r in rows if r['module'] == module]
+            inv = inventories[module]
+            need(len(names) > 0 and len(names) == audit['declaration_counts'][module]
+                 and len(inv['environment']) == len(set(inv['environment'])) == len(names)
+                 and len(inv['serialized']) == len(set(inv['serialized'])) == len(names)
+                 and set(names) == set(inv['serialized']) == set(inv['environment']), 'Incomplete module inventory')
+            entries[module] = {'module': module, 'source_sha256': expected_targets[module], 'object_parts': strict_parts[module],
+                               'owned_receipt': str(path), 'owned_receipt_sha256': spec['ref']['sha256'],
+                               'declarations_json_sha256': spec['sidecars']['declarations.json'],
+                               'complete_serialized_declarations': len(names)}
+        new_rows.extend(rows)
+        covered.update(expected)
+    need(covered == set(expected_targets), 'The single actual audit must cover all seven targets')
+    need(len({r['name'] for r in new_rows}) == len(new_rows)
+         and not {r['name'] for r in old_rows} & {r['name'] for r in new_rows}, 'New fullname collision')
+    rows = sorted(old_rows + new_rows, key=lambda r: (r['module'], r['name']))
+    need([r for r in rows if r['module'] not in expected_targets] == old_rows
+         and {m: entries[m] for m in baseline['modules']} == baseline['modules'], 'Old entries/records changed')
+    candidate = copy.deepcopy(baseline)
+    candidate.update(modules=entries, owned_modules=len(entries), complete_serialized_declarations=len(rows),
+                     distinct_constant_fullnames=len({r['name'] for r in rows}),
+                     original_owned_receipts_rehashed=len({str(paths.normalize(e['owned_receipt']).resolve(strict=True)) for e in entries.values()}),
+                     baseline_census=acceptance['current_census'], baseline_entries_deep_equal=True,
+                     acceptance_status='CANDIDATE_ONLY_PENDING_ROOT_INDEPENDENT_ACCEPTANCE')
+    for path, sha in pinned.items():
+        need(hashlib.sha256(path.read_bytes()).hexdigest() == sha, 'Input drift before return')
+    paths.finish()
+    return {'status': 'SOURCEONLY_RECORD_APPEND_PROPOSAL_REQUIRES_SEPARATE_TERMINAL_VERIFICATION',
+            'candidate_census': candidate, 'complete_declarations': rows,
+            'new_record_counts': {m: sum(r['module'] == m for r in new_rows) for m in expected_targets},
+            'current_reference_files_rehashed': len(pinned), 'reference_scope': 'Explicit current inputs; no referenced JSON descendants loaded',
+            'historical_closure_replayed': False, 'root_acceptance': None, 'proof_credit': 0,
+            'compiler_checker_invocations': 0, 'main_1_plus_1_75': 'OPEN', 'weighted_estimate': 30}
+
+
+def construct_intake(root, inputs_ref, baseline_acceptance_sha256, expected_targets):
+    validate_target_map(expected_targets)
+    """Construct finite draft-contract intake from actual parameter-bound files.
+
+    This is not an acceptance certificate. Full record gates run in propose().
+    No filesystem search or automatic referenced-JSON ancestry traversal occurs.
+    """
+    root = Path(root).resolve(strict=True)
+    paths = FinitePaths(root)
+    pinned = {}
+
+    def bind(reference, external=False):
+        need(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'Exact constructor reference required')
+        expected = reference['sha256']
+        need(isinstance(expected, str) and len(expected) == 64 and set(expected) <= set('0123456789abcdef'), 'Malformed SHA')
+        path = paths.bound_path(reference['path'], external)
+        need(hashlib.sha256(path.read_bytes()).hexdigest() == expected, 'Original constructor input changed')
+        need(path not in pinned or pinned[path] == expected, 'Constructor input SHA conflict')
+        pinned[path] = expected
+        return path
+
+    def pair(path):
+        path = paths.bound_path(path)
+        result = {'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+        bind(result)
+        return result
+
+    def read(reference):
+        return json.loads(bind(reference).read_text(encoding='utf-8'))
+
+    verify_published_baseline(read, baseline_acceptance_sha256)
+    inputs = read(inputs_ref)
+    need(set(inputs) == {'strict_producers', 'original_audit_refs', 'module_locations', 'pins', 'tools', 'producer_command_paths'}, 'Exact constructor parameter fields')
+    need(set(inputs['strict_producers']) == set(expected_targets), 'All seven original strict producer refs required')
+    finite = set(expected_targets)
+    for module, spec in inputs['strict_producers'].items():
+        need(set(spec) == {'receipt', 'stdout'}, 'Strict original ref schema')
+        receipt = json.loads(bind(spec['receipt']).read_text(encoding='utf-8'))
+        need(bind(spec['stdout']) == (bind(spec['receipt']).parent / 'stdout.log').resolve(strict=True), 'Constructor original strict stdout.log location')
+        need(receipt['status'] == 'PASS' and receipt['exit_code'] == 0 and receipt['guard_error'] is None
+             and receipt['module'] == module and receipt['warnings_as_errors'] is True
+             and receipt['binding'] == receipt['binding_after']
+             and receipt['binding']['source_sha256'] == expected_targets[module], 'Missing final strict PASS; pending/failed originals cannot construct intake')
+        finite.update(receipt['binding']['direct_source_sha256'])
+    need(set(inputs['module_locations']) == finite, 'Exactly target/direct supplier module locations required')
+    paths.prepare(finite)
+    module_files = {}
+    for module, locations in inputs['module_locations'].items():
+        need(set(locations) == {'source', 'object_base'}, 'Explicit module source and .olean base paths required')
+        base = paths.bound_path(locations['object_base'])
+        need(base == paths.expected[module][1] and paths.bound_path(locations['source']) == paths.expected[module][0], 'Module original runtime source/object path mismatch')
+        parts = {suffix: pair(base.with_name(base.name[:-6] + suffix)) for suffix in SLOTS
+                 if base.with_name(base.name[:-6] + suffix).exists()}
+        module_files[module] = {'source': pair(locations['source']), 'object_parts': parts}
+    specs, covered = [], set()
+    need(isinstance(inputs['original_audit_refs'], list) and len(inputs['original_audit_refs']) == 1, 'Exactly one completed original stock+ALL audit triple required')
+    for reference in inputs['original_audit_refs']:
+        path = bind(reference)
+        audit = json.loads(path.read_text(encoding='utf-8'))
+        need(path.name == 'receipt.json' and path.parent.parent == root / '.lake/proof-continuation/audits', 'Original audit location')
+        modules = set(audit['targets'])
+        need(audit['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS' and modules
+             and modules <= set(expected_targets) and not covered & modules
+             and audit['targets'] == {m: expected_targets[m] for m in modules}
+             and audit['inputs_before'] == audit['inputs_after'], 'Missing/failed/stale/duplicate audit group')
+        names = {'OwnedAudit.lean', 'declarations.json', 'declarations.log', 'audit-process.json'}
+        names.update('replay-' + m + '.' + ext for m in modules for ext in ('json', 'log'))
+        sidecars = {name: pair(path.parent / name)['sha256'] for name in sorted(names)}
+        specs.append({'ref': reference, 'targets': audit['targets'], 'sidecars': sidecars})
+        covered.update(modules)
+    need(covered == set(expected_targets), 'Unified intake requires all seven actual audit modules')
+    for ref in inputs['pins'].values():
+        bind(ref)
+    for name, ref in inputs['tools'].items():
+        bind(ref, external=name in {'lean', 'lean_real', 'leanchecker'})
+    result = {'schema': 'after232-seven-finite-record-append-draft-input-v1',
+              'baseline_acceptance': {'path': BASELINE_ACCEPTANCE, 'sha256': baseline_acceptance_sha256},
+              'targets': dict(expected_targets), 'strict_producers': inputs['strict_producers'],
+              'current_module_files': module_files, 'pins': inputs['pins'], 'tools': inputs['tools'],
+              'producer_command_paths': inputs['producer_command_paths'], 'audit_receipts': specs,
+              'constructed_from_inputs': inputs_ref,
+              'scope': 'Finite record-stage input, not verified terminal acceptance; collector full gates still required'}
+    bind(result['baseline_acceptance'])
+    for path, sha in pinned.items():
+        need(hashlib.sha256(path.read_bytes()).hexdigest() == sha, 'Constructor input drift')
+    paths.finish()
+    return result
+
+
+def write_new_json(path, value):
+    """Fresh file only; never overwrite evidence or accepted state."""
+    path = Path(path)
+    with path.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(value, stream, ensure_ascii=False, indent=2, sort_keys=True)
+        stream.write('\n')
+    return {'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mode', choices=['build-intake', 'collect'])
+    parser.add_argument('--root', required=True)
+    parser.add_argument('--input', required=True, help='Constructor parameter JSON or final intake, depending on mode')
+    parser.add_argument('--input-sha256', required=True)
+    parser.add_argument('--baseline-acceptance-sha256', required=True)
+    parser.add_argument('--target-source', action='append', required=True, help='Repeat exactly seven times: MODULE=final source SHA256 from ROOT originals')
+    parser.add_argument('--output', required=True, help='Fresh intake file or fresh proposal directory under state/rounds')
+    args = parser.parse_args()
+    expected_targets = parse_target_sources(args.target_source)
+    root = Path(args.root).resolve(strict=True)
+    rounds = (root / '.lake/proof-continuation/rounds').resolve(strict=True)
+    output = (root / args.output).resolve()
+    need(output.parent == rounds and not output.exists(), 'Fresh direct child of state/rounds required')
+    reference = {'path': args.input, 'sha256': args.input_sha256}
+    if args.mode == 'build-intake':
+        need(output.name.startswith('after232-finite-intake-') and output.suffix == '.json', 'Fresh finite intake filename required')
+        intake = construct_intake(root, reference, args.baseline_acceptance_sha256, expected_targets)
+        written = write_new_json(output, intake)
+        print(json.dumps({'status': 'FINITE_INTAKE_WRITTEN_NOT_TERMINAL_ACCEPTANCE', 'intake': written}))
+    else:
+        need(output.name.startswith('after232-record-proposal-'), 'Fresh proposal directory name required')
+        result = propose(root, reference, args.baseline_acceptance_sha256, expected_targets)
+        # All record gates finish before creating the proposal directory.
+        output.mkdir(exist_ok=False)
+        records = write_new_json(output / 'complete-declarations-proposal.json', result.pop('complete_declarations'))
+        census = write_new_json(output / 'candidate-census.json', result.pop('candidate_census'))
+        result.update(complete_declarations=records, candidate_census=census, complete_original_evidence_intake=reference,
+                      baseline_acceptance={'path': BASELINE_ACCEPTANCE, 'sha256': args.baseline_acceptance_sha256},
+                      collector_source={'path': str(Path(__file__).resolve()), 'sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
+        proposal = write_new_json(output / 'acceptance-PROPOSAL.json', result)
+        print(json.dumps({'status': 'PROPOSAL_ONLY_ROOT_TERMINAL_ACCEPTANCE_REQUIRED', 'proposal': proposal,
+                          'candidate_census': census, 'complete_declarations': records}))
+
+
+if __name__ == '__main__':
+    main()

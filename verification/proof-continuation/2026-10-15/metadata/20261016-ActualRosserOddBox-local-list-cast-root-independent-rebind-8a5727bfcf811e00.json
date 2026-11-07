@@ -1,0 +1,153 @@
+{
+  "status": "SOURCE_ONLY_ROOT_NONAUTHOR_EXACT_LOCAL_PROOF_REFACTOR_REBIND_PENDING_ORIGINAL_6144_EXECUTION",
+  "reviewer": "/root (non-author of original source and this proof repair)",
+  "created_at_utc": "2026-10-15T22:12:05.649105+00:00",
+  "candidate": "ImbalancedChen/ActualRosserOddBox.lean",
+  "old_actual_OOM_sha256": "2beffd8af22239e3a5428713c614e8e37bcbb300b16c950ff254d2c9ba031888",
+  "current_sha256": "1bc9376e2d9c96844ddf056ce667c9f8b41bf0e9e46d2763c1314e6a9cd9ea73",
+  "owner_report": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-ActualRosserOddBox-local-list-cast-owner-rebind.json",
+    "sha256": "c484d10d130c906eef5cb8dcfded916b77f6ad54abceb8d4e831577e8c7596dc"
+  },
+  "actual_OOM_evidence": {
+    "receipt_path": ".lake/proof-continuation/runs/20261015T220413968149Z-ImbalancedChen.ActualRosserOddBox/receipt.json",
+    "receipt_sha256": "058dc1548976c2c18a98b71fb8b40603b98cdafe7454f1b5c45ac079887d2ea6",
+    "stdout_path": ".lake/proof-continuation/runs/20261015T220413968149Z-ImbalancedChen.ActualRosserOddBox/stdout.log",
+    "stdout_sha256": "48bc2200174632932b9ea98fd0a0c30e6dc353ce535531045f1c7efc7b79940a",
+    "complete_stdout": "libc++abi: terminating due to uncaught exception of type lean::memory_exception: excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)\n",
+    "exit_code": -6,
+    "max_rss_kib": 6581364,
+    "seconds": 75.606,
+    "memory_mib": 6144,
+    "actual_proof_diagnostic": false,
+    "OOM_location_identified": false,
+    "old_failed_receipt_preserved": true
+  },
+  "all9_complete_unchanged_headers_2definitions": [
+    {
+      "name": "actualRosserOddTail",
+      "kind": "def",
+      "private": false,
+      "complete_header": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ",
+      "complete_definition": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k) => p i.castSucc)"
+    },
+    {
+      "name": "actualRosserOddBoundaryMap",
+      "kind": "def",
+      "private": false,
+      "complete_header": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+      "complete_definition": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k)), actualRosserOddTail p⟩"
+    },
+    {
+      "name": "actualRosserOddTail_card",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddTail_card {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) : (actualRosserOddTail p).card = 2 * k"
+    },
+    {
+      "name": "actualRosserOddTail_prod",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddTail_prod {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserOddTail p, g r) = ∏ i : Fin (2 * k), g (p i.castSucc)"
+    },
+    {
+      "name": "actualRosserOddTail_range",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddTail_range {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Set.range p = (↑(actualRosserOddTail p) : Set ℕ) ∪ {p (Fin.last (2 * k))}"
+    },
+    {
+      "name": "actualRosserOddBoundaryMap_injOn_strictAnti",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 1) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserOddBoundaryMap (k := k)) (T : Set (Fin (2 * k + 1) → ℕ))"
+    },
+    {
+      "name": "actualRosserOddTail_rank_eq",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 1) → ℕ} {r : Fin (2 * l + 1) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserOddTail p = actualRosserOddTail r) : k = l"
+    },
+    {
+      "name": "odd_box_upper_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem odd_box_upper_le {k : ℕ} {a b : Fin (2 * k + 1) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u"
+    },
+    {
+      "name": "actualRosserOddBox_mem_boundary",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem actualRosserOddBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 1) → ℝ) (u beta : ℝ)\n    (hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k), Even i.val →\n      (∑ j : Fin (2 * k) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k), a i.castSucc) +\n      3 * a (Fin.last (2 * k)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 1) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserOddTail p ∈ actualUpperRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k))) ∧\n      (actualRosserOddTail p).card = 2 * k"
+    }
+  ],
+  "literal_byte_patches": [
+    {
+      "old": "  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)\n",
+      "new": "  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)\n  have hllen : l.length = 2 * k := List.length_ofFn\n  have hlprod : (l.prod : ℝ) = ∏ i : Fin (2 * k), (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_ofFn, Nat.cast_prod]\n  have hltake (r : ℕ) : ((l.take r).prod : ℝ) =\n      ∏ i : Fin (2 * k) with i.val < r, (p i.castSucc : ℝ) := by\n    simp only [l, List.prod_take_ofFn, Nat.cast_prod]\n  have hlget (i : Fin l.length) :\n      (l.get i : ℝ) = (p (Fin.cast hllen i).castSucc : ℝ) := by\n    simp only [l, List.get_ofFn]\n",
+      "occurrences": 1
+    },
+    {
+      "old": "    simp [l, actualRosserOddTail, List.mem_ofFn]\n",
+      "new": "    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserOddTail,\n      Finset.mem_image, Finset.mem_univ, true_and]\n",
+      "occurrences": 1
+    },
+    {
+      "old": "    · simp [l]\n    · apply Nat.lt_ceil.mpr\n      simpa [l, List.prod_ofFn, Nat.cast_prod] using htotalReal\n    · intro i hi\n      have hil : i.val < 2 * k := by simpa [l] using i.isLt\n      apply Nat.lt_ceil.mpr\n      simpa [l, List.prod_take_ofFn, List.get_ofFn, Nat.cast_mul, Nat.cast_pow,\n        Nat.cast_prod] using hprefixReal ⟨i.val, hil⟩ hi\n    · apply Nat.ceil_le.mpr\n      simpa [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal\n",
+      "new": "    · rw [hllen]\n      exact ⟨k, by omega⟩\n    · apply Nat.lt_ceil.mpr\n      rw [hlprod]\n      exact htotalReal\n    · intro i hi\n      apply Nat.lt_ceil.mpr\n      rw [Nat.cast_mul, Nat.cast_pow, hltake, hlget]\n      exact hprefixReal (Fin.cast hllen i) hi\n    · apply Nat.ceil_le.mpr\n      rw [Nat.cast_mul, Nat.cast_pow, hlprod]\n      exact hshellReal\n",
+      "occurrences": 1
+    }
+  ],
+  "independent_forward_exact_bytes": true,
+  "independent_inverse_exact_bytes": true,
+  "old_bytes_equal_HEAD_exact": true,
+  "imports_unchanged": [
+    "import ImbalancedChen.ActualRosserBoundaryExpansion",
+    "import ImbalancedChen.ActualPrimeBoxMass",
+    "import Mathlib.Algebra.BigOperators.Fin",
+    "import Mathlib.Data.List.FinRange",
+    "import Mathlib.Order.WellFounded"
+  ],
+  "actual_fixed_API_read": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\OfFn.lean",
+      "sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "lines": [
+        35,
+        38
+      ],
+      "literal_excerpt": "namespace List\n\ntheorem get_ofFn {n} (f : Fin n → α) (i) : get (ofFn f) i = f (Fin.cast (by simp) i) := by\n  simp; congr"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Fin.lean",
+      "sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+      "lines": [
+        727,
+        752
+      ],
+      "literal_excerpt": "@[to_additive]\ntheorem prod_take_ofFn {n : ℕ} (f : Fin n → M) (i : ℕ) :\n    ((ofFn f).take i).prod = ∏ j with j.val < i, f j := by\n  induction i with\n  | zero =>\n    simp\n  | succ i IH =>\n    by_cases h : i < n\n    · have : i < length (ofFn f) := by rwa [length_ofFn]\n      rw [prod_take_succ _ _ this]\n      have A : ({j | j.val < i + 1} : Finset (Fin n)) =\n          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by grind\n      grind\n    · have A : (ofFn f).take i = (ofFn f).take i.succ := by\n        rw [← length_ofFn (f := f)] at h\n        have : length (ofFn f) ≤ i := not_lt.mp h\n        rw [take_of_length_le this, take_of_length_le (le_trans this (Nat.le_succ _))]\n      have B : ∀ j : Fin n, ((j : ℕ) < i.succ) = ((j : ℕ) < i) := by\n        intro j\n        have : (j : ℕ) < i := lt_of_lt_of_le j.2 (not_lt.mp h)\n        simp [this, lt_trans this (Nat.lt_succ_self _)]\n      simp [← A, B, IH]\n\n@[to_additive]\ntheorem prod_ofFn {n : ℕ} {f : Fin n → M} : (ofFn f).prod = ∏ i, f i :=\n  Fin.prod_ofFn f"
+    }
+  ],
+  "mathematical_review": [
+    "Four local list/cast identities retain literal List.ofFn length, full product, arbitrary take product and actual Fin.cast get coordinate; fixed native API signatures match exactly. They neither change any prime box nor erase endpoints.",
+    "The new narrow list-to-finset simp proves exactly the original image identity. Its set elements and multiplicity exclusion use the same actual strict-anti tuple.",
+    "The chain length Even(2*k) uses witness k and actual length equality. Total and terminal tests use the identical previously proved real inequalities with only exact casts; prefix uses the same actual Fin.cast coordinate, same index value and parity.",
+    "The original k=0 active-tail proof, all prime cutoff and prefix cubic geometric inequalities, strict total product versus ceil, weak terminal crossing, rank, sorted chain and boundary injection remain unchanged.",
+    "This is a local proof-term refactor to reduce repeated imported simp-set use; no original failure line was identified, and reduced memory use is only a hypothesis until actual new-source execution."
+  ],
+  "findings": [],
+  "unchanged_pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "source_DAG_delta": 0,
+  "new_global_declarations": 0,
+  "root_specific_gate": "This changed exact source only may receive the original M6144/RSS6656/j2 fair strict run then full owned checks if strict succeeds, after sole runtime owner verifies current actual direct-parent cache binding. Do not retry old unchanged 2be, increase resources or install old reuse chains.",
+  "evidence_boundary": {
+    "lean_or_lake_invoked": false,
+    "source_modified_by_reviewer": false,
+    "memory_fix_confirmed": false,
+    "owned_or_imported_closure_acceptance": false
+  }
+}

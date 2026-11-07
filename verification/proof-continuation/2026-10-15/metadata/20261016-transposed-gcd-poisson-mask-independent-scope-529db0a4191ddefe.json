@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:43:09.1494197Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_GCD_POISSON_MASK_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3TransposedGCDPoissonMask.lean",
+    "sha256": "1b9c64bac5d849c70af899a61a5c191a5e2acfc9d7ec7a5a532372d575a741bf",
+    "frozen_hash_matches": true,
+    "declaration_count": 20,
+    "definition_count": 6,
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.commonFactorPairZeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 32,
+        "signature_last_line": 32,
+        "complete_source_header": "def MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.commonFactorPairNonzeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 39,
+        "signature_last_line": 39,
+        "complete_source_header": "def MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\n          ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n            n₁ n₂ d.residue : ℝ) /\n              (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.commonLargeBetaGCDZeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 49,
+        "signature_last_line": 49,
+        "complete_source_header": "def MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairZeroWeight n₁ n₂ else 0"
+      },
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.commonLargeBetaGCDNonzeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 54,
+        "signature_last_line": 54,
+        "complete_source_header": "def MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ else 0"
+      },
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.commonSmallBetaGCDNonzeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 59,
+        "signature_last_line": 59,
+        "complete_source_header": "def MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "ImbalancedChen.Part3.MediumAtom.transposedLargePairMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 64,
+        "signature_last_line": 64,
+        "complete_source_header": "def MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ",
+        "complete_source_definition": "def MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ :=\n  ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ else 0"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.factor_modulus_pos",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 71,
+        "signature_last_line": 74,
+        "complete_source_header": "private theorem factor_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposedDispersionW_eq_betaPairs",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 78,
+        "signature_last_line": 85,
+        "complete_source_header": "theorem transposedDispersionW_eq_betaPairs\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n          d.transposedAtom.commonFactorPairWeight n₁ n₂"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposedDispersionW_eq_large_add_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 103,
+        "signature_last_line": 108,
+        "complete_source_header": "theorem transposedDispersionW_eq_large_add_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      d.transposedAtom.commonLargeBetaGCDW Y + d.transposedAtom.commonSmallBetaGCDW Y"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_factorPair_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 121,
+        "signature_last_line": 126,
+        "complete_source_header": "theorem transposed_factorPair_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonFactorPairWeight n₁ n₂ =\n      d.transposedAtom.commonFactorPairZeroWeight n₁ n₂ +\n        d.transposedAtom.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_largeW_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 155,
+        "signature_last_line": 160,
+        "complete_source_header": "theorem transposed_largeW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    d.transposedAtom.commonLargeBetaGCDW Y =\n      d.transposedAtom.commonLargeBetaGCDZeroPart Y +\n        d.transposedAtom.commonLargeBetaGCDNonzeroPart Y"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.complexCRTSmoothNonzeroPart_eq_betaPairs",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 173,
+        "signature_last_line": 176,
+        "complete_source_header": "theorem complexCRTSmoothNonzeroPart_eq_betaPairs (d : MediumAtom) :\n    d.complexCRTSmoothNonzeroPart =\n      ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n        d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.complexCRTSmoothNonzeroPart_eq_large_add_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 194,
+        "signature_last_line": 196,
+        "complete_source_header": "theorem complexCRTSmoothNonzeroPart_eq_large_add_small (d : MediumAtom) (Y : ℝ) :\n    d.complexCRTSmoothNonzeroPart =\n      d.commonLargeBetaGCDNonzeroPart Y + d.commonSmallBetaGCDNonzeroPart Y"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_centered_identity_with_large_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 209,
+        "signature_last_line": 220,
+        "complete_source_header": "theorem transposed_centered_identity_with_large_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart -\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) +\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\n          d.transposedAtom.commonSmallBetaGCDNonzeroPart Y)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_largeNonzero_norm_le_W_add_zero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 226,
+        "signature_last_line": 231,
+        "complete_source_header": "theorem transposed_largeNonzero_norm_le_W_add_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n      ‖d.transposedAtom.commonLargeBetaGCDW Y‖ +\n        ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.lcm_weight_sum_le",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 239,
+        "signature_last_line": 244,
+        "complete_source_header": "private theorem lcm_weight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_factorPairZero_norm_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 258,
+        "signature_last_line": 262,
+        "complete_source_header": "theorem transposed_factorPairZero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    ‖d.transposedAtom.commonFactorPairZeroWeight n₁ n₂‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_largeZero_norm_le_pairMass",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 294,
+        "signature_last_line": 299,
+        "complete_source_header": "theorem transposed_largeZero_norm_le_pairMass\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n        d.transposedLargePairMass Y"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_largePairMass_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 320,
+        "signature_last_line": 324,
+        "complete_source_header": "theorem transposed_largePairMass_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    d.transposedLargePairMass Y ≤\n      (2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.betaL2_mul_transposed_largeZero_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 347,
+        "signature_last_line": 355,
+        "complete_source_header": "theorem betaL2_mul_transposed_largeZero_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n      ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 19 *\n              Real.sqrt ((1 + Real.log (2 * d.U)) / Y)"
+      }
+    ],
+    "complete_source_proof_bodies_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\nimport ImbalancedChen.Part3SignedDivisorDeletion\n\n/-!\n# One actual paired-gcd mask in whole W, raw zero and full Fourier remainder\n\nThe same original-alpha pair and real cutoff are retained in all three\nterms of the transposed Poisson identity. Bounding whole W alone is not\nasserted to bound its Fourier remainder: the raw zero under the same\nmask is kept and paid separately below.\n\nThe actual paired coefficient is original alpha extended by zero, so its\nlarge-gcd mass uses the already proved finite estimate at order one and\nT=2U. The raw zero pays the actual complex factor fibers through tau_3\nand the existing lcm moment, with logarithm exponent nineteen. Its common\nscalar remains original V times the local Fourier-zero cutoffMass.\n\nOnly the two already owned local parents are imported. No new foreign\nmodule, transposed MediumAdmissible assertion or analytical budget premise\nis used. The whole-W large-gcd payment and its genuine alpha cleaning are\nseparate from this finite Poisson and raw-zero leaf.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\ndef MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)\n\ndef MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\n          ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n            n₁ n₂ d.residue : ℝ) /\n              (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ)\n\ndef MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairZeroWeight n₁ n₂ else 0\n\ndef MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ else 0\n\ndef MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂\n\ndef MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ :=\n  ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ else 0\n\nnamespace TransposedGCDPoissonMask\n\nprivate theorem factor_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a :=\n  (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd\n    (Finset.mem_image_of_mem _ ha))).1\n\ntheorem transposedDispersionW_eq_betaPairs\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n          d.transposedAtom.commonFactorPairWeight n₁ n₂ := by\n  rw [d.transposedDispersionW_eq_constructedCRT hd]\n  simp only [MediumAtom.complexRowLabels, Finset.sum_product,\n    MediumAtom.complexBetaCoefficient, star_mul]\n  simp_rw [Finset.sum_comm\n    (s := d.transposedAtom.complexFactorLabels) (t := d.transposedAtom.betaCarrier)]\n  simp only [MediumAtom.commonFactorPairWeight, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  apply Finset.sum_congr rfl\n  intro a _\n  apply Finset.sum_congr rfl\n  intro b _\n  ring\n\n/-- The masked whole W is a literal part of the actual transposed W. -/\ntheorem transposedDispersionW_eq_large_add_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      d.transposedAtom.commonLargeBetaGCDW Y + d.transposedAtom.commonSmallBetaGCDW Y := by\n  rw [transposedDispersionW_eq_betaPairs hd]\n  unfold MediumAtom.commonLargeBetaGCDW MediumAtom.commonSmallBetaGCDW\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  split_ifs <;> simp only [add_zero, zero_add]\n\n/-- The actual original-V smoothing is used on each complete physical lcm.\nNo beta coefficient, gcd mask or frequency is discarded in this identity. -/\ntheorem transposed_factorPair_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonFactorPairWeight n₁ n₂ =\n      d.transposedAtom.commonFactorPairZeroWeight n₁ n₂ +\n        d.transposedAtom.commonFactorPairNonzeroWeight n₁ n₂ := by\n  unfold MediumAtom.commonFactorPairWeight MediumAtom.commonFactorPairZeroWeight\n    MediumAtom.commonFactorPairNonzeroWeight\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro a ha\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro b hb\n  change d.complexFactorGamma a * star (d.complexFactorGamma b) *\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n        (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ : ℂ) = _\n  unfold ComplexCRT.constructedProgressionWeight\n  by_cases hc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂\n  · simp only [hc, if_true]\n    have hD : 0 < (complexFactorModulus a).lcm (complexFactorModulus b) :=\n      Nat.pos_of_ne_zero (Nat.lcm_ne_zero (factor_modulus_pos hd ha).ne'\n        (factor_modulus_pos hd hb).ne')\n    have he := CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier\n      (lt_of_lt_of_le zero_lt_one hd.2.1) d.transposedAtom.commonSmoothCarrier\n      (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hD\n      (ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue)\n    simp only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom] at he ⊢\n    rw [he, Complex.ofReal_add]\n    ring\n  · simp only [hc, if_false, Complex.ofReal_zero, mul_zero, add_zero]\n\n/-- Whole W and raw zero have exactly the same actual gcd mask. -/\ntheorem transposed_largeW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    d.transposedAtom.commonLargeBetaGCDW Y =\n      d.transposedAtom.commonLargeBetaGCDZeroPart Y +\n        d.transposedAtom.commonLargeBetaGCDNonzeroPart Y := by\n  unfold MediumAtom.commonLargeBetaGCDW MediumAtom.commonLargeBetaGCDZeroPart\n    MediumAtom.commonLargeBetaGCDNonzeroPart\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, transposed_factorPair_eq_zero_add_nonzero hd, mul_add]\n  · simp only [if_neg hy, add_zero]\n\ntheorem complexCRTSmoothNonzeroPart_eq_betaPairs (d : MediumAtom) :\n    d.complexCRTSmoothNonzeroPart =\n      ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n        d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ := by\n  unfold MediumAtom.complexCRTSmoothNonzeroPart\n  simp only [MediumAtom.complexRowLabels, Finset.sum_product,\n    MediumAtom.complexBetaCoefficient, star_mul]\n  simp_rw [Finset.sum_comm (s := d.complexFactorLabels) (t := d.betaCarrier)]\n  simp only [MediumAtom.commonFactorPairNonzeroWeight, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  apply Finset.sum_congr rfl\n  intro a _\n  apply Finset.sum_congr rfl\n  intro b _\n  ring\n\n/-- The complementary piece has the explicit gcd<=Y branch, and the\nfull signed Poisson remainder is exactly their sum. -/\ntheorem complexCRTSmoothNonzeroPart_eq_large_add_small (d : MediumAtom) (Y : ℝ) :\n    d.complexCRTSmoothNonzeroPart =\n      d.commonLargeBetaGCDNonzeroPart Y + d.commonSmallBetaGCDNonzeroPart Y := by\n  rw [complexCRTSmoothNonzeroPart_eq_betaPairs]\n  unfold MediumAtom.commonLargeBetaGCDNonzeroPart MediumAtom.commonSmallBetaGCDNonzeroPart\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  split_ifs <;> simp only [add_zero, zero_add]\n\n/-- The actual primitive V/U terms stay literal when the full Fourier\nremainder is partitioned by this paired gcd. -/\ntheorem transposed_centered_identity_with_large_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart -\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) +\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\n          d.transposedAtom.commonSmallBetaGCDNonzeroPart Y) := by\n  rw [d.transposed_dispersion_identity_with_commonPoisson hd,\n    complexCRTSmoothNonzeroPart_eq_large_add_small d.transposedAtom Y]\n\n/-- The masked Fourier remainder is bounded only after subtracting the\nraw zero under that same mask. This is not a whole-W substitution. -/\ntheorem transposed_largeNonzero_norm_le_W_add_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n      ‖d.transposedAtom.commonLargeBetaGCDW Y‖ +\n        ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ := by\n  have he : d.transposedAtom.commonLargeBetaGCDNonzeroPart Y =\n      d.transposedAtom.commonLargeBetaGCDW Y - d.transposedAtom.commonLargeBetaGCDZeroPart Y := by\n    rw [transposed_largeW_eq_zero_add_nonzero hd]\n    ring\n  rw [he]\n  exact norm_sub_le _ _\n\nprivate theorem lcm_weight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 19 := by\n  have hh := MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds.sum_abs_lcm_weight_le_log\n    3 (d.one_le_physicalFactorCap hd) d.physicalFactorModuli\n    (d.physicalFactorModuli_subset_cap hd) (fun q ↦ ‖d.groupedFactorGamma q‖)\n    (fun q _ ↦ by simpa only [abs_norm] using d.groupedFactorGamma_norm_le_tauThree hd q)\n  convert hh using 1\n  apply Finset.sum_congr rfl\n  intro q _\n  apply Finset.sum_congr rfl\n  intro r _\n  exact (abs_of_nonneg (by positivity)).symm\n\n/-- The complete original complex factor convolution is grouped exactly\nbefore its norm. No multiplicity-one or modulus coprimality is assumed. -/\ntheorem transposed_factorPairZero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    ‖d.transposedAtom.commonFactorPairZeroWeight n₁ n₂‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 := by\n  unfold MediumAtom.commonFactorPairZeroWeight\n  change ‖∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.V / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)‖ ≤ _\n  rw [TransposedZeroCovariance.factor_pair_sum_eq_grouped d (fun q r ↦\n    ((if ComplexCRT.Compatible q r n₁ n₂ then\n      (d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ))]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        |d.V * CommonSmoothCutoff.cutoffMass| *\n          (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro q _\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro r _\n      by_cases hc : ComplexCRT.Compatible q r n₁ n₂\n      · simp only [if_pos hc, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs,\n          abs_mul, abs_div, abs_of_nonneg (Nat.cast_nonneg (q.lcm r))]\n        exact le_of_eq (by ring)\n      · simp only [if_neg hc, Complex.ofReal_zero, mul_zero, norm_zero]\n        positivity\n    _ = |d.V * CommonSmoothCutoff.cutoffMass| *\n        ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ) := by\n      simp only [Finset.mul_sum]\n    _ ≤ _ := mul_le_mul_of_nonneg_left (lcm_weight_sum_le hd) (abs_nonneg _)\n\ntheorem transposed_largeZero_norm_le_pairMass\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n        d.transposedLargePairMass Y := by\n  unfold MediumAtom.commonLargeBetaGCDZeroPart MediumAtom.transposedLargePairMass\n  simp only [Finset.mul_sum]\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₁ _\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₂ _\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, norm_mul, norm_star]\n    calc\n      _ ≤ (‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖) *\n          (|d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19) :=\n        mul_le_mul_of_nonneg_left (transposed_factorPairZero_norm_le hd n₁ n₂)\n          (mul_nonneg (norm_nonneg _) (norm_nonneg _))\n      _ = _ := by ring\n  · simp only [if_neg hy, norm_zero, mul_zero, le_refl]\n\n/-- The true original-alpha coefficient is one-bounded on its actual\npaired carrier, including the zero padding of the original interval. -/\ntheorem transposed_largePairMass_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    d.transposedLargePairMass Y ≤\n      (2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y) := by\n  have hAlpha : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1 := by\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hd\n    exact hAlpha\n  have hN := d.transposedAtom.betaCarrier_subset_twiceV hd.1\n  have hbeta : ∀ n ∈ d.transposedAtom.betaCarrier,\n      |‖d.transposedAtom.beta n‖| ≤ (fouvryTau 1 n : ℝ) := by\n    intro n hn\n    have hn0 := (Finset.mem_Ioc.mp (hN hn)).1\n    rw [abs_norm, fouvryTau_order_one hn0.ne', Nat.cast_one]\n    change ‖if n ∈ d.alphaCarrier then d.alpha n else 0‖ ≤ 1\n    by_cases hm : n ∈ d.alphaCarrier\n    · simpa only [if_pos hm] using hAlpha n hm\n    · simp only [if_neg hm, norm_zero, zero_le_one]\n  have hh := ActualLargeGCDBetaMass.sum_abs_largeGCDPairs_le (k := 1) (by norm_num)\n    (show 1 ≤ 2 * d.U by linarith [hd.1]) hY d.transposedAtom.betaCarrier hN\n    (fun n ↦ ‖d.transposedAtom.beta n‖) hbeta\n  simpa only [MediumAtom.transposedLargePairMass, ActualLargeGCDBetaMass.largeGCDPairs,\n    Finset.sum_filter, Finset.sum_product, abs_mul, abs_norm, one_pow,\n    Nat.sub_self, pow_zero, mul_one] using hh\n\n/-- Actual outside beta-L2 is paid at length 2V. The right side keeps\nthe original X=U*V, the local mass and both explicit logarithm costs. -/\ntheorem betaL2_mul_transposed_largeZero_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n      ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 19 *\n              Real.sqrt ((1 + Real.log (2 * d.U)) / Y) := by\n  have hV : 0 ≤ d.V := by linarith [hd.2.1]\n  have hcapLog : 0 ≤ 1 + Real.log d.physicalFactorCap :=\n    by linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  have hlogV : 0 ≤ 1 + Real.log (2 * d.V) :=\n    by linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hz := (transposed_largeZero_norm_le_pairMass hd Y).trans\n    (mul_le_mul_of_nonneg_left (transposed_largePairMass_le hd hY) (by positivity))\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        (|d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n          ((2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y))) :=\n      mul_le_mul (mediumAdmissible_beta_norm_sq_sum_le hd) hz (norm_nonneg _) (by positivity)\n    _ = _ := by rw [abs_mul, abs_of_nonneg hV]; unfold MediumAtom.scale; ring\n\nend TransposedGCDPoissonMask\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3SignedDivisorDeletion"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "expected": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2"
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "expected": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1"
+    }
+  ],
+  "sourceDAG_delta": {
+    "basis": "The only direct imports are the exact two already owned local parents supplied by root, with current hashes freshly matched.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3TransposedGCDPoissonMask"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "definition_audit": [
+    "commonFactorPairZeroWeight is the full actual complex factor-label double sum with the exact CRT compatibility mask and local zero scalar (d.U/lcm)*cutoffMass. Applied to transposedAtom, its smoothing scale is original d.V.",
+    "commonFactorPairNonzeroWeight uses the same full labels, compatibility, physical lcm and constructed signed CRT residue in the complete nonzero Poisson series. The real part of that full series is retained exactly.",
+    "commonLargeBetaGCDZeroPart and commonLargeBetaGCDNonzeroPart use the identical ordered beta pair carrier and identical strict mask Y<gcd(n1,n2).",
+    "commonSmallBetaGCDNonzeroPart is the literal complementary branch: zero when Y<gcd, the same signed complex summand otherwise. Equality at gcd=Y therefore belongs to the small piece.",
+    "transposedLargePairMass sums the actual norms of original alpha extended by zero to the full transposed beta carrier, with that same strict gcd mask."
+  ],
+  "exact_mask_and_Poisson_review": [
+    {
+      "site": "transposedDispersionW_eq_betaPairs and transposedDispersionW_eq_large_add_small",
+      "assessment": "The owned actual transposed constructed-CRT W identity is rearranged by finite Fubini and exact complex multiplication. The whole-W large/small split then branches only on the literal Y<gcd condition, retaining both complete physical factor labels and both actual paired coefficients."
+    },
+    {
+      "site": "transposed_factorPair_eq_zero_add_nonzero",
+      "assessment": "Each full physical lcm is positive by the original admissibility factor support. The existing finite progression Poisson equality is used at original V on the one fixed actual transposed common carrier, with the correct inherited support gate hd.2.1. The same compatibility branch and original signed CRT residue remain in the zero and full nonzero terms."
+    },
+    {
+      "site": "transposed_largeW_eq_zero_add_nonzero",
+      "assessment": "The pointwise factor-pair Poisson identity is inserted inside exactly the same strict large-gcd mask. Thus masked whole W equals masked raw zero plus masked full nonzero. This does not identify whole W with its Fourier remainder."
+    },
+    {
+      "site": "complexCRTSmoothNonzeroPart_eq_betaPairs and eq_large_add_small",
+      "assessment": "The full original nonzero Poisson object is first exactly rearranged into actual beta pairs, then partitioned by the same strict Y<gcd mask and its complement. No frequency is truncated or silently discarded."
+    },
+    {
+      "site": "transposed_centered_identity_with_large_small",
+      "assessment": "The actual common-Poisson centered identity retains literal smoothed U and V. Only the full nonzero term is replaced by its proved large+small equality."
+    },
+    {
+      "site": "transposed_largeNonzero_norm_le_W_add_zero",
+      "assessment": "The masked nonzero term is algebraically masked W minus masked raw zero, then norm_sub_le is applied. Its displayed bound explicitly keeps both norms; no whole-W estimate is substituted for the nonzero term by itself."
+    }
+  ],
+  "actual_mass_and_lcm_review": [
+    {
+      "site": "lcm_weight_sum_le",
+      "assessment": "The full original grouped complex coefficient is bounded by the proved tau_3 fiber majorant. The already reachable LcmWeightBounds.sum_abs_lcm_weight_le_log at order j=3 gives exponent 2*3^2+1=19. The absolute value is removed only from a nonnegative real norm-weight summand; every physical q,r remains."
+    },
+    {
+      "site": "transposed_factorPairZero_norm_le",
+      "assessment": "The complete complex label convolution is grouped exactly by q,r before taking norms. The compatibility indicator is bounded branchwise, giving the factor abs(original V*local cutoffMass) times the full lcm norm-weight sum. No one-bound on grouped coefficients, modulus coprimality, or factorization multiplicity-one assumption is made."
+    },
+    {
+      "site": "transposed_largeZero_norm_le_pairMass",
+      "assessment": "Finite triangle inequality inside the identical actual large-gcd mask gives abs(V*local mass)*Hcap^19 times the actual transposedLargePairMass. The complex alpha coefficients are not replaced in the defining identity; norms enter only this inequality."
+    },
+    {
+      "site": "transposed_largePairMass_le",
+      "assessment": "The actual paired coefficient is original alpha on its original alphaCarrier and zero elsewhere on the full U-dyadic carrier. Original admissibility gives its norm<=1, including that padding. The carrier lies in Ioc(0,floor(2U)), so fouvryTau 1 n=1. The existing genuine finite large-gcd mass theorem is invoked with k=1 and T=2U, giving (2U)^2*sqrt((1+log(2U))/Y), with the k^2-1 logarithm exponent exactly zero."
+    },
+    {
+      "site": "betaL2_mul_transposed_largeZero_le",
+      "assessment": "The actual outside original-beta L2 factor is paid by the existing fixed-order square divisor moment at 2V. Multiplying by the just-proved raw-zero estimate gives 2V*abs(V*mass)*(2U)^2=8*abs(mass)*X^2. The original beta exponent ((2^B)^2-1), cap exponent nineteen, and the real sqrt((1+log(2U))/Y) are all retained."
+    }
+  ],
+  "scope_and_remaining_obligations": {
+    "all_20_complete_headers_captured": true,
+    "all_6_definition_bodies_captured": true,
+    "actual_common_carrier_and_weight_preserved": true,
+    "all_original_factor_labels_and_physical_moduli_preserved": true,
+    "original_alpha_one_bound_only": true,
+    "no_MediumAdmissible_transposedAtom_premise": true,
+    "no_new_analytic_or_error_budget_premise": true,
+    "cutoff_gate": "Y>0 only where required by the quantitative large-gcd mass estimate; exact identities hold for every real Y.",
+    "normalization": "Only local cutoffMass and original V smoothing.",
+    "whole_W_large_gcd_payment_proved_here": false,
+    "full_nonzero_frequency_payment_proved_here": false,
+    "small_nonzero_frequency_payment_proved_here": false,
+    "RestrictedMediumTarget_proved_here": false,
+    "remaining": "A whole-W large-gcd estimate with actual paired-alpha cleaning, and a separate small-gcd/nonzero-frequency analytic estimate remain necessary. The displayed raw-zero bound is not a completed logarithmic payment of whole W or all frequencies."
+  },
+  "supplier_source_headers_read": [
+    "MediumAtom.commonFactorPairWeight in Part3CleanBetaLargeGCDMajorant",
+    "MediumAtom.transposedDispersionW_eq_constructedCRT and transposedSmoothWeight_support_subset in owned TransposedDispersion",
+    "CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier in CommonPoisson",
+    "TransposedZeroCovariance.factor_pair_sum_eq_grouped",
+    "LcmWeightBounds.sum_abs_lcm_weight_le_log at j=3",
+    "ActualLargeGCDBetaMass.sum_abs_largeGCDPairs_le at k=1,T=2U",
+    "mediumAdmissible_beta_norm_sq_sum_le"
+  ],
+  "source_checks": {
+    "twenty_declarations_six_definitions": true,
+    "direct_dependency_hashes_match": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "source_modified": false,
+    "dependencies_modified": false,
+    "pins_modified": false,
+    "full_tree_rescanned": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-gcd-poisson-mask-independent-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Root/runtime owner elaboration of this exact frozen source and any required kernel/axiom checks.",
+    "The quantitative whole-W and complete nonzero-frequency obligations identified above remain outside this leaf."
+  ]
+}

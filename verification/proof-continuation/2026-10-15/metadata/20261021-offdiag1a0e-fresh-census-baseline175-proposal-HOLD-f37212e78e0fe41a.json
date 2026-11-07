@@ -1,0 +1,152 @@
+{
+  "status": "OFFDIAG_FRESH_GLOBAL175_CENSUS_LITERAL_REBASE_PROPOSAL_ONLY_HOLD",
+  "created_utc": "2026-10-21T11:06:39.169434+00:00",
+  "target": "ImbalancedChen.Part3ResonanceOffDiagonalCount",
+  "source_sha256": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+  "accepted175": {
+    "path": "source-reviews/20261021T110037115235Z-costalgebradc943-baseline174-v5-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "c4464cabf4300aa4401badfea8076ab9c9d961bf7b5e5c0b6d8d7a98960f12da",
+    "modules": 175,
+    "complete_declarations": 4066,
+    "original_receipts": 123,
+    "root_acceptance_path": "source-reviews/20261021-costalgebradc943-root-actual29-terminal-acceptance.json",
+    "root_acceptance_sha256": "7cd53a88c85b4eae8114b58ffbe58fe2e13e714fda8c489097301f932a27b2a6",
+    "actual_cost_declarations": 29,
+    "only_added_from174": "ImbalancedChen.Part3NonresonantManuscriptCostAlgebra",
+    "all174_module_records_deep_exact": true,
+    "Offdiag_not_already_owned": true
+  },
+  "artifact": {
+    "path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline175.py",
+    "sha256": "e42b59906640fe8ad4e00769509dcb0c56f1a1289de7d4525a3b07c8e129f342",
+    "bytes": 6688,
+    "old_path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline174.py",
+    "old_sha256": "5c97568488331047e5d214b4d049bd790b67c11eaefff8922812a43b588e19d4",
+    "diff_path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline175.diff",
+    "diff_sha256": "73a173d2fe7cb41e20b857903bcf9187d475e359b222bc65d7e9151f4b5bf386",
+    "raw_inverse_path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline175.raw-inverse.json",
+    "raw_inverse_sha256": "6b0ac6cdc1325802ab039c28b248b1e0226f94f677b8023932a38ba06b3979c3",
+    "AST_parse": true,
+    "raw_forward_reverse_exact": true,
+    "inverse_AST_exact": true,
+    "only_four_literal_constants_changed": true,
+    "full_script_utf8": "\"\"\"Rehash the known accepted sources and at most one explicitly audited leaf.\n\nThis performs no compiler invocation or imported-closure replay.\n\"\"\"\nfrom pathlib import Path\nimport argparse\nimport datetime\nimport hashlib\nimport json\n\nSTATE = Path(__file__).resolve().parent.parent\nROOT = STATE.parents[1]\nBASE = STATE / 'source-reviews/20261021T110037115235Z-costalgebradc943-baseline174-v5-runtime-fresh-current-terminal-owned-census.json'\nBASE_SHA = 'c4464cabf4300aa4401badfea8076ab9c9d961bf7b5e5c0b6d8d7a98960f12da'\nMODULE = 'ImbalancedChen.Part3ResonanceOffDiagonalCount'\nSOURCE_SHA = '1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3'\n\n\ndef sha(p):\n    return hashlib.sha256(Path(p).read_bytes()).hexdigest()\n\n\ndef read(p):\n    return json.loads(Path(p).read_text(encoding='utf-8'))\n\n\ndef resolve(value):\n    value = str(value).replace('\\\\', '/')\n    if value.startswith('E:/'):\n        value = '/mnt/e/' + value[3:]\n    elif value.startswith('//wsl.localhost/Debian/'):\n        value = '/' + value[len('//wsl.localhost/Debian/'):]\n    result = Path(value)\n    return result if result.is_absolute() else ROOT / result\n\n\ndef main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--new-owned-receipt')\n    args = parser.parse_args()\n    assert sha(BASE) == BASE_SHA\n    modules = dict(read(BASE)['modules'])\n    assert len(modules) == 175\n    if args.new_owned_receipt:\n        rp = resolve(args.new_owned_receipt)\n        receipt = read(rp)\n        assert receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'\n        assert receipt['targets'] == {MODULE: SOURCE_SHA}\n        assert receipt['inputs_before'] == receipt['inputs_after']\n        assert not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed']\n        dp = rp.parent / 'declarations.json'\n        records = [r for r in read(dp) if r['module'] == MODULE]\n        assert len(records) == receipt['declaration_counts'][MODULE]\n        modules[MODULE] = {\n            'module': MODULE, 'source_sha256': SOURCE_SHA,\n            'object_parts': receipt['inputs_before']['owned_object_parts'][MODULE],\n            'owned_receipt': str(rp), 'owned_receipt_sha256': sha(rp),\n            'declarations_json_sha256': sha(dp), 'complete_serialized_declarations': len(records)}\n    receipts = {}\n    declarations = {}\n    inventories = {}\n    total = 0\n    for module, entry in modules.items():\n        assert sha(ROOT / (module.replace('.', '/') + '.lean')) == entry['source_sha256']\n        for extension, digest in entry['object_parts'].items():\n            assert sha(STATE / 'lib/lean' / (module.replace('.', '/') + extension)) == digest\n        rp = resolve(entry['owned_receipt'])\n        assert sha(rp) == entry['owned_receipt_sha256']\n        key = str(rp)\n        if key not in receipts:\n            receipt = read(rp)\n            assert receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'\n            assert receipt['inputs_before'] == receipt['inputs_after']\n            assert not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed']\n            receipts[key] = receipt\n            dp = rp.parent / 'declarations.json'\n            declarations[key] = read(dp)\n            log = rp.parent / 'declarations.log'\n            inventory_stage = [s for s in receipt['stages'] if s['kind'] == 'full_inventory_type_axioms']\n            assert len(inventory_stage) == 1 and inventory_stage[0]['exit_code'] == 0\n            assert sha(log) == inventory_stage[0]['log_sha256']\n            inventory = {}\n            for line in log.read_text(encoding='utf-8').splitlines():\n                if line.startswith('P0_QUEUE_INVENTORY '):\n                    value = json.loads(line.split(' ', 1)[1])\n                    assert value['module'] not in inventory\n                    inventory[value['module']] = value\n            inventories[key] = inventory\n        receipt = receipts[key]\n        assert receipt['targets'][module] == entry['source_sha256']\n        assert receipt['inputs_before']['owned_object_parts'][module] == entry['object_parts']\n        stock = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]\n        assert len(stock) == 1 and stock[0]['result']['status'] == 'PASS'\n        assert stock[0]['result']['returncode'] == 0\n        assert sha(rp.parent / 'declarations.json') == entry['declarations_json_sha256']\n        records = [r for r in declarations[key] if r['module'] == module]\n        assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]\n        names = set()\n        for record in records:\n            assert record['name'] not in names\n            names.add(record['name'])\n            assert record['type'] and '\u22ef' not in record['type']\n            assert not record['unsafe'] and not record['partial'] and not record['axiom']\n            assert set(record['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'}\n        inventory = inventories[key][module]\n        assert len(inventory['serialized']) == len(set(inventory['serialized']))\n        assert len(names) == len(inventory['environment']) == len(set(inventory['environment']))\n        assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']\n        assert names == set(inventory['serialized']) == set(inventory['environment'])\n        total += len(records)\n    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')\n    result = {\n        'status': 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT',\n        'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),\n        'owned_modules': len(modules), 'complete_serialized_declarations': total,\n        'modules': modules, 'original_owned_receipts_rehashed': len(receipts),\n        'all_generated_serialized_environment_names_match': True,\n        'all_full_types_safety_transitive_three_axioms_checked': True,\n        'external_closure_replayed': False, 'unconditional_main_proved': False,\n        'no_compiler_invoked': True, 'no_cache_mutated': True,\n        'script_sha256': sha(__file__), 'baseline_sha256': BASE_SHA}\n    output = STATE / 'source-reviews' / (stamp + '-offdiag1a0e-baseline175-runtime-fresh-current-terminal-owned-census.json')\n    output.write_text(json.dumps(result, indent=2) + '\\n', encoding='utf-8')\n    print(json.dumps({'report': str(output), 'sha256': sha(output), 'owned_modules': len(modules),\n                      'complete_serialized_declarations': total, 'original_owned_receipts': len(receipts)}))\n\n\nif __name__ == '__main__':\n    main()\n",
+    "full_raw_diff_utf8": "--- rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline174.py\n+++ rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline175.py\n@@ -10,8 +10,8 @@\n \n STATE = Path(__file__).resolve().parent.parent\n ROOT = STATE.parents[1]\n-BASE = STATE / 'source-reviews/20261021T101322959323Z-runtime-fresh-current-terminal-owned-census.json'\n-BASE_SHA = '00445cc0bc388a70374ed800d7d634332199280bd52415c46b83a240774a04e9'\n+BASE = STATE / 'source-reviews/20261021T110037115235Z-costalgebradc943-baseline174-v5-runtime-fresh-current-terminal-owned-census.json'\n+BASE_SHA = 'c4464cabf4300aa4401badfea8076ab9c9d961bf7b5e5c0b6d8d7a98960f12da'\n MODULE = 'ImbalancedChen.Part3ResonanceOffDiagonalCount'\n SOURCE_SHA = '1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3'\n \n@@ -40,7 +40,7 @@\n     args = parser.parse_args()\n     assert sha(BASE) == BASE_SHA\n     modules = dict(read(BASE)['modules'])\n-    assert len(modules) == 174\n+    assert len(modules) == 175\n     if args.new_owned_receipt:\n         rp = resolve(args.new_owned_receipt)\n         receipt = read(rp)\n@@ -119,7 +119,7 @@\n         'external_closure_replayed': False, 'unconditional_main_proved': False,\n         'no_compiler_invoked': True, 'no_cache_mutated': True,\n         'script_sha256': sha(__file__), 'baseline_sha256': BASE_SHA}\n-    output = STATE / 'source-reviews' / (stamp + '-offdiag1a0e-baseline174-runtime-fresh-current-terminal-owned-census.json')\n+    output = STATE / 'source-reviews' / (stamp + '-offdiag1a0e-baseline175-runtime-fresh-current-terminal-owned-census.json')\n     output.write_text(json.dumps(result, indent=2) + '\\n', encoding='utf-8')\n     print(json.dumps({'report': str(output), 'sha256': sha(output), 'owned_modules': len(modules),\n                       'complete_serialized_declarations': total, 'original_owned_receipts': len(receipts)}))\n",
+    "full_raw_inverse": {
+      "original_path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline174.py",
+      "original_sha256": "5c97568488331047e5d214b4d049bd790b67c11eaefff8922812a43b588e19d4",
+      "proposal_path": "rounds/20261021-offdiag1a0e-owned-census-sol-medium-baseline175.py",
+      "proposal_sha256": "e42b59906640fe8ad4e00769509dcb0c56f1a1289de7d4525a3b07c8e129f342",
+      "offset_units": "UTF-8 raw byte offsets",
+      "edits": [
+        {
+          "old_start": 320,
+          "old_end": 406,
+          "old_hex": "736f757263652d726576696577732f3230323631303231543130313332323935393332335a2d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e",
+          "new_hex": "736f757263652d726576696577732f3230323631303231543131303033373131353233355a2d636f7374616c676562726164633934332d626173656c696e653137342d76352d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e",
+          "expected_occurrences": 1,
+          "new_start": 320,
+          "new_end": 438
+        },
+        {
+          "old_start": 420,
+          "old_end": 484,
+          "old_hex": "30303434356363306263333838613730333734656438303064376436333433333231393932383062643532343135633436623833613234303737346130346539",
+          "new_hex": "63343436346361626634333030616134343031626164666561383037366162396339643936316266376235653563306236643864376139383936306631326461",
+          "expected_occurrences": 1,
+          "new_start": 452,
+          "new_end": 516
+        },
+        {
+          "old_start": 1316,
+          "old_end": 1342,
+          "old_hex": "617373657274206c656e286d6f64756c657329203d3d20313734",
+          "new_hex": "617373657274206c656e286d6f64756c657329203d3d20313735",
+          "expected_occurrences": 1,
+          "new_start": 1348,
+          "new_end": 1374
+        },
+        {
+          "old_start": 6255,
+          "old_end": 6328,
+          "old_hex": "2d6f666664696167316130652d626173656c696e653137342d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e",
+          "new_hex": "2d6f666664696167316130652d626173656c696e653137352d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e",
+          "expected_occurrences": 1,
+          "new_start": 6287,
+          "new_end": 6360
+        }
+      ],
+      "literal_replacements": [
+        {
+          "old": "source-reviews/20261021T101322959323Z-runtime-fresh-current-terminal-owned-census.json",
+          "new": "source-reviews/20261021T110037115235Z-costalgebradc943-baseline174-v5-runtime-fresh-current-terminal-owned-census.json",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "00445cc0bc388a70374ed800d7d634332199280bd52415c46b83a240774a04e9",
+          "new": "c4464cabf4300aa4401badfea8076ab9c9d961bf7b5e5c0b6d8d7a98960f12da",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "assert len(modules) == 174",
+          "new": "assert len(modules) == 175",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "-offdiag1a0e-baseline174-runtime-fresh-current-terminal-owned-census.json",
+          "new": "-offdiag1a0e-baseline175-runtime-fresh-current-terminal-owned-census.json",
+          "expected_occurrences": 1
+        }
+      ],
+      "raw_forward_exact": true,
+      "raw_reverse_exact": true
+    }
+  },
+  "frozen_historical174_artifacts_rehashed_unchanged": {
+    "rounds/20261021-offdiag1a0e-readonly-classification-baseline174.py": "df03f06b31838419aa2e09d51abbe7adddcd9665e83f8f4881952c44118076bf",
+    "rounds/20261021-offdiag1a0e-full-inputs-baseline174.py": "7dde373fce9a13a4de1acabf1bb2df7a0898b22d862a9cc65c7501266310441f",
+    "source-reviews/20261021-offdiag1a0e-baseline174-classification-PASS-fullwrapper-proposal-HOLD.json": "2e5cd16f0d71b0e8172ec457808f28b8f8659dc973fc19f6e4383b21cbef92d5"
+  },
+  "scope_split": "Existing classifier/wrapper remain explicitly historical174 snapshots and continue proving that entire174 baseline plus target/native input equality before/after. They do not claim current global175. Future authorized pipeline must additionally execute this new fresh175 census before without --new-owned-receipt and after with actual Offdiag receipt; verify all original175 entries exact, including Cost29, and exactly one new Offdiag module.",
+  "future_pipeline_expectations": {
+    "fresh_global_before_modules": 175,
+    "fresh_global_before_declarations": 4066,
+    "fresh_global_before_receipts": 123,
+    "after_with_actual_new_single_Offdiag_module_count": 176,
+    "after_declarations": "4066 + actual audited Offdiag declaration count",
+    "actual_generated_Offdiag_count": null,
+    "after_preserves_cost_original_record": true,
+    "requires_separate_root_heavy_gate": true
+  },
+  "static_checks": {
+    "all_functions_control_flow_safety_loops_retained": true,
+    "only_BASE_path_BASE_SHA_module_count_output_name_literals_adapted": true,
+    "four_unique_UTF8_anchors_each_exactly_once": true,
+    "raw_wholehashes_forward_reverse_verified": true,
+    "AST_normalize_only_four_constants_equals_original": true,
+    "all_sources_objects_originalreceipts_stocklogs_inventory_actualnames_complete_types_safety_threeaxioms_preserved": true,
+    "optional_new_single_leaf_receipt_rules_unchanged": true,
+    "historical174_inputs_immutable": true,
+    "no_GeneralD_claimed_as_175_addition": true
+  },
+  "execution_scope": {
+    "new_census_executed": false,
+    "classifier_wrapper_proper_helper_compiler_checker_executed": false,
+    "heavy_executed": false,
+    "source_Lean_Git_pins_helpers_catalog_cache_modified": false,
+    "generated_count_predicted": null,
+    "main_theorem_proved": false
+  },
+  "quota": {
+    "before_used_percent": 36,
+    "before_remaining_percent": 64,
+    "after_used_percent": 36,
+    "after_remaining_percent": 64,
+    "secondary": null,
+    "stop_remaining_lte": 40,
+    "null_is_not_zero": true
+  },
+  "publication": "New census/diff/inverse and sole checkpoint atomically .tmp -> replace.",
+  "HOLD": true,
+  "next": "Root read new census and full four-literal diff, then separate pipeline gate. No execution authorized by this preparation."
+}

@@ -1,0 +1,192 @@
+{
+  "audit_id": "20261021-general-D-rootpacket-independent-source-review-HOLD",
+  "reviewer": "/root/chen_bv_reuse_sol_high_oct21",
+  "date": "2026-10-21",
+  "verdict": "PASS_INDEPENDENT_FINITE_MATHEMATICAL_SOURCE_REVIEW_ONLY",
+  "status": "PASS_SOURCE_REVIEW_PENDING_ROOT_ELABORATION_AND_AXIOMS_HOLD",
+  "scope": "Complete182-line candidate and author checkpoint read. Source-level arithmetic/type/API binding review only. One atomic JSON checkpoint; no Lean edits or proper/compiler/helper/checker/Git process or mutation. No analytic claim or acceptance-count change.",
+  "baseline": {
+    "accepted": "173/4024/121",
+    "HEAD": "4c4d53782d0d0805b9498b487ce5d28a67063c2d",
+    "provenance": "Parent-reported baseline; no compiler/kernel acceptance inferred."
+  },
+  "identity": {
+    "source": "ImbalancedChen/Part3SharedFirstFactorGeneralDRootPacket.lean",
+    "expected_source_sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+    "observed_source_sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af",
+    "author_cp": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-general-D-actual-root-packet-finite-candidate-HOLD.json",
+    "expected_author_cp_sha256": "0b83b47d1cdaa0c91cf83b2fbda9789b0013b037b39bda5f70ae793b4c176328",
+    "observed_author_cp_sha256": "0b83b47d1cdaa0c91cf83b2fbda9789b0013b037b39bda5f70ae793b4c176328",
+    "author_full_source_byte_text_equals_candidate": true,
+    "public_type_matches_author": true,
+    "private_type_matches_author": true,
+    "declarations_total": 2
+  },
+  "complete_declaration_headers": [
+    {
+      "name": "ImbalancedChen.Part3.SharedGeneralDRootPacket.normalized_tail",
+      "visibility": "private",
+      "type": "private theorem normalized_tail {r s w : ℕ}\n    (hr : 0 < r) (hs : 0 < s) :\n    let D",
+      "assessment": "Only r>0,s>0 supplied; w may be zero. D=gcd(r*s,w), d=gcd(r,D),q=D/d,r0=r/d,t=s/q all constructed. Outputs positivity, exact factorization and gcd(r0,q)=1."
+    },
+    {
+      "name": "ImbalancedChen.Part3.sharedGeneralDRootPacket_fourier",
+      "visibility": "public",
+      "type": "theorem sharedGeneralDRootPacket_fourier\n    {p r s w N1 N2 : ℕ}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (a h : ℤ) :\n    let D",
+      "assessment": "Only positive original p,r,s,w,N1,N2, actual ComplexCRT compatibility, and arbitrary a,h:Z. All packet factors and inverse arguments are local let definitions. No hypothesis supplies a factorization, inverse, unit, phase identity or mean bound."
+    }
+  ],
+  "arithmetic_review": [
+    {
+      "step": "general_D_normalization",
+      "result": "PASS",
+      "details": "D>0 follows from r*s>0 even when w=0; d>0 from r>0. gcd divisibility gives d|r,d|D,D|r*s. Native coprime_div_gcd_div_gcd applied at gcd(r,D)>0 yields gcd(r0,q)=1. Positive multiplication cancellation turns D|r*s into q|r0*s, and Euclid with q coprime r0 gives q|s. Thus q*t=s,t>0 and D*(r0*t)=r*s; no D|r or D=1 assumption."
+    },
+    {
+      "step": "actual_CRT_licenses",
+      "result": "PASS",
+      "details": "sharedDifferenceData_licenses is instantiated at v=r*s with the exact hp,hr*hs,hw,hN1,hN2,hc,a. Its conjunction positions9,14,18,19 give positive L, L=(p*D)*((r*s)/D)*w0, gcd(A*n2*((r*s)/D),c)=1, and gcd(n1*L,A)=1. Positivity of n1,w0,A is also extracted. No claimed unit comes from the caller."
+    },
+    {
+      "step": "packet_units",
+      "result": "PASS",
+      "details": "Replacing (r*s)/D with r0*t proves A*n2*((r*s)/D)=b*t and n1*L=zeta*t by natural-number ring identities. Coprimality descends to b,t and zeta,t via genuine divisibility of products. Native Coprime.mul_right combines gcd(t,A)=gcd(t,c)=1 into gcd(t,A*c)=1."
+    },
+    {
+      "step": "full_phase_transport",
+      "result": "PASS",
+      "details": "sharedDifferenceReciprocity_fourier supplies the actual ComplexCRT.residue over the exact physical L. The final simpa rewrites only n1*L=zeta*t, A*n2*((r*s)/D)=b*t, and cast(c)=cast(n1)*cast(w0). Negative root numerator -a, signed quotient f=((d1:Z)*n1-n2)/(p*D), original signed h, and slow denominator N1*L are retained exactly."
+    }
+  ],
+  "project_API_bindings": {
+    "actual_compatible_definition": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2",
+    "residue_spec": "theorem residue_spec {q r m1 m2 : ℕ} (a : ℤ) (hc : Compatible q r m1 m2) :\n    Int.ModEq q (residue q r m1 m2 a * m1) a ∧\n      Int.ModEq r (residue q r m1 m2 a * m2) a ∧\n        ∀ n : ℤ, (Int.ModEq q (n * m1) a ∧ Int.ModEq r (n * m2) a) ↔\n          Int.ModEq (q.lcm r) n (residue q r m1 m2 a)",
+    "shared_difference_licenses": "theorem sharedDifferenceData_licenses\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g",
+    "shared_difference_fourier": "theorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g",
+    "inverse_definition": "def CanonicalReciprocalPhase.wPhaseInverse (n m : ℕ) : ℤ := n.gcdA m",
+    "inverse_spec": "theorem wPhaseInverse_spec {n m : ℕ} (h : n.Coprime m) :\n    Int.ModEq m ((n : ℤ) * wPhaseInverse n m) 1",
+    "circle_modEq": "theorem wPhase_circle_eq_of_modEq {m : ℕ} (hm : 0 < m) {x y : ℤ}\n    (h : Int.ModEq m x y) :\n    (((x : ℝ) / m : ℝ) : UnitAddCircle) = ((y : ℝ) / m : ℝ)",
+    "definitions": "supportedPart and coprimePart are finite products of complete prime-factor powers, partitioned by p|g and p∤g. A=g*supportedPart(N1/g,g) is the actual supported root modulus. residue is Classical.choose of a proved CRT construction on Compatible, and is not supplied by a hypothesis."
+  },
+  "native_API_bindings": {
+    "version": "Lean4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1; exact core/native source paths below were read.",
+    "normalized_gcd_type": "theorem coprime_div_gcd_div_gcd\n    (H : 0 < gcd m n) : Coprime (m / gcd m n) (n / gcd m n) := by",
+    "cancel_divisibility_type": "protected theorem dvd_of_mul_dvd_mul_left\n    (kpos : 0 < k) (H : k * m ∣ k * n) : m ∣ n := by",
+    "euclid_type": "theorem Coprime.dvd_of_dvd_mul_left (H1 : Coprime k m) (H2 : k ∣ m * n) : k ∣ n :=\n  H1.dvd_of_dvd_mul_right (by rwa [Nat.mul_comm])",
+    "product_unit_type": "theorem Coprime.mul_right (H1 : Coprime k m) (H2 : Coprime k n) : Coprime k (m * n) :=\n  (H1.symm.mul_left H2.symm).symm",
+    "inherited_unit_type": "lemma Coprime.of_dvd_left (ha : a₁ ∣ a₂) (h : Coprime a₂ b) : Coprime a₁ b := h.coprime_dvd_left ha",
+    "positive_cancellation": "protected theorem mul_left_cancel {n m k : Nat} (np : 0 < n) (h : n * m = n * k) : m = k := by",
+    "fourier_sign": "-- simp normal form is `fourier_neg'`\ntheorem fourier_neg {n : ℤ} {x : AddCircle T} : fourier (-n) x = conj (fourier n x) := by"
+  },
+  "actual_row_binding": {
+    "mapping": "For o,u: p=o.1.1,N1=o.1.2.1,N2=o.1.2.2,r=o.2.1.1,s=u.1,w=o.2.1.2.1*o.2.1.2.2,h=u.2,a=d.residue. The literal row guard supplies gcd(r*s,w)=o.2.2 and Compatible(p*(r*s),p*w,N1,N2). Actual factor-carrier membership with MediumAdmissible provides positivity.",
+    "scope_limit": "The candidate states a raw-tuple pointwise identity. It does not itself prove a public finset/membership adapter, modify any carrier, or claim the full row term equals one isolated character. This limitation is accurately disclosed in its author checkpoint.",
+    "unchanged": "All common coefficients, gcd/support gates, original signed frequency window, h=0 cutoff, real projection, Poisson amplitude, smooth low pass, primitive V/U bookkeeping and outside energy remain in the actual consumer.",
+    "row_definition": "    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0\n\ndef MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)"
+  },
+  "weakening_audit": {
+    "analytic_supplier_found": false,
+    "new_axiom_or_sorry_found_in_candidate": false,
+    "supplied_target_or_phase_hypothesis": false,
+    "signed_h_preserved": true,
+    "signed_a_preserved": true,
+    "full_slow_phase_preserved": true,
+    "D_divides_r_assumed": false,
+    "D_one_assumed": false,
+    "carrier_enlargement": false,
+    "absolute_value_replacement": false,
+    "claim": "Candidate is a finite exact dictionary. PASS here does not certify elaboration, transitive axioms, original7/32, nonresonant cancellation or any global main theorem."
+  },
+  "fixes": {
+    "required_source_repairs": [],
+    "elaboration": "No definite API/type or mathematical defect identified from the inspected sources. Exact Lean elaboration and axiom inspection remain for the root sole heavy queue."
+  },
+  "next_paired_merge": {
+    "precise_input": "Fix one actual outer tuple o and stored D. Take two active inner labels u=(s,h),v=(sPrime,hPrime) from the SAME original inner carrier. Both row guards imply gcd(r*s,w)=gcd(r*sPrime,w)=D and exact Compatible. Apply this candidate twice. Then d,q,r0,g,d1,n1,n2,A,w0,b,c,zeta,f are common; t=s/q,tPrime=sPrime/q>0 and each is coprime to A*c. Keep arbitrary signed h,hPrime,a, including zero.",
+    "normalize": "Let K=(p*D)*r0*w0, z=t*tPrime, k=h*(tPrime:Z)-hPrime*(t:Z), y=f*k. Exact lcm identities give L_t=K*t,L_tPrime=K*tPrime; K>0. Let I(n,m)=CanonicalReciprocalPhase.wPhaseInverse n m and E(x)=fourier(1)(x mod1).",
+    "integer_targets": [
+      "Modulo c: h*I(b*t,c)-hPrime*I(b*tPrime,c) ≡ k*I(b*z,c).",
+      "Modulo A: h*I(zeta*t,A)-hPrime*I(zeta*tPrime,A) ≡ k*I(zeta*z,A)."
+    ],
+    "complete_character_target": "Phi(t,h)*star(Phi(tPrime,hPrime)) = E(-a*k*I(zeta*z,A)/A) * E(a*k/(N1*K*z)) * E(a*f*k*I(b*z,c)/c), where Phi(t,h)=fourier h(CRTresidue_t/L_t). The signed negative root and COMPLETE slow phase remain. This is a proposed next theorem, not proved by the current candidate or this review.",
+    "proof_licenses": "Both moduli are positive; b is unit modulo c,zeta is unit modulo A,t,tPrime are units modulo A*c. Prove the two inverse-difference congruences using the actual inverse specs and unit cancellation, then transport via wPhase_circle_eq_of_modEq and the Fourier conjugation law. Modulus1 is permitted.",
+    "real_projection_warning": "The actual smallCoreSquaredRowTerm is gamma2(s)*Complex.ofReal(Re(F_s,h)), with F the COMPLETE smooth low-pass*Poisson amplitude*character. Therefore its Gram product is not simply F_s,h*star(F_sPrime,hPrime). First expand Re(F)=(F+star(F))/2, yielding all four sign/conjugation products with amplitudes unchanged; alternatively justify an exact signed-frequency regrouping on the original window. The plus branches correspond to replacing hPrime by -hPrime, giving kPlus=h*tPrime+hPrime*t. Preserve the original resonant union and its complement.",
+    "yz_warning": "y=f*k normalizes the reciprocal numerator only. The root and slow factors still depend on k. Retain packet labels including f,k or prove exact recovery of k from fixed nonzero f before reindexing by(y,z). No absolute values of h,k,f or discarded root/slow phase, no replacement carrier, and no spectral estimate follow from the merger."
+  },
+  "project_source_bindings": [
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorGeneralDRootPacket.lean",
+      "sha256": "7e284bf1d7bdfac5ad59f7c509cedc218b10db3b4ccc1aced33e208abb3395af"
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorDifferenceReciprocity.lean",
+      "sha256": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21"
+    },
+    {
+      "path": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f"
+    },
+    {
+      "path": "ImbalancedChen/Part3CanonicalReciprocalPhase.lean",
+      "sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5"
+    },
+    {
+      "path": "ImbalancedChen/Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9"
+    },
+    {
+      "path": "ImbalancedChen/Part3CommonPoisson.lean",
+      "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630"
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+      "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd"
+    }
+  ],
+  "native_source_bindings": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Coprime.lean",
+      "sha256": "05b67b9e50bb0b92ba80dc4a8074580c14a8bdcdbdc150486f4796d104c8426a"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lemmas.lean",
+      "sha256": "8259037db9a9bf223c4d57eb7811ff0b65e4439f98ed0bf3cd301565ff46daad"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\GCD\\Basic.lean",
+      "sha256": "c46b9173200adac93cefa0f8d9ee02306930771a1960796335c32455f719c3ac"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2"
+    }
+  ],
+  "quota": {
+    "before": {
+      "used_percent": 34,
+      "remaining_percent": 66,
+      "secondary": null
+    },
+    "after": {
+      "used_percent": 34,
+      "remaining_percent": 66,
+      "secondary": null
+    },
+    "secondary_null_means_unavailable": true,
+    "stop_remaining_lte": 40,
+    "threshold_reached": false
+  },
+  "HOLD": true
+}

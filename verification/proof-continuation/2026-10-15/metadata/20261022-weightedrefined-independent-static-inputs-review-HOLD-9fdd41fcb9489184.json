@@ -1,0 +1,58 @@
+{
+  "status": "HOLD_INPUTS_STATICALLY_REVIEWED_CLASSIFIER_UNEXECUTED",
+  "date": "2026-10-22",
+  "scope": "只读审核WeightedRefined classifier输入、diff与保留的校验路径；不执行classifier/collect/census/compiler/checker/proper/Git，不修改旧CP或Lean。",
+  "bindings": {
+    "proposal_cp": {
+      "path": ".lake/proof-continuation/source-reviews/20261022-weightedrefined-proper-PASS-classifier-input-proposals-HOLD.json",
+      "sha256": "299cb748b07692d24044f6765b61173c113d302da47b454845b62188a3a43f4d"
+    },
+    "classifier": {
+      "path": ".lake/proof-continuation/rounds/20261022-weightedrefined-readonly-classification-baseline178-proposal.py",
+      "sha256": "f4bab388244efd96972fa0df24992bc655bf12f32b43970d752ae01014c9f68d"
+    },
+    "classifier_full_diff_sha256": "e5abf13b3181853085423a6a6d231089a5e39a63f7f69d8ec353c3d2d0520fc3",
+    "classifier_raw_inverse_sha256": "bdcbf5440f9b99726f4763538688b2c819e7a4762ad15acd06b4cfda1d6476df",
+    "source_bindings": {
+      "path": ".lake/proof-continuation/rounds/20261022-weightedrefined-source-types-api-bindings.json",
+      "sha256": "e13d7833d8d4389d09f088e0f2bc54fcb4e7af8ece6ba95bf1329b01aa373af2"
+    },
+    "parent_measurement": {
+      "path": ".lake/proof-continuation/rounds/20261022-weightedrefined-baseline178-parent-measurement.json",
+      "sha256": "29cf2b2d502887f4bcca60f70c9090ca5c9bdca0ce3a980dcfc92792974a8368"
+    },
+    "one_proper": {
+      "path": ".lake/proof-continuation/preflights/20261021T174822024297Z-exact-current-ImbalancedChen.Part3WeightedRefinedSignedDifference.json",
+      "sha256": "7a6248c167e869e4e1e0f0ee2b10afef8864763d8ecdb4f39c13bd833cd8f366"
+    }
+  },
+  "static_review": {
+    "source": "当前Part3WeightedRefinedSignedDifference源与metadata的完整source逐字一致：SHA f26985d763f57841af4f9c884b0dea5caa64411418ba027f4055a659a523c46c，7522 bytes、174 LF、CR=0。6个完整定理类型、4个定义头均唯一匹配；27条API/source span在14个源文件上重算文件hash、span hash及literal，均相符。classifier继续检查这27条、4 imports、9条Multiplicity stock records、Multiplicity source/object/receipt/root acceptance引用；这些固定文件SHA均匹配。",
+    "diff_and_functions": "以已绑定的mult0f41完整脚本为旧字节、提案脚本为新字节，base64原文hash和大小匹配；全量unified diff逐字重建等于绑定diff，正逆raw字节守恒。path/sha/read/exact/source_path五个helper函数AST与paired0248模板逐一相同；verify_baseline AST除计数常量176→178、4069→4109、124→126外相同。Chen7完整native foreign loop与提案相同，只有三条增加的Multiplicity reference断言，无删除；loop以外原始父缓存、owned/inherited、five-slot及持久化guards均仍在。",
+    "proper_graph": "唯一proper输入SHA匹配且目标SHA等于f26985…c46c：project=56（含目标）、55个父、target cache未纳入、无missing external/parser findings；foreign native nodes=6634、header roots=64。parent measurement的55条原始父记录与proper完全一致。它报告55 caches、8 owned、281 owned serialized records、47 inherited、117 object entries、212 direct edges、16 null-source edges；counts与提案常量相符。",
+    "owned_and_inherited_guards": "verify_baseline保留完整178模块的source/object parts、receipt、stock replay log、完整serialized types、inventory/environment唯一性及unsafe/partial/axiom标志检查，并把transitive axioms限制在{propext, Classical.choice, Quot.sound}。collect再校验55个实际父cache/source/object、binding、direct sources/dependency parts及各对象parts；8个owned父连回完整声明记录与stock receipt。",
+    "native_reference": "Multiplicity五槽历史reference SHA 4e3837369627d8078e14a398739f96bcfbb331f9c181d5be0c497f660a9b4212被保留。reference内6634 foreign modules按五槽统计为31868 present、1302 missing；proposal loop逐module要求当前source/object与reference hash及五槽parts相等。parent measurement明确标注尚未做当前native parts collection，因此此处只确认reference和future classifier guard保留，不声称当前实物6634项已重验。",
+    "latest_ledger": "current178 census SHA dd13aa5bd6e909ed336591a173f48b8221a1b94a5f301ecde41ea87d5b8a4544与root acceptance SHA d88e34e233c3689723cde7150f5b00ba1740ed45db45d0e2ac2718de192b7d9c匹配，分别记178 modules/4109 declarations/126 receipts及root对fulltypes、inventory、stock logs、safety和3 axioms的确认。该账本不与source-only目标的实际声明计数混同。",
+    "prefix_suffix": "Classifier raw inverse has 8 change blocks; independent byte comparison confirmed every untouched inter-block span in the original and proposal is identical (initial and trailing untouched spans are empty because the first and last changes touch file boundaries). The full unified diff also reconstructs byte-for-byte."
+  },
+  "blockers": [
+    "classifier明确未执行；target实际生成声明数、实时55 parent cache读取和当前6634 native五槽对比结果仍未知。因此保持HOLD，不宣称该新定理已kernel accepted。",
+    "parent measurement自身说明没有执行当前native parts collection；将来classifier须按其保留的全6634节点循环再核，不能把Multiplicity历史reference计作本次live recheck。"
+  ],
+  "non_blocking": [
+    "未发现source/API/hash/span、raw diff/逆变换、基线178计数、parent measurement/proper连接、owned/inherited计数或native reference守卫的静态不一致。",
+    "没有compiler/checker结果符合此只读输入审查范围；这不是代码层阻断，也不构成目标已编译或已接受的证据。"
+  ],
+  "execution": {
+    "classifier": false,
+    "collect": false,
+    "census": false,
+    "proper": false,
+    "compiler": false,
+    "checker": false,
+    "git": false,
+    "lean_or_old_CP_changed": false,
+    "actual_target_declaration_count": "unknown",
+    "quota_snapshot": "40% used / 60% remaining; stop when remaining <= 40%"
+  }
+}

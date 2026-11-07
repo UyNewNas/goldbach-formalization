@@ -1,0 +1,320 @@
+from pathlib import Path
+import collections, datetime, hashlib, json, re, shlex, shutil, subprocess
+
+RUNTIME = Path(__file__).resolve().parent
+REPO = Path('/workspace/scratch/cd30ec11ea1d/goldbach-formalization')
+OUT = REPO / 'verification/parts/p5/round3/s1carrier'
+TARGET = 'MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier'
+NS = 'MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig'
+ALLOWED = {'propext', 'Classical.choice', 'Quot.sound'}
+
+def sha(p):
+    return hashlib.file_digest(p.open('rb'), 'sha256').hexdigest()
+
+def save(p, x):
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + '\n')
+
+def copy(p, q):
+    q.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(p, q)
+    assert sha(p) == sha(q)
+
+all_rows = [json.loads(s) for s in (RUNTIME / 'logs/results.jsonl').read_text().splitlines()]
+failures = [r for r in all_rows if r['returncode'] != 0]
+assert len(failures) == 1 and failures[0]['action'] == 'types'
+assert failures[0]['module'] == 'verification.parts.p5.S1CarrierPublicTypes'
+assert failures[0]['returncode'] == 1
+rows = [r for r in all_rows if r['returncode'] == 0]
+assert [r['action'] for r in rows] == ['compile', 'replay', 'audit', 'types']
+assert all(r['returncode'] == 0 and r['source_unchanged'] and
+           r['imports_unchanged'] and r['guards_unchanged'] for r in rows)
+compile_record, replay_record, audit_record, types_record = rows
+assert compile_record['warningAsError'] and compile_record['trustLevel'] == 0
+assert audit_record['warningAsError'] and audit_record['trustLevel'] == 0
+source_hash = compile_record['source_sha256_after']
+assert source_hash == '757bdcea11195c48ed5814f95a70737326853e68bfaa093711a4f6161e1a896a'
+assert replay_record['source_sha256_before'] == source_hash
+obj = compile_record['objects_after']
+assert obj == replay_record['objects_before'] == replay_record['objects_after']
+assert audit_record['imports_before'][0]['objects'] == obj
+assert audit_record['imports_after'][0]['objects'] == obj
+assert types_record['imports_before'][0]['objects'] == obj
+assert types_record['imports_after'][0]['objects'] == obj
+assert compile_record['imports_before'] == replay_record['imports_before']
+assert sha(Path(compile_record['source'])) == source_hash
+assert all(sha(Path(x['path'])) == x['sha256'] for x in obj)
+texts = [Path(r['log']).read_text() for r in rows]
+assert 'FRONTEND_OK module=' + TARGET + ' trustLevel=0' in texts[0]
+assert 'replaying ' + TARGET in texts[1]
+assert 'FRONTEND_OK module=verification.parts.p5.S1CarrierAudit trustLevel=0' in texts[2]
+assert 'FRONTEND_OK module=verification.parts.p5.S1CarrierPublicTypes trustLevel=0' in texts[3]
+decls = [json.loads(line.split(' ', 1)[1]) for line in texts[2].splitlines()
+         if line.startswith('CHEN_P5_S1CARRIER_AUDIT_DECL ')]
+counts = [json.loads(line.split(' ', 1)[1]) for line in texts[2].splitlines()
+          if line.startswith('CHEN_P5_S1CARRIER_AUDIT_MODULE ')]
+assert len(counts) == 1 and counts[0]['module'] == TARGET and counts[0]['count'] == len(decls)
+assert len(decls) == len({x['name'] for x in decls}) and len(decls) >= 25
+assert all(x['module'] == TARGET and set(x['axioms']) <= ALLOWED for x in decls)
+original = (OUT / 'source/upstream-LiLiuGoldbachS1Carrier.lean.txt').read_text()
+source_names = re.findall(r'^theorem\s+([^\s:(]+)', original, re.M)
+assert len(source_names) == 17
+inventory = {x['name']: x for x in decls}
+public = [inventory[NS + '.' + name] for name in source_names]
+assert all(x['kind'] == 'theorem' for x in public)
+explicit = [json.loads(line.split(' ', 1)[1]) for line in texts[3].splitlines()
+            if line.startswith('CHEN_P5_S1CARRIER_EXPLICIT_TYPE ')]
+assert len(explicit) == 17 and {x['name'] for x in explicit} == {x['name'] for x in public}
+assert 'CHEN_P5_S1CARRIER_EXPLICIT_TYPE_COUNT 17' in texts[3]
+explicit_by_name = {x['name']: x for x in explicit}
+public = [dict(x, type_default=x['type'], type=explicit_by_name[x['name']]['type_explicit'],
+               type_expr_repr=explicit_by_name[x['name']]['type_expr_repr']) for x in public]
+assert all('goldbachS1BoundingSieve' in x['type'] for x in public
+           if x['name'].rsplit('.', 1)[-1].startswith('goldbachS1BoundingSieve_'))
+private_names = [x['name'] for x in decls if x['name'].startswith('_private.')]
+assert len(private_names) >= 3
+for r in all_rows:
+    copy(Path(r['log']), OUT / 'raw' / Path(r['log']).name)
+save(OUT / 'commands-and-results.json', all_rows)
+save(OUT / 'compiler-types.json', decls)
+save(OUT / 'public-theorem-types.json', public)
+rendered = []
+for x in decls:
+    rendered += [x['name'] + ' :', x['type'], 'kind: ' + x['kind'],
+                 'transitive axioms: ' + ', '.join(x['axioms']), '']
+(OUT / 'compiler-types.txt').write_text('\n'.join(rendered))
+(OUT / 'public-theorem-types.lean.txt').write_text('\n\n'.join(
+    x['name'] + ' :\n' + x['type'] for x in public) + '\n')
+pre = json.loads((OUT / 'preflight.json').read_text())
+assert sha(OUT / 'preflight.json') == compile_record['preflight_sha256']
+context = json.loads((OUT / 'context.json').read_text())
+next_target = context['next_small_target']
+context['supplier_graph'][0]['status'] = 'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED'
+save(OUT / 'context.json', context)
+candidate_path = REPO / 'ImbalancedChen/CurrentChenInitialMean.lean'
+assert sha(candidate_path) == '5358e4dbbda436b335620de19884624df3260386d5ab5e478a85f70599da6137'
+receipt = {
+    'scope': 'Only MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier',
+    'status': 'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED',
+    'accepted_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'branch': 'chatgpt/chen-p5-lower',
+    'starting_checkpoint': pre['starting_head'], 'common_baseline': pre['common_baseline'],
+    'acceptance_commit': 'The full enclosing commit SHA published with this receipt; no self-referential Git SHA is embedded.',
+    'toolchain': pre['guards']['toolchain'], 'dependencies': pre['packages'],
+    'source': pre['source'], 'source_sha256': source_hash,
+    'source_equals_pinned_dependency': True, 'source_patch': None,
+    'production_source_changes': [], 'compiled_objects': obj,
+    'direct_imports': compile_record['imports_before'],
+    'gates': {r['action']: {'result': 'passed', 'returncode': r['returncode'],
+              'elapsed_seconds': r['elapsed_seconds'], 'command': r['command'],
+              'log': 'raw/' + Path(r['log']).name, 'log_sha256': r['raw_log_sha256']}
+              for r in rows[:3]},
+    'explicit_public_type_query': {'result': 'passed', 'returncode': types_record['returncode'],
+              'elapsed_seconds': types_record['elapsed_seconds'], 'command': types_record['command'],
+              'log': 'raw/' + Path(types_record['log']).name,
+              'log_sha256': types_record['raw_log_sha256'],
+              'source_path': 'verification/parts/p5/S1CarrierPublicTypes.lean',
+              'source_sha256': types_record['source_sha256_after'],
+              'objects': types_record['objects_after'],
+              'count': 17, 'expression_representation_included': True,
+              'reason': 'Default printer hides implicit BoundingSieve carrier arguments; print them explicitly.'},
+    'auxiliary_type_export_diagnostic': {
+              'module': failures[0]['module'], 'returncode': 1,
+              'elapsed_seconds': failures[0]['elapsed_seconds'],
+              'source_sha256_before_repair': failures[0]['source_sha256_before'],
+              'source_sha256_after_repair': types_record['source_sha256_after'],
+              'log': 'raw/' + Path(failures[0]['log']).name,
+              'repair': 'Rename reserved local identifier prefix to declarationRoot.',
+              'target_proof_source_changed': False,
+              'target_strict_replay_axiom_audit_affected': False,
+              'patch': 'source/S1CarrierPublicTypes-keyword-fix.patch'},
+    'audit': {'method': 'Defining-module environment inventory + bundled Lean.collectAxioms',
+              'source_path': 'verification/parts/p5/S1CarrierAudit.lean',
+              'source_sha256': audit_record['source_sha256_after'],
+              'compiled_objects': audit_record['objects_after'],
+              'declaration_count': len(decls), 'public_source_theorem_count': len(public),
+              'private_name_count': len(private_names),
+              'kind_counts': dict(collections.Counter(x['kind'] for x in decls)),
+              'private_and_generated_included': True,
+              'forbidden_axioms': [], 'unsafe_declarations': [], 'own_axiom_declarations': [],
+              'transitive_axiom_union': sorted({a for x in decls for a in x['axioms']}),
+              'types_status': 'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT'},
+    'reuse': {'local_completed_modules': pre['local_compiled_import_count'],
+             'official_cached_source_modules': pre['official_cache_import_count'],
+             'missing_import_objects': [], 'dependencies_compiled_this_batch': [],
+             'evidence': ['preflight.json', 'reused-logs/', 'cache-direct-witness-check.json',
+                          'context/get.log', 'context/result.json'],
+             'scope': 'Reused imports; this batch does not claim fresh replay or per-module axiom audits of the entire import closure.'},
+    'preflight_field_note': 'The legacy-labelled source.git_blob field is SHA-256 of git-show content, not a Git SHA-1 object identifier.',
+    'prior_attempt': {'classification': 'INTERRUPTED_FOR_PRIORITY', 'tool_exit_code': 130,
+                      'frontend_returncode_available': False,
+                      'source_sha256': source_hash, 'receipt': 'context/original-interruption.json'},
+    'unblocked_edge': 'S1BetaFixedNormalizedLower -> S1Carrier: actual finite carrier, sieve sum, main sum and standard prime-AP remainder identification.',
+    'next_small_target': next_target, 'next_target_started': False,
+    'initial_mean': {'module': 'ImbalancedChen.CurrentChenInitialMean',
+                     'source_sha256': sha(candidate_path), 'status': 'SOURCE_CANDIDATE_NOT_LEAN_VERIFIED',
+                     'coefficient': '(33/4) * Real.log 3', 'equals_adopted_L1_claimed': False,
+                     'complete_eleven_term_mean_or_hLower_claimed': False},
+    'protected_files': pre['guards']['protected'],
+    'no_shared_dependency_write': True, 'no_Codex_CLI_or_task_started': True}
+save(OUT / 'receipt.json', receipt)
+commands = ['#!/usr/bin/env bash', 'set -euo pipefail',
+            '# Accepted commands. Full attempt history, including the auxiliary type exporter failure, is in commands-and-results.json.',
+            '# Existing fixed imports and stock toolchain are required.',
+            'export LEAN_SYSROOT=' + shlex.quote(compile_record['LEAN_SYSROOT']),
+            'export LAKE_HOME=' + shlex.quote(compile_record['LEAN_SYSROOT']),
+            'export LEAN_NUM_THREADS=1',
+            'export LEAN_PATH=' + shlex.quote(compile_record['LEAN_PATH']),
+            'cd ' + shlex.quote(str(REPO))]
+for r in rows:
+    commands += ['', '# ' + r['action'] + ': actual exit 0', shlex.join(r['command'])]
+(OUT / 'commands.sh').write_text('\n'.join(commands) + '\n')
+copy(Path(__file__), OUT / 'runtime/finalize_s1carrier.py.txt')
+copy(RUNTIME / 'verify_s1carrier.py', OUT / 'runtime/verify_s1carrier.types.py.txt')
+
+key_suffixes = ['goldbachS1BoundingSieve_multSum_eq_primesInAP',
+                'goldbachS1BoundingSieve_siftedSum_eq',
+                'goldbachS1BoundingSieve_mainSum_eq_totientSum',
+                'goldbachS1BoundingSieve_rem_eq_standardPrimeAPError']
+keys = '\n\n'.join(explicit_by_name[NS + '.' + s]['name'] + ' :\n' +
+                     explicit_by_name[NS + '.' + s]['type_explicit'] for s in key_suffixes)
+import_table = '\n'.join('| `' + x['module'] + '` | `' + x['source']['sha256'] +
+                          '` | `' + x['objects'][0]['sha256'] + '` |'
+                          for x in receipt['direct_imports'])
+doc = f'''# Part 5：S1Carrier 独立验证切片
+
+## 验收结果与固定身份
+
+本检查点只验收 `MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier`。
+固定 goldbach 证明源码已完成严格编译、原装 `leanchecker` 内核重放和定义模块全部声明的传递公理审计。
+没有修改该证明源码，没有补编依赖，也没有启动后续供应节点。
+验收提交为包含本交接与回执的独立提交；发布时提供其完整 SHA。
+
+| 身份 | 固定值 |
+| --- | --- |
+| 分支 | `chatgpt/chen-p5-lower` |
+| 续接检查点 | `{pre['starting_head']}` |
+| 共同证明基线 | `{pre['common_baseline']}` |
+| Lean | `leanprover/lean4:v4.33.0-rc1` |
+| Lean githash | `62eed1db4d67327ec8120be05f1a1b0847d74561` |
+| goldbach | `09b97db5764ade1246bfb77206baa1b124760958` |
+| Mathlib | `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` |
+| 原始及实际编译源码 SHA256 | `{source_hash}` |
+| 目标 `.olean` SHA256 | `{obj[0]['sha256']}` |
+
+其余九项依赖版本及原装工具二进制哈希见完整 [receipt.json](../verification/parts/p5/round3/s1carrier/receipt.json)。
+全部十一项依赖保持固定版本且 tracked clean；工具链、根导入、手稿地图、主定理和数值转移文件均保持共同基线原始字节。
+源码快照为 [upstream-LiLiuGoldbachS1Carrier.lean.txt](../verification/parts/p5/round3/s1carrier/source/upstream-LiLiuGoldbachS1Carrier.lean.txt)。
+
+## 三项实际执行
+
+| 检查 | 实际退出码 | 秒数 | 范围 |
+| --- | ---: | ---: | --- |
+| 官方 frontend 经原装 Lake；`trustLevel=0`、`warningAsError=true` | 0 | {compile_record['elapsed_seconds']:.3f} | 当前固定源码、单模块、单线程 |
+| 原装 `leanchecker --verbose MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier` | 0 | {replay_record['elapsed_seconds']:.3f} | 重放目标模块全部数据部分中的声明，对照其导入环境 |
+| 严格编译 `verification.parts.p5.S1CarrierAudit` | 0 | {audit_record['elapsed_seconds']:.3f} | 实际定义模块全部 {len(decls)} 个声明的传递公理审计 |
+
+审计从 `env.constants` 与 `getModuleIdxFor?` 枚举，包含 private 和 generated 声明。
+实际共有 **{len(decls)} 个声明**，其中定义模块种类计数为 `{receipt['audit']['kind_counts']}`，
+带 private 名称的声明为 {len(private_names)} 个；源文件显式公开定理 17 个全部在编译器清单中。
+每个声明均通过 `isUnsafe`、`isAxiom` 检查，传递公理的并集恰为
+`propext`、`Classical.choice`、`Quot.sound`；没有额外公理。
+源码、目标对象及每次调用的直接导入对象前后哈希一致。
+
+这是复用既有正常环境的官方 frontend API 编译，具体启动入口与 `lake build` 分开记录。
+驱动中既有的官方 initializer API 只负责 frontend 启动；实际证明以 trust level 0 检查。
+本批没有手动运行 CI 或重启旧供应队列。原装 checker 未使用 `--fresh`，因此不把导入缓存误称为本批全部重新重放。
+
+- [实际命令、退出码、前后哈希与原始日志索引](../verification/parts/p5/round3/s1carrier/commands-and-results.json)
+- [可阅读命令清单](../verification/parts/p5/round3/s1carrier/commands.sh)
+- [全部编译器声明类型及逐项公理](../verification/parts/p5/round3/s1carrier/compiler-types.txt)
+- [17 个公开定理的完整编译器类型](../verification/parts/p5/round3/s1carrier/public-theorem-types.lean.txt)
+
+## 关键编译器确认类型
+
+默认 pretty printer 会隐藏 `BoundingSieve.siftedSum` 等函数的隐式载体参数。
+因此在三项验证完成后，另以严格编译的 `S1CarrierPublicTypes` 查询同一目标对象，
+显式输出所有 17 项公开类型并保存完整 `Expr` 表示：退出 0，用时 {types_record['elapsed_seconds']:.3f} 秒。
+该导出脚本首次因局部变量使用 Lean 保留字 `prefix` 而退出 1（{failures[0]['elapsed_seconds']:.3f} 秒），
+仅改名为 `declarationRoot` 后重新执行。原始失败、修复补丁和源码身份均归档；目标 S1Carrier 的证明源码与三项通过结果不受影响。
+该查询没有重跑证明或公理审计。以下为其编译器显式输出，所有实例和载体实参都保留；
+完整 17 项见 `public-theorem-types.json`／`.lean.txt`，36 项声明的公理清单见 `compiler-types.json`。
+
+```lean
+{keys}
+```
+
+真实 `support` 保持 `goldbachDifferenceCarrier N ε`，权恒为 1；终点保持
+`Nat.ceil ((1-ε)*N)-1`，筛素数保持严格 `(p:ℝ)<z` 并排除 `p∣N`。
+差映射计数中的单射、偶数排除素数 2、`literalHPoint` 与真实筛素数乘积的对应均由原始证明保留。
+主质量是 `trueLogarithmicIntegral endpoint`，余项中的模数和剩余类是实际的 `d`、`N % d`。
+`literalHPoint` 仍不等于额外要求差值与 N 互素；`CurrentChenInitialSource` 的 primeFactors 删除成本仍需保留。
+
+## 导入对象与缓存证据
+
+| 直接模块 | 源码 SHA256 | `.olean` SHA256 |
+| --- | --- | --- |
+{import_table}
+
+完整直接导入闭包中有 96 个本地已编译模块及 8679 个官方 Cache 源码模块。
+96 个本地对象按固定源码、完成 frontend 记录、工具版本和对象哈希匹配，记录过的直接导入哈希也逐项匹配；原始完成日志已归档。
+官方 Cache 复用有固定源码版本、官方内容哈希下载／解压成功回执，三个直接 Mathlib 导入另有既有成功编译的相同对象哈希见证。
+目标所需缺失对象为零，所以本批没有补编依赖。
+这 8775 是复用闭包的源码模块数，不是本批新重放或审计的模块数。
+preflight 的 `source.git_blob` 字段存的是 `git show` 内容的 SHA256，非 Git 的 SHA1 对象标识。
+
+详见 [preflight.json](../verification/parts/p5/round3/s1carrier/preflight.json) 与
+[直接缓存见证检查](../verification/parts/p5/round3/s1carrier/cache-direct-witness-check.json)。
+
+## 解除的阻塞与下一小批
+
+`CurrentChenInitialMean` 直接导入 `S1BetaFixedNormalizedLower`，后者直接导入本模块。
+本批解除该供应者的 **实际有限 S1 载体、筛和／主和及标准素数 AP 余项识别** 这一导入阻塞。
+这不提供后续 beta 渐近误差支付、密度下界或主尺度估计。
+
+根据固定源码的真实 imports，下一最小切片是：
+
+```text
+MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser
+source SHA256: {next_target['source_sha256']}
+sole import: MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier
+```
+
+该节点的唯一导入已由本批验收，适合下一批验证其精确 Rosser 主项减 AP 前缀误差的有限下界。
+`S1MainMass` 的唯一导入为既有 `BombieriVinogradov`，是之后另一个小候选。
+`S1BetaPaidLower` 另需 `S1BetaGeometry`、`S1LowerRosser`、`S1MainMass` 和
+`MathlibNt.AnalyticNumberTheory.LargeSieve.Bombieri1965Richert418Unconditional`；
+不能在本批完成后直接假定其额外闭包齐备。
+后续再依依赖顺序推进 `S1BetaLowerDensity`、`S1BetaMainScale`，最终才验收
+`S1BetaFixedNormalizedLower` 和 `CurrentChenInitialMean`。
+本批没有启动这些节点，原 319 项队列也没有展开。
+完整的有限来源图与源码哈希见 [context.json](../verification/parts/p5/round3/s1carrier/context.json)。
+
+## 历史中断及接收边界
+
+原记录中的 S1Carrier 尝试仍按 `INTERRUPTED_FOR_PRIORITY` 保存：工具退出码 130，
+没有 frontend 最终返回码或成功对象。该原始记录不是证明失败，也不被本次新成功回执改写。
+本次从完全相同的源码恢复，正常完成三项验证；没有依赖版本更换或源码补丁。
+
+**接收 Part：P5 首项均值供应链与 P0 集成验证。** 其他 Part 可按本回执哈希复用这一有限模块，
+无需等待完整 InitialMean。
+
+`CurrentChenInitialMean` 的 `(33/4) * Real.log 3` 仍是独立第一项候选下界，尚未编译验收；
+它不等于手稿采用的 L1，也不闭合完整十一项均值或 `hLower`。
+其源文件 SHA256 保持 `5358e4dbbda436b335620de19884624df3260386d5ab5e478a85f70599da6137`。
+本批不改变 `W_N ≤ 4 D12(N) + error` 的计数尺度，完整均值仍需权尺度
+`4c = 49044063/6250000 = 7.84705008`，其 P1/P2/P3/P4-A 输入依旧另行闭合。
+'''
+(REPO / 'docs/CHEN_P5_S1CARRIER_HANDOFF.md').write_text(doc)
+old = REPO / 'docs/CHEN_P5_ROUND2_HANDOFF.md'
+text = old.read_text()
+notice = ('> 后续独立检查点：固定依赖源码 `S1Carrier` 已通过严格编译、原装内核重放及完整定义模块公理审计。'
+          '见 [S1Carrier 小交付](CHEN_P5_S1CARRIER_HANDOFF.md)。下文保留第二轮历史记录；'
+          '`CurrentChenInitialMean` 仍为未编译候选。\n\n')
+if notice not in text:
+    head, rest = text.split('\n\n', 1)
+    old.write_text(head + '\n\n' + notice + rest)
+print(json.dumps({'status': receipt['status'], 'decl_count': len(decls),
+                  'kind_counts': receipt['audit']['kind_counts'], 'private_names': len(private_names),
+                  'public_theorems': len(public), 'axioms': receipt['audit']['transitive_axiom_union'],
+                  'next_small_target': next_target['module']}, ensure_ascii=False))

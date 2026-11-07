@@ -1,0 +1,293 @@
+{
+  "status": "V2_CENSUS_TWO_ADDITIVE_GLOBAL_COVERAGE_CHECKS_EXISTING_CLASSIFIER_COMPLETE_PROPOSAL_ONLY_HOLD",
+  "created_utc": "2026-10-21T09:10:31.182522+00:00",
+  "target": "ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy",
+  "source_sha256": "13a0733609f30d51af3649566b4d85053f866ab785fd35bac3c2f317c95a794e",
+  "v1_proposal": {
+    "path": "source-reviews/20261021-supported-core-cauchy-classifier-census-proposal-HOLD.json",
+    "sha256": "37b481c4ce9682180c5674ad4676448ab6a595cd6eeba9bfc6c892dd32daf7fb"
+  },
+  "root_scope_clarification": "Root explicitly clarified: existing classifier already covers stock raw SHA and environment cardinality/uniqueness; retain classifier 853316 exact, no new classifier/output paths. Create only census v2 with the two missing assertions. No proposed script execution authorized.",
+  "existing_classifier": {
+    "path": "rounds/20261021-supported13a0-readonly-classification-baseline172.py",
+    "sha256": "853316c3aef8acf23ad5d4703b95508b81af312530a487b8659047ea1489b2f4",
+    "bytes": 24478,
+    "unchanged": true,
+    "AST_parse": true,
+    "global172_existing_coverage": [
+      "assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]",
+      "names = set(); assert record['name'] not in names; names.add(record['name']) for every record proves len(names) == len(records)",
+      "assert len(names) == len(inventory['environment']) == len(set(inventory['environment']))",
+      "assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']"
+    ],
+    "equivalence": "Uniqueness assertion and one insertion per actual record imply len(names)==len(records); existing environment assertion therefore proves the reviewed len(environment)==len(set(environment))==len(records) contract."
+  },
+  "reviewed_additions_reference": {
+    "root_review_path": "source-reviews/20261021-decayingfourier1d09-v2-root-readonly-classification-gate.json",
+    "root_review_sha256": "6af8aa51a3d75f349e91e597458e7aef194616399b604c715664eb6829b2c7bc",
+    "census_path": "rounds/20261021-decayingfourier1d09-owned-census-sol-medium-v2.py",
+    "census_sha256": "484e6050b329735bd33e6e5c2bd820c9b3f188146b69a1467821c2946f1f0a84"
+  },
+  "artifacts": [
+    {
+      "path": "rounds/20261021-supported13a0-owned-census-v2-baseline172.py",
+      "sha256": "23c8981e6b6a318ade0b9085508157c0016a9389699f2290daa36b6b1d266d53",
+      "bytes": 6774,
+      "old_path": "rounds/20261021-supported13a0-owned-census-baseline172.py",
+      "old_sha256": "68212b88e4bb73b00fffe33c39f0ffa8b4338c6f9d270e40b4abc98fb5a6f45a",
+      "old_bytes": 6575,
+      "diff_path": "rounds/20261021-supported13a0-owned-census-v2-baseline172.diff",
+      "diff_sha256": "10358c735f7e27bafd5392124472d29437e96ad788ec47d1f1bb8bd7d05c6457",
+      "diff_bytes": 1316,
+      "raw_inverse_path": "rounds/20261021-supported13a0-owned-census-v2-baseline172.raw-inverse.json",
+      "raw_inverse_sha256": "031044cc06f86cc3ed2cf968f6ba7e2ee5bf3aa291d9109929897059ef30f1a6",
+      "raw_inverse_bytes": 1169,
+      "original_newline_preserved": "CRLF",
+      "AST_parse": true,
+      "raw_forward_exact": true,
+      "raw_inverse_exact": true,
+      "inverse_AST_exact": true,
+      "only_additions": [
+        "assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']",
+        "assert len(inventory['environment']) == len(set(inventory['environment'])) == len(records)"
+      ],
+      "output_path_literals_changed": 0
+    }
+  ],
+  "full_raw_diff_utf8": "--- rounds/20261021-supported13a0-owned-census-baseline172.py\n+++ rounds/20261021-supported13a0-owned-census-v2-baseline172.py\n@@ -92,6 +92,7 @@\n         stock = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]\r\n         assert len(stock) == 1 and stock[0]['result']['status'] == 'PASS'\r\n         assert stock[0]['result']['returncode'] == 0\r\n+        assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']\r\n         assert sha(rp.parent / 'declarations.json') == entry['declarations_json_sha256']\r\n         records = [r for r in declarations[key] if r['module'] == module]\r\n         assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]\r\n@@ -104,6 +105,7 @@\n             assert set(record['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'}\r\n         inventory = inventories[key][module]\r\n         assert len(inventory['serialized']) == len(set(inventory['serialized']))\r\n+        assert len(inventory['environment']) == len(set(inventory['environment'])) == len(records)\r\n         assert names == set(inventory['serialized']) == set(inventory['environment'])\r\n         total += len(records)\r\n     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')\r\n",
+  "full_raw_inverse": {
+    "original_path": "rounds/20261021-supported13a0-owned-census-baseline172.py",
+    "original_sha256": "68212b88e4bb73b00fffe33c39f0ffa8b4338c6f9d270e40b4abc98fb5a6f45a",
+    "proposal_path": "rounds/20261021-supported13a0-owned-census-v2-baseline172.py",
+    "proposal_sha256": "23c8981e6b6a318ade0b9085508157c0016a9389699f2290daa36b6b1d266d53",
+    "original_bytes": 6575,
+    "proposal_bytes": 6774,
+    "edits": [
+      {
+        "old_start": 4437,
+        "old_end": 4437,
+        "new_start": 4437,
+        "new_end": 4536,
+        "old_hex": "",
+        "new_hex": "2020202020202020617373657274207368612872702e706172656e74202f2028277265706c61792d27202b206d6f64756c65202b20272e6c6f67272929203d3d2073746f636b5b305d5b27726573756c74275d5b276c6f675f736861323536275d0d0a"
+      },
+      {
+        "old_start": 5236,
+        "old_end": 5236,
+        "new_start": 5335,
+        "new_end": 5435,
+        "old_hex": "",
+        "new_hex": "2020202020202020617373657274206c656e28696e76656e746f72795b27656e7669726f6e6d656e74275d29203d3d206c656e2873657428696e76656e746f72795b27656e7669726f6e6d656e74275d2929203d3d206c656e287265636f726473290d0a"
+      }
+    ],
+    "raw_forward_exact": true,
+    "raw_reverse_exact": true
+  },
+  "static_checks": {
+    "v1_artifacts_rehashed_immutable": true,
+    "all_original_predicates_retained": true,
+    "only_two_reviewed_assertions_added_to_census": true,
+    "classifier_existing_global_checks_complete": true,
+    "all_original_classifier_bytes_exact": true,
+    "census_inverse_AST_exact": true,
+    "census_full_raw_forward_reverse_exact": true,
+    "census_CRLF_preserved": true,
+    "census_timestamp_output_scheme_preserved": true,
+    "derived_author_two_escape_repair_preserved_and_reverified": true,
+    "all_frozen_source_parent_native_bindings_unchanged": true
+  },
+  "preserved_bindings": {
+    "baseline": {
+      "path": "source-reviews/20261021T084509477056Z-runtime-fresh-current-terminal-owned-census.json",
+      "sha256": "dbdd629eae44ea214916da0ce7e49a18c94b548b5b79fc87d5afea03e4492674",
+      "modules": 172,
+      "declarations": 4007,
+      "receipts": 120,
+      "old171_path": "source-reviews/20261021T081745007245Z-runtime-fresh-current-terminal-owned-census.json",
+      "old171_sha256": "1f273c0918fa9d542e1d6a090db3d0816408cf4f5a24766dab6384963172ef56",
+      "all_old171_module_entries_exact": true,
+      "new_envelope_not_parent": true,
+      "acceptance_path": "source-reviews/20261021-envelope93415-root-actual17-terminal-acceptance.json",
+      "acceptance_sha256": "7080340f4883cdd43a7374f14990974154bba89a13aff8f3fd11ac18067bae7c"
+    },
+    "measurement": {
+      "path": "rounds/20261021-supported13a0-stage0-parent-measurement-baseline172.json",
+      "sha256": "ee03044ff95d831345ed02fe124e29fcea32f3f402f273dc18f8cefd5f8a7c69",
+      "counts": {
+        "self": 89,
+        "parents": 88,
+        "owned": 41,
+        "flags": 1477,
+        "inherited": 47,
+        "native": 6634,
+        "roots": 66,
+        "objects": 153,
+        "direct_edges": 274,
+        "explicit_nulls": 16,
+        "nonnull": 258,
+        "binding_after": {
+          "missing": 47,
+          "dict": 41
+        },
+        "warnings": {
+          "None": 2,
+          "False": 45,
+          "True": 41
+        }
+      }
+    },
+    "source_bindings": {
+      "path": "rounds/20261021-supported13a0-source-bindings.json",
+      "sha256": "886c45abb4beb6fd72f11b9ee39ac46452c59dcd3a1e9d58e774f50e7009b41e",
+      "all13_headers": [
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedOuterCarrier",
+          "kind": "def",
+          "header_and_type_as_written": "def MediumAtom.smallCoreSquaredSupportedOuterCarrier (d : MediumAtom)\n    (Ybeta Ysupport : \u211d) :\n    Finset ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115))",
+          "first_line": 25,
+          "header_utf8_sha256": "34f7bb21fdca7c1fa0ccdfd7e1397f5e45d847af2aae6082eb6e2d84d0ecf539"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedFirstEnergy",
+          "kind": "def",
+          "header_and_type_as_written": "def MediumAtom.smallCoreSquaredSupportedFirstEnergy (d : MediumAtom)\n    (Ybeta Ysupport : \u211d) : \u211d",
+          "first_line": 32,
+          "header_utf8_sha256": "f75861d4863a752fe39d6adafc9088cb0f24fe0166dc13466b98c3bd62097991"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedRowSquareMass",
+          "kind": "def",
+          "header_and_type_as_written": "def MediumAtom.smallCoreSquaredSupportedRowSquareMass (d : MediumAtom)\n    (Ybeta Ysupport Z : \u211d) : \u211d",
+          "first_line": 38,
+          "header_utf8_sha256": "7daa0071f42aee46ba5656607a0abcee223f50a5a0fd85f05f0f3dc93ec5750c"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.mem_smallCoreSquaredSupportedOuterCarrier",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.mem_smallCoreSquaredSupportedOuterCarrier\n    (d : MediumAtom) (Ybeta Ysupport : \u211d)\n    (o : (\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115)) :\n    o \u2208 d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport \u2194\n      o \u2208 d.smallCoreSquaredOuterCarrier \u2227\n        d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o \u2260 0",
+          "first_line": 44,
+          "header_utf8_sha256": "1db17fc9d6d8ec5f69d4ecb41ff3596145beddda0b276da31db6b6aa3592555e"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredOuterCoefficient_nonzero_gates",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredOuterCoefficient_nonzero_gates\n    (d : MediumAtom) (Ybeta Ysupport : \u211d)\n    (o : (\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115))\n    (hC : d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o \u2260 0) :\n    (o.1.2.1.gcd o.1.2.2 : \u211d) \u2264 Ybeta \u2227\n      (CanonicalReciprocalData.supportedPart\n        (o.1.2.1 / o.1.2.1.gcd o.1.2.2) (o.1.2.1.gcd o.1.2.2) : \u211d) \u2264\n        Ysupport",
+          "first_line": 53,
+          "header_utf8_sha256": "eacde9097ecff571801392225b44e7762a9e51058998f375466babac336975bb"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedOuterCarrier_gates",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredSupportedOuterCarrier_gates\n    (d : MediumAtom) (Ybeta Ysupport : \u211d)\n    (o : (\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115))\n    (ho : o \u2208 d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport) :\n    (o.1.2.1.gcd o.1.2.2 : \u211d) \u2264 Ybeta \u2227\n      (CanonicalReciprocalData.supportedPart\n        (o.1.2.1 / o.1.2.1.gcd o.1.2.2) (o.1.2.1.gcd o.1.2.2) : \u211d) \u2264\n        Ysupport",
+          "first_line": 66,
+          "header_utf8_sha256": "f620da3168883175e205a737a453da83fd151a4bdbae6d1b653f76e70f24b390"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedOuterCarrier_product_le",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredSupportedOuterCarrier_product_le\n    (d : MediumAtom) (Ybeta Ysupport : \u211d)\n    (o : (\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115))\n    (ho : o \u2208 d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport) :\n    (o.1.2.1.gcd o.1.2.2 : \u211d) *\n      (CanonicalReciprocalData.supportedPart\n        (o.1.2.1 / o.1.2.1.gcd o.1.2.2) (o.1.2.1.gcd o.1.2.2) : \u211d) \u2264\n        Ybeta * Ysupport",
+          "first_line": 79,
+          "header_utf8_sha256": "9c75927a378702cb0c61273800ff151be845537360fe2d5295c3c6e51cb8fcb4"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquared_sum_eq_supported",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquared_sum_eq_supported\n    (d : MediumAtom) (Ybeta Ysupport : \u211d)\n    (F : ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 ((\u2115 \u00d7 \u2115 \u00d7 \u2115) \u00d7 \u2115)) \u2192 \u2102) :\n    (\u2211 o \u2208 d.smallCoreSquaredOuterCarrier,\n      d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o * F o) =\n      \u2211 o \u2208 d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport,\n        d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o * F o",
+          "first_line": 91,
+          "header_utf8_sha256": "a5eb408b19d3a8ab4bacaa7151bb7cb60ca09c08341c9314961ea71f911c5086"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedFirstEnergy_nonneg",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredSupportedFirstEnergy_nonneg\n    (d : MediumAtom) (Ybeta Ysupport : \u211d) :\n    0 \u2264 d.smallCoreSquaredSupportedFirstEnergy Ybeta Ysupport",
+          "first_line": 104,
+          "header_utf8_sha256": "b62a8b58d263db5b90cbda079092c1a880be517b64ec6e7878c1819e85a67212"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedRowSquareMass_nonneg",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredSupportedRowSquareMass_nonneg\n    (d : MediumAtom) (Ybeta Ysupport Z : \u211d) :\n    0 \u2264 d.smallCoreSquaredSupportedRowSquareMass Ybeta Ysupport Z",
+          "first_line": 109,
+          "header_utf8_sha256": "c0baa627a5c20cf5598c3dbf9f593464f22aaca74d936ccf18294e0565f4887e"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquaredSupportedRowSquareMass_eq_totalGram",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquaredSupportedRowSquareMass_eq_totalGram\n    (d : MediumAtom) (Ybeta Ysupport Z : \u211d) :\n    d.smallCoreSquaredSupportedRowSquareMass Ybeta Ysupport Z =\n      \u2211 o \u2208 d.smallCoreSquaredSupportedOuterCarrier Ybeta Ysupport,\n        (\u2211 u \u2208 d.smallCoreSquaredInnerCarrier Z o,\n          \u2211 v \u2208 d.smallCoreSquaredInnerCarrier Z o,\n            d.smallCoreSquaredRowTerm Z o u *\n              star (d.smallCoreSquaredRowTerm Z o v)).re",
+          "first_line": 116,
+          "header_utf8_sha256": "77d5bd5e37fdafea4d4343e6c75043beabfc2eb5ae9223a25063fd07261d2143"
+        },
+        {
+          "name": "ImbalancedChen.Part3.MediumAtom.smallCoreSquared_supported_Cauchy",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem MediumAtom.smallCoreSquared_supported_Cauchy\n    (d : MediumAtom) (Ybeta Ysupport Z : \u211d) :\n    \u2016\u2211 o \u2208 d.smallCoreSquaredOuterCarrier,\n      d.smallCoreSquaredOuterCoefficient Ybeta Ysupport o *\n        (\u2211 u \u2208 d.smallCoreSquaredInnerCarrier Z o,\n          d.smallCoreSquaredRowTerm Z o u)\u2016 ^ 2 \u2264\n      d.smallCoreSquaredSupportedFirstEnergy Ybeta Ysupport *\n        d.smallCoreSquaredSupportedRowSquareMass Ybeta Ysupport Z",
+          "first_line": 133,
+          "header_utf8_sha256": "83499d99c9ad5ca84d615e4c03e8838a9f8c90e04def8492939f79295abeda30"
+        },
+        {
+          "name": "ImbalancedChen.Part3.actual_smallSupported_supportedCore_Cauchy",
+          "kind": "theorem",
+          "header_and_type_as_written": "theorem actual_smallSupported_supportedCore_Cauchy\n    (B : \u2115) (sigma kappa c0 : \u211d) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    \u2200 Z : \u211d, 0 < Z \u2192\n      let e := d.cleanedAlphaAtom\n      let Y := d.scale ^ (sigma / 4)\n      (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n        \u2211 o \u2208 e.smallCoreSquaredSupportedOuterCarrier Y Y,\n          e.smallCoreSquaredOuterCoefficient Y Y o *\n            (\u2211 u \u2208 e.smallCoreSquaredInnerCarrier Z o,\n              e.smallCoreSquaredRowTerm Z o u)) \u2227\n      (\u2016e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z\u2016 ^ 2 \u2264\n        e.smallCoreSquaredSupportedFirstEnergy Y Y *\n          e.smallCoreSquaredSupportedRowSquareMass Y Y Z)",
+          "first_line": 152,
+          "header_utf8_sha256": "f4406d7dbdface646ad742c609675d575179a54827ad5bc5a7c2ceef977379db"
+        }
+      ],
+      "project_API_files": 4,
+      "project_API_declarations": 9,
+      "native_API_files": 7
+    },
+    "proper": {
+      "path": "preflights/20261021T084112921803Z-exact-current-ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy.json",
+      "sha256": "2dbd4a163d70c05d0970f26c0126f4ae94d5b580d56da913944ae8c0e1ff322b",
+      "session_id": 61004,
+      "exit_code": 0,
+      "executions": 1
+    },
+    "metadata_correction": {
+      "original_invalid_author_raw_preserved_sha256": "2890914dd81931263d522a424c3db9d8000bedda3f4c68b447e0c542ea2a84ab",
+      "derived_author_sha256": "cd856cbc8f24bd1053dbdf6c1f5c271cc9d4a985cfbfc37b07f118710b040e7e",
+      "exact_change": "Remove exactly two backslashes immediately before apostrophes in API display labels, repairing invalid JSON escapes. Complete raw forward/inverse diff recorded. Root review continues to bind original raw SHA; classifier explicitly proves original raw->derived bytes before reading derived JSON.",
+      "source_headers_types_and_API_hashes_unchanged": true
+    }
+  },
+  "scope_facts": {
+    "target_source_LF": 183,
+    "explicit_headers": 13,
+    "target_uncompiled": true,
+    "project_parents": 88,
+    "owned_parents": 41,
+    "owned_parent_flags": 1477,
+    "inherited_parents": 47,
+    "native_modules": 6634,
+    "baseline_modules": 172,
+    "baseline_declarations": 4007,
+    "baseline_receipts": 120,
+    "all47_used_original_parents_completed_per_root": true,
+    "actual_target_generated_count_predicted": null
+  },
+  "execution_scope": {
+    "original_proper_not_rerun": true,
+    "new_classifier_created": false,
+    "classifier_executed": false,
+    "census_executed": false,
+    "new_helper_or_heavy_executed": false,
+    "compiler_checker_invoked": false,
+    "Git_catalog_Lean_modified": false,
+    "external_closure_replayed": false,
+    "main_theorem_proved": false,
+    "static_preparation_only": "Inline standard-library byte/AST preparation; no proposal import/eval/exec/compile or native/source inventory traversal."
+  },
+  "quota": {
+    "before_used_percent": 33,
+    "before_remaining_percent": 67,
+    "after_used_percent": 33,
+    "after_remaining_percent": 67,
+    "secondary": null,
+    "null_is_not_zero": true,
+    "stop_remaining_lte": 40,
+    "stop_used_gte": 60
+  },
+  "publication": "New proposal/diff/raw inverse and this sole checkpoint published atomically via .tmp -> replace; all v1 artifacts immutable.",
+  "HOLD": true,
+  "next": "Root complete review and separate execution authorization; weighted profile remains sole heavy."
+}

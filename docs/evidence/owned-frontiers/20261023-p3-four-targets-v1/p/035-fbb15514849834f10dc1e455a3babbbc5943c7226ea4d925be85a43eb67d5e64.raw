@@ -1,0 +1,153 @@
+"""SOURCEONLY / UNEXECUTED. ROOT-only supplemental metadata operator.
+Uses the original runtime, shared lock, guarded single Lean process.
+No stock replay, acceptance write, all-native scan, or quota operation.
+"""
+from pathlib import Path
+import argparse
+import fcntl
+import importlib.util
+import json
+import time
+
+STATE = Path(__file__).resolve().parents[2]
+ROOT = STATE.parents[1]
+RUNTIME_SHA = "81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be"
+MAP = STATE / "source-reviews/20261023-P3-historical196-duplicate-declaration-records-independent-map.json"
+MAP_SHA = "29f9fa967fc846081a507a23cb5b419857537f75c1cad48c9db6bfffae9326fd"
+SOURCE = STATE / "source-reviews/drafts/20261023-P3-historical-duplicate-serialized-proof-metadata-SOURCEONLY.lean.txt"
+SOURCE_SHA = "601551ca2addf3c84c19e9bbc2b2037f3e82010bb66895d7aba39f7e31883b82"
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--directory", default="p3-historical-duplicate-metadata-20261023-v1")
+    args = parser.parse_args()
+    rtfile = STATE / "runtime.py"
+    import hashlib
+    def sha(p):
+        with Path(p).open("rb") as stream:
+            return hashlib.file_digest(stream, "sha256").hexdigest()
+    assert sha(rtfile) == RUNTIME_SHA
+    assert sha(MAP) == MAP_SHA and sha(SOURCE) == SOURCE_SHA
+    spec = importlib.util.spec_from_file_location("original_proof_runtime", rtfile)
+    runtime = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(runtime)
+    rt = runtime.Runtime(ROOT, memory_mib=6144, rss_limit_mib=6656,
+                         resource_reason="ROOT_authorized_exact_old11_30_serialized_theorem_metadata_once")
+    out = (STATE / "rounds" / args.directory).resolve()
+    out.relative_to((STATE / "rounds").resolve())
+    assert not out.exists(), "Preserve every prior operator output"
+    out.mkdir(parents=True)
+    evidence_file = out / "metadata-evidence.json"
+    source = out / "DuplicateProofMetadata.lean"
+    source.write_bytes(SOURCE.read_bytes())
+    assert sha(source) == SOURCE_SHA
+    def local(raw):
+        prefix = "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/"
+        if raw.startswith(prefix):
+            return ROOT / raw[len(prefix):]
+        p = Path(raw)
+        return p if p.is_absolute() else ROOT / p
+    def ref(p):
+        p = Path(p).resolve()
+        return {"path": str(p.relative_to(STATE)), "sha256": sha(p)}
+    m = json.loads(MAP.read_text())
+    groups = m["facts"]["duplicates"]
+    expected = {(o["module"], name): (g, o)
+                for name, g in groups.items() for o in g["occurrences"]}
+    assert len(expected) == 30 and len(groups) == 11
+    expected_modules = {key[0] for key in expected}
+    assert len(expected_modules) == 17
+    originals = {}
+    for (_module, _name), (_g, o) in expected.items():
+        p = local(o["receipt"])
+        assert sha(p) == o["receipt_sha256"]
+        binding = {"source_sha256": o["source_sha256"],
+                   "object_parts": o["object_parts"], "owned_receipt": ref(p)}
+        assert _module not in originals or originals[_module] == binding
+        originals[_module] = binding
+    def snapshot():
+        bindings = {}
+        for module in sorted(expected_modules):
+            src, obj = rt.paths(module)
+            binding = {"source_sha256": sha(src), "object_parts": rt.parts(obj),
+                       "owned_receipt": originals[module]["owned_receipt"]}
+            assert binding == originals[module], "Old defining module drift"
+            bindings[module] = binding
+        return {"bindings": bindings, "pins": rt.pins(),
+                "lean_wrapper_sha256": sha(runtime.BIN / "lean"),
+                "lean_real_sha256": sha(runtime.BIN / "lean.real"),
+                "leanchecker_sha256": sha(runtime.BIN / "leanchecker"),
+                "map_sha256": sha(MAP), "metadata_source_sha256": sha(source)}
+    record = {"status": "RUNNING", "scope": "Exact old11/30 serialized theorem metadata only",
+              "baseline_census": m["baseline_census"], "duplicate_map": ref(MAP),
+              "metadata_source": ref(source), "metadata_runner": ref(Path(__file__)),
+              "runtime": ref(rtfile), "external_closure_replayed": False,
+              "unconditional_main_proved": False, "acceptance_status": "NOT_AN_ACCEPTANCE"}
+    def save():
+        evidence_file.write_text(json.dumps(record, indent=2) + "\n")
+    try:
+        with (runtime.OLD / "locks/compiler-0.lock").open("a+") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            rt.heavy_lock_fd = lock.fileno()
+            before = snapshot()
+            record["inputs_before"] = before
+            save()
+            command = [str(runtime.BIN / "lean"), "-j2", "-M6144",
+                       "-DwarningAsError=true", str(source.relative_to(ROOT))]
+            process_file = out / "metadata-process.json"
+            log = out / "metadata.log"
+            process = {"status": "RUNNING", "command": command,
+                       "resource_reason": rt.resource_reason}
+            start = time.monotonic()
+            with log.open("wb") as stream:
+                code, usage, stopped, error = rt.run_owned_lean(
+                    command, cwd=ROOT, log=stream, record=process, receipt=process_file)
+            process.update(status="GUARD_ERROR" if error else "RESOURCE_STOP" if stopped else "PASS" if code == 0 else "FAILED",
+                           returncode=code, guard_error=error, max_rss_kib=usage.ru_maxrss,
+                           seconds=round(time.monotonic() - start, 3), log_sha256=sha(log))
+            process_file.write_text(json.dumps(process, indent=2) + "\n")
+            record.update(process_receipt=ref(process_file), metadata_log=ref(log))
+            assert code == 0 and not stopped and error is None, "Metadata process not PASS"
+            entries = []
+            summaries = []
+            for line in log.read_text().splitlines():
+                if line.startswith("P3_DUP_META "):
+                    entries.append(json.loads(line.split(" ", 1)[1]))
+                elif line.startswith("P3_DUP_META_SUMMARY "):
+                    summaries.append(json.loads(line.split(" ", 1)[1]))
+                else:
+                    assert not line.strip(), "Unexpected metadata diagnostic"
+            assert len(entries) == 30 and len(summaries) == 1
+            actual = {(e["module"], e["name"]): e for e in entries}
+            assert len(actual) == len(entries) and set(actual) == set(expected)
+            levels = {}
+            for pair, e in actual.items():
+                g, o = expected[pair]
+                assert e["kind"] == "theorem" and e["isProp"] is True
+                assert not e["unsafe"] and not e["partial"] and not e["axiom"]
+                assert e["type"] == g["complete_type"]
+                assert "⋯" not in e["type"] and isinstance(e["serialized_index"], int)
+                assert e["serialized_index"] >= 0
+                assert hashlib.sha256(e["type"].encode()).hexdigest() == o["type_sha256"]
+                assert pair[1] not in levels or levels[pair[1]] == e["level_params"]
+                levels[pair[1]] = e["level_params"]
+            assert summaries[0] == {"entries": 30, "distinct_names": 11, "serialized_modules": 17}
+            after = snapshot()
+            assert before == after
+            record.update(status="PASS_DUPLICATE_THEOREM_METADATA",
+                          entries=entries, summary=summaries[0], inputs_after=after,
+                          bindings=after["bindings"], pins=after["pins"],
+                          lean_wrapper_sha256=after["lean_wrapper_sha256"],
+                          lean_real_sha256=after["lean_real_sha256"],
+                          leanchecker_sha256=after["leanchecker_sha256"])
+            save()
+    except BaseException as error:
+        record.update(status="INCOMPLETE", error=f"{type(error).__name__}: {error}")
+        save()
+        raise
+    print(json.dumps({"evidence": str(evidence_file), "status": record["status"]}), flush=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:01:37.7260633Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_FIRST_RUNTIME_DIAGNOSTIC_PROOF_REPAIR_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "sha256": "8faee595518d1e2c11866b9cdf34995edb4804151e779fdfd9408a9b900de4a0",
+    "complete_source_proof_bodies_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\n\n/-!\n# Reality of the actual primitive zero main term\n\nThe actual complex factor coefficients and coprime masses form a Hermitian\npair. The totient density is real and symmetric under exchanging the two\ncomplete physical labels. Finite Fubini therefore makes primitiveZeroMain\nself-conjugate without changing any carrier or imposing coefficient bounds.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical\nopen scoped BigOperators\n\nnamespace TransposedZeroCovariance\n\ntheorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b := by\n  simp only [star_sum]\n  calc\n    _ = ∑ a ∈ S, ∑ b ∈ S, f b a := by\n      apply Finset.sum_congr rfl\n      intro a ha\n      apply Finset.sum_congr rfl\n      intro b hb\n      exact hf a ha b hb\n    _ = _ := Finset.sum_comm\n\ntheorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d := by\n  unfold primitiveZeroMain\n  rw [star_mul']\n  have hs : star ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) := by\n    simp only [Complex.star_def, Complex.conj_ofReal]\n  rw [hs]\n  apply congrArg (fun z : ℂ ↦ ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) * z)\n  apply star_sum_pair_eq_of_hermitian\n  intro a _ b _\n  simp only [star_mul, star_div₀, star_star, star_natCast,\n    Nat.mul_comm, mul_comm, mul_left_comm, mul_assoc]\n\ntheorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d := by\n  apply Complex.conj_eq_iff_re.mp\n  simpa only [Complex.star_def] using primitiveZeroMain_star d\n\nend TransposedZeroCovariance\n\nend\n\nend ImbalancedChen.Part3\n",
+    "source_declaration_count": 3,
+    "frozen_hash_matches": true,
+    "path": "ImbalancedChen/Part3PrimitiveZeroReal.lean",
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "star_sum_pair_eq_of_hermitian",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 21,
+        "complete_source_header": "theorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b"
+      },
+      {
+        "name": "primitiveZeroMain_star",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 35,
+        "complete_source_header": "theorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d"
+      },
+      {
+        "name": "primitiveZeroMain_ofReal_re",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 49,
+        "complete_source_header": "theorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d"
+      }
+    ],
+    "definition_count": 0
+  },
+  "baseline": {
+    "owner_report": "20261016-primitive-zero-real-first-diag-owner-rebind.json",
+    "exact_old_source_snapshot": "20261016-P0Real-first-diag-original-bdc6.lean.txt",
+    "owner_report_sha256": "1727443be67749ceb77125fb99285cb138e095a150575edbea01ae171facaca9",
+    "proof_only_diff": true,
+    "sha256": "bdc6a0b30068c1b842555baf94911f151a31eab37250985c05ef6fc3f631c36b",
+    "imports_exact_equal": true,
+    "complete_header_and_definition_comparisons": [
+      {
+        "definition_body_exact_equal": true,
+        "name": "star_sum_pair_eq_of_hermitian",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "primitiveZeroMain_star",
+        "complete_header_exact_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "primitiveZeroMain_ofReal_re",
+        "complete_header_exact_equal": true
+      }
+    ]
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "direct_imports": [
+        "ImbalancedChen.Part3TransposedDispersion"
+      ],
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance"
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "basis": "Exact proof-only rebind of the previously reviewed leaf; the prior leaf addition remains +1 local/0 foreign relative to its original parent union.",
+    "imports_changed": false,
+    "definitions_changed": false,
+    "foreign_module_delta": 0,
+    "local_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "actual_runtime_diagnostic_log_fully_read": ".lake/proof-continuation/runs/20261015T204943585617Z-ImbalancedChen.Part3PrimitiveZeroReal/stdout.log",
+  "no_new_premises_or_quantifiers": true,
+  "no_carrier_or_coefficient_changes": true,
+  "no_resource_limit_or_linter_changes": true,
+  "source_checks": {
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_set_option": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "pins_modified": false,
+    "lake_invoked": false,
+    "source_modified_by_reviewer": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "lean_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-primitive-zero-real-first-diag-independent-rebind.json"
+    ],
+    "bootstrap_invoked": false,
+    "axiom_audit_performed": false,
+    "dependencies_modified": false,
+    "source_only": true
+  },
+  "remaining_gate": "Runtime owner elaboration and required kernel/axiom checks of this exact frozen SHA; source review does not assert the new tactic proof elaborates.",
+  "proof_repair_review": [
+    {
+      "assessment": "Original star_mul reversed the outer factors and congr 1 produced the actual wrong subgoal star(sum)=real scalar, as the complete stdout shows. star_mul_prime preserves factor order in Complex. After proving the real-cast scalar fixed by star, congrArg for multiplication by that exact fixed scalar produces precisely the generic Hermitian-sum goal.",
+      "site": "primitiveZeroMain_star"
+    },
+    {
+      "assessment": "Unchanged proof exchanges the complete original a,b labels: complex gamma and coprime-mass coefficients conjugate in pairs; the natural-cast totient density is real and symmetric under q*r=r*q. Commutative multiplication handles the factor order. Total division means no positivity or nonzero-denominator premise is added.",
+      "site": "Hermitian summand"
+    },
+    {
+      "assessment": "The generic finite Hermitian double-sum theorem and the ofReal(re P0)=P0 theorem are unchanged. The generic theorem keeps arbitrary finite S and f with only its original Hermitian hypothesis; P0 reality still has no admissibility hypothesis.",
+      "site": "generic finite sum and final real cast"
+    }
+  ],
+  "source_api_checks": {
+    "scalar_congruence": "congrArg applied to the explicitly typed Complex→Complex function z↦(original V*local cutoffMass cast)*z",
+    "star_mul_prime": "Fresh source read: Mathlib/Algebra/Star/Basic.lean:167, theorem star_mul_prime [CommMagma R] [StarMul R] (x y:R):star(x*y)=star x*star y",
+    "same_density": "Exact primitiveZeroMain from frozen Zero2c96; no modification to it"
+  }
+}

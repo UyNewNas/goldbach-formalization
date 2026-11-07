@@ -1,0 +1,88 @@
+{
+  "status": "SOURCE_ONLY_ADVISORY_REVIEW",
+  "created_utc": "2026-10-15T20:03:27.336233+00:00",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9TrueLiMass",
+  "source_sha256": "38f8b23df497e96554b192211a544417546ca115faa5984a573fbe700184e059",
+  "reviewer": "lower_resume self-review, not independent validation",
+  "no_compiler_invoked": true,
+  "no_kernel_or_axiom_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "declarations": [
+    {
+      "name": "tendsto_currentChenUpsilon9_trueLi_normalized_real",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem tendsto_currentChenUpsilon9_trueLi_normalized_real :\n    Tendsto (fun x : ℝ => trueLogarithmicIntegral x * Real.log x / x)\n      atTop (𝓝 1)",
+      "line": 27
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_trueLi_real_le",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem eventually_currentChenUpsilon9_trueLi_real_le (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ x : ℝ in atTop,\n      trueLogarithmicIntegral x ≤ (1 + η) * x / Real.log x",
+      "line": 45
+    },
+    {
+      "name": "currentChenUpsilon9_li_argument_power_lower",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_li_argument_power_lower {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon9PrefixProducts N) :\n    (N : ℝ) ^ (191 / 500 : ℝ) ≤ (N : ℝ) / (a : ℝ)",
+      "line": 60
+    },
+    {
+      "name": "currentChenUpsilon9_log_gap_pos",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9_log_gap_pos {N a : ℕ} (hN : 2 ≤ N)\n    (ha : a ∈ currentChenUpsilon9PrefixProducts N) :\n    0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ)",
+      "line": 77
+    },
+    {
+      "name": "currentChenUpsilon9LogTotientMass",
+      "private": false,
+      "kind": "def",
+      "signature": "def currentChenUpsilon9LogTotientMass (N : ℕ) : ℝ",
+      "line": 93
+    },
+    {
+      "name": "currentChenUpsilon9LogTotientMass_nonneg",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem currentChenUpsilon9LogTotientMass_nonneg {N : ℕ} (hN : 2 ≤ N) :\n    0 ≤ currentChenUpsilon9LogTotientMass N",
+      "line": 98
+    },
+    {
+      "name": "eventually_currentChenUpsilon9_liMainMass_le_logTotientMass",
+      "private": false,
+      "kind": "theorem",
+      "signature": "theorem eventually_currentChenUpsilon9_liMainMass_le_logTotientMass\n    (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ N : ℕ in atTop,\n      currentChenUpsilon9LiMainMass N * Real.log (N : ℝ) / (N : ℝ) ≤\n        (1 + η) * currentChenUpsilon9LogTotientMass N",
+      "line": 108
+    }
+  ],
+  "findings": [],
+  "checked_semantics": [
+    "The actual trueLogarithmicIntegral real-variable leading-one limit is squeezed by the already proved exact integration-by-parts remainder. There is no caller true-li asymptotic premise.",
+    "Each actual image product a has 0<a<N^(309/500), hence N/a>=N^(191/500); this pays a single true-li threshold for every selected a simultaneously.",
+    "On N>=2 the literal logarithmic gap 1-log(a)/log(N) is positive from the actual product support. Thus multiplying and reciprocal comparisons preserve inequality directions.",
+    "The exact identity log(N/a)=log(N)*(1-log(a)/log(N)) retains the actual moving argument and leading coefficient one.",
+    "The only change of harmonic denominator is the proved upper estimate 1/a<=1/phi(a), with actual a>0 guaranteeing phi(a)>0. No reciprocal replacement equality or asymptotic prime-sum premise is asserted.",
+    "The resulting actualLogTotientMass uses precisely the same modulus-independent zero-one product image and no unproved injectivity or coefficient-bound input.",
+    "No signed Rosser error or count main is altered in this leaf; no density constant, adopted K or hLower is assumed."
+  ],
+  "remaining": [
+    "No Lean compile, owned replay, full-type or axiom acceptance evidence for this candidate yet.",
+    "The actual harmonic mass limit and ordinary switched factor-eight density estimate remain separate tasks."
+  ],
+  "evidence_boundary": "Source-only self-review, no compiler/kernel/object/axiom acceptance claim.",
+  "previous_source_sha256": "18cefc082ad643712c55ce96a5da77fe0521a47c46e89ac1c0b098f25509a9bc",
+  "previous_report_sha256": "bd6d8ff5d18b8fba738a9f575e248a9cc4d4f3d2e7e813b1128b7c65e66e7467",
+  "exact_rebind_scope": "Only explicit unfolding of the actual trueLogarithmicIntegral definition was added to the existing pointwise scaling simp list. Inverse deletion of this one list entry exactly reproduces the old source SHA. Seven complete signatures, definitions, imports and thresholds are byte-identical. No new full-DAG traversal or Lean invocation is claimed.",
+  "inverse_transform_exact_old_sha": true,
+  "actual_failed_run": "runs/20261015T200132843318Z-ImbalancedChen.CurrentChenUpsilon9TrueLiMass/stdout.log",
+  "actual_failed_log_sha256": "4ba2f14f4ea17030707dd2faef6d79e0decfc73e623fc6f4d9f345d15be9c82e",
+  "fixed_alias_definition_read": {
+    "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/BombieriVinogradov.lean",
+    "source_sha256": "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc",
+    "line": 26,
+    "definition": "trueLogarithmicIntegral x := LiuWeight.liuLogarithmicIntegral (2 / Real.log 2) x"
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_ICO_SEMANTICS_WITH_EXISTING_OWNED_RECEIPT_BINDING",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": {
+    "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+    "path": "ImbalancedChen/ActualPrimeIcoCellTestFunctions.lean",
+    "source_sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+    "header": {
+      "module_header": false,
+      "prelude": false,
+      "imports": [
+        {
+          "module": "Init",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "Init",
+          "is_meta": true,
+          "import_all": false,
+          "is_exported": false,
+          "explicit_visibility": null,
+          "implicit": true
+        },
+        {
+          "module": "ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        },
+        {
+          "module": "ImbalancedChen.LogPrimeBoxMesh",
+          "is_meta": false,
+          "import_all": false,
+          "is_exported": true,
+          "explicit_visibility": null,
+          "implicit": false
+        }
+      ],
+      "parser_findings": []
+    }
+  },
+  "complete_source_declarations": [
+    {
+      "name": "affinePrimeGateRamp_upper_eq_one_of_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 20,
+      "complete_signature": "private theorem affinePrimeGateRamp_upper_eq_one_of_le {d r : ℕ}\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (m : ℕ)\n    {x : Fin d → ℝ} (hx : ∀ j, L j x ≤ c j) :\n    affinePrimeGateRamp L c true m x = 1",
+      "independent_assessment": "Every weak row L_j(x)<=c_j makes the upper ramp exactly one, including equality; finite empty product is allowed."
+    },
+    {
+      "name": "affineSandwich_test_error",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 32,
+      "complete_signature": "private theorem affineSandwich_test_error {d r : ℕ}\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ)\n    (R : Set (Fin d → ℝ)) (hlo : primeAffineGateRegion L c ⊆ R)\n    (hhi : ∀ x ∈ R, ∀ j, L j x ≤ c j) (m : ℕ)\n    (f : (Fin d → ℝ) → ℝ) (x : Fin d → ℝ) :\n    |R.indicator f x - f x * affinePrimeGateRamp L c false m x| ≤\n      |f x| * (affinePrimeGateRamp L c true m x - affinePrimeGateRamp L c false m x)",
+      "independent_assessment": "Pointwise bound for any signed f on any R between strict and weak gates. Inside R use upper=1 and lower<=1; outside R strict-subset implies lower=0. No wall atom is removed."
+    },
+    {
+      "name": "integral_affineSandwich",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 49,
+      "complete_signature": "private theorem integral_affineSandwich {d r : ℕ} (a b : ℝ)\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ j, L j ≠ 0)\n    (R : Set (Fin d → ℝ)) (hR : MeasurableSet R)\n    (hlo : primeAffineGateRegion L c ⊆ R) (hhi : ∀ x ∈ R, ∀ j, L j x ≤ c j)\n    (f : (Fin d → ℝ) → ℝ) :\n    (∫ x in logPrimeBox (fun _ : Fin d => a) (fun _ => b) ∩ primeAffineGateRegion L c,\n      f x * ∏ i, 1 / x i) =\n    ∫ x in logPrimeBox (fun _ : Fin d => a) (fun _ => b) ∩ R,\n      f x * ∏ i, 1 / x i",
+      "independent_assessment": "Nonzero finite forms give Lebesgue-null walls. Only here strict gate and R are identified almost everywhere; setIntegral_indicator and integral_congr_ae need no supplied arithmetic premise."
+    },
+    {
+      "name": "tendsto_actualPrimeBoxTestSum_cube_affineSandwich",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 71,
+      "complete_signature": "theorem tendsto_actualPrimeBoxTestSum_cube_affineSandwich {d r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b)\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ j, L j ≠ 0)\n    (R : Set (Fin d → ℝ)) (hR : MeasurableSet R)\n    (hlo : primeAffineGateRegion L c ⊆ R) (hhi : ∀ x ∈ R, ∀ j, L j x ≤ c j)\n    (f : (Fin d → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin d => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin d => a) (fun _ => b)\n      (R.indicator f)) atTop\n      (𝓝 (∫ x in logPrimeBox (fun _ : Fin d => a) (fun _ => b) ∩ R,\n        f x * ∏ i, 1 / x i))",
+      "independent_assessment": "Choose ramp index m using two proved continuous-integral limits before N. Two actual continuous prime-test limits and nonnegative actual reciprocal-prime weights pay four epsilon/4 errors. Caller supplies only positive fixed cube, nonzero forms, measurable intermediate R and continuous signed f."
+    },
+    {
+      "name": "primeIcoBoxGateForms",
+      "kind": "def",
+      "visibility": "public",
+      "line": 132,
+      "complete_signature": "def primeIcoBoxGateForms {d r : ℕ}\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) :\n    Fin (d + (d + r)) → (Fin d → ℝ) →L[ℝ] ℝ",
+      "complete_definition": "def primeIcoBoxGateForms {d r : ℕ}\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) :\n    Fin (d + (d + r)) → (Fin d → ℝ) →L[ℝ] ℝ :=\n  Fin.append (fun i => -ContinuousLinearMap.proj i)\n    (Fin.append (fun i => ContinuousLinearMap.proj i) L)",
+      "independent_assessment": "Exact Fin.append of d negative coordinate projections, d positive projections, then r caller forms."
+    },
+    {
+      "name": "primeIcoBoxGateBounds",
+      "kind": "def",
+      "visibility": "public",
+      "line": 138,
+      "complete_signature": "def primeIcoBoxGateBounds {d r : ℕ} (lo hi : Fin d → ℝ) (c : Fin r → ℝ) :\n    Fin (d + (d + r)) → ℝ",
+      "complete_definition": "def primeIcoBoxGateBounds {d r : ℕ} (lo hi : Fin d → ℝ) (c : Fin r → ℝ) :\n    Fin (d + (d + r)) → ℝ :=\n  Fin.append (fun i => -lo i) (Fin.append hi c)",
+      "independent_assessment": "Matching bounds -lo, hi, c. No coordinate or order wall is silently discarded."
+    },
+    {
+      "name": "primeIcoBoxGateForms_ne_zero",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 142,
+      "complete_signature": "theorem primeIcoBoxGateForms_ne_zero {d r : ℕ}\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (hL : ∀ j, L j ≠ 0) :\n    ∀ j, primeIcoBoxGateForms L j ≠ 0",
+      "independent_assessment": "Projection nonzeroness tested on all-one vector; negative projections nonzero; caller forms use hL. No dimension-positive premise is needed."
+    },
+    {
+      "name": "mem_primeIcoBoxStrictGateRegion",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 152,
+      "complete_signature": "theorem mem_primeIcoBoxStrictGateRegion {d r : ℕ}\n    (lo hi : Fin d → ℝ) (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ)\n    (x : Fin d → ℝ) :\n    x ∈ primeAffineGateRegion (primeIcoBoxGateForms L) (primeIcoBoxGateBounds lo hi c) ↔\n      (∀ i, lo i < x i ∧ x i < hi i) ∧ x ∈ primeAffineGateRegion L c",
+      "independent_assessment": "Strict gate exactly lo_i<x_i<hi_i for all i plus caller strict gates."
+    },
+    {
+      "name": "primeIcoBox_weak_gates",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 166,
+      "complete_signature": "private theorem primeIcoBox_weak_gates {d r : ℕ}\n    (lo hi : Fin d → ℝ) (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ)\n    {x : Fin d → ℝ} (hx : x ∈ logPrimeBox lo hi ∩ primeAffineGateRegion L c) :\n    ∀ j, primeIcoBoxGateForms L j x ≤ primeIcoBoxGateBounds lo hi c j",
+      "independent_assessment": "Actual Ico lower weak and upper strict coordinates imply all weak coordinate rows; original strict caller gates imply their weak rows."
+    },
+    {
+      "name": "tendsto_actualPrimeBoxTestSum_cube_IcoCell_affineGates",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 179,
+      "complete_signature": "theorem tendsto_actualPrimeBoxTestSum_cube_IcoCell_affineGates {d r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (m : ℕ) (j : Fin d → Fin (m + 1))\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ i, L i ≠ 0)\n    (f : (Fin d → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin d => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin d => a) (fun _ => b)\n      ((logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c).indicator f)) atTop\n      (𝓝 (∫ x in logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c,\n        f x * ∏ i, 1 / x i))",
+      "independent_assessment": "Applies general pointwise sandwich to actual Ico mesh cell; positive cube and fixed mesh precede N; cell subset removes only redundant outer cube in continuous integral."
+    }
+  ],
+  "explicit_source_declaration_count": 10,
+  "definition_count": 2,
+  "theorem_count": 8,
+  "issues": [],
+  "direct_sources": [
+    {
+      "module": "ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+      "path": "ImbalancedChen/ActualPrimePolyhedralTestFunctions.lean",
+      "source_sha256": "7281ad47406ad7eb48c5f50c24fa037880778aeb59d79a32f25855ab0dd17ad6",
+      "header": {
+        "module_header": false,
+        "prelude": false,
+        "imports": [
+          {
+            "module": "Init",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "Init",
+            "is_meta": true,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "ImbalancedChen.AffinePrimeGates",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          }
+        ],
+        "parser_findings": []
+      }
+    },
+    {
+      "module": "ImbalancedChen.LogPrimeBoxMesh",
+      "path": "ImbalancedChen/LogPrimeBoxMesh.lean",
+      "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+      "header": {
+        "module_header": false,
+        "prelude": false,
+        "imports": [
+          {
+            "module": "Init",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "Init",
+            "is_meta": true,
+            "import_all": false,
+            "is_exported": false,
+            "explicit_visibility": null,
+            "implicit": true
+          },
+          {
+            "module": "ImbalancedChen.LogPrimeBoxIntegral",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Analysis.SpecificLimits.Basic",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Order.Interval.Set.Union",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          },
+          {
+            "module": "Mathlib.Tactic",
+            "is_meta": false,
+            "import_all": false,
+            "is_exported": true,
+            "explicit_visibility": null,
+            "implicit": false
+          }
+        ],
+        "parser_findings": []
+      }
+    }
+  ],
+  "direct_and_leaf_current_objects": [
+    {
+      "module": "ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+      "object_sha256": "a1ea6cd7acd3317a1e72b9af50c054906b8205d0db2bd78234922745800281da"
+    },
+    {
+      "module": "ImbalancedChen.LogPrimeBoxMesh",
+      "object_sha256": "9e73c5540abaf6fe58d548dd9cbef08ad8d4d1bc4a943bde85a45cbfe8f1153e"
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeIcoCellTestFunctions",
+      "object_sha256": "31c11947924ff99de22228cec79f3704dc531520c823ea477d05f2a32da9d731"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactCellConvergence",
+      "object_sha256": "9454231794ad3a497d11e79865f334db8d1f58c8454587d3eaa56322a8790aba"
+    }
+  ],
+  "stale_object_boundary": {
+    "old_receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-integration\\.lake\\takeover-p0\\cache\\ImbalancedChen.ActualPrimeIcoCellTestFunctions.json",
+    "old_receipt_sha256": "57114524b42047aee1eb7dea8950ce79761327aa3134d3bc0eb473b715819c35",
+    "old_object_sha256": "a5de0fe71fdac5a475ac78bc551172cf53c9b17862f0d2c29017caa5c6f1f480",
+    "old_warning_as_error": false,
+    "old_poly_dependency": "8183d1b0dd51d131216bc1dc0331463f634c66af863f57db6548f70f15531517",
+    "current_poly_dependency": "a1ea6cd7acd3317a1e72b9af50c054906b8205d0db2bd78234922745800281da",
+    "poly_object_mismatch": true,
+    "mesh_object_equal": true,
+    "runtime_old_candidate_false": "Reported by runtime_resume; reviewer did not execute runtime.old_candidate. Old nonstrict receipt is not reused as current acceptance."
+  },
+  "separately_owned_evidence_read": {
+    "strict_compile_receipt": {
+      "path": ".lake/proof-continuation/runs/20261015T201938593811Z-ImbalancedChen.ActualPrimeIcoCellTestFunctions/receipt.json",
+      "sha256": "44625dcd95c018570091eca290e17ce419af9c27f6c7a0ea267a8fd8ee8fd229",
+      "status": "PASS"
+    },
+    "owned_audit_receipt": {
+      "path": ".lake/proof-continuation/audits/20261015T202018926686Z/receipt.json",
+      "sha256": "777e766c8c17d123a0efbaefff992d3b5580a9418c9210d03845447edb3a3a9f",
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "scope": "Owned stock replay and complete serialized/type/axiom census only"
+    },
+    "boundary": "These existing runtime-owned receipts were read and their source/object bindings compared. This source reviewer did not run or independently repeat any Lean/checker/axiom process."
+  },
+  "relative_header_delta": {
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "method": "Fresh parse of this leaf and its two current project parent headers; only imports parents plus implicit Init. Graph-theoretically the only new source node relative to parent closure union is this leaf. No full provider traversal repeated.",
+    "new_project": [
+      "ImbalancedChen.ActualPrimeIcoCellTestFunctions"
+    ],
+    "new_foreign": [],
+    "parser_findings": []
+  },
+  "remaining_gates": [
+    "No additional arithmetic density or signed first-exit sieve identity follows from the actual prime test limit.",
+    "Any new consumer still requires its own exact-source elaboration and owned acceptance."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked_by_reviewer": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "source_modified": false,
+    "checker_modified": false,
+    "python_bytecode_generated": false,
+    "fresh_full_dag_recomputed": false,
+    "new_runtime_acceptance_claimed": false
+  }
+}

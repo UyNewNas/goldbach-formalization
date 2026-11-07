@@ -1,0 +1,79 @@
+"""Package this reviewer's successful saved-evidence measurements; no tool invocation."""
+from pathlib import Path
+import datetime,hashlib,json
+STATE=Path(__file__).resolve().parents[1]
+ROOT=STATE.parents[1]
+BASE=STATE/'source-reviews/20261023-next-seven-actual216-independent-terminal-sol61-v2'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def read(p):return json.loads(Path(p).read_bytes())
+def winpath(p):
+    p=str(p).replace('\\','/')
+    if p.startswith('/mnt/') and len(p)>7:p=p[5].upper()+':/'+p[7:]
+    v=Path(p);return v if v.is_absolute() else (ROOT if p.startswith('.lake/') else STATE)/v
+def bind(ref):
+    p=winpath(ref['path']).resolve();assert sha(p)==ref['sha256'],str(p)
+    return p
+raw=Path(str(BASE)+'-RAW.json');r=read(raw)
+assert r['status']=='PASS_TERMINAL_EVIDENCE_PENDING_ROOT_SIGNATURE'
+assert r['explicit_protocol_version']=='V2'
+assert r['derived_counts']=={'owned_modules':216,'complete_serialized_declarations':5962,'distinct_constant_fullnames':5943,'original_owned_receipts_rehashed':154}
+assert r['historical_entries_deep_equal']==209 and r['historical_records_deep_equal']==5511
+assert r['historical_duplicate_name_count']==11 and r['historical_duplicate_record_excess']==19
+assert r['new_fullname_collisions']==0 and r['supplemental_metadata_counted_as_owned_receipt'] is False
+assert r['independent_of_collector_authorship_and_ROOT_execution'] is True
+assert r['independent_of_seven_proof_authorship'] is False
+assert r['native_fullgraph_rescanned_by_reviewer'] is False and r['blockers']==[]
+helper=STATE/'source-reviews/drafts/20261023-next-seven-actual216-independent-evidence-verifier-V2-explicit-bindings-DRAFT-UNEXECUTED.py.txt'
+assert sha(helper)=='5c2ca78f8ec5a31161c965ab285bdeddb3872022c41cf3ec3f47fb86d126fc04'
+capref={'path':'rounds/20261023-root-next-seven-fresh-capture-refs-v2.json','sha256':'699b3516489297995210e67028d3dae41e47783fc54322fb177b0a2240c1d779'}
+cap=read(bind(capref))
+assert cap['status']=='ROOT_NEXT_SEVEN_V2_FRESH_INPUTS_CAPTURED_NOT_ACCEPTED'
+assert cap['authority_created'] is False and cap['proposal_created'] is False and cap['signed'] is False
+assert cap['terminal_acceptance'] is None
+assert cap['source_count']==r['current_sources_rehashed'] and cap['graph_modules']==r['full_graph_nodes']
+for k in ('source_freeze','compiler_cachelib_freeze','complete_original_evidence_intake','capture_script','baseline_acceptance'):
+    p=bind(cap[k]);assert r['verified_inputs'][str(cap[k]['path']) if str(cap[k]['path']).startswith('/mnt/') else '/mnt/e/'+str(p).replace('\\','/')[3:]]==cap[k]['sha256']
+for p,h in r['verified_inputs'].items():assert sha(winpath(p))==h,('reviewed input drift',p)
+r['verified_inputs']['/mnt/e/'+str(bind(capref)).replace('\\','/')[3:]]=capref['sha256']
+r['created_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+r['reviewed_original_proposal']={'path':'rounds/next-seven-terminal-proposal-20261023-v2-root/acceptance-PROPOSAL.json','sha256':'0f982328e272345949ab51eaef08003ae0795f567e1355cd71c54806483ba889'}
+r['ROOT_original_execution_witness']={'path':'publication-integrity/20261023-root-next-seven-v2-collector-execution-witness.json','sha256':'7232b7844bf983b33827f045ad9f8e62f66f0f0f534482850560455b4333f876','scope':'ROOT observed original session11732 terminal chunk7930b1 exit0 and stdout refs. Factual transcript witness only, not OS-signed evidence, independent reviewer process observation, or collector rerun.'}
+r['reviewer_verifier_execution']={'path':str(helper),'sha256':sha(helper),'executed':True,'observed_exit_code':0,'surface':'Read-only WSL /usr/bin/python3 -B; directly read/hash lean, lean.real, leanchecker as files, without invoking them. PowerShell persisted stdout JSON only after exit0. The filename retains its immutable DRAFT-UNEXECUTED preparation label; this actual report records the later authorized execution.','raw_stdout':{'path':str(raw),'sha256':sha(raw)},'packaging_script':{'path':str(Path(__file__)),'sha256':sha(__file__)}}
+r['checks']={
+ 'actual_census_proposal_complete_witness_and_exact_collector_hash_bound':True,
+ 'ROOT_authority_intake_manifest_fresh_source_fullgraph_capture_bound':True,
+ 'all216_current_owned_sources_and_all_five_object_slots_rehashed':True,
+ 'all154_original_owned_receipts_rehashed_by_canonical_path':True,
+ 'all5962_full_records_from_original_JSON_equal_log_records':True,
+ 'serialized_and_environment_inventories_complete_equal_actual_records':True,
+ 'all_full_types_nonempty_without_truncation':True,
+ 'unsafe_partial_axiom_false_and_only_standard_three_axioms':True,
+ 'all209_historical_entries_and5511_records_deep_equal':True,
+ 'historical_duplicate_names11_excess19_unchanged_new_collisions0':True,
+ 'all216_original_stock_logs_commands_and_resource_schemas_verified':True,
+ 'four_new_original_stock_ALL_audits_all30_sidecars_template_rendering_process_JSON_verified':True,
+ 'seven_current_strict_receipts_cache_stdout_commands_resources_runtime_pins_binary_dependencies_bound':True,
+ 'all_current_ImbalancedChen_sources_and_current_state_cache_lib_before_after_equal':True,
+ 'all_inspected_refs_and_owned_slots_and_three_binary_hashes_rechecked_after':True,
+ 'ROOT_full_native_graph_freeze_and_actual_collector_before_after_gates_reused':True,
+ 'native_fullgraph_rescanned_or_kernel_replayed_by_reviewer':False,
+ 'supplemental_metadata_counted_as_original_owned_receipt':False}
+r['derived_delta_counts']={'owned_modules':r['derived_counts']['owned_modules']-209,'complete_serialized_declarations':r['derived_counts']['complete_serialized_declarations']-5511,'distinct_constant_fullnames':r['derived_counts']['distinct_constant_fullnames']-5492,'original_owned_receipts_rehashed':r['derived_counts']['original_owned_receipts_rehashed']-150}
+assert r['derived_delta_counts']=={'owned_modules':7,'complete_serialized_declarations':451,'distinct_constant_fullnames':451,'original_owned_receipts_rehashed':4}
+r['no_independent_mathematical_certification_of_reviewer_P0_P3_repairs']=True
+r['native_graph_boundary']='Full native source/object graph not rescanned by reviewer. Reviewer directly hashed three current tool binary files before/after and current project sources/owned slots/cache; full ROOT graph/current native slots rely on exact reviewed collector, bound ROOT fresh capture and factual original-exec exit0 witness. Neither project nor external kernel closure replay is claimed.'
+r['compiler_or_collector_reexecuted_by_reviewer']=False
+r['ROOT_acceptance_signature_written_by_reviewer']=False
+cp='''PASS_TERMINAL_EVIDENCE_PENDING_ROOT_SIGNATURE
+Independent actual V2 saved-evidence/protocol review. Derived216 modules/5962 complete records/5943 distinct fullnames/154 original owned receipts; delta7/451/451/4 from strict accepted209/5511/5492/150. New module records147/42/75/44/67/27/49. All209 whole historical entries and5511 full records deeply equal; inherited11 duplicate names/19excess unchanged; new-new/new-old fullname collisions0. Metadata is not another owned receipt.
+Actual V2 census5b515a35/proposal0f982328/complete43a58470, authorityce6f0452, intakef6cbd64f, capture699b3516 and exact collector0d911199 bound. Four real original stock/ALL audits with all30 sidecars, all154 original receipts/logs/full declarations/serialized=environment inventories/types/safety/std3 and all216 original stock commands/resources verified. Seven strict receipt/cache/stdout/runtime/pins/dependency/binary/commands/resources bound; successful P4 nonempty stdout retained.
+Current588 ImbalancedChen sources and all216 owned five object slots read-hashed. Current project sources/cache/lib and inspected refs/owned slots/three binary files checked before/after without proof-tool invocation. Full ROOT graph7050 nodes: native count in JSON is actual saved graph measurement. Full native graph not independently rescanned; exact reviewed collector's complete before/after gates plus bound ROOT fresh full capture and ROOT original-exec witness are reused. Direct three current binaries were independently read-hashed under WSL; none invoked. No project/external kernel closure replay.
+ROOT session11732 chunk7930b1 exit0 witness7232b784 is factual ROOT transcript evidence, not OS-signed process evidence or independent reviewer observation/rerun of collector. Reviewer executed only own325LF5c2c read-only saved-evidence helper, actual exit0, no Runtime/Lean/lake/checker/collector/CI. Output remains proposal pending ROOT signature. Reviewer helped P0/P3 local source repairs, so independent of collector author/ROOT execution only; no independent mathematical certification of own repairs. Main OPEN30, NORMAL_IMPORTED_ENVIRONMENT_TRUST; unconditional main/project/external closure replay false. Only new reviewer JSON/CP/SHA written.
+'''
+j=Path(str(BASE)+'.json');txt=Path(str(BASE)+'.txt');hs=Path(str(BASE)+'.sha256')
+assert all(not p.exists() for p in (j,txt,hs))
+with j.open('x',encoding='utf8',newline='\n') as f:f.write(json.dumps(r,ensure_ascii=False,indent=2)+'\n')
+with txt.open('x',encoding='utf8',newline='\n') as f:f.write(cp)
+with hs.open('x',encoding='utf8',newline='\n') as f:
+    for p in (j,txt,raw,helper,Path(__file__)):f.write(sha(p)+'  '+p.name+'\n')
+print(json.dumps({'status':r['status'],'derived_counts':r['derived_counts'],'sources':r['current_sources_rehashed'],'graph':r['full_graph_nodes'],'native':r['native_nodes'],'artifacts':{str(p):sha(p) for p in (j,txt,hs,raw,Path(__file__))}},indent=2))

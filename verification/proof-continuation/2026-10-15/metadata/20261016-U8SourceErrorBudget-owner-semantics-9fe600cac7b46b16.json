@@ -1,0 +1,227 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_REVIEW_PENDING_NONAUTHOR_REVIEW_AND_RUNTIME",
+  "reviewer": "/root/lower_resume (source author)",
+  "created_at_utc": "2026-10-15T22:22:27.996114+00:00",
+  "module": "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget",
+  "source_sha256": "f8a7e49a7e802d1dfc6459ee5ef0df4086f53e24b05464be05ffc59545aa7d29",
+  "no_Lean_or_build_invoked": true,
+  "no_kernel_owned_or_cache_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "path": "ImbalancedChen/CurrentChenUpsilon8SourceErrorBudget.lean",
+  "declaration_count": 13,
+  "definition_count": 2,
+  "all_complete_headers_definitions_and_proofs": [
+    {
+      "name": "currentChenUpsilon8SmallGoldbachPrimeTriples",
+      "kind": "def",
+      "private": false,
+      "start_line": 27,
+      "complete_source_header": "def currentChenUpsilon8SmallGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ)",
+      "complete_definition": "def currentChenUpsilon8SmallGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n(currentChenUpsilon8PrimeTriples N).filter fun x =>\n    ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ) ≤ (N : ℝ) ^ (1 / 5 : ℝ)"
+    },
+    {
+      "name": "currentChenUpsilon8LargeGoldbachPrimeTriples",
+      "kind": "def",
+      "private": false,
+      "start_line": 31,
+      "complete_source_header": "def currentChenUpsilon8LargeGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ)",
+      "complete_definition": "def currentChenUpsilon8LargeGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n(currentChenUpsilon8PrimeTriples N).filter fun x =>\n    (N : ℝ) ^ (1 / 5 : ℝ) < ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ)"
+    },
+    {
+      "name": "currentChenUpsilon8_prefixProducts_subset_positive_pan_interval",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 35,
+      "complete_source_header": "theorem currentChenUpsilon8_prefixProducts_subset_positive_pan_interval {N : ℕ}\n    (hN : 1 ≤ N) :\n    currentChenUpsilon8PrefixProducts N ⊆ Finset.Ioc 0 (currentChenUpsilon8PanUpper N)",
+      "complete_proof_body_after_by": "intro a ha\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact Finset.mem_Ioc.mpr ⟨(currentChenUpsilon8PrefixProducts_data ha).1,\n    (Finset.mem_Ioc.mp (currentChenUpsilon8PrefixProducts_subset_pan_interval hNr ha)).2⟩"
+    },
+    {
+      "name": "currentChenUpsilon8_prefixProducts_card_le_panUpper",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 43,
+      "complete_source_header": "theorem currentChenUpsilon8_prefixProducts_card_le_panUpper {N : ℕ} (hN : 1 ≤ N) :\n    (currentChenUpsilon8PrefixProducts N).card ≤ currentChenUpsilon8PanUpper N",
+      "complete_proof_body_after_by": "have hcard := Finset.card_le_card\n    (currentChenUpsilon8_prefixProducts_subset_positive_pan_interval hN)\n  simpa only [Nat.card_Ioc, Nat.sub_zero] using hcard"
+    },
+    {
+      "name": "currentChenUpsilon8_unitFibres_card_le_prefixProducts",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 49,
+      "complete_source_header": "theorem currentChenUpsilon8_unitFibres_card_le_prefixProducts (N : ℕ) :\n    (currentChenUpsilon8UnitFibres N).card ≤ (currentChenUpsilon8PrefixProducts N).card",
+      "complete_proof_body_after_by": "apply Finset.card_le_card_of_injOn (fun t : ℕ × ℕ => t.1 * t.2)\n  · intro t ht\n    exact Finset.mem_image.mpr ⟨t, (Finset.mem_filter.mp ht).1, rfl⟩\n  · intro t ht u hu heq\n    exact chenY8PrimeSelector_multiplier_injOn N _ _\n      (Finset.mem_filter.mp ht).1 (Finset.mem_filter.mp hu).1 heq"
+    },
+    {
+      "name": "currentChenUpsilon8_unitFibres_card_le_power",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 58,
+      "complete_source_header": "theorem currentChenUpsilon8_unitFibres_card_le_power {N : ℕ} (hN : 1 ≤ N) :\n    ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ)",
+      "complete_proof_body_after_by": "have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact (Nat.cast_le.mpr (currentChenUpsilon8_unitFibres_card_le_prefixProducts N)).trans\n    ((Nat.cast_le.mpr (currentChenUpsilon8_prefixProducts_card_le_panUpper hN)).trans\n      (currentChenUpsilon8_panUpper_le_two_thirds hNr))"
+    },
+    {
+      "name": "currentChenUpsilon8PrimeTriples_product_goldbachPrime_injOn",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 68,
+      "complete_source_header": "theorem currentChenUpsilon8PrimeTriples_product_goldbachPrime_injOn (N : ℕ) :\n    Set.InjOn (fun x : Σ _ : ℕ × ℕ, ℕ =>\n      (x.1.1 * x.1.2, N - x.1.1 * x.1.2 * x.2))\n      (currentChenUpsilon8PrimeTriples N)",
+      "complete_proof_body_after_by": "intro x hx y hy heq\n  rcases x with ⟨⟨p₁, p₂⟩, r⟩\n  rcases y with ⟨⟨q₁, q₂⟩, s⟩\n  change (p₁ * p₂, N - p₁ * p₂ * r) = (q₁ * q₂, N - q₁ * q₂ * s) at heq\n  have hxp : (p₁, p₂) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) := (Finset.mem_sigma.mp hx).1\n  have hyp : (q₁, q₂) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) := (Finset.mem_sigma.mp hy).1\n  have hpq := chenY8PrimeSelector_multiplier_injOn N _ _ hxp hyp (congrArg Prod.fst heq)\n  have hp₁ : p₁ = q₁ := congrArg Prod.fst hpq\n  have hp₂ : p₂ = q₂ := congrArg Prod.snd hpq\n  subst q₁\n  subst q₂\n  obtain ⟨h₁, h₂, _hA, _hfirst, _hsecond, _hcap, _hr, hrN, _hP, _hcut⟩ :=\n    mem_currentChenUpsilon8PrimeTriples_iff.mp hx\n  obtain ⟨_h₁, _h₂, _hA, _hfirst, _hsecond, _hcap, _hs, hsN, _hQ, _hcut⟩ :=\n    mem_currentChenUpsilon8PrimeTriples_iff.mp hy\n  have ha : 0 < p₁ * p₂ := mul_pos\n    (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n    (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n  have hP : N - p₁ * p₂ * r = N - p₁ * p₂ * s := congrArg Prod.snd heq\n  have hmul : (p₁ * p₂) * r = (p₁ * p₂) * s := by omega\n  have hrs : r = s := Nat.eq_of_mul_eq_mul_left ha hmul\n  subst s\n  rfl"
+    },
+    {
+      "name": "currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_rectangle",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 98,
+      "complete_source_header": "theorem currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_rectangle {N : ℕ}\n    (hN : 1 ≤ N) :\n    (currentChenUpsilon8SmallGoldbachPrimeTriples N).card ≤\n      currentChenUpsilon8PanUpper N * Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ))",
+      "complete_proof_body_after_by": "have hcard : (currentChenUpsilon8SmallGoldbachPrimeTriples N).card ≤\n      (Finset.Ioc 0 (currentChenUpsilon8PanUpper N) ×ˢ\n        Finset.Ioc 0 (Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)))).card := by\n    apply Finset.card_le_card_of_injOn (fun x : Σ _ : ℕ × ℕ, ℕ =>\n      (x.1.1 * x.1.2, N - x.1.1 * x.1.2 * x.2))\n    · intro x hx\n      obtain ⟨hxt, hsmall⟩ := Finset.mem_filter.mp hx\n      rcases x with ⟨⟨p₁, p₂⟩, r⟩\n      have hap : p₁ * p₂ ∈ currentChenUpsilon8PrefixProducts N :=\n        Finset.mem_image.mpr ⟨(p₁, p₂), (Finset.mem_sigma.mp hxt).1, rfl⟩\n      obtain ⟨_h₁, _h₂, _hA, _hfirst, _hsecond, _hcap, _hr, _hrN, hP, _hcut⟩ :=\n        mem_currentChenUpsilon8PrimeTriples_iff.mp hxt\n      have hPpos : 0 < N - p₁ * p₂ * r :=\n        (mem_chenAdditivePrimeCarrier.mp hP).2.1.pos\n      have hPfloor : N - p₁ * p₂ * r ≤ Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)) :=\n        (Nat.le_floor_iff (Real.rpow_nonneg (Nat.cast_nonneg N) _)).mpr hsmall\n      exact Finset.mem_product.mpr\n        ⟨currentChenUpsilon8_prefixProducts_subset_positive_pan_interval hN hap,\n          Finset.mem_Ioc.mpr ⟨hPpos, hPfloor⟩⟩\n    · intro x hx y hy heq\n      exact currentChenUpsilon8PrimeTriples_product_goldbachPrime_injOn N\n        (Finset.mem_filter.mp hx).1 (Finset.mem_filter.mp hy).1 heq\n  simpa only [Finset.card_product, Nat.card_Ioc, Nat.sub_zero] using hcard"
+    },
+    {
+      "name": "currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_power",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 126,
+      "complete_source_header": "theorem currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_power {N : ℕ}\n    (hN : 1 ≤ N) :\n    ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) ≤\n      (N : ℝ) ^ (13 / 15 : ℝ)",
+      "complete_proof_body_after_by": "have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr\n  calc\n    _ ≤ (currentChenUpsilon8PanUpper N : ℝ) *\n        (Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) := by\n      exact_mod_cast currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_rectangle hN\n    _ ≤ (N : ℝ) ^ (2 / 3 : ℝ) * (N : ℝ) ^ (1 / 5 : ℝ) :=\n      mul_le_mul (currentChenUpsilon8_panUpper_le_two_thirds hNr)\n        (Nat.floor_le (Real.rpow_nonneg (Nat.cast_nonneg N) _))\n        (Nat.cast_nonneg _) (Real.rpow_nonneg (Nat.cast_nonneg N) _)\n    _ = _ := by\n      rw [← Real.rpow_add hNp, show (2 / 3 : ℝ) + 1 / 5 = 13 / 15 by norm_num]"
+    },
+    {
+      "name": "currentChenUpsilon8_eq_largeGoldbachPrimeTriples_add_errors",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 145,
+      "complete_source_header": "theorem currentChenUpsilon8_eq_largeGoldbachPrimeTriples_add_errors (N : ℕ) :\n    currentChenUpsilon8 N = ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ) +\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ)",
+      "complete_proof_body_after_by": "have hpart : (currentChenUpsilon8PrimeTriples N).card =\n      (currentChenUpsilon8SmallGoldbachPrimeTriples N).card +\n        (currentChenUpsilon8LargeGoldbachPrimeTriples N).card := by\n    simpa only [currentChenUpsilon8SmallGoldbachPrimeTriples,\n      currentChenUpsilon8LargeGoldbachPrimeTriples, not_le] using\n      (Finset.card_filter_add_card_filter_not (s := currentChenUpsilon8PrimeTriples N)\n        (fun x => ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ) ≤\n          (N : ℝ) ^ (1 / 5 : ℝ))).symm\n  have hpartR : ((currentChenUpsilon8PrimeTriples N).card : ℝ) =\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ) := by exact_mod_cast hpart\n  rw [currentChenUpsilon8_eq_primeTriples_add_unitFibres, hpartR]\n  ring"
+    },
+    {
+      "name": "eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 163,
+      "complete_source_header": "theorem eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop,\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤ ε * singularNormalization N",
+      "complete_proof_body_after_by": "have hsmall := eventually_powerLog_le_singularNormalization 1 (13 / 15) 0\n    (by norm_num) (ε / 2) (half_pos hε)\n  have hunit := eventually_powerLog_le_singularNormalization 1 (2 / 3) 0\n    (by norm_num) (ε / 2) (half_pos hε)\n  filter_upwards [hsmall, hunit, eventually_ge_atTop (1 : ℕ)] with N hs hu hN\n  have hs' : ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) ≤\n      (ε / 2) * singularNormalization N :=\n    (currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_power hN).trans\n      (by simpa only [one_mul, pow_zero, mul_one] using hs)\n  have hu' : ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤\n      (ε / 2) * singularNormalization N :=\n    (currentChenUpsilon8_unitFibres_card_le_power hN).trans\n      (by simpa only [one_mul, pow_zero, mul_one] using hu)\n  linarith only [hs', hu']"
+    },
+    {
+      "name": "tendsto_currentChenUpsilon8_sourceErrors_normalized",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 183,
+      "complete_source_header": "theorem tendsto_currentChenUpsilon8_sourceErrors_normalized :\n    Tendsto (fun N : ℕ =>\n      (((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ)) / singularNormalization N)\n      atTop (𝓝 0)",
+      "complete_proof_body_after_by": "apply tendsto_order.2\n  constructor\n  · intro a ha\n    filter_upwards [eventually_singularNormalization_pos] with N hpos\n    exact ha.trans_le (div_nonneg (by positivity) hpos.le)\n  · intro b hb\n    filter_upwards [eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization\n      (b / 2) (half_pos hb), eventually_singularNormalization_pos] with N hbound hpos\n    have hquot :\n        (((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n          ((currentChenUpsilon8UnitFibres N).card : ℝ)) / singularNormalization N ≤ b / 2 :=\n      (div_le_iff₀ hpos).mpr hbound\n    exact hquot.trans_lt (by linarith)"
+    },
+    {
+      "name": "tendsto_currentChenUpsilon8_sub_largeGoldbachPrimeTriples_normalized",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 204,
+      "complete_source_header": "theorem tendsto_currentChenUpsilon8_sub_largeGoldbachPrimeTriples_normalized :\n    Tendsto (fun N : ℕ =>\n      (currentChenUpsilon8 N - ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ)) /\n        singularNormalization N) atTop (𝓝 0)",
+      "complete_proof_body_after_by": "apply tendsto_currentChenUpsilon8_sourceErrors_normalized.congr'\n  exact Filter.Eventually.of_forall (fun N => by\n    rw [currentChenUpsilon8_eq_largeGoldbachPrimeTriples_add_errors]\n    ring)"
+    }
+  ],
+  "type_extraction": "Theorems split only at actual := by; definitions use top-level assignment outside all bracketed named arguments.",
+  "full_current_source": "import ImbalancedChen.CurrentChenUpsilon8ProductPan\n\n/-!\n# The actual eighth unit and small Goldbach-prime errors\n\nHere P is the original Goldbach prime N-p1*p2*r; r is the prime\nmultiplicative quotient. Both new carriers filter the literal eighth\nPrimeTriples, so its inclusive p2 lower endpoint, strict square-root\nwall, target-prime exclusions and r>=p2 remain present.\n\nActual pair-product injectivity and the strict receiver bound pay an\ninjection into (p1*p2,P). Positive P permits the exact floor endpoint\nfor P<=N^(1/5). Units cost N^(2/3), and the small original Goldbach-prime\ntriples cost N^(13/15), with coefficient one. The proved power-error\nbudget then gives zero normalized ordinary cost. No count envelope or\nanalytic supplier is a premise.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Topology\nopen scoped BigOperators\nopen Classical\n\ndef currentChenUpsilon8SmallGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n  (currentChenUpsilon8PrimeTriples N).filter fun x =>\n    ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ) ≤ (N : ℝ) ^ (1 / 5 : ℝ)\n\ndef currentChenUpsilon8LargeGoldbachPrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n  (currentChenUpsilon8PrimeTriples N).filter fun x =>\n    (N : ℝ) ^ (1 / 5 : ℝ) < ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ)\n\ntheorem currentChenUpsilon8_prefixProducts_subset_positive_pan_interval {N : ℕ}\n    (hN : 1 ≤ N) :\n    currentChenUpsilon8PrefixProducts N ⊆ Finset.Ioc 0 (currentChenUpsilon8PanUpper N) := by\n  intro a ha\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact Finset.mem_Ioc.mpr ⟨(currentChenUpsilon8PrefixProducts_data ha).1,\n    (Finset.mem_Ioc.mp (currentChenUpsilon8PrefixProducts_subset_pan_interval hNr ha)).2⟩\n\ntheorem currentChenUpsilon8_prefixProducts_card_le_panUpper {N : ℕ} (hN : 1 ≤ N) :\n    (currentChenUpsilon8PrefixProducts N).card ≤ currentChenUpsilon8PanUpper N := by\n  have hcard := Finset.card_le_card\n    (currentChenUpsilon8_prefixProducts_subset_positive_pan_interval hN)\n  simpa only [Nat.card_Ioc, Nat.sub_zero] using hcard\n\ntheorem currentChenUpsilon8_unitFibres_card_le_prefixProducts (N : ℕ) :\n    (currentChenUpsilon8UnitFibres N).card ≤ (currentChenUpsilon8PrefixProducts N).card := by\n  apply Finset.card_le_card_of_injOn (fun t : ℕ × ℕ => t.1 * t.2)\n  · intro t ht\n    exact Finset.mem_image.mpr ⟨t, (Finset.mem_filter.mp ht).1, rfl⟩\n  · intro t ht u hu heq\n    exact chenY8PrimeSelector_multiplier_injOn N _ _\n      (Finset.mem_filter.mp ht).1 (Finset.mem_filter.mp hu).1 heq\n\ntheorem currentChenUpsilon8_unitFibres_card_le_power {N : ℕ} (hN : 1 ≤ N) :\n    ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ) := by\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact (Nat.cast_le.mpr (currentChenUpsilon8_unitFibres_card_le_prefixProducts N)).trans\n    ((Nat.cast_le.mpr (currentChenUpsilon8_prefixProducts_card_le_panUpper hN)).trans\n      (currentChenUpsilon8_panUpper_le_two_thirds hNr))\n\n/-- Every actual triple is recovered from its prefix product and its\noriginal Goldbach prime. The strict actual product bound prevents every\nNat-subtraction truncation before the final quotient is cancelled. -/\ntheorem currentChenUpsilon8PrimeTriples_product_goldbachPrime_injOn (N : ℕ) :\n    Set.InjOn (fun x : Σ _ : ℕ × ℕ, ℕ =>\n      (x.1.1 * x.1.2, N - x.1.1 * x.1.2 * x.2))\n      (currentChenUpsilon8PrimeTriples N) := by\n  intro x hx y hy heq\n  rcases x with ⟨⟨p₁, p₂⟩, r⟩\n  rcases y with ⟨⟨q₁, q₂⟩, s⟩\n  change (p₁ * p₂, N - p₁ * p₂ * r) = (q₁ * q₂, N - q₁ * q₂ * s) at heq\n  have hxp : (p₁, p₂) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) := (Finset.mem_sigma.mp hx).1\n  have hyp : (q₁, q₂) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) := (Finset.mem_sigma.mp hy).1\n  have hpq := chenY8PrimeSelector_multiplier_injOn N _ _ hxp hyp (congrArg Prod.fst heq)\n  have hp₁ : p₁ = q₁ := congrArg Prod.fst hpq\n  have hp₂ : p₂ = q₂ := congrArg Prod.snd hpq\n  subst q₁\n  subst q₂\n  obtain ⟨h₁, h₂, _hA, _hfirst, _hsecond, _hcap, _hr, hrN, _hP, _hcut⟩ :=\n    mem_currentChenUpsilon8PrimeTriples_iff.mp hx\n  obtain ⟨_h₁, _h₂, _hA, _hfirst, _hsecond, _hcap, _hs, hsN, _hQ, _hcut⟩ :=\n    mem_currentChenUpsilon8PrimeTriples_iff.mp hy\n  have ha : 0 < p₁ * p₂ := mul_pos\n    (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n    (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n  have hP : N - p₁ * p₂ * r = N - p₁ * p₂ * s := congrArg Prod.snd heq\n  have hmul : (p₁ * p₂) * r = (p₁ * p₂) * s := by omega\n  have hrs : r = s := Nat.eq_of_mul_eq_mul_left ha hmul\n  subst s\n  rfl\n\ntheorem currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_rectangle {N : ℕ}\n    (hN : 1 ≤ N) :\n    (currentChenUpsilon8SmallGoldbachPrimeTriples N).card ≤\n      currentChenUpsilon8PanUpper N * Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)) := by\n  have hcard : (currentChenUpsilon8SmallGoldbachPrimeTriples N).card ≤\n      (Finset.Ioc 0 (currentChenUpsilon8PanUpper N) ×ˢ\n        Finset.Ioc 0 (Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)))).card := by\n    apply Finset.card_le_card_of_injOn (fun x : Σ _ : ℕ × ℕ, ℕ =>\n      (x.1.1 * x.1.2, N - x.1.1 * x.1.2 * x.2))\n    · intro x hx\n      obtain ⟨hxt, hsmall⟩ := Finset.mem_filter.mp hx\n      rcases x with ⟨⟨p₁, p₂⟩, r⟩\n      have hap : p₁ * p₂ ∈ currentChenUpsilon8PrefixProducts N :=\n        Finset.mem_image.mpr ⟨(p₁, p₂), (Finset.mem_sigma.mp hxt).1, rfl⟩\n      obtain ⟨_h₁, _h₂, _hA, _hfirst, _hsecond, _hcap, _hr, _hrN, hP, _hcut⟩ :=\n        mem_currentChenUpsilon8PrimeTriples_iff.mp hxt\n      have hPpos : 0 < N - p₁ * p₂ * r :=\n        (mem_chenAdditivePrimeCarrier.mp hP).2.1.pos\n      have hPfloor : N - p₁ * p₂ * r ≤ Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)) :=\n        (Nat.le_floor_iff (Real.rpow_nonneg (Nat.cast_nonneg N) _)).mpr hsmall\n      exact Finset.mem_product.mpr\n        ⟨currentChenUpsilon8_prefixProducts_subset_positive_pan_interval hN hap,\n          Finset.mem_Ioc.mpr ⟨hPpos, hPfloor⟩⟩\n    · intro x hx y hy heq\n      exact currentChenUpsilon8PrimeTriples_product_goldbachPrime_injOn N\n        (Finset.mem_filter.mp hx).1 (Finset.mem_filter.mp hy).1 heq\n  simpa only [Finset.card_product, Nat.card_Ioc, Nat.sub_zero] using hcard\n\ntheorem currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_power {N : ℕ}\n    (hN : 1 ≤ N) :\n    ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) ≤\n      (N : ℝ) ^ (13 / 15 : ℝ) := by\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr\n  calc\n    _ ≤ (currentChenUpsilon8PanUpper N : ℝ) *\n        (Nat.floor ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) := by\n      exact_mod_cast currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_rectangle hN\n    _ ≤ (N : ℝ) ^ (2 / 3 : ℝ) * (N : ℝ) ^ (1 / 5 : ℝ) :=\n      mul_le_mul (currentChenUpsilon8_panUpper_le_two_thirds hNr)\n        (Nat.floor_le (Real.rpow_nonneg (Nat.cast_nonneg N) _))\n        (Nat.cast_nonneg _) (Real.rpow_nonneg (Nat.cast_nonneg N) _)\n    _ = _ := by\n      rw [← Real.rpow_add hNp, show (2 / 3 : ℝ) + 1 / 5 = 13 / 15 by norm_num]\n\n/-- This is the original current eighth count, with every actual outer\npair label and the inclusive small-Goldbach-prime endpoint retained. -/\ntheorem currentChenUpsilon8_eq_largeGoldbachPrimeTriples_add_errors (N : ℕ) :\n    currentChenUpsilon8 N = ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ) +\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ) := by\n  have hpart : (currentChenUpsilon8PrimeTriples N).card =\n      (currentChenUpsilon8SmallGoldbachPrimeTriples N).card +\n        (currentChenUpsilon8LargeGoldbachPrimeTriples N).card := by\n    simpa only [currentChenUpsilon8SmallGoldbachPrimeTriples,\n      currentChenUpsilon8LargeGoldbachPrimeTriples, not_le] using\n      (Finset.card_filter_add_card_filter_not (s := currentChenUpsilon8PrimeTriples N)\n        (fun x => ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ) ≤\n          (N : ℝ) ^ (1 / 5 : ℝ))).symm\n  have hpartR : ((currentChenUpsilon8PrimeTriples N).card : ℝ) =\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ) := by exact_mod_cast hpart\n  rw [currentChenUpsilon8_eq_primeTriples_add_unitFibres, hpartR]\n  ring\n\ntheorem eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop,\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤ ε * singularNormalization N := by\n  have hsmall := eventually_powerLog_le_singularNormalization 1 (13 / 15) 0\n    (by norm_num) (ε / 2) (half_pos hε)\n  have hunit := eventually_powerLog_le_singularNormalization 1 (2 / 3) 0\n    (by norm_num) (ε / 2) (half_pos hε)\n  filter_upwards [hsmall, hunit, eventually_ge_atTop (1 : ℕ)] with N hs hu hN\n  have hs' : ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) ≤\n      (ε / 2) * singularNormalization N :=\n    (currentChenUpsilon8_smallGoldbachPrimeTriples_card_le_power hN).trans\n      (by simpa only [one_mul, pow_zero, mul_one] using hs)\n  have hu' : ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤\n      (ε / 2) * singularNormalization N :=\n    (currentChenUpsilon8_unitFibres_card_le_power hN).trans\n      (by simpa only [one_mul, pow_zero, mul_one] using hu)\n  linarith only [hs', hu']\n\ntheorem tendsto_currentChenUpsilon8_sourceErrors_normalized :\n    Tendsto (fun N : ℕ =>\n      (((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ)) / singularNormalization N)\n      atTop (𝓝 0) := by\n  apply tendsto_order.2\n  constructor\n  · intro a ha\n    filter_upwards [eventually_singularNormalization_pos] with N hpos\n    exact ha.trans_le (div_nonneg (by positivity) hpos.le)\n  · intro b hb\n    filter_upwards [eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization\n      (b / 2) (half_pos hb), eventually_singularNormalization_pos] with N hbound hpos\n    have hquot :\n        (((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n          ((currentChenUpsilon8UnitFibres N).card : ℝ)) / singularNormalization N ≤ b / 2 :=\n      (div_le_iff₀ hpos).mpr hbound\n    exact hquot.trans_lt (by linarith)\n\n/-- The difference between the literal ordinary eighth count and its\nliteral large-Goldbach-prime triples has zero normalized mean. -/\ntheorem tendsto_currentChenUpsilon8_sub_largeGoldbachPrimeTriples_normalized :\n    Tendsto (fun N : ℕ =>\n      (currentChenUpsilon8 N - ((currentChenUpsilon8LargeGoldbachPrimeTriples N).card : ℝ)) /\n        singularNormalization N) atTop (𝓝 0) := by\n  apply tendsto_currentChenUpsilon8_sourceErrors_normalized.congr'\n  exact Filter.Eventually.of_forall (fun N => by\n    rw [currentChenUpsilon8_eq_largeGoldbachPrimeTriples_add_errors]\n    ring)\n\nend\n\nend ImbalancedChen",
+  "parent": {
+    "path": "ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+    "sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+    "owned_receipt_path": ".lake/proof-continuation/audits/20261015T215816603875Z/receipt.json",
+    "owned_receipt_sha256": "8b85641b9088d2ad7895bae539ca0e23a9bb3c2a7c343573e40141c5746a5e29",
+    "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "scope": "This is the parent own-object acceptance only, not full importedclosure replay."
+  },
+  "relative_DAG_delta": {
+    "new_local": [
+      "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget"
+    ],
+    "new_foreign": []
+  },
+  "semantic_review": [
+    "The two new finite selectors filter the literal actual U8 PrimeTriples. P=N-p1*p2*r is the ORIGINAL Goldbach prime, while r is its multiplicative prime quotient. All original first/second prime bands, inclusive p2 lower ownership, strict sqrt(N/p1) cap, r>=p2 roughness, target-prime exclusion and outer pair labels remain.",
+    "Every literal prefix product is positive and <=the already proved natural PanUpper8, hence PrefixProducts.card<=PanUpper8<=N^(2/3). The actual unit carrier maps injectively by its actual pair product into those products using the already proved U8 selector injection, proving its true finite cardinal<=N^(2/3).",
+    "The actual whole triple map x->(p1*p2,P) is injected using real product uniqueness only on the original pair selector, then actual strict a*r<N and a*s<N to undo Nat subtraction and a>0 to cancel multiplication. No opaque product equality or truncated subtraction is assumed.",
+    "Small original P is prime and therefore positive. The original inclusive cap P<=N^(1/5) places it in Ioc 0 floor(N^(1/5)), while the positive actual prefix is in Ioc 0 PanUpper8. The proved true map injection bounds actual small-triple card by PanUpper8*floor(N^(1/5))<=N^(2/3+1/5)=N^(13/15), with constant ONE and no caller count envelope.",
+    "The small and large P filters partition every actual PrimeTriple exactly, and the owned prime-or-unit equality gives literal currentUpsilon8=Large.card+Small.card+Unit.card for all N. This is an exact source dictionary, not a weakened surrogate count.",
+    "For every epsilon>0, the proved PowerErrorBudget at c=1, theta=13/15 and theta=2/3, k=0 supplies thresholds using epsilon/2. Adding those paid errors gives one eventual epsilon*singularNormalization bound. The threshold precedes N; no parity, main term or analytic supplier is a caller premise.",
+    "Eventual positive genuine singularNormalization and the arbitrary-positive epsilon budget prove the actual total error divided by that normalization tends to zero. The exact source partition gives the same zero limit for (original currentUpsilon8-Large.card)/normalization.",
+    "This pays the actual unit and small original Goldbach-prime finite source errors only. The U8 coprime gate, signed Pan/Rosser error, actual density and harmonic kernel, ordinary U8 upper mean, adopted constants and full hLower/hUpper remain separate obligations."
+  ],
+  "fixed_API_source_evidence": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Card.lean",
+      "file_sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "lines": [
+        424,
+        433
+      ],
+      "role": "card_le_card_of_injOn requires actual MapsTo plus actual source InjOn",
+      "literal_source_excerpt": "lemma _root_.Set.BijOn.finsetCard_eq (e : α → β) (he : Set.BijOn e s t) : #s = #t :=\n  card_nbij e he.mapsTo he.injOn he.surjOn\n\nlemma card_le_card_of_injOn (f : α → β) (hf : Set.MapsTo f s t) (f_inj : (s : Set α).InjOn f) :\n    #s ≤ #t := by\n  classical\n  calc\n    #s = #(s.image f) := (card_image_of_injOn f_inj).symm\n    _ ≤ #t := card_le_card <| image_subset_iff.2 hf\n"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Order/Interval/Finset/Nat.lean",
+      "file_sha256": "90339c927a9c62f2bed05fd25089b1570397415d65bfc09def8b8e536a4019c9",
+      "lines": [
+        79,
+        88
+      ],
+      "role": "Exact positive interval card #(Ioc0M)=M",
+      "literal_source_excerpt": "theorem range_succ_eq_Iic (n : ℕ) : range (n + 1) = Iic n := by\n  rw [range_succ_eq_Icc_zero]\n  rfl\n\n@[simp] lemma card_Icc : #(Icc a b) = b + 1 - a := List.length_range' ..\n@[simp] lemma card_Ico : #(Ico a b) = b - a := List.length_range' ..\n@[simp] lemma card_Ioc : #(Ioc a b) = b - a := List.length_range' ..\n@[simp] lemma card_Ioo : #(Ioo a b) = b - a - 1 := List.length_range' ..\n\n@[simp]"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Defs.lean",
+      "file_sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+      "lines": [
+        136,
+        144
+      ],
+      "role": "Nat.le_floor_iff preserves the inclusive small-prime cap",
+      "literal_source_excerpt": "\n@[inherit_doc]\nnotation \"⌈\" a \"⌉₊\" => Nat.ceil a\n\ntheorem le_floor_iff (ha : 0 ≤ a) : n ≤ ⌊a⌋₊ ↔ (n : α) ≤ a :=\n  FloorSemiring.gc_floor ha\n\ntheorem le_floor (h : (n : α) ≤ a) : n ≤ ⌊a⌋₊ :=\n  (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PowerErrorBudget.lean",
+      "file_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+      "lines": [
+        40,
+        93
+      ],
+      "role": "Proved arbitrary epsilon power-log error budget, not a caller supplier",
+      "literal_source_excerpt": "theorem tendsto_nat_log_pow_div_rpow (k : ℕ) {delta : ℝ} (hdelta : 0 < delta) :\n    Tendsto (fun N : ℕ => (Real.log (N : ℝ)) ^ k / (N : ℝ) ^ delta)\n      atTop (𝓝 0) := by\n  have hreal : Tendsto (fun x : ℝ => (Real.log x) ^ k / x ^ delta)\n      atTop (𝓝 0) := by\n    simpa only [Real.rpow_natCast] using\n      (isLittleO_log_rpow_rpow_atTop (k : ℝ) hdelta).tendsto_div_nhds_zero\n  exact hreal.comp tendsto_natCast_atTop_atTop\n\n/-- A fixed sublinear real power times a fixed logarithm power has\narbitrarily small normalized upper cost. No sign hypothesis on `c` or\nlower bound on `theta` is needed for this upper estimate. -/\ntheorem eventually_powerLog_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k ≤\n          epsilon * singularNormalization N := by\n  intro epsilon hepsilon\n  have hdecay : Tendsto (fun N : ℕ =>\n      c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta)))\n      atTop (𝓝 0) := by\n    simpa only [mul_zero] using\n      (tendsto_nat_log_pow_div_rpow (k + 2) (sub_pos.mpr htheta)).const_mul c\n  have hsmall : ∀ᶠ N : ℕ in atTop,\n      c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta)) <\n        epsilon * twinPrimeConstant :=\n    hdecay.eventually (gt_mem_nhds (mul_pos hepsilon twinPrimeConstant_pos))\n  filter_upwards [hsmall, eventually_ge_atTop (2 : ℕ)] with N hsmallN hN\n  have hNreal : (1 : ℝ) < (N : ℝ) := by\n    exact_mod_cast (show 1 < N by omega)\n  have hNpos : (0 : ℝ) < (N : ℝ) := lt_trans zero_lt_one hNreal\n  have hlog : Real.log (N : ℝ) ≠ 0 := ne_of_gt (Real.log_pos hNreal)\n  have hpow : (N : ℝ) ^ theta ≠ 0 := ne_of_gt (Real.rpow_pos_of_pos hNpos theta)\n  have hbase : 0 ≤ (N : ℝ) / (Real.log (N : ℝ)) ^ 2 :=\n    div_nonneg (Nat.cast_nonneg N) (sq_nonneg _)\n  calc\n    c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k =\n        (c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta))) *\n          ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by\n      rw [Real.rpow_sub hNpos, Real.rpow_one, pow_add]\n      field_simp [ne_of_gt hNpos, hlog, hpow] <;> ring\n    _ ≤ (epsilon * twinPrimeConstant) *\n        ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) :=\n      mul_le_mul_of_nonneg_right hsmallN.le hbase\n    _ = epsilon *\n        (twinPrimeConstant * (N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by ring\n    _ ≤ epsilon * singularNormalization N :=\n      mul_le_mul_of_nonneg_left (singularNormalization_lower N) hepsilon.le\n\n/-- The same power-logarithm error with its additive unit. The unit is\nabsorbed using the proved divergence of the actual normalization. -/\ntheorem eventually_powerLog_add_one_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (htheta : theta < 1) :"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SingularSeries.lean",
+      "file_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+      "lines": [
+        130,
+        156
+      ],
+      "role": "Actual normalization diverges and is eventually positive",
+      "literal_source_excerpt": "  exact div_le_div_of_nonneg_right\n    (mul_le_mul_of_nonneg_right (twinPrimeConstant_le_singularSeries N)\n      (Nat.cast_nonneg N)) (sq_nonneg _)\n\ntheorem tendsto_singularNormalization_atTop :\n    Tendsto singularNormalization atTop atTop := by\n  exact tendsto_atTop_mono singularNormalization_lower\n    (tendsto_pos_mul_nat_div_log_sq_atTop twinPrimeConstant_pos)\n\n/-- The concrete manuscript normalization absorbs the unit correction on all\nsufficiently large integers. No counting or sieve premise is used. -/\ntheorem eventually_singularNormalization_unit_absorption :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N in atTop, 1 ≤ epsilon * singularNormalization N :=\n  eventually_unit_absorption_of_tendsto tendsto_singularNormalization_atTop\n\n/-- The exact even-integer absorption premise of the omega-count transfer. -/\ntheorem eventuallyEven_singularNormalization_unit_absorption :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N in atTop, Even N → 1 ≤ epsilon * singularNormalization N :=\n  eventuallyEven_unit_absorption_of_tendsto tendsto_singularNormalization_atTop\n\ntheorem eventually_singularNormalization_pos :\n    ∀ᶠ N in atTop, 0 < singularNormalization N :=\n  tendsto_singularNormalization_atTop.eventually (eventually_gt_atTop 0)\n\nend ImbalancedChen"
+    }
+  ],
+  "explicit_existing_PowerErrorBudget_import_path": [
+    "CurrentChenUpsilon8ProductPan",
+    "CurrentChenUpsilon8PrimeSource",
+    "CurrentChenUpsilon9PrimeSource",
+    "CurrentChenMeanLedger",
+    "CurrentChenSummedBridge",
+    "PowerErrorBudget"
+  ],
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_current_checks": [
+    {
+      "name": "goldbach",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0
+    }
+  ],
+  "forbidden_or_option_hits": [],
+  "findings": [],
+  "evidence_boundary": "Source author review only; independent full-source review, actual strict first compile and complete original owned types/inventory/axiom acceptance are separate gates. No caller count envelope, hLower/hUpper or adopted-constant statement is assumed or asserted."
+}

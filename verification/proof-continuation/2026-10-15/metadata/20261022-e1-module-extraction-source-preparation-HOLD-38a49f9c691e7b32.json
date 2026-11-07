@@ -1,0 +1,859 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-e1-module-extraction-source-preparation-HOLD",
+  "created_utc": "2026-10-21T20:04:07.1931604Z",
+  "completed_utc": "2026-10-21T20:05:02.0176171Z",
+  "author": "/root/tau_truncation_review_sol_high_oct22",
+  "status": "EXACT_TWO_MODULE_SOURCE_EXTRACTION_DECLARATION_BYTES_PRESERVED_PLANNED_IMPORTS_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Source-only module preparation. Seven interval declarations, twelve strict/floor/native-mean declarations and one definition extracted by exact raw prefix replacement. Every complete public type/proof and retained namespace/section/open/end byte is unchanged. No mathematics added.",
+  "artifacts": [
+    {
+      "intended_module": "ImbalancedChen.Part3ElementaryIntervalDivisibility",
+      "intended_actual_path": "ImbalancedChen/Part3ElementaryIntervalDivisibility.lean",
+      "draft_path": ".lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryIntervalDivisibility-module-source.txt",
+      "draft_sha256": "79a2e60061c239d2eea400325f7cf304ed32f6cb6a1816b2065919a2271ed007",
+      "draft_bytes": 6929,
+      "draft_lf_lines": 152,
+      "imports": [
+        "import ImbalancedChen.Part3ElementaryTauDeletionFiber",
+        "import Mathlib.Data.Nat.Factorization.Basic"
+      ],
+      "source_path": ".lake/proof-continuation/source-reviews/drafts/20261022-elementary-interval-divisibility-source-proposal.txt",
+      "source_sha256": "59babff31ff6f9dcd9856d6f69d7a1b9cc5548dc318d26f9d5c7ab61b549d4eb",
+      "source_bytes": 23706,
+      "source_lf_lines": 493,
+      "retained_source_span": [
+        345,
+        493
+      ],
+      "retained_target_span": [
+        4,
+        152
+      ],
+      "retained_raw_sha256": "831ab75cf5d33f1f487fa803e2d57b25f6aa2c3c166a8b55aac1682a308311db",
+      "retained_raw_bytes": 6830,
+      "line_delta": -341,
+      "complete_unified_raw_diff": "--- .lake/proof-continuation/source-reviews/drafts/20261022-elementary-interval-divisibility-source-proposal.txt\n+++ .lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryIntervalDivisibility-module-source.txt\n@@ -1,344 +1,3 @@\n-import Mathlib.Data.Nat.Factorization.Basic\n-import ImbalancedChen.Part3ElementaryTauTruncation\n-import Mathlib.Algebra.BigOperators.Fin\n-import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise\n-import Mathlib.Algebra.BigOperators.Group.Finset.Sigma\n-import Mathlib.Data.Fin.Tuple.Basic\n-import Mathlib.Data.Fin.SuccPred\n-\n-/-!\n-SOURCE PROPOSAL ONLY -- 2026-10-22 -- UNCOMPILED -- HOLD -- heavy0\n-\n-Single finite task: compress the TRUE eraseAt deletion fibers through\n-Fin.succAbove, retain every ordered multiplicity, and close the original\n-native tau cutoff inequality with its exact natural-number hypotheses.\n-No interval counting, harmonic mean, E1/E3, kappa selection or main theorem\n-is attempted. No actual Lean/runtime/pin write, compiler, proper, checker,\n-classifier, census, cache, Git operation or subagent is used by this author.\n-\n-Pinned native goldbach: 09b97db5764ade1246bfb77206baa1b124760958.\n-Pinned mathlib: e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.\n-\n-SOURCE DEPENDENCIES / NO HIDDEN CARDINALITY ASSUMPTION:\n-The actual imported base module Part3ElementaryTauTruncation has SHA256\n-8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f.\n-Root applied that frozen finite-core source; it is still uncompiled.\n-The complete eight-proof cardinality bridge, plus its three new helper\n-carrier/maps definitions, is copied VERBATIM below from lines 71-180 of\n-20261022-ordered-tau-cardinality-source-proposal.txt, SHA256\n-b997a96beac6c4eca23239b14147e51739a3009bcc2cdde497dcab52f8a910ce.\n-Its existing orderedFactorTuples definition is NOT repeated here: it comes\n-from the actual base module and is byte-identical to the reviewed carrier.\n-The prior cardinality proposal is under independent review; this copy does\n-not alter that proposal or preempt a later concrete review correction.\n-No target identity is introduced as an assumption. Future integration may\n-import the cardinality module and omit the verbatim copied proof block.\n-\n-NEW FINITE ARGUMENT:\n-For b in deletionFiber S i d, b i=1 and product b=d. Define compression by\n-  compressDeleted k i b j = b (i.succAbove j), j : Fin k.\n-Fin.prod_univ_succAbove gives its full product d. Each coordinate divides\n-d by dvd_prod_of_mem, so it lies in the existing orderedFactorTuples k d\n-carrier when d>0. If two normalized b have equal compressed tuples, their\n-pivot coordinates both equal 1, and Fin.exists_succAbove_eq recovers each\n-off-pivot coordinate. Therefore compression is injective on the deletion\n-fiber; no ordered tuples are sorted, permuted into a quotient, or lost.\n-The proof in fact works for any finite S and positive d. The requested\n-K>=2, n>0, d in n.divisors specialization follows immediately.\n-\n-Combine this cardinal bound with the explicit native cardinality bridge\n-and the old indexed-cover truncation theorem. The outer Fin K sum consists\n-of K copies of the same truncated divisor sum. The last theorem is exactly\n-  fouvryTau K n <= K * sum_{d|n,d<=D} fouvryTau (K-1) d,\n-for K>=2, n>=1, n^(K-1)<=D^K. No unproved supplier is added.\n-\n-All proofs are complete AS WRITTEN source proposals; no elaboration or\n-kernel acceptance is claimed. E1 still additionally requires interval\n-counts Y/d+1 and the reciprocal/ordinary divisor means. E3 and all actual\n-cleanup applications, original forall-kappa obligations, and the main\n-theorem remain outside this task. Completion here is only finite tau\n-truncation, not completion of those analytic or parameter obligations.\n--/\n-\n-namespace ImbalancedChen.Part3.ElementaryTauTruncation\n-\n-noncomputable section\n-\n-open Classical Finset\n-open scoped BigOperators\n-open MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n-\n-/- BEGIN VERBATIM PRIOR CARDINALITY PROOFS: original lines 71-180. -/\n-/-- For n != 0 the coordinate divisor restrictions are consequences of the product. -/\n-theorem mem_orderedFactorTuples_iff {k n : ℕ} (hn : n ≠ 0) {a : Fin k → ℕ} :\n-    a ∈ orderedFactorTuples k n ↔ (∏ j, a j) = n := by\n-  constructor\n-  · intro ha\n-    exact (Finset.mem_filter.mp ha).2\n-  · intro hprod\n-    apply Finset.mem_filter.mpr\n-    refine ⟨Fintype.mem_piFinset.mpr ?_, hprod⟩\n-    intro i\n-    have hdiv : a i ∣ ∏ j, a j := Finset.dvd_prod_of_mem a (Finset.mem_univ i)\n-    exact Nat.mem_divisors.mpr ⟨by simpa only [hprod] using hdiv, hn⟩\n-\n-/-- The empty tuple has product 1; its carrier has no other element. -/\n-theorem orderedFactorTuples_zero (n : ℕ) :\n-    orderedFactorTuples 0 n = if n = 1 then {Fin.elim0} else ∅ := by\n-  by_cases hn : n = 1\n-  · subst n\n-    rw [if_pos rfl]\n-    apply Finset.ext\n-    intro a\n-    constructor\n-    · intro _ha\n-      apply Finset.mem_singleton.mpr\n-      funext i\n-      exact Fin.elim0 i\n-    · intro _ha\n-      apply Finset.mem_filter.mpr\n-      exact ⟨Fintype.mem_piFinset.mpr (fun i => Fin.elim0 i), Fin.prod_univ_zero a⟩\n-  · rw [if_neg hn]\n-    apply Finset.eq_empty_iff_forall_notMem.mpr\n-    intro a ha\n-    have hprod : (∏ j : Fin 0, a j) = n := (Finset.mem_filter.mp ha).2\n-    have hone : 1 = n := (Fin.prod_univ_zero a).symm.trans hprod\n-    exact hn hone.symm\n-\n-/-- A head value, the tail product, and the full ordered tail tuple. -/\n-def headTailCarrier (k n : ℕ) : Finset (Σ _ : ℕ × ℕ, Fin k → ℕ) :=\n-  n.divisorsAntidiagonal.sigma (fun p => orderedFactorTuples k p.2)\n-\n-def splitHeadTail (k : ℕ) (a : Fin (k + 1) → ℕ) : Σ _ : ℕ × ℕ, Fin k → ℕ :=\n-  ⟨(a 0, ∏ j : Fin k, Fin.tail a j), Fin.tail a⟩\n-\n-def joinHeadTail (k : ℕ) (p : Σ _ : ℕ × ℕ, Fin k → ℕ) : Fin (k + 1) → ℕ :=\n-  Fin.cons p.1.1 p.2\n-\n-theorem splitHeadTail_mem {k n : ℕ} (hn : 0 < n) {a : Fin (k + 1) → ℕ}\n-    (ha : a ∈ orderedFactorTuples (k + 1) n) :\n-    splitHeadTail k a ∈ headTailCarrier k n := by\n-  have hprod : a 0 * (∏ j : Fin k, Fin.tail a j) = n := by\n-    simpa only [Fin.prod_univ_succ, Fin.tail] using (mem_orderedFactorTuples_iff hn.ne').mp ha\n-  have hpair : (a 0, ∏ j : Fin k, Fin.tail a j) ∈ n.divisorsAntidiagonal :=\n-    Nat.mem_divisorsAntidiagonal.mpr ⟨hprod, hn.ne'⟩\n-  have htail : Fin.tail a ∈ orderedFactorTuples k (∏ j : Fin k, Fin.tail a j) :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mpr rfl\n-  exact Finset.mem_sigma.mpr ⟨hpair, htail⟩\n-\n-theorem joinHeadTail_mem {k n : ℕ} (hn : 0 < n) {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n-    (hp : p ∈ headTailCarrier k n) :\n-    joinHeadTail k p ∈ orderedFactorTuples (k + 1) n := by\n-  obtain ⟨hpair, htail⟩ := Finset.mem_sigma.mp hp\n-  have htprod : (∏ j, p.2 j) = p.1.2 :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mp htail\n-  apply (mem_orderedFactorTuples_iff hn.ne').mpr\n-  calc\n-    (∏ j, joinHeadTail k p j) = p.1.1 * ∏ j, p.2 j := Fin.prod_cons _ _\n-    _ = p.1.1 * p.1.2 := by rw [htprod]\n-    _ = n := (Nat.mem_divisorsAntidiagonal.mp hpair).1\n-\n-theorem join_splitHeadTail (k : ℕ) (a : Fin (k + 1) → ℕ) :\n-    joinHeadTail k (splitHeadTail k a) = a := by\n-  exact Fin.cons_self_tail a\n-\n-theorem split_joinHeadTail {k n : ℕ} {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n-    (hp : p ∈ headTailCarrier k n) : splitHeadTail k (joinHeadTail k p) = p := by\n-  rcases p with ⟨⟨v, d⟩, b⟩\n-  obtain ⟨hpair, hb⟩ := Finset.mem_sigma.mp hp\n-  have hbprod : (∏ j, b j) = d :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mp hb\n-  simp only [splitHeadTail, joinHeadTail, Fin.cons_zero, Fin.tail_cons, hbprod]\n-\n-/-- This is the same full divisor recurrence as native fouvryTau_succ. -/\n-theorem card_orderedFactorTuples_succ (k : ℕ) {n : ℕ} (hn : 0 < n) :\n-    (orderedFactorTuples (k + 1) n).card = ∑ d ∈ n.divisors, (orderedFactorTuples k d).card := by\n-  have hcard : (orderedFactorTuples (k + 1) n).card = (headTailCarrier k n).card :=\n-    Finset.card_nbij' (splitHeadTail k) (joinHeadTail k)\n-      (fun a ha => splitHeadTail_mem hn ha)\n-      (fun p hp => joinHeadTail_mem hn hp)\n-      (fun a _ha => join_splitHeadTail k a)\n-      (fun p hp => split_joinHeadTail hp)\n-  calc\n-    (orderedFactorTuples (k + 1) n).card = (headTailCarrier k n).card := hcard\n-    _ = ∑ p ∈ n.divisorsAntidiagonal, (orderedFactorTuples k p.2).card := by\n-      rw [headTailCarrier, Finset.card_sigma]\n-    _ = ∑ d ∈ n.divisors, (orderedFactorTuples k d).card :=\n-      Nat.sum_divisorsAntidiagonal' (fun _ d => (orderedFactorTuples k d).card)\n-\n-/-- Every order, including zero, counts the exact current Fin-function carrier. -/\n-theorem card_orderedFactorTuples_eq_fouvryTau (k n : ℕ) (hn : 0 < n) :\n-    (orderedFactorTuples k n).card = fouvryTau k n := by\n-  induction k generalizing n with\n-  | zero =>\n-      by_cases hn1 : n = 1\n-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]\n-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]\n-  | succ k ih =>\n-      rw [card_orderedFactorTuples_succ k hn, fouvryTau_succ]\n-      apply Finset.sum_congr rfl\n-      intro d hd\n-      exact ih d (Nat.pos_of_mem_divisors hd)\n-\n-/- END VERBATIM PRIOR CARDINALITY PROOFS. -/\n-\n-section GeneralIndex\n-\n-variable {ι : Type*} [Fintype ι] [DecidableEq ι]\n-\n-/-- Updating the pivot to one leaves precisely the deleted product. -/\n-theorem prod_eraseAt (a : ι → ℕ) (i : ι) :\n-    (∏ j, eraseAt a i j) = deletedProduct a i := by\n-  have hdel : deletedProduct (eraseAt a i) i = deletedProduct a i := by\n-    apply Finset.prod_congr rfl\n-    intro j hj\n-    exact Function.update_of_ne (Finset.mem_erase.mp hj).1 1 a\n-  have hi : eraseAt a i i = 1 := Function.update_self i 1 a\n-  have hp := deletedProduct_mul (eraseAt a i) i\n-  rw [hdel, hi, mul_one] at hp\n-  exact hp.symm\n-\n-/-- These are properties of the actual deletion IMAGE, for an arbitrary S. -/\n-theorem deletionFiber_normalized (S : Finset (ι → ℕ)) {i : ι} {d : ℕ} {b : ι → ℕ}\n-    (hb : b ∈ deletionFiber S i d) : b i = 1 ∧ (∏ j, b j) = d := by\n-  obtain ⟨a, ha, rfl⟩ := Finset.mem_image.mp hb\n-  have had : deletedProduct a i = d := (Finset.mem_filter.mp ha).2\n-  exact ⟨Function.update_self i 1 a, (prod_eraseAt a i).trans had⟩\n-\n-end GeneralIndex\n-\n-/-- Read the remaining coordinates in their original Fin order, skipping i. -/\n-def compressDeleted (k : ℕ) (i : Fin (k + 1)) (b : Fin (k + 1) → ℕ) : Fin k → ℕ :=\n-  fun j => b (i.succAbove j)\n-\n-theorem compressDeleted_prod {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n-    (hb : b ∈ deletionFiber S i d) : (∏ j, compressDeleted k i b j) = d := by\n-  have hinfo := deletionFiber_normalized S hb\n-  have hp := Fin.prod_univ_succAbove b i\n-  rw [hinfo.1, one_mul] at hp\n-  exact hp.symm.trans hinfo.2\n-\n-/-- Every compressed coordinate divides d, with its original position preserved. -/\n-theorem compressDeleted_dvd {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n-    (hb : b ∈ deletionFiber S i d) (j : Fin k) : compressDeleted k i b j ∣ d := by\n-  have hp := compressDeleted_prod S hb\n-  have hdiv : compressDeleted k i b j ∣ ∏ r, compressDeleted k i b r :=\n-    Finset.dvd_prod_of_mem (compressDeleted k i b) (Finset.mem_univ j)\n-  simpa only [hp] using hdiv\n-\n-/-- Explicit product-and-divisor verification for the full current tuple carrier. -/\n-theorem compressDeleted_mapsTo {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    Set.MapsTo (compressDeleted k i) (deletionFiber S i d) (orderedFactorTuples k d) := by\n-  intro b hb\n-  apply Finset.mem_filter.mpr\n-  refine ⟨Fintype.mem_piFinset.mpr ?_, compressDeleted_prod S hb⟩\n-  intro j\n-  exact Nat.mem_divisors.mpr ⟨compressDeleted_dvd S hb j, hd.ne'⟩\n-\n-/-- Normalization recovers the pivot, and succAbove recovers every other coordinate. -/\n-theorem compressDeleted_injective_of_normalized {k : ℕ} (i : Fin (k + 1))\n-    {b c : Fin (k + 1) → ℕ} (hb : b i = 1) (hc : c i = 1)\n-    (hbc : compressDeleted k i b = compressDeleted k i c) : b = c := by\n-  funext j\n-  by_cases hji : j = i\n-  · subst j\n-    exact hb.trans hc.symm\n-  · obtain ⟨r, hr⟩ := Fin.exists_succAbove_eq hji\n-    have heval := congrFun hbc r\n-    simpa only [compressDeleted, hr] using heval\n-\n-/-- A genuine injection of finite deletion images, without any fixed-product supplier. -/\n-theorem card_deletionFiber_le_orderedFactorTuples {k : ℕ}\n-    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    (deletionFiber S i d).card ≤ (orderedFactorTuples k d).card := by\n-  refine Finset.card_le_card_of_injOn (compressDeleted k i) (compressDeleted_mapsTo S i hd) ?_\n-  intro b hb c hc hbc\n-  exact compressDeleted_injective_of_normalized i\n-    (deletionFiber_normalized S hb).1 (deletionFiber_normalized S hc).1 hbc\n-\n-theorem card_deletionFiber_le_fouvryTau_succ {k : ℕ}\n-    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    (deletionFiber S i d).card ≤ fouvryTau k d := by\n-  calc\n-    (deletionFiber S i d).card ≤ (orderedFactorTuples k d).card :=\n-      card_deletionFiber_le_orderedFactorTuples S i hd\n-    _ = fouvryTau k d := card_orderedFactorTuples_eq_fouvryTau k d hd\n-\n-/-- The requested native K-1 fiber bound, with the exact original ordered carrier. -/\n-theorem card_deletionFiber_orderedFactorTuples_le_fouvryTau {K n d : ℕ}\n-    (hK : 2 ≤ K) (hn : 0 < n) (hd : d ∈ n.divisors) (i : Fin K) :\n-    (deletionFiber (orderedFactorTuples K n) i d).card ≤ fouvryTau (K - 1) d := by\n-  cases K with\n-  | zero => omega\n-  | succ k =>\n-      simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using\n-        (card_deletionFiber_le_fouvryTau_succ (orderedFactorTuples (k + 1) n) i\n-          (Nat.pos_of_mem_divisors hd))\n-\n-/-- Exact finite tau truncation; no interval, analytic, or kappa hypothesis is added. -/\n-theorem fouvryTau_le_truncated_divisor_sum {K n D : ℕ}\n-    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) ≤ D ^ K) :\n-    fouvryTau K n ≤ K *\n-      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n-  calc\n-    fouvryTau K n = (orderedFactorTuples K n).card :=\n-      (card_orderedFactorTuples_eq_fouvryTau K n (by omega)).symm\n-    _ ≤ ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n-        (deletionFiber (orderedFactorTuples K n) i d).card :=\n-      card_orderedFactorTuples_truncated hK hn hcut\n-    _ ≤ ∑ _i : Fin K, ∑ d ∈ truncatedDivisors n D, fouvryTau (K - 1) d := by\n-      apply Finset.sum_le_sum\n-      intro i _hi\n-      apply Finset.sum_le_sum\n-      intro d hd\n-      exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n-        (Finset.mem_filter.mp hd).1 i\n-    _ = K * (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n-      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n-        truncatedDivisors]\n-\n-end\n-\n-end ImbalancedChen.Part3.ElementaryTauTruncation\n-\n-/-!\n-NEW BOUNDED INTERVAL PAYMENT -- 2026-10-22 -- SOURCE ONLY -- HOLD\n-\n-The 304-LF finite tau proposal above is reproduced verbatim, with its actual\n-finite-core import and every proof body. No target cardinal or tau inequality\n-is assumed. This standalone TXT adds one import for the existing positive\n-prefix multiple-count theorem. Do not integrate this copy alongside a future\n-tau module without removing the duplicated declarations.\n-\n-The precise interval is Ioc A B in Nat, with A <= B. It consists exactly of\n-the positive integers A < n <= B, and its geometric length is (B:Real)-A.\n-A=0 is allowed; zero is never included. Divisors are strictly positive when\n-used in the length/d payment. Natural d=0 is allowed only in the exact count\n-identity, where both counts and both natural divisions are zero.\n-\n-Nat.Ioc_filter_dvd_card_eq_div already proves the exact positive-prefix\n-count. We reuse it, subtract the two nested finite prefix sets, and prove\n-  card {A<n<=B : d divides n} = B/d - A/d\n-with natural division/subtraction. Casting this equality and using the two\n-standard division bounds proves the genuine length/d+1 inequality.\n-\n-A finite sum swap then charges the exact interval multiples for each d.\n-Together with the FULL written tau proof above this yields\n-  sum_{A<n<=B} tau_K(n)\n-  <= K * [ (B-A)*sum_{1<=d<=D} tau_(K-1)(d)/d\n-           + sum_{1<=d<=D} tau_(K-1)(d) ],\n-under K>=2 and B^(K-1)<=D^K. Endpoints, carriers and casts are explicit.\n-No interval counting hypothesis or desired bound is supplied as an axiom.\n-\n-This does NOT prove E1 with its exact real-root cutoff or any shifted M2.\n-The natural-cutoff premise cannot in general be justified by setting\n-D=floor(Z^(1-1/K)); the floor may have D^K < Z^(K-1). A future real-cutoff\n-geometric/floor bridge must address that point. The exact two native divisor\n-means still need to be applied at the justified common cutoff, with log and\n-endpoint adapters. No new uniform mean, spectrum, kappa or main theorem is\n-claimed. No compiler/checker/proper/classifier/census/Git action was used.\n--/\n-\n+import ImbalancedChen.Part3ElementaryTauDeletionFiber\n+import Mathlib.Data.Nat.Factorization.Basic\n+\n",
+      "diff_note": "Complete zero-context prefix replacement. The complete remaining source suffix is raw-byte identical.",
+      "reversible_byte_transform": {
+        "source_prefix_bytes": 16876,
+        "target_prefix_bytes": 99,
+        "target_prefix_literal": "import ImbalancedChen.Part3ElementaryTauDeletionFiber\nimport Mathlib.Data.Nat.Factorization.Basic\n\n",
+        "source_prefix_raw_sha256": "a35423fc4b5af17ad52d7274242927ad363022ff316894530efa6226bca27e99",
+        "target_prefix_raw_sha256": "a24904cfc62a660dbc69f1b1aa2a87a9b5781d778be69262e248e215db795b65",
+        "source_prefix_base64": "aW1wb3J0IE1hdGhsaWIuRGF0YS5OYXQuRmFjdG9yaXphdGlvbi5CYXNpYwppbXBvcnQgSW1iYWxhbmNlZENoZW4uUGFydDNFbGVtZW50YXJ5VGF1VHJ1bmNhdGlvbgppbXBvcnQgTWF0aGxpYi5BbGdlYnJhLkJpZ09wZXJhdG9ycy5GaW4KaW1wb3J0IE1hdGhsaWIuQWxnZWJyYS5CaWdPcGVyYXRvcnMuR3JvdXAuRmluc2V0LlBpZWNld2lzZQppbXBvcnQgTWF0aGxpYi5BbGdlYnJhLkJpZ09wZXJhdG9ycy5Hcm91cC5GaW5zZXQuU2lnbWEKaW1wb3J0IE1hdGhsaWIuRGF0YS5GaW4uVHVwbGUuQmFzaWMKaW1wb3J0IE1hdGhsaWIuRGF0YS5GaW4uU3VjY1ByZWQKCi8tIQpTT1VSQ0UgUFJPUE9TQUwgT05MWSAtLSAyMDI2LTEwLTIyIC0tIFVOQ09NUElMRUQgLS0gSE9MRCAtLSBoZWF2eTAKClNpbmdsZSBmaW5pdGUgdGFzazogY29tcHJlc3MgdGhlIFRSVUUgZXJhc2VBdCBkZWxldGlvbiBmaWJlcnMgdGhyb3VnaApGaW4uc3VjY0Fib3ZlLCByZXRhaW4gZXZlcnkgb3JkZXJlZCBtdWx0aXBsaWNpdHksIGFuZCBjbG9zZSB0aGUgb3JpZ2luYWwKbmF0aXZlIHRhdSBjdXRvZmYgaW5lcXVhbGl0eSB3aXRoIGl0cyBleGFjdCBuYXR1cmFsLW51bWJlciBoeXBvdGhlc2VzLgpObyBpbnRlcnZhbCBjb3VudGluZywgaGFybW9uaWMgbWVhbiwgRTEvRTMsIGthcHBhIHNlbGVjdGlvbiBvciBtYWluIHRoZW9yZW0KaXMgYXR0ZW1wdGVkLiBObyBhY3R1YWwgTGVhbi9ydW50aW1lL3BpbiB3cml0ZSwgY29tcGlsZXIsIHByb3BlciwgY2hlY2tlciwKY2xhc3NpZmllciwgY2Vuc3VzLCBjYWNoZSwgR2l0IG9wZXJhdGlvbiBvciBzdWJhZ2VudCBpcyB1c2VkIGJ5IHRoaXMgYXV0aG9yLgoKUGlubmVkIG5hdGl2ZSBnb2xkYmFjaDogMDliOTdkYjU3NjRhZGUxMjQ2YmZiNzcyMDZiYWExYjEyNDc2MDk1OC4KUGlubmVkIG1hdGhsaWI6IGU0YzkxNzgzY2E4ZTZhN2M2OTNhZTYyNGFkZTMyZmQyMmQ0ZTQzYzEuCgpTT1VSQ0UgREVQRU5ERU5DSUVTIC8gTk8gSElEREVOIENBUkRJTkFMSVRZIEFTU1VNUFRJT046ClRoZSBhY3R1YWwgaW1wb3J0ZWQgYmFzZSBtb2R1bGUgUGFydDNFbGVtZW50YXJ5VGF1VHJ1bmNhdGlvbiBoYXMgU0hBMjU2CjhlMzE1YWVjNWEzZjAwNTA2YWMyNmU4NzEwNDc0YzQ3YTQ0OGIwNDNkM2NmMzhiZTI3YzRkZjMwYzE4YTQ3OGYuClJvb3QgYXBwbGllZCB0aGF0IGZyb3plbiBmaW5pdGUtY29yZSBzb3VyY2U7IGl0IGlzIHN0aWxsIHVuY29tcGlsZWQuClRoZSBjb21wbGV0ZSBlaWdodC1wcm9vZiBjYXJkaW5hbGl0eSBicmlkZ2UsIHBsdXMgaXRzIHRocmVlIG5ldyBoZWxwZXIKY2Fycmllci9tYXBzIGRlZmluaXRpb25zLCBpcyBjb3BpZWQgVkVSQkFUSU0gYmVsb3cgZnJvbSBsaW5lcyA3MS0xODAgb2YKMjAyNjEwMjItb3JkZXJlZC10YXUtY2FyZGluYWxpdHktc291cmNlLXByb3Bvc2FsLnR4dCwgU0hBMjU2CmI5OTdhOTZiZWFjNmM0ZWNhMjMyMzliMTQxNDdlNTE3MzlhMzAwOWJjYzJjZGRlNDk3ZGNhYjUyZjhhOTEwY2UuCkl0cyBleGlzdGluZyBvcmRlcmVkRmFjdG9yVHVwbGVzIGRlZmluaXRpb24gaXMgTk9UIHJlcGVhdGVkIGhlcmU6IGl0IGNvbWVzCmZyb20gdGhlIGFjdHVhbCBiYXNlIG1vZHVsZSBhbmQgaXMgYnl0ZS1pZGVudGljYWwgdG8gdGhlIHJldmlld2VkIGNhcnJpZXIuClRoZSBwcmlvciBjYXJkaW5hbGl0eSBwcm9wb3NhbCBpcyB1bmRlciBpbmRlcGVuZGVudCByZXZpZXc7IHRoaXMgY29weSBkb2VzCm5vdCBhbHRlciB0aGF0IHByb3Bvc2FsIG9yIHByZWVtcHQgYSBsYXRlciBjb25jcmV0ZSByZXZpZXcgY29ycmVjdGlvbi4KTm8gdGFyZ2V0IGlkZW50aXR5IGlzIGludHJvZHVjZWQgYXMgYW4gYXNzdW1wdGlvbi4gRnV0dXJlIGludGVncmF0aW9uIG1heQppbXBvcnQgdGhlIGNhcmRpbmFsaXR5IG1vZHVsZSBhbmQgb21pdCB0aGUgdmVyYmF0aW0gY29waWVkIHByb29mIGJsb2NrLgoKTkVXIEZJTklURSBBUkdVTUVOVDoKRm9yIGIgaW4gZGVsZXRpb25GaWJlciBTIGkgZCwgYiBpPTEgYW5kIHByb2R1Y3QgYj1kLiBEZWZpbmUgY29tcHJlc3Npb24gYnkKICBjb21wcmVzc0RlbGV0ZWQgayBpIGIgaiA9IGIgKGkuc3VjY0Fib3ZlIGopLCBqIDogRmluIGsuCkZpbi5wcm9kX3VuaXZfc3VjY0Fib3ZlIGdpdmVzIGl0cyBmdWxsIHByb2R1Y3QgZC4gRWFjaCBjb29yZGluYXRlIGRpdmlkZXMKZCBieSBkdmRfcHJvZF9vZl9tZW0sIHNvIGl0IGxpZXMgaW4gdGhlIGV4aXN0aW5nIG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkCmNhcnJpZXIgd2hlbiBkPjAuIElmIHR3byBub3JtYWxpemVkIGIgaGF2ZSBlcXVhbCBjb21wcmVzc2VkIHR1cGxlcywgdGhlaXIKcGl2b3QgY29vcmRpbmF0ZXMgYm90aCBlcXVhbCAxLCBhbmQgRmluLmV4aXN0c19zdWNjQWJvdmVfZXEgcmVjb3ZlcnMgZWFjaApvZmYtcGl2b3QgY29vcmRpbmF0ZS4gVGhlcmVmb3JlIGNvbXByZXNzaW9uIGlzIGluamVjdGl2ZSBvbiB0aGUgZGVsZXRpb24KZmliZXI7IG5vIG9yZGVyZWQgdHVwbGVzIGFyZSBzb3J0ZWQsIHBlcm11dGVkIGludG8gYSBxdW90aWVudCwgb3IgbG9zdC4KVGhlIHByb29mIGluIGZhY3Qgd29ya3MgZm9yIGFueSBmaW5pdGUgUyBhbmQgcG9zaXRpdmUgZC4gVGhlIHJlcXVlc3RlZApLPj0yLCBuPjAsIGQgaW4gbi5kaXZpc29ycyBzcGVjaWFsaXphdGlvbiBmb2xsb3dzIGltbWVkaWF0ZWx5LgoKQ29tYmluZSB0aGlzIGNhcmRpbmFsIGJvdW5kIHdpdGggdGhlIGV4cGxpY2l0IG5hdGl2ZSBjYXJkaW5hbGl0eSBicmlkZ2UKYW5kIHRoZSBvbGQgaW5kZXhlZC1jb3ZlciB0cnVuY2F0aW9uIHRoZW9yZW0uIFRoZSBvdXRlciBGaW4gSyBzdW0gY29uc2lzdHMKb2YgSyBjb3BpZXMgb2YgdGhlIHNhbWUgdHJ1bmNhdGVkIGRpdmlzb3Igc3VtLiBUaGUgbGFzdCB0aGVvcmVtIGlzIGV4YWN0bHkKICBmb3V2cnlUYXUgSyBuIDw9IEsgKiBzdW1fe2R8bixkPD1EfSBmb3V2cnlUYXUgKEstMSkgZCwKZm9yIEs+PTIsIG4+PTEsIG5eKEstMSk8PUReSy4gTm8gdW5wcm92ZWQgc3VwcGxpZXIgaXMgYWRkZWQuCgpBbGwgcHJvb2ZzIGFyZSBjb21wbGV0ZSBBUyBXUklUVEVOIHNvdXJjZSBwcm9wb3NhbHM7IG5vIGVsYWJvcmF0aW9uIG9yCmtlcm5lbCBhY2NlcHRhbmNlIGlzIGNsYWltZWQuIEUxIHN0aWxsIGFkZGl0aW9uYWxseSByZXF1aXJlcyBpbnRlcnZhbApjb3VudHMgWS9kKzEgYW5kIHRoZSByZWNpcHJvY2FsL29yZGluYXJ5IGRpdmlzb3IgbWVhbnMuIEUzIGFuZCBhbGwgYWN0dWFsCmNsZWFudXAgYXBwbGljYXRpb25zLCBvcmlnaW5hbCBmb3JhbGwta2FwcGEgb2JsaWdhdGlvbnMsIGFuZCB0aGUgbWFpbgp0aGVvcmVtIHJlbWFpbiBvdXRzaWRlIHRoaXMgdGFzay4gQ29tcGxldGlvbiBoZXJlIGlzIG9ubHkgZmluaXRlIHRhdQp0cnVuY2F0aW9uLCBub3QgY29tcGxldGlvbiBvZiB0aG9zZSBhbmFseXRpYyBvciBwYXJhbWV0ZXIgb2JsaWdhdGlvbnMuCi0vCgpuYW1lc3BhY2UgSW1iYWxhbmNlZENoZW4uUGFydDMuRWxlbWVudGFyeVRhdVRydW5jYXRpb24KCm5vbmNvbXB1dGFibGUgc2VjdGlvbgoKb3BlbiBDbGFzc2ljYWwgRmluc2V0Cm9wZW4gc2NvcGVkIEJpZ09wZXJhdG9ycwpvcGVuIE1hdGhsaWJOdC5BbmFseXRpY051bWJlclRoZW9yeS5MYXJnZVNpZXZlLkxpTGl1UHJlcmVxRm91dnJ5CgovLSBCRUdJTiBWRVJCQVRJTSBQUklPUiBDQVJESU5BTElUWSBQUk9PRlM6IG9yaWdpbmFsIGxpbmVzIDcxLTE4MC4gLS8KLy0tIEZvciBuICE9IDAgdGhlIGNvb3JkaW5hdGUgZGl2aXNvciByZXN0cmljdGlvbnMgYXJlIGNvbnNlcXVlbmNlcyBvZiB0aGUgcHJvZHVjdC4gLS8KdGhlb3JlbSBtZW1fb3JkZXJlZEZhY3RvclR1cGxlc19pZmYge2sgbiA6IOKElX0gKGhuIDogbiDiiaAgMCkge2EgOiBGaW4gayDihpIg4oSVfSA6CiAgICBhIOKIiCBvcmRlcmVkRmFjdG9yVHVwbGVzIGsgbiDihpQgKOKIjyBqLCBhIGopID0gbiA6PSBieQogIGNvbnN0cnVjdG9yCiAgwrcgaW50cm8gaGEKICAgIGV4YWN0IChGaW5zZXQubWVtX2ZpbHRlci5tcCBoYSkuMgogIMK3IGludHJvIGhwcm9kCiAgICBhcHBseSBGaW5zZXQubWVtX2ZpbHRlci5tcHIKICAgIHJlZmluZSDin6hGaW50eXBlLm1lbV9waUZpbnNldC5tcHIgP18sIGhwcm9k4p+pCiAgICBpbnRybyBpCiAgICBoYXZlIGhkaXYgOiBhIGkg4oijIOKIjyBqLCBhIGogOj0gRmluc2V0LmR2ZF9wcm9kX29mX21lbSBhIChGaW5zZXQubWVtX3VuaXYgaSkKICAgIGV4YWN0IE5hdC5tZW1fZGl2aXNvcnMubXByIOKfqGJ5IHNpbXBhIG9ubHkgW2hwcm9kXSB1c2luZyBoZGl2LCBobuKfqQoKLy0tIFRoZSBlbXB0eSB0dXBsZSBoYXMgcHJvZHVjdCAxOyBpdHMgY2FycmllciBoYXMgbm8gb3RoZXIgZWxlbWVudC4gLS8KdGhlb3JlbSBvcmRlcmVkRmFjdG9yVHVwbGVzX3plcm8gKG4gOiDihJUpIDoKICAgIG9yZGVyZWRGYWN0b3JUdXBsZXMgMCBuID0gaWYgbiA9IDEgdGhlbiB7RmluLmVsaW0wfSBlbHNlIOKIhSA6PSBieQogIGJ5X2Nhc2VzIGhuIDogbiA9IDEKICDCtyBzdWJzdCBuCiAgICBydyBbaWZfcG9zIHJmbF0KICAgIGFwcGx5IEZpbnNldC5leHQKICAgIGludHJvIGEKICAgIGNvbnN0cnVjdG9yCiAgICDCtyBpbnRybyBfaGEKICAgICAgYXBwbHkgRmluc2V0Lm1lbV9zaW5nbGV0b24ubXByCiAgICAgIGZ1bmV4dCBpCiAgICAgIGV4YWN0IEZpbi5lbGltMCBpCiAgICDCtyBpbnRybyBfaGEKICAgICAgYXBwbHkgRmluc2V0Lm1lbV9maWx0ZXIubXByCiAgICAgIGV4YWN0IOKfqEZpbnR5cGUubWVtX3BpRmluc2V0Lm1wciAoZnVuIGkgPT4gRmluLmVsaW0wIGkpLCBGaW4ucHJvZF91bml2X3plcm8gYeKfqQogIMK3IHJ3IFtpZl9uZWcgaG5dCiAgICBhcHBseSBGaW5zZXQuZXFfZW1wdHlfaWZmX2ZvcmFsbF9ub3RNZW0ubXByCiAgICBpbnRybyBhIGhhCiAgICBoYXZlIGhwcm9kIDogKOKIjyBqIDogRmluIDAsIGEgaikgPSBuIDo9IChGaW5zZXQubWVtX2ZpbHRlci5tcCBoYSkuMgogICAgaGF2ZSBob25lIDogMSA9IG4gOj0gKEZpbi5wcm9kX3VuaXZfemVybyBhKS5zeW1tLnRyYW5zIGhwcm9kCiAgICBleGFjdCBobiBob25lLnN5bW0KCi8tLSBBIGhlYWQgdmFsdWUsIHRoZSB0YWlsIHByb2R1Y3QsIGFuZCB0aGUgZnVsbCBvcmRlcmVkIHRhaWwgdHVwbGUuIC0vCmRlZiBoZWFkVGFpbENhcnJpZXIgKGsgbiA6IOKElSkgOiBGaW5zZXQgKM6jIF8gOiDihJUgw5cg4oSVLCBGaW4gayDihpIg4oSVKSA6PQogIG4uZGl2aXNvcnNBbnRpZGlhZ29uYWwuc2lnbWEgKGZ1biBwID0+IG9yZGVyZWRGYWN0b3JUdXBsZXMgayBwLjIpCgpkZWYgc3BsaXRIZWFkVGFpbCAoayA6IOKElSkgKGEgOiBGaW4gKGsgKyAxKSDihpIg4oSVKSA6IM6jIF8gOiDihJUgw5cg4oSVLCBGaW4gayDihpIg4oSVIDo9CiAg4p+oKGEgMCwg4oiPIGogOiBGaW4gaywgRmluLnRhaWwgYSBqKSwgRmluLnRhaWwgYeKfqQoKZGVmIGpvaW5IZWFkVGFpbCAoayA6IOKElSkgKHAgOiDOoyBfIDog4oSVIMOXIOKElSwgRmluIGsg4oaSIOKElSkgOiBGaW4gKGsgKyAxKSDihpIg4oSVIDo9CiAgRmluLmNvbnMgcC4xLjEgcC4yCgp0aGVvcmVtIHNwbGl0SGVhZFRhaWxfbWVtIHtrIG4gOiDihJV9IChobiA6IDAgPCBuKSB7YSA6IEZpbiAoayArIDEpIOKGkiDihJV9CiAgICAoaGEgOiBhIOKIiCBvcmRlcmVkRmFjdG9yVHVwbGVzIChrICsgMSkgbikgOgogICAgc3BsaXRIZWFkVGFpbCBrIGEg4oiIIGhlYWRUYWlsQ2FycmllciBrIG4gOj0gYnkKICBoYXZlIGhwcm9kIDogYSAwICogKOKIjyBqIDogRmluIGssIEZpbi50YWlsIGEgaikgPSBuIDo9IGJ5CiAgICBzaW1wYSBvbmx5IFtGaW4ucHJvZF91bml2X3N1Y2MsIEZpbi50YWlsXSB1c2luZyAobWVtX29yZGVyZWRGYWN0b3JUdXBsZXNfaWZmIGhuLm5lJykubXAgaGEKICBoYXZlIGhwYWlyIDogKGEgMCwg4oiPIGogOiBGaW4gaywgRmluLnRhaWwgYSBqKSDiiIggbi5kaXZpc29yc0FudGlkaWFnb25hbCA6PQogICAgTmF0Lm1lbV9kaXZpc29yc0FudGlkaWFnb25hbC5tcHIg4p+oaHByb2QsIGhuLm5lJ+KfqQogIGhhdmUgaHRhaWwgOiBGaW4udGFpbCBhIOKIiCBvcmRlcmVkRmFjdG9yVHVwbGVzIGsgKOKIjyBqIDogRmluIGssIEZpbi50YWlsIGEgaikgOj0KICAgIChtZW1fb3JkZXJlZEZhY3RvclR1cGxlc19pZmYgKE5hdC5yaWdodF9uZV96ZXJvX29mX21lbV9kaXZpc29yc0FudGlkaWFnb25hbCBocGFpcikpLm1wciByZmwKICBleGFjdCBGaW5zZXQubWVtX3NpZ21hLm1wciDin6hocGFpciwgaHRhaWzin6kKCnRoZW9yZW0gam9pbkhlYWRUYWlsX21lbSB7ayBuIDog4oSVfSAoaG4gOiAwIDwgbikge3AgOiDOoyBfIDog4oSVIMOXIOKElSwgRmluIGsg4oaSIOKElX0KICAgIChocCA6IHAg4oiIIGhlYWRUYWlsQ2FycmllciBrIG4pIDoKICAgIGpvaW5IZWFkVGFpbCBrIHAg4oiIIG9yZGVyZWRGYWN0b3JUdXBsZXMgKGsgKyAxKSBuIDo9IGJ5CiAgb2J0YWluIOKfqGhwYWlyLCBodGFpbOKfqSA6PSBGaW5zZXQubWVtX3NpZ21hLm1wIGhwCiAgaGF2ZSBodHByb2QgOiAo4oiPIGosIHAuMiBqKSA9IHAuMS4yIDo9CiAgICAobWVtX29yZGVyZWRGYWN0b3JUdXBsZXNfaWZmIChOYXQucmlnaHRfbmVfemVyb19vZl9tZW1fZGl2aXNvcnNBbnRpZGlhZ29uYWwgaHBhaXIpKS5tcCBodGFpbAogIGFwcGx5IChtZW1fb3JkZXJlZEZhY3RvclR1cGxlc19pZmYgaG4ubmUnKS5tcHIKICBjYWxjCiAgICAo4oiPIGosIGpvaW5IZWFkVGFpbCBrIHAgaikgPSBwLjEuMSAqIOKIjyBqLCBwLjIgaiA6PSBGaW4ucHJvZF9jb25zIF8gXwogICAgXyA9IHAuMS4xICogcC4xLjIgOj0gYnkgcncgW2h0cHJvZF0KICAgIF8gPSBuIDo9IChOYXQubWVtX2Rpdmlzb3JzQW50aWRpYWdvbmFsLm1wIGhwYWlyKS4xCgp0aGVvcmVtIGpvaW5fc3BsaXRIZWFkVGFpbCAoayA6IOKElSkgKGEgOiBGaW4gKGsgKyAxKSDihpIg4oSVKSA6CiAgICBqb2luSGVhZFRhaWwgayAoc3BsaXRIZWFkVGFpbCBrIGEpID0gYSA6PSBieQogIGV4YWN0IEZpbi5jb25zX3NlbGZfdGFpbCBhCgp0aGVvcmVtIHNwbGl0X2pvaW5IZWFkVGFpbCB7ayBuIDog4oSVfSB7cCA6IM6jIF8gOiDihJUgw5cg4oSVLCBGaW4gayDihpIg4oSVfQogICAgKGhwIDogcCDiiIggaGVhZFRhaWxDYXJyaWVyIGsgbikgOiBzcGxpdEhlYWRUYWlsIGsgKGpvaW5IZWFkVGFpbCBrIHApID0gcCA6PSBieQogIHJjYXNlcyBwIHdpdGgg4p+o4p+odiwgZOKfqSwgYuKfqQogIG9idGFpbiDin6hocGFpciwgaGLin6kgOj0gRmluc2V0Lm1lbV9zaWdtYS5tcCBocAogIGhhdmUgaGJwcm9kIDogKOKIjyBqLCBiIGopID0gZCA6PQogICAgKG1lbV9vcmRlcmVkRmFjdG9yVHVwbGVzX2lmZiAoTmF0LnJpZ2h0X25lX3plcm9fb2ZfbWVtX2Rpdmlzb3JzQW50aWRpYWdvbmFsIGhwYWlyKSkubXAgaGIKICBzaW1wIG9ubHkgW3NwbGl0SGVhZFRhaWwsIGpvaW5IZWFkVGFpbCwgRmluLmNvbnNfemVybywgRmluLnRhaWxfY29ucywgaGJwcm9kXQoKLy0tIFRoaXMgaXMgdGhlIHNhbWUgZnVsbCBkaXZpc29yIHJlY3VycmVuY2UgYXMgbmF0aXZlIGZvdXZyeVRhdV9zdWNjLiAtLwp0aGVvcmVtIGNhcmRfb3JkZXJlZEZhY3RvclR1cGxlc19zdWNjIChrIDog4oSVKSB7biA6IOKElX0gKGhuIDogMCA8IG4pIDoKICAgIChvcmRlcmVkRmFjdG9yVHVwbGVzIChrICsgMSkgbikuY2FyZCA9IOKIkSBkIOKIiCBuLmRpdmlzb3JzLCAob3JkZXJlZEZhY3RvclR1cGxlcyBrIGQpLmNhcmQgOj0gYnkKICBoYXZlIGhjYXJkIDogKG9yZGVyZWRGYWN0b3JUdXBsZXMgKGsgKyAxKSBuKS5jYXJkID0gKGhlYWRUYWlsQ2FycmllciBrIG4pLmNhcmQgOj0KICAgIEZpbnNldC5jYXJkX25iaWonIChzcGxpdEhlYWRUYWlsIGspIChqb2luSGVhZFRhaWwgaykKICAgICAgKGZ1biBhIGhhID0+IHNwbGl0SGVhZFRhaWxfbWVtIGhuIGhhKQogICAgICAoZnVuIHAgaHAgPT4gam9pbkhlYWRUYWlsX21lbSBobiBocCkKICAgICAgKGZ1biBhIF9oYSA9PiBqb2luX3NwbGl0SGVhZFRhaWwgayBhKQogICAgICAoZnVuIHAgaHAgPT4gc3BsaXRfam9pbkhlYWRUYWlsIGhwKQogIGNhbGMKICAgIChvcmRlcmVkRmFjdG9yVHVwbGVzIChrICsgMSkgbikuY2FyZCA9IChoZWFkVGFpbENhcnJpZXIgayBuKS5jYXJkIDo9IGhjYXJkCiAgICBfID0g4oiRIHAg4oiIIG4uZGl2aXNvcnNBbnRpZGlhZ29uYWwsIChvcmRlcmVkRmFjdG9yVHVwbGVzIGsgcC4yKS5jYXJkIDo9IGJ5CiAgICAgIHJ3IFtoZWFkVGFpbENhcnJpZXIsIEZpbnNldC5jYXJkX3NpZ21hXQogICAgXyA9IOKIkSBkIOKIiCBuLmRpdmlzb3JzLCAob3JkZXJlZEZhY3RvclR1cGxlcyBrIGQpLmNhcmQgOj0KICAgICAgTmF0LnN1bV9kaXZpc29yc0FudGlkaWFnb25hbCcgKGZ1biBfIGQgPT4gKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKS5jYXJkKQoKLy0tIEV2ZXJ5IG9yZGVyLCBpbmNsdWRpbmcgemVybywgY291bnRzIHRoZSBleGFjdCBjdXJyZW50IEZpbi1mdW5jdGlvbiBjYXJyaWVyLiAtLwp0aGVvcmVtIGNhcmRfb3JkZXJlZEZhY3RvclR1cGxlc19lcV9mb3V2cnlUYXUgKGsgbiA6IOKElSkgKGhuIDogMCA8IG4pIDoKICAgIChvcmRlcmVkRmFjdG9yVHVwbGVzIGsgbikuY2FyZCA9IGZvdXZyeVRhdSBrIG4gOj0gYnkKICBpbmR1Y3Rpb24gayBnZW5lcmFsaXppbmcgbiB3aXRoCiAgfCB6ZXJvID0+CiAgICAgIGJ5X2Nhc2VzIGhuMSA6IG4gPSAxCiAgICAgIMK3IHNpbXAgW29yZGVyZWRGYWN0b3JUdXBsZXNfemVybywgZm91dnJ5VGF1LCBBcml0aG1ldGljRnVuY3Rpb24ub25lX2FwcGx5LCBobjFdCiAgICAgIMK3IHNpbXAgW29yZGVyZWRGYWN0b3JUdXBsZXNfemVybywgZm91dnJ5VGF1LCBBcml0aG1ldGljRnVuY3Rpb24ub25lX2FwcGx5LCBobjFdCiAgfCBzdWNjIGsgaWggPT4KICAgICAgcncgW2NhcmRfb3JkZXJlZEZhY3RvclR1cGxlc19zdWNjIGsgaG4sIGZvdXZyeVRhdV9zdWNjXQogICAgICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogICAgICBpbnRybyBkIGhkCiAgICAgIGV4YWN0IGloIGQgKE5hdC5wb3Nfb2ZfbWVtX2Rpdmlzb3JzIGhkKQoKLy0gRU5EIFZFUkJBVElNIFBSSU9SIENBUkRJTkFMSVRZIFBST09GUy4gLS8KCnNlY3Rpb24gR2VuZXJhbEluZGV4Cgp2YXJpYWJsZSB7zrkgOiBUeXBlKn0gW0ZpbnR5cGUgzrldIFtEZWNpZGFibGVFcSDOuV0KCi8tLSBVcGRhdGluZyB0aGUgcGl2b3QgdG8gb25lIGxlYXZlcyBwcmVjaXNlbHkgdGhlIGRlbGV0ZWQgcHJvZHVjdC4gLS8KdGhlb3JlbSBwcm9kX2VyYXNlQXQgKGEgOiDOuSDihpIg4oSVKSAoaSA6IM65KSA6CiAgICAo4oiPIGosIGVyYXNlQXQgYSBpIGopID0gZGVsZXRlZFByb2R1Y3QgYSBpIDo9IGJ5CiAgaGF2ZSBoZGVsIDogZGVsZXRlZFByb2R1Y3QgKGVyYXNlQXQgYSBpKSBpID0gZGVsZXRlZFByb2R1Y3QgYSBpIDo9IGJ5CiAgICBhcHBseSBGaW5zZXQucHJvZF9jb25nciByZmwKICAgIGludHJvIGogaGoKICAgIGV4YWN0IEZ1bmN0aW9uLnVwZGF0ZV9vZl9uZSAoRmluc2V0Lm1lbV9lcmFzZS5tcCBoaikuMSAxIGEKICBoYXZlIGhpIDogZXJhc2VBdCBhIGkgaSA9IDEgOj0gRnVuY3Rpb24udXBkYXRlX3NlbGYgaSAxIGEKICBoYXZlIGhwIDo9IGRlbGV0ZWRQcm9kdWN0X211bCAoZXJhc2VBdCBhIGkpIGkKICBydyBbaGRlbCwgaGksIG11bF9vbmVdIGF0IGhwCiAgZXhhY3QgaHAuc3ltbQoKLy0tIFRoZXNlIGFyZSBwcm9wZXJ0aWVzIG9mIHRoZSBhY3R1YWwgZGVsZXRpb24gSU1BR0UsIGZvciBhbiBhcmJpdHJhcnkgUy4gLS8KdGhlb3JlbSBkZWxldGlvbkZpYmVyX25vcm1hbGl6ZWQgKFMgOiBGaW5zZXQgKM65IOKGkiDihJUpKSB7aSA6IM65fSB7ZCA6IOKElX0ge2IgOiDOuSDihpIg4oSVfQogICAgKGhiIDogYiDiiIggZGVsZXRpb25GaWJlciBTIGkgZCkgOiBiIGkgPSAxIOKIpyAo4oiPIGosIGIgaikgPSBkIDo9IGJ5CiAgb2J0YWluIOKfqGEsIGhhLCByZmzin6kgOj0gRmluc2V0Lm1lbV9pbWFnZS5tcCBoYgogIGhhdmUgaGFkIDogZGVsZXRlZFByb2R1Y3QgYSBpID0gZCA6PSAoRmluc2V0Lm1lbV9maWx0ZXIubXAgaGEpLjIKICBleGFjdCDin6hGdW5jdGlvbi51cGRhdGVfc2VsZiBpIDEgYSwgKHByb2RfZXJhc2VBdCBhIGkpLnRyYW5zIGhhZOKfqQoKZW5kIEdlbmVyYWxJbmRleAoKLy0tIFJlYWQgdGhlIHJlbWFpbmluZyBjb29yZGluYXRlcyBpbiB0aGVpciBvcmlnaW5hbCBGaW4gb3JkZXIsIHNraXBwaW5nIGkuIC0vCmRlZiBjb21wcmVzc0RlbGV0ZWQgKGsgOiDihJUpIChpIDogRmluIChrICsgMSkpIChiIDogRmluIChrICsgMSkg4oaSIOKElSkgOiBGaW4gayDihpIg4oSVIDo9CiAgZnVuIGogPT4gYiAoaS5zdWNjQWJvdmUgaikKCnRoZW9yZW0gY29tcHJlc3NEZWxldGVkX3Byb2Qge2sgOiDihJV9IChTIDogRmluc2V0IChGaW4gKGsgKyAxKSDihpIg4oSVKSkKICAgIHtpIDogRmluIChrICsgMSl9IHtkIDog4oSVfSB7YiA6IEZpbiAoayArIDEpIOKGkiDihJV9CiAgICAoaGIgOiBiIOKIiCBkZWxldGlvbkZpYmVyIFMgaSBkKSA6ICjiiI8gaiwgY29tcHJlc3NEZWxldGVkIGsgaSBiIGopID0gZCA6PSBieQogIGhhdmUgaGluZm8gOj0gZGVsZXRpb25GaWJlcl9ub3JtYWxpemVkIFMgaGIKICBoYXZlIGhwIDo9IEZpbi5wcm9kX3VuaXZfc3VjY0Fib3ZlIGIgaQogIHJ3IFtoaW5mby4xLCBvbmVfbXVsXSBhdCBocAogIGV4YWN0IGhwLnN5bW0udHJhbnMgaGluZm8uMgoKLy0tIEV2ZXJ5IGNvbXByZXNzZWQgY29vcmRpbmF0ZSBkaXZpZGVzIGQsIHdpdGggaXRzIG9yaWdpbmFsIHBvc2l0aW9uIHByZXNlcnZlZC4gLS8KdGhlb3JlbSBjb21wcmVzc0RlbGV0ZWRfZHZkIHtrIDog4oSVfSAoUyA6IEZpbnNldCAoRmluIChrICsgMSkg4oaSIOKElSkpCiAgICB7aSA6IEZpbiAoayArIDEpfSB7ZCA6IOKElX0ge2IgOiBGaW4gKGsgKyAxKSDihpIg4oSVfQogICAgKGhiIDogYiDiiIggZGVsZXRpb25GaWJlciBTIGkgZCkgKGogOiBGaW4gaykgOiBjb21wcmVzc0RlbGV0ZWQgayBpIGIgaiDiiKMgZCA6PSBieQogIGhhdmUgaHAgOj0gY29tcHJlc3NEZWxldGVkX3Byb2QgUyBoYgogIGhhdmUgaGRpdiA6IGNvbXByZXNzRGVsZXRlZCBrIGkgYiBqIOKIoyDiiI8gciwgY29tcHJlc3NEZWxldGVkIGsgaSBiIHIgOj0KICAgIEZpbnNldC5kdmRfcHJvZF9vZl9tZW0gKGNvbXByZXNzRGVsZXRlZCBrIGkgYikgKEZpbnNldC5tZW1fdW5pdiBqKQogIHNpbXBhIG9ubHkgW2hwXSB1c2luZyBoZGl2CgovLS0gRXhwbGljaXQgcHJvZHVjdC1hbmQtZGl2aXNvciB2ZXJpZmljYXRpb24gZm9yIHRoZSBmdWxsIGN1cnJlbnQgdHVwbGUgY2Fycmllci4gLS8KdGhlb3JlbSBjb21wcmVzc0RlbGV0ZWRfbWFwc1RvIHtrIDog4oSVfSAoUyA6IEZpbnNldCAoRmluIChrICsgMSkg4oaSIOKElSkpCiAgICAoaSA6IEZpbiAoayArIDEpKSB7ZCA6IOKElX0gKGhkIDogMCA8IGQpIDoKICAgIFNldC5NYXBzVG8gKGNvbXByZXNzRGVsZXRlZCBrIGkpIChkZWxldGlvbkZpYmVyIFMgaSBkKSAob3JkZXJlZEZhY3RvclR1cGxlcyBrIGQpIDo9IGJ5CiAgaW50cm8gYiBoYgogIGFwcGx5IEZpbnNldC5tZW1fZmlsdGVyLm1wcgogIHJlZmluZSDin6hGaW50eXBlLm1lbV9waUZpbnNldC5tcHIgP18sIGNvbXByZXNzRGVsZXRlZF9wcm9kIFMgaGLin6kKICBpbnRybyBqCiAgZXhhY3QgTmF0Lm1lbV9kaXZpc29ycy5tcHIg4p+oY29tcHJlc3NEZWxldGVkX2R2ZCBTIGhiIGosIGhkLm5lJ+KfqQoKLy0tIE5vcm1hbGl6YXRpb24gcmVjb3ZlcnMgdGhlIHBpdm90LCBhbmQgc3VjY0Fib3ZlIHJlY292ZXJzIGV2ZXJ5IG90aGVyIGNvb3JkaW5hdGUuIC0vCnRoZW9yZW0gY29tcHJlc3NEZWxldGVkX2luamVjdGl2ZV9vZl9ub3JtYWxpemVkIHtrIDog4oSVfSAoaSA6IEZpbiAoayArIDEpKQogICAge2IgYyA6IEZpbiAoayArIDEpIOKGkiDihJV9IChoYiA6IGIgaSA9IDEpIChoYyA6IGMgaSA9IDEpCiAgICAoaGJjIDogY29tcHJlc3NEZWxldGVkIGsgaSBiID0gY29tcHJlc3NEZWxldGVkIGsgaSBjKSA6IGIgPSBjIDo9IGJ5CiAgZnVuZXh0IGoKICBieV9jYXNlcyBoamkgOiBqID0gaQogIMK3IHN1YnN0IGoKICAgIGV4YWN0IGhiLnRyYW5zIGhjLnN5bW0KICDCtyBvYnRhaW4g4p+ociwgaHLin6kgOj0gRmluLmV4aXN0c19zdWNjQWJvdmVfZXEgaGppCiAgICBoYXZlIGhldmFsIDo9IGNvbmdyRnVuIGhiYyByCiAgICBzaW1wYSBvbmx5IFtjb21wcmVzc0RlbGV0ZWQsIGhyXSB1c2luZyBoZXZhbAoKLy0tIEEgZ2VudWluZSBpbmplY3Rpb24gb2YgZmluaXRlIGRlbGV0aW9uIGltYWdlcywgd2l0aG91dCBhbnkgZml4ZWQtcHJvZHVjdCBzdXBwbGllci4gLS8KdGhlb3JlbSBjYXJkX2RlbGV0aW9uRmliZXJfbGVfb3JkZXJlZEZhY3RvclR1cGxlcyB7ayA6IOKElX0KICAgIChTIDogRmluc2V0IChGaW4gKGsgKyAxKSDihpIg4oSVKSkgKGkgOiBGaW4gKGsgKyAxKSkge2QgOiDihJV9IChoZCA6IDAgPCBkKSA6CiAgICAoZGVsZXRpb25GaWJlciBTIGkgZCkuY2FyZCDiiaQgKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKS5jYXJkIDo9IGJ5CiAgcmVmaW5lIEZpbnNldC5jYXJkX2xlX2NhcmRfb2ZfaW5qT24gKGNvbXByZXNzRGVsZXRlZCBrIGkpIChjb21wcmVzc0RlbGV0ZWRfbWFwc1RvIFMgaSBoZCkgP18KICBpbnRybyBiIGhiIGMgaGMgaGJjCiAgZXhhY3QgY29tcHJlc3NEZWxldGVkX2luamVjdGl2ZV9vZl9ub3JtYWxpemVkIGkKICAgIChkZWxldGlvbkZpYmVyX25vcm1hbGl6ZWQgUyBoYikuMSAoZGVsZXRpb25GaWJlcl9ub3JtYWxpemVkIFMgaGMpLjEgaGJjCgp0aGVvcmVtIGNhcmRfZGVsZXRpb25GaWJlcl9sZV9mb3V2cnlUYXVfc3VjYyB7ayA6IOKElX0KICAgIChTIDogRmluc2V0IChGaW4gKGsgKyAxKSDihpIg4oSVKSkgKGkgOiBGaW4gKGsgKyAxKSkge2QgOiDihJV9IChoZCA6IDAgPCBkKSA6CiAgICAoZGVsZXRpb25GaWJlciBTIGkgZCkuY2FyZCDiiaQgZm91dnJ5VGF1IGsgZCA6PSBieQogIGNhbGMKICAgIChkZWxldGlvbkZpYmVyIFMgaSBkKS5jYXJkIOKJpCAob3JkZXJlZEZhY3RvclR1cGxlcyBrIGQpLmNhcmQgOj0KICAgICAgY2FyZF9kZWxldGlvbkZpYmVyX2xlX29yZGVyZWRGYWN0b3JUdXBsZXMgUyBpIGhkCiAgICBfID0gZm91dnJ5VGF1IGsgZCA6PSBjYXJkX29yZGVyZWRGYWN0b3JUdXBsZXNfZXFfZm91dnJ5VGF1IGsgZCBoZAoKLy0tIFRoZSByZXF1ZXN0ZWQgbmF0aXZlIEstMSBmaWJlciBib3VuZCwgd2l0aCB0aGUgZXhhY3Qgb3JpZ2luYWwgb3JkZXJlZCBjYXJyaWVyLiAtLwp0aGVvcmVtIGNhcmRfZGVsZXRpb25GaWJlcl9vcmRlcmVkRmFjdG9yVHVwbGVzX2xlX2ZvdXZyeVRhdSB7SyBuIGQgOiDihJV9CiAgICAoaEsgOiAyIOKJpCBLKSAoaG4gOiAwIDwgbikgKGhkIDogZCDiiIggbi5kaXZpc29ycykgKGkgOiBGaW4gSykgOgogICAgKGRlbGV0aW9uRmliZXIgKG9yZGVyZWRGYWN0b3JUdXBsZXMgSyBuKSBpIGQpLmNhcmQg4omkIGZvdXZyeVRhdSAoSyAtIDEpIGQgOj0gYnkKICBjYXNlcyBLIHdpdGgKICB8IHplcm8gPT4gb21lZ2EKICB8IHN1Y2MgayA9PgogICAgICBzaW1wYSBvbmx5IFtOYXQuc3VjY19lcV9hZGRfb25lLCBOYXQuYWRkX3N1Yl9jYW5jZWxdIHVzaW5nCiAgICAgICAgKGNhcmRfZGVsZXRpb25GaWJlcl9sZV9mb3V2cnlUYXVfc3VjYyAob3JkZXJlZEZhY3RvclR1cGxlcyAoayArIDEpIG4pIGkKICAgICAgICAgIChOYXQucG9zX29mX21lbV9kaXZpc29ycyBoZCkpCgovLS0gRXhhY3QgZmluaXRlIHRhdSB0cnVuY2F0aW9uOyBubyBpbnRlcnZhbCwgYW5hbHl0aWMsIG9yIGthcHBhIGh5cG90aGVzaXMgaXMgYWRkZWQuIC0vCnRoZW9yZW0gZm91dnJ5VGF1X2xlX3RydW5jYXRlZF9kaXZpc29yX3N1bSB7SyBuIEQgOiDihJV9CiAgICAoaEsgOiAyIOKJpCBLKSAoaG4gOiAxIOKJpCBuKSAoaGN1dCA6IG4gXiAoSyAtIDEpIOKJpCBEIF4gSykgOgogICAgZm91dnJ5VGF1IEsgbiDiiaQgSyAqCiAgICAgICjiiJEgZCDiiIggbi5kaXZpc29ycy5maWx0ZXIgKGZ1biBkID0+IGQg4omkIEQpLCBmb3V2cnlUYXUgKEsgLSAxKSBkKSA6PSBieQogIGNhbGMKICAgIGZvdXZyeVRhdSBLIG4gPSAob3JkZXJlZEZhY3RvclR1cGxlcyBLIG4pLmNhcmQgOj0KICAgICAgKGNhcmRfb3JkZXJlZEZhY3RvclR1cGxlc19lcV9mb3V2cnlUYXUgSyBuIChieSBvbWVnYSkpLnN5bW0KICAgIF8g4omkIOKIkSBpIDogRmluIEssIOKIkSBkIOKIiCB0cnVuY2F0ZWREaXZpc29ycyBuIEQsCiAgICAgICAgKGRlbGV0aW9uRmliZXIgKG9yZGVyZWRGYWN0b3JUdXBsZXMgSyBuKSBpIGQpLmNhcmQgOj0KICAgICAgY2FyZF9vcmRlcmVkRmFjdG9yVHVwbGVzX3RydW5jYXRlZCBoSyBobiBoY3V0CiAgICBfIOKJpCDiiJEgX2kgOiBGaW4gSywg4oiRIGQg4oiIIHRydW5jYXRlZERpdmlzb3JzIG4gRCwgZm91dnJ5VGF1IChLIC0gMSkgZCA6PSBieQogICAgICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogICAgICBpbnRybyBpIF9oaQogICAgICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogICAgICBpbnRybyBkIGhkCiAgICAgIGV4YWN0IGNhcmRfZGVsZXRpb25GaWJlcl9vcmRlcmVkRmFjdG9yVHVwbGVzX2xlX2ZvdXZyeVRhdSBoSyAoYnkgb21lZ2EpCiAgICAgICAgKEZpbnNldC5tZW1fZmlsdGVyLm1wIGhkKS4xIGkKICAgIF8gPSBLICogKOKIkSBkIOKIiCBuLmRpdmlzb3JzLmZpbHRlciAoZnVuIGQgPT4gZCDiiaQgRCksIGZvdXZyeVRhdSAoSyAtIDEpIGQpIDo9IGJ5CiAgICAgIHNpbXAgb25seSBbRmluc2V0LnN1bV9jb25zdCwgbnNtdWxfZXFfbXVsLCBGaW5zZXQuY2FyZF91bml2LCBGaW50eXBlLmNhcmRfZmluLAogICAgICAgIHRydW5jYXRlZERpdmlzb3JzXQoKZW5kCgplbmQgSW1iYWxhbmNlZENoZW4uUGFydDMuRWxlbWVudGFyeVRhdVRydW5jYXRpb24KCi8tIQpORVcgQk9VTkRFRCBJTlRFUlZBTCBQQVlNRU5UIC0tIDIwMjYtMTAtMjIgLS0gU09VUkNFIE9OTFkgLS0gSE9MRAoKVGhlIDMwNC1MRiBmaW5pdGUgdGF1IHByb3Bvc2FsIGFib3ZlIGlzIHJlcHJvZHVjZWQgdmVyYmF0aW0sIHdpdGggaXRzIGFjdHVhbApmaW5pdGUtY29yZSBpbXBvcnQgYW5kIGV2ZXJ5IHByb29mIGJvZHkuIE5vIHRhcmdldCBjYXJkaW5hbCBvciB0YXUgaW5lcXVhbGl0eQppcyBhc3N1bWVkLiBUaGlzIHN0YW5kYWxvbmUgVFhUIGFkZHMgb25lIGltcG9ydCBmb3IgdGhlIGV4aXN0aW5nIHBvc2l0aXZlCnByZWZpeCBtdWx0aXBsZS1jb3VudCB0aGVvcmVtLiBEbyBub3QgaW50ZWdyYXRlIHRoaXMgY29weSBhbG9uZ3NpZGUgYSBmdXR1cmUKdGF1IG1vZHVsZSB3aXRob3V0IHJlbW92aW5nIHRoZSBkdXBsaWNhdGVkIGRlY2xhcmF0aW9ucy4KClRoZSBwcmVjaXNlIGludGVydmFsIGlzIElvYyBBIEIgaW4gTmF0LCB3aXRoIEEgPD0gQi4gSXQgY29uc2lzdHMgZXhhY3RseSBvZgp0aGUgcG9zaXRpdmUgaW50ZWdlcnMgQSA8IG4gPD0gQiwgYW5kIGl0cyBnZW9tZXRyaWMgbGVuZ3RoIGlzIChCOlJlYWwpLUEuCkE9MCBpcyBhbGxvd2VkOyB6ZXJvIGlzIG5ldmVyIGluY2x1ZGVkLiBEaXZpc29ycyBhcmUgc3RyaWN0bHkgcG9zaXRpdmUgd2hlbgp1c2VkIGluIHRoZSBsZW5ndGgvZCBwYXltZW50LiBOYXR1cmFsIGQ9MCBpcyBhbGxvd2VkIG9ubHkgaW4gdGhlIGV4YWN0IGNvdW50CmlkZW50aXR5LCB3aGVyZSBib3RoIGNvdW50cyBhbmQgYm90aCBuYXR1cmFsIGRpdmlzaW9ucyBhcmUgemVyby4KCk5hdC5Jb2NfZmlsdGVyX2R2ZF9jYXJkX2VxX2RpdiBhbHJlYWR5IHByb3ZlcyB0aGUgZXhhY3QgcG9zaXRpdmUtcHJlZml4CmNvdW50LiBXZSByZXVzZSBpdCwgc3VidHJhY3QgdGhlIHR3byBuZXN0ZWQgZmluaXRlIHByZWZpeCBzZXRzLCBhbmQgcHJvdmUKICBjYXJkIHtBPG48PUIgOiBkIGRpdmlkZXMgbn0gPSBCL2QgLSBBL2QKd2l0aCBuYXR1cmFsIGRpdmlzaW9uL3N1YnRyYWN0aW9uLiBDYXN0aW5nIHRoaXMgZXF1YWxpdHkgYW5kIHVzaW5nIHRoZSB0d28Kc3RhbmRhcmQgZGl2aXNpb24gYm91bmRzIHByb3ZlcyB0aGUgZ2VudWluZSBsZW5ndGgvZCsxIGluZXF1YWxpdHkuCgpBIGZpbml0ZSBzdW0gc3dhcCB0aGVuIGNoYXJnZXMgdGhlIGV4YWN0IGludGVydmFsIG11bHRpcGxlcyBmb3IgZWFjaCBkLgpUb2dldGhlciB3aXRoIHRoZSBGVUxMIHdyaXR0ZW4gdGF1IHByb29mIGFib3ZlIHRoaXMgeWllbGRzCiAgc3VtX3tBPG48PUJ9IHRhdV9LKG4pCiAgPD0gSyAqIFsgKEItQSkqc3VtX3sxPD1kPD1EfSB0YXVfKEstMSkoZCkvZAogICAgICAgICAgICsgc3VtX3sxPD1kPD1EfSB0YXVfKEstMSkoZCkgXSwKdW5kZXIgSz49MiBhbmQgQl4oSy0xKTw9RF5LLiBFbmRwb2ludHMsIGNhcnJpZXJzIGFuZCBjYXN0cyBhcmUgZXhwbGljaXQuCk5vIGludGVydmFsIGNvdW50aW5nIGh5cG90aGVzaXMgb3IgZGVzaXJlZCBib3VuZCBpcyBzdXBwbGllZCBhcyBhbiBheGlvbS4KClRoaXMgZG9lcyBOT1QgcHJvdmUgRTEgd2l0aCBpdHMgZXhhY3QgcmVhbC1yb290IGN1dG9mZiBvciBhbnkgc2hpZnRlZCBNMi4KVGhlIG5hdHVyYWwtY3V0b2ZmIHByZW1pc2UgY2Fubm90IGluIGdlbmVyYWwgYmUganVzdGlmaWVkIGJ5IHNldHRpbmcKRD1mbG9vcihaXigxLTEvSykpOyB0aGUgZmxvb3IgbWF5IGhhdmUgRF5LIDwgWl4oSy0xKS4gQSBmdXR1cmUgcmVhbC1jdXRvZmYKZ2VvbWV0cmljL2Zsb29yIGJyaWRnZSBtdXN0IGFkZHJlc3MgdGhhdCBwb2ludC4gVGhlIGV4YWN0IHR3byBuYXRpdmUgZGl2aXNvcgptZWFucyBzdGlsbCBuZWVkIHRvIGJlIGFwcGxpZWQgYXQgdGhlIGp1c3RpZmllZCBjb21tb24gY3V0b2ZmLCB3aXRoIGxvZyBhbmQKZW5kcG9pbnQgYWRhcHRlcnMuIE5vIG5ldyB1bmlmb3JtIG1lYW4sIHNwZWN0cnVtLCBrYXBwYSBvciBtYWluIHRoZW9yZW0gaXMKY2xhaW1lZC4gTm8gY29tcGlsZXIvY2hlY2tlci9wcm9wZXIvY2xhc3NpZmllci9jZW5zdXMvR2l0IGFjdGlvbiB3YXMgdXNlZC4KLS8KCg==",
+        "unchanged_suffix_bytes": 6830,
+        "unchanged_suffix_raw_sha256": "831ab75cf5d33f1f487fa803e2d57b25f6aa2c3c166a8b55aac1682a308311db",
+        "complete_inverse": "Remove target_prefix_bytes from the target raw bytes, prepend base64-decoded source_prefix_base64, and leave all remaining bytes unchanged.",
+        "inverse_roundtrip_exact": true,
+        "inverse_roundtrip_raw_sha256": "59babff31ff6f9dcd9856d6f69d7a1b9cc5548dc318d26f9d5c7ab61b549d4eb",
+        "source_utf8_roundtrip_exact": true
+      },
+      "complete_declaration_map": [
+        {
+          "name": "interval_multiples_card_eq_div_sub",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.interval_multiples_card_eq_div_sub",
+          "source_span": [
+            354,
+            377
+          ],
+          "source_type_last": 355,
+          "target_span": [
+            13,
+            36
+          ],
+          "target_type_last": 14,
+          "complete_public_type": "theorem interval_multiples_card_eq_div_sub {A B : ℕ} (hAB : A ≤ B) (d : ℕ) :\n    ((Ioc A B).filter (fun n => d ∣ n)).card = B / d - A / d := by\n",
+          "old_type_raw_utf8_sha256": "6ac1349141de70abf0e5c67d6416206630189c8861d2419425f0f19b2762601f",
+          "new_type_raw_utf8_sha256": "6ac1349141de70abf0e5c67d6416206630189c8861d2419425f0f19b2762601f",
+          "old_complete_declaration_raw_utf8_sha256": "55f1f01866973f547c9bb89be7f6760cf3df694205e8bf470eb1839a6efd81cc",
+          "new_complete_declaration_raw_utf8_sha256": "55f1f01866973f547c9bb89be7f6760cf3df694205e8bf470eb1839a6efd81cc",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "interval_multiples_card_le_length_div_add_one",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.interval_multiples_card_le_length_div_add_one",
+          "source_span": [
+            380,
+            395
+          ],
+          "source_type_last": 383,
+          "target_span": [
+            39,
+            54
+          ],
+          "target_type_last": 42,
+          "complete_public_type": "theorem interval_multiples_card_le_length_div_add_one {A B d : ℕ}\n    (hAB : A ≤ B) (hd : 0 < d) :\n    (((Ioc A B).filter (fun n => d ∣ n)).card : ℝ) ≤\n      ((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1 := by\n",
+          "old_type_raw_utf8_sha256": "18c1c19c2bb2b6ef9189e732338cc4568d824549243cf531873a5181ad4c6118",
+          "new_type_raw_utf8_sha256": "18c1c19c2bb2b6ef9189e732338cc4568d824549243cf531873a5181ad4c6118",
+          "old_complete_declaration_raw_utf8_sha256": "5fe7bc024659e2d8893762f7aa0db0b140a36f33338a207483adb7904905b7d8",
+          "new_complete_declaration_raw_utf8_sha256": "5fe7bc024659e2d8893762f7aa0db0b140a36f33338a207483adb7904905b7d8",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "truncated_divisor_carrier_eq",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.truncated_divisor_carrier_eq",
+          "source_span": [
+            398,
+            410
+          ],
+          "source_type_last": 399,
+          "target_span": [
+            57,
+            69
+          ],
+          "target_type_last": 58,
+          "complete_public_type": "theorem truncated_divisor_carrier_eq {n D : ℕ} (hn : 0 < n) :\n    n.divisors.filter (fun d => d ≤ D) = (Icc 1 D).filter (fun d => d ∣ n) := by\n",
+          "old_type_raw_utf8_sha256": "11e1cb6afd6cdd503f11d044bda985df352228971756f522499aba387d423dc7",
+          "new_type_raw_utf8_sha256": "11e1cb6afd6cdd503f11d044bda985df352228971756f522499aba387d423dc7",
+          "old_complete_declaration_raw_utf8_sha256": "c605cd28bdc53b619f181ac1ad2aec6cae273bd9265facba94476cfcbe60d700",
+          "new_complete_declaration_raw_utf8_sha256": "c605cd28bdc53b619f181ac1ad2aec6cae273bd9265facba94476cfcbe60d700",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_interval_divisor_weights_swap",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_interval_divisor_weights_swap",
+          "source_span": [
+            413,
+            420
+          ],
+          "source_type_last": 415,
+          "target_span": [
+            72,
+            79
+          ],
+          "target_type_last": 74,
+          "complete_public_type": "theorem sum_interval_divisor_weights_swap (A B D : ℕ) (w : ℕ → ℝ) :\n    (∑ n ∈ Ioc A B, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) =\n      ∑ d ∈ Icc 1 D, w d * (((Ioc A B).filter (fun n => d ∣ n)).card : ℝ) := by\n",
+          "old_type_raw_utf8_sha256": "c19954307d6ef57a3df6d05186c44166f98627945131d4077b19dc506de4c124",
+          "new_type_raw_utf8_sha256": "c19954307d6ef57a3df6d05186c44166f98627945131d4077b19dc506de4c124",
+          "old_complete_declaration_raw_utf8_sha256": "d63c2e4e2d79e817fba27be26d1c6f7c36c81f5a518dbe0e73d37f6bab4f6456",
+          "new_complete_declaration_raw_utf8_sha256": "d63c2e4e2d79e817fba27be26d1c6f7c36c81f5a518dbe0e73d37f6bab4f6456",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_interval_divisor_weights_le",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_interval_divisor_weights_le",
+          "source_span": [
+            423,
+            433
+          ],
+          "source_type_last": 426,
+          "target_span": [
+            82,
+            92
+          ],
+          "target_type_last": 85,
+          "complete_public_type": "theorem sum_interval_divisor_weights_le {A B D : ℕ} (w : ℕ → ℝ)\n    (hAB : A ≤ B) (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n    (∑ n ∈ Ioc A B, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n      ∑ d ∈ Icc 1 D, w d * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+          "old_type_raw_utf8_sha256": "65c8f2be58ac56b7bca75fbb75072f35cfcfecc1e3e66a6e7339f9d49625066c",
+          "new_type_raw_utf8_sha256": "65c8f2be58ac56b7bca75fbb75072f35cfcfecc1e3e66a6e7339f9d49625066c",
+          "old_complete_declaration_raw_utf8_sha256": "8d2069903980dae7245f74286854180f7e0e279564314f0677807aa27c5dec18",
+          "new_complete_declaration_raw_utf8_sha256": "8d2069903980dae7245f74286854180f7e0e279564314f0677807aa27c5dec18",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_fouvryTau_interval_payment",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment",
+          "source_span": [
+            436,
+            465
+          ],
+          "source_type_last": 440,
+          "target_span": [
+            95,
+            124
+          ],
+          "target_type_last": 99,
+          "complete_public_type": "theorem sum_fouvryTau_interval_payment {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) ≤ D ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+          "old_type_raw_utf8_sha256": "01beff78935783f1f06669601448d6ce99b12e4eaeb60d0e0b8e8f62dbebd1cc",
+          "new_type_raw_utf8_sha256": "01beff78935783f1f06669601448d6ce99b12e4eaeb60d0e0b8e8f62dbebd1cc",
+          "old_complete_declaration_raw_utf8_sha256": "648980c765b056e79a9f233806ce8d5ccd47b578b53bcec8c1fdd36db04e91e9",
+          "new_complete_declaration_raw_utf8_sha256": "648980c765b056e79a9f233806ce8d5ccd47b578b53bcec8c1fdd36db04e91e9",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_fouvryTau_interval_payment_split",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_split",
+          "source_span": [
+            468,
+            489
+          ],
+          "source_type_last": 473,
+          "target_span": [
+            127,
+            148
+          ],
+          "target_type_last": 132,
+          "complete_public_type": "theorem sum_fouvryTau_interval_payment_split {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) ≤ D ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n",
+          "old_type_raw_utf8_sha256": "dea00849647614d5465309aad0fbe6d7570b0531b07b5dd0694f6b1391190255",
+          "new_type_raw_utf8_sha256": "dea00849647614d5465309aad0fbe6d7570b0531b07b5dd0694f6b1391190255",
+          "old_complete_declaration_raw_utf8_sha256": "035bfef3179bf497d1918656b5cf3bdfccffe7c285a5ce94ddea00f0ac7b70fc",
+          "new_complete_declaration_raw_utf8_sha256": "035bfef3179bf497d1918656b5cf3bdfccffe7c285a5ce94ddea00f0ac7b70fc",
+          "all_type_and_proof_bytes_identical": true
+        }
+      ],
+      "reused_theorem_count": 7,
+      "all_namespace_section_open_and_end_bytes_identical": true
+    },
+    {
+      "intended_module": "ImbalancedChen.Part3ElementaryE1StrictFloor",
+      "intended_actual_path": "ImbalancedChen/Part3ElementaryE1StrictFloor.lean",
+      "draft_path": ".lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryE1StrictFloor-module-source.txt",
+      "draft_sha256": "31e919a0003188364a842901c8373ebc08ee8763210484ccaa81af3910c7db70",
+      "draft_bytes": 13509,
+      "draft_lf_lines": 273,
+      "imports": [
+        "import ImbalancedChen.Part3ElementaryIntervalDivisibility",
+        "import Mathlib.Analysis.SpecialFunctions.Pow.Real",
+        "import Mathlib.Algebra.Order.Floor.Semiring"
+      ],
+      "source_path": ".lake/proof-continuation/source-reviews/drafts/20261022-e1-strict-floor-cutoff-mean-source-proposal.txt",
+      "source_sha256": "9724fe22ae6a0c5af45dff9927d45f042ad108ab9298687fe9a359a7cfe68f95",
+      "source_bytes": 38713,
+      "source_lf_lines": 792,
+      "retained_source_span": [
+        524,
+        792
+      ],
+      "retained_target_span": [
+        5,
+        273
+      ],
+      "retained_raw_sha256": "082b424c1cb0bb5c659d075011cab8546f64c413193efa519a2fc4d8567ced4d",
+      "retained_raw_bytes": 13356,
+      "line_delta": -519,
+      "complete_unified_raw_diff": "--- .lake/proof-continuation/source-reviews/drafts/20261022-e1-strict-floor-cutoff-mean-source-proposal.txt\n+++ .lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryE1StrictFloor-module-source.txt\n@@ -1,523 +1,4 @@\n-import Mathlib.Analysis.SpecialFunctions.Pow.Real\n-import Mathlib.Algebra.Order.Floor.Semiring\n-import Mathlib.Data.Nat.Factorization.Basic\n-import ImbalancedChen.Part3ElementaryTauTruncation\n-import Mathlib.Algebra.BigOperators.Fin\n-import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise\n-import Mathlib.Algebra.BigOperators.Group.Finset.Sigma\n-import Mathlib.Data.Fin.Tuple.Basic\n-import Mathlib.Data.Fin.SuccPred\n-\n-/-!\n-SOURCE PROPOSAL ONLY -- 2026-10-22 -- UNCOMPILED -- HOLD -- heavy0\n-\n-Single finite task: compress the TRUE eraseAt deletion fibers through\n-Fin.succAbove, retain every ordered multiplicity, and close the original\n-native tau cutoff inequality with its exact natural-number hypotheses.\n-No interval counting, harmonic mean, E1/E3, kappa selection or main theorem\n-is attempted. No actual Lean/runtime/pin write, compiler, proper, checker,\n-classifier, census, cache, Git operation or subagent is used by this author.\n-\n-Pinned native goldbach: 09b97db5764ade1246bfb77206baa1b124760958.\n-Pinned mathlib: e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.\n-\n-SOURCE DEPENDENCIES / NO HIDDEN CARDINALITY ASSUMPTION:\n-The actual imported base module Part3ElementaryTauTruncation has SHA256\n-8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f.\n-Root applied that frozen finite-core source; it is still uncompiled.\n-The complete eight-proof cardinality bridge, plus its three new helper\n-carrier/maps definitions, is copied VERBATIM below from lines 71-180 of\n-20261022-ordered-tau-cardinality-source-proposal.txt, SHA256\n-b997a96beac6c4eca23239b14147e51739a3009bcc2cdde497dcab52f8a910ce.\n-Its existing orderedFactorTuples definition is NOT repeated here: it comes\n-from the actual base module and is byte-identical to the reviewed carrier.\n-The prior cardinality proposal is under independent review; this copy does\n-not alter that proposal or preempt a later concrete review correction.\n-No target identity is introduced as an assumption. Future integration may\n-import the cardinality module and omit the verbatim copied proof block.\n-\n-NEW FINITE ARGUMENT:\n-For b in deletionFiber S i d, b i=1 and product b=d. Define compression by\n-  compressDeleted k i b j = b (i.succAbove j), j : Fin k.\n-Fin.prod_univ_succAbove gives its full product d. Each coordinate divides\n-d by dvd_prod_of_mem, so it lies in the existing orderedFactorTuples k d\n-carrier when d>0. If two normalized b have equal compressed tuples, their\n-pivot coordinates both equal 1, and Fin.exists_succAbove_eq recovers each\n-off-pivot coordinate. Therefore compression is injective on the deletion\n-fiber; no ordered tuples are sorted, permuted into a quotient, or lost.\n-The proof in fact works for any finite S and positive d. The requested\n-K>=2, n>0, d in n.divisors specialization follows immediately.\n-\n-Combine this cardinal bound with the explicit native cardinality bridge\n-and the old indexed-cover truncation theorem. The outer Fin K sum consists\n-of K copies of the same truncated divisor sum. The last theorem is exactly\n-  fouvryTau K n <= K * sum_{d|n,d<=D} fouvryTau (K-1) d,\n-for K>=2, n>=1, n^(K-1)<=D^K. No unproved supplier is added.\n-\n-All proofs are complete AS WRITTEN source proposals; no elaboration or\n-kernel acceptance is claimed. E1 still additionally requires interval\n-counts Y/d+1 and the reciprocal/ordinary divisor means. E3 and all actual\n-cleanup applications, original forall-kappa obligations, and the main\n-theorem remain outside this task. Completion here is only finite tau\n-truncation, not completion of those analytic or parameter obligations.\n--/\n-\n-namespace ImbalancedChen.Part3.ElementaryTauTruncation\n-\n-noncomputable section\n-\n-open Classical Finset\n-open scoped BigOperators\n-open MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n-\n-/- BEGIN VERBATIM PRIOR CARDINALITY PROOFS: original lines 71-180. -/\n-/-- For n != 0 the coordinate divisor restrictions are consequences of the product. -/\n-theorem mem_orderedFactorTuples_iff {k n : ℕ} (hn : n ≠ 0) {a : Fin k → ℕ} :\n-    a ∈ orderedFactorTuples k n ↔ (∏ j, a j) = n := by\n-  constructor\n-  · intro ha\n-    exact (Finset.mem_filter.mp ha).2\n-  · intro hprod\n-    apply Finset.mem_filter.mpr\n-    refine ⟨Fintype.mem_piFinset.mpr ?_, hprod⟩\n-    intro i\n-    have hdiv : a i ∣ ∏ j, a j := Finset.dvd_prod_of_mem a (Finset.mem_univ i)\n-    exact Nat.mem_divisors.mpr ⟨by simpa only [hprod] using hdiv, hn⟩\n-\n-/-- The empty tuple has product 1; its carrier has no other element. -/\n-theorem orderedFactorTuples_zero (n : ℕ) :\n-    orderedFactorTuples 0 n = if n = 1 then {Fin.elim0} else ∅ := by\n-  by_cases hn : n = 1\n-  · subst n\n-    rw [if_pos rfl]\n-    apply Finset.ext\n-    intro a\n-    constructor\n-    · intro _ha\n-      apply Finset.mem_singleton.mpr\n-      funext i\n-      exact Fin.elim0 i\n-    · intro _ha\n-      apply Finset.mem_filter.mpr\n-      exact ⟨Fintype.mem_piFinset.mpr (fun i => Fin.elim0 i), Fin.prod_univ_zero a⟩\n-  · rw [if_neg hn]\n-    apply Finset.eq_empty_iff_forall_notMem.mpr\n-    intro a ha\n-    have hprod : (∏ j : Fin 0, a j) = n := (Finset.mem_filter.mp ha).2\n-    have hone : 1 = n := (Fin.prod_univ_zero a).symm.trans hprod\n-    exact hn hone.symm\n-\n-/-- A head value, the tail product, and the full ordered tail tuple. -/\n-def headTailCarrier (k n : ℕ) : Finset (Σ _ : ℕ × ℕ, Fin k → ℕ) :=\n-  n.divisorsAntidiagonal.sigma (fun p => orderedFactorTuples k p.2)\n-\n-def splitHeadTail (k : ℕ) (a : Fin (k + 1) → ℕ) : Σ _ : ℕ × ℕ, Fin k → ℕ :=\n-  ⟨(a 0, ∏ j : Fin k, Fin.tail a j), Fin.tail a⟩\n-\n-def joinHeadTail (k : ℕ) (p : Σ _ : ℕ × ℕ, Fin k → ℕ) : Fin (k + 1) → ℕ :=\n-  Fin.cons p.1.1 p.2\n-\n-theorem splitHeadTail_mem {k n : ℕ} (hn : 0 < n) {a : Fin (k + 1) → ℕ}\n-    (ha : a ∈ orderedFactorTuples (k + 1) n) :\n-    splitHeadTail k a ∈ headTailCarrier k n := by\n-  have hprod : a 0 * (∏ j : Fin k, Fin.tail a j) = n := by\n-    simpa only [Fin.prod_univ_succ, Fin.tail] using (mem_orderedFactorTuples_iff hn.ne').mp ha\n-  have hpair : (a 0, ∏ j : Fin k, Fin.tail a j) ∈ n.divisorsAntidiagonal :=\n-    Nat.mem_divisorsAntidiagonal.mpr ⟨hprod, hn.ne'⟩\n-  have htail : Fin.tail a ∈ orderedFactorTuples k (∏ j : Fin k, Fin.tail a j) :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mpr rfl\n-  exact Finset.mem_sigma.mpr ⟨hpair, htail⟩\n-\n-theorem joinHeadTail_mem {k n : ℕ} (hn : 0 < n) {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n-    (hp : p ∈ headTailCarrier k n) :\n-    joinHeadTail k p ∈ orderedFactorTuples (k + 1) n := by\n-  obtain ⟨hpair, htail⟩ := Finset.mem_sigma.mp hp\n-  have htprod : (∏ j, p.2 j) = p.1.2 :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mp htail\n-  apply (mem_orderedFactorTuples_iff hn.ne').mpr\n-  calc\n-    (∏ j, joinHeadTail k p j) = p.1.1 * ∏ j, p.2 j := Fin.prod_cons _ _\n-    _ = p.1.1 * p.1.2 := by rw [htprod]\n-    _ = n := (Nat.mem_divisorsAntidiagonal.mp hpair).1\n-\n-theorem join_splitHeadTail (k : ℕ) (a : Fin (k + 1) → ℕ) :\n-    joinHeadTail k (splitHeadTail k a) = a := by\n-  exact Fin.cons_self_tail a\n-\n-theorem split_joinHeadTail {k n : ℕ} {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n-    (hp : p ∈ headTailCarrier k n) : splitHeadTail k (joinHeadTail k p) = p := by\n-  rcases p with ⟨⟨v, d⟩, b⟩\n-  obtain ⟨hpair, hb⟩ := Finset.mem_sigma.mp hp\n-  have hbprod : (∏ j, b j) = d :=\n-    (mem_orderedFactorTuples_iff (Nat.right_ne_zero_of_mem_divisorsAntidiagonal hpair)).mp hb\n-  simp only [splitHeadTail, joinHeadTail, Fin.cons_zero, Fin.tail_cons, hbprod]\n-\n-/-- This is the same full divisor recurrence as native fouvryTau_succ. -/\n-theorem card_orderedFactorTuples_succ (k : ℕ) {n : ℕ} (hn : 0 < n) :\n-    (orderedFactorTuples (k + 1) n).card = ∑ d ∈ n.divisors, (orderedFactorTuples k d).card := by\n-  have hcard : (orderedFactorTuples (k + 1) n).card = (headTailCarrier k n).card :=\n-    Finset.card_nbij' (splitHeadTail k) (joinHeadTail k)\n-      (fun a ha => splitHeadTail_mem hn ha)\n-      (fun p hp => joinHeadTail_mem hn hp)\n-      (fun a _ha => join_splitHeadTail k a)\n-      (fun p hp => split_joinHeadTail hp)\n-  calc\n-    (orderedFactorTuples (k + 1) n).card = (headTailCarrier k n).card := hcard\n-    _ = ∑ p ∈ n.divisorsAntidiagonal, (orderedFactorTuples k p.2).card := by\n-      rw [headTailCarrier, Finset.card_sigma]\n-    _ = ∑ d ∈ n.divisors, (orderedFactorTuples k d).card :=\n-      Nat.sum_divisorsAntidiagonal' (fun _ d => (orderedFactorTuples k d).card)\n-\n-/-- Every order, including zero, counts the exact current Fin-function carrier. -/\n-theorem card_orderedFactorTuples_eq_fouvryTau (k n : ℕ) (hn : 0 < n) :\n-    (orderedFactorTuples k n).card = fouvryTau k n := by\n-  induction k generalizing n with\n-  | zero =>\n-      by_cases hn1 : n = 1\n-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]\n-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]\n-  | succ k ih =>\n-      rw [card_orderedFactorTuples_succ k hn, fouvryTau_succ]\n-      apply Finset.sum_congr rfl\n-      intro d hd\n-      exact ih d (Nat.pos_of_mem_divisors hd)\n-\n-/- END VERBATIM PRIOR CARDINALITY PROOFS. -/\n-\n-section GeneralIndex\n-\n-variable {ι : Type*} [Fintype ι] [DecidableEq ι]\n-\n-/-- Updating the pivot to one leaves precisely the deleted product. -/\n-theorem prod_eraseAt (a : ι → ℕ) (i : ι) :\n-    (∏ j, eraseAt a i j) = deletedProduct a i := by\n-  have hdel : deletedProduct (eraseAt a i) i = deletedProduct a i := by\n-    apply Finset.prod_congr rfl\n-    intro j hj\n-    exact Function.update_of_ne (Finset.mem_erase.mp hj).1 1 a\n-  have hi : eraseAt a i i = 1 := Function.update_self i 1 a\n-  have hp := deletedProduct_mul (eraseAt a i) i\n-  rw [hdel, hi, mul_one] at hp\n-  exact hp.symm\n-\n-/-- These are properties of the actual deletion IMAGE, for an arbitrary S. -/\n-theorem deletionFiber_normalized (S : Finset (ι → ℕ)) {i : ι} {d : ℕ} {b : ι → ℕ}\n-    (hb : b ∈ deletionFiber S i d) : b i = 1 ∧ (∏ j, b j) = d := by\n-  obtain ⟨a, ha, rfl⟩ := Finset.mem_image.mp hb\n-  have had : deletedProduct a i = d := (Finset.mem_filter.mp ha).2\n-  exact ⟨Function.update_self i 1 a, (prod_eraseAt a i).trans had⟩\n-\n-end GeneralIndex\n-\n-/-- Read the remaining coordinates in their original Fin order, skipping i. -/\n-def compressDeleted (k : ℕ) (i : Fin (k + 1)) (b : Fin (k + 1) → ℕ) : Fin k → ℕ :=\n-  fun j => b (i.succAbove j)\n-\n-theorem compressDeleted_prod {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n-    (hb : b ∈ deletionFiber S i d) : (∏ j, compressDeleted k i b j) = d := by\n-  have hinfo := deletionFiber_normalized S hb\n-  have hp := Fin.prod_univ_succAbove b i\n-  rw [hinfo.1, one_mul] at hp\n-  exact hp.symm.trans hinfo.2\n-\n-/-- Every compressed coordinate divides d, with its original position preserved. -/\n-theorem compressDeleted_dvd {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n-    (hb : b ∈ deletionFiber S i d) (j : Fin k) : compressDeleted k i b j ∣ d := by\n-  have hp := compressDeleted_prod S hb\n-  have hdiv : compressDeleted k i b j ∣ ∏ r, compressDeleted k i b r :=\n-    Finset.dvd_prod_of_mem (compressDeleted k i b) (Finset.mem_univ j)\n-  simpa only [hp] using hdiv\n-\n-/-- Explicit product-and-divisor verification for the full current tuple carrier. -/\n-theorem compressDeleted_mapsTo {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n-    (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    Set.MapsTo (compressDeleted k i) (deletionFiber S i d) (orderedFactorTuples k d) := by\n-  intro b hb\n-  apply Finset.mem_filter.mpr\n-  refine ⟨Fintype.mem_piFinset.mpr ?_, compressDeleted_prod S hb⟩\n-  intro j\n-  exact Nat.mem_divisors.mpr ⟨compressDeleted_dvd S hb j, hd.ne'⟩\n-\n-/-- Normalization recovers the pivot, and succAbove recovers every other coordinate. -/\n-theorem compressDeleted_injective_of_normalized {k : ℕ} (i : Fin (k + 1))\n-    {b c : Fin (k + 1) → ℕ} (hb : b i = 1) (hc : c i = 1)\n-    (hbc : compressDeleted k i b = compressDeleted k i c) : b = c := by\n-  funext j\n-  by_cases hji : j = i\n-  · subst j\n-    exact hb.trans hc.symm\n-  · obtain ⟨r, hr⟩ := Fin.exists_succAbove_eq hji\n-    have heval := congrFun hbc r\n-    simpa only [compressDeleted, hr] using heval\n-\n-/-- A genuine injection of finite deletion images, without any fixed-product supplier. -/\n-theorem card_deletionFiber_le_orderedFactorTuples {k : ℕ}\n-    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    (deletionFiber S i d).card ≤ (orderedFactorTuples k d).card := by\n-  refine Finset.card_le_card_of_injOn (compressDeleted k i) (compressDeleted_mapsTo S i hd) ?_\n-  intro b hb c hc hbc\n-  exact compressDeleted_injective_of_normalized i\n-    (deletionFiber_normalized S hb).1 (deletionFiber_normalized S hc).1 hbc\n-\n-theorem card_deletionFiber_le_fouvryTau_succ {k : ℕ}\n-    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n-    (deletionFiber S i d).card ≤ fouvryTau k d := by\n-  calc\n-    (deletionFiber S i d).card ≤ (orderedFactorTuples k d).card :=\n-      card_deletionFiber_le_orderedFactorTuples S i hd\n-    _ = fouvryTau k d := card_orderedFactorTuples_eq_fouvryTau k d hd\n-\n-/-- The requested native K-1 fiber bound, with the exact original ordered carrier. -/\n-theorem card_deletionFiber_orderedFactorTuples_le_fouvryTau {K n d : ℕ}\n-    (hK : 2 ≤ K) (hn : 0 < n) (hd : d ∈ n.divisors) (i : Fin K) :\n-    (deletionFiber (orderedFactorTuples K n) i d).card ≤ fouvryTau (K - 1) d := by\n-  cases K with\n-  | zero => omega\n-  | succ k =>\n-      simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using\n-        (card_deletionFiber_le_fouvryTau_succ (orderedFactorTuples (k + 1) n) i\n-          (Nat.pos_of_mem_divisors hd))\n-\n-/-- Exact finite tau truncation; no interval, analytic, or kappa hypothesis is added. -/\n-theorem fouvryTau_le_truncated_divisor_sum {K n D : ℕ}\n-    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) ≤ D ^ K) :\n-    fouvryTau K n ≤ K *\n-      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n-  calc\n-    fouvryTau K n = (orderedFactorTuples K n).card :=\n-      (card_orderedFactorTuples_eq_fouvryTau K n (by omega)).symm\n-    _ ≤ ∑ i : Fin K, ∑ d ∈ truncatedDivisors n D,\n-        (deletionFiber (orderedFactorTuples K n) i d).card :=\n-      card_orderedFactorTuples_truncated hK hn hcut\n-    _ ≤ ∑ _i : Fin K, ∑ d ∈ truncatedDivisors n D, fouvryTau (K - 1) d := by\n-      apply Finset.sum_le_sum\n-      intro i _hi\n-      apply Finset.sum_le_sum\n-      intro d hd\n-      exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)\n-        (Finset.mem_filter.mp hd).1 i\n-    _ = K * (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n-      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,\n-        truncatedDivisors]\n-\n-end\n-\n-end ImbalancedChen.Part3.ElementaryTauTruncation\n-\n-/-!\n-NEW BOUNDED INTERVAL PAYMENT -- 2026-10-22 -- SOURCE ONLY -- HOLD\n-\n-The 304-LF finite tau proposal above is reproduced verbatim, with its actual\n-finite-core import and every proof body. No target cardinal or tau inequality\n-is assumed. This standalone TXT adds one import for the existing positive\n-prefix multiple-count theorem. Do not integrate this copy alongside a future\n-tau module without removing the duplicated declarations.\n-\n-The precise interval is Ioc A B in Nat, with A <= B. It consists exactly of\n-the positive integers A < n <= B, and its geometric length is (B:Real)-A.\n-A=0 is allowed; zero is never included. Divisors are strictly positive when\n-used in the length/d payment. Natural d=0 is allowed only in the exact count\n-identity, where both counts and both natural divisions are zero.\n-\n-Nat.Ioc_filter_dvd_card_eq_div already proves the exact positive-prefix\n-count. We reuse it, subtract the two nested finite prefix sets, and prove\n-  card {A<n<=B : d divides n} = B/d - A/d\n-with natural division/subtraction. Casting this equality and using the two\n-standard division bounds proves the genuine length/d+1 inequality.\n-\n-A finite sum swap then charges the exact interval multiples for each d.\n-Together with the FULL written tau proof above this yields\n-  sum_{A<n<=B} tau_K(n)\n-  <= K * [ (B-A)*sum_{1<=d<=D} tau_(K-1)(d)/d\n-           + sum_{1<=d<=D} tau_(K-1)(d) ],\n-under K>=2 and B^(K-1)<=D^K. Endpoints, carriers and casts are explicit.\n-No interval counting hypothesis or desired bound is supplied as an axiom.\n-\n-This does NOT prove E1 with its exact real-root cutoff or any shifted M2.\n-The natural-cutoff premise cannot in general be justified by setting\n-D=floor(Z^(1-1/K)); the floor may have D^K < Z^(K-1). A future real-cutoff\n-geometric/floor bridge must address that point. The exact two native divisor\n-means still need to be applied at the justified common cutoff, with log and\n-endpoint adapters. No new uniform mean, spectrum, kappa or main theorem is\n-claimed. No compiler/checker/proper/classifier/census/Git action was used.\n--/\n-\n-namespace ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment\n-\n-noncomputable section\n-\n-open Classical Finset\n-open scoped BigOperators\n-open MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n-\n-/-- An exact count on the genuine positive interval (A,B]. -/\n-theorem interval_multiples_card_eq_div_sub {A B : ℕ} (hAB : A ≤ B) (d : ℕ) :\n-    ((Ioc A B).filter (fun n => d ∣ n)).card = B / d - A / d := by\n-  have hsub : (Ioc 0 A).filter (fun n => d ∣ n) ⊆\n-      (Ioc 0 B).filter (fun n => d ∣ n) := by\n-    intro n hn\n-    obtain ⟨hnI, hdn⟩ := Finset.mem_filter.mp hn\n-    obtain ⟨h0n, hnA⟩ := Finset.mem_Ioc.mp hnI\n-    exact Finset.mem_filter.mpr ⟨Finset.mem_Ioc.mpr ⟨h0n, hnA.trans hAB⟩, hdn⟩\n-  have hset : (Ioc A B).filter (fun n => d ∣ n) =\n-      ((Ioc 0 B).filter (fun n => d ∣ n)) \\\n-        ((Ioc 0 A).filter (fun n => d ∣ n)) := by\n-    ext n\n-    simp only [Finset.mem_filter, Finset.mem_sdiff, Finset.mem_Ioc]\n-    constructor\n-    · rintro ⟨⟨hAn, hnB⟩, hdn⟩\n-      refine ⟨⟨⟨lt_of_le_of_lt (Nat.zero_le A) hAn, hnB⟩, hdn⟩, ?_⟩\n-      rintro ⟨⟨_h0n, hnA⟩, _hdn⟩\n-      exact (not_le_of_gt hAn) hnA\n-    · rintro ⟨⟨⟨h0n, hnB⟩, hdn⟩, hnA⟩\n-      refine ⟨⟨?_, hnB⟩, hdn⟩\n-      by_contra h\n-      exact hnA ⟨⟨h0n, le_of_not_gt h⟩, hdn⟩\n-  rw [hset, Finset.card_sdiff_of_subset hsub,\n-    Nat.Ioc_filter_dvd_card_eq_div, Nat.Ioc_filter_dvd_card_eq_div]\n-\n-/-- The real interval length divided by d, plus one endpoint allowance. -/\n-theorem interval_multiples_card_le_length_div_add_one {A B d : ℕ}\n-    (hAB : A ≤ B) (hd : 0 < d) :\n-    (((Ioc A B).filter (fun n => d ∣ n)).card : ℝ) ≤\n-      ((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1 := by\n-  rw [interval_multiples_card_eq_div_sub hAB, Nat.cast_sub (Nat.div_le_div_right hAB)]\n-  have hdR : (0 : ℝ) < d := by exact_mod_cast hd\n-  have hBlo : ((B / d : ℕ) : ℝ) * d ≤ B := by\n-    exact_mod_cast Nat.div_mul_le_self B d\n-  have hAhi : (A : ℝ) < (d : ℝ) * (((A / d : ℕ) : ℝ) + 1) := by\n-    exact_mod_cast Nat.lt_mul_div_succ A hd\n-  have hBq : ((B / d : ℕ) : ℝ) ≤ (B : ℝ) / d :=\n-    (le_div_iff₀ hdR).mpr hBlo\n-  have hAq : (A : ℝ) / d < ((A / d : ℕ) : ℝ) + 1 :=\n-    (div_lt_iff₀ hdR).mpr (by nlinarith [hAhi])\n-  rw [sub_div]\n-  linarith\n-\n-/-- The divisor carrier is exactly the bounded positive divisible carrier. -/\n-theorem truncated_divisor_carrier_eq {n D : ℕ} (hn : 0 < n) :\n-    n.divisors.filter (fun d => d ≤ D) = (Icc 1 D).filter (fun d => d ∣ n) := by\n-  ext d\n-  constructor\n-  · intro hd\n-    obtain ⟨hdn, hdD⟩ := Finset.mem_filter.mp hd\n-    exact Finset.mem_filter.mpr\n-      ⟨Finset.mem_Icc.mpr ⟨Nat.pos_of_mem_divisors hdn, hdD⟩,\n-        (Nat.mem_divisors.mp hdn).1⟩\n-  · intro hd\n-    obtain ⟨hdI, hdn⟩ := Finset.mem_filter.mp hd\n-    exact Finset.mem_filter.mpr\n-      ⟨Nat.mem_divisors.mpr ⟨hdn, hn.ne'⟩, (Finset.mem_Icc.mp hdI).2⟩\n-\n-/-- Exact finite interchange, before applying any interval estimate. -/\n-theorem sum_interval_divisor_weights_swap (A B D : ℕ) (w : ℕ → ℝ) :\n-    (∑ n ∈ Ioc A B, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) =\n-      ∑ d ∈ Icc 1 D, w d * (((Ioc A B).filter (fun n => d ∣ n)).card : ℝ) := by\n-  simp_rw [Finset.sum_filter]\n-  rw [Finset.sum_comm]\n-  apply Finset.sum_congr rfl\n-  intro d _hd\n-  rw [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_comm]\n-\n-/-- Deterministic payment for any nonnegative divisor weight. -/\n-theorem sum_interval_divisor_weights_le {A B D : ℕ} (w : ℕ → ℝ)\n-    (hAB : A ≤ B) (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n-    (∑ n ∈ Ioc A B, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n-      ∑ d ∈ Icc 1 D, w d * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n-  rw [sum_interval_divisor_weights_swap]\n-  apply Finset.sum_le_sum\n-  intro d hd\n-  exact mul_le_mul_of_nonneg_left\n-    (interval_multiples_card_le_length_div_add_one hAB (by\n-      have := (Finset.mem_Icc.mp hd).1\n-      omega)) (hw d hd)\n-\n-/-- Finite tau truncation plus a literal interval count, with no analytic supplier. -/\n-theorem sum_fouvryTau_interval_payment {K A B D : ℕ}\n-    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) ≤ D ^ K) :\n-    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n-      (K : ℝ) * ∑ d ∈ Icc 1 D,\n-        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n-  have hpoint : ∀ n ∈ Ioc A B, (fouvryTau K n : ℝ) ≤\n-      (K : ℝ) * ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n),\n-        (fouvryTau (K - 1) d : ℝ) := by\n-    intro n hn\n-    obtain ⟨hAn, hnB⟩ := Finset.mem_Ioc.mp hn\n-    have hnpos : 0 < n := lt_of_le_of_lt (Nat.zero_le A) hAn\n-    have hpow : n ^ (K - 1) ≤ B ^ (K - 1) :=\n-      pow_le_pow_left₀ (Nat.zero_le n) hnB _\n-    have hnat := fouvryTau_le_truncated_divisor_sum hK (by omega : 1 ≤ n)\n-      (hpow.trans hcut)\n-    rw [truncated_divisor_carrier_eq hnpos] at hnat\n-    exact_mod_cast hnat\n-  calc\n-    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n-        ∑ n ∈ Ioc A B, (K : ℝ) *\n-          ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), (fouvryTau (K - 1) d : ℝ) :=\n-      Finset.sum_le_sum hpoint\n-    _ = (K : ℝ) * (∑ n ∈ Ioc A B,\n-        ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), (fouvryTau (K - 1) d : ℝ)) :=\n-      (Finset.mul_sum _ _ _).symm\n-    _ ≤ (K : ℝ) * ∑ d ∈ Icc 1 D,\n-        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) :=\n-      mul_le_mul_of_nonneg_left\n-        (sum_interval_divisor_weights_le (fun d => (fouvryTau (K - 1) d : ℝ)) hAB\n-          (fun d _hd => Nat.cast_nonneg _)) (Nat.cast_nonneg K)\n-\n-/-- The separated reciprocal and ordinary payments needed by the E1 route. -/\n-theorem sum_fouvryTau_interval_payment_split {K A B D : ℕ}\n-    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) ≤ D ^ K) :\n-    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n-      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n-        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n-        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n-  calc\n-    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n-        (K : ℝ) * ∑ d ∈ Icc 1 D,\n-          (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) :=\n-      sum_fouvryTau_interval_payment hK hAB hcut\n-    _ = _ := by\n-      congr 1\n-      calc\n-        (∑ d ∈ Icc 1 D,\n-            (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1)) =\n-            ∑ d ∈ Icc 1 D, (((B : ℝ) - (A : ℝ)) *\n-              ((fouvryTau (K - 1) d : ℝ) / (d : ℝ)) + (fouvryTau (K - 1) d : ℝ)) := by\n-          apply Finset.sum_congr rfl\n-          intro d _hd\n-          ring\n-        _ = _ := by rw [Finset.sum_add_distrib, ← Finset.mul_sum]\n-\n-end\n-\n-end ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment\n-\n-/-!\n-EXACT STRICT-SUCCESSOR/FLOOR CONTINUATION -- SOURCE ONLY -- HOLD\n-\n-The preceding 493-line interval proposal is included verbatim as a written\n-source dependency, not a kernel certificate. Its creation-time floor-bridge\n-warning is addressed by the NEW strict-successor lemmas below. Actual accepted\n-finite-core source is imported and never modified. No missing tau/interval\n-supplier is assumed: every source proof dependency is included above.\n-\n-The pinned manuscript E1 is a sharp two-term inequality for every interval\n-length, not merely C_K notation with length>=Z^(1-1/K). A ceil cutoff yields\n-a useful coarser alternative but does not prove that literal statement.\n-Instead the maximum-coordinate proof already bounds dp^K<=n^(K-1).\n-The sufficient condition n^(K-1)<(D+1)^K forces dp<=D. For the TRUE floor\n-D=floor R and R=Z^((K-1)/K), R<D+1 gives exactly this strict condition.\n-Thus no factor two or enlarged logarithm is needed.\n-\n-The final theorem below proves the sharp E1 formula for the precise positive\n-natural-endpoint carrier Ioc A B, A<=B, B<=Z, Z>=2. It has NO minimum-length\n-hypothesis. Arbitrary REAL interval endpoint adapters are not supplied here.\n-The native reciprocal and ordinary divisor means are reused at real endpoint\n-R with its genuine floor. K=2 uses ordinary tau order 1 and exponent zero.\n-This closes only a written natural-endpoint E1 part, not shifted M2, spectrum,\n-7/32, original forall-kappa obligations, or any main theorem. No actual Lean,\n-runtime or pin change and no compiler/checker/proper/classifier/census/Git.\n--/\n-\n+import ImbalancedChen.Part3ElementaryIntervalDivisibility\n+import Mathlib.Analysis.SpecialFunctions.Pow.Real\n+import Mathlib.Algebra.Order.Floor.Semiring\n+\n",
+      "diff_note": "Complete zero-context prefix replacement. The complete remaining source suffix is raw-byte identical.",
+      "reversible_byte_transform": {
+        "source_prefix_bytes": 25357,
+        "target_prefix_bytes": 153,
+        "target_prefix_literal": "import ImbalancedChen.Part3ElementaryIntervalDivisibility\nimport Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Algebra.Order.Floor.Semiring\n\n",
+        "source_prefix_raw_sha256": "dd744052302199e9dc60e565e005b4a39380b1734a5da03c27f4380a0166cdff",
+        "target_prefix_raw_sha256": "c6949e07f55ed6dd3251f11284ee1a5c62e8842d1299c31233d2f85614788c47",
+        "source_prefix_base64": "aW1wb3J0IE1hdGhsaWIuQW5hbHlzaXMuU3BlY2lhbEZ1bmN0aW9ucy5Qb3cuUmVhbAppbXBvcnQgTWF0aGxpYi5BbGdlYnJhLk9yZGVyLkZsb29yLlNlbWlyaW5nCmltcG9ydCBNYXRobGliLkRhdGEuTmF0LkZhY3Rvcml6YXRpb24uQmFzaWMKaW1wb3J0IEltYmFsYW5jZWRDaGVuLlBhcnQzRWxlbWVudGFyeVRhdVRydW5jYXRpb24KaW1wb3J0IE1hdGhsaWIuQWxnZWJyYS5CaWdPcGVyYXRvcnMuRmluCmltcG9ydCBNYXRobGliLkFsZ2VicmEuQmlnT3BlcmF0b3JzLkdyb3VwLkZpbnNldC5QaWVjZXdpc2UKaW1wb3J0IE1hdGhsaWIuQWxnZWJyYS5CaWdPcGVyYXRvcnMuR3JvdXAuRmluc2V0LlNpZ21hCmltcG9ydCBNYXRobGliLkRhdGEuRmluLlR1cGxlLkJhc2ljCmltcG9ydCBNYXRobGliLkRhdGEuRmluLlN1Y2NQcmVkCgovLSEKU09VUkNFIFBST1BPU0FMIE9OTFkgLS0gMjAyNi0xMC0yMiAtLSBVTkNPTVBJTEVEIC0tIEhPTEQgLS0gaGVhdnkwCgpTaW5nbGUgZmluaXRlIHRhc2s6IGNvbXByZXNzIHRoZSBUUlVFIGVyYXNlQXQgZGVsZXRpb24gZmliZXJzIHRocm91Z2gKRmluLnN1Y2NBYm92ZSwgcmV0YWluIGV2ZXJ5IG9yZGVyZWQgbXVsdGlwbGljaXR5LCBhbmQgY2xvc2UgdGhlIG9yaWdpbmFsCm5hdGl2ZSB0YXUgY3V0b2ZmIGluZXF1YWxpdHkgd2l0aCBpdHMgZXhhY3QgbmF0dXJhbC1udW1iZXIgaHlwb3RoZXNlcy4KTm8gaW50ZXJ2YWwgY291bnRpbmcsIGhhcm1vbmljIG1lYW4sIEUxL0UzLCBrYXBwYSBzZWxlY3Rpb24gb3IgbWFpbiB0aGVvcmVtCmlzIGF0dGVtcHRlZC4gTm8gYWN0dWFsIExlYW4vcnVudGltZS9waW4gd3JpdGUsIGNvbXBpbGVyLCBwcm9wZXIsIGNoZWNrZXIsCmNsYXNzaWZpZXIsIGNlbnN1cywgY2FjaGUsIEdpdCBvcGVyYXRpb24gb3Igc3ViYWdlbnQgaXMgdXNlZCBieSB0aGlzIGF1dGhvci4KClBpbm5lZCBuYXRpdmUgZ29sZGJhY2g6IDA5Yjk3ZGI1NzY0YWRlMTI0NmJmYjc3MjA2YmFhMWIxMjQ3NjA5NTguClBpbm5lZCBtYXRobGliOiBlNGM5MTc4M2NhOGU2YTdjNjkzYWU2MjRhZGUzMmZkMjJkNGU0M2MxLgoKU09VUkNFIERFUEVOREVOQ0lFUyAvIE5PIEhJRERFTiBDQVJESU5BTElUWSBBU1NVTVBUSU9OOgpUaGUgYWN0dWFsIGltcG9ydGVkIGJhc2UgbW9kdWxlIFBhcnQzRWxlbWVudGFyeVRhdVRydW5jYXRpb24gaGFzIFNIQTI1Ngo4ZTMxNWFlYzVhM2YwMDUwNmFjMjZlODcxMDQ3NGM0N2E0NDhiMDQzZDNjZjM4YmUyN2M0ZGYzMGMxOGE0NzhmLgpSb290IGFwcGxpZWQgdGhhdCBmcm96ZW4gZmluaXRlLWNvcmUgc291cmNlOyBpdCBpcyBzdGlsbCB1bmNvbXBpbGVkLgpUaGUgY29tcGxldGUgZWlnaHQtcHJvb2YgY2FyZGluYWxpdHkgYnJpZGdlLCBwbHVzIGl0cyB0aHJlZSBuZXcgaGVscGVyCmNhcnJpZXIvbWFwcyBkZWZpbml0aW9ucywgaXMgY29waWVkIFZFUkJBVElNIGJlbG93IGZyb20gbGluZXMgNzEtMTgwIG9mCjIwMjYxMDIyLW9yZGVyZWQtdGF1LWNhcmRpbmFsaXR5LXNvdXJjZS1wcm9wb3NhbC50eHQsIFNIQTI1NgpiOTk3YTk2YmVhYzZjNGVjYTIzMjM5YjE0MTQ3ZTUxNzM5YTMwMDliY2MyY2RkZTQ5N2RjYWI1MmY4YTkxMGNlLgpJdHMgZXhpc3Rpbmcgb3JkZXJlZEZhY3RvclR1cGxlcyBkZWZpbml0aW9uIGlzIE5PVCByZXBlYXRlZCBoZXJlOiBpdCBjb21lcwpmcm9tIHRoZSBhY3R1YWwgYmFzZSBtb2R1bGUgYW5kIGlzIGJ5dGUtaWRlbnRpY2FsIHRvIHRoZSByZXZpZXdlZCBjYXJyaWVyLgpUaGUgcHJpb3IgY2FyZGluYWxpdHkgcHJvcG9zYWwgaXMgdW5kZXIgaW5kZXBlbmRlbnQgcmV2aWV3OyB0aGlzIGNvcHkgZG9lcwpub3QgYWx0ZXIgdGhhdCBwcm9wb3NhbCBvciBwcmVlbXB0IGEgbGF0ZXIgY29uY3JldGUgcmV2aWV3IGNvcnJlY3Rpb24uCk5vIHRhcmdldCBpZGVudGl0eSBpcyBpbnRyb2R1Y2VkIGFzIGFuIGFzc3VtcHRpb24uIEZ1dHVyZSBpbnRlZ3JhdGlvbiBtYXkKaW1wb3J0IHRoZSBjYXJkaW5hbGl0eSBtb2R1bGUgYW5kIG9taXQgdGhlIHZlcmJhdGltIGNvcGllZCBwcm9vZiBibG9jay4KCk5FVyBGSU5JVEUgQVJHVU1FTlQ6CkZvciBiIGluIGRlbGV0aW9uRmliZXIgUyBpIGQsIGIgaT0xIGFuZCBwcm9kdWN0IGI9ZC4gRGVmaW5lIGNvbXByZXNzaW9uIGJ5CiAgY29tcHJlc3NEZWxldGVkIGsgaSBiIGogPSBiIChpLnN1Y2NBYm92ZSBqKSwgaiA6IEZpbiBrLgpGaW4ucHJvZF91bml2X3N1Y2NBYm92ZSBnaXZlcyBpdHMgZnVsbCBwcm9kdWN0IGQuIEVhY2ggY29vcmRpbmF0ZSBkaXZpZGVzCmQgYnkgZHZkX3Byb2Rfb2ZfbWVtLCBzbyBpdCBsaWVzIGluIHRoZSBleGlzdGluZyBvcmRlcmVkRmFjdG9yVHVwbGVzIGsgZApjYXJyaWVyIHdoZW4gZD4wLiBJZiB0d28gbm9ybWFsaXplZCBiIGhhdmUgZXF1YWwgY29tcHJlc3NlZCB0dXBsZXMsIHRoZWlyCnBpdm90IGNvb3JkaW5hdGVzIGJvdGggZXF1YWwgMSwgYW5kIEZpbi5leGlzdHNfc3VjY0Fib3ZlX2VxIHJlY292ZXJzIGVhY2gKb2ZmLXBpdm90IGNvb3JkaW5hdGUuIFRoZXJlZm9yZSBjb21wcmVzc2lvbiBpcyBpbmplY3RpdmUgb24gdGhlIGRlbGV0aW9uCmZpYmVyOyBubyBvcmRlcmVkIHR1cGxlcyBhcmUgc29ydGVkLCBwZXJtdXRlZCBpbnRvIGEgcXVvdGllbnQsIG9yIGxvc3QuClRoZSBwcm9vZiBpbiBmYWN0IHdvcmtzIGZvciBhbnkgZmluaXRlIFMgYW5kIHBvc2l0aXZlIGQuIFRoZSByZXF1ZXN0ZWQKSz49Miwgbj4wLCBkIGluIG4uZGl2aXNvcnMgc3BlY2lhbGl6YXRpb24gZm9sbG93cyBpbW1lZGlhdGVseS4KCkNvbWJpbmUgdGhpcyBjYXJkaW5hbCBib3VuZCB3aXRoIHRoZSBleHBsaWNpdCBuYXRpdmUgY2FyZGluYWxpdHkgYnJpZGdlCmFuZCB0aGUgb2xkIGluZGV4ZWQtY292ZXIgdHJ1bmNhdGlvbiB0aGVvcmVtLiBUaGUgb3V0ZXIgRmluIEsgc3VtIGNvbnNpc3RzCm9mIEsgY29waWVzIG9mIHRoZSBzYW1lIHRydW5jYXRlZCBkaXZpc29yIHN1bS4gVGhlIGxhc3QgdGhlb3JlbSBpcyBleGFjdGx5CiAgZm91dnJ5VGF1IEsgbiA8PSBLICogc3VtX3tkfG4sZDw9RH0gZm91dnJ5VGF1IChLLTEpIGQsCmZvciBLPj0yLCBuPj0xLCBuXihLLTEpPD1EXksuIE5vIHVucHJvdmVkIHN1cHBsaWVyIGlzIGFkZGVkLgoKQWxsIHByb29mcyBhcmUgY29tcGxldGUgQVMgV1JJVFRFTiBzb3VyY2UgcHJvcG9zYWxzOyBubyBlbGFib3JhdGlvbiBvcgprZXJuZWwgYWNjZXB0YW5jZSBpcyBjbGFpbWVkLiBFMSBzdGlsbCBhZGRpdGlvbmFsbHkgcmVxdWlyZXMgaW50ZXJ2YWwKY291bnRzIFkvZCsxIGFuZCB0aGUgcmVjaXByb2NhbC9vcmRpbmFyeSBkaXZpc29yIG1lYW5zLiBFMyBhbmQgYWxsIGFjdHVhbApjbGVhbnVwIGFwcGxpY2F0aW9ucywgb3JpZ2luYWwgZm9yYWxsLWthcHBhIG9ibGlnYXRpb25zLCBhbmQgdGhlIG1haW4KdGhlb3JlbSByZW1haW4gb3V0c2lkZSB0aGlzIHRhc2suIENvbXBsZXRpb24gaGVyZSBpcyBvbmx5IGZpbml0ZSB0YXUKdHJ1bmNhdGlvbiwgbm90IGNvbXBsZXRpb24gb2YgdGhvc2UgYW5hbHl0aWMgb3IgcGFyYW1ldGVyIG9ibGlnYXRpb25zLgotLwoKbmFtZXNwYWNlIEltYmFsYW5jZWRDaGVuLlBhcnQzLkVsZW1lbnRhcnlUYXVUcnVuY2F0aW9uCgpub25jb21wdXRhYmxlIHNlY3Rpb24KCm9wZW4gQ2xhc3NpY2FsIEZpbnNldApvcGVuIHNjb3BlZCBCaWdPcGVyYXRvcnMKb3BlbiBNYXRobGliTnQuQW5hbHl0aWNOdW1iZXJUaGVvcnkuTGFyZ2VTaWV2ZS5MaUxpdVByZXJlcUZvdXZyeQoKLy0gQkVHSU4gVkVSQkFUSU0gUFJJT1IgQ0FSRElOQUxJVFkgUFJPT0ZTOiBvcmlnaW5hbCBsaW5lcyA3MS0xODAuIC0vCi8tLSBGb3IgbiAhPSAwIHRoZSBjb29yZGluYXRlIGRpdmlzb3IgcmVzdHJpY3Rpb25zIGFyZSBjb25zZXF1ZW5jZXMgb2YgdGhlIHByb2R1Y3QuIC0vCnRoZW9yZW0gbWVtX29yZGVyZWRGYWN0b3JUdXBsZXNfaWZmIHtrIG4gOiDihJV9IChobiA6IG4g4omgIDApIHthIDogRmluIGsg4oaSIOKElX0gOgogICAgYSDiiIggb3JkZXJlZEZhY3RvclR1cGxlcyBrIG4g4oaUICjiiI8gaiwgYSBqKSA9IG4gOj0gYnkKICBjb25zdHJ1Y3RvcgogIMK3IGludHJvIGhhCiAgICBleGFjdCAoRmluc2V0Lm1lbV9maWx0ZXIubXAgaGEpLjIKICDCtyBpbnRybyBocHJvZAogICAgYXBwbHkgRmluc2V0Lm1lbV9maWx0ZXIubXByCiAgICByZWZpbmUg4p+oRmludHlwZS5tZW1fcGlGaW5zZXQubXByID9fLCBocHJvZOKfqQogICAgaW50cm8gaQogICAgaGF2ZSBoZGl2IDogYSBpIOKIoyDiiI8gaiwgYSBqIDo9IEZpbnNldC5kdmRfcHJvZF9vZl9tZW0gYSAoRmluc2V0Lm1lbV91bml2IGkpCiAgICBleGFjdCBOYXQubWVtX2Rpdmlzb3JzLm1wciDin6hieSBzaW1wYSBvbmx5IFtocHJvZF0gdXNpbmcgaGRpdiwgaG7in6kKCi8tLSBUaGUgZW1wdHkgdHVwbGUgaGFzIHByb2R1Y3QgMTsgaXRzIGNhcnJpZXIgaGFzIG5vIG90aGVyIGVsZW1lbnQuIC0vCnRoZW9yZW0gb3JkZXJlZEZhY3RvclR1cGxlc196ZXJvIChuIDog4oSVKSA6CiAgICBvcmRlcmVkRmFjdG9yVHVwbGVzIDAgbiA9IGlmIG4gPSAxIHRoZW4ge0Zpbi5lbGltMH0gZWxzZSDiiIUgOj0gYnkKICBieV9jYXNlcyBobiA6IG4gPSAxCiAgwrcgc3Vic3QgbgogICAgcncgW2lmX3BvcyByZmxdCiAgICBhcHBseSBGaW5zZXQuZXh0CiAgICBpbnRybyBhCiAgICBjb25zdHJ1Y3RvcgogICAgwrcgaW50cm8gX2hhCiAgICAgIGFwcGx5IEZpbnNldC5tZW1fc2luZ2xldG9uLm1wcgogICAgICBmdW5leHQgaQogICAgICBleGFjdCBGaW4uZWxpbTAgaQogICAgwrcgaW50cm8gX2hhCiAgICAgIGFwcGx5IEZpbnNldC5tZW1fZmlsdGVyLm1wcgogICAgICBleGFjdCDin6hGaW50eXBlLm1lbV9waUZpbnNldC5tcHIgKGZ1biBpID0+IEZpbi5lbGltMCBpKSwgRmluLnByb2RfdW5pdl96ZXJvIGHin6kKICDCtyBydyBbaWZfbmVnIGhuXQogICAgYXBwbHkgRmluc2V0LmVxX2VtcHR5X2lmZl9mb3JhbGxfbm90TWVtLm1wcgogICAgaW50cm8gYSBoYQogICAgaGF2ZSBocHJvZCA6ICjiiI8gaiA6IEZpbiAwLCBhIGopID0gbiA6PSAoRmluc2V0Lm1lbV9maWx0ZXIubXAgaGEpLjIKICAgIGhhdmUgaG9uZSA6IDEgPSBuIDo9IChGaW4ucHJvZF91bml2X3plcm8gYSkuc3ltbS50cmFucyBocHJvZAogICAgZXhhY3QgaG4gaG9uZS5zeW1tCgovLS0gQSBoZWFkIHZhbHVlLCB0aGUgdGFpbCBwcm9kdWN0LCBhbmQgdGhlIGZ1bGwgb3JkZXJlZCB0YWlsIHR1cGxlLiAtLwpkZWYgaGVhZFRhaWxDYXJyaWVyIChrIG4gOiDihJUpIDogRmluc2V0ICjOoyBfIDog4oSVIMOXIOKElSwgRmluIGsg4oaSIOKElSkgOj0KICBuLmRpdmlzb3JzQW50aWRpYWdvbmFsLnNpZ21hIChmdW4gcCA9PiBvcmRlcmVkRmFjdG9yVHVwbGVzIGsgcC4yKQoKZGVmIHNwbGl0SGVhZFRhaWwgKGsgOiDihJUpIChhIDogRmluIChrICsgMSkg4oaSIOKElSkgOiDOoyBfIDog4oSVIMOXIOKElSwgRmluIGsg4oaSIOKElSA6PQogIOKfqChhIDAsIOKIjyBqIDogRmluIGssIEZpbi50YWlsIGEgaiksIEZpbi50YWlsIGHin6kKCmRlZiBqb2luSGVhZFRhaWwgKGsgOiDihJUpIChwIDogzqMgXyA6IOKElSDDlyDihJUsIEZpbiBrIOKGkiDihJUpIDogRmluIChrICsgMSkg4oaSIOKElSA6PQogIEZpbi5jb25zIHAuMS4xIHAuMgoKdGhlb3JlbSBzcGxpdEhlYWRUYWlsX21lbSB7ayBuIDog4oSVfSAoaG4gOiAwIDwgbikge2EgOiBGaW4gKGsgKyAxKSDihpIg4oSVfQogICAgKGhhIDogYSDiiIggb3JkZXJlZEZhY3RvclR1cGxlcyAoayArIDEpIG4pIDoKICAgIHNwbGl0SGVhZFRhaWwgayBhIOKIiCBoZWFkVGFpbENhcnJpZXIgayBuIDo9IGJ5CiAgaGF2ZSBocHJvZCA6IGEgMCAqICjiiI8gaiA6IEZpbiBrLCBGaW4udGFpbCBhIGopID0gbiA6PSBieQogICAgc2ltcGEgb25seSBbRmluLnByb2RfdW5pdl9zdWNjLCBGaW4udGFpbF0gdXNpbmcgKG1lbV9vcmRlcmVkRmFjdG9yVHVwbGVzX2lmZiBobi5uZScpLm1wIGhhCiAgaGF2ZSBocGFpciA6IChhIDAsIOKIjyBqIDogRmluIGssIEZpbi50YWlsIGEgaikg4oiIIG4uZGl2aXNvcnNBbnRpZGlhZ29uYWwgOj0KICAgIE5hdC5tZW1fZGl2aXNvcnNBbnRpZGlhZ29uYWwubXByIOKfqGhwcm9kLCBobi5uZSfin6kKICBoYXZlIGh0YWlsIDogRmluLnRhaWwgYSDiiIggb3JkZXJlZEZhY3RvclR1cGxlcyBrICjiiI8gaiA6IEZpbiBrLCBGaW4udGFpbCBhIGopIDo9CiAgICAobWVtX29yZGVyZWRGYWN0b3JUdXBsZXNfaWZmIChOYXQucmlnaHRfbmVfemVyb19vZl9tZW1fZGl2aXNvcnNBbnRpZGlhZ29uYWwgaHBhaXIpKS5tcHIgcmZsCiAgZXhhY3QgRmluc2V0Lm1lbV9zaWdtYS5tcHIg4p+oaHBhaXIsIGh0YWls4p+pCgp0aGVvcmVtIGpvaW5IZWFkVGFpbF9tZW0ge2sgbiA6IOKElX0gKGhuIDogMCA8IG4pIHtwIDogzqMgXyA6IOKElSDDlyDihJUsIEZpbiBrIOKGkiDihJV9CiAgICAoaHAgOiBwIOKIiCBoZWFkVGFpbENhcnJpZXIgayBuKSA6CiAgICBqb2luSGVhZFRhaWwgayBwIOKIiCBvcmRlcmVkRmFjdG9yVHVwbGVzIChrICsgMSkgbiA6PSBieQogIG9idGFpbiDin6hocGFpciwgaHRhaWzin6kgOj0gRmluc2V0Lm1lbV9zaWdtYS5tcCBocAogIGhhdmUgaHRwcm9kIDogKOKIjyBqLCBwLjIgaikgPSBwLjEuMiA6PQogICAgKG1lbV9vcmRlcmVkRmFjdG9yVHVwbGVzX2lmZiAoTmF0LnJpZ2h0X25lX3plcm9fb2ZfbWVtX2Rpdmlzb3JzQW50aWRpYWdvbmFsIGhwYWlyKSkubXAgaHRhaWwKICBhcHBseSAobWVtX29yZGVyZWRGYWN0b3JUdXBsZXNfaWZmIGhuLm5lJykubXByCiAgY2FsYwogICAgKOKIjyBqLCBqb2luSGVhZFRhaWwgayBwIGopID0gcC4xLjEgKiDiiI8gaiwgcC4yIGogOj0gRmluLnByb2RfY29ucyBfIF8KICAgIF8gPSBwLjEuMSAqIHAuMS4yIDo9IGJ5IHJ3IFtodHByb2RdCiAgICBfID0gbiA6PSAoTmF0Lm1lbV9kaXZpc29yc0FudGlkaWFnb25hbC5tcCBocGFpcikuMQoKdGhlb3JlbSBqb2luX3NwbGl0SGVhZFRhaWwgKGsgOiDihJUpIChhIDogRmluIChrICsgMSkg4oaSIOKElSkgOgogICAgam9pbkhlYWRUYWlsIGsgKHNwbGl0SGVhZFRhaWwgayBhKSA9IGEgOj0gYnkKICBleGFjdCBGaW4uY29uc19zZWxmX3RhaWwgYQoKdGhlb3JlbSBzcGxpdF9qb2luSGVhZFRhaWwge2sgbiA6IOKElX0ge3AgOiDOoyBfIDog4oSVIMOXIOKElSwgRmluIGsg4oaSIOKElX0KICAgIChocCA6IHAg4oiIIGhlYWRUYWlsQ2FycmllciBrIG4pIDogc3BsaXRIZWFkVGFpbCBrIChqb2luSGVhZFRhaWwgayBwKSA9IHAgOj0gYnkKICByY2FzZXMgcCB3aXRoIOKfqOKfqHYsIGTin6ksIGLin6kKICBvYnRhaW4g4p+oaHBhaXIsIGhi4p+pIDo9IEZpbnNldC5tZW1fc2lnbWEubXAgaHAKICBoYXZlIGhicHJvZCA6ICjiiI8gaiwgYiBqKSA9IGQgOj0KICAgIChtZW1fb3JkZXJlZEZhY3RvclR1cGxlc19pZmYgKE5hdC5yaWdodF9uZV96ZXJvX29mX21lbV9kaXZpc29yc0FudGlkaWFnb25hbCBocGFpcikpLm1wIGhiCiAgc2ltcCBvbmx5IFtzcGxpdEhlYWRUYWlsLCBqb2luSGVhZFRhaWwsIEZpbi5jb25zX3plcm8sIEZpbi50YWlsX2NvbnMsIGhicHJvZF0KCi8tLSBUaGlzIGlzIHRoZSBzYW1lIGZ1bGwgZGl2aXNvciByZWN1cnJlbmNlIGFzIG5hdGl2ZSBmb3V2cnlUYXVfc3VjYy4gLS8KdGhlb3JlbSBjYXJkX29yZGVyZWRGYWN0b3JUdXBsZXNfc3VjYyAoayA6IOKElSkge24gOiDihJV9IChobiA6IDAgPCBuKSA6CiAgICAob3JkZXJlZEZhY3RvclR1cGxlcyAoayArIDEpIG4pLmNhcmQgPSDiiJEgZCDiiIggbi5kaXZpc29ycywgKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKS5jYXJkIDo9IGJ5CiAgaGF2ZSBoY2FyZCA6IChvcmRlcmVkRmFjdG9yVHVwbGVzIChrICsgMSkgbikuY2FyZCA9IChoZWFkVGFpbENhcnJpZXIgayBuKS5jYXJkIDo9CiAgICBGaW5zZXQuY2FyZF9uYmlqJyAoc3BsaXRIZWFkVGFpbCBrKSAoam9pbkhlYWRUYWlsIGspCiAgICAgIChmdW4gYSBoYSA9PiBzcGxpdEhlYWRUYWlsX21lbSBobiBoYSkKICAgICAgKGZ1biBwIGhwID0+IGpvaW5IZWFkVGFpbF9tZW0gaG4gaHApCiAgICAgIChmdW4gYSBfaGEgPT4gam9pbl9zcGxpdEhlYWRUYWlsIGsgYSkKICAgICAgKGZ1biBwIGhwID0+IHNwbGl0X2pvaW5IZWFkVGFpbCBocCkKICBjYWxjCiAgICAob3JkZXJlZEZhY3RvclR1cGxlcyAoayArIDEpIG4pLmNhcmQgPSAoaGVhZFRhaWxDYXJyaWVyIGsgbikuY2FyZCA6PSBoY2FyZAogICAgXyA9IOKIkSBwIOKIiCBuLmRpdmlzb3JzQW50aWRpYWdvbmFsLCAob3JkZXJlZEZhY3RvclR1cGxlcyBrIHAuMikuY2FyZCA6PSBieQogICAgICBydyBbaGVhZFRhaWxDYXJyaWVyLCBGaW5zZXQuY2FyZF9zaWdtYV0KICAgIF8gPSDiiJEgZCDiiIggbi5kaXZpc29ycywgKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKS5jYXJkIDo9CiAgICAgIE5hdC5zdW1fZGl2aXNvcnNBbnRpZGlhZ29uYWwnIChmdW4gXyBkID0+IChvcmRlcmVkRmFjdG9yVHVwbGVzIGsgZCkuY2FyZCkKCi8tLSBFdmVyeSBvcmRlciwgaW5jbHVkaW5nIHplcm8sIGNvdW50cyB0aGUgZXhhY3QgY3VycmVudCBGaW4tZnVuY3Rpb24gY2Fycmllci4gLS8KdGhlb3JlbSBjYXJkX29yZGVyZWRGYWN0b3JUdXBsZXNfZXFfZm91dnJ5VGF1IChrIG4gOiDihJUpIChobiA6IDAgPCBuKSA6CiAgICAob3JkZXJlZEZhY3RvclR1cGxlcyBrIG4pLmNhcmQgPSBmb3V2cnlUYXUgayBuIDo9IGJ5CiAgaW5kdWN0aW9uIGsgZ2VuZXJhbGl6aW5nIG4gd2l0aAogIHwgemVybyA9PgogICAgICBieV9jYXNlcyBobjEgOiBuID0gMQogICAgICDCtyBzaW1wIFtvcmRlcmVkRmFjdG9yVHVwbGVzX3plcm8sIGZvdXZyeVRhdSwgQXJpdGhtZXRpY0Z1bmN0aW9uLm9uZV9hcHBseSwgaG4xXQogICAgICDCtyBzaW1wIFtvcmRlcmVkRmFjdG9yVHVwbGVzX3plcm8sIGZvdXZyeVRhdSwgQXJpdGhtZXRpY0Z1bmN0aW9uLm9uZV9hcHBseSwgaG4xXQogIHwgc3VjYyBrIGloID0+CiAgICAgIHJ3IFtjYXJkX29yZGVyZWRGYWN0b3JUdXBsZXNfc3VjYyBrIGhuLCBmb3V2cnlUYXVfc3VjY10KICAgICAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICAgICAgaW50cm8gZCBoZAogICAgICBleGFjdCBpaCBkIChOYXQucG9zX29mX21lbV9kaXZpc29ycyBoZCkKCi8tIEVORCBWRVJCQVRJTSBQUklPUiBDQVJESU5BTElUWSBQUk9PRlMuIC0vCgpzZWN0aW9uIEdlbmVyYWxJbmRleAoKdmFyaWFibGUge865IDogVHlwZSp9IFtGaW50eXBlIM65XSBbRGVjaWRhYmxlRXEgzrldCgovLS0gVXBkYXRpbmcgdGhlIHBpdm90IHRvIG9uZSBsZWF2ZXMgcHJlY2lzZWx5IHRoZSBkZWxldGVkIHByb2R1Y3QuIC0vCnRoZW9yZW0gcHJvZF9lcmFzZUF0IChhIDogzrkg4oaSIOKElSkgKGkgOiDOuSkgOgogICAgKOKIjyBqLCBlcmFzZUF0IGEgaSBqKSA9IGRlbGV0ZWRQcm9kdWN0IGEgaSA6PSBieQogIGhhdmUgaGRlbCA6IGRlbGV0ZWRQcm9kdWN0IChlcmFzZUF0IGEgaSkgaSA9IGRlbGV0ZWRQcm9kdWN0IGEgaSA6PSBieQogICAgYXBwbHkgRmluc2V0LnByb2RfY29uZ3IgcmZsCiAgICBpbnRybyBqIGhqCiAgICBleGFjdCBGdW5jdGlvbi51cGRhdGVfb2ZfbmUgKEZpbnNldC5tZW1fZXJhc2UubXAgaGopLjEgMSBhCiAgaGF2ZSBoaSA6IGVyYXNlQXQgYSBpIGkgPSAxIDo9IEZ1bmN0aW9uLnVwZGF0ZV9zZWxmIGkgMSBhCiAgaGF2ZSBocCA6PSBkZWxldGVkUHJvZHVjdF9tdWwgKGVyYXNlQXQgYSBpKSBpCiAgcncgW2hkZWwsIGhpLCBtdWxfb25lXSBhdCBocAogIGV4YWN0IGhwLnN5bW0KCi8tLSBUaGVzZSBhcmUgcHJvcGVydGllcyBvZiB0aGUgYWN0dWFsIGRlbGV0aW9uIElNQUdFLCBmb3IgYW4gYXJiaXRyYXJ5IFMuIC0vCnRoZW9yZW0gZGVsZXRpb25GaWJlcl9ub3JtYWxpemVkIChTIDogRmluc2V0ICjOuSDihpIg4oSVKSkge2kgOiDOuX0ge2QgOiDihJV9IHtiIDogzrkg4oaSIOKElX0KICAgIChoYiA6IGIg4oiIIGRlbGV0aW9uRmliZXIgUyBpIGQpIDogYiBpID0gMSDiiKcgKOKIjyBqLCBiIGopID0gZCA6PSBieQogIG9idGFpbiDin6hhLCBoYSwgcmZs4p+pIDo9IEZpbnNldC5tZW1faW1hZ2UubXAgaGIKICBoYXZlIGhhZCA6IGRlbGV0ZWRQcm9kdWN0IGEgaSA9IGQgOj0gKEZpbnNldC5tZW1fZmlsdGVyLm1wIGhhKS4yCiAgZXhhY3Qg4p+oRnVuY3Rpb24udXBkYXRlX3NlbGYgaSAxIGEsIChwcm9kX2VyYXNlQXQgYSBpKS50cmFucyBoYWTin6kKCmVuZCBHZW5lcmFsSW5kZXgKCi8tLSBSZWFkIHRoZSByZW1haW5pbmcgY29vcmRpbmF0ZXMgaW4gdGhlaXIgb3JpZ2luYWwgRmluIG9yZGVyLCBza2lwcGluZyBpLiAtLwpkZWYgY29tcHJlc3NEZWxldGVkIChrIDog4oSVKSAoaSA6IEZpbiAoayArIDEpKSAoYiA6IEZpbiAoayArIDEpIOKGkiDihJUpIDogRmluIGsg4oaSIOKElSA6PQogIGZ1biBqID0+IGIgKGkuc3VjY0Fib3ZlIGopCgp0aGVvcmVtIGNvbXByZXNzRGVsZXRlZF9wcm9kIHtrIDog4oSVfSAoUyA6IEZpbnNldCAoRmluIChrICsgMSkg4oaSIOKElSkpCiAgICB7aSA6IEZpbiAoayArIDEpfSB7ZCA6IOKElX0ge2IgOiBGaW4gKGsgKyAxKSDihpIg4oSVfQogICAgKGhiIDogYiDiiIggZGVsZXRpb25GaWJlciBTIGkgZCkgOiAo4oiPIGosIGNvbXByZXNzRGVsZXRlZCBrIGkgYiBqKSA9IGQgOj0gYnkKICBoYXZlIGhpbmZvIDo9IGRlbGV0aW9uRmliZXJfbm9ybWFsaXplZCBTIGhiCiAgaGF2ZSBocCA6PSBGaW4ucHJvZF91bml2X3N1Y2NBYm92ZSBiIGkKICBydyBbaGluZm8uMSwgb25lX211bF0gYXQgaHAKICBleGFjdCBocC5zeW1tLnRyYW5zIGhpbmZvLjIKCi8tLSBFdmVyeSBjb21wcmVzc2VkIGNvb3JkaW5hdGUgZGl2aWRlcyBkLCB3aXRoIGl0cyBvcmlnaW5hbCBwb3NpdGlvbiBwcmVzZXJ2ZWQuIC0vCnRoZW9yZW0gY29tcHJlc3NEZWxldGVkX2R2ZCB7ayA6IOKElX0gKFMgOiBGaW5zZXQgKEZpbiAoayArIDEpIOKGkiDihJUpKQogICAge2kgOiBGaW4gKGsgKyAxKX0ge2QgOiDihJV9IHtiIDogRmluIChrICsgMSkg4oaSIOKElX0KICAgIChoYiA6IGIg4oiIIGRlbGV0aW9uRmliZXIgUyBpIGQpIChqIDogRmluIGspIDogY29tcHJlc3NEZWxldGVkIGsgaSBiIGog4oijIGQgOj0gYnkKICBoYXZlIGhwIDo9IGNvbXByZXNzRGVsZXRlZF9wcm9kIFMgaGIKICBoYXZlIGhkaXYgOiBjb21wcmVzc0RlbGV0ZWQgayBpIGIgaiDiiKMg4oiPIHIsIGNvbXByZXNzRGVsZXRlZCBrIGkgYiByIDo9CiAgICBGaW5zZXQuZHZkX3Byb2Rfb2ZfbWVtIChjb21wcmVzc0RlbGV0ZWQgayBpIGIpIChGaW5zZXQubWVtX3VuaXYgaikKICBzaW1wYSBvbmx5IFtocF0gdXNpbmcgaGRpdgoKLy0tIEV4cGxpY2l0IHByb2R1Y3QtYW5kLWRpdmlzb3IgdmVyaWZpY2F0aW9uIGZvciB0aGUgZnVsbCBjdXJyZW50IHR1cGxlIGNhcnJpZXIuIC0vCnRoZW9yZW0gY29tcHJlc3NEZWxldGVkX21hcHNUbyB7ayA6IOKElX0gKFMgOiBGaW5zZXQgKEZpbiAoayArIDEpIOKGkiDihJUpKQogICAgKGkgOiBGaW4gKGsgKyAxKSkge2QgOiDihJV9IChoZCA6IDAgPCBkKSA6CiAgICBTZXQuTWFwc1RvIChjb21wcmVzc0RlbGV0ZWQgayBpKSAoZGVsZXRpb25GaWJlciBTIGkgZCkgKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKSA6PSBieQogIGludHJvIGIgaGIKICBhcHBseSBGaW5zZXQubWVtX2ZpbHRlci5tcHIKICByZWZpbmUg4p+oRmludHlwZS5tZW1fcGlGaW5zZXQubXByID9fLCBjb21wcmVzc0RlbGV0ZWRfcHJvZCBTIGhi4p+pCiAgaW50cm8gagogIGV4YWN0IE5hdC5tZW1fZGl2aXNvcnMubXByIOKfqGNvbXByZXNzRGVsZXRlZF9kdmQgUyBoYiBqLCBoZC5uZSfin6kKCi8tLSBOb3JtYWxpemF0aW9uIHJlY292ZXJzIHRoZSBwaXZvdCwgYW5kIHN1Y2NBYm92ZSByZWNvdmVycyBldmVyeSBvdGhlciBjb29yZGluYXRlLiAtLwp0aGVvcmVtIGNvbXByZXNzRGVsZXRlZF9pbmplY3RpdmVfb2Zfbm9ybWFsaXplZCB7ayA6IOKElX0gKGkgOiBGaW4gKGsgKyAxKSkKICAgIHtiIGMgOiBGaW4gKGsgKyAxKSDihpIg4oSVfSAoaGIgOiBiIGkgPSAxKSAoaGMgOiBjIGkgPSAxKQogICAgKGhiYyA6IGNvbXByZXNzRGVsZXRlZCBrIGkgYiA9IGNvbXByZXNzRGVsZXRlZCBrIGkgYykgOiBiID0gYyA6PSBieQogIGZ1bmV4dCBqCiAgYnlfY2FzZXMgaGppIDogaiA9IGkKICDCtyBzdWJzdCBqCiAgICBleGFjdCBoYi50cmFucyBoYy5zeW1tCiAgwrcgb2J0YWluIOKfqHIsIGhy4p+pIDo9IEZpbi5leGlzdHNfc3VjY0Fib3ZlX2VxIGhqaQogICAgaGF2ZSBoZXZhbCA6PSBjb25nckZ1biBoYmMgcgogICAgc2ltcGEgb25seSBbY29tcHJlc3NEZWxldGVkLCBocl0gdXNpbmcgaGV2YWwKCi8tLSBBIGdlbnVpbmUgaW5qZWN0aW9uIG9mIGZpbml0ZSBkZWxldGlvbiBpbWFnZXMsIHdpdGhvdXQgYW55IGZpeGVkLXByb2R1Y3Qgc3VwcGxpZXIuIC0vCnRoZW9yZW0gY2FyZF9kZWxldGlvbkZpYmVyX2xlX29yZGVyZWRGYWN0b3JUdXBsZXMge2sgOiDihJV9CiAgICAoUyA6IEZpbnNldCAoRmluIChrICsgMSkg4oaSIOKElSkpIChpIDogRmluIChrICsgMSkpIHtkIDog4oSVfSAoaGQgOiAwIDwgZCkgOgogICAgKGRlbGV0aW9uRmliZXIgUyBpIGQpLmNhcmQg4omkIChvcmRlcmVkRmFjdG9yVHVwbGVzIGsgZCkuY2FyZCA6PSBieQogIHJlZmluZSBGaW5zZXQuY2FyZF9sZV9jYXJkX29mX2luak9uIChjb21wcmVzc0RlbGV0ZWQgayBpKSAoY29tcHJlc3NEZWxldGVkX21hcHNUbyBTIGkgaGQpID9fCiAgaW50cm8gYiBoYiBjIGhjIGhiYwogIGV4YWN0IGNvbXByZXNzRGVsZXRlZF9pbmplY3RpdmVfb2Zfbm9ybWFsaXplZCBpCiAgICAoZGVsZXRpb25GaWJlcl9ub3JtYWxpemVkIFMgaGIpLjEgKGRlbGV0aW9uRmliZXJfbm9ybWFsaXplZCBTIGhjKS4xIGhiYwoKdGhlb3JlbSBjYXJkX2RlbGV0aW9uRmliZXJfbGVfZm91dnJ5VGF1X3N1Y2Mge2sgOiDihJV9CiAgICAoUyA6IEZpbnNldCAoRmluIChrICsgMSkg4oaSIOKElSkpIChpIDogRmluIChrICsgMSkpIHtkIDog4oSVfSAoaGQgOiAwIDwgZCkgOgogICAgKGRlbGV0aW9uRmliZXIgUyBpIGQpLmNhcmQg4omkIGZvdXZyeVRhdSBrIGQgOj0gYnkKICBjYWxjCiAgICAoZGVsZXRpb25GaWJlciBTIGkgZCkuY2FyZCDiiaQgKG9yZGVyZWRGYWN0b3JUdXBsZXMgayBkKS5jYXJkIDo9CiAgICAgIGNhcmRfZGVsZXRpb25GaWJlcl9sZV9vcmRlcmVkRmFjdG9yVHVwbGVzIFMgaSBoZAogICAgXyA9IGZvdXZyeVRhdSBrIGQgOj0gY2FyZF9vcmRlcmVkRmFjdG9yVHVwbGVzX2VxX2ZvdXZyeVRhdSBrIGQgaGQKCi8tLSBUaGUgcmVxdWVzdGVkIG5hdGl2ZSBLLTEgZmliZXIgYm91bmQsIHdpdGggdGhlIGV4YWN0IG9yaWdpbmFsIG9yZGVyZWQgY2Fycmllci4gLS8KdGhlb3JlbSBjYXJkX2RlbGV0aW9uRmliZXJfb3JkZXJlZEZhY3RvclR1cGxlc19sZV9mb3V2cnlUYXUge0sgbiBkIDog4oSVfQogICAgKGhLIDogMiDiiaQgSykgKGhuIDogMCA8IG4pIChoZCA6IGQg4oiIIG4uZGl2aXNvcnMpIChpIDogRmluIEspIDoKICAgIChkZWxldGlvbkZpYmVyIChvcmRlcmVkRmFjdG9yVHVwbGVzIEsgbikgaSBkKS5jYXJkIOKJpCBmb3V2cnlUYXUgKEsgLSAxKSBkIDo9IGJ5CiAgY2FzZXMgSyB3aXRoCiAgfCB6ZXJvID0+IG9tZWdhCiAgfCBzdWNjIGsgPT4KICAgICAgc2ltcGEgb25seSBbTmF0LnN1Y2NfZXFfYWRkX29uZSwgTmF0LmFkZF9zdWJfY2FuY2VsXSB1c2luZwogICAgICAgIChjYXJkX2RlbGV0aW9uRmliZXJfbGVfZm91dnJ5VGF1X3N1Y2MgKG9yZGVyZWRGYWN0b3JUdXBsZXMgKGsgKyAxKSBuKSBpCiAgICAgICAgICAoTmF0LnBvc19vZl9tZW1fZGl2aXNvcnMgaGQpKQoKLy0tIEV4YWN0IGZpbml0ZSB0YXUgdHJ1bmNhdGlvbjsgbm8gaW50ZXJ2YWwsIGFuYWx5dGljLCBvciBrYXBwYSBoeXBvdGhlc2lzIGlzIGFkZGVkLiAtLwp0aGVvcmVtIGZvdXZyeVRhdV9sZV90cnVuY2F0ZWRfZGl2aXNvcl9zdW0ge0sgbiBEIDog4oSVfQogICAgKGhLIDogMiDiiaQgSykgKGhuIDogMSDiiaQgbikgKGhjdXQgOiBuIF4gKEsgLSAxKSDiiaQgRCBeIEspIDoKICAgIGZvdXZyeVRhdSBLIG4g4omkIEsgKgogICAgICAo4oiRIGQg4oiIIG4uZGl2aXNvcnMuZmlsdGVyIChmdW4gZCA9PiBkIOKJpCBEKSwgZm91dnJ5VGF1IChLIC0gMSkgZCkgOj0gYnkKICBjYWxjCiAgICBmb3V2cnlUYXUgSyBuID0gKG9yZGVyZWRGYWN0b3JUdXBsZXMgSyBuKS5jYXJkIDo9CiAgICAgIChjYXJkX29yZGVyZWRGYWN0b3JUdXBsZXNfZXFfZm91dnJ5VGF1IEsgbiAoYnkgb21lZ2EpKS5zeW1tCiAgICBfIOKJpCDiiJEgaSA6IEZpbiBLLCDiiJEgZCDiiIggdHJ1bmNhdGVkRGl2aXNvcnMgbiBELAogICAgICAgIChkZWxldGlvbkZpYmVyIChvcmRlcmVkRmFjdG9yVHVwbGVzIEsgbikgaSBkKS5jYXJkIDo9CiAgICAgIGNhcmRfb3JkZXJlZEZhY3RvclR1cGxlc190cnVuY2F0ZWQgaEsgaG4gaGN1dAogICAgXyDiiaQg4oiRIF9pIDogRmluIEssIOKIkSBkIOKIiCB0cnVuY2F0ZWREaXZpc29ycyBuIEQsIGZvdXZyeVRhdSAoSyAtIDEpIGQgOj0gYnkKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gaSBfaGkKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gZCBoZAogICAgICBleGFjdCBjYXJkX2RlbGV0aW9uRmliZXJfb3JkZXJlZEZhY3RvclR1cGxlc19sZV9mb3V2cnlUYXUgaEsgKGJ5IG9tZWdhKQogICAgICAgIChGaW5zZXQubWVtX2ZpbHRlci5tcCBoZCkuMSBpCiAgICBfID0gSyAqICjiiJEgZCDiiIggbi5kaXZpc29ycy5maWx0ZXIgKGZ1biBkID0+IGQg4omkIEQpLCBmb3V2cnlUYXUgKEsgLSAxKSBkKSA6PSBieQogICAgICBzaW1wIG9ubHkgW0ZpbnNldC5zdW1fY29uc3QsIG5zbXVsX2VxX211bCwgRmluc2V0LmNhcmRfdW5pdiwgRmludHlwZS5jYXJkX2ZpbiwKICAgICAgICB0cnVuY2F0ZWREaXZpc29yc10KCmVuZAoKZW5kIEltYmFsYW5jZWRDaGVuLlBhcnQzLkVsZW1lbnRhcnlUYXVUcnVuY2F0aW9uCgovLSEKTkVXIEJPVU5ERUQgSU5URVJWQUwgUEFZTUVOVCAtLSAyMDI2LTEwLTIyIC0tIFNPVVJDRSBPTkxZIC0tIEhPTEQKClRoZSAzMDQtTEYgZmluaXRlIHRhdSBwcm9wb3NhbCBhYm92ZSBpcyByZXByb2R1Y2VkIHZlcmJhdGltLCB3aXRoIGl0cyBhY3R1YWwKZmluaXRlLWNvcmUgaW1wb3J0IGFuZCBldmVyeSBwcm9vZiBib2R5LiBObyB0YXJnZXQgY2FyZGluYWwgb3IgdGF1IGluZXF1YWxpdHkKaXMgYXNzdW1lZC4gVGhpcyBzdGFuZGFsb25lIFRYVCBhZGRzIG9uZSBpbXBvcnQgZm9yIHRoZSBleGlzdGluZyBwb3NpdGl2ZQpwcmVmaXggbXVsdGlwbGUtY291bnQgdGhlb3JlbS4gRG8gbm90IGludGVncmF0ZSB0aGlzIGNvcHkgYWxvbmdzaWRlIGEgZnV0dXJlCnRhdSBtb2R1bGUgd2l0aG91dCByZW1vdmluZyB0aGUgZHVwbGljYXRlZCBkZWNsYXJhdGlvbnMuCgpUaGUgcHJlY2lzZSBpbnRlcnZhbCBpcyBJb2MgQSBCIGluIE5hdCwgd2l0aCBBIDw9IEIuIEl0IGNvbnNpc3RzIGV4YWN0bHkgb2YKdGhlIHBvc2l0aXZlIGludGVnZXJzIEEgPCBuIDw9IEIsIGFuZCBpdHMgZ2VvbWV0cmljIGxlbmd0aCBpcyAoQjpSZWFsKS1BLgpBPTAgaXMgYWxsb3dlZDsgemVybyBpcyBuZXZlciBpbmNsdWRlZC4gRGl2aXNvcnMgYXJlIHN0cmljdGx5IHBvc2l0aXZlIHdoZW4KdXNlZCBpbiB0aGUgbGVuZ3RoL2QgcGF5bWVudC4gTmF0dXJhbCBkPTAgaXMgYWxsb3dlZCBvbmx5IGluIHRoZSBleGFjdCBjb3VudAppZGVudGl0eSwgd2hlcmUgYm90aCBjb3VudHMgYW5kIGJvdGggbmF0dXJhbCBkaXZpc2lvbnMgYXJlIHplcm8uCgpOYXQuSW9jX2ZpbHRlcl9kdmRfY2FyZF9lcV9kaXYgYWxyZWFkeSBwcm92ZXMgdGhlIGV4YWN0IHBvc2l0aXZlLXByZWZpeApjb3VudC4gV2UgcmV1c2UgaXQsIHN1YnRyYWN0IHRoZSB0d28gbmVzdGVkIGZpbml0ZSBwcmVmaXggc2V0cywgYW5kIHByb3ZlCiAgY2FyZCB7QTxuPD1CIDogZCBkaXZpZGVzIG59ID0gQi9kIC0gQS9kCndpdGggbmF0dXJhbCBkaXZpc2lvbi9zdWJ0cmFjdGlvbi4gQ2FzdGluZyB0aGlzIGVxdWFsaXR5IGFuZCB1c2luZyB0aGUgdHdvCnN0YW5kYXJkIGRpdmlzaW9uIGJvdW5kcyBwcm92ZXMgdGhlIGdlbnVpbmUgbGVuZ3RoL2QrMSBpbmVxdWFsaXR5LgoKQSBmaW5pdGUgc3VtIHN3YXAgdGhlbiBjaGFyZ2VzIHRoZSBleGFjdCBpbnRlcnZhbCBtdWx0aXBsZXMgZm9yIGVhY2ggZC4KVG9nZXRoZXIgd2l0aCB0aGUgRlVMTCB3cml0dGVuIHRhdSBwcm9vZiBhYm92ZSB0aGlzIHlpZWxkcwogIHN1bV97QTxuPD1CfSB0YXVfSyhuKQogIDw9IEsgKiBbIChCLUEpKnN1bV97MTw9ZDw9RH0gdGF1XyhLLTEpKGQpL2QKICAgICAgICAgICArIHN1bV97MTw9ZDw9RH0gdGF1XyhLLTEpKGQpIF0sCnVuZGVyIEs+PTIgYW5kIEJeKEstMSk8PUReSy4gRW5kcG9pbnRzLCBjYXJyaWVycyBhbmQgY2FzdHMgYXJlIGV4cGxpY2l0LgpObyBpbnRlcnZhbCBjb3VudGluZyBoeXBvdGhlc2lzIG9yIGRlc2lyZWQgYm91bmQgaXMgc3VwcGxpZWQgYXMgYW4gYXhpb20uCgpUaGlzIGRvZXMgTk9UIHByb3ZlIEUxIHdpdGggaXRzIGV4YWN0IHJlYWwtcm9vdCBjdXRvZmYgb3IgYW55IHNoaWZ0ZWQgTTIuClRoZSBuYXR1cmFsLWN1dG9mZiBwcmVtaXNlIGNhbm5vdCBpbiBnZW5lcmFsIGJlIGp1c3RpZmllZCBieSBzZXR0aW5nCkQ9Zmxvb3IoWl4oMS0xL0spKTsgdGhlIGZsb29yIG1heSBoYXZlIEReSyA8IFpeKEstMSkuIEEgZnV0dXJlIHJlYWwtY3V0b2ZmCmdlb21ldHJpYy9mbG9vciBicmlkZ2UgbXVzdCBhZGRyZXNzIHRoYXQgcG9pbnQuIFRoZSBleGFjdCB0d28gbmF0aXZlIGRpdmlzb3IKbWVhbnMgc3RpbGwgbmVlZCB0byBiZSBhcHBsaWVkIGF0IHRoZSBqdXN0aWZpZWQgY29tbW9uIGN1dG9mZiwgd2l0aCBsb2cgYW5kCmVuZHBvaW50IGFkYXB0ZXJzLiBObyBuZXcgdW5pZm9ybSBtZWFuLCBzcGVjdHJ1bSwga2FwcGEgb3IgbWFpbiB0aGVvcmVtIGlzCmNsYWltZWQuIE5vIGNvbXBpbGVyL2NoZWNrZXIvcHJvcGVyL2NsYXNzaWZpZXIvY2Vuc3VzL0dpdCBhY3Rpb24gd2FzIHVzZWQuCi0vCgpuYW1lc3BhY2UgSW1iYWxhbmNlZENoZW4uUGFydDMuRWxlbWVudGFyeVRhdVRydW5jYXRpb24uSW50ZXJ2YWxQYXltZW50Cgpub25jb21wdXRhYmxlIHNlY3Rpb24KCm9wZW4gQ2xhc3NpY2FsIEZpbnNldApvcGVuIHNjb3BlZCBCaWdPcGVyYXRvcnMKb3BlbiBNYXRobGliTnQuQW5hbHl0aWNOdW1iZXJUaGVvcnkuTGFyZ2VTaWV2ZS5MaUxpdVByZXJlcUZvdXZyeQoKLy0tIEFuIGV4YWN0IGNvdW50IG9uIHRoZSBnZW51aW5lIHBvc2l0aXZlIGludGVydmFsIChBLEJdLiAtLwp0aGVvcmVtIGludGVydmFsX211bHRpcGxlc19jYXJkX2VxX2Rpdl9zdWIge0EgQiA6IOKElX0gKGhBQiA6IEEg4omkIEIpIChkIDog4oSVKSA6CiAgICAoKElvYyBBIEIpLmZpbHRlciAoZnVuIG4gPT4gZCDiiKMgbikpLmNhcmQgPSBCIC8gZCAtIEEgLyBkIDo9IGJ5CiAgaGF2ZSBoc3ViIDogKElvYyAwIEEpLmZpbHRlciAoZnVuIG4gPT4gZCDiiKMgbikg4oqGCiAgICAgIChJb2MgMCBCKS5maWx0ZXIgKGZ1biBuID0+IGQg4oijIG4pIDo9IGJ5CiAgICBpbnRybyBuIGhuCiAgICBvYnRhaW4g4p+oaG5JLCBoZG7in6kgOj0gRmluc2V0Lm1lbV9maWx0ZXIubXAgaG4KICAgIG9idGFpbiDin6hoMG4sIGhuQeKfqSA6PSBGaW5zZXQubWVtX0lvYy5tcCBobkkKICAgIGV4YWN0IEZpbnNldC5tZW1fZmlsdGVyLm1wciDin6hGaW5zZXQubWVtX0lvYy5tcHIg4p+oaDBuLCBobkEudHJhbnMgaEFC4p+pLCBoZG7in6kKICBoYXZlIGhzZXQgOiAoSW9jIEEgQikuZmlsdGVyIChmdW4gbiA9PiBkIOKIoyBuKSA9CiAgICAgICgoSW9jIDAgQikuZmlsdGVyIChmdW4gbiA9PiBkIOKIoyBuKSkgXAogICAgICAgICgoSW9jIDAgQSkuZmlsdGVyIChmdW4gbiA9PiBkIOKIoyBuKSkgOj0gYnkKICAgIGV4dCBuCiAgICBzaW1wIG9ubHkgW0ZpbnNldC5tZW1fZmlsdGVyLCBGaW5zZXQubWVtX3NkaWZmLCBGaW5zZXQubWVtX0lvY10KICAgIGNvbnN0cnVjdG9yCiAgICDCtyByaW50cm8g4p+o4p+oaEFuLCBobkLin6ksIGhkbuKfqQogICAgICByZWZpbmUg4p+o4p+o4p+obHRfb2ZfbGVfb2ZfbHQgKE5hdC56ZXJvX2xlIEEpIGhBbiwgaG5C4p+pLCBoZG7in6ksID9f4p+pCiAgICAgIHJpbnRybyDin6jin6hfaDBuLCBobkHin6ksIF9oZG7in6kKICAgICAgZXhhY3QgKG5vdF9sZV9vZl9ndCBoQW4pIGhuQQogICAgwrcgcmludHJvIOKfqOKfqOKfqGgwbiwgaG5C4p+pLCBoZG7in6ksIGhuQeKfqQogICAgICByZWZpbmUg4p+o4p+oP18sIGhuQuKfqSwgaGRu4p+pCiAgICAgIGJ5X2NvbnRyYSBoCiAgICAgIGV4YWN0IGhuQSDin6jin6hoMG4sIGxlX29mX25vdF9ndCBo4p+pLCBoZG7in6kKICBydyBbaHNldCwgRmluc2V0LmNhcmRfc2RpZmZfb2Zfc3Vic2V0IGhzdWIsCiAgICBOYXQuSW9jX2ZpbHRlcl9kdmRfY2FyZF9lcV9kaXYsIE5hdC5Jb2NfZmlsdGVyX2R2ZF9jYXJkX2VxX2Rpdl0KCi8tLSBUaGUgcmVhbCBpbnRlcnZhbCBsZW5ndGggZGl2aWRlZCBieSBkLCBwbHVzIG9uZSBlbmRwb2ludCBhbGxvd2FuY2UuIC0vCnRoZW9yZW0gaW50ZXJ2YWxfbXVsdGlwbGVzX2NhcmRfbGVfbGVuZ3RoX2Rpdl9hZGRfb25lIHtBIEIgZCA6IOKElX0KICAgIChoQUIgOiBBIOKJpCBCKSAoaGQgOiAwIDwgZCkgOgogICAgKCgoSW9jIEEgQikuZmlsdGVyIChmdW4gbiA9PiBkIOKIoyBuKSkuY2FyZCA6IOKEnSkg4omkCiAgICAgICgoQiA6IOKEnSkgLSAoQSA6IOKEnSkpIC8gKGQgOiDihJ0pICsgMSA6PSBieQogIHJ3IFtpbnRlcnZhbF9tdWx0aXBsZXNfY2FyZF9lcV9kaXZfc3ViIGhBQiwgTmF0LmNhc3Rfc3ViIChOYXQuZGl2X2xlX2Rpdl9yaWdodCBoQUIpXQogIGhhdmUgaGRSIDogKDAgOiDihJ0pIDwgZCA6PSBieSBleGFjdF9tb2RfY2FzdCBoZAogIGhhdmUgaEJsbyA6ICgoQiAvIGQgOiDihJUpIDog4oSdKSAqIGQg4omkIEIgOj0gYnkKICAgIGV4YWN0X21vZF9jYXN0IE5hdC5kaXZfbXVsX2xlX3NlbGYgQiBkCiAgaGF2ZSBoQWhpIDogKEEgOiDihJ0pIDwgKGQgOiDihJ0pICogKCgoQSAvIGQgOiDihJUpIDog4oSdKSArIDEpIDo9IGJ5CiAgICBleGFjdF9tb2RfY2FzdCBOYXQubHRfbXVsX2Rpdl9zdWNjIEEgaGQKICBoYXZlIGhCcSA6ICgoQiAvIGQgOiDihJUpIDog4oSdKSDiiaQgKEIgOiDihJ0pIC8gZCA6PQogICAgKGxlX2Rpdl9pZmbigoAgaGRSKS5tcHIgaEJsbwogIGhhdmUgaEFxIDogKEEgOiDihJ0pIC8gZCA8ICgoQSAvIGQgOiDihJUpIDog4oSdKSArIDEgOj0KICAgIChkaXZfbHRfaWZm4oKAIGhkUikubXByIChieSBubGluYXJpdGggW2hBaGldKQogIHJ3IFtzdWJfZGl2XQogIGxpbmFyaXRoCgovLS0gVGhlIGRpdmlzb3IgY2FycmllciBpcyBleGFjdGx5IHRoZSBib3VuZGVkIHBvc2l0aXZlIGRpdmlzaWJsZSBjYXJyaWVyLiAtLwp0aGVvcmVtIHRydW5jYXRlZF9kaXZpc29yX2NhcnJpZXJfZXEge24gRCA6IOKElX0gKGhuIDogMCA8IG4pIDoKICAgIG4uZGl2aXNvcnMuZmlsdGVyIChmdW4gZCA9PiBkIOKJpCBEKSA9IChJY2MgMSBEKS5maWx0ZXIgKGZ1biBkID0+IGQg4oijIG4pIDo9IGJ5CiAgZXh0IGQKICBjb25zdHJ1Y3RvcgogIMK3IGludHJvIGhkCiAgICBvYnRhaW4g4p+oaGRuLCBoZETin6kgOj0gRmluc2V0Lm1lbV9maWx0ZXIubXAgaGQKICAgIGV4YWN0IEZpbnNldC5tZW1fZmlsdGVyLm1wcgogICAgICDin6hGaW5zZXQubWVtX0ljYy5tcHIg4p+oTmF0LnBvc19vZl9tZW1fZGl2aXNvcnMgaGRuLCBoZETin6ksCiAgICAgICAgKE5hdC5tZW1fZGl2aXNvcnMubXAgaGRuKS4x4p+pCiAgwrcgaW50cm8gaGQKICAgIG9idGFpbiDin6hoZEksIGhkbuKfqSA6PSBGaW5zZXQubWVtX2ZpbHRlci5tcCBoZAogICAgZXhhY3QgRmluc2V0Lm1lbV9maWx0ZXIubXByCiAgICAgIOKfqE5hdC5tZW1fZGl2aXNvcnMubXByIOKfqGhkbiwgaG4ubmUn4p+pLCAoRmluc2V0Lm1lbV9JY2MubXAgaGRJKS4y4p+pCgovLS0gRXhhY3QgZmluaXRlIGludGVyY2hhbmdlLCBiZWZvcmUgYXBwbHlpbmcgYW55IGludGVydmFsIGVzdGltYXRlLiAtLwp0aGVvcmVtIHN1bV9pbnRlcnZhbF9kaXZpc29yX3dlaWdodHNfc3dhcCAoQSBCIEQgOiDihJUpICh3IDog4oSVIOKGkiDihJ0pIDoKICAgICjiiJEgbiDiiIggSW9jIEEgQiwg4oiRIGQg4oiIIChJY2MgMSBEKS5maWx0ZXIgKGZ1biBkID0+IGQg4oijIG4pLCB3IGQpID0KICAgICAg4oiRIGQg4oiIIEljYyAxIEQsIHcgZCAqICgoKElvYyBBIEIpLmZpbHRlciAoZnVuIG4gPT4gZCDiiKMgbikpLmNhcmQgOiDihJ0pIDo9IGJ5CiAgc2ltcF9ydyBbRmluc2V0LnN1bV9maWx0ZXJdCiAgcncgW0ZpbnNldC5zdW1fY29tbV0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIGQgX2hkCiAgcncgW+KGkCBGaW5zZXQuc3VtX2ZpbHRlciwgRmluc2V0LnN1bV9jb25zdCwgbnNtdWxfZXFfbXVsLCBtdWxfY29tbV0KCi8tLSBEZXRlcm1pbmlzdGljIHBheW1lbnQgZm9yIGFueSBub25uZWdhdGl2ZSBkaXZpc29yIHdlaWdodC4gLS8KdGhlb3JlbSBzdW1faW50ZXJ2YWxfZGl2aXNvcl93ZWlnaHRzX2xlIHtBIEIgRCA6IOKElX0gKHcgOiDihJUg4oaSIOKEnSkKICAgIChoQUIgOiBBIOKJpCBCKSAoaHcgOiDiiIAgZCDiiIggSWNjIDEgRCwgMCDiiaQgdyBkKSA6CiAgICAo4oiRIG4g4oiIIElvYyBBIEIsIOKIkSBkIOKIiCAoSWNjIDEgRCkuZmlsdGVyIChmdW4gZCA9PiBkIOKIoyBuKSwgdyBkKSDiiaQKICAgICAg4oiRIGQg4oiIIEljYyAxIEQsIHcgZCAqICgoKEIgOiDihJ0pIC0gKEEgOiDihJ0pKSAvIChkIDog4oSdKSArIDEpIDo9IGJ5CiAgcncgW3N1bV9pbnRlcnZhbF9kaXZpc29yX3dlaWdodHNfc3dhcF0KICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogIGludHJvIGQgaGQKICBleGFjdCBtdWxfbGVfbXVsX29mX25vbm5lZ19sZWZ0CiAgICAoaW50ZXJ2YWxfbXVsdGlwbGVzX2NhcmRfbGVfbGVuZ3RoX2Rpdl9hZGRfb25lIGhBQiAoYnkKICAgICAgaGF2ZSA6PSAoRmluc2V0Lm1lbV9JY2MubXAgaGQpLjEKICAgICAgb21lZ2EpKSAoaHcgZCBoZCkKCi8tLSBGaW5pdGUgdGF1IHRydW5jYXRpb24gcGx1cyBhIGxpdGVyYWwgaW50ZXJ2YWwgY291bnQsIHdpdGggbm8gYW5hbHl0aWMgc3VwcGxpZXIuIC0vCnRoZW9yZW0gc3VtX2ZvdXZyeVRhdV9pbnRlcnZhbF9wYXltZW50IHtLIEEgQiBEIDog4oSVfQogICAgKGhLIDogMiDiiaQgSykgKGhBQiA6IEEg4omkIEIpIChoY3V0IDogQiBeIChLIC0gMSkg4omkIEQgXiBLKSA6CiAgICAo4oiRIG4g4oiIIElvYyBBIEIsIChmb3V2cnlUYXUgSyBuIDog4oSdKSkg4omkCiAgICAgIChLIDog4oSdKSAqIOKIkSBkIOKIiCBJY2MgMSBELAogICAgICAgIChmb3V2cnlUYXUgKEsgLSAxKSBkIDog4oSdKSAqICgoKEIgOiDihJ0pIC0gKEEgOiDihJ0pKSAvIChkIDog4oSdKSArIDEpIDo9IGJ5CiAgaGF2ZSBocG9pbnQgOiDiiIAgbiDiiIggSW9jIEEgQiwgKGZvdXZyeVRhdSBLIG4gOiDihJ0pIOKJpAogICAgICAoSyA6IOKEnSkgKiDiiJEgZCDiiIggKEljYyAxIEQpLmZpbHRlciAoZnVuIGQgPT4gZCDiiKMgbiksCiAgICAgICAgKGZvdXZyeVRhdSAoSyAtIDEpIGQgOiDihJ0pIDo9IGJ5CiAgICBpbnRybyBuIGhuCiAgICBvYnRhaW4g4p+oaEFuLCBobkLin6kgOj0gRmluc2V0Lm1lbV9Jb2MubXAgaG4KICAgIGhhdmUgaG5wb3MgOiAwIDwgbiA6PSBsdF9vZl9sZV9vZl9sdCAoTmF0Lnplcm9fbGUgQSkgaEFuCiAgICBoYXZlIGhwb3cgOiBuIF4gKEsgLSAxKSDiiaQgQiBeIChLIC0gMSkgOj0KICAgICAgcG93X2xlX3Bvd19sZWZ04oKAIChOYXQuemVyb19sZSBuKSBobkIgXwogICAgaGF2ZSBobmF0IDo9IGZvdXZyeVRhdV9sZV90cnVuY2F0ZWRfZGl2aXNvcl9zdW0gaEsgKGJ5IG9tZWdhIDogMSDiiaQgbikKICAgICAgKGhwb3cudHJhbnMgaGN1dCkKICAgIHJ3IFt0cnVuY2F0ZWRfZGl2aXNvcl9jYXJyaWVyX2VxIGhucG9zXSBhdCBobmF0CiAgICBleGFjdF9tb2RfY2FzdCBobmF0CiAgY2FsYwogICAgKOKIkSBuIOKIiCBJb2MgQSBCLCAoZm91dnJ5VGF1IEsgbiA6IOKEnSkpIOKJpAogICAgICAgIOKIkSBuIOKIiCBJb2MgQSBCLCAoSyA6IOKEnSkgKgogICAgICAgICAg4oiRIGQg4oiIIChJY2MgMSBEKS5maWx0ZXIgKGZ1biBkID0+IGQg4oijIG4pLCAoZm91dnJ5VGF1IChLIC0gMSkgZCA6IOKEnSkgOj0KICAgICAgRmluc2V0LnN1bV9sZV9zdW0gaHBvaW50CiAgICBfID0gKEsgOiDihJ0pICogKOKIkSBuIOKIiCBJb2MgQSBCLAogICAgICAgIOKIkSBkIOKIiCAoSWNjIDEgRCkuZmlsdGVyIChmdW4gZCA9PiBkIOKIoyBuKSwgKGZvdXZyeVRhdSAoSyAtIDEpIGQgOiDihJ0pKSA6PQogICAgICAoRmluc2V0Lm11bF9zdW0gXyBfIF8pLnN5bW0KICAgIF8g4omkIChLIDog4oSdKSAqIOKIkSBkIOKIiCBJY2MgMSBELAogICAgICAgIChmb3V2cnlUYXUgKEsgLSAxKSBkIDog4oSdKSAqICgoKEIgOiDihJ0pIC0gKEEgOiDihJ0pKSAvIChkIDog4oSdKSArIDEpIDo9CiAgICAgIG11bF9sZV9tdWxfb2Zfbm9ubmVnX2xlZnQKICAgICAgICAoc3VtX2ludGVydmFsX2Rpdmlzb3Jfd2VpZ2h0c19sZSAoZnVuIGQgPT4gKGZvdXZyeVRhdSAoSyAtIDEpIGQgOiDihJ0pKSBoQUIKICAgICAgICAgIChmdW4gZCBfaGQgPT4gTmF0LmNhc3Rfbm9ubmVnIF8pKSAoTmF0LmNhc3Rfbm9ubmVnIEspCgovLS0gVGhlIHNlcGFyYXRlZCByZWNpcHJvY2FsIGFuZCBvcmRpbmFyeSBwYXltZW50cyBuZWVkZWQgYnkgdGhlIEUxIHJvdXRlLiAtLwp0aGVvcmVtIHN1bV9mb3V2cnlUYXVfaW50ZXJ2YWxfcGF5bWVudF9zcGxpdCB7SyBBIEIgRCA6IOKElX0KICAgIChoSyA6IDIg4omkIEspIChoQUIgOiBBIOKJpCBCKSAoaGN1dCA6IEIgXiAoSyAtIDEpIOKJpCBEIF4gSykgOgogICAgKOKIkSBuIOKIiCBJb2MgQSBCLCAoZm91dnJ5VGF1IEsgbiA6IOKEnSkpIOKJpAogICAgICAoSyA6IOKEnSkgKiAoKChCIDog4oSdKSAtIChBIDog4oSdKSkgKgogICAgICAgICjiiJEgZCDiiIggSWNjIDEgRCwgKGZvdXZyeVRhdSAoSyAtIDEpIGQgOiDihJ0pIC8gKGQgOiDihJ0pKSArCiAgICAgICAg4oiRIGQg4oiIIEljYyAxIEQsIChmb3V2cnlUYXUgKEsgLSAxKSBkIDog4oSdKSkgOj0gYnkKICBjYWxjCiAgICAo4oiRIG4g4oiIIElvYyBBIEIsIChmb3V2cnlUYXUgSyBuIDog4oSdKSkg4omkCiAgICAgICAgKEsgOiDihJ0pICog4oiRIGQg4oiIIEljYyAxIEQsCiAgICAgICAgICAoZm91dnJ5VGF1IChLIC0gMSkgZCA6IOKEnSkgKiAoKChCIDog4oSdKSAtIChBIDog4oSdKSkgLyAoZCA6IOKEnSkgKyAxKSA6PQogICAgICBzdW1fZm91dnJ5VGF1X2ludGVydmFsX3BheW1lbnQgaEsgaEFCIGhjdXQKICAgIF8gPSBfIDo9IGJ5CiAgICAgIGNvbmdyIDEKICAgICAgY2FsYwogICAgICAgICjiiJEgZCDiiIggSWNjIDEgRCwKICAgICAgICAgICAgKGZvdXZyeVRhdSAoSyAtIDEpIGQgOiDihJ0pICogKCgoQiA6IOKEnSkgLSAoQSA6IOKEnSkpIC8gKGQgOiDihJ0pICsgMSkpID0KICAgICAgICAgICAg4oiRIGQg4oiIIEljYyAxIEQsICgoKEIgOiDihJ0pIC0gKEEgOiDihJ0pKSAqCiAgICAgICAgICAgICAgKChmb3V2cnlUYXUgKEsgLSAxKSBkIDog4oSdKSAvIChkIDog4oSdKSkgKyAoZm91dnJ5VGF1IChLIC0gMSkgZCA6IOKEnSkpIDo9IGJ5CiAgICAgICAgICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogICAgICAgICAgaW50cm8gZCBfaGQKICAgICAgICAgIHJpbmcKICAgICAgICBfID0gXyA6PSBieSBydyBbRmluc2V0LnN1bV9hZGRfZGlzdHJpYiwg4oaQIEZpbnNldC5tdWxfc3VtXQoKZW5kCgplbmQgSW1iYWxhbmNlZENoZW4uUGFydDMuRWxlbWVudGFyeVRhdVRydW5jYXRpb24uSW50ZXJ2YWxQYXltZW50CgovLSEKRVhBQ1QgU1RSSUNULVNVQ0NFU1NPUi9GTE9PUiBDT05USU5VQVRJT04gLS0gU09VUkNFIE9OTFkgLS0gSE9MRAoKVGhlIHByZWNlZGluZyA0OTMtbGluZSBpbnRlcnZhbCBwcm9wb3NhbCBpcyBpbmNsdWRlZCB2ZXJiYXRpbSBhcyBhIHdyaXR0ZW4Kc291cmNlIGRlcGVuZGVuY3ksIG5vdCBhIGtlcm5lbCBjZXJ0aWZpY2F0ZS4gSXRzIGNyZWF0aW9uLXRpbWUgZmxvb3ItYnJpZGdlCndhcm5pbmcgaXMgYWRkcmVzc2VkIGJ5IHRoZSBORVcgc3RyaWN0LXN1Y2Nlc3NvciBsZW1tYXMgYmVsb3cuIEFjdHVhbCBhY2NlcHRlZApmaW5pdGUtY29yZSBzb3VyY2UgaXMgaW1wb3J0ZWQgYW5kIG5ldmVyIG1vZGlmaWVkLiBObyBtaXNzaW5nIHRhdS9pbnRlcnZhbApzdXBwbGllciBpcyBhc3N1bWVkOiBldmVyeSBzb3VyY2UgcHJvb2YgZGVwZW5kZW5jeSBpcyBpbmNsdWRlZCBhYm92ZS4KClRoZSBwaW5uZWQgbWFudXNjcmlwdCBFMSBpcyBhIHNoYXJwIHR3by10ZXJtIGluZXF1YWxpdHkgZm9yIGV2ZXJ5IGludGVydmFsCmxlbmd0aCwgbm90IG1lcmVseSBDX0sgbm90YXRpb24gd2l0aCBsZW5ndGg+PVpeKDEtMS9LKS4gQSBjZWlsIGN1dG9mZiB5aWVsZHMKYSB1c2VmdWwgY29hcnNlciBhbHRlcm5hdGl2ZSBidXQgZG9lcyBub3QgcHJvdmUgdGhhdCBsaXRlcmFsIHN0YXRlbWVudC4KSW5zdGVhZCB0aGUgbWF4aW11bS1jb29yZGluYXRlIHByb29mIGFscmVhZHkgYm91bmRzIGRwXks8PW5eKEstMSkuClRoZSBzdWZmaWNpZW50IGNvbmRpdGlvbiBuXihLLTEpPChEKzEpXksgZm9yY2VzIGRwPD1ELiBGb3IgdGhlIFRSVUUgZmxvb3IKRD1mbG9vciBSIGFuZCBSPVpeKChLLTEpL0spLCBSPEQrMSBnaXZlcyBleGFjdGx5IHRoaXMgc3RyaWN0IGNvbmRpdGlvbi4KVGh1cyBubyBmYWN0b3IgdHdvIG9yIGVubGFyZ2VkIGxvZ2FyaXRobSBpcyBuZWVkZWQuCgpUaGUgZmluYWwgdGhlb3JlbSBiZWxvdyBwcm92ZXMgdGhlIHNoYXJwIEUxIGZvcm11bGEgZm9yIHRoZSBwcmVjaXNlIHBvc2l0aXZlCm5hdHVyYWwtZW5kcG9pbnQgY2FycmllciBJb2MgQSBCLCBBPD1CLCBCPD1aLCBaPj0yLiBJdCBoYXMgTk8gbWluaW11bS1sZW5ndGgKaHlwb3RoZXNpcy4gQXJiaXRyYXJ5IFJFQUwgaW50ZXJ2YWwgZW5kcG9pbnQgYWRhcHRlcnMgYXJlIG5vdCBzdXBwbGllZCBoZXJlLgpUaGUgbmF0aXZlIHJlY2lwcm9jYWwgYW5kIG9yZGluYXJ5IGRpdmlzb3IgbWVhbnMgYXJlIHJldXNlZCBhdCByZWFsIGVuZHBvaW50ClIgd2l0aCBpdHMgZ2VudWluZSBmbG9vci4gSz0yIHVzZXMgb3JkaW5hcnkgdGF1IG9yZGVyIDEgYW5kIGV4cG9uZW50IHplcm8uClRoaXMgY2xvc2VzIG9ubHkgYSB3cml0dGVuIG5hdHVyYWwtZW5kcG9pbnQgRTEgcGFydCwgbm90IHNoaWZ0ZWQgTTIsIHNwZWN0cnVtLAo3LzMyLCBvcmlnaW5hbCBmb3JhbGwta2FwcGEgb2JsaWdhdGlvbnMsIG9yIGFueSBtYWluIHRoZW9yZW0uIE5vIGFjdHVhbCBMZWFuLApydW50aW1lIG9yIHBpbiBjaGFuZ2UgYW5kIG5vIGNvbXBpbGVyL2NoZWNrZXIvcHJvcGVyL2NsYXNzaWZpZXIvY2Vuc3VzL0dpdC4KLS8KCg==",
+        "unchanged_suffix_bytes": 13356,
+        "unchanged_suffix_raw_sha256": "082b424c1cb0bb5c659d075011cab8546f64c413193efa519a2fc4d8567ced4d",
+        "complete_inverse": "Remove target_prefix_bytes from the target raw bytes, prepend base64-decoded source_prefix_base64, and leave all remaining bytes unchanged.",
+        "inverse_roundtrip_exact": true,
+        "inverse_roundtrip_raw_sha256": "9724fe22ae6a0c5af45dff9927d45f042ad108ab9298687fe9a359a7cfe68f95",
+        "source_utf8_roundtrip_exact": true
+      },
+      "complete_declaration_map": [
+        {
+          "name": "exists_deletedProduct_le_strict",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.exists_deletedProduct_le_strict",
+          "source_span": [
+            535,
+            561
+          ],
+          "source_type_last": 538,
+          "target_span": [
+            16,
+            42
+          ],
+          "target_type_last": 19,
+          "complete_public_type": "theorem exists_deletedProduct_le_strict (a : ι → ℕ) {n D : ℕ}\n    (hcard : 2 ≤ Fintype.card ι) (hprod : (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    ∃ i : ι, deletedProduct a i ≤ D := by\n",
+          "old_type_raw_utf8_sha256": "5167a341f771736b6b88f26765c5fbe745983ab9ff27610650bc39f36cb84a17",
+          "new_type_raw_utf8_sha256": "5167a341f771736b6b88f26765c5fbe745983ab9ff27610650bc39f36cb84a17",
+          "old_complete_declaration_raw_utf8_sha256": "20e660d880811ff0b2c450899370f03d613afc1fdd0e0c987021c44a05f699ff",
+          "new_complete_declaration_raw_utf8_sha256": "20e660d880811ff0b2c450899370f03d613afc1fdd0e0c987021c44a05f699ff",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "card_smallCover_eq_sum_deletionFibers",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_smallCover_eq_sum_deletionFibers",
+          "source_span": [
+            564,
+            594
+          ],
+          "source_type_last": 567,
+          "target_span": [
+            45,
+            75
+          ],
+          "target_type_last": 48,
+          "complete_public_type": "theorem card_smallCover_eq_sum_deletionFibers (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hprod : ∀ a ∈ S, (∏ j, a j) = n) (i : ι) :\n    (S.filter (fun a => deletedProduct a i ≤ D)).card =\n      ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+          "old_type_raw_utf8_sha256": "2d4a1374408810b1e155573349f6d5933d1595a52f837fddb9b0e8fa5cf424a3",
+          "new_type_raw_utf8_sha256": "2d4a1374408810b1e155573349f6d5933d1595a52f837fddb9b0e8fa5cf424a3",
+          "old_complete_declaration_raw_utf8_sha256": "34c68ae0c851ed9e7a85de38256c8bf07cd083ab6db039f0713a3a8fb676a377",
+          "new_complete_declaration_raw_utf8_sha256": "34c68ae0c851ed9e7a85de38256c8bf07cd083ab6db039f0713a3a8fb676a377",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "card_le_sum_deletionFibers_strict",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_le_sum_deletionFibers_strict",
+          "source_span": [
+            597,
+            610
+          ],
+          "source_type_last": 601,
+          "target_span": [
+            78,
+            91
+          ],
+          "target_type_last": 82,
+          "complete_public_type": "theorem card_le_sum_deletionFibers_strict (S : Finset (ι → ℕ)) {n D : ℕ}\n    (hn : 0 < n) (hcard : 2 ≤ Fintype.card ι)\n    (hprod : ∀ a ∈ S, (∏ j, a j) = n)\n    (hcut : n ^ (Fintype.card ι - 1) < (D + 1) ^ Fintype.card ι) :\n    S.card ≤ ∑ i : ι, ∑ d ∈ truncatedDivisors n D, (deletionFiber S i d).card := by\n",
+          "old_type_raw_utf8_sha256": "7cf1c539dae048681f8eef890d224ae9ef0501b79aa7ee1818828c59745a8e44",
+          "new_type_raw_utf8_sha256": "7cf1c539dae048681f8eef890d224ae9ef0501b79aa7ee1818828c59745a8e44",
+          "old_complete_declaration_raw_utf8_sha256": "7f0be3a5a825b295ad12732a7d1fbe9c2f1bfc02541ad5018918b8b1bbb87bdf",
+          "new_complete_declaration_raw_utf8_sha256": "7f0be3a5a825b295ad12732a7d1fbe9c2f1bfc02541ad5018918b8b1bbb87bdf",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "fouvryTau_le_truncated_divisor_sum_strict",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.fouvryTau_le_truncated_divisor_sum_strict",
+          "source_span": [
+            615,
+            641
+          ],
+          "source_type_last": 618,
+          "target_span": [
+            96,
+            122
+          ],
+          "target_type_last": 99,
+          "complete_public_type": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n",
+          "old_type_raw_utf8_sha256": "8fe7636cb2d61dbadc743efe39e7452212bfb394cc45a974af9624d42bdb6a77",
+          "new_type_raw_utf8_sha256": "8fe7636cb2d61dbadc743efe39e7452212bfb394cc45a974af9624d42bdb6a77",
+          "old_complete_declaration_raw_utf8_sha256": "6ad02b128d8a1676dfec975e4dcfb5f6276c9ac182be8d3842525bd9d58c8d13",
+          "new_complete_declaration_raw_utf8_sha256": "6ad02b128d8a1676dfec975e4dcfb5f6276c9ac182be8d3842525bd9d58c8d13",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_fouvryTau_interval_payment_strict",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict",
+          "source_span": [
+            652,
+            681
+          ],
+          "source_type_last": 656,
+          "target_span": [
+            133,
+            162
+          ],
+          "target_type_last": 137,
+          "complete_public_type": "theorem sum_fouvryTau_interval_payment_strict {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 D,\n        (fouvryTau (K - 1) d : ℝ) * (((B : ℝ) - (A : ℝ)) / (d : ℝ) + 1) := by\n",
+          "old_type_raw_utf8_sha256": "38826d300783e3fc85d099844cf89613c8ebb0bf3d259472cb594f30d2997901",
+          "new_type_raw_utf8_sha256": "38826d300783e3fc85d099844cf89613c8ebb0bf3d259472cb594f30d2997901",
+          "old_complete_declaration_raw_utf8_sha256": "1e6641770bb20aa3d33d14757b8957105597aabc39e471af39dadfa15096899e",
+          "new_complete_declaration_raw_utf8_sha256": "1e6641770bb20aa3d33d14757b8957105597aabc39e471af39dadfa15096899e",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_fouvryTau_interval_payment_strict_split",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict_split",
+          "source_span": [
+            684,
+            705
+          ],
+          "source_type_last": 689,
+          "target_span": [
+            165,
+            186
+          ],
+          "target_type_last": 170,
+          "complete_public_type": "theorem sum_fouvryTau_interval_payment_strict_split {K A B D : ℕ}\n    (hK : 2 ≤ K) (hAB : A ≤ B) (hcut : B ^ (K - 1) < (D + 1) ^ K) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) *\n        (∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 D, (fouvryTau (K - 1) d : ℝ)) := by\n",
+          "old_type_raw_utf8_sha256": "ffa6c7d7e624476bb091d55051fea41509c2323e50cebfab20ed739b640ccc5c",
+          "new_type_raw_utf8_sha256": "ffa6c7d7e624476bb091d55051fea41509c2323e50cebfab20ed739b640ccc5c",
+          "old_complete_declaration_raw_utf8_sha256": "65071d5bf3d8a1d0bc51eb4a837b8c5071a25387e0a661ac8abc0d60dae47ba1",
+          "new_complete_declaration_raw_utf8_sha256": "65071d5bf3d8a1d0bc51eb4a837b8c5071a25387e0a661ac8abc0d60dae47ba1",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "realDeletionRadius_eq_manuscript",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_eq_manuscript",
+          "source_span": [
+            710,
+            719
+          ],
+          "source_type_last": 711,
+          "target_span": [
+            191,
+            200
+          ],
+          "target_type_last": 192,
+          "complete_public_type": "theorem realDeletionRadius_eq_manuscript {K : ℕ} (hK : 2 ≤ K) (Z : ℝ) :\n    realDeletionRadius K Z = Z ^ (1 - 1 / (K : ℝ)) := by\n",
+          "old_type_raw_utf8_sha256": "65c4734eeeef75047242e6f92b69eec9519448f11f07d09b9ee2f52747e0927a",
+          "new_type_raw_utf8_sha256": "65c4734eeeef75047242e6f92b69eec9519448f11f07d09b9ee2f52747e0927a",
+          "old_complete_declaration_raw_utf8_sha256": "c805f53d583a4711a588cae6e2f0841b8f6775bca55d5b08ff0a61f201503538",
+          "new_complete_declaration_raw_utf8_sha256": "c805f53d583a4711a588cae6e2f0841b8f6775bca55d5b08ff0a61f201503538",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "realDeletionRadius_pow",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_pow",
+          "source_span": [
+            721,
+            725
+          ],
+          "source_type_last": 722,
+          "target_span": [
+            202,
+            206
+          ],
+          "target_type_last": 203,
+          "complete_public_type": "theorem realDeletionRadius_pow {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 0 ≤ Z) :\n    realDeletionRadius K Z ^ K = Z ^ (K - 1) := by\n",
+          "old_type_raw_utf8_sha256": "c59fa6a37e22956dfd31dae26fc7e672af9cb834c32f424ffc0c2c702261f4af",
+          "new_type_raw_utf8_sha256": "c59fa6a37e22956dfd31dae26fc7e672af9cb834c32f424ffc0c2c702261f4af",
+          "old_complete_declaration_raw_utf8_sha256": "7a07c68ce32733edc99c15a199ce43657d2813f650790e1b6c38ab879b15d0c1",
+          "new_complete_declaration_raw_utf8_sha256": "7a07c68ce32733edc99c15a199ce43657d2813f650790e1b6c38ab879b15d0c1",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "realDeletionRadius_bounds",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_bounds",
+          "source_span": [
+            727,
+            733
+          ],
+          "source_type_last": 728,
+          "target_span": [
+            208,
+            214
+          ],
+          "target_type_last": 209,
+          "complete_public_type": "theorem realDeletionRadius_bounds {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 1 ≤ Z) :\n    1 ≤ realDeletionRadius K Z ∧ realDeletionRadius K Z ≤ Z := by\n",
+          "old_type_raw_utf8_sha256": "39517e96cd68b75d6a051ad3bb0d571402f10ffa5dbe10a12d71a608bd95df1e",
+          "new_type_raw_utf8_sha256": "39517e96cd68b75d6a051ad3bb0d571402f10ffa5dbe10a12d71a608bd95df1e",
+          "old_complete_declaration_raw_utf8_sha256": "7a391a33b34df26323fb37af6ba62fb821a67cc864bff1528e90eb411c269e1f",
+          "new_complete_declaration_raw_utf8_sha256": "7a391a33b34df26323fb37af6ba62fb821a67cc864bff1528e90eb411c269e1f",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "floor_radius_strict_cutoff",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.floor_radius_strict_cutoff",
+          "source_span": [
+            736,
+            746
+          ],
+          "source_type_last": 738,
+          "target_span": [
+            217,
+            227
+          ],
+          "target_type_last": 219,
+          "complete_public_type": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n",
+          "old_type_raw_utf8_sha256": "6267b634a9a75def166ae70680fb763ca289aeb02257fdc41c4a572df75a65f0",
+          "new_type_raw_utf8_sha256": "6267b634a9a75def166ae70680fb763ca289aeb02257fdc41c4a572df75a65f0",
+          "old_complete_declaration_raw_utf8_sha256": "c2f82153f9949886b6d1730324fdc1a9773702580aa44fa37665276c23631ae0",
+          "new_complete_declaration_raw_utf8_sha256": "c2f82153f9949886b6d1730324fdc1a9773702580aa44fa37665276c23631ae0",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "native_floor_tau_payment",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.native_floor_tau_payment",
+          "source_span": [
+            749,
+            774
+          ],
+          "source_type_last": 753,
+          "target_span": [
+            230,
+            255
+          ],
+          "target_type_last": 234,
+          "complete_public_type": "theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}\n    (hR : 1 ≤ R) (hRZ : R ≤ Z) (hY : 0 ≤ Y) :\n    Y * (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ)) ≤\n      Y * (1 + Real.log Z) ^ (K - 1) + R * (1 + Real.log Z) ^ (K - 2) := by\n",
+          "old_type_raw_utf8_sha256": "4aeaa3ab120b0e5b029b6d7b572fc324215832ca992b080a8f10fbb489c5ea2c",
+          "new_type_raw_utf8_sha256": "4aeaa3ab120b0e5b029b6d7b572fc324215832ca992b080a8f10fbb489c5ea2c",
+          "old_complete_declaration_raw_utf8_sha256": "f8272bb0da42e8f93680d280e300d66a7ec6a864a690883b91b2c3353af4098d",
+          "new_complete_declaration_raw_utf8_sha256": "f8272bb0da42e8f93680d280e300d66a7ec6a864a690883b91b2c3353af4098d",
+          "all_type_and_proof_bytes_identical": true
+        },
+        {
+          "name": "sum_fouvryTau_E1_nat_endpoints",
+          "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_E1_nat_endpoints",
+          "source_span": [
+            777,
+            789
+          ],
+          "source_type_last": 781,
+          "target_span": [
+            258,
+            270
+          ],
+          "target_type_last": 262,
+          "complete_public_type": "theorem sum_fouvryTau_E1_nat_endpoints {K A B : ℕ} (hK : 2 ≤ K)\n    (hAB : A ≤ B) {Z : ℝ} (hZ : 2 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    (∑ n ∈ Ioc A B, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * (((B : ℝ) - (A : ℝ)) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+          "old_type_raw_utf8_sha256": "6e50200237a2dea45a9c01d4eed1ef2fc943a9b78c9c76b0d37342dc1283f3ca",
+          "new_type_raw_utf8_sha256": "6e50200237a2dea45a9c01d4eed1ef2fc943a9b78c9c76b0d37342dc1283f3ca",
+          "old_complete_declaration_raw_utf8_sha256": "f17de216e426ba02fcc250baafc6f58ca0160956c35f84bc29ad987a79587631",
+          "new_complete_declaration_raw_utf8_sha256": "f17de216e426ba02fcc250baafc6f58ca0160956c35f84bc29ad987a79587631",
+          "all_type_and_proof_bytes_identical": true
+        }
+      ],
+      "reused_theorem_count": 12,
+      "all_namespace_section_open_and_end_bytes_identical": true,
+      "definition_map": {
+        "fully_qualified_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius",
+        "source_span": [
+          708,
+          708
+        ],
+        "target_span": [
+          189,
+          189
+        ],
+        "literal_source": "def realDeletionRadius (K : ℕ) (Z : ℝ) : ℝ := Z ^ (((K - 1 : ℕ) : ℝ) / (K : ℝ))\n",
+        "old_raw_utf8_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054",
+        "new_raw_utf8_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054",
+        "raw_byte_identical": true
+      }
+    }
+  ],
+  "dependency_chain": [
+    "ImbalancedChen.Part3ElementaryTauTruncation",
+    "ImbalancedChen.Part3ElementaryTauDeletionFiber",
+    "ImbalancedChen.Part3ElementaryIntervalDivisibility",
+    "ImbalancedChen.Part3ElementaryE1StrictFloor"
+  ],
+  "dependency_contract": {
+    "tau_intended_module": "ImbalancedChen.Part3ElementaryTauDeletionFiber",
+    "tau_v2_source": ".lake/proof-continuation/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal-v2.txt",
+    "expected_v2_sha256": "8bf0caff8389f127ce21c5519d5745ef657894c2ccc050b12a8c349375d35b21",
+    "measured_v2_sha256": "8bf0caff8389f127ce21c5519d5745ef657894c2ccc050b12a8c349375d35b21",
+    "tau_actual_present_at_initial_read": false,
+    "creation": "Parent explicitly directs importing the module root is preparing. This author creates no actual module and does not claim the future imports resolve now.",
+    "v2_compatibility": "V2 preserves all eighteen tau public types and changes one proof expression to genuinely use hn. Both extracted files import that public API and do not redeclare any of the 304 tau content.",
+    "imports": "Interval imports tau plus Nat.Factorization.Basic; strict-floor imports interval plus Pow.Real and Floor.Semiring. Other named APIs are inherited through the displayed dependency chain.",
+    "actual_import_resolution": "NOT_RUN"
+  },
+  "prior_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-e1-strict-floor-cutoff-mean-independent-source-review-HOLD.json",
+    "raw_sha256": "4377ac687b500ef3f211e7a8e3276a4319d2f765af63919a8b369e73d25ee1f3",
+    "finding": "no_static_blocker for source792, not kernel acceptance."
+  },
+  "all_reused_imported_global_declarations": [
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.deletedProduct_mul",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.deletedProduct_dvd",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.exists_deletedProduct_le",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.eraseAt_injective_of_product",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_le_sum_smallCovers",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_le_sum_deletionFibers",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_orderedFactorTuples_truncated",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.deletedProduct",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.eraseAt",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.truncatedDivisors",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.deletionFiber",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.orderedFactorTuples",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauTruncation"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.mem_orderedFactorTuples_iff",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.orderedFactorTuples_zero",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.splitHeadTail_mem",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.joinHeadTail_mem",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.join_splitHeadTail",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.split_joinHeadTail",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_orderedFactorTuples_succ",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_orderedFactorTuples_eq_fouvryTau",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.prod_eraseAt",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.deletionFiber_normalized",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.compressDeleted_prod",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.compressDeleted_dvd",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.compressDeleted_mapsTo",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.compressDeleted_injective_of_normalized",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_deletionFiber_le_orderedFactorTuples",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_deletionFiber_le_fouvryTau_succ",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_deletionFiber_orderedFactorTuples_le_fouvryTau",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.fouvryTau_le_truncated_divisor_sum",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.headTailCarrier",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.splitHeadTail",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.joinHeadTail",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.compressDeleted",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryTauDeletionFiber"
+    }
+  ],
+  "all_extracted_global_declarations": [
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.interval_multiples_card_eq_div_sub",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.interval_multiples_card_le_length_div_add_one",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.truncated_divisor_carrier_eq",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_interval_divisor_weights_swap",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_interval_divisor_weights_le",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_split",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryIntervalDivisibility"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.exists_deletedProduct_le_strict",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_smallCover_eq_sum_deletionFibers",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.card_le_sum_deletionFibers_strict",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.fouvryTau_le_truncated_divisor_sum_strict",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_interval_payment_strict_split",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_eq_manuscript",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_pow",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius_bounds",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.floor_radius_strict_cutoff",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.native_floor_tau_payment",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_E1_nat_endpoints",
+      "kind": "theorem",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    },
+    {
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.realDeletionRadius",
+      "kind": "definition",
+      "module": "ImbalancedChen.Part3ElementaryE1StrictFloor"
+    }
+  ],
+  "global_name_check": {
+    "method": "Compare every fully qualified imported and extracted declaration name, using the full base and tau-v2 theorem inventories plus all nine imported definitions.",
+    "imported_count": 34,
+    "extracted_count": 20,
+    "total_count": 54,
+    "duplicate_count": 0,
+    "duplicate_names": [],
+    "all_names_unique": true,
+    "no_tau304_redeclarations": true
+  },
+  "verification": {
+    "both_full_source_utf8_roundtrips": true,
+    "both_retained_suffixes_raw_byte_identical": true,
+    "all_19_complete_types_and_proofs_raw_byte_identical": true,
+    "realDeletionRadius_definition_raw_byte_identical": true,
+    "both_inverse_reconstructions_match_source_raw_hash": true,
+    "old_source_drafts_unchanged": true,
+    "actual_lean_unchanged": true,
+    "proof_tool_evidence": "NONE",
+    "syntax_import_elaboration_kernel": "NOT_CHECKED",
+    "saved_checkpoint_base64_inverse_rechecked_against_actual_raw_files": true
+  },
+  "claim_boundaries": {
+    "full_real_endpoint_E1": "OPEN",
+    "shifted_M2": "OPEN",
+    "spectrum": "OPEN",
+    "seven_over_32": "OPEN",
+    "original_forall_kappa": "OPEN",
+    "main_theorem": "OPEN",
+    "engineering_admission": false
+  },
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryIntervalDivisibility-module-source.txt",
+      ".lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryE1StrictFloor-module-source.txt",
+      ".lake/proof-continuation/source-reviews/20261022-e1-module-extraction-source-preparation-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "old_draft_edits": 0,
+    "helper_files": 0,
+    "proof_tools": 0,
+    "compiler_runs": 0,
+    "checker_runs": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "git_operations": 0,
+    "runtime_or_pin_edits": 0,
+    "new_subagents": 0
+  },
+  "quota": {
+    "fresh_used_percent": 44,
+    "fresh_remaining_percent": 56,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false,
+    "latest_used_percent": 45,
+    "latest_remaining_percent": 55
+  },
+  "stop_condition": "Exactly two module TXT drafts plus this extraction checkpoint delivered. HOLD. No actual integration, proof execution, source expansion or further task."
+}

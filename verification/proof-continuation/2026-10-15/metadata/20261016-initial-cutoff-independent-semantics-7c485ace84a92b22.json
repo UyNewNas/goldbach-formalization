@@ -1,0 +1,335 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_COMPLETE_INITIAL_CUTOFF_SEMANTICS_AND_RELATIVE_DAG_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author",
+  "created_utc": "2026-10-15T22:42:15.420365+00:00",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdInitialCutoff.lean",
+    "sha256": "69c928f10c84e647febf141fd23d100194ac61f3c7bed86579de99b7bc21259a"
+  },
+  "complete_declaration_count": 13,
+  "definition_count": 1,
+  "proof_count": 12,
+  "whole_source_read": true,
+  "all_complete_declarations": [
+    {
+      "name": "actualExtendedThirdInitialStopExponent",
+      "kind": "def",
+      "private": false,
+      "line": 26,
+      "complete_header": "def actualExtendedThirdInitialStopExponent (e : ℝ) (m : ℕ) : ℝ",
+      "complete_definition": "def actualExtendedThirdInitialStopExponent (e : ℝ) (m : ℕ) : ℝ :=\n  actualExtendedThirdDyadicStep m *\n    (⌊(thirdPrefixRho - 4 * e) / actualExtendedThirdDyadicStep m⌋₊ : ℝ)",
+      "mathematical_and_API_assessment": "Literal step * natural floor(wall/step). No positivity of the integer floor is assumed; zero on coarse grids is retained."
+    },
+    {
+      "name": "actualExtendedThirdInitialStopExponent_bounds",
+      "kind": "theorem",
+      "private": false,
+      "line": 30,
+      "complete_header": "theorem actualExtendedThirdInitialStopExponent_bounds {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (m : ℕ) :\n    0 ≤ actualExtendedThirdInitialStopExponent e m ∧\n      actualExtendedThirdInitialStopExponent e m ≤ thirdPrefixRho - 4 * e ∧\n        thirdPrefixRho - 4 * e - actualExtendedThirdDyadicStep m <\n          actualExtendedThirdInitialStopExponent e m ∧\n            actualExtendedThirdInitialStopExponent e m < thirdPrefixRho",
+      "complete_proof": "have hd := actualExtendedThirdDyadicStep_pos m\n  have hw : 0 ≤ thirdPrefixRho - 4 * e := by\n    dsimp [thirdPrefixRho]\n    linarith\n  have hdiv : 0 ≤ (thirdPrefixRho - 4 * e) / actualExtendedThirdDyadicStep m :=\n    div_nonneg hw hd.le\n  have hcancel : actualExtendedThirdDyadicStep m *\n      ((thirdPrefixRho - 4 * e) / actualExtendedThirdDyadicStep m) = thirdPrefixRho - 4 * e := by\n    simpa only [mul_comm] using div_mul_cancel₀ (thirdPrefixRho - 4 * e) hd.ne'\n  have hupper : actualExtendedThirdInitialStopExponent e m ≤ thirdPrefixRho - 4 * e := by\n    unfold actualExtendedThirdInitialStopExponent\n    exact (mul_le_mul_of_nonneg_left (Nat.floor_le hdiv) hd.le).trans_eq hcancel\n  have hnext := mul_lt_mul_of_pos_left\n    (Nat.lt_floor_add_one ((thirdPrefixRho - 4 * e) / actualExtendedThirdDyadicStep m)) hd\n  rw [hcancel] at hnext\n  refine ⟨mul_nonneg hd.le (Nat.cast_nonneg _), hupper, ?_, ?_⟩\n  · unfold actualExtendedThirdInitialStopExponent\n    nlinarith only [hnext]\n  · exact hupper.trans_lt (by linarith)",
+      "mathematical_and_API_assessment": "rho=19/96 and 0<e<=1/384 give nonnegative wall<rho. Nat.floor_le and lt_floor_add_one multiply by positive step to yield 0<=q<=wall and wall-step<q<rho. hcancel is oriented exactly as the left side of the multiplied strict inequality."
+    },
+    {
+      "name": "initialDyadicLo_step",
+      "kind": "theorem",
+      "private": true,
+      "line": 57,
+      "complete_header": "private theorem initialDyadicLo_step (m : ℕ) (i : Fin (2 ^ m)) :\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 =\n      actualExtendedThirdDyadicStep m * (i.val : ℝ)",
+      "complete_proof": "unfold actualExtendedThirdDyadicLo actualExtendedThirdDyadicStep\n  ring",
+      "mathematical_and_API_assessment": "Only rearranges the existing dyadic lower endpoint; natural label/cast unchanged."
+    },
+    {
+      "name": "initialDyadicHi_step",
+      "kind": "theorem",
+      "private": true,
+      "line": 63,
+      "complete_header": "private theorem initialDyadicHi_step (m : ℕ) (i : Fin (2 ^ m)) :\n    actualExtendedThirdDyadicHi m (fun _ => i) 0 =\n      actualExtendedThirdDyadicStep m * ((i.val + 1 : ℕ) : ℝ)",
+      "complete_proof": "unfold actualExtendedThirdDyadicHi actualExtendedThirdDyadicStep\n  ring",
+      "mathematical_and_API_assessment": "Only rearranges the existing upper endpoint with the identical natural (i.val+1) cast on both sides; no ceil or overshoot."
+    },
+    {
+      "name": "initialDyadicStep_full",
+      "kind": "theorem",
+      "private": true,
+      "line": 69,
+      "complete_header": "private theorem initialDyadicStep_full (m : ℕ) :\n    actualExtendedThirdDyadicStep m * ((2 ^ m : ℕ) : ℝ) = thirdPrefixRho",
+      "complete_proof": "simp only [actualExtendedThirdDyadicStep, Nat.cast_pow, Nat.cast_ofNat]\n  exact div_mul_cancel₀ _ (by positivity)",
+      "mathematical_and_API_assessment": "step*2^m=rho using the actual positive real dyadic denominator and explicit Nat.cast_pow/ofNat."
+    },
+    {
+      "name": "compactFirstStop_iff_log",
+      "kind": "theorem",
+      "private": true,
+      "line": 74,
+      "complete_header": "private theorem compactFirstStop_iff_log {e : ℝ} (he0 : 0 < e)\n    (he : e ≤ 1 / 384) (m N : ℕ) (history : List ℕ)\n    (hx : 0 ≤ primeHistoryLogCoordinates (N : ℝ) 1 history 0) :\n    actualExtendedThirdCompactFirstStop e m N history ↔\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdInitialStopExponent e m",
+      "complete_proof": "let d := actualExtendedThirdDyadicStep m\n  let wall := thirdPrefixRho - 4 * e\n  let x := primeHistoryLogCoordinates (N : ℝ) 1 history 0\n  let k := ⌊wall / d⌋₊\n  have hd : 0 < d := actualExtendedThirdDyadicStep_pos m\n  have hw : 0 ≤ wall := by\n    dsimp [wall, thirdPrefixRho]\n    linarith\n  have hwdiv : 0 ≤ wall / d := div_nonneg hw hd.le\n  have hxd : 0 ≤ x / d := div_nonneg hx hd.le\n  have hkn : k < 2 ^ m := by\n    apply (Nat.floor_lt hwdiv).mpr\n    apply (div_lt_iff₀ hd).mpr\n    calc\n      wall < thirdPrefixRho := by dsimp [wall]; linarith\n      _ = ((2 ^ m : ℕ) : ℝ) * d := by\n        simpa only [mul_comm] using (initialDyadicStep_full m).symm\n  constructor\n  · rintro ⟨i, _hlo, hhi, hwall⟩\n    rw [initialDyadicHi_step] at hhi hwall\n    have hik : i.val + 1 ≤ k := (Nat.le_floor_iff hwdiv).mpr\n      ((le_div_iff₀ hd).mpr (by simpa only [mul_comm] using hwall))\n    change x < d * (k : ℝ)\n    exact hhi.trans_le (mul_le_mul_of_nonneg_left (by exact_mod_cast hik) hd.le)\n  · intro hcut\n    change x < d * (k : ℝ) at hcut\n    let a := ⌊x / d⌋₊\n    have hak : a < k := (Nat.floor_lt hxd).mpr\n      ((div_lt_iff₀ hd).mpr (by simpa only [mul_comm] using hcut))\n    let i : Fin (2 ^ m) := ⟨a, hak.trans hkn⟩\n    refine ⟨i, ?_, ?_, ?_⟩\n    · rw [initialDyadicLo_step]\n      simpa only [i, mul_comm] using (le_div_iff₀ hd).mp (Nat.floor_le hxd)\n    · rw [initialDyadicHi_step]\n      have hnext := (div_lt_iff₀ hd).mp (Nat.lt_floor_add_one (x / d))\n      simpa only [i, Nat.cast_add, Nat.cast_one, mul_comm] using hnext\n    · rw [initialDyadicHi_step]\n      have ha : a + 1 ≤ k := Nat.succ_le_of_lt hak\n      have hbound : d * ((a + 1 : ℕ) : ℝ) ≤ d * (k : ℝ) :=\n        mul_le_mul_of_nonneg_left (by exact_mod_cast ha) hd.le\n      exact hbound.trans (actualExtendedThirdInitialStopExponent_bounds he0 he m).2.1",
+      "mathematical_and_API_assessment": "For nonnegative x, k=floor(wall/step)<2^m. Forward, upper index i+1<=k preserves strict x<upper<=q. Reverse, a=floor(x/step)<k gives an actual Fin label a, lower<=x<upper and upper<=q<=wall. k=0 automatically makes the reverse premise impossible. Uses precisely the original half-open coordinate bins and closed upper-stop wall."
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop_iff_prime",
+      "kind": "theorem",
+      "private": false,
+      "line": 124,
+      "complete_header": "theorem actualExtendedThirdCompactFirstStop_iff_prime {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N)\n    (m p : ℕ) (hp : 0 < p) :\n    actualExtendedThirdCompactFirstStop e m N [p] ↔\n      (p : ℝ) < (N : ℝ) ^ actualExtendedThirdInitialStopExponent e m",
+      "complete_proof": "have hNr : (1 : ℝ) < N := by exact_mod_cast hN\n  have hp1 : (1 : ℝ) ≤ p := by exact_mod_cast (show 1 ≤ p by omega)\n  have hx : 0 ≤ primeHistoryLogCoordinates (N : ℝ) 1 [p] 0 := by\n    simpa [primeHistoryLogCoordinates, primeHistoryTuple] using\n      div_nonneg (Real.log_nonneg hp1) (Real.log_pos hNr).le\n  have hpow : (N : ℝ) ^ primeHistoryLogCoordinates (N : ℝ) 1 [p] 0 = (p : ℝ) := by\n    simpa [primeHistoryLogCoordinates, primeHistoryTuple, actualPrimeTupleLog] using\n      actualPrimeTupleLog_rpow hN (fun _ : Fin 1 => p) (fun _ => hp) 0\n  rw [compactFirstStop_iff_log he0 he m N [p] hx,\n    ← Real.rpow_lt_rpow_left_iff hNr, hpow]",
+      "mathematical_and_API_assessment": "Positive natural p supplies p>=1 and log-coordinate>=0; N>1 supplies log N>0. Existing actualPrimeTupleLog_rpow and strict increasing rpow transform the log iff into literal p<N^q, preserving equality exclusion. No primality or first-cube assumption is needed for this geometric equivalence."
+    },
+    {
+      "name": "actualExtendedThirdInitialStop_cutoff_le_target",
+      "kind": "theorem",
+      "private": false,
+      "line": 141,
+      "complete_header": "theorem actualExtendedThirdInitialStop_cutoff_le_target {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N) (m : ℕ) :\n    (N : ℝ) ^ actualExtendedThirdInitialStopExponent e m ≤ (N : ℝ)",
+      "complete_proof": "have hNr : (1 : ℝ) < N := by exact_mod_cast hN\n  calc\n    _ ≤ (N : ℝ) ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le hNr.le\n      ((actualExtendedThirdInitialStopExponent_bounds he0 he m).2.2.2.le.trans\n        (by norm_num [thirdPrefixRho]))\n    _ = _ := Real.rpow_one _",
+      "mathematical_and_API_assessment": "q<rho=19/96<=1 and N>1 imply N^q<=N. This does not replace strict prime endpoints by floors/ceilings."
+    },
+    {
+      "name": "initial_next_eq_ordinary",
+      "kind": "theorem",
+      "private": true,
+      "line": 151,
+      "complete_header": "private theorem initial_next_eq_ordinary (e : ℝ) (m N : ℕ)\n    (positive : Bool) (q : ℕ) (history : List ℕ) (hne : history ≠ []) :\n    actualExtendedThirdCompactInitialPolicy e m N positive (q :: history) =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))\n        positive (q :: history)",
+      "complete_proof": "have hlen : (q :: history).length ≠ 1 := by\n    intro hh\n    apply hne\n    apply List.length_eq_zero_iff.mp\n    simp only [List.length_cons] at hh\n    omega\n  simp [actualExtendedThirdCompactInitialPolicy, ordinaryParityRosserPolicy,\n    oddFirstExitPolicy, hlen]",
+      "mathematical_and_API_assessment": "A nonempty history gives length(q::history)>=2. The extra length=1 implication is vacuous, leaving the exact ordinary upper parity policy, including the full product and all inherited cubic tests."
+    },
+    {
+      "name": "initial_nonempty_continuation",
+      "kind": "theorem",
+      "private": true,
+      "line": 165,
+      "complete_header": "private theorem initial_nonempty_continuation (e : ℝ) (m N : ℕ)\n    (weight : ℕ → ℝ) (remaining history : List ℕ) (positive : Bool) (mass : ℝ)\n    (hne : history ≠ []) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight history positive mass remaining =\n      firstExitRetainedPolynomial\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)))\n        weight history positive mass remaining",
+      "complete_proof": "induction remaining generalizing history positive mass with\n  | nil => rfl\n  | cons q qs ih =>\n      simp only [firstExitRetainedPolynomial,\n        initial_next_eq_ordinary e m N (!positive) q history hne]\n      rw [ih history positive mass hne]\n      by_cases hq : ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))\n          (!positive) (q :: history) = true\n      · rw [if_pos hq, if_pos hq, ih (q :: history) (!positive) (mass * weight q) (by simp)]\n      · rw [if_neg hq, if_neg hq]",
+      "mathematical_and_API_assessment": "Carrier induction compares every actual skip/select continuation at fixed original history, parity and mass. Nonempty history persists under cons. No sorted carrier, weight sign, mass positivity, density assumption or validity license is used."
+    },
+    {
+      "name": "initial_root_on_low",
+      "kind": "theorem",
+      "private": true,
+      "line": 184,
+      "complete_header": "private theorem initial_root_on_low (e : ℝ) (m N : ℕ) (weight : ℕ → ℝ)\n    (carrier : List ℕ)\n    (hstop : ∀ p ∈ carrier, actualExtendedThirdCompactFirstStop e m N [p]) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 carrier =\n      firstExitRetainedPolynomial\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)))\n        weight [] true 1 carrier",
+      "complete_proof": "revert hstop\n  induction carrier with\n  | nil => intro _; rfl\n  | cons p ps ih =>\n      intro hstop\n      have hp := hstop p (by simp)\n      have hps := fun q hq => hstop q (List.mem_cons_of_mem p hq)\n      have htest : actualExtendedThirdCompactInitialPolicy e m N false [p] =\n          ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) false [p] := by\n        simp [actualExtendedThirdCompactInitialPolicy, ordinaryParityRosserPolicy,\n          oddFirstExitPolicy, hp]\n      simp only [firstExitRetainedPolynomial, htest]\n      rw [ih hps]\n      by_cases ht : ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))\n          false [p] = true\n      · rw [if_pos ht, if_pos ht,\n          initial_nonempty_continuation e m N weight ps [p] false (1 * weight p) (by simp)]\n      · rw [if_neg ht, if_neg ht]",
+      "mathematical_and_API_assessment": "Every low singleton passes precisely the extra FirstStop guard; ordinary singleton full tests may still reject and are retained unchanged on both sides. Skip uses the root induction; selected branch uses nonempty continuation at sign=false and mass=1*weight p."
+    },
+    {
+      "name": "initial_root_skip_high",
+      "kind": "theorem",
+      "private": true,
+      "line": 211,
+      "complete_header": "private theorem initial_root_skip_high (e : ℝ) (m N : ℕ) (weight : ℕ → ℝ)\n    (high low : List ℕ)\n    (hfail : ∀ p ∈ high, actualExtendedThirdCompactInitialPolicy e m N false [p] = false) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 (high ++ low) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        weight [] true 1 low",
+      "complete_proof": "revert hfail\n  induction high with\n  | nil => intro _; rfl\n  | cons p ps ih =>\n      intro hfail\n      have hp := hfail p (by simp)\n      simpa only [List.cons_append, firstExitRetainedPolynomial, hp,\n        Bool.false_eq_true, if_false, add_zero] using\n        ih (fun q hq => hfail q (List.mem_cons_of_mem p hq))",
+      "mathematical_and_API_assessment": "At root []/true each high singleton is rejected by the actual initial policy; its select contribution is zero. Induction deletes only this skip segment, keeping arbitrary signed local weights and the entire low carrier."
+    },
+    {
+      "name": "actualExtendedThirdInitialPolicy_eq_actualPlus",
+      "kind": "theorem",
+      "private": false,
+      "line": 231,
+      "complete_header": "theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) {N : ℕ} (hN : 1 < N) (m : ℕ) :\n    firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N N 0 ((N : ℝ) ^ thirdPrefixRho)) =\n      actualSmallRosserPlusDensity N N\n        ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n        ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))",
+      "complete_proof": "let z := (N : ℝ) ^ actualExtendedThirdInitialStopExponent e m\n  let weight := fun p : ℕ => 1 / ((p : ℝ) - 1)\n  have hNr : (1 : ℝ) < N := by exact_mod_cast hN\n  have hz : z ≤ (N : ℝ) ^ thirdPrefixRho :=\n    Real.rpow_le_rpow_of_exponent_le hNr.le\n      (actualExtendedThirdInitialStopExponent_bounds he0 he m).2.2.2.le\n  have hfail : ∀ p ∈ roughPrimeUniverse N N z ((N : ℝ) ^ thirdPrefixRho),\n      actualExtendedThirdCompactInitialPolicy e m N false [p] = false := by\n    intro p hp\n    have hn : ¬actualExtendedThirdCompactFirstStop e m N [p] := by\n      intro hs\n      exact (not_lt_of_ge (mem_roughPrimeUniverse_lower hp))\n        ((actualExtendedThirdCompactFirstStop_iff_prime he0 he hN m p\n          (mem_roughPrimeUniverse_prime hp).pos).mp hs)\n    simp [actualExtendedThirdCompactInitialPolicy, oddFirstExitPolicy, hn]\n  have hstop : ∀ p ∈ roughPrimeUniverse N N 0 z,\n      actualExtendedThirdCompactFirstStop e m N [p] := by\n    intro p hp\n    exact (actualExtendedThirdCompactFirstStop_iff_prime he0 he hN m p\n      (mem_roughPrimeUniverse_prime hp).pos).mpr (mem_roughPrimeUniverse_upper hp)\n  rw [roughPrimeUniverse_split N N z ((N : ℝ) ^ thirdPrefixRho) hz,\n    initial_root_skip_high e m N weight _ _ hfail,\n    initial_root_on_low e m N weight _ hstop]\n  have hlevel : 0 < thirdPrefixTheta - 2 * e := by\n    dsimp [thirdPrefixTheta]\n    linarith\n  simpa only [Bool.false_eq_true, if_false] using\n    firstExitRetainedPolynomial_ordinaryParityRosser_eq_actualDensity\n      false N N z ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))\n      (Real.one_lt_rpow hNr hlevel) (by simp)",
+      "mathematical_and_API_assessment": "q<=rho supplies exact roughPrimeUniverse_split at zstop=N^q with same N exclusions and cap=N. Real high lower bound contradicts strict FirstStop; low membership proves strict FirstStop. Both finite recursive identities reduce to ordinary upper root at unchanged R=N^(theta-2e). theta=299/500 and e<=1/384 give exponent>0, so N>1 pays the supplier premise 1<R. lower=false makes the conditional lower cutoff premise vacuous; no Even N hypothesis. Result is the literal reciprocal-totient density of original capped prime support below zstop, not the untruncated density below N^rho."
+    }
+  ],
+  "header": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "parent_binding": {
+    "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+    "source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+    "cache_present_at_review": false,
+    "scope": "Current exact5cef source read/bound. Parent actual owned acceptance is a separate runtime gate; this source-only review does not infer it from absence/presence of metadata."
+  },
+  "actual_public_API_interfaces": [
+    {
+      "module": "ImbalancedChen.OrdinaryRosserFirstExitPolicy",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\OrdinaryRosserFirstExitPolicy.lean",
+      "sha256": "879ae0d1793467727abb01d9f9c753d8d8daa756f6462c9bd1cb22bcfa71b49b",
+      "line": 426,
+      "complete_header": "theorem firstExitRetainedPolynomial_ordinaryParityRosser_eq_actualDensity\n    (lower : Bool) (N cap : ℕ) (y R : ℝ) (hR : 1 < R)\n    (hyR : lower = true → y ≤ R) :\n    firstExitRetainedPolynomial (ordinaryParityRosserPolicy lower R)\n        (fun p => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 y) =\n      if lower then actualSmallRosserMinusDensity N cap y R\n        else actualSmallRosserPlusDensity N cap y R",
+      "positive_path": [
+        "ImbalancedChen.ActualExtendedThirdInitialCutoff",
+        "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "ImbalancedChen.ActualUpperPolicyDensity",
+        "ImbalancedChen.FirstExitHistoricalLevels",
+        "ImbalancedChen.FirstExitFrontierAdmission",
+        "ImbalancedChen.FrozenRosserPolicy",
+        "ImbalancedChen.OrdinaryRosserContinuation",
+        "ImbalancedChen.OrdinaryRosserFirstExitPolicy"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimePresieveSplit",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimePresieveSplit.lean",
+      "sha256": "dc6170c527cdde252ecdaa00997841522a4aa469adf799eaae4549e1310ced41",
+      "line": 21,
+      "complete_header": "theorem roughPrimeUniverse_split (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) :\n    roughPrimeUniverse N cap 0 z =\n      roughPrimeUniverse N cap w z ++ roughPrimeUniverse N cap 0 w",
+      "positive_path": [
+        "ImbalancedChen.ActualExtendedThirdInitialCutoff",
+        "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "ImbalancedChen.ActualUpperPolicyDensity",
+        "ImbalancedChen.ActualFirstExitDensityProjection",
+        "ImbalancedChen.ActualPrimePresieveSplit"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FinitePrimeGeometryCore",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FinitePrimeGeometryCore.lean",
+      "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "line": 186,
+      "complete_header": "theorem actualPrimeTupleLog_rpow {k N : ℕ} (hN : 1 < N)\n    (p : Fin k → ℕ) (hp : ∀ i, 0 < p i) (i : Fin k) :\n    (N : ℝ) ^ (actualPrimeTupleLog N p i) = p i",
+      "positive_path": [
+        "ImbalancedChen.ActualExtendedThirdInitialCutoff",
+        "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "ImbalancedChen.HistoricalUnorderedThirdGeometry",
+        "ImbalancedChen.FinitePrimeGeometryCore"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualSmallRosserDensity",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualSmallRosserDensity.lean",
+      "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+      "line": 42,
+      "complete_header": "def actualSmallRosserPlusDensity (N cap : ℕ) (w L : ℝ) : ℝ",
+      "positive_path": [
+        "ImbalancedChen.ActualExtendedThirdInitialCutoff",
+        "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "ImbalancedChen.ActualUpperPolicyDensity",
+        "ImbalancedChen.ActualFirstExitDensityProjection",
+        "ImbalancedChen.ActualPrimePresieveSplit",
+        "ImbalancedChen.ActualSmallRosserDensity"
+      ]
+    }
+  ],
+  "fixed_native_APIs": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Defs.lean",
+      "sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+      "declarations": [
+        {
+          "line": 140,
+          "signature": "Nat.le_floor_iff (ha:0<=a): n<=floor a iff (n:R)<=a"
+        },
+        {
+          "line": 143,
+          "signature": "Nat.le_floor (h:(n:R)<=a): n<=floor a"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/Floor/Semiring.lean",
+      "sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "declarations": [
+        {
+          "line": 41,
+          "signature": "Nat.floor_lt (ha:0<=a): floor a<n iff a<(n:R)"
+        },
+        {
+          "line": 47,
+          "signature": "Nat.floor_le (ha:0<=a): (floor a:R)<=a"
+        },
+        {
+          "line": 63,
+          "signature": "Nat.lt_floor_add_one(a): a<(floor a:R)+1"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "declarations": [
+        {
+          "line": 615,
+          "signature": "Real.rpow_le_rpow_of_exponent_le (hx:1<=x)(hyz:y<=z): x^y<=x^z"
+        },
+        {
+          "line": 634,
+          "signature": "Real.rpow_lt_rpow_left_iff (hx:1<x): x^y<x^z iff y<z"
+        },
+        {
+          "line": 672,
+          "signature": "Real.one_lt_rpow (hx:1<x)(hz:0<z): 1<x^z"
+        }
+      ]
+    }
+  ],
+  "geometry_and_policy_boundaries": {
+    "strict_stop": true,
+    "qcut_zero_allowed": true,
+    "same_full_original_carrier_cap_and_N_exclusions": true,
+    "same_old_Rosser_level": true,
+    "full_total_product_and_cubic_tests_preserved": true,
+    "no_EvenN_premise": true,
+    "no_density_sign_or_monotonicity_assumption": true,
+    "no_caller_admission_or_analytic_license": true,
+    "only_root_full_w_zero_cap_N": true
+  },
+  "relative_DAG_report": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-initial-cutoff-independent-relative-dag.json",
+    "sha256": "71f70a166c5f4cd70b61d43fef73f0f7b759a21aac7f30c45f0a4dcb448f1f22",
+    "only_new_project_module": [
+      "ImbalancedChen.ActualExtendedThirdInitialCutoff"
+    ],
+    "new_foreign_roots": 0,
+    "not_independent_imported_closure_replay": true
+  },
+  "owner_report_reference": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-initial-cutoff-author-scope.json",
+    "sha256": "e110ddfe34211419b5a8c877f9d9a09bf0ebb90299d6a9ff4ed8acc0cfd0436b"
+  },
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "forbidden_admit_axiom_scan_on_comment_stripped_source": [],
+  "source_options": [],
+  "findings": [],
+  "determined_mathematical_or_fixed_API_blocker": false,
+  "remaining_gates": [
+    "Exact candidate Lean elaboration and full owned imported-dependency audit, after root-authorized actual parent acceptance. No successful compile is asserted by this review.",
+    "This finite equality supplies no asymptotic ordinary-plus estimate, full physical rho density, saving positivity, arithmetic counting remainder or distribution endpoint.",
+    "Any later analytic replacement of qcut by rho requires a genuine endpoint-limit argument; this leaf proves the precise truncated equality only."
+  ],
+  "lean_invoked": false,
+  "lake_build_checker_invoked": false,
+  "source_checker_pin_modified": false,
+  "bytecode_written": false,
+  "Lean_PASS_or_imported_closure_acceptance_claimed": false
+}

@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:20:43.509469+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_NO_VISIBLE_MATHEMATICAL_BLOCKER",
+  "candidate": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SmoothProgressionError.lean",
+    "sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+    "source_declaration_count": 9,
+    "definition_count": 1
+  },
+  "all_complete_source_headers": [
+    {
+      "name": "poisson_decay_step",
+      "kind": "theorem",
+      "private": false,
+      "line": 27,
+      "complete_source_header": "theorem poisson_decay_step {t : ℝ} (ht : 0 < t) (n : ℕ) :\n    t / (1 + t * (n + 1)) ^ 2 ≤\n      1 / (1 + t * n) - 1 / (1 + t * (n + 1))"
+    },
+    {
+      "name": "poisson_decay_sum_range_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 38,
+      "complete_source_header": "theorem poisson_decay_sum_range_le {t : ℝ} (ht : 0 < t) (N : ℕ) :\n    (∑ n ∈ Finset.range N, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1"
+    },
+    {
+      "name": "poisson_decay_summable_nat",
+      "kind": "theorem",
+      "private": false,
+      "line": 49,
+      "complete_source_header": "theorem poisson_decay_summable_nat {t : ℝ} (ht : 0 < t) :\n    Summable (fun n : ℕ ↦ t / (1 + t * ((n : ℝ) + 1)) ^ 2)"
+    },
+    {
+      "name": "poisson_decay_tsum_nat_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 53,
+      "complete_source_header": "theorem poisson_decay_tsum_nat_le {t : ℝ} (ht : 0 < t) :\n    (∑' n : ℕ, t / (1 + t * ((n : ℝ) + 1)) ^ 2) ≤ 1"
+    },
+    {
+      "name": "poissonNonzeroDecay",
+      "kind": "def",
+      "private": false,
+      "line": 57,
+      "complete_source_header": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ",
+      "complete_definition": "def poissonNonzeroDecay (t : ℝ) (h : ℤ) : ℝ :=\n  if h = 0 then 0 else t / (1 + |t * h|) ^ 2"
+    },
+    {
+      "name": "poissonNonzeroDecay_summable_tsum_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 60,
+      "complete_source_header": "theorem poissonNonzeroDecay_summable_tsum_le {t : ℝ} (ht : 0 < t) :\n    Summable (poissonNonzeroDecay t) ∧ (∑' h : ℤ, poissonNonzeroDecay t h) ≤ 2"
+    },
+    {
+      "name": "poissonNonzeroFrequency_uniform",
+      "kind": "theorem",
+      "private": false,
+      "line": 85,
+      "complete_source_header": "theorem poissonNonzeroFrequency_uniform :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x : ℝ,\n      ‖∑' h : ℤ, poissonNonzeroFrequency t x h‖ ≤ C"
+    },
+    {
+      "name": "scaledDyadicCutoff_finset_progression_uniform_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 113,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_progression_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q → ∀ b : ℤ,\n      |(∑ m ∈ S, if Int.ModEq q (m : ℤ) b then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C"
+    },
+    {
+      "name": "scaledDyadicCutoff_finset_multiples_uniform_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 126,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_multiples_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, 0 < q →\n      |(∑ m ∈ S, if q ∣ m then scaledDyadicCutoff M m else 0) -\n          (M / q) * cutoffMass| ≤ C"
+    }
+  ],
+  "primitive_definitions_and_supplier_types": [
+    {
+      "source": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "name": "dyadicBump",
+      "kind": "def",
+      "private": false,
+      "line": 36,
+      "complete_source_header": "def dyadicBump : ContDiffBump (3 / 2 : ℝ) where\n  rIn",
+      "complete_definition": "def dyadicBump : ContDiffBump (3 / 2 : ℝ) where\n  rIn := 1 / 2\n  rOut := 1\n  rIn_pos := by norm_num\n  rIn_lt_rOut := by norm_num"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "name": "dyadicCutoff",
+      "kind": "def",
+      "private": false,
+      "line": 42,
+      "complete_source_header": "def dyadicCutoff (x : ℝ) : ℝ",
+      "complete_definition": "def dyadicCutoff (x : ℝ) : ℝ := dyadicBump x"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "name": "scaledDyadicCutoff",
+      "kind": "def",
+      "private": false,
+      "line": 68,
+      "complete_source_header": "def scaledDyadicCutoff (M x : ℝ) : ℝ",
+      "complete_definition": "def scaledDyadicCutoff (M x : ℝ) : ℝ := dyadicCutoff (x / M)"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "name": "dyadicCutoffSchwartz",
+      "kind": "def",
+      "private": false,
+      "line": 100,
+      "complete_source_header": "def dyadicCutoffSchwartz : 𝓢(ℝ, ℂ)",
+      "complete_definition": "def dyadicCutoffSchwartz : 𝓢(ℝ, ℂ) :=\n  (dyadicCutoff_hasCompactSupport.comp_left (g := Complex.ofRealCLM) (map_zero _)).toSchwartzMap\n    (by exact Complex.ofRealCLM.contDiff.comp dyadicCutoff_contDiff)"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "name": "schwartz_norm_le_rapidDecay",
+      "kind": "theorem",
+      "private": false,
+      "line": 130,
+      "complete_source_header": "theorem schwartz_norm_le_rapidDecay (f : 𝓢(ℝ, ℂ)) (k : ℕ) :\n    ∃ C : ℝ, 0 < C ∧ ∀ x : ℝ, ‖f x‖ ≤ C / (1 + |x|) ^ k"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonPoisson.lean",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "name": "poissonNonzeroFrequency",
+      "kind": "def",
+      "private": false,
+      "line": 133,
+      "complete_source_header": "def poissonNonzeroFrequency (t x : ℝ) (h : ℤ) : ℂ",
+      "complete_definition": "def poissonNonzeroFrequency (t x : ℝ) (h : ℤ) : ℂ :=\n  if h = 0 then 0 else\n    t • (𝓕 dyadicCutoffSchwartz) (t * h) * fourier h (x : UnitAddCircle)"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonPoisson.lean",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "name": "poissonNonzeroFrequency_summable_norm",
+      "kind": "theorem",
+      "private": false,
+      "line": 140,
+      "complete_source_header": "theorem poissonNonzeroFrequency_summable_norm {t : ℝ} (ht : 0 < t) (x : ℝ) :\n    Summable (fun h : ℤ ↦ ‖poissonNonzeroFrequency t x h‖)"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonPoisson.lean",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "name": "cutoffMass",
+      "kind": "def",
+      "private": false,
+      "line": 170,
+      "complete_source_header": "def cutoffMass : ℝ",
+      "complete_definition": "def cutoffMass : ℝ := ((𝓕 dyadicCutoffSchwartz) 0).re"
+    },
+    {
+      "source": "ImbalancedChen/Part3CommonPoisson.lean",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "name": "scaledDyadicCutoff_finset_progression_eq_main_add_fourier",
+      "kind": "theorem",
+      "private": false,
+      "line": 172,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_progression_eq_main_add_fourier\n    {M : ℝ} (hM : 0 < M) (S : Finset ℕ)\n    (hS : ∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S)\n    {q : ℕ} (hq : 0 < q) (b : ℤ) :\n    (∑ m ∈ S, if Int.ModEq q (m : ℤ) b then scaledDyadicCutoff M m else 0) =\n      (M / q) * cutoffMass +\n        (∑' h : ℤ, poissonNonzeroFrequency (M / q) ((b : ℝ) / q) h).re"
+    }
+  ],
+  "direct_imports_v2": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.Part3CommonPoisson",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "parent_source_bindings": {
+    "ImbalancedChen/Part3CommonPoisson.lean": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+    "ImbalancedChen/Part3CommonSmoothCutoff.lean": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817"
+  },
+  "fixed_provenance": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "provider_source_path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryPoisson.lean",
+    "provider_source_sha256": "a365f5a2cc1f33fb38dbeeb57206b8c8958b49b0f60ce0713172e94360d0e974",
+    "provider_blob_equal_to_exact_goldbach_commit": true,
+    "six_complete_extracted_declarations": [
+      {
+        "name": "poisson_decay_step",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "08ae7a18cbdbe179043123a78e51db043af618378a45f80110e01500c851b2d6"
+      },
+      {
+        "name": "poisson_decay_sum_range_le",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "9ee73165a787db189d1c2125ae544916e466e0de68586523bd09f3ac749d7341"
+      },
+      {
+        "name": "poisson_decay_summable_nat",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "306dab3705b543c3e9002a6660eb62d71f0e10fc296f7d1fcd6460cdcf3b3a7a"
+      },
+      {
+        "name": "poisson_decay_tsum_nat_le",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "0b0cab183e9bbccd097012a7cb568e5f0a268329ccde84fc9fb3e5f967cd07d6"
+      },
+      {
+        "name": "poissonNonzeroDecay",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "e3f097b54d16801a52c62b71e1e153f0f63b2f510435390b7834b1acc5dfff86"
+      },
+      {
+        "name": "poissonNonzeroDecay_summable_tsum_le",
+        "complete_proof_or_definition_equal": true,
+        "normalized_utf8_sha256": "b9dfb3bb79f65d6afc709af171ce2228a6835be4df4a8406bb3f0782f9a7d038"
+      }
+    ]
+  },
+  "project_pin_file_sha256": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "independent_semantic_findings": [
+    "For every t>0 the decreasing reciprocal differences dominate t/(1+t(n+1))^2. Finite telescoping gives <=1; nonnegative summability gives the same infinite bound. No scale upper/lower restriction occurs.",
+    "The zero term is explicitly zero and both nonzero integer half-lattices reproduce the natural series, giving <=2. The six complete extracted declarations including proof bodies equal the fixed provider after newline normalization.",
+    "The owned local Schwartz rapid-decay theorem at exponent 2 gives C/(1+|t*h|)^2; Fourier phases have norm 1. Existing local absolute summability supports the norm of tsum bound, with uniform constant 2*C.",
+    "A single positive constant precedes all M>0, support-containing finite S, all q>0 and all signed b:Int. Substitution t=M/q only needs positivity, with no q<=M or short-variable assumption.",
+    "The main term is precisely (M/q)*local cutoffMass, defined as the real part of the local Fourier transform at zero. Only the owned exact local progression Poisson identity is used; no integral/provider mass equality or analytic-supply hypothesis is added.",
+    "The multiples endpoint specializes b=0. Directly read source APIs Int.modEq_zero_iff_dvd (pinned Mathlib/Data/Int/ModEq.lean:100) and Int.natCast_dvd_natCast (toolchain Init/Data/Int/DivMod/Lemmas.lean:162) give q divides m with the same constant and carrier."
+  ],
+  "source_API_review": {
+    "all_candidate_proof_bodies_read": true,
+    "visible_errors_found": [],
+    "visible_unused_binder_issue_found": false,
+    "forbidden_proof_tokens": [],
+    "elaboration_decidability_linter_acceptance": "NOT CLAIMED"
+  },
+  "proper_parent_union_sourceDAG_delta": {
+    "baseline": "Parent explicitly identifies CommonPoisson as owned; actual parent source hash rechecked. No owned object/receipt audit claimed.",
+    "method": "Frozen v2 header parser only, sys.dont_write_bytecode=True before import. Candidate has exactly one explicit edge to this owned parent plus implicit Init already present there. No full census rerun.",
+    "new_local_modules": [
+      "ImbalancedChen.Part3SmoothProgressionError"
+    ],
+    "new_foreign_modules": [],
+    "unresolved_direct_imports": [],
+    "parser_findings": []
+  },
+  "strict_scope_boundary": {
+    "SOURCE_ONLY": true,
+    "Lean_lake_compiler_kernel_or_heavy_tools_run": false,
+    "mathematical_sources_modified": false,
+    "no_object_type_axiom_linter_or_olean_acceptance": true,
+    "no_claim_actual_U_V_or_zero_covariance_are_paid": true,
+    "review_is_not_runtime_authorization": true
+  },
+  "self_report_preserved": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-smooth-progression-error-self-scope.json",
+    "sha256": "1575f62231faf3badc53c96f5e3beb44cd1d39c8ea83fb8617edcf40b4c530d6"
+  }
+}

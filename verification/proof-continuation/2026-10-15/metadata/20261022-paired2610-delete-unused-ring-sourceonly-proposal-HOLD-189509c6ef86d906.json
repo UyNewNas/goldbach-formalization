@@ -1,0 +1,99 @@
+{
+  "status": "SOURCE_ONLY_EXACT_DELETE_UNUSED_RING_PROPOSAL_UNAPPLIED_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T18:01:36.741013+00:00",
+  "target": "ImbalancedChen.Part3SharedFirstFactorGeneralDPairedFourier",
+  "original_source_sha256": "26108146f0c7b36e941b2805538ed6a1921bdb4a8fdf3a27eda09d09e28b659a",
+  "proposal_source_sha256": "8976615eaf0542a3fea124574a4883d949789e565d75412196968eb63e285428",
+  "original_and_proposal_LF": 306,
+  "original_source_unchanged": true,
+  "actual_original_failed_terminal_cp_sha256": "e3f01406446e5f632cdf0b3e27f9faffffa9923bc470f5d42e7dcfdbdc4af8ee",
+  "actual_failed_receipt_sha256": "7a1b406c053deb486da72a99bd87c5cd01a6cda213f0deb6857392f1b1635eb5",
+  "actual_original_stdout": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261021T175743675693Z-ImbalancedChen.Part3SharedFirstFactorGeneralDPairedFourier/stdout.log",
+  "actual_original_stdout_sha256": "1580ebbafc63a753bbf66e47c23596262f81a73017335a69c1a3fa5e04b1115f",
+  "actual_original_stdout_full": "ImbalancedChen/Part3SharedFirstFactorGeneralDPairedFourier.lean:264:44: error: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\n",
+  "diagnostic_evidence": "The complete actual strict output has exactly one error: ring does nothing at264:44; there are no unsolved-goals or type-mismatch diagnostics. The prior hreal block retains all four positivity-derived nonzero facts, all rewrites and push_cast; field_simp is its final effective tactic. This supports deletion of the unused trailing ring only.",
+  "mathematical_argument": "After L=K*t and Lprime=K*tprime, k=h*tprime-hprime*t and z=t*tprime are unfolded. The equality is h*a/(N1*K*t)-hprime*a/(N1*K*tprime)=a*(h*tprime-hprime*t)/(N1*K*t*tprime). All N1,K,t,tprime nonzero proofs remain explicit. The actual elaboration reported only an unused final ring; no new equality premise or external supplier is used. Native field_simp accepts the existing nonzero args and may close goals after its cleanup. This is source-only evidence and not a successful strict/kernal-acceptance claim.",
+  "single_change": {
+    "byte_offset": 11142,
+    "old_raw_base64": "ICAgICAgZmllbGRfc2ltcCBbaE4xMCwgaEswLCBodDAsIGh0JzBdIDw7PiByaW5n",
+    "new_raw_base64": "ICAgICAgZmllbGRfc2ltcCBbaE4xMCwgaEswLCBodDAsIGh0JzBd",
+    "old_literal": "      field_simp [hN10, hK0, ht0, ht'0] <;> ring",
+    "new_literal": "      field_simp [hN10, hK0, ht0, ht'0]",
+    "old_literal_unique": true,
+    "forward_full_bytes_PASS": true,
+    "inverse_full_bytes_PASS": true
+  },
+  "nonzero_inputs_exact_unchanged": [
+    "hN10",
+    "hK0",
+    "ht0",
+    "ht'0"
+  ],
+  "all5_complete_headers_unchanged": [
+    {
+      "name": "inverse_pair_modEq",
+      "complete_header_as_written": "private theorem inverse_pair_modEq {m n t t' : \u2115}\n    (hn : n.Coprime m) (ht : t.Coprime m) (ht' : t'.Coprime m)\n    (h h' : \u2124) :\n    Int.ModEq m\n      (h * CanonicalReciprocalPhase.wPhaseInverse (n * t) m -\n        h' * CanonicalReciprocalPhase.wPhaseInverse (n * t') m)\n      ((h * (t' : \u2124) - h' * (t : \u2124)) *\n        CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m) := by",
+      "normalized_lf_utf8_sha256": "73f3ceb5449d34429c465d56a5b24cf0ace85b4428c32df2bf121a341c56d787",
+      "exact_type_bytes_unchanged": true
+    },
+    {
+      "name": "fourier_pair_real",
+      "complete_header_as_written": "private theorem fourier_pair_real (h h' : \u2124) (x x' : \u211d) :\n    fourier h (x : UnitAddCircle) * star (fourier h' (x' : UnitAddCircle)) =\n      fourier 1 ((((h : \u211d) * x - (h' : \u211d) * x') : \u211d) : UnitAddCircle) := by",
+      "normalized_lf_utf8_sha256": "d5b421c1be25809797dd9f522d164437dd1afa24e726725aa6fe52f4f1ff8a9a",
+      "exact_type_bytes_unchanged": true
+    },
+    {
+      "name": "inverse_fourier_pair",
+      "complete_header_as_written": "private theorem inverse_fourier_pair {m n t t' : \u2115}\n    (hm : 0 < m) (hn : n.Coprime m)\n    (ht : t.Coprime m) (ht' : t'.Coprime m) (a h h' : \u2124) :\n    fourier h\n        ((((a : \u211d) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t) m : \u211d) / m) : \u211d) :\n            UnitAddCircle) *\n      star (fourier h'\n        ((((a : \u211d) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * t') m : \u211d) / m) : \u211d) :\n            UnitAddCircle)) =\n      fourier 1\n        ((((a : \u211d) * ((h * (t' : \u2124) - h' * (t : \u2124) : \u2124) : \u211d) *\n          (CanonicalReciprocalPhase.wPhaseInverse (n * (t * t')) m : \u211d) / m) : \u211d) :\n            UnitAddCircle) := by",
+      "normalized_lf_utf8_sha256": "ebefb08ace2a20bad33e06f58566456b59ba7ec292c8547f530f20e09764efe2",
+      "exact_type_bytes_unchanged": true
+    },
+    {
+      "name": "sharedGeneralD_paired_fourier",
+      "complete_header_as_written": "theorem sharedGeneralD_paired_fourier\n    {p r s s' w N1 N2 : \u2115}\n    (hp : 0 < p) (hr : 0 < r) (hs : 0 < s) (hs' : 0 < s') (hw : 0 < w)\n    (hN1 : 0 < N1) (hN2 : 0 < N2)\n    (hc : ComplexCRT.Compatible (p * (r * s)) (p * w) N1 N2)\n    (hc' : ComplexCRT.Compatible (p * (r * s')) (p * w) N1 N2)\n    (hsame : (r * s').gcd w = (r * s).gcd w) (a h h' : \u2124) :\n    let D := (r * s).gcd w\n    let d := r.gcd D\n    let q := D / d\n    let r0 := r / d\n    let t := s / q\n    let t' := s' / q\n    let g := N1.gcd N2\n    let d1 := CanonicalReciprocalData.supportedPart (N1 / g) g\n    let n1 := CanonicalReciprocalData.coprimePart (N1 / g) g\n    let n2 := N2 / g\n    let A := g * d1\n    let w0 := w / D\n    let b := A * n2 * r0\n    let c := n1 * w0\n    let zeta := c * p * D * r0\n    let K := (p * D) * r0 * w0\n    let L := (p * (r * s)).lcm (p * w)\n    let L' := (p * (r * s')).lcm (p * w)\n    let f : \u2124 := ((d1 : \u2124) * n1 - n2) / (p * D : \u2115)\n    let k : \u2124 := h * (t' : \u2124) - h' * (t : \u2124)\n    let z := t * t'\n    0 < K \u2227 0 < A \u2227 0 < c \u2227\n      s = q * t \u2227 s' = q * t' \u2227\n      b.Coprime c \u2227 zeta.Coprime A \u2227\n      t.Coprime (A * c) \u2227 t'.Coprime (A * c) \u2227\n      L = K * t \u2227 L' = K * t' \u2227\n      fourier h\n        (((ComplexCRT.residue (p * (r * s)) (p * w) N1 N2 a : \u211d) / L : \u211d) :\n          UnitAddCircle) *\n        star (fourier h'\n          (((ComplexCRT.residue (p * (r * s')) (p * w) N1 N2 a : \u211d) / L' : \u211d) :\n            UnitAddCircle)) =\n        fourier 1\n          (((-(a : \u211d) * (k : \u211d) *\n            (CanonicalReciprocalPhase.wPhaseInverse (zeta * z) A : \u211d) / A) : \u211d) :\n              UnitAddCircle) *\n          fourier 1 ((((a : \u211d) * (k : \u211d) /\n            ((N1 : \u211d) * K * z)) : \u211d) : UnitAddCircle) *\n          fourier 1\n            ((((a : \u211d) * (f : \u211d) * (k : \u211d) *\n              (CanonicalReciprocalPhase.wPhaseInverse (b * z) c : \u211d) / c) : \u211d) :\n                UnitAddCircle) := by",
+      "normalized_lf_utf8_sha256": "6fbb0c4b94b5c04802715c00f43aa430ce22199ebaed1bb061a5b3a32782f716",
+      "exact_type_bytes_unchanged": true
+    },
+    {
+      "name": "sharedGeneralD_realProjection_four_branches",
+      "complete_header_as_written": "theorem sharedGeneralD_realProjection_four_branches (lambda mu F G : \u2102) :\n    (lambda * (F.re : \u2102)) * star (mu * (G.re : \u2102)) =\n      (lambda * star mu) / 4 *\n        (F * star G + F * G + star F * star G + star F * G) := by",
+      "normalized_lf_utf8_sha256": "3f13a5e26e2a78d764856c8a2213230d1ba3559e662853e951da35beb371bbfd",
+      "exact_type_bytes_unchanged": true
+    }
+  ],
+  "imports_and_all_other_source_bytes_unchanged": true,
+  "native_field_simp_api_binding": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Tactic/FieldSimp.lean",
+    "whole_source_sha256": "924a11d74ca2851409f1d78284affbd60c21c9d54ac5bb4fb4676f17cbecb679",
+    "first": 652,
+    "last": 715,
+    "literal_span": "def parseDischarger (d : Option (TSyntax ``discharger)) (args : Option (TSyntax ``simpArgs)) :\n    TacticM (\u2200 {u : Level} (type : Q(Sort u)), MetaM Q($type)) := do\n  match d with\n  | none =>\n    let ctx \u2190 Simp.Context.ofArgs (args.getD \u27e8.missing\u27e9) { contextual := true }\n    return fun e \u21a6 Prod.fst <$> (FieldSimp.discharge e).run ctx >>= Option.getM\n  | some d =>\n    if args.isSome then\n      logWarningAt args.get!\n        \"Custom `field_simp` dischargers do not make use of the `field_simp` arguments list\"\n    match d with\n    | `(discharger| (discharger := $tac)) =>\n      let tac := (evalTactic (\u2190 `(tactic| ($tac))) *> pruneSolvedGoals)\n      return (synthesizeUsing' \u00b7 tac)\n    | _ => throwError \"could not parse the provided discharger {d}\"\n\n/--\n`field_simp` normalizes expressions in (semi-)fields (i.e., does not require additive inverses)\nby rewriting them to a common denominator, i.e. to reduce them to expressions of the form `n / d`\nwhere neither `n` nor `d` contains any division symbol. The `field_simp` tactic will also clear\ndenominators in field *(in)equalities*, by cross-multiplying.\n\nA very common pattern is `field_simp; ring` (clear denominators, then the resulting goal is\nsolvable by the axioms of a commutative ring). The finishing tactic `field` is a shorthand for this\npattern.\n\nThe tactic will try discharge proofs of nonzeroness of denominators, and skip steps if discharging\nfails. These denominators are made out of denominators appearing in the input expression,\nby repeatedly taking products or divisors. The default discharger can be non-universal, i.e. can be\nspecific to the field at hand (order properties, explicit `\u2260 0` hypotheses, `CharZero` if that is\nknown, etc). See `field_simp_discharge` for full details of the default discharger algorithm.\n\n* `field_simp at l1 l2 ...` can be used to normalize at the given locations.\n* `field_simp (disch := tac)` uses the tactic sequence `tac` to discharge nonzeroness/positivity\n  proofs.\n* `field_simp [t\u2081, ..., t\u2099]` provides terms `t\u2081`, ..., `t\u2099` to the discharger for\n  nonzeroness/positivity proofs.\n\nExamples:\n```\n-- `x / (1 - y) / (1 + y / (1 - y))` is reduced to `x / (1 - y + y)`\nexample (x y z : \u211a) (hy : 1 - y \u2260 0) :\n    \u230ax / (1 - y) / (1 + y / (1 - y))\u230b < 3 := by\n  field_simp\n  -- new goal: `\u22a2 \u230ax / (1 - y + y)\u230b < 3`\n  sorry\n\n-- `field_simp` will clear the `x` denominators in the following equation\nexample {K : Type*} [Field K] {x : K} (hx0 : x \u2260 0) :\n    (x + 1 / x) ^ 2 + (x + 1 / x) = 1 := by\n  field_simp\n  -- new goal: `\u22a2 (x ^ 2 + 1) * (x ^ 2 + 1 + x) = x ^ 2`\n  sorry\n```\n-/\nelab (name := fieldSimp) \"field_simp\" d:(discharger)? args:(simpArgs)? loc:(location)? :\n    tactic => withMainContext do\n  let disch \u2190 parseDischarger d args\n  let s \u2190 IO.mkRef {}\n  let cleanup r := do r.mkEqTrans (\u2190 simpOnlyNames [] r.expr) -- convert e.g. `x = x` to `True`\n  let m := AtomM.recurse s { contextual := true } (wellBehavedDischarge := false)\n    (fun e \u21a6 reduceProp disch e <|> reduceExpr disch e) cleanup\n  let loc := (loc.map expandLocation).getD (.targets #[] true)\n  transformAtLocation (m \u00b7) \"field_simp\" (ifUnchanged := .error) (mayCloseGoalFromHyp := true) loc\n",
+    "raw_span_sha256": "a45e57e72114ce11559546e9a2163614e87daea7ee65738c2db3119c7c26cf14"
+  },
+  "strict_and_linter_settings_unchanged": true,
+  "signed_k_negative_root_fullslow_reciprocal_fourbranch_allgates_coefficients_carrier_unchanged": true,
+  "artifacts": {
+    "source-reviews/drafts/20261022-paired2610-original-before-unused-ring-proposal.txt": {
+      "sha256": "26108146f0c7b36e941b2805538ed6a1921bdb4a8fdf3a27eda09d09e28b659a",
+      "bytes": 13056
+    },
+    "source-reviews/drafts/20261022-paired2610-delete-unused-ring-source-proposal.txt": {
+      "sha256": "8976615eaf0542a3fea124574a4883d949789e565d75412196968eb63e285428",
+      "bytes": 13047
+    },
+    "source-reviews/drafts/20261022-paired2610-delete-unused-ring-source-proposal.txt.full.diff": {
+      "sha256": "36bd0630f991dcddb999eedd06469a97c0b7f05d131674a69280e1e9239a7745",
+      "bytes": 700
+    },
+    "source-reviews/drafts/20261022-paired2610-delete-unused-ring-source-proposal.txt.unique-UTF8-inverse.json": {
+      "sha256": "936f92f1db8389c3ee1f0a2b2a710ae2eb966a4ab11da9573090b924b8fda4c2",
+      "bytes": 686
+    }
+  },
+  "proper_classifier_compile_checker_census_Git_executed": false,
+  "actual_Lean_runtime_pins_guards_original_CP_cache_modified": false,
+  "generated_count_predicted": null,
+  "quota_used_percent": 40,
+  "quota_remaining_percent": 60,
+  "next": "HOLD. Root may independently inspect exact one-block proposal and apply at shared-heavy idle boundary; no execution authorized here."
+}

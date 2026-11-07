@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-elementary-progression-lcm-payment-source-proposal",
+  "author": "/root/tail_real_precision_sol_high_oct22",
+  "created_utc": "2026-10-21T23:37:30.5872426Z",
+  "status": "COMPLETE_WRITTEN_ARBITRARY_RESIDUE_LCM_WEIGHTED_PAYMENT_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "intended_future_module": "ImbalancedChen.Part3ElementaryProgressionLCMPayment",
+  "artifact": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryProgressionLCMPayment-module-source.txt",
+    "sha256": "868a77bb8532f5fa5e4e1a62eb6dd0272a521cd6bb408dac59ea0f71b5c502af",
+    "bytes": 4046,
+    "lf_lines": 86,
+    "spans": [
+      {
+        "first": 1,
+        "last": 1,
+        "literal_source": "import ImbalancedChen.Part3ElementaryCRTSpacing\n",
+        "normalized_lf_utf8_sha256": "76d1d8919fb2c89f7b1a7859568b2c747e9b2bc431b3e803c9bc8455cb0614f6"
+      },
+      {
+        "first": 25,
+        "last": 32,
+        "literal_source": "theorem sum_real_supported_progression_divisor_weights_le_lcm\n    (S : Finset ℕ) {a b : ℝ} {D q : ℕ} {r : ℤ} (w : ℕ → ℝ)\n    (hab : a ≤ b) (hq : 0 < q)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n    (∑ n ∈ S, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n      ∑ d ∈ Icc 1 D, w d * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n",
+        "normalized_lf_utf8_sha256": "2b45ca610e7e8930e909ccdf19342fa7b6f911eab2df259f9c01d9b39e017d93"
+      },
+      {
+        "first": 47,
+        "last": 54,
+        "literal_source": "theorem sum_fouvryTau_real_progression_floor_lcm_payment\n    (S : Finset ℕ) {K q : ℕ} {r : ℤ} (hK : 2 ≤ K) (hq : 0 < q)\n    {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b) (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 ⌊realDeletionRadius K Z⌋₊,\n        (fouvryTau (K - 1) d : ℝ) * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n",
+        "normalized_lf_utf8_sha256": "b97d7fdf6485cf07266478409f6d31853561a82f22540b8ddda0a1d1f85cd954"
+      }
+    ]
+  },
+  "declarations": [
+    {
+      "complete_type": "theorem sum_real_supported_progression_divisor_weights_le_lcm\n    (S : Finset ℕ) {a b : ℝ} {D q : ℕ} {r : ℤ} (w : ℕ → ℝ)\n    (hab : a ≤ b) (hq : 0 < q)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n    (∑ n ∈ S, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n      ∑ d ∈ Icc 1 D, w d * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n",
+      "body_sha256": "7ed661b4f3dfb52b8d49d8167cc767b7ee4c281123aca6491688a7417821f3ac",
+      "first": 25,
+      "last": 44,
+      "name": "sum_real_supported_progression_divisor_weights_le_lcm",
+      "type_last": 32
+    },
+    {
+      "complete_type": "theorem sum_fouvryTau_real_progression_floor_lcm_payment\n    (S : Finset ℕ) {K q : ℕ} {r : ℤ} (hK : 2 ≤ K) (hq : 0 < q)\n    {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b) (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 ⌊realDeletionRadius K Z⌋₊,\n        (fouvryTau (K - 1) d : ℝ) * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n",
+      "body_sha256": "74cd7793b086ba66d9c87fbed3fbef39beec2fa37b9ad7ae3fdfba6869635443",
+      "first": 47,
+      "last": 83,
+      "name": "sum_fouvryTau_real_progression_floor_lcm_payment",
+      "type_last": 54
+    }
+  ],
+  "declaration_counts": {
+    "complete_proofs": 2,
+    "definitions": 0,
+    "lf_lines": 86
+  },
+  "direct_future_parent": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryCRTSpacing-module-source.txt",
+    "sha256": "3efe260ca0e39d4316ebffece2598b95ff3dba3c70e352dd927600959a8fd5b0",
+    "bytes": 2938,
+    "lf_lines": 71,
+    "spans": [
+      {
+        "first": 17,
+        "last": 24,
+        "literal_source": "theorem card_real_supported_modEq_dvd_le_lcm (S : Finset ℕ) {a b : ℝ}\n    {q d : ℕ} {r : ℤ} (hab : a ≤ b) (hq : 0 < q) (hd : 0 < d)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hdiv : ∀ n ∈ S, d ∣ n) :\n    (S.card : ℝ) ≤ (b - a) / (Nat.lcm d q : ℝ) + 1 := by\n  classical\n  by_cases hne : S.Nonempty\n",
+        "normalized_lf_utf8_sha256": "2797cbef99a09eb4ae3f52e6a0e697bc96346c020e32b139c488b1635bf3959b"
+      }
+    ]
+  },
+  "future_parent_independent_review": {
+    "kernel_acceptance": false,
+    "result": "no_static_blocker",
+    "record": {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-elementary-crt-spacing-independent-source-review-HOLD.json",
+      "sha256": "673c98d83008d0fe6c3c9b1b33a24181d33cce47ba53c48b1689f9547824f735",
+      "bytes": 30164,
+      "lf_lines": 398,
+      "spans": []
+    }
+  },
+  "accepted_RealEndpoint_parent": {
+    "source": {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ElementaryE1RealEndpoint.lean",
+      "sha256": "5c386ee17594c075b81b15d56143284fd0f77364f87129d0a96632f17064f8ad",
+      "bytes": 10764,
+      "lf_lines": 225,
+      "spans": [
+        {
+          "first": 83,
+          "last": 90,
+          "literal_source": "theorem sum_real_supported_divisor_weights_swap (S : Finset ℕ) (D : ℕ) (w : ℕ → ℝ) :\n    (∑ n ∈ S, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) =\n      ∑ d ∈ Icc 1 D, w d * ((S.filter (fun n => d ∣ n)).card : ℝ) := by\n  simp_rw [Finset.sum_filter]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro d _hd\n  rw [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_comm]\n",
+          "normalized_lf_utf8_sha256": "72647977c7d13310e557e0543c059a8238317fd7fdf5d2382403e5ac58829fa7"
+        },
+        {
+          "first": 108,
+          "last": 116,
+          "literal_source": "theorem sum_fouvryTau_real_support_floor_payment (S : Finset ℕ) {K : ℕ}\n    (hK : 2 ≤ K) {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b)\n    (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ((b - a) *\n        (∑ d ∈ Icc 1 ⌊realDeletionRadius K Z⌋₊,\n          (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        ∑ d ∈ Icc 1 ⌊realDeletionRadius K Z⌋₊, (fouvryTau (K - 1) d : ℝ)) := by\n",
+          "normalized_lf_utf8_sha256": "b6096de7f1daedd346083afea5b5dd10ecc000f8db53ddb2d20e8ed0de97cfc7"
+        }
+      ]
+    },
+    "accepted_actual_declarations": 19,
+    "root_status": "ROOT_ACTUAL19_STRICT_STOCK_ALL_FULLAFTER_CURRENT186_CENSUS_ACCEPTED",
+    "root_acceptance_record": {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-realendpoint5c38-root-actual19-terminal-acceptance.json",
+      "sha256": "fd6671bff08058f94cf60040ab210f7e12841c87d3c9bc16befbd9472617075c",
+      "bytes": 2830,
+      "lf_lines": 35,
+      "spans": []
+    },
+    "new_wrapper_inherits_no_new_acceptance": true
+  },
+  "actual_StrictFloor_APIs": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ElementaryE1StrictFloor.lean",
+    "sha256": "d85fcb4e7d93a3d9a1ad5bdf659ae95ac542b55a97eb6c48a7754a302489c5d0",
+    "bytes": 13493,
+    "lf_lines": 273,
+    "spans": [
+      {
+        "first": 96,
+        "last": 100,
+        "literal_source": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n  have hfin : (orderedFactorTuples K n).card ≤\n",
+        "normalized_lf_utf8_sha256": "f81a3430f84eeda251e1a4f265a6c5f45fcb7b4672ce97651dda0bafcc4150bf"
+      },
+      {
+        "first": 189,
+        "last": 189,
+        "literal_source": "def realDeletionRadius (K : ℕ) (Z : ℝ) : ℝ := Z ^ (((K - 1 : ℕ) : ℝ) / (K : ℝ))\n",
+        "normalized_lf_utf8_sha256": "c4780ab0fa4c92963d5ac1f8916bb79f0451be7145638ecdb3237792da75f054"
+      },
+      {
+        "first": 217,
+        "last": 221,
+        "literal_source": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n  have hR0 : 0 ≤ realDeletionRadius K Z := le_trans zero_le_one (realDeletionRadius_bounds hK hZ).1\n  have hlt : realDeletionRadius K Z ^ K <\n",
+        "normalized_lf_utf8_sha256": "f8aac612169559a838ead74f890390ee6ec0d334dbe62f488ea783b943f4c1d4"
+      },
+      {
+        "first": 230,
+        "last": 236,
+        "literal_source": "theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}\n    (hR : 1 ≤ R) (hRZ : R ≤ Z) (hY : 0 ≤ Y) :\n    Y * (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ) / (d : ℝ)) +\n        (∑ d ∈ Icc 1 ⌊R⌋₊, (fouvryTau (K - 1) d : ℝ)) ≤\n      Y * (1 + Real.log Z) ^ (K - 1) + R * (1 + Real.log Z) ^ (K - 2) := by\n  have hI : Icc 1 ⌊R⌋₊ = Ioc 0 ⌊R⌋₊ := by\n    ext d\n",
+        "normalized_lf_utf8_sha256": "639e2f3d8393b9d4ac5c7d28ef885f11b84b69399677fb8aa6f88113da2a70d8"
+      }
+    ]
+  },
+  "actual_Interval_APIs": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ElementaryIntervalDivisibility.lean",
+    "sha256": "79a2e60061c239d2eea400325f7cf304ed32f6cb6a1816b2065919a2271ed007",
+    "bytes": 6929,
+    "lf_lines": 152,
+    "spans": [
+      {
+        "first": 57,
+        "last": 59,
+        "literal_source": "theorem truncated_divisor_carrier_eq {n D : ℕ} (hn : 0 < n) :\n    n.divisors.filter (fun d => d ≤ D) = (Icc 1 D).filter (fun d => d ∣ n) := by\n  ext d\n",
+        "normalized_lf_utf8_sha256": "8af845d5051a0c8b04847f0f6b6e6ddd7d81afcb1113bbf94a1567ced60764ae"
+      }
+    ]
+  },
+  "inspected_existing_native_DivisorMean_APIs": {
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+    "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+    "bytes": 17917,
+    "lf_lines": 405,
+    "spans": [
+      {
+        "first": 19,
+        "last": 19,
+        "literal_source": "def fouvryTau (k : ℕ) : ArithmeticFunction ℕ := ArithmeticFunction.zeta ^ k\n",
+        "normalized_lf_utf8_sha256": "dbd8023a6545e4627f4171e9497a9430b850f26645b5703d30faaf242ab4e1c6"
+      },
+      {
+        "first": 104,
+        "last": 105,
+        "literal_source": "theorem fouvryTau_mul_le (k l n : ℕ) :\n    fouvryTau k n * fouvryTau l n ≤ fouvryTau (k * l) n := by\n",
+        "normalized_lf_utf8_sha256": "db3a6bb8e7e844ffc48476ff53872fdc6b532569fc1383a65fabc27dfbd939e4"
+      },
+      {
+        "first": 245,
+        "last": 247,
+        "literal_source": "theorem sum_fouvryTau_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ) / n) ≤ (1 + Real.log x) ^ k := by\n  have heq : reciprocalSum ⌊x⌋₊ = (harmonic ⌊x⌋₊ : ℝ) := by\n",
+        "normalized_lf_utf8_sha256": "ade02f7d2f1887549bca0918aeb521a90807966f339944b819df92a612533fd6"
+      },
+      {
+        "first": 335,
+        "last": 338,
+        "literal_source": "theorem sum_fouvryTau_le_real {k : ℕ} (hk : 1 ≤ k) {x : ℝ} (hx : 1 ≤ x) :\n    (∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau k n : ℝ)) ≤\n      x * (1 + Real.log x) ^ (k - 1) := by\n  obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : k ≠ 0)\n",
+        "normalized_lf_utf8_sha256": "6c968b4c6bdf0987004e65d5cf48c3e6360b4f3dd7b7c2f7801bff2ec8656307"
+      }
+    ]
+  },
+  "mathematical_route_review": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-elementary-E1-general-progression-range-mathematical-review-HOLD.json",
+    "sha256": "f068b3b2d04f989e80ddcce692b63eae25f8f8c2b0dfb4ced9533e799ef6de55",
+    "bytes": 12781,
+    "lf_lines": 104,
+    "spans": []
+  },
+  "complete_source_argument": [
+    "For each d in Icc1D, use the actual fiber S.filter(d|n). Its real support and arbitrary Int.ModEq q n r are inherited by membership projection; divisibility is the filter predicate. Positive d follows from the original Icc1D gate.",
+    "Invoke exactly the future CRTSpacing theorem on that fiber, with hab,hq,hd. It yields card(fiber)<=Y/lcm(d,q)+1 without a coprimality assumption, CRT representative, compatible-class premise or restriction on r.",
+    "The accepted RealEndpoint exact finite exchange sum_real_supported_divisor_weights_swap turns the literal double divisor sum into sum_d w(d)*card(fiber). Multiply each CRT inequality by the assumed nonnegative w(d), then sum. This proves the first reusable generic weighted payment.",
+    "For the actual d_K sum, the original real support gives n>=a>=1 and n<=b<=Z. Existing floor_radius_strict_cutoff supplies n^(K-1)<(floor(realDeletionRadius K Z)+1)^K.",
+    "Apply exactly the accepted StrictFloor fouvryTau_le_truncated_divisor_sum_strict. The existing Interval truncated_divisor_carrier_eq identifies its actual divisor filter with Icc1D filtered by d|n. exact_mod_cast yields the real pointwise d_K bound.",
+    "Sum these pointwise inequalities, pull out the exact K through Finset.mul_sum, and invoke the first generic weighted payment with w(d)=(fouvryTau(K-1)d:Real), nonnegative by Nat.cast_nonneg. This proves the full displayed arbitrary-r finite d_K lcm budget.",
+    "No closed arithmetic mean, shifted mixed moment or target-shaped estimate is used as a premise. The coefficient K is exact and fixed before all interval/modulus/residue choices; arbitrary negative/nonprimitive/incompatible r classes and empty/singleton/zero-length supported sets are allowed."
+  ],
+  "domain_audit": {
+    "cutoff": "D=floor(realDeletionRadius K Z), exactly the accepted strict cutoff; no floor-to-ceiling substitution.",
+    "residue": "Every r:Int, unrelated to any signed shift a; no v congruent to shift-only substitution.",
+    "new_prime_gcd_assumptions": false,
+    "analytic_estimate_premise": false,
+    "K": "Every Nat K>=2, no giant power evaluated.",
+    "modulus": "Every positive q:Nat; q=0 is excluded because this estimate has a positive spacing denominator. This is not a silent change to the earlier algebraic fold allowing q=0.",
+    "real_geometry": "First theorem requires only a<=b. The d_K theorem requires1<=a<=b<=Z,Z>=2, all exact real endpoints.",
+    "generic_weight": "Any Nat->Real, with nonnegativity required only on Icc1D."
+  },
+  "exact_completed_target": "For any finite S supported in[ a,b ]subset[1,Z], every n in S congruent to arbitrary r:Int modulo positive q, and K>=2: sum_(n in S)d_K(n)<=K*sum_(1<=d<=floor(Z^((K-1)/K)))d_(K-1)(d)*((b-a)/lcm(d,q)+1). The helper proves the identical weighted double-sum estimate for any w>=0.",
+  "remaining_obstacle": {
+    "full_general_q_analytic_M2": "OPEN. Even the requested closed one-function progression mean retains an endpoint remainder not divided by q; it does not close the manuscript full-range mixed shifted M2 or actual rough-factor use.",
+    "closed_main": "Still need sum_(d<=D)d_(K-1)(d)/lcm(d,q) <= (d_K(q)/q)*(1+log Z)^(K-1), under the existing positive q and D<=Z domain.",
+    "native_API_caution": "The inspected fouvryTau_mul_le(k,l,n) bounds d_k(n)*d_l(n) by d_(k*l)(n); it is not the multiplication-argument submultiplicativity d_j(g*u)<=d_j(g)*d_j(u).",
+    "divisor_split": "A sufficient route is lcm=d*q/gcd, divisor splitting of gcd(d,q), and d_j(g*u)<=d_j(g)*d_j(u), followed by the existing harmonic mean and sum_(g|q)d_j(g)=d_(j+1)(q). This submultiplicativity is not proved or assumed here.",
+    "ordinary_remainder": "The +1 sum can be paid using existing native sum_fouvryTau_le_real/native_floor_tau_payment and D<=Z^(1-1/K). No theorem evaluating that step or the closed d_K(q) formula is claimed in this draft."
+  },
+  "boundary": "CRTSpacing is a future uncompiled dependency. RealEndpoint acceptance is linked only for the exact5c386ee1 source. This new source has no tested future imports, elaboration, warning/linter check or kernel acceptance. HOLD pending independent review.",
+  "static_author_review": {
+    "no_static_blocker_found": true,
+    "all86_source_lines_and_both_complete_types_bodies_read": true,
+    "independent_review": "PENDING",
+    "engineering_admission": false,
+    "generated_count_predicted": null,
+    "kernel_acceptance": false
+  },
+  "actions": {
+    "new_files_only": [
+      "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3ElementaryProgressionLCMPayment-module-source.txt",
+      "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-elementary-progression-lcm-payment-source-proposal-author-HOLD.json"
+    ],
+    "actual_Lean_or_old_evidence_modified": false,
+    "Lean_Runtime_proper_classifier_census_run": false,
+    "new_agent_spawned": false,
+    "heavy_pipeline_lock_touched": false,
+    "Git_Site_run": false
+  },
+  "timebox": {
+    "maximum_minutes": 12,
+    "stopped_after_one_finite_lcm_payment_package": true,
+    "started_utc": "2026-10-21T23:34:11Z",
+    "finished_utc": "2026-10-21T23:37:37Z",
+    "elapsed_seconds": 206
+  },
+  "quota": {
+    "last_reported_used_percent": 52,
+    "last_reported_remaining_percent": 48,
+    "reset_consumed": false,
+    "stop_when_remaining_lte": 40,
+    "final_observed_used_percent": 53,
+    "final_observed_remaining_percent": 47
+  }
+}

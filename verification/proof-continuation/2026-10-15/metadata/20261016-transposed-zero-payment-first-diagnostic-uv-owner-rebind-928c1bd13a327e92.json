@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T22:50:40.5266977Z",
+  "author": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_ROOT_AUTHORIZED_OWNER_ACTUAL_FIRST_DIAGNOSTIC_PROOF_ONLY_REBIND_PENDING_ROOT_INDEPENDENT_REVIEW",
+  "authorization": "Explicit root delegation after live-agent inventory confirmed primitive_center had no live editing slot; repair ONLY these two actual failed candidate sources. No new agent slot or runtime invocation.",
+  "module": "ImbalancedChen.Part3TransposedZeroPayment",
+  "previous_source_sha256": "ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8",
+  "current_source_sha256": "a044546c1c218110312c9342572945afdccc9e039ff0acccfc9c8f8e8b25b66a",
+  "declaration_count": 2,
+  "definition_count": 0,
+  "all_complete_current_declarations_and_proofs": [
+    {
+      "name": "actual_log_cost_le_log_pow",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 32,
+      "complete_source_header": "theorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s)",
+      "complete_definition": null,
+      "complete_declaration_block": "theorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s) := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    have hprod : 0 ≤ (1 + Real.log 8) * (Real.log d.scale - 1) :=\n      mul_nonneg\n        (by linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)])\n        (sub_nonneg.mpr hlog)\n    dsimp [D]\n    nlinarith\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = _ := by rw [← pow_add, mul_pow]\n\n/-- The actual beta moment times the complete raw-zero discrepancy is paid\nat every requested logarithmic order, uniformly before the family member. -/\n"
+    },
+    {
+      "name": "actual_betaL2_mul_rawZero_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 74,
+      "complete_source_header": "theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A",
+      "complete_definition": null,
+      "complete_declaration_block": "theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A := by\n  let p : ℕ := (2 ^ B) ^ 2 - 1\n  let s : ℕ := 2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1\n  let n : ℕ := p + s\n  let R : ℝ := A + (n : ℝ) + 2\n  have hR : 0 < R := by dsimp [R]; positivity\n  obtain ⟨C, hC, xSW, hxSW, hbound⟩ :=\n    actual_betaL2_mul_rawZero_SW_bound F B C0 sigma kappa c0 R hR hadmissible hSW\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  let K : ℝ := C * |CommonSmoothCutoff.cutoffMass| * D ^ n\n  have hK0 : 0 ≤ K := by dsimp [K]; positivity\n  obtain ⟨xLog, hxLog⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (max 1 K))\n  refine ⟨max xSW xLog, lt_of_lt_of_le hxSW (le_max_left _ _), fun i hx ↦ ?_⟩\n  let x : ℝ := (F i).scale\n  let L : ℝ := Real.log x\n  have hL : max 1 K ≤ L := hxLog (F i).scale ((le_max_right _ _).trans hx)\n  have hL1 : 1 ≤ L := (le_max_left _ _).trans hL\n  have hLpos : 0 < L := zero_lt_one.trans_le hL1\n  have hKsq : K ≤ L ^ 2 := by\n    have hKL : K ≤ L := (le_max_right _ _).trans hL\n    have hLsq : L ≤ L ^ 2 := by nlinarith\n    exact hKL.trans hLsq\n  have hcost :\n      (1 + Real.log (2 * (F i).V)) ^ p *\n        (1 + Real.log (F i).physicalFactorCap) ^ s ≤ D ^ n * L ^ n := by\n    exact actual_log_cost_le_log_pow p s hsigma (hadmissible i) hL1\n  have hpay :\n      C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          (1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s / L ^ R ≤ x ^ 2 / L ^ A := by\n    apply (div_le_div_iff₀ (Real.rpow_pos_of_pos hLpos R)\n      (Real.rpow_pos_of_pos hLpos A)).mpr\n    calc\n      _ = C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          ((1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s) * L ^ A := by ring\n      _ ≤ C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 * (D ^ n * L ^ n) * L ^ A :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_left hcost (by positivity))\n          (Real.rpow_nonneg hLpos.le A)\n      _ = K * x ^ 2 * (L ^ n * L ^ A) := by dsimp [K]; ring\n      _ ≤ L ^ 2 * x ^ 2 * (L ^ n * L ^ A) :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_right hKsq (sq_nonneg x)) (by positivity)\n      _ = x ^ 2 * L ^ R := by\n        dsimp [R]\n        simp only [Real.rpow_add hLpos, Real.rpow_natCast, Real.rpow_two]\n        ring\n  exact (hbound i ((le_max_left _ _).trans hx)).trans hpay\n\nend TransposedZeroPayment\n\nend\n\nend ImbalancedChen.Part3\n"
+    }
+  ],
+  "complete_current_source_read": "import ImbalancedChen.Part3TransposedZeroCovariance\nimport ImbalancedChen.Part3TransposedPrimitiveUPayment\n\n/-!\n# Actual logarithmic payment of the transposed zero covariance\n\nThe owned covariance theorem permits every positive SW exponent. Both\nactual fixed logarithm costs are bounded by a fixed constant times a power\nof log X. Choosing the SW exponent before the family member absorbs those\ncosts, and two further logarithms absorb the fixed coefficient and the\nabsolute value of the local Fourier-zero mass.\n\nThere is no power saving available in the raw zero estimate before SW is\nused. This proof therefore spends additional SW logarithms, rather than an\nunavailable spare power of X. All constants and thresholds precede every\nfamily member; the original B, C0, alpha, beta, gamma labels and scales are\nretained. No remaining error budget or mass normalization is assumed.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Filter Topology\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveUPayment\n\nnamespace TransposedZeroPayment\n\n/-- Fixed logarithm costs on the actual original lengths and physical cap.\nThe logarithmic lower gate is supplied by the final uniform threshold. -/\ntheorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s) := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    have hprod : 0 ≤ (1 + Real.log 8) * (Real.log d.scale - 1) :=\n      mul_nonneg\n        (by linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)])\n        (sub_nonneg.mpr hlog)\n    dsimp [D]\n    nlinarith\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = _ := by rw [← pow_add, mul_pow]\n\n/-- The actual beta moment times the complete raw-zero discrepancy is paid\nat every requested logarithmic order, uniformly before the family member. -/\ntheorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A := by\n  let p : ℕ := (2 ^ B) ^ 2 - 1\n  let s : ℕ := 2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1\n  let n : ℕ := p + s\n  let R : ℝ := A + (n : ℝ) + 2\n  have hR : 0 < R := by dsimp [R]; positivity\n  obtain ⟨C, hC, xSW, hxSW, hbound⟩ :=\n    actual_betaL2_mul_rawZero_SW_bound F B C0 sigma kappa c0 R hR hadmissible hSW\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  let K : ℝ := C * |CommonSmoothCutoff.cutoffMass| * D ^ n\n  have hK0 : 0 ≤ K := by dsimp [K]; positivity\n  obtain ⟨xLog, hxLog⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (max 1 K))\n  refine ⟨max xSW xLog, lt_of_lt_of_le hxSW (le_max_left _ _), fun i hx ↦ ?_⟩\n  let x : ℝ := (F i).scale\n  let L : ℝ := Real.log x\n  have hL : max 1 K ≤ L := hxLog (F i).scale ((le_max_right _ _).trans hx)\n  have hL1 : 1 ≤ L := (le_max_left _ _).trans hL\n  have hLpos : 0 < L := zero_lt_one.trans_le hL1\n  have hKsq : K ≤ L ^ 2 := by\n    have hKL : K ≤ L := (le_max_right _ _).trans hL\n    have hLsq : L ≤ L ^ 2 := by nlinarith\n    exact hKL.trans hLsq\n  have hcost :\n      (1 + Real.log (2 * (F i).V)) ^ p *\n        (1 + Real.log (F i).physicalFactorCap) ^ s ≤ D ^ n * L ^ n := by\n    exact actual_log_cost_le_log_pow p s hsigma (hadmissible i) hL1\n  have hpay :\n      C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          (1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s / L ^ R ≤ x ^ 2 / L ^ A := by\n    apply (div_le_div_iff₀ (Real.rpow_pos_of_pos hLpos R)\n      (Real.rpow_pos_of_pos hLpos A)).mpr\n    calc\n      _ = C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          ((1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s) * L ^ A := by ring\n      _ ≤ C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 * (D ^ n * L ^ n) * L ^ A :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_left hcost (by positivity))\n          (Real.rpow_nonneg hLpos.le A)\n      _ = K * x ^ 2 * (L ^ n * L ^ A) := by dsimp [K]; ring\n      _ ≤ L ^ 2 * x ^ 2 * (L ^ n * L ^ A) :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_right hKsq (sq_nonneg x)) (by positivity)\n      _ = x ^ 2 * L ^ R := by\n        dsimp [R]\n        simp only [Real.rpow_add hLpos, Real.rpow_natCast, Real.rpow_two]\n        ring\n  exact (hbound i ((le_max_left _ _).trans hx)).trans hpay\n\nend TransposedZeroPayment\n\nend\n\nend ImbalancedChen.Part3\n",
+  "baseline": {
+    "exact_old_snapshot": "drafts/Part3TransposedZeroPayment.ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8.lean",
+    "sha256": "ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8",
+    "complete_type_definition_comparisons": [
+      {
+        "name": "actual_log_cost_le_log_pow",
+        "complete_type_exact_equal": true,
+        "complete_definition_exact_equal": true,
+        "complete_proof_block_exact_equal": false
+      },
+      {
+        "name": "actual_betaL2_mul_rawZero_log_payment",
+        "complete_type_exact_equal": true,
+        "complete_definition_exact_equal": true,
+        "complete_proof_block_exact_equal": false
+      }
+    ],
+    "only_changed_proofs": [
+      "actual_log_cost_le_log_pow",
+      "actual_betaL2_mul_rawZero_log_payment"
+    ],
+    "all_other_complete_blocks_exact_equal": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "direct_imports_exact_unchanged": true,
+  "current_direct_parent_hash_bindings": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8"
+    }
+  ],
+  "actual_failed_stdout": {
+    "path": ".lake/proof-continuation/runs/20261015T222824361283Z-ImbalancedChen.Part3TransposedZeroPayment/stdout.log",
+    "sha256": "46790f7c7080bd6314438b258f6702fa905e5157fd274394908659415bade82f",
+    "entire_stdout_read": true,
+    "full_text": "ImbalancedChen/Part3TransposedZeroPayment.lean:70:41: error: No goals to be solved\nImbalancedChen/Part3TransposedZeroPayment.lean:100:33: error: Application type mismatch: The argument\n  LE.le.trans (le_max_right xSW xLog) hx\nhas type\n  xLog ≤ (F i).scale\nof sort `Prop` but is expected to have type\n  ℝ\nof sort `Type` in the application\n  hxLog (LE.le.trans (le_max_right xSW xLog) hx)\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/Part3TransposedZeroPayment.lean:129:27: error: unsolved goals\nι : Type u_1\nF : ι → MediumAtom\nB C0 : ℕ\nsigma kappa c0 A : ℝ\nhA : 0 < A\nhsigma : 0 < sigma\nhadmissible : ∀ (i : ι), MediumAdmissible B sigma kappa c0 (F i)\nhSW : UniformAuxiliarySW F C0\np : ℕ := (2 ^ B) ^ 2 - 1\ns : ℕ := 2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1\nn : ℕ := p + s\nR : ℝ := A + ↑n + 2\nhR : 0 < R\nC : ℝ\nhC : 0 < C\nxSW : ℝ\nhxSW : 1 < xSW\nhbound :\n  ∀ (i : ι),\n    xSW ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n          ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n        C * |CommonSmoothCutoff.cutoffMass| * (F i).scale ^ 2 * (1 + Real.log (2 * (F i).V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log (F i).physicalFactorCap) ^ (2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1) /\n          Real.log (F i).scale ^ R\nD : ℝ := 2 + Real.log 8\nhD : 0 < D\nK : ℝ := C * |CommonSmoothCutoff.cutoffMass| * D ^ n\nhK0 : 0 ≤ K\nxLog : ℝ\nhxLog : ∀ (b : ℝ), xLog ≤ b → max 1 K ≤ Real.log b\ni : ι\nhx : max xSW xLog ≤ (F i).scale\nx : ℝ := (F i).scale\nL : ℝ := Real.log x\nhL : max 1 K ≤ L\nhL1 : 1 ≤ L\nhLpos : 0 < L\nhKsq : K ≤ L ^ 2\nhcost : (1 + Real.log (2 * (F i).V)) ^ p * (1 + Real.log (F i).physicalFactorCap) ^ s ≤ D ^ n * L ^ n\n⊢ L ^ 2 * L ^ n * x ^ 2 * L ^ A = L ^ n * x ^ 2 * L ^ A * L ^ 2\n"
+  },
+  "exact_literal_edits": [
+    {
+      "old": "_ = _ := by rw [← pow_add, mul_pow]; rfl",
+      "new": "_ = _ := by rw [← pow_add, mul_pow]",
+      "occurrences": 1
+    },
+    {
+      "old": "have hL : max 1 K ≤ L := hxLog ((le_max_right _ _).trans hx)",
+      "new": "have hL : max 1 K ≤ L := hxLog (F i).scale ((le_max_right _ _).trans hx)",
+      "occurrences": 1
+    },
+    {
+      "old": "simp only [Real.rpow_add hLpos, Real.rpow_natCast]",
+      "new": "simp only [Real.rpow_add hLpos, Real.rpow_natCast, Real.rpow_two]",
+      "occurrences": 1
+    }
+  ],
+  "diagnostic_mapping_and_API_review": [
+    "Actual70 NoGoals: the same rw already closes the pure equality after pow_add/mul_pow. Remove only the trailing rfl; no mathematical term changes.",
+    "Actual100 exposes hxLog's explicit first real argument. Supply the SAME actual (F i).scale before the unchanged maximum-threshold proof; x=that scale and L=logx are unchanged.",
+    "Actual129 ring residual is a product commutation with two identically printed L^2 terms of different powers: the left natural square comes from hKsq; the right real literal exponent2 comes from R=A+(n:Real)+2. The existing rpow_natCast normalizes the variable castn but does not catch the real numeral2 in this simp-only set. Add the exact fixed public Real.rpow_two L, read atPow/Real470, to normalize only that numeral before unchanged ring. No use of ring_nf, no change to powers or assumptions."
+  ],
+  "mathematics_quantifiers_thresholds_domain_unchanged": "Both complete theorem types and zero definitions unchanged. Full actual Lbeta^p*Lcap^s bound uses the fixedD=2+log8 once logX>=1 on original lengths/cap; no remaining budget premise. The raw-zero endpoint retains original F,B,C0,sigma,kappa,c0,A,hA>0,hsigma>0, original admissible family and SAMEC0 UniformAuxiliarySW. It selects R=A+n+2 before the family member, obtains original actual betaL2 rawZero-P0 SW bound, absorbs K=C*abs(cutoffMass)*D^n by logX^2, uses the same maximum uniform threshold before ALLi, and cross-multiplies positive real log powers. Original signed residue, full physical labels, primitive main term and local cutoff mass remain unchanged. No mass normalization, unavailable spare X power, smaller domain or target completion is introduced.",
+  "fixed_real_power_API_actually_read": {
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+    "historical_source_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+    "historical_hash_evidence": {
+      "report": "20261016-disjoint-label-products-independent-scope.json",
+      "report_sha256": "f66a590faf5824b949b53cbf436508d356877e457b08ae077f5d51a0d6a9ab94"
+    },
+    "rpow_natCast": "theorem rpow_natCast (x : ℝ) (n : ℕ) : x ^ (n : ℝ) = x ^ n",
+    "rpow_two": "theorem rpow_two (x : ℝ) : x ^ (2 : ℝ) = x ^ 2 := by simp",
+    "lines_read_this_turn_using_readonly_rg": "58-71 and470-471",
+    "fresh_whole_file_rehash_boundary": "A later redundant UNC ReadAllText attempt returned semaphore timeout before ANY source/snapshot/report writes. Source declarations above had already been successfully read with rg in this turn. No fresh whole-file hash is claimed; exact prior independent hash is identified separately.",
+    "foreign_import_delta": 0
+  },
+  "bidirectional_byte_certificate": {
+    "replacement": {
+      "offset_zero_based": 3168,
+      "old_removed_count": 3042,
+      "new_inserted_count": 3064,
+      "unchanged_suffix_count": 132,
+      "old_removed_bytes_base64": "OyByZmwKCi8tLSBUaGUgYWN0dWFsIGJldGEgbW9tZW50IHRpbWVzIHRoZSBjb21wbGV0ZSByYXctemVybyBkaXNjcmVwYW5jeSBpcyBwYWlkCmF0IGV2ZXJ5IHJlcXVlc3RlZCBsb2dhcml0aG1pYyBvcmRlciwgdW5pZm9ybWx5IGJlZm9yZSB0aGUgZmFtaWx5IG1lbWJlci4gLS8KdGhlb3JlbSBhY3R1YWxfYmV0YUwyX211bF9yYXdaZXJvX2xvZ19wYXltZW50IHvOuSA6IFR5cGUqfSAoRiA6IM65IOKGkiBNZWRpdW1BdG9tKQogICAgKEIgQzAgOiDihJUpIChzaWdtYSBrYXBwYSBjMCBBIDog4oSdKSAoaEEgOiAwIDwgQSkgKGhzaWdtYSA6IDAgPCBzaWdtYSkKICAgIChoYWRtaXNzaWJsZSA6IOKIgCBpLCBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgKEYgaSkpCiAgICAoaFNXIDogVW5pZm9ybUF1eGlsaWFyeVNXIEYgQzApIDoKICAgIOKIgyB4MCA6IOKEnSwgMSA8IHgwIOKIpyDiiIAgaSwgeDAg4omkIChGIGkpLnNjYWxlIOKGkgogICAgICAo4oiRIG4g4oiIIChGIGkpLmJldGFDYXJyaWVyLCDigJYoRiBpKS5iZXRhIG7igJYgXiAyKSAqCiAgICAgICAg4oCWKEYgaSkudHJhbnNwb3NlZEF0b20uY29tcGxleENSVFNtb290aFplcm9QYXJ0IC0gcHJpbWl0aXZlWmVyb01haW4gKEYgaSnigJYg4omkCiAgICAgICAgICAoRiBpKS5zY2FsZSBeIDIgLyBSZWFsLmxvZyAoRiBpKS5zY2FsZSBeIEEgOj0gYnkKICBsZXQgcCA6IOKElSA6PSAoMiBeIEIpIF4gMiAtIDEKICBsZXQgcyA6IOKElSA6PSAyICogKDMgKiAoMiBeIEMwICsgMSkpIF4gMiArIDEKICBsZXQgbiA6IOKElSA6PSBwICsgcwogIGxldCBSIDog4oSdIDo9IEEgKyAobiA6IOKEnSkgKyAyCiAgaGF2ZSBoUiA6IDAgPCBSIDo9IGJ5IGRzaW1wIFtSXTsgcG9zaXRpdml0eQogIG9idGFpbiDin6hDLCBoQywgeFNXLCBoeFNXLCBoYm91bmTin6kgOj0KICAgIGFjdHVhbF9iZXRhTDJfbXVsX3Jhd1plcm9fU1dfYm91bmQgRiBCIEMwIHNpZ21hIGthcHBhIGMwIFIgaFIgaGFkbWlzc2libGUgaFNXCiAgbGV0IEQgOiDihJ0gOj0gMiArIFJlYWwubG9nIDgKICBoYXZlIGhEIDogMCA8IEQgOj0gYnkKICAgIGRzaW1wIFtEXQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoYnkgbm9ybV9udW0gOiAoMSA6IOKEnSkg4omkIDgpXQogIGxldCBLIDog4oSdIDo9IEMgKiB8Q29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3N8ICogRCBeIG4KICBoYXZlIGhLMCA6IDAg4omkIEsgOj0gYnkgZHNpbXAgW0tdOyBwb3NpdGl2aXR5CiAgb2J0YWluIOKfqHhMb2csIGh4TG9n4p+pIDo9IGV2ZW50dWFsbHlfYXRUb3AubXAKICAgIChSZWFsLnRlbmRzdG9fbG9nX2F0VG9wLmV2ZW50dWFsbHlfZ2VfYXRUb3AgKG1heCAxIEspKQogIHJlZmluZSDin6htYXggeFNXIHhMb2csIGx0X29mX2x0X29mX2xlIGh4U1cgKGxlX21heF9sZWZ0IF8gXyksIGZ1biBpIGh4IOKGpiA/X+KfqQogIGxldCB4IDog4oSdIDo9IChGIGkpLnNjYWxlCiAgbGV0IEwgOiDihJ0gOj0gUmVhbC5sb2cgeAogIGhhdmUgaEwgOiBtYXggMSBLIOKJpCBMIDo9IGh4TG9nICgobGVfbWF4X3JpZ2h0IF8gXykudHJhbnMgaHgpCiAgaGF2ZSBoTDEgOiAxIOKJpCBMIDo9IChsZV9tYXhfbGVmdCBfIF8pLnRyYW5zIGhMCiAgaGF2ZSBoTHBvcyA6IDAgPCBMIDo9IHplcm9fbHRfb25lLnRyYW5zX2xlIGhMMQogIGhhdmUgaEtzcSA6IEsg4omkIEwgXiAyIDo9IGJ5CiAgICBoYXZlIGhLTCA6IEsg4omkIEwgOj0gKGxlX21heF9yaWdodCBfIF8pLnRyYW5zIGhMCiAgICBoYXZlIGhMc3EgOiBMIOKJpCBMIF4gMiA6PSBieSBubGluYXJpdGgKICAgIGV4YWN0IGhLTC50cmFucyBoTHNxCiAgaGF2ZSBoY29zdCA6CiAgICAgICgxICsgUmVhbC5sb2cgKDIgKiAoRiBpKS5WKSkgXiBwICoKICAgICAgICAoMSArIFJlYWwubG9nIChGIGkpLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIHMg4omkIEQgXiBuICogTCBeIG4gOj0gYnkKICAgIGV4YWN0IGFjdHVhbF9sb2dfY29zdF9sZV9sb2dfcG93IHAgcyBoc2lnbWEgKGhhZG1pc3NpYmxlIGkpIGhMMQogIGhhdmUgaHBheSA6CiAgICAgIEMgKiB8Q29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3N8ICogeCBeIDIgKgogICAgICAgICAgKDEgKyBSZWFsLmxvZyAoMiAqIChGIGkpLlYpKSBeIHAgKgogICAgICAgICAgICAoMSArIFJlYWwubG9nIChGIGkpLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIHMgLyBMIF4gUiDiiaQgeCBeIDIgLyBMIF4gQSA6PSBieQogICAgYXBwbHkgKGRpdl9sZV9kaXZfaWZm4oKAIChSZWFsLnJwb3dfcG9zX29mX3BvcyBoTHBvcyBSKQogICAgICAoUmVhbC5ycG93X3Bvc19vZl9wb3MgaExwb3MgQSkpLm1wcgogICAgY2FsYwogICAgICBfID0gQyAqIHxDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKiB4IF4gMiAqCiAgICAgICAgICAoKDEgKyBSZWFsLmxvZyAoMiAqIChGIGkpLlYpKSBeIHAgKgogICAgICAgICAgICAoMSArIFJlYWwubG9nIChGIGkpLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIHMpICogTCBeIEEgOj0gYnkgcmluZwogICAgICBfIOKJpCBDICogfENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzfCAqIHggXiAyICogKEQgXiBuICogTCBeIG4pICogTCBeIEEgOj0KICAgICAgICBtdWxfbGVfbXVsX29mX25vbm5lZ19yaWdodAogICAgICAgICAgKG11bF9sZV9tdWxfb2Zfbm9ubmVnX2xlZnQgaGNvc3QgKGJ5IHBvc2l0aXZpdHkpKQogICAgICAgICAgKFJlYWwucnBvd19ub25uZWcgaExwb3MubGUgQSkKICAgICAgXyA9IEsgKiB4IF4gMiAqIChMIF4gbiAqIEwgXiBBKSA6PSBieSBkc2ltcCBbS107IHJpbmcKICAgICAgXyDiiaQgTCBeIDIgKiB4IF4gMiAqIChMIF4gbiAqIEwgXiBBKSA6PQogICAgICAgIG11bF9sZV9tdWxfb2Zfbm9ubmVnX3JpZ2h0CiAgICAgICAgICAobXVsX2xlX211bF9vZl9ub25uZWdfcmlnaHQgaEtzcSAoc3Ffbm9ubmVnIHgpKSAoYnkgcG9zaXRpdml0eSkKICAgICAgXyA9IHggXiAyICogTCBeIFIgOj0gYnkKICAgICAgICBkc2ltcCBbUl0KICAgICAgICBzaW1wIG9ubHkgW1JlYWwucnBvd19hZGQgaExwb3MsIFJlYWwucnBvd19uYXRDYXN0",
+      "new_inserted_bytes_base64": "CgovLS0gVGhlIGFjdHVhbCBiZXRhIG1vbWVudCB0aW1lcyB0aGUgY29tcGxldGUgcmF3LXplcm8gZGlzY3JlcGFuY3kgaXMgcGFpZAphdCBldmVyeSByZXF1ZXN0ZWQgbG9nYXJpdGhtaWMgb3JkZXIsIHVuaWZvcm1seSBiZWZvcmUgdGhlIGZhbWlseSBtZW1iZXIuIC0vCnRoZW9yZW0gYWN0dWFsX2JldGFMMl9tdWxfcmF3WmVyb19sb2dfcGF5bWVudCB7zrkgOiBUeXBlKn0gKEYgOiDOuSDihpIgTWVkaXVtQXRvbSkKICAgIChCIEMwIDog4oSVKSAoc2lnbWEga2FwcGEgYzAgQSA6IOKEnSkgKGhBIDogMCA8IEEpIChoc2lnbWEgOiAwIDwgc2lnbWEpCiAgICAoaGFkbWlzc2libGUgOiDiiIAgaSwgTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIChGIGkpKQogICAgKGhTVyA6IFVuaWZvcm1BdXhpbGlhcnlTVyBGIEMwKSA6CiAgICDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIGksIHgwIOKJpCAoRiBpKS5zY2FsZSDihpIKICAgICAgKOKIkSBuIOKIiCAoRiBpKS5iZXRhQ2Fycmllciwg4oCWKEYgaSkuYmV0YSBu4oCWIF4gMikgKgogICAgICAgIOKAlihGIGkpLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhDUlRTbW9vdGhaZXJvUGFydCAtIHByaW1pdGl2ZVplcm9NYWluIChGIGkp4oCWIOKJpAogICAgICAgICAgKEYgaSkuc2NhbGUgXiAyIC8gUmVhbC5sb2cgKEYgaSkuc2NhbGUgXiBBIDo9IGJ5CiAgbGV0IHAgOiDihJUgOj0gKDIgXiBCKSBeIDIgLSAxCiAgbGV0IHMgOiDihJUgOj0gMiAqICgzICogKDIgXiBDMCArIDEpKSBeIDIgKyAxCiAgbGV0IG4gOiDihJUgOj0gcCArIHMKICBsZXQgUiA6IOKEnSA6PSBBICsgKG4gOiDihJ0pICsgMgogIGhhdmUgaFIgOiAwIDwgUiA6PSBieSBkc2ltcCBbUl07IHBvc2l0aXZpdHkKICBvYnRhaW4g4p+oQywgaEMsIHhTVywgaHhTVywgaGJvdW5k4p+pIDo9CiAgICBhY3R1YWxfYmV0YUwyX211bF9yYXdaZXJvX1NXX2JvdW5kIEYgQiBDMCBzaWdtYSBrYXBwYSBjMCBSIGhSIGhhZG1pc3NpYmxlIGhTVwogIGxldCBEIDog4oSdIDo9IDIgKyBSZWFsLmxvZyA4CiAgaGF2ZSBoRCA6IDAgPCBEIDo9IGJ5CiAgICBkc2ltcCBbRF0KICAgIGxpbmFyaXRoIFtSZWFsLmxvZ19ub25uZWcgKGJ5IG5vcm1fbnVtIDogKDEgOiDihJ0pIOKJpCA4KV0KICBsZXQgSyA6IOKEnSA6PSBDICogfENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzfCAqIEQgXiBuCiAgaGF2ZSBoSzAgOiAwIOKJpCBLIDo9IGJ5IGRzaW1wIFtLXTsgcG9zaXRpdml0eQogIG9idGFpbiDin6h4TG9nLCBoeExvZ+KfqSA6PSBldmVudHVhbGx5X2F0VG9wLm1wCiAgICAoUmVhbC50ZW5kc3RvX2xvZ19hdFRvcC5ldmVudHVhbGx5X2dlX2F0VG9wIChtYXggMSBLKSkKICByZWZpbmUg4p+obWF4IHhTVyB4TG9nLCBsdF9vZl9sdF9vZl9sZSBoeFNXIChsZV9tYXhfbGVmdCBfIF8pLCBmdW4gaSBoeCDihqYgP1/in6kKICBsZXQgeCA6IOKEnSA6PSAoRiBpKS5zY2FsZQogIGxldCBMIDog4oSdIDo9IFJlYWwubG9nIHgKICBoYXZlIGhMIDogbWF4IDEgSyDiiaQgTCA6PSBoeExvZyAoRiBpKS5zY2FsZSAoKGxlX21heF9yaWdodCBfIF8pLnRyYW5zIGh4KQogIGhhdmUgaEwxIDogMSDiiaQgTCA6PSAobGVfbWF4X2xlZnQgXyBfKS50cmFucyBoTAogIGhhdmUgaExwb3MgOiAwIDwgTCA6PSB6ZXJvX2x0X29uZS50cmFuc19sZSBoTDEKICBoYXZlIGhLc3EgOiBLIOKJpCBMIF4gMiA6PSBieQogICAgaGF2ZSBoS0wgOiBLIOKJpCBMIDo9IChsZV9tYXhfcmlnaHQgXyBfKS50cmFucyBoTAogICAgaGF2ZSBoTHNxIDogTCDiiaQgTCBeIDIgOj0gYnkgbmxpbmFyaXRoCiAgICBleGFjdCBoS0wudHJhbnMgaExzcQogIGhhdmUgaGNvc3QgOgogICAgICAoMSArIFJlYWwubG9nICgyICogKEYgaSkuVikpIF4gcCAqCiAgICAgICAgKDEgKyBSZWFsLmxvZyAoRiBpKS5waHlzaWNhbEZhY3RvckNhcCkgXiBzIOKJpCBEIF4gbiAqIEwgXiBuIDo9IGJ5CiAgICBleGFjdCBhY3R1YWxfbG9nX2Nvc3RfbGVfbG9nX3BvdyBwIHMgaHNpZ21hIChoYWRtaXNzaWJsZSBpKSBoTDEKICBoYXZlIGhwYXkgOgogICAgICBDICogfENvbW1vblNtb290aEN1dG9mZi5jdXRvZmZNYXNzfCAqIHggXiAyICoKICAgICAgICAgICgxICsgUmVhbC5sb2cgKDIgKiAoRiBpKS5WKSkgXiBwICoKICAgICAgICAgICAgKDEgKyBSZWFsLmxvZyAoRiBpKS5waHlzaWNhbEZhY3RvckNhcCkgXiBzIC8gTCBeIFIg4omkIHggXiAyIC8gTCBeIEEgOj0gYnkKICAgIGFwcGx5IChkaXZfbGVfZGl2X2lmZuKCgCAoUmVhbC5ycG93X3Bvc19vZl9wb3MgaExwb3MgUikKICAgICAgKFJlYWwucnBvd19wb3Nfb2ZfcG9zIGhMcG9zIEEpKS5tcHIKICAgIGNhbGMKICAgICAgXyA9IEMgKiB8Q29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3N8ICogeCBeIDIgKgogICAgICAgICAgKCgxICsgUmVhbC5sb2cgKDIgKiAoRiBpKS5WKSkgXiBwICoKICAgICAgICAgICAgKDEgKyBSZWFsLmxvZyAoRiBpKS5waHlzaWNhbEZhY3RvckNhcCkgXiBzKSAqIEwgXiBBIDo9IGJ5IHJpbmcKICAgICAgXyDiiaQgQyAqIHxDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKiB4IF4gMiAqIChEIF4gbiAqIEwgXiBuKSAqIEwgXiBBIDo9CiAgICAgICAgbXVsX2xlX211bF9vZl9ub25uZWdfcmlnaHQKICAgICAgICAgIChtdWxfbGVfbXVsX29mX25vbm5lZ19sZWZ0IGhjb3N0IChieSBwb3NpdGl2aXR5KSkKICAgICAgICAgIChSZWFsLnJwb3dfbm9ubmVnIGhMcG9zLmxlIEEpCiAgICAgIF8gPSBLICogeCBeIDIgKiAoTCBeIG4gKiBMIF4gQSkgOj0gYnkgZHNpbXAgW0tdOyByaW5nCiAgICAgIF8g4omkIEwgXiAyICogeCBeIDIgKiAoTCBeIG4gKiBMIF4gQSkgOj0KICAgICAgICBtdWxfbGVfbXVsX29mX25vbm5lZ19yaWdodAogICAgICAgICAgKG11bF9sZV9tdWxfb2Zfbm9ubmVnX3JpZ2h0IGhLc3EgKHNxX25vbm5lZyB4KSkgKGJ5IHBvc2l0aXZpdHkpCiAgICAgIF8gPSB4IF4gMiAqIEwgXiBSIDo9IGJ5CiAgICAgICAgZHNpbXAgW1JdCiAgICAgICAgc2ltcCBvbmx5IFtSZWFsLnJwb3dfYWRkIGhMcG9zLCBSZWFsLnJwb3dfbmF0Q2FzdCwgUmVhbC5ycG93X3R3bw=="
+    },
+    "forward_byte_equal_current": true,
+    "forward_reconstructed_sha256": "a044546c1c218110312c9342572945afdccc9e039ff0acccfc9c8f8e8b25b66a",
+    "inverse_byte_equal_exact_old": true,
+    "inverse_reconstructed_sha256": "ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8",
+    "reconstruction_in_memory_only": true
+  },
+  "sourceDAG_proof_rebind_delta": {
+    "added_local": [],
+    "added_foreign": [],
+    "imports_unchanged": true
+  },
+  "pin_snapshots": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "exact_expected": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "exact_expected": true
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "exact_expected": true
+    }
+  ],
+  "limits_and_linter_unchanged": true,
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "bootstrap_invoked": false,
+    "kernel_replay_performed": false,
+    "pins_or_checkers_modified": false,
+    "only_requested_candidate_proof_sites_modified": true,
+    "runtime_pass_claimed": false,
+    "publication_freeze_released_before_write": true,
+    "owned_or_unrequested_sources_modified": false
+  },
+  "remaining_gate": "Root must independently review exact new source/types/proofs/diagnostic and both byte reconstruction directions, then runtime owner alone may use the original specifically authorized6144/RSS6656/j2 validation. No compile, PASS or ownership is asserted here."
+}

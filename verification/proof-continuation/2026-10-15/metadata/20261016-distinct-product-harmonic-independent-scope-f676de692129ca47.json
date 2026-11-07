@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_INDEPENDENT_FULL_SEMANTIC_API_SCOPE_PASS_PENDING_PARENT_AND_RUNTIME",
+  "reviewer": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T21:17:54.342822+00:00",
+  "candidate": {
+    "path": "ImbalancedChen\\ActualExtendedThirdDistinctProductHarmonic.lean",
+    "sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064",
+    "declaration_count": 15,
+    "definition_count": 5,
+    "all_complete_headers_and_definitions": [
+      {
+        "name": "actualExtendedThirdDistinctCellPrimeTuples",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdDistinctCellPrimeTuples (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset (Fin 3 → ℕ)",
+        "complete_definition": "def actualExtendedThirdDistinctCellPrimeTuples (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset (Fin 3 → ℕ) :=\n  (actualPrimeBoxTuples N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)).filter\n    (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j)"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellPrimeProducts",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdDistinctCellPrimeProducts (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset ℕ",
+        "complete_definition": "def actualExtendedThirdDistinctCellPrimeProducts (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset ℕ :=\n  (actualExtendedThirdDistinctCellPrimeTuples N h m j).image (fun p => ∏ i : Fin 3, p i)"
+      },
+      {
+        "name": "descending_three_pairwise",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem descending_three_pairwise {a b c : ℕ} (hba : b < a) (hcb : c < b) :\n    [a, b, c].Pairwise (fun x y => y ≤ x)"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellPrimeTuples_product_injOn",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeTuples_product_injOn {N : ℕ}\n    (hN : 1 < N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    Set.InjOn (fun p : Fin 3 → ℕ => ∏ i, p i)\n      (actualExtendedThirdDistinctCellPrimeTuples N h m j)"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellProductTuple",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdDistinctCellProductTuple (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) (n : ℕ) : Fin 3 → ℕ",
+        "complete_definition": "def actualExtendedThirdDistinctCellProductTuple (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) (n : ℕ) : Fin 3 → ℕ :=\n  if hn : n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j then\n    Classical.choose (Finset.mem_image.mp hn)\n  else fun _ => 0"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellProductTuple_spec",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCellProductTuple_spec {N : ℕ} {h : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {n : ℕ}\n    (hn : n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j) :\n    actualExtendedThirdDistinctCellProductTuple N h m j n ∈\n        actualExtendedThirdDistinctCellPrimeTuples N h m j ∧\n      (∏ i : Fin 3, actualExtendedThirdDistinctCellProductTuple N h m j n i) = n"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellProductTuple_product",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCellProductTuple_product {N : ℕ} (hN : 1 < N)\n    {h : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m} {p : Fin 3 → ℕ}\n    (hp : p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j) :\n    actualExtendedThirdDistinctCellProductTuple N h m j (∏ i : Fin 3, p i) = p"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellPrimeTuples_totient_sum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeTuples_totient_sum {N : ℕ}\n    (hN : 1 < N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    (∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j,\n      (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p) =\n      ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n        1 / (Nat.totient n : ℝ) * G (actualExtendedThirdDistinctCellProductTuple N h m j n)"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellProductHarmonicSum",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdDistinctCellProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ",
+        "complete_definition": "def actualExtendedThirdDistinctCellProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ :=\n  ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n    1 / (Nat.totient n : ℝ) *\n      actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)\n        (actualPrimeTupleLog N (actualExtendedThirdDistinctCellProductTuple N h m j n))"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCellProductHarmonicSum_eq",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCellProductHarmonicSum_eq {N : ℕ} (hN : 1 < N)\n    (e h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    actualExtendedThirdDistinctCellProductHarmonicSum N e h m j =\n      actualExtendedThirdDistinctCellPrimeSum N e h m j"
+      },
+      {
+        "name": "tendsto_actualExtendedThirdDistinctCellProductHarmonicSum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem tendsto_actualExtendedThirdDistinctCellProductHarmonicSum {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCellProductHarmonicSum N e h m j) atTop\n      (𝓝 (actualExtendedThirdRetainedCellIntegral e m j))"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCompactProductHarmonicSum",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdDistinctCompactProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ",
+        "complete_definition": "def actualExtendedThirdDistinctCompactProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ :=\n  ∑ j ∈ actualExtendedThirdCompactCells e h m,\n    actualExtendedThirdDistinctCellProductHarmonicSum N e h m j"
+      },
+      {
+        "name": "actualExtendedThirdDistinctCompactProductHarmonicSum_eq",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdDistinctCompactProductHarmonicSum_eq {N : ℕ} (hN : 1 < N)\n    (e h : ℝ) (m : ℕ) :\n    actualExtendedThirdDistinctCompactProductHarmonicSum N e h m =\n      actualExtendedThirdDistinctCompactPrimeSum N e h m"
+      },
+      {
+        "name": "tendsto_actualExtendedThirdDistinctCompactProductHarmonicSum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem tendsto_actualExtendedThirdDistinctCompactProductHarmonicSum {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCompactProductHarmonicSum N e h m) atTop\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m))"
+      },
+      {
+        "name": "exists_actualExtendedThirdDistinctCompactProductHarmonicSum_approx_ideal",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem exists_actualExtendedThirdDistinctCompactProductHarmonicSum_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      ∀ᶠ N : ℕ in atTop,\n        |actualExtendedThirdDistinctCompactProductHarmonicSum N e h m -\n          actualExtendedThirdIdealFunctional| ≤ ε"
+      }
+    ],
+    "full_reviewed_source": "import ImbalancedChen.ActualExtendedThirdDistinctPrimeHarmonic\n\n/-!\n# The original strictly ordered prefix product harmonic dictionary\n\nStrictly ordered prime triples have distinct products.  We prove that\nfact using prime factor uniqueness and the actual strict ordering; no\nfactorial or permutation count is inserted.  The literal finite prime\nsum is then transported to its own product image with exactly 1/phi(n)\nand the same nonlinear test at the uniquely recovered original triple.\n\nThis is a finite arithmetic dictionary and its harmonic limit.  It\ndoes not identify the full signed first-exit sieve coefficient or pay\nits physical counting remainder.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Set Filter Topology\nopen scoped Classical BigOperators\n\ndef actualExtendedThirdDistinctCellPrimeTuples (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset (Fin 3 → ℕ) :=\n  (actualPrimeBoxTuples N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)).filter\n    (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j)\n\ndef actualExtendedThirdDistinctCellPrimeProducts (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Finset ℕ :=\n  (actualExtendedThirdDistinctCellPrimeTuples N h m j).image (fun p => ∏ i : Fin 3, p i)\n\nprivate theorem descending_three_pairwise {a b c : ℕ} (hba : b < a) (hcb : c < b) :\n    [a, b, c].Pairwise (fun x y => y ≤ x) := by\n  apply List.pairwise_cons.mpr\n  constructor\n  · intro x hx\n    rcases List.mem_cons.mp hx with rfl | hx\n    · exact hba.le\n    · have hx' : x = c := List.mem_singleton.mp hx\n      subst x\n      exact (hcb.trans hba).le\n  · exact List.pairwise_pair.mpr hcb.le\n\n/-- This is injectivity on the actual arithmetic selector, including its\nowned cell endpoints and the original target-divisor exclusions. -/\ntheorem actualExtendedThirdDistinctCellPrimeTuples_product_injOn {N : ℕ}\n    (hN : 1 < N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    Set.InjOn (fun p : Fin 3 → ℕ => ∏ i, p i)\n      (actualExtendedThirdDistinctCellPrimeTuples N h m j) := by\n  intro p hp q hq hpq\n  obtain ⟨hpbox, hpregion⟩ := Finset.mem_filter.mp hp\n  obtain ⟨hqbox, hqregion⟩ := Finset.mem_filter.mp hq\n  obtain ⟨hp10, hp21⟩ := actualExtendedThirdDistinctCellPrimeRegion_prime_order hN hpbox hpregion\n  obtain ⟨hq10, hq21⟩ := actualExtendedThirdDistinctCellPrimeRegion_prime_order hN hqbox hqregion\n  have hpprime (i : Fin 3) : Nat.Prime (p i) := (mem_actualPrimeBoxTuples_iff.mp hpbox i).1\n  have hqprime (i : Fin 3) : Nat.Prime (q i) := (mem_actualPrimeBoxTuples_iff.mp hqbox i).1\n  have hpl : ∀ a ∈ [p 0, p 1, p 2], Nat.Prime a := by\n    intro a ha\n    simp only [List.mem_cons, List.mem_singleton] at ha\n    rcases ha with rfl | rfl | rfl\n    · exact hpprime 0\n    · exact hpprime 1\n    · exact hpprime 2\n  have hql : ∀ a ∈ [q 0, q 1, q 2], Nat.Prime a := by\n    intro a ha\n    simp only [List.mem_cons, List.mem_singleton] at ha\n    rcases ha with rfl | rfl | rfl\n    · exact hqprime 0\n    · exact hqprime 1\n    · exact hqprime 2\n  have hprod : [p 0, p 1, p 2].prod = [q 0, q 1, q 2].prod := by\n    simpa only [List.prod_cons, List.prod_nil, mul_one, Fin.prod_univ_three, mul_assoc] using hpq\n  have hperm := (Nat.primeFactorsList_unique hprod hpl).trans\n    (Nat.primeFactorsList_unique rfl hql).symm\n  have heq : [p 0, p 1, p 2] = [q 0, q 1, q 2] :=\n    List.Perm.eq_of_pairwise (fun _ _ _ _ hab hba => Nat.le_antisymm hba hab)\n      (descending_three_pairwise hp10 hp21) (descending_three_pairwise hq10 hq21) hperm\n  have hc : p 0 = q 0 ∧ p 1 = q 1 ∧ p 2 = q 2 := by\n    simpa only [List.cons.injEq, and_true] using heq\n  funext i\n  fin_cases i\n  · exact hc.1\n  · exact hc.2.1\n  · exact hc.2.2\n\n/-- Outside the actual product carrier the total representative is zero.\nOn the carrier its membership and exact product are proved below. -/\ndef actualExtendedThirdDistinctCellProductTuple (N : ℕ) (h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) (n : ℕ) : Fin 3 → ℕ :=\n  if hn : n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j then\n    Classical.choose (Finset.mem_image.mp hn)\n  else fun _ => 0\n\ntheorem actualExtendedThirdDistinctCellProductTuple_spec {N : ℕ} {h : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {n : ℕ}\n    (hn : n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j) :\n    actualExtendedThirdDistinctCellProductTuple N h m j n ∈\n        actualExtendedThirdDistinctCellPrimeTuples N h m j ∧\n      (∏ i : Fin 3, actualExtendedThirdDistinctCellProductTuple N h m j n i) = n := by\n  simpa only [actualExtendedThirdDistinctCellProductTuple, dif_pos hn] using\n    Classical.choose_spec (Finset.mem_image.mp hn)\n\ntheorem actualExtendedThirdDistinctCellProductTuple_product {N : ℕ} (hN : 1 < N)\n    {h : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m} {p : Fin 3 → ℕ}\n    (hp : p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j) :\n    actualExtendedThirdDistinctCellProductTuple N h m j (∏ i : Fin 3, p i) = p := by\n  have hn : (∏ i : Fin 3, p i) ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j :=\n    Finset.mem_image.mpr ⟨p, hp, rfl⟩\n  have hs := actualExtendedThirdDistinctCellProductTuple_spec hn\n  exact actualExtendedThirdDistinctCellPrimeTuples_product_injOn hN h m j hs.1 hp hs.2\n\n/-- Arbitrary signed tests of the original triple are preserved, rather\nthan replaced by a product-only test or by a supremum. -/\ntheorem actualExtendedThirdDistinctCellPrimeTuples_totient_sum {N : ℕ}\n    (hN : 1 < N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    (∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j,\n      (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p) =\n      ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n        1 / (Nat.totient n : ℝ) * G (actualExtendedThirdDistinctCellProductTuple N h m j n) := by\n  rw [actualExtendedThirdDistinctCellPrimeProducts,\n    Finset.sum_image (actualExtendedThirdDistinctCellPrimeTuples_product_injOn hN h m j)]\n  apply Finset.sum_congr rfl\n  intro p hp\n  obtain ⟨hpbox, hpregion⟩ := Finset.mem_filter.mp hp\n  rw [actualExtendedThirdDistinctCellProductTuple_product hN hp,\n    actualExtendedThirdDistinctCellPrimeRegion_weight hN hpbox hpregion]\n\ndef actualExtendedThirdDistinctCellProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ :=\n  ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n    1 / (Nat.totient n : ℝ) *\n      actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)\n        (actualPrimeTupleLog N (actualExtendedThirdDistinctCellProductTuple N h m j n))\n\ntheorem actualExtendedThirdDistinctCellProductHarmonicSum_eq {N : ℕ} (hN : 1 < N)\n    (e h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    actualExtendedThirdDistinctCellProductHarmonicSum N e h m j =\n      actualExtendedThirdDistinctCellPrimeSum N e h m j := by\n  rw [actualExtendedThirdDistinctCellProductHarmonicSum,\n    ← actualExtendedThirdDistinctCellPrimeTuples_totient_sum hN]\n  rw [actualExtendedThirdDistinctCellPrimeSum, actualPrimeBoxTestSum,\n    actualExtendedThirdDistinctCellPrimeTuples, Finset.sum_filter]\n  apply Finset.sum_congr rfl\n  intro p _\n  by_cases hp : actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j\n  · rw [if_pos hp, Set.indicator_of_mem hp]\n  · rw [if_neg hp, Set.indicator_of_notMem hp, mul_zero]\n\ntheorem tendsto_actualExtendedThirdDistinctCellProductHarmonicSum {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCellProductHarmonicSum N e h m j) atTop\n      (𝓝 (actualExtendedThirdRetainedCellIntegral e m j)) := by\n  apply (tendsto_actualExtendedThirdDistinctCellPrimeSum hh hj).congr'\n  filter_upwards [eventually_gt_atTop 1] with N hN\n  exact (actualExtendedThirdDistinctCellProductHarmonicSum_eq hN e h m j).symm\n\ndef actualExtendedThirdDistinctCompactProductHarmonicSum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ :=\n  ∑ j ∈ actualExtendedThirdCompactCells e h m,\n    actualExtendedThirdDistinctCellProductHarmonicSum N e h m j\n\ntheorem actualExtendedThirdDistinctCompactProductHarmonicSum_eq {N : ℕ} (hN : 1 < N)\n    (e h : ℝ) (m : ℕ) :\n    actualExtendedThirdDistinctCompactProductHarmonicSum N e h m =\n      actualExtendedThirdDistinctCompactPrimeSum N e h m := by\n  apply Finset.sum_congr rfl\n  intro j _\n  exact actualExtendedThirdDistinctCellProductHarmonicSum_eq hN e h m j\n\ntheorem tendsto_actualExtendedThirdDistinctCompactProductHarmonicSum {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCompactProductHarmonicSum N e h m) atTop\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m)) := by\n  apply (tendsto_actualExtendedThirdDistinctCompactPrimeSum hh he0 he m).congr'\n  filter_upwards [eventually_gt_atTop 1] with N hN\n  exact (actualExtendedThirdDistinctCompactProductHarmonicSum_eq hN e h m).symm\n\n/-- All cutoffs and the finite owned grid are chosen before N.  The same\nnonlinear manuscript functional is recovered on the literal product carrier. -/\ntheorem exists_actualExtendedThirdDistinctCompactProductHarmonicSum_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      ∀ᶠ N : ℕ in atTop,\n        |actualExtendedThirdDistinctCompactProductHarmonicSum N e h m -\n          actualExtendedThirdIdealFunctional| ≤ ε := by\n  obtain ⟨h, hh, e, he0, he, m, hlim⟩ :=\n    exists_actualExtendedThirdDistinctCompactPrimeSum_approx_ideal hε\n  refine ⟨h, hh, e, he0, he, m, ?_⟩\n  filter_upwards [hlim, eventually_gt_atTop 1] with N hlimN hN\n  simpa only [actualExtendedThirdDistinctCompactProductHarmonicSum_eq hN e h m] using hlimN\n\nend\n\nend ImbalancedChen\n"
+  },
+  "author_report": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261016-distinct-product-harmonic-root-author-scope.json",
+    "sha256": "03a3b3079d008c951865cfda4bcb2dbd2dbb063a7d9531e8ae7f8f99f6c1365f",
+    "all_full_headers_and_definitions_matched_actual_bytes": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.ActualExtendedThirdDistinctPrimeHarmonic"
+  ],
+  "parent_binding": {
+    "path": "ImbalancedChen\\ActualExtendedThirdDistinctPrimeHarmonic.lean",
+    "sha256": "cb52ae6a298b96776b97030b85643702af18d1d0a34cc774df5bc3c777dbd20a",
+    "independent_report": ".lake/proof-continuation/source-reviews/20261016-distinct-prime-harmonic-independent-scope.json",
+    "independent_report_sha256": "10338897f229fe2c60af7321e40c7160c3c83ee0ba8f91ed4c30e5d528ca334f",
+    "parent_status": "SOURCE_REVIEWED_NOT_ASSERTED_OWNED"
+  },
+  "relative_source_DAG": {
+    "new_local_modules": [
+      "ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic"
+    ],
+    "new_foreign_modules": [],
+    "local_delta": 1,
+    "foreign_delta": 0,
+    "method": "Sole direct local parent is source-hash matched cb52. Closure is parent plus this one module; no full graph rescan or bootstrap."
+  },
+  "mathematical_review": [
+    {
+      "site": "tuple and product carriers",
+      "assessment": "The tuple carrier is literally the existing target-linked prime box filtered by the actual strict owned cell; target-prime exclusions and Ico endpoints remain. Products are exactly its finite image, with no enlarged product set."
+    },
+    {
+      "site": "descending_three_pairwise",
+      "assessment": "Both strict inequalities imply the displayed descending list is Pairwise for reverse natural <=, including the transitive first-to-third comparison. This is the relation consumed by core permutation uniqueness."
+    },
+    {
+      "site": "product injectivity",
+      "assessment": "Actual strict prime order is obtained from the parent for N>1. True prime membership is retained for each list entry. The exact equality of products invokes primeFactorsList_unique on each all-prime list and gives a permutation through the same prime factor list. Core List.Perm.eq_of_pairwise applies with the reversed <= relation: its cross-membership antisymmetry function is correctly Nat.le_antisymm hba hab. Equality of lists then gives all actual Fin3 coordinates. This proves injectivity on the actual selector rather than assuming it."
+    },
+    {
+      "site": "chosen product representative and recovery",
+      "assessment": "Classical.choose is total, with zero triple only outside the actual image. choose_spec proves membership in the same tuple carrier and product exactly n on the image. The proved injectivity forces the representative of every original tuple product to equal that same original tuple. No extra uniqueness premise or coefficient bound is introduced."
+    },
+    {
+      "site": "signed totient sum dictionary",
+      "assessment": "Finset.sum_image uses actual injectivity, so no multiplicity or factorial enters. The exact parent weight identity is used on each actual true strict prime tuple. The arbitrary signed real triple test G is evaluated at the exact recovered tuple, not replaced by a product-only surrogate or an absolute supremum. The full product totient and original target exclusions are retained."
+    },
+    {
+      "site": "same nonlinear profile and finite equality",
+      "assessment": "The literal product harmonic sum uses the same actual CompactHarmonicProfile with the same PhysicalLevel and log target N. The arbitrary-G dictionary is specialized to this profile. Filter/indicator cases prove exact equality with the original strict finite prime sum for every N>1."
+    },
+    {
+      "site": "individual, compact and ideal limits",
+      "assessment": "Eventual N>1 transfers the fully established strict tuple limits using eventual exact finite equality. The sum uses precisely the same finite CompactCells. The final h>0,e>0,e<=1/384,m witnesses precede N and recover the same original IdealFunctional. No rate, full signed first-exit coefficient identity, nonzero Fourier estimate or physical counting remainder is asserted."
+    }
+  ],
+  "fixed_API_review": [
+    {
+      "path": "Mathlib/Data/Nat/Factors.lean:168",
+      "pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "complete_header": "theorem primeFactorsList_unique {n : Nat} {l : List Nat} (h1 : prod l = n) (h2 : forall p in l, Prime p) : l.Perm (primeFactorsList n)",
+      "assessment": "Both actual prime lists satisfy every premise; no separate nonzero n condition is required because all entries prime prove it internally."
+    },
+    {
+      "path": "lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Perm.lean:530",
+      "name": "List.Perm.eq_of_pairwise",
+      "assessment": "Actual complete theorem statement and body read. The supplied reverse <= pairwise relation and antisymmetry orientation match, followed by hperm."
+    },
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean",
+      "assessment": "Fresh cb52 byte binding to reviewer own complete independent review. Actual strict natural prime order, exact product totient identity, strict cell and compact limits and policy quantifiers all match."
+    }
+  ],
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "source_checks": {
+    "all_15_complete_headers_read": true,
+    "all_5_complete_definitions_read": true,
+    "all_10_complete_proofs_read": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_limit_or_linter_suppression": true,
+    "issues_identified": []
+  },
+  "scope_boundaries": {
+    "no_factorial_inserted": true,
+    "arbitrary_signed_G_preserved": true,
+    "literal_reciprocal_totient_of_entire_product": true,
+    "prime_wall_atoms_not_assumed_null": true,
+    "full_original_signed_first_exit_dictionary_proved": false,
+    "physical_counting_error_paid": false,
+    "full_hUpper_proved": false
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "source_modified": false,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "bootstrap_invoked": false,
+    "kernel_or_axiom_audit_performed": false,
+    "pins_modified": false,
+    "acceptance_claimed": false,
+    "full_tree_rescanned": false
+  },
+  "remaining_gate": "The exact parent must first become actually owned. Root/runtime must separately authorize and check this frozen source. This review is not Lean elaboration or ownership acceptance."
+}

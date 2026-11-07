@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:04:36.402832+00:00",
+  "reviewer": "/root/dispersion_resume",
+  "status": "SOURCE_ONLY_SELF_REVIEW_ACTUAL_COMPLEX_ZERO_COVARIANCE",
+  "candidate": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedZeroCovariance.lean",
+    "sha256": "53e18e642d3d93f7b9219d70dd86041b61aa7f8ab2fcf0bdec2ebea180daf0fc",
+    "source_declaration_count": 33
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedDispersion"
+  ],
+  "all_complete_source_headers": [
+    {
+      "name": "reducedResidues",
+      "kind": "def",
+      "private": false,
+      "line": 32,
+      "complete_source_header": "def reducedResidues (delta : ℕ) : Finset ℕ"
+    },
+    {
+      "name": "card_reducedResidues",
+      "kind": "theorem",
+      "private": false,
+      "line": 35,
+      "complete_source_header": "theorem card_reducedResidues (delta : ℕ) :\n    (reducedResidues delta).card = delta.totient"
+    },
+    {
+      "name": "coprimeMass",
+      "kind": "def",
+      "private": false,
+      "line": 39,
+      "complete_source_header": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R"
+    },
+    {
+      "name": "residueMass",
+      "kind": "def",
+      "private": false,
+      "line": 43,
+      "complete_source_header": "def residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R"
+    },
+    {
+      "name": "sum_reduced_indicator",
+      "kind": "theorem",
+      "private": true,
+      "line": 47,
+      "complete_source_header": "private theorem sum_reduced_indicator {R : Type*} [AddCommMonoid R]\n    {delta n : ℕ} (hdelta : 0 < delta) (hn : n.Coprime delta) (z : R) :\n    (∑ b ∈ reducedResidues delta, if Nat.ModEq delta n b then z else 0) = z"
+    },
+    {
+      "name": "sum_residueMass",
+      "kind": "theorem",
+      "private": false,
+      "line": 65,
+      "complete_source_header": "theorem sum_residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) {q delta : ℕ}\n    (hdelta : 0 < delta) (hdq : delta ∣ q) :\n    (∑ b ∈ reducedResidues delta, residueMass N beta q delta b) =\n      coprimeMass N beta q"
+    },
+    {
+      "name": "pair_indicator",
+      "kind": "theorem",
+      "private": true,
+      "line": 81,
+      "complete_source_header": "private theorem pair_indicator {q r n₁ n₂ : ℕ} (hq : 0 < q) (z₁ z₂ : ℂ) :\n    (∑ b ∈ reducedResidues (q.gcd r),\n      (if n₁.Coprime q ∧ Nat.ModEq (q.gcd r) n₁ b then z₁ else 0) *\n        star (if n₂.Coprime r ∧ Nat.ModEq (q.gcd r) n₂ b then z₂ else 0)) =\n      if ComplexCRT.Compatible q r n₁ n₂ then z₁ * star z₂ else 0"
+    },
+    {
+      "name": "compatibleMass",
+      "kind": "def",
+      "private": false,
+      "line": 115,
+      "complete_source_header": "def compatibleMass (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "compatibleMass_eq_residue_products",
+      "kind": "theorem",
+      "private": false,
+      "line": 119,
+      "complete_source_header": "theorem compatibleMass_eq_residue_products (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    compatibleMass N beta q r =\n      ∑ b ∈ reducedResidues (q.gcd r),\n        residueMass N beta q (q.gcd r) b * star (residueMass N beta r (q.gcd r) b)"
+    },
+    {
+      "name": "covariance",
+      "kind": "def",
+      "private": false,
+      "line": 134,
+      "complete_source_header": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "covariance_identity",
+      "kind": "theorem",
+      "private": false,
+      "line": 140,
+      "complete_source_header": "theorem covariance_identity (N : Finset ℕ) (beta : ℕ → ℂ) {q r : ℕ} (hq : 0 < q) :\n    compatibleMass N beta q r -\n      coprimeMass N beta q * star (coprimeMass N beta r) / ((q.gcd r).totient : ℂ) =\n        covariance N beta q r"
+    },
+    {
+      "name": "totient_pair_density_eq_lcm",
+      "kind": "theorem",
+      "private": false,
+      "line": 157,
+      "complete_source_header": "theorem totient_pair_density_eq_lcm {q r : ℕ} (hq : q ≠ 0) (hr : r ≠ 0) :\n    ((q * r).totient : ℂ) /\n      ((q.totient : ℂ) * (r.totient : ℂ) * (q * r : ℕ)) =\n        1 / ((q.lcm r : ℂ) * ((q.gcd r).totient : ℂ))"
+    },
+    {
+      "name": "residueMass_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 180,
+      "complete_source_header": "private theorem residueMass_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q delta b : ℕ) :\n    ‖residueMass N beta q delta b‖ ≤ residueMass N (fun n ↦ ‖beta n‖) q delta b"
+    },
+    {
+      "name": "coprimeMass_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 187,
+      "complete_source_header": "private theorem coprimeMass_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q : ℕ) :\n    ‖coprimeMass N beta q‖ ≤ ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "coprimeMass_of_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 194,
+      "complete_source_header": "private theorem coprimeMass_of_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q : ℕ) :\n    coprimeMass N (fun n ↦ ‖beta n‖) q ≤ ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "sum_norm_centered_mass_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 200,
+      "complete_source_header": "theorem sum_norm_centered_mass_le (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q delta : ℕ} (hdelta : 0 < delta) (hdq : delta ∣ q) :\n    (∑ b ∈ reducedResidues delta,\n      ‖residueMass N beta q delta b - coprimeMass N beta q / (delta.totient : ℂ)‖) ≤\n        2 * ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "covariance_norm_le_lone",
+      "kind": "theorem",
+      "private": false,
+      "line": 222,
+      "complete_source_header": "theorem covariance_norm_le_lone (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) {E : ℝ} (hE : 0 ≤ E)\n    (hAP : ∀ b ∈ reducedResidues (q.gcd r),\n      ‖residueMass N beta q (q.gcd r) b -\n        coprimeMass N beta q / ((q.gcd r).totient : ℂ)‖ ≤ E) :\n    ‖covariance N beta q r‖ ≤ 2 * E * ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "actual_centered_mass_eq_auxSWError",
+      "kind": "theorem",
+      "private": false,
+      "line": 247,
+      "complete_source_header": "theorem actual_centered_mass_eq_auxSWError (d : MediumAtom) {q delta b : ℕ}\n    (hdq : delta ∣ q) (hb : b.Coprime delta) :\n    residueMass d.alphaCarrier d.alpha q delta b -\n      coprimeMass d.alphaCarrier d.alpha q / (delta.totient : ℂ) =\n        d.auxSWError (q / delta) delta b"
+    },
+    {
+      "name": "alpha_l1_le_twice_U",
+      "kind": "theorem",
+      "private": true,
+      "line": 269,
+      "complete_source_header": "private theorem alpha_l1_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖) ≤ 2 * d.U"
+    },
+    {
+      "name": "actual_covariance_SW_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 292,
+      "complete_source_header": "theorem actual_covariance_SW_bound {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n      ∀ i, x0 ≤ (F i).scale → ∀ q r : ℕ, 0 < q →\n        ‖covariance (F i).alphaCarrier (F i).alpha q r‖ ≤\n          C * (F i).U ^ 2 * (fouvryTau (2 ^ C0) (q / q.gcd r) : ℝ) /\n            Real.log (F i).scale ^ A"
+    },
+    {
+      "name": "sum_transposedBeta_star_mul",
+      "kind": "theorem",
+      "private": true,
+      "line": 335,
+      "complete_source_header": "private theorem sum_transposedBeta_star_mul (d : MediumAtom) (f : ℕ → ℂ) :\n    (∑ n ∈ d.transposedAtom.betaCarrier, star (d.transposedAtom.beta n) * f n) =\n      ∑ n ∈ d.alphaCarrier, star (d.alpha n) * f n"
+    },
+    {
+      "name": "sum_transposedBeta_pairs",
+      "kind": "theorem",
+      "private": false,
+      "line": 341,
+      "complete_source_header": "theorem sum_transposedBeta_pairs (d : MediumAtom) (f : ℕ → ℕ → ℂ) :\n    (∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n      d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) * f n₁ n₂) =\n        ∑ n₁ ∈ d.alphaCarrier, ∑ n₂ ∈ d.alphaCarrier,\n          d.alpha n₁ * star (d.alpha n₂) * f n₁ n₂"
+    },
+    {
+      "name": "factor_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "private": false,
+      "line": 353,
+      "complete_source_header": "theorem factor_pair_sum_eq_grouped (d : MediumAtom) (f : ℕ → ℕ → ℂ) :\n    (∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n      d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        f (complexFactorModulus a) (complexFactorModulus b)) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) * f q r"
+    },
+    {
+      "name": "actual_rawZero_eq_compatibleMass",
+      "kind": "theorem",
+      "private": false,
+      "line": 373,
+      "complete_source_header": "theorem actual_rawZero_eq_compatibleMass (d : MediumAtom) :\n    d.transposedAtom.complexCRTSmoothZeroPart =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n            compatibleMass d.alphaCarrier d.alpha\n              (complexFactorModulus a) (complexFactorModulus b) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℂ)"
+    },
+    {
+      "name": "primitiveZeroMain",
+      "kind": "def",
+      "private": false,
+      "line": 432,
+      "complete_source_header": "def primitiveZeroMain (d : MediumAtom) : ℂ"
+    },
+    {
+      "name": "actual_rawZero_sub_primitive_eq_covariance",
+      "kind": "theorem",
+      "private": false,
+      "line": 445,
+      "complete_source_header": "theorem actual_rawZero_sub_primitive_eq_covariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n            covariance d.alphaCarrier d.alpha q r / (q.lcm r : ℂ)"
+    },
+    {
+      "name": "one_le_tau_succ",
+      "kind": "theorem",
+      "private": true,
+      "line": 495,
+      "complete_source_header": "private theorem one_le_tau_succ (k : ℕ) {q : ℕ} (hq : q ≠ 0) :\n    1 ≤ fouvryTau (k + 1) q"
+    },
+    {
+      "name": "tau_div_le_succ",
+      "kind": "theorem",
+      "private": true,
+      "line": 503,
+      "complete_source_header": "private theorem tau_div_le_succ (k : ℕ) {q delta : ℕ}\n    (hq : q ≠ 0) (hdq : delta ∣ q) :\n    fouvryTau k (q / delta) ≤ fouvryTau (k + 1) q"
+    },
+    {
+      "name": "actual_weighted_lcm_sum_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 513,
+      "complete_source_header": "theorem actual_weighted_lcm_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k : ℕ) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ) *\n        (fouvryTau k (q / q.gcd r) : ℝ)) ≤\n          (1 + Real.log d.physicalFactorCap) ^ (2 * (3 * (k + 1)) ^ 2 + 1)"
+    },
+    {
+      "name": "covariance_sum_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 555,
+      "complete_source_header": "private theorem covariance_sum_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k : ℕ) {D : ℝ} (hD : 0 ≤ D)\n    (hpoint : ∀ q ∈ d.physicalFactorModuli, ∀ r ∈ d.physicalFactorModuli,\n      ‖covariance d.alphaCarrier d.alpha q r‖ ≤ D * (fouvryTau k (q / q.gcd r) : ℝ)) :\n    ‖∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n        covariance d.alphaCarrier d.alpha q r / (q.lcm r : ℂ)‖ ≤\n          D * (1 + Real.log d.physicalFactorCap) ^ (2 * (3 * (k + 1)) ^ 2 + 1)"
+    },
+    {
+      "name": "actual_rawZero_sub_primitive_SW_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 593,
+      "complete_source_header": "theorem actual_rawZero_sub_primitive_SW_bound {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n      ∀ i, x0 ≤ (F i).scale →\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          C * |(F i).V * CommonSmoothCutoff.cutoffMass| * (F i).U ^ 2 *\n            (1 + Real.log (F i).physicalFactorCap) ^\n              (2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1) / Real.log (F i).scale ^ A"
+    },
+    {
+      "name": "actual_betaL2_mul_rawZero_SW_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 631,
+      "complete_source_header": "theorem actual_betaL2_mul_rawZero_SW_bound {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n      ∀ i, x0 ≤ (F i).scale →\n        (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n          ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n            C * |CommonSmoothCutoff.cutoffMass| * (F i).scale ^ 2 *\n              (1 + Real.log (2 * (F i).V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (F i).physicalFactorCap) ^\n                  (2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1) /\n                    Real.log (F i).scale ^ A"
+    },
+    {
+      "name": "actual_centered_identity_with_primitive",
+      "kind": "theorem",
+      "private": false,
+      "line": 666,
+      "complete_source_header": "theorem actual_centered_identity_with_primitive\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n *\n        ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d) -\n        2 * ((d.transposedAtom.complexDispersionV\n          d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n            primitiveZeroMain d) +\n        ((d.transposedAtom.complexDispersionU\n          d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n            primitiveZeroMain d) + d.transposedAtom.complexCRTSmoothNonzeroPart"
+    }
+  ],
+  "all_definition_blocks": [
+    {
+      "name": "reducedResidues",
+      "source": "def reducedResidues (delta : ℕ) : Finset ℕ :=\n  (Finset.range delta).filter (fun b ↦ b.Coprime delta)"
+    },
+    {
+      "name": "coprimeMass",
+      "source": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q then beta n else 0"
+    },
+    {
+      "name": "residueMass",
+      "source": "def residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q ∧ Nat.ModEq delta n b then beta n else 0"
+    },
+    {
+      "name": "compatibleMass",
+      "source": "def compatibleMass (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ :=\n  ∑ n₁ ∈ N, ∑ n₂ ∈ N,\n    if ComplexCRT.Compatible q r n₁ n₂ then beta n₁ * star (beta n₂) else 0"
+    },
+    {
+      "name": "covariance",
+      "source": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ :=\n  ∑ b ∈ reducedResidues (q.gcd r),\n    (residueMass N beta q (q.gcd r) b - coprimeMass N beta q / ((q.gcd r).totient : ℂ)) *\n      star (residueMass N beta r (q.gcd r) b -\n        coprimeMass N beta r / ((q.gcd r).totient : ℂ))"
+    },
+    {
+      "name": "primitiveZeroMain",
+      "source": "def primitiveZeroMain (d : MediumAtom) : ℂ :=\n  ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n    ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n      d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *\n          star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *\n            (((complexFactorModulus a * complexFactorModulus b).totient : ℂ) /\n              (((complexFactorModulus a).totient : ℂ) *\n                ((complexFactorModulus b).totient : ℂ) *\n                  (complexFactorModulus a * complexFactorModulus b : ℕ)))\n\n/-- Zero-mode discrepancy is exactly the original-alpha covariance,\nwith each original complex factor fiber retained by an exact identity. -/"
+    }
+  ],
+  "dependency_increment": {
+    "project_nodes": [
+      "ImbalancedChen.Part3TransposedZeroCovariance"
+    ],
+    "foreign_nodes": [],
+    "parent_source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+    "prior_fresh_closure_report": ".lake/proof-continuation/source-reviews/20261016-transposed-zero-mode-minimal-current-closure.json",
+    "actual_import_path_to_existing_lcm_supplier_rechecked": [
+      {
+        "module": "ImbalancedChen.Part3TransposedDispersion",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedDispersion.lean",
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.Part3FactorFiberDivisor"
+      },
+      {
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3FactorFiberDivisor.lean",
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.Part3ComplexDispersion"
+      },
+      {
+        "module": "ImbalancedChen.Part3ComplexDispersion",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ComplexDispersion.lean",
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.Part3DistributionTargets"
+      },
+      {
+        "module": "ImbalancedChen.Part3DistributionTargets",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.RestrictedResidueScale"
+      },
+      {
+        "module": "ImbalancedChen.RestrictedResidueScale",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RestrictedResidueScale.lean",
+        "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.PanProductGridRanges"
+      },
+      {
+        "module": "ImbalancedChen.PanProductGridRanges",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PanProductGridRanges.lean",
+        "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.PanProductGrid"
+      },
+      {
+        "module": "ImbalancedChen.PanProductGrid",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PanProductGrid.lean",
+        "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.PanProductAggregateBudget"
+      },
+      {
+        "module": "ImbalancedChen.PanProductAggregateBudget",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PanProductAggregateBudget.lean",
+        "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "ImbalancedChen.PanProductLiuBridge"
+      },
+      {
+        "module": "ImbalancedChen.PanProductLiuBridge",
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PanProductLiuBridge.lean",
+        "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\LiLiuPanBoundedAggregate.lean",
+        "sha256": "87f7f80dbc1808505d85160e0bdb89a08a3304f1558b8ad625d5e63a66c6c753",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.LiuPanUnweightedUnconditional"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.LiuPanUnweightedUnconditional",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\LiuPanUnweightedUnconditional.lean",
+        "sha256": "d37a917b23ec6043ada78d43ce64129cdc9fc24e169bc32d2b26dd19dd7987be",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanUnweightedUnconditional"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanUnweightedUnconditional",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\Distribution\\LiuPan\\LiuPanUnweightedUnconditional.lean",
+        "sha256": "a08b1442be899bd35bf959e1f2d2d51888fbe4a1218fac24a1407c884c38f73a",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanCanonicalWeightTransfer"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanCanonicalWeightTransfer",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\Distribution\\LiuPan\\LiuPanCanonicalWeightTransfer.lean",
+        "sha256": "b6e0cb613e462072cd73a2648dd4674ca0baf7f0fed2cb6029e10e985495984a",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanLiMainTermEnvelope"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanLiMainTermEnvelope",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\Distribution\\LiuPan\\LiuPanLiMainTermEnvelope.lean",
+        "sha256": "145a0609091f9c0f1b67abe524bb429d5192ae56f77c31fd271af6304cd411b6",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.LinearSieve.Richert.Richert1969Ordinary418Specialization"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.LinearSieve.Richert.Richert1969Ordinary418Specialization",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\LinearSieve\\Richert\\Richert1969Ordinary418Specialization.lean",
+        "sha256": "51867e892a4811c8f419c7bbd9935ee428ecf0b16f4206310df5f984751b5e75",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.SieveTheory.Arithmetic.MertensTheorem"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.Arithmetic.MertensTheorem",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\SieveTheory\\Arithmetic\\MertensTheorem.lean",
+        "sha256": "7e6cb18f3aedc340c585693f4ce28d5f2e22428df38189f1f393547731b89cde",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "AnalyticNumberTheory"
+      },
+      {
+        "module": "AnalyticNumberTheory",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\AnalyticNumberTheory.lean",
+        "sha256": "ce62576c179932c0f05c21ad446f90bb99093a6da633441c89602c8c5184bbb5",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "AnalyticNumberTheory.Sieve.PanV1SquareMean"
+      },
+      {
+        "module": "AnalyticNumberTheory.Sieve.PanV1SquareMean",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\AnalyticNumberTheory\\Sieve\\PanV1SquareMean.lean",
+        "sha256": "d916b0d7a3917ca2f78cdea3957fc848c703dc71555136b8686687e0bbcc84eb",
+        "matches_prior_independent_read": true,
+        "actual_next_import": "MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds"
+      },
+      {
+        "module": "MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LcmWeightBounds.lean",
+        "sha256": "6be009d9f4d15468db14dca03434e22259f1d26fe137005f888c76227c1d74ea",
+        "matches_prior_independent_read": true,
+        "actual_next_import": null
+      }
+    ],
+    "all_path_source_hashes_unchanged": true,
+    "unbuilt_ZeroModePayment_chain_imported": false
+  },
+  "exact_primitive_main": "(V*local cutoffMass) times full ordered-factor pair sum gamma_a*star(gamma_b)*M_alpha(q)*star(M_alpha(r))*phi(q*r)/(phi(q)*phi(r)*q*r)",
+  "actual_sw_consumption": {
+    "source": "UniformAuxiliarySW F C0",
+    "auxiliary_sieve": "q/gcd(q,r)",
+    "AP_modulus": "gcd(q,r)",
+    "reduced_class": "b.Coprime gcd(q,r)",
+    "constants_precede_i_q_r": true,
+    "pointwise_covariance_constant": "4*SW_C",
+    "pointwise_scale": "U^2",
+    "all_gcd_weight_order": "3*(2^C0+1)",
+    "lcm_log_cost": "2*(3*(2^C0+1))^2+1",
+    "beta_l2_paid_by": "owned mediumAdmissible_beta_norm_sq_sum_le",
+    "beta_log_cost": "(2^B)^2-1",
+    "final_scale": "original (U*V)^2",
+    "zero_budget_is_caller_premise": false,
+    "new_coefficient_or_geometry_premises": []
+  },
+  "residuals": {
+    "exact_identity": "(rawZero-P0)-2*(literalV-P0)+(literalU-P0)+nonzero",
+    "still_open": [
+      "literal smoothed V-P0",
+      "literal smoothed U-P0",
+      "full signed nonzero frequencies",
+      "RestrictedMedium hUpper"
+    ],
+    "local_mass_not_identified_with_provider_integral": true,
+    "original_signed_residue_unchanged": true,
+    "full_labels_retained_before_exact_fiber_grouping": true
+  },
+  "forbidden_scan": {
+    "sorry_or_admit": false,
+    "axiom_or_opaque": false,
+    "disable_linter": false
+  },
+  "acceptance_limit": "SOURCE ONLY. No Lean/lake/build/runtime/kernel/stock/elaborated-type/axiom audit invoked or claimed. Independent review and root runtime authorization pending."
+}

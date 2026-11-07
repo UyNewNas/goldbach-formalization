@@ -1,0 +1,100 @@
+{
+  "status": "UNAPPLIED_ONE_LINE_SIGMA_SUM_API_REPAIR_SOURCE_PROPOSAL_HOLD",
+  "created_utc": "2026-10-21T17:07:24.590830+00:00",
+  "target": "ImbalancedChen.CurrentChenUpsilon7LargePrimeSwitch",
+  "original_source": "ImbalancedChen\\CurrentChenUpsilon7LargePrimeSwitch.lean",
+  "original_source_sha256": "edb5cdb4f50cbed9014dba0a829a2eb4a95615c307cc270d4403d4cb613c09d4",
+  "original_source_bytes_LF_CR": [
+    8834,
+    174,
+    0
+  ],
+  "original_failure_receipt": ".lake\\proof-continuation\\runs\\20261021T170500118595Z-ImbalancedChen.CurrentChenUpsilon7LargePrimeSwitch\\receipt.json",
+  "original_failure_receipt_sha256": "121399ce861f59c7476dd26f5965bf7885a1d67ec721dcfecc08c413803f9cfe",
+  "original_compiler_stdout_sha256": "8ea7d114cb250761d9929d9f57b53e539a7496aafeec7bf9cd490cea360f0209",
+  "original_compiler_stdout_verbatim": "ImbalancedChen/CurrentChenUpsilon7LargePrimeSwitch.lean:141:2: error: Type mismatch: After simplification, term\n  hreal\n has type\n  ↑{x ∈ currentChenUpsilon7SemiprimeQuadruples N | ↑N ^ (1 / 5) < ↑(N - x.fst.1 * x.fst.2 * (x.snd.1 * x.snd.2))}.card =\n    ∑ x ∈ (chenY7PrimeSelector N (↑N ^ (59 / 250))).sigma fun t => {r ∈ chenAdditivePrimeCarrier N | t.2 ≤ r},\n      ↑(currentChenUpsilon7LargePrimeSemiprimeAPSource N x).card\nbut is expected to have type\n  ↑{x ∈ currentChenUpsilon7SemiprimeQuadruples N | ↑N ^ (1 / 5) < ↑(N - x.fst.1 * x.fst.2 * (x.snd.1 * x.snd.2))}.card =\n    ∑ t ∈ chenY7PrimeSelector N (↑N ^ (59 / 250)),\n      ∑ r ∈ chenAdditivePrimeCarrier N with t.2 ≤ r, ↑(currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩).card\n",
+  "actual_failure_diagnosis": "The casted cardinality proof has the correct sigma-indexed sum. The final simpa only list has card_sigma and Nat.cast_sum but no sum_sigma, so it cannot convert that sigma sum to the original nested AP sum.",
+  "precise_one_line_replacement": {
+    "line_1based": 141,
+    "before": "  simpa only [T, Finset.card_sigma, Nat.cast_sum,",
+    "after": "  simpa only [T, Finset.card_sigma, Nat.cast_sum, Finset.sum_sigma,"
+  },
+  "proposal": ".lake\\proof-continuation\\rounds\\20261022-chen7switch-edb5-sum-sigma-one-line-source-proposal.lean.proposal.txt",
+  "proposal_sha256": "652017e95d6da0d5dbc38e62b715e71d44414d9cb85cde94d5bf4efaca0b7001",
+  "proposal_bytes_LF_CR": [
+    8852,
+    174,
+    0
+  ],
+  "full_diff": ".lake\\proof-continuation\\rounds\\20261022-chen7switch-edb5-sum-sigma-one-line-source-proposal.full.diff",
+  "full_diff_sha256": "3df263231047da9e8123044ba3e339f7278dc01be37925d10abd0e681189b3df",
+  "raw_inverse": ".lake\\proof-continuation\\rounds\\20261022-chen7switch-edb5-sum-sigma-one-line-source-proposal.raw-UTF8-inverse.json",
+  "raw_inverse_sha256": "fd18895060e16bbd60ecfa289dad4fc662fa19275a233652beb7a4d2a07b6ad1",
+  "all_other_raw_bytes_exact": true,
+  "author_cp_sha256": "6ce1394e1d6764216883033dd5d50da70c5121ddaa0f62432f82cbeb6bfc7f26",
+  "all_six_complete_headers": [
+    {
+      "name": "currentChenUpsilon7LargePrimeSemiprimeAPSource",
+      "visibility": "public",
+      "complete_source_header": "def currentChenUpsilon7LargePrimeSemiprimeAPSource (N : ℕ)\n    (x : Σ _ : ℕ × ℕ, ℕ) : Finset ℕ",
+      "raw_UTF8_sha256": "ab35a840470d2da30796fa0fc289018cef252432ff378b8a825683fde3a69fd4",
+      "unchanged_unique_before_after": true
+    },
+    {
+      "name": "currentChenUpsilon7LargePrimeSemiprimeAPSum",
+      "visibility": "public",
+      "complete_source_header": "def currentChenUpsilon7LargePrimeSemiprimeAPSum (N : ℕ) : ℝ",
+      "raw_UTF8_sha256": "4136ea68396b098ba8786e4b9bb1069c8d331cb15ccc62fa87b12c8c91fabd9f",
+      "unchanged_unique_before_after": true
+    },
+    {
+      "name": "seventh_switch_forward",
+      "visibility": "private",
+      "complete_source_header": "private theorem seventh_switch_forward {N p₁ p₂ r s : ℕ}\n    (hx : (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n      currentChenUpsilon7SemiprimeQuadruples N)\n    (hlarge : (N : ℝ) ^ (1 / 5 : ℝ) <\n      ((N - p₁ * p₂ * (r * s) : ℕ) : ℝ)) :\n    (p₁, p₂) ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)) ∧\n      r ∈ (chenAdditivePrimeCarrier N).filter (fun r => p₂ ≤ r) ∧\n      N - p₁ * p₂ * (r * s) ∈\n        currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨(p₁, p₂), r⟩",
+      "raw_UTF8_sha256": "d93e96b993ca9f6546e53bcd16ba8ff835a255edbf28e158f9c67d64ac4442aa",
+      "unchanged_unique_before_after": true
+    },
+    {
+      "name": "seventh_switch_backward",
+      "visibility": "private",
+      "complete_source_header": "private theorem seventh_switch_backward {N : ℕ} {t : ℕ × ℕ} {r P : ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)))\n    (hr : r ∈ (chenAdditivePrimeCarrier N).filter (fun r => t.2 ≤ r))\n    (hP : P ∈ currentChenUpsilon7LargePrimeSemiprimeAPSource N ⟨t, r⟩) :\n    (⟨t, (r, (N - P) / (t.1 * t.2 * r))⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ∧\n      N - t.1 * t.2 * (r * ((N - P) / (t.1 * t.2 * r))) = P ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) < (P : ℝ)",
+      "raw_UTF8_sha256": "d88a588469947f277ea694e1c4901123331709c0b81651b709532767f9e15dc3",
+      "unchanged_unique_before_after": true
+    },
+    {
+      "name": "currentChenUpsilon7_largePrime_semiprime_card_eq_APSum",
+      "visibility": "public",
+      "complete_source_header": "theorem currentChenUpsilon7_largePrime_semiprime_card_eq_APSum (N : ℕ) :\n    (((currentChenUpsilon7SemiprimeQuadruples N).filter (fun x =>\n      (N : ℝ) ^ (1 / 5 : ℝ) <\n        ((N - x.1.1 * x.1.2 * (x.2.1 * x.2.2) : ℕ) : ℝ))).card : ℝ) =\n      currentChenUpsilon7LargePrimeSemiprimeAPSum N",
+      "raw_UTF8_sha256": "8f743140e49b470a474a1d69c9ce07e9c333fdcada252d18ba534c841babe20f",
+      "unchanged_unique_before_after": true
+    },
+    {
+      "name": "eventually_two_currentChenUpsilon7_le_largePrime_counts",
+      "visibility": "public",
+      "complete_source_header": "theorem eventually_two_currentChenUpsilon7_le_largePrime_counts\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∀ᶠ N : ℕ in atTop,\n      2 * currentChenUpsilon7 N ≤\n        2 * ((((currentChenUpsilon7PrimeTriples N).filter (fun x =>\n          (N : ℝ) ^ (1 / 5 : ℝ) <\n            ((N - x.1.1 * x.1.2 * x.2 : ℕ) : ℝ))).card : ℝ) +\n          currentChenUpsilon7LargePrimeSemiprimeAPSum N) +\n          epsilon * singularNormalization N",
+      "raw_UTF8_sha256": "b4c83ec93c0c19c0480d579c5a0a134a08749a12c587e69458b2f9a559edc381",
+      "unchanged_unique_before_after": true
+    }
+  ],
+  "all_headers_imports_exact": true,
+  "api": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+    "source_sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "first_line_1based": 30,
+    "last_line_1based": 48,
+    "literal_span": "/-- The product over a sigma type equals the product of the fiberwise products.\nFor rewriting in the reverse direction, use `Finset.prod_sigma'`.\n\nSee also `Fintype.prod_sigma` for the product over the whole type. -/\n@[to_additive /-- The sum over a sigma type equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_sigma'`.\n\nSee also `Fintype.sum_sigma` for the sum over the whole type. -/]\ntheorem prod_sigma {σ : α → Type*} (s : Finset α) (t : ∀ a, Finset (σ a)) (f : Sigma σ → β) :\n    ∏ x ∈ s.sigma t, f x = ∏ a ∈ s, ∏ s ∈ t a, f ⟨a, s⟩ := by\n  simp_rw [← disjiUnion_map_sigma_mk, prod_disjiUnion, prod_map, Function.Embedding.sigmaMk_apply]\n\n/-- The product over a sigma type equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_sigma`. -/\n@[to_additive /-- The sum over a sigma type equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_sigma` -/]\ntheorem prod_sigma' {σ : α → Type*} (s : Finset α) (t : ∀ a, Finset (σ a)) (f : ∀ a, σ a → β) :\n    (∏ a ∈ s, ∏ s ∈ t a, f a s) = ∏ x ∈ s.sigma t, f x.1 x.2 :=\n  Eq.symm <| prod_sigma s t fun x => f x.1 x.2\n",
+    "span_sha256": "14eb561706935d8b37e8c27f2d3d30e0efce797810c765b1c29ab7a161715b53",
+    "construction": "sum_sigma and sum_sigma' are additive declarations generated by @[to_additive] on prod_sigma/prod_sigma' below. The additive type text here is read by translation from pinned source, not from a fresh elaborator/#check invocation.",
+    "sum_sigma_additive_type": "theorem Finset.sum_sigma {α β : Type*} [AddCommMonoid β] {σ : α → Type*} (s : Finset α) (t : ∀ a, Finset (σ a)) (f : Sigma σ → β) : ∑ x ∈ s.sigma t, f x = ∑ a ∈ s, ∑ b ∈ t a, f ⟨a, b⟩",
+    "sum_sigma_prime_additive_type": "theorem Finset.sum_sigma' {α β : Type*} [AddCommMonoid β] {σ : α → Type*} (s : Finset α) (t : ∀ a, Finset (σ a)) (f : ∀ a, σ a → β) : (∑ a ∈ s, ∑ b ∈ t a, f a b) = ∑ x ∈ s.sigma t, f x.1 x.2",
+    "chosen_direction": "sum_sigma expands a sigma-indexed sum to nested sums; sum_sigma' has the reverse orientation and is not added."
+  },
+  "semantic_invariants": "Only a proof simp rewrite lemma is added. All definitions, carriers, original Y7 selector, outer labels, ordering, repeated prime cases, quotient primality, coefficient two and theorem headers remain byte-exact.",
+  "applied_to_original_source": false,
+  "compiler_checker_proper_classifier_collect_census_rerun": false,
+  "existing_failure_CP_modified": false,
+  "generated_count_predicted": null,
+  "SharpAP_main_mean": "OPEN",
+  "next": "HOLD until root finishes push177 and explicitly authorizes applying proposal; new source SHA/review/API bindings and separate runtime gate required before any attempt."
+}

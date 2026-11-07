@@ -1,0 +1,57 @@
+ImbalancedChen/ActualRoughVectorEndpointBudget.lean:63:4: error: Type mismatch: After simplification, term
+  hlower
+ has type
+  (List.map (fun x_1 => x ^ ρ) input).prod ≤ ↑input.prod
+but is expected to have type
+  (x ^ ρ) ^ input.length ≤ ↑input.prod
+ImbalancedChen/ActualRoughVectorEndpointBudget.lean:83:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ((fun p => ↑p) ∘ upper) ?m.92
+in the target expression
+  0 ≤ (List.map (fun j => ↑(upper j)) input).prod
+
+α : Type u_1
+x τ : ℝ
+hx : 0 < x
+actual upper : α → ℕ
+i : α
+input : List α
+ih :
+  (∀ i ∈ input, ↑(upper i) ≤ x ^ τ * ↑(actual i)) →
+    (List.map (fun i => ↑(upper i)) input).prod ≤ (x ^ τ) ^ input.length * (List.map (fun i => ↑(actual i)) input).prod
+hsize : ∀ i_1 ∈ i :: input, ↑(upper i_1) ≤ x ^ τ * ↑(actual i_1)
+hi : ↑(upper i) ≤ x ^ τ * ↑(actual i)
+ht : (List.map (fun i => ↑(upper i)) input).prod ≤ (x ^ τ) ^ input.length * (List.map (fun i => ↑(actual i)) input).prod
+⊢ 0 ≤ (List.map (fun j => ↑(upper j)) input).prod
+ImbalancedChen/ActualRoughVectorEndpointBudget.lean:110:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ((fun p => ↑p) ∘ actual) ?m.186
+in the target expression
+  0 ≤ (List.map (fun j => ↑(actual j)) (List.take i input)).prod
+
+α : Type u_1
+x τ lam0 lam1 : ℝ
+R : ℕ
+hx : 1 < x
+hτ : 0 ≤ τ
+actual upper : α → ℕ
+input : List α
+hlen : input.length ≤ R
+hsize : ∀ i ∈ input, ↑(upper i) ≤ x ^ τ * ↑(actual i)
+hfull : actualDwellSupport (x ^ lam0) (List.map actual input)
+hbudget : lam0 + τ * (↑R + 1) ≤ lam1
+hxpos : 0 < x
+i : ℕ
+hi : i < (List.map upper input).length
+hi' : i < input.length
+hs : (List.map (fun x => ↑(actual x)) (List.take i input)).prod * ↑(actual input[i]) ^ 2 ≤ x ^ lam0
+hpre :
+  (List.map (fun i => ↑(upper i)) (List.take i input)).prod ≤
+    (x ^ τ) ^ i * (List.map (fun i => ↑(actual i)) (List.take i input)).prod
+hq : ↑(upper input[i]) ≤ x ^ τ * ↑(actual input[i])
+hq2 : ↑(upper input[i]) ^ 2 ≤ (x ^ τ * ↑(actual input[i])) ^ 2
+⊢ 0 ≤ (List.map (fun j => ↑(actual j)) (List.take i input)).prod
+ImbalancedChen/ActualRoughVectorEndpointBudget.lean:154:29: error: Type mismatch: After simplification, term
+  hne
+ has type
+  Ne.{u_1 + 1} input []
+but is expected to have type
+  Ne.{1} (List.map actual input) []

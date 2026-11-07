@@ -1,0 +1,98 @@
+{
+  "status": "ROOT_NONAUTHOR_FOUR_PRIVATE_API_REPAIR_REVIEW_NO_STATIC_BLOCKER_NOT_APPLIED_UNCOMPILED",
+  "created_utc": "2026-10-21T03:31:27.461920+00:00",
+  "proposal": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021T032754048687Z-profile046530-four-api-proposal-sol-medium-HOLD\\proposal.json",
+    "sha256": "d649670833e72fd7005d7f27460dfe7adb26b382ea46ed5abe76a61585daf2d3"
+  },
+  "source_before": "0465301bfa09d53992918a5876a26653e20fb67e99fedf300d95ce3a04410da0",
+  "source_after": "16edfe0c80d24ae03901c8f01282092b025d9f3009d8003c20cfdfcefc17503a",
+  "source_still_before": true,
+  "actual_complete_1500B_log_four_proofs_phasePart_def_and_six_native_API_spans_read": true,
+  "independent_raw_replay_four_bodies_exact": true,
+  "all30_trueheaders_26otherwholedecls_9wholedefs_publicwholeproof_exact": true,
+  "proof_changes": [
+    {
+      "name": "phasePart_contDiff",
+      "before_sha256": "9db61cd449e1ee1cd0a723288493524a42d796ad6cd554398bcbf91a3def303d",
+      "after_sha256": "04c3c739f3b670cceaba4e31f67e3217d4c5aa96d804360cbd41bbb934eb1d84",
+      "header_exact": true
+    },
+    {
+      "name": "phasePart_hasDerivAt",
+      "before_sha256": "2cf9c3b918973ef9c73e06a908edb228537b83ca4c682a46215d25162b28685e",
+      "after_sha256": "172bd288f85c54dbad54cd355753f16b23df3d6314bb3c0d21d6199ea1b86517",
+      "header_exact": true
+    },
+    {
+      "name": "phasePart_iteratedDeriv",
+      "before_sha256": "d0f80254feb8839542058cf2ff6160930b69d756df9f6c31c52876a557cec53d",
+      "after_sha256": "5973a90b567e7dce0aa559bafda63696613bf60f29ea7b3fc6d13129a5155eec",
+      "header_exact": true
+    },
+    {
+      "name": "phasePart_iteratedDeriv_norm",
+      "before_sha256": "bbb5e0ac93c9d81c3815610f420170e622b244bf422ab0e59ad9d83f5a701800",
+      "after_sha256": "a77e1f589da8417aaed7499d0dd251df6a9eabcbf6653ac2d47f6ea4ba64136f",
+      "header_exact": true
+    }
+  ],
+  "specific_API_reasoning": [
+    "Original phasePart rho is a reducible partial application. Explicit change eta-expands to the actual positive fourier lambda so simplification can expose the exponential/composed character in ContDiff and HasDerivAt; identical function and derivative value, no assumptions changed.",
+    "After iteratedDeriv_succ, deriv_const_mul_field and exact phasePart_deriv, beta-reduced target is k^n*(k*phase u)=(k^n*k)*phase u, exactly symmetric mul_assoc.",
+    "Remove only unused norm_mul explicitly identified by original strict linter; retain remaining norm identities and all linter options."
+  ],
+  "native_bindings_rechecked": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "file_sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+      "first_line_1based": 128,
+      "last_line_1based": 145,
+      "span_sha256": "4b568e9541660dee54d021854fbae001488993b8a03bd5305232fb5a9dae6e42",
+      "basis": "fourier_apply, fourier_coe_apply and simp-normal-form fourier_coe_apply' expose actual positive character."
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "file_sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+      "first_line_1based": 533,
+      "last_line_1based": 541,
+      "span_sha256": "085fced4f18d214244db70e5e4fb1dd10b217ba065a43c12c522bfe614918391",
+      "basis": "hasDerivAt_fourier has period explicit via section variable T and derivative 2*pi*I*n/T*fourier."
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\Deriv\\Comp.lean",
+      "file_sha256": "f98d6383df7e29a0712f18c7bd38e7eaa53b9ffffd39d3a6526e1e9513cfa534",
+      "first_line_1based": 107,
+      "last_line_1based": 109,
+      "span_sha256": "8713ed1b647943c96c40b05d23b6c9525e4a9fa1b52cdd3e8e51251913981544",
+      "basis": "HasDerivAt.scomp gives composed lambda and h' scalar multiplication."
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\Deriv\\Mul.lean",
+      "file_sha256": "9eaf8d222c347ea647939daa68fac11edeb7c2572719246ce03d43cb04c94b44",
+      "first_line_1based": 386,
+      "last_line_1based": 391,
+      "span_sha256": "ad84216a99d073e507163017736d46c7eeb67493a1e4c6b2c9876b1e7c177abd",
+      "basis": "deriv_const_mul_field works without differentiability hypothesis."
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\IteratedDeriv\\Defs.lean",
+      "file_sha256": "9a920a1f8c42f6f3eafb628b18f6a5a59f72f5de73e77b8b23294782e8c17536",
+      "first_line_1based": 304,
+      "last_line_1based": 308,
+      "span_sha256": "557227f4d775ed1f51426a596ef10faccea66a3b8758ff9182c47d7aba74e397",
+      "basis": "iteratedDeriv_succ differentiates the prior derivative."
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\ExpDeriv.lean",
+      "file_sha256": "7678c4712458f4129eb9b29ea7eb332467501cc8a6688547d1ed1b25f8849722",
+      "first_line_1based": 112,
+      "last_line_1based": 115,
+      "span_sha256": "bdd4fa1b2fe288170ab31679ec49b82215d77c93dc7183489c62b418629fd3c5",
+      "basis": "Complex.contDiff_exp over scalar field used unchanged."
+    }
+  ],
+  "existing_full334_root_and_independent_semantic_reviews_reused": true,
+  "compiler_PASS_or_fullmain_claimed": false,
+  "next": "After Squared2003 finishes, actual noheavy and separate exact root apply/runtime gate; no extra mathematical review needed for unchanged source."
+}

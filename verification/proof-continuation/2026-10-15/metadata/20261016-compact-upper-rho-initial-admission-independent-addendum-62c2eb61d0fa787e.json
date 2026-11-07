@@ -1,0 +1,280 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_INITIAL_ADMISSION_ADDENDUM_AND_EXACT_REBIND_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author",
+  "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+  "old_source_sha256": "2fb3da6e84cd17fa1600e1b68849c13c16894506672e0f6bfdc80f66debbf40e",
+  "new_source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+  "old_complete_semantic_review": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-compact-upper-rho-independent-semantics.json",
+    "sha256": "2f4802f51411b464d8d90eb1c959ba0483ab836f05d6faf335f3052b2a1cf31a",
+    "scope": "Unchanged original24types/7defs and prior finite policy/rho semantics; not imported-closure acceptance."
+  },
+  "complete_declarations": [
+    {
+      "name": "actualExtendedThirdCompactFirstStop",
+      "kind": "def",
+      "line": 31,
+      "complete_signature": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "complete_definition": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ i : Fin (2 ^ m),\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 ≤\n        primeHistoryLogCoordinates (N : ℝ) 1 history 0 ∧\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdDyadicHi m (fun _ => i) 0 ∧\n      actualExtendedThirdDyadicHi m (fun _ => i) 0 ≤ thirdPrefixRho - 4 * e"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy",
+      "kind": "def",
+      "line": 39,
+      "complete_signature": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "complete_definition": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧\n      (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history))"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel",
+      "kind": "def",
+      "line": 45,
+      "complete_signature": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ",
+      "complete_definition": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ :=\n  (N : ℝ) ^ actualExtendedThirdCompactCellLevel e h m\n    (primeHistoryLogCoordinates (N : ℝ) 3 history)"
+    },
+    {
+      "name": "actualExtendedThirdCompactActive",
+      "kind": "def",
+      "line": 49,
+      "complete_signature": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "complete_definition": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ j ∈ actualExtendedThirdCompactCells e h m,\n    primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy",
+      "kind": "def",
+      "line": 53,
+      "complete_signature": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "complete_definition": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (actualExtendedThirdCompactInitialPolicy e m N)\n    (actualExtendedThirdCompactRawLevel e h m N)"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_on_cell",
+      "kind": "theorem",
+      "line": 58,
+      "complete_signature": "theorem actualExtendedThirdCompactRawLevel_on_cell {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_inactive",
+      "kind": "theorem",
+      "line": 67,
+      "complete_signature": "theorem actualExtendedThirdCompactRawLevel_inactive {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} (ha : ¬actualExtendedThirdCompactActive e h m N history) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ (thirdPrefixTheta - 2 * e)"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+      "kind": "theorem",
+      "line": 76,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_even",
+      "kind": "theorem",
+      "line": 83,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)\n    (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_inactive",
+      "kind": "theorem",
+      "line": 91,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_inactive (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ)\n    (ha : ¬actualExtendedThirdCompactActive e h m N (rosserAncestor 3 history)) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_on_cell",
+      "kind": "theorem",
+      "line": 104,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_on_cell {e h : ℝ} {m N : ℕ}\n    (positive : Bool) (history : List ℕ) (hlen : 3 ≤ history.length)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 history) ∈\n      actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        positive history"
+    },
+    {
+      "name": "actualExtendedThirdCompactFrozenLevel_append",
+      "kind": "theorem",
+      "line": 118,
+      "complete_signature": "theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)\n    (later history : List ℕ) (hlen : 3 ≤ history.length) :\n    actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =\n      actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history)"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_empty_cells",
+      "kind": "theorem",
+      "line": 124,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactUpperPolicy e h m N = actualExtendedThirdCompactInitialPolicy e m N"
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop_of_cell",
+      "kind": "theorem",
+      "line": 135,
+      "complete_signature": "theorem actualExtendedThirdCompactFirstStop_of_cell {e h : ℝ} {m N : ℕ}\n    (p0 p1 p2 : ℕ) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactFirstStop e m N [p0]"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+      "kind": "theorem",
+      "line": 152,
+      "complete_signature": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]"
+    },
+    {
+      "name": "actualExtendedThirdCompactCell_prime_firstCube",
+      "kind": "theorem",
+      "line": 177,
+      "complete_signature": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+      "kind": "theorem",
+      "line": 194,
+      "complete_signature": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+      "kind": "theorem",
+      "line": 210,
+      "complete_signature": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli",
+      "kind": "def",
+      "line": 231,
+      "complete_signature": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ",
+      "complete_definition": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  actualSmallRoughModuli (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho",
+      "kind": "def",
+      "line": 234,
+      "complete_signature": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+      "complete_definition": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z L"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_eq_firstExitAttachment",
+      "kind": "theorem",
+      "line": 237,
+      "complete_signature": "theorem actualExtendedThirdCompactRho_eq_firstExitAttachment\n    (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)"
+    },
+    {
+      "name": "actualExtendedThirdCompactRoughDensity_eq_policy",
+      "kind": "theorem",
+      "line": 250,
+      "complete_signature": "theorem actualExtendedThirdCompactRoughDensity_eq_policy\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n        (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z)\n        (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z)"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_majorant",
+      "kind": "theorem",
+      "line": 261,
+      "complete_signature": "theorem actualExtendedThirdCompactRho_majorant (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (actualExtendedThirdCompactModuli e h m N cap w z)\n        (actualExtendedThirdCompactRho e h m N cap w z L) n.natAbs"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_abs_le_one",
+      "kind": "theorem",
+      "line": 268,
+      "complete_signature": "theorem actualExtendedThirdCompactRho_abs_le_one (e h : ℝ) (m N cap : ℕ)\n    (w z L : ℝ) (q : ℕ) : |actualExtendedThirdCompactRho e h m N cap w z L q| ≤ 1"
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_squarefree",
+      "kind": "theorem",
+      "line": 272,
+      "complete_signature": "theorem actualExtendedThirdCompactModuli_squarefree (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    Squarefree q"
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_coprime_target",
+      "kind": "theorem",
+      "line": 277,
+      "complete_signature": "theorem actualExtendedThirdCompactModuli_coprime_target (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    q.Coprime N"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_empty_cells",
+      "kind": "theorem",
+      "line": 284,
+      "complete_signature": "theorem actualExtendedThirdCompactRho_empty_cells (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      actualSmallRoughRho (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z L"
+    }
+  ],
+  "new_declarations": [
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+      "kind": "theorem",
+      "line": 152,
+      "complete_signature": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]"
+    },
+    {
+      "name": "actualExtendedThirdCompactCell_prime_firstCube",
+      "kind": "theorem",
+      "line": 177,
+      "complete_signature": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+      "kind": "theorem",
+      "line": 194,
+      "complete_signature": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true"
+    }
+  ],
+  "old24_complete_types_and7_defs_exact_unchanged": true,
+  "forward_inverse_bytes_exact": true,
+  "change_scope": "Exactly3 theorem additions plus replacing the existing third_iff inline first-cube argument by the new positive-first-prime helper; all imports/defs/old statements remain byte-identical.",
+  "direct_project_parents": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+      "source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactCellCutoff.lean"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+      "source_sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdFirstCubeMargin.lean"
+    },
+    {
+      "module": "ImbalancedChen.ActualUpperPolicyDensity",
+      "source_sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualUpperPolicyDensity.lean"
+    },
+    {
+      "module": "ImbalancedChen.HistoricalUnorderedThirdGeometry",
+      "source_sha256": "4ffa5f89e52a26f621f2e896d2fa4dd3c26508b887967eac696994ef4c54b129",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\HistoricalUnorderedThirdGeometry.lean"
+    }
+  ],
+  "direct_parent_sources_unchanged_since_old_independent_review": true,
+  "new_math_audit": [
+    "InitialPolicy_first_iff retains ordinary total-product cutoff and upper singleton cube. For positive Nat p, p>=1 gives p<=p^3, so the cube strictly below the old level pays the total-product cutoff. The actual dyadic first-stop condition is retained literally.",
+    "CompactCell_prime_firstCube uses only p0>0 and N>1, inverse logarithmic coordinate on Fin1, exact same owned cell and already proved FirstCubeMargin, with explicit e/mesh conditions unchanged. No positivity premise for irrelevant p1,p2 is silently supplied.",
+    "InitialPolicy_first_of_cell combines same-cell first-stop and the same physical-level first cube, then raises the level only by physicalLevel<=old level (the literal buffered min cap). Thus actual adoption itself supplies initial singleton admission; no caller admission licence is introduced.",
+    "Existing third_iff now calls the positive-first-prime helper; p0>0 follows from positive smallest prime and actual strict decreasing order. Its full original statement and final historical conjunction simplification are unchanged."
+  ],
+  "fixed_provider_API_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPrereqWFSmallRosser.lean",
+      "sha256": "e455e327e217b4d0df3331a07e8e5e5aec90d0b89408aafddfa71a416297bbd7",
+      "lines": "355-357",
+      "API": "UpperAdmissibleSet requires every odd upper-filter prefix product*p^2<L. On singleton it is exactly p^3<L."
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FinitePrimeGeometryCore.lean",
+      "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "lines": "31-34,186-191",
+      "API": "ordinary prefix includes its total product; actualPrimeTupleLog_rpow accepts arbitrary Fin k positive coordinates, including Fin1."
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualThirdPrefixTailIntegralCore.lean",
+      "sha256": "91007ec8c5499586255048f1a46572e6e4262205319351b98bd9873c7f67475f",
+      "lines": "80-82",
+      "API": "thirdPrefixBufferedCap_le_root is literal min_le_left, matching PhysicalLevel definition at138-139."
+    }
+  ],
+  "findings": [],
+  "remaining_gates": [
+    "Actual strict proof/API compilation and owned closure acceptance of this leaf and all pending direct parents.",
+    "Exact density/harmonic profile identification, including the arithmetic wall atoms and original initial first-stop difference. This source proves the retained polynomial identity only.",
+    "Same original arithmetic sieve coefficient mean, distribution remainder, interval-label dictionary assembly and final Chen constant remain separate."
+  ],
+  "relative_DAG": "Same four direct project parent imports and source hashes. Three theorem additions add no imports; no full properDAG sweep or independent imported-closure proof replay claimed.",
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "lean_invoked": false,
+  "build_invoked": false,
+  "source_or_checker_modified_by_reviewer": false,
+  "acceptance": "SOURCE_ONLY. Bool/singleton simp and Fin1 inverse elaboration remain for actual runtime proof execution."
+}

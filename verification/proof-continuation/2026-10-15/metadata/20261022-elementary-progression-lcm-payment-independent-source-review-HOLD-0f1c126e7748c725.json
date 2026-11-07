@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-elementary-progression-lcm-payment-independent-source-review",
+  "reviewer": "/root/progression_lcm_review_sol_high_oct22",
+  "created_utc": "2026-10-21T23:39:46.0200878Z",
+  "status": "INDEPENDENT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "result": "no_static_blocker",
+  "HOLD": true,
+  "kernel_acceptance": false,
+  "engineering_admission": false,
+  "reviewed_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3ElementaryProgressionLCMPayment-module-source.txt",
+    "sha256": "868a77bb8532f5fa5e4e1a62eb6dd0272a521cd6bb408dac59ea0f71b5c502af"
+  },
+  "reviewed_author_checkpoint": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-elementary-progression-lcm-payment-source-proposal-author-HOLD.json",
+    "sha256": "578df2fbc85adadb6c230c2bdf530c862e45bb68d6ae6efe05a90ac16e2e6065"
+  },
+  "read_scope": "All 86 LF lines and both complete proof bodies of the new proposal, all 71 LF lines of its future CRTSpacing parent, and complete actual RealEndpoint, StrictFloor and IntervalDivisibility source files were read independently. Relevant native fouvryTau definition and transitive import chain were also inspected. No Lean execution.",
+  "complete_declaration_types": [
+    "theorem sum_real_supported_progression_divisor_weights_le_lcm\n    (S : Finset ℕ) {a b : ℝ} {D q : ℕ} {r : ℤ} (w : ℕ → ℝ)\n    (hab : a ≤ b) (hq : 0 < q)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hw : ∀ d ∈ Icc 1 D, 0 ≤ w d) :\n    (∑ n ∈ S, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) ≤\n      ∑ d ∈ Icc 1 D, w d * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n",
+    "theorem sum_fouvryTau_real_progression_floor_lcm_payment\n    (S : Finset ℕ) {K q : ℕ} {r : ℤ} (hK : 2 ≤ K) (hq : 0 < q)\n    {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b) (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ∑ d ∈ Icc 1 ⌊realDeletionRadius K Z⌋₊,\n        (fouvryTau (K - 1) d : ℝ) * ((b - a) / (Nat.lcm d q : ℝ) + 1) := by\n"
+  ],
+  "necessary_API_evidence": [
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3ElementaryCRTSpacing-module-source.txt",
+        "sha256": "3efe260ca0e39d4316ebffece2598b95ff3dba3c70e352dd927600959a8fd5b0"
+      },
+      "first": 17,
+      "last": 22,
+      "literal_source": "theorem card_real_supported_modEq_dvd_le_lcm (S : Finset ℕ) {a b : ℝ}\n    {q d : ℕ} {r : ℤ} (hab : a ≤ b) (hq : 0 < q) (hd : 0 < d)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hdiv : ∀ n ∈ S, d ∣ n) :\n    (S.card : ℝ) ≤ (b - a) / (Nat.lcm d q : ℝ) + 1 := by\n",
+      "status": "Future uncompiled dependency, not accepted by this review"
+    },
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryE1RealEndpoint.lean",
+        "sha256": "5c386ee17594c075b81b15d56143284fd0f77364f87129d0a96632f17064f8ad"
+      },
+      "first": 83,
+      "last": 90,
+      "literal_source": "theorem sum_real_supported_divisor_weights_swap (S : Finset ℕ) (D : ℕ) (w : ℕ → ℝ) :\n    (∑ n ∈ S, ∑ d ∈ (Icc 1 D).filter (fun d => d ∣ n), w d) =\n      ∑ d ∈ Icc 1 D, w d * ((S.filter (fun n => d ∣ n)).card : ℝ) := by\n  simp_rw [Finset.sum_filter]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro d _hd\n  rw [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_comm]\n",
+      "purpose": "Exact finite interchange, including multiplication order w(d)*card(fiber)"
+    },
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryE1StrictFloor.lean",
+        "sha256": "d85fcb4e7d93a3d9a1ad5bdf659ae95ac542b55a97eb6c48a7754a302489c5d0"
+      },
+      "first": 96,
+      "last": 99,
+      "literal_source": "theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) < (D + 1) ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n",
+      "purpose": "Native natural-valued sharp truncation with exact coefficient K"
+    },
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryE1StrictFloor.lean",
+        "sha256": "d85fcb4e7d93a3d9a1ad5bdf659ae95ac542b55a97eb6c48a7754a302489c5d0"
+      },
+      "first": 189,
+      "last": 189,
+      "literal_source": "def realDeletionRadius (K : ℕ) (Z : ℝ) : ℝ := Z ^ (((K - 1 : ℕ) : ℝ) / (K : ℝ))\n",
+      "purpose": "Exact real radius definition"
+    },
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryE1StrictFloor.lean",
+        "sha256": "d85fcb4e7d93a3d9a1ad5bdf659ae95ac542b55a97eb6c48a7754a302489c5d0"
+      },
+      "first": 217,
+      "last": 220,
+      "literal_source": "theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}\n    (hZ : 1 ≤ Z) (hBZ : (B : ℝ) ≤ Z) :\n    B ^ (K - 1) < (⌊realDeletionRadius K Z⌋₊ + 1) ^ K := by\n  have hR0 : 0 ≤ realDeletionRadius K Z := le_trans zero_le_one (realDeletionRadius_bounds hK hZ).1\n",
+      "purpose": "Strict successor-power bound at true floor"
+    },
+    {
+      "identity": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryIntervalDivisibility.lean",
+        "sha256": "79a2e60061c239d2eea400325f7cf304ed32f6cb6a1816b2065919a2271ed007"
+      },
+      "first": 57,
+      "last": 69,
+      "literal_source": "theorem truncated_divisor_carrier_eq {n D : ℕ} (hn : 0 < n) :\n    n.divisors.filter (fun d => d ≤ D) = (Icc 1 D).filter (fun d => d ∣ n) := by\n  ext d\n  constructor\n  · intro hd\n    obtain ⟨hdn, hdD⟩ := Finset.mem_filter.mp hd\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_Icc.mpr ⟨Nat.pos_of_mem_divisors hdn, hdD⟩,\n        (Nat.mem_divisors.mp hdn).1⟩\n  · intro hd\n    obtain ⟨hdI, hdn⟩ := Finset.mem_filter.mp hd\n    exact Finset.mem_filter.mpr\n      ⟨Nat.mem_divisors.mpr ⟨hdn, hn.ne'⟩, (Finset.mem_Icc.mp hdI).2⟩\n",
+      "purpose": "Actual divisor carrier equals positive bounded divisibility carrier when n>0"
+    }
+  ],
+  "accepted_parent_record": {
+    "identity": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-realendpoint5c38-root-actual19-terminal-acceptance.json",
+      "sha256": "fd6671bff08058f94cf60040ab210f7e12841c87d3c9bc16befbd9472617075c"
+    },
+    "observed_status": "ROOT_ACTUAL19_STRICT_STOCK_ALL_FULLAFTER_CURRENT186_CENSUS_ACCEPTED",
+    "actual_declarations": 19,
+    "scope": "Only exact RealEndpoint source 5c386ee17594c075b81b15d56143284fd0f77364f87129d0a96632f17064f8ad. New wrapper inherits no acceptance."
+  },
+  "static_checks": {
+    "domains": "S is any finite subset of Nat. Weighted helper assumes only a<=b, q>0, w(d)>=0 on Icc 1 D; no a>=0 restriction is introduced. Main finite payment assumes K>=2, 1<=a<=b<=Z, Z>=2. r is every Int, including negative/nonprimitive residues, independent of interval endpoints.",
+    "positive_denominator": "d in Icc 1 D gives 1<=d and hence d>0 by omega; hq:q>0 is passed explicitly. Thus Nat.lcm d q is positive. No q=0 generality is claimed.",
+    "support_and_two_gates": "The actual fiber is S.filter(fun n=>d|n). Its membership first projection supplies support and Int.ModEq q n r; second projection supplies d|n. Neither congruence nor divisibility is dropped or replaced by a shift-only residue.",
+    "CRT_parent_body": "For nonempty S, subtraction of the least natural element is injective and has support [0,b-a]; common Int.ModEq q yields q|(n-n0), d-divisibility yields d|(n-n0), and Nat.lcm_dvd combines them. Nat.cast_sub and Int.natCast_sub require and receive n0<=n. The actual multiple-count API is used with positive lcm. Empty case uses hab and nonnegative quotient. This review finds no mathematical or visible source/API mismatch in that future dependency, but has no compilation evidence for it.",
+    "interchange": "rw sum_real_supported_divisor_weights_swap gives exactly sum_d w(d)*card(S.filter(d|n)). Finset.sum_le_sum and mul_le_mul_of_nonneg_left use precisely hw d hd. Generic weights need no sign assumption outside Icc 1 D.",
+    "strict_cutoff": "For n in S, ha and hS give n>0 and n>=1; hS upper endpoint trans hbZ gives n<=Z. hZ gives Z>=1. The actual floor_radius_strict_cutoff gives n^(K-1)<(D+1)^K for D=floor(realDeletionRadius K Z), with no ceiling substitution or endpoint rounding loss.",
+    "tau_and_cast": "fouvryTau is the native ArithmeticFunction Nat zeta power, not a surrogate. Native sharp truncation is applied with K>=2,n>=1,strict cutoff, then rewritten by truncated_divisor_carrier_eq hnpos. exact_mod_cast is the same cast step used in accepted RealEndpoint; all sums are finite and natural valued before casting.",
+    "exact_K": "K is arbitrary Nat >=2. Pointwise coefficient is exactly K. Finset.mul_sum pulls out the same K; the final inequality multiplies by Nat.cast_nonneg K. No K-dependent analytic estimate or giant exponent evaluation occurs.",
+    "elaboration_surface": "Namespace and opened scopes agree with actual parent. Generic helper explicit argument order matches S,w,hab,hq,hS,hmod,hw; implicit D is inferred from Icc carrier. Main local let D is definitionally the displayed floor, so the calc endpoint matches without an additional change tactic. Actual import resolution and elaboration remain untested.",
+    "edge_cases": "Empty S, singleton S, b=a, D=0 in helper, and arbitrary incompatible residue classes are permitted. Positive support in the tau theorem excludes n=0 as required by the divisor carrier lemma. Closed real support retains exactly b-a and the +1 endpoint allowance.",
+    "forbidden_shortcuts": "No sorry/admit/axiom, analytic supplier, coprimality assumption, compatible CRT representative premise, closed d_K(q)/q bound, or main theorem appears in these two bodies."
+  },
+  "remaining_obligations": [
+    "Future CRTSpacing 3efe260c source and this 868a77bb source need actual import resolution, Lean elaboration, kernel verification and the root-controlled engineering acceptance sequence.",
+    "The finite lcm-weighted budget is not the closed progression mean. A weighted harmonic lcm estimate giving the d_K(q)/q factor, plus the ordinary +1 remainder payment, remains to be proved.",
+    "Full general-q analytic M2, manuscript original 1+1.75 result and the unconditional main theorem remain open. Neither parent acceptance nor this local source review closes those targets."
+  ],
+  "scope_boundary": "no_static_blocker is conditional source-level review of the exact proposal bytes only. It is neither a kernel claim nor acceptance of a closed d_K(q)/q or analytic M2 statement.",
+  "actions": {
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-elementary-progression-lcm-payment-independent-source-review-HOLD.json"
+    ],
+    "actual_Lean_or_old_evidence_modified": false,
+    "Lean_proper_heavy_runtime_checker_census_run": false,
+    "Git_Site_run": false,
+    "spawned_subagents": false,
+    "heavy_pipeline_lock_touched": false
+  },
+  "quota": {
+    "observed_used_percent": 53,
+    "observed_remaining_percent": 47,
+    "stop_when_remaining_lte": 40,
+    "reset_consumed": false,
+    "credits_consumed": false
+  }
+}

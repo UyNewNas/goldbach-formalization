@@ -1,0 +1,404 @@
+{
+  "audit_id": "20261022-weighted-refined-signed-difference-source-proposal-author-HOLD",
+  "created_utc": "2026-10-21T17:39:07.456116+00:00",
+  "author": "/root/supported_row_review_sol_high_oct22",
+  "status": "COMPLETE_WEIGHTED_REFINED_FINITE_ENERGY_PROOF_DRAFT_TXT_ONLY_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Exactly the selected quantitative coefficient-energy lemma and its true auxiliary-divisor endpoint zero. Complete Lean proof source in a non-project .txt draft; no project Lean source added or edited.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-weighted-refined-signed-difference-source-proposal.txt",
+    "sha256": "f26985d763f57841af4f9c884b0dea5caa64411418ba027f4055a659a523c46c",
+    "bytes": 7522,
+    "lines": 174,
+    "actual_source_read": true,
+    "spans": [
+      {
+        "first": 1,
+        "last": 174,
+        "literal_source": "import ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity\nimport Mathlib.Analysis.Complex.Basic\nimport Mathlib.Analysis.Normed.Group.Basic\nimport Mathlib.Algebra.Order.BigOperators.Ring.Finset\n\n/-!\n# Weighted energy on genuine refinements of the signed-difference source\n\nEach original source index has one label. A refinement is taken inside a\nsubset of the existing source carrier, with its original positive f,\nsigned frequencies, nonzero difference and output map. The label type need\nnot be finite: only the finite image of the source subset is summed.\n\nThis is a coefficient energy estimate. No embedding of the actual packet\ncarrier, separation of its c dependence, or spectral estimate is asserted.\n-/\n\nnamespace ImbalancedChen.Part3.WeightedRefinedSignedDifference\n\nnoncomputable section\n\nopen Classical Finset LichtmanSignedDifferenceMultiplicity\nopen scoped BigOperators\n\nabbrev Source := (ℕ × ℕ × ℕ) × (ℤ × ℤ)\n\nvariable {R : Type*} [DecidableEq R]\n\ndef refinedFiber (U : Finset Source) (ell : Source → R)\n    (r : R) (zy : ℕ × ℤ) : Finset Source :=\n  U.filter (fun t => ell t = r ∧ output t = zy)\n\ndef refinedCoefficient (U : Finset Source) (ell : Source → R)\n    (w : Source → ℂ) (r : R) (zy : ℕ × ℤ) : ℂ :=\n  ∑ t ∈ refinedFiber U ell r zy, w t\n\ndef refinedL2 (S H F : ℝ) (nu : ℕ) (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) : ℝ :=\n  ∑ r ∈ U.image ell, ∑ zy ∈ (sourceCarrier S H F).image output,\n    if (nu : ℤ) ∣ zy.2 then ‖refinedCoefficient U ell w r zy‖ ^ 2 else 0\n\nprivate theorem norm_refinedCoefficient_le (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (r : R) (zy : ℕ × ℤ) :\n    ‖refinedCoefficient U ell w r zy‖ ≤\n      M * ((refinedFiber U ell r zy).card : ℝ) := by\n  unfold refinedCoefficient\n  calc\n    _ ≤ ∑ t ∈ refinedFiber U ell r zy, ‖w t‖ := norm_sum_le _ _\n    _ ≤ ∑ _t ∈ refinedFiber U ell r zy, M := by\n      apply Finset.sum_le_sum\n      intro t ht\n      exact hw t (Finset.mem_filter.mp ht).1\n    _ = _ := by simp only [Finset.sum_const, nsmul_eq_mul, mul_comm]\n\nprivate theorem sum_refinedFiber_card (U : Finset Source)\n    (ell : Source → R) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) =\n      (U.filter (fun t => output t = zy)).card := by\n  have hmap : Set.MapsTo ell\n      (U.filter (fun t => output t = zy)) (U.image ell) := by\n    intro t ht\n    exact Finset.mem_image_of_mem ell (Finset.mem_filter.mp ht).1\n  have hcard := Finset.card_eq_sum_card_fiberwise\n    (f := ell) (s := U.filter (fun t => output t = zy)) (t := U.image ell) hmap\n  have hfiber (r : R) :\n      ((U.filter (fun t => output t = zy)).filter (fun t => ell t = r)) =\n        refinedFiber U ell r zy := by\n    ext t\n    simp only [refinedFiber, Finset.mem_filter, and_assoc, and_left_comm, and_comm]\n  simpa only [hfiber] using hcard.symm\n\nprivate theorem output_energy_le (S H F : ℝ) (U : Finset Source)\n    (hU : U ⊆ sourceCarrier S H F) (ell : Source → R)\n    (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, ‖refinedCoefficient U ell w r zy‖ ^ 2) ≤\n      M ^ 2 * (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 := by\n  have hcard :\n      (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) ≤\n        multiplicity S H F zy.1 zy.2 := by\n    rw [sum_refinedFiber_card U ell zy]\n    unfold multiplicity\n    apply Finset.card_le_card\n    intro t ht\n    exact Finset.mem_filter.mpr\n      ⟨hU (Finset.mem_filter.mp ht).1, (Finset.mem_filter.mp ht).2⟩\n  have hsum :\n      (∑ r ∈ U.image ell, ((refinedFiber U ell r zy).card : ℝ)) ≤\n        (multiplicity S H F zy.1 zy.2 : ℝ) := by\n    exact_mod_cast hcard\n  have hsum0 : 0 ≤ ∑ r ∈ U.image ell,\n      ((refinedFiber U ell r zy).card : ℝ) :=\n    Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)\n  calc\n    _ ≤ ∑ r ∈ U.image ell, (M * ((refinedFiber U ell r zy).card : ℝ)) ^ 2 := by\n      apply Finset.sum_le_sum\n      intro r _hr\n      have hn := norm_refinedCoefficient_le U ell w M hw r zy\n      have hright : 0 ≤ M * ((refinedFiber U ell r zy).card : ℝ) :=\n        mul_nonneg hM (Nat.cast_nonneg _)\n      simpa only [pow_two] using mul_le_mul hn hn (norm_nonneg _) hright\n    _ = M ^ 2 * ∑ r ∈ U.image ell,\n        ((refinedFiber U ell r zy).card : ℝ) ^ 2 := by\n      simp only [mul_pow, Finset.mul_sum]\n    _ ≤ M ^ 2 * (∑ r ∈ U.image ell,\n        ((refinedFiber U ell r zy).card : ℝ)) ^ 2 :=\n      mul_le_mul_of_nonneg_left\n        (Finset.sum_sq_le_sq_sum_of_nonneg (fun _ _ => Nat.cast_nonneg _))\n        (sq_nonneg M)\n    _ ≤ M ^ 2 * (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 :=\n      mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hsum0 hsum 2) (sq_nonneg M)\n\nprivate theorem refinedL2_nonneg (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (ell : Source → R) (w : Source → ℂ) :\n    0 ≤ refinedL2 S H F nu U ell w := by\n  unfold refinedL2\n  apply Finset.sum_nonneg\n  intro r _hr\n  apply Finset.sum_nonneg\n  intro zy _hzy\n  by_cases hd : (nu : ℤ) ∣ zy.2\n  · simpa only [if_pos hd] using sq_nonneg ‖refinedCoefficient U ell w r zy‖\n  · simp only [if_neg hd, le_refl]\n\nprivate theorem refinedL2_le_multiplicityL2 (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤ M ^ 2 * multiplicityL2 S H F nu := by\n  unfold refinedL2 multiplicityL2\n  rw [Finset.sum_comm, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro zy _hzy\n  by_cases hd : (nu : ℤ) ∣ zy.2\n  · simp only [if_pos hd]\n    exact output_energy_le S H F U hU ell w M hM hw zy\n  · simp only [if_neg hd, Finset.sum_const_zero, mul_zero, le_refl]\n\n/-- Any genuine finite labeling of a subset of the original signed source\nhas the original explicit 576 energy budget and the original true endpoint.\nThe label image is a partition of the source indices, not a replication\nover an additional external residue parameter. -/\ntheorem weighted_refined_signedDifference_L2\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ)\n    (M : ℝ) (hM : 0 ≤ M) (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤\n      M ^ 2 * 576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → refinedL2 S H F nu U ell w = 0) := by\n  have hbase := signedDifference_multiplicityL2_bound S H F hS hH hF nu hnu\n  have hdom := refinedL2_le_multiplicityL2 S H F nu U hU ell w M hM hw\n  constructor\n  · calc\n      _ ≤ M ^ 2 * multiplicityL2 S H F nu := hdom\n      _ ≤ M ^ 2 * (576 * (divisorMaximum S H F : ℝ) ^ 5 *\n          (harmonic (Nat.floor (2 * S)) : ℝ) *\n            (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ)) :=\n        mul_le_mul_of_nonneg_left hbase.1 (sq_nonneg M)\n      _ = _ := by ring\n  · intro hlarge\n    apply le_antisymm\n    · calc\n        _ ≤ M ^ 2 * multiplicityL2 S H F nu := hdom\n        _ = 0 := by rw [hbase.2 hlarge, mul_zero]\n    · exact refinedL2_nonneg S H F nu U ell w\n\nend\n\nend ImbalancedChen.Part3.WeightedRefinedSignedDifference\n",
+        "normalized_lf_utf8_sha256": "f26985d763f57841af4f9c884b0dea5caa64411418ba027f4055a659a523c46c"
+      }
+    ],
+    "intended_project_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3WeightedRefinedSignedDifference.lean",
+    "full_source": "import ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity\nimport Mathlib.Analysis.Complex.Basic\nimport Mathlib.Analysis.Normed.Group.Basic\nimport Mathlib.Algebra.Order.BigOperators.Ring.Finset\n\n/-!\n# Weighted energy on genuine refinements of the signed-difference source\n\nEach original source index has one label. A refinement is taken inside a\nsubset of the existing source carrier, with its original positive f,\nsigned frequencies, nonzero difference and output map. The label type need\nnot be finite: only the finite image of the source subset is summed.\n\nThis is a coefficient energy estimate. No embedding of the actual packet\ncarrier, separation of its c dependence, or spectral estimate is asserted.\n-/\n\nnamespace ImbalancedChen.Part3.WeightedRefinedSignedDifference\n\nnoncomputable section\n\nopen Classical Finset LichtmanSignedDifferenceMultiplicity\nopen scoped BigOperators\n\nabbrev Source := (ℕ × ℕ × ℕ) × (ℤ × ℤ)\n\nvariable {R : Type*} [DecidableEq R]\n\ndef refinedFiber (U : Finset Source) (ell : Source → R)\n    (r : R) (zy : ℕ × ℤ) : Finset Source :=\n  U.filter (fun t => ell t = r ∧ output t = zy)\n\ndef refinedCoefficient (U : Finset Source) (ell : Source → R)\n    (w : Source → ℂ) (r : R) (zy : ℕ × ℤ) : ℂ :=\n  ∑ t ∈ refinedFiber U ell r zy, w t\n\ndef refinedL2 (S H F : ℝ) (nu : ℕ) (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) : ℝ :=\n  ∑ r ∈ U.image ell, ∑ zy ∈ (sourceCarrier S H F).image output,\n    if (nu : ℤ) ∣ zy.2 then ‖refinedCoefficient U ell w r zy‖ ^ 2 else 0\n\nprivate theorem norm_refinedCoefficient_le (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (r : R) (zy : ℕ × ℤ) :\n    ‖refinedCoefficient U ell w r zy‖ ≤\n      M * ((refinedFiber U ell r zy).card : ℝ) := by\n  unfold refinedCoefficient\n  calc\n    _ ≤ ∑ t ∈ refinedFiber U ell r zy, ‖w t‖ := norm_sum_le _ _\n    _ ≤ ∑ _t ∈ refinedFiber U ell r zy, M := by\n      apply Finset.sum_le_sum\n      intro t ht\n      exact hw t (Finset.mem_filter.mp ht).1\n    _ = _ := by simp only [Finset.sum_const, nsmul_eq_mul, mul_comm]\n\nprivate theorem sum_refinedFiber_card (U : Finset Source)\n    (ell : Source → R) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) =\n      (U.filter (fun t => output t = zy)).card := by\n  have hmap : Set.MapsTo ell\n      (U.filter (fun t => output t = zy)) (U.image ell) := by\n    intro t ht\n    exact Finset.mem_image_of_mem ell (Finset.mem_filter.mp ht).1\n  have hcard := Finset.card_eq_sum_card_fiberwise\n    (f := ell) (s := U.filter (fun t => output t = zy)) (t := U.image ell) hmap\n  have hfiber (r : R) :\n      ((U.filter (fun t => output t = zy)).filter (fun t => ell t = r)) =\n        refinedFiber U ell r zy := by\n    ext t\n    simp only [refinedFiber, Finset.mem_filter, and_assoc, and_left_comm, and_comm]\n  simpa only [hfiber] using hcard.symm\n\nprivate theorem output_energy_le (S H F : ℝ) (U : Finset Source)\n    (hU : U ⊆ sourceCarrier S H F) (ell : Source → R)\n    (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, ‖refinedCoefficient U ell w r zy‖ ^ 2) ≤\n      M ^ 2 * (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 := by\n  have hcard :\n      (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) ≤\n        multiplicity S H F zy.1 zy.2 := by\n    rw [sum_refinedFiber_card U ell zy]\n    unfold multiplicity\n    apply Finset.card_le_card\n    intro t ht\n    exact Finset.mem_filter.mpr\n      ⟨hU (Finset.mem_filter.mp ht).1, (Finset.mem_filter.mp ht).2⟩\n  have hsum :\n      (∑ r ∈ U.image ell, ((refinedFiber U ell r zy).card : ℝ)) ≤\n        (multiplicity S H F zy.1 zy.2 : ℝ) := by\n    exact_mod_cast hcard\n  have hsum0 : 0 ≤ ∑ r ∈ U.image ell,\n      ((refinedFiber U ell r zy).card : ℝ) :=\n    Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)\n  calc\n    _ ≤ ∑ r ∈ U.image ell, (M * ((refinedFiber U ell r zy).card : ℝ)) ^ 2 := by\n      apply Finset.sum_le_sum\n      intro r _hr\n      have hn := norm_refinedCoefficient_le U ell w M hw r zy\n      have hright : 0 ≤ M * ((refinedFiber U ell r zy).card : ℝ) :=\n        mul_nonneg hM (Nat.cast_nonneg _)\n      simpa only [pow_two] using mul_le_mul hn hn (norm_nonneg _) hright\n    _ = M ^ 2 * ∑ r ∈ U.image ell,\n        ((refinedFiber U ell r zy).card : ℝ) ^ 2 := by\n      simp only [mul_pow, Finset.mul_sum]\n    _ ≤ M ^ 2 * (∑ r ∈ U.image ell,\n        ((refinedFiber U ell r zy).card : ℝ)) ^ 2 :=\n      mul_le_mul_of_nonneg_left\n        (Finset.sum_sq_le_sq_sum_of_nonneg (fun _ _ => Nat.cast_nonneg _))\n        (sq_nonneg M)\n    _ ≤ M ^ 2 * (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 :=\n      mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hsum0 hsum 2) (sq_nonneg M)\n\nprivate theorem refinedL2_nonneg (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (ell : Source → R) (w : Source → ℂ) :\n    0 ≤ refinedL2 S H F nu U ell w := by\n  unfold refinedL2\n  apply Finset.sum_nonneg\n  intro r _hr\n  apply Finset.sum_nonneg\n  intro zy _hzy\n  by_cases hd : (nu : ℤ) ∣ zy.2\n  · simpa only [if_pos hd] using sq_nonneg ‖refinedCoefficient U ell w r zy‖\n  · simp only [if_neg hd, le_refl]\n\nprivate theorem refinedL2_le_multiplicityL2 (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤ M ^ 2 * multiplicityL2 S H F nu := by\n  unfold refinedL2 multiplicityL2\n  rw [Finset.sum_comm, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro zy _hzy\n  by_cases hd : (nu : ℤ) ∣ zy.2\n  · simp only [if_pos hd]\n    exact output_energy_le S H F U hU ell w M hM hw zy\n  · simp only [if_neg hd, Finset.sum_const_zero, mul_zero, le_refl]\n\n/-- Any genuine finite labeling of a subset of the original signed source\nhas the original explicit 576 energy budget and the original true endpoint.\nThe label image is a partition of the source indices, not a replication\nover an additional external residue parameter. -/\ntheorem weighted_refined_signedDifference_L2\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ)\n    (M : ℝ) (hM : 0 ≤ M) (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤\n      M ^ 2 * 576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → refinedL2 S H F nu U ell w = 0) := by\n  have hbase := signedDifference_multiplicityL2_bound S H F hS hH hF nu hnu\n  have hdom := refinedL2_le_multiplicityL2 S H F nu U hU ell w M hM hw\n  constructor\n  · calc\n      _ ≤ M ^ 2 * multiplicityL2 S H F nu := hdom\n      _ ≤ M ^ 2 * (576 * (divisorMaximum S H F : ℝ) ^ 5 *\n          (harmonic (Nat.floor (2 * S)) : ℝ) *\n            (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ)) :=\n        mul_le_mul_of_nonneg_left hbase.1 (sq_nonneg M)\n      _ = _ := by ring\n  · intro hlarge\n    apply le_antisymm\n    · calc\n        _ ≤ M ^ 2 * multiplicityL2 S H F nu := hdom\n        _ = 0 := by rw [hbase.2 hlarge, mul_zero]\n    · exact refinedL2_nonneg S H F nu U ell w\n\nend\n\nend ImbalancedChen.Part3.WeightedRefinedSignedDifference\n",
+    "source_only": true,
+    "project_source_applied": false
+  },
+  "mathematical_route": {
+    "review_CP": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-p3-one-quantitative-step-route-review-HOLD.json",
+      "sha256": "dcd1daaf8096b9d154c2ff3d38e5937d9a8d9b38917935bd7bc866e72c329dac",
+      "bytes": 14771,
+      "lines": 143,
+      "actual_source_read": true,
+      "spans": []
+    },
+    "selected_quantitative_lemma_read": {
+      "name": "weighted_refined_signedDifference_L2",
+      "full_statement": "S,H,F≥1, nu≥1。令T=sourceCarrier S H F，out(v)=(z,y)为既有output，任意U⊆T，任意映射ell:U→有限标签集R，任意w:U→C及M≥0满足|w(v)|≤M。定义B(r,z,y)=sum_{v∈U:ell(v)=r,out(v)=(z,y)} w(v)。则 sum_{r∈ell(U)} sum_{(z,y)∈out(T),nu|y}|B(r,z,y)|² ≤ M²*576*divisorMaximum(S,H,F)^5*harmonic(floor(2S))*(1+H/S)*(HS)²*F/nu。若nu≥8FHS则左边=0。ell可取原signed branch之外的k mod A、原门的额外分块或其组合；没有额外F或|R|损失。",
+      "proof": [
+        "对每个(r,z,y)，三角不等式给|B|≤M*m_r，其中m_r是该真子纤维基数；这一步仍使用完整复权，未改变实际振荡和。",
+        "固定(z,y)，标签子纤维不交，sum_r m_r=m_U≤m_T=multiplicity(S,H,F,z,y)。非负数满足sum_r m_r²≤(sum_r m_r)²≤m_T²。",
+        "乘M²并仅对nu|y求和，得到左边≤M²*multiplicityL2(S,H,F,nu)。调用已有signedDifference_multiplicityL2_bound，得到所述576显式界；它已包含跨f碰撞且F只出现一次。",
+        "原nonzero y支持给0<|y|<8FHS；若nu≥8FHS且nu|y不可能，所以所有对应B为0。也可调用已有multiplicityL2端点归零。",
+        "四signed分支分别用同一界。若四权经同一M归一，完整1/4平均满足|(B1+B2+B3+B4)/4|²≤(sum_i|Bi|²)/4；因此四分支整体不会凭空多付16。若振幅上界不同，逐项保留Mi，不能把它们当一界。"
+      ],
+      "actual_use_and_boundary": "w可包含原gcd/CRT零一门、gamma2、全部root/slow及复振幅，界对每个外部(b,c)和Fourier参数逐点有效。若已有共同点态包络E(xi)则取M=E(xi)，保持积分次序；不使用sup∫代∫sup。但这不自动产生与b,c独立的beta。实际s=q*t的闭端点carrier、signed f→正f重标记及公共Fourier表示仍需显式构造；不能把T的半开dyadicCarrier直接认作当前闭区间factorCarrier。此引理是最小可实现定量子步骤，不声称完整实际核已嵌入T。",
+      "no_hidden_supplier": "仅假设逐项复权界和明确有限集合包含关系；不假设原谱界、目标operator norm、PSD非共振比较或已有数值结论。"
+    },
+    "next_bounded_task_read": {
+      "target": "仅实现weighted_refined_signedDifference_L2及其nu端点归零，使用现有sourceCarrier/output与任意有限label，证明上述明确576界。可另在同一小文件陈述实际packet的c余类精确重写作为应用接口，但不把它当谱进展。",
+      "implementation": "先证norm加权纤维≤M*card；用card_eq_sum_card_fiberwise及sum_sq_le_sq_sum_of_nonneg把细分能量压到multiplicityL2；最后调用既有signedDifference_multiplicityL2_bound。无需新axiom/sorry、无目标谱norm假设。只依赖已验收Multiplicity和mathlib；不导入三个source-only适配器。",
+      "stop_condition": "有限系数界实现后停止。下一真正分析任务只应是上述c类谱定理，或独立验证原稿rough common-factor删除能否在当前门和阈值下消除A；本review没有授权展开第三路线。",
+      "status": "仅完整数学陈述和证明；未生成Lean源码，uncompiled，待root另授。"
+    },
+    "requested_review_sha256": "dcd1daaf8096b9d154c2ff3d38e5937d9a8d9b38917935bd7bc866e72c329dac"
+  },
+  "complete_written_theorem_types": [
+    {
+      "name_as_written": "norm_refinedCoefficient_le",
+      "visibility": "private",
+      "first": 42,
+      "last": 46,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "private theorem norm_refinedCoefficient_le (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (r : R) (zy : ℕ × ℤ) :\n    ‖refinedCoefficient U ell w r zy‖ ≤\n      M * ((refinedFiber U ell r zy).card : ℝ) := by\n",
+      "normalized_lf_utf8_sha256": "e8c304e85faa7fd8a90316a112a3d62918a8ec53c599cf73c59a262b499093b9"
+    },
+    {
+      "name_as_written": "sum_refinedFiber_card",
+      "visibility": "private",
+      "first": 56,
+      "last": 59,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "private theorem sum_refinedFiber_card (U : Finset Source)\n    (ell : Source → R) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) =\n      (U.filter (fun t => output t = zy)).card := by\n",
+      "normalized_lf_utf8_sha256": "fa479acd992e768887a87a4cd5fef783ed7b7608f6a8fadf05d3baf4ad13b50f"
+    },
+    {
+      "name_as_written": "output_energy_le",
+      "visibility": "private",
+      "first": 73,
+      "last": 78,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "private theorem output_energy_le (S H F : ℝ) (U : Finset Source)\n    (hU : U ⊆ sourceCarrier S H F) (ell : Source → R)\n    (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) (zy : ℕ × ℤ) :\n    (∑ r ∈ U.image ell, ‖refinedCoefficient U ell w r zy‖ ^ 2) ≤\n      M ^ 2 * (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 := by\n",
+      "normalized_lf_utf8_sha256": "ffa30453ab821f25047bbd62459ac9bbe06564a7383bc5039cbc047b263f8d49"
+    },
+    {
+      "name_as_written": "refinedL2_nonneg",
+      "visibility": "private",
+      "first": 114,
+      "last": 116,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "private theorem refinedL2_nonneg (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (ell : Source → R) (w : Source → ℂ) :\n    0 ≤ refinedL2 S H F nu U ell w := by\n",
+      "normalized_lf_utf8_sha256": "6acb3dc22cf2049d12dd6a85e69a1b1e5189c7f7c5ada0c61a3aa243233b0828"
+    },
+    {
+      "name_as_written": "refinedL2_le_multiplicityL2",
+      "visibility": "private",
+      "first": 126,
+      "last": 130,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "private theorem refinedL2_le_multiplicityL2 (S H F : ℝ) (nu : ℕ)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ) (M : ℝ) (hM : 0 ≤ M)\n    (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤ M ^ 2 * multiplicityL2 S H F nu := by\n",
+      "normalized_lf_utf8_sha256": "fe9fef5730d369563c22a8498784e1de326fddabfabbea963b1290d34e954997"
+    },
+    {
+      "name_as_written": "weighted_refined_signedDifference_L2",
+      "visibility": "public",
+      "first": 144,
+      "last": 154,
+      "context": "namespace ImbalancedChen.Part3.WeightedRefinedSignedDifference; variable {R : Type*} [DecidableEq R]",
+      "complete_written_type": "theorem weighted_refined_signedDifference_L2\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu)\n    (U : Finset Source) (hU : U ⊆ sourceCarrier S H F)\n    (ell : Source → R) (w : Source → ℂ)\n    (M : ℝ) (hM : 0 ≤ M) (hw : ∀ t ∈ U, ‖w t‖ ≤ M) :\n    refinedL2 S H F nu U ell w ≤\n      M ^ 2 * 576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → refinedL2 S H F nu U ell w = 0) := by\n",
+      "normalized_lf_utf8_sha256": "28d159556d00435f0a2d5e648791d298171d36547fb1f2002ef22b867f44fb92"
+    }
+  ],
+  "definition_headers": [
+    {
+      "first": 25,
+      "last_header_line": 25,
+      "header_through_definition_delimiter": "abbrev Source := (ℕ × ℕ × ℕ) × (ℤ × ℤ)\n"
+    },
+    {
+      "first": 29,
+      "last_header_line": 30,
+      "header_through_definition_delimiter": "def refinedFiber (U : Finset Source) (ell : Source → R)\n    (r : R) (zy : ℕ × ℤ) : Finset Source :=\n"
+    },
+    {
+      "first": 33,
+      "last_header_line": 34,
+      "header_through_definition_delimiter": "def refinedCoefficient (U : Finset Source) (ell : Source → R)\n    (w : Source → ℂ) (r : R) (zy : ℕ × ℤ) : ℂ :=\n"
+    },
+    {
+      "first": 37,
+      "last_header_line": 38,
+      "header_through_definition_delimiter": "def refinedL2 (S H F : ℝ) (nu : ℕ) (U : Finset Source)\n    (ell : Source → R) (w : Source → ℂ) : ℝ :=\n"
+    }
+  ],
+  "declaration_scope": {
+    "public_theorem": "ImbalancedChen.Part3.WeightedRefinedSignedDifference.weighted_refined_signedDifference_L2",
+    "explicit_public_theorems": 1,
+    "private_proof_helpers": 5,
+    "definitions": [
+      "Source (abbreviation)",
+      "refinedFiber",
+      "refinedCoefficient",
+      "refinedL2"
+    ],
+    "actual_generated_declarations_predicted": null
+  },
+  "imports": [
+    "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Normed.Group.Basic",
+    "Mathlib.Algebra.Order.BigOperators.Ring.Finset"
+  ],
+  "actual_API_files_and_spans": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3LichtmanSignedDifferenceMultiplicity.lean",
+      "sha256": "0f41b856a9f52fa9618f0a10538e9b4cdfd46b3c1c795323da11727b5a92632f",
+      "bytes": 71354,
+      "lines": 1457,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 18,
+          "last": 52,
+          "literal_source": "def dyadicCarrier (T : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (2 * T))).filter\n    (fun n => T ≤ (n : ℝ) ∧ (n : ℝ) < 2 * T)\n\ndef frequencyCarrier (H : ℝ) : Finset ℤ :=\n  ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => -(n : ℤ)))\n\ndef difference (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℤ :=\n  t.2.1 * (t.1.1 : ℤ) - t.2.2 * (t.1.2.1 : ℤ)\n\ndef sourceCarrier (S H F : ℝ) : Finset ((ℕ × ℕ × ℕ) × (ℤ × ℤ)) :=\n  ((dyadicCarrier S ×ˢ (dyadicCarrier S ×ˢ dyadicCarrier F)) ×ˢ\n    (frequencyCarrier H ×ˢ frequencyCarrier H)).filter\n      (fun t => difference t ≠ 0)\n\ndef output (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℕ × ℤ :=\n  (t.1.1 * t.1.2.1, (t.1.2.2 : ℤ) * difference t)\n\ndef multiplicity (S H F : ℝ) (z : ℕ) (y : ℤ) : ℕ :=\n  ((sourceCarrier S H F).filter (fun t => output t = (z, y))).card\n\ndef multiplicityL2 (S H F : ℝ) (nu : ℕ) : ℝ :=\n  ∑ zy ∈ (sourceCarrier S H F).image output,\n    if (nu : ℤ) ∣ zy.2 then (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 else 0\n\ndef supportCap (S H F : ℝ) : ℕ :=\n  Nat.ceil (max (4 * S ^ 2) (8 * F * H * S))\n\ndef divisorMaximum (S H F : ℝ) : ℕ :=\n  (Finset.Icc 1 (supportCap S H F)).sup (fun n : ℕ => n.divisors.card)\n\nprivate theorem mem_dyadicCarrier_iff {T : ℝ} {n : ℕ} :\n    n ∈ dyadicCarrier T ↔ 0 < n ∧ T ≤ (n : ℝ) ∧ (n : ℝ) < 2 * T := by\n  constructor\n",
+          "normalized_lf_utf8_sha256": "2164b4de9a0c6801c8d6dee53a1ca1f7aa7bd6c09a3dbad8f65a9c3e63443f05"
+        },
+        {
+          "first": 323,
+          "last": 328,
+          "literal_source": "private theorem source_output_bounds {S H F : ℝ}\n    (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    {t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)} (ht : t ∈ sourceCarrier S H F) :\n    0 < (output t).1 ∧ (output t).2 ≠ 0 ∧\n      ((output t).1 : ℝ) < 4 * S ^ 2 ∧\n      ((output t).2.natAbs : ℝ) < 8 * F * H * S := by\n",
+          "normalized_lf_utf8_sha256": "77d29a7261b66564ba07358ff998a84e2c456b0223a7e88ce8e00325d573119b"
+        },
+        {
+          "first": 377,
+          "last": 394,
+          "literal_source": "private theorem zero_above_support (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H)\n    (hF : 1 ≤ F) (nu : ℕ) (hnu : 0 < nu)\n    (hlarge : 8 * F * H * S ≤ (nu : ℝ)) : multiplicityL2 S H F nu = 0 := by\n  by_cases hnuZero : nu = 0\n  · exact False.elim (hnu.ne' hnuZero)\n  · unfold multiplicityL2\n    apply sum_eq_zero\n    intro zy hzy\n    obtain ⟨t, ht, rfl⟩ := mem_image.mp hzy\n    have hb := source_output_bounds hS hH hF ht\n    have hnot : ¬ (nu : ℤ) ∣ (output t).2 := by\n      intro hd\n      have hnat := Int.natCast_dvd.mp hd\n      have hle : nu ≤ (output t).2.natAbs :=\n        Nat.le_of_dvd (Int.natAbs_pos.mpr hb.2.1) hnat\n      have hleR : (nu : ℝ) ≤ ((output t).2.natAbs : ℝ) := by exact_mod_cast hle\n      exact (not_lt_of_ge hleR) (hb.2.2.2.trans_le hlarge)\n    exact if_neg hnot\n",
+          "normalized_lf_utf8_sha256": "3442f4ff39d5552eeda6da8451116c4a1bc65a77c574ccad6e0cae2c9a3a8f5a"
+        },
+        {
+          "first": 1389,
+          "last": 1396,
+          "literal_source": "theorem signedDifference_multiplicityL2_bound\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu) :\n    multiplicityL2 S H F nu ≤\n      576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → multiplicityL2 S H F nu = 0) := by\n",
+          "normalized_lf_utf8_sha256": "b37a66f3478297b443e8f3ed5772593bba712f865b8053668cdbbc4b05acfdcf"
+        },
+        {
+          "first": 1441,
+          "last": 1453,
+          "literal_source": "      have hfinal := hraw'.trans (scalar_budget hD ht htD hJ hx hT)\n      calc\n        _ ≤ 576 * D ^ 5 * J * (1 + x) * T := hfinal\n        _ = _ := by\n          change\n            576 * (divisorMaximum S H F : ℝ) ^ 5 *\n                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *\n                  ((H * S) ^ 2 * F / (nu : ℝ)) =\n              576 * (divisorMaximum S H F : ℝ) ^ 5 *\n                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *\n                  (H * S) ^ 2 * F / (nu : ℝ)\n          ring\n  · exact zero_above_support S H F hS hH hF nu hnu\n",
+          "normalized_lf_utf8_sha256": "538a496a605ad6b69994be2a3c88a9e8496a934303dbfc9063750a85c4b93723"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Normed\\Group\\Basic.lean",
+      "sha256": "e92959e9926534225cb4ae284cb22662dacca17a9c3996b57d31c51a0e856c94",
+      "bytes": 44531,
+      "lines": 1115,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 828,
+          "last": 831,
+          "literal_source": "@[bound]\ntheorem norm_sum_le {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι → E) :\n    ‖∑ i ∈ s, f i‖ ≤ ∑ i ∈ s, ‖f i‖ :=\n  s.le_sum_of_subadditive norm norm_zero.le norm_add_le f\n",
+          "normalized_lf_utf8_sha256": "9ee9d49fa1985c879f9fe02e7a497915e92a5ebd2ebb47b69d8d3c897c8272a5"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "bytes": 51600,
+      "lines": 1138,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 628,
+          "last": 630,
+          "literal_source": "@[to_additive (attr := simp)]\ntheorem prod_const (b : M) : ∏ _x ∈ s, b = b ^ #s :=\n  (congr_arg _ <| s.val.map_const b).trans <| Multiset.prod_replicate #s b\n",
+          "normalized_lf_utf8_sha256": "cc7a9d0b293a6e259e88d0ea4b8660d858f934c3ed5fb843ede273cf8a1f7760"
+        },
+        {
+          "first": 985,
+          "last": 991,
+          "literal_source": "theorem card_eq_sum_card_fiberwise [DecidableEq M] {f : ι → M} {s : Finset ι} {t : Finset M}\n    (H : (s : Set ι).MapsTo f t) : #s = ∑ b ∈ t, #{a ∈ s | f a = b} := by\n  simp only [card_eq_sum_ones, sum_fiberwise_of_maps_to H]\n\ntheorem card_eq_sum_card_image [DecidableEq M] (f : ι → M) (s : Finset ι) :\n    #s = ∑ b ∈ s.image f, #{a ∈ s | f a = b} :=\n  card_eq_sum_card_fiberwise fun _ => mem_image_of_mem _\n",
+          "normalized_lf_utf8_sha256": "ec506c60c3b177aae388ab62fb45ebe8170ad8d827b9aed76e11bda89e8d4a89"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Ring\\Finset.lean",
+      "sha256": "c89a7463df5acd6485e64d14b958daaedf6b857aad2808a4ead0570b52220568",
+      "bytes": 12700,
+      "lines": 270,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 29,
+          "last": 42,
+          "literal_source": "namespace Finset\n\nsection OrderedSemiring\n\nvariable [Semiring R] [PartialOrder R] [IsOrderedRing R] {f : ι → R} {s : Finset ι}\n\nlemma sum_sq_le_sq_sum_of_nonneg (hf : ∀ i ∈ s, 0 ≤ f i) :\n    ∑ i ∈ s, f i ^ 2 ≤ (∑ i ∈ s, f i) ^ 2 := by\n  simp only [sq, sum_mul_sum]\n  refine sum_le_sum fun i hi ↦ ?_\n  rw [← mul_sum]\n  gcongr\n  · exact hf i hi\n  · exact single_le_sum hf hi\n",
+          "normalized_lf_utf8_sha256": "7af77ae9104cf44a3f55b4052736618dc3d43e645aaa1d6e6394ab41e50468e5"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+      "sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "bytes": 40628,
+      "lines": 974,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 65,
+          "last": 67,
+          "literal_source": "@[gcongr]\ntheorem card_le_card : s ⊆ t → #s ≤ #t :=\n  Multiset.card_le_card ∘ val_le_iff.mpr\n",
+          "normalized_lf_utf8_sha256": "5f2efd89941e5f1b9474714ba3939eedb5398ea54fedcc3c9dddec77fbc6dba1"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "bytes": 63984,
+      "lines": 1480,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 469,
+          "last": 475,
+          "literal_source": "@[mono, gcongr, bound]\ntheorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]\n    (ha : 0 ≤ a) (hab : a ≤ b) : ∀ n, a ^ n ≤ b ^ n\n  | 0 => by simp\n  | 1 => by simpa using hab\n  | n + 2 => by simpa only [pow_succ']\n      using mul_le_mul hab (pow_le_pow_left₀ ha hab _) (pow_succ_nonneg ha _) (ha.trans hab)\n",
+          "normalized_lf_utf8_sha256": "780d8849fc108a1c6ea540be3a03d43fd77afc7dcf43a1ecaffe76d6de637cd5"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean",
+      "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+      "bytes": 16305,
+      "lines": 386,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 54,
+          "last": 64,
+          "literal_source": "variable [NonUnitalNonAssocSemiring R]\n\nlemma sum_mul (s : Finset ι) (f : ι → R) (a : R) :\n    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := map_sum (AddMonoidHom.mulRight a) _ s\n\nlemma mul_sum (s : Finset ι) (f : ι → R) (a : R) :\n    a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i := map_sum (AddMonoidHom.mulLeft a) _ s\n\nlemma sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :\n    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by\n  simp_rw [sum_mul, ← mul_sum]\n",
+          "normalized_lf_utf8_sha256": "36c1620f3522e4bd0d6f6819f509472b0d910ba70fb4b5e3d50b6b2e8741ea60"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Sigma.lean",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+      "bytes": 6475,
+      "lines": 138,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 119,
+          "last": 123,
+          "literal_source": "\n@[to_additive]\ntheorem prod_comm {s : Finset γ} {t : Finset α} {f : γ → α → β} :\n    (∏ x ∈ s, ∏ y ∈ t, f x y) = ∏ y ∈ t, ∏ x ∈ s, f x y :=\n  prod_comm' fun _ _ => Iff.rfl\n",
+          "normalized_lf_utf8_sha256": "c8ed3c3b66e4c129c1fd60b2fa2239fe7e085f1ff03d564266c5f85cab45b949"
+        }
+      ]
+    }
+  ],
+  "API_use_explanation": [
+    {
+      "API": "norm_sum_le",
+      "use": "The complete complex coefficient remains a finite sum over the literal refinedFiber. Triangle inequality gives its norm at most the sum of the original complex norms, bounded termwise by M, then exactly M times fiber.card."
+    },
+    {
+      "API": "Finset.card_eq_sum_card_fiberwise",
+      "use": "Use s=U.filter(output=zy), f=ell, t=U.image ell. MapsTo follows from each filtered member belonging to U. The double filters equal refinedFiber by conjunction reassociation/commutation; the theorem is used in its reversed equality orientation."
+    },
+    {
+      "API": "Finset.card_le_card",
+      "use": "The explicit hU subset sends U.filter(output=zy) into sourceCarrier.filter(output=zy), whose card is precisely the original multiplicity. No ambient fiber is replaced and no endpoint carrier is enlarged."
+    },
+    {
+      "API": "Finset.sum_sq_le_sq_sum_of_nonneg",
+      "use": "For the nonnegative real fiber cards, the sum of squared refined cards is bounded by their total squared. Multiplication by M² is monotone; the resulting total card is at most the original multiplicity."
+    },
+    {
+      "API": "pow_le_pow_left₀ / mul_le_mul / Finset.mul_sum / Finset.sum_comm",
+      "use": "Square only after recording nonnegative M*card and norm. Cast the natural card-sum inequality using exact_mod_cast, apply monotonicity at exponent2, commute the two original finite sums and keep the same nu divisibility indicator."
+    },
+    {
+      "API": "signedDifference_multiplicityL2_bound (public complete conjunction at1389–1396)",
+      "use": "Its first conjunct supplies the exact576*divisorMaximum^5*harmonic(floor(2S))*(1+H/S)*(HS)^2*F/nu bound. Its second conjunct supplies multiplicityL2=0 at8FHS≤nu. Domination and inherent nonnegativity squeeze the actual refinedL2 to0 at precisely that endpoint."
+    }
+  ],
+  "original_hypotheses": {
+    "label_context": "Any type R with DecidableEq R; no Fintype R, cardinality bound or inhabited-label assumption. ell is an arbitrary total function on the original Source indices; only U.image ell is summed.",
+    "S_H_F": "S,H,F are real and at least1.",
+    "nu": "nu is natural with0<nu; the literal indicator remains (nu:Integer) divides output.second.",
+    "U": "Arbitrary finite subset U of the actual existing sourceCarrier S H F.",
+    "weights": "Arbitrary complex w on Source, bounded by the same real M≥0 at each member of U only.",
+    "extra_analytic_or_spectral_hypotheses": []
+  },
+  "proof_chain": [
+    "For every label and existing output, norm(refinedCoefficient)≤M*refinedFiber.card by the actual complex triangle inequality and the given pointwise weight bound.",
+    "For each fixed output, label fibers form a genuine partition of U at that output. Their card sum equals the U-output fiber card, which is at most the existing multiplicity by hU.",
+    "The nonnegative card inequality sum_r m_r²≤(sum_r m_r)²≤multiplicity² gives the output energy bound without a number-of-labels factor.",
+    "Summing the same nu-divisible output terms and commuting only finite sums gives refinedL2≤M²*multiplicityL2. No f-separated estimate is introduced, so cross-f collisions stay inside the existing multiplicity theorem.",
+    "Call the accepted576 quantitative theorem once. Ring normalization places M² before the unchanged explicit coefficient. F occurs once and no label factor occurs.",
+    "At nu≥8FHS the same accepted public theorem gives literal multiplicityL2=0. The proved domination and refinedL2_nonneg give literal refinedL2=0, not merely a small asymptotic upper bound."
+  ],
+  "preserved_semantics": {
+    "actual_sourceCarrier_and_output": true,
+    "positive_f_rule": true,
+    "both_signed_frequency_labels": true,
+    "literal_nonzero_difference": true,
+    "nonzero_y_support_inherited": true,
+    "same_nu_divisibility": true,
+    "same_true_threshold_8FHS": true,
+    "all_original_cross_f_multiplicity": true,
+    "full_complex_weights": true,
+    "extra_F_factor": false,
+    "extra_label_card_factor": false,
+    "carrier_embedding_asserted": false
+  },
+  "pair_label_and_c_boundary": "ell assigns exactly one label to each existing Source pair/frequency/f index. The cardinal identity proves disjoint refinement inside U. This cannot encode copying each pair into every external c residue and claiming no phi(A) cost. A fixed external c may parameterize ell or w for a separate application; simultaneous summation over c classes, their masks and their interval embedding are not proved here.",
+  "semantic_scope": "Coefficient energy only. No nonzero spectral bound, no original C/K supplier, no signed-resonance Gram positivity claim, no true actual-packet embedding from closed factorCarrier into half-open dyadicCarrier, no signed-f-to-positive-f dictionary, no c-independent beta, no Fourier separation and no interval embedding are claimed.",
+  "author_manual_source_review": {
+    "full174line_draft_read": true,
+    "complete_types_reach_theorem_level_proof_delimiter": true,
+    "main_goal_not_weakened": true,
+    "main_endpoint_zero_is_in_same_complete_public_type": true,
+    "manual_checked_points": [
+      "Tuple Source is definitionally the literal original source index type.",
+      "The label-fiber equality has the correct filter intersection order and correct direction of the finite cardinal identity.",
+      "The natural fiber sum is cast to the corresponding real sum before squaring.",
+      "The complex norm comparison is squared only with both sides nonnegative.",
+      "M² multiplication preserves inequalities; no positivity of a complementary signed Gram block is needed.",
+      "The final explicit bound is the original576 expression times M², not a larger unspecified constant.",
+      "The endpoint uses the public accepted theorem second conjunct, without accessing its private support lemma."
+    ],
+    "compiler_or_tactic_execution": false,
+    "kernel_acceptance": false,
+    "remaining": "Parent must independently read the entire draft, apply it only after the project source-stability gate is idle, then own compilation and formal acceptance. No compiled success is guessed."
+  },
+  "execution_scope": {
+    "heavy_work_count": 0,
+    "compiler_executed": false,
+    "checker_executed": false,
+    "proper_executed": false,
+    "classifier_executed": false,
+    "census_executed": false,
+    "cache_modified": false,
+    "Git_executable_or_API_executed": false,
+    "existing_Lean_or_CP_modified": false,
+    "project_Lean_added": false,
+    "original_Multiplicity_hash_unchanged": true,
+    "only_new_files": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-weighted-refined-signed-difference-source-proposal.txt",
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-weighted-refined-signed-difference-source-proposal-author-HOLD.json"
+    ],
+    "subagents_spawned": false,
+    "quota_last_used_percent": 39,
+    "quota_last_remaining_percent": 61,
+    "stop_remaining_lte_percent": 40
+  },
+  "hash_convention": "Whole-file SHA256 covers exact raw bytes. Stored source/API spans and complete written types use the actually read lines joined byLF with a terminalLF, UTF-8 without BOM. Contextual R/DecidableEq binders are explicitly recorded; no generated-declaration count is predicted.",
+  "final_state": "HOLD"
+}

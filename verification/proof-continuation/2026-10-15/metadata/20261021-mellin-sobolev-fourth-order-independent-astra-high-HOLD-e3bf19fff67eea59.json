@@ -1,0 +1,227 @@
+{
+  "status": "ONE_INDEPENDENT_SOBolev_QUANTITATIVE_REVIEW_VALID_ROUTE_NOT_FORMALIZED_HOLD",
+  "author": "/root/mellin_cost_astra_high_oct21",
+  "created_utc": "2026-10-21",
+  "scope": "ONE bounded review of the actual log-weight Fourier L1 cost. Sole write is this checkpoint. No compiler, Lean/helper source, catalog, pins, Git state, CI, resources, child agents or external search changed.",
+  "quota": {
+    "start_used_percent": 25,
+    "last_checked_used_percent": 25,
+    "available_remaining_percent": 75,
+    "stop_remaining_lte": 50,
+    "policy_read": ".lake/proof-continuation/agent-model-policy-20261021.json",
+    "standard_control_exposed": false,
+    "standard_claimed_applied": false
+  },
+  "verdict": {
+    "mathematics": "CONFIRMED: for fixed d<8, the actual smoothReciprocityLogWeight has Fourier L1 norm <=C(1+R)^4. The d=7 fourteen-derivative tensor bound is valid but unnecessarily expensive. For d=2, order2 suffices and gives C(1+R)^2.",
+    "formal_status": "The literal Mixed candidate source625fe3 public jet bound has the required quantifier order and full Frechet operator norm. Its compilation/ownership is not established by this audit. No quantitative Fourier-L1 declaration has been authored or compiled here. The argument is conditional on completing that actual proved-route candidate, not on accepting an assumed Sobolev norm or target estimate.",
+    "budget": "One d=7 Gram product squares the cost to (1+R)^8, hence X^(8kappa)<=X^(0.08sigma) under original0<=kappa<=sigma/100, for this weight component alone. Other spectral, packet, root, arithmetic and summation losses remain OPEN. No smaller-kappa hypothesis is introduced.",
+    "original_goal": "Original exact1+1.75 C/K, hLower and hUpper remain OPEN."
+  },
+  "inputs": {
+    "root_proposal": ".lake/proof-continuation/source-reviews/20261021-root-sobolev-fourth-order-cost-proposal-native-checkpoint.json",
+    "root_proposal_sha256": "c020930a9658b65749f569de39df5f0ee635490217fbadbc1a3e09c30685726c",
+    "literal_weight": "W(t)=CommonSmoothCutoff.smoothReciprocityLogWeight a b c Q Z u0 rho0 t = Q(t)*exp(<c,t>)*smoothReciprocityProfile Z (rho0*exp(<b,t>)) (u0*exp(<a,t>)). Domain E=EuclideanSpace R(Fin d), codomain C. Profile sign is exp(+2pi I rho*u).",
+    "mixed_source_inspected_sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d",
+    "jet_signature": "For fixed d,a,b,c,Q, ContDiff R infinity Q and HasCompactSupport Q, every J:N admits C_J>0 chosen BEFORE all Z,u0,rho0,R. If Z>=1, R>=0 and |rho0 exp(<b,t>)|<=R on tsupport Q, then for every j<=J and every t, ||iteratedFDeriv R j W t||<=C_J*(1+R)^j. This is stronger than coordinate-word control; evaluation at unit basis vectors incurs no additional variable-dependent factor.",
+    "source_ownership": "No changes or recompilation of the mixed candidate. The original source hash and public signatures were checked; other active runtime preparation is owned by root."
+  },
+  "literal_target": {
+    "name_proposed_only": "CommonSmoothCutoff.smoothReciprocityLogWeight_fourier_integral_norm_uniform",
+    "type": "theorem CommonSmoothCutoff.smoothReciprocityLogWeight_fourier_integral_norm_uniform\n    {d : Nat} (hd : d < 8) (a b c : EuclideanSpace Real (Fin d))\n    (Q : EuclideanSpace Real (Fin d) -> Complex)\n    (hQ : ContDiff Real infinity Q) (hQc : HasCompactSupport Q) :\n    exists C : Real, 0 < C and\n      forall Z u0 rho0 R : Real, 1 <= Z -> 0 <= R ->\n        (forall t in tsupport Q, |rho0 * Real.exp (inner Real b t)| <= R) ->\n        integral xi, norm(Fourier (CommonSmoothCutoff.smoothReciprocityLogWeight a b c Q Z u0 rho0) xi)\n          <= C * (1 + R)^4",
+    "type_note": "Complete mathematical quantifiers in Lean-like text; not elaborated Lean source. Fourier is the existing native transform of the actual function, not an arbitrary supplied transform. All integrals use volume on E. The same proof establishes Integrable(Fourier W); native Schwartz inversion then gives pointwise inverse equality.",
+    "two_dimensional_target": "Replace hd:d<8 by hd:d<4 and the final exponent4 by2. This covers the fixed-row d=2 consumer. For this bounded work the requested full-label d=7 endpoint is the primary target.",
+    "constants": "C may depend on fixed d,a,b,c,Q and their fixed derivative bounds, but not on Z,u0,rho0,R, signed residue, atom size, fixed D, or reference dyadic scales when those only enter u0/rho0. An actual external amplitude A0 multiplies the result by |A0| and cannot be hidden in C."
+  },
+  "quantitative_proof": [
+    "1. Set K=tsupport Q. The literal product formula proves tsupport W subset K. The actual smoothness proof uses smooth cutoff, fixed Schwartz spectrum, linear forms and real/complex exponentials; its existing private source argument is at Mixed404-416. Because K is compact, W is compactly supported and can be bundled via HasCompactSupport.toSchwartzMap. This is a construction from the actual function, not an assumed Sobolev premise. K has finite Lebesgue volume M; use M=(volume K).toReal, or a fixed compact containing ball/box if preferred.",
+    "2. Choose the actual candidate jet constant C4 for J=4 BEFORE Z,u0,rho0,R. It simultaneously bounds order0,2,4 by C4*(1+R)^j. In an orthonormal basis e_i, D_iD_i W is the second Frechet derivative evaluated at (e_i,e_i); D_iD_iD_jD_j W is a fourth derivative evaluated at four unit vectors. Native iteratedLineDerivOp_eq_iteratedFDeriv supplies this bridge. Each evaluation is bounded by the operator norm because the product of input norms is1.",
+    "3. Put A=(Id-Delta)^2 W=W-2Delta W+Delta(Delta W), as a Schwartz map. Native laplacian_eq_sum gives Delta W=sum_i D_iD_i W. Applying it again, and distributing directional CLMs over finite sums, gives Delta^2 W=sum_i sum_j D_iD_iD_jD_j W. This is exactly d second-derivative terms and d^2 fourth-derivative terms, with no unbounded basis or dimension constant hidden. No mixed-partial commutation beyond the ordered iterated derivative identity is needed.",
+    "4. All these derivatives are supported in K by tsupport_lineDerivOp_subset/tsupport_iteratedLineDerivOp_subset. For t in K, ||A(t)|| <=C4*[1+2d(1+R)^2+d^2(1+R)^4] <=(1+d)^2*C4*(1+R)^4. Outside K, A=0. Thus integral||A||^2 <=M*(1+d)^4*C4^2*(1+R)^8, and ||A||_2 <=sqrt(M)*(1+d)^2*C4*(1+R)^4. No positive power of Z or |u0| occurs.",
+    "5. Native Fourier has kernel exp(-2pi I<t,xi>). Therefore Fourier(Delta W)(xi)=-(2pi)^2*||xi||^2*Fourier W(xi). Applying twice yields Fourier A(xi)=lambda(xi)^2*Fourier W(xi), lambda=1+4pi^2||xi||^2>0. This follows either from native laplacian_eq_fourierMultiplierCLM plus inversion, or from fourier_lineDerivOp_eq and sum_i<xi,e_i>^2=||xi||^2. All signs and2pi factors are retained.",
+    "6. Define k(xi)=lambda(xi)^(-2), using real positive powers or inverse squares, and I_d=integral lambda(xi)^(-4). Then ||Fourier W(xi)||=k(xi)*||Fourier A(xi)||. The kernel is square integrable: k^2=lambda^-4<=(1+||xi||^2)^(-4), since4pi^2>=1. Native integrable_rpow_neg_one_add_norm_sq with r=8 applies because finrank(E)=d<8. Continuity gives measurability. This proves I_d finite; no exact Gamma-function value or external integral formula is needed. At dimension8 the radial bound is borderline and this method does not prove finiteness; strict d<8 is essential.",
+    "7. Fourier A is Schwartz, hence belongs to L2. Apply native integral_mul_le_Lp_mul_Lq_of_nonneg at p=q=2 to k and ||Fourier A||, or integral_mul_norm_le_Lp_mul_Lq to their real-valued versions. The p=q=2 MemLp hypotheses are proved from the preceding square integrability and native Schwartz memLp. Convert the half real powers to sqrt. This gives integral||Fourier W|| <=sqrt(I_d)*sqrt(integral||Fourier A||^2). It is a quantitative inequality, not merely MemSobolev.fourier_memL1.",
+    "8. Native SchwartzMap.integral_norm_sq_fourier applied to A makes the last square integral exactly integral||A||^2, with no normalization constant. Combine step4: integral||Fourier W|| <=sqrt(I_d)*sqrt(M)*(1+d)^2*C4*(1+R)^4. Choose C=1+sqrt(I_d)*sqrt(M)*(1+d)^2*C4 to ensure strict positivity even when Q=0 or M=0. All constituent constants are fixed before varying parameters.",
+    "9. For d<4 use A1=W-Delta W, k1=lambda^-1, I_d,1=integral lambda^-2. Native JapaneseBracket with r=4 gives finiteness. The order2 jet constant yields ||A1||2<=sqrt(M)*(1+d)*C2*(1+R)^2. Thus C=1+sqrt(I_d,1)*sqrt(M)*(1+d)*C2 gives the exponent2 endpoint. At d=2 the dimension coefficient is3; at d=7 the order4 coefficient is64.",
+    "10. Since W and Fourier W are Schwartz, native continuous Fourier inversion applies pointwise. In log coordinates t_i=log(x_i/x_i0), the inverse exponential splits into product_i exp(2pi I xi_i log(x_i/x_i0)). The joint coefficient measure has total variation exactly integral||Fourier W||. For a tau convention exp(I tau dot t), G(tau)=Fourier W(tau/(2pi)), inverse measure is(2pi)^(-d)G(tau)dtau, and its L1 cost is unchanged."
+  ],
+  "fixed_Q_limitations": [
+    "Q,a,b,c must be fixed in the existential constant. The actual public signature allows arbitrary fixed smooth compact Q, not just a product localizer. There is no uniformity over all Q, moving supports, growing cutoff derivatives or arbitrary varying a,b,c.",
+    "Dyadic reference scales may vary inside u0/rho0 while Q remains one fixed normalized log cutoff. If Q is instead shifted/stretched or modulated with the atom, its support volume and derivative seminorms must be tracked; they are not automatically fixed.",
+    "rho must be bounded on the ENTIRE tsupport Q. A cutoff equal1 on N1/U in[1,2] generally extends below1. The full d=7 construction may require R=2X^kappa rather than X^kappa; this fixed factor only changes C. The fixed-row d=2 case keeps N1 fixed and admits R=X^kappa on actual carriers.",
+    "External actual mesh prefactor A0=VD/(p0*r0*s0*r0prime*s0prime) remains explicit. Its normalized varying part exp(<c,t>) is already in the literal weight, with c fixed. D,V,Z stay fixed for this separation.",
+    "Signed h branches and h=0, dyadic partition/recombination, finite-window zero extension and arithmetic masks remain as recorded in the prior Mellin checkpoint. Smooth localizer support is not a replacement for sharp arithmetic masks."
+  ],
+  "consumer_cost_audit": {
+    "source": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+    "actual_product": "Lines72-79 define smallCoreSquaredBlock as a finite sum of RowTerm(o,u)*star(RowTerm(o,v)), with the signed-slope resonance mask. Lines81-84 multiply its real part by outerCarrier.card and sum over o. This is exactly two row copies, not a fourth row product.",
+    "actual_Cauchy": "Lines586-600 state ||Smooth||^2<=Mass(true)+Mass(false). There is one outer Cauchy square and one row Gram double sum encoding it. The proof does not square Mass again. The norm-square notation and the row*conjugate(row) expansion are the SAME Cauchy/Gram square, so they must not be charged as two independent squares.",
+    "full_label_cost": "One d=7 row decomposition costs C|A0|(1+R)^4; combining row and conjugate row through triangle/Fubini costs the product of their L1 norms, <=C^2|A0|^2(1+R)^8 when the same R bound applies. If R differs use(1+R1)^4(1+R2)^4. This is the weight contribution at the Gram/Mass level. One does not apply the d<8 lemma to an artificial14-dimensional joint object; use two seven-dimensional decompositions.",
+    "fixed_row_cost": "For the actual fixed o row, only(s,|h|) vary smoothly. The stronger d=2 Sobolev route costs(1+R)^2 per row and(1+R)^4 in the Gram, not the old4/8 exponents. This does not separate/cancel the outer labels; use d=7 only when the application really needs those labels separated.",
+    "kappa": "If X>=1,0<=kappa<=sigma/100 and R<=c_*X^kappa with fixed c_*, then d=7 Gram cost<=C'X^(8kappa)<=C'X^(2sigma/25). This weight component requires at most0.08sigma of an exponent budget. d=2 Gram would require4kappa<=0.04sigma.",
+    "not_a_full_budget_claim": "These comparisons do not prove all original geometric margins survive. The spectral endpoint, root inverse operators, gcd/CRT masks, supported packet counts, coefficient energies, h-block sums, other norm-square applications in a future spectral proof, and final placement of square roots remain unassembled. If a later argument squares this Gram bound again, cost16kappa must be recorded then. The separate original signedError square reduction must not be conflated with automatically squaring this Gram cost. No7/32 cancellation or final C/K estimate follows here."
+  },
+  "API_assessment": {
+    "available_quantitative_tools": [
+      "SchwartzMap.integral_norm_sq_fourier (f:SchwartzMap V H): integral||Fourier f||^2=integral||f||^2; H a complete complex inner-product space. Instantiate H=Complex.",
+      "SchwartzMap.laplacian_eq_fourierMultiplierCLM (f): Delta f=-(2*pi)^2 smul fourierMultiplierCLM F (norm(.)^2) f. It has the negative sign and squared norm required by the calculation.",
+      "integrable_rpow_neg_one_add_norm_sq {r:Real} (hnr:(finrank Real E:Real)<r): Integrable (fun x => (1+norm x^2)^(-r/2)) mu, under finite-dimensional Haar/Borel conditions. Instantiate r=8 or4 and mu=volume.",
+      "MeasureTheory.integral_mul_le_Lp_mul_Lq_of_nonneg {p q:Real} (hpq:p.HolderConjugate q) (hf_nonneg:0<=ae f) (hg_nonneg:0<=ae g) (hf:MemLp f(ofReal p)mu) (hg:MemLp g(ofReal q)mu): integral f*g <=(integral f^p)^(1/p)*(integral g^q)^(1/q). This supplies the missing quantitative Cauchy-Schwarz step.",
+      "SchwartzMap.iteratedLineDerivOp_eq_iteratedFDeriv: directional word evaluation equals the iterated Frechet derivative evaluated on that word. SchwartzMap.laplacian_eq_sum: Delta f=sum_i partial_(b i)(partial_(b i) f). Support-subset APIs for each iterated line derivative are present."
+    ],
+    "not_sufficient_by_itself": "TemperedDistribution.MemSobolev.fourier_memL1 has signature: hs:finrank E<2*s and hf:MemSobolev s 2 f imply exists v:Lp F 1 volume, Fourier f=(v:tempered distribution). It neither exposes a quantitative uniform norm constant nor proves the actual Mixed function's Sobolev bound. It is corroborating infrastructure, not the proposed endpoint.",
+    "temperate_growth_caution": "SchwartzMap.memLp needs volume.HasTemperateGrowth; use the genuine Euclidean volume instance, not an arbitrary measure. fourierMultiplierCLM/smulLeftCLM pointwise expansions require the actual polynomial symbol's HasTemperateGrowth. The native Laplacian proof explicitly proves growth of squared linear forms by fun_prop. Prove the squared norm/polynomial growth before using apply lemmas; do not treat a total/default multiplier on an arbitrary function as pointwise multiplication. Alternatively derive the Fourier symbol from directional derivative APIs, avoiding arbitrary-symbol use entirely.",
+    "unimplemented_bridges": [
+      "Expose/reprove literal Mixed smoothness and compact support as needed; the candidate currently proves them privately while its only public estimate is the jet bound.",
+      "Prove the bounded Laplacian/Delta^2 finite-sum expansion and its support/norm estimates with the J=4 candidate jet bound. Existing basis and iteratedLineDerivOp APIs make this a finite bridge.",
+      "Prove Fourier A=lambda^2 Fourier W and turn the real scalar identity into the nonnegative norm identity.",
+      "Package integrability of k^2 and MemLp k 2 from JapaneseBracket via comparison; reconcile real powers/inverse natural powers and ofReal2. Apply native quantitative Holder, then Plancherel.",
+      "Package the exact quantitative native FourierL1 endpoint for the actual function, with C preceding all varying parameters. No ready-made exact actual-weight quantitative endpoint was found or claimed in this finite inspection."
+    ]
+  },
+  "next_ONE": {
+    "target": "Implement the literal d<8 actual-weight Fourier integral norm theorem above, after Mixed's real compilation/ownership gate passes.",
+    "proof_plan": "Use actual J=4 public jet bound and direct Schwartz construction; A=(Id-Delta)^2; native Fourier derivative identity, quantitative Holder and Plancherel. Private reusable derivative/support/kernel helpers are legitimate actual proofs. Do not add a Sobolev-norm estimate or FourierL1 bound as an assumed supplier.",
+    "stop_condition": "One complete genuine proof or a precise elaboration/API blocker. No full spectral-kernel scope expansion."
+  },
+  "trust": {
+    "mathlib_HEAD_verified": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "lean_executed": false,
+    "native_kernel_replayed": false,
+    "source_only": true
+  },
+  "HOLD": true,
+  "native_file_span_bindings": [
+    {
+      "path": "Mathlib/Analysis/Distribution/SchwartzSpace/Fourier.lean",
+      "sha256": "8f74642098d0390e08eae980f72ba29801c46b03446dae2fd20eff9ba0f08737",
+      "spans": [
+        {
+          "first": 202,
+          "last": 210,
+          "normalized_lf_utf8_sha256": "3c9ff6acdc467049da20401ec279570c327a164635f87c949a9a5896cbe6e53a"
+        },
+        {
+          "first": 313,
+          "last": 322,
+          "normalized_lf_utf8_sha256": "89b1d524b98863d2b8be498382c7ec6e1ca50e73aa5e923920bdf7ce3041fb41"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Analysis/Distribution/SchwartzSpace/Deriv.lean",
+      "sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+      "spans": [
+        {
+          "first": 132,
+          "last": 140,
+          "normalized_lf_utf8_sha256": "f33178fd803e69df3bf1c29a1ebfac143e8a48869378c3f453d491a42bf4b4b0"
+        },
+        {
+          "first": 171,
+          "last": 181,
+          "normalized_lf_utf8_sha256": "b1205884eebf635b79dae071770320e2877b44cc755dfd488d061575963c6800"
+        },
+        {
+          "first": 198,
+          "last": 211,
+          "normalized_lf_utf8_sha256": "1c647664e053e21bdf033cb8dcd028402f7e6144c7dd774f42d515b97811bb48"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Analysis/Distribution/SchwartzSpace/Basic.lean",
+      "sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+      "spans": [
+        {
+          "first": 555,
+          "last": 566,
+          "normalized_lf_utf8_sha256": "947ff9f84f83cbf49021ee441fabfd0b7a1a82582b9d7a9bfb859747fa3a71b3"
+        },
+        {
+          "first": 1315,
+          "last": 1318,
+          "normalized_lf_utf8_sha256": "f3d118194f33ff3a8d9d8eda6fcba247697a370c19ab658dd7dd88f8dcc00622"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Analysis/Distribution/FourierMultiplier.lean",
+      "sha256": "22f9fad5a18b2e677fbb861a21f12c78275bffe0fa67c97495b8aa996011f067",
+      "spans": [
+        {
+          "first": 48,
+          "last": 63,
+          "normalized_lf_utf8_sha256": "3117921a070f8a1f3545d86db687f55bfff22b4f9c3a5831c58ce0961ddeaf0a"
+        },
+        {
+          "first": 85,
+          "last": 96,
+          "normalized_lf_utf8_sha256": "d355046818f4f43ec39e8a6859870c471993fe5a13ba70e65eb6bdab0458a2d8"
+        },
+        {
+          "first": 100,
+          "last": 123,
+          "normalized_lf_utf8_sha256": "e82fad77a0609fc1cbd7ca09a6b414bf9c2885d7a7d9178571a28cec51e4ea39"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Analysis/SpecialFunctions/JapaneseBracket.lean",
+      "sha256": "417a150d05e8c2150dbcc8a3ad8adf294e6b3efd13eed6bb2a9377bc93150618",
+      "spans": [
+        {
+          "first": 94,
+          "last": 99,
+          "normalized_lf_utf8_sha256": "7a0a6c6c0c458bdb663bf81da8522ab7b339aa0778169e8b565a96ff85a7f6e3"
+        },
+        {
+          "first": 147,
+          "last": 154,
+          "normalized_lf_utf8_sha256": "cb5c4155388da6279da1e5b30ea68d1e2a95812ea4934592adeca0a0eed11b67"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Analysis/Distribution/Sobolev.lean",
+      "sha256": "626efa98f46bc13e7ef8770bc29e778357c713d15373846f1e49252a7ac1df3e",
+      "spans": [
+        {
+          "first": 237,
+          "last": 263,
+          "normalized_lf_utf8_sha256": "57c2eb48dbdde30230b1a78c8dc365e4763e3efe311daecd9ff0cc42e86f6d03"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/MeasureTheory/Integral/Bochner/Basic.lean",
+      "sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "spans": [
+        {
+          "first": 1141,
+          "last": 1147,
+          "normalized_lf_utf8_sha256": "0f05a59f5f26e3335885835d05264db5887305ed807be88f2bce1f0dc06f2081"
+        },
+        {
+          "first": 1188,
+          "last": 1208,
+          "normalized_lf_utf8_sha256": "c508a2b8fe1b7865b39300102be0918099c497ecf0ebb83998618e6e3d2703ec"
+        }
+      ]
+    }
+  ],
+  "source_file_bindings_at_checkpoint": [
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogMixed.lean",
+      "sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d"
+    },
+    {
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+      "sha256": "2003e7e1915e04597955a71a135b8d15ee3d7a6bebd167a73be0526c4ff85d21"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261021-root-sobolev-fourth-order-cost-proposal-native-checkpoint.json",
+      "sha256": "c020930a9658b65749f569de39df5f0ee635490217fbadbc1a3e09c30685726c"
+    }
+  ]
+}

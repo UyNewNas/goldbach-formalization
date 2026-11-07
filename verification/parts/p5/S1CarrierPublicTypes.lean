@@ -1,0 +1,56 @@
+import MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier
+import Lean
+
+/-!
+Supplement to the completed defining-module axiom audit. Default pretty printing
+hides the implicit sieve parameter of BoundingSieve.siftedSum/mainSum/rem. This
+command records all public theorem types with explicit arguments and also saves
+the exact expression representation. It neither adds a theorem nor repeats the
+completed proof audit.
+-/
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.proofs true
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let moduleName := `MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier
+  let declarationRoot := `MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig
+  let publicNames := #[
+    `mem_goldbachS1SiftingPrimes_iff,
+    `goldbachS1ProdPrimes_squarefree,
+    `goldbachS1ProdPrimes_ne_zero,
+    `goldbachS1ProdPrimes_primeFactors,
+    `prime_dvd_goldbachS1ProdPrimes_iff,
+    `goldbachS1ProdPrimes_coprime_N,
+    `goldbachS1_dvd_prodPrimes_coprime_N,
+    `goldbachS1Endpoint_le,
+    `goldbachS1Endpoint_add_one,
+    `mem_goldbachPrimeCarrier_iff_prime_le_goldbachS1Endpoint,
+    `goldbachS1_coprime_prodPrimes_iff_literalHPoint,
+    `goldbachS1_mod_mem_unitResidues,
+    `goldbachS1BoundingSieve_multSum_eq_primesInAP,
+    `goldbachS1BoundingSieve_siftedSum_eq,
+    `goldbachS1BoundingSieve_nu_eq_inv_totient,
+    `goldbachS1BoundingSieve_mainSum_eq_totientSum,
+    `goldbachS1BoundingSieve_rem_eq_standardPrimeAPError]
+  for suffix in publicNames do
+    let name := declarationRoot ++ suffix
+    let some (.thmInfo info) := env.find? name
+      | throwError "Public theorem not found: {name}"
+    let some idx := env.getModuleIdxFor? name
+      | throwError "Missing defining module: {name}"
+    unless env.header.moduleNames[idx]! == moduleName do
+      throwError "Incorrect defining module: {name}"
+    let type ← liftTermElabM do
+      return (← Meta.ppExpr info.type).pretty
+    let record := Json.mkObj [
+      ("name", toJson name.toString),
+      ("module", toJson moduleName.toString),
+      ("type_explicit", toJson type),
+      ("type_expr_repr", toJson (reprStr info.type))]
+    liftIO <| IO.println s!"CHEN_P5_S1CARRIER_EXPLICIT_TYPE {record.compress}"
+  liftIO <| IO.println s!"CHEN_P5_S1CARRIER_EXPLICIT_TYPE_COUNT {publicNames.size}"

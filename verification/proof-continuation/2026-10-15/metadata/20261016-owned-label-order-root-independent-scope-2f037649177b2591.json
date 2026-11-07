@@ -1,0 +1,92 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_OWNED_LABEL_GEOMETRY_REVIEW_NO_VISIBLE_MATHEMATICAL_BLOCKER",
+  "reviewer": "/root, independent of greedy_review author",
+  "candidate": {
+    "module": "ImbalancedChen.ActualExtendedThirdOwnedLabelOrder",
+    "sha256": "d262f95877de7fc234760cc90622e6b68809d8db22249c257cdd49746733ca28",
+    "source_declarations": 9,
+    "definitions": 1
+  },
+  "all_complete_types_and_definitions": [
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdDyadicHi_le_lo_of_label_lt",
+      "complete_type": "theorem actualExtendedThirdDyadicHi_le_lo_of_label_lt {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {i k : Fin 3} (h : j i < j k) :\n    actualExtendedThirdDyadicHi m j i ≤ actualExtendedThirdDyadicLo m j k"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdOwnedCell_labelOrder",
+      "complete_type": "theorem actualExtendedThirdOwnedCell_labelOrder {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    j 1 ≤ j 0 ∧ j 2 ≤ j 1"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdOwnedCell_nonempty_labelOrder",
+      "complete_type": "theorem actualExtendedThirdOwnedCell_nonempty_labelOrder {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : (actualExtendedThirdOwnedCell m j).Nonempty) :\n    j 1 ≤ j 0 ∧ j 2 ≤ j 1"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdOwnedCell_empty_of_label_lt",
+      "complete_type": "theorem actualExtendedThirdOwnedCell_empty_of_label_lt {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    actualExtendedThirdOwnedCell m j = ∅"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdOwnedPrimeAtoms_empty_of_label_lt",
+      "complete_type": "theorem actualExtendedThirdOwnedPrimeAtoms_empty_of_label_lt {N m : ℕ}\n    (a b : Fin 3 → ℝ) {j : ActualExtendedThirdDyadicLabel m}\n    (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    ((actualPrimeBoxTuples N a b).filter\n      (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j)) = ∅"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdRetainedCellIntegral_zero_of_label_lt",
+      "complete_type": "theorem actualExtendedThirdRetainedCellIntegral_zero_of_label_lt {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (hbad : j 0 < j 1 ∨ j 1 < j 2) :\n    actualExtendedThirdRetainedCellIntegral e m j = 0"
+    },
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdIntegerUpper",
+      "complete_type": "def actualExtendedThirdIntegerUpper (X : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Fin 3 → ℕ",
+      "complete_definition": "def actualExtendedThirdIntegerUpper (X : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Fin 3 → ℕ :=\n  fun i => Nat.floor (X ^ actualExtendedThirdDyadicHi m j i)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdIntegerUpper_order_and_bound",
+      "complete_type": "theorem actualExtendedThirdIntegerUpper_order_and_bound {X : ℝ} (hX : 1 ≤ X)\n    {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j 1 ≤ j 0 ∧ j 2 ≤ j 1) :\n    (actualExtendedThirdIntegerUpper X m j 1 ≤ actualExtendedThirdIntegerUpper X m j 0 ∧\n      actualExtendedThirdIntegerUpper X m j 2 ≤ actualExtendedThirdIntegerUpper X m j 1) ∧\n      ∀ i, (actualExtendedThirdIntegerUpper X m j i : ℝ) ≤\n        X ^ actualExtendedThirdDyadicHi m j i"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdOwnedCell_prime_integer_box",
+      "complete_type": "theorem actualExtendedThirdOwnedCell_prime_integer_box {N m : ℕ} (hN : 1 < N)\n    {j : ActualExtendedThirdDyadicLabel m} (p : Fin 3 → ℕ)\n    (hp : ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N)\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n    p ∈ actualPrimeBoxTuples N (actualExtendedThirdDyadicLo m j)\n        (actualExtendedThirdDyadicHi m j) ∧\n      p ∈ Fintype.piFinset (fun i => Finset.Icc 1\n        (actualExtendedThirdIntegerUpper (N : ℝ) m j i)) ∧\n      (actualExtendedThirdIntegerUpper (N : ℝ) m j 1 ≤\n          actualExtendedThirdIntegerUpper (N : ℝ) m j 0 ∧\n        actualExtendedThirdIntegerUpper (N : ℝ) m j 2 ≤\n          actualExtendedThirdIntegerUpper (N : ℝ) m j 1) ∧\n      ∀ i, (actualExtendedThirdIntegerUpper (N : ℝ) m j i : ℝ) ≤\n        (N : ℝ) ^ actualExtendedThirdDyadicHi m j i"
+    }
+  ],
+  "all_proof_bodies_read": true,
+  "independent_semantic_findings": [
+    "For integer dyadic labels i<k, i+1<=k implies Hi_i<=Lo_k with the original positive rho and denominator 2^m. Actual PhysicalCell source was read: Hi casts the whole natural successor, exactly matching the cast inequality.",
+    "A reversed adjacent label plus original weak coordinate ordering contradicts t_i<Hi_i<=Lo_k<=t_k<=t_i. The strict Ico upper bound is essential. No order of labels is inferred from closed PhysicalCell nonemptiness.",
+    "Invalid ordered labels therefore have an empty actual OwnedCell, no actual filtered prime tuple atoms, and zero literal retained-cell integral, by exact empty-set identities.",
+    "For X>=1, the original real upper exponents, their rpow endpoints and their natural floors preserve weak label order. Each floor is <= the original positive rpow endpoint. No ceil enlargement is introduced.",
+    "The final actual-prime consumer keeps N>1, primality and nondivisibility by the same N, and original OwnedCell logarithmic membership. The existing exact log-box equivalence yields the exact original power box, then prime>=1 and p<N^Hi give the identical-endpoint integer box.",
+    "This is a pointwise cover only. It does not prove converse Cartesian reconstruction, same-block/full-multilabel Moebius and factorial identities, or the original signed rho arithmetic mean."
+  ],
+  "pinned_API_sources_read": [
+    "ActualExtendedThirdPhysicalCell.lean:33-40 (original endpoints and closed order)",
+    "Mathlib/Algebra/Order/Floor/Defs.lean:143 Nat.le_floor",
+    "Mathlib/Algebra/Order/Floor/Semiring.lean:47 Nat.floor_le",
+    "FinitePrimeGeometryCore exact arithmetic log-box APIs also read in the actual source review"
+  ],
+  "parent_source_bindings": {
+    "ActualExtendedThirdFiniteCellIntegral": "b4ce361d78d02ff88d8800d9a129b70092bc31231508a0554007e1c8b1405df3",
+    "FinitePrimeGeometryCore": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85"
+  },
+  "relative_source_delta": {
+    "new_local": [
+      "ImbalancedChen.ActualExtendedThirdOwnedLabelOrder"
+    ],
+    "new_foreign": [],
+    "method": "Only the two existing local direct parents and implicit Init, relative to their source union. No full census or imported-object validation claimed."
+  },
+  "issues_identified": [],
+  "remaining_runtime_gate": "Exact-source strict elaboration and complete owned audit, including actual source/object binding of the existing FinitePrimeGeometryCore prerequisite. Cached-object validity is not assumed here.",
+  "evidence_boundary": {
+    "source_only": true,
+    "source_edited": false,
+    "compiler_kernel_or_axiom_audit": false,
+    "elaboration_or_linter_acceptance_claimed": false
+  }
+}

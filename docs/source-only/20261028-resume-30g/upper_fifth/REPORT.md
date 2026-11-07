@@ -1,0 +1,11 @@
+G upper_fifth 本地步骤完成，完整派发目标仍为 false。只写本目录；F 源码、登记、报告及独立复审均已重核最终 rawSHA，未改冻结批。所有源码未编译、finite 决定项未执行、正式信用0；不运行 Lean/lake/checker/数值重放，不查额度，不派代理。
+
+本批新增76份Lean，其中72份是原始checkpoint字段literal数据，另有Types、Hub及两份分析绑定源码。72个原NPZ只含 indices、old_floor、new_floor，明确没有stored child d/A/B。因此保留全部292633个parent原位置与两个独立parent字段，而child字段继续由原witness及固定(2,2,2,2,4)重建。没有按值去重、重新排序、选择两named代全族或复制gain。NPZ三数组只被读取并转写字面量；没有调用producer、geometry、exact_floor、licence或任何saving总量计算。72个NPZ原字节SHA与各自原metadata pin全部匹配，但此事实不等于Lean二进制解析真实性证明。
+
+P5LicensedRawOwnerActualGain 把F的floor减真实reserve下界接到真正rawOwnerIntegral。方法是让同一owner的原selected mask构造singleton FifthRow，由真实gateCheck证明eligible；actualNext5恰为max(actual original fourth profile, rawCandidate)。已有实际kernel可积定理因而直接给同owner rawOwnerKernel可积，不需要假设整个decoded family全部gate通过。正literal surrogate点态低于这个actual原增量，于是在同一原owner积分，并完整重组每父64个child。它没有把old15当作实际父，也没有把signed literal kernel当成非负。
+
+P5FullStoredParentSameOwnerBinding 通过独立全72块存储表的同源位置接原wire。原producer159–176及subdivision原文113–126规定stored new=max(stored old, complete64child sum)。完整field identity写成闭合finite源码，未执行。这里不拿child证明冒充旧Jensen/Taylor证明，而保留 oldBranchDefect=max(0,stored old−childsum)，证明stored new−oldBranchDefect=childsum。因此每许可parent有 storedNewQ80−旧分支defect−实际严格owner reserve ≤ 同actual original owner gain；再在全部原许可ArchiveIndex求和。右侧仍是带原索引的actual owner增量和，不冒称一个已构造的global common policy或其mean。F独立keypartition提供不同source位置的真实父盒/owner域不交，不以转Finset消掉重数。每父严格64child，128仍只指旧两个named的合计。
+
+仍欠完整target：NPZ/NPY到typed字段的Lean真实性；所有全族finite候选的执行/内核验收；原stored old Jensen/Taylor分支真正同owner证明或明确支付；真实strict clipping reserve的整体小性；实际共同policy实例、mean与数值储备链。没有计算任何saving总量。F最终独立review说明该档局部old/common第五debt已由真实below-mu/fallback分离消除；本批不把它重列为新原稿缺口，也不因此假定全局physical rho已经完成。
+
+本轮未发现新的原稿数学错误。代码对象/真实性/全族验收与reserve/全策略连接不足均属于实现边界；原稿明确要求max替换而非相加，本批严格保留这一会计。精确源SHA、全部72原NPZ/member SHA、依赖与安装映射、未执行决定项及剩余scope见REGISTRY.json。
