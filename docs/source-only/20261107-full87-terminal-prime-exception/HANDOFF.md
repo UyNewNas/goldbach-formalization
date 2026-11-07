@@ -1,0 +1,13 @@
+# P1.4 durable handoff — actual full-modulus prime exceptions
+
+LAST VERIFIED BASE: `df5b3572c2bb28902622247c9053ef1fcba5c09b` (read report, registry, input boundary, last proof, the original `P4AOriginalFull87EighthPrimeMeanLedger.lean` and `ChenInitialPrimeSource.lean`).
+TASK BRANCH: `chatgpt/p1-full87-terminal-prime-exception-20261107`.
+SOURCE PROOF: `docs/source-only/20261107-full87-terminal-prime-exception/P4AOriginalFull87TerminalPrimeExceptionBudget.lean`, blob `3ae6f57eda9abfe9a0daadf3c459f95227d5bb29`, 203 lines. Code: `85dc43f`, focused correction: `d73d538`. Inspect FINAL branch HEAD before further edits. The commit creating this handoff is the publication head until later edits; no branch or workflow elsewhere changed.
+
+NEW SOURCE-ONLY FACT: centre prime correction at every *actual full modulus* is bounded by omega(N) and modulus-prime correction by omega(d)/phi(d) (using the explicit finite primeDivisorWindow, including d=0). The same original signed physical-rho absolute sum bounds both error terms on both policies. The receiver-density error is now bounded by primitive discrepancy + the two explicit prime factor moments. This is an algebraic/finite cardinality bound, not an H_N limit and NOT a reserve debit. The parent historical half-mesh wide-gap result from `df5b357` remains unchanged.
+
+EXACT CHECKS: 1,500 independent N,d cardinality cases; 1,500 signed coefficient-list moment cases (41 with d=0); no violations. Sympy totient(0) test-helper exception corrected before the complete signed rerun. The original saved87 archived values were NOT replayed. The manuscript contains saved density/numerical geometry but does not itself certify the arithmetic occurrence mass of the actual historical wide-gap sources.
+
+VERIFICATION: SOURCE_ONLY / UNEVALUATED / UNCOMPILED / ZERO KERNEL CREDIT. No Lean/Lake, kernel replay, transitive-axiom check, independent review, new axioms, Codex, CI, toolchain change or reserve debit. No standalone original archive numerical gain claimed.
+
+NEXT PRECISE ACTION: take this actual `absoluteGainBudget ... modulusPrimeCap` and `omega_N * absoluteGainBudget ... (fun _ => 1)` on the ORIGINAL full-beta source, and derive effective H_N-relative uniform bounds under *the same rho*; separately instantiate primitive discrepancy on precisely this full modulus and preserve centre-prime correction. If these are unavailable, inspect actual saved87 population against the `df5b357` wide-gap condition (true dynamic parent, real owner/trim and occurrence weights), not a geometric proxy. Then ordinary-integral, sixth-filter, changed/tagged and two distinct reserves remain. P1.4 YELLOW.
