@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenComplexThreeModes
 import ImbalancedChen.P3ActualFrozenComplexThreeTensor
 import ImbalancedChen.P3ActualFrozenComplexGroupGamma
 import ImbalancedChen.P3ActualBoundedGroupWeightGamma
@@ -299,3 +300,10 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenComplexThreeTensor.complex_three_weighted_fibre
 #check ImbalancedChen.P3ActualFrozenComplexThreeTensor.actual_frozen_three_complex_tensor
 #check ImbalancedChen.P3ActualFrozenComplexThreeTensor.actual_frozen_three_complex_same_rho
+
+-- Genuine finite Fourier modes on the three actual physical frozen words.
+-- SOURCE_ONLY: recorded names only, not elaborated or kernel-checked.
+#check ImbalancedChen.P3ActualFrozenComplexThreeModes.triple_mode_sum_comm
+#check ImbalancedChen.P3ActualFrozenComplexThreeModes.finite_modes_three_sum_transport
+#check ImbalancedChen.P3ActualFrozenComplexThreeModes.actual_frozen_three_finite_modes_tensor
+#check ImbalancedChen.P3ActualFrozenComplexThreeModes.actual_frozen_three_finite_modes_same_rho
