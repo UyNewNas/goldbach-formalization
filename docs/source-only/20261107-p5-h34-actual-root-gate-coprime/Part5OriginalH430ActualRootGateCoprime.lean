@@ -30,6 +30,8 @@ open Part5OriginalH430TaggedReceiverFibres
 open Part5OriginalH430TaggedSourceRejections
 open Part5OriginalH430ReceiverRootGateAccounting
 open Part5OriginalH430HistoricalReceiverSixLanes
+open Part5OriginalH430HistoricalRejectedExitLedger
+open Part5OriginalH430RealSignedExitPayment
 open Part5OriginalH430TrueReceiverWeightedExit
 
 /-- The actual raw source retains the original p prime and the
