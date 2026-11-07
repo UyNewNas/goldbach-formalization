@@ -29,6 +29,7 @@ namespace ImbalancedChen.Part5OriginalH430OriginalSelectedRootFibres
 noncomputable section
 open scoped Classical BigOperators
 open Part5OriginalUpsilon5CausalDictionary (a)
+open Part5OriginalH430PhysicalRoots
 open Part5OriginalH430TaggedArithmeticReceivers
 open Part5OriginalH430TaggedReceiverFibres
 open Part5OriginalH430TaggedSourceRejections
