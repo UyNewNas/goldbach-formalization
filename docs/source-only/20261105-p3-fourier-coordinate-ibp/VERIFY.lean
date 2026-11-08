@@ -62,6 +62,8 @@ import ImbalancedChen.P3ActualU8SmallNormLevel
 import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
 import ImbalancedChen.P3ActualU8FifthMismatchBudget
 
+import ImbalancedChen.P3ActualU8FirstExitSupportDelta
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -574,3 +576,8 @@ import ImbalancedChen.P3ActualU8FifthMismatchBudget
 
 #check ImbalancedChen.P3ActualU8FifthMismatchBudget.integer_rough_delta_le_disagreement_card
 #check ImbalancedChen.P3ActualU8FifthMismatchBudget.original_fifth_u8_disagreement_PP
+
+-- Genuine first-exit Mobius support symmetric-difference U8 budget.
+-- SOURCE_ONLY, NOT executed by Lean/Lake/kernel.
+#check ImbalancedChen.P3ActualU8FirstExitSupportDelta.firstExit_rough_delta_le_support_mismatch
+#check ImbalancedChen.P3ActualU8FirstExitSupportDelta.original_fifth_u8_firstExit_support_mismatch_PP
