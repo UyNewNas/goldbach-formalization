@@ -159,9 +159,11 @@ theorem actual_depth_ordinary_full_prefix_passes
           (ordinaryRosserRetainedPolicy lower Q)
           (fun r : ℕ => 1 / ((r : ℝ) - 1))
           [] true 1 (roughPrimeUniverse N cap 0 z0) := by
-    simpa only [actualPhysicalDepthList] using
-      (List.getElem_mem (l := actualPhysicalDepthList k N cap z0 Q lower)
-        (i := i.1) (by exact i.isLt))
+    have hmem :
+        (actualPhysicalDepthList k N cap z0 Q lower)[i] ∈
+          actualPhysicalDepthList k N cap z0 Q lower :=
+      List.getElem_mem
+    simpa only [actualPhysicalDepthList] using hmem
   have hv := mem_firstExitDepthFrontier_ordinaryRosser_admissible_of_pos
     lower Q k hk
     (fun r : ℕ => 1 / ((r : ℝ) - 1))
@@ -199,9 +201,11 @@ theorem actual_depth_state_mass_eq_prefix_product
           (ordinaryRosserRetainedPolicy lower Q)
           (fun r : ℕ => 1 / ((r : ℝ) - 1))
           [] true 1 (roughPrimeUniverse N cap 0 z0) := by
-    simpa only [actualPhysicalDepthList] using
-      (List.getElem_mem (l := actualPhysicalDepthList k N cap z0 Q lower)
-        (i := i.1) (by exact i.isLt))
+    have hmem :
+        (actualPhysicalDepthList k N cap z0 Q lower)[i] ∈
+          actualPhysicalDepthList k N cap z0 Q lower :=
+      List.getElem_mem
+    simpa only [actualPhysicalDepthList] using hmem
   exact mem_firstExitDepthFrontier_mass_eq_selected_prod k
     (ordinaryRosserRetainedPolicy lower Q)
     (fun r : ℕ => 1 / ((r : ℝ) - 1))

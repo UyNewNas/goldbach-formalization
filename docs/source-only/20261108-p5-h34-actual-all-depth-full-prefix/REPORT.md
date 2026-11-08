@@ -69,3 +69,5 @@ extensions and the literal U3/U4 q/tag weight fibres; do not carry over the
 rank-two one-position capacity as a deeper-history payment licence.
 
 **完整h34稿内证明仍未闭合。**
+
+Repository source was finalized with the simpler established `List.getElem_mem` membership proof, in two occurrences. Source blob: `5b0f7e53c1117c5c4e5e7ebc82a567eaa51fd8be`. Initial mathematics commit: `3ce033f6e75dfe9c52d5feb6266685a3b54cd70d`.
