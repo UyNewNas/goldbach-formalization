@@ -23,6 +23,7 @@ namespace ImbalancedChen.Part5OriginalH430ActualResolvedPhysicalGates
 noncomputable section
 open scoped Classical BigOperators
 open Part5OriginalH430PhysicalRoots
+open P2EnhancedLowerPrimeChildCarriers P2EnhancedLowerPrimeChildGeometry
 open Part5OriginalH430FrozenIntegerSupport
 open Part5OriginalH430RequestedHistory
 open Part5OriginalH430RequestedMember
@@ -43,10 +44,7 @@ theorem actual_level_parent_product_pos
     0 < parentProduct (levelOccurrence l).current.old := by
   have hs := rootHistory_support (by omega : 1 < N)
     ht ht' hn hp hband (levelOccurrence_source l).1
-  have hd : (1:ℝ) ≤
-      (parentProduct (levelOccurrence l).current.old : ℝ) :=
-    (parentWindow_logs hs.1).2.1
-  exact_mod_cast (zero_lt_one.trans_le hd)
+  exact hs.1.2.1
 
 /-- The TRUE physical root Q divided by the actual integer product
 is strictly above one at every real request-list position. The exact
