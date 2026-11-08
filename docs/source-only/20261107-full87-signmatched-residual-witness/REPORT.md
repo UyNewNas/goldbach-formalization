@@ -18,14 +18,14 @@ This packet proves a NECESSARY, not sufficient, witness for a *nonzero literal* 
 3. If the original `ordinarySaving(old-minus-new, highQTest X F)` is nonzero, such a leaf belongs to ONE OF EXACTLY the two unchanged policies: own-sixth `actualParent` or finite eighth `finiteCap`, at the same prefix, sign, mass and remaining carrier. No new policy is introduced and no relative sign or cancellation is inferred.
 
 In symbols:
-[
+$
 \mathrm{OrdinarySaving}_{>X}(s;F)\ne0
 \Longrightarrow\exists R\in\{R_{old}(s),R_{new}(s)\},
 \exists\ell\in\mathrm{RetainedLeaves}_R(s),
 \exists a\in A_{small}:
 \ell.value\ne0,\ \beta_{\ell.positive}(a)\ne0,\ 
 X<a\prod\ell.selected,\ F(a\prod\ell.selected)\ne0.
-]
+$
 
 **This does not reverse the implication:** an identified sign-matched leaf need not survive sums across factors, leaves, or old-minus-new. In particular this does not turn failed OR gates into positive lower bounds, physical PP admissibility or any H_N payment.
 
