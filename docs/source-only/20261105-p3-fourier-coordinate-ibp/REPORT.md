@@ -1508,3 +1508,35 @@ Find and read the final frozen causal integer compiler and its retained-`retainO
 - **Checks actually run:** readback of GitHub source and VERIFY, lexical proof-escape scan (0 matches), balanced `()[]{}` static scan, six new names found and six `#check` registrations present (none executed). Independent deterministic Python exact-rational toy model checked **768 cases / 6,144 modulus terms**, of which **2,304** have negative coefficient, with **0 mismatches** for the original signed discrepancy and unchanged zero-extension. There were 108 labelled model occurrences including 61 with p₂=q. It did **not** execute the original first-exit producer, real Rosser weights, Lean selector or actual U8 theorem.
 - **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axioms, Codex, heavy producer. The new module imports staged SOURCE_ONLY code and remains UNCOMPILED/KERNEL_UNVERIFIED; no GREEN. `EXTERNAL_INPUTS.json` remains EXACT blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; manuscript (M) REGISTER_ONLY, not implemented or axiomatized.
 - **Crucial limitation / next exact entry:** a free even-retaining first-exit policy is NOT the final causally frozen whole-domain policy, and an integer rough coefficient passed through real small Rosser weights need not produce an integer physical `rho_T`. Identify the literal final retained policy, physical Q_T and coefficient producer; establish literal equality to this class or prove a genuine quantified coefficient difference with level and weight bounds. The all-source marked/HB atom dictionary, product=T exceptions, nonzero shifted-divisor moments, quantitative original W_T Fourier L1/H/Fubini uniform in growing m(N), empty Gamma mothers, high-rank/enhanced and arbitrary-log same-rho PP remain INTERNAL open obligations. P3.6 YELLOW; only this limited actual tree/U8 source candidate BLUE.
+
+## Successor P3.6 SOURCE_ONLY — sign-sensitive physical-to-rough delta norm (2026-11-08 UTC)
+
+- **Verified branch baseline:** `1cae54a1c103f2dcb91bdc7699cca0283658a8e5` on `chatgpt/p3-internal-original-w-20261105`. Before ref update GitHub HEAD and parent tree were re-read; update_ref returned success with non-force fast-forward. No concurrent branch update was observed at both checks.
+- **Real proof commit:** `41c1dfe8f97a5400460cbf72491c4d847c061abb` (`[skip ci]`); new staged source `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8RoughDeltaNorm.lean` (235 lines), Git blob `012c5eaadb686f2be89e46c9d99777cc28ab27a3`. `VERIFY.lean` was updated in the same commit; Git blob `eef66501f8934c51c349319b16e5b87437fa6059`, four checks registered, **not executed**.
+- **Real dependency inspection:** `SignSensitiveAttachment.lean` (literal sign switch), `SmallRoughAttachment.lean` (one physical coefficient, unique cutoff-separated product), `ActualSmallRosser.lean` (literal upper/lower Rosser weights), `FiniteUpperCarrierCore.lean`, `P3ActualU8CompiledDelta.lean`, `P3ActualU8UnitPhysicalNorm.lean`, `CurrentChenUpsilon8SharpKPhysicalPP.lean`. Root, docs, source-only, packet, and ImbalancedChen `AGENTS.md` were queried and not found; no hidden constraints inferred. Fixed manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, `manuscript-body.tex` lines 450-478 and `distribution-prime-product-completion-20261010.txt` section 1 were read; no version change.
+
+### Real mathematical increment
+
+For fixed literal small-prime Rosser beta-minus/beta-plus and ANY two rough real coefficients x,y, the sign-dependent attachment satisfies
+
+`|signAttachedCoefficient(x,betaMinus,betaPlus)-signAttachedCoefficient(y,betaMinus,betaPlus)| <= max(|betaMinus|,|betaPlus|)*|x-y|`.
+
+The proof explicitly handles the two cross-zero cases; **it does not incorrectly treat signAttachedCoefficient as a linear function of c**. By the already-proved unique physical small/rough product, this pointwise Lipschitz result yields the true finite physical coefficient estimate
+
+`sum_(q in Q) |rho_comp(q)-rho_raw(q)| <= B_small * sum_(d in rough) |compiled(d)-fixedRoughCoefficient(d)|`,
+
+where `Q=smallRoughModuli(actualSmallRosserSupport,rough)` and `B_small=sum_(a in actualSmallRosserSupport) max(|actualSmallRosserMinus(a)|,|actualSmallRosserPlus(a)|)`. The beta norm is **the actual Rosser provider's**: a small slot with both weights zero contributes zero, so no artificial factor `#Q` appears. This is a precise new reduction of the previous *physical* compiled-minus-raw L1 criterion to the *rough* coefficient change.
+
+Composing it with the actual original U8 rank-3 signed PP difference and positive-modulus exact-primitive-mean L1 lemma gives
+
+`|E_U8(Q,rho_comp)-E_U8(Q,rho_raw)| <= card(original_U8_arithmeticTriples) * B_small * sum_(d in rough)|compiled(d)-raw(d)|`.
+
+All original U8 sorted occurrence labels (including p2=q), the complete physical products, the same Q, and exact coprime mean remain untouched. This compares TWO coefficients on the SAME common carrier; the predecessor raw-zero-extension theorem is separately needed to compare against the smaller raw carrier. No final compiler policy, coefficient difference budget, or PP saving is claimed.
+
+### Checks and outstanding obligations
+
+- GitHub proof and VERIFY readback matched both blobs. Source lexical forbidden-escape scan: 0; brackets: balanced. Verify import ordering remained 56 imports before every `#check` (registered only).
+- Independent signed integer-slope finite algebra: **14,641/14,641** crossings/sign combinations with 0 errors. Independent toy cutoff-separated product family with exact integer-scaled beta and rough coefficients: **240/240** physical L1 inequalities, 0 errors. These are **not** Lean, not exact Rosser producer execution and not a proof of the true source's bound.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axioms, Codex, heavy producer. The SOURCE_ONLY file imports previous uncompiled SOURCE_ONLY proof material; elaboration risk remains, and there are no new GREEN nodes.
+- **(M):** `EXTERNAL_INPUTS.json` remains exactly Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: record only, no implementation or axiom. No production module, manuscript, other task, excluded 87-domain node, toolchain, PR or master edit.
+- **Next strict entry:** bound `B_small` using the actual Rosser active-support predicate `d<L`; then inspect the genuine causal frozen rough coefficient producer and derive a **real** bound on `sum|compiled-fixedRaw|` (not a mere named hypothesis). Identify physical and auxiliary levels, complete `rho_T,Q_T`; otherwise this norm inequality is not a paid discrepancy. Independently open: full marked/HB source, complete product=T exceptions, nonzero shifted divisor moments, actual W_T quantitative Fourier L1/H/Fubini uniform for growing m(N), empty Gamma, high-rank/enhanced and complete same-rho PP. **P3.6 stays YELLOW.**
