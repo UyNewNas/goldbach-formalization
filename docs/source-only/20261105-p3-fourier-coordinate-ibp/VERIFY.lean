@@ -48,6 +48,7 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 
 import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 import ImbalancedChen.P3ActualU7PhysicalOffshift
+import ImbalancedChen.P3ActualU9PhysicalOffshift
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -458,3 +459,15 @@ import ImbalancedChen.P3ActualU7PhysicalOffshift
 #check ImbalancedChen.P3ActualU7PhysicalOffshift.actualU7PhysicalOffshift
 #check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_two_ranks_same_rho_offshift
 #check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_original_marked_same_rho_offshift
+
+-- Original U9 marked 3 ordered branches, complete product and same signed rho.
+-- SOURCE_ONLY / NOT executed by Lean, Lake or kernel.
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_order_product_lt
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_order_shift_pos
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_physical_weight_shift_pos
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_order_no_diagonal
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_original_no_diagonal
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actualU9OrderOffshift
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_order_same_rho_offshift
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_switched_same_rho_offshift
+#check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_physical_three_PP_same_rho_offshift
