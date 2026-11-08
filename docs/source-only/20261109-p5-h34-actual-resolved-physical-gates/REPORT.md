@@ -2,9 +2,9 @@
 
 Date: 2026-11-09 (China). Dedicated branch: `chatgpt/p5-h34-request-admission-20261105`.
 Incoming verified HEAD: `d94fefa12d56fff2433ac5a0500ff76e7b06e2c5`.
-New mathematical source commit: `d58d92ab4df5b4c88d336fdcf055451d808021be`.
+New mathematical source commit: `61d28027d58e6e706c6bca0bf0e662c297b61c11`.
 Source path: `docs/source-only/20261109-p5-h34-actual-resolved-physical-gates/Part5OriginalH430ActualResolvedPhysicalGates.lean`.
-Source Git blob: `fc7d45762d4eba0ece9baf5b6acb1381b35c6fed`.
+Source Git blob: `e9a35d6a746ba9004f95c4bc69b933a6d0d4ee75`.
 Fixed manuscript: `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`, `paper/source/manuscript-body.tex`.
 Toolchain retained: Lean `v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
 
@@ -14,7 +14,7 @@ Toolchain retained: Lean `v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd
 
 Previous source-only packet `d877089` had a legitimate exact pushforward from real resolved request-list Fin positions to a finite marked-product sigma, and its `activeProduct_Theta_pos` required **external caller-supplied geometric gates**: each actual product d > 0, and Q/d > 1. This new packet removes those gates **from that particular manuscript-internal consumer**, not by postulating them, but by using the actual `rootHistory_support` theorem and its original root/precision/tau/prime window.
 
-- `actual_level_parent_product_pos` derives true parentProduct > 0 for every generated level-list occurrence. Its proof projects the literal `parentWindow_logs` lower bound from `rootHistory_support`. It does not impose a new positive-product field.
+- `actual_level_parent_product_pos` derives true parentProduct > 0 for every generated level-list occurrence. Its proof projects the literal parent-product positivity field of `parentWindow` from `rootHistory_support`. (The distinct `parentWindow_logs` lemma controls residualLevel, NOT the product itself.) It does not impose a new positive-product field.
 - `actual_level_quotient_gt_one` uses the *same root-specific physical Q*, exact `Q=d*N^L`, and the already-proved `frozenResidualFloor_pos <= L`. Because N>=4, it derives `(N:Real)^L > 1` and exactly `Q/d > 1`. There is no fictitious q=d identification.
 - `activeProduct_Theta_pos_from_root_geometry` passes these two derived gates into the installed `activeProduct_Theta_pos`. Only the genuine geometric root assumptions and **nonemptiness of the actual resolved level** remain. No arithmetic selected-count source has been added to the hypotheses.
 
@@ -29,7 +29,7 @@ Real manuscript-internal obligations also remain: request-level CLOSED-CELL coun
 ## Verification and execution limits
 
 - Authenticated repository write permission, prior branch HEAD, source-only scope and original 20261105 REPORT/REGISTRY/EXTERNAL_INPUTS were read. Existing 20261109 resolved-product source, the exact `rootHistory_support` and all-action source were inspected. This is a fast-forward on the h34 branch only; no merge, force push or production import change.
-- Source blob was verified by reading it back at the mathematical commit. Static forbidden-proof-escape scan was run before submission. These are TEXT checks, not Lean elaboration, kernel replay or transitive axiom audit.
+- The original mathematical source commit `d58d92a` was followed by corrective source commit `61d2802`: inspection of the actual `parentWindow_logs` declaration exposed a misplaced projection. The corrected source directly uses `parentWindow.2.1` to obtain `parentProduct > 0` and opens the original geometry/carriers namespaces explicitly. The corrected source blob was read back at the correction commit. Static forbidden-proof-escape scan was run before submission. These are TEXT checks, not Lean elaboration, kernel replay or transitive axiom audit.
 - Container has Git but **no lean/lake/elan executables**. `git ls-remote` against GitHub failed because `github.com` DNS could not be resolved. The pinned Lean/mathlib dependencies therefore were not provisioned for compilation.
 - Existing full-root CI does not automatically install source-only modules; it was not triggered just to manufacture an unrelated green check. No CI configuration or dependency change. This packet has **NOT** passed Lean/Lake compile, kernel replay or transitive-axiom audit. Prior finite numerical430 and inherited certificates remain **UNEVALUATED**. No green node.
 - No `sorry`, `admit`, custom `axiom`, `unsafe` proof or `native_decide` workaround introduced.
