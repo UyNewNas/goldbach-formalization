@@ -1302,3 +1302,35 @@ The last correction is essential: it is the difference between exact coprime mea
 ### Concrete next entrance
 
 The next internal gap is not another reformulation of the U8 finite identity. Use the real physical sieve constructor to bind `Q_T` and the **same integer** `rho_T`, then prove and pay a signed or absolute *modulus-weighted* bound for the U8 unit-pair branch (the existing `N^(2/3)` pair-count bound by itself does not do it). In parallel the genuine all-marked/HB PP atom compiler still needs occurrence IDs, fine labels, full marked product r, restoring c, causal whole-box, complete HB sources, empty Gamma mother words and high-rank/enhanced coverage. After binding them, pay HB product=T exceptional mass, nonzero-shift mixed divisor moments, original `W_T` continuous Fourier L1/Fubini/common H uniformly in growing m(N), strict endpoints and final absolute arbitrary-log PP. This packet stays YELLOW; U8 unit source is BLUE limited SOURCE_ONLY.
+
+## Successor SOURCE_ONLY increment — genuine U8 unit physical modulus L1 (2026-11-08 UTC)
+
+- **Actual checked baseline:** `e0e4d9a457fa8187c7c76f22bd103e2551efec4e`; no competing writer observed before this proof source write.
+- **Proof commit:** `cacfd568914464fa495a275912af42c6f2a3b5a5` (`[skip ci]`). New source: `P3ActualU8UnitPhysicalNorm.lean`, 116 lines, exact Git blob `f7f4a47d03edba7b88ef1f07a97772069b813b7b`.
+- **Unchanged fixed manuscript:** `9731290e8f53cffda44129906cde6a965eaa869b`, distribution completion §1 count/coprime mean and §4(F); pinned Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+- **Real imported source APIs:** `p5z_labelledDistributionError`, `p5z_labelledCongruenceMass`, `p5z_labelledCoprimeMass`, and existing actual `currentChenUpsilon8_unitFibres_card_le_power`. This is not a copied abstract surrogate family.
+
+### Actual mathematical increment
+
+For every **positive physical sieve modulus** q, both the exact labelled congruence count A_q and the exact coprime mean B_q/phi(q) lie in [0,#S], because every original unit-pair occurrence has indicator weight one and phi(q)>=1. Crucially, **|A_q-B_q/phi(q)| <= #S, not 2#S**. The source candidate `labelled_unit_signed_error_le_l1` proves by finite sum triangle and one unchanged signed rho:
+
+```
+|sum_(q in Q) rho(q) * (A_q - B_q/phi(q))|
+   <= #S * sum_(q in Q) |rho(q)|.
+```
+
+The concrete `actual_u8_unit_error_le_physical_l1` then uses the ALREADY EXISTING actual unit-pair injection `#S_unit(N) <= N^(2/3)` to derive:
+
+```
+|E_U8_unit(N;Q,rho)| <= N^(2/3) * sum_(q in Q) |rho(q)|.
+```
+
+Both the original occurrence labels and exact coprime mean remain intact; q=1 as a **quotient** is not conflated with a physical sieve modulus 1 or an empty Gamma mother. This is a genuinely quantitative finite reduction, **not** a complete PP estimate. In particular, it does **not** prove the actual sieve rho_T has sufficiently small physical L1 norm. An O(N^alpha) norm with alpha<1/3 would give a power reserve, but this is a criterion to establish from the real coefficient, NOT an assumption already paid.
+
+### Checks and limitations
+
+- Independently modelled 147 targets N=11,13,...,303, 748 small actual-like unit-pair labels, 1,764 physical modulus discrepancy terms (785 negative-rho) over q=1..12: **zero mismatches** for the per-modulus and full signed norm inequalities; physical q=1 cancellation checked 147 times. The model does **not** execute the Lean selector or prove source equality.
+- Exact source file read back from GitHub with blob `f7f4a47d03edba7b88ef1f07a97772069b813b7b`; escape-token scan of the new source found zero forbidden proof escapes.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, transitive axiom audit, Codex or heavy numerical producer. New `#check` names are registered in `VERIFY.lean` only, not executed. Nothing is promoted GREEN; elaboration and imported SOURCE_ONLY paths remain risks.
+- `EXTERNAL_INPUTS.json` unchanged: (M) remains only registered, not formalized or axiomatized. No new axioms, manuscript/production/toolchain/lock changes, excluded full87 work, PR or CI action.
+- **Next exact entrance:** identify real integer rho_T and its physical Q_T and prove a useful norm/cancellation on that *literal* coefficient for this unit family; continue all-marked/HB atom compiler, nonzero-shift mixed moments, exceptional HB product=T, and uniform original W_T Fourier L1/H with growing m(N). P3.6 stays YELLOW.

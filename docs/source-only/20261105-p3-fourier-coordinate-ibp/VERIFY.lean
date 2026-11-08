@@ -51,6 +51,7 @@ import ImbalancedChen.P3ActualU7PhysicalOffshift
 import ImbalancedChen.P3ActualU9PhysicalOffshift
 import ImbalancedChen.P3ActualU8SharpKOffshift
 import ImbalancedChen.P3ActualU8UnitQuotientOffshift
+import ImbalancedChen.P3ActualU8UnitPhysicalNorm
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -499,3 +500,7 @@ import ImbalancedChen.P3ActualU8UnitQuotientOffshift
 #check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_unit_same_rho_offshift
 #check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actualU8PrimeUnitOffshift
 #check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_prime_unit_same_rho_offshift
+
+-- P3.6 actual U8 quotient-one positive physical-modulus L1 bounds; NOT EXECUTED.
+#check ImbalancedChen.P3ActualU8UnitPhysicalNorm.labelled_unit_signed_error_le_l1
+#check ImbalancedChen.P3ActualU8UnitPhysicalNorm.actual_u8_unit_error_le_physical_l1
