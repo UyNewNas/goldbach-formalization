@@ -1170,3 +1170,31 @@ This preserves the original signed rho, q, full Möbius factor, arbitrary positi
 
 **Next actual entrance:** Identify the real marked/HB PP atom compiler, extract its exact residual occurrence IDs, label word, marked product r and restoring scalar c, and bind true physical Q_T and rho_T. Classify whether an empty residual word is really emitted by each source and quantitatively pay any surviving unit-residual singleton. Separately prove nonzero full-shift signed modulus mixed-moment budget, original W_T continuous Fourier L1/Fubini/common H uniform for growing m(N), and causal, all-HB, empty-Gamma-mother, high-rank/enhanced source coverage. P3.6 remains YELLOW.
 
+## Successor SOURCE_ONLY increment — two literal original prime words eliminate the complete-product diagonal (2026-11-08 UTC)
+
+- **Verified recovery baseline:** `4d2ec676ec57f7216f527ba710c442547c6f393f`, branch `chatgpt/p3-internal-original-w-20261105`.
+- **Actual proof commit:** `20cfa56d801aa7aa98bc0b9615cb26943f424e61` (`[skip ci]`), 147 lines in `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualOriginalMarkedPrimeNoDiagonal.lean`, Git blob `a8ee2a1761430cd1e1a030f6dad23ad756383d80`.
+- **Manuscript pinned:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`: completion note §1 original fine-prime exclusion, §3 (T) marked/residual normalization, §4 (F) full complete-product exception. Mathlib lock unchanged.
+
+### Genuine manuscript-internal mathematical increment
+
+The earlier original-prime residual-only packet left a possible singleton when the residual slot word was empty and the unconstrained external marked integer was `r=N`. This packet **does not** silently identify an arbitrary `r` with a real marked prime product. Instead, it constructs a **standalone** Lean candidate importing the existing production `ImbalancedChen.ActualPrimeFineLabelSortedSelector` directly. The marked and residual prime lists must EACH be members of the literal `actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)`, at possibly different `τm,τr`. Both alphabets exclude every prime dividing the same physical target `N`.
+
+From genuine slot-box membership, a nonempty list has a prime `p ∤ N`. Yet if `marked.prod * residual.prod=N` then every prime in either list divides `N`. Hence any nonempty combined slot word excludes the entire exceptional fibre. When both words are empty, their complete product is exactly 1. Therefore for **N≠1**, the full marked-prime × residual-prime source has **no** complete-product=N exceptional fibre. A final candidate specializes to the literal full-product Möbius weighted count-minus-exact-coprime-mean, after the complete finite **same signed physical `rho(q)`** modulus sum. No mass estimate, positivity, or Fourier amplitude bound is required for this exact ZERO fibre.
+
+This genuinely strengthens the previous residual-only singleton classification **on the exact domain where the outside marked factor is itself a product of actual target-excluding original prime slots**. It is NOT a blanket conclusion about actual marked compiler output, arbitrary marked integer `r`, HB integer convolution atoms, an empty Gamma mother-word or the full original PP theorem. Physical `Q_T,rho_T` and external scalar `c` remain to be identified with the true compiler. In particular, we did not replace the user's excluded dynamic-parent source.
+
+### Source and checks
+
+Five candidate declarations: `original_prime_box_product_not_dvd`, `marked_residual_full_product_ne_target`, `marked_residual_target_fibre_empty_of_nonempty`, `marked_residual_target_fibre_empty_of_target_ne_one`, `marked_residual_same_rho_exact_diagonal_zero`. The literal kernel in the final declaration uses complete physical product in both congruence and exact coprime mean. The candidate uses no new axioms or placeholder proof premise.
+
+- GitHub original branch HEAD checked immediately before proof commit, and proof file reread with Git blob `a8ee2a1761430cd1e1a030f6dad23ad756383d80`. Existing production `ActualPrimeFineLabelSortedSelector.lean` and its slot-box facts were read directly. Root/packet/ancestor `AGENTS.md` probes returned NOT_FOUND; no implicit constraints inferred.
+- Independent finite JavaScript exhaustive sanity sweep: **20,808/20,808** products for target N=1..72, marked/residual words length up to 2 from small primes excluding p|N, with one correct both-empty N=1 boundary and no violations. Removing the exclusion has the counterexample N=6, marked=[2], residual=[3]. This did NOT execute the Lean definitions or a compiler.
+- Static banned proof-escape token scan: 0; parenthesis depth balanced. `VERIFY.lean` records five checks but does not run them.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, numerical producer. No green status.
+- **IMPORTANT SOURCE_ONLY packaging caveat:** many earlier source-only files import `ImbalancedChen.P3...` modules that are stored only under `docs/source-only`, not the production `ImbalancedChen/` path. Such imports will not resolve in a normal Lake build without future staging/mapping. This new proof file instead imports an existing production module. It remains UNCOMPILED and may have elaboration issues.
+- `EXTERNAL_INPUTS.json` unchanged; medium estimate (M) remains REGISTER_ONLY_NOT_IMPLEMENTED_NOT_AXIOM. No upgrades or other workstreams touched.
+
+### Exact next entrance
+
+Read the actual marked/HB atom generator and supply a genuine compiler-to-literal-prime-box membership proof before applying the new zero diagonal to a marked source. The HB integer source and arbitrary external r do **not** inherit it. Then pay the nonzero complete shift mixed divisor moment, real physical Q_T/rho_T, the original W_T uniform Fourier L1/Fubini/H, and the remaining causal/whole-box, full HB, empty Gamma and enhanced branches independently.

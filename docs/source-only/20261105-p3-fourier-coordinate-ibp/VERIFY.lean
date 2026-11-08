@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal
 import ImbalancedChen.P3ActualCanonicalFrozenSplitPayment
 import ImbalancedChen.P3ActualFrozenCanonicalUnsortedGamma
 import ImbalancedChen.P3ActualFrozenTaggedLabelCompiler
@@ -438,3 +439,12 @@ import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 #check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_full_target_fibre_exact
 #check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_full_target_exception_exact
 #check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.weightedSortedPP_target_N_all_original_words
+
+-- Actual original marked and residual fine-prime slots: both portions
+-- exclude divisors of the physical target; exact full-product diagonal.
+-- This is a standalone source candidate; Lean checks NOT EXECUTED.
+#check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.original_prime_box_product_not_dvd
+#check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_full_product_ne_target
+#check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_target_fibre_empty_of_nonempty
+#check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_target_fibre_empty_of_target_ne_one
+#check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_same_rho_exact_diagonal_zero
