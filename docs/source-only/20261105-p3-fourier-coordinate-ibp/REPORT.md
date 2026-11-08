@@ -1646,3 +1646,33 @@ Here `Q` is the SAME actual small/rough physical carrier for both terms and each
 - No production, manuscript, main, toolchain, PR, other-task, or excluded full87 dynamic-parent files changed. The complete original final integer `rho_T` and licensed physical `Q_T` remain unknown; the new arbitrary other policy is NOT asserted to be that final compiler. The support XOR may be large, and `ceil(L)` can be a positive power of N, so arbitrary logarithmic PP saving remains unproved.
 
 **Next precise internal entry:** identify a non-excluded genuine compiler policy and prove a real structural/signed bound on the actual support symmetric difference with the original historical fifth policy. Do not assume mismatch smallness from a set name. Separately: original physical `W_T` admissibility and uniform Fourier L1/H/Fubini in growing m(N), HB all original sources, exact complete product=T, mixed shifted moments, causal whole boxes, empty Gamma, high-rank/enhanced and final same-rho PP remain internal. Overall P3.6 YELLOW; this limited proof source BLUE only.
+
+## Successor P3.6 SOURCE_ONLY — actual signed first-exit rough-response U8 (2026-11-08 UTC)
+
+- **Actual checked baseline:** `241e383616be04c04a6416efbe7c41f8e16efb04`, branch `chatgpt/p3-internal-original-w-20261105`; **source commit**: `b3341b6e80a446f270711d978721994b3fad5c7c` with `[skip ci]`. No branch move was observed at the source write lease and its subsequent readback.
+- **New source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8FirstExitSignedResponse.lean`, **191 lines**, Git blob `ab51a4f64ae737c60230f9aa244bf73bb1b7f79b`. Updated `VERIFY.lean` Git blob `f62772a0fb7527b43f2c0817f153d24117a54858`: 61 imports precede all 355 audit `#check`; 3 new declarations are registered, **never executed**.
+- **Fixed manuscript**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` around lines 256–280 (exact signed PP, primitive-coprime mean), 450–479 (positive/negative small-Rosser attachment), and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), lines 151–171 (Fourier, physical tail). Mathlib pin `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
+
+### New nontrivial exact finite arithmetic identity
+
+For each literal first-exit policy P on the **same** roughPrimeUniverse, its integer coefficient is exactly `mu(b)` on `S_P=firstExitRetainedModuli P carrier`, zero off `S_P`. Define the actual physical **signed** source response of the rough modulus b:
+
+`R_U8(b)=sum_(a in actualSmallRosserSupport) signAttachedCoefficient(mu(b),betaMinus(a),betaPlus(a)) * [A_U8(a*b)-B_U8(a*b)/phi(a*b)]`.
+
+Here `A_U8(q)` is the complete original labelled sorted `arithmeticTriples N` congruence mass, `B_U8(q)` is its exact coprime mass; the same original physical modulus a*b appears in both. There is no restriction or renormalization by individual root fibres.
+
+The new `firstExit_physical_signed_response` uses already-implemented *unique small/rough product factorization* and the actual sign-sensitive attachment to obtain an exact sum by b over the actual retained support; **both signed beta weights are retained**. Then `firstExit_physical_signed_support_difference` proves for any two genuine first-exit policies P1/P0 (same rough, small and physical carrier):
+
+`E(P1)-E(P0) = sum_(b in R ∩ (S1\S0)) R_U8(b) - sum_(b in R ∩ (S0\S1)) R_U8(b)`.
+
+The new `original_fifth_u8_signed_support_difference` specializes to the *literal original historical fifth* `P1OriginalHistoricalPhysicalCoefficient.finalPolicy` and the real original `P5U8SharpKSource.physicalWeight` / `Part3.primeProductSignedError 3 N N`. Compared with the predecessor's `#arithmeticTriples * ceil(L) * #support-XOR` upper bound, the full signed arithmetic response remains visible for future cancellation. **No cancellation estimate is claimed**; the other policy is not identified with a final global compiler.
+
+The identity preserves the original rank-three ordered labels and possible p2=q diagonal, exact primitive-coprime means, complete physical products, original minus/plus small Rosser sign switch, and the same Q for both coefficients. It neither grants the other policy the pointwise majorant nor proves that the non-smooth U8 indicator belongs to the admissible smoothed PP class.
+
+### Checks and limits
+
+- Full source and VERIFY read back directly from the pushed source commit with the exact Git blobs above; forbidden proof escape token scan = **0**, lexical delimiter stack = **PASS**; VERIFY import order **PASS**. No AGENTS.md at checked root, ImbalancedChen, docs, source-only and packet paths.
+- Independent Python **exact Fraction** finite regression: **2,400/2,400** signed identities, zero mismatches. Includes 2,176 tests with positive oriented mismatch set, 882 with negative oriented mismatch set, 2,164 nonzero signed deltas, repeated prime labels and 12,000 occurrences of p2=q. The toy has 16 distinct physical moduli, honest phi/coprime mass and signed small weights. It is **NOT** execution of the true first-exit producer, real Rosser weights, Lean declarations or the real manuscript estimate.
+- **NOT RUN**: Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. The three new declarations are SOURCE_ONLY, may fail elaboration, and create **no GREEN** status.
+- `EXTERNAL_INPUTS.json` unchanged Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted medium estimate (M) remains exact-version/hypothesis/call-site **RECORD ONLY**, not implemented or axiomatized. No new axioms, no toolchain/lockfile, production, manuscript, main, other automation or excluded full87 edits.
+- **Next exact entry**: identify a permitted non-excluded real causal comparison policy and control these two actual signed rough-response sums by source-specific arithmetic, rather than assuming the support XOR is small. Independently discharge original W_T ContDiff/integrated derivative uniformity in T and growing m(N), all marked/HB source families, complete-product=T exception, nonzero shifted divisor moments, empty Gamma, high-rank/enhanced and actual same-rho arbitrary-log PP. Overall P3.6 YELLOW.
