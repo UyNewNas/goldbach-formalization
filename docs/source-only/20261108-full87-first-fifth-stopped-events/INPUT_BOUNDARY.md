@@ -1,0 +1,13 @@
+# INPUT_BOUNDARY — actual fifth admission stopped-event packet
+
+INTERNAL SOURCE_ONLY candidate, not a conjectured external oracle. It consumes the genuine original RAW and actual LICENSED sixth-policy producers at the same fourth parent and the existing `stoppedTest 8`, `roughPrimeUniverse`, `attachedLeafTest` and `highQTest X F`. The fourth prefix length is proved from the actual List membership; it is NOT a caller-provided substitute certificate.
+
+The first fifth query is exactly `R (!positive) (p :: pre)` or `S (!positive) (p :: pre)`, and a selected child's `stoppedTest` runs on the literal suffix **after** that occurrence. Both-admitted events retain a signed stopped difference and can include sixth/seventh carrier exhaustion. Exclusively admitted events use only their original policy's own stopped subtrees. No event is tagged with an unrelated eighth mask and no geometric nullset is equated with arithmetic zero.
+
+Original small Rosser sign and physical full-q attachment are unchanged: `attachedLeafTest N cap 1 w L (highQTest X F)` contains beta_±(a) and the STRICT test `X < a * selected.prod`. All prior five frontier invoices remain independent. The new first-fifth invoice replaces, rather than duplicates, the earlier stopped invoice. No quantitative `o(H_N)` bound or reserve payment is supplied.
+
+EXTERNAL current-PP (not used or proved): manuscript pin `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, §4 current-PP. Accurate logical input: weighted AP count minus exact modulus-dependent coprime mean `X_W^(q)/phi(q)` with the SAME signed rho_N(q), fixed labelled original p_i >= c N^a_* (a_*>0) and product O(N), only licensed geometric families (uniform fixed polylog Euler-derivative bounds), allowed Gevrey, retained-phase, square and common-interval conditions; `O_{A,W}(N (log N)^(-A))` under those hypotheses. REGISTERED_NOT_PROVED. No new axiom or replacement interface was introduced here.
+
+Frozen Lean leanprover/lean4:v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958, c=49044063/25000000, K=8452171/1250000. SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
+
+Remaining internal: real quantitative fifth-event bounds in the same H_N, all physical frontier/outside charges and raw/filtered losses, true saved87 witness/parent/history/gain, proper PP integer X and its arithmetic corrections, ordinary integral, rank9, changed/tagged, independent compiler/density reserves, compilation and audit.
