@@ -1334,3 +1334,33 @@ Both the original occurrence labels and exact coprime mean remain intact; q=1 as
 - **NOT RUN:** Lean, Lake, CI, kernel replay, transitive axiom audit, Codex or heavy numerical producer. New `#check` names are registered in `VERIFY.lean` only, not executed. Nothing is promoted GREEN; elaboration and imported SOURCE_ONLY paths remain risks.
 - `EXTERNAL_INPUTS.json` unchanged: (M) remains only registered, not formalized or axiomatized. No new axioms, manuscript/production/toolchain/lock changes, excluded full87 work, PR or CI action.
 - **Next exact entrance:** identify real integer rho_T and its physical Q_T and prove a useful norm/cancellation on that *literal* coefficient for this unit family; continue all-marked/HB atom compiler, nonzero-shift mixed moments, exceptional HB product=T, and uniform original W_T Fourier L1/H with growing m(N). P3.6 stays YELLOW.
+
+
+## Successor SOURCE_ONLY increment — actual U8 direct unit source payment, prime-only same-rho insertion (2026-11-08 UTC)
+
+- Baseline HEAD: c4d0bf71dbd1c2770add4f89a519482a7ff85e19 on chatgpt/p3-internal-original-w-20261105; read current REPORT, REGISTRY, EXTERNAL_INPUTS, authentic U8 source and the pinned manuscript. Root, docs, source-only and packet AGENTS.md paths not found; no inferred hidden restrictions.
+- Genuine proof source: P3ActualU8DirectUnitPayment.lean, 148 lines, blob ea258443d84a53874835aa8334cff910ba827cf7. Proof commit 8750778c8bdf7ac78414998b09e78f3bdb9f0bfa with [skip ci]. VERIFY.lean blob 3c241b45c1118bb92c92c73b9caff1296c56f557; three new imports-first checks REGISTERED but NOT RUN.
+- Paper pin: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b; completion module section 1 and 4(F), manuscript-body original U8/PP. Mathlib pin e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 unchanged.
+
+### Precise mathematical contribution and correction
+
+The previous U8 unit physical L1 theorem is only a conditional reduction; it is NOT necessary to spend its unknown actual physical rho L1 for the ORIGINAL U8 upper COUNT. The already proved-in-source identity is literal U8 count = actual prime-quotient triple prime mass + actual quotient-one unit-pair count. The latter is a direct positive source-count error with upstream card <= N^(2/3); it is not the physical modulus q=1 and is not an empty Gamma mother. This does not claim global unit-pair PP as a separate distribution statement.
+
+The new first candidate uses the real arithmetic productWeight_sum and arithmetic_filter_prime_eq to prove that its original positive-family small prime PP cutoff loss is <= the actual small-Goldbach-prime triples count, provided physical presieve cutoff z <= N^(1/5). The sieve loss P<z is strict, whereas the actual small source uses P<=N^(1/5), so no endpoint is dropped. Original product labels, inclusive repeated terminal prime, true multiplicities and centre mask are retained.
+
+The second candidate uses the existing noncircular pointwise sieve upper majorant for ALL n and positive-family PP insertion to derive a new genuine finite U8 upper counting inequality:
+    U8 <= original rank-three mass*physicalDensity(Q,rho)
+       + exactCoprimeCorrection(Q,rho)
+       + true Part3 primeProductSignedError(Q,rho)
+       + #actualSmallGoldbachPrimeTriples + #actualUnitFibres.
+The same signed physical rho appears in count, coprime mean and density, with the complete modulus sum before absolute value. No separate unit-family PP error or L1 hypothesis is inserted.
+
+The third candidate uses the existing actual source-error power payment to bound BOTH literal source-count errors by epsilon*singularNormalization for all sufficiently large N; the threshold precedes z, Q and rho. It does not invent a target-equivalent PP premise. The remaining prime-triple PP is still an analytic obligation.
+
+### Checks, trust boundary and next entry
+
+- GitHub proof and VERIFY readback matched blob ea258443d84a53874835aa8334cff910ba827cf7 and 3c241b45c1118bb92c92c73b9caff1296c56f557, three declared names present, imports before checks. Forbidden proof escapes 0, lexical delimiters PASS.
+- Independent Python exact-Fraction arithmetic model: 341 N targets 60..400, 14,760 tuple-modulus terms, 8 small-prime examples and 3,643 model unit-pair occurrences; signed physical rho(1)=2, rho(2)=-1/2, rho(3)=-1/4, rho(5)=-1/4 has pointwise kernel >=1; observed 0 mismatches. This is a broad finite model, NOT the literal Lean U8 selector, and not a Lean proof.
+- NOT RUN: Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. All new and upstream nodes remain SOURCE_ONLY/UNCOMPILED/KERNEL_UNVERIFIED; no GREEN promotion.
+- EXTERNAL_INPUTS.json unchanged at Git blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab. Research (M) remains RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM. No new axioms, target-equivalent assumptions, default/production changes, manuscript or lockfile edits, excluded full87 parent, other tasks, PR or CI changes.
+- Next: bind literal physical Q_T and integer rho_T from the frozen upper sieve policy into the genuine pointwise majorant and cutoff z<=N^(1/5), then into the rank-three actual PP. Do not confuse the physical sieve level with auxiliary cover. Independently complete marked/HB compiler, full HB product=T exception, nonzero mixed divisor moments, original W_T continuous Fourier L1/Fubini/H and growth in m(N), causal/whole-box, empty Gamma mothers and high-rank/enhanced. P3.6 remains YELLOW.
