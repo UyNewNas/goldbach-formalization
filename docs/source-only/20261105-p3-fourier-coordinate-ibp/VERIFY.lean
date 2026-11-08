@@ -52,6 +52,7 @@ import ImbalancedChen.P3ActualU8DirectUnitPayment
 import ImbalancedChen.P3ActualU8AttachedPhysical
 import ImbalancedChen.P3ActualU8CommonCarrierPP
 import ImbalancedChen.P3ActualU8CompiledDelta
+import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 
 
 
@@ -540,3 +541,11 @@ import ImbalancedChen.P3ActualU8CompiledDelta
 #check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_signed_PP_difference
 #check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_integer_compiler_raw_delta
 #check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_integer_compiler_delta_l1
+
+-- P3.6 actual even-retaining first-exit tree coefficient: SOURCE_ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_support_eq_raw
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_coefficient_eq_raw
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_physical_eq_raw
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_physical_majorant
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_actual_u8_signed_insertion
+#check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_actual_u8_PP_common_eq_raw
