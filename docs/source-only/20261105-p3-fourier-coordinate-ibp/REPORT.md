@@ -1399,3 +1399,36 @@ This binds an actual **raw** real-valued Rosser attachment, **not** the manuscri
 ### Specific successor
 
 Locate the genuine finite causal `retainOdd_N` compiler and the **FINAL** physical `Q_T` and integer `rho_T`, and prove their identity to the parameterized raw attachment with its exact support/levels; derive `ceil(z_T)≤N^(1/5)` at one target threshold. Then attach the actual U8 prime-three absolute arbitrary-log PP bound and physical density/coprime budget, without inventing the required analytic saving. Independently continue all-marked/HB atom source dictionary, product=T HB exceptions, nonzero-shift mixed divisor moments, original `W_T` Fourier L1/Fubini/H uniform over `m(N)`, causal whole-box and empty Gamma mothers, high-rank/enhanced, and full same-rho PP assembly. P3.6 remains YELLOW, this particular RAW coefficient-insertion candidate BLUE only.
+
+## Successor P3.6 SOURCE_ONLY — literal attached N-dependent upper and rho_0 ceiling (2026-11-08 UTC)
+
+- **Checked recovery baseline:** c536a15ac3814c8153b8ce4d4fcedd1c9638fcb4 on chatgpt/p3-internal-original-w-20261105, NOT the obsolete de582e6 branch; last handoff REPORT, REGISTRY, EXTERNAL_INPUTS and actual P3ActualU8RawPhysicalSieve/DirectUnitPayment sources were read. Root and ancestor AGENTS.md paths returned NOT_FOUND. No same-branch concurrent edit was seen before proof push.
+- **Actual proof commit:** 5480b5126c8f2082a2fd281cf6a089b09e0719b9 [skip ci]. New file P3ActualU8AttachedPhysical.lean, 115 nonempty/terminal-line-adjusted lines (source split length 116), Git blob e16dd2c3ac1c958cf1598af920d08c31604b2f68. VERIFY new blob b77e249842e59436d444072072df1d0af0300cff; REGISTRY blob 7e160d9aa466a8c371b2639df05ec4ca48d33c0e. Three new #check declarations registered only; none executed. The entire commit changes only these three P3 files.
+- **Pinned manuscript:** UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex line 364 (rho_0=19/96), lines 256-280 (same signed PP/coprime mean), 462-467 (physical sieve upper), and paper/source/modules/distribution-prime-product-completion-20261010.txt §4 (F). Mathlib pin unchanged at e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.
+
+### Genuine mathematical/source contribution
+
+The prior raw coefficient bridge allowed arbitrary w,z,L, requiring the hypothesis ceil(z) <= N^(1/5) at each target. The actual existing production source ImbalancedChen/ActualUpperCountingInputs.lean ALREADY defines a nontrivial N-dependent attached pair:
+
+    Q_N = attachedUpperModuli nu r epsilon retain cap N
+    rho_N = attachedUpperCoefficient nu r epsilon retain cap N
+    w_N = N^(nu epsilon^2), z_N = N^(nu r), L_N = N^(nu epsilon).
+
+This packet now uses those exact source functions, not an independently copied Q/rho. The existing attachedUpperCoefficient_majorant proves the pointwise majorant without requiring any PP discrepancy. The source-only candidate eventually_attached_u8_cutoff uses the existing eventually_floor_rpow_add_one_le_rpow for the strict gap nu*r<1/5 and proves the precise CEILING inequality eventually. The eventual target threshold is chosen BEFORE any retain/cap functions; their only remaining coverage condition at each N is cap(N)>=N^(nu*r).
+
+Then eventually_u8_at_attached_upper feeds this literal majorant, exact U8 labelled mass/density, original coprime correction and original rank-three Part3.primeProductSignedError into the earlier genuine direct unit-card payment. **The same rho_N** occurs in all three terms; the quotient-one fibre is not separately charged a PP/L1 norm. The analytic PP discrepancy remains an EXPLICIT unbounded term, and no sign of rho is discarded.
+
+Finally eventually_u8_at_manuscript_rho0 specializes (nu,r)=(1,19/96). Exact exponent comparison:
+
+    19/96 = 95/480 < 96/480 = 1/5.
+
+It is essential that ceiling<=N^(1/5) is EVENTUAL, not true for every N. One independent finite numerical regression checked N=2..200000 (199,999 cases): **151,467** failed the stronger ceiling inequality and 48,532 passed, so claiming it pointwise would be false. The proof candidate instead uses the pre-existing rigorous power-gap eventual lemma. An additional independent 100-digit decimal sanity check at N=2^480 (145-digit integer) found upper/z about 2 and upper-z about 3.9614081257e28. The elementary identity x=N^(1/480)>=2 => ceil(x^95)<=x^95+1<=x^96 confirms a possible large threshold; these computations are illustrative ONLY, not Lean acceptance.
+
+### Trust boundary and next entrance
+
+- New source forbidden proof-escape scan after comments: zero; lexical bracket balance passed. VERIFY imports occur before every #check; REGISTRY JSON parsed. GitHub atomic create-tree/commit/ref-write returned success for the proof commit, with exact branch-base optimistic lease.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex or heavy numerical producer. Inherited staged-only import ImbalancedChen.P3ActualU8DirectUnitPayment is not on default production path, so the source does not claim default Lake buildability. All declarations remain candidate SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED; **no GREEN**.
+- This result still has a REAL-valued attached raw coefficient with arbitrary retention/cap and an admitted cap-coverage condition. It does **not** identify the final causally frozen compiled INTEGER rho_T or physical Q_T. It does not prove actual density currentK, exact whole-family PP arbitrary-log absolute error, the nonzero-shift arithmetic mixed moment, W_T Fourier uniform L1/H/Fubini, HB product=T exceptional payment, causal whole-box, empty Gamma mothers, or high-rank/enhanced sources.
+- EXTERNAL_INPUTS.json remains unchanged, Git blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab. Research input (M) is ONLY REGISTERED, not implemented or axiomatized; no new axioms, unsafe shortcuts, production modifications, manuscript edits, excluded full87 work, toolchain or CI changes.
+
+**Next:** Trace the actual final frozen retained-prefix policy, the compiler's physical modulus carrier and coefficient (including the integer-versus-real issue), and an exact equality or a source-proved error bridge to attachedUpperCoefficient. Keep the same complete signed rho in count/density/PP and derive the final causal cap coverage. Only then tackle the genuine analytic PP saving and whole marked/HB atom compiler. P3.6 remains YELLOW; this specific attached physical and rho_0 cutoff source scope is BLUE without any compilation verification.
