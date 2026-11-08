@@ -336,7 +336,7 @@ theorem raw_minus_full_licensed_signed_eq_three_books
   let V := ∑ c : Cell,
     ((states delta n e q om N cap w z (fun _ : ℕ => (1 : ℝ)) c).map
       (licensedSignedHighQ delta n e q om N cap w L X F)).sum
-  let L := ((licensedFrontier delta n e q om N cap w z).map
+  let B := ((licensedFrontier delta n e q om N cap w z).map
     (licensedSignedHighQ delta n e q om N cap w L X F)).sum
   let D := ∑ c : Cell,
     (actualCellLedger delta n e q om N cap w z L X F c).1
@@ -347,15 +347,15 @@ theorem raw_minus_full_licensed_signed_eq_three_books
     have h := actual_raw_highQ_unowned_trim_omitted
       delta e q om N cap w z L X F
     linarith
-  have hl : L = V + W := by
-    dsimp only [L, V, W]
+  have hl : B = V + W := by
+    dsimp only [B, V, W]
     exact licensed_full_signed_eq_owned_plus_outside
       delta n e q om N cap w z L X F
   have hd : T - V = D := by
     dsimp only [T, V, D]
     exact actual_trim_to_licensed_signed_eq_ledger
       delta n e q om N cap w z L X F
-  change R - L = U + D - W
+  change R - B = U + D - W
   linarith
 
 /-- The three charges are disjoint:
@@ -379,7 +379,7 @@ theorem abs_raw_to_full_licensed_le_three_invoices
   let V := ∑ c : Cell,
     ((states delta n e q om N cap w z (fun _ : ℕ => (1 : ℝ)) c).map
       (licensedSignedHighQ delta n e q om N cap w L X F)).sum
-  let L := ((licensedFrontier delta n e q om N cap w z).map
+  let B := ((licensedFrontier delta n e q om N cap w z).map
     (licensedSignedHighQ delta n e q om N cap w L X F)).sum
   have hprior : |R - V| ≤
       rawOutsideHighQInvoice delta e q om N cap w z L X F +
@@ -387,19 +387,19 @@ theorem abs_raw_to_full_licensed_le_three_invoices
     dsimp only [R, V]
     exact abs_raw_to_actual_licensed_owned_le_separate_invoices
       delta n e q om N cap w z L X F
-  have hnew : |V - L| ≤
+  have hnew : |V - B| ≤
       licensedOutsideHighQInvoice delta n e q om N cap w z L X F := by
-    dsimp only [V, L]
+    dsimp only [V, B]
     rw [abs_sub_comm]
     exact abs_licensed_full_minus_owned_le_outside_invoice
       delta n e q om N cap w z L X F
-  change |R - L| ≤
+  change |R - B| ≤
     (rawOutsideHighQInvoice delta e q om N cap w z L X F +
       licensedProducerInvoice delta n e q om N cap w z L X F) +
     licensedOutsideHighQInvoice delta n e q om N cap w z L X F
   calc
-    |R - L| = |(R - V) + (V - L)| := by ring
-    _ ≤ |R - V| + |V - L| := abs_add _ _
+    |R - B| = |(R - V) + (V - B)| := by ring
+    _ ≤ |R - V| + |V - B| := abs_add _ _
     _ ≤ (rawOutsideHighQInvoice delta e q om N cap w z L X F +
           licensedProducerInvoice delta n e q om N cap w z L X F) +
         licensedOutsideHighQInvoice delta n e q om N cap w z L X F :=
