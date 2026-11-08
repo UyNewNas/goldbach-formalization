@@ -1612,3 +1612,37 @@ Both real physical rho functions are obtained by attaching the SAME original min
 - `EXTERNAL_INPUTS.json` unchanged at blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: (M) merely registered and not implemented or invoked as an axiom. No production, manuscript, toolchain, PR, main branch, other automations or excluded 87-domain modifications.
 
 **Next precise entry:** Identify the global final compiler's integer rough coefficient and the actual licensed physical rough carrier. Verify one-boundedness and control the exact disagreement set D relative to the literal fifth policy, or derive a genuine cancellation bound when D is not small. An unsigned cardinality criterion with a potentially polynomial `ceil L` does not pay the required absolute arbitrary-log PP estimate. W_T source-integrated Fourier L1/H/Fubini uniformly in T and m(N), full marked/HB, complete-product=T arithmetic, causal whole boxes, empty Gamma and high-rank/enhanced branches remain internal obligations. P3.6 **YELLOW**.
+
+## Successor P3.6 SOURCE_ONLY — actual first-exit Möbius support mismatch (2026-11-08 UTC)
+
+- **Verified GitHub baseline:** `d4313bda00bd6d44e9fe8d251144f4e95f371e93`; branch `chatgpt/p3-internal-original-w-20261105`. Before the proof commit and again on proof readback the branch head was checked. No concurrent branch movement was observed in those checks.
+- **Real source commit:** `59e180f21f0c10819cedd79f3e62d08cef292f65` [skip ci]. New proof `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8FirstExitSupportDelta.lean` (202 lines), Git blob `3718be60c8fd929ef064408e1f793ee9656aac26`. `VERIFY.lean` Git blob `0f18a88ed217bbca2c8824f77315670ca94166a6`; two new `#check` commands are registered but **NOT executed**. Handoff updates are a second [skip ci] commit with the branch head as the authoritative identifier.
+- **Fixed manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` lines 256–280 and 450–479, and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), lines 151–171. Pinned Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
+
+### Nontrivial actual finite refinement
+
+The previous `original_fifth_u8_disagreement_PP` applied to any separately one-bounded integer rough candidate and charged *two* per coefficient disagreement. The actual `FirstExitGenericModuli.firstExitRetainedCoefficient` is more rigid: for any genuinely retained first-exit policy `P` on the SAME original finite `roughPrimeUniverse`, its coefficient is literally
+
+`c_P(b) = if b in firstExitRetainedModuli(P) then moebius(b) else 0`.
+
+Consequently two such policies cannot assign opposite nonzero signs at a common modulus. With `S_other` and `S_fifth` their actual support sets and a fixed permitted common rough carrier `R`, put
+
+`D = {b in R : (b in S_other and b notin S_fifth) or (b in S_fifth and b notin S_other)}`.
+
+New source-level proof `firstExit_rough_delta_le_support_mismatch` shows `sum_(b in R) |c_other(b)-c_fifth(b)| <= card D`, **not** `2*card D`. This is a sharper genuine same-carrier statement for first-exit producers, with no assumption that a separately supplied arbitrary integer compiler is one-bounded.
+
+`original_fifth_u8_firstExit_support_mismatch_PP` uses the literal original fifth `finalPolicy`, real small Rosser plus/minus attachment, existing genuine U8 sharp-K labelled original rank-three source, and the prior `ceil L` budget. It yields
+
+`|E_U8(Q,rho_other)-E_U8(Q,rho_fifth)| <= card(arithmeticTriples N) * ceil(L) * card(D)`.
+
+Here `Q` is the SAME actual small/rough physical carrier for both terms and each `rho` is attached through the SAME true small Rosser signed weights. Original complete products, repeated `p2=q` labels, signed coefficients and exact coprime mean are untouched. This is a coefficient stability result, not a bound on the individual analytic PP errors and not a final causal compiler identification.
+
+### Checks and unresolved boundary
+
+- New source and VERIFY were read back from GitHub, exact blob IDs above. Static banned proof escape tokens: 0. Parenthesis/bracket/brace lexical balance: PASS. VERIFY imports precede `#check`.
+- Independent deterministic finite Mobius-sign model: **1,000 / 1,000** support-pair checks with no failures; 2,518 common-support occurrences tested. These are standalone toy sets, NOT actual frozen policy enumeration, Rosser producer execution, Lean, or kernel verification.
+- **NOT RUN:** Lean, Lake, kernel replay, CI, full transitive axiom audit, Codex, heavy producer. The two Lean theorem bodies remain SOURCE_ONLY with possible elaboration errors and uncompiled imported predecessors; no new green node.
+- `EXTERNAL_INPUTS.json` unchanged at exact blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: medium estimate (M) recorded by source/version/exact conditions/call site **ONLY**, not implemented, axiomatized or invoked in this source. No new axioms or surrogate analytic PP hypotheses.
+- No production, manuscript, main, toolchain, PR, other-task, or excluded full87 dynamic-parent files changed. The complete original final integer `rho_T` and licensed physical `Q_T` remain unknown; the new arbitrary other policy is NOT asserted to be that final compiler. The support XOR may be large, and `ceil(L)` can be a positive power of N, so arbitrary logarithmic PP saving remains unproved.
+
+**Next precise internal entry:** identify a non-excluded genuine compiler policy and prove a real structural/signed bound on the actual support symmetric difference with the original historical fifth policy. Do not assume mismatch smallness from a set name. Separately: original physical `W_T` admissibility and uniform Fourier L1/H/Fubini in growing m(N), HB all original sources, exact complete product=T, mixed shifted moments, causal whole boxes, empty Gamma, high-rank/enhanced and final same-rho PP remain internal. Overall P3.6 YELLOW; this limited proof source BLUE only.
