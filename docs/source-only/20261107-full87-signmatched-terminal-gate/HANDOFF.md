@@ -1,0 +1,22 @@
+# P1.4 durable continuation — actual sign-matched terminal gate
+
+This dedicated task branch is `chatgpt/p1-full87-signmatched-terminal-gate-20261107`. Recover its latest **verified GitHub HEAD** before changing files. Previous final HEAD: `9d69135e564b12be68adb8e9bbe1d48cf944f267`; this round's Lean SOURCE COMMIT: `634c50e66040342897ff51f944620f34b68d7774` (parent = previous final). Its proof packet is `docs/source-only/20261107-full87-signmatched-terminal-gate/`, and this handoff is in the SAME packet. Later HEAD is the docs commit containing this file; never reset to the older 9649ab3 navigation SHA.
+
+Verified Git objects added this round:
+- Candidate `P4AOriginalFull87SignMatchedTerminalGate.lean` Git blob `9e7e6e89b484ad7c1712e1c2f46e480484d54617`, 228 lines.
+- `REPORT.md` Git blob `1528a3bee98ad9e27302809815a776395c529af9`.
+- `REGISTRY.json` Git blob `cf88e6cc966ea86cfe373b22ad175d0bc550f8ae`.
+- `INPUT_BOUNDARY.md` Git blob `84d224c502735f8ca19d7e6987909a426206a74e`.
+- This `HANDOFF.md` has its own SHA in the Git tree; do not invent a self-referential checksum.
+
+Math result: the earlier OR-max physical decision falsely flags a leaf when only the WRONG-parity Rosser beta is active. The new `signMatchedPhysicalCut` follows exactly original skip/take recursion, checks the ACTUAL terminal parity's nonzero beta maximum, and proves a **SUFFICIENT** strict full-q zero certificate for `attachedLeafTest`, `signedTest`, and the literal old-own-sixth-minus-new-finite-eighth `ordinarySaving` at one `Cell` and one eighth `FirstExitDepthState`. The proof never changes original signed source or multiplicity. A failed decision is not a signed lower bound; cancellation remains possible.
+
+Real archived file location correction: the frozen original verification data lives under `verification/data/` (not `verification/`). `global-selected-numeric-completion-20261010.json` exists there on frozen manuscript pin, Git blob `34c8bb0facc3e24597c09d6b2e410e63c344ef5e`; six named eighth-related numerical groups have label counts 1+14+15+15+13+29=87. The input remains a selected scalar numerical ledger, not a row-level authenticated full87 physical occurrence source, and arithmetic label summation is NOT a proof of disjoint or exhaustive dynamic owners. Six corresponding source JSONs were read. The manifest `verification/full-numerical-source-manifest.json`, Git blob `1dd86c8a72faea1ef390f6df873dacb53401c99a`, records SHA256 for the global-selected source, but it was not independently recalculated.
+
+Frozen math: manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, body blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; Lean 4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958; c=49044063/25000000, K=8452171/1250000. Do NOT change them.
+
+Checks: 5,000 deterministic SYNTHETIC original-style trees; sign gate equalled independent retained-leaf signmatched bound test in all; 1,073 synthetic signed sums nonzero with zero positive-gate mistakes; in 28 cases the old OR gate failed while the new gate passed. Source lexical and bracket balances checked. SOURCE_ONLY / UNEVALUATED / UNCOMPILED: NO Lean/Lake, kernel replay, transitive axiom closure, independent review, physical archived saved87 row replay, PP admissibility, CI/Codex, tool upgrade or reserve payment.
+
+**Precise next action**: inspect/fetch full original source behind the SIX selected numerical eighth group certificates (existing paths above), then locate/derive certified original eighth **physical** `Cell` plus `FirstExitDepthState` rows including `actualParent`, selected/remaining lists, owner/trim, opposite terminal beta signs, and occurrence multiplicity; bind to recorded source rows/hashes. Distinguish numerically labelled 87 from actual owner/leaf 87. Identify manuscript-licensed integer physical PP X, original W_N class and fixed-before-N assumptions; run the two original sign gates on physical rows if licensed, and charge only remaining true signmatched high-q terms vs H_N. Do not silently use 7/32 or 599/1000. Ordinary integral, filtering, rank9, saved signed gain, changed/tagged and BOTH independent reserves remain OPEN. Do not call Codex, restart CI, alter master, or credit P1.4 as blue/green.
+
+Deliver next round with verified new SHA, file hashes, source-only vs compiled/kernel status, and precise remaining yellow math. No meaningless docs-only iteration.
