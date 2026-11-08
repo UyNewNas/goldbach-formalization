@@ -49,6 +49,7 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 import ImbalancedChen.P3ActualU7PhysicalOffshift
 import ImbalancedChen.P3ActualU9PhysicalOffshift
+import ImbalancedChen.P3ActualU8SharpKOffshift
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -471,3 +472,19 @@ import ImbalancedChen.P3ActualU9PhysicalOffshift
 #check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_order_same_rho_offshift
 #check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_switched_same_rho_offshift
 #check ImbalancedChen.P3ActualU9PhysicalOffshift.actual_u9_physical_three_PP_same_rho_offshift
+
+-- Actual U8 sharp-K inclusive terminal wall q=p₂, same physical signed rho.
+-- These checks are REGISTERED ONLY; no Lean/Lake/kernel run.
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_full_product_lt
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_shift_pos
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_full_diagonal_empty
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_source_partition
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_source_partition_disjoint
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_sum_partition
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_distribution_partition
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actualU8SharpKOffshift
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_same_rho_offshift
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_terminal_diagonal_offshift
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_physical_PP_same_rho_offshift
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_productWeight_same_rho_offshift
+#check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_strict_diagonal_same_rho_offshift
