@@ -1455,3 +1455,44 @@ For every genuine raw retained upper rough support (R_0) and covering finite car
 ### Actual next proof entrance
 
 Read the final finite causal compiler's actual retained policy, integer coefficient and physical (Q_T); establish its pointwise coefficient difference from this literal raw source, including compiler-only moduli, before transferring *analytic* PP bounds. The physical and auxiliary covers cannot be conflated. Separately the quantitative original (W_T) Fourier uniformity, mixed shifted divisor bounds, HB product=T exception, all marked/HB source coverage, empty Gamma mother words, high-rank/enhanced and common threshold remain open. **P3.6 stays YELLOW**; this limited exact source-only zero-extension candidate is BLUE only.
+
+## Successor P3.6 SOURCE_ONLY — actual U8 integer rough candidate coefficient delta (2026-11-08 UTC)
+
+- **Recovered actual branch HEAD**: `dac18949a010ac33f93468c24cbc6bfd2d74c884` (no new concurrent branch changes at pre-write checks), branch `chatgpt/p3-internal-original-w-20261105`, not obsolete `de582e6`.
+- **Proof commit**: `874e463cc59ad6e5962c05cb2685f072c8ef7e24` ([skip ci]); file `P3ActualU8CompiledDelta.lean` (175 split lines including the trailing newline), Git blob `c0e1ffa2f01c20064f1f705fd7c9dc6705efe685`, fetched back from GitHub.
+- **Verification registration / structural repair**: `991f8864f35817d788e39815e6d97d745ab518a2`; `VERIFY.lean` Git blob `6f491226fc5ff684cff05a1c5fba66bc29b1a1f1`. The predecessor file had ONE import below executed-looking (but **not actually executed**) #check commands; all 54 imports were moved before any #check, and four new checks registered only.
+- **Updated registry**: commit `e0a74de4132572dda5726efdce34792f40d3dd1c`, `REGISTRY.json` Git blob `2af95430896f98424d4b68bcb20196406e271f75`. Original external register unchanged, blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`.
+- **Pinned manuscript**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`; `paper/source/manuscript-body.tex` lines 256–280 (signed PP and exact coprime mean), 452–478 (physical compiler); `paper/source/modules/distribution-prime-product-completion-20261010.txt` sections 1, 4(F). The fixed Mathlib pin remains `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+- **Real sources actually read**: `ImbalancedChen/FiniteUpperCarrierCore.lean`, `ImbalancedChen/FixedRoughCoefficients.lean`, `ImbalancedChen/ActualSmallRosser.lean`, `ImbalancedChen/SmallRoughAttachment.lean`, `ImbalancedChen/ActualUpperCommonCarrier.lean`, `ImbalancedChen/CurrentChenUpsilon8SharpKPhysicalPP.lean`, `ImbalancedChen/P5zPositiveFamilyBudget.lean`, `ImbalancedChen/ActualUpperCountingInputs.lean`, both predecessor P3 common-carrier and unit-positive-modulus norm files. Root/ancestor packet `AGENTS.md` reads returned NOT_FOUND; no hidden instructions inferred.
+
+### Genuine internal math/source increment
+
+The previous packet established RAW `rho_raw` zero-extension invariance on a common carrier, but that does **not** equal a separately compiled coefficient. This increment makes the missing difference **EXACT** for the actual sorted U8 rank-3 positive prime-product family, retaining the `p2=q` repeated terminal-prime wall and original source occurrence IDs.
+
+For original small Rosser support (S_{\\mathrm{small}}), a rough common carrier (R) containing the actual retained raw rough support (R_0), and genuine physical product moduli (Q=S_{\\mathrm{small}}R), the new file defines two different physical coefficients using the SAME small Rosser attachment:
+
+- `rho_raw`: literal retained `fixedRoughCoefficient` attached on (R), equal to the old raw coefficient on (Q_0) after zero-extension;
+- `rho_comp`: an **arbitrary integer-valued rough candidate** `compiled : Nat -> Int` first cast to `Real` and then attached using exactly the same small Rosser kernels.
+
+Writing `delta(q)=rho_comp(q)-rho_raw(q)`, `A_q` for the actual U8 full labelled congruence mass and `B_q` for the **exact** coprime mass, the candidate establishes
+
+`E_U8(Q,rho_comp) = E_U8(Q_0,rho_raw) + sum_(q in Q) delta(q)*(A_q-B_q/phi(q))`.
+
+The full signed sum is kept intact until after the coefficient difference is formed. Compiler-only moduli remain in the delta sum; no arbitrary modulus is silently thrown out. In contrast to the raw zero-extension theorem, the extra term does **not** vanish by support inclusion alone.
+
+For (R) consisting of genuine `RoughPrimeSupportedAt` factors, `commonQ_positive` derives **positive physical moduli** from actual small-Rosser squarefreeness and nonzero rough factors. The existing exact indicator-source bound then yields
+
+`|E_U8(Q,rho_comp)-E_U8(Q_0,rho_raw)| <= card(S_U8) * sum_(q in Q)|delta(q)|`.
+
+This is a finite algebraic quantitative *reduction*, NOT a proved bound on the actual final compiler, and does NOT supply the manuscript's arbitrary-log PP saving. In particular **an integer rough candidate passed through real small Rosser weights need not itself produce an integer physical coefficient**. The final causally frozen integer `rho_T`, its physical (Q_T), exact support/levels, retained policy and a useful delta mass bound still require a literal producer connection. This statement makes no target-equivalent assumption.
+
+### Actual checks and unverified boundary
+
+- Source was read back at blob `c0e1ffa2f01c20064f1f705fd7c9dc6705efe685`. Source escape-token scan after comment removal: **0**. Static bracket/delimiter scan: **PASS**. Four new Lean declaration names found and registered; #check registrations were **not run**. Earlier `VERIFY.lean` import ordering defect was fixed; remaining SOURCE_ONLY modules are still not proven to resolve in the default Lake path.
+- Independent deterministic scaled-integer finite regression: **504/504** source/modulus/positive-coprime-mean perturbation cases, **0** differences; **301** test cases included at least one duplicate physical product with distinct occurrence IDs. The model checked raw zero-extension, signed compiled-minus-raw equality and the cardinal times L1 envelope, including signed rough candidate coefficients. This is **NOT** an execution of the original rough compiler, exact U8 Lean selector or its proof.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axioms, Codex, or heavy producer. Four new declarations and both imported predecessor SOURCE_ONLY proofs remain compilation/elaboration risks; **NO GREEN**.
+- No change to manuscript, master, other automation branches, excluded full-87 parent/history, production modules, PR, toolchain or dependency locks. (M) is **registered only**, not implemented or used as an axiom.
+
+### Precise next internal entrance
+
+Find and read the final frozen causal integer compiler and its retained-`retainOdd_N` policy. Prove that its literal **physical** coefficient and moduli correspond to `integerCompiledRho` / `commonQ` (or supply the exact difference), including real-small-weight casting and extra compiler-only modulus support. Prove a true usable delta mass/weighted discrepancy estimate, not merely assume it. Then combine with actual U8 signed PP under a single coefficient, controlling density and the exact coprime correction together. Separately still open: all marked/HB atom dictionary, complete-product=T exceptional mass, nonzero shifted-divisor moments, actual (W_T) Fourier L1/H/Fubini uniform for growing (m(N)), causal whole-box, empty Gamma mothers, high-rank/enhanced and final same-rho PP assembly. **P3.6 YELLOW**; the four exactly delimited finite source candidate statements BLUE; kernel/CI verification absent.
