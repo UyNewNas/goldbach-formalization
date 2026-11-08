@@ -1729,3 +1729,37 @@ The previous literal U8 prime-plus-unit signed response compared two first-exit 
 - No production source, frozen manuscript, global source, excluded full87 node, other automation work, PR or master was modified.
 
 **Next precise entrance:** first map the SOURCE_ONLY dependency chain to an existing correct pinned Lean/Lake environment and elaborate this new native carrier transport, correcting concrete errors instead of adding unchecked interfaces. Mathematically this removes only the common-versus-native U8 pair/triple carrier discrepancy. The true final causal integer `rho_T` and physical `Q_T`, signed rough response saving, complete marked/HB/empty Gamma/high-rank sources, growing `m(N)` uniform original `W_T` Fourier bound and full-product `T` exception for other atoms remain INTERNAL YELLOW. No new GREEN node.
+
+
+## Successor P3.6 — actual U8 strict-terminal prime-only PP counting reduction (2026-11-08 UTC)
+
+- **Verified baseline:** `f6b9cbb48f2510b428660dd0a42c6f93c06fd3d0` on the existing unique P3.6 branch `chatgpt/p3-internal-original-w-20261105`; source commit `88b94a376f71b8a9bb0ca34e63abdbd41ce26de0` with `[skip ci]`.
+- **New proof source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8StrictPrimePP.lean`, 182 lines, Git blob `2af339690e2b9a00e8ec9326e9c5873c0396415a`; `VERIFY.lean` blob `ca56462abb4da7ff72329fee05606d9ffc0f0dea`. Three named theorem candidates and their three audit `#check` lines were actually committed, not executed.
+- **Fixed manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`; `paper/source/manuscript-body.tex` §2 distribution from local to prime products (lines 257–280) and finite compilation (450–479), `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4(F) lines 151–171. Fixed Lean `leanprover/lean4:v4.33.0-rc1` and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, no upgrade.
+  
+### Actual mathematical delta
+
+Unlike the preceding source, which kept both triple/quotient-one families as an exact signed distribution on a common or native physical carrier, this packet **removes the inclusive terminal-prime diagonal from the ANALYTIC U8 counting PP obligation by paying its positive count directly**. The actual strict source is `P5U8SharpKSource.strictTriples N` with p₁<p₂<q; the actual diagonal remains `diagonalTriples N` with p₂=q, not an empty or discarded fibre.
+
+The proof first uses `actual_u8_sum_partition` for the original labelled arithmetic triples and the genuine product-multiplicity identity `productWeight_sum` to give the exact original prime-mass partition. It then invokes the actual `p5z_labelledPrimeMass_le_main_add_errors` positive-family sieve majorant **only on strictTriples**. The inclusive diagonal is bounded by its real original cardinality, while the strict small-Goldbach-prime loss is bounded by the *full* source small-prime count. The latter deliberately allows overlap with the already paid diagonal; this is a harmless overestimate, not two disjoint counts being asserted.
+
+For any one physical `Q : Finset ℕ` and one unchanged signed `rho : ℕ → ℝ` satisfying the genuine pointwise sieve majorant (no PP assumption), the new candidate proves:
+
+```text
+currentChenUpsilon8 N
+  <= mass(strictTriples)*physicalDensitySum(Q,rho)
+    + exactCoprimeCorrection(strictTriples,Q,rho)
+    + signedPP(strictTriples,Q,rho)
+    + #smallGoldbachPrimeTriples + #diagonalTriples + #unitFibres.
+```
+
+The two directly paid U8 errors `#small + #unit` already have a genuine source-count bound `o(H_N)`; the original `#diagonal` has `N^(2/3)` bound. The new eventually theorem splits an **arbitrary prior epsilon** into these two budgets before N, z, Q or rho are chosen. Thus the strict-only counting insertion has one common threshold independent of the physical coefficient. **This is not PP for the still-sharp strict indicator and does not identify its Fourier-smoothed W class.** The final global causal integer rho_T, true arithmetic signed-error saving, common physical and auxiliary levels, HB/marked/empty Gamma/high rank and full assembly remain unproved.
+
+### Verification and trust boundaries
+
+- GitHub readback at proof commit `88b94a376f71b8a9bb0ca34e63abdbd41ce26de0` confirmed exact 182-line source SHA `2af339690e2b9a00e8ec9326e9c5873c0396415a` and VERIFY blob `ca56462abb4da7ff72329fee05606d9ffc0f0dea`. The commit contains only the two intended task files and is a direct fast-forward child of the checked baseline. Forbidden proof escape scan: 0; lexical delimiter check passed; all imports precede all 364 registered `#check`.
+- Independent Python exact-rational toy regression: 900/900 finite labelled/counting cases, with original strict/diagonal labels and deliberately signed rho on Q={1,2,3,6}; 776 cases had nonzero signed modulus discrepancy, 2,428 diagonal label occurrences. The tested pointwise majorant was independently checked on each finite N. This verifies a finite algebraic pattern, **not** actual selector/Rosser execution, Lean elaboration or an analytic estimate.
+- Lean/Lake **NOT RUN**: the current container has no lean/lake executable and direct GitHub git DNS resolution fails. The user now authorizes local compilation in a pinned environment, but it was unavailable here. No CI, separate kernel replay, Codex, heavy producer or full axiom audit was launched. `#check` remains unexecuted; the new source has possible tactic/API/elaboration errors and cannot be green.
+- `EXTERNAL_INPUTS.json` unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: manuscript-external (M) remains **REGISTERED ONLY**, never implemented or added as an axiom. No manuscript, production module, excluded full87 parent/history node, main branch, PR, toolchain, other automation or external board change.
+
+**Next exact entry:** In the first available pinned Lean environment, elaborate this specific three-theorem strict counting reduction and its direct dependencies before building further unchecked layers. Mathematically, identify the actual final causal `Q_T,rho_T` and produce genuine arbitrary-log signed discrepancy **for the strict prime-triple source after admissible smoothing**. Complete original `W_T` derivative/Fourier L1/H/Fubini uniformity in growing `m(N)`, whole-box causal selection, marked/HB family coverage, full product=T exceptions beyond these strictly sub-N U8 sources, shifted moments and high-rank/enhanced branches remain INTERNAL. P3.6 is **YELLOW**. New source is **BLUE/SOURCE_ONLY**.
