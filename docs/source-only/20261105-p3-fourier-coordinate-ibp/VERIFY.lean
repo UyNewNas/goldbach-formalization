@@ -58,6 +58,7 @@ import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 
 
 import ImbalancedChen.P3ActualU8RoughDeltaNorm
+import ImbalancedChen.P3ActualU8SmallNormLevel
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -558,3 +559,8 @@ import ImbalancedChen.P3ActualU8RoughDeltaNorm
 #check ImbalancedChen.P3ActualU8RoughDeltaNorm.physical_delta_l1_le_rough_delta
 #check ImbalancedChen.P3ActualU8RoughDeltaNorm.actual_small_rosser_physical_delta_l1
 #check ImbalancedChen.P3ActualU8RoughDeltaNorm.actual_u8_compiled_PP_delta_le_rough_delta
+
+-- Strict L-level actual Rosser beta L1 and original U8 signed PP; NOT EXECUTED.
+#check ImbalancedChen.P3ActualU8SmallNormLevel.actual_small_beta_zero_of_level
+#check ImbalancedChen.P3ActualU8SmallNormLevel.actual_small_beta_norm_le_ceil
+#check ImbalancedChen.P3ActualU8SmallNormLevel.actual_u8_PP_delta_le_ceil_level_rough
