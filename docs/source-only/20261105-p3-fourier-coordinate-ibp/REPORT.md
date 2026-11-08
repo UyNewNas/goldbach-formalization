@@ -1763,3 +1763,33 @@ The two directly paid U8 errors `#small + #unit` already have a genuine source-c
 - `EXTERNAL_INPUTS.json` unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: manuscript-external (M) remains **REGISTERED ONLY**, never implemented or added as an axiom. No manuscript, production module, excluded full87 parent/history node, main branch, PR, toolchain, other automation or external board change.
 
 **Next exact entry:** In the first available pinned Lean environment, elaborate this specific three-theorem strict counting reduction and its direct dependencies before building further unchecked layers. Mathematically, identify the actual final causal `Q_T,rho_T` and produce genuine arbitrary-log signed discrepancy **for the strict prime-triple source after admissible smoothing**. Complete original `W_T` derivative/Fourier L1/H/Fubini uniformity in growing `m(N)`, whole-box causal selection, marked/HB family coverage, full product=T exceptions beyond these strictly sub-N U8 sources, shifted moments and high-rank/enhanced branches remain INTERNAL. P3.6 is **YELLOW**. New source is **BLUE/SOURCE_ONLY**.
+
+
+## Successor P3.6 — strict labelled Part3 physical PP (2026-11-08 UTC)
+
+- **Baseline and actual source commit:** `2f8f1c4fe57063a0eeb0fd75f95f14ca7d2e1336` → `4edc2b155bf7dbeaa31c0d2994c3552e065ad615` on the existing P3.6-only branch `chatgpt/p3-internal-original-w-20261105`; proof file `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8StrictPhysicalPP.lean`, 224 lines, Git blob `8bf503ebe701b95ca5c1705353b35d326af82d72`. Source commit is a direct fast-forward child with `[skip ci]`; the check/handoff commit is a separate fast-forward.
+- **Fixed frozen manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`. Relevant statements: `paper/source/manuscript-body.tex` lines 257–280 (PP: same signed physical rho, fully labelled products, exact coprime mean, smooth source class), 450–479 (compiled physical upper coefficient); `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4(F), lines 151–171 (quantitative Fourier and arithmetic-tail obligations).
+
+### Proven mathematical identity / Lean candidate scope
+
+The previous strict-prime counting packet left the remaining PP term as `p5z_labelledDistributionError (strictTriples N) product ... N Q rho`. The real analytic interface is `Part3.primeProductSignedError 3 N N Q rho W`, requiring an explicit genuine labelled rank-three weight. The existing upstream `P5U8SharpKSource.physicalWeight N` includes the `p₂=q` terminal diagonal, **so it cannot be reused for the strict-only PP term**.
+
+This packet defines `strictPhysicalWeight N` on the original `Part3.labelledPrimeTuples 3 N` as the literal indicator `physicalInverse u ∈ strictTriples N`. Using the actual `natCoord`, `physicalInverse` and original prime-cap source, `strictPhysicalWeight_sum` supplies a label-level finite bijection for every `F : ℕ → ℝ`; this construction deliberately does **not** factor the strict predicate through a product-value deduplication. The weight has absolute bound one and preserves each original `p₁<p₂<q`, full-product `<N`, centre coprimality, and `N^(417/5000)` individual lower cutoff.
+
+The exact same `Q : Finset ℕ` and signed `rho : ℕ → ℝ` occur in each congruence term and the **unmodified primitive coprime mean**:
+```text
+p5z_labelledDistributionError (strictTriples N) product (fun _ => 1) N Q rho
+  = Part3.primeProductSignedError 3 N N Q rho (strictPhysicalWeight N).
+```
+The final two new counting candidates insert that exact rank-three Part3 expression into the existing finite and eventual U8 strict-prime reductions; diagonal `p₂=q`, small Goldbach prime and unit quotient counts remain separately direct-power paid, not dropped.
+
+This is a **finite source identification**, NOT the required manuscript `O_A(N/log^A N)` signed discrepancy. A sharp `strictPhysicalWeight N` has not been shown to equal an admitted smooth original `W_N`; this proof does not identify the final causal integer `rho_T` or its physical `Q_T`, and does not resolve the original Fourier/HB/empty Gamma/arithmetic tail obligations.
+
+### Checks and trust boundaries
+
+- GitHub proof file was read back as blob `8bf503ebe701b95ca5c1705353b35d326af82d72` at commit `4edc2b155bf7dbeaa31c0d2994c3552e065ad615`. Static banned proof-escape scan: zero. Lexical delimiter counts balanced (not syntax or type checking). New import and eight `#check` expressions are registered in `VERIFY.lean` but have NOT been executed.
+- Independent exact rational finite regression: **500/500** model cases; 9,239 strict labels, 4,016 separately retained diagonal labels, and 2,971 nonzero signed-modulus discrepancies. This validates finite algebraic patterns only, **not actual Lean code, original producer execution or analytic estimates**.
+- Compile permission remains in effect, but in this container `lean` and `lake` are absent; GitHub git DNS is unresolved. No Lean/Lake command was executed. Pinned versions remain Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; not upgraded. No CI, independent kernel replay, Codex, producer or transitive axiom audit was run. **SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED**.
+- `EXTERNAL_INPUTS.json` retained unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: (M) remains REGISTERED ONLY, not implemented or assumed as new axiom. Excluded full87 dynamic-parent node, frozen manuscript, production code, main branch, other task files and external board were not modified.
+
+**Next precise entry:** first elaborate this specific strict rank-three weight identification in an existing pinned Lean environment, repairing actual errors before extending the proof stack. Then identify original smooth `W_T` admissibility (quantified mixed derivatives and Fourier L1/H at growing m(N)) and genuinely bound the complete physical PP discrepancy with the final causal integer rho and the same physical modulus family. No new GREEN nodes; P3.6 remains YELLOW.
