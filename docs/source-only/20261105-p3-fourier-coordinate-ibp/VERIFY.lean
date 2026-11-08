@@ -57,6 +57,8 @@ import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 
 
 
+import ImbalancedChen.P3ActualU8RoughDeltaNorm
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -549,3 +551,10 @@ import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 #check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_physical_majorant
 #check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_actual_u8_signed_insertion
 #check ImbalancedChen.P3ActualU8EvenRetainedTreePP.tree_actual_u8_PP_common_eq_raw
+
+-- P3.6 physical small/rough delta Lipschitz and original U8 PP rough-factor norm.
+-- SOURCE_ONLY, none of these checks has been executed by Lean.
+#check ImbalancedChen.P3ActualU8RoughDeltaNorm.signAttachedCoefficient_lipschitz
+#check ImbalancedChen.P3ActualU8RoughDeltaNorm.physical_delta_l1_le_rough_delta
+#check ImbalancedChen.P3ActualU8RoughDeltaNorm.actual_small_rosser_physical_delta_l1
+#check ImbalancedChen.P3ActualU8RoughDeltaNorm.actual_u8_compiled_PP_delta_le_rough_delta
