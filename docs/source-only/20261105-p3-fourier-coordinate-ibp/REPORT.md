@@ -1651,7 +1651,7 @@ Here `Q` is the SAME actual small/rough physical carrier for both terms and each
 
 - **Actual checked baseline:** `241e383616be04c04a6416efbe7c41f8e16efb04`, branch `chatgpt/p3-internal-original-w-20261105`; **source commit**: `b3341b6e80a446f270711d978721994b3fad5c7c` with `[skip ci]`. No branch move was observed at the source write lease and its subsequent readback.
 - **New source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8FirstExitSignedResponse.lean`, **191 lines**, Git blob `ab51a4f64ae737c60230f9aa244bf73bb1b7f79b`. Updated `VERIFY.lean` Git blob `f62772a0fb7527b43f2c0817f153d24117a54858`: 61 imports precede all 355 audit `#check`; 3 new declarations are registered, **never executed**.
-- **Fixed manuscript**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` around lines 256–280 (exact signed PP, primitive-coprime mean), 450–479 (positive/negative small-Rosser attachment), and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), lines 151–171 (Fourier, physical tail). Mathlib pin `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
+- **Fixed manuscript**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` around lines 256–280 (finite compilation, positive/negative small-Rosser attachment), 450–479 (exact signed PP and primitive-coprime mean), and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), lines 151–171 (Fourier, physical tail). Mathlib pin `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
 
 ### New nontrivial exact finite arithmetic identity
 
