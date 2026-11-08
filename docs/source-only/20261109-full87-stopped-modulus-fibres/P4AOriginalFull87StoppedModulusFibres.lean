@@ -68,7 +68,7 @@ private theorem physical_terminal_eq_factor_occurrence_sum
   unfold stoppedPhysicalTerm factorSignedWeight factorModulus
   simp only [attachedLeafTest, one_mul]
   rw [Finset.mul_sum]
-  rw [Finset.sum_toList]
+  rw [Finset.sum_map_toList]
   apply Finset.sum_congr rfl
   intro a ha
   ring
