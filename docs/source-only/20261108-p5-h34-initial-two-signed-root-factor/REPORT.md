@@ -30,7 +30,7 @@ position. This packet makes no such identification.
 
 New source:
 `Part5OriginalH430ActualInitialTwoSignedRootFactor.lean`
-(177 lines, five public theorem bodies, one private theorem,
+(177 lines, four public theorem bodies, one private theorem,
 three definitions).
 
 1. `actualInitialTwoRootFactor` uses exactly
