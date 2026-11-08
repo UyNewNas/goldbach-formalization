@@ -28,6 +28,7 @@ noncomputable section
 
 open scoped Classical BigOperators
 open Part5OriginalH430PhysicalRoots
+open Part5UpperTables.OriginalU34
 open Part5OriginalH430TaggedArithmeticReceivers
 open P2EnhancedTwentyOneSameQWeighted
 open P2EnhancedTwentyOneSourceComparison
