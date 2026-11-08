@@ -47,6 +47,7 @@ import ImbalancedChen.P3ActualComplexPositionalGammaModes
 import ImbalancedChen.P3ActualComplexModeFibreTransport
 
 import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
+import ImbalancedChen.P3ActualU7PhysicalOffshift
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -448,3 +449,12 @@ import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 #check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_target_fibre_empty_of_nonempty
 #check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_target_fibre_empty_of_target_ne_one
 #check ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal.marked_residual_same_rho_exact_diagonal_zero
+
+-- Actual U7 original marked 3/4 PP sources, one real physical rho;
+-- exact off-shift divisor and coprime correction. NOT Lean checked.
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_three_full_product_lt_target
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_four_full_product_lt_target
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_three_four_no_full_diagonal
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actualU7PhysicalOffshift
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_two_ranks_same_rho_offshift
+#check ImbalancedChen.P3ActualU7PhysicalOffshift.actual_u7_original_marked_same_rho_offshift
