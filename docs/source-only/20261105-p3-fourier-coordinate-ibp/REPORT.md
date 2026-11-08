@@ -1676,3 +1676,30 @@ The identity preserves the original rank-three ordered labels and possible p2=q 
 - **NOT RUN**: Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. The three new declarations are SOURCE_ONLY, may fail elaboration, and create **no GREEN** status.
 - `EXTERNAL_INPUTS.json` unchanged Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted medium estimate (M) remains exact-version/hypothesis/call-site **RECORD ONLY**, not implemented or axiomatized. No new axioms, no toolchain/lockfile, production, manuscript, main, other automation or excluded full87 edits.
 - **Next exact entry**: identify a permitted non-excluded real causal comparison policy and control these two actual signed rough-response sums by source-specific arithmetic, rather than assuming the support XOR is small. Independently discharge original W_T ContDiff/integrated derivative uniformity in T and growing m(N), all marked/HB source families, complete-product=T exception, nonzero shifted divisor moments, empty Gamma, high-rank/enhanced and actual same-rho arbitrary-log PP. Overall P3.6 YELLOW.
+
+
+## Successor P3.6 SOURCE_ONLY — actual U8 full prime-plus-unit first-exit response (2026-11-08 UTC)
+
+- **Verified branch baseline:** `de435c90c888a03469e5ef932ca8f211f012a1a7` on `chatgpt/p3-internal-original-w-20261105`. Actual [skip ci] proof commit `27963e7a483c3b60fb5dd5e10f9a769c1519fed4`; GitHub fast-forward readback checked. New file: `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8FirstExitPrimeUnitResponse.lean` (163 source lines, Git blob `b6e970e064cedebf713b58ffd028bb7443fea797`). `VERIFY.lean` blob `7a8288c0b9dc2e4b734f877ab6dcbf3e893c2ec1` has 62 imports before 358 registered #checks; 3 newly registered checks **not executed**.
+- **Manuscript pin:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`. `paper/source/manuscript-body.tex` lines 256–280 (exact same signed rho/coprime mean), lines 450–479 (sign-sensitive attached physical coefficient); `paper/source/modules/distribution-prime-product-completion-20261010.txt` §1 (PP) and §4 (F). Mathlib pinned `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
+
+### Actual manuscript-internal increment
+
+Prior `P3ActualU8FirstExitSignedResponse` preserved the original U8 rank-three sorted labelled prime triples, including the inclusive p₂=q boundary, but did **not** combine the separately recorded original quotient-one pair family. The new `actualU8UnitSignedKernel` is the genuine `currentChenUpsilon8UnitFibres N` rank-two labelled congruence mass minus its exact coprime mean, divided by the genuine physical totient. The theorem `actual_u8_prime_unit_same_rho_signed_kernel` combines this with the original sharp-K rank-three signed `Part3.primeProductSignedError` using **one unchanged physical Q/rho** and **one complete q-sum**, without merging their different source ranks, labels or complete products. `prime_unit_signedRoughResponse_split` preserves the exact sum of the two signed small-Rosser responses before any triangle inequality.
+
+For the **literal** historical fifth first-exit policy, comparison with any other first-exit policy on the same original roughPrimeUniverse now yields the exact SOURCE_ONLY identity:
+
+```text
+E_U8_prime+unit(rho_other) - E_U8_prime+unit(rho_fifth)
+  = sum_(b in R ∩ (S_other \\ S_fifth)) R_prime+unit(b)
+  - sum_(b in R ∩ (S_fifth \\ S_other)) R_prime+unit(b).
+```
+
+The original small Rosser minus/plus selection is unchanged, and both source discrepancies retain their **exact** primitive coprime means. No fibrewise Theta condition is added. This **does not** identify the other policy with the final global causal compiler, prove cancellation, admit the non-smooth U8 indicator into the smooth PP class or establish any arbitrary logarithmic error. The original unit-pair *count* can be paid separately by the pre-existing direct power-error bound.
+
+### Checks and remaining obligations
+
+- Source and VERIFY Git blobs were read back. Forbidden proof-escape tokens = 0; static delimiter scan PASS. Independent exact **integer-scaled** finite algebra model: **1280/1280** success, 0 mismatch, 596 positive / 586 negative signed comparisons, including Möbius-zero rough terms and separate triple/pair kernels. This does **not** execute the real first-exit producer, Rosser weights or Lean.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex or heavy producer; no new GREEN. All three new declarations and their prior imports remain source candidates with elaboration risk.
+- `EXTERNAL_INPUTS.json` unchanged at blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted estimate (M) remains **REGISTER ONLY**, source/version/hypotheses/call-site recorded; never implemented or introduced as an axiom. No other production, main, manuscript, PR, toolchain, other automation or excluded full87 node changes.
+- **Next:** identify a genuinely licensed non-excluded causal policy and derive a real arithmetic estimate for both oriented signed sums (or bypass the unit part with its direct-count payment); independently finish original W_T smoothness and log budgets uniform in T and m(N), Fourier L1/H/Fubini, complete modulus arithmetic including product=T, all marked/HB atoms, empty Gamma, nonzero-shift moments and high-rank/enhanced. P3.6 stays **YELLOW**, the limited source candidate **BLUE**.
