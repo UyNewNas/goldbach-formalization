@@ -1209,3 +1209,38 @@ Read the actual marked/HB atom generator and supply a genuine compiler-to-litera
 - **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. Zero green promoted. This file imports existing production-path `ImbalancedChen.P5U7OriginalPhysicalPP` instead of an absent staged P3 module, but that imported source is itself uncompiled, with elaboration risk.
 - External `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`, (M) REGISTER_ONLY / NOT IMPLEMENTED / NOT AXIOM. Excluded dynamic-parent full87, other tasks, production files, manuscript and toolchain unchanged.
 - **Next exact entrance:** Locate and read the real general marked/HB PP atom compiler, with original residual occurrence IDs, labels, full marked factor r, restoring scalar c and actual physical Q_T/rho_T. Reuse the finite nonzero-shift result only where its genuine source conditions hold; independently pay remaining HB zero-diagonal, complete signed-modulus moving shift moment, W_T continuous Fourier L1/H/Fubini uniform with growing m, and causal/full-HB/empty Gamma/high-rank/enhanced obligations. P3.6 remains YELLOW.
+
+
+## Successor P3.6 SOURCE_ONLY — actual U9 ordered marked source same-rho complete offshift (2026-11-08 UTC)
+
+- **Verified recovery:** The actual branch `chatgpt/p3-internal-original-w-20261105` was at `86230f465b9fbc7ff94fa36aa7f6491db232d0bd` after the previous U7 proof; the old `de582e6` was NOT reused. Read the full existing REPORT, REGISTRY, EXTERNAL_INPUTS and actual U7 source. Root, `docs`, `docs/source-only`, `ImbalancedChen` and packet AGENTS probes found no file.
+- **Actual Lean source:** `P3ActualU9PhysicalOffshift.lean`, 136 lines, Git blob `761e513b1ae49f41cc39c3f71dba63226729e2b0`; source commit `5683e6ba9be8b1bbf59d0ec9e069acd60bf65ffd` (`[skip ci]`).
+- **Verification list:** `VERIFY.lean` blob `b7008ba8dea189aad8c7f7a60a7708a0c99c913c`, commit `791cd1957e25c3410d28c4057efc2d077b9bb42a`, registers nine unexecuted checks with import ahead of checks.
+- **Registry:** source and check record commit `ddb3383d6fc262c3a5aaf6c16fad7327e45b8567`, blob `0b138c3f167ddbe1cb349ec91f92c4d8d7e67146`.
+- **Fixed manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §1 physical E_q and exact coprime mean, §3 (T) labelled multiplicity, §4 (F) complete-product offshift; `paper/source/manuscript-body.tex` PP section. Mathlib pin unchanged.
+- **Real dependency source:** `ImbalancedChen/CurrentChenP5U9OrderedBranches.lean` blob `4fe6309961627f855e0203e3bd73871ff82fa862`, `ImbalancedChen/CurrentChenP5U9OrderedPhysicalPP.lean` blob `ae6a6ef3ef9b4edeb19ca41510e830d9b8e1dbb2`, and `P5zPositiveFamilyBudget.lean` blob `463662f184e9d4c16c2460716fb0b417b69eede3`. All were read, rather than inferred from filenames.
+
+### Genuine new manuscript-internal math
+
+The **actual switched U9** marked source is the disjoint **labelled** union of three original order gates `q<p1`, `p1≤q<p2`, `p2≤q`. The fixed inverse permutations deliver three exact physical rank-3 coefficient functions, all using **one and the same** physical `Q` and signed real `rho`. Actual source membership gives **full physical product m<N**, hence `N-m>0`, even where product values repeat across different labels. This independently excludes `m=N` for the entire U9 switched source and every ordered branch, without replacing it by a generic atom.
+
+Define for each actual branch j:
+
+`A_j = ∑_(t∈S_j) physicalDivisorSum(Q,rho,N-product(t)) - Mass(S_j)*physicalDensitySum(Q,rho) - CoprimeCorrection(S_j,product,1,Q,rho).`
+
+By exact original labelled finite Fubini and the verified-in-source `product<N` predicate (NOT by analytic PP), the candidate source derives:
+
+`E_U9(N;Q,rho)=A_0+A_1+A_2 = PP3(weight_0,Q,rho)+PP3(weight_1,Q,rho)+PP3(weight_2,Q,rho).`
+
+Both equalities preserve signed sum **before** absolute value, full physical product, all original multiplicities and the separate exact coprime corrections. Crucially `physicalDensitySum` alone is NOT the coprime mean. This adds the actual U9 triple-branch source to the earlier bounded U7 3/4-rank family; it is **not** a proof that either family exhausts the real marked/HB compiler. The integer sieve `rho_T` and actual physical `Q_T` have NOT been extracted, and a free real rho is not an identification of them.
+
+### Checks and limits
+
+- GitHub head lease checked before every write; no observed concurrent branch change. New source and VERIFY blobs reread; forbidden proof escape tokens **0** after removing comments; lexical delimiters balanced; imports precede #check; nine checks registered but **NOT executed**.
+- Independent deterministic Python **finite algebra** regression: 101 targets N=8..408 step 4; 1,015 label occurrences, 12,180 signed weighted modulus terms, order-branch occurrences 174 / 543 / 298, 480 negative rho coefficients, and zero congruence-vs-full-shift-difference failures. Independent model uses broad U9-like ordering, `m<N`, centre-coprimality and root wall but does **not** execute the literal Lean source selector or compile Lean. A separate 35-target finite model retained 51 repeated physical-product label occurrences across order gates; no product-image deduplication. Neither model certifies elaboration, full analysis or kernel acceptance.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, transitive axiom audit, Codex, heavyweight producer. Upstream U9 source itself says SOURCE_ONLY/UNCOMPILED. The candidate may still contain elaboration bugs and remains **BLUE LIMITED SCOPE**, not green; P3.6 stays **YELLOW**.
+- `EXTERNAL_INPUTS.json` untouched: blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`, restricted medium (M) only REGISTERED / NOT IMPLEMENTED / NOT AN AXIOM. No substitute axiom, target-equivalent hypothesis, toolchain/lock change, old production module rewrite, manuscript/master update, full87 dynamic-parent change, other-workstream edit, CI trigger or PR.
+
+### Next exact entrance
+
+Find and read the genuine ALL marked/HB PP atom constructor and prove its residual occurrence IDs, fine labels, external marked product r and restoring c correspond to the original physical product with the actual **integer `rho_T`** and physical `Q_T`. Only then use U7/U9 as named subfamilies where the actual compiler certifies inclusion. Independently pay the HB integer complete-product=T exceptional fibre, the nonzero-shift complete signed-modulus mixed divisor moment, original `W_T` continuous Fourier L1/Fubini/H uniformly in growing m(N), causal/whole-box, all HB source words, empty Gamma mothers, high-rank/enhanced and final same-rho PP. No external (M) estimate is implemented here.
