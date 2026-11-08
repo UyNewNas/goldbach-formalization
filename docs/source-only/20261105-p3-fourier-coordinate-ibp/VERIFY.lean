@@ -60,6 +60,7 @@ import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 import ImbalancedChen.P3ActualU8RoughDeltaNorm
 import ImbalancedChen.P3ActualU8SmallNormLevel
 import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
+import ImbalancedChen.P3ActualU8FifthMismatchBudget
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -570,3 +571,6 @@ import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
 #check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.original_fifth_rough_fixed_identification
 #check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.original_fifth_u8_common_carrier_PP
 #check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.eventually_u8_original_fifth_rho0
+
+#check ImbalancedChen.P3ActualU8FifthMismatchBudget.integer_rough_delta_le_disagreement_card
+#check ImbalancedChen.P3ActualU8FifthMismatchBudget.original_fifth_u8_disagreement_PP

@@ -1579,3 +1579,36 @@ GitHub source/VERIFY readback matched exact blobs; 58 imports precede all 348 #c
 NOT RUN: Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. Candidate elaboration remains unverified; no green state. EXTERNAL_INPUTS.json unchanged blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab: medium estimate (M) recorded only, never implemented or axiomatized. No production, manuscript, toolchain, excluded full87, other branches, PR or master modification.
 
 Next entry: Identify whether the GLOBAL manuscript causal coefficient equals this actual fifth producer on its precisely licensed region; otherwise use the compiled-minus-raw delta and prove its real budget, distinguishing rough integer and physical real coefficient as well as physical/auxiliary levels. Still internal: all marked/HB words, product=T exception, nonzero shifted-divisor moments, actual W_T Fourier L1/H/Fubini uniform for growing m(N), causal whole-box, empty Gamma, high-rank/enhanced and actual same-rho arbitrary-log PP. P3.6 remains YELLOW.
+
+
+## Successor P3.6 SOURCE_ONLY — actual fifth-policy rough mismatch cardinality (2026-11-08 UTC)
+
+- **Verified baseline and branch:** `c4009207ca9dee48bc366cfbb1c9002652ade833` on `chatgpt/p3-internal-original-w-20261105`; the GitHub HEAD was checked before writing. Actual new proof commit: `1888835c7c6e1626b1fb1be2a3d263d68acb4a87` with `[skip ci]`.
+- **Proof source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8FifthMismatchBudget.lean`, 144 lines, verified Git blob `ea3255cc578f2e6be63629f4aa28a23d766d3f6b`. Prior source `P3ActualU8OriginalFifthPolicyPP.lean` was read, as were `P3ActualU8SmallNormLevel.lean`, `P3ActualU8RoughDeltaNorm.lean` and literal producer `P1OriginalHistoricalPhysicalCoefficient.lean`. Root/docs/packet/production AGENTS paths were queried and absent. Excluded full87 files were not edited.
+- **Original paper pin:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`; `manuscript-body.tex` lines 256–278 (same signed rho and exact coprime mean), 451–469 (sign-sensitive small attachment) and distribution module §4(F) lines 151–171. Mathlib pin unchanged `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Actual new manuscript-internal reduction
+
+Let `cFifth(d)` be the actual fifth-capped historical first-exit integer coefficient, and `cOther(d)` an explicitly integer-valued, one-bounded rough candidate on the SAME rough physical carrier `R`. Put `D={d in R: cOther(d) != cFifth(d)}`. The genuine built-in `roughCoefficientInt_abs_le_one` supplies the fifth coefficient bound, while the candidate needs its separate one-boundedness hypothesis. A new finite Lean proof-body establishes
+
+```
+sum_(d in R) |cOther(d)-cFifth(d)| <= 2 * #(D)
+```
+
+by discarding equal slots and bounding each unequal integer coefficient difference by two. The second actual theorem combines this with the *previous* genuine sign-sensitive small-Rosser `ceil(L)` estimate and the actual U8 sharp-K labelled complete signed PP:
+
+```
+|E_U8(Q,rhoOther) - E_U8(Q,rhoFifth)|
+ <= #S_U8 * ceil(L) * 2 * #D.
+```
+
+Both real physical rho functions are obtained by attaching the SAME original minus/plus small-Rosser weights to their respective integer rough coefficients. This is a SAME-PHYSICAL-CARRIER comparison, not an asserted global final rho_T identification. It keeps original labels, possible repeated terminal primes, complete product and exact primitive mean without replacing any modulus or choosing coefficients separately for individual count terms. It is stronger than simply charging the cardinality of the whole rough carrier when there are few genuine coefficient disagreements. It does **not** prove #D small or even that the final global compiler satisfies the premise, and `ceil(L)` may be polynomial in N. No arbitrary-log PP gain is inferred.
+
+### Checks and exact boundary
+
+- GitHub source readback `ea3255cc578f2e6be63629f4aa28a23d766d3f6b`; no banned proof-escape tokens; lexical delimiter balance PASS. Two `#check` declarations registered in `VERIFY.lean`, not executed.
+- Independent finite exact integer disagreement scan: 810/810, zero failure. Independent exact-scaled signed-PP toy model: 900/900, with 1,600 negative physical coefficient instances, 18,000 repeated-prime tagged occurrences and 432 instances with complete product equal to target. It uses toy signed small weights and same q/primitive mean; it neither executes the actual fifth producer nor proves the analytic estimate.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, transitive axiom audit, Codex, heavy producer. Source candidates remain uncompiled and kernel-unverified; no new green node.
+- `EXTERNAL_INPUTS.json` unchanged at blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: (M) merely registered and not implemented or invoked as an axiom. No production, manuscript, toolchain, PR, main branch, other automations or excluded 87-domain modifications.
+
+**Next precise entry:** Identify the global final compiler's integer rough coefficient and the actual licensed physical rough carrier. Verify one-boundedness and control the exact disagreement set D relative to the literal fifth policy, or derive a genuine cancellation bound when D is not small. An unsigned cardinality criterion with a potentially polynomial `ceil L` does not pay the required absolute arbitrary-log PP estimate. W_T source-integrated Fourier L1/H/Fubini uniformly in T and m(N), full marked/HB, complete-product=T arithmetic, causal whole boxes, empty Gamma and high-rank/enhanced branches remain internal obligations. P3.6 **YELLOW**.
