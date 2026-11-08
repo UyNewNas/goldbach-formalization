@@ -50,6 +50,7 @@ import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 import ImbalancedChen.P3ActualU7PhysicalOffshift
 import ImbalancedChen.P3ActualU9PhysicalOffshift
 import ImbalancedChen.P3ActualU8SharpKOffshift
+import ImbalancedChen.P3ActualU8UnitQuotientOffshift
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -488,3 +489,13 @@ import ImbalancedChen.P3ActualU8SharpKOffshift
 #check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_physical_PP_same_rho_offshift
 #check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_productWeight_same_rho_offshift
 #check ImbalancedChen.P3ActualU8SharpKOffshift.actual_u8_strict_diagonal_same_rho_offshift
+-- Genuine U8 unit quotient and combined prime + unit physical families.
+-- SOURCE_ONLY: #check recorded only; Lean/Lake/CI/kernel NOT RUN.
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.unitPairProduct
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_unit_product_lt_target
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_unit_shift_pos
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_unit_exact_fibre_empty
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actualU8UnitOffshift
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_unit_same_rho_offshift
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actualU8PrimeUnitOffshift
+#check ImbalancedChen.P3ActualU8UnitQuotientOffshift.actual_u8_prime_unit_same_rho_offshift
