@@ -54,6 +54,7 @@ import ImbalancedChen.P3ActualU8UnitQuotientOffshift
 import ImbalancedChen.P3ActualU8UnitPhysicalNorm
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 import ImbalancedChen.P3ActualU8DirectUnitPayment
+import ImbalancedChen.P3ActualU8AttachedPhysical
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
@@ -516,3 +517,9 @@ import ImbalancedChen.P3ActualU8DirectUnitPayment
 #check ImbalancedChen.P3ActualU8RawPhysicalSieve.actual_u8_raw_physical_moduli_legal
 #check ImbalancedChen.P3ActualU8RawPhysicalSieve.actual_u8_upper_at_raw_physical_coefficient
 #check ImbalancedChen.P3ActualU8RawPhysicalSieve.eventually_actual_u8_raw_physical_upper
+
+-- P3.6 literal N-dependent attached physical coefficient and rho_0 cutoff.
+-- SOURCE_ONLY: registered declarations, not Lean/Lake/kernel checked.
+#check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_attached_u8_cutoff
+#check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_u8_at_attached_upper
+#check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_u8_at_manuscript_rho0
