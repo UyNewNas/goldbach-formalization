@@ -316,7 +316,7 @@ theorem abs_full87_highQ_le_exclusive_leaf_invoice
 
 /-- FULL original87 arithmetic zero certificate. This condition is a
 checkable finite property of the *actual* owner-list occurrences and their
-first-disagreement leaves. It is a sufficient test, not a new axiom, a
+first-disagreement leaves. It is a sufficient test, not an added assumption, a
 claimed property of the unexamined saved87 archive, or a PP error estimate. -/
 theorem full87_highQ_zero_of_all_exclusive_active_cuts
     (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
