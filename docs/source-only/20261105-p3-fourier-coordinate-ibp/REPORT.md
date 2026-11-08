@@ -1703,3 +1703,29 @@ The original small Rosser minus/plus selection is unchanged, and both source dis
 - **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex or heavy producer; no new GREEN. All three new declarations and their prior imports remain source candidates with elaboration risk.
 - `EXTERNAL_INPUTS.json` unchanged at blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted estimate (M) remains **REGISTER ONLY**, source/version/hypotheses/call-site recorded; never implemented or introduced as an axiom. No other production, main, manuscript, PR, toolchain, other automation or excluded full87 node changes.
 - **Next:** identify a genuinely licensed non-excluded causal policy and derive a real arithmetic estimate for both oriented signed sums (or bypass the unit part with its direct-count payment); independently finish original W_T smoothness and log budgets uniform in T and m(N), Fourier L1/H/Fubini, complete modulus arithmetic including product=T, all marked/HB atoms, empty Gamma, nonzero-shift moments and high-rank/enhanced. P3.6 stays **YELLOW**, the limited source candidate **BLUE**.
+
+## Successor P3.6 — original fifth native U8 two-rank carrier transport (2026-11-08)
+
+- Verified baseline: `e3dab5aa2da62da77937b6e8dfd22a68adfaf6e1` on `chatgpt/p3-internal-original-w-20261105`; the branch ref was checked before writing and the proof commit was pushed by expected-head compare-and-swap without force.
+- Actual SOURCE_ONLY proof commit: `d8030fbf4ef3f299043d8dce9ecce00d21d0892a` with `[skip ci]`; new `P3ActualU8PrimeUnitNativeCarrier.lean` (168 lines; Git blob `8f9294b08674e20badbc286944e382f3b6278130`). `VERIFY.lean` blob `64fd2f83cf5a21e49125615cb98df4761fa1a053`; three new `#check` commands are **registered, NOT executed**.
+- Original paper pin: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `manuscript-body.tex` around 257–280 and 450–479, distribution completion §4(F) 151–171. Fixed Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### New source-level internal result (not an analytic PP saving)
+
+The previous literal U8 prime-plus-unit signed response compared two first-exit coefficients **only on a larger common physical carrier**. The native historical fifth coefficient actually has its own `P1OriginalHistoricalPhysicalCoefficient.physicalModuli` and `.rho`, so a native-to-common transport for BOTH original source ranks was missing.
+
+`prime_unit_zero_extension` transports the actual rank-three original sharp-K triples **and** the independent quotient-one prime pairs simultaneously from the original physical Q and real signed rho to a containing rough carrier. It reuses the previously proved-in-source generic labelled signed-distribution zero-extension for the pair and the previous true original U8 rank-three transport. The original complete products, distinct source ranks, labels/multiplicities, small Rosser +/- attachment, and **exact coprime means** are unchanged.
+
+`original_fifth_prime_unit_zero_extension` specializes the transport to the literal original fifth-capped historical `finalPolicy` using the already defined integer-Mobius coefficient and the original `roughCoefficient_eq_fixed` / support-identification bridge. It assumes only that the common rough carrier contains the genuine fifth rough support. It does **not** assume that an arbitrary global compiler coincides with the fifth policy.
+
+`original_fifth_prime_unit_native_offshift` composes this native transport with the pre-existing complete-product offshift equality. Thus the **native** historical fifth two-source signed error equals the **common** carrier's full labelled divisor/offshift, density and exact coprime correction expression, with no new analytic-error hypothesis. This is an exact finite arithmetic source bridge, not cancellation nor proof of the manuscript PP bound.
+
+### Actual checks and environment
+
+- GitHub proof+VERIFY file blobs were read back after the `[skip ci]` commit. Source lexical bracket balance PASS, forbidden proof escapes 0; proof declarations are registered after imports.
+- Independent exact rational `Fraction` toy regression: **750/750** cases with original and larger rough carrier, duplicate separately labelled triple/pair occurrences and signed small-factor weights. Zero mismatches. These are toy models and do **not** execute real Rosser or the historical fifth policy.
+- Pinned toolchain and manifest were read: `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Compilation is now **authorized** by the user, but **was not run**: this execution container has neither a `lean` nor `lake` executable, and the direct git network probe returned DNS resolution failure. No local verified compilation is possible in this environment without an existing pinned execution setup. **No CI was dispatched**, per task restriction. No kernel replay, full axiom audit, Codex, heavy producer or toolchain upgrade.
+- `EXTERNAL_INPUTS.json` remains unchanged (blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`), (M) is **record only**. No new axioms or external results were implemented.
+- No production source, frozen manuscript, global source, excluded full87 node, other automation work, PR or master was modified.
+
+**Next precise entrance:** first map the SOURCE_ONLY dependency chain to an existing correct pinned Lean/Lake environment and elaborate this new native carrier transport, correcting concrete errors instead of adding unchecked interfaces. Mathematically this removes only the common-versus-native U8 pair/triple carrier discrepancy. The true final causal integer `rho_T` and physical `Q_T`, signed rough response saving, complete marked/HB/empty Gamma/high-rank sources, growing `m(N)` uniform original `W_T` Fourier bound and full-product `T` exception for other atoms remain INTERNAL YELLOW. No new GREEN node.
