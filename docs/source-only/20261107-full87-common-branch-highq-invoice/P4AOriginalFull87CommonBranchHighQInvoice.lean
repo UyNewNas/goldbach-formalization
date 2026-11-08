@@ -239,12 +239,13 @@ def ownedCommonHighQCharge
     (originalSameHistoryHighQCharge n e q om N cap X w L F c)).sum
 
 private theorem list_abs_sum_le_common_charge {α : Type*}
-    (xs : List α) (f charge : α → ℝ)
-    (h : ∀ a ∈ xs, |f a| ≤ charge a) :
-    |(xs.map f).sum| ≤ (xs.map charge).sum := by
+    (xs : List α) (f charge : α → ℝ) :
+    (∀ a ∈ xs, |f a| ≤ charge a) →
+      |(xs.map f).sum| ≤ (xs.map charge).sum := by
   induction xs with
-  | nil => simp
+  | nil => intro _; simp
   | cons x tail ih =>
+      intro h
       have hx := h x (by simp)
       have ht : ∀ y ∈ tail, |f y| ≤ charge y := by
         intro y hy
