@@ -65,6 +65,7 @@ import ImbalancedChen.P3ActualU8FifthMismatchBudget
 import ImbalancedChen.P3ActualU8FirstExitSupportDelta
 import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
+import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -595,3 +596,9 @@ import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
 #check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.actual_u8_prime_unit_same_rho_signed_kernel
 #check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.prime_unit_signedRoughResponse_split
 #check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.original_fifth_u8_prime_unit_signed_support_difference
+
+
+-- P3.6 native fifth-policy complete triple+unit transport; candidate only.
+#check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.prime_unit_zero_extension
+#check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.original_fifth_prime_unit_zero_extension
+#check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.original_fifth_prime_unit_native_offshift
