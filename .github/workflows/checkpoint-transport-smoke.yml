@@ -1,5 +1,5 @@
 {
-  "name": "Isolated checkpoint transport smoke test",
+  "name": "Isolated Lake checkpoint interruption test",
   "on": {
     "push": {
       "branches": [
@@ -21,7 +21,7 @@
   "jobs": {
     "produce": {
       "runs-on": "ubuntu-latest",
-      "timeout-minutes": 15,
+      "timeout-minutes": 20,
       "env": {
         "LEAN_NUM_THREADS": 2,
         "CI_LEAN_MEMORY_MIB": 12288
@@ -62,8 +62,13 @@
           "run": "set -euo pipefail\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe"
         },
         {
+          "name": "Build synthetic Lake seed and interrupt its dependent target",
+          "timeout-minutes": 5,
+          "run": "set -euo pipefail\npython3 - <<'PY'\nimport fcntl, hashlib, json, os, pathlib, signal, subprocess, time\nroot = pathlib.Path.cwd()\nfixture = root / '.checkpoint-lake-fixture'\nfixture.mkdir()\n(fixture / 'lean-toolchain').write_bytes((root / 'lean-toolchain').read_bytes())\n(fixture / 'lakefile.toml').write_text('name = \"checkpointfixture\"\\nversion = \"0.1.0\"\\n[[lean_lib]]\\nname = \"Seed\"\\n[[lean_lib]]\\nname = \"Slow\"\\n')\n(fixture / 'Seed.lean').write_text('def checkpointSeed : Nat := 42\\n')\n(fixture / 'Slow.lean').write_text('import Seed\\n' + ''.join(f'def checkpointSlow{i} : Nat := checkpointSeed + {i}\\n' for i in range(100000)))\nsubprocess.run(['lake', 'build', 'Seed'], cwd=fixture, check=True)\nstate = json.loads(pathlib.Path(os.environ['P0_CI_GUARD_STATE']).read_text())\ncommand_log = pathlib.Path(state['log'])\nstart_records = len(command_log.read_text().splitlines())\nlog = open(fixture / 'interrupted-build.log', 'w')\nproc = subprocess.Popen(['lake', 'build', 'Slow'], cwd=fixture, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)\ndef group_alive():\n    alive = []\n    for p in pathlib.Path('/proc').iterdir():\n        if not p.name.isdigit(): continue\n        try:\n            fields = (p / 'stat').read_text().rsplit(')', 1)[1].split()\n            if int(fields[2]) == proc.pid and fields[0] not in ('Z', 'X'): alive.append(int(p.name))\n        except (OSError, ValueError, IndexError): pass\n    return alive\nseen = False\ntry:\n    deadline = time.monotonic() + 120\n    while time.monotonic() < deadline:\n        rows = [json.loads(s) for s in command_log.read_text().splitlines()[start_records:]]\n        seen = any(r['tool'] == 'lean' and any(a.endswith('Slow.lean') for a in r['input_args']) for r in rows)\n        if seen: break\n        if proc.poll() is not None: raise RuntimeError('Build finished before controlled interruption; test is inconclusive')\n        time.sleep(0.02)\n    assert seen, 'No guarded Slow compiler observed'\nfinally:\n    try: os.killpg(proc.pid, signal.SIGTERM)\n    except ProcessLookupError: pass\n    deadline = time.monotonic() + 5\n    while group_alive() and time.monotonic() < deadline: time.sleep(0.05)\n    if group_alive():\n        try: os.killpg(proc.pid, signal.SIGKILL)\n        except ProcessLookupError: pass\n    proc.wait(timeout=10)\n    log.close()\nassert not group_alive(), 'Live process group remains; refuse checkpoint'\nassert proc.returncode != 0, 'Interrupted build must not be reported successful'\nwith open(state['slot'], 'a') as lock:\n    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)\nseed = fixture / '.lake/build/lib/lean/Seed.olean'\nreport = {'kind': 'synthetic-lake-controlled-interruption', 'slow_source_started': seen,\n          'interrupted_exit_code': proc.returncode, 'remaining_processes': group_alive(),\n          'compiler_lock_reacquired': True, 'seed_sha256': hashlib.sha256(seed.read_bytes()).hexdigest(),\n          'claim': 'Checkpoint test only, not project acceptance'}\n(fixture / 'checkpoint-report.json').write_text(json.dumps(report, indent=2) + '\\n')\nprint(json.dumps(report))\nPY\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\n"
+        },
+        {
           "name": "Compile only a tiny synthetic fixture and package it",
-          "run": "set -euo pipefail\nmkdir -p \"$RUNNER_TEMP/transfer\" .lake/build/lib/lean .lake/build/bin\nprintf 'def checkpointProbe : Nat := 42\\n' > CheckpointProbe.lean\nlean -o .lake/build/lib/lean/CheckpointProbe.olean CheckpointProbe.lean\nprintf '#!/bin/sh\\nprintf \"checkpoint-mode-ok\\\\n\"\\n' > .lake/build/bin/checkpoint-mode-probe\nchmod 755 .lake/build/bin/checkpoint-mode-probe\nln -s checkpoint-mode-probe .lake/build/bin/checkpoint-link\ngit rev-parse HEAD > \"$RUNNER_TEMP/transfer/commit.txt\"\nsha256sum lean-toolchain lake-manifest.json lakefile.toml > \"$RUNNER_TEMP/transfer/pins.sha256\"\nsha256sum .lake/build/lib/lean/CheckpointProbe.olean .lake/build/bin/checkpoint-mode-probe > \"$RUNNER_TEMP/transfer/files.sha256\"\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\ntar -cf \"$RUNNER_TEMP/transfer/checkpoint.tar\" .lake/build\n(cd \"$RUNNER_TEMP/transfer\" && sha256sum checkpoint.tar > checkpoint.sha256)\ngit diff --exit-code\nprintf \"Transport smoke test only; no project acceptance claimed.\\n\" >> \"$GITHUB_STEP_SUMMARY\""
+          "run": "set -euo pipefail\nmkdir -p \"$RUNNER_TEMP/transfer\" .lake/build/lib/lean .lake/build/bin\nprintf 'def checkpointProbe : Nat := 42\\n' > CheckpointProbe.lean\nlean -o .lake/build/lib/lean/CheckpointProbe.olean CheckpointProbe.lean\nprintf '#!/bin/sh\\nprintf \"checkpoint-mode-ok\\\\n\"\\n' > .lake/build/bin/checkpoint-mode-probe\nchmod 755 .lake/build/bin/checkpoint-mode-probe\nln -s checkpoint-mode-probe .lake/build/bin/checkpoint-link\ngit rev-parse HEAD > \"$RUNNER_TEMP/transfer/commit.txt\"\nsha256sum lean-toolchain lake-manifest.json lakefile.toml > \"$RUNNER_TEMP/transfer/pins.sha256\"\nsha256sum .lake/build/lib/lean/CheckpointProbe.olean .lake/build/bin/checkpoint-mode-probe > \"$RUNNER_TEMP/transfer/files.sha256\"\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\ntar -cf \"$RUNNER_TEMP/transfer/checkpoint.tar\" .lake/build .checkpoint-lake-fixture\n(cd \"$RUNNER_TEMP/transfer\" && sha256sum checkpoint.tar > checkpoint.sha256)\ngit diff --exit-code\nprintf \"Transport smoke test only; no project acceptance claimed.\\n\" >> \"$GITHUB_STEP_SUMMARY\""
         },
         {
           "name": "Upload exact checkpoint",
@@ -92,7 +97,7 @@
     "consume": {
       "needs": "produce",
       "runs-on": "ubuntu-latest",
-      "timeout-minutes": 15,
+      "timeout-minutes": 20,
       "env": {
         "LEAN_NUM_THREADS": 2,
         "CI_LEAN_MEMORY_MIB": 12288
@@ -143,6 +148,11 @@
         {
           "name": "Verify checkpoint and import the transferred object",
           "run": "set -euo pipefail\ncd \"$RUNNER_TEMP/transfer\"\ntest \"$(cat commit.txt)\" = \"$(git -C \"$GITHUB_WORKSPACE\" rev-parse HEAD)\"\nsha256sum -c checkpoint.sha256\ncd \"$GITHUB_WORKSPACE\"\nsha256sum -c \"$RUNNER_TEMP/transfer/pins.sha256\"\ntar -tf \"$RUNNER_TEMP/transfer/checkpoint.tar\"\ntar -xf \"$RUNNER_TEMP/transfer/checkpoint.tar\"\nsha256sum -c \"$RUNNER_TEMP/transfer/files.sha256\"\ntest -x .lake/build/bin/checkpoint-mode-probe\ntest -L .lake/build/bin/checkpoint-link\ntest \"$(readlink .lake/build/bin/checkpoint-link)\" = checkpoint-mode-probe\ntest \"$(.lake/build/bin/checkpoint-link)\" = checkpoint-mode-ok\nprintf 'import CheckpointProbe\\nexample : checkpointProbe = 42 := rfl\\n' > CheckpointConsumer.lean\nLEAN_PATH=\"$GITHUB_WORKSPACE/.lake/build/lib/lean\" lean CheckpointConsumer.lean\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\ngit diff --exit-code\nprintf \"PASS: cross-job object import, digest, pin, mode, symlink, fresh guard. NOT a full project build or 480-minute resume verification.\\n\" >> \"$GITHUB_STEP_SUMMARY\""
+        },
+        {
+          "name": "Resume real Lake fixture and verify cache reuse",
+          "timeout-minutes": 10,
+          "run": "set -euo pipefail\npython3 - <<'PY'\nimport hashlib, json, os, pathlib, subprocess\nfixture = pathlib.Path('.checkpoint-lake-fixture').resolve()\nreport = json.loads((fixture / 'checkpoint-report.json').read_text())\nassert report['slow_source_started'] and report['compiler_lock_reacquired']\nassert not report['remaining_processes'] and report['interrupted_exit_code'] != 0\nseed = fixture / '.lake/build/lib/lean/Seed.olean'\nassert hashlib.sha256(seed.read_bytes()).hexdigest() == report['seed_sha256']\nstate = json.loads(pathlib.Path(os.environ['P0_CI_GUARD_STATE']).read_text())\nlog = pathlib.Path(state['log'])\nbefore = len(log.read_text().splitlines())\nsubprocess.run(['lake', 'build', 'Seed', 'Slow'], cwd=fixture, check=True)\nrows = [json.loads(s) for s in log.read_text().splitlines()[before:]]\nlean_sources = [a for r in rows if r['tool'] == 'lean' for a in r['input_args'] if a.endswith('.lean')]\nassert any(a.endswith('Slow.lean') for a in lean_sources), 'Interrupted target was not rebuilt'\nassert not any(a.endswith('Seed.lean') for a in lean_sources), 'Completed seed was not reused'\nassert hashlib.sha256(seed.read_bytes()).hexdigest() == report['seed_sha256']\nafter = len(log.read_text().splitlines())\nsubprocess.run(['lake', 'build', 'Seed', 'Slow'], cwd=fixture, check=True)\nrows = [json.loads(s) for s in log.read_text().splitlines()[after:]]\nassert not any(r['tool'] == 'lean' and any(a.endswith('.lean') for a in r['input_args']) for r in rows), 'Warm build recompiled source'\nresult = {'kind': 'synthetic-lake-resume', 'seed_reused': True, 'interrupted_target_rebuilt': True,\n          'warm_build_no_source_compilation': True, 'claim': 'Not full project or 480-minute acceptance'}\nprint(json.dumps(result))\npathlib.Path(os.environ['RUNNER_TEMP'], 'runtime-evidence', 'lake-resume-result.json').write_text(json.dumps(result, indent=2) + '\\n')\nPY\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\nprintf 'Synthetic Lake checkpoint and interruption test passed; full project still unverified.\\n' >> \"$GITHUB_STEP_SUMMARY\"\n"
         },
         {
           "name": "Retain independent runtime evidence",
