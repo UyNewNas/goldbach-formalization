@@ -53,6 +53,7 @@ import ImbalancedChen.P3ActualU8SharpKOffshift
 import ImbalancedChen.P3ActualU8UnitQuotientOffshift
 import ImbalancedChen.P3ActualU8UnitPhysicalNorm
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
+import ImbalancedChen.P3ActualU8DirectUnitPayment
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
@@ -504,3 +505,8 @@ import ImbalancedChen.P3ActualU8UnitPhysicalNorm
 -- P3.6 actual U8 quotient-one positive physical-modulus L1 bounds; NOT EXECUTED.
 #check ImbalancedChen.P3ActualU8UnitPhysicalNorm.labelled_unit_signed_error_le_l1
 #check ImbalancedChen.P3ActualU8UnitPhysicalNorm.actual_u8_unit_error_le_physical_l1
+
+-- P3.6 U8 actual direct unit-count payment, no separate unit PP; NOT EXECUTED.
+#check ImbalancedChen.P3ActualU8DirectUnitPayment.actual_u8_small_prime_PP_loss_le_source_count
+#check ImbalancedChen.P3ActualU8DirectUnitPayment.actual_u8_upper_via_prime_PP_no_unit_PP
+#check ImbalancedChen.P3ActualU8DirectUnitPayment.eventually_actual_u8_upper_via_prime_PP_no_unit_PP
