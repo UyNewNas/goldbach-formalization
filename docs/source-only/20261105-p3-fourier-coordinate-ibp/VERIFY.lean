@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU8StrictBoundarySourcewise
 import ImbalancedChen.P3ActualU8StrictSmoothBoundary
 import ImbalancedChen.P3ActualU8StrictPhysicalPP
 import ImbalancedChen.P3ActualU8StrictPrimePP
@@ -628,3 +629,11 @@ import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 #check ImbalancedChen.P3ActualU8StrictSmoothBoundary.physicalKernel_abs_le_budget
 #check ImbalancedChen.P3ActualU8StrictSmoothBoundary.strict_minus_smooth_exact
 #check ImbalancedChen.P3ActualU8StrictSmoothBoundary.strict_minus_smooth_boundary_bound
+
+-- P3.6 full-target exceptional label and complete physical-q source-wise boundary;
+-- SOURCE_ONLY; no Lean/Lake/kernel run has verified these declarations.
+#check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.strict_weight_zero_at_exact_target
+#check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.smooth_target_product_forced_into_boundary
+#check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.boundary_budget_sum_by_labels
+#check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.physical_kernel_budget_split
+#check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.strict_smoothing_boundary_sourcewise_split
