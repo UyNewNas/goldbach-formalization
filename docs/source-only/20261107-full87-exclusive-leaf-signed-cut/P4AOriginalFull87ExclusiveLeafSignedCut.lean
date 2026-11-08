@@ -313,5 +313,40 @@ theorem abs_full87_highQ_le_exclusive_leaf_invoice
         (fun s _ => abs_original_ordinary_highQ_le_exclusive_cost
           n e q om N cap X w L F c s)
 
+
+/-- FULL original87 arithmetic zero certificate. This condition is a
+checkable finite property of the *actual* owner-list occurrences and their
+first-disagreement leaves. It is a sufficient test, not a new axiom, a
+claimed property of the unexamined saved87 archive, or a PP error estimate. -/
+theorem full87_highQ_zero_of_all_exclusive_active_cuts
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z L : ℝ) (X : ℕ) (F : ℕ → ℝ)
+    (hcut : ∀ c : Cell, ∀ s ∈
+       states delta n e q om N cap w z (fun _ : ℕ => (1 : ℝ)) c,
+       ∀ t ∈ originalExclusiveLeaves n e q om N c s,
+       ∀ a ∈ actualSmallRosserSupport N cap w,
+       (if t.2.positive then actualSmallRosserPlus N cap w L a
+        else actualSmallRosserMinus N cap w L a) ≠ 0 →
+         a * t.2.selected.prod ≤ X) :
+    P4AOriginalLicensedSixthSignedLedger.physical
+        (sixthPolicy n e q om (N : ℝ)) N cap w z L (highQTest X F) -
+      P4AOriginalLicensedSixthSignedLedger.physical
+        (policy delta n e q om (N : ℝ)) N cap w z L (highQTest X F) = 0 := by
+  rw [full87_high_q_gain_eq_owned_sources]
+  apply Finset.sum_eq_zero
+  intro c _
+  unfold ownedSource
+  have hz : ((states delta n e q om N cap w z
+      (fun _ : ℕ => (1 : ℝ)) c).map
+        (ordinarySaving n e q om N cap w L (highQTest X F) c)) =
+      (states delta n e q om N cap w z
+        (fun _ : ℕ => (1 : ℝ)) c).map (fun _ => (0 : ℝ)) := by
+    apply List.map_congr_left
+    intro s hs
+    exact original_ordinary_highQ_zero_of_exclusive_active_cut
+      n e q om N cap X w L F c s (hcut c s hs)
+  rw [hz]
+  simp
+
 end
 end ImbalancedChen.P4AOriginalFull87ExclusiveLeafSignedCut
