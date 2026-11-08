@@ -36,25 +36,27 @@ import ImbalancedChen.P3FourierBoxTailAlgebra
 import ImbalancedChen.P3ActualMarkedOffShiftDivisors
 import ImbalancedChen.P3ActualEvenOriginalPrimeException
 import ImbalancedChen.P3ActualNonemptyOriginalPrimeException
-
 import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
-
 import ImbalancedChen.P3FourierRestrictedBox
 import ImbalancedChen.P3FourierActualBoxTail
 import ImbalancedChen.P3ActualComplexPositionalGammaModes
-
 import ImbalancedChen.P3ActualComplexModeFibreTransport
-
 import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 import ImbalancedChen.P3ActualU7PhysicalOffshift
 import ImbalancedChen.P3ActualU9PhysicalOffshift
 import ImbalancedChen.P3ActualU8SharpKOffshift
 import ImbalancedChen.P3ActualU8UnitQuotientOffshift
 import ImbalancedChen.P3ActualU8UnitPhysicalNorm
--- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 import ImbalancedChen.P3ActualU8DirectUnitPayment
 import ImbalancedChen.P3ActualU8AttachedPhysical
+import ImbalancedChen.P3ActualU8CommonCarrierPP
+import ImbalancedChen.P3ActualU8CompiledDelta
+
+
+
+
+-- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
@@ -526,9 +528,15 @@ import ImbalancedChen.P3ActualU8AttachedPhysical
 
 -- P3.6 actual U8 signed original PP under zero extension to compiler common carrier.
 -- Registered source-only; Lean/Lake/CI/kernel NOT EXECUTED.
-import ImbalancedChen.P3ActualU8CommonCarrierPP
 #check ImbalancedChen.P3ActualU8CommonCarrierPP.labelled_coprime_common_eq_raw
 #check ImbalancedChen.P3ActualU8CommonCarrierPP.labelled_distribution_common_eq_raw
 #check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_rank3_PP_common_eq_raw
 #check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_original_divisor_sum_common_eq_raw
 #check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_PP_on_union_compiler_carrier
+
+-- P3.6 original U8 integer rough compiler-minus-raw physical delta.
+-- SOURCE_ONLY candidates; NONE of these #checks was executed.
+#check ImbalancedChen.P3ActualU8CompiledDelta.commonQ_positive
+#check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_signed_PP_difference
+#check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_integer_compiler_raw_delta
+#check ImbalancedChen.P3ActualU8CompiledDelta.actual_u8_integer_compiler_delta_l1
