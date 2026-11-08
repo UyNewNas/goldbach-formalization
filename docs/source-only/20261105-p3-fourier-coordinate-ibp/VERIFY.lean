@@ -59,6 +59,7 @@ import ImbalancedChen.P3ActualU8EvenRetainedTreePP
 
 import ImbalancedChen.P3ActualU8RoughDeltaNorm
 import ImbalancedChen.P3ActualU8SmallNormLevel
+import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -564,3 +565,8 @@ import ImbalancedChen.P3ActualU8SmallNormLevel
 #check ImbalancedChen.P3ActualU8SmallNormLevel.actual_small_beta_zero_of_level
 #check ImbalancedChen.P3ActualU8SmallNormLevel.actual_small_beta_norm_le_ceil
 #check ImbalancedChen.P3ActualU8SmallNormLevel.actual_u8_PP_delta_le_ceil_level_rough
+
+-- P3.6 literal original fifth frozen physical Q/rho, U8 same signed rho. REGISTERED ONLY.
+#check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.original_fifth_rough_fixed_identification
+#check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.original_fifth_u8_common_carrier_PP
+#check ImbalancedChen.P3ActualU8OriginalFifthPolicyPP.eventually_u8_original_fifth_rho0
