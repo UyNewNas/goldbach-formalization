@@ -4,11 +4,11 @@ Restore **from verified current branch**, not historical 9649ab3: `chatgpt/p1-fu
 
 Files and verified Git blob identifiers (the handoff's own blob can be obtained from the final Git tree):
 - Lean candidate: `docs/source-only/20261107-full87-signmatched-residual-witness/P4AOriginalFull87SignMatchedResidualWitness.lean` => `9b5d53b6087a8d223d98fb79d4b6201047bc9b84`.
-- REPORT.md: `docs/source-only/20261107-full87-signmatched-residual-witness/REPORT.md` => `28aa6c26f3e3c950ef41a532e035cb31be1bc5c1`.
+- REPORT.md: `docs/source-only/20261107-full87-signmatched-residual-witness/REPORT.md` => `8acbedc7005429ce744271295a4f2eeafa6e7987`.
 - REGISTRY.json: `docs/source-only/20261107-full87-signmatched-residual-witness/REGISTRY.json` => `2bacc05cadb8570effbc9b9a9d5506f8e5c124a6`.
 - INPUT_BOUNDARY.md: `docs/source-only/20261107-full87-signmatched-residual-witness/INPUT_BOUNDARY.md` => `f0bc0c68f038b80880598ac08c46f22168cc27d4`.
 
-Report math-display correction commit `823c080e1ea76d30cae2765a105f4784369edd5f`; math text only. Final continuing HEAD resolves from this same dedicated branch.
+Report display-math correction commit `9ee5d500ec4aff46d6493e4b1145eceabc72073c`; documentation formatting only. Final continuing HEAD resolves from this same dedicated branch.
 
 This is the first link from the prior active-OR cutoff's failed-test caution to a **genuine necessary condition** on nonzero high-q mass. If an original ordinary old-minus-new value is nonzero, one of its unchanged policies has a retained leaf with nonzero leaf.value, beta selected by that leaf's ACTUAL parity nonzero, STRICT full q>X and nonzero test F(q). A failed OR-max cutoff alone is insufficient; an isolated real contributor may still cancel in the aggregate. Hence no implicit positive saving, H_N budget, or PP permission.
 
