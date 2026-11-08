@@ -22,6 +22,8 @@ namespace ImbalancedChen.Part5OriginalH430MarkedScalingInvariance
 noncomputable section
 open scoped Classical BigOperators
 open P2EnhancedTwentyOneSameQWeighted
+open Wu2008DoubleSieve
+open AnalyticNumberTheory.LargeSieve.Bombieri1965Richert418
 open Part5OriginalH430TaggedArithmeticReceivers
 
 /-- Exact homogeneous scaling of the actual sieve source Phi, at the
