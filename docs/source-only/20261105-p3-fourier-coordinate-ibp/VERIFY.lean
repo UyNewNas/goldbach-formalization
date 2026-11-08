@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU8StrictPrimePP
 import ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal
 import ImbalancedChen.P3ActualCanonicalFrozenSplitPayment
 import ImbalancedChen.P3ActualFrozenCanonicalUnsortedGamma
@@ -602,3 +603,8 @@ import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 #check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.prime_unit_zero_extension
 #check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.original_fifth_prime_unit_zero_extension
 #check ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier.original_fifth_prime_unit_native_offshift
+
+-- P3.6 genuine strict-terminal U8 counting insertion; SOURCE_ONLY, NOT RUN.
+#check ImbalancedChen.P3ActualU8StrictPrimePP.actual_u8_prime_mass_strict_diagonal
+#check ImbalancedChen.P3ActualU8StrictPrimePP.actual_u8_upper_via_strict_prime_PP
+#check ImbalancedChen.P3ActualU8StrictPrimePP.eventually_actual_u8_upper_via_strict_prime_PP
