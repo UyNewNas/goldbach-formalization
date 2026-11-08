@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU8StrictSmoothBoundary
 import ImbalancedChen.P3ActualU8StrictPhysicalPP
 import ImbalancedChen.P3ActualU8StrictPrimePP
 import ImbalancedChen.P3ActualOriginalMarkedPrimeNoDiagonal
@@ -619,3 +620,11 @@ import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 #check ImbalancedChen.P3ActualU8StrictPhysicalPP.strict_distribution_eq_physicalPP
 #check ImbalancedChen.P3ActualU8StrictPhysicalPP.actual_u8_upper_via_strict_rank_three_PP
 #check ImbalancedChen.P3ActualU8StrictPhysicalPP.eventually_actual_u8_upper_via_strict_rank_three_PP
+
+-- Literal strict U8 versus proposed smooth W: exact SAME physical rho,
+-- complete signed modulus kernel, and selective boundary payment. NOT EXECUTED.
+#check ImbalancedChen.P3ActualU8StrictSmoothBoundary.physicalKernel
+#check ImbalancedChen.P3ActualU8StrictSmoothBoundary.physicalKernelBudget
+#check ImbalancedChen.P3ActualU8StrictSmoothBoundary.physicalKernel_abs_le_budget
+#check ImbalancedChen.P3ActualU8StrictSmoothBoundary.strict_minus_smooth_exact
+#check ImbalancedChen.P3ActualU8StrictSmoothBoundary.strict_minus_smooth_boundary_bound
