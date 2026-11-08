@@ -523,3 +523,12 @@ import ImbalancedChen.P3ActualU8AttachedPhysical
 #check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_attached_u8_cutoff
 #check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_u8_at_attached_upper
 #check ImbalancedChen.P3ActualU8AttachedPhysical.eventually_u8_at_manuscript_rho0
+
+-- P3.6 actual U8 signed original PP under zero extension to compiler common carrier.
+-- Registered source-only; Lean/Lake/CI/kernel NOT EXECUTED.
+import ImbalancedChen.P3ActualU8CommonCarrierPP
+#check ImbalancedChen.P3ActualU8CommonCarrierPP.labelled_coprime_common_eq_raw
+#check ImbalancedChen.P3ActualU8CommonCarrierPP.labelled_distribution_common_eq_raw
+#check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_rank3_PP_common_eq_raw
+#check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_original_divisor_sum_common_eq_raw
+#check ImbalancedChen.P3ActualU8CommonCarrierPP.actual_u8_PP_on_union_compiler_carrier
