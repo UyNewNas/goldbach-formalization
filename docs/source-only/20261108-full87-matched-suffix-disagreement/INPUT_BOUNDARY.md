@@ -1,0 +1,13 @@
+# INPUT_BOUNDARY — real producer matched-state exclusive suffix test
+
+## Inside manuscript proof
+Both `rawSignedHighQ` (original complete-sixth) and `licensedSignedHighQ` (licensed sixth/eighth) are already defined in the predecessor. On the SAME full `FirstExitDepthState`, they evaluate the same literal `attachedLeafTest N cap 1 w L (highQTest X F)`, but with different genuine original policies. `actualMatchedExclusiveLeaves` selects only first-disagreement subtrees of THESE exact two policies, and keeps each leaf's side tag, sign, mass and selected word. The arithmetic high-q test has STRICT `X < a * leaf.selected.prod`; a sufficient zero cut is NONSTRICT `a*prod ≤ X`. Beta is selected by `leaf.positive`, not by its old/new side tag. This does not assert the matched state actually occurs in both true producers.
+
+The existing `producerLedger` is the only actual per-Cell one-copy state matcher. This packet refines the *meaning of its matched test difference*, not the unmatched and outside costs. It must not be confused with the original ordinary old-cap/new-cap difference in a single licensed parent.
+
+## External registered, NOT proven
+Frozen manuscript: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, Git blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, §4 eq. current-PP. For a **fixed** admitted finite original-prime policy, weight on fixed labelled original primes supported above `c N^{a_*}` with fixed polylogarithmic mixed Euler-derivative bounds and no extra arithmetic mask, the SAME signed physical `rho_N(q)` weights BOTH actual AP prime-product count and exact coprime mean `X_W^(q)/phi(q)`; error `O_{A,W}(N(log N)^{-A})` under the stated square/full-modulus, phase, interval, Gevrey and geometric licenses, with all finite parameters fixed before sufficiently large even N. This statement is **registered as an external analytic input**, not imported as a new axiom, assumed via target-valued record, or proved here. No PNT/Mertens/BV/spectral foundation is started.
+
+Actual theorem still requires precise PP integer threshold X and smooth weight, primitive discrepancy and centre/modulus prime corrections, endpoint control, same rho and H_N payments. The two upper reserves (compiler and density) remain separate and unpaid. Saved87 JSON labels, their sum and any missing affine geometry witness do NOT authenticate physical N-dependent occurrence membership.
+
+Toolchain frozen: Lean `leanprover/lean4:v4.33.0-rc1`; mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. Constants c=49044063/25000000, K=8452171/1250000. SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
