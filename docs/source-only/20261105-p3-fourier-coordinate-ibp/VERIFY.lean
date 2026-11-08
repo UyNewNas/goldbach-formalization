@@ -64,6 +64,7 @@ import ImbalancedChen.P3ActualU8FifthMismatchBudget
 
 import ImbalancedChen.P3ActualU8FirstExitSupportDelta
 import ImbalancedChen.P3ActualU8FirstExitSignedResponse
+import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -587,3 +588,10 @@ import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 #check ImbalancedChen.P3ActualU8FirstExitSignedResponse.firstExit_physical_signed_response
 #check ImbalancedChen.P3ActualU8FirstExitSignedResponse.firstExit_physical_signed_support_difference
 #check ImbalancedChen.P3ActualU8FirstExitSignedResponse.original_fifth_u8_signed_support_difference
+
+
+-- Complete actual U8 rank-three plus quotient-one pair signed support response.
+-- SOURCE_ONLY: registered for future elaboration; no Lean/Lake/kernel execution.
+#check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.actual_u8_prime_unit_same_rho_signed_kernel
+#check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.prime_unit_signedRoughResponse_split
+#check ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse.original_fifth_u8_prime_unit_signed_support_difference
