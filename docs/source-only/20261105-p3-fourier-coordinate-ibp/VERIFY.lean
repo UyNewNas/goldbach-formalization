@@ -63,6 +63,7 @@ import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
 import ImbalancedChen.P3ActualU8FifthMismatchBudget
 
 import ImbalancedChen.P3ActualU8FirstExitSupportDelta
+import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -581,3 +582,8 @@ import ImbalancedChen.P3ActualU8FirstExitSupportDelta
 -- SOURCE_ONLY, NOT executed by Lean/Lake/kernel.
 #check ImbalancedChen.P3ActualU8FirstExitSupportDelta.firstExit_rough_delta_le_support_mismatch
 #check ImbalancedChen.P3ActualU8FirstExitSupportDelta.original_fifth_u8_firstExit_support_mismatch_PP
+
+-- P3.6 original first-exit signed rough-response (source-only, never executed).
+#check ImbalancedChen.P3ActualU8FirstExitSignedResponse.firstExit_physical_signed_response
+#check ImbalancedChen.P3ActualU8FirstExitSignedResponse.firstExit_physical_signed_support_difference
+#check ImbalancedChen.P3ActualU8FirstExitSignedResponse.original_fifth_u8_signed_support_difference
