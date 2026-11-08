@@ -510,3 +510,9 @@ import ImbalancedChen.P3ActualU8DirectUnitPayment
 #check ImbalancedChen.P3ActualU8DirectUnitPayment.actual_u8_small_prime_PP_loss_le_source_count
 #check ImbalancedChen.P3ActualU8DirectUnitPayment.actual_u8_upper_via_prime_PP_no_unit_PP
 #check ImbalancedChen.P3ActualU8DirectUnitPayment.eventually_actual_u8_upper_via_prime_PP_no_unit_PP
+
+-- Literal small/rough Rosser coefficient -> physical U8 finite count.
+-- SOURCE_ONLY staged import; none of these checks has been executed.
+#check ImbalancedChen.P3ActualU8RawPhysicalSieve.actual_u8_raw_physical_moduli_legal
+#check ImbalancedChen.P3ActualU8RawPhysicalSieve.actual_u8_upper_at_raw_physical_coefficient
+#check ImbalancedChen.P3ActualU8RawPhysicalSieve.eventually_actual_u8_raw_physical_upper
