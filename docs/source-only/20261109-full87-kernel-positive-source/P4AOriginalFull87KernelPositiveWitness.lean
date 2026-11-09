@@ -17,7 +17,7 @@ This is a strict ideal-kernel result on continuous original Sources only.
 It does NOT authenticate the frozen 87 numerical selected integrals,
 assert an N-dependent prime occurrence, change the actual sixth parent,
 identify physical signed continuation gains, or pay a reserve.
--/-
+-/
 
 namespace ImbalancedChen.P4AOriginalFull87KernelPositiveWitness
 noncomputable section
