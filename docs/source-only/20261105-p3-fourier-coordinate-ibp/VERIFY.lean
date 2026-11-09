@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBSmoothLogScaleBudget
 import ImbalancedChen.P3HBSmoothThreeWayRatioTwo
 import ImbalancedChen.P3HBHalfOpenPhysicalProductBridge
 import ImbalancedChen.P3HBHalfOpenDyadicSubdivision
@@ -865,3 +866,17 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothCoord_live_box
 #check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothTensor_children_sum
 #check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.actualHB_smooth_child_R128
+
+-- Actual three-way smooth HB child: normalized log chart, C-infinity and fixed
+-- positional norm loss. SOURCE_ONLY, NOT LEAN-EXECUTED or kernel-checked.
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.logChild
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothCoord_log_exact
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.logChild_contDiff
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothCoord_log_contDiff
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothCoord_log_deriv
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.logChild_sum
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.logChild_zero_small
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.logChild_zero_large
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothGate_norm_le_two
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothCoord_norm_le_two
+#check ImbalancedChen.P3HBSmoothLogScaleBudget.smoothTensor_norm_le_sixtyfour
