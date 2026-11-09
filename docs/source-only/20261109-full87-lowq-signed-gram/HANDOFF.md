@@ -1,0 +1,11 @@
+# Durable P1.4 handoff — original signed low-q Gram
+
+Latest read baseline: **f05e67ead03c5cda7af39b1f4c26bfc157a299e2**, original branch `chatgpt/p1-full87-lowq-primewise-signed-20261109`, full predecessor source, REPORT, REGISTRY, INPUT_BOUNDARY and HANDOFF read. New task branch `chatgpt/p1-full87-lowq-signed-gram-20261109`, source commit **db566b7efaf9436f5b57da6920114ae9bb3fd127**. Metadata commit is separate; always re-read actual branch HEAD. Do not reset to 9649ab3 or overwrite another task.
+
+**New source:** `docs/source-only/20261109-full87-lowq-signed-gram/P4AOriginalFull87LowQSignedGram.lean`; Git blob **3af5c919a16bfc1afe131154cf730ed82a3bf5bc**; 113 LF lines. It proves a candidate finite Gram identity and PSD for the SAME original RAW/LICENSED signed physical rho at complete `d≤X` and original `chenPrimePrefix(N+D)`. All cross terms are explicit and may be negative. Not a Cauchy bound or `o(H_N)`; not a reserve payment.
+
+**Checks:** remote source blob matched; deterministic 1,500 Fraction synthetic tests no counterexample, 1,307 nonzero cross terms, 717 negative off-diagonal cross terms. No real saved87 replay. `lean/lake/elan --version` all exit 127, no pinned installation. SOURCE_ONLY / UNEVALUATED / UNCOMPILED, no kernel/axiom/independent verification. No CI, Codex, upgrades or unrelated edits.
+
+**Pins:** paper `9731290e8f53cffda44129906cde6a965eaa869b`, manuscript blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, Lean `v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`, c=49044063/25000000, K=8452171/1250000. §4 external PP REGISTERED_NOT_PROVED / NOT_CALLED.
+
+**Concrete next action:** locate and authenticate at least one real original saved87 witness (raw affine row/prime history/source membership and original integral); do not equate archive label indexing to a geometric or arithmetic saving. If pursuing the Gram route, obtain a TRUE original correlation upper bound in the same H_N normalization before comparing with prior positive local B(d)C_W(d) fallback; avoid double invoicing. Preserve all raw/finite/filtered, rank9, changed/tagged, endpoints/centre, legal W_N and X, and two separate reserves. Compile only under matched pinned graph. P1.4 remains YELLOW.
