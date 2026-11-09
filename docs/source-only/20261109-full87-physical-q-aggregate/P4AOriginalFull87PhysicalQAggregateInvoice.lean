@@ -81,7 +81,6 @@ private theorem physical_on_original_union
     _ = ∑ d ∈ pairActualPhysicalModuli R S N cap w z,
           supportedPhysicalRho R N cap w z L d *
             highQTest X F d := by
-          symm
           exact Finset.sum_subset hs hz
 
 /-- The ORIGINAL RAW and LICENSED physical sums use ONE coefficient
