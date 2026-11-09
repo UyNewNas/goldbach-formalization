@@ -1902,5 +1902,32 @@ Both identities keep original labels and occurrence multiplicity, complete prime
 1. Compile the four new declarations with the fixed Lean/Mathlib pins (in an isolated source-only import mapping) and repair any elaboration error; do not promote any of the preceding 100+ source-only modules automatically.
 2. Produce a **real uniform original geometric W_T support contract** and one common large-N threshold with fixed c,a before N and all source labels, then connect the all-rank diagonal result. Do not assume arbitrary W has this property.
 3. Retain a separate exact-product=T arithmetic estimate for HB **integer** slots; pay the off-target complete-modulus congruence and coprime mean, actual mixed shifted moments, normalized Fourier/H-box error and growth m(N) uniformly.
-4. Identify final causal integer `rho_T` and physical `Q_T` (distinct from auxiliary level), finish marked/HB/empty Gamma/high-rank/enhanced sources. P3.6 remains **YELLOW**. 
+4. Identify final causal integer `rho_T` and physical `Q_T` (distinct from auxiliary level), finish marked/HB/empty Gamma/high-rank/enhanced sources. P3.6 remains **YELLOW**.
 
+## Successor P3.6 — actual strict rough-HB even complete target exclusion (2026-11-09)
+
+- **Verified inherited head:** 0e10983bce5f5b51713b1b0f7b73028cfee20a7e; branch chatgpt/p3-internal-original-w-20261105. No replay of the obsolete de582e6 entry.
+- **Actual proof commit:** bcf8162d4260fc3a932080d46bb7cd77f06666fe [skip ci]. P3HBEvenRoughTarget.lean (89 lines), Git blob **b07494d068a53bd0c5c91c525964315b77f8e9a8**.
+- **VERIFY commit:** 7749ec7e43c959b382d1482325fc088edfb0ebf0; import plus four registered, **not executed** check commands. VERIFY Git blob **a45b432d034ea61812ea130c7de474272ecbc788**.
+- **REGISTRY commit:** ccd4c15d5aa7e1aaec498469a83e49242edb9e53; Git blob **1f870a371b3590ff51cf0ca6bce972294b85737c**, valid JSON.
+- **Frozen source:** chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, prime-product completion sections 2 and 4. Lean v4.33.0-rc1 and Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 unchanged.
+- Root, ImbalancedChen, docs, docs/source-only and this packet AGENTS.md lookups were NOT_FOUND. Actual production definitions of roughOneSlot/roughOneSlot_support, actual rough HB role words and factor tuples, and the predecessor literal rough mass source were read. No extra constraints were inferred.
+
+### Actual internal mathematical increment
+
+The production roughOneSlot z n is the literal STRICT rough indicator requiring z < p for every prime p dividing n. Consequently, if T is even and 2 <= z, its original strict rough multiplier at T is **exactly zero** (2 divides T). There is no extra parity mask and no new analytic premise.
+
+The existing production roughOne_list_prod identity then shows that the **product of all original rough group projectors** vanishes whenever their group products multiply to even T, for an arbitrary list length. This exact diagonal statement does not add any cost depending on the growing HB length.
+
+For the actual ordered factorTuples (2*(j+1)) T and original roughTupleWeight z y (roles j), actual_word_mask makes EACH occurrence at complete product T zero. The new final theorem sums these genuine occurrences with the unchanged **signed** order-three HB coefficients +3, -3, +1, preserving the real y cutoff, unit factors, single log slot and positional multiplicities. This is not an abstract surrogate PP theorem.
+
+**Scope:** The proof applies to sources that truly retain the same strict rough projector on each original HB group. It does **not** establish that the final compiler supplies it for all marked, high-rank or empty-Gamma mother cases. An even marked outside factor needs separate scrutiny; actual Zchart >= 2 with a common eventual threshold is also still to be proved. No off-target arithmetic discrepancy, exact coprime mean estimate, full physical modulus mass, Fourier/H tail, final causal rho_T/Q_T, or arbitrary log saving is claimed.
+
+### Verification and open boundary
+
+- GitHub source read-back blob: b07494d068a53bd0c5c91c525964315b77f8e9a8. Forbidden proof escape scan **0** and textual delimiter balance **PASS**. These are NOT Lean checks.
+- Independent Python integer regression: **64,908/64,908** ordered positive factor tuple instances, all even T from 2 through 100, all HB j=0,1,2, cutoffs z=2,3,5,7, zero surviving rough projector products. This does not validate elaboration or analytic estimates.
+- Actual container command lookup showed **no lean**, **no lake**. **NOT RUN:** Lean/Lake typecheck or compilation, kernel replay, CI, transitive axiom audit, Codex, heavy numerical producer. The source-only module import path is not installed. Four declarations remain **SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED** and can still contain elaboration errors. No GREEN promotion.
+- EXTERNAL_INPUTS.json unchanged: Git blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab. Medium analytic estimate (M) is **REGISTERED ONLY**; no implementation or new axiom. No changes to the manuscript, production source, main, excluded full87 dynamic-parent/history node, other tasks, PRs, CI or board.
+
+**Next exact entrance:** Targeted elaboration in the pinned Lean/Mathlib environment (isolate source-only import mapping without changing production files); correct any true errors in these four and their prerequisites. Then prove the actual whole-compiler strict rough mask and Zchart >= 2 with the required common quantifier order; keep marked-even and empty-Gamma exceptions separate. Complete non-target arithmetic moments and true Fourier/H uniformity with the same original physical rho_T,Q_T before any P3.6 closure claim.
