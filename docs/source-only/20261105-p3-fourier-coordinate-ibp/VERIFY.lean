@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBDyadicTensorPartition
 import ImbalancedChen.P3HBFinitePartitionRestore
 import ImbalancedChen.P3HBOriginalGeometricProductCollapse
 import ImbalancedChen.P3HBMarkedFixedProductMassBound
@@ -783,3 +784,16 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBFinitePartitionRestore.fixed_fibre_partition_restores
 #check ImbalancedChen.P3HBFinitePartitionRestore.signed_three_partition_restores
 #check ImbalancedChen.P3HBFinitePartitionRestore.same_rho_offshift_partition_restores
+
+-- P3.6 canonical six-position finite dyadic partition, original ordered HB fibre.
+-- All ten names are SOURCE_ONLY; registration does not execute Lean/kernel.
+#check ImbalancedChen.P3HBDyadicTensorPartition.dyadicPiece
+#check ImbalancedChen.P3HBDyadicTensorPartition.dyadic_telescope
+#check ImbalancedChen.P3HBDyadicTensorPartition.dyadic_one
+#check ImbalancedChen.P3HBDyadicTensorPartition.dyadicLabels
+#check ImbalancedChen.P3HBDyadicTensorPartition.hbDyadicCut
+#check ImbalancedChen.P3HBDyadicTensorPartition.factorTuple_getD_bounds
+#check ImbalancedChen.P3HBDyadicTensorPartition.factorTuple_dyadic_partition
+#check ImbalancedChen.P3HBDyadicTensorPartition.factorTuple_dyadic_partition_marked
+#check ImbalancedChen.P3HBDyadicTensorPartition.original_hb_dyadic_signed_restoration
+#check ImbalancedChen.P3HBDyadicTensorPartition.original_hb_dyadic_offshift_same_rho
