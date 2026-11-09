@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBHalfOpenPhysicalProductBridge
 import ImbalancedChen.P3HBHalfOpenDyadicSubdivision
 import ImbalancedChen.P3HBDyadicRectangleEndpointAudit
 import ImbalancedChen.P3HBRankAdaptiveRetainedSupport
@@ -849,3 +850,8 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut_live_R128
 #check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.rank_retained_half_sum
 #check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.factorTuple_rank_half_partition
+
+-- Actual 2/4/6 original HB factorTuples padded-product bridge (UNEXECUTED).
+#check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.factorTuple_paddedSix_product
+#check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.originalHB_paddedSix_product
+#check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.originalHB_halfOpen_live_R128
