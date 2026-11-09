@@ -6,11 +6,11 @@ Predecessor HEAD `0a62c1ba04fdf7d75189f6105bce42d106132705`, branch `chatgpt/p1-
 Frozen manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. c=`49044063/25000000`, K=`8452171/1250000`; do not change or silently switch paper versions.
 
 ## Exact source and commit log
-- Lean source `P4AOriginalFull87PhysicalQAggregateInvoice.lean`, 213 LF lines, Git blob `1dbd0094e95f59625ee0e562c567803c6fce8b76`. Source commit `94d60cc32f975470eb7dffc491244c09e98baf52`; 3 public candidate theorems, 1 private helper.
+- Lean source `P4AOriginalFull87PhysicalQAggregateInvoice.lean`, 212 LF lines, Git blob `928e8867b9acb0aabc76c6044621d308488b901c`. Initial source commit `94d60cc32f975470eb7dffc491244c09e98baf52`, corrected source commit `9aa2889c7a7f52695adb7d53a648b9b85f22ae3e`; 3 public candidate theorems, 1 private helper.
 - `REPORT.md` Git blob `007b1c844f1e75d82563da5951ca6989434662b0`.
 - `INPUT_BOUNDARY.md` Git blob `20520d53b157982c0458b3dfdb471623fd6ffb32`.
 - `REGISTRY.json` Git blob `b2f0b72aa477b1b6cf6dd031d4df8d0bd03c593b`.
-- Documentation tree commit `9ce1d6ec1c08d189be009e1d6815d4f775b1ae8c`. All four source/report/boundary/registry file blobs and the branch head were re-read from GitHub before this HANDOFF write. Final HEAD is the commit that adds THIS HANDOFF, not `94d60c` or `9ce1d6e`.
+- Documentation tree commit `9ce1d6ec1c08d189be009e1d6815d4f775b1ae8c`. All four source/report/boundary/registry file blobs and the branch head were re-read from GitHub before this HANDOFF write. Final HEAD is the commit that adds THIS HANDOFF, not `94d60c`, `9ce1d6e`, or `9aa2889`.
 
 ## Real finite mathematics, with exact limitations
 From original R/S policies define their real modulus supports `M_R`, `M_S`. For any integer X and real test F, the candidate proves the actual original RAW/LICENSED physical signed difference equals
