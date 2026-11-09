@@ -4,9 +4,9 @@ Date: 2026-11-09 UTC. Source branch: `chatgpt/p5-h34-actual-q-first-exit-receipt
 
 - Verified predecessor h34 HEAD: `d44874cf714b818b5f51aafaf4c85a7e47cc7363`.
 - Historical original task entry: `0a3fa5aa639e74122fbef18be02f0ad6fa8a77a0` (not the working baseline).
-- Mathematical source commit: `0def7e3927ebee04727fceb4f526b148d4210b3c`.
-- Source file: `Part5OriginalH430ActualQFirstExitReceipts.lean`, **201 lines**, two definitions and five candidate theorem declarations.
-- Source blob read back from GitHub: `6409dcb2dfb56866eddb19ec35b24129ab80c3b8`.
+- Mathematical source commits: `0def7e3927ebee04727fceb4f526b148d4210b3c` (initial) and `f878b68530c90ab5351f5c06e140726034eac9e9` (explicit Euler namespace open).
+- Source file: `Part5OriginalH430ActualQFirstExitReceipts.lean`, **202 lines**, two definitions and five candidate theorem declarations.
+- Source blob read back from GitHub: `59ecc85f653805c7c215cf994218a4f7decfa6ec`.
 - **PARTIAL_SOURCE_INCREMENT / SOURCE_ONLY / UNCOMPILED / UNEVALUATED / FULL_H34_OPEN.**
 
 ## Why the increment is new
@@ -37,7 +37,7 @@ This is an actual per-receipt **first-excluded event match** for two of the reje
 ## Validation actually performed
 
 - Confirmed GitHub push permission and predecessor ref `d44874c`.
-- GitHub content readback confirms the new 201-line mathematical file and blob `6409dcb2`; the compare endpoint confirms a clean one-commit fast-forward `d44874c → 0def7e3` adding only this file, with **201 additions, 0 deletions**.
+- GitHub content readback confirms the new 202-line mathematical file and blob `59ecc85`; the compare endpoint confirmed the initial fast-forward `d44874c → 0def7e3` with 201 additions/0 deletions, followed by the one-line source namespace fix `f878b68`. Neither changed any production or concurrent-task file.
 - The current runtime has `git` but **no `lean`, `lake` or `elan` on PATH**; no pinned local dependency checkout or prior source-only module installation is mounted. Existing CI workflows do not automatically install/elaborate these source-only packet imports, and CI configuration is intentionally unchanged. Accordingly **no successful Lean compile**, no kernel replay, no transitive axiom audit and no numerical430 finite replay occurred. Static prohibition checks and Git hashes are not evidence of elaboration.
 - Nothing in the current packet is marked COMPILED or green; inherited source-only proofs and finite guards remain UNEVALUATED.
 
