@@ -6,7 +6,7 @@ Verified predecessor HEAD `0a62c1ba04fdf7d75189f6105bce42d106132705` on `chatgpt
 Fixed manuscript: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Fixed Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`, c `49044063/25000000`, K `8452171/1250000`.
 
 ## New in-paper candidate result
-New source `P4AOriginalFull87PhysicalQAggregateInvoice.lean`, **213 lines**, Git blob `1dbd0094e95f59625ee0e562c567803c6fce8b76`. Exactly 3 public candidate theorems and 1 private helper; source commit `94d60cc32f975470eb7dffc491244c09e98baf52`.
+New source `P4AOriginalFull87PhysicalQAggregateInvoice.lean`, **212 lines**, Git blob `928e8867b9acb0aabc76c6044621d308488b901c`. Exactly 3 public candidate theorems and 1 private helper; source commits `94d60cc32f975470eb7dffc491244c09e98baf52` and orientation correction `9aa2889c7a7f52695adb7d53a648b9b85f22ae3e`.
 
 Original RAW policy R and LICENSED policy S have actual ORIGINAL full-modulus support sets M_R, M_S from `actualSmallRoughModuli (R false)/(S false)`, not artificial Finset of physical occurrences. The same genuine supportedPhysicalRho is used for both. For any finite physical parameters and any integer X and real test F:
 ```
@@ -24,7 +24,7 @@ abs(physical(R, highQTest X F)-physical(S, highQTest X F))
 This removes a finite summation/reindexing gap without inventing a new rho, reassigning parent, factoring out signs before equal full q are combined, or using an AP estimate separately on stopped or Cell subcoefficients. The same pointwise invoices are charged once per physical q; summing them is NOT proof that they are o(H_N).
 
 ## Verification performed / limitations
-- GitHub returned actual source blob `1dbd0094e95f59625ee0e562c567803c6fce8b76`, 213 LF lines, 3 public theorem bodies, exactly the isolated branch and source commit. Static forbidden-escape scan negative and delimiter balance positive. Upstream definition names were checked against full source, but elaboration has NOT been run.
+- GitHub returned actual corrected source blob `928e8867b9acb0aabc76c6044621d308488b901c`, 212 LF lines, 3 public theorem bodies, exactly the isolated branch and source commit. Static forbidden-escape scan negative and delimiter balance positive. Upstream definition names were checked against full source, but elaboration has NOT been run.
 - Independent exact Fraction synthetic check: 2,500 two-policy populations, 20,982 full-modulus probes and 1,936 nonzero physical-difference cases, zero counterexamples; included q=0 and strict X=q boundary. These are finite-model sanity checks ONLY.
 - `lean --version`, `lake --version`, `elan --version` returned 127 (command not found) in the current Debian runtime. Matching pinned Lean/mathlib environment cannot be compiled here; SOURCE_ONLY / UNEVALUATED / UNCOMPILED. No kernel replay, transitive axiom audit, independent peer verification or authentic saved87 physical witness replay.
 - No new CI or GitHub Actions run, Codex, computer access, new compute resources, main/master edit, merge, force update, toolchain upgrade, or reserve payment.
