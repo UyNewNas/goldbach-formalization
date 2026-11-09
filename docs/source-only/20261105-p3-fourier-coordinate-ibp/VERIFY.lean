@@ -87,6 +87,7 @@ import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
 import ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal
 
 import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
+import ImbalancedChen.P3HBGeometryDefectBudget
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -766,3 +767,12 @@ import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 #check ImbalancedChen.P3HBOriginalGeometricProductCollapse.signed_three_product_geometry_collapse
 #check ImbalancedChen.P3HBOriginalGeometricProductCollapse.signed_three_product_geometry_offshift_same_rho
 
+
+
+-- P3.6 localized original HB defect, SOURCE_ONLY, checks NOT RUN
+#check ImbalancedChen.P3HBGeometryDefectBudget.geometryDefect
+#check ImbalancedChen.P3HBGeometryDefectBudget.original_fixed_mass_geometry_split
+#check ImbalancedChen.P3HBGeometryDefectBudget.signed_three_geometry_split
+#check ImbalancedChen.P3HBGeometryDefectBudget.geometry_defect_fixed_mass_norm_le
+#check ImbalancedChen.P3HBGeometryDefectBudget.signed_three_geometry_defect_norm_le
+#check ImbalancedChen.P3HBGeometryDefectBudget.same_rho_offshift_geometry_defect_norm_le
