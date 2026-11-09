@@ -1,0 +1,7 @@
+# P1.4 numerical archive minimum — input boundary
+
+This packet proves only finite statements about the **actual frozen archival selected rational rows** and their original Cell indices. The original saved geometric witness files and actual N-dependent signed sieve occurrences are NOT authenticated here. Positivity of an archival *selected upper direct saving* does not prove positivity of a signed physical gain under an altered parent or strategy. The relative weight function in the stability inequality is a variable, NOT an asserted identity for the original action, nor is its allowance paid.
+
+Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Fixed Lean 4 v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958. Constants c=49044063/25000000, K=8452171/1250000 unchanged.
+
+External §4 PP input: REGISTERED_NOT_PROVED / NOT_CALLED. Exact original same-signed-rho AP minus coprime mean for positive squarefree physical moduli, legal integer X, fixed admissible Gevrey W_N and genuine chart/derivative hypotheses must be verified separately; no distribution claim is inserted here. N-dependent actualParent, source prime population, sixth filtering, ordinary residual integrals, signed gain and separate compiler/density reserve payments remain unproved.
