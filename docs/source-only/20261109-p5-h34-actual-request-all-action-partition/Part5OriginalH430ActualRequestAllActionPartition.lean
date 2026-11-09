@@ -21,6 +21,7 @@ namespace ImbalancedChen.Part5OriginalH430ActualRequestAllActionPartition
 noncomputable section
 open scoped Classical BigOperators
 open P5OriginalFeedbackTableKernels
+open P5OriginalActionMassBound
 open Part5OriginalH430PhysicalRoots
 open Part5OriginalH430BankSlotTargets
 open Part5OriginalH430RequestedReads
