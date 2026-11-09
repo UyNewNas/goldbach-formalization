@@ -133,7 +133,8 @@ theorem integrableOn_original_cap_gap (c : Cell) :
     have hP : 0 < comparison c t - total t :=
       (cutoff_pos.trans hr.1).trans hr.2.1
     linarith [hr.2.2.2]
-  rw [Real.norm_eq_abs, abs_of_nonneg hnonneg]
+  rw [Real.norm_eq_abs, abs_of_nonneg hnonneg,
+    abs_of_nonneg (by positivity : (0 : ℝ) ≤ 3 * mu)]
   exact hup
 
 /-- This is a real, measurable-source INTEGRAL inequality, not an
