@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalGeometricProductCollapse
 import ImbalancedChen.P3HBMarkedFixedProductMassBound
 import ImbalancedChen.P3HBMarkedFixedProductFibre
 import ImbalancedChen.P3HBMarkedMobiusOffshiftSquarefree
@@ -757,3 +758,11 @@ import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 #check ImbalancedChen.P3HBMarkedFixedProductMassBound.originalHBFixedAbsoluteMass_le_rough
 #check ImbalancedChen.P3HBMarkedFixedProductMassBound.originalHBFixedOccurrenceMass_norm_le_tau
 #check ImbalancedChen.P3HBMarkedFixedProductMassBound.offshift_fixed_hb_physical_norm_le_tau
+
+-- P3.6 coherent ORIGINAL group-product geometry, same signed physical rho.
+-- SOURCE_ONLY candidate checks, NOT EXECUTED.
+#check ImbalancedChen.P3HBOriginalGeometricProductCollapse.productGeometry
+#check ImbalancedChen.P3HBOriginalGeometricProductCollapse.original_fixed_mass_product_geometry
+#check ImbalancedChen.P3HBOriginalGeometricProductCollapse.signed_three_product_geometry_collapse
+#check ImbalancedChen.P3HBOriginalGeometricProductCollapse.signed_three_product_geometry_offshift_same_rho
+
