@@ -1,0 +1,9 @@
+# Durable P1.4 H5/H7 continuation
+
+Parent independent branch: `chatgpt/p1-full87-seed-nine-fifty-geometry-20261109`, verified starting HEAD `172533c4b6726dada8dd9babed05b524004a5dfd`. Current branch `chatgpt/p1-full87-h5h7-original-interiors-20261109`; packet `docs/source-only/20261109-full87-h5h7-original-interiors`. Read current branch ref to get its REAL committed HEAD, plus REPORT.md, REGISTRY.json, INPUT_BOUNDARY.md, source, checker and AGENTS before next mutation. Never fall back to 9649ab3 if this later branch is live.
+
+Actual source `docs/source-only/20261102-resume-30r/full87_source_history/P4AOriginalFirstFailureH5H7Literal.lean`, blob `8a727a9f5c9d6de6389a821808f7d3828574ad43`. New source `P4AOriginalFull87H5H7Interiors.lean` and matching checker are recorded in REGISTRY. All 17 original H5/H7 domains / 1710 actual rows exact audited: minimum 3999/40000000 at H5 index2 row18, max abs slope9/2. Uniform margin9/100000, radius1/1000000, retained slack1/20000. Strict original continuous-source candidates now 47/87. 40 remain unbuilt (15 descending, 13 ascendingPair, 12 H3).
+
+**No original saved87 witness recovered; no actual N-dependent Source/parent/beta occurrence; no integral or signed-gain authentication.** This is purely finite continuous geometry. Lean/source-only status SOURCE_ONLY / UNEVALUATED / UNCOMPILED; Lean, Lake, elan not installed; checker stored but not run in full checkout. GitHub connector used because container DNS cannot resolve GitHub. No CI/Codex/main modification or pins changed. External §4 PP REGISTERED_NOT_PROVED / NOT_CALLED.
+
+NEXT: locate pinned saved87 original witness (old archived index maps numeric records but missing raw witness bytes), tie actual state and history to source; if unattainable, certify one of remaining uncovered literal families, then compile only with matching pinned toolchain when available. Do not claim P1.4 closed.
