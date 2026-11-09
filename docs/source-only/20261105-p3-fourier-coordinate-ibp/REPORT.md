@@ -1820,3 +1820,39 @@ This is a **finite source identification**, NOT the required manuscript `O_A(N/l
 - **External boundary:** `EXTERNAL_INPUTS.json` blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab` unchanged; (M) **REGISTERED ONLY**, no implementation/new axiom. The excluded full87 dynamic parent/history node, production modules, other task branches, master, PR, CI and boards were not changed.
 
 **Next exact entrance:** Pin-matched targeted Lean elaboration of this module and its source-only dependencies, fixing actual failures first. Then distinguish the complete labelled congruence boundary response from the exact coprime mean, establish the actual arithmetic shifted-divisor and full-product=N payments, and construct admissible original geometric W with uniform mixed/Fourier bounds for growing m(N). The final causal integer rho_T and physical Q_T and all marked/HB/empty-Gamma/high-rank coverage remain YELLOW. P3.6 overall YELLOW; this restricted packet BLUE/SOURCE_ONLY.
+
+## Successor P3.6 — signed exact-target diagonal extraction on original labels (2026-11-08 UTC)
+
+- **Verified resume baseline:** `74b3eee5cec83951631e4b7f7e700d4c2feb4f71` on the unique P3.6 branch `chatgpt/p3-internal-original-w-20261105`. No writer drift at both pre-write checks. New proof commit **`787976dd72cc0b76c24f696532af540bf4ad03e5`** (`[skip ci]`).
+- **New source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualU8ExactTargetResponse.lean`, 163 text lines, Git blob **`bbea7fc0ec895e6fbbc188bb357a44f49e249762`**. `VERIFY.lean` blob **`338f7ee0ada42ec5c46fe0af87e5128f926f6114`**, with 68 imports before 389 registered `#check` commands (NOT executed). Two finite definitions and five candidate theorems.
+- **Paper pin:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` lines 257–280 and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4(F). Toolchain pin unchanged: Lean v4.33.0-rc1, Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.
+
+### Actual finite mathematical progress
+
+The earlier source-wise boundary packet only *located* the complete-product=N exception. The new packet evaluates its complete signed physical congruence-minus-coprime kernel **exactly**, with no termwise absolute value: for each original rank-three labelled u with `labelledProduct u = N`, `Nat.ModEq q N N` is true for **every physical q**, including Lean's totalized zero-modulus convention. The old strict-source lemma supplies `strictPhysicalWeight N u = 0`. Define
+
+```
+R_target(N,Q,rho) =
+  sum_(q in Q) rho(q) * [1 - 1_((N,q)=1)/phi(q)].
+```
+
+Then the full modulus sum of the original STRICT-minus-smooth kernel on the exact-target labelled carrier factors as
+
+```
+sum_(q in Q) rho(q) * sum_(u in labels, P(u)=N)
+    [strict(u)-W(u)] * K_q(u)
+  = -[sum_(u in labels, P(u)=N) W(u)] * R_target(N,Q,rho).
+```
+
+If W agrees with strict off the actual labelled boundary B, the factor in square brackets is **exactly** the W mass on `labels ∩ B ∩ {P=N}`. `targetResponse_split` also identifies `R_target = sum_q rho(q) - sum_q rho(q)*1_coprime(N,q)/phi(q)`: this is the complete physical divisor response at zero shift minus its literal primitive mean, not a made-up tau(0) expression. The original physical Q and signed rho are shared throughout, and distinct labels with equal product remain distinct.
+
+This is a narrower actual algebraic advance than a full PP estimate: neither `R_target`, the target boundary W mass nor their product has been shown power-small or arbitrarily log-small. It is not a new external assumption, and does not identify the final causal `rho_T,Q_T` or construct an admissible geometric smooth W_T.
+
+### Checks and precise trust boundary
+
+- Source and VERIFY Git blobs were read back at the exact proof commit; current EXTERNAL_INPUTS.json blob remains **`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`**. New source: forbidden proof escape tokens **0**, lexical delimiter balance **PASS**; registry JSON parse **PASS**.
+- Independent exact Python `Fraction` finite model: **1,400/1,400** signed factorizations and off-B target mass checks, including **1,323** nonzero diagonal signed values, **387** cases with q=0, and **1,238** cases with repeated complete products on distinct labels. It confirms only elementary finite identities under the stated model assumptions.
+- Current isolated container probes: `command -v lean` exit **1** and `command -v lake` exit **1**, i.e. matching binaries absent. **NOT RUN:** Lean/Lake compilation, elaboration of seven registered names, CI, independent kernel replay, full transitive axiom audit, Codex, heavy producer. No declaration is upgraded to COMPILED or GREEN.
+- External (M) remains **REGISTERED ONLY** in `EXTERNAL_INPUTS.json`; no new analytic theorem implementation or surrogate axiom. Unchanged: the frozen manuscript, production modules, excluded full87 parent/history task, other branches, CI, PR and external board.
+
+**Next precise entry:** first compile and repair these exact declarations in a pin-matched isolated Lean environment. Then control the real target boundary W-mass times the exact signed zero-shift physical response, separately from the off-target congruence/coprime arithmetic boundary. Construct a truly admissible original W_T with uniform derivative/Fourier/H-box bounds for growing m(N); finish actual same-causal-rho Q_T PP on all admitted marked/HB/empty-Gamma/high-rank sources. P3.6 stays YELLOW, this limited proof source BLUE/SOURCE_ONLY.
