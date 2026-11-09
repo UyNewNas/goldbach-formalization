@@ -25,7 +25,7 @@ For orientation only: using standard volume of an 8D box, the *analytic* integra
 `(1/(45000*mu^10)) * (2*10^-8)^8 = 2048/290805684100673791946979618305846315706730820238590240478515625`, approximately `7.0425e-60`. **The Lean source in this packet formalizes only the row/cap-gap/pointwise-kernel inequality, not the explicit box-volume or full-source integral endpoint.** This extremely small number is not the archived selected gain or a useful `H_N` payment.
 
 ## Committed proof source
-- `P4AOriginalFull87RemainingBoxGapLower.lean`: 184 lines after import/namespace correction, Git blob `7de21016d0dec150690ca3bc333a2878d2f3eec0`, source commit `52316945ca94baf8e796afa64a89a4685b20d561`; initial draft source commit `483342f9de77bc4164dda51c4b521c0d8e8f11a8`. This code introduces no axioms, target-equivalent structure fields, or proof escapes.
+- `P4AOriginalFull87RemainingBoxGapLower.lean`: 185 lines after import/namespace correction, Git blob `7de21016d0dec150690ca3bc333a2878d2f3eec0`, source commit `52316945ca94baf8e796afa64a89a4685b20d561`; initial draft source commit `483342f9de77bc4164dda51c4b521c0d8e8f11a8`. This code introduces no axioms, target-equivalent structure fields, or proof escapes.
 - The source proof depends on existing *SOURCE_ONLY* original-row certificates and the prior integral-comparison packet; it is not independently proven by importing or type-checking those statements.
 
 ## Actual verification and limits
