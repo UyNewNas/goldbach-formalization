@@ -1,0 +1,11 @@
+# INPUT_BOUNDARY — paired real smooth primitive versus modulus-prime
+
+Source: `P4AOriginalFull87PairedSmoothPrimitive.lean` at Git blob `131f81dd5d55cdf7aedfd51441d06e24c3d076f4`, based on actual previous high-q same-rho source commit `ab98eb970b9c946c2116c0d54d7cbfe81c5c585c`. Exact finite proof candidates only.
+
+**Objects unchanged:** ORIGINAL complete-sixth RAW policy, ORIGINAL LICENSED actual sixth/eighth policy, `actualSmallRoughModuli (P false)`, `actualSmallRoughRho (P false)`, `supportedPhysicalRho`, full physical q, signed beta and rough occurrences. `pairActualPhysicalModuli` unions only labels; it does NOT reinterpret two different q fibres as one policy, and does not insert a new source mask. Both paths keep the same N,D,cap,w,z,L and original W before all finite q sums.
+
+**Key distinction:** `finitePrimitiveDiscrepancy(S,W,N,q)` uses the exact *coprime* mean `finiteCoprimeMass(S,W,q)/φ(q)`. The smooth original-prime source recentered by the *full* weighted prime mass `T/φ(q)` differs by the actual `weightedModulusPrimeMass(N,D,q,W)/φ(q)` with a MINUS sign. Omitting this term would be a genuine mathematical error. Here the two corrections are combined over the SAME signed `rho_RAW(q)-rho_LICENSED(q)` before any absolute-value estimate. A nonprime N is required by the imported finite smooth-source lemma.
+
+**Analytic input remains external:** Fixed manuscript §4 `(original complete signed rho_N weighted prime-product AP discrepancy) - (same-rho exact coprime mean)`, its precise side conditions, auxiliary support, legal PP integer cutoff, prime-weight/Gevrey chart, and `O_{A,W}(N(log N)^(-A))`. Fixed source blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, pin `9731290e8f53cffda44129906cde6a965eaa869b`. State REGISTERED_NOT_PROVED / NOT_CALLED. Neither an axiom nor an external PNT/Mertens/BV/spectral proof has been introduced.
+
+This packet is for the UNTRUNCATED paired smooth physical source. It does not imply the support is ≤ legal integer X, does not quantify primitive/centre/modulus/endpoint errors relative to H_N, does not authenticate saved87 geometry or numerical signed saving, and does not spend either compiler or density reserve. Verification SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
