@@ -24,8 +24,10 @@ namespace ImbalancedChen.P4AOriginalFull87LowQAbsoluteEnvelope
 noncomputable section
 open scoped Classical BigOperators
 open P4AOriginalFull87PPCutoffLowQInvoice
-  (pairActualLowQModuli actual_raw_licensed_full_q_arithmetic_support)
-open P4AOriginalFull87PhysicalQAggregateInvoice (pairActualPhysicalModuli)
+  (pairActualLowQModuli actual_raw_licensed_full_q_arithmetic_support
+   actual_raw_licensed_primitive_discrepancy_high_low)
+open P4AOriginalFull87PhysicalQAggregateInvoice
+  (pairActualPhysicalModuli pairActualHighQModuli)
 open P4AOriginalFull87FullRhoQBridge (supportedPhysicalRho)
 
 /-- The literal modulus-congruence mass is controlled by the absolute
@@ -191,6 +193,61 @@ theorem actual_raw_licensed_lowq_primitive_le_support_card
       mul_le_mul_of_nonneg_left hsum
         (mul_nonneg (by norm_num) hT)
     _ = 4 * (Q.card : ℝ) * T := by ring
+
+
+/-- The immediate high-q consequence for the ORIGINAL full-q signed pair.
+A bound for the licensed FULL rho is not silently applied to a filtered
+rho. Rather, exact high/low splitting and the literal low-q envelope
+give a separate, explicit non-asymptotic supplement:
+  |E_high| <= |E_full| + 2 T_W * sum_low |Delta rho|.
+This works with the same original policies and signed physical moduli.
+It does not assert either term is small on the H_N scale. -/
+theorem actual_raw_licensed_highq_primitive_le_full_plus_source_mass
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N D cap : ℕ) (w z L : ℝ) (W : ℕ → ℝ) (X : ℕ) :
+    let R := P4AOriginalFull87CompleteSixthDispatch.policy e q om (N : ℝ)
+    let S := P4AOriginalFull87LicensedSixthPolicy.policy
+      delta n e q om (N : ℝ)
+    let T := ∑ p ∈ chenPrimePrefix (N + D), |W p|
+    |∑ d ∈ pairActualHighQModuli R S N cap w z X,
+      (supportedPhysicalRho R N cap w z L d -
+       supportedPhysicalRho S N cap w z L d) *
+        finitePrimitiveDiscrepancy (chenPrimePrefix (N + D)) W N d| ≤
+    |∑ d ∈ pairActualPhysicalModuli R S N cap w z,
+      (supportedPhysicalRho R N cap w z L d -
+       supportedPhysicalRho S N cap w z L d) *
+        finitePrimitiveDiscrepancy (chenPrimePrefix (N + D)) W N d| +
+      (2 * T) *
+        (∑ d ∈ pairActualLowQModuli R S N cap w z X,
+          |supportedPhysicalRho R N cap w z L d -
+           supportedPhysicalRho S N cap w z L d|) := by
+  dsimp only
+  let R := P4AOriginalFull87CompleteSixthDispatch.policy e q om (N : ℝ)
+  let S := P4AOriginalFull87LicensedSixthPolicy.policy
+    delta n e q om (N : ℝ)
+  let A : ℕ → ℝ := fun d =>
+    supportedPhysicalRho R N cap w z L d -
+      supportedPhysicalRho S N cap w z L d
+  let E : ℕ → ℝ := fun d =>
+    finitePrimitiveDiscrepancy (chenPrimePrefix (N + D)) W N d
+  let T : ℝ := ∑ p ∈ chenPrimePrefix (N + D), |W p|
+  let full : ℝ := ∑ d ∈ pairActualPhysicalModuli R S N cap w z, A d * E d
+  let high : ℝ := ∑ d ∈ pairActualHighQModuli R S N cap w z X, A d * E d
+  let low : ℝ := ∑ d ∈ pairActualLowQModuli R S N cap w z X, A d * E d
+  let C : ℝ := (2 * T) *
+    (∑ d ∈ pairActualLowQModuli R S N cap w z X, |A d|)
+  have hsplit : full = high + low := by
+    exact actual_raw_licensed_primitive_discrepancy_high_low
+      delta n e q om N D cap w z L W X
+  have hlow : |low| ≤ C := by
+    exact actual_raw_licensed_lowq_primitive_le_coefficient_variation
+      delta n e q om N D cap w z L W X
+  change |high| ≤ |full| + C
+  have hdiff : high = full - low := by linarith
+  calc
+    |high| = |full - low| := by rw [hdiff]
+    _ ≤ |full| + |low| := abs_sub_le _ _
+    _ ≤ |full| + C := add_le_add_left hlow _
 
 end
 end ImbalancedChen.P4AOriginalFull87LowQAbsoluteEnvelope
