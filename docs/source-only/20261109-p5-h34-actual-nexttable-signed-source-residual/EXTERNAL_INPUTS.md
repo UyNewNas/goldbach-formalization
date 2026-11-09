@@ -8,20 +8,20 @@ replacement external analytic theorem.
 ## Reused fixed-version interfaces
 
 - Mathlib, at fixed revision
-  \`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\`:
+  `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`:
   finite sums/reindexing, real rings, absolute-value triangle bounds
   and order arithmetic. Called in the seven new Lean candidates,
   with no new analytic hypotheses.
-- Existing \`all_markedBankRead_le_candidate\` from the original
+- Existing `all_markedBankRead_le_candidate` from the original
   selected-bank candidate level. Its exact invocation is
-  \`actual_bank_source_gap_le_candidate_gap\`, and the subsequent
-  \`actual_new_table_same_q_one_sided_source_budget\`.
+  `actual_bank_source_gap_le_candidate_gap`, and the subsequent
+  `actual_new_table_same_q_one_sided_source_budget`.
   This is an internal existing requested-feedback lemma, NOT a
   newly outsourced assertion about the original arithmetic count.
-- Existing \`uniform_actual_retained_selected_same_q_envelope\`,
+- Existing `uniform_actual_retained_selected_same_q_envelope`,
   consuming the preexisting bank/Buchstab raw coefficient error
   and row mass supplier. Called only in
-  \`uniform_actual_new_table_same_q_source_residual_bound\`;
+  `uniform_actual_new_table_same_q_source_residual_bound`;
   no new analytic theorem is imported.
 
 ## Not external
