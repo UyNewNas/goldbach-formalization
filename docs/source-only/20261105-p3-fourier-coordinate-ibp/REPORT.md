@@ -1979,3 +1979,40 @@ The source defines the exact complete-target complex term at an **unchanged phys
 ### Exact next entry
 
 First compile **these four new theorem declarations and their source-only dependencies** in a pinned isolated import map, and correct any real elaboration failure; do not infer proof credit from static scans. Next classify/pay the surviving **even outside marked integer** complete-target contributions in the *actual* compiler (rather than assume the arbitrary carrier M is admitted). Independently prove z=Zchart>=2 eventually with correct common thresholds, real W_T derivative/Fourier/H uniformity for growing m(N), the **off-target** shifted complete-modulus arithmetic ledger and causal same rho_T/Q_T for all HB/marked/empty-Gamma/high-rank/enhanced families. P3.6 remains **YELLOW**.
+
+
+## Successor P3.6 — complete-product Möbius eliminates the remaining marked diagonal when 4 divides T (2026-11-09)
+
+- **Actual restored HEAD**: `888306e8f5a4836d3243c380657c1ae0765fc066` on `chatgpt/p3-internal-original-w-20261105`. The original `de582e6` was not replayed. Before source writing the task branch HEAD exactly matched the inherited commit; it was checked before each subsequent update. No concurrent write was seen at these checks.
+- **Proof commit**: `bb69314f7a70669294917a6b3c66d6344c26ffc9` (`[skip ci]`), `P3HBMarkedMobiusFourDiagonal.lean` (150 lines), source Git blob `bf9694881fcd93b5bdb5a55d22f0bdd9ab3b4789`.
+- **VERIFY commit**: `e78eb48bab7e7ab0becc430b181c1474ef69b988`, Git blob `d86a962ebe138cfe8621c4a6340f85ee2f6b1714`; its six checks are REGISTERED ONLY and have NOT been executed.
+- **REGISTRY commit**: `518cd0b5aa51c1fee9caba50a1f1efc5276e1a07`, JSON blob `96659d9fedde809b68f892179cc5101785b2c7e7`.
+- **Frozen paper**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, prime-product completion §§2–4 and `manuscript-body.tex` 257–280. No manuscript change.
+- **Pinned tools**: Lean v4.33.0-rc1 and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged. The two exact Mathlib sources were directly read at the pinned commit: `Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean`, blob `9e6355da4e175f7ff3e135958b96c592633d47bd`, declares `ArithmeticFunction.moebius_eq_zero_of_not_squarefree`; `Mathlib/Data/Nat/Squarefree.lean`, blob `5fd20e08fc8cfde99dd334bf66a3071da498cfc4`, declares `Nat.squarefree_iff_prime_squarefree`.
+
+### New genuine mathematical restriction
+
+The preceding `P3HBExternalEvenMarkedDiagonal` localized the potentially surviving rough-HB exact product `marked.prod * hb.prod = T` at even T and z>=2 to EVEN outside marked products. It correctly did **not** eliminate that family. This packet adds a separate, actually present factor for certain original marked-residual sources: the literal global `ArithmeticFunction.moebius (r*n)`.
+
+When `4 | T`, 2² divides T, so T is not squarefree and **μ(T)=0**. On the exact COMPLETE product fibre r*n=T, the real original marked-residual kernel `markedResidualKernel r T q n` is identically zero at every physical modulus q; neither a coprimality hypothesis nor cancellation in rho is required. The new code proves candidates `complete_mobius_zero_of_four_dvd` and `markedResidualKernel_target_zero_of_four_dvd`, then applies the result to the **actual** original `weightedSortedPP` exact target fibre with its tuple-dependent W, outside integer r and original complete product.
+
+The module also defines the *explicitly qualified* original Mobius-carrying rough-HB mixed subfamily
+`mobiusMarkedRoughTargetAtQ` using the existing `markedResidualKernel`, genuine ordered `factorTuples`, `roughTupleWeight`, and arbitrary marked integer lists and complex W. Its target sum vanishes at each q when 4|T, and the same identity is transported through original +3,-3,+1 HB signs, unchanged physical Q and integer rho. All original position labels and exact coprime mean remain.
+
+**Scope caution / no false closure:** The unweighted `markedRoughTargetAtQ` from the predecessor does **not** contain a global μ(full product), and is **not** proved zero by this packet. This new identity cannot be inserted into a generic HB occurrence or final causal source without proving that the true source literally carries the global full-product Möbius factor. When T ≡ 2 mod 4, even marked exceptions can still survive (e.g. T=30, marked=2, residual=15, z=2). Thus this is a precise improvement for an admitted arithmetic subfamily, not a universal elimination of the marked-even diagonal or a PP distribution estimate.
+
+### Executed independent checks and limits
+
+- Source GitHub readback yielded exact blob `bf9694881fcd93b5bdb5a55d22f0bdd9ab3b4789`. Forbidden source proof-escape scan had **0 matches**, and text-level parenthesis check passed. `VERIFY.lean` now registers 74 imports and 414 `#check` commands, but has not been run.
+- Direct pinned Mathlib API source inspection noted above was performed; this is NOT elaboration or kernel certification.
+- Independent finite integer factorization model: **730** exact target factorizations with 4|T had μ(T)=0. A second exact Fraction signed physical-kernel model checked **1,320** four-divisible marked-residual cases (including q=0) and found 0 nonzero globally μ-weighted contributions, while **1,200** cases had nonzero would-be amplitudes *without* μ. **177** separate squarefree T≡2(mod 4) factorization controls remain potentially nonzero. These are finite sanity checks, not Lean executions and not uniform analytical estimates.
+- The runtime check found no `lean`, `lake` or `elan` executable, while `git ls-remote` failed to resolve github.com. **NOT RUN**: Lean/Lake directed typecheck or compilation, independent kernel replay, transitive axiom audit, CI (prohibited), Codex or heavy producer. The new six declarations, along with imported SOURCE_ONLY antecedents, remain BLUE / UNCOMPILED / KERNEL_UNVERIFIED.
+- Root and packet AGENTS paths were fetched and returned NOT_FOUND. `EXTERNAL_INPUTS.json` stays exactly blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: the restricted medium result (M) is **RECORD ONLY**, no new axiom and no external implementation.
+- Did not edit fixed manuscript, production files, other automations, excluded full87 dynamic-parent/history/strategy node, toolchain or lock, master/main, PR, CI, heavy producer or external board.
+
+### Real next proof entry
+
+1. In an actual pinned Lean/Mathlib installation, compile the new six declarations and the required mapped SOURCE_ONLY dependencies; repair real elaboration errors before crediting their statements. Static source inspection is insufficient.
+2. Audit the final original marked/HB compiler's actual coefficient: identify precisely which source occurrences retain **μ(complete physical product)**. The four-divisible conclusion must be applied only to those, and the remaining T≡2(mod4) even marked outside contributors still require a genuine finite arithmetic payment.
+3. Continue the *off-target* complete modulus sum and original shifted-divisor/mixed moment; genuinely prove original W_T mixed derivative and Fourier/H-box budgets uniformly in growing m(N), before inserting an actual small error into the same causal integer rho_T and original physical Q_T.
+4. Still internal: all causal/whole-box licences, HB source coverage, empty Gamma mother-word recognition and payment, high-rank/enhanced branches, product=T exceptions for other sources and complete arbitrary-log PP assembly. **P3.6 remains YELLOW; no GREEN promotion.**
