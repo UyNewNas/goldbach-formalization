@@ -1,0 +1,9 @@
+# P1.4 original47 box-gap — exact proof boundary
+
+**New manuscript-internal SOURCE_ONLY candidate:** on each of the existing 47 `.remaining` original full87 Sources, use the real original affine row `commonRow d 15` and the six original-family witness-box certificates to derive `1/20000 ≤ newCap - comparison` uniformly on the pre-existing radius `10^-8` source box, then the original ideal eighth kernel lower `4/(9*mu^10)*1/20000 ≤ kernel`. No extra Source hypothesis, no different selected mask, no standalone assumed uniform gap, no N-dependent parent substitution. The number 47 is exact: 14 ascending + 1 seed + 13 nine + 2 fifty + 7 H5 + 10 H7.
+
+**NOT proved:** Lean elaboration or kernel replay; box-volume identity or exact full-source integral lower; other 40 (15 descending +13 ascending-pair +12 H3) quantitative row-to-gap bounds; actual saved87 numerical endpoints and original witness files; physical N-dependent prime Source membership; true dynamic actualParent and shared histories; signed beta and occurrence multiplicity; true ordinary asymptotic identification; loss payments, two independent reserves or full theorem. The tiny analytic box-volume consequence is not an archived integral witness.
+
+**External §4 PP — REGISTERED_NOT_PROVED / NOT_CALLED:** manuscript version `9731290e8f53cffda44129906cde6a965eaa869b`, section §4, real signed `rho_N(q)`/full squarefree q primitive discrepancy and coprime mean, actual `W_N`, legal integer `X`, normalization `H_N`, admissible fixed-before-N parameters, and precise invocation locations. No proof implementation, no synthetic theorem hypothesis replacing this dependency, no PNT/Mertens/BV/spectral project started.
+
+Lean v4.33.0-rc1; mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; native `09b97db5764ade1246bfb77206baa1b124760958`; `c=49044063/25000000`; `K=8452171/1250000`. Current verification: SOURCE_ONLY / UNEVALUATED / UNCOMPILED, not green.
