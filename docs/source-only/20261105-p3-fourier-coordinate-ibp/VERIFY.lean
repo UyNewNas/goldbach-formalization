@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBRetainedDyadicUpperSupport
 import ImbalancedChen.P3HBDyadicTensorPartition
 import ImbalancedChen.P3HBFinitePartitionRestore
 import ImbalancedChen.P3HBOriginalGeometricProductCollapse
@@ -797,3 +798,15 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBDyadicTensorPartition.factorTuple_dyadic_partition_marked
 #check ImbalancedChen.P3HBDyadicTensorPartition.original_hb_dyadic_signed_restoration
 #check ImbalancedChen.P3HBDyadicTensorPartition.original_hb_dyadic_offshift_same_rho
+
+-- Concrete upper-support pruning of full original six-slot dyadic grid;
+-- SOURCE_ONLY only: these #check targets have not been executed.
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.dyadicPiece_zero_of_high_scale
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.hbDyadicCut_zero_of_high_scale
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.upperRetainedLabels
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.omitted_upper_label_zero
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.factorTuple_upper_retained_partition
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.original_group_dyadic_upper_window
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.groupDyadicGeometry
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.original_group_upper_retained_signed_restoration
+#check ImbalancedChen.P3HBRetainedDyadicUpperSupport.original_group_upper_retained_offshift_same_rho
