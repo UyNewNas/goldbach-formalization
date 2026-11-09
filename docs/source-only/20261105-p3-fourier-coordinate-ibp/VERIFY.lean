@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBHalfOpenDyadicSubdivision
 import ImbalancedChen.P3HBDyadicRectangleEndpointAudit
 import ImbalancedChen.P3HBRankAdaptiveRetainedSupport
 import ImbalancedChen.P3HBRetainedDyadicUpperSupport
@@ -834,3 +835,17 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBDyadicRectangleEndpointAudit.dyadic_piece_live_in_upper_half
 #check ImbalancedChen.P3HBDyadicRectangleEndpointAudit.six_prime_live_pieces
 #check ImbalancedChen.P3HBDyadicRectangleEndpointAudit.six_prime_rectangle_refutes_R128
+
+-- P3.6 finite half-open six-axis HB dyadic support subdivision.
+-- Exact mask partition and ratio-two geometry ONLY; this sharp mask is
+-- NOT C-infinity and is NOT a Fourier-admissible original W_T profile.
+-- SOURCE_ONLY: none of these #check lines have actually been run.
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfMask
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfLower
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut_sum
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut_live_mask
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut_live_box
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.hbHalfCut_live_R128
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.rank_retained_half_sum
+#check ImbalancedChen.P3HBHalfOpenDyadicSubdivision.factorTuple_rank_half_partition
