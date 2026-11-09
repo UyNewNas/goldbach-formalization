@@ -7,9 +7,11 @@ endpoints. SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED.
 Actual psi(x/L)=chi(x/L)-chi(2*x/L) is supported in [L/2,2L],
 so its upper/lower endpoint ratio is FOUR. Six slots imply the safe
 bound R/(2*4^6)=R/8192 from the group cutoff, not R/128.
-The original R/128 claim is refuted by the six-prime live sample below
-for any admissible chi positive on its (1,2) transition, including
-smooth monotone cutoffs. No PP estimate is assumed or proved.
+The R/128 inference for the UNREFINED six-axis psi-support boxes is
+refuted by the live sample below. The manuscript's R/128 may still hold
+for a separately refined 2-to-1 HB rectangle family, but the existence
+and source-preserving coverage of that second subdivision are NOT yet
+proved here. No PP estimate is assumed or proved.
 Manuscript 9731290e8f53cffda44129906cde6a965eaa869b,
 paper/source/modules/distribution-prime-product-completion-20261010.txt
 §2 lines 84-112. Lean v4.33.0-rc1, Mathlib
@@ -91,6 +93,35 @@ theorem six_axis_R8192_lower_envelope (x : Fin 6 → ℝ)
       exact hprod)
   linarith
 
+/-- The stronger R/128 is indeed available IF a separately supplied
+six-axis refinement has actual ratio-two intervals x_i ≤ 2*lower_i.
+This is a genuine additional geometrical condition, NOT a property
+of the coarse psi(x/2^j) support [2^(j-1),2^(j+1)] itself.
+The manuscript's exact selected refined rectangles still need proving. -/
+theorem refined_two_to_one_R128_lower_envelope
+    (x lower : Fin 6 → ℝ) (R : ℝ)
+    (hx : ∀ i, 0 ≤ x i)
+    (hrefined : ∀ i, x i ≤ 2 * lower i)
+    (hgroup : R / 2 < ∏ i : Fin 6, x i) :
+    R / 128 < ∏ i : Fin 6, lower i := by
+  have hprod : (∏ i : Fin 6, x i) ≤
+      ∏ i : Fin 6, 2 * lower i := by
+    apply Finset.prod_le_prod
+    · intro i _
+      exact hx i
+    · intro i _
+      exact hrefined i
+  have hscale :
+      (∏ i : Fin 6, 2 * lower i) =
+      64 * ∏ i : Fin 6, lower i := by
+    rw [Finset.prod_mul_distrib]
+    simp
+  have htotal : R / 2 < 64 * ∏ i : Fin 6, lower i :=
+    lt_of_lt_of_le hgroup (by
+      rw [← hscale]
+      exact hprod)
+  linarith
+
 /-- Genuine group/tensor cutoffs imply the corrected envelope.
 hphysical is only the algebraic padded HB product identity and still
 requires a source-to-factorTuples bridge, not a PP estimate. -/
@@ -152,7 +183,7 @@ theorem six_prime_live_pieces (chi : ℝ → ℂ)
   · exact dyadic_piece_live_in_upper_half chi 13 3 hlarge hmid (by norm_num) (by norm_num)
   · exact dyadic_piece_live_in_upper_half chi 19 4 hlarge hmid (by norm_num) (by norm_num)
 
-/-- Exact rational contradiction to frozen R/128 for a live rank-six
+/-- Exact rational contradiction to UNREFINED R/128 for a live rank-six
 dyadic rectangle: lower endpoints 1,2,2,4,4,8 multiply to 512,
 whereas 285285/128 exceeds 512. -/
 theorem six_prime_rectangle_refutes_R128 :
