@@ -207,9 +207,9 @@ theorem original_group_rank_upper_offshift_same_rho
         (∑ label ∈ rankUpperRetainedLabels J (2 * (j + 1)) R,
           originalHBFixedOccurrenceMass n j z y
             (partitionPiece (groupDyadicGeometry chi R H)
-              (hbDyadicCut chi) label) marked)) *
+              (hbDyadicCut chi) label) marked) ) *
       offMarkedPhysicalResponse marked.prod N n Q rho := by
-        rw [Finset.sum_mul]
+        rw [← Finset.sum_mul]
         apply Finset.sum_congr rfl
         intro j hj
         rw [Finset.sum_mul]
