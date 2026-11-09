@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBFinitePartitionRestore
 import ImbalancedChen.P3HBOriginalGeometricProductCollapse
 import ImbalancedChen.P3HBMarkedFixedProductMassBound
 import ImbalancedChen.P3HBMarkedFixedProductFibre
@@ -776,3 +777,9 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBGeometryDefectBudget.geometry_defect_fixed_mass_norm_le
 #check ImbalancedChen.P3HBGeometryDefectBudget.signed_three_geometry_defect_norm_le
 #check ImbalancedChen.P3HBGeometryDefectBudget.same_rho_offshift_geometry_defect_norm_le
+-- Finite complete ORIGINAL HB positional partition-of-unity, SOURCE_ONLY.
+-- All four declarations require actual fixed-toolchain elaboration; NOT RUN.
+#check ImbalancedChen.P3HBFinitePartitionRestore.partitionPiece
+#check ImbalancedChen.P3HBFinitePartitionRestore.fixed_fibre_partition_restores
+#check ImbalancedChen.P3HBFinitePartitionRestore.signed_three_partition_restores
+#check ImbalancedChen.P3HBFinitePartitionRestore.same_rho_offshift_partition_restores
