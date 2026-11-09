@@ -26,6 +26,10 @@ open scoped Classical BigOperators
 open ImbalancedChen
 open ImbalancedChen.P5Z.LiteralHeathBrownOccurrenceWords
 open ImbalancedChen.P3HBFinitePartitionRestore
+open ImbalancedChen.P3HBMarkedFixedProductFibre
+open ImbalancedChen.P3HBOriginalGeometricProductCollapse
+open ImbalancedChen.P3HBMarkedMobiusOffshiftSameRho
+open ImbalancedChen.P5Z.ActualRoughHeathBrownWords
 
 /-- The literal dyadic difference psi(x/2^j), with psi(t)=chi(t)-chi(2t). -/
 def dyadicPiece (chi : ℝ → ℂ) (x : ℝ) (j : ℕ) : ℂ :=
@@ -61,7 +65,8 @@ theorem dyadic_one (chi : ℝ → ℂ) (x : ℝ) (J : ℕ)
   have hquot : x / (2 : ℝ) ^ J ≤ 1 := by
     apply (div_le_iff₀ hpower).2
     simpa using hJ
-  rw [hsmall _ hquot, hlarge _ (by nlinarith : 2 ≤ 2 * x)]
+  have hdouble : 2 ≤ 2 * x := by nlinarith
+  rw [hsmall _ hquot, hlarge _ hdouble]
   ring
 
 /-- A single common finite family of six positional rectangle labels.
