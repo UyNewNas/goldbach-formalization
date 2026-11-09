@@ -75,6 +75,8 @@ import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 import ImbalancedChen.P3ActualU8ExactTargetResponse
 import ImbalancedChen.P3HBEvenRoughTarget
 
+import ImbalancedChen.P3HBOriginalMarkedFineTarget
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -670,3 +672,8 @@ import ImbalancedChen.P3HBEvenRoughTarget
 #check ImbalancedChen.P3HBEvenRoughTarget.original_group_projectors_target_zero
 #check ImbalancedChen.P3HBEvenRoughTarget.literal_occurrence_target_zero
 #check ImbalancedChen.P3HBEvenRoughTarget.actual_three_signed_target_zero
+
+-- Original fine-marked plus strict rough-HB exact-target fibre; NOT RUN.
+#check ImbalancedChen.P3HBOriginalMarkedFineTarget.original_marked_fine_rough_occurrence_target_zero
+#check ImbalancedChen.P3HBOriginalMarkedFineTarget.originalMarkedFineRoughTargetTerm_zero
+#check ImbalancedChen.P3HBOriginalMarkedFineTarget.original_marked_fine_rough_three_same_rho_target_zero
