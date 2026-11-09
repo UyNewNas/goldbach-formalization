@@ -2209,3 +2209,32 @@ The final theorem retains one whole signed physical `offMarkedPhysicalResponse(m
 - `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted research (M) **REGISTER_ONLY**, no implementation or new axiom. No production, manuscript, lockfile, other branches, excluded full87, PR, CI or external board changed.
 
 **Next exact entrance:** obtain pinned isolated Lean/Lake compilation and repair any real errors; show actual localized `W_T` geometric defect bound or use mixed Euler/Fourier L1/H budgets UNIFORMLY in m(N) and T; prove weighted complete physical shifted-divisor moment, separate complete product=T, and only then causal whole-box, all HB/empty Gamma/high-rank/enhanced same-rho PP assembly. P3.6 remains YELLOW.
+
+## Successor P3.6 — restored original signed HB sum over finite positional dyadic pieces (2026-11-09 UTC)
+
+- **Actual recovery baseline:** `d426684580f31ff18bb8fc3bdd7aecfa4e7e47c6`, branch `chatgpt/p3-internal-original-w-20261105`; HEAD checked before each remote write. Prior REPORT, REGISTRY, EXTERNAL_INPUTS, `P3HBGeometryDefectBudget.lean`, `P3HBOriginalGeometricProductCollapse.lean`, original `P5LiteralHeathBrownOccurrenceWords.lean`, fixed manuscript §2 and §4 were read. Root/docs/source-only/packet AGENTS queried and absent.
+- **Actual new Lean proof commit:** `952fcb671cf71e78c559f1acbf5b110334fac001` ([skip ci]); new `P3HBFinitePartitionRestore.lean` 166 lines, Git blob `0d703b39a48cf6393fdd94b8d73faa6b0ad167aa`. **Actual VERIFY commit:** `f914827df205c7ea94e9de6334f4860df56ebd38`; VERIFY blob `8a3cc48c51970c33d9b99cbb9f5feaf788f88d1e`. Registry commit: `3adc31a15c60bb1f06cd1f3965a138525eef0f11`. All commits [skip ci].
+- **Exact provenance:** frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §2 HB rectangles and §4 (F), `paper/source/manuscript-body.tex` `eq:current-PP`. Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; unchanged.
+
+### Actual manuscript-internal mathematical increment
+
+Unlike the previous single geometry-defect estimate, this works on the **complete finite family of original positional HB-rectangle pieces before taking absolute values**. Each piece
+`W_label(marked,hb)=G(marked,hb.prod)*cut(label,marked,hb)` may depend on every ordered 2/4/6-slot factor and is not individually coherent. The new `fixed_fibre_partition_restores` proves that if **the actual finite sum of cutoffs equals one at every original factor tuple with nonzero G(marked,n)** then the full labelled original HB occurrence sum over all pieces equals the original coherent mass, without losing original occurrence multiplicities or global `mu(marked.prod*n)`.
+
+`signed_three_partition_restores` combines this with the production rough HB identity for `0<=z, 0<=y, (n:Real)<=y^3` (CLOSED) to restore the original signed `+3,-3,+1` identity **after** all positional labels:
+```
+sum_label sum_(j=0)^2 (-1)^j*C(3,j+1)*HB_j(W_label)
+ = G(marked,n)*mu(marked.prod*n)*Lambda(n)*roughOneSlot(z,n).
+```
+`same_rho_offshift_partition_restores` then multiplies the combined sum by ONE unchanged `offMarkedPhysicalResponse(marked.prod,N,n,Q,rho)`, retaining the original integer rho, physical Q, complete shift and exact coprime mean for `marked.prod*n!=N`. There is no division by an auxiliary level and no premature separate q absolute value.
+
+**Strict scope:** The actual finite list of retained HB rectangles and the on-support cutoff partition identity have NOT been instantiated or proved for every real W_T. The result does NOT justify using exact three-term cancellation for each independent rectangle, does not prove their individual discrepancy bound, does not pay a Fourier H tail or shifted-divisor moment, and remains confined to the explicitly global-Mobius marked/rough-HB subfamily. Summing pieces before applying the modulus estimate can restore cancellation algebraically but may not preserve the source-specific hypotheses needed to estimate each piece.
+
+### Verification and next entry
+
+- GitHub source and VERIFY were written and read back at the exact proof commit/VERIFY commit. No proof escapes (`sorry`, `admit`, `unsafe`, `native_decide`, `axiom`) in new source; local lexical delimiter scan passed. Four `#check` requests registered and **not executed**.
+- Independent exact rational/symbolic prime-log finite regression: **716/716** original signed HB/partition/restored same-rho cases; 172 original nonzero cases, **233 individual rectangle mismatches** showing per-rectangle cancellation is false, all 716 same physical signed-response products agree. Test script `/tmp/p3_partition_regression.py`, SHA-256 `c2571388a4fa9a56586f690d9c954ec59a74f53a13e3258ca9a209c5600ff132`, runtime-local only. G=0 supports included with deliberately incomplete cutoffs to check the weaker on-support hypothesis. **This is not Lean elaboration or kernel proof.**
+- Environment probe: `lean`, `lake`, `elan` missing; `git ls-remote` DNS failed (exit 128). **NOT RUN:** Lean/Lake directed compilation, kernel replay, full transitive axioms, CI, Codex, heavy producer. All new proof bodies stay `SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED`; no GREEN.
+- `EXTERNAL_INPUTS.json` unchanged, blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; the research input (M) is **REGISTERED ONLY**, never implemented or axiomatized. No changes to manuscript, toolchain/lock, production files, other tasks, excluded 87-domain parent/history/strategy, PR, CI or external board.
+
+**Exact next dependency:** Prove the actual selected finite dyadic HB partition on nonzero geometry support, with original interval endpoints and retained boxes, **not** by assuming target PP or cancellation. Compile all relevant declarations in the fixed isolated source-only import map and repair elaboration errors. Then pay W_T uniform mixed derivatives/Fourier L1/H for growing m, the signed complete physical modulus shifted-divisor moment and complete product=T exception, all actual source branches, causal/whole-box/empty Gamma/high-rank/enhanced and final same-rho PP. **P3.6 YELLOW; this is a BLUE bounded source-only finite algebraic increment.**
