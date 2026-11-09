@@ -1,0 +1,11 @@
+# P1.4 durable continuation after descending15 and ascendingPair13 geometry
+
+Real verified parent HEAD: `24afacb9a441e9e584652d27e92daed1fa903ecc`, branch `chatgpt/p1-full87-h5h7-original-interiors-20261109`. This branch `chatgpt/p1-full87-desc15-ascpair13-original-interiors-20261109` is independent and created from that exact parent; read its real branch ref, complete source, CHECK, REPORT, REGISTRY, INPUT_BOUNDARY and relevant AGENTS before future modification. **Do not restore old 9649ab3 or branch off the older checkpoint**. Only mutate a new equivalent child or this branch after ref lease verification.
+
+New packet: `docs/source-only/20261109-full87-desc15-ascpair13-original-interiors/`. Proven by exact original-row rational *calculation* (not Lean): original desc15 15x96 + ascendingPair13 13x97 = 2701 rows, all 2701 pass. Minimum `289/25000000` at pair i0 row19; max slope `11/2`; conservative slope 6, centre `9/1000000`, coordinatewise radius `1/100000000`, box row slack `1/125000`. Strict membership candidates use `P4AOriginalFull87SourceDictionary.Source (.descending i)` and `Source (.ascendingPair i)` with exact exported coefficients. No imported new masks or numerically fabricated archive labels.
+
+Cumulative **75/87 original continuous Source geometric interior candidates**: 47 prior + 28 new. **12 H3 remain**. No actual saved87 raw witness or original numeric integration, no physical N-dependent prime Source occurrence or real `actualParent`, no signed gain or H_N payment. P1.4 stays yellow. External paper §4 PP `REGISTERED_NOT_PROVED / NOT_CALLED`.
+
+Verification **SOURCE_ONLY / UNEVALUATED / UNCOMPILED**, fixed compiler not installed and no same-pin elaboration/kernel replay/axiom audit/independent review. Saved checker is meant for full checkout, not executed there. No CI dispatch, Codex, toolchain upgrade, main/master edits, or expanded cloud resources.
+
+**NEXT:** retrieve `P4AOriginalFirstFailureH3Literal` and saved87 original archive witness; if still missing use actual original H3 twelve literal source and certify their original strict rows, then prioritize arithmetic N-dependent actual parent/common history and archive numeric source/gain rather than more algebraic invoicing.
