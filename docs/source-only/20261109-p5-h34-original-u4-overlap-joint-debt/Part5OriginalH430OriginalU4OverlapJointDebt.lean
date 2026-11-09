@@ -125,5 +125,56 @@ theorem actual_U34_overlap_lower_envelope_le_unpaid
   intro p hp
   exact original_overlap_joint_debt_le_two_tag_unpaid N n tau depth p
 
+
+/-- A zero JOINT original U4 overlap debt requires enough true
+resolved marked source across BOTH tags to cover two copies of the
+original quotient receiver. This is a necessary condition only: the
+marked source may still lack a legitimate historical q/tag owner. -/
+theorem actual_original_overlap_zero_requires_double_source
+    (N n : ℕ) (tau : ℝ) (depth : Root → ℕ → Fin 430)
+    (p : ℕ)
+    (hzero : actualOriginalOverlapJointDebt N n tau depth p = 0) :
+    2 * ((originalReceiver N p).card : ℝ) ≤
+      5 * (Phi N (rootQ N n .U3 tau p)
+             (activeProductSupport N n .U3 tau p (depth .U3 p))
+             (activeProductSigma N n .U3 tau p (depth .U3 p)) (11/5) +
+           Phi N (rootQ N n .U4 tau p)
+             (activeProductSupport N n .U4 tau p (depth .U4 p))
+             (activeProductSigma N n .U4 tau p (depth .U4 p)) (11/5)) := by
+  dsimp [actualOriginalOverlapJointDebt] at hzero
+  have hraw := le_max_left
+    (2 * ((originalReceiver N p).card : ℝ) -
+      5 * (Phi N (rootQ N n .U3 tau p)
+             (activeProductSupport N n .U3 tau p (depth .U3 p))
+             (activeProductSigma N n .U3 tau p (depth .U3 p)) (11/5) +
+           Phi N (rootQ N n .U4 tau p)
+             (activeProductSupport N n .U4 tau p (depth .U4 p))
+             (activeProductSigma N n .U4 tau p (depth .U4 p)) (11/5)))
+    (0 : ℝ)
+  rw [hzero] at hraw
+  linarith
+
+/-- The entire original U4 two-tag necessary deficit is bounded
+ABOVE by the actual TOTAL unpaid U3+U4 arithmetic deficit. A future
+small total bound must therefore also control this genuinely tagged
+overlap. The result does not establish that small bound. -/
+theorem actual_original_overlap_joint_debt_le_total_unpaid
+    (N n : ℕ) (tau : ℝ) (depth : Root → ℕ → Fin 430)
+    (hN : 1 ≤ N) :
+    (∑ p ∈ originalBand N .U4,
+      actualOriginalOverlapJointDebt N n tau depth p) ≤
+      actualU34Unpaid N n tau depth := by
+  have hmain := actual_U34_overlap_lower_envelope_le_unpaid
+    N n tau depth hN
+  have hnonneg :
+      0 ≤ ∑ p ∈ upperExclusiveBand N,
+        actualUnpaidAt N n .U3 tau p (depth .U3 p) := by
+    apply Finset.sum_nonneg
+    intro p hp
+    exact (actual_unpaid_nonneg_le_original_card
+      N n .U3 tau p (depth .U3 p)).1
+  unfold actualOriginalOverlapLowerEnvelope at hmain
+  linarith
+
 end
 end ImbalancedChen.Part5OriginalH430OriginalU4OverlapJointDebt
