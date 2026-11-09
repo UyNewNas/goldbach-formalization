@@ -11,7 +11,8 @@ and the already-existing ordinary upper mean of the ORIGINAL sifted
 U3/U4 receiver counts. Both overlapping U4 labels are paid separately
 in the arithmetic total, with no deduplication of original q receipts.
 
-The bound is useful as an explicit worst-case debt ledger, but is too
+The bound is UNIFORM in generation, precision, actual root and depth,
+and is useful as an explicit worst-case debt ledger, but is too
 weak by itself to prove the sharp upper H430 saving. No H430 count owner,
 root sigma identification, signed Euler payment, or closed-cell licence
 is inferred from this result.
@@ -139,18 +140,18 @@ the same singular normalization and the two original labelled bands.
 Crucially, this is an ORDINARY upper coefficient, not an H430
 coefficient and not an o(Theta) payment. It cannot close h34. -/
 theorem eventually_actual_U34_unpaid_le_ordinary_upper
-    (n : ℕ) (tau : ℝ) (depth : Root → ℕ → Fin 430)
     (epsilon : ℝ) (hepsilon : 0 < epsilon) :
     ∀ᶠ N : ℕ in atTop, Even N →
-      actualU34Unpaid N n tau depth ≤
-        (currentChenSinglePrimeOrdinaryUpperIntegral (1/3) +
-          currentChenSinglePrimeOrdinaryUpperIntegral (59/250) +
-          epsilon) * singularNormalization N := by
+      ∀ (n : ℕ) (tau : ℝ) (depth : Root → ℕ → Fin 430),
+        actualU34Unpaid N n tau depth ≤
+          (currentChenSinglePrimeOrdinaryUpperIntegral (1/3) +
+            currentChenSinglePrimeOrdinaryUpperIntegral (59/250) +
+            epsilon) * singularNormalization N := by
   have hhalf : 0 < epsilon / 2 := half_pos hepsilon
   filter_upwards
     [ImbalancedChen.eventually_currentChenUpsilon3_Upsilon4_le_ordinary_upper_mean
       (epsilon / 2) hhalf] with N hN
-  intro hEven
+  intro hEven n tau depth
   obtain ⟨h3, h4⟩ := hN hEven
   calc
     actualU34Unpaid N n tau depth ≤
