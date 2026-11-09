@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBSmoothThreeWayRatioTwo
 import ImbalancedChen.P3HBHalfOpenPhysicalProductBridge
 import ImbalancedChen.P3HBHalfOpenDyadicSubdivision
 import ImbalancedChen.P3HBDyadicRectangleEndpointAudit
@@ -855,3 +856,12 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.factorTuple_paddedSix_product
 #check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.originalHB_paddedSix_product
 #check ImbalancedChen.P3HBHalfOpenPhysicalProductBridge.originalHB_halfOpen_live_R128
+
+-- Smooth actual HB three-way ratio-two source, only CHECK TARGETS, not run.
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothGate_sum
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothGate_contDiff
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothCoord_sum
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothCoord_contDiff
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothCoord_live_box
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.smoothTensor_children_sum
+#check ImbalancedChen.P3HBSmoothThreeWayRatioTwo.actualHB_smooth_child_R128
