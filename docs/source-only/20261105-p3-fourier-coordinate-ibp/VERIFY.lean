@@ -70,6 +70,7 @@ import ImbalancedChen.P3ActualU8FirstExitSupportDelta
 import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
 import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
+import ImbalancedChen.P3ActualU8ExactTargetResponse
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -637,3 +638,12 @@ import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 #check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.boundary_budget_sum_by_labels
 #check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.physical_kernel_budget_split
 #check ImbalancedChen.P3ActualU8StrictBoundarySourcewise.strict_smoothing_boundary_sourcewise_split
+
+-- Exact original labelled full-product=N arithmetic response; SOURCE_ONLY, uncompiled.
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.targetProductLabels
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.targetResponse
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.physicalKernel_at_target
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.targetResponse_split
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.target_product_signed_factor
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.target_weight_sum_boundary
+#check ImbalancedChen.P3ActualU8ExactTargetResponse.target_product_signed_boundary_factor
