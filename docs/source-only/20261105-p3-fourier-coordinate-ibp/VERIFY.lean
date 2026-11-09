@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBRankAdaptiveRetainedSupport
 import ImbalancedChen.P3HBRetainedDyadicUpperSupport
 import ImbalancedChen.P3HBDyadicTensorPartition
 import ImbalancedChen.P3HBFinitePartitionRestore
@@ -810,3 +811,12 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBRetainedDyadicUpperSupport.groupDyadicGeometry
 #check ImbalancedChen.P3HBRetainedDyadicUpperSupport.original_group_upper_retained_signed_restoration
 #check ImbalancedChen.P3HBRetainedDyadicUpperSupport.original_group_upper_retained_offshift_same_rho
+
+-- P3.6 rank-aware concrete original HB retained geometry, SOURCE_ONLY.
+-- #check targets registered only, Lean and kernel NOT RUN.
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.original_group_dyadic_lower_window
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.rankUpperRetainedLabels
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.omitted_padding_label_zero
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.factorTuple_rank_upper_retained_partition
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.original_group_rank_upper_signed_restoration
+#check ImbalancedChen.P3HBRankAdaptiveRetainedSupport.original_group_rank_upper_offshift_same_rho
