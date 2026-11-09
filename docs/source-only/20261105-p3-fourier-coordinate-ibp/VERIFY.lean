@@ -81,6 +81,8 @@ import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
 
 import ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal
 
+import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -706,3 +708,14 @@ import ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal
 #check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.mobiusMarkedRoughTargetAtQ_eq_even_marked
 #check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.surviving_mobius_target_requires_squarefree_even_marked
 #check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.signed_three_mobius_target_eq_squarefree_even_marked
+
+-- P3.6 target diagonal: full signed same-rho factor and original even marked remainder.
+-- SOURCE_ONLY. These checks are REGISTERED, NOT EXECUTED.
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.physicalRhoTargetKernel
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.hbTargetMass
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.hbThreeTargetMass
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.markedResidualKernel_target_without_coprime
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.mobiusMarkedRoughTargetAtQ_exact_factor
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.signed_three_mobius_target_exact_factor
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.signed_three_mobius_target_even_marked_exact_factor
+#check ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor.physicalRhoTargetKernel_coprime
