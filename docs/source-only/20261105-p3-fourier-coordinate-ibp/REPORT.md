@@ -2040,3 +2040,28 @@ Independently, the previously proved-in-source *strict* rough-HB projection for 
 - `EXTERNAL_INPUTS.json` unchanged at blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: external (M) REGISTERED ONLY, no new axiom, no implementation. No user-excluded full87 parent/common-history/strategy, other automation, production source, manuscript, dependency lock, master/main, PR, CI or external board changed.
 
 **Next precise entrance:** fixed-pin targeted elaboration of these six declarations plus dependencies; verify which exact source paths in the FINAL causal original marked/HB compiler actually carry `μ(complete product)`; pay the surviving squarefree N≡2(mod 4) even-marked target and the unweighted branches. Independently finish off-target original physical signed modulus arithmetic moment, uniform original W_T Fourier/H-box for growing m(N), common threshold and complete same-integer rho_T/Q_T assembly. **P3.6 remains YELLOW.**
+
+## Successor P3.6 — exact same-rho physical response factor for surviving marked/HB target (2026-11-09)
+
+- **Recovered actual task HEAD:** \`8fdedb619b6660cebcf55b727acdb75b6fb20b32\`, branch \`chatgpt/p3-internal-original-w-20261105\`. Read the current REPORT/REGISTRY/EXTERNAL_INPUTS and actual latest squarefree source; queried root, docs and packet AGENTS (not found). No concurrent writer seen before this proof commit.
+- **Actual pushed proof+VERIFY commit:** \`70f95f7872e6df0c9cceca88d2e27308b853fe7e\` (\`[skip ci]\`); source \`P3HBMarkedMobiusPhysicalDiagonalFactor.lean\`, **186 lines**, Git blob \`a652394a1d34f1b74ea524fbf87ae36d0c8ce4e3\`; VERIFY blob \`07e6fdea5ebf143c50d598bd99e094b46b90968d\`, 8 newly registered audit #checks, **not executed**.
+- **Manuscript fixed:** \`UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b\`, \`paper/source/modules/distribution-prime-product-completion-20261010.txt\` §§2–4, especially §4 (F) exact full-modulus sum, exact b=T exception and mean; \`paper/source/manuscript-body.tex\` (unchanged). Lean \`v4.33.0-rc1\`; Mathlib \`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\`; no pin changes.
+
+### Mathematics and exact scope
+
+On the actual **full physical product** \`marked.prod * hb.prod=N\`, the existing \`markedResidualKernel\` is exactly \`mu(N)*fineKernel N q N\` at every physical modulus **without assuming (q,N)=1**. The same term is factored through every original ordered \`factorTuples\` occurrence, each outside marked list and its original tuple-dependent complex \`W\`. Pulling the identical factor through the full physical q sum, with the original same integer \`rho\` and HB \`+3,-3,+1\` coefficients, gives the genuinely stronger candidate:
+
+\`signed marked/HB exact-target q,j ledger = mu(N) * (sum_{q in Q} rho(q)*fineKernel N q N) * (signed original HB exact-target mass).\`
+
+For **even N, z>=2**, the actual rough projection proof restricts the last factor to EVEN outside marked products. This retains, rather than assumes small, the surviving squarefree N≡2 (mod 4) marked-exception mass. An independent statement rewrites \`fineKernel N q N = 1-1/phi(q)\` ONLY if the physical original moduli are coprime to N. Otherwise it retains the exact coprime indicator, including the totalized q=0 case. No signed cancellation, geometric W_T admission, uniform analytic saving, final causal Q_T/rho_T, or original compiler coverage has been proved.
+
+The previous non-squarefree Möbius zero remains valid **only when the genuine full-product Mobius factor is present**. The generic unweighted marked HB branch and other compiler sources are still unpaid. The existing SOURCE_ONLY ancestors are not compiled; do not use this as proof that the manuscript's PP estimate has been obtained.
+
+### Checks and next real entrance
+
+- GitHub source+VERIFY exact-blob readback on the new HEAD: PASS. Source forbidden proof escapes: 0; lexical parenthesis stack: balanced. VERIFY import before its #check block: PASS. These are source/static inspections, not Lean elaboration or theorem certification.
+- Independent rational signed finite regression: **650/650**, including **239 nonzero** signed examples, **627 cases with at least one non-coprime physical q**, **392 non-squarefree targets**, original HB order-three coefficients and repeated positions. This verifies finite algebra semantics, **not the Lean proof code** or any asymptotic.
+- Environment probe: no \`lean\`, \`lake\`, \`elan\`; direct \`git ls-remote\` DNS failure. **NOT RUN:** fixed-pin Lean/Lake compilation, kernel checks, independent replay, axiom audit, CI (prohibited), Codex or heavy producer. All new declarations remain **BLUE/SOURCE_ONLY/UNCOMPILED/KERNEL_UNVERIFIED**; no green nodes.
+- \`EXTERNAL_INPUTS.json\` unchanged, Git blob \`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab\`: external (M) RECORD ONLY, accurate pinned premises, no implementation or new axiom. No production files, fixed paper, lock, main branch, PR, other task, excluded full87 dynamic parent or external board changed.
+
+**Next:** compile new four proof bodies plus imported source-only dependencies with the exact pinned Lean/Mathlib in an isolated import map and repair actual errors. Audit the final original compiler's genuine global-Mobius occurrences; bound the surviving *squarefree even-marked* signed target mass and the generic unweighted diagonal. Prove non-target full physical shifted-divisor discrepancy, true original W_T uniform mixed derivatives/Fourier H cutoff with growing m(N), and common causal rho_T/Q_T, all HB/empty-Gamma/high-rank/enhanced sources. **P3.6 remains YELLOW.**
