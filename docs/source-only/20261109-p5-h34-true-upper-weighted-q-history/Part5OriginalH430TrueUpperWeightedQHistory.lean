@@ -69,8 +69,9 @@ theorem original_u4_two_tag_true_upper_weight
   have ht : primeCoordinate N x.1 ∈ Ico a (59 / 250 : ℝ) :=
     primeCoordinate_mem hN (by simpa only [originalBand] using hp)
   have heq := U3_eq_main_on_U4 ht
-  simp only [trueUpperH430TaggedReceiptWeight, Sum.elim_inl,
-    Sum.elim_inr]
+  change w3 x * U3H430Coefficient (primeCoordinate N x.1) +
+      w4 x * U4H430Coefficient (primeCoordinate N x.1) =
+    (w3 x + w4 x) * U4H430Coefficient (primeCoordinate N x.1)
   rw [heq]
   ring
 
