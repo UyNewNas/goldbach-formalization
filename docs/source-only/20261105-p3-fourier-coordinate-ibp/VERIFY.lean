@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU8EvenGeometricTarget
 import ImbalancedChen.P3ActualU8StrictBoundarySourcewise
 import ImbalancedChen.P3ActualU8StrictSmoothBoundary
 import ImbalancedChen.P3ActualU8StrictPhysicalPP
@@ -647,3 +648,9 @@ import ImbalancedChen.P3ActualU8ExactTargetResponse
 #check ImbalancedChen.P3ActualU8ExactTargetResponse.target_product_signed_factor
 #check ImbalancedChen.P3ActualU8ExactTargetResponse.target_weight_sum_boundary
 #check ImbalancedChen.P3ActualU8ExactTargetResponse.target_product_signed_boundary_factor
+
+-- Even-N geometric support excludes the exact-target U8 prime diagonal;
+-- audit requests only, NOT executed by Lean/Lake in this run.
+#check ImbalancedChen.P3ActualU8EvenGeometricTarget.labelledProduct_odd_of_coordinate_gt_two
+#check ImbalancedChen.P3ActualU8EvenGeometricTarget.target_weight_mass_zero_of_geometric_cutoff
+#check ImbalancedChen.P3ActualU8EvenGeometricTarget.target_signed_exception_zero_of_geometric_cutoff
