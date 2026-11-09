@@ -30,7 +30,7 @@ The previous bank-level source theorem partitioned 106 selected bank actions, bu
 9. `unresolved_level_value_zero`: unresolved exterior positions have literally zero `requestValue (iterate (g+1))`, by the existing `resolve_none_value`, not by invented support excision.
 10. `actual_level_request_value_all_actions`: the FULL original one-generation sum of `levelMark * requestValue (iterate (g+1))` splits exactly among retained, Buchstab and 106 bank selected positions. Original path marks, physical root Q, generation and occurrence multiplicities are unchanged.
 
-There are nine theorem declarations (1 equivalence + 1 bank characterization + 1 partition + 3 disjointness + 1 bank sum + 1 resolved sum + 1 exterior-zero + 1 level value sum = TEN); count the source itself for exact confirmation, rather than using this informal estimate. This is SOURCE COVERAGE ONLY. It is not yet a theorem that the original `Upsilon3/Upsilon4` counts are the same finite request history, nor a positive error bound or the original 430-level count induction. The original all-action retention/Buchstab quantitative comparison and base/seed/floor remain separate obligations.
+There are ten candidate theorem declarations, four finite-position set definitions and one actual-selection definition. The full count is anchored to the exact source file. This is SOURCE COVERAGE ONLY. It is not yet a theorem that the original `Upsilon3/Upsilon4` counts are the same finite request history, nor a positive error bound or the original 430-level count induction. The original all-action retention/Buchstab quantitative comparison and base/seed/floor remain separate obligations.
 
 ## Fixed mathematical boundary
 
