@@ -110,6 +110,44 @@ theorem actual_Q_receipt_card_by_unique_keys
     (actual_Q_signed_fibre_partition (M := ℕ)
       N n precision tau z0 lower (fun _ => (1 : ℕ)))
 
+/-- Each DISTINCT real physical key has a genuine original q/tag
+witness; it is not a fresh or freely paid historical event. -/
+theorem actual_Q_key_has_original_receipt
+    (N n precision : ℕ) (tau z0 : ℝ) (lower : Bool)
+    (k : ℝ × EventKey)
+    (hk : k ∈ actualQExitKeys N n precision tau z0 lower) :
+    ∃ z, z ∈ actualQExitFibre N n precision tau z0 lower k := by
+  change k ∈ (actualQFailSource N n precision tau z0 lower).image
+    (actualQExitKey N n precision tau z0 lower) at hk
+  obtain ⟨z, hz, hkey⟩ := Finset.mem_image.mp hk
+  exact ⟨z, Finset.mem_filter.mpr ⟨hz, hkey⟩⟩
+
+/-- Cardinal overhang is the exact number of EXTRA original q/tag
+receipts beyond one per actual (Q,p,ell). This is a capacity DEFICIT,
+not a positive historical payment or a bound on H430 error. -/
+theorem actual_Q_card_unique_keys_plus_collision_overhang
+    (N n precision : ℕ) (tau z0 : ℝ) (lower : Bool) :
+    (actualQFailSource N n precision tau z0 lower).card =
+      (actualQExitKeys N n precision tau z0 lower).card +
+      ∑ k ∈ actualQExitKeys N n precision tau z0 lower,
+        ((actualQExitFibre N n precision tau z0 lower k).card - 1) := by
+  rw [actual_Q_receipt_card_by_unique_keys]
+  calc
+    (∑ k ∈ actualQExitKeys N n precision tau z0 lower,
+      (actualQExitFibre N n precision tau z0 lower k).card) =
+      ∑ k ∈ actualQExitKeys N n precision tau z0 lower,
+        (1 + ((actualQExitFibre N n precision tau z0 lower k).card - 1)) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          obtain ⟨z, hz⟩ :=
+            actual_Q_key_has_original_receipt N n precision tau z0 lower k hk
+          have hp : 0 <
+              (actualQExitFibre N n precision tau z0 lower k).card :=
+            Finset.card_pos.mpr ⟨z, hz⟩
+          omega
+    _ = _ := by
+      simp [Finset.sum_add_distrib]
+
 /-- The original two disjoint rejection lanes remain present with
 their separate bad-factor rules and arbitrary SIGNED weights. -/
 theorem actual_Q_two_fail_signed_split
