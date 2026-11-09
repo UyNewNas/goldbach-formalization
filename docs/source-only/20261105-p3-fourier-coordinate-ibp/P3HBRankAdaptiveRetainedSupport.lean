@@ -194,7 +194,7 @@ theorem original_group_rank_upper_offshift_same_rho
           originalHBFixedOccurrenceMass n j z y
             (partitionPiece (groupDyadicGeometry chi R H)
               (hbDyadicCut chi) label) marked) *
-          offMarkedPhysicalResponse marked.prod N n Q rho)) =
+          offMarkedPhysicalResponse marked.prod N n Q rho) =
       ((groupDyadicGeometry chi R H marked n *
         (((ArithmeticFunction.moebius (marked.prod * n) : ℝ) : ℂ))) *
           (((ArithmeticFunction.vonMangoldt n : ℝ) : ℂ) *
