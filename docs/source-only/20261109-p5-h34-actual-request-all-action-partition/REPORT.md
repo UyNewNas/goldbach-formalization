@@ -5,9 +5,9 @@ Repository: `UyNewNas/goldbach-formalization`.
 Independent h34 branch: `chatgpt/p5-h34-actual-request-all-action-partition-20261109`.
 Latest verified incoming task HEAD: `43a957dc61334d04947af2fdcf4ed84529cd9732`.
 Historical entry `0a3fa5aa639e74122fbef18be02f0ad6fa8a77a0` was inspected but NOT reused as the working baseline.
-New mathematics commits: `9075949b8311075a3b3619b862031441b7265b73` (new file) and `6ca60e35e5a4ffa121c0164e46112708f375553b` (proof-source filter-membership correction).
+New mathematics commits: `9075949b8311075a3b3619b862031441b7265b73` (new file), `6ca60e35e5a4ffa121c0164e46112708f375553b` (proof-source filter-membership correction), and `54c0dec65865c4a550a03e8d1ad2b5184b1c324c` (explicit original106 action namespace).
 New source: `Part5OriginalH430ActualRequestAllActionPartition.lean`.
-Source blob at math HEAD: `999cc998131827d06ed8614989bd30124e1d2c33`.
+Source blob at math HEAD: `0e46ad687609d499c2200a86eb00f49937413e04` (251 lines, 5 definitions, 10 candidate theorems).
 
 **PARTIAL_SOURCE_INCREMENT / SOURCE_ONLY / UNCOMPILED / UNEVALUATED / FULL_H34_OPEN.**
 
