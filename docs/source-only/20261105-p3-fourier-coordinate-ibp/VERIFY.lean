@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBMarkedFixedProductFibre
 import ImbalancedChen.P3HBMarkedMobiusOffshiftSquarefree
 import ImbalancedChen.P3HBMarkedMobiusOffshiftSameRho
 import ImbalancedChen.P3ActualAllRankGeometricTarget
@@ -743,3 +744,10 @@ import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 #check ImbalancedChen.P3HBMarkedMobiusOffshiftSquarefree.offMarkedOccurrence_nonzero_coprime
 #check ImbalancedChen.P3HBMarkedMobiusOffshiftSquarefree.offMarkedResponse_sum_eq_squarefree
 #check ImbalancedChen.P3HBMarkedMobiusOffshiftSquarefree.signed_three_full_squarefree_off_same_rho
+
+-- P3.6 actual ordered HB fixed-product fibre same-physical-rho reduction.
+-- SOURCE_ONLY candidate declarations; #check lines NOT executed.
+#check ImbalancedChen.P3HBMarkedFixedProductFibre.originalHBFixedOccurrenceMass
+#check ImbalancedChen.P3HBMarkedFixedProductFibre.full_product_on_original_hb_fibre
+#check ImbalancedChen.P3HBMarkedFixedProductFibre.squarefree_offshift_hb_fibre
+#check ImbalancedChen.P3HBMarkedFixedProductFibre.signed_three_full_fixed_fibres_same_rho
