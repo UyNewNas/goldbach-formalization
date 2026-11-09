@@ -22,6 +22,7 @@ namespace ImbalancedChen.P4AOriginalFull87RemainingBoxGapLower
 noncomputable section
 
 open scoped Classical BigOperators
+open VariableEnvelope
 open P4AOriginalFull87SourceDictionary
 open P4AOriginalFull87EighthKernelControl
 open P4AOriginalFull87QuantitativeGapIntegral
