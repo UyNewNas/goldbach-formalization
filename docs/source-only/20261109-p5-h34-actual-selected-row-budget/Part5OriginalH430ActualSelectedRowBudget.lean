@@ -19,6 +19,7 @@ namespace ImbalancedChen.Part5OriginalH430ActualSelectedRowBudget
 
 noncomputable section
 open scoped Classical BigOperators
+open P5OriginalFeedbackTableKernels P5OriginalActionMassBound
 open Part5OriginalH430PhysicalRoots
 open Part5OriginalH430ArithmeticAtomRows
 open Part5OriginalH430BankSlotTargets
