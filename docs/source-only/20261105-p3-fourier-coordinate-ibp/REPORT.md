@@ -2141,3 +2141,30 @@ The successor `signed_three_full_fixed_fibres_same_rho` plugs this into the *pre
 - `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: research (M) REGISTERED ONLY, **no implementation and no new axiom**. No production modules, frozen paper, other automation, excluded full87 dynamic-parent/history/strategy, PR, main branch or board changed.
 
 **Next concrete entry:** Compile the four candidates and actual imports using fixed Lean/Mathlib in an isolated mapping, repair elaboration failures, and then derive a genuine absolute weighted mixed shifted-divisor moment for **the fixed residual-n HB convolution coefficient** while retaining original physical Q/rho and exact complete product. Still separately unpaid: surviving squarefree even-marked exact target, sources without global Mobius, actual W_T uniform smoothness/Fourier L1/H tail as m(N) grows, causal/whole-box selection, empty Gamma and all high-rank/enhanced sources. **P3.6 remains YELLOW.**
+
+
+## Successor P3.6 — actual bounded W on original marked/rough-HB fixed-product fibre (2026-11-09 UTC)
+
+- **Confirmed actual starting HEAD:** `e7f1da0f3a206c8a1122f3914a7e64e2eb51e3ec` on branch `chatgpt/p3-internal-original-w-20261105`. Read the current REPORT, REGISTRY, EXTERNAL_INPUTS, `P3HBMarkedFixedProductFibre.lean`, the true P5Z rough/HB occurrence definitions and literal tau-moment bound, the old shifted-divisor source, and frozen manuscript §§2–4 and `eq:current-PP`. Root/docs/source-only/packet AGENTS were queried and are absent.
+- **Pushed real proof/VERIFY commit:** `2b03fa07711f075bfa08c7663b0ad6e066c96b4e`, with `[skip ci]`. Proof `P3HBMarkedFixedProductMassBound.lean`, 139 lines, actual Git blob `a26e1a97b899af17238280310a875e8f0dcf420c`; VERIFY actual blob `ab10c939ac68caf713ff4b211791be755c5203ae`, four new checks registered but **NOT RUN**.
+- **Frozen versions:** manuscript `9731290e8f53cffda44129906cde6a965eaa869b` (`paper/source/modules/distribution-prime-product-completion-20261010.txt` §§2–4 (HB),(T),(F), `paper/source/manuscript-body.tex` `eq:current-PP`); Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, unchanged.
+
+### New manuscript-internal mathematical content
+
+For one original fixed product `n != 0`, one literal ordered `factorTuples (2*(j+1)) n` fibre, fixed actual marked label and its **original** tuple-dependent complex `W(marked,hb)`, assume only `||W(marked,hb)|| <= A` on those actual occurrences with `A>=0`. This is a concrete elementary sup-norm condition, **not** an assumed PP estimate. The actual global `mu(marked.prod*hb.prod)` is one-bounded by the pinned Mathlib `ArithmeticFunction.abs_moebius_le_one`. The true `factorTuples_spec` identifies `hb.prod=n`; the existing strict rough-HB literal norm and one original log-slot bound then give a proof candidate
+
+`|| originalHBFixedOccurrenceMass(n,j,z,y,W,marked) || <= A * log(n) * tau(n)^(2*(j+1))` for `n!=0, z>=0`.
+
+The final new candidate multiplies this **actual** HB mass by exactly the previous signed `offMarkedPhysicalResponse(marked.prod,N,n,Q,rho)`, without replacing `rho`, the original complete shift `|N-marked.prod*n|`, its true coprime mean, or the physical `Q`. The response is **not** separately made absolute at each q; its single combined norm is retained. The explicit `marked.prod*n != N` premise prevents applying the offshift statement to the exact target diagonal.
+
+This is a genuinely quantitative finite HB coefficient majorant aimed at the next mixed shifted-divisor moment, **not** a moment saving, a causal compiler identification, actual `W_T` admission, or arbitrary-log PP proof. The geometry `A` bound and its **uniformity in T and growing m(N)** remain obligations; the global-Mobius subfamily does not cover every actual source.
+
+### Actual checks and trust boundary
+
+- GitHub proof and VERIFY were read back at exact commit `2b03fa07711f075bfa08c7663b0ad6e066c96b4e`; true blobs are above. Escape-token scan: 0 matches; textual parentheses balanced; VERIFY import precedes `#check`.
+- Independent inline Python/SymPy finite **toy** regression enumerated `n=1..60`, `j=0,1,2`, four `(z,y)` cutoff pairs, original ordered integer factor tuples, nonconstant complex `W` of norm 2, global integer Mobius, strict rough masks and the literal HB single logarithm. Result **720/720** mass bounds, **363** nonzero weighted occurrences, zero violations, worst mass/bound ratio **0.25**. This does NOT establish the Lean source elaborates or the full analytic estimate.
+- Host probe: `lean`, `lake`, `elan` unavailable; direct git remote DNS lookup failed. **NOT RUN:** any Lean/Lake elaboration/targeted compile, kernel replay, CI, full dependency axiom audit, Codex, heavy producer. The new theorem bodies remain **SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED**. This does not promote a GREEN node.
+- `EXTERNAL_INPUTS.json` untouched at Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: pinned restricted medium analytic (M) **REGISTERED ONLY**, not implemented or axiomatized; the finite mass bound is internal. No manuscript, dependency lock, production file, external board, PR, other task branch or excluded complete-87-domain node was altered.
+
+**Next exact entrance:** fixed-version isolated compilation of the three new theorem bodies and imported SOURCE_ONLY dependencies, correction of real elaboration errors, then actual `W_T` uniform boundedness and mixed Euler/Fourier budgets for growing `m`, followed by genuine weighted near-linear full-product shifted-divisor estimate under the same physical signed `rho_T,Q_T`. Target diagonal, non-Mobius, empty Gamma, whole box, high-rank and enhanced sources remain **internal and unclosed**. P3.6 remains YELLOW.
+
