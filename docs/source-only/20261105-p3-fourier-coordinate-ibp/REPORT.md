@@ -2344,3 +2344,28 @@ Concrete squarefree rank-six HB word: ordered factors (3,5,7,11,13,19), dyadic b
 
 **P3.6 remains YELLOW. New source-only endpoint audit BLUE, full-manuscript R/128 support-from-retained-rectangles YELLOW, no GREEN.**
 
+
+## Successor P3.6 — explicit HALF-OPEN dyadic ratio-two HB subdivision (2026-11-09 20:41 UTC)
+
+**Recovery and precise write evidence.** Actual starting head dd74fdadb3bb7d4513b470dda7ef46863fc2f0e5 on chatgpt/p3-internal-original-w-20261105, not the obsolete initial de582e6. Read latest REPORT, REGISTRY, EXTERNAL_INPUTS, actual endpoint/rank/dyadic Lean sources, production factorTuples_spec and pinned completion manuscript §2. Root/docs/source-only/packet AGENTS queries returned NOT_FOUND. No concurrent writer was visible at the pre-write branch checks.
+
+- Proof source: P3HBHalfOpenDyadicSubdivision.lean, 184 lines; create commit 817e3e7ce737f172a1f67d808d1b12b2589cd4f5; Git blob 452b98609565fe13dd0b9c8f247d87856d3c2f8a; exact content readback PASS.
+- VERIFY.lean: commit c7dad389b2e960c9d2ceff4508d642666b97621a, blob 393aadb139149ac79497e9080672949d512aaee7, import plus nine registered but UNEXECUTED checks.
+- REGISTRY.json: commit 664990403f6ee48f85b1c7e1d96aee9b9f1ceb8e, blob a624a041749a972963191c027657ec6fc52e066e; exact JSON readback PASS, previous entries preserved.
+- Frozen paper UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, prime-product completion §2 and scale (S). Lean v4.33.0-rc1; Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1. Pins not changed.
+
+**Genuine mathematical increment.** The previous packet established the unrefined original psi_j support [L/2,2L] has upper/lower ratio FOUR. Its coarse six-axis lower product admits only the unconditional R/8192 envelope, not R/128. The previous ratio-two R/128 lemma was conditional on separately supplied boxes.
+
+This packet constructs a concrete finite TWO-CHILD half-open split at each actual original coordinate base L_i=2^(label_i). Define side_i to be true exactly when the genuine padded HB integer x_i<L_i; equality x_i=L_i goes to the upper child. The two lower endpoints are respectively L_i/2 and L_i. For each six-axis original tensor there is exactly one contributing Boolean vector among 64; hbHalfCut_sum and rank_retained_half_sum preserve the original coefficient *exactly*, without changing ordered labels, repeated occurrences or rho/Q. factorTuple_rank_half_partition composes this with the existing rank-aware retained grid and gives mass exactly ONE on each genuine ordered factorTuples fibre.
+
+For every live refined child, hbHalfCut_live_box proves lower_i <= x_i < 2*lower_i from the actual two plateau assumptions and previous literal dyadic support lemmas. hbHalfCut_live_R128 then instantiates the previously conditional geometric envelope: on nonzero original group psi(n/R), R>0 and the explicit algebraic padded-product hypothesis hphysical (product of six padded slots = n), every contributing refined half-open child has product lower_i > R/128. This is not a target-equivalent distribution assumption, but hphysical has NOT YET been discharged from factorTuples_spec in this packet.
+
+**Critical analytic limitation:** this half-open decision is discontinuous at x_i=L_i, hence is NOT a C-infinity refinement and does NOT prove the physical Fourier derivative hypotheses of (F). Do NOT use a sharp child as a smooth W_T Fourier profile; the claim is finite integer-source geometry and exact reconstruction only. A genuine smooth overlapping subordinate ratio-two refinement with uniform derivative budgets, or propagation of the weaker unrefined R/8192 constants through ALL of (S), remains an internal obligation. This packet does not identify the manuscript's finally selected smooth rectangles or pay arithmetic discrepancy.
+
+**Checks.** Exact remote source/VERIFY/registry readbacks PASS. Static forbidden proof escape tokens 0; source delimiter scan 0 errors/unclosed. Exact Python Fraction finite regression evaluated 109,824 six-prime tuple/base assignments, with 84,480 live cases, 240,768 nonzero lower-half slots, 25,344 live equality-boundary slots and 20,004 original coarse R/128 counterexamples. No failures of the unique-mask identity, live child ratio-two bounds or corrected R/128 lower endpoint. Local regression SHA-256 e2b8d121fb6e30d90ab046411270dbf5973a22c3cd4b3f3bcfdbf25ee23294d4 at /mnt/data/p3_halfopen_subdivision_regression.py. The example chi is piecewise linear; no smoothness conclusion. This regression is NOT Lean/kernel verification.
+
+**Not executed:** no lean/lake/elan available; no isolated compile, elaboration, kernel replay, transitive axioms audit, CI, Codex or heavy producer. All proof bodies remain SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED, BLUE at most; no GREEN. EXTERNAL_INPUTS.json unchanged blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab, medium (M) merely registered and not implemented. No axiom, production edit, manuscript edit, toolchain upgrade, 87-domain edits, branch merge or PR.
+
+**Real next entry:** (1) eliminate hphysical by deriving the six padded getD product from actual factorTuples_spec (length≤6, prod=n); (2) resolve the SHARP-vs-SMOOTH obstruction or carry honest R/8192 through strict (S) scale inequalities; (3) obtain fixed-toolchain directed compilation and repair actual diagnostics; (4) continue original W_T uniform Fourier L1/H for growing m, complete same rho/Q arithmetic error and exact product=T, whole-box, all HB, empty Gamma and high-rank/enhanced branches.
+
+**Status: P3.6 YELLOW; new sharp finite subdivision BLUE; true smooth selected rectangles YELLOW; no new GREEN.**
