@@ -107,10 +107,8 @@ theorem resolved_level_partition
   ext l
   rw [Finset.mem_union, Finset.mem_union,
     bank_level_iff_actual_bank N n root tau p g l]
-  change (actualChoice N n root tau p g l).isSome ↔
-    (actualChoice N n root tau p g l = some .retained ∨
-      (actualChoice N n root tau p g l = some .buchstab ∨
-        ∃ k : Fin 106, actualChoice N n root tau p g l = some (.bank k)))
+  simp only [resolvedLevel, retainedLevel, buchstabLevel,
+    Finset.mem_filter, Finset.mem_univ, true_and]
   cases hc : actualChoice N n root tau p g l with
   | none => simp [hc]
   | some c =>
