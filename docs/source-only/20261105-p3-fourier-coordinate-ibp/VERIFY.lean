@@ -73,6 +73,7 @@ import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
 import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 import ImbalancedChen.P3ActualU8ExactTargetResponse
+import ImbalancedChen.P3HBEvenRoughTarget
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -662,3 +663,10 @@ import ImbalancedChen.P3ActualU8ExactTargetResponse
 #check ImbalancedChen.P3ActualAllRankGeometricTarget.geometric_weight_zero_at_target
 #check ImbalancedChen.P3ActualAllRankGeometricTarget.target_label_mass_zero
 #check ImbalancedChen.P3ActualAllRankGeometricTarget.target_fibre_physical_signed_error_zero
+
+-- P3.6 literal strict rough HB projector: exact even-product=T fibre is zero.
+-- This is SOURCE_ONLY, no Lean/Lake execution or full PP implication.
+#check ImbalancedChen.P3HBEvenRoughTarget.even_target_rough_slot_zero
+#check ImbalancedChen.P3HBEvenRoughTarget.original_group_projectors_target_zero
+#check ImbalancedChen.P3HBEvenRoughTarget.literal_occurrence_target_zero
+#check ImbalancedChen.P3HBEvenRoughTarget.actual_three_signed_target_zero
