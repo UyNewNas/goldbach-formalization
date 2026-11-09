@@ -101,13 +101,13 @@ theorem original_marked_fine_rough_three_same_rho_target_zero
     (hz : (2 : ℝ) ≤ z) (hN : Even N) :
     (∑ q ∈ Q, (rho q : ℂ) *
       ∑ j ∈ Finset.range 3,
-        ((((-1 : ℝ) ^ j * (Nat.choose 3 (j + 1) : ℝ) : ℝ) : ℂ) *
+        (((-1 : ℝ) ^ j * (Nat.choose 3 (j + 1) : ℝ) : ℝ) : ℂ) *
           originalMarkedFineRoughTargetTerm N n j q tau z y word W) = 0 := by
   apply Finset.sum_eq_zero
   intro q hq
   have hj :
       (∑ j ∈ Finset.range 3,
-        ((((-1 : ℝ) ^ j * (Nat.choose 3 (j + 1) : ℝ) : ℝ) : ℂ) *
+        (((-1 : ℝ) ^ j * (Nat.choose 3 (j + 1) : ℝ) : ℝ) : ℂ) *
           originalMarkedFineRoughTargetTerm N n j q tau z y word W) = 0 := by
     apply Finset.sum_eq_zero
     intro j hjmem
