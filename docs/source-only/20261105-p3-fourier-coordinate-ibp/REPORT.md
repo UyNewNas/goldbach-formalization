@@ -2182,3 +2182,30 @@ This is a genuinely quantitative finite HB coefficient majorant aimed at the nex
 - **Checks performed:** Independent exact symbolic prime-log coefficient enumeration (not floating logs): 876/876 cases, y=2..5, n<=min(120,y^3), strict z in {0,2,3,5}; 266 nonzero rough-filtered signed coefficients, zero mismatches with von Mangoldt. Independent arbitrary complex geometry and integer signed rho **exact rational** full-shift response sanity checks: 58 admissible nonzero Mobius/offshift samples, zero mismatches. Script run as python /tmp/p3_test.py (SHA256 67c67cb96750dbab4ba04f027f4e2c45061ab36cdc56cebb4018b53fae85fc0f); script is runtime-local, not a committed kernel certificate. Proof lexical balanced delimiters and forbidden proof escape tokens=0. GitHub source and VERIFY blob checks passed. **Not executed:** Lean elaboration/Lake targeted build, kernel checking/replay or full dependency axiom audit. Runtime command probes found no lean/lake/elan, and direct GitHub git transport failed DNS. No CI, Codex or heavy producer triggered.
 - **Fixed environment unchanged:** leanprover/lean4:v4.33.0-rc1, Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1. EXTERNAL_INPUTS.json unchanged Git blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab, research (M) REGISTER_ONLY, no proof or axiom added. No production file, frozen manuscript, lockfile, other task, main branch, PR, external board or excluded full-87 dynamic parent/history/strategy supply modified.
 - **Next real entrance:** targeted pinned Lean/Lake compilation in an isolated import map and repair of real errors; determine which ACTUAL original W_T factors retain product-lift coherence after original HB rectangles / Fourier separation and which require uniform derivative and H-tail payment; then establish true shifted-divisor mixed moment and same physical rho_T/Q_T all-source causal assembly, including surviving squarefree-even marked diagonal, no-Mobius cases, empty Gamma, high-rank and enhanced branches. P3.6 is YELLOW. All new declarations remain BLUE/SOURCE_ONLY/UNCOMPILED/KERNEL_UNVERIFIED; no green promoted.
+
+## Successor P3.6 — actual ordered HB geometric localization defect (2026-11-09 UTC)
+
+- **Actual starting branch HEAD** `68159fb6b06152e5c717d2ead8ad77d1c9d5a028` on `chatgpt/p3-internal-original-w-20261105`, rechecked with the GitHub compare endpoint. Prior REPORT, REGISTRY, EXTERNAL_INPUTS, last `P3HBOriginalGeometricProductCollapse.lean`, last fixed-product mass/response sources, original P5Z rough HB source and frozen prime-product manuscript were read. Relevant root/docs/source-only/packet AGENTS were queried and NOT_FOUND.
+- **Real proof commit** `88c38e1e3f42b28aa5b265ae944452cc67690956` (`[skip ci]`), source `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBGeometryDefectBudget.lean`, blob `b08d2fcd77449401fc54e1e568ddb10a1136a265`, `184` lines. VERIFY blob `59b09446ca7564f3db64f7f95f2165aeded13628` registers the five theorem statements and one definition before checking (six #check commands, **NOT EXECUTED**). Pinned manuscript `9731290e8f53cffda44129906cde6a965eaa869b` and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` unchanged.
+
+### Actual manuscript-internal contribution
+
+For the original 2/4/6-slot ordered HB fibre, arbitrary original positional geometry `W(marked,hb)` is **exactly** the product-lift `G(marked,hb.prod)` plus the literal error `Delta W=W-G`. Under original `0<=z, 0<=y, n<=y^3` (CLOSED) this yields
+```
+signedHB(W) = G(marked,n)*mu(marked.prod*n)*Lambda(n)*roughOneSlot(z,n)
+             + signedHB(Delta W).
+```
+No rectangle-localized `W` has been falsely declared product-coherent. If a genuine pointwise geometry defect `||W(marked,hb)-G(marked,n)||<=delta` is available for **every** original labelled tuple, with `n!=0, z>=0, delta>=0`, the candidate quantitative bound is
+```
+||signedHB(Delta W)|| <= delta*log(n)*
+  sum_{j=0}^2 binom(3,j+1)*tau(n)^(2*(j+1)).
+```
+The final theorem retains one whole signed physical `offMarkedPhysicalResponse(marked.prod,N,n,Q,rho)`, exact complete product shift, integer rho, original physical Q and exact coprime mean **after** the signed HB sum. This is a finite localization-defect budget, NOT a source-wide uniform delta, Fourier/H tail, arithmetic PP saving or all-source causal compiler coverage.
+
+### Checks and remaining obligation
+
+- Independent symbolic EXACT rational prime-log HB 2/4/6-slot regression **3348/3348** (1102 nonzero geometric defects, 3328 nonzero physical responses; original strict rough end point and +3,-3,+1); local regression script SHA256 `b91ab0f279875f8ea5224e6cd6536ba77d4ccf5a0388e628f6f956dafeb075ba`. Toy finite algebra cannot certify Lean elaboration or analytic estimates.
+- Source forbidden proof tokens **0**, lexical delimiter scan **PASS**, six #check recorded not executed. Container **NO lean/lake/elan executable**; Git transport DNS failed. **NOT RUN:** Lean/Lake, kernel, CI, Codex, full axiom audit, producer. All declarations remain BLUE/SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED; no GREEN.
+- `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: restricted research (M) **REGISTER_ONLY**, no implementation or new axiom. No production, manuscript, lockfile, other branches, excluded full87, PR, CI or external board changed.
+
+**Next exact entrance:** obtain pinned isolated Lean/Lake compilation and repair any real errors; show actual localized `W_T` geometric defect bound or use mixed Euler/Fourier L1/H budgets UNIFORMLY in m(N) and T; prove weighted complete physical shifted-divisor moment, separate complete product=T, and only then causal whole-box, all HB/empty Gamma/high-rank/enhanced same-rho PP assembly. P3.6 remains YELLOW.
