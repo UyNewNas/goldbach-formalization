@@ -1867,3 +1867,40 @@ This is a narrower actual algebraic advance than a full PP estimate: neither `R_
 - External input boundary unchanged: EXTERNAL_INPUTS.json blob 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab, (M) record-only. No manuscript, production, main, PR, other branch, excluded full87 node or board edits.
 
 Next concrete entry: use a version-matched Lean/Lake environment to elaborate this 3-theorem module and dependencies and fix any errors. Then establish actual W_T geometric support, 2<c*N^a eventually with the correct uniform quantifier order, and apply this exact-zero target payment ONLY to the genuine rank-three prime source. Complete off-target shifted divisor/physical modulus boundary, W_T uniform Fourier budget and all final same causal rho_T/Q_T source families. P3.6 YELLOW; restricted new code BLUE/SOURCE_ONLY.
+
+## Successor P3.6 — all original-prime ranks: even target-product fibre vanishes (2026-11-09 UTC)
+
+- **Restored exact HEAD**: `9f796a034c47b0bd0998f165c039e19ab430e8cf`, task branch `chatgpt/p3-internal-original-w-20261105`; previous actual handoff was `9f796a0`, not the original `de582e6`.
+- **New proof commit**: `42839b7f99b0189e31b08c5fc0a012d46b45e824` with `[skip ci]`; exact new source blob `8e58d288d7c425985e0004295e0388c739a15785`.
+- **File**: `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualAllRankGeometricTarget.lean`, 121 lines, four candidate theorems; no production modules modified.
+- **Source definitions actually read**: `ImbalancedChen/Part3DistributionTargets.lean` defines `labelledPrimeTuples k P`, `labelledProduct`, and the literal `primeProductSignedError k P N Q rho`. Root `AGENTS.md` was absent at the checked branch, consistent with predecessor packets.
+- **Frozen manuscript**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` lines 254–274 and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §§1,4. Pinned Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+  
+### Actual mathematical increment
+
+Prior rank-three U8 proof showed the target product is impossible on an even N when every original prime coordinate of W is strictly above 2. This round **removes the rank=3 restriction** and proves the finite all-rank parity induction on the *original* Part3 prime-label carrier, including empty rank. For any fixed k, cap P and even N, if a genuine geometric weight W can be nonzero only where all original prime coordinates are at least `c*N^a>2`, then `W(u)=0` whenever `labelledProduct(u)=N`. In particular:
+
+```text
+sum_{u in labelledPrimeTuples(k,P), labelledProduct(u)=N} W(u) = 0
+Part3.primeProductSignedError k P N Q rho
+  (fun u => if labelledProduct u=N then W u else 0) = 0
+```
+
+Both identities keep original labels and occurrence multiplicity, complete prime-product scale, the same arbitrary signed physical Q/rho and literal coprime/totient mean. The latter is the real Part3 signed-error functional, **not** an artificial replacement metric. No new parity filter has been imposed on admitted W. This pays the complete-product=N diagonal **only for geometrically supported original prime-coordinate sources of any rank**. It does **not** pay HB integer slots (even factors are allowed), sharp-to-smooth off-target arithmetic boundary mass, or derive the true uniform W_T admissibility and threshold.
+
+### Evidence and limits
+
+- Exact branch HEAD read before the write; source file created successfully at commit `42839b7f99b0189e31b08c5fc0a012d46b45e824` and subsequently fetched with matching blob `8e58d288d7c425985e0004295e0388c739a15785`.
+- Static banned proof-escape scan: zero; delimiter check: balanced. `VERIFY.lean` has four additional **registered, not executed** `#check` statements.
+- Independent Python arithmetic regression: 230,942 labelled prime tuples over even N=2..80, k=0..4, with 111 target-product occurrences; no admissible nonzero target W. Independent exact Fraction randomized signed test: 600/600, 164 target labels, physical q including zero and arbitrary signed rational rho, all target-part responses zero. **These tests are not Lean elaboration or a mathematical proof.**
+- Environment probe in the present execution container: neither `lean`, `lake`, nor `elan` is installed; direct git access failed DNS resolution. Hence **NOT RUN**: Lean, Lake, CI, independent kernel replay, transitive axiom audit, Codex and heavy producer. Every declaration is `SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED`; no new green status.
+- `EXTERNAL_INPUTS.json` unchanged, blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. The external restricted medium input (M) remains RECORD_ONLY, not implemented and not an axiom.
+- No excluded full87 parent/history node, other task, manuscript, main/master, production source, toolchain, CI configuration, PR or external board was changed.
+
+### Next exact proof entry
+
+1. Compile the four new declarations with the fixed Lean/Mathlib pins (in an isolated source-only import mapping) and repair any elaboration error; do not promote any of the preceding 100+ source-only modules automatically.
+2. Produce a **real uniform original geometric W_T support contract** and one common large-N threshold with fixed c,a before N and all source labels, then connect the all-rank diagonal result. Do not assume arbitrary W has this property.
+3. Retain a separate exact-product=T arithmetic estimate for HB **integer** slots; pay the off-target complete-modulus congruence and coprime mean, actual mixed shifted moments, normalized Fourier/H-box error and growth m(N) uniformly.
+4. Identify final causal integer `rho_T` and physical `Q_T` (distinct from auxiliary level), finish marked/HB/empty Gamma/high-rank/enhanced sources. P3.6 remains **YELLOW**. 
+

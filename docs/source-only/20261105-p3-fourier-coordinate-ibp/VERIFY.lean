@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualAllRankGeometricTarget
 import ImbalancedChen.P3ActualU8EvenGeometricTarget
 import ImbalancedChen.P3ActualU8StrictBoundarySourcewise
 import ImbalancedChen.P3ActualU8StrictSmoothBoundary
@@ -654,3 +655,10 @@ import ImbalancedChen.P3ActualU8ExactTargetResponse
 #check ImbalancedChen.P3ActualU8EvenGeometricTarget.labelledProduct_odd_of_coordinate_gt_two
 #check ImbalancedChen.P3ActualU8EvenGeometricTarget.target_weight_mass_zero_of_geometric_cutoff
 #check ImbalancedChen.P3ActualU8EvenGeometricTarget.target_signed_exception_zero_of_geometric_cutoff
+
+-- P3.6 all original labelled prime ranks: geometric parity kills the exact
+-- even-target fibre in the same physical signed PP functional (SOURCE_ONLY).
+#check ImbalancedChen.P3ActualAllRankGeometricTarget.labelledProduct_odd_of_all_gt_two
+#check ImbalancedChen.P3ActualAllRankGeometricTarget.geometric_weight_zero_at_target
+#check ImbalancedChen.P3ActualAllRankGeometricTarget.target_label_mass_zero
+#check ImbalancedChen.P3ActualAllRankGeometricTarget.target_fibre_physical_signed_error_zero
