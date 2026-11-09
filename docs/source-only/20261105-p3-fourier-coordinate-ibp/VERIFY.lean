@@ -77,6 +77,7 @@ import ImbalancedChen.P3HBEvenRoughTarget
 
 import ImbalancedChen.P3HBOriginalMarkedFineTarget
 import ImbalancedChen.P3HBExternalEvenMarkedDiagonal
+import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -685,3 +686,12 @@ import ImbalancedChen.P3HBExternalEvenMarkedDiagonal
 #check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.markedRoughTargetAtQ
 #check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.markedRoughTargetAtQ_eq_even_marked
 #check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.signed_three_target_eq_even_marked
+
+-- P3.6 global FULL-PRODUCT Mobius target, restricted to 4|N and sources
+-- retaining mu(full product). SOURCE_ONLY; #check NOT EXECUTED.
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.complete_mobius_zero_of_four_dvd
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.markedResidualKernel_target_zero_of_four_dvd
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.weightedSortedPP_target_zero_of_four_dvd
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobiusMarkedRoughTargetAtQ
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobiusMarkedRoughTargetAtQ_zero_of_four_dvd
+#check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobius_marked_rough_three_same_rho_target_zero_four_dvd
