@@ -1,0 +1,9 @@
+# P1.4 original 16 more strict affine Sources — input boundary
+
+Only original manuscript-internal finite geometry is addressed. All new points come from the exact original `P4AOriginalSeed7Unequal15Literal` and selector `P4AOriginalRemainingEighthSources.row`, original `Source` dictionary `P4AOriginalFull87SourceDictionary`; none are a new field or a substitute for the target. The exact 1548 finite checks are not Lean kernel proofs and not the original saved87 numerical certificate. Strict Source nonempty in \u211d^8 is NOT arithmetic prime occurrence, not N-dependent actualParent, and not a signed gain.
+
+Frozen manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Lean `leanprover/lean4:v4.33.0-rc1`; mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`; c=49044063/25000000, K=8452171/1250000.
+
+The §4 external prime-product statement remains **REGISTERED_NOT_PROVED / NOT_CALLED**. Its intended application: original full causal signed physical `rho_N` on positive squarefree moduli coprime to target even N, after the actual policy licence; Gevrey `W_N` fixed with all chart/Fourier conditions before taking N; original permitted integer truncation X; exact primitive-coprime mean `X_W^(q)/phi(q)` with `X_W^(q)=sum_{(p,q)=1} W_N(p)`; conditional residual `O_{A,W}(N(log N)^(-A))` under the original theorem's full hypotheses. The current patch does not invoke this theorem, nor implement PNT/Mertens/BV/spectral foundations. Internal counting, matching source to actual prime state, integral normalization, error and reserve payments remain INTERNAL and UNPROVED.
+
+Status: SOURCE_ONLY / UNEVALUATED / UNCOMPILED, no transitive axioms audit or independent review.
