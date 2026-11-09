@@ -76,6 +76,7 @@ import ImbalancedChen.P3ActualU8ExactTargetResponse
 import ImbalancedChen.P3HBEvenRoughTarget
 
 import ImbalancedChen.P3HBOriginalMarkedFineTarget
+import ImbalancedChen.P3HBExternalEvenMarkedDiagonal
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -677,3 +678,10 @@ import ImbalancedChen.P3HBOriginalMarkedFineTarget
 #check ImbalancedChen.P3HBOriginalMarkedFineTarget.original_marked_fine_rough_occurrence_target_zero
 #check ImbalancedChen.P3HBOriginalMarkedFineTarget.originalMarkedFineRoughTargetTerm_zero
 #check ImbalancedChen.P3HBOriginalMarkedFineTarget.original_marked_fine_rough_three_same_rho_target_zero
+
+-- Even outside-marked target localization; SOURCE_ONLY, NOT RUN.
+#check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.surviving_target_requires_even_marked
+#check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.odd_marked_target_occurrence_zero
+#check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.markedRoughTargetAtQ
+#check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.markedRoughTargetAtQ_eq_even_marked
+#check ImbalancedChen.P3HBExternalEvenMarkedDiagonal.signed_three_target_eq_even_marked
