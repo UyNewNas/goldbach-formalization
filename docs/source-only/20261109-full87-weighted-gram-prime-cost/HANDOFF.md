@@ -1,0 +1,11 @@
+# Durable P1.4 handoff — original signed-W weighted Gram
+
+**Read and confirmed baseline:** `d23b2b5728ba6b54351209ce715d106e60b3da4a` on `chatgpt/p1-full87-lowq-signed-gram-20261109`, with previous full source, report, registry, boundary and handoff. New independent branch: `chatgpt/p1-full87-weighted-gram-prime-cost-20261109`. Its actual latest HEAD must be re-read from GitHub at next run; the 20261105 `9649ab3` is only old navigation, NOT the reset target.
+
+**Source:** `docs/source-only/20261109-full87-weighted-gram-prime-cost/P4AOriginalFull87LowQWeightedGramInvoice.lean`, Git blob `561e9be6a7dd91d928979a851f7fee44df8ffdc7`, SHA256 `da856db6ef95858dd7b6db8acc1fa09d6e2d4546ca2a83ad6e1854471a10c09e`, 212 LF lines. A new actual signed-W (not unweighted) finite Cauchy bound: E_low² ≤ (∑original primes |W|) × (the SAME complete-q signed |W|-weighted Gram). Original RAW/LICENSED rho, occurrence multiplicity and strict q>X boundary retained; off-diagonal correlations can be negative. This is a useful finite prerequisite, not o(H_N), numerical gain, or a paid reserve.
+
+**Actual checks:** 1,800 deterministic exact Fraction cases with zero mismatches; 1,516 negative W, 890 negative weighted cross cases, 1,453 strict Cauchy cases, 1,159 q=1. No genuine saved87 replay. lean/lake/elan exit 127; SOURCE_ONLY / UNEVALUATED / UNCOMPILED, no kernel, transitive axioms or independent review. No CI, Codex, upgrades, main mutation.
+
+**Pins:** paper 9731290e8f53cffda44129906cde6a965eaa869b, TeX blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79, Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958, c=49044063/25000000, K=8452171/1250000. §4 external PP REGISTERED_NOT_PROVED / NOT_CALLED.
+
+**Concrete next action:** authenticate at least one genuinely original saved87 affine witness, its Source condition, actual N-dependent parent, same-history realization and archived signed gain; OR prove a true `G_W` bound in common H_N normalization, choosing it *instead of* previous positive low-q budget. Legal Gevrey W_N / PP integer X, high-q, raw/finite/filtered, rank9, changed/tagged and two reserves remain unpaid. Compile only with exact pinned graph. P1.4 YELLOW.
