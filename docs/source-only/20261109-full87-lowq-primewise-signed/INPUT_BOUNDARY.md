@@ -1,0 +1,9 @@
+# Input boundary — original RAW/LICENSED signed per-prime low-q kernel
+
+Frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` Git blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; constants c=49044063/25000000, K=8452171/1250000 and all project dependency pins remain fixed.
+
+**External §4 singleton prime-product distribution:** source eq:current-PP on the pinned manuscript; mean `X_W^(q) = Σ_{(p,q)=1} W_N(p)`, normalized by actual `Nat.totient(q)`, for the original signed complete-q causal family; schematic remainder `O_(A,W)(N (log N)^(-A))` under the manuscript's parameter order, squarefree and target-coprime physical moduli, Gevrey/polylog Fourier chart and legal PP integer-X cutoffs. Status **REGISTERED_NOT_PROVED / NOT_CALLED**. Applicability has not been certified; the original theorem is never silently granted to a filtered high-q or low-q subfamily.
+
+**Internal manuscript work actually implemented as candidates:** expand original primitive AP minus coprime mean into signed one-prime indicators; commute the original finite prime and low complete-q sums *before* using absolute values; combine with the predecessor's exact full/high/low discrepancy split. `actualPrimeContrast` is a literal formula, not an assumed bound. No policy, beta, origin parent, saved87 membership or occurrence field is added. This is an alternative low-q charge replacing, not added to, the predecessor `Σ_low B(d)C_W(d)`.
+
+**Unproven internal obligations:** fixed true Gevrey `W_N`, original saved87 affine witnesses and dynamic family, admissible integer X, actual same-`H_N` primewise charge, residual integrals, double-count-free error payments and two independent reserves. No external PNT/Mertens/BV/spectral proof introduced. SOURCE_ONLY / UNEVALUATED / UNCOMPILED; no independent audit.
