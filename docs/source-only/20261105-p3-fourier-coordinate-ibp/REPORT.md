@@ -2110,3 +2110,34 @@ The new `offMarkedResponse_sum_eq_squarefree` and `signed_three_full_squarefree_
 - No production source, other automation, excluded full87 dynamic parent/history/strategy, fixed paper, toolchain/lock, master, PR, CI or external board edited.
 
 **Next concrete entry:** Compile this isolated source and required SOURCE_ONLY ancestors under the fixed Lean/Mathlib version, and repair real elaboration errors; then attach squarefree/coprime surviving complete offshift fibres to the actual original finite arithmetic mixed-divisor moment with real source multiplicities and `rho_T,Q_T`. Still open: even-squarefree marked target exception, non-Mobius sources, true W_T uniform Fourier/H for growing m(N), causal/whole-box and all HB/empty-Gamma/high-rank/enhanced assembly. P3.6 stays **YELLOW**; **zero new GREEN**.
+
+## Successor P3.6 — original fixed-product HB fibre, same physical rho (2026-11-09 UTC)
+
+- **Real recovery HEAD:** `7f596ea7c6df1d94cb97f95bf096372118a8a05c` on `chatgpt/p3-internal-original-w-20261105`; the actual REPORT, REGISTRY, EXTERNAL_INPUTS, preceding off-shift/squarefree Lean modules, literal production `ImbalancedChen/P5LiteralHeathBrownOccurrenceWords.lean`, fixed complete-scale manuscript and pinned Mathlib squarefree API were inspected. No relevant AGENTS.md was found at the root or packet ancestry.
+- **Actually pushed proof commit:** `f53166aa33e00a5f745b2f3a1cef48c7c2696509` ([skip ci]), new `P3HBMarkedFixedProductFibre.lean`, **115** lines, readback Git blob `544c64d57fd3ac059dbb2066e307a1dd4ab05845`, local SHA256 `9ed854e4352e0637873901e979c0a6a039f4e1c07d5f4fce0328efc1beee242c`.
+- **Actually pushed VERIFY commit:** `681962ebbf1b2950a99db78667b2737d87befb68` ([skip ci]), blob `f08646b0e9b33763d149933fda41e61561daf115`, one top-level import before the existing #checks and four new declaration checks **NOT EXECUTED**.
+- **Registry commit:** `8ddde2d4c8a5d830babb6cdbe3782ac595feab9e` ([skip ci]), blob `40befd576bd48c3db7489e8086e15509a987f2a8`. Actual pinned `lean-toolchain` is `leanprover/lean4:v4.33.0-rc1`; `lake-manifest.json` pins Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Frozen paper remains `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, prime-product completion §§2–4 (F), with `manuscript-body.tex` eq:current-PP.
+
+### Mathematical progress and exact scope
+
+The actual original `factorTuples_spec` (read from the real production P5Literal source) proves **for every labelled, ordered** `hb ∈ factorTuples (2*(j+1)) n` that `hb.prod=n`. It follows that the **complete physical** marked/HB product is `marked.prod*n`, regardless of which labelled HB factorization of that same residual `n` was chosen. The *same* nonzero complete-product shift `|N-marked.prod*n|`, squarefree predicate from actual global Mobius, and original signed physical `Q,rho` response are therefore constant on the entire HB fibre, though the arbitrary complex original `W(marked,hb)` and rough HB coefficient remain tuple-dependent.
+
+New `squarefree_offshift_hb_fibre` (SOURCE_ONLY candidate) proves the exact original doubly filtered HB occurrence sum equals
+
+```
+if marked.prod*n != N AND Squarefree(marked.prod*n)
+then (sum_{hb in original factorTuples} offMarkedOccurrence(marked,hb))
+       * offMarkedPhysicalResponse(marked.prod,N,n,Q,rho)
+else 0.
+```
+
+The successor `signed_three_full_fixed_fibres_same_rho` plugs this into the *previous* exact target/off-target ledger, with unchanged global target term, original **+3,-3,+1**, every HB positional label and multiplicity, genuine complex W, exact coprime mean, integer rho and physical Q. This is an **arithmetically useful factorization at fixed residual n**: it removes redundant HB-position dependence from the shifted divisor argument without aggregating or dropping the HB weights. It does not bound the newly exposed weighted convolution coefficient; it does not establish the desired mixed-divisor moment, Fourier/H tail or original causal compiler coverage. This result is restricted to the explicitly global-Mobius marked/strict rough-HB subfamily, not all actual PP sources.
+
+### Checks, limitations, next entrance
+
+- GitHub branch HEAD rechecked at each write, source and VERIFY blobs read back, forbidden proof escapes **0**, source delimiter scan **PASS (lexical only)**, four #checks registered but not executed.
+- Independent Python **exact Fraction / complex integer** regression: **32,400 / 32,400** signed physical fixed-product fibres, **1,246,536** original ordered labelled tuple occurrences, **14,397** eligible squarefree off-target fibres, **18,003** ineligible, **14,373** nonzero signed-complex fibres, **12,948** target-label occurrences. Included residual `n=0` empty fibre, repeated/order-sensitive W, q=0, q=1, noncoprime exact mean, and positive/negative integer rho. Finite regression log SHA256 `bff8fbe7ab1ca737f9fe6498f0e7866b0317c5aac3d218715afc51744134dced`. This proves neither Lean elaboration nor an asymptotic.
+- Container `command -v lean`, `lake`, `elan` returned no executables; direct `git ls-remote` failed with `Could not resolve host: github.com`. **NOT RUN:** Lean/Lake compiled proof, kernel checking/replay, full transitive axiom audit, CI (prohibited), Codex or heavy producer. All four declarations remain **BLUE / SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED**, **zero new GREEN**. No toolchain/lockfile changes.
+- `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: research (M) REGISTERED ONLY, **no implementation and no new axiom**. No production modules, frozen paper, other automation, excluded full87 dynamic-parent/history/strategy, PR, main branch or board changed.
+
+**Next concrete entry:** Compile the four candidates and actual imports using fixed Lean/Mathlib in an isolated mapping, repair elaboration failures, and then derive a genuine absolute weighted mixed shifted-divisor moment for **the fixed residual-n HB convolution coefficient** while retaining original physical Q/rho and exact complete product. Still separately unpaid: surviving squarefree even-marked exact target, sources without global Mobius, actual W_T uniform smoothness/Fourier L1/H tail as m(N) grows, causal/whole-box selection, empty Gamma and all high-rank/enhanced sources. **P3.6 remains YELLOW.**
