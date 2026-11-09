@@ -79,6 +79,8 @@ import ImbalancedChen.P3HBOriginalMarkedFineTarget
 import ImbalancedChen.P3HBExternalEvenMarkedDiagonal
 import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
 
+import ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -695,3 +697,12 @@ import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
 #check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobiusMarkedRoughTargetAtQ
 #check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobiusMarkedRoughTargetAtQ_zero_of_four_dvd
 #check ImbalancedChen.P3HBMarkedMobiusFourDiagonal.mobius_marked_rough_three_same_rho_target_zero_four_dvd
+
+-- Squarefree AND even-outside-marked exact physical target restriction.
+-- SOURCE_ONLY: registered for future fixed Lean elaboration, NOT EXECUTED.
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.markedResidualKernel_target_zero_of_nonsquarefree
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.weightedSortedPP_target_zero_of_nonsquarefree
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.mobiusMarkedRoughTargetAtQ_zero_of_nonsquarefree
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.mobiusMarkedRoughTargetAtQ_eq_even_marked
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.surviving_mobius_target_requires_squarefree_even_marked
+#check ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal.signed_three_mobius_target_eq_squarefree_even_marked
