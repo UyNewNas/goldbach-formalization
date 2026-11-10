@@ -1,4 +1,4 @@
-name: T01 exact fifth-floor kernel verification v2
+name: T01 exact fifth-floor kernel verification v3
 on:
   push:
     branches: [codex/yellow-closure-20261110]
@@ -27,10 +27,10 @@ concurrency:
 jobs:
   fifth:
     runs-on: ubuntu-24.04
-    timeout-minutes: 330
+    timeout-minutes: 360
     env:
       SOURCE_COMMIT: ${{ inputs.source_commit || github.sha }}
-      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || 'ab3a852493e4f49ed056a9d815f245bafbf58800234bc96bffb83f2472d25a75' }}
+      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
       CHECK_PURPOSE: ${{ inputs.purpose || 'yellow_green' }}
       LEAN_NUM_THREADS: 2
       T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
@@ -52,13 +52,13 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
-          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v2.json" | sha256sum --check --strict
+          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
           PROJECT="$RUNNER_TEMP/t01-project"
           LOGS="$RUNNER_TEMP/t01-evidence"
           mkdir -p "$LOGS"
           printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
-          python3 "$T01/stage_project_v2.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
-          cp "$PROJECT/T01_PROVENANCE.json" "$PROJECT/T01Audit.lean" "$T01/EXACT_INSTALL_MANIFEST-v2.json" "$T01/REUSE_EVIDENCE.json" "$LOGS/"
+          python3 "$T01/stage_project_v3.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
+          cp "$PROJECT/T01_PROVENANCE.json" "$PROJECT/T01Audit.lean" "$T01/EXACT_INSTALL_MANIFEST-v3.json" "$T01/REUSE_EVIDENCE.json" "$LOGS/"
       - name: Check out pinned existing lean-action scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -87,8 +87,8 @@ jobs:
           cd "$PROJECT"
           lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
           cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
-          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v2.json" --output "$LOGS/dependencies.json"
-      - name: Elaborate all exact fifth suppliers and eight complete theorem types
+          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
+      - name: Elaborate all exact fifth suppliers and original eight terminal types plus explicit carrier type
         id: build
         timeout-minutes: 240
         run: |
@@ -100,12 +100,12 @@ jobs:
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          lake env lean T01Audit.lean 2>&1 | tee "$LOGS/types-axioms.log"
+          lake env lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 T01Audit.lean 2>&1 | tee "$LOGS/types-axioms.log"
       - name: Bind all exact source and compiled object identities before kernel check
         id: objects_before
         run: |
           set -euo pipefail
-          python3 "$T01/record_objects.py" --project "$PROJECT" --manifest "$T01/EXACT_INSTALL_MANIFEST-v2.json" --output "$LOGS/objects-before.json"
+          python3 "$T01/record_objects.py" --project "$PROJECT" --manifest "$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/objects-before.json"
       - name: Replay every selected mathematical supplier with bundled leanchecker
         id: checker
         timeout-minutes: 35
@@ -115,7 +115,7 @@ jobs:
           test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
           mapfile -t modules < <(python3 - <<'PY'
           import json, os, pathlib
-          m = json.loads((pathlib.Path(os.environ['GITHUB_WORKSPACE']) / os.environ['T01'] / 'EXACT_INSTALL_MANIFEST-v2.json').read_text())
+          m = json.loads((pathlib.Path(os.environ['GITHUB_WORKSPACE']) / os.environ['T01'] / 'EXACT_INSTALL_MANIFEST-v3.json').read_text())
           print('\n'.join(m['targets'][0]['closure_modules'] + ['T01Audit']))
           PY
           )
@@ -123,7 +123,7 @@ jobs:
           lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/kernel-checker.log"
           python3 - <<'PY'
           import hashlib, json, os, pathlib
-          m = json.loads((pathlib.Path(os.environ['GITHUB_WORKSPACE']) / os.environ['T01'] / 'EXACT_INSTALL_MANIFEST-v2.json').read_text())
+          m = json.loads((pathlib.Path(os.environ['GITHUB_WORKSPACE']) / os.environ['T01'] / 'EXACT_INSTALL_MANIFEST-v3.json').read_text())
           logs = pathlib.Path(os.environ['LOGS'])
           raw = (logs / 'kernel-checker.log').read_bytes()
           expected = m['targets'][0]['closure_modules'] + ['T01Audit']
@@ -133,17 +133,17 @@ jobs:
           result = {'status': 'PASS_ALL_729_SELECTED_PROJECT_MODULES_REPLAYED_RELATIVE_TO_IMPORTS', 'modules': actual, 'count': len(actual), 'fresh_external_closure_claimed': False, 'source_commit': os.environ['SOURCE_COMMIT'], 'manifest_sha256': os.environ['EXPECTED_MANIFEST'], 'log_sha256': hashlib.sha256(raw).hexdigest()}
           (logs / 'KERNEL_MODULE_RESULT.json').write_text(json.dumps(result, indent=2) + '\n')
           PY
-      - name: Require exactly eight unelided types and matching transitive axiom reports
+      - name: Require all nine unelided types and matching transitive axiom reports
         id: axioms
         run: |
           set -euo pipefail
-          python3 "$T01/audit_remote_output.py" --project "$PROJECT" --log "$LOGS/types-axioms.log" | tee "$LOGS/type-axiom-audit.log"
+          python3 "$T01/audit_remote_output_v3.py" --project "$PROJECT" --log "$LOGS/types-axioms.log" | tee "$LOGS/type-axiom-audit.log"
           cp "$PROJECT/T01_TYPE_AXIOM_RESULT.json" "$LOGS/"
       - name: Require unchanged source and object identities after all checks
         id: objects_after
         run: |
           set -euo pipefail
-          python3 "$T01/record_objects.py" --project "$PROJECT" --manifest "$T01/EXACT_INSTALL_MANIFEST-v2.json" --output "$LOGS/objects-after.json" --compare "$LOGS/objects-before.json"
+          python3 "$T01/record_objects.py" --project "$PROJECT" --manifest "$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/objects-after.json" --compare "$LOGS/objects-before.json"
       - name: Audit actual source compiler commands and pinned runtime
         id: runtime
         if: ${{ always() && steps.materialize.outcome == 'success' }}
@@ -151,6 +151,37 @@ jobs:
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Preserve coherent per-module object bytes and provenance even after build failure
+        id: checkpoint
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          python3 "$T01/checkpoint_objects_v3.py" --project "$PROJECT" --manifest "$T01/EXACT_INSTALL_MANIFEST-v3.json" --logs "$LOGS" --output "$RUNNER_TEMP/t01-object-checkpoint" 2>&1 | tee "$LOGS/checkpoint-collection.log"
+      - name: Retain actual coherent compilation checkpoint bytes including failure checkpoints
+        id: checkpoint_upload
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t01-fifth-objects-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/t01-object-checkpoint/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Bind immutable object artifact identity in the separate evidence receipt
+        if: ${{ always() && steps.checkpoint_upload.outcome == 'success' }}
+        env:
+          OBJECT_ARTIFACT_ID: ${{ steps.checkpoint_upload.outputs.artifact-id }}
+          OBJECT_ARTIFACT_DIGEST: ${{ steps.checkpoint_upload.outputs.artifact-digest }}
+          OBJECT_ARTIFACT_URL: ${{ steps.checkpoint_upload.outputs.artifact-url }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib
+          record = {'artifact_id': os.environ['OBJECT_ARTIFACT_ID'], 'artifact_digest': os.environ['OBJECT_ARTIFACT_DIGEST'], 'artifact_url': os.environ['OBJECT_ARTIFACT_URL'], 'source_commit': os.environ['SOURCE_COMMIT'], 'manifest_sha256': os.environ['EXPECTED_MANIFEST'], 'run_id': os.environ['GITHUB_RUN_ID'], 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'], 'kernel_acceptance_from_cache': False}
+          (pathlib.Path(os.environ['LOGS']) / 'CHECKPOINT_ARTIFACT.json').write_text(json.dumps(record, indent=2) + '\n')
+          PY
       - name: Require every evidence stage without promoting conditional scope
         if: ${{ always() }}
         env:
@@ -163,12 +194,14 @@ jobs:
           AXIOMS: ${{ steps.axioms.outcome }}
           OBJECTS_AFTER: ${{ steps.objects_after.outcome }}
           RUNTIME: ${{ steps.runtime.outcome }}
+          CHECKPOINT: ${{ steps.checkpoint.outcome }}
+          CHECKPOINT_UPLOAD: ${{ steps.checkpoint_upload.outcome }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/t01-evidence"
           python3 - <<'PY'
           import json, os, pathlib
-          keys = ['MATERIALIZE', 'DEPENDENCIES', 'BUILD', 'TYPES', 'OBJECTS_BEFORE', 'CHECKER', 'AXIOMS', 'OBJECTS_AFTER', 'RUNTIME']
+          keys = ['MATERIALIZE', 'DEPENDENCIES', 'BUILD', 'TYPES', 'OBJECTS_BEFORE', 'CHECKER', 'AXIOMS', 'OBJECTS_AFTER', 'RUNTIME', 'CHECKPOINT', 'CHECKPOINT_UPLOAD']
           result = {'source_commit': os.environ['SOURCE_COMMIT'], 'manifest_sha256': os.environ['EXPECTED_MANIFEST'], 'target': 'fifth_floor', 'purpose': os.environ['CHECK_PURPOSE'], 'outcomes': {k: os.environ[k] for k in keys}, 'green': False, 'independent_expanded_type_acceptance_required': True}
           path = pathlib.Path(os.environ['RUNNER_TEMP']) / 't01-evidence/outcomes.json'
           path.write_text(json.dumps(result, indent=2) + '\n')

@@ -1,0 +1,14 @@
+# Independent T06 v3 inherited-source repair review
+
+**Scoped source and integration pass for these six replacements.** The v2 build failed on d5f392f6717227ab94ad4004044a037ac83be877. Its runtime guard passed and its kernel and type/axiom stages were skipped. I compared each candidate with the actual preimage Git blob selected by v2 manifest ab3a852493e4f49ed056a9d815f245bafbf58800234bc96bffb83f2472d25a75, and read the complete textual diffs and corresponding build errors. The author report is SHA256 4e4efbc3758b483947a5f50e7c4763184831d375a1868d4f9acbbecab112a56e and its registry is 43412f43927d26981d6699dfe8363119d638f2ec0aaf2054dac8a10be7a5303f.
+
+| Module | V3 SHA256 | Change reviewed |
+| --- | --- | --- |
+| P1FourthNearOneKernel | 046fbb5257e9a4bbe0d7bd075da054b6dfe2a2e572fa777b13684a29d61a1f83 | Makes Ici/Ioi membership explicit in the original continuous gluing, endpoint and antitone applications, uses the actual native Suzuki source name, removes a no-progress simplification. |
+| P2DirectedLogRounding | 11d018492ac313d814c9a18df0624e65275571b4c7725d9486ca57c00f3fbcd3 | Exact existing public repair from 085ef205. Both uses of mul_lt_mul_iff_left₀ remove the common positive factor on the right, leaving the original strict floor/ceiling bounds. |
+| P1OriginalThirdGammaFirstCoordinateRise | ce79a843c6ac5b6ba7977e40a369cfa7226047d3785f2be466357a29e8536ed2 | Reassociates the actual ux+d+uz argument of v, then uses the original one-sided slope estimate. The rational xy, xyz and admitted xz branches use explicit d/2 plus associativity/commutativity. The gate can still switch off. |
+| P1ActualUpperNearOneBound | e2cd0184207d94fe509ba7b9e2295c07ba0aa505f12dffcefd5a5182806903e4 | Uses the positive-log equivalence for a ≤ b/c from the actual Euler product hypothesis. |
+| P5HistoricalRectangularGammaTransport | fb0e5a57a1123f2ef778c36f1ee29820a0db138d8cc0d862e244eec5d2b33130 | Resolves the intended real VariableEnvelope.B in the rescue estimate and unfolds that same definition. |
+| P5OriginalSignedMidpoint | 9fdda945eebd1a69a285ba9f5cfb7654a5e5caca72b500c12376db0614709442 | Specifies volume throughout the original real interval comparisons and unfolds id in the derivative polynomial left with id x in the failed v2 proof state. |
+
+Every hunk lies in an existing proof body. The original declarations, imports, endpoint conventions, positivity assumptions, constants and strict inequalities are retained. The original A/s extension through two and true operator beyond two agree at the gluing point, and the one-sided limit at one uses the extension value. For the Gamma repair the remaining time/heartbeat behavior is determined by the actual pinned build. Install all six exact outputs at the original production module names in the dedicated v3 build. Retain the whole fifth closure, eight expanded type/axiom checks and all module kernel replays. No local compiler, proof evaluator or finite verification was run.

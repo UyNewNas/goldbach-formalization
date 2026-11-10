@@ -1,0 +1,523 @@
+{
+  "status": "INDEPENDENT SOURCE REPAIR REVIEW COMPLETE; REMOTE UNVERIFIED",
+  "scope": "T02 inherited v3 repair set only",
+  "reviewer": "T09",
+  "model_requested": "gpt-6-astra / xhigh",
+  "run_id": 42740765820,
+  "job_id": 129580945152,
+  "v2_commit": "d5f392f6717227ab94ad4004044a037ac83be877",
+  "v2_inputs": [
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/EXACT_INSTALL_MANIFEST-v2.json",
+      "sha256": "ab3a852493e4f49ed056a9d815f245bafbf58800234bc96bffb83f2472d25a75",
+      "bytes": 1098693
+    },
+    {
+      "path": "output/t-batch-20261110/T01_V2_FAILED_JOB.log",
+      "sha256": "5d4f853ff17bdd28d15f45d56ddb039ce57fa3fe39a82df02236f4a839ea97eb",
+      "bytes": 1120994
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/V3_FULL_FAILURE_DIAGNOSIS.json",
+      "sha256": "69dce479d69f6b4e0a1651226a3a030c3458dc825993642c8b30c90c4bbe1fd7",
+      "bytes": 254988
+    },
+    {
+      "path": "output/t-batch-20261110/T01_V2_ERROR_INDEX.json",
+      "sha256": "781f0a468951de5979a82e66103466f66ee00b944e9f829eeb6d5bc5213dfe4e",
+      "bytes": 46156
+    }
+  ],
+  "frozen_author_records": [
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/REGISTRY.json",
+      "sha256": "57c6e2d6edae4817586fb672dbc03e78deda6a90bba1c2f90df80268e357a859",
+      "bytes": 16937
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/REPORT.md",
+      "sha256": "730c5dd354084d677b8f83311f11bd5a003561b7eb893d8607ce6c9ac6788139",
+      "bytes": 7839
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/ERROR_REPAIRS.json",
+      "sha256": "245c2ef4e87b2d2d1047134f4f3eea9ffd91b2152bffcd452c97d471fcba9345",
+      "bytes": 13735
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/DECLARATION_AUDIT.json",
+      "sha256": "3544441260fc219b3d7619a3e1b664a6a72eeb647fb166fa9cb869e0302c7bdd",
+      "bytes": 26311
+    }
+  ],
+  "actual_v2_errors_in_assigned_files": 23,
+  "replacement_files": [
+    {
+      "module": "ImbalancedChen.HistoricalFifthJointIntegralSupportP1",
+      "install_path": "ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/HistoricalFifthJointIntegralSupportP1.lean",
+        "sha256": "c67618f20e150afd07559f5424533b08438ca69258ec0eba26662fb33613a93e",
+        "bytes": 13254
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean",
+        "sha256": "08aea2daf75e57ad523cbb07ca3334eb123c1bcbebfade2f1aa1ca3690bf4a10",
+        "bytes": 13112
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 29,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean\n+++ v3/ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean\n@@ -171,5 +171,7 @@\n   by_cases ht : t ∈ D.p1FifthJointUnion\n   · obtain ⟨j, hj, htj⟩ : ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j := by\n-      simpa only [p1FifthJointUnion, Set.mem_iUnion] using ht\n+      obtain ⟨j, hrest⟩ := Set.mem_iUnion.mp ht\n+      obtain ⟨hj, htj⟩ := Set.mem_iUnion.mp hrest\n+      exact ⟨j, hj, htj⟩\n     rw [Finset.sum_eq_single_of_mem j hj]\n     · rw [Set.indicator_of_mem htj]\n@@ -271,5 +273,7 @@\n   filter_upwards [ae_restrict_mem D.measurableSet_p1FifthJointUnion] with t ht\n   obtain ⟨j, _hj, htj⟩ : ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j := by\n-    simpa only [p1FifthJointUnion, Set.mem_iUnion] using ht\n+    obtain ⟨j, hrest⟩ := Set.mem_iUnion.mp ht\n+    obtain ⟨hj, htj⟩ := Set.mem_iUnion.mp hrest\n+    exact ⟨j, hj, htj⟩\n   exact if_pos ((D.p1FifthHistoricalParent_on_cell hab.le j t htj.1).mpr htj.2)\n "
+    },
+    {
+      "module": "ImbalancedChen.HistoricalThirdFallbackSupportP1",
+      "install_path": "ImbalancedChen/HistoricalThirdFallbackSupportP1.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/HistoricalThirdFallbackSupportP1.lean",
+        "sha256": "d0784bfcf1211523d0ccf4bb965057c010bf0057d6ff1b056f88d5040578c88a",
+        "bytes": 12142
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/HistoricalThirdFallbackSupportP1.lean",
+        "sha256": "eb0d18ff8645229195f1e09828d32d58c655907384e727920755bb933ff8ceb4",
+        "bytes": 12122
+      },
+      "historical_reuse_blob": "004c930afd3126687701281137620f02de521952",
+      "declared_object_count": 32,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/HistoricalThirdFallbackSupportP1.lean\n+++ v3/ImbalancedChen/HistoricalThirdFallbackSupportP1.lean\n@@ -225,4 +225,5 @@\n       else 0 := by\n   rw [rawDifference_eq_ite, supported_triple]\n+  split_ifs <;> rfl\n \n /-- Finite sums need no convergence or positivity hypotheses for cancellation. -/"
+    },
+    {
+      "module": "ImbalancedChen.P1HistoricalFourthResidualIntegral",
+      "install_path": "ImbalancedChen/P1HistoricalFourthResidualIntegral.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P1HistoricalFourthResidualIntegral.lean",
+        "sha256": "74ad531989b9b140eae924178bfad3dddb8b05eb1bcca34e99b85464db9305c1",
+        "bytes": 19846
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P1HistoricalFourthResidualIntegral.lean",
+        "sha256": "0a7ca2e1773b0e74e631c3ef73befe4784d45cf8f1689a70f592e28a1133c2a6",
+        "bytes": 19553
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 17,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P1HistoricalFourthResidualIntegral.lean\n+++ v3/ImbalancedChen/P1HistoricalFourthResidualIntegral.lean\n@@ -87,5 +87,5 @@\n     have hh := ht.2\n     change (∑ i, t i) + sigma * t (Fin.last 3) ≤ lambda at hh\n-    dsimp [F]\n+    change 0 < t (Fin.last 3) ∧ t (Fin.last 3) < lambda - ∑ i, t i\n     exact ⟨hpos, by linarith⟩\n   obtain ⟨N₀, hN₀, hbound⟩ :=\n@@ -211,4 +211,6 @@\n     have hp : 0 < t (Fin.last 3) :=\n       ha.trans_le (mem_logPrimeBox.mp (logPrimeMeshCell_subset_box hab m j ht.1) _).1\n+    change fourthPlusExtendedProfileP1 sigma lambda t * (∏ i, 1 / t i) =\n+      fourthPlusProfileP1 lambda t * (∏ i, 1 / t i)\n     rw [fourthPlusExtendedProfile_eqP1 sigma lambda t hp (hlegal t ht)]\n   rw [hint] at hfixed\n@@ -253,5 +255,6 @@\n     D.fourthFrontier_cell_weighted_sumP1 hab hcheck N cap hN hcap j,\n     D.fourthFrontier_cell_weighted_sumP1 hab hcheck N cap hN hcap j]\n-  rfl\n+  unfold fourthBoxPlusResidualSumP1\n+  congr 1 <;> apply Finset.sum_congr rfl <;> intro p _ <;> split_ifs <;> rfl\n \n /-- Literal old-minus-new upper residual integral.  No own-cube gate is"
+    },
+    {
+      "module": "ImbalancedChen.P1HistoricalLevelCheckPreservation",
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P1HistoricalLevelCheckPreservation.lean",
+        "sha256": "fede35365d629f25b842382017e4f6c43bce582e4e861a46ae1b53c22f22ddf2",
+        "bytes": 13334
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+        "sha256": "d35b3fd9a37f049d9062b2916391e571495e11d1ca675108d95992dce2b4342e",
+        "bytes": 12684
+      },
+      "historical_reuse_blob": "6ec8bf6706c03b1e7cbaef1b887fe869a32483fc",
+      "declared_object_count": 22,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P1HistoricalLevelCheckPreservation.lean\n+++ v3/ImbalancedChen/P1HistoricalLevelCheckPreservation.lean\n@@ -89,5 +89,7 @@\n   · have hD : j ∈ D.cells3 := (Finset.mem_inter.mp hj).1\n     apply le_of_eq\n-    simp only [cell3, p1RestrictSelections, if_pos hj, if_pos hD]\n+    change (if j ∈ D.cells3 ∩ J3 then D.cap3 j else D.old) =\n+      (if j ∈ D.cells3 then D.cap3 j else D.old)\n+    rw [if_pos hj, if_pos hD]\n   · change (if j ∈ D.cells3 ∩ J3 then D.cap3 j else D.old) ≤ D.cell3 j\n     rw [if_neg hj]\n@@ -114,5 +116,7 @@\n   · have hD : j ∈ D.cells4 := (Finset.mem_inter.mp hj).1\n     apply le_of_eq\n-    simp only [cell4, p1RestrictSelections, if_pos hj, if_pos hD]\n+    change (if j ∈ D.cells4 ∩ J4 then D.cap4 j else (D.p1RestrictSelections J3 J4 J5).old4 j) =\n+      (if j ∈ D.cells4 then D.cap4 j else D.old4 j)\n+    rw [if_pos hj, if_pos hD]\n   · change (if j ∈ D.cells4 ∩ J4 then D.cap4 j else\n       (D.p1RestrictSelections J3 J4 J5).old4 j) ≤ D.cell4 j\n@@ -140,5 +144,7 @@\n   · have hD : j ∈ D.cells5 := (Finset.mem_inter.mp hj).1\n     apply le_of_eq\n-    simp only [cell5, p1RestrictSelections, if_pos hj, if_pos hD]\n+    change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else (D.p1RestrictSelections J3 J4 J5).old5 j) =\n+      (if j ∈ D.cells5 then D.cap5 j else D.old5 j)\n+    rw [if_pos hj, if_pos hD]\n   · change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else\n       (D.p1RestrictSelections J3 J4 J5).old5 j) ≤ D.cell5 j\n@@ -182,5 +188,7 @@\n       (D.p1RestrictSelections J3 J4 J5).old5 j := by\n   rw [(D.p1RestrictSelections J3 J4 J5).exponent5_on_cell hab t j ht]\n-  simp only [cell5, p1RestrictSelections, Finset.mem_inter, hj, and_false, if_false]\n+  change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else\n+    (D.p1RestrictSelections J3 J4 J5).old5 j) = _\n+  rw [if_neg (fun h => hj (Finset.mem_inter.mp h).2)]\n \n /-- Fifth-only restriction retains the exact original lower-rank data. -/\n@@ -208,5 +216,7 @@\n     (D.p1RestrictFifth J5).exponent5 t = D.cap5 j := by\n   rw [(D.p1RestrictFifth J5).exponent5_on_cell hab t j ht]\n-  simp only [cell5, p1RestrictFifth, if_pos hj]\n+  change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else\n+    (D.p1RestrictFifth J5).old5 j) = _\n+  rw [if_pos hj]\n \n /-- Removing the owner of a fifth cell restores the original complete\n@@ -222,5 +232,8 @@\n     exact hj (Finset.mem_inter.mp h).2\n   rw [(D.p1RestrictFifth J5).exponent5_on_cell hab t j ht]\n-  rw [cell5, if_neg hmem, D.p1RestrictFifth_old5 J5 j]\n+  have hcell : (D.p1RestrictFifth J5).cell5 j = (D.p1RestrictFifth J5).old5 j := by\n+    simp only [cell5, p1RestrictFifth]\n+    exact if_neg (show j ∉ D.cells5 ∩ J5 from fun h => hj (Finset.mem_inter.mp h).2)\n+  rw [hcell, D.p1RestrictFifth_old5 J5 j]\n   exact (D.exponent4_on_cell hab _ _\n     (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 4 ≤ 5) ht)).symm"
+    },
+    {
+      "module": "ImbalancedChen.P1HistoricalUpperFourthPhysicalGates",
+      "install_path": "ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P1HistoricalUpperFourthPhysicalGates.lean",
+        "sha256": "ef7ed79b30a42977a0baf5c251ec166bd722b6eba28eb834347b9a952cd5e27a",
+        "bytes": 14632
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean",
+        "sha256": "4b1a7925f95c39649fcf426bd30131dc592c27fbd188dd1ad506f29bf520c2ad",
+        "bytes": 14596
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 16,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean\n+++ v3/ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean\n@@ -110,5 +110,5 @@\n   rw [p1_fourth_quotient_rpow hN p hp,\n     ← actualPrimeTupleLog_rpow hN p hp 3, Real.rpow_lt_rpow_left_iff hn]\n-  linarith\n+  constructor <;> intro h <;> linarith\n \n /-- Both actual quotient levels are legal for the positive upper residual;\n@@ -242,5 +242,5 @@\n     (p : Fin 4 → ℕ) (hp : ∀ i, 0 < p i) :\n     (p1_fourthPlusActiveDivisors N cap lambda p).filter\n-      (fun d => (∑ i, actualPrimeTupleLog N p i) +\n+      (fun (d : ℕ) => (∑ i, actualPrimeTupleLog N p i) +\n         Real.log (d : ℝ) / Real.log (N : ℝ) < lambda) =\n       p1_fourthPlusActiveDivisors N cap lambda p := by"
+    },
+    {
+      "module": "ImbalancedChen.P1OriginalCoarseFourthJointGeometry",
+      "install_path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P1OriginalCoarseFourthJointGeometry.lean",
+        "sha256": "f1e2b5fd1b2ec8fae8a05bdc224a52ca5f2dddc2eecea743faea358b07e31a64",
+        "bytes": 27037
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+        "sha256": "8fceb0ab595dd87e8acda31c32893a0de985e3faf3d81e12a09e5a12ec0c8343",
+        "bytes": 26922
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 38,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean\n+++ v3/ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean\n@@ -67,5 +67,8 @@\n       (List.ofFn (prefix3 p)).dropLast ↔\n       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by\n-    simpa only [prefix3, historicalPrefixProject] using\n+    have hidx : Fin.castLE (by omega : 3 ≤ 4) (0 : Fin 3) = (0 : Fin 4) := by\n+      apply Fin.ext\n+      rfl\n+    simpa only [prefix3, historicalPrefixProject, hidx] using\n       P1ActualTuple.parent_two_iff e chi m omega N (prefix3 p) (hpos 0)\n   rw [hv, hparent]\n@@ -505,5 +508,5 @@\n       exact ⟨hp, ht, ⟨⟨hg, hstop⟩, hrough⟩⟩\n   · rw [if_neg hs]\n-    apply Finset.eq_empty_iff_forall_not_mem.mpr\n+    apply Finset.eq_empty_iff_forall_notMem.mpr\n     intro p hp\n     obtain ⟨_hpbox, ht, hg⟩ := Finset.mem_filter.mp hp"
+    },
+    {
+      "module": "ImbalancedChen.P1OriginalFirstStopInheritance",
+      "install_path": "ImbalancedChen/P1OriginalFirstStopInheritance.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P1OriginalFirstStopInheritance.lean",
+        "sha256": "d4407902d513f9ee636fec8ad38ad6435672974829ee472eeb41d66d496e6431",
+        "bytes": 10060
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P1OriginalFirstStopInheritance.lean",
+        "sha256": "1472b9b846c95498a565e75a7501f2e8b5e56039d08363234750080bc0fe15db",
+        "bytes": 9934
+      },
+      "historical_reuse_blob": "2ee724550b73fc570306363f8669bc2dab82c71d",
+      "declared_object_count": 7,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P1OriginalFirstStopInheritance.lean\n+++ v3/ImbalancedChen/P1OriginalFirstStopInheritance.lean\n@@ -127,10 +127,13 @@\n   obtain ⟨i, hlo, hhi, hstop⟩ := hstop\n   have hcoord := primeHistoryLogCoordinates_ancestor N hlen (by omega : 1 ≤ k) (0 : Fin 1)\n+  have hidx : Fin.castLE (by omega : 1 ≤ k) (0 : Fin 1) = (⟨0, hk⟩ : Fin k) := by\n+    apply Fin.ext\n+    rfl\n   have hlo' : logPrimeMeshPoint 0 (19 / 96) m i.val ≤\n       primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩ := by\n-    simpa only [hcoord] using hlo\n+    simpa only [hcoord, hidx] using hlo\n   have hhi' : primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩ <\n       logPrimeMeshPoint 0 (19 / 96) m (i.val + 1) := by\n-    simpa only [hcoord] using hhi\n+    simpa only [hcoord, hidx] using hhi\n   exact ⟨i, hlo', hhi', hstop⟩\n "
+    },
+    {
+      "module": "ImbalancedChen.P4AHistoricalCausalSavingsLedger",
+      "install_path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P4AHistoricalCausalSavingsLedger.lean",
+        "sha256": "103004b6c7b2667e6692cbff8546c2f20ccb6bb85b882782824de23ab40df3ab",
+        "bytes": 9226
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+        "sha256": "dc54f1cb7c9ddef280fea7922fecf63e26b916dbef9a1b42c04ba2271366c1b3",
+        "bytes": 9305
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 14,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean\n+++ v3/ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean\n@@ -53,5 +53,5 @@\n       exact firstExitDepthFrontier_selected_length 4 _ _ [] _ true 1\n         (by simp) state hstate)\n-  dsimp [p4aPolicyDensity, p4aFourthEntry]\n+  dsimp [p4aPolicyDensity, p4aFourthEntry, upperThirdPolicy, upperFourthPolicy]\n   rw [← hraw]\n   ring\n@@ -156,17 +156,14 @@\n     D.fifthTupleOwnCubeDifference N cap p =\n       D.p4aFifthInheritedPiece N cap p + D.p4aFifthNewOnlyPiece N cap p := by\n+  change (if D.p4aFifthNewGate N p then\n+      p4aUngatedTupleMinus N cap (D.exponent5 (actualPrimeTupleLog N p) : ℝ) p else 0) -\n+    (if D.p4aFifthOldGate N p then p4aUngatedTupleMinus N cap\n+      (D.exponent4 (historicalPrefixProject (by omega : 4 ≤ 5)\n+        (actualPrimeTupleLog N p)) : ℝ) p else 0) = _\n   by_cases hold : D.p4aFifthOldGate N p\n   · have hnew := D.p4a_fifth_oldGate_imp_newGate hab hcheck N hN p hold\n-    simp only [p4aFifthOldGate] at hold\n-    simp only [p4aFifthNewGate] at hnew\n-    simp [fifthTupleOwnCubeDifference, actualPrimeTupleOwnCubeMinus,\n-      p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, p4aUngatedTupleMinus,\n-      p4aFifthOldGate, p4aFifthNewGate, hold, hnew]\n+    simp [p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, hold, hnew]\n   · by_cases hnew : D.p4aFifthNewGate N p <;>\n-      simp only [p4aFifthOldGate] at hold <;>\n-      simp only [p4aFifthNewGate] at hnew <;>\n-      simp [fifthTupleOwnCubeDifference, actualPrimeTupleOwnCubeMinus,\n-        p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, p4aUngatedTupleMinus,\n-        p4aFifthOldGate, p4aFifthNewGate, hold, hnew]\n+      simp [p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, hold, hnew]\n \n /-- The literal finite tuple correction is the sum of the two disjoint"
+    },
+    {
+      "module": "ImbalancedChen.P4ASameRhoSignedMassLedger",
+      "install_path": "ImbalancedChen/P4ASameRhoSignedMassLedger.lean",
+      "author_source": {
+        "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t02_full87_volume_integral/v3repairs/P4ASameRhoSignedMassLedger.lean",
+        "sha256": "c5d2260e12049edc0db66b951e7be1cdb7b0a5f52b54e73708aea95788ca9860",
+        "bytes": 10866
+      },
+      "v2_source": {
+        "path": "goldbach-proof-continuation/ImbalancedChen/P4ASameRhoSignedMassLedger.lean",
+        "sha256": "1ab6548352c51302eb99bd89bfdc0f6839858f753515321ea5e0c820f0594458",
+        "bytes": 10857
+      },
+      "historical_reuse_blob": null,
+      "declared_object_count": 14,
+      "same_imports": true,
+      "changes": "--- v2/ImbalancedChen/P4ASameRhoSignedMassLedger.lean\n+++ v3/ImbalancedChen/P4ASameRhoSignedMassLedger.lean\n@@ -38,5 +38,5 @@\n   · simp [max_eq_left hc, max_eq_right (neg_nonpos.mpr hc)]\n   · have hn : c d ≤ 0 := (lt_of_not_ge hc).le\n-    simp [max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)]\n+    simp [max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)] <;> ring\n \n theorem absoluteMass_eq_positive_add_negative (S : Finset ℕ) (c : ℕ → ℝ) :"
+    }
+  ],
+  "independently_reviewed_diagnostics": [
+    {
+      "index": 1,
+      "failed_log_line": 118,
+      "install_path": "ImbalancedChen/HistoricalThirdFallbackSupportP1.lean",
+      "v2_line": 225,
+      "v2_column": 16,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/HistoricalThirdFallbackSupportP1.lean:225:16: unsolved goals\ne chi : ℝ\nm : ℕ\nomega N : ℝ\np1 p2 p3 : ℕ\n⊢ (if\n        N ^ omega ≤ ↑p3 ∧\n          ∃ j ∈ cells e chi m, primeHistoryLogCoordinates N 3 [p3, p2, p1] ∈ logPrimeMeshCell 0 (19 / 96) m j then\n      N ^ exponent e chi m (primeHistoryLogCoordinates N 3 [p3, p2, p1]) - N ^ initial e\n    else 0) =\n    if\n        N ^ omega ≤ ↑p3 ∧\n          ∃ j ∈ cells e chi m, primeHistoryLogCoordinates N 3 [p3, p2, p1] ∈ logPrimeMeshCell 0 (19 / 96) m j then\n      N ^ exponent e chi m (primeHistoryLogCoordinates N 3 [p3, p2, p1]) - N ^ initial e\n    else 0",
+      "declaration": "rawDifference_triple_eq_ite",
+      "finding": "Both displayed if-expressions decide the same rough-third inequality and original cell existence. Splitting that condition retains the original exponent subtraction on the true branch and zero otherwise.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 9,
+      "failed_log_line": 2846,
+      "install_path": "ImbalancedChen/P1OriginalFirstStopInheritance.lean",
+      "v2_line": 131,
+      "v2_column": 4,
+      "v2_message": "Type mismatch: After simplification, term",
+      "v2_diagnostic": "error: ImbalancedChen/P1OriginalFirstStopInheritance.lean:131:4: Type mismatch: After simplification, term\n  hlo\n has type\n  @LE.le ℝ Real.instLE (logPrimeMeshPoint 0 (19 / 96) m ↑i)\n    (primeHistoryLogCoordinates N k state.selectedPrefix (Fin.castLE ⋯ 0))\nbut is expected to have type\n  @LE.le ℝ Real.instLE (logPrimeMeshPoint 0 (19 / 96) m ↑i)\n    (primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩)",
+      "declaration": "frontier_original_first_cell",
+      "finding": "The inherited first-coordinate lower bound transports by hcoord, followed by the explicit equality of Fin.castLE zero with the constructor whose proof is hk. Fin.ext reduces both values to natural zero.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 10,
+      "failed_log_line": 2854,
+      "install_path": "ImbalancedChen/P1OriginalFirstStopInheritance.lean",
+      "v2_line": 134,
+      "v2_column": 4,
+      "v2_message": "Type mismatch: After simplification, term",
+      "v2_diagnostic": "error: ImbalancedChen/P1OriginalFirstStopInheritance.lean:134:4: Type mismatch: After simplification, term\n  hhi\n has type\n  @LT.lt ℝ Real.instLT (primeHistoryLogCoordinates N k state.selectedPrefix (Fin.castLE ⋯ 0))\n    (logPrimeMeshPoint 0 (19 / 96) m (↑i + 1))\nbut is expected to have type\n  @LT.lt ℝ Real.instLT (primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩)\n    (logPrimeMeshPoint 0 (19 / 96) m (↑i + 1))",
+      "declaration": "frontier_original_first_cell",
+      "finding": "The same coordinate identity transports the strict upper endpoint. Its strictness, cell index and carried first stop are unchanged.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 11,
+      "failed_log_line": 2869,
+      "install_path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+      "v2_line": 69,
+      "v2_column": 4,
+      "v2_message": "Type mismatch: After simplification, term",
+      "v2_diagnostic": "error: ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean:69:4: Type mismatch: After simplification, term\n  P1ActualTuple.parent_two_iff e chi m omega N (prefix3 p) (hpos 0)\n has type\n  Iff\n    (FirstExitValidSelection (policy e chi m omega N) [] true\n      (List.ofFn (historicalPrefixProject prefix3._proof_2 p)).dropLast)\n    (↑(p (Fin.castLE prefix3._proof_2 0)) ^ 3 < N ^ initial e ∧ firstStop e m N [p (Fin.castLE prefix3._proof_2 0)])\nbut is expected to have type\n  Iff\n    (FirstExitValidSelection (policy e chi m omega N) [] true\n      (List.ofFn (historicalPrefixProject prefix3._proof_2 p)).dropLast)\n    (↑(p 0) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0])",
+      "declaration": "valid_fourth_iff",
+      "finding": "For p : Fin 4 → ℕ, Fin.castLE from Fin 3 maps zero to zero. After this finite-index equality the earlier parent_two_iff has precisely the original first-prime cube and stop.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 12,
+      "failed_log_line": 2891,
+      "install_path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+      "v2_line": 507,
+      "v2_column": 10,
+      "v2_message": "Unknown constant `Finset.eq_empty_iff_forall_not_mem.mpr`",
+      "v2_diagnostic": "error: ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean:507:10: Unknown constant `Finset.eq_empty_iff_forall_not_mem.mpr`",
+      "declaration": "truncated_admittedTuples_filter_eq_if",
+      "finding": "The pinned downstream source itself uses Finset.eq_empty_iff_forall_notMem. Its right-to-left implication proves emptiness by contradicting a genuine member of the same admission filter.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 13,
+      "failed_log_line": 2892,
+      "install_path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+      "v2_line": 508,
+      "v2_column": 10,
+      "v2_message": "No goals to be solved",
+      "v2_diagnostic": "error: ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean:508:10: No goals to be solved",
+      "declaration": "truncated_admittedTuples_filter_eq_if",
+      "finding": "This no-goals diagnostic immediately follows the unresolved spelling at #12. With .mpr applied the existing intro p hp has the required nonmembership goal; it is the same hstop contradiction, not another mathematical obligation.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 14,
+      "failed_log_line": 2903,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 89,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:89:2: unsolved goals\ncase pos\nD : HistoricalPrefixCapData\nJ3 : Finset (Fin 3 → Fin (D.m + 1))\nJ4 : Finset (Fin 4 → Fin (D.m + 1))\nJ5 : Finset (Fin 5 → Fin (D.m + 1))\nhcheck : D.levelCheck = true\nj : Fin 3 → Fin (D.m + 1)\nhj : j ∈ D.cells3 ∩ J3\nhD : j ∈ D.cells3\n⊢ (if j ∈ D.cells3 ∩ J3 then D.cap3 j else D.old) = D.cap3 j",
+      "declaration": "p1RestrictSelections_cell3_le",
+      "finding": "Expose the two literal cell3 conditional expressions. Restricted membership hj and its original-set first projection select the unchanged cap3 on both sides.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 15,
+      "failed_log_line": 2921,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 114,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:114:2: unsolved goals\ncase pos\nD : HistoricalPrefixCapData\nJ3 : Finset (Fin 3 → Fin (D.m + 1))\nJ4 : Finset (Fin 4 → Fin (D.m + 1))\nJ5 : Finset (Fin 5 → Fin (D.m + 1))\nhcheck : D.levelCheck = true\nj : Fin 4 → Fin (D.m + 1)\nhj : j ∈ D.cells4 ∩ J4\nhD : j ∈ D.cells4\n⊢ (if j ∈ D.cells4 ∩ J4 then D.cap4 j\n    else\n      { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3 ∩ J3, cap3 := D.cap3, cells4 := D.cells4 ∩ J4,\n            cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old4\n        j) =\n    D.cap4 j",
+      "declaration": "p1RestrictSelections_cell4_le",
+      "finding": "On the selected fourth row both conditionals evaluate to cap4. The alternative branches still carry their individual old4 values.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 16,
+      "failed_log_line": 2944,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 140,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:140:2: unsolved goals\ncase pos\nD : HistoricalPrefixCapData\nJ3 : Finset (Fin 3 → Fin (D.m + 1))\nJ4 : Finset (Fin 4 → Fin (D.m + 1))\nJ5 : Finset (Fin 5 → Fin (D.m + 1))\nhcheck : D.levelCheck = true\nj : Fin 5 → Fin (D.m + 1)\nhj : j ∈ D.cells5 ∩ J5\nhD : j ∈ D.cells5\n⊢ (if j ∈ D.cells5 ∩ J5 then D.cap5 j\n    else\n      { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3 ∩ J3, cap3 := D.cap3, cells4 := D.cells4 ∩ J4,\n            cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5\n        j) =\n    D.cap5 j",
+      "declaration": "p1RestrictSelections_cell5_le",
+      "finding": "The same membership proof at the fifth row selects cap5. The unused inherited old5 branches are retained exactly.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 17,
+      "failed_log_line": 2967,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 182,
+      "v2_column": 50,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:182:50: unsolved goals\nD : HistoricalPrefixCapData\nJ3 : Finset (Fin 3 → Fin (D.m + 1))\nJ4 : Finset (Fin 4 → Fin (D.m + 1))\nJ5 : Finset (Fin 5 → Fin (D.m + 1))\nhab : D.a ≤ D.b\nt : Fin 5 → ℝ\nj : Fin 5 → Fin (D.m + 1)\nhj : j ∉ J5\nht : t ∈ logPrimeMeshCell (↑D.a) (↑D.b) D.m j\n⊢ (if j ∈ D.cells5 ∩ J5 then D.cap5 j\n    else\n      { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3 ∩ J3, cap3 := D.cap3, cells4 := D.cells4 ∩ J4,\n            cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5\n        j) =\n    { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3 ∩ J3, cap3 := D.cap3, cells4 := D.cells4 ∩ J4,\n          cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5\n      j",
+      "declaration": "p1RestrictSelections_exponent5_deleted",
+      "finding": "Nonmembership in J5 defeats membership in D.cells5 ∩ J5 by its second projection; the fifth result is the restricted own old5.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 18,
+      "failed_log_line": 3013,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 208,
+      "v2_column": 53,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:208:53: unsolved goals\nD : HistoricalPrefixCapData\nJ5 : Finset (Fin 5 → Fin (D.m + 1))\nhab : D.a ≤ D.b\nt : Fin 5 → ℝ\nj : Fin 5 → Fin (D.m + 1)\nhj : j ∈ D.cells5 ∩ J5\nht : t ∈ logPrimeMeshCell (↑D.a) (↑D.b) D.m j\n⊢ (if j ∈ D.cells5 ∩ J5 then D.cap5 j\n    else\n      { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3, cap3 := D.cap3, cells4 := D.cells4,\n            cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5\n        j) =\n    D.cap5 j",
+      "declaration": "p1RestrictFifth_exponent5_kept",
+      "finding": "Kept fifth means membership in the full intersection; the explicit restricted conditional evaluates to the original own fifth cap.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 19,
+      "failed_log_line": 3034,
+      "install_path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "v2_line": 224,
+      "v2_column": 6,
+      "v2_message": "Failed to rewrite using equation theorems for `cell5`",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:224:6: Failed to rewrite using equation theorems for `cell5`",
+      "declaration": "p1RestrictFifth_exponent5_deleted",
+      "finding": "A local restricted-cell equality evaluates the absent selection branch. The existing fifth-only ancestry identity then restores the original fourth on this exact historical projection.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 43,
+      "failed_log_line": 3325,
+      "install_path": "ImbalancedChen/P1HistoricalFourthResidualIntegral.lean",
+      "v2_line": 90,
+      "v2_column": 20,
+      "v2_message": "linarith failed to find a contradiction",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalFourthResidualIntegral.lean:90:20: linarith failed to find a contradiction\na b sigma lambda : ℝ\nha : 0 < a\nhsigma : 1 < sigma\neta : ℝ\nheta : 0 < eta\nC : Set (Fin 4 → ℝ) := (univ.pi fun x => Icc a b) ∩ {t | ∑ i, t i + sigma * t (Fin.last 3) ≤ lambda}\nF : (Fin 4 → ℝ) → ℝ × ℝ := fun t => (lambda - ∑ i, t i, t (Fin.last 3))\nT : Set (ℝ × ℝ) := F '' C\nhform : Continuous fun t => ∑ i, t i + sigma * t (Fin.last 3)\nhC : IsCompact C\nhF : Continuous F\nhT : IsCompact T\nt : Fin 4 → ℝ\nht : t ∈ C\nhpos : 0 < t (Fin.last 3)\nhmul : t (Fin.last 3) < sigma * t (Fin.last 3)\nhh : ∑ i, t i + sigma * t (Fin.last 3) ≤ lambda\na✝ : lambda - ∑ i, t i ≤ t 3\n⊢ False\nfailed",
+      "declaration": "exists_fourthTuplePlusResidual_uniform_thresholdP1",
+      "finding": "The raw goal pairs F(t).2 with F(t).1. Keep Fin.last 3 in both projection inequalities. The existing t_last<sigma*t_last and sum+sigma*t_last≤lambda imply the required strict bound.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 44,
+      "failed_log_line": 3346,
+      "install_path": "ImbalancedChen/P1HistoricalFourthResidualIntegral.lean",
+      "v2_line": 213,
+      "v2_column": 8,
+      "v2_message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalFourthResidualIntegral.lean:213:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  fourthPlusExtendedProfileP1 sigma lambda t\nin the target expression\n  (fun x => fourthPlusExtendedProfileP1 sigma lambda x * ∏ i, 1 / x i) t =\n    (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t\n\nr : ℕ\na b sigma lambda : ℝ\nha : 0 < a\nhab : a < b\nhsigma : 1 < sigma\nm : ℕ\nj : Fin 4 → Fin (m + 1)\nL : Fin r → (Fin 4 → ℝ) →L[ℝ] ℝ\nc : Fin r → ℝ\nhL : ∀ (i : Fin r), L i ≠ 0\nhmargin : ∑ i, logPrimeMeshHi a b m j i + sigma * logPrimeMeshHi a b m j (Fin.last 3) ≤ lambda\ncap : ℕ → ℕ\nhcap : ∀ᶠ (N : ℕ) in atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}, ↑N ^ b ≤ ↑(cap N)\nhlegal : ∀ t ∈ logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c, ∑ i, t i + sigma * t (Fin.last 3) ≤ lambda\nherror :\n  Tendsto\n    (fun N =>\n      fourthBoxPlusResidualSumP1 N (cap N) a b lambda (logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c) -\n        actualPrimeBoxTestSum N (fun x => a) (fun x => b)\n          ((logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c).indicator (fourthPlusExtendedProfileP1 sigma lambda)))\n    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 0)\nhfixed :\n  Tendsto\n    (fun N =>\n      actualPrimeBoxTestSum N (fun x => a) (fun x => b)\n        ((logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c).indicator (fourthPlusExtendedProfileP1 sigma lambda)))\n    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N})\n    (𝓝\n      (∫ (x : Fin 4 → ℝ) in logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c,\n        fourthPlusExtendedProfileP1 sigma lambda x * ∏ i, 1 / x i))\nt : Fin 4 → ℝ\nht : t ∈ logPrimeMeshCell a b m j ∩ primeAffineGateRegion L c\nhp : 0 < t (Fin.last 3)\n⊢ (fun x => fourthPlusExtendedProfileP1 sigma lambda x * ∏ i, 1 / x i) t =\n    (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t",
+      "declaration": "tendsto_fourthBoxPlusResidual_IcoCellP1",
+      "finding": "Beta reduction exposes the actual weighted product under the lambda. The already-proved positive-last-coordinate and legal-profile identity replace only the profile under the same product.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 45,
+      "failed_log_line": 3387,
+      "install_path": "ImbalancedChen/P1HistoricalFourthResidualIntegral.lean",
+      "v2_line": 255,
+      "v2_column": 2,
+      "v2_message": "Tactic `rfl` failed: The left-hand side",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalFourthResidualIntegral.lean:255:2: Tactic `rfl` failed: The left-hand side\n  (∑ p ∈ actualPrimeBoxTuples N (fun x => ↑D.a) fun x => ↑D.b,\n      (∏ i, 1 / (↑(p i) - 1)) *\n        if\n            actualPrimeTupleLog N p ∈\n              logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j) then\n          fourthTuplePlusResidualP1 N cap (↑(D.old4 j)) p\n        else 0) -\n    ∑ p ∈ actualPrimeBoxTuples N (fun x => ↑D.a) fun x => ↑D.b,\n      (∏ i, 1 / (↑(p i) - 1)) *\n        if\n            actualPrimeTupleLog N p ∈\n              logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j) then\n          fourthTuplePlusResidualP1 N cap (↑(D.cap4 j)) p\n        else 0\nis not definitionally equal to the right-hand side\n  fourthBoxPlusResidualSumP1 N cap (↑D.a) (↑D.b) (↑(D.old4 j))\n      (logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n        primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j)) -\n    fourthBoxPlusResidualSumP1 N cap (↑D.a) (↑D.b) (↑(D.cap4 j))\n      (logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n        primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j))\n\nD : HistoricalPrefixCapData\nhab : D.a < D.b\nhcheck : D.levelCheck = true\nN cap : ℕ\nhN : 1 < N\nhcap : ↑N ^ ↑D.b ≤ ↑cap\nj : Fin 4 → Fin (D.m + 1)\nhj : j ∈ D.cells4\n⊢ ((∑ p ∈ actualPrimeBoxTuples N (fun x => ↑D.a) fun x => ↑D.b,\n        (∏ i, 1 / (↑(p i) - 1)) *\n          if\n              actualPrimeTupleLog N p ∈\n                logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                  primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j) then\n            fourthTuplePlusResidualP1 N cap (↑(D.old4 j)) p\n          else 0) -\n      ∑ p ∈ actualPrimeBoxTuples N (fun x => ↑D.a) fun x => ↑D.b,\n        (∏ i, 1 / (↑(p i) - 1)) *\n          if\n              actualPrimeTupleLog N p ∈\n                logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                  primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j) then\n            fourthTuplePlusResidualP1 N cap (↑(D.cap4 j)) p\n          else 0) =\n    fourthBoxPlusResidualSumP1 N cap (↑D.a) (↑D.b) (↑(D.old4 j))\n        (logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n          primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j)) -\n      fourthBoxPlusResidualSumP1 N cap (↑D.a) (↑D.b) (↑(D.cap4 j))\n        (logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n          primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j))",
+      "declaration": "fourthCellPrimeCorrection_eq_joint_residual_sumsP1",
+      "finding": "Unfold the residual sum at both levels. Subtraction congruence keeps old4 minus cap4, the same tuple finset and reciprocal prime weights. For each p split the same region-membership proposition to obtain equality on its two branches.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 46,
+      "failed_log_line": 3445,
+      "install_path": "ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean",
+      "v2_line": 112,
+      "v2_column": 2,
+      "v2_message": "linarith failed to find a contradiction",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean:112:2: linarith failed to find a contradiction\nN : ℕ\nhN : 1 < N\np : Fin 4 → ℕ\nhp : ∀ (i : Fin 4), 0 < p i\nlambda : ℝ\nhn : 1 < ↑N\n⊢ False\nfailed",
+      "declaration": "p1_fourth_plus_gate_iff_quotient",
+      "finding": "After the quotient and real-power equivalences the two sides are sum+t3<lambda and t3<lambda−sum. Introducing each implication hypothesis supplies the proper linear inequality.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 47,
+      "failed_log_line": 3454,
+      "install_path": "ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean",
+      "v2_line": 249,
+      "v2_column": 46,
+      "v2_message": "Application type mismatch: The argument",
+      "v2_diagnostic": "error: ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean:249:46: Application type mismatch: The argument\n  hd\nhas type\n  d ∈ do\n    let a ← p1_fourthPlusActiveDivisors N cap lambda p\n    pure ↑a\nbut is expected to have type\n  ?m.47 ∈ p1_fourthPlusActiveDivisors N ?m.46 ?m.48 p\nin the application\n  p1_fourthPlusActive_affine_gate hN hp hd",
+      "declaration": "p1_fourthPlusActive_filter_affine",
+      "finding": "Annotating the filter binder as a natural divisor supplies the membership type required by p1_fourthPlusActive_affine_gate. The former failed expression coerced the natural finset to a real image. This corrects the public result to exact natural-divisor finset equality. The strict real inequality and all external hypotheses are the same.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 48,
+      "failed_log_line": 3468,
+      "install_path": "ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean",
+      "v2_line": 173,
+      "v2_column": 6,
+      "v2_message": "Type mismatch: After simplification, term",
+      "v2_diagnostic": "error: ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean:173:6: Type mismatch: After simplification, term\n  ht\n has type\n  ∃ i, ∃ (_ : i ∈ D.cells5), t ∈ D.p1FifthJointCell i\nbut is expected to have type\n  ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j",
+      "declaration": "p1FifthCorrectionKernel_eq_cell_indicators",
+      "finding": "Expanding the bounded double union yields an owner j and a proof hj of finite-set membership as a dependent index. Two Set.mem_iUnion eliminations yield those witnesses and the same htj, then construct the required bounded existential.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 49,
+      "failed_log_line": 3474,
+      "install_path": "ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean",
+      "v2_line": 273,
+      "v2_column": 4,
+      "v2_message": "Type mismatch: After simplification, term",
+      "v2_diagnostic": "error: ImbalancedChen/HistoricalFifthJointIntegralSupportP1.lean:273:4: Type mismatch: After simplification, term\n  ht\n has type\n  ∃ i, ∃ (_ : i ∈ D.cells5), t ∈ D.p1FifthJointCell i\nbut is expected to have type\n  ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j",
+      "declaration": "p1FifthCorrectionIntegral_eq_integral_historicalProfile",
+      "finding": "The same two eliminations are applied inside the restricted integral. The owner and same t∈cell witness feed the historical parent check without a measurability, nonemptiness or integrability assumption.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 50,
+      "failed_log_line": 3497,
+      "install_path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+      "v2_line": 47,
+      "v2_column": 36,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean:47:36: unsolved goals\nD : HistoricalPrefixCapData\nhab : D.a ≤ D.b\nhcheck : D.levelCheck = true\nN cap : ℕ\nhN : 1 < ↑N\nz : ℝ\nhraw :\n  firstExitRetainedPolynomial (thirdCappedUpperPolicy (ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N))\n        (fun p => 1 / (↑p - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial\n        (fourthCappedUpperPolicy (ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N))\n        (fun p => 1 / (↑p - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n    actualHistoricalFourthSaving (ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N) N cap z\n⊢ firstExitRetainedPolynomial (D.upperThirdPolicy ↑N) (fun p => (-1 + ↑p)⁻¹) [] true 1 (roughPrimeUniverse N cap 0 z) *\n          Real.log ↑N *\n        (singularSeries N)⁻¹ -\n      Real.log ↑N * (singularSeries N)⁻¹ *\n        firstExitRetainedPolynomial (D.upperFourthPolicy ↑N) (fun p => (-1 + ↑p)⁻¹) [] true 1\n          (roughPrimeUniverse N cap 0 z) =\n    Real.log ↑N * (singularSeries N)⁻¹ *\n        firstExitRetainedPolynomial\n          (thirdCappedUpperPolicy (ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N)) (fun p => (-1 + ↑p)⁻¹)\n          [] true 1 (roughPrimeUniverse N cap 0 z) -\n      Real.log ↑N * (singularSeries N)⁻¹ *\n        firstExitRetainedPolynomial\n          (fourthCappedUpperPolicy (ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N))\n          (fun p => (-1 + ↑p)⁻¹) [] true 1 (roughPrimeUniverse N cap 0 z)",
+      "declaration": "p4a_third_sub_fourth_eq",
+      "finding": "The actual raw identity uses thirdCappedUpperPolicy and fourthCappedUpperPolicy. Unfolding both corresponding upper policy abbreviations makes the signed raw terms match before polynomial normalization by log N / singularSeries N.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 51,
+      "failed_log_line": 3525,
+      "install_path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+      "v2_line": 159,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean:159:2: unsolved goals\ncase pos\nD : HistoricalPrefixCapData\nhab : D.a ≤ D.b\nhcheck : D.levelCheck = true\nN cap : ℕ\nhN : 1 < ↑N\np : Fin 5 → ℕ\nhold :\n  ↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 <\n    ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p)))\nhnew : ↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p))\n⊢ ((if (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) -\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^\n              ↑(D.exponent4\n                  (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4))\n              (↑N ^\n                  ↑(D.exponent4\n                      (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) /\n                ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) =\n    (if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N -\n          actualSmallRosserMinusDensity N cap (↑(p 4))\n                (↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) /\n                  ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N\n      else 0) +\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) ∧\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) ≤\n              (∏ i, ↑(p i)) * ↑(p 4) ^ 2 then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0",
+      "declaration": "p4a_fifthTupleOwnCubeDifference_eq_disjoint_pieces",
+      "finding": "On old-admitted candidates the existing same-cap implication supplies new admission. The exact residual difference is the inherited both-admitted difference, with zero new-only contribution and the original normalized Rosser-minus weight.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 52,
+      "failed_log_line": 3575,
+      "install_path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+      "v2_line": 165,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean:165:2: unsolved goals\ncase pos\nD : HistoricalPrefixCapData\nhab : D.a ≤ D.b\nhcheck : D.levelCheck = true\nN cap : ℕ\nhN : 1 < ↑N\np : Fin 5 → ℕ\nhold :\n  ¬↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 <\n      ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p)))\nhnew : ↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p))\n⊢ ((if (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) -\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^\n              ↑(D.exponent4\n                  (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4))\n              (↑N ^\n                  ↑(D.exponent4\n                      (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) /\n                ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) =\n    (if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N -\n          actualSmallRosserMinusDensity N cap (↑(p 4))\n                (↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) /\n                  ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N\n      else 0) +\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) ∧\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) ≤\n              (∏ i, ↑(p i)) * ↑(p 4) ^ 2 then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0\n\ncase neg\nD : HistoricalPrefixCapData\nhab : D.a ≤ D.b\nhcheck : D.levelCheck = true\nN cap : ℕ\nhN : 1 < ↑N\np : Fin 5 → ℕ\nhold :\n  ¬↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 <\n      ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p)))\nhnew : ¬↑(∏ i, p i) * ↑(p (Fin.last 4)) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p))\n⊢ ((if (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) -\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^\n              ↑(D.exponent4\n                  (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4))\n              (↑N ^\n                  ↑(D.exponent4\n                      (historicalPrefixProject fifthTupleOwnCubeDifference._proof_2 (actualPrimeTupleLog N p))) /\n                ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0) =\n    (if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 <\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N -\n          actualSmallRosserMinusDensity N cap (↑(p 4))\n                (↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) /\n                  ∏ i, ↑(p i)) *\n              Real.log ↑N /\n            singularSeries N\n      else 0) +\n      if\n          (∏ i, ↑(p i)) * ↑(p 4) ^ 2 < ↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) ∧\n            ↑N ^ ↑(D.exponent4 (historicalPrefixProject p4aFifthOldGate._proof_2 (actualPrimeTupleLog N p))) ≤\n              (∏ i, ↑(p i)) * ↑(p 4) ^ 2 then\n        actualSmallRosserMinusDensity N cap (↑(p 4)) (↑N ^ ↑(D.exponent5 (actualPrimeTupleLog N p)) / ∏ i, ↑(p i)) *\n            Real.log ↑N /\n          singularSeries N\n      else 0",
+      "declaration": "p4a_fifthTupleOwnCubeDifference_eq_disjoint_pieces",
+      "finding": "Off the old gate, split the actual new gate. New-only candidates receive exactly one new residual and remaining candidates zero. Original strict product-times-square gate, projected fourth parent and natural product agree by direct expansion.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    },
+    {
+      "index": 57,
+      "failed_log_line": 3747,
+      "install_path": "ImbalancedChen/P4ASameRhoSignedMassLedger.lean",
+      "v2_line": 39,
+      "v2_column": 2,
+      "v2_message": "unsolved goals",
+      "v2_diagnostic": "error: ImbalancedChen/P4ASameRhoSignedMassLedger.lean:39:2: unsolved goals\ncase neg\nS : Finset ℕ\nc : ℕ → ℝ\nd : ℕ\na✝ : d ∈ S\nhc : ¬0 ≤ c d\nhn : c d ≤ 0\n⊢ c d / ↑d.totient = -(-c d / ↑d.totient)",
+      "declaration": "signedMass_eq_positive_sub_negative",
+      "finding": "After the c(d)<0 branch simplifies, c(d)/phi(d)=−(−c(d)/phi(d)) is a ring identity after division notation. Real division is total; no nonzero totient premise is introduced.",
+      "source_verdict": "addressed_at_source_remote_elaboration_required"
+    }
+  ],
+  "unchanged_top_level_names_and_imports": true,
+  "public_header_source_changes": [
+    {
+      "module": "ImbalancedChen.P1HistoricalUpperFourthPhysicalGates",
+      "name": "p1_fourthPlusActive_filter_affine",
+      "before": "theorem p1_fourthPlusActive_filter_affine (N cap : ℕ) (hN : 1 < N) (lambda : ℝ)\n    (p : Fin 4 → ℕ) (hp : ∀ i, 0 < p i) :\n    (p1_fourthPlusActiveDivisors N cap lambda p).filter\n      (fun d => (∑ i, actualPrimeTupleLog N p i) +\n        Real.log (d : ℝ) / Real.log (N : ℝ) < lambda) =\n      p1_fourthPlusActiveDivisors N cap lambda p ",
+      "after": "theorem p1_fourthPlusActive_filter_affine (N cap : ℕ) (hN : 1 < N) (lambda : ℝ)\n    (p : Fin 4 → ℕ) (hp : ∀ i, 0 < p i) :\n    (p1_fourthPlusActiveDivisors N cap lambda p).filter\n      (fun (d : ℕ) => (∑ i, actualPrimeTupleLog N p i) +\n        Real.log (d : ℝ) / Real.log (N : ℝ) < lambda) =\n      p1_fourthPlusActiveDivisors N cap lambda p "
+    }
+  ],
+  "all_declaration_name_count": 189,
+  "all_other_header_text_equal": true,
+  "public_semantics": "The v3 natural-valued finset equality in p1_fourthPlusActive_filter_affine differs from the v2 accidentally lifted real-finset expression. It directly preserves the original intended natural divisor support and strict logarithmic gate. No new hypothesis, omitted row or changed numerical constant.",
+  "immutable_v2_caller_search": [
+    "d5f392f6717227ab94ad4004044a037ac83be877:ImbalancedChen/P1HistoricalUpperFourthPhysicalGates.lean:241:theorem p1_fourthPlusActive_filter_affine (N cap : ℕ) (hN : 1 < N) (lambda : ℝ)"
+  ],
+  "published_blob_reuse_commit": "3c94ec71e13d038ae661138dac1037116615a20f",
+  "existing_repairs_reused_without_new_proof": 3,
+  "formal_credit": 0,
+  "local_proof_execution": false,
+  "guard_or_numerical_replay": false,
+  "remote_action_by_reviewer": false,
+  "remote_plan": "Stage exactly the nine listed replacement bytes within T01 complete v3. Build every dependency and the actual target. Inspect the explicit nat finite-set type of the amended gate, original eight target types, transitive axioms and completion status from the same immutable run. Remaining error sites under other owners are outside this review.",
+  "review_report": {
+    "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t09_review_density_history/V3_T02_REPAIR_REVIEW.md",
+    "sha256": "d0c720bf77a358f30154273f62f2ee94c6e654c9ac94e631c51fa85694b71b67",
+    "bytes": 8269
+  }
+}

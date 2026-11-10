@@ -1,0 +1,41 @@
+# T01 v3 inherited repairs independently reviewed for T02
+
+T01 v2 run 42740765820, job 129580945152, failed. I compared the 23 actual diagnostics in the nine assigned modules with the exact v2 installed files and the frozen T02 v3 replacement files. All 23 have a source repair consistent with the actual reported goals. Only a fresh remote elaboration can establish build success. The original eight fifth-floor targets retain zero new kernel credit here.
+
+## Scope and changes
+
+All nine installed v2 preimages match the v2 manifest and original published Git blobs at d5f392f6717227ab94ad4004044a037ac83be877. The frozen T02 manifest has SHA256 57c6e2d6edae4817586fb672dbc03e78deda6a90bba1c2f90df80268e357a859. Three replacements match published commit 3c94ec71e13d038ae661138dac1037116615a20f byte-for-byte, namely HistoricalThirdFallbackSupportP1, P1OriginalFirstStopInheritance and P1HistoricalLevelCheckPreservation. Those three files address nine log records. The other six files supply new narrow source edits.
+
+All 189 named top-level declarations retain their names, and all module imports remain unchanged. There is one intentional public theorem-expression change. In p1_fourthPlusActive_filter_affine, explicitly typing the divisor binder as ℕ removes the unintended coercion of the natural divisor set to a real finite image. The amended conclusion is equality of the actual filtered natural-divisor set with that same natural-divisor set. The strictly logarithmic gate is still evaluated on its real coercion. Global hypotheses, lower/upper weights and cutoff are untouched. A text search of every tracked Lean source at the original v2 commit found only the declaration, hence no named v2 caller relying on the accidental real carrier.
+
+## Per-diagnostic result
+
+| Log index | Module and v2 position | Independent assessment |
+| --- | --- | --- |
+| 1 | HistoricalThirdFallbackSupportP1 225:16 | Both displayed if-expressions decide the same rough-third inequality and original cell existence. Splitting that condition retains the original exponent subtraction on the true branch and zero otherwise. |
+| 9 | P1OriginalFirstStopInheritance 131:4 | The inherited first-coordinate lower bound transports by hcoord, followed by the explicit equality of Fin.castLE zero with the constructor whose proof is hk. Fin.ext reduces both values to natural zero. |
+| 10 | P1OriginalFirstStopInheritance 134:4 | The same coordinate identity transports the strict upper endpoint. Its strictness, cell index and carried first stop are unchanged. |
+| 11 | P1OriginalCoarseFourthJointGeometry 69:4 | For p : Fin 4 → ℕ, Fin.castLE from Fin 3 maps zero to zero. After this finite-index equality the earlier parent_two_iff has precisely the original first-prime cube and stop. |
+| 12 | P1OriginalCoarseFourthJointGeometry 507:10 | The pinned downstream source itself uses Finset.eq_empty_iff_forall_notMem. Its right-to-left implication proves emptiness by contradicting a genuine member of the same admission filter. |
+| 13 | P1OriginalCoarseFourthJointGeometry 508:10 | This no-goals diagnostic immediately follows the unresolved spelling at #12. With .mpr applied the existing intro p hp has the required nonmembership goal; it is the same hstop contradiction, not another mathematical obligation. |
+| 14 | P1HistoricalLevelCheckPreservation 89:2 | Expose the two literal cell3 conditional expressions. Restricted membership hj and its original-set first projection select the unchanged cap3 on both sides. |
+| 15 | P1HistoricalLevelCheckPreservation 114:2 | On the selected fourth row both conditionals evaluate to cap4. The alternative branches still carry their individual old4 values. |
+| 16 | P1HistoricalLevelCheckPreservation 140:2 | The same membership proof at the fifth row selects cap5. The unused inherited old5 branches are retained exactly. |
+| 17 | P1HistoricalLevelCheckPreservation 182:50 | Nonmembership in J5 defeats membership in D.cells5 ∩ J5 by its second projection; the fifth result is the restricted own old5. |
+| 18 | P1HistoricalLevelCheckPreservation 208:53 | Kept fifth means membership in the full intersection; the explicit restricted conditional evaluates to the original own fifth cap. |
+| 19 | P1HistoricalLevelCheckPreservation 224:6 | A local restricted-cell equality evaluates the absent selection branch. The existing fifth-only ancestry identity then restores the original fourth on this exact historical projection. |
+| 43 | P1HistoricalFourthResidualIntegral 90:20 | The raw goal pairs F(t).2 with F(t).1. Keep Fin.last 3 in both projection inequalities. The existing t_last<sigma*t_last and sum+sigma*t_last≤lambda imply the required strict bound. |
+| 44 | P1HistoricalFourthResidualIntegral 213:8 | Beta reduction exposes the actual weighted product under the lambda. The already-proved positive-last-coordinate and legal-profile identity replace only the profile under the same product. |
+| 45 | P1HistoricalFourthResidualIntegral 255:2 | Unfold the residual sum at both levels. Subtraction congruence keeps old4 minus cap4, the same tuple finset and reciprocal prime weights. For each p split the same region-membership proposition to obtain equality on its two branches. |
+| 46 | P1HistoricalUpperFourthPhysicalGates 112:2 | After the quotient and real-power equivalences the two sides are sum+t3<lambda and t3<lambda−sum. Introducing each implication hypothesis supplies the proper linear inequality. |
+| 47 | P1HistoricalUpperFourthPhysicalGates 249:46 | Annotating the filter binder as a natural divisor supplies the membership type required by p1_fourthPlusActive_affine_gate. The former failed expression coerced the natural finset to a real image. This corrects the public result to exact natural-divisor finset equality. The strict real inequality and all external hypotheses are the same. |
+| 48 | HistoricalFifthJointIntegralSupportP1 173:6 | Expanding the bounded double union yields an owner j and a proof hj of finite-set membership as a dependent index. Two Set.mem_iUnion eliminations yield those witnesses and the same htj, then construct the required bounded existential. |
+| 49 | HistoricalFifthJointIntegralSupportP1 273:4 | The same two eliminations are applied inside the restricted integral. The owner and same t∈cell witness feed the historical parent check without a measurability, nonemptiness or integrability assumption. |
+| 50 | P4AHistoricalCausalSavingsLedger 47:36 | The actual raw identity uses thirdCappedUpperPolicy and fourthCappedUpperPolicy. Unfolding both corresponding upper policy abbreviations makes the signed raw terms match before polynomial normalization by log N / singularSeries N. |
+| 51 | P4AHistoricalCausalSavingsLedger 159:2 | On old-admitted candidates the existing same-cap implication supplies new admission. The exact residual difference is the inherited both-admitted difference, with zero new-only contribution and the original normalized Rosser-minus weight. |
+| 52 | P4AHistoricalCausalSavingsLedger 165:2 | Off the old gate, split the actual new gate. New-only candidates receive exactly one new residual and remaining candidates zero. Original strict product-times-square gate, projected fourth parent and natural product agree by direct expansion. |
+| 57 | P4ASameRhoSignedMassLedger 39:2 | After the c(d)<0 branch simplifies, c(d)/phi(d)=−(−c(d)/phi(d)) is a ring identity after division notation. Real division is total; no nonzero totient premise is introduced. |
+
+## Verification boundary
+
+The JSON supplement records every frozen before/after byte hash, unified patch, original diagnostic, raw job log line and exact changed theorem header. The other 188 declaration headers are unchanged. These failures concern formal notation, finite indices, proof simplification, or elementary algebra in inherited suppliers. I found no added premise or substantive mathematical gap at the 23 sites. The v2 logs already show that the proof and axiom stages did not pass. T01 and root must verify the actual target on the combined exact v3 closure and inspect all eight public types and their transitive axioms. This review makes no claim concerning the other v2 failures. No local Lean, LSP, guard, numerical replay, remote build or Git write was used.
