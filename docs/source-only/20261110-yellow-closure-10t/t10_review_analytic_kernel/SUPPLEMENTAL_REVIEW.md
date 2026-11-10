@@ -1,0 +1,22 @@
+# Supplemental independent review
+
+The [main review](REPORT.md) and [original registry](REGISTRY.json) give the exact original-node scope, final lower/upper dependencies and preserved assumptions. The two fifth-kernel integration reviews remain frozen. The supplementary sources below have mathematical-source review. Their theorem types, transitive axioms and kernel replays still require exact-build evidence.
+
+| Supplier | Scope reviewed | Independent record |
+| --- | --- | --- |
+| T06 | Six original U7/U8/U9 profiles, chosen-width and phase budgets, charged full smooth-label grid, physical chart Fourier L1 and tail | [Signed chart and atlas review](T06_SUPPLEMENTAL_REVIEW.md) |
+| T06 | Inversion at actual HB integer tuples, exact full and retained same-Q/rho count-minus-mean integrals, total amplitude | [Physical mode review](T06_ACTUAL_MODES_REVIEW.md) |
+| T07 | W1 closed-cell feedback and the three W2 singleton lanes at their own denominators, exact remaining signed bank expression | [Archive and integral review](T07_SUPPLEMENTAL_REVIEW.md) |
+| T07 | Full original U3 positive-width clamp coefficient, actual root Theta and the two ordered limits | [Clamp contribution review](T07_CLAMP_THETA_REVIEW.md) |
+| T08 | Actual character-pair series, Young completion, Fourier extraction and critical continuation, oldform coefficients at both fixed cusps | [Continuous-spectrum review](T08_SUPPLEMENTAL_REVIEW.md) |
+| T07 and T08 | Strict admission at the actual 11/5 seed endpoint and the physical signed Whittaker character row with its divisor-square residual bound | [Seed and finite row review](T07_SEED_T08_ROW_REVIEW.md) |
+
+## Remaining interfaces
+
+**Lower count.** For h34, the next bank comparison is the four actual W2 upper pair integrals. The signed expression to bound from above contains bankPairArchive minus bankPairIntegral, both evaluated on the genuine previous upper-table values. Use the original physical strict-prime producer, common Q, Θ mark and Q80 credit. Initial and switched signed base terms still require the same ρ. The positive seed now has strict 11/5 admission. Its initial 1/50 estimate, four feedback rounds and common-threshold count induction through 430+11 remain. The clamp limit pays one whole U3 interval. Off-clamp U3, the U4 roots and nested histories still require their own closed-cell weighted adoption. The other seven fixed hLower suppliers remain as listed in the main review, including hstarts and the actual E in h6 and h1011.
+
+**Prime products and upper bound.** The six smooth U789 physical profiles reach the inner full and retained Fourier representations, including normalized amplitude mass. Adoption in the original raw HB sum still needs the collar, prime-power, trim and collision payments and all original bank restrictions. For a caller which starts with a separate outer Mellin representation, prove that original measure’s amplitude and norm before averaging its phases. The signed separated arithmetic estimate on the complete modulus sum and the additional enhanced/high-rank/empty-Γ cases remain. The hUpper interface requires the same selected ρ in hdensity and hUniformPP for all legal widths.
+
+**Spectral return.** For each actual primitive character and fixed t, the finite character-row multiplier λχ(|a|ν,s) is shared by its legal dilations. Young’s (7.2), (7.3) and (8.1)–(8.7) give a precise next target: realize the all-singular-cusp span and its orthogonal vectors as the physical dilations, then use the formal inverse norms, both row functionals, dt/cosh(πt) and the outside 1/(4π). At t≠0 the incoming and outgoing constant powers are separated as functions of y. The possible dependence at t=0 can be removed in this change under the Lebesgue height integral only by recording the null singleton. The individual physical central formulas have their own continuation. The variable-dilation Maass classes, full Petersson basis and arithmetic trace, the actual A/J, regular estimates and 7/32 with all costs in (24)–(25) remain. [Young, §§7–8](https://arxiv.org/html/1710.03624v2)
+
+The machine-readable [supplement registry](SUPPLEMENT_REGISTRY.json) records exact source files, declarations and predecessor references. The frozen T08 baseline author registry is SHA256 `54b3d07052f55bfa885b2d0838f97b3d9d3b5982076ebacd07074fbfcbe7a9e6` and its report is `fe4c75c6a028073266370990b700d53ff67a238b954b12bc7c79cffac118c0f9`. The fifth verification uses its dedicated remote evidence gate. No supplementary theorem supplies a whole previously open terminal.
