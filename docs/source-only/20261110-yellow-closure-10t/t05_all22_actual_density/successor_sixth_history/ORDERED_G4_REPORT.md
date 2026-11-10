@@ -1,0 +1,7 @@
+# G4 on the corrected ordered third
+
+The corrected whole-third fifth tree and the earlier union tree can admit different six-tuples globally. On any tuple above a historical supported third owner, the initial rank agrees, each later odd prefix reads that same third owner, and the even decisions retain their common form. The new `admitted_iff_on_owner` proves the equivalence on the same finite prime carrier.
+
+Every original G4 box supplies this historical owner on the common cofinal early mesh. Off these boxes the saved update has zero quotient difference on either tree. On the boxes the actual old fifth cap and the actual saved cap agree on both trees. `P4AOriginalOrderedSavedGain.exact_gain` thus identifies the two normalized raw differences at the same target, cap and cutoff. `exists_original_G4` places the original G4 numerical floor minus an arbitrary tolerance on the corrected stage zero to one. Its early activation and later physical cutoff obey `omega ≤ a`. The source proves this bound simultaneously for all such later cutoffs.
+
+This checkpoint covers the G4 increment alone on the corrected third. The historical fourteen-slot joint physical count has its own pinned policy. A new common-policy joint count, the other signed increments and the same-coefficient distribution estimate require additional work. These two modules have been inspected and hashed. Their dependencies include the stage-only correction to the historical G4 byte-access proof and the four-file R17 semantic replacement. Lean elaboration remains pending.
