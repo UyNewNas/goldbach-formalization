@@ -1,0 +1,9 @@
+# Original G6, all native cusps and recovered source inputs
+
+The original sixth saving is connected to the actual corrected second-stage frontier, its two real three-variable charts, original4096 Q96 floors and a common pre-target schedule. The same enlarged-bank coefficient now includes original gains2,3,5,6,15–22:12 of22. Ordinary and one-projection endpoints are separate; compiler reserve and beta enter once. The original196731-byte witness is already present in official asset626620833 and is reused through exact member/digest mapping.
+
+Nine spectral sources give all native cusp orbits/initial Young expansion and individual critical cusp continuation, with actual almost-everywhere function independence and a countable exceptional set. Central functions exist but are not declared pointwise independent. Formal Gram, actual complete Plancherel/trace and the7/32 energy bound remain open. Twenty-nine previously written necessary input modules are copied unchanged with independent provenance; their conditional generic interfaces are not claimed complete suppliers.
+
+Independent scope records separate the G1 ordinary Fbar/N-table/fourth licence from the unrelated17572/H247 Wu bank. They also document an actual applicability gap in the chosen formal coarse policy: its full physical high-rank support cannot all be directly assigned the original M conditions. This does not refute the manuscript or the final signed PP estimate. The finite count retains its explicit same-rho distribution error; a faithful whole-third strategy and transport remain necessary. G1,4,7–14 and the remaining density reserve also remain unpaid here.
+
+This commit skips CI and leaves the unique T01v3 run42753193835 on its immutable parent unchanged. The narrow dedicated run does not validate these new sources. No local Lean/Lake/LSP, proof guard, finite certificate evaluation or numerical replay ran; zero new green nodes.
