@@ -1,0 +1,128 @@
+SOURCE ONLY / UNCOMPILED / ready=false / zero credit.
+
+Source chronology guard: `chen-imbalanced-semiprimes/verification/data/
+global-selected-numeric-completion-20261010.txt` SHA256
+`d02f2f62993faac60ac4cc4df957877b235313632ffc78f991e74f5fbf458255`,
+lines 78-86: slot15 adopted cell7; slot16 ascending14; slot17
+descending15; slot18 unequal15; slot19 ascending13; slot20 first-failure29.
+Literal dependencies: Phase9 ascending14/42 SHA
+`3f231338960337db2489843dd4ed8d54ce04db1d98d17e72e52f939231bd9302`
+and Phase13 seed7/unequal15 SHA
+`4020d46ce412fe75bfaca2104268c4c11b773a1dcb567e55e31174f8b0a3d6c3`.
+
+The finite max below is a causal *compiled cap candidate*: an improving
+later action cannot lower a prior eighth cap. Identification with the exact
+original 58-domain selected policy and additive charged gains still needs
+the source separation and physical rough-prime coefficient bridge. It is
+not a claimed all58 numerical certificate. The actual full eleven-cell
+sixth constructor is also not supplied by the one-cell Phase8 adapter.
+
+```lean
+import ImbalancedChen.P4AOriginalAscending14Literal42
+import ImbalancedChen.P4AOriginalSeed7Unequal15Literal
+import ImbalancedChen.OriginalDescendingFifteenCellOwnership
+import ImbalancedChen.OriginalAscendingThirteenCellOwnership
+import ImbalancedChen.P4AOriginalEighthParentPhysicalLedger
+
+namespace ImbalancedChen.P4AOriginalPrior58Chronology
+
+noncomputable section
+open scoped Classical
+
+def slot15 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : ℝ :=
+  P4AOriginalSeed7Unequal15Literal.seed7Raised N lambda6 pre
+
+def slot16 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : ℝ :=
+  max (slot15 N lambda6 pre)
+    (P4AOriginalAscending14Literal42.literal16Exponent N lambda6 pre)
+
+def slot17 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : ℝ :=
+  max (slot16 N lambda6 pre)
+    (OriginalDescendingFifteenCellOwnership.ownedRaisedExponent N lambda6 pre)
+
+def slot18 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : ℝ :=
+  max (slot17 N lambda6 pre)
+    (P4AOriginalSeed7Unequal15Literal.unequalRaised N lambda6 pre)
+
+def slot19 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : ℝ :=
+  max (slot18 N lambda6 pre)
+    (OriginalAscendingThirteenCellOwnership.ownedRaisedExponent N lambda6 pre)
+
+theorem slot15_le_slot16 (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (pre : List ℕ) : slot15 N lambda6 pre ≤ slot16 N lambda6 pre :=
+  le_max_left _ _
+
+theorem slot16_le_slot17 (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (pre : List ℕ) : slot16 N lambda6 pre ≤ slot17 N lambda6 pre :=
+  le_max_left _ _
+
+theorem slot17_le_slot18 (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (pre : List ℕ) : slot17 N lambda6 pre ≤ slot18 N lambda6 pre :=
+  le_max_left _ _
+
+theorem slot18_le_slot19 (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (pre : List ℕ) : slot18 N lambda6 pre ≤ slot19 N lambda6 pre :=
+  le_max_left _ _
+
+theorem actual_sixth_le_slot19 (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (pre : List ℕ) :
+    P4AOriginalSeed7Unequal15Literal.currentSixth lambda6 pre ≤
+      slot19 N lambda6 pre := by
+  exact (P4AOriginalSeed7Unequal15Literal.current_le_seed7Raised
+    N lambda6 pre).trans
+    ((slot15_le_slot16 N lambda6 pre).trans
+      ((slot16_le_slot17 N lambda6 pre).trans
+        ((slot17_le_slot18 N lambda6 pre).trans
+          (slot18_le_slot19 N lambda6 pre))))
+
+/-- One eighth replacement after the actual sixth parent. This keeps
+every rank-eight admission and every prime ancestor of the parent. -/
+def candidate58Policy (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (baseSixth : Bool → List ℕ → Bool) : Bool → List ℕ → Bool :=
+  firstExitDepthSplicePolicy 8
+    (P4AOriginalEighthParentPhysicalLedger.parentPolicy N lambda6 baseSixth)
+    (frozenParityRosserPolicy false 8
+      (fun pre => N ^ slot19 N lambda6 pre))
+
+theorem candidate58_through_eight (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (baseSixth : Bool → List ℕ → Bool) (b : Bool) (pre : List ℕ)
+    (h : pre.length ≤ 8) :
+    candidate58Policy N lambda6 baseSixth b pre =
+      P4AOriginalEighthParentPhysicalLedger.parentPolicy N lambda6 baseSixth
+        b pre := by
+  simp [candidate58Policy, firstExitDepthSplicePolicy, h]
+
+theorem candidate58_frontier_eight (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (baseSixth : Bool → List ℕ → Bool) (h : ℕ → ℝ)
+    (pre carrier : List ℕ) (positive : Bool) (mass : ℝ) :
+    firstExitDepthFrontier 8 (candidate58Policy N lambda6 baseSixth)
+      h pre positive mass carrier =
+    firstExitDepthFrontier 8
+      (P4AOriginalEighthParentPhysicalLedger.parentPolicy N lambda6 baseSixth)
+      h pre positive mass carrier := by
+  exact firstExitDepthFrontier_depthSplice_eq 8 8 (by omega)
+    (P4AOriginalEighthParentPhysicalLedger.parentPolicy N lambda6 baseSixth)
+    (frozenParityRosserPolicy false 8
+      (fun pre => N ^ slot19 N lambda6 pre))
+    h pre carrier positive mass
+
+theorem candidate58_even (N : ℝ) (lambda6 : List ℕ → ℝ)
+    (baseSixth : Bool → List ℕ → Bool)
+    (hbase : ∀ pre,
+      P4AOriginalEighthParentPhysicalLedger.parentPolicy N lambda6 baseSixth
+        true pre = true) (pre : List ℕ) :
+    candidate58Policy N lambda6 baseSixth true pre = true := by
+  by_cases h : pre.length ≤ 8
+  · rw [candidate58_through_eight N lambda6 baseSixth true pre h]
+    exact hbase pre
+  · simp [candidate58Policy, firstExitDepthSplicePolicy, h]
+
+end
+end ImbalancedChen.P4AOriginalPrior58Chronology
+```
+
+OPEN: source affine-to-semantic rewrites, slot15..19 domain separation and
+seed ownership, equality of this max with the manuscript selected caps,
+the actual all11 sixth parent, rank-eight raw rough-prime coefficient and
+its signed telescope, coefficientwise physical domination, and numerical
+rounding loss. The later first-failure29 action is not included here.
