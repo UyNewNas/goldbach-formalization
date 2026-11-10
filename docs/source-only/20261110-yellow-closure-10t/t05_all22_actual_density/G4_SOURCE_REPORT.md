@@ -1,0 +1,11 @@
+# Original grid-400 sixth saving
+
+The six physical coordinates, selected mask and three saved budget columns are read from the same 632,104-row signed-i64 NPY literal used in the actual S09 sixth policy. The existing independent audit records a Q80 numerator sum of 1163968980828875260040 and 444,302 rows whose corner gap has a negative value. Each row uses all 64 signed corner gaps in the barycentric lower bound. The pointwise clipped gap is used before applying the two denominator ceilings. The old ceiling can come from the new endpoint only on a positive gap.
+
+`P4AOriginalSavedSixthIntegral.original_floor_le_sum` compares the original slot-four rational with the sum of the six-dimensional row integrals. `rowTest_le_actual_ordinary` gives the pointwise physical bound for any inherited cap below the certified old upper envelope with positive quotient. Distinct half-open boxes keep coordinate-wall ownership. `P4AOriginalSavedSixthPrimeMean.prime_limit` and `eventually_slot` convert the full integral sum to the actual target-deleted weighted six-prime tests.
+
+`P4AOriginalSavedSixthStage.policy` inserts the first rank-six bank after the actual fifth policy at the same depth-six frontier. It uses exactly the 632,104 saved-row acceptance predicates of the final union policy on its active branch and the original saved exponent elsewhere. `exact_split` gives the exact signed fifth-to-sixth decomposition at the original cutoff. `level_on_original_eleven_cell` proves that the genuine G7 support inherits the fifth cap at this intermediate stage.
+
+To replace the signed fifth-to-saved difference by the numerical floor in the counting upper, the actual common third and fifth history, the signed rank-six ordinary quotient identity and the uniform error comparison still have to be assembled. The latest actual coefficient result at this freeze covers 13/22 on the historical enriched policy. The faithful ordered-third coefficient introduced by T04 has its own outstanding comparison and progression requirements.
+
+All byte hashes, direct project imports and mathematical references are in G4_SOURCE_REGISTRY.json. No Lean, Lake, LSP, numerical certificate, finite guard or remote CI was executed by T05. In particular the finite archive, ownership and Q80 aggregation bodies still require remote elaboration and checking.
