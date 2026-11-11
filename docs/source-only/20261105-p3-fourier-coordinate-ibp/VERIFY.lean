@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBWeightedAxisLeibniz
 import ImbalancedChen.P3HBSmoothTensorQuantitativeL1
 import ImbalancedChen.P3HBSmoothTensorL1
 import ImbalancedChen.P3HBSmoothLogTensorRestoration
@@ -930,3 +931,9 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_children_norm_integrable
 #check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_children_L1_le
 #check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_scaled_children_L1_le
+
+-- Actual one-axis coupled-W Leibniz; SOURCE_ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3HBWeightedAxisLeibniz.logTensorMixed_axis_factor
+#check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_at
+#check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_hasDerivAt
+#check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_derivative_norm_le
