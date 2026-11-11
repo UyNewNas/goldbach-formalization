@@ -2560,3 +2560,11 @@ P3.6 YELLOW. New bounded-W zero-order source candidate BLUE ONLY. No GREEN.
 - **Next entry:** first obtain real pinned Lean/Lake compilation and repair of this module and dependencies; then construct actual physical W_T/U5/trim geometry from manuscript and bound its true repeated 2S derivatives uniformly in T,m(N), integrate the full mixed L1, pay Fourier H-tail and complete same-rho arithmetic including exact b=T.
 
 **Status:** P3.6 YELLOW. This canonical axis identification is a narrow BLUE source candidate only; NO GREEN.
+
+### Final readback and precise test evidence
+
+- Proof commit: `988ab8ba7bfed455737aa5b921c657eb6950a36f` ([GitHub](https://github.com/UyNewNas/goldbach-formalization/commit/988ab8ba7bfed455737aa5b921c657eb6950a36f)), previous exact head `c9de8b9f3283797e9ce89d22c3e7a1037673f5aa`.
+- Proof blob: `4f6a8f5e870319d35ea624b369bff5868b9b9a6b`. Committed reproducible Python script blob: `8f6859f3fac7bc94e82442e6359da4e8120756a1`.
+- **Exact committed-byte test confirmed**: `git hash-object /mnt/data/check_p3_canonical_committed.py` returned `8f6859f3fac7bc94e82442e6359da4e8120756a1`; `python3 /mnt/data/check_p3_canonical_committed.py` exited 0 with **288/288 PASS**, including repeated i=j axes. No Lean conclusion follows.
+- Real tool probes: `command -v lean`, `lake`, `elan` each exit 1; `lake env lean --version` exit 127. Lean/Lake/kernel NOT RUN. No new GREEN.
+- SOURCE_ONLY Lean file is fully read back from the pinned P3.6 branch. `EXTERNAL_INPUTS.json` unchanged blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. The genuine original physical-W uniform derivatives, full 2S/Fourier L1-H, same-rho arithmetic and full source coverage remain OPEN.
