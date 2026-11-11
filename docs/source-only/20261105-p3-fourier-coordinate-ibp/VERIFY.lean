@@ -102,6 +102,7 @@ import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 import ImbalancedChen.P3HBGeometryDefectBudget
 import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 import ImbalancedChen.P3HBActualTwoAxisLocalization
+import ImbalancedChen.P3HBCompactLocalJetBounds
 
 
 
@@ -997,3 +998,12 @@ import ImbalancedChen.P3HBActualTwoAxisLocalization
 #check ImbalancedChen.P3HBLocalTwoAxisL1.actualTwoAxisMass_le_localJetEnvelope
 #check ImbalancedChen.P3HBLocalTwoAxisL1.localJetEnvelope_integrable
 #check ImbalancedChen.P3HBLocalTwoAxisL1.actualTwoAxisMass_integrable_and_L1_of_local_jets
+
+
+-- Compact support gives finite LOCAL ceilings for one fixed actual W;
+-- no uniform T/m(N) envelope is asserted, and Lean has NOT been run.
+#check ImbalancedChen.P3HBCompactLocalJetBounds.originalHBLogBox_isCompact
+#check ImbalancedChen.P3HBCompactLocalJetBounds.originalHBLogBox_nonempty
+#check ImbalancedChen.P3HBCompactLocalJetBounds.continuousJet_exists_local_bound
+#check ImbalancedChen.P3HBCompactLocalJetBounds.actualTwoAxis_exists_local_jet_bounds
+#check ImbalancedChen.P3HBCompactLocalJetBounds.actualTwoAxisMass_exists_integrable_L1_bound
