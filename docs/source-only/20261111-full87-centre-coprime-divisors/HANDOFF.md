@@ -1,0 +1,11 @@
+# Durable P1.4 handoff — exact old/new coprime centre divisor bound
+
+Recovery: independent branch `chatgpt/p1-full87-centre-coprime-divisors-20261111`, packet `docs/source-only/20261111-full87-centre-coprime-divisors/`; parent source at verified `0896f6f7e7e2caba022ea44081751e09b6037132` on `chatgpt/p1-full87-centre-fibre-20261111`. ALWAYS reread live HEAD, REPORT, REGISTRY, INPUT_BOUNDARY and full candidate Lean file; do not reset to stale 9649ab3. No other branches touched.
+
+What is new: actual 6th/8th full-q support union has pre-existing squarefree and (q,N)=1 proofs, and original sign-attached physical rho6 and rho8 each have existing pointwise bound 1. Candidate Lean proof combines them with the same exact physical centre-prime congruence incidence and P<N for nonprime N, to derive B_centre <= 2 sum_(P|N prime) #{d|N-P : gcd(d,N)=1} <= 2 sum_(P|N prime) tau(N-P). This is sharper as a finite fibre envelope than charging *all* divisors, and it connects directly to the prior sharp receiver identity WITHOUT restoring the already-cancelled modulus correction. Two genuinely independent old/new signed sharp PP estimates remain hypotheses, not proved or called.
+
+Verification: original pinned manuscript blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Tool pins Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958; c=49044063/25000000, K=8452171/1250000. Local lean/lake/elan absent, exits 127; source-only candidate uncompiled and unevaluated. Synthetic exact rational comparison: 3560/3560 cases, no failure, not real original87 replay. No kernel replay or independent review; no CI/Codex/host/main/master/merge/force push.
+
+Next concrete mathematical step: PROVE uniform same-H_N quantitative upper control of the coprime-divisor invoice, rather than adding another analogous sum. Also separately prove true sharp-PP q-bound/smooth W_N/legal X/endpoint for old and new; continue weighted actual parent, shared history integral and saved87 archive as previously tracked. Stop at the actual missing hypothesis; do not claim reserve payments.
+
+Source blob and persistent proof packet file hashes: read `REGISTRY.json` on the live branch. SOURCE_ONLY, UNEVALUATED, UNCOMPILED. P1.4 YELLOW.
