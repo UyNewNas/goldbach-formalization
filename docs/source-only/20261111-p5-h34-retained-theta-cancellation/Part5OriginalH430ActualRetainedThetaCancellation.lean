@@ -161,8 +161,12 @@ theorem actual_nonretained_theta_correction_lower
               (levelOccurrence l).current| := by
             dsimp [F]
             rw [abs_mul, abs_mul]
-  simpa only [actualNonretainedThetaCorrection,
-    actualNonretainedThetaPayment, Finset.sum_neg_distrib] using h
+  have hBound :
+      -actualNonretainedThetaCorrection N n root tau p g ≤
+        actualNonretainedThetaPayment N n root tau p g := by
+    simpa only [actualNonretainedThetaCorrection,
+      actualNonretainedThetaPayment, Finset.sum_neg_distrib] using h
+  linarith only [hBound]
 
 /-- The old ALL-ACTION absolute payment decomposes into a nonnegative
 retained excess and this smaller selected-only payment. Thus removing
