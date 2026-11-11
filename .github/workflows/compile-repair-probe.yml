@@ -95,9 +95,28 @@ jobs:
           python3 - <<'PYREPAIR'
           import os, pathlib, hashlib, json
           root = pathlib.Path(os.environ['PROJECT'])
+          # Each closed kernel computation covers 64 indices, not all 4096.
+          chunks = []
+          for k in range(64):
+              off = 64*k
+              chunks.append(f"private theorem source_index_chunk_{k} : ∀ j : Fin 64, (rows[{off} + j.val]'(by rw [rows_size]; have := j.isLt; omega)).sourceIndex = {off} + j.val := by\n  decide +kernel\n")
+          proof = ["theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = 0 + j.val := by", "  intro j", "  have hj := j.isLt", "  rw [rows_size] at hj"]
+          for k in range(64):
+              if k < 63:
+                  proof.append(f"  by_cases h{k} : j.val < {64*(k+1)}")
+                  prefix = "  · "
+                  indent = "    "
+              else:
+                  prefix = "  "
+                  indent = "  "
+              proof.append(prefix + f"have hi : {64*k} + j.val % 64 = j.val := by omega")
+              proof.append(indent + f"have hc := source_index_chunk_{k} ⟨j.val % 64, Nat.mod_lt _ (by decide)⟩")
+              proof.append(indent + "simpa only [hi, Nat.zero_add] using hc")
+          old_p5 = "theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = 0 + j.val := by\n  decide"
+          new_p5 = "\n".join(chunks + ["\n".join(proof)])
           fixes = [
             ('ImbalancedChen/P4ASlot19ChargedFrontier.lean', '  norm_num [selectedMask, selectedSum]', '  simp [selectedMask, selectedSum, Finset.sum_insert, add_assoc]'),
-            ('ImbalancedChen/Data/P5SubdivisionStoredBlock000.lean', '  decide', '  decide +kernel'),
+            ('ImbalancedChen/Data/P5SubdivisionStoredBlock000.lean', old_p5, new_p5),
           ]
           receipt = []
           for name, old, new in fixes:
