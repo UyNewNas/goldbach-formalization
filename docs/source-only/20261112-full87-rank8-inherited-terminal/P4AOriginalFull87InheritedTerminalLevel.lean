@@ -30,7 +30,7 @@ open scoped Classical
 /-- Complete Rosser admissibility survives the exact retained-leaf
 recursion, including parity-safe even steps, for an ordered prime suffix.
 The prefix must really be admissible at this SAME ordinary level. -/
-private theorem ordinary_terminal_admissible
+theorem ordinary_terminal_admissible
     (Q : ℝ) (weight : ℕ → ℝ)
     (pre remaining : List ℕ) (positive : Bool) (mass : ℝ)
     (hpre : ordinaryRosserPrefixAdmissible false Q pre)
@@ -82,7 +82,7 @@ private theorem ordinary_terminal_admissible
 /-- A policy substitution on all NONEMPTY extensions preserves the
 literal retained-leaf list. No signed mass, leaf or occurrence is
 reindexed or deduplicated by this equality. -/
-private theorem retained_leaves_congr_nonempty
+theorem retained_leaves_congr_nonempty
     (R S : Bool → List ℕ → Bool) (weight : ℕ → ℝ)
     (pre remaining : List ℕ) (positive : Bool) (mass : ℝ)
     (heq : ∀ later : List ℕ, later ≠ [] →
