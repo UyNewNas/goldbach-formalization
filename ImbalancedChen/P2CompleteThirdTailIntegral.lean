@@ -1,3 +1,5 @@
+import ImbalancedChen.Part4ActualThirdTailBound
+
 /-!
 SOURCE ONLY / UNCOMPILED.
 
@@ -12,7 +14,6 @@ The imported Part4ActualThirdTailBound and SymmetricTriangleIntegral remain
 source candidates: this file has not been compiled or kernel checked either.
 No original constant, domain normalization, or global reserve is changed.
 -/
-import ImbalancedChen.Part4ActualThirdTailBound
 
 set_option Elab.async false
 
@@ -174,3 +175,4 @@ theorem manuscriptIntegral_le_cutoffEnvelope {h : ℝ}
 
 end
 end ImbalancedChen.P2CompleteThirdTailIntegral
+

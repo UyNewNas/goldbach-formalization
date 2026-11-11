@@ -122,7 +122,7 @@ theorem integral_eq_zero_of_box_old_gate {a b : Point}
   have hc := hs ht
   have hz : 0 < t 2 := hc.1.1.1.1
   have hupper : t 0 + t 1 + 3 * t 2 ≤ thirdPrefixTheta := by
-    simpa only [mul_zero, sub_zero] using hc.1.1.2
+    simpa only [Set.mem_setOf_eq, mul_zero, sub_zero] using hc.1.1.2
   have hx : a 0 ≤ t 0 := hc.2.1 0
   have hy : a 1 ≤ t 1 := hc.2.1 1
   have hzt : a 2 ≤ t 2 := hc.2.1 2
@@ -196,3 +196,4 @@ theorem zero_charge_supplier_of_root_le_envelope {a b : Point} {s : Set Point}
 
 end
 end ImbalancedChen.P4AOriginalZeroLeafSuppliersSourceOnly
+

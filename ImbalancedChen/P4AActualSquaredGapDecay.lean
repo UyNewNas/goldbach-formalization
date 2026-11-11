@@ -69,7 +69,7 @@ theorem hasDerivAt_square_mul_normalized_gap {s : ℝ} (hs : 3 < s) :
       (s * ((upper s - lower s) - (upper (s - 1) - lower (s - 1)))) s := by
   have hs0 : s ≠ 0 := by linarith
   have hsquare : HasDerivAt (fun t : ℝ => t ^ 2) (s + s) s := by
-    simpa only [pow_two, id_eq, one_mul, mul_one] using
+    simpa only [pow_two, Pi.mul_apply, id_eq, one_mul, mul_one] using
       (hasDerivAt_id s).mul (hasDerivAt_id s)
   have hd := hsquare.mul (hasDerivAt_normalized_gap hs)
   apply hd.congr_deriv
@@ -123,3 +123,4 @@ theorem normalized_gap_le_anchor_div_sq {k s : ℝ}
 end
 
 end ImbalancedChen.P4AActualSquaredGapDecay20261024zSourceOnly
+

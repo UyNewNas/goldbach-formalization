@@ -1,3 +1,8 @@
+import ImbalancedChen.P2ThirdTailCertificateTruncation
+import ImbalancedChen.ActualThirdOriginalRationalQuery
+import ImbalancedChen.ActualThirdOriginalBoxMoments
+import Mathlib.Data.List.Forall2
+
 /-!
 SOURCE ONLY / UNCOMPILED.
 
@@ -13,10 +18,6 @@ a source dependency, not a newly asserted validation of the original node table.
 The closed split-tree adapter proves leaf measurability and containment; its
 remaining concrete inputs are finite rational guard checks and box containment.
 -/
-import ImbalancedChen.P2ThirdTailCertificateTruncation
-import ImbalancedChen.ActualThirdOriginalRationalQuery
-import ImbalancedChen.ActualThirdOriginalBoxMoments
-import Mathlib.Data.List.Forall2
 
 set_option Elab.async false
 
@@ -347,3 +348,4 @@ theorem fullIntegral_le_checked_boxes
 
 end
 end ImbalancedChen.P2ThirdCompactCertifiedBoxIntegral
+

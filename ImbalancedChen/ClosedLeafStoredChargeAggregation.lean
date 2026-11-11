@@ -29,6 +29,7 @@ namespace ImbalancedChen.OriginalThirdClosedLeafStoredChargeP4ASourceOnly
 
 noncomputable section
 open Set MeasureTheory
+open scoped ENNReal
 open OriginalThirdFiniteReserveSourceOnly
 open OriginalThirdCompactPartitionSourceOnly
 
@@ -200,3 +201,4 @@ theorem originalCompactThirdCorrection_le_originalAllowance
 
 end
 end ImbalancedChen.OriginalThirdClosedLeafStoredChargeP4ASourceOnly
+

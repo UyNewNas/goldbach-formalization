@@ -1,3 +1,5 @@
+import ImbalancedChen.P2ThirdCompactCertifiedBoxIntegral
+
 /-!
 SOURCE ONLY / UNCOMPILED.
 
@@ -12,7 +14,6 @@ guard checks and the final finite numerical total remain to be supplied.
 The depth12 construction has4096 leaves and cycles x,y,z. It is data source,
 not a runtime replay; this task has not expanded or executed the tree.
 -/
-import ImbalancedChen.P2ThirdCompactCertifiedBoxIntegral
 
 set_option Elab.async false
 
@@ -331,4 +332,5 @@ theorem fullIntegral_le_uniform_checked_boxes
 
 end
 end ImbalancedChen.P2ThirdCompactUniformCover
+
 

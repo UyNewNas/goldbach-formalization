@@ -1,3 +1,6 @@
+import ImbalancedChen.P2CompleteThirdTailIntegral
+import ImbalancedChen.Part4ActualThirdOriginalClosedSplitAggregation
+
 /-!
 SOURCE ONLY / UNCOMPILED.
 
@@ -12,8 +15,6 @@ The sibling draft is intended for ImbalancedChen/P2CompleteThirdTailIntegral.lea
 when a later authorized promotion/validation occurs. Neither draft nor the
 imported source candidates has been compiled by this task.
 -/
-import ImbalancedChen.P2CompleteThirdTailIntegral
-import ImbalancedChen.Part4ActualThirdOriginalClosedSplitAggregation
 
 set_option Elab.async false
 
@@ -262,3 +263,4 @@ theorem fullIntegral_le_closedTree_certificate
 
 end
 end ImbalancedChen.P2ThirdTailCertificateTruncation
+
