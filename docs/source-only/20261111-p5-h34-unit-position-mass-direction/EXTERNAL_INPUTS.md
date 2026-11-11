@@ -1,7 +1,7 @@
 # P5.6 / h34 — external input boundary: unit position mass direction
 
 Pinned manuscript `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`, source `paper/source/manuscript-body.tex`.
-Mathematical commit: `2d8da2a8322718b8c5e975b1d755c112ae5367bd`.
+Initial mathematical commit: `2d8da2a8322718b8c5e975b1d755c112ae5367bd`; namespace repair: `441fd2c796f8852cc5667613901fa62a40fba19b`.
 Mathematical file: `Part5OriginalH430UnitPositionMassDirection.lean`.
 
 **New external analytic theorem, analytic proof or axiom: NONE.**
