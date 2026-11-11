@@ -1,0 +1,145 @@
+# Requeue after excluding unrelated push workflows from this isolated branch.
+name: P2 exact candidate closure validation
+on:
+  push:
+    branches: [ci/resume-compile-repairs-20261111]
+    paths: [.github/workflows/candidate-validation.yml, verification/parts/p0/prepare_candidate_validation.py]
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact published 40-character source commit
+        required: true
+        type: string
+      manifest_sha256:
+        description: Independently reviewed exact manifest SHA256
+        required: true
+        type: string
+      purpose:
+        description: Source gate; green still requires independent expanded-type acceptance
+        required: true
+        default: yellow_green
+        type: choice
+        options: [source_validation, yellow_green]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  fifth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: 58e36e0a0ece9c5e9a869294fb87bcaf92ff7441
+      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
+      CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
+      LEAN_NUM_THREADS: 2
+      T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Validate immutable source identity
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_MANIFEST" =~ ^[0-9a-f]{64}$ ]]
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 58e36e0a0ece9c5e9a869294fb87bcaf92ff7441
+          path: candidate
+          persist-credentials: false
+      - name: Bind exact candidate source and unchanged pins
+        id: materialize
+        run: |
+          set -euo pipefail
+          PROJECT="$GITHUB_WORKSPACE/candidate"
+          LOGS="$RUNNER_TEMP/t01-evidence"
+          test "$(git -C "$PROJECT" rev-parse HEAD)" = "$SOURCE_COMMIT"
+          cmp "$PROJECT/lean-toolchain" lean-toolchain
+          cmp "$PROJECT/lake-manifest.json" lake-manifest.json
+          mkdir -p "$LOGS"
+          printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
+          git -C "$PROJECT" ls-tree -r HEAD > "$LOGS/source-tree.txt"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install unchanged successful 12 GiB serial trust-zero runtime guard
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 - <<'PY'
+          import json,pathlib,subprocess,os
+          lock=json.loads(pathlib.Path('lake-manifest.json').read_text())
+          receipt=[]
+          for p in lock['packages']:
+              d=pathlib.Path('.lake/packages')/p['name']
+              sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+              assert sha==p['rev'],(p['name'],sha,p['rev'])
+              assert not subprocess.check_output(['git','-C',str(d),'diff','HEAD','--'],text=True)
+              receipt.append({'name':p['name'],'sha':sha})
+          pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
+          PY
+      - name: Prepare full local import closure and declaration audit
+        run: python3 verification/parts/p0/prepare_candidate_validation.py prepare
+      - name: Compile exact P2 candidate and entire local closure
+        timeout-minutes: 200
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_candidate_validation.py" snapshot
+      - name: Replay candidate and entire local closure with bundled kernel checker
+        timeout-minutes: 100
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/batch-checker.log"
+      - name: Export every serialized declaration complete type and transitive axioms
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake env lean -DwarningAsError=true CandidateAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_candidate_validation.py" verify
+      - name: Audit actual trust-zero 12 GiB runtime
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Retain batch logs and exact repaired block sources
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-58e36e0-closure-${{ github.run_id }}
+          path: ${{ runner.temp }}/t01-evidence/
+          if-no-files-found: error
+          retention-days: 30
