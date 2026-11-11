@@ -56,3 +56,10 @@ bounds; ordinary continuation to actual residual integral; parent-gap
 weighted invoice; saved87 numerical witness; finite/raw/filtered,
 rank9, changed/tagged; independent compiler/density reserves and same rho.
 P1.4 remains YELLOW.
+
+## This run: actual environment and synthetic bounds check
+
+- Executed `lean --version`, `lake --version`, `elan --version` on the available execution container; each returned exit code 127 (command not found). No source-only dependency closure was mounted. The new source was NOT elaborated, kernel-replayed or axiom-audited.
+- Remote readback confirmed the exact source Git blob 3e8c7c57d392c531562c1eb2753a73ac01431705 and all four accompanying packet blob hashes; branch HEAD at initial source commit 2ddba3208f2a8c24c4e0a99ae833530f004c769f.
+- Independently enumerated 999 even N=4,...,2000. The finite centre coprime-divisor invoice satisfies the explicit real sqrt-log bound and frozen H_N-ratio envelope on all tested cases, zero failures. For this synthetic check only, C_2 was numerically truncated at odd primes below 15000 (0.66016598342102); this is NOT the native infinite product certificate, nor saved87 replay, nor a proof of convergence.
+- Read the exact native LiuSingularSeries source at the fixed pin: liuUniversalProduct_pos, liuCorrection, liuSingularSeries_source_formula and the explicit warning that the finite proxy differs by a factor of two. Read matching mathlib isLittleO_log_rpow_rpow_atTop and Nat.pow_log_le_self. No input boundary changed.
