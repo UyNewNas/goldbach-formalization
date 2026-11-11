@@ -2,14 +2,14 @@
 import hashlib, json, os, pathlib, re, sys
 root=pathlib.Path(os.environ['PROJECT']); logs=pathlib.Path(os.environ['LOGS'])
 mode=sys.argv[1]
-modules=['ImbalancedChen.P5SubdivisionStoredParentTypes']+[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{k:03}' for k in range(5,9)]
+modules=['ImbalancedChen.P5SubdivisionStoredParentTypes']+[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{k:03}' for k in range(9,20)]
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def snapshot():
     paths=list(root.glob('ImbalancedChen/**/*.lean'))+list(root.glob('.lake/build/lib/lean/**/*.olean*'))+list(root.glob('.lake/packages/*/.lake/build/lib/lean/**/*.olean*'))
     return {str(p.relative_to(root)):digest(p) for p in sorted(paths) if p.is_file()}
 if mode=='prepare':
     receipt=[]
-    for block in range(5,9):
+    for block in range(9,20):
         p=root/f'ImbalancedChen/Data/P5SubdivisionStoredBlock{block:03}.lean';before=p.read_text();base=4096*block
         old=f'theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = {base} + j.val := by\n  decide'
         assert before.count(old)==1 and 'theorem rows_size : rows.size = 4096 := rfl' in before
@@ -24,7 +24,7 @@ if mode=='prepare':
             proof.extend([prefix+f'have hi : {64*k} + j.val % 64 = j.val := by omega',indent+f'have hc := source_index_chunk_{k} ⟨j.val % 64, Nat.mod_lt _ (by decide)⟩',indent+'simpa only [hi, Nat.zero_add] using hc'])
         after=before.replace(old,'\n'.join(chunks+['\n'.join(proof)]));p.write_text(after)
         assert before[:before.index(old)]==after[:after.index('private theorem source_index_chunk_0')]
-        receipt.append({'module':modules[block-4],'old_sha256':hashlib.sha256(before.encode()).hexdigest(),'new_sha256':digest(p),'rows':4096,'base':base,'data_unchanged':True})
+        receipt.append({'module':modules[block-8],'old_sha256':hashlib.sha256(before.encode()).hexdigest(),'new_sha256':digest(p),'rows':4096,'base':base,'data_unchanged':True})
     source=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'verification/parts/p0/Round6Audit.lean'
     audit=source.read_text();audit=audit[audit.index('set_option pp.all'):]
     start=audit.index('  let modules := #[');end=audit.index('  let allowed :=',start)
@@ -34,7 +34,7 @@ if mode=='prepare':
     audit=audit[:start]+'    liftIO <| IO.println s!"P0_ROUND6_DECL {record.compress}"\n'+audit[end:]
     audit='\n'.join('import '+m for m in modules)+'\nimport Lean.Util.CollectAxioms\n'+audit
     (root/'StoredBatchAudit.lean').write_text(audit)
-    (logs/'STORED_BATCH_REPAIRS.json').write_text(json.dumps({'green':False,'scope':'blocks005-008 and parent only; not whole T01','source_commit':os.environ['SOURCE_COMMIT'],'repairs':receipt},indent=2))
+    (logs/'STORED_BATCH_REPAIRS.json').write_text(json.dumps({'green':False,'scope':'blocks009-019 and parent only; not whole T01','source_commit':os.environ['SOURCE_COMMIT'],'repairs':receipt},indent=2))
     (logs/'modules.txt').write_text('\n'.join(modules)+'\n')
 elif mode=='snapshot':
     (logs/'BATCH_OBJECTS_BEFORE.json').write_text(json.dumps(snapshot(),sort_keys=True))

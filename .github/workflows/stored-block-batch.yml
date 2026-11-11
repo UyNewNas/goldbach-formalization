@@ -1,5 +1,5 @@
 # Requeue after excluding unrelated push workflows from this isolated branch.
-name: Stored blocks 005-008 kernel batch
+name: Stored blocks 009-019 kernel batch
 on:
   push:
     branches: [ci/resume-compile-repairs-20261111]
@@ -125,7 +125,7 @@ jobs:
           set -euo pipefail
           mkdir -p "$LOGS/compiled-blocks"
           cp "$PROJECT/StoredBatchAudit.lean" "$LOGS/" || true
-          for i in 005 006 007 008; do
+          for i in 009 010 011 012 013 014 015 016 017 018 019; do
             cp "$PROJECT/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.lean" "$LOGS/compiled-blocks/"
             for p in "$PROJECT/.lake/build/lib/lean/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.olean"*; do
               test ! -f "$p" || cp "$p" "$LOGS/compiled-blocks/"
@@ -135,7 +135,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-005-008-${{ github.run_id }}
+          name: stored-blocks-009-019-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: error
           retention-days: 30
