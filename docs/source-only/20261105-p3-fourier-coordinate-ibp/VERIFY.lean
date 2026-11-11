@@ -104,6 +104,7 @@ import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 import ImbalancedChen.P3HBGeometryDefectBudget
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
+import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
@@ -922,3 +923,10 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.all_logTensorMixed_children_L1_le
 #check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.all_scaledTensorMixed_children_L1_le
 #check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.exists_all_scaledTensorMixed_children_L1_bound
+
+-- P3.6 bounded measurable geometry coupled to ALL original HB smooth children.
+-- SOURCE_ONLY: these #checks are registered, NOT EXECUTED.
+#check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_children_norm_sum_eq
+#check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_children_norm_integrable
+#check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_children_L1_le
+#check ImbalancedChen.P3HBWeightedOriginalChildrenL1.weighted_scaled_children_L1_le
