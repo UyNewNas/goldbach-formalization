@@ -1,0 +1,141 @@
+# Requeue after excluding unrelated push workflows from this isolated branch.
+name: Stored blocks 000-004 kernel batch
+on:
+  push:
+    branches: [ci/resume-compile-repairs-20261111]
+    paths: [.github/workflows/stored-block-batch.yml, verification/parts/p0/prepare_stored_batch.py]
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact published 40-character source commit
+        required: true
+        type: string
+      manifest_sha256:
+        description: Independently reviewed exact manifest SHA256
+        required: true
+        type: string
+      purpose:
+        description: Source gate; green still requires independent expanded-type acceptance
+        required: true
+        default: yellow_green
+        type: choice
+        options: [source_validation, yellow_green]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  fifth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: ${{ inputs.source_commit || github.sha }}
+      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
+      CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
+      LEAN_NUM_THREADS: 2
+      T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Validate immutable source identity
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_MANIFEST" =~ ^[0-9a-f]{64}$ ]]
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.source_commit || github.sha }}
+          persist-credentials: false
+      - name: Materialize exact fifth target, original binary and frozen review pins
+        id: materialize
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
+          PROJECT="$RUNNER_TEMP/t01-project"
+          LOGS="$RUNNER_TEMP/t01-evidence"
+          mkdir -p "$LOGS"
+          printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
+          python3 "$T01/stage_project_v3.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
+          cp "$PROJECT/T01_PROVENANCE.json" "$PROJECT/T01Audit.lean" "$T01/EXACT_INSTALL_MANIFEST-v3.json" "$T01/REUSE_EVIDENCE.json" "$LOGS/"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install unchanged successful 12 GiB serial trust-zero runtime guard
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
+      - name: Prepare bounded kernel proofs and full declaration audit
+        run: python3 verification/parts/p0/prepare_stored_batch.py prepare
+      - name: Compile exact selected blocks and their parent
+        timeout-minutes: 200
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_stored_batch.py" snapshot
+      - name: Replay each selected block and parent with bundled kernel checker
+        timeout-minutes: 100
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/batch-checker.log"
+      - name: Export every serialized declaration complete type and transitive axioms
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake env lean -DwarningAsError=true StoredBatchAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_stored_batch.py" verify
+      - name: Audit actual trust-zero 12 GiB runtime
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Retain exact batch source and compiled objects with evidence
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS/compiled-blocks"
+          cp "$PROJECT/StoredBatchAudit.lean" "$LOGS/" || true
+          for i in 000 001 002 003 004; do
+            cp "$PROJECT/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.lean" "$LOGS/compiled-blocks/"
+            for p in "$PROJECT/.lake/build/lib/lean/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.olean"*; do
+              test ! -f "$p" || cp "$p" "$LOGS/compiled-blocks/"
+            done
+          done
+      - name: Retain batch logs and exact repaired block sources
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stored-blocks-000-004-${{ github.run_id }}
+          path: ${{ runner.temp }}/t01-evidence/
+          if-no-files-found: error
+          retention-days: 30
