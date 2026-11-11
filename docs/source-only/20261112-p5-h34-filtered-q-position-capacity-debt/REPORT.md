@@ -4,10 +4,10 @@ Date: 2026-11-12 (Asia/Shanghai).
 Repository: UyNewNas/goldbach-formalization.
 Dedicated h34 branch: `chatgpt/p5-h34-actual-nexttable-signed-source-residual-20261109`.
 Verified prior HEAD: `6e2ca04cfa0608a3170c56bc6844a48c53e8294e`.
-This packet's Lean source commit: `49abdb306d43250f8c685adb1e14b10c71240433`.
+This packet's corrected Lean source commit: `1a83a6558a5f93bf2810b034c9ee4480922fefaf` (initial source `49abdb306d43250f8c685adb1e14b10c71240433`).
 New source: `Part5OriginalH430FilteredQPositionCapacityDebt.lean`.
-Source git blob: `b165d3e52fa8145ff69edf4c2580a2ba73176d3f`.
-Source: 202 nonblank-or-terminated diff lines, 3 definitions, 9 candidate theorems.
+Corrected source git blob: `270ae3c8f2451da5de3d5f9d8a23cfe1869fe64a`.
+Source: 204 Git diff added lines, 3 definitions, 9 candidate theorems.
 
 **PARTIAL_SOURCE_INCREMENT / SOURCE_ONLY / UNCOMPILED / UNEVALUATED / FULL_H34_OPEN.**
 
@@ -99,8 +99,8 @@ Candidate theorems:
 
 ## Actual validation boundary
 
-GitHub write result was fetched back: source commit `49abdb3`,
-blob `b165d3e52fa8145ff69edf4c2580a2ba73176d3f`, diff `+202/-0`,
+GitHub write/readback confirmed corrected source commit `1a83a65`,
+blob `270ae3c8f2451da5de3d5f9d8a23cfe1869fe64a`, diff `+204/-0`,
 with exactly one new path relative to `6e2ca04`. Static source
 scan found no `sorry`, `admit`, new `axiom` or `unsafe`.
 These are text and Git object checks only.
