@@ -28,6 +28,7 @@ noncomputable section
 open MeasureTheory
 open scoped Classical BigOperators
 open ImbalancedChen.P3HBSmoothThreeWayRatioTwo
+open ImbalancedChen.P3HBSmoothLogScaleBudget
 open ImbalancedChen.P3HBSmoothLogTensorRestoration
 open ImbalancedChen.P3HBSmoothTensorL1
 open ImbalancedChen.P3HBSmoothTensorQuantitativeL1
