@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBLocalTwoAxisL1
 import ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas
 import ImbalancedChen.P3HBCanonicalTwoAxisQuantitative
 import ImbalancedChen.P3HBCoupledTwoAxisL1
@@ -83,33 +84,34 @@ import ImbalancedChen.P3ActualU8AttachedPhysical
 import ImbalancedChen.P3ActualU8CommonCarrierPP
 import ImbalancedChen.P3ActualU8CompiledDelta
 import ImbalancedChen.P3ActualU8EvenRetainedTreePP
-
-
-
-
 import ImbalancedChen.P3ActualU8RoughDeltaNorm
 import ImbalancedChen.P3ActualU8SmallNormLevel
 import ImbalancedChen.P3ActualU8OriginalFifthPolicyPP
 import ImbalancedChen.P3ActualU8FifthMismatchBudget
-
 import ImbalancedChen.P3ActualU8FirstExitSupportDelta
 import ImbalancedChen.P3ActualU8FirstExitSignedResponse
 import ImbalancedChen.P3ActualU8FirstExitPrimeUnitResponse
 import ImbalancedChen.P3ActualU8PrimeUnitNativeCarrier
 import ImbalancedChen.P3ActualU8ExactTargetResponse
 import ImbalancedChen.P3HBEvenRoughTarget
-
 import ImbalancedChen.P3HBOriginalMarkedFineTarget
 import ImbalancedChen.P3HBExternalEvenMarkedDiagonal
 import ImbalancedChen.P3HBMarkedMobiusFourDiagonal
-
 import ImbalancedChen.P3HBMarkedMobiusSquarefreeDiagonal
-
 import ImbalancedChen.P3HBMarkedMobiusPhysicalDiagonalFactor
 import ImbalancedChen.P3HBGeometryDefectBudget
+import ImbalancedChen.P3HBWeightedOriginalChildrenL1
+import ImbalancedChen.P3HBActualTwoAxisLocalization
+
+
+
+
+
+
+
+
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
-import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
@@ -982,9 +984,16 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.actualTwoAxisMass_integrable_and_L1_of_continuous_jets
 
 -- P3.6 genuine two-axis support localization; SOURCE_ONLY; NOT EXECUTED.
-import ImbalancedChen.P3HBActualTwoAxisLocalization
 #check ImbalancedChen.P3HBActualTwoAxisLocalization.originalHBLogBox
 #check ImbalancedChen.P3HBActualTwoAxisLocalization.actualTwoAxisChild_zero_exterior
 #check ImbalancedChen.P3HBActualTwoAxisLocalization.actualTwoAxisMass_zero_exterior
 #check ImbalancedChen.P3HBActualTwoAxisLocalization.actualTwoAxisMass_zero_outside_box
 #check ImbalancedChen.P3HBActualTwoAxisLocalization.actualTwoAxisMass_eq_box_indicator
+
+-- P3.6 original compact-box LOCAL geometry jet L1; candidate names only.
+-- Source-only, not elaborated and not checked by a kernel.
+#check ImbalancedChen.P3HBLocalTwoAxisL1.localJetEnvelope
+#check ImbalancedChen.P3HBLocalTwoAxisL1.localJetEnvelope_nonneg
+#check ImbalancedChen.P3HBLocalTwoAxisL1.actualTwoAxisMass_le_localJetEnvelope
+#check ImbalancedChen.P3HBLocalTwoAxisL1.localJetEnvelope_integrable
+#check ImbalancedChen.P3HBLocalTwoAxisL1.actualTwoAxisMass_integrable_and_L1_of_local_jets
