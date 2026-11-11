@@ -4,10 +4,11 @@ Date: 2026-11-11.
 Repository: `UyNewNas/goldbach-formalization`.
 Branch: `chatgpt/p5-h34-actual-nexttable-signed-source-residual-20261109`.
 Incoming remote HEAD: `e1e95dc7bfcdaedbc0cd4e87c278743e09d9315e`.
-Mathematical commit: `2d8da2a8322718b8c5e975b1d755c112ae5367bd`.
+Initial mathematical commit: `2d8da2a8322718b8c5e975b1d755c112ae5367bd`.
+Source namespace repair commit: `441fd2c796f8852cc5667613901fa62a40fba19b`.
 Mathematical file: `Part5OriginalH430UnitPositionMassDirection.lean`.
-Read-back source blob: `5ac961edb502126b1b13e8ec3574c6b08dd42f8a`.
-208 new Lean source lines; six candidate theorem declarations, no new definitions/structures.
+Final source blob: `6b185ba3a7a7b35c745af8d19d2fe86819d36b4d`.
+213 new Lean source lines; six candidate theorem declarations, no new definitions/structures.
 
 Pinned manuscript: `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`, mapped source `paper/source/manuscript-body.tex`.
 Pinned Lean: `v4.33.0-rc1`, Mathlib: `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. No manuscript, parameter, norm, target, toolchain, or CI changes.
@@ -39,7 +40,7 @@ It is NOT a bound of the original arithmetic count ABOVE by the desired H430 sel
 
 ## Engineering check and immutable evidence
 
-The branch was read at `e1e95dc7...` before the write. The math commit `2d8da2a...` was read back on the dedicated branch; compare from `e1e95dc7...` returned **ahead by one**, **one added source file** and **+208/-0**, with blob `5ac961e...`. No other task files changed, no main merge/force-push, no production edits.
+The branch was read at `e1e95dc7...` before the write. The initial math commit `2d8da2a...` was read back on the dedicated branch; compare from `e1e95dc7...` returned **ahead by one**, **one added source file** and **+208/-0**, with blob `5ac961e...`. A subsequent namespace-only repair commit `441fd2c...` adds five required `open` declarations for the pinned imported namespaces; final source is **213 lines** with blob `6b185ba...`. This is a static elaboration-risk repair, not an actual Lean diagnostic. No other task files changed, no main merge/force-push, no production edits.
 
 Static content check: forbidden `sorry`, `admit`, `axiom`, `unsafe` tokens absent; parentheses and bracket counts balanced. **These checks are NOT Lean elaboration, compilation, kernel replay, transitive axiom audit, or finite certification.**
 
