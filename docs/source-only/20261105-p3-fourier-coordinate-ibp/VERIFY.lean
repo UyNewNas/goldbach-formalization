@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBCanonicalGeometryDerivative
 import ImbalancedChen.P3HBWeightedAxisLeibniz
 import ImbalancedChen.P3HBSmoothTensorQuantitativeL1
 import ImbalancedChen.P3HBSmoothTensorL1
@@ -948,3 +949,9 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.remainingTensor_raiseOrder
 #check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.axis_expansion
 #check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.firstAxisLeibniz_second_four_terms
+
+-- Canonical physical coordinate D_i/D_j on the SAME original W and HB child.
+-- Registered only, NOT executed by Lean.
+#check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualAxisDeriv
+#check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualAxisDeriv_weightedChild
+#check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualTwoAxisDeriv_weightedChild
