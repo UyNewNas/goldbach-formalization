@@ -937,3 +937,14 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_at
 #check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_hasDerivAt
 #check ImbalancedChen.P3HBWeightedAxisLeibniz.coupledAxis_derivative_norm_le
+
+-- Genuine two-axis original coupled HB/W Leibniz candidate; NOT LEAN EXECUTED.
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.raiseOrder
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.remainingTensor_update_axis
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.coupledAxis_eq_weighted_slice
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.firstAxisLeibniz
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.firstAxisLeibniz_slice_eq
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.firstAxisLeibniz_second_hasDerivAt
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.remainingTensor_raiseOrder
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.axis_expansion
+#check ImbalancedChen.P3HBWeightedTwoAxisLeibniz.firstAxisLeibniz_second_four_terms
