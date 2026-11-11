@@ -129,13 +129,24 @@ theorem finite_cap5_le_initial_ceiling
   let d := P4AOriginalCompleteSixthChronology.data e q om
   have hd : (0 : ℝ) ≤ (d.e : ℝ) := he
   have hs := originalSeed_le_initial_ceiling d hd N pre
-  have he5 := exponent5_le_initial_ceiling d hd N pre
   have hr : (rounded n (P5OriginalCommonRefinedConstructor.exponent5 d N pre) : ℝ) ≤
       (299 / 500 : ℝ) := by
-    have hmono := rounded_mono n he5
-    have hbase := (rounded_error n VariableEnvelope.cap
-      (by norm_num [VariableEnvelope.cap]) le_rfl).2.2
-    exact hmono.trans (hbase.trans (by norm_num [VariableEnvelope.cap]))
+    have hc := P1GuardFrozenFiniteCapAlgebra.clamp_bounds
+      (P5OriginalCommonRefinedConstructor.exponent5 d N pre)
+    have herr := P4AOriginalFull87FiniteEighthCap.downCap_error n
+      (P1GuardFrozenFiniteCapAlgebra.clamp
+        (P5OriginalCommonRefinedConstructor.exponent5 d N pre))
+    have hw := width_pos n
+    unfold rounded
+    rw [Rat.cast_max, Rat.cast_zero]
+    apply max_le
+    · norm_num
+    · have hb : P1GuardFrozenFiniteCapAlgebra.clamp
+          (P5OriginalCommonRefinedConstructor.exponent5 d N pre) ≤
+          VariableEnvelope.cap := hc.2
+      linarith [herr.2]
+      -- The source-independent clamp is only a numerical rounding device.
+      -- The ORIGINAL fifth action eligibility above remains unchanged.
   rw [cap5_eq_protect]
   change max (originalSeed d N pre)
     ((rounded n (P5OriginalCommonRefinedConstructor.exponent5 d N pre) : ℝ)) ≤ _
