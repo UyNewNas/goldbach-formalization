@@ -170,17 +170,20 @@ private theorem physical_hyperbola_rounded_ratio_le
       ring
     _ = _ := by rw [Real.rpow_sub hNpos, Real.rpow_one]
 
-/-- The full arithmetic correction is now unconditionally negligible for
-the literal attached coefficient and actual smooth family. No polynomial
-range, source mean, coprime-zero, density or signed PP input occurs. -/
-theorem eventually_actual_compact_smooth_correction_le
+/-- A common target threshold precedes every legal attachment precision,
+retention policy and enumeration cap. The finite supplier has a constant
+independent of these objects; hence they may be selected after the target.
+The compact real-b family stays fixed. This is not a noncompact-family or
+full hUpper theorem, and supplies no density or signed PP premise. -/
+theorem eventually_actual_compact_smooth_correction_le_uniform_policy
     {b0 b1 kappa kappaZero theta precision widthMax : ℝ}
     (F : ActualCompactSmoothFamily b0 b1 kappa kappaZero theta precision widthMax)
-    (htheta : 0 < theta) (nu r epsilon : ℝ) (hnu : 0 < nu) (hr : 0 < r)
-    (hepsilon : epsilon ^ 2 ≤ r)
-    (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ)
+    (htheta : 0 < theta) (nu r : ℝ) (hnu : 0 < nu) (hr : 0 < r)
     (tolerance : ℝ) (htolerance : 0 < tolerance) :
-    ∀ᶠ N : ℕ in atTop, Even N → ∀ b : ℝ, b0 ≤ b → b ≤ b1 →
+    ∀ᶠ N : ℕ in atTop, Even N →
+      ∀ epsilon : ℝ, epsilon ^ 2 ≤ r →
+      ∀ (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ),
+      ∀ b : ℝ, b0 ≤ b → b ≤ b1 →
       |actualSmoothOuterCorrection b kappa F.width nu r epsilon retain cap N| ≤
         tolerance * singularNormalization N := by
   obtain ⟨C, hC, hfinite⟩ := exists_actual_upper_outer_hyperbola_bound
@@ -191,7 +194,7 @@ theorem eventually_actual_compact_smooth_correction_le
   filter_upwards [hlarge, eventually_ge_atTop (2 : ℕ),
     eventually_powerLog_le_singularNormalization c (1 - theta) 1
       (by linarith only [htheta]) tolerance htolerance] with N hH hN hbudget
-  intro hEven b hb0 hb1
+  intro hEven epsilon hepsilon retain cap b hb0 hb1
   let L : ℕ := Nat.floor ((N : ℝ) ^ theta)
   let K : ℕ := Nat.ceil (Real.exp F.width * (N : ℝ))
   have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
@@ -252,6 +255,24 @@ theorem eventually_actual_compact_smooth_correction_le
       rw [pow_one]
       ring
     _ ≤ _ := hbudget
+
+
+/-- The full arithmetic correction is now unconditionally negligible for
+the literal attached coefficient and actual smooth family. No polynomial
+range, source mean, coprime-zero, density or signed PP input occurs. -/
+theorem eventually_actual_compact_smooth_correction_le
+    {b0 b1 kappa kappaZero theta precision widthMax : ℝ}
+    (F : ActualCompactSmoothFamily b0 b1 kappa kappaZero theta precision widthMax)
+    (htheta : 0 < theta) (nu r epsilon : ℝ) (hnu : 0 < nu) (hr : 0 < r)
+    (hepsilon : epsilon ^ 2 ≤ r)
+    (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ)
+    (tolerance : ℝ) (htolerance : 0 < tolerance) :
+    ∀ᶠ N : ℕ in atTop, Even N → ∀ b : ℝ, b0 ≤ b → b ≤ b1 →
+      |actualSmoothOuterCorrection b kappa F.width nu r epsilon retain cap N| ≤
+        tolerance * singularNormalization N := by
+  filter_upwards [eventually_actual_compact_smooth_correction_le_uniform_policy
+    F htheta nu r hnu hr tolerance htolerance] with N hN
+  exact fun hEven => hN hEven epsilon hepsilon retain cap
 
 end
 end ImbalancedChen.P4BRangeFreeActualCorrection
