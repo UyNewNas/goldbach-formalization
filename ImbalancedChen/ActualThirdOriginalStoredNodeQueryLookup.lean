@@ -82,7 +82,7 @@ theorem checked_reader_state_characterization (read : ℕ → OriginalNode)
           simpa only [if_pos (show j ≤ k by omega)] using ih' j
         change (if k+1=k+1 then originalNodeUpdate (k+1) (literalNodeState k)
           else literalNodeState k (k+1)) = if k+1 ≤ k+1 then read (k+1) else initialNode
-        simpa only [if_pos (Nat.le_refl (k+1)), if_pos rfl] using hc.trans hlocal.symm
+        simpa only [if_pos (Nat.le_refl (k+1)), if_pos rfl, ite_true] using hc.trans hlocal.symm
       · have hold : literalNodeState (k+1) i=literalNodeState k i := by
           simp only [literalNodeState,if_neg he]
         rw [hold,ih' i]
@@ -164,5 +164,6 @@ theorem CheckedBlockTable.compact_query_encloses (T : CheckedBlockTable)
   exact literal_compact_query_160bit_encloses a b hb ha2 ha12
 
 end ImbalancedChen.OriginalU2StoredQueryLookupSourceOnly
+
 
 

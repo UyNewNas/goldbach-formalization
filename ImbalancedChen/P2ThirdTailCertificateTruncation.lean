@@ -99,7 +99,9 @@ theorem compact_disjoint_strictTail (h : ℝ) :
     Disjoint (compactRegion h) (strictTailRegion h) := by
   apply Set.disjoint_left.mpr
   intro t hc ht
-  exact not_lt_of_ge hc.2 ht.2
+  have hge : h ≤ t 2 := hc.2
+  have hlt : t 2 < h := ht.2
+  exact not_lt_of_ge hge hlt
 
 /-- Exact compact plus strict-tail decomposition of the original full integral.
 There are no assumed numerical, integrability, or endpoint hypotheses. -/
@@ -219,13 +221,12 @@ obligation, including the original z=1/100 boundary convention. -/
 theorem compactIntegral_at_original_cutoff :
     compactIntegral (1 / 100) =
       OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection := by
-  exact OriginalThirdCompactEndpointSourceOnly.
-    originalCompactThirdCorrection_eq_literal_closed_compact.symm
+  exact OriginalThirdCompactEndpointSourceOnly.originalCompactThirdCorrection_eq_literal_closed_compact.symm
 
 private theorem sum_leaf_bounds
     {cells : List (Set Point)} {upper : List ℚ}
     (h : List.Forall₂
-      (fun c q => (∫ t in c, originalKernel t) ≤ (q : ℝ)) cells upper) :
+      (fun c (q : ℚ) => (∫ t in c, originalKernel t) ≤ (q : ℝ)) cells upper) :
     (cells.map (fun c => ∫ t in c, originalKernel t)).sum ≤
       (upper.map (fun q : ℚ => (q : ℝ))).sum := by
   induction h with
@@ -240,7 +241,7 @@ theorem fullIntegral_le_closedTree_certificate
     (tree : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree)
     (upper : List ℚ)
     (hleaf : List.Forall₂
-      (fun c q => (∫ t in c, originalKernel t) ≤ (q : ℝ))
+      (fun c (q : ℚ) => (∫ t in c, originalKernel t) ≤ (q : ℝ))
       (OriginalThirdCompactPartitionSourceOnly.closedLeaves tree
         OriginalThirdCompactPartitionSourceOnly.compactRegion) upper) :
     actualExtendedThirdIdealFunctional ≤
@@ -248,8 +249,7 @@ theorem fullIntegral_le_closedTree_certificate
         OriginalThirdTailActualIdealSourceOnly.Tnew := by
   have hcompact := sum_leaf_bounds hleaf
   have hbase := OriginalThirdFiniteReserveSourceOnly.idealFunctional_le_compact_add_Tnew
-  rw [OriginalThirdCompactPartitionSourceOnly.
-    originalCompactThirdCorrection_eq_sum_closedLeaves tree] at hbase
+  rw [OriginalThirdCompactPartitionSourceOnly.originalCompactThirdCorrection_eq_sum_closedLeaves tree] at hbase
   change actualExtendedThirdIdealFunctional ≤
     (upper.map (fun q : ℚ => (q : ℝ))).sum +
       (319683857488126290909150567 / 2^111 : ℝ)
@@ -263,4 +263,5 @@ theorem fullIntegral_le_closedTree_certificate
 
 end
 end ImbalancedChen.P2ThirdTailCertificateTruncation
+
 

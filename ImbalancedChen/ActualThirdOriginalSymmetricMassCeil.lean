@@ -112,6 +112,7 @@ theorem literal_symmetric_mass_encloses
         (((4*(48000*2^24 : ℤ)*(z1-z0) : ℤ) : ℝ)/((z0*z1 : ℤ) : ℝ)))/2 =
           prismMass (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ) := by
     rw [symmetric_mass_formula, hfactor, pow_two]
+  norm_num only [Nat.cast_ofNat] at hraw
   rw [heq] at hraw
   exact hraw
 
@@ -179,3 +180,4 @@ theorem original_stored_symmetric_leaf_integer_upper
 
 end
 end ImbalancedChen.OriginalThirdSymmetricMassCeilSourceOnly
+
