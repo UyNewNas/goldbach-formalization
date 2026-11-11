@@ -111,9 +111,11 @@ theorem actual_filtered_q_capacity_le_full_frontier
         Finset (Fin (actualPhysicalRankTwoList N cap z0 Q lower).length)) :=
     Finset.subset_univ _
   have hcard := Finset.card_le_card hsubset
-  exact_mod_cast (by simpa using hcard : 
-    (keptPositions N cap z0 Q lower (keep Q)).card ≤
-      (actualPhysicalRankTwoList N cap z0 Q lower).length)
+  have hle :
+      (keptPositions N cap z0 Q lower (keep Q)).card ≤
+      (actualPhysicalRankTwoList N cap z0 Q lower).length := by
+    simpa using hcard
+  exact_mod_cast hle
 
 /-- ORIGINAL unit-weight tagged q source, with U4 overlapping tags
 both retained: exact kept physical slots + erased slots + SIX
