@@ -5,6 +5,12 @@ New independent branch: chatgpt/p1-full87-sharp-hn-log4-20261111
 New packet: docs/source-only/20261111-full87-sharp-hn-log4/
 Candidate: P4AOriginalFull87SharpFrozenLog4.lean
 
+Additional candidate: P4AOriginalFull87LiveSharpFactors.lean,
+which proves ORIGINAL live nonzero delta-rho factorization into a*b
+for the actual active sixth/eighth policy, preserving the real a<L and
+nonzero rough weight. The displayed carrier is not automatically the
+sharp PP support. This does not supply q<=N^theta.
+
 Actual result: conditional but nontrivial pointwise H_N normalization of
 the original sixth-minus-eighth receiver sharp-prime invoice with two
 independent permitted fixed-A=4 PP numerical errors. Uses the actual
