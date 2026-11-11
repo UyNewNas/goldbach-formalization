@@ -2,7 +2,7 @@
 import hashlib, json, os, pathlib, re, sys
 root=pathlib.Path(os.environ['PROJECT']); logs=pathlib.Path(os.environ['LOGS'])
 mode=sys.argv[1]
-targets=['ImbalancedChen.P4AOriginalFiniteFifthCompactProfile']
+targets=['ImbalancedChen.Certificates.P2ThirdZeroGeometry','ImbalancedChen.Certificates.P2HybridThirdChargeLedger']
 def imports(text):
     # Lean nested block comments must not create phantom imports.
     text=re.sub(r'--[^\n]*','',text)
@@ -58,5 +58,5 @@ elif mode=='verify':
     assert all(not(d['is_unsafe'] or d['is_partial'] or d['is_axiom']) and set(d['axioms'])<={'propext','Classical.choice','Quot.sound'} and all(d[k].strip() and '⋯' not in d[k] for k in ['type','readable_type']) for d in ds)
     replay=[x.removeprefix('replaying ') for x in (logs/'batch-checker.log').read_text().splitlines() if x.startswith('replaying ')]
     assert len(replay)==len(modules) and set(replay)==set(modules)
-    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_EXACT_CANDIDATE_CLOSURE_ONLY','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':os.environ['SOURCE_COMMIT'],'whole_p4_accepted':False,'proof_artifact_hash':digest(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
+    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_EXACT_CANDIDATE_CLOSURE_ONLY','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':os.environ['SOURCE_COMMIT'],'whole_p2_accepted':False,'proof_artifact_hash':digest(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
 else:raise SystemExit('bad mode')
