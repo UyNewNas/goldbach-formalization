@@ -103,6 +103,7 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 import ImbalancedChen.P3HBActualTwoAxisLocalization
 import ImbalancedChen.P3HBCompactLocalJetBounds
+import ImbalancedChen.P3HBOriginalGroupDyadicScale
 
 
 
@@ -1007,3 +1008,14 @@ import ImbalancedChen.P3HBCompactLocalJetBounds
 #check ImbalancedChen.P3HBCompactLocalJetBounds.continuousJet_exists_local_bound
 #check ImbalancedChen.P3HBCompactLocalJetBounds.actualTwoAxis_exists_local_jet_bounds
 #check ImbalancedChen.P3HBCompactLocalJetBounds.actualTwoAxisMass_exists_integrable_L1_bound
+
+-- True positive-scale original grouped dyadic psi(c exp(sum_J z_i)).
+-- Finite scalar Euler derivatives and shifted support: SOURCE_ONLY, not checked.
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.groupDyadicLogProfile
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.groupDyadicLogProfile_eq_translate
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.groupDyadicLogProfile_iteratedDeriv_translate
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.baseDyadicLogProfile_iteratedDeriv_children
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.originalGroupDyadicFactor
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.originalGroupDyadicFactor_eq_translate
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.groupDyadicLogProfile_uniform_scale_derivatives
+#check ImbalancedChen.P3HBOriginalGroupDyadicScale.groupDyadicLogProfile_derivative_zero_outside
