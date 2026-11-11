@@ -1,5 +1,5 @@
 # Requeue after excluding unrelated push workflows from this isolated branch.
-name: P2 exact candidate closure validation
+name: P4 compact profile exact closure validation
 on:
   push:
     branches: [ci/resume-compile-repairs-20261111]
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
-      SOURCE_COMMIT: 58e36e0a0ece9c5e9a869294fb87bcaf92ff7441
+      SOURCE_COMMIT: 74cc368ce01532d78b62f064b11979c01e26266b
       EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
       CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
       LEAN_NUM_THREADS: 2
@@ -50,21 +50,24 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: 58e36e0a0ece9c5e9a869294fb87bcaf92ff7441
+          ref: 74cc368ce01532d78b62f064b11979c01e26266b
           path: candidate
           persist-credentials: false
       - name: Bind exact candidate source and unchanged pins
         id: materialize
         run: |
           set -euo pipefail
-          PROJECT="$GITHUB_WORKSPACE/candidate"
+          SOURCE="$GITHUB_WORKSPACE/candidate"
+          PROJECT="$RUNNER_TEMP/p4-profile-project"
           LOGS="$RUNNER_TEMP/t01-evidence"
-          test "$(git -C "$PROJECT" rev-parse HEAD)" = "$SOURCE_COMMIT"
+          test "$(git -C "$SOURCE" rev-parse HEAD)" = "$SOURCE_COMMIT"
+          python3 verification/parts/p0/stage_p4.py --source "$SOURCE" --manifest verification/parts/p0/p4-profile-manifest.json --dest "$PROJECT"
           cmp "$PROJECT/lean-toolchain" lean-toolchain
           cmp "$PROJECT/lake-manifest.json" lake-manifest.json
           mkdir -p "$LOGS"
+          cp "$PROJECT/P4_STAGE_RECEIPT.json" "$LOGS/"
           printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
-          git -C "$PROJECT" ls-tree -r HEAD > "$LOGS/source-tree.txt"
+          git -C "$SOURCE" ls-tree -r HEAD > "$LOGS/source-tree.txt"
       - name: Check out pinned existing lean-action scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -107,7 +110,7 @@ jobs:
           PY
       - name: Prepare full local import closure and declaration audit
         run: python3 verification/parts/p0/prepare_candidate_validation.py prepare
-      - name: Compile exact P2 candidate and entire local closure
+      - name: Compile exact P4 compact profile and entire local closure
         timeout-minutes: 200
         run: |
           set -euo pipefail
@@ -139,7 +142,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: p2-58e36e0-closure-${{ github.run_id }}
+          name: p4-74cc368-profile-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: error
           retention-days: 30
