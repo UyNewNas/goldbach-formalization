@@ -13,3 +13,5 @@ VALIDATION: read pinned actual prior Lean source, centre fibre, mathlib APIs and
 NEXT SPECIFIC ACTION: restore fixed Lean 4 v4.33.0-rc1 + mathlib e4c91783... + native 09b97... already present only if available; typecheck the source using a correctly located `ImbalancedChen/P4AOriginalFull87CentreSqrtEnvelope.lean` module plus its prior source-only import closure. Fix actual errors. Then prove the frozen real `H_N` normalization asymptotic with the manuscript definition rather than free hypotheses. Independently license the two old/new signed PP smooth and support conditions.
 
 No axiom/sorry/admit/native_decide/unsafe, no extra CI/Codex, no changes to main/master, no forced push.
+
+Last local execution check: lean/lake/elan --version each exit 127; 999 even N in [4,2000] satisfied the arithmetic sqrt/log envelope in independent Python enumeration (not Lean validation). GitHub readback confirmed five files. Source still UNCOMPILED.

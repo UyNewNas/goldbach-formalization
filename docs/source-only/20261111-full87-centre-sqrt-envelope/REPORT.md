@@ -39,3 +39,9 @@ Pinned mathlib source inspected for `Nat.lt_succ_sqrt`, `Nat.sqrt_le_sqrt`, `Nat
 - Ordinary continuation asymptotic to actual parent residual integral, weighted parent gap, saved87 witness replay, lower/upper q, raw/finite/filtered, rank9, changed/tagged and TWO independent compiler/density reserves.
 
 P1.4 parent remains YELLOW.
+
+## Post-commit actual checks (2026-11-11)
+
+- Local commands `lean --version`, `lake --version`, `elan --version`: each exit code 127 (`command not found`). `.lake/packages/mathlib` and `.lake/packages/goldbach-lean` absent. No local compilation was possible.
+- Independently enumerated the unweighted coprime divisor invoice for every even N from 4 through 2000 (999 N), using Python integer divisibility and `math.isqrt` / `math.log2`. All 999 satisfied `2*sum_{P|N prime} #{d|N-P:(d,N)=1} <= 4*(isqrt(N)+2)*floor(log2(N))`; zero failures. These are finite synthetic integer checks, NOT source-level Lean elaboration, saved87 data replay or asymptotic proof.
+- Remote GitHub readback after the source commit confirmed the five packet file blobs and their exact registration; no compiler/kernel/axiom status was promoted.
