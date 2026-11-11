@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBSmoothLogTensorRestoration
 import ImbalancedChen.P3HBLogDerivativeGlobalSupport
 import ImbalancedChen.P3HBSmoothLogFiniteDerivatives
 import ImbalancedChen.P3HBSmoothLogScaleBudget
@@ -896,3 +897,10 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBLogDerivativeGlobalSupport.logChild_uniform_global_finite_order
 #check ImbalancedChen.P3HBLogDerivativeGlobalSupport.smoothCoord_log_uniform_global_finite_order
 
+-- P3.6 original HB 3^6 child derivative restoration; UNEXECUTED
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.logChild_iteratedDeriv_sum
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.scaledTensorMixed_eq_logTensorMixed
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.logTensorMixed_children_sum
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.scaledTensorMixed_children_sum
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.logTensorMixed_zero_exterior_coordinate
+#check ImbalancedChen.P3HBSmoothLogTensorRestoration.logTensorMixed_absolute_children_budget
