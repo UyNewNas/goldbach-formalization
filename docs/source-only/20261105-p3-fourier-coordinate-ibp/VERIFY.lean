@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBSmoothTensorQuantitativeL1
 import ImbalancedChen.P3HBSmoothTensorL1
 import ImbalancedChen.P3HBSmoothLogTensorRestoration
 import ImbalancedChen.P3HBLogDerivativeGlobalSupport
@@ -913,3 +914,11 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBSmoothTensorL1.all_logTensorMixed_children_norm_integrable
 #check ImbalancedChen.P3HBSmoothTensorL1.all_logTensorMixed_children_norm_integral_eq
 #check ImbalancedChen.P3HBSmoothTensorL1.all_scaledTensorMixed_children_norm_integral_eq
+
+-- P3.6 quantitative original HB log-tensor L1 upper bounds, SOURCE_ONLY.
+-- Registered names ONLY. No #check below has been run with Lean.
+#check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.logChild_derivative_L1_le
+#check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.logTensorMixed_L1_le
+#check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.all_logTensorMixed_children_L1_le
+#check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.all_scaledTensorMixed_children_L1_le
+#check ImbalancedChen.P3HBSmoothTensorQuantitativeL1.exists_all_scaledTensorMixed_children_L1_bound
