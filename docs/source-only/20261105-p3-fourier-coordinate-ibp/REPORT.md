@@ -2623,3 +2623,5 @@ P3.6 YELLOW. New bounded-W zero-order source candidate BLUE ONLY. No GREEN.
 - **Next exact entry:** fixed-toolchain isolated compilation and repair; then exploit this compact support to derive finite local genuine geometry jet suprema from actual W_T/U5/trim and their common T,m(N)-uniform quantitative envelopes. Continue full 2S differentiated L1, H-box and same-rho complete arithmetic, including b=T.
 
 **P3.6 YELLOW; this support-localization candidate BLUE SOURCE_ONLY; NO GREEN.**
+
+- **Readback of real GitHub proof commit:** `d2dcf18b9a07ebb33cfb3d0aa8ea686a4f81838e` (`[skip ci]`), original source Git blob `7a35e667cc23fa3ed39fca4c0b7c10511367d296`, `VERIFY.lean` blob `23e27cfd50eef5f091c8af0dfdc21a906d55b22f`. Remote branch compare from `d18bad7`: ahead 1, behind 0, exactly 4 files in this isolated task folder. This follow-up commits only provenance/hand-off metadata and does not claim compilation.
