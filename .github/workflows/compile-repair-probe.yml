@@ -100,7 +100,7 @@ jobs:
           for k in range(64):
               off = 64*k
               chunks.append(f"private theorem source_index_chunk_{k} : ∀ j : Fin 64, (rows[{off} + j.val]'(by rw [rows_size]; have := j.isLt; omega)).sourceIndex = {off} + j.val := by\n  decide +kernel\n")
-          proof = ["theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = 0 + j.val := by", "  intro j", "  have hj := j.isLt", "  rw [rows_size] at hj"]
+          proof = ["theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = 0 + j.val := by", "  intro j", "  have hj := j.isLt", "  change j.val < 4096 at hj"]
           for k in range(64):
               if k < 63:
                   proof.append(f"  by_cases h{k} : j.val < {64*(k+1)}")
