@@ -1,0 +1,11 @@
+# Durable P1.4 handoff — actual rank-eight physical prefix
+
+Task successor branch: `chatgpt/p1-full87-real-rank8-prefix-bound-20261112`. Parent HEAD checked and unchanged before branching: `c0ee142fe551ea8d36da6bbe6f65a12a0899e490`. Source commit `58b17a2e40c7d95a58bd5ae4eb0ca1be7ed0df75`. Exact source path `docs/source-only/20261112-full87-real-rank8-prefix-bound/P4AOriginalFull87RankEightPrefixLevel.lean`; Git blob `8e845a8446a4949536df4f2cb2881fc3c976d404`. Read LIVE branch HEAD and REGISTRY before the next run; old navigation SHA 9649ab3 is not a reset point. All work isolated from other tasks.
+
+**New candidate**: strictly bound the ACTUAL retained rank-eight state selected rough prefix by `N^(299/500)`. Proof uses the actual policy's same rank-eight frontier, genuine sixth-ancestor Rosser admission (including seventh odd test) and inherited fifth/third-inactive sixth scalar bound. Fixed prefix factor `a` gives a conditional `a*prefix < N^theta` if `a<L`, `L*N^(.598)≤N^theta`. Neither is a post-eight terminal bound; do not label full q PP-admissible.
+
+**Next source reading**: `ImbalancedChen/P4AActualSixthFrozenEighthAdmission.lean` (step validity); `docs/source-only/20261104-full87-licensed-sixth/P4AOriginalFull87LicensedSixthPolicy.lean` (literal `selectedCap` / inherited fallback); `docs/source-only/20261107-full87-retained-terminal-ceiling/P4AOriginalFull87RetainedTerminalCeiling.lean` (terminal recursion only, no actual bound); original `FirstExitTree.lean`; `docs/source-only/20261112-full87-whole-sixth-ceiling/P4AOriginalFull87WholeSixthCeiling.lean`. Establish true descendant admission and final terminal product for each actual branch. Then attach actual small Rosser factor and one fixed theta<1.
+
+**Verification**: only GitHub source+manuscript read, static prohibited-word check. `lean --version`, `lake --version`, `elan --version` all exit 127; `.lake/packages` absent. Imports pointing at prior source-only modules require correct path staging. UNCOMPILED/UNEVALUATED, no kernel/axiom audit, original87 replay or independent review. No CI/Codex/new axiom/upgrade or branch merge.
+
+Frozen manuscript 9731290e, blob d529bea2; Lean v4.33.0-rc1, mathlib e4c91783, native 09b97db, c/K unchanged. External manuscript §4 PP REGISTERED_NOT_PROVED_NOT_CALLED; no reserve payment or P1.4 closure.
