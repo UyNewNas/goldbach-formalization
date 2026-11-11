@@ -43,3 +43,10 @@ This removes the **unnecessary unchanged branches from the primitive AP discrepa
 5. Stage exact imported source modules and run the fixed Lean kernel. Kernel replay, axiom audit and independent review stay separate.
 
 P1.4 remains **YELLOW**; external §4 PP is **REGISTERED_NOT_PROVED / NOT_CALLED**.
+
+## Follow-up actual receiver-density insertion (second source file)
+A new standalone Lean candidate `P4AOriginalFull87ReceiverLocalizedBudget.lean`, Git blob `43641f89b241bb9a3686e27cb753bca3629be588`, reuses the **already established exact finite receiver decomposition**, not a separate sieve bound:
+`gain(receiverTest N) = primeMass N * gain(densityTest) + gain(primitiveError N) - gain(modulusPrimeTerm N) - gain(chenCentrePrimeAPCount N N)`.
+It substitutes the genuine `full87_primitive_owned_budget` only for the absolute primitive-discrepancy component, leaving modulus-prime and centre-prime corrections as **two distinct** existing `absoluteGainBudget` terms. `full87_receiver_density_with_owned_primitive` proves this physical receiver-density-error bound without a new external assumption or a double payment.
+
+**Numerical ordering caveat:** This localization removes *unchanged branch support* from the primitive bill but does NOT prove its numerical RHS is always <= the previous global `absoluteGainBudget(primitiveError)`. Absolute values before/after cancellations may alter that comparison. It is a better specified actual PP call-site, not yet a proven smaller scalar or a reserve debit. Like the first file, the second is uncompiled; source and all proof terms remain UNEVALUATED.
