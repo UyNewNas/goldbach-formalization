@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBSmoothTensorL1
 import ImbalancedChen.P3HBSmoothLogTensorRestoration
 import ImbalancedChen.P3HBLogDerivativeGlobalSupport
 import ImbalancedChen.P3HBSmoothLogFiniteDerivatives
@@ -904,3 +905,11 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBSmoothLogTensorRestoration.scaledTensorMixed_children_sum
 #check ImbalancedChen.P3HBSmoothLogTensorRestoration.logTensorMixed_zero_exterior_coordinate
 #check ImbalancedChen.P3HBSmoothLogTensorRestoration.logTensorMixed_absolute_children_budget
+
+-- P3.6 exact six-axis original HB child L1/Fubini; SOURCE_ONLY, #checks NOT EXECUTED.
+#check ImbalancedChen.P3HBSmoothTensorL1.logChild_derivative_integrable
+#check ImbalancedChen.P3HBSmoothTensorL1.logTensorMixed_norm_integrable
+#check ImbalancedChen.P3HBSmoothTensorL1.logTensorMixed_norm_integral_eq_prod
+#check ImbalancedChen.P3HBSmoothTensorL1.all_logTensorMixed_children_norm_integrable
+#check ImbalancedChen.P3HBSmoothTensorL1.all_logTensorMixed_children_norm_integral_eq
+#check ImbalancedChen.P3HBSmoothTensorL1.all_scaledTensorMixed_children_norm_integral_eq
