@@ -20,7 +20,7 @@ namespace ImbalancedChen.P4AOriginalFull87SignedParentInvoice
 noncomputable section
 open scoped Classical BigOperators
 open P1Pair12RetainedSignedSource
-open P4AOriginalFull87SourceDictionary (Cell comparison total product)
+open P4AOriginalFull87SourceDictionary (Cell comparison)
 open P4AOriginalFull87StrictActionTrim (trim)
 open P4AOriginalFull87SourceDispatch (point8)
 open P4AOriginalFull87FiniteEighthCap (finiteCap)
@@ -32,7 +32,7 @@ open P4AOriginalFull87LicensedSixthRealization (states)
 open P4AOriginalFull87ActualCommonHistory (RealizedHistory)
 open P4AOriginalFull87EighthKernelIntegration
   (actualParent actual_eighth_kernel_transport)
-open P4AOriginalFull87EighthKernelControl (residual cutoff)
+open P4AOriginalFull87EighthKernelControl (residual cutoff total product)
 open P4AOriginalFull87ActualParentResidualGap (realized_parent_gap_budget)
 open P4AOriginalFull87AllOwnedRealizedHistory
   (exists_shared_history_for_all_owned_eighth_states)
