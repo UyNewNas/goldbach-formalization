@@ -91,3 +91,13 @@ causal histories and effective stage-two erasure payment. Compile the
 direct new module and imports once the pinned environment is restored.
 
 **Complete h34 manuscript-internal proof remains OPEN.**
+
+## Actual submission and readback
+
+Source-only mathematics commit: 095cf972854f24ae9f8bc0340ab672efc2cc03c7.
+Source Git blob: 1b75249db5fac9bbd8ca3ef910354f9ef19a052e.
+Verified compare from 0c6afbfc76f0d90316ea42ed55f416ed7012f0bb:
+forward-only one commit, 4 newly added h34-specific files (+364/-0),
+including 179 actual Lean lines, 2 definitions and 7 theorem proof bodies.
+The complete source text, blob and remote branch HEAD were read back.
+This is Git persistence only, NOT compilation/kernel verification.
