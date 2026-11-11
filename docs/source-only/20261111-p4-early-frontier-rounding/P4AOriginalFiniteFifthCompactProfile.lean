@@ -26,7 +26,7 @@ theorem profile_eq_lowerFactor {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)
         t (Fin.last k) := by
   unfold primeTupleMinusProfile actualExtendedThirdLowerFactor thirdTailLowerFactor
   rw [Real.exp_neg]
-  field_simp [hz.ne', (Real.exp_pos Real.eulerMascheroniConstant).ne'] <;> ring
+  field_simp [hz.ne', (Real.exp_pos Real.eulerMascheroniConstant).ne']; ring
 
 /-- The continuous limiting profile retains the exact strict gate, including equality. -/
 theorem gatedProfile_eq {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)
@@ -45,6 +45,7 @@ theorem gatedProfile_eq {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)
 theorem gatedProfile_mono {k : ℕ} (t : Fin (k + 1) → ℝ)
     (hz : 0 < t (Fin.last k)) : Monotone (fun lam : ℝ => gatedProfile lam t) := by
   intro a b hab
+  change gatedProfile a t ≤ gatedProfile b t
   rw [gatedProfile_eq a t hz, gatedProfile_eq b t hz,
     profile_eq_lowerFactor a t hz, profile_eq_lowerFactor b t hz]
   apply div_le_div_of_nonneg_right _ hz.le
