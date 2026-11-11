@@ -1,0 +1,11 @@
+# P1.4 persistent handoff — exact inner-box measure to same original Source integral
+
+Latest work on isolated branch `chatgpt/p1-full87-box-volume-integral-20261110`; starting immutable HEAD `be2efd01c561080672e6c0ad0ba21638837afe4c`. New Lean source commit `8a8f53b637b26fca5b016fa17bee8d29e7b1a131`, file `docs/source-only/20261110-full87-box-volume-integral/P4AOriginalFull87BoxVolumeIntegral.lean`, blob `5e347cb851489186552221f3704ee9ed57cceaf7`. **Resolve live branch HEAD anew** because report/handoff/registry commits follow source commit; do not reset to historical navigation SHA.
+
+New exact target: same original source set and original eighth kernel. Existing all87 original box lower `q=(4/(9*mu^10))*(1/125000)`; new actual eight-dimensional Lebesgue open box volume `(2/1e8)^8`; candidate source integral lower `q*(2/1e8)^8` for all 87 cells. Three mathematical operations: original box `Set.pi` identity, pinned mathlib real Lebesgue measure, integrable kernel monotonicity on box/source. No numerical saved87 certificate, external asymptotic or physical occurrence is claimed. Rational floor ≈1.1268005e-60, far too small to stand in for signed archive saving.
+
+Pinned mathlib `Real.volume_pi_Ioo_toReal` was actually read at `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Lean/lake/elan absent (exit 127). This is SOURCE_ONLY / UNEVALUATED / UNCOMPILED; explicit candidate may have type/elaboration problems. No CI/Codex/upgrade/resource expansion.
+
+Manuscript immutable `9731290e8f53cffda44129906cde6a965eaa869b`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; fixed Lean v4.33.0-rc1, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`, c=49044063/25000000, K=8452171/1250000. External §4 PP REGISTERED_NOT_PROVED / NOT_CALLED.
+
+Continue: first verify actual branch HEAD, REPORT/REGISTRY/INPUT_BOUNDARY, full source, applicable AGENTS, manuscript pin, compiler availability. If compiler exists, stage imports and type-check. Otherwise focus on authentic saved87 witness recovery and same-actual-parent physical signed occurrence connection; no more redundant geometry positivity helpers. Keep separate reserve invoices and same rho/H_N. P1.4 remains YELLOW.
