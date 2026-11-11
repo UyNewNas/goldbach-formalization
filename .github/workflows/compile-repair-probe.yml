@@ -1,0 +1,139 @@
+name: Compile repair probe P4 sum and P5 stored block
+on:
+  push:
+    branches: [ci/resume-compile-repairs-20261111]
+    paths: [.github/workflows/compile-repair-probe.yml]
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact published 40-character source commit
+        required: true
+        type: string
+      manifest_sha256:
+        description: Independently reviewed exact manifest SHA256
+        required: true
+        type: string
+      purpose:
+        description: Source gate; green still requires independent expanded-type acceptance
+        required: true
+        default: yellow_green
+        type: choice
+        options: [source_validation, yellow_green]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  fifth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: ${{ inputs.source_commit || github.sha }}
+      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
+      CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
+      LEAN_NUM_THREADS: 2
+      T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Validate immutable source identity
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_MANIFEST" =~ ^[0-9a-f]{64}$ ]]
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.source_commit || github.sha }}
+          persist-credentials: false
+      - name: Materialize exact fifth target, original binary and frozen review pins
+        id: materialize
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
+          PROJECT="$RUNNER_TEMP/t01-project"
+          LOGS="$RUNNER_TEMP/t01-evidence"
+          mkdir -p "$LOGS"
+          printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
+          python3 "$T01/stage_project_v3.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
+          cp "$PROJECT/T01_PROVENANCE.json" "$PROJECT/T01Audit.lean" "$T01/EXACT_INSTALL_MANIFEST-v3.json" "$T01/REUSE_EVIDENCE.json" "$LOGS/"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install unchanged successful 12 GiB serial trust-zero runtime guard
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
+      - name: Apply isolated proof-expression repairs and retain exact patch
+        run: |
+          set -euo pipefail
+          python3 - <<'PYREPAIR'
+          import os, pathlib, hashlib, json
+          root = pathlib.Path(os.environ['PROJECT'])
+          fixes = [
+            ('ImbalancedChen/P4ASlot19ChargedFrontier.lean', '  norm_num [selectedMask, selectedSum]', '  simp [selectedMask, selectedSum, Finset.sum_insert, add_assoc]'),
+            ('ImbalancedChen/Data/P5SubdivisionStoredBlock000.lean', '  decide', '  decide +kernel'),
+          ]
+          receipt = []
+          for name, old, new in fixes:
+              p = root / name
+              before = p.read_text()
+              assert before.count(old) == 1, name
+              after = before.replace(old, new)
+              p.write_text(after)
+              receipt.append({'path': name, 'before': hashlib.sha256(before.encode()).hexdigest(), 'after': hashlib.sha256(after.encode()).hexdigest(), 'old': old, 'new': new})
+          logs = pathlib.Path(os.environ['LOGS'])
+          (logs / 'REPAIR_PROBE.json').write_text(json.dumps({'green': False, 'scope': 'two-module expression repair experiment only; not T01 acceptance', 'repairs': receipt}, indent=2))
+          PYREPAIR
+      - name: Compile only the two repaired targets under the original trust-zero guard
+        id: probe
+        timeout-minutes: 300
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake build ImbalancedChen.P4ASlot19ChargedFrontier ImbalancedChen.Data.P5SubdivisionStoredBlock000 2>&1 | tee "$LOGS/probe-build.log"
+      - name: Kernel replay the two compiled repair targets
+        if: ${{ success() }}
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake env leanchecker --verbose ImbalancedChen.P4ASlot19ChargedFrontier ImbalancedChen.Data.P5SubdivisionStoredBlock000 2>&1 | tee "$LOGS/probe-checker.log"
+      - name: Audit trust-zero runtime
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Retain diagnostic evidence; never promote full T01 acceptance
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: compile-repair-probe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t01-evidence/
+          if-no-files-found: error
+          retention-days: 30
