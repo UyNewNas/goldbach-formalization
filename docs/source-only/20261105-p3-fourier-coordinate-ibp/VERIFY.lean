@@ -1,4 +1,5 @@
 import ImbalancedChen.P3HBCanonicalTwoAxisQuantitative
+import ImbalancedChen.P3HBCoupledTwoAxisL1
 import ImbalancedChen.P3HBCanonicalGeometryDerivative
 import ImbalancedChen.P3HBWeightedAxisLeibniz
 import ImbalancedChen.P3HBSmoothTensorQuantitativeL1
@@ -960,3 +961,12 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 -- All actual two-axis geometry/HB quantitative targets: REGISTERED, NOT RUN.
 #check ImbalancedChen.P3HBCanonicalTwoAxisQuantitative.actual_two_axis_child_norm_le
 #check ImbalancedChen.P3HBCanonicalTwoAxisQuantitative.all_actual_two_axis_children_norm_le
+
+-- P3.6 coupled real 6D two-axis mixed-HB L1; REGISTER ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.tensorMass
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.actualTwoAxisMass
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.jetMass
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.actualTwoAxisMass_le_jetMass
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.jetMass_integrable
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.jetMass_L1_le
+#check ImbalancedChen.P3HBCoupledTwoAxisL1.actualTwoAxisMass_integrable_and_L1_le
