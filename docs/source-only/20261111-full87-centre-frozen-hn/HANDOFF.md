@@ -29,3 +29,5 @@ Do not alter main/master, run Actions, Codex, user machine or add cloud
 resource. Never use this historical base SHA to reset a newer task HEAD.
 
 Actual local checks after source commit: lean/lake/elan --version exit 127 each. Source UNCOMPILED, UNEVALUATED, and candidate for elaboration repair. 999 synthetic even-N arithmetic checks passed but not original87 replay. Original source blob 3e8c7c57d392c531562c1eb2753a73ac01431705. Next branch revision must begin from remote HEAD, not earlier base.
+
+Source-level algebra refinement: isolate the actual log/sqrt expressions as opaque locals before rewriting N=(sqrt N)^2 in the normalized ratio identity; then field_simp/ring. This avoids accidentally rewriting the N nested inside log N. This is still UNCOMPILED and requires exact Lean elaboration.

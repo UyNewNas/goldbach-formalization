@@ -147,11 +147,23 @@ theorem original87_centre_budget_div_frozenHN_le
         (frozenHN_lower N)
     _ = (8 / (liuUniversalProduct * Real.log (2 : ℝ))) *
           (Real.log (N : ℝ) ^ 3 / Real.sqrt (N : ℝ)) := by
-      have hs : Real.sqrt (N : ℝ) ^ 2 = (N : ℝ) :=
-        Real.sq_sqrt hx.le
-      have hn : (N : ℝ) ≠ 0 := hx.ne'
-      field_simp [hlog2.ne', hC2.ne', hl.ne', hroot.ne', hn]
-      nlinarith [hs]
+      -- Freeze the logarithm and square-root expressions before rewriting
+      -- N = (sqrt N)^2, so the rewrite cannot enter log N.
+      let x : ℝ := (N : ℝ)
+      let q : ℝ := Real.sqrt (N : ℝ)
+      let l : ℝ := Real.log (N : ℝ)
+      let b : ℝ := Real.log (2 : ℝ)
+      let c : ℝ := liuUniversalProduct
+      change ((8 / b) * q * l) / (c * x / l ^ 2) =
+        (8 / (c * b)) * (l ^ 3 / q)
+      have hq : q ^ 2 = x := Real.sq_sqrt hx.le
+      have hb : b ≠ 0 := hlog2.ne'
+      have hc : c ≠ 0 := hC2.ne'
+      have hl' : l ≠ 0 := hl.ne'
+      have hq' : q ≠ 0 := hroot.ne'
+      rw [← hq]
+      field_simp [hb, hc, hl', hq']
+      ring
 
 /-- The genuine frozen-normalization ratio tends to zero.  The only
 asymptotic lemma used is PINNED mathlib's log^3=o(x^(1/2)).
