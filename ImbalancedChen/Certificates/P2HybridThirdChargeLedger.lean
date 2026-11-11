@@ -1,10 +1,12 @@
 import ImbalancedChen.Certificates.P2OriginalThirdTreeCertificate
 import ImbalancedChen.Certificates.P2HistoricalThirdMeanDispatch
+import ImbalancedChen.Certificates.P2ThirdZeroGeometry
 
 /-!
 P2 SOURCE ONLY / UNCOMPILED.
 A hybrid SEMANTIC ledger joins the existing BoxGuard rule and the complete
 ordinary P160 integral rule to the exact original positional Q80 tree ledger.
+A separate finite zero-geometry checker pays exact zero-charge occurrences.
 No executable whole-ledger Bool is supplied: ordinaryUpper still depends on
 the noncomputable value-semantic reader/log/floor backend. Every actual
 coordinate binding, geometry check, directed integer comparison and adopted
@@ -55,6 +57,7 @@ theorem value_Q80_charge (q : ℤ) :
 inductive Source where
   | box (guard : BoxGuard)
   | ordinary (lo hi : Fin 3 → ℤ)
+  | zero
 
 structure Entry where
   source : Source
@@ -72,12 +75,14 @@ def Entry.Valid (e : Entry) (table : OriginalU2StoredNodeBlockCheckerSourceOnly.
       lo=bounds.1 ∧ hi=bounds.2 ∧
       P2OrdinaryIntegerGuard.check lo hi=true ∧
       P2HistoricalThirdMeanDispatch.ordinaryUpper table lo hi≤e.charge*(2:ℤ)^80
+  | .zero => P2ThirdZeroGeometry.check bounds.1 bounds.2=true ∧ e.charge=0
 
 def Entry.upper (e : Entry)
     (table : OriginalU2StoredNodeBlockCheckerSourceOnly.CheckedBlockTable) : ℝ :=
   match e.source with
   | .box guard => (guard.integralUpper:ℝ)
   | .ordinary lo hi => value (P2HistoricalThirdMeanDispatch.ordinaryUpper table lo hi)
+  | .zero => 0
 
 /-- No caller-supplied integral bound, integrability or real containment is
 stored in an Entry. Existing actual analytic suppliers pay both cases. -/
@@ -106,6 +111,14 @@ theorem Entry.local_integral_bounds
           P2HistoricalThirdMeanDispatch.checked_ordinary_integral_upper table lo hi hg
       · have hpaid := (value_mono hcost).trans_eq (value_Q80_charge e.charge)
         simpa only [Entry.upper,hs] using hpaid
+  | zero =>
+      have hv : P2ThirdZeroGeometry.check bounds.1 bounds.2=true ∧ e.charge=0 := by
+        simpa only [Entry.Valid,hs] using h
+      have hz : (∫ t in literalLeaf bounds,compactKernel t)=0 :=
+        P2ThirdZeroGeometry.check_integral_eq_zero bounds.1 bounds.2 hv.1
+      constructor
+      · simpa only [Entry.upper,hs] using hz.le
+      · norm_num [Entry.upper,hs,hv.2]
 
 /-- Exact positional relation. It retains every original closed-leaf
 occurrence, including duplicates, empty/zero-width leaves and shared faces.
