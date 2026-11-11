@@ -2639,3 +2639,5 @@ P3.6 YELLOW. New bounded-W zero-order source candidate BLUE ONLY. No GREEN.
 - **Next concrete entry:** targeted pinned Lean/Lake compile+repair first; then derive actual physical W_T/U5/trim local jet bounds quantitatively uniform in T and m(N), and generalize actual repeated 2S; then true Fourier H-box, complete same-rho modulus and exceptional product=T payment.
 
 **P3.6 YELLOW. LOCAL second-order L1 candidate BLUE only.**
+
+- **Remote immutable proof readback:** Commit `09407d122c6f8bd23b5e95dc59ed052c333fc746` was accepted and ref updated without force. The fetched proof Git blob is `00f3cf3c46278ca5a1517b04604af773167c3d99`, byte-identical to the local candidate (`git hash-object` agrees), local SHA256 `c098359cc950f6646ea3c0642b709ac07302b6f19f1b665b23790316839e8058`. VERIFY blob `78e117a4d5fd253abba215acd3a6f370e52ab248`, all imports precede the first #check. Pinned Mathlib source inspected directly: `Integrable.const_mul` (Integrable.lean line 1038), `integral_const_mul` and `integral_add` (Bochner/Basic.lean lines 288 and 239). This is signature inspection, NOT elaboration.
