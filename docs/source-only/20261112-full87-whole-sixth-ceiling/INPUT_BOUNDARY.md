@@ -1,0 +1,11 @@
+# P1.4 whole-sixth ceiling — exact input boundary
+
+**Internal candidate proof only**: fixed existing `OriginalData`, real `originalSeed`, `fallbackSeed`, `lambda3`, actual finite fourth/fifth `exponent4/exponent5` and their original eligibility and selected masks; `cap5_eq_protect`; `P1GuardFrozenFiniteCapAlgebra.rounded` and its actual `clamp_bounds`, `P4AOriginalFull87FiniteEighthCap.downCap_error`, `VariableEnvelope.v_le_cap`; original saved/eleven/later raw `current_le_of_subset_tents`; previous actual `licensedCap_le_real_fifth_or_envelope` and literal active/inactive level6 split. Assumption `0≤((P4AOriginalCompleteSixthChronology.data e q om).e:ℝ)` is the pre-existing nonnegative e parameter, NOT a target-equivalent record field.
+
+The conclusion is the uniform scalar inequality `level6Exponent≤299/500` on ALL prefixes, with `N^level6Exponent≤N^(299/500)` for `1≤N`. Strict accepted actions already had their own sharper `153/256-width(n)` bound. No attempt is made to impose that sharper bound on inherited fifth or unaltered inactive raw sixth.
+
+**External input (REGISTERED_NOT_PROVED / NOT_CALLED)**: frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, §4 `eq:current-PP`, `lem:current-sharp-prime` / `eq:current-sharp-pi`, requires both actual signed sixth/eighth physical coefficients, full modulus level `d≤N^theta` for one fixed `theta<1`, correct product scale X, original squarefree/coprimality, smooth-singleton endpoint and error normalization relative to frozen `H_N=C_N N/log²N`, parameters fixed before N. None is derived from the scalar estimate. No PNT/Mertens/BV/spectral foundations attempted. No external theorem is claimed true or invoked.
+
+The physical first-exit retained-leaf validity and small Rosser factor, ordinary-to-residual integral, saved87 certification, original changed/tagged and low/high q charges, two *independent* compiler/density reserves and common rho remain internal unmet duties; do not relabel them external. c and K unchanged.
+
+Verification boundary: SOURCE_ONLY/UNEVALUATED/UNCOMPILED, no kernel replay, axiom audit or independent reproduction. Synthetic Fraction check does not certify original87 states.
