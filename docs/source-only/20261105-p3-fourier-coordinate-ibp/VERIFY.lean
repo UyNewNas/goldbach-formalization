@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBCanonicalTwoAxisQuantitative
 import ImbalancedChen.P3HBCanonicalGeometryDerivative
 import ImbalancedChen.P3HBWeightedAxisLeibniz
 import ImbalancedChen.P3HBSmoothTensorQuantitativeL1
@@ -955,3 +956,7 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualAxisDeriv
 #check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualAxisDeriv_weightedChild
 #check ImbalancedChen.P3HBCanonicalGeometryDerivative.actualTwoAxisDeriv_weightedChild
+
+-- All actual two-axis geometry/HB quantitative targets: REGISTERED, NOT RUN.
+#check ImbalancedChen.P3HBCanonicalTwoAxisQuantitative.actual_two_axis_child_norm_le
+#check ImbalancedChen.P3HBCanonicalTwoAxisQuantitative.all_actual_two_axis_children_norm_le
