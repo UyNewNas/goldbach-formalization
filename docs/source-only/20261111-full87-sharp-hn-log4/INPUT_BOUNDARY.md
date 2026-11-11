@@ -19,6 +19,13 @@ This must be licensed separately for the actual SIXTH and EIGHTH policies,
 not inferred from a triangle over an absolute per-leaf discrepancy and not
 extended to arbitrary high-level or sharp coupled coefficients.
 
+NEW INTERNAL (also candidate, not compiled): on every nonzero
+full87PhysicalRhoChange modulus, one of the two ORIGINAL physical
+coefficients is nonzero and supplies its own actualSmallRoughRho_ne_zero_factors
+certificate: q=a*b, small Rosser a with strict (a:Real)<L, rough
+first-exit b with actual nonzero coefficient. This does not assert
+the missing rough full-q q<=N^theta bound or smooth endpoint PP licence.
+
 This packet takes exactly the numerical consequence with independent fixed
 nonnegative M6,M8 as explicit hypotheses; it does not implement, assert or
 supply a new PP result. Internal scale is H_N=C_N*N/log(N)^2, true
