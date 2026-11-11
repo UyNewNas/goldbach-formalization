@@ -3,8 +3,8 @@
 2026-11-11. Repository: UyNewNas/goldbach-formalization.
 Branch: `chatgpt/p5-h34-actual-nexttable-signed-source-residual-20261109`.
 Verified incoming HEAD: `a7d2d612406e134ae33a4fa3f1d030301cd821e7`.
-Mathematics commit: `c850475e496e10a690a11d7b4093ba47c41bc545`; source blob: `60ebf046b1a01e6e08a757473a401be70b60168f`.
-Module: `Part5OriginalH430PhysicalNonretainedAbsoluteControl.lean` (179 lines, 4 definitions, 7 theorem declarations including one private real absolute-value helper).
+Mathematics candidate commits: `c850475e496e10a690a11d7b4093ba47c41bc545` (original source) and `d94ef44e20ac944651910320ca40b8aa3fc5060a` (namespace-source correction); corrected source blob: `9e7d8b2703300be869b2d7ef9f5e67ab58bf873b`.
+Module: `Part5OriginalH430PhysicalNonretainedAbsoluteControl.lean` (184 lines, 4 definitions, 7 theorem declarations including one private real absolute-value helper).
 Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes@`ba6ec11d800eccc54406490631895e174de85766`, `paper/source/manuscript-body.tex`.
 Lean v4.33.0-rc1, Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.
 
@@ -57,7 +57,7 @@ toolchain, parameters or manuscript mapping changed.
 
 The GitHub connector confirmed push permission and read the exact
 source blob and math commit back. Compare from incoming HEAD to math
-commit: one additive 179-line Lean file, zero deletions. Text scan:
+commit: one additive 184-line Lean file, zero deletions. Text scan:
 no `sorry`, `admit`, new `axiom`, `unsafe` or `native_decide`.
 These checks are not Lean compilation or kernel verification.
 
