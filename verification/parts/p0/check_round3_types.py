@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[3]
 AUDIT = "verification/parts/p0/Round3Audit.lean"
 FINAL_BRIDGE = "ImbalancedChen.current_theorem_1_1_of_manuscript_bounds"
 FINAL_MODULE = "ImbalancedChen.CurrentMainTheorem"
-EXPECTED = {
+ORIGINAL_EXPECTED = {
     "ImbalancedChen.ActualSelectedPrefixLowerCellSum": 9,
     "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral": 8,
     "ImbalancedChen.HistoricalPrefixCertificate": 96,
@@ -36,6 +36,11 @@ EXPECTED = {
     "ImbalancedChen.Certificates.PairedV2Prefix4": 35,
     "ImbalancedChen.Part3LongSlotNormalization": 2,
 }
+MIGRATION_PATH = "verification/parts/p0/round3-owner-migration.json"
+MIGRATION = json.loads((ROOT / MIGRATION_PATH).read_text())
+EXPECTED_OWNERS = MIGRATION["expected_owners"]
+EXPECTED = dict(Counter(EXPECTED_OWNERS.values()))
+assert len(EXPECTED_OWNERS) == sum(ORIGINAL_EXPECTED.values()) == 198
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 FROZEN = {
     "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
@@ -88,6 +93,7 @@ def input_snapshot() -> dict:
                         modules.add(imported)
     sources = {source_path(module).relative_to(ROOT).as_posix() for module in modules}
     sources.update(FROZEN)
+    sources.add(MIGRATION_PATH)
     sources.update({AUDIT, "verification/parts/p0/check_round3_types.py",
                     "verification/parts/p0/check_pins.py",
                     "verification/verify_variable_envelope_boxes.py"})
@@ -117,8 +123,10 @@ def parse_types(stdout: str) -> tuple[list[dict], dict]:
     require(len({d["name"] for d in declarations}) == 198, "Duplicate declaration name")
     require(Counter(d["module"] for d in declarations) == Counter(EXPECTED),
             "Defining-module counts differ from the eight expected counts")
-    require(len(modules) == 8 and {d["module"]: d["count"] for d in modules} == EXPECTED,
+    require(len(modules) == len(EXPECTED) and {d["module"]: d["count"] for d in modules} == EXPECTED,
             "Missing, duplicate, or incorrect per-module census marker")
+    require({d["name"]: d["module"] for d in declarations} == EXPECTED_OWNERS,
+            "Original 198 exact declaration names or migrated owners differ")
     require(len(bridges) == 1, "Expected exactly one final-bridge type record")
     bridge = bridges[0]
     require(bridge["name"] == FINAL_BRIDGE and bridge["module"] == FINAL_MODULE
@@ -172,6 +180,8 @@ def main() -> int:
         head = git("rev-parse", "HEAD")
         require(re.fullmatch(r"[0-9a-f]{40}", head) is not None, "HEAD is not a full commit SHA")
         report["source_commit"] = head
+        for path, wanted in MIGRATION["source_sha256"].items():
+            require(digest(ROOT / path) == wanted, f"Reviewed migration source changed: {path}")
         for relative, expected in FROZEN.items():
             require(digest(ROOT / relative) == expected, f"Frozen input changed: {relative}")
         report["inputs_before"] = input_snapshot()

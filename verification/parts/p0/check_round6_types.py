@@ -31,19 +31,17 @@ MODULES = (
     "ImbalancedChen.ActualHistoricalFifthCellIntegral",
     "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
     "ImbalancedChen.HistoricalFifthCutoffInvariance",
+    "ImbalancedChen.FinitePrimeGeometryCore",
 )
-# All 46 public declarations in the four frozen source modules. Generated and
+# All original 46 public declarations, with three owners migrated to the frozen core. Generated and
 # private declarations are additionally required by exact serialized coverage.
 REQUIRED_PUBLIC = {
     MODULES[0]: (
         "ImbalancedChen.HistoricalPrefixCapData.fifthParentGateBounds",
         "ImbalancedChen.HistoricalPrefixCapData.mem_fifthParentGateRegion",
-        "ImbalancedChen.HistoricalPrefixCapData.level3_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level4_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level5_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level5_on_selected_fifth_cell",
-        "ImbalancedChen.HistoricalPrefixCapData.level3_tuple_on_fifth_cell",
-        "ImbalancedChen.historicalUpperFive_cube_tests_iff_log",
         "ImbalancedChen.mem_historicalUpperFiveFrontierTuples_iff_log_on_cell",
         "ImbalancedChen.historicalUpperFiveFrontierTuples_cell_filter",
     ),
@@ -89,10 +87,17 @@ REQUIRED_PUBLIC = {
         "ImbalancedChen.HistoricalPrefixCapData.upperFourthToFifthSaving_normalized_eq_fifthPrimeCorrection_of_cutoff_ge",
         "ImbalancedChen.HistoricalPrefixCapData.tendsto_upperFourthToFifthSaving_of_cutoff_ge",
     ),
+    MODULES[4]: (
+        "ImbalancedChen.HistoricalPrefixCapData.level3_on_fifth_cell",
+        "ImbalancedChen.HistoricalPrefixCapData.level3_tuple_on_fifth_cell",
+        "ImbalancedChen.historicalUpperFive_cube_tests_iff_log",
+    ),
 }
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 FROZEN = {
-    "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean": "a131b783d59540ea98cc11574f31489e2f75d519927445b49a2e4c688ab74cbe",
+    "verification/parts/p0/round6-owner-migration.json": "d8883893b4085b63052eee0ec0942b59e96da2f81d4fc3774db88f758be9568c",
+    "ImbalancedChen/FinitePrimeGeometryCore.lean": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+    "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean": "a5ca4e515e9bb1451dd1ebdf369cfaac34d7131e4877db0d0d351e06666ac410",
     "ImbalancedChen/ActualHistoricalFifthCellIntegral.lean": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
     "ImbalancedChen/ActualHistoricalFifthSavingIntegral.lean": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
     "ImbalancedChen/HistoricalFifthCutoffInvariance.lean": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
