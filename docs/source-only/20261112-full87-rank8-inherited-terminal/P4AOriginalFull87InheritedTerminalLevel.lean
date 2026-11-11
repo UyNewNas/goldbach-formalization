@@ -125,8 +125,10 @@ private theorem inherited_extension_eq_ordinary
         P4AOriginalFull87LicensedSixthPolicy.level6Exponent
           n e q om (N : ℝ) (rosserAncestor 6 pre))
       b (later ++ pre) := by
-  have hpositiveLength : 0 < later.length :=
-    List.length_pos_iff_ne_nil.mpr hne
+  have hpositiveLength : 0 < later.length := by
+    cases later with
+    | nil => exact (hne rfl).elim
+    | cons p ps => simp
   have hdeep8 : ¬ (later ++ pre).length ≤ 8 := by
     simp only [List.length_append]
     omega
