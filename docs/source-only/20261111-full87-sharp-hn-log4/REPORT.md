@@ -36,6 +36,21 @@ mathematical real-variable observation for fixed M6,M8, but a matching
 Lean asymptotic endpoint for this entire conditional receiver statement is
 NOT claimed by this packet.
 
+## Further exact original PP-support source adaptation
+
+Additional source: P4AOriginalFull87LiveSharpFactors.lean
+(82 lines before trailing newline, SOURCE_ONLY, uncompiled).
+The unchanged original signed delta-rho is nonzero only if the actual
+sixth or actual eighth original physical rho is nonzero. The PINNED
+generic native source lemma actualSmallRoughRho_ne_zero_factors then gives,
+on whichever side is truly active, the ORIGINAL decomposition q=a*b
+with a in actualSmallRosserSupport, b in that side's own fixedRoughSupport,
+a<L strictly, and its own rough first-exit coefficient nonzero.
+This is stronger than simply inspecting the displayed finite carrier,
+which may include zero entries above the real physical level. No side
+inherits the other's mask; no rough bound, q<=N^theta or PP smoothness
+has been supplied yet.
+
 ## Verification
 
 Level SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Container environment check:
