@@ -123,7 +123,7 @@ theorem original_integer_above_mu_log_guards (x0 x1 : ℤ)
       _ = (1-1/((x1 : ℝ)/(x0 : ℝ)))*(P160 : ℝ) := by
         field [hx0.ne', hx1.ne']
   have hfloor : (2 : ℤ)^80 ≤ (ofReal (1-1/((x1 : ℝ)/(x0 : ℝ)))).lo :=
-    Int.le_floor.mpr hfirst
+    Int.le_floor.mpr (by simpa only [Int.cast_pow] using hfirst)
   have hlo := hfloor.trans (originalLnUnit_lo_ge_first hq1 hq2)
   have hlog := original_positive256_ln_sound hq1 hq2
   have hvalid : (originalLnUnit ((x1 : ℝ)/(x0 : ℝ))).lo ≤
@@ -176,4 +176,5 @@ theorem original_stored_above_mu_log_guards (x0 x1 : ℤ) (a b : ℚ)
 
 end
 end ImbalancedChen.OriginalThirdPositiveLogSourceOnly
+
 

@@ -36,7 +36,7 @@ requires no integrability or measurability premise on the kernel itself. -/
 theorem strictTailMass_eq_actual (h : ℝ) :
     strictTailMass h = actualExtendedThirdIdealTailMass 0 h := by
   unfold strictTailMass actualExtendedThirdIdealTailMass thirdPrefixTailMass
-  simp only [mul_zero, sub_zero, Measure.restrict_Ioo_eq_restrict_Ioc,
+  simp only [mul_zero, sub_zero, restrict_Ioo_eq_restrict_Ioc,
     actualExtendedThirdIdealCap]
 
 /-- Nonnegative masses are monotone in the actual cutoff, with no positivity
@@ -80,6 +80,7 @@ theorem actualTailMass_le_cutoffEnvelope {h : ℝ}
   have hhrho : h ≤ thirdPrefixRho :=
     hsmall.trans (by norm_num [thirdPrefixRho])
   have hc := d10EnvelopeCoefficient_nonneg
+  simp only [actualExtendedThirdIdealTailMass, mul_zero, sub_zero]
   change thirdPrefixTailMass thirdPrefixTheta actualExtendedThirdIdealCap
     thirdPrefixRho h ≤ ENNReal.ofReal (cutoffEnvelope h)
   calc
@@ -133,7 +134,9 @@ theorem strictTailMass_le_Tnew {h : ℝ} (hsmall : h ≤ 1 / 100) :
 /-- The new quantitative majorant really vanishes at the improper endpoint. -/
 theorem cutoffEnvelope_tendsto_zero :
     Tendsto cutoffEnvelope (𝓝[>] 0) (𝓝 0) := by
-  simpa only [cutoffEnvelope, mul_zero] using
+  change Tendsto (fun h => d10EnvelopeCoefficient *
+    thirdTailLogPrimitive thirdPrefixRho h) (𝓝[>] 0) (𝓝 0)
+  simpa only [mul_zero] using
     (tendsto_thirdTailLogPrimitive_zero
       (by norm_num [thirdPrefixRho] : 0 < thirdPrefixRho)).const_mul
         d10EnvelopeCoefficient
@@ -164,9 +167,12 @@ theorem manuscriptIntegral_le_cutoffEnvelope {h : ℝ}
   have hb := ENNReal.toReal_mono ENNReal.ofReal_ne_top
     (actualTailMass_le_cutoffEnvelope hh hsmall)
   have hp : 0 ≤ thirdTailLogPrimitive thirdPrefixRho h := by
+    have hhrho : h ≤ thirdPrefixRho :=
+      hsmall.trans (by norm_num [thirdPrefixRho])
+    have hratio : (1 : ℝ) ≤ thirdPrefixRho / h :=
+      (le_div_iff₀ hh).2 (by simpa only [one_mul] using hhrho)
     have hlog : 0 ≤ Real.log (thirdPrefixRho / h) :=
-      Real.log_nonneg ((le_div_iff₀ hh).2
-        (hsmall.trans (by norm_num [thirdPrefixRho])))
+      Real.log_nonneg hratio
     unfold thirdTailLogPrimitive
     positivity
   have hnonneg : 0 ≤ cutoffEnvelope h :=
@@ -175,4 +181,5 @@ theorem manuscriptIntegral_le_cutoffEnvelope {h : ℝ}
 
 end
 end ImbalancedChen.P2CompleteThirdTailIntegral
+
 

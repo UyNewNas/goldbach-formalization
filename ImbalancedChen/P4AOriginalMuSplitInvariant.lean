@@ -27,14 +27,14 @@ theorem leftIntegerUpper_le (b : IntegerPoint) (axis i : Fin 3) (cut : ℤ) :
     leftIntegerUpper b axis cut i ≤ b i := by
   by_cases hi : i = axis
   · subst i
-    simpa only [leftIntegerUpper, Function.update_same] using min_le_left (b axis) cut
+    simpa only [leftIntegerUpper, Function.update_self] using min_le_left (b axis) cut
   · simp [leftIntegerUpper, hi]
 
 theorem le_rightIntegerLower (a : IntegerPoint) (axis i : Fin 3) (cut : ℤ) :
     a i ≤ rightIntegerLower a axis cut i := by
   by_cases hi : i = axis
   · subst i
-    simpa only [rightIntegerLower, Function.update_same] using le_max_left (a axis) cut
+    simpa only [rightIntegerLower, Function.update_self] using le_max_left (a axis) cut
   · simp [rightIntegerLower, hi]
 
 /-- Arbitrary integer left cuts inherit either side of the original guard. -/
@@ -149,7 +149,7 @@ theorem source_seed_noCross_xy (z0 z1 M R x0 x1 y0 y1 : ℤ)
   constructor
   · simpa only [noCrossMu, seedLower, seedUpper, Matrix.cons_val_zero] using
       sourceSeedXYCuts_noCross z0 M R x0 x1 hx
-  · simpa only [noCrossMu, seedLower, seedUpper, Matrix.cons_val_one] using
+  · simpa only [noCrossMu, seedLower, seedUpper, Matrix.cons_val_one, Matrix.cons_val_zero] using
       sourceSeedXYCuts_noCross z0 M R y0 y1 hy
 
 /-- Direct seed-to-all-descendants API for both x and y intervals. -/
@@ -220,3 +220,4 @@ theorem source_seed_descendants_cap_bounds_guard (tree : ClosedCutTree)
 
 end
 end ImbalancedChen.P4AOriginalMuSplitInvariantSourceOnly
+

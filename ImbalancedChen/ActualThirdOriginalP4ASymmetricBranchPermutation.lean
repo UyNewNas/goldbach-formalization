@@ -113,7 +113,7 @@ theorem sumZ_swapSum (s : TentSum) : sumZ (swapSum s) = sumZ s := by
 theorem tentSum_swap (s : TentSum) (t : BoxPoint) :
     tentSum (swapSum s) (swapXY t) = tentSum s t := by
   simp only [tentSum, sumX_swapSum, sumY_swapSum, sumZ_swapSum, swapXY,
-    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two]
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.vecHead, Matrix.vecTail]
   ring
 
 theorem tentPlane_swap (s : TentSum) (k : TentSide) (t : BoxPoint) :
@@ -187,7 +187,7 @@ theorem tentOldArgument_swap (s : TentSum) (k : TentSide) (t : BoxPoint) :
     tentOldArgument (swapSum s) k (swapXY t) = tentOldArgument s k t := by
   simp only [tentOldArgument, affineArgument, oldX_swapSum, oldY_swapSum,
     oldZ_swapSum, swapXY, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two]
+    Matrix.cons_val_two, Matrix.vecHead, Matrix.vecTail]
   ring
 
 theorem tentOldLow_swap (s : TentSum) (k : TentSide) (b : BoxPoint) :
@@ -286,3 +286,4 @@ theorem symmetric_maximal_score_transport
 
 end
 end ImbalancedChen.OriginalThirdP4ASymmetricBranchPermutationSourceOnly
+
