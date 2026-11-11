@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBLogDerivativeGlobalSupport
 import ImbalancedChen.P3HBSmoothLogFiniteDerivatives
 import ImbalancedChen.P3HBSmoothLogScaleBudget
 import ImbalancedChen.P3HBSmoothThreeWayRatioTwo
@@ -886,3 +887,12 @@ import ImbalancedChen.P3HBGeometryDefectBudget
 #check ImbalancedChen.P3HBSmoothLogFiniteDerivatives.smoothCoord_log_iteratedDeriv_exact
 #check ImbalancedChen.P3HBSmoothLogFiniteDerivatives.smoothCoord_log_uniform_finite_order
 #check ImbalancedChen.P3HBSmoothLogFiniteDerivatives.six_slot_log_template_product_budget
+
+-- Original smooth HB log child: every finite derivative has exact compact
+-- support, global fixed-order bounds, and dyadic-scale invariance.
+-- SOURCE_ONLY: these #check lines are REGISTERED, NOT EXECUTED.
+#check ImbalancedChen.P3HBLogDerivativeGlobalSupport.logChild_iteratedDeriv_zero_outside
+#check ImbalancedChen.P3HBLogDerivativeGlobalSupport.logChild_iteratedDeriv_support_subset
+#check ImbalancedChen.P3HBLogDerivativeGlobalSupport.logChild_uniform_global_finite_order
+#check ImbalancedChen.P3HBLogDerivativeGlobalSupport.smoothCoord_log_uniform_global_finite_order
+
