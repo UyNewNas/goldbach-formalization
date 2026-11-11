@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas
 import ImbalancedChen.P3HBCanonicalTwoAxisQuantitative
 import ImbalancedChen.P3HBCoupledTwoAxisL1
 import ImbalancedChen.P3HBCanonicalGeometryDerivative
@@ -970,3 +971,12 @@ import ImbalancedChen.P3HBWeightedOriginalChildrenL1
 #check ImbalancedChen.P3HBCoupledTwoAxisL1.jetMass_integrable
 #check ImbalancedChen.P3HBCoupledTwoAxisL1.jetMass_L1_le
 #check ImbalancedChen.P3HBCoupledTwoAxisL1.actualTwoAxisMass_integrable_and_L1_le
+
+-- P3.6: actual continuous geometry jets imply measurability of the SAME 729-child
+-- two-axis differentiated mass and remove its extra AEStronglyMeasurable premise.
+-- SOURCE_ONLY: #check targets are not executed by this edit.
+#check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.logTensorMixed_continuous
+#check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.twoAxisJetTerm
+#check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.actualTwoAxisMass_eq_jetTerm_sum
+#check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.actualTwoAxisMass_continuous
+#check ImbalancedChen.P3HBCoupledTwoAxisAutomaticMeas.actualTwoAxisMass_integrable_and_L1_of_continuous_jets
