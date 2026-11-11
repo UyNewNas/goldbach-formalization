@@ -7,3 +7,5 @@ Core result: actual source histories from manuscript-internal `FilteredSourceSup
 Next genuine step: derive canonical eight-prime representation and trimmed owner for **every** original rank-eight state where selectedCap=some, using frontier selected length, roughPrimeUniverse prime and target deletion, and original point8/owner identity; then invoke this theorem with an actual cofinal FilteredSourceSupply schedule. Beware boundary cases: inherited none never gets selected mask. Afterwards attach exact small/rough nonzero rho with original Rosser factor L and fixed theta<1.
 
 Source-only, uncompiled. Check registry for hashes, actual commit and exact status before resuming. No CI or Codex or changed pins. Parent node P1.4 YELLOW.
+
+Revision after initial source commit: recovered actual frontier membership from the supplier's filtered owned list via `List.mem_filter.mp`; do not use the first draft's direct assignment. Refer to live branch and registry hashes.

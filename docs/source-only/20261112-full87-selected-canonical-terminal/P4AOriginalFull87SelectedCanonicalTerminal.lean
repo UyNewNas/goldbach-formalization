@@ -66,8 +66,14 @@ theorem actual_selected_canonical_terminal_product_lt_fixed_power
   have hstate : state ∈ firstExitDepthFrontier 8
       (P4AOriginalFull87LicensedSixthPolicy.policy
         (width r) n e q om (N : ℝ))
-      weight [] true 1 (roughPrimeUniverse N cap w z) :=
-    hmember cap w z hw hz hzcap weight
+      weight [] true 1 (roughPrimeUniverse N cap w z) := by
+    -- The existing supplier returns membership in its *filtered owned list*.
+    -- Recover the actual original frontier membership without changing it.
+    have hm : canonicalState N cap w weight p ∈
+        P4AOriginalFull87LicensedSixthRealization.states
+          (width r) n e q om N cap w z weight c :=
+      hmember cap w z hw hz hzcap weight
+    exact (List.mem_filter.mp hm).1
   have hpre : state.selectedPrefix = pre p := rfl
   have hlen : 8 ≤ state.selectedPrefix.length := by
     rw [hpre, pre_length]

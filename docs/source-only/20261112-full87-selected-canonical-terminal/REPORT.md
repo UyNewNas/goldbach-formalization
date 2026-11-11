@@ -15,3 +15,6 @@ This is a fresh selected-branch result, not the preceding inherited `selectedCap
 
 ## Verification
 All changes source-only; SHA and remote readback are recorded in REGISTRY and HANDOFF. Current container lacks lean/lake/elan and matching .lake packages; no Lean elaboration or kernel replay, no transitive axiom audit, no independent verification or archived numerical replay. SOURCE_ONLY / UNEVALUATED / UNCOMPILED. No CI, no Codex, no merge, no force, no external proof.
+
+## Source inspection fix
+The first draft incorrectly assigned `FilteredSourceSupply`'s membership in `states` (an owned frontier filter) directly to membership in `firstExitDepthFrontier`. It has been corrected by `List.mem_filter.mp`, preserving the exact original canonical state. This is a source-level correction only, still UNCOMPILED.
