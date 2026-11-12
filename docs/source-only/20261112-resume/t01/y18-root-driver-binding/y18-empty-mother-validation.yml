@@ -1,0 +1,172 @@
+name: Y18 exact empty-mother bounded validation
+on:
+  push:
+    branches: [ci/y18-empty-mother-20261112]
+    paths: [.github/workflows/y18-empty-mother-validation.yml]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  y18_empty_mother:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: 794fe55a2136e8f502eae426095631f64f596f7f
+      HISTORICAL_COMMIT: f1bcf37b6fe3f0a5a4b6c4c48b166a6119f9f784
+      EXPECTED_MANIFEST: 8c48f34f4479b13cb38749360df78ed06f1d80ddee646472579ad0f1e214a496
+      LEAN_NUM_THREADS: 2
+      PYTHONDONTWRITEBYTECODE: '1'
+      Y18_BUNDLE: docs/source-only/20261112-resume/t01/y18-validation-candidate
+      Y18_DRIVER: docs/source-only/20261112-resume/t01/y18-root-driver-binding
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Initialize exact paths and absolute proof deadline before checkout
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/y18-empty-mother-evidence"
+          proof_started_epoch="$(date +%s)"
+          printf 'PROJECT=%s\n' "$GITHUB_WORKSPACE/y18-candidate" >> "$GITHUB_ENV"
+          printf 'Y18_SOURCE_VIEW=%s\n' "$RUNNER_TEMP/y18-empty-mother-source-view" >> "$GITHUB_ENV"
+          printf 'LOGS=%s\n' "$RUNNER_TEMP/y18-empty-mother-evidence" >> "$GITHUB_ENV"
+          printf 'CHECKPOINT=%s\n' "$RUNNER_TEMP/y18-empty-mother-checkpoint" >> "$GITHUB_ENV"
+          printf 'Y18_ORIGINS=%s\n' "$RUNNER_TEMP/y18-empty-mother-evidence/ORIGINS.json" >> "$GITHUB_ENV"
+          printf 'Y18_MANIFEST=%s\n' "$GITHUB_WORKSPACE/$Y18_BUNDLE/Y18_MANIFEST.json" >> "$GITHUB_ENV"
+          printf 'Y18_PROOF_STARTED_UNIX=%s\n' "$proof_started_epoch" >> "$GITHUB_ENV"
+          printf 'Y18_PROOF_DEADLINE_UNIX=%s\n' "$((proof_started_epoch + 285 * 60))" >> "$GITHUB_ENV"
+      - name: Check out actual driver and its exact reviewed parent
+        timeout-minutes: 5
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Bind actual external selection all payloads workflows and root reuse decision
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$Y18_DRIVER/y18_root_driver.py" select 2>&1 | tee "$LOGS/driver-selection.log"
+      - name: Check out exact original historical source bytes
+        timeout-minutes: 5
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: f1bcf37b6fe3f0a5a4b6c4c48b166a6119f9f784
+          path: y18-historical-source
+          persist-credentials: false
+      - name: Check out exact published Y18 target bytes
+        timeout-minutes: 5
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 794fe55a2136e8f502eae426095631f64f596f7f
+          path: y18-published-source
+          persist-credentials: false
+      - name: Stage isolated exact337 source selection with original stage and reviewed13 List edits
+        timeout-minutes: 10
+        id: materialize
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$Y18_DRIVER/y18_root_driver.py" origins 2>&1 | tee "$LOGS/origin-binding.log"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/stage_y18.py" 2>&1 | tee "$LOGS/materialize.log"
+          cmp "$PROJECT/lean-toolchain" "$GITHUB_WORKSPACE/lean-toolchain"
+          cmp "$PROJECT/lake-manifest.json" "$GITHUB_WORKSPACE/lake-manifest.json"
+      - name: Check out original pinned lean-action scripts
+        timeout-minutes: 5
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install original pinned toolchain without changing runtime setup
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          test ! -e "$LEAN_ACTION_DIR"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install unchanged 12 GiB serial trust-zero guard
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/reused/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Execute all original proof gates before reserved retention deadline
+        timeout-minutes: 290
+        run: |
+          set -euo pipefail
+          remaining="$((Y18_PROOF_DEADLINE_UNIX - $(date +%s)))"
+          test "$remaining" -gt 0
+          timeout --signal=TERM --kill-after=30s "${remaining}s" bash <<'Y18_PROOF'
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/stage_native_y18.py" install --receipt "$LOGS/NATIVE_SOURCE_PRE.json" 2>&1 | tee "$LOGS/native-source-install.log"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/record_dependencies_y18.py" --project "$PROJECT" --manifest "$Y18_MANIFEST" --output "$LOGS/dependencies.json"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/verify_y18_sources.py" pre_compile
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/collect_y18.py" prepare
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+          cd "$PROJECT"
+          lake env python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/consume_y18.py" wrapper 2>&1 | tee "$LOGS/wrapper-build.log"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/finalize_y18.py" wrappers
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/verify_y18_sources.py" post_compile
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/stage_native_y18.py" verify_existing --pre-receipt "$LOGS/NATIVE_SOURCE_PRE.json" --receipt "$LOGS/NATIVE_SOURCE_POST.json"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/collect_y18.py" snapshot
+          cd "$PROJECT"
+          lake env python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/consume_y18.py" checker 2>&1 | tee "$LOGS/batch-checker.log"
+          cd "$PROJECT"
+          lake env python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/consume_y18.py" audit 2>&1 | tee "$LOGS/batch-types.log"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/audit_targets_y18.py"
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/collect_y18.py" verify
+          Y18_PROOF
+      - name: Always audit exact unchanged trust-zero runtime when setup exists
+        timeout-minutes: 5
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS"
+          if test -f "$LOGS/runtime/state.json"; then
+            cd "$PROJECT"
+            python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+          else
+            printf '%s\n' 'NO_RUNTIME_STATE_NO_RUNTIME_ACCEPTANCE' > "$LOGS/runtime-not-available.log"
+          fi
+      - name: Always retain actual full coherent facets and quarantined partial failures
+        if: ${{ always() }}
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS"
+          if test -d "$PROJECT"; then
+            python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/checkpoint_y18.py" --project "$PROJECT" --manifest "$Y18_MANIFEST" --logs "$LOGS" --output "$CHECKPOINT" 2>&1 | tee "$LOGS/checkpoint-collection.log"
+          else
+            printf '%s\n' 'NO_PROJECT_ROOT_NO_OBJECT_OR_PROOF_ACCEPTANCE' > "$LOGS/project-not-created.log"
+          fi
+      - name: Bind actual driver again and finalize only after every original gate
+        timeout-minutes: 10
+        if: ${{ success() }}
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$Y18_DRIVER/y18_root_driver.py" verify
+          python3 "$GITHUB_WORKSPACE/$Y18_BUNDLE/finalize_y18.py"
+      - name: Retain exact Y18 evidence and real output facets including failures
+        timeout-minutes: 10
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: y18-empty-mother-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/y18-empty-mother-evidence/
+            ${{ runner.temp }}/y18-empty-mother-checkpoint/
+          if-no-files-found: error
+          retention-days: 30
