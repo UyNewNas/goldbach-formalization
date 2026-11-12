@@ -1,0 +1,566 @@
+--- a/ImbalancedChen/P0RamanujanGeneralGcdIdentity.lean
++++ b/ImbalancedChen/P0RamanujanGeneralGcdIdentity.lean
+@@ -23,8 +23,8 @@
+ 
+ private theorem stdAddChar_int_fourier {q : ℕ} [NeZero q] (b : ℤ) :
+     ZMod.stdAddChar (b : ZMod q) =
+-      AddCircle.fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by
+-  rw [ZMod.stdAddChar_coe, AddCircle.fourier_coe_apply]
++      _root_.fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by
++  rw [ZMod.stdAddChar_coe, _root_.fourier_coe_apply]
+   push_cast
+   congr 1
+   ring
+@@ -46,7 +46,7 @@
+ frequency and the same period-one Fourier convention as the physical sum. -/
+ theorem complete_fourier_sum {q : ℕ} [NeZero q] (n : ℤ) :
+     (∑ k ∈ range q,
+-      AddCircle.fourier 1
++      _root_.fourier 1
+         ((((n * (k : ℤ) : ℤ) : ℝ) / (q : ℝ)) : UnitAddCircle)) =
+       if (q : ℤ) ∣ n then (q : ℂ) else 0 := by
+   classical
+@@ -69,7 +69,7 @@
+ theorem divisor_multiple_character_sum {c d : ℕ}
+     (hc : c ≠ 0) (hdc : d ∣ c) (n : ℤ) :
+     (∑ k ∈ range (c / d),
+-      AddCircle.fourier 1
++      _root_.fourier 1
+         ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle)) =
+       if ((c / d : ℕ) : ℤ) ∣ n then ((c / d : ℕ) : ℂ) else 0 := by
+   classical
+@@ -95,11 +95,11 @@
+     field_simp [hdR, hqR] <;> ring
+   calc
+     _ = ∑ k ∈ range (c / d),
+-        AddCircle.fourier 1
++        _root_.fourier 1
+           ((((n * (k : ℤ) : ℤ) : ℝ) / ((c / d : ℕ) : ℝ)) : UnitAddCircle) := by
+       apply sum_congr rfl
+       intro k _hk
+-      exact congrArg (fun x : ℝ => AddCircle.fourier 1 (x : UnitAddCircle)) (hratio k)
++      exact congrArg (fun x : ℝ => _root_.fourier 1 (x : UnitAddCircle)) (hratio k)
+     _ = _ := complete_fourier_sum n
+ 
+ /-- An exact evaluated divisor formula for the actual physical Ramanujan
+--- a/ImbalancedChen/P0RamanujanMoebiusExpansion.lean
++++ b/ImbalancedChen/P0RamanujanMoebiusExpansion.lean
+@@ -115,7 +115,7 @@
+     ramanujan c n =
+       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *
+         ∑ a ∈ range c with d ∣ a,
+-          AddCircle.fourier 1
++          _root_.fourier 1
+             ((((n * (a : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by
+   rw [ramanujan, kloosterman]
+   simp only [zero_mul, add_zero]
+@@ -127,7 +127,7 @@
+     ramanujan c n =
+       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *
+         ∑ k ∈ range (c / d),
+-          AddCircle.fourier 1
++          _root_.fourier 1
+             ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by
+   rw [ramanujan_moebius_divisor_filter]
+   apply sum_congr rfl
+--- a/ImbalancedChen/Part3ActualCompactBruhatAllModuli.lean
++++ b/ImbalancedChen/Part3ActualCompactBruhatAllModuli.lean
+@@ -229,7 +229,7 @@
+     (hcompact : HasCompactSupport ψ) (hpositive : tsupport ψ ⊆ Ioi (0 : ℝ))
+     (a : ℝ) (ha : 0 < a) (hfloor : ∀ t : ℝ, ψ t ≠ 0 → a ≤ t)
+     (C : ℕ+) (hC : 1 / (a * y) < (C : ℝ)) :
+-    AddCircle.fourierCoeff (allPositiveModulusSections N y hy m ψ hψ) n =
++    _root_.fourierCoeff (allPositiveModulusSections N y hy m ψ hψ) n =
+       ∑ c ∈ Finset.Icc (1 : ℕ+) C,
+         if N ∣ (c : ℕ) then
+           kloosterman (c : ℕ) n m *
+@@ -237,7 +237,7 @@
+               y hy m ψ) (n : ℝ)
+         else 0 := by
+   rw [allPositiveModulusSections_eq_finite N y hy m ψ hψ hcompact hpositive a ha hfloor C hC]
+-  have hsum := congrFun (AddCircle.fourierCoeff.sum (Finset.Icc (1 : ℕ+) C)
++  have hsum := congrFun (_root_.fourierCoeff.sum (Finset.Icc (1 : ℕ+) C)
+     (fun c => positiveModulusSection N c y hy m ψ hψ)
+     (fun c hc => positiveModulusSection_integrable N c y hy m ψ hψ)) n
+   rw [hsum]
+@@ -247,7 +247,7 @@
+   unfold positiveModulusSection
+   split_ifs with hNc
+   · exact compactSeed_canonicalSection_fourierCoeff (c : ℕ) y hy m n ψ hψ hcompact hpositive
+-  · simp [AddCircle.fourierCoeff]
++  · simp [_root_.fourierCoeff]
+ 
+ end ImbalancedChen.Part3.ActualCompactBruhatAllModuli20261025a
+ 
+--- a/ImbalancedChen/Part3ActualCompactBruhatKernel.lean
++++ b/ImbalancedChen/Part3ActualCompactBruhatKernel.lean
+@@ -73,7 +73,7 @@
+ theorem actualKernel_formula (c : ℝ) (hc : c ≠ 0) (y : ℝ) (hy : 0 < y)
+     (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ) :
+     actualKernel c hc y hy m ψ x =
+-      AddCircle.fourier m
++      _root_.fourier m
+         ((-x / (c ^ 2 * (x ^ 2 + y ^ 2)) : ℝ) : UnitAddCircle) *
+         ψ (y / (c ^ 2 * (x ^ 2 + y ^ 2))) := by
+   unfold actualKernel fourierRadialSeed
+@@ -141,13 +141,13 @@
+       ((-x / (c ^ 2 * (x ^ 2 + y ^ 2)) : ℝ) : UnitAddCircle)) :=
+     continuous_quotient_mk'.comp hre
+   have heq : actualKernel c hc y hy m ψ = fun x =>
+-      AddCircle.fourier m
++      _root_.fourier m
+         ((-x / (c ^ 2 * (x ^ 2 + y ^ 2)) : ℝ) : UnitAddCircle) *
+         ψ (y / (c ^ 2 * (x ^ 2 + y ^ 2))) := by
+     funext x
+     exact actualKernel_formula c hc y hy m ψ x
+   rw [heq]
+-  exact ((map_continuous (AddCircle.fourier m)).comp hcircle).mul (hψ.comp him)
++  exact ((map_continuous (_root_.fourier m)).comp hcircle).mul (hψ.comp him)
+ 
+ /-- L1 of the actual Bruhat kernel is now a consequence of the genuine
+ compact radial seed inputs. -/
+@@ -213,7 +213,7 @@
+ theorem periodizedKernelCircle_fourierCoeff (c : ℝ) (hc : c ≠ 0)
+     (y : ℝ) (hy : 0 < y) (m n : ℤ) (ψ : ℝ → ℂ) (hψ : Continuous ψ)
+     (hcompact : HasCompactSupport ψ) (hpositive : tsupport ψ ⊆ Ioi (0 : ℝ)) :
+-    AddCircle.fourierCoeff (periodizedKernelCircle c hc y hy m ψ hψ) n =
++    _root_.fourierCoeff (periodizedKernelCircle c hc y hy m ψ hψ) n =
+       𝓕 (actualKernel c hc y hy m ψ) (n : ℝ) := by
+   exact Real.fourierCoeff_tsum_comp_add
+     (actualKernel_translates_locally_summable c hc y hy m ψ hψ hcompact hpositive) n
+@@ -243,7 +243,7 @@
+ theorem compactSeed_canonicalSection_fourierCoeff (c : ℕ) [NeZero c]
+     (y : ℝ) (hy : 0 < y) (m n : ℤ) (ψ : ℝ → ℂ) (hψ : Continuous ψ)
+     (hcompact : HasCompactSupport ψ) (hpositive : tsupport ψ ⊆ Ioi (0 : ℝ)) :
+-    AddCircle.fourierCoeff
++    _root_.fourierCoeff
+       (canonicalFiniteSection c m (periodizedKernelCircle (c : ℝ)
+         (by exact_mod_cast (NeZero.ne c)) y hy m ψ hψ)) n =
+       kloosterman c n m *
+--- a/ImbalancedChen/Part3ActualCompactPoincareFourier.lean
++++ b/ImbalancedChen/Part3ActualCompactPoincareFourier.lean
+@@ -57,7 +57,7 @@
+     (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ) (u : (ZMod (c : ℕ))ˣ) (k : ℤ) :
+     indexedCompactSeed N m ψ (horizontalPoint y hy x)
+       (Sum.inr ⟨c, primitiveDUnitTranslateEquiv N (c : ℕ) hNc (u, k)⟩) =
+-      AddCircle.fourier m
++      _root_.fourier m
+         (((upperRepresentative (c : ℕ) ⟨(u : ZMod (c : ℕ)), u.isUnit⟩ : ℤ) : ℝ) /
+           (c : ℝ) : UnitAddCircle) *
+       actualKernel (c : ℝ) (by exact_mod_cast (Nat.ne_of_gt c.property)) y hy m ψ
+@@ -140,7 +140,7 @@
+     (F : UnitAddCircle → ℂ) (x : ℝ) :
+     canonicalFiniteSection c m F (x : UnitAddCircle) =
+       ∑ u : (ZMod c)ˣ,
+-        AddCircle.fourier m
++        _root_.fourier m
+           (((upperRepresentative c ⟨(u : ZMod c), u.isUnit⟩ : ℤ) : ℝ) /
+             (c : ℝ) : UnitAddCircle) *
+         F (((x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℝ) : UnitAddCircle) := by
+@@ -209,24 +209,24 @@
+ def actualCompactPoincareFourier (N : ℕ) (y : ℝ) (hy : 0 < y)
+     (m n : ℤ) (ψ : ℝ → ℂ) : ℂ :=
+   ∫ x in (0 : ℝ)..1,
+-    AddCircle.fourier (-n) (x : UnitAddCircle) *
++    _root_.fourier (-n) (x : UnitAddCircle) *
+       actualCompactPoincare N m ψ (horizontalPoint y hy x)
+ 
+ private def seedCircle (y : ℝ) (m : ℤ) (ψ : ℝ → ℂ) (x : UnitAddCircle) : ℂ :=
+-  AddCircle.fourier m x * ψ y
++  _root_.fourier m x * ψ y
+ 
+ private theorem seedCircle_integrable (y : ℝ) (m : ℤ) (ψ : ℝ → ℂ) :
+     Integrable (seedCircle y m ψ) AddCircle.haarAddCircle := by
+   have hc : Continuous (seedCircle y m ψ) :=
+-    (map_continuous (AddCircle.fourier m)).mul continuous_const
++    (map_continuous (_root_.fourier m)).mul continuous_const
+   exact hc.integrable_of_hasCompactSupport (HasCompactSupport.of_compactSpace _)
+ 
+ private theorem seedCircle_fourierCoeff (y : ℝ) (m n : ℤ) (ψ : ℝ → ℂ) :
+-    AddCircle.fourierCoeff (seedCircle y m ψ) n = if n = m then ψ y else 0 := by
+-  have heq : seedCircle y m ψ = fun x : UnitAddCircle => ψ y * AddCircle.fourier m x := by
++    _root_.fourierCoeff (seedCircle y m ψ) n = if n = m then ψ y else 0 := by
++  have heq : seedCircle y m ψ = fun x : UnitAddCircle => ψ y * _root_.fourier m x := by
+     funext x
+     exact mul_comm _ _
+-  rw [heq, AddCircle.fourierCoeff.const_mul, AddCircle.fourierCoeff_fourier]
++  rw [heq, _root_.fourierCoeff.const_mul, _root_.fourierCoeff_fourier]
+   by_cases hnm : n = m <;> simp [Pi.single_apply, hnm, eq_comm]
+ 
+ /-- Full geometric Fourier/Kloosterman expansion of the ORIGINAL actual
+@@ -246,9 +246,9 @@
+               y hy m ψ) (n : ℝ)
+         else 0 := by
+   have hcircle : actualCompactPoincareFourier N y hy m n ψ =
+-      AddCircle.fourierCoeff
++      _root_.fourierCoeff
+         (seedCircle y m ψ + allPositiveModulusSections N y hy m ψ hψ) n := by
+-    rw [AddCircle.fourierCoeff_eq_intervalIntegral _ n 0]
++    rw [_root_.fourierCoeff_eq_intervalIntegral _ n 0]
+     simp only [div_one, one_smul, zero_add, smul_eq_mul]
+     unfold actualCompactPoincareFourier
+     apply intervalIntegral.integral_congr
+@@ -256,7 +256,7 @@
+     rw [actualCompactPoincare_eq_seed_add_sections N y hy m ψ hψ hcompact hpositive x]
+     rfl
+   rw [hcircle]
+-  have hadd := congrFun (AddCircle.fourierCoeff.add (seedCircle_integrable y m ψ)
++  have hadd := congrFun (_root_.fourierCoeff.add (seedCircle_integrable y m ψ)
+     (allPositiveModulusSections_integrable N y hy m ψ hψ hcompact hpositive)) n
+   rw [hadd]
+   simp only [Pi.add_apply]
+--- a/ImbalancedChen/Part3ActualInfinityKloostermanSeed.lean
++++ b/ImbalancedChen/Part3ActualInfinityKloostermanSeed.lean
+@@ -188,16 +188,16 @@
+ 
+ /-- A genuine Fourier-radial cusp seed on H, with arbitrary radial profile. -/
+ def fourierRadialSeed (m : ℤ) (h : ℝ → ℂ) (z : UpperHalfPlane) : ℂ :=
+-  AddCircle.fourier m (z.re : UnitAddCircle) * h z.im
++  _root_.fourier m (z.re : UnitAddCircle) * h z.im
+ 
+ /-- Horizontal translation of this actual seed produces its actual
+ additive Fourier phase; no automorphic coefficient is a premise. -/
+ theorem fourierRadialSeed_translate (m : ℤ) (h : ℝ → ℂ)
+     (x : ℝ) (z : UpperHalfPlane) :
+     fourierRadialSeed m h (x +ᵥ z) =
+-      AddCircle.fourier m (x : UnitAddCircle) * fourierRadialSeed m h z := by
++      _root_.fourier m (x : UnitAddCircle) * fourierRadialSeed m h z := by
+   simp only [fourierRadialSeed, UpperHalfPlane.vadd_re, UpperHalfPlane.vadd_im,
+-    AddCircle.coe_add, AddCircle.fourier_apply, zsmul_add, AddCircle.toCircle_add,
++    AddCircle.coe_add, _root_.fourier_apply, zsmul_add, AddCircle.toCircle_add,
+     Circle.coe_mul]
+   ring
+ 
+@@ -206,15 +206,15 @@
+ theorem fourierRadialSeed_actual_bruhat (m : ℤ) (h : ℝ → ℂ)
+     (g : SL(2, ℤ)) (hc : (g 1 0 : ℝ) ≠ 0) (z : UpperHalfPlane) :
+     fourierRadialSeed m h (g • z) =
+-      AddCircle.fourier m (((g 0 0 : ℝ) / (g 1 0 : ℝ)) : UnitAddCircle) *
++      _root_.fourier m (((g 0 0 : ℝ) / (g 1 0 : ℝ)) : UnitAddCircle) *
+         fourierRadialSeed m h (scaledWeyl (g 1 0 : ℝ) hc •
+           ((((g 1 1 : ℝ) / (g 1 0 : ℝ))) +ᵥ z)) := by
+   rw [actual_bruhat_smul, fourierRadialSeed_translate]
+ 
+ private theorem fourier_int_ratio (c : ℕ) [NeZero c] (m a : ℤ) :
+-    AddCircle.fourier m (((a : ℝ) / (c : ℝ)) : UnitAddCircle) =
++    _root_.fourier m (((a : ℝ) / (c : ℝ)) : UnitAddCircle) =
+       ZMod.stdAddChar ((m : ZMod c) * (a : ZMod c)) := by
+-  rw [← Int.cast_mul, ZMod.stdAddChar_coe, AddCircle.fourier_coe_apply]
++  rw [← Int.cast_mul, ZMod.stdAddChar_coe, _root_.fourier_coe_apply]
+   push_cast
+   congr 1
+   ring
+@@ -222,9 +222,9 @@
+ /-- Literal normalized matrix phase on the actual canonical double coset.
+ The first frequency multiplies a/c; the second multiplies d/c. -/
+ def canonicalMatrixPhase (c : ℕ) [NeZero c] (m n : ℤ) (u : UnitResidue c) : ℂ :=
+-  AddCircle.fourier m
++  _root_.fourier m
+       (((canonicalMatrix c u 0 0 : ℤ) : ℝ) / (c : ℝ) : UnitAddCircle) *
+-    AddCircle.fourier n
++    _root_.fourier n
+       (((canonicalMatrix c u 1 1 : ℤ) : ℝ) / (c : ℝ) : UnitAddCircle)
+ 
+ /-- The determinant-forced inverse and the actual lower-right unit
+@@ -256,7 +256,7 @@
+ def canonicalFiniteSection (c : ℕ) [NeZero c] (m : ℤ)
+     (F : UnitAddCircle → ℂ) : UnitAddCircle → ℂ :=
+   ∑ u : UnitResidue c, fun x =>
+-    AddCircle.fourier m
++    _root_.fourier m
+         (((canonicalMatrix c u 0 0 : ℤ) : ℝ) / (c : ℝ) : UnitAddCircle) *
+       P3CuspTranslationFourierPhaseSourceOnly.translated F
+         ((((canonicalMatrix c u 1 1 : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) x
+@@ -268,32 +268,32 @@
+ theorem canonicalFiniteSection_fourierCoeff (c : ℕ) [NeZero c]
+     (m n : ℤ) (F : UnitAddCircle → ℂ)
+     (hF : MeasureTheory.Integrable F AddCircle.haarAddCircle) :
+-    AddCircle.fourierCoeff (canonicalFiniteSection c m F) n =
+-      kloosterman c n m * AddCircle.fourierCoeff F n := by
++    _root_.fourierCoeff (canonicalFiniteSection c m F) n =
++      kloosterman c n m * _root_.fourierCoeff F n := by
+   let sections : UnitResidue c → UnitAddCircle → ℂ := fun u x =>
+-    AddCircle.fourier m
++    _root_.fourier m
+         (((canonicalMatrix c u 0 0 : ℤ) : ℝ) / (c : ℝ) : UnitAddCircle) *
+       P3CuspTranslationFourierPhaseSourceOnly.translated F
+         ((((canonicalMatrix c u 1 1 : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) x
+   have hsections (u : UnitResidue c) :
+       MeasureTheory.Integrable (sections u) AddCircle.haarAddCircle := by
+     exact (P3CuspTranslationFourierPhaseSourceOnly.integrable_translated F hF _).const_mul _
+-  have hsum : AddCircle.fourierCoeff (canonicalFiniteSection c m F) n =
+-      ∑ u : UnitResidue c, AddCircle.fourierCoeff (sections u) n := by
+-    simpa only [Finset.sum_apply] using congrFun (AddCircle.fourierCoeff.sum
++  have hsum : _root_.fourierCoeff (canonicalFiniteSection c m F) n =
++      ∑ u : UnitResidue c, _root_.fourierCoeff (sections u) n := by
++    simpa only [Finset.sum_apply] using congrFun (_root_.fourierCoeff.sum
+       (Finset.univ : Finset (UnitResidue c)) sections (fun u hu => hsections u)) n
+   rw [hsum]
+   calc
+     _ = ∑ u : UnitResidue c,
+-        canonicalMatrixPhase c m n u * AddCircle.fourierCoeff F n := by
++        canonicalMatrixPhase c m n u * _root_.fourierCoeff F n := by
+       apply Finset.sum_congr rfl
+       intro u hu
+-      simp only [sections, AddCircle.fourierCoeff.const_mul,
++      simp only [sections, _root_.fourierCoeff.const_mul,
+         P3CuspTranslationFourierPhaseSourceOnly.fourierCoeff_translated,
+         canonicalMatrixPhase]
+       ring
+     _ = (∑ u : UnitResidue c, canonicalMatrixPhase c m n u) *
+-        AddCircle.fourierCoeff F n := (Finset.sum_mul _ _ _).symm
++        _root_.fourierCoeff F n := (Finset.sum_mul _ _ _).symm
+     _ = _ := by rw [sum_canonicalMatrixPhase_eq_kloosterman]
+ end ImbalancedChen.Part3.ActualInfinityKloostermanSeed20261025a
+ 
+--- a/ImbalancedChen/Part3CompactCuspGeometricFubini.lean
++++ b/ImbalancedChen/Part3CompactCuspGeometricFubini.lean
+@@ -26,10 +26,10 @@
+ open ImbalancedChen.Part3.ActualCompactBruhatKernel20261025a
+ 
+ /-- Actual normalized period-one character. -/
+-def phase (m : ℤ) (x : ℝ) : ℂ := AddCircle.fourier m (x : UnitAddCircle)
++def phase (m : ℤ) (x : ℝ) : ℂ := _root_.fourier m (x : UnitAddCircle)
+ 
+ private theorem phase_continuous (m : ℤ) : Continuous (phase m) :=
+-  (map_continuous (AddCircle.fourier m)).comp continuous_quotient_mk'
++  (map_continuous (_root_.fourier m)).comp continuous_quotient_mk'
+ 
+ /-- Canonical weight times the conjugated OUTER radial seed. -/
+ def radialWeight (ψ : ℝ → ℂ) (y : ℝ) : ℂ := ((y⁻¹ ^ 2 : ℝ) : ℂ) * star (ψ y)
+@@ -154,7 +154,7 @@
+   rw [rawBruhatKernel_eq_actual]
+   change Complex.exp (↑(-2 * Real.pi * x * (m : ℝ)) * Complex.I) * _ = phase (-m) x * _
+   congr 1
+-  rw [phase, AddCircle.fourier_coe_apply]
++  rw [phase, _root_.fourier_coe_apply]
+   congr 1
+   push_cast
+   ring
+--- a/ImbalancedChen/Part3CompactCuspParabolicL2.lean
++++ b/ImbalancedChen/Part3CompactCuspParabolicL2.lean
+@@ -64,7 +64,7 @@
+ theorem fourierRadialSeed_continuous (m : ℤ) (ψ : ℝ → ℂ) (hψ : Continuous ψ) :
+     Continuous (fourierRadialSeed m ψ) := by
+   have hcircle : Continuous (fun x : ℝ => (x : UnitAddCircle)) := AddCircle.continuous_mk'
+-  exact (((AddCircle.fourier m).continuous.comp
++  exact (((_root_.fourier m).continuous.comp
+     (hcircle.comp UpperHalfPlane.continuous_re)).mul (hψ.comp UpperHalfPlane.continuous_im))
+ 
+ theorem fourierRadialSeed_measurable (m : ℤ) (ψ : ℝ → ℂ) (hψ : Continuous ψ) :
+@@ -72,7 +72,7 @@
+ 
+ @[simp] theorem fourierRadialSeed_norm (m : ℤ) (ψ : ℝ → ℂ) (z : UpperHalfPlane) :
+     ‖fourierRadialSeed m ψ z‖ = ‖ψ z.im‖ := by
+-  simp only [fourierRadialSeed, norm_mul, AddCircle.fourier_apply, Circle.norm_coe, one_mul]
++  simp only [fourierRadialSeed, norm_mul, _root_.fourier_apply, Circle.norm_coe, one_mul]
+ 
+ theorem fourierRadialSeed_periodic (m : ℤ) (ψ : ℝ → ℂ) :
+     ∀ k : ℤ, ∀ z : UpperHalfPlane,
+--- a/ImbalancedChen/Part3CompactCuspQuotientGeometricPairing.lean
++++ b/ImbalancedChen/Part3CompactCuspQuotientGeometricPairing.lean
+@@ -135,9 +135,9 @@
+       · simp only [weightedStripPairChart, stripPairChart, dif_pos hy, indicator_of_mem hx]
+         rw [cuspPairingSeed, ← actualCompactPoincare_eq_parabolicTrace]
+         simp only [fourierRadialSeed, horizontalPoint, star_mul', Complex.star_def,
+-          ← AddCircle.fourier_neg, NNReal.smul_def, Complex.real_smul]
++          ← _root_.fourier_neg, NNReal.smul_def, Complex.real_smul]
+         change (((y⁻¹ ^ 2 : ℝ) : ℂ) *
+-          ((AddCircle.fourier (-m) (x : UnitAddCircle) * star (ψ y)) * _)) = _
++          ((_root_.fourier (-m) (x : UnitAddCircle) * star (ψ y)) * _)) = _
+         dsimp [radialWeight, phase]
+         ring
+       · simp [weightedStripPairChart, stripPairChart, hy, hx]
+--- a/ImbalancedChen/Part3InfinityZeroActualFiberFourier.lean
++++ b/ImbalancedChen/Part3InfinityZeroActualFiberFourier.lean
+@@ -74,7 +74,7 @@
+     (y : ℝ) (hy : 0 < y) (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ)
+     (r : ZeroResidue N d) (v : ℤ) :
+     zeroFiberSeed N hN d m ψ (horizontalPoint y hy x) (zeroPairCoset N d (r, v)) =
+-      AddCircle.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
++      _root_.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
+         actualKernel (zeroModulus N d) (zeroModulus_ne_zero N hN d) y hy m ψ
+           ((x - (r.1.val : ℝ) / (d : ℝ)) + (v : ℝ)) := by
+   change fourierRadialSeed m ψ
+@@ -123,7 +123,7 @@
+ def zeroFiniteSection (N d : ℕ) [NeZero d] (m : ℤ)
+     (F : UnitAddCircle → ℂ) : UnitAddCircle → ℂ :=
+   ∑ r : ZeroResidue N d, fun x =>
+-    AddCircle.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
++    _root_.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
+       P3CuspTranslationFourierPhaseSourceOnly.translated F
+         ((-((r.1.val : ℝ) / (d : ℝ)) : ℝ) : UnitAddCircle) x
+ 
+@@ -173,8 +173,8 @@
+ 
+ private theorem phase_product (N : ℕ) (hN : 0 < N) (d : ℕ) [NeZero d]
+     (m n : ℤ) (r : ZeroResidue N d) :
+-    AddCircle.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
+-      AddCircle.fourier n ((-((r.1.val : ℝ) / (d : ℝ)) : ℝ) : UnitAddCircle) =
++    _root_.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
++      _root_.fourier n ((-((r.1.val : ℝ) / (d : ℝ)) : ℝ) : UnitAddCircle) =
+         zeroNormalizedPhase N hN d m n r := by
+   have hd : zeroCanonicalMatrix N d r 1 1 ≠ 0 := by
+     change (d : ℤ) ≠ 0
+@@ -183,7 +183,7 @@
+     (r.1.val : ℤ) rfl hd
+   dsimp only [zeroNormalizedPhase]
+   rw [hcoords.1, hcoords.2]
+-  simp only [zeroCanonicalMatrix, Int.cast_natCast, AddCircle.fourier_coe_apply]
++  simp only [zeroCanonicalMatrix, Int.cast_natCast, _root_.fourier_coe_apply]
+   rw [← Complex.exp_add]
+   congr 1
+   push_cast
+@@ -191,29 +191,29 @@
+ 
+ theorem zeroFiniteSection_fourierCoeff (N : ℕ) (hN : 0 < N) (d : ℕ) [NeZero d]
+     (m n : ℤ) (F : UnitAddCircle → ℂ) (hF : Integrable F AddCircle.haarAddCircle) :
+-    AddCircle.fourierCoeff (zeroFiniteSection N d m F) n =
+-      zeroGeneralizedKloosterman N d m n * AddCircle.fourierCoeff F n := by
++    _root_.fourierCoeff (zeroFiniteSection N d m F) n =
++      zeroGeneralizedKloosterman N d m n * _root_.fourierCoeff F n := by
+   let sections : ZeroResidue N d → UnitAddCircle → ℂ := fun r x =>
+-    AddCircle.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
++    _root_.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
+       P3CuspTranslationFourierPhaseSourceOnly.translated F
+         ((-((r.1.val : ℝ) / (d : ℝ)) : ℝ) : UnitAddCircle) x
+   have hsections (r : ZeroResidue N d) : Integrable (sections r) AddCircle.haarAddCircle :=
+     (P3CuspTranslationFourierPhaseSourceOnly.integrable_translated F hF _).const_mul _
+-  have hsum : AddCircle.fourierCoeff (zeroFiniteSection N d m F) n =
+-      ∑ r : ZeroResidue N d, AddCircle.fourierCoeff (sections r) n := by
+-    simpa only [Finset.sum_apply] using congrFun (AddCircle.fourierCoeff.sum
++  have hsum : _root_.fourierCoeff (zeroFiniteSection N d m F) n =
++      ∑ r : ZeroResidue N d, _root_.fourierCoeff (sections r) n := by
++    simpa only [Finset.sum_apply] using congrFun (_root_.fourierCoeff.sum
+       (Finset.univ : Finset (ZeroResidue N d)) sections (fun r hr => hsections r)) n
+   rw [hsum]
+   calc
+     _ = ∑ r : ZeroResidue N d,
+-        zeroNormalizedPhase N hN d m n r * AddCircle.fourierCoeff F n := by
++        zeroNormalizedPhase N hN d m n r * _root_.fourierCoeff F n := by
+       apply Finset.sum_congr rfl
+       intro r hr
+-      simp only [sections, AddCircle.fourierCoeff.const_mul,
++      simp only [sections, _root_.fourierCoeff.const_mul,
+         P3CuspTranslationFourierPhaseSourceOnly.fourierCoeff_translated,
+         ← mul_assoc, phase_product N hN]
+     _ = (∑ r : ZeroResidue N d, zeroNormalizedPhase N hN d m n r) *
+-        AddCircle.fourierCoeff F n := (Finset.sum_mul _ _ _).symm
++        _root_.fourierCoeff F n := (Finset.sum_mul _ _ _).symm
+     _ = _ := by rw [sum_zeroNormalizedPhase_eq_generalized]
+ 
+ /-- Literal normalized Fourier integral of the ORIGINAL actual mixed
+@@ -221,7 +221,7 @@
+ theorem actualZeroFiber_fourierIntegral (N : ℕ) (hN : 0 < N) (d : ℕ) [NeZero d]
+     (y : ℝ) (hy : 0 < y) (m n : ℤ) (ψ : ℝ → ℂ) (hψ : Continuous ψ)
+     (hcψ : HasCompactSupport ψ) (hposψ : tsupport ψ ⊆ Ioi (0 : ℝ)) :
+-    (∫ x in (0 : ℝ)..1, AddCircle.fourier (-n) (x : UnitAddCircle) *
++    (∫ x in (0 : ℝ)..1, _root_.fourier (-n) (x : UnitAddCircle) *
+       actualZeroFiber N hN d m ψ (horizontalPoint y hy x)) =
+       (if N.Coprime d then kloosterman d (-n * inverseResidue d (N : ℤ)) (-m) else 0) *
+         𝓕 (actualKernel (zeroModulus N d) (zeroModulus_ne_zero N hN d) y hy m ψ) (n : ℝ) := by
+@@ -231,7 +231,7 @@
+   dsimp only [F] at hcoeff
+   rw [periodizedKernelCircle_fourierCoeff _ _ y hy m n ψ hψ hcψ hposψ,
+     zeroGeneralized_eq_physical_or_zero] at hcoeff
+-  rw [AddCircle.fourierCoeff_eq_intervalIntegral _ n 0] at hcoeff
++  rw [_root_.fourierCoeff_eq_intervalIntegral _ n 0] at hcoeff
+   simpa only [zero_add, one_div_one, one_smul, smul_eq_mul,
+     actualZeroFiber_eq_section N hN d y hy m ψ hψ hcψ hposψ] using hcoeff
+ 
+@@ -240,7 +240,7 @@
+ theorem zeroKernel_explicit (N : ℕ) (hN : 0 < N) (d : ℕ) [NeZero d]
+     (y : ℝ) (hy : 0 < y) (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ) :
+     actualKernel (zeroModulus N d) (zeroModulus_ne_zero N hN d) y hy m ψ x =
+-      AddCircle.fourier m
++      _root_.fourier m
+         ((-x / ((N : ℝ) * (d : ℝ) ^ 2 * (x ^ 2 + y ^ 2)) : ℝ) : UnitAddCircle) *
+       ψ (y / ((N : ℝ) * (d : ℝ) ^ 2 * (x ^ 2 + y ^ 2))) := by
+   rw [actualKernel_formula, zeroModulus_sq]
+--- a/ImbalancedChen/Part3InfinityZeroActualFiberGeometricPair.lean
++++ b/ImbalancedChen/Part3InfinityZeroActualFiberGeometricPair.lean
+@@ -71,10 +71,10 @@
+     have hpoint (x : ℝ) : ((y⁻¹ ^ 2 : ℝ) : ℂ) *
+         star (fourierRadialSeed m ψ (horizontalPoint y hy x)) *
+           actualZeroFiber N hN d n φ (horizontalPoint y hy x) =
+-        radialWeight ψ y * (AddCircle.fourier (-m) (x : UnitAddCircle) *
++        radialWeight ψ y * (_root_.fourier (-m) (x : UnitAddCircle) *
+           actualZeroFiber N hN d n φ (horizontalPoint y hy x)) := by
+       simp only [fourierRadialSeed, horizontalPoint, star_mul',
+-        Complex.star_def, ← AddCircle.fourier_neg, radialWeight]
++        Complex.star_def, ← _root_.fourier_neg, radialWeight]
+       ring
+     simp_rw [hpoint]
+     rw [intervalIntegral.integral_const_mul,
+--- a/ImbalancedChen/Part3InfinityZeroActualFiniteGeometricAssembly.lean
++++ b/ImbalancedChen/Part3InfinityZeroActualFiniteGeometricAssembly.lean
+@@ -110,14 +110,14 @@
+         star (fourierRadialSeed m ψ (horizontalPoint y hy x)) *
+           fourierRadialSeed n φ (horizontalPoint y hy x) =
+         (radialWeight ψ y * φ y) *
+-          (AddCircle.fourier (-m) (x : UnitAddCircle) * AddCircle.fourier n (x : UnitAddCircle)) := by
++          (_root_.fourier (-m) (x : UnitAddCircle) * _root_.fourier n (x : UnitAddCircle)) := by
+       simp only [fourierRadialSeed, horizontalPoint, star_mul', Complex.star_def,
+-        ← AddCircle.fourier_neg, radialWeight]
++        ← _root_.fourier_neg, radialWeight]
+       ring
+     simp_rw [hseed]
+     rw [intervalIntegral.integral_const_mul]
+-    have hc := AddCircle.fourierCoeff_fourier (T := (1 : ℝ)) n m
+-    rw [AddCircle.fourierCoeff_eq_intervalIntegral _ m 0] at hc
++    have hc := congrFun (_root_.fourierCoeff_fourier (T := (1 : ℝ)) n) m
++    rw [_root_.fourierCoeff_eq_intervalIntegral _ m 0] at hc
+     simpa [hN1, Pi.single_apply, eq_comm] using congrArg (fun t : ℂ => (radialWeight ψ y * φ y) * t) hc
+   · simp [hN1]
+ 
+--- a/ImbalancedChen/Part3InfinityZeroArithmetic.lean
++++ b/ImbalancedChen/Part3InfinityZeroArithmetic.lean
+@@ -320,8 +320,8 @@
+ 
+ private theorem stdAddChar_int_fourier (d : ℕ) [NeZero d] (A : ℤ) :
+     ZMod.stdAddChar (A : ZMod d) =
+-      AddCircle.fourier 1 (((A : ℝ) / (d : ℝ)) : UnitAddCircle) := by
+-  rw [ZMod.stdAddChar_coe, AddCircle.fourier_coe_apply]
++      _root_.fourier 1 (((A : ℝ) / (d : ℝ)) : UnitAddCircle) := by
++  rw [ZMod.stdAddChar_coe, _root_.fourier_coe_apply]
+   push_cast
+   congr 1
+   ring
+@@ -330,7 +330,7 @@
+ arithmetic phase supplied as its definition. -/
+ def zeroNormalizedPhase (N : ℕ) (hN : 0 < N) (d : ℕ) [NeZero d]
+     (m n : ℤ) (r : ZeroResidue N d) : ℂ :=
+-  AddCircle.fourier 1
++  _root_.fourier 1
+     (((m : ℝ) * (zeroCuspProduct N (zeroCanonicalMatrix N d r) 0 0 /
+         zeroCuspProduct N (zeroCanonicalMatrix N d r) 1 0) +
+       (n : ℝ) * (zeroCuspProduct N (zeroCanonicalMatrix N d r) 1 1 /
+@@ -352,7 +352,7 @@
+       ((m * zeroCanonicalMatrix N d r 0 1 - n * (r.1.val : ℤ) : ℤ) : ℝ) / (d : ℝ) := by
+     push_cast
+     ring
+-  change AddCircle.fourier 1
++  change _root_.fourier 1
+     (((m : ℝ) * (((zeroCanonicalMatrix N d r 0 1 : ℤ) : ℝ) / (d : ℝ)) +
+       (n : ℝ) * (-((r.1.val : ℤ) : ℝ) / (d : ℝ))) : UnitAddCircle) = _
+   rw [harg, ← stdAddChar_int_fourier]
+--- a/ImbalancedChen/Part3InfinityZeroBruhatSeed.lean
++++ b/ImbalancedChen/Part3InfinityZeroBruhatSeed.lean
+@@ -150,7 +150,7 @@
+     (g : SL(2, ℤ)) (k : ℤ) (hc : g 1 0 = (N : ℤ) * k) (hd : g 1 1 ≠ 0)
+     (y : ℝ) (hy : 0 < y) (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ) :
+     fourierRadialSeed m ψ (g • (zeroSL N hN • horizontalPoint y hy x)) =
+-      AddCircle.fourier m (((g 0 1 : ℝ) / (g 1 1 : ℝ)) : UnitAddCircle) *
++      _root_.fourier m (((g 0 1 : ℝ) / (g 1 1 : ℝ)) : UnitAddCircle) *
+         actualKernel (Real.sqrt (N : ℝ) * (g 1 1 : ℝ))
+           (zeroWeylModulus_ne_zero N hN g hd) y hy m ψ
+             (x - (k : ℝ) / (g 1 1 : ℝ)) := by
+@@ -168,7 +168,7 @@
+     (m : ℤ) (ψ : ℝ → ℂ) (x : ℝ) :
+     fourierRadialSeed m ψ
+       (zeroCanonicalMatrix N d r • (zeroSL N hN • horizontalPoint y hy x)) =
+-      AddCircle.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
++      _root_.fourier m (((canonicalB N d r.1 : ℤ) : ℝ) / (d : ℝ) : UnitAddCircle) *
+         actualKernel (Real.sqrt (N : ℝ) * (d : ℝ))
+           (mul_ne_zero (Real.sqrt_pos.mpr (by exact_mod_cast hN)).ne'
+             (by exact_mod_cast NeZero.ne d)) y hy m ψ
