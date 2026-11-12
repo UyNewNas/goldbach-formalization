@@ -116,9 +116,11 @@ private theorem actual_seventh_minus_attached_highq_zero
   have hNpos : (0 : ℝ) < (N : ℝ) := lt_trans (by norm_num) hN
   have hexp : epsilon + (299 / 500 : ℝ) ≤ (3 / 5 : ℝ) := by
     linarith
-  simp only [attachedLeafTest, ite_false, one_mul]
+  unfold attachedLeafTest
   apply Finset.sum_eq_zero
   intro a ha
+  change actualSmallRosserMinus N cap w ((N : ℝ) ^ epsilon) a *
+    highQTest X F (a * pre.prod) = 0
   by_cases hb : actualSmallRosserMinus N cap w ((N : ℝ) ^ epsilon) a = 0
   · simp [hb]
   · have hsmall : (a : ℝ) < (N : ℝ) ^ epsilon :=
