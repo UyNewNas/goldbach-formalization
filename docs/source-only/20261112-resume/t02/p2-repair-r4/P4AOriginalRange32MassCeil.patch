@@ -1,0 +1,21 @@
+--- original/ImbalancedChen/P4AOriginalRange32MassCeil.lean
++++ repaired/ImbalancedChen/P4AOriginalRange32MassCeil.lean
+@@ -26,6 +26,8 @@
+ open OriginalThirdBelowMuBMassCeilSourceOnly OriginalThirdSymmetricJensenSourceOnly
+ open OriginalThirdCompactPartitionSourceOnly OriginalThirdBelowMuBRoundedSourceOnly
+ open P4AOriginalSeedRange32InvariantSourceOnly
++open OriginalThirdTriangleMomentsSourceOnly (prismMass prismRegion prismWeight integral_prismWeight)
++open OriginalThirdSortedHalfIntegralSourceOnly (SymmetricFullBox)
+ 
+ /-- Alias of the original full ln32 x/y mass tree, with no symmetric division. -/
+ def ordinaryMass32 (lower upper : Fin 3 → ℤ) : IV :=
+@@ -137,7 +139,8 @@
+     (4*boxMass (![a,a,c]) (![b,b,d]))/2 = prismMass a b c d := by
+   rw [symmetric_mass_formula]
+   unfold boxMass zMass
+-  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two]
++  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
++    Matrix.tail_cons, Matrix.head_cons]
+   ring
+ 
+ /-- The same arbitrary full ln32 interval tree followed by /2 encloses the

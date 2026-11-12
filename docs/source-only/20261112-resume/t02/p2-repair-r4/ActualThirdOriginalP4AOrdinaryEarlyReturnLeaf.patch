@@ -1,0 +1,41 @@
+--- original/ImbalancedChen/ActualThirdOriginalP4AOrdinaryEarlyReturnLeaf.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalP4AOrdinaryEarlyReturnLeaf.lean
+@@ -163,8 +163,12 @@
+     (roundedNew (realBox a) (realBox b)
+       (originalLn32 (realBox b 0/realBox a 0))
+       (originalLn32 (realBox b 1/realBox a 1))).hi P160 P160_pos).2
+-  simpa only [bStoredOut,newQuery,Rat.cast_div,Rat.cast_intCast,value,
+-    P160,Int.cast_pow,Int.cast_ofNat] using hout
++  have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++    rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++  have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++    simp only [P160,Int.cast_pow,Int.cast_ofNat]
++  simp only [newQuery,hcast]
++  simpa only [bStoredOut,value,hscale] using hout
+ 
+ /-- Full original-grid B early charge. All raw log guards, NEW arithmetic,
+ same-reader query, full original mass.hi and final UP are supplied. No OLD
+@@ -184,7 +188,7 @@
+         (bStoredOut table a b)) := by
+   have hr := below_mu_B_log_ratios (realBox a) (realBox b) ha hab hcut hyx hzy hmu
+   have hg := original_stored_ordinary_log32_guards lo hi a b haBind hbBind
+-    ha hab hyx (by simpa only [VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
++    ha hab hyx (by simpa only [realBox,VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
+   have hn := roundedNew_encloses (a := realBox a) (b := realBox b)
+     (originalLn32_sound hr.1.1 hr.1.2)
+     (originalLn32_sound hr.2.1 hr.2.2) hg.1 hg.2
+@@ -232,8 +236,12 @@
+ theorem tent_new_stored_query_encloses (table : CheckedBlockTable) (a b : BoxPoint) :
+     actualExtendedThirdLowerFactor (ordinaryNewQuery a b:ℝ)≤value (tentEarlyOut table a b) := by
+   have h := (CheckedBlockTable.query_encloses_all table (ordinaryNew a b).hi P160 P160_pos).2
+-  simpa only [tentEarlyOut,ordinaryNewQuery,Rat.cast_div,Rat.cast_intCast,value,
+-    P160,Int.cast_pow,Int.cast_ofNat] using h
++  have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++    rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++  have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++    simp only [P160,Int.cast_pow,Int.cast_ofNat]
++  simp only [ordinaryNewQuery,hcast]
++  simpa only [tentEarlyOut,value,hscale] using h
+ 
+ /-- The unit-log ordinary tent NEW charge, independent of the selected
+ plane's OLD chord. A selector that reaches high<=2 returns this exact out.

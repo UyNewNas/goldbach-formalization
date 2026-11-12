@@ -1,0 +1,24 @@
+--- original/ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.lean
+@@ -224,7 +224,8 @@
+   classical
+   have hm := (firstMax_mem_max _ _ _ hselected).1
+   have hr := (List.mem_filter.mp hm).2
+-  simpa only [decide_eq_true_eq,rootTest] using hr
++  have hroot : rootTest lo hi D T .base := of_decide_eq_true hr
++  exact hroot
+ 
+ theorem selected_is_original_first_max (lo hi : Fin 3 → ℤ) (D T : ℤ)
+     (p : Candidate) (hselected : originalMinorant lo hi D T=some p) :
+@@ -292,7 +293,10 @@
+   dsimp [rootTest,rawSum] at hroot
+   exact original_selected_tent_stored_integer_upper table s k lo hi D T a b
+     (literalTentEndpoint s k hi D) (literalTentEndpoint s k lo D) _ _ _
+-    hD hT haBind hbBind ha hab hcut hyx hzy hmu hfull hbranch hroot hres
++    hD hT haBind hbBind ha hab hcut hyx hzy hmu hfull
++    (by cases k <;> exact hbranch)
++    (by cases k <;> simpa only [add_assoc] using hroot)
++    (by cases k <;> exact hres)
+     rfl rfl hlow hratio hpositive rfl rfl rfl
+ 
+ /-- Exact integer box() behavior when mean_upper is absent. -/

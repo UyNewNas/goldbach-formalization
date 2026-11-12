@@ -1,0 +1,491 @@
+MODULE ImbalancedChen.ActualThirdOriginalP4AOrdinaryEarlyReturnLeaf
+
+theorem crossing_rejected (low high : ℚ) (wtLo wtHi fl fh out : ℤ)
+    (hcross : low<2 ∧ 2<high) :
+    originalMeanUpperTail low high wtLo wtHi fl fh out=none := by
+
+theorem crossing_no_charge (low high : ℚ) (wtLo wtHi fl fh out charge : ℤ)
+    (hcross : low<2 ∧ 2<high) :
+    originalMeanUpperTail low high wtLo wtHi fl fh out≠some charge := by
+
+theorem high_le_two_returns_out (low high : ℚ) (wtLo wtHi fl fh out : ℤ)
+    (hhigh : high≤2) :
+    originalMeanUpperTail low high wtLo wtHi fl fh out=some out := by
+
+theorem strict_chord_tail (low high : ℚ) (wtLo wtHi fl fh out : ℤ)
+    (hlow : 2≤low) (hspan : low<high) :
+    originalMeanUpperTail low high wtLo wtHi fl fh out=
+      some (meanHigh wtLo wtHi fl fh out) := by
+
+theorem ordinary_old_span_dispatch_exhaustive (low high : ℚ) (hspan : low<high) :
+    high≤2 ∨ (low<2 ∧ 2<high) ∨ (2≤low ∧ low<high) := by
+
+theorem originalMeanUpperTail_none_iff (low high : ℚ) (wtLo wtHi fl fh out : ℤ) :
+    originalMeanUpperTail low high wtLo wtHi fl fh out=none ↔ low<2 ∧ 2<high := by
+
+theorem ordinary_factor_integrable (a b : BoxPoint)
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (g : BoxPoint → ℝ) (hg : Measurable g) :
+    Integrable (fun t => actualExtendedThirdLowerFactor (g t)) (boxProbability a b) := by
+
+private theorem measurable_actual_old_argument : Measurable actualOldArgument := by
+
+theorem ordinary_new_only_leaf_upper (a b : BoxPoint)
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hrho : b 0≤thirdPrefixRho)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (out : ℝ)
+    (hout : actualExtendedThirdLowerFactor
+      ((thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1)≤out) :
+    (∫ t in compactRegion ∩ Icc a b,compactKernel t)≤4*boxMass a b*out := by
+
+theorem B_old_factor_zero_of_high_le_two (a b : BoxPoint)
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hyx : b 1≤a 0) (hmu : b 0≤VariableEnvelope.mu)
+    (hhigh : bOldHigh a≤2) {t : BoxPoint} (ht : t∈Icc a b) :
+    actualExtendedThirdLowerFactor (bOldArgument t)=0 := by
+
+theorem tent_old_factor_zero_of_high_le_two (s : TentSum) (k : TentSide)
+    (a b : BoxPoint) (ha : ∀ i, 0<a i)
+    (hres : 0<OriginalThirdSixTentCandidatesSourceOnly.oldNumerator s k b)
+    (hhigh : tentOldHigh s k a≤2) {t : BoxPoint} (ht : t∈Icc a b) :
+    actualExtendedThirdLowerFactor (tentOldArgument s k t)=0 := by
+
+theorem B_new_stored_query_encloses (table : CheckedBlockTable) (a b : Fin 3 → ℚ) :
+    actualExtendedThirdLowerFactor
+      (newQuery (realBox a) (realBox b)
+        (originalLn32 (realBox b 0/realBox a 0))
+        (originalLn32 (realBox b 1/realBox a 1)):ℝ)≤value (bStoredOut table a b) := by
+
+theorem ordinary_B_high_le_two_integer_upper
+    (table : CheckedBlockTable) (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (ha : ∀ i, 0<realBox a i) (hab : ∀ i, realBox a i<realBox b i)
+    (hcut : (1:ℝ)/100≤realBox a 2)
+    (hyx : realBox b 1≤realBox a 0) (hzy : realBox b 2≤realBox a 1)
+    (hmu : realBox b 0≤VariableEnvelope.mu)
+    (hfull : realBox b 0+realBox b 1+3*realBox b 2≤thirdPrefixTheta)
+    (hhigh : bHighQ a≤2) :
+    (∫ t in compactRegion ∩ Icc (realBox a) (realBox b),compactKernel t)≤
+      value (OriginalThirdBelowMuBMassCeilSourceOnly.literalOrdinaryUpper lo hi
+        (bStoredOut table a b)) := by
+
+theorem tent_new_stored_query_encloses (table : CheckedBlockTable) (a b : BoxPoint) :
+    actualExtendedThirdLowerFactor (ordinaryNewQuery a b:ℝ)≤value (tentEarlyOut table a b) := by
+
+theorem ordinary_tent_new_only_integer_upper
+    (table : CheckedBlockTable) (lo hi : Fin 3 → ℤ) (D : ℤ) (a b : BoxPoint)
+    (hD : D=48000*2^24)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hmu : b 0≤VariableEnvelope.mu)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (hratio : ∀ i : Fin 2, b i.castSucc/a i.castSucc≤2)
+    (hpositive : ∀ i : Fin 2, 0<(originalLnUnit (b i.castSucc/a i.castSucc)).lo) :
+    (∫ t in compactRegion ∩ Icc a b,compactKernel t)≤
+      value (OriginalThirdSixTentOrdinaryMassCeilSourceOnly.literalOrdinaryUpper lo hi
+        (tentEarlyOut table a b)) := by
+
+theorem ordinary_tent_high_le_two_dispatch
+    (s : TentSum) (k : TentSide) (lo hi : Fin 3 → ℤ) (D : ℤ)
+    (hhigh : literalTentEndpoint s k lo D≤2)
+    (wtLo wtHi fl fh out : ℤ) :
+    originalMeanUpperTail (literalTentEndpoint s k hi D)
+      (literalTentEndpoint s k lo D) wtLo wtHi fl fh out=some out := by
+
+theorem ordinary_B_high_le_two_dispatch
+    (a b : Fin 3 → ℚ) (hhigh : bHighQ a≤2) (wtLo wtHi fl fh out : ℤ) :
+    originalMeanUpperTail (bLowQ b) (bHighQ a) wtLo wtHi fl fh out=some out := by
+
+theorem ordinary_tent_high_le_two_integer_upper
+    (table : CheckedBlockTable) (s : TentSum) (k : TentSide)
+    (lo hi : Fin 3 → ℤ) (D : ℤ) (a b : BoxPoint)
+    (hD : D=48000*2^24)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hmu : b 0≤VariableEnvelope.mu)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (hratio : ∀ i : Fin 2, b i.castSucc/a i.castSucc≤2)
+    (hpositive : ∀ i : Fin 2, 0<(originalLnUnit (b i.castSucc/a i.castSucc)).lo)
+    (hhigh : literalTentEndpoint s k lo D≤2) :
+    originalMeanUpperTail (literalTentEndpoint s k hi D)
+      (literalTentEndpoint s k lo D) 0 0 0 0 (tentEarlyOut table a b)=
+        some (tentEarlyOut table a b) ∧
+    (∫ t in compactRegion ∩ Icc a b,compactKernel t)≤
+      value (OriginalThirdSixTentOrdinaryMassCeilSourceOnly.literalOrdinaryUpper lo hi
+        (tentEarlyOut table a b)) := by
+
+theorem ordinary_tent_crossing_rejected
+    (s : TentSum) (k : TentSide) (lo hi : Fin 3 → ℤ) (D : ℤ)
+    (hcross : literalTentEndpoint s k hi D<2 ∧ 2<literalTentEndpoint s k lo D)
+    (wtLo wtHi fl fh out : ℤ) :
+    originalMeanUpperTail (literalTentEndpoint s k hi D)
+      (literalTentEndpoint s k lo D) wtLo wtHi fl fh out=none := by
+
+theorem ordinary_B_crossing_rejected
+    (a b : Fin 3 → ℚ) (hcross : bLowQ b<2 ∧ 2<bHighQ a)
+    (wtLo wtHi fl fh out : ℤ) :
+    originalMeanUpperTail (bLowQ b) (bHighQ a) wtLo wtHi fl fh out=none := by
+
+MODULE ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector
+
+theorem rootTest_iff_rangeHigh (lo hi : Fin 3 → ℤ) (D T : ℤ) (p : Candidate) :
+    rootTest lo hi D T p ↔ rangeHigh lo hi D p≤(T:ℚ) := by
+
+theorem tent_mem_sourcePair_iff (lo hi : Fin 3 → ℤ) (D : ℤ)
+    (s : TentSum) (k : TentSide) :
+    Candidate.tent s k∈sourcePair lo hi D s ↔ branchTest lo hi D s k := by
+
+theorem tent_mem_sourceRaw_iff (lo hi : Fin 3 → ℤ) (D : ℤ)
+    (s : TentSum) (k : TentSide) :
+    Candidate.tent s k∈sourceRaw lo hi D ↔ branchTest lo hi D s k := by
+
+theorem tent_mem_candidates_iff (lo hi : Fin 3 → ℤ) (D T : ℤ)
+    (s : TentSum) (k : TentSide) :
+    Candidate.tent s k∈sourceCandidates lo hi D T ↔
+      branchTest lo hi D s k ∧ rootTest lo hi D T (.tent s k) := by
+
+theorem firstMax_none_iff {α : Type*} (score : α → ℚ) (xs : List α) :
+    firstMax score xs=none ↔ xs=[] := by
+
+theorem firstMax_mem_max {α : Type*} (score : α → ℚ) (xs : List α) (p : α)
+    (h : firstMax score xs=some p) :
+    p∈xs ∧ ∀ q∈xs, score q≤score p := by
+
+theorem firstMax_priority {α : Type*} (score : α → ℚ) (xs : List α) (p : α)
+    (h : firstMax score xs=some p) :
+    ∃ before after, xs=before++p::after ∧
+      (∀ q∈before, score q<score p) ∧ (∀ q∈after, score q≤score p) := by
+
+theorem selected_tent_guards (lo hi : Fin 3 → ℤ) (D T : ℤ)
+    (s : TentSum) (k : TentSide)
+    (hselected : originalMinorant lo hi D T=some (.tent s k)) :
+    branchTest lo hi D s k ∧ rootTest lo hi D T (.tent s k) := by
+
+theorem selected_base_root (lo hi : Fin 3 → ℤ) (D T : ℤ)
+    (hselected : originalMinorant lo hi D T=some .base) :
+    153*D-96*lo 2≤256*T := by
+
+theorem selected_is_original_first_max (lo hi : Fin 3 → ℤ) (D T : ℤ)
+    (p : Candidate) (hselected : originalMinorant lo hi D T=some p) :
+    ∃ before after, sourceCandidates lo hi D T=before++p::after ∧
+      (∀ q∈before, sourceScore lo hi D q<sourceScore lo hi D p) ∧
+      (∀ q∈after, sourceScore lo hi D q≤sourceScore lo hi D p) := by
+
+theorem originalMinorant_none_iff (lo hi : Fin 3 → ℤ) (D T : ℤ) :
+    originalMinorant lo hi D T=none ↔
+      ∀ p∈sourceRaw lo hi D, ¬rootTest lo hi D T p := by
+
+theorem originalMinorant_ne_none (lo hi : Fin 3 → ℤ) (D T : ℤ)
+    (hD : D=48000*2^24) (hT : T=481573208064) (hz : 0≤lo 2) :
+    originalMinorant lo hi D T≠none := by
+
+theorem original_finite_selected_tent_integer_upper
+    (table : CheckedBlockTable)
+    (s : TentSum) (k : TentSide) (lo hi : Fin 3 → ℤ)
+    (D T : ℤ) (a b : BoxPoint)
+    (hD : D=48000*2^24) (hT : T=481573208064)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hmu : b 0≤VariableEnvelope.mu)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (hselected : originalMinorant lo hi D T=some (.tent s k))
+    (hres : match k with
+      | .rise => 0<D+(literalTentX s-2)*hi 0+(literalTentY s-2)*hi 1
+      | .fall => 0<57*D+(-96*literalTentX s-64)*hi 0+(-96*literalTentY s-64)*hi 1)
+    (hlow : 2≤(literalTentEndpoint s k hi D:ℝ))
+    (hratio : ∀ i : Fin 2, b i.castSucc/a i.castSucc≤2)
+    (hpositive : ∀ i : Fin 2, 0<(originalLnUnit (b i.castSucc/a i.castSucc)).lo) :
+    (∫ t in compactRegion ∩ Icc a b, compactKernel t)≤
+      value (literalOrdinaryUpper lo hi (meanHigh
+        (ordinaryTentWeight s k a b (literalTentEndpoint s k hi D)
+          (literalTentEndpoint s k lo D)).lo
+        (ordinaryTentWeight s k a b (literalTentEndpoint s k hi D)
+          (literalTentEndpoint s k lo D)).hi
+        (readQueryLo160 (assembledRead table.blocks)
+          (literalTentEndpoint s k hi D).num ((literalTentEndpoint s k hi D).den:ℤ))
+        (readQueryLo160 (assembledRead table.blocks)
+          (literalTentEndpoint s k lo D).num ((literalTentEndpoint s k lo D).den:ℤ))
+        (readQueryHi160 (assembledRead table.blocks) (ordinaryNew a b).hi P160))) := by
+
+theorem applyOptionalMean_none (high : ℤ) : applyOptionalMean high none=high := by
+
+theorem applyOptionalMean_some (high j : ℤ) :
+    value (applyOptionalMean high (some j))=min (value high) (value j) := by
+
+theorem min_max0_sub (high out old : ℤ) (hh : 0≤high) :
+    min high (max 0 (out-old))=max 0 (min high (out-old)) := by
+
+theorem max0_sub_antitone (out old₁ old₂ : ℤ) (h : old₁≤old₂) :
+    max 0 (out-old₂)≤max 0 (out-old₁) := by
+
+theorem min_max0_sub_eq (out old₁ old₂ : ℤ) :
+    min (max 0 (out-old₁)) (max 0 (out-old₂))=
+      max 0 (out-max old₁ old₂) := by
+
+MODULE ImbalancedChen.ActualThirdOriginalP4ASymmetricTentPrerequisites
+
+theorem symmetric_positive {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
+    0<a ∧ 0<c := by
+
+theorem symmetric_left_positive {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
+    ∀ i, 0<symmetricLeft a c i := by
+
+theorem symmetric_widths {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
+    ∀ i, symmetricLeft a c i<symmetricRight b d i := by
+
+theorem prismPoint_mem_symmetric_rectangle {a b c d : ℝ} {p : PrismPoint}
+    (hp : p∈prismRegion a b c d) :
+    prismPoint p∈Icc (symmetricLeft a c) (symmetricRight b d) := by
+
+theorem symmetric_tent_plane_le_actual_cap
+    (s : TentSum) (k : TentSide) {a b c d : ℝ}
+    (hg : SymmetricFullBox a b c d) (hmu : b≤VariableEnvelope.mu)
+    (hactive : sourceActive s k (symmetricLeft a c) (symmetricRight b d))
+    (hroot : planeUpper s k (symmetricLeft a c) (symmetricRight b d)≤thirdPrefixTheta)
+    {p : PrismPoint} (hp : p∈prismRegion a b c d) :
+    tentPlane s k (prismPoint p)≤actualExtendedThirdBufferedCap 0 p.1.1 p.1.2 p.2 := by
+
+theorem symmetric_tent_minorant_range
+    (s : TentSum) (k : TentSide) {a b c d : ℝ}
+    (hg : SymmetricFullBox a b c d) (hmu : b≤VariableEnvelope.mu)
+    (hactive : sourceActive s k (symmetricLeft a c) (symmetricRight b d))
+    (hroot : planeUpper s k (symmetricLeft a c) (symmetricRight b d)≤thirdPrefixTheta)
+    (hres : 0<oldNumerator s k (symmetricRight b d))
+    {p : PrismPoint} (hp : p∈prismRegion a b c d) :
+    tentOldArgument s k (prismPoint p)≤actualPrismOld p ∧
+      tentOldArgument s k (prismPoint p)∈Icc
+        (tentOldLow s k (symmetricRight b d))
+        (tentOldHigh s k (symmetricLeft a c)) := by
+
+theorem symmetric_tent_span (s : TentSum) (k : TentSide) {a b c d : ℝ}
+    (hg : SymmetricFullBox a b c d)
+    (hres : 0<oldNumerator s k (symmetricRight b d)) :
+    tentOldLow s k (symmetricRight b d)<tentOldHigh s k (symmetricLeft a c) := by
+
+theorem symmetric_tent_exact_ordered_mean (s : TentSum) (k : TentSide)
+    {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
+    (∫ p, tentOldArgument s k (prismPoint p) ∂prismProbability a b c d)=
+      orderedTentMean s k a b c d := by
+
+theorem ordered_mean_sub_producer_mean (s : TentSum) (k : TentSide)
+    (a b c d : ℝ) :
+    orderedTentMean s k a b c d-
+        tentOldMean s k (symmetricLeft a c) (symmetricRight b d)=
+      (oldX s k-oldY s k)*(maxMean a b-(b-a)/Real.log (b/a))*invZMean c d := by
+
+theorem symmetric_tent_coefficients (s : TentSum) :
+    sumX s=sumY s ↔ s=.xy ∨ s=.xyz := by
+
+theorem balanced_tent_ordered_mean_eq_producer (s : TentSum) (k : TentSide)
+    (a b c d : ℝ) (hs : s=.xy ∨ s=.xyz) :
+    orderedTentMean s k a b c d=
+      tentOldMean s k (symmetricLeft a c) (symmetricRight b d) := by
+
+theorem balanced_tent_chord_eq_producer (s : TentSum) (k : TentSide)
+    (a b c d flo fhi : ℝ) (hs : s=.xy ∨ s=.xyz) :
+    orderedTentChord s k a b c d flo fhi=
+      tentOldChord s k (symmetricLeft a c) (symmetricRight b d) flo fhi := by
+
+theorem ordered_mean_sub_producer_mean_xz_fall (a b c d : ℝ) :
+    orderedTentMean .xz .fall a b c d-
+        tentOldMean .xz .fall (symmetricLeft a c) (symmetricRight b d)=
+      (-(3/2):ℝ)*(maxMean a b-(b-a)/Real.log (b/a))*invZMean c d := by
+
+private theorem prism_mem_ae (a b c d : ℝ) :
+    ∀ᵐ p ∂prismProbability a b c d, p∈prismRegion a b c d := by
+
+private theorem integrable_tent_argument (s : TentSum) (k : TentSide)
+    {a b c d : ℝ} (hg : SymmetricFullBox a b c d)
+    (hres : 0<oldNumerator s k (symmetricRight b d)) :
+    Integrable (fun p => tentOldArgument s k (prismPoint p))
+      (prismProbability a b c d) := by
+
+private theorem integrable_actual_old {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
+    Integrable (fun p => actualExtendedThirdLowerFactor (actualPrismOld p))
+      (prismProbability a b c d) := by
+
+theorem symmetric_tent_chord_le_actual_integral
+    (s : TentSum) (k : TentSide) {a b c d flo fhi : ℝ}
+    (hg : SymmetricFullBox a b c d) (hmu : b≤VariableEnvelope.mu)
+    (hactive : sourceActive s k (symmetricLeft a c) (symmetricRight b d))
+    (hroot : planeUpper s k (symmetricLeft a c) (symmetricRight b d)≤thirdPrefixTheta)
+    (hres : 0<oldNumerator s k (symmetricRight b d))
+    (hlo : 2≤tentOldLow s k (symmetricRight b d))
+    (hfl : flo≤actualExtendedThirdLowerFactor (tentOldLow s k (symmetricRight b d)))
+    (hfh : fhi≤actualExtendedThirdLowerFactor (tentOldHigh s k (symmetricLeft a c))) :
+    orderedTentChord s k a b c d flo fhi≤
+      ∫ p, actualExtendedThirdLowerFactor (actualPrismOld p) ∂prismProbability a b c d := by
+
+theorem saved_tent_endpoint_cast (s : TentSum) (k : TentSide)
+    (x z : ℤ) (a c : ℚ)
+    (ha : a=(x:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z:ℚ)/((48000*2^24:ℤ):ℚ)) (hz : 0<z) :
+    (literalTentEndpoint s k ![x,x,z] (48000*2^24):ℝ)=
+      tentOldArgument s k (symmetricLeft (a:ℝ) (c:ℝ)) := by
+
+theorem symmetric_saved_tent_three_queries
+    (table : CheckedBlockTable) (s : TentSum) (k : TentSide) (x0 x1 z0 z1 : ℤ) :
+    value (readQueryLo160 (assembledRead table.blocks)
+      (savedTentLow s k x1 z1).num ((savedTentLow s k x1 z1).den:ℤ))≤
+        actualExtendedThirdLowerFactor (savedTentLow s k x1 z1:ℝ) ∧
+    value (readQueryLo160 (assembledRead table.blocks)
+      (savedTentHigh s k x0 z0).num ((savedTentHigh s k x0 z0).den:ℤ))≤
+        actualExtendedThirdLowerFactor (savedTentHigh s k x0 z0:ℝ) ∧
+    actualExtendedThirdLowerFactor
+      (((storedGridNew x0 x1 z0 z1).hi:ℝ)/(P160:ℝ))≤
+        value (readQueryHi160 (assembledRead table.blocks)
+          (storedGridNew x0 x1 z0 z1).hi P160) := by
+
+theorem symmetric_grid_bind (x z : ℤ) (a c : ℚ)
+    (ha : a=(x:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z:ℚ)/((48000*2^24:ℤ):ℚ)) :
+    ∀ i, symmetricLeft (a:ℝ) (c:ℝ) i=
+      (![x,x,z] i:ℝ)/((48000*2^24:ℤ):ℝ) := by
+
+theorem positive_grid_binding (z : ℤ) (r : ℚ)
+    (hr : r=(z:ℚ)/((48000*2^24:ℤ):ℚ)) (hp : (0:ℝ)<(r:ℝ)) : 0<z := by
+
+theorem symmetric_saved_tent_new_query
+    (table : CheckedBlockTable) (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hg : SymmetricFullBox (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ)) :
+    actualExtendedThirdLowerFactor
+      (symmetricNewQuery (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ)
+        (originalLnUnit ((b:ℝ)/(a:ℝ))):ℝ)≤
+      value (readQueryHi160 (assembledRead table.blocks)
+        (storedGridNew x0 x1 z0 z1).hi P160) := by
+
+theorem symmetric_saved_tent_old_integral
+    (table : CheckedBlockTable) (s : TentSum) (k : TentSide)
+    (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hg : SymmetricFullBox (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ))
+    (hmu : (b:ℝ)≤VariableEnvelope.mu)
+    (hbranch : literalSymmetricBranch s k x0 x1 z0 z1)
+    (hroot : literalSymmetricRoot s k x0 x1 z0 z1)
+    (hres : literalSymmetricResidual s k x1)
+    (hlow : (2:ℚ)≤savedTentLow s k x1 z1) :
+    orderedTentChord s k (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ)
+      (value (readQueryLo160 (assembledRead table.blocks)
+        (savedTentLow s k x1 z1).num ((savedTentLow s k x1 z1).den:ℤ)))
+      (value (readQueryLo160 (assembledRead table.blocks)
+        (savedTentHigh s k x0 z0).num ((savedTentHigh s k x0 z0).den:ℤ)))≤
+      ∫ p, actualExtendedThirdLowerFactor (actualPrismOld p)
+        ∂prismProbability (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ) := by
+
+MODULE ImbalancedChen.P4AOriginalRange32MassCeil
+
+theorem ordinaryMass32_source_tree (lower upper : Fin 3 → ℤ) :
+    ordinaryMass32 lower upper =
+      mul (mul (originalLn32 ((upper 0 : ℝ)/(lower 0 : ℝ)))
+        (originalLn32 ((upper 1 : ℝ)/(lower 1 : ℝ))))
+        (ofReal (((4*(48000*2^24 : ℤ)*(upper 2-lower 2) : ℤ) : ℝ)/
+          ((lower 2*upper 2 : ℤ) : ℝ))) := by
+
+theorem symmetricMass32_source_tree (x0 x1 z0 z1 : ℤ) :
+    symmetricMass32 x0 x1 z0 z1 =
+      divNat (mul (mul (originalLn32 ((x1 : ℝ)/(x0 : ℝ)))
+        (originalLn32 ((x1 : ℝ)/(x0 : ℝ))))
+        (ofReal (((4*(48000*2^24 : ℤ)*(z1-z0) : ℤ) : ℝ)/
+          ((z0*z1 : ℤ) : ℝ)))) 2 := by
+
+theorem ordinary_mass32_encloses
+    (lower upper : Fin 3 → ℤ) (a b : BoxPoint)
+    (haBind : ∀ i, a i = (lower i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (hbBind : ∀ i, b i = (upper i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)
+    (hx32 : b 0/a 0 ≤ 32) (hy32 : b 1/a 1 ≤ 32) :
+    Encloses (ordinaryMass32 lower upper) (4*boxMass a b) := by
+
+theorem ordinary_mass32_encloses_reciprocal_volume
+    (lower upper : Fin 3 → ℤ) (a b : BoxPoint)
+    (haBind : ∀ i, a i = (lower i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (hbBind : ∀ i, b i = (upper i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)
+    (hx32 : b 0/a 0 ≤ 32) (hy32 : b 1/a 1 ≤ 32) :
+    Encloses (ordinaryMass32 lower upper)
+      (4*(∫ t in Icc a b, boxWeight t)) := by
+
+theorem ordinary_stored_mass32_encloses
+    (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i = (lower i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hbBind : ∀ i, b i = (upper i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (ha : ∀ i, 0 < realBox a i) (hab : ∀ i, realBox a i < realBox b i)
+    (hx32 : realBox b 0/realBox a 0 ≤ 32)
+    (hy32 : realBox b 1/realBox a 1 ≤ 32) :
+    Encloses (ordinaryMass32 lower upper) (4*boxMass (realBox a) (realBox b)) := by
+
+theorem equal_xy_full_mass_div_two (a b c d : ℝ) :
+    (4*boxMass (![a,a,c]) (![b,b,d]))/2 = prismMass a b c d := by
+
+theorem symmetric_mass32_encloses
+    (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a = (x0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hb : b = (x1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hc : c = (z0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hd : d = (z1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hg : SymmetricFullBox (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ))
+    (hratio : (b : ℝ)/(a : ℝ) ≤ 32) :
+    Encloses (symmetricMass32 x0 x1 z0 z1)
+      (prismMass (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ)) := by
+
+theorem symmetric_mass32_encloses_prism_integral
+    (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a = (x0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hb : b = (x1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hc : c = (z0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hd : d = (z1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hg : SymmetricFullBox (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ))
+    (hratio : (b : ℝ)/(a : ℝ) ≤ 32) :
+    Encloses (symmetricMass32 x0 x1 z0 z1)
+      (∫ p in prismRegion (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ), prismWeight p) := by
+
+theorem ordinary_stored_mass32_encloses_below_mu
+    (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i = (lower i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hbBind : ∀ i, b i = (upper i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (ha : ∀ i, 0 < realBox a i) (hab : ∀ i, realBox a i < realBox b i)
+    (hcut : (1 : ℝ)/100 ≤ realBox a 2)
+    (hyx : realBox b 1 ≤ realBox a 0) (hzy : realBox b 2 ≤ realBox a 1)
+    (hmu : realBox b 0 ≤ VariableEnvelope.mu) :
+    Encloses (ordinaryMass32 lower upper) (4*boxMass (realBox a) (realBox b)) := by
+
+theorem ordinary_mass32_encloses_integer_range
+    (lower upper : Fin 3 → ℤ) (a b : BoxPoint)
+    (haBind : ∀ i, a i = (lower i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (hbBind : ∀ i, b i = (upper i : ℝ)/((48000*2^24 : ℤ) : ℝ))
+    (hr : integerBoxRange lower upper) :
+    Encloses (ordinaryMass32 lower upper) (4*boxMass a b) := by
+
+theorem ordinary_stored_mass32_encloses_integer_range
+    (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i = (lower i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hbBind : ∀ i, b i = (upper i : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hr : integerBoxRange lower upper) :
+    Encloses (ordinaryMass32 lower upper) (4*boxMass (realBox a) (realBox b)) := by
+
+theorem symmetric_mass32_encloses_integer_range
+    (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a = (x0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hb : b = (x1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hc : c = (z0 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hd : d = (z1 : ℚ)/((48000*2^24 : ℤ) : ℚ))
+    (hg : SymmetricFullBox (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ))
+    (hr : integerBoxRange ![x0,x0,z0] ![x1,x1,z1]) :
+    Encloses (symmetricMass32 x0 x1 z0 z1)
+      (prismMass (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ)) := by
