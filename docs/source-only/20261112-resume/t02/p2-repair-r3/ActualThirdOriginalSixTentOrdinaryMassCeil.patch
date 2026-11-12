@@ -1,0 +1,27 @@
+--- original/ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean
+@@ -87,6 +87,9 @@
+     field_simp [hz0.ne',hz1.ne'] <;> ring
+   have hraw := mul_sound (mul_sound (hlog 0) (hlog 1))
+     (literalMassZ_sound (hposLo 2) (hposHi 2))
++  have hzero : (0 : Fin 2).castSucc = (0 : Fin 3) := rfl
++  have hone : (1 : Fin 2).castSucc = (1 : Fin 3) := rfl
++  rw [hzero, hone] at hraw
+   have heq : Real.log (b 0/a 0)*Real.log (b 1/a 1)*
+       (((4*(48000*2^24:ℤ)*(hi 2-lo 2):ℤ):ℝ)/((lo 2*hi 2:ℤ):ℝ))=
+         4*boxMass a b := by
+@@ -168,8 +171,12 @@
+   have hout := (CheckedBlockTable.query_encloses_all table (ordinaryNew a b).hi
+     P160 P160_pos).2
+   refine ⟨hfl,hfh,?_⟩
+-  simpa only [ordinaryNewQuery,Rat.cast_div,Rat.cast_intCast,value,P160,
+-    Int.cast_pow,Int.cast_ofNat] using hout
++  have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++    rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++  have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++    simp only [P160,Int.cast_pow,Int.cast_ofNat]
++  simp only [ordinaryNewQuery,hcast]
++  simpa only [value,hscale] using hout
+ 
+ /-- Original ordinary tent candidate: literal integer branch/root/residual
+  -> exact Fraction endpoints -> original OLD/NEW queries -> rounded/clipped

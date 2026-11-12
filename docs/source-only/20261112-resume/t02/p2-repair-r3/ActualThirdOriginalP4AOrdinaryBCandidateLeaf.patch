@@ -1,0 +1,47 @@
+--- original/ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean
+@@ -135,12 +135,18 @@
+     have hx := (div_le_iff₀ hD).1
+       (by simpa only [hbR 0,VariableEnvelope.mu] using hmu :
+         (hi 0:ℝ)/((48000*2^24:ℤ):ℝ)≤25/128)
+-    linarith only [hx]
++    calc
++      (128:ℝ)*(hi 0:ℝ) ≤ 128*((25/128)*((48000*2^24:ℤ):ℝ)) :=
++        mul_le_mul_of_nonneg_left hx (by norm_num)
++      _ = 25*((48000*2^24:ℤ):ℝ) := by ring
+   have hyR : (128:ℝ)*(hi 1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by
+     have hy := (div_le_iff₀ hD).1
+       (by simpa only [hbR 1,VariableEnvelope.mu] using hymu :
+         (hi 1:ℝ)/((48000*2^24:ℤ):ℝ)≤25/128)
+-    linarith only [hy]
++    calc
++      (128:ℝ)*(hi 1:ℝ) ≤ 128*((25/128)*((48000*2^24:ℤ):ℝ)) :=
++        mul_le_mul_of_nonneg_left hy (by norm_num)
++      _ = 25*((48000*2^24:ℤ):ℝ) := by ring
+   have hx : 128*hi 0≤25*(48000*2^24:ℤ) := by exact_mod_cast hxR
+   have hy : 128*hi 1≤25*(48000*2^24:ℤ) := by exact_mod_cast hyR
+   exact ⟨ordinary_B_literal_root lo hz.le,ordinary_B_literal_residual hi hx hy⟩
+@@ -194,8 +200,12 @@
+   refine ⟨?_,?_,?_⟩
+   · simpa only [bStoredFl,value,P160,Int.cast_pow,Int.cast_ofNat,cast_bLowQ] using hfl
+   · simpa only [bStoredFh,value,P160,Int.cast_pow,Int.cast_ofNat,cast_bHighQ] using hfh
+-  · simpa only [bStoredOut,newQuery,Rat.cast_div,Rat.cast_intCast,value,
+-      P160,Int.cast_pow,Int.cast_ofNat] using hout
++  · have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++      rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++    have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++      simp only [P160,Int.cast_pow,Int.cast_ofNat]
++    simp only [newQuery,hcast]
++    simpa only [bStoredOut,value,hscale] using hout
+ 
+ /-- Consumer API for the exact selector's B winner. It covers arbitrary
+ original ordinary B boxes, preserving ln's original range32 implementation,
+@@ -256,7 +266,7 @@
+   have hr := below_mu_B_log_ratios (realBox a) (realBox b)
+     ha hab hcut hyx hzy hmu
+   have hg := original_stored_ordinary_log32_guards lo hi a b haBind hbBind
+-    ha hab hyx (by simpa only [VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
++    ha hab hyx (by simpa only [realBox,VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
+   exact ordinary_B_stored_integer_upper table lo hi a b haBind hbBind
+     ha hab hcut hyx hzy hmu hfull hg.1 hg.2 hlo
+ 

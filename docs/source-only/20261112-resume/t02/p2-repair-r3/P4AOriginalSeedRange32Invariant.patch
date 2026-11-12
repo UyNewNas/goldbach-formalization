@@ -1,0 +1,59 @@
+--- original/ImbalancedChen/P4AOriginalSeedRange32Invariant.lean
++++ repaired/ImbalancedChen/P4AOriginalSeedRange32Invariant.lean
+@@ -100,9 +100,10 @@
+           change (x,y) ∈ (a,b) :: consecutivePairs (b::rest) at h
+           rcases List.mem_cons.mp h with h | h
+           · have he : x=a ∧ y=b := by simpa only [Prod.mk.injEq] using h
+-            rcases he with ⟨rfl,rfl⟩
+             have hne : a ≠ b := by intro he; apply hnodup.1; simp [he]
+-            exact lt_of_le_of_ne (horder.1 b (by simp)) hne
++            have hab : a < b := lt_of_le_of_ne (horder.1 b (by simp)) hne
++            rw [he.1, he.2]
++            exact hab
+           · exact ih horder.2 hnodup.2 h
+ 
+ theorem sourceSeedXYCuts_mem_range (z0 M R H p : ℤ)
+@@ -142,8 +143,8 @@
+     (hy : (y0,y1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger)) :
+     integerBoxRange (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+   have hze := consecutivePairs_mem_endpoints _ hz
+-  have hz0 := originalSeedCuts_range n z0 (Finset.mem_sort.mp hze.1)
+-  have hz1 := originalSeedCuts_range n z1 (Finset.mem_sort.mp hze.2)
++  have hz0 := originalSeedCuts_range n z0 ((Finset.mem_sort (· ≤ ·)).mp hze.1)
++  have hz1 := originalSeedCuts_range n z1 ((Finset.mem_sort (· ≤ ·)).mp hze.2)
+   have hzlt := ordered_nodup_consecutive_lt _ (Finset.pairwise_sort _ _)
+     (Finset.sort_nodup _ _) hz
+   have hzR : z0 < originalRInteger := hzlt.trans_le hz1.2
+@@ -197,8 +198,8 @@
+ theorem cut_inside_of_both_child_widths (a b : IntegerPoint) (axis : Fin 3) (cut : ℤ)
+     (hl : a axis < leftIntegerUpper b axis cut axis)
+     (hr : rightIntegerLower a axis cut axis < b axis) : a axis < cut ∧ cut < b axis := by
+-  change a axis < min (b axis) cut at hl
+-  change max (a axis) cut < b axis at hr
++  simp only [leftIntegerUpper, Function.update_self] at hl
++  simp only [rightIntegerLower, Function.update_self] at hr
+   exact ⟨hl.trans_le (min_le_right _ _),(le_max_right _ _).trans_lt hr⟩
+ 
+ theorem integerBoxRange_ratio32 (a b : IntegerPoint) (hr : integerBoxRange a b) (i : Fin 3) :
+@@ -285,14 +286,19 @@
+     ∀ i, noCrossMu originalMuInteger i (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+   have hxy := source_seed_noCross_xy z0 z1 originalMuInteger originalRInteger x0 x1 y0 y1 hx hy
+   have hzm : originalMuInteger ∈ (originalSeedCuts n).sort (· ≤ ·) :=
+-    Finset.mem_sort.mpr (originalSeedCuts_mu_mem n)
++    (Finset.mem_sort (· ≤ ·)).mpr (originalSeedCuts_mu_mem n)
+   have hzc := ordered_cutList_consecutive_noCross _ originalMuInteger
+     (Finset.pairwise_sort _ _) hzm hz
+   intro i
+   fin_cases i
+   · exact hxy.1
+   · exact hxy.2
+-  · simpa only [noCrossMu,seedLower,seedUpper,Matrix.cons_val_two] using hzc
++  · have hlo : seedLower x0 y0 z0 (2 : Fin 3) = z0 := rfl
++    have hhi : seedUpper x1 y1 z1 (2 : Fin 3) = z1 := rfl
++    change seedUpper x1 y1 z1 (2 : Fin 3) ≤ originalMuInteger ∨
++      originalMuInteger ≤ seedLower x0 y0 z0 (2 : Fin 3)
++    rw [hlo, hhi]
++    exact hzc
+ 
+ /-- End-to-end actual descendant supplier: range, strict ratio<32 and raw
+ original ln32.lo>0 for every coordinate. Only actual positive widths remain. -/

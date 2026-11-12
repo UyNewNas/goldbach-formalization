@@ -1,0 +1,502 @@
+MODULE ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf
+
+theorem literalBEndpoint_eq_bLowQ
+    (v : Fin 3 → ℤ) (p : Fin 3 → ℚ)
+    (hp : ∀ i, p i=(v i:ℚ)/((48000*2^24:ℤ):ℚ)) (hz : v 2≠0) :
+    bLowQ p=literalBEndpoint v (48000*2^24) := by
+
+theorem literalBEndpoint_eq_bHighQ
+    (v : Fin 3 → ℤ) (p : Fin 3 → ℚ)
+    (hp : ∀ i, p i=(v i:ℚ)/((48000*2^24:ℤ):ℚ)) (hz : v 2≠0) :
+    bHighQ p=literalBEndpoint v (48000*2^24) := by
+
+theorem ordinary_B_literal_root (lo : Fin 3 → ℤ) (hz : 0≤lo 2) :
+    153*(48000*2^24:ℤ)-96*lo 2≤256*481573208064 := by
+
+theorem ordinary_B_literal_coefficient_guards :
+    ¬(0:ℤ)>256 ∧ ¬(0:ℤ)>256 := by
+
+theorem ordinary_B_literal_residual (hi : Fin 3 → ℤ)
+    (hx : 128*hi 0≤25*(48000*2^24:ℤ))
+    (hy : 128*hi 1≤25*(48000*2^24:ℤ)) :
+    0<153*(48000*2^24:ℤ)-256*hi 0-256*hi 1 := by
+
+theorem ordinary_B_full_leaf_old_chord_upper (a b : BoxPoint)
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hmu : b 0≤VariableEnvelope.mu)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (flo fhi out : ℝ) (hlo : 2≤bOldLow b)
+    (hfl : flo≤actualExtendedThirdLowerFactor (bOldLow b))
+    (hfh : fhi≤actualExtendedThirdLowerFactor (bOldHigh a))
+    (hout : actualExtendedThirdLowerFactor
+      ((thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1)≤out) :
+    (∫ t in compactRegion ∩ Icc a b, compactKernel t)≤
+      4*boxMass a b*max 0 (out-bOldChord a b flo fhi) := by
+
+theorem ordinary_B_endpoints_eq_literal
+    (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (ha2 : 0<realBox a 2) (hb2 : 0<realBox b 2) :
+    bLowQ b=literalBEndpoint hi (48000*2^24) ∧
+      bHighQ a=literalBEndpoint lo (48000*2^24) := by
+
+theorem ordinary_B_saved_source_guards
+    (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (ha2 : 0<realBox a 2) (hab0 : realBox a 0<realBox b 0)
+    (hyx : realBox b 1≤realBox a 0)
+    (hmu : realBox b 0≤VariableEnvelope.mu) :
+    153*(48000*2^24:ℤ)-96*lo 2≤256*481573208064 ∧
+      0<153*(48000*2^24:ℤ)-256*hi 0-256*hi 1 := by
+
+theorem bStoredFl_eq_literal (table : CheckedBlockTable)
+    (hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ)) (hz : hi 2≠0) :
+    bStoredFl table b=readQueryLo160 (assembledRead table.blocks)
+      (literalBEndpoint hi (48000*2^24)).num
+      ((literalBEndpoint hi (48000*2^24)).den:ℤ) := by
+
+theorem bStoredFh_eq_literal (table : CheckedBlockTable)
+    (lo : Fin 3 → ℤ) (a : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ)) (hz : lo 2≠0) :
+    bStoredFh table a=readQueryLo160 (assembledRead table.blocks)
+      (literalBEndpoint lo (48000*2^24)).num
+      ((literalBEndpoint lo (48000*2^24)).den:ℤ) := by
+
+theorem ordinary_B_three_stored_queries
+    (table : CheckedBlockTable) (a b : Fin 3 → ℚ) :
+    value (bStoredFl table b)≤actualExtendedThirdLowerFactor (bOldLow (realBox b)) ∧
+    value (bStoredFh table a)≤actualExtendedThirdLowerFactor (bOldHigh (realBox a)) ∧
+    actualExtendedThirdLowerFactor
+      (newQuery (realBox a) (realBox b)
+        (originalLn32 (realBox b 0/realBox a 0))
+        (originalLn32 (realBox b 1/realBox a 1)):ℝ)≤value (bStoredOut table a b) := by
+
+theorem ordinary_B_stored_integer_upper
+    (table : CheckedBlockTable)
+    (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (ha : ∀ i, 0<realBox a i) (hab : ∀ i, realBox a i<realBox b i)
+    (hcut : (1:ℝ)/100≤realBox a 2)
+    (hyx : realBox b 1≤realBox a 0) (hzy : realBox b 2≤realBox a 1)
+    (hmu : realBox b 0≤VariableEnvelope.mu)
+    (hfull : realBox b 0+realBox b 1+3*realBox b 2≤thirdPrefixTheta)
+    (hpx : 0<(originalLn32 (realBox b 0/realBox a 0)).lo)
+    (hpy : 0<(originalLn32 (realBox b 1/realBox a 1)).lo)
+    (hlo : 2≤bOldLow (realBox b)) :
+    (∫ t in compactRegion ∩ Icc (realBox a) (realBox b),compactKernel t)≤
+      value (literalOrdinaryUpper lo hi (meanHigh
+        (rawWeight a b (originalLn32 (realBox b 0/realBox a 0))
+          (originalLn32 (realBox b 1/realBox a 1))).lo
+        (rawWeight a b (originalLn32 (realBox b 0/realBox a 0))
+          (originalLn32 (realBox b 1/realBox a 1))).hi
+        (bStoredFl table b) (bStoredFh table a) (bStoredOut table a b))) := by
+
+theorem ordinary_B_stored_integer_upper_of_grid
+    (table : CheckedBlockTable)
+    (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀ i, a i=(lo i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hbBind : ∀ i, b i=(hi i:ℚ)/((48000*2^24:ℤ):ℚ))
+    (ha : ∀ i, 0<realBox a i) (hab : ∀ i, realBox a i<realBox b i)
+    (hcut : (1:ℝ)/100≤realBox a 2)
+    (hyx : realBox b 1≤realBox a 0) (hzy : realBox b 2≤realBox a 1)
+    (hmu : realBox b 0≤VariableEnvelope.mu)
+    (hfull : realBox b 0+realBox b 1+3*realBox b 2≤thirdPrefixTheta)
+    (hlo : 2≤bOldLow (realBox b)) :
+    (∫ t in compactRegion ∩ Icc (realBox a) (realBox b),compactKernel t)≤
+      value (literalOrdinaryUpper lo hi (meanHigh
+        (rawWeight a b (originalLn32 (realBox b 0/realBox a 0))
+          (originalLn32 (realBox b 1/realBox a 1))).lo
+        (rawWeight a b (originalLn32 (realBox b 0/realBox a 0))
+          (originalLn32 (realBox b 1/realBox a 1))).hi
+        (bStoredFl table b) (bStoredFh table a) (bStoredOut table a b))) := by
+
+MODULE ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer
+
+private theorem positive_grid_integer (z : ℤ) (r : ℚ)
+    (hr : r=(z:ℚ)/((48000*2^24:ℤ):ℚ)) (hp : (0:ℝ)<(r:ℝ)) : 0<z := by
+
+theorem stored_grid_ex_eq (x0 x1 : ℤ) (a b : ℚ) (lx : IV)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ)) :
+    symmetricEx (a:ℝ) (b:ℝ) lx=storedGridEx x0 x1 lx := by
+
+theorem stored_grid_invz_eq (z0 z1 : ℤ) (c d : ℚ)
+    (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hz0 : 0<z0) (hz1 : 0<z1) :
+    ofReal (invZMean (c:ℝ) (d:ℝ))=storedGridInvZ z0 z1 := by
+
+theorem stored_grid_new_eq (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hx0 : 0<x0) (hz0 : 0<z0) (hz1 : 0<z1) :
+    symmetricNew (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ)
+      (originalLnUnit ((b:ℝ)/(a:ℝ)))=storedGridNew x0 x1 z0 z1 := by
+
+theorem stored_rat_query_encloses (T : CheckedBlockTable) (q : ℚ) :
+    value (readQueryLo160 (assembledRead T.blocks) q.num (q.den:ℤ))≤
+      actualExtendedThirdLowerFactor (q:ℝ) ∧
+    actualExtendedThirdLowerFactor (q:ℝ)≤
+      value (readQueryHi160 (assembledRead T.blocks) q.num (q.den:ℤ)) := by
+
+theorem original_stored_query_symmetric_integer_upper
+    (T : CheckedBlockTable) (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hg : SymmetricFullBox (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ))
+    (hmu : VariableEnvelope.mu≤(a:ℝ))
+    (hlo : 2≤oldLow (b:ℝ) (d:ℝ))
+    (hspan : oldLow (b:ℝ) (d:ℝ)<oldHigh (a:ℝ) (c:ℝ)) :
+    (∫ t in compactRegion∩symmetricBox (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ),compactKernel t)≤
+      value (storedSymmetricCost T x0 x1 z0 z1 a b c d) := by
+
+MODULE ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil
+
+private theorem raw_positive (v : Fin 3 → ℤ) (D : ℤ) (p : BoxPoint)
+    (hD : D=48000*2^24) (hp : ∀ i, p i=(v i:ℝ)/(D:ℝ))
+    (hpositive : ∀ i, 0<p i) (i : Fin 3) : 0<v i := by
+
+theorem literal_ordinary_mass_encloses
+    (lo hi : Fin 3 → ℤ) (D : ℤ) (a b : BoxPoint)
+    (hD : D=48000*2^24)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hratio : ∀ i : Fin 2, b i.castSucc/a i.castSucc≤2) :
+    Encloses (literalOrdinaryMass lo hi) (4*boxMass a b) := by
+
+theorem ordinary_raw_not_symmetric
+    (lo hi : Fin 3 → ℤ) (D : ℤ) (a b : BoxPoint)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (hab : ∀ i, a i<b i) (hyx : b 1≤a 0) :
+    ¬(lo 0=lo 1 ∧ hi 0=hi 1) := by
+
+theorem literal_tent_endpoint_span
+    (s : TentSum) (k : TentSide) (lo hi : Fin 3 → ℤ)
+    (D : ℤ) (a b : BoxPoint) (hD : D=48000*2^24)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hres : 0<oldNumerator s k b) :
+    (literalTentEndpoint s k hi D:ℝ)<(literalTentEndpoint s k lo D:ℝ) := by
+
+theorem ordinary_strict_chord_dispatch {low high : ℚ}
+    (hlow : 2≤(low:ℝ)) (hspan : (low:ℝ)<(high:ℝ)) :
+    ¬high≤2 ∧ ¬(low<2 ∧ 2<high) ∧ low≠high := by
+
+theorem ordinary_fraction_query_encloses (table : CheckedBlockTable) (q : ℚ) :
+    value (readQueryLo160 (assembledRead table.blocks) q.num (q.den:ℤ))≤
+        actualExtendedThirdLowerFactor (q:ℝ) ∧
+      actualExtendedThirdLowerFactor (q:ℝ)≤
+        value (readQueryHi160 (assembledRead table.blocks) q.num (q.den:ℤ)) := by
+
+theorem ordinary_three_stored_queries
+    (table : CheckedBlockTable) (a b : BoxPoint) (low high : ℚ) :
+    value (readQueryLo160 (assembledRead table.blocks) low.num (low.den:ℤ))≤
+        actualExtendedThirdLowerFactor (low:ℝ) ∧
+      value (readQueryLo160 (assembledRead table.blocks) high.num (high.den:ℤ))≤
+        actualExtendedThirdLowerFactor (high:ℝ) ∧
+      actualExtendedThirdLowerFactor (ordinaryNewQuery a b:ℝ)≤
+        value (readQueryHi160 (assembledRead table.blocks) (ordinaryNew a b).hi P160) := by
+
+theorem original_selected_tent_stored_integer_upper
+    (table : CheckedBlockTable)
+    (s : TentSum) (k : TentSide) (lo hi : Fin 3 → ℤ)
+    (D T : ℤ) (a b : BoxPoint) (low high : ℚ) (fl fh out : ℤ)
+    (hD : D=48000*2^24) (hT : T=481573208064)
+    (haBind : ∀ i, a i=(lo i:ℝ)/(D:ℝ))
+    (hbBind : ∀ i, b i=(hi i:ℝ)/(D:ℝ))
+    (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i)
+    (hcut : (1:ℝ)/100≤a 2) (hyx : b 1≤a 0) (hzy : b 2≤a 1)
+    (hmu : b 0≤VariableEnvelope.mu)
+    (hfull : b 0+b 1+3*b 2≤thirdPrefixTheta)
+    (hbranch : match k with
+      | .rise => -50*D+256*(literalTentX s*hi 0+literalTentY s*hi 1+literalTentZ s*hi 2)≤0
+      | .fall => ¬(-50*D+256*(literalTentX s*hi 0+literalTentY s*hi 1+literalTentZ s*hi 2)≤0) ∧
+          0≤-50*D+256*(literalTentX s*lo 0+literalTentY s*lo 1+literalTentZ s*lo 2))
+    (hroot : match k with
+      | .rise => D+literalTentX s*hi 0+literalTentY s*hi 1+literalTentZ s*hi 2≤2*T
+      | .fall => 57*D-96*(literalTentX s*lo 0+literalTentY s*lo 1+literalTentZ s*lo 2)≤64*T)
+    (hres : match k with
+      | .rise => 0<D+(literalTentX s-2)*hi 0+(literalTentY s-2)*hi 1
+      | .fall => 0<57*D+(-96*literalTentX s-64)*hi 0+(-96*literalTentY s-64)*hi 1)
+    (hlowLiteral : low=literalTentEndpoint s k hi D)
+    (hhighLiteral : high=literalTentEndpoint s k lo D)
+    (hlow : 2≤(low:ℝ))
+    (hratio : ∀ i : Fin 2, b i.castSucc/a i.castSucc≤2)
+    (hpositive : ∀ i : Fin 2, 0<(originalLnUnit (b i.castSucc/a i.castSucc)).lo)
+    (hflSaved : fl=readQueryLo160 (assembledRead table.blocks) low.num (low.den:ℤ))
+    (hfhSaved : fh=readQueryLo160 (assembledRead table.blocks) high.num (high.den:ℤ))
+    (houtSaved : out=readQueryHi160 (assembledRead table.blocks) (ordinaryNew a b).hi P160) :
+    (∫ t in compactRegion ∩ Icc a b, compactKernel t)≤
+      value (literalOrdinaryUpper lo hi (meanHigh
+        (ordinaryTentWeight s k a b low high).lo
+        (ordinaryTentWeight s k a b low high).hi fl fh out)) := by
+
+MODULE ImbalancedChen.P4AOriginalSeedRange32Invariant
+
+theorem original_integer_ranges :
+    0 < originalHInteger ∧ originalHInteger ≤ originalMuInteger ∧
+      originalMuInteger ≤ originalRInteger ∧
+      originalRInteger ≤ 2*originalMuInteger ∧
+      128*originalMuInteger = 25*(48000*2^24 : ℤ) ∧
+      96*originalRInteger = 19*(48000*2^24 : ℤ) := by
+
+theorem original_R_div_H_lt_32 :
+    (originalRInteger : ℝ)/(originalHInteger : ℝ) < 32 := by
+
+theorem seedCutState_range (H M R : ℤ) (hH : 0 < H) (hHM : H ≤ M) (hMR : M ≤ R)
+    (n : ℕ) :
+    H ≤ (seedCutState H M R n).1 ∧ (seedCutState H M R n).1 ≤ R ∧
+      ∀ p ∈ (seedCutState H M R n).2, H ≤ p ∧ p ≤ R := by
+
+theorem seedCutState_mu_mem (H M R : ℤ) (n : ℕ) : M ∈ (seedCutState H M R n).2 := by
+
+theorem originalSeedCuts_range (n : ℕ) (p : ℤ) (hp : p ∈ originalSeedCuts n) :
+    originalHInteger ≤ p ∧ p ≤ originalRInteger := by
+
+theorem originalSeedCuts_mu_mem (n : ℕ) : originalMuInteger ∈ originalSeedCuts n := by
+
+theorem ordered_nodup_consecutive_lt (cuts : List ℤ) :
+    cuts.Pairwise (· ≤ ·) → cuts.Nodup →
+      ∀ {x y : ℤ}, (x,y) ∈ consecutivePairs cuts → x < y := by
+
+theorem sourceSeedXYCuts_mem_range (z0 M R H p : ℤ)
+    (hz : H ≤ z0 ∧ z0 ≤ R) (hM : H ≤ M ∧ M ≤ R)
+    (hp : p ∈ sourceSeedXYCuts z0 M R) : H ≤ p ∧ p ≤ R := by
+
+theorem sourceSeedXYCuts_consecutive_lt (z0 M R x y : ℤ) (hzR : z0 < R)
+    (h : (x,y) ∈ consecutivePairs (sourceSeedXYCuts z0 M R)) : x < y := by
+
+theorem source_seed_integerBoxRange (n : ℕ) (z0 z1 x0 x1 y0 y1 : ℤ)
+    (hz : (z0,z1) ∈ consecutivePairs ((originalSeedCuts n).sort (· ≤ ·)))
+    (hx : (x0,x1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger))
+    (hy : (y0,y1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger)) :
+    integerBoxRange (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+
+theorem integerLeafBoxes_nested (tree : ClosedCutTree) (a b : IntegerPoint)
+    (bounds : IntegerPoint × IntegerPoint) (hb : bounds ∈ integerLeafBoxes tree a b) :
+    ∀ i, a i ≤ bounds.1 i ∧ bounds.2 i ≤ b i := by
+
+theorem integerLeafBoxes_range (tree : ClosedCutTree) (a b : IntegerPoint)
+    (hr : integerBoxRange a b) (bounds : IntegerPoint × IntegerPoint)
+    (hb : bounds ∈ integerLeafBoxes tree a b) (hw : ∀ i, bounds.1 i < bounds.2 i) :
+    integerBoxRange bounds.1 bounds.2 := by
+
+theorem cut_inside_of_both_child_widths (a b : IntegerPoint) (axis : Fin 3) (cut : ℤ)
+    (hl : a axis < leftIntegerUpper b axis cut axis)
+    (hr : rightIntegerLower a axis cut axis < b axis) : a axis < cut ∧ cut < b axis := by
+
+theorem integerBoxRange_ratio32 (a b : IntegerPoint) (hr : integerBoxRange a b) (i : Fin 3) :
+    0 < a i ∧ (b i : ℝ)/(a i : ℝ) ≤
+      (originalRInteger : ℝ)/(originalHInteger : ℝ) ∧ (b i : ℝ)/(a i : ℝ) < 32 := by
+
+theorem originalLn32_eq_originalLnUnit_of_le_two {x : ℝ} (h : x ≤ 2) :
+    originalLn32 x = originalLnUnit x := by
+
+theorem original_range_noCross_log32_pos (a b : IntegerPoint) (hr : integerBoxRange a b)
+    (i : Fin 3) (hc : noCrossMu originalMuInteger i a b) :
+    0 < (originalLn32 ((b i:ℝ)/(a i:ℝ))).lo := by
+
+theorem original_range_unit_log_guards (a b : IntegerPoint) (hr : integerBoxRange a b)
+    (i : Fin 3) (hc : noCrossMu originalMuInteger i a b)
+    (hunit : (b i:ℝ)/(a i:ℝ) ≤ 2) :
+    originalLn32 ((b i:ℝ)/(a i:ℝ)) = originalLnUnit ((b i:ℝ)/(a i:ℝ)) ∧
+      0 < (originalLnUnit ((b i:ℝ)/(a i:ℝ))).lo := by
+
+theorem decoded_ratio_eq_integer_ratio (a b : IntegerPoint) (i : Fin 3)
+    (ha : 0 < a i) :
+    decodeCoordinates b i / decodeCoordinates a i = (b i:ℝ)/(a i:ℝ) := by
+
+theorem original_range_decoded_log32_pos (a b : IntegerPoint) (hr : integerBoxRange a b)
+    (i : Fin 3) (hc : noCrossMu originalMuInteger i a b) :
+    decodeCoordinates b i / decodeCoordinates a i < 32 ∧
+      0 < (originalLn32 (decodeCoordinates b i / decodeCoordinates a i)).lo := by
+
+theorem source_seed_noCross_all (n : ℕ) (z0 z1 x0 x1 y0 y1 : ℤ)
+    (hz : (z0,z1) ∈ consecutivePairs ((originalSeedCuts n).sort (· ≤ ·)))
+    (hx : (x0,x1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger))
+    (hy : (y0,y1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger)) :
+    ∀ i, noCrossMu originalMuInteger i (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+
+theorem source_seed_descendants_range32_log_guards (tree : ClosedCutTree) (n : ℕ)
+    (z0 z1 x0 x1 y0 y1 : ℤ)
+    (hz : (z0,z1) ∈ consecutivePairs ((originalSeedCuts n).sort (· ≤ ·)))
+    (hx : (x0,x1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger))
+    (hy : (y0,y1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger))
+    (bounds : IntegerPoint × IntegerPoint)
+    (hb : bounds ∈ integerLeafBoxes tree (seedLower x0 y0 z0) (seedUpper x1 y1 z1))
+    (hw : ∀ i, bounds.1 i < bounds.2 i) :
+    integerBoxRange bounds.1 bounds.2 ∧ ∀ i,
+      (bounds.2 i:ℝ)/(bounds.1 i:ℝ) ≤ (originalRInteger:ℝ)/(originalHInteger:ℝ) ∧
+      (bounds.2 i:ℝ)/(bounds.1 i:ℝ) < 32 ∧
+      0 < (originalLn32 ((bounds.2 i:ℝ)/(bounds.1 i:ℝ))).lo := by
+
+MODULE ImbalancedChen.P4ASixTentRange32Moments
+
+theorem ordinary_source_tree_abi (a b : BoxPoint) :
+    ordinaryNew32 a b =
+      sub (mul (sub (sub (ofReal thirdPrefixTheta) (ordinaryEx32 a b))
+        (ordinaryEy32 a b)) (ordinaryInvZ32 a b)) (ofReal 1) := by
+
+theorem ordinaryEx32_encloses {a b : BoxPoint}
+    (hlx : Encloses (ordinaryLog32 a b 0) (Real.log (b 0/a 0)))
+    (hpx : 0<(ordinaryLog32 a b 0).lo) :
+    Encloses (ordinaryEx32 a b) (boxEX a b) := by
+
+theorem ordinaryEy32_encloses {a b : BoxPoint}
+    (hly : Encloses (ordinaryLog32 a b 1) (Real.log (b 1/a 1)))
+    (hpy : 0<(ordinaryLog32 a b 1).lo) :
+    Encloses (ordinaryEy32 a b) (boxEY a b) := by
+
+theorem ordinaryInvZ32_encloses (a b : BoxPoint) :
+    Encloses (ordinaryInvZ32 a b) (boxEZInv a b) := by
+
+theorem ordinaryNew32_encloses {a b : BoxPoint}
+    (hlx : Encloses (ordinaryLog32 a b 0) (Real.log (b 0/a 0)))
+    (hly : Encloses (ordinaryLog32 a b 1) (Real.log (b 1/a 1)))
+    (hpx : 0<(ordinaryLog32 a b 0).lo) (hpy : 0<(ordinaryLog32 a b 1).lo) :
+    Encloses (ordinaryNew32 a b)
+      ((thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1) := by
+
+theorem ordinaryLog32_sound {a b : BoxPoint} (i : Fin 3)
+    (hratio : b i/a i∈Icc (1:ℝ) 32) :
+    Encloses (ordinaryLog32 a b i) (Real.log (b i/a i)) := by
+
+theorem moment_enclosures {a b : BoxPoint}
+    (ha : ∀i,0<a i) (hab : ∀i,a i<b i)
+    (hlx : Encloses (ordinaryLog32 a b 0) (Real.log (b 0/a 0)))
+    (hly : Encloses (ordinaryLog32 a b 1) (Real.log (b 1/a 1)))
+    (hpx : 0<(ordinaryLog32 a b 0).lo) (hpy : 0<(ordinaryLog32 a b 1).lo) :
+    Encloses (ordinaryEx32 a b) (∫ t, t 0 ∂boxProbability a b) ∧
+    Encloses (ordinaryEy32 a b) (∫ t, t 1 ∂boxProbability a b) ∧
+    Encloses (ordinaryInvZ32 a b) (∫ t, 1/t 2 ∂boxProbability a b) := by
+
+theorem ordinary_new_probability_mean (a b : BoxPoint)
+    (ha : ∀i,0<a i) (hab : ∀i,a i<b i) :
+    (∫ t, (thirdPrefixTheta-t 0-t 1)/t 2-1 ∂boxProbability a b)=
+      (thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1 := by
+
+theorem ordinaryNew32_encloses_probability_mean {a b : BoxPoint}
+    (ha : ∀i,0<a i) (hab : ∀i,a i<b i)
+    (hlx : Encloses (ordinaryLog32 a b 0) (Real.log (b 0/a 0)))
+    (hly : Encloses (ordinaryLog32 a b 1) (Real.log (b 1/a 1)))
+    (hpx : 0<(ordinaryLog32 a b 0).lo) (hpy : 0<(ordinaryLog32 a b 1).lo) :
+    Encloses (ordinaryNew32 a b)
+      (∫ t, (thirdPrefixTheta-t 0-t 1)/t 2-1 ∂boxProbability a b) := by
+
+theorem symmetric_scalar_new_mean_eq (a b c d : ℝ) :
+    (thirdPrefixTheta-boxEX (![a,a,c]) (![b,b,d])-boxEY (![a,a,c]) (![b,b,d]))*
+        boxEZInv (![a,a,c]) (![b,b,d])-1 = newMean a b c d := by
+
+theorem ordinaryNew32_symmetric_encloses {a b c d : ℝ}
+    (hlx : Encloses (ordinaryLog32 (![a,a,c]) (![b,b,d]) 0) (Real.log (b/a)))
+    (hly : Encloses (ordinaryLog32 (![a,a,c]) (![b,b,d]) 1) (Real.log (b/a)))
+    (hpx : 0<(ordinaryLog32 (![a,a,c]) (![b,b,d]) 0).lo)
+    (hpy : 0<(ordinaryLog32 (![a,a,c]) (![b,b,d]) 1).lo) :
+    Encloses (ordinaryNew32 (![a,a,c]) (![b,b,d])) (newMean a b c d) := by
+
+theorem original_grid_cutoffs_exact :
+    (sourceH:ℝ)/(sourceD:ℝ)=(1:ℝ)/100 ∧
+      (sourceR:ℝ)/(sourceD:ℝ)=thirdPrefixRho := by
+
+theorem global_ratio32 (u v : ℤ) (hH : sourceH≤u) (huv : u<v) (hR : v≤sourceR) :
+    (v:ℝ)/(u:ℝ)∈Icc (1:ℝ) 32 := by
+
+theorem symmetric_source_log32_guard (x0 x1 : ℤ) (a b : ℚ)
+    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (hapos : (0:ℝ)<(a:ℝ)) (hwidth : (a:ℝ)<(b:ℝ))
+    (hmu : (b:ℝ)≤(25:ℝ)/128) (h32 : (b:ℝ)/(a:ℝ)≤32) :
+    0<(originalLn32 ((b:ℝ)/(a:ℝ))).lo := by
+
+private theorem unit_log_lo_nonneg {x : ℝ} (h1 : 1≤x) (h2 : x≤2) :
+    0≤(unitLog x 256).lo := by
+
+private theorem log_two_multiple_lo_pos (k : ℕ) (hk : 0<k) :
+    0<(mul (unitLog 2 256) (ofReal (k:ℝ))).lo := by
+
+private theorem positive_branch_lo_pos {x : ℝ} (h1 : 1≤x) (h2 : x≤2)
+    (k : ℕ) (hk : 0<k) : 0<(originalLogBranch x k).lo := by
+
+private theorem log32_gt_two_lo_pos {x : ℝ} (hx : 2<x) (h32 : x≤32) :
+    0<(originalLn32 x).lo := by
+
+theorem integer_global_log32_guard (u v : ℤ)
+    (hH : sourceH≤u) (huv : u<v) (hR : v≤sourceR) :
+    0<(originalLn32 ((v:ℝ)/(u:ℝ))).lo := by
+
+theorem grid_ratio_eq (u v : ℤ) (a b : ℚ)
+    (ha : a=(u:ℚ)/(sourceD:ℚ)) (hb : b=(v:ℚ)/(sourceD:ℚ)) (hu : u≠0) :
+    (b:ℝ)/(a:ℝ)=(v:ℝ)/(u:ℝ) := by
+
+theorem stored_global_log32_guards (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hH : ∀i,sourceH≤lower i) (hwidth : ∀i,lower i<upper i)
+    (hR : ∀i,upper i≤sourceR) :
+    0<(ordinaryLog32 (realBox a) (realBox b) 0).lo ∧
+      0<(ordinaryLog32 (realBox a) (realBox b) 1).lo := by
+
+theorem stored_global_log32_sound (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hH : ∀i,sourceH≤lower i) (hwidth : ∀i,lower i<upper i)
+    (hR : ∀i,upper i≤sourceR) :
+    ∀i,Encloses (ordinaryLog32 (realBox a) (realBox b) i) (Real.log ((b i:ℝ)/(a i:ℝ))) := by
+
+theorem stored_global_geometry (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hH : ∀i,sourceH≤lower i) (hwidth : ∀i,lower i<upper i) :
+    (∀i,0<realBox a i) ∧ (∀i,realBox a i<realBox b i) := by
+
+theorem stored_global_moments_new (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hH : ∀i,sourceH≤lower i) (hwidth : ∀i,lower i<upper i)
+    (hR : ∀i,upper i≤sourceR) :
+    Encloses (ordinaryEx32 (realBox a) (realBox b))
+      (∫ t, t 0 ∂boxProbability (realBox a) (realBox b)) ∧
+    Encloses (ordinaryEy32 (realBox a) (realBox b))
+      (∫ t, t 1 ∂boxProbability (realBox a) (realBox b)) ∧
+    Encloses (ordinaryInvZ32 (realBox a) (realBox b))
+      (∫ t, 1/t 2 ∂boxProbability (realBox a) (realBox b)) ∧
+    Encloses (ordinaryNew32 (realBox a) (realBox b))
+      (∫ t, (thirdPrefixTheta-t 0-t 1)/t 2-1 ∂boxProbability (realBox a) (realBox b)) := by
+
+theorem grid_width_cast (u v : ℤ) (a b : ℚ)
+    (ha : a=(u:ℚ)/(sourceD:ℚ)) (hb : b=(v:ℚ)/(sourceD:ℚ)) :
+    (b:ℝ)-(a:ℝ)=((v-u:ℤ):ℝ)/(sourceD:ℝ) := by
+
+theorem ordinaryEx32_grid_abi (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ)) (hl : lower 0≠0) :
+    ordinaryEx32 (realBox a) (realBox b)=gridCoordinateEx32 lower upper 0 := by
+
+theorem ordinaryEy32_grid_abi (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ)) (hl : lower 1≠0) :
+    ordinaryEy32 (realBox a) (realBox b)=gridCoordinateEx32 lower upper 1 := by
+
+theorem ordinaryInvZ32_grid_abi (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hl : 0<lower 2) (hu : 0<upper 2) :
+    ordinaryInvZ32 (realBox a) (realBox b)=gridInvZ32 lower upper := by
+
+theorem ordinaryNew32_grid_abi (lower upper : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+    (haBind : ∀i,a i=(lower i:ℚ)/(sourceD:ℚ))
+    (hbBind : ∀i,b i=(upper i:ℚ)/(sourceD:ℚ))
+    (hH : ∀i,sourceH≤lower i) (hwidth : ∀i,lower i<upper i) :
+    ordinaryNew32 (realBox a) (realBox b)=gridNew32 lower upper := by

@@ -1,0 +1,31 @@
+--- original/ImbalancedChen/P4ASixTentRange32Moments.lean
++++ repaired/ImbalancedChen/P4ASixTentRange32Moments.lean
+@@ -103,7 +103,8 @@
+     (thirdPrefixTheta-boxEX (![a,a,c]) (![b,b,d])-boxEY (![a,a,c]) (![b,b,d]))*
+         boxEZInv (![a,a,c]) (![b,b,d])-1 = newMean a b c d := by
+   simp only [boxEX,boxEY,boxEZInv,newMean,sumMean,invZMean,
+-    Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two]
++    Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two,
++    Matrix.tail_cons,Matrix.head_cons]
+   ring
+ 
+ theorem ordinaryNew32_symmetric_encloses {a b c d : ℝ}
+@@ -242,11 +243,14 @@
+         (1:ℝ)≤((v:ℝ)-(u:ℝ))*(P160:ℝ)/(v:ℝ) :=
+           (le_div_iff₀ hv).2 (by simpa only [one_mul] using hscaledR)
+         _=(1-1/((v:ℝ)/(u:ℝ)))*(P160:ℝ) := by field_simp [hu.ne',hv.ne'] <;> ring
+-    have hfloor : (1:ℤ)≤(ofReal (1-1/((v:ℝ)/(u:ℝ)))).lo := Int.le_floor.mpr hfirstR
++    have hfloor : (1:ℤ)≤(ofReal (1-1/((v:ℝ)/(u:ℝ)))).lo :=
++      Int.le_floor.mpr (by simpa only [Int.cast_one] using hfirstR)
+     have hlo := hfloor.trans (originalLnUnit_lo_ge_first hr.1 h2)
+-    rw [originalLn32,if_pos h2]
+-    change 0<(originalLnUnit ((v:ℝ)/(u:ℝ))).lo
+-    omega
++    have hbranch : originalLogBranch ((v:ℝ)/(u:ℝ)) 0 =
++        originalLnUnit ((v:ℝ)/(u:ℝ)) := by
++      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
++    rw [originalLn32, if_pos h2, hbranch]
++    exact (by norm_num : (0:ℤ)<1).trans_le hlo
+   · exact log32_gt_two_lo_pos (lt_of_not_ge h2) hr.2
+ 
+ theorem grid_ratio_eq (u v : ℤ) (a b : ℚ)

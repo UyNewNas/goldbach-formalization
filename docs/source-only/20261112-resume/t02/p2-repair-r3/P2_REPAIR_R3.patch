@@ -1,0 +1,176 @@
+--- original/ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean
+@@ -135,12 +135,18 @@
+     have hx := (div_le_iff₀ hD).1
+       (by simpa only [hbR 0,VariableEnvelope.mu] using hmu :
+         (hi 0:ℝ)/((48000*2^24:ℤ):ℝ)≤25/128)
+-    linarith only [hx]
++    calc
++      (128:ℝ)*(hi 0:ℝ) ≤ 128*((25/128)*((48000*2^24:ℤ):ℝ)) :=
++        mul_le_mul_of_nonneg_left hx (by norm_num)
++      _ = 25*((48000*2^24:ℤ):ℝ) := by ring
+   have hyR : (128:ℝ)*(hi 1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by
+     have hy := (div_le_iff₀ hD).1
+       (by simpa only [hbR 1,VariableEnvelope.mu] using hymu :
+         (hi 1:ℝ)/((48000*2^24:ℤ):ℝ)≤25/128)
+-    linarith only [hy]
++    calc
++      (128:ℝ)*(hi 1:ℝ) ≤ 128*((25/128)*((48000*2^24:ℤ):ℝ)) :=
++        mul_le_mul_of_nonneg_left hy (by norm_num)
++      _ = 25*((48000*2^24:ℤ):ℝ) := by ring
+   have hx : 128*hi 0≤25*(48000*2^24:ℤ) := by exact_mod_cast hxR
+   have hy : 128*hi 1≤25*(48000*2^24:ℤ) := by exact_mod_cast hyR
+   exact ⟨ordinary_B_literal_root lo hz.le,ordinary_B_literal_residual hi hx hy⟩
+@@ -194,8 +200,12 @@
+   refine ⟨?_,?_,?_⟩
+   · simpa only [bStoredFl,value,P160,Int.cast_pow,Int.cast_ofNat,cast_bLowQ] using hfl
+   · simpa only [bStoredFh,value,P160,Int.cast_pow,Int.cast_ofNat,cast_bHighQ] using hfh
+-  · simpa only [bStoredOut,newQuery,Rat.cast_div,Rat.cast_intCast,value,
+-      P160,Int.cast_pow,Int.cast_ofNat] using hout
++  · have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++      rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++    have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++      simp only [P160,Int.cast_pow,Int.cast_ofNat]
++    simp only [newQuery,hcast]
++    simpa only [bStoredOut,value,hscale] using hout
+ 
+ /-- Consumer API for the exact selector's B winner. It covers arbitrary
+ original ordinary B boxes, preserving ln's original range32 implementation,
+@@ -256,7 +266,7 @@
+   have hr := below_mu_B_log_ratios (realBox a) (realBox b)
+     ha hab hcut hyx hzy hmu
+   have hg := original_stored_ordinary_log32_guards lo hi a b haBind hbBind
+-    ha hab hyx (by simpa only [VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
++    ha hab hyx (by simpa only [realBox,VariableEnvelope.mu] using hmu) hr.1.2 hr.2.2
+   exact ordinary_B_stored_integer_upper table lo hi a b haBind hbBind
+     ha hab hcut hyx hzy hmu hfull hg.1 hg.2 hlo
+ 
+--- original/ImbalancedChen/ActualThirdOriginalRoundedStoredQueryIntegerConsumer.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalRoundedStoredQueryIntegerConsumer.lean
+@@ -58,8 +58,7 @@
+   have hwidth : (b:ℝ)-(a:ℝ)=((x1-x0:ℤ):ℝ)/((48000*2^24:ℤ):ℝ) := by
+     rw [haR,hbR]
+     push_cast
+-    field_simp [hDr.ne']
+-    ring
++    field_simp [hDr.ne'] <;> ring
+   unfold symmetricEx storedGridEx
+   rw [hwidth,ofReal_int_div_source (x1-x0) (48000*2^24:ℤ) hD]
+ 
+--- original/ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean
+@@ -87,6 +87,9 @@
+     field_simp [hz0.ne',hz1.ne'] <;> ring
+   have hraw := mul_sound (mul_sound (hlog 0) (hlog 1))
+     (literalMassZ_sound (hposLo 2) (hposHi 2))
++  have hzero : (0 : Fin 2).castSucc = (0 : Fin 3) := rfl
++  have hone : (1 : Fin 2).castSucc = (1 : Fin 3) := rfl
++  rw [hzero, hone] at hraw
+   have heq : Real.log (b 0/a 0)*Real.log (b 1/a 1)*
+       (((4*(48000*2^24:ℤ)*(hi 2-lo 2):ℤ):ℝ)/((lo 2*hi 2:ℤ):ℝ))=
+         4*boxMass a b := by
+@@ -168,8 +171,12 @@
+   have hout := (CheckedBlockTable.query_encloses_all table (ordinaryNew a b).hi
+     P160 P160_pos).2
+   refine ⟨hfl,hfh,?_⟩
+-  simpa only [ordinaryNewQuery,Rat.cast_div,Rat.cast_intCast,value,P160,
+-    Int.cast_pow,Int.cast_ofNat] using hout
++  have hcast (u D : ℤ) : (((u:ℚ)/(D:ℚ):ℚ):ℝ)=(u:ℝ)/(D:ℝ) := by
++    rw [Rat.cast_div,Rat.cast_intCast,Rat.cast_intCast]
++  have hscale : (P160:ℝ)=(2:ℝ)^160 := by
++    simp only [P160,Int.cast_pow,Int.cast_ofNat]
++  simp only [ordinaryNewQuery,hcast]
++  simpa only [value,hscale] using hout
+ 
+ /-- Original ordinary tent candidate: literal integer branch/root/residual
+  -> exact Fraction endpoints -> original OLD/NEW queries -> rounded/clipped
+--- original/ImbalancedChen/P4AOriginalSeedRange32Invariant.lean
++++ repaired/ImbalancedChen/P4AOriginalSeedRange32Invariant.lean
+@@ -100,9 +100,10 @@
+           change (x,y) ∈ (a,b) :: consecutivePairs (b::rest) at h
+           rcases List.mem_cons.mp h with h | h
+           · have he : x=a ∧ y=b := by simpa only [Prod.mk.injEq] using h
+-            rcases he with ⟨rfl,rfl⟩
+             have hne : a ≠ b := by intro he; apply hnodup.1; simp [he]
+-            exact lt_of_le_of_ne (horder.1 b (by simp)) hne
++            have hab : a < b := lt_of_le_of_ne (horder.1 b (by simp)) hne
++            rw [he.1, he.2]
++            exact hab
+           · exact ih horder.2 hnodup.2 h
+ 
+ theorem sourceSeedXYCuts_mem_range (z0 M R H p : ℤ)
+@@ -142,8 +143,8 @@
+     (hy : (y0,y1) ∈ consecutivePairs (sourceSeedXYCuts z0 originalMuInteger originalRInteger)) :
+     integerBoxRange (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+   have hze := consecutivePairs_mem_endpoints _ hz
+-  have hz0 := originalSeedCuts_range n z0 (Finset.mem_sort.mp hze.1)
+-  have hz1 := originalSeedCuts_range n z1 (Finset.mem_sort.mp hze.2)
++  have hz0 := originalSeedCuts_range n z0 ((Finset.mem_sort (· ≤ ·)).mp hze.1)
++  have hz1 := originalSeedCuts_range n z1 ((Finset.mem_sort (· ≤ ·)).mp hze.2)
+   have hzlt := ordered_nodup_consecutive_lt _ (Finset.pairwise_sort _ _)
+     (Finset.sort_nodup _ _) hz
+   have hzR : z0 < originalRInteger := hzlt.trans_le hz1.2
+@@ -197,8 +198,8 @@
+ theorem cut_inside_of_both_child_widths (a b : IntegerPoint) (axis : Fin 3) (cut : ℤ)
+     (hl : a axis < leftIntegerUpper b axis cut axis)
+     (hr : rightIntegerLower a axis cut axis < b axis) : a axis < cut ∧ cut < b axis := by
+-  change a axis < min (b axis) cut at hl
+-  change max (a axis) cut < b axis at hr
++  simp only [leftIntegerUpper, Function.update_self] at hl
++  simp only [rightIntegerLower, Function.update_self] at hr
+   exact ⟨hl.trans_le (min_le_right _ _),(le_max_right _ _).trans_lt hr⟩
+ 
+ theorem integerBoxRange_ratio32 (a b : IntegerPoint) (hr : integerBoxRange a b) (i : Fin 3) :
+@@ -285,14 +286,19 @@
+     ∀ i, noCrossMu originalMuInteger i (seedLower x0 y0 z0) (seedUpper x1 y1 z1) := by
+   have hxy := source_seed_noCross_xy z0 z1 originalMuInteger originalRInteger x0 x1 y0 y1 hx hy
+   have hzm : originalMuInteger ∈ (originalSeedCuts n).sort (· ≤ ·) :=
+-    Finset.mem_sort.mpr (originalSeedCuts_mu_mem n)
++    (Finset.mem_sort (· ≤ ·)).mpr (originalSeedCuts_mu_mem n)
+   have hzc := ordered_cutList_consecutive_noCross _ originalMuInteger
+     (Finset.pairwise_sort _ _) hzm hz
+   intro i
+   fin_cases i
+   · exact hxy.1
+   · exact hxy.2
+-  · simpa only [noCrossMu,seedLower,seedUpper,Matrix.cons_val_two] using hzc
++  · have hlo : seedLower x0 y0 z0 (2 : Fin 3) = z0 := rfl
++    have hhi : seedUpper x1 y1 z1 (2 : Fin 3) = z1 := rfl
++    change seedUpper x1 y1 z1 (2 : Fin 3) ≤ originalMuInteger ∨
++      originalMuInteger ≤ seedLower x0 y0 z0 (2 : Fin 3)
++    rw [hlo, hhi]
++    exact hzc
+ 
+ /-- End-to-end actual descendant supplier: range, strict ratio<32 and raw
+ original ln32.lo>0 for every coordinate. Only actual positive widths remain. -/
+--- original/ImbalancedChen/P4ASixTentRange32Moments.lean
++++ repaired/ImbalancedChen/P4ASixTentRange32Moments.lean
+@@ -103,7 +103,8 @@
+     (thirdPrefixTheta-boxEX (![a,a,c]) (![b,b,d])-boxEY (![a,a,c]) (![b,b,d]))*
+         boxEZInv (![a,a,c]) (![b,b,d])-1 = newMean a b c d := by
+   simp only [boxEX,boxEY,boxEZInv,newMean,sumMean,invZMean,
+-    Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two]
++    Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two,
++    Matrix.tail_cons,Matrix.head_cons]
+   ring
+ 
+ theorem ordinaryNew32_symmetric_encloses {a b c d : ℝ}
+@@ -242,11 +243,14 @@
+         (1:ℝ)≤((v:ℝ)-(u:ℝ))*(P160:ℝ)/(v:ℝ) :=
+           (le_div_iff₀ hv).2 (by simpa only [one_mul] using hscaledR)
+         _=(1-1/((v:ℝ)/(u:ℝ)))*(P160:ℝ) := by field_simp [hu.ne',hv.ne'] <;> ring
+-    have hfloor : (1:ℤ)≤(ofReal (1-1/((v:ℝ)/(u:ℝ)))).lo := Int.le_floor.mpr hfirstR
++    have hfloor : (1:ℤ)≤(ofReal (1-1/((v:ℝ)/(u:ℝ)))).lo :=
++      Int.le_floor.mpr (by simpa only [Int.cast_one] using hfirstR)
+     have hlo := hfloor.trans (originalLnUnit_lo_ge_first hr.1 h2)
+-    rw [originalLn32,if_pos h2]
+-    change 0<(originalLnUnit ((v:ℝ)/(u:ℝ))).lo
+-    omega
++    have hbranch : originalLogBranch ((v:ℝ)/(u:ℝ)) 0 =
++        originalLnUnit ((v:ℝ)/(u:ℝ)) := by
++      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
++    rw [originalLn32, if_pos h2, hbranch]
++    exact (by norm_num : (0:ℤ)<1).trans_le hlo
+   · exact log32_gt_two_lo_pos (lt_of_not_ge h2) hr.2
+ 
+ theorem grid_ratio_eq (u v : ℤ) (a b : ℚ)
