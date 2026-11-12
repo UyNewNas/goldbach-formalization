@@ -1,0 +1,64 @@
+{
+  "module": "ImbalancedChen.Part3ActualPositiveCosineProfile",
+  "status": "source-only selected installation variant, zero new mathematics, uncompiled",
+  "base_directory": "docs/source-only/20261112-resume/t04/positive-test-next",
+  "base_registry": "303739bd40be0ac4eeb21a2e55976ce5272c6c8f30a48b8f0fb76a228badf875",
+  "preimage": {
+    "bytes": 7273,
+    "sha256": "84ca39d301c71996c2eb48001c97d7b338c1d35b2ef8e8f21646f588389b0968",
+    "git_blob": "1d8fc4fdc7bd73ee9681e573dba35f5d70d98b67"
+  },
+  "postimage": {
+    "bytes": 7377,
+    "sha256": "d4866d43e1493b3356ee1b9d143a3d4c0c1f12a2d2f2f2e637101370d576b92c",
+    "git_blob": "337f168b4194fd0f0aa79bd79705c9ad703b84a3"
+  },
+  "selected_path": "ImbalancedChen/Part3ActualPositiveCosineProfile.lean",
+  "unified_patch": {
+    "path": "SELECTION.patch",
+    "bytes": 846,
+    "sha256": "da8379751aea0b0f2dada2a24be0d270f7fecb14d37e66851018b52b1421f12d",
+    "git_blob": "5b5014537dee9507a4a0fb7dc492c87eec14257c"
+  },
+  "exact_body_substitutions": 1,
+  "unchanged_declaration_headers": [
+    "def testDiv (ell : D4 → ℤ) (Y q : ℝ) : ℂ ",
+    "private theorem div_smooth (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) :",
+    "    ContDiff ℝ ∞ (testDiv ell Y) ",
+    "private theorem div_compact (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) : HasCompactSupport (testDiv ell Y) ",
+    "private def evenDiv (ell : D4 → ℤ) (Y : ℝ) (q : ℝ) : ℂ ",
+    "private def physical (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) : SchwartzMap ℝ ℂ ",
+    "private def frequency : ℝ ≃L[ℝ] ℝ ",
+    "def cosineTest (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) : SchwartzMap ℝ ℂ ",
+    "theorem cosineTest_apply (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) (s : ℝ) :",
+    "    cosineTest ell hY s=∫ q in Ioi (0:ℝ),(Real.cos (q*s):ℂ)*testDiv ell Y q ",
+    "private def X (f : SchwartzMap ℝ ℂ) : SchwartzMap ℝ ℂ ",
+    "private def d (f : SchwartzMap ℝ ℂ) : SchwartzMap ℝ ℂ ",
+    "private theorem X_apply (f : SchwartzMap ℝ ℂ) (s : ℝ) : X f s=(s:ℂ)*f s ",
+    "private def jet (A B : SchwartzMap ℝ ℂ) (u : ℝ) : ℂ ",
+    "private theorem jet_deriv (A B : SchwartzMap ℝ ℂ) : deriv (jet A B)=",
+    "    jet (X B + X (X (d B)) - d B) (d A) ",
+    "private theorem jet_rep (f : SchwartzMap ℝ ℂ) (n : ℕ) :",
+    "    ∃ A B : SchwartzMap ℝ ℂ, iteratedDeriv n (fun u => f (Real.cosh u))=jet A B ",
+    "def hyperbolicProfile (f : SchwartzMap ℝ ℂ) : SchwartzMap ℝ ℂ ",
+    "def profile (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) : SchwartzMap ℝ ℂ ",
+    "@[simp] theorem profile_apply (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) (u : ℝ) :",
+    "    profile ell hY u=cosineTest ell hY (Real.cosh u) ",
+    "theorem weighted_profile_L1 (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) :",
+    "    Integrable (fun u => Real.cosh u*‖profile ell hY u‖) "
+  ],
+  "header_text_sha256": "43318716835e8a1ff633fc068d0b2ee965b7b73a27913fd4f8fa5afc67f6c45b",
+  "fixed_library": {
+    "revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "path": "Mathlib/Analysis/Calculus/ContDiff/Operations.lean",
+    "bytes": 48074,
+    "sha256": "3ba61e517d6162ed2fd043f1deb48d80567c2470991d9b3ae99e7be1176eb1c2",
+    "git_blob": "fcd9c1301e86029937280502aa02b3c13b07cd68",
+    "declaration_lines": [
+      806,
+      829
+    ],
+    "fun_inv_use_line": 821
+  },
+  "detail": "The fixed ContDiffAt.div requires both function values in the scalar field. The original test has real differentiability and complex values. Multiplication and the function-valued inverse apply at the same nonzero physical argument."
+}

@@ -1,0 +1,308 @@
+--- v4/p2_validation.py
++++ v5/p2_validation.py
+@@ -41,7 +41,7 @@
+     assert re.fullmatch(r'[0-9a-f]{40}', commit)
+     assert git_head(workspace) == commit
+     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
+-    branch = 'ci/p2-integer-mass-r3-20261112'
++    branch = 'ci/p2-integer-mass-r4-20261112'
+     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
+     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
+     committed = subprocess.check_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
+@@ -53,7 +53,7 @@
+     assert selection['driver_base'] == '356c3782e9428098a2fcbfb18c689bef264d84fa'
+     assert selection['driver_branch'] == branch
+     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
+-    assert selection['bundle_path'] == 'docs/source-only/20261112-resume/p2-validation-v4'
++    assert selection['bundle_path'] == 'docs/source-only/20261112-resume/p2-validation-v5'
+     assert HERE.resolve() == (workspace / selection['bundle_path']).resolve()
+     # A first branch push may have event.before = 0. The real immutable
+     # parent is in the commit header and needs no parent-history fetch.
+@@ -184,7 +184,7 @@
+         paths.update(str(p.relative_to(project)) for p in directory.glob(module_path.name + '.*') if p.is_file())
+         paths.add(record['install_path'])
+     paths.update(['lean-toolchain', 'lake-manifest.json', 'lakefile.toml',
+-                  'CandidateAudit.lean', 'P4_STAGE_RECEIPT.json'])
++                  'CandidateAudit.lean', 'FinitePiPilot.lean', 'P4_STAGE_RECEIPT.json'])
+     inventory, absent, changed = [], [], []
+     archive_path = logs / 'compiled-objects-and-sources.tar.gz'
+     # Stream all snapshot objects, including package .olean* objects, plus
+@@ -211,6 +211,8 @@
+ 
+ 
+ def finalize(manifest: dict, project: Path, logs: Path) -> None:
++    from finitepi_pilot import validate_receipt
++    validate_receipt(manifest, project, logs)
+     installed = bind_installed(manifest, project)
+     assert installed == json.loads((logs / 'SOURCE_OBJECT_BINDINGS.json').read_text())
+     batch = json.loads((logs / 'BATCH_ACCEPTANCE.json').read_text())
+@@ -248,6 +250,7 @@
+                'bundle_registry_sha256': installed['bundle_registry_sha256'],
+                'generated_audit_sha256': installed['audit_sha256'],
+                'compiled_archive_sha256': retained['archive_sha256'],
++               'finitepi_pilot_acceptance_sha256': digest(logs / 'FINITEPI_PILOT_ACCEPTANCE.json'),
+                'runtime_audit_sha256': digest(logs / 'runtime/audit.json'),
+                'runtime_state_sha256': digest(state_path),
+                'runtime_command_log_sha256': digest(command_path),
+--- v4/prepare_p2_integer_mass_validation.py
++++ v5/prepare_p2_integer_mass_validation.py
+@@ -33,7 +33,18 @@
+ def snapshot():
+     paths=list(root.glob('ImbalancedChen/**/*.lean'))+list(root.glob('.lake/build/lib/lean/**/*.olean*'))+list(root.glob('.lake/packages/*/.lake/build/lib/lean/**/*.olean*'))
+     return {str(p.relative_to(root)):digest(p) for p in sorted(paths) if p.is_file()}
+-if mode=='prepare':
++def render_audit(selected):
++    source=pathlib.Path(os.environ['P2_DIAGNOSTIC_AUDIT'])
++    audit=source.read_text();audit=audit[audit.index('set_option pp.all'):]
++    start=audit.index('  let modules := #[');end=audit.index('  let allowed :=',start)
++    audit=audit[:start]+'  let modules := #['+','.join('`'+m for m in selected)+']\n'+audit[end:]
++    audit=audit.replace('  if names.contains finalBridge then\n    throwError "Final bridge must not be included in the owned-module census"\n','').replace('(names.push finalBridge).qsort','names.qsort')
++    start=audit.index('    if name == finalBridge then');end=audit.index('  for (m, count) in counts do',start)
++    audit=audit[:start]+'    liftIO <| IO.println s!"P0_ROUND6_DECL {record.compress}"\n'+audit[end:]
++    audit='\n'.join('import '+m for m in selected)+'\nimport Lean.Util.CollectAxioms\n'+audit
++    return audit
++
++def legacy_full_render():
+     source=pathlib.Path(os.environ['P2_DIAGNOSTIC_AUDIT'])
+     audit=source.read_text();audit=audit[audit.index('set_option pp.all'):]
+     start=audit.index('  let modules := #[');end=audit.index('  let allowed :=',start)
+@@ -42,8 +53,22 @@
+     start=audit.index('    if name == finalBridge then');end=audit.index('  for (m, count) in counts do',start)
+     audit=audit[:start]+'    liftIO <| IO.println s!"P0_ROUND6_DECL {record.compress}"\n'+audit[end:]
+     audit='\n'.join('import '+m for m in modules)+'\nimport Lean.Util.CollectAxioms\n'+audit
+-    (root/'CandidateAudit.lean').write_text(audit)
++    return audit
++
++if mode=='prepare':
++    audit=render_audit(modules)
++    assert audit==legacy_full_render(), 'Full102 exporter changed from the original renderer'
++    pilot=render_audit(['ImbalancedChen.FinitePiIntegral'])
++    for name,text in [('CandidateAudit.lean',audit),('FinitePiPilot.lean',pilot)]:
++        (root/name).write_text(text)
++        (logs/name).write_bytes((root/name).read_bytes())
+     (logs/'modules.txt').write_text('\n'.join(modules)+'\n')
++    (logs/'AUDIT_RENDER_BINDINGS.json').write_text(json.dumps({
++        'full_modules':modules,'pilot_modules':['ImbalancedChen.FinitePiIntegral'],
++        'full_original_render_byte_equal':True,
++        'diagnostic_template_sha256':digest(pathlib.Path(os.environ['P2_DIAGNOSTIC_AUDIT'])),
++        'full_audit_sha256':digest(root/'CandidateAudit.lean'),
++        'pilot_audit_sha256':digest(root/'FinitePiPilot.lean')},indent=2)+'\n')
+ elif mode=='snapshot':
+     (logs/'BATCH_OBJECTS_BEFORE.json').write_text(json.dumps(snapshot(),sort_keys=True))
+ elif mode=='verify':
+--- v4/p2-integer-mass-validation.yml
++++ v5/p2-integer-mass-validation.yml
+@@ -1,7 +1,7 @@
+ name: P2 integer mass ABI exact closure validation
+ on:
+   push:
+-    branches: [ci/p2-integer-mass-r3-20261112]
++    branches: [ci/p2-integer-mass-r4-20261112]
+     paths: [.github/workflows/p2-integer-mass-validation.yml]
+ permissions:
+   contents: read
+@@ -13,11 +13,11 @@
+     runs-on: ubuntu-24.04
+     timeout-minutes: 360
+     env:
+-      SOURCE_COMMIT: 32d541884c85748e3fb18f7a83801b2f8b16e359
++      SOURCE_COMMIT: e6874f0fadb15515e5363ce92d57b73079425283
+       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
+-      EXPECTED_MANIFEST: 0a7790ab937c3ab85bb12a658522e23fe1ff84e00acb059585d118486c5492ba
++      EXPECTED_MANIFEST: 2c81eccdac19920af512db18088d0b2e562b960234404ed5ea713325ded8c8ff
+       LEAN_NUM_THREADS: 2
+-      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v4
++      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v5
+     defaults:
+       run:
+         shell: bash
+@@ -40,7 +40,7 @@
+           persist-credentials: false
+       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+         with:
+-          ref: 32d541884c85748e3fb18f7a83801b2f8b16e359
++          ref: e6874f0fadb15515e5363ce92d57b73079425283
+           path: proof-input
+           persist-credentials: false
+       - name: Bind repair baseline and exact ABI overlay with original generic stage
+@@ -106,11 +106,22 @@
+           set -euo pipefail
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" prepare
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" bind
++      - name: Strict single-module FinitePi preflight before full102 compilation
++        id: finitepi_pilot
++        timeout-minutes: 35
++        run: |
++          set -euo pipefail
++          cd "$PROJECT"
++          lake build ImbalancedChen.FinitePiIntegral 2>&1 | tee "$LOGS/finitepi-build.log"
++          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" before
++          lake env lean -DwarningAsError=true FinitePiPilot.lean 2>&1 | tee "$LOGS/finitepi-types.log"
++          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" verify
+       - name: Compile exact ABI and complete necessary local closure
+         timeout-minutes: 200
+         run: |
+           set -euo pipefail
+           cd "$PROJECT"
++          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" require
+           mapfile -t modules < "$LOGS/modules.txt"
+           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" snapshot
+@@ -134,6 +145,19 @@
+           set -euo pipefail
+           cd "$PROJECT"
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
++      - name: Upload early lightweight logs before full object compression
++        if: ${{ always() }}
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: p2-integer-mass-lightlogs-${{ github.run_id }}
++          path: |
++            ${{ runner.temp }}/p2-integer-mass-evidence/*.log
++            ${{ runner.temp }}/p2-integer-mass-evidence/*.json
++            ${{ runner.temp }}/p2-integer-mass-evidence/*.txt
++            ${{ runner.temp }}/p2-integer-mass-evidence/*.lean
++            ${{ runner.temp }}/p2-integer-mass-evidence/runtime/
++          if-no-files-found: error
++          retention-days: 30
+       - name: Retain actual final compiled objects sources and failure evidence
+         if: ${{ always() && steps.materialize.outcome == 'success' }}
+         run: |
+--- v4/variable-envelope.driver.yml
++++ v5/variable-envelope.driver.yml
+@@ -8,7 +8,7 @@
+       - 'codex/chen-parts-integration'
+       - 'codex/yellow-closure-20261110'
+       - 'ci/resume-compile-repairs-20261111'
+-      - 'ci/p2-integer-mass-r3-20261112'
++      - 'ci/p2-integer-mass-r4-20261112'
+     paths-ignore:
+       - "automation/**"
+   pull_request:
+--- /dev/null
++++ v5/finitepi_pilot.py
+@@ -0,0 +1,124 @@
++"""CI-only strict one-module preflight; full102 acceptance remains mandatory.
++
++This program must not be run locally. It parses the actual original exporter
++output and binds the unchanged target object on both sides of that export.
++It does not replace the later complete closure kernel replay or type audit.
++"""
++from __future__ import annotations
++
++from collections import Counter
++import hashlib
++import json
++import os
++from pathlib import Path
++import sys
++
++HERE = Path(__file__).resolve().parent
++MODULE = 'ImbalancedChen.FinitePiIntegral'
++ALLOWED = {'propext', 'Classical.choice', 'Quot.sound'}
++
++
++def sha(path: Path) -> str:
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def inventory(log: Path) -> dict:
++    lines = log.read_text().splitlines()
++    def records(prefix: str) -> list:
++        return [json.loads(line[len(prefix):]) for line in lines if line.startswith(prefix)]
++    assert not any(line.startswith('P0_ROUND6_INVENTORY_MISMATCH ') for line in lines)
++    serialized = records('P0_ROUND6_SERIALIZED ')
++    declarations = records('P0_ROUND6_DECL ')
++    counts = records('P0_ROUND6_MODULE ')
++    totals = [int(line.removeprefix('P0_ROUND6_COUNT ')) for line in lines
++              if line.startswith('P0_ROUND6_COUNT ')]
++    assert len(serialized) == 1 and serialized[0]['module'] == MODULE
++    row = serialized[0]
++    assert row['is_module'] is False and row['import_all'] is True and row['has_data'] is True
++    names = row['serialized_constant_names']
++    owned = row['environment_constant_names']
++    assert isinstance(names, list) and names and all(isinstance(n, str) and n for n in names)
++    assert isinstance(owned, list) and all(isinstance(n, str) and n for n in owned)
++    assert Counter(names) == Counter(owned)
++    assert row['serialized_constant_count'] == len(names)
++    assert all(n == 1 for n in Counter(names).values()), 'Duplicate serialized declaration'
++    assert Counter(d['name'] for d in declarations) == Counter(names)
++    assert len(declarations) == len(names)
++    for declaration in declarations:
++        assert declaration['module'] == MODULE
++        assert all(declaration[key] is False for key in ['is_unsafe', 'is_partial', 'is_axiom'])
++        assert isinstance(declaration['axioms'], list) and set(declaration['axioms']) <= ALLOWED
++        for key in ['type', 'readable_type']:
++            value = declaration[key]
++            assert isinstance(value, str) and value.strip() and '⋯' not in value
++    assert counts == [{'module': MODULE, 'count': len(names)}]
++    assert totals == [len(names)]
++    assert lines.count('P0_ROUND6_PHASE serialized_inventory_exact_match') == 1
++    return {'module': MODULE, 'serialized_declarations': len(names),
++            'complete_full_types': len(declarations), 'complete_readable_types': len(declarations),
++            'transitive_axiom_records': len(declarations), 'allowed_axioms': sorted(ALLOWED),
++            'owned_serialized_multiplicities_exact': True}
++
++
++def inputs(manifest: dict, project: Path, logs: Path) -> dict:
++    source = next(row for row in manifest['modules'] if row['module'] == MODULE)
++    installed = project / source['install_path']
++    data = installed.read_bytes()
++    assert len(data) == source['bytes'] and sha(installed) == source['sha256']
++    assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == source['git_blob']
++    object_path = project / '.lake/build/lib/lean/ImbalancedChen/FinitePiIntegral.olean'
++    assert object_path.is_file()
++    for name in ['CandidateAudit.lean', 'FinitePiPilot.lean']:
++        assert (project / name).read_bytes() == (logs / name).read_bytes()
++    return {'module': MODULE, 'source': source,
++            'object_path': object_path.relative_to(project).as_posix(), 'object_sha256': sha(object_path),
++            'full_audit_sha256': sha(project / 'CandidateAudit.lean'),
++            'pilot_audit_sha256': sha(project / 'FinitePiPilot.lean'),
++            'diagnostic_template_sha256': sha(HERE / manifest['diagnostic_template']['path']),
++            'manifest_sha256': sha(HERE / 'P2_VALIDATION_MANIFEST.json'),
++            'bundle_registry_sha256': sha(HERE / 'REGISTRY.json'),
++            'driver_binding_sha256': sha(logs / 'DRIVER_BINDING.json'),
++            'build_log_sha256': sha(logs / 'finitepi-build.log'),
++            'driver_commit': os.environ['GITHUB_SHA'], 'run_id': os.environ['GITHUB_RUN_ID'],
++            'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'], 'job': os.environ['GITHUB_JOB']}
++
++
++def expected_receipt(manifest: dict, project: Path, logs: Path) -> dict:
++    before = logs / 'FINITEPI_PILOT_BEFORE.json'
++    bound = inputs(manifest, project, logs)
++    assert json.loads(before.read_text()) == bound, 'Pilot source/object/configuration changed'
++    return {'status': 'PASS_STRICT_SINGLE_MODULE_PREFLIGHT_ONLY', 'inputs': bound,
++            'before_sha256': sha(before), 'types_log_sha256': sha(logs / 'finitepi-types.log'),
++            'inventory': inventory(logs / 'finitepi-types.log'),
++            'whole_p2_accepted': False, 'whole_p4_accepted': False,
++            'full102_kernel_types_axioms_and_final_gate_still_required': True}
++
++
++def validate_receipt(manifest: dict, project: Path, logs: Path) -> dict:
++    expected = expected_receipt(manifest, project, logs)
++    assert json.loads((logs / 'FINITEPI_PILOT_ACCEPTANCE.json').read_text()) == expected
++    return expected
++
++
++def main() -> None:
++    assert os.environ.get('GITHUB_ACTIONS') == 'true', 'Root-authorized CI only; never execute locally'
++    from p2_validation import load_bound_bundle
++    manifest, binding = load_bound_bundle()
++    project, logs = Path(os.environ['PROJECT']), Path(os.environ['LOGS'])
++    assert json.loads((logs / 'DRIVER_BINDING.json').read_text()) == binding
++    mode = sys.argv[1]
++    if mode == 'before':
++        path = logs / 'FINITEPI_PILOT_BEFORE.json'
++        assert not path.exists()
++        path.write_text(json.dumps(inputs(manifest, project, logs), indent=2) + '\n')
++    elif mode == 'verify':
++        receipt = expected_receipt(manifest, project, logs)
++        (logs / 'FINITEPI_PILOT_ACCEPTANCE.json').write_text(json.dumps(receipt, indent=2) + '\n')
++    elif mode == 'require':
++        validate_receipt(manifest, project, logs)
++    else:
++        raise SystemExit('Unknown pilot mode')
++
++
++if __name__ == '__main__':
++    main()
