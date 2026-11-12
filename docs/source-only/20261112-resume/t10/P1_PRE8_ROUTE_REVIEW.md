@@ -1,0 +1,12 @@
+# 第五次准入后、秩八之前的真实大模数账
+
+**独立路线核查通过。** 在原高模数检验 X≥N^(3/5)、N>1、ε≤1/500 与原数据缓冲 e≥0 下，真正准入的第五子树在秩八之前耗尽时，每一个活跃 β 的完整模数都严格小于 N^(3/5)。数学判断依据是已发表的令牌分支、原始算术门与真实素数次序。此记录在收到 T03 的新实现前冻结，只核定路线和必须保留的前提。
+
+1. `sharedRankFour` 来自真实 roughPrimeUniverse 的第四层。选中前缀长 4，符号等于其长度的偶性，因此为正。第五探测发生在选中后的 `p₅::pre₄` 上，其符号为负，质量为原 mass 乘实际 h(p₅)，本物理账取 h=1，余表为候选之后的原 suffix。跳过某个素数只推进原 carrier。第五单侧发出 rawStopped 或负的 licensedStopped。第五双方准入才在同一子树里展开第六。引用头 `a023ae055d3d90738f6965a2848266aa13089faf` 上的 `FirstFifthStoppedEvents`、`FifthSixthStoppedEvents` 和 `SixthBothInvoice` 三个 Git blob 依次为 `dacb5447d0b463d1a6afecb1ac004ce7c611d949`、`430033a84d65d242cf9bfecfd7c681379915a142`、`fe848722381b301e3d044a284aad29cb4fa1909e`。
+2. Raw 第五门经 `current_policy_through_six` 到 `policy5 (data e q om)`，在第 4 层切换后采用第五祖先的 `exponent5`。Licensed 第五门经自身两级拼接回到 `FiniteParentPolicy.fifthPolicy`，在同一第五祖先上依据 active 取 `cap5` 或 `exponent5`。三者都有各自的 ≤299/500 上界，真实幂门 D₅≤N^(299/500)。这只用同一全局上界，允许两个实际门的指数不同。`WholeSixthCeiling` 在 `c0ee142fe551ea8d36da6bbe6f65a12a0899e490` 及上述 P1 头的 blob 均为 `3e0236a913e9f52847d6a090f12cace1020b23e9`。
+3. 令 B₅=prod(p₅::pre₄)。锁定的 `odd_history_own_cube` 对此严格递增的**逆历史**及已通过的负号普通上筛门直接给出 B₅·p₅² < D₅。其左端已含三个 p₅，B₅ 自身已含一个。依据是最小标签过滤到整个奇数基数的集合，乘积按无重复交换回原表。原编译稿第 209–218 行的奇阶立方、偶阶继承平方与此一致。该结论要求原排序与奇性。源码 blob 为 `da08fdb5a2206b9089475c516b1555ffc5552b15`。
+4. `stoppedTerminals 8` 在前缀长度已达 8 时返回空表，只有 carrier 耗尽且长度 <8 时发出终端。第五子树的终端因而只多选零、一或两个素数。要从这条长度界推出乘积界，还必须由该次候选的实际余表证明新选择均 ≤p₅。原 `mem_stoppedTerminals_extends_original_prefix` 单独只给出 `chosen ++ pre`；真实余表的选取还可由同一递归的 sublist/成员归纳得到。原第四态的 `selectedPrefix.reverse ++ remaining` 是严格递减真实素数全集的子列；第五被选之后的所有可选元素均严格小于 p₅。原始素数 p₅≥2 也覆盖空积和单元素情形。故终端粗积 ≤B₅·p₅² <D₅。
+5. 任一真实终端按其**终端符号**选择 Rosser±。每个非零 β 分别由 `actualSmallRosserPlus_active` 或 `actualSmallRosserMinus_active` 得到 a<N^ε。于是 a·prod(terminal)<N^(ε+299/500)≤N^(3/5)≤X。零 β 项本已为零。只用 a 属于宽 small support 无法推出这个界。完整测试 `highQTest X F` 的分支为严格的 X<a·prod(terminal)。乘上实际符号与质量仍为零，且对原列表逐项为零同时覆盖其绝对值账。`StoppedTerminalPopulation.nonzero_stopped_has_actual_ancestor_highq_witness` 已给出真实终端、同一非零 β 和严格高模数；其源 blob 为 `cb879dbdeb3b7d45f591c78e067de1ad719bc4dd`。
+6. 第六探测总在第五双方均准入之后，符号恢复为正。`actual_raw_sixth_gate` 及 `actual_licensed_sixth_gate` 分别把实际策略化到 `currentSixthPolicy`、`FiniteParentPolicy.fifthPolicy`；对应 `current_policy_even`、`fifth_even` 对任意这些正号历史均返回真，因此筛掉 BOTH 后真实 carrier 不能再发出第六单侧事件。仅第六双方都准入的差在先前 `a023ae0` 已核为零。若使用统一的第五后代界，仍应保留两门的真实判断顺序。
+
+该论证没有改变第八及以后前沿费用，也没有给出最终误差或 hLower/hUpper。所有身份均取自锁定的 Git 对象和原稿，未运行证明。新候选的精确声明、依赖与实现需另行独审。
