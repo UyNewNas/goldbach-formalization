@@ -1,0 +1,107 @@
+import ImbalancedChen.Part3ActualFullCuspEigenbasis
+import ImbalancedChen.Part3ActualVariationalCuspEigenmodeConversion
+import ImbalancedChen.Part3ActualFullCuspFriedrichs
+
+/-!
+SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT / READY_FALSE.
+TRANSITIVE immutable be3646/0f1f DOTS API HOLD preserved.
+
+The CONSTRUCTED full-cusp Hilbert basis has actual nonzero original R
+eigenvalues mu with mu=ofReal(mu.re), 0<mu.re<=1. The already proved genuine
+spectral-to-original-graph conversion gives real lambda=mu.re^-1-1>=0
+and the ORIGINAL native Gamma graph for every basis vector. The separately
+constructed exact full-cusp graph identifies the same eigenpairs there.
+No hEigenBasis/hEigenpair, smooth-vector premise, countability, operator
+domain diagonalization, or weighted form Parseval theorem is assumed.
+-/
+
+namespace ImbalancedChen.Part3.ActualCuspEigenbasisNativeLabels20261026b
+noncomputable section
+open Set Module End
+open Gamma0ActualSmoothQuotientCore20261025a Gamma0ActualFriedrichsOperator20261025a
+open Gamma0ActualMaassClosedOperator20261025a GammaActualMinimalDefectVanishes20261026b
+open ActualFullCuspResolvent20261026b ActualFullCuspEigenbasis20261026b
+open ActualFullCuspEigenspanCompleteness20261026b
+open ActualAllFrameCompactVariationalResolvent20261026b
+open ActualVariationalCuspEigenmodeConversion20261026b
+open ActualFullCuspFriedrichs20261026b
+
+theorem actualCuspHilbertBasis_original_ne_zero (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    (actualCuspHilbertBasis N hN i : QuotientL2 N) ≠ 0 := by
+  intro hz
+  have hn : ‖(actualCuspHilbertBasis N hN i : QuotientL2 N)‖ = 1 :=
+    actualCuspHilbertBasis_norm N hN i
+  rw [hz, norm_zero] at hn
+  norm_num at hn
+
+theorem actualCuspHilbertBasis_mem_variational_eigenspace (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    (actualCuspHilbertBasis N hN i : QuotientL2 N) ∈
+      eigenspace (actualAllFrameVariationalResolvent N hN).toLinearMap
+        (actualCuspResolventEigenvalue N hN i) := by
+  rw [nonzero_constrained_eigenspace_eq_original_cusp N hN _
+    (actualCuspResolventEigenvalue_ne_zero N hN i)]
+  exact ⟨(actualCuspHilbertBasis N hN i).property,
+    mem_eigenspace_iff.mpr (actualCuspHilbertBasis_original_resolvent_eigen N hN i)⟩
+
+theorem actualCuspResolventEigenvalue_real_positive_le_one (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    actualCuspResolventEigenvalue N hN i = ((actualCuspResolventEigenvalue N hN i).re : ℂ) ∧
+      0 < (actualCuspResolventEigenvalue N hN i).re ∧
+      (actualCuspResolventEigenvalue N hN i).re ≤ 1 :=
+  variational_eigenvalue_real_positive_le_one N hN (actualCuspResolventEigenvalue_ne_zero N hN i)
+    (actualCuspHilbertBasis N hN i : QuotientL2 N) (actualCuspHilbertBasis_original_ne_zero N hN i)
+    (actualCuspHilbertBasis_mem_variational_eigenspace N hN i)
+
+/-- The ORIGINAL real native eigenvalue, not an independent diagonal parameter. -/
+def actualCuspNativeEigenvalue (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) : ℝ :=
+  variationalMaassEigenvalue (actualCuspResolventEigenvalue N hN i)
+
+theorem actualCuspNativeEigenvalue_nonneg (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) : 0 ≤ actualCuspNativeEigenvalue N hN i :=
+  variationalMaassEigenvalue_nonneg N hN (actualCuspResolventEigenvalue_ne_zero N hN i)
+    (actualCuspHilbertBasis N hN i : QuotientL2 N) (actualCuspHilbertBasis_original_ne_zero N hN i)
+    (actualCuspHilbertBasis_mem_variational_eigenspace N hN i)
+
+theorem actualCuspResolventEigenvalue_eq_native_reciprocal (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    actualCuspResolventEigenvalue N hN i = ((1+actualCuspNativeEigenvalue N hN i)⁻¹ : ℝ) := by
+  have hid : 1+actualCuspNativeEigenvalue N hN i =
+      (actualCuspResolventEigenvalue N hN i).re⁻¹ := by
+    dsimp [actualCuspNativeEigenvalue, variationalMaassEigenvalue]
+    ring
+  rw [hid, inv_inv]
+  exact (actualCuspResolventEigenvalue_real_positive_le_one N hN i).1
+
+/-- Every actual ONB vector is a native ORIGINAL Maass eigenvector. -/
+theorem actualCuspHilbertBasis_original_maass_graph (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    ((actualCuspHilbertBasis N hN i : QuotientL2 N),
+      (actualCuspNativeEigenvalue N hN i : ℂ) • (actualCuspHilbertBasis N hN i : QuotientL2 N)) ∈
+        (actualClosedGammaMaass N).graph :=
+  variational_eigenvector_original_maass_graph N hN (actualCuspResolventEigenvalue_ne_zero N hN i)
+    (actualCuspHilbertBasis N hN i : QuotientL2 N) (actualCuspHilbertBasis_original_ne_zero N hN i)
+    (actualCuspHilbertBasis_mem_variational_eigenspace N hN i)
+
+theorem actualCuspHilbertBasis_original_friedrichs_graph (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    ((actualCuspHilbertBasis N hN i : QuotientL2 N),
+      (actualCuspNativeEigenvalue N hN i : ℂ) • (actualCuspHilbertBasis N hN i : QuotientL2 N)) ∈
+        (actualGammaFriedrichs N).graph := by
+  rw [← actual_minimal_closure_eq_friedrichs N]
+  exact actualCuspHilbertBasis_original_maass_graph N hN i
+
+/-- The SAME real labels diagonalize the separately constructed exact
+native full-cusp operator. No replacement operator is defined here. -/
+theorem actualCuspHilbertBasis_full_cusp_graph (N : ℕ) [NeZero N] (hN : 0 < N)
+    (i : actualCuspBasisIndex N hN) :
+    (actualCuspHilbertBasis N hN i,
+      (actualCuspNativeEigenvalue N hN i : ℂ) • actualCuspHilbertBasis N hN i) ∈
+        (actualFullCuspFriedrichs N hN).graph :=
+  (actualFullCuspFriedrichs_graph_iff_original N hN).mpr
+    (actualCuspHilbertBasis_original_friedrichs_graph N hN i)
+
+end
+end ImbalancedChen.Part3.ActualCuspEigenbasisNativeLabels20261026b

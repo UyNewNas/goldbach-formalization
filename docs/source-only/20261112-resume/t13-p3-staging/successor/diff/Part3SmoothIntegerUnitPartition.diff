@@ -1,0 +1,35 @@
+--- 3eb60ea1153e4138bb21f6ca54d240f6d02bbb88639d38da69bbbc9e11b3620d/Part3SmoothIntegerUnitPartition.lean
++++ cc6fc6afad40d335f97074fde6630e9db6cd13cb1876d23de4dbeab192de5ce0/Part3SmoothIntegerUnitPartition.lean
+@@ -20,6 +20,7 @@
+ 
+ noncomputable section
+ open Set Filter
++open scoped ContDiff
+ 
+ /-- A finite two-term telescope, valid even when x is an integer. -/
+ theorem integer_tsum_step_difference (f : ℝ → ℝ) (a b : ℝ)
+@@ -70,13 +71,13 @@
+ theorem transition_deriv_nonpos (x : ℝ) (hx : x ≤ 0) :
+     deriv Real.smoothTransition x = 0 :=
+   deriv_zero_of_const_on_Iic Real.smoothTransition 0 x
+-    ((Real.smoothTransition.contDiff (n := ∞)).differentiable (by simp) x)
++    ((Real.smoothTransition.contDiff (n := (⊤ : ℕ∞))).differentiable (by simp) x)
+     (fun y hy => Real.smoothTransition.zero_of_nonpos (hy.trans hx))
+ 
+ theorem transition_deriv_one_le (x : ℝ) (hx : 1 ≤ x) :
+     deriv Real.smoothTransition x = 0 :=
+   deriv_zero_of_const_on_Ici Real.smoothTransition 1 x
+-    ((Real.smoothTransition.contDiff (n := ∞)).differentiable (by simp) x)
++    ((Real.smoothTransition.contDiff (n := (⊤ : ℕ∞))).differentiable (by simp) x)
+     (fun y hy => Real.smoothTransition.one_of_one_le (hx.trans hy))
+ 
+ theorem transition_deriv_cinfty : ContDiff ℝ ∞ (deriv Real.smoothTransition) :=
+@@ -133,7 +134,7 @@
+     deriv horizontalUnitPartition x =
+       deriv Real.smoothTransition (x + 1) - deriv Real.smoothTransition x :=
+   deriv_shift_difference Real.smoothTransition
+-    ((Real.smoothTransition.contDiff (n := ∞)).differentiable (by simp)) x
++    ((Real.smoothTransition.contDiff (n := (⊤ : ℕ∞))).differentiable (by simp)) x
+ 
+ theorem horizontalUnitPartition_second (x : ℝ) :
+     deriv (deriv horizontalUnitPartition) x =

@@ -1,0 +1,108 @@
+--- a/ImbalancedChen/P5IndependentTestPrimeChartUniformCutoff.lean
++++ b/ImbalancedChen/P5IndependentTestPrimeChartUniformCutoff.lean
+@@ -80,6 +80,7 @@
+       (2 : ℝ) ^ (8 * K + 2) * (N : ℝ) ^ K := by
+   have hscale := active_psi_scale_each chi hwin hsource
+   have hprod := scales_prod_upper N js (fun j hj => (hscale j hj).2)
++  rw [hlen] at hprod
+   have hlenR : (scales js).length = k := by simp [scales,hlen]
+   have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast hN
+   have hbase : (1 : ℝ) ≤ 4 * N := by nlinarith
+@@ -91,22 +92,23 @@
+     unfold argument
+     rw [hlenR]
+     have hh := mul_le_mul_of_nonneg_left hprod
+-      (by positivity : 0 ≤ (2 : ℝ) ^ (6*K+2) * (2 : ℝ) ^ k)
++      (by positivity : 0 ≤ (2 : ℝ) ^ k)
+     have hp : (2 : ℝ) ^ k * (2 * (N : ℝ)) ^ k =
+         (4 * (N : ℝ)) ^ k := by
+-      rw [← mul_pow]
+-      ring
+-    nlinarith [hh,hp]
++      rw [← mul_pow, show (2 : ℝ) * (2 * N) = 4 * N by ring]
++    exact mul_le_mul_of_nonneg_left (hh.trans_eq hp) hcoeff
+   calc
+     argument K (scales js) ≤
+         (2 : ℝ) ^ (6 * K + 2) * (4 * (N : ℝ)) ^ k := hfirst
+     _ ≤ (2 : ℝ) ^ (6 * K + 2) * (4 * (N : ℝ)) ^ K :=
+       mul_le_mul_of_nonneg_left hpowk hcoeff
+     _ = (2 : ℝ) ^ (8 * K + 2) * (N : ℝ) ^ K := by
+-      rw [mul_pow]
+       have he : 8 * K + 2 = (6 * K + 2) + 2 * K := by omega
+-      rw [he,pow_add,pow_mul]
+-      norm_num
++      have hfour : (2 : ℝ) ^ (2*K) = (4 : ℝ) ^ K := (pow_mul _ _ _).trans
++        (congrArg (fun z : ℝ => z^K) (by norm_num : (2 : ℝ)^2=4))
++      have hconstant : (2 : ℝ) ^ (8*K+2) = (2 : ℝ) ^ (6*K+2) * (4 : ℝ)^K := by
++        rw [he, pow_add (2 : ℝ) (6*K+2) (2*K), hfour]
++      rw [mul_pow,hconstant]
+       ring
+ 
+ /-- For nonempty test words, the argument escapes every fixed analytic
+@@ -144,8 +146,10 @@
+     _ ≤ argument K (scales js) := by
+       unfold argument
+       rw [show (scales js).length = k by simp [scales,hlen]]
+-      exact mul_le_mul_of_nonneg_left (by simpa only [hlen] using hprod)
+-        (by positivity)
++      have hh : ((2 : ℝ) ^ (6*K+2) * (2 : ℝ) ^ k) * A^k ≤
++          ((2 : ℝ) ^ (6*K+2) * (2 : ℝ) ^ k) * (scales js).prod :=
++        mul_le_mul_of_nonneg_left (by simpa only [hlen] using hprod) (by positivity)
++      simpa only [mul_assoc] using hh
+ 
+ /-- The analytic conversion uses the bank-wide exponent K+1. -/
+ theorem uniform_chart_cutoff_of_scalar_threshold
+@@ -193,12 +197,11 @@
+           ((N : ℝ) ^ (K+1)) ^ (astar / (2 * (K+1))) :=
+         Real.rpow_le_rpow ha0.le hargN hdelta
+       _ = (N : ℝ) ^ (astar / 2) := by
+-        rw [← Real.rpow_natCast] 
+-        rw [Real.rpow_mul hN0]
++        rw [← Real.rpow_natCast (N : ℝ) (K+1), ← Real.rpow_mul hN0]
+         congr 1
+-        have hK : (0 : ℝ) < K + 1 := by positivity
+-        field_simp
+-        ring
++        push_cast
++        have hK : (K : ℝ) + 1 ≠ 0 := by positivity
++        field_simp [hK] <;> ring
+   have hstrict : (N : ℝ) ^ (astar / 2) < (N : ℝ) ^ astar :=
+     Real.rpow_lt_rpow_of_exponent_lt hN1 (by linarith [hastar])
+   exact (hrough.trans_le hpow).trans_lt hstrict
+@@ -290,7 +293,8 @@
+   have hden : 0 < 2 * (256 : ℝ) ^ gs.length := by positivity
+   have hfloor : (1 / (2 * (256 : ℝ) ^ gs.length)) *
+       (N : ℝ) ^ (1 - kappa0) ≤ x := by
+-    have hq := (div_le_iff₀ hden).mpr hfull
++    have hq : (N : ℝ) ^ (1 - kappa0) / (2 * (256 : ℝ) ^ gs.length) ≤ x :=
++      (div_le_iff₀ hden).mpr (hfull.trans_eq (mul_comm _ _))
+     calc
+       (1 / (2 * (256 : ℝ) ^ gs.length)) *
+           (N : ℝ) ^ (1 - kappa0) =
+--- a/ImbalancedChen/P5OccurrenceLeibnizAllocation.lean
++++ b/ImbalancedChen/P5OccurrenceLeibnizAllocation.lean
+@@ -93,7 +93,11 @@
+     (fun v => A v * E v) (fun v => P v * C v) z hAE hPC
+   have hleft := occOne_mul a A E z hA hE
+   have hright := occOne_mul a P C z hP hC
+-  convert houter using 1 <;> simp only [hleft, hright] <;> ring
++  have hfun : (fun v => A v * E v * P v * C v) =
++      (fun v => (A v * E v) * (P v * C v)) :=
++    funext (fun v => mul_assoc (A v * E v) (P v) (C v))
++  rw [hfun, houter, hleft, hright]
++  ring
+ 
+ -- The four destinations in the actual chart are ambient A, complete
+ -- product eta, the UNIQUE psi_owner(a), and its own plateau c_a.
+--- a/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean
++++ b/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean
+@@ -131,8 +131,7 @@
+       unfold residueKernel
+       ring
+     _ = _ := by
+-      rw [Finset.sum_sub_distrib, Finset.sum_div]
+-      rfl
++      simp only [residueCount, exactCoprimeMean, Finset.sum_sub_distrib, Finset.sum_div]
+ 
+ -- Exact inversion for every retained integer tuple is the classical input.
+ -- The local arithmetic bound remains uniform in the separated frequency.

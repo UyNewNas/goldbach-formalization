@@ -1,0 +1,53 @@
+--- a/ImbalancedChen/P5IndependentFourPrimeChartCutoff.lean
++++ b/ImbalancedChen/P5IndependentFourPrimeChartCutoff.lean
+@@ -97,15 +97,17 @@
+   have hscale := active_psi_scale_each chi hwin hsource
+   have hprod := scale_product_upper N js (fun j hj => (hscale j hj).2)
+   have hlenR : (scales js).length = 4 := by simp [scales,hlen]
+-  unfold argument
+-  rw [hlenR,hlen] at hprod ⊢
++  rw [hlen] at hprod
+   have hcoeff : 0 ≤ (2 : ℝ) ^ (6 * K + 2) * (2 : ℝ) ^ 4 := by positivity
+   have hh := mul_le_mul_of_nonneg_left hprod hcoeff
+-  have hpow : (2 * (N : ℝ)) ^ 4 = (2 : ℝ) ^ 4 * (N : ℝ) ^ 4 := by ring
+-  rw [hpow] at hh
++  rw [mul_pow] at hh
+   have hexp : 6 * K + 10 = (6 * K + 2) + 4 + 4 := by omega
+-  rw [hexp,pow_add,pow_add]
+-  convert hh using 1 <;> ring
++  have hfactor : (2 : ℝ) ^ (6 * K + 10) =
++      (2 : ℝ) ^ (6 * K + 2) * (2 : ℝ) ^ 4 * (2 : ℝ) ^ 4 := by
++    rw [hexp, pow_add (2 : ℝ) ((6 * K + 2) + 4) 4, pow_add (2 : ℝ) (6 * K + 2) 4]
++  unfold argument
++  rw [hlenR, hfactor]
++  simpa only [mul_assoc] using hh
+ 
+ /-- The matching lower bound forces the original chart argument to
+ escape every fixed subpower-envelope threshold on active marks. -/
+@@ -123,9 +125,12 @@
+   have hscale := active_psi_scale_each chi hwin hsource
+   have hprod := scale_product_lower N js (fun j hj => (hscale j hj).1)
+   have hlenR : (scales js).length = 4 := by simp [scales,hlen]
++  rw [hlen] at hprod
++  have hh := mul_le_mul_of_nonneg_left hprod
++    (by positivity : 0 ≤ (2 : ℝ) ^ (6 * K + 2) * (2 : ℝ) ^ 4)
+   unfold argument
+-  rw [hlenR,hlen] at hprod ⊢
+-  exact mul_le_mul_of_nonneg_left hprod (by positivity)
++  rw [hlenR]
++  simpa only [mul_assoc] using hh
+ 
+ /-- The remaining analytic comparison is elementary once the genuine
+ four-prime chart argument is between its proved polynomial bounds. -/
+@@ -173,9 +178,9 @@
+           ((N : ℝ) ^ 5) ^ (astar / 10) :=
+         Real.rpow_le_rpow ha0.le hargN hdelta
+       _ = (N : ℝ) ^ (astar / 2) := by
+-        rw [Real.rpow_mul hN0]
++        rw [← Real.rpow_natCast (N : ℝ) 5, ← Real.rpow_mul hN0]
+         congr 1
+-        norm_num
++        norm_num <;> ring
+   have hstrict : (N : ℝ) ^ (astar / 2) <
+       (N : ℝ) ^ astar :=
+     Real.rpow_lt_rpow_of_exponent_lt hN1 (by linarith [hastar])

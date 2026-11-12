@@ -1,0 +1,24 @@
+--- bd517a4fd72a25635e35a2c0fd988066589b42b79bfe3af369ee52dba44409d6/Part3PlanarFourierSeriesClassicalCalculus.lean
++++ 517f262e53480f5373736408e91017a17184473cb4f3d1cf5c3135ebb9a97d4b/Part3PlanarFourierSeriesClassicalCalculus.lean
+@@ -32,17 +32,17 @@
+     coordinateLinear a b h = h.1 • a + h.2 • b := by simp [coordinateLinear,firstLift,secondLift]
+ 
+ theorem firstLift_norm_le (a : ℂ) : ‖firstLift a‖ ≤ ‖a‖ := by
+-  apply ContinuousLinearMap.opNorm_le_bound (norm_nonneg _)
++  apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
+   intro h
+   have hx : ‖h.1‖ ≤ ‖h‖ := norm_fst_le h
+-  simpa only [firstLift,ContinuousLinearMap.smulRightL_apply,ContinuousLinearMap.smulRight_apply,
++  simpa only [firstLift,ContinuousLinearMap.smulRightL_apply_apply,ContinuousLinearMap.smulRight_apply,
+     ContinuousLinearMap.fst_apply,norm_smul,mul_comm] using mul_le_mul_of_nonneg_right hx (norm_nonneg a)
+ 
+ theorem secondLift_norm_le (a : ℂ) : ‖secondLift a‖ ≤ ‖a‖ := by
+-  apply ContinuousLinearMap.opNorm_le_bound (norm_nonneg _)
++  apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
+   intro h
+   have hx : ‖h.2‖ ≤ ‖h‖ := norm_snd_le h
+-  simpa only [secondLift,ContinuousLinearMap.smulRightL_apply,ContinuousLinearMap.smulRight_apply,
++  simpa only [secondLift,ContinuousLinearMap.smulRightL_apply_apply,ContinuousLinearMap.smulRight_apply,
+     ContinuousLinearMap.snd_apply,norm_smul,mul_comm] using mul_le_mul_of_nonneg_right hx (norm_nonneg a)
+ 
+ theorem coordinateLinear_norm_le (a b : ℂ) : ‖coordinateLinear a b‖ ≤ ‖a‖+‖b‖ :=
