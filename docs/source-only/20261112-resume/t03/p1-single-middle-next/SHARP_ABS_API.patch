@@ -1,0 +1,31 @@
+--- a/ImbalancedChen/P1OriginalSharpFiniteReceiver.lean
++++ b/ImbalancedChen/P1OriginalSharpFiniteReceiver.lean
+@@ -115,7 +115,7 @@
+   have hlow : |read S c (sharpPrimeError N)|≤2*(u/3*singularNormalization N) := by
+     let pp := read S c (primeError N N)
+     let sh := read S c (sharpPrimeError N)
+-    have H := abs_sub_le pp (pp-sh)
++    have H := abs_sub pp (pp-sh)
+     rw [show pp-(pp-sh)=sh by ring] at H
+     change |pp|≤_ at hpay
+     change |pp-sh|≤_ at hdiff
+@@ -126,7 +126,7 @@
+     ((div_lt_iff₀ (frozenHN_pos N (by omega))).mp hCen).le
+   rw [same_normalization] at hlow
+   rw [recenter,sub_right_comm,low_part]
+-  exact (abs_sub_le _ _).trans (by linarith only [hlow,hz])
++  exact (abs_sub _ _).trans (by linarith only [hlow,hz])
+ 
+ /-- Exact removal of the high cutoff from this particular finite
+ coefficient. Its already-proved support is checked only on live moduli. -/
+--- a/ImbalancedChen/P1OriginalSharpReceiverClassicalReserve.lean
++++ b/ImbalancedChen/P1OriginalSharpReceiverClassicalReserve.lean
+@@ -55,7 +55,7 @@
+         above P N cap w z L)-
+         (physical Q N cap w z L (receiverTest N)-primeMass N*physical Q N cap w z L densityTest-
+         above Q N cap w z L)| := by congr 1 <;> ring
+-    _ ≤ _ := (abs_sub_le _ _).trans (by linarith only [hP,hQ])
++    _ ≤ _ := (abs_sub _ _).trans (by linarith only [hP,hQ])
+ 
+ end
+ end ImbalancedChen.P1OriginalSharpReceiverClassicalReserve

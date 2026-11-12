@@ -1,0 +1,15 @@
+# 单素数物理余项与大模数分布定理
+
+**裁定。** 原历史两项 `comparisonMiddle`、`savingMiddle` 和最终矩形 `P1OriginalSharpFiniteReceiver.middle` 的全中段付款仍待证明。三项的被分布变量都是一个素数 p，移位和端点均为同一偶数 N。在 floor(N^(9/20)) < d < N^(599/1000) 上分别取原 raw-minus-licensed、sixth-minus-eighth 带号系数以及最终矩形的实际系数。不应由另一项的结果推定任何一项已付。此前已经取得的低段、中心和两段系数上端消零继续适用。
+
+**与外部定理的逐项比对。** Lichtman 的定理 1.7(1.7) 允许 |a|<x^(1+ε)，可以令 a=x=N。在 θ=7/32 时，其完整模数指数是 (5−θ)/8−ε=153/256−ε。它还要求给定水准的三重良因子权，即对于定理要求的每个三因子长度分解都能够给出相应的有界 Dirichlet 卷积。当前的非零支撑上界为 .599；该上界本身既未将支撑压到外部指数以下，也未给出上述分解。定理中较高的 66/107 属于小 a 分支。Pascadi 的素数定理 1.3(i),(ii) 分别作用于三重良因子权、特定的上界良因子线性筛权，其估计常数允许依赖 a；不能从该式推出对所有 a=N 的统一常数。Lichtman 命题 6.6 则给定原线性筛的特定权、首素数盒和剩余素因子约束，未提供三种原自适应系数与其权相等的字典。[Lichtman，定理 1.7 与命题 6.6](https://arxiv.org/pdf/2309.08522) [Pascadi，定理 1.3](https://arxiv.org/pdf/2505.00653)
+
+**稿内可用的更细入口。** Lichtman 命题 5.2 的陈述对实际 a 给出精确互素均值的三模数卷积估计，受四个严格单项式约束。用 U 表示被选出的 HB 长度，x=UV，要求 Q₁<Ux^(−σ)、U²Q₂Q₃²<x^(1−8σ)、|N|^θ UQ₁Q₂⁵Q₃²<x^(2−15σ) 与 U^(1+2θ)Q₁Q₂^(5−2θ)Q₃^(2+2θ)<x^(2−15σ)。三条模数因子各为一界、分别与目标互素，α 须满足带任意辅助互素整数的 SW 和给定的无小素因子支撑，β 符合有界条件。原稿为近线性移位单列保留倒数相位的受限论证，并为除数有界补因子单列截断与恢复。其局部尺度还要求 c₀x≤N≤x^(1+κ) 与 0≤κ≤σ/100。被分布对象只有一个素数时，三阶 HB 仍能出现一个 medium 槽，也能出现一个或两个 long 槽。取单素数不会自动删去其中任何分支。[命题 5.2，第 20 页](https://arxiv.org/pdf/2309.08522#page=20) [原稿受限命题](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/9731290e8f53cffda44129906cde6a965eaa869b/proof-library/source/lichtman-restricted-prop52-composite-independent-20261009.tex) [原稿局部到 PP 的精确前提](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/9731290e8f53cffda44129906cde6a965eaa869b/proof-library/source/distribution-prime-product-completion-20261010.txt#L23)
+
+**每个系数要交付什么。** 对最终矩形，可沿冻结的正 ω、同一 β,k 及原 Q,ρ 使用实际 whole-box 卷积/碰撞接口，其中测试的计数核与互素中心必须一起转换。仍需把单素数的原 HB 分支逐个接到合法的模数分组，保存每个 σ 余量、carry β 的组、目标删素、重复标签的阶乘与所有恢复成本，并对实际剩余有符号卷积求得所需误差。双素数带上的现成中槽 SW 或重组恒等不直接给这项和的估计。若先在完整系数上求估计，再扣除此前已付部分，可以绕开硬中段筛选；直接给 q₁q₂q₃ 加上下端点会使模数槽关联，需要另付可分离恢复。对两个历史差，未找到将各自真实未矩形化的历史保留条件推广到这些原矩形系数的现成等式，或针对计数与均值的同时误差界。可以对两个政策的全接收器分别付款再按原方向相减，也可直接按带号差的真出现求和。[原系数与阶乘恢复](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/9731290e8f53cffda44129906cde6a965eaa869b/proof-library/source/lichtman-compiler-orbit-interface-20261010.txt) [原高秩系数与选参](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/9731290e8f53cffda44129906cde6a965eaa869b/proof-library/source/lichtman-current-upper-density-assembly-20261009.txt#L255)
+
+**量词。** 旧 `exists_original_reserves` 断言的是除去中段后的余差，并在充分大偶 N 之后量化 cap,w,z,ℓ；w 只有上界。它没有给 w=N^ω 及预先固定的正 ω。稿内 PP 要求预先选择正 ω、有限秩、有限盒和恢复常数，再取 N 的阈值。若原用途只消费物理选定的参数，可把上述强余差式限制到同一固定日程，并容许新的阈值依赖这些已选常数。它不能推出中段付款对所有随 N 改变的 w 等参数仍共享旧阈值。对最终矩形，`original_archive_and_physical_reserves` 的 β 和 k 已经位于 N₀ 前面，应复用同一选择。
+
+**尖端是可补的初等步骤。** 例如对任一实际差权 c，|c(d)|≤2，且只计中段正整数 d。充分大偶 N 自身不是素数。在 N−h≤p≤N 的单素数过渡窗内按 t=N−p 计数，1≤t≤h，实际原同余项的绝对误差至多 2∑_{1≤t≤h}τ(t)。精确互素均值至多 2(h+1)∑_{d<N^.599}1/φ(d)，两者合计 O((h+1)log N)。取 h=N/log^B N、先按目标精度选 B，内侧光滑化仅引入各固定阶的对数幂。π(N)/φ(d) 与同一真正互素素数均值之差逐 d 为 #{p≤N:p|d}/φ(d)，属已知中心转接规模。该端点推导不使用中段 PP，不可代替中段里远离端点的主体。
+
+截至本次审读，已核对的外部来源和现有本地终端均未给出三项的完整、同系数且参数顺序相符的付款。原稿给出了受限插入的数学路线。此结论不判原 PP 为假，未执行 Lean、数值证书、生产程序或 CI。
