@@ -50,18 +50,6 @@ theorem receipt_weight_split (w : TaggedReceiver → ℝ)
 
 /-- The two real original prime-receiver bands are counted separately.
 In particular an (p,q) in both bands appears twice, with different tags. -/
-theorem original_U3_source_exact (N : ℕ) (w : TaggedReceiver → ℝ) :
-    (∑ z ∈ originalTagged N, onlyU3 w z) =
-      ∑ x ∈ originalPairs N .U3, w (.inl x) := by
-  classical
-  simp [originalTagged, onlyU3, Finset.sum_disjSum]
-
-theorem original_U4_source_exact (N : ℕ) (w : TaggedReceiver → ℝ) :
-    (∑ z ∈ originalTagged N, onlyU4 w z) =
-      ∑ x ∈ originalPairs N .U4, w (.inr x) := by
-  classical
-  simp [originalTagged, onlyU4, Finset.sum_disjSum]
-
 /-- Even a common original (p,q) is two DISTINCT tagged receipts.
 The lemma deliberately asserts no equality between their physical Qs. -/
 theorem overlap_retains_both_original_tags (N : ℕ) (x : TaggedPair)
@@ -128,34 +116,32 @@ theorem all_observed_fin_weight_split
   intro i hi
   exact actual_fin_weight_split N cap precision tau z0 lower w Q i
 
-/-- The actual original U3 tagged source, not an arbitrary selected
-mask, equals the U3-only full Fin source plus its FOUR literal
+/-- The actual original U3-tag projection of the source, not an
+arbitrary selected mask, equals its full Fin source plus its FOUR literal
 outside-source rejection lanes. Nothing here pays either term. -/
 theorem original_U3_four_lane_fin_source
     (N cap precision : ℕ) (tau z0 : ℝ) (lower : Bool)
     (hzcap : z0 ≤ (cap : ℝ)) (w : TaggedReceiver → ℝ) :
-    (∑ x ∈ originalPairs N .U3, w (.inl x)) =
+    (∑ z ∈ originalTagged N, onlyU3 w z) =
       allObservedFinWeight N cap precision tau z0 lower (onlyU3 w) +
       originalFourOutsidePositionLanes N cap precision tau z0 lower
         (onlyU3 w) := by
   have h := original_source_four_lanes_all_tagged_fin
     N cap precision tau z0 lower hzcap (onlyU3 w)
-  rw [original_U3_source_exact] at h
-  exact h
+  simpa only [allObservedFinWeight] using h
 
-/-- Same identity for original U4: overlapping original pairs are
+/-- Same projected identity for original U4: overlapping original pairs are
 not collapsed into U3, and all q-receipts keep their U4 tag. -/
 theorem original_U4_four_lane_fin_source
     (N cap precision : ℕ) (tau z0 : ℝ) (lower : Bool)
     (hzcap : z0 ≤ (cap : ℝ)) (w : TaggedReceiver → ℝ) :
-    (∑ x ∈ originalPairs N .U4, w (.inr x)) =
+    (∑ z ∈ originalTagged N, onlyU4 w z) =
       allObservedFinWeight N cap precision tau z0 lower (onlyU4 w) +
       originalFourOutsidePositionLanes N cap precision tau z0 lower
         (onlyU4 w) := by
   have h := original_source_four_lanes_all_tagged_fin
     N cap precision tau z0 lower hzcap (onlyU4 w)
-  rw [original_U4_source_exact] at h
-  exact h
+  simpa only [allObservedFinWeight] using h
 
 /-- The four actual outside-source lanes themselves split exactly by
 the original U3/U4 tag. No cancellation, sign or smallness is used:
