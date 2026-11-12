@@ -1,0 +1,205 @@
+log line 702
+error: ImbalancedChen/P4AOriginalRange32MassCeil.lean:196:22: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  4 * boxMass ![?a, ?a, ?c] ![?b, ?b, ?d] / 2
+in the target expression
+  Encloses (divNat (ordinaryMass32 ![x0, x0, z0] ![x1, x1, z1]) 2) (4 * boxMass ![↑a, ↑a, ↑c] ![↑b, ↑b, ↑d] / ↑2)
+
+x0 x1 z0 z1 : ℤ
+a b c d : ℚ
+ha : a = ↑x0 / ↑(48000 * 2 ^ 24)
+hb : b = ↑x1 / ↑(48000 * 2 ^ 24)
+hc : c = ↑z0 / ↑(48000 * 2 ^ 24)
+hd : d = ↑z1 / ↑(48000 * 2 ^ 24)
+hg : SymmetricFullBox ↑a ↑b ↑c ↑d
+hratio : ↑b / ↑a ≤ 32
+hcpos : 0 < ↑c
+hapos : 0 < ↑a
+haVec : ∀ (i : Fin 3), 0 < realBox ![a, a, c] i
+habVec : ∀ (i : Fin 3), realBox ![a, a, c] i < realBox ![b, b, d] i
+hfull : Encloses (ordinaryMass32 ![x0, x0, z0] ![x1, x1, z1]) (4 * boxMass (realBox ![a, a, c]) (realBox ![b, b, d]))
+hhalf : Encloses (divNat (ordinaryMass32 ![x0, x0, z0] ![x1, x1, z1]) 2) (4 * boxMass ![↑a, ↑a, ↑c] ![↑b, ↑b, ↑d] / ↑2)
+hrealA : realBox ![a, a, c] = ![↑a, ↑a, ↑c]
+hrealB : realBox ![b, b, d] = ![↑b, ↑b, ↑d]
+⊢ Encloses (symmetricMass32 x0 x1 z0 z1) (prismMass ↑a ↑b ↑c ↑d)
+
+log line 893
+error: ImbalancedChen/ActualThirdOriginalP4AOriginalClippedGapLeaf.lean:77:58: Application type mismatch: The argument
+  add_le_add_right hs d
+has type
+  d + s ≤ d + 2
+but is expected to have type
+  s + d ≤ 2 + d
+in the application
+  LE.le.trans ht (add_le_add_right hs d)
+
+log line 931
+error: ImbalancedChen/ActualThirdOriginalP4AOriginalClippedGapLeaf.lean:298:17: failed to synthesize instance of type class
+  Inter (Point → Prop)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+log line 938
+error: ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteDispatch.lean:113:48: Application type mismatch: The argument
+  husable.left
+has type
+  match k with
+  | TentSide.rise => 0 < 48000 * 2 ^ 24 + (literalTentX s - 2) * hi 0 + (literalTentY s - 2) * hi 1
+  | TentSide.fall => 0 < 57 * (48000 * 2 ^ 24) + (-96 * literalTentX s - 64) * hi 0 + (-96 * literalTentY s - 64) * hi 1
+but is expected to have type
+  match k, ⋯, hselected with
+  | TentSide.rise, hD, hselected => 0 < 48000 * 2 ^ 24 + (literalTentX s - 2) * hi 0 + (literalTentY s - 2) * hi 1
+  | TentSide.fall, hD, hselected =>
+    0 < 57 * (48000 * 2 ^ 24) + (-96 * literalTentX s - 64) * hi 0 + (-96 * literalTentY s - 64) * hi 1
+in the application
+  original_finite_selected_tent_integer_upper table s k lo hi (48000 * 2 ^ 24) 481573208064 (realBox a) (realBox b) rfl
+    rfl (realBox_grid_binding lo a haBind) (realBox_grid_binding hi b hbBind) ha hab hcut hyx hzy hmu hfull hselected
+    husable.left
+
+log line 953
+error: ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteDispatch.lean:127:29: Application type mismatch: The argument
+  hs
+has type
+  originalMinorant lo hi (48000 * 2 ^ 24) 481573208064 = some Candidate.base
+but is expected to have type
+  some Candidate.base = some Candidate.base
+in the application
+  Or.inl hs
+
+log line 961
+error: ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteDispatch.lean:128:38: Application type mismatch: The argument
+  hs
+has type
+  originalMinorant lo hi (48000 * 2 ^ 24) 481573208064 = some (Candidate.tent s k)
+but is expected to have type
+  some (Candidate.tent s k) = some (Candidate.tent s k)
+in the application
+  Exists.intro k hs
+
+log line 975
+error: ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean:74:2: linarith failed to find a contradiction
+a b : ℝ
+ha : 0 < a
+hab : a < b
+h : 2 * (b - a) / Real.log (b / a) - maxMean a b ≤ maxMean a b
+a✝ : maxMean a b < (b - a) / Real.log (b / a)
+⊢ False
+failed
+
+log line 983
+error: ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean:97:14: failed to synthesize instance of type class
+  OfNat (Type ?u.18) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Type ?u.18
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+log line 990
+error: ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean:97:17: Unknown identifier `nvZMean`
+
+log line 991
+error: ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean:113:2: Tactic `apply` failed: could not unify the conclusion of `@add_le_add_left`
+  ?b + ?a ≤ ?c + ?a
+with the goal
+  flo +
+      (tentOldMean s k (symmetricLeft a c) (symmetricRight b d) - tentOldLow s k (symmetricRight b d)) /
+          (tentOldHigh s k (symmetricLeft a c) - tentOldLow s k (symmetricRight b d)) *
+        (fhi - flo) ≤
+    flo +
+      (orderedTentMean s k a b c d - tentOldLow s k (symmetricRight b d)) /
+          (tentOldHigh s k (symmetricLeft a c) - tentOldLow s k (symmetricRight b d)) *
+        (fhi - flo)
+
+Note: The full type of `@add_le_add_left` is
+  ∀ {α : Type ?u.23} [inst : Add α] [inst_1 : LE α] [i : AddRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+
+s : TentSum
+k : TentSide
+hs : SafeAsymmetricTent s k
+a b c d flo fhi : ℝ
+hg : SymmetricFullBox a b c d
+hres : 0 < oldNumerator s k (symmetricRight b d)
+hqueries : flo ≤ fhi
+hmean : tentOldMean s k (symmetricLeft a c) (symmetricRight b d) ≤ orderedTentMean s k a b c d
+hden : 0 ≤ tentOldHigh s k (symmetricLeft a c) - tentOldLow s k (symmetricRight b d)
+⊢ flo +
+      (tentOldMean s k (symmetricLeft a c) (symmetricRight b d) - tentOldLow s k (symmetricRight b d)) /
+          (tentOldHigh s k (symmetricLeft a c) - tentOldLow s k (symmetricRight b d)) *
+        (fhi - flo) ≤
+    flo +
+      (orderedTentMean s k a b c d - tentOldLow s k (symmetricRight b d)) /
+          (tentOldHigh s k (symmetricLeft a c) - tentOldLow s k (symmetricRight b d)) *
+        (fhi - flo)
+
+log line 1023
+error: ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean:227:8: Type mismatch: After simplification, term
+  hbranch
+ has type
+  match k with
+  | TentSide.rise =>
+    -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0
+  | TentSide.fall =>
+    ¬-50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0 ∧
+      0 ≤ -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x0 + literalTentY s * x0 + literalTentZ s * z0)
+but is expected to have type
+  match k, ⋯ with
+  | TentSide.rise, hD =>
+    -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0
+  | TentSide.fall, hD =>
+    ¬-50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0 ∧
+      0 ≤ -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x0 + literalTentY s * x0 + literalTentZ s * z0)
+
+log line 1045
+error: ImbalancedChen/ActualThirdOriginalP4ABalancedSymmetricLeaf.lean:303:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Real.log (↑b / ↑a) * Real.log (↑b / ↑a) * (↑(4 * (48000 * 2 ^ 24) * (z1 - z0)) / ↑(z0 * z1)) / 2
+in the target expression
+  Encloses (divNat (mul (mul (originalLnUnit (↑x1 / ↑x0)) (originalLnUnit (↑x1 / ↑x0))) (literalMassZ z0 z1)) 2)
+    (Real.log (↑b / ↑a) * Real.log (↑b / ↑a) * (↑(4 * (48000 * 2 ^ 24) * (z1 - z0)) / ↑(z0 * z1)) / ↑2)
+
+x0 x1 z0 z1 : ℤ
+a b c d : ℚ
+ha : a = ↑x0 / ↑(48000 * 2 ^ 24)
+hb : b = ↑x1 / ↑(48000 * 2 ^ 24)
+hc : c = ↑z0 / ↑(48000 * 2 ^ 24)
+hd : d = ↑z1 / ↑(48000 * 2 ^ 24)
+hg : SymmetricFullBox ↑a ↑b ↑c ↑d
+hratio : ↑b / ↑a ≤ 2
+hD : 0 < ↑(48000 * 2 ^ 24)
+haR : ↑a = ↑x0 / ↑(48000 * 2 ^ 24)
+hbR : ↑b = ↑x1 / ↑(48000 * 2 ^ 24)
+hcR : ↑c = ↑z0 / ↑(48000 * 2 ^ 24)
+hdR : ↑d = ↑z1 / ↑(48000 * 2 ^ 24)
+hx0 : 0 < x0
+hz0 : 0 < z0
+hz1 : 0 < z1
+hx0R : 0 < ↑x0
+hz0R : 0 < ↑z0
+hz1R : 0 < ↑z1
+hratioEq : ↑b / ↑a = ↑x1 / ↑x0
+hlog : Encloses (originalLnUnit (↑x1 / ↑x0)) (Real.log (↑b / ↑a))
+hfactor : ↑(4 * (48000 * 2 ^ 24) * (z1 - z0)) / ↑(z0 * z1) = 4 * (↑d - ↑c) / (↑c * ↑d)
+hraw :
+  Encloses (divNat (mul (mul (originalLnUnit (↑x1 / ↑x0)) (originalLnUnit (↑x1 / ↑x0))) (literalMassZ z0 z1)) 2)
+    (Real.log (↑b / ↑a) * Real.log (↑b / ↑a) * (↑(4 * (48000 * 2 ^ 24) * (z1 - z0)) / ↑(z0 * z1)) / ↑2)
+heq :
+  Real.log (↑b / ↑a) * Real.log (↑b / ↑a) * (↑(4 * (48000 * 2 ^ 24) * (z1 - z0)) / ↑(z0 * z1)) / 2 =
+    prismMass ↑a ↑b ↑c ↑d
+⊢ Encloses (literalSymmetricMass x0 x1 z0 z1) (prismMass ↑a ↑b ↑c ↑d)
+
+log line 1080
+error: ImbalancedChen/ActualThirdOriginalP4ABalancedSymmetricLeaf.lean:344:8: Type mismatch: After simplification, term
+  hbranch
+ has type
+  match k with
+  | TentSide.rise =>
+    -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0
+  | TentSide.fall =>
+    ¬-50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0 ∧
+      0 ≤ -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x0 + literalTentY s * x0 + literalTentZ s * z0)
+but is expected to have type
+  match k, ⋯ with
+  | TentSide.rise, hD =>
+    -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0
+  | TentSide.fall, hD =>
+    ¬-50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x1 + literalTentY s * x1 + literalTentZ s * z1) ≤ 0 ∧
+      0 ≤ -50 * (48000 * 2 ^ 24) + 256 * (literalTentX s * x0 + literalTentY s * x0 + literalTentZ s * z0)

@@ -1,0 +1,118 @@
+import Mathlib.NumberTheory.ModularForms.Petersson
+import Mathlib.Tactic
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT, S21, 2026-11-02.
+
+Drappeau (4.7) for native holomorphic cusp forms of even weight k=2*r:
+  a_f(n) = rho_f(n) * (4*pi*n)^r,   R_f(n)=sqrt(n)*rho_f(n).
+The coefficients below are computed from Mathlib's actual qExpansion;
+the genuine integral identity and whole convergent q-expansion are reused.
+This is distinct from the Maass rhoK/2 conversion in R21.
+
+A period-one cusp chart is required through the native group's strict
+period membership. No Fourier-shape equality is an input. The file does
+not construct a Petersson orthonormal basis, identify an oldclass, prove
+Deligne's bound, or assert a holomorphic Kuznetsov sum. In that sum the
+weight is Gamma(2*r) and the Bessel order is 2*r-1; neither is replaced
+by a weight-zero Maass parameter here.
+-/
+
+namespace ImbalancedChen.Part3.NativeHolomorphicFourierNormalization20261102s
+
+noncomputable section
+open Complex UpperHalfPlane
+open scoped UpperHalfPlane MatrixGroups
+
+variable {Gamma : Subgroup (GL (Fin 2) ℝ)}
+
+def holomorphicScale (r n : ℕ) : ℂ :=
+  (((4 * Real.pi * (n : ℝ) : ℝ) : ℂ)) ^ r
+
+theorem holomorphicScale_ne_zero (r : ℕ) {n : ℕ} (hn : 0 < n) :
+    holomorphicScale r n ≠ 0 := by
+  apply pow_ne_zero
+  apply Complex.ofReal_ne_zero.mpr
+  exact (mul_pos (mul_pos (by norm_num : (0 : ℝ) < 4) Real.pi_pos)
+    (Nat.cast_pos.mpr hn)).ne'
+
+/-- Actual native holomorphic coefficient in the paper's convention. -/
+def holomorphicRho (r : ℕ) (f : CuspForm Gamma (2 * (r : ℤ))) (n : ℕ) : ℂ :=
+  (qExpansion 1 f).coeff n / holomorphicScale r n
+
+def holomorphicR (r : ℕ) (f : CuspForm Gamma (2 * (r : ℤ))) (n : ℕ) : ℂ :=
+  (Real.sqrt (n : ℝ) : ℂ) * holomorphicRho r f n
+
+theorem holomorphicRho_mul_scale (r : ℕ) (f : CuspForm Gamma (2 * (r : ℤ)))
+    {n : ℕ} (hn : 0 < n) :
+    holomorphicRho r f n * holomorphicScale r n = (qExpansion 1 f).coeff n := by
+  exact div_mul_cancel₀ _ (holomorphicScale_ne_zero r hn)
+
+theorem holomorphicRho_mul_scale_all (r : ℕ) (f : CuspForm Gamma (2 * (r : ℤ)))
+    (hperiod : (1 : ℝ) ∈ Gamma.strictPeriods) (n : ℕ) :
+    holomorphicRho r f n * holomorphicScale r n = (qExpansion 1 f).coeff n := by
+  by_cases hn : n = 0
+  · subst n
+    have hzero : (qExpansion 1 f).coeff 0 = 0 :=
+      CuspFormClass.qExpansion_coeff_zero f (by norm_num) hperiod
+    simp [holomorphicRho, hzero]
+  · exact holomorphicRho_mul_scale r f (Nat.pos_of_ne_zero hn)
+
+/-- The actual integral defining the coefficient is retained, at every
+positive height; no arbitrary Fourier-amplitude input occurs. -/
+theorem native_holomorphic_fourier_integral (r : ℕ)
+    (f : CuspForm Gamma (2 * (r : ℤ)))
+    (hperiod : (1 : ℝ) ∈ Gamma.strictPeriods) (n : ℕ)
+    {y : ℝ} (hy : 0 < y) :
+    (∫ u in (0 : ℝ)..1,
+      1 / Periodic.qParam 1 (u + y * I) ^ n *
+        f ⟨u + y * I, by simpa using hy⟩) =
+      holomorphicRho r f n * holomorphicScale r n := by
+  rw [holomorphicRho_mul_scale_all r f hperiod n]
+  symm
+  simpa using ModularFormClass.qExpansion_coeff_eq_intervalIntegral
+    f (show (0 : ℝ) < 1 by norm_num) hperiod n hy
+
+/-- The entire native cusp-form q-expansion, not a finite replacement
+or an equality for newly chosen coefficients. -/
+theorem native_holomorphic_normalized_hasSum (r : ℕ)
+    (f : CuspForm Gamma (2 * (r : ℤ)))
+    (hperiod : (1 : ℝ) ∈ Gamma.strictPeriods) (w : ℍ) :
+    HasSum (fun n : ℕ => holomorphicRho r f n * holomorphicScale r n *
+      Periodic.qParam 1 (w : ℂ) ^ n) (f w) := by
+  letI : Fact (IsCusp OnePoint.infty Gamma) :=
+    ⟨Gamma.isCusp_of_mem_strictPeriods (show (0 : ℝ) < 1 by norm_num) hperiod⟩
+  simpa only [holomorphicRho_mul_scale_all r f hperiod] using
+    ModularForm.hasSum_qExpansion f (show (0 : ℝ) < 1 by norm_num) hperiod w
+
+/-- Paper-normalized R has the genuine q-expansion coefficient as source.
+This formula must not be confused with the weight-zero native K amplitude. -/
+theorem holomorphicR_eq_qExpansion (r : ℕ) (f : CuspForm Gamma (2 * (r : ℤ)))
+    (n : ℕ) :
+    holomorphicR r f n =
+      (Real.sqrt (n : ℝ) : ℂ) * (qExpansion 1 f).coeff n / holomorphicScale r n := by
+  unfold holomorphicR holomorphicRho
+  ring
+
+/-- The actual Gamma0(N) group has period one at infinity, so the
+original level can be substituted without a new period assumption. -/
+theorem gamma0_native_holomorphic_fourier_integral (N r : ℕ)
+    (f : CuspForm (CongruenceSubgroup.Gamma0 N : Subgroup (GL (Fin 2) ℝ))
+      (2 * (r : ℤ))) (n : ℕ) {y : ℝ} (hy : 0 < y) :
+    (∫ u in (0 : ℝ)..1,
+      1 / Periodic.qParam 1 (u + y * I) ^ n *
+        f ⟨u + y * I, by simpa using hy⟩) =
+      holomorphicRho r f n * holomorphicScale r n := by
+  exact native_holomorphic_fourier_integral r f (by simp) n hy
+
+/-- All actual native Gamma0(N) cusp forms, all even weights, and the
+whole Fourier expansion. This does not assert a Petersson basis. -/
+theorem gamma0_native_holomorphic_normalized_hasSum (N r : ℕ)
+    (f : CuspForm (CongruenceSubgroup.Gamma0 N : Subgroup (GL (Fin 2) ℝ))
+      (2 * (r : ℤ))) (w : ℍ) :
+    HasSum (fun n : ℕ => holomorphicRho r f n * holomorphicScale r n *
+      Periodic.qParam 1 (w : ℂ) ^ n) (f w) := by
+  exact native_holomorphic_normalized_hasSum r f (by simp) w
+
+end
+end ImbalancedChen.Part3.NativeHolomorphicFourierNormalization20261102s

@@ -1,0 +1,11 @@
+--- a/P4BOriginalHigherLowKeySupport.lean
++++ b/P4BOriginalHigherLowKeySupport.lean
+@@ -137,7 +137,7 @@
+     · have hsort : (pr 2::xs).Pairwise (·>·) := (List.pairwise_cons.mp (List.pairwise_cons.mp sort).2).2
+       have hh := (List.pairwise_cons.mp hsort).1 q hq
+       have hq' : q∈front pr xs := by simp [front,hq]
+-      exact (key_le q hq').trans (by rw [Real.rpow_add pos,pw,mul_comm]; exact
++      exact (key_le q hq').trans (by rw [Real.rpow_add pos,pw,mul_comm (pr 2:ℝ) ((P.N:ℝ)^P.T)]; exact
+         mul_le_mul_of_nonneg_left (by exact_mod_cast hh.le) (Real.rpow_nonneg pos.le _))
+ 
+ end

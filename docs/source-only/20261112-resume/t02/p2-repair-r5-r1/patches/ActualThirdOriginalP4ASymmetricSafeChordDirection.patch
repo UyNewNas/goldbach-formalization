@@ -1,0 +1,50 @@
+--- original/ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean
++++ repaired/ImbalancedChen/ActualThirdOriginalP4ASymmetricSafeChordDirection.lean
+@@ -71,7 +71,8 @@
+     (b-a)/Real.log (b/a)≤maxMean a b := by
+   have h := triangle_minMean_le_maxMean ha hab
+   unfold minMean sumMean at h
+-  linarith
++  rw [mul_div_assoc] at h
++  linarith only [h]
+ 
+ /-- Exactly the four asymmetric branches with oldX-oldY positive. The xy
+ and xyz equal-mean branches already belong to the prerequisite module. -/
+@@ -94,7 +95,7 @@
+     (triangle_squareEx_le_maxMean (symmetric_positive hg).1 hg.width_xy)
+   have hc := (symmetric_positive hg).2
+   have hd := hc.trans hg.width_z
+-  have hinv : 0≤invZMean c d := by unfold invZMean; positivity
++  have hinv : (0 : ℝ) ≤ invZMean c d := by unfold invZMean; positivity
+   apply sub_nonneg.mp
+   rw [ordered_mean_sub_producer_mean]
+   exact mul_nonneg (mul_nonneg (safe_asymmetric_coefficient_pos hs).le hcoord) hinv
+@@ -110,9 +111,10 @@
+   have hmean := safe_asymmetric_mean_direction hs hg
+   have hden := (sub_pos.mpr (symmetric_tent_span s k hg hres)).le
+   unfold tentOldChord orderedTentChord
+-  apply add_le_add_left
+-  apply mul_le_mul_of_nonneg_right _ (sub_nonneg.mpr hqueries)
+-  exact div_le_div_of_nonneg_right (sub_le_sub_right hmean _) hden
++  have hprod := mul_le_mul_of_nonneg_right
++    (div_le_div_of_nonneg_right (sub_le_sub_right hmean (tentOldLow s k (symmetricRight b d))) hden)
++    (sub_nonneg.mpr hqueries)
++  linarith only [hprod]
+ 
+ /-- A genuine original producer-square chord lower bound for all four safe
+ asymmetric branches, under the literal nonnegative endpoint-query slope. -/
+@@ -224,11 +226,11 @@
+     (48000*2^24) 481573208064
+     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
+     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
+-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
+-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
+-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+   have hcmp := safe_asymmetric_producer_chord_le_ordered hs hg hguards.2.2
+     (value_mono horder)
