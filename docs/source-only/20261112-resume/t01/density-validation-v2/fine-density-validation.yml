@@ -1,0 +1,157 @@
+name: Exact FineDensity source and kernel validation
+on:
+  push:
+    branches: [ci/fine-density-20261112]
+    paths: [.github/workflows/fine-density-validation.yml]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  fine_density:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: ${{ github.sha }}
+      LEAN_NUM_THREADS: 2
+      FINE_BUNDLE: docs/source-only/20261112-resume/t01/density-validation-v2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Bind root selection and all exact driver workflow bytes
+        run: |
+          set -euo pipefail
+          export LOGS="$RUNNER_TEMP/fine-density-evidence"
+          export PROJECT="$RUNNER_TEMP/fine-density-isolated/project"
+          export CHECKPOINT="$RUNNER_TEMP/fine-density-checkpoint"
+          export RELEASE_ASSET="$RUNNER_TEMP/chen-numerical-evidence-20261010.zip"
+          export DENSITY_MANIFEST="$GITHUB_WORKSPACE/$FINE_BUNDLE/DENSITY_MANIFEST.json"
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" select 2>&1 | tee "$LOGS/driver-selection.log"
+          printf 'LOGS=%s\nPROJECT=%s\nCHECKPOINT=%s\nRELEASE_ASSET=%s\nDENSITY_MANIFEST=%s\n' "$LOGS" "$PROJECT" "$CHECKPOINT" "$RELEASE_ASSET" "$DENSITY_MANIFEST" >> "$GITHUB_ENV"
+      - name: Fetch only manifest-fixed original source commits
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" fetch 2>&1 | tee "$LOGS/source-refs.log"
+      - name: Reuse official original release and stage exact source inputs
+        id: materialize
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 'https://github.com/UyNewNas/chen-imbalanced-semiprimes/releases/download/v2026.10.10/chen-numerical-evidence-20261010.zip' --output "$RELEASE_ASSET"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" stage 2>&1 | tee "$LOGS/materialize.log"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install original pinned toolchain scripts and runtime guard
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          export LEAN_ACTION_DIR
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          cd "$PROJECT"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/reused/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+      - name: Bind native original43 and exact precompile source census
+        id: native_pre
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" native_pre 2>&1 | tee "$LOGS/source-pre.log"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/record_dependencies.py" --project "$PROJECT" --manifest "$DENSITY_MANIFEST" --output "$LOGS/dependencies.json"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/collect_density.py" prepare
+      - name: Compile exact1808 mathematical project suppliers
+        id: compile
+        timeout-minutes: 200
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+      - name: Build complete mathematical inventory audit and retain raw output
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        id: types
+        timeout-minutes: 30
+        run: python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" build_wrapper CandidateAudit
+      - name: Build exact FineDensity named audit and retain raw output
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        id: density_wrapper
+        timeout-minutes: 25
+        run: python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" build_wrapper DensityAudit
+      - name: Build original nine-floor audit and retain both axiom outputs
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        id: floor_wrapper
+        timeout-minutes: 25
+        run: python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" build_wrapper T01Audit
+      - name: Bind all three guarded wrapper outputs and immutable snapshot
+        if: ${{ always() && steps.types.outcome == 'success' && steps.density_wrapper.outcome == 'success' && steps.floor_wrapper.outcome == 'success' }}
+        id: wrappers
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" bind_wrappers
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/collect_density.py" snapshot
+      - name: Replay exact1854 mathematical and built audit modules
+        if: ${{ always() && steps.wrappers.outcome == 'success' }}
+        id: kernel
+        timeout-minutes: 100
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/kernel_modules.txt"
+          lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/batch-checker.log"
+      - name: Verify exact named types and original nine independent axiom reports
+        if: ${{ always() && steps.density_wrapper.outcome == 'success' && steps.floor_wrapper.outcome == 'success' }}
+        id: named
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" named
+      - name: Verify unchanged strict module inventories and replay census
+        if: ${{ always() && steps.compile.outcome == 'success' && steps.kernel.outcome == 'success' && steps.types.outcome == 'success' }}
+        run: python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/collect_density.py" verify
+      - name: Recheck source data and native census without repair
+        if: ${{ always() && steps.native_pre.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" post 2>&1 | tee "$LOGS/source-post.log"
+      - name: Audit original trust-zero serial12GiB runtime
+        if: ${{ always() && steps.dependencies.outcome != 'skipped' && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Always retain coherent complete and quarantined failure objects
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/checkpoint_density.py" --project "$PROJECT" --manifest "$DENSITY_MANIFEST" --logs "$LOGS" --output "$CHECKPOINT" 2>&1 | tee "$LOGS/checkpoint-collection.log"
+      - name: Bind exact FineDensity acceptance after every gate
+        if: ${{ success() }}
+        run: python3 "$GITHUB_WORKSPACE/$FINE_BUNDLE/density_validation.py" finalize
+      - name: Retain complete raw evidence and identified object payloads
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: fine-density-exact-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/fine-density-evidence/
+            ${{ runner.temp }}/fine-density-checkpoint/
+          if-no-files-found: error
+          retention-days: 30

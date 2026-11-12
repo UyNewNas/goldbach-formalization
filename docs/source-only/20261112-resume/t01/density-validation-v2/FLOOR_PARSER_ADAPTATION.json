@@ -1,0 +1,32 @@
+{
+  "original": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t01_remote_fifth_kernel\\audit_remote_output_v3.py",
+  "original_sha256": "28a5c64c8882467174eb482d9f3305a9cdb2dae3b37cce7b661e54b1f137dbfb",
+  "new_sha256": "286ead6f8297fed23c62698ae0479416f924668867c9a510052ec7e78fb74d95",
+  "edits": [
+    {
+      "old": "p.add_argument('--log', type=Path, required=True)",
+      "new": "p.add_argument('--log', type=Path, required=True)\np.add_argument('--manifest', type=Path, required=True)\np.add_argument('--output', type=Path, required=True)",
+      "count": 1
+    },
+    {
+      "old": "prov = json.loads((args.project / 'T01_PROVENANCE.json').read_text())",
+      "new": "prov = json.loads((args.project / 'DENSITY_PROVENANCE.json').read_text())\nmanifest_raw = args.manifest.read_bytes()\nif hashlib.sha256(manifest_raw).hexdigest() != prov['manifest_sha256']:\n    raise SystemExit('Floor audit manifest differs from actual staged provenance')\nmanifest = json.loads(manifest_raw)",
+      "count": 1
+    },
+    {
+      "old": "expected = prov['target']['declarations']",
+      "new": "expected = manifest['floor_target']['declarations']",
+      "count": 1
+    },
+    {
+      "old": "prov['target']['declaration_modules']",
+      "new": "manifest['floor_target']['declaration_modules']",
+      "count": 1
+    },
+    {
+      "old": "(args.project / 'T01_TYPE_AXIOM_RESULT.json').write_text(json.dumps(result, indent=2) + '\\n')",
+      "new": "if args.output.resolve().is_relative_to(args.project.resolve()) or args.output.exists():\n    raise SystemExit('Require a new floor receipt outside the physical source census')\nargs.output.write_text(json.dumps(result, indent=2) + '\\n')",
+      "count": 1
+    }
+  ]
+}

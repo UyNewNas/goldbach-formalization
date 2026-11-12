@@ -1,0 +1,192 @@
+[
+  {
+    "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t06_actual_mixed_fourier\\full87_remote_v3\\stage_project_full87_v3.py",
+    "source_sha256": "d4cba9534ab40e8d0a8b4a4b441cdc0b6b092ed503b3e4f180526ea945d61e76",
+    "output": {
+      "path": "stage_density.py",
+      "bytes": 13029,
+      "sha256": "c0c856a3c1236f877b05567a2f744c4d760a51f1f46d9a4b3dbf1a65278d5a8c",
+      "git_blob_sha1": "7ba3f6d3f712d072a1370565d88ff9e0056d7d40"
+    },
+    "edits": [
+      {
+        "old": "EXACT_INSTALL_MANIFEST.json",
+        "new": "DENSITY_MANIFEST.json",
+        "count": 1
+      },
+      {
+        "old": "ImbalancedChen.P4AOriginalR17PaidIntegral",
+        "new": "ImbalancedChen.P4AOriginalFiniteAll22FineDensity",
+        "count": 2
+      },
+      {
+        "old": "    if manifest['counts']['original_core'] != 1046 or manifest['counts']['complete_old_floor'] != 729:\n        raise ValueError('Original core or floor inventory was reduced')",
+        "new": "    if [r['module'] for r in manifest['files']] != manifest['project_modules'] or len(set(manifest['project_modules'])) != 1808:\n        raise ValueError('Exact FineDensity module census differs')",
+        "count": 1
+      },
+      {
+        "old": "    external_data = project.parent / 'goldbach-research'",
+        "new": "    external_data = project.parent / 'goldbach-research'\n    full_final = project.parent / 'tmp/publication-20261010/verification-renewal-v2/_runs/full-final'\n    declared_data = {r['install_path'] for r in manifest['data_inputs']}\n    if len(manifest['full_final_paths']) != 22 or set(manifest['full_final_paths']) - declared_data:\n        raise ValueError('Exact full-final input census differs')",
+        "count": 1
+      },
+      {
+        "old": "        raise ValueError('Unlisted destination outside the isolated project')",
+        "new": "        if relative in manifest['full_final_paths'] and path.is_relative_to(full_final):\n            return path\n        raise ValueError('Unlisted destination outside the isolated project')",
+        "count": 1
+      },
+      {
+        "old": "Full87RemoteAudit.lean",
+        "new": "CandidateAudit.lean",
+        "count": 1
+      },
+      {
+        "old": "Full87R17PaidAudit.lean",
+        "new": "DensityAudit.lean",
+        "count": 1
+      },
+      {
+        "old": "FULL87_PROVENANCE.json",
+        "new": "DENSITY_PROVENANCE.json",
+        "count": 1
+      },
+      {
+        "old": "MATERIALIZED_ACTUAL_PAID_I87_SOURCES_NO_BUILD_AUTHORIZED",
+        "new": "MATERIALIZED_FINE_DENSITY_SOURCES_UNCOMPILED",
+        "count": 1
+      },
+      {
+        "old": "original_signed_density_and_count",
+        "new": "exists_fine_same_rho_hdensity",
+        "count": 1
+      },
+      {
+        "old": "verify_staged_sources_v3.py",
+        "new": "verify_density_sources.py",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t06_actual_mixed_fourier\\full87_remote_v3\\verify_staged_sources_v3.py",
+    "source_sha256": "d1c67b8d7e7f4dcc21f225105059b0348ecdbf7804e49d903cf0bad88bc404d4",
+    "output": {
+      "path": "verify_density_sources.py",
+      "bytes": 9161,
+      "sha256": "aa4e825b1af92bcd6fa2288071b494588585daaa39b4f8d37862d95acc2cefbc",
+      "git_blob_sha1": "3549b22dfda21472fe7a16e1a8667d8292019346"
+    },
+    "edits": [
+      {
+        "old": "FULL87_PROVENANCE.json",
+        "new": "DENSITY_PROVENANCE.json",
+        "count": 2
+      },
+      {
+        "old": "        external = relative.startswith('../goldbach-research/') and path.is_relative_to(project.parent / 'goldbach-research')",
+        "new": "        external = (relative.startswith('../goldbach-research/') and path.is_relative_to(project.parent / 'goldbach-research')) or (relative in manifest['full_final_paths'] and path.is_relative_to(project.parent / 'tmp/publication-20261010/verification-renewal-v2/_runs/full-final'))",
+        "count": 1
+      },
+      {
+        "old": "    binding = None",
+        "new": "    external_census = {}\n    for root in [project.parent / 'goldbach-research', project.parent / 'tmp/publication-20261010/verification-renewal-v2/_runs/full-final']:\n        expected_paths = {str((project / p).resolve()) for p in expected if p.startswith('../') and (project / p).resolve().is_relative_to(root)}\n        observed_paths = set()\n        if root.exists():\n            for directory, dirs, names in os.walk(root, followlinks=False, onerror=walk_error):\n                for name in dirs + names:\n                    path = Path(directory) / name\n                    if path.is_symlink(): raise ValueError('External source/data symlink')\n                    if path.is_file(): observed_paths.add(str(path.resolve()))\n        if observed_paths != expected_paths:\n            raise ValueError('External data root has extra/missing files')\n        external_census[str(root)] = sorted(observed_paths)\n    binding = None",
+        "count": 1
+      },
+      {
+        "old": "        if pre['actual_inputs'] != actual or pre['physical_project_census'] != physical:",
+        "new": "        if pre['actual_inputs'] != actual or pre['physical_project_census'] != physical or pre['external_data_census'] != external_census:",
+        "count": 1
+      },
+      {
+        "old": "'actual_inputs': actual, 'physical_project_census': physical,",
+        "new": "'actual_inputs': actual, 'physical_project_census': physical, 'external_data_census': external_census,",
+        "count": 1
+      },
+      {
+        "old": "full87-actual-paid-source-receipt-v3",
+        "new": "fine-density-source-receipt-v1",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t06_actual_mixed_fourier\\full87_remote_v3\\stage_native_research_overlay_v3.py",
+    "source_sha256": "29ffc5cca85a21751e5a423a4f96929ba06f7c4cc363ada29f7b0b69eb37bf38",
+    "output": {
+      "path": "stage_native_density.py",
+      "bytes": 14897,
+      "sha256": "7fa45eb3a44ac048c6b1d6221c6594cccfd19930698fddd4a10aeb49c6bfc9a6",
+      "git_blob_sha1": "8640355eb816f97e11316cf35c43b1bc8736b30d"
+    },
+    "edits": [
+      {
+        "old": "    legacy_modules = acceptance['mandatory_legacy_kernel_modules']\n    native_modules = {r['module'] for r in plan['files']}\n    if len(kernel_modules) != len(set(kernel_modules)) or len(kernel_modules) < 1607:\n        raise ValueError('The mandatory fresh kernel gate was reduced or duplicated')\n    if len(legacy_modules) != 1607 or json_identity(sorted(legacy_modules)) != LEGACY_KERNEL_SET_SHA256:\n        raise ValueError('The reviewed legacy1607 module census was altered')\n    if not set(legacy_modules) <= set(kernel_modules):\n        raise ValueError('A mandatory legacy kernel module was dropped')\n    if not native_modules <= set(kernel_modules):\n        raise ValueError('The complete43 native kernel set is missing')\n",
+        "new": "    native_modules = {r['module'] for r in plan['files']}\n    project_modules = acceptance['project_modules']\n    if len(project_modules) != 1808 or len(project_modules) != len(set(project_modules)):\n        raise ValueError('FineDensity project census differs')\n    if len(kernel_modules) != 1851 or len(kernel_modules) != len(set(kernel_modules)) or set(kernel_modules) != set(project_modules) | native_modules:\n        raise ValueError('Exact project/native kernel census differs')\n",
+        "count": 1
+      },
+      {
+        "old": "full87-native-original-source-overlay-receipt-v3",
+        "new": "fine-density-native-source-overlay-receipt-v1",
+        "count": 2
+      },
+      {
+        "old": "LEGACY_KERNEL_SET_SHA256 = '7182083990021cce01c1e357f8de8148e636a4c24d7613c00be0b3328ec5f543'\n",
+        "new": "",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t01_remote_fifth_kernel\\checkpoint_objects_v3.py",
+    "source_sha256": "773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76",
+    "output": {
+      "path": "checkpoint_density.py",
+      "bytes": 33172,
+      "sha256": "89cef03ce9c1f11e2b1fc47e65d632c088cd3f63c927bde90f203ca9e05ba943",
+      "git_blob_sha1": "01ee3468a4792a5225fd70e583b257cea0458d69"
+    },
+    "edits": [
+      {
+        "old": "    sources['T01Audit.lean'] = checked_source(project / 'T01Audit.lean', manifest['audit_source'])",
+        "new": "    for f in manifest['audit_sources']:\n        sources[f['install_path']] = checked_source(project / f['install_path'], f)\n    for f in manifest['native_sources']:\n        checked_source(project / '.lake/packages/goldbach' / f['install_path'], f)",
+        "count": 1
+      },
+      {
+        "old": "T01_PROVENANCE.json",
+        "new": "DENSITY_PROVENANCE.json",
+        "count": 1
+      },
+      {
+        "old": "manifest['targets'][0]['closure_modules'] + ['T01Audit']",
+        "new": "manifest['targets'][0]['closure_modules']",
+        "count": 1
+      },
+      {
+        "old": "Rerun all730 kernel and eight type/axiom gates.",
+        "new": "Rerun the exact1851 project/native kernel set and complete FineDensity type/axiom gates.",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\docs\\source-only\\20261110-yellow-closure-10t\\t01_remote_fifth_kernel\\record_dependencies.py",
+    "source_sha256": "f876cd0b9b1a9503f6f0c7afd42a23912a08b7fa8f85f5556cd39f13eca7de8b",
+    "output": {
+      "path": "record_dependencies.py",
+      "bytes": 2789,
+      "sha256": "ecc43cf7107903ef6318f3e2614700ec9e22d826cae76db5619e80c9638ed1a5",
+      "git_blob_sha1": "f35c936288562dcd05f0ba293d8dfb0bc2da8587"
+    },
+    "edits": [
+      {
+        "old": "T01_PROVENANCE.json",
+        "new": "DENSITY_PROVENANCE.json",
+        "count": 1
+      },
+      {
+        "old": "module.startswith('Init.'):",
+        "new": "module.startswith('Init.') or module == 'Std' or module.startswith('Std.'):",
+        "count": 1
+      }
+    ]
+  }
+]
