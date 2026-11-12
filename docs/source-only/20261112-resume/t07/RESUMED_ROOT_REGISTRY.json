@@ -1,0 +1,495 @@
+{
+  "selection": "original tagged U3/U4 source, actual Fin and same-Q ordinary balance",
+  "state": "SOURCE_ONLY_UNCOMPILED",
+  "manuscript": "ba6ec11d800eccc54406490631895e174de85766",
+  "P5Head": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+  "publishedNov10Source": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+  "scope": "exact four lanes under a below-active cutoff; per-prime actual Rosser surplus; explicit closed-owner difference; same-Q ordinary upper bound",
+  "sourceCount": 3,
+  "declarationCountIncludingPrivate": 16,
+  "sources": [
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430PresieveOutsideFin.lean",
+      "bytes": 4641,
+      "sha256": "884a66280a9f32fc7c319cf6b1ad7045c0796146ba247736a867f52a2986f14c",
+      "gitBlob": "746bc3aaab37973b9baf4753aab23382c4080f0a",
+      "stageAs": "ImbalancedChen/Part5OriginalH430PresieveOutsideFin.lean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OriginalTagSeparatedFinSource",
+        "ImbalancedChen.Part5OriginalH430RequestedOriginalRowFreeze"
+      ],
+      "declarations": [
+        {
+          "name": "presieve_below_frozen_root",
+          "kind": "theorem",
+          "private": false,
+          "line": 24,
+          "declaration": "theorem presieve_below_frozen_root {N n p : ℕ} {k : Root} {τ z₀ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384) (hp : p ∈ originalBand N k)\n    (hz : z₀ ≤ cutoff (rootQ N n k τ p) p\n      (frozenRoot n k τ (physicalPrime N p)).physical.argument) :\n    z₀ ≤ (N : ℝ) ^ a"
+        },
+        {
+          "name": "full_tagged_fin_at_manuscript_presieve",
+          "kind": "theorem",
+          "private": false,
+          "line": 41,
+          "declaration": "theorem full_tagged_fin_at_manuscript_presieve {N cap n p : ℕ} {k : Root} {τ z₀ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384) (hp : p ∈ originalBand N k)\n    (hz : z₀ ≤ cutoff (rootQ N n k τ p) p\n      (frozenRoot n k τ (physicalPrime N p)).physical.argument)\n    (hcap : z₀ ≤ (cap : ℝ)) (lower : Bool) :\n    (∀ (w : TaggedReceiver → ℝ) (Q : ℝ)\n      (i : Fin (actualPhysicalRankTwoList N cap z₀ Q lower).length),\n      actualAllTaggedAtFin N cap n τ z₀ lower w Q i = 0) ∧\n    rootCutoffBlocked (originalTagged N) z₀ = originalTagged N ∧\n    (∀ w : TaggedReceiver → ℝ,\n      originalFourOutsidePositionLanes N cap n τ z₀ lower w =\n        ∑ z ∈ originalTagged N, w z)"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430RootRosserSurplus.lean",
+      "bytes": 4867,
+      "sha256": "de51434511070f52b3f951d88787561d09ee601dc7014e61262a7ea9f5589240",
+      "gitBlob": "2fed2f6b417502138b3c006543ee8e215a033148",
+      "stageAs": "ImbalancedChen/Part5OriginalH430RootRosserSurplus.lean",
+      "imports": [
+        "ImbalancedChen.P5OriginalU5FrozenSource",
+        "ImbalancedChen.Part5OriginalH430SameQCanonicalMains"
+      ],
+      "declarations": [
+        {
+          "name": "primeSurplus",
+          "kind": "def",
+          "private": false,
+          "line": 20,
+          "declaration": "def primeSurplus (N p : ℕ) (Q z : ℝ) (ell : ℕ) : ℝ :="
+        },
+        {
+          "name": "surplus",
+          "kind": "def",
+          "private": false,
+          "line": 25,
+          "declaration": "def surplus (N p : ℕ) (Q z : ℝ) : ℝ :="
+        },
+        {
+          "name": "signedAP",
+          "kind": "def",
+          "private": false,
+          "line": 28,
+          "declaration": "def signedAP (N p : ℕ) (Q z : ℝ) : ℝ :="
+        },
+        {
+          "name": "primeSurplus_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 35,
+          "declaration": "theorem primeSurplus_nonneg {N p : ℕ} {Q z : ℝ} (hD : 1 < rootLevel Q p)\n    (hz : z ≤ (rootLevel Q p : ℝ)) (ell : ℕ) : 0 ≤ primeSurplus N p Q z ell"
+        },
+        {
+          "name": "surplus_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 47,
+          "declaration": "theorem surplus_nonneg {N p : ℕ} {Q z : ℝ} (hD : 1 < rootLevel Q p)\n    (hz : z ≤ (rootLevel Q p : ℝ)) : 0 ≤ surplus N p Q z :="
+        },
+        {
+          "name": "true_quotient_zero_surplus",
+          "kind": "theorem",
+          "private": false,
+          "line": 53,
+          "declaration": "theorem true_quotient_zero_surplus {N p q : ℕ} {Q z : ℝ}\n    (hD : 1 < rootLevel Q p) (hp : ChenPrimeRough z p)\n    (hq : q ∈ chenSiftedQuotientPrimeSource N p z) :\n    ∃ ell ∈ (goldbachDivisible N p).filter (receiver N),\n      (N-ell)/p = q ∧ primeSurplus N p Q z ell = 0"
+        },
+        {
+          "name": "frozen_count_plus_surplus",
+          "kind": "theorem",
+          "private": false,
+          "line": 77,
+          "declaration": "theorem frozen_count_plus_surplus {N p : ℕ} (Q z : ℝ) (hp : p.Coprime N) :\n    (frozenCount N p (receiver N) z : ℝ) + surplus N p Q z =\n      model true N Q p z + signedAP N p Q z"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430OwnedRootRosserBalance.lean",
+      "bytes": 9940,
+      "sha256": "1c4f9063604594a42817c96760a232cb26c71c780e922e45e106c74d8d117cd7",
+      "gitBlob": "ed9ad3319506f5afa2004ed32dc882203417534e",
+      "stageAs": "ImbalancedChen/Part5OriginalH430OwnedRootRosserBalance.lean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedRootCounts",
+        "ImbalancedChen.Part5OriginalH430RootRosserSurplus"
+      ],
+      "declarations": [
+        {
+          "name": "queryAt_le_six",
+          "kind": "theorem",
+          "private": true,
+          "line": 32,
+          "declaration": "private theorem queryAt_le_six {n m : ℕ} (c : RootKey n m) : queryAt c ≤ 6"
+        },
+        {
+          "name": "box_geometry",
+          "kind": "theorem",
+          "private": true,
+          "line": 44,
+          "declaration": "private theorem box_geometry {N n m p : ℕ} {k : Root} {τ : ℝ} {c : RootKey n m}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384) (hp : p ∈ rootFibre N n m k τ c) :\n    let Q := cellQ N n c.1\n    let s := queryAt c\n    2 ≤ s ∧ s ≤ 6 ∧ 1 < Q / (p : ℝ) ∧\n      (N : ℝ) ^ ((11 / 384 : ℝ) / 6) ≤ cutoff Q p s ∧\n      cutoff Q p s ≤ (N : ℝ) ^ a ∧ p ≤ N"
+        },
+        {
+          "name": "original_box_balance",
+          "kind": "theorem",
+          "private": false,
+          "line": 88,
+          "declaration": "theorem original_box_balance {N n m : ℕ} (k : Root) (τ : ℝ) (c : RootKey n m)\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384) :\n    let B := rootFibre N n m k τ c\n    let Q := cellQ N n c.1\n    let s := queryAt c\n    ((∑ p ∈ B, ((originalReceiver N p).card : ℝ)) +\n      ∑ p ∈ B, firstPrimeMass N Q s p) + (∑ p ∈ B, surplus N p Q (cutoff Q p s)) =\n      ∑ p ∈ B, (model true N Q p (cutoff Q p s) + signedAP N p Q (cutoff Q p s))"
+        },
+        {
+          "name": "original_closed_owner_difference",
+          "kind": "theorem",
+          "private": false,
+          "line": 108,
+          "declaration": "theorem original_closed_owner_difference {N n m : ℕ} (k : Root) (τ : ℝ) (c : RootKey n m)\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384) :\n    let B := rootFibre N n m k τ c\n    let Q := cellQ N n c.1\n    let s := queryAt c\n    (∑ p ∈ B, ((originalReceiver N p).card : ℝ)) -\n        (upperA s - ownerFloor c) * Theta N Q B (fun _ => 1) =\n      (∑ p ∈ B, (model true N Q p (cutoff Q p s) + signedAP N p Q (cutoff Q p s) -\n        upperA s * thetaAtom N Q p - surplus N p Q (cutoff Q p s) - firstPrimeMass N Q s p)) +\n      ∑ p ∈ B, thetaAtom N (rootQ N n k τ p) p *\n        requestValue (iterate 430) (rootRequest N n k τ p)"
+        },
+        {
+          "name": "original_quotient_zero_box_surplus",
+          "kind": "theorem",
+          "private": false,
+          "line": 132,
+          "declaration": "theorem original_quotient_zero_box_surplus {N n m p q : ℕ} {k : Root} {τ : ℝ}\n    {c : RootKey n m} (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1 / 12)\n    (hn : 1 / ((n : ℝ) + 1) ≤ 11 / 384)\n    (hp : p ∈ rootFibre N n m k τ c) (hq : q ∈ originalReceiver N p) :\n    let Q := cellQ N n c.1\n    ∃ ell ∈ (goldbachDivisible N p).filter (receiver N), (N-ell)/p = q ∧\n      primeSurplus N p Q (cutoff Q p (queryAt c)) ell = 0"
+        },
+        {
+          "name": "bandUpper",
+          "kind": "def",
+          "private": false,
+          "line": 150,
+          "declaration": "def bandUpper (N n m : ℕ) (k : Root) (τ ε : ℝ) : ℝ :="
+        },
+        {
+          "name": "original_U34_at_signed_root_AP",
+          "kind": "theorem",
+          "private": false,
+          "line": 162,
+          "declaration": "theorem original_U34_at_signed_root_AP {ε : ℝ} (he : 0 < ε) :\n    ∃ T : ℕ, 4 ≤ T ∧ ∀ N : ℕ, T ≤ N → Even N → ∀ (n m : ℕ) (τ : ℝ),\n      0 ≤ τ → τ ≤ 1 / 12 → 1 / ((n : ℝ) + 1) ≤ 11 / 384 →\n      currentChenUpsilon3 N + currentChenUpsilon4 N ≤\n        bandUpper N n m .U3 τ ε + bandUpper N n m .U4 τ ε"
+        }
+      ]
+    }
+  ],
+  "directSiblingImports": [
+    {
+      "source": "Part5OriginalH430OwnedRootRosserBalance",
+      "imports": "Part5OriginalH430RootRosserSurplus"
+    }
+  ],
+  "pinnedDirectAndGoverningSources": [
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261112-p5-h34-original-tag-separated-fin-source/Part5OriginalH430OriginalTagSeparatedFinSource.lean",
+      "bytes": 9625,
+      "sha256": "992b46a18ea6f5e530eea1036b2d8fa4de4808452c8cfb185a8b1ace28d4debb",
+      "gitBlob": "da669fa248df753432269760eb5687e5fd3effe3",
+      "purpose": "Direct import. Actual two-tag source and four outside terms."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261105-p5-h34-original-row-freeze/Part5OriginalH430RequestedOriginalRowFreeze.lean",
+      "bytes": 10699,
+      "sha256": "0dffa60b0b01170c0d3fc1902eb0f1d085aa8e2e9c5933fd819d8a676fa5f28e",
+      "gitBlob": "7d4e2b93473c60db4000230cbda265c4fdfa3223",
+      "purpose": "Direct import. Integer frozen cutoff power at the unchanged genuine level."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30j/h5/P5OriginalU5FrozenSource.lean",
+      "bytes": 9513,
+      "sha256": "86d8922dfc5fa2c2b685f11cba8f3ec8eb8d871043828edd7542ab75e8dbd93b",
+      "gitBlob": "01f76f110f6d523f6f2e1d297ae33ff714b564db",
+      "purpose": "Direct import. Actual prime/quotient correspondence and exact finite primitive AP."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430OwnedRootCounts.lean",
+      "bytes": 13479,
+      "sha256": "7edf742ee6dde0c2283aac4c94c40b55e890644f68901e585720f54854bb6477",
+      "gitBlob": "b9f6217182a2511d64383cc37b1cfeb042f288dd",
+      "purpose": "Direct import. Actual root cell, joint query, positive shell and Theta price."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/ordinary_rosser/Part5OriginalH430SameQCanonicalMains.lean",
+      "bytes": 5895,
+      "sha256": "8c83b2235cbc0682ceb2303e11fe3f5bfdb86fb548c6fe7adeea3083edd92b07",
+      "gitBlob": "dc1f6afb97034c27fb48fd9d34c8cb2b51cbb990",
+      "purpose": "Direct import. Canonical moving Rosser main."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261108-p5-h34-upper-overlap-common-q/Part5OriginalH430UpperOverlapCommonQ.lean",
+      "bytes": 9034,
+      "sha256": "63512f9f548274a1ffee7c71c55e3d331de7dfb05b55fac784ad75812d55b0ce",
+      "gitBlob": "aca5a0b523fe24dab2a3a86bb1f0e29272fa8b44",
+      "purpose": "U4 overlap has identically the same physical Q."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261112-p5-h34-u4-actual-fin-double-tag/Part5OriginalH430U4ActualFinDoubleTag.lean",
+      "bytes": 7834,
+      "sha256": "5fa218f593b7ff916a5321c0b67eac6549a29d0df284e0c62b7755709eab971d",
+      "gitBlob": "0ea5fe7bbca7508f0b4c8d63824dd13b03e556f4",
+      "purpose": "All retained q/tags collapsed at one position with exact 2+R, all original weights maintained."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261106-p5-h34-original-root-cutoff-obstruction/Part5OriginalH430OriginalRootCutoffObstruction.lean",
+      "bytes": 5706,
+      "sha256": "1233f530be3e3747da978a0624a1ad37a316ab23f4b11ceff3864efe22aa1d94",
+      "gitBlob": "f4f927abc73b61964c8c0b84b2d3dbfb8ab73710",
+      "purpose": "Conditional obstruction at z0 at or below N^a."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261105-p5-h34-tagged-arithmetic-receivers/Part5OriginalH430TaggedArithmeticReceivers.lean",
+      "bytes": 9959,
+      "sha256": "2ef66982f4a5d8e617f57c745828314dae5e4c626791a570a8ad1afffc57b7c8",
+      "gitBlob": "edfdd8a262234e3d92649284fce73ba1bd1a6633",
+      "purpose": "Existing unconditional original band, p coprime to N, q integer quotient."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261107-p5-h34-actual-root-stage-receipts/Part5OriginalH430ActualRootStageReceipts.lean",
+      "bytes": 12389,
+      "sha256": "92e5042794ac67f9aa9269febfe7bdabb40e6198cac16865ee93a225a9566c07",
+      "gitBlob": "3a9cd6b0506b63da51e58afa94b42339ff05e9ee",
+      "purpose": "Single immutable stage at each own Q."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261107-p5-h34-physical-slot-list-positions/Part5OriginalH430PhysicalSlotListPositions.lean",
+      "bytes": 6812,
+      "sha256": "c825e4e0aeef88ced8f97eb47ecb41a2bc20de8704eed18670446eb223b514af",
+      "gitBlob": "d648a49cc363261e003a01255ede9d3ec69c2931",
+      "purpose": "Actual small-prime list is below z0."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261112-p5-h34-four-lane-full-tagged-fin/Part5OriginalH430FourLaneFullTaggedFin.lean",
+      "bytes": 9958,
+      "sha256": "38756cdfa627d90f371b0b4af0ec20f9bff16d0f3c7cfd57ab5e3cc16956b03e",
+      "gitBlob": "84f7967783ea7c37345c6705711b50517193fce7",
+      "purpose": "Finite tagged pushforward, exact four lanes."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30m/h430_common_approximation/Part5OriginalH430PhysicalRoots.lean",
+      "bytes": 12160,
+      "sha256": "560c588ed72d45ba8d8d2b28ba5b2b964fdc69a8acf27b066d835e702c4759be",
+      "gitBlob": "aac3ad9df3f287fb30dc294c7e3636d61b2a3526",
+      "purpose": "Coefficient recurrence, actual row mass bound and global root 7/2."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+      "bytes": 18026,
+      "sha256": "804709bc71b85ce677a585c1dbe6e9d90527eb40befad03f99214e7b6a0eeadd",
+      "gitBlob": "2e710506c6a786dad2d47ab041646d1724f54217",
+      "purpose": "430+11, propagation, signed root budget."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30q/h430_root_license/Part5OriginalH430RootSourceDictionary.lean",
+      "bytes": 10486,
+      "sha256": "8a868d9ebd0a15b5d0eabf8f50466645a3afc8c9a3606f7208bdfa7e3fd252d2",
+      "gitBlob": "a0b1c26944eac2a849eff90c3d1c3aa29756458c",
+      "purpose": "Root ordinary below-half/enhanced split and permissible cover."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30o/h430_smooth_causal_boxes/Part5OriginalH430RootGateObstruction.lean",
+      "bytes": 4725,
+      "sha256": "d2897afbf9efc91f35a3d911dce5e826578daa5b967cf90ff49d37c74633f72b",
+      "gitBlob": "55a7b25dd168737bdcf5bb3a4284863d0a5e2ceb",
+      "purpose": "Universal fullGates fails for the actual classical tail."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261105-p5-h34-request-admission/Part5OriginalH430RequestedAdmission.lean",
+      "bytes": 14151,
+      "sha256": "83f08a5dcbd3c49481553c99296eade3e49ce699262de2f7b22607763d53fd8e",
+      "gitBlob": "8cbf985c9de8d86bcd27a5645c8626780d645222",
+      "purpose": "Geometric gate admission is separate from counts."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261109-p5-h34-actual-signed-euler-suffix/Part5OriginalH430ActualSignedEulerSuffix.lean",
+      "bytes": 7668,
+      "sha256": "8a1c7de5b4b39fb80648d55e712ba148ba93810de653d3991f21f2dbd4be7cad",
+      "gitBlob": "33980c9d2253e645c937932715e9ea331f28ec59",
+      "purpose": "Signed historical Euler tail lives on the small-prime carrier."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261111-p5-h34-original-q-fibre-physical-debt/Part5OriginalH430OriginalQFibrePhysicalDebt.lean",
+      "bytes": 8282,
+      "sha256": "9e8ebb8b1f17054e3a69e061d2bcd17a3e21fbeaae5f17bd9b5229c9189ec734",
+      "gitBlob": "8c6f282e999d1b7a6ffebb0c6ac3929d45dce804",
+      "purpose": "Lifting a root-only test per arithmetic receipt repeats it once per q; distinct from the per-p marked count."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ChenQuotientPrimeSource.lean",
+      "bytes": 18967,
+      "sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+      "gitBlob": "f1c57933b7fcd4f4fff5bdf64a211543982cae2e",
+      "purpose": "Exact immutable quotient population and injectivity."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261028-resume-30f/certificate_enhanced/P2FrozenReceiverCountActions.lean",
+      "bytes": 12345,
+      "sha256": "9ec450af567f8b2998d0bb1b28c8074f802cfba2d7515568509248072a5e222a",
+      "gitBlob": "2bf0f7eed646eed5a9d0a23714b135e6c1120b10",
+      "purpose": "GCD indicator, signed finite polynomial and count upper bound."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430HistoryQuotientCounts.lean",
+      "bytes": 11715,
+      "sha256": "1357863c8038c3711adef0122c0e31297d8bd26bb7cb6c8ca9b355f17203ee45",
+      "gitBlob": "e0b381a7af6241e1174f38699323bab706f50e65",
+      "purpose": "Generation-zero and old-word strict cutoff."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430CorrectedWinningSource.lean",
+      "bytes": 11334,
+      "sha256": "66a7feae51bc3fb3095ebba5c1d684defd2d4ee3b007e17c673bc477ae7d2879",
+      "gitBlob": "c96d88eac32db3e83e07fdce0a2dd917445ffd7d",
+      "purpose": "Same-Q closed W1/W2 correction and true root entry."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/own-chen-table-insertion-chain-20261009.tex",
+      "bytes": 25557,
+      "sha256": "09f84f41e97dbd2267baee01a0a7c7c765e696a00688809086394c10f24623ee",
+      "gitBlob": "560d2a05d752f0b03e09a18c2028e6bb1c0c18db",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/finite-step-typed-closure-audit.tex",
+      "bytes": 17282,
+      "sha256": "17b7d69d86f9cf9dbcc5512724fbddefdde8c5d5e9ea23a45ee0a9c9de91948f",
+      "gitBlob": "660f49e87ffd612ccf2998cc2e912bce942670c7",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/actual-k-compilation-joint-audit.tex",
+      "bytes": 18212,
+      "sha256": "fd7b8917b59b2ae1896023a1b64d32344b49a92e10c8b91fa51ac8a030f0c812",
+      "gitBlob": "d99156d7e4fb3914bedfe4cb9e5b329899a20f37",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/own-lower-compiler-chain-audit-20261009.tex",
+      "bytes": 23846,
+      "sha256": "8bbfd9713050c7845ef5455cea0667d9dcb2a196eae7a0ff77805d9f6f0dbd66",
+      "gitBlob": "52dcf935a7d1917df6b694e952ac27c0099414a3",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/current-eighth-distribution-interface-audit-20261009.tex",
+      "bytes": 20256,
+      "sha256": "4347b578faa8475ce50444d7a20e2da9f2c201dced064bf168a704c7d2f1ed88",
+      "gitBlob": "2ac67376eee98e33ebbcbf71f21653c48148a8a0",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/fixed-action-stationarity-independent-20261009.tex",
+      "bytes": 4166,
+      "sha256": "894e50d312196cd645c2c7f0de14fb615561ac209a0a09ec1bbdae4586a37a97",
+      "gitBlob": "a6ebe0d4cd7f557e231a68dd241e6d30305b6e4f",
+      "purpose": "Frozen manuscript primary source."
+    }
+  ],
+  "reusedLocalSelections": [
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/pair_rosser/REGISTRY.json",
+      "bytes": 44219,
+      "sha256": "f7e935987b056b0c20d26b052807de81934f3905eb1b4db93b45c836b432ae85",
+      "gitBlob": "c197341305094ce05496d0fb415ce8ecb28f5e41"
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/pair_rosser/REPORT.md",
+      "bytes": 3855,
+      "sha256": "a2ac54130ccb0048f63f2f26304d205fd6f3733aa4e7bbe96b76d23bb3b62ac6",
+      "gitBlob": "74d0c3568ba6e5b89d90eb9c7e895963051d721c"
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/seed_pair_closure/REGISTRY.json",
+      "bytes": 73280,
+      "sha256": "8264101a1415641d1127e370ed84ee966303b972dfd7af37bd8abd0006fe5e1f",
+      "gitBlob": "ed10b9e0615562f618eb868aab0b4dc7d2186d7b"
+    },
+    {
+      "path": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/seed_pair_closure/REPORT.md",
+      "bytes": 5652,
+      "sha256": "4d855a358f3583a861bc9768a2c2baff912d98c6f96e513fa1be95b468e3f584",
+      "gitBlob": "61cfca1074f74ce4fcdbb70fff2b51bdb81114b3"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_PAIR_ROSSER_ALLOWLIST.json",
+      "bytes": 5378,
+      "sha256": "30ed1e7135edd7a2332297748c6472fbefbab78fe6a2a277b7228a266cf53cfd",
+      "gitBlob": "ed85214c4c6b689367d97e2e772109a2305a5aab"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_PAIR_ROSSER_REVIEW.md",
+      "bytes": 2432,
+      "sha256": "3c6ad08a89f947e6125e24f14d028ebfeab9ddc50a6bac1fe61a0003efc0ef17",
+      "gitBlob": "be4b976ba8eb34e0532ffebfaa72619f26b2ed56"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_SEED_PAIR_ALLOWLIST.json",
+      "bytes": 7566,
+      "sha256": "ba02982c734c4a72616087f4b04a3415aabeca9ffd6ed318a16f18e70f6564b4",
+      "gitBlob": "f464722e2544d4aec2b7c8b1e63b0ad26a6e7b2c"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_SEED_PAIR_REVIEW.md",
+      "bytes": 3104,
+      "sha256": "d04209aa35da57ad7596beff4e44dff7678d89820155e12f553ee7126273ab98",
+      "gitBlob": "10b813e12aa448317de01e744801bd48dda9ec1f"
+    }
+  ],
+  "report": {
+    "path": "output/resume-20261112/t07/ROOT_SOURCE_REPORT.md",
+    "bytes": 8398,
+    "sha256": "bc8da53a2ffa4003aaceb5ab499ae256cd5df98d5e552b367571fbfc0bab7720",
+    "gitBlob": "d4e1dbf440271e66f31b5d4ea45bfc22a71822ea"
+  },
+  "verification": "Source bytes, declarations and historical Git blob provenance only. No local Lean/Lake/LSP, guard or proof arithmetic was run. No CI or publication.",
+  "open": [
+    "enhanced marked ordinary AP and coefficient compilation, same-rho PP",
+    "paid positive seed and four actual rounds, previous-generation W1/W2/Buchstab transition",
+    "closed-cell common nested 430+11 count induction, 7/2 terminal budget",
+    "kernel, transitive axioms and finite receipts"
+  ]
+}

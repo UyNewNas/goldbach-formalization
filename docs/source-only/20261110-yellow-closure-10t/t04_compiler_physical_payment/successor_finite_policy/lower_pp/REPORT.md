@@ -1,0 +1,18 @@
+# Finite-policy PP, end of the run
+
+Three source drafts are sealed at the user’s requested stop. The high-head packet and the 32-source coefficient packet remain separately frozen. These drafts have had source inspection only and have no formal or independent-review credit.
+
+| Source | Supplied scope |
+|---|---|
+| P4AFinitePPLowActualRoot | On the genuine raw support of the final dispatch, rank at least three has an actual retained ordered third cell at the physical cutoff. The full-policy lower mode is equivalent to the first exponent being at most μ. Equal coarse labels are included. |
+| P4AFinitePPLastOddSupport | The last odd admission supplies an ordinary retained predicate on the whole rough word, at the evaluated actual affine program for that decision. When the word has even length, ordering and the preceding admitted odd decision permit its final prime. |
+| P4AFinitePPSelectedPrefixSquares | For a given native prefix mask, the complement list follows the original increasing slot indices. Every native complementary square converts to the integer predicate. Product cancellation extends these squares to any tail at the full ordinary budget. |
+
+The matrix of remaining suppliers is explicit.
+
+* The lower first-prime region at rough rank at least three still needs the numerical identification of the last actual program value with the winning seed, fourth, fifth, sixth or eighth scalar, and the corresponding mask on the actual minimum representative of the occupied rectangle. The whole modified gamma table uses the retained `475q` ordered cells. Its six ordinary/rescued branches and two gated pairs need their branch-specific whole-box prices. The non-dyadic table has not been identified with the earlier compact dyadic-frontier hypothesis of `Part3.ActualWSameKeyMonomials.actual_W_gap_same_key_monomials`.
+* For the later selected actions the archived fourth uniform margin is fixed before e. The fifth source `P4AOriginalFourthFifthUniformActionLicense.exists_fifth_resolution` works for any actual OriginalData, so it applies to the union fifth bank. The accepted sixth action carries its own lower gates and selected tent. `P4AOriginalFull87FiniteEighthCap.finiteCap_licensed` requires four times width(n) below the fixed eighth trim width. These are real upstream primitives. The present delivery does not export an all-winners licence or an all-lower-atoms grouping derived from them.
+* The frozen high theorem `P4AOriginalFiniteFallbackJointHigh.joint` uses a single beta and fine grid internally and supplies same-coefficient M bounds on all high heads with at least three rough primes. Its statement omits the internally proved fine-width budget. The primitive `P4AOriginalFiniteFallbackPPSchedule.joined` exports the two beta/width bounds at its single selection. A further common choice with an arbitrary tolerance depending on the chosen beta and retaining the visible combined high-atom conclusion was not supplied at the stop. Two independent existential choices cannot discharge it.
+* T02’s three short-rank sources give true clipped square-product range and the classical signed prime BV instance. A general outer smooth-product/HB or generalized BV discrepancy is a separate obligation. The full factorial representation after unrestricted regrouping also needs the physical squareful-modulus removal in paragraph five of `actual-k-compilation-joint-audit.tex`. An M-support or classical prime-BV range alone gives neither the removal estimate nor full PP for all outer families.
+
+The final user instruction stopped extensions of this run. No local compiler, guard, numerical replay, remote action or CI was run here.

@@ -1,0 +1,329 @@
+{
+  "selection": "complete frozen classical U3 root signed AP and its two-band insertion",
+  "state": "SOURCE_ONLY_UNCOMPILED",
+  "manuscript": "ba6ec11d800eccc54406490631895e174de85766",
+  "P5Head": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+  "publishedNov10Source": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+  "scope": "classical U3 root only, fixed tau>0, sum of absolute signed rows at original frozen physical Q and keys, entire finite-li/centre term retained and bounded; exact same two-band source",
+  "sourceCount": 3,
+  "declarationCountIncludingPrivate": 12,
+  "sources": [
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430FrozenClassicalRootModuli.lean",
+      "bytes": 4726,
+      "sha256": "54f8991043167c7e71fa567a675f88b27c379bb0cd8a3b81e57b076e236089df",
+      "gitBlob": "068e3df986e2234cb09f8484c51a32f837c8a6f7",
+      "stageAs": "ImbalancedChen/Part5OriginalH430FrozenClassicalRootModuli.lean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedRootRosserBalance",
+        "ImbalancedChen.Part5OriginalH430PresieveOutsideFin",
+        "ImbalancedChen.Part5OriginalH430ClassicalTailBV"
+      ],
+      "declarations": [
+        {
+          "name": "classicalBand",
+          "kind": "def",
+          "private": false,
+          "line": 26,
+          "declaration": "def classicalBand (N : ℕ) : Finset ℕ :="
+        },
+        {
+          "name": "cutoffAt",
+          "kind": "def",
+          "private": false,
+          "line": 29,
+          "declaration": "def cutoffAt (N n m p : ℕ) (τ : ℝ) : ℝ :="
+        },
+        {
+          "name": "activeDivisors",
+          "kind": "def",
+          "private": false,
+          "line": 32,
+          "declaration": "def activeDivisors (N n m p : ℕ) (τ : ℝ) : Finset ℕ :="
+        },
+        {
+          "name": "classical_geometry",
+          "kind": "theorem",
+          "private": false,
+          "line": 41,
+          "declaration": "theorem classical_geometry {N n m p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    1 < rootQ N n .U3 τ p / (p : ℝ) ∧ cutoffAt N n m p τ ≤ (N:ℝ)^a ∧\n      rootQ N n .U3 τ p ≤ (N:ℝ)^(1/2-τ)"
+        },
+        {
+          "name": "pooled_support",
+          "kind": "theorem",
+          "private": false,
+          "line": 67,
+          "declaration": "theorem pooled_support {N n m : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) :\n    (∀ p ∈ classicalBand N, activeDivisors N n m p τ ⊆\n      (sieveProduct N (Nat.ceil ((N:ℝ)^a))).divisors) ∧\n    (∀ p ∈ classicalBand N, ∀ r ∈ activeDivisors N n m p τ,\n      p*r ≤ ⌊(N:ℝ)^(1/2-τ)⌋₊)"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430FrozenClassicalRootAP.lean",
+      "bytes": 7995,
+      "sha256": "209e1168a60ac56033937577d633ff42bdfc454181113a43902c41b67a58f42b",
+      "gitBlob": "08f4bb7177402eca56d47d398ce86d1c7310293c",
+      "stageAs": "ImbalancedChen/Part5OriginalH430FrozenClassicalRootAP.lean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430FrozenClassicalRootModuli",
+        "ImbalancedChen.ChenInitialCorrectionBudget"
+      ],
+      "declarations": [
+        {
+          "name": "primeError",
+          "kind": "def",
+          "private": true,
+          "line": 23,
+          "declaration": "private def primeError (N k : ℕ) : ℝ :="
+        },
+        {
+          "name": "primeError_bound",
+          "kind": "theorem",
+          "private": true,
+          "line": 28,
+          "declaration": "private theorem primeError_bound {N k : ℕ} (hN : 0 < N) (hk : 0 < k)\n    (hcop : k.Coprime N) (hlog : 1 ≤ Real.log (N:ℝ)) :\n    |primeError N k| ≤ |chenQuotientPrimeAPError N (trueLogarithmicIntegral N) k| +\n      (3 / Real.log 2) * Real.log (N : ℝ)"
+        },
+        {
+          "name": "abs_row_le_active",
+          "kind": "theorem",
+          "private": true,
+          "line": 58,
+          "declaration": "private theorem abs_row_le_active (N n m p : ℕ) (τ : ℝ) :\n    |signedAP N p (rootQ N n .U3 τ p) (cutoffAt N n m p τ)| ≤\n      ∑ r ∈ activeDivisors N n m p τ, |primeError N (p*r)|"
+        },
+        {
+          "name": "classical_tail_AP_log_saving",
+          "kind": "theorem",
+          "private": false,
+          "line": 86,
+          "declaration": "theorem classical_tail_AP_log_saving {τ : ℝ} (hτ : 0 < τ) (hτ' : τ ≤ 1/12)\n    (K : ℕ) (hK : 0 < K) :\n    ∃ C : ℝ, 0 < C ∧ ∀ᶠ N : ℕ in atTop, ∀ n m : ℕ,\n      1/((n:ℝ)+1) ≤ 11/384 →\n      (∑ p ∈ classicalBand N, |signedAP N p (rootQ N n .U3 τ p) (cutoffAt N n m p τ)|) ≤\n        C * (N:ℝ) / Real.log (N:ℝ)^K"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430U34PaidClassicalRoot.lean",
+      "bytes": 3966,
+      "sha256": "dabb349c91a00df3e05b4bd08967cd5ba273ffbf3a7c0468d67153a97574d6e6",
+      "gitBlob": "930e256c1b70d5bd7a6b1610e946c9c26651f383",
+      "stageAs": "ImbalancedChen/Part5OriginalH430U34PaidClassicalRoot.lean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430FrozenClassicalRootAP"
+      ],
+      "declarations": [
+        {
+          "name": "U3Upper",
+          "kind": "def",
+          "private": false,
+          "line": 22,
+          "declaration": "def U3Upper (N n m : ℕ) (τ ε : ℝ) : ℝ :="
+        },
+        {
+          "name": "original_U3_signed_split",
+          "kind": "theorem",
+          "private": false,
+          "line": 31,
+          "declaration": "theorem original_U3_signed_split {N n m : ℕ} {τ : ℝ} (ε : ℝ)\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12) (hn : 1/((n:ℝ)+1) ≤ 11/384) :\n    bandUpper N n m .U3 τ ε = U3Upper N n m τ ε +\n      ∑ p ∈ classicalBand N, signedAP N p (rootQ N n .U3 τ p) (cutoffAt N n m p τ)"
+        },
+        {
+          "name": "original_U34_with_classical_root_AP_paid",
+          "kind": "theorem",
+          "private": false,
+          "line": 59,
+          "declaration": "theorem original_U34_with_classical_root_AP_paid {τ ε : ℝ}\n    (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) (K : ℕ) (hK : 0 < K) :\n    ∃ C : ℝ, 0 < C ∧ ∀ᶠ N : ℕ in atTop, Even N → ∀ n m : ℕ,\n      1/((n:ℝ)+1) ≤ 11/384 →\n      currentChenUpsilon3 N + currentChenUpsilon4 N ≤\n        U3Upper N n m τ ε + bandUpper N n m .U4 τ ε + C*(N:ℝ)/Real.log (N:ℝ)^K"
+        }
+      ]
+    }
+  ],
+  "directSiblingImports": [
+    {
+      "source": "Part5OriginalH430FrozenClassicalRootModuli",
+      "imports": [
+        "Part5OriginalH430OwnedRootRosserBalance",
+        "Part5OriginalH430PresieveOutsideFin"
+      ]
+    },
+    {
+      "source": "Part5OriginalH430FrozenClassicalRootAP",
+      "imports": [
+        "Part5OriginalH430FrozenClassicalRootModuli"
+      ]
+    },
+    {
+      "source": "Part5OriginalH430U34PaidClassicalRoot",
+      "imports": [
+        "Part5OriginalH430FrozenClassicalRootAP"
+      ]
+    }
+  ],
+  "pinnedDirectAndGoverningSources": [
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30q/h430_root_license/Part5OriginalH430ClassicalTailBV.lean",
+      "bytes": 9275,
+      "sha256": "c235528f5f46b551e7422747b51053b7c08d571a684fd1b895c8b542da5fbea2",
+      "gitBlob": "646e2409745b95f44c06f292253f4e70534db69a",
+      "purpose": "Exact ordinary classical BV at the old row and true-li/centre identity."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/Part3PrimeAPDistribution.lean",
+      "bytes": 9881,
+      "sha256": "c317d422e93b4f0bd6bde7ef28306de2fcd65fe4b0e34854117a10a87f0ef316",
+      "gitBlob": "13502fc254e57776f485822a56e529b68e835440",
+      "purpose": "Complete primitive BV pool from coefficient 1."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ChenPooledQuotientAP.lean",
+      "bytes": 20824,
+      "sha256": "f968115d1a3be23d9feac4910ca717e1dc89c72d19b4d854524243fd0158a8d3",
+      "gitBlob": "aa198c9e3c491cfcffd384b99ea64d08025fa58a",
+      "purpose": "GCD injection on the actual large selected prime and disjoint small divisor, preserving the whole modulus."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ChenInitialCorrectionBudget.lean",
+      "bytes": 22686,
+      "sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+      "gitBlob": "d6af7883500a1bff26ef9f0f7325f60032bdc9d6",
+      "purpose": "Direct import. Finite centre and modulus-prime estimates."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/BoundaryArbitraryLog.lean",
+      "bytes": 13779,
+      "sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+      "gitBlob": "3fff7b74021465b9c22d60b9da203feb7ee1216a",
+      "purpose": "Arbitrary logarithmic accuracy for strictly sublinear powers."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30q/h430_root_license/Part5OriginalH430RootSourceDictionary.lean",
+      "bytes": 10486,
+      "sha256": "8a868d9ebd0a15b5d0eabf8f50466645a3afc8c9a3606f7208bdfa7e3fd252d2",
+      "gitBlob": "a0b1c26944eac2a849eff90c3d1c3aa29756458c",
+      "purpose": "Source branch U3 below half with equality at start of tail."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430OwnedRootCounts.lean",
+      "bytes": 13479,
+      "sha256": "7edf742ee6dde0c2283aac4c94c40b55e890644f68901e585720f54854bb6477",
+      "gitBlob": "b9f6217182a2511d64383cc37b1cfeb042f288dd",
+      "purpose": "Frozen level and exact original closed-cell query and root geometry."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261028-resume-30f/certificate_enhanced/P2ActualMarkedCountState.lean",
+      "bytes": 11699,
+      "sha256": "929740fe8e957d025f2414ec104534957ee5ffb3a1b9aef2bd63b844fb08c635",
+      "gitBlob": "93809d4a2cd3623ff05b44895c9fdbce031db6c1",
+      "purpose": "Complete root coefficient support p*r<=Q and coprimality."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30m/h430_common_approximation/Part5OriginalH430FrozenRootRefinement.lean",
+      "bytes": 11769,
+      "sha256": "d05ebfcc10e8dde12560e87d99a9c47082c69995184e4aa2689bbec9fd92f8f1",
+      "gitBlob": "9e99c8c5696b130fe89ec12e6763c01f2eae9037",
+      "purpose": "Exact common frozen root level bound."
+    },
+    {
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30j/h5/P5OriginalU5FrozenSource.lean",
+      "bytes": 9513,
+      "sha256": "86d8922dfc5fa2c2b685f11cba8f3ec8eb8d871043828edd7542ab75e8dbd93b",
+      "gitBlob": "01f76f110f6d523f6f2e1d297ae33ff714b564db",
+      "purpose": "True finite prime receiver."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/own-chen-table-insertion-chain-20261009.tex",
+      "bytes": 25557,
+      "sha256": "09f84f41e97dbd2267baee01a0a7c7c765e696a00688809086394c10f24623ee",
+      "gitBlob": "560d2a05d752f0b03e09a18c2028e6bb1c0c18db",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/finite-step-typed-closure-audit.tex",
+      "bytes": 17282,
+      "sha256": "17b7d69d86f9cf9dbcc5512724fbddefdde8c5d5e9ea23a45ee0a9c9de91948f",
+      "gitBlob": "660f49e87ffd612ccf2998cc2e912bce942670c7",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/current-eighth-distribution-interface-audit-20261009.tex",
+      "bytes": 20256,
+      "sha256": "4347b578faa8475ce50444d7a20e2da9f2c201dced064bf168a704c7d2f1ed88",
+      "gitBlob": "2ac67376eee98e33ebbcbf71f21653c48148a8a0",
+      "purpose": "Frozen manuscript primary source."
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/fixed-action-stationarity-independent-20261009.tex",
+      "bytes": 4166,
+      "sha256": "894e50d312196cd645c2c7f0de14fb615561ac209a0a09ec1bbdae4586a37a97",
+      "gitBlob": "a6ebe0d4cd7f557e231a68dd241e6d30305b6e4f",
+      "purpose": "Frozen manuscript primary source."
+    }
+  ],
+  "reusedLocalSelections": [
+    {
+      "path": "output/resume-20261112/t07/RESUMED_ROOT_REGISTRY.json",
+      "bytes": 26479,
+      "sha256": "3706d6b4e513e2063469cab78d5881263938146a829a57e3ab74198a990e12e5",
+      "gitBlob": "f1b804d29f1129090f0d1f4182dadb5f3dc5d65f"
+    },
+    {
+      "path": "output/resume-20261112/t07/ROOT_SOURCE_REPORT.md",
+      "bytes": 8398,
+      "sha256": "bc8da53a2ffa4003aaceb5ab499ae256cd5df98d5e552b367571fbfc0bab7720",
+      "gitBlob": "d4e1dbf440271e66f31b5d4ea45bfc22a71822ea"
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430RootRosserSurplus.lean",
+      "bytes": 4867,
+      "sha256": "de51434511070f52b3f951d88787561d09ee601dc7014e61262a7ea9f5589240",
+      "gitBlob": "2fed2f6b417502138b3c006543ee8e215a033148"
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430PresieveOutsideFin.lean",
+      "bytes": 4641,
+      "sha256": "884a66280a9f32fc7c319cf6b1ad7045c0796146ba247736a867f52a2986f14c",
+      "gitBlob": "746bc3aaab37973b9baf4753aab23382c4080f0a"
+    },
+    {
+      "path": "output/resume-20261112/t07/Part5OriginalH430OwnedRootRosserBalance.lean",
+      "bytes": 9940,
+      "sha256": "1c4f9063604594a42817c96760a232cb26c71c780e922e45e106c74d8d117cd7",
+      "gitBlob": "ed9ad3319506f5afa2004ed32dc882203417534e"
+    }
+  ],
+  "report": {
+    "path": "output/resume-20261112/t07/CLASSICAL_TAIL_REPORT.md",
+    "bytes": 3910,
+    "sha256": "d85f9e284a732ffec26cc5986157186b82552c2743975526c3a94e76aa64d251",
+    "gitBlob": "1aec3f7fd31ca427ffe69cbd1533b7fb74c2db6a"
+  },
+  "verification": "Source bytes, declarations and historical Git blob provenance only. No local Lean/Lake/LSP, guard or proof arithmetic was run. No CI or publication.",
+  "open": [
+    "enhanced marked ordinary AP and coefficient compilation, same-rho PP",
+    "paid positive seed and four actual rounds, previous-generation W1/W2/Buchstab transition",
+    "closed-cell common nested 430+11 count induction, 7/2 terminal budget",
+    "kernel, transitive axioms and finite receipts"
+  ]
+}
