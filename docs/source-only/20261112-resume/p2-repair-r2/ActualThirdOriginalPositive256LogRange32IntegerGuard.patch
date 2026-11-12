@@ -1,0 +1,20 @@
+--- a/ImbalancedChen/ActualThirdOriginalPositive256LogRange32IntegerGuard.lean
++++ b/ImbalancedChen/ActualThirdOriginalPositive256LogRange32IntegerGuard.lean
+@@ -135,11 +135,13 @@
+         _ = (1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ) := by
+           field_simp [hx0Real.ne', hx1Real.ne'] <;> ring
+     have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo :=
+-      Int.le_floor.mpr hfirst
++      Int.le_floor.mpr (by simpa only [Int.cast_one] using hfirst)
+     have hlo := hfloor.trans (originalLnUnit_lo_ge_first h1 h2)
+-    rw [originalLn32, if_pos h2]
+-    change 0<(originalLnUnit ((x1:ℝ)/(x0:ℝ))).lo
+-    omega
++    have hbranch : originalLogBranch ((x1:ℝ)/(x0:ℝ)) 0 =
++        originalLnUnit ((x1:ℝ)/(x0:ℝ)) := by
++      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
++    rw [originalLn32, if_pos h2, hbranch]
++    exact (by norm_num : (0:ℤ)<1).trans_le hlo
+   · exact range32_two_lt_lo_pos (lt_of_not_ge h2) h32
+ 
+ /-- Direct reusable wrapper for one of the original ordinary x/y log

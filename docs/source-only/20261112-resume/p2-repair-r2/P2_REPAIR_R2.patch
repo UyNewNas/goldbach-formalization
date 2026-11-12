@@ -1,0 +1,66 @@
+--- a/ImbalancedChen/ActualThirdOriginalPositive256LogRange32IntegerGuard.lean
++++ b/ImbalancedChen/ActualThirdOriginalPositive256LogRange32IntegerGuard.lean
+@@ -135,11 +135,13 @@
+         _ = (1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ) := by
+           field_simp [hx0Real.ne', hx1Real.ne'] <;> ring
+     have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo :=
+-      Int.le_floor.mpr hfirst
++      Int.le_floor.mpr (by simpa only [Int.cast_one] using hfirst)
+     have hlo := hfloor.trans (originalLnUnit_lo_ge_first h1 h2)
+-    rw [originalLn32, if_pos h2]
+-    change 0<(originalLnUnit ((x1:ℝ)/(x0:ℝ))).lo
+-    omega
++    have hbranch : originalLogBranch ((x1:ℝ)/(x0:ℝ)) 0 =
++        originalLnUnit ((x1:ℝ)/(x0:ℝ)) := by
++      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
++    rw [originalLn32, if_pos h2, hbranch]
++    exact (by norm_num : (0:ℤ)<1).trans_le hlo
+   · exact range32_two_lt_lo_pos (lt_of_not_ge h2) h32
+ 
+ /-- Direct reusable wrapper for one of the original ordinary x/y log
+--- a/ImbalancedChen/P4AOriginalExecutableLog32.lean
++++ b/ImbalancedChen/P4AOriginalExecutableLog32.lean
+@@ -134,10 +134,17 @@
+       (Rat.cast_le (K := ℝ) (p := a) (q := (2 : ℚ)))
+   have h1 : ((q : ℝ) / 2 ≤ 2) ↔ q / 2 ≤ 2 := by
+     simpa only [Rat.cast_div, Rat.cast_ofNat] using hle (q / 2)
++  have hcast (k : ℕ) :
++      ((q / (2 : ℚ) ^ k : ℚ) : ℝ) = (q : ℝ) / (2 : ℝ) ^ k := by
++    rw [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat]
+   have h2 : ((q : ℝ) / (2 : ℝ) ^ 2 ≤ 2) ↔ q / (2 : ℚ) ^ 2 ≤ 2 := by
+-    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat] using hle (q / (2 : ℚ) ^ 2)
++    have h := hle (q / (2 : ℚ) ^ 2)
++    rw [hcast 2] at h
++    exact h
+   have h3 : ((q : ℝ) / (2 : ℝ) ^ 3 ≤ 2) ↔ q / (2 : ℚ) ^ 3 ≤ 2 := by
+-    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat] using hle (q / (2 : ℚ) ^ 3)
++    have h := hle (q / (2 : ℚ) ^ 3)
++    rw [hcast 3] at h
++    exact h
+   simp only [ln32, OriginalThirdPositiveLogSourceOnly.originalLn32,
+     hle q, h1, h2, h3, logBranch_eq_original,
+     Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat]
+--- a/ImbalancedChen/ActualThirdOriginalStoredQueryAllBranches.lean
++++ b/ImbalancedChen/ActualThirdOriginalStoredQueryAllBranches.lean
+@@ -22,8 +22,8 @@
+       nodeValue hi/12 ≤ nodeValue (-(-hi/12)) := by
+   have hp : (0 : ℝ) < (originalWeightP : ℝ) := by
+     norm_num [originalWeightP]
+-  have hloQ := Int.floor_le ((lo : ℚ)/12)
+-  have hhiQ := Int.le_ceil ((hi : ℚ)/12)
++  have hloQ := Int.floor_le ((lo : ℚ)/((12 : ℤ) : ℚ))
++  have hhiQ := Int.le_ceil ((hi : ℚ)/((12 : ℤ) : ℚ))
+   rw [query_floor_div_literal lo 12 (by norm_num)] at hloQ
+   rw [query_ceil_div_literal hi 12 (by norm_num)] at hhiQ
+   have hloR : ((lo/12 : ℤ) : ℝ) ≤ (lo : ℝ)/12 := by exact_mod_cast hloQ
+--- a/ImbalancedChen/ActualThirdOriginalSymmetricMassCeil.lean
++++ b/ImbalancedChen/ActualThirdOriginalSymmetricMassCeil.lean
+@@ -112,7 +112,7 @@
+         (((4*(48000*2^24 : ℤ)*(z1-z0) : ℤ) : ℝ)/((z0*z1 : ℤ) : ℝ)))/2 =
+           prismMass (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ) := by
+     rw [symmetric_mass_formula, hfactor, pow_two]
+-  norm_num only [Nat.cast_ofNat] at hraw
++  norm_num only [Nat.cast_ofNat] at hraw heq
+   rw [heq] at hraw
+   exact hraw
+ 

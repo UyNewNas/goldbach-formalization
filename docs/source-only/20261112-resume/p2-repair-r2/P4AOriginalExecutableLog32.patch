@@ -1,0 +1,22 @@
+--- a/ImbalancedChen/P4AOriginalExecutableLog32.lean
++++ b/ImbalancedChen/P4AOriginalExecutableLog32.lean
+@@ -134,10 +134,17 @@
+       (Rat.cast_le (K := ℝ) (p := a) (q := (2 : ℚ)))
+   have h1 : ((q : ℝ) / 2 ≤ 2) ↔ q / 2 ≤ 2 := by
+     simpa only [Rat.cast_div, Rat.cast_ofNat] using hle (q / 2)
++  have hcast (k : ℕ) :
++      ((q / (2 : ℚ) ^ k : ℚ) : ℝ) = (q : ℝ) / (2 : ℝ) ^ k := by
++    rw [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat]
+   have h2 : ((q : ℝ) / (2 : ℝ) ^ 2 ≤ 2) ↔ q / (2 : ℚ) ^ 2 ≤ 2 := by
+-    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat] using hle (q / (2 : ℚ) ^ 2)
++    have h := hle (q / (2 : ℚ) ^ 2)
++    rw [hcast 2] at h
++    exact h
+   have h3 : ((q : ℝ) / (2 : ℝ) ^ 3 ≤ 2) ↔ q / (2 : ℚ) ^ 3 ≤ 2 := by
+-    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat] using hle (q / (2 : ℚ) ^ 3)
++    have h := hle (q / (2 : ℚ) ^ 3)
++    rw [hcast 3] at h
++    exact h
+   simp only [ln32, OriginalThirdPositiveLogSourceOnly.originalLn32,
+     hle q, h1, h2, h3, logBranch_eq_original,
+     Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat]

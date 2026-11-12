@@ -1,0 +1,28 @@
+P2 compile interface repair r2 — SOURCE ONLY, UNCOMPILED
+
+Exact input selection
+- Frozen P2_VALIDATION_MANIFEST.json SHA256 54fe783fd7310114cd8012530ff6eedc52c3a01fa76eb4860e1641cfe3f52653.
+- Manifest source ABI commit 607d835f6e18f0013cbea63bbefdaf7f6867cd50 stays unchanged.
+- All four failing selected sources come from repaired baseline eb035a259f2f40853e9899f6d98af25852184fee, not from an identically named alternate working-tree file.
+- Each original file was read byte-for-byte through git cat-file, matched against manifest byte length, SHA256, and Git blob; originals are retained under original/.
+
+Observed failure
+- CI run 43147273995, job 130947911930 ended in failure. The saved complete log is output/resume-20261112/ci/43147273995.log, 189473 bytes, SHA256 f2b8922cd78386ea0c9ef91f2805f226328e56e5d4c0c66887165c452792b138.
+- The four actual build failures are the modules listed in REPAIR_REGISTRY.json. Advice about ring in other built modules is not a failure.
+
+Minimal proof repairs
+1. ActualThirdOriginalPositive256LogRange32IntegerGuard: bridge the cast of the integer 1 with Int.cast_one before Int.le_floor.mpr. Replace projection-level change at the zero range branch with a local equality originalLogBranch x 0 = originalLnUnit x proved by restricted simp of only the two definitions and Nat.cast_zero, then use the existing positive lower bound directly. This avoids unfolding the 256-step loop; no recursion-depth setting changes.
+2. P4AOriginalExecutableLog32: prove the cast of q/(2:Q)^k at symbolic k with explicit Rat.cast_div, Rat.cast_pow, and Rat.cast_ofNat rewriting, then rewrite h2 and h3 by that exact equality. q and its divisions remain rational. This does not replace rational division with integer division or alter the five range branches.
+3. ActualThirdOriginalStoredQueryAllBranches: form floor/ceil facts with the explicit rational cast of the integer denominator 12. This is the exact denominator shape in query_floor_div_literal/query_ceil_div_literal. Only proof-local representations change.
+4. ActualThirdOriginalSymmetricMassCeil: run the already-present restricted numeral normalization on both hraw and heq. Their integer factor 4*(48000*2^24) then has the same syntactic normal form before rewriting. The mass formula and interval operation tree are unchanged.
+
+Scope and limits
+- Imports and every theorem header (including all public names, premises, types, and quantifiers) are byte-identical before/after. Header hashes are in REPAIR_REGISTRY.json. All definitions and their bodies are unchanged.
+- Changes address expression/elaboration interfaces observed in CI. They supply no missing mathematical hypothesis and assert no new mathematical gap or mathematical completion.
+- No theorem is deleted. No axiom, sorry, native_decide, trust setting, precision, algorithm, or dependency is added or changed.
+- No local Lean, Lake, LSP, kernel/proof, numerical calculation, guard, installer, or CI run was executed. No external writes, dispatch, or quota reads were performed by this task. Only source/Git reading, byte/string comparison, diffs, and hashing were performed.
+- The available local refs were inspected for existing repairs; see LOCAL_REF_REUSE_CHECK.json. This does not claim network-fresh remote state.
+- These candidates require T10 independent source review and exact remote CI acceptance by root. No compile or kernel success is claimed.
+
+Revision history
+- r1 retained unchanged. T10 gave its statements and mathematical expressions a static PASS, and recommended this r2 explicit cast bridge plus restricted zero-branch simp before the next remote compile. r2 is still source-only and awaits its own independent frozen-byte review.
