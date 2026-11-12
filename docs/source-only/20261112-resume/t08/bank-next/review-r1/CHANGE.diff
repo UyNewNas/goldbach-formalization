@@ -1,0 +1,11 @@
+--- frozen/P2HistoricalHighPointAncestry.lean
++++ review-r1/P2HistoricalHighPointAncestry.lean
+@@ -107,7 +107,7 @@
+   have hs := tableGrid_mono (show 50 ≤ i.val+1 by omega)
+   have hs2 : 2 ≤ tableGrid (i.val+1) := by simpa [tableGrid] using hs
+   have hs5 := (tableGrid_bounds (show i.val+1 ≤ 200 by omega)).2
+-  rw [high_last_suffix w₁ w₂ hw]
++  rw [high_last_suffix w₁ w₂ hw n i hi]
+   change (suffixNumerator historicalLogWeights (iterate w₁ w₂ n) false k : ℝ)/tableQ ≤ _
+   change _ ≤ ∫ u in tableGrid (max 50 (i.val-49))..5, h δ u / u at ht
+   rw [tableGrid_upper_start hg] at ht

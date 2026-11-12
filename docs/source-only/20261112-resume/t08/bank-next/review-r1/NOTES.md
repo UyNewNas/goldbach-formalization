@@ -1,0 +1,5 @@
+This candidate replaces only the first Lean source of the initial freeze. Its declarations and imports are identical; the diff supplies the already available argument `hi` to the rewrite theorem. The original freeze and the other two Lean source files have not been modified.
+
+On the W2 side, `sourcePointSum` is the *integer* parent-point numerator before the single `//5` in the whole producer. The native count statement compares the real contribution of the two parent slots at factor 1/5. It does not separately floor the parent-point sum, alter the other integrals, or assert a reconstruction of the whole candidate by independently dividing each integer term.
+
+The exact project-import inventory (including each terminal) has 148 project modules for the ancestry module, 152 for the scheduled scalar module and 258 for the native count module. The last depends transitively on two original local draft bytes outside the pinned formal Git tree. The historical data reader and its old guard bodies are only reached by the latter two modules. Source enumeration is not a compilation receipt.
