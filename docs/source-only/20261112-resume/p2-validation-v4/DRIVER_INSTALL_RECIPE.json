@@ -1,0 +1,55 @@
+{
+  "schema": "p2-integer-mass-driver-install-recipe-v4",
+  "status": "PREPARED_NOT_APPLIED_ROOT_ONLY_AFTER_T10_REVIEW",
+  "driver_base": "356c3782e9428098a2fcbfb18c689bef264d84fa",
+  "driver_branch": "ci/p2-integer-mass-r3-20261112",
+  "required_direct_parent": "356c3782e9428098a2fcbfb18c689bef264d84fa",
+  "bundle_install_path": "docs/source-only/20261112-resume/p2-validation-v4",
+  "bundle_bytes": "All REGISTRY.files plus the independently pinned REGISTRY.json; delivery proposal/identity are excluded",
+  "new_workflow": {
+    "from": "p2-integer-mass-validation.yml",
+    "to": ".github/workflows/p2-integer-mass-validation.yml"
+  },
+  "ve_patch": {
+    "patch": "VE_DRIVER_ONLY.patch",
+    "replacement": "variable-envelope.driver.yml",
+    "to": ".github/workflows/variable-envelope.yml",
+    "before": {
+      "bytes": 5284,
+      "sha256": "ab1c420e1f7ab7855860a705831203c7f1f467ce6302e16405f9bb487ac3d106",
+      "git_blob": "00fac4eaa44203cfb457a5a58dd962fba808a949"
+    },
+    "after": {
+      "bytes": 5325,
+      "sha256": "3d05eeee9da64d7da4020e2f5c51905717aaf666a9ed508c63c52dde19ca36e2",
+      "git_blob": "1e3f326368445f658514ba3ecd6d0166d38579f3"
+    },
+    "only_change": "One entry added to push.branches-ignore; PR/manual/other bytes unchanged"
+  },
+  "other_six_workflows": "Exact original bytes from driver_base; audit lists each identity",
+  "external_selection": {
+    "template": "ROOT_SELECTION_TEMPLATE.json",
+    "concrete_proposal": "ROOT_DELIVERED_SELECTION.proposed.json",
+    "identity": "ROOT_DELIVERED_SELECTION.IDENTITY.json",
+    "to": "verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json",
+    "outside_bundle_registry": true,
+    "review_required": "Root adopts exact proposal after T10 review; never use the placeholder"
+  },
+  "extra_workflows_allowed": false,
+  "default_branch_modified": false,
+  "installed": false,
+  "pushed": false,
+  "ci_dispatched": false,
+  "first_push_parent_binding": "GITHUB_SHA raw commit header, not event.before",
+  "post_deployment_review": "T10/root inspect exact driver commit/tree before interpreting the run; do not infer deployment from this preparation",
+  "source_checkouts": {
+    "baseline": "eb035a259f2f40853e9899f6d98af25852184fee",
+    "proof-input": "32d541884c85748e3fb18f7a83801b2f8b16e359"
+  },
+  "v3_to_v4_driver_delta": {
+    "p2_validation.py": "--- v3/p2_validation.py\n+++ v4/p2_validation.py\n@@ -41,7 +41,7 @@\n     assert re.fullmatch(r'[0-9a-f]{40}', commit)\n     assert git_head(workspace) == commit\n     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'\n-    branch = 'ci/p2-integer-mass-r2-20261112'\n+    branch = 'ci/p2-integer-mass-r3-20261112'\n     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch\n     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'\n     committed = subprocess.check_output(['git', '-C', str(workspace), 'show', commit + ':' + path])\n@@ -53,7 +53,7 @@\n     assert selection['driver_base'] == '356c3782e9428098a2fcbfb18c689bef264d84fa'\n     assert selection['driver_branch'] == branch\n     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'\n-    assert selection['bundle_path'] == 'docs/source-only/20261112-resume/p2-validation-v3'\n+    assert selection['bundle_path'] == 'docs/source-only/20261112-resume/p2-validation-v4'\n     assert HERE.resolve() == (workspace / selection['bundle_path']).resolve()\n     # A first branch push may have event.before = 0. The real immutable\n     # parent is in the commit header and needs no parent-history fetch.\n",
+    "p2-integer-mass-validation.yml": "--- v3/p2-integer-mass-validation.yml\n+++ v4/p2-integer-mass-validation.yml\n@@ -1,7 +1,7 @@\n name: P2 integer mass ABI exact closure validation\n on:\n   push:\n-    branches: [ci/p2-integer-mass-r2-20261112]\n+    branches: [ci/p2-integer-mass-r3-20261112]\n     paths: [.github/workflows/p2-integer-mass-validation.yml]\n permissions:\n   contents: read\n@@ -13,11 +13,11 @@\n     runs-on: ubuntu-24.04\n     timeout-minutes: 360\n     env:\n-      SOURCE_COMMIT: 51859a24c91580f885afd2a781dcb48b07177529\n+      SOURCE_COMMIT: 32d541884c85748e3fb18f7a83801b2f8b16e359\n       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee\n-      EXPECTED_MANIFEST: 6d876300c58ee32a2204198142e6863b2c23d2929cab4b1641ca06d551d6714b\n+      EXPECTED_MANIFEST: 0a7790ab937c3ab85bb12a658522e23fe1ff84e00acb059585d118486c5492ba\n       LEAN_NUM_THREADS: 2\n-      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v3\n+      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v4\n     defaults:\n       run:\n         shell: bash\n@@ -40,7 +40,7 @@\n           persist-credentials: false\n       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262\n         with:\n-          ref: 51859a24c91580f885afd2a781dcb48b07177529\n+          ref: 32d541884c85748e3fb18f7a83801b2f8b16e359\n           path: proof-input\n           persist-credentials: false\n       - name: Bind repair baseline and exact ABI overlay with original generic stage\n",
+    "variable-envelope.driver.yml": "--- v3/variable-envelope.driver.yml\n+++ v4/variable-envelope.driver.yml\n@@ -8,7 +8,7 @@\n       - 'codex/chen-parts-integration'\n       - 'codex/yellow-closure-20261110'\n       - 'ci/resume-compile-repairs-20261111'\n-      - 'ci/p2-integer-mass-r2-20261112'\n+      - 'ci/p2-integer-mass-r3-20261112'\n     paths-ignore:\n       - \"automation/**\"\n   pull_request:\n"
+  },
+  "unchanged_logic": "p2_validation.py only branch and bundle path literals change; original two-origin stage and all proof/resource/retention gates are byte-identical."
+}

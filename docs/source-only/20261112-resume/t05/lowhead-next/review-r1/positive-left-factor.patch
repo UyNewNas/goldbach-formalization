@@ -1,0 +1,13 @@
+--- a/ImbalancedChen/P4BOriginalMediumAtomFamily.lean
++++ b/ImbalancedChen/P4BOriginalMediumAtomFamily.lean
+@@ -166,9 +166,9 @@
+   refine ⟨C,hC,x0,(by dsimp [x0]; exact (by norm_num : (1:ℝ)<2).trans_le (le_max_left _ _)),?_⟩
+   intro I hx k q b hk' hq hb
+   have hn : N0≤I.P.N := by
+     have he := (le_max_right (2:ℝ) (Real.exp 1*(N0:ℝ))).trans (hx.trans I.scale_upper)
+-    exact_mod_cast (mul_le_mul_left (Real.exp_pos 1)).mp he
++    exact_mod_cast (mul_le_mul_iff_right₀ (Real.exp_pos 1)).mp he
+   obtain ⟨_,_,H⟩ := h0 I.P.N hn I.b_pos I.kap_pos I.s_pos I.gate _ _ I.cj I.ck I.bs I.i I.C
+     I.live I.selected (I.roles I.i) (I.truncations I.i) I.xi I.band
+   change ‖auxiliarySWError (I.atom K).alphaCarrier (I.atom K).alpha k q b‖≤_
+   rw [I.carrier K]
