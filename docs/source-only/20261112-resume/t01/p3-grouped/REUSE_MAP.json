@@ -1,0 +1,1547 @@
+{
+  "schema": "T01_P3_ACTUAL_GROUPED_DERIVATIVE_REUSE_V1",
+  "status": "STATIC_REUSE_AUDIT_NO_NEW_LEAN",
+  "p3_snapshot": "a29bd6b4cba6d1b7e8cd48165f3a0f76f040082b",
+  "new_lean_sources": [],
+  "new_proof_required_for_actual_partition_group_identity": false,
+  "selected_reused_source_roots_and_named_predecessors": [
+    {
+      "module": "ImbalancedChen.P5ActualEtaPsiOccurrenceBudget",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30c/pp_derivatives/P5ActualEtaPsiOccurrenceBudget.lean",
+      "sha256": "e74a8e2492758caac1cbd2c9db04bfc610a18233e5b0dea1e2593d7a17575f01",
+      "git_blob_sha1": "ce098bfa1466350290d4a4c82b4ca78c7ec20de3",
+      "bytes": 18326,
+      "suggested_install_path": "ImbalancedChen/P5ActualEtaPsiOccurrenceBudget.lean",
+      "role": "Actual grouped cutoffs; exact arbitrary-word identity; fixed-rank chart budget",
+      "latest_P3_same_path_blob": "ce098bfa1466350290d4a4c82b4ca78c7ec20de3",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30c/pp_derivatives/P5ActualEtaPsiOccurrenceBudget.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5ActualOccurrencePlateauWordBudget",
+        "Mathlib"
+      ],
+      "declarations": [
+        {
+          "line": 20,
+          "text": "def eta (s : ℝ) : ℝ := Real.smoothTransition (s - 1)"
+        },
+        {
+          "line": 21,
+          "text": "def chi (s : ℝ) : ℝ := 1 - eta s"
+        },
+        {
+          "line": 22,
+          "text": "def psi (s : ℝ) : ℝ := chi s - chi (2 * s)"
+        },
+        {
+          "line": 23,
+          "text": "def etaLog (x : ℝ) : ℝ := eta (Real.exp x)"
+        },
+        {
+          "line": 24,
+          "text": "def psiLog (x : ℝ) : ℝ := psi (Real.exp x)"
+        },
+        {
+          "line": 26,
+          "text": "theorem eta_smooth : ContDiff ℝ ∞ eta :="
+        },
+        {
+          "line": 28,
+          "text": "theorem psi_smooth : ContDiff ℝ ∞ psi := by"
+        },
+        {
+          "line": 32,
+          "text": "theorem etaLog_smooth : ContDiff ℝ ∞ etaLog := eta_smooth.comp Real.contDiff_exp"
+        },
+        {
+          "line": 33,
+          "text": "theorem psiLog_smooth : ContDiff ℝ ∞ psiLog := psi_smooth.comp Real.contDiff_exp"
+        },
+        {
+          "line": 35,
+          "text": "theorem eta_bounds (s : ℝ) : 0 ≤ eta s ∧ eta s ≤ 1 :="
+        },
+        {
+          "line": 37,
+          "text": "theorem eta_zero {s : ℝ} (hs : s ≤ 1) : eta s = 0 :="
+        },
+        {
+          "line": 39,
+          "text": "theorem eta_one {s : ℝ} (hs : 2 ≤ s) : eta s = 1 :="
+        },
+        {
+          "line": 41,
+          "text": "theorem psi_eq_eta_difference (s : ℝ) : psi s = eta (2 * s) - eta s := by"
+        },
+        {
+          "line": 45,
+          "text": "theorem etaLog_zero {x : ℝ} (hx : x ≤ 0) : etaLog x = 0 :="
+        },
+        {
+          "line": 47,
+          "text": "theorem etaLog_one {x : ℝ} (hx : Real.log 2 ≤ x) : etaLog x = 1 := by"
+        },
+        {
+          "line": 53,
+          "text": "theorem etaLog_derivative_zero_left (n : ℕ) {x : ℝ} (hx : x < 0) :"
+        },
+        {
+          "line": 60,
+          "text": "theorem etaLog_derivative_zero_right (n : ℕ) (hn : 0 < n)"
+        },
+        {
+          "line": 69,
+          "text": "theorem exists_etaLog_order_bound (n : ℕ) :"
+        },
+        {
+          "line": 97,
+          "text": "theorem psiLog_zero_left {x : ℝ} (hx : x ≤ -Real.log 2) : psiLog x = 0 := by"
+        },
+        {
+          "line": 105,
+          "text": "theorem psiLog_zero_right {x : ℝ} (hx : Real.log 2 ≤ x) : psiLog x = 0 := by"
+        },
+        {
+          "line": 113,
+          "text": "theorem psiLog_compact : HasCompactSupport psiLog := by"
+        },
+        {
+          "line": 123,
+          "text": "theorem psiLog_iterated_compact (n : ℕ) : HasCompactSupport (iteratedDeriv n psiLog) := by"
+        },
+        {
+          "line": 128,
+          "text": "theorem exists_psiLog_order_bound (n : ℕ) :"
+        },
+        {
+          "line": 147,
+          "text": "theorem finite_order_constants (f : ℝ → ℝ)"
+        },
+        {
+          "line": 164,
+          "text": "def scalarLift {m : ℕ} (b : ℝ) (f : ℝ → ℝ) (z : Fin m → ℝ) : ℝ :="
+        },
+        {
+          "line": 167,
+          "text": "theorem sum_shift {m : ℕ} (z : Fin m → ℝ) (a : Fin m) (t : ℝ) :"
+        },
+        {
+          "line": 172,
+          "text": "theorem occOne_scalarLift {m : ℕ} (a : Fin m) (b : ℝ) (f : ℝ → ℝ)"
+        },
+        {
+          "line": 181,
+          "text": "theorem occWord_scalarLift {m : ℕ} (w : List (Fin m)) (b : ℝ) (f : ℝ → ℝ) :"
+        },
+        {
+          "line": 194,
+          "text": "def groupTensor {k m : ℕ} (owner : Fin m → Fin k) (b : Fin k → ℝ)"
+        },
+        {
+          "line": 198,
+          "text": "theorem occOne_groupTensor {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 228,
+          "text": "theorem occWord_groupTensor {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 246,
+          "text": "theorem count_le_word_length {α : Type*} [DecidableEq α] (w : List α) (i : α) :"
+        },
+        {
+          "line": 253,
+          "text": "theorem groupTensor_word_bound {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 270,
+          "text": "theorem groupLog_total {k m : ℕ} (owner : Fin m → Fin k) (z : Fin m → ℝ) :"
+        },
+        {
+          "line": 276,
+          "text": "theorem completeProduct {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 282,
+          "text": "def actualEta {k m : ℕ} (T : ℕ) (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 285,
+          "text": "def actualPsi {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 289,
+          "text": "theorem actualEta_eq_scalarLift {k m : ℕ} (T : ℕ) (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 302,
+          "text": "theorem actualPsi_eq_groupTensor {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 315,
+          "text": "theorem actualEta_smooth {k m : ℕ} (T : ℕ) (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 324,
+          "text": "theorem actualPsi_smooth {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 331,
+          "text": "def actualChart {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 337,
+          "text": "theorem actualChart_smooth {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 345,
+          "text": "theorem actualChart_compact {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 358,
+          "text": "theorem exists_actualChart_word_budget {kStar : ℕ} (A : Family kStar) :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5GroupedOccurrenceLogShift",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB4-HBFamily-GroupLog/P5GroupedOccurrenceLogShift.lean",
+      "sha256": "c1d17f2772316c94046e0be779c0ea001e13c0573dead5c9839baf0f0ac67803",
+      "git_blob_sha1": "6d7d207b8175740b64b7c545cdaf1a189d775e39",
+      "bytes": 5125,
+      "suggested_install_path": "ImbalancedChen/P5GroupedOccurrenceLogShift.lean",
+      "role": "Unique original owner, original group products and exact log shift",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5MixedEulerTwoStepLeibniz",
+        "Mathlib"
+      ],
+      "declarations": [
+        {
+          "line": 15,
+          "text": "def groupLog {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 19,
+          "text": "def groupBase {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 23,
+          "text": "def groupProduct {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 27,
+          "text": "theorem groupBase_pos {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 35,
+          "text": "theorem groupProduct_pos {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 44,
+          "text": "theorem groupLog_shift {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 74,
+          "text": "theorem groupProduct_shift {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 84,
+          "text": "theorem groupProduct_shift_own {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 90,
+          "text": "theorem groupProduct_shift_other {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 99,
+          "text": "theorem groupProduct_own_deriv {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 114,
+          "text": "theorem groupProduct_other_deriv {k m : ℕ} (owner : Fin m → Fin k)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5OccurrenceWordFourFactorLeibniz",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30/pp_derivatives/P5OccurrenceWordFourFactorLeibniz.lean",
+      "sha256": "e6c864e011037d7b70f4aac6a4fa720010fbb8f3cb68c8152570b436ae1317ab",
+      "git_blob_sha1": "4f9f5141c0bc58e7a3fa769e848ffee05bb53ea7",
+      "bytes": 15668,
+      "suggested_install_path": "ImbalancedChen/P5OccurrenceWordFourFactorLeibniz.lean",
+      "role": "Existing complete ordered four-factor allocation, including repeats",
+      "latest_P3_same_path_blob": "4f9f5141c0bc58e7a3fa769e848ffee05bb53ea7",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30/pp_derivatives/P5OccurrenceWordFourFactorLeibniz.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5OccurrenceLeibnizAllocation",
+        "Mathlib"
+      ],
+      "declarations": [
+        {
+          "line": 21,
+          "text": "abbrev OccSpace (m : ℕ) := Fin m → ℝ"
+        },
+        {
+          "line": 24,
+          "text": "theorem coordinate_hasDerivAt {m : ℕ} (z : OccSpace m) (a : Fin m) :"
+        },
+        {
+          "line": 36,
+          "text": "theorem occOne_eq_fderiv {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 46,
+          "text": "theorem occOne_smooth {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 55,
+          "text": "theorem occWord_smooth {m : ℕ} (w : List (Fin m))"
+        },
+        {
+          "line": 63,
+          "text": "theorem coordinate_differentiable {m : ℕ} (f : OccSpace m → ℝ)"
+        },
+        {
+          "line": 71,
+          "text": "def sumTerms {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 75,
+          "text": "@[simp] theorem sumTerms_nil {ι : Type*} {m : ℕ}"
+        },
+        {
+          "line": 78,
+          "text": "@[simp] theorem sumTerms_cons {ι : Type*} {m : ℕ} (i : ι) (L : List ι)"
+        },
+        {
+          "line": 82,
+          "text": "@[simp] theorem sumTerms_append {ι : Type*} {m : ℕ} (L R : List ι)"
+        },
+        {
+          "line": 88,
+          "text": "@[simp] theorem sumTerms_map {ι κ : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 94,
+          "text": "theorem sumTerms_add {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 106,
+          "text": "theorem sumTerms_congr {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 117,
+          "text": "theorem sumTerms_smooth {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 128,
+          "text": "theorem occOne_sumTerms {ι : Type*} {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 149,
+          "text": "structure FourWords (α : Type*) where"
+        },
+        {
+          "line": 157,
+          "text": "def fourAlloc {α : Type*} : List α → List (FourWords α)"
+        },
+        {
+          "line": 165,
+          "text": "theorem fourAlloc_length {α : Type*} (w : List α) :"
+        },
+        {
+          "line": 174,
+          "text": "theorem fourAlloc_letters {α : Type*} :"
+        },
+        {
+          "line": 193,
+          "text": "def fourTerm {m : ℕ} (A E P C : OccSpace m → ℝ)"
+        },
+        {
+          "line": 200,
+          "text": "theorem occWord_four {m : ℕ} (A E P C : OccSpace m → ℝ)"
+        },
+        {
+          "line": 241,
+          "text": "theorem abs_sumTerms_le {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 259,
+          "text": "theorem occWord_four_bound {m : ℕ} (A E P C : OccSpace m → ℝ)"
+        },
+        {
+          "line": 287,
+          "text": "theorem groupProduct_smooth {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 293,
+          "text": "theorem family_grouped_smooth {kStar m : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 306,
+          "text": "theorem family_four_chart_bound {kStar : ℕ} (A : Family kStar) :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5OccurrenceLeibnizAllocation",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB7-HBFamily-Allocation/P5OccurrenceLeibnizAllocation.lean",
+      "sha256": "6c0ac5a7979b272630ff276093666f4e302ada41f1f6419d05379a2095a43479",
+      "git_blob_sha1": "f92cefa2688b72c97da6955bd2d9ee150b67779e",
+      "bytes": 4067,
+      "suggested_install_path": "ImbalancedChen/P5OccurrenceLeibnizAllocation.lean",
+      "role": "Original finite allocation and one-letter calculus predecessor",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5AllWordAmbientOccurrenceBound",
+        "Mathlib.Analysis.Calculus.Deriv.Mul",
+        "Mathlib.Analysis.Calculus.Deriv.Add"
+      ],
+      "declarations": [
+        {
+          "line": 15,
+          "text": "def binaryAlloc {α : Type*} : List α → List (List α × List α)"
+        },
+        {
+          "line": 21,
+          "text": "theorem binaryAlloc_length {α : Type*} (w : List α) :"
+        },
+        {
+          "line": 29,
+          "text": "theorem binaryAlloc_letters {α : Type*} :"
+        },
+        {
+          "line": 51,
+          "text": "theorem occOne_add {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 61,
+          "text": "theorem occOne_mul {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 71,
+          "text": "theorem occOne_four {m : ℕ} (a : Fin m)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5AllWordAmbientOccurrenceBound",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB6-HBFamily-WordChain/P5AllWordAmbientOccurrenceBound.lean",
+      "sha256": "62e92b727855055890fa2bf7953fb490b6b589fe0abe168bb59c26ccd65577cb",
+      "git_blob_sha1": "dd7c5adbb07ecb40d96f19eb6da2d449875da277",
+      "bytes": 3700,
+      "suggested_install_path": "ImbalancedChen/P5AllWordAmbientOccurrenceBound.lean",
+      "role": "Actual occurrence words and conditional real ambient Family budget",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5GroupedAmbientOccurrenceChain",
+        "Mathlib.Analysis.Calculus.ContDiff.Comp"
+      ],
+      "declarations": [
+        {
+          "line": 14,
+          "text": "def occOne {m : ℕ} (a : Fin m)"
+        },
+        {
+          "line": 18,
+          "text": "def occWord {m : ℕ} (w : List (Fin m))"
+        },
+        {
+          "line": 22,
+          "text": "theorem eulerOne_smooth {k : ℕ} (i : Fin k)"
+        },
+        {
+          "line": 31,
+          "text": "theorem eulerWord_smooth {k : ℕ} (w : List (Fin k))"
+        },
+        {
+          "line": 42,
+          "text": "theorem occWord_ambient {k m : ℕ}"
+        },
+        {
+          "line": 71,
+          "text": "theorem family_all_word_ambient_bound {kStar : ℕ}"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5GroupedAmbientOccurrenceChain",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB5-HBFamily-AmbientChain/P5GroupedAmbientOccurrenceChain.lean",
+      "sha256": "e16705d18a76e01044ff814436f87d8e9e9cec972d81553276bfe1bc888e86cb",
+      "git_blob_sha1": "18131ba38e04f2e057cc1235d8332ddad79e67d8",
+      "bytes": 4299,
+      "suggested_install_path": "ImbalancedChen/P5GroupedAmbientOccurrenceChain.lean",
+      "role": "True grouped ambient chain predecessor",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5GroupedOccurrenceLogShift",
+        "Mathlib.Analysis.Calculus.Deriv.Prod",
+        "Mathlib.Analysis.Calculus.Deriv.Comp"
+      ],
+      "declarations": [
+        {
+          "line": 14,
+          "text": "theorem groupProducts_hasDerivAt {k m : ℕ}"
+        },
+        {
+          "line": 56,
+          "text": "theorem ambient_grouped_log_deriv {k m : ℕ}"
+        },
+        {
+          "line": 74,
+          "text": "theorem family_ambient_grouped_log_deriv {kStar m : ℕ}"
+        },
+        {
+          "line": 90,
+          "text": "theorem eulerWord_grouped_step {k m : ℕ}"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5MixedEulerTwoStepLeibniz",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB3-HBFamily-Calculus/P5MixedEulerTwoStepLeibniz.lean",
+      "sha256": "679e286793a45d694bd510527c789948523d7e9e7581dfa5be0fe8d1b7f89d50",
+      "git_blob_sha1": "0c844de6f5f8575df767d77879b3bac9f6782efd",
+      "bytes": 2417,
+      "suggested_install_path": "ImbalancedChen/P5MixedEulerTwoStepLeibniz.lean",
+      "role": "Original Euler calculus predecessor",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily",
+        "Mathlib.Analysis.Calculus.FDeriv.Mul",
+        "Mathlib.Analysis.Calculus.FDeriv.Add"
+      ],
+      "declarations": [
+        {
+          "line": 14,
+          "text": "theorem eulerOne_add {k : ℕ} (i : Fin k)"
+        },
+        {
+          "line": 21,
+          "text": "theorem eulerOne_mul {k : ℕ} (i : Fin k)"
+        },
+        {
+          "line": 33,
+          "text": "theorem eulerTwo_mul {k : ℕ} (i j : Fin k)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261028-PrimeProducts-PhaseB-HBFamily-AllRanks/P5AdmissibleAllRankIntegerGeometricFamily.lean",
+      "sha256": "ba364732afa8ef3c5f2de97eca598f40119ce2b925e77a9ef9edc2868ed254cb",
+      "git_blob_sha1": "8e8f2a6987e73f1d028f65555014d04ace8f2db7",
+      "bytes": 6644,
+      "suggested_install_path": "ImbalancedChen/P5AdmissibleAllRankIntegerGeometricFamily.lean",
+      "role": "Original real Family definition; its primitive mixedEuler field is not discharged by this inventory",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward"
+      ],
+      "declarations": [
+        {
+          "line": 15,
+          "text": "def eulerOne {k : ℕ} (i : Fin k) (f : (Fin k → ℝ) → ℝ) :"
+        },
+        {
+          "line": 19,
+          "text": "def eulerWord {k : ℕ} (w : List (Fin k))"
+        },
+        {
+          "line": 27,
+          "text": "structure Family (kStar : ℕ) where"
+        },
+        {
+          "line": 50,
+          "text": "def originalWeight {kStar : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 54,
+          "text": "def integerWeight {kStar : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 58,
+          "text": "theorem finite_original_prime_support {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 65,
+          "text": "def licence {kStar : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 73,
+          "text": "theorem rank_le {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 78,
+          "text": "theorem original_support {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 86,
+          "text": "theorem integer_weight_eq_original {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 90,
+          "text": "theorem smooth_profile {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 98,
+          "text": "theorem smooth_hb_pullback {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 113,
+          "text": "theorem per_chart_all_rank_atlas {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 132,
+          "text": "theorem list_prime_weight {kStar : ℕ} (A : Family kStar)"
+        },
+        {
+          "line": 139,
+          "text": "theorem branch_partition_all_rank {kStar : ℕ} (A : Family kStar)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5ActualOccurrencePlateauWordBudget",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30b/pp_derivatives/P5ActualOccurrencePlateauWordBudget.lean",
+      "sha256": "0580909eff67ebd68ed66cb87961884674f1a02548cb18fc4033d901fe1b9eb0",
+      "git_blob_sha1": "4bf6bc2363a3822894bd083ca450c413b44697a2",
+      "bytes": 10571,
+      "suggested_install_path": "ImbalancedChen/P5ActualOccurrencePlateauWordBudget.lean",
+      "role": "Actual compact plateau supplier",
+      "latest_P3_same_path_blob": "4bf6bc2363a3822894bd083ca450c413b44697a2",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30b/pp_derivatives/P5ActualOccurrencePlateauWordBudget.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5OccurrenceWordFourFactorLeibniz",
+        "Mathlib"
+      ],
+      "declarations": [
+        {
+          "line": 26,
+          "text": "def c (x : ℝ) : ℝ :="
+        },
+        {
+          "line": 30,
+          "text": "theorem c_smooth : ContDiff ℝ ∞ c := by"
+        },
+        {
+          "line": 37,
+          "text": "theorem c_bounds (x : ℝ) : 0 ≤ c x ∧ c x ≤ 1 := by"
+        },
+        {
+          "line": 42,
+          "text": "theorem c_eq_one {x : ℝ} (hx : x ∈ Icc (0 : ℝ) (Real.log 2)) : c x = 1 := by"
+        },
+        {
+          "line": 48,
+          "text": "theorem c_eq_zero_of_left {x : ℝ} (hx : x ≤ -1) : c x = 0 := by"
+        },
+        {
+          "line": 53,
+          "text": "theorem c_eq_zero_of_right {x : ℝ} (hx : Real.log 2 + 1 ≤ x) : c x = 0 := by"
+        },
+        {
+          "line": 58,
+          "text": "theorem c_nonzero_support {x : ℝ} (hx : c x ≠ 0) :"
+        },
+        {
+          "line": 67,
+          "text": "def plateau (m : ℕ) (z : Fin m → ℝ) : ℝ := ∏ a : Fin m, c (z a)"
+        },
+        {
+          "line": 69,
+          "text": "theorem plateau_smooth (m : ℕ) : ContDiff ℝ ∞ (plateau m) := by"
+        },
+        {
+          "line": 75,
+          "text": "theorem plateau_compact (m : ℕ) : HasCompactSupport (plateau m) := by"
+        },
+        {
+          "line": 88,
+          "text": "theorem plateau_rightClosed_atom {m : ℕ} (U : Fin m → ℝ) (n : Fin m → ℕ)"
+        },
+        {
+          "line": 108,
+          "text": "theorem occOne_compact {m : ℕ} (a : Fin m) (f : OccSpace m → ℝ)"
+        },
+        {
+          "line": 119,
+          "text": "theorem occWord_compact {m : ℕ} (w : List (Fin m))"
+        },
+        {
+          "line": 129,
+          "text": "theorem exists_compact_profile_bound {m : ℕ} (f : OccSpace m → ℝ)"
+        },
+        {
+          "line": 147,
+          "text": "def wordBank (m : ℕ) : ℕ → List (List (Fin m))"
+        },
+        {
+          "line": 152,
+          "text": "theorem mem_wordBank {m : ℕ} (r : ℕ) (w : List (Fin m)) :"
+        },
+        {
+          "line": 162,
+          "text": "theorem finite_profile_bounds {ι : Type*} {m : ℕ} (L : List ι)"
+        },
+        {
+          "line": 179,
+          "text": "theorem exists_plateau_word_budget (m r : ℕ) :"
+        },
+        {
+          "line": 194,
+          "text": "theorem exists_uniform_plateau_word_budget (kStar : ℕ) :"
+        },
+        {
+          "line": 211,
+          "text": "theorem family_chart_actual_plateau_bound {kStar : ℕ} (A : Family kStar) :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5OccurrenceEuclideanMixedIntegral",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30c/pp_fourier/P5OccurrenceEuclideanMixedIntegral.lean",
+      "sha256": "1fb8d68345325c54dcc3b75c0c96d865b9906c100fd49bbf31fdf207ca68bb68",
+      "git_blob_sha1": "2df047d95894ab5fbcc0acccd076b105dc628f4d",
+      "bytes": 12050,
+      "suggested_install_path": "ImbalancedChen/P5OccurrenceEuclideanMixedIntegral.lean",
+      "role": "Exact all-word complexification, Euclidean coordinate and L1 transport",
+      "latest_P3_same_path_blob": "2df047d95894ab5fbcc0acccd076b105dc628f4d",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30c/pp_fourier/P5OccurrenceEuclideanMixedIntegral.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5ActualEuclideanPhysicalFourier",
+        "ImbalancedChen.P5ActualOccurrencePlateauWordBudget",
+        "Mathlib.MeasureTheory.Integral.Pi"
+      ],
+      "declarations": [
+        {
+          "line": 21,
+          "text": "abbrev coordinates : V m ≃L[ℝ] (Fin m → ℝ) := EuclideanSpace.equiv (Fin m) ℝ"
+        },
+        {
+          "line": 23,
+          "text": "def euclideanLift (w : (Fin m → ℝ) → ℝ) (z : V m) : ℂ :="
+        },
+        {
+          "line": 26,
+          "text": "@[simp] theorem euclideanLift_toLp (w : (Fin m → ℝ) → ℝ) (z : Fin m → ℝ) :"
+        },
+        {
+          "line": 29,
+          "text": "theorem euclideanLift_smooth (w : (Fin m → ℝ) → ℝ) (hw : ContDiff ℝ ∞ w) :"
+        },
+        {
+          "line": 34,
+          "text": "theorem euclideanLift_compact (w : (Fin m → ℝ) → ℝ) (hw : HasCompactSupport w) :"
+        },
+        {
+          "line": 47,
+          "text": "theorem coordDeriv_euclideanLift (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 67,
+          "text": "theorem coordWord_euclideanLift (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 80,
+          "text": "theorem integral_norm_coordWord (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 90,
+          "text": "theorem occWord_tsupport_subset (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 107,
+          "text": "def plateauBox : Set (Fin m → ℝ) :="
+        },
+        {
+          "line": 110,
+          "text": "theorem plateauBox_compact : IsCompact (plateauBox m) :="
+        },
+        {
+          "line": 113,
+          "text": "theorem plateau_nonzero_mem_box (z : Fin m → ℝ) (hz : plateau m z ≠ 0) :"
+        },
+        {
+          "line": 123,
+          "text": "theorem window_support (G : (Fin m → ℝ) → ℝ) :"
+        },
+        {
+          "line": 130,
+          "text": "theorem window_tsupport (G : (Fin m → ℝ) → ℝ) :"
+        },
+        {
+          "line": 136,
+          "text": "def intervalOne (x : ℝ) : ℝ :="
+        },
+        {
+          "line": 139,
+          "text": "def boxMass : ℝ := volume.real (Icc (-1 : ℝ) (Real.log 2 + 1))"
+        },
+        {
+          "line": 141,
+          "text": "theorem boxMass_nonneg : 0 ≤ boxMass := ENNReal.toReal_nonneg"
+        },
+        {
+          "line": 143,
+          "text": "theorem intervalOne_integrable : Integrable intervalOne := by"
+        },
+        {
+          "line": 148,
+          "text": "theorem intervalOne_integral : (∫ x : ℝ, intervalOne x) = boxMass := by"
+        },
+        {
+          "line": 152,
+          "text": "def boxOne (z : Fin m → ℝ) : ℝ := ∏ a, intervalOne (z a)"
+        },
+        {
+          "line": 154,
+          "text": "theorem boxOne_nonneg (z : Fin m → ℝ) : 0 ≤ boxOne m z := by"
+        },
+        {
+          "line": 161,
+          "text": "theorem boxOne_eq_one (z : Fin m → ℝ) (hz : z ∈ plateauBox m) : boxOne m z = 1 := by"
+        },
+        {
+          "line": 166,
+          "text": "theorem boxOne_integrable : Integrable (boxOne m) := by"
+        },
+        {
+          "line": 171,
+          "text": "theorem boxOne_integral : (∫ z : Fin m → ℝ, boxOne m z) = boxMass ^ m := by"
+        },
+        {
+          "line": 178,
+          "text": "theorem occurrence_word_l1_le (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 203,
+          "text": "theorem twoWord_length (S : Finset (Fin m)) : (twoWord m S).length = 2 * S.card := by"
+        },
+        {
+          "line": 215,
+          "text": "theorem mixedD_euclideanLift_le (w : (Fin m → ℝ) → ℝ)"
+        },
+        {
+          "line": 242,
+          "text": "def dimensionBudget (kStar : ℕ) : ℝ :="
+        },
+        {
+          "line": 245,
+          "text": "theorem dimensionBudget_nonneg (kStar : ℕ) : 0 ≤ dimensionBudget kStar := by"
+        },
+        {
+          "line": 250,
+          "text": "theorem dimension_factor_le {kStar m : ℕ} (hm : m ≤ 6 * kStar) :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5ActualAllRankOccurrenceFourierBridge",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30c/pp_fourier/P5ActualAllRankOccurrenceFourierBridge.lean",
+      "sha256": "9906a7d667288e1a00adbd47a1f53e11bd4ad0556d4631807dc2124bb20406a2",
+      "git_blob_sha1": "4b9144c8998c830c76f223932cabbd94374cafb7",
+      "bytes": 21380,
+      "suggested_install_path": "ImbalancedChen/P5ActualAllRankOccurrenceFourierBridge.lean",
+      "role": "Existing actual-chart mixedD and Fourier consumer, retaining Family premise",
+      "latest_P3_same_path_blob": "4b9144c8998c830c76f223932cabbd94374cafb7",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30c/pp_fourier/P5ActualAllRankOccurrenceFourierBridge.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5OccurrenceEuclideanMixedIntegral",
+        "ImbalancedChen.P5ActualEtaPsiOccurrenceBudget",
+        "ImbalancedChen.PrimeProductsMellinExactMeanInsertion"
+      ],
+      "declarations": [
+        {
+          "line": 27,
+          "text": "def actualEuclideanChart (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 31,
+          "text": "theorem actualEuclideanChart_smooth (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 36,
+          "text": "theorem actualEuclideanChart_compact (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 41,
+          "text": "theorem actualChart_tsupport_box (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 51,
+          "text": "theorem exists_actual_mixedD_budget (A : Family kStar) :"
+        },
+        {
+          "line": 78,
+          "text": "def actualAmplitude (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 83,
+          "text": "theorem actualAmplitude_integrable (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 90,
+          "text": "theorem actualAmplitude_l1_le (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 112,
+          "text": "theorem exists_actual_fourier_budgets (A : Family kStar) :"
+        },
+        {
+          "line": 140,
+          "text": "def integerGroupProduct {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 144,
+          "text": "def logOccurrence (U : Fin m → ℝ) (n : Fin m → ℕ) : Fin m → ℝ :="
+        },
+        {
+          "line": 151,
+          "text": "def occurrenceMode (U : Fin m → ℝ) (n : Fin m → ℕ) (ξ : Fin m → ℝ) : ℂ :="
+        },
+        {
+          "line": 154,
+          "text": "theorem physicalPhase_occurrenceMode (U : Fin m → ℝ) (n : Fin m → ℕ)"
+        },
+        {
+          "line": 162,
+          "text": "theorem groupProduct_logOccurrence {k m : ℕ} (owner : Fin m → Fin k)"
+        },
+        {
+          "line": 180,
+          "text": "theorem complete_product_grouped {k m : ℕ} (owner : Fin m → Fin k) (n : Fin m → ℕ) :"
+        },
+        {
+          "line": 194,
+          "text": "def integerChartWeight (A : Family kStar) (T : ℕ) (k : Fin (kStar + 1))"
+        },
+        {
+          "line": 203,
+          "text": "theorem actualEuclideanChart_integer_atom (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 220,
+          "text": "theorem integerChartWeight_fourier (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 243,
+          "text": "theorem actual_integer_mode_integrable (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 256,
+          "text": "theorem same_rho_actual_fourier_integral {ι : Type*}"
+        },
+        {
+          "line": 296,
+          "text": "theorem same_rho_count_mean_fourier {ι : Type*}"
+        },
+        {
+          "line": 324,
+          "text": "theorem same_rho_hb_weighted_tensor_integral {ι : Type*}"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P5ActualEuclideanPhysicalFourier",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30b/pp_fourier/P5ActualEuclideanPhysicalFourier.lean",
+      "sha256": "f7eef1aee1c97306962bda55e634c1a3cbfcbae4ef106afdb7302d7f4519590c",
+      "git_blob_sha1": "25d604dac24d2ec9125100ac1231de803767c57d",
+      "bytes": 13802,
+      "suggested_install_path": "ImbalancedChen/P5ActualEuclideanPhysicalFourier.lean",
+      "role": "Existing normalization and genuine physical Fourier transport",
+      "latest_P3_same_path_blob": "25d604dac24d2ec9125100ac1231de803767c57d",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261028-resume-30b/pp_fourier/P5ActualEuclideanPhysicalFourier.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P5AllRankMixedFourierPointwise",
+        "ImbalancedChen.P5AllRankCauchyCubeTail",
+        "Mathlib.MeasureTheory.Measure.Haar.NormedSpace",
+        "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+        "Mathlib.Analysis.Fourier.Inversion"
+      ],
+      "declarations": [
+        {
+          "line": 27,
+          "text": "def frequencyScale : ℝ := 2 * Real.pi"
+        },
+        {
+          "line": 29,
+          "text": "theorem frequencyScale_pos : 0 < frequencyScale := by"
+        },
+        {
+          "line": 33,
+          "text": "theorem frequencyScale_ne_zero : frequencyScale ≠ 0 := frequencyScale_pos.ne'"
+        },
+        {
+          "line": 38,
+          "text": "def normalizedFrequency (ξ : Fin m → ℝ) : V m :="
+        },
+        {
+          "line": 41,
+          "text": "def physicalCoordinates (ν : V m) : Fin m → ℝ :="
+        },
+        {
+          "line": 44,
+          "text": "@[simp] theorem physical_coordinate_normalized (ξ : Fin m → ℝ) (i : Fin m) :"
+        },
+        {
+          "line": 49,
+          "text": "@[simp] theorem normalized_physicalCoordinates (ν : V m) :"
+        },
+        {
+          "line": 57,
+          "text": "theorem integral_toLp {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]"
+        },
+        {
+          "line": 64,
+          "text": "theorem integrable_toLp {E : Type*} [NormedAddCommGroup E]"
+        },
+        {
+          "line": 75,
+          "text": "theorem integral_normalizedFrequency {E : Type*} [NormedAddCommGroup E]"
+        },
+        {
+          "line": 88,
+          "text": "theorem normalized_integral_normalizedFrequency {E : Type*}"
+        },
+        {
+          "line": 95,
+          "text": "theorem integrable_normalizedFrequency {E : Type*} [NormedAddCommGroup E]"
+        },
+        {
+          "line": 103,
+          "text": "def dotPhysical (ξ : Fin m → ℝ) (z : V m) : ℝ := ∑ i, ξ i * z i"
+        },
+        {
+          "line": 105,
+          "text": "theorem scaled_inner_eq_dot (ξ : Fin m → ℝ) (z : V m) :"
+        },
+        {
+          "line": 114,
+          "text": "theorem scaled_inner_right_eq_dot (ξ : Fin m → ℝ) (z : V m) :"
+        },
+        {
+          "line": 121,
+          "text": "def physicalFourier (f : V m → ℂ) (ξ : Fin m → ℝ) : ℂ :="
+        },
+        {
+          "line": 125,
+          "text": "theorem physicalFourier_eq_integral (f : V m → ℂ) (ξ : Fin m → ℝ) :"
+        },
+        {
+          "line": 138,
+          "text": "def physicalPhase (z : V m) (ξ : Fin m → ℝ) : ℂ :="
+        },
+        {
+          "line": 141,
+          "text": "theorem physicalPhase_eq_native (z : V m) (ξ : Fin m → ℝ) :"
+        },
+        {
+          "line": 149,
+          "text": "theorem physicalPhase_continuous (z : V m) : Continuous (physicalPhase m z) := by"
+        },
+        {
+          "line": 153,
+          "text": "theorem physicalPhase_norm (z : V m) (ξ : Fin m → ℝ) :"
+        },
+        {
+          "line": 159,
+          "text": "theorem euclidean_fourier_integrable (f : V m → ℂ)"
+        },
+        {
+          "line": 166,
+          "text": "theorem physicalFourier_integrable (f : V m → ℂ)"
+        },
+        {
+          "line": 174,
+          "text": "theorem physicalFourier_pointwise (f : V m → ℂ)"
+        },
+        {
+          "line": 188,
+          "text": "theorem mixedD_nonneg (f : V m → ℂ) : 0 ≤ mixedD m f := by"
+        },
+        {
+          "line": 194,
+          "text": "theorem physicalFourier_l1_identity (f : V m → ℂ) :"
+        },
+        {
+          "line": 200,
+          "text": "theorem physicalFourier_normalized_l1_le (f : V m → ℂ)"
+        },
+        {
+          "line": 211,
+          "text": "theorem euclidean_fourier_l1_le (f : V m → ℂ)"
+        },
+        {
+          "line": 220,
+          "text": "theorem physical_inverse (f : V m → ℂ)"
+        },
+        {
+          "line": 241,
+          "text": "def truncatedPhysical (f : V m → ℂ) (H : ℝ) (z : V m) : ℂ :="
+        },
+        {
+          "line": 248,
+          "text": "theorem actual_uniform_truncation_error (f : V m → ℂ)"
+        },
+        {
+          "line": 263,
+          "text": "theorem jacobian_rank_zero {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]"
+        },
+        {
+          "line": 269,
+          "text": "theorem outsideCube_rank_zero (H : ℝ) : outsideCube 0 H = ∅ := by"
+        },
+        {
+          "line": 277,
+          "text": "theorem truncated_rank_zero (f : V 0 → ℂ)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P3ActualHBChildMixedFourier",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t06_actual_mixed_fourier/P3ActualHBChildMixedFourier.lean",
+      "sha256": "88da0602726a095332e8f2a32510eacf2afd9ccb2ab303c78bc271cb7fc97ab1",
+      "git_blob_sha1": "b88a9e111db458be40e66cbdb55cfa674bba2447",
+      "bytes": 28414,
+      "suggested_install_path": "ImbalancedChen/P3ActualHBChildMixedFourier.lean",
+      "role": "Existing actual child conversion, translated bases and coupled arbitrary-word refined chart",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P3HBSmoothLogFiniteDerivatives",
+        "ImbalancedChen.P5ActualAllRankOccurrenceFourierBridge"
+      ],
+      "declarations": [
+        {
+          "line": 41,
+          "text": "def childGate (t : ℝ) (a : Fin 3) : ℝ :="
+        },
+        {
+          "line": 46,
+          "text": "def childLog (a : Fin 3) (u : ℝ) : ℝ :="
+        },
+        {
+          "line": 49,
+          "text": "theorem childLog_ofReal (a : Fin 3) (u : ℝ) :"
+        },
+        {
+          "line": 54,
+          "text": "theorem chi_smooth : ContDiff ℝ ∞ chi := contDiff_const.sub eta_smooth"
+        },
+        {
+          "line": 56,
+          "text": "theorem childGate_smooth (a : Fin 3) : ContDiff ℝ ∞ (fun t => childGate t a) := by"
+        },
+        {
+          "line": 66,
+          "text": "theorem childLog_smooth (a : Fin 3) : ContDiff ℝ ∞ (childLog a) :="
+        },
+        {
+          "line": 69,
+          "text": "theorem childLog_sum (u : ℝ) : (∑ a : Fin 3, childLog a u) = psiLog u := by"
+        },
+        {
+          "line": 78,
+          "text": "theorem childLog_iterated_ofReal (a : Fin 3) (n : ℕ) :"
+        },
+        {
+          "line": 95,
+          "text": "theorem childLog_derivative_zero_outside (a : Fin 3) (n : ℕ) {u : ℝ}"
+        },
+        {
+          "line": 111,
+          "text": "theorem exists_childLog_global_budget (K : ℕ) :"
+        },
+        {
+          "line": 130,
+          "text": "def childTensor {m : ℕ} (child : Fin m → Fin 3) : (Fin m → ℝ) → ℝ :="
+        },
+        {
+          "line": 133,
+          "text": "theorem childTensor_eq_product {m : ℕ} (child : Fin m → Fin 3) (z : Fin m → ℝ) :"
+        },
+        {
+          "line": 139,
+          "text": "theorem six_childTensor_eq_original (label : Fin 6 → ℕ)"
+        },
+        {
+          "line": 152,
+          "text": "theorem six_childTensor_eq_smoothTensor (label : Fin 6 → ℕ)"
+        },
+        {
+          "line": 168,
+          "text": "theorem occWord_childTensor {m : ℕ} (child : Fin m → Fin 3)"
+        },
+        {
+          "line": 193,
+          "text": "theorem childTensor_smooth {m : ℕ} (child : Fin m → Fin 3) :"
+        },
+        {
+          "line": 202,
+          "text": "def childBox (m : ℕ) : Set (Fin m → ℝ) :="
+        },
+        {
+          "line": 205,
+          "text": "theorem childTensor_support {m : ℕ} (child : Fin m → Fin 3) :"
+        },
+        {
+          "line": 217,
+          "text": "theorem childTensor_compact {m : ℕ} (child : Fin m → Fin 3) :"
+        },
+        {
+          "line": 221,
+          "text": "theorem childTensor_mixed_support {m : ℕ} (child : Fin m → Fin 3)"
+        },
+        {
+          "line": 228,
+          "text": "theorem childTensor_word_bound {m : ℕ} (child : Fin m → Fin 3)"
+        },
+        {
+          "line": 242,
+          "text": "theorem childTensor_mixed_integral_bound {m : ℕ} (child : Fin m → Fin 3)"
+        },
+        {
+          "line": 270,
+          "text": "def shiftedChildTensor {m : ℕ} (offset : Fin m → ℝ) (child : Fin m → Fin 3) :"
+        },
+        {
+          "line": 274,
+          "text": "theorem shiftedChildTensor_eq_product {m : ℕ} (offset : Fin m → ℝ)"
+        },
+        {
+          "line": 282,
+          "text": "theorem shiftedChildTensor_children_sum {m : ℕ} (offset : Fin m → ℝ)"
+        },
+        {
+          "line": 291,
+          "text": "theorem occWord_shiftedChildTensor {m : ℕ} (offset : Fin m → ℝ)"
+        },
+        {
+          "line": 316,
+          "text": "theorem shiftedChildTensor_smooth {m : ℕ} (offset : Fin m → ℝ)"
+        },
+        {
+          "line": 326,
+          "text": "theorem shiftedChildTensor_word_bound {m : ℕ} (offset : Fin m → ℝ)"
+        },
+        {
+          "line": 341,
+          "text": "theorem shiftedChildTensor_physical {m : ℕ} (label : Fin m → ℕ)"
+        },
+        {
+          "line": 359,
+          "text": "theorem six_shiftedChildTensor_physical (label : Fin 6 → ℕ)"
+        },
+        {
+          "line": 369,
+          "text": "def refinedChart {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 375,
+          "text": "theorem refinedChart_smooth {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 381,
+          "text": "theorem refinedChart_children_sum {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 389,
+          "text": "theorem refinedChart_support {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 399,
+          "text": "theorem refinedChart_compact {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 406,
+          "text": "theorem refinedChart_tsupport_box {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 416,
+          "text": "theorem occWord_refinedChart_exact {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 431,
+          "text": "theorem occurrence_one_bound {m : ℕ} (w : List (Fin m)) (z : Fin m → ℝ) :"
+        },
+        {
+          "line": 447,
+          "text": "theorem exists_refinedChart_word_budget {kStar : ℕ} (A : Family kStar) :"
+        },
+        {
+          "line": 485,
+          "text": "def refinedEuclideanChart {kStar m : ℕ} (A : Family kStar) (T : ℕ)"
+        },
+        {
+          "line": 493,
+          "text": "theorem exists_refined_fourier_budgets {kStar : ℕ} (A : Family kStar) :"
+        },
+        {
+          "line": 546,
+          "text": "theorem refinedEuclideanChart_six_integer_atom {kStar : ℕ} (A : Family kStar)"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P3ActualUpperPairChildFourier",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t06_actual_mixed_fourier/P3ActualUpperPairChildFourier.lean",
+      "sha256": "56a13fc4c39981762cb47a2f4916558889299d29fb280cb1287824a98f24eb86",
+      "git_blob_sha1": "62a07f3a8bff5826ec95b525d48c3cc3944a2e9b",
+      "bytes": 12813,
+      "suggested_install_path": "ImbalancedChen/P3ActualUpperPairChildFourier.lean",
+      "role": "Existing concrete legal-width real rank-two refined chart consumer",
+      "latest_P3_same_path_blob": null,
+      "latest_P3_exact_blob_paths": [],
+      "latest_P3_contains_exact_bytes": false,
+      "direct_imports": [
+        "ImbalancedChen.P3ActualHBChildMixedFourier",
+        "ImbalancedChen.P4BArbitraryWidthUpperPairOccurrence"
+      ],
+      "declarations": [
+        {
+          "line": 35,
+          "text": "def refinedUpper {d : ℕ} (b κ width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 40,
+          "text": "def refinedUpperEuclidean {d : ℕ} (b κ width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 45,
+          "text": "theorem refinedUpper_children_sum {d : ℕ} (b κ width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 52,
+          "text": "theorem refinedUpper_support {d : ℕ} (b κ width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 66,
+          "text": "theorem refinedUpper_integer_atom {d : ℕ} {b κ ν r width : ℝ}"
+        },
+        {
+          "line": 92,
+          "text": "theorem exists_refinedUpper_word_width_budget :"
+        },
+        {
+          "line": 138,
+          "text": "theorem exists_refinedUpper_fourier_width_budget :"
+        },
+        {
+          "line": 196,
+          "text": "theorem exists_refinedUpper_resolution_polylog_budget (B : ℕ) :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    },
+    {
+      "module": "ImbalancedChen.P4BArbitraryWidthUpperPairOccurrence",
+      "source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261102-resume-30j/upper_pp/P4BArbitraryWidthUpperPairOccurrence.lean",
+      "sha256": "b606451c20be2eadab5bcaf3d427e38038589a45be81748524a30ec16283fac0",
+      "git_blob_sha1": "5a5803b3c65522991a2f4efabe6448eef6dbf04e",
+      "bytes": 10244,
+      "suggested_install_path": "ImbalancedChen/P4BArbitraryWidthUpperPairOccurrence.lean",
+      "role": "Existing actual rank-two ambient occurrence supplier, no abstract Family input",
+      "latest_P3_same_path_blob": "5a5803b3c65522991a2f4efabe6448eef6dbf04e",
+      "latest_P3_exact_blob_paths": [
+        "docs/source-only/20261102-resume-30j/upper_pp/P4BArbitraryWidthUpperPairOccurrence.lean"
+      ],
+      "latest_P3_contains_exact_bytes": true,
+      "direct_imports": [
+        "ImbalancedChen.P4BArbitraryWidthUpperPairHBNormalization",
+        "ImbalancedChen.P5ActualUpperPairNormalizedOccurrence"
+      ],
+      "declarations": [
+        {
+          "line": 25,
+          "text": "def groupChart (b kappa width : ℝ) (N : ℕ) (kappa0 : ℝ)"
+        },
+        {
+          "line": 30,
+          "text": "def occurrenceChart {m : ℕ} (b kappa width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 36,
+          "text": "theorem occurrenceChart_eq_groupChart {m : ℕ} (b kappa width : ℝ)"
+        },
+        {
+          "line": 48,
+          "text": "theorem groupChart_nat (N : ℕ) (kappa0 : ℝ) (R : Fin 2 → ℝ) (u : Fin 2 → ℕ) :"
+        },
+        {
+          "line": 59,
+          "text": "theorem grouped_profile_smooth {m : ℕ} (N : ℕ)"
+        },
+        {
+          "line": 67,
+          "text": "theorem occurrenceChart_smooth {m : ℕ} (N : ℕ)"
+        },
+        {
+          "line": 76,
+          "text": "theorem occurrenceChart_integer_atom {m : ℕ} (N : ℕ)"
+        },
+        {
+          "line": 93,
+          "text": "theorem occurrenceChart_tsupport_box {m : ℕ} (b kappa width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 99,
+          "text": "theorem occurrenceChart_compact {m : ℕ} (b kappa width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 108,
+          "text": "theorem exists_occurrenceChart_width_budget :"
+        },
+        {
+          "line": 150,
+          "text": "def euclideanChart {m : ℕ} (b kappa width : ℝ) (N : ℕ)"
+        },
+        {
+          "line": 156,
+          "text": "theorem exists_actual_mixedD_width_budget :"
+        }
+      ],
+      "claim": "REUSED_UNCHANGED_SOURCE_ONLY_NOT_COMPILED_OR_KERNEL_VERIFIED"
+    }
+  ],
+  "latest_P3_generic_sources_inspected_unchanged": [
+    {
+      "path": "docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBOriginalGroupCoordinateMixed.lean",
+      "commit": "a29bd6b4cba6d1b7e8cd48165f3a0f76f040082b",
+      "git_blob_sha1": "5b20c69e5d285eb427cba8a4ff1cfc776926a094",
+      "sha256": "ed66909da656c3009541850e20b93181fb848a0f093b0411d7e5d98ed21c2603",
+      "bytes": 9264,
+      "modified": false
+    },
+    {
+      "path": "docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBOriginalGroupLeibnizAllocation.lean",
+      "commit": "a29bd6b4cba6d1b7e8cd48165f3a0f76f040082b",
+      "git_blob_sha1": "a87933a0644a85a165a5aa95ebf1c3f9d71a000e",
+      "sha256": "4e2d9db54dc6587cf163e4a9e36b84cf546d240b326102fdeca05f2259261ef6",
+      "bytes": 6261,
+      "modified": false
+    },
+    {
+      "path": "docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBOriginalGroupProductFirstDerivative.lean",
+      "commit": "a29bd6b4cba6d1b7e8cd48165f3a0f76f040082b",
+      "git_blob_sha1": "82a35489785898712c344ef783b909a5b5c86475",
+      "sha256": "bb82bb773514ff3d723bb7a64cdb0254d563c41eb6aecd380b48706987c24ee4",
+      "bytes": 9261,
+      "modified": false
+    },
+    {
+      "path": "docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBOriginalGroupJetLeibnizStep.lean",
+      "commit": "a29bd6b4cba6d1b7e8cd48165f3a0f76f040082b",
+      "git_blob_sha1": "af1823b9adf72d3b8f909dd5768e49a347a1ae9c",
+      "sha256": "2d84f821ee1c7a75466d190befcfd0edf15c4b1d147ec7893f90b1e86b2019d9",
+      "bytes": 9146,
+      "modified": false
+    }
+  ],
+  "manuscript_sources": [
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "9731290e8f53cffda44129906cde6a965eaa869b",
+      "path": "proof-library/source/distribution-prime-product-completion-20261010.txt",
+      "sha256": "a953b3233c1249b4791830da33b76a58b19ca110a5e1b5b6172b3248a00053e1",
+      "git_blob_sha1": "5e59d2881181b29446e5786584d6442e7a96fe04"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "9731290e8f53cffda44129906cde6a965eaa869b",
+      "path": "proof-library/source/actual-k-distribution-joint-audit.tex",
+      "sha256": "e435985ab5c74c551da8f1c7e91e916831464dbf3232a03328c945078628ecf6",
+      "git_blob_sha1": "01c7374066c0da735d784018edb2657da786c775"
+    }
+  ],
+  "existing_scope_reviews": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30c/reviews/pp_transfer.md",
+      "sha256": "dc756f330b00c9310103e849f2622e6a02fe028e7507775262ca070ec8b479c6",
+      "git_blob_sha1": "7cd2709de294832d827e808f08551790bb07a0d5",
+      "bytes": 18489
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261028-resume-30c/reviews/pp_transfer.json",
+      "sha256": "903442f3e53b13d419173a48b735181cf0498d504e1f836948101a791beff733",
+      "git_blob_sha1": "b1768469860cc10e72da9fe41af44f37653c0d91",
+      "bytes": 61976
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t06_actual_mixed_fourier/REGISTRY.json",
+      "sha256": "6c635f8afa7df62516a44ffdcc15e3377cebf3eb6acf0251b5f7af769a7a12d1",
+      "git_blob_sha1": "9870cde2209978db87db686305318b63161755ae",
+      "bytes": 18532
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t06_actual_mixed_fourier/REPORT.md",
+      "sha256": "1b981e7593b97fec26a2625f91b30a30e2127012656232d100ee63a9a688cc07",
+      "git_blob_sha1": "e24837893be5ff238a27f79ceb42808a7e4ae12d",
+      "bytes": 11287
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t10_review_analytic_kernel/REGISTRY.json",
+      "sha256": "f708bc2d07106c926cb6693f01f0a002ab3837fe720c0eaa129ffd2b9bd4b0ec",
+      "git_blob_sha1": "2f82dd31e6565262b5936722e07403d3a526adb7",
+      "bytes": 52816
+    }
+  ],
+  "completeness_boundary": "Named source reuse map, not an exhaustive installation/build manifest. Exact project and Mathlib closure still require installation and remote verification.",
+  "no_new_compile_or_kernel_credit": true,
+  "whole_PP_closed": false,
+  "whole_original_W_membership_closed": false,
+  "arbitrary_overlapping_J_generic_P3_claim_closed": false,
+  "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "lean_pin": "leanprover/lean4:v4.33.0-rc1",
+  "verification_performed": [
+    "source reads",
+    "immutable local Git reads",
+    "SHA256/Git-blob identity metadata",
+    "existing source-review receipt reuse"
+  ],
+  "prohibited_execution_performed": false
+}

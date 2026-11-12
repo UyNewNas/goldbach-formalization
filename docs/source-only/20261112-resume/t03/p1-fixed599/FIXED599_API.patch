@@ -1,0 +1,99 @@
+--- a/ImbalancedChen/P4AOriginalFull87UnilateralStoppedLevel.lean
++++ b/ImbalancedChen/P4AOriginalFull87UnilateralStoppedLevel.lean
+@@ -80,7 +80,7 @@
+ 
+ /-- Keep the provenance of the extra factors. They were selected from this
+ literal post-fifth suffix, so each is at most the fifth prime. -/
+-private theorem stopped_extension {R : Bool → List ℕ → Bool} (p : ℕ)
++theorem stopped_extension {R : Bool → List ℕ → Bool} (p : ℕ)
+     (pre : List ℕ) (s : Bool) (mass : ℝ) (rest : List ℕ)
+     (hr : ∀ x ∈ rest, x ≤ p) (t : StoppedTerminal ℕ)
+     (ht : t ∈ stoppedTerminals 8 R (fun _ => 1) pre s mass rest) :
+@@ -112,7 +112,7 @@
+             exact hr x (by simp)
+         · simp [hg] at htake
+ 
+-private theorem prod_le_pow (p : ℕ) (xs : List ℕ) (h : ∀ x ∈ xs, x ≤ p) :
++theorem prod_le_pow (p : ℕ) (xs : List ℕ) (h : ∀ x ∈ xs, x ≤ p) :
+     xs.prod ≤ p^xs.length := by
+   induction xs with
+   | nil => simp
+--- a/ImbalancedChen/P4AOriginalFull87FrontierLeafCharge.lean
++++ b/ImbalancedChen/P4AOriginalFull87FrontierLeafCharge.lean
+@@ -14,7 +14,7 @@
+ open P4AOriginalFull87LicensedOutsideThreeInvoices (licensedFrontier)
+ open P4AOriginalFull87LicensedSixthRealization (FilteredSourceSupply)
+ 
+-private theorem charge_zero_on_live (N cap : ℕ) (w L : ℝ) (X : ℕ) (F : ℕ → ℝ)
++theorem charge_zero_on_live (N cap : ℕ) (w L : ℝ) (X : ℕ) (F : ℕ → ℝ)
+     (leaf : FirstExitLeaf ℕ)
+     (hlive : ∀ a : ℕ, (if leaf.positive then actualSmallRosserPlus N cap w L a
+       else actualSmallRosserMinus N cap w L a) ≠ 0 → a * leaf.selected.prod ≤ X) :
+--- a/ImbalancedChen/P4AOriginalFull87FrontierInvoicesZero.lean
++++ b/ImbalancedChen/P4AOriginalFull87FrontierInvoicesZero.lean
+@@ -1,4 +1,4 @@
+-import ImbalancedChen.P4AOriginalFull87FrontierLeafCharge
++import ImbalancedChen.P4AOriginalFull87Fixed599Charges
+ import ImbalancedChen.P4AOriginalFull87FrontierLeafMembership
+ import ImbalancedChen.P4AOriginalFull87UnilateralStoppedLevel
+ 
+@@ -42,12 +42,13 @@
+ /-- Licensed/outside is supported on its own two filtered occurrence lists.
+ Raw/outside has different lists. The middle sum has exactly the three
+ original side-matched leaf charges in each of the 87 source cells. -/
+-theorem actual_frontier_invoices_zero (s r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
++theorem actual_frontier_invoices_at_fixed_cuts (s r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+     (N cap : ℕ) (w z epsilon : ℝ) (hsupply : FilteredSourceSupply s r n e q om)
+     (he : 0 ≤ ((data e q om).e : ℝ)) (hN : 1 < (N : ℝ))
+     (hw : w ≤ (N : ℝ)^(53/13824 : ℝ)) (hz : (N : ℝ)^mu ≤ z) (hzcap : z ≤ (cap : ℝ))
+-    (he0 : 0 < epsilon) (heps : epsilon ≤ 1/500)
+-    (X : ℕ) (hX : (N : ℝ)^(3/5 : ℝ) ≤ (X : ℝ)) (F : ℕ → ℝ) :
++    (he0 : 0 < epsilon) (X : ℕ)
++    (hcut : (epsilon ≤ 1/500 ∧ (N : ℝ)^(3/5 : ℝ) ≤ (X : ℝ)) ∨
++      (epsilon ≤ 1/1000 ∧ (N : ℝ)^(599/1000 : ℝ) ≤ ((X+1 : ℕ) : ℝ))) (F : ℕ → ℝ) :
+     rawOutsideHighQInvoice (width r) e q om N cap w z ((N : ℝ)^epsilon) X F = 0 ∧
+     actualProducerThreeClassLeafBill (width r) n e q om N cap w z ((N : ℝ)^epsilon) X F = 0 ∧
+     licensedOutsideHighQInvoice (width r) n e q om N cap w z ((N : ℝ)^epsilon) X F = 0 := by
+@@ -57,12 +58,18 @@
+   let licF := licensedFrontier (width r) n e q om N cap w z
+   let charge := leafHighQCharge N cap w L X F
+   have rawC (u : FirstExitDepthState ℕ) (hu : u ∈ rawF) :
+-      ∀ leaf ∈ rawRetainedLeaves e q om N u, charge leaf = 0 :=
+-    raw_charge_zero e q om N cap w z epsilon he hN heps X hX F u hu
++      ∀ leaf ∈ rawRetainedLeaves e q om N u, charge leaf = 0 := by
++    rcases hcut with ⟨heps,hX⟩ | ⟨heps,hX⟩
++    · exact raw_charge_zero e q om N cap w z epsilon he hN heps X hX F u hu
++    · exact P4AOriginalFull87Fixed599Charges.raw_charge_599
++        e q om N cap w z epsilon he hN heps X hX F u hu
+   have licC (u : FirstExitDepthState ℕ) (hu : u ∈ licF) :
+-      ∀ leaf ∈ licensedRetainedLeaves (width r) n e q om N u, charge leaf = 0 :=
+-    licensed_charge_zero s r n e q om N cap w z epsilon hsupply he hN hw hz hzcap
+-      he0 heps X hX F u hu
++      ∀ leaf ∈ licensedRetainedLeaves (width r) n e q om N u, charge leaf = 0 := by
++    rcases hcut with ⟨heps,hX⟩ | ⟨heps,hX⟩
++    · exact licensed_charge_zero s r n e q om N cap w z epsilon hsupply he hN hw hz hzcap
++        he0 heps X hX F u hu
++    · exact P4AOriginalFull87Fixed599Charges.licensed_charge_599
++        s r n e q om N cap w z epsilon hsupply he hN hw hz hzcap heps X hX F u hu
+   have rawAbs (u : FirstExitDepthState ℕ) (hu : u ∈ rawF) :
+       |rawSignedHighQ e q om N cap w L X F u| = 0 := by
+     have h := raw_only_abs_le_actual_leaf_charge e q om N cap w L X F u
+@@ -140,6 +147,18 @@
+       apply sum_zero_on
+       intro u hu
+       exact licAbs u (List.mem_filter.mp (List.mem_filter.mp hu).1).1
++
++theorem actual_frontier_invoices_zero (s r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
++    (N cap : ℕ) (w z epsilon : ℝ) (hsupply : FilteredSourceSupply s r n e q om)
++    (he : 0 ≤ ((data e q om).e : ℝ)) (hN : 1 < (N : ℝ))
++    (hw : w ≤ (N : ℝ)^(53/13824 : ℝ)) (hz : (N : ℝ)^mu ≤ z) (hzcap : z ≤ (cap : ℝ))
++    (he0 : 0 < epsilon) (heps : epsilon ≤ 1/500)
++    (X : ℕ) (hX : (N : ℝ)^(3/5 : ℝ) ≤ (X : ℝ)) (F : ℕ → ℝ) :
++    rawOutsideHighQInvoice (width r) e q om N cap w z ((N : ℝ)^epsilon) X F = 0 ∧
++    actualProducerThreeClassLeafBill (width r) n e q om N cap w z ((N : ℝ)^epsilon) X F = 0 ∧
++    licensedOutsideHighQInvoice (width r) n e q om N cap w z ((N : ℝ)^epsilon) X F = 0 :=
++  actual_frontier_invoices_at_fixed_cuts s r n e q om N cap w z epsilon hsupply he hN
++    hw hz hzcap he0 X (Or.inl ⟨heps,hX⟩) F
+ 
+ /-- No high-q discrepancy remains in the full raw-versus-licensed P1
+ functional. The theorem is uniform in F and uses the same small sieve level. -/

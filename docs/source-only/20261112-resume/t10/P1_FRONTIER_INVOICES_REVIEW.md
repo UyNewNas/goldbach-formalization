@@ -1,0 +1,10 @@
+# P1 第八前沿三笔绝对费用
+
+**四份源码通过限定数学审查。** 在原共同许可日程、`0 < ε ≤ 1/500`、`L = N^ε`、`N^(3/5) ≤ X` 的条件下，原 raw outside、87 个源 cell 的 producer three-class、licensed outside 三笔费用各等于零。结论对任意同一个 `F : ℕ → ℝ` 成立。接上 `a41918df` 的预八单侧结论后，相同参数的整个 raw 与 licensed 物理泛函在严格高模数测试上的差等于零。本次为源码审查，远端编译和 kernel 核验仍待完成。
+
+1. `raw_frontier_leaf_product_lt` 从真实 rank-eight frontier 出发。每个到达前缀满足进入时的 sixth admissibility，故其乘积小于 `N^(299/500)`。对非空后继，owner 保持不变。无 owner 的分支使用原 sixth 指数，有 owner 的分支使用原 `newCap` 和 `point8`，两者分别有上界。若原前缀在固定后继层 `D` 可接纳，直接调用原 ordinary terminal admissibility。若不可接纳，真实第八步为偶正号，下次 take 会在奇负号检查完整前缀。由于剩余元素是原严格降序列表中的素数，任何可接纳的第一次 take 都会由 `ordinaryRosserPrefixAdmissible_tail` 推出原前缀可接纳。故此时只可能逐项 skip，留下原前缀。两种情况都给每个真实 raw retained leaf 的乘积上界，无需比较进入层和后继层的大小。
+2. `charge_zero_on_live` 展开原 `leafHighQCharge`，其中有 `|leaf.value|`、实际 small support 全求和、取决于叶自身符号的 `|β_±(a)|`，以及严格测试 `[X < a·prod] |F(a·prod)|`。零 beta 项直接消失。其余项的 `a < N^ε` 来自对应符号的实际支持定理，配合各自 retained leaf 的乘积上界，完整模数达不到测试阈值。licensed 侧使用同一个 `s,r,n,e,q,om,N,cap,w,z` 的原 `actual_post8_live_full_modulus_lt_three_fifths` 以及同一 `FilteredSourceSupply`。
+3. `copies_mem` 在实际 `pairedCopies_signed` 中分别代入点示性函数和零函数，得到 raw 和 licensed 两份独立的非负次数等式，保留重复 occurrence。`tagged_leaf_mem` 按真实 first-disagreement 递归处理共同 skip、共同 take 与两种单侧 take。tag 中的 side 给出相应的真 retained leaf，原 `exclusiveLeafCost` 就是该叶的绝对费用。raw 与 licensed 的 outside 各自从其实际 unowned、owned-but-trimmed 列表回到原 carrier。中间 87 个 cell 分别处理 matched、raw-only 和 licensed-only。零结论由每个真实费用项推出。
+4. `actual_physical_highq_difference_zero` 把上述三个等式代入已发表的 `physical_highq_le_frontier`。`exists_shared_physical_highq_zero` 直接实例化原 `exists_shared_licensed_sixth_schedule`，保留三项 omission 预算，以及 `s,r,e0`、`e,q0,q,om`、`n0,n,m0,m`、`N,cap,w,z,ε,X,F` 的先后次序。截断宽度为相同的 `width r`，真实 physical 前提包括 `1 < N`、`w ≤ N^(53/13824)` 和 `N^mu ≤ z ≤ cap`。
+
+原稿 `actual-k-compilation-joint-audit.tex` 第 200–220 行要求保持原先 admission，并在最后活跃的 selected prefix 使用原 gates。新源码兑现的是这套前缀与测试的有限算术传播。原稿 `manuscript-body.tex` 第 743–751 行的 sharp original-prime endpoint 还需要真正允许的 smooth-singleton PP。更低的统一阈值 `θ* < 3/5` 需要事先固定 `ε < 1/500`，再将 `ε + 299/500` 的上界显式传入各账；本次公开物理定理的阈值是 `3/5`。完整 P1.4 与相应 PP 界仍待各自验收。

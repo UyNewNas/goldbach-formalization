@@ -1,0 +1,726 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "sourceCount": 5,
+  "directExternalCount": 8,
+  "mathematicalTerminal": "actual_classical_and_clamp_distance; archived_classical_H430_gap, selected_classical_H430_gap and actual_clamp_H430_gap",
+  "scope": "Original U3 classical roots [57/224,1/3), including the genuine clamp subfamily [833/2500,1/3), original even N, frozen common Q, outer prime p coprime to N, original prime receiver and integer quotient, original same-Q weights. Absolute first-order discrepancy is negligible relative to either of these two positive family masses for fixed positive tau. One-sided source credit lower bound remains open.",
+  "sources": [
+    {
+      "path": "output/resume-20261112/t07/classical-h430/Part5OriginalH430ClassicalRootThetaPayment.lean",
+      "bytes": 6770,
+      "sha256": "922d1d28e94d519171da35334e001b51cc02d4687a5ee0f09f3772ba9a1ab583",
+      "gitBlob": "2d690cc33b408e66d8eb91aa62b3bdcdf0a15370",
+      "stageAs": "ImbalancedChen/Part5OriginalH430ClassicalRootThetaPayment.lean",
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalRootThetaPayment",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430FrozenClassicalRootAP",
+        "ImbalancedChen.Part5OriginalH430RootIntervalTheta",
+        "ImbalancedChen.P5zElevenErrorTransport"
+      ],
+      "declarations": [
+        {
+          "name": "clamp_subset_classical",
+          "kind": "theorem",
+          "private": false,
+          "line": 25,
+          "declaration": "theorem clamp_subset_classical {N : ℕ} (hN : 2 ≤ N) :\n    clampPrimes N ⊆ classicalBand N"
+        },
+        {
+          "name": "interval_subset_clamp",
+          "kind": "theorem",
+          "private": true,
+          "line": 39,
+          "declaration": "private theorem interval_subset_clamp {N : ℕ} (hN : 1 ≤ N) :\n    primeBand N clampStart (1/3) ⊆ clampPrimes N"
+        },
+        {
+          "name": "theta_antitone",
+          "kind": "theorem",
+          "private": true,
+          "line": 47,
+          "declaration": "private theorem theta_antitone {N p : ℕ} {Q Q' : ℝ}\n    (hN : 4 ≤ N) (hp : 0 < p) (hR : 1 < Q/(p:ℝ)) (hQ : Q ≤ Q') :\n    thetaAtom N Q' p ≤ thetaAtom N Q p"
+        },
+        {
+          "name": "uniform_clamp_witness",
+          "kind": "theorem",
+          "private": false,
+          "line": 65,
+          "declaration": "theorem uniform_clamp_witness :\n    let I := intervalMass clampStart (1/3) (1/2)\n    0 < I ∧ ∀ᶠ N : ℕ in atTop, ∀ (n : ℕ) (τ : ℝ),\n      0 ≤ τ → τ ≤ 1/12 → 1/((n:ℝ)+1) ≤ 11/384 →\n      (I/2)*singularNormalization N ≤ clampMass N n τ"
+        },
+        {
+          "name": "classicalMass",
+          "kind": "def",
+          "private": false,
+          "line": 103,
+          "declaration": "def classicalMass (N n : ℕ) (τ : ℝ) : ℝ :="
+        },
+        {
+          "name": "clampMass_le_classicalMass",
+          "kind": "theorem",
+          "private": false,
+          "line": 106,
+          "declaration": "theorem clampMass_le_classicalMass {N n : ℕ} {τ : ℝ} (hN : 4 ≤ N)\n    (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12) (hn : 1/((n:ℝ)+1) ≤ 11/384) :\n    clampMass N n τ ≤ classicalMass N n τ"
+        },
+        {
+          "name": "complete_classical_AP_le_clamp_theta",
+          "kind": "theorem",
+          "private": false,
+          "line": 117,
+          "declaration": "theorem complete_classical_AP_le_clamp_theta {τ ε : ℝ}\n    (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ n m : ℕ, 1/((n:ℝ)+1) ≤ 11/384 →\n      (∑ p ∈ classicalBand N, |signedAP N p (rootQ N n .U3 τ p)\n        (cutoffAt N n m p τ)|) ≤ ε * clampMass N n τ"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/classical-h430/Part5OriginalH430ClassicalRootPriceGeometry.lean",
+      "bytes": 6092,
+      "sha256": "28a4b3d8cb6724e7e9348d08b086f376d0b7c29e5325c8bf8d5ab5e6f1edfac2",
+      "gitBlob": "bdc4a7c9205d367d5749626d99d871dc05041cf5",
+      "stageAs": "ImbalancedChen/Part5OriginalH430ClassicalRootPriceGeometry.lean",
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalRootPriceGeometry",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430ClassicalRootThetaPayment",
+        "ImbalancedChen.P5ZU1011H248CommonPartition",
+        "ImbalancedChen.ActualRosserInitialResidualSaving",
+        "MathlibNt.Wu2008DoubleSieve.ImprovementFamilies"
+      ],
+      "declarations": [
+        {
+          "name": "actual_classical_queries",
+          "kind": "theorem",
+          "private": false,
+          "line": 26,
+          "declaration": "theorem actual_classical_queries {N n m p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    let s := frozenQuery n .U3 τ (physicalPrime N p)\n    let w := queryAt (keyAt N n m .U3 τ p)\n    2 ≤ s ∧ s ≤ 149/50 ∧ s ≤ w ∧ w ≤ 3"
+        },
+        {
+          "name": "actual_classical_amplitudes",
+          "kind": "theorem",
+          "private": false,
+          "line": 67,
+          "declaration": "theorem actual_classical_amplitudes {N n m p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    upperAmplitude (frozenQuery n .U3 τ (physicalPrime N p)) = 1 ∧\n      P5CanonicalUpperCancellation.upperA (queryAt (keyAt N n m .U3 τ p)) = 1"
+        },
+        {
+          "name": "external_prime_square_gt_half",
+          "kind": "theorem",
+          "private": false,
+          "line": 81,
+          "declaration": "theorem external_prime_square_gt_half {N p : ℕ} (hN : 2 ≤ N) (hp : p ∈ classicalBand N) :\n    (N:ℝ)^(1/2:ℝ) < (p:ℝ)^2"
+        },
+        {
+          "name": "external_prime_outside_Wu_windows",
+          "kind": "theorem",
+          "private": false,
+          "line": 95,
+          "declaration": "theorem external_prime_outside_Wu_windows {N p k i : ℕ} {δ Δ : ℝ} {V : Fin i → ℝ}\n    (hN : 2 ≤ N) (hp : p ∈ classicalBand N) (hδ : 0 ≤ δ)\n    (hbox : wuSourceBox k δ N i Δ V) (j : Fin i) :\n    p ∉ convolutionWuWindows N Δ V j"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/classical-h430/install_overlay/Part5OriginalH430ClassicalRootOrdinaryMean.lean",
+      "bytes": 9245,
+      "sha256": "1ed7d0b7493a1a000daa547c3af83e1aa4a758e031a04a81c321d16143406d69",
+      "gitBlob": "e502a652880fba4ee94554faed89eda869382021",
+      "stageAs": "ImbalancedChen/Part5OriginalH430ClassicalRootOrdinaryMean.lean",
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalRootOrdinaryMean",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430ClassicalRootPriceGeometry",
+        "ImbalancedChen.Part5OriginalH430SeedChildRosserDictionary"
+      ],
+      "declarations": [
+        {
+          "name": "same_prime_density",
+          "kind": "theorem",
+          "private": true,
+          "line": 24,
+          "declaration": "private theorem same_prime_density {N n p : ℕ} {τ : ℝ} (hp : p.Prime) (hc : p.Coprime N)\n    (z : ℝ) : let Q := rootQ N n .U3 τ p\n    actualSmallRosserPlusDensity (p*N) ⌈z⌉₊ z (Q/p) =\n      ordinaryRosserMainSum true N p (P2ActualMarkedCountState.rootLevel Q p) z"
+        },
+        {
+          "name": "beta_bounds",
+          "kind": "theorem",
+          "private": true,
+          "line": 50,
+          "declaration": "private theorem beta_bounds {N n p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    Real.log (rootQ N n .U3 τ p / (p:ℝ)) / Real.log ((p*N:ℕ):ℝ) ∈ Icc (11/768:ℝ) 1"
+        },
+        {
+          "name": "classical_root_main_close",
+          "kind": "theorem",
+          "private": false,
+          "line": 82,
+          "declaration": "theorem classical_root_main_close {ε : ℝ} (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ (n m : ℕ) (τ : ℝ),\n      0 ≤ τ → τ ≤ 1/12 → 1/((n:ℝ)+1) ≤ 11/384 → ∀ p ∈ classicalBand N,\n      let Q := rootQ N n .U3 τ p\n      |model true N Q p (cutoffAt N n m p τ) - thetaAtom N Q p| ≤ ε*thetaAtom N Q p"
+        }
+      ],
+      "frozenBeforeReview": {
+        "path": "output/resume-20261112/t07/classical-h430/Part5OriginalH430ClassicalRootOrdinaryMean.lean",
+        "bytes": 9245,
+        "sha256": "ae3978e55b87ebb910ed219587f5361c9026b8c7e55375250661a6ca067e73ee",
+        "gitBlob": "bed10c937a142b8dead8a9d2dc9bbbaf93cee75b"
+      },
+      "overlayChange": "One proof-script line, rw [...] <;> rfl; theorem statements and mathematical steps identical."
+    },
+    {
+      "path": "output/resume-20261112/t07/classical-h430/Part5OriginalH430ClassicalRootCredits.lean",
+      "bytes": 9442,
+      "sha256": "5b0ed495fe074159f4e9420c92b89bf70311710c2d708c5bf4a9ac851c41ea16",
+      "gitBlob": "b3d9de0d38c30b00ea7e6b9aa6161cc3eedcbf91",
+      "stageAs": "ImbalancedChen/Part5OriginalH430ClassicalRootCredits.lean",
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalRootCredits",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430ClassicalRootPriceGeometry",
+        "ImbalancedChen.Part5OriginalH430PairExactUpperPolynomial"
+      ],
+      "declarations": [
+        {
+          "name": "classical_Q_exact",
+          "kind": "theorem",
+          "private": false,
+          "line": 30,
+          "declaration": "theorem classical_Q_exact {N n p : ℕ} {τ : ℝ} (hp : p ∈ classicalBand N) :\n    rootQ N n .U3 τ p = (N:ℝ)^(clampLevel n τ)"
+        },
+        {
+          "name": "frozen_receiver_shell",
+          "kind": "theorem",
+          "private": true,
+          "line": 38,
+          "declaration": "private theorem frozen_receiver_shell {N p : ℕ} {Q w : ℝ} (hp : p ∈ classicalBand N)\n    (hz : cutoff Q p w ≤ (N:ℝ)^a) :\n    (frozenCount N p (receiver N) (cutoff Q p w):ℝ) =\n      ((originalReceiver N p).card:ℝ) + firstPrimeMass N Q w p"
+        },
+        {
+          "name": "physical_marked_class",
+          "kind": "theorem",
+          "private": false,
+          "line": 55,
+          "declaration": "theorem physical_marked_class {N n m : ℕ} {τ : ℝ} (c : RootKey n m)\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12) (hn : 1/((n:ℝ)+1) ≤ 11/384) :\n    let B := (classicalBand N).filter (fun p => keyAt N n m .U3 τ p = c)\n    let Q := (N:ℝ)^(clampLevel n τ)\n    markedPhi N Q B id (fun _ => 1) (fun _ => receiver N) (queryAt c) =\n        (∑ p ∈ B, ((originalReceiver N p).card:ℝ)) + ∑ p ∈ B, firstPrimeMass N Q (queryAt c) p ∧\n      Theta N Q B (fun _ => 1) = ∑ p ∈ B, thetaAtom N (rootQ N n .U3 τ p) p"
+        },
+        {
+          "name": "original_class_zero_theta_iff_empty",
+          "kind": "theorem",
+          "private": false,
+          "line": 79,
+          "declaration": "theorem original_class_zero_theta_iff_empty {N n m : ℕ} {τ : ℝ} (c : RootKey n m)\n    (hN : 4 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12) (hn : 1/((n:ℝ)+1) ≤ 11/384) :\n    let B := (classicalBand N).filter (fun p => keyAt N n m .U3 τ p = c)\n    Theta N ((N:ℝ)^(clampLevel n τ)) B (fun _ => 1) = 0 ↔ B = ∅"
+        },
+        {
+          "name": "cubeCredit",
+          "kind": "def",
+          "private": false,
+          "line": 113,
+          "declaration": "def cubeCredit (N n p : ℕ) (τ : ℝ) : ℝ :="
+        },
+        {
+          "name": "cubeCredit_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 117,
+          "declaration": "theorem cubeCredit_nonneg {N n p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    0 ≤ cubeCredit N n p τ"
+        },
+        {
+          "name": "original_classical_credit",
+          "kind": "theorem",
+          "private": false,
+          "line": 128,
+          "declaration": "theorem original_classical_credit {N n m p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12)\n    (hn : 1/((n:ℝ)+1) ≤ 11/384) (hp : p ∈ classicalBand N) :\n    let Q := rootQ N n .U3 τ p\n    let w := queryAt (keyAt N n m .U3 τ p)\n    let z := cutoffAt N n m p τ\n    surplus N p Q z + firstPrimeMass N Q w p = cubeCredit N n p τ ∧\n      ((originalReceiver N p).card:ℝ) + cubeCredit N n p τ = model true N Q p z + signedAP N p Q z"
+        }
+      ]
+    },
+    {
+      "path": "output/resume-20261112/t07/classical-h430/Part5OriginalH430ClassicalRootH430Boundary.lean",
+      "bytes": 11140,
+      "sha256": "8e79a25b0047cad2745b6a4b28a5ae2b086b2b2c7d60812bafdb1993527f5e31",
+      "gitBlob": "0ecbeb092d4b9050ce8cea94becbf447b4c570fe",
+      "stageAs": "ImbalancedChen/Part5OriginalH430ClassicalRootH430Boundary.lean",
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalRootH430Boundary",
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430ClassicalRootOrdinaryMean",
+        "ImbalancedChen.Part5OriginalH430ClassicalRootCredits"
+      ],
+      "declarations": [
+        {
+          "name": "rootDifference",
+          "kind": "def",
+          "private": false,
+          "line": 29,
+          "declaration": "def rootDifference (N n p : ℕ) (τ : ℝ) : ℝ :="
+        },
+        {
+          "name": "actual_classical_and_clamp_distance",
+          "kind": "theorem",
+          "private": false,
+          "line": 35,
+          "declaration": "theorem actual_classical_and_clamp_distance {τ ε : ℝ}\n    (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ, 1/((n:ℝ)+1) ≤ 11/384 →\n      (∑ p ∈ classicalBand N, |rootDifference N n p τ|) ≤ ε * classicalMass N n τ ∧\n      (∑ p ∈ clampPrimes N, |rootDifference N n p τ|) ≤ ε * clampMass N n τ"
+        },
+        {
+          "name": "archived_classical_H430_gap",
+          "kind": "theorem",
+          "private": false,
+          "line": 74,
+          "declaration": "theorem archived_classical_H430_gap {τ ε : ℝ} (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ, 1/((n:ℝ)+1) ≤ 11/384 →\n      (∑ p ∈ classicalBand N,\n        let s := frozenQuery n .U3 τ (physicalPrime N p)\n        let θ := thetaAtom N (rootQ N n .U3 τ p) p\n        |(((originalReceiver N p).card:ℝ) - (upperAmplitude s - H430 s)*θ) -\n          (H430 s*θ - cubeCredit N n p τ)|) ≤ ε*classicalMass N n τ"
+        },
+        {
+          "name": "selected_classical_H430_gap",
+          "kind": "theorem",
+          "private": false,
+          "line": 97,
+          "declaration": "theorem selected_classical_H430_gap {τ ε : ℝ} (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ n m : ℕ, 1/((n:ℝ)+1) ≤ 11/384 →\n      (∑ p ∈ classicalBand N,\n        let c := keyAt N n m .U3 τ p\n        let θ := thetaAtom N (rootQ N n .U3 τ p) p\n        |(((originalReceiver N p).card:ℝ) - (P5CanonicalUpperCancellation.upperA (queryAt c) -\n          ownerFloor c)*θ) -\n          (requestValue (iterate 430) (rootRequest N n .U3 τ p)*θ - cubeCredit N n p τ)|) ≤\n        ε*classicalMass N n τ"
+        },
+        {
+          "name": "archive_clamp_price",
+          "kind": "theorem",
+          "private": false,
+          "line": 128,
+          "declaration": "theorem archive_clamp_price :\n    H430 2 = (37052565421922458792801:ℝ)/(2:ℝ)^80"
+        },
+        {
+          "name": "selected_clamp_price_lower",
+          "kind": "theorem",
+          "private": false,
+          "line": 137,
+          "declaration": "theorem selected_clamp_price_lower {N n p : ℕ} {τ : ℝ}\n    (hN : 2 ≤ N) (hτ : 0 ≤ τ) (hτ' : τ ≤ 1/12) (hp : p ∈ clampPrimes N) :\n    (1/50:ℝ) ≤ requestValue (iterate 430) (rootRequest N n .U3 τ p)"
+        },
+        {
+          "name": "archive_clamp_charge_positive",
+          "kind": "theorem",
+          "private": false,
+          "line": 166,
+          "declaration": "theorem archive_clamp_charge_positive :\n    let c := ((37052565421922458792801:ℝ)/(2:ℝ)^80)*(4*Real.log (834/833:ℝ))\n    0 < c ∧ ∀ᶠ N : ℕ in atTop, ∀ (n : ℕ) (τ : ℝ), 0 ≤ τ → τ ≤ 1/12 →\n      1/((n:ℝ)+1) ≤ 11/384 → c*singularNormalization N ≤ H430 2 * clampMass N n τ"
+        },
+        {
+          "name": "actual_clamp_H430_gap",
+          "kind": "theorem",
+          "private": false,
+          "line": 185,
+          "declaration": "theorem actual_clamp_H430_gap {τ ε : ℝ} (hτ : 0 < τ) (hτ' : τ ≤ 1/12) (he : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ, 1/((n:ℝ)+1) ≤ 11/384 →\n      |((∑ p ∈ clampPrimes N, ((originalReceiver N p).card:ℝ)) -\n          (1-H430 2)*clampMass N n τ) -\n        (H430 2*clampMass N n τ - ∑ p ∈ clampPrimes N, cubeCredit N n p τ)| ≤\n        ε*clampMass N n τ"
+        }
+      ]
+    }
+  ],
+  "directExternal": [
+    {
+      "module": "ImbalancedChen.ActualRosserInitialResidualSaving",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ActualRosserInitialResidualSaving.lean",
+      "bytes": 7382,
+      "sha256": "f47716ff1b570b6c87846548e74f9c0286d0d99a65d9dd9ee20f213ff86c683c",
+      "gitBlob": "cc2d54fea59b3044f62a1d9115f9b66a8fafd4df"
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011H248CommonPartition",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/P5ZU1011H248CommonPartition.lean",
+      "bytes": 16023,
+      "sha256": "d7438867fcc0e89083ad3e7a023056192cc3042b002327c5fca341d74db915ec",
+      "gitBlob": "999ec5a2bc77644c4f93455adb850b4d6bc3ef63"
+    },
+    {
+      "module": "ImbalancedChen.P5zElevenErrorTransport",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/P5zElevenErrorTransport.lean",
+      "bytes": 7866,
+      "sha256": "e7aeb142a84d153e9521527419660edfd5b8f294e18af452ef127240e5b03be2",
+      "gitBlob": "5d098c947b266dac2d2d0d26df11970d98f464df"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430FrozenClassicalRootAP",
+      "repository": "goldbach-formalization",
+      "commit": "71b47b30928600386237323d4f6a1f0c332edfbe",
+      "path": "docs/source-only/20261112-resume/t07/Part5OriginalH430FrozenClassicalRootAP.lean",
+      "receipt": "output/resume-20261112/density-pp-publication/PUBLICATION_RECEIPT.json",
+      "exactLocalSource": "output/resume-20261112/t07/Part5OriginalH430FrozenClassicalRootAP.lean",
+      "bytes": 7995,
+      "sha256": "209e1168a60ac56033937577d633ff42bdfc454181113a43902c41b67a58f42b",
+      "gitBlob": "08f4bb7177402eca56d47d398ce86d1c7310293c"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430PairExactUpperPolynomial",
+      "repository": "goldbach-formalization",
+      "commit": "3a8d00b03b165503afc4c78c1e73a1ef6f70fe03",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/pair_rosser/Part5OriginalH430PairExactUpperPolynomial.lean",
+      "receipt": "output/resume-20261112/reviewed-publication/PUBLICATION_RECEIPT.json",
+      "exactLocalSource": "goldbach-proof-continuation/docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/pair_rosser/Part5OriginalH430PairExactUpperPolynomial.lean",
+      "bytes": 3989,
+      "sha256": "0efbf9752990fe986741bed9235f700196fdf9fa37d8fcb9a111b61e181ca21a",
+      "gitBlob": "385fc47f27ecbba0437d3cf8c7556e67dcbb2cf0"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RootIntervalTheta",
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430RootIntervalTheta.lean",
+      "bytes": 20929,
+      "sha256": "cc3ef5f1c7d692d1b062ffb0c2738bf9f43edd87ce98918900367ecec39e6833",
+      "gitBlob": "28ae6ccaa118cab66261be32d10058982f1c7a47"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430SeedChildRosserDictionary",
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/ordinary_rosser/Part5OriginalH430SeedChildRosserDictionary.lean",
+      "bytes": 4068,
+      "sha256": "84bdb92d07e64fff1369ad315b8efaa7b60a71a5ee5ccfb96b3e2e340fa37b7a",
+      "gitBlob": "f376ce5353e25a0c981e76b3615891307314b01a"
+    },
+    {
+      "module": "MathlibNt.Wu2008DoubleSieve.ImprovementFamilies",
+      "repository": "goldbach",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/ImprovementFamilies.lean",
+      "bytes": 8422,
+      "sha256": "341c26f45021933753c1513b6e35debcf3e4668848229394bceb0856d50bc68f",
+      "gitBlob": "99aadbfcccd08833ab430e0fa85c46b43ce1d052"
+    }
+  ],
+  "citedPriorSource": [
+    {
+      "module": "ImbalancedChen.ActualRosserCompactNormalization",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ActualRosserCompactNormalization.lean",
+      "bytes": 4547,
+      "sha256": "939cb980af37f45bcf5eacf7e5ea452c520263f3fe75f5d0a788e9302a7a55e4",
+      "gitBlob": "1aee1137567123db5a3b599db02b7fd6dec183f5"
+    },
+    {
+      "module": "ImbalancedChen.ActualRosserResidualDensity",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/ActualRosserResidualDensity.lean",
+      "bytes": 23093,
+      "sha256": "1bf3036c8c2e60114035696dbb1216fc66316fc3f8796435fe784410b1f45843",
+      "gitBlob": "39bc6d0bfe86a94f8c42383cc734666a4b6026a1"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalChildPhysicalNormalization",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30m/h247_w2_mass_license/P2OriginalChildPhysicalNormalization.lean",
+      "bytes": 7718,
+      "sha256": "5203b9a60fc2890ec3f3b0a1f31a5d726f293643f59a3eedf8c461d0c802e04d",
+      "gitBlob": "cd31d7e1343e5f6a5cae9c633a37049b0f2d21a7"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalPositiveSameQMassLift",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30o/h247_moving_mass/P2OriginalPositiveSameQMassLift.lean",
+      "bytes": 11907,
+      "sha256": "bec25f9fdca24ffaba071b8f49aaeb3a21fec454f3088543f04f9b1544a6e565",
+      "gitBlob": "e828d0bf86eb9b6abe29a50967c942c605c017f5"
+    },
+    {
+      "module": "ImbalancedChen.P2Selected430CausalOccurrenceExporter",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261028-resume-30c/certificate_triple/P2Selected430CausalOccurrenceExporter.lean",
+      "bytes": 21442,
+      "sha256": "803ca8022befa228a3337342b374247fd454e5e423f237f45e52d49fd831f391",
+      "gitBlob": "c8c4aa702d9e58597bd6d14337f35177561b8711"
+    },
+    {
+      "module": "ImbalancedChen.P2Selected430LiteralActionData",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261028-resume-30c/certificate_triple/P2Selected430LiteralActionData.lean",
+      "bytes": 385227,
+      "sha256": "59ca54c5e2215ba2ea5f32a173ef96684c5ce779af4119588a9479f23ca9fe23",
+      "gitBlob": "6f0aeb88b8427c37144772fa5adca3a3d7aaf0c4"
+    },
+    {
+      "module": "ImbalancedChen.P5OriginalFeedbackTableKernels",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/P5OriginalFeedbackTableKernels.lean",
+      "bytes": 5596,
+      "sha256": "d2fe93469265382c451a48311b764165255d9c46d8ae7e2d1054aa25d4018305",
+      "gitBlob": "379c2619a4ff42b5bf0267fc7681111bf09d001c"
+    },
+    {
+      "module": "ImbalancedChen.Part5AdoptedUpperTableData",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/Part5AdoptedUpperTableData.lean",
+      "bytes": 16416,
+      "sha256": "e6eedd62575fb3ae3eb98235fa77d66ccc8005b780bb347cc8faf3633c00bde4",
+      "gitBlob": "05cb106e895c37867be8de12520019db30d3c7e5"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430ActualMarkedRootConsumer",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261109-p5-h34-actual-marked-root-consumer/Part5OriginalH430ActualMarkedRootConsumer.lean",
+      "bytes": 10199,
+      "sha256": "811fcb01e95780b677a81c3d87d9380b59f6449f09187799ea568b9b5c2ab2fd",
+      "gitBlob": "3e917dfcb6fa0a687269543b1a67d7fd780e8f54"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430ClosedOwner",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261103-p5-h34-selected-feedback/Part5OriginalH430ClosedOwner.lean",
+      "bytes": 7725,
+      "sha256": "850aa4422f2ada024488270b3e760afec19eb9f3f2cb8155175b2747816f4d08",
+      "gitBlob": "a078f454db17d920a2fc90f0f6a6c4b9e08d81ac"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430DecisionProvenance",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261103-p5-h34-selected-feedback/Part5OriginalH430DecisionProvenance.lean",
+      "bytes": 7803,
+      "sha256": "6794632b0fbe84de3a7540f965a4a7fc935b9b347bb93c4ea8c0fc152b6ca762",
+      "gitBlob": "a78328ede9524f0a0c5fcc4f2853b281ffc95e15"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430FrozenClassicalRootModuli",
+      "repository": "goldbach-formalization",
+      "commit": "71b47b30928600386237323d4f6a1f0c332edfbe",
+      "path": "docs/source-only/20261112-resume/t07/Part5OriginalH430FrozenClassicalRootModuli.lean",
+      "receipt": "output/resume-20261112/density-pp-publication/PUBLICATION_RECEIPT.json",
+      "exactLocalSource": "output/resume-20261112/t07/Part5OriginalH430FrozenClassicalRootModuli.lean",
+      "bytes": 4726,
+      "sha256": "54f8991043167c7e71fa567a675f88b27c379bb0cd8a3b81e57b076e236089df",
+      "gitBlob": "068e3df986e2234cb09f8484c51a32f837c8a6f7"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430FrozenRootRefinement",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30m/h430_common_approximation/Part5OriginalH430FrozenRootRefinement.lean",
+      "bytes": 11769,
+      "sha256": "d05ebfcc10e8dde12560e87d99a9c47082c69995184e4aa2689bbec9fd92f8f1",
+      "gitBlob": "9e99c8c5696b130fe89ec12e6763c01f2eae9037"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430FrozenTableRootMass",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30p/h430_frozen_q/Part5OriginalH430FrozenTableRootMass.lean",
+      "bytes": 17261,
+      "sha256": "6f96860efb43e4cd7f6278baecc4a3b6765e7e02b8dfe7a694f2b7aa2d7c5725",
+      "gitBlob": "979b144c7ceb1149eaa24ca033a0e8abaebe8d05"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OriginalTagSeparatedFinSource",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261112-p5-h34-original-tag-separated-fin-source/Part5OriginalH430OriginalTagSeparatedFinSource.lean",
+      "bytes": 9625,
+      "sha256": "992b46a18ea6f5e530eea1036b2d8fa4de4808452c8cfb185a8b1ace28d4debb",
+      "gitBlob": "da669fa248df753432269760eb5687e5fd3effe3"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OriginalU34AnalyticLookup",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261108-p5-h34-original-u34-analytic-lookup/Part5OriginalH430OriginalU34AnalyticLookup.lean",
+      "bytes": 5525,
+      "sha256": "e3d51b17ecc6e59c4712922368f4c36c598cb7e6135e502c343e4a715d2b7e4e",
+      "gitBlob": "64805703e0e9ba06de90135c37881424238e709a"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OwnedRootCounts",
+      "repository": "goldbach-formalization",
+      "commit": "3a46b3f0a4ee8ee7e628c9234717fae03064a52b",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/Part5OriginalH430OwnedRootCounts.lean",
+      "bytes": 13479,
+      "sha256": "7edf742ee6dde0c2283aac4c94c40b55e890644f68901e585720f54854bb6477",
+      "gitBlob": "b9f6217182a2511d64383cc37b1cfeb042f288dd"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OwnedRootRosserBalance",
+      "repository": "goldbach-formalization",
+      "commit": "71b47b30928600386237323d4f6a1f0c332edfbe",
+      "path": "docs/source-only/20261112-resume/t07/Part5OriginalH430OwnedRootRosserBalance.lean",
+      "receipt": "output/resume-20261112/density-pp-publication/PUBLICATION_RECEIPT.json",
+      "exactLocalSource": "output/resume-20261112/t07/Part5OriginalH430OwnedRootRosserBalance.lean",
+      "bytes": 9940,
+      "sha256": "1c4f9063604594a42817c96760a232cb26c71c780e922e45e106c74d8d117cd7",
+      "gitBlob": "ed9ad3319506f5afa2004ed32dc882203417534e"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RootGateObstruction",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30o/h430_smooth_causal_boxes/Part5OriginalH430RootGateObstruction.lean",
+      "bytes": 4725,
+      "sha256": "d2897afbf9efc91f35a3d911dce5e826578daa5b967cf90ff49d37c74633f72b",
+      "gitBlob": "55a7b25dd168737bdcf5bb3a4284863d0a5e2ceb"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RootRosserSurplus",
+      "repository": "goldbach-formalization",
+      "commit": "71b47b30928600386237323d4f6a1f0c332edfbe",
+      "path": "docs/source-only/20261112-resume/t07/Part5OriginalH430RootRosserSurplus.lean",
+      "receipt": "output/resume-20261112/density-pp-publication/PUBLICATION_RECEIPT.json",
+      "exactLocalSource": "output/resume-20261112/t07/Part5OriginalH430RootRosserSurplus.lean",
+      "bytes": 4867,
+      "sha256": "de51434511070f52b3f951d88787561d09ee601dc7014e61262a7ea9f5589240",
+      "gitBlob": "2fed2f6b417502138b3c006543ee8e215a033148"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalU34ClampIntegral",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "docs/source-only/20261102-resume-30j/h34/Part5OriginalU34ClampIntegral.lean",
+      "bytes": 10158,
+      "sha256": "fda37064d05869e3e9f9f057cabf1b69dbf519fc704a5806bc03ebb2d4a7a70b",
+      "gitBlob": "43fb7eadd65ddc2df6a7c88fef7e9eea74be7b70"
+    },
+    {
+      "module": "ImbalancedChen.RenewalFiniteErrorPropagationP5",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+      "bytes": 18026,
+      "sha256": "804709bc71b85ce677a585c1dbe6e9d90527eb40befad03f99214e7b6a0eeadd",
+      "gitBlob": "2e710506c6a786dad2d47ab041646d1724f54217"
+    },
+    {
+      "module": "ImbalancedChen.SingularSeries",
+      "repository": "goldbach-formalization",
+      "commit": "001d139e667eb5cb42f1e9ca8f02de221b00db5c",
+      "path": "ImbalancedChen/SingularSeries.lean",
+      "bytes": 6842,
+      "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+      "gitBlob": "d7e2d4a957b4647e259378f91e2a8c27c7d095c8"
+    },
+    {
+      "module": "MathlibNt.Wu2008DoubleSieve.BoxMassTheta",
+      "repository": "goldbach",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/BoxMassTheta.lean",
+      "bytes": 9759,
+      "sha256": "f185f2db47bc663c6d966190ffa8a6abd03a10be015557c709ee25ede959f123",
+      "gitBlob": "13ba287da26dab0aeae6c8bfd4a77b39c6fbf76d"
+    },
+    {
+      "module": "MathlibNt.Wu2008DoubleSieve.ConvolutionWuBoxes",
+      "repository": "goldbach",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/ConvolutionWuBoxes.lean",
+      "bytes": 4045,
+      "sha256": "69f44283fc113b7a14cb37a3f3ad02fcf302e72ac5ab1d3c504c35c10d09f39e",
+      "gitBlob": "ba43dc53ebbc857ffe6b89dd2d6593411d306482"
+    },
+    {
+      "module": "MathlibNt.Wu2008DoubleSieve.PhiBounded",
+      "repository": "goldbach",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/PhiBounded.lean",
+      "bytes": 19765,
+      "sha256": "e5b8686e4ae3bd6e3a3794182df9197080388a40ad87e9dba4f7812bc1c36ff8",
+      "gitBlob": "1832ba22105bf8bc80fef7846e2b9f6cab1ba3cc"
+    },
+    {
+      "module": "MathlibNt.Wu2008DoubleSieve.PositiveGainActual",
+      "repository": "goldbach",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/PositiveGainActual.lean",
+      "bytes": 3392,
+      "sha256": "5ff57708ba4a3e1ff0aa4b0eb25dee7f314e2c12bf45bcb25960353036eabcef",
+      "gitBlob": "c9b07aec3d09f300e22339e35615cd4bafce3e6e"
+    }
+  ],
+  "manuscriptPins": [
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "paper/source/manuscript-body.tex",
+      "bytes": 68191,
+      "sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd",
+      "gitBlob": "d529bea2ecfcc74d64fc1664ac770a3becaa7c79"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/own-chen-table-insertion-chain-20261009.tex",
+      "bytes": 25557,
+      "sha256": "09f84f41e97dbd2267baee01a0a7c7c765e696a00688809086394c10f24623ee",
+      "gitBlob": "560d2a05d752f0b03e09a18c2028e6bb1c0c18db"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/finite-step-typed-closure-audit.tex",
+      "bytes": 17282,
+      "sha256": "17b7d69d86f9cf9dbcc5512724fbddefdde8c5d5e9ea23a45ee0a9c9de91948f",
+      "gitBlob": "660f49e87ffd612ccf2998cc2e912bce942670c7"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/replacement-second-seed-route.tex",
+      "bytes": 17886,
+      "sha256": "6086d5f6b6b5f6074c9cccbcec8fbb68a3e39ddd5c73597e9adbfacb037b9c00",
+      "gitBlob": "d0fd7eb63f2fdebea1290faa77a58b7fb2055b80"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/second-seed-stable-prefix-extension.tex",
+      "bytes": 13908,
+      "sha256": "4f34200171f30f6934ee6f63dba78ba005219c19a603047c02650152d5e02ad0",
+      "gitBlob": "edd80d8e497b59649498fedf85dcd5d09e5b4971"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/second-seed-certified-finite-feedback.tex",
+      "bytes": 6757,
+      "sha256": "e1389b8457d162cfd8ed9a0ab76039fc9e437bef234240498ab1ad18ffdb8782",
+      "gitBlob": "31cc22e9f70458b9ed6cc646e4c8ffcfd2a44b44"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/new-finite-double-sieve-recursion.tex",
+      "bytes": 11621,
+      "sha256": "690fc611d899bab48c50e9391117a9107388ffd13a6b184882e86c5b94250914",
+      "gitBlob": "26133f1f27fd17d4b011ccdbf0258c4f6c9c3a0e"
+    },
+    {
+      "repository": "chen-imbalanced-semiprimes",
+      "commit": "ba6ec11d800eccc54406490631895e174de85766",
+      "path": "proof-library/source/generalized-one-step-double-sieve.tex",
+      "bytes": 18143,
+      "sha256": "dfa3c8d96a4e19c79693dd650cca6d4a63a96580b11024b990659933ce47b7be",
+      "gitBlob": "05e05d87937962d850fb009daa3d475ee1fa97c0"
+    }
+  ],
+  "previousSelectionAndIndependentReview": [
+    {
+      "path": "output/resume-20261112/t07/RESUMED_ROOT_REGISTRY.json",
+      "bytes": 26479,
+      "sha256": "3706d6b4e513e2063469cab78d5881263938146a829a57e3ab74198a990e12e5",
+      "gitBlob": "f1b804d29f1129090f0d1f4182dadb5f3dc5d65f"
+    },
+    {
+      "path": "output/resume-20261112/t07/CLASSICAL_TAIL_REGISTRY.json",
+      "bytes": 15508,
+      "sha256": "dccc6ac63f17a9958956744e54e784292479dc4d9da3248b0d97cff226c95b97",
+      "gitBlob": "a07a17777b076a2dcdcacb6e2c67d403dac378fc"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_PAIR_ROSSER_ALLOWLIST.json",
+      "bytes": 5378,
+      "sha256": "30ed1e7135edd7a2332297748c6472fbefbab78fe6a2a277b7228a266cf53cfd",
+      "gitBlob": "ed85214c4c6b689367d97e2e772109a2305a5aab"
+    },
+    {
+      "path": "output/resume-20261112/t09/T07_CLASSICAL_TAIL_ALLOWLIST.json",
+      "bytes": 3342,
+      "sha256": "4b3fc7f7f638ef8ac12a699186379cc03504536ab25774f74f3b002557075990",
+      "gitBlob": "467951c847897e488062af2239a16709c75f23e6"
+    }
+  ],
+  "report": {
+    "path": "output/resume-20261112/t07/classical-h430/REPORT.md",
+    "bytes": 7666,
+    "sha256": "fd622ab35ade91cc52e3968a5bf92bdf022b5f0d954bf99bfb40f57428df125d",
+    "gitBlob": "26a47e50d4a76950f851ebfb54585e86ccf85bff"
+  },
+  "open": [
+    "lower bound on real nonsurvivor Rosser surplus plus first-prime shell versus sum H430 times physical theta for original classical family",
+    "seed/four round switched positive integrals, 430 predecessors and 11 layers",
+    "all original enhanced and sound same-rho P3 PP inputs",
+    "arbitrary positive owner class has no uniform relative scale in this result"
+  ],
+  "validation": "Exact content hash and source comparison only; no Lean, Lake, LSP, finite guard evaluation, numeric theorem execution or CI."
+}
