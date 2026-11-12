@@ -1,0 +1,50 @@
+{
+  "schema": "P2-v5-strict-single-FinitePi-preflight-v1",
+  "not_executed_locally": true,
+  "template": {
+    "path": "reused/Round6Audit.lean",
+    "bytes": 10050,
+    "sha256": "46eedd90437fae00921f2a5a6a39abb5996125f45033b230c17d1403d16eec95",
+    "git_blob": "853f1a12de896ae0857e2b7e3b3f0900d31788bc"
+  },
+  "pilot_modules": [
+    "ImbalancedChen.FinitePiIntegral"
+  ],
+  "render": "Extract unchanged original imports/modules/finalBridge transform into render_audit(selected); runtime compare full102 to legacy_full_render before writing either exporter.",
+  "ordered_ci_commands": [
+    "lake build ImbalancedChen.FinitePiIntegral",
+    "python3 finitepi_pilot.py before",
+    "lake env lean -DwarningAsError=true FinitePiPilot.lean",
+    "python3 finitepi_pilot.py verify",
+    "python3 finitepi_pilot.py require",
+    "original full102 build/snapshot/checker/types/axioms/runtime/retain/finalize"
+  ],
+  "strict_parser": [
+    "exactly one nonempty SERIALIZED",
+    "exact ownership/serialized/DECL Counter including multiplicity",
+    "exactly one full and readable type and collectAxioms record per declaration",
+    "unsafe/partial/axiom false; original three allowed transitive axioms only",
+    "one exact MODULE count and final COUNT",
+    "original mismatch throw retained; no mismatch record accepted"
+  ],
+  "object_binding": "Actual FinitePi source, olean, template, full/pilot exporters, build/type logs, manifest, registry, driver/run/job; object equal before/after pilot and at full finalize.",
+  "not_a_kernel_or_global_acceptance": true,
+  "full102_gates_unchanged_and_required": true,
+  "early_lightlogs": {
+    "condition": "${{ always() }}",
+    "position": "after original full102 types and always runtime audit, immediately before heavy retain tar.gz",
+    "includes": [
+      "top-level *.log",
+      "*.json",
+      "*.txt",
+      "*.lean",
+      "runtime/"
+    ],
+    "excludes_by_allowlist": [
+      "compiled-objects-and-sources.tar.gz",
+      "all .olean and native object payloads"
+    ],
+    "pilot_or_compile_failure": "Later proof steps skip; always runtime audit and lightlogs still execute before final fullarchive.",
+    "does_not_replace_final_fullarchive": true
+  }
+}
