@@ -1,0 +1,141 @@
+--- a/ImbalancedChen/P2GammaCompleteLevelMother.lean
++++ b/ImbalancedChen/P2GammaCompleteLevelMother.lean
+@@ -121,7 +121,7 @@
+   induction L with
+   | nil => simp
+   | cons a L ih =>
+-      have ha := h a (List.mem_cons_self a L)
++      have ha := h a (List.mem_cons_self)
+       have ht := ih (fun b hb => h b (List.mem_cons_of_mem a hb))
+       simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+       exact (abs_add _ _).trans ((add_le_add ha ht).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaJointDiscardedPayment.lean
++++ b/ImbalancedChen/P2GammaJointDiscardedPayment.lean
+@@ -189,7 +189,7 @@
+     | nil => intro _; simp
+     | cons cs W ih =>
+         intro hW
+-        have hc := hW cs (List.mem_cons_self cs W)
++        have hc := hW cs (List.mem_cons_self)
+         have hw := ih (fun ds hds => hW ds (List.mem_cons_of_mem cs hds))
+         simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+         exact (abs_add _ _).trans ((add_le_add hc hw).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaJointMotherLogSaving.lean
++++ b/ImbalancedChen/P2GammaJointMotherLogSaving.lean
+@@ -117,7 +117,7 @@
+   induction L with
+   | nil => simp
+   | cons a L ih =>
+-      have ha := h a (List.mem_cons_self a L)
++      have ha := h a (List.mem_cons_self)
+       have ht := ih (fun b hb => h b (List.mem_cons_of_mem a hb))
+       simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+       exact (abs_add _ _).trans ((add_le_add ha ht).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaJointOrderGeometry.lean
++++ b/ImbalancedChen/P2GammaJointOrderGeometry.lean
+@@ -59,7 +59,7 @@
+         simpa only [labelHead,List.headD_cons] using
+           (original_label_head_prime (by omega) hxroot).pos
+       have hord := List.pairwise_cons.mp (root_word_ordered hxroot)
+-      have hpq : p < q := hord.1 q (List.mem_cons_self q v)
++      have hpq : p < q := hord.1 q (List.mem_cons_self)
+       have hq : 0 < q := hp.trans hpq
+       have hv : 0 < v.prod := by
+         have hwp := word_prod_pos hdata.1
+--- a/ImbalancedChen/P2GammaJointRemainingPayment.lean
++++ b/ImbalancedChen/P2GammaJointRemainingPayment.lean
+@@ -69,7 +69,7 @@
+     | nil => intro _; simp
+     | cons cs W ih =>
+         intro hW
+-        have hc := hW cs (List.mem_cons_self cs W)
++        have hc := hW cs (List.mem_cons_self)
+         have hw := ih (fun ds hds => hW ds (List.mem_cons_of_mem cs hds))
+         simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+         exact (abs_add _ _).trans ((add_le_add hc hw).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaJointUpperPayment.lean
++++ b/ImbalancedChen/P2GammaJointUpperPayment.lean
+@@ -213,7 +213,7 @@
+     | nil => intro _; simp
+     | cons cs W ih =>
+         intro hW
+-        have hc := hW cs (List.mem_cons_self cs W)
++        have hc := hW cs (List.mem_cons_self)
+         have hw := ih (fun ds hds => hW ds (List.mem_cons_of_mem cs hds))
+         simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+         exact (abs_add _ _).trans ((add_le_add hc hw).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaOrderingStripPayment.lean
++++ b/ImbalancedChen/P2GammaOrderingStripPayment.lean
+@@ -154,7 +154,7 @@
+         simpa only [labelHead,List.headD_cons] using
+           (original_label_head_prime (by omega) hxroot).pos
+       have hord := List.pairwise_cons.mp (root_word_ordered hxroot)
+-      have hpq : p < q := hord.1 q (List.mem_cons_self q v)
++      have hpq : p < q := hord.1 q (List.mem_cons_self)
+       have hq : 0 < q := hp.trans hpq
+       have hv : 0 < v.prod := by
+         have hwp := word_prod_pos hdata.1
+@@ -647,7 +647,7 @@
+     | nil => intro _; simp
+     | cons cs W ih =>
+         intro hW
+-        have hc := hW cs (List.mem_cons_self cs W)
++        have hc := hW cs (List.mem_cons_self)
+         have hw := ih (fun ds hds => hW ds (List.mem_cons_of_mem cs hds))
+         simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+         exact (abs_add (f cs) ((W.map f).sum)).trans ((add_le_add hc hw).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaOriginalCartesianMask.lean
++++ b/ImbalancedChen/P2GammaOriginalCartesianMask.lean
+@@ -155,7 +155,7 @@
+   have hmem : labelHead x∈x.1 := by
+     have hh := congrArg Prod.fst (rebuild_head_complement hx)
+     rw [← hh]
+-    exact List.mem_cons_self _ _
++    exact List.mem_cons_self
+   refine ⟨specified_prime_floor hN ht hx _ hmem,?_⟩
+   apply (old_group_floor hN ht).trans
+   exact_mod_cast complement_contains_old_pair ht
+--- a/ImbalancedChen/P2GammaRetainedSameRhoMother.lean
++++ b/ImbalancedChen/P2GammaRetainedSameRhoMother.lean
+@@ -115,7 +115,7 @@
+   induction L with
+   | nil => simp
+   | cons a L ih =>
+-      have ha := h a (List.mem_cons_self a L)
++      have ha := h a (List.mem_cons_self)
+       have ht := ih (fun b hb => h b (List.mem_cons_of_mem a hb))
+       simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+       exact (abs_add _ _).trans ((add_le_add ha ht).trans_eq (by ring))
+--- a/ImbalancedChen/P2GammaUpperStripPayment.lean
++++ b/ImbalancedChen/P2GammaUpperStripPayment.lean
+@@ -455,7 +455,7 @@
+     | nil => intro _; simp
+     | cons cs W ih =>
+         intro hW
+-        have hc := hW cs (List.mem_cons_self cs W)
++        have hc := hW cs (List.mem_cons_self)
+         have hw := ih (fun ds hds => hW ds (List.mem_cons_of_mem cs hds))
+         simp only [List.map_cons,List.sum_cons,List.length_cons,Nat.cast_add,Nat.cast_one]
+         exact (abs_add (f cs) ((W.map f).sum)).trans
+--- a/ImbalancedChen/P2OriginalGammaDivisorNorm.lean
++++ b/ImbalancedChen/P2OriginalGammaDivisorNorm.lean
+@@ -244,7 +244,7 @@
+   cases w with
+   | nil => simp only [List.length_nil] at hlen; omega
+   | cons p v =>
+-      exact (mem_primeWindow.mp (hwindow p (List.mem_cons_self p v))).1
++      exact (mem_primeWindow.mp (hwindow p (List.mem_cons_self))).1
+ 
+ /-- The complete complement contains the old marked pair and the exact
+ quotient. In particular it is not the residual quotient alone. -/
+--- a/ImbalancedChen/P2OriginalU5WholeGroupCapacity.lean
++++ b/ImbalancedChen/P2OriginalU5WholeGroupCapacity.lean
+@@ -83,7 +83,7 @@
+       calc
+         z^w.length*z≤(w.prod : ℝ)*(p : ℝ) :=
+           mul_le_mul (ih (fun q hq => hw q (List.mem_cons_of_mem p hq)))
+-            (hw p (List.mem_cons_self p w)) hz (Nat.cast_nonneg _)
++            (hw p (List.mem_cons_self)) hz (Nat.cast_nonneg _)
+         _=_ := mul_comm _ _
+ 
+ /-- Capacity is paid by the WHOLE specified group: the arity multiplies
