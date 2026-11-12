@@ -227,8 +227,15 @@ theorem actual_fourth_signed_or_abs_drop_sixth_both
       (roughPrimeUniverse N cap w z) true 1 (by simp) state hstate
   have hp : state.positive = true :=
     actual_rank_four_positive e q om N cap w z state hstate
-  apply fifthThenSixth_map_sum_drop_both
-  · intro p pp tail
+  refine fifthThenSixth_map_sum_drop_both
+    (P4AOriginalFull87CompleteSixthDispatch.policy e q om (N : ℝ))
+    (P4AOriginalFull87LicensedSixthPolicy.policy delta n e q om (N : ℝ))
+    (fun _ : ℕ => (1 : ℝ))
+    (attachedLeafTest N cap 1 w ((N : ℝ) ^ epsilon)
+      (highQTest X F))
+    state.selectedPrefix state.positive state.mass state.remaining
+    g hg ?_
+  intro p pp tail
     have hzero :=
       actual_rank_six_stopped_difference_zero_at_highq
         delta n e q om N cap w he hN epsilon heps X hX F
