@@ -1,0 +1,13 @@
+SOURCE_ONLY / UNEVALUATED / UNCOMPILED / NOT FULL All22.
+
+This supplement adds one actual common-coefficient endpoint to the frozen selected40 sources. It joins T04's actual finite-upper positive-root/fallback/compiler/count theorem with the selected40 common seventeen lower saving slots. It preserves the original literal slot groups 0/1/2, 4/5, 3, 6, 7..13 and 14..21.
+
+`original_same_rho_with_actual_early_defect` selects one common m/r/n/e/q/a schedule, then one beta, late omega = nu*beta^2, aligned rectangle, target N, Q and actual finite-bank rho. Its conclusions retain that exact rho's compiler expense, physical density sum, strict support and actual half-product count/distribution error. The presieve correction is the actual final false-policy correction, used once. The scalar bound is the original All22 scalar plus the explicitly defined actual lowerEarlyDefect, six epsilon expenditures, and one compiler reserve.
+
+The six epsilon expenditures are the positive root, two upper slots as one joint block, and four lower blocks (saved G4, original G7, seven later slots, eight original I87 slots). The error count is block-level; no saving is counted twice. The upper is derived from the actual exact raw telescope, without any assumed sign or bound on lowerEarlyDefect. Therefore this theorem is an unconditional endpoint with a named actual remainder, not an All22 completion or K theorem.
+
+The common theorem holds for every q after a common threshold. Thus the subsequent early-owner supplier may choose q in its cofinal 256-divisible grid after all existing thresholds. Early a and late omega remain distinct. None of the final counting/distribution/PP interfaces is replaced by an old first-exit coefficient.
+
+Static verification: all selected41 byte counts, SHA256 and Git blob identities were checked against disk; selected40 was reused without edits. Direct imports resolve in the selected/exact-supplier census. This is text/hash verification only: no local Lean, Lake, LSP, proof-body/guard execution, numerical replay, compiler or CI was invoked. Existing remote v3 is unchanged and remains root-owned.
+
+Still required: independent review of this one source and the preceding common17 two-source supplement; T03's actual lower-early literal0/1/2 updated-parent payment; its common schedule and any cofinal q restriction; final original K/reserve theorem with the actual early defect removed; the actual same-rho smooth PP/count interface where needed; full transitive staging and remote elaboration/closed guards/expanded types/axioms/kernel replay. No green or formal credit is claimed.
