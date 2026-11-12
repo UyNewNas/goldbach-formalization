@@ -1,0 +1,22 @@
+--- a/ImbalancedChen/P4BOriginalFiniteProperPayment.lean
++++ b/ImbalancedChen/P4BOriginalFiniteProperPayment.lean
+@@ -84,7 +84,8 @@
+       _ ≤ (F*(N:ℝ)^eps)*(D*(N:ℝ)^(modulusExponent+eps)) :=
+         mul_le_mul_of_nonneg_right hT (by positivity)
+       _ = (F*D)*(N:ℝ)^(eps+(modulusExponent+eps)) := by
+-        rw [Real.rpow_add hNr]; ring
++        conv_rhs => rw [Real.rpow_add hNr]
++        ring
+       _ ≤ _ := by simpa only [pow_zero,mul_one] using hdiag
+   have hoffCost : (∑ ps∈U,‖signedRow S cc N ps.prod‖)≤
+       (delta/2)*(N:ℝ)/Real.log (N:ℝ)^A := by
+@@ -101,7 +102,8 @@
+       _ ≤ (B*(N:ℝ)^(1-exponent/2)*Real.log (N:ℝ)^3)*(C*(N:ℝ)^eps) :=
+         mul_le_mul_of_nonneg_right hU (by positivity)
+       _ = (B*C)*(N:ℝ)^(1-exponent/2+eps)*Real.log (N:ℝ)^3 := by
+-        rw [Real.rpow_add hNr]; ring
++        conv_rhs => rw [Real.rpow_add hNr]
++        ring
+       _ ≤ _ := hoff
+   have hpart := Finset.sum_filter_add_sum_filter_not P (fun ps => ps.prod=N)
+     (fun ps => ‖signedRow S cc N ps.prod‖)
