@@ -236,7 +236,11 @@ theorem actual_rank_six_stopped_difference_zero_at_highq
       (attachedLeafTest N cap 1 w ((N : ℝ) ^ epsilon)
         (highQTest X F)) pre true mass remaining = 0 := by
   apply sub_eq_zero.mpr
-  apply rank_six_stopped_equal_of_seventh_zero
+  refine rank_six_stopped_equal_of_seventh_zero
+    (P4AOriginalFull87CompleteSixthDispatch.policy e q om (N : ℝ))
+    (P4AOriginalFull87LicensedSixthPolicy.policy delta n e q om (N : ℝ))
+    (attachedLeafTest N cap 1 w ((N : ℝ) ^ epsilon) (highQTest X F))
+    pre hpre mass ?_ ?_ remaining
   · intro p hp
     exact actual_admitted_seventh_terminal_highq_zero
       delta n e q om N cap w he hN epsilon heps X hX F
