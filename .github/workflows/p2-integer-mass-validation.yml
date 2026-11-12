@@ -1,0 +1,152 @@
+name: P2 integer mass ABI exact closure validation
+on:
+  push:
+    branches: [ci/p2-integer-mass-r2-20261112]
+    paths: [.github/workflows/p2-integer-mass-validation.yml]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  p2_integer_mass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: 51859a24c91580f885afd2a781dcb48b07177529
+      BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
+      EXPECTED_MANIFEST: 6d876300c58ee32a2204198142e6863b2c23d2929cab4b1641ca06d551d6714b
+      LEAN_NUM_THREADS: 2
+      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v3
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Bind root-delivered selection and actual committed workflows
+        run: |
+          set -euo pipefail
+          export LOGS="$RUNNER_TEMP/p2-integer-mass-evidence"
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" select 2>&1 | tee "$LOGS/driver-selection.log"
+          printf 'LOGS=%s\n' "$LOGS" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: eb035a259f2f40853e9899f6d98af25852184fee
+          path: baseline
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 51859a24c91580f885afd2a781dcb48b07177529
+          path: proof-input
+          persist-credentials: false
+      - name: Bind repair baseline and exact ABI overlay with original generic stage
+        id: materialize
+        run: |
+          set -euo pipefail
+          export PROJECT="$GITHUB_WORKSPACE/candidate"
+          export LOGS="$RUNNER_TEMP/p2-integer-mass-evidence"
+          export BASELINE_SOURCE="$GITHUB_WORKSPACE/baseline"
+          export ABI_SOURCE="$GITHUB_WORKSPACE/proof-input"
+          export P2_SOURCE_VIEW="$RUNNER_TEMP/p2-integer-mass-source-view"
+          export P2_VALIDATION_MANIFEST="$GITHUB_WORKSPACE/$P2_BUNDLE/P2_VALIDATION_MANIFEST.json"
+          export P2_DIAGNOSTIC_AUDIT="$GITHUB_WORKSPACE/$P2_BUNDLE/reused/Round6Audit.lean"
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" stage 2>&1 | tee "$LOGS/materialize.log"
+          cmp "$PROJECT/lean-toolchain" lean-toolchain
+          cmp "$PROJECT/lake-manifest.json" lake-manifest.json
+          printf 'PROJECT=%s\nLOGS=%s\nBASELINE_SOURCE=%s\nABI_SOURCE=%s\nP2_SOURCE_VIEW=%s\nP2_VALIDATION_MANIFEST=%s\nP2_DIAGNOSTIC_AUDIT=%s\n' \
+            "$PROJECT" "$LOGS" "$BASELINE_SOURCE" "$ABI_SOURCE" "$P2_SOURCE_VIEW" \
+            "$P2_VALIDATION_MANIFEST" "$P2_DIAGNOSTIC_AUDIT" >> "$GITHUB_ENV"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with unchanged existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install original 12 GiB serial trust-zero runtime guard
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/reused/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 - <<'PY'
+          import json,pathlib,subprocess,os
+          lock=json.loads(pathlib.Path('lake-manifest.json').read_text())
+          receipt=[]
+          for p in lock['packages']:
+              d=pathlib.Path('.lake/packages')/p['name']
+              sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+              assert sha==p['rev'],(p['name'],sha,p['rev'])
+              assert not subprocess.check_output(['git','-C',str(d),'diff','HEAD','--'],text=True)
+              receipt.append({'name':p['name'],'sha':sha})
+          pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
+          PY
+      - name: Prepare complete ABI import census with original strict diagnostic audit
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" prepare
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" bind
+      - name: Compile exact ABI and complete necessary local closure
+        timeout-minutes: 200
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" snapshot
+      - name: Replay all closure modules with original bundled kernel checker
+        timeout-minutes: 100
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/batch-checker.log"
+      - name: Export every serialized declaration both full types and transitive axioms
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake env lean -DwarningAsError=true CandidateAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" verify
+      - name: Audit unchanged actual trust-zero 12 GiB runtime
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Retain actual final compiled objects sources and failure evidence
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" retain
+      - name: Bind final ABI-only acceptance after every original gate
+        if: ${{ success() }}
+        run: python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" finalize
+      - name: Retain full exact object archive and evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-integer-mass-abi-${{ github.run_id }}
+          path: ${{ runner.temp }}/p2-integer-mass-evidence/
+          if-no-files-found: error
+          retention-days: 30
