@@ -1,0 +1,13 @@
+# Durable P1.4 handoff — actual rank-seven stopped high-q cancellation
+
+Read last remote verified baseline first: 78711f3f2b7b2e08cc8b278d2a4853f4105cf0e7, branch chatgpt/p1-full87-post8-attached-scale-20261112. This task's independent branch is chatgpt/p1-full87-rank7-stopped-highq-20261112. Current packet is docs/source-only/20261112-full87-rank7-stopped-highq/. The source commit and exact verified blobs are in REGISTRY.json. Always inspect CURRENT remote HEAD before the next round; do not roll back to the initial 9649ab3 navigation.
+
+Real increment: two real rank-seven gate implications (raw and licensed at own sixth ancestor) give selected rough prefix product <N^(299/500). The genuine active MINUS small beta gives full physical a*b<N^(3/5), thus each admitted seventh terminal high-q attached test is exactly zero for X>=N^(3/5). At any true sixth prefix both ORIGINAL stoppedTest 8 functions then agree because all admitted seventh children are zero; the earlier literal seventhExclusiveEvents signed sum is zero. No unrelated branch receives a mask; repeated labels are retained and one high-q invoice is eliminated, not double paid.
+
+The fifth/sixth exclusive stopped subtrees, original raw eighth frontier, full sixth physical rho, epsilon-vs-density/reserve simultaneous scale, PP smooth singleton/endpoints, ordinary residual integral, saved87 numerical certification and two separate reserve payments remain yellow. P1.4 parent YELLOW. In particular neither stoppedTest individually nor full physical high-q is proved zero; no claim about total H_N-relative size.
+
+Next local proof target: strengthen the previous FifthSixthSeventhEvent/actualExclusiveFiveSixSevenInvoice using the rank-six equality to **remove precisely seventhAfterBoth** terms from the real fifth/sixth event list, preserving all fifth/sixth one-sided branches, and then prove their live small-beta complete q level from the actual fifth/sixth gates. Do not use an arbitrary universal rough-prime product as N^theta. Attempt fixed toolchain compile only if it is locally present; do not install, upgrade, dispatch CI/Codex or change cloud resources.
+
+Fixed manuscript: 9731290e8f53cffda44129906cde6a965eaa869b, blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Toolchain: Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958. Constants c=49044063/25000000 and K=8452171/1250000 unchanged.
+
+Local verification: lean/lake/elan --version each exited 127, fixed .lake/packages missing. All new source is UNEVALUATED/UNCOMPILED and not kernel replayed, transitively axiom-audited or independently verified. SOURCE_ONLY [skip ci] commits on this branch only.
