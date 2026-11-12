@@ -1,0 +1,11 @@
+--- c51501c5ae949018d44907601ddbb27bd3fdad4c33e45e4f5e4c2ee9086ae09c
++++ d4d0a1047d6dd5ad881c1c8fac10a5b0d8ecb6bfa278f912ebd4d56c0e3ffc15
+@@ -54,7 +54,7 @@
+       deriv Real.smoothTransition (r-a)*Real.smoothTransition (b+1-r) -
+         Real.smoothTransition (r-a)*deriv Real.smoothTransition (b+1-r) := by
+   have hs : Differentiable ℝ Real.smoothTransition :=
+-    Real.smoothTransition.contDiff.differentiable (by norm_num : (1 : ℕ∞) ≤ 1)
++    (Real.smoothTransition.contDiff (n := 1)).differentiable (by norm_num)
+   have hleft := (hs (r-a)).hasDerivAt.comp r
+     ((hasDerivAt_id r).sub_const a)
+   have hright := (hs (b+1-r)).hasDerivAt.comp r

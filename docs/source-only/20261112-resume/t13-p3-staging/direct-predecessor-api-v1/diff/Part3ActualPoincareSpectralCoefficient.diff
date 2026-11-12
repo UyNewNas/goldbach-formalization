@@ -1,0 +1,43 @@
+--- 335c593ece0ccc557585b58513b90e31767616141e97f8f038df38314f873a05/Part3ActualPoincareSpectralCoefficient.lean
++++ 8eec5ffef35c8ba575dd6cd6e2536bc08b5c98c436e51e56fdb19cd10ed1e049/Part3ActualPoincareSpectralCoefficient.lean
+@@ -154,19 +154,19 @@
+ Zero extension below height zero is irrelevant to every final integral. -/
+ def actualTestFourier (N : ℕ) (U : Gamma0OrbitSpace N → ℂ) (m : ℤ) (y : ℝ) : ℂ :=
+   ∫ x in Ico (0 : ℝ) 1,
+-    AddCircle.fourier (-m) (x : UnitAddCircle) * chartPullback (testLift N U) (x, y)
++    _root_.fourier (-m) (x : UnitAddCircle) * chartPullback (testLift N U) (x, y)
+ 
+ theorem actualTestFourier_eq_interval (N : ℕ) (U : Gamma0OrbitSpace N → ℂ)
+     (m : ℤ) (y : ℝ) : actualTestFourier N U m y =
+       ∫ x in (0 : ℝ)..1,
+-        AddCircle.fourier (-m) (x : UnitAddCircle) * chartPullback (testLift N U) (x, y) := by
++        _root_.fourier (-m) (x : UnitAddCircle) * chartPullback (testLift N U) (x, y) := by
+   rw [actualTestFourier, intervalIntegral.integral_of_le zero_le_one,
+     integral_Ico_eq_integral_Ioc]
+ 
+ def planarPairSeed (N : ℕ) (m : ℤ) (ψ : ℝ → ℂ)
+     (U : Gamma0OrbitSpace N → ℂ) (p : ℝ × ℝ) : ℂ :=
+   (Ico (0 : ℝ) 1).indicator (fun x =>
+-    star (AddCircle.fourier m (x : UnitAddCircle) * ψ p.2) *
++    star (_root_.fourier m (x : UnitAddCircle) * ψ p.2) *
+       chartPullback (testLift N U) (x, p.2)) p.1
+ 
+ theorem planarPairSeed_at_chart (N : ℕ) (m : ℤ) (ψ : ℝ → ℂ)
+@@ -197,7 +197,7 @@
+     ← integral_const_mul]
+   apply integral_congr_ae
+   exact Filter.Eventually.of_forall (fun x => by
+-    simp only [star_mul, Complex.star_def, ← AddCircle.fourier_neg]
++    simp only [star_mul, Complex.star_def, ← _root_.fourier_neg]
+     ring)
+ 
+ /-- Exact seed/Fourier pairing, obtained by actual Fubini after proved
+@@ -246,7 +246,7 @@
+ theorem actualTestFourier_positive_height (N : ℕ) (U : Gamma0OrbitSpace N → ℂ)
+     (m : ℤ) {y : ℝ} (hy : 0 < y) :
+     actualTestFourier N U m y = ∫ x in Ico (0 : ℝ) 1,
+-      AddCircle.fourier (-m) (x : UnitAddCircle) *
++      _root_.fourier (-m) (x : UnitAddCircle) *
+         U (orbitProjection N (⟨⟨x, y⟩, hy⟩ : UpperHalfPlane)) := by
+   unfold actualTestFourier
+   apply integral_congr_ae

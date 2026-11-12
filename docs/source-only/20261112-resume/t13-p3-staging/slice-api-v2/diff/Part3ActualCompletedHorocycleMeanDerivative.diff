@@ -1,0 +1,20 @@
+--- be3646e9fb2b001630e08e4f94ee798ea46724e4a61b13346d6929f1ac25d3c3/Part3ActualCompletedHorocycleMeanDerivative.lean
++++ 0a07f8818194304a3901ab10c0fe7df1055c077922c4fb78ba1e241cbbceb9bc/Part3ActualCompletedHorocycleMeanDerivative.lean
+@@ -17,7 +17,7 @@
+ namespace ImbalancedChen.Part3.ActualCompletedHorocycleMeanDerivative20261026b
+ noncomputable section
+ open Set MeasureTheory Filter
+-open scoped Topology UpperHalfPlane
++open scoped Topology UpperHalfPlane ContDiff
+ open Gamma0ActualEnergyCompletion20261025a Gamma0QuotientCellPushforward20261025a
+ open NormalizedCuspCompletedWeakH120261026b ActualPullbackLocalH1Transfer20261026b
+ open SmoothIntegerUnitPartition20261026b SmoothZeroHeightSeedProfiles20261026b
+@@ -171,7 +171,7 @@
+   have heM : (fun y => ∫ x, star (meanTestTensor (deriv φ) (x,y)) *
+       actualPlanePullback N (physicalProjection N e) (x,y)) =ᵐ[volume]
+       fun y => star (deriv φ y) * actualFormMean N e y := by
+-    filter_upwards [hiM.prod_right_ae] with y hy
++    filter_upwards [hiM.prod_left_ae] with y hy
+     exact tensor_value_horizontal_integral N e (deriv φ) y hy
+   have heG : (fun y => ∫ x, star (meanTestTensor φ (x,y)) * D.gy (x,y)) =
+       fun y => star (φ y) * actualFormGradientMean N e y := by

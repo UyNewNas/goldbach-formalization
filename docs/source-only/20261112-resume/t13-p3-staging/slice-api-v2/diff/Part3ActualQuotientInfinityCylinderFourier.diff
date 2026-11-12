@@ -1,0 +1,40 @@
+--- 07cd6e4910d1e7b2cb6644ad6151c618369f52f6108820c6fc2e28adff9de23a/Part3ActualQuotientInfinityCylinderFourier.lean
++++ 5a917e87f2896f85f253305e8d15167ed008fc438c87a53588dfea560f6b41fb/Part3ActualQuotientInfinityCylinderFourier.lean
+@@ -86,11 +86,11 @@
+ The later theorem pays slice L2 and the representative AE join. -/
+ theorem quotient_circle_coefficient_eq_actualFourier (N : ℕ)
+     (F : Gamma0OrbitSpace N → ℂ) (m : ℤ) (y : PositiveHeight) :
+-    AddCircle.fourierCoeff
++    _root_.fourierCoeff
+       (fun x : UnitAddCircle => F (orbitProjection N (nativeCylinderPoint (x, y)))) m =
+       actualTestFourier N F m (y : ℝ) := by
+   let G : UnitAddCircle → ℂ := fun x =>
+-    AddCircle.fourier (-m) x * F (orbitProjection N (nativeCylinderPoint (x, y)))
++    _root_.fourier (-m) x * F (orbitProjection N (nativeCylinderPoint (x, y)))
+   change (∫ x : UnitAddCircle, G x ∂AddCircle.haarAddCircle) = _
+   rw [circleHaar_eq_volume]
+   calc
+@@ -113,7 +113,7 @@
+     ∀ᵐ y ∂heightMeasure.restrict (closedHeightTail Y),
+       MemLp (fun x : UnitAddCircle => actualQuotientInfinityCylinder N hY f (x, y))
+         2 AddCircle.haarAddCircle ∧
+-      ∀ m : ℤ, AddCircle.fourierCoeff
++      ∀ m : ℤ, _root_.fourierCoeff
+           (fun x : UnitAddCircle => actualQuotientInfinityCylinder N hY f (x, y)) m =
+         actualTestFourier N f m (y : ℝ) := by
+   let U := actualQuotientInfinityCylinder N hY f
+@@ -128,12 +128,12 @@
+       U (p.2, p.1) = f (orbitProjection N (nativeCylinderPoint (p.2, p.1))) :=
+     Measure.measurePreserving_swap.quasiMeasurePreserving.ae hae
+   have hsections := ae_ae_of_ae_prod hswap
+-  filter_upwards [hsquare.prod_right_ae, hsections] with y hy hsec
++  filter_upwards [hsquare.prod_left_ae, hsections] with y hy hsec
+   refine ⟨(memLp_two_iff_integrable_sq_norm
+     ((Lp.stronglyMeasurable U).comp_measurable measurable_prodMk_right).aestronglyMeasurable).mpr hy,
+       ?_⟩
+   intro m
+-  rw [congrFun (AddCircle.fourierCoeff_congr_ae hsec) m]
++  rw [congrFun (_root_.fourierCoeff_congr_ae hsec) m]
+   exact quotient_circle_coefficient_eq_actualFourier N f m y
+ 
+ end

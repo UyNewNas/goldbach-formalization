@@ -1,0 +1,20 @@
+--- a2b7a96ed16117ff2ac23d3c2e73f49707ff70297f6665a6723f559a3abc6f86/Part3ActualCuspSmoothEigenprofileFamily.lean
++++ 7d2a5070d28c198ad9b293046dce53af2d6a26474a5f889a3d6c78771afd15ec/Part3ActualCuspSmoothEigenprofileFamily.lean
+@@ -16,7 +16,7 @@
+ namespace ImbalancedChen.Part3.ActualCuspSmoothEigenprofileFamily20261026b
+ noncomputable section
+ open Set MeasureTheory Filter
+-open scoped MatrixGroups UpperHalfPlane
++open scoped MatrixGroups UpperHalfPlane Topology ContDiff
+ open ActualFullCuspEigenbasis20261026b ActualCuspEigenbasisNativeLabels20261026b
+ open Gamma0ActualSmoothQuotientCore20261025a Gamma0ActualMaassClosedOperator20261025a
+ open GammaActualEigenSmoothRepresentative20261026b UniformNormalizedEigenFrameClassicalBound20261026b
+@@ -69,7 +69,7 @@
+   let f : QuotientL2 N := (actualCuspHilbertBasis N hN i : QuotientL2 N)
+   have hnorm : ‖f‖ ^ 2 = ∫ q, ‖f q‖ ^ 2 ∂carrierPushforward N := by
+     have h := L2.inner_def (𝕜 := ℂ) f f
+-    simp_rw [inner_self_eq_norm_sq_to_K] at h
++    simp_rw [inner_self_eq_norm_sq_to_K, ← Complex.ofReal_pow] at h
+     rw [integral_ofReal] at h
+     exact Complex.ofReal_injective h
+   have hAE := (actualCuspSmoothProfile_spec N hN i).2.1

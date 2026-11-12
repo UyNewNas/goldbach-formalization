@@ -1,0 +1,120 @@
+{
+  "scope": "Source-text headers, not elaborated types",
+  "module": "ImbalancedChen.Part3ImaginaryRadialTailDerivativeL2",
+  "declaration_count": 11,
+  "all_original_declaration_headers_identical": true,
+  "original": [
+    {
+      "name": "intervalCutoff",
+      "line": 26,
+      "header": "private def intervalCutoff (a b r : ℝ) : ℝ"
+    },
+    {
+      "name": "intervalCutoff_smooth",
+      "line": 29,
+      "header": "private theorem intervalCutoff_smooth (a b : ℝ) :\n    ContDiff ℝ 1 (intervalCutoff a b)"
+    },
+    {
+      "name": "intervalCutoff_range",
+      "line": 34,
+      "header": "private theorem intervalCutoff_range (a b r : ℝ) :\n    0 ≤ intervalCutoff a b r ∧ intervalCutoff a b r ≤ 1"
+    },
+    {
+      "name": "intervalCutoff_left",
+      "line": 41,
+      "header": "private theorem intervalCutoff_left (a b : ℝ) : intervalCutoff a b a = 0"
+    },
+    {
+      "name": "intervalCutoff_right",
+      "line": 44,
+      "header": "private theorem intervalCutoff_right (a b : ℝ) : intervalCutoff a b (b+1) = 0"
+    },
+    {
+      "name": "intervalCutoff_one",
+      "line": 47,
+      "header": "private theorem intervalCutoff_one {a b r : ℝ} (hr : r ∈ Icc (a+1) b) :\n    intervalCutoff a b r = 1"
+    },
+    {
+      "name": "intervalCutoff_deriv",
+      "line": 52,
+      "header": "private theorem intervalCutoff_deriv (a b r : ℝ) :\n    deriv (intervalCutoff a b) r =\n      deriv Real.smoothTransition (r-a)*Real.smoothTransition (b+1-r) -\n        Real.smoothTransition (r-a)*deriv Real.smoothTransition (b+1-r)"
+    },
+    {
+      "name": "intervalCutoff_deriv_bound",
+      "line": 65,
+      "header": "private theorem intervalCutoff_deriv_bound {C : ℝ} (hC : 0 ≤ C)\n    (hbound : ∀ r : ℝ, |deriv Real.smoothTransition r| ≤ C)\n    (a b r : ℝ) : |deriv (intervalCutoff a b) r| ≤ 2*C"
+    },
+    {
+      "name": "tail_continuity",
+      "line": 83,
+      "header": "private theorem tail_continuity {tau R : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u) :\n    ContinuousOn u (Ioi R) ∧ ContinuousOn (deriv u) (Ioi R)"
+    },
+    {
+      "name": "finite_derivative_bound",
+      "line": 91,
+      "header": "private theorem finite_derivative_bound {tau R a C : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u) (hRa : R < a) (hC : 0 ≤ C)\n    (hCbound : ∀ r : ℝ, |deriv Real.smoothTransition r| ≤ C)\n    (hL2 : MemLp u 2 (volume.restrict (Ioi R)))\n    {b : ℝ} (hab : a+1 ≤ b) :\n    (∫ r in (a+1)..b, Complex.normSq (deriv u r)) ≤\n      (16*C^2+2*tau^2)*(∫ r in Ioi R, Complex.normSq (u r))"
+    },
+    {
+      "name": "derivative_memLp_two_smaller_tail",
+      "line": 163,
+      "header": "theorem derivative_memLp_two_smaller_tail {tau R : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u)\n    (hL2 : MemLp u 2 (volume.restrict (Ioi R))) :\n    MemLp (deriv u) 2 (volume.restrict (Ioi (R+2)))"
+    }
+  ],
+  "selected_existing_candidate": [
+    {
+      "name": "intervalCutoff",
+      "line": 26,
+      "header": "private def intervalCutoff (a b r : ℝ) : ℝ"
+    },
+    {
+      "name": "intervalCutoff_smooth",
+      "line": 29,
+      "header": "private theorem intervalCutoff_smooth (a b : ℝ) :\n    ContDiff ℝ 1 (intervalCutoff a b)"
+    },
+    {
+      "name": "intervalCutoff_range",
+      "line": 34,
+      "header": "private theorem intervalCutoff_range (a b r : ℝ) :\n    0 ≤ intervalCutoff a b r ∧ intervalCutoff a b r ≤ 1"
+    },
+    {
+      "name": "intervalCutoff_left",
+      "line": 41,
+      "header": "private theorem intervalCutoff_left (a b : ℝ) : intervalCutoff a b a = 0"
+    },
+    {
+      "name": "intervalCutoff_right",
+      "line": 44,
+      "header": "private theorem intervalCutoff_right (a b : ℝ) : intervalCutoff a b (b+1) = 0"
+    },
+    {
+      "name": "intervalCutoff_one",
+      "line": 47,
+      "header": "private theorem intervalCutoff_one {a b r : ℝ} (hr : r ∈ Icc (a+1) b) :\n    intervalCutoff a b r = 1"
+    },
+    {
+      "name": "intervalCutoff_deriv",
+      "line": 52,
+      "header": "private theorem intervalCutoff_deriv (a b r : ℝ) :\n    deriv (intervalCutoff a b) r =\n      deriv Real.smoothTransition (r-a)*Real.smoothTransition (b+1-r) -\n        Real.smoothTransition (r-a)*deriv Real.smoothTransition (b+1-r)"
+    },
+    {
+      "name": "intervalCutoff_deriv_bound",
+      "line": 65,
+      "header": "private theorem intervalCutoff_deriv_bound {C : ℝ} (hC : 0 ≤ C)\n    (hbound : ∀ r : ℝ, |deriv Real.smoothTransition r| ≤ C)\n    (a b r : ℝ) : |deriv (intervalCutoff a b) r| ≤ 2*C"
+    },
+    {
+      "name": "tail_continuity",
+      "line": 83,
+      "header": "private theorem tail_continuity {tau R : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u) :\n    ContinuousOn u (Ioi R) ∧ ContinuousOn (deriv u) (Ioi R)"
+    },
+    {
+      "name": "finite_derivative_bound",
+      "line": 91,
+      "header": "private theorem finite_derivative_bound {tau R a C : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u) (hRa : R < a) (hC : 0 ≤ C)\n    (hCbound : ∀ r : ℝ, |deriv Real.smoothTransition r| ≤ C)\n    (hL2 : MemLp u 2 (volume.restrict (Ioi R)))\n    {b : ℝ} (hab : a+1 ≤ b) :\n    (∫ r in (a+1)..b, Complex.normSq (deriv u r)) ≤\n      (16*C^2+2*tau^2)*(∫ r in Ioi R, Complex.normSq (u r))"
+    },
+    {
+      "name": "derivative_memLp_two_smaller_tail",
+      "line": 163,
+      "header": "theorem derivative_memLp_two_smaller_tail {tau R : ℝ} {u : ℝ → ℂ}\n    (hu : TailSolution tau R u)\n    (hL2 : MemLp u 2 (volume.restrict (Ioi R))) :\n    MemLp (deriv u) 2 (volume.restrict (Ioi (R+2)))"
+    }
+  ]
+}
