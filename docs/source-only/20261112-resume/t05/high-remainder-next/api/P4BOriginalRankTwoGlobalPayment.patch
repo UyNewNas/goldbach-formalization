@@ -1,0 +1,129 @@
+--- a/ImbalancedChen/P4BOriginalRankTwoGlobalPayment.lean
++++ b/ImbalancedChen/P4BOriginalRankTwoGlobalPayment.lean
+@@ -21,11 +21,12 @@
+ open P5Z.ActualDyadicRankPolynomial (bankLogConstant bankLogConstant_pos eventually_actual_cutoffIndex_le_log)
+ open Part3 (primeProductSignedError)
+ 
+-theorem eventually_each_block (A : ℕ) (delta : ℝ) (hd : 0<delta) :
++/-- Uniform over all complete moduli in the stated range and arbitrary one-bounded
++weights on that finite set. The early constants come from the same proof on dyadic blocks. -/
++theorem eventually_each_bounded_block (A : ℕ) (delta : ℝ) (hd : 0<delta) :
+     ∀ᶠ N : ℕ in atTop,∀ (b kap s kap0 : ℝ),0<b → 0<kap → 0<s → 2*s≤baseline b kap-19/96 →
+-      ∀ (m r n : ℕ) (e : ℚ) (q : ℕ) (a omega : ℝ) (k : ℕ) (ell : ℝ),ell<1/1000 →
+-      let S := carrier m r n e q a omega k N ell
+-      let c := coefficient m r n e q a omega k N ((N:ℝ)^ell)
++      ∀ (S : Finset ℕ) (c : ℕ → ℝ),
++      (∀ d∈S,0<d ∧ (d:ℝ)<(N:ℝ)^(2/5:ℝ) ∧ N.Coprime d ∧ |c d|≤1) →
+       ∀ i∈bank N,∀ j∈bank N,|discrepancy N S c (box N i) (box N j)
+         (naturalWeight b kap s kap0 N)|≤delta*(N:ℝ)/(Real.log (N:ℝ))^A := by
+   let B := A+2
+@@ -36,11 +37,8 @@
+   filter_upwards [eventually_geometry B x0,eventually_block_cost A K delta hK hd,smallProduct]
+     with N geom hbudget hsmall
+   obtain ⟨hN,hlog,hcut,hJ,hJlo,hJhi,Hgeom⟩ := geom
+-  intro b kap s kap0 hb hk hs hg m r n e q a omega k ell hell
+-  dsimp only
++  intro b kap s kap0 hb hk hs hg S c hS
+   intro i hi j hj
+-  let S := carrier m r n e q a omega k N ell
+-  let c := coefficient m r n e q a omega k N ((N:ℝ)^ell)
+   let P := base i
+   let V := base j
+   let x := (P:ℝ)*(V:ℝ)
+@@ -48,12 +46,19 @@
+   let W := naturalWeight b kap s kap0 N
+   have hn0 : 1<N := by omega
+   have hn : (1:ℝ)<N := by exact_mod_cast hn0
+-  obtain ⟨hS,hSN,hc⟩ := physical_moduli m r n e q a omega k N hn0 ell hell
++  have hSN : S⊆Finset.Icc 1 N := by
++    intro d hd
++    refine Finset.mem_Icc.mpr ⟨(hS d hd).1,Nat.cast_le.mp (α:=ℝ) ?_⟩
++    exact (hS d hd).2.1.le.trans (by simpa using
++      Real.rpow_le_rpow_of_exponent_le hn.le (by norm_num : (2/5:ℝ)≤1))
+   have hgoal : 0≤delta*(N:ℝ)/(Real.log (N:ℝ))^A := by positivity
+   by_cases hlow : x≤(N:ℝ)^(9/10:ℝ)
+   · let cc := fun d => if d∈S then c d else 0
+     obtain ⟨HR,_⟩ := rows N (by omega) S cc (fun d ht => (hS d ht).1)
+-      (fun d => by by_cases h : d∈S <;> simp [cc,h,hc d])
++      (fun d => by
++        by_cases h : d∈S
++        · simpa only [cc,if_pos h] using (hS d h).2.2.2
++        · simp [cc,h])
+       (fun d h => by
+         by_cases ht : d∈S
+         · exact (hS d ht).2.1.trans_le (Real.rpow_le_rpow_of_exponent_le hn.le
+@@ -78,7 +83,7 @@
+         hPH (min_le_right _ _) hJ hJP hT (box_le N j) (fun d hd' => ⟨(hS d hd').1,
+           (hS d hd').2.1.le.trans hcap,(hS d hd').2.2.1,(hS d hd').2.2.2⟩)
+       have hm : reciprocalMass S c≤4*(1+Real.log (N:ℝ)) := by
+-        simpa only [max_eq_right hn.le] using modulus_budget hSN (fun d _ => hc d)
++        simpa only [max_eq_right hn.le] using modulus_budget hSN (fun d hd => (hS d hd).2.2.2)
+       exact hmain.trans (hbudget x (reciprocalMass S c) (zero_lt_one.trans (hx0.trans_le hstart))
+         hxhi hlogx (reciprocalMass_nonneg _ _) hm hJlo hJhi)
+     · have he : discrepancy N S c (box N i) (box N j) W=0 := by
+@@ -91,29 +96,34 @@
+       change |discrepancy N S c (box N i) (box N j) W|≤_
+       simpa only [he,abs_zero] using hgoal
+ 
+-/-- Unconditional original signed prime-product payment on every
+-remaining complete modulus of rough rank two. The same c appears inside
+-the progression and the exact mean, with no global support premise. -/
+-theorem eventually_original_prime_rank_two (A : ℕ) (delta : ℝ) (hd : 0<delta) :
++theorem eventually_each_block (A : ℕ) (delta : ℝ) (hd : 0<delta) :
+     ∀ᶠ N : ℕ in atTop,∀ (b kap s kap0 : ℝ),0<b → 0<kap → 0<s → 2*s≤baseline b kap-19/96 →
+       ∀ (m r n : ℕ) (e : ℚ) (q : ℕ) (a omega : ℝ) (k : ℕ) (ell : ℝ),ell<1/1000 →
+       let S := carrier m r n e q a omega k N ell
+       let c := coefficient m r n e q a omega k N ((N:ℝ)^ell)
++      ∀ i∈bank N,∀ j∈bank N,|discrepancy N S c (box N i) (box N j)
++        (naturalWeight b kap s kap0 N)|≤delta*(N:ℝ)/(Real.log (N:ℝ))^A := by
++  filter_upwards [eventually_each_bounded_block A delta hd,eventually_ge_atTop (2:ℕ)] with N H hN
++  intro b kap s kap0 hb hk hs hg m r n e q a omega k ell hell
++  exact H b kap s kap0 hb hk hs hg _ _ (physical_moduli m r n e q a omega k N (by omega) ell hell).1
++
++/-- The complete pre-HB prime-product error for every such finite subset and signed row. -/
++theorem eventually_bounded_moduli_prime (A : ℕ) (delta : ℝ) (hd : 0<delta) :
++    ∀ᶠ N : ℕ in atTop,∀ (b kap s kap0 : ℝ),0<b → 0<kap → 0<s → 2*s≤baseline b kap-19/96 →
++      ∀ (S : Finset ℕ) (c : ℕ → ℝ),
++      (∀ d∈S,0<d ∧ (d:ℝ)<(N:ℝ)^(2/5:ℝ) ∧ N.Coprime d ∧ |c d|≤1) →
+       |primeProductSignedError 2 N N S c (trimmedWeight b kap s kap0 N)|≤
+         delta*(N:ℝ)/(Real.log (N:ℝ))^A := by
+   let C := bankLogConstant
+   have hC : 0<C := bankLogConstant_pos
+   have hfee : 0<delta/C^2 := by positivity
+-  filter_upwards [eventually_each_block (A+2) (delta/C^2) hfee,
++  filter_upwards [eventually_each_bounded_block (A+2) (delta/C^2) hfee,
+     eventually_actual_cutoffIndex_le_log 1 (by norm_num),eventually_one_le_nat_log] with N H hc hl
+-  intro b kap s kap0 hb hk hs hg m r n e q a omega k ell hell
+-  dsimp only
+-  let S := carrier m r n e q a omega k N ell
+-  let c := coefficient m r n e q a omega k N ((N:ℝ)^ell)
++  intro b kap s kap0 hb hk hs hg S c hS
+   let F := fun i j => discrepancy N S c (box N i) (box N j) (naturalWeight b kap s kap0 N)
+   let L := Real.log (N:ℝ)
+   have hl0 : 0<L := zero_lt_one.trans_le hl
+-  have hbnd := H b kap s kap0 hb hk hs hg m r n e q a omega k ell hell
++  have hbnd := H b kap s kap0 hb hk hs hg S c hS
+   let E := (delta/C^2)*(N:ℝ)/L^(A+2)
+   have he : 0≤E := by dsimp [E]; positivity
+   have hcnt : ((bank N).card:ℝ)≤C*L := by
+@@ -131,6 +141,20 @@
+     _ ≤ (C*L)^2*E := mul_le_mul_of_nonneg_right
+       (pow_le_pow_left₀ (Nat.cast_nonneg _) hcnt 2) he
+     _ = _ := by dsimp only [E,L]; rw [pow_add]; field_simp [hC.ne',hl0.ne'] <;> ring
++
++/-- Unconditional original signed prime-product payment on every
++remaining complete modulus of rough rank two. The same c appears inside
++the progression and the exact mean, with no global support premise. -/
++theorem eventually_original_prime_rank_two (A : ℕ) (delta : ℝ) (hd : 0<delta) :
++    ∀ᶠ N : ℕ in atTop,∀ (b kap s kap0 : ℝ),0<b → 0<kap → 0<s → 2*s≤baseline b kap-19/96 →
++      ∀ (m r n : ℕ) (e : ℚ) (q : ℕ) (a omega : ℝ) (k : ℕ) (ell : ℝ),ell<1/1000 →
++      let S := carrier m r n e q a omega k N ell
++      let c := coefficient m r n e q a omega k N ((N:ℝ)^ell)
++      |primeProductSignedError 2 N N S c (trimmedWeight b kap s kap0 N)|≤
++        delta*(N:ℝ)/(Real.log (N:ℝ))^A := by
++  filter_upwards [eventually_bounded_moduli_prime A delta hd,eventually_ge_atTop (2:ℕ)] with N H hN
++  intro b kap s kap0 hb hk hs hg m r n e q a omega k ell hell
++  exact H b kap s kap0 hb hk hs hg _ _ (physical_moduli m r n e q a omega k N (by omega) ell hell).1
+ 
+ /-- The joint sum of BOTH original HB alternatives over ALL original
+ dyadic labels of the actual remaining low-rank piece. -/
