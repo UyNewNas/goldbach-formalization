@@ -11,7 +11,7 @@ Reused existing (uncompiled) **manuscript-internal** declarations:
 - `Part5OriginalH430FourLaneFullTaggedFin.original_source_four_lanes_all_tagged_fin`, `original_negative_quarter_four_lanes_all_tagged_fin`, `originalFourOutsidePositionLanes`.
 - `Part5OriginalH430SequentialTaggedReceiptDebt.actualSlotTaggedWeight`.
 - `Part5OriginalH430NegativeQuarterActualPositionDirection.originalU34SignedQuarter`.
-- Elementary imported Mathlib `Finset.sum_add_distrib`, `Finset.sum_disjSum`, `Finset.sum_congr`, basic finite sums and ordered real arithmetic.
+- Elementary imported Mathlib `Finset.sum_add_distrib`, `Finset.sum_congr`, basic finite sums and ordered real arithmetic.
 
 All original same-Q physical-source mapping, actual q/tag multiplicity, frozen full/selected/inherited match, native Euler mass, proper/seed/PP/same-rho instantiations, and combined 430+11 causal closure remain **manuscript-internal obligations**, not external licences.
 
