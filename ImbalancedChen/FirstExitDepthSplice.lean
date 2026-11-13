@@ -46,7 +46,7 @@ def firstExitDepthSplicePolicy {α : Type*} (k : ℕ)
 
 /-- The finite parent frontier. Reaching rank `k` stops the scan immediately,
 so the remaining smaller labels are retained as part of the state. -/
-def firstExitDepthFrontier {α : Type*} (k : ℕ)
+noncomputable def firstExitDepthFrontier {α : Type*} (k : ℕ)
     (parent : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
     List α → List (FirstExitDepthState α)
@@ -67,7 +67,7 @@ def firstExitDepthFrontier {α : Type*} (k : ℕ)
 
 /-- Signed terminal values of branches ending before the frontier. Branches
 that reach the frontier contribute zero here and are continued separately. -/
-def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)
+noncomputable def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)
     (parent : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
   | [] => if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass
