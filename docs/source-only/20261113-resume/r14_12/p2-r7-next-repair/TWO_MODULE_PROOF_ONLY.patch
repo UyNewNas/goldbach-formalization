@@ -1,0 +1,109 @@
+diff --git a/ImbalancedChen/ActualThirdOriginalP4AOrdinaryRawFallbackAllOld.lean b/ImbalancedChen/ActualThirdOriginalP4AOrdinaryRawFallbackAllOld.lean
+index 5518240..caebc6c 100644
+--- a/ImbalancedChen/ActualThirdOriginalP4AOrdinaryRawFallbackAllOld.lean
++++ b/ImbalancedChen/ActualThirdOriginalP4AOrdinaryRawFallbackAllOld.lean
+@@ -67,8 +67,7 @@ theorem raw_tent_floor_le_v (n : ℤ) :
+       _=VariableEnvelope.A ((n:ℝ)/(D₀:ℝ)) := by
+         unfold VariableEnvelope.A
+         push_cast
+-        field_simp [scale_pos.ne']
+-        ring
++        field_simp [scale_pos.ne'] <;> ring
+   · calc
+       (rawTentLower n:ℝ)/(D₀:ℝ)≤(((57*D₀-96*n:ℤ):ℝ)/64)/(D₀:ℝ) :=
+         div_le_div_of_nonneg_right hf scale_pos.le
+@@ -86,10 +85,14 @@ theorem v_endpoint_min_le {l u t : ℝ} (hlt : l≤t) (htu : t≤u) :
+     (min_le_left _ _).trans (by rw [VariableEnvelope.v_eq_min]; exact min_le_left _ _)
+   have hu : min (VariableEnvelope.v l) (VariableEnvelope.v u)≤VariableEnvelope.C u :=
+     (min_le_right _ _).trans (by rw [VariableEnvelope.v_eq_min]; exact min_le_right _ _)
+-  rw [VariableEnvelope.v_eq_min]
++  rw [VariableEnvelope.v_eq_min t]
+   apply le_min
+-  · exact hl.trans (by unfold VariableEnvelope.A; linarith)
+-  · exact hu.trans (by unfold VariableEnvelope.C; linarith)
++  · calc
++      min (VariableEnvelope.v l) (VariableEnvelope.v u)≤VariableEnvelope.A l := hl
++      _≤VariableEnvelope.A t := by unfold VariableEnvelope.A; linarith only [hlt]
++  · calc
++      min (VariableEnvelope.v l) (VariableEnvelope.v u)≤VariableEnvelope.C u := hu
++      _≤VariableEnvelope.C t := by unfold VariableEnvelope.C; linarith only [htu]
+ 
+ theorem tent_floor_endpoint_min_le (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
+     (g : OrdinaryGrid lo hi a b) (s : TentSum) {t : BoxPoint}
+@@ -133,8 +136,13 @@ theorem raw_B_floor_le (hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
+     push_cast
+     field_simp [scale_pos.ne']
+     ring
+-  rw [he] at hh
+-  exact hh.trans (by unfold VariableEnvelope.B; linarith [ht 2])
++  have hh' : ((((153*D₀-96*hi 2)/256:ℤ):ℝ)/(D₀:ℝ))≤
++      VariableEnvelope.B (realBox b 2) := by
++    rw [← he]
++    simpa only [Int.cast_ofNat] using hh
++  exact hh'.trans (show VariableEnvelope.B (realBox b 2)≤VariableEnvelope.B (t 2) from by
++    unfold VariableEnvelope.B
++    linarith only [ht 2])
+ 
+ theorem normalized_foldr_max_le (zs : List ℤ) (base : ℤ) (u : ℝ)
+     (hb : (base:ℝ)/(D₀:ℝ)≤u)
+@@ -206,8 +214,7 @@ theorem original_old_endpoint_cast (lo hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
+   rw [hbind 0,hbind 1,hbind 2]
+   unfold oldLowerNumerator
+   push_cast
+-  field_simp [scale_pos.ne',hz0]
+-  ring
++  field_simp [scale_pos.ne',hz0] <;> ring
+ 
+ /-- The producer's actual assert ca>x1+y1 pays the numerator sign. It is
+ stronger than merely having positive z, and is retained as an integer fact. -/
+@@ -232,8 +239,7 @@ theorem original_old_endpoint_le_actual (lo hi : Fin 3 → ℤ)
+   have he : actualOldArgument t=
+       (actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)-t 0-t 1)/t 2-1 := by
+     unfold actualOldArgument
+-    field_simp [hz.ne']
+-    ring
++    field_simp [hz.ne'] <;> ring
+   rw [he]
+   exact sub_le_sub_right hdiv 1
+ 
+@@ -251,10 +257,9 @@ theorem original_new_pointwise_le_endpoint (lo hi : Fin 3 → ℤ)
+   rw [original_new_endpoint_cast lo a g.lower (g.positive 2)]
+   have he : (thirdPrefixTheta-realBox a 0-realBox a 1-realBox a 2)/realBox a 2=
+       (thirdPrefixTheta-realBox a 0-realBox a 1)/realBox a 2-1 := by
+-    field_simp [(g.positive 2).ne']
+-    ring
++    field_simp [(g.positive 2).ne'] <;> ring
+   rw [he]
+-  simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using add_le_add_right hdiv (-1)
++  simpa only [affineArgument,neg_one_mul,sub_eq_add_neg,add_comm] using add_le_add_right hdiv (-1)
+ 
+ /-- Original upper NEW read minus original lower OLD read, on ONE immutable
+ table. All query branches remain certified, including positive OLD and tail. -/
+diff --git a/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean b/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
+index f99d638..3b0274e 100644
+--- a/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
++++ b/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
+@@ -214,9 +214,9 @@ theorem all_saved_producer_chord_le_actual_integral
+     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
+     (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
+-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
+-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
+   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
+@@ -319,9 +319,9 @@ theorem all_saved_producer_chord_le_actual_integral_no_query_order
+     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
+     (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
+-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
+-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
+   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)

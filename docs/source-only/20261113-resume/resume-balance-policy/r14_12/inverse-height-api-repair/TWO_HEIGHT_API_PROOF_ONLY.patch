@@ -1,0 +1,26 @@
+diff --git a/ImbalancedChen/Part3SmallHeightReducedMatrixBounds.lean b/ImbalancedChen/Part3SmallHeightReducedMatrixBounds.lean
+index 026fedd..20f5ddf 100644
+--- a/ImbalancedChen/Part3SmallHeightReducedMatrixBounds.lean
++++ b/ImbalancedChen/Part3SmallHeightReducedMatrixBounds.lean
+@@ -68,7 +68,7 @@ theorem reduced_nonzero_lowerLeft_bounds {t : ℝ} (ht : 0 < t) (ht1 : t ≤ 1)
+     (mul_le_mul_of_nonneg_right himage w.im_pos.le).trans (im_smul_mul_im_le_one g hc w)
+   have hy : w.im ≤ 1/t := (le_div_iff₀ ht).mpr (by simpa only [mul_comm] using hty)
+   have hcy : t*c^2*w.im ≤ 1 := by
+-    apply (mul_le_mul_right w.im_pos).mp
++    apply (mul_le_mul_iff_left₀ w.im_pos).mp
+     have hmain : t*(c*w.im)^2 ≤ w.im := by
+       dsimp [D] at htD
+       nlinarith [mul_nonneg ht.le (sq_nonneg (c*w.re+d))]
+diff --git a/ImbalancedChen/Part3Gamma0ActualHighCuspTail.lean b/ImbalancedChen/Part3Gamma0ActualHighCuspTail.lean
+index cfc868b..667f2ca 100644
+--- a/ImbalancedChen/Part3Gamma0ActualHighCuspTail.lean
++++ b/ImbalancedChen/Part3Gamma0ActualHighCuspTail.lean
+@@ -57,7 +57,7 @@ theorem im_smul_mul_im_le_one (g : SL(2,ℤ)) (hc : g 1 0≠0) (z : UpperHalfPla
+     (eq_div_iff hdenpos.ne').mp him
+   have hsq : (g • z).im*z.im^2≤z.im :=
+     (mul_le_mul_of_nonneg_left hysq (g • z).im_pos.le).trans_eq heq
+-  apply (mul_le_mul_right z.im_pos).mp
++  apply (mul_le_mul_iff_left₀ z.im_pos).mp
+   simpa only [pow_two,mul_assoc,one_mul] using hsq
+ 
+ /-- Two actual Gamma0 images both above height one lie in the same actual
