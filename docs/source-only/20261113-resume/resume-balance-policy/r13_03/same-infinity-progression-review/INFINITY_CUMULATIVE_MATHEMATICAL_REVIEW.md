@@ -1,0 +1,15 @@
+# Cumulative holomorphic estimate at the identity observation
+
+The five selected sources give the following source-level terminal. For every ε>0 there is one positive Cε such that, for every positive integral level z, every K≥1 and real L≥1/2, every finite S⊂(L,2L], any complex coefficients a and any complete Petersson orthonormal basis at each even weight,
+
+    Σ_{j≥0, 2j+1≤K} Γ(2j+2) Σᵢ |Σ_{n∈S} a(n) Rᵢ,∞(n)|²
+      ≤ Cε (K² + L^(1+ε)/z) Σ_{n∈S}|a(n)|².
+
+The original code's observation `false` is the identity scaling matrix. For each weight the Riesz vectors of the two coefficient functionals give the same cross inner product in any complete basis. On multiplying by conj(aₘ)aₙ and summing over the finite packet, the diagonal contributes exactly the packet energy and the basis term becomes its squared norm. The ordering of the Riesz vectors follows Lean's convention that the first inner-product argument is conjugate linear.
+
+Write h=2j+1, κ=h+1. The fixed-weight trace contains 4πΓ(h) times the unweighted squared packet. Multiplying by hW gives 4πWΓ(h+1) times that packet. The signed Bessel factor satisfies (−i)^(2j+2)=i^(h+1). The two definitions of the argument have the common value 4π√m√n/c for c=z(l+1). The native matrix already contains 2/c, giving a coefficient π in the scaled trace and 1/4 after division by 4π. Each even h is masked. After the actual absolute h,c interchange, taking real parts and applying the full geometric norm estimate gives a total cost of 4K²+2 cost(ε)M^(1+ε)/z times the natural dyadic energy. The fixed-parameter convergence majorant contributes no constant to this bound.
+
+Set M=⌊L⌋+1. Every n∈S has M≤n≤2M, and M≤L+1≤3L. Extending a by zero yields exactly the original finite energy and every coefficient functional. This includes L=1/2 and the empty packet. The only conversion in the price of the length is 3^(1+ε). For h≥3 the lower cutoff e^-1(1−e^-2) applies uniformly on h≤K. The map j↦2j+1 is injective, and the weighted summands are nonnegative. Consequently the whole selected upper range is paid at once. At h=1 the chosen window vanishes. The prior `manuscript_holomorphic` is used once at cutoff K=1, where its finite index set is precisely {0} and its existing K≤2 hypothesis holds for every L. This also covers K=1 and 1<K<3.
+
+With D the uniform constant in the prior bounded-height result, the new terminal chooses D+[4+2|cost(ε)|3^(1+ε)]/[4πe^-1(1−e^-2)] before z,K,L,S,a and all the bases. The prior higher-range alternatives impose no restriction on the new terminal, because the only call to that prior result is at K=1. There is no smoothness, spectral gap, target inequality or unknown h,c exchange among the assumptions. This supplies the unrestricted identity-observation holomorphic instance of the manuscript large sieve at the source level. The other cusp, regular Maaß spectrum, continuous incoming channels, full packet assembly and kernel verification remain distinct obligations. [Drappeau, Proposition 4.7, equations (4.23) and (4.26)](https://arxiv.org/pdf/1504.05549v4#page=14)
+

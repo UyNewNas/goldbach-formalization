@@ -1,0 +1,19 @@
+# Uniform regular transform of the two switching tests
+
+The reviewed freeze is `a0317924442753b76a938ed7b510b637a9d3dc0f79099d8b49d421cd47a50d67`. The published reference tree is `484d8ffc8f79e7c213b33ae86a8d960cd4da6de4`. The review covers three source files, eleven declarations including one abbreviation and four private lemmas, and zero kernel checks. This is a scalar principal-series transform estimate.
+
+## Common constant
+
+The physical mode is spectralMode(k,x/V). The pinned cosine formula integrates cos(xy) times this mode with dx/x. The positive substitution x=Vu puts the complete mode at unit scale and changes the frequency to Vy. The V Jacobian cancels exactly with the denominator. Reflection, the ordinary Fourier transform, frequency dilation by 1/(2π), and the exterior half give the actual unit-scale cosine Schwartz function. Its seminorms of indices (j,j) and (j+1,j) for j=0,1,2,3 have one polynomial bound A(k)=C(1+|k|)^r, with C,r before k and every Y. This uses only the unit-scale specialization of the prior fixed-scale control theorem.
+
+For V=1/Y, Y≥1, set v=V cosh u, w=V sinh u. The third derivative of f(v) is w f'(v) + 3wv f''(v) + w³f'''(v). Since |w|≤v, each derivative term uses its matching j-jet with the full weight (1+v)v^j. This bounds both the profile and its third derivative by 5A(k)/(1+v). For H=log(2Y), the part |u|≤H is immediate. For |u|>H the quantity b=|u|−H satisfies b²/2≤exp b≤v. Thus 1+u²≤8(1+H²)(1+v) on the real line. Both L¹ norms cost at most 40π A(k)(1+H²) using the integral of (1+u²)⁻¹. At Y=1 all these bounds stay finite.
+
+The actual positive-weight transform is four times the full Fourier transform at t/π. The n=3 derivative multiplier has norm (2|t|)³, including its 2π Fourier normalization. Split |t|≤1 from |t|>1. The zeroth-derivative bound handles t=0 and both signs of t use the same constants. Summing the actual tested mode expansion costs at most the previous uniform weighted absolute coefficient budget at exponent r. Hence all Y≥1, both tests, every real L and t satisfy (1+|t|)³ |positiveWeight| ≤ C(1+log²(2Y)). L can be zero or negative; at positive marks m,n and d,Q>0 the reflected case is exactly L=4πY√(mn)/(dQ). A single C is chosen before all these parameters. The source also covers the unreflected first test.
+
+## Use in the proof of (4.29)
+
+The two trace errors in the printed argument are additive. The logarithm here can be paid on a regular remainder once its genuine spectral sum is bounded. It does not supply a multiplier on the exceptional recurrence. A pointwise uniform bound for the reflected transform leaves the dependence through √(mn) in the bilinear spectral row. Bounding each coefficient in absolute value before using the large sieve would discard the cancellation needed for the ℓ² row estimate. This three-file batch gives no separation of the marks, holomorphic bound, cumulative native large-sieve estimate, full trace remainder, or induction. The actual regular spectral measures retain their published cosh and continuous 1/(4π) normalizations whenever the scalar numerator is inserted. See Drappeau, proof of Lemma 4.11 (4.29), p. 17.
+
+## Pinned interfaces
+
+The required 484d sources are `Part3ActualPositiveCosineProfile` repaired blob `a6e796a834aa77a38db07187932bf15d585d6d38`, `Part3OriginalSwitchedSchwartzPrices` `f882155900d25054457a70a9f547f7c5fde82173`, `Part3OriginalSwitchedRegularModePrice` `8c377263452ea5695d20386c3ea7eac366891664`, `Part3OriginalSwitchedCutoffModes` `65c70f76b9a06278deece9f5b7435d1147224a52` and `Part3OriginalSwitchedModeTransforms` `4f569539f9f18bd9ea0d178c1c491f0ee236a4cc`. Reviewed the e4c91783 declarations for half-line dilation, weighted Schwartz seminorms, the actual derivative CLM and the Fourier transform of an iterated derivative. The canonical cosine repair is the fully selected 484d source. No local proof or runtime was executed.
