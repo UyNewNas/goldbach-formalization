@@ -649,8 +649,8 @@ class CacheSession:
     def admit(self):
         self.require_fixtures();self.verify_restored();self.policy_audit()
         if self.scope==NATIVE:
-            from cache_project import ProjectSession
-            ProjectSession(self).validate()
+            from cache_project import validate_all
+            validate_all(self)
         qualification=self.receipt('CACHE_QUALIFICATION.json')
         require(qualification['status']=='PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY','Cache qualification required before admission')
         policy=read(self.logs/'CACHE_PREEXEC_POLICY.json');sources={}
@@ -722,8 +722,8 @@ class CacheSession:
                     and final['bootstrap_restore_sha256']==sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json'),
                     'Final authentic bootstrap input binding changed')
         if self.scope==NATIVE:
-            from cache_project import ProjectSession
-            require(all(final.get(k)==v for k,v in ProjectSession(self).validate().items()),'Final root86 receipt binding changed')
+            from cache_project import validate_all
+            require(all(final.get(k)==v for k,v in validate_all(self).items()),'Final root87 receipt binding changed')
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==self.receipt('CACHE_QUALIFICATION.json')['physical_parts_receipt_sha256'],'Input receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)
@@ -738,8 +738,8 @@ class CacheSession:
         bootstrap_binding={'bootstrap_qualification_sha256':sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json'),
                            'bootstrap_restore_sha256':sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json')}
         if self.scope==NATIVE:
-            from cache_project import ProjectSession
-            bootstrap_binding.update(ProjectSession(self).validate())
+            from cache_project import validate_all
+            bootstrap_binding.update(validate_all(self))
         self.emit('CACHE_FINAL_INPUT_AUDIT.json',{'status':'PASS_UNCHANGED_CACHE_INPUTS_AND_ZERO_PROTECTED_EXEC','qualification_sha256':sha(self.logs/'CACHE_QUALIFICATION.json'),
                   **bootstrap_binding,
                   'runtime_state_sha256':sha(self.logs/'runtime/state.json'),'command_log_sha256':sha(self.state['log']),
@@ -763,8 +763,8 @@ def main():
         else:
             getattr(session,sys.argv[1])()
             if session.scope==NATIVE and sys.argv[1] in {'acquire','restore','qualify'}:
-                from cache_project import ProjectSession
-                getattr(ProjectSession(session),sys.argv[1])()
+                from cache_project import ProjectSession, PRODUCERS
+                for producer in PRODUCERS:getattr(ProjectSession(session,producer),sys.argv[1])()
     except Exception as error:
         failure=session.logs/'CACHE_FAILURE.json'
         if not failure.exists():write(failure,{'binding':session.binding,'phase':sys.argv[1],'error_type':type(error).__name__,'error':str(error),'no_rebuild_fallback':True,'proof_acceptance':False})

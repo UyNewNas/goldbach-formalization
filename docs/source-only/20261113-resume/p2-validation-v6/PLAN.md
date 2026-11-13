@@ -1,25 +1,24 @@
-# P2 r7 plan
+# P2 r8 plan
 
-Direct parent8efe66f50b8d3aff776883c051cee6d23f414a63; exact push branch
-ci/p2-integer-mass-r7-20261113. Original r6 is immutable and failed mathematics,
-with authentic bootstrap11/native407 qualifications independently confirmed.
+Direct parent7686657050f460baefd28d3e4777aaec3a18aad8; exact push branch
+ci/p2-integer-mass-r8-20261113. Frozen R7 and Stored core1a600c86 remain unchanged.
 
-Exactly102 original modules, imports and order remain:82 baselineeb,18 original
-686 overlays,2 published680 proof-expression repairs. No other source is adopted.
-Source checkouts and each module source_commit/path/bytes/SHA/blob are explicit.
+Keep102 names/imports/order:81 baselineeb,18 overlays686,1 successful Outer680,
+2 published a6aec20e proof-only repairs (new Pair and RawFallback). Source origins
+are four explicit pinned checkouts. Never choose the failed680 Pair postimage.
 
-Restore original T01 Cache144/native398+Architect9 as before. Separately restore
-r6 root86×8 genuine leanArts facets using original CHECKPOINT503750d5 and exact
-artifact14027780569 Ranges. All86 stock leanArts/current full setups/physical
-import parts/runtime/ABI must qualify; misses stop, with no compiler fallback.
-Protect all86 root sources and outputs before exec. Compile only16 affected
-modules. Require one real compilation per16 at final. Strict FinitePi starts
-from its qualified object with stock no-build, then uses its unchanged pilot.
+Reuse original native407 and authentic144 Cache CLI as before. Root87 comprises
+original86 from unchanged R6 selector/checkpoint plus Outer1 from its genuine R7
+checkpoint. R7 old86 quarantined classifications remain untouched. The identical
+restorer class handles two separate provenance datasets; no facet/trace invented.
+New stock no-build leanArts/setups/importArts/runtime/ABI qualification must pass
+for all87; any missHOLD. Source/output compiler events for cached87 are forbidden.
 
-Full102 fresh kernel replay, original strict serialized ownership, both full
-types, transitive allowed axioms, before/after snapshots, original837guard,
-32993collector, current source/object archive and final gate remain mandatory.
+Compile only the15 affected modules, exactly once each at final. Strict FinitePi
+pilot starts with the qualified object through stock no-build. Fresh full102
+kernel/fulltypes/serializedownership/axioms/snapshots/runtime/retention gates stay.
+Original837guard and32993collector plus stage/audit/prepare/pilot are byte-identical.
 
-No local helper, Lean, Lake, LSP, fixture or runtime execution. No Git/GH write
-or dispatch. ROOT alone applies independently reviewed exact rows, obtains
-actual-tree review, fresh-checks the heavy queue and pushes once.
+All candidate/runtime/fixture/proof execution is GitHub-only. ROOT alone may
+construct the reviewed actual tree, fresh-check queue and single-push after
+independent actual-tree review. No local helper or proof execution is authorized.

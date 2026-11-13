@@ -1,26 +1,24 @@
-# P2 r7 static candidate
+# P2 R8 static candidate
 
-This successor fixes no additional mathematics. It adopts the two already
-published proof-expression repairs from680fc11a47a9fb081fbf108cd007820e45656ab2,
-with the same102 names/order/imports and old18 overlays unchanged at686.
+R7 passed authentic11/407/86 input qualification but failed two mathematical
+source compilations; only OuterMinimum newly completed. No full102 kernel/types
+acceptance exists. R8 selects the two already published a6 proof-only repairs,
+retains Outer680 and old686 overlays, and changes no102 module name/order/import.
 
-The r6 original checkpoint contains86 completed compile-only root modules,
-not86 kernel acceptances. Each has exactly8 real leanArts facets. The exact
-selection/index are source reviewed against original CRC/SHA-bound raw ZIP
-metadata. A small adapter inherits existing Range/facet/setup/physical-import
-mechanisms; authentic traces/setups remain unmodified. A new stock no-build
-qualification and matching b47a root profile are mandatory. Root86 cannot be
-compiled if reuse fails. Original407 and bootstrap11 are independently bound.
+The original R6 86 selector/index remain byte-identical. Original R7 CHECKPOINT
+has only one completed module, Outer, while old86 retain their quarantine label.
+R8 takes only Outer9 real source/facet payloads from that producer; it never
+relabels old86. A producer parameter reuses the existing restorer for separate
+acquisition/restore/stock leanArts/setup/physicalimport/runtime/ABI checks. Both
+producer qualification/restore/acquisition receipts are independently hash-bound
+at final. Native407/Cache144 protocol and all original guard/proof gates remain.
 
-The ordinary compile list is16. The fresh kernel/type/axiom/serialized ownership
-scope remains102. Final acceptance requires exact16 distinct source compiler
-events, every original gate, unchanged cache receipts/objects and complete
-retention. Original proof helper, pilot, strict audit, stage, guard and collector
-bytes are retained. Final cache audit binds r6 project acquisition/restore/
-qualification and bootstrap restore/qualification receipts.
+Ordinary compilation is exactly15, cached87 zero. Final actualpreexec/compiler
+bijection and oneevent per15 join FINAL_ACCEPTANCE. Fresh102 kernel, complete
+two types, strict serialized ownership, transitive allowed axioms, dual object
+snapshots and retention are unchanged. No cache mismatch can fall back to compile.
 
-All checks performed here are static AST/JSON/SHA/Git-object/ZIP metadata checks.
-No candidate helper, fixture, runtime, compiler, proof or CI was run locally.
-This packet is not proof acceptance. driverReady is false pending independent
-source review, ROOT actual-tree construction/review and authorization. All
-execution and proof qualification must come from a future ROOT-owned GitHub job.
+Only static AST/JSON/hash/Git and explicitly authorized ZIP Range metadata were
+used locally. Candidate helpers, fixtures, compiler and proof were not executed.
+This is not proof acceptance. driverReady is false until ROOT actual-tree review
+and authorization, and all real GitHub qualification/proof receipts remain due.
