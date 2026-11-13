@@ -1,5 +1,6 @@
 import Mathlib.MeasureTheory.Constructions.Pi
 import Mathlib.MeasureTheory.Integral.Prod
+import Mathlib.MeasureTheory.Integral.Pi
 
 /-!
 # Fubini for finite real coordinate spaces
