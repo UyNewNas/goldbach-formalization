@@ -3,29 +3,31 @@ import hashlib, json, os, pathlib, re, sys
 assert os.environ.get('GITHUB_ACTIONS') == 'true', 'Remote GitHub generation only; never run locally'
 root=pathlib.Path(os.environ['PROJECT']); logs=pathlib.Path(os.environ['LOGS'])
 mode=sys.argv[1]
-modules=[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{k:03}' for k in range(53,64)]
+modules=[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{k:03}' for k in range(64,72)]
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def snapshot():
     paths=list(root.glob('ImbalancedChen/**/*.lean'))+list(root.glob('.lake/build/lib/lean/**/*.olean*'))+list(root.glob('.lake/packages/*/.lake/build/lib/lean/**/*.olean*'))
     return {str(p.relative_to(root)):digest(p) for p in sorted(paths) if p.is_file()}
 if mode=='prepare':
     receipt=[]
-    for block in range(53,64):
-        p=root/f'ImbalancedChen/Data/P5SubdivisionStoredBlock{block:03}.lean';before=p.read_text();base=4096*block
+    for block in range(64,72):
+        p=root/f'ImbalancedChen/Data/P5SubdivisionStoredBlock{block:03}.lean';before=p.read_text();base=4096*block; size=1817 if block==71 else 4096; count=(size+63)//64
         old=f'theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = {base} + j.val := by\n  decide'
-        assert before.count(old)==1 and 'theorem rows_size : rows.size = 4096 := rfl' in before
+        assert before.count(old)==1 and f'theorem rows_size : rows.size = {size} := rfl' in before
         chunks=[]
-        for k in range(64):
-            off=64*k
-            chunks.append(f'private theorem source_index_chunk_{k} : ∀ j : Fin 64, (rows[{off} + j.val]\'(by rw [rows_size]; have := j.isLt; omega)).sourceIndex = {base} + ({off} + j.val) := by\n  decide +kernel\n')
-        proof=[f'theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = {base} + j.val := by','  intro j','  have hj := j.isLt','  change j.val < 4096 at hj']
-        for k in range(64):
-            if k<63: proof.append(f'  by_cases h{k} : j.val < {64*(k+1)}');prefix='  · ';indent='    '
+        for k in range(count):
+            off=64*k; width=min(64,size-off)
+            chunks.append(f'private theorem source_index_chunk_{k} : ∀ j : Fin {width}, (rows[{off} + j.val]\'(by rw [rows_size]; have := j.isLt; omega)).sourceIndex = {base} + ({off} + j.val) := by\n  decide +kernel\n')
+        proof=[f'theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = {base} + j.val := by','  intro j','  have hj := j.isLt',f'  change j.val < {size} at hj']
+        for k in range(count):
+            if k<count-1: proof.append(f'  by_cases h{k} : j.val < {64*(k+1)}');prefix='  · ';indent='    '
             else:prefix='  ';indent='  '
-            proof.extend([prefix+f'have hi : {64*k} + j.val % 64 = j.val := by omega',indent+f'have hc := source_index_chunk_{k} ⟨j.val % 64, Nat.mod_lt _ (by decide)⟩',indent+'simpa only [hi, Nat.zero_add] using hc'])
+            width=min(64,size-64*k)
+            fin_bound='Nat.mod_lt _ (by decide)' if width==64 else 'by omega'
+            proof.extend([prefix+f'have hi : {64*k} + j.val % 64 = j.val := by omega',indent+f'have hc := source_index_chunk_{k} ⟨j.val % 64, {fin_bound}⟩',indent+'simpa only [hi, Nat.zero_add] using hc'])
         after=before.replace(old,'\n'.join(chunks+['\n'.join(proof)]));p.write_text(after)
         assert before[:before.index(old)]==after[:after.index('private theorem source_index_chunk_0')]
-        receipt.append({'module':modules[block-53],'old_sha256':hashlib.sha256(before.encode()).hexdigest(),'new_sha256':digest(p),'rows':4096,'base':base,'data_unchanged':True})
+        receipt.append({'module':modules[block-64],'old_sha256':hashlib.sha256(before.encode()).hexdigest(),'new_sha256':digest(p),'rows':size,'base':base,'data_unchanged':True})
     source=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'verification/parts/p0/Round6Audit.lean'
     audit=source.read_text();audit=audit[audit.index('set_option pp.all'):]
     start=audit.index('  let modules := #[');end=audit.index('  let allowed :=',start)
@@ -35,7 +37,7 @@ if mode=='prepare':
     audit=audit[:start]+'    liftIO <| IO.println s!"P0_ROUND6_DECL {record.compress}"\n'+audit[end:]
     audit='\n'.join('import '+m for m in modules)+'\nimport Lean.Util.CollectAxioms\n'+audit
     (root/'StoredBatchAudit.lean').write_text(audit)
-    (logs/'STORED_BATCH_REPAIRS.json').write_text(json.dumps({'green':False,'scope':'blocks053-063 only; cached parent import only; not whole T01','source_commit':os.environ['SOURCE_COMMIT'],'repairs':receipt},indent=2))
+    (logs/'STORED_BATCH_REPAIRS.json').write_text(json.dumps({'green':False,'scope':'blocks064-071 only; cached parent import only; not whole T01','source_commit':os.environ['SOURCE_COMMIT'],'repairs':receipt},indent=2))
     (logs/'modules.txt').write_text('\n'.join(modules)+'\n')
 elif mode=='snapshot':
     (logs/'BATCH_OBJECTS_BEFORE.json').write_text(json.dumps(snapshot(),sort_keys=True))
@@ -55,3 +57,4 @@ elif mode=='verify':
     assert len(replay)==len(modules) and set(replay)==set(modules)
     (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_SELECTED_BLOCKS_ONLY','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':os.environ['SOURCE_COMMIT'],'whole_t01_accepted':False,'proof_artifact_hash':digest(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
 else:raise SystemExit('bad mode')
+

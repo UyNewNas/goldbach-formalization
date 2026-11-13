@@ -1,11 +1,11 @@
-name: Stored blocks 053-063 cache-first kernel batch
+name: Stored blocks 064-071 cache-first kernel batch
 on:
   push:
-    branches: [ci/stored-blocks-053-063-20261113]
+    branches: [ci/stored-blocks-064-071-20261113]
     paths:
       - .github/workflows/stored-block-batch.yml
       - verification/parts/p0/prepare_stored_batch.py
-      - verification/parts/p0/stored053_063/**
+      - verification/parts/p0/stored064_071/**
       - docs/source-only/20261113-resume/coherent-cache-tools/**
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
       CHECK_PURPOSE: source_validation
       LEAN_NUM_THREADS: 2
       T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
-      CALLER: verification/parts/p0/stored053_063
+      CALLER: verification/parts/p0/stored064_071
       CACHE_TOOLS: docs/source-only/20261113-resume/coherent-cache-tools
       CACHE_SCOPE: STORED_PARENT
     defaults:
@@ -105,7 +105,7 @@ jobs:
           python3 verification/parts/p0/prepare_stored_batch.py prepare
           python3 "$CALLER/stored_caller.py" bind-sources
           python3 "$CACHE_TOOLS/coherent_cache.py" admit
-      - name: Compile only eleven new selected blocks with parent and accepted54 protected
+      - name: Compile only eight new selected blocks with parent and accepted65 protected
         timeout-minutes: 200
         run: |
           set -euo pipefail
@@ -113,7 +113,7 @@ jobs:
           mapfile -t modules < "$LOGS/new-modules.txt"
           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
           python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_stored_batch.py" snapshot
-      - name: Replay exactly eleven new selected blocks with accepted54 excluded with bundled kernel checker
+      - name: Replay exactly eight new selected blocks with accepted65 excluded with bundled kernel checker
         timeout-minutes: 100
         run: |
           set -euo pipefail
@@ -142,7 +142,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-053-063-light-${{ github.run_id }}
+          name: stored-blocks-064-071-light-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: warn
           retention-days: 30
@@ -156,7 +156,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-053-063-${{ github.run_id }}
+          name: stored-blocks-064-071-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: error
           retention-days: 30
@@ -164,7 +164,8 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-053-063-full-checkpoint-${{ github.run_id }}
+          name: stored-blocks-064-071-full-checkpoint-${{ github.run_id }}
           path: ${{ runner.temp }}/stored-parent-full-checkpoint/
           if-no-files-found: warn
           retention-days: 30
+

@@ -124,11 +124,11 @@ def stored_admission(control, selection):
     admission=control['source_admission'];new=admission['new_modules'];protected=admission['protected_modules']
     parent='ImbalancedChen.P5SubdivisionStoredParentTypes'
     pattern=r'ImbalancedChen\.Data\.P5SubdivisionStoredBlock[0-9]{3}'
-    require(selection['schema']=='STORED053_063_EXACT_SOURCE_SCOPE_PROPOSAL_V1'
-            and len(new)==11 and len(protected)==54 and len(set(new+protected))==65
+    require(selection['schema']=='STORED064_071_EXACT_SOURCE_SCOPE_PROPOSAL_V1'
+            and len(new)==8 and len(protected)==65 and len(set(new+protected))==73
             and all(re.fullmatch(pattern,n) for n in new+protected[1:]) and protected[0]==parent
-            and new==[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(53,64)]
-            and protected==[parent]+[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(53)]
+            and new==[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(64,72)]
+            and protected==[parent]+[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(64)]
             and admission['audit_filename']=='StoredBatchAudit.lean'
             and selection['parent']['module']==parent
             and all(selection[key]==new for key in ['new_modules','new_proof_compile_scope','kernel_replay_scope','owned_types_axioms_scope'])
@@ -183,7 +183,7 @@ def scope_policy(scope, project, logs, binding):
                    for r in manifest['modules'] if r['module'] not in protected]
         flags = []; audits = ['CandidateAudit.lean', 'FinitePiPilot.lean']
     else:
-        # The independent caller binds these exact eleven source postimages in
+        # The independent caller binds these exact eight source postimages in
         # its original selection and retains the original 26a6 project profile.
         control = read(os.environ['CACHE_ROOT_CONTROL'])
         selection = read(Path(os.environ['GITHUB_WORKSPACE'])/control['source_selection']['path'])
