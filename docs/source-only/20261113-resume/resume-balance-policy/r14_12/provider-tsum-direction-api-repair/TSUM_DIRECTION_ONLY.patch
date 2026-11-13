@@ -1,0 +1,39 @@
+diff --git a/ImbalancedChen/Part3OriginalSwitchedHolExchange.lean b/ImbalancedChen/Part3OriginalSwitchedHolExchange.lean
+index 5b848af..e7f8ff6 100644
+--- a/ImbalancedChen/Part3OriginalSwitchedHolExchange.lean
++++ b/ImbalancedChen/Part3OriginalSwitchedHolExchange.lean
+@@ -93,7 +93,7 @@ theorem hol_exchange (q m n : ℕ+) (s : Bool) (L Y : ℝ) (yp : 0<Y) :
+     have T := hasSum_sum (s:=(univ:Finset (BasisIndex q.val (j+1)))) (fun i _ => lim j i)
+     simpa only [F,Finset.mul_sum] using T.tsum_eq
+   have H := SF.prod.hasSum
+-  rw [SF.tsum_comm] at H
++  rw [SF.tsum_comm.symm] at H
+   simp_rw [row] at H
+   simpa only [F,holSum,tsum_mul_left,c,Φ,f] using H
+ 
+diff --git a/ImbalancedChen/Part3OriginalSwitchedMaassExchange.lean b/ImbalancedChen/Part3OriginalSwitchedMaassExchange.lean
+index 2573927..03f6149 100644
+--- a/ImbalancedChen/Part3OriginalSwitchedMaassExchange.lean
++++ b/ImbalancedChen/Part3OriginalSwitchedMaassExchange.lean
+@@ -103,7 +103,7 @@ theorem maass_exchange (q m n : ℕ+) (s : Bool) (L Y : ℝ) (yp : 0<Y) :
+           mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_right (bound k _) (norm_nonneg _)) (norm_nonneg _)
+         _ = _ := by dsimp only [A]; ring
+   have DS := hs.prod.hasSum
+-  rw [hs.tsum_comm] at DS
++  rw [hs.tsum_comm.symm] at DS
+   simp_rw [(point _).tsum_eq] at DS
+   have gp (k : ℤ) (t : ℝ) : ‖G k t‖≤A k*(linePrice t*‖cont q m n t‖) := by
+     simp only [G,norm_mul]
+diff --git a/ImbalancedChen/Part3OriginalSameInfinityTensorSpectrum.lean b/ImbalancedChen/Part3OriginalSameInfinityTensorSpectrum.lean
+index 40ac701..c6d3248 100644
+--- a/ImbalancedChen/Part3OriginalSameInfinityTensorSpectrum.lean
++++ b/ImbalancedChen/Part3OriginalSameInfinityTensorSpectrum.lean
+@@ -71,7 +71,7 @@ theorem compact_scalar (η H : RadialTest) (R : ℝ) (q m n : ℕ+) :
+     simp only [D,disc_factor,←mul_assoc,tsum_mul_right,c]
+     rw [(probes η H R _).tsum_eq]
+   have discrete := ds.prod.hasSum
+-  rw [ds.tsum_comm] at discrete
++  rw [ds.tsum_comm.symm] at discrete
+   simp_rw [individual] at discrete
+   have GI (v : Modes) : Integrable (G v) :=
+     (Complex.conjCLE.toContinuousLinearMap.integrable_comp (E v).2.1).const_mul (c v)
