@@ -1,0 +1,16 @@
+diff --git a/ImbalancedChen/Part3ActualPositiveCosineProfile.lean b/ImbalancedChen/Part3ActualPositiveCosineProfile.lean
+index 337f168..a6e796a 100644
+--- a/ImbalancedChen/Part3ActualPositiveCosineProfile.lean
++++ b/ImbalancedChen/Part3ActualPositiveCosineProfile.lean
+@@ -120,9 +120,9 @@ def hyperbolicProfile (f : SchwartzMap ℝ ℂ) : SchwartzMap ℝ ℂ := by
+   calc
+     _ ≤ (Real.cosh u)^k*(‖A (Real.cosh u)‖+Real.cosh u*‖B (Real.cosh u)‖) := by
+       apply mul_le_mul (pow_le_pow_left₀ (abs_nonneg _) hu k) _ (norm_nonneg _) (pow_nonneg (Real.cosh_pos _).le _)
+-      exact (norm_add_le _ _).trans (add_le_add_left (by
++      exact (norm_add_le _ _).trans (add_le_add le_rfl (by
+         rw [norm_mul,Complex.norm_real,Real.norm_eq_abs]
+-        exact mul_le_mul_of_nonneg_right hs (norm_nonneg _)) _)
++        exact mul_le_mul_of_nonneg_right hs (norm_nonneg _)))
+     _ ≤ _ := by rw [pow_succ] at b; linarith only [a,b]
+ 
+ def profile (ell : D4 → ℤ) {Y : ℝ} (hY : 0<Y) : SchwartzMap ℝ ℂ :=
