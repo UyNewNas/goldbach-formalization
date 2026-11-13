@@ -1,28 +1,15 @@
-# Fair queue launch after P4 inventory diagnostic completed; all gates unchanged.
-# Requeue after excluding unrelated push workflows from this isolated branch.
-name: Stored blocks 042-052 kernel batch
+name: Stored blocks 053-063 cache-first kernel batch
 on:
   push:
-    branches: [ci/stored-blocks-042-052-20261113]
-    paths: [.github/workflows/stored-block-batch.yml, verification/parts/p0/prepare_stored_batch.py]
-  workflow_dispatch:
-    inputs:
-      source_commit:
-        description: Exact published 40-character source commit
-        required: true
-        type: string
-      manifest_sha256:
-        description: Independently reviewed exact manifest SHA256
-        required: true
-        type: string
-      purpose:
-        description: Source gate; green still requires independent expanded-type acceptance
-        required: true
-        default: yellow_green
-        type: choice
-        options: [source_validation, yellow_green]
+    branches: [ci/stored-blocks-053-063-20261113]
+    paths:
+      - .github/workflows/stored-block-batch.yml
+      - verification/parts/p0/prepare_stored_batch.py
+      - verification/parts/p0/stored053_063/**
+      - docs/source-only/20261113-resume/coherent-cache-tools/**
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: goldbach-p0-heavy
   cancel-in-progress: false
@@ -31,34 +18,37 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
-      SOURCE_COMMIT: ${{ inputs.source_commit || github.sha }}
-      EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
-      CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
+      SOURCE_COMMIT: ${{ github.sha }}
+      EXPECTED_MANIFEST: 0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963
+      CHECK_PURPOSE: source_validation
       LEAN_NUM_THREADS: 2
       T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+      CALLER: verification/parts/p0/stored053_063
+      CACHE_TOOLS: docs/source-only/20261113-resume/coherent-cache-tools
+      CACHE_SCOPE: STORED_PARENT
     defaults:
       run:
         shell: bash
     steps:
-      - name: Validate immutable source identity
-        run: |
-          set -euo pipefail
-          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
-          [[ "$EXPECTED_MANIFEST" =~ ^[0-9a-f]{64}$ ]]
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ inputs.source_commit || github.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Materialize exact fifth target, original binary and frozen review pins
+      - name: Bind immutable reviewed caller and materialize original exact project
         id: materialize
         run: |
           set -euo pipefail
+          export PROJECT="$RUNNER_TEMP/t01-project"
+          export LOGS="$RUNNER_TEMP/t01-evidence"
+          export CACHE_INPUTS="$RUNNER_TEMP/stored-parent-authentic-inputs"
+          export CACHE_CHECKPOINT_OUTPUT="$RUNNER_TEMP/stored-parent-full-checkpoint"
+          export CACHE_ROOT_CONTROL="$GITHUB_WORKSPACE/$CALLER/ROOT_CONTROL.json"
+          printf 'PROJECT=%s\nLOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\nCACHE_ROOT_CONTROL=%s\n' "$PROJECT" "$LOGS" "$CACHE_INPUTS" "$CACHE_CHECKPOINT_OUTPUT" "$CACHE_ROOT_CONTROL" >> "$GITHUB_ENV"
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
           test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
-          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
-          PROJECT="$RUNNER_TEMP/t01-project"
-          LOGS="$RUNNER_TEMP/t01-evidence"
           mkdir -p "$LOGS"
-          printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
+          python3 "$CALLER/stored_caller.py" preflight
+          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
           python3 "$T01/stage_project_v3.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
           cp "$PROJECT/T01_PROVENANCE.json" "$PROJECT/T01Audit.lean" "$T01/EXACT_INSTALL_MANIFEST-v3.json" "$T01/REUSE_EVIDENCE.json" "$LOGS/"
       - name: Check out pinned existing lean-action scripts
@@ -76,31 +66,54 @@ jobs:
           mv .ci-lean-action "$LEAN_ACTION_DIR"
           printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
           "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
-      - name: Install unchanged successful 12 GiB serial trust-zero runtime guard
+      - name: Install original serial trust-zero guard with shared pre-exec admission
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
-      - name: Reuse pinned dependency cache and bind dependency sources
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/cache_runtime_setup.py"
+      - name: Acquire authentic warm Cache11 and parent inputs once with the shared Range reader
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" fixtures
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" acquire
+      - name: Qualify stock no-build warm Cache11 and bind unchanged dependency sources
         id: dependencies
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" bootstrap 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
+      - name: Qualify authentic parent with stock Lake no-build and zero protected compile starts
         timeout-minutes: 35
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
-          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
-          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
-      - name: Prepare bounded kernel proofs and full declaration audit
-        run: python3 verification/parts/p0/prepare_stored_batch.py prepare
-      - name: Compile exact selected blocks and their parent
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" restore
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" qualify
+      - name: Prepare only reviewed new proofs and bind exact postimages before admission
+        run: |
+          set -euo pipefail
+          python3 "$CALLER/stored_caller.py" before
+          python3 verification/parts/p0/prepare_stored_batch.py prepare
+          python3 "$CALLER/stored_caller.py" bind-sources
+          python3 "$CACHE_TOOLS/coherent_cache.py" admit
+      - name: Compile only eleven new selected blocks with parent and accepted54 protected
         timeout-minutes: 200
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          mapfile -t modules < "$LOGS/modules.txt"
+          mapfile -t modules < "$LOGS/new-modules.txt"
           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
           python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_stored_batch.py" snapshot
-      - name: Replay each selected block and parent with bundled kernel checker
+      - name: Replay exactly eleven new selected blocks with accepted54 excluded with bundled kernel checker
         timeout-minutes: 100
         run: |
           set -euo pipefail
@@ -114,34 +127,44 @@ jobs:
           cd "$PROJECT"
           lake env lean -DwarningAsError=true StoredBatchAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
           python3 "$GITHUB_WORKSPACE/verification/parts/p0/prepare_stored_batch.py" verify
-      - name: Audit actual trust-zero 12 GiB runtime
+      - name: Audit actual original trust-zero two-thread 12 GiB runtime
         if: ${{ always() && steps.materialize.outcome == 'success' }}
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
-      - name: Retain exact batch source and compiled objects with evidence
-        if: ${{ always() && steps.materialize.outcome == 'success' }}
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Revalidate unchanged parent facets imports admission and original batch acceptance
         run: |
           set -euo pipefail
-          mkdir -p "$LOGS/compiled-blocks"
-          cp "$PROJECT/StoredBatchAudit.lean" "$LOGS/" || true
-          for i in 042 043 044 045 046 047 048 049 050 051 052; do
-            cp "$PROJECT/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.lean" "$LOGS/compiled-blocks/"
-            for p in "$PROJECT/.lake/build/lib/lean/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.olean"*; do
-              test ! -f "$p" || cp "$p" "$LOGS/compiled-blocks/"
-            done
-          done
-          mkdir -p "$LOGS/compiled-parent"
-          cp "$PROJECT/ImbalancedChen/P5SubdivisionStoredParentTypes.lean" "$LOGS/compiled-parent/"
-          for p in "$PROJECT/.lake/build/lib/lean/ImbalancedChen/P5SubdivisionStoredParentTypes.olean"*; do
-            test ! -f "$p" || cp "$p" "$LOGS/compiled-parent/"
-          done
-      - name: Retain batch logs and exact repaired block sources
+          python3 "$CACHE_TOOLS/coherent_cache.py" audit
+          python3 "$CALLER/stored_caller.py" final
+      - name: Retain early logs and original rejection evidence before full facet archive
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-042-052-${{ github.run_id }}
+          name: stored-blocks-053-063-light-${{ github.run_id }}
+          path: ${{ runner.temp }}/t01-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Retain all available authentic inputs current facets imports ABI and partial failures
+        if: ${{ always() }}
+        run: python3 "$CALLER/stored_caller.py" retain
+      - name: Run unchanged original full collector through the shared retention adapter
+        if: ${{ always() }}
+        run: python3 "$CACHE_TOOLS/coherent_cache.py" retain
+      - name: Retain full batch logs sources raw inputs current facets and failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stored-blocks-053-063-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: error
+          retention-days: 30
+      - name: Retain original full checkpoint output and quarantined partial evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stored-blocks-053-063-full-checkpoint-${{ github.run_id }}
+          path: ${{ runner.temp }}/stored-parent-full-checkpoint/
+          if-no-files-found: warn
           retention-days: 30
