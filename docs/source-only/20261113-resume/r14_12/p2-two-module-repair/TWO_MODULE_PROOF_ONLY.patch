@@ -1,0 +1,58 @@
+diff --git a/ImbalancedChen/ActualThirdOriginalP4AOrdinaryOuterMinimum.lean b/ImbalancedChen/ActualThirdOriginalP4AOrdinaryOuterMinimum.lean
+index 2d12cf4..2ba57cc 100644
+--- a/ImbalancedChen/ActualThirdOriginalP4AOrdinaryOuterMinimum.lean
++++ b/ImbalancedChen/ActualThirdOriginalP4AOrdinaryOuterMinimum.lean
+@@ -171,7 +171,7 @@ theorem actual_new_mean_le_lower_corner (a b : BoxPoint)
+     have hnum : thirdPrefixTheta-t 0-t 1≤thirdPrefixTheta-a 0-a 1 := by
+       linarith [ht.1 0,ht.1 1]
+     have hdiv := div_le_div₀ (hn.trans hnum) hnum (ha 2) (ht.1 2)
+-    simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using add_le_add_right hdiv (-1)
++    simpa only [affineArgument,neg_one_mul,sub_eq_add_neg,add_comm] using add_le_add_right hdiv (-1)
+   have hh := integral_mono_ae hi (integrable_const ((thirdPrefixTheta-a 0-a 1)/a 2-1))
+     ((boxProbability_ae_mem a b).mono (fun t ht => hpoint t ht))
+   rw [boxProbability_affine_mean a b ha hab thirdPrefixTheta (-1) (-1) (-1)] at hh
+@@ -179,8 +179,7 @@ theorem actual_new_mean_le_lower_corner (a b : BoxPoint)
+     neg_one_mul] at hh
+   have he : (thirdPrefixTheta-a 0-a 1)/a 2-1=
+       (thirdPrefixTheta-a 0-a 1-a 2)/a 2 := by
+-    field_simp [(ha 2).ne']
+-    ring
++    field_simp [(ha 2).ne'] <;> ring
+   have hh' : (thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1≤
+       (thirdPrefixTheta-a 0-a 1)/a 2-1 := by
+     simpa only [sub_eq_add_neg] using hh
+@@ -200,10 +199,9 @@ theorem original_new_endpoint_cast (lo : Fin 3 → ℤ) (a : Fin 3 → ℚ)
+   have htheta : (T₀:ℝ)=(D₀:ℝ)*thirdPrefixTheta := by norm_num [thirdPrefixTheta]
+   rw [hal 0,hal 1,hal 2]
+   unfold newUpperNumerator
+-  push_cast
++  push_cast at htheta ⊢
+   rw [htheta]
+-  field_simp [hD.ne',hz0]
+-  ring
++  field_simp [hD.ne',hz0] <;> ring
+ 
+ theorem original_raw_fallback_clamped (table : CheckedBlockTable)
+     (lo hi : Fin 3 → ℤ) (hclamp : oldLowerNumerator lo hi≤2*hi 2) :
+diff --git a/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean b/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
+index 194ec29..f99d638 100644
+--- a/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
++++ b/ImbalancedChen/ActualThirdOriginalP4ASymmetricPairRealRescue.lean
+@@ -212,7 +212,7 @@ theorem all_saved_producer_chord_le_actual_integral
+     (48000*2^24) 481573208064
+     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
+     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
+-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
+     (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
+@@ -317,7 +317,7 @@ theorem all_saved_producer_chord_le_actual_integral_no_query_order
+     (48000*2^24) 481573208064
+     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
+     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
+-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
++    (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
+     (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
