@@ -1,0 +1,279 @@
+--- a/v5/p2_validation.py
++++ b/v6-r1/p2_validation.py
+@@ -35,16 +35,22 @@
+     return data
+ 
+ 
++def git_output(argv, **kwargs):
++    assert argv[0] == 'git'
++    return subprocess.check_output(['git', '-c', 'protocol.allow=never', *argv[1:]],
++                                   env=dict(os.environ, GIT_NO_LAZY_FETCH='1'), **kwargs)
++
++
+ def committed_driver_selection() -> tuple[dict, dict]:
+     workspace = Path(os.environ['GITHUB_WORKSPACE'])
+     commit = os.environ['GITHUB_SHA']
+     assert re.fullmatch(r'[0-9a-f]{40}', commit)
+     assert git_head(workspace) == commit
+     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
+-    branch = 'ci/p2-integer-mass-r4-20261112'
++    branch = 'ci/p2-integer-mass-r5-20261113'
+     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
+     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
+-    committed = subprocess.check_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
++    committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
+     assert (workspace / path).read_bytes() == committed, 'Root selection differs from driver commit'
+     selection = json.loads(committed)
+     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
+@@ -53,11 +59,11 @@
+     assert selection['driver_base'] == '356c3782e9428098a2fcbfb18c689bef264d84fa'
+     assert selection['driver_branch'] == branch
+     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
+-    assert selection['bundle_path'] == 'docs/source-only/20261112-resume/p2-validation-v5'
++    assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
+     assert HERE.resolve() == (workspace / selection['bundle_path']).resolve()
+     # A first branch push may have event.before = 0. The real immutable
+     # parent is in the commit header and needs no parent-history fetch.
+-    raw_commit = subprocess.check_output(['git', '-C', str(workspace), 'cat-file', 'commit', commit])
++    raw_commit = git_output(['git', '-C', str(workspace), 'cat-file', 'commit', commit])
+     headers = raw_commit.split(b'\n\n', 1)[0].decode().splitlines()
+     parents = [line.removeprefix('parent ') for line in headers if line.startswith('parent ')]
+     assert parents == [selection['driver_base']], 'Prepared one-commit driver must directly extend the reviewed base'
+@@ -87,6 +93,7 @@
+     assert manifest['repaired_baseline'] == os.environ['BASELINE_COMMIT']
+     assert selection['source_commit'] == manifest['source_commit']
+     assert selection['repaired_baseline'] == manifest['repaired_baseline']
++    assert selection['compile_cache'] == manifest['compile_cache'], 'Root must explicitly adopt the exact independent cache route'
+     assert selection['manifest_sha256'] == digest(manifest_path)
+     workspace = Path(os.environ['GITHUB_WORKSPACE'])
+     audit = json.loads((HERE / 'DRIVER_BASE_WORKFLOW_AUDIT.json').read_text())
+@@ -100,7 +107,7 @@
+     workflow_bindings = []
+     for path, record in sorted(expected.items()):
+         data = checked(workspace / path, record)
+-        assert data == subprocess.check_output(['git', '-C', str(workspace), 'show', os.environ['GITHUB_SHA'] + ':' + path])
++        assert data == git_output(['git', '-C', str(workspace), 'show', os.environ['GITHUB_SHA'] + ':' + path])
+         workflow_bindings.append({'path': path, 'sha256': record['sha256'],
+                                   'git_blob': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()})
+     binding.update(bundle_registry_sha256=digest(registry_path),
+@@ -110,7 +117,7 @@
+ 
+ 
+ def git_head(path: Path) -> str:
+-    return subprocess.check_output(['git', '-C', str(path), 'rev-parse', 'HEAD'], text=True).strip()
++    return git_output(['git', '-C', str(path), 'rev-parse', 'HEAD'], text=True).strip()
+ 
+ 
+ def bind_installed(manifest: dict, project: Path) -> dict:
+@@ -134,7 +141,7 @@
+     assert git_head(origins['baseline']) == manifest['repaired_baseline']
+     assert git_head(origins['abi']) == manifest['source_commit']
+     for path in origins.values():
+-        assert not subprocess.check_output(['git', '-C', str(path), 'diff', 'HEAD', '--'])
++        assert not git_output(['git', '-C', str(path), 'diff', 'HEAD', '--'])
+     view = Path(os.environ['P2_SOURCE_VIEW'])
+     assert not view.exists() and not project.exists(), 'Require fresh isolated roots'
+     view.mkdir(parents=True)
+@@ -162,7 +169,7 @@
+                'legacy_stage_receipt_name': 'P4_STAGE_RECEIPT.json'}
+     (logs / 'P2_STAGE_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
+     for label, path in origins.items():
+-        (logs / (label + '-source-tree.txt')).write_bytes(subprocess.check_output(
++        (logs / (label + '-source-tree.txt')).write_bytes(git_output(
+             ['git', '-C', str(path), 'ls-tree', '-r', 'HEAD']))
+     (logs / 'VALIDATION_MANIFEST.json').write_bytes((HERE / 'P2_VALIDATION_MANIFEST.json').read_bytes())
+     (logs / 'VALIDATION_BUNDLE_REGISTRY.json').write_bytes((HERE / 'REGISTRY.json').read_bytes())
+@@ -213,6 +220,42 @@
+ def finalize(manifest: dict, project: Path, logs: Path) -> None:
+     from finitepi_pilot import validate_receipt
+     validate_receipt(manifest, project, logs)
++    cache_tools = Path(os.environ['GITHUB_WORKSPACE']) / manifest['compile_cache']['tools_bundle']['path']
++    sys.path.insert(0, str(cache_tools))
++    from coherent_cache import CacheSession
++    cache_session = CacheSession('P2_NATIVE_398')
++    cache_session.validate_final()
++    checkpoint = json.loads((logs / 'CACHE_CHECKPOINT_RETENTION.json').read_text())
++    assert checkpoint['exit_code'] == 0 and checkpoint['collector_sha256'] == '773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76'
++    assert checkpoint['binding'] == cache_session.binding
++    checkpoint_path = Path(checkpoint['output']).resolve()
++    expected_checkpoint = (Path(os.environ['RUNNER_TEMP']) / 'p2-coherent-checkpoint').resolve()
++    assert checkpoint_path == Path(os.environ['CACHE_CHECKPOINT_OUTPUT']).resolve() == expected_checkpoint
++    assert not checkpoint_path.is_relative_to(project.resolve()) and not checkpoint_path.is_relative_to(logs.resolve())
++    adapted_path = logs / 'CHECKPOINT_COLLECTOR_INPUT.json'
++    assert checkpoint['adapter_sha256'] == digest(cache_tools / 'cache_checkpoint_retain.py')
++    assert checkpoint['input_sha256'] == digest(adapted_path)
++    assert checkpoint['stdout_sha256'] == digest(logs / 'checkpoint-collection.log')
++    assert checkpoint['argv'] == [sys.executable, str(cache_tools / 'reference/checkpoint_objects_v3.py'),
++        '--project', str(project.resolve()), '--manifest', str(adapted_path.resolve()),
++        '--logs', str(logs.resolve()), '--output', str(expected_checkpoint)]
++    assert (checkpoint_path / 'CHECKPOINT.json').is_file()
++    adapted = json.loads(adapted_path.read_text())
++    assert adapted['files'] == manifest['modules'] and adapted['data_inputs'] == []
++    assert adapted['targets'] == [{'closure_modules': [r['module'] for r in manifest['modules']],
++        'source_identity_sha256': hashlib.sha256(json.dumps(manifest['modules'], sort_keys=True).encode()).hexdigest()}]
++    actual_checkpoint = json.loads((checkpoint_path / 'CHECKPOINT.json').read_text())
++    assert actual_checkpoint['schema'] == 't01-coherent-build-checkpoint-v3'
++    assert actual_checkpoint['source_commit'] == manifest['source_commit']
++    assert str(actual_checkpoint['run_id']) == os.environ['GITHUB_RUN_ID']
++    assert str(actual_checkpoint['run_attempt']) == os.environ['GITHUB_RUN_ATTEMPT']
++    assert actual_checkpoint['runtime_state'] == json.loads((logs / 'runtime/state.json').read_text())
++    assert actual_checkpoint['manifest_sha256'] == digest(adapted_path)
++    assert actual_checkpoint['source_identity_sha256'] == adapted['targets'][0]['source_identity_sha256']
++    assert actual_checkpoint['runtime_audit_valid'] is True and actual_checkpoint['all_dependency_source_pins_valid'] is True
++    summary = json.loads((logs / 'CHECKPOINT_SUMMARY.json').read_text())
++    assert summary['checkpoint_sha256'] == digest(checkpoint_path / 'CHECKPOINT.json')
++    assert summary['module_count'] == len(manifest['modules']) + 1
+     installed = bind_installed(manifest, project)
+     assert installed == json.loads((logs / 'SOURCE_OBJECT_BINDINGS.json').read_text())
+     batch = json.loads((logs / 'BATCH_ACCEPTANCE.json').read_text())
+@@ -251,6 +294,10 @@
+                'generated_audit_sha256': installed['audit_sha256'],
+                'compiled_archive_sha256': retained['archive_sha256'],
+                'finitepi_pilot_acceptance_sha256': digest(logs / 'FINITEPI_PILOT_ACCEPTANCE.json'),
++               'cache_final_input_audit_sha256': digest(logs / 'CACHE_FINAL_INPUT_AUDIT.json'),
++               'cache_qualification_sha256': digest(logs / 'CACHE_QUALIFICATION.json'),
++               'coherent_checkpoint_sha256': digest(checkpoint_path / 'CHECKPOINT.json'),
++               'cache_tools_registry_sha256': manifest['compile_cache']['tools_bundle']['registry_sha256'],
+                'runtime_audit_sha256': digest(logs / 'runtime/audit.json'),
+                'runtime_state_sha256': digest(state_path),
+                'runtime_command_log_sha256': digest(command_path),
+--- a/v5/p2-integer-mass-validation.yml
++++ b/v6-r1/p2-integer-mass-validation.yml
+@@ -1,10 +1,11 @@
+ name: P2 integer mass ABI exact closure validation
+ on:
+   push:
+-    branches: [ci/p2-integer-mass-r4-20261112]
++    branches: [ci/p2-integer-mass-r5-20261113]
+     paths: [.github/workflows/p2-integer-mass-validation.yml]
+ permissions:
+   contents: read
++  actions: read
+ concurrency:
+   group: goldbach-p0-heavy
+   cancel-in-progress: false
+@@ -13,11 +14,13 @@
+     runs-on: ubuntu-24.04
+     timeout-minutes: 360
+     env:
+-      SOURCE_COMMIT: e6874f0fadb15515e5363ce92d57b73079425283
++      SOURCE_COMMIT: 686024b292027816b712963167436c445df5e68e
+       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
+-      EXPECTED_MANIFEST: 2c81eccdac19920af512db18088d0b2e562b960234404ed5ea713325ded8c8ff
++      EXPECTED_MANIFEST: 48497291ec2cc629089966f61182e16409475f6711d8ae7ebcda1d571019a676
+       LEAN_NUM_THREADS: 2
+-      P2_BUNDLE: docs/source-only/20261112-resume/p2-validation-v5
++      P2_BUNDLE: docs/source-only/20261113-resume/p2-validation-v6
++      CACHE_BUNDLE: docs/source-only/20261113-resume/coherent-cache-tools
++      CACHE_SCOPE: P2_NATIVE_398
+     defaults:
+       run:
+         shell: bash
+@@ -32,7 +35,7 @@
+           export LOGS="$RUNNER_TEMP/p2-integer-mass-evidence"
+           mkdir -p "$LOGS"
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" select 2>&1 | tee "$LOGS/driver-selection.log"
+-          printf 'LOGS=%s\n' "$LOGS" >> "$GITHUB_ENV"
++          printf 'LOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\n' "$LOGS" "$RUNNER_TEMP/p2-cache-inputs" "$RUNNER_TEMP/p2-coherent-checkpoint" >> "$GITHUB_ENV"
+       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+         with:
+           ref: eb035a259f2f40853e9899f6d98af25852184fee
+@@ -40,7 +43,7 @@
+           persist-credentials: false
+       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+         with:
+-          ref: e6874f0fadb15515e5363ce92d57b73079425283
++          ref: 686024b292027816b712963167436c445df5e68e
+           path: proof-input
+           persist-credentials: false
+       - name: Bind repair baseline and exact ABI overlay with original generic stage
+@@ -76,11 +79,11 @@
+           mv .ci-lean-action "$LEAN_ACTION_DIR"
+           printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+           "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+-      - name: Install original 12 GiB serial trust-zero runtime guard
+-        run: |
+-          set -euo pipefail
+-          cd "$PROJECT"
+-          python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/reused/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
++      - name: Install original guard plus explicitly hashed pre-exec cache admission
++        run: |
++          set -euo pipefail
++          cd "$PROJECT"
++          python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/cache_runtime_setup.py"
+       - name: Reuse pinned dependency cache and bind dependency sources
+         id: dependencies
+         timeout-minutes: 35
+@@ -95,17 +98,31 @@
+           receipt=[]
+           for p in lock['packages']:
+               d=pathlib.Path('.lake/packages')/p['name']
+-              sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
++              os.environ['GIT_NO_LAZY_FETCH']='1'
++              sha=subprocess.check_output(['git','-c','protocol.allow=never','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+               assert sha==p['rev'],(p['name'],sha,p['rev'])
+-              assert not subprocess.check_output(['git','-C',str(d),'diff','HEAD','--'],text=True)
++              assert not subprocess.check_output(['git','-c','protocol.allow=never','-C',str(d),'diff','HEAD','--'],text=True)
+               receipt.append({'name':p['name'],'sha':sha})
+           pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
+           PY
++      - name: Restore authentic407 package inputs and require stock no-build cache qualification
++        id: cache_qualification
++        timeout-minutes: 75
++        env:
++          GH_TOKEN: ${{ github.token }}
++        run: |
++          set -euo pipefail
++          cd "$PROJECT"
++          for phase in fixtures acquire restore qualify; do
++            python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
++          done
+       - name: Prepare complete ABI import census with original strict diagnostic audit
++        id: audit_prepare
+         run: |
+           set -euo pipefail
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" prepare
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/p2_validation.py" bind
++          python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" admit 2>&1 | tee "$LOGS/cache-admit.log"
+       - name: Strict single-module FinitePi preflight before full102 compilation
+         id: finitepi_pilot
+         timeout-minutes: 35
+@@ -145,6 +162,12 @@
+           set -euo pipefail
+           cd "$PROJECT"
+           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
++      - name: Audit immutable407 cache inputs and zero protected source compiler events
++        if: ${{ always() && steps.cache_qualification.outcome == 'success' && steps.audit_prepare.outcome == 'success' }}
++        run: |
++          set -euo pipefail
++          cd "$PROJECT"
++          python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" audit 2>&1 | tee "$LOGS/cache-final-audit.log"
+       - name: Upload early lightweight logs before full object compression
+         if: ${{ always() }}
+         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+@@ -156,8 +179,25 @@
+             ${{ runner.temp }}/p2-integer-mass-evidence/*.txt
+             ${{ runner.temp }}/p2-integer-mass-evidence/*.lean
+             ${{ runner.temp }}/p2-integer-mass-evidence/runtime/
++            ${{ runner.temp }}/p2-integer-mass-evidence/cache-processes/*.json
++            ${{ runner.temp }}/p2-integer-mass-evidence/cache-processes/*.stderr
+           if-no-files-found: error
+           retention-days: 30
++      - name: Preserve full raw native/setup/IR/source checkpoint with original collector
++        if: ${{ always() && steps.materialize.outcome == 'success' }}
++        run: |
++          set -euo pipefail
++          cd "$PROJECT"
++          python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" retain
++      - name: Upload original-collector coherent checkpoint including partial failure bytes
++        if: ${{ always() && steps.materialize.outcome == 'success' }}
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: p2-coherent-checkpoint-${{ github.run_id }}
++          path: ${{ runner.temp }}/p2-coherent-checkpoint/
++          if-no-files-found: error
++          retention-days: 30
++          compression-level: 0
+       - name: Retain actual final compiled objects sources and failure evidence
+         if: ${{ always() && steps.materialize.outcome == 'success' }}
+         run: |

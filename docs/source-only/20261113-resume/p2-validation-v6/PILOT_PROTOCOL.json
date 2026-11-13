@@ -1,0 +1,69 @@
+{
+  "schema": "P2-v6-strict-single-FinitePi-preflight-v1",
+  "not_executed_locally": true,
+  "template": {
+    "path": "reused/Round6Audit.lean",
+    "bytes": 10050,
+    "sha256": "46eedd90437fae00921f2a5a6a39abb5996125f45033b230c17d1403d16eec95",
+    "git_blob": "853f1a12de896ae0857e2b7e3b3f0900d31788bc"
+  },
+  "pilot_modules": [
+    "ImbalancedChen.FinitePiIntegral"
+  ],
+  "render": "Extract unchanged original imports/modules/finalBridge transform into render_audit(selected); runtime compare full102 to legacy_full_render before writing either exporter.",
+  "ordered_ci_commands": [
+    "lake build ImbalancedChen.FinitePiIntegral",
+    "python3 finitepi_pilot.py before",
+    "lake env lean -DwarningAsError=true FinitePiPilot.lean",
+    "python3 finitepi_pilot.py verify",
+    "python3 finitepi_pilot.py require",
+    "original full102 build/snapshot/checker/types/axioms/runtime/retain/finalize"
+  ],
+  "strict_parser": [
+    "exactly one nonempty SERIALIZED",
+    "exact ownership/serialized/DECL Counter including multiplicity",
+    "exactly one full and readable type and collectAxioms record per declaration",
+    "unsafe/partial/axiom false; original three allowed transitive axioms only",
+    "one exact MODULE count and final COUNT",
+    "original mismatch throw retained; no mismatch record accepted"
+  ],
+  "object_binding": "Actual FinitePi source, olean, template, full/pilot exporters, build/type logs, manifest, registry, driver/run/job; object equal before/after pilot and at full finalize.",
+  "not_a_kernel_or_global_acceptance": true,
+  "full102_gates_unchanged_and_required": true,
+  "early_lightlogs": {
+    "condition": "${{ always() }}",
+    "position": "after original full102 types and always runtime audit, immediately before heavy retain tar.gz",
+    "includes": [
+      "top-level *.log",
+      "*.json",
+      "*.txt",
+      "*.lean",
+      "runtime/"
+    ],
+    "excludes_by_allowlist": [
+      "compiled-objects-and-sources.tar.gz",
+      "all .olean and native object payloads"
+    ],
+    "pilot_or_compile_failure": "Later proof steps skip; always runtime audit and lightlogs still execute before final fullarchive.",
+    "does_not_replace_final_fullarchive": true
+  },
+  "additional_cache_inputs_gate": {
+    "scope": "P2_NATIVE_398",
+    "selection_sha256": "4ad7329984a1df0ee9dfd4b142adb4d42c0cc0952275f110b4934d609563eab9",
+    "tools_bundle": {
+      "path": "docs/source-only/20261113-resume/coherent-cache-tools",
+      "registry_sha256": "6ac160fbc4d59120eb10f20304ed97788ac03c830b2df9a53bf39e096e5c48ca"
+    },
+    "main_module_count": 398,
+    "independent_prerequisite_count": 9,
+    "prerequisites_selection_sha256": "f7fc42912e11aabb3a5483ae07ff5f2f2744f937bbb822c5a2b86ace7712b5bd",
+    "architect_command_leaf_rule_sha256": "2ba94d77875a4f2794ef770299547667dc85eaf573f770fb21e786ccc6d8246b",
+    "original_checkpoint_sha256": "aa44099f53c82b885c3bf56cdbaa74055d5b583a9e941facb47ffd2b0f01be2a",
+    "required_stock_qualification": "ALL_407_LEANARTS_AND_FULL_ORDERED_CURRENT_SETUP_AND_PHYSICAL_IMPORT_PARTS",
+    "source_compiler_denial": "goldbach_and_LeanArchitect_roots_before_exec",
+    "protected_source_compiler_events_required": 0,
+    "root_project_profile_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "no_cold_rebuild_fallback": true,
+    "cache_is_not_proof_acceptance": true
+  }
+}
