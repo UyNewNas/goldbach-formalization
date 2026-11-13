@@ -1,0 +1,11 @@
+--- a/ImbalancedChen/Part3OriginalPositiveStrip.lean
++++ b/ImbalancedChen/Part3OriginalPositiveStrip.lean
+@@ -144,7 +144,7 @@
+     congr 2; push_cast; ring_nf; simp [I_sq]
+   have ep (x : ℝ) : p (-x)=p x := by dsimp [p]; simp only [profile_apply,Real.cosh_neg]
+   have refl := integral_comp_neg_Ioi (0:ℝ) F
+-  have E := (integral_Iic_add_Ioi (a:=(0:ℝ)) (f:=F) i.integrableOn i.integrableOn).symm
++  have E := (intervalIntegral.integral_Iic_add_Ioi (b:=(0:ℝ)) (f:=F) i.integrableOn i.integrableOn).symm
+   rw [←(by simpa only [neg_zero] using refl : (∫ x in Ioi (0:ℝ),F (-x))=∫ x in Iic 0,F x),
+     ←integral_add i.comp_neg.integrableOn i.integrableOn] at E
+   rw [(exceptional_transform ell hY ha ha1).2]

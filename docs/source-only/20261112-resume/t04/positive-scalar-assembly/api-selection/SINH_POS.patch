@@ -1,0 +1,20 @@
+--- a/ImbalancedChen/Part3ActualPositiveSmallHeightKBound.lean
++++ b/ImbalancedChen/Part3ActualPositiveSmallHeightKBound.lean
+@@ -57,7 +57,7 @@
+ private theorem coth_large {x : ℝ} (hx : Real.pi≤x) :
+     Real.cosh x≤(1+(Real.sinh Real.pi)⁻¹)*Real.sinh x := by
+   have s := Real.sinh_strictMono.monotone hx
+-  have p : 0<Real.sinh Real.pi := Real.sinh_pos.mpr Real.pi_pos
++  have p : 0<Real.sinh Real.pi := Real.sinh_pos_iff.mpr Real.pi_pos
+   have m : (1:ℝ)≤(Real.sinh Real.pi)⁻¹*Real.sinh x := by
+     simpa only [inv_mul_cancel₀ p.ne'] using mul_le_mul_of_nonneg_left s (inv_nonneg.mpr p.le)
+   have e : Real.exp (-x)≤1 := Real.exp_le_one_iff.mpr (by linarith [Real.pi_pos])
+@@ -81,7 +81,7 @@
+     · rw [abs_of_neg h,mul_neg,Real.sinh_neg]; ring
+   have cc : Real.cosh (Real.pi*t)=Real.cosh (Real.pi*|t|) := by rw [← pp,Real.cosh_abs]
+   have hh : Real.pi≤Real.pi*|t| := by simpa using mul_le_mul_of_nonneg_left ht Real.pi_pos.le
+-  have gt : 0<Real.sinh (Real.pi*|t|) := Real.sinh_pos.mpr (mul_pos Real.pi_pos (abs_pos.mpr nt))
++  have gt : 0<Real.sinh (Real.pi*|t|) := Real.sinh_pos_iff.mpr (mul_pos Real.pi_pos (abs_pos.mpr nt))
+   have g := mul_le_mul (K_bound t nt ha.1 ha.2) (K_bound t nt hb.1 hb.2)
+     (norm_nonneg _) (mul_nonneg (norm_nonneg _) (expMass_nonneg _))
+   rw [norm_mul,cc]

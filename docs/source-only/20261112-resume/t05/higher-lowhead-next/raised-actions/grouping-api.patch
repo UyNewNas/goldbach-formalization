@@ -1,0 +1,439 @@
+--- a/ImbalancedChen/P4BOriginalHigherLowAdmissible.lean
++++ b/ImbalancedChen/P4BOriginalHigherLowAdmissible.lean
+@@ -1,4 +1,5 @@
+ import ImbalancedChen.P4BOriginalHigherLowRestoration
++import ImbalancedChen.P4BOriginalHigherActionGroups
+ 
+ namespace ImbalancedChen.P4BOriginalHigherLowAdmissible
+ noncomputable section
+@@ -7,7 +8,6 @@
+ open P4BOriginalMediumAtomFamily (Index support third_data)
+ open P4BOriginalHigherLowBins (useRoot four_used)
+ open P4BOriginalHigherLowRepresentative (d t)
+-open P4BOriginalHigherLowNativeAtoms (groups firstSet secondSet thirdSet atom factors)
+ open P4BOriginalMediumOccupiedLengths (factor_owner)
+ open P4BOriginalMediumTriplePowers (power upper_iff strict_iff power_mul power_pow power_rpow)
+ open P4BUpperSelectedBoxCapacity (endpoint)
+@@ -30,16 +30,39 @@
+   apply (div_le_iff₀ (by positivity : 0<2400*(q:ℝ))).mpr
+   linarith only [H]
+ 
+-theorem eventually_root_words (K order : ℕ) {z k k0 : ℝ}
++namespace Mode
++open P4BOriginalCollisionWords (Params)
++open P4BOriginalHigherWordGrouping (Rule historical)
++
++def choose : Bool→Rule
++  | false => historical
++  | true => P4BOriginalHigherActionGroups.rule
++
++def allowance : Bool→Params→ℝ
++  | false,P => (P.e:ℝ)
++  | true,P => P4BOriginalHigherActionKeys.localE P
++
++def covers : Bool→Params→List ℕ→Prop
++  | false,P,J => useRoot P J
++  | true,P,J => 4≤J.length ∧ t P J 0≤VariableEnvelope.mu
++
++variable {o : ℕ} {z k0 : ℝ} (extended : Bool) (I : Index o z k0)
++abbrev groups := P4BOriginalHigherLowNativeAtoms.ByRule.groups (choose extended) I
++abbrev firstSet := P4BOriginalHigherLowNativeAtoms.ByRule.firstSet (choose extended) I
++abbrev secondSet := P4BOriginalHigherLowNativeAtoms.ByRule.secondSet (choose extended) I
++abbrev thirdSet := P4BOriginalHigherLowNativeAtoms.ByRule.thirdSet (choose extended) I
++abbrev atom := P4BOriginalHigherLowNativeAtoms.ByRule.atom (choose extended) I
++
++theorem eventually_words (extended : Bool) (K order : ℕ) {z k k0 : ℝ}
+     (hz : 0<z) (hz' : z≤1/20000) (hk : 0<k) (hk' : k≤z/200000)
+     (hk0 : k0<k/(4*(1+k))) (hk1 : k0<1) :
+     ∀ᶠ N : ℕ in atTop,∀ (I : Index order z k0),I.P.N=N → I.eta=z →
+-      0<I.P.e → (I.P.e:ℝ)≤1/2048 → z≤(I.P.e:ℝ)/512 →
++      0<I.P.e → (I.P.e:ℝ)≤1/2048 → z≤allowance extended I.P/512 →
+       logPrimeMeshStep 0 (19/96) (d I.P).m≤(I.P.e:ℝ)/20 →
+       0<I.P.omega → I.P.T*((J0 I.P.omega:ℝ)+1)≤z → 0≤I.P.ell → 2*I.P.ell≤z/16 →
+-      useRoot I.P I.J →
+-      ∀ D∈(firstSet I).image owner,∀ E∈(secondSet I).image owner,∀ G∈(thirdSet I).image owner,
+-        MediumAdmissible 12 (z/2000) k (1/Real.exp 1) (atom I K D E G) := by
++      covers extended I.P I.J →
++      ∀ D∈(firstSet extended I).image owner,∀ E∈(secondSet extended I).image owner,∀ G∈(thirdSet extended I).image owner,
++        MediumAdmissible 12 (z/2000) k (1/Real.exp 1) (atom extended I K D E G) := by
+   have hz0 : z≤1/400 := by linarith
+   have hkz : k≤z := by linarith
+   filter_upwards [P4BOriginalHighRankLiveFibreModes.eventually_fixed_live_window K hz hz0 hk hkz hk0 hk1,
+@@ -54,9 +77,22 @@
+   have hnR : 0<(I.P.N:ℝ) := by exact_mod_cast I.N_pos
+   have hu := zero_lt_one.trans hU1
+   have hi := hhi.trans (Real.rpow_le_rpow_of_exponent_le hx.le (by linarith only [hkz] : 1+k≤1+z))
+-  obtain ⟨h1,h2,h3,h4⟩ := P4BOriginalHigherLowEndpointBounds.original I.P (by omega) he he' step ho
+-    I.word huse hx hz hzE ht hlo hi hU hUmax hell'
+-  let S := groups I
++  have targets :
++      let S := (choose extended).split I.P I.x I.U z I.J
++      let H := actualPrimeFineLabelIntegerUpper I.P.N I.P.T
++      let a := endpoint H S.1
++      let b := endpoint H S.2.1
++      let c := endpoint H S.2.2*I.x^(2*I.P.ell)
++      a<I.U*I.x^(-z/100) ∧ I.U^2*b*c^2<I.x^(1-8*(z/100)) ∧
++        I.x^(7/32:ℝ)*I.U*a*b^5*c^2<I.x^(2-15*(z/100)) ∧
++        I.U^(23/16:ℝ)*a*b^(73/16:ℝ)*c^(39/16:ℝ)<I.x^(2-15*(z/100)) := by
++    cases extended with
++    | false => exact P4BOriginalHigherLowEndpointBounds.original I.P (by omega) he he' step ho
++        I.word huse hx hz hzE ht hlo hi hU hUmax hell'
++    | true => exact P4BOriginalHigherActionGroups.endpoints I.P (by omega) he he' step ho
++        I.word huse.1 huse.2 hx hz hzE ht hlo hi hU hUmax hell'
++  obtain ⟨h1,h2,h3,h4⟩ := targets
++  let S := groups extended I
+   let H := actualPrimeFineLabelIntegerUpper I.P.N I.P.T
+   let A := endpoint H S.1
+   let B := endpoint H S.2.1
+@@ -76,11 +112,11 @@
+     change I.P.L*endpoint H S.2.2≤endpoint H S.2.2*_
+     rw [mul_comm I.P.L]
+     exact mul_le_mul_of_nonneg_left hb (by rw [P4BUpperSelectedBoxCapacity.endpoint_eq_cast]; positivity)
+-  have f1 : A<I.U*I.x^(-z/100) := by simpa only [A,S,groups,heta] using h1
+-  have f2 : I.U^2*B*C^2<I.x^(1-8*(z/100)) := by simpa only [B,C,S,groups,heta] using h2
+-  have f3 : I.x^(7/32:ℝ)*I.U*A*B^5*C^2<I.x^(2-15*(z/100)) := by simpa only [A,B,C,S,groups,heta] using h3
++  have f1 : A<I.U*I.x^(-z/100) := by simpa only [A,S,groups,P4BOriginalHigherLowNativeAtoms.ByRule.groups,heta] using h1
++  have f2 : I.U^2*B*C^2<I.x^(1-8*(z/100)) := by simpa only [B,C,S,groups,P4BOriginalHigherLowNativeAtoms.ByRule.groups,heta] using h2
++  have f3 : I.x^(7/32:ℝ)*I.U*A*B^5*C^2<I.x^(2-15*(z/100)) := by simpa only [A,B,C,S,groups,P4BOriginalHigherLowNativeAtoms.ByRule.groups,heta] using h3
+   have f4 : I.U^(23/16:ℝ)*A*B^(73/16:ℝ)*C^(39/16:ℝ)<I.x^(2-15*(z/100)) := by
+-    simpa only [A,B,C,S,groups,heta] using h4
++    simpa only [A,B,C,S,groups,P4BOriginalHigherLowNativeAtoms.ByRule.groups,heta] using h4
+   have hDP : (0:ℝ)<lower D := by exact_mod_cast lower_pos D
+   have hEP : (0:ℝ)<lower E := by exact_mod_cast lower_pos E
+   have hGP : (0:ℝ)<lower G := by exact_mod_cast lower_pos G
+@@ -113,9 +149,25 @@
+   · intro n _; exact P4BOriginalMediumHBHead.alpha_one _ _ _ _ _ n
+   · intro n _ h p hp hd; exact hZ.trans_lt (P4BOriginalMediumHBHead.alpha_rough h p hp hd)
+   · exact fun _ h => I.atom_beta_bound K h
+-  · exact fun q _ => (factors I K D E G q).1
+-  · exact fun q _ => (factors I K D E G q).2.1
+-  · exact fun q _ => (factors I K D E G q).2.2
++  · exact fun q _ => (P4BOriginalHigherLowNativeAtoms.ByRule.factors (choose extended) I K D E G q).1
++  · exact fun q _ => (P4BOriginalHigherLowNativeAtoms.ByRule.factors (choose extended) I K D E G q).2.1
++  · exact fun q _ => (P4BOriginalHigherLowNativeAtoms.ByRule.factors (choose extended) I K D E G q).2.2
++
++end Mode
++
++open P4BOriginalHigherLowNativeAtoms (groups firstSet secondSet thirdSet atom factors)
++
++theorem eventually_root_words (K order : ℕ) {z k k0 : ℝ}
++    (hz : 0<z) (hz' : z≤1/20000) (hk : 0<k) (hk' : k≤z/200000)
++    (hk0 : k0<k/(4*(1+k))) (hk1 : k0<1) :
++    ∀ᶠ N : ℕ in atTop,∀ (I : Index order z k0),I.P.N=N → I.eta=z →
++      0<I.P.e → (I.P.e:ℝ)≤1/2048 → z≤(I.P.e:ℝ)/512 →
++      logPrimeMeshStep 0 (19/96) (d I.P).m≤(I.P.e:ℝ)/20 →
++      0<I.P.omega → I.P.T*((J0 I.P.omega:ℝ)+1)≤z → 0≤I.P.ell → 2*I.P.ell≤z/16 →
++      useRoot I.P I.J →
++      ∀ D∈(firstSet I).image owner,∀ E∈(secondSet I).image owner,∀ G∈(thirdSet I).image owner,
++        MediumAdmissible 12 (z/2000) k (1/Real.exp 1) (atom I K D E G) :=
++  Mode.eventually_words false K order hz hz' hk hk' hk0 hk1
+ 
+ /-- Every rank-four low-first word, with no inherited-cap test left as a
+ premise. All original smoothing widths and occupied dyadic HB fibres
+--- a/ImbalancedChen/P4BOriginalHigherLowNativeAtoms.lean
++++ b/ImbalancedChen/P4BOriginalHigherLowNativeAtoms.lean
+@@ -1,4 +1,4 @@
+-import ImbalancedChen.P4BOriginalHigherLowTensor
++import ImbalancedChen.P4BOriginalHigherWordGrouping
+ import ImbalancedChen.P4BOriginalHigherLowEndpointBounds
+ 
+ namespace ImbalancedChen.P4BOriginalHigherLowNativeAtoms
+@@ -20,17 +20,21 @@
+ open P5Z.ActualHBPostModulusLogCutoff (completeProduct)
+ open PrimeProducts.MellinInsertion20261028 (exactDiscrepancy)
+ 
++
++open P4BOriginalHigherWordGrouping (Rule historical)
++namespace ByRule
++variable (rule : Rule)
+ variable {order : ℕ} {zeta kap0 : ℝ} (I : Index order zeta kap0)
+-abbrev groups := split I.P I.x I.U I.eta I.J
+-abbrev firstSet := support I.P (groups I).1
+-abbrev secondSet := support I.P (groups I).2.1
+-abbrev thirdSet := thirdSupport I.P I.J (groups I).2.2
++abbrev groups := rule.split I.P I.x I.U I.eta I.J
++abbrev firstSet := support I.P (groups rule I).1
++abbrev secondSet := support I.P (groups rule I).2.1
++abbrev thirdSet := thirdSupport I.P I.J (groups rule I).2.2
+ 
+ def atom (K : ℕ) (D E G : Block) : MediumAtom :=
+   { (withOwners I D E G).atom K with
+-    gamma1 := cut (firstSet I) (factor I.P (groups I).1) D
+-    gamma2 := cut (secondSet I) (factor I.P (groups I).2.1) E
+-    gamma3 := cut (thirdSet I) (gamma I.P I.J (groups I).2.2) G }
++    gamma1 := cut (firstSet rule I) (factor I.P (groups rule I).1) D
++    gamma2 := cut (secondSet rule I) (factor I.P (groups rule I).2.1) E
++    gamma3 := cut (thirdSet rule I) (gamma I.P I.J (groups rule I).2.2) G }
+ 
+ /-- Regrouping the modulus occurrences leaves the original first medium
+ HB slot, the auxiliary progression, and its family-uniform constants intact. -/
+@@ -38,14 +42,14 @@
+     (hz : 0<zeta) (hz1 : zeta≤1/400) (hk : 0<kappa) (hkz : kappa≤zeta)
+     (ht : kap0<kappa/(4*(1+kappa))) (ht1 : kap0<1) :
+     Part3.UniformAuxiliarySW
+-      (fun p : Index order zeta kap0 × Block × Block × Block => atom p.1 K p.2.1 p.2.2.1 p.2.2.2) 1 := by
++      (fun p : Index order zeta kap0 × Block × Block × Block => atom rule p.1 K p.2.1 p.2.2.1 p.2.2.2) 1 := by
+   intro A hA
+   obtain ⟨C,hC,x0,hx,H⟩ := P4BOriginalMediumAtomFamily.uniform_original_auxiliary_SW
+     K order hz hz1 hk hkz ht ht1 A hA
+   exact ⟨C,hC,x0,hx,fun p hp k q b hk' hq hb => H p.1 hp k q b hk' hq hb⟩
+ 
+ theorem factors (K : ℕ) (D E G : Block) (q : ℕ) :
+-    let a := atom I K D E G
++    let a := atom rule I K D E G
+     (‖a.gamma1 q‖≤1 ∧ (a.gamma1 q≠0 → q.Coprime I.P.N)) ∧
+     (‖a.gamma2 q‖≤1 ∧ (a.gamma2 q≠0 → q.Coprime I.P.N)) ∧
+     (‖a.gamma3 q‖≤1 ∧ (a.gamma3 q≠0 → q.Coprime I.P.N)) := by
+@@ -60,8 +64,8 @@
+     atCut _ _ _ (gamma_one _ _ _ _) (fun h => (third_data _ _ _ h).2)⟩
+ 
+ def errors (K : ℕ) : ℂ :=
+-  ∑ D∈(firstSet I).image owner,∑ E∈(secondSet I).image owner,∑ G∈(thirdSet I).image owner,
+-    (atom I K D E G).signedError
++  ∑ D∈(firstSet rule I).image owner,∑ E∈(secondSet rule I).image owner,∑ G∈(thirdSet rule I).image owner,
++    (atom rule I K D E G).signedError
+ 
+ private def box (S : Finset ℕ) (f : ℕ→ℝ) (D : Block) (F : ℕ→ℂ) :=
+   ∑ n∈factorCarrier (lower D:ℝ),cut S f D n*F n
+@@ -73,26 +77,26 @@
+   simp_rw [Finset.mul_sum]
+ 
+ theorem word_errors (K : ℕ) :
+-    errors I K=∑ a∈firstSet I,∑ b∈secondSet I,∑ c∈thirdSet I,
+-      (factor I.P (groups I).1 a:ℂ)*(factor I.P (groups I).2.1 b:ℂ)*
+-        (gamma I.P I.J (groups I).2.2 c:ℂ)*(I.atom K).discrepancy (a*b*c) := by
+-  let A := firstSet I
+-  let B := secondSet I
+-  let C := thirdSet I
+-  let f := factor I.P (groups I).1
+-  let g := factor I.P (groups I).2.1
+-  let h := gamma I.P I.J (groups I).2.2
++    errors rule I K=∑ a∈firstSet rule I,∑ b∈secondSet rule I,∑ c∈thirdSet rule I,
++      (factor I.P (groups rule I).1 a:ℂ)*(factor I.P (groups rule I).2.1 b:ℂ)*
++        (gamma I.P I.J (groups rule I).2.2 c:ℂ)*(I.atom K).discrepancy (a*b*c) := by
++  let A := firstSet rule I
++  let B := secondSet rule I
++  let C := thirdSet rule I
++  let f := factor I.P (groups rule I).1
++  let g := factor I.P (groups rule I).2.1
++  let h := gamma I.P I.J (groups rule I).2.2
+   let F (a b c : ℕ) := (I.atom K).discrepancy (a*b*c)
+   have ha (n) (hn : n∈A) := (support_data _ _ hn).1
+   have hb (n) (hn : n∈B) := (support_data _ _ hn).1
+   have hc (n) (hn : n∈C) := (third_data _ _ _ hn).1
+-  have boxes (D E G : Block) : (atom I K D E G).signedError=
++  have boxes (D E G : Block) : (atom rule I K D E G).signedError=
+       box A f D (fun a => box B g E (fun b => box C h G (F a b))) := by
+     change (∑ a∈factorCarrier (lower D:ℝ),∑ b∈factorCarrier (lower E:ℝ),∑ c∈factorCarrier (lower G:ℝ),
+       cut A f D a*cut B g E b*cut C h G c*F a b c)=_
+     simp only [box,Finset.mul_sum,mul_assoc]
+   have last (D E : Block) :
+-      (∑ G∈C.image owner,(atom I K D E G).signedError)=
++      (∑ G∈C.image owner,(atom rule I K D E G).signedError)=
+         box A f D (fun a => box B g E (fun b => ∑ c∈C,(h c:ℂ)*F a b c)) := by
+     simp_rw [boxes]
+     rw [commute]
+@@ -103,7 +107,7 @@
+     exact Finset.sum_congr rfl (fun b _ =>
+       congrArg (fun v : ℂ => cut B g E b*v) (owner_sum C h hc (F a b)))
+   have middle (D : Block) :
+-      (∑ E∈B.image owner,∑ G∈C.image owner,(atom I K D E G).signedError)=
++      (∑ E∈B.image owner,∑ G∈C.image owner,(atom rule I K D E G).signedError)=
+       box A f D (fun a => ∑ b∈B,(g b:ℂ)*∑ c∈C,(h c:ℂ)*F a b c) := by
+     simp_rw [last]
+     rw [commute]
+@@ -121,14 +125,52 @@
+     exactDiscrepancy (fibre I.bs I.i I.C) (products I.P) (fun q => (free I.P q:ℂ))
+       completeProduct I.P.N (originalMode I K)=
+       (scalar I:ℂ)*∑ j∈I.P.words.attach,let A := onWord I j
+-        (restore I.P j.val (groups A):ℂ)*errors A K := by
+-  rw [free_fibre I K hU,P4BOriginalHigherLowTensor.complex_complete I.P hN I.x I.U I.eta]
++        (restore I.P j.val (groups rule A):ℂ)*errors rule A K := by
++  rw [free_fibre I K hU,rule.complex_complete I.P hN I.x I.U I.eta]
+   apply congrArg (fun z : ℂ => (scalar I:ℂ)*z)
+   rw [←Finset.sum_attach I.P.words]
+   apply Finset.sum_congr rfl
+   intro j _
+-  apply congrArg (fun z : ℂ => (restore I.P j.val (groups (onWord I j)):ℂ)*z)
+-  exact (word_errors (onWord I j) K).symm
++  apply congrArg (fun z : ℂ => (restore I.P j.val (groups rule (onWord I j)):ℂ)*z)
++  exact (word_errors rule (onWord I j) K).symm
++
++end ByRule
++
++variable {order : ℕ} {zeta kap0 : ℝ} (I : Index order zeta kap0)
++abbrev groups := ByRule.groups historical I
++abbrev firstSet := ByRule.firstSet historical I
++abbrev secondSet := ByRule.secondSet historical I
++abbrev thirdSet := ByRule.thirdSet historical I
++def atom (K : ℕ) (D E G : Block) : MediumAtom := ByRule.atom historical I K D E G
++
++theorem uniform_auxiliary (K order : ℕ) {zeta kappa kap0 : ℝ}
++    (hz : 0<zeta) (hz1 : zeta≤1/400) (hk : 0<kappa) (hkz : kappa≤zeta)
++    (ht : kap0<kappa/(4*(1+kappa))) (ht1 : kap0<1) :
++    Part3.UniformAuxiliarySW
++      (fun p : Index order zeta kap0 × Block × Block × Block => atom p.1 K p.2.1 p.2.2.1 p.2.2.2) 1 :=
++  ByRule.uniform_auxiliary historical K order hz hz1 hk hkz ht ht1
++
++theorem factors (K : ℕ) (D E G : Block) (q : ℕ) :
++    let a := atom I K D E G
++    (‖a.gamma1 q‖≤1 ∧ (a.gamma1 q≠0 → q.Coprime I.P.N)) ∧
++    (‖a.gamma2 q‖≤1 ∧ (a.gamma2 q≠0 → q.Coprime I.P.N)) ∧
++    (‖a.gamma3 q‖≤1 ∧ (a.gamma3 q≠0 → q.Coprime I.P.N)) :=
++  ByRule.factors historical I K D E G q
++
++def errors (K : ℕ) : ℂ := ByRule.errors historical I K
++
++theorem word_errors (K : ℕ) :
++    errors I K=∑ a∈firstSet I,∑ b∈secondSet I,∑ c∈thirdSet I,
++      (factor I.P (groups I).1 a:ℂ)*(factor I.P (groups I).2.1 b:ℂ)*
++        (gamma I.P I.J (groups I).2.2 c:ℂ)*(I.atom K).discrepancy (a*b*c) :=
++  ByRule.word_errors historical I K
++
++theorem original_fibre (K : ℕ) (hN : 1<I.P.N) (hU : 1<I.U) :
++    exactDiscrepancy (fibre I.bs I.i I.C) (products I.P) (fun q => (free I.P q:ℂ))
++      completeProduct I.P.N (originalMode I K)=
++      (scalar I:ℂ)*∑ j∈I.P.words.attach,let A := onWord I j
++        (restore I.P j.val (groups A):ℂ)*errors A K :=
++  ByRule.original_fibre historical I K hN hU
+ 
+ end
+ end ImbalancedChen.P4BOriginalHigherLowNativeAtoms
+--- a/ImbalancedChen/P4BOriginalHigherLowRestoration.lean
++++ b/ImbalancedChen/P4BOriginalHigherLowRestoration.lean
+@@ -8,7 +8,6 @@
+ open P4BOriginalCollisionThirdFactor (master admissible_words)
+ open P4BOriginalHigherLowBins (Groups split split_perm)
+ open P4BOriginalHigherLowTensor (restore)
+-open P4BOriginalHigherLowNativeAtoms (groups firstSet secondSet thirdSet)
+ open P4BOriginalMediumAtomFamily (Index support support_data third_data)
+ open P4BOriginalMediumSignedFibre (scalar)
+ open P4BOriginalMediumPhysicalAtomSum (onWord)
+@@ -23,8 +22,13 @@
+ open P4BOuterRampRoughness (baseline)
+ open P4AHeldTaggedCompilerSupport (J0)
+ 
++
++open P4BOriginalHigherWordGrouping (Rule historical)
++namespace ByRule
++open P4BOriginalHigherLowNativeAtoms.ByRule (groups firstSet secondSet thirdSet)
++variable (rule : Rule)
+ def pieces {o : ℕ} {z k0 : ℝ} (I : Index o z k0) :=
+-  ((firstSet I).image owner).card*((secondSet I).image owner).card*((thirdSet I).image owner).card
++  ((firstSet rule I).image owner).card*((secondSet rule I).image owner).card*((thirdSet rule I).image owner).card
+ 
+ private theorem supported (P : Params) (S : List ℕ) {q} (hq : q∈support P S) : q≤P.N^S.length := by
+   obtain ⟨ps,hp,rfl⟩ := Finset.mem_image.mp hq
+@@ -39,12 +43,12 @@
+ variable {o : ℕ} {z k0 : ℝ} (I : Index o z k0)
+ theorem factor_and_boxes (hN : 1<I.P.N) (he : 0≤I.P.e) (ho : 0<I.P.omega) (hell : I.P.ell≤1) :
+     let k := J0 I.P.omega
+-    |restore I.P I.J (groups I)|≤(k.factorial:ℝ)^3 ∧
+-      (pieces I:ℝ)≤(dyadicConstant*((k:ℝ)+2)*logScale (I.P.N:ℝ))^3 := by
++    |restore I.P I.J (groups rule I)|≤(k.factorial:ℝ)^3 ∧
++      (pieces rule I:ℝ)≤(dyadicConstant*((k:ℝ)+2)*logScale (I.P.N:ℝ))^3 := by
+   let P := I.P
+-  let S := groups I
++  let S := groups rule I
+   let k := J0 P.omega
+-  have part := (split_perm P I.x I.U I.eta I.word).length_eq
++  have part := (rule.perm P hN I.x I.U I.eta I.J I.word).length_eq
+   change (S.1++(S.2.1++S.2.2)).length=I.J.length at part
+   simp only [List.length_append] at part
+   have hr := P.rank_cap I.word hN he ho
+@@ -61,7 +65,7 @@
+           (Nat.cast_nonneg _) (by positivity)) (fa _ a3) (Nat.cast_nonneg _) (by positivity)
+       _=_ := by ring
+   let R := P.N^(k+1)
+-  have hb3 (q) (hq : q∈thirdSet I) : q≤R := by
++  have hb3 (q) (hq : q∈thirdSet rule I) : q≤R := by
+     obtain ⟨⟨a,b⟩,hab,rfl⟩ := Finset.mem_image.mp hq
+     obtain ⟨ha,hb⟩ := Finset.mem_product.mp hab
+     have hNZ := (Finset.mem_filter.mp ha).2
+@@ -76,12 +80,12 @@
+       ((supported P S.2.2 hb).trans (Nat.pow_le_pow_right (by omega) a3))
+   have card (T : Finset ℕ) (h : ∀n∈T,0<n ∧ n≤R) : (T.image owner).card≤(bank R).card :=
+     Finset.card_le_card (fun _ hB => by obtain ⟨u,hu,rfl⟩ := Finset.mem_image.mp hB; exact owner_mem_bank (h u hu).1 (h u hu).2)
+-  have c1 := card (firstSet I) (fun u h => ⟨(support_data _ _ h).1,
++  have c1 := card (firstSet rule I) (fun u h => ⟨(support_data _ _ h).1,
+     (supported P S.1 h).trans (Nat.pow_le_pow_right (by omega) (by omega : S.1.length≤k+1))⟩)
+-  have c2 := card (secondSet I) (fun u h => ⟨(support_data _ _ h).1,
++  have c2 := card (secondSet rule I) (fun u h => ⟨(support_data _ _ h).1,
+     (supported P S.2.1 h).trans (Nat.pow_le_pow_right (by omega) (by omega : S.2.1.length≤k+1))⟩)
+-  have c3 := card (thirdSet I) (fun u h => ⟨(third_data _ _ _ h).1,hb3 u h⟩)
+-  have cb : pieces I≤(bank R).card^3 := by
++  have c3 := card (thirdSet rule I) (fun u h => ⟨(third_data _ _ _ h).1,hb3 u h⟩)
++  have cb : pieces rule I≤(bank R).card^3 := by
+     simpa only [pieces,pow_succ,pow_zero,one_mul] using Nat.mul_le_mul (Nat.mul_le_mul c1 c2) c3
+   have hn : (1:ℝ)≤P.N := by exact_mod_cast hN.le
+   have hnp := zero_lt_one.trans_le hn
+@@ -97,7 +101,7 @@
+     have h7 := Real.log_nonneg (by norm_num : (1:ℝ)≤7)
+     nlinarith only [h7,Real.log_nonneg hn,Nat.cast_nonneg k,mul_nonneg (Nat.cast_nonneg k) h7]
+   have cap' := hcard.trans (mul_le_mul_of_nonneg_left hlog dyadicConstant_pos.le)
+-  refine ⟨m1,(by exact_mod_cast cb : (pieces I:ℝ)≤((bank R).card:ℝ)^3).trans ?_⟩
++  refine ⟨m1,(by exact_mod_cast cb : (pieces rule I:ℝ)≤((bank R).card:ℝ)^3).trans ?_⟩
+   apply pow_le_pow_left₀ (Nat.cast_nonneg _)
+   simpa only [mul_assoc] using cap'
+ 
+@@ -109,7 +113,7 @@
+     I.P.N=N → I.P.omega=omega → I.P.T=T → 0≤I.P.e → I.P.ell≤1 →
+     ((bank (cap N)).card:ℝ)*totalMass b kap (outerWidth N) N kap0*scalar I*
+       (∑ j∈I.P.words.attach,let A := onWord I j
+-        |restore I.P j.val (groups A)|*(pieces A:ℝ))≤C*(Real.log (N:ℝ))^54 := by
++        |restore I.P j.val (groups rule A)|*(pieces rule A:ℝ))≤C*(Real.log (N:ℝ))^54 := by
+   obtain ⟨C0,hC,HM⟩ := exists_scheduled_split_mass
+   let B := ((master omega T).card:ℝ)*((J0 omega).factorial:ℝ)^3
+   let D := 2*dyadicConstant*((J0 omega:ℝ)+2)
+@@ -136,13 +140,13 @@
+   have hD : 0≤D := by dsimp [D]; positivity [dyadicConstant_pos]
+   have hweight :
+       (∑ j∈I.P.words.attach,let A := onWord I j
+-        |restore I.P j.val (groups A)|*(pieces A:ℝ))≤B*(D*L)^3 := by
++        |restore I.P j.val (groups rule A)|*(pieces rule A:ℝ))≤B*(D*L)^3 := by
+     let K := ((J0 omega).factorial:ℝ)^3
+     calc
+       _≤∑ _j∈I.P.words.attach,K*(D*L)^3 := by
+         apply Finset.sum_le_sum
+         intro j _
+-        obtain ⟨hh,hp⟩ := factor_and_boxes (onWord I j) hNP he hOP hE
++        obtain ⟨hh,hp⟩ := factor_and_boxes rule (onWord I j) hNP he hOP hE
+         apply mul_le_mul (by simpa only [onWord,hO,K] using hh) _ (Nat.cast_nonneg _) (by dsimp [K]; positivity)
+         apply hp.trans
+         change (dyadicConstant*((J0 I.P.omega:ℝ)+2)*logScale (I.P.N:ℝ))^3≤_
+@@ -156,7 +160,7 @@
+           (mul_nonneg (pow_nonneg (Nat.cast_nonneg (J0 omega).factorial) 3)
+             (pow_nonneg (mul_nonneg hD hL) 3))
+   have hw0 : 0≤∑ j∈I.P.words.attach,let A := onWord I j
+-      |restore I.P j.val (groups A)|*(pieces A:ℝ) := Finset.sum_nonneg (fun _ _ => mul_nonneg (abs_nonneg _) (Nat.cast_nonneg _))
++      |restore I.P j.val (groups rule A)|*(pieces rule A:ℝ) := Finset.sum_nonneg (fun _ _ => mul_nonneg (abs_nonneg _) (Nat.cast_nonneg _))
+   have H := mul_le_mul (mul_le_mul (hmaster kap0) hfactor (scalar_cost I).1.le
+     (mul_nonneg hC (pow_nonneg hL 39))) hweight hw0
+       (mul_nonneg (mul_nonneg hC (pow_nonneg hL 39)) (pow_nonneg (by positivity : 0≤4*L) 12))
+@@ -164,5 +168,26 @@
+   change (C0*L^39*(4*L)^12)*(B*(D*L)^3)=(C0*4^12*(B*D^3))*L^54
+   ring
+ 
++end ByRule
++
++open P4BOriginalHigherLowNativeAtoms (groups firstSet secondSet thirdSet)
++def pieces {o : ℕ} {z k0 : ℝ} (I : Index o z k0) := ByRule.pieces historical I
++
++variable {o : ℕ} {z k0 : ℝ} (I : Index o z k0)
++theorem factor_and_boxes (hN : 1<I.P.N) (he : 0≤I.P.e) (ho : 0<I.P.omega) (hell : I.P.ell≤1) :
++    let k := J0 I.P.omega
++    |restore I.P I.J (groups I)|≤(k.factorial:ℝ)^3 ∧
++      (pieces I:ℝ)≤(dyadicConstant*((k:ℝ)+2)*logScale (I.P.N:ℝ))^3 :=
++  ByRule.factor_and_boxes historical I hN he ho hell
++
++theorem scheduled (omega T : ℝ) (ho : 0<omega) :
++    ∃ C : ℝ,0≤C ∧ ∀ {b kap : ℝ},0<b → b≤1 → 0<kap → 19/96<baseline b kap →
++    ∀ᶠ N : ℕ in atTop,∀ (order : ℕ) (zeta kap0 : ℝ) (I : Index order zeta kap0),
++    I.P.N=N → I.P.omega=omega → I.P.T=T → 0≤I.P.e → I.P.ell≤1 →
++    ((bank (cap N)).card:ℝ)*totalMass b kap (outerWidth N) N kap0*scalar I*
++      (∑ j∈I.P.words.attach,let A := onWord I j
++        |restore I.P j.val (groups A)|*(pieces A:ℝ))≤C*(Real.log (N:ℝ))^54 :=
++  ByRule.scheduled historical omega T ho
++
+ end
+ end ImbalancedChen.P4BOriginalHigherLowRestoration
