@@ -190,7 +190,7 @@ theorem firstExitRetainedLeaves_mass_eq_selected_prod
         exact ih selectedPrefix positive mass hmass leaf hleaf
 
 /-- Boolean parity of a list length: `true` means even. -/
-def evenListLength {α : Type*} : List α → Bool
+noncomputable def evenListLength {α : Type*} : List α → Bool
   | [] => true
   | _ :: xs => !evenListLength xs
 
