@@ -1,3 +1,4 @@
+# Validate targeted evenListLength codegen repair; all strict gates unchanged.
 # Start reviewed 5ccdc639 owner-import validation after Stored053-063 and P2r9 finished.
 # Requeue after excluding unrelated push workflows from this isolated branch.
 name: P4 compact profile strict inventory diagnostic
@@ -31,7 +32,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
-      SOURCE_COMMIT: 5ccdc63953a82dca253bea6f74c4301025199a32
+      SOURCE_COMMIT: 78b7c06f7a6dd538cf90dbc2825466257b00da46
       EXPECTED_MANIFEST: ${{ inputs.manifest_sha256 || '0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963' }}
       CHECK_PURPOSE: ${{ inputs.purpose || 'source_validation' }}
       LEAN_NUM_THREADS: 2
@@ -51,7 +52,7 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: 5ccdc63953a82dca253bea6f74c4301025199a32
+          ref: 78b7c06f7a6dd538cf90dbc2825466257b00da46
           path: candidate
           persist-credentials: false
       - name: Bind exact candidate source and unchanged pins
