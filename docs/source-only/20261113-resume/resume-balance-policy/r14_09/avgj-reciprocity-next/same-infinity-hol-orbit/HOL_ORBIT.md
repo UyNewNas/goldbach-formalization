@@ -1,0 +1,11 @@
+# Same-infinity holomorphic orbit
+
+The positive-sign trace in Drappeau’s two applications of Kuznetsov at infinity includes the holomorphic spectrum. These three sources recover its fixed even weight on Γ₀(N), including weight two, using the existing Hecke limit, unit-period horizontal extraction, translated Bessel formula and normalized Petersson coefficient from T21. The Fourier expansion keeps the existing arbitrary integral frame until its arithmetic gate is specialized. [Drappeau, (4.12), (4.15) and Proofs 4.6–4.7](https://arxiv.org/html/1504.05549v4#S4.SS2)
+
+At the identity frame, the period-N summation in `cuspSum_eq` forces the auxiliary frequency to be N times an integer. Orthogonality of the additive character in the denominator lift supplies N if N divides the physical positive denominator C and zero otherwise, also for N=1 or C=1. Its factor N cancels the Poisson normalization. `identity_denominator` uses the original convergent expansion and reindexes its supported modes by the full integer lattice.
+
+`same_infinity_den_mode` extracts the actual positive Fourier slot h at height one. The published periodization and translated Bessel evaluation identify its archimedean factor at physical denominator C, with complex amplitude and the power (√h/√m)^(2r−1). The published involution on the units of ℤ/Cℤ changes S(h,m;C) to S(m,h;C).
+
+`same_infinity_petersson` at κ=2(j+1) gives the full native Petersson basis product weighted by 4πΓ(κ−1). Its right-hand side is the all-level collision 1[m=h] plus the absolutely summed terms (2π/C)(−i)^κ S(m,h;C) J_{κ−1}(4π√(mh)/C) over N|C. Both evaluations of `frameR` use the identity on the same group. The input consists of positive integer marks m,h and the level N; it contains no trace identity, convergence, or spectral bound as a parameter.
+
+The existing T21 period-64 holomorphic weight sum still has a mixed cusp arithmetic gate. For either switched Φ one must sum these same-frame fixed-weight identities with that test’s actual odd moments, including the common collision correction. The actual two-probe scalar pretrace has a different test family and still needs identification at the same prescribed positive joint test. The uniform estimates for the complementary spectral terms and the iteration of (4.29) also remain. This source audit includes no Lean elaboration or kernel check.
