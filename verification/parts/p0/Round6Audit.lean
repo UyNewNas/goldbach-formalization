@@ -73,6 +73,47 @@ run_cmd do
       unless owned.size > 0 do
         throwError "Audited module has no declarations: {imported.module}"
       unless owned.qsort Name.lt == data.constNames.qsort Name.lt do
+        -- Diagnostics only. Keep the exact original rejection below.
+        let countName := fun (xs : Array Name) (n : Name) =>
+          xs.foldl (fun count x => if x == n then count + 1 else count) (0 : Nat)
+        let allNames := (owned ++ data.constNames).foldl
+          (fun acc n => if acc.contains n then acc else acc.push n) (#[] : Array Name)
+        let differentNames := allNames.filter fun n =>
+          countName owned n != countName data.constNames n
+        let mut differences : Array Json := #[]
+        for name in differentNames.qsort Name.lt do
+          let canonical := env.getModuleIdxFor? name
+          let mut occurrences : Array Json := #[]
+          for otherIdx in List.range env.header.modules.size do
+            let otherModule := env.header.modules[otherIdx]!
+            let otherData := env.header.moduleData[otherIdx]!
+            let serializedCount := countName otherData.constNames name
+            let extraCount := countName otherData.extraConstNames name
+            if serializedCount > 0 || extraCount > 0 then
+              occurrences := occurrences.push (Json.mkObj [
+                ("module_data_index", toJson otherIdx),
+                ("module", toJson otherModule.module.toString),
+                ("serialized_count", toJson serializedCount),
+                ("extra_codegen_count", toJson extraCount)])
+          differences := differences.push (Json.mkObj [
+            ("name", toJson name.toString),
+            ("owned_count", toJson (countName owned name)),
+            ("serialized_count", toJson (countName data.constNames name)),
+            ("environment_has_constant", toJson (env.find? name).isSome),
+            ("canonical_owner_index", toJson (canonical.map (fun i => i.toNat))),
+            ("canonical_owner_module", toJson (canonical.map (fun i => moduleNames[i]!.toString))),
+            ("loaded_occurrences", Json.arr occurrences)])
+        let diagnostic := Json.mkObj [
+          ("module_data_index", toJson idx),
+          ("module", toJson imported.module.toString),
+          ("owned_names", toJson (owned.map Name.toString)),
+          ("serialized_names", toJson (data.constNames.map Name.toString)),
+          ("extra_codegen_names", toJson (data.extraConstNames.map Name.toString)),
+          ("multiplicity_differences", Json.arr differences),
+          ("acceptance_rule_unchanged", toJson true)]
+        liftIO do
+          IO.println s!"P0_ROUND6_INVENTORY_MISMATCH {diagnostic.compress}"
+          (← IO.getStdout).flush
         throwError "Serialized declarations and defining-module inventory differ for {imported.module}"
       serializedModules := serializedModules.push imported.module
       serializedTotal := serializedTotal + data.constNames.size
