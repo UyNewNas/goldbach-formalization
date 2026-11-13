@@ -1,4 +1,4 @@
-"""P2-only reuse of the authentic T01 Cache executable; no compiler fallback.
+"""Explicitly adopted P2/Stored reuse of the authentic T01 Cache executable; no compiler fallback.
 
 Range acquisition, facet copying, trace descriptors, setup/import comparison,
 runtime/ABI and official-install identity use the existing shared implementation.
@@ -12,7 +12,7 @@ import re
 import struct
 import sys
 
-from coherent_cache import HERE, NATIVE, checked, read, require, sha, write
+from coherent_cache import HERE, NATIVE, PARENT, checked, read, require, sha, write
 
 SELECTION = '2e7bb18d35a8de3db8f5acf2139747175430dad91359631d3f04b1eaff6c1010'
 INDEX = '92bd3af256690b9c4fb7f9c3b819649ec892d9bba20a2497a46e2ef6da5a511d'
@@ -143,15 +143,17 @@ def verify(session):
 
 
 def bootstrap(session):
-    require(session.scope == NATIVE, 'Bootstrap selection is P2-only')
+    require(session.scope in {NATIVE,PARENT}, 'Explicit bootstrap scope required')
     selected,index,rule = load_inputs();raw = session.original();session.require_fixtures()
     require(selected['oldRoot'] == raw['runtime_state']['root'] and selected['source_files'] == 11
             and selected['module_facets'] == 129 and len(selected['binaryFacets']) == 4
             and selected['leaf_rule_sha256'] == LEAVES and selected['coldFallback'] is False, 'Bootstrap graph changed')
     checkout = session.run('bootstrap-resolve-pinned-dependencies', ['lake','--no-build','env','printenv','LEAN_PATH'])
     session.validate_environment(raw)
+    current_profile=selected['newProjectProfileSHA256'] if session.scope==NATIVE else session.selection['candidateFullInputProfileSHA256']
     require(raw['runtime_state']['input_sha256'][selected['oldRoot']+'/lakefile.toml'] == selected['oldProjectProfileSHA256']
-            and sha(session.project/'lakefile.toml') == selected['newProjectProfileSHA256'], 'Old/root project profiles were mixed')
+            and (session.scope!=PARENT or current_profile==selected['oldProjectProfileSHA256'])
+            and sha(session.project/'lakefile.toml') == current_profile, 'Old/root project profiles were mixed')
     origin = HERE/'inputs/ARCHITECT_COMMAND_LEAF_RULE.json'
     require(sha(origin) == rule['shared_architect_toolchain_origin_rule_sha256']
             and rule['historical_per_core_olean_hashes_available'] is False and rule['historical_core_bytes_verified'] is False,
@@ -182,7 +184,7 @@ def bootstrap(session):
         require(native['depHash'] == row['native_trace_depHash'] and native['outputs'] == row['native_trace_output']+'.o', 'Bootstrap native trace differs')
     binaries = session.restore_facets(raw,selected['binaryFacets'],session.project/'.lake/packages/mathlib','mathlib')
     session.emit('CACHE_BOOTSTRAP_RESTORE.json', {'modules':restored,'binary_facets':binaries,
-                 'selection_sha256':SELECTION,'leaf_rule_sha256':LEAVES,'old_project_profile_adopted':False})
+                 'selection_sha256':SELECTION,'leaf_rule_sha256':LEAVES,'old_project_profile_adopted':session.scope==PARENT})
     verify(session);binary = binary_trace(session,raw,selected)
     glibc = glibc_identity(session,raw,rule,binary)
     process = session.run('bootstrap-stock-cache-executable', ['lake','--no-build','build','@mathlib/cache'])
@@ -202,7 +204,7 @@ def bootstrap(session):
 
 
 def validate(session):
-    if session.scope != NATIVE: return
+    if session.scope not in {NATIVE,PARENT}: return
     selected,index,rule = load_inputs();verify(session);session.policy_audit()
     value = session.receipt('CACHE_BOOTSTRAP_QUALIFICATION.json')
     require(value['status'] == 'PASS_AUTHENTIC_CACHE_BOOTSTRAP_STOCK_NO_BUILD_INPUT_ONLY'

@@ -1,26 +1,25 @@
-# P2 r6 direct81 successor plan
+# P2 r7 plan
 
-ROOT-selected driver: ci/p2-integer-mass-r6-20261113, one direct parent
-81cb87f5cd18ab8dc4e85300340de92d91c551bb. The parent actual tree and all
-old freezes remain immutable. Apply only the exact reviewed successor delta.
-The full58-path projection is supplied for byte review; this is not a new
-driver reconstructed on the older356 base. Six other existing workflows retain
-exact parent bytes; VE gains only the r6 push exclusion, retaining its r5 entry.
+Direct parent8efe66f50b8d3aff776883c051cee6d23f414a63; exact push branch
+ci/p2-integer-mass-r7-20261113. Original r6 is immutable and failed mathematics,
+with authentic bootstrap11/native407 qualifications independently confirmed.
 
-Mathematical source686024b2, original102 ordered module records,84baseline/
-18overlay, all project pins/profileb47a, strict FinitePi, kernel, complete types,
-serialized ownership, original axioms and dual snapshots remain. Only the P2
-selection helper's branch/direct-parent literals and two appended bootstrap
-receipt SHA fields change; every original proof check is unchanged.
+Exactly102 original modules, imports and order remain:82 baselineeb,18 original
+686 overlays,2 published680 proof-expression repairs. No other source is adopted.
+Source checkouts and each module source_commit/path/bytes/SHA/blob are explicit.
 
-Use the independently selected authentic144-path Cache bootstrap and the same
-Range/CHECKPOINT acquisition as407. Every bootstrap Lean/C/link call denies.
-Stock no-build Cache executable,11 complete setups, finite official-origin/ABI/
-glibc and same-Lake-environment loader gates precede the no-build cache get.
-Then original407 stock qualification and original102 gates run. Any cache or
-identity mismatch HOLDs with no cold fallback. Early always logs retain actual
-JSONL and small bootstrap stdout; unchanged collector/full artifacts remain.
+Restore original T01 Cache144/native398+Architect9 as before. Separately restore
+r6 root86×8 genuine leanArts facets using original CHECKPOINT503750d5 and exact
+artifact14027780569 Ranges. All86 stock leanArts/current full setups/physical
+import parts/runtime/ABI must qualify; misses stop, with no compiler fallback.
+Protect all86 root sources and outputs before exec. Compile only16 affected
+modules. Require one real compilation per16 at final. Strict FinitePi starts
+from its qualified object with stock no-build, then uses its unchanged pilot.
 
-Local source/AST/JSON/YAML/hash/Git-metadata only. Source and actual-tree review
-by03 plus ROOT queue check/adoption precede the one fresh push. No local
-fixture/helper/Lean/Lake/LSP/runtime execution; driverReady remains false.
+Full102 fresh kernel replay, original strict serialized ownership, both full
+types, transitive allowed axioms, before/after snapshots, original837guard,
+32993collector, current source/object archive and final gate remain mandatory.
+
+No local helper, Lean, Lake, LSP, fixture or runtime execution. No Git/GH write
+or dispatch. ROOT alone applies independently reviewed exact rows, obtains
+actual-tree review, fresh-checks the heavy queue and pushes once.

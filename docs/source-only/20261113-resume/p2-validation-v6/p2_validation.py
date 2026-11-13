@@ -47,7 +47,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert re.fullmatch(r'[0-9a-f]{40}', commit)
     assert git_head(workspace) == commit
     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
-    branch = 'ci/p2-integer-mass-r6-20261113'
+    branch = 'ci/p2-integer-mass-r7-20261113'
     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
     committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
@@ -56,7 +56,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
     assert re.fullmatch(r'[0-9a-f]{64}', selection['bundle_registry_sha256'])
     assert re.fullmatch(r'[0-9a-f]{64}', selection['manifest_sha256'])
-    assert selection['driver_base'] == '81cb87f5cd18ab8dc4e85300340de92d91c551bb'
+    assert selection['driver_base'] == '8efe66f50b8d3aff776883c051cee6d23f414a63'
     assert selection['driver_branch'] == branch
     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
     assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
@@ -137,9 +137,11 @@ def bind_installed(manifest: dict, project: Path) -> dict:
 
 def stage(manifest: dict, project: Path, logs: Path) -> None:
     origins = {'baseline': Path(os.environ['BASELINE_SOURCE']),
-               'abi': Path(os.environ['ABI_SOURCE'])}
-    assert git_head(origins['baseline']) == manifest['repaired_baseline']
-    assert git_head(origins['abi']) == manifest['source_commit']
+               'abi': Path(os.environ['ABI_SOURCE']),
+               'repair': Path(os.environ['REPAIR_SOURCE'])}
+    assert manifest['source_revisions']=={'baseline':manifest['repaired_baseline'],'abi':manifest['inherited_source_commit'],'repair':manifest['source_commit']}
+    for label,path in origins.items():
+        assert git_head(path)==manifest['source_revisions'][label]
     for path in origins.values():
         assert not git_output(['git', '-C', str(path), 'diff', 'HEAD', '--'])
     view = Path(os.environ['P2_SOURCE_VIEW'])
@@ -147,7 +149,7 @@ def stage(manifest: dict, project: Path, logs: Path) -> None:
     view.mkdir(parents=True)
     logs.mkdir(parents=True, exist_ok=True)
     for record in manifest['modules']:
-        expected_ref = manifest['repaired_baseline'] if record['origin'] == 'baseline' else manifest['source_commit']
+        expected_ref = manifest['source_revisions'][record['origin']]
         assert record['source_commit'] == expected_ref
         source = origins[record['origin']] / record['origin_path']
         data = checked(source, record)
@@ -171,6 +173,10 @@ def stage(manifest: dict, project: Path, logs: Path) -> None:
     for label, path in origins.items():
         (logs / (label + '-source-tree.txt')).write_bytes(git_output(
             ['git', '-C', str(path), 'ls-tree', '-r', 'HEAD']))
+    sys.path.insert(0,str(Path(os.environ['GITHUB_WORKSPACE'])/manifest['compile_cache']['tools_bundle']['path']))
+    from cache_project import load_inputs
+    project_selection,_=load_inputs()
+    (logs/'recompile-modules.txt').write_text('\n'.join(project_selection['compile_modules'])+'\n')
     (logs / 'VALIDATION_MANIFEST.json').write_bytes((HERE / 'P2_VALIDATION_MANIFEST.json').read_bytes())
     (logs / 'VALIDATION_BUNDLE_REGISTRY.json').write_bytes((HERE / 'REGISTRY.json').read_bytes())
 
@@ -225,6 +231,27 @@ def finalize(manifest: dict, project: Path, logs: Path) -> None:
     from coherent_cache import CacheSession
     cache_session = CacheSession('P2_NATIVE_398')
     cache_session.validate_final()
+    from cache_project import load_inputs as project_inputs
+    project_selection,_=project_inputs()
+    expected_compile=project_selection['compile_modules']
+    selected={r['module']:r for r in manifest['modules']}
+    expected_sources={str(project/selected[n]['install_path']):n for n in expected_compile}
+    events=[json.loads(line) for line in (logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
+    compiled=[e for e in events if e['classification']=='EXACT_CURRENT_CALLER_SOURCE']
+    assert len(expected_compile)==len(compiled)==16
+    assert all(e['tool']=='lean' and e['compiler_exec_permitted'] is True and e['context']==cache_session.binding
+               and len(e['physical_inputs'])==1 for e in compiled)
+    observed=[e['physical_inputs'][0]['path'] for e in compiled]
+    assert len(set(observed))==16 and set(observed)==set(expected_sources), 'Only16 unique affected source compilations required'
+    for event in compiled:
+        physical=event['physical_inputs'][0];record=selected[expected_sources[physical['path']]]
+        assert physical=={'path':str(project/record['install_path']),'bytes':record['bytes'],'sha256':record['sha256']}
+    compile_census={'binding':cache_session.binding,'status':'PASS_EXACTLY16_NEW_AND_ZERO_PROTECTED_SOURCE_COMPILES',
+        'expected_modules':expected_compile,'events':compiled,'source_compile_count':16,'protected_root86_compile_count':0,
+        'bootstrap11_or_native407_compile_count':0,'preexec_events_sha256':digest(logs/'CACHE_PREEXEC_EVENTS.jsonl'),
+        'command_log_sha256':digest(logs/'runtime/compiler-commands.jsonl')}
+    census_path=logs/'P2_COMPILE_CENSUS.json';assert not census_path.exists()
+    census_path.write_text(json.dumps(compile_census,indent=2)+'\n')
     checkpoint = json.loads((logs / 'CACHE_CHECKPOINT_RETENTION.json').read_text())
     assert checkpoint['exit_code'] == 0 and checkpoint['collector_sha256'] == '773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76'
     assert checkpoint['binding'] == cache_session.binding
@@ -298,6 +325,10 @@ def finalize(manifest: dict, project: Path, logs: Path) -> None:
                'cache_qualification_sha256': digest(logs / 'CACHE_QUALIFICATION.json'),
                'cache_bootstrap_qualification_sha256': digest(logs / 'CACHE_BOOTSTRAP_QUALIFICATION.json'),
                'cache_bootstrap_restore_sha256': digest(logs / 'CACHE_BOOTSTRAP_RESTORE.json'),
+               'cache_project_qualification_sha256': digest(logs / 'CACHE_PROJECT_QUALIFICATION.json'),
+               'cache_project_restore_sha256': digest(logs / 'CACHE_PROJECT_RAW_RESTORE.json'),
+               'cache_project_acquisition_sha256': digest(logs / 'CACHE_PROJECT_ACQUISITION.json'),
+               'compile_census_sha256': digest(logs / 'P2_COMPILE_CENSUS.json'),
                'coherent_checkpoint_sha256': digest(checkpoint_path / 'CHECKPOINT.json'),
                'cache_tools_registry_sha256': manifest['compile_cache']['tools_bundle']['registry_sha256'],
                'runtime_audit_sha256': digest(logs / 'runtime/audit.json'),

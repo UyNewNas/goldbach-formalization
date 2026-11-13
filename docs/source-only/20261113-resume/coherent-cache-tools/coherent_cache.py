@@ -109,19 +109,42 @@ def bind_inputs(scope):
         checked(workspace/relative, row); require(git('-C',workspace,'show',commit+':'+relative) == (workspace/relative).read_bytes(), 'Workflow changed')
     source = (workspace / c['source_selection']['path']).resolve()
     require(source.is_relative_to(workspace), 'Selection escape'); checked(source,c['source_selection'])
-    require(sha(source) == '069d1591f45d448f55145fffdd17b9bb9d7bb1fa2b4178db78ef580397c5e71a', 'Wrong new11 source graph')
     require(git('-C',workspace,'show',commit+':'+source.relative_to(workspace).as_posix()) == source.read_bytes(), 'Stored source selection not committed')
+    stored_admission(c,read(source))
+    from cache_bootstrap import ADOPTION, load_inputs
+    require(c['bootstrap_cache']==ADOPTION,'Stored authentic bootstrap not explicitly adopted');load_inputs()
     return {'scope':scope, 'driver_commit':commit, 'run_id':os.environ['GITHUB_RUN_ID'],
             'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'], 'job':os.environ['GITHUB_JOB'],
             'source_commit':commit,'manifest_sha256':sha(source),'root_control_sha256':sha(control_path),
             'bundle_registry_sha256':c['bundle_registry_sha256'],'selection_sha256':expected}
 
 
+
+def stored_admission(control, selection):
+    admission=control['source_admission'];new=admission['new_modules'];protected=admission['protected_modules']
+    parent='ImbalancedChen.P5SubdivisionStoredParentTypes'
+    pattern=r'ImbalancedChen\.Data\.P5SubdivisionStoredBlock[0-9]{3}'
+    require(selection['schema']=='STORED053_063_EXACT_SOURCE_SCOPE_PROPOSAL_V1'
+            and len(new)==11 and len(protected)==54 and len(set(new+protected))==65
+            and all(re.fullmatch(pattern,n) for n in new+protected[1:]) and protected[0]==parent
+            and new==[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(53,64)]
+            and protected==[parent]+[f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(53)]
+            and admission['audit_filename']=='StoredBatchAudit.lean'
+            and selection['parent']['module']==parent
+            and all(selection[key]==new for key in ['new_modules','new_proof_compile_scope','kernel_replay_scope','owned_types_axioms_scope'])
+            and all(selection[key]==protected for key in ['forbidden_old_source_compile_modules','forbidden_old_kernel_replay_modules'])
+            and [r['module'] for r in selection['files']]==new,
+            'Stored explicit new-only/protected source scope differs')
+    return admission
+
+
 def scope_policy(scope, project, logs, binding):
     roots, exact = [], []
     if scope == NATIVE: roots = [str(project / ('.lake/packages/'+name)) for name in ['goldbach','LeanArchitect']]
     else:
-        modules = ['ImbalancedChen.P5SubdivisionStoredParentTypes'] + [f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(31)]
+        control=read(os.environ['CACHE_ROOT_CONTROL'])
+        selection=read(Path(os.environ['GITHUB_WORKSPACE'])/control['source_selection']['path'])
+        modules=stored_admission(control,selection)['protected_modules']
         exact = [str(project / (n.replace('.', '/') + '.lean')) for n in modules]
         for name in modules:
             for directory, suffixes in [('.lake/build/lib/lean',['.olean','.ilean','.ir','.ir.sig']),('.lake/build/ir',['.c','.bc'])]:
@@ -138,7 +161,7 @@ def scope_policy(scope, project, logs, binding):
         elif isinstance(value, dict): value = {k:substitute(v) for k,v in value.items()}
         return value
     protocol = read(HERE / 'COMPILER_PROTOCOL.json')
-    if scope == NATIVE:
+    if scope in {NATIVE,PARENT}:
         from cache_bootstrap import load_inputs
         bootstrap,_,_ = load_inputs()
         roots += [str(project/'.lake/packages/mathlib'/relative) for relative in ['Cache','.lake/build/lib/lean/Cache','.lake/build/ir/Cache']]
@@ -150,16 +173,21 @@ def scope_policy(scope, project, logs, binding):
         caller = Path(os.environ['GITHUB_WORKSPACE']) / os.environ['P2_BUNDLE']
         sys.path.insert(0,str(caller))
         from p2_validation import load_bound_bundle
-        manifest, _ = load_bound_bundle(); sources = [dict(path=str(project/r['install_path']), bytes=r['bytes'], sha256=r['sha256']) for r in manifest['modules']]
+        manifest, _ = load_bound_bundle()
+        from cache_project import ADOPTION, load_inputs
+        require(manifest['compile_cache']['root_project_cache']==ADOPTION,'Root86 cache adoption differs')
+        selected,_=load_inputs();protected={r['module'] for r in selected['rows']}
+        for row in selected['rows']:
+            exact += [str(project/part['path']) for part in [row['source'],*row['facets']]]
+        sources = [dict(path=str(project/r['install_path']), bytes=r['bytes'], sha256=r['sha256'])
+                   for r in manifest['modules'] if r['module'] not in protected]
         flags = []; audits = ['CandidateAudit.lean', 'FinitePiPilot.lean']
     else:
         # The independent caller binds these exact eleven source postimages in
         # its original selection and retains the original 26a6 project profile.
         control = read(os.environ['CACHE_ROOT_CONTROL'])
         selection = read(Path(os.environ['GITHUB_WORKSPACE'])/control['source_selection']['path'])
-        expected = [f'ImbalancedChen.Data.P5SubdivisionStoredBlock{i:03}' for i in range(31,42)]
-        require(selection['new_modules']==expected and [r['module'] for r in selection['files']]==expected,
-                'Stored compile-admission source census changed')
+        expected=stored_admission(control,selection)['new_modules']
         sources = [dict(path=str(project/r['install_path']),bytes=r['bytes'],sha256=r['sha256']) for r in selection['files']]
         flags = ['-D','maxRecDepth=100000','-D','maxHeartbeats=4000000']; audits = ['StoredBatchAudit.lean']
     for source in sources:
@@ -182,7 +210,7 @@ def scope_policy(scope, project, logs, binding):
             'historical_cache_rsp':protocol['historical_cache_rsp'],
             'bootstrap_native_objects':native_objects,'toolchain_library_roots':[str(realroot/'lib'),str(shadow/'lib')],
             'toolchain_roots':{'realroot':str(realroot),'shadow':str(shadow)},
-            'bootstrap_cache_reuse_only':scope==NATIVE,
+            'bootstrap_cache_reuse_only':True,
             'unknown_tools_modes_flags_and_response_files':'DENY_BEFORE_COMPILER_EXEC',
             'no_cold_rebuild_fallback':True,'cache_hit_is_not_proof_acceptance':True}
 
@@ -263,12 +291,12 @@ class CacheSession:
             for name,row in extra['objects'].items():
                 require(name not in self.index['objects'] or self.index['objects'][name]==row,'Conflicting content-addressed payload')
                 self.index['objects'][name]=row
-            from cache_bootstrap import load_inputs
-            self.bootstrap_selection,bootstrap_index,_=load_inputs()
-            require(bootstrap_index['whole_artifact']==self.index['whole_artifact'],'Bootstrap is not from the same authentic archive')
-            for name,row in bootstrap_index['objects'].items():
-                require(name not in self.index['objects'] or self.index['objects'][name]==row,'Conflicting authentic bootstrap payload')
-                self.index['objects'][name]=row
+        from cache_bootstrap import load_inputs
+        self.bootstrap_selection,bootstrap_index,_=load_inputs()
+        require(bootstrap_index['whole_artifact']==self.index['whole_artifact'],'Bootstrap is not from the same authentic archive')
+        for name,row in bootstrap_index['objects'].items():
+            require(name not in self.index['objects'] or self.index['objects'][name]==row,'Conflicting authentic bootstrap payload')
+            self.index['objects'][name]=row
         self.anchor=self.index['whole_artifact'];require(self.anchor['artifact']==13749339878,'Wrong input archive')
         self._part_cache={};self._historical_cache={};self._raw=None
         self.state=read(self.logs/'runtime/state.json');require(self.state['guard_sha256']==BASELINE_GUARD,'Baseline guard changed')
@@ -357,6 +385,8 @@ class CacheSession:
         package=('mathlib' if name is not None and name.startswith('Cache.') else
                  'batteries' if name is not None and name.startswith('Batteries.') else
                  'LeanArchitect' if name is not None and (name=='Architect' or name.startswith('Architect.')) else 'goldbach')
+        if name is not None and (name.startswith('Cache.') or name.startswith('Batteries.')):
+            return self.project/'.lake/packages'/package
         return self.project/'.lake/packages'/package if self.scope==NATIVE else self.project
 
     def mapping(self,raw,path):
@@ -434,7 +464,8 @@ class CacheSession:
             payload=self.inputs/facet['object'];checked(payload,facet)
             relative=Path(facet['path']);target=root/relative
             require(not relative.is_absolute() and '..' not in relative.parts and relative.parts[:2]==('.lake','build') and not target.is_symlink() and target.resolve().is_relative_to((root/'.lake/build').resolve()),'Unsafe raw facet destination')
-            previous=raw['files'].get(str(Path(raw['runtime_state']['root'])/('.lake/packages/'+package if self.scope==NATIVE else '')/relative))
+            old_root=Path(raw['runtime_state']['root'])/root.relative_to(self.project)
+            previous=raw['files'].get(str(old_root/relative))
             require(previous and previous['payload']==facet['object'] and previous['sha256']==facet['sha256'] and previous['bytes']==facet['bytes'],'Facet not bound by original schema')
             if target.exists():checked(target,facet)
             else:
@@ -458,7 +489,7 @@ class CacheSession:
         return {'module':row['module'],'source':{'path':str(source),'bytes':row['source']['bytes'],'sha256':row['source']['sha256']},'facets':outputs}
 
     def restore(self):
-        if self.scope==NATIVE:
+        if self.scope in {NATIVE,PARENT}:
             from cache_bootstrap import validate
             validate(self)
         raw=self.original();self.validate_environment(raw);oldroot=raw['runtime_state']['root']
@@ -576,8 +607,8 @@ class CacheSession:
             imports,libraries=self.setup_inputs(raw,historical_setup)
             observed={module:[[part['historical_path'],part['sha256']] for part in parts] for module,parts in imports.items()}
             old_hash=_hashlib.sha256(json.dumps(observed,sort_keys=True,separators=(',',':')).encode()).hexdigest()
-            if self.scope==NATIVE:
-                selected=next(r for r in selected_rows if r['module']==name)
+            selected=next(r for r in selected_rows if r['module']==name)
+            if 'priorActualImportMapSHA256' in selected:
                 require(old_hash==selected['priorActualImportMapSHA256'] and len(imports)==selected['priorActualImportCount'],'Actual original import receipt map differs')
             else:require(old_hash==self.selection['actualImportReceiptMapSHA256'] and len(imports)==self.selection['actualImportCount'],'Parent actual import map differs')
             for parts in imports.values():
@@ -617,6 +648,9 @@ class CacheSession:
 
     def admit(self):
         self.require_fixtures();self.verify_restored();self.policy_audit()
+        if self.scope==NATIVE:
+            from cache_project import ProjectSession
+            ProjectSession(self).validate()
         qualification=self.receipt('CACHE_QUALIFICATION.json')
         require(qualification['status']=='PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY','Cache qualification required before admission')
         policy=read(self.logs/'CACHE_PREEXEC_POLICY.json');sources={}
@@ -645,7 +679,7 @@ class CacheSession:
         return value
 
     def qualification_inputs(self):
-        if self.scope==NATIVE:
+        if self.scope in {NATIVE,PARENT}:
             from cache_bootstrap import validate
             validate(self)
         value=self.receipt('CACHE_QUALIFICATION.json')
@@ -683,10 +717,13 @@ class CacheSession:
                 and final['denial_log_sha256']==sha(self.logs/'CACHE_COMPILER_DENIALS.jsonl')
                 and final['preexec_events_sha256']==sha(self.logs/'CACHE_PREEXEC_EVENTS.jsonl'),'Cache final evidence changed')
         require(final['caller_inputs_sha256']==sha(self.logs/'CACHE_CALLER_INPUTS.json'),'Final caller admission changed')
-        if self.scope==NATIVE:
+        if self.scope in {NATIVE,PARENT}:
             require(final['bootstrap_qualification_sha256']==sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json')
                     and final['bootstrap_restore_sha256']==sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json'),
                     'Final authentic bootstrap input binding changed')
+        if self.scope==NATIVE:
+            from cache_project import ProjectSession
+            require(all(final.get(k)==v for k,v in ProjectSession(self).validate().items()),'Final root86 receipt binding changed')
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==self.receipt('CACHE_QUALIFICATION.json')['physical_parts_receipt_sha256'],'Input receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)
@@ -698,8 +735,11 @@ class CacheSession:
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==qualification['physical_parts_receipt_sha256'],'Import-part receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)
-        bootstrap_binding=({'bootstrap_qualification_sha256':sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json'),
-                            'bootstrap_restore_sha256':sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json')} if self.scope==NATIVE else {})
+        bootstrap_binding={'bootstrap_qualification_sha256':sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json'),
+                           'bootstrap_restore_sha256':sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json')}
+        if self.scope==NATIVE:
+            from cache_project import ProjectSession
+            bootstrap_binding.update(ProjectSession(self).validate())
         self.emit('CACHE_FINAL_INPUT_AUDIT.json',{'status':'PASS_UNCHANGED_CACHE_INPUTS_AND_ZERO_PROTECTED_EXEC','qualification_sha256':sha(self.logs/'CACHE_QUALIFICATION.json'),
                   **bootstrap_binding,
                   'runtime_state_sha256':sha(self.logs/'runtime/state.json'),'command_log_sha256':sha(self.state['log']),
@@ -720,7 +760,11 @@ def main():
         if sys.argv[1]=='bootstrap':
             from cache_bootstrap import bootstrap
             bootstrap(session)
-        else:getattr(session,sys.argv[1])()
+        else:
+            getattr(session,sys.argv[1])()
+            if session.scope==NATIVE and sys.argv[1] in {'acquire','restore','qualify'}:
+                from cache_project import ProjectSession
+                getattr(ProjectSession(session),sys.argv[1])()
     except Exception as error:
         failure=session.logs/'CACHE_FAILURE.json'
         if not failure.exists():write(failure,{'binding':session.binding,'phase':sys.argv[1],'error_type':type(error).__name__,'error':str(error),'no_rebuild_fallback':True,'proof_acceptance':False})
