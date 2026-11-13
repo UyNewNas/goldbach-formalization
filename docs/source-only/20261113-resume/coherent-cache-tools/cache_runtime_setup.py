@@ -57,6 +57,8 @@ def main():
     sys.argv = [str(baseline), 'setup', '--evidence', str(evidence)]
     guard.main()
     state = json.loads((evidence / 'state.json').read_text())
+    assert state['shadow'] == policy['toolchain_roots']['shadow']
+    assert str(Path(state['realbin']).parent) == policy['toolchain_roots']['realroot']
     actual = {tool: sha(Path(state['shadow']) / 'bin' / tool) for tool in state['tools']}
     receipt = {'status': 'ORIGINAL_GUARD_PLUS_EXPLICIT_PREEXEC_CACHE_DENIAL', 'binding': bound,
                'baseline_guard_sha256': BASELINE, 'extension_sha256': sha(__file__),

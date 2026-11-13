@@ -1,7 +1,7 @@
 name: P2 integer mass ABI exact closure validation
 on:
   push:
-    branches: [ci/p2-integer-mass-r5-20261113]
+    branches: [ci/p2-integer-mass-r6-20261113]
     paths: [.github/workflows/p2-integer-mass-validation.yml]
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
     env:
       SOURCE_COMMIT: 686024b292027816b712963167436c445df5e68e
       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
-      EXPECTED_MANIFEST: 48497291ec2cc629089966f61182e16409475f6711d8ae7ebcda1d571019a676
+      EXPECTED_MANIFEST: e1ab63bdcb027e40c592138b7ca712e1af99864404a94ee893645ab0180fa3ff
       LEAN_NUM_THREADS: 2
       P2_BUNDLE: docs/source-only/20261113-resume/p2-validation-v6
       CACHE_BUNDLE: docs/source-only/20261113-resume/coherent-cache-tools
@@ -84,13 +84,26 @@ jobs:
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/cache_runtime_setup.py"
-      - name: Reuse pinned dependency cache and bind dependency sources
-        id: dependencies
-        timeout-minutes: 35
+      - name: Acquire authentic bootstrap and407 inputs once with the shared Range reader
+        id: cache_acquisition
+        timeout-minutes: 75
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          for phase in fixtures acquire; do
+            python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
+          done
+      - name: Reuse authentic Cache executable with stock no-build and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" bootstrap 2>&1 | tee "$LOGS/dependency-cache.log"
           cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
           python3 - <<'PY'
           import json,pathlib,subprocess,os
@@ -113,7 +126,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          for phase in fixtures acquire restore qualify; do
+          for phase in restore qualify; do
             python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/coherent_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
           done
       - name: Prepare complete ABI import census with original strict diagnostic audit
@@ -176,11 +189,13 @@ jobs:
           path: |
             ${{ runner.temp }}/p2-integer-mass-evidence/*.log
             ${{ runner.temp }}/p2-integer-mass-evidence/*.json
+            ${{ runner.temp }}/p2-integer-mass-evidence/*.jsonl
             ${{ runner.temp }}/p2-integer-mass-evidence/*.txt
             ${{ runner.temp }}/p2-integer-mass-evidence/*.lean
             ${{ runner.temp }}/p2-integer-mass-evidence/runtime/
             ${{ runner.temp }}/p2-integer-mass-evidence/cache-processes/*.json
             ${{ runner.temp }}/p2-integer-mass-evidence/cache-processes/*.stderr
+            ${{ runner.temp }}/p2-integer-mass-evidence/cache-processes/bootstrap-*.stdout
           if-no-files-found: error
           retention-days: 30
       - name: Preserve full raw native/setup/IR/source checkpoint with original collector

@@ -47,7 +47,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert re.fullmatch(r'[0-9a-f]{40}', commit)
     assert git_head(workspace) == commit
     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
-    branch = 'ci/p2-integer-mass-r5-20261113'
+    branch = 'ci/p2-integer-mass-r6-20261113'
     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
     committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
@@ -56,7 +56,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
     assert re.fullmatch(r'[0-9a-f]{64}', selection['bundle_registry_sha256'])
     assert re.fullmatch(r'[0-9a-f]{64}', selection['manifest_sha256'])
-    assert selection['driver_base'] == '356c3782e9428098a2fcbfb18c689bef264d84fa'
+    assert selection['driver_base'] == '81cb87f5cd18ab8dc4e85300340de92d91c551bb'
     assert selection['driver_branch'] == branch
     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
     assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
@@ -296,6 +296,8 @@ def finalize(manifest: dict, project: Path, logs: Path) -> None:
                'finitepi_pilot_acceptance_sha256': digest(logs / 'FINITEPI_PILOT_ACCEPTANCE.json'),
                'cache_final_input_audit_sha256': digest(logs / 'CACHE_FINAL_INPUT_AUDIT.json'),
                'cache_qualification_sha256': digest(logs / 'CACHE_QUALIFICATION.json'),
+               'cache_bootstrap_qualification_sha256': digest(logs / 'CACHE_BOOTSTRAP_QUALIFICATION.json'),
+               'cache_bootstrap_restore_sha256': digest(logs / 'CACHE_BOOTSTRAP_RESTORE.json'),
                'coherent_checkpoint_sha256': digest(checkpoint_path / 'CHECKPOINT.json'),
                'cache_tools_registry_sha256': manifest['compile_cache']['tools_bundle']['registry_sha256'],
                'runtime_audit_sha256': digest(logs / 'runtime/audit.json'),

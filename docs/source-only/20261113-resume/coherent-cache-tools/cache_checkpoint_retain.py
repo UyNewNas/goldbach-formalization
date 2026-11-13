@@ -49,11 +49,11 @@ def main():
     config=logs/'CHECKPOINT_COLLECTOR_INPUT.json';write(config,adapted)
     # Preserve the actual current protected sources even though this run is
     # forbidden to produce a new compiler-source event for a cache input.
-    restore=logs/'CACHE_RAW_RESTORE.json'
-    if restore.exists():
-        for row in read(restore)['modules']:
-            source=row['source'];target=logs/'cached-source-inputs'/Path(source['path']).relative_to(project)
-            checked(source['path'],source);target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source['path'],target)
+    for restore in [logs/'CACHE_RAW_RESTORE.json',logs/'CACHE_BOOTSTRAP_RESTORE.json']:
+        if restore.exists():
+            for row in read(restore)['modules']:
+                source=row['source'];target=logs/'cached-source-inputs'/Path(source['path']).relative_to(project)
+                checked(source['path'],source);target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source['path'],target)
     collector=HERE/'reference/checkpoint_objects_v3.py'
     require(collector.stat().st_size==32993 and sha(collector)=='773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76',
             'Original collector bytes changed')

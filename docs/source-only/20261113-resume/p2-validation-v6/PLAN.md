@@ -1,11 +1,26 @@
-# P2 v6 exact r5-r1 closure and authentic coherent-cache input route
+# P2 r6 direct81 successor plan
 
-Source-only preparation. The original102 ordered modules remain101 ABI plus FinitePi. All84 unchanged baseline rows are read from eb035a; all18 overlays are read from the published686024b2 checkout. Five r5-r1 files replace actual failed proof/API expressions;13 inherited overlays are byte-identical. No newly published P3 source is selected.
+ROOT-selected driver: ci/p2-integer-mass-r6-20261113, one direct parent
+81cb87f5cd18ab8dc4e85300340de92d91c551bb. The parent actual tree and all
+old freezes remain immutable. Apply only the exact reviewed successor delta.
+The full58-path projection is supplied for byte review; this is not a new
+driver reconstructed on the older356 base. Six other existing workflows retain
+exact parent bytes; VE gains only the r6 push exclusion, retaining its r5 entry.
 
-Before any original project build, the separately frozen shared tool bundle restores the original3590 payloads plus genuine CHECKPOINT and153 independent Architect payloads by exact ranges. The original398 selector4ad73299 is unchanged. The nine prerequisites are separate; only Architect.Command uses an explicit release-origin/ABI leaf rule preserving its original quarantine and acknowledging unavailable historical per-core hashes. All407 raw source/trace/setup/facets remain unmodified and all407 protected source compilers are denied before exec. Stock Lake --no-build leanArts and complete current setup/import-part comparison must pass; a miss fails with no cold fallback. P2 retains its b47a root profile, separate from old26a6.
+Mathematical source686024b2, original102 ordered module records,84baseline/
+18overlay, all project pins/profileb47a, strict FinitePi, kernel, complete types,
+serialized ownership, original axioms and dual snapshots remain. Only the P2
+selection helper's branch/direct-parent literals and two appended bootstrap
+receipt SHA fields change; every original proof check is unchanged.
 
-After qualification the unchanged prepare renderer and one-time source/audit admission run. Original strict FinitePi pilot, full102 compilation, bundled kernel, exact serialized/owner census, both full types, transitive axioms, dual object snapshots, source/config binding, runtime guard/audit/probes and full original archive remain mandatory. The new cache audit is after runtime probes. Original32993-byte collector additionally retains actual raw package facets/setup/IR/source with explicit P2-only retention aliases; no compiler/proof acceptance is claimed by cache or checkpoint records.
+Use the independently selected authentic144-path Cache bootstrap and the same
+Range/CHECKPOINT acquisition as407. Every bootstrap Lean/C/link call denies.
+Stock no-build Cache executable,11 complete setups, finite official-origin/ABI/
+glibc and same-Lake-environment loader gates precede the no-build cache get.
+Then original407 stock qualification and original102 gates run. Any cache or
+identity mismatch HOLDs with no cold fallback. Early always logs retain actual
+JSONL and small bootstrap stdout; unchanged collector/full artifacts remain.
 
-Actual driver must directly extend356c3782 on ci/p2-integer-mass-r5-20261113. Seven inherited workflows are bound; six retain original bytes, VariableEnvelope adds only this exclusion. Heavy concurrency/cancel=false remain. Root alone may construct the actual tree; independent actual-tree review and root authorization are still required. driverReady=false.
-
-Revision v6-r1 additionally binds the original collector retention receipt, exact output directory, collector/adapter argv and source hashes, actual raw checkpoint run/attempt/source/runtime state, adapted source selection and original summary at final acceptance. The immutable eba726a5 predecessor is preserved.
+Local source/AST/JSON/YAML/hash/Git-metadata only. Source and actual-tree review
+by03 plus ROOT queue check/adoption precede the one fresh push. No local
+fixture/helper/Lean/Lake/LSP/runtime execution; driverReady remains false.

@@ -36,6 +36,84 @@ class CacheProtectionCases(unittest.TestCase):
 
     def call(self,argv,raw=None):enforce('lean',argv,self.root,self.path,self.sha,raw_argv=argv if raw is None else raw)
 
+    def clang_case(self):
+        # The policy row comes from the immutable historical protocol, while
+        # the actual argv below is the literal shape in failed run43345599845.
+        # Real filesystem links reproduce the original guard's include map.
+        realroot=self.root/'official/leanprover--lean4---v4.33.0-rc1'
+        shadow=self.root/'p0-ci-shadow-toolchain'
+        (realroot/'include/clang').mkdir(parents=True);shadow.mkdir()
+        (shadow/'include').symlink_to(realroot/'include',target_is_directory=True)
+        self.policy['toolchain_roots']={'realroot':str(realroot),'shadow':str(shadow)}
+        protocol=json.loads(Path(__file__).with_name('COMPILER_PROTOCOL.json').read_text())
+        template=next(r for r in protocol['commands'] if r['tool']=='clang' and
+                      r['argv'][3].endswith('/Cache/Cli.c'))
+        replacements={'{project}':str(self.root),'{shadow}':str(shadow),'{realroot}':str(realroot)}
+        def substitute(token):
+            for old,new in replacements.items():token=token.replace(old,new)
+            return token
+        self.policy['admitted_commands'].append(dict(template,argv=[substitute(a) for a in template['argv']]))
+        self.path.write_text(json.dumps(self.policy));self.sha=hashlib.sha256(self.path.read_bytes()).hexdigest()
+        stem=str(self.root/'.lake/packages/mathlib/.lake/build/ir/Cache/Cli.c')
+        argv=['-c','-o',stem+'.o.export',stem,'-I',str(shadow/'include'),
+              '-fstack-clash-protection','-ffp-contract=off','-fdata-sections','-ffunction-sections',
+              '-fPIC','-fvisibility=hidden','-Wno-unused-command-line-argument','--sysroot',str(shadow),
+              '-nostdinc','-isystem',str(shadow/'include/clang'),'-O3','-DNDEBUG','-DLEAN_EXPORTING']
+        return argv,realroot,shadow
+
+    def call_clang(self,argv):enforce('clang',argv,self.root,self.path,self.sha,raw_argv=argv)
+
+    def test_clang_bootstrap_exact_shadow_include_command_allowed(self):
+        argv,realroot,shadow=self.clang_case()
+        self.call_clang(argv)
+        self.assertFalse((self.root/'denials.jsonl').exists())
+        event=json.loads((self.root/'events.jsonl').read_text())
+        self.assertEqual(event['classification'],'EXACT_PINNED_BOOTSTRAP_NATIVE')
+        self.assertTrue(event['compiler_exec_permitted'])
+
+    def test_clang_extra_or_changed_flag_denied(self):
+        argv,realroot,shadow=self.clang_case()
+        for variant in [argv+['-march=native'],[('-O2' if a=='-O3' else a) for a in argv]]:
+            with self.assertRaises(RuntimeError):self.call_clang(variant)
+
+    def test_clang_external_alias_to_same_include_denied(self):
+        argv,realroot,shadow=self.clang_case()
+        alias=self.root/'external-include';alias.symlink_to(realroot/'include',target_is_directory=True)
+        argv[5]=str(alias)
+        with self.assertRaises(RuntimeError):self.call_clang(argv)
+
+    def test_clang_shadow_include_escape_denied(self):
+        argv,realroot,shadow=self.clang_case()
+        outside=self.root/'outside';(outside/'clang').mkdir(parents=True)
+        (shadow/'include').unlink();(shadow/'include').symlink_to(outside,target_is_directory=True)
+        with self.assertRaises(RuntimeError):self.call_clang(argv)
+
+    def test_clang_nested_include_escape_denied(self):
+        argv,realroot,shadow=self.clang_case()
+        outside=self.root/'outside';outside.mkdir()
+        (realroot/'include/clang').rmdir()
+        (realroot/'include/clang').symlink_to(outside,target_is_directory=True)
+        with self.assertRaises(RuntimeError):self.call_clang(argv)
+
+    def test_clang_unregistered_source_or_output_denied(self):
+        argv,realroot,shadow=self.clang_case()
+        for index in [2,3]:
+            variant=list(argv);variant[index]+='.unregistered'
+            with self.assertRaises(RuntimeError):self.call_clang(variant)
+
+    def test_reuse_only_denies_pinned_bootstrap_compile_and_link(self):
+        argv,realroot,shadow=self.clang_case()
+        self.policy['bootstrap_cache_reuse_only']=True
+        self.path.write_text(json.dumps(self.policy));self.sha=hashlib.sha256(self.path.read_bytes()).hexdigest()
+        with self.assertRaises(RuntimeError):self.call_clang(argv)
+        with self.assertRaises(RuntimeError):self.call_clang(['-o',self.policy['cache_link_output'],
+                                                            '@'+self.policy['cache_link_response']])
+
+    def test_source_symlink_into_protected_cache_denied(self):
+        protected=self.root/'goldbach/Protected.lean';protected.parent.mkdir();protected.write_text('-- FAKE UNIT\n')
+        source=self.root/'New031.lean';source.unlink();source.symlink_to(protected)
+        with self.assertRaises(RuntimeError):self.call(['-t0','-j2','-M12288','-D','warningAsError=true','New031.lean'])
+
     def test_native_source_denied_before_fake_exec(self):
         sentinel=self.root/'FAKE_EXEC_WAS_CALLED'
         def fake_program():

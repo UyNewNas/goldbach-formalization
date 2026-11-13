@@ -1,72 +1,62 @@
-# Coherent cache shared tools
+# Authentic coherent cache tools: bootstrap successor
 
-Frozen source for GitHub Linux only. No helper, Lean, Lake, fixture, stage or
-runtime program has been executed locally. This continues the preserved T02 WIP.
-Actual installation path: `docs/source-only/20261113-resume/coherent-cache-tools`.
+GitHub Linux only. Never run these helpers, fixtures, Lean, Lake or runtime
+programs locally. Actual install path remains
+`docs/source-only/20261113-resume/coherent-cache-tools`. Original32993-byte
+collector773e4eab and22947-byte guard837f0036 remain byte-identical. The actual
+generated wrappers are explicitly extended and hashed; their original locks,
+normalizer and resource/env gates remain.
 
-The original `reference/checkpoint_objects_v3.py` is exactly 32993 bytes / SHA256
-`773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76`.
-The original `reused/ci_runtime_guard.py` is exactly 22947 bytes / SHA256
-`837f00360ca1364eb6adede88c05a72122acbbbbff2437c83026f2851836a877`.
-The separate runtime extension inserts its own hashed default-deny policy before
-the original log/exec, after the unchanged normalizer and serial lock. Actual
-generated wrapper hashes and both template hashes are recorded explicitly in
-`CACHE_RUNTIME_EXTENSION.json`; extended bytes are never called original bytes.
+This explicit successor preserves frozen r2/6ac160fb. P2 alone adopts the new
+11-module authentic Cache executable bootstrap selection, four separate
+toolchain-only leaf rules, and bounded same-Ubuntu libc6 origin conditions. It
+does not automatically alter the successful Stored driver or its selection.
 
-Set `PROJECT`, `LOGS`, `CACHE_INPUTS` (outside project and logs), `CACHE_SCOPE`,
-`GH_TOKEN`, and the ordinary GitHub immutable run/attempt/job environment.
-`P2_NATIVE_398` additionally sets `P2_BUNDLE` to its independently bound P2
-caller bundle. Its exact manifest explicitly adopts this shared registry, the
-original398 selector and the separate Architect.Command rule.
-`STORED_PARENT` additionally sets `CACHE_ROOT_CONTROL` to its committed root
-control. That control binds the shared registry, all actual workflows, exact
-direct parent/branch, and the unchanged 069d1591 source selection. Stored keeps
-26a6 profile; P2 keeps b47a profile. Scopes cannot be combined.
+P2 remote order is runtime setup; fixtures; acquire; bootstrap; restore;
+qualify; original caller prepare/bind then admit; original102 compile/kernel/
+full declaration types/serialized ownership/axioms/dual snapshots/runtime;
+audit; original collector retain and all final gates. Acquisition merges the
+new144 Cache paths, original398 and9 prerequisites into ONE exact Range
+selection from the same artifact and authentic CHECKPOINT. The original
+ArchiveReader performs all HTTP206/Content-Range/header/CRC/SHA validation and
+bounded expired-redirect renewal. No whole ZIP or already verified object is
+redownloaded as fallback.
 
-Ordered remote CLI:
+Bootstrap uses stock `lake --no-build env printenv LEAN_PATH` only to resolve
+the pinned dependency workspace; every old/current package pin/source,11 real
+runtime payloads and8 ABI inputs are then compared. Shared original facet-copy
+and trace-sidecar logic restores the11 sources/129 facets/4 executable facets
+without changing any trace, setup, sidecar or old-root response byte. Original
+QUARANTINED labels of the four core-only leaves are retained. Their separate
+limited official distribution identity has no historical per-core olean hashes.
 
-1. `python3 "$CACHE_BUNDLE/cache_runtime_setup.py"` installs the original guard
-   plus the separately declared admission hook before dependency setup.
-2. The original `lake exe cache get` remains; only the eleven pinned Cache and
-   Batteries bootstrap sources and their exact eleven native commands are
-   admitted before cache qualification. Singleton `--githash`/`--print-prefix`
-   are the only Lean metadata modes. The sole Cache linker response is checked
-   against its original1906-byte SHA after the sole project-root mapping.
-3. Run `python3 "$CACHE_BUNDLE/coherent_cache.py"` separately with modes
-   `fixtures`, `acquire`, `restore`, `qualify`, in that order. These require
-   actual fixture process receipts. Acquisition uses authenticated exact HTTP
-   ranges, payload SHA/length and CRC, plus the real67075207-byte CHECKPOINT.
-4. P2 restores the original398 plus nine independent Architect prerequisites.
-   Architect.Command retains its original quarantine and uses only the explicit
-   release-origin/ABI leaf rule. No historical per-core olean SHA is invented.
-   Stored restores only the original single parent and protects its old31 block
-   sources/outputs. Both scopes require real stock `--no-build build :leanArts`,
-   then full current stock `--no-build --json query :setup` in bounded batches.
-   All ordered actual import parts, ABI, original trace/setup/facets, source pins
-   and bytes are rebound. A miss/denial fails immediately, with no cold fallback.
-5. Run the unchanged caller prepare/source-binding stage, then mode `admit`.
-   It locks the exact current source postimages and generated audit bytes once.
-   Original caller builds/kernel/full declarations/ownership/axioms/snapshots
-   remain required. Every admitted command has its own pre-exec classification
-   journal entry and original runtime log entry; project compile before `admit`
-   is rejected.
-6. After the original runtime audit including its probes, run mode `audit`.
-   At final caller acceptance run mode `validate_final` (or the identical
-   `CacheSession(scope).validate_final()` API). No later compiler command may
-   be inserted between final cache audit and final validation.
-7. Always run mode `retain` after runtime audit, even following a cache/build
-   failure, with `CACHE_CHECKPOINT_OUTPUT` outside project/logs. It invokes the
-   original collector unchanged and preserves actual cache source bytes. Its
-   P2 legacy T01 audit/provenance names are explicit retention-only aliases;
-   that alias has no compiler event or acceptance. Stored preserves its real
-   original stage T01Audit/T01_PROVENANCE bytes and records their hashes; it
-   retains its independent actual StoredBatchAudit acceptance gates. Collector
-   stdout stays outside the scanned logs until the process ends. Failure retains raw
-   quarantined bytes and does not enable fallback. Upload that output directory
-   as well as the caller's unchanged full evidence archive.
+Before executing the authentic whole-SHA Cache binary, current ELF type,
+interpreter, all six needed names and absent RPATH/RUNPATH are checked. Current
+six physical libraries must belong to installed libc6:amd64, match its md5
+manifest and recorded current SHA. Original libc SHA must match. The other five
+historical individual hashes do not exist and are not claimed. In the exact
+stock Lake augmented environment the validated official loader --list must
+resolve precisely those six paths, with no LD_PRELOAD/LD_AUDIT. The Cache main
+is not executed by this loader query.
 
-`CACHE_QUALIFICATION.json` is cache-input qualification only. Driver readiness
-still requires root review, independent review of the actual constructed tree,
-and actual GitHub execution. No new proof or kernel credit is claimed here.
+Stock `lake --no-build build @mathlib/cache`, full current stock11 :setup
+comparison with original ordered physical imports, and then
+`lake --no-build exe @mathlib/cache get` are required. Every selected bootstrap
+byte remains identical afterward and at final audit. All11 Cache/OpenPrivate
+Lean/C and linker calls are denied before exec, including historically pinned
+commands. The canonical path comparison bug is independently corrected by
+matching both physical and lexical signatures on both sides and binding the
+original guard shadow include links inside the fixed official toolchain root.
+Unknown tools/modes/flags/inputs and all protected407 sources still deny.
 
-Revision2 preserves the immutable first freeze a4aa47d4. It fixes Stored retention name collisions, keeps collector stdout outside the scanned logs until completion, requires exact raw singleton metadata argv, and refreshes an expired authenticated artifact redirect only to retry the identical failed HTTP Range. It never changes the original checkpoint, collector, guard or cache payloads.
+Original407 stock leanArts and bounded-batch full setup qualification remains
+separate and mandatory; cache qualification is never proof acceptance. All
+original current caller gates, full archives and the unchanged collector remain.
+The collector already captures Cache/native/bin raw roots; the adapter also
+retains all11 actual cached sources. Early lightweight logs include actual
+denial/preexec/restore JSONL and small bootstrap process stdout, while full
+407 setup stdout remains in the final evidence archive.
+
+All23 metadata regression fixtures are GitHub-only. Local verification is
+AST/JSON/YAML/source/hash only. DriverReady remains false pending independent
+source/actual-tree review, root adoption and actual GitHub qualification.

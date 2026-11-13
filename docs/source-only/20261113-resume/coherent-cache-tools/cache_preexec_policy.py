@@ -10,10 +10,30 @@ def resolved(value, cwd):
     return str((Path(cwd) / path).resolve() if not path.is_absolute() else path.resolve())
 
 
-def canonical(argv, cwd):
-    return [resolved(a, cwd) if not a.startswith(('-', '@'))
+def canonical(argv, cwd, physical=True):
+    def path(value):
+        return resolved(value, cwd) if physical else os.path.abspath(os.path.join(str(cwd), value))
+    return [path(a) if not a.startswith(('-', '@'))
             and ('/' in a or a.endswith(('.lean', '.c', '.olean', '.ilean', '.json')))
             else a for a in argv]
+
+
+def clang_toolchain_paths(policy):
+    # The original guard makes shadow/include a link into this exact official
+    # root. Canonicalizing BOTH command sides must not bless a redirected link.
+    realroot = Path(policy['toolchain_roots']['realroot'])
+    shadow = Path(policy['toolchain_roots']['shadow'])
+    for root in [realroot, shadow]:
+        if not root.is_absolute() or root.resolve(strict=True) != root or not root.is_dir():
+            raise RuntimeError('Compiler toolchain root changed or escaped its fixed identity')
+    if not (shadow / 'include').is_symlink():
+        raise RuntimeError('Original shadow include link is missing')
+    for relative in ['include', 'include/clang']:
+        official = realroot / relative
+        target = official.resolve(strict=True)
+        if (not official.is_dir() or not target.is_relative_to(realroot) or
+                (shadow / relative).resolve(strict=True) != target):
+            raise RuntimeError('Compiler include path escapes the fixed official toolchain')
 
 
 def denied_path(argv, cwd, policy):
@@ -52,13 +72,18 @@ def classify(tool, argv, cwd, policy, check_phase=True, raw_argv=None):
     protected = denied_path(argv, cwd, policy)
     if protected is not None: raise RuntimeError('Protected cache source/output: ' + str(protected))
     command = canonical(argv, cwd)
+    lexical_command = canonical(argv, cwd, physical=False)
     if tool == 'lean' and command in [['-t0', '-j2', '-M12288', x] for x in ['--githash', '--print-prefix']]:
         if raw_argv not in [['--githash'], ['--print-prefix']]: raise RuntimeError('Metadata raw argv must be the exact singleton')
         if resolved(cwd, cwd) not in policy['metadata_cwds']: raise RuntimeError('Metadata cwd not admitted')
         return {'classification': 'EXACT_READ_ONLY_TOOLCHAIN_METADATA', 'physical_inputs': []}
     if resolved(cwd, cwd) != policy['project']: raise RuntimeError('Compiler cwd outside canonical project')
     for row in policy['admitted_commands']:
-        if row['tool'] == tool and command == row['argv']:
+        if (row['tool'] == tool and command == canonical(row['argv'], cwd)
+                and lexical_command == canonical(row['argv'], cwd, physical=False)):
+            if row['phase'] == 'bootstrap' and policy.get('bootstrap_cache_reuse_only'):
+                raise RuntimeError('Pinned bootstrap compiler call denied: authentic cache reuse only')
+            if tool == 'clang': clang_toolchain_paths(policy)
             if row['phase'] == 'qualified-project' and check_phase:
                 qualification = json.loads(Path(policy['qualification']).read_text())
                 if (qualification['binding'] != policy['context'] or
@@ -78,6 +103,8 @@ def classify(tool, argv, cwd, policy, check_phase=True, raw_argv=None):
                 physical.append(actual)
             return {'classification': row['classification'], 'physical_inputs': physical}
     if tool == 'clang' and command == ['-o', policy['cache_link_output'], '@' + policy['cache_link_response']]:
+        if policy.get('bootstrap_cache_reuse_only'):
+            raise RuntimeError('Cache link denied: authentic cache reuse only')
         return {'classification': 'EXACT_BOOTSTRAP_CACHE_LINK_RESPONSE',
                 'physical_inputs': [cache_response(policy['cache_link_response'], policy)]}
     raise RuntimeError('Unknown compiler tool, mode, flags or input; default deny')

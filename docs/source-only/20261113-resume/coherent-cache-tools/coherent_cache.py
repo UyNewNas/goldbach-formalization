@@ -73,6 +73,9 @@ def bind_inputs(scope):
         require(read(logs / 'DRIVER_BINDING.json') == binding, 'Wrong actual P2 driver binding')
         require(manifest['compile_cache']['scope'] == NATIVE and manifest['compile_cache']['selection_sha256'] == expected,
                 'Native398 cache not adopted by exact P2 manifest')
+        from cache_bootstrap import ADOPTION, load_inputs
+        require(manifest['compile_cache']['bootstrap_cache'] == ADOPTION,'Authentic Cache bootstrap was not explicitly adopted')
+        load_inputs()
         tools = manifest['compile_cache']['tools_bundle']
         require(HERE == (workspace / tools['path']).resolve() and sha(HERE/'REGISTRY.json') == tools['registry_sha256'],
                 'Wrong explicitly adopted shared cache tools')
@@ -135,6 +138,13 @@ def scope_policy(scope, project, logs, binding):
         elif isinstance(value, dict): value = {k:substitute(v) for k,v in value.items()}
         return value
     protocol = read(HERE / 'COMPILER_PROTOCOL.json')
+    if scope == NATIVE:
+        from cache_bootstrap import load_inputs
+        bootstrap,_,_ = load_inputs()
+        roots += [str(project/'.lake/packages/mathlib'/relative) for relative in ['Cache','.lake/build/lib/lean/Cache','.lake/build/ir/Cache']]
+        for row in bootstrap['rows']:
+            if row['package']=='batteries':
+                exact += [str(project/'.lake/packages/batteries'/part['path']) for part in [row['source'],*row['facets']]]
     commands = [substitute(r) for r in protocol['commands'] if r['package'] != 'LeanArchitect']
     if scope == NATIVE:
         caller = Path(os.environ['GITHUB_WORKSPACE']) / os.environ['P2_BUNDLE']
@@ -171,6 +181,8 @@ def scope_policy(scope, project, logs, binding):
             'cache_link_response':str(project/'.lake/packages/mathlib/.lake/build/bin/cache.rsp'),
             'historical_cache_rsp':protocol['historical_cache_rsp'],
             'bootstrap_native_objects':native_objects,'toolchain_library_roots':[str(realroot/'lib'),str(shadow/'lib')],
+            'toolchain_roots':{'realroot':str(realroot),'shadow':str(shadow)},
+            'bootstrap_cache_reuse_only':scope==NATIVE,
             'unknown_tools_modes_flags_and_response_files':'DENY_BEFORE_COMPILER_EXEC',
             'no_cold_rebuild_fallback':True,'cache_hit_is_not_proof_acceptance':True}
 
@@ -250,6 +262,12 @@ class CacheSession:
             extra=read(HERE/'inputs/P2_LEANARCHITECT_9_PAYLOAD_INDEX.json')
             for name,row in extra['objects'].items():
                 require(name not in self.index['objects'] or self.index['objects'][name]==row,'Conflicting content-addressed payload')
+                self.index['objects'][name]=row
+            from cache_bootstrap import load_inputs
+            self.bootstrap_selection,bootstrap_index,_=load_inputs()
+            require(bootstrap_index['whole_artifact']==self.index['whole_artifact'],'Bootstrap is not from the same authentic archive')
+            for name,row in bootstrap_index['objects'].items():
+                require(name not in self.index['objects'] or self.index['objects'][name]==row,'Conflicting authentic bootstrap payload')
                 self.index['objects'][name]=row
         self.anchor=self.index['whole_artifact'];require(self.anchor['artifact']==13749339878,'Wrong input archive')
         self._part_cache={};self._historical_cache={};self._raw=None
@@ -336,7 +354,9 @@ class CacheSession:
                  'facets':[x for x in self.selection['genuineFacetsAndSource'] if not x['path'].endswith('.lean')]}]
 
     def root_for(self,name=None):
-        package='LeanArchitect' if name is not None and (name=='Architect' or name.startswith('Architect.')) else 'goldbach'
+        package=('mathlib' if name is not None and name.startswith('Cache.') else
+                 'batteries' if name is not None and name.startswith('Batteries.') else
+                 'LeanArchitect' if name is not None and (name=='Architect' or name.startswith('Architect.')) else 'goldbach')
         return self.project/'.lake/packages'/package if self.scope==NATIVE else self.project
 
     def mapping(self,raw,path):
@@ -388,8 +408,8 @@ class CacheSession:
                 libraries.append({'kind':field,**self.historical_file(raw,old)})
         return result,libraries
 
-    def restore(self):
-        raw=self.original();root=self.root_for();oldroot=raw['runtime_state']['root']
+    def validate_environment(self,raw):
+        root=self.root_for()
         lock=read(self.project/'lake-manifest.json');packages={p['name']:p for p in raw['packages']}
         require(len(lock['packages'])==len(packages),'Dependency package set changed')
         for p in lock['packages']:
@@ -407,6 +427,41 @@ class CacheSession:
         require(len(payloads)==11,'Wrong original runtime payload census')
         for path,expected in payloads.items():require(sha(self.mapping(raw,path))==expected,'Original selected runtime payload changed')
         for entry in raw['native_and_toolchain_library_ABI_receipts']:checked(Path(self.mapping(raw,entry['original_path'])).resolve(strict=True),entry)
+
+    def restore_facets(self,raw,facets,root,package):
+        outputs=[]
+        for facet in facets:
+            payload=self.inputs/facet['object'];checked(payload,facet)
+            relative=Path(facet['path']);target=root/relative
+            require(not relative.is_absolute() and '..' not in relative.parts and relative.parts[:2]==('.lake','build') and not target.is_symlink() and target.resolve().is_relative_to((root/'.lake/build').resolve()),'Unsafe raw facet destination')
+            previous=raw['files'].get(str(Path(raw['runtime_state']['root'])/('.lake/packages/'+package if self.scope==NATIVE else '')/relative))
+            require(previous and previous['payload']==facet['object'] and previous['sha256']==facet['sha256'] and previous['bytes']==facet['bytes'],'Facet not bound by original schema')
+            if target.exists():checked(target,facet)
+            else:
+                target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(payload,target);target.chmod(previous['mode'])
+            checked(target,facet)
+            with (self.logs/'CACHE_RESTORE_JOURNAL.jsonl').open('a') as journal:journal.write(json.dumps({'path':str(target),'bytes':facet['bytes'],'sha256':facet['sha256'],'scope':self.scope,'binding':self.binding})+'\n')
+            outputs.append({'path':str(target),'bytes':facet['bytes'],'sha256':facet['sha256'],'object':facet['object']})
+        return outputs
+
+    def restore_module(self,raw,row):
+        root=self.root_for(row['module'])
+        source=root/row['source']['path'];checked(source,row['source']);checked(self.inputs/row['source']['object'],row['source'])
+        require(source.read_bytes()==(self.inputs/row['source']['object']).read_bytes(),'Current pinned source differs from raw producer bytes')
+        outputs=self.restore_facets(raw,row['facets'],root,row.get('package','goldbach'))
+        from checkpoint_original_protocol import lake_descriptor_binding
+        relative=Path(*row['module'].split('.'));stem=root/'.lake/build/lib/lean'/relative;ir=root/'.lake/build/ir'/relative
+        trace=read(stem.with_suffix('.trace'))
+        require(trace['schemaVersion']=='2025-09-10' and trace['synthetic'] is False,'Not an original complete Lake trace')
+        checks=lake_descriptor_binding(trace['outputs'],stem,ir)
+        require(checks and all(r['matched'] for r in checks),'Original trace descriptors do not match real sidecars')
+        return {'module':row['module'],'source':{'path':str(source),'bytes':row['source']['bytes'],'sha256':row['source']['sha256']},'facets':outputs}
+
+    def restore(self):
+        if self.scope==NATIVE:
+            from cache_bootstrap import validate
+            validate(self)
+        raw=self.original();self.validate_environment(raw);oldroot=raw['runtime_state']['root']
         old_compilations={r['module']:r for r in raw['all_guarded_package_compilations'] if r.get('package') in {'goldbach','LeanArchitect'} and 'module' in r}
         old_modules={r['module']:r for r in raw['modules']}
         restored=[]
@@ -422,32 +477,41 @@ class CacheSession:
             if self.scope==NATIVE:
                 command=[x.replace(oldroot,'{root}') for x in prior['command']['command']]
                 require(command==row['guardedCommandNormalized'] and not any(x.startswith('-D') for x in prior['command']['input_args']),'Historical native command/profile changed')
-            source=root/row['source']['path'];checked(source,row['source']);checked(self.inputs/row['source']['object'],row['source'])
-            require(source.read_bytes()==(self.inputs/row['source']['object']).read_bytes(),'Current pinned source differs from raw producer bytes')
-            outputs=[]
-            for facet in row['facets']:
-                payload=self.inputs/facet['object'];checked(payload,facet)
-                relative=Path(facet['path']);target=root/relative
-                require(not relative.is_absolute() and '..' not in relative.parts and relative.parts[:2]==('.lake','build') and not target.is_symlink() and target.resolve().is_relative_to((root/'.lake/build').resolve()),'Unsafe raw facet destination')
-                package=row.get('package','goldbach')
-                previous=raw['files'].get(str(Path(oldroot)/('.lake/packages/'+package if self.scope==NATIVE else '')/relative))
-                require(previous and previous['payload']==facet['object'] and previous['sha256']==facet['sha256'] and previous['bytes']==facet['bytes'],'Facet not bound by original schema')
-                if target.exists():checked(target,facet)
-                else:
-                    target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(payload,target);target.chmod(previous['mode'])
-                checked(target,facet)
-                with (self.logs/'CACHE_RESTORE_JOURNAL.jsonl').open('a') as journal:journal.write(json.dumps({'path':str(target),'bytes':facet['bytes'],'sha256':facet['sha256'],'scope':self.scope,'binding':self.binding})+'\n')
-                outputs.append({'path':str(target),'bytes':facet['bytes'],'sha256':facet['sha256'],'object':facet['object']})
-            from checkpoint_original_protocol import lake_descriptor_binding
-            relative=Path(*row['module'].split('.'));stem=root/'.lake/build/lib/lean'/relative;ir=root/'.lake/build/ir'/relative
-            trace=read(stem.with_suffix('.trace'))
-            require(trace['schemaVersion']=='2025-09-10' and trace['synthetic'] is False,'Not an original complete Lake trace')
-            checks=lake_descriptor_binding(trace['outputs'],stem,ir)
-            require(checks and all(r['matched'] for r in checks),'Original trace descriptors do not match real sidecars')
-            restored.append({'module':row['module'],'source':{'path':str(source),'bytes':row['source']['bytes'],'sha256':row['source']['sha256']},'facets':outputs})
+            restored.append(self.restore_module(raw,row))
         self.policy_audit()
         self.emit('CACHE_RAW_RESTORE.json',{'status':'AUTHENTIC_FACETS_RESTORED_PENDING_STOCK_NO_BUILD','modules':restored,
                   'historical_root_project_profile_not_asserted_equal':self.scope==NATIVE,'all_trace_setup_and_output_bytes_unmodified':True,'proof_acceptance':False})
+
+    def leaf_runtime_identity(self,raw,rule,label):
+        current_install=self.logs/'install-toolchain.log';text=current_install.read_text()
+        require(rule['same_run_install_artifact']['observed_url'] in text
+                and rule['same_run_install_artifact']['version_output'] in text,'Current original installer URL/version/commit/target differs')
+        asset=rule['official_asset'];url='https://api.github.com/repos/leanprover/lean4/releases/assets/'+str(asset['id'])
+        request=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+            'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'})
+        with urllib.request.urlopen(request,timeout=60) as response:metadata=json.load(response)
+        require(all(metadata.get(k)==v for k,v in asset.items()),'Official pinned distribution asset identity changed')
+        require(rule['historical_matched_runtime_payloads']=={p:h for p,h in raw['runtime_state']['runtime_sha256'].items()
+                    if p not in {raw['runtime_state']['shadow']+'/bin/'+n for n in raw['runtime_state']['tools']}},'Single-leaf runtime census differs')
+        runtime=[]
+        for path,expected in rule['historical_matched_runtime_payloads'].items():
+            current=Path(self.mapping(raw,path));require(sha(current)==expected,'Leaf runtime payload differs');runtime.append({'path':str(current),'sha256':expected})
+        require(len(rule['abi_receipts'])==8 and rule['abi_receipts']==raw['native_and_toolchain_library_ABI_receipts'],'Single-leaf ABI census differs')
+        for row in rule['abi_receipts']:checked(Path(self.mapping(raw,row['original_path'])).resolve(strict=True),row)
+        script="import json,os;print(json.dumps({k:os.environ.get(k,'') for k in ['LEAN_PATH','LEAN_SYSROOT']}))"
+        search_process=self.run(label+'-search-path',['lake','--no-build','env',sys.executable,'-c',script])
+        search=read(search_process['stdout']);require(search['LEAN_SYSROOT']==self.state['shadow'],'Leaf sysroot origin changed')
+        official={Path(self.state['shadow']).joinpath('lib/lean').resolve(),Path(self.state['realbin']).parent.joinpath('lib/lean').resolve()}
+        roots=[self.project/'.lake/build/lib/lean']+[self.project/'.lake/packages'/p['name']/'.lake/build/lib/lean' for p in raw['packages']]
+        allowed={p.resolve() for p in roots}|official
+        actual=[Path(p).resolve() for p in search['LEAN_PATH'].split(os.pathsep) if p]
+        require(set(actual)<=allowed,'Unreviewed Lean search-path root')
+        for root in set(actual)|{p.resolve() for p in roots}:
+            if root in official:continue
+            for core in ['Lean','Init','Std']:
+                require(not (root/core).exists() and not list(root.glob(core+'.*')),'Package/project shadows official Lean core')
+        return {'current_install_log_sha256':sha(current_install),'official_asset':metadata,'runtime_payloads':runtime,
+                'abi_receipts':rule['abi_receipts'],'search_path_process':search_process,'search_path':search}
 
     def command_leaf(self,prior,raw):
         rule_path=HERE/'inputs/ARCHITECT_COMMAND_LEAF_RULE.json';rule=read(rule_path)
@@ -467,43 +531,15 @@ class CacheSession:
         trace=read(self.inputs/trace_path['payload'])
         require(trace['depHash']==rule['old_trace_dephash'] and trace['schemaVersion']=='2025-09-10' and trace['synthetic'] is False,
                 'Wrong original leaf trace')
-        current_install=self.logs/'install-toolchain.log';text=current_install.read_text()
-        require(rule['same_run_install_artifact']['observed_url'] in text
-                and rule['same_run_install_artifact']['version_output'] in text,'Current original installer URL/version/commit/target differs')
-        asset=rule['official_asset'];url='https://api.github.com/repos/leanprover/lean4/releases/assets/'+str(asset['id'])
-        request=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
-            'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'})
-        with urllib.request.urlopen(request,timeout=60) as response:metadata=json.load(response)
-        require(all(metadata.get(k)==v for k,v in asset.items()),'Official pinned distribution asset identity changed')
-        require(rule['historical_matched_runtime_payloads']=={p:h for p,h in raw['runtime_state']['runtime_sha256'].items()
-                    if p not in {raw['runtime_state']['shadow']+'/bin/'+n for n in raw['runtime_state']['tools']}},'Single-leaf runtime census differs')
-        runtime=[]
-        for path,expected in rule['historical_matched_runtime_payloads'].items():
-            current=Path(self.mapping(raw,path));require(sha(current)==expected,'Leaf runtime payload differs');runtime.append({'path':str(current),'sha256':expected})
-        require(len(rule['abi_receipts'])==8 and rule['abi_receipts']==raw['native_and_toolchain_library_ABI_receipts'],'Single-leaf ABI census differs')
-        for row in rule['abi_receipts']:checked(Path(self.mapping(raw,row['original_path'])).resolve(strict=True),row)
-        script="import json,os;print(json.dumps({k:os.environ.get(k,'') for k in ['LEAN_PATH','LEAN_SYSROOT']}))"
-        search_process=self.run('architect-command-search-path',['lake','--no-build','env',sys.executable,'-c',script])
-        search=read(search_process['stdout']);require(search['LEAN_SYSROOT']==self.state['shadow'],'Leaf sysroot origin changed')
-        official={Path(self.state['shadow']).joinpath('lib/lean').resolve(),Path(self.state['realbin']).parent.joinpath('lib/lean').resolve()}
-        roots=[self.project/'.lake/build/lib/lean']+[self.project/'.lake/packages'/p['name']/'.lake/build/lib/lean' for p in raw['packages']]
-        allowed={p.resolve() for p in roots}|official
-        actual=[Path(p).resolve() for p in search['LEAN_PATH'].split(os.pathsep) if p]
-        require(set(actual)<=allowed,'Unreviewed Lean search-path root')
-        for root in set(actual)|{p.resolve() for p in roots}:
-            if root in official:continue
-            for core in ['Lean','Init','Std']:
-                require(not (root/core).exists() and not list(root.glob(core+'.*')),'Package/project shadows official Lean core')
+        identity=self.leaf_runtime_identity(raw,rule,'architect-command')
         self.emit('CACHE_ARCHITECT_COMMAND_LEAF.json',{'status':'SEPARATE_RELEASE_ORIGIN_AND_ABI_LEAF_PENDING_CURRENT_STOCK_NO_BUILD',
             'rule_sha256':sha(rule_path),'original_classification_preserved':prior['classification'],
             'historical_per_core_olean_hashes_available':False,'historical_core_bytes_verified':False,
-            'current_install_log_sha256':sha(current_install),'official_asset':metadata,'runtime_payloads':runtime,
-            'abi_receipts':rule['abi_receipts'],'search_path_process':search_process,'search_path':search,
-            'old_trace_dephash':trace['depHash'],'proof_acceptance':False})
+            **identity,'old_trace_dephash':trace['depHash'],'proof_acceptance':False})
         return True
 
-    def verify_restored(self):
-        receipt=self.receipt('CACHE_RAW_RESTORE.json')
+    def verify_restored(self,name='CACHE_RAW_RESTORE.json'):
+        receipt=self.receipt(name)
         for row in receipt['modules']:
             checked(row['source']['path'],row['source'])
             for facet in row['facets']:checked(facet['path'],facet)
@@ -526,12 +562,7 @@ class CacheSession:
         require(result.returncode==0,'Stock no-build qualification rejected; no rebuild fallback: '+label)
         return row
 
-    def qualify(self):
-        raw=self.original();restore=self.verify_restored()
-        names=[r['module'] for r in restore['modules']]
-        targets=['@'+('LeanArchitect' if n=='Architect' or n.startswith('Architect.') else 'goldbach')+'/+'+n+':leanArts'
-                 if self.scope==NATIVE else '+'+n+':leanArts' for n in names]
-        process=self.run('stock-leanArts',['lake','--no-build','build',*targets]);self.verify_restored()
+    def qualify_setups(self,raw,names,selected_rows,target,label):
         import hashlib as _hashlib
         shared={};rows=[]
         def compare_setup(name,current,result,line_number):
@@ -546,7 +577,7 @@ class CacheSession:
             observed={module:[[part['historical_path'],part['sha256']] for part in parts] for module,parts in imports.items()}
             old_hash=_hashlib.sha256(json.dumps(observed,sort_keys=True,separators=(',',':')).encode()).hexdigest()
             if self.scope==NATIVE:
-                selected=next(r for r in self.rows() if r['module']==name)
+                selected=next(r for r in selected_rows if r['module']==name)
                 require(old_hash==selected['priorActualImportMapSHA256'] and len(imports)==selected['priorActualImportCount'],'Actual original import receipt map differs')
             else:require(old_hash==self.selection['actualImportReceiptMapSHA256'] and len(imports)==self.selection['actualImportCount'],'Parent actual import map differs')
             for parts in imports.values():
@@ -561,14 +592,23 @@ class CacheSession:
         # Read one JSON line at a time: the complete 407 setups exceed 1 GB.
         for offset in range(0,len(names),16):
             batch_names=names[offset:offset+16]
-            setup_targets=['@'+('LeanArchitect' if n=='Architect' or n.startswith('Architect.') else 'goldbach')+'/+'+n+':setup'
-                           if self.scope==NATIVE else '+'+n+':setup' for n in batch_names]
-            result=self.run('stock-setup-'+str(offset).zfill(3),['lake','--no-build','--json','query',*setup_targets])
+            setup_targets=[target(n) for n in batch_names]
+            result=self.run(label+'-'+str(offset).zfill(3),['lake','--no-build','--json','query',*setup_targets])
             with Path(result['stdout']).open() as output:
                 for number,name in enumerate(batch_names,1):
                     line=output.readline();require(bool(line),'Missing stock setup target row')
                     compare_setup(name,json.loads(line),result,number)
                 require(not output.read().strip(),'Extra stock setup target row')
+        return rows,shared
+
+    def qualify(self):
+        raw=self.original();restore=self.verify_restored()
+        names=[r['module'] for r in restore['modules']]
+        targets=['@'+('LeanArchitect' if n=='Architect' or n.startswith('Architect.') else 'goldbach')+'/+'+n+':leanArts'
+                 if self.scope==NATIVE else '+'+n+':leanArts' for n in names]
+        process=self.run('stock-leanArts',['lake','--no-build','build',*targets]);self.verify_restored()
+        target=lambda n: '@'+('LeanArchitect' if n=='Architect' or n.startswith('Architect.') else 'goldbach')+'/+'+n+':setup' if self.scope==NATIVE else '+'+n+':setup'
+        rows,shared=self.qualify_setups(raw,names,self.rows(),target,'stock-setup')
         self.verify_restored()
         self.emit('CACHE_IMPORT_PARTS.json',{'parts':shared})
         self.emit('CACHE_QUALIFICATION.json',{'status':'PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY','stock_process':process,'modules':rows,
@@ -605,6 +645,9 @@ class CacheSession:
         return value
 
     def qualification_inputs(self):
+        if self.scope==NATIVE:
+            from cache_bootstrap import validate
+            validate(self)
         value=self.receipt('CACHE_QUALIFICATION.json')
         require(value['status']=='PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY'
                 and [r['module'] for r in value['modules']]==[r['module'] for r in self.rows()]
@@ -640,6 +683,10 @@ class CacheSession:
                 and final['denial_log_sha256']==sha(self.logs/'CACHE_COMPILER_DENIALS.jsonl')
                 and final['preexec_events_sha256']==sha(self.logs/'CACHE_PREEXEC_EVENTS.jsonl'),'Cache final evidence changed')
         require(final['caller_inputs_sha256']==sha(self.logs/'CACHE_CALLER_INPUTS.json'),'Final caller admission changed')
+        if self.scope==NATIVE:
+            require(final['bootstrap_qualification_sha256']==sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json')
+                    and final['bootstrap_restore_sha256']==sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json'),
+                    'Final authentic bootstrap input binding changed')
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==self.receipt('CACHE_QUALIFICATION.json')['physical_parts_receipt_sha256'],'Input receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)
@@ -651,7 +698,10 @@ class CacheSession:
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==qualification['physical_parts_receipt_sha256'],'Import-part receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)
+        bootstrap_binding=({'bootstrap_qualification_sha256':sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json'),
+                            'bootstrap_restore_sha256':sha(self.logs/'CACHE_BOOTSTRAP_RESTORE.json')} if self.scope==NATIVE else {})
         self.emit('CACHE_FINAL_INPUT_AUDIT.json',{'status':'PASS_UNCHANGED_CACHE_INPUTS_AND_ZERO_PROTECTED_EXEC','qualification_sha256':sha(self.logs/'CACHE_QUALIFICATION.json'),
+                  **bootstrap_binding,
                   'runtime_state_sha256':sha(self.logs/'runtime/state.json'),'command_log_sha256':sha(self.state['log']),
                   'denial_log_sha256':sha(self.logs/'CACHE_COMPILER_DENIALS.jsonl'),
                   'preexec_events_sha256':sha(self.logs/'CACHE_PREEXEC_EVENTS.jsonl'),
@@ -661,12 +711,16 @@ class CacheSession:
 
 
 def main():
-    require(len(sys.argv)==2 and sys.argv[1] in {'fixtures','acquire','restore','qualify','admit','audit','validate_final','retain'},'Expected fixtures/acquire/restore/qualify/admit/audit/validate_final/retain')
+    require(len(sys.argv)==2 and sys.argv[1] in {'fixtures','acquire','bootstrap','restore','qualify','admit','audit','validate_final','retain'},'Expected fixtures/acquire/bootstrap/restore/qualify/admit/audit/validate_final/retain')
     if sys.argv[1]=='retain':
         from cache_checkpoint_retain import main as retain
         retain();return
     session=CacheSession(os.environ['CACHE_SCOPE'])
-    try:getattr(session,sys.argv[1])()
+    try:
+        if sys.argv[1]=='bootstrap':
+            from cache_bootstrap import bootstrap
+            bootstrap(session)
+        else:getattr(session,sys.argv[1])()
     except Exception as error:
         failure=session.logs/'CACHE_FAILURE.json'
         if not failure.exists():write(failure,{'binding':session.binding,'phase':sys.argv[1],'error_type':type(error).__name__,'error':str(error),'no_rebuild_fallback':True,'proof_acceptance':False})
