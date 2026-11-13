@@ -1,4 +1,4 @@
-"""Authentic separate r6/r7 root leanArts-only reuse; delegates all payload IO to shared code.
+"""Authentic separate r6/r7/r8 root leanArts-only reuse; delegates all payload IO to shared code.
 
 This is compile reuse only. All102 fresh kernel/types/ownership/axiom gates stay.
 Never execute locally. A missing or changed input fails without a build fallback.
@@ -13,11 +13,13 @@ PRODUCERS = {
     'r6': ('P2_R6_PROJECT_86_SELECTION.json','b8b19472fc9f9d6e82d630b89dc39f118ed9e09e22235a7a0801d7b5dd926c6c',
            'P2_R6_PROJECT_86_PAYLOAD_INDEX.json','44203c14066f0c24e3cabf1f353a6f11604db27450a392f0ec30e84397378c14',86),
     'r7_outer': ('P2_R7_OUTER_SELECTION.json','e03fc3bd0539459a836bd63d2b5a9e7a3b81ccfd737fd123cd90031fe8d9998b',
-                 'P2_R7_OUTER_PAYLOAD_INDEX.json','c10c60b44c6cad2c8a9a2f36856ec81341f6b646d9282df5d6d93a08b806c370',1)}
+                 'P2_R7_OUTER_PAYLOAD_INDEX.json','c10c60b44c6cad2c8a9a2f36856ec81341f6b646d9282df5d6d93a08b806c370',1),
+    'r8_pair_raw': ('P2_R8_PAIR_RAW_SELECTION.json','23c44b3fd3b542c024ff983a821102749592069bf6068f1225cbb3b878b5cd09',
+                    'P2_R8_PAIR_RAW_PAYLOAD_INDEX.json','9ce807fa76162da77043a05e1113426d7ae0d0ec125bf7c402ae80e14b8989e6',2)}
 ADOPTION = {'producer_selections':{name:{'selection_sha256':v[1],'payload_index_sha256':v[3],'module_count':v[4]}
                                   for name,v in PRODUCERS.items()},
-            'module_count':87,'facet_count':696,'source_files':87,'recompile_count':15,
-            'historical_runs':[43402135668,43412656063],
+            'module_count':89,'facet_count':712,'source_files':89,'recompile_count':13,
+            'historical_runs':[43402135668,43412656063,43422852694],
             'root_profile_sha256':'b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254',
             'stock_facet':'leanArts','native_precompile_adopted':False,
             'protected_source_compiler_events_required':0,'no_cold_rebuild_fallback':True,
@@ -39,14 +41,17 @@ def load_producer(name):
 def load_inputs():
     # Only the source-scope view is combined. Original checkpoints, indexes,
     # classifications, facet payloads and runtime provenance stay separate.
-    r6,_=load_producer('r6');outer,_=load_producer('r7_outer')
+    r6,_=load_producer('r6');outer,_=load_producer('r7_outer');pair_raw,_=load_producer('r8_pair_raw')
     outer_name='ImbalancedChen.ActualThirdOriginalP4AOrdinaryOuterMinimum'
-    rows=r6['rows']+outer['rows'];names=[r['module'] for r in rows]
+    rows=r6['rows']+outer['rows']+pair_raw['rows'];names=[r['module'] for r in rows]
     require([r['module'] for r in outer['rows']]==[outer_name]
-            and len(names)==len(set(names))==87
+            and len(names)==len(set(names))==89
             and [n for n in r6['compile_modules'] if n!=outer_name]==outer['compile_modules']
-            and len(outer['compile_modules'])==15,'Root87/new15 source partition differs')
-    return {'rows':rows,'compile_modules':outer['compile_modules']},None
+            and len(outer['compile_modules'])==15
+            and [r['module'] for r in pair_raw['rows']]==['ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld','ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue']
+            and [n for n in outer['compile_modules'] if n not in {r['module'] for r in pair_raw['rows']}]==pair_raw['compile_modules']
+            and len(pair_raw['compile_modules'])==13,'Root89/new13 source partition differs')
+    return {'rows':rows,'compile_modules':pair_raw['compile_modules']},None
 
 
 def validate_all(parent):
@@ -57,23 +62,23 @@ def validate_all(parent):
 
 class ProjectSession(CacheSession):
     def __init__(self, parent, producer):
-        require(parent.scope == NATIVE, 'Root87 cannot enter the independent Stored graph')
+        require(parent.scope == NATIVE, 'Root89 cannot enter the independent Stored graph')
         from p2_validation import load_bound_bundle
         manifest, _ = load_bound_bundle()
-        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root87 not explicitly adopted')
+        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root89 not explicitly adopted')
         self.__dict__ = parent.__dict__.copy()
-        self.scope = 'P2_PROJECT_87'
+        self.scope = 'P2_PROJECT_89'
         self.producer = producer
         self.selection, self.index = load_producer(producer)
         combined, _ = load_inputs()
         self.anchor = self.index['whole_artifact']
-        self.inputs = parent.inputs/('r6-project' if producer=='r6' else 'r7-outer')
+        self.inputs = parent.inputs/{'r6':'r6-project','r7_outer':'r7-outer','r8_pair_raw':'r8-pair-raw'}[producer]
         self._raw = None; self._part_cache = {}; self._historical_cache = {}
         old = {r['module']: r for r in combined['rows']}
         new = {r['module']: r for r in manifest['modules']}
         compile_names = combined['compile_modules']
         require(len(new) == 102 and set(old).isdisjoint(compile_names)
-                and set(old) | set(compile_names) == set(new), 'Root87/new15 must exactly partition102')
+                and set(old) | set(compile_names) == set(new), 'Root89/new13 must exactly partition102')
         for name, row in old.items():
             require((new[name]['install_path'],new[name]['bytes'],new[name]['sha256'],new[name]['git_blob']) ==
                     (row['source']['path'],row['source']['bytes'],row['source']['sha256'],row['source_git_blob']),

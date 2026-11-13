@@ -723,7 +723,7 @@ class CacheSession:
                     'Final authentic bootstrap input binding changed')
         if self.scope==NATIVE:
             from cache_project import validate_all
-            require(all(final.get(k)==v for k,v in validate_all(self).items()),'Final root87 receipt binding changed')
+            require(all(final.get(k)==v for k,v in validate_all(self).items()),'Final root89 receipt binding changed')
         parts=self.receipt('CACHE_IMPORT_PARTS.json')
         require(sha(self.logs/'CACHE_IMPORT_PARTS.json')==self.receipt('CACHE_QUALIFICATION.json')['physical_parts_receipt_sha256'],'Input receipt changed')
         for row in parts['parts'].values():checked(row['path'],row)

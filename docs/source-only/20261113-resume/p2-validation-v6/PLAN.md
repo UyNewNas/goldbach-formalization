@@ -1,24 +1,21 @@
-# P2 r8 plan
+# P2 R9 plan
 
-Direct parent7686657050f460baefd28d3e4777aaec3a18aad8; exact push branch
-ci/p2-integer-mass-r8-20261113. Frozen R7 and Stored core1a600c86 remain unchanged.
+Direct parentb359b5aee53365b456234e908822f94b095d8ca9; only push branch
+ci/p2-integer-mass-r9-20261113. R8/shared6ac and Stored/shared1a600 stay immutable.
+Exactly102 original names/imports/order:79eb+18original686+Outer680+Raw/Paira6
++two published484 ClippedGapAssembly/SixTent proof-only repairs. Five source
+revisions are explicitly checked out and individually bound by original blobs.
 
-Keep102 names/imports/order:81 baselineeb,18 overlays686,1 successful Outer680,
-2 published a6aec20e proof-only repairs (new Pair and RawFallback). Source origins
-are four explicit pinned checkouts. Never choose the failed680 Pair postimage.
+Reuse original native407 and Cache144 protocols. Root89 combines three genuine
+producers: originalR6 86 + R7Outer1 + R8Raw/Pair2. The latter19-member index was
+independently matched against original CP and central bytes. Each producer has
+its own checkpoint/status/index/input root and receipts; no quarantine is changed.
+The same restorer and stock setup/physical-import/runtime/ABI methods are reused.
+All89 require fresh actual stock no-build qualification; any missHOLD, no coldbuild.
 
-Reuse original native407 and authentic144 Cache CLI as before. Root87 comprises
-original86 from unchanged R6 selector/checkpoint plus Outer1 from its genuine R7
-checkpoint. R7 old86 quarantined classifications remain untouched. The identical
-restorer class handles two separate provenance datasets; no facet/trace invented.
-New stock no-build leanArts/setups/importArts/runtime/ABI qualification must pass
-for all87; any missHOLD. Source/output compiler events for cached87 are forbidden.
-
-Compile only the15 affected modules, exactly once each at final. Strict FinitePi
-pilot starts with the qualified object through stock no-build. Fresh full102
+Compile only13 affected modules once each at final. Strict FinitePi still begins
+from its qualified object through stock no-build and unchanged pilot. Freshfull102
 kernel/fulltypes/serializedownership/axioms/snapshots/runtime/retention gates stay.
-Original837guard and32993collector plus stage/audit/prepare/pilot are byte-identical.
-
-All candidate/runtime/fixture/proof execution is GitHub-only. ROOT alone may
-construct the reviewed actual tree, fresh-check queue and single-push after
-independent actual-tree review. No local helper or proof execution is authorized.
+Original837guard32993collector/stage/audit/prepare/pilot/fixtures remain unchanged.
+ROOT alone constructs reviewed actual tree, checks queue and single-pushes when
+allowed. No local Lean/Lake/LSP/helper/fixture/runtime/proof execution or Git write.

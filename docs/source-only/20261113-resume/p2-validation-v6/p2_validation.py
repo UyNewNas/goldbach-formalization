@@ -47,7 +47,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert re.fullmatch(r'[0-9a-f]{40}', commit)
     assert git_head(workspace) == commit
     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
-    branch = 'ci/p2-integer-mass-r8-20261113'
+    branch = 'ci/p2-integer-mass-r9-20261113'
     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
     committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
@@ -56,7 +56,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
     assert re.fullmatch(r'[0-9a-f]{64}', selection['bundle_registry_sha256'])
     assert re.fullmatch(r'[0-9a-f]{64}', selection['manifest_sha256'])
-    assert selection['driver_base'] == '7686657050f460baefd28d3e4777aaec3a18aad8'
+    assert selection['driver_base'] == 'b359b5aee53365b456234e908822f94b095d8ca9'
     assert selection['driver_branch'] == branch
     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
     assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
@@ -139,8 +139,9 @@ def stage(manifest: dict, project: Path, logs: Path) -> None:
     origins = {'baseline': Path(os.environ['BASELINE_SOURCE']),
                'abi': Path(os.environ['ABI_SOURCE']),
                'repair': Path(os.environ['REPAIR_SOURCE']),
-               'repair_next': Path(os.environ['REPAIR_NEXT_SOURCE'])}
-    assert manifest['source_revisions']=={'baseline':manifest['repaired_baseline'],'abi':manifest['inherited_source_commit'],'repair':manifest['previous_source_commit'],'repair_next':manifest['source_commit']}
+               'repair_next': Path(os.environ['REPAIR_NEXT_SOURCE']),
+               'repair_r9': Path(os.environ['REPAIR_R9_SOURCE'])}
+    assert manifest['source_revisions']=={'baseline':manifest['repaired_baseline'],'abi':manifest['inherited_source_commit'],'repair':manifest['previous_source_commit'],'repair_next':manifest['prior_source_commit'],'repair_r9':manifest['source_commit']}
     for label,path in origins.items():
         assert git_head(path)==manifest['source_revisions'][label]
     for path in origins.values():
@@ -239,16 +240,16 @@ def finalize(manifest: dict, project: Path, logs: Path) -> None:
     expected_sources={str(project/selected[n]['install_path']):n for n in expected_compile}
     events=[json.loads(line) for line in (logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
     compiled=[e for e in events if e['classification']=='EXACT_CURRENT_CALLER_SOURCE']
-    assert len(expected_compile)==len(compiled)==15
+    assert len(expected_compile)==len(compiled)==13
     assert all(e['tool']=='lean' and e['compiler_exec_permitted'] is True and e['context']==cache_session.binding
                and len(e['physical_inputs'])==1 for e in compiled)
     observed=[e['physical_inputs'][0]['path'] for e in compiled]
-    assert len(set(observed))==15 and set(observed)==set(expected_sources), 'Only15 unique affected source compilations required'
+    assert len(set(observed))==13 and set(observed)==set(expected_sources), 'Only13 unique affected source compilations required'
     for event in compiled:
         physical=event['physical_inputs'][0];record=selected[expected_sources[physical['path']]]
         assert physical=={'path':str(project/record['install_path']),'bytes':record['bytes'],'sha256':record['sha256']}
-    compile_census={'binding':cache_session.binding,'status':'PASS_EXACTLY15_NEW_AND_ZERO_PROTECTED_SOURCE_COMPILES',
-        'expected_modules':expected_compile,'events':compiled,'source_compile_count':15,'protected_root87_compile_count':0,
+    compile_census={'binding':cache_session.binding,'status':'PASS_EXACTLY13_NEW_AND_ZERO_PROTECTED_SOURCE_COMPILES',
+        'expected_modules':expected_compile,'events':compiled,'source_compile_count':13,'protected_root89_compile_count':0,
         'bootstrap11_or_native407_compile_count':0,'preexec_events_sha256':digest(logs/'CACHE_PREEXEC_EVENTS.jsonl'),
         'command_log_sha256':digest(logs/'runtime/compiler-commands.jsonl')}
     census_path=logs/'P2_COMPILE_CENSUS.json';assert not census_path.exists()

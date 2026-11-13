@@ -1,24 +1,25 @@
-# P2 R8 static candidate
+# P2 R9 static candidate
 
-R7 passed authentic11/407/86 input qualification but failed two mathematical
-source compilations; only OuterMinimum newly completed. No full102 kernel/types
-acceptance exists. R8 selects the two already published a6 proof-only repairs,
-retains Outer680 and old686 overlays, and changes no102 module name/order/import.
+R8 passed cached-input qualification but failed ClippedGapAssembly and SixTent;
+only RawFallback and Pair newly completed. No full102 kernel/types acceptance.
+R9 selects their two independently reviewed source484 successors with no102 name,
+order or import change. All other source postimages retain their original commits.
 
-The original R6 86 selector/index remain byte-identical. Original R7 CHECKPOINT
-has only one completed module, Outer, while old86 retain their quarantine label.
-R8 takes only Outer9 real source/facet payloads from that producer; it never
-relabels old86. A producer parameter reuses the existing restorer for separate
-acquisition/restore/stock leanArts/setup/physicalimport/runtime/ABI checks. Both
-producer qualification/restore/acquisition receipts are independently hash-bound
-at final. Native407/Cache144 protocol and all original guard/proof gates remain.
+Root89 consists of R6 original86, R7Outer1 and R8new2, each with8 real leanArts
+facets and a distinct authentic checkpoint. Old87 quarantine labels in R8 stay.
+Its new19-member selection contains18 true source/facet payloads plus originalCP;
+10 independently signed this metadata index, not a new-run qualification. The
+single restorer class uses three explicit producer parameters; no trace/setup/
+response edit, provenance merge or fake native facet is allowed. Final validation
+binds9 acquisition/restore/qualification hashes and verifies physical import parts.
 
-Ordinary compilation is exactly15, cached87 zero. Final actualpreexec/compiler
-bijection and oneevent per15 join FINAL_ACCEPTANCE. Fresh102 kernel, complete
-two types, strict serialized ownership, transitive allowed axioms, dual object
-snapshots and retention are unchanged. No cache mismatch can fall back to compile.
+Ordinary compile scope is13, cached89 zero. Exactly13 actual distinct source events
+are required at final, after existing compiler/preexec bijection. Full102 fresh
+kernel/twofulltypes/strictserializedownership/transitiveallowedaxioms/dual objects/
+runtime/retention are unchanged, including original guard/collector/stage/audit/
+prepare/pilot/fixtures. Cache failure isHOLD with no source compilation fallback.
 
-Only static AST/JSON/hash/Git and explicitly authorized ZIP Range metadata were
-used locally. Candidate helpers, fixtures, compiler and proof were not executed.
-This is not proof acceptance. driverReady is false until ROOT actual-tree review
-and authorization, and all real GitHub qualification/proof receipts remain due.
+All local checks are source/static AST/JSON/hash/read-only Git. No candidate
+helper, Lean, Lake, LSP, environment, fixture, compiler or proof program ran.
+No Git/GitHub write or CI. driverReady=false pending ROOT actual-tree review
+and authorization; actual GitHub cache/compiler/kernel/type gates remain due.
