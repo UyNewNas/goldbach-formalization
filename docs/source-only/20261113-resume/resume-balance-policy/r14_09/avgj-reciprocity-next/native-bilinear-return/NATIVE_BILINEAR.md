@@ -1,0 +1,5 @@
+# Same-infinity switch on the native common Fourier row pair
+
+The block now sums the complete positive spectral traces over the actual m,n ∈ [2ʲ,2ʲ⁺¹) with common weight conjugate(e(ωm))e(ωn). Both full level sums converge. Their equality holds with the original input level bump and the reflected m,n-dependent bump at level d. For each pair of marks the prior support cutoff gives finite support for the total over positive levels. The finite block permits interchange by finite sums of the corresponding HasSum statements.
+
+At an actual exceptional slot the double sum with the marked covariance in R normalization equals one quarter of the corresponding double sum with the physical T08 row in ρᴷ normalization. The identity accepts the true m,n-dependent transform as weight, covers m=n and uses the identity scaling at both arguments. Only the total spectral trace has the arithmetic support cutoff. Estimates for its individual components use their own spectral bounds. [Drappeau, opening the square before and after the switch in Proof 4.6](https://arxiv.org/html/1504.05549v4#S4.SS2)
