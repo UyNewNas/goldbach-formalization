@@ -1,8 +1,8 @@
 # Requeue after excluding unrelated push workflows from this isolated branch.
-name: Stored blocks 031-041 kernel batch
+name: Stored blocks 042-052 kernel batch
 on:
   push:
-    branches: [ci/stored-blocks-031-041-20261113]
+    branches: [ci/stored-blocks-042-052-20261113]
     paths: [.github/workflows/stored-block-batch.yml, verification/parts/p0/prepare_stored_batch.py]
   workflow_dispatch:
     inputs:
@@ -125,7 +125,7 @@ jobs:
           set -euo pipefail
           mkdir -p "$LOGS/compiled-blocks"
           cp "$PROJECT/StoredBatchAudit.lean" "$LOGS/" || true
-          for i in 031 032 033 034 035 036 037 038 039 040 041; do
+          for i in 042 043 044 045 046 047 048 049 050 051 052; do
             cp "$PROJECT/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.lean" "$LOGS/compiled-blocks/"
             for p in "$PROJECT/.lake/build/lib/lean/ImbalancedChen/Data/P5SubdivisionStoredBlock$i.olean"*; do
               test ! -f "$p" || cp "$p" "$LOGS/compiled-blocks/"
@@ -140,7 +140,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: stored-blocks-031-041-${{ github.run_id }}
+          name: stored-blocks-042-052-${{ github.run_id }}
           path: ${{ runner.temp }}/t01-evidence/
           if-no-files-found: error
           retention-days: 30
