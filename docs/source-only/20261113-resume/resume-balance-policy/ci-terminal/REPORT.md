@@ -1,0 +1,20 @@
+# CI terminal review — 2026-11-13
+
+Observed at 2026-11-13 08:09 UTC through the GitHub connector (read-only). The two exact runs have reached terminal status. No rerun, cancellation, dispatch, Git operation, local Lean/Lake/LSP execution, or large-artifact download was performed.
+
+## P2 run 43345599845
+
+- Repository: `UyNewNas/goldbach-formalization`; run #5, branch `ci/p2-integer-mass-r5-20261113`; driver SHA `81cb87f5cd18ab8dc4e85300340de92d91c551bb`.
+- Run/job `131684560090`: `completed / failure`; updated 2026-11-13 04:16:02 UTC.
+- First failing gate: step 10, “Reuse pinned dependency cache and bind dependency sources”. Full job log fetched through the GitHub connector (128,837 characters; 1,355 lines). At 04:15:45.568Z the first compiler denial occurred while Lean's cache bootstrap tried to build `Cache.Cli:c.o`: `RuntimeError: Unknown compiler tool, mode, flags or input; default deny`; wrapper then raised `Cache compiler admission rejected before exec`. This is the initial actionable failure, before any project ABI compilation. The light log repeats the same admission failure for subsequent C object builds.
+- Not run (skipped): step 11 restore authentic407 + stock no-build qualification; step 12 full ABI import census/diagnostic audit; step 13 strict FinitePi preflight; step 14 exact ABI/full local closure compile; step 15 kernel replay; step 16 full type/transitive-axiom export; step 18 cache/zero compiler-events audit; step 23 bind acceptance after original gates. Step 17 reports `PASS_RUNTIME_GUARD_ONLY` with 22 compiler commands/11 source commands; it is a runtime guard result, not a kernel/type acceptance. Step 20 raw/setup/IR/source checkpoint collector also failed (`ValueError: Original collector failed; raw snapshot remains quarantined`). Steps 19, 21, 22 and 24 uploaded/retained evidence; those do not change the failed gate result.
+- Light-log artifact `14010055674`, `p2-integer-mass-lightlogs-43345599845`, 1,190,754 bytes, GitHub digest `sha256:cad2fe5addd5b90e2c90bf88e4e35f7be30ab9962f5a1d1e39ccdb98b41d9332`, expiry 2026-12-13 04:15:52 UTC. Downloaded once to `p2-integer-mass-lightlogs-43345599845.zip`. Local SHA256 matches the GitHub digest; ZIP has 22 entries, 4,840,430 uncompressed bytes, and all entry CRCs pass (`testzip` returned no bad entry).
+- Other evidence artifacts, metadata only: coherent checkpoint `14009013075` (17,197,514 bytes; `sha256:b4d4533904d71677243581ee3393454870a34a8e833b712c459a84fab8fbd1d2`); ABI artifact `14009008186` (3,491,907 bytes; `sha256:f4d02424ad8196f357de122021ae5a73cf58629ec120af0056334dbaa8e2f340`). The 1.9 GB full archive was not downloaded.
+
+## Stored031–041 run 43342877411
+
+- Repository: `UyNewNas/goldbach-formalization`; branch `ci/stored-blocks-031-041-20261113`; source SHA `e94213659a5a01a3790baf41a8d49610cf9793aa`.
+- Run/job `131615167793`: `completed / success`; updated 2026-11-13 04:14:12 UTC. All original gates 1–15 succeeded, including exact selected-block-plus-parent compile (10), bundled kernel replay (11), full type/transitive-axiom export (12), trust-zero runtime audit (13), archive retention (14), and source/log retention (15); post steps 29–31 also succeeded.
+- Artifact `14009233352`, `stored-blocks-031-041-43342877411`, 80,224,048 bytes, GitHub digest `sha256:38fd77a23829da47ae25d2f5b1de05be80f660a7913f973b0dc83e1d88c19947`, expiry 2026-12-13 04:13:50 UTC. A search under local `output` found no matching run ID, artifact ID, name, or ZIP path. The artifact was not downloaded; downstream reuse should be based on this run/job/artifact identity and full digest, with artifact validation performed by its consumer.
+
+“Not found locally” only describes the searched `output` tree and does not prove that no copy exists elsewhere. Likewise, successful Stored run evidence applies to this exact SHA, job, and archived batch; it does not certify unrelated tasks or later revisions. P2 is a terminal failed run, and its pending manifest/receipt is not a live process or proof pass.
