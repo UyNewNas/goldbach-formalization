@@ -1,0 +1,291 @@
+--- dca6/LeanPool/KloostermanWeil/Stepanov/Auxiliary.lean
++++ compat/LeanPool/KloostermanWeil/Stepanov/Auxiliary.lean
+@@ -125,7 +125,7 @@
+       · intro i hi hij
+         simp only [Finset.mem_range] at hi
+         by_cases hijlt : i < j
+-        · rw [coeff_mul_X_pow', ite_eq_left]
++        · rw [coeff_mul_X_pow', if_pos]
+           · apply coeff_eq_zero_of_natDegree_lt
+             have hmul : (i + 1) * q ≤ j * q :=
+               Nat.mul_le_mul_right q (Nat.succ_le_iff.2 hijlt)
+@@ -140,7 +140,7 @@
+           · have hmul : i * q ≤ j * q :=
+               Nat.mul_le_mul_right q (Nat.le_of_lt hijlt)
+             exact hmul.trans (Nat.le_add_left _ _)
+-        · rw [coeff_mul_X_pow', ite_eq_right]
++        · rw [coeff_mul_X_pow', if_neg]
+           have hji : j < i :=
+             lt_of_le_of_ne (Nat.le_of_not_gt hijlt) hij.symm
+           have hmul : (j + 1) * q ≤ i * q :=
+@@ -175,7 +175,7 @@
+   · intro j _hj hji
+     by_cases hji_lt : (j : ℕ) < i
+     · rw [hprev j hji_lt, zero_mul, coeff_zero]
+-    · rw [coeff_mul_X_pow', ite_eq_right]
++    · rw [coeff_mul_X_pow', if_neg]
+       have hij : (i : ℕ) < j := lt_of_le_of_ne
+         (Nat.le_of_not_gt hji_lt) (fun h ↦ hji (Fin.ext h.symm))
+       have hmul : ((i : ℕ) + 1) * q ≤ (j : ℕ) * q :=
+@@ -208,7 +208,7 @@
+ theorem X_card_pow_dvd_pow_card_sub_C_coeff_zero
+     {F : Type*} [Field F] [Fintype F] (f : F[X]) :
+     X ^ Fintype.card F ∣ f ^ Fintype.card F - C (f.coeff 0) := by
+-  rw [← FiniteField.Polynomial.expand_card f]
++  rw [← FiniteField.expand_card f]
+   rw [X_pow_dvd_iff]
+   intro n hn
+   rw [coeff_sub, coeff_expand (Fintype.card_pos) f]
+@@ -218,7 +218,7 @@
+   · have hndvd : ¬ Fintype.card F ∣ n := by
+       intro hdvd
+       exact hn0 (Nat.eq_zero_of_dvd_of_lt hdvd hn)
+-    rw [ite_eq_right hndvd, zero_sub, coeff_C]
++    rw [if_neg hndvd, zero_sub, coeff_C]
+     simp [hn0]
+ 
+ /-- Squaring the first-block congruence and applying finite-field
+--- dca6/LeanPool/KloostermanWeil/Carlitz/DicksonFiniteAlgebra.lean
++++ compat/LeanPool/KloostermanWeil/Carlitz/DicksonFiniteAlgebra.lean
+@@ -56,7 +56,7 @@
+     norm_num
+   have hn : (1 : FpPoly p).nextCoeff = 0 := by
+     simp [Polynomial.nextCoeff]
+-  rw [etaPoly, ite_eq_right (by simp [h0])]
++  rw [etaPoly, if_neg (by simp [h0])]
+   rw [hn, h1, h0]
+   simp
+ 
+@@ -75,9 +75,9 @@
+     · have hfg0 : (f * g).coeff 0 ≠ 0 := by
+         rw [mul_coeff_zero]
+         exact mul_ne_zero hf0 hg0
+-      rw [etaPoly, ite_eq_right hfg0,
+-        etaPoly, ite_eq_right hf0,
+-        etaPoly, ite_eq_right hg0]
++      rw [etaPoly, if_neg hfg0,
++        etaPoly, if_neg hf0,
++        etaPoly, if_neg hg0]
+       have harg :
+           -(f * g).nextCoeff -
+               t * ((f * g).coeff 1 / (f * g).coeff 0) =
+@@ -207,7 +207,7 @@
+       intro h
+       apply ht
+       exact neg_eq_zero.mp (h.symm.trans hc0)
+-    rw [ite_eq_right hcnt]
++    rw [if_neg hcnt]
+     simp [etaPoly_monicQuadratic, hc0]
+   · rw [show (∑ b : Fp p, etaPoly p t (monicQuadratic b c)) =
+       ∑ b : Fp p, ZMod.stdAddChar (-(1 + t / c) * b) by
+@@ -237,7 +237,7 @@
+       have hsum :=
+         AddChar.sum_eq_zero_of_ne_one
+           (R := Fp p) (R' := ℂ) hnontriv
+-      rw [ite_eq_right hct]
++      rw [if_neg hct]
+       simpa [AddChar.mulShift_apply] using hsum
+ 
+ end KloostermanWeil.Dickson
+@@ -317,7 +317,7 @@
+     (monicFromCoeffs p n a).coeff j = a ⟨j, hj⟩ := by
+   unfold monicFromCoeffs
+   rw [coeff_add, coeff_X_pow]
+-  rw [ite_eq_right (Nat.ne_of_lt hj)]
++  rw [if_neg (Nat.ne_of_lt hj)]
+   rw [zero_add, coeff_fintype_sum]
+   simp_rw [coeff_C_mul_X_pow]
+   let idx : Fin n := ⟨j, hj⟩
+@@ -348,7 +348,7 @@
+     (monicFromCoeffs p n a).nextCoeff = a (lastIndex n hn) := by
+   have hd : (monicFromCoeffs p n a).natDegree = n :=
+     natDegree_eq_of_degree_eq_some (monicFromCoeffs_degree p n a)
+-  rw [Polynomial.nextCoeff, hd, ite_eq_right hn.ne']
++  rw [Polynomial.nextCoeff, hd, if_neg hn.ne']
+   exact monicFromCoeffs_coeff_lt p n (n - 1)
+     (Nat.sub_lt hn (by norm_num)) a
+ 
+@@ -457,7 +457,7 @@
+     simp [etaPoly, hzero, hzero']
+   · have hzero' : (monicFromCoeffs p n sh).coeff 0 ≠ 0 := by
+       rwa [hc0]
+-    rw [etaPoly, ite_eq_right hzero', etaPoly, ite_eq_right hzero]
++    rw [etaPoly, if_neg hzero', etaPoly, if_neg hzero]
+     rw [hnxt, hc1, hc0]
+     have harg :
+         (-( (monicFromCoeffs p n a).nextCoeff + u) -
+--- dca6/LeanPool/KloostermanWeil/Weil/PrimeFoundation.lean
++++ compat/LeanPool/KloostermanWeil/Weil/PrimeFoundation.lean
+@@ -160,7 +160,7 @@
+       (if x = 0 then 0 else ZMod.stdAddChar (m * x + n * x⁻¹)) =
+       (if m * x = 0 then 0
+        else ZMod.stdAddChar (1 * (m * x) + (m * n) * (m * x)⁻¹))
+-    rw [ite_eq_right hx, ite_eq_right hmx, one_mul, mul_inv_rev]
++    rw [if_neg hx, if_neg hmx, one_mul, mul_inv_rev]
+     congr 2
+     calc
+       n * x⁻¹ = (n * x⁻¹) * 1 := by rw [mul_one]
+--- dca6/LeanPool/KloostermanWeil/Carlitz/ExtensionDefinitions.lean
++++ compat/LeanPool/KloostermanWeil/Carlitz/ExtensionDefinitions.lean
+@@ -89,7 +89,7 @@
+     simp [e, degreeOneEquiv]
+   · have hex : e.toEquiv x ≠ 0 := by
+       simpa using ((map_ne_zero e).2 hx)
+-    simp only [ite_eq_right hx, ite_eq_right hex]
++    simp only [if_neg hx, if_neg hex]
+     change ZMod.stdAddChar (1 * x + t * x⁻¹) =
+       psiExt p 1
+         (e x + algebraMap (Fp p) (Ext p 1) t * (e x)⁻¹)
+--- dca6/LeanPool/KloostermanWeil/Carlitz/ClassValue.lean
++++ compat/LeanPool/KloostermanWeil/Carlitz/ClassValue.lean
+@@ -74,7 +74,7 @@
+           (x + algebraMap (Fp p) (Ext p n) t * x⁻¹)) by rfl]
+   rw [trace_carlitz_arg t hx]
+   unfold KloostermanWeil.Dickson.etaPoly
+-  rw [ite_eq_right hc]
++  rw [if_neg hc]
+   simpa [nsmul_eq_mul] using
+     (AddChar.map_nsmul_eq_pow
+       ZMod.stdAddChar
+--- dca6/LeanPool/KloostermanWeil/Carlitz/ClassGhost.lean
++++ compat/LeanPool/KloostermanWeil/Carlitz/ClassGhost.lean
+@@ -135,13 +135,13 @@
+   intro c
+   by_cases hc : c = 0
+   · subst c
+-    rw [ite_eq_left rfl]
++    rw [if_pos rfl]
+     apply Fintype.sum_eq_zero
+     intro y
+     have hy0 : (y : Ext p n) = 0 :=
+       (ConjRootClass.mk_eq_zero_iff (K := Fp p) (y : Ext p n)).mp y.2
+     simp [hy0]
+-  · rw [ite_eq_right hc]
++  · rw [if_neg hc]
+     calc
+       (∑ y : c.carrier,
+           if (y : Ext p n) = 0 then 0
+@@ -160,7 +160,7 @@
+               ConjRootClass.mem_carrier.mp y.2
+             rw [hy0, ConjRootClass.mk_zero] at hyc
+             exact hc hyc.symm
+-          rw [ite_eq_right hyne]
++          rw [if_neg hyne]
+           rw [psiExt_carlitz_arg_eq_etaPoly_pow p n t hyne]
+           rw [minpoly_eq_class_minpoly p n y]
+           rw [relative_finrank_eq_total_div_classDegree p n y]
+--- dca6/LeanPool/KloostermanWeil/Carlitz/IrreducibleGhost.lean
++++ compat/LeanPool/KloostermanWeil/Carlitz/IrreducibleGhost.lean
+@@ -82,9 +82,9 @@
+           (n / c.minpoly.natDegree)
+   by_cases hc : c = 0
+   · subst c
+-    rw [ite_eq_left rfl, minpoly_zero_class_eq_X p n]
++    rw [if_pos rfl, minpoly_zero_class_eq_X p n]
+     simp [KloostermanWeil.Dickson.etaPoly, NeZero.ne n]
+-  · rw [ite_eq_right hc]
++  · rw [if_neg hc]
+ 
+ theorem Kext_eq_irredGhost
+     (p n : ℕ) [Fact p.Prime] [NeZero n] (t : Fp p) :
+--- dca6/LeanPool/KloostermanWeil/Stepanov/CurveTrace.lean
++++ compat/LeanPool/KloostermanWeil/Stepanov/CurveTrace.lean
+@@ -137,7 +137,7 @@
+   by_cases hA : A = 0
+   · subst A
+     simp [ZMod.card p]
+-  · rw [ite_eq_right hA]
++  · rw [if_neg hA]
+     simpa [mul_comm] using
+       (AddChar.sum_eq_zero_of_ne_one (ZMod.isPrimitive_stdAddChar p hA))
+ 
+--- dca6/LeanPool/KloostermanWeil/Stepanov/ScalarExtensionSum.lean
++++ compat/LeanPool/KloostermanWeil/Stepanov/ScalarExtensionSum.lean
+@@ -69,7 +69,7 @@
+       if x = 0 then (0 : ℂ)
+       else psiExt p n
+         (x + algebraMap (ZMod p) (GaloisField p n) t * x⁻¹)) 0]
+-  simp only [ite_eq_left, zero_add]
++  simp only [if_pos, zero_add]
+   have hsub :
+       (∑ x : {x : GaloisField p n // x ≠ 0},
+         if x.1 = 0 then (0 : ℂ)
+@@ -80,7 +80,7 @@
+           (x.1 + algebraMap (ZMod p) (GaloisField p n) t * x.1⁻¹) := by
+     apply Finset.sum_congr rfl
+     intro x hx
+-    rw [ite_eq_right x.property]
++    rw [if_neg x.property]
+   rw [hsub]
+   refine Fintype.sum_equiv unitsEquivNeZero.symm
+     (fun x : {x : GaloisField p n // x ≠ 0} =>
+@@ -132,7 +132,7 @@
+   rw [Fintype.sum_eq_add_sum_subtype_ne
+     (fun x : GaloisField p n =>
+       if x = 0 then (0 : ℂ) else psiExt p n (A * x + B * x⁻¹)) 0]
+-  simp only [ite_eq_left, zero_add]
++  simp only [if_pos, zero_add]
+   have hsub :
+       (∑ x : {x : GaloisField p n // x ≠ 0},
+         if x.1 = 0 then (0 : ℂ)
+@@ -141,7 +141,7 @@
+         psiExt p n (A * x.1 + B * x.1⁻¹) := by
+     apply Finset.sum_congr rfl
+     intro x hx
+-    rw [ite_eq_right x.property]
++    rw [if_neg x.property]
+   rw [hsub]
+   exact Fintype.sum_equiv unitsEquivNeZero
+     (fun u : (GaloisField p n)ˣ =>
+@@ -202,10 +202,10 @@
+   · subst x
+     simp [M, M0]
+   · have hMx : M0 * x ≠ 0 := mul_ne_zero hM0 hx
+-    simp only [ite_eq_right hx]
++    simp only [if_neg hx]
+     have hcoe : ((Units.mulLeft M) x : GaloisField p n) = M0 * x := by
+       rfl
+-    rw [ite_eq_right (by simpa [hcoe] using hMx)]
++    rw [if_neg (by simpa [hcoe] using hMx)]
+     apply congrArg (psiExt p n)
+     change
+       M0 * x +
+--- dca6/LeanPool/KloostermanWeil/Stepanov/CarlitzRoots.lean
++++ compat/LeanPool/KloostermanWeil/Stepanov/CarlitzRoots.lean
+@@ -40,14 +40,14 @@
+ theorem carlitzAlpha_add_beta
+     (p : ℕ) [Fact p.Prime] {t : ZMod p} (ht : t ≠ 0) :
+     carlitzAlpha p t + carlitzBeta p t = -Kext p 1 t := by
+-  simp only [carlitzAlpha, carlitzBeta, dite_eq_right ht]
++  simp only [carlitzAlpha, carlitzBeta, dif_neg ht]
+   exact (Classical.choose_spec (Classical.choose_spec
+     (carlitz_spectral_roots_Kext p ht))).1
+ 
+ theorem carlitzAlpha_mul_beta
+     (p : ℕ) [Fact p.Prime] {t : ZMod p} (ht : t ≠ 0) :
+     carlitzAlpha p t * carlitzBeta p t = (p : ℂ) := by
+-  simp only [carlitzAlpha, carlitzBeta, dite_eq_right ht]
++  simp only [carlitzAlpha, carlitzBeta, dif_neg ht]
+   exact (Classical.choose_spec (Classical.choose_spec
+     (carlitz_spectral_roots_Kext p ht))).2.1
+ 
+@@ -57,7 +57,7 @@
+     Kext p (r + 1) t =
+       -(carlitzAlpha p t ^ (r + 1) +
+         carlitzBeta p t ^ (r + 1)) := by
+-  simp only [carlitzAlpha, carlitzBeta, dite_eq_right ht]
++  simp only [carlitzAlpha, carlitzBeta, dif_neg ht]
+   exact (Classical.choose_spec (Classical.choose_spec
+     (carlitz_spectral_roots_Kext p ht))).2.2 r
+ 
+--- dca6/LeanPool/KloostermanWeil/Stepanov/SpectralBound.lean
++++ compat/LeanPool/KloostermanWeil/Stepanov/SpectralBound.lean
+@@ -79,7 +79,7 @@
+         (p : ℂ) ^ n := by
+   rw [Fintype.sum_prod_type]
+   simp only [normalizedCarlitzSquaredRoot, Fintype.sum_bool,
+-    ite_eq_left, Bool.false_eq_true, ite_false, div_pow, ← pow_mul]
++    if_pos, Bool.false_eq_true, ite_false, div_pow, ← pow_mul]
+   rw [Finset.sum_div]
+   apply Finset.sum_congr rfl
+   intro m hm
