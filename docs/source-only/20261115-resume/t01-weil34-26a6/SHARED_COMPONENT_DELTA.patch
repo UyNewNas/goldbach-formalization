@@ -1,0 +1,265 @@
+--- original/shared-tools/cache_bootstrap.py
++++ R2/shared-tools/cache_bootstrap.py
+@@ -12,7 +12,7 @@
+ import struct
+ import sys
+ 
+-from coherent_cache import HERE, NATIVE, PARENT, INV, checked, read, require, sha, write
++from coherent_cache import HERE, NATIVE, PARENT, INV, WEIL, checked, read, require, sha, write
+ 
+ SELECTION = '2e7bb18d35a8de3db8f5acf2139747175430dad91359631d3f04b1eaff6c1010'
+ INDEX = '92bd3af256690b9c4fb7f9c3b819649ec892d9bba20a2497a46e2ef6da5a511d'
+@@ -143,7 +143,7 @@
+ 
+ 
+ def bootstrap(session):
+-    require(session.scope in {NATIVE,PARENT,INV}, 'Explicit bootstrap scope required')
++    require(session.scope in {NATIVE,PARENT,INV,WEIL}, 'Explicit bootstrap scope required')
+     selected,index,rule = load_inputs();raw = session.original();session.require_fixtures()
+     require(selected['oldRoot'] == raw['runtime_state']['root'] and selected['source_files'] == 11
+             and selected['module_facets'] == 129 and len(selected['binaryFacets']) == 4
+@@ -152,7 +152,7 @@
+     session.validate_environment(raw)
+     current_profile=selected['newProjectProfileSHA256'] if session.scope==NATIVE else session.selection['candidateFullInputProfileSHA256']
+     require(raw['runtime_state']['input_sha256'][selected['oldRoot']+'/lakefile.toml'] == selected['oldProjectProfileSHA256']
+-            and (session.scope not in {PARENT,INV} or current_profile==selected['oldProjectProfileSHA256'])
++            and (session.scope not in {PARENT,INV,WEIL} or current_profile==selected['oldProjectProfileSHA256'])
+             and sha(session.project/'lakefile.toml') == current_profile, 'Old/root project profiles were mixed')
+     origin = HERE/'inputs/ARCHITECT_COMMAND_LEAF_RULE.json'
+     require(sha(origin) == rule['shared_architect_toolchain_origin_rule_sha256']
+@@ -184,7 +184,7 @@
+         require(native['depHash'] == row['native_trace_depHash'] and native['outputs'] == row['native_trace_output']+'.o', 'Bootstrap native trace differs')
+     binaries = session.restore_facets(raw,selected['binaryFacets'],session.project/'.lake/packages/mathlib','mathlib')
+     session.emit('CACHE_BOOTSTRAP_RESTORE.json', {'modules':restored,'binary_facets':binaries,
+-                 'selection_sha256':SELECTION,'leaf_rule_sha256':LEAVES,'old_project_profile_adopted':session.scope in {PARENT,INV}})
++                 'selection_sha256':SELECTION,'leaf_rule_sha256':LEAVES,'old_project_profile_adopted':session.scope in {PARENT,INV,WEIL}})
+     verify(session);binary = binary_trace(session,raw,selected)
+     glibc = glibc_identity(session,raw,rule,binary)
+     process = session.run('bootstrap-stock-cache-executable', ['lake','--no-build','build','@mathlib/cache'])
+@@ -204,7 +204,7 @@
+ 
+ 
+ def validate(session):
+-    if session.scope not in {NATIVE,PARENT,INV}: return
++    if session.scope not in {NATIVE,PARENT,INV,WEIL}: return
+     selected,index,rule = load_inputs();verify(session);session.policy_audit()
+     value = session.receipt('CACHE_BOOTSTRAP_QUALIFICATION.json')
+     require(value['status'] == 'PASS_AUTHENTIC_CACHE_BOOTSTRAP_STOCK_NO_BUILD_INPUT_ONLY'
+--- original/shared-tools/CACHE_FIXTURE_CONTRACT.json
++++ R2/shared-tools/CACHE_FIXTURE_CONTRACT.json
+@@ -8,11 +8,18 @@
+     "test_clang_nested_include_escape_denied",
+     "test_clang_shadow_include_escape_denied",
+     "test_clang_unregistered_source_or_output_denied",
++    "test_direct_exact_setup_and_import_inputs_admitted",
++    "test_direct_import_mutation_denied_before_exec",
++    "test_direct_missing_import_denied_before_exec",
++    "test_direct_receipt_other_argv_denied",
++    "test_direct_receipt_other_run_denied",
++    "test_direct_setup_mutation_denied_before_exec",
++    "test_header_body_string_does_not_invent_import",
++    "test_header_legacy_default_init_and_visibility",
++    "test_header_nested_comments_meta_all_and_prelude",
++    "test_header_unclosed_comment_holds",
++    "test_header_unknown_import_identifier_holds",
+     "test_hook_precedes_original_log_and_exec",
+-    "test_inverse_exact_scope_and_owner_targets",
+-    "test_inverse_legacy_header_has_no_illegal_import_all",
+-    "test_inverse_original_protected_168_sources_denied",
+-    "test_inverse_root_and_package_command_profiles_separate",
+     "test_long_option_cannot_hide_protected_path",
+     "test_metadata_prefix_probe_allowed",
+     "test_metadata_raw_extra_resource_option_denied",
+@@ -29,6 +36,8 @@
+     "test_unknown_stdin_and_response_are_denied",
+     "test_unknown_tool_and_native_mode_are_denied"
+   ],
+-  "inverse_scope": "Exact167+conditional1 protected /383 new /542 mathematical; all metadata fixture execution GH-only",
+-  "legacy_header": "No module token and no literal import all; require all542 effective importAll/hasData and exact Euler-only isModule"
++  "original_generic_negative_cases": 23,
++  "new_direct_input_cases": 6,
++  "new_header_boundary_cases": 5,
++  "scope": "Original full preexec denial fixtures plus direct source/setup/import mutation and strict fixed-syntax header coverage; fake metadata gives no proof/cache credit"
+ }
+--- original/shared-tools/cache_negative_fixtures.py
++++ R2/shared-tools/cache_negative_fixtures.py
+@@ -175,56 +175,71 @@
+         self.assertEqual(extended.replace(hook,''),fake)
+ 
+ 
+-    def test_inverse_exact_scope_and_owner_targets(self):
+-        from inverse_cache import data,target
+-        selected,manifest,scope=data()
+-        self.assertEqual(len(selected['rows']),167)
+-        self.assertEqual(len(scope['ordinary_source_compile_modules']),383)
+-        self.assertEqual(len(scope['mathematical_modules']),542)
+-        self.assertEqual(len(scope['root_targets']),10)
+-        for row in manifest['modules']:
+-            prefix='' if row['package']=='root' else '@'+row['package']+'/'
+-            self.assertEqual(target(row['module'],'leanArts',manifest),prefix+'+'+row['module']+':leanArts')
+-        self.assertEqual(set(scope['ordinary_source_compile_modules']) & set(scope['protected_ordinary_compile_cache_modules']),set())
+-
+-    def test_inverse_root_and_package_command_profiles_separate(self):
+-        from inverse_cache import inverse_policy
+-        import tempfile
+-        with tempfile.TemporaryDirectory() as directory:
+-            root=Path(directory);logs=root/'logs';logs.mkdir()
+-            policy=inverse_policy(root/'project',logs,{})
+-            commands=[r for r in policy['admitted_commands'] if r['classification']=='EXACT_CURRENT_CALLER_SOURCE']
+-            self.assertEqual(len(commands),383)
+-            self.assertEqual(sum('maxRecDepth=100000' in r['argv'] for r in commands),72)
+-            self.assertEqual(sum('maxRecDepth=100000' not in r['argv'] for r in commands),311)
+-            self.assertTrue(policy['bootstrap_cache_reuse_only'])
+-            self.assertEqual(len([r for r in policy['admitted_commands'] if r['tool']!='lean']),0)
+-
+-    def test_inverse_original_protected_168_sources_denied(self):
+-        from inverse_cache import inverse_policy,data
+-        from cache_preexec_policy import denied_path
+-        import tempfile
+-        with tempfile.TemporaryDirectory() as directory:
+-            root=Path(directory);logs=root/'logs';logs.mkdir();project=root/'project'
+-            policy=inverse_policy(project,logs,{})
+-            selected,manifest,scope=data()
+-            for row in manifest['modules']:
+-                if row['module'] in scope['protected_ordinary_compile_cache_modules']+scope['protected_conditional_leaf_modules']:
+-                    source=project/row['installation_path']
+-                    self.assertIsNotNone(denied_path([str(source)],str(project),policy))
+-
+-
+-
+-    def test_inverse_legacy_header_has_no_illegal_import_all(self):
+-        from inverse_cache import data
+-        from inverse_validation import audit_header
+-        _,_,scope=data()
+-        header=audit_header(scope)
+-        self.assertEqual(header.splitlines(),['import '+n for n in scope['mathematical_modules']])
+-        self.assertNotIn('import all ',header)
+-        self.assertFalse(header.startswith('module'))
+-        self.assertEqual(sum(r['source_module_mode'] for r in scope['audit_import_modes']),1)
+-        self.assertEqual(sum(r['module']=='PrimeNumberTheoremAnd.EulerMaclaurin' for r in scope['audit_import_modes']),1)
++    def direct_case(self):
++        source=self.root/'New031.lean'
++        setup=self.root/'new.setup.json';setup.write_text('{}')
++        dependency=self.root/'dependency.olean';dependency.write_bytes(b'FAKE METADATA ONLY')
++        def rec(path):
++            raw=path.read_bytes()
++            return dict(path=str(path),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
++        command=self.policy['admitted_commands'][0]
++        receipt=self.root/'direct-inputs.json'
++        receipt.write_text(json.dumps(dict(binding=self.policy['context'],source=rec(source),
++            normalized_argv=command['argv'],files=[rec(setup),rec(dependency)])))
++        command['input_binding']=str(receipt)
++        self.path.write_text(json.dumps(self.policy));self.sha=hashlib.sha256(self.path.read_bytes()).hexdigest()
++        return command['argv'],receipt,setup,dependency
++
++    def test_direct_exact_setup_and_import_inputs_admitted(self):
++        argv,receipt,setup,dependency=self.direct_case();self.call(argv)
++
++    def test_direct_setup_mutation_denied_before_exec(self):
++        argv,receipt,setup,dependency=self.direct_case();setup.write_text('{"changed":true}')
++        with self.assertRaises(RuntimeError):self.call(argv)
++
++    def test_direct_import_mutation_denied_before_exec(self):
++        argv,receipt,setup,dependency=self.direct_case();dependency.write_bytes(b'CHANGED')
++        with self.assertRaises(RuntimeError):self.call(argv)
++
++    def test_direct_missing_import_denied_before_exec(self):
++        argv,receipt,setup,dependency=self.direct_case();dependency.unlink()
++        with self.assertRaises(RuntimeError):self.call(argv)
++
++    def test_direct_receipt_other_run_denied(self):
++        argv,receipt,setup,dependency=self.direct_case();value=json.loads(receipt.read_text())
++        value['binding']={};receipt.write_text(json.dumps(value))
++        with self.assertRaises(RuntimeError):self.call(argv)
++
++    def test_direct_receipt_other_argv_denied(self):
++        argv,receipt,setup,dependency=self.direct_case();value=json.loads(receipt.read_text())
++        value['normalized_argv']=['--run'];receipt.write_text(json.dumps(value))
++        with self.assertRaises(RuntimeError):self.call(argv)
++
++    def test_header_nested_comments_meta_all_and_prelude(self):
++        from weil_inputs import header
++        value=header('/- outer /- nested -/ -/\nmodule\nprelude\npublic meta import all Lean.Util.FoldConsts\npublic section\ndef x := 1')
++        self.assertTrue(value['is_module']);self.assertTrue(value['prelude'])
++        self.assertEqual(value['imports'],['Lean.Util.FoldConsts'])
++        self.assertEqual(value['explicit_imports'],[dict(module='Lean.Util.FoldConsts',import_all=True,is_meta=True,is_exported=True)])
++
++    def test_header_body_string_does_not_invent_import(self):
++        from weil_inputs import header
++        value=header('module\nimport Mathlib.Data.Nat.Sqrt\ndef message := "import Evil.Hidden /-"')
++        self.assertEqual(value['imports'],['Init','Mathlib.Data.Nat.Sqrt'])
++
++    def test_header_legacy_default_init_and_visibility(self):
++        from weil_inputs import header
++        value=header('import Lean.Util.FoldConsts\nnamespace Test')
++        self.assertFalse(value['is_module']);self.assertEqual(value['imports'],['Init','Lean.Util.FoldConsts'])
++        self.assertTrue(value['explicit_imports'][0]['is_exported'])
++
++    def test_header_unknown_import_identifier_holds(self):
++        from weil_inputs import header
++        with self.assertRaises(ValueError):header('module\nimport «Unbound Module»')
++
++    def test_header_unclosed_comment_holds(self):
++        from weil_inputs import header
++        with self.assertRaises(ValueError):header('/- unclosed\nmodule\nimport Init')
+ 
+ 
+ def main():
+--- original/shared-tools/cache_preexec_policy.py
++++ R2/shared-tools/cache_preexec_policy.py
+@@ -101,6 +101,25 @@
+                         admitted['qualification_sha256'] != hashlib.sha256(Path(policy['qualification']).read_bytes()).hexdigest()):
+                         raise RuntimeError('Caller source/exporter changed after its one-time admission')
+                 physical.append(actual)
++            if 'input_binding' in row:
++                # New direct vendor command: hash the complete prepared setup and
++                # every pre-resolved physical import immediately before exec.
++                receipt_path = Path(row['input_binding'])
++                receipt_bytes = receipt_path.read_bytes()
++                receipt = json.loads(receipt_bytes)
++                if receipt['binding'] != policy['context'] or receipt['source'] != physical[0]:
++                    raise RuntimeError('Direct compiler input receipt belongs to another source/run')
++                if receipt['normalized_argv'] != row['argv']:
++                    raise RuntimeError('Direct compiler input receipt argv changed')
++                for item in receipt['files']:
++                    file = Path(item['path'])
++                    if not file.is_file() or file.is_symlink():
++                        raise RuntimeError('Direct compiler setup/import became nonregular')
++                    data = file.read_bytes()
++                    if len(data) != item['bytes'] or hashlib.sha256(data).hexdigest() != item['sha256']:
++                        raise RuntimeError('Direct compiler setup/import changed after admission')
++                physical.append({'path':str(receipt_path),'bytes':len(receipt_bytes),
++                                 'sha256':hashlib.sha256(receipt_bytes).hexdigest()})
+             return {'classification': row['classification'], 'physical_inputs': physical}
+     if tool == 'clang' and command == ['-o', policy['cache_link_output'], '@' + policy['cache_link_response']]:
+         if policy.get('bootstrap_cache_reuse_only'):
+--- original/shared-tools/coherent_cache.py
++++ R2/shared-tools/coherent_cache.py
+@@ -20,6 +20,7 @@
+ import zlib
+ 
+ HERE = Path(__file__).resolve().parent
++WEIL = 'WEIL34_PROJECT26A6'
+ INV = 'INVERSE_T01_26A6'
+ NATIVE = 'P2_NATIVE_398'
+ PARENT = 'STORED_PARENT'
+@@ -59,6 +60,9 @@
+ 
+ 
+ def bind_inputs(scope):
++    if scope==WEIL:
++        from weil_scope import bind
++        return bind()[1]
+     if scope==INV:
+         from inverse_validation import bind
+         return bind()[1]
+@@ -143,6 +147,9 @@
+ 
+ 
+ def scope_policy(scope, project, logs, binding):
++    if scope==WEIL:
++        from weil_cache import policy
++        return policy(project,logs,binding)
+     if scope==INV:
+         from inverse_cache import inverse_policy
+         return inverse_policy(project,logs,binding)

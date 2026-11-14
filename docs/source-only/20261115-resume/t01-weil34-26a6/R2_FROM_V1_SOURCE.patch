@@ -1,0 +1,899 @@
+--- v1/shared-tools/cache_negative_fixtures.py
++++ R2/shared-tools/cache_negative_fixtures.py
+@@ -215,6 +215,32 @@
+         value['normalized_argv']=['--run'];receipt.write_text(json.dumps(value))
+         with self.assertRaises(RuntimeError):self.call(argv)
+ 
++    def test_header_nested_comments_meta_all_and_prelude(self):
++        from weil_inputs import header
++        value=header('/- outer /- nested -/ -/\nmodule\nprelude\npublic meta import all Lean.Util.FoldConsts\npublic section\ndef x := 1')
++        self.assertTrue(value['is_module']);self.assertTrue(value['prelude'])
++        self.assertEqual(value['imports'],['Lean.Util.FoldConsts'])
++        self.assertEqual(value['explicit_imports'],[dict(module='Lean.Util.FoldConsts',import_all=True,is_meta=True,is_exported=True)])
++
++    def test_header_body_string_does_not_invent_import(self):
++        from weil_inputs import header
++        value=header('module\nimport Mathlib.Data.Nat.Sqrt\ndef message := "import Evil.Hidden /-"')
++        self.assertEqual(value['imports'],['Init','Mathlib.Data.Nat.Sqrt'])
++
++    def test_header_legacy_default_init_and_visibility(self):
++        from weil_inputs import header
++        value=header('import Lean.Util.FoldConsts\nnamespace Test')
++        self.assertFalse(value['is_module']);self.assertEqual(value['imports'],['Init','Lean.Util.FoldConsts'])
++        self.assertTrue(value['explicit_imports'][0]['is_exported'])
++
++    def test_header_unknown_import_identifier_holds(self):
++        from weil_inputs import header
++        with self.assertRaises(ValueError):header('module\nimport «Unbound Module»')
++
++    def test_header_unclosed_comment_holds(self):
++        from weil_inputs import header
++        with self.assertRaises(ValueError):header('/- unclosed\nmodule\nimport Init')
++
+ 
+ def main():
+     from coherent_cache import bind_inputs, HERE, read, write
+--- v1/shared-tools/weil_cache.py
++++ R2/shared-tools/weil_cache.py
+@@ -9,6 +9,7 @@
+ from coherent_cache import (BASELINE_GUARD, HERE, WEIL, CacheSession, checked,
+                             git, read, require, sha, write)
+ from weil_scope import BUNDLE, bind, data, installed, roots
++from weil_inputs import header, source_closure
+ 
+ 
+ def normalized_argv(name, project):
+@@ -30,6 +31,8 @@
+     for row in [*data()['source_rows'], dict(module='T01Audit', installation_path='T01Audit.lean')]:
+         source = dict(path=str(project/row['installation_path']))
+         source.update({k:row[k] for k in ['bytes', 'sha256'] if k in row})
++        if row['module'] == 'T01Audit':
++            source.update(bytes=(BUNDLE/'WeilAudit.lean').stat().st_size, sha256=sha(BUNDLE/'WeilAudit.lean'))
+         commands.append(dict(tool='lean', argv=normalized_argv(row['module'], project), phase='qualified-project',
+             classification='EXACT_CURRENT_WEIL34_SOURCE' if row['module'] != 'T01Audit' else 'EXACT_WEIL34_AUDIT',
+             source=source, input_binding=str(logs/'direct-inputs'/(row['module']+'.json'))))
+@@ -55,21 +58,13 @@
+     return dict(path=str(path), bytes=path.stat().st_size, sha256=sha(path))
+ 
+ 
+-def no_comments(text):
+-    # Header-only lexical processing; never evaluates a Lean declaration.
+-    out, depth, index = [], 0, 0
+-    while index < len(text):
+-        pair = text[index:index+2]
+-        if pair == '/-': depth += 1; index += 2; continue
+-        if depth and pair == '-/': depth -= 1; index += 2; continue
+-        if not depth and pair == '--':
+-            index = text.find('\n', index)
+-            if index < 0: break
+-            continue
+-        if not depth: out.append(text[index])
+-        index += 1
+-    require(depth == 0, 'Unclosed source comment')
+-    return ''.join(out)
++def process_receipt(session, p, label, argv):
++    require(p['argv'] == argv and p['cwd'] == str(session.project) and p['exit_code'] == 0
++            and p['stdout'] == str(session.logs/'cache-processes'/(label+'.stdout'))
++            and p['stderr'] == str(session.logs/'cache-processes'/(label+'.stderr'))
++            and read(session.logs/'cache-processes'/(label+'.json')) == dict(binding=session.binding, **p)
++            and sha(p['stdout']) == p['stdout_sha256'] and sha(p['stderr']) == p['stderr_sha256'],
++            'Actual process argv/cwd/exit/raw-output receipt differs: '+label)
+ 
+ 
+ class WeilSession(CacheSession):
+@@ -84,6 +79,7 @@
+         self.index['objects']['CHECKPOINT.json'] = checkpoint
+         self.anchor = self.index['whole_artifact']
+         self._part_cache = {}; self._historical_cache = {}; self._raw = None; self.prerequisites = None
++        self._source_trees = {}
+         self.state = read(self.logs/'runtime/state.json')
+         require(self.state['guard_sha256'] == BASELINE_GUARD and Path(self.state['root']).resolve() == self.project,
+                 'Original guard/root changed')
+@@ -106,12 +102,21 @@
+         super().validate_environment(raw)
+         installed()
+         require(len(raw['native_and_toolchain_library_ABI_receipts']) == 8, 'Original ABI census changed')
++        for package in raw['packages']:
++            require(not git('-C', self.project/'.lake/packages'/package['name'],
++                            'ls-files', '--others', '--exclude-standard', '--', '*.lean', '*.toml'),
++                    'Untracked standard package source/config is not an exact-pin input')
+ 
+     def locate(self, name):
+         relative = Path(*name.split('.'))
+-        if name.startswith(('Init.', 'Lean.', 'Std.')) or name in {'Init', 'Lean', 'Std'}:
++        if name.startswith(('Init.', 'Lean.', 'Std.', 'Lake.')) or name in {'Init', 'Lean', 'Std', 'Lake'}:
+             root = Path(self.state['realbin']).parent
+-            source = root/'src/lean'/relative.with_suffix('.lean')
++            candidates = [root/'src/lean'/relative.with_suffix('.lean')]
++            if name == 'Lake' or name.startswith('Lake.'):
++                candidates.append(root/'src/lean/lake'/relative.with_suffix('.lean'))
++            candidates = [path for path in candidates if path.is_file()]
++            require(len(candidates) == 1, 'Missing/ambiguous official source in the actual pinned distribution: '+name)
++            source = candidates[0]
+             stem = root/'lib/lean'/relative
+             owner = 'official_lean_toolchain'
+         else:
+@@ -119,10 +124,33 @@
+             stem = root/'.lake/build/lib/lean'/relative
+             owner = 'root' if root == self.project else root.name
+         require(source.is_file(), 'Actual pinned source absent: '+name)
+-        modern = re.search(r'^module\s*$', no_comments(source.read_text(encoding='utf-8')), re.M) is not None
++        modern = header(source.read_text(encoding='utf-8'))['is_module']
+         suffixes = ['.olean', '.olean.server', '.olean.private', '.ir.sig', '.ir'] if modern else ['.olean']
+         records = [physical(str(stem)+suffix) for suffix in suffixes]
+-        return dict(module=name, owner=owner, source=physical(source), modern=modern, facets=records)
++        source_record = physical(source)
++        source_bytes = source.read_bytes()
++        blob = hashlib.sha1(b'blob '+str(len(source_bytes)).encode()+b'\0'+source_bytes).hexdigest()
++        if owner == 'root':
++            expected = next(row for row in data()['source_rows'] if row['module'] == name)
++            require(blob == expected['git_blob'], 'Exact vendored source blob changed')
++            provenance = dict(commit=expected['source_commit'], git_blob=blob, identity_kind='EXACT_PUBLISHED_VENDOR_SOURCE')
++        elif owner == 'official_lean_toolchain':
++            provenance = dict(commit=data()['lean_commit'], git_blob=blob,
++                identity_kind='CURRENT_EXACT_OFFICIAL_DISTRIBUTION_SOURCE_SNAPSHOT_NOT_HISTORICAL_CORE_OLEAN_RECEIPT')
++        else:
++            package = next(row for row in self.original()['packages'] if row['name'] == owner)
++            if owner not in self._source_trees:
++                tree = {}
++                for entry in git('-C', root, 'ls-tree', '-r', '-z', package['rev']).split(b'\0'):
++                    if not entry: continue
++                    metadata, path = entry.split(b'\t', 1)
++                    mode, kind, object_id = metadata.decode().split()
++                    if kind == 'blob': tree[path.decode()] = object_id
++                self._source_trees[owner] = tree
++            require(self._source_trees[owner].get(source.relative_to(root).as_posix()) == blob,
++                    'Current standard source is not the exact immutable package-tree blob')
++            provenance = dict(commit=package['rev'], git_blob=blob, identity_kind='EXACT_PINNED_PACKAGE_SOURCE_BLOB')
++        return dict(module=name, owner=owner, source=source_record, source_provenance=provenance, modern=modern, facets=records)
+ 
+     def artifacts(self, name, all_private=False):
+         row = self.locate(name); paths = {Path(r['path']).suffix:r['path'] for r in row['facets']}
+@@ -137,13 +165,15 @@
+         validate(self)
+         names = data()['direct_standard_imports']
+         stock = self.run('weil-standard-stock', ['lake', '--no-build', 'build', *['@mathlib/+'+n+':leanArts' for n in names]])
+-        setups, table = {}, {}
++        setups, table, queries = {}, {}, []
+         for offset in range(0, len(names), 8):
+             batch = names[offset:offset+8]
+             result = self.run('weil-standard-setup-'+str(offset),
+                 ['lake', '--no-build', '--json', 'query', *['@mathlib/+'+n+':setup' for n in batch]])
+-            values = [json.loads(line) for line in Path(result['stdout']).read_text(encoding='utf-8').splitlines() if line.strip()]
++            lines = [(number, line) for number, line in enumerate(Path(result['stdout']).read_text(encoding='utf-8').splitlines(), 1) if line.strip()]
++            values = [json.loads(line) for _, line in lines]
+             require(len(values) == len(batch), 'Official stock setup query count differs')
++            queries.append(dict(offset=offset, names=batch, process=result, stdout_lines=[number for number, _ in lines], values=values))
+             for name, setup in zip(batch, values):
+                 require(setup['name'] == name and isinstance(setup['importArts'], dict), 'Unexpected official full ModuleSetup')
+                 setups[name] = setup
+@@ -153,11 +183,16 @@
+                 table[name] = self.artifacts(name)
+         # The exporter uses FoldConsts directly. Its official source/serialized
+         # identity is current-distribution evidence, never a historical olean claim.
+-        table['Lean.Util.FoldConsts'] = self.artifacts('Lean.Util.FoldConsts', True)
++        closure = source_closure(self, [*names, 'Lean.Util.FoldConsts'])
++        require(set(table) <= set(closure), 'Official setup import escaped the complete real source header closure')
++        for module in closure:
++            if module not in table: table[module] = self.artifacts(module)
+         files, identities = {}, {}
+         for name, groups in table.items():
+             require(groups and groups[0] and groups[0][0].endswith('.olean'), 'IR-only stock import is not data')
+-            identities[name] = self.locate(name)
++            identities[name] = closure[name]['identity']
++            for part in [identities[name]['source'], *identities[name]['facets']]:
++                files[part['path']] = part
+             for group in groups:
+                 for value in group:
+                     p = Path(value)
+@@ -168,9 +203,10 @@
+                     files[str(p)] = physical(p)
+         search = self.run('weil-actual-search-path', ['lake', '--no-build', 'env', sys.executable, '-c',
+             "import os,json;print(json.dumps({k:os.environ.get(k,'') for k in ['LEAN_PATH','LEAN_SYSROOT']}))"])
+-        require(read(search['stdout'])['LEAN_SYSROOT'] == self.state['shadow'], 'Actual sysroot changed')
+-        self.emit('WEIL_STANDARD_INPUTS.json', dict(stock_process=stock, setups=setups, importArts=table,
+-            identities=identities, physical_files=files, search_path_process=search,
++        search_value = read(search['stdout']); self.validate_search(search_value)
++        self.emit('WEIL_STANDARD_INPUTS.json', dict(stock_process=stock, setups=setups, setup_queries=queries, importArts=table,
++            source_private_closure=closure, identities=identities, physical_files=files,
++            search_path_process=search, search_path_value=search_value,
+             official_current_distribution_not_historical_core_receipts=True))
+         self.emit('CACHE_QUALIFICATION.json', dict(status='PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY',
+             stock_process=stock, standard_inputs_sha256=sha(self.logs/'WEIL_STANDARD_INPUTS.json'),
+@@ -180,16 +216,83 @@
+         sources[str(self.project/'T01Audit.lean')] = physical(self.project/'T01Audit.lean')
+         self.emit('CACHE_CALLER_INPUTS.json', dict(qualification_sha256=sha(self.logs/'CACHE_QUALIFICATION.json'), sources=sources))
+ 
++    def validate_search(self, search):
++        require(search['LEAN_SYSROOT'] == self.state['shadow'], 'Actual sysroot changed')
++        official = {Path(self.state['shadow']).joinpath('lib/lean').resolve(),
++                    Path(self.state['realbin']).parent.joinpath('lib/lean').resolve()}
++        roots = [self.project/'.lake/build/lib/lean'] + [self.project/'.lake/packages'/p['name']/'.lake/build/lib/lean'
++                 for p in self.original()['packages']]
++        actual = {Path(p).resolve() for p in search['LEAN_PATH'].split(os.pathsep) if p}
++        require(actual <= {p.resolve() for p in roots} | official
++                and (self.project/'.lake/build/lib/lean').resolve() in actual, 'Unbound actual Lean search root')
++        for root in actual | {p.resolve() for p in roots}:
++            if root in official: continue
++            for core in ['Lean', 'Init', 'Std', 'Lake']:
++                require(not (root/core).exists() and not list(root.glob(core+'.*')), 'Package/project shadows official core')
++
+     def qualification_inputs(self):
+         from cache_bootstrap import validate
+         validate(self); self.validate_environment(self.original())
+         q = self.receipt('CACHE_QUALIFICATION.json'); standard = self.receipt('WEIL_STANDARD_INPUTS.json')
+         require(q['standard_inputs_sha256'] == sha(self.logs/'WEIL_STANDARD_INPUTS.json')
+-                and q['bootstrap_qualification_sha256'] == sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json'), 'Stock qualification receipt changed')
++                and q['bootstrap_qualification_sha256'] == sha(self.logs/'CACHE_BOOTSTRAP_QUALIFICATION.json')
++                and q['status'] == 'PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY'
++                and q['stock_process'] == standard['stock_process']
++                and q['protected_source_compiler_events'] == 0 and q['proof_or_full_kernel_acceptance'] is False,
++                'Stock qualification receipt changed')
++        names = data()['direct_standard_imports']
++        process_receipt(self, standard['stock_process'], 'weil-standard-stock',
++                        ['lake', '--no-build', 'build', *['@mathlib/+'+n+':leanArts' for n in names]])
++        expected_setups = {}; original_table = {}
++        require(len(standard['setup_queries']) == (len(names)+7)//8, 'Missing original setup query batch')
++        for offset, query in zip(range(0, len(names), 8), standard['setup_queries']):
++            batch = names[offset:offset+8]
++            require(query['offset'] == offset and query['names'] == batch, 'Original setup batch/order differs')
++            process_receipt(self, query['process'], 'weil-standard-setup-'+str(offset),
++                            ['lake', '--no-build', '--json', 'query', *['@mathlib/+'+n+':setup' for n in batch]])
++            lines = [(number, line) for number, line in enumerate(Path(query['process']['stdout']).read_text(encoding='utf-8').splitlines(), 1) if line.strip()]
++            values = [json.loads(line) for _, line in lines]
++            require(values == query['values'] and len(values) == len(batch)
++                    and query['stdout_lines'] == [number for number, _ in lines], 'Original setup stdout/ordered parsed line positions changed')
++            for line, (name, setup) in enumerate(zip(batch, values), 1):
++                require(setup['name'] == name and isinstance(setup['importArts'], dict), 'Wrong ordered source setup name')
++                expected_setups[name] = setup
++                for imported, groups in setup['importArts'].items():
++                    require(imported not in original_table or original_table[imported] == groups, 'Changed stock setup merge')
++                    original_table[imported] = groups
++                original_table[name] = self.artifacts(name)
++        require(standard['setups'] == expected_setups, 'Source setup values no longer equal authenticated raw output')
++        closure = source_closure(self, [*names, 'Lean.Util.FoldConsts'])
++        require(standard['source_private_closure'] == closure and set(original_table) <= set(closure),
++                'Complete current pinned source/private-artifact closure changed')
++        for module in closure:
++            if module not in original_table: original_table[module] = self.artifacts(module)
++        require(standard['importArts'] == original_table
++                and standard['identities'] == {name:row['identity'] for name, row in closure.items()}, 'Prepared complete artifact map changed')
++        argv = ['lake', '--no-build', 'env', sys.executable, '-c',
++                "import os,json;print(json.dumps({k:os.environ.get(k,'') for k in ['LEAN_PATH','LEAN_SYSROOT']}))"]
++        process_receipt(self, standard['search_path_process'], 'weil-actual-search-path', argv)
++        require(read(standard['search_path_process']['stdout']) == standard['search_path_value'], 'Actual authenticated search value changed')
++        self.validate_search(standard['search_path_value'])
++        expected_files = {}
++        for groups in original_table.values():
++            for group in groups:
++                for value in group:
++                    p = Path(value)
++                    if not p.is_absolute(): p = self.project/p
++                    expected_files[str(p)] = physical(p)
++        for row in closure.values():
++            for part in [row['identity']['source'], *row['identity']['facets']]: expected_files[part['path']] = part
++        require(standard['physical_files'] == expected_files, 'Complete original resolved input/source/facet inventory changed')
+         for row in standard['physical_files'].values(): checked(row['path'], row)
+         for row in standard['identities'].values():
+             checked(row['source']['path'], row['source'])
+             for facet in row['facets']: checked(facet['path'], facet)
++        caller = self.receipt('CACHE_CALLER_INPUTS.json')
++        expected_sources = {str(self.project/r['installation_path']):physical(self.project/r['installation_path']) for r in data()['source_rows']}
++        expected_sources[str(self.project/'T01Audit.lean')] = physical(self.project/'T01Audit.lean')
++        require(caller['qualification_sha256'] == sha(self.logs/'CACHE_QUALIFICATION.json')
++                and caller['sources'] == expected_sources, 'Original exact source/frozen auditor admission changed')
+         return standard
+ 
+     def compile_census(self, complete):
+--- v1/shared-tools/weil_proof.py
++++ R2/shared-tools/weil_proof.py
+@@ -7,6 +7,7 @@
+ 
+ from coherent_cache import checked, read, require, sha, write
+ from weil_cache import WeilSession, normalized_argv, physical
++from weil_inputs import source_closure
+ from weil_scope import data, installed
+ 
+ 
+@@ -22,7 +23,7 @@
+     return p
+ 
+ 
+-def setup_for(session, name, standard):
++def setup_value(session, name, standard):
+     rows = {r['module']:r for r in data()['source_rows']}
+     required = set()
+     def visit(module):
+@@ -37,7 +38,7 @@
+     # below is explicitly caller-produced from their resolved artifacts.
+     table = {n:[[str(canonical_path(session, p)) for p in group] for group in groups]
+              for n, groups in standard['importArts'].items()}
+-    for module in required:
++    for module in sorted(required):
+         table[module] = session.artifacts(module, all_private=name == 'T01Audit')
+     if name == 'T01Audit':
+         # The legacy exporter loads all private data. No public/private union
+@@ -54,13 +55,28 @@
+     setup = dict(name=name, package='imbalancedChen', isModule=name != 'T01Audit',
+                  imports=None, importArts=table, options={}, **libraries)
+     path = session.project/'.lake/build/ir'/Path(*name.split('.')).with_suffix('.setup.json')
+-    write(path, setup)
+-    files = {str(path):physical(path)}
++    files = {}
+     for value in flatten(table): files[value] = physical(value)
+     for field in libraries:
+         for value in libraries[field]:
+             p = value if isinstance(value, str) else value['path']
+             files[p] = physical(p)
++    # Every possible source-private fallback part is pre-bound too; a name
++    # missing from the table can never silently become an accepted import.
++    closure = source_closure(session, [*data()['compile_order'], 'Lean.Util.FoldConsts']) if name == 'T01Audit' else standard['source_private_closure']
++    for record in closure.values():
++        identity = record['identity']
++        for part in [identity['source'], *identity['facets']]: files[part['path']] = part
++    for module in sorted(required):
++        identity = session.locate(module)
++        for part in [identity['source'], *identity['facets']]: files[part['path']] = part
++    return setup, path, files
++
++
++def setup_for(session, name, standard):
++    setup, path, files = setup_value(session, name, standard)
++    write(path, setup)
++    files[str(path)] = physical(path)
+     source = session.project/Path(*name.split('.')).with_suffix('.lean')
+     input_path = session.logs/'direct-inputs'/(name+'.json')
+     receipt = dict(binding=session.binding, source=physical(source), normalized_argv=normalized_argv(name, session.project),
+@@ -70,6 +86,26 @@
+                    imports_override_is_null=True, options_are_empty_profile_args_are_explicit=True)
+     write(input_path, receipt)
+     return input_path
++
++
++def validate_direct_input(session, name, standard):
++    path = session.logs/'direct-inputs'/(name+'.json')
++    receipt = read(path)
++    setup, setup_path, files = setup_value(session, name, standard)
++    require(read(setup_path) == setup, 'Actual complete source-header-preserving ModuleSetup changed')
++    files[str(setup_path)] = physical(setup_path)
++    source = session.project/Path(*name.split('.')).with_suffix('.lean')
++    expected = dict(binding=session.binding, source=physical(source), normalized_argv=normalized_argv(name, session.project),
++        setup=setup, setup_path=str(setup_path), files=list(files.values()),
++        setup_origin='EXPLICIT_NEW_CALLER_SETUP_NOT_A_LAKE_TRACE_OR_HISTORICAL_SETUP',
++        stock_inputs_sha256=sha(session.logs/'WEIL_STANDARD_INPUTS.json'),
++        imports_override_is_null=True, options_are_empty_profile_args_are_explicit=True)
++    require(receipt == expected, 'Original direct source/setup/complete physical closure receipt changed')
++    events = [json.loads(line) for line in (session.logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
++    matches = [event for event in events if event['tool'] == 'lean' and event['argv'] == normalized_argv(name, session.project)]
++    require(len(matches) == 1 and matches[0]['physical_inputs'] == [receipt['source'], physical(path)],
++            'Original complete input receipt is not bound to the actual preexec event')
++    return receipt, matches[0]
+ 
+ 
+ def source_compile(session, name, standard):
+@@ -104,6 +140,8 @@
+ 
+ 
+ def check_outputs(session):
++    installed()
++    standard = session.qualification_inputs()
+     before = session.receipt('WEIL_OBJECTS_BEFORE_AUDIT.json')
+     require(before['identities'] == {name:session.locate(name) for name in data()['compile_order']},
+             'Actual34 source/public/server/private/IR objects changed during proof gates')
+@@ -112,6 +150,8 @@
+         receipt_path = session.logs/'direct-inputs'/(name+'.json')
+         require(row['input_binding_sha256'] == sha(receipt_path) and row['input_binding'] == read(receipt_path)
+                 and row['output_identity'] == before['identities'][name], 'Exact direct compile receipt/output changed')
++        expected_input, actual_event = validate_direct_input(session, name, standard)
++        require(row['input_binding'] == expected_input and row['actual_preexec_event'] == actual_event, 'Original actual direct input/event record changed')
+         for item in row['input_binding']['files']: checked(item['path'], item)
+         process_receipt(session, row['process'], 'weil-compile-'+name,
+                         ['lake', '--no-build', 'env', 'lean', *normalized_argv(name, session.project)[3:]])
+@@ -145,15 +185,21 @@
+     check_outputs(session)
+ 
+ 
+-def verify():
+-    session = WeilSession(); session.qualification_inputs(); objects = check_outputs(session)
++def validated_inventory(session, retain_available=False):
++    standard = session.qualification_inputs(); objects = check_outputs(session)
+     modules = data()['compile_order']; rows = {r['module']:r for r in data()['source_rows']}
+     k = session.receipt('WEIL_KERNEL_PROCESS.json')
+     process_receipt(session, k['process'], 'weil-kernel', ['lake', '--no-build', 'env', 'leanchecker', '--verbose', *modules])
++    replay = [line.removeprefix('replaying ') for line in Path(k['process']['stdout']).read_text(encoding='utf-8').splitlines() if line.startswith('replaying ')]
++    require(Counter(replay) == Counter(modules) and k['replayed_modules'] == replay
++            and k['actual_modern_private_parts_mandatory'] is True
++            and k['unsafe_partial_skipped_by_native_checker_credit'] is False, 'Original actual most-private kernel replay changed')
+     audit = session.receipt('direct-results/T01Audit.json')
+     process_receipt(session, audit['process'], 'weil-compile-T01Audit',
+                     ['lake', '--no-build', 'env', 'lean', *normalized_argv('T01Audit', session.project)[3:]])
+     require(audit['input_binding_sha256'] == sha(session.logs/'direct-inputs/T01Audit.json'), 'Actual audit input receipt changed')
++    expected_input, actual_event = validate_direct_input(session, 'T01Audit', standard)
++    require(audit['input_binding'] == expected_input and audit['actual_preexec_event'] == actual_event, 'Actual frozen auditor input/event changed')
+     for item in audit['input_binding']['files']: checked(item['path'], item)
+     lines = Path(audit['process']['stdout']).read_text(encoding='utf-8').splitlines()
+     def records(prefix): return [json.loads(line[len(prefix):]) for line in lines if line.startswith(prefix)]
+@@ -161,8 +207,9 @@
+     inventory = records('P0_ROUND6_SERIALIZED ')
+     counts = records('P0_ROUND6_MODULE ')
+     # Retain raw parsed evidence even if a later semantic cross-check rejects it.
+-    session.emit('WEIL_AVAILABLE_INVENTORY.json', dict(declarations=declarations, serialized=inventory, module_counts=counts,
+-                 module_identities=objects['identities'], compiler_stdout_sha256=audit['process']['stdout_sha256'], acceptance=False))
++    if retain_available:
++        session.emit('WEIL_AVAILABLE_INVENTORY.json', dict(declarations=declarations, serialized=inventory, module_counts=counts,
++                     module_identities=objects['identities'], compiler_stdout_sha256=audit['process']['stdout_sha256'], acceptance=False))
+     require(len(inventory) == len(counts) == 34
+             and Counter(r['module'] for r in inventory) == Counter(modules)
+             and Counter(r['module'] for r in counts) == Counter(modules), 'Exact34 complete module census differs')
+@@ -174,6 +221,16 @@
+         require(names and Counter(names) == Counter(i['serialized_constant_names']) == Counter(i['environment_constant_names'])
+                 and len(names) == count == i['serialized_constant_count'] and i['is_module']
+                 and i['has_data'] and i['import_all'], 'Exact canonical-owner/modern-private multiset differs: '+module)
++    loaded = records('WEIL34_LOADED_MODULE ')
++    loaded_map = {r['module']:r for r in loaded}
++    closure = source_closure(session, [*modules, 'Lean.Util.FoldConsts'])
++    require(len(loaded) == len(loaded_map) and loaded and set(modules) <= set(loaded_map)
++            and set(loaded_map) <= set(closure), 'Actual loaded module/fallback set escaped complete prebound source-private closure')
++    require(set(closure) == set(standard['source_private_closure']) | set(modules), 'Auditor private source closure differs from prepared complete coverage')
++    for module, record in loaded_map.items():
++        require(record['has_data'] and record['import_all']
++                and record['is_module'] == closure[module]['identity']['modern'],
++                'Actual legacy-private loaded mode/hasData differs: '+module)
+     logical, executable = [], []
+     for d in declarations:
+         require(d['module'] in rows and not d['is_axiom'] and set(d['axioms']) <= set(data()['allowed_axioms'])
+@@ -189,6 +246,9 @@
+             visited.add(name); pending.extend(graph[name]['used_constants'])
+         require(visited == set(graph) and set(d['axioms']) == {n for n, r in graph.items() if r['is_axiom']},
+                 'Fresh complete raw type/body/constructor/recursor closure differs')
++        require(all(r['owner_module'] in loaded_map and r['owner_module'] in closure
++                    and loaded_map[r['owner_module']]['has_data'] and loaded_map[r['owner_module']]['import_all']
++                    for r in graph.values()), 'A raw type/body dependency owner lacks actual private-data/physical-source binding')
+         unsafe = {n for n, r in graph.items() if r['is_unsafe'] or r['is_partial']}
+         implementation = d['is_unsafe'] or d['is_partial']
+         require(set(d['unsafe_partial_dependencies']) == unsafe
+@@ -205,11 +265,18 @@
+     terminals = [d for d in declarations if d['name'] in data()['required_terminals']]
+     require(Counter(d['name'] for d in terminals) == Counter(data()['required_terminals'])
+             and all(d['kind'] == 'theorem' and d['safety_class'] == 'logical_safe' for d in terminals), 'Actual safe terminal theorem absent')
+-    session.emit('WEIL_FULL_INVENTORY.json', dict(declarations=declarations, serialized=inventory, module_counts=counts,
++    return dict(declarations=declarations, serialized=inventory, module_counts=counts,
+         module_identities=objects['identities'], safe_logical_names=[d['name'] for d in logical],
+         executable_implementation_metadata=executable, implementation_kernel_or_termination_credit=False,
+         required_terminal_full_types=terminals, actual_kernel_process=k['process'], actual_types_process=audit['process'],
+-        complete_private_generated_owned_inventory=True, adapter_stage_B='HOLD', half_support_closed=False, full_J=False))
++        loaded_modules=loaded, complete_source_private_closure=closure,
++        complete_private_generated_owned_inventory=True, adapter_stage_B='HOLD', half_support_closed=False, full_J=False)
++
++
++def verify():
++    session = WeilSession()
++    inventory = validated_inventory(session, retain_available=True)
++    session.emit('WEIL_FULL_INVENTORY.json', inventory)
+ 
+ 
+ if __name__ == '__main__':
+--- v1/shared-tools/weil_retention.py
++++ R2/shared-tools/weil_retention.py
+@@ -1,10 +1,10 @@
+-"""Run the original runtime/collector and bind complete raw34 evidence.
+-
+-Direct Lean outputs have no fabricated Lake traces. The original collector
+-keeps its original non-reusable classification; this caller's proof acceptance
+-binds real compiler input/output receipts independently.
++"""Original runtime/collector plus complete immutable final proof evidence chain.
++
++Direct outputs retain the original collector's no-Lake-trace quarantine.
++Only the independently bound exact34 proof processes can earn StageA credit.
+ """
+ import hashlib
++import io
+ import json
+ import os
+ from pathlib import Path
+@@ -14,149 +14,247 @@
+ import tarfile
+ 
+ from coherent_cache import BASELINE_GUARD, HERE, checked, read, require, sha, write
+-from weil_cache import WeilSession, physical
+-from weil_scope import bind, data, installed, roots
+-from weil_proof import check_outputs
++from weil_cache import WeilSession, physical, process_receipt
++from weil_scope import BUNDLE, bind, data, installed, roots
++from weil_proof import check_outputs, validated_inventory
+ 
+ COLLECTOR = '773e4eab588c0d196c5b7ad86a3a0f90a6a0fe1c225baa7559b2b1380e853a76'
++
++
++def source_rows():
++    return [dict(module=r['module'], install_path=r['installation_path'], bytes=r['bytes'], sha256=r['sha256'], imports=r['imports'])
++            for r in data()['source_rows']]
++
++
++def collector_manifest(project):
++    rows = source_rows()
++    audit = BUNDLE/'WeilAudit.lean'
++    return dict(files=rows, data_inputs=[], audit_source=dict(bytes=audit.stat().st_size, sha256=sha(audit)),
++        targets=[dict(closure_modules=[r['module'] for r in rows],
++            source_identity_sha256=hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest())])
+ 
+ 
+ def runtime():
+     session = WeilSession()
+-    guard = HERE/'reused/ci_runtime_guard.py'
+-    require(sha(guard) == BASELINE_GUARD, 'Original runtime auditor changed')
+-    argv = [sys.executable, str(guard), 'audit', '--state', str(session.logs/'runtime/state.json'), '--require-source']
+-    output, error = session.logs/'runtime-audit.stdout', session.logs/'runtime-audit.stderr'
+-    require(not output.exists() and not error.exists(), 'Runtime audit already recorded')
+-    with output.open('wb') as out, error.open('wb') as err:
+-        result = subprocess.run(argv, cwd=session.project, stdout=out, stderr=err)
+-    session.emit('WEIL_RUNTIME_PROCESS.json', dict(argv=argv, cwd=str(session.project), exit_code=result.returncode,
+-        stdout_sha256=sha(output), stderr_sha256=sha(error), guard_sha256=sha(guard)))
+-    session.policy_audit()
+-    require(result.returncode == 0, 'Original actual runtime audit failed; retention must still run')
++    require(sha(HERE/'reused/ci_runtime_guard.py') == BASELINE_GUARD, 'Original runtime auditor changed')
++    argv = [sys.executable, str(HERE/'reused/ci_runtime_guard.py'), 'audit', '--probe', '--require-source']
++    result = session.run('runtime-audit', argv)
++    session.emit('WEIL_RUNTIME_PROCESS.json', dict(process=result))
+ 
+ 
+ def retain():
+     _, binding = bind(); project, logs = roots()
+-    paths = set()
+-    # Capture every available vendor source/output before validating integrity.
+-    for row in data()['source_rows']: paths.add(project/row['installation_path'])
+-    for name in ['T01Audit.lean', 'T01_PROVENANCE.json', 'LEANPOOL_LICENSE', 'lakefile.toml', 'lean-toolchain', 'lake-manifest.json']:
+-        paths.add(project/name)
+-    if (project/'.lake/build').exists():
+-        paths.update(p for p in (project/'.lake/build').rglob('*') if p.is_file())
+-    # Direct commands have no Lake trace. Preserve their complete actual setup
+-    # input bytes explicitly so the unchanged collector cannot silently omit them.
+-    for path in (logs/'direct-inputs').glob('*.json'):
+-        value = read(path)
+-        paths.update(Path(row['path']) for row in value['files'])
+-    standard_path = logs/'WEIL_STANDARD_INPUTS.json'
+-    if standard_path.is_file():
+-        standard = read(standard_path)
+-        paths.update(Path(row['path']) for row in standard['physical_files'].values())
+-        for row in standard['identities'].values():
+-            paths.add(Path(row['source']['path']))
+-            paths.update(Path(r['path']) for r in row['facets'])
+-    failures, capture = [], []
++    failures, capture, captured = [], [], set()
+     archive = logs/'weil-source-object-inputs.tar.gz'
+     require(not archive.exists(), 'Raw retention already recorded')
+-    with tarfile.open(archive, 'w:gz', dereference=True) as tar:
+-        for path in sorted(paths):
++    # No JSON is parsed before the available vendor bytes and raw receipt files
++    # are captured. Each bad receipt becomes an accumulated failure afterwards.
++    initial = {project/r['installation_path'] for r in data()['source_rows']}
++    initial.update(project/n for n in ['T01Audit.lean', 'T01_PROVENANCE.json', 'LEANPOOL_LICENSE',
++                                      'lakefile.toml', 'lean-toolchain', 'lake-manifest.json'])
++    initial.update(p for p in (project/'.lake/build').rglob('*') if p.is_file())
++    initial.update(p for p in logs.rglob('*') if p.is_file())
++    official = Path.home()/'.elan/toolchains/leanprover--lean4---v4.33.0-rc1'
++    allowed = [project, logs, official, Path(os.environ['RUNNER_TEMP']).resolve()/'p0-ci-shadow-toolchain']
++    with tarfile.open(archive, 'w:gz') as tar:
++        def save(path, expected=None):
++            path = Path(path)
+             try:
+-                if not path.is_file(): continue
+-                require(not path.is_symlink(), 'Refuse source/object symlink at leaf')
+-                record = physical(path)
+-                arcname = 'physical/'+hashlib.sha256(str(path).encode()).hexdigest()+'/'+path.name
+-                tar.add(path, arcname=arcname, recursive=False)
+-                capture.append(dict(record, archive_member=arcname))
++                require(any(path.resolve().is_relative_to(root.resolve()) for root in allowed), 'Raw input escaped selected roots')
++                require(path.is_file() and not path.is_symlink(), 'Missing/nonregular raw evidence')
++                if str(path) not in captured:
++                    arcname = 'physical/'+hashlib.sha256(str(path).encode()).hexdigest()+'/'+path.name
++                    info = tarfile.TarInfo(arcname); info.size = path.stat().st_size
++                    class DigestReader:
++                        def __init__(self, stream):
++                            self.stream = stream; self.digest = hashlib.sha256(); self.count = 0
++                        def read(self, size=-1):
++                            content = self.stream.read(size); self.digest.update(content); self.count += len(content)
++                            return content
++                    with path.open('rb') as stream:
++                        reader = DigestReader(stream); tar.addfile(info, reader)
++                    require(reader.count == info.size, 'Incomplete raw file copy')
++                    record = dict(path=str(path), bytes=reader.count, sha256=reader.digest.hexdigest())
++                    capture.append(dict(record, archive_member=arcname)); captured.add(str(path))
++                if expected is not None: checked(path, expected)
+             except Exception as error:
+                 failures.append(dict(path=str(path), error=str(error)))
++        for path in sorted(initial):
++            if path.is_file(): save(path)
++        for path in sorted((logs/'direct-inputs').glob('*.json')):
++            try:
++                value = read(path)
++                require(value['binding'] == binding, 'Wrong direct-input receipt run')
++                for row in value['files']: save(row['path'], row)
++                save(value['source']['path'], value['source'])
++            except Exception as error:
++                failures.append(dict(phase='direct-input-parse', path=str(path), error=str(error)))
++        standard_path = logs/'WEIL_STANDARD_INPUTS.json'
++        if standard_path.is_file():
++            try:
++                standard = read(standard_path)
++                require(standard['binding'] == binding, 'Wrong standard receipt run')
++                for row in standard['physical_files'].values(): save(row['path'], row)
++                for row in standard['source_private_closure'].values():
++                    identity = row['identity']
++                    for part in [identity['source'], *identity['facets']]: save(part['path'], part)
++            except Exception as error:
++                failures.append(dict(phase='standard-input-parse', path=str(standard_path), error=str(error)))
+     write(logs/'WEIL_RAW_CAPTURE.json', dict(binding=binding, files=capture, archive=archive.name,
+         archive_sha256=sha(archive), integrity_errors=failures.copy(), proof_acceptance=False))
+-    rows = [dict(module=r['module'], install_path=r['installation_path'], bytes=r['bytes'], sha256=r['sha256'], imports=r['imports'])
+-            for r in data()['source_rows']]
+-    audit = project/'T01Audit.lean'
+-    audit_record = dict(bytes=audit.stat().st_size, sha256=sha(audit)) if audit.is_file() else dict(bytes=0, sha256=hashlib.sha256(b'').hexdigest())
+-    config = logs/'CHECKPOINT_COLLECTOR_INPUT.json'
+-    write(config, dict(files=rows, data_inputs=[], audit_source=audit_record,
+-        targets=[dict(closure_modules=[r['module'] for r in rows],
+-                      source_identity_sha256=hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest())]))
++    rows = source_rows(); config = logs/'CHECKPOINT_COLLECTOR_INPUT.json'
++    write(config, collector_manifest(project))
+     collector = HERE/'reference/checkpoint_objects_v3.py'
+     require(collector.stat().st_size == 32993 and sha(collector) == COLLECTOR, 'Original collector bytes changed')
+     output = Path(os.environ['CACHE_CHECKPOINT_OUTPUT']).resolve()
+-    require(not output.exists() and not output.is_relative_to(project) and not output.is_relative_to(logs), 'Fresh disjoint original checkpoint output required')
++    require(not output.exists() and not output.is_relative_to(project) and not output.is_relative_to(logs), 'Fresh disjoint checkpoint output required')
+     argv = [sys.executable, str(collector), '--project', str(project), '--manifest', str(config), '--logs', str(logs), '--output', str(output)]
+-    before_provenance = sha(project/'T01_PROVENANCE.json') if (project/'T01_PROVENANCE.json').is_file() else None
++    provenance_path = project/'T01_PROVENANCE.json'
++    before_provenance = sha(provenance_path) if provenance_path.is_file() else None
+     temporary = output.parent/(output.name+'.collector-stdout.log')
+     require(not temporary.exists(), 'Original collector already invoked')
+     with temporary.open('wb') as stream:
+         result = subprocess.run(argv, cwd=project, stdout=stream, stderr=subprocess.STDOUT)
+     shutil.copyfile(temporary, logs/'checkpoint-collection.log')
+-    if before_provenance is None or sha(project/'T01_PROVENANCE.json') != before_provenance:
++    if before_provenance is None or not provenance_path.is_file() or sha(provenance_path) != before_provenance:
+         failures.append(dict(error='Actual original source provenance missing/changed'))
+     checkpoint = output/'CHECKPOINT.json'; summary = logs/'CHECKPOINT_SUMMARY.json'
++    checkpoint_summary = None
++    if checkpoint.is_file():
++        try:
++            raw = read(checkpoint)
++            checkpoint_summary = {k:raw[k] for k in ['source_commit', 'run_id', 'run_attempt', 'manifest_sha256',
++                                                     'runtime_audit_valid', 'all_dependency_source_pins_valid']}
++        except Exception as error: failures.append(dict(phase='checkpoint-parse', error=str(error)))
++    actual_summary = None
++    if summary.is_file():
++        try: actual_summary = read(summary)
++        except Exception as error: failures.append(dict(phase='collector-summary-parse', error=str(error)))
++    state = logs/'runtime/state.json'; command = None
++    if state.is_file():
++        try:
++            command_path = Path(read(state)['log'])
++            if command_path.is_file(): command = dict(path=str(command_path), sha256=sha(command_path))
++        except Exception as error: failures.append(dict(phase='runtime-state-parse', error=str(error)))
+     write(logs/'WEIL_RETENTION.json', dict(binding=binding, argv=argv, cwd=str(project), exit_code=result.returncode,
+-        collector_sha256=sha(collector), collector_bytes=collector.stat().st_size, collector_manifest_sha256=sha(config),
++        collector_sha256=sha(collector), collector_bytes=collector.stat().st_size,
++        collector_manifest_sha256=sha(config), source_manifest_sha256=sha(BUNDLE/'STAGE_A34.json'),
++        root_source_count=len(rows), root_source_rows_sha256=hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest(),
+         stdout_sha256=sha(logs/'checkpoint-collection.log'), output=str(output),
+-        checkpoint_sha256=sha(checkpoint) if checkpoint.is_file() else None,
+-        actual_collector_summary=read(summary) if summary.is_file() else None,
+-        actual_collector_summary_sha256=sha(summary) if summary.is_file() else None,
++        checkpoint_sha256=sha(checkpoint) if checkpoint.is_file() else None, checkpoint_summary=checkpoint_summary,
++        actual_collector_summary=actual_summary, actual_collector_summary_sha256=sha(summary) if summary.is_file() else None,
++        runtime_state_sha256=sha(state) if state.is_file() else None, current_command_log=command,
+         raw_capture_sha256=sha(logs/'WEIL_RAW_CAPTURE.json'), provenance_sha256=before_provenance,
+         direct_outputs_have_no_synthetic_Lake_trace=True, collector_restore_classification_preserved=True,
+         integrity_errors=failures, proof_acceptance=False))
+-    require(result.returncode == 0 and not failures, 'Original raw collector/complete capture failed; evidence remains quarantined')
+-
+-
+-def finalize():
+-    session = WeilSession(); installed(); session.qualification_inputs(); objects = check_outputs(session)
+-    inventory = session.receipt('WEIL_FULL_INVENTORY.json')
+-    require(inventory['module_identities'] == objects['identities'], 'Proof inventory current physical identities differ')
+-    counts = session.compile_census(True)
+-    runtime = session.receipt('WEIL_RUNTIME_PROCESS.json')
+-    actual = read(session.logs/'runtime/audit.json')
+-    require(runtime['exit_code'] == 0 and runtime['guard_sha256'] == BASELINE_GUARD
+-            and actual['status'] == 'PASS_RUNTIME_GUARD_ONLY'
+-            and actual['state_sha256'] == sha(session.logs/'runtime/state.json')
+-            and actual['command_log_sha256'] == sha(session.state['log']), 'Actual original runtime/command receipt changed')
+-    retention = session.receipt('WEIL_RETENTION.json'); capture = session.receipt('WEIL_RAW_CAPTURE.json')
+-    require(retention['exit_code'] == 0 and not retention['integrity_errors'] and not capture['integrity_errors']
+-            and retention['collector_sha256'] == COLLECTOR and retention['collector_bytes'] == 32993
+-            and retention['raw_capture_sha256'] == sha(session.logs/'WEIL_RAW_CAPTURE.json')
+-            and capture['archive_sha256'] == sha(session.logs/capture['archive']), 'Original complete raw retention chain changed')
++    require(result.returncode == 0 and not failures, 'Original complete raw collection failed; all available evidence remains quarantined')
++
++
++def validate_capture(session, capture, inventory):
++    require(capture['archive'] == 'weil-source-object-inputs.tar.gz' and not capture['integrity_errors']
++            and capture['archive_sha256'] == sha(session.logs/capture['archive']), 'Raw source/object archive changed')
++    expected = {r['archive_member']:r for r in capture['files']}
++    require(len(expected) == len(capture['files']), 'Duplicate retained archive member')
++    with tarfile.open(session.logs/capture['archive'], 'r:gz') as tar:
++        members = tar.getmembers()
++        require(len(members) == len(expected) and {m.name for m in members} == set(expected), 'Actual raw archive file set differs')
++        for member in members:
++            require(member.isfile(), 'Raw archive contains a nonregular member')
++            row = expected[member.name]; digest = hashlib.sha256(); count = 0
++            with tar.extractfile(member) as stream:
++                while content := stream.read(1024*1024):
++                    count += len(content); digest.update(content)
++            require(count == row['bytes'] and digest.hexdigest() == row['sha256'], 'Copied raw archive bytes differ')
+     for row in capture['files']: checked(row['path'], row)
+     captured = {r['path'] for r in capture['files']}
+-    for identity in objects['identities'].values():
+-        require({identity['source']['path'], *[r['path'] for r in identity['facets']]} <= captured,
+-                'A modern vendor source/private/server/IR facet was omitted from raw retention')
+-    checkpoint_path = Path(retention['output'])/'CHECKPOINT.json'
+-    checkpoint = read(checkpoint_path); summary = read(session.logs/'CHECKPOINT_SUMMARY.json')
+-    require(sha(checkpoint_path) == retention['checkpoint_sha256'] == summary['checkpoint_sha256']
+-            and summary == retention['actual_collector_summary']
+-            and sha(session.logs/'CHECKPOINT_SUMMARY.json') == retention['actual_collector_summary_sha256']
+-            and checkpoint['source_commit'] == session.binding['source_commit']
+-            and str(checkpoint['run_id']) == session.binding['run_id']
+-            and checkpoint['runtime_audit_valid'] and checkpoint['all_dependency_source_pins_valid']
+-            and CounterNames(checkpoint['modules']) == set(data()['compile_order']) | {'T01Audit'},
+-            'Actual original collector source/runtime/run/summary differs')
++    needed = set()
++    for record in inventory['complete_source_private_closure'].values():
++        identity = record['identity']
++        needed.add(identity['source']['path']); needed.update(r['path'] for r in identity['facets'])
++    for name in [*data()['compile_order'], 'T01Audit']:
++        path = session.logs/'direct-inputs'/(name+'.json'); needed.add(str(path))
++        receipt = read(path)
++        needed.add(receipt['source']['path']); needed.update(r['path'] for r in receipt['files'])
++    needed.update(str(session.project/n) for n in ['T01Audit.lean', 'T01_PROVENANCE.json', 'LEANPOOL_LICENSE', 'lakefile.toml', 'lake-manifest.json', 'lean-toolchain'])
++    require(needed <= captured, 'A prepared setup/import/library/source/private artifact was omitted from complete raw capture')
++
++
++def finalize():
++    session = WeilSession(); installed(); session.qualification_inputs()
++    objects = check_outputs(session)
++    # Reconstruct from the same authenticated kernel/types streams. A changed
++    # stored inventory is rejected, never overwritten with a new self-signature.
++    inventory = validated_inventory(session)
++    require(session.receipt('WEIL_FULL_INVENTORY.json') == dict(binding=session.binding, **inventory),
++            'Final complete inventory/terminals/implementation/safe replay differ from original authenticated stdout')
++    require(inventory['module_identities'] == objects['identities'], 'Final physical proof identities differ')
++    counts = session.compile_census(True)
++    runtime = session.receipt('WEIL_RUNTIME_PROCESS.json')['process']
++    runtime_argv = [sys.executable, str(HERE/'reused/ci_runtime_guard.py'), 'audit', '--probe', '--require-source']
++    process_receipt(session, runtime, 'runtime-audit', runtime_argv)
++    actual = read(session.logs/'runtime/audit.json')
++    require(actual['status'] == 'PASS_RUNTIME_GUARD_ONLY' and actual['probe'] is True
++            and actual['state_sha256'] == sha(session.logs/'runtime/state.json')
++            and actual['command_log_sha256'] == sha(session.state['log'])
++            and 'PASS_RUNTIME_GUARD_ONLY' in Path(runtime['stdout']).read_text(encoding='utf-8'), 'Actual original runtime probe/state/commands changed')
++    retention = session.receipt('WEIL_RETENTION.json'); capture = session.receipt('WEIL_RAW_CAPTURE.json')
++    output = Path(os.environ['CACHE_CHECKPOINT_OUTPUT']).resolve()
++    config_path = session.logs/'CHECKPOINT_COLLECTOR_INPUT.json'
++    expected_argv = [sys.executable, str(HERE/'reference/checkpoint_objects_v3.py'), '--project', str(session.project),
++                     '--manifest', str(config_path), '--logs', str(session.logs), '--output', str(output)]
++    require(retention['argv'] == expected_argv and retention['cwd'] == str(session.project)
++            and retention['exit_code'] == 0 and retention['output'] == str(output) and not retention['integrity_errors']
++            and retention['collector_sha256'] == COLLECTOR == sha(HERE/'reference/checkpoint_objects_v3.py')
++            and retention['collector_bytes'] == 32993 and retention['collector_manifest_sha256'] == sha(config_path)
++            and retention['stdout_sha256'] == sha(session.logs/'checkpoint-collection.log')
++            and retention['raw_capture_sha256'] == sha(session.logs/'WEIL_RAW_CAPTURE.json'), 'Original collector exact process/input/output binding changed')
++    require(read(config_path) == collector_manifest(session.project), 'Actual exact34 collector source graph/audit manifest changed')
++    rows = source_rows(); graph_hash = hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()
++    provenance = session.project/'T01_PROVENANCE.json'
++    require(read(provenance) == dict(schema='weil34-exact-source-original-profile-provenance-v1',
++        binding=session.binding, modules=data()['source_rows'], adapter_stage_B='HOLD', full_J=False), 'Actual staged source provenance changed')
++    state_path, command_path, audit_path = session.logs/'runtime/state.json', Path(session.state['log']), session.logs/'runtime/audit.json'
++    require(retention['root_source_count'] == len(rows) == 34 and retention['root_source_rows_sha256'] == graph_hash
++            and retention['source_manifest_sha256'] == sha(BUNDLE/'STAGE_A34.json')
++            and retention['provenance_sha256'] == sha(provenance)
++            and retention['runtime_state_sha256'] == sha(state_path)
++            and retention['current_command_log'] == dict(path=str(command_path), sha256=sha(command_path)), 'Collector source/provenance/state/command graph changed')
++    raw_path = output/'CHECKPOINT.json'; raw = read(raw_path); summary_path = session.logs/'CHECKPOINT_SUMMARY.json'
++    summary = read(summary_path)
++    checkpoint_summary = {k:raw[k] for k in ['source_commit', 'run_id', 'run_attempt', 'manifest_sha256',
++                                            'runtime_audit_valid', 'all_dependency_source_pins_valid']}
++    require(str(raw['source_commit']) == session.binding['source_commit'] and str(raw['run_id']) == session.binding['run_id']
++            and str(raw['run_attempt']) == session.binding['run_attempt'] and raw['runtime_audit_valid']
++            and raw['all_dependency_source_pins_valid'] and raw['manifest_sha256'] == sha(config_path)
++            and raw['runtime_state'] == session.state and raw['source_identity_sha256'] == graph_hash
++            and retention['checkpoint_summary'] == checkpoint_summary and retention['checkpoint_sha256'] == sha(raw_path), 'Original checkpoint exact run/attempt/manifest/source/runtime summary changed')
++    require(set(raw['sources_and_data']) == {r['install_path'] for r in rows} | {'T01Audit.lean'}
++            and all(raw['sources_and_data'][r['install_path']]['sha256'] == r['sha256']
++                    and raw['sources_and_data'][r['install_path']]['bytes'] == r['bytes'] for r in rows)
++            and raw['sources_and_data']['T01Audit.lean']['sha256'] == sha(BUNDLE/'WeilAudit.lean')
++            and raw['sources_and_data']['T01Audit.lean']['bytes'] == (BUNDLE/'WeilAudit.lean').stat().st_size,
++            'Original collector actual source records differ from exact34/frozen exporter')
++    require(all(raw['files'][str(path)]['sha256'] == sha(path) for path in [state_path, command_path, audit_path, config_path])
++            and retention['actual_collector_summary'] == summary and retention['actual_collector_summary_sha256'] == sha(summary_path)
++            and summary == dict(status=raw['status'], completed_compile_candidates=raw['completed_compile_candidates'],
++                module_count=len(raw['modules']), payload_blobs=raw['saved_unique_payload_blobs'], checkpoint_sha256=sha(raw_path), green=False),
++            'Original checkpoint current state/audit/commands/summary file identities changed')
++    names = [r['module'] for r in raw['modules']]
++    require(len(names) == 35 and len(names) == len(set(names)) and set(names) == set(data()['compile_order']) | {'T01Audit'}, 'Original collector module census differs')
++    validate_capture(session, capture, inventory)
++    evidence = ['WEIL_FULL_INVENTORY.json', 'WEIL_KERNEL_PROCESS.json', 'direct-results/T01Audit.json',
++                'WEIL_STANDARD_INPUTS.json', 'CACHE_QUALIFICATION.json', 'CACHE_BOOTSTRAP_QUALIFICATION.json',
++                'WEIL_RUNTIME_PROCESS.json', 'runtime/state.json', 'runtime/audit.json', 'WEIL_RETENTION.json',
++                'WEIL_RAW_CAPTURE.json', 'CHECKPOINT_COLLECTOR_INPUT.json', 'CHECKPOINT_SUMMARY.json']
+     session.emit('WEIL_STAGE_A_ACCEPTANCE.json', dict(status='PASS_EXACT34_PROJECT433RC1_26A6_COMPATIBILITY_ONLY',
+-        source_manifest_sha256=session.binding['source_manifest_sha256'],
+-        complete_inventory_sha256=sha(session.logs/'WEIL_FULL_INVENTORY.json'),
+-        actual_kernel_process_sha256=sha(session.logs/'WEIL_KERNEL_PROCESS.json'),
+-        actual_types_process_sha256=sha(session.logs/'direct-results/T01Audit.json'),
+-        original_runtime_sha256=sha(session.logs/'runtime/audit.json'),
+-        original_stock_qualification_sha256=sha(session.logs/'CACHE_QUALIFICATION.json'),
+-        actual_retention_sha256=sha(session.logs/'WEIL_RETENTION.json'), compiler_census=counts,
+-        original_collector_restore_eligibility_not_overridden=True,
+-        executable_implementation_kernel_or_termination_credit=False,
++        evidence={name:sha(session.logs/name) for name in evidence}, actual_kernel_process=inventory['actual_kernel_process'],
++        actual_types_process=inventory['actual_types_process'], actual_checkpoint_summary=checkpoint_summary,
++        source_manifest_sha256=session.binding['source_manifest_sha256'], compiler_census=counts,
++        original_collector_restore_eligibility_not_overridden=True, executable_implementation_kernel_or_termination_credit=False,
+         all34_private_generated_declarations_two_full_types_direct_axioms_and_safe_kernel_verified=True,
++        actual_private_dependency_source_object_owner_coverage_verified=True,
+         adapter_stage_B='HOLD_ALL_SIX_AND_COMPLETE_REAL_DEPENDENCY_GRAPH_REQUIRED',
+         half_support_closed=False, full_J=False, whole_manuscript_accepted=False, goal_count_change=0))
+-
+-
+-def CounterNames(rows):
+-    names = [r['module'] for r in rows]
+-    require(len(names) == len(set(names)), 'Duplicate module in original collector')
+-    return set(names)
+ 
+ 
+ if __name__ == '__main__':
+--- v1/shared-tools/weil_scope.py
++++ R2/shared-tools/weil_scope.py
+@@ -85,9 +85,21 @@
+     c, binding = bind()
+     project, _ = roots()
+     for row in data()['source_rows']:
+-        checked(project/row['installation_path'], row)
++        source = project/row['installation_path']
++        checked(source, row)
++        from weil_inputs import header
++        parsed = header(source.read_text(encoding='utf-8'))
++        require(parsed['is_module'] == row['source_module_mode']
++                and [r['module'] for r in parsed['explicit_imports']] == row['imports'],
++                'Frozen vendor graph is not the real source header')
+     for row in read(HERE/'inputs/T01_26A6_PROFILE_BRIDGE.json')['configuration']:
+         checked(project/row['install_path'], row)
++    audit = BUNDLE/'WeilAudit.lean'
++    expected = dict(bytes=audit.stat().st_size, sha256=sha(audit))
++    checked(project/'T01Audit.lean', expected)
++    _, logs = roots()
++    checked(logs/'T01Audit.lean', expected)
++    checked(project/'LEANPOOL_LICENSE', c['license'])
+     return binding
+ 
+ 
+--- v1/WeilAudit.lean
++++ R2/WeilAudit.lean
+@@ -48,6 +48,15 @@
+     IO.println "P0_ROUND6_PHASE environment_ready"
+     (← IO.getStdout).flush
+   let moduleNames := env.header.moduleNames
++  for idx in List.range env.header.modules.size do
++    let imported := env.header.modules[idx]!
++    let selected := env.header.moduleData[idx]!
++    let record := Json.mkObj [
++      ("module", toJson imported.module.toString),
++      ("is_module", toJson selected.isModule),
++      ("has_data", toJson imported.hasData),
++      ("import_all", toJson imported.importAll)]
++    liftIO <| IO.println s!"WEIL34_LOADED_MODULE {record.compress}"
+   let modules := #[`LeanPool.KloostermanWeil.Stepanov.Algebra,`LeanPool.KloostermanWeil.Stepanov.Auxiliary,`LeanPool.KloostermanWeil.Stepanov.Parameters,`LeanPool.KloostermanWeil.Stepanov.CurveCount,`LeanPool.KloostermanWeil.Stepanov.Defect,`LeanPool.KloostermanWeil.Stepanov.SpecializedCurve,`LeanPool.KloostermanWeil.Carlitz.FactorData,`LeanPool.KloostermanWeil.Carlitz.DicksonFiniteAlgebra,`LeanPool.KloostermanWeil.Carlitz.CoefficientEquivalence,`LeanPool.KloostermanWeil.Carlitz.FactorWeight,`LeanPool.KloostermanWeil.Weil.PrimeFoundation,`LeanPool.KloostermanWeil.Carlitz.ExtensionDefinitions,`LeanPool.KloostermanWeil.Carlitz.MinimalPolynomialInverse,`LeanPool.KloostermanWeil.Carlitz.ClassValue,`LeanPool.KloostermanWeil.Carlitz.ConjugateDecomposition,`LeanPool.KloostermanWeil.Carlitz.ClassGhost,`LeanPool.KloostermanWeil.Carlitz.RelevantIrreducibles,`LeanPool.KloostermanWeil.Carlitz.IrreducibleGhost,`LeanPool.KloostermanWeil.Carlitz.NewtonIndex,`LeanPool.KloostermanWeil.Carlitz.NewtonSum,`LeanPool.KloostermanWeil.Carlitz.FormalAlgebra,`LeanPool.KloostermanWeil.Carlitz.GeneratingIdentity,`LeanPool.KloostermanWeil.Carlitz.RecurrencePackage,`LeanPool.KloostermanWeil.Stepanov.FiniteSum,`LeanPool.KloostermanWeil.Stepanov.ArtinSchreier,`LeanPool.KloostermanWeil.Stepanov.CurveTrace,`LeanPool.KloostermanWeil.Stepanov.ScalarExtensionSum,`LeanPool.KloostermanWeil.Stepanov.PointCountBridge,`LeanPool.KloostermanWeil.Stepanov.CarlitzRoots,`LeanPool.KloostermanWeil.Stepanov.PowerSumSpectral,`LeanPool.KloostermanWeil.Stepanov.SpectralBound,`LeanPool.KloostermanWeil.Stepanov.PrimeWeil,`LeanPool.KloostermanWeil.Stepanov.PrimeWeilBridge,`LeanPool.KloostermanWeil.Weil.PrimeKloosterman]
+   let allowed := #[`propext, `Classical.choice, `Quot.sound]
+   let mut targetIndices : Array ModuleIdx := #[]
+@@ -178,7 +187,10 @@
+         let mut used : Array Name := #[]
+         for dependency in currentInfo.getUsedConstantsAsSet do
+           used := used.push dependency
++        let some currentOwner := env.getModuleIdxFor? current |
++          throwError "Missing physical defining module for dependency {current} from {name}"
+         dependencyRecords := dependencyRecords.push (Json.mkObj [
++          ("owner_module", toJson moduleNames[currentOwner]!.toString),
+           ("name", toJson current.toString),
+           ("is_unsafe", toJson currentInfo.isUnsafe),
+           ("is_partial", toJson currentInfo.isPartial),

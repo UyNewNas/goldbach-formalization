@@ -1,0 +1,131 @@
+name: Exact34 Weil project433rc1 original26a6 qualification
+on:
+  push:
+    branches: [ci/weil34-26a6-20261115]
+    paths: [.github/workflows/weil34-qualification.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  weil34:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      LEAN_NUM_THREADS: 2
+      WEIL_BUNDLE: docs/source-only/20261115-resume/t01-weil34-26a6
+      CACHE_SCOPE: WEIL34_PROJECT26A6
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: dca6bab3c54d34937205ac0334e350455ec21a3c
+          path: weil-source-dca6
+          persist-credentials: false
+      - name: Bind actual driver and stage exact34 with unchanged487B profile
+        id: materialize
+        run: |
+          set -euo pipefail
+          export PROJECT="$RUNNER_TEMP/t01-project"
+          export LOGS="$RUNNER_TEMP/weil34-evidence"
+          export CACHE_INPUTS="$RUNNER_TEMP/weil34-original-cache-inputs"
+          export CACHE_CHECKPOINT_OUTPUT="$RUNNER_TEMP/weil34-original-checkpoint"
+          export SOURCE_COMMIT="dca6bab3c54d34937205ac0334e350455ec21a3c"
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_scope.py" stage 2>&1 | tee "$LOGS/materialize.log"
+          printf 'PROJECT=%s\nLOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\nSOURCE_COMMIT=%s\n' \
+            "$PROJECT" "$LOGS" "$CACHE_INPUTS" "$CACHE_CHECKPOINT_OUTPUT" "$SOURCE_COMMIT" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install exact original toolchain with original pinned installer
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          cd "$PROJECT"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install original837 guard plus complete source setup import preexec binding
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/cache_runtime_setup.py"
+      - name: Run actual original denial fixtures and acquire exact same-producer Cache144
+        timeout-minutes: 45
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          for phase in fixtures acquire bootstrap standard; do
+            python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
+          done
+      - name: Compile only exact34 in dependency order with original profile arguments
+        timeout-minutes: 150
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" compile_all
+      - name: Fresh native safe kernel replay from all34 actual most-private artifacts
+        timeout-minutes: 60
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" kernel
+      - name: Export complete private generated inventories both full types and direct axioms
+        timeout-minutes: 45
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" types
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" verify
+      - name: Audit original runtime after actual success or failure
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" runtime
+      - name: Upload early process inventory and original runtime evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil34-lightlogs-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/weil34-evidence/*.json
+            ${{ runner.temp }}/weil34-evidence/*.jsonl
+            ${{ runner.temp }}/weil34-evidence/*.log
+            ${{ runner.temp }}/weil34-evidence/*.lean
+            ${{ runner.temp }}/weil34-evidence/direct-results/
+            ${{ runner.temp }}/weil34-evidence/direct-inputs/
+            ${{ runner.temp }}/weil34-evidence/cache-processes/*.json
+            ${{ runner.temp }}/weil34-evidence/cache-processes/*.stderr
+            ${{ runner.temp }}/weil34-evidence/runtime/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve all actual34 facets and original32993 collector on success or failure
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" retain
+      - name: Upload original raw checkpoint with unchanged classifications
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil34-original-checkpoint-${{ github.run_id }}
+          path: ${{ runner.temp }}/weil34-original-checkpoint/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+      - name: Accept only Stage A after complete actual proof stock runtime and retention gates
+        if: ${{ success() }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" finalize
+      - name: Upload complete source objects declarations and final scoped evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil34-proof-${{ github.run_id }}
+          path: ${{ runner.temp }}/weil34-evidence/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
