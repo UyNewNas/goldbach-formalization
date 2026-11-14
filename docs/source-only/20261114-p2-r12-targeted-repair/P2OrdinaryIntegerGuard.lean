@@ -78,14 +78,24 @@ theorem checked_grid {lo hi : Fin 3 → ℤ} (h : check lo hi=true) :
       (rationalPoint hi i.castSucc:ℝ)/(rationalPoint lo i.castSucc:ℝ)≤2 := by
     simpa only [OriginalThirdP4AOrdinaryFiniteDispatchSourceOnly.realBox,
       OriginalThirdBelowMuBRoundedSourceOnly.realBox] using hratio i
+  have hratio0 :
+      (rationalPoint hi (0 : Fin 3):ℝ)/(rationalPoint lo (0 : Fin 3):ℝ)≤2 := by
+    have h0 := hratioCast (0 : Fin 2)
+    rw [show (0 : Fin 2).castSucc = (0 : Fin 3) from Fin.ext (by rfl)] at h0
+    exact h0
+  have hratio1 :
+      (rationalPoint hi (1 : Fin 3):ℝ)/(rationalPoint lo (1 : Fin 3):ℝ)≤2 := by
+    have h1 := hratioCast (1 : Fin 2)
+    rw [show (1 : Fin 2).castSucc = (1 : Fin 3) from Fin.ext (by rfl)] at h1
+    exact h1
   have hlogs := original_stored_ordinary_log32_guards lo hi
     (rationalPoint lo) (rationalPoint hi) (fun _ => rfl) (fun _ => rfl)
     hpos hwidthR hxyR
     (by simpa only [OriginalThirdBelowMuBRoundedSourceOnly.realBox,
       VariableEnvelope.mu] using hmuR)
-    (by linarith only [hratioCast 0]) (by linarith only [hratioCast 1])
-  rw [originalLn32_eq_originalLnUnit_of_le_two (hratioCast 0),
-    originalLn32_eq_originalLnUnit_of_le_two (hratioCast 1)] at hlogs
+    (hratio0.trans (by norm_num)) (hratio1.trans (by norm_num))
+  rw [originalLn32_eq_originalLnUnit_of_le_two hratio0,
+    originalLn32_eq_originalLnUnit_of_le_two hratio1] at hlogs
   refine ⟨(fun _ => rfl),(fun _ => rfl),hpos,hwidthR,hcut,hxyR,hzyR,hmuR,
     hfullR,hratio,?_⟩
   intro i
