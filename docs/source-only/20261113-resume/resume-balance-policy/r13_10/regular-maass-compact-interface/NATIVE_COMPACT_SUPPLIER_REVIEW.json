@@ -1,0 +1,796 @@
+{
+  "decision": "PASS_SCOPED_SOURCE_APPLICABILITY_NATIVE_COMPACT_SPECTRUM; HOLD_FULL_ALL_K_CUMULATIVE_ACCEPTANCE",
+  "scope": "Independent source-level applicability of existing physical compact suppliers to the new regular Maass and continuous test. No rederivation or certification of gamma/Gaussian, orbital estimates, current author implementation or manuscript theorem.",
+  "published_source_and_frozen_dependency_declarations": [
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "ImbalancedChen/Part3Gamma0QuotientCellPushforward.lean",
+      "bytes": 7537,
+      "sha256": "2d61acc97c1e398a6fa6d34ffac73c4d9e59272da7b1409c5d652af859f97a12",
+      "git_blob": "8a1de92d73d94df71ee9c20af03edc1424c0fabe",
+      "declarations": [
+        {
+          "name": "carrierPushforward",
+          "line": 135,
+          "source_signature_or_definition": "def carrierPushforward (N : ℕ) [NeZero N] : Measure (Gamma0OrbitSpace N) :=\n  cellPushforward N (gamma0Carrier N)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "ImbalancedChen/Part3Gamma0ActualConstantMode.lean",
+      "bytes": 9004,
+      "sha256": "e080dd2104f8bdd01edcec8443bf11567321d279f7ec26aff98d09a5c46392a5",
+      "git_blob": "847583ab1d5c084da5e357761af529051d71b81f",
+      "declarations": [
+        {
+          "name": "QuotientL2",
+          "line": 41,
+          "source_signature_or_definition": "abbrev QuotientL2 (N : ℕ) [NeZero N] := Lp ℂ 2 (carrierPushforward N)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "ImbalancedChen/Part3ActualInfinityCuspAnnihilator.lean",
+      "bytes": 2916,
+      "sha256": "aac9967fb297ca5ac1e881aaf7a130541f54594aba270d227336bf03cb3d0230",
+      "git_blob": "f04ca37279375b57f74cb0d8e7829ab24bdf6142",
+      "declarations": [
+        {
+          "name": "HeightSeed",
+          "line": 22,
+          "source_signature_or_definition": "structure HeightSeed where\n  toFun : ℝ → ℂ\n  continuous : Continuous toFun\n  compact : HasCompactSupport toFun\n  positive : tsupport toFun ⊆ Ioi (0 : ℝ)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "ImbalancedChen/Part3SmoothZeroHeightSeedProfiles.lean",
+      "bytes": 6943,
+      "sha256": "92aa836b476722b99b873054b297483e718d6b5b41c037d9b5f04395fb55dc42",
+      "git_blob": "7b9d86e88be637016c9b8f42db61c9eb8a4317e3",
+      "declarations": [
+        {
+          "name": "SmoothHeightSeed",
+          "line": 26,
+          "source_signature_or_definition": "structure SmoothHeightSeed extends HeightSeed where\n  cinfty : ContDiff ℝ ∞ toFun"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3OriginalContinuousPoincarePackets.lean",
+      "bytes": 10881,
+      "sha256": "41ebfba185d0501ff8c73eb130361db9551385b64833a7b2d34152bd39b2d18c",
+      "git_blob": "2c9b1264d96940bb3222e28e0f72812c9e681c6e",
+      "declarations": [
+        {
+          "name": "scaledSeed",
+          "line": 24,
+          "source_signature_or_definition": "def scaledSeed (m : ℤ) (ψ : ℝ → ℂ) (y : ℝ) : ℂ :=\n  ((Real.sqrt |(m : ℝ)| : ℝ) : ℂ)⁻¹ * ψ (|(m : ℝ)|*y)"
+        },
+        {
+          "name": "orderRadial",
+          "line": 43,
+          "source_signature_or_definition": "def orderRadial (m : ℤ) (ν : ℂ) (y : ℝ) : ℂ :=\n  2*(Real.sqrt y : ℂ)*ComplexOrderKBridgeSourceOnly.complexOrderK ν (2*Real.pi*|(m : ℝ)|*y)"
+        },
+        {
+          "name": "orderProbe",
+          "line": 46,
+          "source_signature_or_definition": "def orderProbe (m : ℤ) (ψ : ℝ → ℂ) (ν : ℂ) : ℂ :=\n  ∫ y in Ioi (0 : ℝ), ((y⁻¹)^2 : ℝ) • (star (ψ y)*orderRadial m ν y)"
+        },
+        {
+          "name": "common_orderProbe",
+          "line": 51,
+          "source_signature_or_definition": "theorem common_orderProbe (m : ℤ) (hm : m ≠ 0) (ψ : ℝ → ℂ) (ν : ℂ) :\n    orderProbe m (scaledSeed m ψ) ν = orderProbe 1 ψ ν"
+        },
+        {
+          "name": "common_radialProbe",
+          "line": 84,
+          "source_signature_or_definition": "theorem common_radialProbe (m : ℤ) (hm : m ≠ 0) (ψ : ℝ → ℂ) (t : ℝ) :\n    radialProbe m (scaledSeed m ψ) t = radialProbe 1 ψ t"
+        },
+        {
+          "name": "packet",
+          "line": 90,
+          "source_signature_or_definition": "def packet (N : ℕ) [NeZero N] (one : Bool) (S : Finset ℕ) (w : ℕ → ℂ) (ind : ℕ → ℤ)\n    (ψ : ℝ → ℂ) (u : Gamma0OrbitSpace N) : ℂ :=\n  ∑ b ∈ S,star (w b)*originalPoincare N one (ind b) (scaledSeed (ind b) ψ) u"
+        },
+        {
+          "name": "spectrum",
+          "line": 94,
+          "source_signature_or_definition": "def spectrum (N : ℕ) [NeZero N] (V : Gamma0OrbitSpace N → ℂ) (a : Parameters N) (t : ℝ) : ℂ :=\n  ∫ u, star (V u)*quotientProfile a t u ∂carrierPushforward N"
+        },
+        {
+          "name": "packet_L2",
+          "line": 97,
+          "source_signature_or_definition": "theorem packet_L2 (N : ℕ) [NeZero N] (one : Bool) (S : Finset ℕ) (w : ℕ → ℂ) (ind : ℕ → ℤ)\n    (hn : ∀ b ∈ S, ind b ≠ 0) (ψ : ℝ → ℂ) (hψ : Continuous ψ) (hc : HasCompactSupport ψ)\n    (hpos : tsupport ψ ⊆ Ioi (0 : ℝ)) : MemLp (packet N one S w ind ψ) 2 (carrierPushforward N)"
+        },
+        {
+          "name": "packet_spectrum",
+          "line": 108,
+          "source_signature_or_definition": "theorem packet_spectrum (N : ℕ) [NeZero N] (one : Bool) (S : Finset ℕ) (w : ℕ → ℂ) (ind : ℕ → ℤ)\n    (hn : ∀ b ∈ S, ind b ≠ 0) (ψ : ℝ → ℂ) (hψ : Continuous ψ) (hc : HasCompactSupport ψ)\n    (hpos : tsupport ψ ⊆ Ioi (0 : ℝ)) (a : Parameters N) (t : ℝ) :\n    Integrable (fun u => star (packet N one S w ind ψ u)*quotientProfile a t u) (carrierPushforward N) ∧\n    spectrum N (packet N one S w ind ψ) a t =\n      radialProbe 1 ψ t*markedRow S w ind (fun n => nativeR a one n t)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3ActualContinuousPoincarePairing.lean",
+      "bytes": 11769,
+      "sha256": "1b46cc9df168800beb4e50a1873812ccf2ec8e4ec43c90cb626d0c9b0dbb8262",
+      "git_blob": "9287652ec49186e20307fa0b1f2c3e72753cde59",
+      "declarations": [
+        {
+          "name": "originalFrame",
+          "line": 46,
+          "source_signature_or_definition": "def originalFrame (one : Bool) : SL(2,ℤ) := if one then cuspOneMatrix else 1"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3OriginalCuspidalPoincareTrace.lean",
+      "bytes": 10853,
+      "sha256": "b5a2f61204942065726fa72996362731c8f2db712bc4e3cf3fff104ee43eca0a",
+      "git_blob": "28ee432011d065f9ea63f1ff1c5c26c9237bb2af",
+      "declarations": [
+        {
+          "name": "basis_packet_inner",
+          "line": 68,
+          "source_signature_or_definition": "theorem basis_packet_inner (N : ℕ) [NeZero N] (i : actualCuspBasisIndex N (NeZero.pos N))\n    (one : Bool) (S : Finset ℕ) (w : ℕ → ℂ) (ind : ℕ → ℤ) (hn : ∀ b ∈ S,ind b ≠ 0)\n    (ψ : ℝ → ℂ) (hψ : Continuous ψ) (hc : HasCompactSupport ψ) (hpos : tsupport ψ ⊆ Ioi (0 : ℝ)) :\n    inner ℂ ((packet_L2 N one S w ind hn ψ hψ hc hpos).toLp (packet N one S w ind ψ))\n      (actualCuspHilbertBasis N (NeZero.pos N) i : QuotientL2 N) =\n      orderProbe 1 ψ (basisOrder N (NeZero.pos N) i)*\n        markedRow S w ind (basisR N (NeZero.pos N) i (originalFrame one))"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3OriginalResidualPoincarePackets.lean",
+      "bytes": 6831,
+      "sha256": "46cd335002628ce68d4a08840c12f228a26a48ff90e9a97f5bbeb34929dd9dfd",
+      "git_blob": "865deef09caf23b658c8d9c0befc0ae3702477f9",
+      "declarations": [
+        {
+          "name": "packet_projection",
+          "line": 74,
+          "source_signature_or_definition": "private theorem packet_projection (N : ℕ) [NeZero N] (one : Bool) (S : Finset ℕ)\n    (w : ℕ → ℂ) (ind : ℕ → ℤ) (hn : ∀ b ∈ S, ind b ≠ 0) (ψ : ℝ → ℂ) (hψ : Continuous ψ)\n    (hc : HasCompactSupport ψ) (hp : tsupport ψ ⊆ Ioi (0 : ℝ)) :\n    (ℂ ∙ constantL2 N).starProjection ((packet_L2 N one S w ind hn ψ hψ hc hp).toLp\n      (packet N one S w ind ψ)) = 0"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/mixed-continuous-next/Part3ActualMarkedHorocycleSupport.lean",
+      "bytes": 8388,
+      "sha256": "4a0cfd32cb22a00a2fb42a03eee52fb0337f31a502361d156030c59988c91bf4",
+      "git_blob": "5a936dcca70be3d2e1a8abf727473570c5acd85d",
+      "declarations": [
+        {
+          "name": "marked_support",
+          "line": 45,
+          "source_signature_or_definition": "theorem marked_support (N : ℕ) [NeZero N] (one : Bool) (S : Finset ℕ) (w : ℕ → ℂ)\n    (ind : ℕ → ℤ) (hn : ∀ b ∈ S,ind b ≠ 0) (ψ : ℝ → ℂ) (hψ : Continuous ψ)\n    (hc : HasCompactSupport ψ) (hp : tsupport ψ ⊆ Ioi (0 : ℝ)) :\n    supportedInQuotientCompact N (packet N one S w ind ψ)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3ActualCuspDenominatorClasses.lean",
+      "bytes": 12106,
+      "sha256": "b65ddaab62cefeb32da36cabd6e040586da4242a125b3f2fb4d068bd78f14a63",
+      "git_blob": "66c1abc68098422fcb7d424b55437f54c4b1f0c7",
+      "declarations": [
+        {
+          "name": "youngCuspEquiv",
+          "line": 242,
+          "source_signature_or_definition": "def youngCuspEquiv (N : ℕ) [NeZero N] : Parameters N ≃ NativeCusps N :=\n  Equiv.ofBijective _ ⟨parameter_injective N,parameter_surjective N⟩"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3ActualContinuousClassFourier.lean",
+      "bytes": 9160,
+      "sha256": "568cfdc089473872bee5db22e25a07c51ab7f75f9236c9d56965b4ba0e5b53f1",
+      "git_blob": "cb7fdff1839edb0a6c5d18c1e6b9a75ada427e42",
+      "declarations": [
+        {
+          "name": "nativeR",
+          "line": 139,
+          "source_signature_or_definition": "def nativeR {N : ℕ} [NeZero N] (a : Parameters N) (one : Bool) (n : ℤ) (t : ℝ) : ℂ :=\n  ∑ ξ : DirichletCharacter ℂ (band N a.1.1), inverseWeight a.1 a.2 ξ*channelR ⟨a.1,ξ⟩ one n t"
+        },
+        {
+          "name": "native_mode",
+          "line": 152,
+          "source_signature_or_definition": "theorem native_mode {N : ℕ} [NeZero N] (a : Parameters N) (one : Bool)\n    (n : ℤ) (hn : n ≠ 0) (t y : ℝ) (hy : 0 < y) :\n    sectionMode N (NeZero.pos N) one (cuspFamily N ((youngCuspEquiv N) a) (criticalPoint t)) n y hy =\n      radial n t y*nativeR a one n t"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261110-yellow-closure-10t/t08_actual_spectral_supplier/Part3OriginalContinuousCuspGram.lean",
+      "bytes": 7922,
+      "sha256": "d95d490926bdc12aff7a32bfb9ef0a031a5121e70af0436e49cf083c343ff117",
+      "git_blob": "f5de45d10eb2cd96eadc16b0c3fbf2c314555209",
+      "declarations": [
+        {
+          "name": "nativeProduct",
+          "line": 53,
+          "source_signature_or_definition": "def nativeProduct (N : ℕ) [NeZero N] (X Y : Parameters N → ℂ) : ℂ :=\n  ∑ a : Parameters N, star (X a)*Y a/(4*(Real.pi : ℂ))"
+        },
+        {
+          "name": "nativeMass",
+          "line": 102,
+          "source_signature_or_definition": "def nativeMass (N : ℕ) [NeZero N] (X : Parameters N → ℂ) : ℝ :=\n  ∑ a : Parameters N,‖X a‖^2/(4*Real.pi)"
+        },
+        {
+          "name": "native_self_re",
+          "line": 119,
+          "source_signature_or_definition": "private theorem native_self_re (N : ℕ) [NeZero N] (X : Parameters N → ℂ) :\n    (nativeProduct N X X).re = nativeMass N X"
+        },
+        {
+          "name": "marked_covariance",
+          "line": 75,
+          "source_signature_or_definition": "theorem marked_covariance (N : ℕ) [NeZero N] (t : ℝ) (left right : Bool)\n    (S T : Finset ℕ) (c d : ℕ → ℂ) (p n : ℕ → ℤ) :\n    classProduct N\n      (fun i => markedRow S c p (fun a => channelR i left a t))\n      (fun i => markedRow T d n (fun a => channelR i right a t)) =\n    nativeProduct N\n      (fun a => markedRow S c p (fun b => nativeR a left b t))\n      (fun a => markedRow T d n (fun b => nativeR a right b t))"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/projection-next/Part3ActualContinuousResolution.lean",
+      "bytes": 7315,
+      "sha256": "9d2325eaa31cb770326cba7cbd45b9f3749921ce778a75f62ee9a2499dec465a",
+      "git_blob": "5c99742eab228ce0d880b6e041018c2748047823",
+      "declarations": [
+        {
+          "name": "centeredSpace",
+          "line": 20,
+          "source_signature_or_definition": "def centeredSpace (N : ℕ) [NeZero N] : Submodule ℂ (QuotientL2 N) :=\n  (Submodule.span ℂ (generators N)).topologicalClosure"
+        },
+        {
+          "name": "nativeSynthesis_analysis_eq_projection",
+          "line": 119,
+          "source_signature_or_definition": "theorem nativeSynthesis_analysis_eq_projection (N : ℕ) [NeZero N] (v : QuotientL2 N) :\n    nativeSynthesis N (fun a => analysis N a v) = (centeredSpace N).starProjection v"
+        },
+        {
+          "name": "range_nativeSynthesis",
+          "line": 123,
+          "source_signature_or_definition": "theorem range_nativeSynthesis (N : ℕ) [NeZero N] :\n    range (nativeSynthesis N) = (centeredSpace N : Set (QuotientL2 N))"
+        },
+        {
+          "name": "continuous_projection_gram",
+          "line": 131,
+          "source_signature_or_definition": "theorem continuous_projection_gram (N : ℕ) [NeZero N] (v w : QuotientL2 N) :\n    inner ℂ ((centeredSpace N).starProjection v) ((centeredSpace N).starProjection w) =\n      (1/2 : ℂ)*∑ a : Parameters N,inner ℂ (analysis N a v) (analysis N a w)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/projection-next/Part3ActualContinuousPhysicalComplement.lean",
+      "bytes": 8945,
+      "sha256": "d7cd4a9b374c38909165bda7643b8e14cddd5cece4296270e3823d044333ca73",
+      "git_blob": "b66d24b504e04a350002059dd86fa2f2d17335e3",
+      "declarations": [
+        {
+          "name": "centered_eq_physical_complement",
+          "line": 144,
+          "source_signature_or_definition": "theorem centered_eq_physical_complement (N : ℕ) [NeZero N] :\n    centeredSpace N = (ℂ ∙ constantL2 N)ᗮ ⊓ (allFrameCuspSubspace N (NeZero.pos N))ᗮ"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/projection-next/Part3OriginalProjectedContinuousCovariance.lean",
+      "bytes": 7456,
+      "sha256": "c09ddd19363ba5a338677f495a09147794f3c38a7934ac2179ed5014e4f67cda",
+      "git_blob": "ba9a180907c8a00ec0e80a7335349011b7778210",
+      "declarations": [
+        {
+          "name": "physical_split",
+          "line": 31,
+          "source_signature_or_definition": "theorem physical_split (N : ℕ) [NeZero N] (v : QuotientL2 N) :\n    v=(ℂ ∙ constantL2 N).starProjection v+(allFrameCuspSubspace N (NeZero.pos N)).starProjection v+\n      (centeredSpace N).starProjection v"
+        },
+        {
+          "name": "spatial_orthogonal_gram",
+          "line": 65,
+          "source_signature_or_definition": "theorem spatial_orthogonal_gram (N : ℕ) [NeZero N] (v w : QuotientL2 N) :\n    let C := ℂ ∙ constantL2 N\n    let D := allFrameCuspSubspace N (NeZero.pos N)\n    inner ℂ v w = inner ℂ (C.starProjection v) (C.starProjection w)+\n      inner ℂ (D.starProjection v) (D.starProjection w)+\n      (1/2 : ℂ)*∑ a : Parameters N,inner ℂ (analysis N a v) (analysis N a w)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/mixed-continuous-next/Part3OriginalMarkedWeakAdjoint.lean",
+      "bytes": 6356,
+      "sha256": "8b9535c104b38df71af726b409091b306f7dea49ff6317a570a070fd952c1f32",
+      "git_blob": "33fa78e34eaa944546345250a9a2ff6a73b4a41d",
+      "declarations": [
+        {
+          "name": "integrated_native",
+          "line": 26,
+          "source_signature_or_definition": "private theorem integrated_native (N : ℕ) [NeZero N] {X Y : Gamma0OrbitSpace N → ℂ}\n    (hx : MemLp X 2 (carrierPushforward N)) (hy : MemLp Y 2 (carrierPushforward N))\n    (cx : supportedInQuotientCompact N X) (cy : supportedInQuotientCompact N Y)\n    (rx : (ℂ ∙ constantL2 N).starProjection (hx.toLp X)=0)\n    (ry : (ℂ ∙ constantL2 N).starProjection (hy.toLp Y)=0) :\n    let G := fun t => nativeProduct N (fun a => spectrum N X a t) (fun a => spectrum N Y a t)\n    Integrable G ∧ inner ℂ (hy.toLp Y) (nativeSynthesis N (fun a => analysis N a (hx.toLp X))) = ∫ t,G t"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261102-resume-30s/S/s20_normalized_kuznetsov/Part3ActualCuspBasisWhittakerCoefficients.lean",
+      "bytes": 16581,
+      "sha256": "f7be43b6fbc72b75202d581e45bc92d5108ca24c473a523bf3b132f0cb335653",
+      "git_blob": "6191caeb30ff26136fffd7f6600e8a2228f1b8ff",
+      "declarations": [
+        {
+          "name": "basisOrder",
+          "line": 144,
+          "source_signature_or_definition": "def basisOrder (i : actualCuspBasisIndex N hN) : ℂ :=\n  if actualCuspNativeEigenvalue N hN i ≤ 1/4 then\n    (Real.sqrt (1/4-actualCuspNativeEigenvalue N hN i) : ℂ)\n  else (Real.sqrt (actualCuspNativeEigenvalue N hN i-1/4) : ℂ) * Complex.I"
+        },
+        {
+          "name": "basisMode_eq_K",
+          "line": 216,
+          "source_signature_or_definition": "theorem basisMode_eq_K (i : actualCuspBasisIndex N hN) (g : SL(2, ℤ))\n    {n : ℤ} (hn : n ≠ 0) {y : ℝ} (hy : 0 < y) :\n    basisMode N hN i g n y = basisRhoK N hN i g n * (Real.sqrt y : ℂ) *\n      complexOrderK (basisOrder N hN i) (2*Real.pi*|(n : ℝ)|*y)"
+        },
+        {
+          "name": "basisRhoW",
+          "line": 247,
+          "source_signature_or_definition": "def basisRhoW (i : actualCuspBasisIndex N hN) (g : SL(2, ℤ)) (n : ℤ) : ℂ :=\n  basisRhoK N hN i g n / (2 * (Real.sqrt |(n : ℝ)| : ℂ))"
+        },
+        {
+          "name": "basisR",
+          "line": 250,
+          "source_signature_or_definition": "def basisR (i : actualCuspBasisIndex N hN) (g : SL(2, ℤ)) (n : ℤ) : ℂ :=\n  (Real.sqrt |(n : ℝ)| : ℂ) * basisRhoW N hN i g n"
+        },
+        {
+          "name": "basisR_eq_half_native",
+          "line": 258,
+          "source_signature_or_definition": "theorem basisR_eq_half_native (i : actualCuspBasisIndex N hN) (g : SL(2, ℤ))\n    {n : ℤ} (hn : n ≠ 0) :\n    basisR N hN i g n = basisRhoK N hN i g n / 2"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/unit-band-next/Part3ActualUnitBandSpectralMass.lean",
+      "bytes": 12047,
+      "sha256": "2cfdfbfcaf2eb6697f929e7593ba2221352ad99fa4a38a2fa73464f730bd051c",
+      "git_blob": "4da83596a3c4f0ca50a8940c4f74d20beb682d9a",
+      "declarations": [
+        {
+          "name": "height",
+          "line": 18,
+          "source_signature_or_definition": "def height (i : Idx) : ℝ := Real.sqrt (actualCuspNativeEigenvalue N (NeZero.pos N) i-1/4)"
+        },
+        {
+          "name": "exceptional",
+          "line": 19,
+          "source_signature_or_definition": "def exceptional (i : Idx) : Prop := actualCuspNativeEigenvalue N (NeZero.pos N) i<1/4"
+        },
+        {
+          "name": "order_regular",
+          "line": 29,
+          "source_signature_or_definition": "theorem order_regular {i : Idx} (h : ¬exceptional N i) :\n    basisOrder N (NeZero.pos N) i=((height N i:ℝ):ℂ)*I"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261112-resume/t04/kuznetsov-next/Part3ActualCuspOneGeometricPairing.lean",
+      "bytes": 12266,
+      "sha256": "adbe2bfb2ab97b684241699b05e654e5b3ac71998d2a156d800c08b20dadcf4f",
+      "git_blob": "01a29757e5978592c8caf67c87cd3b7420dab606",
+      "declarations": [
+        {
+          "name": "fricke_measure",
+          "line": 72,
+          "source_signature_or_definition": "private theorem fricke_measure (N : ℕ) [NeZero N] :\n    MeasurePreserving (quotientFricke N (NeZero.pos N)) (carrierPushforward N) (carrierPushforward N)"
+        },
+        {
+          "name": "pulled_infinity",
+          "line": 76,
+          "source_signature_or_definition": "private theorem pulled_infinity (N : ℕ) [NeZero N] (n : ℤ) (φ : ℝ → ℂ)\n    (hc : HasCompactSupport φ) (hp : tsupport φ ⊆ Ioi (0 : ℝ)) :\n    originalPoincare N false n φ ∘ quotientFricke N (NeZero.pos N) =ᵐ[carrierPushforward N]\n      zeroCuspPoincare N (NeZero.pos N) n φ hc hp"
+        },
+        {
+          "name": "one_zero_pair",
+          "line": 95,
+          "source_signature_or_definition": "theorem one_zero_pair (N : ℕ) [NeZero N] (n : ℤ) (φ : ℝ → ℂ) (hφ : Continuous φ)\n    (hc : HasCompactSupport φ) (hp : tsupport φ ⊆ Ioi (0 : ℝ))\n    (F : Gamma0OrbitSpace N → ℂ) (hF : MemLp F 2 (carrierPushforward N)) :\n    (∫ q, star (originalPoincare N true n φ q)*F q ∂carrierPushforward N) =\n      e ((n : ℝ)/(N : ℝ)) * ∫ q, star (zeroCuspPoincare N (NeZero.pos N) n φ hc hp q)*F q ∂carrierPushforward N"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_04/regular-sieve-next/Part3OriginalRegularPacketTest.lean",
+      "bytes": 9764,
+      "sha256": "5f3a88bb46a8c3afd55119616a43ab59b4bbb221e72e5265f893964d6094b706",
+      "git_blob": "a2ddb01ebe7b34350dcb2cdd7cc61544d33bb9e6",
+      "declarations": [
+        {
+          "name": "packet_test",
+          "line": 125,
+          "source_signature_or_definition": "theorem packet_test (one neg : Bool) {L H : ℝ} (hL : 0<L) (hH : 0<H)\n    (S : Finset ℕ) (a : ℕ→ℂ) (band : Dyadic L S) :\n    let ξ := seed H\n    let B := (8+32*(L*H/(N:ℝ)))*energy S a\n    let F := fun t : ℝ => ‖orderProbe 1 ξ.toFun ((t:ℂ)*I)‖^2*lineMass N one neg S a t\n    (∀ J : Finset Idx,(∑ i∈J,‖orderProbe 1 ξ.toFun (basisOrder N (NeZero.pos N) i)*\n      discreteRow N one neg S a i‖^2) ≤ B) ∧ Integrable F ∧ (∫ t,F t)≤B"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_04/regular-sieve-next/Part3OriginalRegularBaseCumulative.lean",
+      "bytes": 6563,
+      "sha256": "4a6cf964fb8d7a5feba8cdbe401195db5befa910620f2edea85241e0d241a542",
+      "git_blob": "4bde9ec373551ef47ece1136a29c1783c23d57c5",
+      "declarations": [
+        {
+          "name": "baseTerm",
+          "line": 21,
+          "source_signature_or_definition": "def baseTerm (one neg : Bool) (K : ℝ) (S : Finset ℕ) (a : ℕ→ℂ) (i : Idx) : ℝ :=\n  if ¬exceptional N i ∧ height N i≤K then\n    ‖discreteRow N one neg S a i‖^2/Real.cosh (Real.pi*height N i) else 0"
+        },
+        {
+          "name": "lineTerm",
+          "line": 25,
+          "source_signature_or_definition": "def lineTerm (one neg : Bool) (S : Finset ℕ) (a : ℕ→ℂ) (t : ℝ) : ℝ :=\n  lineMass N one neg S a t/Real.cosh (Real.pi*t)"
+        },
+        {
+          "name": "base_cumulative",
+          "line": 49,
+          "source_signature_or_definition": "theorem base_cumulative (one neg : Bool) {L K : ℝ} (hL : 0<L) (hK : K≤2)\n    (S : Finset ℕ) (a : ℕ→ℂ) (band : Dyadic L S) :\n    Summable (baseTerm N one neg K S a) ∧\n    (∑' i,baseTerm N one neg K S a i) ≤ baseConstant*(1+L/(N:ℝ))*energy S a ∧\n    IntegrableOn (lineTerm N one neg S a) (Icc (-K) K) ∧\n    (∫ t in Icc (-K) K,lineTerm N one neg S a t) ≤ baseConstant*(1+L/(N:ℝ))*energy S a"
+        }
+      ]
+    },
+    {
+      "commit": "a6aec20e831aa7f905533bec69fd0f86cd2bf9b1",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_09/avgj-reciprocity-next/same-infinity-pretrace/Part3OriginalSameInfinityCompactSpectrum.lean",
+      "bytes": 8726,
+      "sha256": "7dd64d7e31b57ec637fd02bfb0628c319f6234c2d400377557aea094c65b41d0",
+      "git_blob": "644e73675ede349875b0e42e3639defe8dc27e29",
+      "declarations": [
+        {
+          "name": "vector",
+          "line": 29,
+          "source_signature_or_definition": "def vector (q : ℕ) [NeZero q] (S : Finset ℕ) (w : ℕ → ℂ) (f : ℕ → ℤ)\n    (pos : ∀ n ∈ S, f n ≠ 0) (ψ : HeightSeed) : QuotientL2 q :=\n  (packet_L2 q false S w f pos ψ.toFun ψ.continuous ψ.compact ψ.positive).toLp (packet q false S w f ψ.toFun)"
+        },
+        {
+          "name": "discrete",
+          "line": 33,
+          "source_signature_or_definition": "def discrete (q : ℕ) [NeZero q] (S : Finset ℕ) (w : ℕ → ℂ) (f : ℕ → ℤ)\n    (ψ : HeightSeed) (i : actualCuspBasisIndex q (NeZero.pos q)) : ℂ :=\n  orderProbe 1 ψ.toFun (basisOrder q (NeZero.pos q) i)*markedRow S w f (basisR q (NeZero.pos q) i 1)"
+        },
+        {
+          "name": "continuousCoord",
+          "line": 37,
+          "source_signature_or_definition": "def continuousCoord (q : ℕ) [NeZero q] (S : Finset ℕ) (w : ℕ → ℂ) (f : ℕ → ℤ)\n    (ψ : HeightSeed) (t : ℝ) (a : Parameters q) : ℂ :=\n  radialProbe 1 ψ.toFun t*markedRow S w f (fun n => nativeR a false n t)"
+        },
+        {
+          "name": "compact_spectrum",
+          "line": 50,
+          "source_signature_or_definition": "theorem compact_spectrum (q : ℕ) [NeZero q] (S T : Finset ℕ) (u v : ℕ→ℂ) (f g : ℕ→ℤ)\n    (su : ∀ n ∈ S, f n ≠ 0) (tv : ∀ n ∈ T, g n ≠ 0) (ψ φ : HeightSeed) :\n    let F := fun i => discrete q S u f ψ i * star (discrete q T v g φ i)\n    let E := fun t => nativeProduct q (continuousCoord q T v g φ t) (continuousCoord q S u f ψ t)\n    Summable F ∧ Integrable E ∧ inner ℂ (vector q S u f su ψ) (vector q T v g tv φ) =\n      (∑' i, F i)+(∫ t : ℝ, E t)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_12/same-infinity-namespace-repair/repaired/ImbalancedChen/Part3OriginalSameInfinityCompactTrace.lean",
+      "bytes": 3686,
+      "sha256": "390a1c64a67fb8eedf0aecae7d1258dbe3f2a4b4f3f59d21d5e49b6f4e570620",
+      "git_blob": "9c7cdea7057b66c65ab32df0a58659d368ee8610",
+      "declarations": [
+        {
+          "name": "singleton_vector",
+          "line": 23,
+          "source_signature_or_definition": "private theorem singleton_vector (q m : ℕ+) (ψ : HeightSeed) :\n    vector q.val {m.val} (fun _ => 1) (fun n => (n:ℤ)) (positiveIndex m) ψ = packetVector q m ψ"
+        },
+        {
+          "name": "atom",
+          "line": 36,
+          "source_signature_or_definition": "def atom (q m : ℕ+) (ψ : HeightSeed) (i : actualCuspBasisIndex q.val (NeZero.pos q.val)) :=\n  orderProbe 1 ψ.toFun (basisOrder q.val (NeZero.pos q.val) i)*\n    basisR q.val (NeZero.pos q.val) i (1 : SL(2,ℤ)) (m.val:ℤ)"
+        },
+        {
+          "name": "eisenstein",
+          "line": 40,
+          "source_signature_or_definition": "def eisenstein (q m n : ℕ+) (ψ φ : HeightSeed) (t : ℝ) :=\n  nativeProduct q.val (fun a => radialProbe 1 φ.toFun t*ImbalancedChen.Part3.ActualContinuousClassFourier20261110.nativeR a false (n.val:ℤ) t)\n    (fun a => radialProbe 1 ψ.toFun t*ImbalancedChen.Part3.ActualContinuousClassFourier20261110.nativeR a false (m.val:ℤ) t)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_09/avgj-reciprocity-next/same-infinity-scalar-limits-r2/Part3OriginalSameInfinityScalarGeometry.lean",
+      "bytes": 3353,
+      "sha256": "636056c214d99bed9cc4b1b99829741ebf6ce164de0dc861312e0fbca20b4036",
+      "git_blob": "799caf055ea72d278767f2ac95e6c192f13bc456",
+      "declarations": [
+        {
+          "name": "rank_one_term",
+          "line": 56,
+          "source_signature_or_definition": "theorem rank_one_term (q m n k : ℕ+) (ψ φ : HeightSeed) :\n    term (induced (fun a b => ψ.toFun a*star (φ.toFun b))) q m n k=\n      star (if q.val∣k.val then orbital m n k ψ φ else 0)"
+        }
+      ]
+    },
+    {
+      "commit": "23fa4b92744247e6e65aacb14680024df3a3fda5",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_09/avgj-reciprocity-next/same-infinity-scalar-limits-r2/Part3OriginalSameInfinityFullModulus.lean",
+      "bytes": 5139,
+      "sha256": "6fcfb27c4477a692becafcd7043c38740cb1c71ed201d6c34482f4869412624f",
+      "git_blob": "54cae1344656e7bd69f7607bc54930ada35465cf",
+      "declarations": [
+        {
+          "name": "all_moduli",
+          "line": 22,
+          "source_signature_or_definition": "private theorem all_moduli (q m n : ℕ+) (ψ φ : HeightSeed) :\n    HasSum (fun k : ℕ+ => if q.val∣k.val then orbital m n k ψ φ else 0) (offDiagonal q m n ψ φ)"
+        },
+        {
+          "name": "full_rank_one_trace",
+          "line": 67,
+          "source_signature_or_definition": "theorem full_rank_one_trace (q m n : ℕ+) (ψ φ : HeightSeed) :\n    let P := fun a b => ψ.toFun a*star (φ.toFun b)\n    Summable (term (induced P) q m n) ∧\n    diagonal P 1 m.val (n.val:ℤ)+(∑' k,term (induced P) q m n k)=\n        star ((∑' i,atom q m ψ i*star (atom q n φ i))+(∫ t,eisenstein q m n ψ φ t))"
+        }
+      ]
+    },
+    {
+      "commit": "06f3e98f81031d292c99cee98fd14c78909e3254",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_04/regular-sieve-full-next/maass-prekuznetsov-next/Part3OriginalRegularPreKuznetsovSeed.lean",
+      "bytes": 5258,
+      "sha256": "863e13d6f0787f5b487e5c25f2acfc7fd0963fb2adbb6bee357baf62938b9328",
+      "git_blob": "421cb4aac40e784bb20b1c5ad78b1badcd0dfcf3",
+      "declarations": [
+        {
+          "name": "seed",
+          "line": 47,
+          "source_signature_or_definition": "def seed (C T : ℝ) (k : ℕ) : SmoothHeightSeed := fromLog (logSeed C T k)"
+        },
+        {
+          "name": "cutoff_probe",
+          "line": 49,
+          "source_signature_or_definition": "theorem cutoff_probe (m : ℤ) (hm : m≠0) (T : ℝ) (k : ℕ) (ν : ℂ) :\n    orderProbe m (seed (rate m) T k).toFun ν =\n      2*∫ q in Ioi (0:ℝ),(window k (Real.log q):ℂ)*density T ν q"
+        },
+        {
+          "name": "cutoff_limit",
+          "line": 81,
+          "source_signature_or_definition": "theorem cutoff_limit (m : ℤ) (hm : m≠0) (T : ℝ) {ν : ℂ} (hν : |ν.re|<1/2) :\n    Tendsto (fun k => orderProbe m (seed (rate m) T k).toFun ν) atTop (𝓝 (2*probe T ν))"
+        }
+      ]
+    },
+    {
+      "commit": "06f3e98f81031d292c99cee98fd14c78909e3254",
+      "path": "docs/source-only/20261113-resume/resume-balance-policy/r14_04/regular-sieve-full-next/maass-prekuznetsov-next/Part3OriginalRegularPreKuznetsovGaussian.lean",
+      "bytes": 9787,
+      "sha256": "b276bdf49eb9bfbec76de0c5ba3fc2ad412af1f2dbf6a3a34ca0da40a5e79c1a",
+      "git_blob": "ee2e46adec2505949d81cc294474f78ba2cf2731",
+      "declarations": [
+        {
+          "name": "dyadic_gaussian_majorant",
+          "line": 148,
+          "source_signature_or_definition": "theorem dyadic_gaussian_majorant :\n    ∃ C : ℝ,0<C ∧ ∀ {K t : ℝ}, 2≤|t| → K/2≤|t| → |t|≤K →\n      K*(Real.cosh (Real.pi*t))⁻¹ ≤ C*∫ r in Ioi (0:ℝ),mass K t r"
+        }
+      ]
+    },
+    {
+      "origin": "frozen original indexed source",
+      "registry_path": "output/resume-20261112/t13-p3-staging/successor/reference/native_labels.original-registry.json",
+      "registry_sha256": "92d72914f84dfa890b42ab21e212033ac2a4a36425bff49ebaf0f37645f1fa26",
+      "path": "goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261026b-GammaCompactness/frozen/d1e28c1a6b3a3ec757f63aca24c2004f8a1285827ba2f7c41c09a020e07756d7/Part3ActualFullCuspEigenbasis.lean",
+      "bytes": 6370,
+      "sha256": "d1e28c1a6b3a3ec757f63aca24c2004f8a1285827ba2f7c41c09a020e07756d7",
+      "git_blob": "c55af4fa2fa863849b57d234307ed6432325d9f0",
+      "declarations": [
+        {
+          "name": "actualCuspBasisIndex",
+          "line": 45,
+          "source_signature_or_definition": "abbrev actualCuspBasisIndex (N : ℕ) [NeZero N] (hN : 0 < N) :=\n  Σ μ : NonzeroCuspResolventLabel, Fin (finrank ℂ (actualCuspEigenFiber N hN μ))"
+        },
+        {
+          "name": "actualCuspHilbertBasis",
+          "line": 94,
+          "source_signature_or_definition": "def actualCuspHilbertBasis (N : ℕ) [NeZero N] (hN : 0 < N) :\n    HilbertBasis (actualCuspBasisIndex N hN) ℂ (ActualFullCuspL2 N hN) :=\n  HilbertBasis.mk (actualCuspEigenvector_orthonormal N hN) (actualCuspEigenvector_dense_span N hN)"
+        },
+        {
+          "name": "actualCuspHilbertBasis_original_resolvent_eigen",
+          "line": 111,
+          "source_signature_or_definition": "theorem actualCuspHilbertBasis_original_resolvent_eigen (N : ℕ) [NeZero N] (hN : 0 < N)\n    (i : actualCuspBasisIndex N hN) :\n    actualGammaResolvent N (actualCuspHilbertBasis N hN i : QuotientL2 N) =\n      actualCuspResolventEigenvalue N hN i • (actualCuspHilbertBasis N hN i : QuotientL2 N)"
+        }
+      ]
+    },
+    {
+      "origin": "frozen original indexed source",
+      "registry_path": "output/resume-20261112/t13-p3-staging/successor/reference/native_labels.original-registry.json",
+      "registry_sha256": "92d72914f84dfa890b42ab21e212033ac2a4a36425bff49ebaf0f37645f1fa26",
+      "path": "goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261026b-GammaCompactness/frozen/b8d49c247489f7c45b93ac10d5c272baa8195f2512309b4df673f19c5a540bf2/Part3ActualCuspEigenbasisNativeLabels.lean",
+      "bytes": 5788,
+      "sha256": "b8d49c247489f7c45b93ac10d5c272baa8195f2512309b4df673f19c5a540bf2",
+      "git_blob": "5c5b270b90a952810075844e80bf4093da86177a",
+      "declarations": [
+        {
+          "name": "actualCuspNativeEigenvalue",
+          "line": 58,
+          "source_signature_or_definition": "def actualCuspNativeEigenvalue (N : ℕ) [NeZero N] (hN : 0 < N)\n    (i : actualCuspBasisIndex N hN) : ℝ :=\n  variationalMaassEigenvalue (actualCuspResolventEigenvalue N hN i)"
+        },
+        {
+          "name": "actualCuspNativeEigenvalue_nonneg",
+          "line": 62,
+          "source_signature_or_definition": "theorem actualCuspNativeEigenvalue_nonneg (N : ℕ) [NeZero N] (hN : 0 < N)\n    (i : actualCuspBasisIndex N hN) : 0 ≤ actualCuspNativeEigenvalue N hN i"
+        },
+        {
+          "name": "actualCuspHilbertBasis_original_friedrichs_graph",
+          "line": 88,
+          "source_signature_or_definition": "theorem actualCuspHilbertBasis_original_friedrichs_graph (N : ℕ) [NeZero N] (hN : 0 < N)\n    (i : actualCuspBasisIndex N hN) :\n    ((actualCuspHilbertBasis N hN i : QuotientL2 N),\n      (actualCuspNativeEigenvalue N hN i : ℂ) • (actualCuspHilbertBasis N hN i : QuotientL2 N)) ∈\n        (actualGammaFriedrichs N).graph"
+        },
+        {
+          "name": "actualCuspHilbertBasis_full_cusp_graph",
+          "line": 98,
+          "source_signature_or_definition": "theorem actualCuspHilbertBasis_full_cusp_graph (N : ℕ) [NeZero N] (hN : 0 < N)\n    (i : actualCuspBasisIndex N hN) :\n    (actualCuspHilbertBasis N hN i,\n      (actualCuspNativeEigenvalue N hN i : ℂ) • actualCuspHilbertBasis N hN i) ∈\n        (actualFullCuspFriedrichs N hN).graph"
+        }
+      ]
+    }
+  ],
+  "frozen_author_geometry_and_native_application": {
+    "freeze_sha256": "bad587b33cfef9e8b41a9cf72f9c1ac039e55039531dec1dd9194be76b19cb7e",
+    "registry_sha256": "92ca57165212233d3095935f5d7e40d2329ea3072b0ccc63444a7f1ca9d5172e",
+    "scope": "confirm imported declarations, coordinates and their normalization only; no independent certification of six whole proofs",
+    "sources": [
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularCompactGram.lean",
+        "bytes": 6746,
+        "sha256": "dfa7916101b8762e0379a691bca026ea886c2e564a32a21263369a8dda717c3b",
+        "git_blob": "a52b0a827679fa19167b80526608efeea4303c0f",
+        "declarations": [
+          {
+            "name": "vector",
+            "line": 37,
+            "source_signature_or_definition": "def vector (q : ℕ+) (M : ℕ) (a : ℕ→ℂ) (ψ : HeightSeed) : QuotientL2 q.val :=\n  ∑ i∈range (M+1),star (a (M+i)) • packetVector q (mark (M+i)) ψ"
+          },
+          {
+            "name": "gram",
+            "line": 53,
+            "source_signature_or_definition": "theorem gram (q : ℕ+) {M : ℕ} (hM : 0<M) (a : ℕ→ℂ) (j : ℕ) (r : ℝ) :\n    (‖vector q M a (compact r j)‖^2:ℝ)=\n      height j*dyadEnergy M a+\n        (packet M a (fun m n => series q (mark m) (mark n) (some j) r)).re"
+          },
+          {
+            "name": "full_rows",
+            "line": 106,
+            "source_signature_or_definition": "theorem full_rows {K : ℝ} (hK : 0<K) (q : ℕ+) {M : ℕ} (hM : 0<M) (a : ℕ→ℂ) :\n    HasSum (entry M q.val K (fun n => star (a n)) a)\n      (packet M a (fun m n => ∑' c,term (gaussianOrbit K) q (mark m) (mark n) c))"
+          }
+        ]
+      },
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularInfinityDyadic.lean",
+        "bytes": 8297,
+        "sha256": "f5b8d2309637a0b82bacbbad1307570e1b5731c5f373cf6273ba5d80fb010c74",
+        "git_blob": "0bb31eee487e7f48fd7a7bebc63f3b640fba3cd8",
+        "declarations": [
+          {
+            "name": "D",
+            "line": 28,
+            "source_signature_or_definition": "def D (q : ℕ+) (M : ℕ) (a : ℕ→ℂ) (i : Idx q) :=\n  markedRow (block M) (row M a) (index M) (basisR q.val q.property i (originalFrame false))"
+          },
+          {
+            "name": "L",
+            "line": 30,
+            "source_signature_or_definition": "def L (q : ℕ+) (M : ℕ) (a : ℕ→ℂ) := native q false (block M) (row M a) (index M)"
+          },
+          {
+            "name": "positive_shell",
+            "line": 85,
+            "source_signature_or_definition": "theorem positive_shell : ∃ C : ℝ,0<C ∧ ∀ {e K : ℝ},0<e → 2≤K → ∀ (q : ℕ+) {M : ℕ},0<M →\n    ∀ a : ℕ→ℂ,\n      (∀ J : Finset (Idx q),\n        (∀ i∈J,¬exceptional q.val i ∧ height q.val i∈window K) →\n        (∑ i∈J,‖D q M a i‖^2/cosh (π*height q.val i))≤\n          C*((π*sqrt π/8)*K^2+cost e*((M:ℝ)^(1+e)/q.val))*dyadEnergy M a) ∧\n      (∫ t,L q M a t/cosh (π*t) ∂windowMeasure K)≤\n          C*((π*sqrt π/8)*K^2+cost e*((M:ℝ)^(1+e)/q.val))*dyadEnergy M a"
+          }
+        ]
+      },
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularCompactCoordinates.lean",
+        "bytes": 7239,
+        "sha256": "828f78d7fed04b9e3c66e665e2c5ecb049fe85a9d58c05f629599616a4e128d4",
+        "git_blob": "7c90304cf1e7de7a64a1465a6d96f0984b6204c4",
+        "declarations": [
+          {
+            "name": "spatial",
+            "line": 29,
+            "source_signature_or_definition": "def spatial (q : ℕ+) (one : Bool) (S : Finset ℕ) (a : ℕ→ℂ) (f : ℕ→ℤ)\n    (nf : ∀ n∈S,f n≠0) (ψ : HeightSeed) : QuotientL2 q.val :=\n  (packet_L2 q.val one S a f nf ψ.toFun ψ.continuous ψ.compact ψ.positive).toLp\n    (packet q.val one S a f ψ.toFun)"
+          },
+          {
+            "name": "native",
+            "line": 34,
+            "source_signature_or_definition": "def native (q : ℕ+) (one : Bool) (S : Finset ℕ) (a : ℕ→ℂ) (f : ℕ→ℤ) (t : ℝ) :=\n  nativeMass q.val (fun b => markedRow S a f (fun n => nativeR b one n t))"
+          },
+          {
+            "name": "spectral_squares",
+            "line": 40,
+            "source_signature_or_definition": "theorem spectral_squares (q : ℕ+) (one : Bool) (S : Finset ℕ) (a : ℕ→ℂ) (f : ℕ→ℤ)\n    (nf : ∀ n∈S,f n≠0) (ψ : HeightSeed) :\n    let B := ‖spatial q one S a f nf ψ‖^2\n    let D := fun i => markedRow S a f (basisR q.val q.property i (originalFrame one))\n    let C := fun t : ℝ => ‖orderProbe 1 ψ.toFun ((t:ℂ)*I)‖^2*native q one S a f t\n    (∀ J : Finset (actualCuspBasisIndex q.val q.property),\n      (∑ i∈J,‖orderProbe 1 ψ.toFun (basisOrder q.val q.property i)*D i‖^2)≤B) ∧\n      Integrable C ∧ (∫ t,C t)≤B"
+          },
+          {
+            "name": "positive_vector",
+            "line": 93,
+            "source_signature_or_definition": "theorem positive_vector (q : ℕ+) {M : ℕ} (hM : 0<M) (a : ℕ→ℂ) (ψ : HeightSeed) :\n    spatial q false (block M) (row M a) (index M) (nonzero hM) ψ=vector q M a ψ"
+          }
+        ]
+      },
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularCompactEnergy.lean",
+        "bytes": 5651,
+        "sha256": "471613d8d4170ba5e53ec6cb4d91107593b8a275917b1bd5f3ef7ec4ddb37893",
+        "git_blob": "8a32515cf9078675c44cfdbd2251d13760bc58b7",
+        "declarations": [
+          {
+            "name": "mass",
+            "line": 54,
+            "source_signature_or_definition": "def mass (q : ℕ+) (M : ℕ) (a : ℕ→ℂ) (K : ℝ) (j : ℕ) (r : ℝ) :=\n  weight K r*‖vector q M a (compact r j)‖^2"
+          },
+          {
+            "name": "energy_limit",
+            "line": 65,
+            "source_signature_or_definition": "theorem energy_limit {K : ℝ} (hp : 0<K) (q : ℕ+) {M : ℕ} (hM : 0<M) (a : ℕ→ℂ) :\n    (∀ j,Integrable (mass q M a K j)) ∧\n    Tendsto (fun j : ℕ => ∫ r : ℝ,mass q M a K j r) atTop (𝓝 (limitEnergy q M a K))"
+          },
+          {
+            "name": "energy_bound",
+            "line": 82,
+            "source_signature_or_definition": "theorem energy_bound {e K : ℝ} (he : 0<e) (hK : 2≤K) (q : ℕ+) {M : ℕ} (hM : 0<M) (a : ℕ→ℂ) :\n    limitEnergy q M a K≤\n      ((π*sqrt π/8)*K^3+cost e*K*((M:ℝ)^(1+e)/q.val))*dyadEnergy M a"
+          }
+        ]
+      },
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularCutoffOrder.lean",
+        "bytes": 7209,
+        "sha256": "9254b4edffec7685d19d2052bb12c0e1f38a8972e586eed5575db9ac00cd204b",
+        "git_blob": "189957745da6fabc292b15186fcc272e8bb58b98",
+        "declarations": [
+          {
+            "name": "coordinate_limit",
+            "line": 31,
+            "source_signature_or_definition": "theorem coordinate_limit (r t : ℝ) : Tendsto (fun j : ℕ => coordinate j r t) atTop (𝓝 (floorLimit r t))"
+          },
+          {
+            "name": "coordinate_measurable",
+            "line": 41,
+            "source_signature_or_definition": "theorem coordinate_measurable (j : ℕ) : Measurable (Function.uncurry (coordinate j))"
+          },
+          {
+            "name": "coordinate_bound",
+            "line": 77,
+            "source_signature_or_definition": "theorem coordinate_bound (j : ℕ) (r t : ℝ) : ‖coordinate j r t‖≤cap"
+          }
+        ]
+      },
+      {
+        "status": "frozen author source; reviewed only for native supplier applicability; full source proof audit assigned separately",
+        "path": "output/resume-20261113/resume-balance-policy/r14_04/regular-sieve-full-next/maass-energy-next/Part3OriginalRegularGaussianSpectralWindow.lean",
+        "bytes": 6244,
+        "sha256": "ec5673047faa268c1766a83a91e8c788c9c70e874839152fb76696e1b3986321",
+        "git_blob": "0671eaba588fbc3bc940d3fa3dd25dd00d1dc561",
+        "declarations": [
+          {
+            "name": "window",
+            "line": 18,
+            "source_signature_or_definition": "def window (K : ℝ) := {t : ℝ | 2≤|t| ∧ K/2≤|t| ∧ |t|≤K}"
+          },
+          {
+            "name": "native_continuous",
+            "line": 28,
+            "source_signature_or_definition": "theorem native_continuous (q : ℕ+) (one : Bool) (S : Finset ℕ) (a : ℕ→ℂ) (f : ℕ→ℤ) :\n    Continuous (native q one S a f)"
+          },
+          {
+            "name": "integral_window",
+            "line": 47,
+            "source_signature_or_definition": "theorem integral_window {K : ℝ} (hK : 0<K) {L : ℝ→ℝ} (cont : Continuous L) (L0 : ∀ t,0≤L t) :\n    (∀ j,Integrable (lineDensity K j L) (volume.prod (windowMeasure K))) ∧\n    Tendsto (fun j : ℕ => ∫ z,lineDensity K (some j) L z ∂volume.prod (windowMeasure K))\n      atTop (𝓝 (∫ z,lineDensity K none L z ∂volume.prod (windowMeasure K)))"
+          },
+          {
+            "name": "discrete_integral",
+            "line": 67,
+            "source_signature_or_definition": "theorem discrete_integral {K : ℝ} (hK : 0<K) (t : ℝ) :\n    (∀ j,Integrable (discreteDensity K j t)) ∧\n    Tendsto (fun j : ℕ => ∫ r : ℝ,discreteDensity K (some j) t r) atTop\n      (𝓝 (∫ r : ℝ,discreteDensity K none t r))"
+          },
+          {
+            "name": "shell_floor",
+            "line": 83,
+            "source_signature_or_definition": "theorem shell_floor : ∃ C : ℝ,0<C ∧ ∀ {K t : ℝ},2≤K → t∈window K →\n    K/cosh (π*t)≤C*∫ r : ℝ,discreteDensity K none t r"
+          }
+        ]
+      }
+    ]
+  },
+  "derivation": [
+    "On the actual Gamma0 orbit space carrierPushforward is the cell pushforward, and QuotientL2 is Lp C 2 of that measure. Each nonzero level is admitted without primality. The full compact spectrum theorem is independent of the six original M/N specializations. It permits two independent finite index sets, rows, signed nonzero marking maps and positive-height supported seeds. One fixed height seed is shared by each leg up to the required dilation per mode. If each frequency has a different seed, finite bilinearity is available term by term; a uniform row estimate for independent seeds does not follow.",
+    "HeightSeed requires continuity, compact support and closed support inside (0,infinity); SmoothHeightSeed extends it. For m nonzero, the physical mode uses |m|^(-1/2) psi(|m| y). The conjugated coefficient multiplies the Poincare summand and reappears without conjugation in the tested spectral row. common_orderProbe reduces to frequency 1. For the proposed simultaneous packet take psi=(seed (rate 1) r j).toHeightSeed at each fixed r,j. Do not feed the untruncated noncompact function to compact_spectrum.",
+    "The full discrete expansion runs over actualCuspBasisIndex, the Hilbert basis of the actual allFrameCuspSubspace. It arises from the original compact resolvent. Both the ambient Friedrichs graph and restricted full-cusp graph act by the same actualCuspNativeEigenvalue. This eigenvalue is nonnegative; regular is the complement of lambda<1/4. order_regular gives order=i sqrt(lambda-1/4), including lambda=1/4 with t=0. No exclusion of exceptional eigenvectors is a hypothesis of the full compact equality. In the positive-square inequality select the finitely many regular indices being tested or bound every finite subset before taking its nonnegative sum.",
+    "Parameters is equivalent to all native cusp classes (youngCuspEquiv). nativeR evaluates the inverse Young expansion at the chosen observation, signed frequency and real t. nativeProduct has the complete finite sum of conjugate(X_a)Y_a/(4*pi), nativeMass its real self-Gram. The integral runs over both signs of t on real Lebesgue measure. Under integrated_native, physical compact support and zero constant projections are explicit. marked_support and packet_projection discharge both for the present nonzero packets. The weak adjoint uses a.e. spectral coordinates; it does not take pointwise critical-line Eisenstein functions as quotient L2 vectors.",
+    "The continuous subspace is the closed span of physical centered generators. nativeSynthesis_analysis_eq_projection, centered_eq_physical_complement and physical_split prove the complete orthogonal decomposition into constant, cusp and actual centered continuous parts. On the specified packets the constant projection vanishes by the zero horizontal Fourier average and actual_residual_projection. No external residual-free or Parseval premise is required by compact_spectrum. Zero frequency falls outside this application.",
+    "compact_spectrum on the identity frame gives Summable and Integrable, and discrete(X)*star(discrete(Y)) plus nativeProduct(Y,X). On positive singleton marks full_rank_one_trace equals the conjugate of the entire spectral expression. Finite-row bilinearity preserves the relevant coefficient and probe orientation. At either Bool observation basis_packet_inner, packet_spectrum and integrated_native already identify the actual spectral squares. The identity-frame positive-modulus spatial price requires transport for other observations or signs.",
+    "Original basisR equals half of the K-Bessel amplitude for every nonzero mode. The manuscript-normalized row definitions use basisR and nativeR. The regular orderProbe cutoff limit is 2*probe, hence factor 4 when squaring; the same compact normalization applies on the continuous side. Bare Plancherel has dt/(4*pi). The separate Gaussian majorant supplies reciprocal cosh(pi*t), with an additional K on the left on shell 2<=|t|, K/2<=|t|<=K. Its applicability to an entire cumulative interval needs shell summation and the original base_cumulative covering K<=2 and the threshold. Nothing in the compact identity divides by cosh automatically.",
+    "one_zero_pair includes e(n/N) in the conjugate test against an arbitrary L2 function, and pulled_infinity and fricke_measure identify the pullback and preserve norm. These allow the chart change without diagonalizing the cusp basis under Fricke. For negative marks the abstract coordinate identity is already signed, but a positive-index spatial estimate still needs conjugating the physical seed, reversing the modulation sign and preserving the weighted energy. Repeated/sparse indices and dyadic interval endpoints must preserve the actual row coefficients.",
+    "The compact identities and pointwise cutoff_limit alone give no global uniform spatial price. The frozen six-source 04 candidate joins actual spatial and spectral quantities on positive-frequency infinity integer dyads: spectral_squares, positive_vector, energy_limit, energy_bound, coordinate_limit and the finite-window integral/discrete convergence feed positive_shell. Its actual D uses basisR at originalFrame false, L uses nativeMass of signed Fourier coefficients evaluated at positive M+i, all a : Parameters. shell_floor consumes 2*probe with the squared factor 4 on the full real modulation line using a positive-half-line lower bound. The shell output comprises bounds for all finite regular basis subsets selected by the stated window and the full incoming native integral on that window. Scope here is declaration and physical normalization applicability; detailed estimates and Lean source correctness have their own independent reviewer. To close the full (4.24)/(4.25) still requires dyadic-to-cumulative summation with uniform constants and both signs/observations on the manuscript carrier. No inference of a missing physical spectral supplier or an error in the manuscript follows from these remaining assembly steps."
+  ],
+  "optional_shell_loss_accounting": "After summing shells, the K_j^2 diagonal costs sum geometrically; the M^(1+delta)/q loss can repeat O(log(2K)) times. Take 0<delta<=min(epsilon/2,1/2). If K<=M^(1+delta), log(2K) is bounded by C_epsilon M^(epsilon-delta). If K>M^(1+delta), M^(1+delta) log(2K)/q is at most C K^2 for q>=1, K>=2. Nonempty L<n<=2L has L>=1/2, M=ceil(L)<=2L; zero extension into [M,2M] preserves the squared row norm. This is an elementary bookkeeping route, not an accepted proof of the full result.",
+  "validation": {
+    "source_and_git_objects_only": true,
+    "locally_executed_lean_lake_or_helpers": false,
+    "kernel_acceptance": 0,
+    "new_mathematical_acceptance": 0,
+    "all_K_accepted": false
+  }
+}

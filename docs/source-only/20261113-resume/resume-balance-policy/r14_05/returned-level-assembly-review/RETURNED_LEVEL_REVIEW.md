@@ -1,0 +1,33 @@
+# Independent source review of the finite returned levels
+
+I checked the three modules and LEVEL_RETURN.md in freeze b2341db5286a14070551b5b231ee656166557ce132910285d6638969715b9605 against the actual two-cutoff trace, signed projection, exceptional floor, prefix return and holomorphic estimate. The comparison tree is 8f70dd1a9d1aa03c02490c55ed3fb25002d82985. The selected projection freeze is 2401a3c2 with independent review 7db54de8. The selected returned-window freeze is 00fdea0b. The published physical windows and scale R2 are 549fc94b and 3eaf5f36. The manuscript comparison is Drappeau pp. 16–17, Lemma 4.10 and the proof of (4.29), and the native common interval and infinity phase fixed in medium §10(v)–(vii) at 9731290e.
+
+## Input shoulders, parent plateaux and exact child scales
+
+Fix one entry scale Q>0, M=2ʲ−1/2, Y>0 and C=πMY/Q. Each level dyad of lower endpoint B is (B,2B], intersected with the positive integers. The possible input values of Φ(q/Q) have q in [Q/2,5Q/2]. The four lower endpoints Aᵥ=2ᵛQ/4 for v=0,…,3 cover (Q/4,4Q]. Hence q=Q/2 is covered by (Q/4,Q/2], q=5Q/2 by (2Q,4Q], and the plateau entry (Q,2Q] by v=2. The proof derives the inclusion from the actual topological support. It does not need either endpoint value to vanish.
+
+For every pair of marks in the same dyadic frequency block, a nonzero reflected test Φ(Yx)Φ(4π√(mn)/(dQx)) requires 16C/25≤d≤32C. Thus its six covering dyads have lower endpoints Bₗ=2ˡC/2, l=0,…,5, and union (C/2,32C]. The strict lower end is legitimate since 16/25>1/2, and the upper endpoint is included. The broader cover is used to dominate the nonnegative costs.
+
+The parent in the printed definition is (Q,16Q]. Its four plateau *entry scales* are Qᵦ=2ᵇQ, b=0,…,3. Applying this single-entry theorem four times gives shoulder scales Aᵦᵥ=2ᵛQᵦ/4, physical radii Cᵦ=C/2ᵇ and child endpoints Bᵦₗ=2^(l−b−1)C. Each mark still uses dQᵦ in its reflected test. The 24 covering intervals have combined union (C/16,32C]. Children with equal endpoints from different b can have different reflected weights and must retain their multiplicity when charged. The four lists of shoulders together cover (Q/4,32Q]; only (Q,16Q] is the parent energy being estimated. The theorem in this freeze has one entry. These four applications are a finite deduction, rather than a new 24-window Lean declaration.
+
+The exact scale-contraction R2 endpoint at parent Q is Bᵦₗ above. At the single shared test scale Z=Q²/(D_damp M), this is between (π/16)Q/D_damp and 16πQ/D_damp. No redefinition of the parent Q is needed. If Q/4 were inserted into that formula as a new parent merely because the first shoulder starts there, the damped scale would be Z/16 and its radius at fixed Y would instead be 4C. Those constants cannot be carried over unchanged. The source never uses the shoulders as parent scales.
+
+## Complex equality and positivity
+
+Both trace legs use the same original [a,b), the same ω and conjugate(e(mω))e(nω) at Γ₀(level) infinity. balance starts from the complex HasSum over *all* positive levels of the complete marked trace. For inputs outside the shoulder union U, the external weight vanishes. For d outside the six-window union V, six_return forces the reflected test to vanish identically for every marked pair. Its regular and complementary integrals, native discrete multipliers, holomorphic moments and hence the complete spectrum at that mark vanish. The proof reduces the two complete totals to finite sums before substituting the fixed-level sums of the retained and remaining components. It assumes no separate levelwise convergence for the five resulting contributions.
+
+For fixed 0≤T<1 the true native band floor gives, for each slot with τ≤T and Y≥Y₀(T), a nonnegative real part of the input slot. Four times this real part equals the real part of its single-bump native weight times the squared native ρᴷ row norm. The factor four comes from ρᴷ=2R on both positive marks. Multiplication by the real Φ(q/Q) in [0,1] preserves nonnegativity. This permits enlargement of the retained sum from the unit plateau (Q,2Q] to U. The input remainder uses a different inequality, −Re(Φ rest)≤|rest|. No separate nonnegativity is asserted for the high complementary, principal, incoming or holomorphic contributions. On both sides the high contribution is the norm of the *sum* of the actual complex slots with τ>T at that level.
+
+## Single-entry bound and the induction bill
+
+Let Pₗ be prefixMax on (Bₗ,2Bₗ]. It takes a maximum after summing the full native exceptional energy over all levels and all strict exceptional slots, at one common prefix endpoint and the original ω. The implementation uses [a,min(b,n+1)) for a≤n≤b. For a<b this includes all nonempty prefixes. The omitted empty prefix has energy zero. At a=b the only prefix is empty. Let Eₛ(z)=|highₛ(z)|+|Rₛ(z)|+|Cₛ(z)| for the two actual tests. R is the entire λ≥1/4 principal spectrum, including t=0, and C is the all-incoming real-line integral with dt/(4π cosh(πt)).
+
+For fixed T and ε>0 there exist c,K>0, D≥0 and Y₀≥1 before Y≥Y₀, Q>0, ω, j and the common endpoints 2ʲ≤a≤b≤2ʲ⁺¹. The precise estimate obtained for the retained native energy is
+
+    c J_T((Q,2Q]) ≤ K Σₗ [Pₗ + Y^ε(Bₗ+M)M]
+        + 4 [Σ_{d∈V} E_out(d) + Σ_{q∈U} E_in(q)]
+        + 4D [Σₗ (Bₗ+M^(1+ε))M + Σᵥ (Aᵥ+M^(1+ε))M].
+
+The input floor supplies c, output_bound supplies K, hol_price supplies D, and Y₀ is the larger of the two exceptional thresholds. Since Σₗ Bₗ=63C/2 and Σᵥ Aᵥ=15Q/4, the full holomorphic charge per application is 4DM(63C/2+15Q/4+10M^(1+ε)). Both signs of the half-frequency in the Mellin inversion, the density integral with its Abel moment, and the X=1 baseline are already included in K. The proof charges a union by its component dyads only for nonnegative costs. All high, principal and incoming residuals stay as levelwise norms on both finite unions. After division by c the actual child coefficient is K/c. An induction using 24 entries must budget at most 24K/c before the separate damping choice; the Mellin and two-sign factors are already present. No logarithmic multiplier appears on each recurrent prefix.
+
+A uniform actual order bound is still needed to identify the parent band with the full native energy. Passing to the old square-root transport also requires its specific τ≤1/2 cap. Uniform estimates for both ordinary real-parameter errors on both sides and the matching initial estimate remain necessary. This batch establishes a finite retained single-step inequality with those three explicit errors, and supplies no new unconditional (4.29), (4.30), Pascadi J, 7/32 or P3.5. The source and hash review did not run Lean, elaborate the declarations or verify them in the kernel.
