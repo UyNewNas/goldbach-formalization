@@ -16,9 +16,18 @@ PRODUCERS = {
                  'P2_R7_OUTER_PAYLOAD_INDEX.json','c10c60b44c6cad2c8a9a2f36856ec81341f6b646d9282df5d6d93a08b806c370',1),
     'r8_pair_raw': ('P2_R8_PAIR_RAW_SELECTION.json','23c44b3fd3b542c024ff983a821102749592069bf6068f1225cbb3b878b5cd09',
                     'P2_R8_PAIR_RAW_PAYLOAD_INDEX.json','9ce807fa76162da77043a05e1113426d7ae0d0ec125bf7c402ae80e14b8989e6',2)}
+# View-only invalidation. Producer selections/indexes/checkpoints remain immutable.
+INVALIDATED = (
+    'ImbalancedChen.ActualThirdOriginalP4ASymmetricTentPrerequisites',
+    'ImbalancedChen.ActualThirdOriginalP4ABalancedSymmetricLeaf',
+    'ImbalancedChen.ActualThirdOriginalP4ASymmetricSafeChordDirection',
+    'ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue',
+)
+
 ADOPTION = {'producer_selections':{name:{'selection_sha256':v[1],'payload_index_sha256':v[3],'module_count':v[4]}
                                   for name,v in PRODUCERS.items()},
-            'module_count':89,'facet_count':712,'source_files':89,'recompile_count':13,
+            'module_count':85,'facet_count':680,'source_files':85,'recompile_count':17,
+            'invalidated_modules':list(INVALIDATED),
             'historical_runs':[43402135668,43412656063,43422852694],
             'root_profile_sha256':'b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254',
             'stock_facet':'leanArts','native_precompile_adopted':False,
@@ -51,7 +60,15 @@ def load_inputs():
             and [r['module'] for r in pair_raw['rows']]==['ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld','ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue']
             and [n for n in outer['compile_modules'] if n not in {r['module'] for r in pair_raw['rows']}]==pair_raw['compile_modules']
             and len(pair_raw['compile_modules'])==13,'Root89/new13 source partition differs')
-    return {'rows':rows,'compile_modules':pair_raw['compile_modules']},None
+    require(len(INVALIDATED)==len(set(INVALIDATED))==4 and set(INVALIDATED)<=set(names),
+            'Invalidation must select exactly four original cache rows')
+    retained=[r for r in rows if r['module'] not in INVALIDATED]
+    compile_names=[*pair_raw['compile_modules'],*INVALIDATED]
+    require(len(retained)==85 and len(compile_names)==len(set(compile_names))==17
+            and {r['module'] for r in retained}.isdisjoint(compile_names)
+            and {r['module'] for r in retained}|set(compile_names)==set(names)|set(pair_raw['compile_modules']),
+            'Filtered85/new17 must preserve the original complete partition')
+    return {'rows':retained,'compile_modules':compile_names},None
 
 
 def validate_all(parent):
@@ -62,12 +79,12 @@ def validate_all(parent):
 
 class ProjectSession(CacheSession):
     def __init__(self, parent, producer):
-        require(parent.scope == NATIVE, 'Root89 cannot enter the independent Stored graph')
+        require(parent.scope == NATIVE, 'Root85 cannot enter the independent Stored graph')
         from p2_validation import load_bound_bundle
         manifest, _ = load_bound_bundle()
-        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root89 not explicitly adopted')
+        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root85 not explicitly adopted')
         self.__dict__ = parent.__dict__.copy()
-        self.scope = 'P2_PROJECT_89'
+        self.scope = 'P2_PROJECT_85'
         self.producer = producer
         self.selection, self.index = load_producer(producer)
         combined, _ = load_inputs()
@@ -78,7 +95,15 @@ class ProjectSession(CacheSession):
         new = {r['module']: r for r in manifest['modules']}
         compile_names = combined['compile_modules']
         require(len(new) == 102 and set(old).isdisjoint(compile_names)
-                and set(old) | set(compile_names) == set(new), 'Root89/new13 must exactly partition102')
+                and set(old) | set(compile_names) == set(new), 'Root85/new17 must exactly partition102')
+        require(len(old)==85 and len(compile_names)==17,
+                'Wrong filtered root source counts')
+        # Retained local inputs must themselves import only retained local inputs.
+        # Together with unchanged source hashes this excludes every affected
+        # transitive local descendant, not just the edited module.
+        require(all(dependency not in new or dependency in old
+                    for name in old for dependency in new[name]['imports']),
+                'Retained root cache depends on a recompiled local module')
         for name, row in old.items():
             require((new[name]['install_path'],new[name]['bytes'],new[name]['sha256'],new[name]['git_blob']) ==
                     (row['source']['path'],row['source']['bytes'],row['source']['sha256'],row['source_git_blob']),
@@ -100,7 +125,7 @@ class ProjectSession(CacheSession):
         return self.project
 
     def rows(self):
-        return self.selection['rows']
+        return [r for r in self.selection['rows'] if r['module'] not in INVALIDATED]
 
     def acquire(self):
         self.require_fixtures()
@@ -127,7 +152,7 @@ class ProjectSession(CacheSession):
                 and raw['manifest_sha256'] == self.selection['original_manifest_sha256']
                 and raw['source_identity_sha256'] == self.selection['original_source_identity_sha256']
                 and raw['runtime_audit_valid'] and raw['all_dependency_source_pins_valid']
-                and raw['completed_compile_candidates'] == len(self.rows()) and raw['issues'] == []
+                and raw['completed_compile_candidates'] == len(self.selection['rows']) and raw['issues'] == []
                 and raw['runtime_state']['guard_sha256'] == '837f00360ca1364eb6adede88c05a72122acbbbbff2437c83026f2851836a877'
                 and raw['runtime_state']['input_sha256'][raw['runtime_state']['root']+'/lakefile.toml'] == ADOPTION['root_profile_sha256'],
                 'Wrong authentic root checkpoint/source/profile/runtime')
@@ -211,3 +236,4 @@ class ProjectSession(CacheSession):
         return {'project_'+self.producer+'_qualification_sha256':sha(self.logs/self.name('CACHE_QUALIFICATION.json')),
                 'project_'+self.producer+'_restore_sha256':sha(self.logs/self.name('CACHE_RAW_RESTORE.json')),
                 'project_'+self.producer+'_acquisition_sha256':sha(self.logs/self.name('CACHE_ACQUISITION.json'))}
+
