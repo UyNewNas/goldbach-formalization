@@ -265,9 +265,9 @@ theorem original_symmetric_tent_range32_mean_upper
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
     (by cases k <;> simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
+    (by cases k <;> simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
+    (by cases k <;> simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
