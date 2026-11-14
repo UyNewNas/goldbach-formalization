@@ -1,7 +1,7 @@
 name: P2 integer mass ABI exact closure validation
 on:
   push:
-    branches: [ci/p2-integer-mass-r18-20261114]
+    branches: [ci/p2-integer-mass-r19-20261114]
     paths: [.github/workflows/p2-integer-mass-validation.yml]
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
     env:
       SOURCE_COMMIT: c8f756f40eb8404013e73ac3ef0170279c44d0ae
       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
-      EXPECTED_MANIFEST: ceeff67f302a261a55115b30c0e91ab0cadbd96233c9ce789124652bceafdc1b
+      EXPECTED_MANIFEST: 98832631410cfc078b44c5af7ccc1c0075b3dcc27411c0fae1306bccf321b55a
       LEAN_NUM_THREADS: 2
       P2_BUNDLE: docs/source-only/20261113-resume/p2-validation-v6
       CACHE_BUNDLE: docs/source-only/20261113-resume/coherent-cache-tools
@@ -102,7 +102,7 @@ jobs:
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/cache_runtime_setup.py"
-      - name: Acquire authentic bootstrap,407 and89 root inputs with the shared Range reader
+      - name: Acquire authentic bootstrap,407 and85 root inputs with the shared Range reader
         id: cache_acquisition
         timeout-minutes: 75
         env:
@@ -136,7 +136,7 @@ jobs:
               receipt.append({'name':p['name'],'sha':sha})
           pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
           PY
-      - name: Restore authentic407 package and89 root inputs; require stock no-build qualification
+      - name: Restore authentic407 package and85 root inputs; require stock no-build qualification
         id: cache_qualification
         timeout-minutes: 75
         env:
@@ -164,14 +164,14 @@ jobs:
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" before
           lake env lean -DwarningAsError=true FinitePiPilot.lean 2>&1 | tee "$LOGS/finitepi-types.log"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" verify
-      - name: Compile only13 affected modules; preserve qualified89 inputs
+      - name: Compile exactly17 affected modules; preserve qualified85 inputs
         timeout-minutes: 200
         run: |
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" require
           mapfile -t modules < "$LOGS/recompile-modules.txt"
-          test "${#modules[@]}" -eq 13
+          test "${#modules[@]}" -eq 17
           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" snapshot
       - name: Replay all closure modules with original bundled kernel checker
