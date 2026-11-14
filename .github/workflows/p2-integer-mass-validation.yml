@@ -1,7 +1,7 @@
 name: P2 integer mass ABI exact closure validation
 on:
   push:
-    branches: [ci/p2-integer-mass-r22-20261115]
+    branches: [ci/p2-integer-mass-r23-20261115]
     paths: [.github/workflows/p2-integer-mass-validation.yml]
 permissions:
   contents: read
@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     env:
-      SOURCE_COMMIT: d9002cf6fe0c162060db9760b587dc5fe7c549bb
+      SOURCE_COMMIT: c9e959c4c358b501272d29c329ac3c2040e28697
       BASELINE_COMMIT: eb035a259f2f40853e9899f6d98af25852184fee
-      EXPECTED_MANIFEST: 909cc1172c77320ad905bcb63bd752ed31b21331c083c1fc7a1bf1d63e4c8938
+      EXPECTED_MANIFEST: eb5f69ec17be11ae5a99b23712946a39a0e0f6a8b0d6170f03a6754818cfbe6f
       LEAN_NUM_THREADS: 2
       P2_BUNDLE: docs/source-only/20261113-resume/p2-validation-v6
       CACHE_BUNDLE: docs/source-only/20261113-resume/coherent-cache-tools
@@ -58,7 +58,7 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: d9002cf6fe0c162060db9760b587dc5fe7c549bb
+          ref: c9e959c4c358b501272d29c329ac3c2040e28697
           path: repair-r9-input
           persist-credentials: false
       - name: Bind repair baseline and exact ABI overlay with original generic stage
@@ -102,7 +102,7 @@ jobs:
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$CACHE_BUNDLE/cache_runtime_setup.py"
-      - name: Acquire authentic bootstrap,407 and83 root inputs with the shared Range reader
+      - name: Acquire authentic bootstrap,407 and75 root inputs with the shared Range reader
         id: cache_acquisition
         timeout-minutes: 75
         env:
@@ -136,7 +136,7 @@ jobs:
               receipt.append({'name':p['name'],'sha':sha})
           pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
           PY
-      - name: Restore authentic407 package and83 root inputs; require stock no-build qualification
+      - name: Restore authentic407 package and75 root inputs; require stock no-build qualification
         id: cache_qualification
         timeout-minutes: 75
         env:
@@ -164,14 +164,14 @@ jobs:
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" before
           lake env lean -DwarningAsError=true FinitePiPilot.lean 2>&1 | tee "$LOGS/finitepi-types.log"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" verify
-      - name: Compile exactly19 affected modules; preserve qualified83 inputs
+      - name: Compile exactly27 affected modules; preserve qualified75 inputs
         timeout-minutes: 200
         run: |
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/finitepi_pilot.py" require
           mapfile -t modules < "$LOGS/recompile-modules.txt"
-          test "${#modules[@]}" -eq 19
+          test "${#modules[@]}" -eq 27
           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
           python3 "$GITHUB_WORKSPACE/$P2_BUNDLE/prepare_p2_integer_mass_validation.py" snapshot
       - name: Replay all closure modules with original bundled kernel checker

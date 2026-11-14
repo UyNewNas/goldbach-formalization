@@ -24,11 +24,19 @@ INVALIDATED = (
     'ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue',
     'ImbalancedChen.P4AOriginalExecutableLog32',
     'ImbalancedChen.FinitePiIntegral',
+    'ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteDispatch',
+    'ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector',
+    'ImbalancedChen.ActualThirdOriginalP4AOrdinaryOuterMinimum',
+    'ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld',
+    'ImbalancedChen.P4AClosedTreeCoordinatePropagation',
+    'ImbalancedChen.P4AOriginalMuSplitInvariant',
+    'ImbalancedChen.P4AOriginalRange32MassCeil',
+    'ImbalancedChen.P4AOriginalSeedRange32Invariant',
 )
 
 ADOPTION = {'producer_selections':{name:{'selection_sha256':v[1],'payload_index_sha256':v[3],'module_count':v[4]}
                                   for name,v in PRODUCERS.items()},
-            'module_count':83,'facet_count':664,'source_files':83,'recompile_count':19,
+            'module_count':75,'facet_count':600,'source_files':75,'recompile_count':27,
             'invalidated_modules':list(INVALIDATED),
             'historical_runs':[43402135668,43412656063,43422852694],
             'root_profile_sha256':'b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254',
@@ -62,14 +70,14 @@ def load_inputs():
             and [r['module'] for r in pair_raw['rows']]==['ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld','ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue']
             and [n for n in outer['compile_modules'] if n not in {r['module'] for r in pair_raw['rows']}]==pair_raw['compile_modules']
             and len(pair_raw['compile_modules'])==13,'Root89/new13 source partition differs')
-    require(len(INVALIDATED)==len(set(INVALIDATED))==6 and set(INVALIDATED)<=set(names),
-            'Invalidation must select exactly six original cache rows')
+    require(len(INVALIDATED)==len(set(INVALIDATED))==14 and set(INVALIDATED)<=set(names),
+            'Invalidation must select exactly fourteen original cache rows')
     retained=[r for r in rows if r['module'] not in INVALIDATED]
     compile_names=[*pair_raw['compile_modules'],*INVALIDATED]
-    require(len(retained)==83 and len(compile_names)==len(set(compile_names))==19
+    require(len(retained)==75 and len(compile_names)==len(set(compile_names))==27
             and {r['module'] for r in retained}.isdisjoint(compile_names)
             and {r['module'] for r in retained}|set(compile_names)==set(names)|set(pair_raw['compile_modules']),
-            'Filtered83/new19 must preserve the original complete partition')
+            'Filtered75/new27 must preserve the original complete partition')
     return {'rows':retained,'compile_modules':compile_names},None
 
 
@@ -81,12 +89,12 @@ def validate_all(parent):
 
 class ProjectSession(CacheSession):
     def __init__(self, parent, producer):
-        require(parent.scope == NATIVE, 'Root83 cannot enter the independent Stored graph')
+        require(parent.scope == NATIVE, 'Root75 cannot enter the independent Stored graph')
         from p2_validation import load_bound_bundle
         manifest, _ = load_bound_bundle()
-        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root83 not explicitly adopted')
+        require(manifest['compile_cache']['root_project_cache'] == ADOPTION, 'Root75 not explicitly adopted')
         self.__dict__ = parent.__dict__.copy()
-        self.scope = 'P2_PROJECT_83'
+        self.scope = 'P2_PROJECT_75'
         self.producer = producer
         self.selection, self.index = load_producer(producer)
         combined, _ = load_inputs()
@@ -97,8 +105,8 @@ class ProjectSession(CacheSession):
         new = {r['module']: r for r in manifest['modules']}
         compile_names = combined['compile_modules']
         require(len(new) == 102 and set(old).isdisjoint(compile_names)
-                and set(old) | set(compile_names) == set(new), 'Root83/new19 must exactly partition102')
-        require(len(old)==83 and len(compile_names)==19,
+                and set(old) | set(compile_names) == set(new), 'Root75/new27 must exactly partition102')
+        require(len(old)==75 and len(compile_names)==27,
                 'Wrong filtered root source counts')
         # Retained local inputs must themselves import only retained local inputs.
         # Together with unchanged source hashes this excludes every affected
@@ -195,6 +203,21 @@ class ProjectSession(CacheSession):
     def qualify(self):
         raw = self.original(); self.verify_restored()
         names = [r['module'] for r in self.rows()]
+        if not names:
+            require(self.selection['rows'] and
+                    all(r['module'] in INVALIDATED for r in self.selection['rows']),
+                    'Empty reuse must be an explicitly fully invalidated authentic producer')
+            self.emit('CACHE_IMPORT_PARTS.json', {'parts':{}})
+            self.emit('CACHE_QUALIFICATION.json', {
+                'status':'AUTHENTIC_PRODUCER_NO_RETAINED_MODULES_NO_STOCK_PROCESS',
+                'stock_process':None, 'modules':[],
+                'original_producer_module_count':len(self.selection['rows']),
+                'invalidated_modules':[r['module'] for r in self.selection['rows']],
+                'physical_parts_receipt_sha256':sha(self.logs/self.name('CACHE_IMPORT_PARTS.json')),
+                'protected_source_compiler_events':0, 'proof_or_full_kernel_acceptance':False,
+                'all_original_caller_gates_still_required':True})
+            self.validate()
+            return
         process = self.run('stock-leanArts',['lake','--no-build','build',*['+'+n+':leanArts' for n in names]])
         self.verify_restored()
         rows, shared = self.qualify_setups(raw,names,self.rows(),lambda n:'+'+n+':setup','stock-setup')
@@ -209,6 +232,26 @@ class ProjectSession(CacheSession):
     def validate(self):
         self.verify_restored(); self.policy_audit(); self.validate_environment(self.original())
         value = self.receipt('CACHE_QUALIFICATION.json'); names = [r['module'] for r in self.rows()]
+        if not names:
+            require(self.selection['rows'] and
+                    all(r['module'] in INVALIDATED for r in self.selection['rows']),
+                    'Empty reuse is not fully covered by explicit invalidation')
+            require(value['status']=='AUTHENTIC_PRODUCER_NO_RETAINED_MODULES_NO_STOCK_PROCESS'
+                    and value['stock_process'] is None and value['modules']==[]
+                    and value['original_producer_module_count']==len(self.selection['rows'])
+                    and value['invalidated_modules']==[r['module'] for r in self.selection['rows']]
+                    and value['protected_source_compiler_events']==0
+                    and value['proof_or_full_kernel_acceptance'] is False
+                    and value['all_original_caller_gates_still_required'] is True,
+                    'Empty producer receipt must not assert stock/module/proof acceptance')
+            require(self.receipt('CACHE_IMPORT_PARTS.json')['parts']=={}
+                    and sha(self.logs/self.name('CACHE_IMPORT_PARTS.json'))==value['physical_parts_receipt_sha256'],
+                    'Empty producer cannot carry physical import qualification claims')
+            require(not any((self.logs/'cache-processes').glob('project-'+self.producer+'-*')),
+                    'Empty producer must not execute stock build or setup processes')
+            return {'project_'+self.producer+'_qualification_sha256':sha(self.logs/self.name('CACHE_QUALIFICATION.json')),
+                    'project_'+self.producer+'_restore_sha256':sha(self.logs/self.name('CACHE_RAW_RESTORE.json')),
+                    'project_'+self.producer+'_acquisition_sha256':sha(self.logs/self.name('CACHE_ACQUISITION.json'))}
         require(value['status'] == 'PASS_AUTHENTIC_STOCK_NO_BUILD_CACHE_INPUT_ONLY'
                 and value['protected_source_compiler_events'] == 0
                 and [r['module'] for r in value['modules']] == names

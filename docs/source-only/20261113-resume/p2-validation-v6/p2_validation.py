@@ -47,7 +47,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert re.fullmatch(r'[0-9a-f]{40}', commit)
     assert git_head(workspace) == commit
     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
-    branch = 'ci/p2-integer-mass-r22-20261115'
+    branch = 'ci/p2-integer-mass-r23-20261115'
     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
     committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
@@ -56,7 +56,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
     assert re.fullmatch(r'[0-9a-f]{64}', selection['bundle_registry_sha256'])
     assert re.fullmatch(r'[0-9a-f]{64}', selection['manifest_sha256'])
-    assert selection['driver_base'] == 'f4ba8eb616bb66e7e1a42e4f5d2a2a838c0d2c58'
+    assert selection['driver_base'] == '3d4dce4431e036fc7035429f136332e81e82871f'
     assert selection['driver_branch'] == branch
     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
     assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
@@ -240,16 +240,16 @@ def finalize(manifest: dict, project: Path, logs: Path) -> None:
     expected_sources={str(project/selected[n]['install_path']):n for n in expected_compile}
     events=[json.loads(line) for line in (logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
     compiled=[e for e in events if e['classification']=='EXACT_CURRENT_CALLER_SOURCE']
-    assert len(expected_compile)==len(compiled)==19
+    assert len(expected_compile)==len(compiled)==27
     assert all(e['tool']=='lean' and e['compiler_exec_permitted'] is True and e['context']==cache_session.binding
                and len(e['physical_inputs'])==1 for e in compiled)
     observed=[e['physical_inputs'][0]['path'] for e in compiled]
-    assert len(set(observed))==19 and set(observed)==set(expected_sources), 'Only19 unique affected source compilations required'
+    assert len(set(observed))==27 and set(observed)==set(expected_sources), 'Only27 unique affected source compilations required'
     for event in compiled:
         physical=event['physical_inputs'][0];record=selected[expected_sources[physical['path']]]
         assert physical=={'path':str(project/record['install_path']),'bytes':record['bytes'],'sha256':record['sha256']}
-    compile_census={'binding':cache_session.binding,'status':'PASS_EXACTLY19_NEW_AND_ZERO_PROTECTED_SOURCE_COMPILES',
-        'expected_modules':expected_compile,'events':compiled,'source_compile_count':19,'protected_root83_compile_count':0,
+    compile_census={'binding':cache_session.binding,'status':'PASS_EXACTLY27_NEW_AND_ZERO_PROTECTED_SOURCE_COMPILES',
+        'expected_modules':expected_compile,'events':compiled,'source_compile_count':27,'protected_root75_compile_count':0,
         'bootstrap11_or_native407_compile_count':0,'preexec_events_sha256':digest(logs/'CACHE_PREEXEC_EVENTS.jsonl'),
         'command_log_sha256':digest(logs/'runtime/compiler-commands.jsonl')}
     census_path=logs/'P2_COMPILE_CENSUS.json';assert not census_path.exists()
