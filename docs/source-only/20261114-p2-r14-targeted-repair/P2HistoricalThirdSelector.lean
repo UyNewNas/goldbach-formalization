@@ -163,7 +163,7 @@ theorem selected_chord_integral_upper (table : CheckedBlockTable)
         (realBox_grid_binding lo a g.lower) (realBox_grid_binding hi b g.upper)
         g.positive g.width g.cut g.xy g.yz g.mu g.full
         (by cases k <;> norm_num at hbranch ⊢ <;> exact hbranch)
-        (by cases k <;> norm_num at hroot ⊢ <;> exact hroot)
+        (by cases k <;> norm_num at hroot ⊢ <;> simpa only [add_assoc] using hroot)
         (by cases k <;> norm_num at hres ⊢ <;> exact hres)
         rfl rfl hlo g.ratio g.logPositive rfl rfl rfl
 
