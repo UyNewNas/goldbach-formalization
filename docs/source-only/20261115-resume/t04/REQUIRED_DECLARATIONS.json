@@ -1,0 +1,87 @@
+{
+  "schema": "t04-zero-poisson-required-contract-v1",
+  "consumer": {
+    "module": "ImbalancedChen.Part3OriginalNonzeroCuspOneSource",
+    "namespace": "ImbalancedChen.Part3.OriginalNonzeroCuspOneSource20261102",
+    "import_line": 4,
+    "namespace_open_line": 28,
+    "required_namespace": "ImbalancedChen.Part3.ActualZeroPoissonKernel20261102",
+    "consumer_theorem": "original_nonzeroKernel_eq_cuspOne",
+    "consumer_lines": [
+      345,
+      366
+    ]
+  },
+  "directly_used_declarations": [
+    {
+      "name": "smoothModuli",
+      "full_declaration": "def smoothModuli (C : ℝ) : Finset ℕ := Ioc 0 (Nat.floor (3*C))",
+      "source_lines": [
+        23,
+        23
+      ]
+    },
+    {
+      "name": "nonzeroKernel",
+      "full_declaration": "def nonzeroKernel (C D : ℝ) (a : ℤ) (zy : ℕ × ℤ) : ℂ :=\n  ∑ c ∈ smoothModuli C, (scaledDyadicCutoff C c : ℂ) *\n    (if c.Coprime zy.1 then\n      ∑' m : ℤ, if m = 0 then 0 else frequency D c a zy.2 (zy.1 : ℤ) m\n     else 0)",
+      "source_lines": [
+        31,
+        35
+      ]
+    }
+  ],
+  "transitive_physical_declaration": "def frequency (B : ℝ) (c : ℕ) (a y z m : ℤ) : ℂ :=\n  (B / (c : ℝ)) •\n      (𝓕 dyadicCutoffSchwartz) ((B / (c : ℝ)) * (m : ℝ)) *\n    kloosterman c (m * inverseResidue c z) (a * y)",
+  "consumer_theorem_full_type": "theorem original_nonzeroKernel_eq_cuspOne (C D : ℝ) (a y : ℤ)\n    (z : ℕ) (hz : 0 < z) :\n    nonzeroKernel C D a (z,y) =\n      ∑ c ∈ smoothModuli C, (scaledDyadicCutoff C c : ℂ) *\n        ∑' m : ℤ, if m = 0 then 0 else cuspOneFrequency D z c a y m",
+  "preserved_contract": [
+    "C,D arbitrary reals in the arithmetic nonzero identity.",
+    "a,y signed integers; the zero-kernel-bound condition a*y ≠ 0 is not imposed on the nonzero identity.",
+    "z a positive natural only in the consumer theorem; exact level and cusp infinity/one retained.",
+    "c belongs to Ioc 0 floor(3*C); includes modulus one and permits an empty support.",
+    "c.Coprime z gate unchanged; no additional (a,c)=1.",
+    "All m : ℤ retained except m=0; no truncation or interval replacement.",
+    "Exact scalar D/c and Fourier argument (D/c)*m; exact inverseResidue c z.",
+    "Returned phase e(-a*y/z); unit coefficient is independent of future m.",
+    "No analytic q specialization, spectral measure normalization, or spectral bound is introduced by this source mapping."
+  ],
+  "zero_mode_bound_full_type": "theorem zeroKernel_norm_le {C D : ℝ} (hC : 0 < C) (hD : 0 ≤ D)\n    (a : ℤ) (zy : ℕ × ℤ) (hay : a*zy.2 ≠ 0) :\n    ‖zeroKernel C D a zy‖ ≤\n      6*D*zeroFourierMass*((a*zy.2).natAbs.divisors.card : ℝ)",
+  "split_full_type": "theorem completedKernel_eq_zero_add_nonzero {D : ℝ} (hD : 0 < D)\n    (C : ℝ) (a : ℤ) (zy : ℕ × ℤ) :\n    completedKernel C D a zy = zeroKernel C D a zy + nonzeroKernel C D a zy",
+  "manuscript": {
+    "path": "chen-imbalanced-semiprimes/paper/source/modules/distribution-medium-completion-20261010.txt",
+    "bytes": 27771,
+    "sha256": "93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7",
+    "paragraphs": [
+      {
+        "lines": [
+          349,
+          358
+        ],
+        "content": "Exact Poisson return, m=0 contribution D^2*U*Z*B_all^2, then independently truncated nonzero m."
+      },
+      {
+        "lines": [
+          360,
+          367
+        ],
+        "content": "Exact infinity/one cusp phase e(-a*y/z) and later spectral normalization."
+      },
+      {
+        "lines": [
+          382,
+          390
+        ],
+        "content": "Returned polynomial (25) retains D^2*U*Z and treats C/D<1/2 through actual nonempty intervals."
+      }
+    ],
+    "body_path": "chen-imbalanced-semiprimes/paper/source/manuscript-body.tex",
+    "body_sha256": "ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd"
+  },
+  "math_classification": {
+    "locator": "Resolved source/installation path mismatch, not a missing mathematical theorem.",
+    "expression_difficulty": "No new interface needed; the exact existing declarations already fit the real importer.",
+    "fillable_omission": "The source selection record omitted the archived module and its package closure; repaired by exact pinning.",
+    "substantive_gap_found": false,
+    "limits": "The restored source does not itself prove nonzero spectral Eq24, the full returned polynomial, or the whole fullregular target. It supplies the exact definitions already consumed, an independently bounded zero mode, and an absolute-convergence split."
+  },
+  "verification": "Source and mathematical inspection only; no Lean/Lake/LSP/project helper/candidate execution.",
+  "formal_credit": 0
+}
