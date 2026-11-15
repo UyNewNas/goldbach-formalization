@@ -1,0 +1,43 @@
+T05 independent review of the single actual-W1 strict-product lemma, 2026-11-15.
+
+Decision: allow the exact source-level mathematical lemma `actual_product_lt` in the 1637-byte source SHA `69442b656e5357d9d64fc82019967bf24119dc0a5152959af0106c6440823021`, blob `116af7e1736798dc855f651c418c3a34a6c16971`, bound by U02 FREEZE `cd23ee654396c8527b8e0649c1b4ae2b4629803d5058aede9b786e17f26c384f`. Its stated two actual memberships imply the strict bound on the same complete physical product. No additional mathematical or source-expression issue was found in the inspected proof. This is not a claim of Lean elaboration, compilation, kernel acceptance or complete import closure.
+
+The public statement has only two hypotheses: `(a1,a2,a3)` belongs to `orderedTriples (primeWindow (d*N) z w)`, and r belongs to `roughNumbers ((N:ℝ)/((d*a1*a2*a3:ℕ):ℝ)) (a2:ℝ)`. The conclusion is `d*a1*a2*a3*r < N`. All N,d,a1,a2,a3,r are natural numbers and z,w are arbitrary reals. The source sets autoImplicit=false and introduces no unnamed mathematical assumption, extra positivity premise, receiver test, desired product bound, or asymptotic threshold.
+
+Actual carrier and tuple order
+
+The fixed 19c7759d source `Part5OriginalH430W1PhysicalRoughDictionary` defines integerMass at lines 16–18 using exactly the same ordered triple and inclusive rough tail. Its dictionary `label q=(q 2,q 1,q 0)` at line 20 sends the physical Fin 3 labels to the ascending triple, leaving the middle prime q 1 as the roughness cutoff. The candidate neither reverses that cutoff nor changes the physical denominator. `Part5OriginalH430BankAfterW1PrimeRestriction` lines 30–33 uses the same source and merely filters its tail by the existing additive-prime receiver. The new theorem applies before that additional filter, so it requires no receiver premise and also applies to its subset.
+
+The real 09b97 package interfaces were read directly. FiniteWeights lines 21–22 defines orderedTriples as `(s ×ˢ (s ×ˢ s)).filter (first < middle ∧ middle < last)`. Thus the candidate's mem_filter then mem_product extraction correctly gives a1 in the original primeWindow; Lean's `(a1,a2,a3)` uses this right-nested product. GoldbachWeights lines 24–26 gives `q.Prime ∧ q.Coprime M ∧ z≤q ∧ q<w`, with M=d*N. The upper window is strict and the lower window inclusive. LiLiuPrereqBuchstabCount lines 30–31 gives `0<r ∧ (r:ℝ)≤x ∧ Rough z r`, without squarefreeness or primality of r. Its lines 47–53 explicitly retain 1, with `1∈roughNumbers x z ↔ 1≤x`.
+
+The candidate's uses of these interfaces retain their literal domains. It does not form a new carrier, erase a repeated factor, remove unit, combine equal physical products, or alter the surrounding history/position labels and weights. The strict ordering is part of the unchanged original carrier even though excluding the equality endpoint needs only its first prime. Any original selected/history subfamily inherits the pointwise result without a new selection or normalization argument.
+
+Proof and boundary audit
+
+Let D=d*a1*a2*a3 and F=D*r. From the triple membership, a1 is prime and coprime to d*N. `Nat.coprime_mul_iff_right` projects this to a1.Coprime N; this is also the exact projection already used by the fixed PhysicalRoughDictionary at line 70. The directly read Mathlib prime API `Prime.coprime_iff_not_dvd` says that, for a prime a1, a1.Coprime N is equivalent to a1 not dividing N.
+
+The rough membership gives `(r:ℝ)≤N/D`. If D=0, the candidate proves F≤N by simp, using no division theorem at zero. If D≠0, natural-number positivity supplies 0<D locally, and the existing `InclusiveRoughUniform.nonunit_gate_iff N D r` turns that real inequality into D*r≤N. Its actual type, at InclusiveRoughProduct lines 18–19, is
+
+`(q:ℝ) ≤ (N:ℝ)/D ↔ D*q ≤ N`, with the sole premise `0<D`.
+
+Despite its name, this theorem has no q≠1, q>1, primality, cutoff, N≥4, logarithmic domain or asymptotic hypothesis. The candidate uses that elementary gate only, not the later `uniform_product_upper` theorem. It therefore covers r=1 exactly and does not silently remove the unit or add a domain restriction. The gate's existing proof uses division by a positive denominator and exact natural casts; the candidate does not reprove or alter a generic floor estimate.
+
+The witness d*a2*a3*r proves a1 divides F by the unchanged natural product identity. If F=N, transport gives a1 divides N, contrary to its primality/coprimality. Hence F≠N. The final natural-order step combines F≤N and F≠N into F<N. The `ring` step only proves the divisibility witness identity; `omega` only closes this linear order implication. There is no analytic inference.
+
+For N=0, primeWindow membership is already impossible: a1 is a prime coprime to zero, which would force a1=1. The proof also handles this without adding N>0: F≤0 and the coprimality contradiction exclude equality. For d=0 the primeWindow uses d*N=0 and has the same impossibility; in addition, the real quotient convention yields zero and roughNumbers contains no positive r. The candidate's explicit D=0 branch is a valid local arithmetic split, not a premise excluding those inputs. Any zero a1/a2/a3 is likewise impossible from triple membership. If r=0, rough membership is impossible by its positive-integer requirement; if r=1, all steps remain valid. No eventual N0 is needed: this is a finite pointwise statement for all N. Empty or reversed prime windows simply give vacuous membership implications.
+
+The physical scale throughout is N and the complete product is d*a1*a2*a3*r. The temporary quotient N/D remains the original rough-tail size; it is never promoted to a new target scale. There are no constants, density factors, factorial changes, same-rho assumptions or weighted normalization changes in this lemma.
+
+Manuscript and scope
+
+The original T08 supplier audit FREEZE is `408935f06773ac232749b7423a0e53d85801a7ed0438f9f572d36eab51849658`. Its REPORT's exact carrier and endpoint discussion give this finite implication while separately retaining the analytic debt. I checked the actual manuscript bytes SHA `ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd`: lines 514–558 state the positive-product consequence at m<N and its same-rho proof; lines 852–853 explicitly retain switching unit surfaces in their masses. The new source supplies the actual W1 carrier's strict endpoint condition. It does not supply the bounded-rank prime decomposition, analytic distribution estimate, positive smoothing, collar mass or any other hypothesis of that larger consequence.
+
+The scoped dedup evidence covers the five actual W1 sources and the listed underlying finite interfaces. These already supply the inclusive non-strict product gate and the actual integer/receiver dictionaries; no exact actual-W1 strict terminal was found there. I independently inspected those relevant definitions and strict-support occurrences. This is not an exhaustive remote search, and no claim of global novelty is needed. The candidate reuses the existing non-strict gate instead of duplicating it.
+
+Exact dependency identity
+
+All 21 independently checked file bindings match. The five W1 source blobs were checked by read-only `git ls-tree` on the existing project commit `19c7759d496bb527cc8546cfeb17f8579f10bfed`, including the previously less explicitly pinned InclusiveRoughCounts source. The three named package interfaces and the new InclusiveRoughProduct import were checked on the existing package commit `09b97db5764ade1246bfb77206baa1b124760958`. No network request, fetch or download was made.
+
+In particular, `research/wu2008/src/MathlibNt/Wu2008DoubleSieve/InclusiveRoughProduct.lean` is present in that exact package tree as blob `3c3404db62399b73dbffe69b3c29a954a8b90370`, matching the actual 3117 bytes and SHA `93769dc04ed13a5a75fa95867f5779dc9d590eec94c306acf88eb115b2471a81`. This new evidence resolves the single commit:path locator HOLD stated in the unchanged U02 freeze. It does not retroactively rewrite that record or imply recursive source/ABI/toolchain compatibility. Its root-level absence is irrelevant because the actual library source lives under the research path.
+
+The allowlist is limited to the exact theorem source, its mathematical proof route and these source identities. No PP, h34, Delta estimate, same-rho supply, near-N collar, 430/441, J, main theorem, compilation or kernel credit is granted. ready_to_install=false, compiled=false and formal_credit=0 remain. No old source or freeze was modified. Only this T05 review directory was written; no Lean/Lake/LSP/candidate/fixture/guard/proof helper, artifact, quota check, spawn or Git/GitHub write was used.

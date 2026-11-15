@@ -1,0 +1,45 @@
+--- /dev/null
++++ output/resume-20261115/u02-p5-strict-product/Part5OriginalH430W1StrictProduct.lean
+@@ -0,0 +1,42 @@
++import ImbalancedChen.Part5OriginalH430W1PhysicalRoughDictionary
++import MathlibNt.Wu2008DoubleSieve.InclusiveRoughProduct
++
++/-!
++SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++The exact ordered W1 integer carrier has no complete-product equality endpoint.
++All original labels and every rough integer, including the unit, are retained.
++-/
++
++set_option autoImplicit false
++
++namespace ImbalancedChen.Part5OriginalH430W1StrictProduct
++
++open Finset Wu2008DoubleSieve LiLiuPrereqBuchstab
++
++/-- Strict physical support for the same triple and rough-tail memberships
++used in the original W1 integerMass and primeRestriction sums. -/
++theorem actual_product_lt
++    {N d a1 a2 a3 r : ℕ} {z w : ℝ}
++    (ht : (a1, a2, a3) ∈ orderedTriples (primeWindow (d * N) z w))
++    (hr : r ∈ roughNumbers
++      ((N : ℝ) / ((d * a1 * a2 * a3 : ℕ) : ℝ)) (a2 : ℝ)) :
++    d * a1 * a2 * a3 * r < N := by
++  have ha1 := (Finset.mem_product.mp (Finset.mem_filter.mp ht).1).1
++  have hp : a1.Prime := (mem_primeWindow.mp ha1).1
++  have hcop : a1.Coprime N :=
++    (Nat.coprime_mul_iff_right.mp (mem_primeWindow.mp ha1).2.1).2
++  have hle : d * a1 * a2 * a3 * r ≤ N := by
++    by_cases hD : d * a1 * a2 * a3 = 0
++    · simp [hD]
++    · exact (Wu2008DoubleSieve.InclusiveRoughUniform.nonunit_gate_iff
++        N (d * a1 * a2 * a3) r (Nat.pos_of_ne_zero hD)).mp
++        (mem_roughNumbers.mp hr).2.1
++  have hdiv : a1 ∣ d * a1 * a2 * a3 * r := by
++    refine ⟨d * a2 * a3 * r, ?_⟩
++    ring
++  have hne : d * a1 * a2 * a3 * r ≠ N := by
++    intro h
++    exact (hp.coprime_iff_not_dvd.mp hcop) (h ▸ hdiv)
++  omega
++
++end ImbalancedChen.Part5OriginalH430W1StrictProduct
