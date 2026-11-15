@@ -1,0 +1,118 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED_UNREVIEWED_PROTOCOL_HOLD",
+  "base": {
+    "path": "output/resume-20261115/t07/r22-audit/inputs/CandidateAudit.lean",
+    "bytes": 19752,
+    "sha256": "43d3b26cbd50149fdfc60b4ffb8c6d3f22100ba402c4ebfd93ec90a8bf19381d",
+    "computed_git_blob": "16bb6e2655c0361cdf329d158ed62185353a0c9d"
+  },
+  "candidate": {
+    "path": "output/resume-20261115/u02-p2-exporter-only/CandidateAudit.lean",
+    "bytes": 26345,
+    "sha256": "80f718e9820ac03dc572da2ad910e03dde5318022c5647d168a92301b9cbc956",
+    "computed_git_blob": "92cfbcc5c54d6e92b212c802a5844fd0a738c53a"
+  },
+  "R2_algorithm_source": {
+    "path": "output/resume-20261115/s02/inverse-mean-validation-26a6-r2/shared-tools/inverse_validation.py",
+    "bytes": 55677,
+    "sha256": "1f3445628be8da5e2779ff6db00f9bce8121b8e37e683afe25cab686569f6a53",
+    "computed_git_blob": "e800b72fe3193d65d367886caa8cf07492d97c65"
+  },
+  "changes": [
+    {
+      "reason": "R2 fresh fold API import instead of cached collectAxioms API",
+      "old": "import Lean.Util.CollectAxioms\n",
+      "new": "import Lean.Util.FoldConsts\n"
+    },
+    {
+      "reason": "R2 accumulated failure state plus graph-output dedup only",
+      "old": "  let mut counts : Array (Name × Nat) := modules.map (·, 0)",
+      "new": "  let mut exportFailures : Array String := #[]\n  -- This set deduplicates emitted graph records only; every root still has fresh seen/pending.\n  let mut graphEmitted : NameSet := {}\n  let mut counts : Array (Name × Nat) := modules.map (·, 0)"
+    },
+    {
+      "reason": "Retain separate actual extra-codegen inventory total",
+      "old": "  let mut serializedTotal := 0",
+      "new": "  let mut serializedTotal := 0\n  let mut extraCodegenTotal := 0"
+    },
+    {
+      "reason": "Expose entire actual loaded mode table for future F7 binding",
+      "old": "    let imported := env.header.modules[idx]!\n    if modules.contains imported.module then",
+      "new": "    let imported := env.header.modules[idx]!\n    let loadedData := env.header.moduleData[idx]!\n    let loadedRecord := Json.mkObj [\n      (\"module_data_index\", toJson idx),\n      (\"module\", toJson imported.module.toString),\n      (\"is_module\", toJson loadedData.isModule),\n      (\"import_all\", toJson imported.importAll),\n      (\"has_data\", toJson imported.hasData),\n      (\"audited\", toJson (modules.contains imported.module))]\n    liftIO <| IO.println s!\"P0_ROUND6_LOADED_MODULE {loadedRecord.compress}\"\n    if modules.contains imported.module then"
+    },
+    {
+      "reason": "Count codegen names independently of kernel declarations",
+      "old": "      serializedTotal := serializedTotal + data.constNames.size",
+      "new": "      serializedTotal := serializedTotal + data.constNames.size\n      extraCodegenTotal := extraCodegenTotal + data.extraConstNames.size"
+    },
+    {
+      "reason": "Output actual codegen name multiset without reinterpretation",
+      "old": "        (\"extra_codegen_name_count\", toJson data.extraConstNames.size)]",
+      "new": "        (\"extra_codegen_name_count\", toJson data.extraConstNames.size),\n        (\"extra_codegen_names\", toJson (data.extraConstNames.map Name.toString))]"
+    },
+    {
+      "reason": "Pin measured original complete scope and actual integral endpoint",
+      "old": "  liftIO do\n    IO.println \"P0_ROUND6_PHASE serialized_inventory_exact_match\"",
+      "new": "  unless modules.size == 102 && names.size == 3628 && extraCodegenTotal == 3787 do\n    throwError \"Exact R22 102/3628/3787 inventories changed\"\n  let requiredTerminal :=\n    `ImbalancedChen.Certificates.P2HistoricalThirdIntegerMass.checked_ordinary_integral_upper\n  unless names.contains requiredTerminal do\n    throwError \"Missing original ordinary integral endpoint {requiredTerminal}\"\n  liftIO do\n    IO.println \"P0_ROUND6_PHASE serialized_inventory_exact_match\""
+    },
+    {
+      "reason": "Read every root actual current checked ConstantInfo",
+      "old": "    let some info := env.find? name | throwError \"Missing inventoried declaration {name}\"",
+      "new": "    let some info := env.checked.get.find? name | throwError \"Missing current checked inventoried declaration {name}\""
+    },
+    {
+      "reason": "Verbatim R2 actual unsafe/partial defn-or-opaque executable classification",
+      "old": "    if info.isUnsafe then\n      throwError \"Unsafe declaration in a P0 batch module: {name}\"\n    if info.isPartial then\n      throwError \"Partial declaration in a P0 batch module: {name}\"\n",
+      "new": "    let executable := info.isUnsafe || info.isPartial\n    let executableKindAllowed := match info with\n      | .defnInfo _ => true\n      | .opaqueInfo _ => true\n      | _ => false\n    if executable && !executableKindAllowed then\n      exportFailures := exportFailures.push s!\"Unexpected unsafe/partial constant kind: {name}\"\n"
+    },
+    {
+      "reason": "Verbatim R2 owned axiom rejection with accumulated error",
+      "old": "      throwError \"Unproved axiom declaration in a P0 batch module: {name}\"",
+      "new": "      exportFailures := exportFailures.push s!\"Unproved axiom declaration in audited module: {name}\""
+    },
+    {
+      "reason": "R2 fresh per-root checked-type/body worklist plus complete graph observations and fail-closed body/owner/kind",
+      "old": "    let axioms ← collectAxioms name",
+      "new": "    -- Fresh worklist for this declaration; no exportedAxiomsExt/cache lookup.\n    let mut pending := #[name]\n    let mut seen : NameSet := {}\n    let mut axioms : Array Name := #[]\n    let mut unsafePartialDependencies : Array Name := #[]\n    while !pending.isEmpty do\n      let current := pending.back!\n      pending := pending.pop\n      unless seen.contains current do\n        seen := seen.insert current\n        let some currentInfo := env.checked.get.find? current |\n          throwError \"Missing current checked dependency {current} from {name}\"\n        let currentConstructor := match currentInfo with\n          | .thmInfo _ => \"thmInfo\"\n          | .defnInfo _ => \"defnInfo\"\n          | .opaqueInfo _ => \"opaqueInfo\"\n          | .quotInfo _ => \"quotInfo\"\n          | .axiomInfo _ => \"axiomInfo\"\n          | .inductInfo _ => \"inductInfo\"\n          | .ctorInfo _ => \"ctorInfo\"\n          | .recInfo _ => \"recInfo\"\n        let currentBodyRequired := match currentInfo with\n          | .thmInfo _ => true\n          | .defnInfo _ => true\n          | .opaqueInfo _ => true\n          | _ => false\n        let currentBodyPresent := (currentInfo.value? (allowOpaque := true)).isSome\n        if currentBodyRequired && !currentBodyPresent then\n          throwError \"Missing current checked body {current} from {name}\"\n        let some currentOwner := env.getModuleIdxFor? current |\n          throwError \"Missing canonical dependency owner {current} from {name}\"\n        unless currentOwner.toNat < moduleNames.size do\n          throwError \"Invalid canonical dependency owner index {current} from {name}\"\n        let currentExecutableKindAllowed := match currentInfo with\n          | .defnInfo _ => true\n          | .opaqueInfo _ => true\n          | _ => false\n        if (currentInfo.isUnsafe || currentInfo.isPartial) && !currentExecutableKindAllowed then\n          exportFailures := exportFailures.push s!\"Unexpected unsafe/partial dependency kind {current} from {name}\"\n        if currentInfo.isUnsafe || currentInfo.isPartial then\n          unsafePartialDependencies := unsafePartialDependencies.push current\n          unless executable do\n            exportFailures := exportFailures.push s!\"Unsafe/partial dependency {current} reachable from safe logical declaration {name}\"\n        if currentInfo.isAxiom then\n          axioms := axioms.push current\n        -- getUsedConstantsAsSet includes type and value? (allowOpaque := true),\n        -- inductive constructors and recursor groups; seen terminates cycles.\n        let mut directDependencies : Array Name := #[]\n        for dependency in currentInfo.getUsedConstantsAsSet do\n          directDependencies := directDependencies.push dependency\n          pending := pending.push dependency\n        unless graphEmitted.contains current do\n          graphEmitted := graphEmitted.insert current\n          let graphRecord := Json.mkObj [\n            (\"name\", toJson current.toString),\n            (\"canonical_owner_index\", toJson currentOwner.toNat),\n            (\"canonical_owner_module\", toJson moduleNames[currentOwner]!.toString),\n            (\"constant_constructor\", toJson currentConstructor),\n            (\"is_unsafe\", toJson currentInfo.isUnsafe),\n            (\"is_partial\", toJson currentInfo.isPartial),\n            (\"is_axiom\", toJson currentInfo.isAxiom),\n            (\"body_required\", toJson currentBodyRequired),\n            (\"body_present\", toJson currentBodyPresent),\n            (\"direct_dependencies\", toJson ((directDependencies.qsort Name.lt).map Name.toString))]\n          liftIO <| IO.println s!\"P0_ROUND6_DEPENDENCY_NODE {graphRecord.compress}\""
+    },
+    {
+      "reason": "Verbatim R2 forbidden transitive axiom rejection including implementations",
+      "old": "        throwError \"Forbidden transitive axiom {ax} in {name}\"",
+      "new": "        exportFailures := exportFailures.push s!\"Forbidden transitive axiom {ax} in {name}\""
+    },
+    {
+      "reason": "Verbatim R2 fulltype rejection retained after record emission",
+      "old": "      throwError \"Truncated compiler type for {name}\"",
+      "new": "      exportFailures := exportFailures.push s!\"Truncated compiler type for {name}\""
+    },
+    {
+      "reason": "Expose actual constructor and preserve required safe theorem endpoint",
+      "old": "    let type ← liftTermElabM do",
+      "new": "    if name == requiredTerminal && (kind != \"theorem\" || executable) then\n      exportFailures := exportFailures.push s!\"Original ordinary integral endpoint must be a safe theorem: {name}\"\n    let constantConstructor := match info with\n      | .thmInfo _ => \"thmInfo\"\n      | .defnInfo _ => \"defnInfo\"\n      | .opaqueInfo _ => \"opaqueInfo\"\n      | .quotInfo _ => \"quotInfo\"\n      | .axiomInfo _ => \"axiomInfo\"\n      | .inductInfo _ => \"inductInfo\"\n      | .ctorInfo _ => \"ctorInfo\"\n      | .recInfo _ => \"recInfo\"\n    let type ← liftTermElabM do"
+    },
+    {
+      "reason": "Preserve original kind and add exact ConstantInfo constructor/owner",
+      "old": "      (\"kind\", toJson kind),",
+      "new": "      (\"kind\", toJson kind),\n      (\"constant_constructor\", toJson constantConstructor),\n      (\"canonical_owner_index\", toJson idx.toNat),"
+    },
+    {
+      "reason": "Verbatim R2 executable metadata classification and zero implementation credit fields",
+      "old": "      (\"is_axiom\", toJson info.isAxiom),",
+      "new": "      (\"is_axiom\", toJson info.isAxiom),\n      (\"safety_class\", toJson (if executable then \"executable_implementation\" else \"logical_safe\")),\n      (\"kernel_replay_required\", toJson (!executable)),\n      (\"implementation_kernel_proof_credit\", toJson false),\n      (\"implementation_termination_credit\", toJson false),\n      (\"unsafe_partial_dependencies\", toJson (unsafePartialDependencies.map Name.toString)),"
+    },
+    {
+      "reason": "Retain exact R2 fresh AX fields and identify complete graph root",
+      "old": "      (\"axioms\", toJson (axioms.map Name.toString))]",
+      "new": "      (\"axiom_audit\", toJson \"fresh_current_checked_type_and_body\"),\n      (\"axiom_visited_count\", toJson seen.size),\n      (\"dependency_graph_root\", toJson name.toString),\n      (\"axioms\", toJson (axioms.map Name.toString))]"
+    }
+  ],
+  "source_only": true,
+  "ready": false,
+  "compiled": false,
+  "independent_candidate_AL": null,
+  "CI_prepared": false,
+  "runtime_or_retention_implementation_added": false,
+  "mathsource_compile_target": 0,
+  "mathsource_changed": 0,
+  "appended_final_failure_footer": "\n  liftIO <| IO.println s!\"P0_ROUND6_EXTRA_CODEGEN_COUNT {extraCodegenTotal}\"\n  liftIO <| IO.println s!\"P0_ROUND6_DEPENDENCY_COUNT {graphEmitted.size}\"\n  unless exportFailures.isEmpty do\n    liftIO <| IO.println s!\"P0_ROUND6_EXPORT_FAILURES {(toJson exportFailures).compress}\"\n    throwError \"P2 declaration safety/axiom/fulltype gate failed; complete available inventory retained\"\n",
+  "new_candidate_source_review_status": "NOT_YET_INDEPENDENTLY_REVIEWED"
+}

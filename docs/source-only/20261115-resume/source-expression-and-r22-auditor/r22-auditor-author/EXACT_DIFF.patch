@@ -1,0 +1,211 @@
+--- output/resume-20261115/t07/r22-audit/inputs/CandidateAudit.lean
++++ output/resume-20261115/u02-p2-exporter-only/CandidateAudit.lean
+@@ -100,7 +100,7 @@
+ import ImbalancedChen.P4ARange32ExecutableReaderABI
+ import ImbalancedChen.Certificates.P2HistoricalThirdIntegerMass
+ import ImbalancedChen.FinitePiIntegral
+-import Lean.Util.CollectAxioms
++import Lean.Util.FoldConsts
+ set_option pp.all true
+ set_option pp.proofs true
+ set_option pp.deepTerms true
+@@ -139,8 +139,18 @@
+     (← IO.getStdout).flush
+   let mut serializedModules : Array Name := #[]
+   let mut serializedTotal := 0
++  let mut extraCodegenTotal := 0
+   for idx in List.range env.header.modules.size do
+     let imported := env.header.modules[idx]!
++    let loadedData := env.header.moduleData[idx]!
++    let loadedRecord := Json.mkObj [
++      ("module_data_index", toJson idx),
++      ("module", toJson imported.module.toString),
++      ("is_module", toJson loadedData.isModule),
++      ("import_all", toJson imported.importAll),
++      ("has_data", toJson imported.hasData),
++      ("audited", toJson (modules.contains imported.module))]
++    liftIO <| IO.println s!"P0_ROUND6_LOADED_MODULE {loadedRecord.compress}"
+     if modules.contains imported.module then
+       if serializedModules.contains imported.module then
+         throwError "Duplicate serialized module inventory: {imported.module}"
+@@ -197,6 +207,7 @@
+         throwError "Serialized declarations and defining-module inventory differ for {imported.module}"
+       serializedModules := serializedModules.push imported.module
+       serializedTotal := serializedTotal + data.constNames.size
++      extraCodegenTotal := extraCodegenTotal + data.extraConstNames.size
+       let record := Json.mkObj [
+         ("module", toJson imported.module.toString),
+         ("is_module", toJson data.isModule),
+@@ -205,31 +216,108 @@
+         ("serialized_constant_names", toJson (data.constNames.map Name.toString)),
+         ("environment_constant_names", toJson (owned.map Name.toString)),
+         ("serialized_constant_count", toJson data.constNames.size),
+-        ("extra_codegen_name_count", toJson data.extraConstNames.size)]
++        ("extra_codegen_name_count", toJson data.extraConstNames.size),
++        ("extra_codegen_names", toJson (data.extraConstNames.map Name.toString))]
+       liftIO <| IO.println s!"P0_ROUND6_SERIALIZED {record.compress}"
+   unless serializedModules.qsort Name.lt == modules.qsort Name.lt do
+     throwError "Missing Round 6 serialized module data"
+   unless serializedTotal == names.size do
+     throwError "Round 6 serialized total and environment total differ"
++  unless modules.size == 102 && names.size == 3628 && extraCodegenTotal == 3787 do
++    throwError "Exact R22 102/3628/3787 inventories changed"
++  let requiredTerminal :=
++    `ImbalancedChen.Certificates.P2HistoricalThirdIntegerMass.checked_ordinary_integral_upper
++  unless names.contains requiredTerminal do
++    throwError "Missing original ordinary integral endpoint {requiredTerminal}"
+   liftIO do
+     IO.println "P0_ROUND6_PHASE serialized_inventory_exact_match"
+     (← IO.getStdout).flush
++  let mut exportFailures : Array String := #[]
++  -- This set deduplicates emitted graph records only; every root still has fresh seen/pending.
++  let mut graphEmitted : NameSet := {}
+   let mut counts : Array (Name × Nat) := modules.map (·, 0)
+   for name in names.qsort Name.lt do
+     liftIO do
+       IO.println s!"P0_ROUND6_PHASE declaration_start {name}"
+       (← IO.getStdout).flush
+-    let some info := env.find? name | throwError "Missing inventoried declaration {name}"
+-    if info.isUnsafe then
+-      throwError "Unsafe declaration in a P0 batch module: {name}"
+-    if info.isPartial then
+-      throwError "Partial declaration in a P0 batch module: {name}"
++    let some info := env.checked.get.find? name | throwError "Missing current checked inventoried declaration {name}"
++    let executable := info.isUnsafe || info.isPartial
++    let executableKindAllowed := match info with
++      | .defnInfo _ => true
++      | .opaqueInfo _ => true
++      | _ => false
++    if executable && !executableKindAllowed then
++      exportFailures := exportFailures.push s!"Unexpected unsafe/partial constant kind: {name}"
+     if info.isAxiom then
+-      throwError "Unproved axiom declaration in a P0 batch module: {name}"
+-    let axioms ← collectAxioms name
++      exportFailures := exportFailures.push s!"Unproved axiom declaration in audited module: {name}"
++    -- Fresh worklist for this declaration; no exportedAxiomsExt/cache lookup.
++    let mut pending := #[name]
++    let mut seen : NameSet := {}
++    let mut axioms : Array Name := #[]
++    let mut unsafePartialDependencies : Array Name := #[]
++    while !pending.isEmpty do
++      let current := pending.back!
++      pending := pending.pop
++      unless seen.contains current do
++        seen := seen.insert current
++        let some currentInfo := env.checked.get.find? current |
++          throwError "Missing current checked dependency {current} from {name}"
++        let currentConstructor := match currentInfo with
++          | .thmInfo _ => "thmInfo"
++          | .defnInfo _ => "defnInfo"
++          | .opaqueInfo _ => "opaqueInfo"
++          | .quotInfo _ => "quotInfo"
++          | .axiomInfo _ => "axiomInfo"
++          | .inductInfo _ => "inductInfo"
++          | .ctorInfo _ => "ctorInfo"
++          | .recInfo _ => "recInfo"
++        let currentBodyRequired := match currentInfo with
++          | .thmInfo _ => true
++          | .defnInfo _ => true
++          | .opaqueInfo _ => true
++          | _ => false
++        let currentBodyPresent := (currentInfo.value? (allowOpaque := true)).isSome
++        if currentBodyRequired && !currentBodyPresent then
++          throwError "Missing current checked body {current} from {name}"
++        let some currentOwner := env.getModuleIdxFor? current |
++          throwError "Missing canonical dependency owner {current} from {name}"
++        unless currentOwner.toNat < moduleNames.size do
++          throwError "Invalid canonical dependency owner index {current} from {name}"
++        let currentExecutableKindAllowed := match currentInfo with
++          | .defnInfo _ => true
++          | .opaqueInfo _ => true
++          | _ => false
++        if (currentInfo.isUnsafe || currentInfo.isPartial) && !currentExecutableKindAllowed then
++          exportFailures := exportFailures.push s!"Unexpected unsafe/partial dependency kind {current} from {name}"
++        if currentInfo.isUnsafe || currentInfo.isPartial then
++          unsafePartialDependencies := unsafePartialDependencies.push current
++          unless executable do
++            exportFailures := exportFailures.push s!"Unsafe/partial dependency {current} reachable from safe logical declaration {name}"
++        if currentInfo.isAxiom then
++          axioms := axioms.push current
++        -- getUsedConstantsAsSet includes type and value? (allowOpaque := true),
++        -- inductive constructors and recursor groups; seen terminates cycles.
++        let mut directDependencies : Array Name := #[]
++        for dependency in currentInfo.getUsedConstantsAsSet do
++          directDependencies := directDependencies.push dependency
++          pending := pending.push dependency
++        unless graphEmitted.contains current do
++          graphEmitted := graphEmitted.insert current
++          let graphRecord := Json.mkObj [
++            ("name", toJson current.toString),
++            ("canonical_owner_index", toJson currentOwner.toNat),
++            ("canonical_owner_module", toJson moduleNames[currentOwner]!.toString),
++            ("constant_constructor", toJson currentConstructor),
++            ("is_unsafe", toJson currentInfo.isUnsafe),
++            ("is_partial", toJson currentInfo.isPartial),
++            ("is_axiom", toJson currentInfo.isAxiom),
++            ("body_required", toJson currentBodyRequired),
++            ("body_present", toJson currentBodyPresent),
++            ("direct_dependencies", toJson ((directDependencies.qsort Name.lt).map Name.toString))]
++          liftIO <| IO.println s!"P0_ROUND6_DEPENDENCY_NODE {graphRecord.compress}"
+     for ax in axioms do
+       unless allowed.contains ax do
+-        throwError "Forbidden transitive axiom {ax} in {name}"
++        exportFailures := exportFailures.push s!"Forbidden transitive axiom {ax} in {name}"
+     let some idx := env.getModuleIdxFor? name |
+       throwError "Missing defining module for {name}"
+     let moduleName := moduleNames[idx]!
+@@ -243,22 +331,43 @@
+       | .inductInfo _ => "inductive"
+       | .ctorInfo _ => "constructor"
+       | .recInfo _ => "recursor"
++    if name == requiredTerminal && (kind != "theorem" || executable) then
++      exportFailures := exportFailures.push s!"Original ordinary integral endpoint must be a safe theorem: {name}"
++    let constantConstructor := match info with
++      | .thmInfo _ => "thmInfo"
++      | .defnInfo _ => "defnInfo"
++      | .opaqueInfo _ => "opaqueInfo"
++      | .quotInfo _ => "quotInfo"
++      | .axiomInfo _ => "axiomInfo"
++      | .inductInfo _ => "inductInfo"
++      | .ctorInfo _ => "ctorInfo"
++      | .recInfo _ => "recInfo"
+     let type ← liftTermElabM do
+       return (← Meta.ppExpr info.type).pretty
+     let readableType ← liftTermElabM do
+       withOptions (fun opts => (opts.setBool `pp.all false).setBool `pp.explicit false) do
+         return (← Meta.ppExpr info.type).pretty
+     if type.contains '⋯' || readableType.contains '⋯' then
+-      throwError "Truncated compiler type for {name}"
++      exportFailures := exportFailures.push s!"Truncated compiler type for {name}"
+     let record := Json.mkObj [
+       ("name", toJson name.toString),
+       ("module", toJson moduleName.toString),
+       ("kind", toJson kind),
++      ("constant_constructor", toJson constantConstructor),
++      ("canonical_owner_index", toJson idx.toNat),
+       ("is_unsafe", toJson info.isUnsafe),
+       ("is_partial", toJson info.isPartial),
+       ("is_axiom", toJson info.isAxiom),
++      ("safety_class", toJson (if executable then "executable_implementation" else "logical_safe")),
++      ("kernel_replay_required", toJson (!executable)),
++      ("implementation_kernel_proof_credit", toJson false),
++      ("implementation_termination_credit", toJson false),
++      ("unsafe_partial_dependencies", toJson (unsafePartialDependencies.map Name.toString)),
+       ("type", toJson type),
+       ("readable_type", toJson readableType),
++      ("axiom_audit", toJson "fresh_current_checked_type_and_body"),
++      ("axiom_visited_count", toJson seen.size),
++      ("dependency_graph_root", toJson name.toString),
+       ("axioms", toJson (axioms.map Name.toString))]
+     liftIO <| IO.println s!"P0_ROUND6_DECL {record.compress}"
+   for (m, count) in counts do
+@@ -267,3 +376,9 @@
+     let record := Json.mkObj [("module", toJson m.toString), ("count", toJson count)]
+     liftIO <| IO.println s!"P0_ROUND6_MODULE {record.compress}"
+   liftIO <| IO.println s!"P0_ROUND6_COUNT {names.size}"
++
++  liftIO <| IO.println s!"P0_ROUND6_EXTRA_CODEGEN_COUNT {extraCodegenTotal}"
++  liftIO <| IO.println s!"P0_ROUND6_DEPENDENCY_COUNT {graphEmitted.size}"
++  unless exportFailures.isEmpty do
++    liftIO <| IO.println s!"P0_ROUND6_EXPORT_FAILURES {(toJson exportFailures).compress}"
++    throwError "P2 declaration safety/axiom/fulltype gate failed; complete available inventory retained"
