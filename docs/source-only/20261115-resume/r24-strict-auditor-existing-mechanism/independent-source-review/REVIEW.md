@@ -1,0 +1,17 @@
+批准精确26345B / SHA256 `99eab937d22dc3e20f8ba93fbd6bf581879bc491f046a14724aa1924bbc012db` / Git blob `cab376b2b6702a3d21d4fd6cff2a49792fe8a236` 的当前R24源码适用性。此为新范围AL，不是旧R22 AL的自动转移；没有编译、执行、对象或CI验收。
+
+U05 freeze `61a79e83bd3a122f12576968250be52b6a9fd762a09f276bd8679f72afe9096c` 的16文件合计466,582B，逐件length/SHA256/Gitblob一致；20项外部绑定也逐件一致。259项独立静态核对零差异，详见INDEPENDENT_CHECKS.json。包内作者脚本仅作为冻结字节读取，没有执行。
+
+新旧源码同为26345B、行数相同，只有226、227两行不同。第226行保留原exact assert，将102/3628/3787改为真实R24的102/3590/3779；第227行仅改相应错误数字与R24标签。正向替换与完整新文件相等，反向替换与原80f718…完整字节相等。从requiredTerminal到EOF的严格算法全文、全部imports、其余源码均未变。因此复用既有独审a320所核机制，不重新证明或重写旧算法。
+
+当前范围有独立真实证据：manifest `52c614d4…` 对应run43670444098 / driver b125727f… / source1d586700…；新source的102条数学imports与module数组逐序相同，辅助import仍为既有严格版本的Lean.Util.FoldConsts。R24_EXPECTED_INVENTORY的逐模块canonical root names、重数、DECL/serialized/environment相等关系及names摘要，与原batch-types.log逐项一致，合计3590根；两条新增firstMax_nil/cons的完整原记录也一致。3779来自原extra_codegen计数，并非旧数加减推算。但原成功输出没有真实extra名字列表，因此这个数只约束新候选的预期，不是已付完整codegen库存。
+
+保留的严格机制包括：每个logical及implementation root独立新建pending/seen、读取当前env.checked type/body、body存在性、实际构造器与flags、dependency canonical owner、所有primitive直接边、每root完整AX与安全可达性；global graphEmitted仅去重输出。safe logical闭包拒绝unsafe/partial；actual defnInfo/opaqueInfo executable companions只作metadata，仍审完整AX，proof/termination credit为0；未知或缺失kind/owner/body不得放行。完整serialized/owner重数、双types、loaded modes、实际extra-codegen names输出与原safe theorem终点均保持。当前新stdout是否确实满足这些条件，需要真实执行及独立parser按完整名字/图核验，不能用本次静态总数代替。
+
+本次新AL只适用于上述R24数学源、manifest顺序与真实库存上下文。原R24实际运行的19752B审计器仍为43d3b26c…，其HOLD7c800…没有被改写；新99ea候选也没有在该run中执行。collectAxioms缺口仍准确表述为imported exportedAxiomsExt可返回缓存，实际旧API每call有局部seen，不是未经证实的跨root globalvisited错误。
+
+audit-only静态计划边界可用：先完成原R24对象、source/private/server/IR、setup、allactualinputs、runtime/toolchain/ABI及collector/retention的同一实物资格绑定，再复用原102模块kernel证据。保留逻辑角色上的kernel_replay_required，不等于安排重复运行已可靠核过的同一对象。light没有独立checker exit receipt，包中仍为null，没有造exit0；原102replay、workflow pipefail/后继BATCH验证与原成功状态的证据范围未扩大。缺原件先HOLD，不以重编102数学源或重复可靠kernel作默认补救。
+
+后续可能的源执行仅限精确获批的新审计工具；数学源编译、native/C/link及bootstrap冷编fallback全部为0。当前硬槽位仍未填写：实际audit-only head/tree/parent、全物理对象与同对象kernel绑定、完整loaded closure、guard/preexec admission、原argv/cwd/exit/stdout/stderr、fresh parser及每root图重算、final acceptance与retention。精确已审auditor bytes必须分别绑定stage、qualification、preexec、proof、final、retention；final与retention不能合并，不能只用当前文件自报hash。源AL不补这些F1–F7资格。
+
+无新数学证明、无102数学源修改、无原endpoint/前提削弱。原15条endpoint双types与conditional P2.4 component边界继续保留，不扩大为整P2/P4。旧80f、a320、U05原188文件与doc9历史不改；本次只写新的独审记录。未执行Lean/Lake/LSP、任何新旧helper、fixture或audit脚本；无网络、下载、Git/GH写、额度查询或spawn。
