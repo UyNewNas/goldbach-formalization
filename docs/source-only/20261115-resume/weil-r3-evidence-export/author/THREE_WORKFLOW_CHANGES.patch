@@ -1,0 +1,61 @@
+--- base2960/.github/workflows/lean.yml
++++ proposed/.github/workflows/lean.yml
+@@ -7,6 +7,7 @@
+       - 'codex/chen-parts-integration'
+       - 'codex/yellow-closure-20261110'
+       - 'ci/weil34-26a6-20261115'
++      - 'ci/weil-r3-evidence-20261115'
+     paths-ignore:
+       - "automation/**"
+   pull_request:
+--- base2960/.github/workflows/variable-envelope.yml
++++ proposed/.github/workflows/variable-envelope.yml
+@@ -8,6 +8,7 @@
+       - 'codex/chen-parts-integration'
+       - 'codex/yellow-closure-20261110'
+       - 'ci/weil34-26a6-20261115'
++      - 'ci/weil-r3-evidence-20261115'
+     paths-ignore:
+       - "automation/**"
+   pull_request:
+--- /dev/null
++++ proposed/.github/workflows/weil-r3-evidence-export.yml
+@@ -0,0 +1,38 @@
++name: Finite original R3 evidence byte carrier only
++on:
++  push:
++    branches: [ci/weil-r3-evidence-20261115]
++    paths: [.github/workflows/weil-r3-evidence-export.yml]
++permissions:
++  contents: read
++  actions: read
++concurrency:
++  group: goldbach-weil-r3-evidence-43657752592
++  cancel-in-progress: false
++jobs:
++  original-evidence-export:
++    runs-on: ubuntu-24.04
++    timeout-minutes: 30
++    defaults:
++      run:
++        shell: bash
++    steps:
++      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
++        with:
++          ref: ${{ github.sha }}
++          persist-credentials: false
++      - name: Export only finite original bytes without toolchain or object loading
++        env:
++          GH_TOKEN: ${{ github.token }}
++        run: |
++          set -euo pipefail
++          python3 "$GITHUB_WORKSPACE/docs/source-only/20261115-resume/weil-r3-evidence-export/export_evidence.py"
++      - name: Preserve available original bytes and exact GET boundary receipts on failure
++        if: ${{ always() }}
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: weil-r3-evidence-byte-carrier-${{ github.run_id }}
++          path: ${{ runner.temp }}/weil-r3-evidence-export/
++          if-no-files-found: error
++          retention-days: 30
++          compression-level: 0
