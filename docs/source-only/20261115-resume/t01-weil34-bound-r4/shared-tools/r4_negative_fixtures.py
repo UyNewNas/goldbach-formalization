@@ -41,7 +41,7 @@ class R4ProtectionCases(unittest.TestCase):
         bundle = self.root/'bundle'; path = bundle/'direct-reuse/R4_DIRECT_SELECTION.json'
         path.parent.mkdir(parents=True); path.write_text(json.dumps(value))
         binding = dict(source_commit=qd.SOURCE,run_id='FAKE_DISTINCT_R4_RUN')
-        control = dict(driver_base=qd.R3_HEAD,driver_branch='ci/weil34-26a6-20261115',
+        control = dict(driver_base=qd.DRIVER_PARENT,driver_branch='ci/weil34-26a6-20261115',
                        multi_direct_selection_sha256=qa.sha(path))
         with patch.object(qd,'BUNDLE',bundle),patch.object(qd,'bind',return_value=(control,binding)),\
              self.assertRaisesRegex(ValueError,'^R4 HOLD: raw physical inputs and full protocol review are not ready$'):
@@ -112,16 +112,42 @@ class R4ProtectionCases(unittest.TestCase):
             qd.check_input_file_set(value,{},Path(setup['path']),{private['path']:private})
 
     def test_r4_nonempty_historical_stream_cannot_be_synthesized(self):
-        context = object.__new__(qd.R3Direct); context.inputs = self.root/'originals'; context.inputs.mkdir()
-        context.used_payloads = {}; context.body_sources = {}; context.current_authenticated_streams = []
+        from carrier_originals import CarrierOriginals
+        from r4_bound_negative_fixtures import R4BoundInputCases
+        selected = self.selected()['r3_modules'][0]
+        qa.checked(qa.BUNDLE/selected['carrier_authority']['bundle_relative_path'],selected['carrier_authority'])
+        authentic = R4BoundInputCases.authority(self)
+        self.assertEqual(authentic['original_binding'],selected['prior_binding'])
         path = '/home/runner/work/_temp/weil34-evidence/cache-processes/runtime-audit.stdout'
-        raw = b'AUTHENTIC NONEMPTY BYTES NOT AVAILABLE'
-        context.cp = dict(files={path:dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),payload='objects/missing')})
+        pin = next(r for r in authentic['originals'] if r['original_path'] == path)
+        self.assertNotIn(path,{r['original_path'] for r in authentic['deduplicated_authentic_prior_R1_streams']})
+        # Exact501B original JSON stdout copied from the already-held carrier,
+        # not reconstructed from a digest/summary. This is metadata fixture data.
+        raw = b'{"pinned_sysroot_probe": {"leantar_hashes_match": true, "prefix_matches_shadow": true, "real_leantar_exists": true, "real_leantar_within_pin_root": true, "shadow_leantar_exists": true, "shadow_leantar_is_real_symlink": true}}\n{"status": "PASS_RUNTIME_GUARD_ONLY", "compiler_commands": 49, "source_commands": 15, "probe": true, "command_log_sha256": "f2dcf440e009914b0eb6c950d4247de6d759be7dcfc7ed1cfec42b76b3c4e30e", "state_sha256": "3c705df437cc7bb53aa96cca780e8dce7921f3450f4477031eed13851db873b4"}\n'
+        self.assertEqual((len(raw),hashlib.sha256(raw).hexdigest()),(pin['bytes'],pin['sha256']))
+        context = object.__new__(qd.R3Direct); context.inputs = self.root/'originals'; context.inputs.mkdir()
+        context.session = SimpleNamespace(project=self.project,logs=self.logs,binding=dict(fake_unit_metadata_only=True))
+        context.selected = selected; context.module = selected['module']
+        context.used_payloads = {}; context.body_sources = {}; context.current_authenticated_streams = []
+        context.cp = dict(files={path:dict(original_path=path,resolved_path=path,bytes=pin['bytes'],sha256=pin['sha256'],payload=pin['member'])})
+        # Same method-level cached-carrier seam as the already passed donor
+        # builder; fixtures precede acquisition, so no whole123-body admission.
+        authority = object.__new__(CarrierOriginals); authority.context = context; authority.root = context.inputs
+        authority.authority = authentic; authority.used = {}; authority.original_files = {}
+        authority.receipt = R4BoundInputCases.receipt(self)
+        authority.pins = {(r['artifact'],r['member']):r for r in authentic['originals']}
+        context._genuine_carrier = authority
+        target = qa.relative(context.inputs,'raw/'+pin['member']); self.put(target,raw)
         light = self.root/'tiny.zip'
         with zipfile.ZipFile(light,'w') as archive: archive.writestr('authentic-empty',b'')
         with zipfile.ZipFile(light) as archive:
             context.light = archive
-            with self.assertRaisesRegex(ValueError,'^Missing/nonregular payload: '): context.original_file(path)
+            actual,record = context.original_file(path)
+            self.assertEqual(actual,target); self.assertEqual(actual.read_bytes(),raw)
+            self.assertEqual((record['bytes'],record['sha256']),(pin['bytes'],pin['sha256']))
+            target.unlink()  # Only changed input after the successful control.
+            with self.assertRaisesRegex(ValueError,'^Missing/nonregular payload: '+re.escape(str(target))+'$'):
+                context.original_file(path)
 
     def test_r4_all15_source_outputs_hash_setup_trace_native_paths_denied(self):
         policy = dict(admitted_commands=[dict(source=dict(path=str(self.project/Path(*n.split('.')).with_suffix('.lean'))))
