@@ -12,7 +12,7 @@ import sys
 from coherent_cache import HERE, WEIL, checked, git, read, require, sha, write
 
 BUNDLE = HERE.parent
-SOURCE = '9c26636f2bf35991f0fb16e4fe76eb165bdee056'
+SOURCE = '267a1b0d8ed58c9c0fc8520f3b2777b7963b767f'
 
 
 def data():
