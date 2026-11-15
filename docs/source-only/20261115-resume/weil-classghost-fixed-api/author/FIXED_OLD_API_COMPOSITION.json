@@ -1,0 +1,75 @@
+{
+  "schema": "ClassGhost-old-API-proof-local-composition-v1",
+  "status": "EXACT_SOURCE_API_TYPES_AND_EXISTING_HYPOTHESES_NOT_COMPILED",
+  "old_multiplicativity": {
+    "source": {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/LinearAlgebra/Dimension/Free.lean",
+      "local_path": "output/resume-20261115/t01/weil34-classghost-api/references/mathlib-e4c917/Mathlib/LinearAlgebra/Dimension/Free.lean",
+      "bytes": 18124,
+      "sha256": "e2fbc9efb856428648d2f0bc94a66d94ecd4e9a3559ef1686fe61a9fe36f3f4a",
+      "git_blob": "691e13d49d4fed676940ca269afbf010f18a5755",
+      "source_GET_only": true,
+      "role": "fixed_original_API"
+    },
+    "context_lines": "33: section Tower\n34: \n35: variable (F : Type u) (K : Type v) (A : Type w)\n36: variable [Semiring F] [Semiring K] [AddCommMonoid A]\n37: variable [Module F K] [Module K A] [Module F A] [IsScalarTower F K A]\n38: variable [StrongRankCondition F] [StrongRankCondition K] [Module.Free F K] [Module.Free K A]\n",
+    "declaration_and_proof": "63: /-- Tower law: if `A` is a `K`-module and `K` is an extension of `F` then\n64: $\\operatorname{rank}_F(A) = \\operatorname{rank}_F(K) * \\operatorname{rank}_K(A)$.\n65: \n66: See `Module.finrank_mul_finrank'` for a variant over a tower of domains that assumes the rings are\n67: module-finite rather than the modules being free. -/\n68: theorem Module.finrank_mul_finrank : finrank F K * finrank K A = finrank F A := by\n69:   simp_rw [finrank]\n70:   rw [← toNat_lift.{w} (Module.rank F K), ← toNat_lift.{v} (Module.rank K A), ← toNat_mul,\n71:     lift_rank_mul_lift_rank, toNat_lift]\n",
+    "full_context": "F,K,A are types; Semiring F/K, AddCommMonoid A; Module F K/K A/F A and IsScalarTower; StrongRankCondition F/K and Free F K/K A",
+    "instantiation": {
+      "F": "Fp p",
+      "K": "M = IntermediateField.adjoin (Fp p) {y}",
+      "A": "Ext p n"
+    },
+    "field_instance_reason": "Fp p and M are fields and Ext is the same extension field; canonical module/scalar-tower/free-vector-space instances supply the old contexts. No finite-dimensional or positivity assumption is appended to the theorem."
+  },
+  "old_nat_division": {
+    "source": {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/Init/Data/Nat/Div/Basic.lean",
+      "local_path": "output/resume-20261115/t01/weil34-classghost-api/references/lean-62eed1db/src/Init/Data/Nat/Div/Basic.lean",
+      "bytes": 17368,
+      "sha256": "67f894497257111dff81a5b3bab0f849cc53f31a3c62656333366ad62ab63a58",
+      "git_blob": "b1645a4d168ee2ce0e8e06775a42e13ddf3ec2e6",
+      "source_GET_only": true,
+      "role": "fixed_original_Nat_API"
+    },
+    "declaration_and_proof": "447: protected theorem div_eq_of_eq_mul_left (H1 : 0 < n) (H2 : m = k * n) : m / n = k :=\n448: by rw [H2, Nat.mul_div_cancel _ H1]\n449: \n450: protected theorem div_eq_of_eq_mul_right (H1 : 0 < n) (H2 : m = n * k) : m / n = k :=\n451: by rw [H2, Nat.mul_div_cancel_left _ H1]\n",
+    "same_fixed_file_usage_of_Nat_pos_of_ne_zero": "401:     rw [z0, Nat.zero_mul, Nat.zero_mul, Nat.zero_mul, mod_zero]\n402:   else by\n403:     induction x using Nat.strongRecOn with\n404:     | _ n IH =>\n405:       have y0 : y > 0 := Nat.pos_of_ne_zero y0\n406:       have z0 : z > 0 := Nat.pos_of_ne_zero z0\n407:       cases Nat.lt_or_ge n y with\n",
+    "instantiation": {
+      "m": "Module.finrank (Fp p) (Ext p n)",
+      "n": "Module.finrank (Fp p) M",
+      "k": "Module.finrank M (Ext p n)",
+      "H1": "Nat.pos_of_ne_zero hbase0",
+      "H2": "(Module.finrank_mul_finrank (Fp p) M (Ext p n)).symm"
+    }
+  },
+  "new_upstream_convenience_lemma": {
+    "source": {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+      "path": "Mathlib/LinearAlgebra/Dimension/Free.lean",
+      "local_path": "output/resume-20261115/t01/weil34-classghost-api/references/mathlib-upstream56a005/Mathlib/LinearAlgebra/Dimension/Free.lean",
+      "bytes": 19191,
+      "sha256": "f79c9b1213f5991832518b4547da7bf4103ec2d51b045b2ecd5eae72243880ce",
+      "git_blob": "a5fea957c5c336fb9ab5564974a68d03924c03ce",
+      "source_GET_only": true,
+      "role": "comparison_only_not_dependency_upgrade"
+    },
+    "context_and_body": "81: theorem Module.finrank_div_finrank_cancel_right (h : Module.finrank K A ≠ 0) :\n82:     Module.finrank F A / Module.finrank K A = Module.finrank F K :=\n83:   Nat.div_eq_of_eq_mul_left h.bot_lt (finrank_mul_finrank ..).symm\n84: \n85: theorem Module.finrank_div_finrank_cancel_left (h : Module.finrank F K ≠ 0) :\n86:     Module.finrank F A / Module.finrank F K = Module.finrank K A :=\n87:   Nat.div_eq_of_eq_mul_right h.bot_lt (finrank_mul_finrank ..).symm\n",
+    "role": "Comparison only; its body composes the already existing multiplicativity and Nat division. It is NOT copied as a new general theorem and no dependency is upgraded."
+  },
+  "unchanged_local_derivations": [
+    "hyint from IsIntegral.of_finite",
+    "hbase from existing adjoin finrank/minpoly identity",
+    "htotal from GaloisField.finrank with original NeZero n",
+    "hdegpos from original integral minpoly degree",
+    "hbase0 from hbase and hdegpos",
+    "original calc hcancel.symm followed by rw[htotal,hbase]"
+  ],
+  "no_target_shaped_new_assumption": true,
+  "no_new_general_tower_theorem": true,
+  "no_changed_Field_finite_nonzero_parameters": true,
+  "new_imports": 0
+}
