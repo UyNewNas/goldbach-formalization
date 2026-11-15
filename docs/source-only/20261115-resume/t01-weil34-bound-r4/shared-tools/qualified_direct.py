@@ -17,7 +17,7 @@ from coherent_cache import HERE, checked, read, require, sha
 from weil_scope import BUNDLE, SOURCE, bind, data, installed
 
 R3_HEAD = '2960e200301de4189c1c2793b918fc8aa7666930'
-DRIVER_PARENT = '38f50cc6168422f37d9523da1f83f37bd870cb1f'
+DRIVER_PARENT = 'dfeabf9b5e88703c8700a388d53277132e586b90'
 R3_RUN = '43657752592'
 R3_SCOPE = '36db0010a096951a6c3e1186949e400c27e6658fb355c5328380cfade5a86290'
 R3_LIGHT = 'b4bf5cb681e4f27284ac5d8253180b4b8931bb2dab012f0f0fbb9c1f11c26f9d'
@@ -81,7 +81,7 @@ def selection(session):
             and sys.platform == 'linux' and binding['source_commit'] == SOURCE
             and binding['run_id'] not in {'43643644264',R3_RUN}
             and control['driver_base'] == DRIVER_PARENT
-            and control['driver_branch'] == 'ci/weil34-26a6-20261115',
+            and control['driver_branch'] == 'ci/weil-formalalgebra-20261115',
             'R4 distinct exact-source caller/current parent/same CI branch required')
     path = BUNDLE/'direct-reuse/R4_DIRECT_SELECTION.json'
     require(control['multi_direct_selection_sha256'] == sha(path), 'R4 exact selection is not ROOT pinned')

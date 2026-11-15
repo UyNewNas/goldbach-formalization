@@ -41,7 +41,7 @@ class R4ProtectionCases(unittest.TestCase):
         bundle = self.root/'bundle'; path = bundle/'direct-reuse/R4_DIRECT_SELECTION.json'
         path.parent.mkdir(parents=True); path.write_text(json.dumps(value))
         binding = dict(source_commit=qd.SOURCE,run_id='FAKE_DISTINCT_R4_RUN')
-        control = dict(driver_base=qd.DRIVER_PARENT,driver_branch='ci/weil34-26a6-20261115',
+        control = dict(driver_base=qd.DRIVER_PARENT,driver_branch='ci/weil-formalalgebra-20261115',
                        multi_direct_selection_sha256=qa.sha(path))
         with patch.object(qd,'BUNDLE',bundle),patch.object(qd,'bind',return_value=(control,binding)),\
              self.assertRaisesRegex(ValueError,'^R4 HOLD: raw physical inputs and full protocol review are not ready$'):
