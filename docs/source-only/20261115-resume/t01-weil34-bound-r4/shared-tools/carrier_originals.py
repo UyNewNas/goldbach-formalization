@@ -170,7 +170,7 @@ def check_data_review(value,authority):
             and value['carrier']['is_proof_producer'] is False
             and value['selected_originals']==123 and value['selected_CP_original_paths']==117
             and value['current_R4_source_identity_draft_freeze_sha256']=='370699cbc0f25b87b58336f0419b4e39e3ac31cacc9e3ea0500927006249664c'
-            and authority['source_commit_current']==SOURCE=='267a1b0d8ed58c9c0fc8520f3b2777b7963b767f',
+            and authority['source_commit_current']==SOURCE=='770ceedf8802d3a956c5b25d274b87216f8eb5ee',
             'R4 independent original physical data review binding changed')
     require(value['data_allowlist'] is True and value['allow_next_candidate_to_bind_exact_historical_bytes'] is True
             and value['allow_dispatch'] is False and value['reuseReady'] is False and value['driverReady'] is False

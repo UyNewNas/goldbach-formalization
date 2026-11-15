@@ -17,7 +17,7 @@ from coherent_cache import HERE, checked, read, require, sha
 from weil_scope import BUNDLE, SOURCE, bind, data, installed
 
 R3_HEAD = '2960e200301de4189c1c2793b918fc8aa7666930'
-DRIVER_PARENT = '03503312ab75015db0e91b8c5bf86b7256c0f97b'
+DRIVER_PARENT = 'bb275c0e30873f893cc7221dcba739fc7137b708'
 R3_RUN = '43657752592'
 R3_SCOPE = '36db0010a096951a6c3e1186949e400c27e6658fb355c5328380cfade5a86290'
 R3_LIGHT = 'b4bf5cb681e4f27284ac5d8253180b4b8931bb2dab012f0f0fbb9c1f11c26f9d'
