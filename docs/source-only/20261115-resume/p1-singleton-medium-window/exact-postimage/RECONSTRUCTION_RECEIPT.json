@@ -1,0 +1,116 @@
+{
+  "schema": "u02-p1-medium-window-four-root-API-tokens-v1",
+  "status": "SOURCE_ONLY_UNCOMPILED_NEW_EXACT_SOURCE_REVIEW_PENDING",
+  "old": {
+    "path": "output/resume-20261115/t06/p1-singleton-medium-window/P1OriginalSingletonMediumWindow.lean",
+    "bytes": 9561,
+    "sha256": "2c4c8bf58fd305013b4d66801cca4ffeeb9d592676c2fd2cf5c3eb62ca7c806b",
+    "computed_git_blob": "831cf9642283ad3511fe3b8fec1942013369ec43"
+  },
+  "postimage": {
+    "path": "output/resume-20261115/u02-p1-medium-window-api-postimage/P1OriginalSingletonMediumWindow.lean",
+    "bytes": 9569,
+    "sha256": "2c2da3d3a40695ec78ecdc055acc3d66378b65ed46b1946b71fa1a0533db202a",
+    "computed_git_blob": "aa0b580baf5ede66e5043c45b82409fcf064cc43"
+  },
+  "original_T06_freeze": {
+    "path": "output/resume-20261115/t06/p1-singleton-medium-window/FREEZE.json",
+    "bytes": 4158,
+    "sha256": "fd1c611e77107eb4bb9220ecdf5109e6c03b41a0b70ee01f9791a1d3b68938c3",
+    "computed_git_blob": "777e2bc2ff775b0e3bb654e59c397c3fffcdd620"
+  },
+  "fixed_API_binding": {
+    "path": "output/resume-20261115/u02-p1-medium-window-api-postimage/FIXED_MATHLIB_API_BINDING.json",
+    "bytes": 2142,
+    "sha256": "8b428b337025ce68cde9ea6b3d7deb112d5f6a5f4bc5b35ced15434be9fc4c45",
+    "computed_git_blob": "72047e8cc8902b0ef1cda94646fa952e18511473"
+  },
+  "replacement_old": "Real.tendsto_rpow_atTop",
+  "replacement_new": "_root_.tendsto_rpow_atTop",
+  "replacement_occurrences": 4,
+  "changed_source_lines": [
+    {
+      "line": 92,
+      "old_line": "      (Real.tendsto_rpow_atTop (by norm_num : (0:ℝ)<1/3)).eventually_ge_atTop 2,",
+      "new_line": "      (_root_.tendsto_rpow_atTop (by norm_num : (0:ℝ)<1/3)).eventually_ge_atTop 2,"
+    },
+    {
+      "line": 93,
+      "old_line": "      (Real.tendsto_rpow_atTop (by linarith : 0<zeta/4)).eventually_ge_atTop 8,",
+      "new_line": "      (_root_.tendsto_rpow_atTop (by linarith : 0<zeta/4)).eventually_ge_atTop 8,"
+    },
+    {
+      "line": 94,
+      "old_line": "      (Real.tendsto_rpow_atTop hz).eventually_ge_atTop 2,",
+      "new_line": "      (_root_.tendsto_rpow_atTop hz).eventually_ge_atTop 2,"
+    },
+    {
+      "line": 95,
+      "old_line": "      (Real.tendsto_rpow_atTop he).eventually_ge_atTop 2]",
+      "new_line": "      (_root_.tendsto_rpow_atTop he).eventually_ge_atTop 2]"
+    }
+  ],
+  "all_four_declaration_heads_identical": [
+    {
+      "name": "live_geometry",
+      "private": false,
+      "line": 35,
+      "head": "theorem live_geometry (kap : ℝ) (hkap : kap<1) {N : ℕ} (hN : 0<N)\n    (cj : ℕ) (kap0 : ℝ) {r : ℕ} (bs : Fin r→Block)\n    (n : Fin r→ℕ) (i : Fin r) (hn : n∈rectangle bs)\n    (hw : integerProfile kap 6 N cj kap0 n≠0) :\n    let x := completeScale bs n i\n    (1/4:ℝ)*(N:ℝ)^(1-kap0)≤x ∧ x≤2*(N:ℝ) ∧\n      R cj≤8*x ∧ x≤2*R cj := by",
+      "head_bytes": 365,
+      "head_sha256": "2f1801186252cfa5722d14f71b8ff3635d118a87411ea9c99298e622ab2c429d"
+    },
+    {
+      "name": "selected_window",
+      "private": false,
+      "line": 60,
+      "head": "theorem selected_window {r : ℕ} (bs : Fin r→Block) (i : Fin r)\n    (cj : ℕ) (zeta : ℝ)\n    (h : firstMedium (originalMediumLow zeta [cj]) (originalMediumHigh zeta [cj])\n      (List.ofFn bs)=some i.val) :\n    (R cj)^(3*zeta)≤(lower (bs i):ℝ) ∧\n      (lower (bs i):ℝ)≤(R cj)^(1/3+zeta/4:ℝ) := by",
+      "head_bytes": 313,
+      "head_sha256": "680151300aef92c1cc46e9965b0a8b0d951c5894fb614a3fb16e506cd74c6f63"
+    },
+    {
+      "name": "scale_window",
+      "private": true,
+      "line": 69,
+      "head": "private theorem scale_window (K : ℕ) (xMin : ℝ) {zeta kappa kap0 : ℝ}\n    (hz : 0<zeta) (hz1 : zeta≤1/400) (hk : 0<kappa)\n    (ht : kap0<kappa/(4*(1+kappa))) (ht1 : kap0<1) :\n    ∀ᶠ N : ℕ in atTop, ∀ (x X U : ℝ),\n      (1/4:ℝ)*(N:ℝ)^(1-kap0)≤x → x≤2*(N:ℝ) →\n      X≤8*x → x≤2*X → X^(3*zeta)≤U → U≤X^(1/3+zeta/4:ℝ) →\n      let v := (2:ℝ)^(6*K+3)*X\n      xMin≤x ∧ 1<x ∧ (2:ℝ)⁻¹*x≤N ∧ (N:ℝ)≤x^(1+kappa) ∧\n      x^(1-zeta)≤N ∧ 1<U ∧ x^(2*zeta)≤U ∧\n      U≤x^(1/3+zeta/2:ℝ) ∧ 2*U≤x ∧ x≤v ∧ v≤x^2 ∧\n      roughF x≤roughF v ∧ roughF v≤x^(2/(Real.log (Real.log x))^3) := by",
+      "head_bytes": 672,
+      "head_sha256": "9b7f651863007db37e583e0155fb1448131981d04ae27ff1b1a29d6d87470fa6"
+    },
+    {
+      "name": "eventually_original_medium_window",
+      "private": false,
+      "line": 159,
+      "head": "theorem eventually_original_medium_window (K : ℕ) (xMin : ℝ)\n    {kap zeta kappa kap0 : ℝ} (hkap : kap<1)\n    (hz : 0<zeta) (hz1 : zeta≤1/400) (hk : 0<kappa)\n    (ht : kap0<kappa/(4*(1+kappa))) (ht1 : kap0<1) :\n    ∀ᶠ N : ℕ in atTop, ∀ (cj r : ℕ) (bs : Fin r→Block)\n      (i : Fin r) (C : Block),\n      (∃ n∈fibre bs i C,integerProfile kap 6 N cj kap0 n≠0) →\n      firstMedium (originalMediumLow zeta [cj]) (originalMediumHigh zeta [cj])\n        (List.ofFn bs)=some i.val →\n      let U := (lower (bs i):ℝ)\n      let x := U*(lower C:ℝ)\n      let v := (2:ℝ)^(6*K+3)*R cj\n      xMin≤x ∧ 1<x ∧ (2:ℝ)⁻¹*x≤N ∧ (N:ℝ)≤x^(1+kappa) ∧\n      x^(1-zeta)≤N ∧ 1<U ∧ x^(2*zeta)≤U ∧\n      U≤x^(1/3+zeta/2:ℝ) ∧ 2*U≤x ∧ x≤v ∧ v≤x^2 ∧\n      roughF x≤beforeHBCutoff K [cj] ∧\n      beforeHBCutoff K [cj]≤x^(2/(Real.log (Real.log x))^3) := by",
+      "head_bytes": 910,
+      "head_sha256": "484ea6e889b14b99b0f0bc69edbda841bbcf0e7dbf20b1a68ec3d278ad738552"
+    }
+  ],
+  "full_header_comparison_includes_statement_let_binders": true,
+  "all_imports_identical": [
+    "import ImbalancedChen.P1OriginalSingletonOneLongGeometry\n",
+    "import ImbalancedChen.P4BOriginalHighRankComplementBlocks\n",
+    "import ImbalancedChen.RestrictedResidueScale\n"
+  ],
+  "all_other_source_bytes_identical_after_reverse_replacement": true,
+  "line_count_unchanged": true,
+  "source_preamble_unchanged": true,
+  "mathematical_parameters_premises_types_thresholds_conclusions_unchanged": true,
+  "body_change_scope": "Only four theorem-name tokens inside private scale_window proof at92–95. Every other proof word/body byte remains unchanged.",
+  "new_math_lemma_definition_axiom_or_assumption": false,
+  "old_review_AL_transferred": false,
+  "new_T05_exact_source_AL": null,
+  "old_author_freeze_preserved": true,
+  "compiled": false,
+  "ready_to_install": false,
+  "formal_credit": 0,
+  "recursive_import_closure_accepted": false,
+  "original_HOLDs_retained": [
+    "Final Params/free singleton mediumAtlas uniform payment remains unproved by this packet.",
+    "Actual singleton role normalization, retained-band and atom reconstruction/restoration remain separate.",
+    "Whole-box M inequalities on all final words/history and the uniform signed M analysis remain required.",
+    "Historical comparisonMiddle/savingMiddle and full87 actual history supply remain unchanged.",
+    "No ALL16 lower/upper coefficient substitution, no raw-to-boxed transfer, no removal of small beta or tails.",
+    "Existing half-J source-math AL retained at its original range and original no-kernel status; not treated as whole M.",
+    "Historical R22 full 102 kernel pass is not negated."
+  ],
+  "operations": "Only source/JSON/text/hash and existing local fixed Mathlib Git object metadata were read; every oid locally present before query. No Lean/Lake/LSP/candidate/helper/guard/fixture, network/GET/artifact, Git/GH writes, quota or spawn."
+}
