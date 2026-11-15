@@ -1,4 +1,4 @@
-name: Exact34 Weil project433rc1 original26a6 qualification
+name: Exact34 Weil original26a6 direct Algebra reuse and33 fresh qualification
 on:
   push:
     branches: [ci/weil34-26a6-20261115]
@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 300
     env:
       LEAN_NUM_THREADS: 2
-      WEIL_BUNDLE: docs/source-only/20261115-resume/t01-weil34-26a6
+      WEIL_BUNDLE: docs/source-only/20261115-resume/t01-weil34-direct-r3
       CACHE_SCOPE: WEIL34_PROJECT26A6
     defaults:
       run:
@@ -27,8 +27,8 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: dca6bab3c54d34937205ac0334e350455ec21a3c
-          path: weil-source-dca6
+          ref: 26c8c3ab7017ff27aafb60b5e26f3183f2ed8b7a
+          path: weil-source-26c8
           persist-credentials: false
       - name: Bind actual driver and stage exact34 with unchanged487B profile
         id: materialize
@@ -38,11 +38,12 @@ jobs:
           export LOGS="$RUNNER_TEMP/weil34-evidence"
           export CACHE_INPUTS="$RUNNER_TEMP/weil34-original-cache-inputs"
           export CACHE_CHECKPOINT_OUTPUT="$RUNNER_TEMP/weil34-original-checkpoint"
-          export SOURCE_COMMIT="dca6bab3c54d34937205ac0334e350455ec21a3c"
+          export SOURCE_COMMIT="26c8c3ab7017ff27aafb60b5e26f3183f2ed8b7a"
+          export WEIL_DIRECT_INPUTS="$RUNNER_TEMP/weil34-prior-direct-inputs"
           mkdir -p "$LOGS"
           python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_scope.py" stage 2>&1 | tee "$LOGS/materialize.log"
-          printf 'PROJECT=%s\nLOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\nSOURCE_COMMIT=%s\n' \
-            "$PROJECT" "$LOGS" "$CACHE_INPUTS" "$CACHE_CHECKPOINT_OUTPUT" "$SOURCE_COMMIT" >> "$GITHUB_ENV"
+          printf 'PROJECT=%s\nLOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\nSOURCE_COMMIT=%s\nWEIL_DIRECT_INPUTS=%s\n' \
+            "$PROJECT" "$LOGS" "$CACHE_INPUTS" "$CACHE_CHECKPOINT_OUTPUT" "$SOURCE_COMMIT" "$WEIL_DIRECT_INPUTS" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: leanprover/lean-action
@@ -70,10 +71,10 @@ jobs:
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          for phase in fixtures acquire bootstrap standard; do
+          for phase in fixtures acquire bootstrap standard prior_direct_acquire prior_direct_admit; do
             python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
           done
-      - name: Compile only exact34 in dependency order with original profile arguments
+      - name: Compile exactly33 fresh and protect reused Algebra with original profile arguments
         timeout-minutes: 150
         run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" compile_all
       - name: Fresh native safe kernel replay from all34 actual most-private artifacts
