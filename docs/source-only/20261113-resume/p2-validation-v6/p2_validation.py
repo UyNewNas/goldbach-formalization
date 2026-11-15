@@ -47,7 +47,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert re.fullmatch(r'[0-9a-f]{40}', commit)
     assert git_head(workspace) == commit
     assert os.environ['GITHUB_EVENT_NAME'] == 'push', 'Only the root-selected narrow push route is prepared'
-    branch = 'ci/p2-integer-mass-r23-20261115'
+    branch = 'ci/p2-integer-mass-r24-20261115'
     assert os.environ['GITHUB_REF'] == 'refs/heads/' + branch
     path = 'verification/parts/p0/P2_INTEGER_MASS_DRIVER_SELECTION.json'
     committed = git_output(['git', '-C', str(workspace), 'show', commit + ':' + path])
@@ -56,7 +56,7 @@ def committed_driver_selection() -> tuple[dict, dict]:
     assert selection['schema'] == 'p2-integer-mass-root-driver-selection-v2'
     assert re.fullmatch(r'[0-9a-f]{64}', selection['bundle_registry_sha256'])
     assert re.fullmatch(r'[0-9a-f]{64}', selection['manifest_sha256'])
-    assert selection['driver_base'] == '3d4dce4431e036fc7035429f136332e81e82871f'
+    assert selection['driver_base'] == '0e6f803687e15d9fa4a2437455bc924a2766cfcb'
     assert selection['driver_branch'] == branch
     assert selection['workflow_path'] == '.github/workflows/p2-integer-mass-validation.yml'
     assert selection['bundle_path'] == 'docs/source-only/20261113-resume/p2-validation-v6'
