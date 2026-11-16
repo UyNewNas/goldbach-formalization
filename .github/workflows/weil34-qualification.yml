@@ -1,4 +1,4 @@
-name: Weil timeout original checkpoint original15 protected physical inputs only
+name: Weil exact fresh stock diagnostic without protected compilation
 on:
   push:
     branches: [ci/weil-formalalgebra-20261115]
@@ -10,24 +10,92 @@ concurrency:
   group: goldbach-p0-heavy
   cancel-in-progress: false
 jobs:
-  evidence:
+  weil34:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 90
+    env:
+      LEAN_NUM_THREADS: 2
+      WEIL_BUNDLE: docs/source-only/20261115-resume/t01-weil34-bound-r4
+      CACHE_SCOPE: WEIL34_PROJECT26A6
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Verify exact producer and acquire bounded raw checkpoint receipts without compilation
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 770ceedf8802d3a956c5b25d274b87216f8eb5ee
+          path: weil-source-e364
+          persist-credentials: false
+      - name: Bind actual driver and stage exact34 with unchanged487B profile
+        id: materialize
+        run: |
+          set -euo pipefail
+          export PROJECT="$RUNNER_TEMP/t01-project"
+          export LOGS="$RUNNER_TEMP/weil34-evidence"
+          export CACHE_INPUTS="$RUNNER_TEMP/weil34-original-cache-inputs"
+          export CACHE_CHECKPOINT_OUTPUT="$RUNNER_TEMP/weil34-original-checkpoint"
+          export SOURCE_COMMIT="770ceedf8802d3a956c5b25d274b87216f8eb5ee"
+          export WEIL_DIRECT_INPUTS="$RUNNER_TEMP/weil34-prior-direct-inputs"
+          mkdir -p "$LOGS"
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_scope.py" stage 2>&1 | tee "$LOGS/materialize.log"
+          printf 'PROJECT=%s\nLOGS=%s\nCACHE_INPUTS=%s\nCACHE_CHECKPOINT_OUTPUT=%s\nSOURCE_COMMIT=%s\nWEIL_DIRECT_INPUTS=%s\n' \
+            "$PROJECT" "$LOGS" "$CACHE_INPUTS" "$CACHE_CHECKPOINT_OUTPUT" "$SOURCE_COMMIT" "$WEIL_DIRECT_INPUTS" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install exact original toolchain with original pinned installer
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          cd "$PROJECT"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install original837 guard plus complete source setup import preexec binding
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/cache_runtime_setup.py"
+      - name: Run original denial fixtures bootstrap and stock with no protected source compilation
+        timeout-minutes: 45
         env:
           GH_TOKEN: ${{ github.token }}
-          OUT: ${{ runner.temp }}/weil-timeout-evidence
-        run: python3 docs/source-only/20261115-weil-timeout-evidence/acquire_protected105.py
-      - name: Preserve raw evidence only with no proof or reuse credit
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          for phase in fixtures acquire bootstrap standard; do
+            python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
+          done
+      - name: Verify fresh stock actual inputs through unchanged original gates only
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          PYTHONPATH="$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools" python3 - <<'PY'
+          import json
+          from coherent_cache import require, sha
+          from weil_cache import WeilSession
+          session = WeilSession()
+          session.stock_qualification_inputs()
+          session.require_fixtures()
+          commands = session.policy_audit()
+          events = [json.loads(line) for line in (session.logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
+          require(all(event['classification'] == 'EXACT_READ_ONLY_TOOLCHAIN_METADATA' for event in events), 'Non-metadata compiler event in no-build diagnostic')
+          session.emit('FRESH_STOCK_DIAGNOSTIC_ONLY.json', dict(status='FRESH_STOCK_SELF_CHECK_ONLY_NOT_HISTORICAL_EQUIVALENCE_OR_REUSE', command_count=len(commands), event_count=len(events), source_compiler_events=0, standard_inputs_sha256=sha(session.logs/'WEIL_STANDARD_INPUTS.json'), command_log_sha256=sha(session.state['log']), preexec_events_sha256=sha(session.logs/'CACHE_PREEXEC_EVENTS.jsonl'), original_runtime_result_modified=False, proof_acceptance=False, protected_reuse_qualified=False))
+          PY
+      - name: Preserve fresh diagnostic evidence only without reuse or proof credit
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: weil-timeout-evidence-${{ github.run_id }}
-          path: ${{ runner.temp }}/weil-timeout-evidence/
+          name: weil-fresh-stock-diagnostic-${{ github.run_id }}
+          path: ${{ runner.temp }}/weil34-evidence/
           if-no-files-found: error
           retention-days: 30
+
