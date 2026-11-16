@@ -1,4 +1,4 @@
-"""Stage original frozen T01 v3, then apply exactly one namespace correction."""
+"""Stage frozen T01 v3, then apply exact namespace and rewrite-instantiation corrections."""
 import hashlib, json, os, pathlib, subprocess, sys
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -33,6 +33,9 @@ def main():
     replacement = m['replacement']
     assert before.count(replacement['old'].encode()) == replacement['count'] == 1
     after = before.replace(replacement['old'].encode(), replacement['new'].encode())
+    instantiation = m['rewrite_instantiation']
+    assert after.count(instantiation['old'].encode()) == instantiation['count'] == 1
+    after = after.replace(instantiation['old'].encode(), instantiation['new'].encode())
     assert digest(after) == m['candidate_target_sha256']
     assert after == (HERE / 'candidate.lean').read_bytes()
     target.write_bytes(after)
@@ -42,7 +45,7 @@ def main():
         expected = m['candidate_target_sha256'] if row['module'] == m['target'] else row['sha256']
         assert digest((project / row['install_path']).read_bytes()) == expected, row['module']
     logs.mkdir(parents=True, exist_ok=True)
-    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'one_namespace_change_only': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
+    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'one_namespace_change_and_one_explicit_instantiation_only': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
     (logs / 'P1_STAGE_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
     (logs / 'ORIGINAL_T01_PROVENANCE.json').write_bytes((project / 'T01_PROVENANCE.json').read_bytes())
     print(json.dumps(receipt))

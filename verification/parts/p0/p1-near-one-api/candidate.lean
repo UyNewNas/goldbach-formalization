@@ -125,7 +125,7 @@ theorem closedUpper_le_amplitude {s : ℝ} (hs : 1 ≤ s) : closedUpper s ≤ A 
   · have hs2' : 2 ≤ s := le_of_not_ge hs2
     have h := upper_antitone (show (2 : ℝ) ∈ Ici 2 by simp)
       (by change (2 : ℝ) ≤ s; exact hs2') hs2'
-    rw [upper_eq_inv (by norm_num) (by norm_num)] at h
+    rw [upper_eq_inv (s := (2 : ℝ)) (by norm_num) (by norm_num)] at h
     change suzukiContinuousUpperFactor s / A ≤ 1 / 2 at h
     have h' := (div_le_iff₀ A_pos).mp h
     rw [closedUpper_eq_actual (by linarith)]
