@@ -1,4 +1,5 @@
 import ImbalancedChen.HistoricalUpperFiveCellGeometry
+import ImbalancedChen.FinitePrimeGeometryCore
 import ImbalancedChen.ActualHistoricalFifthCellIntegral
 import ImbalancedChen.ActualHistoricalFifthSavingIntegral
 import ImbalancedChen.HistoricalFifthCutoffInvariance
@@ -6,7 +7,7 @@ import ImbalancedChen.CurrentMainTheorem
 import Lean.Util.CollectAxioms
 
 /-! Round 6 type export after the full root build.
-The census contains every serialized declaration owned by the four listed modules,
+The census contains every serialized declaration owned by the five listed modules after the finite-core migration,
 including private and generated declarations. It is checked against the imported
 environment, rather than an unsupported historical declaration count.
 The existing final bridge is printed separately with all its analytic hypotheses.
@@ -33,7 +34,8 @@ run_cmd do
     `ImbalancedChen.HistoricalUpperFiveCellGeometry,
     `ImbalancedChen.ActualHistoricalFifthCellIntegral,
     `ImbalancedChen.ActualHistoricalFifthSavingIntegral,
-    `ImbalancedChen.HistoricalFifthCutoffInvariance]
+    `ImbalancedChen.HistoricalFifthCutoffInvariance,
+    `ImbalancedChen.FinitePrimeGeometryCore]
   let finalBridge := `ImbalancedChen.current_theorem_1_1_of_manuscript_bounds
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let mut targetIndices : Array ModuleIdx := #[]
@@ -45,7 +47,7 @@ run_cmd do
     IO.println "P0_ROUND6_PHASE name_index_inventory_start"
     (← IO.getStdout).flush
   -- Traverse only name/index entries for the complete imported ownership census.
-  -- ConstantInfo is queried only after selecting one of the four module indices.
+  -- ConstantInfo is queried only after selecting one of the five module indices.
   -- The index also contains IR/codegen-only names; these have no ConstantInfo
   -- and are not kernel declarations. All remaining names must match constNames.
   let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun names name idx =>
