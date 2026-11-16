@@ -1,4 +1,4 @@
-name: Weil exact fresh stock diagnostic without protected compilation
+name: Exact34 Weil fresh19 original15 strict retry without timeout14 reuse
 on:
   push:
     branches: [ci/weil-formalalgebra-20261115]
@@ -12,7 +12,7 @@ concurrency:
 jobs:
   weil34:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 360
     env:
       LEAN_NUM_THREADS: 2
       WEIL_BUNDLE: docs/source-only/20261115-resume/t01-weil34-bound-r4
@@ -64,38 +64,69 @@ jobs:
           set -euo pipefail
           cd "$PROJECT"
           python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/cache_runtime_setup.py"
-      - name: Run original denial fixtures bootstrap and stock with no protected source compilation
+      - name: Run91 actual denial fixtures and acquire exact original Cache144 and15 protected inputs
         timeout-minutes: 45
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          for phase in fixtures acquire bootstrap standard; do
+          for phase in fixtures acquire bootstrap standard prior_direct_acquire prior_direct_admit; do
             python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_cache.py" "$phase" 2>&1 | tee "$LOGS/cache-$phase.log"
           done
-      - name: Verify fresh stock actual inputs through unchanged original gates only
+      - name: Compile exactly19 fresh and protect all15 original sources with unchanged profile arguments
+        timeout-minutes: 240
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" compile_all
+      - name: Fresh native safe kernel replay from all34 actual most-private artifacts
+        timeout-minutes: 60
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" kernel
+      - name: Export complete private generated inventories both full types and direct axioms
+        timeout-minutes: 45
         run: |
           set -euo pipefail
-          cd "$PROJECT"
-          PYTHONPATH="$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools" python3 - <<'PY'
-          import json
-          from coherent_cache import require, sha
-          from weil_cache import WeilSession
-          session = WeilSession()
-          session.stock_qualification_inputs()
-          session.require_fixtures()
-          commands = session.policy_audit()
-          events = [json.loads(line) for line in (session.logs/'CACHE_PREEXEC_EVENTS.jsonl').read_text().splitlines() if line.strip()]
-          require(all(event['classification'] == 'EXACT_READ_ONLY_TOOLCHAIN_METADATA' for event in events), 'Non-metadata compiler event in no-build diagnostic')
-          session.emit('FRESH_STOCK_DIAGNOSTIC_ONLY.json', dict(status='FRESH_STOCK_SELF_CHECK_ONLY_NOT_HISTORICAL_EQUIVALENCE_OR_REUSE', command_count=len(commands), event_count=len(events), source_compiler_events=0, standard_inputs_sha256=sha(session.logs/'WEIL_STANDARD_INPUTS.json'), command_log_sha256=sha(session.state['log']), preexec_events_sha256=sha(session.logs/'CACHE_PREEXEC_EVENTS.jsonl'), original_runtime_result_modified=False, proof_acceptance=False, protected_reuse_qualified=False))
-          PY
-      - name: Preserve fresh diagnostic evidence only without reuse or proof credit
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" types
+          python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_proof.py" verify
+      - name: Audit original runtime after actual success or failure
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" runtime
+      - name: Upload early process inventory and original runtime evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: weil-fresh-stock-diagnostic-${{ github.run_id }}
+          name: weil34-lightlogs-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/weil34-evidence/*.json
+            ${{ runner.temp }}/weil34-evidence/*.jsonl
+            ${{ runner.temp }}/weil34-evidence/*.log
+            ${{ runner.temp }}/weil34-evidence/*.lean
+            ${{ runner.temp }}/weil34-evidence/direct-results/
+            ${{ runner.temp }}/weil34-evidence/direct-inputs/
+            ${{ runner.temp }}/weil34-evidence/cache-processes/*.json
+            ${{ runner.temp }}/weil34-evidence/cache-processes/*.stderr
+            ${{ runner.temp }}/weil34-evidence/runtime/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve all actual34 facets and original32993 collector on success or failure
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" retain
+      - name: Upload original raw checkpoint with unchanged classifications
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil34-original-checkpoint-${{ github.run_id }}
+          path: ${{ runner.temp }}/weil34-original-checkpoint/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+      - name: Accept only Stage A after complete actual proof stock runtime and retention gates
+        if: ${{ success() }}
+        run: python3 "$GITHUB_WORKSPACE/$WEIL_BUNDLE/shared-tools/weil_retention.py" finalize
+      - name: Upload complete source objects declarations and final scoped evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil34-proof-${{ github.run_id }}
           path: ${{ runner.temp }}/weil34-evidence/
           if-no-files-found: error
           retention-days: 30
-
+          compression-level: 0
