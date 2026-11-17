@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalGroupJets729Integrated
 import ImbalancedChen.P3HBExplicitSmoothCutoffs
 import ImbalancedChen.P3HBNonnegativeDyadicContraction
 import ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder
@@ -1252,3 +1253,8 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBExplicitSmoothCutoffs.chosenEta_right
 #check ImbalancedChen.P3HBExplicitSmoothCutoffs.chosenChi_dyadic_contraction
 #check ImbalancedChen.P3HBExplicitSmoothCutoffs.chosen_group_trim_ordered_polynomial
+
+-- Full 729-child ordered group-trim jet L1 contribution: NOT COMPILED.
+#check ImbalancedChen.P3HBOriginalGroupJets729Integrated.originalGroupJetChildrenMass_eq
+#check ImbalancedChen.P3HBOriginalGroupJets729Integrated.originalGroupJetChildren_integrable_polynomial
+#check ImbalancedChen.P3HBOriginalGroupJets729Integrated.chosenGroupJetChildren_integrable_polynomial
