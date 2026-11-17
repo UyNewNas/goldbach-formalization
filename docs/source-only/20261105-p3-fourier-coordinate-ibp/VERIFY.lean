@@ -115,6 +115,7 @@ import ImbalancedChen.P3HBActualTwoAxisLocalization
 import ImbalancedChen.P3HBCompactLocalJetBounds
 import ImbalancedChen.P3HBOriginalGroupDyadicScale
 import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
+import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 
 
 
@@ -1148,3 +1149,8 @@ import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 #check ImbalancedChen.P3HBOriginalGroupTrimAllOrder.originalGroupPhysicalTrim_ordered_eq_binary
 #check ImbalancedChen.P3HBOriginalGroupTrimAllOrder.binaryMass
 #check ImbalancedChen.P3HBOriginalGroupTrimAllOrder.originalGroupPhysicalTrim_ordered_norm_le_binaryMass
+
+-- Literal grouped product x ONE physical trim: fixed-K pointwise binary mass
+-- and actual ordered derivative ceiling; SOURCE_ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget.binaryMass_uniform_finite_order
+#check ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget.originalGroupPhysicalTrim_ordered_uniform_finite_order
