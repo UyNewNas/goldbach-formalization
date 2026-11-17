@@ -307,5 +307,70 @@ theorem actual_stopped_delta_four_sources
   exact actual_fixed_fifth_receiver_decomposition
     delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
 
+/-- A local, honest error payment ledger: NO primitive/AP, modulus-prime
+or centre-prime component is assumed small. Their EXACT signed terms
+belong to the same fixed fifth event population; taking absolutes is
+done only AFTER the complete signed decomposition. -/
+private theorem abs_three_term_payment (a b c : ℝ) :
+    |a - b - c| ≤ |a| + |b| + |c| := by
+  calc
+    |a - b - c| ≤ |a - b| + |c| := by
+      simpa only [sub_eq_add_neg, abs_neg] using
+        (abs_add (a - b) (-c))
+    _ ≤ (|a| + |b|) + |c| := by
+      exact add_le_add_right
+        (by simpa only [sub_eq_add_neg, abs_neg] using
+          (abs_add a (-b))) _
+    _ = _ := by ring
+
+/-- An explicit signed, same-rho PP adapter for the retained ACTUAL
+fifth tail. The right side is NOT claimed o(H_N); full-q admission,
+density-to-integral identification and separate physical outside bills
+remain independent manuscript obligations. -/
+theorem actual_stopped_primitive_density_gap_bound
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z : ℝ)
+    (he : (0 : ℝ) ≤
+      ((P4AOriginalCompleteSixthChronology.data e q om).e : ℝ))
+    (hN : 1 < (N : ℝ))
+    (epsilon : ℝ) (heps : epsilon ≤ (1 / 500 : ℝ))
+    (X : ℕ) (hX : (N : ℝ) ^ (3 / 5 : ℝ) ≤ (X : ℝ)) :
+    |(rawStopped e q om N cap w z ((N : ℝ) ^ epsilon) X
+        (receiverTest N) -
+      licensedStopped delta n e q om N cap w z
+        ((N : ℝ) ^ epsilon) X (receiverTest N)) -
+      primeMass N * actualFixedSignedFifthTail
+        delta n e q om N cap w z ((N : ℝ) ^ epsilon) X densityTest| ≤
+      |actualFixedSignedFifthTail
+        delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+          (primitiveError N)| +
+      |actualFixedSignedFifthTail
+        delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+          (modulusPrimeTerm N)| +
+      |actualFixedSignedFifthTail
+        delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+          (chenCentrePrimeAPCount N N)| := by
+  rw [actual_stopped_delta_four_sources
+    delta n e q om N cap w z he hN epsilon heps X hX]
+  let U := actualFixedSignedFifthTail
+    delta n e q om N cap w z ((N : ℝ) ^ epsilon) X densityTest
+  let A := actualFixedSignedFifthTail
+    delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+      (primitiveError N)
+  let B := actualFixedSignedFifthTail
+    delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+      (modulusPrimeTerm N)
+  let C := actualFixedSignedFifthTail
+    delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+      (chenCentrePrimeAPCount N N)
+  change |(primeMass N * U + A - B - C) -
+    primeMass N * U| ≤ |A| + |B| + |C|
+  have hcancel :
+      (primeMass N * U + A - B - C) - primeMass N * U =
+        A - B - C := by ring
+  rw [hcancel]
+  exact abs_three_term_payment A B C
+
+
 end
 end ImbalancedChen.P4AOriginalFull87FifthSignedPrimitive
