@@ -6,7 +6,7 @@ import Mathlib.Tactic
 SOURCE_ONLY / UNEVALUATED / UNCOMPILED.  No kernel credit.
 
 At the ACTUAL even sixth gate there is no odd Rosser product test:
-both original policies admit every positive-sign prefix.  Instead of
+both original policies RETAIN every positive-sign prefix.  Instead of
 pretending that the sixth selected product is < N^(299/500), retain the
 literal high-q support of the ORIGINAL plus Rosser beta.  The same
 original ordered sixth-prime continuation is supported only at p with
@@ -103,7 +103,31 @@ theorem sixthPositiveContinuation_eq_largeSixthCarrier
   · simp [hr, hz]
   · simp [hr]
 
-/-- Both ORIGINAL policies automatically admit every even sixth
+/-- Necessary witness in the ORIGINAL sixth suffix: a nonzero
+signed continuation requires at least one actual candidate prime
+whose COMPLETE selected product crosses the active high-q level.
+Cancellation is not reversed: this is only a necessary condition. -/
+theorem nonzero_sixthPositiveContinuation_has_large_prime
+    (R : Bool → List ℕ → Bool)
+    (N cap : ℕ) (w L : ℝ) (X : ℕ) (F : ℕ → ℝ)
+    (pre : List ℕ) (mass : ℝ) (remaining : List ℕ)
+    (hnz : sixthPositiveContinuation R
+      (attachedLeafTest N cap 1 w L (highQTest X F))
+      pre mass remaining ≠ 0) :
+    ∃ p ∈ remaining, (X : ℝ) < L * ((p :: pre).prod : ℝ) := by
+  have heq := sixthPositiveContinuation_eq_largeSixthCarrier
+    R N cap w L X F pre mass remaining
+  cases hlist : largeSixthCarrier L X pre remaining with
+  | nil =>
+      rw [heq, hlist] at hnz
+      simp at hnz
+  | cons p ps =>
+      have hp : p ∈ largeSixthCarrier L X pre remaining := by
+        simp [hlist]
+      obtain ⟨hmem, hlarge⟩ := List.mem_filter.mp hp
+      exact ⟨p, hmem, hlarge⟩
+
+/-- Both ORIGINAL policies automatically retain every even sixth
 prefix.  Thus the surviving list is determined by the physical
 complete a*b test, not by a hypothetical sixth odd Rosser gate. -/
 theorem actual_even_sixth_large_carrier_normal_form
