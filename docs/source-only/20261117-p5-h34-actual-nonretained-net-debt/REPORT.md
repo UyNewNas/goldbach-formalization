@@ -58,3 +58,11 @@ Next: stage pinned imports, compile this module and dependencies; then
 prove a *pointwise* Buchstab/bank positive gap bound before summation.
 Do not infer the latter from a signed full-level residual inequality.
 No new genuinely external analytic result or new axiom was introduced.
+
+## Remote delivery audit
+
+Math source commit: eec61f6c3089ddf057bb2b27ac34f2a0e8805d04. Source blob: 85272e3101b6d0449a2a8f822076fb899c7faed6.
+Compared against 3c67dde647dee0ce2bd68213fcfb349389bedd8e: ahead 1, behind 0; 4 new files,
+367 added lines and 0 deletions. Direct remote source readback matched the
+8 declaration names and 4 definitions. This confirms transport and not Lean.
+
