@@ -1,0 +1,9 @@
+# P1.4 input boundary — super-N exact cancellation
+
+**Internal:** same-source receiver fibre support q<=N; centre-prime AP zero above N under explicit non-prime centre; primitiveError = modulusPrimeTerm - primeMass*densityTest on the entire q>N region; above-N cancellation carried through the ORIGINAL fixed signed fifth events; termwise truncation of the exact four-source stopped identity before absolute-value payments; previous centre budget reused once. No invented event supplier and no unsigned replacement of the original signed delta.
+
+**External registered, not implemented and not called:** same physical signed sharp-prime PP and primitive AP distribution, manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b` (`paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`), anchors `eq:current-PP`, `lem:current-sharp-prime`, `eq:current-sharp-pi`. Required hypotheses: actual original signed rho, full coprime squarefree q<=N^theta with fixed theta<1, original smooth-singleton and endpoint conditions, and correct O_A at H_N=C_N*N/log(N)^2 normalization. Status `REGISTERED_NOT_PROVED_NOT_CALLED`; callsite NONE. The new q<=N truncation is **not** sufficient to invoke this input.
+
+No new external theorem construction. Internal obligations still include source/coefficient/geometry adaptation, remaining N^theta<q<=N band, primitive and modulus-prime payment, centre correction, original ordinary integral and density, saved87, changed/tagged and both independent reserves. The mathematical separation q>N is **exact finite arithmetic**, not a geometric null set or an asymptotic estimate.
+
+**Verification:** source only, no fixed Lean dependency closure in this runtime, no compilation/kernel/axiom audit/independent review. No change to c,K or the manuscript pin.
