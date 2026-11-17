@@ -3041,3 +3041,33 @@ The `childOrdersAfter` recursion applies the actual `raiseOrder` in original ord
 4. Complete Fourier normalized L1/H-box and Fubini with physical 2π, then same **integer** rho and the entire physical modulus sum, exact coprime mean and product=T exception. Still internal: causal/whole-box, all HB sources, empty Gamma mother-word identification and payment, high rank/enhanced branches.
 
 **Status: P3.6 YELLOW. This limited new exact-derivative source candidate BLUE / SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED. GREEN: none.**
+
+## Successor P3.6 — ALL genuine whole-child binary allocations, 729 labels, six-dimensional L1 (2026-11-18)
+
+- **Exact verified predecessor**: `4ac9edd35a865f77190782248c04dd05610e786f`, branch `chatgpt/p3-internal-original-w-20261105`; no branch deviation before proof or subsequent record writes. **Proof commit [skip ci]**: `f021d04e1b85135560f9883c9e046f91b5e28d11`, source `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBOriginalWholeChildAllocationL1.lean`, Git blob `a08a4f86febac2a1cb3cf38a16f322a67a14d2b7` (272 lines).
+- **Audit registration commit** `ac4fc107c43ed4998c5509d2f7a5daa2191a86fd`, blob `02f47f4556706ba6d24bbb7421719915eb9d9bbe`: 7 new `#check` targets **registered, NOT executed**. **Registry commit**: `e52fe9b12a2a502637dc6dfabe09ba19a77acacf`. Original `EXTERNAL_INPUTS.json` preserved, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`.
+- Fixed paper `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §§2,4(F), in particular lines 153–171. Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; no toolchain/lock or manuscript changes.
+
+### Genuine mathematics and exact limitations
+
+This packet composes the previous **actual full-product ordered derivative = sum over all binary owner functions** with the previously obtained **integrable actual geometry-jet × original HB-tensor mass**. It does not introduce a dummy derivative field, source-fibre PP hypothesis, or independent L1-bound record. For every actual `owner : Fin k → Fin 2`, the original `wholeOwnerChildrenMass` is *definitionally reduced* to the true predecessor `originalGroupJetChildrenMass` with the extracted geometry derivative word and the HB orders increased by exactly the owner's chosen positions. A new induction proves each raised positional order is no larger than `orders i + word.length`, retaining repeated derivative coordinates. Therefore for original `k ≤ K`, `orders i ≤ K`, the predecessor is invoked at **2K**, not circularly at K or at a fixed stage that may grow without control.
+
+The exact absolute mass pays the complete set of **2^k** derivative owners and **3^6=729** positional labels. The new fixed-order source-only integrated inequality is
+
+```
+∫_{R^6} Σ_(owner:Fin k→Fin 2) Σ_(child∈smoothChildren)
+      ‖wholeChildTerm chi eta c J s orders child axes owner u‖ du
+ ≤ 2^k * [2^k * (((g+1)*B)^k) * Ceta] *
+      [729 * ((2*log(2))*C)^6].
+```
+
+Constants `B,Ceta,C` are selected at fixed order 2K **before** the number `g` of original occurrences, original group/trim scales, derivative words and labels. In particular the two powers `2^k` have **different legitimate costs**: the first counts all binary derivative assignments; the second is from the inherited group × single-trim jet bound. A companion pointwise genuine derivative identity and triangle inequality pay `wholeDerivativeChildrenMass ≤ wholeAllocationChildrenMass`. **Not yet formally paid:** the integrability and integral domination transfer to the norm of the complete derivative itself; true U5, all hats and full W_T; common 2S/growing m(T) cutoff; Fourier, arithmetic, same rho.
+
+### Performed checks and status
+
+- GitHub proof create/readback and Git blob `a08a4f86febac2a1cb3cf38a16f322a67a14d2b7`: **PASS**. Static forbidden proof escape hits **0**, lexical delimiter stack **PASS**. Neither verifies Lean.
+- Independent exact finite regression: **271,453** owner/axis allocations (including **241,560** repeated-axis cases), 31 exact polynomial integrated allocation identities, 729-label cardinality. Script SHA256 `f56464c43ebd03e7a44fd3f6ef95eb01d4619f75bce519be957b8e1dcdd27e2a`; log SHA256 `11fa192e1abb8b88b1260998d1d888f7fde06d40b3788c8df70baf2cca4a67d7`. This is an independent finite model, not a check of real C-infinity functions, Lebesgue integrals or Lean proofs.
+- Attempted `lake env lean ImbalancedChen/P3HBOriginalWholeChildAllocationL1.lean`: exit **127**, `lake: command not found`, log `/mnt/data/p3run28/targeted_lean.log`. Isolated original-import mapping and pinned local Lean/Mathlib unavailable. **No elaboration, kernel checking, transitive axiom audit, CI, independent replay, Codex or heavy producer**. This new source and all inherited SOURCE_ONLY modules remain **BLUE/UNCOMPILED/KERNEL_UNVERIFIED**, with nontrivial type/rewrite risk.
+- Frozen manuscript, production modules, all other tasks, excluded full87 node, main branch, PR and CI unchanged. (M) remains **RECORD_ONLY / NOT_IMPLEMENTED / NOT_AXIOM** in `EXTERNAL_INPUTS.json`.
+
+**Real next entrance:** pinned isolated compile/repair, then continuous actual whole child derivative mass and L1 domination transfer; next original U5/hats/all W_T 2S mixed integrated class with uniform T and growing m(T), genuine Fourier truncation and identical integer rho complete physical modulus arithmetic, exact coprime mean, product=T exception, causal/empty Gamma/all PP sources. Overall P3.6 **YELLOW**, newly limited source **BLUE**, **0 new GREEN**.
