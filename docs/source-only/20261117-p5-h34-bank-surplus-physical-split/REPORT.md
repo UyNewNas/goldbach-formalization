@@ -3,8 +3,8 @@
 Repository: UyNewNas/goldbach-formalization.
 Dedicated task branch: `chatgpt/p5-h34-full-tagged-actual-fin-20261112`.
 Incoming verified HEAD: `32fef5121570a3591ad7e1d4974352837fba698b`.
-Mathematical source commit: `6be01669df7ac20f1292bab35cb51bc5b39cbba4`.
-Source: `Part5OriginalH430BankSurplusPhysicalSplit.lean`; Git blob `344de2882bd0f7a5a17097738d249654684df694`.
+Mathematical source commits: initial `6be01669df7ac20f1292bab35cb51bc5b39cbba4`; namespace-corrected `dd28ee154df75ca8031d96f1b3bf3d185a3848bb`.
+Source: `Part5OriginalH430BankSurplusPhysicalSplit.lean`; corrected Git blob `a685adb5650c5f4d4947d5b5bc899334e97d98d9`.
 Pinned manuscript: UyNewNas/chen-imbalanced-semiprimes@`ba6ec11d800eccc54406490631895e174de85766` (old proof map, not the November 6 released manuscript).
 Pinned toolchain: Lean v4.33.0-rc1, Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.
 
@@ -88,3 +88,7 @@ remain UNEVALUATED. No green status is earned.
   nested 430+11 causal refinement. No new external PNT/Mertens/BV proof.
 
 **Complete h34 manuscript-internal proof remains OPEN.**
+
+## Subsequent source correction
+
+The source was amended in commit `dd28ee1` to explicitly open the **existing** request resolver, decision provenance, old ideal-cell profile, original atom-row, action-mass and physical wave namespaces. This changes no theorem statements or mathematical estimates; it avoids relying on transitive namespace openings of imported modules. The current blob is `a685adb5650c5f4d4947d5b5bc899334e97d98d9`. This was still NOT compiled.
