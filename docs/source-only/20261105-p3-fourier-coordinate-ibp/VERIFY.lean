@@ -1081,3 +1081,12 @@ import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 #check ImbalancedChen.P3HBOriginalGroupJetLeibnizStep.allocatedGroupJetProduct_axisDeriv
 #check ImbalancedChen.P3HBOriginalGroupJetLeibnizStep.allocatedGroupJetSum
 #check ImbalancedChen.P3HBOriginalGroupJetLeibnizStep.allocatedGroupJetSum_axisDeriv
+
+-- P3.6 original group Fin.cons reindex and true all-order derivative candidates.
+-- SOURCE_ONLY: neither target nor transitive imports have been Lean-executed.
+#check ImbalancedChen.P3HBOriginalGroupFinCons.axesAssigned_cons
+#check ImbalancedChen.P3HBOriginalGroupFinCons.sum_owner_cons
+#check ImbalancedChen.P3HBOriginalGroupFinCons.allocatedGroupJetProduct_cons
+#check ImbalancedChen.P3HBOriginalGroupFinCons.allocatedGroupJetSum_cons
+#check ImbalancedChen.P3HBOriginalGroupFinCons.originalGroupProduct_ordered_eq_allocation
+#check ImbalancedChen.P3HBOriginalGroupFinCons.originalGroupProduct_ordered_norm_le_mass
