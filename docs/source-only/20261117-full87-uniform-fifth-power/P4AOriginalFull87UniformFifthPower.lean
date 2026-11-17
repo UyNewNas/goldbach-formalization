@@ -57,8 +57,10 @@ theorem actual_fifth_uniform_power_attached_zero
   · simp [hb]
   · have hlt : (a : ℝ) < L :=
       (actualSmallRosserPlus_active hb).2.1
+    have hL : 0 ≤ L :=
+      le_trans (Nat.cast_nonneg a) hlt.le
     have ha5 : (a : ℝ) ^ 5 ≤ L ^ 5 := by
-      gcongr
+      gcongr <;> first | exact hlt.le | exact hL | positivity
     have hprod :
         (a : ℝ) ^ 5 * (fifth.selectedAfter.prod : ℝ) ^ 6 ≤
           L ^ 5 * (fifth.selectedAfter.prod : ℝ) ^ 6 :=
