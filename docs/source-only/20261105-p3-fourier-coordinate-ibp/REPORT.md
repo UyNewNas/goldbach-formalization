@@ -2945,3 +2945,41 @@ Status: P3.6 YELLOW; this bounded-trim candidate BLUE; kernel GREEN none.
 - Directed compile lake env lean ImbalancedChen/P3HBExplicitSmoothCutoffs.lean exited 127 (lake: command not found); /mnt/data/p3run24_targeted_lean.log SHA256 8b3325de18ab3008328aff4cbca332778ce4491ce9087f8532eb2d03ee3b7c32. No pinned Lean/Lake dependencies or isolated source mapping available here. All 23 new declarations are SOURCE_ONLY/UNCOMPILED/KERNEL_UNVERIFIED. NO Lean elaboration, complete transitive compilation, #check execution, kernel, axiom audit, independent replay, CI, Codex or heavy producer.
 - External (M) is unchanged RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM. No production files, manuscript, tools/locks, other task branches, excluded full87 dynamic parent, PR or CI modified. Current overall P3.6 YELLOW; newly covered explicit cutoff/trim construction BLUE only.
 - Next entrance: (1) obtain pinned Lean v4.33.0-rc1, Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, goldbach 09b97db5764ade1246bfb77206baa1b124760958, isolate ImbalancedChen imports and compile/fix all upstream source candidates; (2) check admissible profile selection is consistent with ACTUALLY frozen W_T profile (do not silently replace an already fixed different eta); (3) true U5, full HB hats, 729 labels and joint T,m(N) fixed-order mixed 2S L1; (4) Fourier L1/H-tail/Fubini with physical 2pi normalization; (5) same-integer rho_T full physical modulus/precise coprime mean and exact product=T exception; causal/whole-box, all HB, empty Gamma mothers and high-rank/enhanced source remain INTERNAL.
+
+## P3.6 successor — actual ordered original group/trim jet times all 729 HB children, integrated (2026-11-18)
+
+- **Actual inherited branch HEAD:** f7fe324a5e2c552952be867266929cb0330ac3da, `chatgpt/p3-internal-original-w-20261105`; comparison before write was identical, so no newer or concurrent task-branch update was observed. Root/docs/source-only/packet AGENTS.md were queried and returned NOT_FOUND. Read actual previous REPORT, REGISTRY and EXTERNAL_INPUTS; checked the inherited genuine group-trim all-order proof, 729 child tensor/Fubini/weighted-L1 sources, the pinned cutoff construction and frozen paper.
+- **New proof-body commit [skip ci]:** fe1a650cf5ca6c3bbf4aa808fa251fcdc0edf56c. `P3HBOriginalGroupJets729Integrated.lean`, 181 lines; verified returned Git blob `8e34caf1b387d3cbbb2bb9442cb5980acb7aa4c3`. **VERIFY** commit f7fc627942008738750ed6da1981805977a956a9, Git blob e971ee4e50dde6f834b8b49bbe3758984c5cddc7, with three added but **not run** checks and the import located before checks.
+- **Pinned proof environment:** Lean `leanprover/lean4:v4.33.0-rc1` (`lean-toolchain` Git blob `fd85b262bf1c734663aa8292b0101f672168788f`); Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` (`lake-manifest.json` Git blob `86cb11a7a4b1c8ee3cd1d583985b4c7877933a4f`). Frozen manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §2 and §4(F). No lock/paper edit.
+
+### Genuine internal mathematics
+
+The previous exact all-order geometry candidate bounds the **true**, repeated-axis derivative `D_I[G(u) eta(s exp(sum u))]` by `2^k((g+1)B)^k Ceta` for fixed `k<=K`, where G retains all original occurrence-indexed groups and positive scales. The previous Fubini/weighted-children source bounds the `L1` of all literal `3^6=729` log HB tensors simultaneously by `729(2 log 2 C)^6` with **the same** chosen chi. This round composes both into the genuinely coupled, labelled, Lebesgue-integrated term
+
+```
+F_(I,orders)(u)
+ = sum_(a in {0,1,2}^6)
+     || D_I(G*oneTrim)(u) * logTensorMixed(chi,orders,a,u) ||,
+integral_(R^6) F_(I,orders)
+ <= 2^k * ((g+1)*B)^k * Ceta * 729 * (2*log 2*C)^6.
+```
+
+`originalGroupJetChildrenMass_eq` justifies the **actual** common geometry factor before integration, `originalGroupJetChildren_integrable_polynomial` derives the integrability and bound with fixed B/Ceta/C *before* g, coordinates, original scales, label and u, and `chosenGroupJetChildren_integrable_polynomial` substitutes the single explicit `smoothTransition` cutoff/trim. All original six positions, repeats and 729 labels remain literal; no generic prescribed geometric jet, new rho or modulus is substituted.
+
+**Important mathematical scope and pending internal regularity:** the theorem explicitly assumes measurability of the norm of this **actual higher-order geometry jet**. It is not the target integral as a hypothesis and should follow from the smooth original formula, but the Lean proof of that implication remains open. This theorem pays only a **single high-order geometry-jet × HB-tensor Leibniz contribution**; the high-order derivative of the *whole* physical HB child and all of its finite Leibniz terms are NOT yet proved to equal the sum. This packet covers only this six-coordinate original group/trim component, not actual U5, remaining hats, other source words or a uniform growing-m(T) mixed 2S bound. In particular, no Fourier L1/H tail, primitive same-integer-rho arithmetic discrepancy or product=T exception is claimed.
+
+### Checks and trust boundary
+
+- GitHub source creation, readback content equality and Git blob check: PASS for the new 181-line source. Source declaration escape scan: 0; lexical bracket balance: PASS. Exact pinned Mathlib `Real.smoothTransition` source blob `cd24266ad8eb620150d7dd302ea1d6932745c14b` was also inspected. These are static checks, **not Lean elaboration**.
+- Actual targeted command `lake env lean ImbalancedChen/P3HBOriginalGroupJets729Integrated.lean` returned **exit 127, `lake: command not found`**; log `/mnt/data/p3run25/targeted_lean.log`, SHA-256 `a867b2941e105dad50fedc482873bb493078314df1039d9daaba979191dfc0f9`. `lean` and `elan` also missing. No isolated import graph, dependency typechecking, kernel acceptance or transitive axiom audit was possible.
+- **NOT RUN:** Lean/Lake compilation (environment blocked), kernel replay, CI, heavy numerical producer or Codex. No GREEN promotions; SOURCE_ONLY/UNCOMPILED/KERNEL_UNVERIFIED.
+- External (M) unchanged: `EXTERNAL_INPUTS.json` Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`, RECORD_ONLY, no implementation, axioms, target-equivalent hypotheses or extra fibrewise relative Theta demand. No excluded 87-domain dynamic-parent node, other tasks, production source, manuscript, PR, merge or CI modifications.
+
+### Next precise internal entrance
+
+1. Obtain the pinned toolchain and locked dependencies; isolate `ImbalancedChen.*` source-only imports and compile the true group-trim all-order / selected-cutoff / weighted-HB-chain. Fix concrete elaboration errors before status promotion.
+2. Prove continuity/measurability of **every** actual `originalOrderedAxisDeriv` geometry jet via the already-derived original finite Leibniz formula and smooth scalar profiles; remove the new ordinary `Measurable` premise.
+3. Establish the true higher Leibniz identity for the **whole** `originalGroupPhysicalTrim * logTensorMixed` and pay the complete finite sum of this round's integrated contributions; then incorporate actual U5, all HB hats, growing m(T) and a single T threshold.
+4. After genuine Fourier L1/H/Fubini and H-box tail with exact normalization, pay full original physical-modulus arithmetic discrepancy for the **same integer rho_T**, exact coprime mean, all tags and product=T separately; causal/whole-box, empty Gamma mother-words, all HB alternatives/high-rank/enhanced remain internal, not external inputs.
+
+Status: **P3.6 YELLOW**, one strictly limited SOURCE_ONLY integration node BLUE, **GREEN none**. This run made no claim of complete manuscript-internal PP closure.
