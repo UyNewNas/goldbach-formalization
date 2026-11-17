@@ -104,7 +104,7 @@ theorem licensed_rank_seven_gate_rough_lt
 /-- Actual sign-MINUS seventh attached terminal vanishes above the full
 a*b threshold. The strict small factor comes from NONZERO original beta,
 not from mere membership of the displayed small carrier. -/
-private theorem actual_seventh_minus_attached_highq_zero
+theorem actual_minus_attached_highq_zero_of_rough_lt
     (N cap : ℕ) (w : ℝ)
     (hN : 1 < (N : ℝ)) (epsilon : ℝ)
     (heps : epsilon ≤ (1 / 500 : ℝ))
@@ -165,7 +165,7 @@ theorem actual_admitted_seventh_terminal_highq_zero
     hgate.elim
       (raw_rank_seven_gate_rough_lt e q om N he hN pre hlen)
       (licensed_rank_seven_gate_rough_lt delta n e q om N he hN pre hlen)
-  exact actual_seventh_minus_attached_highq_zero
+  exact actual_minus_attached_highq_zero_of_rough_lt
     N cap w hN epsilon heps X hX F pre hrough
 
 /-- Finite tree algebra only: if every true seventh selected gate has
