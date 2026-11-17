@@ -54,6 +54,7 @@ elif mode=='verify':
     assert {x['module'] for x in inv}==set(modules) and len(inv)==len(modules)
     assert len({x['name'] for x in ds})==len(ds)
     by_name={d['name']:d for d in ds}
+    assert set(manifest['proof_api_new_equations']) <= set(by_name), 'Computation equation missing'
     for preserved in manifest['preserved_public_types']:
         assert preserved['name'] in by_name, 'Original public definition missing'
         assert all(by_name[preserved['name']][k]==preserved[k] for k in ['type','readable_type']), 'Original public definition type changed'

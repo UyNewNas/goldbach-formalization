@@ -57,13 +57,21 @@ def main():
         assert repaired == (HERE / repair['source_file']).read_bytes()
         repair_path.write_bytes(repaired)
         recursor_hashes[repair['module']] = repair['candidate_sha256']
+    proof_api_hashes = {}
+    for repair in m['proof_api_repairs']:
+        repair_path = project / repair['install_path']
+        assert digest(repair_path.read_bytes()) == repair['original_sha256']
+        repaired = (HERE / repair['source_file']).read_bytes()
+        assert digest(repaired) == repair['candidate_sha256']
+        repair_path.write_bytes(repaired)
+        proof_api_hashes[repair['module']] = repair['candidate_sha256']
     assert len((project / 'lakefile.toml').read_bytes()) == 487
     assert digest((project / 'lakefile.toml').read_bytes()) == '26a6b01a52446ad6aae63d5201330b902ec94a1171fb1f0baf9fc61016098491'
     for row in m['closure_source_records']:
-        expected = {m['target']: m['candidate_target_sha256'], owner['module']: owner['candidate_sha256'], **recursor_hashes}.get(row['module'], row['sha256'])
+        expected = {m['target']: m['candidate_target_sha256'], owner['module']: owner['candidate_sha256'], **recursor_hashes, **proof_api_hashes}.get(row['module'], row['sha256'])
         assert digest((project / row['install_path']).read_bytes()) == expected, row['module']
     logs.mkdir(parents=True, exist_ok=True)
-    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'bound_API_owner_import_and_six_total_recursor_repairs': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
+    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'bound_API_owner_total_recursors_and_computation_equation_interfaces': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
     (logs / 'P1_STAGE_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
     (logs / 'ORIGINAL_T01_PROVENANCE.json').write_bytes((project / 'T01_PROVENANCE.json').read_bytes())
     print(json.dumps(receipt))
