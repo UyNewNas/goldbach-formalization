@@ -57,7 +57,7 @@ private theorem strict_integer_band_of_uniform_fifth_power
         _ = (N : ℝ) ^ (3 : ℝ) := by norm_num
         _ = (N : ℝ) ^ 3 := by norm_num
     rw [← hp]
-    gcongr
+    gcongr <;> assumption
   have hL500 : ((N : ℝ) ^ epsilon) ^ 500 ≤ (N : ℝ) := by
     calc
       _ = (N : ℝ) ^ (epsilon * (500 : ℝ)) :=
@@ -68,13 +68,13 @@ private theorem strict_integer_band_of_uniform_fifth_power
   have hlarge100 :
       ((X : ℝ) ^ 5) ^ 100 <
         (((N : ℝ) ^ epsilon) ^ 5 * (b : ℝ) ^ 6) ^ 100 := by
-    gcongr
+    gcongr <;> assumption
   have hN300 :
       (N : ℝ) ^ 300 <
         ((N : ℝ) ^ epsilon) ^ 500 * (b : ℝ) ^ 600 := by
     calc
       _ = ((N : ℝ) ^ 3) ^ 100 := by ring
-      _ ≤ ((X : ℝ) ^ 5) ^ 100 := by gcongr
+      _ ≤ ((X : ℝ) ^ 5) ^ 100 := by gcongr <;> assumption
       _ < (((N : ℝ) ^ epsilon) ^ 5 * (b : ℝ) ^ 6) ^ 100 :=
         hlarge100
       _ = ((N : ℝ) ^ epsilon) ^ 500 * (b : ℝ) ^ 600 := by ring
