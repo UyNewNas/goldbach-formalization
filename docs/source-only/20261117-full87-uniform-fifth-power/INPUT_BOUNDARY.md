@@ -1,0 +1,9 @@
+# P1.4 external and internal boundary — fifth-parent uniform L-power
+
+**Internal manuscript-side target:** exact original finite `actualSmallRosserPlus` sum in `attachedLeafTest`, the original fifthExclusive state/selected history and sixth carrier, the prior actual high-q fifth-power inequality, and the same signed sixthPositiveContinuation. The strict inequalities `a<L`, `X<a*b6`, `X^5<a^5*b5^6` are not interchanged with nonstrict ones. The new uniform **sufficient zero region** `L^5*b5^6≤X^5` uses a real bound already supplied by the actual coefficient, not an unrelated cap or target-smallness field.
+
+**Registered outside input, not invoked:** manuscript signed sharp prime PP at `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; anchors `eq:current-PP`, `lem:current-sharp-prime`, `eq:current-sharp-pi`. Accurate intended statement: primitive AP count minus *exact coprime mean* of the same original signed physical rho_N, common W and X_W^(q), complete squarefree-coprime a*b moduli inside a **fixed** theta<1 supported level (here sought <3/5), all strict/smooth endpoints, centre-/modulus-prime corrections, signed O_(A,W)(N/log(N)^A). Normalization H_N=C_N*N/log(N)^2; callsite NONE; status REGISTERED_NOT_PROVED_NOT_CALLED.
+
+**Not proved here:** physical level for all retained fifth-sixth moduli (large b5 remains); quantitative fifth-large signed reserve; direct sixthFromBoth, RAW eighth, ordinary residual integral, actualParent loss, full87 saved numerical certificate, changed/tagged/rank9, epsilon/density/two independent reserve compatibility. No PNT/Mertens/BV/spectral proof is implemented; no fresh axiom or proof escape.
+
+Toolchain fixed: Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958. Compile unavailable; SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
