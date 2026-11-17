@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1Instantiated
 import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1
 import ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst
 import ImbalancedChen.P3HBOriginalGroupTrimAllOrder
@@ -1172,3 +1173,8 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass
 #check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass_measurable
 #check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass_integrable_and_L1_le
+
+-- P3.6 actual physical group×trim 0/1-jet envelopes, no arbitrary M0/M1.
+-- Only measurable actual geometry jets remain as conditional assumptions.
+-- SOURCE_ONLY / UNCOMPILED; check name REGISTERED, NOT EXECUTED.
+#check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1Instantiated.physicalChildrenFirstMass_integrable_actual_bounds
