@@ -1,0 +1,9 @@
+# P1.4 durable handoff — genuine fifth integer-power band
+
+Latest known verified previous task stop: `b55a247512ae79c98aae9345b08abb86568321a7`; previous branch `chatgpt/p1-full87-uniform-fifth-power-20261117-2014`. New isolated branch `chatgpt/p1-full87-fifth-integer-band-20261117-2110`. New file `docs/source-only/20261117-full87-fifth-integer-band/P4AOriginalFull87FifthIntegerBand.lean`, SHA blob `d8be09df26243740f715f85b985cf45ba434a984`; last Lean source commit `7bddcdef3b27e1ede4deb3b4d7f07370f46d4dc7`.
+
+**New strict deduction:** Genuine fifth-exclusive sixth continuation nonzero, with frozen `N>1, epsilon<=1/500, X>=N^(3/5)`, implies `N^299 < (fifth.selectedAfter.prod)^600`. This actually pays the frozen exponent arithmetic left as paper-only last run. It does NOT bound the remaining same-rho signed mass or full a*b6 moduli, and does not apply to sixthFromBoth. Next do not repeat this power conversion; seek a manuscript-supported estimate for this retained band and check separate direct sixthFromBoth.
+
+**Exact checks:** source remotely read back and sha matched; relative branch compare done; static source scan no forbidden constructs. Lean/Lake/Elan commands all exited 127, no pinned dependency closure, no compilation, no kernel replay, no axiom audit and no independent review. Status SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Review new tactic `gcongr` and `Real.rpow_mul_natCast` against fixed Lean v4.33.0-rc1 mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 before claiming compile. No CI/Codex/user machine, no branch merges/forced updates.
+
+Frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, native `09b97db5764ade1246bfb77206baa1b124760958`, c=49044063/25000000, K=8452171/1250000. External signed sharp PP remains REGISTERED_NOT_PROVED_NOT_CALLED. P1.4 YELLOW.
