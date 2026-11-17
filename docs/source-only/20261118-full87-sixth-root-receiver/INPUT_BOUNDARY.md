@@ -1,0 +1,10 @@
+# Frozen manuscript and external input boundary — P1.4 coprime quotient receiver
+
+Inside the manuscript: `chenPrimeReceiverSource N` is the original injective image of additive primes under `P -> N-P`; its existing `chenPrimeReceiverSource_data` supplies `0<n<=N` and `Coprime n N`. The actual `P4AOriginalFull87EighthPrimeMeanLedger.receiverTest N d` counts `d|n` on this source. The new `coprimeQuotientCount N d` counts ALL integer quotients k<=N/d coprime to N, without pretending that they all correspond to prime P. The injection, full-q beta attachment, same-root fourth-parent, signed event mapping, three original outside invoices and comparison to preceding harmonic bound are manuscript-side work.
+
+The new bound does NOT replace the genuine receiver by a new model. Coprime quotients are used ONLY as a majorant. The old floor bound is still available. The result is a pointwise finite arithmetic inequality; any H_N-relative asymptotic, physical support theta, smooth-singleton admission, primitive discrepancy, numerical reserve, and residual-integral/actualParent error payment remain unproved manuscript-side.
+
+Frozen manuscript: `UyNewNas/chen-imbalanced-semiprimes` commit `9731290e8f53cffda44129906cde6a965eaa869b`, path `paper/source/manuscript-body.tex`, Git blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.
+External input REGISTERED_NOT_PROVED_NOT_CALLED: signed sharp-prime PP and sharp endpoint, anchors `eq:current-PP`, `lem:current-sharp-prime`, `eq:current-sharp-pi`. Requires the SAME signed physical rho, fixed full squarefree/coprime q=a*b <=N^theta with theta<1, admitted smooth singleton, signed error O_A(N/log(N)^A), centre and endpoint corrections, and normalization H_N=C_N*N/log(N)^2. This packet has NO PP callsite; coprime receiver quotients do not establish full-q PP admission. Manuscript finite-density/compiler reserves remain distinct; neither is spent.
+
+Do NOT implement PNT/Mertens/BV/spectral external projects or introduce new axiom, sorry/admit, native_decide or unsafe escape. No toolchain or manuscript pin changes.
