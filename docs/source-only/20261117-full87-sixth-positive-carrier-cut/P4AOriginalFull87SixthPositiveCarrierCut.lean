@@ -149,34 +149,32 @@ theorem sixthPositiveContinuation_zero_of_carrier_bound
     sixthPositiveContinuation R
       (attachedLeafTest N cap 1 w L (highQTest X F))
       pre mass remaining = 0 := by
-  have hsmall : ∀ p ∈ remaining,
-      L * ((p :: pre).prod : ℝ) ≤ (X : ℝ) := by
-    intro p hp
-    calc
-      L * ((p :: pre).prod : ℝ) =
-          (L * (pre.prod : ℝ)) * (p : ℝ) := by
-            simp only [List.prod_cons, Nat.cast_mul]
-            ring
-      _ ≤ (L * (pre.prod : ℝ)) * B :=
-        mul_le_mul_of_nonneg_left (hB p hp)
-          (mul_nonneg hL (Nat.cast_nonneg _))
-      _ ≤ (X : ℝ) := hcut
+  revert hB
   induction remaining with
-  | nil => simp [sixthPositiveContinuation]
+  | nil =>
+      intro hB
+      simp [sixthPositiveContinuation]
   | cons p ps ih =>
-      have hp : L * ((p :: pre).prod : ℝ) ≤ (X : ℝ) :=
-        hsmall p (by simp)
+      intro hB
+      have hpB : (p : ℝ) ≤ B := hB p (by simp)
+      have hp : L * ((p :: pre).prod : ℝ) ≤ (X : ℝ) := by
+        calc
+          L * ((p :: pre).prod : ℝ) =
+              (L * (pre.prod : ℝ)) * (p : ℝ) := by
+                simp only [List.prod_cons, Nat.cast_mul]
+                ring
+          _ ≤ (L * (pre.prod : ℝ)) * B :=
+            mul_le_mul_of_nonneg_left hpB
+              (mul_nonneg hL (Nat.cast_nonneg _))
+          _ ≤ (X : ℝ) := hcut
       have hz := plus_attached_highq_zero_of_level
         N cap w L X F (p :: pre) hp
-      have hrest : ∀ t ∈ ps, L * ((t :: pre).prod : ℝ) ≤ (X : ℝ) := by
-        intro t ht
-        exact hsmall t (by simp [ht])
       have htail : sixthPositiveContinuation R
           (attachedLeafTest N cap 1 w L (highQTest X F))
-          pre mass ps = 0 := by
-        apply ih
-        intro t ht
-        exact hB t (by simp [ht])
+          pre mass ps = 0 :=
+        ih (by
+          intro t ht
+          exact hB t (by simp [ht]))
       simp [sixthPositiveContinuation, hz, htail]
 
 /-- The REAL rough-prime range supplies p < z with no synthetic
