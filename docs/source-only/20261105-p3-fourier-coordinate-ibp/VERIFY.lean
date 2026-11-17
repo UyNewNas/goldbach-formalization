@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1
 import ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst
 import ImbalancedChen.P3HBOriginalGroupTrimAllOrder
 import ImbalancedChen.P3HBOriginalGroupPhysicalTrimFirst
@@ -1163,3 +1164,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChildren_axisDeriv_restoration
 #check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChild_axisDeriv_norm_le
 #check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChildren_axisDeriv_mass_le
+
+
+-- Actual original 729 labelled physical children: true first-axis L1 on the
+-- six-dimensional log chart, conditional only on ordinary geometry jet
+-- measurability and zeroth/first bounds. SOURCE_ONLY, NOT Lean-executed.
+#check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass
+#check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass_measurable
+#check ImbalancedChen.P3HBOriginalPhysicalChildrenFirstL1.physicalChildrenFirstMass_integrable_and_L1_le
