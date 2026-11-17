@@ -1,0 +1,13 @@
+# Durable P1.4 handoff — actual coprime quotient receiver bill
+
+**Restored verified HEAD:** `88ea5d042c4daa7b0267536565fb031ff10ddbdd` on `chatgpt/p1-full87-receiver-harmonic-20261118`; do NOT revert to stale `9649ab3`. Continue from the final actual HEAD of **`chatgpt/p1-full87-sixth-root-receiver-20261118`**, after checking REGISTRY, REPORT, INPUT_BOUNDARY and actual source. The last substantive source is `docs/source-only/20261118-full87-sixth-root-receiver/P4AOriginalFull87CoprimeQuotient.lean`. Read its actual Git blob from REGISTRY and compare before any edits.
+
+Substantive new candidate: for the SAME actual target-deleted receiver and **complete** modulus d, injection n -> k=n/d establishes `receiverTest N d <= #{1<=k<=N/d, Coprime k N} <= N/d`. This is an actual improvement over the previous floor cost, not an external sieve estimate. On the same unaltered fifth-exclusive event occurrences and signed kernel, `actualCoprimeQuotientBudget` now bounds both the stopped absolute invoice and full physical RAW-LICENSED discrepancy with exactly THREE original outside bills. A separate candidate theorem shows this new budget <= the old harmonic budget globally. Neither H_N relative smallness nor PP admission is proved.
+
+**Important correction:** A p^6>N pruning attempt was found numerically redundant: the old floor(N/d) is already zero on every excluded full modulus. That draft file was deleted and MUST NOT be counted as an improvement. Do not reintroduce root pruning as an independent invoice/saving. Preserve all event multiplicities, signs, full small Rosser beta, original history and rho.
+
+Verification: SOURCE_ONLY / UNEVALUATED / UNCOMPILED; local lean/lake/elan --version exit127, missing pins/import closure. Python finite actual receiver arithmetic 49,050 samples for N=1..300,d=0..N+12, zero failures and 14,884 strict new-capacity improvements; **not** kernel or original87 verification. No axiom audit, independent review, saved87 replay, CI or Codex.
+
+Frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; Lean `v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`, c=`49044063/25000000`, K=`8452171/1250000` all unchanged.
+
+**Next:** Actual quantitative control or rigorous obstruction for the new coprime quotient invoice and old three outside bills, relative to H_N. Theoretical PP modulus support and original signed sharp discrepancy remain separate. Need pinned Lean typecheck and repair before any COMPILED credit. No extra files beyond this independent task proof packet, main/master, CI, merge, force push or user machine.
