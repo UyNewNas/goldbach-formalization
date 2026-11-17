@@ -236,9 +236,8 @@ theorem p1LevelCheck_does_not_imply_ceiling :
       D.levelCheck = true ∧ D.p1CapCeilingCheck 1 = false := by
   refine ⟨p1CeilingIndependenceHighFallback, ?_, ?_⟩
   · simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
-    dsimp only [p1CeilingIndependenceHighFallback]
+    dsimp (config := { instances := true }) only [p1CeilingIndependenceHighFallback]
     norm_num
-    set_option pp.all true in trace_state
   · norm_num [p1CapCeilingCheck, p1CeilingIndependenceHighFallback]
 
 theorem p1CeilingCheck_does_not_imply_levelCheck :
@@ -250,9 +249,8 @@ theorem p1CeilingCheck_does_not_imply_levelCheck :
     norm_num
   · rw [Bool.eq_false_iff]
     simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
-    dsimp only [p1CeilingIndependenceDecreasingThird]
+    dsimp (config := { instances := true }) only [p1CeilingIndependenceDecreasingThird]
     norm_num
-    set_option pp.all true in trace_state
 
 end HistoricalPrefixCapData
 
