@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBActualCompleteProductTrim
 import ImbalancedChen.P3HBOriginalGroupFinCons
 import ImbalancedChen.P3HBOriginalGroupAllOrderShiftedSupport
 import ImbalancedChen.P3HBOriginalGroupIncidenceSupport
@@ -1100,3 +1101,17 @@ import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 #check ImbalancedChen.P3HBOriginalGroupAllOrderShiftedSupport.allocationTerm_zero_outside_any_group
 #check ImbalancedChen.P3HBOriginalGroupAllOrderShiftedSupport.allocationMass_zero_outside_any_group
 #check ImbalancedChen.P3HBOriginalGroupAllOrderShiftedSupport.originalGroupProduct_ordered_zero_outside_any_group
+
+-- Full-product smooth physical trim: REAL eta embedded in complex chart,
+-- actual six-axis repeated jets, positive-order shifted transition support.
+-- SOURCE_ONLY / #check NOT EXECUTED, transitive kernel status UNKNOWN.
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrimReal
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrimReal_eq_complex
+#check ImbalancedChen.P3HBActualCompleteProductTrim.trimLogProfile_eq_translate
+#check ImbalancedChen.P3HBActualCompleteProductTrim.trimLogProfile_iteratedDeriv_translate
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrim_orderedDeriv_exact
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrim_eq_zero_of_small
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrim_eq_one_of_large
+#check ImbalancedChen.P3HBActualCompleteProductTrim.baseTrim_jet_zero_low
+#check ImbalancedChen.P3HBActualCompleteProductTrim.baseTrim_jet_zero_high
+#check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrim_orderedDeriv_zero_outside
