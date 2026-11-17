@@ -54,6 +54,7 @@ elif mode=='verify':
     assert {x['module'] for x in inv}==set(modules) and len(inv)==len(modules)
     assert len({x['name'] for x in ds})==len(ds)
     by_name={d['name']:d for d in ds}
+    assert by_name['ImbalancedChen.physicalDensitySum.eq_1']['module'] == 'ImbalancedChen.PhysicalUpperWeightBridge', 'physicalDensitySum equation canonical owner mismatch'
     assert set(manifest['proof_api_new_equations']) <= set(by_name), 'Computation equation missing'
     for preserved in manifest['preserved_public_types']:
         assert preserved['name'] in by_name, 'Original public definition missing'
