@@ -84,22 +84,16 @@ private theorem reduced_fifth_exclusive_kind {α : Type*}
               fifthSixthWithoutBoth R S h T pre positive mass ps := by
             simpa [fifthSixthWithoutBoth, hr, hs] using hmem
           exact ih htail
-        · have hparts :
-              fifth.kind = FifthAdmissionClass.rawOnly ∨
-              FifthSixthStoppedEvent.fifthExclusive fifth ∈
-                fifthSixthWithoutBoth R S h T pre positive mass ps := by
-            simpa [fifthSixthWithoutBoth, hr, hs] using hmem
-          rcases hparts with hkind | htail
-          · exact Or.inl hkind
+        · simp [fifthSixthWithoutBoth, hr, hs] at hmem
+          rcases hmem with hhead | htail
+          · cases hhead
+            exact Or.inl rfl
           · exact ih htail
       · by_cases hs : S (!positive) (p :: pre) = true
-        · have hparts :
-              fifth.kind = FifthAdmissionClass.licensedOnly ∨
-              FifthSixthStoppedEvent.fifthExclusive fifth ∈
-                fifthSixthWithoutBoth R S h T pre positive mass ps := by
-            simpa [fifthSixthWithoutBoth, hr, hs] using hmem
-          rcases hparts with hkind | htail
-          · exact Or.inr hkind
+        · simp [fifthSixthWithoutBoth, hr, hs] at hmem
+          rcases hmem with hhead | htail
+          · cases hhead
+            exact Or.inr rfl
           · exact ih htail
         · have htail : FifthSixthStoppedEvent.fifthExclusive fifth ∈
               fifthSixthWithoutBoth R S h T pre positive mass ps := by
