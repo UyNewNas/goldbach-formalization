@@ -192,9 +192,11 @@ private theorem list_abs_sum_le_map {α : Type*}
     (xs : List α) (f b : α → ℝ)
     (h : ∀ x ∈ xs, |f x| ≤ b x) :
     |(xs.map f).sum| ≤ (xs.map b).sum := by
+  revert h
   induction xs with
-  | nil => simp
+  | nil => intro _; simp
   | cons x xs ih =>
+      intro h
       simp only [List.map_cons, List.sum_cons]
       have hx : |f x| ≤ b x := h x (by simp)
       have ht : |(xs.map f).sum| ≤ (xs.map b).sum := by
@@ -208,9 +210,11 @@ private theorem list_sum_map_le_map {α : Type*}
     (xs : List α) (f b : α → ℝ)
     (h : ∀ x ∈ xs, f x ≤ b x) :
     (xs.map f).sum ≤ (xs.map b).sum := by
+  revert h
   induction xs with
-  | nil => simp
+  | nil => intro _; simp
   | cons x xs ih =>
+      intro h
       simp only [List.map_cons, List.sum_cons]
       exact add_le_add (h x (by simp))
         (ih (by
