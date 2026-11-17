@@ -1,0 +1,11 @@
+# Persistent P1.4 handoff — single centre-prime upper-third invoice
+
+Baseline branch `chatgpt/p1-full87-even-upper-third-20261118-0610` at `0b4cdce2fa531602c44e270a3ba478c15eaa6325`; independent task branch `chatgpt/p1-full87-upper-third-centre-singleton-20261118-0710`. Candidate source first commit `c1eb91155883a7304df645316cb64046eea8e2ec`; source blob `59c42bc45876345de7597eeba6f06370d6f989b6`. FIRST read current remote HEAD and this packet's source/REPORT/REGISTRY/INPUT_BOUNDARY/HANDOFF, then verify branch parent before another change. Do not revert to obsolete initial 9649ab3. No main/master, merge, force push, CI, Codex, changed pin or changed task branch.
+
+**New proved-on-paper finite fact; Lean candidate only:** For `¬Prime N`, complete d coprime N, and N<3d, the original centre AP's P|N forces P=2 and N-2=2d. There is one exceptional d globally. Actual unmodified physical small/rough rho has |coefficient|<=1, so the gated centre error invoice costs <=1 per actual policy, <=2 across two policies. Strict X<d, full modulus, same physical beta and multiplicity-free physical modulus set. No other prime-error, PP or signed saving estimate follows.
+
+**Independent checks:** 72,999 composite-centre/cop rime-upper-third (N,d) tests, no counterexamples; 174 nonzero examples; 7,480 synthetic signed physical support checks, no violation. Local lean/lake/elan are missing (127). **SOURCE_ONLY / UNEVALUATED / UNCOMPILED**; do not claim kernel, axiom or independent verification. Source is not installed as an ImbalancedChen module for local compilation, so imports require staging in the fixed dependency closure.
+
+**Next precise work:** (1) If pinned local closure appears, stage and Lean-check this candidate and fix real elaboration errors; no new CI. (2) Identify/prove the *actual same sharedRankFour & filtered fifth/sixth stopped* centre correction source equality/inequality, accounting for all event signs and repeated occurrences; the physical <=1 is NOT automatically an occurrence-tail <=1. (3) Quantify switched high-third same signed prime sum and N^theta<q<=N/3, keep PP outside. (4) Preserve three distinct outside bills, compiler/density reserves, ordinary residual integral and saved87/rank9/changed/tagged.
+
+Frozen manuscript and all three tool pins are in REGISTRY; c=49044063/25000000, K=8452171/1250000. P1.4 remains YELLOW.
