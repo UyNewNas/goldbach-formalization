@@ -238,6 +238,7 @@ theorem p1LevelCheck_does_not_imply_ceiling :
   · simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
     dsimp only [p1CeilingIndependenceHighFallback]
     norm_num
+    set_option pp.all true in trace_state
   · norm_num [p1CapCeilingCheck, p1CeilingIndependenceHighFallback]
 
 theorem p1CeilingCheck_does_not_imply_levelCheck :
@@ -251,6 +252,7 @@ theorem p1CeilingCheck_does_not_imply_levelCheck :
     simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
     dsimp only [p1CeilingIndependenceDecreasingThird]
     norm_num
+    set_option pp.all true in trace_state
 
 end HistoricalPrefixCapData
 
