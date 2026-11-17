@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalWholeChildAllOrder
 import ImbalancedChen.P3HBOriginalGroupJets729NoMeas
 import ImbalancedChen.P3HBOriginalGroupJets729Integrated
 import ImbalancedChen.P3HBExplicitSmoothCutoffs
@@ -1273,3 +1274,15 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBOriginalGroupJets729NoMeas.originalGroupPhysicalTrimJet_norm_measurable
 #check ImbalancedChen.P3HBOriginalGroupJets729NoMeas.originalGroupJetChildren_integrable_polynomial_no_meas
 #check ImbalancedChen.P3HBOriginalGroupJets729NoMeas.chosenGroupJetChildren_integrable_polynomial_no_meas
+
+-- Exact original whole child (group x one trim x literal HB tensor) all-order Leibniz.
+-- SOURCE_ONLY: nine checks REGISTERED, none executed by Lean/kernel.
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.logTensorMixed_actualAxisDeriv
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.logTensorMixed_ordered_derivative
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.geometryJet_slice_differentiable
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.wholeChildTerm
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.wholeChildSum
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.wholeChildTerm_axisDeriv
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.wholeChildSum_axisDeriv
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.wholeChildSum_cons
+#check ImbalancedChen.P3HBOriginalWholeChildAllOrder.originalWholeChild_ordered_eq_allocation
