@@ -1,0 +1,10 @@
+# P1.4 input boundary — actual history/suffix order
+
+SOURCE: Unmodified original firstFifthEvents and sixth-BOTH-filtered fifthSixthWithoutBoth producers, original sharedRankFour, original sorted roughPrimeUniverse. eventSelected is only projection of the existing event constructor, never a new parent, policy or source. Sublist proofs retain all occurrence multiplicities, original sign/mass, strict/weak endpoints, and actual suffix. No recomputed signed coefficient, no extra filters.
+
+ACTUAL CANDIDATE: For every genuine event, eventSelected.reverse ++ eventSixthSuffix is an ordered sublist of the original decreasing roughPrimeUniverse. Each pending p is less than every selected r, hence p^selected.length <= selected.prod for fifth-exclusive events. A specific rough-product sixth-power inequality additionally requires fifth selected length exactly 5, not yet automatically supplied in the theorem. No conclusion about high-q cancellation, finite density loss or uniform full N^(3/5) support is claimed.
+
+EXTERNAL INPUT REGISTERED_NOT_PROVED_NOT_CALLED:
+Name: frozen manuscript Section 4 signed sharp-prime PP. Source UyNewNas/chen-imbalanced-semiprimes, commit 9731290e8f53cffda44129906cde6a965eaa869b, path paper/source/manuscript-body.tex, blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Anchors eq:current-PP, lem:current-sharp-prime, eq:current-sharp-pi. Statement: same original signed physical rho_N AP minus exact coprime mean, common W and X_W^(q), original bounded squarefree coprime complete a*b support in licensed fixed theta<1 range (manuscript local complete support <3/5), strict endpoints, smooth singleton, signed O_{A,W}(N/log(N)^A), modulus-prime and centre-prime corrections. Normalization H_N=C_N*N/log(N)^2. Applicability missing: actual sixth-even large-product tail, RAW eighth and early support, compatible epsilon and both reserves. Callsite: NONE. Verification: registered only.
+
+No new axiom, sorry/admit, native_decide, unsafe, or external PNT/Mertens/BV/spectral engineering. No quantity/equivalence field postulating the desired result. SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
