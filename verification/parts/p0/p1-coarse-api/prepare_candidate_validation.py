@@ -53,6 +53,10 @@ elif mode=='verify':
     inv=[json.loads(x.removeprefix('P0_ROUND6_SERIALIZED ')) for x in lines if x.startswith('P0_ROUND6_SERIALIZED ')]
     assert {x['module'] for x in inv}==set(modules) and len(inv)==len(modules)
     assert len({x['name'] for x in ds})==len(ds)
+    by_name={d['name']:d for d in ds}
+    for preserved in manifest['preserved_public_types']:
+        assert preserved['name'] in by_name, 'Original public definition missing'
+        assert all(by_name[preserved['name']][k]==preserved[k] for k in ['type','readable_type']), 'Original public definition type changed'
     for m in modules:
         names={d['name'] for d in ds if d['module']==m};i=next(i for i in inv if i['module']==m)
         assert names==set(i['serialized_constant_names'])==set(i['environment_constant_names'])

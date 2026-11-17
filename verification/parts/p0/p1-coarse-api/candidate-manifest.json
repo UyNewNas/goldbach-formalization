@@ -1227,5 +1227,94 @@
     ],
     "failed_run": 43985121392,
     "strict_serialized_equals_owned_unchanged": true
-  }
+  },
+  "total_recursor_repairs": [
+    {
+      "module": "ImbalancedChen.FirstExitTree",
+      "install_path": "ImbalancedChen/FirstExitTree.lean",
+      "source_file": "FirstExitTree.lean",
+      "original_sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+      "candidate_sha256": "3275423104964113dd1b637986d888aafc6690c74818ee2ab076c3f1e0ad6213",
+      "replacements": [
+        {
+          "old": "def firstExitRetainedPolynomial {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ\n  | [] => signedTreeCoefficient positive mass\n  | p :: ps =>\n      firstExitRetainedPolynomial retained h selectedPrefix positive mass ps +\n        if retained (Bool.not positive) (p :: selectedPrefix) = true then\n          firstExitRetainedPolynomial retained h (p :: selectedPrefix) (Bool.not positive)\n            (mass * h p) ps\n        else 0",
+          "new": "def firstExitRetainedPolynomial {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=\n  fun remaining =>\n    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)\n      (fun selectedPrefix positive mass =>\n        signedTreeCoefficient positive mass)\n      (fun p ps ih selectedPrefix positive mass =>\n        ih selectedPrefix positive mass +\n          if retained (Bool.not positive) (p :: selectedPrefix) = true then\n            ih (p :: selectedPrefix) (Bool.not positive)\n              (mass * h p)\n          else 0)\n      remaining) selectedPrefix positive mass",
+          "count": 1,
+          "public_name": "ImbalancedChen.firstExitRetainedPolynomial"
+        },
+        {
+          "old": "def firstExitCorrection {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ\n  | [] => 0\n  | p :: ps =>\n      firstExitCorrection retained h selectedPrefix positive mass ps +\n        if retained (Bool.not positive) (p :: selectedPrefix) = true then\n          firstExitCorrection retained h (p :: selectedPrefix) (Bool.not positive)\n            (mass * h p) ps\n        else\n          -signedTreeCoefficient (Bool.not positive) (mass * h p) *\n            (ps.map fun q => 1 - h q).prod",
+          "new": "def firstExitCorrection {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=\n  fun remaining =>\n    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)\n      (fun selectedPrefix positive mass =>\n        0)\n      (fun p ps ih selectedPrefix positive mass =>\n        ih selectedPrefix positive mass +\n          if retained (Bool.not positive) (p :: selectedPrefix) = true then\n            ih (p :: selectedPrefix) (Bool.not positive)\n              (mass * h p)\n          else\n            -signedTreeCoefficient (Bool.not positive) (mass * h p) *\n              (ps.map fun q => 1 - h q).prod)\n      remaining) selectedPrefix positive mass",
+          "count": 1,
+          "public_name": "ImbalancedChen.firstExitCorrection"
+        },
+        {
+          "old": "def firstExitRetainedLeaves {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitLeaf α)\n  | [] => [{ selected := selectedPrefix, positive := positive, mass := mass }]\n  | p :: ps =>\n      firstExitRetainedLeaves retained h selectedPrefix positive mass ps ++\n        if retained (Bool.not positive) (p :: selectedPrefix) = true then\n          firstExitRetainedLeaves retained h (p :: selectedPrefix) (Bool.not positive)\n            (mass * h p) ps\n        else []",
+          "new": "def firstExitRetainedLeaves {α : Type*}\n    (retained : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitLeaf α) :=\n  fun remaining =>\n    (List.rec (motive := fun _ => List α → Bool → ℝ → List (FirstExitLeaf α))\n      (fun selectedPrefix positive mass =>\n        [{ selected := selectedPrefix, positive := positive, mass := mass }])\n      (fun p ps ih selectedPrefix positive mass =>\n        ih selectedPrefix positive mass ++\n          if retained (Bool.not positive) (p :: selectedPrefix) = true then\n            ih (p :: selectedPrefix) (Bool.not positive)\n              (mass * h p)\n          else [])\n      remaining) selectedPrefix positive mass",
+          "count": 1,
+          "public_name": "ImbalancedChen.firstExitRetainedLeaves"
+        },
+        {
+          "old": "def evenListLength {α : Type*} : List α → Bool\n  | [] => true\n  | _ :: xs => !evenListLength xs",
+          "new": "def evenListLength {α : Type*} : List α → Bool :=\n  List.rec (motive := fun _ => Bool) true (fun _ _ ih => !ih)",
+          "count": 1,
+          "public_name": "ImbalancedChen.evenListLength"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FirstExitDepthSplice",
+      "install_path": "ImbalancedChen/FirstExitDepthSplice.lean",
+      "source_file": "FirstExitDepthSplice.lean",
+      "original_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+      "candidate_sha256": "c089ad1e471254d59fa3e2b48a0d2982f491aa898710aab3d7ec22332fa72e10",
+      "replacements": [
+        {
+          "old": "def firstExitDepthFrontier {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)\n  | [] =>\n      if k ≤ selectedPrefix.length then\n        [{selectedPrefix := selectedPrefix, positive := positive, mass := mass, remaining := []}]\n      else []\n  | p :: ps =>\n      if k ≤ selectedPrefix.length then\n        [{selectedPrefix := selectedPrefix, positive := positive, mass := mass,\n          remaining := p :: ps}]\n      else\n        firstExitDepthFrontier k parent h selectedPrefix positive mass ps ++\n          if parent (Bool.not positive) (p :: selectedPrefix) = true then\n            firstExitDepthFrontier k parent h (p :: selectedPrefix) (Bool.not positive)\n              (mass * h p) ps\n          else []",
+          "new": "def firstExitDepthFrontier {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α) :=\n  fun remaining =>\n    (List.rec (motive := fun _ => List α → Bool → ℝ → List (FirstExitDepthState α))\n      (fun selectedPrefix positive mass =>\n        if k ≤ selectedPrefix.length then\n          [{selectedPrefix := selectedPrefix, positive := positive, mass := mass, remaining := []}]\n        else [])\n      (fun p ps ih selectedPrefix positive mass =>\n        if k ≤ selectedPrefix.length then\n          [{selectedPrefix := selectedPrefix, positive := positive, mass := mass,\n            remaining := p :: ps}]\n        else\n          ih selectedPrefix positive mass ++\n            if parent (Bool.not positive) (p :: selectedPrefix) = true then\n              ih (p :: selectedPrefix) (Bool.not positive)\n                (mass * h p)\n            else [])\n      remaining) selectedPrefix positive mass",
+          "count": 1,
+          "public_name": "ImbalancedChen.firstExitDepthFrontier"
+        },
+        {
+          "old": "def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ\n  | [] => if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass\n  | p :: ps =>\n      if k ≤ selectedPrefix.length then 0\n      else\n        firstExitDepthTerminalPolynomial k parent h selectedPrefix positive mass ps +\n          if parent (Bool.not positive) (p :: selectedPrefix) = true then\n            firstExitDepthTerminalPolynomial k parent h (p :: selectedPrefix)\n              (Bool.not positive) (mass * h p) ps\n          else 0",
+          "new": "def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=\n  fun remaining =>\n    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)\n      (fun selectedPrefix positive mass =>\n        if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass)\n      (fun p ps ih selectedPrefix positive mass =>\n        if k ≤ selectedPrefix.length then 0\n        else\n          ih selectedPrefix positive mass +\n            if parent (Bool.not positive) (p :: selectedPrefix) = true then\n              ih (p :: selectedPrefix)\n                (Bool.not positive) (mass * h p)\n            else 0)\n      remaining) selectedPrefix positive mass",
+          "count": 1,
+          "public_name": "ImbalancedChen.firstExitDepthTerminalPolynomial"
+        }
+      ]
+    }
+  ],
+  "preserved_public_types": [
+    {
+      "name": "ImbalancedChen.evenListLength",
+      "type": "{α : Type u_1} → List.{u_1} α → Bool",
+      "readable_type": "{α : Type u_1} → List.{u_1} α → Bool"
+    },
+    {
+      "name": "ImbalancedChen.firstExitCorrection",
+      "type": "{α : Type u_1} →\n  (retained : Bool → List.{u_1} α → Bool) →\n    (h : α → Real) → (selectedPrefix : List.{u_1} α) → (positive : Bool) → (mass : Real) → List.{u_1} α → Real",
+      "readable_type": "{α : Type u_1} → (Bool → List.{u_1} α → Bool) → (α → ℝ) → List.{u_1} α → Bool → ℝ → List.{u_1} α → ℝ"
+    },
+    {
+      "name": "ImbalancedChen.firstExitDepthFrontier",
+      "type": "{α : Type u_1} →\n  (k : Nat) →\n    (parent : Bool → List.{u_1} α → Bool) →\n      (h : α → Real) →\n        (selectedPrefix : List.{u_1} α) →\n          (positive : Bool) → (mass : Real) → List.{u_1} α → List.{u_1} (ImbalancedChen.FirstExitDepthState.{u_1} α)",
+      "readable_type": "{α : Type u_1} →\n  ℕ →\n    (Bool → List.{u_1} α → Bool) →\n      (α → ℝ) → List.{u_1} α → Bool → ℝ → List.{u_1} α → List.{u_1} (ImbalancedChen.FirstExitDepthState.{u_1} α)"
+    },
+    {
+      "name": "ImbalancedChen.firstExitDepthTerminalPolynomial",
+      "type": "{α : Type u_1} →\n  (k : Nat) →\n    (parent : Bool → List.{u_1} α → Bool) →\n      (h : α → Real) → (selectedPrefix : List.{u_1} α) → (positive : Bool) → (mass : Real) → List.{u_1} α → Real",
+      "readable_type": "{α : Type u_1} → ℕ → (Bool → List.{u_1} α → Bool) → (α → ℝ) → List.{u_1} α → Bool → ℝ → List.{u_1} α → ℝ"
+    },
+    {
+      "name": "ImbalancedChen.firstExitRetainedLeaves",
+      "type": "{α : Type u_1} →\n  (retained : Bool → List.{u_1} α → Bool) →\n    (h : α → Real) →\n      (selectedPrefix : List.{u_1} α) →\n        (positive : Bool) → (mass : Real) → List.{u_1} α → List.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} α)",
+      "readable_type": "{α : Type u_1} →\n  (Bool → List.{u_1} α → Bool) →\n    (α → ℝ) → List.{u_1} α → Bool → ℝ → List.{u_1} α → List.{u_1} (ImbalancedChen.FirstExitLeaf.{u_1} α)"
+    },
+    {
+      "name": "ImbalancedChen.firstExitRetainedPolynomial",
+      "type": "{α : Type u_1} →\n  (retained : Bool → List.{u_1} α → Bool) →\n    (h : α → Real) → (selectedPrefix : List.{u_1} α) → (positive : Bool) → (mass : Real) → List.{u_1} α → Real",
+      "readable_type": "{α : Type u_1} → (Bool → List.{u_1} α → Bool) → (α → ℝ) → List.{u_1} α → Bool → ℝ → List.{u_1} α → ℝ"
+    }
+  ],
+  "expected_generated_implementation_change": "All actual serialized declarations across all53 modules remain audited. Six unsafe-rec helpers should no longer be generated; compare actual old/new generated inventory, never filter it."
 }
