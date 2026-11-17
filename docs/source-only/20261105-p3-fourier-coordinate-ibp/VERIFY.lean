@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder
 import ImbalancedChen.P3HBOriginalGroupPolynomialAllOrder
 import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstPolynomial
 import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstMeasurable
@@ -1212,3 +1213,8 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBOriginalGroupPolynomialAllOrder.allocationTerm_le_polynomial
 #check ImbalancedChen.P3HBOriginalGroupPolynomialAllOrder.allocationMass_le_polynomial
 #check ImbalancedChen.P3HBOriginalGroupPolynomialAllOrder.originalGroupProduct_ordered_polynomial
+
+-- P3.6 actual group-occurrence product times ONE full-product trim: fixed-order polynomial g.
+-- SOURCE_ONLY: registered but NOT Lean/Lake executed or kernel checked.
+#check ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder.binaryMass_polynomial_finite_order
+#check ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder.originalGroupPhysicalTrim_ordered_polynomial
