@@ -2997,3 +2997,47 @@ Status: **P3.6 YELLOW**, one strictly limited SOURCE_ONLY integration node BLUE,
 - Next exact entrance: acquire the pinned Lean/Lake/Mathlib dependency tree, prepare isolated ImbalancedChen source import mapping, compile and fix this module plus all necessary inherited SOURCE_ONLY dependencies. Then prove the ACTUAL all-order Leibniz decomposition of (G*eta)*logTensorMixed with all 729 child labels and pay every allocated L1 contribution, not just the geometry jet term. Incorporate actual U5 and every frozen hat into the real W_T, quantify uniformly in T and m(T) at all 2S mixed orders, then complete normalized Fourier L1/H-box tail, full physical modulus sum at the identical integer rho_T, exact coprime mean, complete product=T exception, causal whole-box, empty Gamma mother words and all unresolved original PP sources.
 
 Status: P3.6 YELLOW. New limited node BLUE / SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED. GREEN: none.
+
+
+## Successor P3.6 — exact high-order Leibniz decomposition of the WHOLE original HB child (2026-11-18)
+
+**Verified branch predecessor:** \`db1bac5c4d1632b15c5ad2c7a3353990fd91ea5d\`, \`chatgpt/p3-internal-original-w-20261105\`. The actual branch ref was read before source creation and before the VERIFY/REGISTRY writes. No concurrent update was visible at those checks. Root and packet AGENTS.md were searched earlier and not found; none were invented.
+
+**Genuine source commit [skip ci]:** \`77991a62c05791abd278d794ebfcb32eb476b879\`.
+**Source:** \`P3HBOriginalWholeChildAllOrder.lean\`, 335 lines, verified Git blob \`44a4f5d96807b73b347ec45d459ec5cab99e0318\`.
+**Verification-registration commit:** \`7325ad7b5977ae87ca90013b3b38d3480549aed6\`, blob \`c773153b04c2dd420361581754da7cfcdb93d58e\`, **9 checks registered but not executed**.
+**Registry commit:** \`0ceb7c16c27d29e9b322071ed5ccecc2d7fa4493\`, blob \`1241649b87f8a15efb9c6230aa8f4f1eba4398d9\`.
+**Manuscript pin:** \`UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b\`, \`paper/source/modules/distribution-prime-product-completion-20261010.txt\` §§2,4(F). Lean \`v4.33.0-rc1\`; Mathlib \`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\`. All locks/paper/production files unchanged.
+
+### Mathematical work, actual scope
+
+The preceding packet paid a **single** geometry-jet times an undifferentiated HB derivative tensor, but did not identify the derivative of their product. This packet writes a candidate **actual all-order equality** retaining each original occurrence-indexed group, the one original physical full-product trim, and the original six-position \`logTensorMixed\` child:
+
+\`\`\`
+D_axes (originalGroupPhysicalTrim(chi,eta,c,J,s) *
+        logTensorMixed(chi,orders,child))
+  = sum_(owner : Fin k -> Fin 2)
+       D_(axesAssigned axes owner 0) originalGroupPhysicalTrim *
+       logTensorMixed(chi,
+         childOrdersAfter orders (axesAssigned axes owner 1), child)
+\`\`\`
+
+The \`childOrdersAfter\` recursion applies the actual \`raiseOrder\` in original ordered derivative order, with repeated coordinates kept. \`logTensorMixed_actualAxisDeriv\` uses the inherited actual weighted-child derivative with constant weight 1; \`logTensorMixed_ordered_derivative\` iterates it. \`geometryJet_slice_differentiable\` is derived from the old exact binary group/trim owner formula and smooth scalar slices. \`wholeChildTerm_axisDeriv\`, \`wholeChildSum_axisDeriv\`, \`wholeChildSum_cons\`, and \`originalWholeChild_ordered_eq_allocation\` then give the actual repeated-axis product-rule source candidates and \`2^k\` owner reindexing. No independent derivative-valued hypothesis is introduced, and no child labels are identified or removed. The statement is for **one literal child**, which must later be summed over all 729 original labels.
+
+### Independent checks / exact trust boundary
+
+- GitHub contents creation and readback: **PASS**, proof blob as above; resulting source commit confirmed. Forbidden declaration escape hits: 0; lexical parenthesis/bracket/brace stack: PASS. These do **not** demonstrate elaboration or kernel correctness.
+- Independent SymPy exact polynomial model: **484/484** finite binary owner-allocation identities; **420** repeated-axis cases. Scope: three-coordinate polynomial proxy with 4 original-position child-label assignments, two group occurrences and one complete trim, lengths 0..4. This supports combinatorial algebra only; not the genuine smooth six-coordinate Lean statement, no analytic norm/integral proof.
+- Regression script: \`/mnt/data/p3run27/algebra_regression.py\`, SHA256 \`227dbd47bfed237cc410a82c72f32a00c584dc9535412e02e7481b14d0825c0d\`; log SHA256 \`1b195778a973e3e9b94e302876d941b76e21c1fe1c1ab1c45c7b1966b813af8b\`.
+- Attempted directed compilation: \`lake env lean ImbalancedChen/P3HBOriginalWholeChildAllOrder.lean\`, exit **127**, \`lake: command not found\`; log \`/mnt/data/p3run27/targeted_lean.log\`, SHA256 \`99ba208b43bce979037339e9c86ec50b5af2841d3a704f11217f921b0e61729a\`. Pinned Lean/Mathlib dependency tree and isolated original \`ImbalancedChen.*\` module mapping were not available here. **No Lean elaboration, kernel checking, independent replay or full axiom audit occurred**. Nine new \`#check\` lines are registered only; all earlier SOURCE_ONLY files stay unverified. The newly written source may have type/rewrite mismatches; resolve only by true pinned compilation before promotion.
+- **NOT TRIGGERED:** CI, Codex, heavy producer, PR, merge, toolchain or lock upgrade. No other automation branches, excluded full87 work, or manuscript edits.
+- External (M): \`EXTERNAL_INPUTS.json\` Git blob \`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab\`, **RECORD_ONLY / NOT_IMPLEMENTED / NOT_AXIOM**, unchanged.
+
+### Real next entrance
+
+1. Obtain fixed Lean/Lake/Mathlib dependencies and isolate import mapping; **compile and repair** the new module and its ancestor chain; only then assess proof statements for green.
+2. Integrate the norm of **every** genuine Leibniz allocation over the full six-dimensional original chart and sum both over all \`2^k\` owners and all 729 labelled children. Ensure the child derivative order is raised by at most k and global constants are chosen before growing g,m and physical scales.
+3. Incorporate original U5 and all remaining HB hats and every frozen source into the true physical \`W_T\`; obtain one common threshold in \`T,m(T)\` for all actual \`2S\` mixed L1 classes, without assuming fixed-stage smoothing gives this automatically.
+4. Complete Fourier normalized L1/H-box and Fubini with physical 2π, then same **integer** rho and the entire physical modulus sum, exact coprime mean and product=T exception. Still internal: causal/whole-box, all HB sources, empty Gamma mother-word identification and payment, high rank/enhanced branches.
+
+**Status: P3.6 YELLOW. This limited new exact-derivative source candidate BLUE / SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED. GREEN: none.**
