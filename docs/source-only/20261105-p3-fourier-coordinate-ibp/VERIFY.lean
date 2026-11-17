@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBNonnegativeDyadicContraction
 import ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder
 import ImbalancedChen.P3HBOriginalGroupPolynomialAllOrder
 import ImbalancedChen.P3HBOriginalPhysicalChildrenFirstPolynomial
@@ -1218,3 +1219,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 -- SOURCE_ONLY: registered but NOT Lean/Lake executed or kernel checked.
 #check ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder.binaryMass_polynomial_finite_order
 #check ImbalancedChen.P3HBOriginalGroupTrimPolynomialAllOrder.originalGroupPhysicalTrim_ordered_polynomial
+
+-- Actual nonnegative dyadic partition => norm psi <= 1 (all real t).
+-- Real plateau and positivity are still required; no added monotonicity.
+-- SOURCE_ONLY; all checks REGISTERED, NOT EXECUTED.
+#check ImbalancedChen.P3HBNonnegativeDyadicContraction.real_dyadic_piece_between_zero_one
+#check ImbalancedChen.P3HBNonnegativeDyadicContraction.complex_original_dyadic_contraction
+#check ImbalancedChen.P3HBNonnegativeDyadicContraction.original_group_trim_polynomial_of_nonnegative_dyadic
