@@ -45,7 +45,7 @@ def childThetaDrift (N : ℕ) (Q : ℝ) (g : ℕ) (r : Request) : ℝ :=
         iteratedRequest g (nextRequest r e))).sum
 
 /-- Literal physical edgeValue equals the unweighted request wave plus
-its child-Theta correction. This also preserves every q and action tag. -/
+its child-Theta correction. This retains every selected original edge occurrence. -/
 theorem edgeValue_eq_raw_plus_theta (N : ℕ) (Q : ℝ) (r : Request)
     (es : List (Edge N)) (t : Table) :
     edgeValue Q t r es =
@@ -112,6 +112,22 @@ theorem selected_retention_physical_gap (N : ℕ) (Q : ℝ)
   unfold physicalStepDefect
   rw [step_retained N Q g r (iterate g) i hs]
   ring
+
+
+/-- On the selected genuine retention edge, the parent-normalization
+and child-normalization terms cancel in the TOTAL request residual.
+It is incorrect to charge them independently as two retained debts. -/
+theorem selected_retention_total_gap (N : ℕ) (Q : ℝ)
+    (g : ℕ) (r : Request) (i : Fin 200)
+    (hs : Selected g r i .retained) :
+    (1 - thetaAtom N Q (parentProduct r.old)) *
+        iteratedRequest (g+1) r +
+      (physicalStepDefect N Q g r + childThetaDrift N Q g r) =
+    iteratedRequest (g+1) r -
+      iteratedRequest g (nextRequest r (.retained i)) := by
+  have h := actual_request_local_defect_exact N Q g r
+  rw [selected_retention_defect N Q iteratedRequest g r i hs] at h
+  exact h.symm
 
 /-- Zero generation is the seed, not a wrapped predecessor-429. -/
 def parentThetaAt (N : ℕ) (Q : ℝ) : ℕ → Request → ℝ
