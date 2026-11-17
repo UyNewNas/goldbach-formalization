@@ -1,4 +1,4 @@
-"""Stage original frozen T01 v3, then apply exactly one definitional-equality elaboration correction."""
+"""Stage original frozen T01 v3, then apply bound definitional-equality and canonical owner import corrections."""
 import hashlib, json, os, pathlib, subprocess, sys
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -36,13 +36,22 @@ def main():
     assert digest(after) == m['candidate_target_sha256']
     assert after == (HERE / 'candidate.lean').read_bytes()
     target.write_bytes(after)
+    owner = m['import_owner_repair']
+    owner_path = project / owner['install_path']
+    owner_before = owner_path.read_bytes()
+    assert digest(owner_before) == owner['original_sha256']
+    assert owner_before.count(owner['old'].encode()) == owner['count'] == 1
+    owner_after = owner_before.replace(owner['old'].encode(), owner['new'].encode())
+    assert digest(owner_after) == owner['candidate_sha256']
+    assert owner_after == (HERE / owner['source_file']).read_bytes()
+    owner_path.write_bytes(owner_after)
     assert len((project / 'lakefile.toml').read_bytes()) == 487
     assert digest((project / 'lakefile.toml').read_bytes()) == '26a6b01a52446ad6aae63d5201330b902ec94a1171fb1f0baf9fc61016098491'
     for row in m['closure_source_records']:
-        expected = m['candidate_target_sha256'] if row['module'] == m['target'] else row['sha256']
+        expected = {m['target']: m['candidate_target_sha256'], owner['module']: owner['candidate_sha256']}.get(row['module'], row['sha256'])
         assert digest((project / row['install_path']).read_bytes()) == expected, row['module']
     logs.mkdir(parents=True, exist_ok=True)
-    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'one_definitional_equality_change_only': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
+    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'one_definitional_equality_and_one_owner_import_only': True, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
     (logs / 'P1_STAGE_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
     (logs / 'ORIGINAL_T01_PROVENANCE.json').write_bytes((project / 'T01_PROVENANCE.json').read_bytes())
     print(json.dumps(receipt))
