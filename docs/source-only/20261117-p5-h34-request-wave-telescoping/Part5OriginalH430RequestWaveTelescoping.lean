@@ -21,6 +21,8 @@ open scoped Classical BigOperators
 open Part5OriginalH430RequestedReads
 open Part5OriginalH430RequestedBranches
 open Part5OriginalH430RequestedHistory
+open P2EnhancedLowerPrimeChildCarriers
+open Part5OriginalH430BankSlotTargets
 open Part5OriginalH430ActualRequestAllActionWave
 
 /-- Only real generation-zero leaves contribute seed values.
