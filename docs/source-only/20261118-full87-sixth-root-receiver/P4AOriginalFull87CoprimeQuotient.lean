@@ -105,6 +105,38 @@ theorem actual_receiver_fibre_le_coprime_quotients (N d : ℕ) :
         _ ≤ Q.card := Finset.card_le_card hsubset
     exact_mod_cast hcard
 
+/-- The new quotient capacity never exceeds the former floor capacity.
+This is an actual Finset injection, not an asserted analytic density. -/
+theorem coprimeQuotientCount_le_floor (N d : ℕ) :
+    coprimeQuotientCount N d ≤ ((N / d : ℕ) : ℝ) := by
+  classical
+  let Q : Finset ℕ :=
+    (Finset.Icc 1 (N / d)).filter (fun k => Nat.Coprime k N)
+  change (Q.card : ℝ) ≤ ((N / d : ℕ) : ℝ)
+  have hinj : Set.InjOn (fun k : ℕ => k - 1) Q := by
+    intro x hx y hy hxy
+    have hx1 : 1 ≤ x :=
+      (Finset.mem_Icc.mp (Finset.mem_filter.mp hx).1).1
+    have hy1 : 1 ≤ y :=
+      (Finset.mem_Icc.mp (Finset.mem_filter.mp hy).1).1
+    dsimp at hxy
+    omega
+  have hsub : Q.image (fun k : ℕ => k - 1) ⊆
+      Finset.range (N / d) := by
+    intro j hj
+    obtain ⟨k, hk, rfl⟩ := Finset.mem_image.mp hj
+    obtain ⟨hklo, hkle⟩ :=
+      Finset.mem_Icc.mp (Finset.mem_filter.mp hk).1
+    change k - 1 < N / d
+    omega
+  have hc : Q.card ≤ N / d := by
+    calc
+      Q.card = (Q.image (fun k : ℕ => k - 1)).card :=
+        (Finset.card_image_of_injOn hinj).symm
+      _ ≤ (Finset.range (N / d)).card := Finset.card_le_card hsub
+      _ = N / d := by simp
+  exact_mod_cast hc
+
 private theorem receiver_nonneg (N d : ℕ) :
     0 ≤ receiverTest N d := by
   unfold receiverTest
@@ -308,6 +340,65 @@ theorem actual_full_physical_receiver_abs_le_coprime_quotients
   have hinvoice := actual_invoice_le_coprime_quotient_budget
     delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
   linarith
+
+/-- A genuine comparison with the PRECEDING original harmonic bill.
+Unlike root pruning beyond p^6>N (where that bill is already zero),
+the coprime quotient capacity can be strictly smaller for nonzero
+retained moduli and its proof pays no new outside invoice. -/
+theorem sixth_coprime_budget_le_old_harmonic
+    (N cap : ℕ) (w L : ℝ) (X : ℕ)
+    (fifth : FifthStoppedEvent ℕ) :
+    sixthCoprimeQuotientBudget N cap w L X fifth ≤
+      P4AOriginalFull87ReceiverHarmonic.sixthHarmonicBudget
+        N cap w L X fifth := by
+  unfold sixthCoprimeQuotientBudget
+    P4AOriginalFull87ReceiverHarmonic.sixthHarmonicBudget
+  apply list_sum_map_le_map
+  intro p hp
+  apply mul_le_mul_of_nonneg_left _ (abs_nonneg _)
+  apply Finset.sum_le_sum
+  intro a ha
+  exact mul_le_mul_of_nonneg_left
+    (coprimeQuotientCount_le_floor N
+      (a * (p :: fifth.selectedAfter).prod))
+    (abs_nonneg _)
+
+theorem event_coprime_budget_le_old_harmonic
+    (N cap : ℕ) (w L : ℝ) (X : ℕ)
+    (ev : FifthSixthStoppedEvent ℕ) :
+    eventCoprimeQuotientBudget N cap w L X ev ≤
+      P4AOriginalFull87ReceiverHarmonic.eventHarmonicBudget
+        N cap w L X ev := by
+  cases ev with
+  | fifthExclusive fifth =>
+      cases hk : fifth.kind with
+      | rawOnly =>
+          simpa [eventCoprimeQuotientBudget,
+            P4AOriginalFull87ReceiverHarmonic.eventHarmonicBudget, hk] using
+            (sixth_coprime_budget_le_old_harmonic N cap w L X fifth)
+      | licensedOnly =>
+          simpa [eventCoprimeQuotientBudget,
+            P4AOriginalFull87ReceiverHarmonic.eventHarmonicBudget, hk] using
+            (sixth_coprime_budget_le_old_harmonic N cap w L X fifth)
+      | both => simp [eventCoprimeQuotientBudget,
+          P4AOriginalFull87ReceiverHarmonic.eventHarmonicBudget, hk]
+  | sixthFromBoth fifthSelected inner =>
+      simp [eventCoprimeQuotientBudget,
+        P4AOriginalFull87ReceiverHarmonic.eventHarmonicBudget]
+
+theorem actual_coprime_budget_le_old_harmonic
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z L : ℝ) (X : ℕ) :
+    actualCoprimeQuotientBudget delta n e q om N cap w z L X ≤
+      P4AOriginalFull87ReceiverHarmonic.actualReceiverHarmonicBudget
+        delta n e q om N cap w z L X := by
+  unfold actualCoprimeQuotientBudget
+    P4AOriginalFull87ReceiverHarmonic.actualReceiverHarmonicBudget
+  apply list_sum_map_le_map
+  intro state hstate
+  apply list_sum_map_le_map
+  intro ev hev
+  exact event_coprime_budget_le_old_harmonic N cap w L X ev
 
 end
 end ImbalancedChen.P4AOriginalFull87CoprimeQuotient
