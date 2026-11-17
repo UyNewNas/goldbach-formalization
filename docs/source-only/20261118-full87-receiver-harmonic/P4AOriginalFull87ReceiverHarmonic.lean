@@ -242,7 +242,11 @@ signed expression, whose equality to the REAL event requires the
 earlier actual-source theorems. -/
 def eventHarmonicBudget (N cap : ℕ) (w L : ℝ) (X : ℕ) :
     FifthSixthStoppedEvent ℕ → ℝ
-  | .fifthExclusive fifth => sixthHarmonicBudget N cap w L X fifth
+  | .fifthExclusive fifth =>
+      match fifth.kind with
+      | .rawOnly => sixthHarmonicBudget N cap w L X fifth
+      | .licensedOnly => sixthHarmonicBudget N cap w L X fifth
+      | .both => 0
   | .sixthFromBoth _ _ => 0
 
 theorem common_event_receiver_abs_le_harmonic
@@ -262,8 +266,7 @@ theorem common_event_receiver_abs_le_harmonic
             (actual_common_sixth_receiver_abs_le_harmonic
               N cap w L X fifth)
       | both =>
-          simp [commonSignedEventValue, eventHarmonicBudget, hk,
-            sixthHarmonicBudget]
+          simp [commonSignedEventValue, eventHarmonicBudget, hk]
   | sixthFromBoth fifthSelected inner =>
       simp [commonSignedEventValue, eventHarmonicBudget]
 
