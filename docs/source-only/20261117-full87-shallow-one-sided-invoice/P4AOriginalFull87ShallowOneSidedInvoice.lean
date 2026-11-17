@@ -229,7 +229,7 @@ theorem actual_fourth_prefix_shallow_map
 /-- A true shared fourth-frontier source has four selected primes and
 positive sign. Both facts come from the SAME original frontier, not
 from a new sign certificate. -/
-private theorem real_fourth_prefix_positive
+theorem real_fourth_prefix_positive
     (e : ℚ) (q : ℕ) (om : ℝ)
     (N cap : ℕ) (w z : ℝ)
     (state : FirstExitDepthState ℕ)
