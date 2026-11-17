@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst
 import ImbalancedChen.P3HBOriginalGroupTrimAllOrder
 import ImbalancedChen.P3HBOriginalGroupPhysicalTrimFirst
 import ImbalancedChen.P3HBActualCompleteProductTrimUniform
@@ -1154,3 +1155,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 -- and actual ordered derivative ceiling; SOURCE_ONLY, NOT EXECUTED.
 #check ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget.binaryMass_uniform_finite_order
 #check ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget.originalGroupPhysicalTrim_ordered_uniform_finite_order
+
+-- Literal grouped geometry x physical trim x all 3^6 original labelled HB children.
+-- SOURCE_ONLY; all four checks, imports and transitive dependencies UNCOMPILED.
+#check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChild
+#check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChild_axisDeriv
+#check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChildren_axisDeriv_restoration
+#check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChild_axisDeriv_norm_le
+#check ImbalancedChen.P3HBOriginalGroupPhysicalChildrenFirst.physicalOriginalChildren_axisDeriv_mass_le
