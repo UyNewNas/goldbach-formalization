@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBActualCompleteProductTrimUniform
 import ImbalancedChen.P3HBActualCompleteProductTrim
 import ImbalancedChen.P3HBOriginalGroupFinCons
 import ImbalancedChen.P3HBOriginalGroupAllOrderShiftedSupport
@@ -1115,3 +1116,10 @@ import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 #check ImbalancedChen.P3HBActualCompleteProductTrim.baseTrim_jet_zero_low
 #check ImbalancedChen.P3HBActualCompleteProductTrim.baseTrim_jet_zero_high
 #check ImbalancedChen.P3HBActualCompleteProductTrim.physicalTrim_orderedDeriv_zero_outside
+
+-- Physical complete-product trim: global finite K log jets independent of c>0.
+-- SOURCE_ONLY. These checks and their transitive imports have not been executed.
+#check ImbalancedChen.P3HBActualCompleteProductTrimUniform.baseTrimLogProfile_contDiff
+#check ImbalancedChen.P3HBActualCompleteProductTrimUniform.baseTrimLogProfile_oneOrder_global_bound
+#check ImbalancedChen.P3HBActualCompleteProductTrimUniform.baseTrimLogProfile_uniform_finite_order
+#check ImbalancedChen.P3HBActualCompleteProductTrimUniform.physicalTrim_uniform_ordered_jets
