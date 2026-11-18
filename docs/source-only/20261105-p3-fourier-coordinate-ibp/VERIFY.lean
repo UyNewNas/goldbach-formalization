@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitRealCompactIntegrable
 import ImbalancedChen.P3HBUnsplitRealSupport
 import ImbalancedChen.P3HBUnsplitRealFourierD
 import ImbalancedChen.P3HBUnsplitRealSliceSmooth
@@ -1404,3 +1405,14 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_nonzero_axis_bounds
 #check ImbalancedChen.P3HBUnsplitRealSupport.sixDyadicPositionalWindow
 #check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_support_subset
+
+-- Actual compact closed-log-box support and all six-slot ordered-derivative
+-- integrability; source-only #check registration, NOT executed.
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.sixClosedLogBox
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.sixClosedLogBox_isCompact
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.realSixUnsplitWeight_support_subset_closedBox
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.realSixUnsplitWeight_hasCompactSupport
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.realOrderedAxisDeriv_hasCompactSupport
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.chosen_real_ordered_hasCompactSupport
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.chosen_real_ordered_integrable
+#check ImbalancedChen.P3HBUnsplitRealCompactIntegrable.chosen_original_six_doubled_integrable
