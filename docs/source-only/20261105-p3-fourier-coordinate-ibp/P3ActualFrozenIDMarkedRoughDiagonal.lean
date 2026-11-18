@@ -16,6 +16,14 @@ complete marked-prime * HB-product = N fibre, group by group, at each
 physical q and after the unchanged signed integer rho(q) and exact
 coprime mean. The genuine HB roles and +3,-3,+1 scalars are retained.
 
+IMPORTANT SCOPE CORRECTION: the three separate realizedTaggedHBAtQ
+summands below each test one group's marked-product=N condition. They are
+NOT the full three-group physical product (a*b*d)*HB=N and cannot be used
+as an off-target PP identity. The simultaneous Cartesian three-group
+complete-product fibre is implemented separately in
+P3ActualFrozenThreeWholeBoxHBTarget.lean. The zero lemmas below remain
+restricted valid individual-fibre statements, not full compiler payment.
+
 This covers ONLY a realized frozen original-ID prime assignment paired
 with a literal rough-HB factorTuples fibre. It does NOT certify that
 every HB/PP compiler atom is such an assignment, nor prove the
