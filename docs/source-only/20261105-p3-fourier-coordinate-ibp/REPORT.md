@@ -3365,3 +3365,43 @@ The proof of the scalar cutoff derives 0≤eps from genuine D≥0 and H>0. It do
 **Next entry:** obtain fixed Lean/Lake toolchain and isolated docs/source-only to ImbalancedChen import mapping, compile all dependencies and repair any source errors. Then identify from the actual physical PP compiler whether the empty original-prime word with marked `r=N` ever occurs and pay its explicit signed scalar; separately complete offshift near-linear mixed moment, rho/totient mass, full growing-m(N) W_T smooth and Fourier bounds, causal/whole-box and all HB/empty-Gamma/high-rank/enhanced source obligations. EXTERNAL_INPUTS.json remains identical blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: classical estimate (M) **REGISTER_ONLY_NOT_IMPLEMENTED_NOT_AXIOM**. Excluded full87 node, production files, manuscript, master, other tasks, PRs and external board unchanged.
 
 **Overall P3.6: YELLOW. This finite actual-sorted-prime exceptional-fibre candidate: BLUE.**
+
+## Successor SOURCE_ONLY increment — actual marked-prime box to sorted residual same-rho offshift (2026-11-18, run 44)
+
+- **Actual branch baseline:** `606297a151fa18f83246bf39467b31ec338bcd29` on `chatgpt/p3-internal-original-w-20261105`, verified with GitHub ref before new write. The task continued from this latest HEAD, not the old `de582e6` checkpoint.
+- **New proof commit:** `e4484f475939e867846acb7b23f04779507e2f2d` (`[skip ci]`), `P3ActualSortedMarkedSameRhoNoDiagonal.lean`, **150 lines**, Git blob `3fc210479a7142933ae001ae017cd73965338a1f`.
+- **VERIFY commit:** `4717575e82602ef3e491cde4e854565e12552ed7`, Git blob `dc2ecb79f222026b315421f315155d430cf4a5ce`, four new `#check` lines, *registered but not run*.
+- **REGISTRY commit:** `dc5dfcb798311357298db2980b55ddd9aec4b76f`, Git blob `99b85a28cc5ace253dbe0ca4c9b568a0523cfafa`; exact premises, source and regression hashes in `successor_original_marked_box_sorted_same_rho_offshift_20261118_run44`.
+- **Frozen manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` lines 259–275 (`eq:current-PP`) and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §§2–4. Fixed Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Mathematical advance and exact hypotheses
+
+The previous round showed that the original **sorted residual fine-prime** exact product `r * ps.prod = N` could occur only for the empty residual word and `r=N`. Existing `P3ActualOriginalMarkedPrimeNoDiagonal` separately showed that a **Cartesian marked-prime/residual-prime box** from the same N-excluding fine-prime alphabet has no diagonal when `N != 1`. This packet connects these two **actual, different carriers** rather than recasting the same empty-fibre equality.
+
+For `marked ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N taum) markedWord` and `ps ∈ actualPrimeFineLabelSortedTuples N taur blocks`, with both prime alphabets using **the same N**, `N != 1`, and potentially distinct fine scales, `sorted_marked_full_product_ne_target` supplies:
+
+`marked.prod * ps.prod != N`.
+
+This includes **zero residual slots** and even **zero marked slots** (then the product is 1, not N). The proof uses the *literal* prior Cartesian marked/residual no-diagonal theorem and the exact sorted selector's membership in its residual slot box, not an assumption that arbitrary outside `r` is odd or small. `sorted_marked_full_target_fibre_empty` discharges the corresponding entire filtered sorted residual source.
+
+`weightedSortedPP_original_marked_off_divisors` passes the fact through the **same signed physical rho** in every congruence and **exact coprime mean**, retaining `r = marked.prod`, original physical q, complete Mobius `mu(marked.prod * ps.prod)`, strictly sorted residual labels, and arbitrary tuple-dependent W. `original_marked_box_sorted_same_rho_off_divisors` then actually sums over all original marked words with arbitrary marked-dependent coefficient and arbitrary two-word geometric W. No divisors of zero appear; all arithmetic shifts are `|N - marked.prod * ps.prod| > 0`.
+
+**Scope/remaining boundary:** This identifies the empty-residual exception as absent for **actual original marked PRIME boxes**. It does *not* prove the full compiler produces only these marked prime boxes, nor handle HB **integer** variables, empty Gamma mother words or high-rank branches. It proves an exact finite identity but **not** the nonzero-shift arithmetic divisor moment, uniform logarithmic error, full `fullModulusMass`, or complete PP. No unsupported fibrewise relative bound and no external research theorem are added.
+
+### Checks executed and NOT executed
+
+- GitHub branch HEAD rechecked before each write; no concurrent change was observed at those checks. All writes were through GitHub content API on the same isolated task branch, `[skip ci]`.
+- Read previous `REPORT.md`, `REGISTRY.json`, `EXTERNAL_INPUTS.json`, previous prime exception and offshift sources, pinned manuscript `eq:current-PP`, and queried AGENTS paths (all NOT_FOUND). New source Git blob and subsequent versions are subject to final readback.
+- Static forbidden escape token scan: **0**; rough parenthesis balance: **PASS**. These do not certify proof elaboration.
+- Independent Python finite regression: **9,744** marked/residual product non-diagonal cases, **1,827** exact signed-rho + coprime-mean offshift comparisons, including **609** empty residual cases. Source `/mnt/data/p3run44/check_marked_sorted.py` (SHA-256 `fcf58964edf31a9446c926a18b9eadb22417168f682b5674467f5b2fee7cec4d`), output `/mnt/data/p3run44/regression.log` (SHA-256 `258bfed3df65fab34b5b92ba1b5da719b727c74f5b58f7180601aaf4651c1ca0`). This is a **toy finite arithmetic sanity check**, not a Lean/Mathlib or actual compiler test.
+- Attempted **`lake env lean ImbalancedChen/P3ActualSortedMarkedSameRhoNoDiagonal.lean`**, exit **127** (`lake: command not found`); log `/mnt/data/p3run44/targeted_lean.log` (SHA-256 `59cd6ea6b295e724d0a5032846ad088d630b7067b2a993e38cfcb766ab1dd993`). No locked Lean/Lake/Mathlib available, so isolated import mapping and true elaboration/kernel verification could not begin.
+- **NOT RUN:** Lean typecheck/kernel, dependency compilation, transitive axiom audit, kernel replay, CI, Codex and heavy numerical producer. No green node.
+- **EXTERNAL_INPUTS.json unchanged:** (M) is `RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM`, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. No added axioms or substituted assumptions, no excluded full87, production, toolchain, manuscript, other task, PR or CI edits.
+
+### Concrete next entrance
+
+1. Recover the pinned Lean/Lake environment and map only this P3.6 source-only import closure into an isolated `ImbalancedChen.*` validation directory; compile this file and necessary imports; repair actual elaboration errors before claiming correctness.
+2. Prove from the actual marked compiler's *existing* selector that its emitted marked PRIME labels belong to the literal same-N fine-prime box; do not assume this for HB integer-variable atoms. Apply the no-diagonal bridge only to the admitted prime boxes.
+3. Keep separate the rough-HB full-product diagonal and empty Gamma mother-word payments, complete signed physical modulus discrepancy and shifted divisor moment, all original U5/HB hats, growing `m(N)`/common-threshold Fourier budgets and full same-rho PP assembly. None is closed by the new exact finite result.
+
+**State:** P3.6 YELLOW, this one marked-box-to-sorted-source bridge BLUE SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED, GREEN additions 0.
