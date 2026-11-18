@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport
 import ImbalancedChen.P3ActualMarkedOddHBTargetSupport
 import ImbalancedChen.P3ActualLiteralHBOnlySameRhoEvenDiagonal
 import ImbalancedChen.P3ActualHybridCoefficientFaithfulDiagonal
@@ -1486,3 +1487,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualMarkedOddHBTargetSupport.literalMarkedSameRhoDiagonal
 #check ImbalancedChen.P3ActualMarkedOddHBTargetSupport.literalMarkedSameRhoDiagonal_zero_odd
 #check ImbalancedChen.P3ActualMarkedOddHBTargetSupport.fullMarkedSameRhoDiagonal_restrict_nonodd
+
+-- Exact 2-primary same-rho genuine marked HB diagonal support (SOURCE_ONLY).
+-- Checks recorded, NOT executed; locked Lean/Lake absent from the environment.
+#check ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport.sameTwoProfile
+#check ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport.sameTwoProfile_of_odd_cofactor
+#check ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport.literalMarkedHBTargetAtQ_zero_of_twoProfile_mismatch
+#check ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport.literalMarkedSameRhoDiagonal_zero_of_twoProfile_mismatch
+#check ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport.fullMarkedSameRhoDiagonal_restrict_twoProfile
