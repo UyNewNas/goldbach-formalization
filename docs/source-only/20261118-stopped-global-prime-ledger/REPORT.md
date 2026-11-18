@@ -3,7 +3,7 @@
 ## Exact recovery and immutable source
 - Verified predecessor (this task): d580229bcce5106d9f12bb86194fc924db425883, branch chatgpt/p1-full87-stopped-upper-half-coprime-unmask-20261118-2010. Re-read its source and HANDOFF / REPORT / REGISTRY / INPUT_BOUNDARY. Do not resume from historical 9649ab3.
 - Independent branch: chatgpt/p1-full87-stopped-global-prime-ledger-20261118-2110. Created at exactly d580229; all writes restricted to this packet, no main/master changes.
-- New Lean candidate: P4AOriginalFull87StoppedGlobalPrimeLedger.lean, 313 lines, initially 4744d7f7d1aa174e3c26f9aa3fe68b54e1aa9c5f; enhanced source commit 080161d057896b97ce467c4d55dea4a5b43b1516. Source blob 824f0bc39b4f11efd8e3a3e8a94cbac40e326520.
+- New Lean candidate: P4AOriginalFull87StoppedGlobalPrimeLedger.lean, 313 lines, initially 4744d7f7d1aa174e3c26f9aa3fe68b54e1aa9c5f; enhanced source commit 080161d057896b97ce467c4d55dea4a5b43b1516, plus explicit signed congruence typing revision 8bcf48ce7193dfa7174f6cbc4db9c533b6657331. Current source blob e007d29731d0abe6f76e4f100c84155e59741207.
 - Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex, blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. PP premise and forbidden arithmetic filters re-read at lines 255–315.
 - Frozen tools: Lean 4 leanprover/lean4:v4.33.0-rc1; mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1; native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958. c=49044063/25000000, K=8452171/1250000.
 - Applicable AGENTS.md probes in repository root, docs, docs/source-only: no such files.
@@ -26,7 +26,7 @@ This is more useful than a family of per-event identities: the **one actual phys
 
 ## Checks and validation
 - Host command tests: lean --version EXIT=127, lake --version EXIT=127, elan --version EXIT=127 (command not found). git exists; no exact Lean installation / pinned Lake closure. Current container cgroup memory.max=4294967296 bytes is an existing resource limit, not set or increased here. There was no Lean compile, no OOM, and no resource change.
-- Remote new source returned blob 824f0bc39b4f11efd8e3a3e8a94cbac40e326520. Static scan: zero instances of disallowed proof-escape commands; 14 := by forms (includes helper/theorem bodies). Source-only imports still require staging under ImbalancedChen paths on a matching pinned Lake closure.
+- Remote source returned blob e007d29731d0abe6f76e4f100c84155e59741207. Static scan: zero instances of disallowed proof-escape commands; 14 := by forms (includes helper/theorem bodies). Source-only imports still require staging under ImbalancedChen paths on a matching pinned Lake closure.
 - Independent Python toy finite signed-Fubini check: 12,000 seeded cases, 4,883 with nonzero total, 21,142 counted direct terms, zero left/right mismatches. This tests elementary finite quotient regrouping, NOT the actual producer or any Lean proof body. First diagnostic attempt raised a sample-size ValueError; corrected sampling and reran successfully. No claim of real-event evaluation.
 - Levels: SOURCE_ONLY / UNEVALUATED / UNCOMPILED. KERNEL_REPLAYED: NO. Transitive axioms checked: NO. Independent review: NO. Saved87 certificate replay: NO. No extra CI, no Codex, no dependency pin changes.
 
