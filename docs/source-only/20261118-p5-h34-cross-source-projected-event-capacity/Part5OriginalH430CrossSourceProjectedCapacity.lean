@@ -22,6 +22,7 @@ namespace ImbalancedChen.Part5OriginalH430CrossSourceProjectedCapacity
 noncomputable section
 open scoped Classical BigOperators
 open Part5OriginalH430TaggedArithmeticReceivers
+open Part5OriginalH430ReceiverEventFibreWeights
 open Part5OriginalH430PhysicalSelectedRootQFibres
 open Part5OriginalH430ActualRetainedPrefixFibres
 open Part5OriginalH430FirstCompatibleFrontierFactor
@@ -179,8 +180,7 @@ theorem projected_joint_signed_sum
   simpa [projectedJointFibre] using
     (Finset.sum_union
       (projected_cross_source_receipts_disjoint
-        N n cap precision tau z0 lower hN htau htauhi hn k)
-      (f := w))
+        N n cap precision tau z0 lower hN htau htauhi hn k))
 
 theorem projected_joint_card_partition
     (N n cap precision : ℕ) (tau z0 : ℝ) (lower : Bool)
