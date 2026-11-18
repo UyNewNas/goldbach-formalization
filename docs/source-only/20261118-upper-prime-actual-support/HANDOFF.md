@@ -1,0 +1,11 @@
+# Persistent P1.4 handoff: actual nonzero upper-prime support
+
+Continue from the **freshly read and verified remote HEAD** of branch `chatgpt/p1-full87-upper-prime-actual-support-20261118-2206` and this packet's `REPORT.md`, `REGISTRY.json`, `INPUT_BOUNDARY.md` and entire `P4AOriginalFull87UpperPrimeActualSupport.lean`. Baseline was `4b1deb6de2cb8d21b043f13801924ec25fd3d6f4` from `chatgpt/p1-full87-stopped-global-prime-ledger-20261118-2110`; this is not permission to reset a newer continuation. The proof file commit is `29fd32e53cb9c30be4813588eaa51a0c943b87cc`; remote source blob `7ec0f1d7d4f2dbefc7d2c1ae87c19e4d2495f5dd`.
+
+**Genuine new candidate:** nonzero actual global signed prime coefficient => a REAL admitted fifthExclusive occurrence under the original receiver-generated sharedRankFour tree, a sixth p occurrence, the original Rosser quotient a and full q=N-P, strict 2P<N and X<q, and exact fifth-power filter X^5<a^5*b5^6. This is necessary support only, not smooth PP admissibility, an H_N bound or converse. It leaves all signs and copies unchanged.
+
+**Next specific mathematical work:** classify original quotient-support changes across smooth prime log-coordinate cells, with an exact integer arithmetic boundary invoice and no geometrical-zero=>arithmetic-zero shortcut; then provide a rigorous same-rho bound or a legal frozen PP adapter. Or pay the unchanged lower-half three corrections on the same original source. Do not duplicate earlier signed harmonic or low-q weighted Gram invoices. In parallel source-map actual upper producer w lower vs z upper. Check that no equivalent lemma already exists before new source.
+
+**Toolchain:** pinned Lean 4 v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958. Local lean/lake/elan exit 127 and closure absent. Candidate is SOURCE_ONLY, UNEVALUATED, UNCOMPILED. Separate kernel replay, transitive axioms, independent review, saved87 replay missing. No CI, Codex, user machine, tool upgrade, higher resources, main/master changes. c/K frozen.
+
+Preserve [skip ci], task-only independent branch/packet and actual remote evidence. Keep parent P1.4 YELLOW; do not imply H_N improvement.
