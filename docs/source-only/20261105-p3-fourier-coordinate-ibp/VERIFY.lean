@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitChildSliceSmooth
 import ImbalancedChen.P3HBUnsplitDirectRestoration
 import ImbalancedChen.P3HBRestoredSixPolynomialD
 import ImbalancedChen.P3HBRestoredSixCoordinateD
@@ -1341,3 +1342,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD
 #check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD_eq_restored
 #check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD_poly12
+
+-- Discharge the REAL original child-slice regularity using smooth group/trim
+-- and literal owner allocation; registered only, NOT Lean/kernel executed.
+#check ImbalancedChen.P3HBUnsplitChildSliceSmooth.originalChildSliceRegular_of_smooth
+#check ImbalancedChen.P3HBUnsplitChildSliceSmooth.originalUnsplitOrdered_eq_restored_smooth
+#check ImbalancedChen.P3HBUnsplitChildSliceSmooth.sixUnsplitDirectMixedD_eq_restored_smooth
+#check ImbalancedChen.P3HBUnsplitChildSliceSmooth.sixUnsplitDirectMixedD_poly12_smooth
