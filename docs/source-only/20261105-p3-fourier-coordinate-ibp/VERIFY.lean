@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre
 import ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift
 import ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget
 import ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal
@@ -1532,3 +1533,12 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.threeWholeHBAtQ_eq_off_divisors
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.frozenThreeWholeHB_off_divisors
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.frozenThreeWholeSameRho_off_divisors
+
+-- P3.6 literal fixed-product HB occurrence and SAME signed physical rho.
+-- Candidate declarations only: #check targets NOT executed by Lean/kernel.
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.hbPositionalMass
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.hbPositionalMass_norm_le_tau
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.threeWholeHBFixedAtQ
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.threeWholeHBAtQ_eq_fixed
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.sameRhoFixedProductResponse
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.threeWholeHB_sameRho_fixed
