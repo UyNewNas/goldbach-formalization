@@ -23,6 +23,7 @@ noncomputable section
 open MeasureTheory
 open scoped Classical BigOperators
 open P3FourierSubsetExpansion
+open P3U5ChartMixedL1Budget
 open ImbalancedChen.P3HBSmoothThreeWayRatioTwo
 open ImbalancedChen.P3HBSmoothLogTensorRestoration
 open ImbalancedChen.P3HBOriginalGroupCoordinateMixed
@@ -63,17 +64,13 @@ theorem restored_zero_eq_unsplit {g : ℕ}
       unsplitSixLogTensor chi u
   rw [← Finset.mul_sum, ← unsplitSixLogTensor_eq_children chi hchi u]
 
-/-- The maximum derivative order across the literal ORIGINAL finite
-2S Fourier words. This is a fixed dimension-six integer, chosen BEFORE
-the number of HB groups or their physical scales. -/
-def sixDoubledOrder : ℕ :=
-  (Finset.univ : Finset (Finset (Fin 6))).sup
-    (fun S => (doubled S).length)
-
-theorem doubled_length_le_sixDoubledOrder (S : Finset (Fin 6)) :
-    (doubled S).length ≤ sixDoubledOrder := by
-  unfold sixDoubledOrder
-  exact Finset.le_sup (Finset.mem_univ S)
+/-- The pinned, actual doubled S definition repeats each selected coordinate
+in adjacent ordered positions; its length never exceeds 2*6=12.
+This is the original Fourier order bound, not a surrogate coordinate set. -/
+theorem doubled_six_length_le_twelve (S : Finset (Fin 6)) :
+    (doubled S).length ≤ 12 := by
+  simpa only [Nat.reduceMul] using
+    (P3U5ChartMixedL1Budget.doubled_length_le S)
 
 /-- The full finite 2S mixed-L1 ledger for the restored original
 six-position tensor. Every repeated coordinate in the actual doubled
@@ -91,7 +88,7 @@ def sixRestoredMixedD {g : ℕ}
 instantiating the existing 729-label integrated theorem separately for
 each literal Fourier doubled word. No target L1 budget is assumed.
 The result has a finite polynomial-in-g RHS with exponent bounded by
-the fixed sixDoubledOrder. This is not yet uniform in a growing m(T). -/
+the fixed 12. This is not yet uniform in a growing m(T). -/
 theorem sixRestoredMixedD_integrable_budget
     (chi eta : ℝ → ℂ)
     (hchi : ContDiff ℝ ⊤ chi) (heta : ContDiff ℝ ⊤ eta)
@@ -120,7 +117,7 @@ theorem sixRestoredMixedD_integrable_budget
   obtain ⟨B, Ceta, C, hB, hCeta, hC, hbase⟩ :=
     originalRestoredWholeDerivative_integrable_polynomial
       chi eta hchi heta hsmall hlarge hpsi hetaSmall hetaLarge
-      sixDoubledOrder
+      12
   refine ⟨B, Ceta, C, hB, hCeta, hC, ?_⟩
   intro g c J hc s hs
   have hS (S : Finset (Fin 6)) :
@@ -139,7 +136,7 @@ theorem sixRestoredMixedD_integrable_budget
               ((2 * Real.log 2) * C) ^ 6)) :=
     hbase g (doubled S).length c J hc s hs
       (fun i : Fin (doubled S).length => (doubled S)[i])
-      (doubled_length_le_sixDoubledOrder S)
+      (doubled_six_length_le_twelve S)
       (fun _ => 0) (fun _ => Nat.zero_le _)
   refine ⟨(fun S => (hS S).1), ?_⟩
   unfold sixRestoredMixedD
