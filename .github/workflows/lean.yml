@@ -44,41 +44,7 @@ jobs:
           test ! -e "$LEAN_ACTION_DIR"
           mv .ci-lean-action "$LEAN_ACTION_DIR"
           mkdir -p "$RUNNER_TEMP/lean-ci" "$RUNNER_TEMP/lean-verification-logs"
-          cat > "$RUNNER_TEMP/lean-ci/run-stage" <<'BASH'
-          #!/usr/bin/env bash
-          set -euo pipefail
-          stage="$1"
-          shift
-          logdir="$RUNNER_TEMP/lean-verification-logs"
-          log="$logdir/$stage.log"
-          started="$(date -u +%FT%TZ)"
-          start_seconds="$(date +%s)"
-          printf 'stage=%s started=%s\n' "$stage" "$started" | tee "$log"
-          finish() {
-            status=$?
-            trap - EXIT
-            set +e
-            finished="$(date -u +%FT%TZ)"
-            elapsed=$(( $(date +%s) - start_seconds ))
-            printf 'stage=%s finished=%s elapsed_seconds=%s exit_code=%s\n' \
-              "$stage" "$finished" "$elapsed" "$status" | tee -a "$log"
-            printf 'stage\tstarted_utc\tfinished_utc\telapsed_seconds\texit_code\n%s\t%s\t%s\t%s\t%s\n' \
-              "$stage" "$started" "$finished" "$elapsed" "$status" > "$logdir/$stage.timing.tsv"
-            printf 'elapsed-seconds=%s\nexit-code=%s\n' "$elapsed" "$status" >> "$GITHUB_OUTPUT"
-            printf -- '- %s: %s seconds; exit code %s\n' "$stage" "$elapsed" "$status" >> "$GITHUB_STEP_SUMMARY"
-            exit "$status"
-          }
-          trap finish EXIT
-          set +e
-          "$@" 2>&1 | tee -a "$log"
-          statuses=("${PIPESTATUS[@]}")
-          set -e
-          # Preserve the tool's failure; fail on a broken logging pipe as well.
-          if (( statuses[0] != 0 )); then
-            exit "${statuses[0]}"
-          fi
-          exit "${statuses[1]}"
-          BASH
+          cp verification/parts/p0/run-stage "$RUNNER_TEMP/lean-ci/run-stage"
           chmod +x "$RUNNER_TEMP/lean-ci/run-stage"
           {
             printf 'project_commit='; git rev-parse HEAD
@@ -92,6 +58,8 @@ jobs:
         run: |
           PYTHONDONTWRITEBYTECODE=1 "$RUNNER_TEMP/lean-ci/run-stage" type-export-regressions \
             python3 -m unittest discover -s verification/parts/p0 -p 'test_type_export_migration.py' -v
+          PYTHONDONTWRITEBYTECODE=1 "$RUNNER_TEMP/lean-ci/run-stage" cleanup-regressions \
+            python3 -m unittest discover -s verification/parts/p0 -p 'test_run_stage.py' -v
       - name: Record physical memory and OS limits for 12 GiB experiment
         run: |
           set -euo pipefail
@@ -157,7 +125,7 @@ jobs:
             ImbalancedChen.Certificates.PairedV2Prefix64
       - name: Recheck ImbalancedChen with bundled Lean 4.33.0-rc1 leanchecker
         id: leanchecker
-        timeout-minutes: 25
+        timeout-minutes: 60
         env:
           LEANCHECKER_INPUT: 'true'
           LEAN4CHECKER_INPUT: 'false'
@@ -173,7 +141,7 @@ jobs:
           '
       - name: Audit ImbalancedChen root declarations and transitive axioms
         id: axiom-audit
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps['leanchecker'].outcome == 'success' }}
         timeout-minutes: 10
         env:
           AXIOM_AUDIT_ROOT: ImbalancedChen
@@ -184,19 +152,19 @@ jobs:
           "$RUNNER_TEMP/lean-ci/run-stage" axiom-audit "$LEAN_ACTION_DIR/scripts/run_axiom_audit.sh"
       - name: Export complete round 3 types and the existing conditional main bridge
         id: round3-types
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps['axiom-audit'].outcome == 'success' }}
         timeout-minutes: 10
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round3-types python3 verification/parts/p0/check_round3_types.py --timeout-seconds 540
       - name: Export complete round 4 types and the existing conditional main bridge
         id: round4-types
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps['round3-types'].outcome == 'success' }}
         timeout-minutes: 25
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round4-types python3 verification/parts/p0/check_round4_types.py --timeout-seconds 1440
       - name: Export complete round 6 historical types and the conditional main bridge
         id: round6-types
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps['round4-types'].outcome == 'success' }}
         timeout-minutes: 25
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round6-types python3 verification/parts/p0/check_round6_types.py --timeout-seconds 1440

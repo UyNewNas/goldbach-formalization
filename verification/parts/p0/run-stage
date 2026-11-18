@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+stage="$1"; shift
+case "$stage" in
+  type-export-regressions|cleanup-regressions) budget=60 ;;
+  install-elan|configure|mathlib-cache) budget=1200 ;;
+  build) budget=10740 ;;
+  round4-targets|axiom-audit) budget=540 ;;
+  leanchecker) budget=3540 ;;
+  round3-types) budget=560 ;;
+  round4-types|round6-types) budget=1460 ;;
+  *) printf 'Unknown supervised stage: %s\n' "$stage" >&2; exit 125 ;;
+esac
+exec python3 "$GITHUB_WORKSPACE/verification/parts/p0/run_stage.py" --timeout "$budget" "$stage" "$@"
