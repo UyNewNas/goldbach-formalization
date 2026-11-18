@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitRealFourierD
 import ImbalancedChen.P3HBUnsplitRealSliceSmooth
 import ImbalancedChen.P3HBUnsplitRealProfile
 import ImbalancedChen.P3HBUnsplitChildSliceSmooth
@@ -1383,3 +1384,12 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realOrderedAxisDeriv_contDiff
 #check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realUnsplitSliceRegular_of_chosen
 #check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realSixUnsplitMixedD_poly12_chosen
+
+-- P3.6 chosen-real shift/update and ACTUAL Fourier derivativeD bridge;
+-- registered only, not executed by Lean/kernel.
+#check ImbalancedChen.P3HBUnsplitRealFourierD.realAxisDeriv_eq_coordinateDeriv
+#check ImbalancedChen.P3HBUnsplitRealFourierD.mixed_eq_realOrdered_of_contDiff
+#check ImbalancedChen.P3HBUnsplitRealFourierD.chosen_real_mixed_eq_ordered
+#check ImbalancedChen.P3HBUnsplitRealFourierD.realSixUnsplitMixedD_eq_pointD
+#check ImbalancedChen.P3HBUnsplitRealFourierD.realSixUnsplitMixedD_eq_actualFourierD
+#check ImbalancedChen.P3HBUnsplitRealFourierD.exists_chosen_original_six_fourierD_poly12
