@@ -1,4 +1,3 @@
-import ImbalancedChen.P4AOriginalFull87StoppedQ0FactorSupportSix
 import ImbalancedChen.P4AOriginalFull87StoppedCentreExceptionFibre
 import ImbalancedChen.P4AOriginalFull87FifthRankPowerTail
 import ImbalancedChen.P4AOriginalFull87OrderedSixthSuffix
@@ -50,7 +49,7 @@ private theorem rough_cutoff_pow_length_le_product
     (xs : List ℕ) (w : ℝ) (hw : 0 ≤ w)
     (hlo : ∀ r ∈ xs, w ≤ (r : ℝ)) :
     w ^ xs.length ≤ (xs.prod : ℝ) := by
-  induction xs with
+  induction xs generalizing hlo with
   | nil =>
       simp
   | cons r rs ih =>
