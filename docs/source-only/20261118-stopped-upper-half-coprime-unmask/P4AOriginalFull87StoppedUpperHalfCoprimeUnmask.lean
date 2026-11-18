@@ -71,8 +71,8 @@ private theorem original_rough_six_product_coprime
 /-- A FULL original Rosser-rough modulus, with no discarded a or sixth
 occurrence, is coprime to the Goldbach centre. -/
 theorem original_full_modulus_coprime_target
-    (N cap : ℕ) (w z : ℝ) (pre : List ℕ) (p a : ℕ)
-    (ha : a ∈ largeFifthRosserIndices N cap w 0 pre)
+    (N cap : ℕ) (w z : ℝ) (X : ℕ) (pre : List ℕ) (p a : ℕ)
+    (ha : a ∈ largeFifthRosserIndices N cap w X pre)
     (hrough : ∀ r ∈ p :: pre, r ∈ roughPrimeUniverse N cap w z) :
     Nat.Coprime (a * (p :: pre).prod) N := by
   have hSupport : a ∈ actualSmallRosserSupport N cap w :=
