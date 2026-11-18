@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre
 import ImbalancedChen.P3HBChosenSixSameRhoCutoff
 import ImbalancedChen.P3HBUnsplitFrechetFourierAdmission
 import ImbalancedChen.P3HBUnsplitRealCompactIntegrable
@@ -1435,3 +1436,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBChosenSixSameRhoCutoff.chosen_six_real_truncated_inverse_error
 #check ImbalancedChen.P3HBChosenSixSameRhoCutoff.exists_chosen_six_fourier_tail_poly12
 #check ImbalancedChen.P3HBChosenSixSameRhoCutoff.exists_chosen_six_same_rho_epsilon_cutoff
+
+-- Actual original sorted-prime complete-product=N exceptional singleton.
+-- SOURCE_ONLY: registered for future pinned-toolchain Lean run, not executed.
+#check ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre.sorted_empty_word_singleton
+#check ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre.sorted_target_exact_fibre
+#check ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre.exact_target_N_signed_mass
+#check ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre.sorted_target_exact_fibre_empty_of_marked_ne
+#check ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre.weightedSortedPP_target_off_if_marked_ne
