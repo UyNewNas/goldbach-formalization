@@ -24,6 +24,7 @@ noncomputable section
 open MeasureTheory
 open scoped Classical BigOperators FourierTransform RealInnerProductSpace
 open ImbalancedChen.P3FourierDPointwise
+open ImbalancedChen.P3FourierSubsetExpansion
 open ImbalancedChen.P3FourierPointCoordinateBridge
 open ImbalancedChen.P3FourierRealComplex
 open ImbalancedChen.P3FourierCoordinateIBP
