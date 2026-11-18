@@ -57,6 +57,9 @@ elif mode=='verify':
     assert by_name['ImbalancedChen.actualSmallRosserMinusDensity.eq_1']['module'] == 'ImbalancedChen.ActualSmallRosserDensity', 'actualSmallRosserMinusDensity equation canonical owner mismatch'
     assert by_name['ImbalancedChen.actualSmallRosserPlusDensity.eq_1']['module'] == 'ImbalancedChen.ActualSmallRosserDensity', 'actualSmallRosserPlusDensity equation canonical owner mismatch'
     assert by_name['ImbalancedChen.physicalDensitySum.eq_1']['module'] == 'ImbalancedChen.PhysicalUpperWeightBridge', 'physicalDensitySum equation canonical owner mismatch'
+    assert by_name['ImbalancedChen.ordinaryParityRosserPolicy.eq_1']['module'] == 'ImbalancedChen.FinitePrimeGeometryCore', 'ordinaryParityRosserPolicy equation canonical owner mismatch'
+    assert by_name['ImbalancedChen.ancestorFrozenPolicy.eq_1']['module'] == 'ImbalancedChen.FinitePrimeGeometryCore', 'ancestorFrozenPolicy equation canonical owner mismatch'
+    assert by_name['ImbalancedChen.frozenParityRosserPolicy.eq_1']['module'] == 'ImbalancedChen.FinitePrimeGeometryCore', 'frozenParityRosserPolicy equation canonical owner mismatch'
     assert set(manifest['proof_api_new_equations']) <= set(by_name), 'Computation equation missing'
     for preserved in manifest['preserved_public_types']:
         assert preserved['name'] in by_name, 'Original public definition missing'
