@@ -1,0 +1,7 @@
+# Input boundary — P1.4 active-Rosser long upper-half
+
+INTERNAL (new candidate): actual upper Rosser beta nonzero at the ORIGINAL exact integer quotient a=(N-P)/b forces a in the genuine small Rosser support and (a:ℝ)<L, by existing `ImbalancedChen.ActualSmallRosser.actualSmallRosserPlus_active`. With b=(p::pre).prod and exact a*b=N-P, original upper-half 2P<N implies N<2*L*b. Use an **upper-bound carrier**, not a source mask; retain all original coefficient signs, integer quotient, fifth-power filter, strict high-q and original occurrence list. Active-card invoice replaces old lattice invoice; no double payment. The local exact-zero condition 2*L*b<=N remains CONDITIONAL until producer instances are checked.
+
+EXTERNAL INPUT registered and NOT called: signed physical PP, frozen `eq:current-PP`, `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Precise requirement: same signed physical rho_N(q), fixed smooth labelled-prime product W_N with Euler-derivative/product control and no arbitrary Rosser quotient or lattice filters; exact coprime X_W^(q)/phi(q), error O_{A,W}(N(log N)^(-A)). Original lambda, Q/B, H_N and fixed-parameters-before-large-even-N. No callsite in this packet, status REGISTERED_NOT_PROVED_NOT_CALLED.
+
+No PNT/Mertens/BV/spectral foundational work. No producer X upper or z/rho0 mapping, no smooth PP extension, no asymptotic H_N payment, no reserve payment. Toolchain and c,K pins unchanged. SOURCE_ONLY / UNEVALUATED / UNCOMPILED.
