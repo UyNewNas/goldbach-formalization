@@ -27,6 +27,7 @@ open MeasureTheory
 open scoped Classical BigOperators
 open ImbalancedChen.P3HBSmoothThreeWayRatioTwo
 open ImbalancedChen.P3HBRestoredSixCoordinateD
+open ImbalancedChen.P3HBOriginalRestoredTensorL1
 open ImbalancedChen.P3U5ChartMixedL1Budget
 
 /-- The finite true six-axis 2S ledger has a single uniform polynomial
