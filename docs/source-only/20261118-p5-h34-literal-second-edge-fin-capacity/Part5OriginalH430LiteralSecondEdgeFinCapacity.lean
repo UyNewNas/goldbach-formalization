@@ -74,8 +74,9 @@ theorem literal_second_edge_fin_witness
     (l : Index N n root tau p g)
     (hl : l ∈ literalSecondEdgeFinPositions N n root tau p g k) :
     ∃ e ∈ (levelOccurrence l).path, edgePrimes e = k.2.2 := by
-  exact (mem_literal_second_edge_fin_positions_iff
-    N n root tau p g k l).mp hl |>.2.2.2
+  rcases (mem_literal_second_edge_fin_positions_iff
+    N n root tau p g k l).mp hl with ⟨_, _, _, hpath⟩
+  exact hpath
 
 /-- A numeric same-key match cannot manufacture a request position
 for an incompatible physical Q. -/
