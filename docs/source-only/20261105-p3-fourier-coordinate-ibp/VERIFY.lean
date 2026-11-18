@@ -1363,3 +1363,15 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_im_zero
 #check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_re_eq_real
 #check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_norm_le_one
+
+-- P3.6 real actual ordered derivatives and complete 64-word 2S ledger.
+-- REGISTERED ONLY; these #check declarations have not been executed by Lean.
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.realAxisDeriv
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.realOrderedAxisDeriv
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.actualAxisDeriv_ofReal
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.originalOrderedAxisDeriv_ofReal
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.RealUnsplitSliceRegular
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.chosen_originalOrdered_eq_real
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD_eq_complex
+#check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD_poly12_of_regular
