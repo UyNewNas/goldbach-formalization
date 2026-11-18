@@ -1,0 +1,11 @@
+# P1.4 input boundary — actual stopped upper-third centre cancellation
+
+**Proved only as Lean candidate bodies, not elaborated.** The original `actualFifthSixthWithoutBoth ... (receiverTest N)` population is fixed on `sharedRankFour`. `actual_event_joined_history_original_rough` and real `actualSmallRosserSupport` imply complete physical q=a*(p::selectedAfter).prod is coprime to N. On the ORIGINAL strict N<3q high-third region, the preceding theorem `centre_upper_third_zero_mod_four_two` applies termwise for nonprime N%4=2. The unchanged `highQTest X` still imposes X<q. The PLUS-beta summands, signed masses, actual occurrence List and their multiplicities remain untouched. This establishes a zero actual stopped high-third **centre** component without identifying its weight with fixed-policy physical rho.
+
+**Boundary**: Closed complementary band is 3q<=N; N%4=0 still has exceptional q0=(N-2)/2. Neither centre low-third nor prime/primitive/modulus-prime remainder is small by this argument. No saved87 numeric gain, outside invoice, compiler/density reserve, physical-to-stopped coefficient identification, PP admission or full87 node closure follows.
+
+**External analytic input — REGISTERED_NOT_PROVED_NOT_CALLED**. Frozen signed sharp-prime PP in `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` (blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`), labels `eq:current-PP`, `lem:current-sharp-prime`, `eq:current-sharp-pi`. Premises include full squarefree target-coprime modulus q<=N^theta with fixed theta<1, original signed physical rho, smooth-singleton, Fourier/geometric/endpoint conditions and original H_N normalization. Callsite NONE. No large external analytic foundation is implemented.
+
+**Frozen tools**: Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958. c=49044063/25000000, K=8452171/1250000.
+
+**Verification**: SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Local lean/lake/elan --version exit 127; no pinned build, kernel replay, transitive axiom check, independent review, or saved87 replay. Static scans and finite integer tests do not upgrade verification.
