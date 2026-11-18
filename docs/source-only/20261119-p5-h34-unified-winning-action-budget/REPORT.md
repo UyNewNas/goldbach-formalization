@@ -5,7 +5,7 @@ Branch: `chatgpt/p5-h34-full-tagged-actual-fin-20261112`.
 Verified incoming HEAD: `4e3cd88514f6ec40ca7068694405478487cc54eb`.
 Candidate mathematical source commit: `59744a77c7f718cc489201226129c36204dc8030` (the second of two source edits).
 Final source blob: `edb7c04a3e6bdf72d2b32f712c1fa498abc00a08`.
-Module: `Part5OriginalH430UnifiedWinningActionBudget.lean` (150 lines, one candidate theorem).
+Module: `Part5OriginalH430UnifiedWinningActionBudget.lean` (149 nonempty source lines, one candidate theorem).
 Frozen manuscript: `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`.
 Pinned Lean `v4.33.0-rc1`; Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
 
