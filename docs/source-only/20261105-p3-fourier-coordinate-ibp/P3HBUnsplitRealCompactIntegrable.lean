@@ -157,10 +157,12 @@ theorem chosen_real_ordered_integrable {g : ℕ}
     (s : ℝ) (word : List (Fin 6)) :
     Integrable (realOrderedAxisDeriv word
       (realSixUnsplitWeight c J s)) := by
-  exact (realOrderedAxisDeriv_contDiff _
-    (realSixUnsplitWeight_contDiff c J s) word).continuous
-    |>.integrable_of_hasCompactSupport
-      (chosen_real_ordered_hasCompactSupport c J s word)
+  have hcont : Continuous (realOrderedAxisDeriv word
+      (realSixUnsplitWeight c J s)) :=
+    (realOrderedAxisDeriv_contDiff _
+      (realSixUnsplitWeight_contDiff c J s) word).continuous
+  exact hcont.integrable_of_hasCompactSupport
+    (chosen_real_ordered_hasCompactSupport c J s word)
 
 /-- All 64 TRUE doubled-coordinate Fourier L1 integrability
 obligations for the fixed original six-position smooth source.
