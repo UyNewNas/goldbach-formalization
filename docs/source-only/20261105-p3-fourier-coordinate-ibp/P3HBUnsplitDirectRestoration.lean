@@ -182,5 +182,67 @@ theorem sixUnsplitDirectMixedD_eq_restored {g : ℕ}
       (originalUnsplitOrdered_eq_restored chi eta hchi c J s
         hregular (fun i : Fin (doubled S).length => (doubled S)[i]) u))
 
+
+/-- On precisely the explicit regularity domain, the DIRECT derivative
+of the un-split original grouped weight inherits the genuine prior
+degree-12 six-slot L1 budget. It is not assumed as an input. The cutoffs
+are fixed before the number g and actual positive physical scales.
+This still requires proving the concrete smooth slices regular and
+identifying all frozen physical U5 / HB-hat families; no PP is claimed. -/
+theorem sixUnsplitDirectMixedD_poly12
+    (chi eta : ℝ → ℂ)
+    (hchi : ContDiff ℝ ⊤ chi) (heta : ContDiff ℝ ⊤ eta)
+    (hsmall : ∀ t : ℝ, t ≤ 1 → chi t = 1)
+    (hlarge : ∀ t : ℝ, 2 ≤ t → chi t = 0)
+    (hpsi : ∀ t : ℝ, ‖chi t - chi (2 * t)‖ ≤ 1)
+    (hetaSmall : ∀ t : ℝ, t ≤ 1 → eta t = 0)
+    (hetaLarge : ∀ t : ℝ, 2 ≤ t → eta t = 1) :
+    ∃ Cpoly : ℝ, 0 ≤ Cpoly ∧
+      ∀ (g : ℕ) (c : Fin g → ℝ)
+        (J : Fin g → Finset (Fin 6)), (∀ j, 0 < c j) →
+        ∀ (s : ℝ), 0 < s →
+          OriginalChildSliceRegular chi eta c J s →
+          (∀ S : Finset (Fin 6),
+            Integrable (fun u : Fin 6 → ℝ =>
+              ‖originalOrderedAxisDeriv (doubled S)
+                (originalSixUnsplitWeight chi eta c J s) u‖)) ∧
+          sixUnsplitDirectMixedD chi eta c J s ≤
+            Cpoly * (((g : ℝ) + 1) ^ 12) := by
+  classical
+  obtain ⟨Cpoly, hCpoly, hbase⟩ :=
+    sixRestoredMixedD_poly12 chi eta hchi heta
+      hsmall hlarge hpsi hetaSmall hetaLarge
+  refine ⟨Cpoly, hCpoly, ?_⟩
+  intro g c J hc s hs hregular
+  obtain ⟨hint, hbound⟩ := hbase g c J hc s hs
+  have hpoint (S : Finset (Fin 6)) (u : Fin 6 → ℝ) :
+      originalOrderedAxisDeriv (doubled S)
+        (originalSixUnsplitWeight chi eta c J s) u =
+      originalRestoredWholeDerivative chi eta c J s (fun _ => 0)
+        (fun i : Fin (doubled S).length => (doubled S)[i]) u := by
+    have hword :
+        List.ofFn (fun i : Fin (doubled S).length => (doubled S)[i]) =
+          doubled S := by simp
+    simpa only [hword] using
+      (originalUnsplitOrdered_eq_restored chi eta hchi c J s hregular
+        (fun i : Fin (doubled S).length => (doubled S)[i]) u)
+  refine ⟨?_, ?_⟩
+  · intro S
+    have heq :
+        (fun u : Fin 6 → ℝ =>
+          ‖originalOrderedAxisDeriv (doubled S)
+            (originalSixUnsplitWeight chi eta c J s) u‖) =
+        (fun u : Fin 6 → ℝ =>
+          ‖originalRestoredWholeDerivative chi eta c J s
+            (fun _ => 0)
+            (fun i : Fin (doubled S).length => (doubled S)[i]) u‖) := by
+      funext u
+      exact congrArg norm (hpoint S u)
+    rw [heq]
+    exact hint S
+  · rw [sixUnsplitDirectMixedD_eq_restored chi eta hchi c J s hregular]
+    exact hbound
+
+
 end
 end ImbalancedChen.P3HBUnsplitDirectRestoration
