@@ -1,0 +1,9 @@
+# Frozen input boundary — actual live-z long-prime window
+
+Manuscript pinned: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Original physical upper endpoint rho0=19/96; do not replace rough lower endpoint w by N^rho0. Original roughPrimeUniverse source blob 83eed818d7e7330ddcf6bcff790a93c884a1263c has p<z strictly. The actual fifthExclusive source, combined original history+tail Sublist, full beta and sixth occurrence list are preserved.
+
+In-scope candidate: nonzero original LONG fibre implies 2P<N, N-X*p<=P, X<N-P, p<z and N<2Xp<2Xz. Thus global X,z endpoint control 2*(X:R)*z<=N makes actual fifth long List zero and preserves short ledger. This is conditional; neither a true producer X upper bound nor actual z=N^rho0 binding has been supplied. In contrast, actual long-tail invoice hX is N^(3/5)<=X, NOT X<=N^(3/5). No quantitative H_N saving, no new source type and no incorrect parameter substitution.
+
+External frozen signed PP: REGISTERED_NOT_PROVED_NOT_CALLED. Source: manuscript eq:current-PP, same physical signed rho_N(q), original labelled prime support, exact coprime X_W^(q)/phi(q), O_{A,W}(N(log N)^(-A)) under fixed smooth weights and derivative/product premises, without extra arithmetic filters. Normalization original lambda, Q/B, H_N; no callsite. The short term still has actualSmallRosserSupport((N-P)/(p*b5)), a discrete arithmetic mask; this is not a smooth PP weight. No external PNT/Mertens/BV/spectral work.
+
+Outstanding internal obligations: actual X,z fixed-parameter source linkage or exact long-prime-window signed payment; same-rho small-Rosser PP adapter, primitive/modulus-prime/centre, original continuation/integral, full87 saved geometry, RAW/BOTH/rank9/changed/tagged, both independent reserves. Proofs not elaborated/kernellized; no hidden axioms or manual escape.
