@@ -40,3 +40,10 @@ No actual Lean/Lake success, kernel replay, transitive axiom audit, finite certi
 4. Close strict-prime Buchstab/retention, correct seed/base/fixed/switched/floor CLOSED-CELL induction, same-rho/PP consumers, native-history, integral–Theta–count, and one common 430+11 causal refinement.
 
 FULL h34 manuscript-internal proof is NOT closed. Next concrete action: bind the canonical least-eligible divisor to the actual rank-two historical frontier or exhibit a precise mismatch and account for it; restore fixed import staging and compile.
+
+## Confirmed source commit and remote readback
+
+- Mathematical source commit: 271e2fdd66ca2c677545ba4e25a8f666d133285f.
+- Lean source Git blob: 82f06caa534a6d6f1bb99c0f6dcbbc2e0d19688e.
+- Remote source content reread matched exactly. Four-file source commit was checked; this does not constitute Lean elaboration.
+- This documentation commit advances the branch only to persist the verified SHA, not to add a new theorem.
