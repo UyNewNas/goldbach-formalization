@@ -38,6 +38,9 @@ open ImbalancedChen.P3HBWeightedAxisLeibniz
 open ImbalancedChen.P3HBWeightedTwoAxisLeibniz
 open ImbalancedChen.P3HBOriginalGroupLeibnizAllocation
 open ImbalancedChen.P3HBOriginalWholeChildAllOrder
+open ImbalancedChen.P3HBOriginalRestoredTensorL1
+open ImbalancedChen.P3HBRestoredSixCoordinateD
+open ImbalancedChen.P3U5ChartMixedL1Budget
 open ImbalancedChen.P3HBUnsplitDirectRestoration
 
 /-- The literal owner term is differentiable along every actual
