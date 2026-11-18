@@ -29,6 +29,7 @@ open ImbalancedChen.P3HBOriginalGroupCoordinateMixed
 open ImbalancedChen.P3HBExplicitSmoothCutoffs
 open ImbalancedChen.P3HBUnsplitRealProfile
 open ImbalancedChen.P3HBUnsplitRealOrderedD
+open ImbalancedChen.P3U5ChartMixedL1Budget
 
 /-- The actual finite coordinate sum defining an original HB group is
 C-infinity even if a group incidence set is empty. -/
