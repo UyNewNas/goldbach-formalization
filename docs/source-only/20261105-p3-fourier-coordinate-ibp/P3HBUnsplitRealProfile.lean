@@ -68,8 +68,7 @@ theorem groupFactor_ofReal (c : ℝ) (J : Finset (Fin 6))
   unfold originalGroupDyadicFactor groupDyadicLogProfile realGroupFactor
   dsimp
   rw [chosenChi_real, chosenChi_real]
-  push_cast
-  rfl
+  push_cast <;> rfl
 
 /-- The chosen physical trim is exactly the real trim embedded in C. -/
 theorem fullTrim_ofReal (s : ℝ) (u : Fin 6 → ℝ) :
@@ -92,8 +91,7 @@ theorem sixTensor_ofReal (u : Fin 6 → ℝ) :
     unfold realSlotFactor
     dsimp
     rw [chosenChi_real, chosenChi_real]
-    push_cast
-    rfl
+    push_cast <;> rfl
   calc
     (∏ i : Fin 6, iteratedDeriv 0
       (fun v : ℝ => chosenChi (Real.exp v) -
@@ -129,8 +127,7 @@ theorem unsplit_chosen_ofReal {g : ℕ}
   unfold originalSixUnsplitWeight originalGroupPhysicalTrim
   rw [hgroups, fullTrim_ofReal s u, sixTensor_ofReal u]
   unfold realSixUnsplitWeight
-  push_cast
-  rfl
+  push_cast <;> rfl
 
 /-- Every original group dyadic factor is in [0,1], uniformly in its
 physical scale. -/
