@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget
 import ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal
 import ImbalancedChen.P3ActualMarkedAllSmallPrimeHBTargetSupport
 import ImbalancedChen.P3ActualMarkedTwoAdicHBTargetSupport
@@ -1512,3 +1513,13 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal.realizedTaggedHBAtQ_zero
 #check ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal.frozen_selected_three_realized_atQ_zero
 #check ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal.frozen_selected_three_same_rho_target_zero
+
+-- P3.6 whole Cartesian frozen-group marked product, NOT three isolated tests.
+-- SOURCE_ONLY: registered, not Lean/Lake or kernel executed.
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.prime_box_append_mem
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.three_prime_boxes_whole_mem
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.threeFineRoughAtQ
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.threeFineRoughAtQ_zero
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeAtQ
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeAtQ_zero
+#check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeSameRhoTarget_zero
