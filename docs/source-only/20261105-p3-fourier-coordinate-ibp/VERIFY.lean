@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitRealProfile
 import ImbalancedChen.P3HBUnsplitChildSliceSmooth
 import ImbalancedChen.P3HBUnsplitDirectRestoration
 import ImbalancedChen.P3HBRestoredSixPolynomialD
@@ -1349,3 +1350,16 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitChildSliceSmooth.originalUnsplitOrdered_eq_restored_smooth
 #check ImbalancedChen.P3HBUnsplitChildSliceSmooth.sixUnsplitDirectMixedD_eq_restored_smooth
 #check ImbalancedChen.P3HBUnsplitChildSliceSmooth.sixUnsplitDirectMixedD_poly12_smooth
+
+-- Exact real six-slot HB original W bridge; REGISTERED ONLY (not compiled).
+#check ImbalancedChen.P3HBUnsplitRealProfile.groupFactor_ofReal
+#check ImbalancedChen.P3HBUnsplitRealProfile.fullTrim_ofReal
+#check ImbalancedChen.P3HBUnsplitRealProfile.sixTensor_ofReal
+#check ImbalancedChen.P3HBUnsplitRealProfile.unsplit_chosen_ofReal
+#check ImbalancedChen.P3HBUnsplitRealProfile.realGroupFactor_between
+#check ImbalancedChen.P3HBUnsplitRealProfile.realSlotFactor_between
+#check ImbalancedChen.P3HBUnsplitRealProfile.realFullTrim_between
+#check ImbalancedChen.P3HBUnsplitRealProfile.realSixUnsplitWeight_between
+#check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_im_zero
+#check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_re_eq_real
+#check ImbalancedChen.P3HBUnsplitRealProfile.chosen_unsplit_norm_le_one
