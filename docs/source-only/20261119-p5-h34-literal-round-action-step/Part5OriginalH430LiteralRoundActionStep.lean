@@ -11,7 +11,7 @@ ONLY on the upper table. The proofs below expose the three precise
 inequalities sufficient for a one-round ceiling, and a converse overflow
 witness identifying which un-paid channel must exceed the ceiling.
 No fabricated fourth action, scalar bank owner, arithmetic q/tag licence,
-new threshold, axiom, sorry, or analytic input is introduced.
+new threshold, proof escape, or analytic input is introduced.
 
 A real closed-cell consequence is obtained only if a separate integer
 ceiling and its real cellwise envelope are genuinely supplied. Their
@@ -27,7 +27,6 @@ open scoped Classical BigOperators
 open P2Selected430CausalOccurrenceExporter
 open P2Selected430LiteralActionData (rows)
 open Part5OriginalUpsilon5CausalDictionary (floorValue)
-open Part5OriginalH430FixedReadDictionary (queryCell)
 
 /-- The original offer changes the numerator only by a maximum.
 No symbolic action is added to the literal choice type. -/
