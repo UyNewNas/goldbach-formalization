@@ -177,10 +177,10 @@ theorem sixUnsplitDirectMixedD_eq_restored {g : ℕ}
     have hword :
         List.ofFn (fun i : Fin (doubled S).length => (doubled S)[i]) =
           doubled S := by simp
-    rw [← hword]
-    exact congrArg norm
-      (originalUnsplitOrdered_eq_restored chi eta hchi c J s
-        hregular (fun i : Fin (doubled S).length => (doubled S)[i]) u))
+    simpa only [hword] using
+      (congrArg norm
+        (originalUnsplitOrdered_eq_restored chi eta hchi c J s
+          hregular (fun i : Fin (doubled S).length => (doubled S)[i]) u)))
 
 
 /-- On precisely the explicit regularity domain, the DIRECT derivative
