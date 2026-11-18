@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBChosenSixSameRhoCutoff
 import ImbalancedChen.P3HBUnsplitFrechetFourierAdmission
 import ImbalancedChen.P3HBUnsplitRealCompactIntegrable
 import ImbalancedChen.P3HBUnsplitRealSupport
@@ -1427,3 +1428,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitFrechetFourierAdmission.chosen_original_six_coordinate_fourierIBP
 #check ImbalancedChen.P3HBUnsplitFrechetFourierAdmission.chosen_original_six_physical_product_bound
 #check ImbalancedChen.P3HBUnsplitFrechetFourierAdmission.exists_chosen_original_six_physical_fourier_poly12
+
+-- Original fixed-six Fourier H-box AND true same-integer-rho signed cutoff.
+-- SOURCE_ONLY: #check entries registered; Lean/kernel NOT executed.
+#check ImbalancedChen.P3HBChosenSixSameRhoCutoff.chosen_six_fourier_Hbox_tail
+#check ImbalancedChen.P3HBChosenSixSameRhoCutoff.chosen_six_real_truncated_inverse_error
+#check ImbalancedChen.P3HBChosenSixSameRhoCutoff.exists_chosen_six_fourier_tail_poly12
+#check ImbalancedChen.P3HBChosenSixSameRhoCutoff.exists_chosen_six_same_rho_epsilon_cutoff
