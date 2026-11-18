@@ -32,8 +32,8 @@ def selectedMask : Finset (Fin 8) := {1, 3, 7}
 theorem selectedMask_sum (t : Point) :
     (∑ i ∈ selectedMask, t i) = selectedSum t := by
   change (∑ i ∈ ({1, 3, 7} : Finset (Fin 8)), t i) = t 1 + t 3 + t 7
-  rw [Finset.sum_insert (by decide : (1 : Fin 8) ∉ {3, 7}),
-    Finset.sum_insert (by decide : (3 : Fin 8) ∉ {7}), Finset.sum_singleton]
+  rw [Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({(3 : Fin 8), (7 : Fin 8)} : Finset (Fin 8))),
+    Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({(7 : Fin 8)} : Finset (Fin 8))), Finset.sum_singleton]
   exact (add_assoc _ _ _).symm
 
 theorem selectedMask_bits : (2 ^ 1 + 2 ^ 3 + 2 ^ 7 : ℕ) = 138 :=
