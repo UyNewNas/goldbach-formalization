@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitRealSupport
 import ImbalancedChen.P3HBUnsplitRealFourierD
 import ImbalancedChen.P3HBUnsplitRealSliceSmooth
 import ImbalancedChen.P3HBUnsplitRealProfile
@@ -1393,3 +1394,13 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitRealFourierD.realSixUnsplitMixedD_eq_pointD
 #check ImbalancedChen.P3HBUnsplitRealFourierD.realSixUnsplitMixedD_eq_actualFourierD
 #check ImbalancedChen.P3HBUnsplitRealFourierD.exists_chosen_original_six_fourierD_poly12
+
+-- Literal six-position positional support: register for future locked-toolchain Lean run.
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSlotFactor_zero_of_small
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSlotFactor_zero_of_large
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_zero_of_slot
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_zero_of_small
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_zero_of_large
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_nonzero_axis_bounds
+#check ImbalancedChen.P3HBUnsplitRealSupport.sixDyadicPositionalWindow
+#check ImbalancedChen.P3HBUnsplitRealSupport.realSixUnsplitWeight_support_subset
