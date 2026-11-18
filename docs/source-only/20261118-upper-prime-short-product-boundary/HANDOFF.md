@@ -1,0 +1,7 @@
+# Persistent P1.4 continuation: upper-prime short-product boundary
+
+Continue from VERIFIED remote branch HEAD chatgpt/p1-full87-upper-prime-short-product-boundary-20261118-2310, reading this packet's full Lean, REPORT, REGISTRY and INPUT_BOUNDARY first. Baseline a470d102f49a946f4add15a86ce85892e769682c is navigation, not a reset point. Keep proof work on task-only independent branch. Fixed manuscript/Lean/mathlib/native pins in REGISTRY must not change.
+
+This run's exact candidate: actual fifthExclusive event short region X*p<N-P=a*p*b5 implies fifth-power Rosser filter, so the original upper-prime occurrence splits into short term without the fifth-power mask (still with small-Rosser arithmetic quotient) plus unchanged long original boundary. Summed once over actual fifth signed List. Long term nonzero => N<2*X*p. Zero long ledger under actual all-sixth 2*X*p<=N is conditional only.
+
+NEXT: locate genuine upper producer source X and z (do not confuse lower w with upper rho0), prove correct quantifiers for 2*X*p<=N or pay actual long term. Then address surviving small-Rosser arithmetic quotient PP admission, physical same-rho H_N, low-half 3 errors, ordinary residual integral, saved87 and remaining variants, separate reserves. No H_N claim, no direct frozen PP call. Local lean/lake/elan version checks exit 127, pinned closure absent: SOURCE_ONLY/UNEVALUATED/UNCOMPILED. No CI/Codex/user machine/extra resource or main changes. Parent YELLOW.
