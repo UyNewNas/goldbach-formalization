@@ -20,15 +20,21 @@ namespace ImbalancedChen.P4AOriginalFull87StoppedGlobalPrimeLedger
 noncomputable section
 open scoped Classical BigOperators
 
-open P4AOriginalFull87StoppedUpperHalfPrimeDirect (upperHalfReceiver)
+open P4AOriginalFull87StoppedUpperHalfPrimeDirect
+  (upperHalfReceiver lowerHalfReceiver upperHalfComplementPrime
+   upper_half_receiver_eq_complement_prime
+   actual_stopped_receiver_prime_upper_half_split)
 open P4AOriginalFull87StoppedUpperHalfCoprimeUnmask
   (actual_common_sixth_unmasked_prime_prefix)
 open P4AOriginalFull87PlusBetaPowerFilter
   (largeFifthRosserIndices)
 open P4AOriginalFull87CommonSixthSignedKernel
-  (commonLargeSixthKernel commonSignedEventValue)
+  (commonLargeSixthKernel commonSignedEventValue
+   actual_stopped_difference_eq_common_signed_sixth_kernel)
 open P4AOriginalFull87FifthSignedPrimitive
   (actualFixedSignedFifthTail)
+open P4AOriginalFull87EarlyStopPhysicalGap
+  (rawStopped licensedStopped)
 open P4AOriginalFull87FirstFifthStoppedEvents
   (FifthStoppedEvent)
 open P4AOriginalFull87FifthSixthStoppedEvents
@@ -254,6 +260,53 @@ theorem actual_fixed_stopped_upper_primewise_strict_half
   · simp [hh]
   · simp [hh, actual_stopped_prime_coefficient_zero_outside_half
       delta n e q om N cap w z L X P hh]
+
+/-- Exactly one arithmetic prime-wise upper-half payment and the UNCHANGED
+lower-half receiver bill, for the original receiver-generated event tree.
+There is no additional centre correction or second rounding here. -/
+theorem actual_fixed_stopped_receiver_primewise_and_lower
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z L : ℝ) (X : ℕ) :
+    actualFixedSignedFifthTail delta n e q om N cap w z L X
+        (receiverTest N) =
+      (∑ P ∈ (chenPrimePrefix N).filter (fun P => 2 * P < N),
+        actualStoppedUpperPrimeCoefficient
+          delta n e q om N cap w z L X P) +
+      actualFixedSignedFifthTail delta n e q om N cap w z L X
+        (lowerHalfReceiver N) := by
+  rw [actual_stopped_receiver_prime_upper_half_split]
+  have hsource : upperHalfComplementPrime N = upperHalfReceiver N := by
+    funext d
+    exact (upper_half_receiver_eq_complement_prime N d).symm
+  rw [hsource, actual_fixed_stopped_upper_primewise_strict_half]
+
+/-- The same decomposition after the actual RAW-minus-LICENSED
+physical stopped-difference bridge. One fixed producer, physical
+parameters and policy are carried throughout. This remains exact,
+not an analytic estimate for either right-hand term. -/
+theorem actual_physical_stopped_delta_primewise_and_lower
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z : ℝ)
+    (he : (0 : ℝ) ≤
+      ((P4AOriginalCompleteSixthChronology.data e q om).e : ℝ))
+    (hN : 1 < (N : ℝ))
+    (epsilon : ℝ) (heps : epsilon ≤ (1 / 500 : ℝ))
+    (X : ℕ) (hX : (N : ℝ) ^ (3 / 5 : ℝ) ≤ (X : ℝ)) :
+    rawStopped e q om N cap w z ((N : ℝ) ^ epsilon) X
+        (receiverTest N) -
+      licensedStopped delta n e q om N cap w z
+        ((N : ℝ) ^ epsilon) X (receiverTest N) =
+      (∑ P ∈ (chenPrimePrefix N).filter (fun P => 2 * P < N),
+        actualStoppedUpperPrimeCoefficient
+          delta n e q om N cap w z ((N : ℝ) ^ epsilon) X P) +
+      actualFixedSignedFifthTail
+        delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
+          (lowerHalfReceiver N) := by
+  rw [actual_stopped_difference_eq_common_signed_sixth_kernel
+    delta n e q om N cap w z he hN epsilon heps X hX
+      (receiverTest N)]
+  exact actual_fixed_stopped_receiver_primewise_and_lower
+    delta n e q om N cap w z ((N : ℝ) ^ epsilon) X
 
 end
 end ImbalancedChen.P4AOriginalFull87StoppedGlobalPrimeLedger
