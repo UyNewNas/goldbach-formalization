@@ -3317,3 +3317,5 @@ Consequently, `chosen_original_six_coordinate_fourierIBP` discharges both actual
 
 **Next concrete entry:** (1) isolated fixed-toolchain targeted compile of this file and ancestors and correction of real elaboration errors; (2) uniform source admission for actual growing W_T/U5/HB hats with all labels; (3) Fourier normalized L1/H-box quantitative Fubini transfer, then exact same-rho full physical modulus arithmetic sum and exceptional full product=T payment. P3.6 remains **YELLOW**.
 
+**Post-commit source audit and correction (run41):** Static dependency inspection located `physicalDenom` and `physicalFrequency` in the original `ImbalancedChen.P3FourierSubsetExpansion` namespace. The first source revision omitted the explicit `open` in the new importing module. Added this namespace declaration in commit `fd885605439cfa2befca7abb69eef425f357a35e` ([skip ci]); exact revised proof blob **`4a09883d5c45ec949c4a5dfa0af8582f07415127`**. No theorem statement, original geometry, frequency, or bound changed. This is a source name-resolution repair, **NOT Lean elaboration**. The file and ancestors remain BLUE / UNCOMPILED / KERNEL_UNVERIFIED.
+
