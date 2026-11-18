@@ -3319,3 +3319,35 @@ Consequently, `chosen_original_six_coordinate_fourierIBP` discharges both actual
 
 **Post-commit source audit and correction (run41):** Static dependency inspection located `physicalDenom` and `physicalFrequency` in the original `ImbalancedChen.P3FourierSubsetExpansion` namespace. The first source revision omitted the explicit `open` in the new importing module. Added this namespace declaration in commit `fd885605439cfa2befca7abb69eef425f357a35e` ([skip ci]); exact revised proof blob **`4a09883d5c45ec949c4a5dfa0af8582f07415127`**. No theorem statement, original geometry, frequency, or bound changed. This is a source name-resolution repair, **NOT Lean elaboration**. The file and ancestors remain BLUE / UNCOMPILED / KERNEL_UNVERIFIED.
 
+## P3.6 successor — chosen original six-slot H-box to SAME-rho finite signed cutoff (2026-11-18, run42)
+
+**Verified continuation:** actual head `ed8bd2ce96a83557aaba62dd988bd440c473d4a2`, not historical de582e6. New proof commit **`5b05488e93858cb9361ca6dfebeb9d3cacf7b712`** (`[skip ci]`), path `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBChosenSixSameRhoCutoff.lean`, Git blob **`85a2b3b1a3c14d88f32d3f49fee9d9a0defe1e48`**, 162 physical lines. `VERIFY.lean` imports this new module FIRST and registers its four declarations (`#check` **not executed**), change commit `fed4e52c56a9980413e4eeaec573d1f5e7cb1bec`, blob `dcbe7061c1ace2e236dbceab2be2bf490dc184e3`. Registry update `c0ccd6917010e2b48225bc18629f5329fa87394c`, blob `28fe7b952198a3cc768b6764b3b99d4fb5afd562`. HEAD checked before each write. No concurrent writer detected on these checks.
+
+**Real mathematical increment:** The previous original selected six-slot HB profile had source candidates for C∞, compact support, every iterated complex Fréchet derivative's integrability and actual original derivativeD ≤ Cpoly(g+1)^12. This packet now explicitly instantiates the **previous genuine multidimensional physical-frequency H-box Fourier norm tail** and **pointwise real truncated Fourier inversion** at that very same selected real original group × one complete-product trim × six positional factor function. No independent Fourier-error or integrability hypothesis is introduced. The new `exists_chosen_six_fourier_tail_poly12` yields for H>0 the genuine *Fourier complement integral*
+
+```
+∫_{eta outside original physical box |2π eta|≤H}
+   ‖Fourier(actualMixedFamily W ∅)(eta)‖
+ ≤ 6*Cpoly*(g+1)^12/H.
+```
+
+The new `exists_chosen_six_same_rho_epsilon_cutoff` uses that actual inversion source and the established `signedSource_approximation` for the **original finite complete-modulus signedSource**, with literal Q, arbitrary original source index occurrences, originalProducts, T, original point map, one identical `rho : ℕ → ℝ` used in congruence count and exact coprime mean, and the true `fullModulusMass`:
+
+```
+if 6*Cpoly*(g+1)^12 ≤ eps*H and H>0, then
+  |signedSource(Q,source,rho,weight W,T,originalProducts)
+     -signedSource(Q,source,rho,truncatedW_H,T,originalProducts)|
+     ≤ eps * fullModulusMass(Q,source,rho,coefficient,T,originalProducts).
+```
+
+The proof of the scalar cutoff derives 0≤eps from genuine D≥0 and H>0. It does **not** assume an epsilon error as a premise and does **not** create a new PP axiom. It does not manipulate `fullModulusMass` or deduce that this arithmetic mass is small: the full physical modulus sum, exact coprime mean and **complete product=T** contribution must STILL be paid with the frozen manuscript's true arithmetic bounds. This packet improves the *conditional analytic transfer* into the existing same-integer-rho interface only for the fixed six-position chosen profile, **not** every original W_T/U5/HB hat or growing m(T) source.
+
+**Paper and fixed versions:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), and `paper/source/manuscript-body.tex` original eq `current-PP`. Toolchain `leanprover/lean4:v4.33.0-rc1`; Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. `AGENTS.md` queried at root/docs/docs-source/packet, all unavailable at stated ref. No branch/lockfile/manuscript mixing.
+
+**Actual checks:** source read back from GitHub after creation with exact blob `85a2b3b1a3c14d88f32d3f49fee9d9a0defe1e48`; source-only rough bracket-balance and executable banned-token scan passed (0). `VERIFY.lean` import was prepended to existing import section before `#check`; its four new `#check` entries are *registered not executed*. Independent exact rational scalar cutoff sanity regression `1344/1344` at `/mnt/data/p3run42/check_scalar_cutoff.py` (SHA-256 `fe36ec0c8e21f1ee23fedae35ab8f383ba3737e2f7c784dcfcfeed3b197a0e91`), output SHA-256 `2457995c22922d4316a96d13a7793a4a0236e26ea21d3952e9b0290c9a7d1c73`. This checks only the **scalar inequality** `0≤D≤C(g+1)^12, 6C(g+1)^12≤eps H ⇒ 6D/H≤eps`, not the real signedSource definition or any Lean/analysis claim.
+
+**Compilation:** ran `lake env lean ImbalancedChen/P3HBChosenSixSameRhoCutoff.lean` in available container, exit **127**, `bash: lake: command not found`, log `/mnt/data/p3run42/targeted_lean.log`, SHA-256 `d5a111f2e9e52c08859794fefbd0d466f7f217d8d6fcdf4b0b09fe3230d08d17`. Network DNS also unavailable, and no pinned local toolchain/Mathlib checkout or isolated source-only `ImbalancedChen.*` mapping exists here. **NOT RUN:** Lean elaboration, kernel acceptance, transitive axiom audit, CI, Codex, heavy producer or independent replay. All new and inherited statements remain **BLUE SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED**; zero GREEN nodes.
+
+**External boundary:** `EXTERNAL_INPUTS.json` unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`: only restricted classical medium estimate (M), REGISTER_ONLY_NOT_IMPLEMENTED_NOT_AXIOM. All following are manuscript-INTERNAL and not reclassified as external: all true actual W_T, U5/HB hats, T,m(T) uniform derivative budgets, the true arithmetical `fullModulusMass` bound including complete-product T, causal/whole-box, empty Gamma mothers, all HB words, high rank/enhanced sources, final same-rho PP.
+
+**Next exact entrance:** First obtain the pinned toolchain and dependencies in an isolated environment, map every `docs/source-only` predecessor to literal `ImbalancedChen.*` imports, typecheck this file and transitive SOURCE_ONLY ancestors, fix actual errors before any green. Then prove the literal original T,m(T)-uniform family admission and the complete arithmetic modulus/shifted-divisor moment, treating product=T separately without τ(0); only after this use the analytic `eps * fullModulusMass` term in the full same-rho PP. No other branch or excluded full87 dynamic-parent/history/member node was touched.
