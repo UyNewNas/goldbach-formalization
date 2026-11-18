@@ -1,0 +1,9 @@
+# P1.4 persistent handoff — integer Rosser quotient gap
+
+Verified predecessor: `c83c33f4f9202830bbc48d6299929d212f922949` on `chatgpt/p1-full87-long-prime-active-level-20261119-0310` (compare identical). Do not revert to the historical 9649ab3 navigation SHA. This independent continuation: `chatgpt/p1-full87-upper-active-quotient-gap-20261119-0410`, packet `docs/source-only/20261119-upper-active-quotient-gap/`.
+
+Source: `P4AOriginalFull87UpperActiveQuotientGap.lean` (283 lines; candidate blob `aa005117b166c9949cf5af111aff21f7dcf96c8d`). Exact local proof candidates: original ACTIVE carrier forces b>0; quotient a lies in integer interval `[N/(2*b)+1,ceil(L))`; P->a injective on unchanged carrier; active-card <= truncated gap; original PRIME sum inherits finite gap budget; empty integer band forces each original long fibre zero; conditional exact deletion across original ordered sixth list; fifth signed gap-envelope budget. This does not reduce the already tighter actual-active-card count unless evaluating a convenient numerical upper envelope, and is NOT an H_N payment.
+
+Verification: SOURCE_ONLY / UNEVALUATED / UNCOMPILED; Lean/Lake/elan missing (127), no fixed local import staging. 100,000 deterministic arithmetic constructions with no violation; 1,082 zero-band examples where old 2Lb<=N fails. No actual tree execution or independent mathematical review. No CI/Codex/pin changes/extra resources. Existing memory.max 4GiB unchanged.
+
+Next: instantiate actual producer L,X,z and full b with exact real/original occurrence fields; when integral gap holds, use zero once; elsewhere use old active-card or the new quotient upper envelope (NOT both). Remain honest about PP arithmetic mask, same rho, lower-half primitive/modulus-prime/centre, ordinary integral, full87 actualParent/saved87, RAW/BOTH/changed-tagged, independent reserves. Preserve frozen manuscript/toolchain/c,K. Fetch and compare current remote branch HEAD before any further write.
