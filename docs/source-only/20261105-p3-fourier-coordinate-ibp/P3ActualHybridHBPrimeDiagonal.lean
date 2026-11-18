@@ -2,6 +2,15 @@ import ImbalancedChen.P3ActualSortedMarkedSameRhoNoDiagonal
 import ImbalancedChen.P3ActualEmptyPrimeExceptionalFibre
 
 /-!
+
+IMPORTANT COEFFICIENT SCOPE AUDIT (2026-11-18): the mu of the COMPLETE
+product below is a specialized arithmetic model, NOT the literal HB
+coefficient of the frozen manuscript. The real HB expansion uses products
+of mu_Z on INDIVIDUAL truncated variables, signed binomial constants,
+and a separate log slot. In general mu(3)*mu(3)=1 but mu(9)=0.
+Therefore the five finite identities below must NOT be cited as actual
+full-HB coefficient/exception payment. See the arbitrary occurrence-
+coefficient repair in P3ActualHybridCoefficientFaithfulDiagonal.lean.
 P3.6 — actual fine-prime slots interleaved with ARBITRARY HB integer slots.
 Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes
 @9731290e8f53cffda44129906cde6a965eaa869b
