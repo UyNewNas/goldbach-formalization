@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBRestoredSixPolynomialD
 import ImbalancedChen.P3HBRestoredSixCoordinateD
 import ImbalancedChen.P3HBOriginalWholeDerivativeL1
 import ImbalancedChen.P3HBOriginalRestoredTensorL1
@@ -1324,3 +1325,8 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.doubled_six_length_le_twelve
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.sixRestoredMixedD
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.sixRestoredMixedD_integrable_budget
+
+-- Explicit degree-12 group polynomial and conditional log-budget; SOURCE_ONLY.
+-- These checks are registered but NOT executed by Lean or the kernel.
+#check ImbalancedChen.P3HBRestoredSixPolynomialD.sixRestoredMixedD_poly12
+#check ImbalancedChen.P3HBRestoredSixPolynomialD.sixRestoredMixedD_polylog_of_group_growth
