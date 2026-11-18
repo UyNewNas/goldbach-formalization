@@ -1,0 +1,11 @@
+# P1.4 — input boundary, stopped centre q0 fibre
+
+**New internal finite candidate ONLY:** For nonprime N>=8 and N%4=0, the ORIGINAL complete target-coprime strict upper-third centre AP correction is exactly the singleton at q0=(N-2)/2, with value one there. The proof relies on actual receiverTest-generated fifth/sixth history for full-q coprimality, and preserves actual Rosser PLUS-beta, strict X<q, history, each ordered occurrence and signs. The new q0 coefficient is `actualFixedSignedFifthTail (..., exceptionalCentreFibre N)`, not the pre-existing fixed physical rho coefficient. It is not assumed bounded by 1, small, or even zero.
+
+**Still manuscript-internal and OPEN:** quantitatively estimate the genuine stopped signed q0 coefficient (or prove actual source exclusion), lower-third centre payments, N^theta<q<=N signed high-modulus prime and primitive discrepancy, modulus-prime correction, ordinary residual integral, original actualParent/saved87 and all three outside error invoices, distinct compiler/density reserves and changed/tagged. Never use cap monotonicity for signed gain, never lose occurrence multiplicity, never pay a correction twice.
+
+**External analytic input REGISTERED_NOT_PROVED_NOT_CALLED:** frozen `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, verified blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Source statement: original signed sharp-prime PP `eq:current-PP`, `lem:current-sharp-prime`, `eq:current-sharp-pi`, requires same actual signed physical rho and complete squarefree target-coprime q<=N^theta, fixed theta<1, original smooth-singleton/endpoint and Fourier/geometric conditions at original H_N normalization. No proof implemented or callsite asserted. Outside-source errors remain separately registered.
+
+**Verification:** SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Lean/lake/elan version commands exit 127, pinned dependencies unavailable, no staged imports, no kernel or transitive-axiom check, no independent review. Synthetic integer/rational checks are not Lean checks.
+
+**Fixed:** Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958, c=49044063/25000000, K=8452171/1250000.
