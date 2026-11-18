@@ -201,5 +201,27 @@ theorem chosen_unsplit_im_zero {g : ℕ}
   rw [unsplit_chosen_ofReal]
   simp
 
+
+/-- Pointwise the actual chosen original geometric coefficient has the
+same real value as the explicit real Point 6 function. -/
+theorem chosen_unsplit_re_eq_real {g : ℕ}
+    (c : Fin g → ℝ) (J : Fin g → Finset (Fin 6))
+    (s : ℝ) (u : Fin 6 → ℝ) :
+    (originalSixUnsplitWeight chosenChi chosenEta c J s u).re =
+      realSixUnsplitWeight c J s u := by
+  rw [unsplit_chosen_ofReal]
+  simp
+
+/-- The original selected complex amplitude is bounded by one without
+any g-dependent factor, directly from the REAL nonnegative dyadic split.
+No derivative or integrated bound is inferred from this pointwise fact. -/
+theorem chosen_unsplit_norm_le_one {g : ℕ}
+    (c : Fin g → ℝ) (J : Fin g → Finset (Fin 6))
+    (s : ℝ) (u : Fin 6 → ℝ) :
+    ‖originalSixUnsplitWeight chosenChi chosenEta c J s u‖ ≤ 1 := by
+  rw [unsplit_chosen_ofReal]
+  obtain ⟨h0, h1⟩ := realSixUnsplitWeight_between c J s u
+  simpa only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg h0] using h1
+
 end
 end ImbalancedChen.P3HBUnsplitRealProfile
