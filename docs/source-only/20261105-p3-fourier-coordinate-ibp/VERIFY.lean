@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitDirectRestoration
 import ImbalancedChen.P3HBRestoredSixPolynomialD
 import ImbalancedChen.P3HBRestoredSixCoordinateD
 import ImbalancedChen.P3HBOriginalWholeDerivativeL1
@@ -1330,3 +1331,13 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 -- These checks are registered but NOT executed by Lean or the kernel.
 #check ImbalancedChen.P3HBRestoredSixPolynomialD.sixRestoredMixedD_poly12
 #check ImbalancedChen.P3HBRestoredSixPolynomialD.sixRestoredMixedD_polylog_of_group_growth
+
+-- Original six-slot UNSPLIT direct-vs-signed derivatives and direct mixed D.
+-- These #check lines are REGISTERED ONLY: no Lean/Lake/kernel was run.
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.originalSixUnsplitWeight
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.OriginalChildSliceRegular
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.originalSixUnsplitWeight_eq_children
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.originalUnsplitOrdered_eq_restored
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD_eq_restored
+#check ImbalancedChen.P3HBUnsplitDirectRestoration.sixUnsplitDirectMixedD_poly12
