@@ -80,7 +80,7 @@ theorem actual_second_prefix_witness
   classical
   have hret : hasRetainedOriginalSecond
       N cap precision tau z0 lower z :=
-    (mem_stage_retained_original N cap precision tau z0 lower z).mp hz |>.2.2
+    ((mem_stage_retained_original N cap precision tau z0 lower z).mp hz).2.2
   refine ⟨Nat.find hret, ?_, ?_⟩
   · simp [actualSecondPrefixKey, hret]
   · exact Nat.find_spec hret
