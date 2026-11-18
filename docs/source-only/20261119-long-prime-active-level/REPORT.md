@@ -21,3 +21,6 @@ The active-level zero criterion has NOT been verified for every actual producer 
 
 ## Next concrete work
 At the actual upper producer, bind real `L`, `X`, `z`, full occurrence `b`: split already covered (2Xz\le N) and (2Lb\le N) exact-zero cases once only; elsewhere estimate `W_active` against H_N with same signed physical coefficients and no duplicate reserve charge. Then upper Rosser PP adaptation, lower-half primitive/modulus-prime/centre, ordinary residual integral, actualParent/saved87/RAW/BOTH/changed-tagged, independent compiler and density reserves.
+
+## Additional deterministic arithmetic check
+- Python Fraction arithmetic, 40,000 seeded constructions of exact q=a*b=N-P; 22,183 constructions satisfied 2P<N and a<L. All 22,183 obeyed the derived N<2*L*b, with zero counterexamples. This checks only the algebraic necessary condition, NOT actual prime event generation or Lean elaboration. Static forbidden-proof-token scan of the 265-line candidate Lean source found zero matches (axiom/sorry/admit/native_decide/unsafe); that is not a compilation check.
