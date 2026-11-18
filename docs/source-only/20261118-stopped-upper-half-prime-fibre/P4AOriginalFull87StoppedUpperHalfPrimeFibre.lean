@@ -16,7 +16,7 @@ input, nor a claim that the resulting signed prime invoice is small.
 
 Both strict boundaries X < N-P and 2*P < N are preserved. Each actual
 post-fifth sixth occurrence and the original mass/sign remain intact.
-No external theorem, new axiom, sorry/admit, native_decide or unsafe.
+No external number-theoretic input or proof escape is introduced.
 -/
 
 namespace ImbalancedChen.P4AOriginalFull87StoppedUpperHalfPrimeFibre
