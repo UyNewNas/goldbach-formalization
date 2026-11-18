@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBUnsplitRealSliceSmooth
 import ImbalancedChen.P3HBUnsplitRealProfile
 import ImbalancedChen.P3HBUnsplitChildSliceSmooth
 import ImbalancedChen.P3HBUnsplitDirectRestoration
@@ -1375,3 +1376,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD
 #check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD_eq_complex
 #check ImbalancedChen.P3HBUnsplitRealOrderedD.realSixUnsplitMixedD_poly12_of_regular
+
+-- Genuine source-only C-infinity real-axis regularity discharge and real 64-word budget.
+-- Registered for future Lean run; do not read as kernel validation.
+#check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realSixUnsplitWeight_contDiff
+#check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realOrderedAxisDeriv_contDiff
+#check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realUnsplitSliceRegular_of_chosen
+#check ImbalancedChen.P3HBUnsplitRealSliceSmooth.realSixUnsplitMixedD_poly12_chosen
