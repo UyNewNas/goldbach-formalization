@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift
 import ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget
 import ImbalancedChen.P3ActualFrozenIDMarkedRoughDiagonal
 import ImbalancedChen.P3ActualMarkedAllSmallPrimeHBTargetSupport
@@ -1523,3 +1524,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeAtQ
 #check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeAtQ_zero
 #check ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget.frozenThreeWholeSameRhoTarget_zero
+
+-- P3.6 whole three-Cartesian physical nonzero-shift divisor transport.
+-- SOURCE_ONLY: checks are registered, NOT executed in Lean.
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.threeWholeHBAtQ
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.threeWholeHBOffDivisorsAtQ
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.threeWholeHBAtQ_eq_off_divisors
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.frozenThreeWholeHB_off_divisors
+#check ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift.frozenThreeWholeSameRho_off_divisors
