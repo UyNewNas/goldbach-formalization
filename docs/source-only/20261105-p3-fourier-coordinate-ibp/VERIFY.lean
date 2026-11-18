@@ -1316,12 +1316,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3HBOriginalRestoredTensorL1.originalRestoredWholeDerivative_norm_le_mass
 #check ImbalancedChen.P3HBOriginalRestoredTensorL1.originalRestoredWholeDerivative_integrable_polynomial
 
--- Actual literal doubled-2S, all subsets of Fin 6; checks registered only.
+-- Actual literal adjacent doubled-2S, all subsets of Fin 6; checks registered only.
 -- No Lean/Lake/kernel execution in this packet.
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.unsplitSixLogTensor
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.unsplitSixLogTensor_eq_children
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.restored_zero_eq_unsplit
-#check ImbalancedChen.P3HBRestoredSixCoordinateD.sixDoubledOrder
-#check ImbalancedChen.P3HBRestoredSixCoordinateD.doubled_length_le_sixDoubledOrder
+#check ImbalancedChen.P3HBRestoredSixCoordinateD.doubled_six_length_le_twelve
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.sixRestoredMixedD
 #check ImbalancedChen.P3HBRestoredSixCoordinateD.sixRestoredMixedD_integrable_budget
