@@ -33,3 +33,12 @@ Local execution checked: no `lean`, `lake`, `elan`; no fixed staged import closu
 - Close manuscript-local PP/same-rho, signed Euler/native-history, integral–Theta–count, and one common 430+11 nested causal refinement.
 
 **完整h34稿内证明仍未闭合。**
+
+## Remote commit handoff (actual)
+
+- Previous validated branch HEAD: `9eff133bf7b0d48e0928e2c9a8a232fc1b219a10`.
+- New mathematical source commit: `b92e3f318c3f812a9a915224bef9c279bb678025`.
+- Minimal source proof-term syntax clarification: `1785d66bc0ce0dae178624f7df59be34125a5273`.
+- Verified source blob: `2fb42cbf213e521f2ab83cc08b0ca7e778d0abc3`.
+- These are GitHub source records, **not** successful Lean/Lake elaboration or kernel certification.
+- Next iteration must use the current branch HEAD, not the original 20261105 entry SHA.
