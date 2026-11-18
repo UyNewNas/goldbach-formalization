@@ -149,7 +149,7 @@ theorem actual_event_upper_prime_exchange
             using h
       | licensedOnly =>
           simpa [commonSignedEventValue, upperPrimeFibreEventValue, hk,
-            Finset.sum_neg_distrib] using congrArg Neg.neg h
+            Finset.sum_neg_distrib] using congrArg (fun t : ℝ => -t) h
       | both =>
           simp [commonSignedEventValue, upperPrimeFibreEventValue, hk]
   | sixthFromBoth pre fifth =>
