@@ -1,0 +1,5 @@
+# External boundary — fifth-history integer ceiling prune
+
+Internal-only exact candidate: the ORIGINAL full upper prime fibre has a nonzero fifth-power-filtered PLUS-Rosser quotient a with X^5 < a^5*selectedAfter.prod^6 and a<L. This forces X^5 < (Nat.ceil L-1)^5*selectedAfter.prod^6, yielding a conditional fifth-history-only zero theorem for full fibre and original ordered signed fifth event. No new source mask, new coefficient, geometric zero-to-arithmetic inference, or H_N estimate.
+
+External, REGISTERED_NOT_PROVED_NOT_CALLED: manuscript UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79, eq:current-PP. Frozen signed physical rho_N(q), fixed smooth product of labelled original primes, Euler derivative/product restrictions; weighted congruence sum differs from exact coprime X_W^(q)/phi(q) by O_(A,W)(N*(log N)^(-A)). No extra arithmetic Rosser quotient indicator is licensed. Original N^lambda, Q/B, H_N and fixed parameters before sufficiently large even N. No PP invocation or implementation; no extra axioms or external PNT/Mertens/BV/spectral project.
