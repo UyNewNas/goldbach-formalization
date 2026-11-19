@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualRawActiveLevelTotientCap
 import ImbalancedChen.P3ActualRawPhysicalRhoTotientCap
 import ImbalancedChen.P3ActualSignedPairTotientCap
 import ImbalancedChen.P3ActualPhysicalTotientConvolution
@@ -1642,3 +1643,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actual_raw_pair_coefficient_abs_le_one
 #check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actualRawPhysicalTotientMass
 #check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actual_raw_physical_mass_le_log_caps
+
+-- P3.6: true raw rho nonzero-fibre strict Rosser level;
+-- the displayed small divisor product needs NO cap <= A.
+-- SOURCE_ONLY; none of these #check commands has been executed.
+#check ImbalancedChen.P3ActualRawActiveLevelTotientCap.activeSmallRosserByLevel
+#check ImbalancedChen.P3ActualRawActiveLevelTotientCap.activeRawPhysicalModuli
+#check ImbalancedChen.P3ActualRawActiveLevelTotientCap.active_raw_physical_moduli_subset
+#check ImbalancedChen.P3ActualRawActiveLevelTotientCap.actual_raw_physical_mass_le_active_level_caps
