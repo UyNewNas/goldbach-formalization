@@ -32,8 +32,8 @@ open P4AOriginalFull87OrderedSixthSuffix
   (actual_event_joined_history_original_rough)
 open P4AOriginalFull87RankFourStoppedLocalization (sharedRankFour)
 open P4AOriginalFull87SixthBothInvoice (actualFifthSixthWithoutBoth)
-open P4AOriginalFull87FifthSixthStoppedEvents
-  (FifthStoppedEvent FifthSixthStoppedEvent)
+open P4AOriginalFull87FirstFifthStoppedEvents (FifthStoppedEvent)
+open P4AOriginalFull87FifthSixthStoppedEvents (FifthSixthStoppedEvent)
 open P4AOriginalFull87EighthPrimeMeanLedger (receiverTest)
 
 /-- Image of the *existing* nonzero original prime carrier, with the
