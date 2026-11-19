@@ -1,0 +1,23 @@
+# P2.5: actual compiler coefficient correction
+
+Baseline `b8c5171242e163368ead8427b4a3ed02d3383090` on `chatgpt/p2-saving16-cofinal-20261119-1727`; the commit containing this packet is the new SHA. Status SOURCE_ONLY, UNCOMPILED; KERNEL_REPLAYED=false; transitive axiom check NOT_RUN; independent review NOT_RUN; inherited finite proof bodies UNEVALUATED.
+
+## New candidate statements
+
+`P2Saving16ActualCompilerDifference.lean` gives `actual_product_correction`: for each actual small factor `a` and rough factor `d` in the fixed carriers, the literal ALL/ANY compiled `rho(a*d)` minus the literal raw attached coefficient is exactly zero when the original `changed` predicate is false, and the appropriate actual beta-plus or beta-minus value when it is true. The latter value may itself be zero or negative. The two cases are the actual outer-positive addition and inner-negative removal, with the same small/rough split, N, cap, w, z, tau and L. No sign is assumed for the small beta coefficients.
+
+`actual_weighted_product_correction` retains an arbitrary test `G(a*d)` on the *same full product*, so multiplicity or an occurrence weight is not discarded. `r17_actual_coefficient_at_product` combines that literal correction with the existing R17/historical enlarged-bank signed difference from `b8c5171`: for one actual product and the same physical beta, the compiled R17 eighth coefficient is the R17 sixth raw attachment minus the enlarged historical sixth-to-eighth signed change plus exactly the one changed-cell beta term. `HistoryOnTrim`, `0≤e`, `nu*beta²≤a` and `1<N` are inherited from that transport. It uses the actual `P4AOriginalOrderedThirdActualCoefficient.coefficient`, not a renamed compiler or an unweighted support assertion.
+
+Mathematical deduction: the rough compiler coefficient and raw coefficient are each either 0 or the same Möbius value; upper rounding gives a nonnegative difference, and its existing absolute-value identity shows that the difference is the indicator of the actual changed predicate. Both sign-attached terms therefore share the multiplier selected by the rough Möbius sign, even when one term is zero. Unique small/rough attachment supplies the literal full-product values. No new Q96 gain or `u_c` reserve is paid in this identity.
+
+## Scope and remaining work
+
+This is a pointwise decomposition on the actual small/rough product carrier, not an identification of geometric endpoint corner tests with ALL/ANY. It does not prove that the fourteen original corner/occurrence families enter the same actual fourth-parent frontier with correct multiplicities; nor does it identify the old held-fourteen tree with the later enlarged R17 history. The literal correction must still be summed for the original counting/density consumer under the existing single `u_c` receipt; the plus/minus beta choice cannot be replaced by an always-positive term. PP remains the actual compiled `realPhysicalDistributionError b N T Q rho`, at `0<b<1`, `0<T`, `ceil z≤T^(b/(1+b))`; the particular PP decomposition and proven parameter coverage for this coefficient have not been established.
+
+The formula inherits `P4AFull87TaggedAtomValue.admit`, an existing named Boolean/Prop predicate defining occupied cells. Its use is not Lean's `admit` proof tactic, and no proof placeholder is introduced. The two archived theorem candidates and dependency supersession graph remain uncompiled.
+
+## Verification and inputs
+
+The prior packet, full actual compiler definitions and R17 transport, G4/main84 reviews, and original sign-attachment section were read. Manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, `manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, lines 453–481 matches the registered pin. Fixed project pins remain Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`.
+
+`lean --version` and `lake --version` exit 127: executable absent. Python enumerated 72 admissible positive/negative raw, outer and inner configurations with signed rational beta values; all satisfied the correction formula. This is a finite sanity check, not Lean elaboration, finite archive evaluation, kernel replay or a PP check. A word scan finds the existing named `P4AFull87TaggedAtomValue.admit` predicate only; there is no new axiom, proof tactic `admit`, `sorry`, `native_decide` or `unsafe`. No CI was run. Next: compile the exact pinned staged graph when the existing environment supplies it, then prove the original ordered endpoint occurrence/corner identification and sum the correction under the already-paid same-rho compiler ledger.
