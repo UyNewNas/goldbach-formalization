@@ -1,0 +1,7 @@
+# Persistent P1.4 handoff — reflected nonprime signed room
+
+Last confirmed parent `09f30dcf363c7d5d26b41a59252dde52d661f2f9` (`chatgpt/p1-full87-signed-beta-frozen-global-20261119-1710`). New independent branch `chatgpt/p1-full87-reflected-nonprime-room-20261119-1810`; source in `docs/source-only/20261119-reflected-nonprime-room/P4AOriginalFull87ReflectedNonprimeRoom.lean` (390 lines). See `REGISTRY.json` for frozen versions and status.
+
+New conditional manuscript candidate, on the exact true quotient room: `a` is occupied iff its reflected `N-a*b` is in the original prime prefix and original PLUS beta(a) is nonzero. This handles b=0 via empty interval and preserves all strict gates; the unoccupied signed sum therefore equals the signed original beta over reflected **non-primes**. Lift via original fifth suffix and actual parent to the frozen full signed RAW-minus-LICENSED physical ledger, subtracting lower exactly once. This is a finite identity and does NOT imply the missing complement is negligible; any `o(H_N)` claim still requires genuine signed prime distribution control.
+
+Validation SOURCE_ONLY / UNEVALUATED / UNCOMPILED; lean/lake/elan missing, exit 127; no kernel or independent audit. No main/master writes, CI, Codex or toolchain/resource expansion. Exact new commit SHA and source blob to be verified after GitHub commit/readback. Next is matching-pin elaboration first, then same-rho primitive signed AP/PP authentication and the real absolute/signed invoice payment. P1.4 remains YELLOW.
