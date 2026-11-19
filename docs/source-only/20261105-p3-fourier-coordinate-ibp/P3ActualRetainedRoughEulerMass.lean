@@ -110,6 +110,18 @@ private theorem squarefree_support_mass_le_euler
       positivity
     _ = _ := sum_powerset_prime_weights P
 
+/-- Reusable finite support bound for *either* original first-exit parity.
+The source-specific squarefree and prime-factor support obligations must
+still be proved separately; this is not an analytic Euler product estimate. -/
+theorem squarefree_support_mass_le_explicit_euler
+    (S P : Finset ℕ)
+    (hsq : ∀ b ∈ S, Squarefree b)
+    (hprime : ∀ b ∈ S, b.primeFactors ⊆ P) :
+    (∑ b ∈ S, (Nat.totient b : ℝ)⁻¹) ≤
+      ∏ p ∈ P, (1 + ((p - 1 : ℕ) : ℝ)⁻¹) := by
+  simpa only [invPhiPrime] using
+    squarefree_support_mass_le_euler S P hsq hprime
+
 /-- Finite Euler factor bound on the ACTUAL retained rough first-exit
 source. It is valid for every retention policy, including policies with
 unbounded retained rank. The prime interval and N-coprimality are exact. -/
