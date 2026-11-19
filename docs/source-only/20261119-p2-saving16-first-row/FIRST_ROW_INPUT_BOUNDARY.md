@@ -1,0 +1,5 @@
+# Input boundary
+
+No new external theorem, axiom or goal-equivalent structural field is introduced. This packet consumes the existing literal 14-cell source table and its `sourceCell` binding, the actual eighth trim program and `trim_exact`, the existing canonical-prefix/fine-label same-cell comparison, the literal occupied-fibre scalar, and the existing small/rough attachment. Its geometric hypotheses are a specific actual trimmed-source witness, actual rank and fibre membership, and `0<tau<delta`; they do not assert the desired full compiler or PP conclusion. All dependencies remain SOURCE_ONLY pending an exact staged compilation and transitive-axiom audit.
+
+No PP bound is supplied. The original proof-library joint audit sections 3–9 specify the endpoint rules, unique beta attachment, slot factorial and whole-upper-corner medium-scale conditions. The exact remaining counting input is the actual compiled `realPhysicalDistributionError b N T Q rho` under `0<b<1`, `T>0` and `ceil z≤T^(b/(1+b))`; the packet proves only the first row of the local endpoint geometry, not its full PP coverage.
