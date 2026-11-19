@@ -1,6 +1,6 @@
 # P1.4 — original physical carrier jump invoice (source-only)
 
-Verified baseline: `92c7eacb418daebc6f77a830a9ddbafd8405753f`, upstream weighted-centre candidate blob `9b4970d4c026049911b77a9b0b90d9b2c65bb00f`. Continuation branch: `chatgpt/p1-full87-carrier-global-jump-20261119-2310`.
+Source commit: `8d9d0a4d76cab19bb9495b913e68af41953c3cf3`. Verified baseline: `92c7eacb418daebc6f77a830a9ddbafd8405753f`, upstream weighted-centre candidate blob `9b4970d4c026049911b77a9b0b90d9b2c65bb00f`. Continuation branch: `chatgpt/p1-full87-carrier-global-jump-20261119-2310`.
 
 ## Substantive finite work
 
