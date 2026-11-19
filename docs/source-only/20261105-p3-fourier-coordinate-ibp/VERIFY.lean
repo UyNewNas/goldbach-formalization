@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualIntegerRawSameRhoMean
 import ImbalancedChen.P3ActualRetainedRoughEulerMass
 import ImbalancedChen.P3ActualRawIntegerRhoCast
 import ImbalancedChen.P3ActualRetainedRoughRankCap
@@ -1682,3 +1683,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualRetainedRoughEulerMass.roughEulerMass
 #check ImbalancedChen.P3ActualRetainedRoughEulerMass.actual_retained_rough_totient_mass_le_euler
 #check ImbalancedChen.P3ActualRetainedRoughEulerMass.actual_raw_physical_mass_le_active_level_euler
+
+-- P3.6 integer RAW rho / actual physical Euler / original HB mean: REGISTERED ONLY.
+-- SOURCE_ONLY; each #check still requires Lean elaboration before green status.
+#check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_physical_mass_eq
+#check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_physical_mass_le_euler
+#check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_primitive_mean_le_euler
+#check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_threeHB_mean_le_euler
