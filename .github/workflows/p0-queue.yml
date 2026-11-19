@@ -28,6 +28,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
+      - name: Check standalone compiler memory and runtime regressions
+        run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s verification/parts/p0 -p 'test_*.py' -v
       - name: Check out pinned lean-action setup
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

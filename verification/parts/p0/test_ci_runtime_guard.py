@@ -80,6 +80,7 @@ class GuardTests(unittest.TestCase):
         for name in ('lakefile.toml', 'lake-manifest.json'):
             (self.root / name).write_text('{}\n')
         env = {k: v for k, v in os.environ.items() if k not in guard.AMBIGUOUS_ENV}
+        env.pop('P0_LEAN_MEMORY_MB', None)
         env.update(LEAN_NUM_THREADS='2', RUNNER_TEMP=str(self.runner),
                    FAKE_EVENTS=str(self.base / 'events.jsonl'), FAKE_ACTIVE=str(self.base / 'active.lock'))
         self.env = patch.dict(os.environ, env, clear=True); self.env.start(); self.addCleanup(self.env.stop)
@@ -100,7 +101,7 @@ class GuardTests(unittest.TestCase):
         self.run_tool('lean', '-t', '99', '-j8', '-M9000', '--threads=16',
                       '--trust', '5', '--memory=9999', '-o', 'x.olean', 'X.lean')
         cmd = self.records()[-1]['command']
-        self.assertEqual(cmd[1:], ['-t0','-j2','-M4096','-o','x.olean','X.lean'])
+        self.assertEqual(cmd[1:], ['-t0','-j2','-M12288','-o','x.olean','X.lean'])
         self.assertNotIn('-DwarningAsError=true', cmd)
         self.run_tool('lean', '-DwarningAsError=true', 'Audit.lean')
         self.assertIn('warningAsError=true', self.records()[-1]['command'])
@@ -110,8 +111,38 @@ class GuardTests(unittest.TestCase):
         self.run_tool('lean', '-qt5', '-j', '9', '-M8192', '--trust=9',
                       '--timeout=30', '-T40', '-DmaxRecDepth=1000', '-o', '-j9.olean', 'X.lean')
         self.assertEqual(self.records()[-1]['command'][1:],
-                         ['-t0','-j2','-M4096','-q','--timeout=30','-T','40',
+                         ['-t0','-j2','-M12288','-q','--timeout=30','-T','40',
                           '-D','maxRecDepth=1000','-o','-j9.olean','X.lean'])
+
+    def test_larger_memory_configuration_reaches_compiler_and_audit(self):
+        runner = self.base / 'larger-runner'
+        runner.mkdir()
+        env = {k: v for k, v in os.environ.items() if k not in guard.AMBIGUOUS_ENV}
+        env['P0_LEAN_MEMORY_MB'] = '16384'
+        with patch.dict(os.environ, env, clear=True):
+            state = guard.prepare(self.root, runner, runner / 'evidence',
+                                  self.realbin, self.base / 'fake-action', verify_action=False)
+            os.environ.update(state['environment'])
+            os.environ['PATH'] = state['shadow'] + '/bin:' + os.environ['PATH']
+            subprocess.run([state['shadow'] + '/bin/lean', '--memory=4096', 'X.lean'],
+                           cwd=self.root, check=True, timeout=10)
+            record = json.loads(Path(state['log']).read_text().splitlines()[-1])
+            self.assertEqual(record['command'][1:], ['-t0', '-j2', '-M16384', 'X.lean'])
+            self.assertEqual(state['lean_memory_mb'], 16384)
+            self.assertEqual(guard.audit(Path(os.environ['P0_CI_GUARD_STATE']))['status'],
+                             'PASS_RUNTIME_GUARD_ONLY')
+
+    def test_low_or_invalid_memory_rejected_before_runtime_created(self):
+        for value in ['4096', '0', '-1', '', '12GiB', '12288.0']:
+            with self.subTest(value=value):
+                runner = self.base / ('invalid-' + str(len(value)) + '-' + value.replace('/', '_'))
+                env = {k: v for k, v in os.environ.items() if k not in guard.AMBIGUOUS_ENV}
+                env['P0_LEAN_MEMORY_MB'] = value
+                with patch.dict(os.environ, env, clear=True):
+                    with self.assertRaisesRegex((ValueError, RuntimeError), 'P0_LEAN_MEMORY_MB'):
+                        guard.prepare(self.root, runner, runner / 'evidence',
+                                      self.realbin, self.base / 'fake-action', verify_action=False)
+                self.assertFalse((runner / 'p0-ci-shadow-toolchain').exists())
 
     def test_malformed_or_abbreviated_resources_fail_closed(self):
         for args in [('-j',), ('-M', 'X.lean'), ('--thre=8',), ('-tbad',), ('--tru=1',), ('-M=9999',)]:

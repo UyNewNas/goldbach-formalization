@@ -3,19 +3,25 @@
 Does not build the project root or any Goldbach theorem. P0 owns all execution.
 """
 from pathlib import Path
-import datetime, fcntl, hashlib, json, os, re, signal, subprocess, sys, time
+import datetime, fcntl, hashlib, inspect, json, os, re, shutil, signal, subprocess, sys, time
 ROOT=Path(__file__).resolve().parents[4]
 sys.path.insert(0,str(ROOT))
 from verification.verify_variable_envelope_boxes import lean_code
+from verification.parts.p0.compiler_policy import compiler_flags, resolve_memory_mb
+from verification.parts.p0.ci_runtime_guard import normalize_lean_args
 
 def sha(p):
     with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def main():
+    memory_mb=resolve_memory_mb(); policy=compiler_flags(memory_mb)
     out=ROOT/'.lake/p0-queue/bootstrap';out.mkdir(parents=True,exist_ok=False)
     report={'status':'RUNNING','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'mode':'FRESH_PINNED_TARGET_CLOSURE','full_root_build':False,'stages':[],'manifest_sha256':sha(ROOT/'lake-manifest.json'),'script_sha256':sha(Path(__file__))}
+    report.update(lean_memory_mb=memory_mb,command_policy=policy,
+                  verifier_sha256={p:sha(ROOT/p) for p in ['verification/parts/p0/compiler_policy.py','verification/parts/p0/ci_runtime_guard.py']})
     def save(): (out/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
     save(); lock_path=os.environ['CHEN_HEAVY_LOCK_PATH'];lock_fd=os.open(lock_path,os.O_CREAT|os.O_WRONLY,0o600);fcntl.flock(lock_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
     env=os.environ.copy();env['LEAN_NUM_THREADS']='2';env.pop('LEAN_PATH',None);env.pop('LEAN_SRC_PATH',None)
+    env['P0_LEAN_MEMORY_MB']=str(memory_mb)
     proc=None
     def stop(sig,frame):
         if proc is not None and proc.poll() is None:
@@ -52,23 +58,25 @@ def main():
         for p in realroot.iterdir():
             if p.name!='bin':(shadow/p.name).symlink_to(p,target_is_directory=p.is_dir())
         for p in (realroot/'bin').iterdir():
-            if p.name not in ['lean','leanir','clang','leanc','llvm-ar']:(shadow/'bin'/p.name).symlink_to(p,target_is_directory=p.is_dir())
+            if p.name not in ['lean','leanir','clang','leanc','llvm-ar','lake']:(shadow/'bin'/p.name).symlink_to(p,target_is_directory=p.is_dir())
+        # Lake derives PATH from its own executable location. A symlink or the
+        # real Lake path would put unguarded compilers ahead of this shadow.
+        shutil.copy2(realroot/'bin/lake',shadow/'bin/lake')
+        assert sha(shadow/'bin/lake')==sha(realroot/'bin/lake'),'Shadow Lake copy differs'
         wrapper=shadow/'bin/lean'
         wrapper.write_text('''#!/usr/bin/env python3
-import fcntl,json,os,sys,time
-args=[]; skip=False
-for a in sys.argv[1:]:
-    if skip:skip=False;continue
-    if a in ['-j','-M']:skip=True;continue
-    if a.startswith('-j') or a.startswith('-M'):continue
-    args.append(a)
+import fcntl,json,os,re,sys
+def require(ok,message):
+    if not ok:raise RuntimeError('P0 compiler policy: '+message)
+__NORMALIZER__
+args=normalize_lean_args(sys.argv[1:],__MEMORY_MB__)
 fd=os.open(os.environ['P0_COMPILER_SLOT'],os.O_CREAT|os.O_WRONLY,0o600)
 if os.environ.get('P0_COMPILER_SLOT_HELD')!='1':fcntl.flock(fd,fcntl.LOCK_EX)
 os.set_inheritable(fd,True);os.environ['P0_COMPILER_SLOT_HELD']='1'
-cmd=[os.environ['P0_REAL_LEAN'],'-t0','-j2','-M4096',*args]
+cmd=[os.environ['P0_REAL_LEAN'],*args]
 with open(os.environ['P0_COMPILER_LOG'],'a') as f:f.write(json.dumps({'pid':os.getpid(),'command':cmd})+'\\n')
 os.execv(cmd[0],cmd)
-''');wrapper.chmod(0o755)
+'''.replace('__NORMALIZER__',inspect.getsource(normalize_lean_args)).replace('__MEMORY_MB__',str(memory_mb)));wrapper.chmod(0o755)
         (out/'lean-wrapper.py').write_text(wrapper.read_text())
         for tool in ['leanir','clang','leanc','llvm-ar']:
             native=shadow/'bin'/tool
@@ -84,7 +92,7 @@ os.execv(cmd[0],cmd)
             (out/(tool+'-wrapper.py')).write_text(native.read_text())
         env.update(LEAN_SYSROOT=str(shadow),LAKE_OVERRIDE_LEAN='true',LAKE_NO_CACHE='true',LAKE_ARTIFACT_CACHE='false',P0_REAL_LEAN=str(reallean),P0_COMPILER_SLOT=str(out/'compiler.lock'),P0_COMPILER_LOG=str(out/'compiler-commands.jsonl'))
         env['PATH']=str(shadow/'bin')+':'+env['PATH']
-        report['runtime_sha256']={str(reallean):sha(reallean),str(realroot/'bin/lake'):sha(realroot/'bin/lake'),str(wrapper):sha(wrapper)}
+        report['runtime_sha256']={str(reallean):sha(reallean),str(realroot/'bin/lake'):sha(realroot/'bin/lake'),str(shadow/'bin/lake'):sha(shadow/'bin/lake'),str(wrapper):sha(wrapper)}
         for tool in ['leanir','clang','leanc','llvm-ar']:
             report['runtime_sha256'][str(realroot/'bin'/tool)]=sha(realroot/'bin'/tool)
             report['runtime_sha256'][str(shadow/'bin'/tool)]=sha(shadow/'bin'/tool)
@@ -103,7 +111,7 @@ os.execv(cmd[0],cmd)
                     todo += re.sub(r'^\s*(?:(?:public|private|meta)\s+)*import\s+(?:all\s+)?','',line).split()
         assert mathlib,'No Mathlib target boundary found'
         report['target_source_walk']=seen;report['mathlib_cache_roots']=sorted(mathlib);save()
-        run([str(realroot/'bin/lake'),'--no-cache','exe','cache','get',*sorted(mathlib)],'official-mathlib-cache',timeout=1800)
+        run([str(shadow/'bin/lake'),'--no-cache','exe','cache','get',*sorted(mathlib)],'official-mathlib-cache',timeout=1800)
         cache_exe=ROOT/'.lake/packages/mathlib/.lake/build/bin/cache'
         assert cache_exe.is_file(),'Official cache executable not found at expected pinned package path'
         report['runtime_sha256'][str(cache_exe)]=sha(cache_exe)
@@ -111,6 +119,7 @@ os.execv(cmd[0],cmd)
         run([sys.executable,'verification/parts/p0/check_pins.py'],'pins-after',timeout=60)
         assert sha(ROOT/'lake-manifest.json')==report['manifest_sha256'],'Manifest changed'
         assert sha(Path(__file__))==report['script_sha256'],'Bootstrap changed'
+        assert all(sha(ROOT/p)==h for p,h in report['verifier_sha256'].items()),'Compiler policy or normalizer changed'
         assert all(sha(Path(p))==h for p,h in report['runtime_sha256'].items()),'Runtime or wrapper changed'
         assert all(sha(ROOT/v['path'])==v['sha256'] for v in seen.values()),'Source changed'
         report['status']='PASS_OFFICIAL_CACHE_ONLY';report['goldbach_or_project_proof_compiled']=False;report['dependency_acceptance']='Official Mathlib cached dependencies only; fresh project/Goldbach compilation and target audits are separate later stages'

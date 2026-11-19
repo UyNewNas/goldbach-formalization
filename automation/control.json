@@ -1,6 +1,6 @@
 {
   "schema": "chen-parts-control-v1",
-  "updated_at": "2026-10-15T06:39:33Z",
+  "updated_at": "2026-11-19T02:12:41Z",
   "lifecycle": "ACTIVE",
   "authorization": "Owner explicitly resumed hourly P0\u2013P5 work on 2026-10-15",
   "coordinator": "P0",
@@ -18,7 +18,9 @@
     "owner": "P0",
     "max_heavy_processes_per_host": 1,
     "lean_threads": 2,
-    "lean_memory_mb": 4096,
+    "lean_memory_mb": 12288,
+    "lean_memory_override_env": "P0_LEAN_MEMORY_MB",
+    "lean_memory_policy": "Default/minimum 12288 MiB; larger budgets may be requested before bootstrap. All compiler entries and receipts use verification/parts/p0/compiler_policy.py. Never fall back to 4096 MiB.",
     "local_lock": "/workspace/shared/chen-coordination/locks/heavy.lock",
     "wrapper": "/workspace/shared/chen-coordination/p0/automation/contracts/with-heavy-lock.sh",
     "non_p0_lean_lake_checker_ci_forbidden": true,
@@ -85,7 +87,7 @@
     "resumed_at": "2026-10-15T00:45:59Z",
     "instruction": "Resume from this control branch and exact prior receipts. Do not duplicate a still-live round or running CI.",
     "active_round": "20261015T035000Z-hourly-continuation",
-    "next": "Separate full Core audit and exact single-strip diagnostic, same -t0/-j2/-M4096/werror/checker/axiom gates."
+    "next": "Separate full Core audit and exact single-strip diagnostic, shared compiler memory policy (default 12288 MiB; P0_LEAN_MEMORY_MB may raise it), retaining -t0/-j2/werror/checker/axiom gates."
   },
   "last_execution": {
     "run_id": 38671169182,

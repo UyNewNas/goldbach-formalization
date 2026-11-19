@@ -8,6 +8,10 @@ from pathlib import Path
 import datetime, hashlib, json, shutil, stat, subprocess, sys, zipfile
 
 ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(ROOT))
+from verification.parts.p0.compiler_policy import compiler_flags, resolve_memory_mb
+from verification.parts.p0.ci_runtime_guard import normalize_lean_args
+
 CATALOG = 'verification/parts/p0/queue/reuse-anchors.json'
 
 def sha(path):
@@ -40,6 +44,8 @@ def extract(archive, incoming, anchor):
     assert all(not p.is_symlink() for p in incoming.rglob('*')), 'Artifact contains symlinks'
 
 def main():
+    memory_mb = resolve_memory_mb()
+    policy = compiler_flags(memory_mb)
     catalog_path = ROOT / CATALOG
     catalog = json.loads(catalog_path.read_text())
     dispatch = json.loads((ROOT / 'automation/dispatch.json').read_text())
@@ -49,6 +55,7 @@ def main():
     anchors = [catalog['artifacts'][str(i)] for i in ids]
     bootstrap = json.loads((ROOT / '.lake/p0-queue/bootstrap/receipt.json').read_text())
     assert bootstrap['status'] == 'PASS_OFFICIAL_CACHE_ONLY'
+    assert bootstrap.get('command_policy') == policy and bootstrap.get('lean_memory_mb') == memory_mb, 'Bootstrap compiler policy differs'
     lean = Path(subprocess.check_output(['elan', 'which', 'lean'], text=True).strip())
     lean_sha = sha(lean)
     pins = {p: sha(ROOT / p) for p in ['lean-toolchain', 'lakefile.toml', 'lake-manifest.json']}
@@ -87,7 +94,7 @@ def main():
             signature = entry['inputs']
             if (signature['source_sha256'] != source['sha256'] or signature['pins'] != pins
                     or signature['lean_sha256'] != lean_sha
-                    or signature['command_policy'] != ['-t0', '-j2', '-M4096']):
+                    or signature['command_policy'] != policy):
                 skipped[key] = 'current source/pin/runtime/command identity differs'
                 continue
             assert sha(ROOT / source['path']) == source['sha256']
@@ -96,7 +103,9 @@ def main():
             assert producer['compiled_objects'][module] == entry['objects']
             stages = [s for s in producer['stages'] if s['label'] == 'compile-' + module]
             assert len(stages) == 1 and stages[0]['exit_code'] == 0
-            assert stages[0]['command'][:4] == [str(lean), '-t0', '-j2', '-M4096']
+            assert stages[0]['command'][:1 + len(policy)] == [str(lean), *policy], 'Producer compiler command differs from its signature'
+            normalize_lean_args(stages[0]['command'][1 + len(policy):], memory_mb,
+                                reject_resource_overrides=True)
             archived_parts = {}
             for original_path, expected in entry['objects'].items():
                 destination = Path(original_path)
@@ -142,6 +151,9 @@ def main():
     overlay.mkdir(parents=True, exist_ok=True)
     destination_index.write_text(json.dumps(restored, indent=2) + '\n')
     receipt = {'status': 'STAGED_COMPILED_PREREQUISITES_ONLY',
+               'lean_memory_mb': memory_mb, 'command_policy': policy,
+               'compiler_policy_sha256': sha(ROOT / 'verification/parts/p0/compiler_policy.py'),
+               'normalizer_sha256': sha(ROOT / 'verification/parts/p0/ci_runtime_guard.py'),
                'anchor_sha256': sha(catalog_path), 'script_sha256': sha(Path(__file__)),
                'source_artifacts': anchors, 'restored_modules': sorted(restored), 'skipped_modules': skipped,
                'acceptance': 'No new replay claimed. Historical complete leaf receipts remain valid. run.py checks full direct imports; targets always rebuild/replay/audit.',

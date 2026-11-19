@@ -23,6 +23,9 @@ import time
 
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT))
+from verification.parts.p0.compiler_policy import compiler_flags, resolve_memory_mb
+
 AUDIT = "verification/parts/p0/Round6Audit.lean"
 FINAL_BRIDGE = "ImbalancedChen.current_theorem_1_1_of_manuscript_bounds"
 FINAL_MODULE = "ImbalancedChen.CurrentMainTheorem"
@@ -147,6 +150,7 @@ def input_snapshot() -> dict:
     sources = {source_path(module).relative_to(ROOT).as_posix() for module in modules}
     sources.update(FROZEN)
     sources.update({AUDIT, "verification/parts/p0/check_round6_types.py",
+                    "verification/parts/p0/compiler_policy.py",
                     "verification/parts/p0/check_pins.py",
                     "verification/verify_variable_envelope_boxes.py"})
     git("ls-files", "--error-unmatch", "--", *sorted(sources))
@@ -295,6 +299,9 @@ def main() -> int:
     }
     exit_code = 1
     try:
+        memory_mb = resolve_memory_mb()
+        policy = compiler_flags(memory_mb)
+        report.update(lean_memory_mb=memory_mb, command_policy=policy)
         head = git("rev-parse", "HEAD")
         require(re.fullmatch(r"[0-9a-f]{40}", head) is not None, "HEAD is not a full commit SHA")
         report["source_commit"] = head
@@ -308,9 +315,10 @@ def main() -> int:
         require(pin_result.returncode == 0, "Existing frozen-pin check failed")
         lake = shutil.which("lake")
         require(lake is not None, "Pinned normal Lake is not on PATH")
-        command = [lake, "env", "lean", "-j2", "-M4096", "-DwarningAsError=true",
+        command = [lake, "env", "lean", *policy, "-DwarningAsError=true",
                    "-o", str(audit_object), AUDIT]
         environment = os.environ.copy()
+        environment['P0_LEAN_MEMORY_MB'] = str(memory_mb)
         for key in ["LEAN_PATH", "LEAN_SRC_PATH"]:
             environment.pop(key, None)
         report.update(command=command, cwd=str(ROOT), timeout_seconds=args.timeout_seconds,

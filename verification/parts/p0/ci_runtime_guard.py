@@ -22,6 +22,9 @@ import shutil
 import subprocess
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+from verification.parts.p0.compiler_policy import compiler_flags, resolve_memory_mb
+
 PIN = 'leanprover/lean4:v4.33.0-rc1'
 ACTION_COMMIT = 'f061402b660e0c34644504b324e830f2991d4865'
 ACTION_SHA256 = {
@@ -37,7 +40,7 @@ AMBIGUOUS_ENV = ('LEAN_SYSROOT', 'LEAN', 'LEAN_AR', 'LEAN_CC', 'LAKE',
                  'LAKE_HOME', 'LAKE_OVERRIDE_LEAN', 'LEAN_PATH', 'LEAN_SRC_PATH',
                  'P0_CI_GUARD_STATE', 'P0_COMPILER_SLOT_HELD', 'P0_COMPILER_SLOT_FD', 'P0_COMPILER_SLOT_TOOL')
 
-def normalize_lean_args(args):
+def normalize_lean_args(args, memory_mb, *, reject_resource_overrides=False):
     # Exact fixed-pin src/util/shell.cpp getopt spellings. -t is TRUST;
     # -T/--timeout is a different option and must remain unchanged.
     controlled = {'--trust', '--threads', '--memory'}
@@ -57,6 +60,7 @@ def normalize_lean_args(args):
             require(not (len(key) > 2 and '--run'.startswith(key)),
                     'program execution is outside this build-only wrapper')
             if key in controlled:
+                require(not reject_resource_overrides, 'resource override after frozen compiler policy')
                 if not sep:
                     i += 1
                     require(i < len(args), 'missing resource argument')
@@ -84,6 +88,7 @@ def normalize_lean_args(args):
                         require(i < len(args), 'missing option argument')
                         value = args[i]
                     if flag in 'tjM':
+                        require(not reject_resource_overrides, 'resource override after frozen compiler policy')
                         require(re.fullmatch(r'[0-9]+', value), 'bad resource argument')
                     else:
                         clean.extend(['-' + flag, value])
@@ -93,7 +98,7 @@ def normalize_lean_args(args):
         else:
             clean.append(a)
         i += 1
-    return ['-t0', '-j2', '-M4096', *clean]
+    return ['-t0', '-j2', f'-M{memory_mb}', *clean]
 
 
 WRAPPER = r'''#!/usr/bin/env python3
@@ -112,7 +117,7 @@ name = pathlib.Path(sys.argv[0]).name
 require(name in C['tools'], 'unknown compiler')
 args = sys.argv[1:]
 if name == 'lean':
-    args = normalize_lean_args(args)
+    args = normalize_lean_args(args, C['lean_memory_mb'])
 # One inherited flock across Lean and native compiler descendants. Never trust
 # a naked HELD flag: require a live ancestor holding the exact lock descriptor.
 held = os.environ.get('P0_COMPILER_SLOT_HELD')
@@ -184,6 +189,7 @@ def resolve_pin() -> Path:
 def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
             action_dir: Path, verify_action: bool = True) -> dict:
     """Separated for deterministic fake-executable tests; CLI never skips pins."""
+    memory_mb = resolve_memory_mb()
     root, runner_temp, realbin = root.resolve(), runner_temp.resolve(), realbin.resolve()
     require((root / 'lean-toolchain').read_text().strip() == PIN, 'Unexpected toolchain pin')
     require(not any(key in os.environ for key in AMBIGUOUS_ENV), 'Ambiguous existing runtime environment')
@@ -218,10 +224,12 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
     shutil.copy2(realbin / 'lake', shadow / 'bin' / 'lake')
     state_path = evidence / 'state.json'
     environment = {'LEAN_SYSROOT': str(shadow), 'LAKE_OVERRIDE_LEAN': 'true',
-                   'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path)}
+                   'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path),
+                   'P0_LEAN_MEMORY_MB': str(memory_mb)}
     config = {'environment': environment, 'shadow': str(shadow), 'realbin': str(realbin),
               'slot': str(evidence / 'compiler.lock'), 'log': str(evidence / 'compiler-commands.jsonl'),
-              'tools': list(TOOLS)}
+              'tools': list(TOOLS), 'lean_memory_mb': memory_mb,
+              'command_policy': compiler_flags(memory_mb)}
     runtime = {str(realbin / name): sha(realbin / name) for name in (*TOOLS, 'lake', 'leanchecker')}
     runtime[str(shadow / 'bin' / 'lake')] = sha(shadow / 'bin' / 'lake')
     require(runtime[str(realbin / 'lake')] == runtime[str(shadow / 'bin' / 'lake')], 'Lake copy differs')
@@ -237,9 +245,10 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
              'runtime_sha256': runtime,
              'input_sha256': {str(root / p): sha(root / p) for p in ('lean-toolchain', 'lake-manifest.json', 'lakefile.toml')},
              'guard_sha256': sha(Path(__file__)),
+             'compiler_policy_sha256': sha(Path(__file__).with_name('compiler_policy.py')),
              'action_commit': ACTION_COMMIT,
              'action_script_sha256': {str(action_dir / 'scripts' / n): h for n, h in ACTION_SHA256.items()} if verify_action else {},
-             'policy': 'Lean -t0 -j2 -M4096; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
+             'policy': 'Lean ' + ' '.join(compiler_flags(memory_mb)) + '; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
     write_json(state_path, state)
     return state
 
@@ -262,6 +271,8 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
     state = json.loads(state_path.read_text())
     check_environment(state)
     require(sha(Path(__file__)) == state['guard_sha256'], 'Runtime guard changed')
+    require(sha(Path(__file__).with_name('compiler_policy.py')) == state['compiler_policy_sha256'],
+            'Compiler policy changed')
     require(not (Path(state['shadow']) / 'bin' / 'lake').is_symlink(), 'Lake must be a byte-identical copy')
     for mapping in ('runtime_sha256', 'input_sha256', 'action_script_sha256'):
         for path, expected in state[mapping].items():
@@ -283,7 +294,7 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
         require(name in TOOLS and record['command'][0] == state['realbin'] + '/' + name, 'Unknown compiler command')
         require(record['sysroot'] == state['shadow'], 'Compiler sysroot bypass')
         if name == 'lean':
-            require(record['command'][1:] == normalize_lean_args(record['input_args']),
+            require(record['command'][1:] == normalize_lean_args(record['input_args'], state['lean_memory_mb']),
                     'Lean command differs from normalized input (possible flag override)')
         else:
             require(record['command'][1:] == record['input_args'], 'Native compiler flags changed')

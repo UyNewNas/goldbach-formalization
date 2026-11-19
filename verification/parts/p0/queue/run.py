@@ -10,6 +10,7 @@ import argparse, datetime, hashlib, json, os, re, subprocess, sys, time
 ROOT=Path(__file__).resolve().parents[4]
 sys.path.insert(0,str(ROOT))
 from verification.verify_variable_envelope_boxes import lean_code
+from verification.parts.p0.compiler_policy import compiler_flags, resolve_memory_mb
 BASE='59d338b93b2347021237eb51293bb934a316909d'
 
 def sha(p):
@@ -23,6 +24,7 @@ def imports(p):
       for m in re.sub(r'^\s*(?:(?:public|private|meta)\s+)*import\s+(?:all\s+)?','',line).split()]
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('request'); args=ap.parse_args()
+    memory_mb=resolve_memory_mb(); policy=compiler_flags(memory_mb)
     req=json.loads(Path(args.request).read_text()); run_id=req['run_id']
     assert re.fullmatch(r'[A-Za-z0-9_-]+',run_id)
     out=ROOT/'.lake/p0-queue'/run_id; out.mkdir(parents=True,exist_ok=False)
@@ -30,6 +32,7 @@ def main():
     overlay=ROOT/'.lake/p0-queue/fresh-objects' if fresh else out/'objects'; overlay.mkdir(parents=True,exist_ok=fresh); fresh_index_path=ROOT/'.lake/p0-queue/fresh-index.json'
     fresh_index=json.loads(fresh_index_path.read_text()) if fresh_index_path.is_file() else {}
     report={'schema':'p0-finite-queue-v1','run_id':run_id,'source_commit':git('rev-parse','HEAD'),'status':'RUNNING','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'strategy':'Fresh pinned target closure' if fresh else 'Exact baseline cache, serial bounded targets; no full build','unconditional_main':False,'stages':[],'reused_project_cache':{},'dependency_replay_claim':False}
+    report.update(lean_memory_mb=memory_mb,command_policy=policy)
     dump(out/'receipt.json',report)
     import fcntl, signal
     lock_path=os.environ.get('CHEN_HEAVY_LOCK_PATH','/workspace/shared/chen-coordination/locks/heavy.lock')
@@ -49,6 +52,7 @@ def main():
         raise RuntimeError('P0 run interrupted by signal '+str(sig))
     signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
     env=os.environ.copy(); env.pop('LEAN_PATH',None); env.pop('LEAN_SRC_PATH',None); env['LEAN_NUM_THREADS']='2'
+    env['P0_LEAN_MEMORY_MB']=str(memory_mb)
     def run(cmd,label,timeout=600,cwd=ROOT):
         nonlocal active_proc
         log=out/(label+'.log'); start=time.monotonic()
@@ -84,6 +88,7 @@ def main():
             bootstrap=ROOT/'.lake/p0-queue/bootstrap/receipt.json'
             receipt=json.loads(bootstrap.read_text())
             assert receipt['status']=='PASS_OFFICIAL_CACHE_ONLY' and receipt['manifest_sha256']==sha(ROOT/'lake-manifest.json'),'Fresh bootstrap is not verified'
+            assert receipt.get('command_policy')==policy and receipt.get('lean_memory_mb')==memory_mb,'Bootstrap compiler policy differs; rerun bootstrap with the selected P0_LEAN_MEMORY_MB'
             report['cache_provenance']={'mode':'FRESH_PINNED_TARGET_CLOSURE','bootstrap_receipt_sha256':sha(bootstrap),'prior_baseline_receipt_reused':False}
             report['fresh_source_providers']=['project','goldbach','LeanArchitect']
             staged=ROOT/'.lake/p0-queue/reuse-staging.json'
@@ -92,6 +97,9 @@ def main():
                 assert provenance['status']=='STAGED_COMPILED_PREREQUISITES_ONLY'
                 assert provenance['anchor_sha256']==sha(ROOT/'verification/parts/p0/queue/reuse-anchors.json')
                 assert provenance['script_sha256']==sha(ROOT/'verification/parts/p0/queue/restore_compiled.py')
+                assert provenance.get('command_policy')==policy and provenance.get('lean_memory_mb')==memory_mb,'Restored compiler policy differs'
+                assert provenance['compiler_policy_sha256']==sha(ROOT/'verification/parts/p0/compiler_policy.py'),'Restored compiler policy source changed'
+                assert provenance['normalizer_sha256']==sha(ROOT/'verification/parts/p0/ci_runtime_guard.py'),'Restored command normalizer changed'
                 report['restored_compilation_provenance']=provenance
                 report['reuse_staging_sha256']=sha(staged)
         else:
@@ -100,6 +108,8 @@ def main():
         report['runtime_sha256']={str(p):sha(p) for p in [lean,checker]}
         report['pins_sha256']={p:sha(ROOT/p) for p in ['lean-toolchain','lakefile.toml','lake-manifest.json']}
         report['verifier_sha256']={p:sha(ROOT/p) for p in ['verification/parts/p0/queue/run.py','verification/parts/p0/queue/bootstrap.py','verification/parts/p0/queue/AuditTemplate.lean','verification/parts/p0/check_pins.py','verification/verify_variable_envelope_boxes.py','.github/workflows/p0-queue.yml','automation/dispatch.json']}
+        report['verifier_sha256']['verification/parts/p0/compiler_policy.py']=sha(ROOT/'verification/parts/p0/compiler_policy.py')
+        report['verifier_sha256']['verification/parts/p0/ci_runtime_guard.py']=sha(ROOT/'verification/parts/p0/ci_runtime_guard.py')
         if report.get('restored_compilation_provenance'):
             for p in ['verification/parts/p0/queue/restore_compiled.py','verification/parts/p0/queue/reuse-anchors.json']:
                 report['verifier_sha256'][p]=sha(ROOT/p)
@@ -162,7 +172,7 @@ def main():
             dest=overlay/(module.replace('.','/')+'.olean')
             if fresh:
                 dep_parts={d:parts(resolved_object(d,overlay/(d.replace('.','/')+'.olean') if (overlay/(d.replace('.','/')+'.olean')).exists() else seen[d][2])) for d in deps}
-                signature={'source_sha256':sha(source),'dependency_objects':dep_parts,'pins':report['pins_sha256'],'lean_sha256':sha(lean),'command_policy':['-t0','-j2','-M4096']}
+                signature={'source_sha256':sha(source),'dependency_objects':dep_parts,'pins':report['pins_sha256'],'lean_sha256':sha(lean),'command_policy':policy}
                 cached=fresh_index.get(module)
                 if not force and cached and cached['inputs']==signature and dest.exists() and parts(dest)==cached['objects']:
                     kind='reused_compiled_artifact' if cached.get('producer_ci') else 'reused_fresh_compilation'
@@ -175,7 +185,7 @@ def main():
                     report['reused_project_cache'][module]={'baseline':BASE,'source_sha256':sha(source),'object_parts':parts(resolved_object(module,obj))};prepared.add(module);return
             dest.parent.mkdir(parents=True,exist_ok=True)
             # Prerequisites use the baseline ordinary warning policy; targets are strict.
-            command=[str(lean),'-t0','-j2','-M4096',*(['-DwarningAsError=true'] if force else []),'-o',str(dest),str(source.relative_to(root))]
+            command=[str(lean),*policy,*(['-DwarningAsError=true'] if force else []),'-o',str(dest),str(source.relative_to(root))]
             # run() receives an explicit provider cwd, never changes other workspaces.
             run(command,'compile-'+module,req.get('compile_timeout_seconds',900),cwd=root)
             compiled.add(module); prepared.add(module); report.setdefault('compiled_objects',{})[module]=parts(dest)
@@ -193,7 +203,7 @@ def main():
             source.write_text(template.replace('TARGET_IMPORT',module).replace('TARGET_NAME',module))
             generated_sha=sha(source)
             obj=overlay/'verification/parts/p0/queue'/(audit_name+'.olean'); obj.parent.mkdir(parents=True,exist_ok=True)
-            text=run([str(lean),'-t0','-j2','-M4096','-DwarningAsError=true','-o',str(obj),str(source.relative_to(ROOT))],'audit-'+module,900)
+            text=run([str(lean),*policy,'-DwarningAsError=true','-o',str(obj),str(source.relative_to(ROOT))],'audit-'+module,900)
             actual=[json.loads(x.removeprefix('P0_QUEUE_IMPORTS ')) for x in text.splitlines() if x.startswith('P0_QUEUE_IMPORTS ')]
             assert len(actual)==1 and actual[0] and all(m in seen for m in actual[0]),'Actual imported module missing from frozen source closure'
             actual_objects={}
