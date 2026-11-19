@@ -1,0 +1,7 @@
+# P1.4 persistent continuation — actual primitive Rosser subroom
+
+Read actual branch HEAD, `REPORT.md`, `REGISTRY.json`, `INPUT_BOUNDARY.md`, and full `P4AOriginalFull87ActualPrimitiveRosserRoom.lean` (blob `4654ecab6d4bf8fca0496cac106738573109b27b`); then read the preceding centre-leaf, full upper-room bridge and original producer source. Verified baseline before this commit: `7575fb841b3cd51a6af0a2a41bc50e36be5c809f`; do not roll back to navigation SHA 9649ab3.
+
+The genuinely new finite deduction is that a nonzero *original* upper rough occurrence injects its prime P into the PLUS-indexed AND full-modulus-coprime subroom of the existing integral upper quotient room. Preserve the exact original source Lists, signs, complete modulus, actual history and post-generation survivor filter. The new global bound is monotone **as a nonnegative absolute bill**, never as a signed saving, and lower is subtracted only once. No asymptotic H_N payment, PP, or archive authentication is claimed.
+
+Status SOURCE_ONLY / UNEVALUATED / UNCOMPILED, no kernel replay, axiom audit or independent review. The fixed matching Lean/Lake tools were absent in this 4 GiB container, so the new source has NOT been type-checked. Next concrete action: stage fixed-pin source-only imports and compile these specific candidates (fix real elaboration failures); then evaluate actual surviving primitive Rosser room and fit a verified same-rho discrepancy estimate, without altering frozen manuscript or external input boundary. Keep parent P1.4 YELLOW.
