@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualRetainedRoughEulerMass
 import ImbalancedChen.P3ActualRawIntegerRhoCast
 import ImbalancedChen.P3ActualRetainedRoughRankCap
 import ImbalancedChen.P3ActualRawActiveLevelTotientCap
@@ -1674,3 +1675,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_abs_le_one
 #check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_trivalent
 #check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_weighted_physical_sum
+-- P3.6: actual retained first-exit rough phi-mass WITHOUT a bounded rank;
+-- finite Euler product on the ORIGINAL rough prime universe. No Mertens
+-- bound or final integer causal rho_N identity is claimed.
+-- SOURCE_ONLY: these two #checks are NOT EXECUTED.
+#check ImbalancedChen.P3ActualRetainedRoughEulerMass.roughEulerMass
+#check ImbalancedChen.P3ActualRetainedRoughEulerMass.actual_retained_rough_totient_mass_le_euler
+#check ImbalancedChen.P3ActualRetainedRoughEulerMass.actual_raw_physical_mass_le_active_level_euler
