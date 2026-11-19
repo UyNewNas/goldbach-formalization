@@ -29,3 +29,7 @@ SOURCE_ONLY / UNEVALUATED / UNCOMPILED. This packet is a Lean candidate and has 
 ## Next concrete actions
 
 Stage source-only dependencies as modules at their fixed pins; compile and repair this and predecessor packets. Evaluate the actual beta-weighted survivor room against H_N with original histories and same rho; identify a legitimate signed primitive discrepancy theorem with verified version/hypotheses before any invocation. Keep P1.4 yellow.
+
+## Remote source and environment receipt
+
+Original new proof source Git blob: `7087e2aec09a148fcd11ad6e6d19d51a746edb26` (478 lines). The initial packet commit `19b5d22cd2069513cdc21e39425deff87c6f828c` was read back and compared against the exact parent: ahead 1, behind 0, five added files only. All five first-commit file hashes were retrieved, and the source contains no forbidden escape tokens. The fixed `lean-toolchain`, `lake-manifest.json`, and `lakefile.toml` were read and match the pinned versions. In the local container, `lean --version`, `lake --version`, `elan --version` each returned exit 127 (`command not found`); cgroup `memory.max=4294967296`. The proof remains UNCOMPILED/UNEVALUATED: no successful Lean type-check or kernel replay.
