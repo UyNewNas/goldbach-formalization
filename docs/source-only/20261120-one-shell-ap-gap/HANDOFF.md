@@ -1,0 +1,11 @@
+# Persistent P1.4 recovery — reflected one-shell vs actual full-q AP
+
+Active branch: \`chatgpt/p1-full87-one-shell-ap-gap-20261120-0210\`. Verified parent: \`a4d60eafae8a83a675e1962a0773f43eff1785d5\`. This packet's source commit: \`1fdd2512cfb7b8943217aec0c73b7255a4bf66d9\`; source blob: \`4f36b722ac7843d4c726ac44902b53729216ce08\`, file \`docs/source-only/20261120-one-shell-ap-gap/P4AOriginalFull87OneShellAPGap.lean\` (347 lines). The documentation commit following source advances HEAD; **read branch HEAD live before resuming**, not the November 5 historical SHA.
+
+Actual candidate result: full primitive AP at Q=a*b is one reflected prime shell P=N-Q plus an explicit SAME-AP tail. Original signed beta, fifth RAW/LICENSED, sixth occurrence, true sharedRankFour parent, frozen survivor filter and single lower subtraction are used unchanged. Physical error becomes \`mean + fullQAP - outsideShell\`. This is **not** yet a same-rho manuscript PP estimate: a smooth W_N and true physical coefficient identification, correct coprime mean, admissibility and outside-shell payment are all missing.
+
+Read \`REPORT.md\` and \`INPUT_BOUNDARY.md\` for exact formulas and denial of stronger claims; \`REGISTRY.json\` for pins, hashes, checks and outstanding obligations. The original previous signed AP code remains at \`docs/source-only/20261120-signed-carrier-ap/P4AOriginalFull87SignedCarrierAP.lean\` (blob \`b83aec43dd8919728dcbe6acd78c5467be2d51cd\`).
+
+Fixed pin: manuscript 9731290 / d529bea; Lean v4.33.0-rc1; mathlib e4c91783; native 09b97db5; c=49044063/25000000; K=8452171/1250000. Toolchain checks \`lean\`, \`lake\`, \`elan\` exit 127; cgroup 4 GiB. Finite diagnostic 35,800 AP fibres + 3,580 rational signed-weight identities, no mismatch, **not** Lean acceptance. No CI or resource changes, no Codex, no main changes.
+
+**Status: SOURCE_ONLY / UNEVALUATED / UNCOMPILED; P1.4 YELLOW.** Next first action: fixed-pin import staging and actual Lean elaboration when available. Then test whether the ORIGINAL physical signed coefficient/PP weight can account for the explicit non-shell tail, including SAME-rho class membership and q-dependent smoothness restrictions. Do not replace the tail by zero or infer a per-q absolute estimate from the signed PP theorem.
