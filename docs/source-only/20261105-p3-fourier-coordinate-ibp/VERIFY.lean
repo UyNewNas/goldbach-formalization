@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualRetainedRoughRankCap
 import ImbalancedChen.P3ActualRawActiveLevelTotientCap
 import ImbalancedChen.P3ActualRawPhysicalRhoTotientCap
 import ImbalancedChen.P3ActualSignedPairTotientCap
@@ -1651,3 +1652,12 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualRawActiveLevelTotientCap.activeRawPhysicalModuli
 #check ImbalancedChen.P3ActualRawActiveLevelTotientCap.active_raw_physical_moduli_subset
 #check ImbalancedChen.P3ActualRawActiveLevelTotientCap.actual_raw_physical_mass_le_active_level_caps
+
+-- P3.6: selected-rank upper bound on ACTUAL retained rough first-exit products;
+-- unconditional fallback is finite but NOT a uniform logarithmic bound.
+-- All five declarations are SOURCE_ONLY; these #checks are NOT EXECUTED.
+#check ImbalancedChen.P3ActualRetainedRoughRankCap.retained_leaf_prod_le_rank_cap
+#check ImbalancedChen.P3ActualRetainedRoughRankCap.fixed_rough_support_le_rank_cap
+#check ImbalancedChen.P3ActualRetainedRoughRankCap.fixed_rough_support_le_universe_power
+#check ImbalancedChen.P3ActualRetainedRoughRankCap.actual_raw_physical_mass_le_retained_rank_caps
+#check ImbalancedChen.P3ActualRetainedRoughRankCap.actual_raw_physical_mass_le_universe_length_caps
