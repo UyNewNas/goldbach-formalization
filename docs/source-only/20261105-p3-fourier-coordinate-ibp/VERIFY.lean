@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualSignedPairTotientCap
 import ImbalancedChen.P3ActualPhysicalTotientConvolution
 import ImbalancedChen.P3ActualWholeProductPrimitiveMeanPayment
 import ImbalancedChen.P3ActualWholeProductMixedTauTransfer
@@ -1625,3 +1626,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualPhysicalTotientConvolution.physicalIntegerMass_eq_complexMass
 #check ImbalancedChen.P3ActualPhysicalTotientConvolution.signed_pair_rho_original_physical_mass_le
 #check ImbalancedChen.P3ActualPhysicalTotientConvolution.original_threeHB_mean_of_signed_pair_rho
+
+-- P3.6 run 63: actual bounded signed pair source, both finite phi masses
+-- paid by the pinned TotientReciprocalBudget (SOURCE_ONLY; UNEXECUTED).
+#check ImbalancedChen.P3ActualSignedPairTotientCap.logTotientCap
+#check ImbalancedChen.P3ActualSignedPairTotientCap.logTotientCap_nonneg
+#check ImbalancedChen.P3ActualSignedPairTotientCap.bounded_pair_physical_mass_le_log_caps
+#check ImbalancedChen.P3ActualSignedPairTotientCap.integer_pair_physical_mass_le_log_caps
+#check ImbalancedChen.P3ActualSignedPairTotientCap.original_threeHB_mean_le_log_caps
