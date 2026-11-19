@@ -174,6 +174,7 @@ import ImbalancedChen.P3HBOriginalGroupDyadicScale
 import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 import ImbalancedChen.P3ActualEvenLowerEulerMass
+import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 
 
 
@@ -1739,3 +1740,11 @@ import ImbalancedChen.P3ActualEvenLowerEulerMass
 #check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.actual_additive_source_AP_primitive_recenter
 #check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.signed_actual_additive_source_recenter
 #check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.original_U6_lower_labelled_additive_source_recenter
+ 
+-- P3.6 run75: exact coprime full-modulus prime correction split for the
+-- ORIGINAL U6 even-first-exit LOWER signed integer rho and P5 labelled source.
+-- These #checks are REGISTERED ONLY; Lean/Lake and kernel were NOT RUN.
+#check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.prime_divisor_count_coprime_mul
+#check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.signed_modulus_prime_correction_split
+#check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.actual_U6_lower_modulus_prime_correction_split
+#check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.actual_U6_lower_labelled_recenter_split
