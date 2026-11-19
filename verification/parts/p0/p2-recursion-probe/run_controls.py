@@ -10,6 +10,8 @@ import time
 
 DIRECT = 'ImbalancedChen.Probes.DirectRecControl'
 STRUCTURAL = 'ImbalancedChen.Probes.StructuralControl'
+SIZEOF = 'ImbalancedChen.Probes.IterativeProbe'
+SIZEOF_HELPER = SIZEOF + '.Expr._sizeOf_inst'
 DIRECT_RECURSOR = DIRECT + '.Expr.rec'
 PARTIAL_HELPER = STRUCTURAL + '.count._unsafe_rec'
 
@@ -21,6 +23,8 @@ def verdict(kind, returncode, output, timed_out=False):
         needle = 'code generator does not support recursor `' + DIRECT_RECURSOR + '` yet'
     elif kind == 'structural':
         needle = 'Partial declaration in a P0 batch module: ' + PARTIAL_HELPER
+    elif kind == 'sizeof':
+        needle = 'Failed to find LCNF signature for ' + SIZEOF_HELPER
     else:
         raise ValueError(kind)
     # Exact full declaration, not a prefix of another generated name.
@@ -95,6 +99,9 @@ def main():
         r, out = command(['lake', 'env', 'lean', '-DwarningAsError=true', audit.name], project, logs, 'negative-structural-audit', args.timeout)
         assert verdict('structural', r['returncode'], out, r['timed_out']), 'Structural control failed to produce exact owned partial declaration rejection'
         receipt['controls']['structural'] = 'EXPECTED_STRICT_AUDIT_REJECTION'
+        r, out = command(['lake', 'build', SIZEOF], project, logs, 'negative-sizeof-build', args.timeout)
+        assert verdict('sizeof', r['returncode'], out, r['timed_out']), 'SizeOf control failed to produce exact missing LCNF signature diagnostic'
+        receipt['controls']['sizeof'] = 'EXPECTED_SIZEOF_LCNF_REJECTION'
         receipt['status'] = 'PASS_NEGATIVE_CONTROLS_ONLY'
     except Exception as exc:
         receipt['error'] = str(exc)

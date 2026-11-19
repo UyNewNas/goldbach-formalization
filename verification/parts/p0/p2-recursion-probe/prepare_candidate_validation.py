@@ -2,7 +2,7 @@
 import hashlib, json, os, pathlib, re, sys
 root=pathlib.Path(os.environ['PROJECT']); logs=pathlib.Path(os.environ['LOGS'])
 mode=sys.argv[1]
-targets=['ImbalancedChen.Probes.IterativeProbe']
+targets=['ImbalancedChen.Probes.FixedFuelProbe']
 def imports(text):
     # Lean nested block comments must not create phantom imports.
     text=re.sub(r'--[^\n]*','',text)
