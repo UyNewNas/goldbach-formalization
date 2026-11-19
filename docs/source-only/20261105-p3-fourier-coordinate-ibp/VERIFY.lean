@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments
 import ImbalancedChen.P3ActualU6LowerActualPrimeCarrier
 import ImbalancedChen.P3ActualU6LowerGlobalMask
 import ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean
@@ -1748,3 +1749,10 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.signed_modulus_prime_correction_split
 #check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.actual_U6_lower_modulus_prime_correction_split
 #check ImbalancedChen.P3ActualU6LowerModulusPrimeSplit.actual_U6_lower_labelled_recenter_split
+
+-- P3.6 run76: exact original U6 signed quotient-prime correction split
+-- into real small Rosser + even-retained rough moments, with a positive
+-- pair-moment bound. REGISTERED ONLY; NOT EXECUTED by Lean/kernel.
+#check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.original_U6_lower_threeblock_prime_count
+#check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.actual_U6_lower_quotient_prime_correction_pair_split
+#check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.actual_U6_lower_quotient_prime_correction_abs_le_pair_moment
