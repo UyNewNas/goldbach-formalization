@@ -8,7 +8,7 @@ Pinned Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade
 
 The true first D5 affine interval [50/227,117/454] is divided into eight exact rational cells, each invoking the original `first_cell` soundness theorem at its exact left-end logarithm argument. The second interval [117/454,19/58] is divided into sixteen cells, each invoking `second_cell` at the exact right-end logarithm argument. A typed `join_actual` lemma assembles original real interval integrals, not assumed measurements. The third affine interval [19/58,1/3] has an explicit separate nonnegative term. The old 12-cell proof is not altered.
 
-Independent **exact rational BigInt arithmetic**, using the inherited two-term log lower series, yields first eight 0.073377283642 > 733/10000, second sixteen NaN > 977/10000, combined NaN >171/1000. This is arithmetic diagnosis, NOT Lean elaboration, kernel validation or finite certification.
+Independent **exact rational BigInt arithmetic**, using the inherited two-term log lower series, yields first eight 0.073377283642 > 733/10000, second sixteen 0.097814770210 > 977/10000, combined 0.171192053852 >171/1000. This is arithmetic diagnosis, NOT Lean elaboration, kernel validation or finite certification.
 
 If the candidate Lean proof checks, original D5 increases from 163/1000 to 171/1000, seven-term source from 577/1000 to 585/1000 and lambda from 577/5000 to 117/1000. The unchanged required total 650/1000 is still 65/1000 away. No use of target-equivalent hypothesis.
 
