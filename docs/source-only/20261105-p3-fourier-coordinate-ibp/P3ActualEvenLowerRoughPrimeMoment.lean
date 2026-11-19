@@ -203,7 +203,7 @@ theorem squarefree_prime_divisor_moment_le_euler
             prod_nonneg_local T roughPrimeInvPhi hp
           exact mul_nonneg (by positivity) hprod
     _ ≤ _ := powerset_card_first_moment_le P roughPrimeInvPhi
-      (fun p hp => by simp [u]; positivity)
+      (fun p hp => by simp [roughPrimeInvPhi]; positivity)
 
 /-- Instantiation to the *actual* even-first-exit LOWER rough leaves,
 not an arbitrary replacement coefficient. All original strict prime
