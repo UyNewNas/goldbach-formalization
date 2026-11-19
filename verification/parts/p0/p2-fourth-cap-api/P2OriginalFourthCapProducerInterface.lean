@@ -156,11 +156,33 @@ theorem oldCube_eval (t : Point) : oldCube.eval t = t 0 + t 1 + 3 * t 2 := by
 theorem oldComponent_vector (t : Point) : oldComponent t =
     ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), VariableEnvelope.B (t 2),
       v (t 0 + t 2), v (t 1 + t 2)] := by
+  have h01 : (0 : Fin 4) ≠ 1 := by decide
+  have h02 : (0 : Fin 4) ≠ 2 := by decide
+  have h12 : (1 : Fin 4) ≠ 2 := by decide
   funext j
-  fin_cases j <;>
-    norm_num [oldComponent, oldPiece, oldMask, tentPlane, Affine.eval,
-      VariableEnvelope.B, cap, v_eq_min, A, C, Fin.sum_univ_four]
-  all_goals congr 1 <;> ring
+  fin_cases j
+  · change newCap ({0} : Finset (Fin 4)) t = v (t 0)
+    rw [newCap_eq_v]
+    simp
+  · change newCap ({0, 1} : Finset (Fin 4)) t = v (t 0 + t 1)
+    rw [newCap_eq_v]
+    simp [h01]
+  · change newCap ({0, 1, 2} : Finset (Fin 4)) t = v (t 0 + t 1 + t 2)
+    rw [newCap_eq_v]
+    simp [h01, h02, h12, add_assoc]
+  · change min
+      ((⟨153 / 256, ![0, 0, -3 / 8, 0]⟩ : Affine).eval t)
+      ((⟨153 / 256, ![0, 0, -3 / 8, 0]⟩ : Affine).eval t) =
+        VariableEnvelope.B (t 2)
+    rw [min_self]
+    norm_num [Affine.eval, VariableEnvelope.B, cap, Fin.sum_univ_four]
+    <;> ring
+  · change newCap ({0, 2} : Finset (Fin 4)) t = v (t 0 + t 2)
+    rw [newCap_eq_v]
+    simp [h02]
+  · change newCap ({1, 2} : Finset (Fin 4)) t = v (t 1 + t 2)
+    rw [newCap_eq_v]
+    simp [h12]
 
 theorem oldComponent_le (t : Point) (j : Fin 6) : oldComponent t j ≤ oldCap t := by
   rw [oldComponent_vector]
@@ -240,20 +262,39 @@ theorem halfGate_eval (t : Point) : halfGate.eval t = 1 / 2 := by
   simp [halfGate, Affine.eval]
 
 theorem fullGate_eval (t : Point) (j : Fin 4) : (fullGate j).eval t = prefixSquareExpr t j := by
-  fin_cases j <;>
-    norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter,
-      Fin.sum_univ_four, Fin.lt_def, Fin.ext_iff]
-  <;> ring
+  have hsum (p : Fin 4 → Prop) [DecidablePred p] (c : ℚ) :
+      (∑ i, ((if p i then c else 0 : ℚ) : ℝ) * t i) =
+        (c : ℝ) * ∑ i, if p i then t i else 0 := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    by_cases hi : p i <;> simp [hi]
+  have hdiag : (∑ i : Fin 4, if i = j then t i else 0) = t j := by
+    simp
+  simp only [fullGate, Affine.eval, Rat.cast_zero, zero_add, Rat.cast_add,
+    add_mul, Finset.sum_add_distrib]
+  rw [hsum (fun i => i < j) 1, hsum (fun i => i = j) 2]
+  simp only [Rat.cast_one, Rat.cast_ofNat, one_mul, hdiag,
+    prefixSquareExpr, Finset.sum_filter]
 
 theorem selectedGate_eval (I : Finset (Fin 4)) (t : Point) (j : Fin 4) :
     (selectedGate I j).eval t = selectedSquareExpr I t j := by
-  unfold selectedSquareExpr
-  rw [← maskSum_eq I t]
-  simp only [selectedGate, Affine.eval, maskSum, Finset.sum_filter, Fin.sum_univ_four]
-  by_cases h0 : (0 : Fin 4) ∈ I <;> by_cases h1 : (1 : Fin 4) ∈ I <;>
-    by_cases h2 : (2 : Fin 4) ∈ I <;> by_cases h3 : (3 : Fin 4) ∈ I <;>
-    fin_cases j <;>
-    norm_num [h0, h1, h2, h3, Fin.lt_def, Fin.ext_iff] <;> ring
+  have hsum (p : Fin 4 → Prop) [DecidablePred p] (c : ℚ) :
+      (∑ i, ((if p i then c else 0 : ℚ) : ℝ) * t i) =
+        (c : ℝ) * ∑ i, if p i then t i else 0 := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    by_cases hi : p i <;> simp [hi]
+  have hdiag : (∑ i : Fin 4, if i = j then t i else 0) = t j := by
+    simp
+  simp only [selectedGate, Affine.eval, Rat.cast_zero, zero_add, Rat.cast_add,
+    add_mul, Finset.sum_add_distrib]
+  rw [hsum (fun i => i ∈ I) 1, hsum (fun i => i < j ∧ i ∉ I) 1,
+    hsum (fun i => i = j) 2]
+  simp only [Rat.cast_one, Rat.cast_ofNat, one_mul, hdiag,
+    selectedSquareExpr, Finset.sum_filter]
+  rw [show (∑ i, if i ∈ I then t i else 0) = ∑ i ∈ I, t i from maskSum_eq I t]
 
 /-- These are finite rational endpoint inequalities, precisely the source
 gateslack>0 test decomposed into its individual affine differences. -/
