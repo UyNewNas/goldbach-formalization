@@ -1,0 +1,7 @@
+# Frozen external input boundary
+
+Reference manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b; `paper/source/manuscript-body.tex`, exact blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Section 'A positive upper sieve with its own density' states rho0=19/96, and eq:current-PP states the licensed smooth complete-modulus distribution bound with the SAME signed rho_N, coprime/Euler normalization, O_(A,W)(N (log N)^(-A)) error under its stated support/geometry premises. Does not grant an arithmetic Rosser quotient indicator. Registered, not proved, not called here.
+
+This packet implements internal exact finite List and prime-indexed identities only, at literal z=N^(19/96), L=N^epsilon, epsilon<=1/500, N>1 and X>=N^(3/5). It makes no statement that every upstream generic w,z,L caller is bound to these. The original lower w is an independent endpoint. The original selected history, actual sharedRankFour, receiverTest, fifth sign, sixth order/duplicates, complete modulus, strict 2P<N and same Rosser beta remain untouched. Two prior zero certificates and the frozen exponent certificate remove only one-sided events whose upper coefficient is exactly zero. 
+
+No external input is implemented, used as an axiom, or treated as verified. The bound by frozenSurvivorUpperAbsoluteInvoice is NOT normalized against H_N; no reserve paid. No changes to manuscript/constants/pins; no PNT/Mertens/BV/spectral subproject.
