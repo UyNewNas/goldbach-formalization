@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment
 import ImbalancedChen.P3ActualU6LowerPairMomentFactor
 import ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments
 import ImbalancedChen.P3ActualU6LowerActualPrimeCarrier
@@ -1764,3 +1765,9 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6LowerPairMomentFactor.coprime_threeblock_pair_prime_moment
 #check ImbalancedChen.P3ActualU6LowerPairMomentFactor.actual_U6_lower_positive_pair_moment_factor
 #check ImbalancedChen.P3ActualU6LowerPairMomentFactor.actual_U6_lower_quotient_prime_correction_abs_le_separated
+
+-- P3.6 run78: actual even-first-exit LOWER finite rough prime first moment.
+-- SOURCE_ONLY: these checks are registered but were NOT run with Lean/Lake/kernel.
+#check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.chen_prime_divisor_count_le_primeFactors_card
+#check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.squarefree_prime_divisor_moment_le_euler
+#check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.actual_even_retained_rough_prime_divisor_moment_le_euler
