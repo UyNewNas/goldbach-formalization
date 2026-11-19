@@ -1,0 +1,9 @@
+# P1.4 persistent handoff — anchored jump AP error
+
+The verified baseline was `56b9d85593a6c00b0211d15e47c9017e8ce179c4` on the reflected-prefix Abel line. This independent task branch is `chatgpt/p1-full87-anchored-jump-primitive-prefix-20261119-2010`. The new source is `P4AOriginalFull87AnchoredJumpPrimitivePrefix.lean`, source blob `a30a8f7463eef3bdc3d192df6cd3754fa8d6de37`, initial source commit `70f8b40bd8e78c178a336571687977ca5ec2090f`.
+
+Substantive fact: real bounded PLUS beta weight w has w(0)=w(m)=0. Therefore the full signed Abel correction is exactly the sum of ORIGINAL beta jumps multiplied by `Q(t+1)-Q(ell)`, where ell is the actual strict full-quotient lower gate. Conditional payment needs the anchored primitive AP discrepancy only at genuine jumps, times the actual total beta variation; no analytic rate has been supplied. Outer `sharedRankFour`/frozen event transport is inherited unchanged from the previous packet, not overwritten.
+
+Validation: SOURCE_ONLY / UNEVALUATED / UNCOMPILED; lean/lake/elan exit 127 in this 4 GiB container; no CI and no kernel or transitive axiom audit. Exact-rational synthetic diagnostics 15,000 cases/0 mismatches, not actual-producer evidence. Frozen Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958, manuscript 9731290e8f53cffda44129906cde6a965eaa869b, c and K unchanged.
+
+Next precise action: stage matching ancestral imports and attempt frozen-version Lean typecheck; check local theorem equality/support proof first. Then translate a real same-rho reflected AP *short-interval* source to each actual jump. Quantify beta total variation and multiplicity-preserving signed global budget before H_N assertions. Do not treat the previous mean as authenticated. Keep P1.4 YELLOW and preserve all source/registry/logs.
