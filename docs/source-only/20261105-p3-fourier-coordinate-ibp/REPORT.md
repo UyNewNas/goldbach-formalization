@@ -3852,3 +3852,32 @@ EXTERNAL_INPUTS.json unchanged at Git blob
 8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab:
 (M) RECORD ONLY / NOT IMPLEMENTED / NOT AXIOM. P3.6 YELLOW;
 this narrow source BLUE; NO new GREEN.
+
+## P3.6 successor — actual first-exit retained-rank rough modulus cap (2026-11-19)
+
+**Recovery and evidence.** Resumed the actual task branch HEAD `ec3ca6876c212491ce835d2a9bb90a2fa6f86726` (not the old initial de582e6). GitHub compare was IDENTICAL prior to source creation. Re-read the prior REPORT/REGISTRY/EXTERNAL_INPUTS, `P3ActualRawActiveLevelTotientCap.lean`, `P3ActualRawPhysicalRhoTotientCap.lean`, the pinned producer `FixedRoughCoefficients`, `RoughPrimeUniverse`, `RetainedModuli`, `FirstExitTree`, and the frozen manuscript §3(T)/§4(F). Root/docs/ImbalancedChen AGENTS.md probes returned NOT_FOUND, not treated as hidden authorization. No concurrent branch movement at write checkpoints.
+
+**New mathematical work.** The old raw physical `rho/phi` bound assumed a cap on every retained rough factor `b`. The actual producer expresses each such `b` as the product of `leaf.selected` for a real retained leaf of the original `oddFirstExitRetainedLeaves` with the genuine ordered `roughPrimeUniverse N cap w z`. The existing `selected.reverse <+ carrier` theorem implies each selected prime is *strictly below cap* and its count is bounded by the carrier's length. Using a proved-in-source elementary list product bound and an explicit integer power monotonicity argument, the candidate derives:
+
+```
+(hcap : 1 <= cap),
+(hrank : forall actual retained leaf, leaf.selected.length <= K)
+  ==> forall b in fixedRoughSupport, b <= cap^K.
+```
+
+It then discharges the previous explicit `hB` assumption with the *real producer* rank premise while preserving the real raw `actualSmallRoughRho`, true physical integer product `q`, full Euler `Nat.totient q`, and the strict small Rosser level `L <= A`:
+
+```
+M_raw(Q) = sum_(q in actualSmallRoughModuli) |rho_raw(q)|/phi(q)
+  <= logTotientCap A * logTotientCap(cap^K).
+```
+
+The unconditional finite fallback uses `K = (roughPrimeUniverse N cap w z).length`, since every selected leaf is a subword of that same real carrier. **The fallback need not be polynomial in N and is NOT a uniform log(N)^E budget.** A *uniform* admissible retained-rank bound, or another genuine weighted rough-support budget, is still an unproved manuscript-INTERNAL obligation. The result does NOT identify the final integer compiled `rho_N`, prove all PP/HB sources, or pay the shifted arithmetic discrepancy.
+
+**Source and commits.** New `P3ActualRetainedRoughRankCap.lean`, 163 lines, commit `5e15d10be1b6cbf9f546262c78422997acbf4c71` ([skip ci]), blob `c18572b325f648ab6f4a39e707f174af6b27d7c1`. Five public theorem candidates (list/power arithmetic helpers are private). `VERIFY.lean` new import and five UNEXECUTED `#check` entries: commit `60a5a0df9d9a6a042ddce4f6e4b97c39372967ca`, blob `91ed89bb580f8e2b4ebb1f72c73ae1d7aa4ac1be`. `REGISTRY.json` exact new successor record: commit `76ae7169c75307df01162ebe3672f44572c59e82`, blob `b9f23ac8ecf467addf915de90cb6f0379425894d`. Existing REPORT appended; no parallel packet/handoff document.
+
+**Executed checks and limits.** Proof source GitHub readback: exact blob; forbidden escape names 0; lexical delimiters balanced. Independent Python first-exit recursive finite MODEL (seeded, not the manuscript causal policy): 360/360 instances, 4,202 retained-product checks, 11,106 signed pair values, 1,372 negative attached coefficients, 188 cases where the displayed small product exceeds active small cap. The first attempted regression failed due to an invalid random interval and was repaired; final exit 0. Script `/mnt/data/p3run66/regression.py` SHA256 `72549e73c35b722665c5ffe96857e2dc70111dd32002198d97a156ec8f5bdea8`, log `/mnt/data/p3run66/regression.log` SHA256 `a9288acd34a6d9d8a08f854ec7cdc588295feb33d3ab395a8a7c925493fa8d9e`. Targeted command `lake env lean ImbalancedChen/P3ActualRetainedRoughRankCap.lean` genuinely attempted, **exit 127** (`lake: command not found`), log SHA256 `a867b2941e105dad50fedc482873bb493078314df1039d9daaba979191dfc0f9`. Thus there was no Lean elaboration, isolated import mapping, kernel checking, axiom audit, CI, independent replay or Codex. **SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED, no GREEN.**
+
+**Unchanged boundaries and precise next step.** The original paper stays pinned at `9731290e8f53cffda44129906cde6a965eaa869b`, Lean at `v4.33.0-rc1` and Mathlib at `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. `EXTERNAL_INPUTS.json` remains blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; research estimate (M) **RECORD ONLY / NOT IMPLEMENTED / NOT AN AXIOM**. No changes to production, manuscript, toolchain, other task branches, excluded full87 parent/history node, CI or PRs. Next: obtain the fixed Lean/Lake toolchain, create an isolated original `ImbalancedChen.*` import mapping, compile and repair this module **and its predecessors**. Then derive a genuine bounded K(N), or a direct weighted rough support budget, from the actual causal retainOdd producer; only afterward connect the final integer `rho_N` and all remaining PP/HB sources, nonzero shifts, Fourier W_T uniformity and exceptional diagonal.
+
+**Status: P3.6 YELLOW; exact real retained first-exit rank-cap bridge BLUE, not compiled; GREEN +0.**
