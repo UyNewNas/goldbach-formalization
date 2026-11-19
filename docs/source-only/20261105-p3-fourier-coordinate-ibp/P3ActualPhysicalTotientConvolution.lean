@@ -29,6 +29,8 @@ noncomputable section
 open scoped Classical BigOperators
 open ImbalancedChen
 open ImbalancedChen.P3ActualWholeProductMixedTauTransfer
+open ImbalancedChen.P3ActualFrozenTaggedPrimeBox
+open ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre
 
 /-- The physical modulus is the INTEGER PRODUCT, not an auxiliary
 Fourier frequency or independently chosen density level. -/
@@ -206,24 +208,24 @@ theorem original_threeHB_mean_of_signed_pair_rho
     ‖P3ActualFixedHBOffshiftSourceLedger.fixedThreeHBOffshiftMean
         N m j τ z y u v w (S.image pairModulus)
           (signedIntegerPairRho S c) W‖ ≤
-      (∑ a ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-          (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) u,
-        ∑ b ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-          (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) v,
-          ∑ d ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-            (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) w,
-              ‖P3ActualFrozenWholeBoxHBFixedFibre.hbPositionalMass
+      (∑ a ∈ actualPrimeSlotBox
+          (actualPrimeFineLabelFinset N τ) u,
+        ∑ b ∈ actualPrimeSlotBox
+          (actualPrimeFineLabelFinset N τ) v,
+          ∑ d ∈ actualPrimeSlotBox
+            (actualPrimeFineLabelFinset N τ) w,
+              ‖hbPositionalMass
                 m j z y W a b d‖) *
       (∑ x ∈ S, ‖(c x : ℂ)‖ *
         ((Nat.totient x.1 : ℝ)⁻¹ * (Nat.totient x.2 : ℝ)⁻¹)) := by
   have hcoeff : 0 ≤
-      (∑ a ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-          (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) u,
-        ∑ b ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-          (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) v,
-          ∑ d ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-            (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) w,
-              ‖P3ActualFrozenWholeBoxHBFixedFibre.hbPositionalMass
+      (∑ a ∈ actualPrimeSlotBox
+          (actualPrimeFineLabelFinset N τ) u,
+        ∑ b ∈ actualPrimeSlotBox
+          (actualPrimeFineLabelFinset N τ) v,
+          ∑ d ∈ actualPrimeSlotBox
+            (actualPrimeFineLabelFinset N τ) w,
+              ‖hbPositionalMass
                 m j z y W a b d‖) := by
     apply Finset.sum_nonneg
     intro a ha
@@ -231,13 +233,13 @@ theorem original_threeHB_mean_of_signed_pair_rho
     intro b hb
     exact Finset.sum_nonneg (fun d hd => norm_nonneg _)
   calc
-    _ ≤ (∑ a ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-            (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) u,
-          ∑ b ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-            (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) v,
-            ∑ d ∈ P3ActualFrozenTaggedPrimeBox.actualPrimeSlotBox
-              (P3ActualFrozenTaggedPrimeBox.actualPrimeFineLabelFinset N τ) w,
-                ‖P3ActualFrozenWholeBoxHBFixedFibre.hbPositionalMass
+    _ ≤ (∑ a ∈ actualPrimeSlotBox
+            (actualPrimeFineLabelFinset N τ) u,
+          ∑ b ∈ actualPrimeSlotBox
+            (actualPrimeFineLabelFinset N τ) v,
+            ∑ d ∈ actualPrimeSlotBox
+              (actualPrimeFineLabelFinset N τ) w,
+                ‖hbPositionalMass
                   m j z y W a b d‖) *
           P3ActualWholeProductPrimitiveMeanPayment.physicalReciprocalTotientMass
             (S.image pairModulus) (signedIntegerPairRho S c) :=
