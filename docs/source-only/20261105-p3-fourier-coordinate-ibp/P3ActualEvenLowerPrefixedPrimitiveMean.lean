@@ -80,6 +80,7 @@ theorem prefixedPrimitiveMean_factor
     have hphi : ((Nat.totient (b * q) : ℝ)⁻¹) =
         (Nat.totient b : ℝ)⁻¹ * (Nat.totient q : ℝ)⁻¹ := by
       rw [Nat.totient_mul (hcop q hqQ), Nat.cast_mul, mul_inv_rev]
+      ring
     have hphiC := congrArg (fun r : ℝ => (r : ℂ)) hphi
     rw [hphiC, Complex.ofReal_mul]
     ring
