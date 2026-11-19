@@ -19,3 +19,9 @@ This source further lifts the **finite exact identity** to the SAME actual RAW-o
 Frozen manuscript: `9731290e8f53cffda44129906cde6a965eaa869b`, body blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`, c=49044063/25000000, K=8452171/1250000. No CI/Codex/main writes or expansion.
 
 **Next exact steps:** (1) stage earlier source-only imports at their matching module paths and typecheck the new finite Abel and global signed-List theorems, repairing errors; (2) identify an authenticated same-rho unweighted **primitive reflected AP prefix** theorem for the full actual modulus b and the requested clock/center corrections, if available; (3) calculate genuine β-room variation and event-level signed or absolute budget relative to (H_N); (4) proceed to lower-half correction, ordinary residual integral, saved87 and changed/tagged/rank9 coverage, two independent reserves. P1.4 stays YELLOW.
+
+## Finite arithmetic diagnostics — not formal validation
+
+The initial naive 25,000-case test recomputed a prime set in every quotient evaluation and **timed out after 60 seconds**. A revised test cached exact prime sets and completed **12,000 deterministic cases** (seed 191019; N in [2,260], quotient modulus b in [0,25], arbitrary truncated rooms, omitted room elements, signed rational beta weights, rational reference means). Exact Abel equality, endpoint weight zero, and correction ≤ maximal prefix discrepancy × actual room variation held in all cases (**0 mismatches**). This is Python finite arithmetic, not Lean verification or an actual producer/H_N estimate.
+
+Source Blob verified by GitHub readback: `ba93cce2135bcd19eb4b1f5648f03720ba3b0cb3`. Proof source commit: `99d0da26b103a13a0e312d9066f51a8ff06a01d3`. Lean/Lake/elaboration remains unavailable; no COMPILED status awarded.
