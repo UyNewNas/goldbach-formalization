@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualTaggedLiteralHBModeGamma
 import ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre
 import ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift
 import ImbalancedChen.P3ActualFrozenThreeWholeBoxHBTarget
@@ -1542,3 +1543,11 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.threeWholeHBAtQ_eq_fixed
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.sameRhoFixedProductResponse
 #check ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre.threeWholeHB_sameRho_fixed
+
+-- P3.6 actual original-ID finite separated HB/Fourier gamma normalization.
+-- All SOURCE_ONLY: #check registered, NOT executed in a Lean toolchain.
+#check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHBModeFibre
+#check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHB_finite_separated_fibre
+#check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHBModeFibre_norm_le_tau
+#check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHB_mode_amplitude_l1
+#check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.tagged_literal_hb_modes_same_rho_tensor
