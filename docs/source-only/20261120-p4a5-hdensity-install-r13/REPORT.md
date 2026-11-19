@@ -1,0 +1,41 @@
+# P4A.5 same-ρ hdensity installation continuation r13
+
+Parent `103617db065bd29e61d6f5b87846348ef0bc7f46`. Six hash-recorded source modules were installed into an isolated stage, satisfying the seven previously missing direct edges recorded by r12's limited G3/T05 registry-edge audit. Source expansion also reveals additional unresolved dependencies; it does not close the target. A new per-file resource-option inventory covers the currently reached literal graph. The candidate `P4AOriginalFiniteAll22FineDensity.lean` remains unchanged, SHA-256 `1942060c36cde2fb609dce8d370d29fa10701c5e6ed75159416e1c51cb8df7e5`; no mathematical declaration, theorem proof, premise or analytic input was changed.
+
+SOURCE_ONLY=true; COMPILED=false / UNCOMPILED; KERNEL_REPLAYED=false; TRANSITIVE_AXIOMS=NOT_CHECKED; FINITE_BODIES=UNEVALUATED; NEW_INDEPENDENT_PROOF_REVIEW=false. Earlier independent source review is not a kernel or elaboration receipt.
+
+## Precise installation, edge and resource status
+
+The six sources are `P5OriginalParentJensenIntegral`, `P1HistoricalFifthCommonPolicyInputs`, `P5OriginalArchiveCommonRawMean`, `P4AOriginalFull87CompleteSixthBound`, `P4AOriginalCatalogFiveArchiveSchedule`, `P4AActualJointDensitySchedule`. `EDGE_SOURCES.json` records each selected source's exact registry, path, size, SHA, actual direct imports, all currently observed importers and the particular missing registry edges. `bind_missing_edges.py` requires the previous audit and registry hashes, checks each expected source hash/size and actual missing target, then selects each distinct module once. All selections remain conditional until elaboration validates their compatibility and transitive closure. The stored existing endpoint source is installed unchanged; no P4A.4 endpoint was recalculated.
+
+On the same limited scope as r12, the 15 exact-hash G3 supplement/T05 primary parent records have 36 registered-hash direct edges: **35 match, zero missing, one mismatch** (r12: 28 match, seven missing, one mismatch). This says nothing about other parents or edges lacking a recorded expected hash. The mismatch remains the actual `P4AOriginalNewFifthCoverage` → `P5HistoricalRectangularGammaTransport` edge: G3 records original `6917658f287ac043bfebca18c7775efc145db71796a2ee71ae03e0e16c2e625a`, whereas the stage conditionally selects v3 repair `fb0e5a57a1123f2ef778c36f1ee29820a0db138d8cc0d862e244eec5d2b33130`. Both originals remain separate; the mismatch is not resolved or accepted by Lean.
+
+The literal traversal now has 203 staged files, 664 visited project modules, 70 unresolved project imports and 157 external module names (r12: 197, 658, 65, 156). The six old missing names are replaced by eleven newly exposed names; details are in `IMPORT_AUDIT.json`. These counts and the focused registry-edge results do not establish a complete source/data/package closure, parse correctness or kernel verification.
+
+`audit_resource_directives.py` rechecks the actual SHA-256 of every reachable source at its actual stage/checkout location and scans for standalone, line-leading `set_option maxHeartbeats` and `set_option maxRecDepth` numeric text. `RESOURCE_DIRECTIVES.json` records 18 source modules, each source origin/hash, and 442 matched lines with option, value, line and `in` status; 217 lines are `maxHeartbeats 0`. This is a textual scan, not Lean parsing: comments are not lexed, other syntactic forms can be missed, and actual execution/resource requirements remain unknown. The user's resource restriction must be satisfied before compiling these sources; the current run did not execute or raise any of these options. No resource-limit change or semantic proof adaptation has been made.
+
+## Exact target and source boundary
+
+The historical same-ρ source candidate targets `∀ δ>0, ∀ᶠ N, Even N → physicalDensitySum (Q δ N) (ρ δ N) ≤ (currentK+δ)*(singularSeries N/Real.log N)`. Prior source review records one Fine/cofinal call at `densityReserve/2`, the same β/k and inherited uniform N₀, δ-independent Q/ρ, the actual correction retained and its nonnegativity invoked for the same F/N/cap/w/z with w ≤ z, and no duplicate compiler payment. This is an inherited source claim, not a newly checked theorem. The actual finite count keeps the full signed error, `ceil(z)` and `T+1`; full PP, remaining assembly inputs and hUpper remain open. No P4B.4 signed PP assumption was inserted into density.
+
+The manuscript pin `9731290e8f53cffda44129906cde6a965eaa869b` has `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, consistent with the chain's registered pin; no version or parameter was changed. External inputs, exact statements, normalization, assumptions, call sites and verification statuses remain in predecessor registries; no new external analytic input or proof was introduced. Declared pins remain Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`; these are declarations, not installed-version receipts. c/K are unchanged.
+
+## Verification and next action
+
+- Python 3.12.14. `python3 docs/source-only/20261120-p4a5-hdensity-install-r13/bind_missing_edges.py > docs/source-only/20261120-p4a5-hdensity-install-r13/EDGE_SOURCES.json` exited 0; rerun stdout compared identical. Each original source was checked against its source-chain registered hash/size and actual r12 missing edge.
+- `python3 docs/source-only/20261120-p4a5-hdensity-install-r13/stage_and_audit.py /workspace/scratch/cb6959cc4223/stage-r13 > docs/source-only/20261120-p4a5-hdensity-install-r13/IMPORT_AUDIT.json`, `audit_registered_edges.py`, and `audit_resource_directives.py /workspace/scratch/cb6959cc4223/stage-r13` each exited 0. The latter two outputs were regenerated and compared byte-for-byte; `py_compile` of the Python scripts exited 0. These checks do not compile or execute Lean.
+- The r9 `stage_original_npz.py` populated stage-r13 from the partial sparse release archive, exit 0, 188 member files, receipt SHA `ca484f66ba9efdc89fbf7b1692cac17ccee9ff3825a546870faa9799c2d3fb5f` matching r9. This validates per-block/member bytes only; it is not an evaluation of finite certificates or a full release/G3_INPUTS archive hash check. The large fixture stage is ephemeral and excluded from Git.
+- `lake env lean /workspace/scratch/cb6959cc4223/stage-r13/ImbalancedChen/P4AOriginalFiniteAll22FineDensity.lean` exited 127, `/bin/bash: lake: command not found`. Exact Lean/Lake/Elan and the pinned package closure are not installed here. No Lean elaboration, kernel replay, axiom inspection, finite evaluation, resource expansion, CI or user-machine access occurred.
+- Next: resolve the gamma source mismatch by actually checking the precise consumer/producer pair in an allowed pinned environment, trace and install the 70 visible missing sources, and verify all conditional selections/other fixture dependencies. Reconcile actual source resource directives with the no-expansion requirement before compiling; do not assert that removing/changing resource settings preserves elaboration without checking. Then typecheck the exact target, inspect transitive axioms and replay finite bodies. Independently complete signed error payment and other assembly hypotheses; this packet does not supply PP or hUpper.
+
+Changed-file SHA-256 (excluding this report):
+
+- `EDGE_SOURCES.json`: `a78a3987f7904f7b054bb1724fdc59a6836331715664526e9f57c6e0f2cbedbd`
+- `IMPORT_AUDIT.json`: `2bba8ecc78267049b022a57503a0557bfcc1d616c902ab4f6265ac6a9adc0b08`
+- `INSTALL_MANIFEST.json`: `712a216b908060cfdaefa0304ed9021fcc68a2d20f3312113802244897ab0246`
+- `REGISTERED_EDGE_AUDIT.json`: `3717e9eaaa8d7f2abbd451e96ac07c2a7093c6c9e4d33b526590a2db129d3319`
+- `RESOURCE_DIRECTIVES.json`: `7622865a56136064448b1317df5fa8455e56ee4d06ad1daf23d248f6b08d59ef`
+- `audit_registered_edges.py`: `a384f87d2e8dc232d4dcb855dc780c3f9da41f0f16328353e082e8027a908b5c`
+- `audit_resource_directives.py`: `ad673d6fb64f36481483ab2fae7f5810f050d4a88f014bb3b4452084f0e7e761`
+- `bind_missing_edges.py`: `a1277a4bfa243d8648e85efee552378ba91e78d5ac5940ec6f5efe652d9d619c`
+- `stage_and_audit.py`: `4712cdf8de1acaf35e8ec422e35958736b046088bdaceb39e2c115ca7029dd1a`
