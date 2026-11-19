@@ -156,7 +156,7 @@ theorem original_upper_signed_eq_full_beta_sub_unoccupied
   have hsubset := occupied_original_upper_subset_actual_room
     N cap w z L X pre p hrough
   have hpart :
-      (∑ a ∈ (actualPrimitiveRosserRoom N cap w L X pre p) \\
+      (∑ a ∈ (actualPrimitiveRosserRoom N cap w L X pre p) \
           (occupiedOriginalUpperBetaQuotients N cap w L X pre p),
         actualSmallRosserPlus N cap w L a) +
       (∑ a ∈ occupiedOriginalUpperBetaQuotients N cap w L X pre p,
