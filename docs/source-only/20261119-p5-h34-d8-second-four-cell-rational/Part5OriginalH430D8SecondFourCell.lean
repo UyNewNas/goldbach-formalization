@@ -147,8 +147,8 @@ private theorem second_cell (l r q : ℚ)
 /-- Four cells cover every point of the true D8 SECOND affine source,
 from cut=1265/5648 to uHi=100/353; the first source is nonnegative.
 The independent exact rational Darboux sum is > 0.103239. -/
-theorem genuine_d8_four_cell_ge_103_per_1000 :
-    (103/1000 : ℝ) ≤ d8Logs := by
+theorem genuine_d8_second_four_cell_ge_103_per_1000 :
+    (103/1000 : ℝ) ≤ ∫ u in cut..uHi, outerSlice u := by
   let a : ℚ := 1265/5648
   let t₁ : ℚ := 1/4
   let t₂ : ℚ := 13/50
@@ -215,9 +215,12 @@ theorem genuine_d8_four_cell_ge_103_per_1000 :
   have hbEq : (b : ℝ) = uHi := by norm_num [b,uHi]
   rw [haEq] at h₁
   rw [hbEq] at h₄
-  have hSecond : (103/1000 : ℝ) ≤
-      ∫ u in cut..uHi, outerSlice u := by
-    linarith only [h₁,h₂,h₃,h₄,hRat,hCast,s₁₂,s₁₂₃,s₁₂₃₄]
+  linarith only [h₁,h₂,h₃,h₄,hRat,hCast,s₁₂,s₁₂₃,s₁₂₃₄]
+
+/-- The full D8 includes the nonnegative first affine contribution exactly once. -/
+theorem genuine_d8_four_cell_ge_103_per_1000 :
+    (103/1000 : ℝ) ≤ d8Logs := by
+  have hSecond := genuine_d8_second_four_cell_ge_103_per_1000
   have hFirst : 0 ≤
       ∫ u in Ioc uLo cut, firstSlice u := by
     apply MeasureTheory.setIntegral_nonneg
