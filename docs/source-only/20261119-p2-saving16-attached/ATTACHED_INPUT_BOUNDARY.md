@@ -1,0 +1,5 @@
+# Input boundary
+
+No new axiom or external number-theory estimate is introduced. The proof bodies use the existing conditional `P4AOriginalR17EighthSignedTransport.coefficient_difference`, the existing finite `P4AUpperTaggedBetaAttachment.raw_attachment_eq_actual`, and the literal definitions of `smallRoughRho`, `smallRoughPairCoefficient`, and `signAttachedCoefficient`. The first input carries the existing `HistoryOnTrim`, `0≤e`, `omega≤a` and `1<N` conditions; the attachment is a finite equality on the same N, cap, w, z and L. These project inputs and their transitive dependencies remain SOURCE_ONLY with their original provenance and pins; this packet does not claim independent verification or an axiom audit.
+
+No external PP or density estimate is supplied. The final count's outstanding distribution term is `realPhysicalDistributionError b N T Q rho`, with the literal compiled `rho` and the consumer's `0<b<1`, `0<T`, and `ceil z≤T^(b/(1+b))` gate. Determining its original PP decomposition and actual covered parameter ranges remains open; this packet does not infer them from the old-coefficient medium-support obstruction.
