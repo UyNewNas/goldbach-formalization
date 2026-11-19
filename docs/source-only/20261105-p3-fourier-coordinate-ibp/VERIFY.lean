@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6LowerActualPrimeCarrier
 import ImbalancedChen.P3ActualU6LowerGlobalMask
 import ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean
 import ImbalancedChen.P3ActualEvenLowerIntegerRho
@@ -1731,3 +1732,10 @@ import ImbalancedChen.P3ActualEvenLowerEulerMass
 #check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_full_modulus_global_mask
 #check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_masked_signed_count_eq_pairs
 #check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_masked_prefixed_mean_eq
+
+-- P3.6 original U6 even-LOWER: exact admissible additive-prime source
+-- recentering, modulus-prime correction and original labelled signed source.
+-- These are declaration CHECKS ONLY; Lean was NOT RUN.
+#check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.actual_additive_source_AP_primitive_recenter
+#check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.signed_actual_additive_source_recenter
+#check ImbalancedChen.P3ActualU6LowerActualPrimeCarrier.original_U6_lower_labelled_additive_source_recenter
