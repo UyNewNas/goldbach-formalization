@@ -118,7 +118,7 @@ theorem original_signed_primitive_carrier_AP_eq_jump
         beta a * originalCarrierReflectedStep N pre p a) -
         mu * (∑ a ∈ room, beta a) := by
     simp_rw [mul_sub]
-    rw [Finset.sum_sub_distrib, Finset.sum_mul]
+    rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
     ring
   have habel := actual_room_reflected_prime_abel
     N cap w L X pre p mean
@@ -182,7 +182,7 @@ theorem original_signed_carrier_event_eq_jump_event
             originalCarrierJumpEvent, hk, c, A, J] using heq
       | licensedOnly =>
           simpa [originalSignedPrimitiveCarrierAPEvent,
-            originalCarrierJumpEvent, hk, c, A, J] using congrArg Neg.neg heq
+            originalCarrierJumpEvent, hk, c, A, J] using congrArg (fun x : ℝ => -x) heq
       | both =>
           simp [originalSignedPrimitiveCarrierAPEvent,
             originalCarrierJumpEvent, hk]
