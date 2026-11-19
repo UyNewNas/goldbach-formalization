@@ -1,0 +1,31 @@
+# P2.9 — H246 repeated-ceiling small-prime sum
+
+SOURCE_ONLY=true; COMPILED=false (UNCOMPILED); KERNEL_REPLAYED=false; TRANSITIVE_AXIOMS=NOT_CHECKED; INDEPENDENT_REVIEW=NOT_PERFORMED. All new and inherited proof terms, including finite row matching, are UNEVALUATED. This packet pays no H247 endpoint, no complete W2 collision allowance, and does not upgrade P2.9.
+
+## Baseline and scope
+
+Continuation branch `chatgpt/p2-9-causal-successor-20261119-1640`, baseline `6a845e2b60bad008d49b97c1655b7fd6b9ff0b15`; preceding pointwise packet `48a333723f7c66e4ebf4741a7c403de54cfc2aea` and its receipt are read. This packet extends that exact uncompiled dependency; it does not replace or independently certify it.
+
+Historical ledger `4ccc54e1423db03315957dc79138a89d4dab7efd` records the 29 actual H247 upper comparisons. The available local Wu/high-grid inputs at `365409fed5d1a485d82cd2b6849b202492dad401` do not establish a selected enhanced-Q H247 comparison. For index 50, s=101/50, the missing input is a bound for the actual H247 profile in its actual selected box, at its native Q and cutoff, with the ledger's Θ normalization and upper direction; a classical full-box estimate or an H246 upper bound is not such a comparison. No endpoint is eliminated here. Registry and selected source at `32d541884c85748e3fb18f7a83801b2f8b16e359` and the later handoff do not supply that comparison. This statement is restricted to the inspected chain and does not assert absence of unrelated later work.
+
+The chain's manuscript pin, verified in the preceding continuation, is `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b:paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, matching the user entry. Its lines 795–855 specify the common physical Q, marked Θ, true alpha, chosen/full carrier, ceiling tests and four separate W2 pair occurrences. No pin or parameter is changed.
+
+## New proof bodies and mathematical content
+
+`P2Historical246RepeatedCeilingSum.lean` SHA-256 `191abed4a1f25463f90b9eca760df47475ef7193e92083025cbf8527eb44680c`. For an actual H246 lane j,k, let d be the old parent product, L its true residual exponent, Q=d N^L and c the successor's actual last appended prime. The slice is the original N-deleted `halfCarrier`, intersected with the original interior and parent-window gates, with not-both-coprime prefix collision and large coordinate equal to c. It is a subcase of that existing collision class, not a new ceiling payment.
+
+At fixed c, projecting (small,large) to small is injective. The projected points lie in the original N-deleted one-dimensional prime box [N^(L/10), N^(3L/5)] with the exact endpoint conventions inherited from `actualPrimeBoxTuples`. Consequently the finite reciprocal sum is bounded by `actualPrimeBoxMass N (L/10) (3L/5)`. Combining the inherited exact repeated-prime factor 1/c and H246 atom bound yields
+
+`|sum_slice oldPairAtom| ≤ |thetaAtom(N,Q,d)| * (20*floorBound(H246)/c) * actualPrimeBoxMass(N,L/10,3L/5)`.
+
+`successor_equal_ceiling_sum_uniform` further supplies a single T for each eta>0, epsilon>0 and horizon, before N, nu, mark, successor choice, actual source tuple and actual tagged row. For N≥T, nu≤1, and the original BoxRows/source assumptions, it chooses the actual prime c with c|d and physicalPrime(N,c) equal to the original history ceiling, identifies the actual row j and all four ordered lanes k, and proves the displayed slice sum is at most `epsilon * thetaAtom(N,N^nu,d)` for each k. The proof uses the existing true successor floor `lo=floorAt eta (horizon+1)>0`, so c≥N^lo; monotonicity embeds the moving small-prime box into fixed ambient exponents lo/20 and max(1,lo); the existing fixed-box mass limit and N^(-lo) make the coefficient tend to zero. Existing same-Q positivity supplies thetaAtom≥0. This proof is per parent, per occurrence: it does not yet sum over marked parents or establish an epsilon times total marked Θ.
+
+No collapsed multiplicities: projection is injective only within one fixed-c pair occurrence; the four k are retained separately. The proof stops before the original W2 /5. It adds neither Q80 /4 nor replacement payment, and makes no assertion that the entire prefix collision is bounded, nor that any independently existing count-collision payment equals this Θ-profile sum.
+
+## Inputs, verification and remaining obligations
+
+No new external analytic input is assumed. Inherited pinned-source lemmas are `repeated_large_atom_bound`, `successor_ceiling_is_prime`, `successor_sameQ_positive_level`, `successor_pair_floor_uniform`, `actual_pair_lists`, `moving_box_mass_le_ambient`, `tendsto_actualPrimeBoxMass`, `physical_floor_to_power`, and `thetaAtom_nonneg` / `sameQ_residual_gt_one`; their import closure and kernel validity remain unverified in this environment. The exact actual source geometry and quantifier order are kept; no PNT/Mertens/BV/spectral proof is started.
+
+Executed `lean --version` and `lake --version`: both exit 127, raw logs included. Baseline `lean-toolchain` says `leanprover/lean4:v4.33.0-rc1`; baseline `lake-manifest.json` pins mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; the inherited registry pins `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. The installed executables and import closure are unavailable; no compiler invocation or kernel replay was possible. `rg` found no forbidden proof placeholders or native-decision/unsafe token in the new source, but is not a type check. No resource enlargement, producer replay, CI or Actions occurred.
+
+Next: in the pinned environment elaborate the exact parent imports and new file, repair any scoped errors, replay the kernel and check transitive axioms; arrange an independent review. Then sum the uniform per-parent bound against the actual nonnegative labelled weights, preserving each of the four W2 occurrences and applying /5 exactly once, and bind the resulting sum to the same marked Θ without silently reusing any count-collision budget. Still owed: all other prefix/repeat/center collisions, strict large>ceiling and walls, exact signed base/seed and query/selection admissions, Γ5 and unclosed Γ9–15 old-count licences, reserve payments, and all actual H247 endpoint comparisons at `BankEndpointLicences`, subject to any independently verified later payments.
