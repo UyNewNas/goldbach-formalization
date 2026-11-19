@@ -1,0 +1,41 @@
+# P4A.5 same-ρ hdensity installation continuation r12
+
+Parent `223ad22588b928e8756131b10d55da4e334ace25`. Seven actual missing project imports were installed as conditional source selections from recorded G3/T05/T04 source versions, and a focused direct-edge hash audit identified a **specific live importer** for the previously known gamma-version conflict. The unchanged candidate `P4AOriginalFiniteAll22FineDensity.lean` is SHA-256 `1942060c36cde2fb609dce8d370d29fa10701c5e6ed75159416e1c51cb8df7e5`; no Lean statement or proof body was modified and no premise was newly eliminated.
+
+SOURCE_ONLY=true; COMPILED=false (UNCOMPILED); KERNEL_REPLAYED=false; TRANSITIVE_AXIOMS=NOT_CHECKED; FINITE_BODIES=UNEVALUATED; NEW_INDEPENDENT_PROOF_REVIEW=false. The historical independent source review does not establish Lean/kernel acceptance.
+
+## Precise installation and edge conflict
+
+The seven actual frontier sources are `P2OriginalSaving16HistoricalMesh`, `P4AFull87CompilerCapRead`, `P4AFull87CompilerChangedPartition`, `P4AOriginalFull87SlotTwoFive`, `P4AOriginalNewFifthBoxIntegral`, `P4AUpperTaggedContinuationAccounting`, `P5OriginalHistoryGapCorner`. `FRONTIER_EVIDENCE.json` gives each registered path, byte length, SHA-256, actual literal direct imports and actual importing sources. Where the selected registry explicitly gives ordered direct imports they are checked against the file; for sources whose specific G3/T05 record only binds identity, the imports are read from the source and marked as such. Each choice remains conditional on typechecking and compatibility.
+
+`audit_registered_edges.py` covers only reached G3 supplement or T05 primary sources whose actual parent source SHA matches the respective registry, and only direct edges for which that registry supplies a child SHA. `REGISTERED_EDGE_AUDIT.json` records 15 such parent records and 36 checked edges: 28 match, seven are missing and one mismatches. These are not counts for the complete project graph, and a matching hash does not establish semantic or Lean correctness.
+
+The mismatched actual edge is `P4AOriginalNewFifthCoverage` (staged SHA `81d483c3a2ed8a67ed52f4bc25d5a4ec9eb5fc7bc8b77f36c0fceb64d79ce53d`) importing `P5HistoricalRectangularGammaTransport`. The G3 registry records original source `docs/source-only/20261102-resume-30j/history_reserve/P5HistoricalRectangularGammaTransport.lean`, SHA `6917658f287ac043bfebca18c7775efc145db71796a2ee71ae03e0e16c2e625a`; the prior isolated stage conditionally selected T01 v3 repair `docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/v3repairs/P5HistoricalRectangularGammaTransport.lean`, SHA `fb0e5a57a1123f2ef778c36f1ee29820a0db138d8cc0d862e244eec5d2b33130`. Their complete textual diff changes `B z` and `dsimp only [B]` to `VariableEnvelope.B z` and `dsimp only [VariableEnvelope.B]` in an existing proof. T01's failure diagnosis motivated the repair but does not establish its compatibility with this consumer or an accepted object. Both versions are preserved; no source was silently replaced, and the conflict is not declared resolved. A future Lean check must validate the exact selected producer and consumer together.
+
+The literal import traversal now has 197 staged sources, 658 visited project modules, 65 unresolved project modules and 156 external import names, compared with r11's 190, 651, 67 and 156. The seven old missing names disappear; five new names are reached: `P2OriginalSaving16TrimmedHistory`, `P4AActualJointDensitySchedule`, `P4AHeldTaggedFiniteAdmissionPayment`, `P5HistoricalHistoryTransportConsumers`, `P5OriginalParentJensenIntegral`. These counts are diagnostic and do not certify parsing, full data closure, version compatibility or proof correctness.
+
+The pre-existing source options and resource restriction documented in r11 remain: in particular some selected finite proof sources contain `set_option maxHeartbeats 0` and enlarged `maxRecDepth`; they were not executed. Do not run those scopes in a future build without reconciling them with the user's no-resource-expansion rule. No resource limit was raised this round.
+
+## Exact claim and boundaries
+
+The historical candidate intends the same actual Q/ρ density premise `∀ δ>0, ∀ᶠ N, Even N → physicalDensitySum (Q δ N) (ρ δ N) ≤ (currentK+δ)*(singularSeries N/Real.log N)`. The prior source review records one Fine invocation at `densityReserve/2`, same β/k and common N₀, Q/ρ independent of δ, retained correction, and the same F/N/cap/w/z with w ≤ z for correction nonnegativity; compiler expense is inherited without double payment. This describes the existing reviewed source only, not a newly checked theorem. The actual finite count keeps the complete signed distribution error, `ceil(z)` and `T+1`. Complete PP, other assembly hypotheses and hUpper remain open; no signed PP premise was inserted into density.
+
+Manuscript revision `9731290e8f53cffda44129906cde6a965eaa869b` yields `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, consistent with the inherited pin; no manuscript version or constants changed. External analytic inputs, their versions, normalization, hypotheses, call sites and verification statuses are inherited from prior registries; none were added or proved here. Declared pins remain Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`; these declarations are not receipts of installed tools.
+
+## Verification and next step
+
+- Python 3.12.14; `python3 docs/source-only/20261120-p4a5-hdensity-install-r12/bind_frontier.py > docs/source-only/20261120-p4a5-hdensity-install-r12/FRONTIER_EVIDENCE.json` exited 0; repeated output compared byte-identical. It checks source bytes, registry binding, direct imports where registered and actual previous importers.
+- `python3 docs/source-only/20261120-p4a5-hdensity-install-r12/stage_and_audit.py /workspace/scratch/cb6959cc4223/stage-r12 > docs/source-only/20261120-p4a5-hdensity-install-r12/IMPORT_AUDIT.json` exited 0. `audit_registered_edges.py` exited 0 and repeated byte-identically; its missing/mismatch statuses are findings, not a successful dependency-closure assertion. Both scripts are static audits.
+- The r9 `stage_original_npz.py` populated the new stage from the partial sparse release archive, exit 0; 188 members, receipt SHA `ca484f66ba9efdc89fbf7b1692cac17ccee9ff3825a546870faa9799c2d3fb5f` matches r9. The full outer release and old G3_INPUTS archive hashes were not verified; finite certificate content was not evaluated. Large fixtures are ephemeral and not committed.
+- `lake env lean /workspace/scratch/cb6959cc4223/stage-r12/ImbalancedChen/P4AOriginalFiniteAll22FineDensity.lean` exited 127: `/bin/bash: lake: command not found`. The exact toolchain and packages are unavailable in this environment; no Lean elaboration, CI, kernel replay, transitive axiom check, finite evaluation or user machine was used.
+- Next: resolve the explicit gamma edge conflict with actual Lean elaboration rather than a silent hash swap, verify all conditional choices, and recover the 65 visible missing project imports and other required data. Respect the resource boundary in r11. Only in a permitted existing pinned environment can the exact closure/candidate be typechecked and its transitive axioms and finite bodies replayed. Separately pay the signed error and remaining assembly inputs; this packet does not supply PP/hUpper.
+
+Changed-file SHA-256 (excluding this report):
+
+- `FRONTIER_EVIDENCE.json`: `e22f31f52df531d09a212f508b42da1007833dc08c2ac3ab6be1691d4cd8970a`
+- `IMPORT_AUDIT.json`: `2d86add163805bb27e2fc5880cf732ecfc596f1553a357ade345a223e9f86d5c`
+- `INSTALL_MANIFEST.json`: `b9f31ac7fa3f4a288ad660b980c69d544acef06cf34a9822c78b9e92cec1424e`
+- `REGISTERED_EDGE_AUDIT.json`: `47b5f5d8af0afa4e655998ac738775e0db12e1eee568102468a4f031b2cc0fe6`
+- `audit_registered_edges.py`: `a384f87d2e8dc232d4dcb855dc780c3f9da41f0f16328353e082e8027a908b5c`
+- `bind_frontier.py`: `c5b1cede014137931f89e32696a0fbfc0347ef9c2ae2c764ca46ed6af5228fc4`
+- `stage_and_audit.py`: `4712cdf8de1acaf35e8ec422e35958736b046088bdaceb39e2c115ca7029dd1a`
