@@ -13,7 +13,7 @@ original physical Q and EXACT coprime mean are kept.
 Unlike the preceding shifted-divisor *count* ledger, the primitive MEAN
 has a completely separate positive mass. It can be paid after the full
 product-fibre regrouping, with no shift-divisor factor, no rho sign
-assumption, no change of label multiplicities and no new analytic axiom.
+assumption, no change of label multiplicities and no new analytic premise.
 
 This does NOT show that actual rho_N has polylog reciprocal-totient mass,
 that W_T has the necessary uniform coefficient norm, or that the full
