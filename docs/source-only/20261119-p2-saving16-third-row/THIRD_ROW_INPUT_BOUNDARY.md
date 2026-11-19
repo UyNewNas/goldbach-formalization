@@ -1,0 +1,7 @@
+# Input boundary
+
+No new external theorem or structural assumption is introduced. The candidate consumes the same original source table, trim and compiler fibre declarations as the previous packet; the actual fourth exponent uses existing `P4AOriginalFull87DataPolicy` cap4/cap5/licensedCap definitions and `P4AOriginalR17EighthParent.parent_on_owner` with the existing `HistoryOnTrim` premise. This premise and all imported candidates are uncompiled here. The result is a one-history exponent inequality, not identification of the full-q fourth-parent coefficient.
+
+Manuscript pin: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; eighth-saving threshold and sign-selected beta attachment occur in its eighth-saving and finite-compilation subsections. Source row and R17 parent are in formal repository at baseline `30a8e977b6e87229541a23777bf9ac7fb48a8eaf`. Verification status is SOURCE_ONLY.
+
+No PP input has been verified or supplied. The call sought is the distribution error `realPhysicalDistributionError b N T Q rho`, with `0<b<1`, `T>0`, `ceil z≤T^(b/(1+b))`, for the same compiled Q and rho; a precise quantitative estimate, its normalization, provenance, and compatibility with all selected corners still need to be checked before invocation. The manuscript must prove the parameter adaptation, per-corner transport and error/reserve payment. This packet opens no PNT, Mertens, BV or spectral proof.

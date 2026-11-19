@@ -1,0 +1,27 @@
+# P2.5: third source row and actual fourth-layer exponent
+
+Baseline `30a8e977b6e87229541a23777bf9ac7fb48a8eaf`, branch `chatgpt/p2-saving16-cofinal-20261119-1727`. The new SHA is the commit containing this report. SOURCE_ONLY; COMPILED=false / UNCOMPILED; KERNEL_REPLAYED=false; transitive axiom check NOT_RUN; independent review NOT_RUN; finite Lean reductions UNEVALUATED.
+
+## Correction to the preceding candidate
+
+`P2Saving16SecondRowCompilerFibre.lean` used `(abs_lt.mp hclose).1` in the second-row positivity proof. For `hclose : |t3(x)-t3(y)| < tau`, that projection is `-tau < t3(x)-t3(y)`; the required direction is `t3(x)-t3(y)<tau`, namely projection `.2`. This packet changes that occurrence to `.2` and updates the previous registry's file hash. The preceding commit remains the historical record; neither version has been compiled. The first-row proof legitimately uses the other direction and is unchanged.
+
+## New candidate
+
+The 14 literal index vectors all have entry 2 at ordered row index 2; pool row 2 is `[-53/13824,0,0,0,0,0,0,0,1]`. `original_third_row` states its exact affine value `t 7 - 53/13824`. `third_row_margin` extracts `delta ≤ t_8(x)-53/13824` from the actual trim. For a rank-eight witness and `0<tau<delta`, the half-open label upper inequality gives `t_8(x)<lower_8(x)+tau`, hence `lower_8(x)>53/13824`, including the lower endpoint. If y belongs to the same actual compiler fibre, the direction `t_8(x)-t_8(y)<tau` gives strict positivity of this row at y. `third_row_and_signed_fibre` combines it with the compiler's original Mobius-signed occupied scalar, actual sign-selected small-factor coefficient, and full-modulus weight `G(b*y)` by applying the corrected previous candidate.
+
+`actual_fourth_le_sixth_parent` works on that same word `rosserAncestor 8 x.primeFactorsList`. With `HistoryOnTrim`, `0≤e`, `omega≤a`, `N>1` and the trim witness, the original source is active at both the fourth and sixth ancestors. The actual `level4Exponent` is then `cap4`; the `cap5` maximum contains that exact cap4, and the licensed sixth cap contains that cap5. The existing `parent_on_owner` identifies the latter with the R17 physical sixth parent. Therefore the actual fourth-layer exponent at this history is at most that sixth parent. This is stronger than the earlier old-third lower bound, but is an exponent inequality, not an equality of full-q or signed corner coefficients.
+
+`third_row_fourth_parent_signed` packages the third-row endpoint and fibre occurrence, this actual fourth-layer exponent bound, and the same signed coefficient for the same witness x and product b*y. The input is one trimmed actual source witness, not all corners or a proof that the global envelope can already discharge its hypotheses. The theorem does not assert positive-w permission, choose Q/rho/beta, or derive PP.
+
+## Remaining scope
+
+Rows 3–95 (zero-based), all ordered corner occurrences and original signs/multiplicities still need corresponding proofs, including binding the actual fourth parent to the full-q source and to the exact term read by the signed compiler. The `G` argument is arbitrary and does not itself identify the global compiled Q or rho. Establish positive-w permission and the actual common schedule's `tau < width r` while retaining the same single beta and complete `u_c`; then attach the literal compiled distribution error and pay its budget only once. Preserve the ordinary w=0 negative complement, inherited moment direction, Q96 and reserve. No identification follows merely from ALL/ANY on an untagged rectangle.
+
+The pending external counting input is the actual `realPhysicalDistributionError b N T Q rho` for `0<b<1`, `T>0`, and `ceil z≤T^(b/(1+b))`; exact normalization and rate remain to be recovered and checked. The whole-upper-corner medium partition, above-mu buffered fallbacks, strict power savings and transport to the same-Q same-rho budget remain manuscript proof obligations.
+
+## Evidence and limits
+
+Read the complete prior proof packet and the 14-cell affine table, `P4AOrderedThirdEighthTrimProgram`, `P4AOriginalR17EighthParent`, `P4AOriginalNonsingletonEighthParent`, `P4AOriginalFull87UnionHistory`, and `P4AOriginalFull87DataPolicy`. The current manuscript `9731290e8f53cffda44129906cde6a965eaa869b` has body blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; its eighth-saving paragraph states `t_8>53/13824` and the finite compiler uses sign-selected small beta weights. The repository pins remain Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and native `09b97db5764ade1246bfb77206baa1b124760958`.
+
+`lean --version` and `lake --version` each exited 127, command not found; logs are included. No compiler, kernel replay, transitive axiom check, independent review or CI ran. A source scan found no forbidden escape tokens. Parsing found fourteen third literal indices all 2; an exact-rational sanity check tested 43,712 eligible source points with ten points in each half-open fibre. These checks are not Lean compilation or evaluation. Existing resource limits were not increased: stack 8192 KiB, virtual memory and CPU unlimited, core 0. Next, type-check the exact staged import graph in the pinned environment and bind the actual fourth exponent to the same fourth full-q source and signed occurrence, proceeding to the next uncovered row only with its original threshold order.

@@ -98,7 +98,7 @@ theorem two_rows_full_modulus
   have hmargin := second_row_margin i delta (firstEightCoordinates N x) htrim
   have hsecond : 0 < (rowForm (sourceCell i) (1 : Fin 96)).eval (firstEightCoordinates N y) := by
     rw [original_second_row]
-    have hh := (abs_lt.mp hclose).1
+    have hh := (abs_lt.mp hclose).2
     linarith
   exact ⟨hfirst.1, second_lower_endpoint_strict i N x tau delta htau hwidth hrank htrim,
     hfirst.2.1, hsecond, hfirst.2.2⟩
