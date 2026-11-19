@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualWholeProductFibreLedger
 import ImbalancedChen.P3ActualFixedHBOffshiftSourceLedger
 import ImbalancedChen.P3ActualOffshiftSignedPhysicalDivisorMean
 import ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport
@@ -1575,3 +1576,14 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualFixedHBOffshiftSourceLedger.fixedThreeHBOffshiftMean
 #check ImbalancedChen.P3ActualFixedHBOffshiftSourceLedger.fixedThreeHB_sameRho_offshift_count_sub_mean
 #check ImbalancedChen.P3ActualFixedHBOffshiftSourceLedger.fixedThreeHB_signed_all_occurrences_offshift
+
+-- Run 59: whole PHYSICAL integer product fibres, true three-box positional HB.
+-- SOURCE_ONLY #checks registered, NOT RUN by Lean/Lake/kernel.
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.sum_by_full_product_fibre
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.weighted_sum_by_full_product_fibre
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.full_product_fibre_l1_le
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.actualHBTriples
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.tripleFullProduct
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.actualHBFullProductCoeff
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.actualThreeHB_sameRho_regroup_by_complete_product
+#check ImbalancedChen.P3ActualWholeProductFibreLedger.actualHBFullProductCoeff_l1_le
