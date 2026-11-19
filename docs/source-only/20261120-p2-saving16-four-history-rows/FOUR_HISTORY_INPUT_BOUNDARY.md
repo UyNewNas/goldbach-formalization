@@ -1,0 +1,7 @@
+# Input boundary
+
+No new external mathematical input or new structural hypothesis is introduced. The source candidate uses the original fourteen-cell ordered row table, `trim_exact`, the actual existing odd-history/comparison functions, the half-open fine-label and fibre statements, and the preceding same-Q same-beta signed-product theorem. `HistoryOnTrim`, the source witness, fibre and support hypotheses are inherited; the sufficient strict width `12*tau<width r` is explicit and is not established by the existing common schedule here. Every imported candidate is SOURCE_ONLY / UNCOMPILED.
+
+Manuscript source: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. The original source dictionary and remaining-eighth source at formal baseline `b2e8adc53ec993677ff966437a1260312328c69a` define the four original history expressions and ascending comparison; no actual fourth-parent/full-q equality follows from comparison alone.
+
+The required PP input is an estimate for the actual `realPhysicalDistributionError b N T Q rho` at `0<b<1`, `T>0`, `ceil z≤T^(b/(1+b))`, on the same compiled Q and rho. The precise rate, normalization and cited theorem remain unverified; none is asserted. Whole-upper-corner partition, above-mu fallback replacements, original occurrence multiplicity, positive-w license and one-time reserve/error payment remain manuscript obligations. No PNT, Mertens, BV or spectral proof is started.
