@@ -1,0 +1,5 @@
+# Input boundary
+
+No new external result, axiom or target-shaped assumption is introduced. The source imports `P2Saving16ActualCompilerDifference`, the existing `P4AOriginalR17PaidIntegral` and `P4AFiniteCapTaggedPayment`, and invokes the actual finite small/rough bijection and previous signed transport with its existing `HistoryOnTrim` hypothesis. Its density sum is exactly the absolute compiler-change component inside the existing `compilerExpense`; the separate beta defect is preserved. All imported candidates remain SOURCE_ONLY with their existing pins; the transitive axiom closure was not inspected.
+
+No PP or other external distribution theorem is proved. The exact outstanding consumer is `realPhysicalDistributionError b N T Q rho` with compiled rho, same Q, `0<b<1`, `0<T` and `ceil z≤T^(b/(1+b))`. The manuscript's fixed whole-upper-corner medium partition and its strict power saving remain to be established on the actual policy, including buffered above-mu second/third fallback boxes and their signed transport. No coverage of unverified ranges is claimed.

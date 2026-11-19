@@ -1,0 +1,23 @@
+# P2.5: same-Q weighted compiler ledger
+
+Baseline `4669fcb6ae682b98ba55bceedee653bb4163b224` on `chatgpt/p2-saving16-cofinal-20261119-1727`; the commit containing this packet is its new SHA. SOURCE_ONLY; UNCOMPILED; KERNEL_REPLAYED=false; transitive axiom check NOT_RUN; independent review NOT_RUN; inherited finite guards UNEVALUATED.
+
+## New candidate proof bodies
+
+`P2Saving16WeightedCompilerLedger.lean` defines `correctionSum` over the actual small/rough pairs. Each summand uses the original changed predicate, the sign-selected actual beta coefficient and the unchanged full-modulus test `G(a*d)`. `actual_weighted_correction_sum` identifies this sum with the compiled-minus-raw attached coefficient difference over the complete physical carrier. The existing cutoff-separated `sum_smallRoughModuli` supplies the unique pair-to-modulus reindexing, so no new factorial or multiplicity is inserted. `actual_density_correction_sum` specializes the same identity to the reciprocal-totient test.
+
+`compilerExpense_eq_beta_add_correction` identifies the absolute value of that exact density correction as the existing `P4AFiniteCapTaggedConstructor.compilerExpense`'s second term, while keeping the existing beta-projection defect as its first term. It is an equality, not a new expenditure or an unconditional assertion that the correction alone is below `u_c`. The existing common schedule already supplies a strict bound on the **whole** expense for its chosen coefficient, beta, fine width and N.
+
+`r17_same_Q_weighted_ledger` joins the actual compiler correction to the prior R17/enlarged-historical signed transport on the same `Q = moduli N w`, with `w=N^(nu*beta²)`, `z=cutoff N`, `L=N^(nu*beta)`, the actual `coefficient`, and arbitrary signed full-q test G. It expresses the actual compiled weighted sum as the same R17 sixth raw attached sum minus the enlarged-historical sixth/eighth signed difference plus exactly one correction. `r17_same_Q_density_ledger` chooses the reciprocal-totient test used by the existing integral envelope. These are exact finite identities, not two independently bounded sieves. They retain the inherited `HistoryOnTrim`, `0≤e`, `nu*beta²≤a`, and `1<N`.
+
+## Remaining obligations
+
+No proof here identifies the original fourteen geometric endpoint corners or ordered occurrence multiplicities with ALL/ANY decisions on the same actual fourth-parent frontier. Nor is the older held-fourteen policy shown equal to the enlarged R17 history. The ordinary w=0 negative complement and Q96 remain inherited, with no additional copy charged. The complete same-parameter schedule must still instantiate the exact history and consumer before assigning formal credit.
+
+PP remains the actual signed `realPhysicalDistributionError b N T Q rho` for the literal compiled Q and rho, under `0<b<1`, `0<T`, `ceil z≤T^(b/(1+b))`. The existing T04 ordered-third report identifies a specific outstanding condition: a fixed admissible partition on the entire upper corner of each active rectangle at every local medium scale, with strict power-saving after endpoint, beta and dyadic inflation. Its literal above-mu second/third fallbacks evaluate `v(y)` and `v(y+z)`; the finite buffered replacements and signed transfer remain open. This scope is not a proof that all PP outside a particular numerical range fails, nor a bound for the discrepancy.
+
+## Evidence
+
+The actual full Lean source and prior report/registry/input boundary were read at baseline; reviewed `SmallRoughAttachment`, `P4AOriginalR17PaidIntegral`, `P4AOrderedThirdCommonSchedule`, `P4AOrderedThirdRectanglePayment`, and the existing compiler expense definition. The manuscript body at `9731290e8f53cffda44129906cde6a965eaa869b`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, lines 453–481 was rechecked. Pins: Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`.
+
+`lean --version` and `lake --version` each returned exit 127, command not found. A Python rational check evaluated 16 weighted finite-carrier configurations with 16 unique products; it passed and is not a Lean proof or archive evaluation. The source scan found no new axiom, sorry, proof-tactic admit, native_decide or unsafe. No CI, compiler, kernel replay, transitive axiom check or independent review ran. Next: install the exact archived graph only in an environment already authorized for it, elaborate both predecessor modules and this one, then bind the remaining actual geometric-corner occurrence to the same paid coefficient and prove the PP whole-corner coverage.
