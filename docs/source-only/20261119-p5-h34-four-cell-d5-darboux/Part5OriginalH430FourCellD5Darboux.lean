@@ -170,7 +170,7 @@ private theorem second_argument_floor (l r u : ℝ)
   exact (mul_le_mul_of_nonneg_left hDenBound hNumR).trans
     (mul_le_mul_of_nonneg_right hNumBound hDr.le)
 
-private theorem first_cell (l r q : ℚ)
+theorem first_cell (l r q : ℚ)
     (hl : a0 ≤ (l : ℝ)) (hlr : l ≤ r) (hr : (r : ℝ) ≤ cutOne)
     (hq : 1 < q) (hs : 0 ≤ logSeriesLower q 2)
     (hqv : (q : ℝ) =
@@ -189,7 +189,7 @@ private theorem first_cell (l r q : ℚ)
   rw [hfa.1,hfa.2]
   exact hqv.le.trans hfr
 
-private theorem second_cell (l r q : ℚ)
+theorem second_cell (l r q : ℚ)
     (hl : cutOne ≤ (l : ℝ)) (hlr : l ≤ r) (hr : (r : ℝ) ≤ cutTwo)
     (hq : 1 < q) (hs : 0 ≤ logSeriesLower q 2)
     (hqv : (q : ℝ) =
