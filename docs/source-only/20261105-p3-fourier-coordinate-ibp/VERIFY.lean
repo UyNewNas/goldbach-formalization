@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerIntegerRho
 import ImbalancedChen.P3ActualIntegerRawSameRhoMean
 import ImbalancedChen.P3ActualRetainedRoughEulerMass
 import ImbalancedChen.P3ActualRawIntegerRhoCast
@@ -1690,3 +1691,14 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_physical_mass_le_euler
 #check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_primitive_mean_le_euler
 #check ImbalancedChen.P3ActualIntegerRawSameRhoMean.actual_integer_raw_threeHB_mean_le_euler
+
+-- P3.6: genuine even-first-exit LOWER source, not the previously constructed
+-- odd-first-exit UPPER raw rho. All 8 checks remain NOT EXECUTED.
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenRoughInt_cast
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerPairInt_cast
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_cast
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_abs_le_one
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_trivalent
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerPairInt_eq_P5_coefficient
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_signed_sum
+#check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_prefix_fubini
