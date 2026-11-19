@@ -170,6 +170,7 @@ import ImbalancedChen.P3HBCompactLocalJetBounds
 import ImbalancedChen.P3HBOriginalGroupDyadicScale
 import ImbalancedChen.P3HBOriginalGroupJetLeibnizStep
 import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
+import ImbalancedChen.P3ActualEvenLowerEulerMass
 
 
 
@@ -1702,3 +1703,13 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerPairInt_eq_P5_coefficient
 #check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_signed_sum
 #check ImbalancedChen.P3ActualEvenLowerIntegerRho.actualEvenLowerIntegerRho_prefix_fubini
+
+-- Even-first-exit LOWER physical rho: strictly conditional finite Euler mass,
+-- same integer coefficient and coprime primitive mean. NOT RUN by Lean.
+#check ImbalancedChen.P3ActualRetainedRoughEulerMass.squarefree_support_mass_le_explicit_euler
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actualEvenLowerRealMass
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_retained_rough_totient_mass_le_euler
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_real_mass_le_euler
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_integer_physical_mass_eq
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_integer_physical_mass_le_euler
+#check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_primitive_mean_le_euler
