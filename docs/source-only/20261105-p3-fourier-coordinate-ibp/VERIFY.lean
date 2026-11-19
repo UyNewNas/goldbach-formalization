@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6LowerGlobalMask
 import ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean
 import ImbalancedChen.P3ActualEvenLowerIntegerRho
 import ImbalancedChen.P3ActualIntegerRawSameRhoMean
@@ -1723,3 +1724,10 @@ import ImbalancedChen.P3ActualEvenLowerEulerMass
 #check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_lower_moduli_coprime_prefix
 #check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_even_lower_prefixed_mean_factor
 #check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_even_lower_prefixed_mean_le_euler
+
+-- Original U6 even-first-exit LOWER full-modulus squarefree/target mask:
+-- signed INTEGER coefficient, source labels, and full-physical B-filtered mean.
+-- These 3 checks are registered only, NOT EXECUTED by Lean.
+#check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_full_modulus_global_mask
+#check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_masked_signed_count_eq_pairs
+#check ImbalancedChen.P3ActualU6LowerGlobalMask.actual_u6_lower_masked_prefixed_mean_eq
