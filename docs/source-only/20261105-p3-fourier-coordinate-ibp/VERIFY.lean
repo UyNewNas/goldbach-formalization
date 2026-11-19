@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport
 import ImbalancedChen.P3ActualTaggedLiteralHBModeGamma
 import ImbalancedChen.P3ActualFrozenWholeBoxHBFixedFibre
 import ImbalancedChen.P3ActualFrozenWholeBoxHBOffshift
@@ -1551,3 +1552,12 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHBModeFibre_norm_le_tau
 #check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.literalHB_mode_amplitude_l1
 #check ImbalancedChen.P3ActualTaggedLiteralHBModeGamma.tagged_literal_hb_modes_same_rho_tensor
+
+-- P3.6 actual original physical (q,N)=1 support of COMPLETE prime*HB product.
+-- SOURCE_ONLY: #check registrations only. No Lean/Lake/kernel check was run.
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.full_product_coprime_of_target_congruent
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.fineKernel_zero_of_nonprimitive_full_product
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.sameRhoFixedProductResponse_restrict_primitive
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.sameRhoFixedProductResponse_offshift_primitive
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.sameRhoFixedProductResponse_exact_target
+#check ImbalancedChen.P3ActualPrimitivePhysicalRhoSupport.threeWholeHB_sameRho_restrict_primitive
