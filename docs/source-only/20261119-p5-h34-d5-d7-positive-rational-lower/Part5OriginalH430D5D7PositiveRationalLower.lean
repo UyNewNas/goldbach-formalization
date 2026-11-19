@@ -130,6 +130,7 @@ theorem actual_d5_second_slice_ge_22_over_25
   have hquarter : u*(1-u) ≤ (1/4 : ℝ) := by
     nlinarith [sq_nonneg (u-1/2)]
   unfold logSlice
+  rw [show 1-u-u = 1-2*u by ring]
   apply (le_div_iff₀ hpos).mpr
   nlinarith only [hlog,hquarter]
 
@@ -186,7 +187,7 @@ theorem actual_d5Logs_ge_37_per_1000 :
   have hb : cutOne ≤ (3/10 : ℝ) := by norm_num [cutOne]
   have hc : (3/10 : ℝ) ≤ top := by norm_num [top]
   have hstart : a0 ≤ top := ha.trans (hb.trans hc)
-  have hI₁ := intervalIntegrable_outerSlice (le_refl a0) ha (ha.trans (hb.trans hc))
+  have hI₁ := intervalIntegrable_outerSlice (le_refl a0) ha (hb.trans hc)
   have hI₂ := intervalIntegrable_outerSlice ha hb hc
   have hI₃ := intervalIntegrable_outerSlice (ha.trans hb) hc (le_refl top)
   have hI₁₂ := intervalIntegrable_outerSlice (le_refl a0)
@@ -265,6 +266,7 @@ theorem actual_d7_second_argument_ge_six_fifths
       uHi*(1/2 : ℝ) := by norm_num [uHi]
   unfold logArgument
   rw [hlow]
+  rw [show 1-u-u = 1-2*u by ring]
   apply (le_div_iff₀ hden).mpr
   nlinarith only [hdenBound,hnumBound,hconstant]
 
