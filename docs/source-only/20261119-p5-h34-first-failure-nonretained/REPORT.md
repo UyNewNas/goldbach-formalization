@@ -2,7 +2,7 @@
 
 Date: 2026-11-19 (Asia/Shanghai). Dedicated continuing branch: `chatgpt/p5-h34-full-tagged-actual-fin-20261112`.
 Verified incoming HEAD: `0eeb0245df0fc2850bec9ae069128dbebd947d57`.
-Source: `Part5OriginalH430FirstFailureNonretained.lean` (`95` lines; 3 theorem bodies).
+Source: `Part5OriginalH430FirstFailureNonretained.lean` (`95` lines; 2 theorem bodies).
 Source Git blob: `b3e10e23eb48a924e496fb0934929ecc84aedcac`.
 Frozen manuscript: `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`.
 Pinned Lean: `leanprover/lean4:v4.33.0-rc1`; mathlib: `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
