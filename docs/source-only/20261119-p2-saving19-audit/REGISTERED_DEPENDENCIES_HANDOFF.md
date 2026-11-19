@@ -1,0 +1,37 @@
+# P2.6 recovery of the registered T03 source dependencies
+
+Parent: `e8c4ad297d6b117c6825d945954f68c0def8ad7e`; original source baseline `6848b4a69fd6f25806989dac7d305d27a6cd204e`. This is a source-provenance and scope handoff, not a Lean proof packet. It adds no source theorem, axiom or premise and does not mark P2.6 compiled.
+
+## Exact sources recovered
+
+The publication manifest `docs/source-only/20261110-yellow-closure-10t/FULL87_PUBLICATION_PROVENANCE.json`, blob `44c46f115ba79dd62ed581c889c34612c21d2434`, records some T03 dependencies at older topic commit `be2efd01c561080672e6c0ad0ba21638837afe4c`, not at the original checkpoint's current paths. All eight entries below were fetched read-only at their exact registered paths. The downloaded UTF-8 bytes were independently SHA-256 hashed; all eight match the manifest. Git blob IDs are also those in the manifest. They are available as source, not yet installed or compiled.
+
+| Module | Topic path prefix under `docs/source-only/` | Git blob | SHA-256 |
+|---|---|---|---|
+| P4AOriginalFull87EighthKernelIntegration | `20261104-full87-eighth-kernel/` | `961aa0541ed1c135bfecaf0d89fc764277ad88de` | `20b08bb8a216d882fa037631c532e15415c7025696eaf6a66fe411164d66e87a` |
+| P4AOriginalFull87OwnedEighthSource | `20261105-full87-eighth-arithmetic/` | `c314277acb4968bf854d58ba860f552c7fef0a29` | `1f2b2b53f1c28e9a14b2b38ba8e403b79e53c19d443c303f335bd8b6c1bbb80e` |
+| P4AOriginalFull87LicensedSixthPolicy | `20261104-full87-licensed-sixth/` | `69a860892d521246ba6ca97993bdfff6432c3df1` | `896d9814ec35309be76d0452ed754a251699c2a3b18ecbaede3adbce48632041` |
+| P4AOriginalFull87HistoryCore | `20261103-full87-common-history/` | `458a67483f57fba768d06acc431a27a386bf9975` | `cad88ca9f018acf3ae3e78c203403f15b0e4f8089bc1d7dc1394dfc15b575c77` |
+| P4AOriginalFull87FiniteEighthPolicy | `20261103-full87-finite-eighth/` | `27435e70df49f4029e564f79bcf04db3de88b914` | `c44d1b052263dc75cc89e6eb5980c8e7497a9f3892e97ca2cb415cc3954641e4` |
+| P4AOriginalFull87ActualCommonHistory | `20261103-full87-common-history/` | `f6aa7cb228dadd0883e08ccb1676623cdec4e249` | `3fe33184c97ded23c1ec2a1960bed5f1d1208bc8a33b6d5e42b030633137a992` |
+| P4AOriginalFull87PolicyReverseAdmission | `20261103-full87-reverse-admission/` | `36667fd2ad700c51e0706e9614e61335a5db9e0f` | `6f828a7e1a826ca244574ad24f3cb6ff88e80368922fbbbce9b2550e4951b8a8` |
+| P4AOriginalFull87SevenCubeAdmission | `20261103-full87-reverse-admission/` | `469bc82253b5ac4b4ab088f930212cbf50d95c1f` | `d60d435d5902cfed47440fbb5ab7d67af646dd210401684c9332e02101f1033b` |
+
+Each complete path is the indicated prefix followed by the module name and `.lean`. The manifest reports a 1,046-module project closure, including 65 topic-only files; these counts are historical manifest assertions, not an independently authenticated 1,046-module installation. The eight recovered files are among those topic-only sources. A path-name search at the baseline and master heads alone is therefore not a valid missing-mathematics test.
+
+## Same history, parent and signed dictionary
+
+* `ActualCommonHistory.RealizedHistory` fixes the original common `data e q omega`, the rank-1 first stop, rank-3 supported ancestor, all four odd history bounds at `lambda3` on `rosserAncestor 4`, and `lambda3 ≤ currentSixthExponent` on `rosserAncestor 6 ≤ comparison`. `exists_original_common_history` is a source proof candidate with a positive trim, then e0/e, q0/q, omega and N, and later the positive length-eight prefix and original source/core membership; it does not accept the stated history inequalities or supported predicate as caller premises.
+* `SevenCubeAdmission.pre` is the reverse of the eight-tuple, and the source `tuple_pre` candidate maps it back to the original tuple. `PolicyReverseAdmission.validSelection_of_realized_history` uses source rows, primality and realized history to establish all eight decisions, including the four distinct odd levels. This is a source-level reverse-admission candidate, not a separately evaluated prime data test.
+* The S12 local fourteen policy is formed from the R06 held `lambda6 (data e q omega)`. `P4AOriginalCompleteSixthChronology.data` is exactly that R06 data. Its source theorem `held_eleven_le_current` states held `lambda6 ≤ currentSixthExponent`; the complete exponent includes saved and subsequent actions. This inequality is not equality of the two policies.
+* T03's `P4AOriginalFull87DataPolicy.old_sixthPolicy` equates its old-bank specialization with `P4AOriginalFull87LicensedSixthPolicy.sixthPolicy`, whose active branch uses a rounded licensed cap and whose inactive branch uses the complete sixth exponent. The equality does not identify that licensed policy with S12's held `policy6`. The distinction matters when saying which sixth parent and chronological stage receives the saving. Neither source-level identity has been elaborated in this run.
+* `OwnedEighthSource.physical_saving_eq_owned_sources` uses the unit-weight frontier and preserves the full signed test, mass and remaining carrier. Its generic signed-continuation lemmas permit arbitrary weights but do not assert equality of unit-weight and reciprocal-weight states. T03's later tuple expression uses the separate ordered product of `1/(p−1)`; a cross-dictionary equality cannot be inferred from sharing an eight-label tuple.
+* `HistoryCore.source_eq_iUnion_retained` uses a common compact history carrier but explicitly does not call the intersection with a strict source compact. `FiniteEighthPolicy.selectedCap_append` and the licensed policy's `frozen_continuation_append` preserve the respective rank-eight and rank-six ancestors. These are candidates in the identified bytes; no claim is made for an unverified composition or all87 acceptance.
+
+## Verification and remaining work
+
+SOURCE_ONLY; new Lean source=none; COMPILED=no; KERNEL_REPLAYED=no; transitive axiom audit=NOT RUN; independent review of this handoff=NOT RUN; finite bodies UNEVALUATED. Exact SHA-256 checks above are byte checks, not Lean or numerical validation. No new CI/Actions, toolchain installation, enlarged resources, or change to the three pins occurred.
+
+Current shell still has no `lean`, `lake`, or `elan` in PATH, and the sibling `goldbach-research` 26 saving19 inputs remain absent. The pinned original witness release is recorded by the existing manifest as asset 626620833, `chen-numerical-evidence-20261010.zip`, SHA-256 `8f1bdf63e1aa972256b2422f824f3d177617b31bf41b6a2b8cf29b0562647ad1`; this run did not fetch or validate that archive. The previous v3 run does not include this T03/saving19 downstream and is not reused as its acceptance.
+
+Next, in the authorized existing execution environment, stage the manifest's exact effective source map, topic-only files, required same-module repairs, pinned packages and original byte-matched witnesses. Verify the 28,918 row IDs and corresponding ten factors, Q80/Q96 saved fields and source cell associations, then build and replay the smallest matching complete downstream closure with logs and transitive axioms. Inspect the relation between the local after-fourteen held policy and the actual licensed/full chronology at the exact consumer; where a literal identity is required, produce that exact proof rather than importing it from the existing inequality. Until the intended identity and full closure are checked, record the issue as an unverified integration boundary, not an established new mathematical gap.
