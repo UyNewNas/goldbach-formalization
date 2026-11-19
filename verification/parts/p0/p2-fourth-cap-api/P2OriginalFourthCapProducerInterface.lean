@@ -175,7 +175,9 @@ theorem oldComponent_vector (t : Point) : oldComponent t =
       ((⟨153 / 256, ![0, 0, -3 / 8, 0]⟩ : Affine).eval t) =
         VariableEnvelope.B (t 2)
     rw [min_self]
-    norm_num [Affine.eval, VariableEnvelope.B, cap, Fin.sum_univ_four]
+    have h2 : (![0, 0, -3 / 8, 0] : Fin 4 → ℚ) 2 = -3 / 8 := rfl
+    have h3 : (![0, 0, -3 / 8, 0] : Fin 4 → ℚ) 3 = 0 := rfl
+    norm_num [Affine.eval, VariableEnvelope.B, cap, Fin.sum_univ_four, h2, h3]
     <;> ring
   · change newCap ({0, 2} : Finset (Fin 4)) t = v (t 0 + t 2)
     rw [newCap_eq_v]
