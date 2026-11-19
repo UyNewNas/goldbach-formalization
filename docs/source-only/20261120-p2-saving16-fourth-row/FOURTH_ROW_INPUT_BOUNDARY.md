@@ -1,0 +1,7 @@
+# Input boundary
+
+No new external theorem is introduced. This packet uses the literal 14-row table, `trim_exact`, prime-label half-open and fibre bounds, the existing same-source fourth-layer exponent/parent candidate and `P2Saving16ActualCompilerDifference.r17_actual_coefficient_at_product`; all remain SOURCE_ONLY and the `HistoryOnTrim` premise is inherited. The `2*tau≤delta` hypothesis is a local sufficient width condition for the actual worst corner, not an assertion that the common schedule already satisfies it.
+
+Manuscript source: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`; finite compilation specifies even/odd endpoint testing, sign-selected beta, and unique small/rough attachment. The current candidate does not turn its arbitrary full-q test G into the original occurrence multiplicity, or establish positive-w and the full `u_c` schedule.
+
+The pending input is an actual `realPhysicalDistributionError b N T Q rho` estimate at `0<b<1`, `T>0`, `ceil z≤T^(b/(1+b))`, for the same literal compiled Q and rho. Its precise rate, normalization, origin and compatibility with the entire upper corner remain unverified; no new external axiom is asserted. Buffered above-mu fallback transport, strict savings, parameter adaptations and reserve payment remain manuscript duties. No PNT, Mertens, BV or spectral proof is started.
