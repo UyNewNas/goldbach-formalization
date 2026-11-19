@@ -1,0 +1,7 @@
+# Persistent P1.4 handoff — original full upper quotient room
+
+BASE 56b7c573bf9f61172be356bb32b6bdce368e0a41; task-only branch chatgpt/p1-full87-full-upper-quotient-room-20261119-1015; packet docs/source-only/20261119-full-upper-quotient-room/. The full upper exact integer quotient has TWO-sided support max(N/(2b)+1,X/b+1) <= a < min(ceil L,N/b+1); it strengthens the old LONG-only room and covers SHORT+LONG together. The original nonzero prime carrier injects into this bounded interval. The original full prime absolute sum is bounded by the interval cardinal. Entire original one-sided fifth upper event is zero if the room is empty for each occurrence. Keep both/sixthFromBoth untouched, do not add a new producer mask.
+
+Read full Lean source, REPORT.md, REGISTRY.json and INPUT_BOUNDARY.md here. SOURCE_ONLY/UNEVALUATED/UNCOMPILED: lean/lake/elan exit 127, no pinned compiler. No actual H_N bound or physical reserve paid, no known real producer coverage. NEXT: integrate this full two-sided arithmetic room with actual frozenSurvivorUpperAbsoluteInvoice via nested ordered prime/event interchange, then prove quantitative signed arithmetic PP admission or legitimate error/payment; do not restart parameter tuning.
+
+Frozen manuscript 9731290e8f53cffda44129906cde6a965eaa869b; Lean 4.33.0-rc1 mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 native 09b97db5764ade1246bfb77206baa1b124760958; c=49044063/25000000 K=8452171/1250000. Check current branch HEAD before further writes; no main/master/CI/Codex changes.

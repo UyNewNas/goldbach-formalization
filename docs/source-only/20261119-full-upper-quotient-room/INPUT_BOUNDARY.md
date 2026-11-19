@@ -1,0 +1,5 @@
+# External-input and normalization boundary
+
+Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex, blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. The smooth complete-modulus PP of eq:current-PP under section 'A positive upper sieve with its own density' supplies signed same-rho_N coprime/Euler-normalized smooth distribution only under its stated conditions, not this original arithmetic Rosser quotient indicator. Status REGISTERED_NOT_PROVED_NOT_CALLED. No PNT/Mertens/BV/spectral proof.
+
+New source is finite ORIGINAL upper-half arithmetic only, for generic actual b=(p::pre).prod, original positive Rosser beta, strict 2P<N, strict X<N-P, exact a*b=N-P, real a<L, and full q<=N. The two-sided room is a bounding/test set only: it does not filter RAW/LICENSED, change original fifth/sixth source, change signed coefficients or discard modulus-prime/centre corrections. The generic w lower cutoff is never equated to rho0 upper z. Saved c=49044063/25000000, K=8452171/1250000, rho0=19/96 untouched. The source-count bound is finite and not o(H_N).
