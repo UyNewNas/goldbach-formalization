@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean
 import ImbalancedChen.P3ActualEvenLowerIntegerRho
 import ImbalancedChen.P3ActualIntegerRawSameRhoMean
 import ImbalancedChen.P3ActualRetainedRoughEulerMass
@@ -1713,3 +1714,12 @@ import ImbalancedChen.P3ActualEvenLowerEulerMass
 #check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_integer_physical_mass_eq
 #check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_integer_physical_mass_le_euler
 #check ImbalancedChen.P3ActualEvenLowerEulerMass.actual_even_lower_primitive_mean_le_euler
+
+-- P3.6 genuine U6 two-prime prefix b: signed even-lower integer rho,
+-- full PHYSICAL b*q totient, independent complete product B, exact coprime mean.
+-- All checks SOURCE_ONLY; none executed by Lean (lake unavailable).
+#check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.prefixedPrimitiveMean_factor
+#check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.prefixedPrimitiveMean_norm_le
+#check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_lower_moduli_coprime_prefix
+#check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_even_lower_prefixed_mean_factor
+#check ImbalancedChen.P3ActualEvenLowerPrefixedPrimitiveMean.actual_u6_even_lower_prefixed_mean_le_euler
