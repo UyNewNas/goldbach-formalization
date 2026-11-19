@@ -1,0 +1,11 @@
+# Persistent P1.4 continuation — absolute beta-mass envelope
+
+Resume from the LIVE branch head `chatgpt/p1-full87-beta-mass-envelope-20261120-0010`, not from the November 5 navigation SHA. Baseline commit verified `a6d1bcb7ba22b2c709fb97f93f925b0dc2fc15b0`; this round's proof-source commit `40bb9d26627bfa0a95a5c7b4776e5dce8be741e1`; proof-source blob `263ec7d8a4754575adeac0214f73c660110dca66`. The final documentation HEAD must be re-read from GitHub because writing this handoff itself advances HEAD. Keep earlier packets intact.
+
+New finite proof target: original strict full-modulus beta weight has right endpoint zero, hence sum genuine jumps |delta beta| <= 2 sum original |beta|. Conditional on SAME complete modulus primitive-carrier AP error E at genuine beta jumps, the exact J_b bill is <= 2 E_b M_b. This coarser bound is transported through the ACTUAL RAW/LIC event sign, ordered original fifth/sixth occurrences, original sharedRankFour states, original survivor filter, and the existing physical stopped lower-once identity. It removes the need for an independently estimated total-variation constant but does NOT pay the numeric bill; prior J_b remains sharper.
+
+Last actual environment checks: no lean/lake/elan (exit 127 each), memory 4 GiB; the fixed toolchain and manuscript commits match manifests. Validation SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Do not infer compile or kernel success, and no proof of same-rho AP input has been added. No CI, Codex, main/master or dependency changes.
+
+Next exact work, in priority order: (1) confirm pinned import closure and stage a local fixed-version Lean elaboration if the environment permits, repairing source-level errors; (2) verify the true primitive AP mean normalization and error for ACTUAL beta jump endpoints (full b, rho, quantifiers), not a guessed mean; (3) use original actual M_b and E_b to pay the all-occurrence bill versus H_N, or revert to sharper exact J_b if the factor-two envelope is too expensive; (4) preserve lower-half, ordinary integral, saved87, BOTH/rank9, changed/tagged, and independent compiler/density reserves as open obligations. See REPORT.md and INPUT_BOUNDARY.md.
+
+P1.4 remains YELLOW; do not promote to green or label COMPILED.
