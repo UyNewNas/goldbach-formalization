@@ -155,10 +155,18 @@ theorem original_upper_signed_eq_full_beta_sub_unoccupied
       actualSmallRosserPlus N cap w L a) := by
   have hsubset := occupied_original_upper_subset_actual_room
     N cap w z L X pre p hrough
+  have hpart :
+      (∑ a ∈ (actualPrimitiveRosserRoom N cap w L X pre p) \\
+          (occupiedOriginalUpperBetaQuotients N cap w L X pre p),
+        actualSmallRosserPlus N cap w L a) +
+      (∑ a ∈ occupiedOriginalUpperBetaQuotients N cap w L X pre p,
+        actualSmallRosserPlus N cap w L a) =
+      (∑ a ∈ actualPrimitiveRosserRoom N cap w L X pre p,
+        actualSmallRosserPlus N cap w L a) :=
+    Finset.sum_sdiff hsubset
   rw [original_upper_signed_sum_eq_occupied_beta]
   unfold unoccupiedOriginalUpperBetaQuotients
-  rw [Finset.sum_sdiff hsubset]
-  ring
+  linarith
 
 /-- A List identity proved occurrence by occurrence, without a
 Finset conversion (which would erase repeated sixth primes). -/
