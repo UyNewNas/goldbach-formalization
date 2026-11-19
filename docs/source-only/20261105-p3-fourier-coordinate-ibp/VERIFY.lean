@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6LowerPairMomentFactor
 import ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments
 import ImbalancedChen.P3ActualU6LowerActualPrimeCarrier
 import ImbalancedChen.P3ActualU6LowerGlobalMask
@@ -1756,3 +1757,10 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.original_U6_lower_threeblock_prime_count
 #check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.actual_U6_lower_quotient_prime_correction_pair_split
 #check ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments.actual_U6_lower_quotient_prime_correction_abs_le_pair_moment
+
+-- P3.6 run77: exact original U6 even-LOWER positive moment factoring
+-- into weighted actual small/rough totient moments at full b*s*r.
+-- REGISTERED ONLY; no Lean/Lake or kernel execution.
+#check ImbalancedChen.P3ActualU6LowerPairMomentFactor.coprime_threeblock_pair_prime_moment
+#check ImbalancedChen.P3ActualU6LowerPairMomentFactor.actual_U6_lower_positive_pair_moment_factor
+#check ImbalancedChen.P3ActualU6LowerPairMomentFactor.actual_U6_lower_quotient_prime_correction_abs_le_separated
