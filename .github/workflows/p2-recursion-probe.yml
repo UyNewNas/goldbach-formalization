@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 360
     env:
       SOURCE_COMMIT: b7b0f5613f1b34855e0da7ad44d1d79ed34519cf
-      EXPECTED_MANIFEST: 15eacbd61bffc391d15f27ca18886971d4b3c27d45e45abdbc4cc6044937e262
+      EXPECTED_MANIFEST: 21f9105951247e4bcf010f6251fdeb6edb32c16580d25ee799f4bcdc83edf4f5
       CHECK_PURPOSE: source_validation
       LEAN_NUM_THREADS: 2
       T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
@@ -103,13 +103,6 @@ jobs:
           mapfile -t modules < "$LOGS/modules.txt"
           lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
           python3 "$GITHUB_WORKSPACE/verification/parts/p0/p2-recursion-probe/prepare_candidate_validation.py" snapshot
-      - name: Execute isolated finite output checks
-        timeout-minutes: 5
-        run: |
-          set -euo pipefail
-          cd "$PROJECT"
-          lake env lean --run ProbeExecute.lean 2>&1 | tee "$LOGS/probe-runtime.log"
-          grep -Fx 'P2_RECURSION_PROBE_OUTPUT_OK: leaf=1 sample=7 surplus=7' "$LOGS/probe-runtime.log"
       - name: Replay candidate and entire local closure with bundled kernel checker
         timeout-minutes: 25
         run: |

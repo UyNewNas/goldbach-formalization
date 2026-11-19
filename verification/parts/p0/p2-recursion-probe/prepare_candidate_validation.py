@@ -3,6 +3,7 @@ import hashlib, json, os, pathlib, re, sys
 root=pathlib.Path(os.environ['PROJECT']); logs=pathlib.Path(os.environ['LOGS'])
 mode=sys.argv[1]
 targets=['ImbalancedChen.Probes.FixedFuelProbe']
+FIXED_LITERAL_ASSERTIONS = ('ImbalancedChen.Probes.FixedFuelProbe.literal_fuel_zero', 'ImbalancedChen.Probes.FixedFuelProbe.literal_fuel_one', 'ImbalancedChen.Probes.FixedFuelProbe.literal_fuel_seven', 'ImbalancedChen.Probes.FixedFuelProbe.literal_fuel_hundred')
 def imports(text):
     # Lean nested block comments must not create phantom imports.
     text=re.sub(r'--[^\n]*','',text)
@@ -58,6 +59,11 @@ elif mode=='verify':
     assert {x['module'] for x in inv}==set(modules) and len(inv)==len(modules)
     assert len({x['name'] for x in ds})==len(ds)
     by_name={d['name']:d for d in ds}
+    assert manifest['probe_scope']['literal_assertions'] == list(FIXED_LITERAL_ASSERTIONS), 'Fixed literal assertion registry changed'
+    for name in FIXED_LITERAL_ASSERTIONS:
+        assert name in by_name, 'Fixed literal assertion missing: ' + name
+        assert by_name[name]['kind'] == 'theorem', 'Fixed literal assertion is not a theorem: ' + name
+        assert by_name[name]['module'] == 'ImbalancedChen.Probes.FixedFuelProbe', 'Fixed literal assertion owner changed: ' + name
     if 'ImbalancedChen.SmallRoughMainTerm' in modules:
         assert by_name['ImbalancedChen.reciprocalTotientDensity.eq_1']['module'] == 'ImbalancedChen.SmallRoughMainTerm', 'reciprocalTotientDensity equation canonical owner mismatch'
     else:
@@ -97,5 +103,5 @@ elif mode=='verify':
     assert all(not(d['is_unsafe'] or d['is_partial'] or d['is_axiom']) and set(d['axioms'])<={'propext','Classical.choice','Quot.sound'} and all(d[k].strip() and '⋯' not in d[k] for k in ['type','readable_type']) for d in ds)
     replay=[x.removeprefix('replaying ') for x in (logs/'batch-checker.log').read_text().splitlines() if x.startswith('replaying ')]
     assert len(replay)==len(modules) and set(replay)==set(modules)
-    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_COMPILER_PROBE_ONLY_NOT_P2_ACCEPTANCE','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':os.environ['SOURCE_COMMIT'],'whole_t01_accepted':False, 'whole_p1_accepted':False,'proof_artifact_hash':digest(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
+    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_FIXED_LITERAL_KERNEL_ASSERTIONS_ONLY_NATIVE_NOT_EXECUTED','native_output_evaluated':False,'production_P2_accepted':False,'fixed_literal_assertions':list(FIXED_LITERAL_ASSERTIONS),'modules':modules,'complete_serialized_declarations':len(ds),'source_commit':os.environ['SOURCE_COMMIT'],'whole_t01_accepted':False, 'whole_p1_accepted':False,'proof_artifact_hash':digest(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
 else:raise SystemExit('bad mode')

@@ -38,4 +38,17 @@ def outputChecks : Bool :=
   finishedWith (run 7 sample) 7 &&
   finishedWith (run 100 sample) 7
 
+/-- Closed kernel-reduction checks only; these do not evaluate native output. -/
+theorem literal_fuel_zero :
+    finishedWith (run 0 (.rational 0)) 0 = false := by rfl
+
+theorem literal_fuel_one :
+    finishedWith (run 1 (.rational 0)) 1 = true := by rfl
+
+theorem literal_fuel_seven :
+    finishedWith (run 7 sample) 7 = true := by rfl
+
+theorem literal_fuel_hundred :
+    finishedWith (run 100 sample) 7 = true := by rfl
+
 end ImbalancedChen.Probes.FixedFuelProbe
