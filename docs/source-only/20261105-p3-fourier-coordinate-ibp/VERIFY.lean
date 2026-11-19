@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualRawIntegerRhoCast
 import ImbalancedChen.P3ActualRetainedRoughRankCap
 import ImbalancedChen.P3ActualRawActiveLevelTotientCap
 import ImbalancedChen.P3ActualRawPhysicalRhoTotientCap
@@ -1661,3 +1662,15 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualRetainedRoughRankCap.fixed_rough_support_le_universe_power
 #check ImbalancedChen.P3ActualRetainedRoughRankCap.actual_raw_physical_mass_le_retained_rank_caps
 #check ImbalancedChen.P3ActualRetainedRoughRankCap.actual_raw_physical_mass_le_universe_length_caps
+
+-- P3.6: actual INTEGER realization of the previously REAL raw small/rough
+-- physical coefficient, exact source-level equality, -1/0/1 and signed sums.
+-- These checks are registered but NOT EXECUTED; SOURCE_ONLY.
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualSmallRosserMinusInt_cast
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualSmallRosserPlusInt_cast
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRoughInt_cast
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawPairInt_cast
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_cast
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_abs_le_one
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_trivalent
+#check ImbalancedChen.P3ActualRawIntegerRhoCast.actualRawIntegerRho_weighted_physical_sum
