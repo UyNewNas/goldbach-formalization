@@ -1,0 +1,7 @@
+# External-input boundary — real survivor upper quotient-room bridge
+
+Frozen manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, H_N=C_N*N/log^2N. Constants c=49044063/25000000, K=8452171/1250000. Fixed Lean leanprover/lean4:v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958.
+
+The frozen smooth complete-modulus PP under manuscript section "A positive upper sieve with its own density" and eq:current-PP, with its own signed, same-rho_N coprime/Euler-normalized hypotheses, is REGISTERED_NOT_PROVED_NOT_CALLED. Its exact source/normalization is not transferred to an original Rosser quotient arithmetic indicator. No PNT, Mertens, BV, spectral or distribution input is proved here.
+
+This packet only transports an existing finite, source-specific absolute bound from the original FULL upper Rosser quotient room to the literal post-generation survivor List. Each term uses complete modulus beta, the actual Rosser PLUS coefficient, strict X<N-P and 2P<N, raw/licensed sign and every sixth occurrence. Inherited .both and .sixthFromBoth are kept, not given the fifth-only mask. The lower receiver stays separate. Fixed upper z=N^(19/96), L=N^epsilon are passed literally at the same source, not interchanged with the generic lower w. There is no asymptotic H_N control or physical/density reserve discharge.
