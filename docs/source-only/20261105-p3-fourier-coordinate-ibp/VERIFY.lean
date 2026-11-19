@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualRawPhysicalRhoTotientCap
 import ImbalancedChen.P3ActualSignedPairTotientCap
 import ImbalancedChen.P3ActualPhysicalTotientConvolution
 import ImbalancedChen.P3ActualWholeProductPrimitiveMeanPayment
@@ -1634,3 +1635,10 @@ import ImbalancedChen.P3HBOriginalGroupTrimPointwiseBudget
 #check ImbalancedChen.P3ActualSignedPairTotientCap.bounded_pair_physical_mass_le_log_caps
 #check ImbalancedChen.P3ActualSignedPairTotientCap.integer_pair_physical_mass_le_log_caps
 #check ImbalancedChen.P3ActualSignedPairTotientCap.original_threeHB_mean_le_log_caps
+
+-- Run 64: genuine raw physical small/rough Rosser attachment and conditional
+-- two-log Euler totient mass. SOURCE_ONLY, not yet Lean-executed.
+#check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actual_raw_rho_at_pair
+#check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actual_raw_pair_coefficient_abs_le_one
+#check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actualRawPhysicalTotientMass
+#check ImbalancedChen.P3ActualRawPhysicalRhoTotientCap.actual_raw_physical_mass_le_log_caps
