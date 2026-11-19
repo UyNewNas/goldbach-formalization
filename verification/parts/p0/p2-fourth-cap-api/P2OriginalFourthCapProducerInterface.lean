@@ -179,6 +179,10 @@ theorem oldComponent_vector (t : Point) : oldComponent t =
     have h3 : (![0, 0, -3 / 8, 0] : Fin 4 → ℚ) 3 = 0 := rfl
     norm_num [Affine.eval, VariableEnvelope.B, cap, Fin.sum_univ_four, h2, h3]
     <;> ring
+    change (153 / 256 : ℝ) + ((-3 / 8 : ℚ) : ℝ) * t 2 +
+      ((0 : ℚ) : ℝ) * t 3 = 153 / 256 + t 2 * (-3 / 8)
+    norm_num only [Rat.cast_zero, Rat.cast_neg, Rat.cast_div, Rat.cast_ofNat]
+    ring
   · change newCap ({0, 2} : Finset (Fin 4)) t = v (t 0 + t 2)
     rw [newCap_eq_v]
     simp [h02]
