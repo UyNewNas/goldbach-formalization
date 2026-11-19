@@ -1,0 +1,7 @@
+# Input boundary
+
+No new external mathematical theorem is supplied. The candidate imports the existing uncompiled original affine table and trim, fine-label geometry, same-beta product transport, actual fourth-parent exponent bound, and the finite small/rough support uniqueness theorem. `HistoryOnTrim` and `2*tau≤width r` are explicit inherited/local premises. Q is exactly `P4AOriginalFull87CompiledCounting.moduli N w`; factorization uniqueness does not establish the multiplicity of the original ordered cell or corner occurrence.
+
+Manuscript pin: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Finite-compilation text specifies one sign-sensitive small-prime beta attachment and unique small/rough decomposition. All candidate and imported proof bodies remain SOURCE_ONLY in this execution.
+
+A verified quantitative PP estimate has not been provided. The consumer is the actual compiled `realPhysicalDistributionError b N T Q rho` for `0<b<1`, `T>0`, `ceil z≤T^(b/(1+b))`. The quantitative rate, normalization, precise source and compatibility with the whole upper corner remain to be checked; no estimate is asserted. Original occurrence-weighted full-q mapping, positive-w license, above-mu buffered fallbacks, common-width schedule and one-time reserve payment remain manuscript obligations. No PNT, Mertens, BV or spectral proof is started.
