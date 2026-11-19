@@ -1,0 +1,7 @@
+# P1.4 persistent handoff — reflected prefix Abel
+
+Parent `541c757da0dcbe437297d840238e331a08386ed4` (freshly compared, identical to previous task branch), new independent branch `chatgpt/p1-full87-reflected-prefix-abel-20261119-1910`. Source and verification in this packet. `REPORT.md` explains the finite Abel identity and the exact, unpaid prefix discrepancy/variation budgets. `REGISTRY.json` retains frozen pins and layered validation; `INPUT_BOUNDARY.md` blocks promotion of an arbitrary per-modulus mean to an analytic theorem.
+
+Main advance: for the literal original full modulus b and PLUS room beta weight, exact reflected-prime sum = per-b reference main mass + Abel prefix correction; signed reflected-NONprime complement = (1-main density) original mass - correction. The explicit hE hypothesis is the **unweighted prefix AP** bound for every k, not the weighted conclusion itself. Full actual parent and List signs occur in the candidate global transport; lower is subtracted once. No claim of numerical saving, asymptotic, H_N reserve payment or compilation.
+
+Next run: verify branch HEAD and hashes first; import ancestral source-only modules; **compile** with matching Lean if executable (none here: lean/lake/elan exit 127); repair proof errors before generating more interfaces. Then identify true same-rho primitive prefix source and quantify actual per-occurrence variation. P1.4 remains YELLOW.

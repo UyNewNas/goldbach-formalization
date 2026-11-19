@@ -1,0 +1,7 @@
+# Input boundary — reflected prefix Abel
+
+Everything proved here is finite arithmetic inside the frozen manuscript. Actual objects: `chenPrimePrefix N`, `actualPrimitiveRosserRoom`, original `actualSmallRosserPlus`, complete modulus `(p :: pre).prod`, original RAW/Licensed event tags and occurrence Lists, actual `sharedRankFour` and frozen filter. The integer prefix ends at `N / b + 1` (not a surplus N-wide artificial tail), with exact upper and strict lower gates inherited.
+
+`mean : Nat -> Real` is an arbitrary chosen reference scalar indexed by the **full modulus**; it is NOT an analytic theorem or a claim of physical density. An external input, if later adopted, must supply its source, date/version, exact primitive AP premise for the SAME reflected prime test, full ranges and center N, accurate correction for central/modulus primes, N-uniform quantifiers, precise H_N normalization, and an explicit usable bound on every `reflectedPrimePrefixDiscrepancy N pre p mean k` for k ≤ N/b+1. It must also pay the true original-beta **total variation** after the frozen original event multiplicities/signs; simply bounding a generic prime count does NOT pay the weighted global discrepancy.
+
+Status: same-rho primitive signed AP / PP NOT_VERIFIED_NOT_CALLED. Existing smooth signed coprime PP REGISTERED_NOT_PROVED_NOT_CALLED. There is no new axiom, analytic input implementation, target-equivalent field, geometry-to-zero conversion, or assumption of o(H_N).
