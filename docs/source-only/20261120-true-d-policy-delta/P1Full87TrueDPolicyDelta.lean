@@ -11,8 +11,8 @@ fifth and rank-six-spliced policies carry DIFFERENT original rho's.
 Their signed difference must first be put on ONE true-d carrier. This
 file uses the union of their OWN physical supports (not a new branch
 mask) and an exact pointwise signed zero extension. All operations
-remain finite, with the original full small/rough attachment, modulus
-prime correction and unchanged occurrence multiplicities.
+remain finite, with the original full small/rough attachment and modulus-prime
+correction. The original ordered-87 occurrence pushforward remains open.
 
 This proves an exact single-coefficient difference, NOT an identification
 with the manuscript's certified full87 rho_N, nor a PP coefficient licence.
@@ -69,10 +69,10 @@ theorem trueDDeltaRho_zero_outside
     trueDDeltaRho old fresh N cap w z L d = 0 := by
   have hnew : d ∉ actualSmallRoughModuli fresh N cap w z := by
     intro h
-    exact hd (Finset.mem_union_left _ h)
+    exact hd (by simp [trueDDeltaSupport, h])
   have hold : d ∉ actualSmallRoughModuli old N cap w z := by
     intro h
-    exact hd (Finset.mem_union_right _ h)
+    exact hd (by simp [trueDDeltaSupport, h])
   simp [trueDDeltaRho, hnew, hold]
 
 /-- A signed policy difference can be twice as large as either original
@@ -130,8 +130,7 @@ theorem trueDDeltaRho_test
       _ = _ := by
         have hf : (A ∪ B).filter (fun d => d ∈ A) = A := by
           ext d
-          simp
-          tauto
+          simp; tauto
         rw [hf]
   have hB :
       (∑ d ∈ A ∪ B, (if d ∈ B then b d else 0) * G d) =
@@ -146,8 +145,7 @@ theorem trueDDeltaRho_test
       _ = _ := by
         have hf : (A ∪ B).filter (fun d => d ∈ B) = B := by
           ext d
-          simp
-          tauto
+          simp; tauto
         rw [hf]
   change (∑ d ∈ A ∪ B,
       ((if d ∈ A then a d else 0) -
