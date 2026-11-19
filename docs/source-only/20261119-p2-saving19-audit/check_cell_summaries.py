@@ -16,18 +16,79 @@ PINS = {
     "review": "e3241b43644f708a37bd83ad8177ea6e3f8adcd6f44fa5f0c931964027a3e84e",
 }
 
+INDEX_PINS = {
+    "fourteen": "e5e7c88c94e3debd43ad523ecdcafcf3878852414f473037328761b0d73e5aaa",
+    "dictionary": "dbfadaa879e08c2c3ecb270f699b84f3f9ac7b0b044ba96be8046da4a73c501c",
+    "sourceindex": "a003919a12b213dd2a979fe07e7376ec3e619d24f704faacf5c5430b3ed009f1",
+}
+
 
 def require(condition, message):
     if not condition:
         raise SystemExit("FAIL: " + message)
 
 
+def check_source_indices(stage, fourteen, dictionary, sourceindex):
+    """Check the literal frozen archive layout, not N-dependent occurrences."""
+    ids_match = re.search(r"def originalId : Fin 14 → ℕ := !\[([^\]]+)\]", fourteen)
+    require(ids_match is not None, "originalId definition missing")
+    ids = [int(x.strip()) for x in ids_match.group(1).split(",")]
+    require(len(ids) == len(set(ids)) == 14, "fourteen ID cardinality")
+    require(set(ids) == (set(range(15)) - {7}), "fourteen/radial ID partition")
+
+    dictionary_flat = "".join(dictionary.split())
+    for code in (
+        "|.remaining(.ascendingi)=>⟨P4AOriginalAscendingFourteenAffineSource.originalIdi,byfin_casesi<;>decide⟩",
+        "|.remaining.seed=>7",
+        "|.ascendingPairi=>⟨45+i.val,byomega⟩",
+    ):
+        require(code in dictionary_flat, "globalIndex definition changed")
+    index_flat = "".join(sourceindex.split())
+    require("defunequalSourceOrder:ListMomentArchiveRow:="
+            "((unequalRows.drop1).take11)++(unequalRows.take1)++(unequalRows.drop12)" in index_flat,
+            "unequal source order changed")
+    require("defsourceIndexedRecords:List(String×ℚ):="
+            "(ascendingRows.take7)++[(\"a07-radial-whole\",radialWhole)]++"
+            "(ascendingRows.drop7)++descendingRows++"
+            "(unequalSourceOrder.map(funr=>(r.label,r.final)))++"
+            "(thirdRows.map(funr=>(r.label,r.final)))++"
+            "(historyRows.map(funr=>(r.label,r.final)))" in index_flat,
+            "source-index archive layout changed")
+
+    def labels(name):
+        match = re.search(r"def " + name + r"[^\n]*:= \[(.*?)\n\]", stage, re.S)
+        require(match is not None, f"{name} definition missing")
+        return re.findall(r'"([^\"]+)"', match.group(1))
+
+    ascending, descending, unequal, third, history = (
+        labels(name) for name in
+        ("ascendingRows", "descendingRows", "unequalRows", "thirdRows", "historyRows")
+    )
+    require(list(map(len, (ascending, descending, unequal, third, history))) ==
+            [14, 15, 15, 13, 29], "stage label counts changed")
+    records = (ascending[:7] + ["a07-radial-whole"] + ascending[7:] + descending +
+               unequal[1:12] + unequal[:1] + unequal[12:] + third + history)
+    require(len(records) == len(set(records)) == 87, "archive label multiplicity")
+    for i, index in enumerate(ids):
+        require(records[index] == f"a{index:02}", f"fourteen original index {i}")
+    require(records[7] == "a07-radial-whole", "radial position")
+    for i in range(13):
+        require(records[45 + i] == f"t{i:02}", f"thirteen original index {i}")
+    print("PASS: original fourteen indices, single radial index 7, thirteen indices 45–57")
+    print("SCOPE: 87 archive labels only; no policy order, prime occurrences or simplex rows")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in PINS:
         parser.add_argument("--" + name, required=True, type=Path)
+    for name in INDEX_PINS:
+        parser.add_argument("--" + name, type=Path)
     args = parser.parse_args()
-    for name, digest in PINS.items():
+    chosen = [getattr(args, name) is not None for name in INDEX_PINS]
+    require(not any(chosen) or all(chosen), "supply all three source-index inputs or none")
+    pins = PINS | (INDEX_PINS if all(chosen) else {})
+    for name, digest in pins.items():
         actual = hashlib.sha256(getattr(args, name).read_bytes()).hexdigest()
         require(actual == digest, f"{name} source hash {actual} != {digest}")
 
@@ -81,6 +142,9 @@ def main():
     print("PASS: 26 recorded witness hash bindings, 28918 recorded rows, 289180 factors")
     print("Q96 old/new/increment:", *(value.numerator * (q96 // value.denominator) for value in totals))
     print("SCOPE: summary metadata only; no witness bytes, row replay, Lean or kernel validation")
+    if all(chosen):
+        check_source_indices(stage, args.fourteen.read_text(), args.dictionary.read_text(),
+                             args.sourceindex.read_text())
 
 
 if __name__ == "__main__":
