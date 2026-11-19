@@ -46,16 +46,22 @@ def actualSmallRosserPlusInt (N cap : ℕ) (w L : ℝ) (a : ℕ) : ℤ :=
 theorem actualSmallRosserMinusInt_cast (N cap : ℕ) (w L : ℝ) (a : ℕ) :
     ((actualSmallRosserMinusInt N cap w L a : ℤ) : ℝ) =
       actualSmallRosserMinus N cap w L a := by
-  simp only [actualSmallRosserMinusInt, actualSmallRosserMinus,
-    ActualSmallRosserProvider.lowerWeight, SmallRosser.lowerWeight_apply,
-    Int.cast_ite, Int.cast_pow, Int.cast_neg, Int.cast_one, Int.cast_zero]
+  by_cases h : a ∈ (actualSmallPrimeProduct N cap w).divisors ∧ (a : ℝ) < L ∧
+      SmallRosser.LowerAdmissibleSet L a.primeFactors
+  · simp [actualSmallRosserMinusInt, actualSmallRosserMinus,
+      ActualSmallRosserProvider.lowerWeight, SmallRosser.lowerWeight_apply, h]
+  · simp [actualSmallRosserMinusInt, actualSmallRosserMinus,
+      ActualSmallRosserProvider.lowerWeight, SmallRosser.lowerWeight_apply, h]
 
 theorem actualSmallRosserPlusInt_cast (N cap : ℕ) (w L : ℝ) (a : ℕ) :
     ((actualSmallRosserPlusInt N cap w L a : ℤ) : ℝ) =
       actualSmallRosserPlus N cap w L a := by
-  simp only [actualSmallRosserPlusInt, actualSmallRosserPlus,
-    ActualSmallRosserProvider.upperWeight, SmallRosser.upperWeight_apply,
-    Int.cast_ite, Int.cast_pow, Int.cast_neg, Int.cast_one, Int.cast_zero]
+  by_cases h : a ∈ (actualSmallPrimeProduct N cap w).divisors ∧ (a : ℝ) < L ∧
+      SmallRosser.UpperAdmissibleSet L a.primeFactors
+  · simp [actualSmallRosserPlusInt, actualSmallRosserPlus,
+      ActualSmallRosserProvider.upperWeight, SmallRosser.upperWeight_apply, h]
+  · simp [actualSmallRosserPlusInt, actualSmallRosserPlus,
+      ActualSmallRosserProvider.upperWeight, SmallRosser.upperWeight_apply, h]
 
 /-- The actual selected rough coefficient, represented as the integer
 Möbius coefficient that the original fixedRoughCoefficient casts to R. -/
