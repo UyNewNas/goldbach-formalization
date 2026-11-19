@@ -1,0 +1,36 @@
+# P4A.5 hdensity installation continuation r8
+
+Parent `a205d080c1b3900706f2dc31ffc2689ef4b62e34`; unchanged candidate `P4AOriginalFiniteAll22FineDensity.lean` SHA-256 `1942060c36cde2fb609dce8d370d29fa10701c5e6ed75159416e1c51cb8df7e5`. SOURCE_ONLY; COMPILED=false; KERNEL_REPLAYED=false; TRANSITIVE_AXIOMS=NOT_CHECKED; finite proof bodies UNEVALUATED. No mathematical theorem, proof body or external analytic input was added. The earlier independent review is historical source-only evidence, not a current kernel receipt; no new independent review or green promotion was performed.
+
+## Reader and actual data dependency
+
+The r7 literal import graph shows that `P4AOriginalNewFifthArchiveData` actually imports the still-missing `P4AOriginalNewFifthArchiveReader`. T03's historical review-input hash was `0eae7ab3d79c3a0f57d42870a1c8016f9e5b22aa50a8c0fa5e7d2fe24527b844`; T09's later review explicitly directs the final T05 variant `c449ef380e318797bcd9789e282b705bbdb847d4215d40cd04b2f404cafac540` for the joint manifest. The latter source's bytes, byte count, direct imports and SHA match T05 `G3_REGISTRY.json`; the selected `ArchiveData` source also matches that registry. The final Reader is now in the isolated stage as a **conditional source candidate**; compatible elaboration with the full P4A.5 closure remains unverified. We did not overwrite the older source or assert either variant compiled.
+
+The Reader's `include_new_fifth_pair%` calls `IO.FS.readBinFile` relative to the Lean Data source. The Data source lists **94 pairs** of NPY filenames. The ordered source pairs match exactly the 94 blocks / 188 distinct filenames in `G3_FIXTURES.json`; the manifest itself and the archive hash match the final G3 registry. Their recorded total uncompressed member size is 423,244,864 bytes. The required `G3_INPUTS.zip` is recorded as 32,285,020 bytes, SHA-256 `5903eadd154aa06797a22a2b01399c6255b25d67d688a283630c56ef33f0c328`. None of these figures means that the data or finite certificates were evaluated.
+
+The named archive and a sample member were absent from this task checkout and scratch search; the exact archive title search returned no Library match. This is not a claim that no copy exists anywhere. `stage_g3_fixtures.py` supplies a reproducible **future** staging operation: it checks the selected Data-source and fixture-manifest hashes, verifies the full ZIP length and SHA before opening it, verifies all 188 exact member names, sizes and SHA-256 values before writing, and refuses duplicate names, unsafe paths or overwriting a different existing fixture. It writes the verified members only below `ImbalancedChen/g3-fixtures`, next to the staged Lean Data source. It does not download, reconstruct, evaluate or substitute data.
+
+The isolated source stage now contains 179 files; its literal-import walker visits 640 project modules with 59 unresolved project imports, 154 external names and 56 provisional/conditional selections. The previous Reader frontier is resolved at source-selection level, conditional on actual elaboration; its inputs and the other closures are not. Counts do not prove full Lean syntax, data completeness, package identity, `.olean` compatibility, source compatibility or kernel acceptance. The gamma and radial variants remain separate.
+
+## Exact density and boundaries
+
+The unchanged candidate intends `∀ δ>0, ∀ᶠ N, Even N → physicalDensitySum (Q δ N) (ρ δ N) ≤ (currentK+δ)*(singularSeries N / Real.log N)`. Its Fine/cofinal predecessor is called once at `densityReserve/2`; Q and ρ ignore δ and share β/k and N₀. Its actual correction remains in the upper; the nonnegativity theorem uses the same F/N/cap/w/z and compiler expense is not paid again. This is the old source-reviewed scope, not a newly compiled theorem. The finite count retains the complete signed `realPhysicalDistributionError`, `ceil(z)` and `T+1`; full PP payment, the remaining assembly inputs and hUpper are not supplied by this packet.
+
+The saved87 registry records manuscript revisions `9731290e8f53cffda44129906cde6a965eaa869b` and `ba6ec11d800eccc54406490631895e174de85766` with the same paper source tree. A fresh read of the requested 9731290 manuscript lines 465–480 returned blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. No manuscript pin, parameter or external analytic input was changed; inherited inputs retain their existing recorded statuses.
+
+## Checks and remaining work
+
+- `python3 docs/source-only/20261119-p4a5-hdensity-install-r8/bind_g3_reader.py` exited 0: selected final Reader/actual Data source identities matched, and all 94 source pairs matched the 188 unique registry paths. `G3_EVIDENCE.json` records exact per-member hashes, sizes and source/version evidence. This is not a certificate replay.
+- `python3 docs/source-only/20261119-p4a5-hdensity-install-r8/stage_and_audit.py /workspace/scratch/cb6959cc4223/stage-r8 > docs/source-only/20261119-p4a5-hdensity-install-r8/IMPORT_AUDIT.json` exited 0; it is a literal import/source hash check only.
+- `python3 docs/source-only/20261119-p4a5-hdensity-install-r8/stage_g3_fixtures.py --archive /workspace/scratch/cb6959cc4223/G3_INPUTS.zip --stage /workspace/scratch/cb6959cc4223/stage-r8` exited 1: `G3_INPUTS.zip not found`. No fixtures were written. A deliberately incorrect small scratch ZIP was rejected with `archive SHA-256 or byte length mismatch`, exit 1, and the destination fixture directory remained absent. The valid-archive branch was not exercised because the exact archive is unavailable here.
+- The checkout declares Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. These are declared pins, not installed-version receipts. `lake env lean /workspace/scratch/cb6959cc4223/stage-r8/ImbalancedChen/P4AOriginalFiniteAll22FineDensity.lean` returned 127, `lake: command not found`. Lean/Lake/Elan and `.lake/packages`/`.lake/build` are absent. Python 3.12.14 was used only for these checks. No Lean elaboration, kernel replay, transitive-axiom check, finite-data evaluation, CI, resource expansion or user-machine access occurred.
+- Next: locate the exact hash-matching 32,285,020-byte G3 archive or obtain its original 188 manifest-matching members; run the staging verifier in the selected source directory. Resolve 59 visible missing modules and 56 provisional choices and verify other data files. In an existing permitted environment with the actual pinned toolchain/packages, typecheck the candidate and actual closure, inspect generated declarations and transitive axioms, then replay finite bodies. Record commands, logs and exit statuses; do not treat the source/data inventory as kernel acceptance.
+
+Changed-file SHA-256 (excluding this report):
+
+- `G3_EVIDENCE.json`: `15ef485c32fecc91aa1d059c17bc502d0a1bd54b9dfb1d95ee036b5875bb58bd`
+- `IMPORT_AUDIT.json`: `c81299186df1f7d76a2c003222614e6b97c4598c14db10ffb33d28ee849755c0`
+- `INSTALL_MANIFEST.json`: `7edc4851e3cd445faecf47a92f4adc716c20fd96bb13947d2154a9bbbf9fd006`
+- `bind_g3_reader.py`: `a1a1c565eaa07195efca5491b2dd3838da89f4a8d4c38fbf0bf1c04870a925c3`
+- `stage_and_audit.py`: `4712cdf8de1acaf35e8ec422e35958736b046088bdaceb39e2c115ca7029dd1a`
+- `stage_g3_fixtures.py`: `32a27a0bc5a988fa11dddad86dbbdd4565137e2685b9fa32f120a2868e812554`
