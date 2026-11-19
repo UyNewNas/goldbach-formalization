@@ -3764,3 +3764,91 @@ The modulus q is the **whole original integer physical product**, using true Eul
 **Next exact entrance.** With the pinned Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and isolated original `ImbalancedChen.*` mapping, actually compile this source, repair any elaboration failure and check its real transitive dependencies. Next in mathematics, derive true `A(N)` and `B(N)` caps from actual supported rough first-exit producer (rather than assuming them), and compare the **full final integer** `rho_N` including original global squarefree gate and all high-rank/enhanced marked sources. Still pending: true nonzero-shift mixed divisor moment, uniform growing-m actual W_T Fourier norms/tail, whole-box causal licenses, empty Gamma mother and complete PP/HB exhaustion and exact B=N from missing sources. Excluded full-87 parent/history remains untouched; frozen manuscript, production files, dependency locks, other tasks and boards remain untouched.
 
 **Status:** P3.6 **YELLOW**; exact *raw* physical source and support-cap-conditional mass **BLUE**, overall compiler `rho_N` identity and PP remain open. No GREEN.
+
+
+## Successor — active Rosser strict-level raw rho mass (2026-11-19)
+
+**Actual baseline:** b8958b9ebaaca5b753b28b5dc8ce5e7ad04af039 on branch
+chatgpt/p3-internal-original-w-20261105; compare was IDENTICAL before
+writing. AGENTS paths at root/docs/packet were fetched and yielded 404;
+no unseen constraints inferred. The predecessor REPORT, REGISTRY, unchanged
+EXTERNAL_INPUTS, raw source and true producer definitions in
+ActualSmallRosser, ActualSmallRoughAttachment, SmallRoughAttachment and
+TotientReciprocalBudget were read. Frozen manuscript
+9731290e8f53cffda44129906cde6a965eaa869b §§3(T),4(F) was re-read.
+
+**Genuine source improvement.** The previous actual-raw mass proof assumed
+that EVERY displayed small Rosser divisor a was <= A. But the displayed
+carrier consists of all divisors of the presieving product; this is far
+larger than the true Rosser coefficient level L. The installed PRODUCTION
+theorem actualSmallRoughRho_ne_zero_factors proves that at EVERY NONZERO
+physical raw coefficient q there exist the original factors q=a*b
+with a < L and b in the retained rough first-exit support. This is
+STRICT a<L, not a<=L, and not an assumed source equivalence.
+
+New file P3ActualRawActiveLevelTotientCap.lean (173 lines) proves that
+nonzero physical moduli lie in the image of the actual small-support
+filter a<L times the original fixed rough support. Via Finset.sum_subset,
+only exact zero coefficients are omitted; physical integer q, original
+real rho_raw and 1/phi(q) remain unchanged. The true separated-prime
+support bijection and the finite reciprocal-totient budget yield:
+
+  L <= (A:Real), all b in fixedRoughSupport <= B
+    ==> sum_(q in actualSmallRoughModuli) |rho_raw(q)|/phi(q)
+        <= 16*(1+log(max(1,A)))*(1+log(max(1,B))).
+
+Thus no size premise on every divisor of the small presieving prime
+product is needed. The true rough retained cap B remains an explicit
+independent internal obligation. The source does NOT establish the
+identity between REAL raw rho and final causally selected INTEGER rho_N,
+nor uniform final modulus mass for full original PP.
+
+**Commits and exact hashes.** New source commit
+638ebda7f741a86fe7a5b31200c0defc165cd97f [skip ci],
+Git blob c214fbea284916679111339268e5f53b318d1af7.
+VERIFY four newly registered but UNEXECUTED checks: commit
+37f9fc22146292e83ec5329752f0f1abed0c8280,
+blob d43919e23d3f76b173dd88d3ed5b1c2a7357dd56.
+REGISTRY update: commit 2ba248f25104bfb417b2c0491768b08edbbc0433,
+blob 28fc33b3c20750d2d4bd4eccb296b4784326a821.
+
+**Checks and trust boundary.** GitHub source readback confirmed 173
+lines and blob, forbidden proof escapes 0, delimiter lexical scan
+balanced. Independent exact rational finite arithmetic model:
+720/720 cases passed, including 407 cases where the displayed small
+prime-product support exceeds A=ceil(L), 3506 negative sign-attached
+coefficients, 15227 zero raw moduli, and 65 empty rough sources.
+The model did not implement the production Rosser/rough producer.
+Regression script /mnt/data/p3run65/regression.py SHA256:
+3e18dd12dce4c66ff805efe3563323aca37928a2300e7fe8449fffa570ceac81;
+regression.log SHA256:
+2e6ed4a29029eaddee9d2e2d6371f59da9a32f343e18c82a65ef896ec8b7f756.
+Attempted exact target:
+lake env lean ImbalancedChen/P3ActualRawActiveLevelTotientCap.lean
+exited 127, lake: command not found. Log
+/mnt/data/p3run65/targeted_lean.log SHA256:
+bcac41f7ee475b8e4b15f016b8961a4af86d034ba2d57085dd7dbb9cccadabfe.
+Locked Lean v4.33.0-rc1 / Mathlib
+e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 unchanged, but not
+available as an executable/dependency tree in this container. No
+isolated import mapping, elaboration, kernel, axiom audit, CI, independent
+replay, Codex or heavy producer executed. SOURCE_ONLY, UNCOMPILED,
+KERNEL_UNVERIFIED; not GREEN.
+
+**Next mathematical/verification entry.** Restore and actually compile
+the pinned toolchain and original ImbalancedChen import mapping, fixing
+errors rather than assuming earlier source validity. Next obtain true
+rough first-exit retained factor B(N) bound (or directly its phi-weighted
+mass), without trying to cap the full displayed small presieving product.
+Then identify final integer rho_N plus all small/rough, squarefree,
+restoration, original label and high-rank/enhanced source dictionaries.
+Still open: nonzero-shift divisor moments, actual W_T growth-uniform
+Fourier L1/H tail, all HB/PP source words, full b=T exception, causal
+whole-box and empty Gamma mother contributions. No changes to the frozen
+manuscript, production modules, toolchain, other branch or excluded
+87-domain parent/history node.
+
+EXTERNAL_INPUTS.json unchanged at Git blob
+8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab:
+(M) RECORD ONLY / NOT IMPLEMENTED / NOT AXIOM. P3.6 YELLOW;
+this narrow source BLUE; NO new GREEN.
