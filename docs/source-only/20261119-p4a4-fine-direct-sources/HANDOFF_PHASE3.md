@@ -1,0 +1,23 @@
+# P4A.4 selected dependency and K-ledger coherence audit
+
+SOURCE_ONLY / COMPILED: NO / KERNEL_REPLAYED: NO / TRANSITIVE_AXIOMS: NOT CHECKED / INDEPENDENT_REVIEW_THIS_RUN: NO / FINITE CERTIFICATES: UNEVALUATED.
+
+Baseline bd20b73b9b33cc0c619ba4ff318ba1f72c5963c8. This packet adds 34 exact existing Lean source blobs, with origin paths and selected registry SHA-256 identities in SOURCE_SELECTION_PHASE3.json. All 34 were read from the baseline and their local SHA-256 matched their recorded registries. Combined with the unchanged 40 earlier staged sources, the isolated packet holds 74 sources. No proof body was created, no precondition eliminated, no pin changed.
+
+## Selection conflict
+
+The Fine independent allowlist and P4 Nineteen dependency record select P4AAll22OriginalKLedger Git blob b34635e0078592b84fb9a2b4fd4469358819dc80 (SHA-256 c868f088df2402058fa4be33896e7894aa078a2f1d7f67de7dc8adc0df3404b5). The historical full87 v3 exact manifest selects its v3 repair blob d4cadbcd8fafcb3b19994c6a877458a5a5383068 (SHA-256 f6d8cbee7226df90750d57771f223e8634a19107720c3a961d46481848f1e03c), with the former as the explicit preimage.
+
+A raw diff of the two complete fetched sources exits 1 and shows one changed line in fifth_saving_slot_is_coarse_endpoint: `norm_num [currentUpperEighteenGains]` is replaced by `rfl`. No other textual difference was observed. The statement and all definitions appear identical in the inspected text, but this is not Lean elaboration, definitional-equality checking, an axiom audit, or validation of either object. Both variants are retained: the Fine-selected old blob remains at the packet's ImbalancedChen module path; the v3 repair is stored only under reference-variants, never as a second active module. No substitution is silently made.
+
+Manifest-graph traversal finds six reachable direct consumers of this module: P4ASlot17DescendingChargedFrontier, P4ASlot19ChargedFrontier, P4AAll22AdditionalActualSuppliers, P4AActualBufferedFallbackCapPayment, P5HistoricalGatePaidReserveSchedule, and the packet's P4AOriginalFiniteAll22Nineteen. The five first rows are v3-manifest identities, not verified installed objects. The selected source and actual import identity must be bound consistently; objects built for the other blob and its affected reverse dependencies must not be reused merely because this one-line diff looks harmless. Rebuild/replay under one exact choice and check full types and transitive axioms. Do not extend local CI for a single slot to the entire graph.
+
+## Graph limit
+
+With the 74 local source imports taking precedence over the full87 v3 manifest's declared imports, a name-level traversal from exists_fine_cofinal_same_coefficient_density_and_count's module reaches 1680 distinct project module names: 74 packet names and 1606 manifest-only names. It stops on 19 project-module names not in that union and records 231 distinct external import names. These counts are source-metadata diagnostics, not a fresh read of 1,606 source blobs, verified compiler closure, byte-coherent overlay, or compilation. Exact frontier names and 34 source identities appear in SOURCE_SELECTION_PHASE3.json. FullPolicy/List and all four R17 replacements, data fixtures, Q96/rounding finite guards and true source installation remain separate checks.
+
+The source candidate keeps its original beta/k, q, F/Q/rho, reserved compiler payment, distinct density reserve, presieve correction and signed distribution error. This round does not prove the whole 22-term assembly or PP, and changes no manuscript or underlying source proof. Existing source packets, archive manifests and historical source reviews remain immutable.
+
+Validation: the exact Git blob/SHA-256 checks and import-name scan were performed using Python on the 74 staged files, exit 0. The source diff above was run with `diff -u`, exit 1 for the reported difference. The 34 matching staged source bytes and the isolated v3 reference require remote readback after the commit; neither scan is a Lean check. In this environment `command -v lean`, `lake`, and `elan` produced no paths; no compiler, finite evaluator, kernel replay, independent review, GitHub Actions or user machine was used. Lean/mathlib/native pins and manuscript provenance remain those recorded in prior handoffs.
+
+Next resolve the graph frontier with exact source registries, handle the ledger conflict by a single explicit source selection and invalidation set, validate actual fixtures and overlays, then run the pinned Lean and kernel/axiom gates when the authorized environment contains the toolchain and full closure. Do not invent new mathematical gaps from these installation issues.
