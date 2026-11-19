@@ -1,0 +1,7 @@
+# Input boundary
+
+No new external mathematical theorem or target-equivalent assumption is introduced. This candidate uses the original 14-cell ordered table and trim, original `VariableEnvelope` A/B/C branches and eta, fine-label/fibre bounds and the preceding same-Q same-beta signed product with its existing `HistoryOnTrim` premise. `12*tau<width r` remains an explicit sufficient hypothesis; the common schedule has not supplied it. All candidates are SOURCE_ONLY / UNCOMPILED.
+
+Manuscript pin: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. The original affine table, source dictionary and VariableEnvelope are read at formal baseline `8b4fcfc7d95a27d6db403a1a582c8b64a1b010f7`. The three row meanings are the branch side, comparison-minus-B, and newCap-minus-comparison; the comparison is not identified with the actual fourth parent.
+
+The still-unverified counting input is the actual compiled `realPhysicalDistributionError b N T Q rho`, under `0<b<1`, `T>0`, `ceil z≤T^(b/(1+b))`, with exact quantitative rate, normalization and provenance not yet checked. No estimate is asserted. Original occurrence-weighted full-q matching, whole-upper-corner PP conditions, positive-w, common-width adaptation, strict savings and one-time error/reserve payment remain manuscript obligations. No PNT, Mertens, BV or spectral proof is started.
