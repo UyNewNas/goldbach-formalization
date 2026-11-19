@@ -26,7 +26,7 @@ open ImbalancedChen
 open ImbalancedChen.P3ActualRetainedRoughEulerMass
 open ImbalancedChen.P3ActualEvenLowerEulerMass
 
-private def u (p : ℕ) : ℝ := (((p - 1 : ℕ) : ℝ))⁻¹
+def roughPrimeInvPhi (p : ℕ) : ℝ := (((p - 1 : ℕ) : ℝ))⁻¹
 
 /-- Pure finite Euler identity, valid for any real-valued prime weight. -/
 private theorem powerset_euler (P : Finset ℕ) (f : ℕ → ℝ) :
@@ -150,7 +150,7 @@ theorem squarefree_prime_divisor_moment_le_euler
     (hfactor : ∀ r ∈ S, r.primeFactors ⊆ P) :
     (∑ r ∈ S, chenPrimeDivisorCount N r *
       (Nat.totient r : ℝ)⁻¹) ≤
-      (∏ p ∈ P, (1 + u p)) * (∑ p ∈ P, u p) := by
+      (∏ p ∈ P, (1 + roughPrimeInvPhi p)) * (∑ p ∈ P, roughPrimeInvPhi p) := by
   classical
   have hinj : Set.InjOn Nat.primeFactors S := by
     intro a ha b hb hab
@@ -164,7 +164,7 @@ theorem squarefree_prime_divisor_moment_le_euler
     obtain ⟨r, hr, rfl⟩ := Finset.mem_image.mp hT
     exact Finset.mem_powerset.mpr (hfactor r hr)
   have hphi (r : ℕ) (hr : r ∈ S) :
-      (Nat.totient r : ℝ)⁻¹ = ∏ p ∈ r.primeFactors, u p := by
+      (Nat.totient r : ℝ)⁻¹ = ∏ p ∈ r.primeFactors, roughPrimeInvPhi p := by
     have hphi : Nat.totient r =
         ∏ p ∈ r.primeFactors, (p - 1) := by
       calc
@@ -175,7 +175,7 @@ theorem squarefree_prime_divisor_moment_le_euler
         _ = ∏ p ∈ r.primeFactors, (p - 1) := by
           rw [Nat.prod_primeFactors_of_squarefree (hsq r hr)]
           simp [(hsq r hr).ne_zero]
-    simp [hphi, u, Nat.cast_prod, Finset.prod_inv_distrib]
+    simp [hphi, roughPrimeInvPhi, Nat.cast_prod, Finset.prod_inv_distrib]
   calc
     (∑ r ∈ S, chenPrimeDivisorCount N r *
       (Nat.totient r : ℝ)⁻¹) ≤
@@ -187,22 +187,22 @@ theorem squarefree_prime_divisor_moment_le_euler
             (chen_prime_divisor_count_le_primeFactors_card N r
               (hsq r hr).ne_zero) (by positivity)
     _ = ∑ T ∈ S.image Nat.primeFactors,
-          (T.card : ℝ) * (∏ p ∈ T, u p) := by
+          (T.card : ℝ) * (∏ p ∈ T, roughPrimeInvPhi p) := by
           rw [Finset.sum_image hinj]
           apply Finset.sum_congr rfl
           intro r hr
           rw [hphi r hr]
-    _ ≤ ∑ T ∈ P.powerset, (T.card : ℝ) * (∏ p ∈ T, u p) := by
+    _ ≤ ∑ T ∈ P.powerset, (T.card : ℝ) * (∏ p ∈ T, roughPrimeInvPhi p) := by
           apply Finset.sum_le_sum_of_subset_of_nonneg himage
           intro T hT hnot
-          have hp : ∀ p ∈ T, 0 ≤ u p := by
+          have hp : ∀ p ∈ T, 0 ≤ roughPrimeInvPhi p := by
             intro p hpt
-            simp [u]
+            simp [roughPrimeInvPhi]
             positivity
-          have hprod : 0 ≤ ∏ p ∈ T, u p :=
-            prod_nonneg_local T u hp
+          have hprod : 0 ≤ ∏ p ∈ T, roughPrimeInvPhi p :=
+            prod_nonneg_local T roughPrimeInvPhi hp
           exact mul_nonneg (by positivity) hprod
-    _ ≤ _ := powerset_card_first_moment_le P u
+    _ ≤ _ := powerset_card_first_moment_le P roughPrimeInvPhi
       (fun p hp => by simp [u]; positivity)
 
 /-- Instantiation to the *actual* even-first-exit LOWER rough leaves,
@@ -213,7 +213,7 @@ theorem actual_even_retained_rough_prime_divisor_moment_le_euler
     (∑ r ∈ fixedEvenRoughSupport retainEven N cap w z,
       chenPrimeDivisorCount N r * (Nat.totient r : ℝ)⁻¹) ≤
       roughEulerMass N cap w z *
-        (∑ p ∈ roughPrimeFinset N cap w z, u p) := by
+        (∑ p ∈ roughPrimeFinset N cap w z, roughPrimeInvPhi p) := by
   classical
   let S := fixedEvenRoughSupport retainEven N cap w z
   let P := (roughPrimeUniverse N cap w z).toFinset
