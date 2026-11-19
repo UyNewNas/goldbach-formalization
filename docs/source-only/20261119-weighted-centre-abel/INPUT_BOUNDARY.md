@@ -1,0 +1,7 @@
+# Input boundary: exact weighted centre cancellation
+
+**Manuscript-internal finite facts only:** original upper room `actualPrimitiveRosserRoom N cap w L X pre p`; complete quotient modulus `b=(p::pre).prod`; `Nat.Coprime (a*b) N` already present as actual room filter; prime prefix and its actual additive-carrier/centre split; `actualRoomBetaWeight`; original finite Abel identity, terminal weight zero, strict lower quotient gate. The proof never assumes centre-count intervals are zero. It proves **weighted** centre cancellation only.
+
+**External analytic input still NOT VERIFIED / NOT CALLED:** exact bibliographic source and theorem/version for same-rho primitive reflected prime AP counts at actual beta jump intervals `[ell,t+1)` for complete b; correct primitive restriction, totient/density normalization and centre/modulus prime corrections; permissible b and N-uniformity; numeric E relative to actual H_N. Arbitrary `mean b` in finite identities is not authenticated as an AP density.
+
+**Unpaid manuscript-internal bills:** true beta total variation; frozen fifth signed masses and ordered sixth occurrences; E*variation summation to H_N; lower-half primitive/modulus-prime/centre terms (still needed), ordinary continuation residual integral, changed/tagged and saved87, two independent compiler/density reserves and single rounding. No axiom, sorry/admit, independent masks or cap-signed monotonicity.
