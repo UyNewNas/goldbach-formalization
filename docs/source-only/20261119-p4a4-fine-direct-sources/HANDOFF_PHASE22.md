@@ -1,0 +1,37 @@
+# P4A.4 actual positive-cutoff, all-tags wall rate — phase 22
+
+Baseline `a9073a6a09820ac0db2cdac409e34596800eb732`, branch `chatgpt/p4a4-fine-audit-20261119-1645`. The commit containing this handoff has that baseline as parent; its Git tree identifies this file and all new source blobs. SOURCE_ONLY: YES. COMPILED: NO / UNCOMPILED. KERNEL_REPLAYED: NO. TRANSITIVE_AXIOMS: NOT CHECKED. INDEPENDENT_REVIEW_THIS_RUN: NO. Finite proof bodies: UNEVALUATED. This is a limited candidate, not a proof of complete All22, hdensity or PP.
+
+## Actual endpoint and mathematical derivation
+
+Existing `P4AOriginalFiniteFallbackWallRate.rate` is for `F T delta n D 0` and an arbitrary fixed tag schedule. Existing `P4AOriginalFiniteFallbackPayment.fixed_rate` transports changed mass to the positive-cutoff policy only for the empty tag; `P4AOriginalFiniteFallbackActualChangedSupport.actual_changed_seen` supplies a pointwise chart cover for arbitrary tags on the actual `F ... omega N`. Thus the consumer ingredients exist, but a uniformly quantified actual-positive-cutoff changed-mass endpoint is not explicitly exported by those declarations. No claim is made that a new analytic estimate was absent.
+
+For fixed original bank `T`, history/data `D`, positive delta and `D.e≥0`, let `S` be the entire original `universe N cap (N^omega) (N^v)` filtered by the actual tagged `changed` predicate for `F T delta n D omega N`. The pointwise source covers **each** member of S by one of the original finite `Charts T delta n D` with `centresFor` and radius `J0(omega)*tau`. `P4AFull87FiniteWallRate.exists_finite_rate` sums `cost d=1/phi(d)` over any finite S under exactly that cover; this is definitionally the original `changedMass` weight, not an unweighted count or a changed policy. Its Kwall/Ewall are chosen from the finite catalogue before B, N, cap, omega, v, tau and the arbitrary full tag function. The candidate retains the source hypotheses `2≤N`, `Even N`, `0<omega≤v≤1`, `0<tau`, `3≤N^omega` and `Ewall≤omega*log N`. It proves
+
+`(B/omega) * changedMass(F ... omega N, tags, ...) ≤ (M*150*B*tau + M*10*B*Kwall/log N)/omega^5`,
+
+where `B≥0` and `M=count T delta n D`. The Kwall here is the named wall constant, not the manuscript's fixed numerical K. The second theorem fixes omega and v, uses the standard power/log tending-to-infinity facts, and chooses one `N0≥2` after them and before N, cap, tau, B and tags. Every tag is retained; pointwise membership, strict support and the existing actual carrier remain unchanged.
+
+## Same-witness use and budget boundary
+
+For the already-selected Fine witness, instantiate `T=bank m`, `delta=width r`, `D=data e q a`, `omega=nu*beta²`, `v=19/96`, `tau=alignedWidth (jointIndex (bank m) (data e q a).m) k`, `cap=N`. Fine supplies positive nu and beta, `beta²<v_Fine` and `nu*v_Fine=19/96`, hence `0<omega<19/96≤1`; the physical z is definitionally `cutoff N=N^(19/96)`. Existing canonical boundedness, positive width and `data.e=e` justify the other displayed inputs, at source level. The new eventual threshold is selected after this omega; it may be joined with Fine's original N0 by `max`, without reselecting q, beta or k. This is an explicit parameter mapping, not an additional Lean theorem combining the two existential outputs; that combination is not claimed kernel-checked.
+
+The new conclusions are changed-mass bounds, not a second compiler-reserve payment, an all-tags rho support assertion, a same-rho signed PP, or a density result. They do not allocate compilerReserve or densityReserve. Existing Fine's unlabelled physical rho, actual presieve correction and finite losses remain unchanged; G7 is not repaid. No new external input is introduced. Inherited external PNT/Mertens/BV/spectral sources, normalizations, hypotheses, call sites and verification status remain as separately registered.
+
+## Source identity, manuscript and validation
+
+The direct pointwise source has Git blob `be14059cc960d861be48a445c748f95eaa63514b`; the original rate source is `2a817dca158e647917b0cf355f47966565cf9659`. The exact original `P4AFull87FiniteWallRate` is selected in full87 manifest blob `d609c1595f40130292e260e592ad700f3dd3f0e7`, origin commit `6848b4a69fd6f25806989dac7d305d27a6cd204e`, Git blob `c3f59dc3c639bbf1a50044f7e0c1b889e3fee51d`, SHA-256 `d876bc25d74b1e23854aef6897435688914c1221bcc9a33c8f349fdcb92d2ae0`. Its origin path returns that blob at `62af0da0...`, `71b47b30...`, and the baseline. It is staged at the previously absent task-packet module path. This is one source placement, not an installed transitive closure. Exact inputs and comparisons are in `REGISTRY_PHASE22.json`; phase 21 records the 4+22 individual numeric source mapping and exact Q96/reserve arithmetic.
+
+The Fine report, final registry and density-PP source selection at `71b47b30928600386237323d4f6a1f0c332edfbe` were reread. They retain one actual q/beta/k schedule and SOURCE_ONLY / UNCOMPILED boundaries. Manuscript `9731290e8f53cffda44129906cde6a965eaa869b:paper/source/manuscript-body.tex` returned blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79` matching the inherited pin. The current manuscript lines 451–482 preserve parity-dependent outer/inner rounding, sign-sensitive beta attachment and the physical rho's strict support. The previously established `ba6ec11d...` source relationship and older baseline c remain separately scoped in phase 21. Neither `c=49044063/25000000` nor `K=8452171/1250000` is altered.
+
+`python3 /tmp/p4a4-phase22/verify_phase22.py` exited 0 and checked six Git source blobs, the original filtered-universe and totient weight, quantifier/source markers, and a lexical prohibited-token scan. This is not Lean parsing, elaboration, transitive axiom inspection or a mathematical review. `lean --version` and `lake env lean /tmp/p4a4-phase22/P4AOriginalFiniteFallbackActualTaggedRate.lean` each exited 127 because commands were absent; see `LEAN_CHECK_PHASE22.log`. Configuration text pins Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`; installed versions were not verifiable. Stack 8192 KiB, Python 3.12.14; no limits raised, CI run or user machine used. Applicable root/docs/source-only/packet AGENTS files were absent.
+
+Changed file SHA-256 (the Git tree identifies this handoff):
+- `P4AOriginalFiniteFallbackActualTaggedRate.lean`: `6d1cb0381e0de0674d7216c36c0c9e434da87f5c8a3971a8faac879c011f2337`
+- `REGISTRY_PHASE22.json`: `dc81a81dd0548d55d7983bec0b76c396f2cadcefab75144edca6e6c5a644ed76`
+- `verify_phase22.py`: `02ce5e2bee1b84219f8fa3a9c46e23cc1b5acced5b42a3834ee482e9941d4e6a`
+- `SOURCE_CHECK_PHASE22.log`: `703db6b5d01156a0cfcbaee8e511366048ef04af65bf99712c68adf6561d18e8`
+- `LEAN_CHECK_PHASE22.log`: `bbd788c379777a045639dd483274a3b722ee28ae13238315435fb236361c6ad1`
+- `P4AFull87FiniteWallRate.lean`: `d876bc25d74b1e23854aef6897435688914c1221bcc9a33c8f349fdcb92d2ae0`.
+
+Next reconcile exact overlays and remaining source/data closure, including the 13 still-provisional phase-16 variants. With the existing pinned toolchain, elaborate phases 18–20 and this candidate, inspect the actual generated types and transitive axioms, evaluate finite guards, and kernel-replay the matching downstream. Only if the actual consumer requires a combined Fine existential plus this tagged rate should that exact same-witness export be added; do not infer a new saving or allocate reserve twice from an unavailable build.
