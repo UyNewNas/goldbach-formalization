@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment
 import ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment
 import ImbalancedChen.P3ActualU6LowerPairMomentFactor
 import ImbalancedChen.P3ActualU6LowerQuotientPrimeMoments
@@ -1780,3 +1781,12 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_even_lower_signed_pairs_eq_active
 #check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_U6_lower_quotient_prime_correction_active
 #check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_U6_lower_quotient_prime_correction_abs_le_active_moments
+
+-- P3.6 run80: strictly active Rosser small prime first moment <=
+-- floor(log_2 A)*logTotientCap(A), then actual U6 LOWER integer rho
+-- full b*q quotient-prime correction <= finite small/rough Euler moments.
+-- REGISTERED ONLY: not executed by Lean/Lake or kernel.
+#check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.primeFactors_card_le_nat_log_two
+#check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.chen_prime_divisor_count_le_nat_log_two
+#check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.actual_active_small_prime_moment_le_nat_log_cap
+#check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.actual_U6_lower_quotient_prime_correction_abs_le_log_euler
