@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6PrefixMassLogSquare
 import ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger
 import ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog
 import ImbalancedChen.P3ActualEvenLowerRoughEulerUniform
@@ -1823,3 +1824,10 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 -- REGISTERED ONLY; no Lean/Lake elaboration or kernel check.
 #check ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger.all_original_U6_lower_labelled_recenter
 #check ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger.exists_all_original_U6_quotient_prime_correction_bound
+
+-- P3.6 run85: original sixthSupport physical prefix reciprocal totient
+-- mass <= (logTotientCap N)^2; the *same* all-row LOWER rho correction
+-- obtains a two-log prefix payment. REGISTERED ONLY: NOT EXECUTED.
+#check ImbalancedChen.P3ActualU6PrefixMassLogSquare.original_U6_selector_subset_positive_prefix
+#check ImbalancedChen.P3ActualU6PrefixMassLogSquare.original_U6_prefix_mass_le_log_square
+#check ImbalancedChen.P3ActualU6PrefixMassLogSquare.exists_all_original_U6_quotient_correction_with_paid_prefix
