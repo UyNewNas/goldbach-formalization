@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6EnhancedCapUniformGate
 import ImbalancedChen.P3ActualU6EnhancedPowerLevel
 import ImbalancedChen.P3ActualU6PrefixMassLogSquare
 import ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger
@@ -1838,3 +1839,14 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6EnhancedPowerLevel.enhanced_power_level_le_common_cap
 #check ImbalancedChen.P3ActualU6EnhancedPowerLevel.enhanced_power_all_original_U6_rows_minorize
 #check ImbalancedChen.P3ActualU6EnhancedPowerLevel.exists_enhanced_original_U6_quotient_correction_bound
+
+-- P3.6 run87: explicit missing exponent gate; two rational witnesses
+-- exhibit both admitted and over-target-power parameter regimes.
+-- The finite N-cap theorem, totient/log monotonicity, and same original
+-- even-first-exit LOWER rho correction are REGISTERED ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.compatible_reserve_parameters_can_exceed_target_power
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.compatible_reserve_parameters_can_fit_target_power
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.enhanced_power_cap_le_target_of_exponent_gate
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.logTotientCap_le_of_le
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.enhanced_power_level_both_logs_le_target
+#check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.exists_enhanced_original_U6_correction_target_level_gate
