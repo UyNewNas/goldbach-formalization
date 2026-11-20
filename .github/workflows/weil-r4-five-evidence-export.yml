@@ -1,0 +1,38 @@
+name: Finite original R4 five-source bytes only
+on:
+  push:
+    branches: [ci/weil-r4-five-evidence-20261120]
+    paths: [.github/workflows/weil-r4-five-evidence-export.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: goldbach-weil-r4-evidence-43681964804
+  cancel-in-progress: false
+jobs:
+  original-five-byte-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Export only original finite bytes without toolchain or object loading
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/docs/source-only/20261120-resume/weil-r4-five-byte-export/export_r4_five.py"
+      - name: Retain available bytes and precise request boundaries even on failure
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: weil-r4-five-original-byte-carrier-${{ github.run_id }}
+          path: ${{ runner.temp }}/weil-r4-five-byte-carrier/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
