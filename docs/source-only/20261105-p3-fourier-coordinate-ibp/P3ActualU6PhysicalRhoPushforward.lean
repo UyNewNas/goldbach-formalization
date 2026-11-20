@@ -197,5 +197,38 @@ theorem actual_U6_signed_discrepancy_same_physical_integer_rho
       (fun d => finitePrimitiveDiscrepancy (chenAdditivePrimeCarrier N)
         (fun _ => 1) N d))
 
+
+/-- The real U6 count has a genuine lower inequality against ONE
+integer physical-rho signed discrepancy. Only the quotient-prime correction
+is separated; the displayed offshift discrepancy is NOT estimated.
+No claim relates this partial rho to the entire PP compiler. -/
+theorem actual_U6_count_lower_one_integer_physical_discrepancy
+    (N : ℕ) (policy : (ℕ × ℕ) → List ℕ → Bool)
+    (w L : (ℕ × ℕ) → ℝ)
+    (hgates : ∀ t ∈ sixthSupport N,
+      1 < L t ∧ w t ≤ L t ∧
+        w t ≤ P5CausalRhoQuotientBridge.cutoff N) :
+    (∑ t ∈ sixthSupport N, rowPrimitiveMean N policy w L t) +
+      (∑ d ∈ actualU6PhysicalModuli N policy w,
+        (actualU6PhysicalIntegerRho N policy w L d : ℝ) *
+          finitePrimitiveDiscrepancy (chenAdditivePrimeCarrier N)
+            (fun _ => 1) N d) -
+      (∑ t ∈ sixthSupport N,
+        rowQuotientPrimeCorrection N policy w L t) ≤
+      ∑ t ∈ sixthSupport N, sixthWeight N t := by
+  have hwz : ∀ t ∈ sixthSupport N,
+      w t ≤ P5CausalRhoQuotientBridge.cutoff N := by
+    intro t ht
+    exact (hgates t ht).2.2
+  have hledger :=
+    all_original_U6_lower_labelled_recenter N policy w L hwz
+  have hcount :=
+    ImbalancedChen.P3ActualU6SignedLowerCount.literal_integer_labelledAP_le_actual_U6_count
+      N policy w L hgates
+  rw [hledger] at hcount
+  rw [← actual_U6_signed_discrepancy_same_physical_integer_rho
+    N policy w L] at hcount
+  exact hcount
+
 end
 end ImbalancedChen.P3ActualU6PhysicalRhoPushforward
