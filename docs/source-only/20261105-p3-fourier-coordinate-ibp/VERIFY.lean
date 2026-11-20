@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog
 import ImbalancedChen.P3ActualEvenLowerRoughEulerUniform
 import ImbalancedChen.P3ActualEvenLowerOneEulerMoment
 import ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment
@@ -1807,3 +1808,11 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.actual_rough_euler_le_inverse_envelope
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.exists_original_rough_euler_le_log_envelope
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.exists_actual_U6_lower_quotient_correction_log_envelope
+
+-- P3.6 run83: literal production z=N^(417/5000) to target log N,
+-- and same U6 even-first-exit LOWER integer rho physical correction.
+-- REGISTERED ONLY: neither imported module nor checks were Lean-compiled.
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.original_U6_rough_cutoff_le_N
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.original_U6_rough_log_envelope_le_target
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.exists_original_U6_rough_euler_le_target_log
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.exists_actual_U6_lower_quotient_correction_target_log
