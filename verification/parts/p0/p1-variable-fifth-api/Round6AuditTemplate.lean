@@ -125,6 +125,7 @@ run_cmd do
         ("serialized_constant_names", toJson (data.constNames.map Name.toString)),
         ("environment_constant_names", toJson (owned.map Name.toString)),
         ("serialized_constant_count", toJson data.constNames.size),
+        ("extra_codegen_names", toJson (data.extraConstNames.map Name.toString)),
         ("extra_codegen_name_count", toJson data.extraConstNames.size)]
       liftIO <| IO.println s!"P0_ROUND6_SERIALIZED {record.compress}"
   unless serializedModules.qsort Name.lt == modules.qsort Name.lt do

@@ -176,12 +176,16 @@ def fourthCappedUpperPolicy (base : Bool → List ℕ → Bool)
   firstExitDepthSplicePolicy 4 (thirdCappedUpperPolicy base Q3)
     (frozenParityRosserPolicy false 4 Q4)
 
+#print equations fourthCappedUpperPolicy
+
 /-- The fifth-level own test is replaced before admission, on the same
 third-capped rank-four frontier used by the fourth replacement. -/
 def fifthCappedUpperPolicy (base : Bool → List ℕ → Bool)
     (Q3 Q5 : List ℕ → ℝ) : Bool → List ℕ → Bool :=
   firstExitDepthSplicePolicy 4 (thirdCappedUpperPolicy base Q3)
     (frozenParityRosserPolicy false 5 Q5)
+
+#print equations fifthCappedUpperPolicy
 
 theorem fourthCappedUpperPolicy_frontier_four
     (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)

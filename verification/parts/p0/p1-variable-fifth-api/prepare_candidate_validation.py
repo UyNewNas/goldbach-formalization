@@ -86,6 +86,16 @@ elif mode=='verify':
         assert by_name['ImbalancedChen.frozenParityRosserPolicy.eq_1']['module'] == 'ImbalancedChen.FinitePrimeGeometryCore', 'frozenParityRosserPolicy equation canonical owner mismatch'
     else:
         assert 'ImbalancedChen.frozenParityRosserPolicy.eq_1' not in by_name, 'Out-of-scope generated declaration'
+    assert all(len(row['extra_codegen_names']) == row['extra_codegen_name_count'] for row in inv)
+    policy_equation_owner = 'ImbalancedChen.FirstExitHistoricalLevels'
+    for name in ('ImbalancedChen.fourthCappedUpperPolicy.eq_1',
+                 'ImbalancedChen.fifthCappedUpperPolicy.eq_1'):
+        serialized = [row['module'] for row in inv for n in row['serialized_constant_names'] if n == name]
+        environment = [row['module'] for row in inv for n in row['environment_constant_names'] if n == name]
+        exported = [row['module'] for row in ds if row['name'] == name]
+        expected = [policy_equation_owner] if policy_equation_owner in modules else []
+        assert serialized == environment == exported == expected, (name, serialized, environment, exported, expected)
+        assert all(name not in row['extra_codegen_names'] for row in inv), (name, 'Policy equation unexpectedly classified as codegen')
     assert set(manifest['proof_api_new_equations']) <= set(by_name), 'Computation equation missing'
     for preserved in manifest['preserved_public_types']:
         assert preserved['name'] in by_name, 'Original public definition missing'
