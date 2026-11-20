@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6SignedLowerCount
 import ImbalancedChen.P3ActualU6LiteralParameterAndLedger
 import ImbalancedChen.P3ActualU6ReserveEpsilonSelected
 import ImbalancedChen.P3ActualU6EnhancedCapUniformGate
@@ -1864,3 +1865,11 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 -- even-LOWER reserve at literal ceil(cutoff N), and all-row correction.
 -- REGISTERED ONLY: Lean/Lake/kernel NOT RUN.
 #check ImbalancedChen.P3ActualU6LiteralParameterAndLedger.exists_literal_U6_reserve_ledger_and_correction
+
+-- P3.6 run90: true original U6 signed count bridge, original integer pair
+-- rho versus rowEstimator, all-label pointwise minorant, then original
+-- count lower bound with the nonzero-shift discrepancy STILL UNPAID.
+-- Registration only; unavailable pinned Lean/Lake was NOT run.
+#check ImbalancedChen.P3ActualU6SignedLowerCount.rowEstimator_eq_literal_integer_labelledAP
+#check ImbalancedChen.P3ActualU6SignedLowerCount.literal_integer_labelledAP_le_actual_U6_count
+#check ImbalancedChen.P3ActualU6SignedLowerCount.exists_literal_U6_count_lower_with_unpaid_signed_discrepancy
