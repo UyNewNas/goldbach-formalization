@@ -185,7 +185,10 @@ theorem future_exactly_350_nonzero_physical (g : ℕ) (hg : 4 ≤ g) :
       if iterate g false i ≠ 0 then (1 : ℕ) else 0) = 350 := by
   have hu : (∑ i : Fin 200,
       if iterate g true i ≠ 0 then (1 : ℕ) else 0) = 200 := by
-    simp [ne_of_gt (future_upper_all_positive g hg)]
+    have hall : ∀ i : Fin 200, iterate g true i ≠ 0 := by
+      intro i
+      exact ne_of_gt (future_upper_all_positive g hg i)
+    simp [hall]
   have hl : (∑ i : Fin 200,
       if iterate g false i ≠ 0 then (1 : ℕ) else 0) = 150 := by
     simp_rw [future_lower_nonzero_iff g hg]

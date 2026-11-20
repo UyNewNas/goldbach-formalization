@@ -4,7 +4,7 @@ Date: 2026-11-20. Branch: `chatgpt/p5-h34-full-tagged-actual-fin-20261112`.
 Confirmed incoming HEAD: `9aa4f4322e9ca6e96160cd80245e606cde11d605`.
 Pinned manuscript: UyNewNas/chen-imbalanced-semiprimes @ ba6ec11d800eccc54406490631895e174de85766.
 Pinned toolchain: leanprover/lean4:v4.33.0-rc1; mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1.
-Source blob: `5119497dda5183bcb0ed637669a447c05ada2310`; 203 Lean source lines; 13 theorem declarations.
+Source blob: `2a2180de3cc982d00265ec00e79824de77783084`; 206 Lean source lines; 13 theorem declarations.
 Status: SOURCE_ONLY / UNCOMPILED / UNEVALUATED / FULL_H34_OPEN.
 
 ## Actual new manuscript-internal work
