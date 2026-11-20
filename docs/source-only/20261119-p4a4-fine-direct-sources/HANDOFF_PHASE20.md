@@ -1,0 +1,31 @@
+# P4A.4 Fine existential witness and changed coverage — phase 20
+
+Baseline `1f532c4e35015a6a019bb8b15430491fae96ef64`, tree `3c94f85dfe63d233b8d62e549823f78fe7348e5e`, branch `chatgpt/p4a4-fine-audit-20261119-1645`. The commit containing this file has that baseline as parent; its Git commit and tree identify the new SHA and all changed file blobs without a self-referential hash. Only this packet is changed. SOURCE_ONLY: YES. COMPILED: NO / UNCOMPILED. KERNEL_REPLAYED: NO. TRANSITIVE_AXIOMS: NOT CHECKED. INDEPENDENT_REVIEW_THIS_RUN: NO. Finite Lean bodies: UNEVALUATED.
+
+## Exact candidate and boundary
+
+`P4AOriginalFineSameWitnessChangedCoverage.exists_fine_cofinal_same_witness_with_changed_coverage` calls `P4AOriginalFiniteAll22FineCofinalCoefficient.exists_fine_cofinal_same_coefficient_density_and_count` once, then applies `P4AOriginalFineWitnessChangedSupport.fine_witness_all_changed_seen` to the resulting exact `m,r,n,q,k,N,e,a,nu,v,beta`. It returns the unchanged complete Fine terminal output AND the pointwise tagged changed coverage for the same witness. Original threshold order, strictness, divisibility, data, `F`, `Q`, `rho`, compiler expense, physical error and finite losses are kept. The actual chart cover still requires actual universe and changed membership; there is no assertion of existence of a changed point. The explicit phase-19 parameter inequalities are derived from the Fine witness (`e>0`, `beta>0`, `nu>0`, `nu*v=19/96`, `beta²<v`, `N≥N0≥2`), rather than added as independent premises.
+
+This is a source-level data connection, not a new proof of the 22 savings, density, a signed distribution estimate, PP, all-tags HighAtoms, or all-tags rho support. The original Fine HighAtoms and rho output retains its own scope. The zero-cutoff-to-actual change transport is phase 18 and its exact witness specialization is phase 19; both remain UNCOMPILED. This candidate adds no separate savings or reserve payment. G7 remains an ordered replacement, and compiler reserve and density reserve remain distinct. No external theorem is asserted as newly verified: PNT, Mertens, BV and spectral inputs retain the exact provenance, conditions, normalization, call sites and verification status registered in the inherited selection and handoffs.
+
+The same witness is `T=bank m`, `delta=width r`, `D=data e q a`, `omega=nu*beta^2`, `tau=alignedWidth (jointIndex (bank m) (data e q a).m) k`, `w=(N:Real)^omega`, `z=cutoff N`, `Q=moduli N w`, `rho=P4AOriginalFiniteFallbackPolicy.rho (bank m) r n e q a omega N tau ((N:Real)^(nu*beta))` and `f=F T delta n D omega N`. `REGISTRY_PHASE19.json` records direct inputs and the source-level `data.e=e` chain. This phase creates no new source estimate and no PP/hdensity export.
+
+## Provenance and checks
+
+The complete Fine and phase-19 Lean sources were recovered and read from the baseline branch and locally checked against their recorded SHA-256s `74f2d4dc15e059f9ab197157ee9172808ddb34d2547dc85733eec878e1fbc3b6` and `19556299fcbf01d7826c759d6c0bef8922adf40ff38100c0bfec680867959c25`. The phase-19 handoff and registry, and phase-18 changed transport and wall source, were reread. Source selections and `REPORT_FINE.md` / `FINAL_FINE_REGISTRY.json` / `SOURCE_SELECTION.json` at `71b47b30928600386237323d4f6a1f0c332edfbe` and earlier lineage are recorded in the inherited handoff. This phase does not establish that the complete four-positive / 22-saving supplier graph is installed, aligned, or proved. Thirteen phase-16 choices remain provisional, with many full87 sources previously manifest-only; no new complete-closure claim is made.
+
+The manuscript entry `9731290e8f53cffda44129906cde6a965eaa869b:paper/source/manuscript-body.tex` again returns blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, consistent with the inherited source tree `4df4763ce4d22730fb3c30b816244e9c51c04a19`; the separately registered historical `ba6ec11d...` citation is not substituted. `lean-toolchain` records `leanprover/lean4:v4.33.0-rc1`, and `lake-manifest.json` records mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. These are configuration checks, not installed-runtime verification. The fixed c/K values are untouched. Applicable root/docs/source-only/packet `AGENTS.md` lookups returned 404.
+
+`python3 /tmp/p4a4-phase20/verify_phase20.py` exit 0 verifies both source hashes, byte-identical original Fine statement after undoing only the extra parentheses, single calls to the two source candidates, and lexical forbidden-token scan. It does not parse or elaborate Lean. `lean --version` and `lake env lean /tmp/p4a4-phase20/P4AOriginalFineSameWitnessChangedCoverage.lean` each exited 127 (commands not found); `LEAN_CHECK_PHASE20.log`. Python 3.12.14, inherited stack 8192 KiB; no resource limits raised, CI initiated, toolchain installed or user machine used. No transitive axiom check or independent review was performed.
+
+Changed file SHA-256 (this handoff is identified by its Git blob/tree):
+- `P4AOriginalFineSameWitnessChangedCoverage.lean`: `de718c92c1edb25fc49bdb1ce08336186403f2a8c30de0ff08f16e0d4502a824`
+- `verify_phase20.py`: `34218a544631f5b134dbc9add04795fb548fb65bd0766ecd5242d1b6fe3ae701`
+- `SOURCE_CHECK_PHASE20.log`: `67aec21880861c2042f50e53207df9035c43d90afb43c4e13dff90e9c07e1441`
+- `LEAN_CHECK_PHASE20.log`: `bbd788c379777a045639dd483274a3b722ee28ae13238315435fb236361c6ad1`
+- `REGISTRY_PHASE20.json`: `4d45ad9635171ae3872d2c7f6e6b195cb141d4aaae9eab38819a6e4187ce20ca`
+- Candidate Git blob: `864879272cd7381468969caba4352ea3a1524d73`.
+
+## Next action
+
+Reconcile source overlays and actual source/data import closure; elaborate and kernel-replay the exact phases 18–20 and relevant downstream in the already pinned environment if available, check transitive axioms and finite bodies. Reverse-check the original four-positive and 22-saving numbered suppliers, including early/later cofinal meeting, actual dispatch and occurrence data at the same witness. Verify only the tagged/rho support actually required by the consumer and the separately accounted Q96 rounding, compiler and density reserves. No mathematical gap follows solely from this candidate or the original Fine assembler being uncompiled.
