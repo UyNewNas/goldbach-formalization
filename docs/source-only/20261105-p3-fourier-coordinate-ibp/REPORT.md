@@ -4207,3 +4207,32 @@ That last original **physical prefix inverse-totient mass** is NOT automatically
 
 **Scope and next exact entrance.** `EXTERNAL_INPUTS.json` remains unchanged Git blob `9bdf12ace9d635d5747d1369515826bb13a5d78f`: Mertens and classical restricted (M) are RECORD-ONLY, NOT implemented, not new axioms. No modifications to frozen manuscript, production, toolchain/locks, other tasks, excluded dynamic full87 parent/history node, CI, PR or external dashboard. Next (1) obtain fixed Lean/Lake and isolated `ImbalancedChen.*` mapping, compile/repair source and inherited actual modules; (2) derive the **real** common small Rosser A(N) and original U6 prefix totient mass from the actual producer; (3) independently pay signed nonzero-shift complete-modulus discrepancy, exact B=T exception and full global causal rho_N/PP restoration; (4) finish actual W_T growing-m Fourier H-tail and causal whole-box, empty Gamma, high-rank/enhanced families. P3.6 overall YELLOW; this exact candidate scope BLUE only.
 
+
+
+## P3.6 successor — literal original U6 physical prefix mass paid by two logs (run85, 2026-11-20)
+
+**True recovery and scope.** Continued exclusively on `chatgpt/p3-internal-original-w-20261105` from GitHub-verified `f73939467908f750a584a3df9978eac151f5403a`, rather than rebooting at the old de582e6. Read the previous run84 REPORT/REGISTRY/EXTERNAL_INPUTS and `P3ActualU6AllRowsPrimitiveLedger.lean`; inspected source-only total totient caps and original production `ChenQuotientPrimeSource.lean` (`chenY6PrimeSelector`), `CurrentChenP5SelectedMaskTransport.lean` (`sixthSupport`), `ChenInitialPrimeSource.lean` (literal original additive-prime carrier) and the frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b` §1(PP),§3(T),§4(F). Root and path-ancestor AGENTS queried; no file found. Compare confirmed no successor to run84 on this task branch before writes; no other task branch was resumed or modified.
+
+**Mathematical increment and real source.** New `P3ActualU6PrefixMassLogSquare.lean` (144 content lines, Git blob `d29417501d2ca6ee10b02d5f113d9d9ea2ddafe9`), source commit `2eca169642f313ad81653f7adaaba1a632efb8b6` [skip ci]. Three public proof candidates. The exact original ordered sixth selector uses **the original** `N^(417/5000)`, `N^(19/125)`, `N^(59/250)` bands and is a subset of `chenAdditivePrimeCarrier N × chenAdditivePrimeCarrier N`, hence of `[1,N] × [1,N]` with all original pair labels. For positive `p,q`, reuse the existing finite physical totient inequality `1/φ(pq) ≤ (1/φ(p))(1/φ(q))`; no new coprimality hypothesis or `pq ≤ N` was smuggled in. Finite Fubini + existing `sum_reciprocal_totient_le_log` give
+
+```
+originalU6PrefixMass N = Σ_{t∈sixthSupport N} 1/φ(t.1*t.2)
+  ≤ (logTotientCap N)^2
+logTotientCap N = 4*(1+log(max(1,N))).
+```
+
+Combined with run84's **one universal**, existing uncompiled Mertens constant `C>0`, the exact all-U6 labelled even-first-exit LOWER integer rho quotient-prime correction has the source candidate bound
+
+```
+|Σ_t rowQuotientPrimeCorrection(N,policy,w,L,t)|
+ ≤ (logTotientCap N)^2 * logTotientCap A
+   * U * (Nat.log 2 A + U),
+U=C*(1+log N), N>=2,
+∀t∈sixthSupport N, w(t)<=cutoff(N), L(t)<=A.
+```
+
+This genuinely pays the **formerly-open physical U6 prefix reciprocal-totient mass**, with no additional external estimate. It does NOT pay the actual signed complete-modulus offshift discrepancy, establish common producer A(N), identify the FINAL global causal integer rho_N, or prove PP.
+
+**Checks executed vs unexecuted.** GitHub source readback SHA exactly `d29417501d2ca6ee10b02d5f113d9d9ea2ddafe9`; stripped-source proof-escape scan 0. Independent Python deterministic original-prime-band finite tests: **4,945/4,945** checks, 1,415 N cases (1,406 nonempty, up to 1,470 labelled pairs) plus 350 complete small finite totient-prefix controls. It uses exact `Fraction` arithmetic for every totient sum, but a separate Python prime selector; it is NOT Lean elaboration, a P5 first-exit producer test, an original analytic PP test or a kernel proof. Script `/mnt/data/p3run85/regression.py` SHA256 `2d004e977b34349d2e65320e72555ee4ece3b626627c1bb3df6779d8c46f892c`, log `/mnt/data/p3run85/regression.log` SHA256 `8a07a30996549fc85ea32588f8690ef43ba90670d61f6dc8a85a67ecd8ddbbb6`. The literal `lake env lean ImbalancedChen/P3ActualU6PrefixMassLogSquare.lean` exited **127** with `lake: command not found`; log `/mnt/data/p3run85/targeted_lean.log` SHA256 `568e574886ebc7b55770577fb78d6b92a020a23838f409cc2cba6563b6414a32`. There is no installed fixed Lean/Lake toolchain or isolated `ImbalancedChen.*` mirror. Three added `#check` declarations in VERIFY commit `080c88643c19da7510bb201a225e942431c2e8c5` **REGISTERED, NOT EXECUTED**; REGISTRY updated at `63314ac7526c010b7ff8374a3370da8dbefc0f38`. No type check, kernel, transitive axioms audit, CI, replay, Codex, or heavy producer. **SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED; no new GREEN.**
+
+**Pins, boundary and next exact entrance.** Frozen manuscript `9731290e8f53cffda44129906cde6a965eaa869b`, Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach-Lean `09b97db5764ade1246bfb77206baa1b124760958` unchanged. `EXTERNAL_INPUTS.json` stays at blob `9bdf12ace9d635d5747d1369515826bb13a5d78f`; pinned existing Mertens theorem and classical restricted estimate (M) remain RECORD-ONLY, NOT implemented, NOT axiomatized. No edits to production, manuscript, other tasks, excluded complete-87 dynamic parent/history node, CI, PR or dashboards. Next: (1) obtain locked Lean/Lake and isolated source-only import mapping and actually compile/repair run85 and inherited chain; (2) supply the true common Rosser level A(N) and bound `logTotientCap A` with the correct joint N threshold; (3) independently pay signed nonzero-shift complete-physical-modulus discrepancy, exact product=T, and full same global integer rho_N labels/repeats/restoring scalars/collision factors; (4) actual growing-m W_T Fourier L1/H tail, causal whole boxes, empty Gamma, high-rank/enhanced source families. P3.6 overall **YELLOW**, new limited source **BLUE**.
