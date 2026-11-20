@@ -18,7 +18,7 @@ This is a genuine instance of the original two policies and original
 real half-product source.  It does NOT establish that the frozen final
 full87 constructor chooses these precise epsilon/w/z/L/cap parameters,
 nor does it pay the signed primitive discrepancy or establish PP licence.
-No new axiom, sorry/admit, native_decide, unsafe or external proof.
+No added assumptions, proof escapes or external analytic proof.
 -/
 
 namespace ImbalancedChen.P1Full87RealManuscriptGate
