@@ -1,0 +1,8 @@
+# P1.4 persistent handoff — literal compact w versus rough fifth power
+
+- Verified prior HEAD `a1285c62408d60f6ad213036464b8a34a97d5994`; source commit `e2b3942f6408622b95bf9e3c687c90caaca4bf1c`, blob `1f11ea824a7f0070b72ac58222d2e205e84cf66a`, independent branch `chatgpt/p1-full87-compact-w-scale-audit-20261120-1610`.
+- Read the full previous source and handoff as well as actual `ActualUpperCountingInputs`, `P4ASameRhoCompact`, `P4ACompactPhysicalIntegralLedger`, `RoughPrimeUniverse`, `FixedRoughCoefficients`; verified frozen manuscript blob.
+- **Actual correction:** for compact attachment, `w=N^(epsilon^2)`, `z=N^(19/96)`, `L=N^epsilon`, `epsilon<=2e<=1/192`. New candidate Lean bodies derive `5epsilon^2<=5/36864<19/96`; for N>=2, `w^5<z<N^(599/1000)`; the earlier strict low-carrier exclusion premise fails at the real physical theta scale.
+- The old changed-rough conditional b>=w^5 is preserved with its original RAW/LICENSED policy and explicitly chosen compact w,z, but no genuine full87 epsilon installation has been proved. Do not infer gain existence or absence. The compact source is the third-policy supplier, NOT automatic final full87 coefficient authentication.
+- STATUS: SOURCE_ONLY / UNEVALUATED / UNCOMPILED; compiler/elan/lake absent (127), memory 4 GiB; imported source-only closure not staged. Toolchain and manifest pins confirmed. No kernel replay or independent review.
+- Next: locate actual full87 fixed compiler precision and same-rho physical coefficient, prove exact end-point/coefficient alignment, then rank5/7/9 first-disagreement-to-87 occurrence mapping and H_N error/reserve payment. Keep source-only and [skip ci]. Resolve branch HEAD before continuing; do not reset to earlier SHA.
