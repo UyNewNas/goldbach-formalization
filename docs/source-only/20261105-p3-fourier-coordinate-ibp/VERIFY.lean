@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6LiteralParameterAndLedger
 import ImbalancedChen.P3ActualU6ReserveEpsilonSelected
 import ImbalancedChen.P3ActualU6EnhancedCapUniformGate
 import ImbalancedChen.P3ActualU6EnhancedPowerLevel
@@ -1857,3 +1858,9 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 -- Registered ONLY. No Lean elaboration or kernel check executed.
 #check ImbalancedChen.P3ActualU6ReserveEpsilonSelected.exists_original_lower_reserve_with_target_power_gate
 #check ImbalancedChen.P3ActualU6ReserveEpsilonSelected.exists_one_constant_original_lower_reserve_and_U6_correction
+
+-- P3.6 run89: exact nu=1, r=417/5000 production instantiation and
+-- SAME selected epsilon, N0, true U6 labelled primitive ledger,
+-- even-LOWER reserve at literal ceil(cutoff N), and all-row correction.
+-- REGISTERED ONLY: Lean/Lake/kernel NOT RUN.
+#check ImbalancedChen.P3ActualU6LiteralParameterAndLedger.exists_literal_U6_reserve_ledger_and_correction
