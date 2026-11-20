@@ -1,0 +1,5 @@
+# Input boundary
+
+No new analytic input is assumed. The unverified external PP requirement remains the original real half-product source's signed sum over its exact Q and rho of congruence mass minus coprime mass divided by phi, in the original jointly quantified parameter regime. The count gate includes `0<b<1`, `T>0`, `ceil z<=T^(b/(1+b))`; precise source, version, rate, normalization and uniformity are NOT VERIFIED. No PNT, Mertens, BV or spectral proof was opened.
+
+The old original trim, full87 trim, bank field constraints and actual negative-inner hypotheses remain explicit; uniform compatibility and covering are manuscript obligations. The existing common historical theorem supplies old policy admission only on its original small prime box and after its own m0 schedule. This packet keeps the distinct full compiler cutoff and never assumes that the full modulus has only eight factors. Original corner weights and signed multiplicities, full u_c, ordinary negative complement, inherited moment and one-time reserve payment remain open.
