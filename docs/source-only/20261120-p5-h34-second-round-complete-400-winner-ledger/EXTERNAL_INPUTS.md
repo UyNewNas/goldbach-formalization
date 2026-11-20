@@ -1,0 +1,4 @@
+# P5.6/h34 external-input boundary — full second-round 400
+No newly implemented or assumed external mathematical theorem; no new axiom or number-theoretic input. Reuses the pinned Mathlib finite `Fin`, `Finset`, integer arithmetic and the existing source-only original literal Q80 producer, row data and predecessor certificates. The pinned manuscript `ba6ec11d800eccc54406490631895e174de85766` and original source-mapping remain unchanged.
+
+**Internal and UNPAID:** compilation and numerical Lean certification, frozen F endpoint/seed, correct positive-source CLOSED-CELL for generations 1..430, all original selected-count/root norm 7/2/owner/filter/rejection identities, fixed intercept/seven-integral ≥0.65, manuscript-local PP/same-rho, native-history, outer integral/Theta/count and joint430+11 refinement. No external-input reclassification of these obligations.
