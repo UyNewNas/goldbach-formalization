@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerRoughEulerUniform
 import ImbalancedChen.P3ActualEvenLowerOneEulerMoment
 import ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment
 import ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment
@@ -1799,3 +1800,10 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.rough_prime_sum_add_one_le_euler
 #check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.rough_prime_sum_le_euler
 #check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.actual_U6_lower_quotient_prime_correction_abs_le_one_euler
+
+-- P3.6 run82: exact original rough carrier <= inclusive Mertens carrier,
+-- uniform log(z) envelope and actual integer U6 LOWER physical correction.
+-- REGISTERED ONLY: not Lean-elaborated or kernel-checked.
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.actual_rough_euler_le_inverse_envelope
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.exists_original_rough_euler_le_log_envelope
+#check ImbalancedChen.P3ActualEvenLowerRoughEulerUniform.exists_actual_U6_lower_quotient_correction_log_envelope
