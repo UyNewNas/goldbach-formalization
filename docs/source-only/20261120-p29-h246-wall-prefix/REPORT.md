@@ -1,0 +1,29 @@
+# P2.9 — H246 shared wall and full prefix-collision removal
+
+SOURCE_ONLY=true; COMPILED=false (UNCOMPILED); KERNEL_REPLAYED=false; TRANSITIVE_AXIOMS=NOT_CHECKED; INDEPENDENT_REVIEW=NOT_PERFORMED. New and inherited proof terms, including finite archived-row matching, are UNEVALUATED. This is a candidate H246 pair-profile reduction, not a complete W2 count licence, strict-ceiling payment, named reserve, signed seed, H247 endpoint or P2.9-wide acceptance.
+
+## Baseline and endpoint boundary
+
+Continuation branch `chatgpt/p2-9-causal-successor-20261119-1640`, baseline `5d585aeba2adb47c1fcbe004ac55186d74644c3c`, previous proof `77bbaf7ff28349c5577e914897a4225d2bce5a91`. Read the full previous source/report, the separate all-wall candidate, the actual H246 parent/window decomposition and preceding wall-plus-equality Lean candidate. The previous full-prefix bound contains both earlier equal-ceiling slices; this packet uses the full prefix bound once, not their previously separated allowances.
+
+At historical `4ccc54e1423db03315957dc79138a89d4dab7efd`, 29 actual H247 upper comparisons remain open; selected functional registry `32d541884c85748e3fb18f7a83801b2f8b16e359` does not close them. Example zero-based index 50, s=101/50 requires `(iterate designatedW1 designatedW2 247 true 50 : Real)/tableQ ≤ wuImprovementLimit true delta (101/50)` with original fixed `0<delta≤1/10` and Q80 `1208925819614629174706176`. Wu's printed classical sufficiently-small-delta bound 0.0223939 at 2.2 is below saved H184 numerator `36351464408527643182652` divided by Q80; it cannot pay that comparison or be moved automatically from `Q=N^(1/2−delta)` full boxes to enhanced/restricted descendants. Actual signed cost/seed and matching same-native-source limiting comparison remain necessary. No endpoint is eliminated here; no claim is made about uninspected later work.
+
+The previously verified manuscript pin equals requested `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b:paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Original Q=N^nu, residual L, exact parent and selected-square gates, physical ceiling, four ordered W2 pair occurrences and positive pair sign remain in force. No source pin or parameter is changed.
+
+## New candidate proof bodies
+
+`P2Historical246WallPrefixRemoval.lean`, SHA-256 `75d4d504833d1c3af217d38f9746a35ad57242425115d4ee67925ac7222afb2a`:
+
+* `laneAfterWallPrefix` is the literal sum of strict ceiling rejection `c<p1` and actual `pairChildren` with original signed H246 atom. It is not assumed negligible, nor identified with the actual sifted count.
+* `laneFull_eq_wall_prefix_after` uses the actual successor parent-window fact, same-Q source level, product-gate proof and inherited integer-prime ceiling equivalence. On each actual source tuple and lane it states the exact signed equality `laneFull = laneWall + prefixLane + laneAfterWallPrefix`. The wall and prefix buckets are the original mutually exclusive gates. The whole prefix bucket includes every earlier equality-ceiling subcase, and those subcases are not summed again. `bookFull_sub_after_eq_wall_prefix` lifts the equality over each original source path/tuple and four ordered pair lanes, with the original W2 `/5` exactly once.
+* `tagged_book_remove_wall_and_full_prefix` fixes one actual `b∈taggedW2 246` and one matching historical j, uses all-j uniform wall and full-prefix suppliers with a shared maximum threshold, and obtains the candidate `|bookFull − bookAfterWallPrefix| ≤ epsilon*Theta N (N^nu) (sourceSupport A next N nu) (sourceSigma A next N nu)`. T is chosen before N, nu, marked book, actual choices/tuples and row. Each of the two signed errors gets `5*epsilon/8` for each original k, so four occurrences divided by 5 cost epsilon; no nonnegative or counting assumption on the signed profile is added. `source_Theta_exact` retains duplicate source products and external labels. No Q80 `/4` or replacement payment is introduced.
+
+The remaining explicit `bookAfterWallPrefix` still includes strict ceiling rejection and the literal child carrier. The estimate does not by itself remove the strict-ceiling term, identify the actual child sum with the sifted count, consume a specific named reserve, prove a full H246 action, or pay an H247 endpoint. P2.9 remains yellow.
+
+## Inputs and validation
+
+No new outside analytic hypothesis. Existing actual parent/source and product gates, prime-ceiling equivalence, single-face prime-box estimate and labelled-fibre prefix bound, actual wall bound, same marked-Theta pushforward and archived-row matching are inherited source candidates and remain uncompiled here. Baseline pins Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; the selected registry pins native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. No c/K is newly used. No PNT/Mertens/BV/spectral proof is started.
+
+`lean --version` and `lake --version` each exited 127; raw logs included. No matching Lean executable or verified import closure exists here. Text search found no forbidden proof placeholder, native decision or unsafe token in the new file; this is not type checking. No kernel replay, transitive axiom check, independent review, numeric guard/producer/certificate evaluation, CI, Actions, pin change or resource increase occurred.
+
+Next: elaborate this candidate and exact closure under pinned versions, repair scoped errors, kernel replay, inspect transitive axioms and obtain independent review. Derive the strict-ceiling term using its actual selected source and prove the child count-to-profile bridge; then identify and discharge the real named reserve with a single error budget. Separately prove signed base/seed, Gamma5 and unclosed Gamma9–15 licences and each actual H247 `BankEndpointLicences` comparison, subject to independently verified subsequent work.
