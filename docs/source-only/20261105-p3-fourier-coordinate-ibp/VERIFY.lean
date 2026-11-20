@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger
 import ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog
 import ImbalancedChen.P3ActualEvenLowerRoughEulerUniform
 import ImbalancedChen.P3ActualEvenLowerOneEulerMoment
@@ -1816,3 +1817,9 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.original_U6_rough_log_envelope_le_target
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.exists_original_U6_rough_euler_le_target_log
 #check ImbalancedChen.P3ActualEvenLowerRoughEulerToTargetLog.exists_actual_U6_lower_quotient_correction_target_log
+
+-- P3.6 run84: ORIGINAL U6 all labelled LOWER rows, exact global primitive ledger
+-- and common Mertens scalar paid against the actual prefix totient mass.
+-- REGISTERED ONLY; no Lean/Lake elaboration or kernel check.
+#check ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger.all_original_U6_lower_labelled_recenter
+#check ImbalancedChen.P3ActualU6AllRowsPrimitiveLedger.exists_all_original_U6_quotient_prime_correction_bound
