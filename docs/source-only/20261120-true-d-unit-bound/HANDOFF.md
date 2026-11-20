@@ -1,0 +1,7 @@
+# P1.4 persistent handoff — same Mobius sign yields actual true-d unit bound
+Read the task's latest GitHub branch HEAD `chatgpt/p1-full87-true-d-unit-bound-20261120-1110` (never backtrack to original 9649ab3). Exact predecessor `9772ff8f83f88be3bc4dc005198e650a526b1751`.
+Source: `docs/source-only/20261120-true-d-unit-bound/P1Full87TrueDUnitBound.lean`, blob `20febe424fb4aa3d57067763ec46f5174841b07b`. Full target definitions are genuine `actualSmallRoughRho`, `fixedRoughCoefficient` and `trueDDeltaRho`; no invented field.
+Candidate conclusion: `|trueDDeltaRho old fresh N cap w z L d| <= 1` for any two real first-exit policies. Reason: each fixed rough coefficient is either one shared Mobius(b) or zero, both attach the same small Rosser beta determined by that sign, and small*rough product on actual cutoff-separated support has unique factorization.
+Keep previous three-book physical identity, exact state equality/one-copy producer ledger, signed outside net and all actual parent/list multiplicities. These candidates are not certificates of the full eq:current-PP admissible causal class, nor H_N payment.
+Compiler unavailable: lean/lake/elan exit127; 4GiB cap. SOURCE_ONLY / UNEVALUATED / UNCOMPILED. No kernel, axiom or independent validation. Manuscript and all pins unchanged.
+Next exact step: stage fixed source-only imports and check elaboration; then prove full PP causal class or identify true mismatch, and certify changed/tagged/BOTH/rank9/inherited member links. Continue actual H_N accounting rather than generic same-statement repackaging.
