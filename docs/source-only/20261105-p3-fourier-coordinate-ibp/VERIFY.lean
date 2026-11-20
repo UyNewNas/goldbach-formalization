@@ -1771,3 +1771,12 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.chen_prime_divisor_count_le_primeFactors_card
 #check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.squarefree_prime_divisor_moment_le_euler
 #check ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment.actual_even_retained_rough_prime_divisor_moment_le_euler
+
+-- P3.6 run79: original U6 EVEN-first-exit LOWER signed integer pair
+-- correction restricted EXACTLY to small Rosser s<L before the
+-- positive active-small/actual-rough moment factorization.
+-- REGISTERED ONLY: the fixed lake toolchain is unavailable; NOT EXECUTED.
+#check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_even_lower_pair_small_strict_of_ne_zero
+#check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_even_lower_signed_pairs_eq_active
+#check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_U6_lower_quotient_prime_correction_active
+#check ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment.actual_U6_lower_quotient_prime_correction_abs_le_active_moments
