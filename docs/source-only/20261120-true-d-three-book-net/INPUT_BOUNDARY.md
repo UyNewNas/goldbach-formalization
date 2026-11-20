@@ -1,0 +1,10 @@
+# Input boundary — three-book true-d signed net
+
+- Pinned external manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, file `paper/source/manuscript-body.tex`, exact blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.
+- `eq:current-physical-upper`: physical `R_N(n)=sum_{q|n} rho_N(q)`, actual bounded squarefree/coprime small/rough modulus. The upper tree has a nonnegative majorant. The **difference** of an actual RAW policy and an actual LICENSED policy has NOT been proved to be such a majorant.
+- `eq:current-PP`: for one finite smooth `W_N` on labelled original prime products in the required product window, polylog mixed Euler derivative bounds and the manuscript's admitted real causal coefficient classes, `sum_q rho_N(q) [AP_{W_N}(q)-X_W^{(q)}/phi(q)] = O_{A,W}(N (log N)^{-A})`. The coefficient used in BOTH terms must be identical, with proper support, normalization, fixed-policy-before-N quantifiers and permitted factorization.
+- CURRENT proof uses `deltaRho = rho_LICENSED-rho_RAW` only in finite `highQTest`. The general bound `|deltaRho|<=2` does NOT prove the single permitted signed PP class, smoothness, source support or analytic rate. PP INPUT = NOT_APPLIED / NOT_AUTHENTICATED.
+- New purely manuscript-internal candidate algebra: `physicalDelta + orderedStops = licensedOutsideSigned - rawOutsideSigned - actualProducerLedger`. This is signed finite conservation, not positive saving. The two outside signed masses can cancel before taking absolute values; no bound relative to `H_N` is derived. The original per-owner producer ledger still pays its own matched/unmatched occurrences.
+- No new axiom, no extra inherited mask, no substituted full-shell `Q=ab`, no geometric zero-as-zero-error, no double payment of raw/outside lists, no coefficient licence by unsupported normalization.
+- Constants `c=49044063/25000000`, `K=8452171/1250000`; Lean v4.33.0-rc1 / mathlib e4c91783 / native 09b97db pinned.
+- Verification: SOURCE_ONLY / UNEVALUATED / UNCOMPILED. Kernel replay, transitive axiom audit, independent review still pending.
