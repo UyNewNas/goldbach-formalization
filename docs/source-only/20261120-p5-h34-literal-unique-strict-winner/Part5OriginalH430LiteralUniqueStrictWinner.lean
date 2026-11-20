@@ -90,8 +90,7 @@ private theorem bank_offer_origin (old : Table) (i : Fin 200)
     WinnerOrigin old true i (offerRow old i d k) := by
   by_cases ht : i.val ∈ (rows k).targets
   · by_cases hv : d.numerator < candidate old (rows k)
-    · change WinnerOrigin old true i
-        (offer d (candidate old (rows k)) (.bank k))
+    · simp only [offerRow, if_pos ht]
       simp only [offer, if_pos hv]
       refine ⟨hd.1.trans hv.le, ?_, ?_, ?_⟩
       · intro hr
