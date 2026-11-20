@@ -28,6 +28,8 @@ open ImbalancedChen
 open ImbalancedChen.P3ActualRawActiveLevelTotientCap
 open ImbalancedChen.P3ActualRawPhysicalRhoTotientCap
 open ImbalancedChen.P3ActualEvenLowerEulerMass
+open ImbalancedChen.P3ActualEvenLowerIntegerRho
+open ImbalancedChen.P3ActualRetainedRoughEulerMass
 open ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment
 open ImbalancedChen.P3ActualEvenLowerActivePairPrimeMoment
 
