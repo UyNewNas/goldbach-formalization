@@ -142,8 +142,7 @@ theorem original_retained_u4_exceeds_occupied_fin_capacity
       ∑ Q ∈ observedReceiptQs N cap precision tau z0 lower,
         ∑ i : Fin (actualPhysicalRankTwoList N cap z0 Q lower).length,
           (extraTagged N cap precision tau z0 lower Q i : ℝ) := by
-    have hc := congrArg (fun n : ℕ => (n : ℝ)) hnat
-    simpa only [Nat.cast_sum, Nat.cast_one] using hc
+    exact_mod_cast hnat
   have hsource := retained_original_occupied_plus_collision_excess
     N cap precision tau z0 lower
   linarith only [hreal, hsource]
