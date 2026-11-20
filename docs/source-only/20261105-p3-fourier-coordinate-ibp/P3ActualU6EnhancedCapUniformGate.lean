@@ -46,6 +46,16 @@ theorem compatible_reserve_parameters_can_exceed_target_power :
   refine ⟨834, 1 / 10000, 1 / 100, ?_⟩
   norm_num
 
+/-- The extra power gate is not vacuous: the original compatibility
+conditions have an explicit rational point satisfying it. -/
+theorem compatible_reserve_parameters_can_fit_target_power :
+    ∃ nu r epsilon : ℝ,
+      0 < nu ∧ 0 < epsilon ∧ epsilon < 1 / 8 ∧
+      epsilon ^ 2 ≤ r ∧ nu * r = (417 / 5000 : ℝ) ∧
+      nu * epsilon ≤ 1 := by
+  refine ⟨417 / 50, 1 / 100, 1 / 20, ?_⟩
+  norm_num
+
 /-- The cap of the actual L=N^(nu*epsilon) is at most the original N
 only if the exponent condition is separately supplied. This is a
 small Rosser mass level; never an auxiliary or physical modulus cap. -/
