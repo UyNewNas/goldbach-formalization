@@ -3,7 +3,7 @@
 **Verified baseline:** `8cb8db0e399c039adeb49550eec7fbc6c7edce87`, previous proof packet `docs/source-only/20261120-true-d-owned87-invoice/`.
 **Task branch:** `chatgpt/p1-full87-true-d-three-book-net-20261120-1010` (new independent branch from verified baseline).
 **Candidate path:** `docs/source-only/20261120-true-d-three-book-net/P1Full87TrueDThreeBookNetInvoice.lean`.
-**Candidate blob:** `af150a6dce8c548c5b62223a7066fd5fe3ff14bd`, 177 lines, 3 SOURCE_ONLY theorems. Full source commit and latest HEAD are recorded separately in the new REGISTRY and the actual GitHub branch HEAD; use GitHub read to recover.
+**Candidate blob:** `af150a6dce8c548c5b62223a7066fd5fe3ff14bd`, 177 lines, 3 SOURCE_ONLY theorems. Source/packet commit **a15393962e8cba79fbbaab139bad3e3046d08796**; later docs-only handoff commit will advance branch HEAD. Read remote branch HEAD on the next run and never reset to this recorded source commit.
 **Prior actual source 87 partition:** original RAW `e79f478556138b88fba6a597600476ae87642b32` on predecessor.
 **Manuscript pin:** `9731290e8f53cffda44129906cde6a965eaa869b` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. No parameter change.
 
