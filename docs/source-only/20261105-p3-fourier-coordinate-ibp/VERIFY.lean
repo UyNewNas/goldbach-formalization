@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6PhysicalRhoPushforward
 import ImbalancedChen.P3ActualU6SignedLowerCount
 import ImbalancedChen.P3ActualU6LiteralParameterAndLedger
 import ImbalancedChen.P3ActualU6ReserveEpsilonSelected
@@ -1873,3 +1874,15 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6SignedLowerCount.rowEstimator_eq_literal_integer_labelledAP
 #check ImbalancedChen.P3ActualU6SignedLowerCount.literal_integer_labelledAP_le_actual_U6_count
 #check ImbalancedChen.P3ActualU6SignedLowerCount.exists_literal_U6_count_lower_with_unpaid_signed_discrepancy
+
+
+-- P3.6 run91: integer physical-modulus pushforward for genuine U6 LOWER.
+-- UNION of moduli, SUM of signed fibres (no label collision loss).
+-- Includes true U6 count lower with the offshift term still UNPAID.
+-- ALL SIX #check targets REGISTERED ONLY; Lean/Lake/kernel NOT RUN.
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.tagged_physical_mem
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.tagged_physical_integer_rho_zero_off_support
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.tagged_physical_pushforward_identity
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.actual_U6_physical_rho_zero_off_support
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.actual_U6_signed_discrepancy_same_physical_integer_rho
+#check ImbalancedChen.P3ActualU6PhysicalRhoPushforward.actual_U6_count_lower_one_integer_physical_discrepancy
