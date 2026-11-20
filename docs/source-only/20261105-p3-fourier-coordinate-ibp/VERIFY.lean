@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualU6ReserveEpsilonSelected
 import ImbalancedChen.P3ActualU6EnhancedCapUniformGate
 import ImbalancedChen.P3ActualU6EnhancedPowerLevel
 import ImbalancedChen.P3ActualU6PrefixMassLogSquare
@@ -1850,3 +1851,9 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.logTotientCap_le_of_le
 #check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.enhanced_power_level_both_logs_le_target
 #check ImbalancedChen.P3ActualU6EnhancedCapUniformGate.exists_enhanced_original_U6_correction_target_level_gate
+
+-- P3.6 run88: EXISTENTIAL production epsilonMax selection, genuine
+-- full even-LOWER reserve and same-epsilon original U6 correction.
+-- Registered ONLY. No Lean elaboration or kernel check executed.
+#check ImbalancedChen.P3ActualU6ReserveEpsilonSelected.exists_original_lower_reserve_with_target_power_gate
+#check ImbalancedChen.P3ActualU6ReserveEpsilonSelected.exists_one_constant_original_lower_reserve_and_U6_correction
