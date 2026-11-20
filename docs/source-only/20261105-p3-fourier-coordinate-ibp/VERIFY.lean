@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualEvenLowerOneEulerMoment
 import ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment
 import ImbalancedChen.P3ActualEvenLowerRoughPrimeMoment
 import ImbalancedChen.P3ActualU6LowerPairMomentFactor
@@ -1790,3 +1791,11 @@ import ImbalancedChen.P3ActualU6LowerModulusPrimeSplit
 #check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.chen_prime_divisor_count_le_nat_log_two
 #check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.actual_active_small_prime_moment_le_nat_log_cap
 #check ImbalancedChen.P3ActualEvenLowerActiveSmallLogMoment.actual_U6_lower_quotient_prime_correction_abs_le_log_euler
+
+-- P3.6 run81: finite Euler product controls its OWN first prime moment;
+-- same actual U6 EVEN LOWER integer rho, full b*q modulus and strict Rosser level.
+-- REGISTERED ONLY. No Lean/Lake elaboration or kernel checking performed.
+#check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.finite_euler_one_add_sum_le_prod
+#check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.rough_prime_sum_add_one_le_euler
+#check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.rough_prime_sum_le_euler
+#check ImbalancedChen.P3ActualEvenLowerOneEulerMoment.actual_U6_lower_quotient_prime_correction_abs_le_one_euler
