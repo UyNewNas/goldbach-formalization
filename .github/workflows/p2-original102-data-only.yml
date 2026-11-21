@@ -1,0 +1,41 @@
+name: P2 original102 original object bytes only
+on:
+  push:
+    branches: [ci/p2-original102-bytes-20261121]
+    paths:
+      - '.github/workflows/p2-original102-data-only.yml'
+      - 'docs/source-only/20261121-resume/p2-original102-byte-carrier/**'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: p2-original102-data-only-43670444098
+  cancel-in-progress: false
+jobs:
+  original102-byte-carrier:
+    if: ${{ github.repository == 'UyNewNas/goldbach-formalization' && github.event_name == 'push' && github.ref == 'refs/heads/ci/p2-original102-bytes-20261121' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Original metadata and bounded finite byte transport only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 "$GITHUB_WORKSPACE/docs/source-only/20261121-resume/p2-original102-byte-carrier/export_p2_original102.py"
+      - name: Preserve available original bytes and HOLD receipts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-original102-original-byte-carrier-43670444098
+          path: ${{ runner.temp }}/p2-original102-byte-carrier/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
