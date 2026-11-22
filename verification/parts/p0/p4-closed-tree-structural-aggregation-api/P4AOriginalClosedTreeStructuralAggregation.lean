@@ -156,7 +156,7 @@ theorem integral_le_totalCharge (tree : ChargedCutTree) :
   induction tree with
   | leaf charge =>
       intro s _ _ hlocal
-      simpa only [totalCharge_leaf] using hlocal
+      simpa only [totalCharge_leaf, LocalChargeBound_leaf] using hlocal
   | split axis cut left right ihL ihR =>
       intro s hs hsub hlocal
       let sL : Set Point :=
