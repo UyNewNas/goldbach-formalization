@@ -117,7 +117,10 @@ theorem decodeChunks_exists {α : Type*} (size : ℕ) (decode : List ℕ → Opt
     (hb : ∀ b ∈ bytes, b < 256) : ∃ values, decodeChunks size decode n bytes = some values := by
   induction n generalizing bytes with
   | zero =>
-      have hnil : bytes = [] := List.length_eq_zero.mp (by simpa using hlen)
+      have hnil : bytes = [] := by
+        cases bytes with
+        | nil => rfl
+        | cons b bs => simp at hlen
       subst bytes
       exact ⟨[], by simp [decodeChunks_zero]⟩
   | succ n ih =>
@@ -189,7 +192,8 @@ theorem encodeRow_of_decodeRow80 (bytes : List ℕ) (wire : FifthWireRow)
   | none => simp only [hf, Option.map_none] at h; cases h
   | some fields =>
       have heq : wireOfColumns (listColumns fields) = wire := by
-        simpa only [hf, Option.map_some] using h
+        exact Option.some.inj (show some (wireOfColumns (listColumns fields)) = some wire from by
+          simpa only [hf, Option.map_some] using h)
       have hlen := (decodeChunks_some_lengths 8 decodeWord8 decodeWord8_some_length 10 bytes fields hf).1
       rw [← heq]
       unfold encodeRow
@@ -212,7 +216,9 @@ theorem decodeRow80_some_signed_range (bytes : List ℕ) (wire : FifthWireRow)
   cases hf : decodeFields 10 bytes with
   | none => simp only [hf, Option.map_none] at h; cases h
   | some fields =>
-      have heq : wireOfColumns (listColumns fields) = wire := by simpa only [hf, Option.map_some] using h
+      have heq : wireOfColumns (listColumns fields) = wire := by
+        exact Option.some.inj (show some (wireOfColumns (listColumns fields)) = some wire from by
+          simpa only [hf, Option.map_some] using h)
       have hfields := decodeChunks_some_values 8 decodeWord8
         (fun z => -(half64 : ℤ) ≤ z ∧ z < (half64 : ℤ)) decodeWord8_some_range 10 bytes fields hf
       have hget : ∀ (values : List ℤ),
@@ -239,7 +245,6 @@ theorem encodeRows_of_decodeRows (bytes : List ℕ) (rows : List FifthWireRow)
   split_ifs at h with hmod
   · exact encodeChunks_of_decodeChunks 80 decodeRow80 encodeRow encodeRow_of_decodeRow80
       (bytes.length / 80) bytes rows h
-  · cases h
 
 /-- Every legal byte-domain payload whose length is80*n is accepted. -/
 theorem decodeRows_exists_of_length (bytes : List ℕ) (n : ℕ)
@@ -284,7 +289,6 @@ theorem decodeRows_some_signed_range (bytes : List ℕ) (rows : List FifthWireRo
       (fun wire => ∀ column : Fin 10,
         -(half64 : ℤ) ≤ wireColumns wire column ∧ wireColumns wire column < (half64 : ℤ))
       decodeRow80_some_signed_range (bytes.length / 80) bytes rows h
-  · cases h
 
 end
 end ImbalancedChen.P1HistoricalFifthSigned64PayloadCompleteness
