@@ -15,22 +15,32 @@ open P1OriginalPrefixRowDecodeSoundness P1HistoricalFifthTableParser
 open P1HistoricalFifthSigned64Arithmetic
 
 /-- Least-significant byte first, with exactly n output bytes. -/
-def encodeNatLE : ℕ → ℕ → List ℕ
-  | 0, _ => []
-  | n + 1, word => word % 256 :: encodeNatLE n (word / 256)
+def encodeNatLE : ℕ → ℕ → List ℕ :=
+  Nat.rec (motive := fun _ => ℕ → List ℕ)
+    (fun _ => [])
+    (fun _ recur word => word % 256 :: recur (word / 256))
 
-def unsignedLE : List ℕ → ℕ
-  | [] => 0
-  | byte :: tail => byte + 256 * unsignedLE tail
+theorem encodeNatLE_zero (word : ℕ) : encodeNatLE 0 word = [] := rfl
+
+theorem encodeNatLE_succ (n word : ℕ) :
+    encodeNatLE (n + 1) word = word % 256 :: encodeNatLE n (word / 256) := rfl
+
+def unsignedLE : List ℕ → ℕ :=
+  List.foldr (fun byte tail => byte + 256 * tail) 0
+
+theorem unsignedLE_nil : unsignedLE [] = 0 := rfl
+
+theorem unsignedLE_cons (byte : ℕ) (tail : List ℕ) :
+    unsignedLE (byte :: tail) = byte + 256 * unsignedLE tail := rfl
 
 theorem encodeNatLE_length (n word : ℕ) : (encodeNatLE n word).length = n := by
   induction n generalizing word with
   | zero => rfl
-  | succ n ih => simp [encodeNatLE, ih]
+  | succ n ih => simp [encodeNatLE_succ, ih]
 
 theorem encodeNatLE_byte_bound (n word : ℕ) : ∀ byte ∈ encodeNatLE n word, byte < 256 := by
   induction n generalizing word with
-  | zero => simp [encodeNatLE]
+  | zero => simp [encodeNatLE_zero]
   | succ n ih =>
       intro byte hb
       rcases List.mem_cons.mp hb with rfl | hb
@@ -44,29 +54,29 @@ theorem unsignedLE_encodeNatLE (n word : ℕ) (hword : word < 256 ^ n) :
   induction n generalizing word with
   | zero =>
       have hw : word = 0 := by norm_num at hword; omega
-      simp [encodeNatLE, unsignedLE, hw]
+      simp [encodeNatLE_zero, unsignedLE_nil, hw]
   | succ n ih =>
       have hdiv : word / 256 < 256 ^ n := by
         rw [pow_succ] at hword
         omega
-      simp only [encodeNatLE, unsignedLE, ih _ hdiv]
+      simp only [encodeNatLE_succ, unsignedLE_cons, ih _ hdiv]
       exact Nat.mod_add_div word 256
 
 theorem unsignedLE_lt (bytes : List ℕ) (hbytes : ∀ b ∈ bytes, b < 256) :
     unsignedLE bytes < 256 ^ bytes.length := by
   induction bytes with
-  | nil => norm_num [unsignedLE]
+  | nil => norm_num [unsignedLE_nil]
   | cons b tail ih =>
       have hb := hbytes b (by simp)
       have ht := ih (fun x hx => hbytes x (List.mem_cons_of_mem _ hx))
-      simp only [unsignedLE, List.length_cons, pow_succ]
+      simp only [unsignedLE_cons, List.length_cons, pow_succ]
       omega
 
 /-- This sequential value is the same unsignedLE8 function as the scalar
 arithmetic module, with the same byte order. -/
 theorem unsignedLE_ofFn8 (bytes : Bytes8) :
     unsignedLE (List.ofFn bytes) = unsigned64LE8 bytes := by
-  norm_num [List.ofFn_succ, unsignedLE, unsigned64LE8, Fin.sum_univ_succ] <;> omega
+  norm_num [List.ofFn_succ, unsignedLE_cons, unsignedLE_nil, unsigned64LE8, Fin.sum_univ_succ] <;> omega
 
 def encodeWord8 (z : ℤ) : List ℕ := encodeNatLE 8 (encodeSigned64 z)
 
@@ -121,12 +131,26 @@ theorem decodeWord8_some_range (bytes : List ℕ) (z : ℤ) (h : decodeWord8 byt
 /-- Fuel counts complete fixed-size chunks. The final branch rejects
 unconsumed bytes instead of silently dropping a suffix. -/
 def decodeChunks {α : Type*} (size : ℕ) (decode : List ℕ → Option α) :
-    ℕ → List ℕ → Option (List α)
-  | 0, bytes => if bytes = [] then some [] else none
-  | n + 1, bytes =>
-      match decode (bytes.take size), decodeChunks size decode n (bytes.drop size) with
+    ℕ → List ℕ → Option (List α) :=
+  Nat.rec (motive := fun _ => List ℕ → Option (List α))
+    (fun bytes => if bytes = [] then some [] else none)
+    (fun _ recur bytes =>
+      match decode (bytes.take size), recur (bytes.drop size) with
       | some value, some tail => some (value :: tail)
-      | _, _ => none
+      | _, _ => none)
+
+theorem decodeChunks_zero {α : Type*} (size : ℕ) (decode : List ℕ → Option α)
+    (bytes : List ℕ) :
+    decodeChunks size decode 0 bytes = (if bytes = [] then some [] else none) := rfl
+
+theorem decodeChunks_succ {α : Type*} (size : ℕ) (decode : List ℕ → Option α)
+    (n : ℕ) (bytes : List ℕ) :
+    decodeChunks size decode (n + 1) bytes =
+      (match decode (bytes.take size), decodeChunks size decode n (bytes.drop size) with
+      | some value, some tail => some (value :: tail)
+      | _, _ => none) := by
+  cases decode (bytes.take size) <;>
+    cases decodeChunks size decode n (bytes.drop size) <;> rfl
 
 def encodeChunks {α : Type*} (encode : α → List ℕ) (values : List α) : List ℕ :=
   values.flatMap encode
@@ -153,15 +177,15 @@ theorem decodeChunks_some_lengths {α : Type*} (size : ℕ) (decode : List ℕ �
       by_cases hb : bytes = []
       · subst bytes
         have hz : decodeChunks size decode 0 ([] : List ℕ) = some ([] : List α) := by
-          simp [decodeChunks]
+          simp [decodeChunks_zero]
         rw [hz] at h
         have he := Option.some.inj h
         subst values
         simp
-      · simp only [decodeChunks, if_neg hb] at h
+      · simp only [decodeChunks_zero, if_neg hb] at h
         cases h
   | succ n ih =>
-      simp only [decodeChunks] at h
+      simp only [decodeChunks_succ] at h
       cases hd : decode (bytes.take size) with
       | none => simp only [hd] at h; cases h
       | some x =>
@@ -188,10 +212,10 @@ theorem decodeChunks_some_bytes {α : Type*} (size : ℕ) (decode : List ℕ →
   | zero =>
       by_cases hb : bytes = []
       · simp [hb]
-      · simp only [decodeChunks, if_neg hb] at h
+      · simp only [decodeChunks_zero, if_neg hb] at h
         cases h
   | succ n ih =>
-      simp only [decodeChunks] at h
+      simp only [decodeChunks_succ] at h
       cases hd : decode (bytes.take size) with
       | none => simp only [hd] at h; cases h
       | some x =>
@@ -210,12 +234,12 @@ theorem decodeChunks_encodeChunks {α : Type*} (size : ℕ) (decode : List ℕ �
     (values : List α) (hinverse : ∀ x ∈ values, decode (encode x) = some x) :
     decodeChunks size decode values.length (encodeChunks encode values) = some values := by
   induction values with
-  | nil => simp [encodeChunks, decodeChunks]
+  | nil => simp [encodeChunks, decodeChunks_zero]
   | cons x tail ih =>
       have hx := hinverse x (by simp)
       have ht := ih (fun y hy => hinverse y (List.mem_cons_of_mem _ hy))
       change decodeChunks size decode tail.length (tail.flatMap encode) = some tail at ht
-      simp only [encodeChunks, List.flatMap_cons, List.length_cons, decodeChunks]
+      simp only [encodeChunks, List.flatMap_cons, List.length_cons, decodeChunks_succ]
       rw [List.take_left' (hsize x), List.drop_left' (hsize x), hx, ht]
 
 def encodeFields (values : List ℤ) : List ℕ := encodeChunks encodeWord8 values
@@ -286,7 +310,7 @@ theorem decodeRowsFuel_cons_chunk (count : ℕ) (chunk tail : List ℕ) (hchunk 
       | some wire, some rest => some (wire :: rest)
       | _, _ => none := by
   unfold decodeRowsFuel
-  rw [decodeChunks, List.take_left' hchunk, List.drop_left' hchunk]
+  rw [decodeChunks_succ, List.take_left' hchunk, List.drop_left' hchunk]
   cases decodeRow80 chunk <;> cases decodeChunks 80 decodeRow80 count tail <;> rfl
 
 theorem decodeRows_encodeRows (rows : List FifthWireRow)
