@@ -91,18 +91,22 @@ theorem normalized_initial_boxes :
     (integerLeafBoxes initialTree initialLower initialUpper).map normalizeRoot =
       initialSeeds := by
   rw [initialSeeds_eq_records]
-  have h01 : (0 : Fin 3) ≠ 1 := by decide
-  have h02 : (0 : Fin 3) ≠ 2 := by decide
-  have h10 : (1 : Fin 3) ≠ 0 := by decide
-  have h12 : (1 : Fin 3) ≠ 2 := by decide
-  have h20 : (2 : Fin 3) ≠ 0 := by decide
-  have h21 : (2 : Fin 3) ≠ 1 := by decide
-  norm_num [initialTree,xyTree,integerLeafBoxes,leftIntegerUpper,rightIntegerLower,
-    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,
-    P4AOriginalInitialSeedInventorySourceOnly.M,P4AOriginalInitialSeedInventorySourceOnly.R,
-    Function.update,funext_iff,Fin.forall_fin_succ,Fin.ext_iff,h01,h02,h10,h12,h20,h21,
-    Matrix.cons_val_two,Matrix.tail_cons,Matrix.head_cons,
-    Matrix.cons_val_zero',Matrix.cons_val_succ'] <;> decide
+  let encode (c : SeedCell) : List ℤ × List ℤ :=
+    (List.ofFn c.1, List.ofFn c.2)
+  have ofFnInj : Function.Injective (List.ofFn : (Fin 3 → ℤ) → List ℤ) := by
+    intro f g h
+    funext i
+    have hfin : i.val < (List.ofFn f).length := by
+      simpa only [List.length_ofFn] using i.isLt
+    simpa only [List.getElem_ofFn] using List.getElem_of_eq h hfin
+  have encodeInj : Function.Injective encode := by
+    intro a b h
+    apply Prod.ext
+    · exact ofFnInj (congrArg Prod.fst h)
+    · exact ofFnInj (congrArg Prod.snd h)
+  apply (List.map_inj_right (f := encode) (fun _ _ h => encodeInj h)).mp
+  dsimp only [encode]
+  decide +kernel
 
 theorem compactRegion_subset_initial_box :
     compactRegion ⊆ Icc (decodeCoordinates initialLower)
