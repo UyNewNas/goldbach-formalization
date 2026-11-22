@@ -149,8 +149,18 @@ theorem decodeChunks_succ {α : Type*} (size : ℕ) (decode : List ℕ → Optio
       (match decode (bytes.take size), decodeChunks size decode n (bytes.drop size) with
       | some value, some tail => some (value :: tail)
       | _, _ => none) := by
-  cases decode (bytes.take size) <;>
-    cases decodeChunks size decode n (bytes.drop size) <;> rfl
+  first
+  | rfl
+  | change
+      (match decode (bytes.take size), decodeChunks size decode n (bytes.drop size) with
+      | some value, some tail => some (value :: tail)
+      | _, _ => none) = _
+    cases decode (bytes.take size) <;>
+      cases decodeChunks size decode n (bytes.drop size) <;> rfl
+  | cases hfirst : decode (bytes.take size) <;>
+      cases htail : decodeChunks size decode n (bytes.drop size) <;>
+      simp only [decodeChunks] at htail ⊢ <;>
+      simp [hfirst, htail]
 
 def encodeChunks {α : Type*} (encode : α → List ℕ) (values : List α) : List ℕ :=
   values.flatMap encode
