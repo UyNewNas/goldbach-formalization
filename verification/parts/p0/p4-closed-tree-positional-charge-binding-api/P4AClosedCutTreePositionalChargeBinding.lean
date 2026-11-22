@@ -147,14 +147,28 @@ theorem localChargeBound_iff_positional (tree : ChargedCutTree) :
       intro s
       let sL := s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}
       let sR := s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis}
+      have castAsMap (qs : List ℤ) :
+          (show List ℝ from do
+            let q ← qs
+            pure (q : ℝ)) = qs.map (fun q : ℤ => (q : ℝ)) := by
+        change qs.flatMap (fun q : ℤ => [(q : ℝ)]) = _
+        exact List.map_eq_flatMap.symm
       rw [LocalChargeBound_split, eraseCharges_split, leafCharges_split]
       change (LocalChargeBound left sL ∧ LocalChargeBound right sR) ↔
-        List.Forall₂ _
+        List.Forall₂ (fun (c : Set Point) (q : ℝ) =>
+          (∫ t in c, compactKernel t) ≤ q / 2^80)
           (closedLeaves (eraseCharges left) sL ++
             closedLeaves (eraseCharges right) sR)
-          (leafCharges left ++ leafCharges right)
-      rw [forall₂_append_iff_of_length_eq _ _ _ _
-        (leafCharges_length left sL).symm]
+          (show List ℝ from do
+            let q ← leafCharges left ++ leafCharges right
+            pure (q : ℝ))
+      rw [castAsMap, List.map_append]
+      have hlen :
+          (closedLeaves (eraseCharges left) sL).length =
+            ((leafCharges left).map (fun q : ℤ => (q : ℝ))).length := by
+        simpa only [List.length_map] using (leafCharges_length left sL).symm
+      rw [forall₂_append_iff_of_length_eq _ _ _ _ hlen]
+      rw [← castAsMap (leafCharges left), ← castAsMap (leafCharges right)]
       exact and_congr (ihL sL) (ihR sR)
 
 /-- Concrete tree and charge data may use the structural constructor directly;
