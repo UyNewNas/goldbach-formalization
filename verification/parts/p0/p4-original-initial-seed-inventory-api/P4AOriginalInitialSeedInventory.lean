@@ -127,11 +127,13 @@ theorem roots0_to14_overlap (i : Fin 21)
     (hi : i.1 ≤ 12 ∨ i.1 = 14) : (rootCell (recordAt i)).Nonempty := by
   refine ⟨witness (recordAt i), ?_⟩
   apply witness_mem_of_geometry
+  all_goals (try (intro j; fin_cases j))
   all_goals
-    try (intro j; fin_cases j)
     fin_cases i <;> (try norm_num at hi) <;>
       norm_num [witness,recordAt,records,decodeCoordinates,
-        coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R]
+        coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R,
+        Matrix.cons_val_two,Matrix.tail_cons,Matrix.head_cons,
+        Matrix.cons_val_zero',Matrix.cons_val_succ']
 
 /-- Root 13 has only x≤mu≤y, whereas the ordered domain requires y≤x.
 The forced equality x=y=mu violates the old-cube test already at z=8h. -/
