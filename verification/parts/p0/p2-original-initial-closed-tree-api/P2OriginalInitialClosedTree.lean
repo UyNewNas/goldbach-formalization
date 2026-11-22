@@ -91,9 +91,18 @@ theorem normalized_initial_boxes :
     (integerLeafBoxes initialTree initialLower initialUpper).map normalizeRoot =
       initialSeeds := by
   rw [initialSeeds_eq_records]
+  have h01 : (0 : Fin 3) ≠ 1 := by decide
+  have h02 : (0 : Fin 3) ≠ 2 := by decide
+  have h10 : (1 : Fin 3) ≠ 0 := by decide
+  have h12 : (1 : Fin 3) ≠ 2 := by decide
+  have h20 : (2 : Fin 3) ≠ 0 := by decide
+  have h21 : (2 : Fin 3) ≠ 1 := by decide
   norm_num [initialTree,xyTree,integerLeafBoxes,leftIntegerUpper,rightIntegerLower,
-    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,M,R,
-    Function.update,funext_iff,Fin.forall_fin_succ]
+    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,
+    P4AOriginalInitialSeedInventorySourceOnly.M,P4AOriginalInitialSeedInventorySourceOnly.R,
+    Function.update,funext_iff,Fin.forall_fin_succ,Fin.ext_iff,h01,h02,h10,h12,h20,h21,
+    Matrix.cons_val_two,Matrix.tail_cons,Matrix.head_cons,
+    Matrix.cons_val_zero',Matrix.cons_val_succ'] <;> decide
 
 theorem compactRegion_subset_initial_box :
     compactRegion ⊆ Icc (decodeCoordinates initialLower)
@@ -108,8 +117,8 @@ theorem compactRegion_subset_initial_box :
     fin_cases i <;> norm_num [decodeCoordinates,initialLower,H,coordinateDenominator]
   have hhi : decodeCoordinates initialUpper = fun _ => thirdPrefixRho := by
     ext i
-    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,R,
-      coordinateDenominator,thirdPrefixRho]
+    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,
+      P4AOriginalInitialSeedInventorySourceOnly.R,coordinateDenominator,thirdPrefixRho]
   rw [hlo,hhi]
   constructor
   · intro i
