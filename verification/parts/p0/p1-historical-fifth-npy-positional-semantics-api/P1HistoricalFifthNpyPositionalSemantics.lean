@@ -84,9 +84,17 @@ theorem fieldByteOffset_injective :
   have hqc := q.2.1.isLt
   have hpb := p.2.2.isLt
   have hqb := q.2.2.isLt
-  have hr : p.1 = q.1 := by unfold fieldByteOffset at heq; omega
-  have hc : p.2.1 = q.2.1 := by apply Fin.ext; unfold fieldByteOffset at heq; omega
-  have hb : p.2.2 = q.2.2 := by apply Fin.ext; unfold fieldByteOffset at heq; omega
+  change 128 + 80 * p.1 + 8 * p.2.1.val + p.2.2.val =
+    128 + 80 * q.1 + 8 * q.2.1.val + q.2.2.val at heq
+  have hr : p.1 = q.1 := by omega
+  have hc : p.2.1 = q.2.1 := by
+    apply Fin.ext
+    change p.2.1.val = q.2.1.val
+    omega
+  have hb : p.2.2 = q.2.2 := by
+    apply Fin.ext
+    change p.2.2.val = q.2.2.val
+    omega
   exact Prod.ext hr (Prod.ext hc hb)
 
 theorem frameRowBytes_offset (bytes : List ℕ) (row : ℕ) :
