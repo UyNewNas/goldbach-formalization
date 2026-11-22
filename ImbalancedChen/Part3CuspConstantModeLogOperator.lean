@@ -115,8 +115,10 @@ theorem constantMode_radial_conjugation (g : ℝ → ℝ)
       (Real.exp r) ^ (1 / 2 : ℝ) := by
     rw [← Real.rpow_natCast, ← Real.rpow_add hy]
     norm_num
-  rw [hp]
-  ring
+  calc
+    _ = ((Real.exp r) ^ 2 * (Real.exp r) ^ (-(3 / 2 : ℝ))) *
+        (-deriv (deriv g) r + (1 / 4 : ℝ) * g r) := by ring
+    _ = _ := by rw [hp]
 
 /-- The norm-square density in cusp height becomes `g(log y)^2/y`.
 This is the pointwise Jacobian that permits use of the repository's
