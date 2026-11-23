@@ -1,0 +1,63 @@
+"""Stage exact frozen T01 v3 and hash-bound accepted-source/API overlays; GitHub CI only."""
+import hashlib, json, os, pathlib, subprocess, sys
+HERE = pathlib.Path(__file__).resolve().parent
+T01 = pathlib.Path('docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel')
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+def main():
+    if os.environ.get('GITHUB_ACTIONS') != 'true':
+        raise SystemExit('GitHub Actions only; no local proof execution')
+    source = pathlib.Path(os.environ['GITHUB_WORKSPACE']) / 'candidate'
+    project = pathlib.Path(os.environ['PROJECT'])
+    logs = pathlib.Path(os.environ['LOGS'])
+    raw = (HERE / 'candidate-manifest.json').read_bytes()
+    assert digest(raw) == os.environ['EXPECTED_MANIFEST']
+    m = json.loads(raw)
+    assert subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip() == m['base_commit'] == os.environ['SOURCE_COMMIT']
+    original = source / T01
+    full_raw = (original / 'EXACT_INSTALL_MANIFEST-v3.json').read_bytes()
+    assert digest(full_raw) == m['original_full_manifest_sha256']
+    assert digest((original / 'stage_project_v3.py').read_bytes()) == m['original_installer_sha256']
+    full = json.loads(full_raw)
+    assert len(full['targets'][0]['declarations']) == 9
+    assert len(full['files']) == 729
+    subprocess.run([sys.executable, str(original / 'stage_project_v3.py'), '--dest', str(project), '--purpose', 'source_validation'], check=True)
+    # Append only only these exact checkout sources absent from frozen T01.
+    expected_supplemental = {'ImbalancedChen.P4BSmoothGateUpperStep': ('ImbalancedChen/P4BSmoothGateUpperStep.lean', 'ImbalancedChen/P4BSmoothGateUpperStep.lean', '3c2e4e78b85574d236c7c73183daab1a1c4d24de', '4a4f83fb9c1de975235ed538bd8933006d9e047b5b2cb587be238d105f90fe9b', 7101), 'ImbalancedChen.P4BSmoothStepDerivativeBudget': ('ImbalancedChen/P4BSmoothStepDerivativeBudget.lean', 'ImbalancedChen/P4BSmoothStepDerivativeBudget.lean', 'a69431f7b7c81bf0490e896efe07250b2a54a364', 'b2eb98634d337d9af63ecc951f34771dac8489361e64961332a7712bb1ef69d4', 6499)}
+    ext_sources = m['supplemental_checkout_sources']
+    assert len(ext_sources) == len(expected_supplemental)
+    assert {x['module'] for x in ext_sources} == set(expected_supplemental)
+    assert m['target'] == 'ImbalancedChen.P4BSmoothStepDerivativeBudget'
+    for ext in ext_sources:
+        install_path, source_path, expected_blob, expected_hash, expected_len = expected_supplemental[ext['module']]
+        assert ext['install_path'] == install_path and ext['repository_path'] == ext['source'] == source_path
+        assert [row for row in m['closure_source_records'] if row['module'] == ext['module']] == [ext]
+        blob = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD:' + source_path], text=True).strip()
+        assert blob == ext['git_blob_sha1'] == expected_blob
+        content = subprocess.check_output(['git', '-C', str(source), 'cat-file', 'blob', blob])
+        assert len(content) == ext['bytes'] == expected_len
+        assert digest(content) == ext['sha256'] == expected_hash
+        destination = project / ext['install_path']
+        assert not destination.exists(), 'Supplemental target unexpectedly part of original T01'
+        destination.write_bytes(content)
+    expected_overlays = {}
+    for row in m['candidate_overlays']:
+        path = project / row['install_path']
+        assert digest(path.read_bytes()) == row['original_sha256'], row['module']
+        content = (HERE / row['source_file']).read_bytes()
+        assert digest(content) == row['candidate_sha256'], row['module']
+        path.write_bytes(content)
+        assert row['module'] not in expected_overlays
+        expected_overlays[row['module']] = row['candidate_sha256']
+    assert len((project / 'lakefile.toml').read_bytes()) == 487
+    assert digest((project / 'lakefile.toml').read_bytes()) == '26a6b01a52446ad6aae63d5201330b902ec94a1171fb1f0baf9fc61016098491'
+    assert set(expected_overlays) <= set(m['closure_modules'])
+    for row in m['closure_source_records']:
+        assert digest((project / row['install_path']).read_bytes()) == expected_overlays.get(row['module'], row['sha256']), row['module']
+    logs.mkdir(parents=True, exist_ok=True)
+    receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'source_commit': m['base_commit'], 'manifest_sha256': digest(raw), 'target': m['target'], 'closure_modules': m['closure_modules'], 'overlays': expected_overlays, 'whole_t01_accepted': False, 'original_full_t01_requirements_unchanged': True}
+    (logs / 'P1_STAGE_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
+    (logs / 'ORIGINAL_T01_PROVENANCE.json').write_bytes((project / 'T01_PROVENANCE.json').read_bytes())
+    print(json.dumps(receipt))
+if __name__ == '__main__':
+    main()
