@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "theorem",
+    "name": "dwell_ofFn_iff",
+    "header_before": "theorem dwell_ofFn_iff {n : ℕ} (Q : ℝ) (v : Fin n → ℕ) :\n    actualDwellSupport Q (List.ofFn v) ↔\n      boxSquaredPrefixes Q (fun j => (v j : ℝ))",
+    "header_after": "theorem dwell_ofFn_iff {n : ℕ} (Q : ℝ) (v : Fin n → ℕ) :\n    actualDwellSupport Q (List.ofFn v) ↔\n      boxSquaredPrefixes Q (fun j => (v j : ℝ))",
+    "header_byte_exact": true,
+    "header_sha256_before": "d59b2e13ec8edec7b764c831b5d3b2e66838e239d7ffcb72a1c5228fa32e0891",
+    "header_sha256_after": "d59b2e13ec8edec7b764c831b5d3b2e66838e239d7ffcb72a1c5228fa32e0891"
+  },
+  {
+    "kind": "theorem",
+    "name": "cast_insertNth",
+    "header_before": "theorem cast_insertNth {n : ℕ} (p : Fin (n + 1)) (q : ℕ) (v : Fin n → ℕ) :\n    (fun j => (p.insertNth q v j : ℝ)) =\n      p.insertNth (q : ℝ) (fun j => (v j : ℝ))",
+    "header_after": "theorem cast_insertNth {n : ℕ} (p : Fin (n + 1)) (q : ℕ) (v : Fin n → ℕ) :\n    (fun j => (p.insertNth (α := fun _ => ℕ) q v j : ℝ)) =\n      p.insertNth (α := fun _ => ℝ) (q : ℝ) (fun j => (v j : ℝ))",
+    "header_byte_exact": false,
+    "header_sha256_before": "4c2f81ba85cad6265fd5e441804aa3b67c274ddb19879df1845205db4a738d21",
+    "header_sha256_after": "2bc376c1e809fb39fe05546871b094c1a42158de1fa42e4778dcc0da9d4a26c0"
+  },
+  {
+    "kind": "theorem",
+    "name": "inserted_labels_perm",
+    "header_before": "theorem inserted_labels_perm {n : ℕ} (p : Fin (n + 1)) (q : ℕ) (v : Fin n → ℕ) :\n    (List.ofFn (p.insertNth q v)).Perm (q :: List.ofFn v)",
+    "header_after": "theorem inserted_labels_perm {n : ℕ} (p : Fin (n + 1)) (q : ℕ) (v : Fin n → ℕ) :\n    (List.ofFn (p.insertNth q v)).Perm (q :: List.ofFn v)",
+    "header_byte_exact": true,
+    "header_sha256_before": "5a742ecdea8494a059166273a3367c279e2baedcd7a2bb277dad2c2cc95f70dc",
+    "header_sha256_after": "5a742ecdea8494a059166273a3367c279e2baedcd7a2bb277dad2c2cc95f70dc"
+  },
+  {
+    "kind": "theorem",
+    "name": "exists_sorted_union",
+    "header_before": "theorem exists_sorted_union {Q R : ℝ} (old : List ℕ)\n    (hold : actualDwellSupport Q old) (holdSort : old.Pairwise (· ≥ ·))\n    (holdOne : ∀ p ∈ old, 1 ≤ p) (hbudget : (old.prod : ℝ) * R ≤ Q)\n    (residual : List ℕ) (hres : actualDwellSupport R residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) :\n    ∃ v : Fin (old.length + residual.length) → ℕ,\n      Antitone (fun j => (v j : ℝ)) ∧\n      boxSquaredPrefixes Q (fun j => (v j : ℝ)) ∧\n      (List.ofFn v).Perm (old ++ residual)",
+    "header_after": "theorem exists_sorted_union {Q R : ℝ} (old : List ℕ)\n    (hold : actualDwellSupport Q old) (holdSort : old.Pairwise (· ≥ ·))\n    (holdOne : ∀ p ∈ old, 1 ≤ p) (hbudget : (old.prod : ℝ) * R ≤ Q)\n    (residual : List ℕ) (hres : actualDwellSupport R residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) :\n    ∃ v : Fin (old.length + residual.length) → ℕ,\n      Antitone (fun j => (v j : ℝ)) ∧\n      boxSquaredPrefixes Q (fun j => (v j : ℝ)) ∧\n      (List.ofFn v).Perm (old ++ residual)",
+    "header_byte_exact": true,
+    "header_sha256_before": "9cf0c009b1c9014e1cadc62b884bdc53f54a5ca225e65bd34e7d2e69ebd6922e",
+    "header_sha256_after": "9cf0c009b1c9014e1cadc62b884bdc53f54a5ca225e65bd34e7d2e69ebd6922e"
+  },
+  {
+    "kind": "def",
+    "name": "sortedUnion",
+    "header_before": "def sortedUnion (old residual : List ℕ) : List ℕ",
+    "header_after": "def sortedUnion (old residual : List ℕ) : List ℕ",
+    "header_byte_exact": true,
+    "header_sha256_before": "71e8dab4e728c96494a3496ad91325db01dffafc791e1a9067aa49b3282ec61e",
+    "header_sha256_after": "71e8dab4e728c96494a3496ad91325db01dffafc791e1a9067aa49b3282ec61e"
+  },
+  {
+    "kind": "theorem",
+    "name": "sortedUnion_perm",
+    "header_before": "theorem sortedUnion_perm (old residual : List ℕ) :\n    (sortedUnion old residual).Perm (old ++ residual)",
+    "header_after": "theorem sortedUnion_perm (old residual : List ℕ) :\n    (sortedUnion old residual).Perm (old ++ residual)",
+    "header_byte_exact": true,
+    "header_sha256_before": "e950681defdc33487642f20a576ead316f7bc88f294f9db7346b0f8590302ea8",
+    "header_sha256_after": "e950681defdc33487642f20a576ead316f7bc88f294f9db7346b0f8590302ea8"
+  },
+  {
+    "kind": "theorem",
+    "name": "sortedUnion_sorted",
+    "header_before": "theorem sortedUnion_sorted (old residual : List ℕ) :\n    (sortedUnion old residual).Pairwise (· ≥ ·)",
+    "header_after": "theorem sortedUnion_sorted (old residual : List ℕ) :\n    (sortedUnion old residual).Pairwise (· ≥ ·)",
+    "header_byte_exact": true,
+    "header_sha256_before": "12e6fb1bccca083aa83251e73d9fe47d513ace5c3632a1ea6612d2600ce69129",
+    "header_sha256_after": "12e6fb1bccca083aa83251e73d9fe47d513ace5c3632a1ea6612d2600ce69129"
+  },
+  {
+    "kind": "theorem",
+    "name": "sortedUnion_well",
+    "header_before": "theorem sortedUnion_well {Q R : ℝ} (old residual : List ℕ)\n    (hold : actualDwellSupport Q old) (holdSort : old.Pairwise (· ≥ ·))\n    (holdOne : ∀ p ∈ old, 1 ≤ p) (hres : actualDwellSupport R residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) (hbudget : (old.prod : ℝ) * R ≤ Q) :\n    actualDwellSupport Q (sortedUnion old residual)",
+    "header_after": "theorem sortedUnion_well {Q R : ℝ} (old residual : List ℕ)\n    (hold : actualDwellSupport Q old) (holdSort : old.Pairwise (· ≥ ·))\n    (holdOne : ∀ p ∈ old, 1 ≤ p) (hres : actualDwellSupport R residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) (hbudget : (old.prod : ℝ) * R ≤ Q) :\n    actualDwellSupport Q (sortedUnion old residual)",
+    "header_byte_exact": true,
+    "header_sha256_before": "1681f5f127e56cc851290af91f7828b53c084d5f031c958d79f13de7d7cc64cc",
+    "header_sha256_after": "1681f5f127e56cc851290af91f7828b53c084d5f031c958d79f13de7d7cc64cc"
+  },
+  {
+    "kind": "theorem",
+    "name": "sortedUnion_at_residual_level",
+    "header_before": "theorem sortedUnion_at_residual_level {Q : ℝ} (old residual : List ℕ)\n    (holdProd : 0 < old.prod) (hold : actualDwellSupport Q old)\n    (holdSort : old.Pairwise (· ≥ ·)) (holdOne : ∀ p ∈ old, 1 ≤ p)\n    (hres : actualDwellSupport (Q / (old.prod : ℝ)) residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) :\n    actualDwellSupport Q (sortedUnion old residual)",
+    "header_after": "theorem sortedUnion_at_residual_level {Q : ℝ} (old residual : List ℕ)\n    (holdProd : 0 < old.prod) (hold : actualDwellSupport Q old)\n    (holdSort : old.Pairwise (· ≥ ·)) (holdOne : ∀ p ∈ old, 1 ≤ p)\n    (hres : actualDwellSupport (Q / (old.prod : ℝ)) residual)\n    (hresOne : ∀ p ∈ residual, 1 ≤ p) :\n    actualDwellSupport Q (sortedUnion old residual)",
+    "header_byte_exact": true,
+    "header_sha256_before": "6b86d0d19e8f362ec3b9a80d219554279dc5fbceed531b07b02c1bb03b5e0dc4",
+    "header_sha256_after": "6b86d0d19e8f362ec3b9a80d219554279dc5fbceed531b07b02c1bb03b5e0dc4"
+  },
+  {
+    "kind": "theorem",
+    "name": "sortedUnion_product",
+    "header_before": "theorem sortedUnion_product (old residual : List ℕ) :\n    (sortedUnion old residual).prod = old.prod * residual.prod",
+    "header_after": "theorem sortedUnion_product (old residual : List ℕ) :\n    (sortedUnion old residual).prod = old.prod * residual.prod",
+    "header_byte_exact": true,
+    "header_sha256_before": "10b10b5edd68eecdbc1018d43f66360fbefe29e5aadba501512d3e8b096c3175",
+    "header_sha256_after": "10b10b5edd68eecdbc1018d43f66360fbefe29e5aadba501512d3e8b096c3175"
+  }
+]

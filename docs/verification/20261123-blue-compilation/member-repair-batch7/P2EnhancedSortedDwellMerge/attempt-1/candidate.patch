@@ -1,0 +1,61 @@
+--- baseline/ImbalancedChen/P2EnhancedSortedDwellMerge.lean
++++ candidate/ImbalancedChen/P2EnhancedSortedDwellMerge.lean
+@@ -6,7 +6,7 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ The primary source already proves one true sorted insertion. This file
+ iterates that theorem through an arbitrary residual atom at Q/B. Every
+@@ -36,16 +36,16 @@
+   · intro h j
+     have hs := h j.val (by simp)
+     simpa only [List.map_take, List.map_ofFn, List.prod_take_ofFn,
+-      List.getElem_ofFn, Fin.lt_def] using hs
++      List.getElem_ofFn, Fin.lt_def, Function.comp_apply] using hs
+   · intro h i hi
+     have hi' : i < n := by simpa only [List.length_ofFn] using hi
+     have hs := h ⟨i, hi'⟩
+     simpa only [List.map_take, List.map_ofFn, List.prod_take_ofFn,
+-      List.getElem_ofFn, Fin.lt_def] using hs
++      List.getElem_ofFn, Fin.lt_def, Function.comp_apply] using hs
+ 
+ theorem cast_insertNth {n : ℕ} (p : Fin (n + 1)) (q : ℕ) (v : Fin n → ℕ) :
+-    (fun j => (p.insertNth q v j : ℝ)) =
+-      p.insertNth (q : ℝ) (fun j => (v j : ℝ)) := by
++    (fun j => (p.insertNth (α := fun _ => ℕ) q v j : ℝ)) =
++      p.insertNth (α := fun _ => ℝ) (q : ℝ) (fun j => (v j : ℝ)) := by
+   rw [← Fin.cons_comp_cycleRange, ← Fin.cons_comp_cycleRange]
+   funext j
+   simp only [Function.comp_apply]
+@@ -78,6 +78,7 @@
+       intro i j hij
+       rcases lt_or_eq_of_le hij with hlt | heq
+       · have hs := (List.pairwise_iff_getElem.mp holdSort) i.val j.val i.isLt j.isLt hlt
++        change (old[j.val] : ℝ) ≤ (old[i.val] : ℝ)
+         exact_mod_cast hs
+       · subst j
+         exact le_rfl
+@@ -115,8 +116,8 @@
+         _ ≤ Q := hbudget
+     obtain ⟨p, hpanti, hpwell⟩ :=
+       exists_sorted_box_insertion hq hvOne hvanti hvwell hfull
+-    simp only [List.length_append, List.length_singleton, ← Nat.add_assoc]
+-    refine ⟨p.insertNth q v, ?_, ?_, ?_⟩
++    rw [List.length_append, List.length_singleton, ← Nat.add_assoc]
++    refine ⟨p.insertNth (α := fun _ => ℕ) q v, ?_, ?_, ?_⟩
+     · simpa only [cast_insertNth] using hpanti
+     · simpa only [cast_insertNth] using hpwell
+     · have hmove : (q :: (old ++ residual)).Perm ((old ++ residual) ++ [q]) := by
+@@ -149,7 +150,8 @@
+   have hsort : (List.ofFn v).Pairwise (· ≥ ·) := by
+     apply List.pairwise_ofFn.mpr
+     intro i j hij
+-    exact_mod_cast hvanti hij.le
++    have hr : (v j : ℝ) ≤ (v i : ℝ) := hvanti hij.le
++    exact_mod_cast hr
+   have heq : List.ofFn v = sortedUnion old residual :=
+     (hvperm.trans (sortedUnion_perm old residual).symm).eq_of_pairwise'
+       hsort (sortedUnion_sorted old residual)

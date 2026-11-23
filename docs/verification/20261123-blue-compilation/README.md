@@ -114,4 +114,6 @@ Member 已完成缓存窗口的精简证据保存在 [member-cache-window](membe
 
 Member 第八批 `ActualFrozenSlotCoefficientRegrouping` 完整复用已发表 `c45e845b` 的 `8f609edc` 源码，保留原系数、阶乘恢复、ordered slot／product fibres 的标签重数和全部假设。标准构建、指定模块 kernel replay 及全部 19 个实际公开导出的完整类型／公理检查通过，仅标准三公理，源码和五项主要产物稳定，见 [验收结果](member-repair-batch8/VALIDATION_RESULTS.json) 及 [独立复核](member-repair-batch8/INDEPENDENT_REVIEW.json)。旧静态头表的两项 let-valued 结论仅记录了前缀；原表保持不动，新增 [完整 12 条源码声明头比较](member-repair-batch8/PUBLIC_HEADERS_COMPLETE.json) 与不可变发布补充清单。实际 elaborated 完整类型与 kernel 检查一直完整，未因元数据补正重跑验证。
 
+Member 第七批 `P2EnhancedSortedDwellMerge` 通过标准构建、指定模块 kernel replay 与全部 14 个公开导出的完整类型／公理检查，仅标准三公理，源码和五项主要产物稳定。`cast_insertNth` 原声明无法推断 dependent family，现显式标注原常值自然数／实数 family；原 `q`、`v`、索引和 cast equality 意图保持，旧未 elaboration 的声明不声称已有相同 kernel 类型。其余修补为 β 展开、现有 `Fin.comp_cons` 和长度 API，原定义、标签、置换、Q／B 与常量保持。独立复核按顶层 `:=` 比较完整源码声明头，避免嵌套参数 `α :=` 截断，见 [验收结果](member-repair-batch7/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch7/INDEPENDENT_REVIEW.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
