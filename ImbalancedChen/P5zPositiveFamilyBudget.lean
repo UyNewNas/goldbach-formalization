@@ -5,7 +5,9 @@ import ImbalancedChen.Part3DistributionTargets
 /-!
 # Positive labelled-family finite U* budget, including J = 0
 
-SOURCE ONLY / UNCOMPILED. Labels are never replaced by an unweighted
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+Labels are never replaced by an unweighted
 image of their products. The rho in every sum is literally the same.
 No analytic licence, same-rho PP estimate or currentK density supplier
 is asserted here. Those are explicit finite premises at their actual
@@ -132,9 +134,11 @@ theorem p5z_labelledPrimeMass_le_main_add_errors
     by_cases hg : f t < N ∧ Nat.Prime (N - f t)
     · by_cases hs : N - f t < z
       · have hproduct := mul_nonneg (hW t ht) (hnonneg (N - f t))
-        simp only [if_pos hg, if_pos ⟨hg.1, hg.2, hs⟩]
+        have hsmall : f t < N ∧ Nat.Prime (N - f t) ∧ N - f t < z :=
+          ⟨hg.1, hg.2, hs⟩
+        simp only [if_pos hg, if_pos hsmall]
         linarith
-      · have hcop := prime_coprime_sieveProduct_of_cap_le hg.2 (Nat.le_of_not_gt hs)
+      · have hcop := prime_coprime_sieveProduct_of_cap_le (N := N) hg.2 (Nat.le_of_not_gt hs)
         have hD : 1 ≤ physicalDivisorSum Q rho (N - f t) := by
           simpa only [if_pos hcop] using hmajor (N - f t)
         have hmul := mul_le_mul_of_nonneg_left hD (hW t ht)

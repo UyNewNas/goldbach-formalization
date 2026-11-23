@@ -4,7 +4,9 @@ import ImbalancedChen.P5zPositiveFamilyBudget
 /-!
 # Actual U9 triple-multiplicity switched family
 
-SOURCE ONLY / UNCOMPILED. The intended preceding candidate is
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+The intended preceding candidate is
 P5zPositiveFamilyBudget.lean.txt, staged as ImbalancedChen.P5zPositiveFamilyBudget.
 
 The source below has no primality condition on N-product. The original
@@ -69,11 +71,11 @@ theorem p5z_u9_switchedLabels_filter_eq_primeTriples (N : ℕ) :
       currentChenUpsilon9PrimeTriples N := by
   ext t
   rcases t with ⟨⟨p₁, p₂⟩, q⟩
-  simp only [Finset.mem_filter, p5z_u9_switchedLabels, Finset.mem_sigma,
-    Finset.mem_filter, Finset.mem_range, p5z_u9_product,
-    currentChenUpsilon9PrimeTriples, Finset.mem_sigma, Finset.mem_filter]
   constructor
-  · rintro ⟨⟨hp, hqN, hq, hlt, hcut, hcop⟩, _, hprime⟩
+  · intro ht
+    obtain ⟨hlabel, hfilter⟩ := Finset.mem_filter.mp ht
+    obtain ⟨hp, hqN, hq, hlt, hcut, hcop⟩ := mem_p5z_u9_switchedLabels_iff.mp hlabel
+    have hprime : Nat.Prime (N - p₁ * p₂ * q) := hfilter.2
     have hP : N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N := by
       apply mem_chenAdditivePrimeCarrier.mpr
       refine ⟨?_, hprime, hcop⟩
@@ -81,16 +83,20 @@ theorem p5z_u9_switchedLabels_filter_eq_primeTriples (N : ℕ) :
       have hqpos := hq.pos
       have hmpos : 0 < p₁ * p₂ * q := mul_pos hb hqpos
       omega
-    exact ⟨hp,
+    exact Finset.mem_sigma.mpr ⟨hp, Finset.mem_filter.mpr ⟨
       (currentChenUpsilon9_prime_mem_iff (p5z_u9_pair_product_pos hp) hq _).mpr
-        ⟨hlt, hP, hcut⟩, hq⟩
-  · rintro ⟨hp, hqsource, hq⟩
+        ⟨hlt, hP, hcut⟩, hq⟩⟩
+  · intro ht
+    obtain ⟨hp, hqprime⟩ := Finset.mem_sigma.mp ht
+    obtain ⟨hqsource, hq⟩ := Finset.mem_filter.mp hqprime
     obtain ⟨hlt, hP, hcut⟩ :=
       (currentChenUpsilon9_prime_mem_iff (p5z_u9_pair_product_pos hp) hq _).mp hqsource
     obtain ⟨hPN, hprime, hcop⟩ := mem_chenAdditivePrimeCarrier.mp hP
     have hqle : q ≤ p₁ * p₂ * q :=
       Nat.le_mul_of_pos_left q (p5z_u9_pair_product_pos hp)
-    exact ⟨⟨hp, by omega, hq, hlt, hcut, hcop⟩, hlt, hprime⟩
+    exact Finset.mem_filter.mpr ⟨mem_p5z_u9_switchedLabels_iff.mpr
+      ⟨hp, lt_of_le_of_lt hqle (lt_trans hlt (Nat.lt_succ_self N)), hq, hlt, hcut, hcop⟩,
+      hlt, hprime⟩
 
 /-- Exact finite pushforward with multiplicity. It works for an arbitrary
 real-valued test function, so applies before any signed PP norm. -/
@@ -220,7 +226,7 @@ theorem p5z_u9_le_same_rho_main_add_errors (N z : ℕ)
       p5z_labelledSmallPrimeMass (Finset.range N) id (p5z_u9_switchedWeight N) N z +
       ((currentChenUpsilon9UnitFibres N).card : ℝ) := by
   rw [p5z_u9_eq_switchedWeight_primeMass_add_units]
-  exact add_le_add_right
+  exact add_le_add_left
     (p5z_labelledPrimeMass_le_main_add_errors (Finset.range N) id
       (p5z_u9_switchedWeight N) N z Q rho
       (fun m _ => p5z_u9_switchedWeight_nonneg N m)

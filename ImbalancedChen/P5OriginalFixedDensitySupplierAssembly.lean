@@ -5,7 +5,8 @@ import ImbalancedChen.CurrentP5CausalCellEventualAssembly
 /-!
 # Fixed original numerical instance of the eventual supplier assembly
 
-SOURCE ONLY; UNCOMPILED. All imports with P5 names are staged draft names.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 
 The original records only certify the combined ordinary-start change and
 the combined U3/U4 table gains. They do not give a separate original endpoint
@@ -85,7 +86,7 @@ theorem eventual_joint_final_supplier_of_original_raw
   have hH : 0 ≤ singularNormalization N :=
     div_nonneg (mul_nonneg (singularSeries_pos N).le (Nat.cast_nonneg N)) (sq_nonneg _)
   exact (hN hEven).trans (mul_le_mul_of_nonneg_right
-    (add_le_add_right (originalJointFinalCost_is_weakening fixedProductDensityCoefficient)
+    (add_le_add_left (originalJointFinalCost_is_weakening fixedProductDensityCoefficient)
       (2 * delta)) hH)
 
 def originalGroupedCoefficient (k : ℝ) : ℝ :=

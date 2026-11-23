@@ -1,0 +1,26 @@
+--- a/ImbalancedChen/CurrentChenP5U9UniformTaylorTail.lean
++++ b/ImbalancedChen/CurrentChenP5U9UniformTaylorTail.lean
+@@ -3,7 +3,8 @@
+ /-!
+ # Uniform logarithm truncation error on the literal original U9 interval
+ 
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ 
+ This isolates the power-series error from the mesh error. The exact
+ logarithm variable is at most 47/106 on the entire original interval.
+@@ -155,10 +156,11 @@
+       _ ≤ ∑ k ∈ Finset.range m,
+           (mesh m (k + 1) - mesh m k) * (32 * geometricTail n) :=
+         Finset.sum_le_sum (fun k hk => (hcell k hk).2)
+-      _ = (672 / 125 : ℚ) * geometricTail n := by
++      _ ≤ (672 / 125 : ℚ) * geometricTail n := by
+         rw [← Finset.sum_mul, mesh_length_sum m m, mesh_zero, mesh_last m hm]
++        have hG : 0 ≤ geometricTail n := pow_nonneg (by norm_num) _
+         norm_num [a, b]
+-        <;> ring
++        nlinarith only [hG]
+ 
+ end
+ 

@@ -63,7 +63,7 @@ also supplies a simple exact sanity bound for future quadrature proofs. -/
 theorem currentChenP5U9HarmonicIntegral_ge_log_two :
     (21 / 250 : ℝ) * Real.log (2 : ℝ) ≤ currentChenUpsilon9HarmonicIntegral := by
   have hab : (19 / 125 : ℝ) ≤ 59 / 250 := by norm_num
-  have hint := currentChenP5U9LogIntegrand_continuousOn.intervalIntegrable_of_Icc hab
+  have hint := currentChenP5U9LogIntegrand_continuousOn.intervalIntegrable_of_Icc (μ := volume) hab
   rw [currentChenUpsilon9HarmonicIntegral_eq_logIntegral,
     integral_Ico_eq_integral_Ioc, ← intervalIntegral.integral_of_le hab]
   calc

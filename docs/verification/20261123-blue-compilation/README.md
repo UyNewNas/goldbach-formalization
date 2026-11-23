@@ -80,4 +80,12 @@ Member 工程还复用基线已验证的 `P4BSmoothGateUpperStep` 生产源码�
 
 Member 的 `P2HistoricLogRangeReduction` 复用既有提交 `085ef205771858c7115d092766b3ffcf7ab86d55` 的六处证明修补，显式处理整数/有理数转换、floor/ceil 与 `2^80` 位长为 81 的 kernel 计算。30 条显式公开源码声明、八个定义和全部常量、假设保持不变。标准构建、指定模块 kernel replay 及实际 `Certificates` 命名空间下的完整类型/传递公理检查均退出 0，仅标准三公理；源码和五项产物跨阶段稳定。结果见 [historic-log-range/VALIDATION_RESULTS.json](historic-log-range/VALIDATION_RESULTS.json)，源码复核见 [INDEPENDENT_REVIEW.json](historic-log-range/INDEPENDENT_REVIEW.json)。
 
-项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。其余两个 P6 入口、H430 Member 入口及其它已确认范围继续构建，验收分别记录。
+原第九积分价格入口 `P6OriginalNinthMeshPrice` 已通过完整标准构建，R02 入口源码逐字保持。十四个支撑源码后像与入口共十五模块通过指定模块 kernel replay，全部 301 条定义模块声明（含 private 和生成声明）完成完整类型和传递公理检查，仅标准三公理，源码和七十五项主要产物跨阶段稳定。独立复核覆盖十四个源码后像、200 条显式源码声明及手稿对应关系，未发现后像问题，见 [NINTH_ROOT_ACCEPTANCE.json](NINTH_ROOT_ACCEPTANCE.json)、[批次结果](p6-ninth/BATCH_SUMMARY.json) 和 [源码复核](p6-ninth/INDEPENDENT_REVIEW.json)。
+
+第九批有两项明确例外。`CurrentP5CausalCellEventualAssembly` 六处声明头将 `Finset.univ` 显式转换为原意的完整有限指标集合；旧语法不能 elaboration，因此不声称旧、新源码已生成相同 kernel 类型。`CurrentChenP5U9UniformTaylorTail` 原内部等式的算术值应为 `336/125`，原公开结论使用较宽的 `672/125` 预算；修补仅将内部错误等式改为不等式并使用原尾项非负，公开预算、假设、定义保持不变。这是可补齐的内部算术与余量推导，详见 [TAYLOR_INTERNAL_SLACK_REVIEW.json](p6-ninth/TAYLOR_INTERNAL_SLACK_REVIEW.json)。两次检查脚本自身失败的记录保留，最终检查采用缓存模块名、完整环境常量枚举和实际定义模块归属，不声称失败的 ModuleData 索引检查通过。
+
+原零标记积分成本入口 `P6OriginalZeroMarkedIntegralCost` 与 `P6OriginalMarkedIntegralPrices` 无需源码修补，均与冻结 R02 选源完全一致。标准构建、两个指定模块 kernel replay 和全部 42 条定义模块声明的完整类型／传递公理检查通过，仅标准三公理，源码及十项主要产物跨阶段稳定，见 [ZERO_ROOT_ACCEPTANCE.json](ZERO_ROOT_ACCEPTANCE.json) 和 [批次结果](p6-zero/BATCH_SUMMARY.json)。
+
+上述四个 P6 入口最后通过同一次 `lake --no-build build` 检查，退出 0，新增源码编译调用为 0。208 个项目源码和 810 个 native 源码的最终选版与产物绑定见 [FOUR_ROOT_ACCEPTANCE.json](p6-four-roots/FOUR_ROOT_ACCEPTANCE.json)。全部项目均有 `.olean`、`.ilean`、生成 C 和 trace；复用的 `ChenLogLevelGeometry` 未安装原生产者的辅助 setup 文件，其标准 Lake 重放及四入口最终检查均已通过，辅助文件例外单列记录。34 项生产源码覆盖见 [VERIFIED_P6_SOURCE_OVERRIDES.json](VERIFIED_P6_SOURCE_OVERRIDES.json)，冻结文件保持原样，阶段专有入口按安装路径恢复。
+
+项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

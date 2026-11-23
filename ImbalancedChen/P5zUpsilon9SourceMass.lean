@@ -7,7 +7,9 @@ import ImbalancedChen.HalfProductMassLimit
 /-!
 # Unconditional source-mass supplier for the actual ninth triple weight
 
-SOURCE ONLY / UNCOMPILED. The source contains NO Prime(N-product) gate.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+The source contains NO Prime(N-product) gate.
 Its centre-coprime restriction and moving quotient lower cutoff can be
 removed for an upper mass bound. Pair-product injection is already proved;
 no triple-product injection is assumed. Every third-prime label is counted.
@@ -154,7 +156,7 @@ theorem p5z_eventually_u9_switchedLabels_mass_le_harmonicIntegral
   have h1 : ((p5z_u9_switchedLabels N).card : ℝ) * Real.log (N : ℝ) / (N : ℝ) ≤
       (1 + delta) * (currentChenUpsilon9LiMainMass N * Real.log (N : ℝ) / (N : ℝ)) := by
     have h := mul_le_mul_of_nonneg_right hsource (div_nonneg hlog.le hNp.le)
-    convert h using 1 <;> ring
+    simpa only [mul_div_assoc, mul_assoc] using h
   have h2 := mul_le_mul_of_nonneg_left hli (by linarith only [hd] : 0 ≤ 1 + delta)
   have hnormalized : ((p5z_u9_switchedLabels N).card : ℝ) * Real.log (N : ℝ) / (N : ℝ) ≤
       J + eta := by

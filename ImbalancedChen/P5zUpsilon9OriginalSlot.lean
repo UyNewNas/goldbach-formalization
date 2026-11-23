@@ -4,7 +4,9 @@ import ImbalancedChen.P5OriginalFixedDensitySupplierAssembly
 /-!
 # Actual original U9 supplier slot at the original fixed density coefficient
 
-SOURCE ONLY / UNCOMPILED. The two U9 integral inequalities below are
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+The two U9 integral inequalities below are
 INDEPENDENT P2 CERTIFICATE obligations; no numerical enclosure is asserted.
 Their upper and lower endpoints are the exact original saved U9 endpoint
 and independent Simpson lower slope from P5OriginalKFeedbackBudget.
@@ -87,7 +89,7 @@ theorem p5z_original_h9_of_fixed_actual_rho
   have hH : 0 ≤ singularNormalization N :=
     div_nonneg (mul_nonneg (singularSeries_pos N).le (Nat.cast_nonneg N)) (sq_nonneg _)
   exact (hN hEven).trans (mul_le_mul_of_nonneg_right
-    (add_le_add_right hcoefficient delta) hH)
+    (add_le_add_left hcoefficient delta) hH)
 
 /-- Joint full-policy version of the original h9 slot. The actual density
 selection theorem is called with densityCap=the ORIGINAL fixed k, and

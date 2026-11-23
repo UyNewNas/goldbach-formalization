@@ -1,0 +1,66 @@
+--- a/ImbalancedChen/CurrentP5CausalCellEventualAssembly.lean
++++ b/ImbalancedChen/CurrentP5CausalCellEventualAssembly.lean
+@@ -4,7 +4,8 @@
+ /-!
+ # Eventual assembly from actual common-policy cell contributions
+ 
+-Source-only candidate, uncompiled. The first import is the preceding
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`. The first import is the preceding
+ source-only candidate, intended for the corresponding ImbalancedChen path.
+ The index type is fixed and finite; its actual receiver cells may depend
+ on N. Every supplier bounds one concrete local signed eleven-term source.
+@@ -40,7 +41,7 @@
+ theorem p5CausalPartitionCellContribution_sum {ι : Type*}
+     [Fintype ι] [DecidableEq ι]
+     (N : ℕ) (E : ℕ × ℕ → Prop) (cells : ι → Finset ℕ)
+-    (hdisjoint : Set.PairwiseDisjoint (Finset.univ : Set ι) cells)
++    (hdisjoint : Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) cells)
+     (hcover : Finset.univ.biUnion cells = chenAdditivePrimeCarrier N) :
+     (∑ a, p5CausalPartitionCellContribution N E (cells a)) =
+       currentChenPairedPrimeSum N E := by
+@@ -59,7 +60,7 @@
+ errors. No whole-weight lower bound appears among the inputs. -/
+ theorem p5CausalCellAssembly_finite {ι : Type*} [Fintype ι] [DecidableEq ι]
+     (N : ℕ) (E : ℕ × ℕ → Prop) (cells : ι → Finset ℕ)
+-    (hdisjoint : Set.PairwiseDisjoint (Finset.univ : Set ι) cells)
++    (hdisjoint : Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) cells)
+     (hcover : Finset.univ.biUnion cells = chenAdditivePrimeCarrier N)
+     (mass amplification accuracy : ι → ℝ)
+     (hlocal : ∀ a, (mass a - |amplification a| * accuracy a) *
+@@ -76,7 +77,7 @@
+ theorem p5CausalCellAssembly_eventually_of_accuracies {ι : Type*}
+     [Fintype ι] [DecidableEq ι]
+     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
+-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
++    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
+     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
+     (mass amplification accuracy : ι → ℝ)
+     (hlocal : ∀ a, ∀ᶠ N : ℕ in atTop, Even N →
+@@ -144,7 +145,7 @@
+ assemble into the actual paired-prime-sum mean at their finite mass sum. -/
+ theorem p5CausalCellAssembly_eventual_mean {ι : Type*} [Fintype ι] [DecidableEq ι]
+     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
+-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
++    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
+     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
+     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
+     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →
+@@ -173,7 +174,7 @@
+ theorem p5CausalCellAssembly_eventual_current_mean {ι : Type*}
+     [Fintype ι] [DecidableEq ι]
+     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
+-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
++    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
+     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
+     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
+     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →
+@@ -195,7 +196,7 @@
+ The negligible count loss is the already proved uniform-selector loss. -/
+ theorem p5CausalCellAssembly_eventual_D12 {ι : Type*} [Fintype ι] [DecidableEq ι]
+     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
+-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
++    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
+     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
+     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
+     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →

@@ -3,7 +3,8 @@ import ImbalancedChen.CurrentNumericalTransfer
 import ImbalancedChen.P2ContinuousSieveRational
 
 /-!
-SOURCE_WRITTEN / UNCOMPILED / CODE_ONLY.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 
 The literal ninth domain is x in [19/125,59/250), and y in
 [59/250,(1-x)/2).  Its density is 1/(x*y*(1-x-y)).  The moving wall is
@@ -49,8 +50,8 @@ theorem mesh_monotone (m : ℕ) (hm : 0 < m) : Monotone (mesh m) := by
   have hklQ : (k : ℚ) ≤ (l : ℚ) := by exact_mod_cast hkl
   have hmQ : (0 : ℚ) < m := by exact_mod_cast hm
   dsimp [mesh]
-  exact add_le_add_left (div_le_div_of_nonneg_right
-    (mul_le_mul_of_nonneg_left hklQ (by norm_num [a, b])) hmQ.le) a
+  exact add_le_add_right (div_le_div_of_nonneg_right
+    (mul_le_mul_of_nonneg_left hklQ (by norm_num [a, b] : (0 : ℚ) ≤ b - a)) hmQ.le) a
 
 theorem mesh_bounds (m : ℕ) (hm : 0 < m) (k : ℕ) (hk : k ≤ m) :
     a ≤ mesh m k ∧ mesh m k ≤ b := by
@@ -127,7 +128,9 @@ theorem literal_domain_uniform_cover (m : ℕ) (hm : 0 < m) {x y : ℝ}
     ∃ k : ℕ, k < m ∧ (mesh m k : ℝ) ≤ x ∧
       x < (mesh m (k + 1) : ℝ) ∧ (d : ℝ) ≤ y ∧ y < (cap m k : ℝ) := by
   obtain ⟨hx, hy⟩ := (currentChenUpsilon9HarmonicDomain_vec_iff x y).1 hxy
-  exact moving_domain_uniform_cover m hm hx hy
+  apply moving_domain_uniform_cover m hm
+  · simpa only [a, b, Rat.cast_div, Rat.cast_ofNat] using hx
+  · simpa only [d, Rat.cast_div, Rat.cast_ofNat] using hy
 
 /-- The generated boxes have a uniform strictly positive logarithmic gap. -/
 theorem whole_box_positive_gap (m : ℕ) (hm : 0 < m) (k : ℕ) (hk : k < m)
@@ -223,7 +226,8 @@ theorem logDensity_le_cellUpper (n : ℕ) (l : ℚ) {x : ℝ}
   have hnum := (Real.log_le_log (by linarith :
     0 < (1 - x - (d : ℝ)) / (d : ℝ)) hratio).trans hlogUpper
   have hlpos : 0 < (l : ℝ) * (1 - (l : ℝ)) := by
-    apply mul_pos <;> norm_num [a, b] at hlR hx ⊢ <;> linarith
+    exact mul_pos ((by norm_num [a] : (0 : ℝ) < (a : ℝ)).trans_le hlR)
+      (sub_pos.mpr (lt_of_le_of_lt (hlx.trans hx) (by norm_num [b] : (b : ℝ) < 1)))
   have hden : (l : ℝ) * (1 - (l : ℝ)) ≤ x * (1 - x) := by
     have hprod := mul_nonneg (sub_nonneg.mpr hlx)
       (show 0 ≤ 1 - x - (l : ℝ) by norm_num [b] at hx; linarith)
@@ -258,7 +262,7 @@ theorem actual_integral_le_rationalUpper (n m : ℕ) (hm : 0 < m) :
       ∫ x in (a : ℝ)..(b : ℝ), logDensity x := by
     rw [currentChenUpsilon9HarmonicIntegral_eq_logIntegral,
       integral_Ico_eq_integral_Ioc, ← intervalIntegral.integral_of_le (by norm_num)]
-    rfl
+    simp only [a, b, d, logDensity, Rat.cast_div, Rat.cast_ofNat]
   rw [hJ, ← hpartition]
   change (∑ k ∈ Finset.range m, ∫ x in (mesh m k : ℝ)..(mesh m (k + 1) : ℝ),
     logDensity x) ≤ (rationalUpper n m : ℝ)

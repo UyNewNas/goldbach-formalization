@@ -4,7 +4,9 @@ import ImbalancedChen.PowerErrorBudget
 /-!
 # Actual ninth multiplicity and small-prime receiver payment
 
-SOURCE ONLY / UNCOMPILED. A product represented by three primes has at
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+A product represented by three primes has at
 most THREE distinct prime values. Its ordered pair label determines q.
 Consequently the literal fibre weight is at most 9, without assuming that
 all m are rough, squarefree, or even represented. Repeated q=p1 or q=p2
@@ -131,6 +133,7 @@ theorem p5z_u9_smallPrimeMass_le_nine_mul_cutoff (N z : ℕ) :
         · intro m hm r hr heq
           have hmN := Finset.mem_range.mp (Finset.mem_filter.mp hm).1
           have hrN := Finset.mem_range.mp (Finset.mem_filter.mp hr).1
+          change N - m = N - r at heq
           omega
       _ = z := Finset.card_range z
   have hcardR : (F.card : ℝ) ≤ (z : ℝ) := by exact_mod_cast hcard

@@ -3,7 +3,9 @@ import ImbalancedChen.P5OriginalQuantitativeBudget
 /-!
 # Original lower endpoint with a slightly larger product-density coefficient
 
-SOURCE ONLY; UNCOMPILED. This is a conservative original numerical
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
+This is a conservative original numerical
 majorant functional, not an assertion that the true Chen mean is affine.
 
 The precise source of the slopes is
@@ -106,7 +108,7 @@ theorem removed_gross_scaling (I G k : ℝ)
   have heq : (currentK * I / 8) * (k / currentK) = k * I / 8 := by
     field_simp [ne_of_gt hK] <;> ring
   rw [heq] at hm
-  convert hm using 1 <;> ring
+  simpa only [mul_div_assoc] using hm
 
 def allRemovedGross : ℝ := E0Gross + E1Gross + extraSameMaskGross
 def variableRemovedGross (k : ℝ) : ℝ := allRemovedGross * k / currentK
