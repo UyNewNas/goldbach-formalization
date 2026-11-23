@@ -2,12 +2,13 @@
 
 ## 2026-11-23 第二批本地续证
 
-- **手稿 (17)、(18)**。任意紧支撑复 Schwartz 槽的倒数相位完成保留 Fourier 相位的正号和精确 Ramanujan 零频。原始模数 $qr,qr'$ 的共轭相位积提升到 $qrr'$，保留两个互素门。行列式为零时计数，非零时控制 gcd 和 Weil 聚合，三项尺度单项式按 $x=MN$ 化简。实际 E1 加权和与 Cauchy 平方的接合仍开放。[平滑完成](../../ImbalancedChen/Part3SmoothReciprocalWeil.lean) · [共轭相位](../../ImbalancedChen/Part3E1ReciprocalPhase.lean) · [行列式求和](../../ImbalancedChen/Part3DeterminantGCD.lean)
+- **手稿 (17)、(18)**。原始 E1 复权和保留 $\varphi(qs)qr$ 分母、两侧互素门、正负频率和原始 $r,s$ 支撑。Cauchy 平方把模数 $qr,qr'$ 的相位积提升到 $qrr'$，再分别计数零行列式及支付 Weil 和非零行列式的 Ramanujan 项。对实际实尺度 dyadic 支撑和频率上界，三项乘任意固定 $X^\varepsilon$ 后给出 (18)。[平滑完成](../../ImbalancedChen/Part3SmoothReciprocalWeil.lean) · [加权 Cauchy](../../ImbalancedChen/Part3E1FiniteCauchy.lean) · [实尺度 (18)](../../ImbalancedChen/Part3E1RealScales.lean)
+- **手稿 (21)**。E2 的原始两段倒数相位等于带符号差 $n_1-n_2$ 的主相位与慢相位的乘积，保留 CRT 互素前提。慢相位的五坐标分部求和 (22) 仍待接合。[E2 互反恒等式](../../ImbalancedChen/Part3E2Reciprocity.lean)
 - **手稿 (23)**。固定实际模数和 dyadic 频率段的平方按零差与非零差精确重排。非零差项使用带复系数、相位、互素门、辅助除子和两种频率符号的二次矩。对显式多项式大小包络，可取得任意固定 $X^\varepsilon$ 损失。[实际计数二次矩](../../ImbalancedChen/Part3OriginalSignedCountingNorm.lean)
 - **两长槽**。两个零频轴在精确互素主项里相消。自然数乘积的平滑逐模差异界为 $4CD\,\tau(q)^2(\sqrt q+1/\varphi(q))$，其中 $C,D$ 是两槽的 Fourier 衰减常数。固定二次除数损失经除数矩求和给出 $R^{3/2}$ 乘固定对数幂。Brun 比较保留原加权差异，除子推回逐项使用 $mde,U/d,V/e$。有限 Brun 倒数密度和 Euler 乘积的差由下一阶倒数和控制。[平滑估计](../../ImbalancedChen/Part3TwoLongSmooth.lean) · [Brun 比较](../../ImbalancedChen/Part3TwoLongBrunComparison.lean) · [Brun 密度](../../ImbalancedChen/Part3BrunDensity.lean)
 - **辅助 SW 与平滑截断**。连续总变差控制实际粗糙槽的采样变化量及 Mellin 对数预算，截止保持 $f(2^{6k_*+2}X^+)$。另构造固定四阶 Gevrey 平顶截断，在手稿 (6) 的 $tH\ge\log^5 x$ 条件下证明任意幂节省的 Fourier 尾和界。该截断仍需接到实际共同平滑调用。[SW 预算](../../ImbalancedChen/Part3RoughAuxiliarySWChartBudget.lean) · [Fourier 尾和](../../ImbalancedChen/Part3GevreyCutoff.lean)
 
-完整 `RestrictedMediumObligation` 和实际 `UniformPrimeProductTarget` 仍开放。除上述接合外，尚缺手稿 (24) 的共同非零频率谱估计，以及两长槽图册和实际素数乘积的统一组装。
+完整 `RestrictedMediumObligation` 和实际 `UniformPrimeProductTarget` 仍开放。E1 仍需接到具体固定 $d$ 的 medium 分块与 (20)。E2 尚缺 (24) 的共同非零频率谱估计。两长槽图册和实际素数乘积仍待统一组装。
 
 ## 2026-11-23 本地续证
 

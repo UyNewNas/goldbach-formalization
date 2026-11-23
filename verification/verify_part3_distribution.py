@@ -53,7 +53,9 @@ MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3DeterminantGCD", "Part3RoughAuxiliarySWChartBudget",
     "Part3SmoothReciprocalWeil", "Part3TwoLongBrunComparison",
     "Part3TwoLongCompletion", "Part3TwoLongSmooth", "Part3GevreyCutoff",
-    "Part3E1ReciprocalPhase", "Part3BrunDensity"))
+    "Part3E1ReciprocalPhase", "Part3BrunDensity",
+    "Part3E1FiniteCauchy", "Part3E1CompletedAggregate", "Part3E1Equation18",
+    "Part3E1SourceMask", "Part3E1RealScales", "Part3E2Reciprocity"))
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/Part3DistributionAudit.lean"
 WORKFLOW = ".github/workflows/part3-distribution.yml"

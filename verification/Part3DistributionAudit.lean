@@ -36,6 +36,12 @@ import ImbalancedChen.Part3TwoLongSmooth
 import ImbalancedChen.Part3GevreyCutoff
 import ImbalancedChen.Part3E1ReciprocalPhase
 import ImbalancedChen.Part3BrunDensity
+import ImbalancedChen.Part3E1FiniteCauchy
+import ImbalancedChen.Part3E1CompletedAggregate
+import ImbalancedChen.Part3E1Equation18
+import ImbalancedChen.Part3E1SourceMask
+import ImbalancedChen.Part3E1RealScales
+import ImbalancedChen.Part3E2Reciprocity
 import Lean.Util.CollectAxioms
 
 /-!
@@ -96,7 +102,13 @@ run_cmd do
     `ImbalancedChen.Part3TwoLongSmooth,
     `ImbalancedChen.Part3GevreyCutoff,
     `ImbalancedChen.Part3E1ReciprocalPhase,
-    `ImbalancedChen.Part3BrunDensity]
+    `ImbalancedChen.Part3BrunDensity,
+    `ImbalancedChen.Part3E1FiniteCauchy,
+    `ImbalancedChen.Part3E1CompletedAggregate,
+    `ImbalancedChen.Part3E1Equation18,
+    `ImbalancedChen.Part3E1SourceMask,
+    `ImbalancedChen.Part3E1RealScales,
+    `ImbalancedChen.Part3E2Reciprocity]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with
