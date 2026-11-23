@@ -1,0 +1,50 @@
+[
+  {
+    "name": "halfOpenTable",
+    "complete_raw_region": "def halfOpenTable (nums : Fin 200 → ℤ) (w : ℝ) : ℝ :=\n  ∑ i : Fin 200, (Ico (floorGrid i.val) (floorGrid (i.val + 1))).indicator\n    (fun _ => floorValue nums i) w\n\n",
+    "sha256": "51efd15b37387bc32843927764ff941f451230d9a401567d647cc979813c04c6",
+    "byte_identical": true
+  },
+  {
+    "name": "tailDomain",
+    "complete_raw_region": "def tailDomain (c : ℝ) : Set ℝ := Ico (max 1 c) 5\n",
+    "sha256": "134a9923411eac260f65b91fb7920b99696ce56e2dcb86cafb21a50a1f60cb4f",
+    "byte_identical": true
+  },
+  {
+    "name": "tableTail",
+    "complete_raw_region": "def tableTail (nums : Fin 200 → ℤ) (c : ℝ) : ℝ :=\n  ∫ w in tailDomain c, upperFloor nums w / w\n\n",
+    "sha256": "2b306e46387a3b869d667dda25f32e2d9c2a9a3d6ee9ce0d6c00fbf1e8394e8f",
+    "byte_identical": true
+  },
+  {
+    "name": "clippedCellLeft",
+    "complete_raw_region": "def clippedCellLeft (i : Fin 200) (c : ℝ) : ℝ :=\n  min (floorGrid (i.val + 1)) (max c (floorGrid i.val))\n\n",
+    "sha256": "e84be5840c693d9ca68409a2079855d053bbe3c43c5b2f7789ce77bf9254835d",
+    "byte_identical": true
+  },
+  {
+    "name": "upperTransition",
+    "complete_raw_region": "def upperTransition (lowerNums : Fin 200 → ℤ) (s : ℝ) : ℝ :=\n  tableTail lowerNums (max 2 (s - 1))\n\n",
+    "sha256": "fa5a4a749d1a49ee165392d79bc9c88a1613c782f1bf339663102132f1d96cf3",
+    "byte_identical": true
+  },
+  {
+    "name": "lowerTransition",
+    "complete_raw_region": "def lowerTransition (upperNums : Fin 200 → ℤ) (s : ℝ) : ℝ := tableTail upperNums (s - 1)\n\n",
+    "sha256": "43148dcb87e1a35e47f7b9dd6fe0f57d5f0ce8ea3ee39e561107928981279c05",
+    "byte_identical": true
+  },
+  {
+    "name": "adoptedHnew",
+    "complete_raw_region": "def adoptedHnew : ℝ → ℝ := upperTransition adoptedH248Numerators\n",
+    "sha256": "13b6e2ee63c47d788ca49fd8ecfeed0dcb4d826f402dd598e3ff4a18f38b0e40",
+    "byte_identical": true
+  },
+  {
+    "name": "adoptedhnew",
+    "complete_raw_region": "def adoptedhnew : ℝ → ℝ := lowerTransition H248Numerators\n\n",
+    "sha256": "9d81d69b27803e122b2da30cc94a15208f8dbb19c073a77179f137384978baae",
+    "byte_identical": true
+  }
+]

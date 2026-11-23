@@ -88,7 +88,7 @@ theorem exists_variable_cutoff_normalized_reserve (r eta epsilonMax : ℝ)
     positivity
   have herror := hsupply D hDs N cap hEven retainOdd z
   have hscalar := (hDscalar D hDt).1
-  have hnorm : 0≤singularSeries N/Real.log D :=
+  have hnorm : 0 ≤ singularSeries N/Real.log D :=
     div_nonneg (singularSeries_pos N).le hlogD.le
   dsimp only at herror ⊢
   refine ⟨herror.1,herror.2.trans ?_⟩

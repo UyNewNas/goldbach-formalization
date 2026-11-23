@@ -69,7 +69,7 @@ theorem ae_ne_all_scalar_knots :
   apply ae_all_iff.mpr
   intro j
   rw [ae_iff]
-  simpa only [not_not] using (measure_singleton (floorGrid j.val) :
+  simpa only [not_not, Set.ofPred_eq_eq_singleton] using (measure_singleton (floorGrid j.val) :
     volume {floorGrid j.val} = 0)
 
 theorem upperFloor_ae_eq_halfOpen (nums : Fin 200 → ℤ) :
@@ -109,7 +109,9 @@ theorem integrable_upperFloor_div (nums : Fin 200 → ℤ) :
   intro w
   by_cases hw : w ∈ Icc (1 : ℝ) 5
   · rw [indicator_of_mem hw]
-  · rw [indicator_of_notMem hw, upperFloor_outside nums hw, zero_div]
+  · rw [indicator_of_notMem hw]
+    change 0 = upperFloor nums w / w
+    rw [upperFloor_outside nums hw, zero_div]
 
 theorem intervalIntegrable_upperFloor_div (nums : Fin 200 → ℤ) (c d : ℝ) :
     IntervalIntegrable (fun w => upperFloor nums w / w) volume c d :=
@@ -148,6 +150,7 @@ theorem tableTail_eq_interval (nums : Fin 200 → ℤ) {c : ℝ} (hc : 1 ≤ c) 
         _ = ∫ _w in Ioc (5 : ℝ) c, (0 : ℝ) := by
           apply setIntegral_congr_fun measurableSet_Ioc
           intro w hw
+          change upperFloor nums w / w = (0 : ℝ)
           rw [upperFloor_outside nums (show w ∉ Icc (1 : ℝ) 5 from
             fun h => (not_lt_of_ge h.2) hw.1), zero_div]
         _ = 0 := by simp
@@ -260,6 +263,7 @@ theorem upperTransition_literal (nums : Fin 200 → ℤ) (s : ℝ) :
   rw [hstart]
   apply setIntegral_congr_fun measurableSet_Ico
   intro w hw
+  change upperFloor nums w / w = floorStep nums w / w
   rw [upperFloor_eq_lowerFloor_of_two_le nums
     ((le_max_left (2 : ℝ) (s - 1)).trans hw.1)]
 

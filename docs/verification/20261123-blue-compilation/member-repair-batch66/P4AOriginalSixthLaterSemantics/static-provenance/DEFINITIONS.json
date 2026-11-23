@@ -1,0 +1,44 @@
+[
+  {
+    "name": "eval",
+    "complete_raw_region": "def eval (r : Affine) (t : Point) : ℝ := r 0 + ∑ i : Fin 6, r i.succ * t i\r\n\r\n",
+    "sha256": "3be7835178f0d86f69be56f14cb80b6ab51e328aa594facc4c2def846208ef4f",
+    "byte_identical": true
+  },
+  {
+    "name": "coordinates",
+    "complete_raw_region": "def coordinates (c : Cell) (t : Point) : Point :=\r\n  if mapped c then Certificates.P2OriginalSixthElevenLogSemantics.chart t else t\r\n\r\n/-- Every original named row is retained, including old activation/branch\r\nexclusions. The chart is invertible by Certificates.P2OriginalSixthElevenLogSemantics.physical_chart. -/\r\n",
+    "sha256": "7898236647b0c763f254e4f8e94bb60e2e6eb999cf9c43ac0aeafc5a56474fb3",
+    "byte_identical": true
+  },
+  {
+    "name": "Source",
+    "complete_raw_region": "def Source (c : Cell) (t : Point) : Prop :=\r\n  ∀ r ∈ rows c, 0 < eval r (coordinates c t)\r\n\r\n",
+    "sha256": "c417968f923bb2b4933c6fbed697c435d99768a2bdc4555ce047469d4799a5b8",
+    "byte_identical": true
+  },
+  {
+    "name": "selectedSum",
+    "complete_raw_region": "def selectedSum (c : Cell) (t : Point) : ℝ := Certificates.P2OriginalSixthElevenLogSemantics.selectedSum (mask c) t\r\n\r\n",
+    "sha256": "8873a061d4e6d3e949c6a7fc593be122009b0b64731f869ae86320411254361d",
+    "byte_identical": true
+  },
+  {
+    "name": "endpoint",
+    "complete_raw_region": "def endpoint (c : Cell) (t : Point) : ℝ :=\r\n  (if descending c then 57 / 64 - 3 * selectedSum c t / 2\r\n   else (1 + selectedSum c t) / 2) - Certificates.P2OriginalSixthElevenLogSemantics.eta\r\n\r\n/-- Descending pair17 is the actual old envelope of the four final\r\nnonsingleton source cells, with x and the fifth coordinate p. -/\r\n",
+    "sha256": "1ac70bfdac17a15e78a3beb3ace070e34c1ec252551df62f90d90758cf48f17f",
+    "byte_identical": true
+  },
+  {
+    "name": "R17",
+    "complete_raw_region": "def R17 (t : Point) : ℝ := 57 / 64 - 3 * (t 0 + t 4) / 2\r\n\r\n/-- Original comparison planes, including the last four pair17 parents.\r\nG13's two comparison-only corrections install no further action. -/\r\n",
+    "sha256": "82ecf0e4242db197fe2cd5459c6ac458d33473c06102473b7905c7a94df48bb9",
+    "byte_identical": true
+  },
+  {
+    "name": "comparison",
+    "complete_raw_region": "def comparison (c : Cell) (t : Point) : ℝ :=\r\n  if comparisonChart c = 0 then Certificates.P2OriginalSixthElevenLogSemantics.R0 t\r\n  else if comparisonChart c = 1 then Certificates.P2OriginalSixthElevenLogSemantics.descending33 t\r\n  else if comparisonChart c = 2 then Certificates.P2OriginalSixthElevenLogSemantics.ascending34 t\r\n  else R17 t\r\n\r\n/-- The four pair17 sources carry the strict old-envelope gap in literal row 4. -/\r\n",
+    "sha256": "e1cc6f7b480dafebe2c70ed26ba895e05ba16f015611e3e9b9e0fd585dc74cc9",
+    "byte_identical": true
+  }
+]

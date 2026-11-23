@@ -252,3 +252,14 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 这些是复用 070／071 已验线性索引证明模板的工程安排，没有把原未执行的 000–049 虚列为实际失败。每块原数据、字段、顺序、偏移、两个原公开声明和 `rows_size` 的 `rfl` 保持；私有 List 投影证书推回同一个全部有限索引命题。已绿 070／071 没有重复编译。五十份源码作为明确安装后像发布，主仓不新建同名 canonical 文件。这仍仅验收原始索引事实，不能替代父子 max 恒等式、数值 gain 或完整 P1。
 
 68 保留一项与前述相同的 finalizer stdout 晚绑定；160 个其它原条目逐字匹配，原清单和实际 stdout 均保留。69–72 各自 160 个原发布条目全部匹配。68／69 最终复核新清单的初始绝对路径版本另存为历史文件，规范清单只将路径改为包内相对路径并绑定原版本哈希，复核和验证记录未改；该包装兼容调整没有重跑 Lean。
+
+
+第七十三、七十四批完成 `Data.P5SubdivisionStoredBlock050` 至 `069` 的实际验收和非作者最终复核，各十个模块、50 个 owned 声明（40 public、10 private），全部原正常编译／指定模块 kernel replay／完整 owned 审计退出 0，仅标准三公理，源码及百项主要产物稳定，见 [73](member-repair-batch73/VALIDATION_RESULTS.json)、[74](member-repair-batch74/VALIDATION_RESULTS.json)。069 保留原 4000000-heartbeat `whnf` 超时的真实失败记录；其它未执行原稿块按工程复用分类。先前仅取消过未执行且无子进程的调度父进程，原 outer143 与新验证 lane 的真实退出 0 分开记录，没有向编译器或 checker 发信号。
+
+至此 72 个原始索引块（000–071、292633 行）均有实际 normal／kernel／full-owned 验收，共 360 个声明（288 public、72 private）。070／071 的既有成功未重复，所有原数据、字段、顺序、偏移和公开索引命题保持。这是全部档案块的索引事实，父子 max 检查、gain 及完整 P1 仍须各自闭合。
+
+第六十六批四个必要供应者也完成最终验收，共 113 个 owned 声明，全部为 public，没有虚构 private 计数，见 [结果](member-repair-batch66/VALIDATION_RESULTS.json) 和 [组合独审](member-repair-batch66/FINAL_REVIEW.json)。Renewal 的原数表与 knots 保持；Gate/Beta 仅原加法结合和 proof token/API 修补，其独立数学范围复用包内 `137206947…` 非作者审。最终组合复核明确披露复核者是这两个补丁的作者，未把自审冒充外审；另两模块的范围与四模块实际验收链也已独立复核。
+
+SixthLater 原内部 `opposite_license_identity` 在原字面数据下不成立：c6、零向量的两边相差原 eta。修正为无 Source 前提的原 row≤gap 辅助不等式，完整保留原十九行、eta、七个定义，以及最终 `source_endpoint_lt_selected_tent` 的严格 `<` 声明。原稿需要的两侧严格 tent licence 仍由原 Source 的严格正性导出；没有添加更强 Source、目标许可或额外 eta 预留。该一处公有辅助名称／声明修正明确记录，不称全部旧公头逐字保持；后续只是具体 Fin 向量与 simp 控制适配。
+
+66 的三个已成功源复用原 Member normal／kernel，新 Sixth 与最终 audit 使用原 P6 guard。collector 按每条真实命令的 state 读取对应原 journal，独立小审和晚绑定见 `late-mixed-runtime-collector-review/`；两个 state 与原 journal 前缀不改，没有为混合 state 的元数据整理重复编译。三个新发布包的原发布清单全部逐字匹配。

@@ -1,0 +1,48 @@
+--- baseline/ImbalancedChen/P4AOriginalSixthLaterSemantics.lean
++++ candidate/ImbalancedChen/P4AOriginalSixthLaterSemantics.lean
+@@ -49,33 +49,35 @@
+   have hh : (rows c)[4] = r := Option.some.inj (by simpa [hm.1] using hm.2.1)
+   have hmem : r∈rows c := hh ▸ (List.getElem_mem hm.1)
+   have h := hs r hmem
+-  norm_num [coordinates,hm.2.2,eval,r,Fin.sum_univ_succ] at h
++  norm_num [coordinates,hm.2.2,eval,r,Fin.sum_univ_succ,Fin.succ] at h
+   dsimp only [R17,Certificates.P2OriginalSixthElevenLogSemantics.R0]
+   linarith
+ 
+ set_option maxRecDepth 8192 in
+ set_option maxHeartbeats 0 in
+-theorem opposite_license_identity (c : Cell) (t : Point) :
+-    eval (oppositeLicenseRow c) (coordinates c t) =
++theorem opposite_license_row_le_gap (c : Cell) (t : Point) :
++    eval (oppositeLicenseRow c) (coordinates c t) ≤
+       (if descending c then (1 + selectedSum c t) / 2
+        else 57 / 64 - 3 * selectedSum c t / 2) - endpoint c t := by
+   fin_cases c <;>
+-    norm_num [eval, oppositeLicenseRow, coordinates, mapped, descending,
+-      selectedSum, mask, endpoint, Certificates.P2OriginalSixthElevenLogSemantics.chart, Certificates.P2OriginalSixthElevenLogSemantics.R0, Certificates.P2OriginalSixthElevenLogSemantics.S5, Certificates.P2OriginalSixthElevenLogSemantics.H5,
+-      Certificates.P2OriginalSixthElevenLogSemantics.selectedSum, Certificates.P2OriginalSixthElevenLogSemantics.bit, Certificates.P2OriginalSixthElevenLogSemantics.eta, Fin.sum_univ_succ] <;> ring
++    norm_num [eval, P4AOriginalSixthLaterLiteral.oppositeLicenseRow, coordinates,
++      P4AOriginalSixthLaterLiteral.mapped, P4AOriginalSixthLaterLiteral.descending,
++      selectedSum, P4AOriginalSixthLaterLiteral.mask, endpoint, Certificates.P2OriginalSixthElevenLogSemantics.chart, Certificates.P2OriginalSixthElevenLogSemantics.R0, Certificates.P2OriginalSixthElevenLogSemantics.S5, Certificates.P2OriginalSixthElevenLogSemantics.H5,
++      Certificates.P2OriginalSixthElevenLogSemantics.selectedSum, Certificates.P2OriginalSixthElevenLogSemantics.bit, Certificates.P2OriginalSixthElevenLogSemantics.eta, Fin.sum_univ_succ, Fin.succ, Bool.coe_true, Bool.coe_false] <;> linarith
+ 
+ /-- Actual literal source membership supplies both tent licences. -/
+ theorem source_endpoint_lt_selected_tent (c : Cell) (t : Point) (h : Source c t) :
+     endpoint c t < VariableEnvelope.v (selectedSum c t) := by
+-  have ho := h (oppositeLicenseRow c) (oppositeLicenseRow_mem c)
+-  rw [opposite_license_identity] at ho
++  have ho := lt_of_lt_of_le
++    (h (oppositeLicenseRow c) (oppositeLicenseRow_mem c))
++    (opposite_license_row_le_gap c t)
+   rw [VariableEnvelope.v_eq_min]
+   dsimp only [VariableEnvelope.A, VariableEnvelope.C]
+   have he : (0 : ℝ) < Certificates.P2OriginalSixthElevenLogSemantics.eta := by norm_num [Certificates.P2OriginalSixthElevenLogSemantics.eta]
+   by_cases hd : descending c = true
+-  · simp only [hd, Bool.true_eq_true, if_true] at ho
++  · simp only [hd, Bool.coe_true, if_true] at ho
+     have hh : endpoint c t = 57 / 64 - 3 * selectedSum c t / 2 - Certificates.P2OriginalSixthElevenLogSemantics.eta := by
+-      simp only [endpoint, hd, Bool.true_eq_true, if_true]
++      simp only [endpoint, hd, Bool.coe_true, if_true]
+     exact lt_min (by linarith) (by linarith)
+   · have hf : descending c = false := Bool.eq_false_iff.mpr hd
+     simp only [hf, Bool.false_eq_true, if_false] at ho

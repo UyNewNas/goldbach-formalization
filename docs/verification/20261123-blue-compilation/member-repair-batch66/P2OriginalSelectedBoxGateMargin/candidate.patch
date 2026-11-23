@@ -1,0 +1,11 @@
+--- baseline/ImbalancedChen/P2OriginalSelectedBoxGateMargin.lean
++++ candidate/ImbalancedChen/P2OriginalSelectedBoxGateMargin.lean
+@@ -67,7 +67,7 @@
+       (x 0 + x 1 + x 2 + x 3) + 2 * x 4 < cap4 := by
+   have hcube := (point_gates_of_strict_upper_corner hbox hx).2.2
+   have hadmission : admission H (x 3) := by
+-    simpa [admission, hword, hincoming] using hcube
++    simpa [admission, hword, hincoming, add_assoc] using hcube
+   have hpass := (step_accepted_iff P a b H (x 3)).mpr ⟨haccepted, hadmission⟩
+   have hfreeze : (step P a b H (x 3)).cap = cap4 := by
+     simp [step, hchoice, CapChoice.freeze]

@@ -1,0 +1,159 @@
+✖ [10345/10374] Building ImbalancedChen.P5OriginalCommonBetaVariableCutoffReserve (19s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.setup.json --json
+error: ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.lean:91:15: failed to synthesize instance of type class
+  OfNat (Graph ?m.1158 ?m.1159) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Graph ?m.1158 ?m.1159
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.lean:91:18: Unknown identifier `ingularSeries`
+error: ImbalancedChen/P5OriginalCommonBetaVariableCutoffReserve.lean:32:88: unsolved goals
+r eta epsilonMax : ℝ
+hr : 0 < r
+heta : 0 < eta
+hepsilonMax : 0 < epsilonMax
+CEuler : ℝ
+_hCEuler : 0 < CEuler
+hEuler :
+  ∀ (N cap : ℕ),
+    0 < N →
+      Even N → ∀ (w : ℝ), 4 ≤ w → w ≤ ↑cap → actualSmallEulerProduct N cap w ≤ CEuler * singularSeries N / Real.log w
+C K : ℝ
+hC : 0 < C
+_hK : 1 < K
+hsieve :
+  ∀ (epsilon : ℝ),
+    0 < epsilon →
+      epsilon < 1 / 8 →
+        ∃ D₀,
+          2 ≤ D₀ ∧
+            ∀ (D : ℝ),
+              D₀ ≤ D →
+                ∀ (N cap : ℕ),
+                  Even N →
+                    ∀ (retainOdd : List ℕ → Bool) (z : ℝ),
+                      have w := D ^ epsilon ^ 2;
+                      have L := D ^ epsilon;
+                      have V := actualSmallEulerProduct N cap w;
+                      have E := actualSmallRosserDensityError C K D epsilon;
+                      have S := fixedRoughSupport retainOdd N cap w z;
+                      have c := fixedRoughCoefficient retainOdd N cap w z;
+                      have density :=
+                        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
+                          (actualSmallRoughRho retainOdd N cap w z L);
+                      0 ≤ density - V * reciprocalTotientDensity S c ∧
+                        density - V * reciprocalTotientDensity S c ≤ V * E * reciprocalTotientDensity S fun d => |c d|
+Krough : ℝ
+hKrough : 1 < Krough
+hrough :
+  ∀ (retainOdd : List ℕ → Bool) (N cap : ℕ),
+    Even N →
+      ∀ (w z : ℝ),
+        1 < w →
+          w ≤ z →
+            (reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z) fun d =>
+                |fixedRoughCoefficient retainOdd N cap w z d|) ≤
+              Real.log z / Real.log w * (1 + Krough / Real.log w)
+epsilon : ℝ
+hepsilon : 0 < epsilon
+hepsilon8 : epsilon < 1 / 8
+hepsilonMax' : epsilon < epsilonMax
+hepsilonr : epsilon ^ 2 ≤ r
+hfloor : CEuler / epsilon ^ 2 * (C * Real.exp (-(1 / epsilon))) * (r / epsilon ^ 2) < eta
+hlimit :
+  Tendsto
+    (fun D =>
+      CEuler / epsilon ^ 2 * actualSmallRosserDensityError C K D epsilon * (r / epsilon ^ 2) *
+        (1 + Krough / (epsilon ^ 2 * Real.log D)))
+    atTop (𝓝 (CEuler / epsilon ^ 2 * (C * Real.exp (-(1 / epsilon))) * (r / epsilon ^ 2)))
+hsmall :
+  ∀ᶠ (D : ℝ) in atTop,
+    CEuler / epsilon ^ 2 * actualSmallRosserDensityError C K D epsilon * (r / epsilon ^ 2) *
+        (1 + Krough / (epsilon ^ 2 * Real.log D)) <
+      eta
+Dscalar : ℝ
+hDscalar :
+  ∀ (b : ℝ),
+    Dscalar ≤ b →
+      CEuler / epsilon ^ 2 * actualSmallRosserDensityError C K b epsilon * (r / epsilon ^ 2) *
+            (1 + Krough / (epsilon ^ 2 * Real.log b)) <
+          eta ∧
+        4 ≤ b ^ epsilon ^ 2
+Dsieve : ℝ
+hDsieve : 2 ≤ Dsieve
+hsupply :
+  ∀ (D : ℝ),
+    Dsieve ≤ D →
+      ∀ (N cap : ℕ),
+        Even N →
+          ∀ (retainOdd : List ℕ → Bool) (z : ℝ),
+            have w := D ^ epsilon ^ 2;
+            have L := D ^ epsilon;
+            have V := actualSmallEulerProduct N cap w;
+            have E := actualSmallRosserDensityError C K D epsilon;
+            have S := fixedRoughSupport retainOdd N cap w z;
+            have c := fixedRoughCoefficient retainOdd N cap w z;
+            have density :=
+              physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
+                (actualSmallRoughRho retainOdd N cap w z L);
+            0 ≤ density - V * reciprocalTotientDensity S c ∧
+              density - V * reciprocalTotientDensity S c ≤ V * E * reciprocalTotientDensity S fun d => |c d|
+D : ℝ
+hD : max Dsieve Dscalar ≤ D
+N cap : ℕ
+hNpos : 0 < N
+hEven : Even N
+hcap : D ^ epsilon ^ 2 ≤ ↑cap
+z : ℝ
+hwz : D ^ epsilon ^ 2 ≤ z
+hzmax : z ≤ D ^ r
+retainOdd : List ℕ → Bool
+hDs : Dsieve ≤ D
+hDt : Dscalar ≤ D
+hD1 : 1 < D
+hDpos : 0 < D
+hlogD : 0 < Real.log D
+hw : 1 < D ^ epsilon ^ 2
+hlogw : 0 < Real.log (D ^ epsilon ^ 2)
+hzpos : 0 < z
+hlogz : Real.log z ≤ r * Real.log D
+hratio : Real.log z / Real.log (D ^ epsilon ^ 2) ≤ r / epsilon ^ 2
+hfactor : 0 ≤ 1 + Krough / Real.log (D ^ epsilon ^ 2)
+hmass :
+  (reciprocalTotientDensity (fixedRoughSupport retainOdd N cap (D ^ epsilon ^ 2) z) fun d =>
+      |fixedRoughCoefficient retainOdd N cap (D ^ epsilon ^ 2) z d|) ≤
+    Real.log z / Real.log (D ^ epsilon ^ 2) * (1 + Krough / Real.log (D ^ epsilon ^ 2))
+hmass' :
+  (reciprocalTotientDensity (fixedRoughSupport retainOdd N cap (D ^ epsilon ^ 2) z) fun d =>
+      |fixedRoughCoefficient retainOdd N cap (D ^ epsilon ^ 2) z d|) ≤
+    r / epsilon ^ 2 * (1 + Krough / (epsilon ^ 2 * Real.log D))
+hV : 0 < actualSmallEulerProduct N cap (D ^ epsilon ^ 2)
+hVbound : actualSmallEulerProduct N cap (D ^ epsilon ^ 2) ≤ CEuler * singularSeries N / (epsilon ^ 2 * Real.log D)
+hE : 0 ≤ actualSmallRosserDensityError C K D epsilon
+hQ : 0 ≤ r / epsilon ^ 2 * (1 + Krough / (epsilon ^ 2 * Real.log D))
+herror :
+  have w := D ^ epsilon ^ 2;
+  have L := D ^ epsilon;
+  have V := actualSmallEulerProduct N cap w;
+  have E := actualSmallRosserDensityError C K D epsilon;
+  have S := fixedRoughSupport retainOdd N cap w z;
+  have c := fixedRoughCoefficient retainOdd N cap w z;
+  have density :=
+    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z) (actualSmallRoughRho retainOdd N cap w z L);
+  0 ≤ density - V * reciprocalTotientDensity S c ∧
+    density - V * reciprocalTotientDensity S c ≤ V * E * reciprocalTotientDensity S fun d => |c d|
+hscalar :
+  CEuler / epsilon ^ 2 * actualSmallRosserDensityError C K D epsilon * (r / epsilon ^ 2) *
+      (1 + Krough / (epsilon ^ 2 * Real.log D)) <
+    eta
+⊢ let w := D ^ epsilon ^ 2;
+  let B := D ^ epsilon;
+  let V := actualSmallEulerProduct N cap w;
+  let S := fixedRoughSupport retainOdd N cap w z;
+  let c := fixedRoughCoefficient retainOdd N cap w z;
+  let density :=
+    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z) (actualSmallRoughRho retainOdd N cap w z B);
+  0 ≤ density - V * reciprocalTotientDensity S c ∧
+    density - V * reciprocalTotientDensity S c ≤ eta * singularSeries N / Real.log D
+error: Lean exited with code 1
