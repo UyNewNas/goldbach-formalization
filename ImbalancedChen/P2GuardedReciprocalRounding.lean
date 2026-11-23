@@ -4,9 +4,10 @@ import ImbalancedChen.CurrentChenUpsilon8HarmonicMean
 /-!
 # Sign-separated reciprocal and division certificates
 
-SOURCE ONLY, uncompiled.  `P2DirectedLogRounding` is the sibling draft
-module; the eventual source assembly must put both files on its import
-path together.  A reciprocal is accepted only for an ordered rational
+Verification records: docs/verification/20261123-blue-compilation.
+
+`P2DirectedLogRounding` supplies the sibling interval-enclosure operations.
+A reciprocal is accepted only for an ordered rational
 interval wholly above or wholly below zero.  The checked operations return
 `none` on a failed guard, including intervals containing zero.
 
@@ -95,7 +96,6 @@ theorem Enclosure.reciprocal_width (a : Enclosure) (hc : a.reciprocalCheck = tru
   obtain ⟨hl, hu⟩ := a.reciprocal_endpoint_ne_zero hc
   dsimp only [Enclosure.reciprocalBounds]
   field_simp [hl, hu]
-  ring
 
 def Enclosure.reciprocalQ80 (a : Enclosure) : Enclosure :=
   a.reciprocalBounds.round 80
@@ -137,7 +137,7 @@ needs a sign-separated guard, because multiplication uses all four corners. -/
 theorem Enclosure.divisionBounds_contains {a b : Enclosure} {x y : ℝ}
     (hx : a.Contains x) (hy : b.Contains y) (hc : b.reciprocalCheck = true) :
     (a.divisionBounds b).Contains (x / y) := by
-  simpa only [Enclosure.divisionBounds, div_eq_mul_inv, one_div] using
+  simpa only [Enclosure.divisionBounds, div_eq_mul_inv, one_div, one_mul] using
     Enclosure.mul_contains hx (Enclosure.reciprocalBounds_contains hy hc)
 
 theorem Enclosure.checkedDivision_sound {a b c : Enclosure} {x y : ℝ}

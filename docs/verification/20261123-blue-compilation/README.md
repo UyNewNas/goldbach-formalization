@@ -88,4 +88,8 @@ Member 的 `P2HistoricLogRangeReduction` 复用既有提交 `085ef205771858c7115
 
 上述四个 P6 入口最后通过同一次 `lake --no-build build` 检查，退出 0，新增源码编译调用为 0。208 个项目源码和 810 个 native 源码的最终选版与产物绑定见 [FOUR_ROOT_ACCEPTANCE.json](p6-four-roots/FOUR_ROOT_ACCEPTANCE.json)。全部项目均有 `.olean`、`.ilean`、生成 C 和 trace；复用的 `ChenLogLevelGeometry` 未安装原生产者的辅助 setup 文件，其标准 Lake 重放及四入口最终检查均已通过，辅助文件例外单列记录。34 项生产源码覆盖见 [VERIFIED_P6_SOURCE_OVERRIDES.json](VERIFIED_P6_SOURCE_OVERRIDES.json)，冻结文件保持原样，阶段专有入口按安装路径恢复。
 
+Member 的 `P2SavedFloorSemantics` 从已有正性假设显式推出相同分母为正；`P2GuardedReciprocalRounding` 删除已闭合目标后的多余 tactic，并补充 `one_mul` 归一化。两个标准模块构建、两次指定模块 kernel replay 和实际定义模块归属下的全部 94 个公开导出（45、49，包含生成导出）均通过，仅标准三公理，源码及十项主要产物跨阶段稳定。原 60 条显式公开源码接口、定义、常量和假设保持不变，见 [VALIDATION_RESULTS.json](member-api-pair/VALIDATION_RESULTS.json) 与 [独立源码复核](member-api-pair/INDEPENDENT_REVIEW.json)。
+
+`P2DirectedLogRounding` 主源码同时对齐 R03 已选用的既有 `86d2a123` 后像，仅两处乘法消去 API 名称变化；Member 选源未改变，未重复已有验证、不计新增证明或节点。精确来源见 [DIRECTED_LOG_EXISTING_SOURCE_REUSE.json](existing-green-suppliers/DIRECTED_LOG_EXISTING_SOURCE_REUSE.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

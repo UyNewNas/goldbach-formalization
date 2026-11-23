@@ -139,7 +139,7 @@ theorem roundDown_error (bits : ℕ) (q : ℚ) :
   · exact sub_nonneg.mpr (roundDown_le bits q)
   · have hf := Int.lt_floor_add_one (q * dyadicScale bits)
     have hs := dyadicScale_pos bits
-    apply (mul_lt_mul_right hs).mp
+    apply (mul_lt_mul_iff_left₀ hs).mp
     rw [sub_mul]
     dsimp only [roundDown]
     rw [div_mul_cancel₀ _ (ne_of_gt hs), div_mul_cancel₀ _ (ne_of_gt hs)]
@@ -152,7 +152,7 @@ theorem roundUp_error (bits : ℕ) (q : ℚ) :
   · exact sub_nonneg.mpr (le_roundUp bits q)
   · have hf := Int.ceil_lt_add_one (q * dyadicScale bits)
     have hs := dyadicScale_pos bits
-    apply (mul_lt_mul_right hs).mp
+    apply (mul_lt_mul_iff_left₀ hs).mp
     rw [sub_mul]
     dsimp only [roundUp]
     rw [div_mul_cancel₀ _ (ne_of_gt hs), div_mul_cancel₀ _ (ne_of_gt hs)]

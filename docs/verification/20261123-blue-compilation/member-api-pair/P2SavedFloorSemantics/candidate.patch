@@ -1,0 +1,33 @@
+--- baseline/ImbalancedChen/P2SavedFloorSemantics.lean
++++ candidate/ImbalancedChen/P2SavedFloorSemantics.lean
+@@ -4,7 +4,7 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE_WRITTEN_UNCOMPILED. Code-only candidate, 2026-10-24.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ This file supplies an analytic meaning for a lower ordinary pair estimator,
+ including the ACTUAL first saved E0 row. The zero claim below is about the
+@@ -135,6 +135,7 @@
+   have hden : ordinaryA * t * u ≤ ordinaryA * tr * ur := by
+     exact mul_le_mul (mul_le_mul_of_nonneg_left ht.2 ordinaryA_pos.le)
+       hu.2 hu0.le (mul_nonneg ordinaryA_pos.le htr0.le)
++  have hden0 : 0 < ordinaryA * t * u := mul_pos (mul_pos ordinaryA_pos ht0) hu0
+   unfold ordinaryPairKernel
+   calc
+     4 * actualExtendedThirdLowerFactor (ordinaryResidual tr ur / ordinaryA) /
+@@ -143,11 +144,11 @@
+         (ordinaryA * t * u) :=
+       div_le_div_of_nonneg_left
+         (mul_nonneg (by norm_num) (actualExtendedThirdLowerFactor_nonneg _))
+-        (by positivity) hden
++        hden0 hden
+     _ ≤ 4 * actualExtendedThirdLowerFactor (ordinaryResidual t u / ordinaryA) /
+         (ordinaryA * t * u) :=
+       div_le_div_of_nonneg_right
+-        (mul_le_mul_of_nonneg_left hprofile (by norm_num)) (by positivity)
++        (mul_le_mul_of_nonneg_left hprofile (by norm_num)) hden0.le
+ 
+ /-- Continuity and integrability are proved for the real density, including
+ the s=2 branch. They are not introduced as numerical certificate premises. -/

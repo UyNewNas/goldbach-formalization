@@ -1,0 +1,194 @@
+[
+  {
+    "name": "Enclosure.ReciprocalValid",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.ReciprocalValid (a : Enclosure) : Prop"
+  },
+  {
+    "name": "<anonymous_instance_0>",
+    "kind": "instance",
+    "private": false,
+    "header": "instance (a : Enclosure) : Decidable a.ReciprocalValid"
+  },
+  {
+    "name": "Enclosure.reciprocalCheck",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.reciprocalCheck (a : Enclosure) : Bool"
+  },
+  {
+    "name": "Enclosure.reciprocalBounds",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.reciprocalBounds (a : Enclosure) : Enclosure"
+  },
+  {
+    "name": "Enclosure.checkedReciprocal",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.checkedReciprocal (a : Enclosure) : Option Enclosure"
+  },
+  {
+    "name": "Enclosure.reciprocalCheck_false_of_crosses_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocalCheck_false_of_crosses_zero (a : Enclosure)\n    (hl : a.lower ≤ 0) (hu : 0 ≤ a.upper) : a.reciprocalCheck = false"
+  },
+  {
+    "name": "Enclosure.checkedReciprocal_none_of_crosses_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.checkedReciprocal_none_of_crosses_zero (a : Enclosure)\n    (hl : a.lower ≤ 0) (hu : 0 ≤ a.upper) : a.checkedReciprocal = none"
+  },
+  {
+    "name": "Enclosure.reciprocal_endpoint_ne_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocal_endpoint_ne_zero (a : Enclosure)\n    (hc : a.reciprocalCheck = true) : a.lower ≠ 0 ∧ a.upper ≠ 0"
+  },
+  {
+    "name": "Enclosure.reciprocal_width_denominator_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocal_width_denominator_pos (a : Enclosure)\n    (hc : a.reciprocalCheck = true) : 0 < a.lower * a.upper"
+  },
+  {
+    "name": "Enclosure.reciprocalBounds_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocalBounds_contains {a : Enclosure} {x : ℝ}\n    (hx : a.Contains x) (hc : a.reciprocalCheck = true) :\n    a.reciprocalBounds.Contains (1 / x)"
+  },
+  {
+    "name": "Enclosure.checkedReciprocal_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.checkedReciprocal_sound {a b : Enclosure} {x : ℝ}\n    (hx : a.Contains x) (hresult : a.checkedReciprocal = some b) :\n    b.Contains (1 / x)"
+  },
+  {
+    "name": "Enclosure.reciprocal_width",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocal_width (a : Enclosure) (hc : a.reciprocalCheck = true) :\n    a.reciprocalBounds.upper - a.reciprocalBounds.lower =\n      (a.upper - a.lower) / (a.lower * a.upper)"
+  },
+  {
+    "name": "Enclosure.reciprocalQ80",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.reciprocalQ80 (a : Enclosure) : Enclosure"
+  },
+  {
+    "name": "Enclosure.reciprocalQ80_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocalQ80_contains {a : Enclosure} {x : ℝ}\n    (hx : a.Contains x) (hc : a.reciprocalCheck = true) :\n    a.reciprocalQ80.Contains (1 / x)"
+  },
+  {
+    "name": "Enclosure.reciprocalQ80_errors",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocalQ80_errors (a : Enclosure) :\n    (0 ≤ 1 / a.upper - a.reciprocalQ80.lower ∧\n      1 / a.upper - a.reciprocalQ80.lower < 1 / dyadicScale 80) ∧\n    (0 ≤ a.reciprocalQ80.upper - 1 / a.lower ∧\n      a.reciprocalQ80.upper - 1 / a.lower < 1 / dyadicScale 80)"
+  },
+  {
+    "name": "Enclosure.reciprocalQ80_width",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.reciprocalQ80_width (a : Enclosure)\n    (hc : a.reciprocalCheck = true) :\n    a.reciprocalQ80.upper - a.reciprocalQ80.lower <\n      (a.upper - a.lower) / (a.lower * a.upper) + 2 / dyadicScale 80"
+  },
+  {
+    "name": "Enclosure.divisionBounds",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.divisionBounds (a b : Enclosure) : Enclosure"
+  },
+  {
+    "name": "Enclosure.checkedDivision",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.checkedDivision (a b : Enclosure) : Option Enclosure"
+  },
+  {
+    "name": "Enclosure.checkedDivision_none_of_crosses_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.checkedDivision_none_of_crosses_zero (a b : Enclosure)\n    (hl : b.lower ≤ 0) (hu : 0 ≤ b.upper) : a.checkedDivision b = none"
+  },
+  {
+    "name": "Enclosure.divisionBounds_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.divisionBounds_contains {a b : Enclosure} {x y : ℝ}\n    (hx : a.Contains x) (hy : b.Contains y) (hc : b.reciprocalCheck = true) :\n    (a.divisionBounds b).Contains (x / y)"
+  },
+  {
+    "name": "Enclosure.checkedDivision_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.checkedDivision_sound {a b c : Enclosure} {x y : ℝ}\n    (hx : a.Contains x) (hy : b.Contains y)\n    (hresult : a.checkedDivision b = some c) : c.Contains (x / y)"
+  },
+  {
+    "name": "Enclosure.divisionQ80",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.divisionQ80 (a b : Enclosure) : Enclosure"
+  },
+  {
+    "name": "Enclosure.divisionQ80_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.divisionQ80_contains {a b : Enclosure} {x y : ℝ}\n    (hx : a.Contains x) (hy : b.Contains y) (hc : b.reciprocalCheck = true) :\n    (a.divisionQ80 b).Contains (x / y)"
+  },
+  {
+    "name": "Enclosure.divisionQ80_errors",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.divisionQ80_errors (a b : Enclosure) :\n    (0 ≤ (a.divisionBounds b).lower - (a.divisionQ80 b).lower ∧\n      (a.divisionBounds b).lower - (a.divisionQ80 b).lower < 1 / dyadicScale 80) ∧\n    (0 ≤ (a.divisionQ80 b).upper - (a.divisionBounds b).upper ∧\n      (a.divisionQ80 b).upper - (a.divisionBounds b).upper < 1 / dyadicScale 80)"
+  },
+  {
+    "name": "Enclosure.clampLower",
+    "kind": "def",
+    "private": false,
+    "header": "def Enclosure.clampLower (a : Enclosure) (q : ℚ) : Enclosure"
+  },
+  {
+    "name": "Enclosure.clampLower_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Enclosure.clampLower_contains {a : Enclosure} {x : ℝ}\n    (hx : a.Contains x) (q : ℚ) : (a.clampLower q).Contains (max (q : ℝ) x)"
+  },
+  {
+    "name": "u8GapBox",
+    "kind": "def",
+    "private": false,
+    "header": "def u8GapBox (a b : Enclosure) : Enclosure"
+  },
+  {
+    "name": "u8DenominatorBox",
+    "kind": "def",
+    "private": false,
+    "header": "def u8DenominatorBox (a b : Enclosure) : Enclosure"
+  },
+  {
+    "name": "u8KernelQ80",
+    "kind": "def",
+    "private": false,
+    "header": "def u8KernelQ80 (a b : Enclosure) : Enclosure"
+  },
+  {
+    "name": "u8DenominatorBox_guard",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem u8DenominatorBox_guard (a b : Enclosure)\n    (ha : a.lower ≤ a.upper) (hb : b.lower ≤ b.upper) :\n    (u8DenominatorBox a b).reciprocalCheck = true"
+  },
+  {
+    "name": "u8KernelQ80_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem u8KernelQ80_contains {a b : Enclosure} {x : Fin 2 → ℝ}\n    (ha : a.Contains (x 0)) (hb : b.Contains (x 1)) :\n    (u8KernelQ80 a b).Contains (ImbalancedChen.currentChenUpsilon8HarmonicKernel x)"
+  },
+  {
+    "name": "u8OriginalGapKernelQ80_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem u8OriginalGapKernelQ80_contains {a b : Enclosure} {x : Fin 2 → ℝ}\n    (ha : a.Contains (x 0)) (hb : b.Contains (x 1))\n    (hx : x ∈ ImbalancedChen.currentChenUpsilon8HarmonicRegion) :\n    (u8KernelQ80 a b).Contains (1 / (1 - x 0 - x 1))"
+  }
+]

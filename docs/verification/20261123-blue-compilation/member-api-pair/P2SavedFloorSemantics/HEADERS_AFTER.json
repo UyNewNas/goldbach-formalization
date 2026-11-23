@@ -1,0 +1,182 @@
+[
+  {
+    "name": "ordinaryA",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryA : ℝ"
+  },
+  {
+    "name": "ordinaryResidual",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryResidual (t u : ℝ) : ℝ"
+  },
+  {
+    "name": "ordinaryPairCap",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryPairCap (t : ℝ) : ℝ"
+  },
+  {
+    "name": "ordinaryResidual_eq_cap_residual",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryResidual_eq_cap_residual {t u : ℝ} (ht : (25 / 128 : ℝ) ≤ t) :\n    ordinaryResidual t u = ordinaryPairCap t - t - u"
+  },
+  {
+    "name": "ordinaryPairKernel",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryPairKernel (t u : ℝ) : ℝ"
+  },
+  {
+    "name": "ordinaryCellIntegral",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryCellIntegral (tl tr ul ur : ℝ) : ℝ"
+  },
+  {
+    "name": "ordinaryA_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryA_pos : 0 < ordinaryA"
+  },
+  {
+    "name": "ordinaryResidual_antitone",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryResidual_antitone {t₁ t₂ u₁ u₂ : ℝ}\n    (ht : t₁ ≤ t₂) (hu : u₁ ≤ u₂) :\n    ordinaryResidual t₂ u₂ ≤ ordinaryResidual t₁ u₁"
+  },
+  {
+    "name": "ordinaryPairKernel_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_nonneg {t u : ℝ} (ht : 0 < t) (hu : 0 < u) :\n    0 ≤ ordinaryPairKernel t u"
+  },
+  {
+    "name": "ordinaryPairKernel_eq_zero_of_residual_le_two",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_eq_zero_of_residual_le_two {t u : ℝ}\n    (h : ordinaryResidual t u ≤ 2 * ordinaryA) :\n    ordinaryPairKernel t u = 0"
+  },
+  {
+    "name": "ordinaryPairKernel_eq_zero_on_rectangle",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_eq_zero_on_rectangle {tl tr ul ur : ℝ}\n    (hzero : ordinaryResidual tl ul ≤ 2 * ordinaryA)\n    {t u : ℝ} (ht : t ∈ Icc tl tr) (hu : u ∈ Icc ul ur) :\n    ordinaryPairKernel t u = 0"
+  },
+  {
+    "name": "ordinaryCellIntegral_eq_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryCellIntegral_eq_zero {tl tr ul ur : ℝ}\n    (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hzero : ordinaryResidual tl ul ≤ 2 * ordinaryA) :\n    ordinaryCellIntegral tl tr ul ur = 0"
+  },
+  {
+    "name": "ordinaryPairKernel_corner_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_corner_le {tl tr ul ur t u : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul)\n    (ht : t ∈ Icc tl tr) (hu : u ∈ Icc ul ur) :\n    ordinaryPairKernel tr ur ≤ ordinaryPairKernel t u"
+  },
+  {
+    "name": "ordinaryPairKernel_intervalIntegrable",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_intervalIntegrable {t ul ur : ℝ}\n    (ht : 0 < t) (hul : 0 < ul) (hu : ul ≤ ur) :\n    IntervalIntegrable (ordinaryPairKernel t) volume ul ur"
+  },
+  {
+    "name": "positiveExtension",
+    "kind": "def",
+    "private": true,
+    "header": "private def positiveExtension (tl ul t u : ℝ) : ℝ"
+  },
+  {
+    "name": "continuous_positiveExtension",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem continuous_positiveExtension {tl ul : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) :\n    Continuous (fun p : ℝ × ℝ => positiveExtension tl ul p.1 p.2)"
+  },
+  {
+    "name": "ordinaryPairKernel_outer_intervalIntegrable",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryPairKernel_outer_intervalIntegrable {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    IntervalIntegrable (fun t => ∫ u in ul..ur, ordinaryPairKernel t u)\n      volume tl tr"
+  },
+  {
+    "name": "q80",
+    "kind": "def",
+    "private": false,
+    "header": "def q80 : ℝ"
+  },
+  {
+    "name": "savedQ80Value",
+    "kind": "def",
+    "private": false,
+    "header": "def savedQ80Value (n : ℕ) : ℝ"
+  },
+  {
+    "name": "q80_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem q80_pos : 0 < q80"
+  },
+  {
+    "name": "savedQ80Value_eq_rational",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem savedQ80Value_eq_rational (n : ℕ) :\n    savedQ80Value n = (((n : ℚ) / (2 ^ 80 : ℚ) : ℚ) : ℝ)"
+  },
+  {
+    "name": "ordinaryCornerMass",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryCornerMass (tl tr ul ur : ℝ) : ℝ"
+  },
+  {
+    "name": "directedCornerQ80",
+    "kind": "def",
+    "private": false,
+    "header": "def directedCornerQ80 (tl tr ul ur : ℝ) : ℕ"
+  },
+  {
+    "name": "ordinaryCornerMass_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryCornerMass_nonneg {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    0 ≤ ordinaryCornerMass tl tr ul ur"
+  },
+  {
+    "name": "directedCornerQ80_le_mass",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem directedCornerQ80_le_mass {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    savedQ80Value (directedCornerQ80 tl tr ul ur) ≤\n      ordinaryCornerMass tl tr ul ur"
+  },
+  {
+    "name": "directedCornerQ80_le_rectangle_sample",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem directedCornerQ80_le_rectangle_sample {tl tr ul ur t u : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul)\n    (ht : t ∈ Icc tl tr) (hu : u ∈ Icc ul ur) :\n    savedQ80Value (directedCornerQ80 tl tr ul ur) ≤\n      (tr - tl) * (ur - ul) * ordinaryPairKernel t u"
+  },
+  {
+    "name": "directedCornerQ80_le_actual_integral",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem directedCornerQ80_le_actual_integral {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    savedQ80Value (directedCornerQ80 tl tr ul ur) ≤\n      ordinaryCellIntegral tl tr ul ur"
+  },
+  {
+    "name": "directedCornerQ80_eq_zero_of_crossing",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem directedCornerQ80_eq_zero_of_crossing {tl tr ul ur : ℝ}\n    (hcross : ordinaryResidual tr ur ≤ 2 * ordinaryA) :\n    directedCornerQ80 tl tr ul ur = 0"
+  },
+  {
+    "name": "first_savedQ80_eq_actual_ordinary_integral",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem first_savedQ80_eq_actual_ordinary_integral :\n    savedQ80Value firstDiscardedQ80 =\n      ordinaryCellIntegral (tLower firstTIndex : ℝ) (tUpper firstTIndex : ℝ)\n        (uLower firstUIndex : ℝ) (uUpper firstUIndex : ℝ)"
+  },
+  {
+    "name": "first_savedQ80_chen_units",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem first_savedQ80_chen_units :\n    savedQ80Value firstDiscardedQ80 / 4 =\n      ordinaryCellIntegral (tLower firstTIndex : ℝ) (tUpper firstTIndex : ℝ)\n        (uLower firstUIndex : ℝ) (uUpper firstUIndex : ℝ) / 4"
+  }
+]
