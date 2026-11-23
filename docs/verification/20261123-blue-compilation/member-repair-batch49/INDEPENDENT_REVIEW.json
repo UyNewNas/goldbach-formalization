@@ -1,0 +1,160 @@
+{
+  "schema": "independent_P1_full_owned_source_and_final_binding_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "captured_utc": "2026-11-23T17:06:43.128504+00:00",
+  "batch": 49,
+  "findings": [],
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P2OriginalFourteenCausalHistoryMesh",
+      "baseline_sha256": "f25acecb6c35e16d4b61eb015537967ae126daeb5fe4cc5a13cd83ca66993aa8",
+      "postimage_sha256": "c189e83f89355b87337774a3c8d225b1408f7cc107263a5c00879b275af7046c",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "upper_endpoint_bounds",
+          "kind": "complete_header",
+          "raw": "private theorem upper_endpoint_bounds (tau x : ℝ) (htau : 0 < tau) :\n    x < (((⌊x / tau⌋ : ℤ) : ℝ) + 1) * tau ∧\n      (((⌊x / tau⌋ : ℤ) : ℝ) + 1) * tau ≤ x + tau :="
+        },
+        {
+          "name": "finiteThirdCap_bounds",
+          "kind": "complete_header",
+          "raw": "theorem finiteThirdCap_bounds (tau : ℝ) (htau : 0 < tau) (t : Point) :\n    R t - 3 * tau ≤ finiteThirdCap tau t ∧ finiteThirdCap tau t < R t :="
+        },
+        {
+          "name": "pointLabel_mem",
+          "kind": "complete_header",
+          "raw": "theorem pointLabel_mem {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) (tau : ℝ) (htau : 0 < tau) :\n    pointLabel tau t ∈ labels tau :="
+        },
+        {
+          "name": "refinedLabel_preserves_old",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem refinedLabel_preserves_old {α : Type*} (old : Point → α) (tau : ℝ) (t : Point) :\n    (refinedLabel old tau t).1 = old t := rfl\n\n"
+        },
+        {
+          "name": "refinedLabel_mem",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem refinedLabel_mem {α : Type*} [DecidableEq α]\n    (old : Point → α) (oldLabels : Finset α) (tau : ℝ) (htau : 0 < tau)\n    {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) (hold : old t ∈ oldLabels) :\n    refinedLabel old tau t ∈ oldLabels.product (labels tau) :=\n  Finset.mem_product.mpr ⟨hold, pointLabel_mem h tau htau⟩\n\n"
+        },
+        {
+          "name": "historyGap_continuous",
+          "kind": "complete_header",
+          "raw": "theorem historyGap_continuous : Continuous historyGap :="
+        },
+        {
+          "name": "historyGap_pos",
+          "kind": "complete_header",
+          "raw": "theorem historyGap_pos {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) : 0 < historyGap t :="
+        },
+        {
+          "name": "histories_below_mesh",
+          "kind": "complete_header",
+          "raw": "theorem histories_below_mesh (tau delta : ℝ) (htau : 0 < tau)\n    (hprecision : 3 * tau < delta) (t : Point) (hgap : delta ≤ historyGap t) :\n    3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t :="
+        },
+        {
+          "name": "exists_common_history_precision",
+          "kind": "complete_header",
+          "raw": "theorem exists_common_history_precision\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t) :\n    ∃ tau : ℝ, 0 < tau ∧ ∀ t ∈ T,\n      pointLabel tau t ∈ labels tau ∧\n      3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t ∧\n      finiteThirdCap tau t < R t :="
+        },
+        {
+          "name": "exists_common_history_precision_with_error",
+          "kind": "complete_header",
+          "raw": "theorem exists_common_history_precision_with_error\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t)\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∃ tau : ℝ, 0 < tau ∧ 3 * tau < epsilon ∧ ∀ t ∈ T,\n      pointLabel tau t ∈ labels tau ∧\n      3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t ∧\n      0 < R t - finiteThirdCap tau t ∧ R t - finiteThirdCap tau t < epsilon :="
+        },
+        {
+          "name": "causalThirdExponent_same_ancestor",
+          "kind": "complete_header",
+          "raw": "theorem causalThirdExponent_same_ancestor (tau N : ℝ) (pre other : List ℕ)\n    (h : rosserAncestor 3 pre = rosserAncestor 3 other) :\n    causalThirdExponent tau N pre = causalThirdExponent tau N other :="
+        },
+        {
+          "name": "causalThirdExponent_eighth",
+          "kind": "complete_header",
+          "raw": "theorem causalThirdExponent_eighth (tau N : ℝ) (pre : List ℕ)\n    (hlen : pre.length = 8) :\n    causalThirdExponent tau N pre =\n      finiteThirdCap tau (primeHistoryLogCoordinates N 8 pre) :="
+        },
+        {
+          "name": "common_precision_supplies_parent_history",
+          "kind": "complete_header",
+          "raw": "theorem common_precision_supplies_parent_history\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t) :\n    ∃ tau : ℝ, 0 < tau ∧ ∀ N : ℝ, ∀ pre : List ℕ, pre.length = 8 →\n      primeHistoryLogCoordinates N 8 pre ∈ T → ∀ current : ℝ,\n      causalThirdExponent tau N pre ≤ current →\n      current ≤ R (primeHistoryLogCoordinates N 8 pre) →\n      CurrentParentGuard (primeHistoryLogCoordinates N 8 pre) current :="
+        }
+      ],
+      "changed_proof_names": [
+        "finiteThirdCap_bounds",
+        "pointLabel_mem",
+        "historyGap_continuous"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "Previously independently reviewed final mixed-EOL source c189: original R qualified only in proofs, exact same Icc/product witnesses and continuous gap; final source retains the real preimage line endings. No old normalized-LF draft is accepted."
+    }
+  ],
+  "final_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch49/FINAL_RELEASE.json",
+      "bytes": 1078,
+      "sha256": "47be026c22507d14a5cba275ac643ed66efd6e47c1d095fe6ab00f618d67dcc1"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch49/PUBLICATION_FILES.json",
+      "bytes": 6069,
+      "sha256": "fd689ccf04cd9723759d9e08780decc9074052aa91c2e7fa8ab2302c69a9b164"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch49/VALIDATION_RESULTS.json",
+      "bytes": 4466,
+      "sha256": "bdd0ef1df78546fd245e0aac42eeebed820a9a1ae549b36f77b3950686c74eaa"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch49/SOURCE_SELECTION.json",
+      "bytes": 1771,
+      "sha256": "0cba49cd662c2b1cdef72db8a1613ac5568cce50cb8a7a3f1e7bbf6b41ffccbd"
+    }
+  ],
+  "original_publication_file_count": 34,
+  "all_packet_bindings_match": true,
+  "source_and_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.lean",
+      "bytes": 10960,
+      "sha256": "c189e83f89355b87337774a3c8d225b1408f7cc107263a5c00879b275af7046c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.olean",
+      "bytes": 456024,
+      "sha256": "d48128fe7e222d2223eedc96c7c25782bdb903e92f2ce5d18293e844d0344412"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.ilean",
+      "bytes": 49023,
+      "sha256": "71ba34da419a5f3aaac15edacebaabf06292c233e9639bbed2d3655aa0cc657c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.c",
+      "bytes": 9430,
+      "sha256": "2c9006b088015ad1011f04377736f8f8f13be8b8adea5a003e410ceedbf70e29"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.setup.json",
+      "bytes": 6349365,
+      "sha256": "d44dee2d0da87dddc5ae8efb4c67e0ec04d4e65bda0d526b9de07dae0fe7aef1"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.trace",
+      "bytes": 3283,
+      "sha256": "1a25bf7725aa2fc41b3b1ac3bcc3d5ffab65f9bd23b83042614826142199819d"
+    }
+  ],
+  "existing_validation": {
+    "owned": 31,
+    "public": 30,
+    "private": 1,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "raw_AST_universe_axioms_and_owner_inventory_exact": true,
+    "only_standard_axioms": true
+  },
+  "scope": "These exact necessary P1 suppliers in their recorded Member import context; no complete P1 or whole-board acceptance.",
+  "new_Lean_kernel_audit_or_source_compiler_invocations": 0,
+  "original_source_outputs_logs_or_records_mutated": false
+}

@@ -183,4 +183,18 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 各目录保存 `INDEPENDENT_REVIEW.json` 和不可变发布清单。原完整声明、数学假设、数据、数值和定义保持；二十七批仅把 reserved-token 字段 `Frame.prefix` 及同名引用写作 `«prefix»`，相同 Lean.Name、类型与数据 term 不变，旧未解析语法不声称已有相同 kernel 值。三十一批配对验收的 `P2HistoricalBankLogWeights` canonical 文件仍未创建，其源码作为明确安装后像保存；验收不外推到不同源版本，也不把这些共享供应者计作完整 P1 终点。
 
+完整 P1 的第一轮实际共享构建新增以下五批验收，共十四个模块、564 个定义模块声明，其中公开 542、private 22。每批均已完成标准构建、指定模块 kernel replay、按定义模块枚举全部声明的完整类型／宇宙参数／传递公理检查，公理仅标准三项，源码和七十项主要产物跨阶段稳定。独立复核及原命令、真实退出码、完整 AST 和源版本均在各批目录，没有为包装重跑成功的 source 或 kernel 检查。
+
+| 批次／验收结果 | 范围 | 全部 owned／public／private |
+| --- | --- | ---: |
+| [47](member-repair-batch47/VALIDATION_RESULTS.json) | `P4AOriginalFull87GammaApproximation` | 8／8／0 |
+| [48](member-repair-batch48/VALIDATION_RESULTS.json) | 四个原 P1 policy／cap／variable-fourth 前置、三个 literal 源、Descending15、Slot19 与 Slot9 | 451／430／21 |
+| [49](member-repair-batch49/VALIDATION_RESULTS.json) | `P2OriginalFourteenCausalHistoryMesh` | 31／30／1 |
+| [50](member-repair-batch50/VALIDATION_RESULTS.json) | `P1OriginalCoarseFifthResidualDictionary` | 32／32／0 |
+| [51](member-repair-batch51/VALIDATION_RESULTS.json) | `P1HistoricalFifthJointIntegralSign` | 42／42／0 |
+
+这些修补保留原声明头、定义、几何、数据、常量、假设与量词。Gamma 显式消费原 `v_eq_min`，并在证明内部限定实数 `VariableEnvelope.B`；四个 P1 前置限定已有 Θ 常量、计算原封闭 Bool 反例、显式给出原 profile 参数或解码完整原 firstStop guard。三个 literal 源调整条件化简与 witness 解构的次序；Descending15 使用原严格序传递正性；Slot19 展开原 mask138，Slot9 使用原正数倒数比较。Fourteen 限定原 R 并显式构造原有限标签会员；最终源保留真实 preimage 的混合行尾，早期规范化行尾的草稿未被编译或接受。ResidualDictionary 仅在两处补 `rfl`；FifthJointIntegralSign 使用原 dependent union、old/new own-cube gate 和同一 overlap 定义。
+
+Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充确认该模块 owned 恰为原八个 public，无 private；原成功编译与 kernel 没有重复。Gamma、三个 literal 模块和 Fourteen 的主仓 canonical 文件仍不存在，已验源码按明确安装路径作为后像发布。其余九个 canonical 文件与实际已验后像一致。当前这些是完整 P1 的必要前置验收；三个新的 P1 raw／structure／ancestor 输出候选及完整现代端点仍须继续验证，不能把本表视作整个 P1 完成。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。

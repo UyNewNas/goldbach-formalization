@@ -1,0 +1,13 @@
+--- baseline/ImbalancedChen/P1ActualCoarseRetainedModulusLevel.lean
++++ candidate/ImbalancedChen/P1ActualCoarseRetainedModulusLevel.lean
+@@ -41,7 +41,9 @@
+   | false =>
+       have hfull : ordinaryRosserPrefixAdmissible false (N ^ initial e) pre ∧
+           (pre.length = 1 → firstStop e m N pre) := by
+-        simpa [initialPolicy, oddFirstExitPolicy] using ht
++        change decide (ordinaryRosserPrefixAdmissible false (N ^ initial e) pre ∧
++          (pre.length = 1 → firstStop e m N pre)) = true at ht
++        exact of_decide_eq_true ht
+       simpa [ordinaryParityRosserPolicy, oddFirstExitPolicy] using hfull.1
+   | true => simp [ordinaryParityRosserPolicy, oddFirstExitPolicy]
+ 

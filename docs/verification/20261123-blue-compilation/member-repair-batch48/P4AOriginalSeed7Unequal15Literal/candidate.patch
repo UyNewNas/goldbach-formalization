@@ -1,0 +1,23 @@
+--- baseline/ImbalancedChen/P4AOriginalSeed7Unequal15Literal.lean
++++ candidate/ImbalancedChen/P4AOriginalSeed7Unequal15Literal.lean
+@@ -1711,8 +1711,8 @@
+     (pre : List ℕ) :
+     currentSixth lambda6 pre ≤ seed7Raised N lambda6 pre := by
+   by_cases h : ActualSeed7 N lambda6 pre
+-  · obtain ⟨_, _rows, _history, hcap, himp⟩ := h
+-    simp only [seed7Raised, if_pos h]
++  · simp only [seed7Raised, if_pos h]
++    obtain ⟨_, _rows, _history, hcap, himp⟩ := h
+     exact hcap.trans himp.le
+   · simp [seed7Raised, h]
+ 
+@@ -1737,7 +1737,8 @@
+       newCap c (primeHistoryLogCoordinates N 8 pre)
+       else currentSixth lambda6 pre) hmem
+   by_cases h : ActualUnequalCell N lambda6 (.nine 0) pre
+-  · obtain ⟨_, _, _, hcap, himp⟩ := h
++  · simp only [if_pos h] at hle
++    obtain ⟨_, _, _, hcap, himp⟩ := h
+     exact (hcap.trans himp.le).trans hle
+   · simpa [unequalRaised, h] using hle
+ 

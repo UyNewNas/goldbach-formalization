@@ -1,0 +1,102 @@
+{
+  "schema": "independent_actual_P1_static_proof_review_v1",
+  "reviewer": "/root",
+  "status": "NO_STATIC_FINDINGS_ACTUAL_NORMAL_KERNEL_PENDING",
+  "captured_utc": "2026-11-23T16:45:37.969005+00:00",
+  "module": "ImbalancedChen.P2OriginalFourteenCausalHistoryMesh",
+  "baseline_sha256": "f25acecb6c35e16d4b61eb015537967ae126daeb5fe4cc5a13cd83ca66993aa8",
+  "candidate_sha256": "c189e83f89355b87337774a3c8d225b1408f7cc107263a5c00879b275af7046c",
+  "complete_source_headers_or_entire_alias_declarations": [
+    {
+      "name": "upper_endpoint_bounds",
+      "kind": "complete_header",
+      "raw": "private theorem upper_endpoint_bounds (tau x : ℝ) (htau : 0 < tau) :\n    x < (((⌊x / tau⌋ : ℤ) : ℝ) + 1) * tau ∧\n      (((⌊x / tau⌋ : ℤ) : ℝ) + 1) * tau ≤ x + tau :=",
+      "sha256": "1106ee518314ad3791c5a670931be1688b42eb617290132f981a5e9b7abbbacb"
+    },
+    {
+      "name": "finiteThirdCap_bounds",
+      "kind": "complete_header",
+      "raw": "theorem finiteThirdCap_bounds (tau : ℝ) (htau : 0 < tau) (t : Point) :\n    R t - 3 * tau ≤ finiteThirdCap tau t ∧ finiteThirdCap tau t < R t :=",
+      "sha256": "eb7af072a7cf349df0496b2565e2d533fa8c2edcedb8aada893e7da819eb3264"
+    },
+    {
+      "name": "pointLabel_mem",
+      "kind": "complete_header",
+      "raw": "theorem pointLabel_mem {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) (tau : ℝ) (htau : 0 < tau) :\n    pointLabel tau t ∈ labels tau :=",
+      "sha256": "3d0ddecdbc5cb42bc56889cfce45699c7105ed4d39812d38c1c5d352136edcb8"
+    },
+    {
+      "name": "refinedLabel_preserves_old",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem refinedLabel_preserves_old {α : Type*} (old : Point → α) (tau : ℝ) (t : Point) :\n    (refinedLabel old tau t).1 = old t := rfl\n\n",
+      "sha256": "d0f13288af822b457a42830fd07dae8770089bc9c5ef29b515f502bd7888db92"
+    },
+    {
+      "name": "refinedLabel_mem",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem refinedLabel_mem {α : Type*} [DecidableEq α]\n    (old : Point → α) (oldLabels : Finset α) (tau : ℝ) (htau : 0 < tau)\n    {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) (hold : old t ∈ oldLabels) :\n    refinedLabel old tau t ∈ oldLabels.product (labels tau) :=\n  Finset.mem_product.mpr ⟨hold, pointLabel_mem h tau htau⟩\n\n",
+      "sha256": "7cdb398eaf3083de477eb6372e525ca669d0946d243995b4ed6bfca7c8d0a1a2"
+    },
+    {
+      "name": "historyGap_continuous",
+      "kind": "complete_header",
+      "raw": "theorem historyGap_continuous : Continuous historyGap :=",
+      "sha256": "628db190cc7fb0c58522b1b02019548e5e0b0a8285cbc7244cc5efd13300add8"
+    },
+    {
+      "name": "historyGap_pos",
+      "kind": "complete_header",
+      "raw": "theorem historyGap_pos {planes : Finset (Fin 6) → Bool} {t : Point}\n    (h : CellGuard planes t) : 0 < historyGap t :=",
+      "sha256": "8b8966273c03199bba7879ccdef6bc2265b5a6871906f1a7427a08988347e618"
+    },
+    {
+      "name": "histories_below_mesh",
+      "kind": "complete_header",
+      "raw": "theorem histories_below_mesh (tau delta : ℝ) (htau : 0 < tau)\n    (hprecision : 3 * tau < delta) (t : Point) (hgap : delta ≤ historyGap t) :\n    3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t :=",
+      "sha256": "1166f6e0f4e25913fb8b3ce79fa0eac1cec50774394ef1a4f611d80c85db2d62"
+    },
+    {
+      "name": "exists_common_history_precision",
+      "kind": "complete_header",
+      "raw": "theorem exists_common_history_precision\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t) :\n    ∃ tau : ℝ, 0 < tau ∧ ∀ t ∈ T,\n      pointLabel tau t ∈ labels tau ∧\n      3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t ∧\n      finiteThirdCap tau t < R t :=",
+      "sha256": "4f3585176d97e677348b9ff43ba92485f3b2d4f3439aab4597a8a0572a8f0362"
+    },
+    {
+      "name": "exists_common_history_precision_with_error",
+      "kind": "complete_header",
+      "raw": "theorem exists_common_history_precision_with_error\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t)\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) :\n    ∃ tau : ℝ, 0 < tau ∧ 3 * tau < epsilon ∧ ∀ t ∈ T,\n      pointLabel tau t ∈ labels tau ∧\n      3 * t 0 < finiteThirdCap tau t ∧\n      oddCube t 2 < finiteThirdCap tau t ∧\n      oddCube t 4 < finiteThirdCap tau t ∧\n      oddCube t 6 < finiteThirdCap tau t ∧\n      0 < R t - finiteThirdCap tau t ∧ R t - finiteThirdCap tau t < epsilon :=",
+      "sha256": "90b622750b458493ce768ffd9dbc321ee31e9beffe7fc2c2c7590f56cab8ad77"
+    },
+    {
+      "name": "causalThirdExponent_same_ancestor",
+      "kind": "complete_header",
+      "raw": "theorem causalThirdExponent_same_ancestor (tau N : ℝ) (pre other : List ℕ)\n    (h : rosserAncestor 3 pre = rosserAncestor 3 other) :\n    causalThirdExponent tau N pre = causalThirdExponent tau N other :=",
+      "sha256": "214e56c7e48c0ecb3bad41aaad65b2e6b905285566841e130565e24abceb02b7"
+    },
+    {
+      "name": "causalThirdExponent_eighth",
+      "kind": "complete_header",
+      "raw": "theorem causalThirdExponent_eighth (tau N : ℝ) (pre : List ℕ)\n    (hlen : pre.length = 8) :\n    causalThirdExponent tau N pre =\n      finiteThirdCap tau (primeHistoryLogCoordinates N 8 pre) :=",
+      "sha256": "4d2c7239e6194a15b36893c3da0fac681506e0c6802605c842b0c3dc3d70a1e4"
+    },
+    {
+      "name": "common_precision_supplies_parent_history",
+      "kind": "complete_header",
+      "raw": "theorem common_precision_supplies_parent_history\n    (patterns : Fin 15 → Finset (Fin 6) → Bool) (T : Set Point)\n    (hT : IsCompact T) (hsub : ∀ t ∈ T, SelectedFamilyGuard patterns t) :\n    ∃ tau : ℝ, 0 < tau ∧ ∀ N : ℝ, ∀ pre : List ℕ, pre.length = 8 →\n      primeHistoryLogCoordinates N 8 pre ∈ T → ∀ current : ℝ,\n      causalThirdExponent tau N pre ≤ current →\n      current ≤ R (primeHistoryLogCoordinates N 8 pre) →\n      CurrentParentGuard (primeHistoryLogCoordinates N 8 pre) current :=",
+      "sha256": "b773e088da9d4b9cde12a20e3995b3ebf546a9f189085a029c1ec14e09791f79"
+    }
+  ],
+  "changed_proof_names": [
+    "finiteThirdCap_bounds",
+    "pointLabel_mem",
+    "historyGap_continuous"
+  ],
+  "all_definitions_imports_data_constants_quantifiers_hypotheses_exact": true,
+  "source_outside_proof_bodies": "exact except explicitly registered neutral verification comment pointer",
+  "mathematical_review": "Qualified only the original ascending eighth R in tactic unfolding. The same floor bounds feed explicit Icc and product membership. No label, mesh, side bound, slack or history quantity changes. The final three CRLF lines match the actual selected preimage, superseding the uncompiled normalized-LF draft.",
+  "new_assumptions_or_licence_changes": false,
+  "findings": [],
+  "source_context_graph_sha256": "42b00fa59648eeb934374f047228434d774cec3d7f16bac775c8b2d660849e71",
+  "Lean_Lake_kernel_or_audit_invocations": 0,
+  "live_or_candidate_source_mutation": false
+}

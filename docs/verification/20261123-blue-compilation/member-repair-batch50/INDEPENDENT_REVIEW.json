@@ -1,0 +1,184 @@
+{
+  "schema": "independent_P1_full_owned_source_and_final_binding_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "captured_utc": "2026-11-23T17:06:43.369483+00:00",
+  "batch": 50,
+  "findings": [],
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P1OriginalCoarseFifthResidualDictionary",
+      "baseline_sha256": "6b4f1ffe349f81c579b3d91b2fad4aa03a5fafbc26b2df753e93edafd2d384b9",
+      "postimage_sha256": "71dd324f017b24760f40c2af30c9deea11985e85f0122bce84715edc70e72971",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "tupleHistory_primeHistoryTuple",
+          "kind": "complete_header",
+          "raw": "theorem tupleHistory_primeHistoryTuple (history : List ℕ) (hlen : history.length = 5) :\n    tupleHistory (primeHistoryTuple 5 history) = history :="
+        },
+        {
+          "name": "primeHistoryTuple_tupleHistory",
+          "kind": "complete_header",
+          "raw": "theorem primeHistoryTuple_tupleHistory (p : Fin 5 → ℕ) :\n    primeHistoryTuple 5 (tupleHistory p) = p :="
+        },
+        {
+          "name": "tupleHistory_log",
+          "kind": "complete_header",
+          "raw": "theorem tupleHistory_log (N : ℕ) (p : Fin 5 → ℕ) :\n    primeHistoryLogCoordinates (N : ℝ) 5 (tupleHistory p) = actualPrimeTupleLog N p :="
+        },
+        {
+          "name": "tupleHistory_pos",
+          "kind": "complete_header",
+          "raw": "theorem tupleHistory_pos (p : Fin 5 → ℕ) (hp : ∀ i, 0 < p i) :\n    ∀ q ∈ tupleHistory p, 0 < q :="
+        },
+        {
+          "name": "newOwnCube_normalized_history",
+          "kind": "complete_header",
+          "raw": "theorem newOwnCube_normalized_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (history : List ℕ) (hlen : history.length = 5) :\n    actualOwnCubeGatedMinusDensity N cap\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) history *\n        Real.log (N : ℝ) / singularSeries N =\n      actualPrimeTupleOwnCubeMinus N cap\n        (effectiveExponent5Q e chi m omega J4 cap4 J5 cap5 (N : ℝ) history : ℝ)\n        (primeHistoryTuple 5 history) :="
+        },
+        {
+          "name": "oldOwnCube_normalized_history",
+          "kind": "complete_header",
+          "raw": "theorem oldOwnCube_normalized_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (N cap : ℕ) (history : List ℕ) (hlen : history.length = 5) :\n    actualOwnCubeGatedMinusDensity N cap\n        (fun pre => P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ)\n          (rosserAncestor 4 pre)) history * Real.log (N : ℝ) / singularSeries N =\n      actualPrimeTupleOwnCubeMinus N cap\n        (P1OriginalCoarseContinuation.effectiveExponent4Q e chi m omega J4 cap4 (N : ℝ)\n          (rosserAncestor 4 history) : ℝ) (primeHistoryTuple 5 history) :="
+        },
+        {
+          "name": "coarseTupleOwnCubeDifference_history",
+          "kind": "complete_header",
+          "raw": "theorem coarseTupleOwnCubeDifference_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (history : List ℕ) (hlen : history.length = 5) :\n    coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap\n        (primeHistoryTuple 5 history) =\n      (actualOwnCubeGatedMinusDensity N cap\n          (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) history -\n        actualOwnCubeGatedMinusDensity N cap\n          (fun pre => P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ)\n            (rosserAncestor 4 pre)) history) * Real.log (N : ℝ) / singularSeries N :="
+        },
+        {
+          "name": "coarseTupleOwnCubeDifference_outside",
+          "kind": "complete_header",
+          "raw": "theorem coarseTupleOwnCubeDifference_outside (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ)\n    (hout : ∀ j ∈ selectedFifthCells e chi m omega J5,\n      actualPrimeTupleLog N p ∉ logPrimeMeshCell 0 (19 / 96) m j) :\n    coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p = 0 :="
+        },
+        {
+          "name": "coarseTupleOwnCubeDifference_on_cell",
+          "kind": "complete_header",
+          "raw": "theorem coarseTupleOwnCubeDifference_on_cell (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 5 → ℕ) (hp : ∀ i, 0 < p i)\n    (j : Label5 m) (hj : j ∈ selectedFifthCells e chi m omega J5)\n    (ht : actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j) :\n    coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p =\n      actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n        actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p :="
+        },
+        {
+          "name": "coarseTupleOwnCubeDifference_on_unselected_cell",
+          "kind": "complete_header",
+          "raw": "theorem coarseTupleOwnCubeDifference_on_unselected_cell\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ) (j : Label5 m)\n    (hj : j ∉ selectedFifthCells e chi m omega J5)\n    (ht : actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j) :\n    coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p = 0 :="
+        },
+        {
+          "name": "coarseTupleOwnCubeDifference_eq_cell_indicators",
+          "kind": "complete_header",
+          "raw": "theorem coarseTupleOwnCubeDifference_eq_cell_indicators\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ) :\n    coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p =\n      ∑ j ∈ selectedFifthCells e chi m omega J5,\n        if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n          coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p else 0 :="
+        },
+        {
+          "name": "actualSaving_eq_tupleSum",
+          "kind": "complete_header",
+          "raw": "theorem actualSaving_eq_tupleSum (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (z : ℝ) :\n    actualHistoricalFifthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) N cap z *\n          Real.log (N : ℝ) / singularSeries N =\n      ∑ p ∈ firstExitFrontierTuples 4\n          (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n          (roughPrimeUniverse N cap 0 z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          coarseTupleOwnCubeDifference e chi m omega J4 cap4 J5 cap5 N cap p :="
+        },
+        {
+          "name": "actualSaving_eq_cells",
+          "kind": "complete_header",
+          "raw": "theorem actualSaving_eq_cells (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (z : ℝ) :\n    actualHistoricalFifthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) N cap z *\n          Real.log (N : ℝ) / singularSeries N =\n      ∑ j ∈ selectedFifthCells e chi m omega J5,\n        coarseCellPrimeCorrection e chi m omega J4 cap4 J5 cap5 N cap z j :="
+        },
+        {
+          "name": "candidateTuple_pos",
+          "kind": "complete_header",
+          "raw": "theorem candidateTuple_pos (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (z : ℝ) (p : Fin 5 → ℕ)\n    (hp : p ∈ firstExitFrontierTuples 4\n      (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 z)) : ∀ i, 0 < p i :="
+        },
+        {
+          "name": "cellCorrection_eq_capResidualSum",
+          "kind": "complete_header",
+          "raw": "theorem cellCorrection_eq_capResidualSum (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ) (j : Label5 m)\n    (hj : j ∈ selectedFifthCells e chi m omega J5) :\n    coarseCellPrimeCorrection e chi m omega J4 cap4 J5 cap5 N cap z j =\n      ∑ p ∈ firstExitFrontierTuples 4\n          (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n          (roughPrimeUniverse N cap 0 z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n            actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n              actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0) :="
+        },
+        {
+          "name": "coarseCellPrimeCorrection_eq_zero_of_unselected",
+          "kind": "complete_header",
+          "raw": "theorem coarseCellPrimeCorrection_eq_zero_of_unselected\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (z : ℝ) (j : Label5 m)\n    (hj : j ∉ selectedFifthCells e chi m omega J5) :\n    coarseCellPrimeCorrection e chi m omega J4 cap4 J5 cap5 N cap z j = 0 :="
+        },
+        {
+          "name": "actualSaving_eq_capResidualCells",
+          "kind": "complete_header",
+          "raw": "theorem actualSaving_eq_capResidualCells (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ) :\n    actualHistoricalFifthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) N cap z *\n          Real.log (N : ℝ) / singularSeries N =\n      ∑ j ∈ selectedFifthCells e chi m omega J5,\n        ∑ p ∈ firstExitFrontierTuples 4\n            (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n            (roughPrimeUniverse N cap 0 z),\n          (∏ i, 1 / ((p i : ℝ) - 1)) *\n            (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n              actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n                actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0) :="
+        },
+        {
+          "name": "cellCorrection_eq_positiveTruncation_add_smallRemainder",
+          "kind": "complete_header",
+          "raw": "theorem cellCorrection_eq_positiveTruncation_add_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (z a : ℝ) (j : Label5 m)\n    (hj : j ∈ selectedFifthCells e chi m omega J5) :\n    coarseCellPrimeCorrection e chi m omega J4 cap4 J5 cap5 N cap z j =\n      (∑ p ∈ (firstExitFrontierTuples 4\n          (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n          (roughPrimeUniverse N cap 0 z)).filter\n            (fun p => ∀ i, a ≤ actualPrimeTupleLog N p i),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n            actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n              actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0)) +\n      ∑ p ∈ (firstExitFrontierTuples 4\n          (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n          (roughPrimeUniverse N cap 0 z)).filter\n            (fun p => ∃ i, actualPrimeTupleLog N p i < a),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n            actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n              actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0) :="
+        }
+      ],
+      "changed_proof_names": [
+        "newOwnCube_normalized_history",
+        "oldOwnCube_normalized_history"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "Only two rfl steps after the existing tuple/history dictionary and own-cube definitions. The original old/new gates, exponent casts, natural product and reciprocal-totient normalization stay identical."
+    }
+  ],
+  "final_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch50/FINAL_RELEASE.json",
+      "bytes": 1151,
+      "sha256": "14305480796b932eb5fc7c0ad63293467b2ea6c3a0c3da00414ac5b11fe5fe0e"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch50/PUBLICATION_FILES.json",
+      "bytes": 5697,
+      "sha256": "0c16f764ffcc0532c06467dafa4151dc6dda25c01cccb33c544324ced600bfed"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch50/VALIDATION_RESULTS.json",
+      "bytes": 4532,
+      "sha256": "00ac271de9c5644ef4ce13b3742e6301f049d4533a5260fb4142e22ffc188b43"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch50/SOURCE_SELECTION.json",
+      "bytes": 1807,
+      "sha256": "4b263afa6719fe22c1eaf01fee4f1111b609401d77d782e243a936deecda8ec3"
+    }
+  ],
+  "original_publication_file_count": 32,
+  "all_packet_bindings_match": true,
+  "source_and_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.lean",
+      "bytes": 20167,
+      "sha256": "71dd324f017b24760f40c2af30c9deea11985e85f0122bce84715edc70e72971"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.olean",
+      "bytes": 348624,
+      "sha256": "db42a918a65cde3c3b3e7c3754b711af411e751b3aedd4c483fc928336b5885a"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.ilean",
+      "bytes": 83406,
+      "sha256": "753a6a38a05adf9d427013413d45a7bca0ad11e6aabe484fe6154ef553ac79cb"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.c",
+      "bytes": 2432,
+      "sha256": "1d1f7bdd75b0754b6e71eb59a377e756e974ebd14990f8e998d874ffec793756"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.setup.json",
+      "bytes": 6353063,
+      "sha256": "85a01c284cf6f0559f887feb9070d5ac8a42f69cab3e9f476144058cd63c2b57"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFifthResidualDictionary.trace",
+      "bytes": 3191,
+      "sha256": "51960416b3e98f508fc6c0ffc18ffe60db53a235cc8f7732be486e80a44d1cdf"
+    }
+  ],
+  "existing_validation": {
+    "owned": 32,
+    "public": 32,
+    "private": 0,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "raw_AST_universe_axioms_and_owner_inventory_exact": true,
+    "only_standard_axioms": true
+  },
+  "scope": "These exact necessary P1 suppliers in their recorded Member import context; no complete P1 or whole-board acceptance.",
+  "new_Lean_kernel_audit_or_source_compiler_invocations": 0,
+  "original_source_outputs_logs_or_records_mutated": false
+}

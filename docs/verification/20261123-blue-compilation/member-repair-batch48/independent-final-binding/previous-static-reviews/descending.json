@@ -1,0 +1,118 @@
+{
+  "schema": "independent_actual_P1_static_proof_review_v1",
+  "reviewer": "/root",
+  "status": "NO_STATIC_FINDINGS_ACTUAL_NORMAL_KERNEL_PENDING",
+  "captured_utc": "2026-11-23T16:45:37.433097+00:00",
+  "module": "ImbalancedChen.OriginalDescendingFifteenCellOwnership",
+  "baseline_sha256": "60e94da8b232587fed343e4d21a5d38a48ff14a2bc185a026dc5b9ff6cd57d62",
+  "candidate_sha256": "d1acd74bf2e2e975e890c7ad075b237c1743e32834f6e5b37faf23a447dc8705",
+  "complete_source_headers_or_entire_alias_declarations": [
+    {
+      "name": "leftMasks_injective",
+      "kind": "complete_header",
+      "raw": "theorem leftMasks_injective : Function.Injective leftMasks :=",
+      "sha256": "1dcaea874b1d7a1d677721219e81443a301adc917448f451d6726bb2ba14336e"
+    },
+    {
+      "name": "leftMasks_subset",
+      "kind": "complete_header",
+      "raw": "theorem leftMasks_subset (i : Fin 15) : leftMasks i ⊆ Finset.Icc 1 63 :=",
+      "sha256": "efc34d3a6f422a1a0f4b14e42071f18ff2022881d7f16c29b52bffc0bb6731b0"
+    },
+    {
+      "name": "six_not_left",
+      "kind": "complete_header",
+      "raw": "theorem six_not_left (i : Fin 15) : 6 ∉ leftMasks i :=",
+      "sha256": "a11425151f912a961ad28d0986be7341c146c15145910a995be3eaeb38c4e90b"
+    },
+    {
+      "name": "exists_separator",
+      "kind": "complete_header",
+      "raw": "private theorem exists_separator {i j : Fin 15} (hij : i ≠ j) :\n    ∃ m ∈ Finset.Icc 1 63, m ≠ 6 ∧\n      ((m ∈ leftMasks i ∧ m ∉ leftMasks j) ∨\n        (m ∈ leftMasks j ∧ m ∉ leftMasks i)) :=",
+      "sha256": "9843aaa7543a44c25965e14f91b4b9006303cb576487badb43e596749f3c3ecc"
+    },
+    {
+      "name": "strict_cells_disjoint",
+      "kind": "complete_header",
+      "raw": "theorem strict_cells_disjoint {i j : Fin 15} (hij : i ≠ j) :\n    Disjoint (cell i) (cell j) :=",
+      "sha256": "eb101d8807c1c08a0390a2d45d450bc3221dd59e358a0de878c359589be51033"
+    },
+    {
+      "name": "owner_unique",
+      "kind": "complete_header",
+      "raw": "theorem owner_unique {i j : Fin 15} {t : Point}\n    (hi : StrictRows i t) (hj : StrictRows j t) : i = j :=",
+      "sha256": "02806ffe77dfcb5b669ecb782d66619089cc2126f43c5abd383c1f58678ecf49"
+    },
+    {
+      "name": "branch_tie_not_owned",
+      "kind": "complete_header",
+      "raw": "theorem branch_tie_not_owned (i : Fin 15) (m : ℕ) (t : Point)\n    (hm : m ∈ Finset.Icc 1 63) (hm6 : m ≠ 6)\n    (heq : branchPlane i m t = oldRaw t) : ¬StrictRows i t :=",
+      "sha256": "6f0de713a076703774a7c31d63dd3d4aa7eab68c68c4228ece12050cc4c170b1"
+    },
+    {
+      "name": "plane_tie_outside_all",
+      "kind": "complete_header",
+      "raw": "theorem plane_tie_outside_all (m : ℕ) (t : Point)\n    (hm : m ∈ Finset.Icc 1 63) (hm6 : m ≠ 6) (hd : mu < d t)\n    (heq : A (subsetSum m t) = oldRaw t ∨ C (subsetSum m t) = oldRaw t) :\n    ∀ i : Fin 15, ¬StrictRows i t :=",
+      "sha256": "a7af6dfecbd6d29406b73104379e84ce7bdbf8d6c54df3245165c6d3120701f1"
+    },
+    {
+      "name": "coordinates_pos",
+      "kind": "complete_header",
+      "raw": "theorem coordinates_pos {i : Fin 15} {t : Point} (h : StrictRows i t) :\n    ∀ j, 0 < t j :=",
+      "sha256": "e3df1d66d2f7d5d6332205a74ad8ed06d3539edae496fbbee717f5acad152a3c"
+    },
+    {
+      "name": "rows_descendingGuard",
+      "kind": "complete_header",
+      "raw": "theorem rows_descendingGuard {i : Fin 15} {t : Point} (h : StrictRows i t)\n    (current : ℝ) (hHistory : history7 t < current) (hCap : current ≤ oldRaw t) :\n    P4ASlot17DescendingChargedFrontierSourceOnly.DescendingRows t current where\n  coordinates := coordinates_pos h\n  lastOrder :=",
+      "sha256": "56586fcb135586bee71dda2dc66fe287a87410c0356e5e43742c588cd1b4a4f9"
+    },
+    {
+      "name": "owned_history_raisedExponent",
+      "kind": "complete_header",
+      "raw": "theorem owned_history_raisedExponent\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) (i : Fin 15)\n    (hRows : StrictRows i (primeHistoryLogCoordinates N 8 pre))\n    (hHistory : history7 (primeHistoryLogCoordinates N 8 pre) <\n      P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre)\n    (hCap : P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre ≤\n      oldRaw (primeHistoryLogCoordinates N 8 pre)) :\n    P4ASlot17DescendingChargedFrontierSourceOnly.raisedExponent N lambda6 pre =\n      newCap (primeHistoryLogCoordinates N 8 pre) :=",
+      "sha256": "397aa52148c3e2f07f029ae354effe25282eb3d678439f1a754e0fbafbeccf7d"
+    },
+    {
+      "name": "ownedRaisedExponent_eq_original_action",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem ownedRaisedExponent_eq_original_action\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) (i : Fin 15)\n    (hi : StrictRows i (primeHistoryLogCoordinates N 8 pre)) :\n    ownedRaisedExponent N lambda6 pre =\n      P4ASlot17DescendingChargedFrontierSourceOnly.raisedExponent N lambda6 pre :=\n  if_pos ⟨i, hi⟩\n\n",
+      "sha256": "b2ff891b05248181af7deb6504e518d90f1504048a531cd53bafe654097f3779"
+    },
+    {
+      "name": "ownedRaisedExponent_eq_parent_outside",
+      "kind": "complete_header",
+      "raw": "theorem ownedRaisedExponent_eq_parent_outside\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ)\n    (houtside : ∀ i : Fin 15, ¬StrictRows i (primeHistoryLogCoordinates N 8 pre)) :\n    ownedRaisedExponent N lambda6 pre =\n      P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre :=",
+      "sha256": "9804b11ae3d1738dd3ee0abcb11a1bd253eed32ee85013ab529d1b5c2e2f65fa"
+    },
+    {
+      "name": "ownedRaisedExponent_eq_selected_cap",
+      "kind": "complete_header",
+      "raw": "theorem ownedRaisedExponent_eq_selected_cap\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) (i : Fin 15)\n    (hRows : StrictRows i (primeHistoryLogCoordinates N 8 pre))\n    (hHistory : history7 (primeHistoryLogCoordinates N 8 pre) <\n      P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre)\n    (hCap : P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre ≤\n      oldRaw (primeHistoryLogCoordinates N 8 pre)) :\n    ownedRaisedExponent N lambda6 pre = newCap (primeHistoryLogCoordinates N 8 pre) :=",
+      "sha256": "4646e7c00da55763d2671fecc24fdfb57a7193bf032a9d932403c92b464365d1"
+    },
+    {
+      "name": "ownedRaisedExponent_inherits_at_plane_tie",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem ownedRaisedExponent_inherits_at_plane_tie\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) (m : ℕ)\n    (hm : m ∈ Finset.Icc 1 63) (hm6 : m ≠ 6)\n    (hd : mu < d (primeHistoryLogCoordinates N 8 pre))\n    (heq : A (subsetSum m (primeHistoryLogCoordinates N 8 pre)) =\n        oldRaw (primeHistoryLogCoordinates N 8 pre) ∨\n      C (subsetSum m (primeHistoryLogCoordinates N 8 pre)) =\n        oldRaw (primeHistoryLogCoordinates N 8 pre)) :\n    ownedRaisedExponent N lambda6 pre =\n      P4ASlot17DescendingChargedFrontierSourceOnly.inheritedSixth lambda6 pre :=\n  ownedRaisedExponent_eq_parent_outside N lambda6 pre\n    (plane_tie_outside_all m _ hm hm6 hd heq)\n\n/-- The owned action is placed after rank eight on the existing parent,\nso every selected prefix, sign, mass and remaining carrier is preserved. -/\n",
+      "sha256": "bb84f8e1e55f6da920363cce7db9d734c3b88af86f7c11c7cec6522fc38dc04a"
+    },
+    {
+      "name": "ownedPolicy_frontier_eight",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem ownedPolicy_frontier_eight\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (parent : Bool → List ℕ → Bool)\n    (h : ℕ → ℝ) (pre carrier : List ℕ) (positive : Bool) (mass : ℝ) :\n    firstExitDepthFrontier 8 (ownedPolicy N lambda6 parent) h pre positive mass carrier =\n      firstExitDepthFrontier 8 parent h pre positive mass carrier :=\n  firstExitDepthFrontier_depthSplice_eq 8 8 le_rfl parent _ h pre carrier positive mass\n\n",
+      "sha256": "ab43a473c1af9eadbd569ace87b0a6256beb5ce75ded6cec4f256cbd23e77e12"
+    }
+  ],
+  "changed_proof_names": [
+    "coordinates_pos"
+  ],
+  "all_definitions_imports_data_constants_quantifiers_hypotheses_exact": true,
+  "source_outside_proof_bodies": "exact",
+  "mathematical_review": "Use the same strict adjacent order to propagate positivity from t7 to each earlier coordinate; Fin8 case split returns the corresponding already-typed proof. No domain, floor, ordering or ownership change.",
+  "new_assumptions_or_licence_changes": false,
+  "findings": [],
+  "source_context_graph_sha256": "42b00fa59648eeb934374f047228434d774cec3d7f16bac775c8b2d660849e71",
+  "Lean_Lake_kernel_or_audit_invocations": 0,
+  "live_or_candidate_source_mutation": false
+}

@@ -1,0 +1,134 @@
+{
+  "schema": "P1_GammaApproximation_independent_static_repair_review_v1",
+  "reviewer": "/root/member_current_repairs",
+  "implementation_author": "/root",
+  "reviewer_is_implementation_author": false,
+  "completed_utc": "2026-11-23T16:36:35.229484+00:00",
+  "status": "STATIC_REVIEW_READY_NOT_COMPILED",
+  "outcome": "NO_FINDINGS_IN_EXACT_PROOF_ONLY_CANDIDATE",
+  "module": "ImbalancedChen.P4AOriginalFull87GammaApproximation",
+  "preimage_sha256": "c49dd0e10e6673942691bab626797a68e6d70f6dc0792b529e144eb4b4b4b8c5",
+  "postimage_sha256": "05073ba886bd34c734c0b15e08aef9bbca777d1d83fa4c750611676b03f861ce",
+  "baseline_matches_existing_published_blob": {
+    "commit": "be2efd01c561080672e6c0ad0ba21638837afe4c",
+    "path": "docs/source-only/20261103-full87-common-history/P4AOriginalFull87GammaApproximation.lean",
+    "git_blob": "183def26311b910855764a99c2469a63d7b29b53",
+    "byte_exact": true
+  },
+  "bound_records": {
+    "STATIC_REPAIR.json": {
+      "path": "/workspace/p1-complete-proof/gamma-approximation-repair/STATIC_REPAIR.json",
+      "sha256": "1eb120e662ad2ffa4c95a15db1bc8fae9c023a2801df53e85ebfe670ee5ec50a"
+    },
+    "candidate.patch": {
+      "path": "/workspace/p1-complete-proof/gamma-approximation-repair/candidate.patch",
+      "sha256": "bda29e8e0fa9bb0fe564e5013b957f9834bb2574b4f22559d7c2ef7133e3d0f1"
+    },
+    "actual-failure.log": {
+      "path": "/workspace/p1-complete-proof/gamma-approximation-repair/actual-failure.log",
+      "sha256": "347fcb15a86f43c8957dc9b3bbf6fb9d48c6e580dfa79d1e21cb154e68613869"
+    }
+  },
+  "full_raw_headers": [
+    {
+      "name": "side_widths",
+      "full_raw_header_sha256": "aec587589c9d41c8238c8486794dabc99d6aac655921e180635d5c43e58776fd",
+      "full_raw_header_preserved": true
+    },
+    {
+      "name": "upper_pair_tent",
+      "full_raw_header_sha256": "86a8ea444998839b066b5ed967a8eb576c4f2a06ae315bcc1bb60ec5b8eac275",
+      "full_raw_header_preserved": true
+    },
+    {
+      "name": "winning_xz_gate",
+      "full_raw_header_sha256": "ad3c841228e06645a44bd228225b24ec39f1da4374402fd6de15110f525a0071",
+      "full_raw_header_preserved": true
+    },
+    {
+      "name": "winning_yz_gate",
+      "full_raw_header_sha256": "dd830bb771f9a24f048550339c3155877a17769ed3410c0f5cdb508e616ef666",
+      "full_raw_header_preserved": true
+    },
+    {
+      "name": "six_le_fullGamma_add_error",
+      "full_raw_header_sha256": "73d2fe667871555bddafdb801f8830e76d692735666a1ce34e352162d89b0fe0",
+      "full_raw_header_preserved": true
+    },
+    {
+      "name": "actual_gamma_sandwich",
+      "full_raw_header_sha256": "2469d0bbdb7d502df1f3b9d9918ce08dac960504d51dc3ce594c61ae422230e6",
+      "full_raw_header_preserved": true
+    }
+  ],
+  "source_declarations": 6,
+  "definition_or_import_or_numeric_data_or_hypothesis_changes": false,
+  "changed_proof_bodies": [
+    "upper_pair_tent",
+    "six_le_fullGamma_add_error"
+  ],
+  "all_source_bytes_outside_authorized_tactic_replacements_exact": true,
+  "public_header_or_definition_exceptions": [],
+  "source_API_bindings": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/VariableEnvelope.lean",
+      "bytes": 7292,
+      "sha256": "ec0fc1a6099e6667015e90306d18cf05b43c556ef8ad8e2f99c91f967e0f4b8c"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/HistoricalThirdCoarsePolicy.lean",
+      "bytes": 24460,
+      "sha256": "86424459ed1208c11b400c56e1127c9fb39f2d137773eb2505c735361accbc50"
+    }
+  ],
+  "actual_failure_readback": {
+    "owner_reported_actual_failure_run": "54793",
+    "provided_log_binds_original_errors": true,
+    "pair_error": "Original rw rewrote one occurrence; the recorded goal still has a third min branch and hvA/hvC still use v.",
+    "B_error": "Recorded z:Real was supplied to an unintended Nat-argument B; hB then became an elaborator recovery placeholder. No literal admission was introduced by this candidate."
+  },
+  "proof_delta_review": [
+    {
+      "declaration": "upper_pair_tent",
+      "classification": "reuse_existing_equality_simplification_all_occurrences",
+      "conclusion": "NO_FINDINGS",
+      "reason": "VariableEnvelope.v_eq_min is already proved for every real input, including negative inputs. simp only [v_eq_min] at * rewrites both saved upper bounds hvA/hvC and both v occurrences in the goal into the original A/C minimum. After le_min and affine expansion, min<=A together with nonnegative interval displacement proves the increasing A branch; min<=C and (A-a)+(B-b)<=2*chi prove the decreasing C branch with the same3*chi debit. The original ha/hA imply chi>=0, so no missing positivity hypothesis is added."
+    },
+    {
+      "declaration": "six_le_fullGamma_add_error",
+      "classification": "proof_local_name_disambiguation",
+      "conclusion": "NO_FINDINGS",
+      "reason": "The six branch and rescue are defined using the real affine VariableEnvelope.B(t)=153/256-(3/8)*t. rescue=max(qA lx,qB uz), and cast_qB therefore gives B(uz)<=rescue<=fullGamma. From uz-z<=chi and chi>=0, B(z)<=B(uz)+(3/8)*chi<=fullGamma+(9/2)*chi. Qualification resolves the observed Nat-B application without changing the branch, rescue, Gamma, gate or error constant."
+    }
+  ],
+  "mathematical_scope_preserved": [
+    "original six branches and ordered domain",
+    "both whole-box pair gates and losing-pair baseline payment",
+    "e+7*chi<=3/256 gate surplus",
+    "9/2*chi approximation error",
+    "mu-4e whole-box condition",
+    "gamma/levelExponent and one2e buffer subtraction"
+  ],
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "anchors": [
+      "argument.tex204-218 v=min((1+t)/2,57/64-3t/2), original causal upper policy and successive parent changes",
+      "coefficient-appendix.tex49-68 W(z)=Lambda_cap-3z/8, Gamma-2e and3/256 initialization reserve",
+      "coefficient-appendix.tex118-126 original finite coarse width/reserves before target growth"
+    ]
+  },
+  "existing_work_check_boundary": {
+    "independent_original_blob_identity_checked": true,
+    "known_repair_inventory_query": "build_workflow existing source index: one variant only, c49dd0e1 / be2efd01; no known exact-preimage repair. Similar ActualExtendedThirdGammaApproximation is a different module and is not substituted.",
+    "query_provenance": "Owner/build_workflow existing source index as recorded in STATIC_REPAIR.json. No duplicate global or remote search performed; no exhaustive absence claim."
+  },
+  "deterministic_remaining_API_problem_identified": false,
+  "findings": [],
+  "acceptance_boundary": "No Lean, Lake, kernel, test or public type/axiom check was run by the reviewer. The exact candidate remains pending sole-owner normal/kernel/all-owned validation; this static review does not claim compilation success.",
+  "execution": {
+    "Lean_Lake_compiler_kernel_type_axiom_runs": 0,
+    "candidate_live_main_source_or_old_record_changes": 0,
+    "only_new_review_written": true
+  }
+}

@@ -1,0 +1,44 @@
+--- baseline/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.lean
++++ candidate/ImbalancedChen/P2OriginalFourteenCausalHistoryMesh.lean
+@@ -3,7 +3,7 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Compilation records: docs/verification/20261123-blue-compilation.
+ 
+ Saving16 uses the original fourteen ascending cells, indices 0..14 except 7,
+ and R=C(t2+t3). This module constructs one finite causal third-cap mesh on
+@@ -49,7 +49,7 @@
+     R t - 3 * tau ≤ finiteThirdCap tau t ∧ finiteThirdCap tau t < R t := by
+   have h1 := upper_endpoint_bounds tau (t 1) htau
+   have h2 := upper_endpoint_bounds tau (t 2) htau
+-  dsimp [finiteThirdCap, labelCap, pointLabel, R, d, C]
++  dsimp [finiteThirdCap, labelCap, pointLabel, P2OriginalAscendingEighthCapDictionary.R, d, C]
+   constructor <;> linarith [h1.1, h1.2, h2.1, h2.2]
+ 
+ /-- Every actual saving16 point has a label in the same finite alphabet.
+@@ -63,9 +63,11 @@
+       (0 : ℤ) ≤ ⌊x / tau⌋ ∧ ⌊x / tau⌋ ≤ ⌊mu / tau⌋ :=
+     ⟨Int.floor_nonneg.mpr (div_nonneg hx htau.le),
+       Int.floor_mono ((div_le_div_iff_of_pos_right htau).mpr hxu)⟩
+-  simpa only [pointLabel, labels, Finset.mem_product, Finset.mem_Icc] using
+-    And.intro (hfloor (t 1) (h.coordinate_pos 1).le h1)
+-      (hfloor (t 2) (h.coordinate_pos 2).le h2)
++  change (⌊t 1 / tau⌋, ⌊t 2 / tau⌋) ∈
++    (Finset.Icc 0 (⌊mu / tau⌋ : ℤ)).product (Finset.Icc 0 (⌊mu / tau⌋ : ℤ))
++  exact Finset.mem_product.mpr
++    ⟨Finset.mem_Icc.mpr (hfloor (t 1) (h.coordinate_pos 1).le h1),
++      Finset.mem_Icc.mpr (hfloor (t 2) (h.coordinate_pos 2).le h2)⟩
+ 
+ /-- Explicit common refinement: old labels are retained as the first
+ component; no old equality/inheritance region is removed by relabeling. -/
+@@ -88,7 +90,7 @@
+ def historyGap (t : Point) : ℝ := R t - historyCeiling t
+ 
+ theorem historyGap_continuous : Continuous historyGap := by
+-  unfold historyGap historyCeiling R d C oddCube prefixSum
++  unfold historyGap historyCeiling P2OriginalAscendingEighthCapDictionary.R d C oddCube prefixSum
+   fun_prop
+ 
+ theorem historyGap_pos {planes : Finset (Fin 6) → Bool} {t : Point}

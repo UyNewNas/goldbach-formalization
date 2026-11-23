@@ -1,0 +1,26 @@
+--- baseline/ImbalancedChen/P4AOriginalFull87GammaApproximation.lean
++++ candidate/ImbalancedChen/P4AOriginalFull87GammaApproximation.lean
+@@ -33,7 +33,7 @@
+     rw [v_eq_min]; exact min_le_left _ _
+   have hvC : v (a + b) ≤ C (a + b) := by
+     rw [v_eq_min]; exact min_le_right _ _
+-  rw [v_eq_min]
++  simp only [v_eq_min] at *
+   apply le_min <;> dsimp [VariableEnvelope.A, C] at * <;> linarith
+ 
+ /-- A winning original xz pair survives the literal whole-box gate. -/
+@@ -98,11 +98,11 @@
+       (by push_cast; linarith [hb.2.1, hb.2.2.2.1, hb.2.2.2.2.2])
+     push_cast at hh
+     linarith
+-  have hvB : B z ≤ (fullGamma e b : ℝ) + (9 / 2 : ℝ) * chi := by
+-    have hB : B (b.uz : ℝ) ≤ (rescue b : ℝ) := by
++  have hvB : VariableEnvelope.B z ≤ (fullGamma e b : ℝ) + (9 / 2 : ℝ) * chi := by
++    have hB : VariableEnvelope.B (b.uz : ℝ) ≤ (rescue b : ℝ) := by
+       simp only [rescue, Rat.cast_max, cast_qA, cast_qB]
+       exact le_max_right _ _
+-    dsimp [B] at hB ⊢
++    dsimp [VariableEnvelope.B] at hB ⊢
+     linarith [hb.2.2.2.2.1]
+   have hvxz : v (x + z) ≤ (fullGamma e b : ℝ) + (9 / 2 : ℝ) * chi := by
+     by_cases hwin : v x ≤ v (x + z)

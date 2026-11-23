@@ -1,0 +1,124 @@
+{
+  "status": "STATIC_CANDIDATE_NOT_COMPILED",
+  "module": "ImbalancedChen.P1HistoricalCapCeilingCheck",
+  "baseline_sha256": "be0f847d6eb71d756a34450625bbf6d42140d87f92254c0e5740cd2815e81ca6",
+  "candidate_sha256": "1bd7115414abe27cc422f81aba71a7303f415acfc9e894be430932c651dc5465",
+  "changed_proofs": [
+    "p1LevelCheck_does_not_imply_ceiling",
+    "p1CeilingCheck_does_not_imply_levelCheck"
+  ],
+  "complete_headers": [
+    {
+      "name": "p1HistoricalPrefixLookup_le_of_bounds",
+      "header": "theorem p1HistoricalPrefixLookup_le_of_bounds {d : ℕ} (a b : ℚ) (hab : a ≤ b)\n    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback theta : ℚ)\n    (hfallback : fallback ≤ theta) (hcap : ∀ j ∈ J, cap j ≤ theta)\n    (t : Fin d → ℝ) :\n    historicalPrefixLookup a b m J cap fallback t ≤ theta :=",
+      "sha256": "b74b7e02806a598a89315f7ada26a2f24b6fc6880b4aac8e739a697952ac8ae7"
+    },
+    {
+      "name": "p1CapCeilingCheck_iff",
+      "header": "theorem p1CapCeilingCheck_iff (D : HistoricalPrefixCapData) (theta : ℚ) :\n    D.p1CapCeilingCheck theta = true ↔\n      D.old ≤ theta ∧ (∀ j ∈ D.cells3, D.cap3 j ≤ theta) ∧\n        (∀ j ∈ D.cells4, D.cap4 j ≤ theta) ∧\n        (∀ j ∈ D.cells5, D.cap5 j ≤ theta) :=",
+      "sha256": "9c8ac8ebaba2bef9666b42a1e82e310d8ecd211ff9a39fb1d31144c86334dc21"
+    },
+    {
+      "name": "p1CapCeilingCheck_sound",
+      "header": "theorem p1CapCeilingCheck_sound (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) :\n    D.old ≤ theta ∧ (∀ j ∈ D.cells3, D.cap3 j ≤ theta) ∧\n      (∀ j ∈ D.cells4, D.cap4 j ≤ theta) ∧\n      (∀ j ∈ D.cells5, D.cap5 j ≤ theta) :=",
+      "sha256": "42ffa0a8a8904f953e11a78e5a2f7bc70ffac386659e34a37dd29b7d505525da"
+    },
+    {
+      "name": "p1CapCeilingCheck_of_bounds",
+      "header": "theorem p1CapCeilingCheck_of_bounds (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hold : D.old ≤ theta) (h3 : ∀ j ∈ D.cells3, D.cap3 j ≤ theta)\n    (h4 : ∀ j ∈ D.cells4, D.cap4 j ≤ theta)\n    (h5 : ∀ j ∈ D.cells5, D.cap5 j ≤ theta) :\n    D.p1CapCeilingCheck theta = true :=",
+      "sha256": "110ba2dda47dd9fc59531d43e02218cebc45d4a275f33229578341d3b039e52c"
+    },
+    {
+      "name": "p1CapCeilingCheck_mono",
+      "header": "theorem p1CapCeilingCheck_mono (D : HistoricalPrefixCapData) {theta theta' : ℚ}\n    (hcheck : D.p1CapCeilingCheck theta = true) (hle : theta ≤ theta') :\n    D.p1CapCeilingCheck theta' = true :=",
+      "sha256": "473dca31b8280a8dc7e7743970d20f036940a1832af53d2168e782d81d8b15f1"
+    },
+    {
+      "name": "p1Cell3_le_ceiling",
+      "header": "theorem p1Cell3_le_ceiling (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) (j : Fin 3 → Fin (D.m + 1)) :\n    D.cell3 j ≤ theta :=",
+      "sha256": "f8231d83bbc52d9d1008d7934999ff294b726f080ad920fbde95b4576954bc9c"
+    },
+    {
+      "name": "p1Old4_le_ceiling",
+      "header": "theorem p1Old4_le_ceiling (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) (j : Fin 4 → Fin (D.m + 1)) :\n    D.old4 j ≤ theta :=",
+      "sha256": "d3b01f8377fc4bc0cd394dc363938d61f93d48d4887211bfeca36cda7b8091ae"
+    },
+    {
+      "name": "p1Cell4_le_ceiling",
+      "header": "theorem p1Cell4_le_ceiling (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) (j : Fin 4 → Fin (D.m + 1)) :\n    D.cell4 j ≤ theta :=",
+      "sha256": "c19b4a972b5239acb113e973c89a120b99e4345c820675eecfaceeedbfbc1584"
+    },
+    {
+      "name": "p1Old5_le_ceiling",
+      "header": "theorem p1Old5_le_ceiling (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) (j : Fin 5 → Fin (D.m + 1)) :\n    D.old5 j ≤ theta :=",
+      "sha256": "e2ae49ac42597fa5bffe0d78084ba7a1c5911c480b0d0a26521c06f4b3555284"
+    },
+    {
+      "name": "p1Cell5_le_ceiling",
+      "header": "theorem p1Cell5_le_ceiling (D : HistoricalPrefixCapData) (theta : ℚ)\n    (hcheck : D.p1CapCeilingCheck theta = true) (j : Fin 5 → Fin (D.m + 1)) :\n    D.cell5 j ≤ theta :=",
+      "sha256": "683c1f941a5ddc3ea8d60d7125ded625b33abb75610d06c7368f55d285caedc0"
+    },
+    {
+      "name": "p1Exponent3_le_ceiling",
+      "header": "theorem p1Exponent3_le_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true) (t : Fin 3 → ℝ) :\n    D.exponent3 t ≤ theta :=",
+      "sha256": "7362818572f07a4e6f5ce0450a9b3404aab11c9ecb1ef963176bb6055433cfbf"
+    },
+    {
+      "name": "p1Exponent4_le_ceiling",
+      "header": "theorem p1Exponent4_le_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true) (t : Fin 4 → ℝ) :\n    D.exponent4 t ≤ theta :=",
+      "sha256": "e6064ef52b1988c6716f63e9cdf690a037401311528b05b4df950cbbb1f48b8c"
+    },
+    {
+      "name": "p1Exponent5_le_ceiling",
+      "header": "theorem p1Exponent5_le_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true) (t : Fin 5 → ℝ) :\n    D.exponent5 t ≤ theta :=",
+      "sha256": "a0d8a876d819fd67466fa5914bf0188b6e9be5e3ed5440ea54d637048b7e1b30"
+    },
+    {
+      "name": "p1Level3_le_power_ceiling",
+      "header": "theorem p1Level3_le_power_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (history : List ℕ) :\n    D.level3 N history ≤ N ^ (theta : ℝ) :=",
+      "sha256": "87be5b05813793526bb198375795f77860853158ce48ba43cfd84329e483c71b"
+    },
+    {
+      "name": "p1Level4_le_power_ceiling",
+      "header": "theorem p1Level4_le_power_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (history : List ℕ) :\n    D.level4 N history ≤ N ^ (theta : ℝ) :=",
+      "sha256": "df726317eec07b98ca85860560563128ac8275b6cf9a4f07a3bf85623cbbb7d4"
+    },
+    {
+      "name": "p1Level5_le_power_ceiling",
+      "header": "theorem p1Level5_le_power_ceiling (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (history : List ℕ) :\n    D.level5 N history ≤ N ^ (theta : ℝ) :=",
+      "sha256": "89dadee48675c97d1c6808afe04cfbbebe13c9cdf0a256ef7489074fc743fc0b"
+    },
+    {
+      "name": "p1RestrictSelections_capCeilingCheck",
+      "header": "theorem p1RestrictSelections_capCeilingCheck (D : HistoricalPrefixCapData)\n    (J3 : Finset (Fin 3 → Fin (D.m + 1)))\n    (J4 : Finset (Fin 4 → Fin (D.m + 1)))\n    (J5 : Finset (Fin 5 → Fin (D.m + 1)))\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true) :\n    (D.p1RestrictSelections J3 J4 J5).p1CapCeilingCheck theta = true :=",
+      "sha256": "5da460cfe66e55dc853d63c66c7b56d5642ba239e23ba29b2b2c6c6ec6c38a2d"
+    },
+    {
+      "name": "p1RestrictFifth_capCeilingCheck",
+      "header": "theorem p1RestrictFifth_capCeilingCheck (D : HistoricalPrefixCapData)\n    (J5 : Finset (Fin 5 → Fin (D.m + 1)))\n    (theta : ℚ) (hcheck : D.p1CapCeilingCheck theta = true) :\n    (D.p1RestrictFifth J5).p1CapCeilingCheck theta = true :=",
+      "sha256": "1794a5b550252abbd61499ba429ccc3d1f0eefab8b119f5461a79dc673c6b35f"
+    },
+    {
+      "name": "p1RestrictSelections_bothChecks",
+      "header": "theorem p1RestrictSelections_bothChecks (D : HistoricalPrefixCapData)\n    (J3 : Finset (Fin 3 → Fin (D.m + 1)))\n    (J4 : Finset (Fin 4 → Fin (D.m + 1)))\n    (J5 : Finset (Fin 5 → Fin (D.m + 1))) (theta : ℚ)\n    (hlevel : D.levelCheck = true) (hceil : D.p1CapCeilingCheck theta = true) :\n    (D.p1RestrictSelections J3 J4 J5).levelCheck = true ∧\n      (D.p1RestrictSelections J3 J4 J5).p1CapCeilingCheck theta = true :=",
+      "sha256": "a11b35def2c7286f975b77ead3bdd66cab03a237cfc7ed3b994b74a03c3b11cf"
+    },
+    {
+      "name": "p1LevelCheck_does_not_imply_ceiling",
+      "header": "theorem p1LevelCheck_does_not_imply_ceiling :\n    ∃ D : HistoricalPrefixCapData,\n      D.levelCheck = true ∧ D.p1CapCeilingCheck 1 = false :=",
+      "sha256": "72fb5d5582e299ba950ee41d93bcb0f720ecb52cad9360f013a3282695734d32"
+    },
+    {
+      "name": "p1CeilingCheck_does_not_imply_levelCheck",
+      "header": "theorem p1CeilingCheck_does_not_imply_levelCheck :\n    ∃ D : HistoricalPrefixCapData,\n      D.p1CapCeilingCheck 1 = true ∧ D.levelCheck = false :=",
+      "sha256": "54d6a2631b9a315aa9866092570a1355c7cae177608507e0855622c7b8ef964b"
+    }
+  ],
+  "all_source_bytes_outside_named_tactic_bodies_exact": true,
+  "definitions_imports_constants_domains_hypotheses_unchanged": true,
+  "scope": "Reuse the original two explicit finite witnesses and four closed Bool computations with kernel decide. The selected sets, cap values and both independence statements stay unchanged; no native_decide or new theorem.",
+  "known_source_reuse_check": "Existing module source index contains one canonical preimage variant only; main/Member/full87 selected source match it.",
+  "new_axioms_or_goal_hypotheses": false,
+  "no_live_source_or_output_mutation": true,
+  "Lean_Lake_kernel_audit_invocations": 0
+}

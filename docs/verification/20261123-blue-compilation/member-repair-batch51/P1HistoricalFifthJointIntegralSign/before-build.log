@@ -1,0 +1,63 @@
+✖ [9497/9529] Building ImbalancedChen.P1HistoricalFifthJointIntegralSign (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFifthJointIntegralSign.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFifthJointIntegralSign.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFifthJointIntegralSign.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFifthJointIntegralSign.setup.json --json
+warning: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:32:2: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+error: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:128:6: Type mismatch: After simplification, term
+  ht
+ has type
+  ∃ i, ∃ (_ : i ∈ D.cells5), t ∈ D.p1FifthJointCell i
+but is expected to have type
+  ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j
+error: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:209:67: unsolved goals
+D : HistoricalPrefixCapData
+hcheck : D.levelCheck = true
+j : Fin 5 → Fin (D.m + 1)
+hj : j ∈ D.cells5
+t : Fin 5 → ℝ
+ht : t ∈ D.p1FifthOwnCubeOverlap j
+hlevel : ↑(D.old5 j) ≤ ↑(D.cap5 j)
+⊢ (primeTupleMinusProfile (↑(D.cap5 j)) t -
+        if primeTupleOwnCubeForm t < ↑(D.old5 j) then primeTupleMinusProfile (↑(D.old5 j)) t else 0) *
+      ∏ i, 1 / t i =
+    (primeTupleMinusProfile (↑(D.cap5 j)) t - primeTupleMinusProfile (↑(D.old5 j)) t) * ∏ i, 1 / t i
+warning: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:213:35: This simp argument is unused:
+  if_pos ht.2
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [p1FifthCellProfile, primeOwnCubeGatedProfile, if_pos (ht.2.trans_le hlevel)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:238:34: `Set.mem_setOf_eq` has been deprecated: Use `Set.mem_ofPred_eq` instead
+info: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:272:2: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+error: ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean:248:78: unsolved goals
+D : HistoricalPrefixCapData
+ha : 0 < D.a
+hab : D.a < D.b
+hcheck : D.levelCheck = true
+j : Fin 5 → Fin (D.m + 1)
+hj : j ∈ D.cells5
+hn : IntegrableOn (fun t => primeTupleMinusProfile (↑(D.cap5 j)) t * ∏ i, 1 / t i) (D.p1FifthJointCell j) volume
+ho : IntegrableOn (fun t => primeTupleMinusProfile (↑(D.old5 j)) t * ∏ i, 1 / t i) (D.p1FifthJointCell j) volume
+hnA : IntegrableOn (fun t => primeTupleMinusProfile (↑(D.cap5 j)) t * ∏ i, 1 / t i) (D.p1FifthOwnCubeAnnulus j) volume
+hnO : IntegrableOn (fun t => primeTupleMinusProfile (↑(D.cap5 j)) t * ∏ i, 1 / t i) (D.p1FifthOwnCubeOverlap j) volume
+hoO : IntegrableOn (fun t => primeTupleMinusProfile (↑(D.old5 j)) t * ∏ i, 1 / t i) (D.p1FifthOwnCubeOverlap j) volume
+hoverlap :
+  D.p1FifthOverlapIncrementIntegral j =
+    (∫ (t : Fin 5 → ℝ) in D.p1FifthOwnCubeOverlap j, primeTupleMinusProfile (↑(D.cap5 j)) t * ∏ i, 1 / t i) -
+      ∫ (t : Fin 5 → ℝ) in D.p1FifthOwnCubeOverlap j, primeTupleMinusProfile (↑(D.old5 j)) t * ∏ i, 1 / t i
+⊢ ∫ (x : Fin 5 → ℝ) in D.p1FifthOwnCubeAnnulus j, primeTupleMinusProfile (↑(D.cap5 j)) x * ∏ x_1, (x x_1)⁻¹ ∂volume +
+        ∫ (x : Fin 5 → ℝ) in D.p1FifthOwnCubeOverlap j,
+          primeTupleMinusProfile (↑(D.cap5 j)) x * ∏ x_1, (x x_1)⁻¹ ∂volume -
+      ∫ (t : Fin 5 → ℝ) in D.p1FifthJointCell j ∩ {t | primeTupleOwnCubeForm t < ↑(D.old5 j)},
+        primeTupleMinusProfile (↑(D.old5 j)) t * ∏ x, (t x)⁻¹ =
+    ∫ (x : Fin 5 → ℝ) in D.p1FifthOwnCubeAnnulus j, primeTupleMinusProfile (↑(D.cap5 j)) x * ∏ x_1, (x x_1)⁻¹ ∂volume +
+        ∫ (x : Fin 5 → ℝ) in D.p1FifthOwnCubeOverlap j,
+          primeTupleMinusProfile (↑(D.cap5 j)) x * ∏ x_1, (x x_1)⁻¹ ∂volume -
+      ∫ (t : Fin 5 → ℝ) in D.p1FifthOwnCubeOverlap j, primeTupleMinusProfile (↑(D.old5 j)) t * ∏ x, (t x)⁻¹
+error: Lean exited with code 1

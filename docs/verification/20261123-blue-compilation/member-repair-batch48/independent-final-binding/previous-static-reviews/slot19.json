@@ -1,0 +1,76 @@
+{
+  "schema": "independent_actual_P1_static_proof_review_v1",
+  "reviewer": "/root",
+  "status": "NO_STATIC_FINDINGS_ACTUAL_NORMAL_KERNEL_PENDING",
+  "captured_utc": "2026-11-23T16:45:37.820239+00:00",
+  "module": "ImbalancedChen.P4ASlot19ChargedFrontier",
+  "baseline_sha256": "ad38b642d824c1f67739ef41b1bf3c08ddd9766580eae39666dcb7b935837709",
+  "candidate_sha256": "fa457ee89dabde751e9dce99c07e461c79ff15a0cb57dff25ae9121f929d9ef4",
+  "complete_source_headers_or_entire_alias_declarations": [
+    {
+      "name": "selectedMask_sum",
+      "kind": "complete_header",
+      "raw": "theorem selectedMask_sum (t : Point) :\n    (∑ i ∈ selectedMask, t i) = selectedSum t :=",
+      "sha256": "414f7e473aff364647994b6bf5e2fa8a9e7fc5669be44f9ddfafeed1e4c90f98"
+    },
+    {
+      "name": "selectedMask_bits",
+      "kind": "entire_non_tactic_alias_declaration",
+      "raw": "theorem selectedMask_bits : (2 ^ 1 + 2 ^ 3 + 2 ^ 7 : ℕ) = 138 :=\n  selected_mask_dictionary\n\n",
+      "sha256": "3345c878834d5f086162fd2188f51c636f9e87b5b35e16d2c31fe5bfc12a8d17"
+    },
+    {
+      "name": "slot19_exact_coefficient",
+      "kind": "complete_header",
+      "raw": "theorem slot19_exact_coefficient :\n    finalFourGains 0 = (283388722705335806564439 / 2^96 : ℝ) :=",
+      "sha256": "592db3326dcedbe94320ad314c319af0100d6d0f9ce2e2c0eb4843b67874fa75"
+    },
+    {
+      "name": "inheritedSixth_le_raisedExponent",
+      "kind": "complete_header",
+      "raw": "theorem inheritedSixth_le_raisedExponent\n    (N : ℝ) (lambda6 : List ℕ → ℝ) (history : List ℕ) :\n    inheritedSixth lambda6 history ≤ raisedExponent N lambda6 history :=",
+      "sha256": "4804f1562a99e835036c9be12f565340bfb2df224cdecdd74f3b7426aa4a4c14"
+    },
+    {
+      "name": "oldLevel_le_raisedLevel",
+      "kind": "complete_header",
+      "raw": "theorem oldLevel_le_raisedLevel\n    (N : ℝ) (hN : 1 ≤ N) (lambda6 : List ℕ → ℝ) (history : List ℕ) :\n    oldLevel N lambda6 history ≤ raisedLevel N lambda6 history :=",
+      "sha256": "2531a1c99c2cc4bfb4393124ea4f8ccb705b48f400476473866edaa734954293"
+    },
+    {
+      "name": "oldPolicy_even",
+      "kind": "complete_header",
+      "raw": "theorem oldPolicy_even (N : ℝ) (lambda6 : List ℕ → ℝ)\n    (parent : Bool → List ℕ → Bool)\n    (hparent : ∀ pre, parent true pre = true) (pre : List ℕ) :\n    oldPolicy N lambda6 parent true pre = true :=",
+      "sha256": "e87c3ee2f812c710e759f9e064581cce04aa645df140b9366fb34979cbb2b09f"
+    },
+    {
+      "name": "raisedPolicy_even",
+      "kind": "complete_header",
+      "raw": "theorem raisedPolicy_even (N : ℝ) (lambda6 : List ℕ → ℝ)\n    (parent : Bool → List ℕ → Bool)\n    (hparent : ∀ pre, parent true pre = true) (pre : List ℕ) :\n    raisedPolicy N lambda6 parent true pre = true :=",
+      "sha256": "8d387220b42e983bf6b7a4a111d32dd9d90d8b136fd23bc481ab750351f679f0"
+    },
+    {
+      "name": "slot19_signed_frontier_charge",
+      "kind": "complete_header",
+      "raw": "theorem slot19_signed_frontier_charge\n    (N cap : ℕ) (hN : 1 ≤ (N : ℝ)) (z : ℝ)\n    (lambda6 : List ℕ → ℝ) (parent : Bool → List ℕ → Bool)\n    (hold : ∀ state ∈ firstExitDepthFrontier 8 parent\n      (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z),\n      ordinaryRosserPrefixAdmissible false\n        (oldLevel (N : ℝ) lambda6 state.selectedPrefix) state.selectedPrefix) :\n    firstExitRetainedPolynomial (oldPolicy (N : ℝ) lambda6 parent)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial (raisedPolicy (N : ℝ) lambda6 parent)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      ((firstExitDepthFrontier 8 parent (fun p : ℕ => 1 / ((p : ℝ) - 1))\n        [] true 1 (roughPrimeUniverse N cap 0 z)).map (fun state =>\n          actualFrozenFrontierDensityTerm false N cap (oldLevel (N : ℝ) lambda6)\n              state.selectedPrefix -\n            actualFrozenFrontierDensityTerm false N cap (raisedLevel (N : ℝ) lambda6)\n              state.selectedPrefix)).sum :=",
+      "sha256": "c77b1e1c2108b3ba762604b02dd1a0fbb7e8778292b9ad3b443dee08f2ef1c18"
+    },
+    {
+      "name": "slot19_physical_frontier_charge",
+      "kind": "complete_header",
+      "raw": "theorem slot19_physical_frontier_charge\n    (N cap : ℕ) (hN : 1 ≤ (N : ℝ)) (z L : ℝ)\n    (lambda6 : List ℕ → ℝ) (parent : Bool → List ℕ → Bool)\n    (hparent : ∀ pre, parent true pre = true)\n    (hold : ∀ state ∈ firstExitDepthFrontier 8 parent\n      (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z),\n      ordinaryRosserPrefixAdmissible false\n        (oldLevel (N : ℝ) lambda6 state.selectedPrefix) state.selectedPrefix) :\n    let old := oldPolicy (N : ℝ) lambda6 parent false\n    let fresh := raisedPolicy (N : ℝ) lambda6 parent false\n    let lo := reciprocalTotientDensity (actualSmallRosserSupport N cap 0)\n      (actualSmallRosserMinus N cap 0 L)\n    let hi := reciprocalTotientDensity (actualSmallRosserSupport N cap 0)\n      (actualSmallRosserPlus N cap 0 L)\n    physicalDensitySum (actualSmallRoughModuli old N cap 0 z)\n        (actualSmallRoughRho old N cap 0 z L) -\n      physicalDensitySum (actualSmallRoughModuli fresh N cap 0 z)\n        (actualSmallRoughRho fresh N cap 0 z L) =\n      ((hi + lo) / 2) *\n        ((firstExitDepthFrontier 8 parent (fun p : ℕ => 1 / ((p : ℝ) - 1))\n          [] true 1 (roughPrimeUniverse N cap 0 z)).map (fun state =>\n            actualFrozenFrontierDensityTerm false N cap (oldLevel (N : ℝ) lambda6)\n                state.selectedPrefix -\n              actualFrozenFrontierDensityTerm false N cap (raisedLevel (N : ℝ) lambda6)\n                state.selectedPrefix)).sum +\n      ((hi - lo) / 2) *\n        (reciprocalTotientDensity (fixedRoughSupport old N cap 0 z)\n            (fun d => |fixedRoughCoefficient old N cap 0 z d|) -\n          reciprocalTotientDensity (fixedRoughSupport fresh N cap 0 z)\n            (fun d => |fixedRoughCoefficient fresh N cap 0 z d|)) :=",
+      "sha256": "c546b52480e7d1df770a5d703cd88179531f96e4413432af054f10b9e49d41d0"
+    }
+  ],
+  "changed_proof_names": [
+    "selectedMask_sum"
+  ],
+  "all_definitions_imports_data_constants_quantifiers_hypotheses_exact": true,
+  "source_outside_proof_bodies": "exact except explicitly registered neutral verification comment pointer",
+  "mathematical_review": "Unfold exactly the original Fin8 mask {1,3,7}; closed kernel decide establishes only distinct singleton membership. The result is the existing selectedSum t with the same three labels and association.",
+  "new_assumptions_or_licence_changes": false,
+  "findings": [],
+  "source_context_graph_sha256": "42b00fa59648eeb934374f047228434d774cec3d7f16bac775c8b2d660849e71",
+  "Lean_Lake_kernel_or_audit_invocations": 0,
+  "live_or_candidate_source_mutation": false
+}

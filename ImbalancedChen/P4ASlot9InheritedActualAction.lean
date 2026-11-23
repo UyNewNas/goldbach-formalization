@@ -3,7 +3,7 @@ import ImbalancedChen.P4ASameRhoSignedMassLedger
 import ImbalancedChen.CurrentUpperEighteenBudget
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Compilation records: docs/verification/20261123-blue-compilation.
 
 Original all22 saving 9 is the ascending mask34 sixth-node increment,
 M=(1+t2+t6)/2-10^-6, compared conservatively with R=max(R0,D33).
@@ -37,7 +37,7 @@ def fifthHistory (t : Fin 6 → ℝ) : ℝ :=
 
 theorem fifthHistory_residual (t : Fin 6 → ℝ) :
     fifthHistory t - S t = 2 * t 4 - t 5 := by
-  simp [fifthHistory, S, Fin.sum_univ_succ]
+  simp [fifthHistory, P2OriginalAscending34CapDictionary.S, Fin.sum_univ_succ]
   <;> ring
 
 /-- These are local, primitive history/cap guards; no gain is a field. -/
@@ -67,7 +67,8 @@ theorem comparison_gain_le_inherited {t : Fin 6 → ℝ} {current : ℝ}
   have hM : 0 < M t - S t := hp.1.trans hp.2.2.2.1
   have hi := one_div_le_one_div_of_le hc (sub_le_sub_right h.2.2 (S t))
   have hfour : 4 / (comparisonR t - S t) ≤ 4 / (current - S t) := by
-    convert mul_le_mul_of_nonneg_left hi (by norm_num : (0 : ℝ) ≤ 4) using 1 <;> ring
+    simpa only [div_eq_mul_inv, one_mul] using
+      mul_le_mul_of_nonneg_left hi (by norm_num : (0 : ℝ) ≤ 4)
   rw [sourceGain_eq_difference _ _ t hR hM,
     sourceGain_eq_difference _ _ t hc hM]
   exact sub_le_sub_right hfour _

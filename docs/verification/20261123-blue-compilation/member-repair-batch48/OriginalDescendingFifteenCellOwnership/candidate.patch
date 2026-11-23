@@ -1,0 +1,35 @@
+--- baseline/ImbalancedChen/OriginalDescendingFifteenCellOwnership.lean
++++ candidate/ImbalancedChen/OriginalDescendingFifteenCellOwnership.lean
+@@ -153,16 +153,23 @@
+ theorem coordinates_pos {i : Fin 15} {t : Point} (h : StrictRows i t) :
+     ∀ j, 0 < t j := by
+   have hlast : 0 < t 7 := lt_trans (by norm_num) h.lastFloor
+-  have h0 := h.order 0
+-  have h1 := h.order 1
+-  have h2 := h.order 2
+-  have h3 := h.order 3
+-  have h4 := h.order 4
+-  have h5 := h.order 5
+-  have h6 := h.order 6
+-  norm_num at h0 h1 h2 h3 h4 h5 h6
++  have h6 : 0 < t 6 := lt_trans hlast (h.order 6)
++  have h5 : 0 < t 5 := lt_trans h6 (h.order 5)
++  have h4 : 0 < t 4 := lt_trans h5 (h.order 4)
++  have h3 : 0 < t 3 := lt_trans h4 (h.order 3)
++  have h2 : 0 < t 2 := lt_trans h3 (h.order 2)
++  have h1 : 0 < t 1 := lt_trans h2 (h.order 1)
++  have h0 : 0 < t 0 := lt_trans h1 (h.order 0)
+   intro j
+-  fin_cases j <;> linarith
++  fin_cases j
++  · exact h0
++  · exact h1
++  · exact h2
++  · exact h3
++  · exact h4
++  · exact h5
++  · exact h6
++  · exact hlast
+ 
+ /-- Literal owned rows enter the EXISTING original descending action once
+ the actual inherited parent has passed rank7 and is below its raw envelope.

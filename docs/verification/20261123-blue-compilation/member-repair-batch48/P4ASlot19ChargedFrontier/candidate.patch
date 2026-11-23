@@ -1,0 +1,24 @@
+--- baseline/ImbalancedChen/P4ASlot19ChargedFrontier.lean
++++ candidate/ImbalancedChen/P4ASlot19ChargedFrontier.lean
+@@ -4,7 +4,7 @@
+ import ImbalancedChen.P4AAll22OriginalKLedger
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Compilation records: docs/verification/20261123-blue-compilation.
+ 
+ A structural rank-eight charge for the proposed slot-19 mask 138. The action
+ retains the actual inherited sixth ancestor outside the physical-row guard.
+@@ -31,7 +31,11 @@
+ 
+ theorem selectedMask_sum (t : Point) :
+     (∑ i ∈ selectedMask, t i) = selectedSum t := by
+-  norm_num [selectedMask, selectedSum]
++  rw [selectedMask,
++    Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({3, 7} : Finset (Fin 8))),
++    Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({7} : Finset (Fin 8))),
++    Finset.sum_singleton]
++  simp only [P2OriginalThirdMinorantLogDictionarySourceOnly.selectedSum, add_assoc]
+ 
+ theorem selectedMask_bits : (2 ^ 1 + 2 ^ 3 + 2 ^ 7 : ℕ) = 138 :=
+   selected_mask_dictionary

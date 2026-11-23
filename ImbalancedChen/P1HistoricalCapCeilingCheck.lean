@@ -235,15 +235,15 @@ theorem p1LevelCheck_does_not_imply_ceiling :
     ∃ D : HistoricalPrefixCapData,
       D.levelCheck = true ∧ D.p1CapCeilingCheck 1 = false := by
   refine ⟨p1CeilingIndependenceHighFallback, ?_, ?_⟩
-  · simp [levelCheck, p1CeilingIndependenceHighFallback]
-  · norm_num [p1CapCeilingCheck, p1CeilingIndependenceHighFallback]
+  · decide
+  · decide
 
 theorem p1CeilingCheck_does_not_imply_levelCheck :
     ∃ D : HistoricalPrefixCapData,
       D.p1CapCeilingCheck 1 = true ∧ D.levelCheck = false := by
   refine ⟨p1CeilingIndependenceDecreasingThird, ?_, ?_⟩
-  · norm_num [p1CapCeilingCheck, p1CeilingIndependenceDecreasingThird]
-  · norm_num [levelCheck, p1CeilingIndependenceDecreasingThird]
+  · decide
+  · decide
 
 end HistoricalPrefixCapData
 

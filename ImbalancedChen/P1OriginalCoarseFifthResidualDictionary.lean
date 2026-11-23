@@ -74,6 +74,7 @@ theorem newOwnCube_normalized_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : �
         (primeHistoryTuple 5 history) := by
   rw [actualPrimeTupleOwnCubeMinus_primeHistoryTuple N cap _ (k := 4) hlen]
   simp only [actualOwnCubeGatedMinusDensity, level5, effectiveExponent5]
+  rfl
 
 theorem oldOwnCube_normalized_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)
@@ -87,6 +88,7 @@ theorem oldOwnCube_normalized_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : �
   rw [actualPrimeTupleOwnCubeMinus_primeHistoryTuple N cap _ (k := 4) hlen]
   simp only [actualOwnCubeGatedMinusDensity, P1OriginalCoarseContinuation.level4,
     P1OriginalCoarseContinuation.effectiveExponent4]
+  rfl
 
 theorem coarseTupleOwnCubeDifference_history (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)
