@@ -63,7 +63,9 @@ theorem eventually_log_rpow_le_roughCutoff (B : ℝ) :
       Real.log x * (1 / (Real.log (Real.log x)) ^ 3) := by
     rw [mul_one_div]
     apply (le_div_iff₀ (pow_pos hloglogpos 3)).mpr
-    convert hfour using 1 <;> ring
+    calc
+      _ = B * (Real.log (Real.log x)) ^ 4 := by ring
+      _ ≤ Real.log x := hfour
   rw [Real.rpow_def_of_pos hlogpos, Real.rpow_def_of_pos hxpos]
   exact Real.exp_le_exp.mpr hexponent
 
@@ -199,7 +201,8 @@ theorem uniformAuxiliarySW_of_rough_one
     calc
       _ = (C * (F i).U / (Real.log (F i).scale) ^ A) * 1 := by ring
       _ ≤ (C * (F i).U / (Real.log (F i).scale) ^ A) *
-          (k.divisors.card : ℝ) := mul_le_mul_of_nonneg_left hτ (by positivity)
+          (k.divisors.card : ℝ) :=
+        mul_le_mul_of_nonneg_left hτ (div_nonneg (mul_nonneg hC.le (hU i).le) hden.le)
       _ = _ := by ring
   simp only [pow_one]
   calc
@@ -308,11 +311,12 @@ theorem eventually_auxiliarySW_large_modulus_logAccuracy
       auxiliarySWError_norm_le_large_modulus S α H k q b hS hH3 hqpos hα
     _ ≤ (H : ℝ) * Real.log x / (Real.log x) ^ (A + 2) + 2 +
         (H : ℝ) * c * (2 * Real.log x) / (Real.log x) ^ (A + 2) :=
-      add_le_add (add_le_add_right hAP 2) hmean
+      add_le_add (add_le_add hAP le_rfl) hmean
     _ = (D / Real.log x) * ((H : ℝ) / (Real.log x) ^ A) + 2 := by
       rw [Real.rpow_add hlogpos, Real.rpow_ofNat]
       dsimp [D]
-      field_simp [hlogpos.ne', hR.ne'] <;> ring
+      field_simp [hlogpos.ne', hR.ne']
+      ring
     _ ≤ (epsilon / 2) * ((H : ℝ) / (Real.log x) ^ A) +
         (epsilon / 2) * (H : ℝ) / (Real.log x) ^ A :=
       add_le_add (mul_le_mul_of_nonneg_right hDsmall (by positivity)) htwo

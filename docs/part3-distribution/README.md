@@ -1,6 +1,24 @@
 # Part 3：算术分布与实际误差供应者交接
 
-## 最新小批：quotient 筛余项直接供应者已验收
+## 2026-11-23 本地续证
+
+本轮以 P3 分支 `688f495a56d29ad250bd0719ef2cb8c18d5f722c` 为基线，沿用
+Lean、Mathlib 和 goldbach-lean 的固定版本。低秩 BV、辅助互素剥离和归一化修复保持原有定理陈述。
+
+- **粗糙数辅助 SW**。对粗糙 `1` 和粗糙 Möbius 槽按最大素因子分纤维，在每个商尺度应用固定依赖中的素数 SW。合并后用分部求和支付复权和 Mellin 的变化量。
+  `uniformAuxiliarySW_of_chart_mellin_slot` 使用实际区间、粗糙截止及精确互素主项。调用者提供分离后的槽系数、截止下界和固定的对数变化量预算。[证明](../../ImbalancedChen/Part3RoughAuxiliarySWChart.lean)
+- **粗糙一长槽**。实际 Brun 截断支撑、有限点态夹逼、阶乘间隙和 Mertens 调和界合并为任意对数节省。`eventually_longSlot_brunRough_logAccuracy` 覆盖尖锐整数区间，保留短因子权和模数权以及逐模数的 `1/φ(q)` 主项质量。[证明](../../ImbalancedChen/Part3LongSlotBrunNormalization.lean)
+- **频率与碰撞**。固定平滑截断的倒数相位完成分别支付零频的 Ramanujan 项与非零频的 Weil 项。有限碰撞二次矩从 `082e55b2b0a82c422b3b9391f41ec21d1f2cbad9` 导入，保留实际的非零符号差、不同 `f` 的碰撞以及辅助除子截断。[倒数相位完成](../../ImbalancedChen/Part3CompletedReciprocalWeil.lean) · [碰撞二次矩](../../ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean)
+
+验证器逐个编译和回放本轮模块，并用序列化声明库存复核所有所属声明的传递公理。
+
+```sh
+python3 verification/verify_part3_distribution.py --expected-head "$(git rev-parse HEAD)"
+```
+
+完整 `RestrictedMediumObligation` 和实际 `UniformPrimeProductTarget` 仍开放。余项包括手稿 (18) 的完整频率聚合、(23) 与实际复系数及频率盒的接合、(24) 的共同非零相位谱返回，以及两长槽和实际素数乘积的统一组装。
+
+## 历史批次：quotient 筛余项直接供应者验收
 
 `ImbalancedChen.ChenQuotientSieveRemainders` 已完成严格编译、同对象原装重放、
 34 项所属声明的完整编译器类型／传递公理审计，以及审计对象重放。独立复编对象与被重放对象
@@ -10,7 +28,7 @@ SHA256 完全相同；仅出现 `propext`、`Classical.choice`、`Quot.sound`。
 这一小批只消除了 `Part3PrimeAPDistribution` 的两个直接导入阻塞之一。冻结 goldbach
 BV 供应者仍缺，目标模块尚未开始实际 elaboration，故新增已确认的分布定理仍为 0。
 
-## 最新小批：真实素数 BV 的导入诊断（阻塞）
+## 历史批次：真实素数 BV 的导入诊断
 
 从 `f37f341412eb239f7e7e8937921ee8d01c9c2922` 继续，仅核对并尝试验收 `Part3PrimeAPDistribution`。生产源码保持不变。固定分支的 348 个文件逐 Git blob 恢复匹配；目标涉及的 25 个项目源码和 11 个依赖包固定版本均已核对。
 
@@ -18,7 +36,7 @@ BV 供应者仍缺，目标模块尚未开始实际 elaboration，故新增已�
 
 实际命令、日志、缺项清单、完整源码声明头和 pinned 供应者匹配见 [本批交接](../../verification/parts/p3/prime-ap-distribution/HANDOFF.md)。13 条定理仍为候选，普通 BV 的平方根物理模数、真实素数共同区间、移动互素余数和零相位边界保持原样。本批没有启动依赖闭包重建，没有修改既有完整验证门。
 
-## 最新局部验收：长整数槽归一化
+## 历史批次：长整数槽归一化
 
 在 `7d70a2545fd819706e473eb41e4d430ad19119d8` 之后的小批中，已按 Part 0 固定提交 `80aca6710c83b5160f4c5fdd05d180e507990e95` 接收长槽修复，并完成 `Part3LongSlotNormalization` 原有两条定理的严格编译、原装生产对象重放、全部定义模块声明传递公理审计。两条证明源码保持不变；编译器库存与序列化库存均为 2 条，三门绑定同一源码、目标对象和实际导入对象。
 

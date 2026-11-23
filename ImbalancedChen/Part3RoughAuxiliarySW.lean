@@ -78,8 +78,18 @@ theorem auxiliarySWError_sub_one_norm_le_bad_mass
     rw [← sum_sub_distrib]
     apply sum_congr rfl
     intro n _
-    by_cases hqn : Nat.Coprime n q <;> by_cases hkn : Nat.Coprime n k <;>
-      simp [Nat.coprime_mul_iff_right, hqn, hkn]
+    by_cases hqn : Nat.Coprime n q
+    · by_cases hkn : Nat.Coprime n k
+      · have hremoved : ¬ (Nat.Coprime n q ∧ ¬ Nat.Coprime n k) := fun h => h.2 hkn
+        rw [if_pos (Nat.coprime_mul_iff_right.mpr ⟨hkn, hqn⟩), if_pos hqn,
+          if_neg hremoved, sub_zero]
+      · have hprod : ¬ Nat.Coprime n (k * q) :=
+          fun h => hkn (Nat.coprime_mul_iff_right.mp h).1
+        rw [if_neg hprod, if_pos hqn, if_pos (And.intro hqn hkn), sub_self]
+    · have hprod : ¬ Nat.Coprime n (k * q) :=
+        fun h => hqn (Nat.coprime_mul_iff_right.mp h).2
+      have hremoved : ¬ (Nat.Coprime n q ∧ ¬ Nat.Coprime n k) := fun h => hqn h.1
+      rw [if_neg hprod, if_neg hqn, if_neg hremoved, sub_zero]
   have heq : auxiliarySWError S α k q b - auxiliarySWError S α 1 q b =
       -A + B / (Nat.totient q : ℂ) := by
     unfold auxiliarySWError
@@ -117,7 +127,7 @@ theorem sum_norm_not_coprime_le_rough
     (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖) ≤
       (k.primeFactors.card : ℝ) * (H : ℝ) / z := by
   let T := (S.filter (fun n => ¬Nat.Coprime n k)).filter (fun n => α n ≠ 0)
-  let P := k.primeFactors.filter (fun p => z < (p : ℝ))
+  let P : Finset ℕ := k.primeFactors.filter (fun p => z < (p : ℝ))
   have hmass : (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖) =
       ∑ n ∈ T, ‖α n‖ := by
     symm
@@ -218,8 +228,8 @@ theorem auxiliarySWError_norm_le_one_add
       ring
     _ ≤ ‖auxiliarySWError S α 1 q b‖ +
         ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ := norm_add_le _ _
-    _ ≤ _ := add_le_add_left
-      (auxiliarySWError_sub_one_norm_le S α H k q b z hS hz hk hq hα hrough) _
+    _ ≤ _ := add_le_add le_rfl
+      (auxiliarySWError_sub_one_norm_le S α H k q b z hS hz hk hq hα hrough)
 
 /-- The literal rough integer slot. -/
 def roughOneSlot (z : ℝ) (n : ℕ) : ℂ := by
@@ -320,7 +330,10 @@ private theorem card_filter_modEq_le_prefix
   have hinv : (1 : ℝ) / q ≤ 1 := div_le_self zero_le_one hq1
   calc
     _ ≤ (((H + 1) / q : ℕ) : ℝ) + 1 := hcard
-    _ ≤ ((H + 1 : ℕ) : ℝ) / q + 1 := add_le_add_right Nat.cast_div_le 1
+    _ ≤ ((H + 1 : ℕ) : ℝ) / q + 1 := by
+      have hdiv : (((H + 1) / q : ℕ) : ℝ) ≤ ((H + 1 : ℕ) : ℝ) / q :=
+        Nat.cast_div_le
+      exact add_le_add hdiv le_rfl
     _ = (H : ℝ) / q + 1 / q + 1 := by rw [Nat.cast_add, Nat.cast_one, add_div]
     _ ≤ (H : ℝ) / q + 2 := by linarith only [hinv]
 
@@ -344,8 +357,11 @@ theorem auxiliarySWError_norm_le_large_modulus
       _ ≤ ∑ n ∈ S, if Nat.ModEq q n b then (1 : ℝ) else 0 := by
         apply sum_le_sum
         intro n hn
-        by_cases hb : Nat.ModEq q n b <;> by_cases hk : Nat.Coprime n k <;>
-          simp [hb, hk, hα n hn]
+        by_cases h : Nat.ModEq q n b ∧ Nat.Coprime n k
+        · rw [if_pos h, if_pos h.1]
+          exact hα n hn
+        · rw [if_neg h, norm_zero]
+          split_ifs <;> norm_num
       _ = ((S.filter (fun n => Nat.ModEq q n b)).card : ℝ) := by
         rw [← sum_filter]
         simp
@@ -356,7 +372,11 @@ theorem auxiliarySWError_norm_le_large_modulus
       _ ≤ ∑ _n ∈ S, (1 : ℝ) := by
         apply sum_le_sum
         intro n hn
-        by_cases h : Nat.Coprime n (k * q) <;> simp [h, hα n hn]
+        by_cases h : Nat.Coprime n (k * q)
+        · rw [if_pos h]
+          exact hα n hn
+        · rw [if_neg h, norm_zero]
+          exact zero_le_one
       _ = (S.card : ℝ) := by simp
       _ ≤ (H : ℝ) := by
         have hcard : S.card ≤ H := (card_le_card hS).trans_eq (by simp)

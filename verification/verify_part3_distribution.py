@@ -38,8 +38,16 @@ CONFIG_SHA256 = {
 MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3DistributionTargets", "Part3PrimeAPDistribution",
     "Part3CurrentLowerDistribution", "Part3LongSlotDistribution",
-    "Part3LongSlotNormalization", "Part3RoughAuxiliarySW",
-    "Part3RoughAuxiliarySWNormalization"))
+    "Part3LongSlotNormalization", "Part3BrunWeights", "Part3BrunBudget",
+    "Part3LongSlotDivisorExpansion", "Part3LongSlotBrunTransfer",
+    "Part3RoughAuxiliarySW", "Part3RoughAuxiliarySWNormalization",
+    "Part3RoughAuxiliarySWPrimeFactor", "Part3RoughAuxiliarySWWeighted",
+    "Part3RoughAuxiliarySWMellin", "Part3RoughAuxiliarySWChart",
+    "Part3LongSlotBrunNormalization", "Part3CompletedReciprocalWeil",
+    "Part3ComplexDispersion", "Part3ComplexCRTConsumer",
+    "Part3FactorFiberDivisor", "Part3CommonSmoothCutoff",
+    "Part3CleanBetaLargeGCDMajorant", "Part3PolynomialResidueDivisorBound",
+    "Part3ActualLargeGCDBetaMass", "Part3LichtmanSignedDifferenceMultiplicity"))
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/Part3DistributionAudit.lean"
 WORKFLOW = ".github/workflows/part3-distribution.yml"
@@ -221,7 +229,8 @@ def main() -> None:
                        ",".join(r["axioms"]) for r in records if r["kind"] == "theorem") + "\n")
         report.update(status="PASSED", declaration_count=len(records), module_counts=counts)
         save()
-        print(f"PASS: {len(records)} declarations, all five builds, strict compiles, kernel replays and full transitive audits.")
+        print(f"PASS: {len(records)} declarations across {len(MODULES)} modules, "
+              "with strict compilation, kernel replay and complete transitive audits.")
     except BaseException as error:
         report.update(status="FAILED", error=str(error))
         save()

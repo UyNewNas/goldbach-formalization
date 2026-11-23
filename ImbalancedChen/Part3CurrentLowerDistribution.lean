@@ -127,8 +127,8 @@ theorem part3_quotientRemainder_log_saving_add_centre
       ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →
         ∀ A : ℝ, ∀ T : Finset α, ∀ b : α → ℕ, ∀ S : α → Finset ℕ,
           ∀ hN : Even N,
-          ∀ hbpos : ∀ t ∈ T, 0 < b t,
-          ∀ hbN : ∀ t ∈ T, Nat.Coprime (b t) N,
+          ∀ _hbpos : ∀ t ∈ T, 0 < b t,
+          ∀ _hbN : ∀ t ∈ T, Nat.Coprime (b t) N,
           ∀ hb : ∀ t ∈ T, Nat.Coprime (b t) (sieveProduct N (Nat.ceil A)),
           Set.InjOn b (T : Set α) → ChenQuotientRows N A Q T b S →
           (∑ t ∈ T.attach, ∑ e ∈ S t.val,
@@ -145,7 +145,7 @@ theorem part3_quotientRemainder_log_saving_add_centre
     T b S N A (trueLogarithmicIntegral N) Q heven hbpos hbN hb hinj
     (fun t ht e he => (Finset.mem_filter.mp (hrows t ht he)).1)
     (fun t ht e he => (Finset.mem_filter.mp (hrows t ht he)).2)).trans ?_
-  apply add_le_add_right
+  refine add_le_add ?_ le_rfl
   exact mul_le_mul_of_nonneg_left (hN Q hQ) (by
     have hlog : 0 ≤ Real.log (max 1 (Q : ℝ)) := Real.log_nonneg (le_max_left _ _)
     positivity)
@@ -262,7 +262,9 @@ theorem part3CurrentLowerCentreCost_le_sqrt_log_cube {N Q : ℕ}
   let L : ℝ := Real.log (N : ℝ) / Real.log 2
   have htwo : 0 < Real.log 2 := Real.log_pos (by norm_num)
   have htwo1 : Real.log 2 ≤ 1 := by
-    simpa using (Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2))
+    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)
+    norm_num at h ⊢
+    exact h
   have hL : 1 ≤ L := (le_div_iff₀ htwo).mpr (by simpa using htwo1.trans hlog)
   have hpow : L ^ 2 ≤ L ^ 3 := by
     have h := mul_nonneg (sub_nonneg.mpr hL) (sq_nonneg L)
@@ -371,7 +373,7 @@ theorem part3_currentLowerRemainder_negligible :
       _ ≤ (36 * Real.log (N : ℝ)) *
           (C * (N : ℝ) / Real.log (N : ℝ) ^ (4 : ℕ)) :=
         mul_le_mul_of_nonneg_right hfactor (by positivity)
-      _ = _ := by field_simp [ne_of_gt hlogpos]; ring
+      _ = _ := by field_simp [ne_of_gt hlogpos]
   have hlogprod : 72 * C ≤ Real.log (N : ℝ) * (epsilon * twinPrimeConstant) :=
     (div_le_iff₀ (mul_pos hepsilon twinPrimeConstant_pos)).mp hlargeN
   have hcoefficient : 36 * C / Real.log (N : ℝ) ≤
@@ -382,7 +384,7 @@ theorem part3_currentLowerRemainder_negligible :
     calc
       _ = (36 * C / Real.log (N : ℝ)) *
           ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) := by
-        field_simp [ne_of_gt hlogpos]; ring
+        field_simp [ne_of_gt hlogpos]
       _ ≤ ((epsilon / 2) * twinPrimeConstant) *
           ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) :=
         mul_le_mul_of_nonneg_right hcoefficient (by positivity)
