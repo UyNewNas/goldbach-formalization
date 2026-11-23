@@ -3,7 +3,8 @@ import ImbalancedChen.CurrentChenPairHarmonicMean
 import ImbalancedChen.ActualRosserLowerLimit
 
 /-!
-Original U5 causal-level dictionary. SOURCE ONLY: never compiled.
+Original U5 causal-level dictionary.
+Verification records: docs/verification/20261123-blue-compilation.
 
 The root occurrence in section 4 of global-chen-lower-completion-20261010
 uses V=max(v(t),v(t+u),Lambda-3a/8), not the ordinary level 1/2.
@@ -199,7 +200,7 @@ theorem integral_eq_canonical (corr : ℝ → ℝ) :
     integral corr = ∫ x in triangle, canonicalKernel corr x * ∏ i, 1 / x i := by
   apply setIntegral_congr_fun measurableSet_triangle
   intro x hx
-  rw [kernel_eq_canonical hx]
+  exact congrArg (fun y => y * ∏ i, 1 / x i) (kernel_eq_canonical hx corr)
 
 end
 

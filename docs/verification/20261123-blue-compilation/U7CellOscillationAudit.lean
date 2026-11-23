@@ -1,0 +1,29 @@
+import ImbalancedChen.P5U7OriginalKernelOscillation
+import ImbalancedChen.P5U7OriginalRationalCellBounds
+
+set_option pp.all true
+
+#check @ImbalancedChen.p5U7OmegaArgument_abs_sub_le
+#print axioms ImbalancedChen.p5U7OmegaArgument_abs_sub_le
+#check @ImbalancedChen.p5U7OmegaKernel_abs_sub_le_original
+#print axioms ImbalancedChen.p5U7OmegaKernel_abs_sub_le_original
+#check @ImbalancedChen.p5U7_logLower_nonneg
+#print axioms ImbalancedChen.p5U7_logLower_nonneg
+#check @ImbalancedChen.p5U7_buchstab_first_rational_interval
+#print axioms ImbalancedChen.p5U7_buchstab_first_rational_interval
+#check @ImbalancedChen.p5U7_buchstab_second_rational_interval
+#print axioms ImbalancedChen.p5U7_buchstab_second_rational_interval
+#check @ImbalancedChen.p5U7_argument_rational_box
+#print axioms ImbalancedChen.p5U7_argument_rational_box
+#check @ImbalancedChen.p5U7FirstCellLower
+#print axioms ImbalancedChen.p5U7FirstCellLower
+#check @ImbalancedChen.p5U7FirstCellUpper
+#print axioms ImbalancedChen.p5U7FirstCellUpper
+#check @ImbalancedChen.p5U7SecondCellLower
+#print axioms ImbalancedChen.p5U7SecondCellLower
+#check @ImbalancedChen.p5U7SecondCellUpper
+#print axioms ImbalancedChen.p5U7SecondCellUpper
+#check @ImbalancedChen.p5U7_original_first_rational_cell_bounds
+#print axioms ImbalancedChen.p5U7_original_first_rational_cell_bounds
+#check @ImbalancedChen.p5U7_original_second_rational_cell_bounds
+#print axioms ImbalancedChen.p5U7_original_second_rational_cell_bounds

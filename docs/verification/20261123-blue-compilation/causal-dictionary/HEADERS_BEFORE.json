@@ -1,0 +1,137 @@
+[
+  {
+    "name": "a",
+    "kind": "def",
+    "header": "def a : ℝ"
+  },
+  {
+    "name": "h",
+    "kind": "def",
+    "header": "def h : ℝ"
+  },
+  {
+    "name": "triangle",
+    "kind": "def",
+    "header": "def triangle : Set (Fin 2 → ℝ)"
+  },
+  {
+    "name": "mem_triangle",
+    "kind": "theorem",
+    "header": "theorem mem_triangle {x : Fin 2 → ℝ} :\n    x ∈ triangle ↔ a ≤ x 0 ∧ x 0 < x 1 ∧ x 1 < h"
+  },
+  {
+    "name": "measurableSet_triangle",
+    "kind": "theorem",
+    "header": "theorem measurableSet_triangle : MeasurableSet triangle"
+  },
+  {
+    "name": "level",
+    "kind": "def",
+    "header": "def level (u t : ℝ) : ℝ"
+  },
+  {
+    "name": "residual",
+    "kind": "def",
+    "header": "def residual (x : Fin 2 → ℝ) : ℝ"
+  },
+  {
+    "name": "argument",
+    "kind": "def",
+    "header": "def argument (x : Fin 2 → ℝ) : ℝ"
+  },
+  {
+    "name": "alpha",
+    "kind": "def",
+    "header": "def alpha (x : Fin 2 → ℝ) : ℝ"
+  },
+  {
+    "name": "original_cutoff_square",
+    "kind": "theorem",
+    "header": "theorem original_cutoff_square : h < 2 * a"
+  },
+  {
+    "name": "level_bounds",
+    "kind": "theorem",
+    "header": "theorem level_bounds {u t : ℝ}\n    (hu : a ≤ u) (hut : u ≤ t) (ht : t ≤ h) :\n    (1 + t) / 2 ≤ level u t ∧ level u t ≤ (1 + t + u) / 2"
+  },
+  {
+    "name": "residual_bounds",
+    "kind": "theorem",
+    "header": "theorem residual_bounds {x : Fin 2 → ℝ}\n    (hu : a ≤ x 0) (hut : x 0 ≤ x 1) (ht : x 1 ≤ h) :\n    (34 / 125 : ℝ) ≤ residual x ∧ residual x ≤ 2083 / 5000"
+  },
+  {
+    "name": "residual_pos",
+    "kind": "theorem",
+    "header": "theorem residual_pos {x : Fin 2 → ℝ} (hx : x ∈ triangle) : 0 < residual x"
+  },
+  {
+    "name": "selected_full_squares",
+    "kind": "theorem",
+    "header": "theorem selected_full_squares {x : Fin 2 → ℝ} (hx : x ∈ triangle) :\n    2 * x 1 < level (x 0) (x 1) ∧\n      x 1 + 2 * x 0 < level (x 0) (x 1)"
+  },
+  {
+    "name": "cutoff_square",
+    "kind": "theorem",
+    "header": "theorem cutoff_square {x : Fin 2 → ℝ} (hx : x ∈ triangle) :\n    x 0 + x 1 + 2 * a < level (x 0) (x 1)"
+  },
+  {
+    "name": "argument_mem",
+    "kind": "theorem",
+    "header": "theorem argument_mem {x : Fin 2 → ℝ} (hx : x ∈ triangle) :\n    argument x ∈ Icc (2 : ℝ) 5"
+  },
+  {
+    "name": "alpha_ge_two",
+    "kind": "theorem",
+    "header": "theorem alpha_ge_two {x : Fin 2 → ℝ} (hx : x ∈ triangle) : 2 ≤ alpha x"
+  },
+  {
+    "name": "residual_div_argument",
+    "kind": "theorem",
+    "header": "theorem residual_div_argument {x : Fin 2 → ℝ} (hx : x ∈ triangle) :\n    residual x / argument x = a"
+  },
+  {
+    "name": "lowerAmplitude",
+    "kind": "def",
+    "header": "def lowerAmplitude (s : ℝ) : ℝ"
+  },
+  {
+    "name": "kernel",
+    "kind": "def",
+    "header": "def kernel (corr : ℝ → ℝ) (x : Fin 2 → ℝ) : ℝ"
+  },
+  {
+    "name": "canonicalKernel",
+    "kind": "def",
+    "header": "def canonicalKernel (corr : ℝ → ℝ) (x : Fin 2 → ℝ) : ℝ"
+  },
+  {
+    "name": "kernel_eq_canonical",
+    "kind": "theorem",
+    "header": "theorem kernel_eq_canonical {x : Fin 2 → ℝ} (hx : x ∈ triangle)\n    (corr : ℝ → ℝ) : kernel corr x = canonicalKernel corr x"
+  },
+  {
+    "name": "lowerAmplitude_eq_log",
+    "kind": "theorem",
+    "header": "theorem lowerAmplitude_eq_log {s : ℝ} (hs : 2 ≤ s) (hs4 : s ≤ 4) :\n    lowerAmplitude s = Real.log (s - 1)"
+  },
+  {
+    "name": "kernel_eq_log_of_argument_le_four",
+    "kind": "theorem",
+    "header": "theorem kernel_eq_log_of_argument_le_four {x : Fin 2 → ℝ}\n    (hx : x ∈ triangle) (hx4 : argument x ≤ 4) (corr : ℝ → ℝ) :\n    kernel corr x =\n      4 * (Real.log (argument x - 1) + corr (argument x)) / residual x"
+  },
+  {
+    "name": "second_interval_witness",
+    "kind": "theorem",
+    "header": "theorem second_interval_witness :\n    (![9 / 100, 1 / 10] : Fin 2 → ℝ) ∈ triangle ∧\n      argument (![9 / 100, 1 / 10] : Fin 2 → ℝ) = 675 / 139 ∧\n      (4 : ℝ) < argument (![9 / 100, 1 / 10] : Fin 2 → ℝ)"
+  },
+  {
+    "name": "integral",
+    "kind": "def",
+    "header": "def integral (corr : ℝ → ℝ) : ℝ"
+  },
+  {
+    "name": "integral_eq_canonical",
+    "kind": "theorem",
+    "header": "theorem integral_eq_canonical (corr : ℝ → ℝ) :\n    integral corr = ∫ x in triangle, canonicalKernel corr x * ∏ i, 1 / x i"
+  }
+]

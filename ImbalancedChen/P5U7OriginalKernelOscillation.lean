@@ -1,7 +1,8 @@
 import ImbalancedChen.P5U7OriginalBuchstabLipschitz
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 Explicit oscillation bound for the actual K=1 original U7 kernel on its
 complete closed triangle. The proof uses the actual cross-seam Buchstab
 Lipschitz theorem, exact rational-function differences, and the original
@@ -65,7 +66,7 @@ theorem p5U7OmegaArgument_abs_sub_le {t u v w : ℝ}
       (abs_nonneg (1 / u - 1 / w)) zero_le_one
     simpa only [one_mul] using hh
   rw [heq]
-  exact (abs_add _ _).trans (add_le_add hfirst hsecond)
+  exact (abs_add_le _ _).trans (add_le_add hfirst hsecond)
 
 private def p5U7ReciprocalKernel (t u : ℝ) : ℝ := (1 / t) * (1 / u) * (1 / u)
 
@@ -107,10 +108,10 @@ private theorem p5U7ReciprocalKernel_abs_sub_le {t u v w : ℝ}
         (p5U7_inverse_difference_le hu hw)
       _ = _ := by ring
   rw [heq]
-  have htri := (abs_add
+  have htri := (abs_add_le
     ((1 / t - 1 / v) * (1 / u) * (1 / u) + (1 / v) * (1 / u - 1 / w) * (1 / u))
     ((1 / v) * (1 / w) * (1 / u - 1 / w))).trans
-      (add_le_add_right (abs_add _ _) _)
+      (add_le_add_left (abs_add_le _ _) _)
   linarith only [htri, h1, h2, h3]
 
 /-- Explicit actual-kernel oscillation, crossing the s=2 seam whenever
@@ -161,7 +162,7 @@ theorem p5U7OmegaKernel_abs_sub_le_original {t u v w : ℝ}
     rw [abs_mul]
     have hh := mul_le_mul hb' hRdiff (abs_nonneg _) zero_le_one
     simpa only [one_mul] using hh
-  have htri := abs_add
+  have htri := abs_add_le
     ((buchstab (p5U7OmegaArgument t u) - buchstab (p5U7OmegaArgument v w)) *
       p5U7ReciprocalKernel t u)
     (buchstab (p5U7OmegaArgument v w) *

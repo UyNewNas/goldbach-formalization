@@ -1,4 +1,4 @@
-本记录覆盖七个依赖模块、共 215 个公开声明的检查。三个 U7 模块分别检查 30、6、21 个声明，连续筛模块 15 个，三个 Member 支撑模块共 143 个。U7 源码对应 1106 版手稿的第七积分原三角域，边界为 `59/250 ≤ t ≤ 1/3`、`t ≤ u ≤ (1-t)/2`，分段接缝为 `u=(1-t)/3`。手稿固定到 `a988cba584d803ae2856a0de50efb582f4f3dd6a` 的 `paper/release-20261106/en`。
+本记录覆盖十个依赖模块、共 254 个公开声明的检查。五个 U7 模块共检查 69 个声明，连续筛模块 15 个，四个 Member 支撑模块共 170 个。U7 源码对应 1106 版手稿的第七积分原三角域，边界为 `59/250 ≤ t ≤ 1/3`、`t ≤ u ≤ (1-t)/2`，分段接缝为 `u=(1-t)/3`。手稿固定到 `a988cba584d803ae2856a0de50efb582f4f3dd6a` 的 `paper/release-20261106/en`。
 
 原构建在行积分的连续性组合处达到 4,000,000 heartbeat 上限，两处积分字典改写还保留了函数应用形式。修补显式给出配对映射、映射到正象限的证明与 `ContinuousOn.comp'` 的函数参数，并在分支改写前用 `change` 展开定义相等的条件表达式。复用了原来的全部定义、数字常数与 30 个公开声明。源码的状态注释指向本目录。
 
@@ -47,6 +47,8 @@ lake env lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 --stdin < /workspace/
 
 结果、15 个完整类型与传递公理、五项产物及实际编译器命令见 [P2_CONTINUOUS_SIEVE_RESULTS.json](P2_CONTINUOUS_SIEVE_RESULTS.json)，选版见 [P2_CONTINUOUS_SIEVE_SOURCE_SELECTION.json](P2_CONTINUOUS_SIEVE_SOURCE_SELECTION.json)。源码及五项产物在 kernel replay 和声明检查前后保持一致，公理集合仍限于上述三项。原失败与成功日志均保存在本目录。
 
+U7 的 `P5U7OriginalKernelOscillation` 与 `P5U7OriginalRationalCellBounds` 分别检查 2 个和 10 个公开声明。前者适配固定 Mathlib 的绝对值三角不等式与同加项 API，后者显式搬运 `Rat.cast_le` 并归一化 `132/59` 的转换；原闭三角、接缝、常量及所有声明保持不变。标准构建、一次枚举两模块的独立 kernel replay、12 个完整类型与传递公理检查均退出 0，源码和十项产物前后稳定。结果见 [U7_CELL_OSCILLATION_RESULTS.json](U7_CELL_OSCILLATION_RESULTS.json)，选版见 [振荡界](U7_KERNEL_OSCILLATION_SOURCE_SELECTION.json) 和 [有理网格界](U7_RATIONAL_CELL_SOURCE_SELECTION.json)，驱动见 [U7CellOscillationAudit.lean](U7CellOscillationAudit.lean)。
+
 Member 工程使用同一组 Lean、Mathlib、goldbach 固定版本，基础项目选源来自 `R03_SOURCE_SELECTION.json`，并使用其独立的现有 `-t0 -j2 -M12288` guard。以下两条标准构建命令均退出 0，三个模块也分别通过独立 kernel replay。
 
 ```sh
@@ -59,5 +61,9 @@ lake build ImbalancedChen.P5OriginalActionMassBound:olean
 `P5OriginalActionMassBound` 的七处证明修补使用 `setIntegral_const`、显式 `Fin 2` 坐标序链和集合参数，保持 109 个公开声明及全部定义、常量、假设不变。109 个完整类型与传递公理检查通过；结果见 [ACTION_MASS_RESULTS.json](ACTION_MASS_RESULTS.json)，选版见 [ACTION_MASS_SOURCE_SELECTION.json](ACTION_MASS_SOURCE_SELECTION.json)，驱动见 [ActionMassAudit.lean](ActionMassAudit.lean)。原阶段记录证明源码及四项输出 `.olean`、`.ilean`、`.c`、setup 在检查前后稳定；`.trace` 另记为全部检查后的独立当前快照，没有跨阶段比较。结果解析器只修正了标准公理名称的宇宙参数归一化，没有重跑成功的 Lean 命令。
 
 上述三个 Member 模块的公理集合也仅包含 `propext`、`Classical.choice` 和 `Quot.sound`。原始日志保留 Lean 的输出空白格式。各入口的最终验收与单个依赖模块的检查分别记录。
+
+Member 的 `Part5OriginalUpsilon5CausalDictionary` 另检查 27 个公开声明。其积分被积函数等式复用既有提交 `085ef205771858c7115d092766b3ffcf7ab86d55` 的 `congrArg` 证明，避免 lambda 应用下的改写匹配失败。27 个声明、11 个定义及全部常量和假设保持不变。标准构建、独立 kernel replay 和全部声明的完整类型/传递公理检查均退出 0，源码与五项产物跨阶段稳定，公理仍仅上述三项。结果与原始日志见 [causal-dictionary/VALIDATION_RESULTS.json](causal-dictionary/VALIDATION_RESULTS.json)，选源与手稿对应关系见 [REPAIR_RECEIPT.json](causal-dictionary/REPAIR_RECEIPT.json)。四个 Member 支撑模块的基础选源与生产源码覆盖见 [MEMBER_SOURCE_OVERRIDES.json](MEMBER_SOURCE_OVERRIDES.json)。
+
+本轮生成 C 辅助文件的缓存复用修正另存于 [cache-reuse](cache-reuse/README.md)，包含遗漏原因、实际恢复范围、原始身份和标准 Lake 前后检查。
 
 项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。第七积分入口和 H430 Member 入口的后续构建另行记录。
