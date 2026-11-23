@@ -1,0 +1,54 @@
+--- a/ImbalancedChen/P5U7OriginalBoundaryCostRate.lean
++++ b/ImbalancedChen/P5U7OriginalBoundaryCostRate.lean
+@@ -2,7 +2,8 @@
+ import ImbalancedChen.P5U7OriginalUniformLogTail
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ The actual generated rational-cover boundary cost has an explicit
+ vanishing rate. Proved uniform Taylor bounds give numeratorUpper<=1;
+ the original positive grid cutoff gives every actual cell upper<=125.
+@@ -29,13 +30,15 @@
+ theorem actual_logUpper_le_one (n : ℕ) (q : ℚ)
+     (hq : 2 ≤ q) (hM : q ≤ 132 / 59) : logUpper n q ≤ 1 := by
+   have hqR : (2 : ℝ) ≤ q := by exact_mod_cast hq
+-  have hMR : (q : ℝ) ≤ 132 / 59 := by exact_mod_cast hM
++  have hMR : (q : ℝ) ≤ 132 / 59 := by
++    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hM
+   have hlog := Real.log_le_sub_one_of_pos (show 0 < (q : ℝ) - 1 by linarith)
+   have hLo := (log_bounds n q hq).1
+   have hGap : (logUpper n q : ℝ) - (logLower n q : ℝ) ≤ (rate n : ℝ) := by
+     exact_mod_cast (rational_gap_le_rate n q hq hM).2
+   have hRate : (rate n : ℝ) ≤ 4 * (7 / 66 : ℝ) := by
+-    exact_mod_cast uniform_rate_le n
++    simpa only [Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr (uniform_rate_le n)
+   have hreal : (logUpper n q : ℝ) ≤ 1 := by
+     linarith only [hMR, hlog, hLo, hGap, hRate]
+   exact_mod_cast hreal
+@@ -60,12 +63,10 @@
+   have hc := (mesh_bounds ulo uhi (by norm_num [ulo, uhi]) m hm i.2 i.2.isLt.le).1
+   have ha5 : (1 / 5 : ℚ) ≤ (cell m i).a := by
+     change 1 / 5 ≤ mesh tlo thi m i.1
+-    norm_num [tlo] at ha
+-    linarith only [ha]
++    exact (by norm_num [tlo] : (1 / 5 : ℚ) ≤ tlo).trans ha
+   have hc5 : (1 / 5 : ℚ) ≤ (cell m i).c := by
+     change 1 / 5 ≤ mesh ulo uhi m i.2
+-    norm_num [ulo] at hc
+-    linarith only [hc]
++    exact (by norm_num [ulo] : (1 / 5 : ℚ) ≤ ulo).trans hc
+   have ha0 : 0 < (cell m i).a := lt_of_lt_of_le (by norm_num) ha5
+   have hc0 : 0 < (cell m i).c := lt_of_lt_of_le (by norm_num) hc5
+   have hden : (1 / 125 : ℚ) ≤ (cell m i).a * (cell m i).c ^ 2 := by
+@@ -103,7 +104,7 @@
+   have h := hi.const_mul
+     (((thi - tlo) * (3 * (thi - tlo) + 4 * (uhi - ulo)) : ℚ) : ℝ)
+   simpa only [areaRate_eq_constant_div, Rat.cast_div, Rat.cast_natCast,
+-    div_eq_mul_inv, mul_zero] using h
++    ← div_eq_mul_inv, mul_zero] using h
+ 
+ theorem tendsto_boundaryCost_fixed_precision (n : ℕ) :
+     Tendsto (fun m : ℕ => (rationalBoundaryCost n m : ℝ)) atTop (𝓝 0) := by

@@ -1,7 +1,8 @@
 import ImbalancedChen.P5U7OriginalInnerCellWidth
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 The actual generated two-regime U7 rational upper/lower sums have a proved
 vanishing gap. The complete finite boundary contribution and the actual
 inner interval-coefficient widths are paid explicitly. Neither geometric
@@ -60,7 +61,7 @@ def innerRate (n m : ℕ) : ℚ := 40000 * (tStep m + uStep m) + 125 * rate n
 def totalRate (n m : ℕ) : ℚ := 125 * areaRate m + innerRate n m
 
 theorem innerRate_nonneg (n m : ℕ) : 0 ≤ innerRate n m := by
-  have hs := step_nonneg m
+  obtain ⟨ht, hu⟩ := step_nonneg m
   have hr := rate_nonneg n
   unfold innerRate
   positivity
@@ -115,9 +116,9 @@ theorem tendsto_steps :
   have hi : Tendsto (fun m : ℕ => (m : ℝ)⁻¹) atTop (𝓝 0) :=
     tendsto_inv_atTop_zero.comp tendsto_natCast_atTop_atTop
   constructor
-  · simpa only [tStep, Rat.cast_div, Rat.cast_natCast, div_eq_mul_inv, mul_zero] using
+  · simpa only [tStep, Rat.cast_div, Rat.cast_natCast, ← div_eq_mul_inv, mul_zero] using
       hi.const_mul ((thi - tlo : ℚ) : ℝ)
-  · simpa only [uStep, Rat.cast_div, Rat.cast_natCast, div_eq_mul_inv, mul_zero] using
+  · simpa only [uStep, Rat.cast_div, Rat.cast_natCast, ← div_eq_mul_inv, mul_zero] using
       hi.const_mul ((uhi - ulo : ℚ) : ℝ)
 
 theorem tendsto_totalRate_diagonal :

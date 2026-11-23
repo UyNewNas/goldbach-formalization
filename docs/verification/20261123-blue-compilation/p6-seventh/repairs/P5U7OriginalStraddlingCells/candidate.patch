@@ -1,0 +1,41 @@
+--- a/ImbalancedChen/P5U7OriginalStraddlingCells.lean
++++ b/ImbalancedChen/P5U7OriginalStraddlingCells.lean
+@@ -2,7 +2,8 @@
+ import ImbalancedChen.P5U7OriginalOmegaFubini
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ Rational boxes may cross either the original triangle boundary or the
+ Buchstab seam. Local argument intervals are clamped separately to each
+ genuine piece; min/max joins keep both directions valid on straddling
+@@ -58,7 +59,14 @@
+     0 < (B.a : ℝ) ∧ (B.a : ℝ) ≤ B.b ∧ (B.b : ℝ) ≤ 1 / 3 ∧
+       0 < (B.c : ℝ) ∧ (B.c : ℝ) ≤ B.d := by
+   unfold Box.Valid at h
+-  exact_mod_cast h
++  obtain ⟨ha, hab, hb, hc, hcd⟩ := h
++  refine ⟨?_, ?_, ?_, ?_, ?_⟩
++  · exact_mod_cast ha
++  · exact_mod_cast hab
++  · simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hb
++  · exact_mod_cast hc
++  · exact_mod_cast hcd
+ 
+ theorem Box.clamp_guards (B : Box) :
+     1 ≤ B.firstLo ∧ B.firstLo ≤ 2 ∧ 1 ≤ B.firstHi ∧ B.firstHi ≤ 2 ∧
+@@ -129,10 +137,10 @@
+       ((1 / B.firstHi : ℚ) : ℝ) ≤ buchstab s ∧
+         buchstab s ≤ ((1 / B.firstLo : ℚ) : ℝ) := by
+     have hsl : (B.firstLo : ℝ) ≤ s := by
+-      simp only [Box.firstLo, Rat.cast_min, Rat.cast_max, Rat.cast_ofNat]
++      simp only [Box.firstLo, Rat.cast_min, Rat.cast_max, Rat.cast_one, Rat.cast_ofNat]
+       exact (min_le_right _ _).trans (max_le hs1 hlo)
+     have hsu : s ≤ (B.firstHi : ℝ) := by
+-      simp only [Box.firstHi, Rat.cast_min, Rat.cast_max, Rat.cast_ofNat]
++      simp only [Box.firstHi, Rat.cast_min, Rat.cast_max, Rat.cast_one, Rat.cast_ofNat]
+       exact (le_min hs2 hhi).trans (le_max_right _ _)
+     exact p5U7_buchstab_first_rational_interval B.firstLo B.firstHi hFL hFH hsl hsu
+   have hsecond (hs2 : 2 ≤ s) :

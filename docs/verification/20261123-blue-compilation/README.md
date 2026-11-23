@@ -1,4 +1,4 @@
-本记录覆盖十个依赖模块、共 254 个公开声明的检查。五个 U7 模块共检查 69 个声明，连续筛模块 15 个，四个 Member 支撑模块共 170 个。U7 源码对应 1106 版手稿的第七积分原三角域，边界为 `59/250 ≤ t ≤ 1/3`、`t ≤ u ≤ (1-t)/2`，分段接缝为 `u=(1-t)/3`。手稿固定到 `a988cba584d803ae2856a0de50efb582f4f3dd6a` 的 `paper/release-20261106/en`。
+首批十个依赖模块检查了 254 条显式公开源码声明，包括五个 U7 模块的 69 条、连续筛模块的 15 条和四个 Member 支撑模块的 170 条。后续完整入口与新增支撑模块按批次另行记录。U7 源码对应 1106 版手稿的第七积分原三角域，边界为 `59/250 ≤ t ≤ 1/3`、`t ≤ u ≤ (1-t)/2`，分段接缝为 `u=(1-t)/3`。手稿固定到 `a988cba584d803ae2856a0de50efb582f4f3dd6a` 的 `paper/release-20261106/en`。
 
 原构建在行积分的连续性组合处达到 4,000,000 heartbeat 上限，两处积分字典改写还保留了函数应用形式。修补显式给出配对映射、映射到正象限的证明与 `ContinuousOn.comp'` 的函数参数，并在分支改写前用 `change` 展开定义相等的条件表达式。复用了原来的全部定义、数字常数与 30 个公开声明。源码的状态注释指向本目录。
 
@@ -66,4 +66,12 @@ Member 的 `Part5OriginalUpsilon5CausalDictionary` 另检查 27 个公开声明�
 
 本轮生成 C 辅助文件的缓存复用修正另存于 [cache-reuse](cache-reuse/README.md)，包含遗漏原因、实际恢复范围、原始身份和标准 Lake 前后检查。
 
-项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。第七积分入口和 H430 Member 入口的后续构建另行记录。
+`P2EnhancedPrefixMaskDefect` 随后用显式 `_root_.not_imp` 解决命名歧义，保留原声明、定义和假设。标准模块构建、独立 kernel replay 与 12 条显式公开声明的完整类型/传递公理检查均退出 0；源码和五项产物跨阶段稳定，公理仍只有标准三项。结果与原始日志见 [prefix-mask/VALIDATION_RESULTS.json](prefix-mask/VALIDATION_RESULTS.json)。
+
+Member 工程还复用基线已验证的 `P4BSmoothGateUpperStep` 生产源码，覆盖 R03 中的旧 API 版本。原验证记录位于 `docs/verification/20261123-local-pilot`，本轮保留其精确源码，不重复其已有证明验收、不计新增蓝色节点。来源与 staging 覆盖见 [EXISTING_REUSE_RECEIPT.json](existing-green-suppliers/EXISTING_REUSE_RECEIPT.json) 及 [MEMBER_SOURCE_OVERRIDES.json](MEMBER_SOURCE_OVERRIDES.json)。物理对象的当前资格单独核对。
+
+原第七积分价格入口 `P6OriginalSeventhMeshPrice` 已通过完整标准构建。其 R02 入口源码保持原始 SHA，使用 112 个项目源码、411 个 native 源码及 15 项已登记证明修补。入口与本批九个新增支撑模块均通过指定模块 kernel replay；按 Lean 的定义模块元数据枚举的 223 条声明全部完成完整类型和传递公理检查，包括 private、结构字段及自动生成声明，公理仅标准三项。十个源码与五十项主要产物在检查前后稳定。
+
+入口绑定见 [SEVENTH_ROOT_ACCEPTANCE.json](SEVENTH_ROOT_ACCEPTANCE.json)，完整批次见 [p6-seventh/BATCH_SUMMARY.json](p6-seventh/BATCH_SUMMARY.json)，实际命令、类型、公理、构建尝试及精确选源均保存在该子目录。本批九处源码修补由独立复核确认保持原声明、定义、常量和假设，见 [INDEPENDENT_REVIEW.json](p6-seventh/INDEPENDENT_REVIEW.json)。该入口在隔离的精确选源工程验证，原始入口文件及全部证明修补均可按记录定位。
+
+项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。其余三个 P6 入口、H430 Member 入口及其它已确认范围继续构建，验收分别记录。

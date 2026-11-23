@@ -2,7 +2,8 @@ import ImbalancedChen.P5U7OriginalScalarCoefficientWidth
 import ImbalancedChen.P5U7OriginalStaircaseGeometry
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 The actual two-regime rational numerator gap is controlled on every
 generated inner cell. The seam-straddling max/min coefficients are
 explicitly paid using the common s=2 value, not by kernel continuity alone.
@@ -108,7 +109,9 @@ theorem generated_inner_numerator_width (n m : ℕ) (hm : 0 < m)
     rw [hHiArg]
     exact (Box.argument_bounds hv hlo).1
   exact box_numerator_width B n (by exact_mod_cast hLoR)
-    (by exact_mod_cast hLUR) (by exact_mod_cast hHiR)
+    (by exact_mod_cast hLUR) (by
+      apply (Rat.cast_le (K := ℝ)).mp
+      simpa only [Rat.cast_div, Rat.cast_ofNat] using hHiR)
 
 end
 

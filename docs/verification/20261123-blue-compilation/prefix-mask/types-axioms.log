@@ -1,0 +1,127 @@
+ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier : (N d : Nat) → (l : List.{0} Nat) → Finset.{0} Nat
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier : (N d : Nat) → (l : List.{0} Nat) → Finset.{0} Nat
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.SelectedCollision : (N d : Nat) → (l : List.{0} Nat) → (ell : Nat) → Prop
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.SelectedCollision' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier : (N d : Nat) → (l : List.{0} Nat) → Finset.{0} Nat
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.take_prod_dvd_complete : ∀ (d : Nat) (l : List.{0} Nat),
+  @Dvd.dvd.{0} Nat Nat.instDvd
+    (@List.prod.{0} Nat instMulNat Nat.instOne
+      (@List.take.{0} Nat
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@List.length.{0} Nat l)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        l))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) d (@List.prod.{0} Nat instMulNat Nat.instOne l))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.take_prod_dvd_complete' depends on axioms: [propext]
+@ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_quotient_sifted : ∀ {N d ell : Nat} {l : List.{0} Nat}
+  (hell :
+    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+      (Wu2008DoubleSieve.secondFunctionalMotherPrefixCarrier N d l) ell),
+  Wu2008DoubleSieve.Sifted
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) d
+        (@List.prod.{0} Nat instMulNat Nat.instOne
+          (@List.take.{0} Nat
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@List.length.{0} Nat l)
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            l)))
+      N)
+    (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv)
+      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N ell)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) d (@List.prod.{0} Nat instMulNat Nat.instOne l)))
+    (@Nat.cast.{0} Real Real.instNatCast
+      (@List.getD.{0} Nat l
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@List.length.{0} Nat l)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_quotient_sifted' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.defect_subset_collision : ∀ (N d : Nat) (l : List.{0} Nat),
+  @LE.le.{0} (Finset.{0} Nat)
+    (@Preorder.toLE.{0} (Finset.{0} Nat)
+      (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+    (ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier N d l)
+    (ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier N d l)
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.defect_subset_collision' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_forces_prime_square : ∀ {N d ell : Nat} {l : List.{0} Nat}
+  (hell :
+    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+      (ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier N d l) ell),
+  @Exists.{1} Nat fun (r : Nat) =>
+    And (Nat.Prime r)
+      (And
+        (@LT.lt.{0} Real Real.instLT (@Nat.cast.{0} Real Real.instNatCast r)
+          (@Nat.cast.{0} Real Real.instNatCast
+            (@List.getD.{0} Nat l
+              (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@List.length.{0} Nat l)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))
+        (@Dvd.dvd.{0} Nat Nat.instDvd
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+            (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid))) r
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N ell)))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_forces_prime_square' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_partition : ∀ (N d : Nat) (l : List.{0} Nat),
+  @Eq.{1} Nat (@Finset.card.{0} Nat (Wu2008DoubleSieve.secondFunctionalMotherPrefixCarrier N d l))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@Finset.card.{0} Nat
+        (@Inter.inter.{0} (Finset.{0} Nat) (@Finset.instInter.{0} Nat instDecidableEqNat)
+          (Wu2008DoubleSieve.secondFunctionalMotherPrefixCarrier N d l)
+          (ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier N d l)))
+      (@Finset.card.{0} Nat (ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier N d l)))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_partition' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_le_quotient_add_collision : ∀ (N d : Nat) (l : List.{0} Nat),
+  @LE.le.{0} Nat instLENat (@Finset.card.{0} Nat (Wu2008DoubleSieve.secondFunctionalMotherPrefixCarrier N d l))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@Finset.card.{0} Nat (ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier N d l))
+      (@Finset.card.{0} Nat (ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier N d l)))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_le_quotient_add_collision' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2EnhancedPrefixMaskDefect.squarefree_prefix_subset_quotient : ∀ (N d : Nat) (l : List.{0} Nat),
+  @LE.le.{0} (Finset.{0} Nat)
+    (@Preorder.toLE.{0} (Finset.{0} Nat)
+      (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+    (@Finset.filter.{0} Nat
+      (fun (ell : Nat) =>
+        @Squarefree.{0} Nat Nat.instMonoid (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N ell))
+      (fun (a : Nat) =>
+        Nat.instDecidablePredSquarefree (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N a))
+      (Wu2008DoubleSieve.secondFunctionalMotherPrefixCarrier N d l))
+    (ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier N d l)
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.squarefree_prefix_subset_quotient' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_quotient_ne_one : ∀ {N d ell : Nat} {l : List.{0} Nat}
+  (hell :
+    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+      (ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier N d l) ell),
+  @Ne.{1} Nat
+    (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv)
+      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N ell)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) d (@List.prod.{0} Nat instMulNat Nat.instOne l)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+'ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_quotient_ne_one' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

@@ -1,0 +1,39 @@
+import ImbalancedChen.P2EnhancedPrefixMaskDefect
+
+set_option pp.all true
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.quotientCarrier
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.defectCarrier
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.SelectedCollision
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.SelectedCollision
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.collisionCarrier
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.take_prod_dvd_complete
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.take_prod_dvd_complete
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_quotient_sifted
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_quotient_sifted
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.defect_subset_collision
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.defect_subset_collision
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_forces_prime_square
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_forces_prime_square
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_partition
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_partition
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_le_quotient_add_collision
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.prefix_card_le_quotient_add_collision
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.squarefree_prefix_subset_quotient
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.squarefree_prefix_subset_quotient
+
+#check @ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_quotient_ne_one
+#print axioms ImbalancedChen.P2EnhancedPrefixMaskDefect.collision_quotient_ne_one

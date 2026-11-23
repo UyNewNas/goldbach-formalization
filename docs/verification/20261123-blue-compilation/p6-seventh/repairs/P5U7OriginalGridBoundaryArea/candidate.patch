@@ -1,0 +1,59 @@
+--- a/ImbalancedChen/P5U7OriginalGridBoundaryArea.lean
++++ b/ImbalancedChen/P5U7OriginalGridBoundaryArea.lean
+@@ -1,7 +1,8 @@
+ import ImbalancedChen.P5U7OriginalRationalCoverCertificate
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ The actual generated outer-minus-inner staircase is paid by two explicit
+ slanted strips: the original order diagonal and the original square-root
+ wall. Product-measure integration proves the strip areas; disjoint open
+@@ -76,7 +77,7 @@
+   rw [Measure.volume_eq_prod, Measure.prod_apply (strip_measurable center hc delta)]
+   simp_rw [hfiber]
+   rw [lintegral_indicator measurableSet_Icc, lintegral_const]
+-  simp only [Measure.restrict_apply measurableSet_univ, univ_inter, Real.volume_Icc]
++  simp only [Measure.restrict_apply MeasurableSet.univ, univ_inter, Real.volume_Icc]
+ 
+ theorem boundary_subset_strips (m : ℕ) (hm : 0 < m) :
+     boundary m ⊆ strip (fun x => x) (diagonalWidth m : ℝ) ∪
+@@ -125,18 +126,19 @@
+ boundary staircase, with its original order and square-root walls. -/
+ theorem boundary_volume_real_le (m : ℕ) (hm : 0 < m) :
+     (volume (boundary m)).toReal ≤ (areaRate m : ℝ) := by
+-  have hmeasure := (measure_mono (boundary_subset_strips m hm)).trans
++  have hmeasure := (measure_mono (μ := volume) (boundary_subset_strips m hm)).trans
+     (measure_union_le
+       (strip (fun x => x) (diagonalWidth m : ℝ))
+       (strip (fun x => (1 - x) / 2) ((capWidth m : ℝ) / 2)))
+-  rw [strip_volume _ continuous_id,
+-    strip_volume _ (by fun_prop : Continuous (fun x : ℝ => (1 - x) / 2))] at hmeasure
++  rw [strip_volume (fun x : ℝ => x) (by fun_prop) (diagonalWidth m : ℝ),
++    strip_volume (fun x : ℝ => (1 - x) / 2) (by fun_prop)
++      ((capWidth m : ℝ) / 2)] at hmeasure
+   have hfinD : ENNReal.ofReal (2 * (diagonalWidth m : ℝ)) *
+       ENNReal.ofReal ((thi : ℝ) - tlo) ≠ ⊤ :=
+-    ENNReal.mul_ne_top (by simp) (by simp)
++    ENNReal.mul_ne_top ENNReal.ofReal_ne_top ENNReal.ofReal_ne_top
+   have hfinC : ENNReal.ofReal (2 * ((capWidth m : ℝ) / 2)) *
+       ENNReal.ofReal ((thi : ℝ) - tlo) ≠ ⊤ :=
+-    ENNReal.mul_ne_top (by simp) (by simp)
++    ENNReal.mul_ne_top ENNReal.ofReal_ne_top ENNReal.ofReal_ne_top
+   have hfinite :
+       ENNReal.ofReal (2 * (diagonalWidth m : ℝ)) * ENNReal.ofReal ((thi : ℝ) - tlo) +
+       ENNReal.ofReal (2 * ((capWidth m : ℝ) / 2)) * ENNReal.ofReal ((thi : ℝ) - tlo) ≠ ⊤ := by
+@@ -176,10 +178,10 @@
+   have hcell (i : Index m) : (∫ p : ℝ × ℝ in (cell m i).opened, (1 : ℝ)) =
+       ((cell m i).area : ℝ) := by
+     rw [integral_const]
+-    simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter,
++    simp only [Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter,
+       smul_eq_mul, opened_volume_real (cell_valid m hm i), mul_one]
+   simp_rw [hcell] at hsum
+-  simp only [integral_const, Measure.real, Measure.restrict_apply measurableSet_univ,
++  simp only [integral_const, Measure.real, Measure.restrict_apply MeasurableSet.univ,
+     univ_inter, smul_eq_mul, mul_one] at hsum
+   unfold rationalBoundaryArea
+   push_cast

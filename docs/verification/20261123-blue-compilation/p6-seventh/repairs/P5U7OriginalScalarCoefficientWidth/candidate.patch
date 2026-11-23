@@ -1,0 +1,23 @@
+--- a/ImbalancedChen/P5U7OriginalScalarCoefficientWidth.lean
++++ b/ImbalancedChen/P5U7OriginalScalarCoefficientWidth.lean
+@@ -2,7 +2,8 @@
+ import ImbalancedChen.P5U7OriginalBuchstabLipschitz
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ Actual width of the finite directed scalar coefficients used by the U7
+ rational cells. This pays the interval dependency of the two directed
+ log queries as well as the true uniform Taylor remainder. Kernel
+@@ -37,7 +38,9 @@
+       (1 + logUpper n U) / L - (1 + logLower n L) / U ≤ U - L + rate n := by
+   have hLr : (2 : ℝ) ≤ L := by exact_mod_cast hL
+   have hLUr : (L : ℝ) ≤ U := by exact_mod_cast hLU
+-  have hUr : (U : ℝ) ≤ 132 / 59 := by exact_mod_cast hU
++  have hUr : (U : ℝ) ≤ 132 / 59 := by
++    simpa only [Rat.cast_div, Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hU
+   have hU2 : 2 ≤ U := hL.trans hLU
+   have hLM : L ≤ 132 / 59 := hLU.trans hU
+   have hL0 : (0 : ℝ) < L := by linarith

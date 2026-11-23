@@ -3,7 +3,8 @@ import ImbalancedChen.P5U7OriginalBoundaryCostRate
 import ImbalancedChen.P5U7OriginalKernelOscillation
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 Actual interval-coefficient width on every generated inner cell. This
 combines the genuine clamped two-piece numerator gap, original corner
 argument distortion, and the exact reciprocal product-denominator gap.
@@ -62,6 +63,7 @@ theorem generated_reciprocal_denominator_gap (m : ℕ) (hm : 0 < m) (i : Index m
     have hsum : B.d + B.c ≤ 2 := by linarith
     have hh1 := mul_le_mul_of_nonneg_left hdSq (sub_nonneg.mpr hab)
     have hh2 := mul_le_mul_of_nonneg_right ha1 (sub_nonneg.mpr hcd)
+    simp only [one_mul] at hh2
     have hh3 := mul_le_mul hh2 hsum (by positivity : 0 ≤ B.d + B.c)
       (sub_nonneg.mpr hcd)
     have hwidth := cell_widths m i

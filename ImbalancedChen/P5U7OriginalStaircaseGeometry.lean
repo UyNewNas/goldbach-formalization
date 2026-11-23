@@ -1,7 +1,8 @@
 import ImbalancedChen.P5U7OriginalStraddlingCells
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 An explicit rational grid supplies a complete closed outer staircase and
 disjoint open inner staircase of the literal original U7 triangle. The
 mesh has no externally supplied coverage or disjointness premise.
@@ -32,7 +33,7 @@ theorem mesh_mono (a b : ℚ) (hab : a ≤ b) (m : ℕ) (hm : 0 < m) :
   have hklQ : (k : ℚ) ≤ l := by exact_mod_cast hkl
   have hmQ : (0 : ℚ) < m := by exact_mod_cast hm
   unfold mesh
-  exact add_le_add_left (div_le_div_of_nonneg_right
+  exact add_le_add_right (div_le_div_of_nonneg_right
     (mul_le_mul_of_nonneg_left hklQ (sub_nonneg.mpr hab)) hmQ.le) a
 
 theorem mesh_bounds (a b : ℚ) (hab : a ≤ b) (m : ℕ) (hm : 0 < m)
@@ -66,7 +67,7 @@ theorem mesh_closed_cover (a b : ℚ) (hab : a < b) (m : ℕ) (hm : 0 < m)
     let k : ℕ := ⌊z⌋₊
     have hk : k < m := (Nat.floor_lt hz).mpr hzm
     have hl := (le_div_iff₀ hw).mp (Nat.floor_le hz : (k : ℝ) ≤ z)
-    have hr := (lt_div_iff₀ hw).mp (Nat.lt_floor_add_one z : z < (k : ℝ) + 1)
+    have hr := (div_lt_iff₀ hw).mp (Nat.lt_floor_add_one z : z < (k : ℝ) + 1)
     refine ⟨k, hk, ?_, ?_⟩
     · have hdiv : ((b : ℝ) - a) * k / (m : ℝ) ≤ x - (a : ℝ) := by
         apply (div_le_iff₀ hmR).mpr
@@ -105,10 +106,13 @@ theorem cell_valid (m : ℕ) (hm : 0 < m) (i : Index m) : (cell m i).Valid := by
   have hu := mesh_bounds ulo uhi (by norm_num [ulo, uhi]) m hm i.2 i.2.isLt.le
   have htm := mesh_mono tlo thi (by norm_num [tlo, thi]) m hm (Nat.le_succ i.1.val)
   have hum := mesh_mono ulo uhi (by norm_num [ulo, uhi]) m hm (Nat.le_succ i.2.val)
-  change 0 < mesh tlo thi m i.1 ∧ _ ∧ _ ∧ 0 < mesh ulo uhi m i.2 ∧ _
-  exact ⟨(by norm_num [tlo] at ht; linarith only [ht.1]), htm,
-    (by simpa only [thi] using ht'.2),
-    (by norm_num [ulo] at hu; linarith only [hu.1]), hum⟩
+  change 0 < mesh tlo thi m i.1 ∧
+    mesh tlo thi m i.1 ≤ mesh tlo thi m (i.1.val + 1) ∧
+    mesh tlo thi m (i.1.val + 1) ≤ 1 / 3 ∧
+    0 < mesh ulo uhi m i.2 ∧
+    mesh ulo uhi m i.2 ≤ mesh ulo uhi m (i.2.val + 1)
+  exact ⟨lt_of_lt_of_le (by norm_num [tlo] : (0 : ℚ) < tlo) ht.1, htm,
+    ht'.2, lt_of_lt_of_le (by norm_num [ulo] : (0 : ℚ) < ulo) hu.1, hum⟩
 
 /-- Every point of the CLOSED literal original triangle lies in one of
 the explicitly generated outer staircase cells. -/
@@ -116,12 +120,15 @@ theorem original_triangle_outer_cover (m : ℕ) (hm : 0 < m)
     {p : ℝ × ℝ} (hp : p ∈ p5U7OmegaTriangle) :
     ∃ i ∈ outer m, p ∈ (cell m i).closed := by
   have hg := p5U7Omega_closed_geometry hp
-  have ht : p.1 ∈ Icc (tlo : ℝ) thi := ⟨hp.1, hg.2.2.2.1⟩
+  have ht : p.1 ∈ Icc (tlo : ℝ) thi := by
+    simp only [mem_Icc, tlo, thi, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat]
+    exact ⟨hp.1, hg.2.2.2.1⟩
   have hu : p.2 ∈ Icc (ulo : ℝ) uhi := by
-    refine ⟨hp.1.trans hp.2.1, ?_⟩
-    change p.2 ≤ ((1 - 59 / 250 : ℚ) / 2 : ℝ)
-    push_cast
-    linarith only [hp.1, hp.2.2]
+    constructor
+    · simpa only [ulo, Rat.cast_div, Rat.cast_ofNat] using hp.1.trans hp.2.1
+    · dsimp only [uhi]
+      push_cast
+      linarith only [hp.1, hp.2.2]
   obtain ⟨k, hk, hkl, hkr⟩ := mesh_closed_cover tlo thi
     (by norm_num [tlo, thi]) m hm ht
   obtain ⟨j, hj, hjl, hjr⟩ := mesh_closed_cover ulo uhi
@@ -142,7 +149,9 @@ theorem inner_cell_subset_triangle (m : ℕ) (hm : 0 < m)
   have hcap : ((cell m i).b : ℝ) + 2 * (cell m i).d ≤ 1 := by
     exact_mod_cast hinner.2
   have hlo := (mesh_bounds tlo thi (by norm_num [tlo, thi]) m hm i.1 i.1.isLt.le).1
-  have hloR : (59 / 250 : ℝ) ≤ (cell m i).a := by exact_mod_cast hlo
+  have hloR : (59 / 250 : ℝ) ≤ (cell m i).a := by
+    simpa only [tlo, cell, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hlo
   intro p hp
   refine ⟨hloR.trans hp.1.1, hp.1.2.trans (horder.trans hp.2.1), ?_⟩
   linarith only [hp.1.2, hp.2.2, hcap]

@@ -3,7 +3,7 @@ import Mathlib.Data.Nat.Squarefree
 import Mathlib.Tactic
 
 /-!
-SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Verification records: docs/verification/20261123-blue-compilation.
 
 The 21-term mother and its four-band count proof already exist in
 `SecondFunctionalMotherFinite`. The missing finite comparison treated here
@@ -81,7 +81,7 @@ theorem defect_subset_collision (N d : ℕ) (l : List ℕ) :
     intro hs
     apply hmiss
     exact mem_filter.mpr ⟨hrange, hprime, hdiv, hs⟩
-  simp only [Sifted, not_forall, not_imp, not_not] at hnot
+  simp only [Sifted, not_forall, _root_.not_imp, not_not] at hnot
   obtain ⟨r, hr, hrM, hrz, hrd⟩ := hnot
   have hrpre : r ∣ (l.take (l.length - 2)).prod := by
     by_contra hn

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "quotientCarrier",
+    "kind": "def",
+    "header": "def quotientCarrier (N d : ℕ) (l : List ℕ) : Finset ℕ"
+  },
+  {
+    "name": "defectCarrier",
+    "kind": "def",
+    "header": "def defectCarrier (N d : ℕ) (l : List ℕ) : Finset ℕ"
+  },
+  {
+    "name": "SelectedCollision",
+    "kind": "def",
+    "header": "def SelectedCollision (N d : ℕ) (l : List ℕ) (ell : ℕ) : Prop"
+  },
+  {
+    "name": "collisionCarrier",
+    "kind": "def",
+    "header": "def collisionCarrier (N d : ℕ) (l : List ℕ) : Finset ℕ"
+  },
+  {
+    "name": "take_prod_dvd_complete",
+    "kind": "theorem",
+    "header": "theorem take_prod_dvd_complete (d : ℕ) (l : List ℕ) :\n    (l.take (l.length - 2)).prod ∣ d * l.prod"
+  },
+  {
+    "name": "prefix_quotient_sifted",
+    "kind": "theorem",
+    "header": "theorem prefix_quotient_sifted {N d ell : ℕ} {l : List ℕ}\n    (hell : ell ∈ secondFunctionalMotherPrefixCarrier N d l) :\n    Sifted (d * (l.take (l.length - 2)).prod * N)\n      ((N - ell) / (d * l.prod)) (l.getD (l.length - 2) 0)"
+  },
+  {
+    "name": "defect_subset_collision",
+    "kind": "theorem",
+    "header": "theorem defect_subset_collision (N d : ℕ) (l : List ℕ) :\n    defectCarrier N d l ⊆ collisionCarrier N d l"
+  },
+  {
+    "name": "collision_forces_prime_square",
+    "kind": "theorem",
+    "header": "theorem collision_forces_prime_square {N d ell : ℕ} {l : List ℕ}\n    (hell : ell ∈ collisionCarrier N d l) :\n    ∃ r : ℕ, r.Prime ∧ (r : ℝ) < l.getD (l.length - 2) 0 ∧\n      r ^ 2 ∣ N - ell"
+  },
+  {
+    "name": "prefix_card_partition",
+    "kind": "theorem",
+    "header": "theorem prefix_card_partition (N d : ℕ) (l : List ℕ) :\n    (secondFunctionalMotherPrefixCarrier N d l).card =\n      ((secondFunctionalMotherPrefixCarrier N d l) ∩ quotientCarrier N d l).card +\n        (defectCarrier N d l).card"
+  },
+  {
+    "name": "prefix_card_le_quotient_add_collision",
+    "kind": "theorem",
+    "header": "theorem prefix_card_le_quotient_add_collision (N d : ℕ) (l : List ℕ) :\n    (secondFunctionalMotherPrefixCarrier N d l).card ≤\n      (quotientCarrier N d l).card + (collisionCarrier N d l).card"
+  },
+  {
+    "name": "squarefree_prefix_subset_quotient",
+    "kind": "theorem",
+    "header": "theorem squarefree_prefix_subset_quotient (N d : ℕ) (l : List ℕ) :\n    (secondFunctionalMotherPrefixCarrier N d l).filter\n      (fun ell => Squarefree (N - ell)) ⊆ quotientCarrier N d l"
+  },
+  {
+    "name": "collision_quotient_ne_one",
+    "kind": "theorem",
+    "header": "theorem collision_quotient_ne_one {N d ell : ℕ} {l : List ℕ}\n    (hell : ell ∈ collisionCarrier N d l) :\n    (N - ell) / (d * l.prod) ≠ 1"
+  }
+]

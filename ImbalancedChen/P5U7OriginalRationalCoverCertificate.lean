@@ -1,7 +1,8 @@
 import ImbalancedChen.P5U7OriginalStaircaseGeometry
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 Automatic rational outer/inner staircases enclose the WHOLE genuine
 original J7 integral. Outer rectangles pay their complete areas, including
 triangle and Buchstab-seam straddles. Inner open rectangles have proved
@@ -87,14 +88,14 @@ theorem minorant_integrable (B : Box) (n : ℕ) : Integrable (minorant B n) := b
 theorem integral_majorant {B : Box} (hB : B.Valid) (n : ℕ) :
     (∫ p, majorant B n p) = (((B.upper n) * B.area : ℚ) : ℝ) := by
   rw [majorant, integral_indicator (closed_measurable B), integral_const]
-  simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter,
+  simp only [Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter,
     smul_eq_mul, closed_volume_real hB, Rat.cast_mul]
   ring
 
 theorem integral_minorant {B : Box} (hB : B.Valid) (n : ℕ) :
     (∫ p, minorant B n p) = (((B.lower n) * B.area : ℚ) : ℝ) := by
   rw [minorant, integral_indicator (opened_measurable B), integral_const]
-  simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter,
+  simp only [Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter,
     smul_eq_mul, opened_volume_real hB, Rat.cast_mul]
   ring
 
@@ -118,7 +119,7 @@ theorem actual_integral_le_rationalUpper (n m : ℕ) (hm : 0 < m) :
       calc
         kernel p ≤ ((cell m i).upper n : ℝ) :=
           (Box.enclosure (cell_valid m hm i) n hpi hp).2
-        _ = majorant (cell m i) n p := (indicator_of_mem hpi _).symm
+        _ = majorant (cell m i) n p := by simp only [majorant, indicator_of_mem hpi]
         _ ≤ _ := Finset.single_le_sum
           (fun j _ => majorant_nonneg (cell_valid m hm j) n p) hi
     · rw [indicator_of_notMem hp]
@@ -138,6 +139,7 @@ theorem actual_integral_le_rationalUpper (n m : ℕ) (hm : 0 < m) :
     _ = _ := by
       unfold rationalUpper
       push_cast
+      rfl
 
 /-- Genuine full-source lower certificate. Inner open boxes have proved
 disjoint ownership, hence no cell value is counted twice. -/
@@ -175,6 +177,7 @@ theorem rationalLower_le_actual_integral (n m : ℕ) (hm : 0 < m) :
         ∑ i ∈ inner m, (((cell m i).lower n * (cell m i).area : ℚ) : ℝ) := by
           unfold rationalLower
           push_cast
+          rfl
     _ = ∑ i ∈ inner m, ∫ p, minorant (cell m i) n p := by
       apply Finset.sum_congr rfl
       intro i _
