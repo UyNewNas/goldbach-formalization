@@ -158,4 +158,14 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 上述十八至二十三批合计十二个模块、265 个实际公开导出，按 `SOURCE_SELECTION` 的真实模块映射发布。单模块的成功不代替旧十入口的最终验收。当前阶段目标已改为完整 P1；后续执行范围与完整端点合同见 [P1 计划](../../superpowers/plans/2026-11-23-p1-complete-formal-proof.md)。其余已验工作保留，未验证的修改不计完成。
 
+完整 P1 前置的第三十八批 `P1HistoricalFourthFullCellLimit` 与 `P1OriginalCoarseFourthCellIntegral` 共 34 个实际公开导出，通过标准构建、指定模块 kernel replay 和完整类型／传递公理检查，仅标准三公理，源码及十项主要产物稳定。修补为同一 `Fin 4` 坐标的显式化及原 `Pi.sub_def`／β 展开；完整声明头、定义、原积分域和假设保持，见 [验收结果](member-repair-batch38/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch38/INDEPENDENT_REVIEW.json)。
+
+第三十九批 `P2OriginalFourthCapProducerInterface` 是完整 P1 历史链的必要供应者，完整复用已发表 `48db3d60` 的原始文件，包括历史注释。144 个公开导出的三项检查通过，仅标准三公理，源码和五项主要产物稳定，见 [验收结果](member-repair-batch39/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch39/INDEPENDENT_REVIEW.json)。其 `oldComponent_vector` 把原命名歧义 `B(t2)` 写为 `VariableEnvelope.B(t2)`：这是原第三分量的 `153/256-3*t2/8`，旧同名自然数函数导致旧声明不能 elaboration。此声明头例外明确记录，不声称旧声明已有相同 kernel 类型；其余完整声明头、全部定义和物理分量保持。
+
+第四十四批 `Part3ActualAttachedRoughFrontier` 也出现在完整 P1 的真实闭包中。7 个公开导出的三项检查通过，仅标准三公理，源码和五项主要产物稳定。两条声明将原上下文已强制为自然数的存在量 `a k` 显式标为 `ℕ`；原因子分解、frontier、support、量词次序和 `q≠0` 保持，三个证明体逐字不变。旧声明未 elaboration，亦不声称旧 kernel 类型已存在，见 [验收结果](member-repair-batch44/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch44/INDEPENDENT_REVIEW.json)。
+
+旧 R03 的五模块 P1 前置链已完成：第四十一批 `P1OriginalCoarseFourthCellLimit`、四十二批 `P1OriginalFourthSmallPrimeStratification`、四十三批 `P1OriginalFourthSmallBinWeightedMass`、四十五批 `P1OriginalFourthMovingPrimeIntervalBound`、四十六批 `P1ActualMovingPrimeIntervalEnvelope`。五批共 112 个实际公开导出（28、51、14、14、5），全部标准构建、指定模块 kernel replay 和完整类型／公理检查通过，仅标准三公理，源码及二十五项主要产物稳定；独立复核均已完成。
+
+前四个模块分别修补空集积分 API／β 展开、原 Nat/Fin 坐标显式化、同一有限和标量分配，以及原不等式的标量改写。完整声明头、定义、bin endpoints、常量、假设和 K 的独立量词保持。最后的 Envelope 与原选源逐字一致，直接复用其唯一成功的顶层 normal invocation，无源码修改或重复编译。四十五批原静态证明标签的已知误写由原发布前补充记录更正，原定理名与声明未改。逐批结果及独立复核见 [41](member-repair-batch41/VALIDATION_RESULTS.json)、[42](member-repair-batch42/VALIDATION_RESULTS.json)、[43](member-repair-batch43/VALIDATION_RESULTS.json)、[45](member-repair-batch45/VALIDATION_RESULTS.json)、[46](member-repair-batch46/VALIDATION_RESULTS.json)；每个目录同时保存 `INDEPENDENT_REVIEW.json`。这使旧二十模块 P1 子集对象齐备，仍不等于完整 P1 的最终证明闭合。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。

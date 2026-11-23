@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean
++++ candidate/ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean
+@@ -99,7 +99,7 @@
+       gateForms_ne_zero f hf
+   · simp only [if_neg hs]
+     simpa only [Set.indicator_empty, actualPrimeBoxTestSum, Pi.zero_apply,
+-      mul_zero, Finset.sum_const_zero, inter_empty, integral_empty] using
++      mul_zero, Finset.sum_const_zero, inter_empty, setIntegral_empty] using
+       (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (𝓝 0))
+ 
+ /-- The actual closed-residual supplier applies to the original coarse
+@@ -145,6 +145,7 @@
+         fourthPlusProfileP1 lambda t * ∏ i, 1 / t i := by
+     apply setIntegral_congr_fun (P1OriginalFourthIntegral.truncatedCell_measurable e m omega a j)
+     intro t ht
++    dsimp only
+     rw [P1OriginalFourthIntegral.rawProfile_eq_extended_on_truncated e m omega ha j hlevel ht]
+   rw [heq] at hfixed
+   have hh := herror.add hfixed

@@ -1,0 +1,38 @@
+[
+  {
+    "kind": "theorem",
+    "name": "one_add_reciprocal_sum_le_euler",
+    "raw_header": "private theorem one_add_reciprocal_sum_le_euler (S : Finset ℕ)\n    (hprime : ∀ p ∈ S, Nat.Prime p) :\n    1 + ∑ p ∈ S, 1 / ((p : ℝ) - 1) ≤\n      ∏ p ∈ S, (1 + 1 / ((p : ℝ) - 1))",
+    "sha256": "9efaafa78a55185d7835427455d9ee434f280022999edfee2865d6b971d30924"
+  },
+  {
+    "kind": "theorem",
+    "name": "exists_uniform_reciprocal_interval_bound",
+    "raw_header": "theorem exists_uniform_reciprocal_interval_bound :\n    ∃ K : ℝ, 1 < K ∧ ∀ (N cap : ℕ), Even N →\n      ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n        (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n          Real.log z / Real.log w * (1 + K / Real.log w) - 1",
+    "sha256": "776a08076fc10c01c9e42779ad8070d3f266aeb74ad2f22af970e24bb718d4be"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeReciprocalMass_le_moving_ratio",
+    "raw_header": "theorem actualPrimeReciprocalMass_le_moving_ratio\n    (K : ℝ)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (N : ℕ) (hEven : Even N) (lo hi : ℝ)\n    (hlo : 2 ≤ (N : ℝ) ^ lo) (hlohi : lo ≤ hi) (hN : 1 < N) :\n    actualPrimeReciprocalMass N lo hi ≤\n      Real.log ((N : ℝ) ^ hi) / Real.log ((N : ℝ) ^ lo) *\n        (1 + K / Real.log ((N : ℝ) ^ lo)) - 1",
+    "sha256": "b86c73f3c3ad3f400a788647d7ff0d9f8586b7c626f1eee5f7de9bb7a03f399e"
+  },
+  {
+    "kind": "theorem",
+    "name": "weighted_last_prime_interval_le_terms",
+    "raw_header": "theorem weighted_last_prime_interval_le_terms\n    (K : ℝ) (hKpos : 0 ≤ K)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (N : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a : ℝ) (ha : 0 < a) (r : ℕ) (hr : 1 ≤ r)\n    (hlo : 2 ≤ (N : ℝ) ^ (a / ((r : ℝ) + 1))) :\n    (a / (r : ℝ)) * actualPrimeReciprocalMass N\n        (a / ((r : ℝ) + 1))\n        (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) ≤\n      2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ)",
+    "sha256": "14f163cc6c516bc7c26c06591907edf5ddcbc3ea44e80eeabea251aa5ba80406"
+  },
+  {
+    "kind": "theorem",
+    "name": "weightedBinMass_le_uniform_ratio_box",
+    "raw_header": "theorem weightedBinMass_le_uniform_ratio_box\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ) (ha : 0 < a)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (hEven : Even N) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (k : Bin) (K : ℝ)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (hlow : ∀ i : Fin 4, 2 ≤ (N : ℝ) ^ (binLo omega a k.1 i))\n    (horder : ∀ i : Fin 4, binLo omega a k.1 i ≤ binHi a k.1 i) :\n    weightedBinMass e chi m omega a old new N cap j k ≤\n      (a / (k.1 : ℝ)) *\n        ∏ i : Fin 4,\n          (Real.log ((N : ℝ) ^ (binHi a k.1 i)) /\n                Real.log ((N : ℝ) ^ (binLo omega a k.1 i)) *\n              (1 + K / Real.log ((N : ℝ) ^ (binLo omega a k.1 i))) - 1)",
+    "sha256": "5de3b9b328873493f62dfa1c29452f9401ece4754066a428f3c93743c61e50b1"
+  },
+  {
+    "kind": "theorem",
+    "name": "exists_weightedBinMass_uniform_ratio_box",
+    "raw_header": "theorem exists_weightedBinMass_uniform_ratio_box :\n    ∃ K : ℝ, 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ), 0 < a →\n      ∀ (J4 : Finset (FourthCell m)) (N cap : ℕ), 1 < N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n      ∀ (k : Bin),\n        (∀ i : Fin 4, 2 ≤ (N : ℝ) ^ (binLo omega a k.1 i)) →\n        (∀ i : Fin 4, binLo omega a k.1 i ≤ binHi a k.1 i) →\n        weightedBinMass e chi m omega a old new N cap j k ≤\n          (a / (k.1 : ℝ)) *\n            ∏ i : Fin 4,\n              (Real.log ((N : ℝ) ^ (binHi a k.1 i)) /\n                    Real.log ((N : ℝ) ^ (binLo omega a k.1 i)) *\n                  (1 + K / Real.log ((N : ℝ) ^ (binLo omega a k.1 i))) - 1)",
+    "sha256": "891bdc99049fb638b6b9edb285e1f453a7571bb9f4c2761592a986220126ce9f"
+  }
+]

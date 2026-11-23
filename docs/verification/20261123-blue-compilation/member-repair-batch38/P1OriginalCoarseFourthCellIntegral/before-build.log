@@ -1,0 +1,38 @@
+✖ [11085/11126] Building ImbalancedChen.P1OriginalCoarseFourthCellIntegral (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.setup.json --json
+error: ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean:133:2: Type mismatch: After simplification, term
+  IntegrableOn.sub (integrableOn_extendedWeightedProfile e m omega ha j (oldExponent e m j))
+    (integrableOn_extendedWeightedProfile e m omega ha j ↑(cap4 j))
+ has type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm
+    (extendedWeightedProfile (oldExponent e m j) - extendedWeightedProfile ↑(cap4 j)) (truncatedCell e m omega a j)
+    volume
+but is expected to have type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm
+    (fun t =>
+      extendedProfile (oldExponent e m j) t * reciprocalWeight t - extendedProfile (↑(cap4 j)) t * reciprocalWeight t)
+    (truncatedCell e m omega a j) volume
+error: ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean:155:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fourthPlusProfileP1 (oldExponent e m j) t
+in the target expression
+  (fun x => (extendedProfile (oldExponent e m j) x - extendedProfile (↑(cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (oldExponent e m j) x - fourthPlusProfileP1 (↑(cap4 j)) x) * ∏ i, 1 / x i) t
+
+e : ℚ
+chi : ℝ
+m : ℕ
+omega a : ℝ
+ha : 0 < a
+J4 : Finset (FourthCell m)
+cap4 : FourthCell m → ℚ
+hcheck : h34Check e chi m omega J4 cap4 = true
+j : FourthCell m
+hj : j ∈ selectedFourthCells e chi m omega J4
+hlevel : oldExponent e m j ≤ ↑(cap4 j)
+t : Fin 4 → ℝ
+ht : t ∈ truncatedCell e m omega a j
+⊢ (fun x => (extendedProfile (oldExponent e m j) x - extendedProfile (↑(cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (oldExponent e m j) x - fourthPlusProfileP1 (↑(cap4 j)) x) * ∏ i, 1 / x i) t
+error: Lean exited with code 1

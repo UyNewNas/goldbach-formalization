@@ -1,0 +1,171 @@
+{
+  "schema": "independent_P1_single_batch_complete_source_and_validation_review_v1",
+  "batch": 43,
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root/retained_reuse",
+  "reviewed_utc": "2026-11-23T16:03:55.655950+00:00",
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P1OriginalFourthSmallBinWeightedMass",
+      "baseline_sha256": "a844e26e4c91dbefd703215d4dbfe869568df4ee921e94c5326e988dd5cb8f00",
+      "postimage_sha256": "4cecb1db718d8bb96ed0961072d91415c5cd531cf0d148c3bbe333a3ce0352c8",
+      "complete_comment_aware_headers": [
+        {
+          "name": "smallBin_subset_prime_box",
+          "private": false,
+          "header": "theorem smallBin_subset_prime_box\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ) (ha : 0 < a)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (k : Bin) :\n    sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k ⊆\n      actualPrimeBoxTuples N (binLo omega a k.1) (binHi a k.1) :=",
+          "sha256": "c8b79ac78d6324a108c7b919ad5f32f6ebacf62594f7d5a8305cb8913f718334"
+        },
+        {
+          "name": "weightedBinMass_le_prime_box",
+          "private": false,
+          "header": "theorem weightedBinMass_le_prime_box\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ) (ha : 0 < a)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (k : Bin) :\n    weightedBinMass e chi m omega a old new N cap j k ≤\n      (a / (k.1 : ℝ)) *\n        ∏ i, actualPrimeReciprocalMass N (binLo omega a k.1 i) (binHi a k.1 i) :=",
+          "sha256": "97ebd10583216c08d7e7f57b27d9f740e4ed6516c086ea44e9c9eb1191f53bf3"
+        }
+      ],
+      "raw_definition_data_commands": [
+        {
+          "raw": "abbrev PrimeTuple := Fin 4 → ℕ\n\n",
+          "sha256": "51fdb31b8190ac85744aacb9a51992082aa30bb784671df742252cd850ec9a65"
+        },
+        {
+          "raw": "def binLo (omega a : ℝ) (k : ℕ) : Fin 4 → ℝ :=\n  fun i => if i = Fin.last 3 then a / ((k : ℝ) + 1) else omega\n\n",
+          "sha256": "56e19699917b6112fd4f65e85c96a1b0ddd5467438647778e9e04fbe4ae063b6"
+        },
+        {
+          "raw": "def binHi (a : ℝ) (k : ℕ) : Fin 4 → ℝ :=\n  fun i => if i = Fin.last 3 then\n    a / (k : ℝ) + a / ((k : ℝ) * ((k : ℝ) + 1))\n  else (19 / 96 : ℝ)\n\n",
+          "sha256": "32d770bb38e063309c5c19bfa088256b6897c2d9003315586584ea40aaac7dfd"
+        },
+        {
+          "raw": "def weightedBinMass (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ)\n    (N cap : ℕ) (j : FourthCell m) (k : Bin) : ℝ :=\n  ∑ p ∈ sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k,\n    (∏ i, 1 / ((p i : ℝ) - 1)) * actualPrimeTupleLog N p (Fin.last 3)\n\n/-- The original finite bin embeds in a genuine target-deleted prime box.\nThe first three lower endpoints use the selected *active third* cell;\ntheir upper endpoints retain the original `19/96` universe. -/\n",
+          "sha256": "a634c8cb7f770d4763cc8aaf336e7497ff45a1b9091f82ae776f230e569e7f5f"
+        }
+      ],
+      "changed_proofs": [
+        "smallBin_subset_prime_box",
+        "weightedBinMass_le_prime_box"
+      ],
+      "all_complete_headers_and_raw_definitions_data_parameters_unchanged": true,
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "all_imports_constants_hypotheses_domains_quantifiers_unchanged": true,
+      "raw_line_endings": {
+        "pre_CRLF": 0,
+        "post_CRLF": 0,
+        "pre_bare_LF": 133,
+        "post_bare_LF": 136
+      },
+      "mathematical_scope": "The same actual original source bin is dominated by the same target-deleted prime box: first THREE intervals stay[omega,19/96), last interval retains its slightly open upper endpoint; original prime logarithm moment and scalar a/k remain. Only Fin equality simplification and sum multiplication API change.",
+      "header_or_definition_syntax_exceptions": [],
+      "new_mathematical_assumptions_or_weakened_statements": false,
+      "raw_original_failure": {
+        "path": "/workspace/blue-member-repair-batch43/P1OriginalFourthSmallBinWeightedMass/before-build.log",
+        "bytes": 3717,
+        "sha256": "23161136383f4c674a903bc073e295ca2db5cd51fd607e0069803c150316828f"
+      },
+      "original_registered_source_byte_exact": false
+    }
+  ],
+  "final_release_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch43/FINAL_RELEASE.json",
+      "bytes": 957,
+      "sha256": "a6a1d745d8dfedf4d0914852236bf0207ead412cc8db4231fd087434243e4bca"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch43/PUBLICATION_FILES.json",
+      "bytes": 5595,
+      "sha256": "6c5df4f1b77890024fcdacc2b1e9132f8d93731918356c2f6fa358f11b988f2f"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch43/VALIDATION_RESULTS.json",
+      "bytes": 4331,
+      "sha256": "6c80677b8f425e1f79c67e3ab733d5b8d0e441b4a081d7861a1975ece8c56754"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch43/SOURCE_SELECTION.json",
+      "bytes": 1719,
+      "sha256": "221ae7c1b80a6e2a02b4ab32e25932e2039c7f7df0e9ecbbc19ec886543b42e9"
+    }
+  ],
+  "original_manifest_file_count": 31,
+  "all_recorded_original_manifest_file_sha256_and_sizes_match_and_stable": true,
+  "current_source_main_Member_match": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean",
+      "bytes": 6155,
+      "sha256": "4cecb1db718d8bb96ed0961072d91415c5cd531cf0d148c3bbe333a3ce0352c8"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean",
+      "bytes": 6155,
+      "sha256": "4cecb1db718d8bb96ed0961072d91415c5cd531cf0d148c3bbe333a3ce0352c8"
+    }
+  ],
+  "current_source_plus_five_facets": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean",
+      "bytes": 6155,
+      "sha256": "4cecb1db718d8bb96ed0961072d91415c5cd531cf0d148c3bbe333a3ce0352c8"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.olean",
+      "bytes": 177704,
+      "sha256": "bde9129ac7746eeb28edb0741d45c0f1328792a86792c665b8e87fbfb60926ca"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.ilean",
+      "bytes": 26714,
+      "sha256": "75b2a11c7850cabd02b1f07a0c02492d610889ef88c5a5bb64a79acb1bbd9c66"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.c",
+      "bytes": 1792,
+      "sha256": "5c7c65845f440a65b539c9ba38bb19b257df5887cecda4f66bf44f4bbde4c431"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.setup.json",
+      "bytes": 6356892,
+      "sha256": "e9eb56c29f5b530851eda98e19cf3612d2507db664e4a378acbcd72207d8071c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.trace",
+      "bytes": 3147,
+      "sha256": "bdcf3f6bcbf03843c422f863c9ca549858846c7866f0a59a1927086e17591548"
+    }
+  ],
+  "existing_validation": {
+    "actual_environment_public_counts": {
+      "ImbalancedChen.P1OriginalFourthSmallBinWeightedMass": 14
+    },
+    "total": 14,
+    "normal_exit_codes": [
+      0
+    ],
+    "kernel_exit_codes": [
+      0
+    ],
+    "audit_exit_code": 0,
+    "full_AST_records_equal_raw_log": true,
+    "canonical_owner_enumeration": true,
+    "no_type_elisions": true,
+    "transitive_axioms_equal_raw_print_records": true,
+    "only_standard_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "actual_guard_trace_argv_cwd_sysroot_and_effective_flags_bound": true,
+    "source_plus5_facets_current_and_recorded_stable": true,
+    "reused_normal_invocation_binding": null
+  },
+  "findings": [],
+  "Lean_kernel_type_axiom_build_calls_by_reviewer": 0,
+  "actual_source_or_original_manifest_log_edits": 0,
+  "limitations": [
+    "Acceptance is for SOURCE_SELECTION actual module keys and their recorded Member import/runtime context only.",
+    "These are already verified necessary suppliers of the selected twenty-module P1 chain, not the complete manuscript/repository P1 proof.",
+    "Original hypotheses, positive-cutoff domains, actual source objects, endpoints and uniform quantifier order remain; no new small-prime asymptotic or full-source theorem is inferred.",
+    "No kernel-type equivalence claim is made for the old failing source before repair."
+  ],
+  "late_addendum_handoff": "Publish this independent review and its separate manifest as new late files; preserve original FINAL_RELEASE/PUBLICATION_FILES/VALIDATION_RESULTS, original sources and raw logs."
+}

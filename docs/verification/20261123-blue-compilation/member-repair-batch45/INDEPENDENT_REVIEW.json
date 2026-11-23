@@ -1,0 +1,191 @@
+{
+  "schema": "independent_P1_single_batch_complete_source_and_validation_review_v1",
+  "batch": 45,
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root/retained_reuse",
+  "reviewed_utc": "2026-11-23T16:04:36.757501+00:00",
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P1OriginalFourthMovingPrimeIntervalBound",
+      "baseline_sha256": "9d722f5129cbed252cabb22d645c53178876019531e09f43bb864a2f4f9b28b4",
+      "postimage_sha256": "530d01fcacccbde865f8e1b2e15efce8e7141a743483c625df073209ffdfa0d8",
+      "complete_comment_aware_headers": [
+        {
+          "name": "one_add_reciprocal_sum_le_euler",
+          "private": true,
+          "header": "private theorem one_add_reciprocal_sum_le_euler (S : Finset ℕ)\n    (hprime : ∀ p ∈ S, Nat.Prime p) :\n    1 + ∑ p ∈ S, 1 / ((p : ℝ) - 1) ≤\n      ∏ p ∈ S, (1 + 1 / ((p : ℝ) - 1)) :=",
+          "sha256": "d2ff7cbfdee577ab65d827be29c73926d1506e08d29ad40c6c4d0f1068816516"
+        },
+        {
+          "name": "exists_uniform_reciprocal_interval_bound",
+          "private": false,
+          "header": "theorem exists_uniform_reciprocal_interval_bound :\n    ∃ K : ℝ, 1 < K ∧ ∀ (N cap : ℕ), Even N →\n      ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n        (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n          Real.log z / Real.log w * (1 + K / Real.log w) - 1 :=",
+          "sha256": "c959629ed2a0d9ae448d2e85a9bf99f5846f3a16436a395f277efbe747b681f8"
+        },
+        {
+          "name": "actualPrimeReciprocalMass_le_moving_ratio",
+          "private": false,
+          "header": "theorem actualPrimeReciprocalMass_le_moving_ratio\n    (K : ℝ)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (N : ℕ) (hEven : Even N) (lo hi : ℝ)\n    (hlo : 2 ≤ (N : ℝ) ^ lo) (hlohi : lo ≤ hi) (hN : 1 < N) :\n    actualPrimeReciprocalMass N lo hi ≤\n      Real.log ((N : ℝ) ^ hi) / Real.log ((N : ℝ) ^ lo) *\n        (1 + K / Real.log ((N : ℝ) ^ lo)) - 1 :=",
+          "sha256": "a8ed4ff47f2bbec5c4660bfe447dfbbde6816385dcfbc3d7ae0b79b8fad5471a"
+        },
+        {
+          "name": "weighted_last_prime_interval_le_terms",
+          "private": false,
+          "header": "theorem weighted_last_prime_interval_le_terms\n    (K : ℝ) (hKpos : 0 ≤ K)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (N : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a : ℝ) (ha : 0 < a) (r : ℕ) (hr : 1 ≤ r)\n    (hlo : 2 ≤ (N : ℝ) ^ (a / ((r : ℝ) + 1))) :\n    (a / (r : ℝ)) * actualPrimeReciprocalMass N\n        (a / ((r : ℝ) + 1))\n        (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) ≤\n      2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ) :=",
+          "sha256": "18398987daae8a905edb291894a04b7cc6a0ac0bc53b021d5d0c5578875f67f0"
+        },
+        {
+          "name": "weightedBinMass_le_uniform_ratio_box",
+          "private": false,
+          "header": "theorem weightedBinMass_le_uniform_ratio_box\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ) (ha : 0 < a)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (hEven : Even N) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (k : Bin) (K : ℝ)\n    (hK : ∀ (N cap : ℕ), Even N → ∀ w z : ℝ, 2 ≤ w → w ≤ z →\n      (∑ p ∈ roughPrimeFinset N cap w z, 1 / ((p : ℝ) - 1)) ≤\n        Real.log z / Real.log w * (1 + K / Real.log w) - 1)\n    (hlow : ∀ i : Fin 4, 2 ≤ (N : ℝ) ^ (binLo omega a k.1 i))\n    (horder : ∀ i : Fin 4, binLo omega a k.1 i ≤ binHi a k.1 i) :\n    weightedBinMass e chi m omega a old new N cap j k ≤\n      (a / (k.1 : ℝ)) *\n        ∏ i : Fin 4,\n          (Real.log ((N : ℝ) ^ (binHi a k.1 i)) /\n                Real.log ((N : ℝ) ^ (binLo omega a k.1 i)) *\n              (1 + K / Real.log ((N : ℝ) ^ (binLo omega a k.1 i))) - 1) :=",
+          "sha256": "ccd005d63d1c90c2f9e852b09a5f06b29042ba5091aa4fb19cfe8a53726dee40"
+        },
+        {
+          "name": "exists_weightedBinMass_uniform_ratio_box",
+          "private": false,
+          "header": "theorem exists_weightedBinMass_uniform_ratio_box :\n    ∃ K : ℝ, 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ), 0 < a →\n      ∀ (J4 : Finset (FourthCell m)) (N cap : ℕ), 1 < N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n      ∀ (k : Bin),\n        (∀ i : Fin 4, 2 ≤ (N : ℝ) ^ (binLo omega a k.1 i)) →\n        (∀ i : Fin 4, binLo omega a k.1 i ≤ binHi a k.1 i) →\n        weightedBinMass e chi m omega a old new N cap j k ≤\n          (a / (k.1 : ℝ)) *\n            ∏ i : Fin 4,\n              (Real.log ((N : ℝ) ^ (binHi a k.1 i)) /\n                    Real.log ((N : ℝ) ^ (binLo omega a k.1 i)) *\n                  (1 + K / Real.log ((N : ℝ) ^ (binLo omega a k.1 i))) - 1) :=",
+          "sha256": "86183df9f9251f721aee893d74e622886f495d27162c72998566846625e7fdf8"
+        }
+      ],
+      "raw_definition_data_commands": [],
+      "changed_proofs": [
+        "weighted_last_prime_interval_le_terms"
+      ],
+      "all_complete_headers_and_raw_definitions_data_parameters_unchanged": true,
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "all_imports_constants_hypotheses_domains_quantifiers_unchanged": true,
+      "raw_line_endings": {
+        "pre_CRLF": 0,
+        "post_CRLF": 0,
+        "pre_bare_LF": 246,
+        "post_bare_LF": 246
+      },
+      "mathematical_scope": "Original uniform moving-prime interval estimate and weighted original bins: K precedes targets/caps/endpoints, original Even hypotheses, strict endpoints, target deletion and6K/logN error remain. Only trans_eq cancellation and explicit unchanged additive summand API change.",
+      "header_or_definition_syntax_exceptions": [],
+      "new_mathematical_assumptions_or_weakened_statements": false,
+      "raw_original_failure": {
+        "path": "/workspace/blue-member-repair-batch45/P1OriginalFourthMovingPrimeIntervalBound/before-build.log",
+        "bytes": 2235,
+        "sha256": "16328bcc59c6a1a5d6c4d6f5729e1385549a5c78f5d565ba56e484c3f66ecda1"
+      },
+      "original_registered_source_byte_exact": false
+    }
+  ],
+  "final_release_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch45/FINAL_RELEASE.json",
+      "bytes": 965,
+      "sha256": "53a459b85c667e02fc05a9894e06d2665e31b32cdbb942549db8a61241906203"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch45/PUBLICATION_FILES.json",
+      "bytes": 5612,
+      "sha256": "679c01bd3bd417d7e6cd01ec952d18202e1ff6281c1ac7ae52024a164e597be6"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch45/VALIDATION_RESULTS.json",
+      "bytes": 4392,
+      "sha256": "571c4243829f9230d9d0cfc6fa50caa6d0a51270602e85eec3b954435349a47b"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch45/SOURCE_SELECTION.json",
+      "bytes": 1733,
+      "sha256": "cf4618476fe76d5ec7f314b5e313462cff1c4d9dfba6d19f56fc284a348134e1"
+    }
+  ],
+  "original_manifest_file_count": 31,
+  "all_recorded_original_manifest_file_sha256_and_sizes_match_and_stable": true,
+  "current_source_main_Member_match": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.lean",
+      "bytes": 11538,
+      "sha256": "530d01fcacccbde865f8e1b2e15efce8e7141a743483c625df073209ffdfa0d8"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.lean",
+      "bytes": 11538,
+      "sha256": "530d01fcacccbde865f8e1b2e15efce8e7141a743483c625df073209ffdfa0d8"
+    }
+  ],
+  "current_source_plus_five_facets": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.lean",
+      "bytes": 11538,
+      "sha256": "530d01fcacccbde865f8e1b2e15efce8e7141a743483c625df073209ffdfa0d8"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.olean",
+      "bytes": 508704,
+      "sha256": "d76ee91e445cb0a64d77a7be2cca0aed086e0d863055792f4bfd180fb15bef65"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.ilean",
+      "bytes": 49742,
+      "sha256": "5f4980187a841bd4f9d4f8b684296c7d6e7d3a873b07358fe33f1bdad55a1cbc"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.c",
+      "bytes": 1794,
+      "sha256": "fb079b164e1aed372c7181196d20531259216c7966eb76a73372a32e306c4774"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.setup.json",
+      "bytes": 6357070,
+      "sha256": "e135c2bee7e455188b41a28da396f20228b11b454d57c1eeb3bd1d4b54281f68"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthMovingPrimeIntervalBound.trace",
+      "bytes": 3621,
+      "sha256": "e52fd4d7037c6f143381a1cbd45b4c88453893957a23e8ce11e39b0680726fa0"
+    }
+  ],
+  "existing_validation": {
+    "actual_environment_public_counts": {
+      "ImbalancedChen.P1OriginalFourthMovingPrimeIntervalBound": 14
+    },
+    "total": 14,
+    "normal_exit_codes": [
+      0
+    ],
+    "kernel_exit_codes": [
+      0
+    ],
+    "audit_exit_code": 0,
+    "full_AST_records_equal_raw_log": true,
+    "canonical_owner_enumeration": true,
+    "no_type_elisions": true,
+    "transitive_axioms_equal_raw_print_records": true,
+    "only_standard_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "actual_guard_trace_argv_cwd_sysroot_and_effective_flags_bound": true,
+    "source_plus5_facets_current_and_recorded_stable": true,
+    "reused_normal_invocation_binding": null
+  },
+  "findings": [
+    {
+      "severity": "ALREADY_CLARIFIED_METADATA_LABEL",
+      "original_field": "changed_existing_proof",
+      "original_label": "weighted_moving_last_interval",
+      "actual_unchanged_header_theorem": "weighted_last_prime_interval_le_terms",
+      "pre_release_clarification": {
+        "path": "/workspace/blue-member-repair-batch45/PRE_RELEASE_METADATA_CLARIFICATION.json",
+        "bytes": 637,
+        "sha256": "4c4aef2bccd75ce74687f5abb7c8b06f9afabc56dbe4f47991ef6b58433d9bd0"
+      },
+      "source_or_validation_impact": false,
+      "additional_clarification_needed": false
+    }
+  ],
+  "Lean_kernel_type_axiom_build_calls_by_reviewer": 0,
+  "actual_source_or_original_manifest_log_edits": 0,
+  "limitations": [
+    "Acceptance is for SOURCE_SELECTION actual module keys and their recorded Member import/runtime context only.",
+    "These are already verified necessary suppliers of the selected twenty-module P1 chain, not the complete manuscript/repository P1 proof.",
+    "Original hypotheses, positive-cutoff domains, actual source objects, endpoints and uniform quantifier order remain; no new small-prime asymptotic or full-source theorem is inferred.",
+    "No kernel-type equivalence claim is made for the old failing source before repair."
+  ],
+  "late_addendum_handoff": "Publish this independent review and its separate manifest as new late files; preserve original FINAL_RELEASE/PUBLICATION_FILES/VALIDATION_RESULTS, original sources and raw logs."
+}

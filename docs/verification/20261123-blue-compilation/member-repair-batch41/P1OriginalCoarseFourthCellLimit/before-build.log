@@ -1,0 +1,57 @@
+✖ [9410/9414] Building ImbalancedChen.P1OriginalCoarseFourthCellLimit (9.3s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellLimit.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellLimit.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellLimit.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellLimit.setup.json --json
+error: ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean:102:52: Unknown identifier `integral_empty`
+error: ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean:101:4: Type mismatch: After simplification, term
+  tendsto_const_nhds
+ has type
+  Tendsto (fun x => 0) atTop (𝓝 0)
+but is expected to have type
+  Tendsto (fun N => 0) atTop (𝓝 (∫ (t : Fin 4 → ℝ) in ∅, f t * ∏ i, 1 / t i))
+error: ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean:148:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fourthPlusProfileP1 lambda t
+in the target expression
+  (fun x => extendedProfile lambda x * ∏ i, 1 / x i) t = (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t
+
+e : ℚ
+m : ℕ
+omega a : ℝ
+ha : 0 < a
+haRho : a < 19 / 96
+j : FourthCell m
+hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m (prefix3 j) 2
+lambda : ℝ
+hlevel : P1OriginalFourthIntegral.oldExponent e m j ≤ lambda
+cap : ℕ → ℕ
+hcap : ∀ᶠ (N : ℕ) in atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}, ↑N ^ (19 / 96) ≤ ↑(cap N)
+herror :
+  Tendsto
+    (fun N =>
+      fourthBoxPlusResidualSumP1 N (cap N) a (19 / 96) lambda (sourceRegion e m omega j) -
+        actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+          ((sourceRegion e m omega j).indicator (extendedProfile lambda)))
+    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 0)
+hfixed :
+  Tendsto
+    (fun N =>
+      actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+        ((sourceRegion e m omega j).indicator (extendedProfile lambda)))
+    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N})
+    (𝓝
+      (∫ (t : Fin 4 → ℝ) in P1OriginalFourthIntegral.truncatedCell e m omega a j,
+        extendedProfile lambda t * ∏ i, 1 / t i))
+t : Fin 4 → ℝ
+ht : t ∈ P1OriginalFourthIntegral.truncatedCell e m omega a j
+⊢ (fun x => extendedProfile lambda x * ∏ i, 1 / x i) t = (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t
+warning: ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean:213:5: Variable name `J4` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _J4
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ImbalancedChen/P1OriginalCoarseFourthCellLimit.lean:225:5: Variable name `J4` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _J4
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+error: Lean exited with code 1

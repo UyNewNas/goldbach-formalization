@@ -30,6 +30,10 @@ Reuse the existing source proofs and actual data. Do not replace them with a new
 
 Both the FourthCap producer and AttachedRoughFrontier suppliers occur in the real full-P1 closures. Their verified compatibility changes are relevant even though they are outside the twenty-module Member subset.
 
+The modern complete bound follows a distinct, explicitly constructed admissible policy: the new ordered-third selector and finite rational dispatch, with `F(data = NewFifthUnion)`. `FullPolicy.root_on_old_owner` / `policy_on_old_owner` identify it with the older policy only on the proved old-owner domain. New owners have separate estimates. `Canonical.selected_second`, `selected_third` and `RankReads.read` supply the actual selector and ancestor conditions. The manuscript permits a fixed finite admissible refinement; this does not imply global equality with the older `licensed` root.
+
+For that modern policy, reuse `P4AOriginalFiniteAll22Nineteen.exists_final_raw_upper_with_early_defect`, the existing early-defect payment and the cofinal coefficient assembly. `FineCofinalCoefficient` explicitly removes the early defect on a common schedule before the broader Fine density result. The Nineteen source is available as published Git blob `abadf4d9fbbec16085deb732f4e3388e35500218`; the associated EarlyDefectCounting source is blob `fb3aa5371d57b599fac9726603aaf3d179dd38db`. Materialize and qualify their exact dependency context before building. Do not invent separate nonpositivity statements for the old root's unresolved adjustment terms to force a join. The final accepted theorem must name the chosen policy literally and verify its manuscript-admissibility conditions.
+
 ## Execution steps
 
 ### 1. Freeze scope and reuse evidence

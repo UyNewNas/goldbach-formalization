@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean
++++ candidate/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean
+@@ -130,7 +130,7 @@
+     IntegrableOn (fun t =>
+       (extendedProfile (oldExponent e m j) t - extendedProfile (cap4 j : ℝ) t) *
+         reciprocalWeight t) (truncatedCell e m omega a j) := by
+-  simpa only [extendedWeightedProfile, sub_mul] using
++  simpa only [Pi.sub_def, extendedWeightedProfile, sub_mul] using
+     (integrableOn_extendedWeightedProfile e m omega ha j (oldExponent e m j)).sub
+       (integrableOn_extendedWeightedProfile e m omega ha j (cap4 j : ℝ))
+ 
+@@ -152,6 +152,7 @@
+   have hlevel := selected_cap_ge_old e chi m omega J4 cap4 hcheck j hj
+   apply setIntegral_congr_fun (truncatedCell_measurable e m omega a j)
+   intro t ht
++  dsimp only
+   rw [rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,
+     rawProfile_eq_extended_on_truncated e m omega ha j hlevel ht]
+   rfl

@@ -1,0 +1,359 @@
+{
+  "schema": "independent_P1_single_batch_complete_source_and_validation_review_v1",
+  "batch": 42,
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root/retained_reuse",
+  "reviewed_utc": "2026-11-23T16:03:55.456969+00:00",
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P1OriginalFourthSmallPrimeStratification",
+      "baseline_sha256": "9746cd554c9091938eded8a09ec2e21a01c5501b2a7cae6232f9954c341af328",
+      "postimage_sha256": "101c624a750374dc3ce4e421bb0786e6a12f0151620ce747c424a8146a13629e",
+      "complete_comment_aware_headers": [
+        {
+          "name": "admitted_log_data",
+          "private": false,
+          "header": "theorem admitted_log_data (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : PrimeTuple) (hp : p ∈ admitted e chi m omega N cap) :\n    StrictAnti (actualPrimeTupleLog N p) ∧ (∀ i, Nat.Prime (p i)) ∧\n      (∀ i, 0 < actualPrimeTupleLog N p i) :=",
+          "sha256": "d23a987cdde3a432717920d595bc0e4e66fa587aaf33a3f118b66390bd99545b"
+        },
+        {
+          "name": "exists_small_iff_last",
+          "private": false,
+          "header": "theorem exists_small_iff_last {t : Fin 4 → ℝ} (ht : StrictAnti t) (a : ℝ) :\n    (∃ i, t i < a) ↔ t (Fin.last 3) < a :=",
+          "sha256": "9a371ee3d2720203a7f20b7e72aea46103102c47a1592721c95eaeb4eaf0e22e"
+        },
+        {
+          "name": "selected_first_three_ge_omega",
+          "private": false,
+          "header": "theorem selected_first_three_ge_omega\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (J4 : Finset (FourthCell m))\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (t : Fin 4 → ℝ) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m j)\n    (hanti : StrictAnti t) :\n    ∀ i : Fin 3, omega ≤ t ⟨i.val, by omega⟩ :=",
+          "sha256": "f1a74f43acde39c4e9dcd16f3ad8dfc49a664d1036671fae43b55d8471a24f71"
+        },
+        {
+          "name": "selected_third_prime_rough",
+          "private": false,
+          "header": "theorem selected_third_prime_rough\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (J4 : Finset (FourthCell m))\n    (N cap : ℕ) (hN : 1 < N) (p : PrimeTuple) (hp : p ∈ admitted e chi m omega N cap)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (ht : actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j) :\n    (N : ℝ) ^ omega ≤ (p 2 : ℝ) :=",
+          "sha256": "b96172796aa94103335b2575804ac2bb5650a029dd143e45c5723bbaeab443ea"
+        },
+        {
+          "name": "smallCellTuples_eq_original_filter",
+          "private": false,
+          "header": "theorem smallCellTuples_eq_original_filter\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (N cap : ℕ) (hN : 1 < N)\n    (j : FourthCell m) :\n    smallCellTuples e chi m omega a N cap j =\n      (admitted e chi m omega N cap).filter (fun p =>\n        (∃ i, actualPrimeTupleLog N p i < a) ∧\n          actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j) :=",
+          "sha256": "1efdffaa1f4207cc73d933c618c7660496afa72dbc357f0073ff476f4052c831"
+        },
+        {
+          "name": "smallCellTuple_first_three_large",
+          "private": false,
+          "header": "theorem smallCellTuple_first_three_large\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (haomega : a ≤ omega)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (p : PrimeTuple) (hp : p ∈ smallCellTuples e chi m omega a N cap j) :\n    (∀ i : Fin 3, a ≤ actualPrimeTupleLog N p ⟨i.val, by omega⟩) ∧\n      actualPrimeTupleLog N p (Fin.last 3) < a :=",
+          "sha256": "1a53f16e4df823c96afa81ae896f4f405a35396e0bf9b5a91a6bc291478da3c9"
+        },
+        {
+          "name": "unique_sourceBin",
+          "private": false,
+          "header": "theorem unique_sourceBin (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ)\n    (p : PrimeTuple) (hp : p ∈ S) :\n    ∃! k, k ∈ sourceBins S a old new N ∧ p ∈ sourceBin S a old new N k :=",
+          "sha256": "ea54b9ef336c769ab7eb37c1110881fd74dc98c724e93c353b3d5be5bddebb8e"
+        },
+        {
+          "name": "sourceBins_disjoint",
+          "private": false,
+          "header": "theorem sourceBins_disjoint (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ)\n    (k l : Bin) (hne : k ≠ l) :\n    Disjoint (sourceBin S a old new N k) (sourceBin S a old new N l) :=",
+          "sha256": "22395ce9553e4eed214a14dff59c739d60a91db3c1581d794185a707f6e1a246"
+        },
+        {
+          "name": "source_eq_biUnion_bins",
+          "private": false,
+          "header": "theorem source_eq_biUnion_bins (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ) :\n    S = (sourceBins S a old new N).biUnion (sourceBin S a old new N) :=",
+          "sha256": "879b9f53da9e9a0d2ce5943d93e7075ff1f71f91a39873c3576646d201da1a7d"
+        },
+        {
+          "name": "sum_source_eq_bins",
+          "private": false,
+          "header": "theorem sum_source_eq_bins (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ)\n    (f : PrimeTuple → ℝ) :\n    (∑ p ∈ S, f p) =\n      ∑ k ∈ sourceBins S a old new N, ∑ p ∈ sourceBin S a old new N k, f p :=",
+          "sha256": "d92803cfb93c9469e75f4245525fce384e2380aff19b7c27a1b06499b3576ffb"
+        },
+        {
+          "name": "sourceBin_s_bounds",
+          "private": false,
+          "header": "theorem sourceBin_s_bounds (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ)\n    (k : Bin) (p : PrimeTuple) (hp : p ∈ sourceBin S a old new N k) :\n    (k.2.1 : ℝ) ≤ residualS old N p ∧ residualS old N p < (k.2.1 : ℝ) + 1 ∧\n      (k.2.2 : ℝ) ≤ residualS new N p ∧ residualS new N p < (k.2.2 : ℝ) + 1 :=",
+          "sha256": "99741ecdaaf47e3ced14a5bae4dec9a4f45c67544f72dbc649f6afa631428c3f"
+        },
+        {
+          "name": "sourceBin_common_parameter",
+          "private": false,
+          "header": "theorem sourceBin_common_parameter (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ)\n    (k : Bin) (p : PrimeTuple) (hp : p ∈ sourceBin S a old new N k)\n    (t : ℝ) (hold : t ≤ (k.2.1 : ℝ)) (hnew : t ≤ (k.2.2 : ℝ)) :\n    t ≤ residualS old N p ∧ t ≤ residualS new N p :=",
+          "sha256": "c0d2ee8b2d4505130109db0757f40225843a02fc06906008abba7d2a63ffddbc"
+        },
+        {
+          "name": "smallBin_cutoffs",
+          "private": false,
+          "header": "theorem smallBin_cutoffs\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ) (ha : 0 < a)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) (k : Bin) (p : PrimeTuple)\n    (hp : p ∈ sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k) :\n    1 ≤ k.1 ∧ a / ((k.1 : ℝ) + 1) < actualPrimeTupleLog N p (Fin.last 3) ∧\n      actualPrimeTupleLog N p (Fin.last 3) ≤ a / (k.1 : ℝ) ∧\n      (N : ℝ) ^ (a / ((k.1 : ℝ) + 1)) < (p (Fin.last 3) : ℝ) ∧\n      (p (Fin.last 3) : ℝ) ≤ (N : ℝ) ^ (a / (k.1 : ℝ)) :=",
+          "sha256": "4aa6c614c0662bfcf048536f7ab93e6b37f441b3d1cdd5f93899ff650f1bb6b5"
+        },
+        {
+          "name": "smallBin_s_numerator_bounds",
+          "private": false,
+          "header": "theorem smallBin_s_numerator_bounds\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) (k : Bin) (p : PrimeTuple)\n    (hp : p ∈ sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k) :\n    (k.2.1 : ℝ) * actualPrimeTupleLog N p (Fin.last 3) ≤ old - ∑ i, actualPrimeTupleLog N p i ∧\n      old - (∑ i, actualPrimeTupleLog N p i) <\n        ((k.2.1 : ℝ) + 1) * actualPrimeTupleLog N p (Fin.last 3) ∧\n      (k.2.2 : ℝ) * actualPrimeTupleLog N p (Fin.last 3) ≤ new - ∑ i, actualPrimeTupleLog N p i ∧\n      new - (∑ i, actualPrimeTupleLog N p i) <\n        ((k.2.2 : ℝ) + 1) * actualPrimeTupleLog N p (Fin.last 3) :=",
+          "sha256": "75bea309fb404e60e15ded1f69e9ff9c4a6c5e51b36c585010a72c7594024f91"
+        },
+        {
+          "name": "smallBin_common_parameter_physical_levels",
+          "private": false,
+          "header": "theorem smallBin_common_parameter_physical_levels\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a old new : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) (k : Bin) (p : PrimeTuple)\n    (hp : p ∈ sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k)\n    (t : ℝ) (hold : t ≤ (k.2.1 : ℝ)) (hnew : t ≤ (k.2.2 : ℝ)) :\n    (p (Fin.last 3) : ℝ) ^ t ≤ (N : ℝ) ^ old / (∏ i, p i : ℕ) ∧\n      (p (Fin.last 3) : ℝ) ^ t ≤ (N : ℝ) ^ new / (∏ i, p i : ℕ) :=",
+          "sha256": "3e27fd0c3f9d8c61ac2173e1ee4e7bf5e905cabd88952b6cb3535b40e6faf291"
+        },
+        {
+          "name": "binSignedMass_eq_reciprocal_sum",
+          "private": false,
+          "header": "theorem binSignedMass_eq_reciprocal_sum (S : Finset PrimeTuple) (a old new : ℝ)\n    (N : ℕ) (k : Bin) :\n    binSignedMass S a old new N k =\n      ∑ p ∈ sourceBin S a old new N k, ∏ i, 1 / ((p i : ℝ) - 1) :=",
+          "sha256": "e1968d700c872f35a01f06965820dc12a17b8a466295ea45ddc65d0ae2e414f3"
+        },
+        {
+          "name": "binCorrection_eq_old_sub_new",
+          "private": false,
+          "header": "theorem binCorrection_eq_old_sub_new (S : Finset PrimeTuple) (a old new : ℝ)\n    (N cap : ℕ) (k : Bin) :\n    binCorrection S a old new N cap k =\n      (∑ p ∈ sourceBin S a old new N k,\n        signedTupleWeight p * fourthTuplePlusResidualP1 N cap old p) -\n      (∑ p ∈ sourceBin S a old new N k,\n        signedTupleWeight p * fourthTuplePlusResidualP1 N cap new p) :=",
+          "sha256": "9969a85579e7995c5057396a1a608140f465277f0977d6a6bbf74c8c99b18ec8"
+        },
+        {
+          "name": "abs_binCorrection_le_payment",
+          "private": false,
+          "header": "theorem abs_binCorrection_le_payment (S : Finset PrimeTuple) (a old new : ℝ)\n    (N cap : ℕ) (k : Bin) :\n    |binCorrection S a old new N cap k| ≤ binAbsPayment S a old new N cap k :=",
+          "sha256": "96ceb2d3c9dfed6ca2e60a472b6448d6c1b21e597da591d1c1b60890b48025d7"
+        },
+        {
+          "name": "abs_binCorrection_le_differencePayment",
+          "private": false,
+          "header": "theorem abs_binCorrection_le_differencePayment (S : Finset PrimeTuple) (a old new : ℝ)\n    (N cap : ℕ) (k : Bin) :\n    |binCorrection S a old new N cap k| ≤ binDifferenceAbsPayment S a old new N cap k :=",
+          "sha256": "1b6fb5ff07324698b15fec47f971182f9dd5a1b89562f2518a50522c03239a5e"
+        },
+        {
+          "name": "binDifferencePayment_le_pairPayment",
+          "private": false,
+          "header": "theorem binDifferencePayment_le_pairPayment (S : Finset PrimeTuple) (a old new : ℝ)\n    (N cap : ℕ) (k : Bin) :\n    binDifferenceAbsPayment S a old new N cap k ≤ binAbsPayment S a old new N cap k :=",
+          "sha256": "1c7ebc24e2e2440c0ce5cf3749339103546456b674f9026b3bc68047c5373f59"
+        },
+        {
+          "name": "smallCellRemainder_eq_signed_source",
+          "private": false,
+          "header": "theorem smallCellRemainder_eq_signed_source\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) :\n    P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j =\n      ∑ p ∈ smallCellTuples e chi m omega a N cap j, signedTupleWeight p *\n        (fourthTuplePlusResidualP1 N cap (thirdCellExponent e m j : ℝ) p -\n          fourthTuplePlusResidualP1 N cap (cap4 j : ℝ) p) :=",
+          "sha256": "b25b8d06eb41b4d374d6d11e03cc526d28bebaee62b5a8313148c072d318d153"
+        },
+        {
+          "name": "smallCellRemainder_eq_bins",
+          "private": false,
+          "header": "theorem smallCellRemainder_eq_bins\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) :\n    P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j =\n      ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n        binCorrection (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "d77fc85dea96d1283c13c7c25dc2a333d85a2ec7815294785da56a6b320463b2"
+        },
+        {
+          "name": "smallCellRemainder_abs_le_binPayments",
+          "private": false,
+          "header": "theorem smallCellRemainder_abs_le_binPayments\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) :\n    |P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j| ≤\n      ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n        binAbsPayment (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "840398c0433ee3ade965af6ff86c544e12d8f2898b462b93c504424aad3961df"
+        },
+        {
+          "name": "smallCellRemainder_abs_le_binDifferencePayments",
+          "private": false,
+          "header": "theorem smallCellRemainder_abs_le_binDifferencePayments\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) :\n    |P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j| ≤\n      ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n        binDifferenceAbsPayment (smallCellTuples e chi m omega a N cap j)\n          a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "a745489753e1d54059d317cd7822ebb4b78504e69e5b8367d4b67f906f75dcf8"
+        },
+        {
+          "name": "signed_mass_eq_bins",
+          "private": false,
+          "header": "theorem signed_mass_eq_bins (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ) :\n    (∑ p ∈ S, signedTupleWeight p) =\n      ∑ k ∈ sourceBins S a old new N, binSignedMass S a old new N k :=",
+          "sha256": "2c8f9a4fba54bd29f62c82a63e27503bd14cf870755ef002e103595a399caa71"
+        },
+        {
+          "name": "smallRemainder_eq_all_bins",
+          "private": false,
+          "header": "theorem smallRemainder_eq_all_bins\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) :\n    P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N cap =\n      ∑ j ∈ selectedFourthCells e chi m omega J4,\n        ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n          binCorrection (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "c79f77cf36222c562d5e5356c249401b5a322b1372a44c5c0d08ee705a51d8c7"
+        },
+        {
+          "name": "smallRemainder_abs_le_all_binPayments",
+          "private": false,
+          "header": "theorem smallRemainder_abs_le_all_binPayments\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) :\n    |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N cap| ≤\n      ∑ j ∈ selectedFourthCells e chi m omega J4,\n        ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n          binAbsPayment (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "9b8ffd7b054b199f34e8b1e76b7df51d79e871d4a68717e2364e8f661e350bda"
+        },
+        {
+          "name": "smallRemainder_abs_le_all_binDifferencePayments",
+          "private": false,
+          "header": "theorem smallRemainder_abs_le_all_binDifferencePayments\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) :\n    |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N cap| ≤\n      ∑ j ∈ selectedFourthCells e chi m omega J4,\n        ∑ k ∈ sourceBins (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N,\n          binDifferenceAbsPayment (smallCellTuples e chi m omega a N cap j)\n            a (thirdCellExponent e m j : ℝ) (cap4 j : ℝ) N cap k :=",
+          "sha256": "82411cd9b739abdfdee407936a3278d295216e3590ab4f2eebd6ebddbe6daa2a"
+        }
+      ],
+      "raw_definition_data_commands": [
+        {
+          "raw": "abbrev PrimeTuple := Fin 4 → ℕ\n",
+          "sha256": "f52a16b0e2b3387332e2aeffe1dc60cee9ad452fe65b66a1bd2bf28fc8af67fb"
+        },
+        {
+          "raw": "abbrev Bin := ℕ × ℤ × ℤ\n\n/-- Actual original admitted tuples, retaining the original outer rough cutoff. -/\n",
+          "sha256": "3e6840ab406f2394063ba94b55af1e1aa21369ed588b57ec7a66699a46a7ae10"
+        },
+        {
+          "raw": "def admitted (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) : Finset PrimeTuple :=\n  firstExitAdmittedTuples 4 (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n    (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))\n\n",
+          "sha256": "77edbe9e08f33aaaf1fb37ecc8cb6fc5f2d43f5a7815356a240678d4e0f0e975"
+        },
+        {
+          "raw": "def smallCellTuples (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (j : FourthCell m) : Finset PrimeTuple :=\n  (admitted e chi m omega N cap).filter fun p =>\n    actualPrimeTupleLog N p (Fin.last 3) < a ∧\n      actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j\n\n",
+          "sha256": "a9056763c21a9d88c933a8f1bb05aebd4987ef9bc63b8a501ddfc45633da1a3a"
+        },
+        {
+          "raw": "def residualS (lambda : ℝ) (N : ℕ) (p : PrimeTuple) : ℝ :=\n  (lambda - ∑ i, actualPrimeTupleLog N p i) / actualPrimeTupleLog N p (Fin.last 3)\n\n",
+          "sha256": "f922f94c27f98a8010cc8072bc81a3e875b3834a7d952d0ca95d598e831bd46c"
+        },
+        {
+          "raw": "def binOwner (a old new : ℝ) (N : ℕ) (p : PrimeTuple) : Bin :=\n  (⌊a / actualPrimeTupleLog N p (Fin.last 3)⌋₊,\n    ⌊residualS old N p⌋, ⌊residualS new N p⌋)\n\n/-- This is a finite image of the ACTUAL source, with no artificial tail cap. -/\n",
+          "sha256": "8180de2a89412820faeebc5fa1adb81a0aa923967dd9e908254452653875eb02"
+        },
+        {
+          "raw": "def sourceBins (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ) : Finset Bin :=\n  S.image (binOwner a old new N)\n\n",
+          "sha256": "b720d2719f9b11951391f73104379532ec79f917610ff270cb372b4fb235d068"
+        },
+        {
+          "raw": "def sourceBin (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ) (k : Bin) :\n    Finset PrimeTuple := S.filter fun p => binOwner a old new N p = k\n\n",
+          "sha256": "6d064ced94d4e679f5b6c688b75af842517c40fb5e8b8500c62baac41636aa8b"
+        },
+        {
+          "raw": "def binCorrection (S : Finset PrimeTuple) (a old new : ℝ) (N cap : ℕ) (k : Bin) : ℝ :=\n  ∑ p ∈ sourceBin S a old new N k, signedTupleWeight p *\n    (fourthTuplePlusResidualP1 N cap old p - fourthTuplePlusResidualP1 N cap new p)\n\n",
+          "sha256": "d7c62d11cac13ef82f5a7460d35b1b3d0655124cfbd5e5c1c126f0da01cf7dc4"
+        },
+        {
+          "raw": "def binSignedMass (S : Finset PrimeTuple) (a old new : ℝ) (N : ℕ) (k : Bin) : ℝ :=\n  ∑ p ∈ sourceBin S a old new N k, signedTupleWeight p\n\n",
+          "sha256": "68711740d5483174e3798c1c3ee0431771bfeb16736549482439bdc713f75107"
+        },
+        {
+          "raw": "def binAbsPayment (S : Finset PrimeTuple) (a old new : ℝ) (N cap : ℕ) (k : Bin) : ℝ :=\n  ∑ p ∈ sourceBin S a old new N k, |signedTupleWeight p| *\n    (|fourthTuplePlusResidualP1 N cap old p| + |fourthTuplePlusResidualP1 N cap new p|)\n\n/-- This sharper payment preserves actual old/new cancellation at the SAME cutoff. -/\n",
+          "sha256": "bd8d359bfa33d7cb46d77fa038999d21e68ad30cd293411e8dc847551b9b4c06"
+        },
+        {
+          "raw": "def binDifferenceAbsPayment (S : Finset PrimeTuple) (a old new : ℝ)\n    (N cap : ℕ) (k : Bin) : ℝ :=\n  ∑ p ∈ sourceBin S a old new N k, |signedTupleWeight p| *\n    |fourthTuplePlusResidualP1 N cap old p - fourthTuplePlusResidualP1 N cap new p|\n\n",
+          "sha256": "2e8d72e3d49a8a5a506236922cd840053111d6c3919b554897c2056cf4894bda"
+        }
+      ],
+      "changed_proofs": [
+        "selected_first_three_ge_omega",
+        "selected_third_prime_rough"
+      ],
+      "all_complete_headers_and_raw_definitions_data_parameters_unchanged": true,
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "all_imports_constants_hypotheses_domains_quantifiers_unchanged": true,
+      "raw_line_endings": {
+        "pre_CRLF": 0,
+        "post_CRLF": 0,
+        "pre_bare_LF": 478,
+        "post_bare_LF": 481
+      },
+      "mathematical_scope": "Exact finite admitted-source stratification: third-prime coordinate2 and all first THREE coordinates remain rough-active, the last-coordinate smallness and signed reciprocal-prime weights remain. Only definitional Fin/Nat coordinate exposure changes.",
+      "header_or_definition_syntax_exceptions": [],
+      "new_mathematical_assumptions_or_weakened_statements": false,
+      "raw_original_failure": {
+        "path": "/workspace/blue-member-repair-batch42/P1OriginalFourthSmallPrimeStratification/before-build.log",
+        "bytes": 3165,
+        "sha256": "f6c0f90be2a94fd92747daf13e32a769ad30932de044badc5b326cd334a5c28c"
+      },
+      "original_registered_source_byte_exact": false
+    }
+  ],
+  "final_release_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch42/FINAL_RELEASE.json",
+      "bytes": 965,
+      "sha256": "85f5457fa1b2081a4eb9cdce67f9e139f057072c97956b0a7627d26a92018502"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch42/PUBLICATION_FILES.json",
+      "bytes": 5440,
+      "sha256": "f4d424aa21150b582c6eb423cf0039b175012abe2be7f1947d1a5a716ad9c124"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch42/VALIDATION_RESULTS.json",
+      "bytes": 4394,
+      "sha256": "0dde6f38c5cabcd73955b4ea72a6845a5c6cc14c1a36d4a7bfa2edb0d932e73b"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch42/SOURCE_SELECTION.json",
+      "bytes": 1738,
+      "sha256": "db4554469d404b9cde058ab23346ef594390e23976665f63084826d877ef6c19"
+    }
+  ],
+  "original_manifest_file_count": 30,
+  "all_recorded_original_manifest_file_sha256_and_sizes_match_and_stable": true,
+  "current_source_main_Member_match": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.lean",
+      "bytes": 25166,
+      "sha256": "101c624a750374dc3ce4e421bb0786e6a12f0151620ce747c424a8146a13629e"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.lean",
+      "bytes": 25166,
+      "sha256": "101c624a750374dc3ce4e421bb0786e6a12f0151620ce747c424a8146a13629e"
+    }
+  ],
+  "current_source_plus_five_facets": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.lean",
+      "bytes": 25166,
+      "sha256": "101c624a750374dc3ce4e421bb0786e6a12f0151620ce747c424a8146a13629e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.olean",
+      "bytes": 429976,
+      "sha256": "666a21dcdca0b661b8612d9616b874653e15fd3e66ba02e305699d78d63df97e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.ilean",
+      "bytes": 115710,
+      "sha256": "4abb43c0acad6da4171767c7802e1cf3fa72c459f04ddc4fc61c822db9df3f42"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.c",
+      "bytes": 2161,
+      "sha256": "affb960b60a759d974d68867d6be7df3a4942a62d8ec985541ea68e38343c20c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.setup.json",
+      "bytes": 6356714,
+      "sha256": "7f550de36a16be87be1a2e7eaa06c8302774219159593b0fc539a92b948a28cc"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.trace",
+      "bytes": 3719,
+      "sha256": "37dc1a3d7519ecd7e9c4ea32aefc4512f3e68faec7dafcfd53fd8e7c214390c2"
+    }
+  ],
+  "existing_validation": {
+    "actual_environment_public_counts": {
+      "ImbalancedChen.P1OriginalFourthSmallPrimeStratification": 51
+    },
+    "total": 51,
+    "normal_exit_codes": [
+      0
+    ],
+    "kernel_exit_codes": [
+      0
+    ],
+    "audit_exit_code": 0,
+    "full_AST_records_equal_raw_log": true,
+    "canonical_owner_enumeration": true,
+    "no_type_elisions": true,
+    "transitive_axioms_equal_raw_print_records": true,
+    "only_standard_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "actual_guard_trace_argv_cwd_sysroot_and_effective_flags_bound": true,
+    "source_plus5_facets_current_and_recorded_stable": true,
+    "reused_normal_invocation_binding": null
+  },
+  "findings": [],
+  "Lean_kernel_type_axiom_build_calls_by_reviewer": 0,
+  "actual_source_or_original_manifest_log_edits": 0,
+  "limitations": [
+    "Acceptance is for SOURCE_SELECTION actual module keys and their recorded Member import/runtime context only.",
+    "These are already verified necessary suppliers of the selected twenty-module P1 chain, not the complete manuscript/repository P1 proof.",
+    "Original hypotheses, positive-cutoff domains, actual source objects, endpoints and uniform quantifier order remain; no new small-prime asymptotic or full-source theorem is inferred.",
+    "No kernel-type equivalence claim is made for the old failing source before repair."
+  ],
+  "late_addendum_handoff": "Publish this independent review and its separate manifest as new late files; preserve original FINAL_RELEASE/PUBLICATION_FILES/VALIDATION_RESULTS, original sources and raw logs."
+}

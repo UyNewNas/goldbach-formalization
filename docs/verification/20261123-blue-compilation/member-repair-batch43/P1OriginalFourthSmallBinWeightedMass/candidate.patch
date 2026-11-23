@@ -1,0 +1,25 @@
+--- baseline/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean
++++ candidate/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean
+@@ -86,8 +86,8 @@
+     let i3 : Fin 3 := ⟨i.val, hi3⟩
+     have heq : (⟨i3.val, by omega⟩ : Fin 4) = i := Fin.ext rfl
+     constructor
+-    · simpa [binLo, hilast, heq] using hfirst i3
+-    · simpa [binHi, hilast] using hupper i
++    · simpa [binLo, hilast, heq, Fin.ext_iff, hne] using hfirst i3
++    · simpa [binHi, hilast, Fin.ext_iff, hne] using hupper i
+ 
+ /-- Uniform in the actual enumeration cap and target: a bin's weighted
+ fourth-prime first moment is paid by one full, target-deleted prime box.
+@@ -123,7 +123,10 @@
+         ∏ i, actualPrimeReciprocalMass N (binLo omega a k.1 i) (binHi a k.1 i) := by
+       dsimp [B]
+       rw [← actualPrimeBoxMass_eq_prod]
+-      simp only [actualPrimeBoxMass, Finset.sum_mul]
++      simp only [actualPrimeBoxMass]
++      rw [Finset.mul_sum]
++      apply Finset.sum_congr rfl
++      intro p hp
+       ring
+ 
+ end P1OriginalFourthSmallBinWeightedMass

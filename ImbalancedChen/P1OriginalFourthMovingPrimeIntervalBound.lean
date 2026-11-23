@@ -147,7 +147,7 @@ theorem weighted_last_prime_interval_le_terms
       ((r : ℝ) ^ 2 * Real.log (N : ℝ)) ≤
         6 * K / Real.log (N : ℝ) := by
     have h := div_le_div_of_nonneg_right hnum hden
-    convert h using 1 <;> field_simp [hrR.ne', hlogN.ne'] <;> ring
+    exact h.trans_eq (by field_simp [hrR.ne', hlogN.ne'] <;> ring)
   calc
     _ ≤ (a / (r : ℝ)) *
         (Real.log ((N : ℝ) ^
@@ -158,7 +158,7 @@ theorem weighted_last_prime_interval_le_terms
     _ = 2 * a / (r : ℝ) ^ 2 +
         K * ((r : ℝ) + 2) * ((r : ℝ) + 1) /
           ((r : ℝ) ^ 2 * Real.log (N : ℝ)) := hEq
-    _ ≤ 2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ) := add_le_add_left herr _
+    _ ≤ 2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ) := add_le_add (le_refl _) herr
 
 /-- A moving-endpoint, target-uniform envelope for each exact original
 bin. It is conditional only on explicit geometric endpoint inequalities

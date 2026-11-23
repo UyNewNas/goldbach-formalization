@@ -44,7 +44,7 @@ theorem exists_tuplePlus_closed_uniform_threshold
   have hparam : ∀ q ∈ T, 0 < q.2 ∧ q.2 ≤ q.1 := by
     rintro q ⟨t, ht, rfl⟩
     have hh := ht.2
-    change (∑ i, t i) + t (Fin.last 3) ≤ lambda at hh
+    change (∑ i, t i) + t 3 ≤ lambda at hh
     exact ⟨ha.trans_le (ht.1 _ (mem_univ _)).1, by dsimp [F]; linarith⟩
   obtain ⟨N₀, hN₀, hbound⟩ :=
     exists_p1_actualSmallRosserPlusDensity_closed_quotient_compact_normalized_threshold
@@ -74,6 +74,7 @@ theorem exists_tuplePlus_closed_uniform_threshold
   have hs : 1 ≤ P1FourthNearOneKernel.residual lambda (actualPrimeTupleLog N p) := by
     apply (le_div_iff₀ hu).mpr
     dsimp [P1FourthNearOneKernel.residual]
+    change (∑ i, actualPrimeTupleLog N p i) + actualPrimeTupleLog N p 3 ≤ lambda at hlegal
     linarith
   have hprofile : extendedProfile lambda (actualPrimeTupleLog N p) =
       (2 * Real.exp (-Real.eulerMascheroniConstant) / actualPrimeTupleLog N p (Fin.last 3)) *
@@ -151,6 +152,7 @@ theorem tendsto_boxPlus_full_joint
         p1_fourthParentGateForms (D.p1_fourthParentGateBounds j) := by
     apply setIntegral_congr_fun (measurableSet_jointCell D j)
     intro t ht
+    dsimp only
     rw [extendedProfile_eq_raw_on_joint D ha hab j hlevel ht]
   change Tendsto _ _ (𝓝 (∫ t in jointCell D j, extendedProfile lambda t * ∏ i, 1 / t i)) at hfixed
   rw [hint] at hfixed

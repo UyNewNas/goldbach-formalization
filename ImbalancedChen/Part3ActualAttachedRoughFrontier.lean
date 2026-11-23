@@ -5,7 +5,7 @@ import ImbalancedChen.FirstExitValidSelection
 /-!
 # Nonzero actual attached coefficients have original rough frontiers
 
-SOURCE ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED.
+Verification records: docs/verification/20261123-blue-compilation.
 
 A valid selection is realized at its own rank in the actual stopped
 frontier.  The existing literal small/rough factorization of a nonzero
@@ -72,7 +72,7 @@ theorem actual_compact_rho_ne_zero_frontier
     (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) {q : ℕ}
     (hq : actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false)
       N cap w z L q ≠ 0) :
-    ∃ a k (state : FirstExitDepthState ℕ),
+    ∃ (a k : ℕ) (state : FirstExitDepthState ℕ),
       a ∈ actualSmallRosserSupport N cap w ∧ (a : ℝ) < L ∧
       state.selectedPrefix.length = k ∧
       state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)
@@ -119,7 +119,7 @@ theorem actual_attached_upper_ne_zero_frontier
     (e h epsilon : ℝ) (m N : ℕ) (cap : ℕ → ℕ) {q : ℕ}
     (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon
       (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :
-    ∃ a k (state : FirstExitDepthState ℕ),
+    ∃ (a k : ℕ) (state : FirstExitDepthState ℕ),
       a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧
       (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧
       state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)

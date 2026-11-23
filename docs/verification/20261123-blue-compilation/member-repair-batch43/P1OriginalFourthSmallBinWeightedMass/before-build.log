@@ -1,0 +1,47 @@
+✖ [9412/9414] Building ImbalancedChen.P1OriginalFourthSmallBinWeightedMass (7.0s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.setup.json --json
+error: ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean:89:6: Type mismatch: After simplification, term
+  hfirst i3
+ has type
+  omega ≤ actualPrimeTupleLog N p i
+but is expected to have type
+  (if i = 3 then a / (↑k.1 + 1) else omega) ≤ actualPrimeTupleLog N p i
+error: ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean:90:6: Type mismatch: After simplification, term
+  hupper i
+ has type
+  actualPrimeTupleLog N p i < 19 / 96
+but is expected to have type
+  actualPrimeTupleLog N p i < if i = 3 then a / ↑k.1 + a / (↑k.1 * (↑k.1 + 1)) else 19 / 96
+info: ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean:127:6: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+error: ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean:123:82: unsolved goals
+e : ℚ
+chi : ℝ
+m : ℕ
+omega a old new : ℝ
+ha : 0 < a
+J4 : Finset (FourthCell m)
+N cap : ℕ
+hN : 1 < N
+j : FourthCell m
+hj : j ∈ selectedFourthCells e chi m omega J4
+k : Bin
+S : Finset P1OriginalFourthSmallPrimeStratification.PrimeTuple :=
+  sourceBin (smallCellTuples e chi m omega a N cap j) a old new N k
+B : Finset (Fin 4 → ℕ) := actualPrimeBoxTuples N (binLo omega a k.1) (binHi a k.1)
+hsub : S ⊆ B
+hk : 0 ≤ a / ↑k.1
+⊢ ∑ x ∈ actualPrimeBoxTuples N (binLo omega a k.1) (binHi a k.1), (∏ x_1, (-1 + ↑(x x_1))⁻¹) * a * (↑k.1)⁻¹ =
+    a * (↑k.1)⁻¹ * ∑ x ∈ actualPrimeBoxTuples N (binLo omega a k.1) (binHi a k.1), ∏ x_1, (-1 + ↑(x x_1))⁻¹
+warning: ImbalancedChen/P1OriginalFourthSmallBinWeightedMass.lean:126:37: This simp argument is unused:
+  Finset.sum_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [actualPrimeBoxMass]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: Lean exited with code 1

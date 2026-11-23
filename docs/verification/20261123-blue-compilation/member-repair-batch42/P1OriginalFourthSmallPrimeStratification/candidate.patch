@@ -1,0 +1,21 @@
+--- baseline/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.lean
++++ candidate/ImbalancedChen/P1OriginalFourthSmallPrimeStratification.lean
+@@ -85,7 +85,9 @@
+     rw [hcast] at hrough
+     exact hrough.trans (mem_logPrimeMeshCell.mp hproj 2).1
+   intro i
+-  have hi : (⟨i.val, by omega⟩ : Fin 4) ≤ 2 := by omega
++  have hi : (⟨i.val, by omega⟩ : Fin 4) ≤ 2 := by
++    change i.val ≤ 2
++    omega
+   exact hthird.trans (hanti.antitone hi)
+ 
+ /-- In particular the original selected source has its actual third-prime
+@@ -98,6 +100,7 @@
+     (N : ℝ) ^ omega ≤ (p 2 : ℝ) := by
+   have hd := admitted_log_data e chi m omega N cap hN p hp
+   have hrough := selected_first_three_ge_omega e chi m omega J4 j hj _ ht hd.1 (2 : Fin 3)
++  change omega ≤ actualPrimeTupleLog N p (2 : Fin 4) at hrough
+   have hn : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)
+   have h := Real.rpow_le_rpow_of_exponent_le hn hrough
+   rw [actualPrimeTupleLog_rpow hN p (fun i => (hd.2.1 i).pos) (2 : Fin 4)] at h

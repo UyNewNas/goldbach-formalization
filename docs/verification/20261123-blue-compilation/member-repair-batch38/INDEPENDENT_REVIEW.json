@@ -1,0 +1,405 @@
+{
+  "schema": "independent_batch38_full_source_and_validation_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root/retained_reuse",
+  "reviewed_utc": "2026-11-23T15:40:58.249358+00:00",
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P1HistoricalFourthFullCellLimit",
+      "baseline_sha256": "21bdb2f0ea2fe0da9d24cd0dd74dd8396618c36df6f6bfeb07fb2825c213c4da",
+      "postimage_sha256": "9f47674f92deaeac04e501d587786d80295efd81f8fb1fe3b91b8d996e2c154b",
+      "complete_headers": [
+        {
+          "name": "exists_tuplePlus_closed_uniform_threshold",
+          "private": false,
+          "header": "theorem exists_tuplePlus_closed_uniform_threshold\n    (a b lambda : ℝ) (ha : 0 < a) (eta : ℝ) (heta : 0 < eta) :\n    ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a) (fun _ => b),\n        (∑ i, actualPrimeTupleLog N p i) + actualPrimeTupleLog N p (Fin.last 3) ≤ lambda →\n        |fourthTuplePlusResidualP1 N cap lambda p -\n          extendedProfile lambda (actualPrimeTupleLog N p)| < eta :=",
+          "sha256": "09a39649b26cd3b48718faf0b8bbc33ae8ab378fd47afe6d84367c4e264e86ab"
+        },
+        {
+          "name": "tendsto_boxPlus_closed_error",
+          "private": false,
+          "header": "theorem tendsto_boxPlus_closed_error\n    (a b lambda : ℝ) (ha : 0 < a) (hab : a < b)\n    (R : Set (Fin 4 → ℝ))\n    (hlegal : ∀ t ∈ R, (∑ i, t i) + t (Fin.last 3) ≤ lambda)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ b ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => fourthBoxPlusResidualSumP1 N (cap N) a b lambda R -\n      actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => b)\n        (R.indicator (extendedProfile lambda)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 0) :=",
+          "sha256": "3f82a033ded2a74eec6d9d56fe5653a084c4faab1973f74e81593e46730249c0"
+        },
+        {
+          "name": "tendsto_boxPlus_full_joint",
+          "private": false,
+          "header": "theorem tendsto_boxPlus_full_joint\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (j : Fin 4 → Fin (D.m + 1)) (lambda : ℝ) (hlevel : (D.old4 j : ℝ) ≤ lambda)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => fourthBoxPlusResidualSumP1 N (cap N) (D.a : ℝ) (D.b : ℝ)\n      lambda (jointCell D j))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (fourthPlusCellIntegralP1 (D.a : ℝ) (D.b : ℝ) lambda D.m j\n        p1_fourthParentGateForms (D.p1_fourthParentGateBounds j))) :=",
+          "sha256": "9c7e51c657eda1c640efd6a86e449c9d3231001adf0e49e4bedaf0640f0cd0d9"
+        },
+        {
+          "name": "tendsto_fourthCellPrimeCorrection",
+          "private": false,
+          "header": "theorem tendsto_fourthCellPrimeCorrection\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (j : Fin 4 → Fin (D.m + 1)) (hj : j ∈ D.cells4)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => D.fourthCellPrimeCorrectionP1 N (cap N) j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (D.fourthCellIntegralP1 j)) :=",
+          "sha256": "05722b3e33bc4e34e29de2a183b5397cc6864c87a78c699386763adc1e6e5f92"
+        },
+        {
+          "name": "tendsto_fourthPrimeCorrection",
+          "private": false,
+          "header": "theorem tendsto_fourthPrimeCorrection\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => D.fourthPrimeCorrectionP1 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 D.fourthCorrectionIntegralP1) :=",
+          "sha256": "6f8c59427e46f815f756b7e9d494517b4b3085ec7a56e74cbde49dd9b08c7d2f"
+        },
+        {
+          "name": "tendsto_fourthCellPrimeCorrection_fullIntegral",
+          "private": false,
+          "header": "theorem tendsto_fourthCellPrimeCorrection_fullIntegral\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (j : Fin 4 → Fin (D.m + 1)) (hj : j ∈ D.cells4)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => D.fourthCellPrimeCorrectionP1 N (cap N) j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (fullCellIntegral D j)) :=",
+          "sha256": "79663b2843707be4cede400bfaa358251dfb8269ee2356d6c349bad36e1fe498"
+        },
+        {
+          "name": "tendsto_fourthPrimeCorrection_fullIntegral",
+          "private": false,
+          "header": "theorem tendsto_fourthPrimeCorrection_fullIntegral\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => D.fourthPrimeCorrectionP1 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (fullIntegral D)) :=",
+          "sha256": "2095665224b74132bcace1378608f3c0063865acad7b50867d10a7fbaf7768ed"
+        },
+        {
+          "name": "tendsto_actualHistoricalFourthSaving",
+          "private": false,
+          "header": "theorem tendsto_actualHistoricalFourthSaving\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => actualHistoricalFourthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) N (cap N) ((N : ℝ) ^ (D.b : ℝ)) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 D.fourthCorrectionIntegralP1) :=",
+          "sha256": "8dae5a76b3e942fe4535accae9d875d740fff43ab0dc85951538c1e002d3da59"
+        },
+        {
+          "name": "tendsto_upperThirdToFourthSaving",
+          "private": false,
+          "header": "theorem tendsto_upperThirdToFourthSaving\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial (D.upperThirdPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (D.b : ℝ))) -\n        firstExitRetainedPolynomial (D.upperFourthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (D.b : ℝ)))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 D.fourthCorrectionIntegralP1) :=",
+          "sha256": "eb9d6f40478aeb194902509e70a9c29b1ea16990059f6268beb2030803344ad4"
+        },
+        {
+          "name": "tendsto_actualHistoricalFourthSaving_ceil",
+          "private": false,
+          "header": "theorem tendsto_actualHistoricalFourthSaving_ceil\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) :\n    Tendsto (fun N : ℕ => actualHistoricalFourthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ))\n        N (Nat.ceil ((N : ℝ) ^ (D.b : ℝ))) ((N : ℝ) ^ (D.b : ℝ)) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 D.fourthCorrectionIntegralP1) :=",
+          "sha256": "4aac48c91c0ad9d80480c7626ed8b741562ec00d2290c7eba70a6f1bd2bff9c9"
+        },
+        {
+          "name": "tendsto_upperThirdToFourthSaving_ceil",
+          "private": false,
+          "header": "theorem tendsto_upperThirdToFourthSaving_ceil\n    (D : HistoricalPrefixCapData) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hcheck : D.levelCheck = true) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial (D.upperThirdPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (Nat.ceil ((N : ℝ) ^ (D.b : ℝ))) 0 ((N : ℝ) ^ (D.b : ℝ))) -\n        firstExitRetainedPolynomial (D.upperFourthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (Nat.ceil ((N : ℝ) ^ (D.b : ℝ))) 0 ((N : ℝ) ^ (D.b : ℝ)))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 D.fourthCorrectionIntegralP1) :=",
+          "sha256": "525d70a993ec30fc845da36122e4286cbf6d2cf6ef59e7f6001e18b200d5e214"
+        }
+      ],
+      "raw_definitions": [],
+      "changed_proofs": [
+        "exists_tuplePlus_closed_uniform_threshold",
+        "tendsto_boxPlus_full_joint"
+      ],
+      "imports_definitions_numeric_constants_hypotheses_quantifiers_unchanged": true,
+      "source_bytes_outside_changed_tactic_bodies_exact": true,
+      "all_original_integrability_and_legal_domain_premises_preserved": true,
+      "header_or_definition_syntax_exceptions": [],
+      "substantive_mathematical_gap_or_new_assumption_found": false,
+      "manuscript_scope": {
+        "manuscript_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+        "release": "paper/release-20261106/en",
+        "anchors": [
+          "argument.tex204-220 fourth/fifth/sixth same-parent raw-density differences telescope",
+          "argument.tex245-276 compact residual density, first-cube reduction and exact singular/log normalization",
+          "coefficient-appendix.tex20-44 original full/selected square conditions and parent retention"
+        ],
+        "classification": "formalization_expression_or_pinned_proof_API",
+        "substantive_mathematical_gap": false,
+        "reason": "In the two arithmetic steps, dsimp of F or residual turns the last Fin4 coordinate into numeral 3 while hh/hlegal retain Fin.last 3, so linarith treats defeq coordinate terms as different atoms. Two local change annotations express exactly the same existing legal inequality with coordinate 3 before the unchanged linarith. In the integral comparison, dsimp only beta-reduces the already applied integrand lambdas before the existing raw/extended profile rewrite. No legal domain, residual-one endpoint, natural product, cap, cutoff, positive compact image, singular series/log normalization or quantifier changes. No margin or integrability hypothesis is added.",
+        "explicit_exception": null,
+        "pinned_API": {
+          "same_family_successful_existing_source": "/workspace/blue-member-repair-batch21/P1HistoricalFourthFullCellIntegral/candidate.lean",
+          "source_sha256": "c4760220aadc2800820716e61e2582e8b6cc9c7fc867a37f1c7440f9375bd012",
+          "existing_successful_validation": "/workspace/blue-member-repair-batch21/VALIDATION_RESULTS.json",
+          "reused_pattern": "same integrand pointwise dsimp only before original profile rw; no existing validation repeated",
+          "Fin4_coordinate_normalization": "Fin.last 3 and (3:Fin4) denote the same coordinate; local change only"
+        }
+      },
+      "raw_failure": {
+        "path": "/workspace/blue-member-repair-batch38/P1HistoricalFourthFullCellLimit/before-build.log",
+        "bytes": 6737,
+        "sha256": "191d7954bc793666dccab99aed10fb9d23d7d93d309effea1e92a00b2633b895"
+      }
+    },
+    {
+      "module": "ImbalancedChen.P1OriginalCoarseFourthCellIntegral",
+      "baseline_sha256": "d5f1f5d4fd05a401f07c4991bc715a4ed86b9c0531bb9ee7a3d36fff4f97af0e",
+      "postimage_sha256": "465179d732e6961e24222f8315ac8c4e8a07bcd5e58fbbb98848bfc6a52b531c",
+      "complete_headers": [
+        {
+          "name": "oldExponent_eq_actual",
+          "private": false,
+          "header": "theorem oldExponent_eq_actual (e : ℚ) (m : ℕ) (j : FourthCell m) :\n    oldExponent e m j = HistoricalThirdCoarse.levelExponent (e : ℝ)\n      (HistoricalThirdCoarse.box m (HistoricalThirdCoarse.P1OriginalFourth.prefix3 j)) :=",
+          "sha256": "d4f12384bc23793f460dad06aaef33c4cc7bb4ff05fe49394b45ef53c278601b"
+        },
+        {
+          "name": "truncatedCell_measurable",
+          "private": false,
+          "header": "theorem truncatedCell_measurable (e : ℚ) (m : ℕ) (omega a : ℝ) (j : FourthCell m) :\n    MeasurableSet (truncatedCell e m omega a j) :=\n  (measurableSet_logPrimeBox _ _).inter\n    ((HistoricalThirdCoarse.P1OriginalFourth.jointCell_measurable _ _ _ _).inter\n      (HistoricalThirdCoarse.P1OriginalFourth.jointRegion_measurable _ _ _ _))\n\ntheorem truncatedCell_subset_closedBox (e : ℚ) (m : ℕ) (omega a : ℝ) (j : FourthCell m) :\n    truncatedCell e m omega a j ⊆ univ.pi (fun _ : Fin 4 => Icc a (19 / 96 : ℝ)) :=",
+          "sha256": "4af936ba4c36e54d623f9fafcea4dc21eda4662e017ce2b6746db4e7beb4be90"
+        },
+        {
+          "name": "truncatedCell_subset_closedBox",
+          "private": false,
+          "header": "theorem truncatedCell_subset_closedBox (e : ℚ) (m : ℕ) (omega a : ℝ) (j : FourthCell m) :\n    truncatedCell e m omega a j ⊆ univ.pi (fun _ : Fin 4 => Icc a (19 / 96 : ℝ)) :=",
+          "sha256": "1ee326d4c34dae3618cb71dfb36ae94ad6918797114b124b877c3d3b69713836"
+        },
+        {
+          "name": "residual_gt_one_on_truncated",
+          "private": false,
+          "header": "theorem residual_gt_one_on_truncated (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) {lambda : ℝ}\n    (hlevel : oldExponent e m j ≤ lambda) {t : Fin 4 → ℝ}\n    (ht : t ∈ truncatedCell e m omega a j) : 1 < residual lambda t :=",
+          "sha256": "4305d028cd48a19e2124c1dbcbff404a4b3a9ff88bcf53d928b94eb15629fa88"
+        },
+        {
+          "name": "truncatedCell_subset_legal",
+          "private": false,
+          "header": "theorem truncatedCell_subset_legal (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) {lambda : ℝ}\n    (hlevel : oldExponent e m j ≤ lambda) :\n    truncatedCell e m omega a j ⊆ legal a lambda :=",
+          "sha256": "5a76672338c90093348ee4f7edb567751098a6c5ed54cdf51c15e04a8eeea4a7"
+        },
+        {
+          "name": "rawProfile_eq_extended_on_truncated",
+          "private": false,
+          "header": "theorem rawProfile_eq_extended_on_truncated (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) {lambda : ℝ}\n    (hlevel : oldExponent e m j ≤ lambda) {t : Fin 4 → ℝ}\n    (ht : t ∈ truncatedCell e m omega a j) :\n    fourthPlusProfileP1 lambda t = extendedProfile lambda t :=",
+          "sha256": "70c3f498bf0a48cf3b79f88d87caa1a2c3f6533240139e8c375fa38429f426e1"
+        },
+        {
+          "name": "abs_rawProfile_le_on_truncated",
+          "private": false,
+          "header": "theorem abs_rawProfile_le_on_truncated (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) {lambda : ℝ}\n    (hlevel : oldExponent e m j ≤ lambda) {t : Fin 4 → ℝ}\n    (ht : t ∈ truncatedCell e m omega a j) : |fourthPlusProfileP1 lambda t| ≤ 4 / a :=",
+          "sha256": "bb2ff9a2bfb898c48561cff23fb1f083e3006bf3b22ff736ab9434c902ac7830"
+        },
+        {
+          "name": "integrableOn_extendedWeightedProfile",
+          "private": false,
+          "header": "theorem integrableOn_extendedWeightedProfile (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) (lambda : ℝ) :\n    IntegrableOn (extendedWeightedProfile lambda) (truncatedCell e m omega a j) :=",
+          "sha256": "d625120ffb74e43ff7b93f3150994283de46ebc406751604fe869ac2fd230d8a"
+        },
+        {
+          "name": "integrableOn_rawWeightedProfile",
+          "private": false,
+          "header": "theorem integrableOn_rawWeightedProfile (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (j : FourthCell m) {lambda : ℝ}\n    (hlevel : oldExponent e m j ≤ lambda) :\n    IntegrableOn (fun t => fourthPlusProfileP1 lambda t * ∏ i, 1 / t i)\n      (truncatedCell e m omega a j) :=",
+          "sha256": "2ac80057e2117d3b2aed21b748e50baabfe8ad0c13bbb6c4ab98e54702be7dd7"
+        },
+        {
+          "name": "integrableOn_cellIntegrand",
+          "private": false,
+          "header": "theorem integrableOn_cellIntegrand (e : ℚ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (cap4 : FourthCell m → ℚ) (j : FourthCell m) :\n    IntegrableOn (fun t =>\n      (extendedProfile (oldExponent e m j) t - extendedProfile (cap4 j : ℝ) t) *\n        reciprocalWeight t) (truncatedCell e m omega a j) :=",
+          "sha256": "ae18b7afbe3862d59884439abd7ef8eaac777ae58b622ab5c6d51de7ee861d56"
+        },
+        {
+          "name": "selected_cap_ge_old",
+          "private": false,
+          "header": "theorem selected_cap_ge_old (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4) :\n    oldExponent e m j ≤ (cap4 j : ℝ) :=",
+          "sha256": "eaadfc2b0a9827a7f3259b34860f772a815df3b665c8711f1bb0980f916460bb"
+        },
+        {
+          "name": "cellIntegral_eq_raw",
+          "private": false,
+          "header": "theorem cellIntegral_eq_raw (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4) :\n    cellIntegral e m omega a cap4 j = ∫ t in truncatedCell e m omega a j,\n      (fourthPlusProfileP1 (oldExponent e m j) t - fourthPlusProfileP1 (cap4 j : ℝ) t) *\n        ∏ i, 1 / t i :=",
+          "sha256": "b34d63dbff2fe56999040284b7699201dd7f8901911c5b230ff8478dd0bee7a2"
+        },
+        {
+          "name": "cellIntegral_eq_raw_difference",
+          "private": false,
+          "header": "theorem cellIntegral_eq_raw_difference (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4) :\n    cellIntegral e m omega a cap4 j =\n      (∫ t in truncatedCell e m omega a j,\n        fourthPlusProfileP1 (oldExponent e m j) t * ∏ i, 1 / t i) -\n      ∫ t in truncatedCell e m omega a j,\n        fourthPlusProfileP1 (cap4 j : ℝ) t * ∏ i, 1 / t i :=",
+          "sha256": "9f27097a935d065ae9658a6331857534a4533eef5bfdc58a2ff19003c944befb"
+        },
+        {
+          "name": "selectedIntegral_eq_raw",
+          "private": false,
+          "header": "theorem selectedIntegral_eq_raw (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) :\n    selectedIntegral e chi m omega a J4 cap4 =\n      ∑ j ∈ selectedFourthCells e chi m omega J4,\n        ∫ t in truncatedCell e m omega a j,\n          (fourthPlusProfileP1 (oldExponent e m j) t -\n            fourthPlusProfileP1 (cap4 j : ℝ) t) * ∏ i, 1 / t i :=",
+          "sha256": "afc474e7a473e6957d071cadd903a4b3a3d109fbc014fe58c61a03ce82a0436e"
+        },
+        {
+          "name": "selected_original_levels",
+          "private": false,
+          "header": "theorem selected_original_levels (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ) (hpos : ∀ i, 0 < p i)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (ht : actualPrimeTupleLog N p ∈ truncatedCell e m omega a j) :\n    HistoricalThirdCoarse.frozenLevel (e : ℝ) chi m omega (N : ℝ)\n        (HistoricalThirdCoarse.P1OriginalFourth.history4 p) = (N : ℝ) ^ oldExponent e m j ∧\n      P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ)\n        (HistoricalThirdCoarse.P1OriginalFourth.history4 p) = (N : ℝ) ^ (cap4 j : ℝ) :=",
+          "sha256": "04f8fa1b68192cc20ec96e90a28df4ae4f03f0f85e5bd849b55bbe0e486a1c9f"
+        }
+      ],
+      "raw_definitions": [
+        {
+          "raw": "def oldExponent (e : ℚ) (m : ℕ) (j : FourthCell m) : ℝ :=\n  (thirdCellExponent e m j : ℝ)\n\n",
+          "sha256": "3195504067a6ec0ed13c21109b5a167d5ce1bab12c22068fb718bb3dd7ef3f2b"
+        },
+        {
+          "raw": "def truncatedCell (e : ℚ) (m : ℕ) (omega a : ℝ) (j : FourthCell m) :\n    Set (Fin 4 → ℝ) :=\n  logPrimeBox (fun _ => a) (fun _ => (19 / 96 : ℝ)) ∩\n    (HistoricalThirdCoarse.P1OriginalFourth.jointCell m m\n        (HistoricalThirdCoarse.P1OriginalFourth.prefix3 j) j ∩\n      HistoricalThirdCoarse.P1OriginalFourth.jointRegion (e : ℝ) omega m\n        (HistoricalThirdCoarse.P1OriginalFourth.prefix3 j))\n\n",
+          "sha256": "671184499b0bbf1e5337d2edaf421bddafd38f5ad576411fc57822a348bd0809"
+        },
+        {
+          "raw": "def cellIntegral (e : ℚ) (m : ℕ) (omega a : ℝ)\n    (cap4 : FourthCell m → ℚ) (j : FourthCell m) : ℝ :=\n  ∫ t in truncatedCell e m omega a j,\n    (extendedProfile (oldExponent e m j) t - extendedProfile (cap4 j : ℝ) t) *\n      reciprocalWeight t\n\n",
+          "sha256": "24cba8cd04ba6edd7dabd8bc987b4adc523f2a5d22dbb35395a451c94ed98a45"
+        },
+        {
+          "raw": "def selectedIntegral (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ) : ℝ :=\n  ∑ j ∈ selectedFourthCells e chi m omega J4, cellIntegral e m omega a cap4 j\n\n",
+          "sha256": "ff337834939209a9df5adc66fafc45260eb0c73915574826c7c619c43866e9dd"
+        }
+      ],
+      "changed_proofs": [
+        "integrableOn_cellIntegrand",
+        "cellIntegral_eq_raw"
+      ],
+      "imports_definitions_numeric_constants_hypotheses_quantifiers_unchanged": true,
+      "source_bytes_outside_changed_tactic_bodies_exact": true,
+      "all_original_integrability_and_legal_domain_premises_preserved": true,
+      "header_or_definition_syntax_exceptions": [],
+      "substantive_mathematical_gap_or_new_assumption_found": false,
+      "manuscript_scope": {
+        "manuscript_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+        "release": "paper/release-20261106/en",
+        "anchors": [
+          "argument.tex204-220 actual-prefix fourth/fifth/sixth cap replacements from respective parents",
+          "coefficient-appendix.tex20-44 original inherited full/selected-square policy",
+          "coefficient-appendix.tex49-68 literal Gamma-2e and fixed coarse-box reserves",
+          "argument.tex245-276 compact residual density and exact normalization"
+        ],
+        "classification": "formalization_expression_or_pinned_proof_API",
+        "substantive_mathematical_gap": false,
+        "reason": "Reuses the exact proof API normalization already validated for P1HistoricalFourthFullCellIntegral: Pi.sub_def exposes the pointwise function subtraction returned by IntegrableOn.sub before the original extendedWeightedProfile/sub_mul simplification, and dsimp only beta-reduces pointwise integral lambdas before the two original profile rewrites. All original Gamma-2e old exponents, selected cap/check, initial/current first and third cube/firstStop gates, inclusive omega activation, common truncated [a,19/96)^4 domain, integrability hypotheses and parameter quantifiers remain unchanged. No claim about omitted small-prime part, a→0 or a global mean limit is added.",
+        "explicit_exception": null,
+        "pinned_API": {
+          "same_family_successful_existing_source": "/workspace/blue-member-repair-batch21/P1HistoricalFourthFullCellIntegral/candidate.lean",
+          "source_sha256": "c4760220aadc2800820716e61e2582e8b6cc9c7fc867a37f1c7440f9375bd012",
+          "existing_successful_validation": "/workspace/blue-member-repair-batch21/VALIDATION_RESULTS.json",
+          "reused_pattern": "identical Pi.sub_def + pointwise dsimp only pair; no existing successful validation repeated",
+          "IntegrableOn.sub_declaration": "Mathlib/MeasureTheory/Integral/IntegrableOn.lean:271"
+        }
+      },
+      "raw_failure": {
+        "path": "/workspace/blue-member-repair-batch38/P1OriginalCoarseFourthCellIntegral/before-build.log",
+        "bytes": 3622,
+        "sha256": "3b10e506262c4e56a99d1e936af39db55d9691ab66c7400bdd0ca43876dabd6f"
+      }
+    }
+  ],
+  "final_release_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch38/FINAL_RELEASE.json",
+      "bytes": 1341,
+      "sha256": "f1d3c8c704bd069c962742c2c651258c796ed6c61256ad051225f13fce535ba6"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch38/PUBLICATION_FILES.json",
+      "bytes": 7992,
+      "sha256": "059d5d50594e1271ed57182275becc85484d7788a4313688ec23a6baede3df2f"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch38/VALIDATION_RESULTS.json",
+      "bytes": 7190,
+      "sha256": "c74594ede939ffb8422473f83c0b837ecc85dadf0e29cf027db6c1df8ae7bda1"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch38/SOURCE_SELECTION.json",
+      "bytes": 3480,
+      "sha256": "1686990d9d767a1c788c15b185157f47d56ec75bd9264c3ccd6b72e3f7930c79"
+    }
+  ],
+  "original_manifest_file_count": 44,
+  "all_recorded_manifest_file_sha256_and_sizes_match": true,
+  "source_plus5_current_objects": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1HistoricalFourthFullCellLimit.lean",
+      "bytes": 16169,
+      "sha256": "9f47674f92deaeac04e501d587786d80295efd81f8fb1fe3b91b8d996e2c154b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFourthFullCellLimit.olean",
+      "bytes": 328712,
+      "sha256": "32d68ca84315fe675321a89336b6001f20c7da125e96785243c6fe2343855c3f"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFourthFullCellLimit.ilean",
+      "bytes": 77212,
+      "sha256": "a724c6366c43f25e5ecea6bf5f6a7483ec4e9627d86963d5978ae5d103440ae8"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFourthFullCellLimit.c",
+      "bytes": 2432,
+      "sha256": "660d4be5ca6201572da977bb2144bbd699b5e6f6590bc5bdfd5edf71341d0f45"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFourthFullCellLimit.setup.json",
+      "bytes": 6354049,
+      "sha256": "13d01680ef208bfa200d16b2f170c5e46c7ad4eaf0f69e76dc718911aade7d97"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFourthFullCellLimit.trace",
+      "bytes": 3537,
+      "sha256": "0622a6cbc4302d685c0f4b3b4e908c9ee7e4fae4cd39eb75f11cea4fef8811f0"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean",
+      "bytes": 11552,
+      "sha256": "465179d732e6961e24222f8315ac8c4e8a07bcd5e58fbbb98848bfc6a52b531c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.olean",
+      "bytes": 200088,
+      "sha256": "70bc774a1363dea35eeab93a522b7a92d7145064f03dab7397408a2a219ad093"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.ilean",
+      "bytes": 47869,
+      "sha256": "a57cb01961adaf2a942a0acc1329575134d63701b36ad180cb6fa9f03a18f061"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.c",
+      "bytes": 2146,
+      "sha256": "1a8b02d1f5a1f1f4680e77be9653c696df9b95b10ce0ef45f6be6ac9c4e76ebd"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.setup.json",
+      "bytes": 6355202,
+      "sha256": "7d098605cd5fb2bd257751d14829f18cb9eb49f1445c1c6f41c0d358eaac06cb"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.trace",
+      "bytes": 3364,
+      "sha256": "e510f3dbe509469f2b7278490e2e48b61e836484d3738ddd04326fa54ae74289"
+    }
+  ],
+  "source_main_Member_equal_recorded_postimages": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1HistoricalFourthFullCellLimit.lean",
+      "bytes": 16169,
+      "sha256": "9f47674f92deaeac04e501d587786d80295efd81f8fb1fe3b91b8d996e2c154b"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/ImbalancedChen/P1HistoricalFourthFullCellLimit.lean",
+      "bytes": 16169,
+      "sha256": "9f47674f92deaeac04e501d587786d80295efd81f8fb1fe3b91b8d996e2c154b"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean",
+      "bytes": 11552,
+      "sha256": "465179d732e6961e24222f8315ac8c4e8a07bcd5e58fbbb98848bfc6a52b531c"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean",
+      "bytes": 11552,
+      "sha256": "465179d732e6961e24222f8315ac8c4e8a07bcd5e58fbbb98848bfc6a52b531c"
+    }
+  ],
+  "existing_validation": {
+    "actual_environment_public_counts": {
+      "ImbalancedChen.P1HistoricalFourthFullCellLimit": 13,
+      "ImbalancedChen.P1OriginalCoarseFourthCellIntegral": 21
+    },
+    "total": 34,
+    "normal_exit_codes": [
+      0,
+      0
+    ],
+    "kernel_exit_codes": [
+      0,
+      0
+    ],
+    "audit_exit_code": 0,
+    "full_AST_records_equal_raw_log": true,
+    "canonical_owner_enumeration": true,
+    "no_type_elisions": true,
+    "transitive_axioms_equal_raw_log": true,
+    "only_standard_axioms": true,
+    "actual_guard_trace_argv_bound": true
+  },
+  "findings": [],
+  "Lean_kernel_type_axiom_invocations_by_reviewer": 0,
+  "live_or_original_packet_edits": 0,
+  "limitations": [
+    "This verifies exactly two source postimages and their existing recorded Member import context, not complete P1 or complete blue-node closure.",
+    "Historical fixed-mesh fourth and original coarse positive-cutoff integral objects remain distinct. No global small-prime/a→0/full-source premise is discharged by this review.",
+    "The baseline source did not previously elaborate; no old kernel type-equality claim is made."
+  ],
+  "late_addendum_handoff": "Add this review and its separate file manifest to a new late addendum, without changing original FINAL_RELEASE/PUBLICATION_FILES/VALIDATION_RESULTS/raw logs."
+}

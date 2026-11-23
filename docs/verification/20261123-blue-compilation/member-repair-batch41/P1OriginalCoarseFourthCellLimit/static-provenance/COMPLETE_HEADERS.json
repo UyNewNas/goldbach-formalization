@@ -1,0 +1,128 @@
+[
+  {
+    "kind": "theorem",
+    "name": "tendsto_test_cube_IcoBox_affineGates",
+    "raw_header": "theorem tendsto_test_cube_IcoBox_affineGates {r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (lo hi : Fin 4 → ℝ)\n    (L : Fin r → (Fin 4 → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ i, L i ≠ 0)\n    (f : (Fin 4 → ℝ) → ℝ)\n    (hf : ContinuousOn f (univ.pi (fun _ : Fin 4 => Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => b)\n        ((logPrimeBox lo hi ∩ primeAffineGateRegion L c).indicator f)) atTop\n      (𝓝 (∫ t in logPrimeBox (fun _ : Fin 4 => a) (fun _ => b) ∩\n          (logPrimeBox lo hi ∩ primeAffineGateRegion L c),\n        f t * ∏ i, 1 / t i))",
+    "sha256": "e1660b24c6e61b5c8fda2b9d44bea4cbc43e255dff09400c9cda04f9ce646081"
+  },
+  {
+    "kind": "def",
+    "name": "sourceRegion",
+    "raw_header": "def sourceRegion (e : ℚ) (m : ℕ) (omega : ℝ) (j : FourthCell m) : Set (Fin 4 → ℝ)",
+    "sha256": "d0d82ceed25ef9ce009da379591c6c76ec4131c9141108ec1373911528bedd76"
+  },
+  {
+    "kind": "theorem",
+    "name": "sourceRegion_eq_if",
+    "raw_header": "theorem sourceRegion_eq_if (e : ℚ) (m : ℕ) (omega : ℝ) (j : FourthCell m)\n    (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m (prefix3 j) 2) :\n    sourceRegion e m omega j =\n      if firstStopCellCheck (e : ℝ) m j = true then\n        logPrimeMeshCell 0 (19 / 96) m j ∩ primeAffineGateRegion gateForms\n          (gateBounds (HistoricalThirdCoarse.initial (e : ℝ))\n            (HistoricalThirdCoarse.levelExponent (e : ℝ) (HistoricalThirdCoarse.box m (prefix3 j))))\n      else ∅",
+    "sha256": "f8c186dd70e8365fb274a735eaa3a2c037d2d9aba8809847f8a7ba9a894aee9d"
+  },
+  {
+    "kind": "theorem",
+    "name": "truncatedCell_eq_inter_sourceRegion",
+    "raw_header": "theorem truncatedCell_eq_inter_sourceRegion (e : ℚ) (m : ℕ) (omega a : ℝ) (j : FourthCell m) :\n    P1OriginalFourthIntegral.truncatedCell e m omega a j =\n      logPrimeBox (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ)) ∩ sourceRegion e m omega j",
+    "sha256": "ecd6faa6db68fc610ed02df7097c59dc03ac8927e4cbf954ad4fe3eabf3fa724"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_test_original_sourceRegion",
+    "raw_header": "theorem tendsto_test_original_sourceRegion\n    (e : ℚ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (j : FourthCell m) (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m (prefix3 j) 2)\n    (f : (Fin 4 → ℝ) → ℝ)\n    (hf : ContinuousOn f (univ.pi (fun _ : Fin 4 => Icc a (19 / 96 : ℝ)))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin 4 => a)\n        (fun _ => (19 / 96 : ℝ)) ((sourceRegion e m omega j).indicator f)) atTop\n      (𝓝 (∫ t in P1OriginalFourthIntegral.truncatedCell e m omega a j,\n        f t * ∏ i, 1 / t i))",
+    "sha256": "fc8888b2209bd7b582430d84c557f9f827e0b150b7b5b14793e97f28e3305764"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_original_plus_residual_error",
+    "raw_header": "theorem tendsto_original_plus_residual_error\n    (e : ℚ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (j : FourthCell m) (lambda : ℝ)\n    (hlevel : P1OriginalFourthIntegral.oldExponent e m j ≤ lambda)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => fourthBoxPlusResidualSumP1 N (cap N) a (19 / 96) lambda\n        (sourceRegion e m omega j) -\n      actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator (extendedProfile lambda)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 0)",
+    "sha256": "ff0325853427e04d3f736296492edee00d48e9c6271c2b6672438d3c47d25597"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_original_box_plus_residual",
+    "raw_header": "theorem tendsto_original_box_plus_residual\n    (e : ℚ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (j : FourthCell m) (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m (prefix3 j) 2)\n    (lambda : ℝ) (hlevel : P1OriginalFourthIntegral.oldExponent e m j ≤ lambda)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => fourthBoxPlusResidualSumP1 N (cap N) a (19 / 96) lambda\n        (sourceRegion e m omega j))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (∫ t in P1OriginalFourthIntegral.truncatedCell e m omega a j,\n        fourthPlusProfileP1 lambda t * ∏ i, 1 / t i))",
+    "sha256": "d2c73c3af262fb387cc543896561a828e1d53b3fd49e5fbd40c38e3bfd46bace"
+  },
+  {
+    "kind": "theorem",
+    "name": "selected_whole_active",
+    "raw_header": "theorem selected_whole_active (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (FourthCell m)) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4) :\n    omega ≤ logPrimeMeshLo 0 (19 / 96) m (prefix3 j) 2",
+    "sha256": "9c8659e2d65d270377351f40d174cbb6d6da41d952d8ba38fe275d88b8459063"
+  },
+  {
+    "kind": "theorem",
+    "name": "positive_frontier_weighted_sum",
+    "raw_header": "theorem positive_frontier_weighted_sum\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (f : (Fin 4 → ℕ) → ℝ) :\n    (∑ p ∈ (firstExitAdmittedTuples 4\n        (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n        (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))).filter\n          (fun p => ∀ i, a ≤ actualPrimeTupleLog N p i),\n      (∏ i, 1 / ((p i : ℝ) - 1)) *\n        (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then f p else 0)) =\n      ∑ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ)),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          (if actualPrimeTupleLog N p ∈ sourceRegion e m omega j then f p else 0)",
+    "sha256": "a02a2a95699f36672463d1948aef2e3465b085e0ef11eb30469c75b5b59bd3aa"
+  },
+  {
+    "kind": "def",
+    "name": "positiveCellCorrection",
+    "raw_header": "def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ",
+    "sha256": "3b6982681c5a8da91a9c609cf43b30f8bf0a34bf8d8dac123bc65625860d0b5c"
+  },
+  {
+    "kind": "def",
+    "name": "smallCellRemainder",
+    "raw_header": "def smallCellRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ",
+    "sha256": "1f110c339a4d4c6668f23bf427527f3e79ad7984df60ab912e57fd870e75e918"
+  },
+  {
+    "kind": "def",
+    "name": "positiveCorrection",
+    "raw_header": "def positiveCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ) (N cap : ℕ) : ℝ",
+    "sha256": "7f830655fbfe2a5ff96eeb824dda6f7aa3fc39638503fef93248de0d33a16344"
+  },
+  {
+    "kind": "def",
+    "name": "smallRemainder",
+    "raw_header": "def smallRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ) (N cap : ℕ) : ℝ",
+    "sha256": "2da2417de6341e242dc7f3a06a04210374c3c704feb967f704699cd612ba7883"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualSaving_eq_positive_add_smallRemainder",
+    "raw_header": "theorem actualSaving_eq_positive_add_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) :\n    actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (level4 e chi m omega J4 cap4 (N : ℝ)) N cap ((N : ℝ) ^ (19 / 96 : ℝ)) *\n        Real.log (N : ℝ) / singularSeries N =\n      positiveCorrection e chi m omega a J4 cap4 N cap +\n        smallRemainder e chi m omega a J4 cap4 N cap",
+    "sha256": "4ad4d80397fe45ea54d9d96f13487f4d686a13d6c42edb72fbd1f73bf0d6a5ab"
+  },
+  {
+    "kind": "theorem",
+    "name": "positiveCellCorrection_eq_box_residual_difference",
+    "raw_header": "theorem positiveCellCorrection_eq_box_residual_difference\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4) :\n    positiveCellCorrection e chi m omega a J4 cap4 N cap j =\n      fourthBoxPlusResidualSumP1 N cap a (19 / 96) (thirdCellExponent e m j : ℝ)\n          (sourceRegion e m omega j) -\n        fourthBoxPlusResidualSumP1 N cap a (19 / 96) (cap4 j : ℝ)\n          (sourceRegion e m omega j)",
+    "sha256": "373b7fd661f83a0763eaeab6b615e31564713dedfffea4fea2c383462e8ea1e2"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_positiveCellCorrection",
+    "raw_header": "theorem tendsto_positiveCellCorrection\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => positiveCellCorrection e chi m omega a J4 cap4 N (cap N) j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFourthIntegral.cellIntegral e m omega a cap4 j))",
+    "sha256": "00578d4bf93a75f3798b1607c0ef8e9c740fad49fdc965a4cc97ababf82d1e9b"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_positiveCorrection",
+    "raw_header": "theorem tendsto_positiveCorrection\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => positiveCorrection e chi m omega a J4 cap4 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFourthIntegral.selectedIntegral e chi m omega a J4 cap4))",
+    "sha256": "72ac62e8a3984a52b38d92085ae8a6f2e799e3984b3dd1fbcbf002c08fce6cc4"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_actualSaving_sub_smallRemainder",
+    "raw_header": "theorem tendsto_actualSaving_sub_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n          (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n          (level4 e chi m omega J4 cap4 (N : ℝ)) N (cap N) ((N : ℝ) ^ (19 / 96 : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N -\n        smallRemainder e chi m omega a J4 cap4 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFourthIntegral.selectedIntegral e chi m omega a J4 cap4))",
+    "sha256": "05dfad20c1fa4f8df552d302db44c16d7642b5777aa59fa5f9257ab9c8272b19"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_actualSaving_sub_smallRemainder_ceil",
+    "raw_header": "theorem tendsto_actualSaving_sub_smallRemainder_ceil\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) :\n    Tendsto (fun N : ℕ =>\n      actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n          (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n          (level4 e chi m omega J4 cap4 (N : ℝ))\n          N (Nat.ceil ((N : ℝ) ^ (19 / 96 : ℝ))) ((N : ℝ) ^ (19 / 96 : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N -\n        smallRemainder e chi m omega a J4 cap4 N (Nat.ceil ((N : ℝ) ^ (19 / 96 : ℝ))))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFourthIntegral.selectedIntegral e chi m omega a J4 cap4))",
+    "sha256": "e776f899ad82f9f84ea285252e0491d133bc0fe8c362cccffb9b718f68616276"
+  },
+  {
+    "kind": "theorem",
+    "name": "originalPolicySaving_eq",
+    "raw_header": "theorem originalPolicySaving_eq\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ) :\n    firstExitRetainedPolynomial (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial\n        (fourthCappedUpperPolicy (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n          (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n          (level4 e chi m omega J4 cap4 (N : ℝ)))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (level4 e chi m omega J4 cap4 (N : ℝ)) N cap z",
+    "sha256": "5f4108171658104ed7958a01f85476212309eb9e6fb51196b97ca97cb542f51f"
+  },
+  {
+    "kind": "theorem",
+    "name": "tendsto_originalPolicySaving_sub_smallRemainder",
+    "raw_header": "theorem tendsto_originalPolicySaving_sub_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (19 / 96 : ℝ))) -\n        firstExitRetainedPolynomial\n          (fourthCappedUpperPolicy (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n            (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n            (level4 e chi m omega J4 cap4 (N : ℝ)))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (19 / 96 : ℝ)))) *\n          Real.log (N : ℝ) / singularSeries N -\n        smallRemainder e chi m omega a J4 cap4 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFourthIntegral.selectedIntegral e chi m omega a J4 cap4))",
+    "sha256": "3fa3eace18c0433a255bc306cd7cd73788b79f0e46cc6262913b59361c0f0d30"
+  }
+]
