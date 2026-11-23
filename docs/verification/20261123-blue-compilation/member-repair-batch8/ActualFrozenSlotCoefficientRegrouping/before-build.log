@@ -1,0 +1,73 @@
+✖ [10848/10875] Building ImbalancedChen.ActualFrozenSlotCoefficientRegrouping (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.setup.json --json
+error: ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean:63:33: Unknown identifier `q`
+error: ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean:151:11: `simp` made no progress
+error: ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean:184:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ ps ∈ actualPrimeSlotBox ?B (?left ++ ?right), ?F ps.prod
+in the target expression
+  let slots := actualFrozenSelectedPairSlots D A yz upper p tail;
+  let T₁ := actualPrimeSlotBox B slots.1;
+  let T₂ := actualPrimeSlotBox B slots.2.1;
+  let T₃ := actualPrimeSlotBox B slots.2.2;
+  ∑
+      ps ∈
+        actualPrimeSlotBox B
+          ((actualFrozenSelectedPairSlots D A yz upper p tail).1 ++
+              (actualFrozenSelectedPairSlots D A yz upper p tail).2.1 ++
+            (actualFrozenSelectedPairSlots D A yz upper p tail).2.2),
+      c * H ps.prod =
+    ∑ a ∈ Finset.image List.prod T₁,
+      ∑ b ∈ Finset.image List.prod T₂,
+        ∑ d ∈ Finset.image List.prod T₃,
+          c * ↑slots.1.length.factorial * ↑slots.2.1.length.factorial * ↑slots.2.2.length.factorial *
+                  actualNormalizedPrimeTupleCoefficient T₁ slots.1.length a *
+                actualNormalizedPrimeTupleCoefficient T₂ slots.2.1.length b *
+              actualNormalizedPrimeTupleCoefficient T₃ slots.2.2.length d *
+            H (a * b * d)
+
+ι : Type u_1
+D A : ℝ
+yz : Bool
+upper : ι → ℕ
+p : Fin 3 → ι
+tail : List ι
+B : ι → Finset ℕ
+c : ℝ
+H : ℕ → ℝ
+slots : List ι × List ι × List ι := actualFrozenSelectedPairSlots D A yz upper p tail
+⊢ let slots := actualFrozenSelectedPairSlots D A yz upper p tail;
+  let T₁ := actualPrimeSlotBox B slots.1;
+  let T₂ := actualPrimeSlotBox B slots.2.1;
+  let T₃ := actualPrimeSlotBox B slots.2.2;
+  ∑
+      ps ∈
+        actualPrimeSlotBox B
+          ((actualFrozenSelectedPairSlots D A yz upper p tail).1 ++
+              (actualFrozenSelectedPairSlots D A yz upper p tail).2.1 ++
+            (actualFrozenSelectedPairSlots D A yz upper p tail).2.2),
+      c * H ps.prod =
+    ∑ a ∈ Finset.image List.prod T₁,
+      ∑ b ∈ Finset.image List.prod T₂,
+        ∑ d ∈ Finset.image List.prod T₃,
+          c * ↑slots.1.length.factorial * ↑slots.2.1.length.factorial * ↑slots.2.2.length.factorial *
+                  actualNormalizedPrimeTupleCoefficient T₁ slots.1.length a *
+                actualNormalizedPrimeTupleCoefficient T₂ slots.2.1.length b *
+              actualNormalizedPrimeTupleCoefficient T₃ slots.2.2.length d *
+            H (a * b * d)
+error: ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean:210:83: Application type mismatch: The argument
+  hi
+has type
+  i ∈ slots.1
+but is expected to have type
+  i ∈ (actualFrozenSelectedPairSlots D A yz upper p tail).1 ++ (actualFrozenSelectedPairSlots D A yz upper p tail).2.1
+in the application
+  Or.inl hi
+error: ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean:214:35: Application type mismatch: The argument
+  List.mem_append.mpr (Or.inr hi)
+has type
+  i ∈ ?m.266 ++ slots.2.2
+but is expected to have type
+  i ∈ (actualFrozenSelectedPairSlots D A yz upper p tail).2.2
+in the application
+  Or.inr (List.mem_append.mpr (Or.inr hi))
+error: Lean exited with code 1

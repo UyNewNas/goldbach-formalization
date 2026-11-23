@@ -1,0 +1,62 @@
+[
+  {
+    "kind": "def",
+    "name": "actualPrimeSlotBox",
+    "header": "def actualPrimeSlotBox {ι : Type*} (B : ι → Finset ℕ) : List ι → Finset (List ℕ)\n  | [] => {[]}\n  | i :: input => ((B i).product (actualPrimeSlotBox B input)).image\n      (fun pq => pq.1 :: pq.2)"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_sum_cons",
+    "header": "theorem actualPrimeSlotBox_sum_cons {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (input : List ι) (F : List ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (i :: input), F ps) =\n      ∑ q ∈ B i, ∑ ps ∈ actualPrimeSlotBox B input, F (q :: ps)"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_length",
+    "header": "theorem actualPrimeSlotBox_length {ι : Type*} (B : ι → Finset ℕ) (input : List ι) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.length = input.length"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_prime",
+    "header": "theorem actualPrimeSlotBox_prime {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, Nat.Prime q"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_prod_le_upper",
+    "header": "theorem actualPrimeSlotBox_prod_le_upper {ι : Type*} (B : ι → Finset ℕ)\n    (upper : ι → ℕ) (input : List ι)\n    (hsize : ∀ i ∈ input, ∀ q ∈ B i, q ≤ upper i) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.prod ≤ (input.map upper).prod"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_product_sum_perm",
+    "header": "theorem actualPrimeSlotBox_product_sum_perm {ι : Type*} (B : ι → Finset ℕ)\n    {input₁ input₂ : List ι} (hperm : input₁.Perm input₂) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B input₁, F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B input₂, F ps.prod"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_product_sum_append",
+    "header": "theorem actualPrimeSlotBox_product_sum_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (left ++ right), F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B left, ∑ qs ∈ actualPrimeSlotBox B right,\n        F (ps.prod * qs.prod)"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeTuple_sum_by_product",
+    "header": "theorem actualPrimeTuple_sum_by_product (T : Finset (List ℕ)) (F : ℕ → ℝ) :\n    (∑ ps ∈ T, F ps.prod) =\n      ∑ n ∈ T.image List.prod, (actualPrimeTupleCoefficient T n : ℝ) * F n"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeTuple_threeGroup_sum_normalized",
+    "header": "theorem actualPrimeTuple_threeGroup_sum_normalized\n    (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (∑ ps ∈ T₁, ∑ qs ∈ T₂, ∑ rs ∈ T₃, c * H (ps.prod * qs.prod * rs.prod)) =\n      ∑ a ∈ T₁.image List.prod, ∑ b ∈ T₂.image List.prod, ∑ d ∈ T₃.image List.prod,\n        (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n          actualNormalizedPrimeTupleCoefficient T₁ m₁ a *\n          actualNormalizedPrimeTupleCoefficient T₂ m₂ b *\n          actualNormalizedPrimeTupleCoefficient T₃ m₃ d * H (a * b * d)"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualFrozenSelectedPair_signed_regroup",
+    "header": "theorem actualFrozenSelectedPair_signed_regroup {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    let slots"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualFrozenSelectedPair_group_support",
+    "header": "theorem actualFrozenSelectedPair_group_support {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ)\n    (hsize : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, ∀ q ∈ B i, q ≤ upper i) :\n    let slots"
+  },
+  {
+    "kind": "theorem",
+    "name": "actualPrimeSlotBox_normalized_abs_le_one",
+    "header": "theorem actualPrimeSlotBox_normalized_abs_le_one {ι : Type*}\n    (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) (n : ℕ) :\n    |actualNormalizedPrimeTupleCoefficient (actualPrimeSlotBox B input) input.length n| ≤ 1"
+  }
+]

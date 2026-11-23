@@ -112,4 +112,6 @@ Member 第二修补批覆盖 physical normalization、actual Buchstab transfer�
 
 Member 已完成缓存窗口的精简证据保存在 [member-cache-window](member-cache-window/README.md)：实际复用 T01 八组、Prototype 九组项目产物和一组 P6 native 产物；已存在的 18 组 T01、23 组 Prototype native 保持，64 组 T01 因实际依赖对象不同未采用。原聚合控制器在活动 Lean 自然退出后受控停止，exit 241 属于操作停点，停点前后 1242 项成功产物保持。Prototype 首次 stock 的 exit 3 后，只对两项工作 trace 采用真实生产者原始字节，并先补齐四个缺失 C／hash 辅助文件；旧 trace 已备份，没有修改 depHash 或生成伪 trace。最终对应 stock 均为 0，Member 源码编译调用为 0。该目录仅整理已完成回执、原始摘要与小脚本，未重跑构建或资格检查，不计新增定理或看板节点。
 
+Member 第八批 `ActualFrozenSlotCoefficientRegrouping` 完整复用已发表 `c45e845b` 的 `8f609edc` 源码，保留原系数、阶乘恢复、ordered slot／product fibres 的标签重数和全部假设。标准构建、指定模块 kernel replay 及全部 19 个实际公开导出的完整类型／公理检查通过，仅标准三公理，源码和五项主要产物稳定，见 [验收结果](member-repair-batch8/VALIDATION_RESULTS.json) 及 [独立复核](member-repair-batch8/INDEPENDENT_REVIEW.json)。旧静态头表的两项 let-valued 结论仅记录了前缀；原表保持不动，新增 [完整 12 条源码声明头比较](member-repair-batch8/PUBLIC_HEADERS_COMPLETE.json) 与不可变发布补充清单。实际 elaborated 完整类型与 kernel 检查一直完整，未因元数据补正重跑验证。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
