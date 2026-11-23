@@ -1,0 +1,328 @@
+{
+  "schema": "independent_non_author_Remaining_actual_private_API_semantic_repair_review_v1",
+  "reviewer": "/root/member_current_repairs",
+  "candidate_author": false,
+  "reviewed_utc": "2026-11-23T21:19:49.104567+00:00",
+  "outcome": "NO_FINDINGS_IN_ASSIGNED_PRIVATE_API_AND_17_SEMANTIC_PROOF_SCOPE",
+  "owner_gate": "PRIVATE_PART_STATIC_READY_SUBJECT_TO_ROOT_INDEPENDENT_SUFFIX_DATA_SCOPE_AND_ACTUAL_VALIDATION",
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-remaining-eighth-affine-reuse/actual-api-repair-v3/candidate.lean",
+    "bytes": 43839,
+    "sha256": "bcc58d5ded7bd80dd91b6f52cbd40324256db913ff492c3453feb19424d070a1"
+  },
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-remaining-eighth-affine-reuse/actual-api-repair-v3/baseline-8cc.lean",
+    "sha256": "8ccf34a43159984ea66a4930756c09dc14cbe401196e3a4862461d487c77eba7"
+  },
+  "source_selection_sha256": "d360d15a53f85cab0552436a1a50bd03d7f124cca592b87a95e99ff85e9ecfcb",
+  "original_files_manifest_sha256": "85893db9a08d11242366e139f9ac627b7253b7e608a1dca81dab52c9f7fdd345",
+  "original_manifest_rows_bytes_digests_only_verified": true,
+  "changed_proof_regions_metadata_sha256": "93b1e38a75cd3bee3488fb49c9b17a39ca418b60f6b5a82e54941bc1ae04b0c1",
+  "prior_static_semantic_review": {
+    "path": "/workspace/p1-complete-proof/static-remaining-eighth-affine-reuse/v2/INDEPENDENT_SEMANTIC_REVIEW.json",
+    "sha256": "48c6742d064106b85ccb5204114f8caa6abe5d3a5f2df8a53af0cdfdddd3ec59",
+    "scope_limits": [
+      "Static review finds no mathematical object/sign/index/API-signature mismatch in this assigned partition. It does not establish that the new Lean proofs elaborate or that any closed coefficient certificate is true.",
+      "The14closed certificate checks and their coverage are reviewed separately by root and still require actual normal/kernel/full-owned acceptance by soleowner.",
+      "Existing supplier success is not acceptance of this new module; resource benefit remains unmeasured. No Lean, external checker, numerical replay, sample-point evaluation, live-source/cache/object or old-record mutation was performed."
+    ],
+    "prior_review_did_not_establish_8cc_elaboration": true
+  },
+  "actual_failed_baseline": {
+    "command_sha256": "d237394318faa267592feca4fc7c3834fe746259646802cb220906dc835cc14f",
+    "raw_log_sha256": "80ffcbf1e8ec51bba6b66653a8687dc4174d9f169f316c7069b9fa7d546b0ca2",
+    "exit_code": 1,
+    "elapsed_seconds": 542.1104321259991,
+    "classification": "Natural exit1 with concrete API/recursion/goal diagnostics; not memory_exception or certificate success."
+  },
+  "five_new_private_interface_theorems": [
+    {
+      "declaration": "rem_eval_notation_add",
+      "first_line": 155,
+      "complete_header": "private theorem rem_eval_notation_add (a b : Expr) (t : Point) :\n    evaluate (a + b) t = evaluate a t + evaluate b t :=",
+      "header_sha256": "c08574a9d095c112c5256a53a6f3ac8aefb87a0f81abbbe46e5a4a6d03b89bdd",
+      "raw_region_sha256": "af32053ff651be5fcfc9125fc191737b3e41c34330f56b596202f70d5e168030",
+      "interface_review": "rfl expands original instAddExpr=Expr.add and evaluate.add; no new addition/compiler."
+    },
+    {
+      "declaration": "rem_eval_notation_sub",
+      "first_line": 158,
+      "complete_header": "private theorem rem_eval_notation_sub (a b : Expr) (t : Point) :\n    evaluate (a - b) t = evaluate a t - evaluate b t :=",
+      "header_sha256": "d9ec649289837e5db100da1a51d2e381dede41c04eba086cf1f923bcc2440e75",
+      "raw_region_sha256": "f08037ffed11ebeceabd86c9ad0584813277991c3dc3363f6b9045b75aab8303",
+      "interface_review": "rfl expands original instSubExpr=Expr.sub and evaluate.sub; same subtraction/sign."
+    },
+    {
+      "declaration": "rem_eval_notation_smul",
+      "first_line": 161,
+      "complete_header": "private theorem rem_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :\n    evaluate (q • a) t = (q : ℝ) * evaluate a t :=",
+      "header_sha256": "0843c713d1994173a64d1aef25281a67436184d44c09817736a1f093e97f6535",
+      "raw_region_sha256": "cfc20470d0babca691a13c9a71fbfab78bedc7000ec20e07bec3065463805e10",
+      "interface_review": "rfl expands original instSMulRatExpr=Expr.scale and evaluate.scale, including exact Rat→Real cast."
+    },
+    {
+      "declaration": "rem_eval_notation_ite",
+      "first_line": 164,
+      "complete_header": "private theorem rem_eval_notation_ite (p : Prop) [Decidable p] (a b : Expr) (t : Point) :\n    evaluate (if p then a else b) t = if p then evaluate a t else evaluate b t :=",
+      "header_sha256": "60debd5f21735093f6efb844e421ac8324114059d8949c787af88eefd7717c9c",
+      "raw_region_sha256": "bb7af56d2bb550742f33d069047e50caf3af538046859733625d2c79399672c0",
+      "interface_review": "For arbitrary Prop with Decidable instance, split_ifs proves both original branches by rfl. This lifts only evaluate(if p...) itself, not arbitrary AST contexts."
+    },
+    {
+      "declaration": "rem_subset_sum_canonical",
+      "first_line": 215,
+      "complete_header": "private theorem rem_subset_sum_canonical (m : ℕ) (t : Point) :\n    subsetSum m t = ∑ j : Fin 6,\n      if decide (m / 2 ^ j.val % 2 = 1) then t (Fin.ofNat 8 j.val) else 0 :=",
+      "header_sha256": "9d00a9517c5706354a3613b76841ddf24cabea9388f6cbb7ade1e90d818ecd1c",
+      "raw_region_sha256": "be936770ee115bfc57b9a32ffe0cf3e144e24aebd12298728d3defabc55fe8ee",
+      "interface_review": "Unfold original subsetSum, Finset.sum_congr rfl, one rw[rem_castCoord j] per j:Fin6. Unchanged rem_castCoord uses j<6<8, so no wrap. Original six bit predicates remain; no recursive simp or new hypothesis."
+    }
+  ],
+  "seventeen_changed_private_semantic_proofs": [
+    {
+      "declaration": "rem_eval_slotSum",
+      "complete_header": "private theorem rem_eval_slotSum (I : Finset (Fin 8)) (t : Point) :\n    evaluate (remSlotSumExpr I) t = ∑ j ∈ I, t j :=",
+      "header_sha256": "ba9c600ae99b7b58584f7fa4fac8f7b0bd41397b625eb9387fd565af993bb5ca",
+      "header_byte_exact": true,
+      "before_proof_sha256": "f45bea245706d9d4ffe0237fd35e909c0659332e20a217c70c0847fb6a848efb",
+      "after_proof_sha256": "322dfd4b110f6c04bb34cf4f85e6d0e59541031788caf9e7578d9e04c8816f64",
+      "unrestricted_domain_preserved": true,
+      "review": "Same arbitrary I:Finset(Fin8) and free real t. The notation-add and evaluation-only ite adapters reduce the same fixed eight terms. No generic apply_ite distributes conditions through Expr contexts. The existing univ.filter membership=I and Finset.sum_filter identify the original exact finite sum."
+    },
+    {
+      "declaration": "rem_eval_A",
+      "complete_header": "private theorem rem_eval_A (e : Expr) (t : Point) :\n    evaluate (remAExpr e) t = A (evaluate e t) :=",
+      "header_sha256": "1e95f5809e6582f5b336c8e207c8938cd470453143eac4fd2700a3f81e6ea49e",
+      "header_byte_exact": true,
+      "before_proof_sha256": "270dbec643b86578bd68e540f3bbd1c02df16913704c4fd3022f2b9cb8f7c513",
+      "after_proof_sha256": "2c3954bc06707c9f884706d405ef05eb2761bec22db70291ec5bba8ef165a915",
+      "unrestricted_domain_preserved": true,
+      "review": "Same A=(1+s)/2, derived from K(1/2)+(1/2)•e by existing add/smul evaluator reductions and exact rational cast arithmetic."
+    },
+    {
+      "declaration": "rem_eval_C",
+      "complete_header": "private theorem rem_eval_C (e : Expr) (t : Point) :\n    evaluate (remCExpr e) t = C (evaluate e t) :=",
+      "header_sha256": "ca9209470aeb60bd85e6e2542ebcf3d738ba41445451c72fedbb9374103c00cf",
+      "header_byte_exact": true,
+      "before_proof_sha256": "9d1daf324d422a96520abb57d21c98b8e55cdce6a6e236d51db8f2ea8186c6bd",
+      "after_proof_sha256": "e81b6b0d15bed2f98daa090a4c6f33730c7e491313ff187ef2f7ee62c2f1af1c",
+      "unrestricted_domain_preserved": true,
+      "review": "Same C=57/64−(3/2)s, derived from K(57/64)−(3/2)•e with unchanged sign."
+    },
+    {
+      "declaration": "rem_eval_old",
+      "complete_header": "private theorem rem_eval_old (t : Point) :\n    evaluate oldExpr t = C (t 1 + t 2) :=",
+      "header_sha256": "67e2f90cb9e4d7797690e25c2b6a0f7c4e906919fda9f175dd0a16e433aec0d2",
+      "header_byte_exact": true,
+      "before_proof_sha256": "9c09c5b9e5725c43e892c8563587577c29d0cb71ae7213044886b24d278c2afb",
+      "after_proof_sha256": "29c27ea9084414445c9cfffeeeb6c3a09fde6a8b93ff0ba93db2067799d2f3dc",
+      "unrestricted_domain_preserved": true,
+      "review": "Existing public Desc oldExpr remains C(t1+t2), with the same two coordinates and coefficients."
+    },
+    {
+      "declaration": "rem_eval_subset",
+      "complete_header": "private theorem rem_eval_subset (m : ℕ) (t : Point) :\n    evaluate (subsetExpr m) t = subsetSum m t :=",
+      "header_sha256": "d02ca631ac60097b121f0a46a4724a3b15f98ecf5a36979d61c9c3367ee52149",
+      "header_byte_exact": true,
+      "before_proof_sha256": "afb2ce4d1c2a1b0bb7357c28f2c94595fe46c410686eac001c278fd823353fc5",
+      "after_proof_sha256": "ad3c08de52ad9a16bebf006e428eac22bfd6f89515f3010134b1e35de47de499",
+      "unrestricted_domain_preserved": true,
+      "review": "Rewrite original subsetSum once by the new canonical Fin6 transport, then unfold only the fixed six terms and testBit=decide(div/pow/mod) predicate. Arbitrary Nat m remains; no extra m≤63 premise or bits6/7."
+    },
+    {
+      "declaration": "rem_eval_ascending",
+      "complete_header": "private theorem rem_eval_ascending (m : ℕ) (t : Point) :\n    evaluate (ascendingExpr m) t = A (subsetSum m t) :=",
+      "header_sha256": "a749bca01522969b65838358230f97b854c484851c6a15180ce00b69e3362918",
+      "header_byte_exact": true,
+      "before_proof_sha256": "9c958fdefea4c4ee872d935107dfcea5b6dd0924520cc016f99a53d846f455d1",
+      "after_proof_sha256": "efa035d8b13c1f55047394e60b3e574e19ed17a2aad1a5b404e137815b37e270",
+      "unrestricted_domain_preserved": true,
+      "review": "Existing ascendingExpr still evaluates to A of the same original six-slot subsetSum."
+    },
+    {
+      "declaration": "rem_eval_descending",
+      "complete_header": "private theorem rem_eval_descending (m : ℕ) (t : Point) :\n    evaluate (descendingExpr m) t = C (subsetSum m t) :=",
+      "header_sha256": "d35c2346fec2119708b133b8beee3bca6879302412c6693868eaf554c6ca86a9",
+      "header_byte_exact": true,
+      "before_proof_sha256": "da8a09cc75678a637ac404ff509603a75a9e5edf23b355956fdadc9c2f166b5a",
+      "after_proof_sha256": "40ad4826d38fa83196d46018a59b3e6f41816ce9d9d40e990cc38263d0089494",
+      "unrestricted_domain_preserved": true,
+      "review": "Existing descendingExpr still evaluates to C of the same original six-slot subsetSum."
+    },
+    {
+      "declaration": "rem_eval_comparison",
+      "complete_header": "private theorem rem_eval_comparison (c : Cell) (t : Point) :\n    evaluate (remComparisonExpr c) t = comparison c t :=",
+      "header_sha256": "e945f027ac557348a798b27ed0508593af74dde6a01570f3f10caeb337e74305",
+      "header_byte_exact": true,
+      "before_proof_sha256": "1b110d9528b65b502a083e2aadf1b143cf72749e99b59c9012930e71c46d4c37",
+      "after_proof_sha256": "04468c100ba73f7369a2836ed73fc64df1428395016e32a57515c5176dc8dcb2",
+      "unrestricted_domain_preserved": true,
+      "review": "All original comparison branches remain: old C(t1+t2) for ascending/seed, ascending mask50 for fiftyA, descending mask50 for fiftyD, ascending mask9 otherwise. Only literal Fin atom presentation changes."
+    },
+    {
+      "declaration": "rem_eval_minorant",
+      "complete_header": "private theorem rem_eval_minorant (c : Cell) (t : Point) :\n    evaluate (remMinorantExpr c) t = minorant c t :=",
+      "header_sha256": "17013aee00a92c6537f9a9838f3da00e620b93a4de7a17b53528cef4e1b9c1a6",
+      "header_byte_exact": true,
+      "before_proof_sha256": "1006eb0d89641426856a13e9440c5207350ce53394307d4be418ad93b8fbbd34",
+      "after_proof_sha256": "566550371ba960c05e3cbcd935ce53a7e213700f4d54f07e8a3f604a63adc0da",
+      "unrestricted_domain_preserved": true,
+      "review": "All original minorants remain: old C(t1+t2) for ascending/seed/nine, ascending mask6 for fiftyA, ascending mask1 otherwise. No new envelope or incoming cap."
+    },
+    {
+      "declaration": "rem_eval_newCap",
+      "complete_header": "private theorem rem_eval_newCap (c : Cell) (t : Point) :\n    evaluate (remNewCapExpr c) t = newCap c t :=",
+      "header_sha256": "65b6180c2719c3e2dde6f2a3f3f8e465bce1a3dbfe837cf1353d188497e4c618",
+      "header_byte_exact": true,
+      "before_proof_sha256": "d53728aa68f4e9b65d50625692213cead3770a4915e763af2896d83b71f3a6a5",
+      "after_proof_sha256": "84eebe211138df81237816a7cee41da8ae1c013b56ef8fa6ab8d78c3bb74b990",
+      "unrestricted_domain_preserved": true,
+      "review": "by_cases h:descendingNew c=true covers both original Bool values. True branch uses C and false uses A on the same selectedSum; both subtract exactly eta=1/1000000 once. No condition or positivity premise is added."
+    },
+    {
+      "declaration": "rem_eval_otherPlane",
+      "complete_header": "private theorem rem_eval_otherPlane (c : Cell) (t : Point) :\n    evaluate (remOtherPlaneExpr c) t = otherPlane c (selectedSum c t) :=",
+      "header_sha256": "b79091a0f5f7195248925be7691739840b25629d5fe2e7d30431b2214ece1069",
+      "header_byte_exact": true,
+      "before_proof_sha256": "44b955c81966fbfbd2394c85be6e3ab9f95a400e1b4cc15b626dc38cde1bbfdb",
+      "after_proof_sha256": "9f85773e326fbf4a59bd520c15d6113ad8b19fa50f4b57e16d334cbde27d5ab9",
+      "unrestricted_domain_preserved": true,
+      "review": "The same Bool true branch uses opposite A and false branch opposite C, without eta in otherPlane. Eta stays separately in the original opposite common slack."
+    },
+    {
+      "declaration": "rem_eval_history",
+      "complete_header": "private theorem rem_eval_history (j : Fin 4) (t : Point) :\n    evaluate (remHistoryExpr j) t = history t j :=",
+      "header_sha256": "508537088d30dc51195f1feb3c7235b775b4b746644b32672e1286bfb7567903",
+      "header_byte_exact": true,
+      "before_proof_sha256": "35ad026a0d2ef4583453093c45077cee4f985259ed207e770cf50e295a1fad7f",
+      "after_proof_sha256": "2497043c2c5487e7de946934e65419f9623cbf92c22fa1fa5bc458fc5c5f3130",
+      "unrestricted_domain_preserved": true,
+      "review": "Same four chronological expressions with cubic coefficients at slots0,2,4,6 and exactly the original preceding sums."
+    },
+    {
+      "declaration": "rem_eval_prefixSquare",
+      "complete_header": "private theorem rem_eval_prefixSquare (j : Fin 8) (t : Point) :\n    evaluate (remPrefixSquareExpr j) t = prefixSquareExpr t j :=",
+      "header_sha256": "dde43a8fd009a0814bc6a8c12d5ee0312e107dee29d45cfb2d5da68cb61fe7f2",
+      "header_byte_exact": true,
+      "before_proof_sha256": "4eeb2f573b6e9b9198fac6a72f6b6d42a389dcced1b696a0ea512f0ecf41809f",
+      "after_proof_sha256": "838c356139599679327a6650cca797de13618fc0479bd670e09d460a95eb9064",
+      "unrestricted_domain_preserved": true,
+      "review": "Same arbitrary j:Fin8, all earlier k<j and original2tj, using exact arbitrary finite-set evaluation."
+    },
+    {
+      "declaration": "rem_eval_selectedSquare",
+      "complete_header": "private theorem rem_eval_selectedSquare (I : Finset (Fin 8)) (j : Fin 8) (t : Point) :\n    evaluate (remSelectedSquareExpr I j) t = selectedSquareExpr I t j :=",
+      "header_sha256": "e33ea71477123d1c0deefa96e5b34e5eb9fce81dfed52bb2948e8656784e9a4c",
+      "header_byte_exact": true,
+      "before_proof_sha256": "57b993c4773ccc9e949fda373544d17091f787025f52ae378f4b2f961ba7e0d9",
+      "after_proof_sha256": "72eff735ddcb63cb3e15b2199be052b71dd42672ca8b14d82f49ec000a4c44b2",
+      "unrestricted_domain_preserved": true,
+      "review": "Same arbitrary I,j, sum over I plus earlier k<j with k∉I and original2tj. No j∉I, Source, positivity or square licence assumption."
+    },
+    {
+      "declaration": "rem_eval_side",
+      "complete_header": "private theorem rem_eval_side (c : Cell) (t : Point) :\n    evaluate (remSideExpr c) t = sideSlack c t :=",
+      "header_sha256": "d244ef622cc64dcf635f8b1d8b774dcda7681af0dbd10c31ff10ffb41a6a188a",
+      "header_byte_exact": true,
+      "before_proof_sha256": "9842edf65a9da3a87fcaa24e9131ccf02ec5952c92d9e5d6db098b292a3ccb54",
+      "after_proof_sha256": "db500a312b5c9aea59683fa3f0b2b4371b43fd32e18e709371df66e283595daf",
+      "unrestricted_domain_preserved": true,
+      "review": "Same constructor cases and signs: ascending/seed/nine2(t1+t2−mu), fiftyA2(mu−t1−t2), otherwise mu−t0; original mu25/128."
+    },
+    {
+      "declaration": "rem_eval_common",
+      "complete_header": "private theorem rem_eval_common (c : Cell) (k : Fin 35) (t : Point) :\n    evaluate (remCommonExpr c k) t = commonSlack c t k :=",
+      "header_sha256": "16c2fadaf7afa7408886033fb9b7fd65d37d9853c178cae4165694bc0beb7701",
+      "header_byte_exact": true,
+      "before_proof_sha256": "b7064a94452687f4f4d59681ce323ea4fbc8a5455b9612acb8f0722a5e7e2646",
+      "after_proof_sha256": "7edd148c968f8db0afe928dc50fc94579fc3c95240784d1b76224478e153fd1b",
+      "unrestricted_domain_preserved": true,
+      "review": "All Fin35 semantic cases stay universal in c,t and use the existing Expr model. Selected-slot dummy terms remain mu−t0; all full/selected square terms and opposite-plane−eta keep their old form. No Source or desired licence input."
+    },
+    {
+      "declaration": "rem_eval_branch",
+      "complete_header": "private theorem rem_eval_branch (c : Cell) (m : ℕ) (t : Point) :\n    evaluate (remBranchExpr c m) t = comparison c t - oldPlane c m t :=",
+      "header_sha256": "12159248a34053a8b84f5745f56f0d657cfa5c8aa04a4304b9dcbb03969ae0a8",
+      "header_byte_exact": true,
+      "before_proof_sha256": "ada26688a0c4c38128282123e5f8407d71201faab1d99ddbd5ce41c5f334becc",
+      "after_proof_sha256": "1d347d04bd2115aff8c0ce890a3f63525bef5c5e4d93d38128ca2e00f874fde1",
+      "unrestricted_domain_preserved": true,
+      "review": "Explicit by_cases m∈leftMasks c covers both original oldPlane branches. The same comparison minus A/C of the same six-slot subsetSum is retained."
+    }
+  ],
+  "existing_Desc_instance_identity": {
+    "source_path": "/workspace/blue-member-build/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean",
+    "source_sha256": "f88800d5e0894e3304f26c43c1e42ef7142dcd09583253fede542a2f3b335c18",
+    "existing_owned_inventory_path": "/workspace/blue-member-repair-batch58/OWNED_EXPORTS.json",
+    "existing_owned_inventory_sha256": "e68479484f740699d7b5cb92f7c34288d3521bb5cdf856af71683a2d8eafd51d",
+    "three_existing_public_definitions": [
+      {
+        "name": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.instAddExpr",
+        "kind": "definition",
+        "type": "Add.{0} ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.Expr",
+        "is_private": false,
+        "is_axiom_declaration": false,
+        "transitive_axioms": []
+      },
+      {
+        "name": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.instSMulRatExpr",
+        "kind": "definition",
+        "type": "SMul.{0, 0} Rat ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.Expr",
+        "is_private": false,
+        "is_axiom_declaration": false,
+        "transitive_axioms": []
+      },
+      {
+        "name": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.instSubExpr",
+        "kind": "definition",
+        "type": "Sub.{0} ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.Expr",
+        "is_private": false,
+        "is_axiom_declaration": false,
+        "transitive_axioms": []
+      }
+    ],
+    "rfl_matches_existing_Expr_constructors_and_evaluate_equations": true,
+    "no_new_instance_operator_model_or_recursive_compiler": true
+  },
+  "conditional_scope": "Only evaluate-level ite or explicit exhaustive by_cases on the same Bool equality/membership. Broad apply_ite is absent from the17 repaired proofs; neither original case is discarded.",
+  "coordinate_scope": "Same Fin6 mask domain transported once within a finite sum by unchanged rem_castCoord. All Nat masks, all free real points, arbitrary selected sets and indices remain. No new mask bound, point sample or Source premise.",
+  "mathematical_scope_preserved": [
+    "Original comparison/minorant per Cell, mask6/9/50 choices and all signs.",
+    "Same selected set, newcap A/C−eta and opposite branch; eta=1/1000000.",
+    "Same histories, all8full square indices, arbitrary-I selected squares and selected-slot dummy terms.",
+    "No parent/cap/licence/Source/desired gain/mean/tail assumption."
+  ],
+  "pinned_read_only_API_sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean",
+      "sha256": "f88800d5e0894e3304f26c43c1e42ef7142dcd09583253fede542a2f3b335c18"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SelectedPrefixBoxCap.lean",
+      "sha256": "a6cc561425e128c917a3dc0511bc8095befac404b40a6dee04e6a2612ac75e55"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/VariableEnvelope.lean",
+      "sha256": "ec0fc1a6099e6667015e90306d18cf05b43c556ef8ad8e2f99c91f967e0f4b8c"
+    },
+    {
+      "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Nat/Bitwise/Lemmas.lean",
+      "sha256": "529687f061efb55560de711acb367184e86b2cc8c21a4894a6169460e337f430"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Tactic/Ring/RingNF.lean",
+      "sha256": "96f7e73f696f2e0f28592538eade5e1bfae6c63bb7fc58744d3e1f8aae219b28"
+    }
+  ],
+  "explicitly_outside_assigned_review": [
+    "winner_plane/branchMask_covers: root reviews the blue integration of this reviewer's earlier suffix suggestions.",
+    "Root owns42headers/25defs,13models,14closed certificates/literal data and reverse reconstruction. No certificate inspected or replayed here.",
+    "No acceptance inferred from Desc/API success; failed8cc and uncompiled bcc provide no coefficient-PASS credit."
+  ],
+  "verification_limits": {
+    "Lean_Lake_kernel_types_axioms_tests_or_numeric_replay_run": 0,
+    "candidate_live_cache_active_process_queue_guard_or_old_record_changes": 0,
+    "allnewprivate_and_generated_owned_declarations_require_actual_full_owned_validation": true,
+    "resource_success_or_elaboration_claimed": false
+  },
+  "findings": []
+}

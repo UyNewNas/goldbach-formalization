@@ -95,7 +95,7 @@ theorem remainder_cube_vanishes {y : ℝ} (hy : 0 ≤ y) :
     VanishesUpTo (remainder y ^ 3) (y^3) := by
   have h2 := mul_vanishes hy hy (remainder_vanishes y) (remainder_vanishes y)
   have h3 := mul_vanishes (mul_nonneg hy hy) hy h2 (remainder_vanishes y)
-  simpa only [pow_three] using h3
+  simpa only [pow_three, mul_assoc] using h3
 
 /-- Literal original annihilation, including n=0 and n=1 whenever
 they belong to the stated REAL cube range. -/

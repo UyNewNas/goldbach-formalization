@@ -1,0 +1,263 @@
+{
+  "module": "ImbalancedChen.P1OriginalSmallCutoffActualLowerTail",
+  "headers": [
+    {
+      "name": "lowerDeficit",
+      "kind": "def",
+      "complete_raw_header": "def lowerDeficit (N cap : ℕ) (y R : ℝ) : ℝ :=",
+      "sha256": "362e298210ed29eb13ed48459c7bccfeab3c32b999fde533a29341e2c4da5761",
+      "byte_exact": true
+    },
+    {
+      "name": "actualMinus_sub_eq_deficit_sub",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualMinus_sub_eq_deficit_sub (N cap : ℕ) (y Rold Rnew : ℝ) :\n    actualSmallRosserMinusDensity N cap y Rnew - actualSmallRosserMinusDensity N cap y Rold =\n      lowerDeficit N cap y Rold - lowerDeficit N cap y Rnew :=",
+      "sha256": "39f6a858d577fd55dde535355d7784c4f275c3a11f86ab169aa9d310b9256c50",
+      "byte_exact": true
+    },
+    {
+      "name": "lowerDeficit_nonneg",
+      "kind": "theorem",
+      "complete_raw_header": "theorem lowerDeficit_nonneg (N cap : ℕ) (hEven : Even N) (y R : ℝ)\n    (hcap : y ≤ (cap : ℝ)) (hy : 1 < y) (hyR : y ≤ R) :\n    0 ≤ lowerDeficit N cap y R :=",
+      "sha256": "0899b1d2ea857440db011af40c20865285e58901e354556007c2bf4b6aba099c",
+      "byte_exact": true
+    },
+    {
+      "name": "abs_actualMinus_sub_le_deficits",
+      "kind": "theorem",
+      "complete_raw_header": "theorem abs_actualMinus_sub_le_deficits (N cap : ℕ) (hEven : Even N)\n    (y Rold Rnew : ℝ) (hcap : y ≤ (cap : ℝ)) (hy : 1 < y)\n    (hold : y ≤ Rold) (hnew : y ≤ Rnew) :\n    |actualSmallRosserMinusDensity N cap y Rnew - actualSmallRosserMinusDensity N cap y Rold| ≤\n      lowerDeficit N cap y Rold + lowerDeficit N cap y Rnew :=",
+      "sha256": "1005bf2a0c32bb14b217cd7aa39f6366d6592bdd7ad1d65f3b75487775c45e7e",
+      "byte_exact": true
+    },
+    {
+      "name": "actualMinus_sub_le_old_deficit",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualMinus_sub_le_old_deficit (N cap : ℕ) (hEven : Even N)\n    (y Rold Rnew : ℝ) (hcap : y ≤ (cap : ℝ)) (hy : 1 < y) (hnew : y ≤ Rnew) :\n    actualSmallRosserMinusDensity N cap y Rnew - actualSmallRosserMinusDensity N cap y Rold ≤\n      lowerDeficit N cap y Rold :=",
+      "sha256": "86c459964b674f8930079fa4012dfbed37ed32ed644048a6379f7fdf66195570",
+      "byte_exact": true
+    },
+    {
+      "name": "lowerDeficit_eq_actualT",
+      "kind": "theorem",
+      "complete_raw_header": "theorem lowerDeficit_eq_actualT (N cap : ℕ) (hEven : Even N)\n    (y R t : ℝ) (hcap : y ≤ (cap : ℝ)) (hy : 1 < y) (hyR : y ≤ R)\n    (ht : 2 ≤ t) (hpower : y ^ t ≤ R) :\n    lowerDeficit N cap y R =\n      suzukiActualT (goldbachB8PlusBoundingSieve N hEven y)\n        (2 * ((suzukiSupportedBelow (goldbachB8PlusBoundingSieve N hEven y)\n          (Nat.ceil ((Nat.ceil R : ℝ) ^ (1 / t)))).card + 1))\n        (Nat.ceil R) (Nat.ceil ((Nat.ceil R : ℝ) ^ (1 / t))) :=",
+      "sha256": "bc0aa16fb2debecda22067545d1fbbbe7f2bc60a58dc3565ca3f0b2ab00a7272",
+      "byte_exact": true
+    },
+    {
+      "name": "tailEnvelope",
+      "kind": "def",
+      "complete_raw_header": "def tailEnvelope (A B K R t : ℝ) : ℝ :=",
+      "sha256": "041597ce087694ed368126b1cda97eea484e52c7373b43886b506a575203cb1a",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_actualMinus_deficit_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_actualMinus_deficit_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ N cap : ℕ, Even N → ∀ y R t : ℝ,\n        y ≤ (cap : ℝ) → 1 < y → y ≤ R → 2 ≤ t → y ^ t ≤ R →\n        t ^ 13 ≤ Real.log (Nat.ceil R : ℝ) →\n        Real.exp 1 ≤ Real.log (Nat.ceil R : ℝ) →\n        0 ≤ lowerDeficit N cap y R ∧\n          lowerDeficit N cap y R ≤ actualSmallEulerProduct N cap y * tailEnvelope A B K R t :=",
+      "sha256": "acdb2753e7617d4872ff0d242e1b9d84fb98025e16ea9b102fa900c731639124",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_actualMinus_pair_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_actualMinus_pair_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ N cap : ℕ, Even N → ∀ y Rold Rnew told tnew : ℝ,\n        y ≤ (cap : ℝ) → 1 < y → y ≤ Rold → y ≤ Rnew →\n        2 ≤ told → 2 ≤ tnew → y ^ told ≤ Rold → y ^ tnew ≤ Rnew →\n        told ^ 13 ≤ Real.log (Nat.ceil Rold : ℝ) →\n        tnew ^ 13 ≤ Real.log (Nat.ceil Rnew : ℝ) →\n        Real.exp 1 ≤ Real.log (Nat.ceil Rold : ℝ) →\n        Real.exp 1 ≤ Real.log (Nat.ceil Rnew : ℝ) →\n        |actualSmallRosserMinusDensity N cap y Rnew - actualSmallRosserMinusDensity N cap y Rold| ≤\n          actualSmallEulerProduct N cap y *\n            (tailEnvelope A B K Rold told + tailEnvelope A B K Rnew tnew) :=",
+      "sha256": "b209161fc86b3f52ac138886c06ecceaf3bb5eb248ad30a3981cc94bb5de50a3",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_actualMinus_signed_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_actualMinus_signed_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ N cap : ℕ, Even N → ∀ y Rold Rnew t : ℝ,\n        y ≤ (cap : ℝ) → 1 < y → y ≤ Rold → y ≤ Rnew → 2 ≤ t → y ^ t ≤ Rold →\n        t ^ 13 ≤ Real.log (Nat.ceil Rold : ℝ) →\n        Real.exp 1 ≤ Real.log (Nat.ceil Rold : ℝ) →\n        actualSmallRosserMinusDensity N cap y Rnew - actualSmallRosserMinusDensity N cap y Rold ≤\n          actualSmallEulerProduct N cap y * tailEnvelope A B K Rold t :=",
+      "sha256": "f0b9fbf9f046d58e116c7c34319f5dd4d0697414293f596792300729c1faeedc",
+      "byte_exact": true
+    },
+    {
+      "name": "history5",
+      "kind": "def",
+      "complete_raw_header": "def history5 (p : Fin 5 → ℕ) : List ℕ :=",
+      "sha256": "fabe6cb317c03c016d2eb6f9fac7339d186afd87688df2cb5a13a2e24ba96ad4",
+      "byte_exact": true
+    },
+    {
+      "name": "history5_prod",
+      "kind": "theorem",
+      "complete_raw_header": "theorem history5_prod (p : Fin 5 → ℕ) : (history5 p).prod = ∏ i, p i :=",
+      "sha256": "82a87c13a6ad56f64ae1ec3c91b1dc01b79592427aedcb9d69ed970179b51bbd",
+      "byte_exact": true
+    },
+    {
+      "name": "history5_head",
+      "kind": "theorem",
+      "complete_raw_header": "theorem history5_head (p : Fin 5 → ℕ) : (history5 p).headD 0 = p 4 :=",
+      "sha256": "1aadd8ce31bbaba6bdb898b92a6908c30ce3e41adfe3f503b6543910e0f03263",
+      "byte_exact": true
+    },
+    {
+      "name": "residualLevel",
+      "kind": "def",
+      "complete_raw_header": "def residualLevel (N : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ) : ℝ :=",
+      "sha256": "80f194cc72a585f5f022a5bf91a139a2519b09a8f786d5de562d2b2634caf214",
+      "byte_exact": true
+    },
+    {
+      "name": "tupleGatedMinus",
+      "kind": "def",
+      "complete_raw_header": "def tupleGatedMinus (N cap : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ) : ℝ :=",
+      "sha256": "c48f30dd79881bba87ae490495f5f788c0ee19add900c616204caff1203f307c",
+      "byte_exact": true
+    },
+    {
+      "name": "tupleGatedMinus_of_gate",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tupleGatedMinus_of_gate (N cap : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ)\n    (hgate : (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda) :\n    tupleGatedMinus N cap lambda p = actualSmallRosserMinusDensity N cap (p 4 : ℝ)\n      (residualLevel N lambda p) :=",
+      "sha256": "d7b928f178317bef9256dd5d2ab9918ffa14645b55ba38ffef117fe7750429d1",
+      "byte_exact": true
+    },
+    {
+      "name": "tuple_gated_sub_cancel",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tuple_gated_sub_cancel (N cap : ℕ) (lambda4 lambda5 : ℝ) (p : Fin 5 → ℕ)\n    (h4 : (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda4)\n    (h5 : (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda5) :\n    tupleGatedMinus N cap lambda5 p - tupleGatedMinus N cap lambda4 p =\n      lowerDeficit N cap (p 4 : ℝ) (residualLevel N lambda4 p) -\n        lowerDeficit N cap (p 4 : ℝ) (residualLevel N lambda5 p) :=",
+      "sha256": "c36383885c3eb1897cff9a3e83d622f1589d0606b35f342fea96ba782869bc8e",
+      "byte_exact": true
+    },
+    {
+      "name": "oldExponent",
+      "kind": "def",
+      "complete_raw_header": "def oldExponent (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (N : ℕ) (p : Fin 5 → ℕ) : ℝ :=",
+      "sha256": "77026f4808ce0da8aea3d87b7c22d308a72a1f10c6939b624d2ecb783893d1ce",
+      "byte_exact": true
+    },
+    {
+      "name": "newExponent",
+      "kind": "def",
+      "complete_raw_header": "def newExponent (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N : ℕ) (p : Fin 5 → ℕ) : ℝ :=",
+      "sha256": "eeb4906d8aeaf266f22c7f40b5fab4e0c44cf386023a550d2c4b62c84143ce90",
+      "byte_exact": true
+    },
+    {
+      "name": "originalDifference",
+      "kind": "def",
+      "complete_raw_header": "def originalDifference (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ) : ℝ :=",
+      "sha256": "44eadba4b55c4f9ede7190c62d9751aef23852242fcd0d593df8ad9f520b6579",
+      "byte_exact": true
+    },
+    {
+      "name": "originalDifference_eq_tuple",
+      "kind": "theorem",
+      "complete_raw_header": "theorem originalDifference_eq_tuple (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ) :\n    originalDifference e chi m omega J4 cap4 J5 cap5 N cap p =\n      tupleGatedMinus N cap (newExponent e chi m omega J4 cap4 J5 cap5 N p) p -\n        tupleGatedMinus N cap (oldExponent e chi m omega J4 cap4 N p) p :=",
+      "sha256": "6fc7e1591ff1597dd9935b352902dfef3f4d605088816e9d6e4d348a85ea60f0",
+      "byte_exact": true
+    },
+    {
+      "name": "residualLevel_ge_cutoff_of_gate",
+      "kind": "theorem",
+      "complete_raw_header": "theorem residualLevel_ge_cutoff_of_gate (N : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ)\n    (hpos : ∀ i, 0 < p i) (hy : 1 < (p 4 : ℝ))\n    (hgate : (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda) :\n    (p 4 : ℝ) ≤ residualLevel N lambda p :=",
+      "sha256": "bb6f64feae133fa8885ed05e17c58f765d26b5e3575e0ebe6bb5e99d3aab8e40",
+      "byte_exact": true
+    },
+    {
+      "name": "original_small_last_gates_and_cancel",
+      "kind": "theorem",
+      "complete_raw_header": "theorem original_small_last_gates_and_cancel\n    (e : ℚ) (chi : ℝ) (m n : ℕ) (omega : ℝ) (homega : 0 < omega)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N cap : ℕ) (hN : 1 < N) (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (p : Fin 5 → ℕ) (j3 : HistoricalThirdCoarse.Cell m)\n    (hj3 : j3 ∈ HistoricalThirdCoarse.cells (e : ℝ) chi m)\n    (j4 : Fin 4 → Fin (n + 1))\n    (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m j3 2)\n    (ht : actualPrimeTupleLog N (HistoricalThirdCoarse.P1OriginalSmallCoordinate.prefix4 p) ∈\n      HistoricalThirdCoarse.P1OriginalFourth.jointCell m n j3 j4)\n    (hp : p ∈ firstExitFrontierTuples 4 (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ))))\n    (a : ℝ) (ha : 0 < a) (haomega : a ≤ omega / 3)\n    (hsmall : actualPrimeTupleLog N p 4 ≤ a)\n    (h34 : HistoricalThirdCoarse.levelExponent (e : ℝ) (HistoricalThirdCoarse.box m j3) ≤\n      oldExponent e chi m omega J4 cap4 N p)\n    (h45 : oldExponent e chi m omega J4 cap4 N p ≤ newExponent e chi m omega J4 cap4 J5 cap5 N p) :\n    (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ oldExponent e chi m omega J4 cap4 N p ∧\n      (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ newExponent e chi m omega J4 cap4 J5 cap5 N p ∧\n      originalDifference e chi m omega J4 cap4 J5 cap5 N cap p =\n        lowerDeficit N cap (p 4 : ℝ) (residualLevel N (oldExponent e chi m omega J4 cap4 N p) p) -\n          lowerDeficit N cap (p 4 : ℝ)\n            (residualLevel N (newExponent e chi m omega J4 cap4 J5 cap5 N p) p) :=",
+      "sha256": "cbf0aa55a5fefdaea55abf8682540c9257f383f06b4bf4e67a23d3f25aeb9bdb",
+      "byte_exact": true
+    },
+    {
+      "name": "sourceBudget",
+      "kind": "def",
+      "complete_raw_header": "def sourceBudget (y R t : ℝ) : Prop :=",
+      "sha256": "a825fc34418ace1d8e8b6ffeecddf3e23cd18638ae1d00c5c0ccb445d51f7dce",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_tuple_gated_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_tuple_gated_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ N cap : ℕ, Even N → ∀ lambda4 lambda5 : ℝ, ∀ p : Fin 5 → ℕ,\n        (∀ i, 0 < p i) → 1 < (p 4 : ℝ) → (p 4 : ℝ) ≤ (cap : ℝ) →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda4 →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ lambda5 →\n        ∀ told tnew : ℝ,\n          sourceBudget (p 4 : ℝ) (residualLevel N lambda4 p) told →\n          sourceBudget (p 4 : ℝ) (residualLevel N lambda5 p) tnew →\n          |tupleGatedMinus N cap lambda5 p - tupleGatedMinus N cap lambda4 p| ≤\n            actualSmallEulerProduct N cap (p 4 : ℝ) *\n              (tailEnvelope A B K (residualLevel N lambda4 p) told +\n                tailEnvelope A B K (residualLevel N lambda5 p) tnew) :=",
+      "sha256": "c5321ceb8ffed2f1a3e569a91e6031b56053ae63414fa061e5a1d4fd88bc5494",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_originalDifference_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_originalDifference_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n        (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n        (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n        (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n        (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n        (N cap : ℕ) (p : Fin 5 → ℕ),\n        Even N → (∀ i, 0 < p i) → 1 < (p 4 : ℝ) → (p 4 : ℝ) ≤ (cap : ℝ) →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ oldExponent e chi m omega J4 cap4 N p →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ newExponent e chi m omega J4 cap4 J5 cap5 N p →\n        ∀ told tnew : ℝ,\n          sourceBudget (p 4 : ℝ) (residualLevel N (oldExponent e chi m omega J4 cap4 N p) p) told →\n          sourceBudget (p 4 : ℝ)\n            (residualLevel N (newExponent e chi m omega J4 cap4 J5 cap5 N p) p) tnew →\n          |originalDifference e chi m omega J4 cap4 J5 cap5 N cap p| ≤\n            actualSmallEulerProduct N cap (p 4 : ℝ) *\n              (tailEnvelope A B K (residualLevel N (oldExponent e chi m omega J4 cap4 N p) p) told +\n                tailEnvelope A B K\n                  (residualLevel N (newExponent e chi m omega J4 cap4 J5 cap5 N p) p) tnew) :=",
+      "sha256": "59a464f1b98a58a12ee91c8341044fdca9d8bd8ddf5ed2466694c85c768026bf",
+      "byte_exact": true
+    },
+    {
+      "name": "exists_originalDifference_signed_exp_bound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem exists_originalDifference_signed_exp_bound :\n    ∃ A B K : ℝ, 0 < A ∧ 0 < B ∧ 2 ≤ K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n        (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n        (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n        (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n        (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n        (N cap : ℕ) (p : Fin 5 → ℕ),\n        Even N → (∀ i, 0 < p i) → 1 < (p 4 : ℝ) → (p 4 : ℝ) ≤ (cap : ℝ) →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ oldExponent e chi m omega J4 cap4 N p →\n        (∏ i, p i : ℕ) * (p 4 : ℝ) ^ 2 < (N : ℝ) ^ newExponent e chi m omega J4 cap4 J5 cap5 N p →\n        ∀ t : ℝ,\n          sourceBudget (p 4 : ℝ) (residualLevel N (oldExponent e chi m omega J4 cap4 N p) p) t →\n          originalDifference e chi m omega J4 cap4 J5 cap5 N cap p ≤\n            actualSmallEulerProduct N cap (p 4 : ℝ) *\n              tailEnvelope A B K (residualLevel N (oldExponent e chi m omega J4 cap4 N p) p) t :=",
+      "sha256": "729588bfc66bfbe8a8705aac84b78faddbfc36e3b3ee57c478ad2752e76ad7f5",
+      "byte_exact": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "lowerDeficit",
+      "complete_raw_region": "def lowerDeficit (N cap : ℕ) (y R : ℝ) : ℝ :=\n  actualSmallEulerProduct N cap y - actualSmallRosserMinusDensity N cap y R\n\n/-- The same cutoff is essential for exact baseline cancellation. -/\n",
+      "sha256": "c6f4618238fd6b98d970c631698a1013e9af27722c24c24d8e2dc7a21f36e5c1",
+      "byte_exact": true
+    },
+    {
+      "name": "tailEnvelope",
+      "complete_raw_region": "def tailEnvelope (A B K R t : ℝ) : ℝ :=\n  A * Real.exp (-t) + B * Real.exp (Real.sqrt K) * Real.exp (-t) *\n    (Real.log (Nat.ceil R : ℝ)) ^ (-(1 / 3 : ℝ))\n\n/-- Genuine all-target, all-cutoff lower deficit bound, reusing the upper\ntask's pinned actual-T supplier. No analytic supplier is assumed by the caller. -/\n",
+      "sha256": "24ea84830009135f646773299ef5319a02c85802150151f681deb69c8bdb18a2",
+      "byte_exact": true
+    },
+    {
+      "name": "history5",
+      "complete_raw_region": "def history5 (p : Fin 5 → ℕ) : List ℕ := (List.ofFn p).reverse\n\n",
+      "sha256": "f124442e1040afeaae986fd5756516d9c0051a97f3e54914fbb74733d10ce81b",
+      "byte_exact": true
+    },
+    {
+      "name": "residualLevel",
+      "complete_raw_region": "def residualLevel (N : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ) : ℝ :=\n  (N : ℝ) ^ lambda / (∏ i, p i : ℕ)\n\n",
+      "sha256": "6a12ba99f6034beabcbff52d3868d0a71af06904976814e02d54dad2232022fb",
+      "byte_exact": true
+    },
+    {
+      "name": "tupleGatedMinus",
+      "complete_raw_region": "def tupleGatedMinus (N cap : ℕ) (lambda : ℝ) (p : Fin 5 → ℕ) : ℝ :=\n  actualOwnCubeGatedMinusDensity N cap (fun _ => (N : ℝ) ^ lambda) (history5 p)\n\n",
+      "sha256": "92b8cc8a9a18fa2e9478a7b389b6651ba81c0df69f008ce645767fdad19f7394",
+      "byte_exact": true
+    },
+    {
+      "name": "oldExponent",
+      "complete_raw_region": "def oldExponent (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (N : ℕ) (p : Fin 5 → ℕ) : ℝ :=\n  (P1OriginalCoarseContinuation.effectiveExponent4Q e chi m omega J4 cap4 (N : ℝ)\n    (rosserAncestor 4 (history5 p)) : ℝ)\n\n",
+      "sha256": "3a93dfc157b8dbf046a32ca55b1a4e0e4e11bbbf9246aef67a7b53de084267a4",
+      "byte_exact": true
+    },
+    {
+      "name": "newExponent",
+      "complete_raw_region": "def newExponent (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N : ℕ) (p : Fin 5 → ℕ) : ℝ :=\n  P1OriginalCoarseFifthContinuation.effectiveExponent5 e chi m omega J4 cap4 J5 cap5\n    (N : ℝ) (history5 p)\n\n/-- Literal new5-minus-old4 actual gated lower residual, at exactly p5. -/\n",
+      "sha256": "457399a21dc3703a01fc18bb1994cc9f9778e40cfe59f75d332babc892fbf976",
+      "byte_exact": true
+    },
+    {
+      "name": "originalDifference",
+      "complete_raw_region": "def originalDifference (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseFifthContinuation.Label4 m))\n    (cap4 : P1OriginalCoarseFifthContinuation.Label4 m → ℚ)\n    (J5 : Finset (P1OriginalCoarseFifthContinuation.Label5 m))\n    (cap5 : P1OriginalCoarseFifthContinuation.Label5 m → ℚ)\n    (N cap : ℕ) (p : Fin 5 → ℕ) : ℝ :=\n  actualOwnCubeGatedMinusDensity N cap\n      (P1OriginalCoarseFifthContinuation.level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) (history5 p) -\n    actualOwnCubeGatedMinusDensity N cap\n      (fun pre => P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ)\n        (rosserAncestor 4 pre)) (history5 p)\n\n",
+      "sha256": "4c51b06ba09bf16942f8a0297941b2a97085192cd2725fc0f695182c8f745d94",
+      "byte_exact": true
+    },
+    {
+      "name": "sourceBudget",
+      "complete_raw_region": "def sourceBudget (y R t : ℝ) : Prop :=\n  2 ≤ t ∧ y ^ t ≤ R ∧ t ^ 13 ≤ Real.log (Nat.ceil R : ℝ) ∧\n    Real.exp 1 ≤ Real.log (Nat.ceil R : ℝ)\n\n/-- The closed actual arithmetic tail kernel after the two gates have opened.\nConstants are chosen before all targets, primes, levels and moving budgets. -/\n",
+      "sha256": "e8ee81b31a019634f959d09b0513d402e262314689f37e2bd2da736558f0792c",
+      "byte_exact": true
+    }
+  ],
+  "changed_proofs": [
+    {
+      "name": "history5_prod",
+      "before_body": " by\n  simp [history5, List.prod_ofFn]\n\n",
+      "after_body": " by\n  simp only [history5, List.prod_reverse, List.prod_ofFn]\n\n",
+      "before_sha256": "ea8fea363566d0f2ae9da26f510c9cd7c1650a2592b1079a0ab67b432498e9cd",
+      "after_sha256": "e7ae51d127b3d03dfc00eed2fc8f497cf1776c8b4280bf2bd2477e8bf39b0950"
+    }
+  ],
+  "all_other_raw_bytes_exact": true,
+  "header_definition_import_option_data_hypothesis_or_numeric_changes": false,
+  "new_declarations": 0,
+  "exceptions": []
+}

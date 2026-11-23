@@ -1,0 +1,150 @@
+{
+  "module": "ImbalancedChen.P1OriginalVariableFourthDescendantLevel",
+  "headers": [
+    {
+      "name": "fourthDescendantLevel",
+      "kind": "def",
+      "complete_raw_header": "def fourthDescendantLevel {ι : Type*} (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (rows : Finset ι) (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (pre : List ℕ) : ℝ :=",
+      "sha256": "07b090c1d9a0f24a6970c3e1d04305268de1fb030f2d1ed96b76458353793942",
+      "byte_identical": true
+    },
+    {
+      "name": "fourth_ancestor_exponent_order",
+      "kind": "theorem",
+      "complete_raw_header": "theorem fourth_ancestor_exponent_order {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega N : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (pre : List ℕ)\n    (_hlen : 4 ≤ pre.length) :\n    seedExponent e chi m omega N pre ≤\n      exponent4 e chi m omega N rows eligible profile (rosserAncestor 4 pre) :=",
+      "sha256": "d7e0c0d17cc7eb39fa567398ef29855fda44661968b4bf6d541ff583e2173eee",
+      "byte_identical": true
+    },
+    {
+      "name": "frozenThird_le_frozenFourth",
+      "kind": "theorem",
+      "complete_raw_header": "theorem frozenThird_le_frozenFourth {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega N : ℝ) (hN : 1 ≤ N) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (pre : List ℕ)\n    (_hlen : 4 ≤ pre.length) :\n    frozenLevel e chi m omega N pre ≤\n      frozenLevel4 e chi m omega N rows eligible profile pre :=",
+      "sha256": "f0e50f7040cfcb967d175e4279e93002e25cf0bc1d3d718e44840ea4da84aebb",
+      "byte_identical": true
+    },
+    {
+      "name": "policy4_eq_original_fifth_spelling",
+      "kind": "theorem",
+      "complete_raw_header": "theorem policy4_eq_original_fifth_spelling {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega N : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) :\n    policy4 e chi m omega N rows eligible profile =\n      P1OriginalHistoricalRetainedModulusLevel.originalFifthPolicy e chi m omega N\n        (fun pre => level4 e chi m omega N rows eligible profile (rosserAncestor 4 pre)) :=",
+      "sha256": "a28467aa1dfacb0cc0e51c712653d84633d08d51cef21c0f66e92f4fddb5f1a2",
+      "byte_identical": true
+    },
+    {
+      "name": "frontier_four_eq_original_third",
+      "kind": "theorem",
+      "complete_raw_header": "theorem frontier_four_eq_original_third {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega N : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (weight : ℕ → ℝ)\n    (pre carrier : List ℕ) (positive : Bool) (mass : ℝ) :\n    firstExitDepthFrontier 4 (policy4 e chi m omega N rows eligible profile)\n        weight pre positive mass carrier =\n      firstExitDepthFrontier 4 (HistoricalThirdCoarse.policy e chi m omega N)\n        weight pre positive mass carrier :=",
+      "sha256": "47c5a1d321becde93faa0996c9eb42c838be4213b177b84e6edbdab80441c4d1",
+      "byte_identical": true
+    },
+    {
+      "name": "fourthDescendantLevel_eq_original_spelling",
+      "kind": "theorem",
+      "complete_raw_header": "theorem fourthDescendantLevel_eq_original_spelling {ι : Type*}\n    (e chi : ℝ) (m : ℕ) (omega N : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (pre : List ℕ) :\n    fourthDescendantLevel e chi m omega N rows eligible profile pre =\n      P1OriginalHistoricalRetainedModulusLevel.currentLevel e chi m omega N\n        (fun q => level4 e chi m omega N rows eligible profile (rosserAncestor 4 q)) pre :=",
+      "sha256": "1e6860b8c5f1ed353e4329b5d020d00775a12eecc7db76236a8d2874841e6b2a",
+      "byte_identical": true
+    },
+    {
+      "name": "retained_leaf_valid",
+      "kind": "theorem",
+      "complete_raw_header": "theorem retained_leaf_valid {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega : ℝ) (N cap : ℕ) (w z : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves\n      (policy4 e chi m omega (N : ℝ) rows eligible profile)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    ordinaryRosserPrefixAdmissible false\n      (fourthDescendantLevel e chi m omega (N : ℝ) rows eligible profile leaf.selected)\n      leaf.selected :=",
+      "sha256": "06c8b978035aaaa486f0606d3cc56aceecb97e7c48f407515c6e27133ec0a3b3",
+      "byte_identical": true
+    },
+    {
+      "name": "retained_leaf_modulus_lt_current",
+      "kind": "theorem",
+      "complete_raw_header": "theorem retained_leaf_modulus_lt_current {ι : Type*} (e chi : ℝ) (m : ℕ)\n    (omega : ℝ) (N cap : ℕ) (w z : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves\n      (policy4 e chi m omega (N : ℝ) rows eligible profile)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    (leaf.selected.prod : ℝ) <\n      fourthDescendantLevel e chi m omega (N : ℝ) rows eligible profile leaf.selected :=",
+      "sha256": "0b4c6d46b2290625143705526165437d846b916aadcc5a078e74d7efd3a75e6f",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_exponent4_le_initial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_exponent4_le_initial (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega N : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (pre : List ℕ) :\n    exponent4 e chi m omega N rows (producerEligible licensed)\n      (fun r => r.bufferedCandidate e) pre ≤ initial e :=",
+      "sha256": "812d5a7252462e153cf797d59bda0e6248da2ec80d519e73de069e2f07e5799a",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_frozenLevel4_le_initial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_frozenLevel4_le_initial (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega N : ℝ) (hN : 1 ≤ N)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (pre : List ℕ) :\n    producerFrozenLevel4 e chi m omega N rows licensed pre ≤ N ^ initial e :=",
+      "sha256": "a5f098d169409d06534585ce98966eb70870e4fa2928e3f67a405c4dd8cba2f4",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_descendantLevel_le_initial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_descendantLevel_le_initial (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega N : ℝ) (hN : 1 ≤ N)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (pre : List ℕ) :\n    fourthDescendantLevel e chi m omega N rows (producerEligible licensed)\n      (fun r => r.bufferedCandidate e) pre ≤ N ^ initial e :=",
+      "sha256": "26b98d5100c88de587710b4fe012f5c421a38b0464663a2d06ddc59c5bf6c4b1",
+      "byte_identical": true
+    },
+    {
+      "name": "producerRoughModuli",
+      "kind": "def",
+      "complete_raw_header": "def producerRoughModuli (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (w z : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) : Finset ℕ :=",
+      "sha256": "221c65132e6d4d0ce20bd02a0bfb1bcc8c1dd7dc7e2ed8aea820d4264df733aa",
+      "byte_identical": true
+    },
+    {
+      "name": "producerRoughCoefficient",
+      "kind": "def",
+      "complete_raw_header": "def producerRoughCoefficient (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (w z : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (d : ℕ) : ℝ :=",
+      "sha256": "f804b6150a176faad566667fc0ca287e3bb4c0540410b71da7247ea5381db7e5",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_roughModulus_lt_initial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_roughModulus_lt_initial (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (d : ℕ) (hd : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed) :\n    (d : ℝ) < (N : ℝ) ^ initial e :=",
+      "sha256": "39643630c5f32bae2f7d8014c02eee1527e535dd3e7670303da4cda63e79a846",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_roughModulus_lt_theta",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_roughModulus_lt_theta (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (d : ℕ) (hd : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed) :\n    (d : ℝ) < (N : ℝ) ^ extendedDistributionCap :=",
+      "sha256": "869cb610e32d3b4b6e49357bd3ca620c14862d9158f271b4a3aa1e51d03c725a",
+      "byte_identical": true
+    },
+    {
+      "name": "producer_nonzeroCoefficient_modulus_lt_theta",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producer_nonzeroCoefficient_modulus_lt_theta (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (d : ℕ)\n    (hd : producerRoughCoefficient e chi m omega N cap w z rows licensed d ≠ 0) :\n    (d : ℝ) < (N : ℝ) ^ extendedDistributionCap :=",
+      "sha256": "fe844be197ddbd400e6036504c763c841c515ae706fa305034cf9a5e0c4b5df4",
+      "byte_identical": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "fourthDescendantLevel",
+      "complete_raw_region": "def fourthDescendantLevel {ι : Type*} (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (rows : Finset ι) (eligible : ι → (Fin 4 → ℝ) → Prop)\n    (profile : ι → (Fin 4 → ℝ) → ℝ) (pre : List ℕ) : ℝ :=\n  if pre.length ≤ 4 then frozenLevel e chi m omega N pre\n  else frozenLevel4 e chi m omega N rows eligible profile pre\n\n/-- The old Q3 exponent is the exact seed of the fourth ancestor's max. -/\n",
+      "sha256": "392f03dba5e2d14e7e9d94432c028c658e914b9988cc1a35ae4b38f3b6d2a3b8",
+      "byte_identical": true
+    },
+    {
+      "name": "producerRoughModuli",
+      "complete_raw_region": "def producerRoughModuli (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (w z : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) : Finset ℕ :=\n  firstExitRetainedModuli\n    (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n    (roughPrimeUniverse N cap w z)\n\n",
+      "sha256": "afc459aea7e3dd59cc1d8fe7a41427bfcb89a21f722ed0ef6a03e1188c033ded",
+      "byte_identical": true
+    },
+    {
+      "name": "producerRoughCoefficient",
+      "complete_raw_region": "def producerRoughCoefficient (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (w z : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (d : ℕ) : ℝ :=\n  (firstExitRetainedCoefficient\n    (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n    (roughPrimeUniverse N cap w z) d : ℝ)\n\n/-- A strict rough modulus bound for the exact variable-fourth policy;\nthe right side is the original Theta level, without a target-density premise. -/\n",
+      "sha256": "8319d52ae46d63f16df54f95be396f688edbf643a9bea34d31d4970d9b459d38",
+      "byte_identical": true
+    }
+  ],
+  "changed_proofs": [
+    {
+      "name": "producer_nonzeroCoefficient_modulus_lt_theta",
+      "before_body": " by\n  have hmem : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed := by\n    by_contra hnot\n    apply hd\n    simp [producerRoughCoefficient, firstExitRetainedCoefficient,\n      producerRoughModuli, hnot]\n  exact producer_roughModulus_lt_theta e chi he m omega N cap w z rows licensed\n    heupper hN d hmem\n\nend ProducerRows\n\nend P1OriginalVariableFourthDescendantLevel\nend\nend ImbalancedChen\n",
+      "after_body": " by\n  have hmem : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed := by\n    by_contra hnot\n    apply hd\n    change d ∉ firstExitRetainedModuli\n      (producerPolicy4 e chi m omega (N : ℝ) rows licensed) (roughPrimeUniverse N cap w z) at hnot\n    change ((if d ∈ firstExitRetainedModuli\n      (producerPolicy4 e chi m omega (N : ℝ) rows licensed) (roughPrimeUniverse N cap w z)\n        then ArithmeticFunction.moebius d else 0 : ℤ) : ℝ) = 0\n    rw [if_neg hnot]\n    norm_num\n  exact producer_roughModulus_lt_theta e chi he m omega N cap w z rows licensed\n    heupper hN d hmem\n\nend ProducerRows\n\nend P1OriginalVariableFourthDescendantLevel\nend\nend ImbalancedChen\n",
+      "before_sha256": "edddbb5c374dd48681496c05063b548c10d2be0a575202c24834041604d53b28",
+      "after_sha256": "a4e33b2676600686b3c3f38dfd44e9fafe585e9784b72cb2d1958a629e1a4e9c"
+    }
+  ],
+  "all_bytes_outside_one_last_proof_identical": true,
+  "all_imports_options_comments_hypotheses_quantifiers_constants_data_and_EOL_unchanged": true,
+  "new_declarations": 0,
+  "header_or_definition_exceptions": []
+}

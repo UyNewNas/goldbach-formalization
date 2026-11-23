@@ -1,0 +1,98 @@
+--- frozen60ae
++++ lossless-candidate
+@@ -3,6 +3,7 @@
+ import hashlib
+ import json
+ import shutil
++import restore_lossless_evidence as lossless
+ import sys
+ from pathlib import Path
+ 
+@@ -178,8 +179,41 @@
+             if path.stat().st_size != record['bytes'] or sha(path) != record['sha256']:
+                 files[index], exception = _late_finalizer_record(source, manifest, review, record)
+                 continue
+-        _relative_record(source, record)
++        if lossless.is_large_evidence(record):
++            lossless.validate_raw(source, record)
++        else:
++            _relative_record(source, record)
+     return files, exception
++
++
++LOSSLESS_HELPER_BYTES = 12953
++LOSSLESS_HELPER_SHA256 = '37a595c62167d5773b370490b824d50989f25166842f5d4d0bf7ec3137af5f15'
++
++
++def preflight_publication_carriers(source, destination, files):
++    large = [record for record in files if lossless.is_large_evidence(record)]
++    if not large:
++        return
++    _require(lossless.digest_file(Path(lossless.__file__))
++             == (LOSSLESS_HELPER_BYTES, LOSSLESS_HELPER_SHA256),
++             'Lossless helper differs from the independently reviewed bytes')
++    raw_paths = {record['path'] for record in files}
++    reserved = {'LOSSLESS_ARTIFACTS.json', 'restore_lossless_evidence.py'}
++    reserved.update(record['path'] + '.gz' for record in large)
++    _require(not raw_paths.intersection(reserved), 'Carrier/metadata collides with an original raw record')
++    for record in large:
++        lossless.preflight_destination(destination, record)
++
++
++def copy_publication_artifact(source, destination, record):
++    if lossless.is_large_evidence(record):
++        return lossless.create_carrier(source, destination, record)
++    out = destination / record['path']
++    out.parent.mkdir(parents=True, exist_ok=True)
++    if not out.exists():
++        shutil.copyfile(source / record['path'], out)
++    assert sha(out) == record['sha256']
++    return {'raw': dict(record), 'repository': dict(record)}
+ 
+ 
+ def main(argv=None):
+@@ -318,13 +352,16 @@
+             for item in additions:
+                 if item['path'] not in {f['path'] for f in files}:
+                     files.append(item)
++        preflight_publication_carriers(source, destination, files)
+         for f in files:
+             rel = Path(f['path'])
+             assert not rel.is_absolute() and '..' not in rel.parts
+             path = source / rel
+             assert path.stat().st_size == f['bytes'] and sha(path) == f['sha256'], path
+             out = destination / rel
+-            if out.exists():
++            if lossless.is_large_evidence(f):
++                lossless.preflight_destination(destination, f)
++            elif out.exists():
+                 assert sha(out) == f['sha256'], out
+         for module, info in selection.items():
+             assert module not in existing, module
+@@ -370,12 +407,12 @@
+                 entry['validation'] = 'normal_lake_named_module_kernel_all_environment_owned_types_axioms_including_private_generated_passed'
+             overrides['source_overrides'].append(entry)
+             existing.add(module)
+-        for f in files:
+-            out = destination / f['path']
+-            out.parent.mkdir(parents=True, exist_ok=True)
+-            if not out.exists():
+-                shutil.copyfile(source / f['path'], out)
+-            assert sha(out) == f['sha256']
++        artifacts = [copy_publication_artifact(source, destination, f) for f in files]
++        carriers = [row for row in artifacts if 'carrier' in row]
++        small_files = [row['repository'] for row in artifacts if 'repository' in row]
++        lossless_integrity = (lossless.finish_publication(destination, carriers,
++                              sha(source / 'PUBLICATION_FILES.json'), small_files)
++                              if carriers else {})
+         write(destination / 'PUBLICATION_INTEGRITY.json', {
+             'schema': 'member_verified_batch_publication_integrity_v1',
+             'result': ('PASS_SOURCE_OUTPUT_AND_REVIEW_WITH_BOUND_LATE_FINALIZER_STDOUT'
+@@ -392,6 +429,7 @@
+             'main_absent_sources_remain_explicit_postimages': True,
+             'raw_evidence_bytes_preserved': True, 'successful_Lean_checks_repeated': False,
+             'board_node_mapping_verified': False,
++            **lossless_integrity,
+         })
+         staging_paths.append(str(destination.relative_to(repo)))
+         published.append({'key': key, 'files': len(files), 'modules': len(selection), 'public_exports': sum(counts.values())})

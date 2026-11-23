@@ -1,0 +1,152 @@
+{
+  "schema": "independent_remaining_private_fin_normalization_review_v1",
+  "reviewer": "/root/omega_review",
+  "candidate_author": "/root/blue_inventory",
+  "reviewer_is_candidate_author": false,
+  "reviewed_utc": "2026-11-23T21:39:35.301791+00:00",
+  "status": "NO_FINDINGS_PRIVATE_FIN_NORMALIZATION_STATIC_ONLY_UNCOMPILED",
+  "findings": [],
+  "module": "ImbalancedChen.P4AOriginalRemainingEighthSources",
+  "baseline": {
+    "path": "baseline-bcc.lean",
+    "bytes": 43839,
+    "sha256": "bcc58d5ded7bd80dd91b6f52cbd40324256db913ff492c3453feb19424d070a1"
+  },
+  "candidate": {
+    "path": "candidate.lean",
+    "bytes": 43994,
+    "sha256": "5b0286530a147e6426338c5860498ee09b063fc5071d00a30d0b803c8ef28f95"
+  },
+  "original_files_manifest": {
+    "path": "FILES_MANIFEST.json",
+    "bytes": 1192,
+    "sha256": "a8674553c81d2cff5563811718c82f6ed1c7b03fc35be78e4f0fae7dd7557b22"
+  },
+  "original_manifest_8_payloads_current_bytes_and_digests_exact": true,
+  "source_selection": {
+    "path": "SOURCE_SELECTION.json",
+    "bytes": 7181,
+    "sha256": "e5bda610515f9d8cee47dee5d253572c43631614629ec814dbee03530119b90d"
+  },
+  "changed_proof_regions": {
+    "path": "CHANGED_PROOF_REGIONS.json",
+    "bytes": 3188,
+    "sha256": "c89fb4f9e7d8ba9d8b52d956926b996e0d13059aea8b5703f97f2ccdd16ce483"
+  },
+  "patch": {
+    "path": "candidate.patch",
+    "bytes": 1854,
+    "sha256": "38c40fded9db52b56ac7ab3fbc7b4943b43853e1ebaf3642620de3108ca8ff8d"
+  },
+  "reviewed_three_private_proofs": [
+    {
+      "name": "rem_eval_comparison",
+      "complete_unchanged_header": "private theorem rem_eval_comparison (c : Cell) (t : Point) :\n    evaluate (remComparisonExpr c) t = comparison c t :=",
+      "before_body_sha256": "04468c100ba73f7369a2836ed73fc64df1428395016e32a57515c5176dc8dcb2",
+      "after_body_sha256": "b44c30f322d07993a4994e2d976856d37789cd2c5266b31497e2d3fd61a5f8bd",
+      "complete_header_and_exact_body_uniquely_bound_in_both_sources": true
+    },
+    {
+      "name": "rem_eval_minorant",
+      "complete_unchanged_header": "private theorem rem_eval_minorant (c : Cell) (t : Point) :\n    evaluate (remMinorantExpr c) t = minorant c t :=",
+      "before_body_sha256": "566550371ba960c05e3cbcd935ce53a7e213700f4d54f07e8a3f604a63adc0da",
+      "after_body_sha256": "29d41b02ba5761a4f331df56efa1c47c6565cd63551156f361865bf8d8604fd6",
+      "complete_header_and_exact_body_uniquely_bound_in_both_sources": true
+    },
+    {
+      "name": "rem_eval_common",
+      "complete_unchanged_header": "private theorem rem_eval_common (c : Cell) (k : Fin 35) (t : Point) :\n    evaluate (remCommonExpr c k) t = commonSlack c t k :=",
+      "before_body_sha256": "7edd148c968f8db0afe928dc50fc94579fc3c95240784d1b76224478e153fd1b",
+      "after_body_sha256": "f95a082153aa850161ab10330095aebe102817929ca4b1f1f865ec4d126827f0",
+      "complete_header_and_exact_body_uniquely_bound_in_both_sources": true
+    }
+  ],
+  "prior_independent_model_and_interface_semantics": {
+    "path": "/workspace/p1-complete-proof/static-remaining-eighth-affine-reuse/actual-api-repair-v3/PRIVATE_API_SEMANTIC_REVIEW.json",
+    "bytes": 22421,
+    "sha256": "26e976c4aaa21f0c13402377485a2e288aac8356897719fc8cfecff69fe42d4d",
+    "reviewer": "/root/member_current_repairs",
+    "candidate_sha256_exactly_this_baseline": true,
+    "reuse_scope": "Reuse the independent bcc semantic/model/interface review; no new 13-model, 14-certificate or full-module semantic review is asserted here."
+  },
+  "actual_failed_baseline": {
+    "command": {
+      "path": "ACTUAL_BCC_NORMAL_COMMAND.json",
+      "bytes": 658,
+      "sha256": "6b01b8553f1ffc9e01fd0759413c92e960e0dd05e3877fa53173898f18f402ce"
+    },
+    "raw_log": {
+      "path": "ACTUAL_BCC_NORMAL_FAILURE.log",
+      "bytes": 296001,
+      "sha256": "5a44bb5a1c8dbc7e46c8fa488f7a04caa4294590999c2b2418040983878c63a6"
+    },
+    "exit_code": 1,
+    "elapsed_seconds": 399.41524959600065,
+    "diagnostic_instances": 37,
+    "diagnostic_counts_by_original_source_line": {
+      "256": 5,
+      "263": 4,
+      "367": 28
+    },
+    "all_37_diagnostic_messages": "ring failed, ring expressions not equal",
+    "interpretation": "Three private declarations with 37 instantiated residual goals. Natural exit1 with explicit arithmetic/projection residuals, not a memory-limit result."
+  },
+  "private_proof_reasoning": {
+    "comparison": "The five residuals contain fixed mask bit tests (e.g. mask 9 at coordinate 1) still expressed through Fin values. Removing only restores the normal norm_num simp set; explicit pinned Fin value/modulo lemmas normalize these closed tests. The finite Cell case split, arbitrary Point t, and original rfl/ring1! fallback are preserved.",
+    "minorant": "The four residuals similarly retain a closed-false mask 6 test at coordinate 0. The identical Fin normalization changes only proof reduction; it supplies no geometric premise and changes neither branch conditions nor minorant definition.",
+    "common": "The 28 residuals retain the literal 35-entry vector applied at a concrete Fin constructor. Matrix.cons_val_zero' and cons_val_succ' are actual projection equalities for the proof-carrying constructor, with original bound proofs. fin_cases enumerates only k:Fin35; c and all real coordinates of t remain free. Existing semantic evaluation bridges and rfl/ring1! then prove the unchanged pointwise equality.",
+    "logical_boundary": "No hypothesis, Source/row licence, sampled Real point, desired target gain, model value, certificate or public conclusion is introduced by these three proof-body edits. Broader default simp may affect elaboration cost/success; no such success or resource benefit is claimed statically."
+  },
+  "pinned_API_sources": [
+    {
+      "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Fin/Lemmas.lean",
+      "bytes": 49063,
+      "sha256": "4b77e061431db2682c388e5df160c1f280c36f09f6c7b51b6a73d88457e98e51",
+      "read_actual_pinned_signatures": [
+        "Fin.val_zero",
+        "Fin.val_succ",
+        "Fin.val_mk"
+      ]
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/Basic.lean",
+      "bytes": 19097,
+      "sha256": "8e0eaf32283e9bf44c09b0a3d20a2a0944901c880b9977bf88233c17aca0f462",
+      "read_actual_pinned_signatures": [
+        "Fin.coe_ofNat_eq_mod"
+      ]
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/VecNotation.lean",
+      "bytes": 17629,
+      "sha256": "17b85a7ee9c4478995b91d56eda4115ac0b399ea676e1d29ba50485803d4b34e",
+      "read_actual_pinned_signatures": [
+        "Matrix.cons_val_zero'",
+        "Matrix.cons_val_succ'"
+      ]
+    }
+  ],
+  "same_shape_existing_H3_proof_pattern": {
+    "path": "/workspace/p1-complete-proof/static-h3-affine-reuse/v3-actual-fin-reduction/candidate.lean",
+    "bytes": 32709,
+    "sha256": "05d2ab9aa8ecac638c2e912aef3b666e8ed05535cb759ea945e782e76c9ab263",
+    "scope": "Read only the same Fin-value and Matrix projection rule pattern. H3 acceptance/resource results are not inherited or asserted."
+  },
+  "root_separate_scope_not_repeated": {
+    "whole_three_body_reverse_reconstruction_and_all_other_source_bytes": "Parent root performs the whole-source inverse reconstruction and original 42 headers/25 definitions/options scope check.",
+    "unchanged_models_certificates_record": {
+      "path": "UNCHANGED_MODELS_CERTIFICATES.json",
+      "bytes": 4023,
+      "sha256": "8c1524da1c5194a851216fff2a02655207d42b51fa7d542888f3a0d1646c1157"
+    },
+    "no_duplicate_13_models_14_certificates_or_full_module_review": true
+  },
+  "execution_limits": {
+    "Lean_Lake_kernel_type_axiom_stock_runs": 0,
+    "live_source_cache_runtime_or_queue_mutations": 0,
+    "source_compilation_pass_claimed": false,
+    "candidate_uncompiled": true,
+    "next_step": "Sole owner may run actual normal validation under the existing unmodified guard and limits; this static gate is not a normal/kernel/audit acceptance."
+  },
+  "old_source_manifest_receipts_and_logs_unchanged": true
+}

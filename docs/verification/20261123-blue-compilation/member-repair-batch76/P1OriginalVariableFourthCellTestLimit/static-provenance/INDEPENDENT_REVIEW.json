@@ -1,0 +1,271 @@
+{
+  "schema": "variable_fourth_cell_test_limit_nonauthor_static_review_v1",
+  "reviewer": "/root/blue_inventory",
+  "candidate_author": "/root/member_current_repairs",
+  "reviewed_utc": "2026-11-23T22:07:19.317572+00:00",
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_REQUIRES_OWNER_VALIDATION",
+  "findings": [],
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/baseline.lean",
+    "bytes": 11925,
+    "sha256": "15c70f8f72c7277c7aecba132e502cccc4e12e34aede120a1ce28cd8aab82565"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/candidate.lean",
+    "bytes": 12046,
+    "sha256": "0c4503b359d170103cec25159947e09350cbee5a22c764b8d1b00058fae22345"
+  },
+  "source_selection": {
+    "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/SOURCE_SELECTION.json",
+    "bytes": 7534,
+    "sha256": "b687234a25d14aca4c465bdb44cb800ad13cd975e6cfdefb09028a307b6f68f7"
+  },
+  "original_manifest": {
+    "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/FILES_MANIFEST.json",
+    "bytes": 1861,
+    "sha256": "2e6f2b7e9ed4ec390bc92410ce62c39f25e99e41822090337bb93e3c9d3558f9"
+  },
+  "original_manifest_entries_rehashed": 11,
+  "all_original_manifest_entries_match": true,
+  "exact_four_edits_forward_and_reverse_reconstruct_entire_source": true,
+  "all10_complete_headers": [
+    {
+      "name": "fixedCellExponent",
+      "kind": "def",
+      "complete_header": "def fixedCellExponent (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=",
+      "sha256": "148438e2d53b8501a3048a043b941d500afad26df37f431d84d0e9978463dec4",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "fixedCellTest",
+      "kind": "def",
+      "complete_header": "def fixedCellTest (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=",
+      "sha256": "6fdc3e07c568835ad1ed889303ed57b4c111c7110395d4e0c782dde13f4a5584",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "continuous_fixedCellExponent",
+      "kind": "theorem",
+      "complete_header": "theorem continuous_fixedCellExponent (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) :\n    Continuous (fixedCellExponent e rows E seed) :=",
+      "sha256": "c3e88da92b858ac4af75238e78b7b7eed29de4f5edea690f3a5a66cea8077cb1",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "continuousOn_variableExtended",
+      "kind": "theorem",
+      "complete_header": "theorem continuousOn_variableExtended (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed a b : ℝ) (ha : 0 < a) :\n    ContinuousOn (fun t : Point =>\n      extendedProfile (fixedCellExponent e rows E seed t) t)\n        (univ.pi (fun _ : Fin 4 => Icc a b)) :=",
+      "sha256": "c7da09040a02a9e02c6379cb9e7a2ca2d98183b2a323c56e68faf134ff3c923f",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "continuousOn_fixedCellTest",
+      "kind": "theorem",
+      "complete_header": "theorem continuousOn_fixedCellTest (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed a b : ℝ) (ha : 0 < a) :\n    ContinuousOn (fixedCellTest e rows E seed)\n      (univ.pi (fun _ : Fin 4 => Icc a b)) :=",
+      "sha256": "4baa73ff794ed9d11b4727bc44ad16533205ee6123faf41fb1365dfdbbfd4274",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "producerProfile4_eq_fixedCellExponent_on_source",
+      "kind": "theorem",
+      "complete_header": "theorem producerProfile4_eq_fixedCellExponent_on_source\n    (e : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (E : Finset ProducerRow) (seed : ℝ)\n    (C : Set Point)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ C,\n      producerEligible licensed r t ↔ r ∈ E)\n    {t : Point} (ht : t ∈ C) :\n    producerProfile4 e rows licensed seed t =\n      fixedCellExponent e rows E seed t :=",
+      "sha256": "475008c4d0516d7a18d8eb23f540370a6f9af94796b47eff2c2949096b9d2781",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "tendsto_variableFourth_fixed_cell_test",
+      "kind": "theorem",
+      "complete_header": "theorem tendsto_variableFourth_fixed_cell_test\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (E : Finset ProducerRow)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ sourceRegion e m omega j,\n      producerEligible licensed r t ↔ r ∈ E) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t)))\n      atTop\n      (𝓝 (∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 (oldExponent e m j) t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t) *\n          ∏ i, 1 / t i)) :=",
+      "sha256": "771060ac3f32ba2381c726d480e566f13c6bf14e9751724974ddec7a37c90d9b",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "labelledRawCellSum",
+      "kind": "def",
+      "complete_header": "def labelledRawCellSum (e : ℚ) (m : ℕ) (omega a : ℝ)\n    (j : FourthCell m) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (N : ℕ) : ℝ :=",
+      "sha256": "46a36f61388afae2349f654e42d38596971143c94a6dfba304e2331ca477ff35",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "labelledRawCellSum_eq_test",
+      "kind": "theorem",
+      "complete_header": "theorem labelledRawCellSum_eq_test (e : ℚ) (m N : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (hN : 1 < N) (j : FourthCell m)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop) :\n    labelledRawCellSum e m omega a j rows licensed N =\n      actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t)) :=",
+      "sha256": "2c05c92609e30a1744618ee6587c5378010e7964c7f3e76dec33535e9c6b14ca",
+      "pre_post_byte_identical": true
+    },
+    {
+      "name": "tendsto_labelledRawCellSum",
+      "kind": "theorem",
+      "complete_header": "theorem tendsto_labelledRawCellSum\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (E : Finset ProducerRow)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ sourceRegion e m omega j,\n      producerEligible licensed r t ↔ r ∈ E) :\n    Tendsto (fun N : ℕ => labelledRawCellSum e m omega a j rows licensed N)\n      atTop\n      (𝓝 (∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 (oldExponent e m j) t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t) *\n          ∏ i, 1 / t i)) :=",
+      "sha256": "96eea934e17d55c299febe360b12b487e3bf862ad1054ca26690de3706329b8d",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "all3_complete_definition_regions_byte_exact": true,
+  "only_changed_proof_bodies": [
+    "continuousOn_variableExtended",
+    "tendsto_variableFourth_fixed_cell_test",
+    "labelledRawCellSum_eq_test",
+    "tendsto_labelledRawCellSum"
+  ],
+  "imports_comments_data_numeric_constants_options_quantifiers_hypotheses_and_all_other_bytes_exact": true,
+  "semantic_review": [
+    {
+      "scope": "continuousOn_variableExtended",
+      "finding": "None",
+      "reason": "The typed show exposes precisely MapsTo membership in Real Ici1, definitionally1<=max1(original residual). It uses the same le_max_left proof, same point and residual expression. It changes neither the max-one test nor the positive ambient cube/domain."
+    },
+    {
+      "scope": "two off-source branches",
+      "finding": "None",
+      "reason": "The pinned to_additive declaration generates Set.indicator_of_notMem from mulIndicator_of_notMem. Replacing the obsolete spelling keeps the same not-membership proof and exact zero branches; no source point, subset or indicator convention changes."
+    },
+    {
+      "scope": "tendsto_labelledRawCellSum",
+      "finding": "None",
+      "reason": "The actual heq is labelled=eventually test, while htest converges for test. Pinned Tendsto.congr' transports from its convergent first function to its eventually equal second, so heq.symm has the required test=eventually labelled direction. Limit integral/filter/normalizations are unchanged."
+    }
+  ],
+  "original_hfixed_scope": {
+    "all3_hfixed_headers_raw_identical": true,
+    "domain": "Fixed eligibility only on the original named C/sourceRegion, with the original rows/licensed/E/seed inputs. No global or across-wall fixed-eligibility assumption is introduced.",
+    "source_geometry": "Original selected positive coarse Q3 source, firstStop/rawGamma cube/order/cube/rough gates and actual tuple/labelled signed weights remain exact.",
+    "no_desired_limit_or_licence_or_mean_or_tail_assumption_added": true
+  },
+  "actual_failure": {
+    "command": {
+      "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/ACTUAL_NORMAL_COMMAND.json",
+      "bytes": 919,
+      "sha256": "efa4789f624e51622bd8a0bad5c3bf6acf718c8f169e57449d51fce8992f9615"
+    },
+    "full_log": {
+      "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/ACTUAL_NORMAL_FAILURE.log",
+      "bytes": 171707,
+      "sha256": "d34667b8f110e9ae2267e6a7fe8d3af817d624bf8ed63b42b34559a54b3280ed"
+    },
+    "slice": {
+      "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/ACTUAL_FAILURE_SLICE.log",
+      "bytes": 3842,
+      "sha256": "c1851688847597c3f31d35d0d8be4f316627a5b18de2f81a5c7473aee14a1042"
+    },
+    "exit_code": 1,
+    "elapsed_seconds": 23.304676331004885,
+    "slice_verbatim_in_full_log": true
+  },
+  "bounded_existing_published_source_lookup_reused": {
+    "concrete_pins": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean",
+        "exists": true,
+        "sha256": "15c70f8f72c7277c7aecba132e502cccc4e12e34aede120a1ce28cd8aab82565",
+        "blob": "5826aeb256e2726bcb7a922dd1847095a608774e",
+        "same_original_preimage": true,
+        "concrete_pin_independently_verified": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean",
+        "exists": false,
+        "git_exit": 128,
+        "concrete_path_absence_verified_without_history_rescan": true
+      },
+      {
+        "commit": "368736567624353986efd3b6d6c5ccef97e8b535",
+        "path": "ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean",
+        "exists": true,
+        "sha256": "15c70f8f72c7277c7aecba132e502cccc4e12e34aede120a1ce28cd8aab82565",
+        "blob": "5826aeb256e2726bcb7a922dd1847095a608774e",
+        "same_original_preimage": true,
+        "concrete_pin_independently_verified": true
+      }
+    ],
+    "different_repair_not_found_in_recorded_bounded_scope": true,
+    "all_history_or_objects_scan_repeated": false,
+    "absence_of_repair_outside_recorded_scope_not_claimed": true
+  },
+  "pinned_API_files": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Indicator.lean",
+      "bytes": 11063,
+      "sha256": "cdffdb2811704a457253c1387d7e7ae784d9ba10f51bc38d3697bcfaf9ab4ef9"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Order/Filter/Tendsto.lean",
+      "bytes": 14382,
+      "sha256": "76800f92ca0414bd4f31e94719ac9cac2985bd2b083035380c3e32111e0405ce"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1FourthNearOneKernel.lean",
+      "bytes": 11844,
+      "sha256": "5697ff54d7c5f0ccc440ddc3180c98f0f490e34fa4b714a7c4aeee4f75817c17"
+    }
+  ],
+  "pinned_API_existing_typed_membership_example": "P1FourthNearOneKernel maxOneNormalized continuity proof already uses change (1:Real)<=max1(residual...) before le_max_left.",
+  "manuscript1106_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_anchors": [
+    {
+      "source": {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+        "bytes": 39389,
+        "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440"
+      },
+      "lines": [
+        100,
+        117
+      ],
+      "snapshot": {
+        "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/coefficient-appendix-100-117.tex",
+        "bytes": 823,
+        "sha256": "e7b00f1f511fe4d26502f118cabca7371f6c940d5280f68a5d8e2a75ff85bb5e"
+      },
+      "snapshot_line_ending_mode": "raw_exact",
+      "fixed1106_git_pin_verified": true,
+      "role": "Joint finite partition, exact inherited cells and limiting boundaries; local fixed eligibility is only on the original source cell."
+    },
+    {
+      "source": {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "bytes": 52306,
+        "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8"
+      },
+      "lines": [
+        294,
+        302
+      ],
+      "snapshot": {
+        "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/sieve-appendix-294-302.tex",
+        "bytes": 548,
+        "sha256": "23905084907b7958ea56194f7efa4f3128456d99e178f9188247b2ee034cd0d3"
+      },
+      "snapshot_line_ending_mode": "raw_exact",
+      "fixed1106_git_pin_verified": true,
+      "role": "Original retained inherit/equality regions and coarse caps before child refinement; no across-wall continuity claim."
+    },
+    {
+      "source": {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+        "bytes": 55378,
+        "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182"
+      },
+      "lines": [
+        207,
+        218
+      ],
+      "snapshot": {
+        "path": "/workspace/p1-complete-proof/static-variable-fourth-cell-test-limit-api/argument-207-218.tex",
+        "bytes": 624,
+        "sha256": "c1b77cb004878ca2b6fcc5814f24a43a9592bcc7d988f292019a5beeb4e4a9ef"
+      },
+      "snapshot_line_ending_mode": "raw_exact",
+      "fixed1106_git_pin_verified": true,
+      "role": "Actual original policy cap chronology and original upper source parameters."
+    }
+  ],
+  "old_records_unchanged": true,
+  "all_preexisting_packet_files_rechecked_unchanged": 12,
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_test_numeric_or_Real_sampling_calls": 0,
+    "source_live_main_Member_P6_cache_queue_guard_or_old_manifest_edits": 0
+  },
+  "acceptance_boundary": "Exact static source/API review only. Soleowner must normal-build, named-kernel check and audit full-owned declarations of0c4503. This conditional one-cell test-limit supplier does not itself establish complete P1, adopted eligibility constancy or a global producer continuity/limit theorem."
+}

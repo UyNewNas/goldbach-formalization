@@ -1,0 +1,157 @@
+--- frozen-v2-revision2-b7cf4de8
++++ isolated-v3-gate
+@@ -7,6 +7,7 @@
+ from contextlib import contextmanager
+ from pathlib import Path
+ import datetime
++import errno
+ import fcntl
+ import hashlib
+ import json
+@@ -47,7 +48,8 @@
+     '/workspace/blue-member-repair-batch73/VALIDATION_LANE_PRIORITY_REQUEUE.json': 'LANE_FINISHED',
+     '/workspace/blue-member-repair-batch74/VALIDATION_LANE_PRIORITY_REQUEUE.json': 'LANE_FINISHED',
+     '/workspace/blue-member-repair-batch66/VALIDATION_LANE_REVISION3.json': 'LANE_FINISHED',
+-    '/workspace/blue-member-repair-batch66/VALIDATION_LANE_REVISION4.json': 'LANE_FINISHED',
++    '/workspace/blue-member-repair-batch66/VALIDATION_LANE_REVISION4_P6.json': 'LANE_FINISHED',
++    '/workspace/blue-member-repair-batch66/VALIDATION_LANE_REVISION5_P6.json': 'LANE_FINISHED',
+     '/workspace/blue-member-repair-batch56/VALIDATION_LANE_AFFINE_REUSE_REVISION4.json': 'LANE_FINISHED',
+     '/workspace/p1-complete-proof/validation-lane-correction/LEGACY_P6_LANE.json': 'FINISHED_UTC',
+ }
+@@ -64,36 +66,60 @@
+     return json.loads(raw)
+ 
+ 
+-def current_related_jobs():
+-    """Keep unreadable-cwd jobs: never silently skip visible source/queue argv."""
++def current_related_jobs(proc_root=Path('/proc')):
++    """Read only process identities; unknown identities fail closed.
++
++    proc_root is injectable only for isolated fake-/proc regression fixtures.
++    A failed read is a disappearance race only for ENOENT/ESRCH and a
++    confirming absent PID directory. Access/decoding failures remain blockers.
++    """
+     result = []
+     roots = (str(MEMBER), str(PRODUCER), '/workspace/goldbach-formalization/.lake/packages')
+     tools = {'lean', 'lean-runtime', 'leanchecker', 'lake', 'clang', 'leanc', 'llvm-ar'}
+-    for entry in Path('/proc').iterdir():
++
++    def disappeared(entry, error):
++        if not isinstance(error, OSError) or error.errno not in (errno.ENOENT, errno.ESRCH):
++            return False
++        try:
++            entry.stat()
++        except OSError as probe_error:
++            return probe_error.errno in (errno.ENOENT, errno.ESRCH)
++        return False
++
++    for entry in Path(proc_root).iterdir():
+         if not entry.name.isdigit() or int(entry.name) == os.getpid():
+             continue
+         try:
+             stat = (entry / 'stat').read_text().rsplit(')', 1)[1].split()
++            if len(stat) < 20:
++                raise ValueError('malformed_proc_stat')
+             if stat[0] == 'Z':
+                 continue
+             comm = (entry / 'comm').read_text().strip()
+-        except (OSError, UnicodeError):
+-            continue  # Process disappeared before it could be identified.
++        except (OSError, UnicodeError, ValueError, IndexError) as error:
++            if disappeared(entry, error):
++                continue
++            result.append({'pid': int(entry.name), 'unknown_process_identity': type(error).__name__})
++            continue
+         try:
+             argv = [a for a in (entry / 'cmdline').read_text().split('\0') if a]
+         except (OSError, UnicodeError) as error:
+-            if comm in tools:
+-                result.append({'pid': int(entry.name), 'state': stat[0],
+-                               'unknown_compiler_argv': type(error).__name__})
++            if disappeared(entry, error):
++                continue
++            # Without argv even Python's comm cannot distinguish a pending
++            # controller/guard from an unrelated interpreter. Never omit it.
++            result.append({'pid': int(entry.name), 'state': stat[0], 'comm': comm,
++                           'unknown_argv': type(error).__name__})
+             continue
+         if not argv:
+-            if comm in tools:
+-                result.append({'pid': int(entry.name), 'state': stat[0], 'unknown_compiler_argv': 'EMPTY'})
++            result.append({'pid': int(entry.name), 'state': stat[0], 'comm': comm,
++                           'unknown_argv': 'EMPTY'})
+             continue
+         executable = Path(argv[0]).name
+         python = executable.startswith('python')
+         compiler = executable in tools or (python and len(argv) > 1 and '/p0-ci-shadow-toolchain/bin/' in argv[1])
+         controller = python and any(
++            a == '/workspace/blue-build-tools/run_guarded.py' or
+             a.endswith('/serialize_validation_lane.py') or a.endswith('/resume_legacy_p6_lane.py') or
+             a.endswith('/prepare_and_run_attempt1.py') or
+             (a.endswith('/run_validation.py') and '/blue-member-repair-batch' in a) or
+@@ -101,7 +127,9 @@
+             for a in argv[1:])
+         try:
+             cwd, cwd_error = str((entry / 'cwd').resolve(strict=True)), None
+-        except OSError as error:
++        except (OSError, UnicodeError) as error:
++            if disappeared(entry, error):
++                continue
+             cwd, cwd_error = None, type(error).__name__
+         related = any((cwd is not None and cwd.startswith(r)) or any(a.startswith(r) for a in argv) for r in roots)
+         # A compiler without a readable cwd cannot be proved unrelated just
+@@ -110,7 +138,6 @@
+             result.append({'pid': int(entry.name), 'ppid': int(stat[1]), 'state': stat[0],
+                 'starttime': stat[19], 'argv': argv, 'cwd': cwd, 'cwd_read_error': cwd_error})
+     return result
+-
+ 
+ def assert_no_related_jobs():
+     jobs = current_related_jobs()
+@@ -195,6 +222,38 @@
+         assert replacement['original_compiler_slot'] == old['original_compiler_slot']
+         assert replacement['state'] == old['state'] and replacement['state_sha256'] == old['state_sha256']
+         assert replacement['validation_lane_lock'] == old['validation_lane_lock']
++
++
++SIXTH_MOVE_RECEIPT = Path('/workspace/blue-member-repair-batch66/REVISION4_UNEXECUTED_MEMBER_TO_P6_MOVE.json')
++SIXTH_MOVE_SHA = '993d37b38c8bad1edfd6d3a6972b1b834fe7fbefb69bbaa0e4e4fe674cfd02b1'
++SIXTH_CANCELLED_MEMBER_RECEIPT = Path('/workspace/blue-member-repair-batch66/VALIDATION_LANE_REVISION4.json')
++SIXTH_CANCELLED_MEMBER_SHA = '73dbe70118ef31268304b86599dc2c32b50a915bb9903e465d6da7011907563c'
++
++
++def validate_sixth_exact_unexecuted_lane_move():
++    """One pinned no-child Member cancellation; replacement must really finish on P6."""
++    moved = read_pinned(SIXTH_MOVE_RECEIPT, SIXTH_MOVE_SHA)
++    old = read_pinned(SIXTH_CANCELLED_MEMBER_RECEIPT, SIXTH_CANCELLED_MEMBER_SHA)
++    assert moved['status'] == 'UNEXECUTED_REVISION4_MEMBER_QUEUE_CANCELLED_TO_MOVE_TO_FREE_ORIGINAL_P6_LANE'
++    assert moved['old_receipt'] == str(SIXTH_CANCELLED_MEMBER_RECEIPT)
++    assert moved['old_pid'] == old['pid']
++    assert moved['no_child_or_normal_stage_at_cancel'] is True
++    assert moved['source_compiler_checker_signals'] == []
++    assert moved['only_scheduler_parent_signals'] == ['SIGSTOP', 'SIGTERM', 'SIGCONT']
++    assert moved['P6_fullchain_lock_obtained_nonblocking_after_H3_natural_failure'] is True
++    assert moved['source_guard_M12288_t0_j2_100k4m_unchanged'] is True
++    assert moved['next_receipt'] == 'VALIDATION_LANE_REVISION4_P6.json'
++    assert old['status'] == 'WAITING_VALIDATION_LANE' and 'child_pid' not in old
++    assert old['state'] == str(STATES[0][0]) and old['state_sha256'] == STATES[0][1]
++    replacement_path = SIXTH_CANCELLED_MEMBER_RECEIPT.with_name(moved['next_receipt'])
++    replacement = json.loads(replacement_path.read_text())
++    assert replacement['status'] == 'VALIDATION_LANE_FINISHED'
++    assert replacement['finished_utc'] and isinstance(replacement['exit_code'], int)
++    assert replacement['argv'] == old['argv']
++    state = read_pinned(*STATES[1])
++    assert replacement['state'] == str(STATES[1][0]) and replacement['state_sha256'] == STATES[1][1]
++    assert replacement['original_compiler_slot'] == state['slot']
++    assert replacement['validation_lane_lock'] == state['slot'] + '.validation-lane.lock'
+ 
+ 
+ class ControlledOwnerWindow:
+@@ -275,6 +334,7 @@
+             assert predicate == 'FINISHED_UTC'
+     validate_historical_controlled_stop()
+     validate_exact_waiting_requeue_cancellations()
++    validate_sixth_exact_unexecuted_lane_move()
+     manifest = read_pinned(BASE / 'MANIFEST.json', QUALIFIED_SHA)
+     for name, digest in manifest['additional_files'].items():
+         assert Path(name).name == name

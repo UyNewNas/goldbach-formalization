@@ -1,0 +1,405 @@
+--- 744b/P4AOriginalFirstFailureH3SourceSemantics.lean
++++ affine-reuse/P4AOriginalFirstFailureH3SourceSemantics.lean
+@@ -1,3 +1,4 @@
++import ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows
+ import ImbalancedChen.P4AOriginalFirstFailureH3Literal
+ import ImbalancedChen.SelectedPrefixBoxCap
+ import ImbalancedChen.VariableEnvelope
+@@ -64,16 +65,377 @@
+ 
+ def branchRow (k : Fin 62) : Fin 99 := ⟨37 + k.val, by omega⟩
+ 
++/-! H3-specific affine syntax. The verified compiler itself is imported;
++no generic compiler or literal source row is recreated here. -/
++open OriginalDescendingFifteenLiteralAffineRows
++  (Expr K X coefficients evaluate evaluateCoefficients evaluate_coefficients
++    oldExpr subsetExpr ascendingExpr descendingExpr)
++
++private theorem h3_castCoord (j : Fin 6) :
++    j.castSucc.castSucc = Fin.ofNat 8 j.val := by
++  apply Fin.ext
++  change j.val = j.val % 8
++  exact (Nat.mod_eq_of_lt (lt_trans j.isLt (by decide : 6 < 8))).symm
++
++private theorem h3_eval_subset (m : ℕ) (t : Point) :
++    evaluate (subsetExpr m) t = oldSubsetSum m t := by
++  simp [subsetExpr, evaluate, K, X, apply_ite, oldSubsetSum, h3_castCoord,
++    Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ] <;> ring
++
++private theorem h3_eval_ascending (m : ℕ) (t : Point) :
++    evaluate (ascendingExpr m) t = A (oldSubsetSum m t) := by
++  norm_num [ascendingExpr, evaluate, K, h3_eval_subset, A] <;> ring
++
++private theorem h3_eval_descending (m : ℕ) (t : Point) :
++    evaluate (descendingExpr m) t = D (oldSubsetSum m t) := by
++  norm_num [descendingExpr, evaluate, K, h3_eval_subset, D] <;> ring
++
++private theorem h3_eval_R6 (t : Point) :
++    evaluate (ascendingExpr 9) t = R6 t := by
++  norm_num [h3_eval_ascending, oldSubsetSum, h3_castCoord,
++    Fin.sum_univ_succ, R6, A] <;> ring
++
++private theorem h3_eval_B3 (t : Point) :
++    evaluate (ascendingExpr 1) t = B3 t := by
++  norm_num [h3_eval_ascending, oldSubsetSum, h3_castCoord,
++    Fin.sum_univ_succ, B3, A] <;> ring
++
++private theorem h3_eval_oppositeR6 (t : Point) :
++    evaluate (descendingExpr 9) t = D (t 0 + t 3) := by
++  norm_num [h3_eval_descending, oldSubsetSum, h3_castCoord,
++    Fin.sum_univ_succ, D] <;> ring
++
++private theorem h3_eval_D23 (t : Point) :
++    evaluate oldExpr t = D23 t := by
++  norm_num [oldExpr, evaluate, K, X, D23, D] <;> ring
++
++private def h3M8Expr : Expr :=
++  K (1 / 2) + (1 / 2 : ℚ) • (X 1 + X 3 + X 7) - K (1 / 1000000)
++
++private theorem h3_eval_M8 (t : Point) :
++    evaluate h3M8Expr t = M8 t := by
++  norm_num [h3M8Expr, evaluate, K, X, M8, A, eta] <;> ring
++
++private def h3Opposite138Expr : Expr :=
++  K (57 / 64) - (3 / 2 : ℚ) • (X 1 + X 3 + X 7) - K (1 / 1000000)
++
++private theorem h3_eval_opposite138 (t : Point) :
++    evaluate h3Opposite138Expr t = D (selected138 t) - eta := by
++  norm_num [h3Opposite138Expr, evaluate, K, X, D, selected138, eta] <;> ring
++
++private def h3HistoryExpr : Fin 4 → Expr :=
++  ![(3 : ℚ) • X 0, X 0 + X 1 + (3 : ℚ) • X 2,
++    X 0 + X 1 + X 2 + X 3 + (3 : ℚ) • X 4,
++    X 0 + X 1 + X 2 + X 3 + X 4 + X 5 + (3 : ℚ) • X 6]
++
++private theorem h3_eval_history (j : Fin 4) (t : Point) :
++    evaluate (h3HistoryExpr j) t = (![H1 t, H3 t, H5 t, H7 t] : Fin 4 → ℝ) j := by
++  fin_cases j <;> norm_num [h3HistoryExpr, evaluate, X, H1, H3, H5, H7]
++
++private def h3TotalExpr : Expr := X 0 + X 1 + X 2 + X 3 + X 4 + X 5 + X 6 + X 7
++
++private theorem h3_eval_total (t : Point) :
++    evaluate h3TotalExpr t = S8 t := by
++  simp [h3TotalExpr, evaluate, X, S8, Fin.sum_univ_succ] <;> ring
++
++private def h3FullExpr (j : Fin 8) : Expr :=
++  (if (0 : Fin 8) < j then X 0 else K 0) +
++  (if (1 : Fin 8) < j then X 1 else K 0) +
++  (if (2 : Fin 8) < j then X 2 else K 0) +
++  (if (3 : Fin 8) < j then X 3 else K 0) +
++  (if (4 : Fin 8) < j then X 4 else K 0) +
++  (if (5 : Fin 8) < j then X 5 else K 0) +
++  (if (6 : Fin 8) < j then X 6 else K 0) +
++  (if (7 : Fin 8) < j then X 7 else K 0) + (2 : ℚ) • X j
++
++private theorem h3_eval_full (j : Fin 8) (t : Point) :
++    evaluate (h3FullExpr j) t = fullExpr t j := by
++  simp [h3FullExpr, fullExpr, evaluate, K, X, apply_ite, Fin.sum_univ_succ] <;> ring
++
++private def h3ComplementExpr (j : Fin 8) : Expr :=
++  X 1 + X 3 + X 7 +
++    ((if (0 : Fin 8) < j then X 0 else K 0) +
++     (if (2 : Fin 8) < j then X 2 else K 0) +
++     (if (4 : Fin 8) < j then X 4 else K 0) +
++     (if (5 : Fin 8) < j then X 5 else K 0) +
++     (if (6 : Fin 8) < j then X 6 else K 0)) + (2 : ℚ) • X j
++
++private theorem h3_eval_complement (j : Fin 8) (t : Point) :
++    evaluate (h3ComplementExpr j) t = complementExpr t j := by
++  simp [h3ComplementExpr, complementExpr, selected138, evaluate, K, X,
++    apply_ite, Fin.sum_univ_succ] <;> ring
++
++private def h3CommonExpr : Fin 37 → Expr :=
++  ![K (25 / 128) - X 0, X 2 - K (1 / 100), X 7 - K (53 / 13824),
++    X 0 - X 1, X 1 - X 2, X 2 - X 3, X 3 - X 4,
++    X 4 - X 5, X 5 - X 6, X 6 - X 7,
++    ascendingExpr 1 - h3HistoryExpr 0, ascendingExpr 1 - h3HistoryExpr 1,
++    ascendingExpr 1 - h3HistoryExpr 2, ascendingExpr 1 - h3HistoryExpr 3,
++    ascendingExpr 9 - ascendingExpr 1, descendingExpr 9 - ascendingExpr 9,
++    ascendingExpr 9 - (K (153 / 256) - (3 / 8 : ℚ) • X 2),
++    X 1 + X 2 - K (25 / 128), h3HistoryExpr 1 - oldExpr,
++    h3M8Expr - ascendingExpr 9, h3Opposite138Expr - h3M8Expr,
++    h3M8Expr - h3FullExpr 0, h3M8Expr - h3ComplementExpr 0,
++    h3M8Expr - h3FullExpr 1, h3M8Expr - h3FullExpr 2,
++    h3M8Expr - h3ComplementExpr 2, h3M8Expr - h3FullExpr 3,
++    h3M8Expr - h3FullExpr 4, h3M8Expr - h3ComplementExpr 4,
++    h3M8Expr - h3FullExpr 5, h3M8Expr - h3ComplementExpr 5,
++    h3M8Expr - h3FullExpr 6, h3M8Expr - h3ComplementExpr 6,
++    h3M8Expr - h3FullExpr 7, ascendingExpr 9 - (h3TotalExpr + X 7),
++    h3TotalExpr + (3 : ℚ) • X 7 - h3M8Expr, oldExpr - h3HistoryExpr 0]
++
++private theorem h3_eval_common (k : Fin 37) (t : Point) :
++    evaluate (h3CommonExpr k) t = commonSlack t k := by
++  fin_cases k <;>
++    norm_num [h3CommonExpr, commonSlack, evaluate, K, X,
++      h3_eval_history, h3_eval_B3, h3_eval_R6, h3_eval_oppositeR6,
++      h3_eval_D23, h3_eval_M8, h3_eval_opposite138, h3_eval_full,
++      h3_eval_complement, h3_eval_total, mu, W] <;> ring
++
++private def h3BranchExpr (i : Fin 12) (m : ℕ) : Expr :=
++  ascendingExpr 9 -
++    (if m ∈ leftMasks i then ascendingExpr m else descendingExpr m)
++
++private theorem h3_eval_branch (i : Fin 12) (m : ℕ) (t : Point) :
++    evaluate (h3BranchExpr i m) t = R6 t - oldPlane i m t := by
++  simp [h3BranchExpr, oldPlane, evaluate, apply_ite, h3_eval_R6,
++    h3_eval_ascending, h3_eval_descending]
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_00 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (0 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_01 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (1 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_02 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (2 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_03 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (3 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_04 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (4 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_05 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (5 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_06 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (6 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_07 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (7 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_08 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (8 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_09 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (9 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_10 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (10 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_coeff_11 :
++    ∀ (k : Fin 37) (j : Fin 9),
++      (sourceAffineRows (11 : Fin 12) (commonRow k)).2 j =
++        coefficients (h3CommonExpr k) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_00 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (0 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (0 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_01 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (1 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (1 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_02 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (2 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (2 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_03 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (3 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (3 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_04 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (4 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (4 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_05 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (5 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (5 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_06 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (6 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (6 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_07 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (7 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (7 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_08 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (8 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (8 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_09 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (9 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (9 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_10 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (10 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (10 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_coeff_11 :
++    ∀ (k : Fin 62) (j : Fin 9),
++      (sourceAffineRows (11 : Fin 12) (branchRow k)).2 j =
++        coefficients (h3BranchExpr (11 : Fin 12) (branchMask k)) j := by
++  decide +kernel
++
++private theorem h3_common_coefficients (i : Fin 12) (k : Fin 37) (j : Fin 9) :
++    (sourceAffineRows i (commonRow k)).2 j = coefficients (h3CommonExpr k) j := by
++  fin_cases i
++  · exact h3_common_coeff_00 k j
++  · exact h3_common_coeff_01 k j
++  · exact h3_common_coeff_02 k j
++  · exact h3_common_coeff_03 k j
++  · exact h3_common_coeff_04 k j
++  · exact h3_common_coeff_05 k j
++  · exact h3_common_coeff_06 k j
++  · exact h3_common_coeff_07 k j
++  · exact h3_common_coeff_08 k j
++  · exact h3_common_coeff_09 k j
++  · exact h3_common_coeff_10 k j
++  · exact h3_common_coeff_11 k j
++
++private theorem h3_branch_coefficients (i : Fin 12) (k : Fin 62) (j : Fin 9) :
++    (sourceAffineRows i (branchRow k)).2 j = coefficients (h3BranchExpr i (branchMask k)) j := by
++  fin_cases i
++  · exact h3_branch_coeff_00 k j
++  · exact h3_branch_coeff_01 k j
++  · exact h3_branch_coeff_02 k j
++  · exact h3_branch_coeff_03 k j
++  · exact h3_branch_coeff_04 k j
++  · exact h3_branch_coeff_05 k j
++  · exact h3_branch_coeff_06 k j
++  · exact h3_branch_coeff_07 k j
++  · exact h3_branch_coeff_08 k j
++  · exact h3_branch_coeff_09 k j
++  · exact h3_branch_coeff_10 k j
++  · exact h3_branch_coeff_11 k j
++
+ /-- UNEVALUATED symbolic equality against every original common row.
+ The free real tuple is never sampled or replaced by a centre. -/
+ set_option maxRecDepth 4096 in
+ set_option maxHeartbeats 0 in
+ theorem source_common_row (i : Fin 12) (k : Fin 37) (t : Point) :
+     evalAffine (sourceAffineRows i (commonRow k)).2 t = commonSlack t k := by
+-  fin_cases i <;> fin_cases k <;>
+-    norm_num [sourceAffineRows, commonRow, evalAffine, commonSlack,
+-      fullExpr, complementExpr, selected138, mu, eta, A, D, R6, B3,
+-      M8, S8, H1, H3, H5, H7, W, D23, Fin.sum_univ_succ] <;> ring
++  have hcoeff : (sourceAffineRows i (commonRow k)).2 = coefficients (h3CommonExpr k) :=
++    funext (h3_common_coefficients i k)
++  change evaluateCoefficients (sourceAffineRows i (commonRow k)).2 t = commonSlack t k
++  rw [hcoeff, evaluate_coefficients]
++  exact h3_eval_common k t
+ 
+ /-- UNEVALUATED symbolic equality against the original 12-by-62
+ assigned old planes; no payload-equality hypothesis is accepted. -/
+@@ -82,9 +444,12 @@
+ theorem source_branch_row (i : Fin 12) (k : Fin 62) (t : Point) :
+     evalAffine (sourceAffineRows i (branchRow k)).2 t =
+       R6 t - oldPlane i (branchMask k) t := by
+-  fin_cases i <;> fin_cases k <;>
+-    norm_num [sourceAffineRows, branchRow, branchMask, evalAffine,
+-      oldPlane, leftMasks, oldSubsetSum, R6, A, D, Fin.sum_univ_succ] <;> ring
++  have hcoeff : (sourceAffineRows i (branchRow k)).2 =
++      coefficients (h3BranchExpr i (branchMask k)) := funext (h3_branch_coefficients i k)
++  change evaluateCoefficients (sourceAffineRows i (branchRow k)).2 t =
++    R6 t - oldPlane i (branchMask k) t
++  rw [hcoeff, evaluate_coefficients]
++  exact h3_eval_branch i (branchMask k) t
+ 
+ theorem branchMask_mem (k : Fin 62) :
+     branchMask k ∈ Finset.Icc 1 63 ∧ branchMask k ≠ 9 := by

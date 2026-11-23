@@ -1,0 +1,72 @@
+def current_related_jobs(proc_root=Path('/proc')):
+    """Read only process identities; unknown identities fail closed.
+
+    proc_root is injectable only for isolated fake-/proc regression fixtures.
+    A failed read is a disappearance race only for ENOENT/ESRCH and a
+    confirming absent PID directory. Access/decoding failures remain blockers.
+    """
+    result = []
+    roots = (str(MEMBER), str(PRODUCER), '/workspace/goldbach-formalization/.lake/packages')
+    tools = {'lean', 'lean-runtime', 'leanchecker', 'lake', 'clang', 'leanc', 'llvm-ar'}
+
+    def disappeared(entry, error):
+        if not isinstance(error, OSError) or error.errno not in (errno.ENOENT, errno.ESRCH):
+            return False
+        try:
+            entry.stat()
+        except OSError as probe_error:
+            return probe_error.errno in (errno.ENOENT, errno.ESRCH)
+        return False
+
+    for entry in Path(proc_root).iterdir():
+        if not entry.name.isdigit() or int(entry.name) == os.getpid():
+            continue
+        try:
+            stat = (entry / 'stat').read_text().rsplit(')', 1)[1].split()
+            if len(stat) < 20:
+                raise ValueError('malformed_proc_stat')
+            if stat[0] == 'Z':
+                continue
+            comm = (entry / 'comm').read_text().strip()
+        except (OSError, UnicodeError, ValueError, IndexError) as error:
+            if disappeared(entry, error):
+                continue
+            result.append({'pid': int(entry.name), 'unknown_process_identity': type(error).__name__})
+            continue
+        try:
+            argv = [a for a in (entry / 'cmdline').read_text().split('\0') if a]
+        except (OSError, UnicodeError) as error:
+            if disappeared(entry, error):
+                continue
+            # Without argv even Python's comm cannot distinguish a pending
+            # controller/guard from an unrelated interpreter. Never omit it.
+            result.append({'pid': int(entry.name), 'state': stat[0], 'comm': comm,
+                           'unknown_argv': type(error).__name__})
+            continue
+        if not argv:
+            result.append({'pid': int(entry.name), 'state': stat[0], 'comm': comm,
+                           'unknown_argv': 'EMPTY'})
+            continue
+        executable = Path(argv[0]).name
+        python = executable.startswith('python')
+        compiler = executable in tools or (python and len(argv) > 1 and '/p0-ci-shadow-toolchain/bin/' in argv[1])
+        controller = python and any(
+            a == '/workspace/blue-build-tools/run_guarded.py' or
+            a.endswith('/serialize_validation_lane.py') or a.endswith('/resume_legacy_p6_lane.py') or
+            a.endswith('/prepare_and_run_attempt1.py') or
+            (a.endswith('/run_validation.py') and '/blue-member-repair-batch' in a) or
+            ('install_two_qualified' in Path(a).name)
+            for a in argv[1:])
+        try:
+            cwd, cwd_error = str((entry / 'cwd').resolve(strict=True)), None
+        except (OSError, UnicodeError) as error:
+            if disappeared(entry, error):
+                continue
+            cwd, cwd_error = None, type(error).__name__
+        related = any((cwd is not None and cwd.startswith(r)) or any(a.startswith(r) for a in argv) for r in roots)
+        # A compiler without a readable cwd cannot be proved unrelated just
+        # because it is between source arguments (e.g. Lake/githash/checker).
+        if controller or (compiler and (related or cwd is None)):
+            result.append({'pid': int(entry.name), 'ppid': int(stat[1]), 'state': stat[0],
+                'starttime': stat[19], 'argv': argv, 'cwd': cwd, 'cwd_read_error': cwd_error})
+    return result

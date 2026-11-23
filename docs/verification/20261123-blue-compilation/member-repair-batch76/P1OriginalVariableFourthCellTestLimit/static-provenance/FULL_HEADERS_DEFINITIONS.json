@@ -1,0 +1,129 @@
+{
+  "module": "ImbalancedChen.P1OriginalVariableFourthCellTestLimit",
+  "headers": [
+    {
+      "name": "fixedCellExponent",
+      "kind": "def",
+      "complete_raw_header": "def fixedCellExponent (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=",
+      "sha256": "148438e2d53b8501a3048a043b941d500afad26df37f431d84d0e9978463dec4",
+      "byte_identical": true
+    },
+    {
+      "name": "fixedCellTest",
+      "kind": "def",
+      "complete_raw_header": "def fixedCellTest (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=",
+      "sha256": "6fdc3e07c568835ad1ed889303ed57b4c111c7110395d4e0c782dde13f4a5584",
+      "byte_identical": true
+    },
+    {
+      "name": "continuous_fixedCellExponent",
+      "kind": "theorem",
+      "complete_raw_header": "theorem continuous_fixedCellExponent (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) :\n    Continuous (fixedCellExponent e rows E seed) :=",
+      "sha256": "c3e88da92b858ac4af75238e78b7b7eed29de4f5edea690f3a5a66cea8077cb1",
+      "byte_identical": true
+    },
+    {
+      "name": "continuousOn_variableExtended",
+      "kind": "theorem",
+      "complete_raw_header": "theorem continuousOn_variableExtended (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed a b : ℝ) (ha : 0 < a) :\n    ContinuousOn (fun t : Point =>\n      extendedProfile (fixedCellExponent e rows E seed t) t)\n        (univ.pi (fun _ : Fin 4 => Icc a b)) :=",
+      "sha256": "c7da09040a02a9e02c6379cb9e7a2ca2d98183b2a323c56e68faf134ff3c923f",
+      "byte_identical": true
+    },
+    {
+      "name": "continuousOn_fixedCellTest",
+      "kind": "theorem",
+      "complete_raw_header": "theorem continuousOn_fixedCellTest (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed a b : ℝ) (ha : 0 < a) :\n    ContinuousOn (fixedCellTest e rows E seed)\n      (univ.pi (fun _ : Fin 4 => Icc a b)) :=",
+      "sha256": "4baa73ff794ed9d11b4727bc44ad16533205ee6123faf41fb1365dfdbbfd4274",
+      "byte_identical": true
+    },
+    {
+      "name": "producerProfile4_eq_fixedCellExponent_on_source",
+      "kind": "theorem",
+      "complete_raw_header": "theorem producerProfile4_eq_fixedCellExponent_on_source\n    (e : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (E : Finset ProducerRow) (seed : ℝ)\n    (C : Set Point)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ C,\n      producerEligible licensed r t ↔ r ∈ E)\n    {t : Point} (ht : t ∈ C) :\n    producerProfile4 e rows licensed seed t =\n      fixedCellExponent e rows E seed t :=",
+      "sha256": "475008c4d0516d7a18d8eb23f540370a6f9af94796b47eff2c2949096b9d2781",
+      "byte_identical": true
+    },
+    {
+      "name": "tendsto_variableFourth_fixed_cell_test",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tendsto_variableFourth_fixed_cell_test\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (E : Finset ProducerRow)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ sourceRegion e m omega j,\n      producerEligible licensed r t ↔ r ∈ E) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t)))\n      atTop\n      (𝓝 (∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 (oldExponent e m j) t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t) *\n          ∏ i, 1 / t i)) :=",
+      "sha256": "771060ac3f32ba2381c726d480e566f13c6bf14e9751724974ddec7a37c90d9b",
+      "byte_identical": true
+    },
+    {
+      "name": "labelledRawCellSum",
+      "kind": "def",
+      "complete_raw_header": "def labelledRawCellSum (e : ℚ) (m : ℕ) (omega a : ℝ)\n    (j : FourthCell m) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (N : ℕ) : ℝ :=",
+      "sha256": "46a36f61388afae2349f654e42d38596971143c94a6dfba304e2331ca477ff35",
+      "byte_identical": true
+    },
+    {
+      "name": "labelledRawCellSum_eq_test",
+      "kind": "theorem",
+      "complete_raw_header": "theorem labelledRawCellSum_eq_test (e : ℚ) (m N : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (hN : 1 < N) (j : FourthCell m)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop) :\n    labelledRawCellSum e m omega a j rows licensed N =\n      actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t)) :=",
+      "sha256": "2c05c92609e30a1744618ee6587c5378010e7964c7f3e76dec33535e9c6b14ca",
+      "byte_identical": true
+    },
+    {
+      "name": "tendsto_labelledRawCellSum",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tendsto_labelledRawCellSum\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (FourthCell m)) (j : FourthCell m)\n    (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (E : Finset ProducerRow)\n    (hfixed : ∀ r ∈ rows, ∀ t ∈ sourceRegion e m omega j,\n      producerEligible licensed r t ↔ r ∈ E) :\n    Tendsto (fun N : ℕ => labelledRawCellSum e m omega a j rows licensed N)\n      atTop\n      (𝓝 (∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 (oldExponent e m j) t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t) *\n          ∏ i, 1 / t i)) :=",
+      "sha256": "96eea934e17d55c299febe360b12b487e3bf862ad1054ca26690de3706329b8d",
+      "byte_identical": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "fixedCellExponent",
+      "complete_raw_region": "def fixedCellExponent (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=\n  fixedMax seed (rows.filter (fun r => r ∈ E))\n    (fun r => r.bufferedCandidate e) t\n\n",
+      "sha256": "da345ca140b75760bdf5bd9a1edc1f004694496ab9bebf9f0d54f4e000e85ea8",
+      "byte_identical": true
+    },
+    {
+      "name": "fixedCellTest",
+      "complete_raw_region": "def fixedCellTest (e : ℝ) (rows : Finset ProducerRow)\n    (E : Finset ProducerRow) (seed : ℝ) (t : Point) : ℝ :=\n  extendedProfile seed t - extendedProfile (fixedCellExponent e rows E seed t) t\n\n",
+      "sha256": "c13c23f6e4073ba973ba20889c3653c9daa30f6a1fd4e27a8cb2e4358a4f4c58",
+      "byte_identical": true
+    },
+    {
+      "name": "labelledRawCellSum",
+      "complete_raw_region": "def labelledRawCellSum (e : ℚ) (m : ℕ) (omega a : ℝ)\n    (j : FourthCell m) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) (N : ℕ) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ)),\n    signedTupleWeight p *\n      (if actualPrimeTupleLog N p ∈ sourceRegion e m omega j then\n        fourthPlusProfileP1 (oldExponent e m j) (actualPrimeTupleLog N p) -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j)\n              (actualPrimeTupleLog N p)) (actualPrimeTupleLog N p)\n       else 0)\n\n",
+      "sha256": "a06b2a2423605bace3928d66e3c28e4531be9bb8a603c82e690dd2b95d640be5",
+      "byte_identical": true
+    }
+  ],
+  "changed_proof_bodies": [
+    {
+      "name": "continuousOn_variableExtended",
+      "before_body": " by\n  let C : Set Point := univ.pi (fun _ : Fin 4 => Icc a b)\n  have hsum : Continuous (fun t : Point => ∑ i, t i) := by fun_prop\n  have hlast : Continuous (fun t : Point => t (Fin.last 3)) := by fun_prop\n  have hnum : Continuous (fun t : Point =>\n      fixedCellExponent e rows E seed t - ∑ i, t i) :=\n    (continuous_fixedCellExponent e rows E seed).sub hsum\n  have hne : ∀ t ∈ C, t (Fin.last 3) ≠ 0 := by\n    intro t ht\n    exact (ha.trans_le (ht _ (mem_univ _)).1).ne'\n  have hres : ContinuousOn (fun t : Point =>\n      (fixedCellExponent e rows E seed t - ∑ i, t i) / t (Fin.last 3)) C :=\n    hnum.continuousOn.div hlast.continuousOn hne\n  have hclosed : ContinuousOn (fun t : Point =>\n      closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /\n        t (Fin.last 3)))) C :=\n    continuousOn_closedUpper.comp (continuousOn_const.sup hres)\n      (fun _ _ => le_max_left _ _)\n  have hmain : ContinuousOn (fun t : Point =>\n      (2 * Real.exp (-Real.eulerMascheroniConstant)) *\n        (closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /\n          t (Fin.last 3))) / t (Fin.last 3))) C :=\n    continuousOn_const.mul (hclosed.div hlast.continuousOn hne)\n  simpa only [extendedProfile, maxOneNormalized, residual, C] using hmain\n\n",
+      "after_body": " by\n  let C : Set Point := univ.pi (fun _ : Fin 4 => Icc a b)\n  have hsum : Continuous (fun t : Point => ∑ i, t i) := by fun_prop\n  have hlast : Continuous (fun t : Point => t (Fin.last 3)) := by fun_prop\n  have hnum : Continuous (fun t : Point =>\n      fixedCellExponent e rows E seed t - ∑ i, t i) :=\n    (continuous_fixedCellExponent e rows E seed).sub hsum\n  have hne : ∀ t ∈ C, t (Fin.last 3) ≠ 0 := by\n    intro t ht\n    exact (ha.trans_le (ht _ (mem_univ _)).1).ne'\n  have hres : ContinuousOn (fun t : Point =>\n      (fixedCellExponent e rows E seed t - ∑ i, t i) / t (Fin.last 3)) C :=\n    hnum.continuousOn.div hlast.continuousOn hne\n  have hclosed : ContinuousOn (fun t : Point =>\n      closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /\n        t (Fin.last 3)))) C :=\n    continuousOn_closedUpper.comp (continuousOn_const.sup hres)\n      (fun t _ => (show (1 : ℝ) ≤ max 1\n        ((fixedCellExponent e rows E seed t - ∑ i, t i) / t (Fin.last 3)) from\n          le_max_left _ _))\n  have hmain : ContinuousOn (fun t : Point =>\n      (2 * Real.exp (-Real.eulerMascheroniConstant)) *\n        (closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /\n          t (Fin.last 3))) / t (Fin.last 3))) C :=\n    continuousOn_const.mul (hclosed.div hlast.continuousOn hne)\n  simpa only [extendedProfile, maxOneNormalized, residual, C] using hmain\n\n",
+      "before_sha256": "9760cb41b96827451b23bddd21ff45b690a5b9de4e4f5c1e3c0deb9584cd69e7",
+      "after_sha256": "a14e423c0b75bd68ee6ef565f9f0cb60ab586772328c9c54bd5120cbfc4a724f"
+    },
+    {
+      "name": "tendsto_variableFourth_fixed_cell_test",
+      "before_body": " by\n  let seed := oldExponent e m j\n  let f := fixedCellTest (e : ℝ) rows E seed\n  have hwhole := selected_whole_active e chi m omega J4 j hj\n  have htransport := tendsto_test_original_sourceRegion e m omega a ha haRho j\n    hwhole f (continuousOn_fixedCellTest (e : ℝ) rows E seed a (19 / 96) ha)\n  have hsource : ∀ t ∈ sourceRegion e m omega j,\n      producerProfile4 (e : ℝ) rows licensed seed t =\n        fixedCellExponent (e : ℝ) rows E seed t := by\n    intro t ht\n    exact producerProfile4_eq_fixedCellExponent_on_source\n      (e : ℝ) rows licensed E seed _ hfixed ht\n  have hsum : (fun N : ℕ => actualPrimeBoxTestSum N\n      (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n      ((sourceRegion e m omega j).indicator\n        (fun t => extendedProfile seed t -\n          extendedProfile (producerProfile4 (e : ℝ) rows licensed seed t) t))) =\n      (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator f)) := by\n    funext N\n    unfold actualPrimeBoxTestSum\n    apply Finset.sum_congr rfl\n    intro p _\n    by_cases ht : actualPrimeTupleLog N p ∈ sourceRegion e m omega j\n    · simp only [Set.indicator_of_mem ht, hsource _ ht, f, fixedCellTest]\n    · simp only [Set.indicator_of_not_mem ht]\n  have hraw : (∫ t in truncatedCell e m omega a j,\n      f t * ∏ i, 1 / t i) =\n      ∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 seed t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed seed t) t) *\n          ∏ i, 1 / t i := by\n    apply setIntegral_congr_fun (truncatedCell_measurable e m omega a j)\n    intro t ht\n    have hs : t ∈ sourceRegion e m omega j :=\n      (truncatedCell_eq_inter_sourceRegion e m omega a j ▸ ht).2\n    have hle : seed ≤ producerProfile4 (e : ℝ) rows licensed seed t :=\n      producerProfile4_seed_le (e : ℝ) rows licensed seed t\n    simp only [f, fixedCellTest, ← hsource t hs]\n    rw [← rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,\n      ← rawProfile_eq_extended_on_truncated e m omega ha j hle ht]\n  rw [hraw] at htransport\n  rw [← hsum] at htransport\n  simpa only [seed] using htransport\n\n/-- The finite labelled sum has the actual rank-four signed tree coefficient,\nthe original selected source gate, and the literal Suzuki PLUS factor at\nthe tuple-dependent fourth exponent. -/\n",
+      "after_body": " by\n  let seed := oldExponent e m j\n  let f := fixedCellTest (e : ℝ) rows E seed\n  have hwhole := selected_whole_active e chi m omega J4 j hj\n  have htransport := tendsto_test_original_sourceRegion e m omega a ha haRho j\n    hwhole f (continuousOn_fixedCellTest (e : ℝ) rows E seed a (19 / 96) ha)\n  have hsource : ∀ t ∈ sourceRegion e m omega j,\n      producerProfile4 (e : ℝ) rows licensed seed t =\n        fixedCellExponent (e : ℝ) rows E seed t := by\n    intro t ht\n    exact producerProfile4_eq_fixedCellExponent_on_source\n      (e : ℝ) rows licensed E seed _ hfixed ht\n  have hsum : (fun N : ℕ => actualPrimeBoxTestSum N\n      (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n      ((sourceRegion e m omega j).indicator\n        (fun t => extendedProfile seed t -\n          extendedProfile (producerProfile4 (e : ℝ) rows licensed seed t) t))) =\n      (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator f)) := by\n    funext N\n    unfold actualPrimeBoxTestSum\n    apply Finset.sum_congr rfl\n    intro p _\n    by_cases ht : actualPrimeTupleLog N p ∈ sourceRegion e m omega j\n    · simp only [Set.indicator_of_mem ht, hsource _ ht, f, fixedCellTest]\n    · simp only [Set.indicator_of_notMem ht]\n  have hraw : (∫ t in truncatedCell e m omega a j,\n      f t * ∏ i, 1 / t i) =\n      ∫ t in truncatedCell e m omega a j,\n        (fourthPlusProfileP1 seed t -\n          fourthPlusProfileP1\n            (producerProfile4 (e : ℝ) rows licensed seed t) t) *\n          ∏ i, 1 / t i := by\n    apply setIntegral_congr_fun (truncatedCell_measurable e m omega a j)\n    intro t ht\n    have hs : t ∈ sourceRegion e m omega j :=\n      (truncatedCell_eq_inter_sourceRegion e m omega a j ▸ ht).2\n    have hle : seed ≤ producerProfile4 (e : ℝ) rows licensed seed t :=\n      producerProfile4_seed_le (e : ℝ) rows licensed seed t\n    simp only [f, fixedCellTest, ← hsource t hs]\n    rw [← rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,\n      ← rawProfile_eq_extended_on_truncated e m omega ha j hle ht]\n  rw [hraw] at htransport\n  rw [← hsum] at htransport\n  simpa only [seed] using htransport\n\n/-- The finite labelled sum has the actual rank-four signed tree coefficient,\nthe original selected source gate, and the literal Suzuki PLUS factor at\nthe tuple-dependent fourth exponent. -/\n",
+      "before_sha256": "4995a3cc17463ac40ffbdb173b5a9fb2668253dd8bee65de43c3d8c34b623690",
+      "after_sha256": "e28f5e58b6a0f790370e20fde8d0fe3344e0e0ebbc5d81dc526f2bd8d0242532"
+    },
+    {
+      "name": "labelledRawCellSum_eq_test",
+      "before_body": " by\n  unfold labelledRawCellSum actualPrimeBoxTestSum\n  apply Finset.sum_congr rfl\n  intro p hp\n  rw [signedTupleWeight_eq]\n  by_cases hs : actualPrimeTupleLog N p ∈ sourceRegion e m omega j\n  · have hbox := ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n    have ht : actualPrimeTupleLog N p ∈ truncatedCell e m omega a j := by\n      rw [truncatedCell_eq_inter_sourceRegion]\n      exact ⟨hbox, hs⟩\n    have hle : oldExponent e m j ≤\n        producerProfile4 (e : ℝ) rows licensed (oldExponent e m j)\n          (actualPrimeTupleLog N p) :=\n      producerProfile4_seed_le (e : ℝ) rows licensed (oldExponent e m j) _\n    simp only [if_pos hs, Set.indicator_of_mem hs]\n    rw [rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,\n      rawProfile_eq_extended_on_truncated e m omega ha j hle ht]\n  · simp only [if_neg hs, Set.indicator_of_not_mem hs, mul_zero]\n\n",
+      "after_body": " by\n  unfold labelledRawCellSum actualPrimeBoxTestSum\n  apply Finset.sum_congr rfl\n  intro p hp\n  rw [signedTupleWeight_eq]\n  by_cases hs : actualPrimeTupleLog N p ∈ sourceRegion e m omega j\n  · have hbox := ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n    have ht : actualPrimeTupleLog N p ∈ truncatedCell e m omega a j := by\n      rw [truncatedCell_eq_inter_sourceRegion]\n      exact ⟨hbox, hs⟩\n    have hle : oldExponent e m j ≤\n        producerProfile4 (e : ℝ) rows licensed (oldExponent e m j)\n          (actualPrimeTupleLog N p) :=\n      producerProfile4_seed_le (e : ℝ) rows licensed (oldExponent e m j) _\n    simp only [if_pos hs, Set.indicator_of_mem hs]\n    rw [rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,\n      rawProfile_eq_extended_on_truncated e m omega ha j hle ht]\n  · simp only [if_neg hs, Set.indicator_of_notMem hs, mul_zero]\n\n",
+      "before_sha256": "bc491116a39a124b5baded6387b242d59f60bc61d69cdb543c51afa30b87847d",
+      "after_sha256": "0a9226ae0cea9c6087cff2ecd4a6ea628e72e2df37812334da36c51f8c525436"
+    },
+    {
+      "name": "tendsto_labelledRawCellSum",
+      "before_body": " by\n  have htest := tendsto_variableFourth_fixed_cell_test e chi m omega a ha haRho\n    J4 j hj rows licensed E hfixed\n  have heq : (fun N : ℕ => labelledRawCellSum e m omega a j rows licensed N) =ᶠ[atTop]\n      (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t))) := by\n    filter_upwards [eventually_gt_atTop (1 : ℕ)] with N hN\n    exact labelledRawCellSum_eq_test e m N omega a ha hN j rows licensed\n  exact htest.congr' heq\n\nend\nend ImbalancedChen.P1OriginalVariableFourthCellTestLimit\n",
+      "after_body": " by\n  have htest := tendsto_variableFourth_fixed_cell_test e chi m omega a ha haRho\n    J4 j hj rows licensed E hfixed\n  have heq : (fun N : ℕ => labelledRawCellSum e m omega a j rows licensed N) =ᶠ[atTop]\n      (fun N : ℕ => actualPrimeBoxTestSum N\n        (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t))) := by\n    filter_upwards [eventually_gt_atTop (1 : ℕ)] with N hN\n    exact labelledRawCellSum_eq_test e m N omega a ha hN j rows licensed\n  exact htest.congr' heq.symm\n\nend\nend ImbalancedChen.P1OriginalVariableFourthCellTestLimit\n",
+      "before_sha256": "007d2ace3c2628b9d924c394c707421b994cf243dcd3f3953210c7c31f350393",
+      "after_sha256": "805e59f407c7b5c97cb07a5493f89db06178c4ddca83645141263afb55d2d9d3"
+    }
+  ],
+  "outside_four_proofs_byte_identical": true,
+  "outside_proofs_sha256": "bb8f5bbafca302c42835ff33af199a4ef77f9da5ae4bb8afc57baf42e209e822",
+  "header_definition_import_option_numeric_data_or_hypothesis_changes": false,
+  "new_declarations": 0
+}

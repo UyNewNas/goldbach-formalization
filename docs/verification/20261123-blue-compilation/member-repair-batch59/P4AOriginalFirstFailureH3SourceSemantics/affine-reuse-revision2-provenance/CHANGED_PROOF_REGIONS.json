@@ -1,0 +1,122 @@
+[
+  {
+    "name": "h3_eval_subset",
+    "complete_header": "private theorem h3_eval_subset (m : ℕ) (t : Point) :\n    evaluate (subsetExpr m) t = oldSubsetSum m t :=",
+    "before_body": "\n  simp [subsetExpr, evaluate, K, X, apply_ite, oldSubsetSum, h3_castCoord,\n    Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ] <;> ring\n\n",
+    "after_body": "\n  rw [h3_subset_sum_canonical]\n  norm_num only [subsetExpr, h3_eval_notation_add, h3_eval_notation_ite,\n    evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,\n    Fin.ofNat, Fin.succ] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "6e84127a1da7ae3db6e2bab1eb57495b68ce4c06da3285782fbd116f3f362442",
+    "after_sha256": "86893c7234483890bb148a7886cc8e74536a0e539f834094fee4d729e84a8a7b"
+  },
+  {
+    "name": "h3_eval_ascending",
+    "complete_header": "private theorem h3_eval_ascending (m : ℕ) (t : Point) :\n    evaluate (ascendingExpr m) t = A (oldSubsetSum m t) :=",
+    "before_body": "\n  norm_num [ascendingExpr, evaluate, K, h3_eval_subset, A] <;> ring\n\n",
+    "after_body": "\n  norm_num only [ascendingExpr, h3_eval_notation_add, h3_eval_notation_smul,\n    evaluate, K, h3_eval_subset, A] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "c5d27d74fd104a77500a866608f2833dff9f1ae98bde3ebba6bada766ec6592e",
+    "after_sha256": "c3795f529fc8880f96ef8a5d5cfa672248be78ce49d4d40dfe4120593b5827ff"
+  },
+  {
+    "name": "h3_eval_descending",
+    "complete_header": "private theorem h3_eval_descending (m : ℕ) (t : Point) :\n    evaluate (descendingExpr m) t = D (oldSubsetSum m t) :=",
+    "before_body": "\n  norm_num [descendingExpr, evaluate, K, h3_eval_subset, D] <;> ring\n\n",
+    "after_body": "\n  norm_num only [descendingExpr, h3_eval_notation_sub, h3_eval_notation_smul,\n    evaluate, K, h3_eval_subset, D] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "d1129cd233ad4ebecd6e5675e5dbac7dedaba523638337ddf0348c1a2ba752fa",
+    "after_sha256": "098941f1d5b7d19ed83733568c130e872cbee0d00eefd9bb770ae6ab602be808"
+  },
+  {
+    "name": "h3_eval_R6",
+    "complete_header": "private theorem h3_eval_R6 (t : Point) :\n    evaluate (ascendingExpr 9) t = R6 t :=",
+    "before_body": "\n  norm_num [h3_eval_ascending, oldSubsetSum, h3_castCoord,\n    Fin.sum_univ_succ, R6, A] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3_eval_ascending, h3_subset_sum_canonical, Fin.sum_univ_succ,\n    Fin.ofNat, Fin.succ, R6, A] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "fc483174fbb5404b07638c060c19ba5a3f237dfcb64deab1af454ba1a9cb751d",
+    "after_sha256": "1e4c27fa95d779fd801e24ade358754dd95be785b1e91b154172092308aef04e"
+  },
+  {
+    "name": "h3_eval_B3",
+    "complete_header": "private theorem h3_eval_B3 (t : Point) :\n    evaluate (ascendingExpr 1) t = B3 t :=",
+    "before_body": "\n  norm_num [h3_eval_ascending, oldSubsetSum, h3_castCoord,\n    Fin.sum_univ_succ, B3, A] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3_eval_ascending, h3_subset_sum_canonical, Fin.sum_univ_succ,\n    Fin.ofNat, Fin.succ, B3, A] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "dbf6108173e8c2c18f237d8040277720033320fa643dc6b59534114aba20684d",
+    "after_sha256": "aebfc800186beda03ab733a17347d7a7529c631cb3d4a9dc8209cb617dfbe559"
+  },
+  {
+    "name": "h3_eval_oppositeR6",
+    "complete_header": "private theorem h3_eval_oppositeR6 (t : Point) :\n    evaluate (descendingExpr 9) t = D (t 0 + t 3) :=",
+    "before_body": "\n  norm_num [h3_eval_descending, oldSubsetSum, h3_castCoord,\n    Fin.sum_univ_succ, D] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3_eval_descending, h3_subset_sum_canonical, Fin.sum_univ_succ,\n    Fin.ofNat, Fin.succ, D] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "0b8c45ae63b058c68d075ca5c168a8a73f3e06d6ffe6decc6e80bbd2034450b6",
+    "after_sha256": "c7d4f0ea7d147208189a9e63b6bf4ca9b0bb6bb38a711229c5cc67ccab803053"
+  },
+  {
+    "name": "h3_eval_D23",
+    "complete_header": "private theorem h3_eval_D23 (t : Point) :\n    evaluate oldExpr t = D23 t :=",
+    "before_body": "\n  norm_num [oldExpr, evaluate, K, X, D23, D] <;> ring\n\n",
+    "after_body": "\n  norm_num only [oldExpr, h3_eval_notation_add, h3_eval_notation_sub,\n    h3_eval_notation_smul, evaluate, K, X, D23, D] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "57ace161244941a7a88fc966c309bc90fc8dc34ae341a2544751a4cfebe9f8a6",
+    "after_sha256": "60d184821cb34b36651936bfffc35e5c354bc369d98fbfc85ea529765e89ebe1"
+  },
+  {
+    "name": "h3_eval_M8",
+    "complete_header": "private theorem h3_eval_M8 (t : Point) :\n    evaluate h3M8Expr t = M8 t :=",
+    "before_body": "\n  norm_num [h3M8Expr, evaluate, K, X, M8, A, eta] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3M8Expr, h3_eval_notation_add, h3_eval_notation_sub,\n    h3_eval_notation_smul, evaluate, K, X, M8, A, eta] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "91f21a5e248d80a888c9c780d9342081067394beffeb2da0d682488630853316",
+    "after_sha256": "5abd0749d73f7ae1d7759ffec090a7ed7df68dc0bbdeebb9a78d78ed8675d964"
+  },
+  {
+    "name": "h3_eval_opposite138",
+    "complete_header": "private theorem h3_eval_opposite138 (t : Point) :\n    evaluate h3Opposite138Expr t = D (selected138 t) - eta :=",
+    "before_body": "\n  norm_num [h3Opposite138Expr, evaluate, K, X, D, selected138, eta] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3Opposite138Expr, h3_eval_notation_add, h3_eval_notation_sub,\n    h3_eval_notation_smul, evaluate, K, X, D, selected138, eta] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "33724e297c55b3b228e0e85c5966c1cd41894253e42264472aa1037353310005",
+    "after_sha256": "efb5425ef5aa6045749114de43e4a9b3fea109d0dc5c9185cf05ad17fafcd794"
+  },
+  {
+    "name": "h3_eval_history",
+    "complete_header": "private theorem h3_eval_history (j : Fin 4) (t : Point) :\n    evaluate (h3HistoryExpr j) t = (![H1 t, H3 t, H5 t, H7 t] : Fin 4 → ℝ) j :=",
+    "before_body": "\n  fin_cases j <;> norm_num [h3HistoryExpr, evaluate, X, H1, H3, H5, H7]\n\n",
+    "after_body": "\n  fin_cases j <;>\n    norm_num only [h3HistoryExpr, h3_eval_notation_add, h3_eval_notation_smul,\n      evaluate, X, H1, H3, H5, H7] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "1628c7b005a9768fcf83e20580a2939708d7262c4630b4f5d267f5d7556e955f",
+    "after_sha256": "2ac1be4c068c9250439a0ef3c4d069ad21cc1ede6163b0e40f2de77bedc66dfa"
+  },
+  {
+    "name": "h3_eval_total",
+    "complete_header": "private theorem h3_eval_total (t : Point) :\n    evaluate h3TotalExpr t = S8 t :=",
+    "before_body": "\n  simp [h3TotalExpr, evaluate, X, S8, Fin.sum_univ_succ] <;> ring\n\n",
+    "after_body": "\n  norm_num only [h3TotalExpr, h3_eval_notation_add, evaluate, X, S8,\n    Fin.sum_univ_succ, Fin.succ] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "5fd8c4ffd1cfc3ee6fb119fb4bc9bb96f68c2196c05648d6287059262ffc4dd1",
+    "after_sha256": "12124a612fe6962117a25227b151369701e97fe80a36c27afc49d12d3af6389b"
+  },
+  {
+    "name": "h3_eval_full",
+    "complete_header": "private theorem h3_eval_full (j : Fin 8) (t : Point) :\n    evaluate (h3FullExpr j) t = fullExpr t j :=",
+    "before_body": "\n  simp [h3FullExpr, fullExpr, evaluate, K, X, apply_ite, Fin.sum_univ_succ] <;> ring\n\n",
+    "after_body": "\n  fin_cases j <;>\n    norm_num only [h3FullExpr, fullExpr, h3_eval_notation_add, h3_eval_notation_smul,\n      h3_eval_notation_ite, evaluate, K, X, Fin.sum_univ_succ, Fin.succ, if_true, if_false]\n    <;> first | rfl | ring1!\n\n",
+    "before_sha256": "3c59a51018d365f0be3a65373c2083dcfbbba07896dfdc2927d07305461cc751",
+    "after_sha256": "a2c37f52698b1b39c4fde3ddf821c4d6b218e6475b02922e757a0a9e7c289e3e"
+  },
+  {
+    "name": "h3_eval_complement",
+    "complete_header": "private theorem h3_eval_complement (j : Fin 8) (t : Point) :\n    evaluate (h3ComplementExpr j) t = complementExpr t j :=",
+    "before_body": "\n  simp [h3ComplementExpr, complementExpr, selected138, evaluate, K, X,\n    apply_ite, Fin.sum_univ_succ] <;> ring\n\n",
+    "after_body": "\n  fin_cases j <;>\n    norm_num only [h3ComplementExpr, complementExpr, selected138, h3_eval_notation_add,\n      h3_eval_notation_smul, h3_eval_notation_ite, evaluate, K, X,\n      Fin.sum_univ_succ, Fin.succ, if_true, if_false] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "17d1d89631a866640871502c4228767d83f837110d0e0586f2cb6bcf8f12e141",
+    "after_sha256": "f1cef78fa711b33405b8277aa763491c476429d3fc8efe8054a199a630cb0b37"
+  },
+  {
+    "name": "h3_eval_common",
+    "complete_header": "private theorem h3_eval_common (k : Fin 37) (t : Point) :\n    evaluate (h3CommonExpr k) t = commonSlack t k :=",
+    "before_body": "\n  fin_cases k <;>\n    norm_num [h3CommonExpr, commonSlack, evaluate, K, X,\n      h3_eval_history, h3_eval_B3, h3_eval_R6, h3_eval_oppositeR6,\n      h3_eval_D23, h3_eval_M8, h3_eval_opposite138, h3_eval_full,\n      h3_eval_complement, h3_eval_total, mu, W] <;> ring\n\n",
+    "after_body": "\n  fin_cases k <;>\n    norm_num only [h3CommonExpr, commonSlack, h3_eval_notation_add, h3_eval_notation_sub,\n      h3_eval_notation_smul, evaluate, K, X, h3_eval_history, h3_eval_B3, h3_eval_R6,\n      h3_eval_oppositeR6, h3_eval_D23, h3_eval_M8, h3_eval_opposite138,\n      h3_eval_full, h3_eval_complement, h3_eval_total, mu, W] <;> first | rfl | ring1!\n\n",
+    "before_sha256": "785cc80942bdf8346564a908474c8510751977716c851dd122e6fb35f5b0e01f",
+    "after_sha256": "a5eb7e80c7f2872663d6d768e6daec2a0a59102ba11c589fddbcd1ebc5701853"
+  },
+  {
+    "name": "h3_eval_branch",
+    "complete_header": "private theorem h3_eval_branch (i : Fin 12) (m : ℕ) (t : Point) :\n    evaluate (h3BranchExpr i m) t = R6 t - oldPlane i m t :=",
+    "before_body": "\n  simp [h3BranchExpr, oldPlane, evaluate, apply_ite, h3_eval_R6,\n    h3_eval_ascending, h3_eval_descending]\n\n",
+    "after_body": "\n  by_cases h : m ∈ leftMasks i\n  · simp only [h3BranchExpr, oldPlane, if_pos h, h3_eval_notation_sub,\n      h3_eval_R6, h3_eval_ascending]\n  · simp only [h3BranchExpr, oldPlane, if_neg h, h3_eval_notation_sub,\n      h3_eval_R6, h3_eval_descending]\n\n",
+    "before_sha256": "3fb3c1d0c2fe4aafd0b0ce04db9fed204ea31522a85f1e24df3e166400aec7dd",
+    "after_sha256": "ae6140d10e6a4d805a4d10296d962b6579aa2d1ea3b510eb8efffa2200616b6c"
+  }
+]

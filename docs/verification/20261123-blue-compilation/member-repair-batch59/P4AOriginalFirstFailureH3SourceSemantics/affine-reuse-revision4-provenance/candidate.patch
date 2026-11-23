@@ -1,0 +1,20 @@
+--- 05d2/H3.lean
++++ controlled-complement/H3.lean
+@@ -199,9 +199,14 @@
+ private theorem h3_eval_complement (j : Fin 8) (t : Point) :
+     evaluate (h3ComplementExpr j) t = complementExpr t j := by
+   fin_cases j <;>
+-    norm_num [h3ComplementExpr, complementExpr, selected138, h3_eval_notation_add,
+-      h3_eval_notation_smul, h3_eval_notation_ite, evaluate, K, X,
+-      Fin.sum_univ_succ, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Fin.lt_def, Fin.ext_iff, if_true, if_false] <;> first | rfl | ring1!
++    norm_num only [h3ComplementExpr, complementExpr, selected138,
++      h3_eval_notation_add, h3_eval_notation_smul, h3_eval_notation_ite,
++      evaluate, K, X, Fin.sum_univ_succ, Fin.sum_univ_zero,
++      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
++      Fin.mk_lt_mk, Fin.mk.inj_iff, ne_eq, Nat.reduceMod,
++      and_true, true_and, and_false, false_and,
++      not_true_eq_false, not_false_eq_true, ite_true, ite_false]
++    <;> first | rfl | ring1!
+ 
+ private def h3CommonExpr : Fin 37 → Expr :=
+   ![K (25 / 128) - X 0, X 2 - K (1 / 100), X 7 - K (53 / 13824),

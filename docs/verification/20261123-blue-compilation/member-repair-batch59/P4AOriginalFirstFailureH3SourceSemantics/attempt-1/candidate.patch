@@ -1,0 +1,220 @@
+--- baseline/ImbalancedChen/P4AOriginalFirstFailureH3SourceSemantics.lean
++++ candidate/ImbalancedChen/P4AOriginalFirstFailureH3SourceSemantics.lean
+@@ -64,16 +64,190 @@
+ 
+ def branchRow (k : Fin 62) : Fin 99 := ⟨37 + k.val, by omega⟩
+ 
++local macro "h3CommonAffineNF" : tactic =>
++  `(tactic| (norm_num [sourceAffineRows, commonRow, evalAffine, commonSlack,
++      fullExpr, complementExpr, selected138, mu, eta, A, D, R6, B3,
++      M8, S8, H1, H3, H5, H7, W, D23, Fin.sum_univ_succ] <;> ring))
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_00 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (0 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_01 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (1 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_02 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (2 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_03 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (3 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_04 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (4 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_05 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (5 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_06 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (6 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_07 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (7 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_08 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (8 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_09 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (9 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_10 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (10 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_common_11 (k : Fin 37) (t : Point) :
++    evalAffine (sourceAffineRows (11 : Fin 12) (commonRow k)).2 t = commonSlack t k := by
++  fin_cases k <;> h3CommonAffineNF
++
+ /-- UNEVALUATED symbolic equality against every original common row.
+ The free real tuple is never sampled or replaced by a centre. -/
+ set_option maxRecDepth 4096 in
+ set_option maxHeartbeats 0 in
+ theorem source_common_row (i : Fin 12) (k : Fin 37) (t : Point) :
+     evalAffine (sourceAffineRows i (commonRow k)).2 t = commonSlack t k := by
+-  fin_cases i <;> fin_cases k <;>
+-    norm_num [sourceAffineRows, commonRow, evalAffine, commonSlack,
+-      fullExpr, complementExpr, selected138, mu, eta, A, D, R6, B3,
+-      M8, S8, H1, H3, H5, H7, W, D23, Fin.sum_univ_succ] <;> ring
++  fin_cases i
++  · exact h3_common_00 k t
++  · exact h3_common_01 k t
++  · exact h3_common_02 k t
++  · exact h3_common_03 k t
++  · exact h3_common_04 k t
++  · exact h3_common_05 k t
++  · exact h3_common_06 k t
++  · exact h3_common_07 k t
++  · exact h3_common_08 k t
++  · exact h3_common_09 k t
++  · exact h3_common_10 k t
++  · exact h3_common_11 k t
++
++local macro "h3BranchAffineNF" : tactic =>
++  `(tactic| (norm_num [sourceAffineRows, branchRow, branchMask, evalAffine,
++      oldPlane, leftMasks, oldSubsetSum, R6, A, D, Fin.sum_univ_succ] <;> ring))
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_00 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (0 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (0 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_01 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (1 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (1 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_02 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (2 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (2 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_03 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (3 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (3 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_04 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (4 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (4 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_05 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (5 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (5 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_06 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (6 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (6 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_07 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (7 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (7 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_08 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (8 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (8 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_09 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (9 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (9 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_10 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (10 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (10 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
++
++set_option maxRecDepth 4096 in
++set_option maxHeartbeats 0 in
++private theorem h3_branch_11 (k : Fin 62) (t : Point) :
++    evalAffine (sourceAffineRows (11 : Fin 12) (branchRow k)).2 t =
++      R6 t - oldPlane (11 : Fin 12) (branchMask k) t := by
++  fin_cases k <;> h3BranchAffineNF
+ 
+ /-- UNEVALUATED symbolic equality against the original 12-by-62
+ assigned old planes; no payload-equality hypothesis is accepted. -/
+@@ -82,9 +256,19 @@
+ theorem source_branch_row (i : Fin 12) (k : Fin 62) (t : Point) :
+     evalAffine (sourceAffineRows i (branchRow k)).2 t =
+       R6 t - oldPlane i (branchMask k) t := by
+-  fin_cases i <;> fin_cases k <;>
+-    norm_num [sourceAffineRows, branchRow, branchMask, evalAffine,
+-      oldPlane, leftMasks, oldSubsetSum, R6, A, D, Fin.sum_univ_succ] <;> ring
++  fin_cases i
++  · exact h3_branch_00 k t
++  · exact h3_branch_01 k t
++  · exact h3_branch_02 k t
++  · exact h3_branch_03 k t
++  · exact h3_branch_04 k t
++  · exact h3_branch_05 k t
++  · exact h3_branch_06 k t
++  · exact h3_branch_07 k t
++  · exact h3_branch_08 k t
++  · exact h3_branch_09 k t
++  · exact h3_branch_10 k t
++  · exact h3_branch_11 k t
+ 
+ theorem branchMask_mem (k : Fin 62) :
+     branchMask k ∈ Finset.Icc 1 63 ∧ branchMask k ≠ 9 := by

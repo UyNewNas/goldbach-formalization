@@ -1,0 +1,56 @@
+{
+  "schema": "lossless_carrier_publisher_original_business_exact_reverse_v1",
+  "baseline_sha256": "60ae182dcd0a055bddc00ce7ab1eb96701ce683008bb545e727e7e38b1317b20",
+  "candidate_sha256": "8c514ef4240a3ecebb7cee931794b2ad62f6e617b5caa1ef0be5de85321445c8",
+  "helper_sha256": "37a595c62167d5773b370490b824d50989f25166842f5d4d0bf7ec3137af5f15",
+  "helper_bytes": 12953,
+  "full_reverse_reconstructed_baseline_sha256": "60ae182dcd0a055bddc00ce7ab1eb96701ce683008bb545e727e7e38b1317b20",
+  "whole_business_AST_equal_after_only_enumerated_new_carrier_operations_removed": true,
+  "unchanged_original_function_bodies": [
+    "sha",
+    "read",
+    "write",
+    "_require",
+    "_relative_record",
+    "_late_finalizer_record"
+  ],
+  "all_original_finalizer_whitelist_review_SOURCE_SELECTION_source_five_outputs_owned_counts_catalog_logic_preserved": true,
+  "small_copy_original_five_statements_retained_in_copy_publication_artifact": true,
+  "edits": [
+    {
+      "baseline": "",
+      "candidate": "import restore_lossless_evidence as lossless\n"
+    },
+    {
+      "baseline": "",
+      "candidate": "LOSSLESS_HELPER_BYTES = 12953\nLOSSLESS_HELPER_SHA256 = '37a595c62167d5773b370490b824d50989f25166842f5d4d0bf7ec3137af5f15'\n\n\ndef preflight_publication_carriers(source, destination, files):\n    large = [record for record in files if lossless.is_large_evidence(record)]\n    if not large:\n        return\n    _require(lossless.digest_file(Path(lossless.__file__))\n             == (LOSSLESS_HELPER_BYTES, LOSSLESS_HELPER_SHA256),\n             'Lossless helper differs from the independently reviewed bytes')\n    raw_paths = {record['path'] for record in files}\n    reserved = {'LOSSLESS_ARTIFACTS.json', 'restore_lossless_evidence.py'}\n    reserved.update(record['path'] + '.gz' for record in large)\n    _require(not raw_paths.intersection(reserved), 'Carrier/metadata collides with an original raw record')\n    for record in large:\n        lossless.preflight_destination(destination, record)\n\n\ndef copy_publication_artifact(source, destination, record):\n    if lossless.is_large_evidence(record):\n        return lossless.create_carrier(source, destination, record)\n    out = destination / record['path']\n    out.parent.mkdir(parents=True, exist_ok=True)\n    if not out.exists():\n        shutil.copyfile(source / record['path'], out)\n    assert sha(out) == record['sha256']\n    return {'raw': dict(record), 'repository': dict(record)}\n\n\n"
+    },
+    {
+      "baseline": "        _relative_record(source, record)\n    return files, exception",
+      "candidate": "        if lossless.is_large_evidence(record):\n            lossless.validate_raw(source, record)\n        else:\n            _relative_record(source, record)\n    return files, exception"
+    },
+    {
+      "baseline": "",
+      "candidate": "        preflight_publication_carriers(source, destination, files)\n"
+    },
+    {
+      "baseline": "            if out.exists():\n                assert sha(out) == f['sha256'], out\n",
+      "candidate": "            if lossless.is_large_evidence(f):\n                lossless.preflight_destination(destination, f)\n            elif out.exists():\n                assert sha(out) == f['sha256'], out\n"
+    },
+    {
+      "baseline": "        for f in files:\n            out = destination / f['path']\n            out.parent.mkdir(parents=True, exist_ok=True)\n            if not out.exists():\n                shutil.copyfile(source / f['path'], out)\n            assert sha(out) == f['sha256']\n",
+      "candidate": "        artifacts = [copy_publication_artifact(source, destination, f) for f in files]\n        carriers = [row for row in artifacts if 'carrier' in row]\n        small_files = [row['repository'] for row in artifacts if 'repository' in row]\n        lossless_integrity = (lossless.finish_publication(destination, carriers,\n                              sha(source / 'PUBLICATION_FILES.json'), small_files)\n                              if carriers else {})\n"
+    },
+    {
+      "baseline": "",
+      "candidate": "            **lossless_integrity,\n"
+    }
+  ],
+  "old_legacy_fixtures_path_adapter_only": {
+    "original_sha256": "68370ff18b45074e8b0c29ce72095d8ab7962ad0f7c71c66f9c16d8bb30b571e",
+    "adapted_sha256": "879a70082105475931b2524a4c9355e6a59156ff8a1354d88fc468d2c5874b2f",
+    "same_after_reversing_single_SCRIPT_constant": true
+  },
+  "production_publisher60ae_unchanged": true,
+  "raw_production_evidence_or_main_not_read_or_run": true
+}

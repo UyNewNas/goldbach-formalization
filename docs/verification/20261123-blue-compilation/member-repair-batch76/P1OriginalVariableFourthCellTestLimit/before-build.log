@@ -1,0 +1,49 @@
+✖ [9413/9413] Building ImbalancedChen.P1OriginalVariableFourthCellTestLimit (16s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.setup.json --json
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:68:18: Type mismatch
+  le_max_left ?m.228 ?m.229
+has type
+  ?m.228 ≤ max ?m.228 ?m.229
+but is expected to have type
+  max 1 ((fixedCellExponent e rows E seed x✝¹ - ∑ i, x✝¹ i) / x✝¹ (Fin.last 3)) ∈ Ici 1
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:145:17: Unknown constant `Set.indicator_of_not_mem`
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:145:6: `simp` made no progress
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:206:26: Unknown constant `Set.indicator_of_not_mem`
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:206:2: unsolved goals
+case neg
+e : ℚ
+m N : ℕ
+omega a : ℝ
+ha : 0 < a
+hN : 1 < N
+j : FourthCell m
+rows : Finset ProducerRow
+licensed : ProducerRow → Prop
+p : Fin 4 → ℕ
+hp : p ∈ actualPrimeBoxTuples N (fun x => a) fun x => 19 / 96
+hs : actualPrimeTupleLog N p ∉ sourceRegion e m omega j
+⊢ 0 =
+    (∏ i, 1 / (↑(p i) - 1)) *
+      (sourceRegion e m omega j).indicator
+        (fun t =>
+          extendedProfile (oldExponent e m j) t -
+            extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)
+        (actualPrimeTupleLog N p)
+error: ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:235:21: Application type mismatch: The argument
+  heq
+has type
+  (fun N => labelledRawCellSum e m omega a j rows licensed N) =ᶠ[atTop] fun N =>
+    actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+      ((sourceRegion e m omega j).indicator fun t =>
+        extendedProfile (oldExponent e m j) t -
+          extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)
+but is expected to have type
+  (fun N =>
+      actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+        ((sourceRegion e m omega j).indicator fun t =>
+          extendedProfile (oldExponent e m j) t -
+            extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)) =ᶠ[atTop]
+    fun N => labelledRawCellSum e m omega a j rows licensed N
+in the application
+  Tendsto.congr' heq
+error: Lean exited with code 1

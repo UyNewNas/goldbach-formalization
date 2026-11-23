@@ -175,7 +175,7 @@ theorem exists_actualMinus_signed_exp_bound :
 def history5 (p : Fin 5 → ℕ) : List ℕ := (List.ofFn p).reverse
 
 theorem history5_prod (p : Fin 5 → ℕ) : (history5 p).prod = ∏ i, p i := by
-  simp [history5, List.prod_ofFn]
+  simp only [history5, List.prod_reverse, List.prod_ofFn]
 
 theorem history5_head (p : Fin 5 → ℕ) : (history5 p).headD 0 = p 4 := by
   simp [history5, List.ofFn_succ]

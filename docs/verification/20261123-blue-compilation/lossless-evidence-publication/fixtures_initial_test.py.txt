@@ -1,0 +1,50 @@
+"""Temporary-file fixtures only; never invoke the publisher's main."""
+import hashlib
+import importlib.util
+import os
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+
+HERE = Path(__file__).parent
+SCRIPT = Path(os.environ.get('PUBLISHER_UNDER_TEST', str(HERE / 'publish_verified_member_batch.candidate.py')))
+sys.path.insert(0, str(HERE))
+spec = importlib.util.spec_from_file_location('isolated_publisher_fixture', SCRIPT)
+publisher = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(publisher)
+
+
+class LosslessPublication(unittest.TestCase):
+    def test_exact_large_evidence_roundtrip(self):
+        copy_file = getattr(publisher, 'copy_publication_artifact', None)
+        self.assertTrue(callable(copy_file), 'lossless publication carrier support is missing')
+        import restore_lossless_evidence as carrier
+        with tempfile.TemporaryDirectory(prefix='lossless-evidence-fixture-') as tmp:
+            root = Path(tmp)
+            source, dest = root / 'source', root / 'published'
+            source.mkdir()
+            raw = source / 'OWNED_EXPORTS.json'
+            block = b'{"full_type":"original bytes"}\r\n' * 2048
+            h = hashlib.sha256()
+            size = 0
+            with raw.open('wb') as f:
+                while size <= 50 * 1024**2:
+                    f.write(block)
+                    h.update(block)
+                    size += len(block)
+            record = {'path': raw.name, 'bytes': size, 'sha256': h.hexdigest()}
+            row = copy_file(source, dest, record)
+            self.assertFalse((dest / raw.name).exists())
+            self.assertEqual(row['raw'], record)
+            self.assertEqual(row['carrier']['path'], raw.name + '.gz')
+            self.assertEqual(raw.stat().st_size, size)
+            manifest = carrier.finish_publication(dest, [row], '1' * 64, [])
+            restored = root / 'restored'
+            carrier.restore(dest / 'LOSSLESS_ARTIFACTS.json', restored, max_total_bytes=size)
+            self.assertEqual(carrier.digest_file(restored / raw.name), (size, record['sha256']))
+            self.assertEqual(manifest['original_manifest_paths_present_in_repository_destination'], False)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,31 @@
+--- bcc/Remaining.lean
++++ actual-fin-reduction/Remaining.lean
+@@ -251,15 +251,15 @@
+ private theorem rem_eval_comparison (c : Cell) (t : Point) :
+     evaluate (remComparisonExpr c) t = comparison c t := by
+   cases c <;>
+-    norm_num only [remComparisonExpr, comparison, rem_eval_old, rem_eval_ascending,
++    norm_num [remComparisonExpr, comparison, rem_eval_old, rem_eval_ascending,
+       rem_eval_descending, rem_subset_sum_canonical, Fin.sum_univ_succ,
+-      Fin.ofNat, Fin.succ, A, C] <;> first | rfl | ring1!
++      Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, A, C] <;> first | rfl | ring1!
+ 
+ private theorem rem_eval_minorant (c : Cell) (t : Point) :
+     evaluate (remMinorantExpr c) t = minorant c t := by
+   cases c <;>
+-    norm_num only [remMinorantExpr, minorant, rem_eval_old, rem_eval_ascending,
+-      rem_subset_sum_canonical, Fin.sum_univ_succ, Fin.ofNat, Fin.succ, A, C]
++    norm_num [remMinorantExpr, minorant, rem_eval_old, rem_eval_ascending,
++      rem_subset_sum_canonical, Fin.sum_univ_succ, Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, A, C]
+     <;> first | rfl | ring1!
+ 
+ private def remNewCapExpr (c : Cell) : Expr :=
+@@ -359,7 +359,7 @@
+ private theorem rem_eval_common (c : Cell) (k : Fin 35) (t : Point) :
+     evaluate (remCommonExpr c k) t = commonSlack c t k := by
+   fin_cases k <;>
+-    norm_num only [remCommonExpr, commonSlack, rem_eval_notation_add, rem_eval_notation_sub,
++    norm_num [remCommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ', rem_eval_notation_add, rem_eval_notation_sub,
+       rem_eval_notation_smul, rem_eval_notation_ite, evaluate, K, X,
+       rem_eval_minorant, rem_eval_history, rem_eval_comparison, rem_eval_newCap,
+       rem_eval_otherPlane, rem_eval_slotSum, rem_eval_prefixSquare,

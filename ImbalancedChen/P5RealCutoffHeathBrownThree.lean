@@ -62,7 +62,7 @@ theorem identity_at_zero (y : ℝ) :
 theorem identity_at_one {y : ℝ} (hy : 1 ≤ y) :
     (∑ j ∈ Finset.range 3, (-1 : ℝ)^j * (Nat.choose 3 (j+1) : ℝ) * term y j 1) = 0 := by
   have hcube : (1 : ℝ) ≤ y^3 := one_le_pow₀ hy
-  simpa using (order_three_identity (by linarith : 0 ≤ y) hcube).symm
+  simpa using (order_three_identity (n := 1) (by linarith : 0 ≤ y) (by simpa using hcube)).symm
 
 end
 end ImbalancedChen.P5Z.RealCutoffHeathBrownThree
