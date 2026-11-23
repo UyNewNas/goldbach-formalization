@@ -1,0 +1,22 @@
+--- baseline/ImbalancedChen/Data/P5SubdivisionStoredBlock036.lean
++++ candidate/ImbalancedChen/Data/P5SubdivisionStoredBlock036.lean
+@@ -4108,8 +4108,18 @@
+ 
+ theorem rows_size : rows.size = 4096 := rfl
+ 
++private theorem source_indices_eq_range :
++    rows.toList.map StoredParent.sourceIndex = List.range' 147456 rows.size := by
++  decide
++
+ /-- Positional index alignment, closed source only; not executed. -/
+ theorem source_index_at : ∀ j : Fin rows.size, (rows[j.val]).sourceIndex = 147456 + j.val := by
+-  decide
++  intro j
++  have h := congrArg (fun xs : List ℕ => xs[j.val]?) source_indices_eq_range
++  simp only [List.getElem?_map, Array.getElem?_toList,
++    Array.getElem?_eq_getElem (xs := rows) (i := j.val) j.isLt,
++    Option.map_some, List.getElem?_range' (s := 147456) (step := 1) j.isLt,
++    Nat.one_mul] at h
++  exact Option.some.inj h
+ 
+ end ImbalancedChen.Data.P5SubdivisionStoredBlock036

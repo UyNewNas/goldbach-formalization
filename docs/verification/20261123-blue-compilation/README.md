@@ -245,3 +245,10 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 58、61、64、65 的旧发布清单在 finalizer 尚未输出时记录了空 `finalizer.log`，随后辅助 stdout 写入完整 `FINAL_RELEASE.json`。四个包各自保存不可变 `LATE_FINALIZER_LOG_BINDING.json`，精确绑定实际 stdout 与 FINAL 的逐字同一性；原清单、实际日志及验证证据保持。仅该辅助条目使用显式晚绑定，所有其它原条目仍逐个核哈希，不将旧清单误称为当前全部匹配。60 的原清单全部匹配。这项包装补充没有重跑 Lean，也不增加数学前提。
 
 这些结果仍是完整 P1 的真实供应链验收。H3、Remaining、SixthLater、其余原始数据与最终四个 P1 出口继续按实际编译结果推进；本表不宣称完整 P1 或看板全部蓝色节点已经完成。
+
+
+第六十八至七十二批完成 `Data.P5SubdivisionStoredBlock000` 至 `049` 的实际验收，共 50 个模块、204800 行原数据、250 个 owned 声明（200 public、50 private）。全部 50 次正常编译、50 次指定模块 kernel replay 和五次完整 owned 审计实际退出 0，非作者逐批最终复核确认完整类型／AST／宇宙参数／标准三公理、原声明清单和源码及 250 项主要产物稳定。逐批结果见 [68](member-repair-batch68/VALIDATION_RESULTS.json)、[69](member-repair-batch69/VALIDATION_RESULTS.json)、[70](member-repair-batch70/VALIDATION_RESULTS.json)、[71](member-repair-batch71/VALIDATION_RESULTS.json)、[72](member-repair-batch72/VALIDATION_RESULTS.json)；各目录保存 `FINAL_REVIEW.json`。
+
+这些是复用 070／071 已验线性索引证明模板的工程安排，没有把原未执行的 000–049 虚列为实际失败。每块原数据、字段、顺序、偏移、两个原公开声明和 `rows_size` 的 `rfl` 保持；私有 List 投影证书推回同一个全部有限索引命题。已绿 070／071 没有重复编译。五十份源码作为明确安装后像发布，主仓不新建同名 canonical 文件。这仍仅验收原始索引事实，不能替代父子 max 恒等式、数值 gain 或完整 P1。
+
+68 保留一项与前述相同的 finalizer stdout 晚绑定；160 个其它原条目逐字匹配，原清单和实际 stdout 均保留。69–72 各自 160 个原发布条目全部匹配。68／69 最终复核新清单的初始绝对路径版本另存为历史文件，规范清单只将路径改为包内相对路径并绑定原版本哈希，复核和验证记录未改；该包装兼容调整没有重跑 Lean。
