@@ -1,0 +1,149 @@
+{
+  "schema": "block071_sequential_projection_resource_plan_v1",
+  "API_excerpts": [
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Basic.lean",
+        "bytes": 87020,
+        "sha256": "6fe2c8b4db30895cfc240e96d49119a8fb9997c6074e294ba62352a7f9adba72"
+      },
+      "first_line": 2125,
+      "last_line": 2128,
+      "raw_excerpt": "def range' : (start len : Nat) → (step : Nat := 1) → List Nat\n  | _, 0, _ => []\n  | s, n+1, step => s :: range' (s+step) n step\n\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Lemmas.lean",
+        "bytes": 152635,
+        "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac"
+      },
+      "first_line": 1088,
+      "last_line": 1097,
+      "raw_excerpt": "\n@[simp, grind =] theorem getElem?_map {f : α → β} : ∀ {l : List α} {i : Nat}, (map f l)[i]? = Option.map f l[i]?\n  | [], _ => rfl\n  | _ :: _, 0 => by simp\n  | _ :: l, i+1 => by simp [getElem?_map]\n\n-- The argument `f : α → β` is explicit, to facilitate rewriting from right to left.\n@[simp, grind =] theorem getElem_map (f : α → β) {l} {i : Nat} {h : i < (map f l).length} :\n    (map f l)[i] = f (l[i]'(length_map f ▸ h)) :=\n  Option.some.inj <| by rw [← getElem?_eq_getElem, getElem?_map, getElem?_eq_getElem]; rfl\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Range.lean",
+        "bytes": 11045,
+        "sha256": "74561923c148bb19e8cbcfbbd30f81dcb1302bb395925e7d06d107eb90e6a29a"
+      },
+      "first_line": 81,
+      "last_line": 92,
+      "raw_excerpt": "\ntheorem getElem?_range' {s step} :\n    ∀ {i n : Nat}, i < n → (range' s n step)[i]? = some (s + step * i)\n  | 0, n + 1, _ => by simp [range'_succ]\n  | m + 1, n + 1, h => by\n    simp only [range'_succ, getElem?_cons_succ]\n    exact (getElem?_range' (s := s + step) (by exact succ_lt_succ_iff.mp h)).trans <| by\n      simp [Nat.mul_succ, Nat.add_assoc, Nat.add_comm]\n\n@[simp, grind =] theorem getElem_range' {n m step} {i} (H : i < (range' n m step).length) :\n    (range' n m step)[i] = n + step * i :=\n  (getElem?_eq_some_iff.1 <| getElem?_range' (by simpa using H)).2\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Array/Basic.lean",
+        "bytes": 75780,
+        "sha256": "85b1fcc2eac430164656c02295d9cf5d3549826517a2a89083a7afae28b1e4f2"
+      },
+      "first_line": 91,
+      "last_line": 97,
+      "raw_excerpt": "@[simp, grind =] theorem toArray_toList {xs : Array α} : xs.toList.toArray = xs := rfl\n\n@[simp, grind =] theorem getElem_toList {xs : Array α} {i : Nat} (h : i < xs.toList.length) : xs.toList[i] = xs[i] := rfl\n\n@[simp, grind =] theorem getElem?_toList {xs : Array α} {i : Nat} : xs.toList[i]? = xs[i]? := by\n  simp only [getElem?_def, getElem_toList]\n  simp only [Array.size]\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Array/Lemmas.lean",
+        "bytes": 191046,
+        "sha256": "d3d343ae6aec3ee4de41c7008e4391a923befa309428a5aea8681e6c47f32721"
+      },
+      "first_line": 138,
+      "last_line": 139,
+      "raw_excerpt": "@[simp] theorem getElem?_eq_getElem {xs : Array α} {i : Nat} (h : i < xs.size) : xs[i]? = some xs[i] :=\n  getElem?_pos ..\n"
+    }
+  ],
+  "why_not_Array_equality": {
+    "source": {
+      "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Array/DecidableEq.lean",
+      "bytes": 7115,
+      "sha256": "b1682d00c2b7ac63511ed58d421e191c6286cd342baf8be8cc6dd37cf9642fac"
+    },
+    "first_line": 99,
+    "last_line": 114,
+    "raw_excerpt": "def instDecidableEqImpl [DecidableEq α] : DecidableEq (Array α) := fun xs ys =>\n  match h:isEqv xs ys (fun a b => a = b) with\n  | true  => isTrue (eq_of_isEqv xs ys h)\n  | false => isFalse (by subst ·; rw [isEqv_self] at h; contradiction)\n\ninstance instDecidableEq [DecidableEq α] : DecidableEq (Array α) := fun xs ys =>\n  match xs with\n  | ⟨[]⟩ =>\n    match ys with\n    | ⟨[]⟩ => isTrue rfl\n    | ⟨_ :: _⟩ => isFalse (fun h => Array.noConfusion rfl (heq_of_eq h) (fun h => List.noConfusion rfl h))\n  | ⟨a :: as⟩ =>\n    match ys with\n    | ⟨[]⟩ => isFalse (fun h => Array.noConfusion rfl (heq_of_eq h) (fun h => List.noConfusion rfl h))\n    | ⟨b :: bs⟩ => instDecidableEqImpl ⟨a :: as⟩ ⟨b :: bs⟩\n\n"
+  },
+  "array_equality_index_loop": {
+    "source": {
+      "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Array/Basic.lean",
+      "bytes": 75780,
+      "sha256": "85b1fcc2eac430164656c02295d9cf5d3549826517a2a89083a7afae28b1e4f2"
+    },
+    "first_line": 294,
+    "last_line": 300,
+    "raw_excerpt": "def isEqvAux (xs ys : Array α) (hsz : xs.size = ys.size) (p : α → α → Bool) :\n    ∀ (i : Nat) (_ : i ≤ xs.size), Bool\n  | 0, _ => true\n  | i+1, h =>\n    p xs[i] (ys[i]'(hsz ▸ h)) && isEqvAux xs ys hsz p i (Nat.le_trans (Nat.le_add_right i 1) h)\n\n/--\n"
+  },
+  "availability_imports": [
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List.lean",
+        "bytes": 1334,
+        "sha256": "9d4127179da53d3b7fa59204024db7cd5db60e12c24d7be9fb274befca80ce71"
+      },
+      "first_line": 35,
+      "last_line": 38,
+      "raw_excerpt": "public import Init.Data.List.FinRange\npublic import Init.Data.List.Lex\npublic import Init.Data.List.Range\npublic import Init.Data.List.Scan\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Array.lean",
+        "bytes": 1249,
+        "sha256": "ed52b7179b4acdb25b1e6cce1445ade9afedf1fb8c109a5fad7442c2b7c740a5"
+      },
+      "first_line": 15,
+      "last_line": 18,
+      "raw_excerpt": "public import Init.Data.Array.Attach\npublic import Init.Data.Array.BasicAux\npublic import Init.Data.Array.Lemmas\npublic import Init.Data.Array.TakeDrop\n"
+    }
+  ],
+  "same_family_examined": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/Data/P5SubdivisionStoredBlock069.lean",
+      "bytes": 217237,
+      "sha256": "7bd52f6b8c29688b3e3bb4295f71af304ac5f44267c780e0abbc6335e24c1867"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/Data/P5SubdivisionStoredBlock070.lean",
+      "bytes": 217485,
+      "sha256": "6e479bc81706f9899619199d1363ec1c4b758a39e1279b90b2289b27fc5f1cc2"
+    }
+  ],
+  "same_family_result": "The bounded adjacent069/070 sources use the same direct forall-Fin by decide guard. No pre-existing sequential projection helper was found in these examined siblings or P5Subdivision wrapper files. This is not a repository-wide absence claim.",
+  "bounded_existing_indexes": [
+    {
+      "source": {
+        "path": "/workspace/blue-member-blob-inventory.json",
+        "bytes": 1405462,
+        "sha256": "b5508317b6126e689f8a9810ab0e9e5f8bba5491823b63bd016b1ec5f5c617cf"
+      },
+      "exact_module_name_matches": 0
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-known-api-repair-inventory/INVENTORY.json",
+        "bytes": 6717,
+        "sha256": "feb6c40828632dcbbb03ccfec7e698e99eac123a25b3c479056ba0746d549c55"
+      },
+      "exact_module_name_matches": 0
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-four-commit-reuse-inventory-20261123.json",
+        "bytes": 150513,
+        "sha256": "a60103db75acd3954b44032b4f6e66ef79b5dd9460b26dd3ec5f226781e482e8"
+      },
+      "exact_module_name_matches": 0
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-reindex-build-evidence/EXACT_SELECTION.json",
+        "bytes": 1105894,
+        "sha256": "553708c41780b0b1293fe60ab24973a3565f98d029202053b0e024d642e24d34"
+      },
+      "exact_module_name_matches": 0
+    }
+  ],
+  "static_reason": "The original finite forall checks row lookup separately for each j. The private List map/range equality instead checks two structurally recursive streams of1817 natural numbers; StoredParent.oldQ80/newQ80 are never compared or arithmetically recomputed. List.range' advances one step per output, and List.map projects one head at a time. The public theorem uses getElem? congruence and already imported total-index APIs; it does not decide the forall again.",
+  "boundary": "Static proof-engineering proposal only. No Lean call, finite guard replay, exact-false-row diagnostic or resource measurement was performed. A compiler/kernel PASS or bounded memory use is not asserted. If the new closed check is false, the original row/order/index data must be retained and the exact counterexample reported. This candidate neither certifies any old/new integral/floor/license value nor repairs the whole archive guard.",
+  "complexity_claim": "Removes repeated original StoredParent array indexing from the closed decidable proposition; the projected check is sequential in the intended reduction equations. Actual kernel normalization/caching/memory remain to be measured by sole owner under unchanged12GiB limits.",
+  "normal_kernel_full_owned": "PENDING_SOLE_OWNER_UNCHANGED_BUDGET",
+  "no_native_decide_or_oracle": true
+}

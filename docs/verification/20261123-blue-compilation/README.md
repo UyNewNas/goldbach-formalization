@@ -214,3 +214,9 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 至此首轮实际构建遇到的 32 个失败依赖均已有相应正常编译、kernel 与 owned 验收，共 1081 个声明（978 public、103 private）。这不替代完整现代 P1 的最终端点：当前继续构建实际 All22 源、三个新输出及固定参数汇合入口，未把依赖验收当作完整 P1 完成。
 
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。
+
+第六十三批 `Data.P5SubdivisionStoredBlock071` 已通过正常编译、指定模块 kernel replay、完整 owned 类型／宇宙参数／传递公理检查及非作者最终复核，5 个声明（4 public、1 private）仅使用标准三公理，包含生成的公开 proof 声明。源码及五项主要产物跨阶段稳定，见 [验收结果](member-repair-batch63/VALIDATION_RESULTS.json) 和 [最终复核](member-repair-batch63/INDEPENDENT_REVIEW.json)。原正常编译在索引证明的 kernel 阶段内存超限；修补先用一个私有闭合证明校核 `rows.toList.map sourceIndex` 的顺序索引，再通过 `getElem?` 推回原来的全部有限索引命题。1817 行 literal 数据、字段、顺序、两个原公开声明及 `rows_size` 的 `rfl` 均保持，源进程的原 12 GiB 预算不变。三个检查分别实际退出 0，未为发布重跑。
+
+第六十七批 `Data.P5SubdivisionStoredBlock070` 复用同一证明模板，也通过三项检查及非作者最终复核，5 个 owned 声明（4 public、1 private）仅标准三公理，源码及五项主要产物稳定，见 [验收结果](member-repair-batch67/VALIDATION_RESULTS.json) 和 [最终复核](member-repair-batch67/INDEPENDENT_REVIEW.json)。该块原失败是 4000000-heartbeat 的 `whnf` 超时，修补保持 4096 行数据、原偏移 286720、完整原声明及预算；没有把超时记为数据反例或内存失败。
+
+这两份源码仍作为明确安装后像发布，主仓没有新建同名 canonical 文件。这里只验收两个档案块的原始索引事实；其它块、全部父子最大值检查和完整 P1 端点仍须各自取得实际验收。
