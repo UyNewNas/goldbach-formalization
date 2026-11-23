@@ -1,0 +1,34 @@
+import ImbalancedChen.P2ContinuousSieveRational
+
+set_option pp.all true
+
+#check @ImbalancedChen.P2ContinuousSieveRational.logLower
+#print axioms ImbalancedChen.P2ContinuousSieveRational.logLower
+#check @ImbalancedChen.P2ContinuousSieveRational.logUpper
+#print axioms ImbalancedChen.P2ContinuousSieveRational.logUpper
+#check @ImbalancedChen.P2ContinuousSieveRational.D
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D
+#check @ImbalancedChen.P2ContinuousSieveRational.D_eq_upper_sub_lower
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_eq_upper_sub_lower
+#check @ImbalancedChen.P2ContinuousSieveRational.log_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.log_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.lower_rational_node_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.lower_rational_node_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.upper_rational_node_eq
+#print axioms ImbalancedChen.P2ContinuousSieveRational.upper_rational_node_eq
+#check @ImbalancedChen.P2ContinuousSieveRational.D_rational_node_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_rational_node_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.lower_rational_cell_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.lower_rational_cell_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.D_rational_cell_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_rational_cell_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.log_two_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.log_two_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.D_three_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_three_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.D_le_rational_quadratic_tail
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_le_rational_quadratic_tail
+#check @ImbalancedChen.P2ContinuousSieveRational.D_rational_tail_cell_bounds
+#print axioms ImbalancedChen.P2ContinuousSieveRational.D_rational_tail_cell_bounds
+#check @ImbalancedChen.P2ContinuousSieveRational.upper_le_lower_add_rational_tail
+#print axioms ImbalancedChen.P2ContinuousSieveRational.upper_le_lower_add_rational_tail

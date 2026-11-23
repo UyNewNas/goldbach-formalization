@@ -1,0 +1,257 @@
+ImbalancedChen.P2ContinuousSieveRational.logLower : (n : Nat) → (q : Rat) → Rat
+'ImbalancedChen.P2ContinuousSieveRational.logLower' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.logUpper : (n : Nat) → (q : Rat) → Rat
+'ImbalancedChen.P2ContinuousSieveRational.logUpper' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D : (s : Real) → Real
+'ImbalancedChen.P2ContinuousSieveRational.D' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D_eq_upper_sub_lower : ∀ (s : Real),
+  @Eq.{1} Real (ImbalancedChen.P2ContinuousSieveRational.D s)
+    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.upper s)
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower s))
+'ImbalancedChen.P2ContinuousSieveRational.D_eq_upper_sub_lower' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.log_bounds : ∀ (n : Nat) (q : Rat)
+  (hq : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) q),
+  And
+    (@LE.le.{0} Real Real.instLE
+      (@Rat.cast.{0} Real Real.instRatCast (ImbalancedChen.P2ContinuousSieveRational.logLower n q))
+      (Real.log
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@Rat.cast.{0} Real Real.instRatCast q)
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))))
+    (@LE.le.{0} Real Real.instLE
+      (Real.log
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@Rat.cast.{0} Real Real.instRatCast q)
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))
+      (@Rat.cast.{0} Real Real.instRatCast (ImbalancedChen.P2ContinuousSieveRational.logUpper n q)))
+'ImbalancedChen.P2ContinuousSieveRational.log_bounds' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.lower_rational_node_bounds : ∀ (n : Nat) (q : Rat)
+  (hq2 : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) q)
+  (hq4 : @LE.le.{0} Rat Rat.instLE q (@OfNat.ofNat.{0} Rat (nat_lit 4) (@Rat.instOfNat (nat_lit 4)))),
+  And
+    (@LE.le.{0} Real Real.instLE
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (ImbalancedChen.P2ContinuousSieveRational.logLower n q) q))
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower (@Rat.cast.{0} Real Real.instRatCast q)))
+    (@LE.le.{0} Real Real.instLE
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower (@Rat.cast.{0} Real Real.instRatCast q))
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (ImbalancedChen.P2ContinuousSieveRational.logUpper n q) q)))
+'ImbalancedChen.P2ContinuousSieveRational.lower_rational_node_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.upper_rational_node_eq : ∀ (q : Rat)
+  (hq1 : @LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))) q)
+  (hq3 : @LE.le.{0} Rat Rat.instLE q (@OfNat.ofNat.{0} Rat (nat_lit 3) (@Rat.instOfNat (nat_lit 3)))),
+  @Eq.{1} Real (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.upper (@Rat.cast.{0} Real Real.instRatCast q))
+    (@Rat.cast.{0} Real Real.instRatCast
+      (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+        (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))) q))
+'ImbalancedChen.P2ContinuousSieveRational.upper_rational_node_eq' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D_rational_node_bounds : ∀ (n : Nat) (q : Rat)
+  (hq2 : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) q)
+  (hq3 : @LE.le.{0} Rat Rat.instLE q (@OfNat.ofNat.{0} Rat (nat_lit 3) (@Rat.instOfNat (nat_lit 3)))),
+  And
+    (@LE.le.{0} Real Real.instLE
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (ImbalancedChen.P2ContinuousSieveRational.logUpper n q))
+          q))
+      (ImbalancedChen.P2ContinuousSieveRational.D (@Rat.cast.{0} Real Real.instRatCast q)))
+    (@LE.le.{0} Real Real.instLE (ImbalancedChen.P2ContinuousSieveRational.D (@Rat.cast.{0} Real Real.instRatCast q))
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (ImbalancedChen.P2ContinuousSieveRational.logLower n q))
+          q)))
+'ImbalancedChen.P2ContinuousSieveRational.D_rational_node_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.lower_rational_cell_bounds : ∀ (n : Nat) (a b : Rat) (s : Real)
+  (ha : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) a)
+  (hb : @LE.le.{0} Rat Rat.instLE b (@OfNat.ofNat.{0} Rat (nat_lit 4) (@Rat.instOfNat (nat_lit 4))))
+  (has : @LE.le.{0} Real Real.instLE (@Rat.cast.{0} Real Real.instRatCast a) s)
+  (hsb : @LE.le.{0} Real Real.instLE s (@Rat.cast.{0} Real Real.instRatCast b)),
+  And
+    (@LE.le.{0} Real Real.instLE
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (ImbalancedChen.P2ContinuousSieveRational.logLower n a) a))
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower s))
+    (@LE.le.{0} Real Real.instLE (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower s)
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (ImbalancedChen.P2ContinuousSieveRational.logUpper n b) b)))
+'ImbalancedChen.P2ContinuousSieveRational.lower_rational_cell_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D_rational_cell_bounds : ∀ (n : Nat) (a b : Rat) (s : Real)
+  (ha : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) a)
+  (hb : @LE.le.{0} Rat Rat.instLE b (@OfNat.ofNat.{0} Rat (nat_lit 3) (@Rat.instOfNat (nat_lit 3))))
+  (has : @LE.le.{0} Real Real.instLE (@Rat.cast.{0} Real Real.instRatCast a) s)
+  (hsb : @LE.le.{0} Real Real.instLE s (@Rat.cast.{0} Real Real.instRatCast b)),
+  And
+    (@LE.le.{0} Real Real.instLE
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (ImbalancedChen.P2ContinuousSieveRational.logUpper n b))
+          b))
+      (ImbalancedChen.P2ContinuousSieveRational.D s))
+    (@LE.le.{0} Real Real.instLE (ImbalancedChen.P2ContinuousSieveRational.D s)
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (ImbalancedChen.P2ContinuousSieveRational.logLower n a))
+          a)))
+'ImbalancedChen.P2ContinuousSieveRational.D_rational_cell_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.log_two_bounds : And
+  (@LE.le.{0} Real Real.instLE
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 693147)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 693147) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 693146) (instOfNatNat (nat_lit 693146)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 693145) (instOfNatNat (nat_lit 693145)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 1000000)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000000) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999999) (instOfNatNat (nat_lit 999999)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 999998) (instOfNatNat (nat_lit 999998))))))))
+    (Real.log
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+  (@LE.le.{0} Real Real.instLE
+    (Real.log
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 693148)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 693148) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 693147) (instOfNatNat (nat_lit 693147)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 693146) (instOfNatNat (nat_lit 693146)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 1000000)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000000) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999999) (instOfNatNat (nat_lit 999999)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 999998) (instOfNatNat (nat_lit 999998)))))))))
+'ImbalancedChen.P2ContinuousSieveRational.log_two_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D_three_bounds : And
+  (@LE.le.{0} Real Real.instLE
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 306852)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 306852) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 306851) (instOfNatNat (nat_lit 306851)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 306850) (instOfNatNat (nat_lit 306850)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 3000000)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3000000) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2999999) (instOfNatNat (nat_lit 2999999)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2999998) (instOfNatNat (nat_lit 2999998))))))))
+    (ImbalancedChen.P2ContinuousSieveRational.D
+      (@OfNat.ofNat.{0} Real (nat_lit 3)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))))
+  (@LE.le.{0} Real Real.instLE
+    (ImbalancedChen.P2ContinuousSieveRational.D
+      (@OfNat.ofNat.{0} Real (nat_lit 3)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 306853)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 306853) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 306852) (instOfNatNat (nat_lit 306852)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 306851) (instOfNatNat (nat_lit 306851)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 3000000)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3000000) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2999999) (instOfNatNat (nat_lit 2999999)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2999998) (instOfNatNat (nat_lit 2999998)))))))))
+'ImbalancedChen.P2ContinuousSieveRational.D_three_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@ImbalancedChen.P2ContinuousSieveRational.D_le_rational_quadratic_tail : ∀ {s : Real}
+  (hs :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real (nat_lit 3)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+      s),
+  @LE.le.{0} Real Real.instLE (ImbalancedChen.P2ContinuousSieveRational.D s)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 920559)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 920559) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 920558) (instOfNatNat (nat_lit 920558)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 920557) (instOfNatNat (nat_lit 920557)))))))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real (nat_lit 1000000)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000000) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999999) (instOfNatNat (nat_lit 999999)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 999998) (instOfNatNat (nat_lit 999998)))))))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real
+          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid))) s
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+'ImbalancedChen.P2ContinuousSieveRational.D_le_rational_quadratic_tail' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P2ContinuousSieveRational.D_rational_tail_cell_bounds : ∀ (a : Rat) (s : Real)
+  (ha : @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 3) (@Rat.instOfNat (nat_lit 3))) a)
+  (has : @LE.le.{0} Real Real.instLE (@Rat.cast.{0} Real Real.instRatCast a) s),
+  And
+    (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+      (ImbalancedChen.P2ContinuousSieveRational.D s))
+    (@LE.le.{0} Real Real.instLE (ImbalancedChen.P2ContinuousSieveRational.D s)
+      (@Rat.cast.{0} Real Real.instRatCast
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@OfNat.ofNat.{0} Rat (nat_lit 920559) (@Rat.instOfNat (nat_lit 920559)))
+          (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1000000) (@Rat.instOfNat (nat_lit 1000000)))
+            (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+              (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid))) a
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))))
+'ImbalancedChen.P2ContinuousSieveRational.D_rational_tail_cell_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@ImbalancedChen.P2ContinuousSieveRational.upper_le_lower_add_rational_tail : ∀ {s : Real}
+  (hs :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real (nat_lit 3)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 3) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+      s),
+  @LE.le.{0} Real Real.instLE (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.upper s)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (ImbalancedChen.OriginalU2CoupledRecurrenceSourceOnly.lower s)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real (nat_lit 920559)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 920559) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 920558) (instOfNatNat (nat_lit 920558)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 920557) (instOfNatNat (nat_lit 920557)))))))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 1000000)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000000) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999999) (instOfNatNat (nat_lit 999999)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 999998) (instOfNatNat (nat_lit 999998)))))))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real
+            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid))) s
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+'ImbalancedChen.P2ContinuousSieveRational.upper_le_lower_add_rational_tail' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
