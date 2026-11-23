@@ -1,3 +1,4 @@
+import ImbalancedChen.ActualPrimeBoxInitialSavingIntegral
 import ImbalancedChen.P1ActualUpperClosedParameterUniformity
 import ImbalancedChen.P1ActualUpperNearOneBound
 import ImbalancedChen.P1ActualCoarseLevelCeiling
@@ -356,7 +357,7 @@ theorem oldLevel_le_newLevel (e : ℚ) (chi : ℝ) (m : ℕ) (omega rho : ℝ)
   have hd := admitted_tuple_data (e : ℝ) chi m omega rho N cap p hp
   have hpos : ∀ q ∈ fourthHistory p, 0 < q := by
     intro q hq
-    simp only [fourthHistory, List.mem_cons, List.mem_singleton] at hq
+    simp only [fourthHistory, List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hq
     rcases hq with rfl | rfl | rfl | rfl <;> exact (hd.2.1 _).pos
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   have hc := P1OriginalCoarseContinuation.frozenLevel_le_level4
@@ -472,7 +473,9 @@ theorem normalizedResidual_primeHistoryTuple (N cap : ℕ) {history : List ℕ}
     normalizedResidual N cap (primeHistoryTuple 4 history) Q =
       historyNormalizedResidual N cap history Q := by
   unfold normalizedResidual historyNormalizedResidual
-  rw [primeHistoryTuple_prod hlen, primeHistoryTuple_last hlen]
+  have hlast := primeHistoryTuple_last hlen
+  change primeHistoryTuple 4 history 3 = history.headD 0 at hlast
+  rw [primeHistoryTuple_prod hlen, hlast]
 
 theorem fourthHistory_primeHistoryTuple {history : List ℕ} (hlen : history.length = 4) :
     fourthHistory (primeHistoryTuple 4 history) = history := by
@@ -535,7 +538,9 @@ theorem exists_original_frontier_old_new_uniform_suppliers (a rho : ℝ) (ha : 0
   have hp : p ∈ admittedTuples (e : ℝ) chi m omega rho N cap :=
     frontier_tuple_mem_admitted (e : ℝ) chi m omega rho N cap weight state hstate
   have hcutTuple : (N : ℝ) ^ a ≤ (p 3 : ℝ) := by
-    simpa only [p, primeHistoryTuple_last hlen] using hcut
+    have hlast := primeHistoryTuple_last hlen
+    change primeHistoryTuple 4 state.selectedPrefix 3 = state.selectedPrefix.headD 0 at hlast
+    simpa only [p, hlast] using hcut
   have h := hbound N hN hEven omega hcheck cap p hp hcutTuple
   have hhistory : fourthHistory p = state.selectedPrefix := fourthHistory_primeHistoryTuple hlen
   have hold : oldLevel (e : ℝ) chi m omega N p =

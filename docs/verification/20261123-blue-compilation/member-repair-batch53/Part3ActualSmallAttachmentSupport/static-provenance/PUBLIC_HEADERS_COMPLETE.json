@@ -1,0 +1,57 @@
+{
+  "headers": [
+    {
+      "name": "dwell_prepend_block",
+      "kind": "theorem",
+      "before_complete_header": "theorem dwell_prepend_block {D E : ℝ} (a : ℕ) (input : List ℕ)\n    (hfull : actualDwellSupport D input)\n    (hfirst : (a : ℝ) ^ 2 ≤ E) (hscale : (a : ℝ) * D ≤ E) :\n    actualDwellSupport E (a :: input)",
+      "after_complete_header": "theorem dwell_prepend_block {D E : ℝ} (a : ℕ) (input : List ℕ)\n    (hfull : actualDwellSupport D input)\n    (hfirst : (a : ℝ) ^ 2 ≤ E) (hscale : (a : ℝ) * D ≤ E) :\n    actualDwellSupport E (a :: input)",
+      "before_sha256": "a9e2f008a2e8b2738c2f9a66041c52917b5980aaeaee4f3cbba7bb12d10aac3d",
+      "after_sha256": "a9e2f008a2e8b2738c2f9a66041c52917b5980aaeaee4f3cbba7bb12d10aac3d",
+      "raw_header_byte_exact": true
+    },
+    {
+      "name": "dwell_prepend_small_power",
+      "kind": "theorem",
+      "before_complete_header": "theorem dwell_prepend_small_power {N lam epsilon : ℝ} (hN : 1 < N)\n    (a : ℕ) (input : List ℕ) (ha : (a : ℝ) ≤ N ^ epsilon)\n    (hepsilon : epsilon ≤ lam) (hfull : actualDwellSupport (N ^ lam) input) :\n    actualDwellSupport (N ^ (lam + epsilon)) (a :: input)",
+      "after_complete_header": "theorem dwell_prepend_small_power {N lam epsilon : ℝ} (hN : 1 < N)\n    (a : ℕ) (input : List ℕ) (ha : (a : ℝ) ≤ N ^ epsilon)\n    (hepsilon : epsilon ≤ lam) (hfull : actualDwellSupport (N ^ lam) input) :\n    actualDwellSupport (N ^ (lam + epsilon)) (a :: input)",
+      "before_sha256": "9fb7f560565cb1e52c6cb9b73e39ff4fed96dc063efe64ea920e6f4dddd9dd4b",
+      "after_sha256": "9fb7f560565cb1e52c6cb9b73e39ff4fed96dc063efe64ea920e6f4dddd9dd4b",
+      "raw_header_byte_exact": true
+    },
+    {
+      "name": "actual_compact_level_ge_e",
+      "kind": "theorem",
+      "before_complete_header": "theorem actual_compact_level_ge_e {e h : ℝ} {m : ℕ}\n    (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    e ≤ actualExtendedThirdPhysicalLevel e m j",
+      "after_complete_header": "theorem actual_compact_level_ge_e {e h : ℝ} {m : ℕ}\n    (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    e ≤ actualExtendedThirdPhysicalLevel e m j",
+      "before_sha256": "b6bd1079bc82c6ba1a27100ca0c11b12eb736dbf5ee8bb7b8902efef025de9bb",
+      "after_sha256": "b6bd1079bc82c6ba1a27100ca0c11b12eb736dbf5ee8bb7b8902efef025de9bb",
+      "raw_header_byte_exact": true
+    },
+    {
+      "name": "actual_attached_upper_ne_zero_block_support",
+      "kind": "theorem",
+      "before_complete_header": "theorem actual_attached_upper_ne_zero_block_support\n    (e h epsilon : ℝ) (m N : ℕ) (cap : ℕ → ℕ)\n    (hN : 2 ≤ N) (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (hepsilon : epsilon ≤ e)\n    {q : ℕ}\n    (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon\n      (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :\n    ∃ a k (state : FirstExitDepthState ℕ),\n      a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧\n      (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧\n      state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun _ => 1) [] true 1\n        (roughPrimeUniverse N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)) ∧\n      (a :: state.selectedPrefix.reverse).prod = q ∧\n      fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n        N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)\n        state.selectedPrefix.prod ≠ 0 ∧\n      ∀ j : ActualExtendedThirdDyadicLabel m, j ∈ actualExtendedThirdCompactCells e h m →\n        3 ≤ k →\n        primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 state.selectedPrefix) ∈\n          actualExtendedThirdOwnedCell m j →\n        actualDwellSupport ((N : ℝ) ^ (actualExtendedThirdPhysicalLevel e m j + epsilon))\n          (a :: state.selectedPrefix.reverse) ∧\n        ∀ (x tau theta : ℝ) (upper : ℕ → ℕ), 1 < x → 0 ≤ tau →\n          (∀ p ∈ a :: state.selectedPrefix.reverse, (upper p : ℝ) ≤ x ^ tau * p) →\n          (Real.log (N : ℝ) / Real.log x) *\n              (actualExtendedThirdPhysicalLevel e m j + epsilon) + tau * (k + 2) ≤ theta →\n          actualDwellSupport (x ^ theta) ((a :: state.selectedPrefix.reverse).map upper)",
+      "after_complete_header": "theorem actual_attached_upper_ne_zero_block_support\n    (e h epsilon : ℝ) (m N : ℕ) (cap : ℕ → ℕ)\n    (hN : 2 ≤ N) (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (hepsilon : epsilon ≤ e)\n    {q : ℕ}\n    (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon\n      (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :\n    ∃ (a k : ℕ) (state : FirstExitDepthState ℕ),\n      a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧\n      (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧\n      state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun _ => 1) [] true 1\n        (roughPrimeUniverse N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)) ∧\n      (a :: state.selectedPrefix.reverse).prod = q ∧\n      fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n        N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)\n        state.selectedPrefix.prod ≠ 0 ∧\n      ∀ j : ActualExtendedThirdDyadicLabel m, j ∈ actualExtendedThirdCompactCells e h m →\n        3 ≤ k →\n        primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 state.selectedPrefix) ∈\n          actualExtendedThirdOwnedCell m j →\n        actualDwellSupport ((N : ℝ) ^ (actualExtendedThirdPhysicalLevel e m j + epsilon))\n          (a :: state.selectedPrefix.reverse) ∧\n        ∀ (x tau theta : ℝ) (upper : ℕ → ℕ), 1 < x → 0 ≤ tau →\n          (∀ p ∈ a :: state.selectedPrefix.reverse, (upper p : ℝ) ≤ x ^ tau * p) →\n          (Real.log (N : ℝ) / Real.log x) *\n              (actualExtendedThirdPhysicalLevel e m j + epsilon) + tau * (k + 2) ≤ theta →\n          actualDwellSupport (x ^ theta) ((a :: state.selectedPrefix.reverse).map upper)",
+      "before_sha256": "215d1d8443cedca0ab37dcb7a6d3c826524b9a7d4ac87cdc9b1914c330fdbacd",
+      "after_sha256": "c3e8c74f929dc7c779d57f40550702d74bbf7d7d49cae8a5481165f6333ee966",
+      "raw_header_byte_exact": false
+    }
+  ],
+  "definitions_structures_inductives_abbreviations": [],
+  "syntax_exceptions": [
+    {
+      "declaration": "actual_attached_upper_ne_zero_block_support",
+      "kind": "root-authorized explicit Nat existential binder syntax only",
+      "before_complete_header": "theorem actual_attached_upper_ne_zero_block_support\n    (e h epsilon : ℝ) (m N : ℕ) (cap : ℕ → ℕ)\n    (hN : 2 ≤ N) (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (hepsilon : epsilon ≤ e)\n    {q : ℕ}\n    (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon\n      (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :\n    ∃ a k (state : FirstExitDepthState ℕ),\n      a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧\n      (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧\n      state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun _ => 1) [] true 1\n        (roughPrimeUniverse N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)) ∧\n      (a :: state.selectedPrefix.reverse).prod = q ∧\n      fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n        N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)\n        state.selectedPrefix.prod ≠ 0 ∧\n      ∀ j : ActualExtendedThirdDyadicLabel m, j ∈ actualExtendedThirdCompactCells e h m →\n        3 ≤ k →\n        primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 state.selectedPrefix) ∈\n          actualExtendedThirdOwnedCell m j →\n        actualDwellSupport ((N : ℝ) ^ (actualExtendedThirdPhysicalLevel e m j + epsilon))\n          (a :: state.selectedPrefix.reverse) ∧\n        ∀ (x tau theta : ℝ) (upper : ℕ → ℕ), 1 < x → 0 ≤ tau →\n          (∀ p ∈ a :: state.selectedPrefix.reverse, (upper p : ℝ) ≤ x ^ tau * p) →\n          (Real.log (N : ℝ) / Real.log x) *\n              (actualExtendedThirdPhysicalLevel e m j + epsilon) + tau * (k + 2) ≤ theta →\n          actualDwellSupport (x ^ theta) ((a :: state.selectedPrefix.reverse).map upper)",
+      "after_complete_header": "theorem actual_attached_upper_ne_zero_block_support\n    (e h epsilon : ℝ) (m N : ℕ) (cap : ℕ → ℕ)\n    (hN : 2 ≤ N) (he0 : 0 ≤ e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (hepsilon : epsilon ≤ e)\n    {q : ℕ}\n    (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon\n      (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :\n    ∃ (a k : ℕ) (state : FirstExitDepthState ℕ),\n      a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧\n      (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧\n      state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun _ => 1) [] true 1\n        (roughPrimeUniverse N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)) ∧\n      (a :: state.selectedPrefix.reverse).prod = q ∧\n      fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n        N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ((N : ℝ) ^ thirdPrefixRho)\n        state.selectedPrefix.prod ≠ 0 ∧\n      ∀ j : ActualExtendedThirdDyadicLabel m, j ∈ actualExtendedThirdCompactCells e h m →\n        3 ≤ k →\n        primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 state.selectedPrefix) ∈\n          actualExtendedThirdOwnedCell m j →\n        actualDwellSupport ((N : ℝ) ^ (actualExtendedThirdPhysicalLevel e m j + epsilon))\n          (a :: state.selectedPrefix.reverse) ∧\n        ∀ (x tau theta : ℝ) (upper : ℕ → ℕ), 1 < x → 0 ≤ tau →\n          (∀ p ∈ a :: state.selectedPrefix.reverse, (upper p : ℝ) ≤ x ^ tau * p) →\n          (Real.log (N : ℝ) / Real.log x) *\n              (actualExtendedThirdPhysicalLevel e m j + epsilon) + tau * (k + 2) ≤ theta →\n          actualDwellSupport (x ^ theta) ((a :: state.selectedPrefix.reverse).map upper)",
+      "old_unparsed": true,
+      "old_new_kernel_type_equality_claimed": false,
+      "same_intended_carriers": [
+        "a : ℕ, already constrained by actualSmallRosserSupport and natural product",
+        "k : ℕ, already constrained by selectedPrefix.length",
+        "state : FirstExitDepthState ℕ"
+      ],
+      "no_hypothesis_quantifier_order_or_guard_change": true
+    }
+  ]
+}

@@ -174,7 +174,7 @@ theorem weightedReciprocalBin_le_prime_box
       exact mul_nonneg (actualPrimeBoxWeight_nonneg hp) hr
     _ = (a / (r : ℝ)) * actualPrimeBoxMass N (binLo omega a r) (binHi a r) := by
       dsimp [B]
-      simp only [actualPrimeBoxMass, Finset.sum_mul]
+      rw [actualPrimeBoxMass, ← Finset.sum_mul]
       ring
 
 end P1OriginalFourthReciprocalBinRegrouping

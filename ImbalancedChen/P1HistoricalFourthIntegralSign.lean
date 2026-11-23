@@ -38,7 +38,9 @@ theorem closedUpper_antitone_ge_one : AntitoneOn closedUpper (Ici 1) := by
   by_cases hx1 : x = 1
   · subst x
     simpa only [closedUpper_one] using closedUpper_le_amplitude hy
-  · have hxgt : 1 < x := by linarith
+  · have hxgt : 1 < x := by
+      by_contra hn
+      exact hx1 (le_antisymm (le_of_not_gt hn) hx)
     have hygt : 1 < y := hxgt.trans_le hxy
     rw [closedUpper_eq_actual (s := x) hxgt, closedUpper_eq_actual (s := y) hygt]
     exact canonicalUpper_antitone_gt_one hxgt hygt hxy
@@ -51,7 +53,13 @@ theorem maxOneNormalized_antitone_level (t : Fin 4 → ℝ)
     (ht : 0 < t (Fin.last 3)) {old new : ℝ} (hlevel : old ≤ new) :
     maxOneNormalized new t ≤ maxOneNormalized old t := by
   apply div_le_div_of_nonneg_right _ ht.le
-  exact closedUpper_antitone_ge_one (le_max_left _ _) (le_max_left _ _)
+  have hold : max 1 (residual old t) ∈ Ici (1 : ℝ) := by
+    change (1 : ℝ) ≤ max 1 (residual old t)
+    exact le_max_left _ _
+  have hnew : max 1 (residual new t) ∈ Ici (1 : ℝ) := by
+    change (1 : ℝ) ≤ max 1 (residual new t)
+    exact le_max_left _ _
+  exact closedUpper_antitone_ge_one hold hnew
     (max_le_max le_rfl (residual_mono_level t ht hlevel))
 
 theorem extendedProfile_antitone_level (t : Fin 4 → ℝ)

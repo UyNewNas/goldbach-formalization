@@ -1,0 +1,18 @@
+--- baseline/ImbalancedChen/P5OriginalAboveMuThirdRaisedAdmission.lean
++++ candidate/ImbalancedChen/P5OriginalAboveMuThirdRaisedAdmission.lean
+@@ -127,8 +127,13 @@
+   have hpre := selected_pair_three_admissible N hN p hp ⟨h32, h21⟩ hregion'
+   have hpre' : ordinaryRosserPrefixAdmissible false
+       (thirdQ (N : ℝ) state.selectedPrefix) state.selectedPrefix := by
+-    simpa [thirdQ, primeHistoryLogCoordinates, actualPrimeTupleLog, p, hlist]
+-      using hpre
++    have hcoords :
++        primeHistoryLogCoordinates (N : ℝ) 3 state.selectedPrefix =
++          actualPrimeTupleLog N p := by
++      rw [hlist]
++      exact HistoricalThirdCoarse.P1ActualTuple.history_log N p
++    rw [thirdQ, hcoords, hlist]
++    exact hpre
+   exact third_frontier_signed_lower_density e chi m omega N cap z state
+     hstate hregion hpre'
+ 

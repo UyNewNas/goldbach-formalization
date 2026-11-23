@@ -1,0 +1,173 @@
+{
+  "status": "STATIC_CANDIDATE_UNCOMPILED",
+  "module": "ImbalancedChen.P1OriginalCoarseUpperResidualUniformity",
+  "preimage_sha256": "348bd23f51edafd3b74c6df4507b34fdb7fe7f882c3b9e77fd3d63669f3380d4",
+  "postimage_sha256": "e430a9c24746bc524680c11fdd52e89da6932bbb5dd1bf645a34ed00065d9cc5",
+  "complete_source_headers": [
+    {
+      "name": "oldExponent_mem_values",
+      "kind": "full_header",
+      "raw": "theorem oldExponent_mem_values (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N : ℕ) (p : Fin 4 → ℕ) :\n    oldExponent e chi m omega N p ∈ P1ActualCoarseLevelCeiling.exponentValues e chi m :="
+    },
+    {
+      "name": "oldExponent_le_initial",
+      "kind": "full_header",
+      "raw": "theorem oldExponent_le_initial (e chi : ℝ) (he : 0 ≤ e) (m : ℕ) (omega : ℝ)\n    (N : ℕ) (p : Fin 4 → ℕ) : oldExponent e chi m omega N p ≤ initial e :="
+    },
+    {
+      "name": "oldLevel_eq_rpow",
+      "kind": "full_header",
+      "raw": "theorem oldLevel_eq_rpow (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N : ℕ) (p : Fin 4 → ℕ) :\n    oldLevel e chi m omega N p = (N : ℝ) ^ oldExponent e chi m omega N p :="
+    },
+    {
+      "name": "admitted_tuple_data",
+      "kind": "full_header",
+      "raw": "theorem admitted_tuple_data (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (p : Fin 4 → ℕ) (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    StrictAnti p ∧ (∀ i, Nat.Prime (p i)) ∧\n      (∀ i, p i ∈ roughPrimeUniverse N cap 0 ((N : ℝ) ^ rho)) ∧\n      FirstExitValidSelection (policy e chi m omega (N : ℝ)) [] true (List.ofFn p) :="
+    },
+    {
+      "name": "old_third_cube_log",
+      "kind": "full_header",
+      "raw": "theorem old_third_cube_log (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n        3 * actualPrimeTupleLog N p 2 < oldExponent e chi m omega N p :="
+    },
+    {
+      "name": "old_plus_legality",
+      "kind": "full_header",
+      "raw": "theorem old_plus_legality (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    (∑ i, actualPrimeTupleLog N p i) + actualPrimeTupleLog N p 3 <\n      oldExponent e chi m omega N p :="
+    },
+    {
+      "name": "admitted_log_pos",
+      "kind": "full_header",
+      "raw": "theorem admitted_log_pos (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    ∀ i, 0 < actualPrimeTupleLog N p i :="
+    },
+    {
+      "name": "admitted_last_bounds",
+      "kind": "full_header",
+      "raw": "theorem admitted_last_bounds (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    actualPrimeTupleLog N p 3 < rho ∧ (p 3 : ℝ) ≤ (cap : ℝ) :="
+    },
+    {
+      "name": "quotientParameters_eq_tuple",
+      "kind": "full_header",
+      "raw": "theorem quotientParameters_eq_tuple (N : ℕ) (p : Fin 4 → ℕ)\n    (hpos : ∀ i, 0 < p i) (lambda : ℝ) :\n    actualRosserQuotientParameters (N : ℝ) (∏ i, p i : ℕ) (p 3 : ℝ) lambda =\n      (lambda - ∑ i, actualPrimeTupleLog N p i, actualPrimeTupleLog N p 3) :="
+    },
+    {
+      "name": "residualWindow_isCompact",
+      "kind": "full_header",
+      "raw": "theorem residualWindow_isCompact (a rho Theta : ℝ) :\n    IsCompact (residualWindow a rho Theta) :="
+    },
+    {
+      "name": "residualWindow_legal",
+      "kind": "full_header",
+      "raw": "theorem residualWindow_legal (a rho Theta : ℝ) (ha : 0 < a) :\n    ∀ q ∈ residualWindow a rho Theta, 0 < q.2 ∧ q.2 ≤ q.1 :="
+    },
+    {
+      "name": "quotientParameters_mem_window",
+      "kind": "full_header",
+      "raw": "theorem quotientParameters_mem_window (a rho Theta : ℝ) (N : ℕ)\n    (p : Fin 4 → ℕ) (hpos : ∀ i, 0 < p i) (lambda : ℝ)\n    (htpos : ∀ i, 0 ≤ actualPrimeTupleLog N p i)\n    (hlo : a ≤ actualPrimeTupleLog N p 3) (hhi : actualPrimeTupleLog N p 3 ≤ rho)\n    (hlegal : actualPrimeTupleLog N p 3 ≤ lambda - ∑ i, actualPrimeTupleLog N p i)\n    (hTheta : lambda ≤ Theta) :\n    actualRosserQuotientParameters (N : ℝ) (∏ i, p i : ℕ) (p 3 : ℝ) lambda ∈\n      residualWindow a rho Theta :="
+    },
+    {
+      "name": "old_quotientParameters_mem_window",
+      "kind": "full_header",
+      "raw": "theorem old_quotientParameters_mem_window (a rho : ℝ) (e chi : ℝ) (he : 0 ≤ e)\n    (m : ℕ) (omega : ℝ) (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap)\n    (hcut : (N : ℝ) ^ a ≤ (p 3 : ℝ)) :\n    actualRosserQuotientParameters (N : ℝ) (∏ i, p i : ℕ) (p 3 : ℝ)\n        (oldExponent e chi m omega N p) ∈ residualWindow a rho (initial e) :="
+    },
+    {
+      "name": "exists_original_old_uniform_error",
+      "kind": "full_header",
+      "raw": "theorem exists_original_old_uniform_error (a rho : ℝ) (ha : 0 < a)\n    (e chi : ℝ) (he : 0 ≤ e) (m : ℕ) (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ omega : ℝ, ∀ cap : ℕ, ∀ p ∈ admittedTuples e chi m omega rho N cap,\n        (N : ℝ) ^ a ≤ (p 3 : ℝ) →\n          |normalizedResidual N cap p (oldLevel e chi m omega N p) -\n            closedProfile N p (oldExponent e chi m omega N p)| < eta :="
+    },
+    {
+      "name": "old_last_lt_quotient",
+      "kind": "full_header",
+      "raw": "theorem old_last_lt_quotient (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples e chi m omega rho N cap) :\n    (p 3 : ℝ) < oldLevel e chi m omega N p / (∏ i, p i : ℕ) :="
+    },
+    {
+      "name": "exists_original_old_uniform_absolute_bound",
+      "kind": "full_header",
+      "raw": "theorem exists_original_old_uniform_absolute_bound (a rho : ℝ) (ha : 0 < a)\n    (e chi : ℝ) (m : ℕ) :\n    ∃ M : ℝ, 0 < M ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ omega : ℝ, ∀ cap : ℕ, ∀ p ∈ admittedTuples e chi m omega rho N cap,\n        (N : ℝ) ^ a ≤ (p 3 : ℝ) →\n          |normalizedResidual N cap p (oldLevel e chi m omega N p)| ≤ M :="
+    },
+    {
+      "name": "thirdAncestor_fourthHistory",
+      "kind": "full_header",
+      "raw": "theorem thirdAncestor_fourthHistory (p : Fin 4 → ℕ) :\n    rosserAncestor 3 (fourthHistory p) = thirdHistory p :="
+    },
+    {
+      "name": "newLevel_eq_rpow",
+      "kind": "full_header",
+      "raw": "theorem newLevel_eq_rpow (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (N : ℕ) (p : Fin 4 → ℕ) :\n    newLevel e chi m omega J4 cap4 N p =\n      (N : ℝ) ^ newExponent e chi m omega J4 cap4 N p :="
+    },
+    {
+      "name": "newExponent_mem_finite_values",
+      "kind": "full_header",
+      "raw": "theorem newExponent_mem_finite_values (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (N : ℕ) (p : Fin 4 → ℕ) :\n    newExponent e chi m omega J4 cap4 N p ∈\n      (allFourthExponentValues e chi m J4 cap4).image (fun q : ℚ => (q : ℝ)) :="
+    },
+    {
+      "name": "exists_new_uniform_exponent_ceiling",
+      "kind": "full_header",
+      "raw": "theorem exists_new_uniform_exponent_ceiling (e : ℚ) (chi : ℝ) (m : ℕ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ) :\n    ∃ Theta : ℝ, initial (e : ℝ) ≤ Theta ∧ ∀ omega : ℝ, ∀ N : ℕ,\n      ∀ p : Fin 4 → ℕ, newExponent e chi m omega J4 cap4 N p ≤ Theta :="
+    },
+    {
+      "name": "oldLevel_eq_frozenThird",
+      "kind": "full_header",
+      "raw": "theorem oldLevel_eq_frozenThird (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N : ℕ) (p : Fin 4 → ℕ) :\n    oldLevel e chi m omega N p = frozenLevel e chi m omega (N : ℝ) (fourthHistory p) :="
+    },
+    {
+      "name": "oldLevel_le_newLevel",
+      "kind": "full_header",
+      "raw": "theorem oldLevel_le_newLevel (e : ℚ) (chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (hcheck : P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples (e : ℝ) chi m omega rho N cap) :\n    oldLevel (e : ℝ) chi m omega N p ≤ newLevel e chi m omega J4 cap4 N p :="
+    },
+    {
+      "name": "oldExponent_le_newExponent",
+      "kind": "full_header",
+      "raw": "theorem oldExponent_le_newExponent (e : ℚ) (chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (hcheck : P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true)\n    (N cap : ℕ) (hN : 1 < N) (p : Fin 4 → ℕ)\n    (hp : p ∈ admittedTuples (e : ℝ) chi m omega rho N cap) :\n    oldExponent (e : ℝ) chi m omega N p ≤ newExponent e chi m omega J4 cap4 N p :="
+    },
+    {
+      "name": "exists_original_new_uniform_error",
+      "kind": "full_header",
+      "raw": "theorem exists_original_new_uniform_error (a rho : ℝ) (ha : 0 < a)\n    (e : ℚ) (chi : ℝ) (m : ℕ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ omega : ℝ, P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true →\n        ∀ cap : ℕ, ∀ p ∈ admittedTuples (e : ℝ) chi m omega rho N cap,\n          (N : ℝ) ^ a ≤ (p 3 : ℝ) →\n            |normalizedResidual N cap p (newLevel e chi m omega J4 cap4 N p) -\n              closedProfile N p (newExponent e chi m omega J4 cap4 N p)| < eta :="
+    },
+    {
+      "name": "exists_original_old_new_uniform_suppliers",
+      "kind": "full_header",
+      "raw": "theorem exists_original_old_new_uniform_suppliers (a rho : ℝ) (ha : 0 < a)\n    (e : ℚ) (chi : ℝ) (he : 0 ≤ (e : ℝ)) (m : ℕ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ M : ℝ, 0 < M ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ omega : ℝ, P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true →\n        ∀ cap : ℕ, ∀ p ∈ admittedTuples (e : ℝ) chi m omega rho N cap,\n          (N : ℝ) ^ a ≤ (p 3 : ℝ) →\n            (|normalizedResidual N cap p (oldLevel (e : ℝ) chi m omega N p)| ≤ M ∧\n              |normalizedResidual N cap p (newLevel e chi m omega J4 cap4 N p)| ≤ M) ∧\n            |normalizedResidual N cap p (oldLevel (e : ℝ) chi m omega N p) -\n                closedProfile N p (oldExponent (e : ℝ) chi m omega N p)| < eta ∧\n            |normalizedResidual N cap p (newLevel e chi m omega J4 cap4 N p) -\n                closedProfile N p (newExponent e chi m omega J4 cap4 N p)| < eta :="
+    },
+    {
+      "name": "normalizedResidual_primeHistoryTuple",
+      "kind": "full_header",
+      "raw": "theorem normalizedResidual_primeHistoryTuple (N cap : ℕ) {history : List ℕ}\n    (hlen : history.length = 4) (Q : ℝ) :\n    normalizedResidual N cap (primeHistoryTuple 4 history) Q =\n      historyNormalizedResidual N cap history Q :="
+    },
+    {
+      "name": "fourthHistory_primeHistoryTuple",
+      "kind": "full_header",
+      "raw": "theorem fourthHistory_primeHistoryTuple {history : List ℕ} (hlen : history.length = 4) :\n    fourthHistory (primeHistoryTuple 4 history) = history :="
+    },
+    {
+      "name": "frontier_tuple_mem_admitted",
+      "kind": "full_header",
+      "raw": "theorem frontier_tuple_mem_admitted (e chi : ℝ) (m : ℕ) (omega rho : ℝ)\n    (N cap : ℕ) (weight : ℕ → ℝ) (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier 4 (policy e chi m omega (N : ℝ))\n      weight [] true 1 (roughPrimeUniverse N cap 0 ((N : ℝ) ^ rho))) :\n    primeHistoryTuple 4 state.selectedPrefix ∈ admittedTuples e chi m omega rho N cap :="
+    },
+    {
+      "name": "exists_original_frontier_old_new_uniform_suppliers",
+      "kind": "full_header",
+      "raw": "theorem exists_original_frontier_old_new_uniform_suppliers (a rho : ℝ) (ha : 0 < a)\n    (e : ℚ) (chi : ℝ) (he : 0 ≤ (e : ℝ)) (m : ℕ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (cap4 : P1OriginalCoarseContinuation.FourthCell m → ℚ)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ M : ℝ, 0 < M ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ omega : ℝ, P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true →\n        ∀ cap : ℕ, ∀ weight : ℕ → ℝ, ∀ state ∈\n          firstExitDepthFrontier 4 (policy (e : ℝ) chi m omega (N : ℝ)) weight [] true 1\n            (roughPrimeUniverse N cap 0 ((N : ℝ) ^ rho)),\n          (N : ℝ) ^ a ≤ (state.selectedPrefix.headD 0 : ℝ) →\n          let p := primeHistoryTuple 4 state.selectedPrefix\n          (|historyNormalizedResidual N cap state.selectedPrefix\n              (frozenLevel (e : ℝ) chi m omega (N : ℝ) state.selectedPrefix)| ≤ M ∧\n            |historyNormalizedResidual N cap state.selectedPrefix\n              (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4\n                (N : ℝ) state.selectedPrefix)| ≤ M) ∧\n          |historyNormalizedResidual N cap state.selectedPrefix\n                (frozenLevel (e : ℝ) chi m omega (N : ℝ) state.selectedPrefix) -\n              closedProfile N p (oldExponent (e : ℝ) chi m omega N p)| < eta ∧\n          |historyNormalizedResidual N cap state.selectedPrefix\n                (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4\n                  (N : ℝ) state.selectedPrefix) -\n              closedProfile N p (newExponent e chi m omega J4 cap4 N p)| < eta :="
+    }
+  ],
+  "changed_proofs": [
+    "oldLevel_le_newLevel",
+    "normalizedResidual_primeHistoryTuple",
+    "exists_original_frontier_old_new_uniform_suppliers"
+  ],
+  "all_non_proof_code_bytes_exact_except_listed_new_existing_supplier_import": true,
+  "import_added": "import ImbalancedChen.ActualPrimeBoxInitialSavingIntegral",
+  "existing_supplier": "actualPrimeTupleLog_sum_prod already proved in ActualPrimeBoxInitialSavingIntegral. No replacement log-product theorem is introduced.",
+  "scope": "Explicitly eliminate only empty-list membership; normalize Fin.last3 to the same original Fin4 coordinate3 in two local equality proofs. All tuple products, cutoff, uniform N0-before-omega/cap/state and old/new level assumptions unchanged.",
+  "header_definition_data_or_hypothesis_exceptions": [],
+  "no_new_axioms_or_target_hypotheses": true,
+  "live_or_output_mutations": false,
+  "Lean_Lake_kernel_invocations": 0,
+  "known_existing_work_lookup": {
+    "existing_source_index": "/workspace/p1-complete-proof/source-graph-inventory.json",
+    "variant_sha256": [
+      "348bd23f51edafd3b74c6df4507b34fdb7fe7f882c3b9e77fd3d63669f3380d4"
+    ],
+    "same_preimage_only": true
+  }
+}

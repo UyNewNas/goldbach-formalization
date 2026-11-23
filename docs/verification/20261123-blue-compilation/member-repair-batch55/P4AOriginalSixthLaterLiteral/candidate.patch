@@ -1,0 +1,553 @@
+--- baseline/ImbalancedChen/P4AOriginalSixthLaterLiteral.lean
++++ candidate/ImbalancedChen/P4AOriginalSixthLaterLiteral.lean
+@@ -10,8 +10,8 @@
+ abbrev Affine := Fin 7 → ℝ
+ abbrev Cell := Fin 19
+ 
+-def rows : Cell → List Affine
+-  | 0 => [
++private def rowsCell0 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -72,7 +72,9 @@
+     ![(-12207/31250), (2), (0), (0), (-1), (0), (11/2)], -- 57: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 58: actual old upper argument above1
+   ]
+-  | 1 => [
++
++private def rowsCell1 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -133,7 +135,9 @@
+     ![(-12207/31250), (2), (0), (0), (-1), (0), (11/2)], -- 57: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 58: actual old upper argument above1
+   ]
+-  | 2 => [
++
++private def rowsCell2 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -195,7 +199,9 @@
+     ![(1/1000000), (1/2), (-1/2), (0), (-1), (0), (7/2)], -- 58: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 59: actual inherited upper argument above1
+   ]
+-  | 3 => [
++
++private def rowsCell3 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -257,7 +263,9 @@
+     ![(1/1000000), (1/2), (-1/2), (0), (-1), (0), (7/2)], -- 58: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 59: actual inherited upper argument above1
+   ]
+-  | 4 => [
++
++private def rowsCell4 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -319,7 +327,9 @@
+     ![(-12207/31250), (1/2), (3/2), (0), (-1), (0), (11/2)], -- 58: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 59: old R0 upper argument above1
+   ]
+-  | 5 => [
++
++private def rowsCell5 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -381,7 +391,9 @@
+     ![(-12207/31250), (1/2), (3/2), (0), (-1), (0), (11/2)], -- 58: new upper argument below3
+     ![(0), (0), (0), (0), (1), (0), (-2)] -- 59: old R0 upper argument above1
+   ]
+-  | 6 => [
++
++private def rowsCell6 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -443,7 +455,9 @@
+     ![(-445313/500000), (1), (5/2), (1), (1), (5/2), (11/2)], -- 58: clipped50 descending license fails
+     ![(25/64), (0), (-2), (0), (0), (0), (-2)] -- 59: ascending34 below descending34
+   ]
+-  | 7 => [
++
++private def rowsCell7 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -505,7 +519,9 @@
+     ![(-445313/500000), (1), (5/2), (1), (1), (5/2), (11/2)], -- 58: clipped50 descending license fails
+     ![(-25/64), (0), (2), (0), (0), (0), (2)] -- 59: descending34 below ascending34
+   ]
+-  | 8 => [
++
++private def rowsCell8 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -568,7 +584,9 @@
+     ![(25/64), (0), (-2), (0), (0), (-2), (-2)], -- 59: old clipped50 license branch 0
+     ![(-500001/1000000), (1), (1/2), (1), (1), (1/2), (7/2)] -- 60: old clipped50 minimum license fails
+   ]
+-  | 9 => [
++
++private def rowsCell9 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -631,7 +649,9 @@
+     ![(-25/64), (0), (2), (0), (0), (2), (2)], -- 59: old clipped50 license branch 1
+     ![(-445313/500000), (1), (5/2), (1), (1), (5/2), (11/2)] -- 60: old clipped50 minimum license fails
+   ]
+-  | 10 => [
++
++private def rowsCell10 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -693,7 +713,9 @@
+     ![(25/64), (0), (-2), (0), (0), (-2), (-2)], -- 58: old clipped50 license branch 0
+     ![(-500001/1000000), (1), (1/2), (1), (1), (1/2), (7/2)] -- 59: old clipped50 minimum license fails
+   ]
+-  | 11 => [
++
++private def rowsCell11 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -755,7 +777,9 @@
+     ![(25/64), (0), (-2), (0), (0), (-2), (-2)], -- 58: old clipped50 license branch 0
+     ![(-500001/1000000), (1), (1/2), (1), (1), (1/2), (7/2)] -- 59: old clipped50 minimum license fails
+   ]
+-  | 12 => [
++
++private def rowsCell12 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -817,7 +841,9 @@
+     ![(-25/64), (0), (2), (0), (0), (2), (2)], -- 58: old clipped50 license branch 1
+     ![(-445313/500000), (1), (5/2), (1), (1), (5/2), (11/2)] -- 59: old clipped50 minimum license fails
+   ]
+-  | 13 => [
++
++private def rowsCell13 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -879,7 +905,9 @@
+     ![(-25/64), (0), (2), (0), (0), (2), (2)], -- 58: old clipped50 license branch 1
+     ![(-445313/500000), (1), (5/2), (1), (1), (5/2), (11/2)] -- 59: old clipped50 minimum license fails
+   ]
+-  | 14 => [
++
++private def rowsCell14 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: sixth below old cover
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact lower cutoff
+@@ -944,7 +972,9 @@
+     ![(0), (-1/2), (1/2), (0), (0), (0), (1/2)], -- 61: comparison branch
+     ![(12207/31250), (-3/2), (-1/2), (0), (0), (0), (-2)] -- 62: new cap above actual old comparison
+   ]
+-  | 15 => [
++
++private def rowsCell15 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: r below saved cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact r
+@@ -1009,7 +1039,9 @@
+     ![(1/2), (-1/2), (-1), (-1), (-1), (-1), (-2)], -- 61: old R0 residual above1
+     ![(-499999/1000000), (1/2), (1), (1), (1), (1), (7/2)] -- 62: new residual below3
+   ]
+-  | 16 => [
++
++private def rowsCell16 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: r below saved cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact r
+@@ -1074,7 +1106,9 @@
+     ![(1/2), (-1/2), (-1), (-1), (-1), (-1), (-2)], -- 61: old R0 residual above1
+     ![(-13916/15625), (5/2), (1), (1), (1), (1), (11/2)] -- 62: new residual below3
+   ]
+-  | 17 => [
++
++private def rowsCell17 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: r below saved cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact r
+@@ -1139,7 +1173,9 @@
+     ![(1/2), (-1/2), (-1), (-1), (-1), (-1), (-2)], -- 61: old R0 residual above1
+     ![(-499999/1000000), (1/2), (1), (1), (1), (1), (7/2)] -- 62: new residual below3
+   ]
+-  | 18 => [
++
++private def rowsCell18 : List Affine :=
++  [
+     ![(25/128), (-1), (0), (0), (0), (0), (0)], -- 0: largest below mu
+     ![(1/50), (0), (0), (0), (0), (0), (-1)], -- 1: r below saved cutoff
+     ![(-53/4608), (0), (0), (0), (0), (0), (1)], -- 2: compact r
+@@ -1205,155 +1241,194 @@
+     ![(-13916/15625), (5/2), (1), (1), (1), (1), (11/2)] -- 62: new residual below3
+   ]
+ 
+-def stage : Cell → ℕ
+-  | 0 => 0
+-  | 1 => 0
+-  | 2 => 1
+-  | 3 => 1
+-  | 4 => 2
+-  | 5 => 2
+-  | 6 => 3
+-  | 7 => 4
+-  | 8 => 5
+-  | 9 => 5
+-  | 10 => 5
+-  | 11 => 5
+-  | 12 => 5
+-  | 13 => 5
+-  | 14 => 6
+-  | 15 => 7
+-  | 16 => 7
+-  | 17 => 7
+-  | 18 => 7
+-
+-def mask : Cell → ℕ
+-  | 0 => 33
+-  | 1 => 33
+-  | 2 => 34
+-  | 3 => 34
+-  | 4 => 34
+-  | 5 => 34
+-  | 6 => 34
+-  | 7 => 34
+-  | 8 => 33
+-  | 9 => 33
+-  | 10 => 50
+-  | 11 => 50
+-  | 12 => 50
+-  | 13 => 50
+-  | 14 => 33
+-  | 15 => 33
+-  | 16 => 33
+-  | 17 => 33
+-  | 18 => 33
+-
+-def descending : Cell → Bool
+-  | 0 => true
+-  | 1 => true
+-  | 2 => false
+-  | 3 => false
+-  | 4 => true
+-  | 5 => true
+-  | 6 => false
+-  | 7 => true
+-  | 8 => true
+-  | 9 => true
+-  | 10 => false
+-  | 11 => false
+-  | 12 => true
+-  | 13 => true
+-  | 14 => true
+-  | 15 => false
+-  | 16 => true
+-  | 17 => false
+-  | 18 => true
+-
+-def mapped : Cell → Bool
+-  | 0 => true
+-  | 1 => true
+-  | 2 => true
+-  | 3 => true
+-  | 4 => true
+-  | 5 => true
+-  | 6 => false
+-  | 7 => false
+-  | 8 => false
+-  | 9 => false
+-  | 10 => false
+-  | 11 => false
+-  | 12 => false
+-  | 13 => false
+-  | 14 => false
+-  | 15 => false
+-  | 16 => false
+-  | 17 => false
+-  | 18 => false
+-
+-def comparisonChart : Cell → ℕ
+-  | 0 => 0
+-  | 1 => 0
+-  | 2 => 0
+-  | 3 => 1
+-  | 4 => 0
+-  | 5 => 1
+-  | 6 => 0
+-  | 7 => 0
+-  | 8 => 0
+-  | 9 => 0
+-  | 10 => 0
+-  | 11 => 0
+-  | 12 => 0
+-  | 13 => 0
+-  | 14 => 2
+-  | 15 => 3
+-  | 16 => 3
+-  | 17 => 3
+-  | 18 => 3
+-
+-def licenseIndex : Cell → ℕ
+-  | 0 => 46
+-  | 1 => 46
+-  | 2 => 47
+-  | 3 => 47
+-  | 4 => 47
+-  | 5 => 47
+-  | 6 => 42
+-  | 7 => 42
+-  | 8 => 42
+-  | 9 => 42
+-  | 10 => 42
+-  | 11 => 42
+-  | 12 => 42
+-  | 13 => 42
+-  | 14 => 42
+-  | 15 => 50
+-  | 16 => 50
+-  | 17 => 50
+-  | 18 => 50
+-
+-def oppositeLicenseRow : Cell → Affine
+-  | 0 => ![(-12207/31250), (2), (0), (0), (0), (0), (2)]
+-  | 1 => ![(-12207/31250), (2), (0), (0), (0), (0), (2)]
+-  | 2 => ![(195313/500000), (0), (-2), (0), (0), (0), (-2)]
+-  | 3 => ![(195313/500000), (0), (-2), (0), (0), (0), (-2)]
+-  | 4 => ![(-12207/31250), (0), (2), (0), (0), (0), (2)]
+-  | 5 => ![(-12207/31250), (0), (2), (0), (0), (0), (2)]
+-  | 6 => ![(25/64), (0), (-2), (0), (0), (0), (-2)]
+-  | 7 => ![(-25/64), (0), (2), (0), (0), (0), (2)]
+-  | 8 => ![(-25/64), (2), (0), (0), (0), (0), (2)]
+-  | 9 => ![(-25/64), (2), (0), (0), (0), (0), (2)]
+-  | 10 => ![(25/64), (0), (-2), (0), (0), (-2), (-2)]
+-  | 11 => ![(25/64), (0), (-2), (0), (0), (-2), (-2)]
+-  | 12 => ![(-25/64), (0), (2), (0), (0), (2), (2)]
+-  | 13 => ![(-25/64), (0), (2), (0), (0), (2), (2)]
+-  | 14 => ![(-25/64), (2), (0), (0), (0), (0), (2)]
+-  | 15 => ![(25/64), (-2), (0), (0), (0), (0), (-2)]
+-  | 16 => ![(-25/64), (2), (0), (0), (0), (0), (2)]
+-  | 17 => ![(25/64), (-2), (0), (0), (0), (0), (-2)]
+-  | 18 => ![(-25/64), (2), (0), (0), (0), (0), (2)]
++def rows : Cell → List Affine :=
++  ![
++    rowsCell0,
++    rowsCell1,
++    rowsCell2,
++    rowsCell3,
++    rowsCell4,
++    rowsCell5,
++    rowsCell6,
++    rowsCell7,
++    rowsCell8,
++    rowsCell9,
++    rowsCell10,
++    rowsCell11,
++    rowsCell12,
++    rowsCell13,
++    rowsCell14,
++    rowsCell15,
++    rowsCell16,
++    rowsCell17,
++    rowsCell18
++  ]
++
++def stage : Cell → ℕ :=
++  ![
++    0,
++    0,
++    1,
++    1,
++    2,
++    2,
++    3,
++    4,
++    5,
++    5,
++    5,
++    5,
++    5,
++    5,
++    6,
++    7,
++    7,
++    7,
++    7
++  ]
++
++def mask : Cell → ℕ :=
++  ![
++    33,
++    33,
++    34,
++    34,
++    34,
++    34,
++    34,
++    34,
++    33,
++    33,
++    50,
++    50,
++    50,
++    50,
++    33,
++    33,
++    33,
++    33,
++    33
++  ]
++
++def descending : Cell → Bool :=
++  ![
++    true,
++    true,
++    false,
++    false,
++    true,
++    true,
++    false,
++    true,
++    true,
++    true,
++    false,
++    false,
++    true,
++    true,
++    true,
++    false,
++    true,
++    false,
++    true
++  ]
++
++def mapped : Cell → Bool :=
++  ![
++    true,
++    true,
++    true,
++    true,
++    true,
++    true,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false,
++    false
++  ]
++
++def comparisonChart : Cell → ℕ :=
++  ![
++    0,
++    0,
++    0,
++    1,
++    0,
++    1,
++    0,
++    0,
++    0,
++    0,
++    0,
++    0,
++    0,
++    0,
++    2,
++    3,
++    3,
++    3,
++    3
++  ]
++
++def licenseIndex : Cell → ℕ :=
++  ![
++    46,
++    46,
++    47,
++    47,
++    47,
++    47,
++    42,
++    42,
++    42,
++    42,
++    42,
++    42,
++    42,
++    42,
++    42,
++    50,
++    50,
++    50,
++    50
++  ]
++
++def oppositeLicenseRow : Cell → Affine :=
++  ![
++    ![(-12207/31250), (2), (0), (0), (0), (0), (2)],
++    ![(-12207/31250), (2), (0), (0), (0), (0), (2)],
++    ![(195313/500000), (0), (-2), (0), (0), (0), (-2)],
++    ![(195313/500000), (0), (-2), (0), (0), (0), (-2)],
++    ![(-12207/31250), (0), (2), (0), (0), (0), (2)],
++    ![(-12207/31250), (0), (2), (0), (0), (0), (2)],
++    ![(25/64), (0), (-2), (0), (0), (0), (-2)],
++    ![(-25/64), (0), (2), (0), (0), (0), (2)],
++    ![(-25/64), (2), (0), (0), (0), (0), (2)],
++    ![(-25/64), (2), (0), (0), (0), (0), (2)],
++    ![(25/64), (0), (-2), (0), (0), (-2), (-2)],
++    ![(25/64), (0), (-2), (0), (0), (-2), (-2)],
++    ![(-25/64), (0), (2), (0), (0), (2), (2)],
++    ![(-25/64), (0), (2), (0), (0), (2), (2)],
++    ![(-25/64), (2), (0), (0), (0), (0), (2)],
++    ![(25/64), (-2), (0), (0), (0), (0), (-2)],
++    ![(-25/64), (2), (0), (0), (0), (0), (2)],
++    ![(25/64), (-2), (0), (0), (0), (0), (-2)],
++    ![(-25/64), (2), (0), (0), (0), (0), (2)]
++  ]
+ 
+ theorem oppositeLicenseRow_mem (c : Cell) : oppositeLicenseRow c ∈ rows c := by
+-  fin_cases c <;> simp [oppositeLicenseRow, rows]
++  fin_cases c <;> simp [oppositeLicenseRow, rows,
++    rowsCell0, rowsCell1, rowsCell2, rowsCell3, rowsCell4, rowsCell5, rowsCell6, rowsCell7, rowsCell8, rowsCell9,
++    rowsCell10, rowsCell11, rowsCell12, rowsCell13, rowsCell14, rowsCell15, rowsCell16, rowsCell17, rowsCell18]
+ 
+ end
+ end ImbalancedChen.P4AOriginalSixthLaterLiteral

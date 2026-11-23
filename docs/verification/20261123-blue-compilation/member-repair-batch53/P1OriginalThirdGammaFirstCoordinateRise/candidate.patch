@@ -1,0 +1,34 @@
+--- baseline/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean
++++ candidate/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean
+@@ -88,18 +88,18 @@
+         (le_max_of_le_right (le_max_of_le_right (le_max_right _ _))))
+     simpa [hg] using h
+   have hnew0 : qVLo (b.lx + d) (b.ux + d) ≤ G + d / 2 :=
+-    (qVLo_shift_le b.lx b.ux d hd).trans (add_le_add_right h0 _)
++    (qVLo_shift_le b.lx b.ux d hd).trans (add_le_add h0 (le_refl (d / 2)))
+   have hnewxy : qVLo (b.lx + d + b.ly) (b.ux + d + b.uy) ≤ G + d / 2 := by
+     simpa only [add_assoc, add_left_comm, add_comm] using
+       (qVLo_shift_le (b.lx + b.ly) (b.ux + b.uy) d hd).trans
+-        (add_le_add_right hxy (d / 2))
++        (add_le_add hxy (le_refl (d / 2)))
+   have hnewxyz : qVLo (b.lx + d + b.ly + b.lz)
+       (b.ux + d + b.uy + b.uz) ≤ G + d / 2 := by
+     simpa only [add_assoc, add_left_comm, add_comm] using
+       (qVLo_shift_le (b.lx + b.ly + b.lz)
+-        (b.ux + b.uy + b.uz) d hd).trans (add_le_add_right hxyz (d / 2))
++        (b.ux + b.uy + b.uz) d hd).trans (add_le_add hxyz (le_refl (d / 2)))
+   have hnewres : rescue (shiftX b d) ≤ G + d / 2 :=
+-    (rescue_shift_le b d hd).trans (add_le_add_right hr _)
++    (rescue_shift_le b d hd).trans (add_le_add hr (le_refl (d / 2)))
+   have hnewxz : (if e ≤ xzGap (shiftX b d) then
+       qVLo (b.lx + d + b.lz) (b.ux + d + b.uz)
+       else qVLo (b.lx + d) (b.ux + d)) ≤ G + d / 2 := by
+@@ -108,7 +108,7 @@
+       have hg0 : e ≤ xzGap b := hg.trans (xzGap_shift_le b d hd)
+       simpa only [add_assoc, add_left_comm, add_comm] using
+         (qVLo_shift_le (b.lx + b.lz) (b.ux + b.uz) d hd).trans
+-          (add_le_add_right (hxz hg0) (d / 2))
++          (add_le_add (hxz hg0) (le_refl (d / 2)))
+     · simpa [hg] using hnew0
+   have hnewyz : (if e ≤ yzGap (shiftX b d) then
+       qVLo (b.ly + b.lz) (b.uy + b.uz)

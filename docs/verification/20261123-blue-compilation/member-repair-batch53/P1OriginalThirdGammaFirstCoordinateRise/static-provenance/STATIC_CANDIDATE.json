@@ -1,0 +1,198 @@
+{
+  "schema": "p1_third_gamma_actual_failure_static_candidate_v1",
+  "captured_utc": "2026-11-23T17:01:37.815841+00:00",
+  "status": "UNCOMPILED_STATIC_CANDIDATE",
+  "author": "/root/blue_inventory",
+  "module": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/actual-repairs-third-gamma-rise/baseline/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean",
+    "sha256": "ce79a843c6ac5b6ba7977e40a369cfa7226047d3785f2be466357a29e8536ed2",
+    "bytes": 5952
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/actual-repairs-third-gamma-rise/candidate/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean",
+    "sha256": "ff449219a89ac54613a743fe9fd81069a737aebd188bfbddff8254d2176d50a4",
+    "bytes": 5984
+  },
+  "selected_registered_v3_source": {
+    "path": "/workspace/goldbach-formalization/docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/v3repairs/P1OriginalThirdGammaFirstCoordinateRise.lean",
+    "sha256": "ce79a843c6ac5b6ba7977e40a369cfa7226047d3785f2be466357a29e8536ed2",
+    "bytes": 5952
+  },
+  "canonical_main_source_absent": true,
+  "existing_exact_variant_search": {
+    "index": {
+      "path": "/workspace/p1-complete-proof/source-graph-inventory.json",
+      "sha256": "6efb6d8ee792f592d73f831cbedacbf768b5c76c8f2b9eefb33075fe0d38e912",
+      "bytes": 4810737
+    },
+    "variants": [
+      {
+        "sha256": "ce79a843c6ac5b6ba7977e40a369cfa7226047d3785f2be466357a29e8536ed2",
+        "bytes": 5952,
+        "imports": [
+          "ImbalancedChen.HistoricalThirdCoarsePolicy"
+        ],
+        "project_imports": [
+          "ImbalancedChen.HistoricalThirdCoarsePolicy"
+        ],
+        "paths": [
+          {
+            "path": "/workspace/goldbach-formalization/docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/v3repairs/P1OriginalThirdGammaFirstCoordinateRise.lean",
+            "repo_relative_path": "docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/v3repairs/P1OriginalThirdGammaFirstCoordinateRise.lean",
+            "kind": "source-only-inferred-basename"
+          }
+        ]
+      },
+      {
+        "sha256": "5a2b06092371fb49adcc5742ac538fbb32d6f0c2f340f166a157cda27649ac6e",
+        "bytes": 5712,
+        "imports": [
+          "ImbalancedChen.HistoricalThirdCoarsePolicy"
+        ],
+        "project_imports": [
+          "ImbalancedChen.HistoricalThirdCoarsePolicy"
+        ],
+        "paths": [
+          {
+            "path": "/workspace/goldbach-formalization/docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/payload/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean",
+            "repo_relative_path": "docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel/payload/ImbalancedChen/P1OriginalThirdGammaFirstCoordinateRise.lean",
+            "kind": "source-only"
+          }
+        ]
+      }
+    ],
+    "interpretation": "ce79 is the selected v3 post of earlier payload5a2b, with pre-existing xz-association and coordinate-simpa fixes. Both were inspected; no repaired successor of ce79 is in this held index. Candidate starts from ce79 and retains every v3 correction. No globalGit absence claimed.",
+    "all_history_or_remote_rescan": false
+  },
+  "actual_failure": {
+    "path": "/workspace/p1-complete-proof/actual-repairs-third-gamma-rise/RAW_FAILURE.log",
+    "sha256": "648b52729d1150897644c5cd331441f6cf9d03e5030d32edd87befe87557f421",
+    "bytes": 2079,
+    "master_path": "/workspace/p1-complete-proof/shared901-build/attempt-1-build.log",
+    "master_byte_offset": 243125,
+    "exact_failure_bytes_present": true,
+    "master_prefix_through_excerpt_sha256": "094f98522d700d48538d08499df3695f60135cca594c046bc9b03324baa33933",
+    "location": "line91:41, wrong attached addition side for hnew0"
+  },
+  "root_cause": "Pinned global add_le_add_right is the additive translation of mul_le_mul_right with typebc -> a*b<=a*c, so it attaches the extra term on the left. qVLo_shift_le ends at qVLo_old+d/2 and needs qVLo_old+d/2<=G+d/2. The actual error prints the opposite-side term. Five identical calls occur in this same proof; explicit add_le_add h (le_refl(d/2)) supplies exactly the intended right-side inequality without changing the mathematical bound.",
+  "pinned_order_API_evidence": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/Monoid/Unbundled/Basic.lean",
+    "sha256": "5e294a0e96698d3537095d94dda4ccf3bc7304ad8772f39e25d712a390281337",
+    "bytes": 51997,
+    "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "lines": [
+      69,
+      79
+    ],
+    "excerpt": "@[to_additive (attr := gcongr high - 1)]\ntheorem mul_le_mul_right [MulLeftMono α] {b c : α} (bc : b ≤ c) (a : α) : a * b ≤ a * c :=\n  CovariantClass.elim _ bc\n\n@[to_additive le_of_add_le_add_left]\ntheorem le_of_mul_le_mul_left' [MulLeftReflectLE α] {a b c : α} (bc : a * b ≤ a * c) : b ≤ c :=\n  MulLeftReflectLE.le_of_mul_le_mul_left' bc\n\n@[to_additive (attr := gcongr high - 1)]\ntheorem mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b ≤ c) (a : α) : b * a ≤ c * a :=\n  i.elim a bc",
+    "new_call_shape": "add_le_add (h : old<=G) (le_refl(d/2)) : old+d/2<=G+d/2"
+  },
+  "all_complete_headers": [
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.v_shift_le",
+      "private": true,
+      "complete_header": "private theorem v_shift_le (t d : ℝ) (hd : 0 ≤ d) :\n    v (t + d) ≤ v t + d / 2 :=",
+      "header_sha256": "4ca543ddf377385cd8e4b9239a01ad3fd37ad9ca82ce725506f2389da7cff0df",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.qVLo_shift_le",
+      "private": true,
+      "complete_header": "private theorem qVLo_shift_le (l u d : ℚ) (hd : 0 ≤ d) :\n    qVLo (l + d) (u + d) ≤ qVLo l u + d / 2 :=",
+      "header_sha256": "460e8e273b4a67abbe48b9933b257a9a4bd4d40dff233f224cafd04ab624566f",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.xzGap_shift_le",
+      "private": true,
+      "complete_header": "private theorem xzGap_shift_le (b : RationalBox) (d : ℚ) (hd : 0 ≤ d) :\n    xzGap (shiftX b d) ≤ xzGap b :=",
+      "header_sha256": "9e6c13dcca44cc142db5c4f4e527882f11e303a1202ea2c6677318793cc19891",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.yzGap_shift_le",
+      "private": true,
+      "complete_header": "private theorem yzGap_shift_le (b : RationalBox) (d : ℚ) (hd : 0 ≤ d) :\n    yzGap (shiftX b d) ≤ yzGap b :=",
+      "header_sha256": "af412621ceaab5b487acdc1052922609c86ff9fa927073d439f7ebed44f30535",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.rescue_shift_le",
+      "private": true,
+      "complete_header": "private theorem rescue_shift_le (b : RationalBox) (d : ℚ) (hd : 0 ≤ d) :\n    rescue (shiftX b d) ≤ rescue b + d / 2 :=",
+      "header_sha256": "dcab0dd2401b875746acc48ddfeb093c543d19275f7893813f47724f5f8ad54e",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.fullGamma_shift_le",
+      "private": false,
+      "complete_header": "theorem fullGamma_shift_le (e : ℝ) (b : RationalBox) (d : ℚ) (hd : 0 ≤ d) :\n    fullGamma e (shiftX b d) ≤ fullGamma e b + d / 2 :=",
+      "header_sha256": "7db3acab82776c0aa6cf5a7b972c6fc3e61357b2afffade20f2503a0997451d3",
+      "pre_post_byte_identical": true
+    },
+    {
+      "fqn": "ImbalancedChen.P1OriginalThirdGammaFirstCoordinateRise.gamma_shift_le",
+      "private": false,
+      "complete_header": "theorem gamma_shift_le (e : ℝ) (b : RationalBox) (d : ℚ) (hd : 0 ≤ d)\n    (hb : (b.ux : ℝ) ≤ mu - 4 * e)\n    (hshift : ((shiftX b d).ux : ℝ) ≤ mu - 4 * e) :\n    gamma e (shiftX b d) ≤ gamma e b + d / 2 :=",
+      "header_sha256": "347ed9a0ca56b4548e0094b589b51fd7cd20af25849004a9d60f47aab3cf68ad",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "all_complete_definitions": [
+    {
+      "name": "shiftX",
+      "kind": "def",
+      "complete_definition": "def shiftX (b : RationalBox) (d : ℚ) : RationalBox :=\n  { lx := b.lx + d, ux := b.ux + d,\n    ly := b.ly, uy := b.uy, lz := b.lz, uz := b.uz }\n\n",
+      "sha256": "dad1c162554e3dacd2f337ff7cf6ea4ef2dd1955fcc192aab7e255a030425000",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "changed_proof_body": [
+    {
+      "name": "fullGamma_shift_le",
+      "before_body": "\n  let G := fullGamma e b\n  have h0 : qVLo b.lx b.ux ≤ G := baseline_le_fullGamma e b\n  have hxy : qVLo (b.lx + b.ly) (b.ux + b.uy) ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_left _ _)\n  have hxyz : qVLo (b.lx + b.ly + b.lz) (b.ux + b.uy + b.uz) ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_of_le_right (le_max_left _ _))\n  have hr : rescue b ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_of_le_right\n      (le_max_of_le_right (le_max_left _ _)))\n  have hxz (hg : e ≤ xzGap b) :\n      qVLo (b.lx + b.lz) (b.ux + b.uz) ≤ G := by\n    have h : (if e ≤ xzGap b then qVLo (b.lx + b.lz) (b.ux + b.uz)\n      else qVLo b.lx b.ux) ≤ G := by\n      dsimp [G, fullGamma]\n      exact le_max_of_le_right (le_max_of_le_right\n        (le_max_of_le_right (le_max_of_le_right (le_max_left _ _))))\n    simpa [hg] using h\n  have hyz (hg : e ≤ yzGap b) :\n      qVLo (b.ly + b.lz) (b.uy + b.uz) ≤ G := by\n    have h : (if e ≤ yzGap b then qVLo (b.ly + b.lz) (b.uy + b.uz)\n      else qVLo b.lx b.ux) ≤ G := by\n      dsimp [G, fullGamma]\n      exact le_max_of_le_right (le_max_of_le_right\n        (le_max_of_le_right (le_max_of_le_right (le_max_right _ _))))\n    simpa [hg] using h\n  have hnew0 : qVLo (b.lx + d) (b.ux + d) ≤ G + d / 2 :=\n    (qVLo_shift_le b.lx b.ux d hd).trans (add_le_add_right h0 _)\n  have hnewxy : qVLo (b.lx + d + b.ly) (b.ux + d + b.uy) ≤ G + d / 2 := by\n    simpa only [add_assoc, add_left_comm, add_comm] using\n      (qVLo_shift_le (b.lx + b.ly) (b.ux + b.uy) d hd).trans\n        (add_le_add_right hxy (d / 2))\n  have hnewxyz : qVLo (b.lx + d + b.ly + b.lz)\n      (b.ux + d + b.uy + b.uz) ≤ G + d / 2 := by\n    simpa only [add_assoc, add_left_comm, add_comm] using\n      (qVLo_shift_le (b.lx + b.ly + b.lz)\n        (b.ux + b.uy + b.uz) d hd).trans (add_le_add_right hxyz (d / 2))\n  have hnewres : rescue (shiftX b d) ≤ G + d / 2 :=\n    (rescue_shift_le b d hd).trans (add_le_add_right hr _)\n  have hnewxz : (if e ≤ xzGap (shiftX b d) then\n      qVLo (b.lx + d + b.lz) (b.ux + d + b.uz)\n      else qVLo (b.lx + d) (b.ux + d)) ≤ G + d / 2 := by\n    by_cases hg : e ≤ xzGap (shiftX b d)\n    · rw [if_pos hg]\n      have hg0 : e ≤ xzGap b := hg.trans (xzGap_shift_le b d hd)\n      simpa only [add_assoc, add_left_comm, add_comm] using\n        (qVLo_shift_le (b.lx + b.lz) (b.ux + b.uz) d hd).trans\n          (add_le_add_right (hxz hg0) (d / 2))\n    · simpa [hg] using hnew0\n  have hnewyz : (if e ≤ yzGap (shiftX b d) then\n      qVLo (b.ly + b.lz) (b.uy + b.uz)\n      else qVLo (b.lx + d) (b.ux + d)) ≤ G + d / 2 := by\n    by_cases hg : e ≤ yzGap (shiftX b d)\n    · rw [if_pos hg]\n      exact (hyz (hg.trans (yzGap_shift_le b d hd))).trans\n        (le_add_of_nonneg_right (by positivity))\n    · simpa [hg] using hnew0\n  dsimp [fullGamma, shiftX]\n  simp only [max_le_iff]\n  exact ⟨hnew0, hnewxy, hnewxyz, hnewres, hnewxz, hnewyz⟩\n\n-- This is a genuine Gamma statement, with full-dispatch facts exposed.\n-- A contained key<=77 raw child supplies both facts for z in [0,3/51200].\n",
+      "after_body": "\n  let G := fullGamma e b\n  have h0 : qVLo b.lx b.ux ≤ G := baseline_le_fullGamma e b\n  have hxy : qVLo (b.lx + b.ly) (b.ux + b.uy) ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_left _ _)\n  have hxyz : qVLo (b.lx + b.ly + b.lz) (b.ux + b.uy + b.uz) ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_of_le_right (le_max_left _ _))\n  have hr : rescue b ≤ G := by\n    dsimp [G, fullGamma]\n    exact le_max_of_le_right (le_max_of_le_right\n      (le_max_of_le_right (le_max_left _ _)))\n  have hxz (hg : e ≤ xzGap b) :\n      qVLo (b.lx + b.lz) (b.ux + b.uz) ≤ G := by\n    have h : (if e ≤ xzGap b then qVLo (b.lx + b.lz) (b.ux + b.uz)\n      else qVLo b.lx b.ux) ≤ G := by\n      dsimp [G, fullGamma]\n      exact le_max_of_le_right (le_max_of_le_right\n        (le_max_of_le_right (le_max_of_le_right (le_max_left _ _))))\n    simpa [hg] using h\n  have hyz (hg : e ≤ yzGap b) :\n      qVLo (b.ly + b.lz) (b.uy + b.uz) ≤ G := by\n    have h : (if e ≤ yzGap b then qVLo (b.ly + b.lz) (b.uy + b.uz)\n      else qVLo b.lx b.ux) ≤ G := by\n      dsimp [G, fullGamma]\n      exact le_max_of_le_right (le_max_of_le_right\n        (le_max_of_le_right (le_max_of_le_right (le_max_right _ _))))\n    simpa [hg] using h\n  have hnew0 : qVLo (b.lx + d) (b.ux + d) ≤ G + d / 2 :=\n    (qVLo_shift_le b.lx b.ux d hd).trans (add_le_add h0 (le_refl (d / 2)))\n  have hnewxy : qVLo (b.lx + d + b.ly) (b.ux + d + b.uy) ≤ G + d / 2 := by\n    simpa only [add_assoc, add_left_comm, add_comm] using\n      (qVLo_shift_le (b.lx + b.ly) (b.ux + b.uy) d hd).trans\n        (add_le_add hxy (le_refl (d / 2)))\n  have hnewxyz : qVLo (b.lx + d + b.ly + b.lz)\n      (b.ux + d + b.uy + b.uz) ≤ G + d / 2 := by\n    simpa only [add_assoc, add_left_comm, add_comm] using\n      (qVLo_shift_le (b.lx + b.ly + b.lz)\n        (b.ux + b.uy + b.uz) d hd).trans (add_le_add hxyz (le_refl (d / 2)))\n  have hnewres : rescue (shiftX b d) ≤ G + d / 2 :=\n    (rescue_shift_le b d hd).trans (add_le_add hr (le_refl (d / 2)))\n  have hnewxz : (if e ≤ xzGap (shiftX b d) then\n      qVLo (b.lx + d + b.lz) (b.ux + d + b.uz)\n      else qVLo (b.lx + d) (b.ux + d)) ≤ G + d / 2 := by\n    by_cases hg : e ≤ xzGap (shiftX b d)\n    · rw [if_pos hg]\n      have hg0 : e ≤ xzGap b := hg.trans (xzGap_shift_le b d hd)\n      simpa only [add_assoc, add_left_comm, add_comm] using\n        (qVLo_shift_le (b.lx + b.lz) (b.ux + b.uz) d hd).trans\n          (add_le_add (hxz hg0) (le_refl (d / 2)))\n    · simpa [hg] using hnew0\n  have hnewyz : (if e ≤ yzGap (shiftX b d) then\n      qVLo (b.ly + b.lz) (b.uy + b.uz)\n      else qVLo (b.lx + d) (b.ux + d)) ≤ G + d / 2 := by\n    by_cases hg : e ≤ yzGap (shiftX b d)\n    · rw [if_pos hg]\n      exact (hyz (hg.trans (yzGap_shift_le b d hd))).trans\n        (le_add_of_nonneg_right (by positivity))\n    · simpa [hg] using hnew0\n  dsimp [fullGamma, shiftX]\n  simp only [max_le_iff]\n  exact ⟨hnew0, hnewxy, hnewxyz, hnewres, hnewxz, hnewyz⟩\n\n-- This is a genuine Gamma statement, with full-dispatch facts exposed.\n-- A contained key<=77 raw child supplies both facts for z in [0,3/51200].\n",
+      "before_body_sha256": "66e0f1773f2f22fbf88394edd2be2014168e1be552dfa3fc53df2ca2a87eb1d8",
+      "after_body_sha256": "c1462a605f0f58d606bd37b7339c1739c89ed36d10ae17ed8ab3b1de304bcf53"
+    }
+  ],
+  "all_bytes_outside_one_registered_proof_identical": true,
+  "all_imports_header_hypotheses_defs_data_and_numerical_bounds_preserved": true,
+  "mathematical_review": {
+    "nonnegative_first_coordinate_perturbation": "shiftX changes exactly lx and ux by the same rationald>=0. All other box endpoints are unchanged. qVLo and rescue retain the original d/2 bound.",
+    "whole_box_gates": "xz/yz gates may be disabled after shifting; unchanged xzGap_shift_le/yzGap_shift_le transport only shifted-active gates back to the old active gate. No equality of gate booleans is asserted.",
+    "gamma_dispatch": "The public gamma_shift_le still requires BOTH b.ux<=mu-4e and shifted.ux<=mu-4e. No dispatch crossing or extra branch is admitted.",
+    "firstStop_buffer_and_quantifiers": "This leaf has no N or mesh existential and does not prove a new whole-policy firstStop claim. Its RationalBox/data, original buffers, strict inequalities and all existing caller premises remain byte-identical. Pre-N mesh choice belongs to the unchanged consumers; it is not deleted or inferred from this lemma."
+  },
+  "manuscript1106": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+      "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+      "bytes": 39389,
+      "fixed_git_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "lines": [
+        19,
+        69
+      ],
+      "excerpt": "The number $\\Theta$ bounds the complete carrier; $\\Lambda_{\\rm cap}$ bounds the\nhigh-rank levels.  A finite policy specifies a level $N^\\lambda$ at each\nof finitely many prime prefixes.  An ancestor decision is fixed before\nthe children are subdivided.  For decreasing exponents $t_1,\\ldots,t_j$,\nput $S_j=t_1+\\cdots+t_j$.  The full square conditions at an auxiliary\nlevel $N^\\ell$ are\n\\begin{equation}\n S_{j-1}+2t_j\\le\\ell.\n \\label{coef:full-squares}\n\\end{equation}\nIf $I$ is a selected subset of the marked slots, put\n$b_I=\\sum_{i\\in I}t_i$.  In addition to \\eqref{coef:full-squares}, retain\nall the conditions\n\\begin{equation}\n b_I+\\sum_{\\substack{i<j\\\\i\\notin I}}t_i+2t_j\\le\\ell\n \\qquad(j\\notin I).\n \\label{coef:selected-squares}\n\\end{equation}\nFor $j$ after the last selected index, the left side of\n\\eqref{coef:selected-squares} is exactly $S_{j-1}+2t_j$.\nThus adjoining smaller primes preserves the selected conditions whenever\nthe full conditions are preserved.  An admitted cube also implies the\nnext square, since\n\\[\n S_j+2t_{j+1}\\le S_{j-1}+3t_j.\n\\]\nThis observation applies to both parities of the ordinary sieve tree:\nupper first exits have odd rank, and lower first exits have even rank.\n\nThe physical level $\\lambda$ and the auxiliary covering level $\\ell$\nhave different uses.  The coefficient and its density use $\\lambda$;\nfactorization may use a slightly larger $\\ell$.  No change in $\\lambda$\nis made in obtaining this cover.  Here is the needed choice at the\nthree-slot alternative.  Put\n\\[\n A(t)=\\frac{1+t}{2},\\qquad W(z)=\\Lambda_{\\rm cap}-\\frac38z.\n\\]\nOn a coarse box let $\\Gamma=\\inf\\max(A,W)$ and\n$\\lambda=\\Gamma-2e$, where the variation allowance satisfies\n$\\chi<e/10$.  If $\\inf A\\ge\\lambda+e/2$, choose\n$\\ell=\\lambda+e/4$.  Otherwise $\\sup A<\\lambda+11e/20$,\nso $W\\ge\\Gamma$ throughout the box; choose $\\ell=\\lambda+e$.\nThis leaves a reserve of at least $9e/20$ above the lower bound and $e$\nbelow the upper bound.  The remaining initialization reserves include\n\\[\n 1-\\Lambda_{\\rm cap}-2\\mu_0=\\frac3{256},\\qquad\n \\frac{525}{8704}+\\frac{49z}{272}>0.\n\\]\nThe higher-rank changes are restricted to compact pieces on which their\nsupport conditions have positive reserve.  Fine endpoint enlargement is then taken\nsmaller than this reserve."
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "bytes": 52306,
+      "fixed_git_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "lines": [
+        286,
+        315
+      ],
+      "excerpt": "\\begin{proof}\nFirst truncate any small-last-prime tail.  At the third activation\none may use, with $u=\\rho_0/2$ and $0<h<u$,\n\\begin{equation}\\label{sv:activation-tail}\n T_3(h)\\le\\frac{18h}{(u-h)^2}\n   \\left(\\log^2\\frac{\\rho_0}{h}\n                   +2\\log\\frac{\\rho_0}{h}+2\\right)=o(1).\n\\end{equation}\nThis follows from $\\overline F(s)-\\overline f(s)\\le9/s^2$\nfor $s\\ge3$, the residual lower bound $\\lambda-t_1-t_2\\ge u$,\nand the ordered reciprocal-prime triangle of mass\n$\\tfrac12\\log^2(\\rho_0/t_3)$.  Higher selected changes have\npositive last-prime cutoffs.  Proper affine walls have arbitrarily\nsmall strip volume.  Identities and open inherit regions are\nretained.  On the remaining compact pieces choose coarse caps with\nstrict margins and refine them in increasing prefix order.  No\nancestor decision may depend on an appended prime.\n\nThe third endpoint is piecewise affine and Lipschitz.  For boxes\nof width $\\chi<e/10$, caps of the form\n$\\lambda_{\\mathscr B}=\\Gamma_{\\mathscr B}-2e$ approximate it with error at most\n$4e+6\\chi$.  Near a three-slot branch with endpoint\n$W=\\Lambda_{\\rm cap}-3t_3/8$, an auxiliary factorization cover may exceed\nthe physical cap.  If $\\inf_{\\mathscr B} A\\ge\\lambda_{\\mathscr B}+e/2$, where\n$A=(1+t_1)/2$, take $\\ell_{\\rm aux}=\\lambda_{\\mathscr B}+e/4$.\nOtherwise $\\sup_{\\mathscr B} A<\\lambda_{\\mathscr B}+11e/20$, and\n$\\ell_{\\rm aux}=\\lambda_{\\mathscr B}+e$ lies at least $9e/20$ above the\nnecessary support condition and $e$ below $W$.  The other initialization square\nhas margin $3/256$.  The auxiliary cover gives a factorization for the coefficient;\nit never replaces the physical cap in a density or residual level."
+    }
+  ],
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_or_tests": 0,
+    "live_main_dependency_cache_or_frozen_sources_changed": 0,
+    "new_primitive_proof_statement_hypothesis_or_numerical_bound": 0,
+    "soleowner_next_step": "Compile exact candidate in the selected context and retain original actual failure; then normal/kernel/allowned validation as authorised."
+  }
+}

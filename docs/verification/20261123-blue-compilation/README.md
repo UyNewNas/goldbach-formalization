@@ -205,4 +205,12 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 
 少数旧 `pointer_inserted_this_overlay` 字段实际只记录 owner-stager 是否插入注释，未计入候选作者预先加入的中性指针。新增 [字段语义补充](P1_POINTER_FIELD_SEMANTICS_CLARIFICATION.json) 明确这三处，旧源码、验证与冻结记录均未改动；后续批次分开记录实际 overlay 与 stager 两个动作。
 
+第五十三批六个依赖完成标准构建、指定模块 kernel replay、完整 owned 类型／宇宙参数／公理检查及独立复核，107 个声明（102 public、5 private）仅标准三公理，源码及三十项主要产物稳定，见 [验收结果](member-repair-batch53/VALIDATION_RESULTS.json) 和 [独立最终链](member-repair-batch53/INDEPENDENT_REVIEW.json)。范围为第四 reciprocal-bin regrouping／integral sign、AboveMu third admission、SmallAttachment support、CoarseUpper residual uniformity 与 ThirdGamma first-coordinate rise。修补使用原有限和、端点不等式、history-log 供应者、Fin 坐标及原同侧加法；统一 N0 仍先于 omega、cap、weight、state。SmallAttachment 仅一个 existential header 显式标注原 `a k : ℕ`，旧模板误写为两个 headers 已在独审记录澄清；随后一次 proof simp 补 `1+1=2` 单列，旧未解析 header 不声称已有相同 kernel 类型。两项实际失败的首版及 v2 均归档，其余四个已成功的 source／kernel 未重复。
+
+第五十五批 `P4AOriginalSixthLaterLiteral` 通过正常编译、指定模块 kernel replay 及全部 80 个 owned 声明检查，其中 public 14、private 66，包含新增的 19 个 typed private tables 与生成声明。源码和五项主要产物稳定，公理仅标准三项，见 [验收结果](member-repair-batch55/VALIDATION_RESULTS.json) 和 [非作者复核](member-repair-batch55/INDEPENDENT_REVIEW.json)。八个原有限表定义的实现表示确有变化：将原十九份表分开定型，公有 lookup 使用同序 Fin19 向量，解决原 elaboration 预算及有限模式覆盖问题；原编译资源选项未提高。152 项 lookup RHS、1155 行／8085 个系数、行次序、多重及 R17 charts15–18=3 均保持，原 public headers 不变。原未 elaboration 的函数不声称已有相同 kernel 值或 raw body。
+
+该表原完整 AST／宇宙参数／公理审计已接受全部 80 项；其中十九个 private equation 的 pretty 展示碰到默认 5000-step 上限。只对这十九项补充完整 pretty，逐项确认其 AST、宇宙参数与原记录相同，另外 61 项和全部原公理检查复用，原成功 source／kernel 没有重跑。原截断展示及约 40MB 的完整 raw 审计均留档，最终导出已合并补充。后续新审计显式提高展示步数，项目源码的 heartbeat 预算保持原值。
+
+至此首轮实际构建遇到的 32 个失败依赖均已有相应正常编译、kernel 与 owned 验收，共 1081 个声明（978 public、103 private）。这不替代完整现代 P1 的最终端点：当前继续构建实际 All22 源、三个新输出及固定参数汇合入口，未把依赖验收当作完整 P1 完成。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。
