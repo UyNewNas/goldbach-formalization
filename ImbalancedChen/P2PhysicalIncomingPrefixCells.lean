@@ -2,7 +2,7 @@ import ImbalancedChen.CurrentP5MarkedTupleCommonRefinement
 import ImbalancedChen.LogPrimeBoxMesh
 
 /-!
-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Verification records: docs/verification/20261123-blue-compilation.
 Actual physical exponent cells and earlier-prefix cap lookups for the
 typed-density bridge section4. The finite geometric plan is fixed before
 any arithmetic target; it reads physical chronological prefixes only.
@@ -66,9 +66,9 @@ theorem exponentCode_eq_of_cell {a b : ℝ} (hab : a<b) {m : ℕ}
 
 /-- Default padding is the top singleton with an unselected mark;
 at every genuine prefix position no default is read. -/
-def physicalCode (a b : ℝ) (depth m : ℕ) (prefix : List MarkedExponent) :
+def physicalCode (a b : ℝ) (depth m : ℕ) («prefix» : List MarkedExponent) :
     Fin depth → CellCode m×Bool := fun i =>
-  let p := prefix.getD i.val (b,false)
+  let p := «prefix».getD i.val (b,false)
   (exponentCode a b m p.1,p.2)
 
 def incomingCode (a b : ℝ) (depth m rank : ℕ) (word : List MarkedExponent) :
@@ -103,6 +103,7 @@ def queryLabel (s : ℝ) : QueryLabel :=
 theorem queryLabel_exactlyTwo_iff (s : ℝ) : queryLabel s=.exactlyTwo ↔ s=2 := by
   unfold queryLabel
   split_ifs <;> simp_all
+  exact ne_of_lt ‹s < 2›
 
 /-- A genuinely finite family of incoming-prefix geometric choices:
 finite rank, finite physical bins, and the actual selected marks.

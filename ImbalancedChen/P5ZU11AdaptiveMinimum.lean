@@ -158,7 +158,7 @@ theorem weight_le_envelope (N : ℕ) (bank : Finset ℕ)
   intro v hv
   obtain ⟨c, hc, rfl⟩ := Finset.mem_image.mp hv
   rcases Finset.mem_insert.mp hc with h0 | hc
-  · simpa only [h0, kernel, if_pos rfl] using hs
+  · simpa only [h0, kernel, if_pos rfl, ite_true] using hs
   · obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hc
     obtain ⟨hjbank, hjeligible⟩ := Finset.mem_filter.mp hj
     simpa [kernel] using ho j hjbank hjeligible

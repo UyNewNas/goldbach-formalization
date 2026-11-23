@@ -134,4 +134,8 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 第二轮启动时已提交源码与 36 项项目覆盖的逐项比较见 [ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json](ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json)，其 recipe commit 明确固定于 `31169d69`；后续通过的修补按批次追加。补充的 [只读复用核查](reuse-observations-iteration2/PUBLICATION_FILES.json) 确认当前缺失 native 对象没有漏用 P6 现成对象，四个已知修补提交中的其它匹配模块已有当前对象，未覆盖或重编它们。该核查没有执行新的 Lean、stock、资格检查或安装。
 
+第十四批 Receiver／Adaptive 两模块通过标准构建、指定模块 kernel replay 及全部 74 个公开导出的完整类型／公理检查，仅标准三公理，源码和十项主要产物稳定。Receiver 两处 sandwich 显式给出原 `s`、`t`，Adaptive 的原 tag-0 分支仅补 `ite_true` 化简；原 frozen receiver、函数 family、标签和量词保持。Receiver 主仓 canonical 路径仍缺席，仅发布明确安装的已验后像。见 [验收结果](member-repair-batch14/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch14/INDEPENDENT_REVIEW.json)。
+
+第十六批 Rho／Incoming 两模块通过同样三项检查，全部 116 个公开导出仅标准三公理，源码和十项主要产物稳定。Rho 只补原 True 条件化简，保留相同 rho 与商。Incoming 将原 reserved-token binder `prefix` 及其同一引用写成 `«prefix»`，保留相同 Lean.Name、类型、数据 term 与 `(b,false)` padding；原未解析定义不能声称已有相同 kernel 类型或 raw definition 字节。另一处证明仅从原 `s<2` 得到 `s≠2`。原物理先前 prefix 的因果性和精确 `s=2` 边界保持，见 [验收结果](member-repair-batch16/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch16/INDEPENDENT_REVIEW.json)。两批独立复核先冻结稳定源码／日志／产物摘要，FINAL 完成后只补相同 hash 链，没有重复源码或 Lean 检查。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

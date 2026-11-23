@@ -15,7 +15,7 @@ centre-prime corrections, and same-mask restriction are proved here.
 No total support envelope, distribution estimate above sqrt(N), or
 identification with the manuscript h248/nu kernel is asserted.
 
-SOURCE ONLY: uncompiled; the companion transport import is also a draft.
+Verification records: docs/verification/20261123-blue-compilation.
 -/
 
 namespace ImbalancedChen.P5CausalRhoQuotientBridge
@@ -68,7 +68,7 @@ theorem receiver_quotient_indicator_minorant
   by_cases hd : b ∣ N - P
   · have hq : (N - P) / b ∈ chenQuotientPrimeSource N b :=
       Finset.mem_image.mpr ⟨P, mem_chenQuotientPrimeCarrier.mpr ⟨hP, hd⟩, rfl⟩
-    simpa only [if_pos hd, ChenQuotient, hd, true_and] using
+    simpa only [if_pos hd, ChenQuotient, hd, true_and, if_true] using
       quotientSource_pointwise_minorant retainEven N b cap w z L hL hwL hwz hzcap hq
   · have hnot : ¬ ChenQuotient b z (N - P) := fun h => hd h.1
     simp only [if_neg hd, if_neg hnot, le_refl]

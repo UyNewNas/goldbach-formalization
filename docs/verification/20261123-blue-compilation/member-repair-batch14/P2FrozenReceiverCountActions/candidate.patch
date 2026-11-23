@@ -1,0 +1,29 @@
+--- baseline/ImbalancedChen/P2FrozenReceiverCountActions.lean
++++ candidate/ImbalancedChen/P2FrozenReceiverCountActions.lean
+@@ -2,7 +2,7 @@
+ import MathlibNt.Wu2008DoubleSieve.Buchstab
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ Exact source actions with a fixed original receiver predicate. Every
+ receiver remains a literal prime label at most N; masks and strict prime
+ windows are inherited. The signed AP discrepancy uses the same frozen
+@@ -249,7 +249,7 @@
+       markedChildPolynomial false N Q L B sigma E s t := by
+   have hb := markedPhi_buchstab N Q L B sigma E (fun a ha => (hR a ha).le)
+     (by linarith : 0<s) hst
+-  have hc := (markedChildren_sandwich N Q L B sigma E hB hsigma hR hs).1
++  have hc := (markedChildren_sandwich N Q L B sigma E (s := s) (t := t) hB hsigma hR hs).1
+   linarith
+ 
+ theorem marked_actual_lower_transfer {ι : Type*} (N : ℕ) (Q : ℝ) (L : Finset ι)
+@@ -260,7 +260,7 @@
+       markedPhi N Q L B sigma E s := by
+   have hb := markedPhi_buchstab N Q L B sigma E (fun a ha => (hR a ha).le)
+     (by linarith : 0<s) hst
+-  have hc := (markedChildren_sandwich N Q L B sigma E hB hsigma hR hs).2
++  have hc := (markedChildren_sandwich N Q L B sigma E (s := s) (t := t) hB hsigma hR hs).2
+   linarith
+ 
+ end
