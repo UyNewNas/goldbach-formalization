@@ -204,7 +204,7 @@ def main() -> None:
             parts = [Path(str(olean) + suffix) for suffix in ("", ".server", ".private")]
             for part in parts:
                 part.unlink(missing_ok=True)
-            run(["lake", "env", "lean", "-DwarningAsError=true", "-o", str(olean),
+            run(["lake", "env", "lean", "-t0", "-DwarningAsError=true", "-o", str(olean),
                  relative + ".lean"], module.rsplit(".", 1)[1] + "-strict")
             if not olean.is_file():
                 raise RuntimeError("Strict compilation produced no olean: " + module)
@@ -216,7 +216,7 @@ def main() -> None:
                          module.rsplit(".", 1)[1] + "-replay")
             if f"replaying {module}" not in replay.splitlines():
                 raise RuntimeError("Missing replay evidence: " + module)
-        log = run(["lake", "env", "lean", "-DwarningAsError=true", AUDIT], "axioms")
+        log = run(["lake", "env", "lean", "-t0", "-DwarningAsError=true", AUDIT], "axioms")
         records, counts = validate_inventory(log)
         for relative, expected in {**hashes, **objects}.items():
             if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
