@@ -1,0 +1,36 @@
+✖ [10988/11126] Building ImbalancedChen.P1HistoricalFourthFullCellIntegral (13s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFourthFullCellIntegral.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1HistoricalFourthFullCellIntegral.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFourthFullCellIntegral.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1HistoricalFourthFullCellIntegral.setup.json --json
+warning: ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean:55:29: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+error: ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean:170:2: Type mismatch: After simplification, term
+  IntegrableOn.sub (integrableOn_extendedWeightedProfile_joint D ha hab j ↑(D.old4 j))
+    (integrableOn_extendedWeightedProfile_joint D ha hab j ↑(D.cap4 j))
+ has type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm (extendedWeightedProfile ↑(D.old4 j) - extendedWeightedProfile ↑(D.cap4 j))
+    (jointCell D j) volume
+but is expected to have type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm
+    (fun t =>
+      extendedProfile (↑(D.old4 j)) t * reciprocalWeight t - extendedProfile (↑(D.cap4 j)) t * reciprocalWeight t)
+    (jointCell D j) volume
+error: ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean:184:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  extendedProfile (↑(D.old4 j)) t
+in the target expression
+  (fun x => (extendedProfile (↑(D.old4 j)) x - extendedProfile (↑(D.cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (↑(D.old4 j)) x - fourthPlusProfileP1 (↑(D.cap4 j)) x) * ∏ i, 1 / x i) t
+
+D : HistoricalPrefixCapData
+ha : 0 < D.a
+hab : D.a < D.b
+hcheck : D.levelCheck = true
+j : Fin 4 → Fin (D.m + 1)
+hj : j ∈ D.cells4
+hlevel : ↑(D.old4 j) ≤ ↑(D.cap4 j)
+t : Fin 4 → ℝ
+ht : t ∈ jointCell D j
+⊢ (fun x => (extendedProfile (↑(D.old4 j)) x - extendedProfile (↑(D.cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (↑(D.old4 j)) x - fourthPlusProfileP1 (↑(D.cap4 j)) x) * ∏ i, 1 / x i) t
+error: Lean exited with code 1

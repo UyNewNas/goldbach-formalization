@@ -1,0 +1,23 @@
+--- baseline/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean
++++ candidate/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean
+@@ -62,6 +62,7 @@
+     apply (currentChenUpsilon9_dvd_reciprocalTotient_sum_le D Q (t i).val (hp i) hD).trans
+     have hinv := p5z_marked_prime_inverse_le (hp i) hH (hrough i)
+     have hm := mul_le_mul_of_nonneg_right hinv hL
++    simp only [div_eq_mul_inv] at hm ⊢
+     nlinarith only [hm]
+   calc
+     _ ≤ ∑ i : Fin rank, ∑ d ∈ D,
+@@ -87,8 +88,10 @@
+       intro t ht
+       apply Finset.sum_congr rfl
+       intro d hd
+-      by_cases hc : Nat.Coprime (Part3.labelledProduct t) d <;>
+-        simp only [hc, if_true, if_false] <;> ring
++      by_cases hc : Nat.Coprime (Part3.labelledProduct t) d
++      · simp only [if_pos hc, sub_self, zero_div, mul_zero, neg_zero]
++      · simp only [if_neg hc, zero_sub]
++        ring
+     _ = _ := by simp only [Finset.sum_neg_distrib]
+ 
+ /-- Finite weighted correction cost, with an arbitrary fixed coefficient

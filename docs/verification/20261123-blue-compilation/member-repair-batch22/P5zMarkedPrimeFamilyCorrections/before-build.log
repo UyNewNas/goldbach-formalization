@@ -1,0 +1,54 @@
+✖ [11114/11225] Building ImbalancedChen.P5zMarkedPrimeFamilyCorrections (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.setup.json --json
+error: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:65:4: linarith failed to find a contradiction
+rank N : ℕ
+t : Fin rank → Fin (N + 1)
+ht : t ∈ Part3.labelledPrimeTuples rank N
+H : ℝ
+hH : 0 < H
+hrough : ∀ (i : Fin rank), H ≤ ↑↑(t i)
+D : Finset ℕ
+Q : ℕ
+hD : D ⊆ Finset.Icc 1 Q
+hp : ∀ (i : Fin rank), Nat.Prime ↑(t i)
+hL : 0 ≤ 1 + Real.log (max 1 ↑Q)
+hpoint :
+  ∀ (d : ℕ),
+    (if (Part3.labelledProduct t).Coprime d then 0 else 1 / ↑d.totient) ≤ ∑ i, if ↑(t i) ∣ d then 1 / ↑d.totient else 0
+hsum :
+  (∑ i ∈ D, if (Part3.labelledProduct t).Coprime i then 0 else 1 / ↑i.totient) ≤
+    ∑ y, ∑ x ∈ D, if ↑(t y) ∣ x then 1 / ↑x.totient else 0
+i : Fin rank
+hinv : 1 / (↑↑(t i) - 1) ≤ 2 / H
+hm : 1 / (↑↑(t i) - 1) * (1 + Real.log (max 1 ↑Q)) ≤ 2 / H * (1 + Real.log (max 1 ↑Q))
+a✝ : 8 / H * (1 + Real.log (max 1 ↑Q)) < 4 / (↑↑(t i) - 1) * (1 + Real.log (max 1 ↑Q))
+⊢ False
+failed
+error: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:91:8: `simp` made no progress
+error: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:85:94: unsolved goals
+case neg
+rank N : ℕ
+S : Finset (Fin rank → Fin (N + 1))
+W : (Fin rank → Fin (N + 1)) → ℝ
+D : Finset ℕ
+rho : ℕ → ℝ
+t : Fin rank → Fin (N + 1)
+ht : t ∈ S
+d : ℕ
+hd : d ∈ D
+hc : ¬(Part3.labelledProduct t).Coprime d
+⊢ rho d * ((0 - W t) / ↑d.totient) = -(W t * (rho d * (1 / ↑d.totient)))
+warning: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:91:23: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:181:40: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean:181:40: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: Lean exited with code 1

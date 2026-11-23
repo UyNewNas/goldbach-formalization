@@ -1,0 +1,249 @@
+{
+  "schema": "member_corrections_unsifted_static_candidates_v1",
+  "captured_utc": "2026-11-23T15:00:47.151830+00:00",
+  "status": "UNCOMPILED_PROOF_BODY_CANDIDATES_NO_KERNEL_OR_THEOREM_CREDIT",
+  "actual_source_edits": 0,
+  "Lean_Lake_compiler_invocations": 0,
+  "modules": [
+    {
+      "module": "ImbalancedChen.P5zMarkedPrimeFamilyCorrections",
+      "source": "/workspace/blue-member-build/ImbalancedChen/P5zMarkedPrimeFamilyCorrections.lean",
+      "baseline_sha256": "8bda4688a4f0da2f95aa13c7ac243eaf8366f3e62da1ba53cabafbaf13723ca8",
+      "candidate_sha256": "3a1461431c1db114362eab162c1a6c559bf3919dc3aa24d8c21ed2175c240e95",
+      "baseline_bytes": 11530,
+      "candidate_bytes": 11641,
+      "baseline_CRLF": 2,
+      "candidate_CRLF": 2,
+      "headers": [
+        {
+          "name": "p5z_marked_prime_inverse_le",
+          "private": true,
+          "header": "private theorem p5z_marked_prime_inverse_le {p : ℕ} (hp : Nat.Prime p)\n    {H : ℝ} (hH : 0 < H) (hHp : H ≤ (p : ℝ)) : 1 / ((p : ℝ) - 1) ≤ 2 / H :=",
+          "sha256": "e339a3146bad5c57b92d6f4e644e20f35829a547f782608d8cf3623d832b161c"
+        },
+        {
+          "name": "p5z_marked_noncoprime_totient_sum_le",
+          "private": false,
+          "header": "theorem p5z_marked_noncoprime_totient_sum_le {rank N : ℕ}\n    (t : Fin rank → Fin (N + 1)) (ht : t ∈ Part3.labelledPrimeTuples rank N)\n    (H : ℝ) (hH : 0 < H) (hrough : ∀ i, H ≤ ((t i).val : ℝ))\n    (D : Finset ℕ) (Q : ℕ) (hD : D ⊆ Finset.Icc 1 Q) :\n    (∑ d ∈ D, if Nat.Coprime (Part3.labelledProduct t) d then (0 : ℝ)\n      else 1 / (Nat.totient d : ℝ)) ≤\n      (8 * (rank : ℝ) / H) * (1 + Real.log (max 1 (Q : ℝ))) :=",
+          "sha256": "dd74a0198c8c9db0b2ee37bf6fcb440e15431bb35fe24fa4eff268d6769e2d6c"
+        },
+        {
+          "name": "p5z_markedCoprimeCorrection_eq_neg_sum",
+          "private": false,
+          "header": "theorem p5z_markedCoprimeCorrection_eq_neg_sum {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (W : (Fin rank → Fin (N + 1)) → ℝ)\n    (D : Finset ℕ) (rho : ℕ → ℝ) :\n    p5z_labelledCoprimeCorrection S Part3.labelledProduct W D rho =\n      -(∑ t ∈ S, ∑ d ∈ D, W t * (rho d *\n        (if Nat.Coprime (Part3.labelledProduct t) d then 0 else 1 / (Nat.totient d : ℝ)))) :=",
+          "sha256": "a75ab5fa082a4dda4513cdf5836a55fee72425ddb624cf4ebc19eda60069fafc"
+        },
+        {
+          "name": "p5z_marked_abs_correction_le_mass",
+          "private": false,
+          "header": "theorem p5z_marked_abs_correction_le_mass {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (W : (Fin rank → Fin (N + 1)) → ℝ) (hW : ∀ t ∈ S, 0 ≤ W t)\n    (H : ℝ) (hH : 0 < H) (hrough : ∀ t ∈ S, ∀ i, H ≤ ((t i).val : ℝ))\n    (D : Finset ℕ) (Q : ℕ) (hD : D ⊆ Finset.Icc 1 Q)\n    (rho : ℕ → ℝ) (M : ℝ) (hM : 0 ≤ M) (hrho : ∀ d ∈ D, |rho d| ≤ M) :\n    |p5z_labelledCoprimeCorrection S Part3.labelledProduct W D rho| ≤\n      M * ((8 * (rank : ℝ) / H) * (1 + Real.log (max 1 (Q : ℝ)))) * p5z_labelledMass S W :=",
+          "sha256": "f009f326586e7af8b54f009f32d056b1573fb4a2dcdeb38a7e846d10354d7ac1"
+        },
+        {
+          "name": "p5z_eventually_marked_correction_le",
+          "private": false,
+          "header": "theorem p5z_eventually_marked_correction_le {rank : ℕ}\n    (S : (N : ℕ) → Finset (Fin rank → Fin (N + 1)))\n    (W : (N : ℕ) → (Fin rank → Fin (N + 1)) → ℝ)\n    (hS : ∀ N, S N ⊆ Part3.labelledPrimeTuples rank N)\n    (hW : ∀ N, ∀ t ∈ S N, 0 ≤ W N t)\n    (a nu M J : ℝ) (ha : 0 < a) (hnu : 0 ≤ nu) (hM : 0 ≤ M) (hJ : 0 ≤ J)\n    (hrough : ∀ᶠ N : ℕ in atTop, Even N → ∀ t ∈ S N, ∀ i,\n      (N : ℝ) ^ a ≤ ((t i).val : ℝ))\n    (hmass : ∀ eta : ℝ, 0 < eta → ∀ᶠ N : ℕ in atTop, Even N →\n      p5z_labelledMass (S N) (W N) ≤ (J + eta) * ((N : ℝ) / Real.log (N : ℝ)))\n    (eta : ℝ) (heta : 0 < eta) :\n    ∀ᶠ N : ℕ in atTop, Even N → ∀ D : Finset ℕ, ∀ Q : ℕ, ∀ rho : ℕ → ℝ,\n      D ⊆ Finset.Icc 1 Q → (Q : ℝ) ≤ (N : ℝ) ^ nu → (∀ d ∈ D, |rho d| ≤ M) →\n      |p5z_labelledCoprimeCorrection (S N) Part3.labelledProduct (W N) D rho| ≤\n        eta * singularNormalization N :=",
+          "sha256": "124c78463769b58dc6caaccb1d3e1903c52980012ed7704c8cd2cef6e951e2b3"
+        },
+        {
+          "name": "p5z_eventually_marked_smallPrimeMass_le_ceil",
+          "private": false,
+          "header": "theorem p5z_eventually_marked_smallPrimeMass_le_ceil {rank : ℕ}\n    (S : (N : ℕ) → Finset (Fin rank → Fin (N + 1)))\n    (W : (N : ℕ) → (Fin rank → Fin (N + 1)) → ℝ)\n    (hS : ∀ N, S N ⊆ Part3.labelledPrimeTuples rank N)\n    (B : ℝ) (hB : 0 ≤ B) (hW : ∀ N, ∀ t ∈ S N, W N t ≤ B)\n    (hcap : ∀ N, ∀ t ∈ S N, Part3.labelledProduct t ≤ N)\n    (theta : ℝ) (htheta : theta < 1) (eta : ℝ) (heta : 0 < eta) :\n    ∀ᶠ N : ℕ in atTop,\n      p5z_labelledSmallPrimeMass (S N) Part3.labelledProduct (W N) N\n        (Nat.ceil ((N : ℝ) ^ theta)) ≤ eta * singularNormalization N :=",
+          "sha256": "1856198ba3742bdf6d0f08e6178fbf78563291d8c16e4fc6840c4297ead2c7f0"
+        }
+      ],
+      "public_theorems": 5,
+      "private_theorems": 1,
+      "changed_proofs": [
+        "p5z_marked_noncoprime_totient_sum_le",
+        "p5z_markedCoprimeCorrection_eq_neg_sum"
+      ],
+      "all_complete_comment_aware_headers_exact": true,
+      "all_raw_definitions_and_outside_original_proof_bytes_exact": true,
+      "imports_constants_hypotheses_quantifiers_changed": false,
+      "original_published_blob": "04bfce7f4bb85bda6a22c1cfa68fc714300f2d70",
+      "all_refs_exact_path_variant_count": 1,
+      "published_fixed_alternative_found": false,
+      "actual_relationships": {
+        "goldbach-formalization": {
+          "exists": true,
+          "sha256": "8bda4688a4f0da2f95aa13c7ac243eaf8366f3e62da1ba53cabafbaf13723ca8",
+          "matches_baseline": true
+        },
+        "blue-member-build": {
+          "exists": true,
+          "sha256": "8bda4688a4f0da2f95aa13c7ac243eaf8366f3e62da1ba53cabafbaf13723ca8",
+          "matches_baseline": true
+        },
+        "blue-p6-build": {
+          "exists": false
+        }
+      }
+    },
+    {
+      "module": "ImbalancedChen.P2TwentyOneUnsiftedArithmeticSource",
+      "source": "/workspace/blue-member-build/ImbalancedChen/P2TwentyOneUnsiftedArithmeticSource.lean",
+      "baseline_sha256": "d8563021fcf599531d17536258c0491031cbe9ff5bcc0a53ab0b280570f8569f",
+      "candidate_sha256": "430fa3e92238738e2f9702e0e2de44121b69c707ed614cb6ce197f7ce2bb3f40",
+      "baseline_bytes": 8844,
+      "candidate_bytes": 8975,
+      "baseline_CRLF": 0,
+      "candidate_CRLF": 0,
+      "headers": [
+        {
+          "name": "word_prod_pos",
+          "private": false,
+          "header": "theorem word_prod_pos {M : ℕ} {a b c e f : ℝ} {cs l : List ℕ}\n    (hl : l ∈ words M a b c e f cs) : 0<l.prod :=",
+          "sha256": "41474d2ec07ab3421f4c75936cb115c61ad03bad0b2195498075b9433ccb4859"
+        },
+        {
+          "name": "source_output_lt",
+          "private": false,
+          "header": "theorem source_output_lt {N d ell : ℕ} {l : List ℕ}\n    (hN : 4≤N) (he : Even N) (hell : ell ∈ quotientCarrier N d l) : ell<N :=",
+          "sha256": "466c1e8f1b1f932e413ccfe1b6aa0d8fb166f7623e042e2f6110bc1159d0e517"
+        },
+        {
+          "name": "encode_source",
+          "private": false,
+          "header": "theorem encode_source {N d M : ℕ} {a b c e f : ℝ} {cs : List ℕ}\n    (hN : 4≤N) (he : Even N) (hd : 0<d) {x : SourceLabel}\n    (hx : x ∈ sourceLabels N d M a b c e f cs) :\n    encode N d x ∈ arithmeticLabels N d M a b c e f cs ∧\n    product d (encode N d x)=N-x.2 ∧ Nat.Prime (N-product d (encode N d x)) :=",
+          "sha256": "b12f468940fa529557e8246e1517423d88fb2803b716cb8602a9f4b22253f13b"
+        },
+        {
+          "name": "arithmetic_restores_source",
+          "private": false,
+          "header": "theorem arithmetic_restores_source {N d M : ℕ} {a b c e f : ℝ} {cs : List ℕ}\n    (hd : 0<d) {x : Label} (hx : x ∈ arithmeticLabels N d M a b c e f cs)\n    (hprime : Nat.Prime (N-product d x)) :\n    (⟨x.1,N-product d x⟩ : SourceLabel) ∈ sourceLabels N d M a b c e f cs ∧\n    encode N d ⟨x.1,N-product d x⟩=x :=",
+          "sha256": "8d07776a808bc3830e78c8927c049dafd4c04dff31ac501981785e0364d38ad9"
+        },
+        {
+          "name": "source_card_eq_restored",
+          "private": false,
+          "header": "theorem source_card_eq_restored {N d M : ℕ} {a b c e f : ℝ} {cs : List ℕ}\n    (hN : 4≤N) (he : Even N) (hd : 0<d) :\n    (sourceLabels N d M a b c e f cs).card=(restoredLabels N d M a b c e f cs).card :=",
+          "sha256": "4f6004dd2c7c2041b0320b2540e836892cedb940dfa8b3fd026441bb42006326"
+        },
+        {
+          "name": "source_card_eq_quotientPrefixTerm",
+          "private": false,
+          "header": "theorem source_card_eq_quotientPrefixTerm (N d M : ℕ) (a b c e f : ℝ) (cs : List ℕ) :\n    ((sourceLabels N d M a b c e f cs).card : ℝ)=quotientPrefixTerm N d M a b c e f cs :=",
+          "sha256": "971eb84ced3f0a50ad0319ca5fdd2f806fbb3a475fbad0befc60bd980f32599d"
+        },
+        {
+          "name": "primeMass_eq_restored",
+          "private": false,
+          "header": "theorem primeMass_eq_restored (N d M : ℕ) (a b c e f : ℝ) (cs : List ℕ) (sigma : ℝ) :\n    p5z_labelledPrimeMass (arithmeticLabels N d M a b c e f cs) (product d)\n      (fun _ => sigma) N = sigma*((restoredLabels N d M a b c e f cs).card : ℝ) :=",
+          "sha256": "f0443e1b4a2a96958e2a781c8c3ee1ed1d4cbb7970913d22eb5598888e053fa0"
+        },
+        {
+          "name": "quotientPrefixTerm_eq_primeMass",
+          "private": false,
+          "header": "theorem quotientPrefixTerm_eq_primeMass {N d M : ℕ} {a b c e f : ℝ} {cs : List ℕ}\n    (hN : 4≤N) (he : Even N) (hd : 0<d) (sigma : ℝ) :\n    sigma*quotientPrefixTerm N d M a b c e f cs =\n      p5z_labelledPrimeMass (arithmeticLabels N d M a b c e f cs) (product d)\n        (fun _ => sigma) N :=",
+          "sha256": "b0bb9f35caba8fe0b856431b7705ff90b5a09e72ea42ad0421747e096cf93f6e"
+        },
+        {
+          "name": "quotientSwitched_eq_switchedPrimeMass",
+          "private": false,
+          "header": "theorem quotientSwitched_eq_switchedPrimeMass {N d M : ℕ} {a b c e f : ℝ}\n    (hN : 4≤N) (he : Even N) (hd : 0<d) :\n    quotientSwitched N d M a b c e f=switchedPrimeMass N d M a b c e f :=",
+          "sha256": "dfe7531568e28c7822668dc6876e6ad326b1709d54f6b4752b141d2f40866f34"
+        }
+      ],
+      "public_theorems": 9,
+      "private_theorems": 0,
+      "changed_proofs": [
+        "arithmetic_restores_source",
+        "source_card_eq_restored",
+        "primeMass_eq_restored"
+      ],
+      "all_complete_comment_aware_headers_exact": true,
+      "all_raw_definitions_and_outside_original_proof_bytes_exact": true,
+      "imports_constants_hypotheses_quantifiers_changed": false,
+      "original_published_blob": "75c2ebdb303b35fbb9068bc09e53269d4ed1a86d",
+      "all_refs_exact_path_variant_count": 1,
+      "published_fixed_alternative_found": false,
+      "actual_relationships": {
+        "goldbach-formalization": {
+          "exists": false
+        },
+        "blue-member-build": {
+          "exists": true,
+          "sha256": "d8563021fcf599531d17536258c0491031cbe9ff5bcc0a53ab0b280570f8569f",
+          "matches_baseline": true
+        },
+        "blue-p6-build": {
+          "exists": false
+        }
+      }
+    }
+  ],
+  "all_exact_path_refs_consulted_without_repeat_global_history_audit": true,
+  "no_fixed_published_alternative_found": true,
+  "source_selection_or_definition_or_header_exception": false,
+  "diagnoses": [
+    {
+      "module": "ImbalancedChen.P5zMarkedPrimeFamilyCorrections",
+      "theorem": "p5z_marked_noncoprime_totient_sum_le",
+      "failure_line": 65,
+      "cause": "Existing hm bounds1/(p-1)*logfactor by2/H*logfactor. nlinarith treats4/(p-1) separately until division is exposed as multiplication by inverse.",
+      "candidate": "simp only [div_eq_mul_inv] at hm and target, then original nlinarith.",
+      "unchanged": "Constant8, every repeated slot, arbitrary finiteD subsetIcc1Q, positiveH and same H<=prime roughness."
+    },
+    {
+      "module": "ImbalancedChen.P5zMarkedPrimeFamilyCorrections",
+      "theorem": "p5z_markedCoprimeCorrection_eq_neg_sum",
+      "failure_line": 91,
+      "cause": "Bare hc/if_true/if_false simp-only can fail before ring and leave signed negative-branch algebra.",
+      "candidate": "Explicit if_pos/if_neg proof selection; zero_sub/sub_self/zero_div/mul_zero normalizations; same ring in negative branch.",
+      "unchanged": "Signed rho, original weighted labels, exact coprime recentering and no nonnegative rho premise."
+    },
+    {
+      "module": "ImbalancedChen.P2TwentyOneUnsiftedArithmeticSource",
+      "theorem": "arithmetic_restores_source",
+      "failure_lines": [
+        96,
+        99
+      ],
+      "cause": "Sigma pair.snd remains opaque to omega; threshold abbreviation is not unfolded by restricted simp.",
+      "candidate": "change first range goal to N-product<N+1; unfold threshold only in existing hquot/Sifted comparison.",
+      "unchanged": "Original d*N mask and next-to-last cutoff, same exact quotient and strict product<N Geometry."
+    },
+    {
+      "module": "ImbalancedChen.P2TwentyOneUnsiftedArithmeticSource",
+      "theorem": "source_card_eq_restored",
+      "failure_line": 119,
+      "cause": "Sigma constructors remain opaque in hm and ell<N facts; raw counterexample lists those projections as atoms.",
+      "candidate": "change hm to N-ell=N-ellprime and bounds to ell<N,ellprime<N before original omega.",
+      "unchanged": "Same injective encode map; equal products, all list occurrences and unit residual preserved."
+    },
+    {
+      "module": "ImbalancedChen.P2TwentyOneUnsiftedArithmeticSource",
+      "theorem": "primeMass_eq_restored",
+      "failure_line": 146,
+      "cause": "if_pos receives anonymous conjunction with no expected type for constructor inference.",
+      "candidate": "And.intro hm hp is an explicitly inferable proof of the same strict cutoff/prime conjunction.",
+      "unchanged": "Same additive prime receiver and arithmetic source without additive-prime filter."
+    }
+  ],
+  "mathematical_scope": {
+    "no_substantive_counting_or_estimate_gap_identified": true,
+    "P5": "Arbitrary coefficient boundM, source mass premiseJ, marked labels/repetitions, threshold-before-allD/Q/rho eventuality, Q<=N^nu and exact ceil cutoff retained. No unit bound borrowed and no U* premise added.",
+    "P2": "ALL original Gamma7--21 arities, colours and list multiplicities; old-mask Sifted(d*N), original prime output and strict product<N, exact quotient, tail=1 and repeated occurrences retained. No K/PP/capacity/J/cost-integral supplier assumed.",
+    "all_new_work_is_expression_API_normalization_in_original_proofs": true
+  },
+  "manuscript1106": {
+    "directory": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en",
+    "anchors": [
+      "argument.tex359-397 positive labelled product consequence, same original-slot coprime correction and small-prime payments",
+      "coefficient-appendix.tex207-221 marked multiplicities and unique small/rough decomposition",
+      "sieve-appendix.tex633-725 twenty-one Gamma ranges/list multiplicities and next-to-last quotient cutoff",
+      "sieve-appendix.tex778-791 ordinary Buchstab term versus separate quotient1 surface"
+    ],
+    "scope": "Finite arithmetic identities and primitive payments only; not a new full enhanced-family K/PP licence."
+  },
+  "patch": {
+    "path": "/workspace/blue-member-static-corrections-unsifted/candidate.patch",
+    "sha256": "863a012c66dedfd40721089b14ff2ac76d17e381c0a4159770517e5aae6b166a",
+    "check_cwd": "/workspace/blue-member-static-corrections-unsifted/apply-check",
+    "check_exit_code": 0,
+    "check_stdout": "",
+    "check_stderr": ""
+  },
+  "owner_handoff": "Only manuscript_inventory adopts after checking baseline exactSHA and runs guarded normal/kernel/all-public; no previously accepted modules rerun by this agent."
+}

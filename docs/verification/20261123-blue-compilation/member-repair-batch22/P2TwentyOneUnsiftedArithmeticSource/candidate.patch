@@ -1,0 +1,36 @@
+--- baseline/ImbalancedChen/P2TwentyOneUnsiftedArithmeticSource.lean
++++ candidate/ImbalancedChen/P2TwentyOneUnsiftedArithmeticSource.lean
+@@ -93,10 +93,12 @@
+     rw [hm]
+     exact Nat.mul_div_cancel_left x.2 hD
+   refine ⟨Finset.mem_sigma.mpr ⟨hw,Finset.mem_filter.mpr ⟨?_,hprime,?_,?_⟩⟩,?_⟩
+-  · exact Finset.mem_range.mpr (by omega)
++  · apply Finset.mem_range.mpr
++    change N-product d x < N+1
++    omega
+   · rw [hm]
+     exact dvd_mul_right _ _
+-  · simpa only [hquot] using hg.2.1
++  · simpa only [hquot,threshold] using hg.2.1
+   · exact Prod.ext rfl hquot
+ 
+ /-- Literal receiver labels and independent arithmetic labels are in
+@@ -116,6 +118,9 @@
+     rw [(encode_source hN he hd hx).2.1,(encode_source hN he hd hy).2.1] at hm
+     have hlx := source_output_lt hN he (Finset.mem_sigma.mp hx).2
+     have hly := source_output_lt hN he (Finset.mem_sigma.mp hy).2
++    change N-ell = N-ell' at hm
++    change ell < N at hlx
++    change ell' < N at hly
+     have hel : ell=ell' := by omega
+     subst l'
+     subst ell'
+@@ -143,7 +148,7 @@
+     intro x hx
+     have hm := (Finset.mem_filter.mp hx).2.2.2
+     by_cases hp : Nat.Prime (N-product d x)
+-    · simp only [if_pos hp,if_pos ⟨hm,hp⟩]
++    · simp only [if_pos hp,if_pos (And.intro hm hp)]
+     · simp only [if_neg hp,if_neg (show ¬(product d x<N ∧ Nat.Prime (N-product d x))
+         from fun h => hp h.2)]
+   rw [hs]

@@ -142,7 +142,7 @@ theorem tendsto_dilation_massScale_ratio {c : ℝ} (hc : 1 < c) :
   have hlim : Tendsto (fun N : ℕ =>
       ((Nat.floor (c * (N : ℝ)) : ℝ) / (N : ℝ)) /
         (Real.log (Nat.floor (c * (N : ℝ)) : ℝ) / Real.log (N : ℝ)))
-      atTop (𝓝 c) := by simpa only [div_one] using hratio
+      atTop (𝓝 c) := by simpa only [Pi.div_def, div_one] using hratio
   apply hlim.congr'
   filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN
   have hN1 : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)
@@ -197,7 +197,9 @@ theorem tendsto_physicalProductShell_mass
       atTop (𝓝 ((c - 1) * Real.log (1 / b))) := by
     simpa only [sub_div] using hsub
   apply hlim.congr'
-  exact Filter.Eventually.of_forall fun N => by rw [shell_card_eq_source_sub hc.le N]
+  exact Filter.Eventually.of_forall fun N => by
+    dsimp only
+    rw [shell_card_eq_source_sub hc.le N]
 
 /-- A genuine physical product ramp may be given an arbitrarily small
 source-shell payment by fixing a positive logarithmic width FIRST, then

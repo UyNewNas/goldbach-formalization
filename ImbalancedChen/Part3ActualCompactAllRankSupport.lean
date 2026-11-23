@@ -5,7 +5,7 @@ import ImbalancedChen.UpperRosserCubeCarrier
 /-!
 # Actual compact rough-frontier support at every rank
 
-SOURCE ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED.
+Compilation and verification records: docs/verification/20261123-blue-compilation.
 
 The finite-set Rosser filter at the i-th original decreasing prime is
 exactly the first i+1 entries.  Its odd cardinality test therefore gives
@@ -137,7 +137,7 @@ theorem actual_compact_frontier_all_rank_support
   have hleaf := firstExitDepthFrontier_toLeaf_mem k
     (actualExtendedThirdCompactUpperPolicy e h m N) weight []
     (roughPrimeUniverse N cap w z) true 1 state hstate
-  have hsub : state.selectedPrefix.reverse <+ roughPrimeUniverse N cap w z := by
+  have hsub : List.Sublist state.selectedPrefix.reverse (roughPrimeUniverse N cap w z) := by
     simpa only [List.reverse_nil, List.nil_append] using
       firstExitRetainedLeaves_selected_reverse_sublist
         (actualExtendedThirdCompactUpperPolicy e h m N) weight []
@@ -146,7 +146,7 @@ theorem actual_compact_frontier_all_rank_support
   apply upper_set_dwell_support state.selectedPrefix.reverse
     (fun p hp => hprime p (hsub.subset hp))
     ((roughPrimeUniverse_pairwise_gt N cap w z).sublist hsub)
-  simpa only [List.toFinset_reverse] using hadm.2
+  simpa only [List.toFinset_reverse, Bool.false_eq_true, if_false] using hadm.2
 
 /-- The same actual all-rank frontier support may now be used directly
 by the complete-local endpoint allocator. The physical history is not

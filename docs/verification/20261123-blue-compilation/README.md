@@ -132,7 +132,9 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 第十七批 `P2HistoricQ80OrdinaryEstimatorSoundness` 的五处变化限定于四个证明：同加项 API、函数 β 展开和显式使用既有 `ordinaryA_pos`。全部原声明、七个定义、数据、row bank、cutoffs、chord／max 与 actual-h 许可保持。标准构建、指定模块 kernel replay 和全部 54 个公开导出的完整类型／公理检查通过，仅标准三公理，源码及五项主要产物稳定，见 [验收结果](member-repair-batch17/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch17/INDEPENDENT_REVIEW.json)。原 155 秒失败记录完整保留，没有重跑已经成功的检查。
 
-第二轮启动时已提交源码与 36 项项目覆盖的逐项比较见 [ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json](ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json)，其 recipe commit 明确固定于 `31169d69`；后续通过的修补按批次追加。补充的 [只读复用核查](reuse-observations-iteration2/PUBLICATION_FILES.json) 确认当前缺失 native 对象没有漏用 P6 现成对象，四个已知修补提交中的其它匹配模块已有当前对象，未覆盖或重编它们。该核查没有执行新的 Lean、stock、资格检查或安装。
+第二轮启动时已提交源码与 36 项项目覆盖的逐项比较见 [ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json](ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json)，其 recipe commit 明确固定于 `31169d69`；后续通过的修补按批次追加。补充的 [只读复用核查](reuse-observations-iteration2/PUBLICATION_FILES.json) 确认当前缺失 native 对象没有漏用 P6 现成对象。四个已知修补提交另提供十份精确 preimage 匹配的源码候选，原始逐项索引均记录没有 `.olean`，不构成已有对象或资格。该核查没有执行新的 Lean、stock、资格检查或安装。
+
+本目录前版根据伴随消息，将这十份源码误写为已有编译对象；原始 `a60103db` 索引始终正确且未改动。现以 [明确更正记录](reuse-observations-iteration2/OLEAN_PRESENCE_MESSAGE_CLARIFICATION.json) 修正说明，没有基于错误消息接受任何旧对象或计验证 credit。随后四个实际新失败命中现成源码的复用记录仍然有效。
 
 第十四批 Receiver／Adaptive 两模块通过标准构建、指定模块 kernel replay 及全部 74 个公开导出的完整类型／公理检查，仅标准三公理，源码和十项主要产物稳定。Receiver 两处 sandwich 显式给出原 `s`、`t`，Adaptive 的原 tag-0 分支仅补 `ite_true` 化简；原 frozen receiver、函数 family、标签和量词保持。Receiver 主仓 canonical 路径仍缺席，仅发布明确安装的已验后像。见 [验收结果](member-repair-batch14/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch14/INDEPENDENT_REVIEW.json)。
 
@@ -142,6 +144,18 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 完整结果见 [验收记录](member-repair-batch13/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch13/INDEPENDENT_REVIEW.json)。LogPoint 旧静态表受到注释内假声明及 let-result 截断影响，原记录保持，新 [完整 27 条声明头比较](member-repair-batch13/LOG_POINT_FULL_HEADERS_REVIEW.json) 与 [发布补充](member-repair-batch13/PUBLICATION_ADDENDUM.json) 给出修正；实际 132 项环境导出的完整类型／公理记录一直完整，没有因此重跑 Lean。
 
-第二轮最早九个新失败模块的本地验收及独立复核均已完成，代码分批发布。统一入口构建还暴露了更后层的模块，正复用已有修补或处理其当前 API；单个模块通过不代替十入口的最终验收。
+第十八批 `P2SeedOmegaQuotientUnitCarrierExact` 仅在两处 `Nat.div_self` 显式提供既有正性，原 mask、receiver 和最后两项 cutoff 保持。标准构建、指定模块 kernel replay 及全部 10 个公开导出的完整类型／公理检查通过，仅标准三公理；源码和五项主要产物稳定，见 [验收结果](member-repair-batch18/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch18/INDEPENDENT_REVIEW.json)。
 
-项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
+第十九批三个模块共 113 个公开导出全部通过相同三项检查，源码及十五项主要产物稳定，仅标准三公理。`P1OriginalCoarseContinuationCells` 逐字复用既有 `3c94` 后像；`P4BLabelledOuterPushforward` 和 `P4BPhysicalShellMass` 逐字复用既有 `48db` 后像，包括历史注释。原 imports、完整声明头、定义、数值及假设保持，见 [验收结果](member-repair-batch19/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch19/INDEPENDENT_REVIEW.json)。这里复用的是可靠源码，当前对象通过本批实际检查接受。
+
+第二十批只有 `P2EnhancedOrderedReciprocalBudget` 一个模块，共 14 个公开导出；`Nat.cast_prod` 的证明 API 修补保留原 Γ7–21 各有序位置和原 `22*H^6` 总预算。三项检查通过，仅标准三公理，源码及五项主要产物稳定，见 [验收结果](member-repair-batch20/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch20/INDEPENDENT_REVIEW.json)。BoundaryUnion 属于下一批。
+
+第二十一批 `P4BOuterRampBoundaryUnion`、`P1ActualUpperClosedParameterUniformity`、`P1HistoricalFourthFullCellIntegral` 共 59 个公开导出通过三项检查，仅标准三公理，源码及十五项主要产物稳定。BoundaryUnion 仅移植既有四个证明体，保留当前 `ActualUpperCountingInputs` import；Uniformity 显式取出已有不等式，FullCellIntegral 使用原 `Pi.sub_def` 与 β 展开。原完整声明、定义和假设保持，见 [验收结果](member-repair-batch21/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch21/INDEPENDENT_REVIEW.json)。
+
+第二十二批 `P5zMarkedPrimeFamilyCorrections` 与 `P2TwentyOneUnsiftedArithmeticSource` 共 44 个公开导出通过三项检查，仅标准三公理，源码及十项主要产物稳定。五个证明的代数、阈值与条件化简修补保留任意 M/J、signed rho、Γ7–21 重数、unit tail 及原严格 cutoffs。后者主仓 canonical 文件不存在，已验源码只按明确安装路径发布，见 [验收结果](member-repair-batch22/VALIDATION_RESULTS.json)、[独立复核](member-repair-batch22/INDEPENDENT_REVIEW.json) 和 [源码覆盖表](MEMBER_SOURCE_OVERRIDES.json)。
+
+第二十三批 `ActualPrimeSlotSquarefreeSymmetry` 与 `Part3ActualCompactAllRankSupport` 共 25 个公开导出通过三项检查，仅标准三公理，源码及十项主要产物稳定。修补限定于零列表分支、局部名字、`List.Sublist` 及 Bool／if 化简，原声明、定义、重数与 support 保持。CompactAllRankSupport 首个候选的真实失败单独归档，最终 `25fcb4b7` 后像通过；已成功的 Squarefree 检查未重复运行。见 [验收结果](member-repair-batch23/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch23/INDEPENDENT_REVIEW.json)。
+
+上述十八至二十三批合计十二个模块、265 个实际公开导出，按 `SOURCE_SELECTION` 的真实模块映射发布。单模块的成功不代替旧十入口的最终验收。当前阶段目标已改为完整 P1；后续执行范围与完整端点合同见 [P1 计划](../../superpowers/plans/2026-11-23-p1-complete-formal-proof.md)。其余已验工作保留，未验证的修改不计完成。
+
+项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。

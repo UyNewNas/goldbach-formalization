@@ -1,0 +1,47 @@
+✖ [11124/11238] Building ImbalancedChen.P4BOuterRampBoundaryUnion (11s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P4BOuterRampBoundaryUnion.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BOuterRampBoundaryUnion.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BOuterRampBoundaryUnion.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BOuterRampBoundaryUnion.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BOuterRampBoundaryUnion.setup.json --json
+error: ImbalancedChen/P4BOuterRampBoundaryUnion.lean:51:28: Ambiguous term
+  not_imp
+Possible interpretations:
+  _root_.not_imp : ¬(?m.58 → ?m.59) ↔ ?m.58 ∧ ¬?m.59
+  
+  Classical.not_imp : ¬(?m.58 → ?m.59) ↔ ?m.58 ∧ ¬?m.59
+error: ImbalancedChen/P4BOuterRampBoundaryUnion.lean:51:4: Type mismatch: After simplification, term
+  hnot
+ has type
+  ∃ x, ∃ (_ : x ∈ I), G x ≤ 0
+but is expected to have type
+  ∃ i ∈ I, G i ≤ 0
+error: ImbalancedChen/P4BOuterRampBoundaryUnion.lean:104:51: Application type mismatch: The argument
+  hi
+has type
+  Membership.mem.{u_1, u_1} I i
+but is expected to have type
+  Membership.mem.{0, 0} ?m.261 0
+in the application
+  Finset.single_le_sum
+    (fun j _hj =>
+      Eq.mpr (id (congrArg (LE.le 0) (if_pos hstrip)))
+        (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero)
+          (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_one) (Eq.refl true)))
+    hi
+error: ImbalancedChen/P4BOuterRampBoundaryUnion.lean:147:6: Type mismatch
+  add_le_add_left
+    (ramp_product_sub_strict_indicator_le_strip_union I (fun i => G i m) (fun i => ramp i m) width (hbound m hm)
+      (hone m hm) (hzero m hm))
+    ?m.364
+has type
+  (∏ i ∈ I, ramp i m - if ∀ i ∈ I, 0 < G i m then 1 else 0) + ?m.364 ≤
+    (∑ i ∈ I, if -width < G i m ∧ G i m ≤ 0 then 1 else 0) + ?m.364
+but is expected to have type
+  (if ∀ i ∈ I, 0 < G i m then 1 else 0) + (∏ i ∈ I, ramp i m - if ∀ i ∈ I, 0 < G i m then 1 else 0) ≤
+    (if ∀ i ∈ I, 0 < G i m then 1 else 0) + ∑ i ∈ I, if -width < G i m ∧ G i m ≤ 0 then 1 else 0
+error: ImbalancedChen/P4BOuterRampBoundaryUnion.lean:167:16: Application type mismatch: The argument
+  add_le_add_left hpaid ↑A.card
+has type
+  ∑ i ∈ I, ↑{m ∈ S | -width < G i m ∧ G i m ≤ 0}.card + ↑A.card ≤ E + ↑A.card
+but is expected to have type
+  ↑A.card + ∑ i ∈ I, ↑{m ∈ S | -width < G i m ∧ G i m ≤ 0}.card ≤ ↑A.card + E
+in the application
+  LE.le.trans h (add_le_add_left hpaid ↑A.card)
+error: Lean exited with code 1

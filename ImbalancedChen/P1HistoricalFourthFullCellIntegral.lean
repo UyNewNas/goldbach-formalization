@@ -167,7 +167,7 @@ theorem integrableOn_fullCellIntegrand (D : HistoricalPrefixCapData)
     IntegrableOn (fun t =>
       (extendedProfile (D.old4 j : ℝ) t - extendedProfile (D.cap4 j : ℝ) t) *
         reciprocalWeight t) (jointCell D j) := by
-  simpa only [extendedWeightedProfile, sub_mul] using
+  simpa only [Pi.sub_def, extendedWeightedProfile, sub_mul] using
     (integrableOn_extendedWeightedProfile_joint D ha hab j (D.old4 j : ℝ)).sub
       (integrableOn_extendedWeightedProfile_joint D ha hab j (D.cap4 j : ℝ))
 
@@ -181,6 +181,7 @@ theorem fullCellIntegral_eq_raw_single (D : HistoricalPrefixCapData)
     exact_mod_cast (D.levelCheck_sound hcheck).2.1 j hj
   apply setIntegral_congr_fun (measurableSet_jointCell D j)
   intro t ht
+  dsimp only
   rw [extendedProfile_eq_raw_on_joint D ha hab j le_rfl ht,
     extendedProfile_eq_raw_on_joint D ha hab j hlevel ht]
   rfl

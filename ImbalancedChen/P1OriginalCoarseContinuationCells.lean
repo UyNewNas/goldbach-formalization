@@ -247,6 +247,7 @@ theorem effectiveExponent3Q_ancestor_on_wholeActive_cell (e : ℚ) (chi : ℝ) (
   rw [if_pos hs, historicalPrefixLookup_on_cell 0 (19 / 96) (by norm_num) m
     (HistoricalThirdCoarse.cells (e : ℝ) chi m) _ (299 / 500) _
     (historicalPrefixProject (by omega : 3 ≤ 4) j) hcoarse ht3']
+  rfl
 
 theorem effectiveExponent4Q_on_wholeActive_cell (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)

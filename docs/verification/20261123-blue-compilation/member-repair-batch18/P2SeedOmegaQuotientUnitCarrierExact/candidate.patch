@@ -1,0 +1,29 @@
+--- baseline/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.lean
++++ candidate/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.lean
+@@ -2,7 +2,7 @@
+ import MathlibNt.Wu2008DoubleSieve.SecondFunctionalUnitPrimeOutput
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ Exact finite carrier equality for the Gamma20/21 quotient-one branch.
+ The enhanced same-Q comparison uses quotientCarrier with old mask d*N;
+ the pinned unit count receiver uses the original exempt-prefix carrier.
+@@ -56,7 +56,7 @@
+     apply mem_filter.mpr
+     refine ⟨mem_range.mpr (by omega),hell,?_,?_⟩
+     · simpa only [heq] using (dvd_rfl : d*(pre++[p,q]).prod ∣ d*(pre++[p,q]).prod)
+-    · rw [heq,Nat.div_self (Nat.ne_of_gt hprod)]
++    · rw [heq,Nat.div_self hprod]
+       intro r hr _ _ hrd
+       exact hr.not_dvd_one hrd
+ 
+@@ -79,7 +79,7 @@
+   intro ell hu hc
+   have heq := (mem_filter.mp hu).2
+   apply collision_quotient_ne_one hc
+-  rw [heq,Nat.div_self (Nat.ne_of_gt (specified_product_pos hd hpre hp hq))]
++  rw [heq,Nat.div_self (specified_product_pos hd hpre hp hq)]
+ 
+ end
+ end ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact

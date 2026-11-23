@@ -74,7 +74,7 @@ theorem mem_actualPrimeSlotBox_replicate (B : Finset ℕ) (m : ℕ) (ps : List �
     ps ∈ actualPrimeSlotBox (fun _ : Unit => B) (List.replicate m ()) ↔
       ps.length = m ∧ ∀ q ∈ ps, q ∈ B := by
   induction m generalizing ps with
-  | zero => simp [actualPrimeSlotBox]
+  | zero => cases ps <;> simp [actualPrimeSlotBox]
   | succ m ih =>
       cases ps with
       | nil => simp [actualPrimeSlotBox, List.replicate_succ]
@@ -84,7 +84,7 @@ theorem mem_actualPrimeSlotBox_replicate (B : Finset ℕ) (m : ℕ) (ps : List �
             obtain ⟨⟨r, rs⟩, hmem, heq⟩ := Finset.mem_image.mp hps
             obtain ⟨hr, hrs⟩ := Finset.mem_product.mp hmem
             obtain ⟨rfl, rfl⟩ := List.cons.inj heq
-            obtain ⟨hlen, hqs⟩ := (ih qs).mp hrs
+            obtain ⟨hlen, hqs⟩ := (ih rs).mp hrs
             exact ⟨by simpa only [List.length_cons, hlen],
               fun s hs => (List.mem_cons.mp hs).elim (fun h => h.symm ▸ hr) (hqs s)⟩
           · rintro ⟨hlen, hmem⟩

@@ -1,0 +1,375 @@
+{
+  "schema": "independent_member_batch18_unit_carrier_final_review_v1",
+  "status": "NO_FINDINGS_IN_REVIEWED_POSTIMAGE_AND_EXECUTED_VALIDATION_CHAIN",
+  "reviewer": "build_workflow",
+  "independent_of_static_authors": true,
+  "created_utc": "2026-11-23T15:11:35.114338+00:00",
+  "actual_scope": "Batch18 contains only UnitCarrier: one module, 10 actual public exports. OrderedReciprocal is separately batch20 and is not credited here.",
+  "module": "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact",
+  "preimage_sha256": "7d13e8c49bca022d8833e56df7d70842b6a370f4021cbabe9ec08b229b1d645a",
+  "postimage_sha256": "5e78fdde5c19d8fbdc3178e44606fbe1b93109d73eda3e919d468aad7dd11128",
+  "review_findings": [],
+  "full_source_commands": 5,
+  "complete_raw_headers": [
+    {
+      "kind": "def",
+      "name": "quotientUnitCarrier",
+      "before": "def quotientUnitCarrier (N d : ℕ) (l : List ℕ) : Finset ℕ",
+      "after": "def quotientUnitCarrier (N d : ℕ) (l : List ℕ) : Finset ℕ",
+      "sha256": "0cb52050ea215427effb36a60c3383b9bdb9bf3a133386b9ae7adb7865cff71c"
+    },
+    {
+      "kind": "theorem",
+      "name": "specified_product_pos",
+      "before": "theorem specified_product_pos {d p q : ℕ} {pre : List ℕ}\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) :\n    0<d*(pre++[p,q]).prod",
+      "after": "theorem specified_product_pos {d p q : ℕ} {pre : List ℕ}\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) :\n    0<d*(pre++[p,q]).prod",
+      "sha256": "abbcfadf597f2cdd2eb4f6919512ad6e907f03eef1db74e8dcaeb0614c2e537f"
+    },
+    {
+      "kind": "theorem",
+      "name": "quotientUnit_eq_originalUnit",
+      "before": "theorem quotientUnit_eq_originalUnit {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) (hpq : p≤q) :\n    quotientUnitCarrier N d (pre++[p,q])=\n      secondFunctionalFourPrimeUnitCarrier N d (pre++[p,q])",
+      "after": "theorem quotientUnit_eq_originalUnit {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) (hpq : p≤q) :\n    quotientUnitCarrier N d (pre++[p,q])=\n      secondFunctionalFourPrimeUnitCarrier N d (pre++[p,q])",
+      "sha256": "95771534dbedebbccb5860202e5d2ab03fe9ed94f2efce33973c83820c8ed597"
+    },
+    {
+      "kind": "theorem",
+      "name": "quotientUnit_card",
+      "before": "theorem quotientUnit_card {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) (hpq : p≤q) :\n    (quotientUnitCarrier N d (pre++[p,q])).card=\n      if (N-d*(pre++[p,q]).prod).Prime then 1 else 0",
+      "after": "theorem quotientUnit_card {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) (hpq : p≤q) :\n    (quotientUnitCarrier N d (pre++[p,q])).card=\n      if (N-d*(pre++[p,q]).prod).Prime then 1 else 0",
+      "sha256": "397cc37fbc3fa49546ef65ff1b79070f5f3e39fabf162ffca3482b139c4000cc"
+    },
+    {
+      "kind": "theorem",
+      "name": "quotientUnit_disjoint_collision",
+      "before": "theorem quotientUnit_disjoint_collision {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) :\n    Disjoint (quotientUnitCarrier N d (pre++[p,q]))\n      (collisionCarrier N d (pre++[p,q]))",
+      "after": "theorem quotientUnit_disjoint_collision {N d p q : ℕ} (pre : List ℕ)\n    (hd : 0<d) (hpre : 0<pre.prod) (hp : p.Prime) (hq : q.Prime) :\n    Disjoint (quotientUnitCarrier N d (pre++[p,q]))\n      (collisionCarrier N d (pre++[p,q]))",
+      "sha256": "10b88953256a42f408c3359e2fa55bc73492e6d0f22e1ad920e66589efcada99"
+    }
+  ],
+  "header_exceptions": [],
+  "sole_definition_body_identical": true,
+  "all_numeric_tokens_hypotheses_quantifiers_imports_and_carrier_data_preserved": true,
+  "proof_review": "Exactly two Nat.div_self applications pass the already established 0<d*(pre++[p,q]).prod, as required by pinned API, instead of its derived nonzero proof. The quotient-one filter, old d*N mask, actual natural ell receiver, next-to-last cutoff, ordered p≤q including equality, singleton-or-empty prime formula and disjoint collision carrier remain unchanged. No sorted merge, discarded unit term, cutoff enlargement or new asymptotic claim.",
+  "source_provenance": {
+    "registered_git_blob_sha1": "0b1a8da840a15ed0b2d555e9a221255b79ce9e12",
+    "baseline_matches_registered_git_blob": true,
+    "static_candidate_sha256": "a24e203e128b415e04bf2005742c5c0e37e2fb5d58b1c9c7d031796c3b87af99",
+    "canonical_only_neutral_status_difference_from_static": true
+  },
+  "read_back_current_main_Member_source_exact": true,
+  "source_plus_five_outputs_current_hashes_match_after_normal_after_kernel_and_final_validation": {
+    "ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.lean": {
+      "bytes": 4072,
+      "sha256": "5e78fdde5c19d8fbdc3178e44606fbe1b93109d73eda3e919d468aad7dd11128"
+    },
+    ".lake/build/lib/lean/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.olean": {
+      "bytes": 142640,
+      "sha256": "9037e4295a91e55447bab3edb96c6799e20bf34fb8643e427c989ac3017dec35"
+    },
+    ".lake/build/lib/lean/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.ilean": {
+      "bytes": 14676,
+      "sha256": "64b35f084e8812f9bb18a698109e6cc33f0950e6c31b0008af5caca8d4418ca1"
+    },
+    ".lake/build/ir/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.c": {
+      "bytes": 1814,
+      "sha256": "fde44405bba66948db4db1b36805dd90d04a909675669e44e4504729d48d6058"
+    },
+    ".lake/build/ir/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.setup.json": {
+      "bytes": 2956019,
+      "sha256": "e547925f86cc269d1f5c4e27a8035f99d358d23648c8915e59ba0efeba06c20d"
+    },
+    ".lake/build/lib/lean/ImbalancedChen/P2SeedOmegaQuotientUnitCarrierExact.trace": {
+      "bytes": 3157,
+      "sha256": "56b9003733dff54063e186a852c9762795c52fdb4969585e886d2000c6466bc6"
+    }
+  },
+  "recorded_validation_commands_checked": [
+    {
+      "name": "P2SeedOmegaQuotientUnitCarrierExact-normal",
+      "argv": [
+        "python3",
+        "/workspace/blue-build-tools/run_guarded.py",
+        "--state",
+        "/workspace/blue-build-tools/runtime-evidence/state.json",
+        "lake",
+        "build",
+        "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact:olean"
+      ],
+      "exit_code": 0,
+      "log_sha256": "b75d543a52d7d90328ac0e2a43e68dc81f2e6ff0554754cef07fa02776ffd620",
+      "elapsed_seconds": 10.292656941001042
+    },
+    {
+      "name": "P2SeedOmegaQuotientUnitCarrierExact-kernel",
+      "argv": [
+        "python3",
+        "/workspace/blue-build-tools/run_guarded.py",
+        "--state",
+        "/workspace/blue-build-tools/runtime-evidence/state.json",
+        "lake",
+        "env",
+        "leanchecker",
+        "--verbose",
+        "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e75428dda15c5dbb5806fc2dd5e7ff2b71fe82943b3301ba12597b5d9d2ccbc2",
+      "elapsed_seconds": 12.698455960999127
+    },
+    {
+      "name": "all-public-types-axioms",
+      "argv": [
+        "python3",
+        "/workspace/blue-build-tools/run_guarded.py",
+        "--state",
+        "/workspace/blue-build-tools/runtime-evidence/state.json",
+        "lake",
+        "env",
+        "lean",
+        "-DmaxRecDepth=100000",
+        "-DmaxHeartbeats=4000000",
+        "--root=/workspace/blue-member-repair-batch18",
+        "/workspace/blue-member-repair-batch18/PublicAudit.lean"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e2bbe80903f6a6a5073850ea9def3a9c6d114fc0f15467751b3665e9dad6848d",
+      "elapsed_seconds": 7.945080793997477
+    }
+  ],
+  "full_actual_public_count": 10,
+  "source_declaration_counts": {
+    "def": 1,
+    "theorem": 4
+  },
+  "generated_public_exports": [
+    "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact.quotientUnitCarrier.eq_1",
+    "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact.quotientUnit_eq_originalUnit._proof_1_2",
+    "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact.quotientUnit_eq_originalUnit._proof_1_3",
+    "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact.quotientUnit_eq_originalUnit._proof_1_4",
+    "ImbalancedChen.P2SeedOmegaQuotientUnitCarrierExact.quotientUnit_eq_originalUnit._proof_1_5"
+  ],
+  "full_type_prettyprint_raw_AST_and_universe_records_present": true,
+  "only_standard_three_axioms_and_no_sorryAx": true,
+  "public_inventory_scope": "Exact defining owner, includes public generated equation/proof declarations; original audit excludes private names. Complete actual-public audit, not full-owned-private credit.",
+  "kernel_scope": "Named module with existing imported objects; no fresh all-import recheck claimed.",
+  "original_failed_log_verbatim": true,
+  "pinned_API": {
+    "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/Nat/Div/Basic.lean",
+    "sha256": "67f894497257111dff81a5b3bab0f849cc53f31a3c62656333366ad62ab63a58",
+    "line": 443,
+    "declaration": "@[simp] protected theorem div_self (H : 0 < n) : n / n = 1"
+  },
+  "manuscript_release": "1106",
+  "manuscript_anchors": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "lines": [
+        778,
+        793
+      ],
+      "text": "For a switched domain $\\mathcal D_i$ with $r$ primes, let\n$w=u_{r-1}$ and $U=u_1+\\cdots+u_r$.  Its normalized unsifted\nmass at the actual parent ratio $\\alpha$ is\n\\begin{equation}\\label{sv:full-switched-mass}\n \\mathcal M_i(\\alpha)=\n \\int_{\\substack{\\boldsymbol u\\in\\mathcal D_i\\\\U\\le\\alpha-w}}\n \\frac{\\omega((\\alpha-U)/w)}{w\\prod_j u_j}\\,d\\boldsymbol u\n +\\int_{\\substack{\\boldsymbol u\\in\\mathcal D_i\\\\U=\\alpha}}\n                     \\frac{du_1\\cdots du_{r-1}}{\\prod_j u_j}.\n\\end{equation}\nIn the surface integral one coordinate is eliminated with derivative\none.  The surface counts quotient $1$; it is separate from the\nordinary Buchstab term.  Prime summation and the rough-number\nformula on fixed positive boxes give \\eqref{sv:full-switched-mass}.\nThe upper count in parent units is $K\\mathcal M_i(\\alpha)/4$.\n",
+      "scope": "Quotient-one surface remains separate from ordinary Buchstab term; this finite equality does not discard or asymptotically bound it."
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "lines": [
+        531,
+        536
+      ],
+      "text": "Map a contributing four-prefix tuple to its last pair $(p_3,p_4)$.\nThe quotient roughness forces its first two selected primes to be\nthe two least factors of $n$. The image lies in the prescribed\nrectangle, and removing $p_3p_4$ leaves an $N^{a_{\\rm s}}$-rough residual,\nso this pair contributes to $Y_6(\\mathscr E)$. Since the first two factors\nare determined by $n$, two tuples with the same last pair coincide.",
+      "scope": "Existing ordered last pair and prescribed rectangle retain actual labels."
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "lines": [
+        541,
+        548
+      ],
+      "text": "$|W_{\\mathscr E}|$ by $1016$ on rough $n$.  The number of $n\\le N$ with a\nrepeated prime at least $N^{a_{\\rm s}}$ is at most $2N^{1-{a_{\\rm s}}}$ for large $N$.\nAfter restricting to primes $p<N$ with $(p,N)=1$ and removing the\nunit, the squareful and unit costs are at most\n$2032N^{1-{a_{\\rm s}}}+4=o(H_N)$.  It follows that\n\\begin{equation}\n 4D_{1,2}(N)\\ge\n       \\sum_{\\substack{p<N\\\\p\\ {\\rm prime}\\\\(p,N)=1}}W_{\\mathscr E}(N-p)",
+      "scope": "The unit removed separately at weight-to-count is not inferred negligible by this exact carrier repair."
+    }
+  ],
+  "existing_module_scope_only": true,
+  "no_Lean_Lake_stock_kernel_audit_reexecuted": true,
+  "no_live_source_cache_trace_guard_or_old_record_mutation": true,
+  "pending_final_chain_only": [],
+  "reviewed_files": [
+    {
+      "path": "/workspace/blue-member-repair-batch18/ACTUAL_RUNTIME_COMMANDS.json",
+      "bytes": 3065,
+      "sha256": "df3fed4b67f4523019c81736cd2d80f0c1d4d03a6cf5ea510c53e5607bd62c49"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/BEFORE_LOG_SLICES.json",
+      "bytes": 413,
+      "sha256": "9870296281b4c1434ae004f2665a9470bc8c0d6b21857970849027b38f0f1f85"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/EXPECTED_SOURCES.json",
+      "bytes": 127,
+      "sha256": "0afb790084c57675137df5136e48debcb1dd35c213c60a55eafcec5247e69dab"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/FINAL_RELEASE.json",
+      "bytes": 955,
+      "sha256": "8368ce4841b95e7b6c8107c0268515e589fcf380d72786a6a083548765dddac6"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/MAIN_SOURCE_EXCEPTIONS.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/SOURCE_COMPARISON.json",
+      "bytes": 1551,
+      "sha256": "8a0a49c1febbc50558f2c324881ff9fe0a3b30a1b5d22798d80ef28398d10e49"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/baseline.lean",
+      "bytes": 4082,
+      "sha256": "7d13e8c49bca022d8833e56df7d70842b6a370f4021cbabe9ec08b229b1d645a"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/before-build.log",
+      "bytes": 2342,
+      "sha256": "be9123924ffb89b7220962bbbd322a20161443790a3952d33e7efb2962d4cca5"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/candidate.lean",
+      "bytes": 4072,
+      "sha256": "5e78fdde5c19d8fbdc3178e44606fbe1b93109d73eda3e919d468aad7dd11128"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/candidate.patch",
+      "bytes": 1209,
+      "sha256": "64ce15667e87d2c8c76ef1a5c4fe61b5a8cf327549fbb952eb79a8cf89b09a51"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/static-candidate-before-owner-comment.lean",
+      "bytes": 4052,
+      "sha256": "a24e203e128b415e04bf2005742c5c0e37e2fb5d58b1c9c7d031796c3b87af99"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/static-provenance/REVIEW.md",
+      "bytes": 2914,
+      "sha256": "30fbdc168a03c6e9ac860c648f523c9f61a635cf07627f9a8d0f529c69c455b0"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact/static-provenance/STATIC_RECEIPT.json",
+      "bytes": 5809,
+      "sha256": "fef1d5be57bd17a21d02331ee4f251ff9b1db802b1ea39118edf1f02c52c38da"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-AFTER_KERNEL.json",
+      "bytes": 1116,
+      "sha256": "fc44c4e16fd34b133bda380b7b2acba877a679cf730b54cb1355ac076ff98da0"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-AFTER_NORMAL.json",
+      "bytes": 1116,
+      "sha256": "fc44c4e16fd34b133bda380b7b2acba877a679cf730b54cb1355ac076ff98da0"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-kernel-command.json",
+      "bytes": 685,
+      "sha256": "170ebc3f93e5f043a7d331b431c13e205644cb3b68d43ae43df5536069541825"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-kernel.log",
+      "bytes": 61,
+      "sha256": "e75428dda15c5dbb5806fc2dd5e7ff2b71fe82943b3301ba12597b5d9d2ccbc2"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-normal-command.json",
+      "bytes": 657,
+      "sha256": "b417e912c6bc7ab78a20b90208578d5be9dc65091a6855066d8eccbbb0b5bb0f"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/P2SeedOmegaQuotientUnitCarrierExact-normal.log",
+      "bytes": 27818,
+      "sha256": "b75d543a52d7d90328ac0e2a43e68dc81f2e6ff0554754cef07fa02776ffd620"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/PUBLICATION_FILES.json",
+      "bytes": 5202,
+      "sha256": "325b95828be24b66310f537224c15c1705291020db37d61d32dae67b0c30b8ab"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/PUBLIC_EXPORTS.json",
+      "bytes": 96520,
+      "sha256": "a4357cbdb55dd429e65b5ed958de79af7582a023ea9c86f98fd7051c751532f1"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/PublicAudit.lean",
+      "bytes": 1274,
+      "sha256": "6718b1fd23ebb7a6b3a3965d2400b6fe196f03f0ec16c8656132cd50b889bb69"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/SOURCE_SELECTION.json",
+      "bytes": 1663,
+      "sha256": "572da8749bc21c95c7d01d4f98c97f76e0c95921373c2382031414e838a0ba7b"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/STAGING_CONFIGURATION.json",
+      "bytes": 885,
+      "sha256": "9693aa8534455030bb58129bef2d8879c1060b14d15b2a5ca3956c4ce75b2dca"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/STOCK_READINESS.json",
+      "bytes": 196,
+      "sha256": "bc82ceeaad1016daae9baf6649d963f83e725cc5204cc3ed42f9b702656ed394"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/VALIDATION_RESULTS.json",
+      "bytes": 4295,
+      "sha256": "9ada6de4e12ebc955a441c8855da81ff5f90f729daa7605f8251ba70c71f58e4"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/all-public-types-axioms-command.json",
+      "bytes": 726,
+      "sha256": "07fcc858140f75a0a9d23f2d6a5580c628d251458e1414d15fc490182c6204de"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/run_validation.py",
+      "bytes": 5950,
+      "sha256": "35c55443289c0b7376432eb6d6869305c6c9d63a4b1f87c46f308a9db2257601"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/stock-readiness-command.json",
+      "bytes": 620,
+      "sha256": "cfddca15ddf3cd904a24c4b6c77ad03d7b02a12ed69b052a044e37b91b5a440d"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/stock-readiness.log",
+      "bytes": 27917,
+      "sha256": "bbd3610b14ae6650688e37ea4662c15ac8008a964155069598944503b7027de3"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/types-axioms.log",
+      "bytes": 107886,
+      "sha256": "e2bbe80903f6a6a5073850ea9def3a9c6d114fc0f15467751b3665e9dad6848d"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch18/validation-controller.log",
+      "bytes": 2516,
+      "sha256": "95e49b56ee1618b660bd6ed2d68b1b93a731296d39cfc619f58ad0a3f4df16c1"
+    }
+  ],
+  "prepared_review": {
+    "path": "PREPARED_INDEPENDENT_REVIEW.json",
+    "sha256": "80952d49e3d521fcd09a6881e47483e03fd524c6e8ba3c3bc02f1e36787ec34a"
+  },
+  "final_chain": {
+    "FINAL_RELEASE.json": "8368ce4841b95e7b6c8107c0268515e589fcf380d72786a6a083548765dddac6",
+    "PUBLICATION_FILES.json": "325b95828be24b66310f537224c15c1705291020db37d61d32dae67b0c30b8ab",
+    "VALIDATION_RESULTS.json": "9ada6de4e12ebc955a441c8855da81ff5f90f729daa7605f8251ba70c71f58e4",
+    "publication_files_verified": 29,
+    "prepared_evidence_files_unchanged": 32,
+    "final_chain_checked_utc": "2026-11-23T15:12:04.210488+00:00",
+    "source_or_Lean_checks_repeated_for_finalization": false
+  }
+}

@@ -3,7 +3,7 @@ import MathlibNt.Wu2008DoubleSieve.SecondFunctionalHighNonunitSieveMultiplicity
 import Mathlib.NumberTheory.Harmonic.Bounds
 
 /-!
-SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Verification records: docs/verification/20261123-blue-compilation.
 
 Finite reciprocal mass of the actual arbitrary-arity ordered mother
 tuples. Every whole ordered list embeds in the full coordinate cube;
@@ -35,7 +35,7 @@ theorem coordinates_product {r : ℕ} {l : List ℕ} (hlen : l.length = r) :
       exact List.getD_eq_getElem _ _ j.isLt]
     exact List.ofFn_getElem
   have hprod := congrArg (fun xs : List ℕ => (xs.prod : ℝ)) hof
-  simpa only [Nat.cast_list_prod, List.map_ofFn, List.prod_ofFn] using hprod
+  simpa only [Nat.cast_list_prod, List.map_ofFn, List.prod_ofFn, Nat.cast_prod] using hprod
 
 /-- All ordered lists, including empty carriers, embed with every slot retained. -/
 def tupleEmbedding (P : Finset ℕ) (r : ℕ) :
