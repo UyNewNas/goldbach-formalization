@@ -27,7 +27,7 @@ def main():
     ext_sources = m['supplemental_checkout_sources']
     assert len(ext_sources) == len(expected_supplemental)
     assert {x['module'] for x in ext_sources} == set(expected_supplemental)
-    assert m['target'] == 'ImbalancedChen.P2OriginalPrioritySerialQueue'
+    assert m['target'] == 'ImbalancedChen.P2OriginalEfficientPriorityHeap'
     for ext in ext_sources:
         install_path, source_path, expected_blob, expected_hash, expected_len = expected_supplemental[ext['module']]
         assert ext['install_path'] == install_path and ext['repository_path'] == ext['source'] == source_path

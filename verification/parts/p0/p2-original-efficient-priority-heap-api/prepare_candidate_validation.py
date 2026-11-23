@@ -38,7 +38,7 @@ def snapshot():
     paths=list(root.glob('ImbalancedChen/**/*.lean'))+list(root.glob('.lake/build/lib/lean/**/*.olean*'))+list(root.glob('.lake/packages/*/.lake/build/lib/lean/**/*.olean*'))
     return {str(p.relative_to(root)):digest(p) for p in sorted(paths) if p.is_file()}
 if mode=='prepare':
-    source=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'verification/parts/p0/p2-original-priority-serial-queue-api/Round6AuditTemplate.lean'
+    source=pathlib.Path(__file__).resolve().parent/'Round6AuditTemplate.lean'
     audit=source.read_text();audit=audit[audit.index('set_option pp.all'):]
     start=audit.index('  let modules := #[');end=audit.index('  let allowed :=',start)
     audit=audit[:start]+'  let modules := #['+','.join('`'+m for m in modules)+']\n'+audit[end:]
