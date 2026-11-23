@@ -150,7 +150,7 @@ theorem actual_frontier_winner_attached_complement
           mul_le_mul_of_nonneg_right ha (Real.rpow_nonneg hNpos.le _)
         _ = (N : ℝ) ^ (epsilon + (theta - 2 * (e / 32))) :=
           (Real.rpow_add hNpos _ _).symm
-        _ ≤ E := Real.rpow_le_rpow_of_exponent_le hNr.le (by dsimp [E]; linarith)
+        _ ≤ E := Real.rpow_le_rpow_of_exponent_le hNr.le (by linarith)
     simpa only [mul_div_assoc] using div_le_div_of_nonneg_right hbound hbpos.le
   have hattached := dwell_prepend_block a (actualSelectedPairRemainingPrime yz p :: tail)
     hrest ((le_div_iff₀ hbpos).mpr (by simpa only [mul_comm] using hsmallgate)) hscale
@@ -171,7 +171,7 @@ theorem actual_attached_ne_zero_winner_complement
     {q : ℕ}
     (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon
       (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :
-    ∃ a k (state : FirstExitDepthState ℕ),
+    ∃ (a k : ℕ) (state : FirstExitDepthState ℕ),
       a ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧
       (a : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧
       state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)

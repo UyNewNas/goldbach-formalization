@@ -1,0 +1,69 @@
+✖ [9687/10087] Building ImbalancedChen.P1OriginalVariableFourthProfileRegularity (129s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalVariableFourthProfileRegularity.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalVariableFourthProfileRegularity.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalVariableFourthProfileRegularity.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalVariableFourthProfileRegularity.setup.json --json
+warning: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:59:10: `continuous_finset_sum` has been deprecated: Use `continuous_finsetSum` instead
+error: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:62:2: Type mismatch: After simplification, term
+  Continuous.sub (Continuous.comp continuous_v hsum) continuous_const
+ has type
+  @Continuous Point ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    ((v ∘ fun t => ∑ i ∈ I, t i) - fun x => loss)
+but is expected to have type
+  @Continuous (Fin 4 → ℝ) ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (candidateExponent loss I)
+error: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:73:58: unsolved goals
+ι : Type u_1
+seed : ℝ
+rows : Finset ι
+profile : ι → Point → ℝ
+r : ι
+t : Point
+⊢ max seed ((insert (profile r t) (Finset.image (fun r => profile r t) rows)).max' ⋯) =
+    max (profile r t) ((insert seed (Finset.image (fun r => profile r t) rows)).max' ⋯)
+warning: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:75:39: This simp argument is unused:
+  Finset.insert_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fixedMax, Finset.image_insert, Finset.max'_insert]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:103:6: Type mismatch: After simplification, term
+  continuous_const
+ has type
+  @Continuous Point ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace fun x => seed
+but is expected to have type
+  @Continuous Point ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace (fixedMax seed ∅ profile)
+error: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:151:2: Type mismatch: After simplification, term
+  h
+ has type
+  @Continuous (Fin 4 → ℝ) ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (candidateExponent (2 * e) r.selected)
+but is expected to have type
+  @Continuous Point ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace fun t =>
+    v (∑ i ∈ r.selected, t i) - 2 * e
+error: ImbalancedChen/P1OriginalVariableFourthProfileRegularity.lean:186:2: Tactic `apply` failed: could not unify the conclusion of `fixedMax_abs_sub_le seed ?m.105 (fun r => ?m.107) t u
+  (3 / 2 * d) (mul_nonneg ?m.127 hd)`
+  |fixedMax seed ?m.105 (fun r => ?m.107) t - fixedMax seed ?m.105 (fun r => ?m.107) u| ≤ 3 / 2 * d
+with the goal
+  |fixedMax seed ({r ∈ rows | r ∈ E}) (fun r => r.bufferedCandidate e) t -
+        fixedMax seed ({r ∈ rows | r ∈ E}) (fun r => r.bufferedCandidate e) u| ≤
+    3 / 2 * d
+
+Note: The full type of `fixedMax_abs_sub_le seed ?m.105 (fun r => ?m.107) t u (3 / 2 * d) (mul_nonneg ?m.127 hd)` is
+  (∀ r ∈ ?m.105, |?m.107 t - ?m.107 u| ≤ 3 / 2 * d) →
+    |fixedMax seed ?m.105 (fun r => ?m.107) t - fixedMax seed ?m.105 (fun r => ?m.107) u| ≤ 3 / 2 * d
+
+e seed : ℝ
+rows : Finset ProducerRow
+licensed : ProducerRow → Prop
+C : Set Point
+E : Finset ProducerRow
+hfixed : ∀ r ∈ rows, ∀ t ∈ C, producerEligible licensed r t ↔ r ∈ E
+t u : Point
+ht : t ∈ C
+hu : u ∈ C
+d : ℝ
+hd : 0 ≤ d
+hrows : ∀ r ∈ rows, r ∈ E → |∑ i ∈ r.selected, t i - ∑ i ∈ r.selected, u i| ≤ d
+⊢ |fixedMax seed ({r ∈ rows | r ∈ E}) (fun r => r.bufferedCandidate e) t -
+        fixedMax seed ({r ∈ rows | r ∈ E}) (fun r => r.bufferedCandidate e) u| ≤
+    3 / 2 * d
+error: Lean exited with code 1

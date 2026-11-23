@@ -226,3 +226,22 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 第六十二批四个供应者通过同样验收，共 78 个声明（75 public、3 private），源码及二十项主要产物稳定，见 [结果](member-repair-batch62/VALIDATION_RESULTS.json) 和 [非作者复核](member-repair-batch62/INDEPENDENT_REVIEW.json)。范围为 literal fifth、physical savings reserve、smooth common compact support 与 first derivative budget。两项定义恢复例外明确保留：`rawFourth` 的 Real 参数恢复使用既有 `VariableEnvelope.B`；四项原连续线性映射补齐同一类型信息，Derivative 完整文件原样复用已发表 `48db3d60` 后像。旧定义未 elaboration，不声称旧 kernel 值已经相同。原公式、常量、两策略／2eta／presieve 项及其余完整声明与定义保持。
 
 [调度语义补充](validation-lane-correction/LANE_SEMANTICS_ADDENDUM.json) 说明：原 `compiler.lock` 约束源码编译，独立 `leanchecker` 未自行取锁，早期有短时验证重叠；原真实通过结果和日志均保留。新的独立 lane 锁覆盖整条 normal／kernel／audit 调度，并与原编译锁分离。互斥 fixture 和过渡代码见 [发布复核](validation-lane-correction/PUBLICATION_REVIEW.json)。没有将原两条源码 guard 外推为早期整条验证链始终独占两个 lane 或 24 GiB 总硬上限，也没有为此重跑已经成功的 Lean 检查。
+
+
+现代 P1 的第二轮实际失败修补新增五组最终验收，共 24 个供应模块、773 个 owned 声明（737 public、36 private）。每组均完成原正常编译、指定模块 kernel replay、完整 owned 类型／AST／宇宙参数／传递公理检查和非作者最终复核，仅标准三公理，源码及 120 项主要产物跨阶段稳定。已成功的 source 与 kernel 检查没有为发布重复。
+
+| 批次／结果 | 模块数 | owned／public／private |
+| --- | ---: | ---: |
+| [58](member-repair-batch58/VALIDATION_RESULTS.json) | 6 | 329／310／19 |
+| [60](member-repair-batch60/VALIDATION_RESULTS.json) | 7 | 128／122／6 |
+| [61](member-repair-batch61/VALIDATION_RESULTS.json) | 3 | 83／80／3 |
+| [64](member-repair-batch64/VALIDATION_RESULTS.json) | 4 | 71／70／1 |
+| [65](member-repair-batch65/VALIDATION_RESULTS.json) | 4 | 162／155／7 |
+
+范围为原 variable-fourth/fifth、历史单元所有权与 literal affine rows、splice／singleton 传输、实际 winner support 与 rough Euler、原 finite-bin 与两类 tail、supported strip／rough-square，以及 P1 必需的 lower-cell／Entry3 前置。各批 `FINAL_REVIEW.json` 保存最终源绑定、实际失败的修订沿革和完整声明范围。Descending 的仿射编译器及 12960 项封闭有理坐标校核已实际通过，后续 H3／Remaining 是否可复用及通过仍须另验。
+
+两个声明表达例外明确保留：WinnerAttached 的存在量 `a k` 显式定为原上下文所需的 `ℕ`，旧未解析模板不声称已有同一 kernel 类型；FiniteBin 的两个辅助有限和将 summand 写成 `(main + error)`，修正原模板被解析为 `(∑ main) + error` 的作用域。后者的最终 occupied-prime 质量上界、常量、K 的量词次序与其它最终声明保持；不是全部原辅助声明头逐字不变。LowerFinite 的 `roughProduct` 与 `«universe»` 保留原模块、定义体和归属，没有迁移到其它供应者。
+
+58、61、64、65 的旧发布清单在 finalizer 尚未输出时记录了空 `finalizer.log`，随后辅助 stdout 写入完整 `FINAL_RELEASE.json`。四个包各自保存不可变 `LATE_FINALIZER_LOG_BINDING.json`，精确绑定实际 stdout 与 FINAL 的逐字同一性；原清单、实际日志及验证证据保持。仅该辅助条目使用显式晚绑定，所有其它原条目仍逐个核哈希，不将旧清单误称为当前全部匹配。60 的原清单全部匹配。这项包装补充没有重跑 Lean，也不增加数学前提。
+
+这些结果仍是完整 P1 的真实供应链验收。H3、Remaining、SixthLater、其余原始数据与最终四个 P1 出口继续按实际编译结果推进；本表不宣称完整 P1 或看板全部蓝色节点已经完成。

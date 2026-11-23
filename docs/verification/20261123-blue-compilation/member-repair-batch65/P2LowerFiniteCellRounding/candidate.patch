@@ -1,0 +1,109 @@
+--- baseline/ImbalancedChen/P2LowerFiniteCellRounding.lean
++++ candidate/ImbalancedChen/P2LowerFiniteCellRounding.lean
+@@ -25,7 +25,7 @@
+ def roughProduct (N cap : ℕ) (w z : ℝ) : ℕ :=
+   (roughPrimeUniverse N cap w z).prod
+ 
+-def universe (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
++def «universe» (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
+   (roughProduct N cap w z).divisors
+ 
+ def rawSupport (retainEven : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
+@@ -41,7 +41,7 @@
+   d.primeFactorsList.reverse.map (primeLabel N tau)
+ 
+ def cell (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Finset ℕ :=
+-  (universe N cap w z).filter (fun e=>label N tau e=label N tau d)
++  («universe» N cap w z).filter (fun e=>label N tau e=label N tau d)
+ 
+ def inner (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=
+   cell N cap w z tau d ⊆ rawSupport retainEven N cap w z
+@@ -50,7 +50,7 @@
+   (cell N cap w z tau d ∩ rawSupport retainEven N cap w z).Nonempty
+ 
+ def coefficient (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : ℝ :=
+-  if d∈universe N cap w z then
++  if d∈«universe» N cap w z then
+     if 0≤(ArithmeticFunction.moebius d:ℝ) then
+       if inner retainEven N cap w z tau d then (ArithmeticFunction.moebius d:ℝ) else 0
+     else if outer retainEven N cap w z tau d then (ArithmeticFunction.moebius d:ℝ) else 0
+@@ -62,11 +62,11 @@
+     (roughPrimeUniverse_nodup N cap w z) (fun _ hp=>mem_roughPrimeUniverse_prime hp)
+ 
+ theorem universe_squarefree (N cap : ℕ) (w z : ℝ) {d : ℕ}
+-    (hd : d∈universe N cap w z) : Squarefree d :=
+-  (roughProduct_squarefree N cap w z).of_dvd (Nat.mem_divisors.mp hd).1
++    (hd : d∈«universe» N cap w z) : Squarefree d :=
++  (roughProduct_squarefree N cap w z).squarefree_of_dvd (Nat.mem_divisors.mp hd).1
+ 
+ theorem universe_rough (N cap : ℕ) (w z : ℝ) {d : ℕ}
+-    (hd : d∈universe N cap w z) : RoughPrimeSupportedAt w d := by
++    (hd : d∈«universe» N cap w z) : RoughPrimeSupportedAt w d := by
+   have hP := roughProduct_squarefree N cap w z
+   have hdvd := (Nat.mem_divisors.mp hd).1
+   refine ⟨(universe_squarefree N cap w z hd).ne_zero,?_⟩
+@@ -86,7 +86,7 @@
+   exact mem_roughPrimeUniverse_lower (List.mem_toFinset.mp hpP)
+ 
+ theorem rawSupport_subset_universe (retainEven : List ℕ → Bool)
+-    (N cap : ℕ) (w z : ℝ) : rawSupport retainEven N cap w z ⊆ universe N cap w z := by
++    (N cap : ℕ) (w z : ℝ) : rawSupport retainEven N cap w z ⊆ «universe» N cap w z := by
+   intro d hd
+   obtain ⟨leaf,hleaf,hprod⟩ :=
+     (mem_firstExitRetainedModuli (evenFirstExitPolicy retainEven)
+@@ -95,17 +95,18 @@
+     (evenFirstExitPolicy retainEven) (fun _=>1) (roughPrimeUniverse N cap w z) leaf hleaf
+   apply Nat.mem_divisors.mpr
+   refine ⟨?_,(roughProduct_squarefree N cap w z).ne_zero⟩
+-  have hdiv := hsub.prod_dvd_prod
+-  simpa only [List.prod_reverse,hprod] using hdiv
++  obtain ⟨k,hk⟩ := hsub.prod_dvd_prod
++  refine ⟨k, ?_⟩
++  simpa only [roughProduct,List.prod_reverse,hprod] using hk
+ 
+ theorem raw_value (retainEven : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :
+     raw retainEven N cap w z d=
+       if d∈rawSupport retainEven N cap w z then (ArithmeticFunction.moebius d:ℝ) else 0 := by
+   unfold raw fixedEvenRoughCoefficient firstExitRetainedCoefficient rawSupport fixedEvenRoughSupport
+-  split_ifs <;> rfl
++  split_ifs <;> simp only [Int.cast_zero]
+ 
+ theorem self_mem_cell (N cap : ℕ) (w z tau : ℝ) {d : ℕ}
+-    (hd : d∈universe N cap w z) : d∈cell N cap w z tau d :=
++    (hd : d∈«universe» N cap w z) : d∈cell N cap w z tau d :=
+   Finset.mem_filter.mpr ⟨hd,rfl⟩
+ 
+ /-- Every real logarithmic prime coordinate belongs to its single
+@@ -131,7 +132,7 @@
+ theorem coefficient_le_raw (retainEven : List ℕ → Bool) (N cap : ℕ)
+     (w z tau : ℝ) (d : ℕ) : coefficient retainEven N cap w z tau d≤raw retainEven N cap w z d := by
+   rw [raw_value]
+-  by_cases hd : d∈universe N cap w z
++  by_cases hd : d∈«universe» N cap w z
+   · have hself := self_mem_cell N cap w z tau hd
+     by_cases hsign : 0≤(ArithmeticFunction.moebius d:ℝ)
+     · by_cases hi : inner retainEven N cap w z tau d
+@@ -157,19 +158,20 @@
+   all_goals exact_mod_cast (ArithmeticFunction.abs_moebius_le_one (n:=d))
+ 
+ def roundingLoss (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  reciprocalTotientDensity (universe N cap w z)
++  reciprocalTotientDensity («universe» N cap w z)
+     (fun d=>|coefficient retainEven N cap w z tau d-raw retainEven N cap w z d|)
+ 
+ /-- Exact signed density loss of this output, rather than an unspecified
+ compiler error. Quantitative gate-strip smallness remains separate. -/
+ theorem roundingLoss_exact (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) :
+-    reciprocalTotientDensity (universe N cap w z) (raw retainEven N cap w z)-
+-      reciprocalTotientDensity (universe N cap w z) (coefficient retainEven N cap w z tau)=
++    reciprocalTotientDensity («universe» N cap w z) (raw retainEven N cap w z)-
++      reciprocalTotientDensity («universe» N cap w z) (coefficient retainEven N cap w z tau)=
+         roundingLoss retainEven N cap w z tau := by
+   unfold reciprocalTotientDensity roundingLoss
+   rw [←Finset.sum_sub_distrib]
+   apply Finset.sum_congr rfl
+   intro d hd
++  dsimp only
+   rw [abs_of_nonpos (sub_nonpos.mpr (coefficient_le_raw retainEven N cap w z tau d))]
+   ring
+ 

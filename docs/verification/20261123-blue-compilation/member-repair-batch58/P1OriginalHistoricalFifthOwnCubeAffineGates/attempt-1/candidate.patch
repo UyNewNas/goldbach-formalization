@@ -1,0 +1,56 @@
+--- baseline/ImbalancedChen/P1OriginalHistoricalFifthOwnCubeAffineGates.lean
++++ candidate/ImbalancedChen/P1OriginalHistoricalFifthOwnCubeAffineGates.lean
+@@ -42,8 +42,11 @@
+     have hhi : MeasurableSet {t : Fin 5 → ℝ |
+         t 0 < logPrimeMeshPoint 0 (19 / 96) m (i.val + 1)} :=
+       measurableSet_lt (measurable_pi_apply 0) measurable_const
+-    simpa only [hs, and_true] using hlo.inter hhi
+-  · simp only [hs, and_false, Set.setOf_false, measurableSet_empty]
++    convert hlo.inter hhi using 1
++    ext t
++    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hs, and_true]
++  · simpa only [hs, and_false, Set.setOf_false] using
++      (MeasurableSet.empty : MeasurableSet (∅ : Set (Fin 5 → ℝ)))
+ 
+ theorem measurableSet_activeRegion (e chi : ℝ) (m : ℕ) (omega : ℝ)
+     (j : Fin 5 → Fin (m + 1)) : MeasurableSet (activeRegion e chi m omega j) := by
+@@ -97,7 +100,8 @@
+       (historicalPrefixProject (by omega : 3 ≤ 5) j) 2 : ℝ) ≤ t 2 := by
+     rw [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m
+       (historicalPrefixProject (by omega : 3 ≤ 5) j)) 2]
+-    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat, historicalPrefixProject] using hlo
++    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat, historicalPrefixProject,
++      Fin.castLE, Fin.coe_ofNat_eq_mod, Nat.reduceMod] using hlo
+   exact hc.2.2.trans hreal
+ 
+ /-- Current third cap is the original selected Gamma-2e on this SAME
+@@ -177,7 +181,7 @@
+           P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4 then
+         (cap4 (historicalPrefixProject (by omega : 4 ≤ 5) j) : ℝ)
+       else levelExponent (e : ℝ) (box m (thirdOwner j)) := by
+-  unfold old5
++  dsimp only [old5]
+   split_ifs
+   · rfl
+   · rw [P1OriginalCoarseContinuation.cast_thirdCellExponent]
+@@ -466,10 +470,17 @@
+       exact ⟨ht, (jointRegion_on_selected_cell e chi m omega J5 j hj ht).mp hg⟩
+     · rintro ⟨ht, hg⟩
+       exact ⟨ht, (jointRegion_on_selected_cell e chi m omega J5 j hj ht).mpr hg⟩
+-  rw [hregion, candidateCell_eq_if e chi m omega J5 j hj]
+   by_cases hs : firstStopCellCheck (e : ℝ) m j = true
+-  · simp only [if_pos hs]
+-  · simp only [if_neg hs, Set.mem_empty_iff_false, Finset.filter_false]
++  · rw [if_pos hs]
++    apply Finset.filter_congr
++    intro p _hp
++    rw [hregion, candidateCell_eq_if e chi m omega J5 j hj]
++    simp only [if_pos hs]
++  · rw [if_neg hs]
++    apply Finset.filter_eq_empty_iff.mpr
++    intro p _hp
++    rw [hregion, candidateCell_eq_if e chi m omega J5 j hj]
++    simp only [if_neg hs, Set.mem_empty_iff_false, not_false_eq_true]
+ 
+ theorem historical_overlap_of_check
+     (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)

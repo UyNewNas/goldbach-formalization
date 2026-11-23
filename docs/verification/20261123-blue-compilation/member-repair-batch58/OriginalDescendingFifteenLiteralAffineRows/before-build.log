@@ -1,0 +1,27 @@
+✖ [9954/10109] Building ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows (16s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.setup.json --json
+error: ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean:74:12: unsolved goals
+case coord
+t : Fin 8 → ℝ
+j : Fin 8
+⊢ ↑(if 0 = j.succ then 1 else 0) + ∑ x, ↑(if x = j then 1 else 0) * t x = t j
+error: ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean:326:73: Tactic `decide` failed for proposition
+  ∀ (i : Fin 15) (r : Fin 96) (k : Fin 9), exportedCoefficients i r k = coefficients (semanticExpr i r) k
+because its `Decidable` instance
+  Nat.decidableForallFin fun i =>
+    ∀ (r : Fin 96) (k : Fin 9), exportedCoefficients i r k = coefficients (semanticExpr i r) k
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `decidable_of_iff`, `instDecidableEqRat`, `Int.decEq`, `Int.instDecidableEq`, `Nat.decidableBallLT`, `Nat.decidableForallFin`, and `instDecidableEqRat.decEq`, reduction got stuck at the `Decidable` instance
+  match (Rat.mul 25 (Rat.inv 128)).num, ((coefficients (K (25 / 128)) ⟨0, ⋯⟩).sub (coefficients (X 0) ⟨0, ⋯⟩)).num with
+  | Int.ofNat a, Int.ofNat b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+  | Int.ofNat a, Int.negSucc a_1 => isFalse ⋯
+  | Int.negSucc a, Int.ofNat a_1 => isFalse ⋯
+  | Int.negSucc a, Int.negSucc b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+error: Lean exited with code 1

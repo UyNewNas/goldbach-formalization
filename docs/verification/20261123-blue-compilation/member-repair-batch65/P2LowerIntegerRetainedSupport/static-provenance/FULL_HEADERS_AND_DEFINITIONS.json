@@ -1,0 +1,82 @@
+{
+  "module": "ImbalancedChen.P2LowerIntegerRetainedSupport",
+  "original_headers": [
+    {
+      "name": "parity",
+      "kind": "theorem",
+      "complete_original_raw_header": "private theorem parity (pre : List ℕ) : evenListLength pre=decide (Even pre.length) :=",
+      "raw_header_sha256": "56798ab4269d0c2c182f4a548f33bcfb3f90dfc6b722e478f8db4f8184037f74",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "run_accepted_incoming",
+      "kind": "theorem",
+      "complete_original_raw_header": "theorem run_accepted_incoming {depth m : ℕ} (P : CapPlan depth m)\n    (a b : ℝ) (H : Trace) (xs : List ℝ) (h : (run P a b H xs).accepted=true) :\n    H.accepted=true :=",
+      "raw_header_sha256": "1edcd15c1b3bb81638d5873b9b0fb5dc02a22117032e50813fa5db46455be493",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "retainEven_of_newer",
+      "kind": "theorem",
+      "complete_original_raw_header": "theorem retainEven_of_newer {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N : ℕ) (newer older : List ℕ)\n    (h : retainEven P a b seedCap N (newer++older)=true) :\n    retainEven P a b seedCap N older=true :=",
+      "raw_header_sha256": "8d2f4e0071d80aeb896a90ef126a9099e608534a73b295da4d6ecf0d612d3b1b",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "next_policy_iff_trace",
+      "kind": "theorem",
+      "complete_original_raw_header": "private theorem next_policy_iff_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N p : ℕ) (pre : List ℕ)\n    (hpre : retainEven P a b seedCap N pre=true) (hsquare : 2*coordinate N p<seedCap) :\n    evenFirstExitPolicy (retainEven P a b seedCap N) (!(evenListLength pre)) (p::pre)=true ↔\n      retainEven P a b seedCap N (p::pre)=true :=",
+      "raw_header_sha256": "880cdcc37105cb77b90db17910d967565ab170d5fd912ba1d250e496e9e86d4a",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "validSelection_iff_computed_trace",
+      "kind": "theorem",
+      "complete_original_raw_header": "theorem validSelection_iff_computed_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N : ℕ) (chosen : List ℕ) :\n    ∀pre : List ℕ,retainEven P a b seedCap N pre=true →\n      (∀p∈chosen,2*coordinate N p<seedCap) →\n      (FirstExitValidSelection (evenFirstExitPolicy (retainEven P a b seedCap N))\n        pre (evenListLength pre) chosen ↔\n        retainEven P a b seedCap N (chosen.reverse++pre)=true) :=",
+      "raw_header_sha256": "908949e7b5276d87ab1898a25367234ba6d26478795279a8460a46044a81e50e",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "actual_prime_initial_square",
+      "kind": "theorem",
+      "complete_original_raw_header": "theorem actual_prime_initial_square {N cap p : ℕ} (hN : 1<(N:ℝ))\n    (z0 w seedCap : ℝ) (hmargin : 2*w<seedCap)\n    (hp : p∈roughPrimeUniverse N cap z0 ((N:ℝ)^w)) : 2*coordinate N p<seedCap :=",
+      "raw_header_sha256": "99d65ee8b5835345e35596df2fde6f28cc5b60972bbfe9331ff776eebe4ef6fb",
+      "same_after_only_registered_lexical_normalization": true
+    },
+    {
+      "name": "raw_support_iff_actual_trace",
+      "kind": "theorem",
+      "complete_original_raw_header": "theorem raw_support_iff_actual_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)\n    (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :\n    d∈fixedEvenRoughSupport (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) ↔\n      ∃chosen : List ℕ,chosen <+ roughPrimeUniverse N cap z0 ((N:ℝ)^w) ∧\n        retainEven P a b seedCap N chosen.reverse=true ∧ chosen.prod=d :=",
+      "raw_header_sha256": "07aca0235e2e620f75bcadefe9e097ef0e165e44170d14178faea8063e142504",
+      "same_after_only_registered_lexical_normalization": true
+    }
+  ],
+  "complete_definitions": [],
+  "changed_proof_bodies": [
+    {
+      "name": "next_policy_iff_trace",
+      "before_body": " by\n  cases hs : evenListLength pre with\n  | false => simp only [hs,Bool.not_false,evenFirstExitPolicy,Bool.not_true,Bool.false_or]\n  | true =>\n      have hnext : retainEven P a b seedCap N (p::pre)=true := by\n        by_cases hnil : pre=[]\n        · subst pre\n          rw [retainEven_cons_iff]\n          exact ⟨hpre,by simpa only [integerTrace,physicalWord,List.reverse_nil,List.map_nil,\n            run,List.foldl_nil,root,admission,List.length_nil,if_pos rfl] using hsquare⟩\n        · have he : Even pre.length := by\n            have hs' := hs\n            rw [parity] at hs'\n            exact of_decide_eq_true hs'\n          obtain ⟨k,hk⟩ := he\n          have hodd : (pre.length+1)%2≠0 := by omega\n          exact (odd_rank_bypass P a b seedCap N p pre (List.length_pos.mpr hnil) hodd).mpr hpre\n      simp only [hs,Bool.not_true,evenFirstExitPolicy,Bool.not_false,Bool.true_or]\n      exact iff_of_true trivial hnext\n\n/-- The complete computed trace replaces the generic valid-selection\nobligation; all earlier tests are recovered, rather than assumed anew. -/\n",
+      "after_body": " by\n  cases hs : evenListLength pre with\n  | false => simp only [hs,Bool.not_false,evenFirstExitPolicy,Bool.not_true,Bool.false_or]\n  | true =>\n      have hnext : retainEven P a b seedCap N (p::pre)=true := by\n        by_cases hnil : pre=[]\n        · subst pre\n          rw [retainEven_cons_iff]\n          exact ⟨hpre,by simpa only [integerTrace,physicalWord,List.reverse_nil,List.map_nil,\n            run,List.foldl_nil,root,admission,List.length_nil,if_pos rfl,ite_true] using hsquare⟩\n        · have he : Even pre.length := by\n            have hs' := hs\n            rw [parity] at hs'\n            exact of_decide_eq_true hs'\n          obtain ⟨k,hk⟩ := he\n          have hodd : (pre.length+1)%2≠0 := by omega\n          exact (odd_rank_bypass P a b seedCap N p pre (List.length_pos_iff.mpr hnil) hodd).mpr hpre\n      simp only [hs,Bool.not_true,evenFirstExitPolicy,Bool.not_false,Bool.true_or]\n      exact iff_of_true trivial hnext\n\n/-- The complete computed trace replaces the generic valid-selection\nobligation; all earlier tests are recovered, rather than assumed anew. -/\n",
+      "before_sha256": "94f2254fffb188b864a13af0c3b9910085334b307b52dc8e836257c34d0adeaf",
+      "after_sha256": "41a037bfc42c25d428140874d2bbdd617cabc48c907b30f2702dd34ee60b1160"
+    },
+    {
+      "name": "validSelection_iff_computed_trace",
+      "before_body": " by\n  induction chosen with\n  | nil =>\n      intro pre hpre hsquare\n      simp only [FirstExitValidSelection,List.reverse_nil,List.nil_append,hpre]\n  | cons p ps ih =>\n      intro pre hpre hsquare\n      have hnext := next_policy_iff_trace P a b seedCap N p pre hpre\n        (hsquare p (List.mem_cons_self p ps))\n      have htailSquare : ∀q∈ps,2*coordinate N q<seedCap :=\n        fun q hq=>hsquare q (List.mem_cons_of_mem p hq)\n      rw [FirstExitValidSelection]\n      constructor\n      · rintro ⟨hpass,hvalid⟩\n        have hpassed := hnext.mp hpass\n        have htail : FirstExitValidSelection (evenFirstExitPolicy (retainEven P a b seedCap N))\n            (p::pre) (evenListLength (p::pre)) ps := hvalid\n        have hfinal := (ih (p::pre) hpassed htailSquare).mp htail\n        simpa only [List.reverse_cons,List.append_assoc,List.singleton_append] using hfinal\n      · intro hfinal\n        have hfinal' : retainEven P a b seedCap N (ps.reverse++p::pre)=true := by\n          simpa only [List.reverse_cons,List.append_assoc,List.singleton_append] using hfinal\n        have hpassed := retainEven_of_newer P a b seedCap N ps.reverse (p::pre) hfinal'\n        exact ⟨hnext.mpr hpassed,(ih (p::pre) hpassed htailSquare).mpr hfinal'⟩\n\n/-- Every actual rough prime below N^w has the initial square margin.\nThis is derived from the physical carrier cutoff and 2w<seedCap. -/\n",
+      "after_body": " by\n  induction chosen with\n  | nil =>\n      intro pre hpre hsquare\n      simp only [FirstExitValidSelection,List.reverse_nil,List.nil_append,hpre]\n  | cons p ps ih =>\n      intro pre hpre hsquare\n      have hnext := next_policy_iff_trace P a b seedCap N p pre hpre\n        (hsquare p (List.mem_cons_self))\n      have htailSquare : ∀q∈ps,2*coordinate N q<seedCap :=\n        fun q hq=>hsquare q (List.mem_cons_of_mem p hq)\n      rw [FirstExitValidSelection]\n      constructor\n      · rintro ⟨hpass,hvalid⟩\n        have hpassed := hnext.mp hpass\n        have htail : FirstExitValidSelection (evenFirstExitPolicy (retainEven P a b seedCap N))\n            (p::pre) (evenListLength (p::pre)) ps := hvalid\n        have hfinal := (ih (p::pre) hpassed htailSquare).mp htail\n        simpa only [List.reverse_cons,List.append_assoc,List.singleton_append] using hfinal\n      · intro hfinal\n        have hfinal' : retainEven P a b seedCap N (ps.reverse++p::pre)=true := by\n          simpa only [List.reverse_cons,List.append_assoc,List.singleton_append] using hfinal\n        have hpassed := retainEven_of_newer P a b seedCap N ps.reverse (p::pre) hfinal'\n        exact ⟨hnext.mpr hpassed,(ih (p::pre) hpassed htailSquare).mpr hfinal'⟩\n\n/-- Every actual rough prime below N^w has the initial square margin.\nThis is derived from the physical carrier cutoff and 2w<seedCap. -/\n",
+      "before_sha256": "58c4e74e1686500df35e3609d0bfafced322a1cf5856e0730bc804d789ba571f",
+      "after_sha256": "cd0fda86d91a56a9040bd4bfcd1e26ce20268f3b41b9282c9b325d9e7ed85d69"
+    }
+  ],
+  "normalization_only_to_compare_same_intended_syntax": [
+    {
+      "scope": "ROOT_AUTHORIZED_SCOPED_NOTATION_RESTORATION",
+      "declaration": "raw_support_iff_actual_trace",
+      "new_command": "open scoped List in",
+      "same_original_raw_header": true,
+      "meaning": "Original chosen <+ carrier is the already imported List.Sublist relation; notation was previously unopened and header did not parse. Scope applies only to this theorem.",
+      "old_unparsed_kernel_type_equality_not_claimed": true
+    }
+  ],
+  "outside_proof_and_lexical_exceptions_sha256": "2ce38b8cd2b0d3be2b3da372b3bed3ee969ec70e8f55053ef26de04810a6e537"
+}

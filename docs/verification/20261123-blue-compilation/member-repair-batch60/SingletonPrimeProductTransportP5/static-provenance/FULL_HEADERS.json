@@ -1,0 +1,96 @@
+{
+  "count": 18,
+  "complete_headers_or_entire_aliases": [
+    {
+      "name": "labelledProduct_singleton",
+      "header_or_entire_alias": "theorem labelledProduct_singleton (P : ℕ) (t : Fin 1 → Fin (P + 1)) :\n    labelledProduct t = (t 0).val :=",
+      "sha256": "b2a91a03aad9ff3b2a9b78b5ef021a16a2bc65f02ff46e26fa864fb9c279f504"
+    },
+    {
+      "name": "sum_labelledSingleton",
+      "header_or_entire_alias": "theorem sum_labelledSingleton (P : ℕ) (f : ℕ → ℝ) :\n    (∑ t ∈ labelledPrimeTuples 1 P, f (t 0).val) =\n      ∑ p ∈ chenPrimePrefix P, f p :=",
+      "sha256": "caec003a52e34d12bc548fe5467ba3d66cbc168067fc7adfaf4d9a7ae585442a"
+    },
+    {
+      "name": "primeProductSignedError_singleton_eq",
+      "header_or_entire_alias": "theorem primeProductSignedError_singleton_eq\n    (P N : ℕ) (Q : Finset ℕ) (rho omega : ℕ → ℝ) :\n    primeProductSignedError 1 P N Q rho (singletonWeight P omega) =\n      ∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy (chenPrimePrefix P) omega N q :=",
+      "sha256": "1fddb3c481d02f27a8a9c637175e5bb58a543515e6b0e98201ec40702645dacd"
+    },
+    {
+      "name": "interval_discrepancy_eq",
+      "header_or_entire_alias": "theorem interval_discrepancy_eq (P N q : ℕ) (lo hi : ℝ) (omega : ℕ → ℝ) :\n    finitePrimitiveDiscrepancy (chenPrimePrefix P) (primeIntervalWeight lo hi omega) N q =\n      finitePrimitiveDiscrepancy (primeIntervalSource P lo hi) omega N q :=",
+      "sha256": "58154e31227371591908808766e4832cd02e617b86fb88a3356a24b2dd019c01"
+    },
+    {
+      "name": "primeProductSignedError_singleton_interval_eq",
+      "header_or_entire_alias": "theorem primeProductSignedError_singleton_interval_eq\n    (P N : ℕ) (Q : Finset ℕ) (rho omega : ℕ → ℝ) (lo hi : ℝ) :\n    primeProductSignedError 1 P N Q rho\n      (singletonWeight P (primeIntervalWeight lo hi omega)) =\n      ∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy (primeIntervalSource P lo hi) omega N q :=",
+      "sha256": "1247b29b3602a372d844931e8cf10eab297258ba161a3544ce16bb9cfd2b619e"
+    },
+    {
+      "name": "singletonIntervalFamily_error_eq",
+      "header_or_entire_alias": "theorem singletonIntervalFamily_error_eq {ι : Type*} (cap : ℕ → ℕ)\n    (lo hi : ℕ → ι → ℝ) (omega : ℕ → ι → ℕ → ℝ)\n    (N : ℕ) (i : ι) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    primeProductSignedError 1 (cap N) N Q rho (singletonIntervalFamily cap lo hi omega N i) =\n      ∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy\n        (primeIntervalSource (cap N) (lo N i) (hi N i)) (omega N i) N q :=",
+      "sha256": "b3005836e65854d0b94ee8c001c22f70a2e7fb0c3bcb809994751dc5bd04acea"
+    },
+    {
+      "name": "prefix_truncation_discrepancy_eq",
+      "header_or_entire_alias": "theorem prefix_truncation_discrepancy_eq (P Y N q : ℕ) (hYP : Y ≤ P) :\n    finitePrimitiveDiscrepancy (chenPrimePrefix P)\n      (fun p => if p ≤ Y then (1 : ℝ) else 0) N q =\n        finitePrimitiveDiscrepancy (chenPrimePrefix Y) (fun _ => 1) N q :=",
+      "sha256": "b9f48b065d612eb2c1c7e5478c2f29f5da39102e95b3725508c9986bb632995c"
+    },
+    {
+      "name": "primeProductSignedError_singleton_cutoff_split",
+      "header_or_entire_alias": "theorem primeProductSignedError_singleton_cutoff_split\n    (P Y N : ℕ) (hYP : Y ≤ P) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    primeProductSignedError 1 P N Q rho (singletonWeight P (fun _ => 1)) =\n      (∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy (chenPrimePrefix Y) (fun _ => 1) N q) +\n      primeProductSignedError 1 P N Q rho\n        (singletonWeight P (fun p => if Y < p then 1 else 0)) :=",
+      "sha256": "971c76e22c2317afa4263157881a0fa7a4562214c7fbb1e3532d50df4de9c663"
+    },
+    {
+      "name": "singleton_interval_weight_abs_le_one",
+      "header_or_entire_alias": "theorem singleton_interval_weight_abs_le_one\n    (P : ℕ) (lo hi : ℝ) (omega : ℕ → ℝ)\n    (homega : ∀ p ∈ chenPrimePrefix P, |omega p| ≤ 1)\n    (t : Fin 1 → Fin (P + 1)) (ht : t ∈ labelledPrimeTuples 1 P) :\n    |singletonWeight P (primeIntervalWeight lo hi omega) t| ≤ 1 :=",
+      "sha256": "42d187b91c19dc09a047bedbfe34edee38294d90b6f5369b0fac86e39757c5cc"
+    },
+    {
+      "name": "active_physical_data",
+      "header_or_entire_alias": "theorem active_physical_data\n    (retainEven : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) {q : ℕ}\n    (hq : q ∈ active retainEven N cap w z L) :\n    0 < q ∧ Squarefree q ∧ Nat.Coprime q N ∧\n      |actualLowerSmallRoughRho retainEven N cap w z L q| ≤ 1 :=",
+      "sha256": "61939b0f54c24e5ae123448a31f430ca064f55d00e032f4081ac1c17c797c966"
+    },
+    {
+      "name": "active_singleton_fibre_not_dvd_modulus",
+      "header_or_entire_alias": "theorem active_singleton_fibre_not_dvd_modulus\n    (retainEven : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) {q : ℕ}\n    (hq : q ∈ active retainEven N cap w z L)\n    (t : Fin 1 → Fin (N + 1)) (ht : t ∈ labelledPrimeTuples 1 N)\n    (hAP : Nat.ModEq q (labelledProduct t) N) : ¬(t 0).val ∣ q :=",
+      "sha256": "61e6d772e8c35b8402f1b29bf536105ba8fcd8cb87ee2168a032921e26b2e452"
+    },
+    {
+      "name": "active_physical_data_of_level",
+      "header_or_entire_alias": "theorem active_physical_data_of_level\n    (theta : ℝ) (retainEven : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (hlevel : CausalSingletonPhysicalLevel theta retainEven N cap w z L)\n    {q : ℕ} (hq : q ∈ active retainEven N cap w z L) :\n    0 < q ∧ Squarefree q ∧ Nat.Coprime q N ∧\n      |actualLowerSmallRoughRho retainEven N cap w z L q| ≤ 1 ∧\n        (q : ℝ) ≤ (N : ℝ) ^ theta :=",
+      "sha256": "b55f39607414a4bcae9e7f1ca29ebb5b8c08e7118c015a06ed7f758eeb9d8bb4"
+    },
+    {
+      "name": "additive_source_discrepancy_eq_mask",
+      "header_or_entire_alias": "theorem additive_source_discrepancy_eq_mask (N q : ℕ) (omega : ℕ → ℝ) :\n    finitePrimitiveDiscrepancy (chenAdditivePrimeCarrier N) omega N q =\n      finitePrimitiveDiscrepancy (chenPrimePrefix N)\n        (fun p => if ¬p ∣ N then omega p else 0) N q :=",
+      "sha256": "027c8c61f6d16203b0a5385ad31532c31629ddb254e2f277cda47bba452a6fdf"
+    },
+    {
+      "name": "additive_discrepancy_eq_prefix_add_centre",
+      "header_or_entire_alias": "theorem additive_discrepancy_eq_prefix_add_centre\n    (N : ℕ) (hEven : Even N) {q : ℕ} (hqN : Nat.Coprime q N) :\n    finitePrimitiveDiscrepancy (chenAdditivePrimeCarrier N) (fun _ => 1) N q =\n      finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N q +\n        chenPrimeDivisorCount N N / (Nat.totient q : ℝ) - chenCentrePrimeAPCount N N q :=",
+      "sha256": "69ec4661c6027445751cd0e37b4afa0bb6a2ae0ce2b9ff5f6366ea4ee492f969"
+    },
+    {
+      "name": "primeProductSignedError_singleton_unit_eq_AP",
+      "header_or_entire_alias": "theorem primeProductSignedError_singleton_unit_eq_AP\n    (N : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    primeProductSignedError 1 N N Q rho (singletonWeight N (fun _ => 1)) =\n      (∑ q ∈ Q, rho q * (chenPrimeAPCount N N q -\n        ((chenPrimePrefix N).card : ℝ) / (Nat.totient q : ℝ))) +\n      ∑ q ∈ Q, rho q * (chenPrimeDivisorCount N q / (Nat.totient q : ℝ)) :=",
+      "sha256": "a8f6b5e0884e6186fa5ca85a55d5d6a8eb81e71e3931a751c3c8f20b6dd389f6"
+    },
+    {
+      "name": "original_signed_AP_mass_eq_PP",
+      "header_or_entire_alias": "theorem original_signed_AP_mass_eq_PP\n    (N : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ q ∈ Q, rho q * (chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)) =\n      ((chenPrimePrefix N).card : ℝ) * physicalDensitySum Q rho +\n        primeProductSignedError 1 N N Q rho (singletonWeight N (fun _ => 1)) -\n        (∑ q ∈ Q, rho q * (chenPrimeDivisorCount N q / (Nat.totient q : ℝ))) -\n        ∑ q ∈ Q, rho q * chenCentrePrimeAPCount N N q :=",
+      "sha256": "8d11a0b52d3e218d4c1eab7613343e2bd4f6621ecb7db6f733a097c6fa53fb40"
+    },
+    {
+      "name": "causal_PP_lower",
+      "header_or_entire_alias": "theorem causal_PP_lower\n    (retainEven : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) (hEven : Even N)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :\n    ((chenAdditivePrimeCarrier N).card : ℝ) *\n        physicalDensitySum (actualLowerSmallRoughModuli retainEven N cap w z)\n          (actualLowerSmallRoughRho retainEven N cap w z L) +\n      primeProductSignedError 1 N N (active retainEven N cap w z L)\n        (actualLowerSmallRoughRho retainEven N cap w z L) (singletonWeight N (fun _ => 1)) -\n      chenInitialCorrectionCost N (active retainEven N cap w z L) ≤\n        ((chenSiftedPrimeSource N z).card : ℝ) :=",
+      "sha256": "c1edfb46acde19fa09f8c018cc6196ef2543e0752f10ec31bbd7c281b18f729b"
+    },
+    {
+      "name": "eventually_currentUpsilon1_PP_lower_paid",
+      "header_or_entire_alias": "theorem eventually_currentUpsilon1_PP_lower_paid\n    (theta eta : ℝ) (htheta0 : 0 ≤ theta) (htheta1 : theta < 1) (heta : 0 < eta) :\n    ∀ᶠ N : ℕ in atTop, ∀ (retainEven : List ℕ → Bool) (cap Q : ℕ) (w L : ℝ),\n      Even N → 1 < L → w ≤ L → w ≤ (N : ℝ) ^ (417 / 5000 : ℝ) →\n      (N : ℝ) ^ (417 / 5000 : ℝ) ≤ (cap : ℝ) →\n      (Q : ℝ) ≤ (N : ℝ) ^ theta →\n      (∀ q ∈ active retainEven N cap w ((N : ℝ) ^ (417 / 5000 : ℝ)) L, q ≤ Q) →\n      ((chenAdditivePrimeCarrier N).card : ℝ) *\n          physicalDensitySum\n            (actualLowerSmallRoughModuli retainEven N cap w ((N : ℝ) ^ (417 / 5000 : ℝ)))\n            (actualLowerSmallRoughRho retainEven N cap w ((N : ℝ) ^ (417 / 5000 : ℝ)) L) +\n        primeProductSignedError 1 N N\n          (active retainEven N cap w ((N : ℝ) ^ (417 / 5000 : ℝ)) L)\n          (actualLowerSmallRoughRho retainEven N cap w ((N : ℝ) ^ (417 / 5000 : ℝ)) L)\n          (singletonWeight N (fun _ => 1)) -\n        eta * singularNormalization N ≤ currentChenUpsilon1 N :=",
+      "sha256": "c981fecdb4a7334f66eafeb36a764594ac60c1e0f72bea762bbface6a27cc933"
+    }
+  ],
+  "all_byte_identical": true
+}

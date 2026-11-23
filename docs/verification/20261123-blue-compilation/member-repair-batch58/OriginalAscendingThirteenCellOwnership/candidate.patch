@@ -1,0 +1,20 @@
+--- baseline/ImbalancedChen/OriginalAscendingThirteenCellOwnership.lean
++++ candidate/ImbalancedChen/OriginalAscendingThirteenCellOwnership.lean
+@@ -112,16 +112,7 @@
+   exact Set.disjoint_left.mp (strict_cells_disjoint hij) hi hj
+ 
+ theorem rows_antitone {i : Fin 13} {t : Point} (h : StrictRows i t) : Antitone t := by
+-  have h0 := h.order 0
+-  have h1 := h.order 1
+-  have h2 := h.order 2
+-  have h3 := h.order 3
+-  have h4 := h.order 4
+-  have h5 := h.order 5
+-  have h6 := h.order 6
+-  norm_num at h0 h1 h2 h3 h4 h5 h6
+-  intro i j hij
+-  fin_cases i <;> fin_cases j <;> norm_num at hij ⊢ <;> linarith
++  exact Fin.antitone_iff_succ_le.mpr (fun j => (h.order j).le)
+ 
+ theorem rows_physical {i : Fin 13} {t : Point} (h : StrictRows i t) : PhysicalRows t where
+   ordered := rows_antitone h

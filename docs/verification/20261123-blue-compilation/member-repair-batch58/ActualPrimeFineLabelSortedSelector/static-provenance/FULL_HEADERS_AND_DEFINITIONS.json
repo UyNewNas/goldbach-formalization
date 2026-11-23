@@ -1,0 +1,131 @@
+{
+  "parser_scope": "Comment-aware complete top-level theorem headers and raw definition/inductive/data commands, balancing binders/type-level lets. Source identity, not elaborated type-equivalence.",
+  "baseline_headers": [
+    {
+      "name": "actualPrimeSlotBox_replicate_sort",
+      "private": false,
+      "complete_header": "theorem actualPrimeSlotBox_replicate_sort {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (m : ℕ) (ps : List ℕ)\n    (hps : ps ∈ actualPrimeSlotBox B (List.replicate m i)) :\n    ps.mergeSort (· ≥ ·) ∈ actualPrimeSlotBox B (List.replicate m i) ∧\n      (ps.mergeSort (· ≥ ·)).Perm ps ∧ (ps.mergeSort (· ≥ ·)).SortedGE :=",
+      "sha256": "e69e34c6522aabcf306fa9220ea828b2692a2fef2b51f96d434e9c4e61b9c9f8"
+    },
+    {
+      "name": "actualPrimeFineLabelFinset_prime_lt",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelFinset_prime_lt {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j p q : ℕ} (hji : j < i)\n    (hp : p ∈ actualPrimeFineLabelFinset N τ i)\n    (hq : q ∈ actualPrimeFineLabelFinset N τ j) : q < p :=",
+      "sha256": "0896acbb637610b7d17181cc1b19c9eff97128fc0ca3f154fd0e13b11cb97a52"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_sort",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelBlocks_sort {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) :\n    ∀ blocks : List (ℕ × ℕ), blocks.Pairwise (fun b c => c.1 < b.1) →\n      ∀ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n      ∃ qs ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks), qs.Perm ps ∧ qs.SortedGE :=",
+      "sha256": "fba399ef8b0616fc62f1545a59da9f46f6b3881f81bdbb158cf955259cf906e6"
+    },
+    {
+      "name": "mem_actualPrimeFineLabelSortedProducts_iff",
+      "private": false,
+      "complete_header": "theorem mem_actualPrimeFineLabelSortedProducts_iff {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    n ∈ actualPrimeFineLabelSortedProducts N τ blocks ↔\n      Squarefree n ∧ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod :=",
+      "sha256": "65b892af83adc2c6c30e7b7967c3c4043fa528bcd22c861e8920483905e9f952"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedTuples_product_injective",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSortedTuples_product_injective (N : ℕ) (τ : ℝ)\n    (blocks : List (ℕ × ℕ)) :\n    ∀ ps ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n      ∀ qs ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n        ps.prod = qs.prod → ps = qs :=",
+      "sha256": "9f18ec7459ac78acd0b416d4d182e892482df514124f8c94c3cccea90de7fae9"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_moebius_fibre",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r n : ℕ) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      (ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n :=",
+      "sha256": "a0d6b17fc939853dc59f31935840d763245472fe157ba8ffab58723d667d6b21"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_literal_multiplicity",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n : ℝ) else 0) =\n      (actualPrimeLabelBlocksFactorial blocks : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n :=",
+      "sha256": "a3c5bac002b350e189addc9a9f6558a8148e580a4211c7be6c923f152d3094ea"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_original_scalar",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ actualPrimeFineLabelSortedProducts N τ blocks,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+      "sha256": "72009abe44a803e65459799f8e973b888228797e2e196e4afbccd987db9f2b32"
+    }
+  ],
+  "candidate_headers": [
+    {
+      "name": "actualPrimeSlotBox_replicate_sort",
+      "private": false,
+      "complete_header": "theorem actualPrimeSlotBox_replicate_sort {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (m : ℕ) (ps : List ℕ)\n    (hps : ps ∈ actualPrimeSlotBox B (List.replicate m i)) :\n    ps.mergeSort (· ≥ ·) ∈ actualPrimeSlotBox B (List.replicate m i) ∧\n      (ps.mergeSort (· ≥ ·)).Perm ps ∧ (ps.mergeSort (· ≥ ·)).SortedGE :=",
+      "sha256": "e69e34c6522aabcf306fa9220ea828b2692a2fef2b51f96d434e9c4e61b9c9f8"
+    },
+    {
+      "name": "actualPrimeFineLabelFinset_prime_lt",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelFinset_prime_lt {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j p q : ℕ} (hji : j < i)\n    (hp : p ∈ actualPrimeFineLabelFinset N τ i)\n    (hq : q ∈ actualPrimeFineLabelFinset N τ j) : q < p :=",
+      "sha256": "0896acbb637610b7d17181cc1b19c9eff97128fc0ca3f154fd0e13b11cb97a52"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_sort",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelBlocks_sort {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) :\n    ∀ blocks : List (ℕ × ℕ), blocks.Pairwise (fun b c => c.1 < b.1) →\n      ∀ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n      ∃ qs ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks), qs.Perm ps ∧ qs.SortedGE :=",
+      "sha256": "fba399ef8b0616fc62f1545a59da9f46f6b3881f81bdbb158cf955259cf906e6"
+    },
+    {
+      "name": "mem_actualPrimeFineLabelSortedProducts_iff",
+      "private": false,
+      "complete_header": "theorem mem_actualPrimeFineLabelSortedProducts_iff {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    n ∈ actualPrimeFineLabelSortedProducts N τ blocks ↔\n      Squarefree n ∧ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod :=",
+      "sha256": "65b892af83adc2c6c30e7b7967c3c4043fa528bcd22c861e8920483905e9f952"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedTuples_product_injective",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSortedTuples_product_injective (N : ℕ) (τ : ℝ)\n    (blocks : List (ℕ × ℕ)) :\n    ∀ ps ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n      ∀ qs ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n        ps.prod = qs.prod → ps = qs :=",
+      "sha256": "9f18ec7459ac78acd0b416d4d182e892482df514124f8c94c3cccea90de7fae9"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_moebius_fibre",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r n : ℕ) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      (ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n :=",
+      "sha256": "a0d6b17fc939853dc59f31935840d763245472fe157ba8ffab58723d667d6b21"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_literal_multiplicity",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n : ℝ) else 0) =\n      (actualPrimeLabelBlocksFactorial blocks : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n :=",
+      "sha256": "a3c5bac002b350e189addc9a9f6558a8148e580a4211c7be6c923f152d3094ea"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_original_scalar",
+      "private": false,
+      "complete_header": "theorem actualPrimeFineLabelSorted_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ actualPrimeFineLabelSortedProducts N τ blocks,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+      "sha256": "72009abe44a803e65459799f8e973b888228797e2e196e4afbccd987db9f2b32"
+    }
+  ],
+  "baseline_raw_definitions": [
+    {
+      "raw_command": "def actualPrimeFineLabelSortedTuples (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset (List ℕ) :=\n  (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n    (actualPrimeLabelBlocksWord blocks)).filter List.SortedGT\n\n",
+      "sha256": "26afbc84749ba0c5b0e641804750a5271184e4ee60d6c20de36e270da42fccf8"
+    },
+    {
+      "raw_command": "def actualPrimeFineLabelSortedProducts (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset ℕ :=\n  (actualPrimeFineLabelSortedTuples N τ blocks).image List.prod\n\n",
+      "sha256": "bd3554354dded0d3a7b2816991531a3363c13f7da9a6e6b9358654b1419fa473"
+    },
+    {
+      "raw_command": "def actualPrimeFineLabelSortedIndicator (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))\n    (n : ℕ) : ℝ :=\n  if n ∈ actualPrimeFineLabelSortedProducts N τ blocks then 1 else 0\n\n",
+      "sha256": "e55be8241de76436196d3bbee420323358f4b4e1a8c7a019240ffa1530788583"
+    }
+  ],
+  "candidate_raw_definitions": [
+    {
+      "raw_command": "def actualPrimeFineLabelSortedTuples (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset (List ℕ) :=\n  (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n    (actualPrimeLabelBlocksWord blocks)).filter List.SortedGT\n\n",
+      "sha256": "26afbc84749ba0c5b0e641804750a5271184e4ee60d6c20de36e270da42fccf8"
+    },
+    {
+      "raw_command": "def actualPrimeFineLabelSortedProducts (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset ℕ :=\n  (actualPrimeFineLabelSortedTuples N τ blocks).image List.prod\n\n",
+      "sha256": "bd3554354dded0d3a7b2816991531a3363c13f7da9a6e6b9358654b1419fa473"
+    },
+    {
+      "raw_command": "def actualPrimeFineLabelSortedIndicator (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))\n    (n : ℕ) : ℝ :=\n  if n ∈ actualPrimeFineLabelSortedProducts N τ blocks then 1 else 0\n\n",
+      "sha256": "e55be8241de76436196d3bbee420323358f4b4e1a8c7a019240ffa1530788583"
+    }
+  ]
+}

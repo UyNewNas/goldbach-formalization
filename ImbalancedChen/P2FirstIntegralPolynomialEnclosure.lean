@@ -119,6 +119,7 @@ theorem approximant_eq_product (n m : ℕ) (x : ℝ) :
     approximant n m x = logPolynomial n x * reciprocalPolynomial m x := by
   simp only [approximant, logPolynomial, reciprocalPolynomial,
     Finset.sum_mul, Finset.mul_sum]
+  conv_rhs => rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro i hi
   apply Finset.sum_congr rfl
@@ -170,7 +171,7 @@ theorem logPolynomial_abs_bound (n : ℕ) {x : ℝ} (hx : x ∈ Icc (0 : ℝ) d)
     _ = |Real.log (1 + x) + (logPolynomial n x - Real.log (1 + x))| := by
       congr 1
       ring
-    _ ≤ |Real.log (1 + x)| + |logPolynomial n x - Real.log (1 + x)| := abs_add _ _
+    _ ≤ |Real.log (1 + x)| + |logPolynomial n x - Real.log (1 + x)| := abs_add_le _ _
     _ ≤ d + logError n := add_le_add (by simpa only [abs_of_nonneg hl0] using hld)
       (by simpa only [abs_sub_comm] using logPolynomial_error n hx)
 
@@ -186,7 +187,7 @@ theorem transformedKernel_polynomial_error (n m : ℕ) {x : ℝ}
     dsimp [transformedKernel]
     ring
   rw [he]
-  apply (abs_add _ _).trans
+  apply (abs_add_le _ _).trans
   apply add_le_add
   · rw [abs_div, abs_of_pos hx2]
     exact (div_le_div_of_nonneg_right (logPolynomial_error n hx) hx2.le).trans
@@ -212,7 +213,7 @@ theorem integral_approximant (n m : ℕ) :
     rw [intervalIntegral.integral_finsetSum]
     · apply Finset.sum_congr rfl
       intro j hj
-      rw [intervalIntegral.integral_const_mul, intervalIntegral.integral_pow]
+      rw [intervalIntegral.integral_const_mul, integral_pow]
       simp only [zero_pow (Nat.succ_ne_zero _), sub_zero]
     · intro j hj
       exact (continuous_const.mul (continuous_id.pow _)).intervalIntegrable 0 d
@@ -263,11 +264,11 @@ def errorQ (n m : ℕ) : ℚ :=
 def radiusQ (n m : ℕ) : ℚ := (2000 / 299) * (errorQ n m * dQ)
 
 theorem centerQ_cast (n m : ℕ) : (centerQ n m : ℝ) = (4 / theta) * center n m := by
-  simp [centerQ, center, coefficientQ, coefficient, logCoeff, reciprocalCoeff, dQ, d, theta] <;> ring
+  simp [centerQ, center, coefficientQ, coefficient, logCoeff, reciprocalCoeff, dQ, d, theta] <;> ring_nf <;> simp
 
 theorem radiusQ_cast (n m : ℕ) :
     (radiusQ n m : ℝ) = (4 / theta) * (uniformError n m * d) := by
-  simp [radiusQ, errorQ, dQ, uniformError, logError, reciprocalError, d, theta] <;> ring
+  simp [radiusQ, errorQ, dQ, uniformError, logError, reciprocalError, d, theta] <;> ring_nf <;> simp
 
 /-- Fully rational enclosure of the actual first integral at every pair of
 orders, with no finite rational-function integral left to evaluate. -/
@@ -295,7 +296,8 @@ theorem originalFirstIntegral_Q80_polynomial_enclosure :
       originalFirstIntegral ≤ (centerQ 16 16 : ℝ) + (1 / 2 ^ 80 : ℝ) := by
   have h := originalFirstIntegral_polynomial_enclosure 16 16
   have hr : (radiusQ 16 16 : ℝ) ≤ (1 / 2 ^ 80 : ℝ) := by
-    exact_mod_cast radiusQ_sixteen_le_Q80
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_pow, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).2 radiusQ_sixteen_le_Q80
   push_cast at h
   constructor <;> linarith [h.1, h.2]
 

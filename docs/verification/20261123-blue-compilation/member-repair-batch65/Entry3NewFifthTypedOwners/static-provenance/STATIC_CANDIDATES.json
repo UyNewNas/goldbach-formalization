@@ -1,0 +1,226 @@
+{
+  "schema": "first_integral_and_typed_owners_static_candidates_v1",
+  "created_utc": "2026-11-23T19:08:47.128403+00:00",
+  "author": "/root/member_current_repairs",
+  "status": "UNCOMPILED_REQUIRES_NONAUTHOR_REVIEW",
+  "modules": [
+    {
+      "module": "ImbalancedChen.P2FirstIntegralPolynomialEnclosure",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/baseline.lean",
+        "sha256": "c5d48026fc64fdb6cd423bf5e4b2bbc2d0d8a49758e52c729ca495c883ab46f3",
+        "bytes": 12995
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/candidate.lean",
+        "sha256": "99adc3690de755e1732ec537d60f59a1a5d1f1852c4a3ebf484c94887e67e7b2",
+        "bytes": 13137
+      },
+      "complete_headers": 40,
+      "complete_definitions_abbrevs_structures": 18,
+      "changed_proof_bodies": [
+        "approximant_eq_product",
+        "logPolynomial_abs_bound",
+        "transformedKernel_polynomial_error",
+        "integral_approximant",
+        "centerQ_cast",
+        "radiusQ_cast",
+        "originalFirstIntegral_Q80_polynomial_enclosure"
+      ],
+      "inventory": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/FULL_HEADERS_AND_DEFINITIONS.json",
+        "sha256": "b6795ff2dafcf01674304fc42b51c1381eeec4cc25bf55e1193b0c1052b5ce6b",
+        "bytes": 25940
+      },
+      "actual_failure_slice": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/actual-failure.log",
+        "sha256": "014d75f5021e1eab93f0b4ee62aa37c6388bfd4c8bc3ddc4f2b886ddbe9715bf",
+        "bytes": 4572
+      },
+      "fixes": [
+        {
+          "theorem": "approximant_eq_product",
+          "root_cause": "sum_mul/mul_sum simplification exposes RHS sums in reverse outer order",
+          "repair": "Apply existing Finset.sum_comm only to RHS, then retain original termwise degree/pow/ring proof."
+        },
+        {
+          "theorem": [
+            "logPolynomial_abs_bound",
+            "transformedKernel_polynomial_error"
+          ],
+          "root_cause": "abs_add unknown under pinned imported API",
+          "repair": "Use existing abs_add_le triangle inequality with exactly the original two operands."
+        },
+        {
+          "theorem": "integral_approximant",
+          "root_cause": "integral_pow is declared in root namespace after end intervalIntegral",
+          "repair": "Resolve existing integral_pow; same original monomial exponent and integrability premises."
+        },
+        {
+          "theorem": [
+            "centerQ_cast",
+            "radiusQ_cast"
+          ],
+          "root_cause": "ring leaves explicit True ∨ ... residual from normalized multiplicative equality",
+          "repair": "Use non-closing ring_nf then simp to discharge tautological proposition; same exact rational functions and prefactor."
+        },
+        {
+          "theorem": "originalFirstIntegral_Q80_polynomial_enclosure",
+          "root_cause": "exact_mod_cast leaves untransported rational radius inequality",
+          "repair": "Transport original rational inequality via Rat.cast_le then normalize only cast of division/one/power/numeral."
+        }
+      ],
+      "mathematical_scope": "Same complete original first integral: theta=299/500, rho=19/96, translated whole interval [0,51/2375], signed log Taylor polynomial, finite geometric reciprocal, rational center and radius, order16 radius<=2^(-80). No numerical endpoint or selected U1 frozen-decimal comparison is added.",
+      "original_contract_boundary": "Original OPEN GAP comments are retained byte for byte: finite center not numerically evaluated/compared with selected U1 payload, no original hUpper or endpoint assertion follows. This pre-existing endpoint gap is not a proof gap in these unchanged enclosure declarations.",
+      "classification": "PROOF_ONLY_CURRENT_API_AND_EXPRESSION_REDUCTION",
+      "substantive_mathematical_gap_identified_in_unchanged_declarations": false,
+      "header_definition_import_or_data_changes": false,
+      "status": "UNCOMPILED_STATIC_CANDIDATE"
+    },
+    {
+      "module": "ImbalancedChen.Entry3NewFifthTypedOwners",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/Entry3NewFifthTypedOwners/baseline.lean",
+        "sha256": "92eb5db892ca9d723cbd20f8138407dedbbf52f2fa66c3fb0c53722647e16cbb",
+        "bytes": 6158
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/Entry3NewFifthTypedOwners/candidate.lean",
+        "sha256": "03e41f908653ee91c1a4f03a8b82dece3c5dd75702c66581761303247d15b437",
+        "bytes": 6356
+      },
+      "complete_headers": 13,
+      "complete_definitions_abbrevs_structures": 9,
+      "changed_proof_bodies": [
+        "fine_box_subset_parent",
+        "indexBox_owner_unique"
+      ],
+      "inventory": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/Entry3NewFifthTypedOwners/FULL_HEADERS_AND_DEFINITIONS.json",
+        "sha256": "7465badbfb82cce60cc2e1a1462de8b68aa3a2ff68773427b2207400313847f9",
+        "bytes": 12425
+      },
+      "actual_failure_slice": {
+        "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/Entry3NewFifthTypedOwners/actual-failure.log",
+        "sha256": "8c61e7be7187bdcb8ab614f060f17ef72ff38ad66eb38243b5884f9f7696cf74",
+        "bytes": 2879
+      },
+      "fixes": [
+        {
+          "theorem": [
+            "fine_box_subset_parent",
+            "indexBox_owner_unique"
+          ],
+          "root_cause": "div_le_iff₀/lt_div_iff₀ return t*grid while original local annotations expect grid*t",
+          "repair": "Six exact old evidence terms wrapped in simpa only[mul_comm]. Original local k:=lower i remains definitionally equal, all arithmetic and strict half-open faces retained."
+        }
+      ],
+      "mathematical_scope": "Same five-coordinate half-open owner, grid800 children and grid400 parent via coordinatewise Nat.div by2, unique owner at positive grid, exact original key-level ownership exclusions and both literal saved-row examples including masks/gaps/ratio numerators/denominators/Q80 floors.",
+      "original_contract_boundary": "No complete row-array import, 47block certificate replay, universal owner key-exclusion proof, numerical integral or Q80-floor-to-gain assertion is supplied or assumed; original limited geometry/data contract and source comments are retained.",
+      "classification": "PROOF_ONLY_CURRENT_API_AND_EXPRESSION_REDUCTION",
+      "substantive_mathematical_gap_identified_in_unchanged_declarations": false,
+      "header_definition_import_or_data_changes": false,
+      "status": "UNCOMPILED_STATIC_CANDIDATE"
+    }
+  ],
+  "history_lookup": {
+    "scope": "Held source graph/index plus narrow exact module filename all-ref git log; no global history or object scan. No different reliable repair found at these exact paths.",
+    "published_baseline_sources": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P2FirstIntegralPolynomialEnclosure.lean",
+        "blob": "62829067e5068ef7de641213e6a57fde90462b96",
+        "sha256": "c5d48026fc64fdb6cd423bf5e4b2bbc2d0d8a49758e52c729ca495c883ab46f3",
+        "identical_to_current_baseline": true
+      },
+      {
+        "commit": "e3383270bcdf1a22ce32ff379c0695f3729978cc",
+        "path": "ImbalancedChen/P2FirstIntegralPolynomialEnclosure.lean",
+        "blob": "62829067e5068ef7de641213e6a57fde90462b96",
+        "sha256": "c5d48026fc64fdb6cd423bf5e4b2bbc2d0d8a49758e52c729ca495c883ab46f3",
+        "identical_to_current_baseline": true
+      },
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "docs/source-only/20261028-paper-first/cohort03/transfer/sources/92eb5db892ca9d723cbd20f8138407dedbbf52f2fa66c3fb0c53722647e16cbb/Entry3NewFifthTypedOwners.lean",
+        "blob": "3fab623acc8121ab077f41685b81848d2920cac7",
+        "sha256": "92eb5db892ca9d723cbd20f8138407dedbbf52f2fa66c3fb0c53722647e16cbb",
+        "identical_to_current_baseline": true
+      },
+      {
+        "commit": "aa9db4862dc06239f79d0d64aee0b9a70ee77ddf",
+        "path": "docs/source-only/20261028-paper-first/cohort03/transfer/sources/92eb5db892ca9d723cbd20f8138407dedbbf52f2fa66c3fb0c53722647e16cbb/Entry3NewFifthTypedOwners.lean",
+        "blob": "3fab623acc8121ab077f41685b81848d2920cac7",
+        "sha256": "92eb5db892ca9d723cbd20f8138407dedbbf52f2fa66c3fb0c53722647e16cbb",
+        "identical_to_current_baseline": true
+      }
+    ]
+  },
+  "manuscript_pin": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_anchors": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "full_source_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "first_line": 95,
+      "last_line": 121,
+      "excerpt_sha256": "d33e8b700bf5bd9bd1bab05749eb26f46a45fa479d2b586299da17b55a4c59e0",
+      "excerpt": "All rounding used to prove an upper bound is outward, and all rounding\r\nused to prove a lower bound is inward.  More explicitly, at denominator\r\n$\\mathsf Q=2^{b_{\\rm fp}}$ a rational interval $[x,y]$ is represented by\r\n$[\\lfloor \\mathsf Q x\\rfloor,\\lceil \\mathsf Q y\\rceil]$.  Addition and subtraction\r\nare exact at the integer level.  For multiplication the four endpoint\r\nproducts are enclosed by their minimum and maximum and rounded in the\r\nindicated directions after division by $\\mathsf Q$.  Division is performed\r\nonly after verifying that the denominator interval is positive.\r\n\r\nFor logarithms put $z=(x-1)/(x+1)$.  If $1\\le x\\le2$, then\r\n\\begin{equation}\r\n 2\\sum_{j=0}^{n-1}\\frac{z^{2j+1}}{2j+1}\r\n \\le\\log x\\le\r\n 2\\sum_{j=0}^{n-1}\\frac{z^{2j+1}}{2j+1}\r\n +\\frac{2z^{2n+1}}{(2n+1)(1-z^2)}.\r\n \\label{num:log-enclosure}\r\n\\end{equation}\r\nThis follows by summing the positive power series for\r\n$2\\operatorname{arctanh}z$ and bounding the remaining denominators\r\nbelow by $2n+1$.  For $n=96$ the remainder is at most\r\n$9/(4\\cdot193\\cdot3^{193})$.  Range reduction and a separate\r\nenclosure of $\\log2$ extend the formula to every positive rational\r\nargument used here.  The paired-cell calculation uses denominator\r\n$2^{224}$ for the series and denominator $2^{160}$ for its returned\r\nintervals.  Thus no floating-point evaluation of a logarithm determines\r\nthe direction of an inequality.\r\n\r\n",
+      "purpose": "Directed exact rational log enclosure and geometric remainder, avoiding numerical endpoint assumptions."
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "full_source_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "first_line": 225,
+      "last_line": 233,
+      "excerpt_sha256": "70784286859e5cf221527e760a221386f87a6b6c52e32ab28da36990ffe7e492",
+      "excerpt": "\\end{equation}\r\nHere the ordered $x,y$ integral is\r\n$\\tfrac12\\log^2(\\rho_0/z)$, and the remaining integral\r\nover $0<z<\\delta$ is elementary.  In particular the\r\nlogarithmic singularity at $z=0$ is integrated rather\r\nthan discarded.  The first integral is\r\nenclosed by a positive series with its geometric remainder.\r\nThe compact third integral is covered by a disjoint partition,\r\nincluding conservative bounds on its boundary boxes.\r\n",
+      "purpose": "Complete first integral enclosed by positive series with geometric remainder; original series supplier used by polynomial continuation."
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "full_source_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "first_line": 247,
+      "last_line": 285,
+      "excerpt_sha256": "d7190c12de8f8bbadf3277d3be2e4154e4ec5e6e18c07ef083b179499e1f7c46",
+      "excerpt": "$j$ & Saving & $m_j$\\\\\r\n\\midrule\r\n\\endfirsthead\r\n\\toprule $j$ & Saving & $m_j$\\\\\\midrule\r\n\\endhead\r\n1 & Fourth-rank cap replacement & 3507783546602\\\\\r\n2 & Fifth-rank parent subdivision & 1005163763573\\\\\r\n3 & Disjoint fifth-rank region & 136378695993\\\\\r\n4 & Sixth-rank cap replacement & 96281257455\\\\\r\n5 & Second-rank fallback above $\\mu_0$ & 4209783419\\\\\r\n6 & Third-rank fallback above $\\mu_0$ & 3908979560\\\\\r\n7 & Sixth-rank logarithmic moments & 1525398138\\\\\r\n8 & Sixth-rank descending region & 187855687\\\\\r\n9 & Sixth-rank ascending cap difference & 387157212\\\\\r\n10 & Sixth-rank descending cap difference & 236377744\\\\\r\n11 & Sixth-rank clipped lower window & 846201484\\\\\r\n12 & Sixth-rank descending lower window & 500857555\\\\\r\n13 & Sixth-rank local cap corrections & 50721206\\\\\r\n14 & Sixth-rank nonsingleton regions & 11743733\\\\\r\n15 & Eighth-rank radial bound & 94105689\\\\\r\n16 & Eighth-rank ascending regions & 1543640141\\\\\r\n17 & Eighth-rank descending regions & 590010094\\\\\r\n18 & Eighth-rank unequal-parent moments & 1304343681\\\\\r\n19 & Eighth-rank third-coordinate moments & 357686854\\\\\r\n20 & Eighth-rank prefix-dependent moments & 37235787\\\\\r\n21 & Eighth-rank curvature increment & 97705\\\\\r\n22 & Eighth-rank mixed increment & 607514\\\\\r\n\\bottomrule\r\n\\end{longtable}\r\n\r\nThe upper enclosures use $3699127$ fourth-rank boxes,\r\n$292633$ fifth-rank parents subdivided into $18728512$ children,\r\n$1763420$ boxes in the disjoint fifth-rank region, and $632104$\r\nsixth-rank cubes. The eighth-rank regions have disjoint families\r\nof sizes $30$, $15$, $13$, and $29$. Across ranks the cap\r\ndifferences telescope. On a parent region take the maximum of its\r\nvalid saving bounds, comparing its own bound with the complete\r\nchild sum.\r\n\r\n",
+      "purpose": "Original disjoint fifth saving and coarse/fine parent-versus-child ownership; no full row replay performed here."
+    }
+  ],
+  "pinned_api_source_bindings": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Integrals/Basic.lean",
+      "sha256": "58a81e8137bddf5cc43ae28f08ffa75ea3aa086e607cf70e70f70c3c8e935e81"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Order.lean",
+      "sha256": "2df1dcb5ad5bcac62adc9def0ffe5f8fc4da13f1c8f1dc89c0ff84bc41253cb8"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/CharZero.lean",
+      "sha256": "39c30fd995f1c9f0b8e74b8d494ee14295763c6d290c46b81af97a15d6bc3764"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Lemmas.lean",
+      "sha256": "58f8f967f66d5c1ed48a5231b7112247bb12ef2af4a79343a5db0300268770f4"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/NumberTheory/Ostrowski.lean",
+      "sha256": "5d897ff051c882d7dd3232c08e31cb442ad849fafa28ec8b39464c26f4f9463a"
+    }
+  ],
+  "actual_aggregate_log_capture": {
+    "path": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "sha256": "0fdabdc39ec5d68f4cfc3bfc4da28735720b456a645c93b260b6602ab599d88d",
+    "bytes": 443615,
+    "can_still_grow": true
+  },
+  "verification_limits": {
+    "Lean_Lake_kernel_type_axiom_or_tests_run": 0,
+    "live_source_main_P6_frozen_objects_caches_modified": 0,
+    "source_candidate_not_compilation_or_kernel_success": true
+  }
+}

@@ -143,7 +143,7 @@ theorem supported_order_card_le_orderStrip_add_two_ceil {kappa width b T : ℝ} 
     rw [← himage]
     exact hlowPairs
   have hsplit : H.card + L.card = S.card :=
-    Finset.card_filter_add_card_filter_not S
+    Finset.card_filter_add_card_filter_not (s := S)
       (fun t => U ≤ ((tuplePair t).1 * (tuplePair t).2 : ℕ))
   change S.card ≤ (orderStrip kappa width (2 * N)).card + 2 * Nat.ceil U
   omega

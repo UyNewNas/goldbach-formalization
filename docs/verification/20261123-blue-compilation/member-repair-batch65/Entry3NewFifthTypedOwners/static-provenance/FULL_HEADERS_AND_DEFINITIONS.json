@@ -1,0 +1,181 @@
+{
+  "module": "ImbalancedChen.Entry3NewFifthTypedOwners",
+  "headers": [
+    {
+      "name": "BoxKey",
+      "kind": "abbrev",
+      "complete_raw_header": "abbrev BoxKey :=",
+      "sha256": "a53b833fd103ac920d310c910957918fb507fdf1e566e9b010aa90253cd05882",
+      "byte_exact": true
+    },
+    {
+      "name": "SavedRow",
+      "kind": "structure",
+      "complete_raw_header": "structure SavedRow where",
+      "sha256": "6fda115725f6644524d9a7df14a9a9ee8a2cb09e312a92f59ea7a04b05abd4a6",
+      "byte_exact": true
+    },
+    {
+      "name": "indexBox",
+      "kind": "def",
+      "complete_raw_header": "def indexBox (grid : ℕ) (lower : BoxKey) : Set (Fin 5 → ℝ) :=",
+      "sha256": "b6b46e536fe7744ff1ea55bb4b4eb4ef1e217856b2a0d620947815dcdd2f23be",
+      "byte_exact": true
+    },
+    {
+      "name": "SavedRow.owner",
+      "kind": "def",
+      "complete_raw_header": "def SavedRow.owner (r : SavedRow) : Set (Fin 5 → ℝ) :=",
+      "sha256": "390cb970e8ca69bd8f8781aab93574b5b7a307349b97dc9a7b0b5962bda3e146",
+      "byte_exact": true
+    },
+    {
+      "name": "fineParent",
+      "kind": "def",
+      "complete_raw_header": "def fineParent (lower : BoxKey) : BoxKey :=",
+      "sha256": "215f2c78bdb7dd353be66adbec5ac97411e8f0cbb1503deac03f241197e20dd6",
+      "byte_exact": true
+    },
+    {
+      "name": "fine_box_subset_parent",
+      "kind": "theorem",
+      "complete_raw_header": "theorem fine_box_subset_parent (lower : BoxKey) :\n    indexBox 800 lower ⊆ indexBox 400 (fineParent lower) :=",
+      "sha256": "580ae9c00d28231f6dd3faae99312bdf4c99388c622f33f803f59714efc3d0dd",
+      "byte_exact": true
+    },
+    {
+      "name": "indexBox_owner_unique",
+      "kind": "theorem",
+      "complete_raw_header": "theorem indexBox_owner_unique {grid : ℕ} (hgrid : 0 < grid)\n    {a b : BoxKey} {t : Fin 5 → ℝ}\n    (ha : t ∈ indexBox grid a) (hb : t ∈ indexBox grid b) : a = b :=",
+      "sha256": "30c4d4f7cbe0b1c6b5f95fac035794d7c20b683906fcdb1870fcb00a9211a95e",
+      "byte_exact": true
+    },
+    {
+      "name": "CoarseOwned",
+      "kind": "def",
+      "complete_raw_header": "def CoarseOwned (oldKeys : Finset BoxKey) (r : SavedRow) : Prop :=",
+      "sha256": "8086dd79a971fb39de4d7409c478c2d7f9828b030e4bd2fd260953d76c5b7cb5",
+      "byte_exact": true
+    },
+    {
+      "name": "FineOwned",
+      "kind": "def",
+      "complete_raw_header": "def FineOwned (oldKeys coarseKeys : Finset BoxKey) (r : SavedRow) : Prop :=",
+      "sha256": "6e9ece9c50e8af40b2946a33fc0d0e82fae90107e0fe54c30af484f58a6c2b4a",
+      "byte_exact": true
+    },
+    {
+      "name": "fine_owner_parent_and_exclusion",
+      "kind": "theorem",
+      "complete_raw_header": "theorem fine_owner_parent_and_exclusion\n    {oldKeys coarseKeys : Finset BoxKey} {r : SavedRow}\n    (hown : FineOwned oldKeys coarseKeys r)\n    {t : Fin 5 → ℝ} (ht : t ∈ r.owner) :\n    t ∈ indexBox 400 (fineParent r.lower) ∧\n      (∀ old ∈ oldKeys, t ∉ indexBox 400 old) ∧\n      (∀ coarse ∈ coarseKeys, t ∉ indexBox 400 coarse) :=",
+      "sha256": "43a3dd44c9afd7aef60932c3580ef3d51cd73fd3582f1bdf125d6a6abe3bd4a8",
+      "byte_exact": true
+    },
+    {
+      "name": "coarseBlock05First",
+      "kind": "def",
+      "complete_raw_header": "def coarseBlock05First : SavedRow :=",
+      "sha256": "942f0277842f59312f697749089210bc3800be0e26be1b6fae9a6b97920ac68f",
+      "byte_exact": true
+    },
+    {
+      "name": "fineBlock05First",
+      "kind": "def",
+      "complete_raw_header": "def fineBlock05First : SavedRow :=",
+      "sha256": "142191244adeee1a2392e383834cd1d505203266eb69ff236fd53a181a9d477c",
+      "byte_exact": true
+    },
+    {
+      "name": "sample_grids_and_parent",
+      "kind": "theorem",
+      "complete_raw_header": "theorem sample_grids_and_parent :\n    coarseBlock05First.grid = 400 ∧ fineBlock05First.grid = 800 ∧\n      fineParent fineBlock05First.lower = ![70, 68, 28, 22, 9] :=",
+      "sha256": "23bdd6cb0d9053560d328d0c975e15c151edaa563bcdee1485102732ec24f634",
+      "byte_exact": true
+    }
+  ],
+  "definitions_abbrevs_structures": [
+    {
+      "name": "BoxKey",
+      "kind": "abbrev",
+      "complete_original_definition_region": "abbrev BoxKey := Fin 5 → ℕ\n\n/-- One literal saved row plus its separate floor field.  `gap`, `ratioNum`,\nand `ratioDen` are source columns 7, 8, and 9, not inferred estimates. -/\n",
+      "sha256": "2f6c954a6ed0e5438b41e749285355642e9be0542ca5321a577de5426721bd6c",
+      "byte_exact": true
+    },
+    {
+      "name": "SavedRow",
+      "kind": "structure",
+      "complete_original_definition_region": "structure SavedRow where\n  grid : ℕ\n  lower : BoxKey\n  mask : ℕ\n  gap : ℕ\n  ratioNum : ℕ\n  ratioDen : ℕ\n  floorQ80 : ℕ\n  deriving DecidableEq\n\n/-- Exact half-open log-coordinate owner.  The strict upper faces ensure\nthat equal-grid box interiors and their boundary assignment have one key. -/\n",
+      "sha256": "c9b87fc049dc82a31032fe9bf03d7f937745bb92a166529f9df404d6c1d121cf",
+      "byte_exact": true
+    },
+    {
+      "name": "indexBox",
+      "kind": "def",
+      "complete_original_definition_region": "def indexBox (grid : ℕ) (lower : BoxKey) : Set (Fin 5 → ℝ) :=\n  {t | ∀ i, (lower i : ℝ) / grid ≤ t i ∧\n    t i < ((lower i : ℝ) + 1) / grid}\n\n",
+      "sha256": "aae262b667f3de41071e194b18eafc73281a0566e68e9fedc204d61be1f2166c",
+      "byte_exact": true
+    },
+    {
+      "name": "SavedRow.owner",
+      "kind": "def",
+      "complete_original_definition_region": "def SavedRow.owner (r : SavedRow) : Set (Fin 5 → ℝ) :=\n  indexBox r.grid r.lower\n\n",
+      "sha256": "1e05a6b9daee4fdc33ef12ef1527ccb881467978eb248c2ee03d51e030ce3fb6",
+      "byte_exact": true
+    },
+    {
+      "name": "fineParent",
+      "kind": "def",
+      "complete_original_definition_region": "def fineParent (lower : BoxKey) : BoxKey :=\n  fun i => lower i / 2\n\n/-- Any grid-800 child lies in its exact grid-400 parent.  No floating-point\nrounding or measure-zero deletion is used. -/\n",
+      "sha256": "5d13da00395eb5ae4099471f49f1ff8969d4ede49c2408de5e4bbc366e253c26",
+      "byte_exact": true
+    },
+    {
+      "name": "CoarseOwned",
+      "kind": "def",
+      "complete_original_definition_region": "def CoarseOwned (oldKeys : Finset BoxKey) (r : SavedRow) : Prop :=\n  r.grid = 400 ∧ r.lower ∉ oldKeys\n\n",
+      "sha256": "0e8be6c92ed2648bc1dc76806ae24d9b7b373323675ea7923c2ab800ab5f4242",
+      "byte_exact": true
+    },
+    {
+      "name": "FineOwned",
+      "kind": "def",
+      "complete_original_definition_region": "def FineOwned (oldKeys coarseKeys : Finset BoxKey) (r : SavedRow) : Prop :=\n  r.grid = 800 ∧ fineParent r.lower ∉ oldKeys ∧\n    fineParent r.lower ∉ coarseKeys\n\n/-- A fine row is physically inside its coarse parent box and can touch no\nold or newly selected coarse owner when the archived key exclusions are\nproved for this row. -/\n",
+      "sha256": "5336746fa6b87f6281ae2e890c20d2e4cc4dbd716cb4137ad4f8b6c7fdc22b5e",
+      "byte_exact": true
+    },
+    {
+      "name": "coarseBlock05First",
+      "kind": "def",
+      "complete_original_definition_region": "def coarseBlock05First : SavedRow :=\n  ⟨400, ![76, 67, 28, 22, 9], 18, 256, 1152, 288,\n    2092644346019902⟩\n\n/-- A literal static sample from F block 0005. -/\n",
+      "sha256": "51246d6d07ef62e3ca1207a9635e060b5e5dc200b0f94056b1ba63955185db54",
+      "byte_exact": true
+    },
+    {
+      "name": "fineBlock05First",
+      "kind": "def",
+      "complete_original_definition_region": "def fineBlock05First : SavedRow :=\n  ⟨800, ![141, 136, 57, 44, 19], 17, 256, 2416, 608,\n    37708750149112⟩\n\n",
+      "sha256": "42fb165b76eab26cbaf44195d690dcdbeb488f2380581b49f521d5128136c4a6",
+      "byte_exact": true
+    }
+  ],
+  "changed_proof_bodies": [
+    {
+      "name": "fine_box_subset_parent",
+      "before_body": " by\n  intro t ht i\n  let k : ℕ := lower i\n  have hki : 2 * (k / 2) ≤ k := by omega\n  have hkj : k + 1 ≤ 2 * (k / 2) + 2 := by omega\n  have hkiR : (2 : ℝ) * (k / 2 : ℕ) ≤ (k : ℝ) := by\n    exact_mod_cast hki\n  have hkjR : (k : ℝ) + 1 ≤ 2 * (k / 2 : ℕ) + 2 := by\n    exact_mod_cast hkj\n  have hfl : (k : ℝ) ≤ 800 * t i :=\n    (div_le_iff₀ (by norm_num : (0 : ℝ) < 800)).mp (ht i).1\n  have hfu : 800 * t i < (k : ℝ) + 1 :=\n    (lt_div_iff₀ (by norm_num : (0 : ℝ) < 800)).mp (ht i).2\n  change ((k / 2 : ℕ) : ℝ) / 400 ≤ t i ∧\n    t i < (((k / 2 : ℕ) : ℝ) + 1) / 400\n  constructor\n  · apply (div_le_iff₀ (by norm_num : (0 : ℝ) < 400)).mpr\n    nlinarith only [hkiR, hfl]\n  · apply (lt_div_iff₀ (by norm_num : (0 : ℝ) < 400)).mpr\n    nlinarith only [hkjR, hfu]\n\n/-- A point has a unique half-open index at any positive fixed grid. -/\n",
+      "after_body": " by\n  intro t ht i\n  let k : ℕ := lower i\n  have hki : 2 * (k / 2) ≤ k := by omega\n  have hkj : k + 1 ≤ 2 * (k / 2) + 2 := by omega\n  have hkiR : (2 : ℝ) * (k / 2 : ℕ) ≤ (k : ℝ) := by\n    exact_mod_cast hki\n  have hkjR : (k : ℝ) + 1 ≤ 2 * (k / 2 : ℕ) + 2 := by\n    exact_mod_cast hkj\n  have hfl : (k : ℝ) ≤ 800 * t i :=\n    by simpa only [mul_comm] using\n      (div_le_iff₀ (by norm_num : (0 : ℝ) < 800)).mp (ht i).1\n  have hfu : 800 * t i < (k : ℝ) + 1 :=\n    by simpa only [mul_comm] using\n      (lt_div_iff₀ (by norm_num : (0 : ℝ) < 800)).mp (ht i).2\n  change ((k / 2 : ℕ) : ℝ) / 400 ≤ t i ∧\n    t i < (((k / 2 : ℕ) : ℝ) + 1) / 400\n  constructor\n  · apply (div_le_iff₀ (by norm_num : (0 : ℝ) < 400)).mpr\n    nlinarith only [hkiR, hfl]\n  · apply (lt_div_iff₀ (by norm_num : (0 : ℝ) < 400)).mpr\n    nlinarith only [hkjR, hfu]\n\n/-- A point has a unique half-open index at any positive fixed grid. -/\n",
+      "before_sha256": "8386c1656de5dd062e77148fe715b3ac63754d6f1effc40e9d1275dd5c48f7be",
+      "after_sha256": "7097f655b13b31d9e7f9beb84ab5ef8f63a938558edd9c38866db195f4b67502"
+    },
+    {
+      "name": "indexBox_owner_unique",
+      "before_body": " by\n  funext i\n  have hg : (0 : ℝ) < grid := by exact_mod_cast hgrid\n  have haLo : (a i : ℝ) ≤ (grid : ℝ) * t i :=\n    (div_le_iff₀ hg).mp (ha i).1\n  have haHi : (grid : ℝ) * t i < (a i : ℝ) + 1 :=\n    (lt_div_iff₀ hg).mp (ha i).2\n  have hbLo : (b i : ℝ) ≤ (grid : ℝ) * t i :=\n    (div_le_iff₀ hg).mp (hb i).1\n  have hbHi : (grid : ℝ) * t i < (b i : ℝ) + 1 :=\n    (lt_div_iff₀ hg).mp (hb i).2\n  have hab : a i < b i + 1 := by\n    exact_mod_cast (show (a i : ℝ) < (b i : ℝ) + 1 by linarith)\n  have hba : b i < a i + 1 := by\n    exact_mod_cast (show (b i : ℝ) < (a i : ℝ) + 1 by linarith)\n  omega\n\n/-- The exact archive ownership checks are stated as key-level predicates.\nThey require an independent checked import of the old O keys and the new C\nkeys; a scalar gain or a row-count assertion cannot supply either check. -/\n",
+      "after_body": " by\n  funext i\n  have hg : (0 : ℝ) < grid := by exact_mod_cast hgrid\n  have haLo : (a i : ℝ) ≤ (grid : ℝ) * t i :=\n    by simpa only [mul_comm] using (div_le_iff₀ hg).mp (ha i).1\n  have haHi : (grid : ℝ) * t i < (a i : ℝ) + 1 :=\n    by simpa only [mul_comm] using (lt_div_iff₀ hg).mp (ha i).2\n  have hbLo : (b i : ℝ) ≤ (grid : ℝ) * t i :=\n    by simpa only [mul_comm] using (div_le_iff₀ hg).mp (hb i).1\n  have hbHi : (grid : ℝ) * t i < (b i : ℝ) + 1 :=\n    by simpa only [mul_comm] using (lt_div_iff₀ hg).mp (hb i).2\n  have hab : a i < b i + 1 := by\n    exact_mod_cast (show (a i : ℝ) < (b i : ℝ) + 1 by linarith)\n  have hba : b i < a i + 1 := by\n    exact_mod_cast (show (b i : ℝ) < (a i : ℝ) + 1 by linarith)\n  omega\n\n/-- The exact archive ownership checks are stated as key-level predicates.\nThey require an independent checked import of the old O keys and the new C\nkeys; a scalar gain or a row-count assertion cannot supply either check. -/\n",
+      "before_sha256": "5418e200c732226d93384dee0eae3334bfe6151a5787dd902a766bc84f1116bd",
+      "after_sha256": "6c42d95d2adb9f7d186aff5e27ccaf5c5ce956f5ca897e71627e372c186ffa6a"
+    }
+  ],
+  "outside_changed_proofs_byte_exact": true,
+  "outside_changed_proofs_sha256": "d60cc2aa353cf5f7e50c41128eb508a48c7dac67f38f4aaed2f3ce8ec8870029",
+  "imports_comments_data_constants_hypotheses_quantifiers_all_original": true,
+  "header_or_definition_exceptions": []
+}

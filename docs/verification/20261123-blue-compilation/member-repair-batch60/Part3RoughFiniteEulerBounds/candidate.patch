@@ -1,0 +1,20 @@
+--- baseline/ImbalancedChen/Part3RoughFiniteEulerBounds.lean
++++ candidate/ImbalancedChen/Part3RoughFiniteEulerBounds.lean
+@@ -30,7 +30,7 @@
+       rw [one_mul,Complex.norm_natCast_cpow_of_pos hp.pos,Complex.neg_re]
+     _ ≤ (p : ℝ)^(-1 : ℝ) :=
+       Real.rpow_le_rpow_of_exponent_le hp1 (by linarith)
+-    _ = _ := by simp
++    _ = _ := by simp only [Real.rpow_neg_one, one_div]
+ 
+ theorem prime_factor_bounds {q p : ℕ} (chi : DirichletCharacter ℂ q)
+     (hp : p.Prime) {s : ℂ} (hs : 1 ≤ s.re) :
+@@ -51,7 +51,7 @@
+   have hnonzero : (1-chi p*(p : ℂ)^(-s)) ≠ 0 :=
+     norm_pos_iff.mp (hdelta.trans_le hlower)
+   refine ⟨hnonzero,hlower,?_,?_⟩
+-  · exact (norm_sub_le _ _).trans (by simpa only [norm_one] using add_le_add_left htwist 1)
++  · exact (norm_sub_le _ _).trans (by simpa only [norm_one] using add_le_add (le_refl (1 : ℝ)) htwist)
+   · rw [norm_inv]
+     simpa only [one_div] using one_div_le_one_div_of_le hdelta hlower
+ 

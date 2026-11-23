@@ -36,6 +36,7 @@ theorem clampKnot_value (nums : Fin 200 → ℤ) :
     floorKnotValue nums clampKnot =
       min (floorValue nums 49) (floorValue nums 50) := by
   norm_num [floorKnotValue, clampKnot]
+  rfl
 
 /-- Every serialized atom, including singleton knots, has its literal value. -/
 theorem H248_eq_atom {s : ℝ} {b : FloorAtom} (hb : s ∈ upperAtomSet b) :
@@ -122,9 +123,9 @@ theorem continuousOn_extendedClampMinimum (ell : ℝ) (hell : 0 < ell)
     cube_subset_compactBox
   have ho : ContinuousOn (fun v => clampCoefficient / max ell (L v))
       (Set.univ.pi (fun _ : Fin 4 => Icc (417 / 5000 : ℝ) (59 / 250 : ℝ))) := by
-    exact continuousOn_const.div (continuousOn_const.max hL)
+    exact continuousOn_const.div (continuousOn_const.sup hL)
       (fun v _ => (hell.trans_le (le_max_left ell (L v))).ne')
-  exact hs.min ho
+  exact hs.inf ho
 
 theorem extended_eq_original (ell : ℝ) (L : LogFour → ℝ) (v : LogFour)
     (hw : 0 < v 3) (hlo : ell ≤ L v) (hhi : L v ≤ 2 * v 3) :
@@ -186,6 +187,7 @@ theorem tendsto_actualPrimeBox_H248_clamp_minimum {r : ℕ}
             (ordinaryKernel H248 (fun _ => L) 0 v) * ∏ j, 1 / v j := by
     apply setIntegral_congr_fun ((measurableSet_logPrimeBox _ _).inter hR)
     intro v hv
+    dsimp only
     rw [heq v hv.2]
   rw [hf, ← hint]
   exact hlim

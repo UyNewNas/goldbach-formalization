@@ -1,0 +1,34 @@
+--- baseline/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean
++++ candidate/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean
+@@ -71,7 +71,20 @@
+     evaluateCoefficients (coefficients e) t = evaluate e t := by
+   induction e with
+   | constant c => simp [coefficients, evaluateCoefficients, evaluate]
+-  | coord j => simp [coefficients, evaluateCoefficients, evaluate, Fin.succ_inj]
++  | coord j =>
++      have hz : (0 : Fin 9) ≠ j.succ := by
++        intro heq
++        have hval := congrArg Fin.val heq
++        change 0 = j.val + 1 at hval
++        omega
++      simp only [coefficients, evaluateCoefficients, evaluate]
++      rw [if_neg hz]
++      simp only [Rat.cast_zero, zero_add]
++      rw [Finset.sum_eq_single_of_mem j (Finset.mem_univ j)]
++      · simp
++      · intro k _ hkj
++        have hsucc : k.succ ≠ j.succ := fun heq => hkj (Fin.succ_inj.mp heq)
++        simp only [if_neg hsucc, Rat.cast_zero, zero_mul]
+   | add a b ha hb =>
+       rw [coefficients, evaluateCoefficients_add, ha, hb]
+       rfl
+@@ -323,7 +336,8 @@
+ set_option maxRecDepth 100000 in
+ set_option maxHeartbeats 0 in
+ theorem literal_coefficients_match : ∀ (i : Fin 15) (r : Fin 96) (k : Fin 9),
+-    exportedCoefficients i r k = coefficients (semanticExpr i r) k := by decide
++    exportedCoefficients i r k = coefficients (semanticExpr i r) k := by
++  decide +kernel
+ 
+ def semanticSlack (i : Fin 15) (r : Fin 96) (t : Fin 8 → ℝ) : ℝ :=
+   evaluate (semanticExpr i r) t

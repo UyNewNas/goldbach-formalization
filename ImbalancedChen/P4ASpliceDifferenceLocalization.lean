@@ -3,7 +3,7 @@ import ImbalancedChen.FirstExitDepthSplice
 import ImbalancedChen.ActualExtendedThirdCompactUpperRho
 
 /-!
-SOURCEONLY / UNCOMPILED. Agreement through selected rank k gives equality
+Compilation records: docs/verification/20261123-blue-compilation. Agreement through selected rank k gives equality
 of all terminal leaves of selected length at most k. The original rough
 carrier is duplicate-free and prime, so the selected length of a retained
 leaf is exactly the number of distinct prime factors of its modulus.
@@ -73,7 +73,7 @@ theorem shallow_leaf_mem_iff {α : Type*} (k : ℕ)
             (!positive) (mass * weight p) leaf hleaf).trans hlen)
         by_cases hr₁ : policy₁ (!positive) (p :: pre) = true <;>
           by_cases hr₂ : policy₂ (!positive) (p :: pre) = true <;>
-          simp only [firstExitRetainedLeaves, hr₁, hr₂, if_true, if_false,
+          simp only [firstExitRetainedLeaves, hr₁, hr₂, Bool.false_eq_true, if_true, if_false,
             List.mem_append, List.not_mem_nil, hnot₁, hnot₂, or_false, List.append_nil] <;>
           exact ih pre positive mass
 
@@ -150,7 +150,8 @@ theorem shallow_coefficient_eq (k : ℕ)
     fixedRoughCoefficient retainOdd₁ N cap w z d =
       fixedRoughCoefficient retainOdd₂ N cap w z d := by
   have hmem := shallow_support_mem_iff k retainOdd₁ retainOdd₂ hagree N cap w z d hcard
-  rw [coefficient_eq_moebius_indicator, coefficient_eq_moebius_indicator, hmem]
+  rw [coefficient_eq_moebius_indicator, coefficient_eq_moebius_indicator]
+  exact ite_cond_congr (propext hmem)
 
 /-- Every modulus in the exact compiler charge comes from a descendant
 strictly after the common depth. -/

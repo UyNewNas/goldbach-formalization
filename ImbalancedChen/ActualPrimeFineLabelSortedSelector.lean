@@ -63,7 +63,8 @@ theorem actualPrimeFineLabelBlocks_sort {N : ℕ} (hN : 1 ≤ N)
       intro _horder ps hps
       have hnil : ps = [] := by simpa [actualPrimeLabelBlocksWord, actualPrimeSlotBox] using hps
       subst ps
-      exact ⟨[], by simp [actualPrimeLabelBlocksWord, actualPrimeSlotBox], List.Perm.refl _, by simp⟩
+      exact ⟨[], by simp [actualPrimeLabelBlocksWord, actualPrimeSlotBox],
+        List.Perm.refl _, List.Pairwise.sortedGE List.Pairwise.nil⟩
   | cons b blocks ih =>
       rcases b with ⟨i, m⟩
       intro horder ps hps

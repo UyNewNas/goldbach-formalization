@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_canonical_accepts_only_late_stdout_and_preserves_other_record (__main__.PublisherGate.test_canonical_accepts_only_late_stdout_and_preserves_other_record)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/p1-complete-proof/finalizer-publication-support/test_finalizer_gate.py", line 27, in test_canonical_accepts_only_late_stdout_and_preserves_other_record
+    files,exception=self.run_gate();self.assertEqual(files,[rec(self.p,'finalizer.log'),self.manifest['files'][1]]);self.assertEqual(exception['original_manifest_entry'],self.empty);self.assertEqual(exception['actual_finalizer_log'],rec(self.p,'finalizer.log'))
+                    ~~~~~~~~~~~~~^^
+  File "/workspace/p1-complete-proof/finalizer-publication-support/test_finalizer_gate.py", line 18, in run_gate
+    fn=ns.get('prepare_publication_files');self.assertTrue(callable(fn),'strict importable finalizer gate not implemented');before={str(p.relative_to(self.p)):p.read_bytes()for p in self.p.rglob('*')if p.is_file()};m=copy.deepcopy(self.manifest)
+                                           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : strict importable finalizer gate not implemented
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=1)

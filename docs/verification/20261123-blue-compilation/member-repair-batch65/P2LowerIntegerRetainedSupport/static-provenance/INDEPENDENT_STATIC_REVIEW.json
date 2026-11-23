@@ -1,0 +1,396 @@
+{
+  "schema": "four_existing_candidate_nonauthor_static_review_v1",
+  "reviewer": "/root/blue_inventory",
+  "reviewed_utc": "2026-11-23T19:15:51.804136+00:00",
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_REQUIRES_OWNER_LEAN_VALIDATION",
+  "findings": [],
+  "reviewed_original_metadata": [
+    {
+      "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/STATIC_CANDIDATES.json",
+      "sha256": "193164b402644b8e72c2186bf5ba2a9f0dd1b5aabaa542ad3fa534b2c88b4662",
+      "bytes": 7346
+    },
+    {
+      "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/CANDIDATE_FILES.json",
+      "sha256": "36b68c05b2b96e03386690235bd60425ff0d906f0faa16868d576f37d814cd97",
+      "bytes": 2629
+    },
+    {
+      "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/MANUSCRIPT_SCOPE_ADDENDUM.json",
+      "sha256": "2d2e2052b2213d21498583075bed8f8ca3a0253a7f341532894d8ab16cef0513",
+      "bytes": 8216
+    },
+    {
+      "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/ADDENDUM_FILES.json",
+      "sha256": "0abab1931a0023c72cdeb2ad7cccb6d2e2526d782e7f4328edeed0ef9c0f36b1",
+      "bytes": 279
+    }
+  ],
+  "original_manifest_entries_rehashed": 14,
+  "original_manifest_entries_all_match": true,
+  "modules": [
+    {
+      "module": "ImbalancedChen.P2LowerIntegerRetainedSupport",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerIntegerRetainedSupport/baseline.lean",
+        "sha256": "bc52ccd3b9071d72385c41bbeb0139b908201b46c7d88f99d52198ae6a4d2ad8",
+        "bytes": 7445
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerIntegerRetainedSupport/candidate.lean",
+        "sha256": "b3f56ae58f1aec98dd98f564c057fe908ff845348ff2d153a94d991d3cac640f",
+        "bytes": 7473
+      },
+      "inventory": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerIntegerRetainedSupport/FULL_HEADERS_AND_DEFINITIONS.json",
+        "sha256": "134e48b0945860a0950c134de7d28824631aa0dc223e0145724862d27e960d79",
+        "bytes": 10279
+      },
+      "literal_complete_headers": [
+        {
+          "name": "parity",
+          "kind": "theorem",
+          "complete_original_header": "private theorem parity (pre : List ℕ) : evenListLength pre=decide (Even pre.length) :=",
+          "sha256": "56798ab4269d0c2c182f4a548f33bcfb3f90dfc6b722e478f8db4f8184037f74",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "run_accepted_incoming",
+          "kind": "theorem",
+          "complete_original_header": "theorem run_accepted_incoming {depth m : ℕ} (P : CapPlan depth m)\n    (a b : ℝ) (H : Trace) (xs : List ℝ) (h : (run P a b H xs).accepted=true) :\n    H.accepted=true :=",
+          "sha256": "1edcd15c1b3bb81638d5873b9b0fb5dc02a22117032e50813fa5db46455be493",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "retainEven_of_newer",
+          "kind": "theorem",
+          "complete_original_header": "theorem retainEven_of_newer {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N : ℕ) (newer older : List ℕ)\n    (h : retainEven P a b seedCap N (newer++older)=true) :\n    retainEven P a b seedCap N older=true :=",
+          "sha256": "8d2f4e0071d80aeb896a90ef126a9099e608534a73b295da4d6ecf0d612d3b1b",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "next_policy_iff_trace",
+          "kind": "theorem",
+          "complete_original_header": "private theorem next_policy_iff_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N p : ℕ) (pre : List ℕ)\n    (hpre : retainEven P a b seedCap N pre=true) (hsquare : 2*coordinate N p<seedCap) :\n    evenFirstExitPolicy (retainEven P a b seedCap N) (!(evenListLength pre)) (p::pre)=true ↔\n      retainEven P a b seedCap N (p::pre)=true :=",
+          "sha256": "880cdcc37105cb77b90db17910d967565ab170d5fd912ba1d250e496e9e86d4a",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "validSelection_iff_computed_trace",
+          "kind": "theorem",
+          "complete_original_header": "theorem validSelection_iff_computed_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) (N : ℕ) (chosen : List ℕ) :\n    ∀pre : List ℕ,retainEven P a b seedCap N pre=true →\n      (∀p∈chosen,2*coordinate N p<seedCap) →\n      (FirstExitValidSelection (evenFirstExitPolicy (retainEven P a b seedCap N))\n        pre (evenListLength pre) chosen ↔\n        retainEven P a b seedCap N (chosen.reverse++pre)=true) :=",
+          "sha256": "908949e7b5276d87ab1898a25367234ba6d26478795279a8460a46044a81e50e",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "actual_prime_initial_square",
+          "kind": "theorem",
+          "complete_original_header": "theorem actual_prime_initial_square {N cap p : ℕ} (hN : 1<(N:ℝ))\n    (z0 w seedCap : ℝ) (hmargin : 2*w<seedCap)\n    (hp : p∈roughPrimeUniverse N cap z0 ((N:ℝ)^w)) : 2*coordinate N p<seedCap :=",
+          "sha256": "99d65ee8b5835345e35596df2fde6f28cc5b60972bbfe9331ff776eebe4ef6fb",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "raw_support_iff_actual_trace",
+          "kind": "theorem",
+          "complete_original_header": "theorem raw_support_iff_actual_trace {depth m : ℕ} (P : CapPlan depth m)\n    (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)\n    (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :\n    d∈fixedEvenRoughSupport (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) ↔\n      ∃chosen : List ℕ,chosen <+ roughPrimeUniverse N cap z0 ((N:ℝ)^w) ∧\n        retainEven P a b seedCap N chosen.reverse=true ∧ chosen.prod=d :=",
+          "sha256": "07aca0235e2e620f75bcadefe9e097ef0e165e44170d14178faea8063e142504",
+          "post_equal_after_only_registered_lexical_normalization": true
+        }
+      ],
+      "header_count": 7,
+      "complete_definition_count": 0,
+      "all_definition_regions_independently_exact_after_only_registered_lexical_normalization": true,
+      "changed_proofs": [
+        "next_policy_iff_trace",
+        "validSelection_iff_computed_trace"
+      ],
+      "outside_registered_proofs_and_explicit_lexical_exceptions_byte_exact": true,
+      "outside_proof_normalized_skeleton_sha256": "bc436bc52fb2156ce735d37de945e52b72213138afa103798b77512eec991ee4",
+      "actual_failure_slice": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerIntegerRetainedSupport/actual-failure.log",
+        "sha256": "12580e5dd5d532aafb5593acb4d03d7c8cbcbab90b3fdb53a185df9727ee9f5a",
+        "bytes": 3041
+      },
+      "failure_slice_is_contiguous_original_log_bytes": true,
+      "classification": "Restores only the scoped List.Sublist notation on raw_support_iff_actual_trace, and proof-local existing List/ite APIs. Original header source text, imported CapPlan, physical rough carrier, initial-square margin, parity and actual constructive trace equivalence stay unchanged.",
+      "limits": [
+        "Old raw_support_iff_actual_trace did not parse; no old/new elaborated-type or kernel-value equivalence is claimed.",
+        "This remains a generic CapPlan supplier; it does not instantiate an adopted original bank or prove rounding-error smallness."
+      ]
+    },
+    {
+      "module": "ImbalancedChen.P2LowerFiniteCellRounding",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerFiniteCellRounding/baseline.lean",
+        "sha256": "542d0c1101a79ebcd77cf19678e6a41e1a9bab22410965f0a746c5a29142032a",
+        "bytes": 8671
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerFiniteCellRounding/candidate.lean",
+        "sha256": "2dc5c7dd1cc54c905c5d22875ab86c2bcc5137d5c6a92215da92d7d4b2465d97",
+        "bytes": 8737
+      },
+      "inventory": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerFiniteCellRounding/FULL_HEADERS_AND_DEFINITIONS.json",
+        "sha256": "f838ce64e51c248c0f26e927c1db2513f67d8a047626aa7dc3383e89075dc46c",
+        "bytes": 15120
+      },
+      "literal_complete_headers": [
+        {
+          "name": "roughProduct",
+          "kind": "def",
+          "complete_original_header": "def roughProduct (N cap : ℕ) (w z : ℝ) : ℕ :=",
+          "sha256": "df961cbfec19a2476d308cda4ed84177052e667f0c4170f26c93ece50de43049",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "universe",
+          "kind": "def",
+          "complete_original_header": "def universe (N cap : ℕ) (w z : ℝ) : Finset ℕ :=",
+          "sha256": "9fecfa231ccf9a1910c04d9ce9fc4ffe773a68147fc2c8dc2d9694ece9f39407",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "rawSupport",
+          "kind": "def",
+          "complete_original_header": "def rawSupport (retainEven : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset ℕ :=",
+          "sha256": "b80e42398262e6364c61827729e99e4b7adccab017fc4a0460eb4ab4e0c55fc3",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "raw",
+          "kind": "def",
+          "complete_original_header": "def raw (retainEven : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) : ℝ :=",
+          "sha256": "b0ba624d851cd9e5f888e62d8eeec88097fa096aa888ed16ab391b3845251dc6",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "primeLabel",
+          "kind": "def",
+          "complete_original_header": "def primeLabel (N : ℕ) (tau : ℝ) (p : ℕ) : ℤ :=",
+          "sha256": "e86debaab084bbf575ff31383dbf2ff5f63de0b58ae3d13c4d34f92fc018db45",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "label",
+          "kind": "def",
+          "complete_original_header": "def label (N : ℕ) (tau : ℝ) (d : ℕ) : List ℤ :=",
+          "sha256": "8a37feb40efc3726cbba0b7e921b4d8c9aa90f46cd18572016a1c1502ecb41d3",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "cell",
+          "kind": "def",
+          "complete_original_header": "def cell (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Finset ℕ :=",
+          "sha256": "f3bd6624189f44a6072fbb3bed9378cc74f69351bf1531312ecdb3ed3408a9f5",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "inner",
+          "kind": "def",
+          "complete_original_header": "def inner (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+          "sha256": "0c1318d0f3532565d46902200f3ca70cbff978d91856f1ee4fc5baa3cc9ca20b",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "outer",
+          "kind": "def",
+          "complete_original_header": "def outer (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+          "sha256": "d097881cfa791a39af03413151951242540dfa0d9889da3090ee7aef4aac762a",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "coefficient",
+          "kind": "def",
+          "complete_original_header": "def coefficient (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : ℝ :=",
+          "sha256": "2488123e8045a83a41df6015a26e0d17faa36e1e8f69f64b33330faf22582491",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "roughProduct_squarefree",
+          "kind": "theorem",
+          "complete_original_header": "theorem roughProduct_squarefree (N cap : ℕ) (w z : ℝ) :\n    Squarefree (roughProduct N cap w z) :=",
+          "sha256": "8650dbb64cd4a04c6d743f0b8e64d9839bafd610b584608b86afa8877f2857f9",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "universe_squarefree",
+          "kind": "theorem",
+          "complete_original_header": "theorem universe_squarefree (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d∈universe N cap w z) : Squarefree d :=",
+          "sha256": "76bf92c76e38a398113a0a926d6e2181f2f948244238455b24fc3b7ff289b32e",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "universe_rough",
+          "kind": "theorem",
+          "complete_original_header": "theorem universe_rough (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d∈universe N cap w z) : RoughPrimeSupportedAt w d :=",
+          "sha256": "2e96ce54548527a50c64fcb1dfe6c623afa79518d1000da0924975be40d6be18",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "rawSupport_subset_universe",
+          "kind": "theorem",
+          "complete_original_header": "theorem rawSupport_subset_universe (retainEven : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : rawSupport retainEven N cap w z ⊆ universe N cap w z :=",
+          "sha256": "90a0376119f0b1bf9915934b04814f8b9c5ab5eb60a2cd7f4bc5939655459da0",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "raw_value",
+          "kind": "theorem",
+          "complete_original_header": "theorem raw_value (retainEven : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    raw retainEven N cap w z d=\n      if d∈rawSupport retainEven N cap w z then (ArithmeticFunction.moebius d:ℝ) else 0 :=",
+          "sha256": "b4b6757220f135b575bf19913e21ae47a4041ecc08a1ee0a8ccd742f0b2171cc",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "self_mem_cell",
+          "kind": "theorem",
+          "complete_original_header": "theorem self_mem_cell (N cap : ℕ) (w z tau : ℝ) {d : ℕ}\n    (hd : d∈universe N cap w z) : d∈cell N cap w z tau d :=",
+          "sha256": "801bd19822fdf10d27c1e22806ff74a91adf718ed677da9d2ad0bf42084f1fe9",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "primeLabel_halfopen",
+          "kind": "theorem",
+          "complete_original_header": "theorem primeLabel_halfopen (N : ℕ) {tau : ℝ} (htau : 0<tau) (p : ℕ) :\n    (primeLabel N tau p:ℝ)*tau≤Real.log (p:ℝ)/Real.log N ∧\n      Real.log (p:ℝ)/Real.log N<((primeLabel N tau p:ℝ)+1)*tau :=",
+          "sha256": "2dbab85a86cc41bb73a1079e57ba94631081d1ae47342cf201c441cb0792dd9e",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "cells_disjoint",
+          "kind": "theorem",
+          "complete_original_header": "theorem cells_disjoint (N cap : ℕ) (w z tau : ℝ) {d e : ℕ}\n    (h : label N tau d≠label N tau e) :\n    Disjoint (cell N cap w z tau d) (cell N cap w z tau e) :=",
+          "sha256": "9af71c5806dbdb482d59efe71e5e7f5c158d37df0984dd0d81ebed119d28f896",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "coefficient_le_raw",
+          "kind": "theorem",
+          "complete_original_header": "theorem coefficient_le_raw (retainEven : List ℕ → Bool) (N cap : ℕ)\n    (w z tau : ℝ) (d : ℕ) : coefficient retainEven N cap w z tau d≤raw retainEven N cap w z d :=",
+          "sha256": "bc374719028eed24a8e75ec73c0a31e84af02620628c400cc72e42a5b8c22718",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "coefficient_abs_le_one",
+          "kind": "theorem",
+          "complete_original_header": "theorem coefficient_abs_le_one (retainEven : List ℕ → Bool) (N cap : ℕ)\n    (w z tau : ℝ) (d : ℕ) : |coefficient retainEven N cap w z tau d|≤1 :=",
+          "sha256": "6cf42bd4f4301edcb73e19f7cf010b6dcba7362e791e0381e0f98a546dd834fc",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "roundingLoss",
+          "kind": "def",
+          "complete_original_header": "def roundingLoss (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) : ℝ :=",
+          "sha256": "526ff4fdf34321b4df0e735b41ea872da1bd04af765f8856ec19b94de9bb043f",
+          "post_equal_after_only_registered_lexical_normalization": true
+        },
+        {
+          "name": "roundingLoss_exact",
+          "kind": "theorem",
+          "complete_original_header": "theorem roundingLoss_exact (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau : ℝ) :\n    reciprocalTotientDensity (universe N cap w z) (raw retainEven N cap w z)-\n      reciprocalTotientDensity (universe N cap w z) (coefficient retainEven N cap w z tau)=\n        roundingLoss retainEven N cap w z tau :=",
+          "sha256": "4e31e309474190e0f7efac78bf82ae582a50b79d7152a9fc43b326afaad58002",
+          "post_equal_after_only_registered_lexical_normalization": true
+        }
+      ],
+      "header_count": 22,
+      "complete_definition_count": 11,
+      "all_definition_regions_independently_exact_after_only_registered_lexical_normalization": true,
+      "changed_proofs": [
+        "raw_value"
+      ],
+      "outside_registered_proofs_and_explicit_lexical_exceptions_byte_exact": true,
+      "outside_proof_normalized_skeleton_sha256": "86f24003f1cefab2cbce61145bd3aa4813217278c582243b06918a17b50b9afb",
+      "actual_failure_slice": {
+        "path": "/workspace/p1-complete-proof/static-lower-retained-rounding/P2LowerFiniteCellRounding/actual-failure.log",
+        "sha256": "8c28461adf56a2f0aebff0ab282bab30ec7a6136764840fd6d9c22f153a2c1c6",
+        "bytes": 12593
+      },
+      "failure_slice_is_contiguous_original_log_bytes": true,
+      "classification": "Quotes only the reserved universe token as «universe», the same intended Lean identifier, while retaining the original module-owned roughProduct and universe bodies/imports/order. raw_value only normalizes Int.cast_zero. Original ALL/ANY construction and exact signed density loss are preserved.",
+      "limits": [
+        "Old reserved-token declarations/references did not parse; no original accepted kernel value is claimed.",
+        "Published ResidualUniverseCore migration is not adopted.",
+        "No quantitative rounding-loss smallness, physical density or final count bound is supplied."
+      ]
+    }
+  ],
+  "original_master_log_prefix": {
+    "path": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "bytes": 443615,
+    "sha256": "0fdabdc39ec5d68f4cfc3bfc4da28735720b456a645c93b260b6602ab599d88d",
+    "may_still_grow": true
+  },
+  "original_master_log_prefix_and_each_failure_slice_verified": true,
+  "pinned_API_files_rehashed": [
+    {
+      "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Lemmas.lean",
+      "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac",
+      "bytes": 152635
+    },
+    {
+      "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Basic.lean",
+      "sha256": "6fe2c8b4db30895cfc240e96d49119a8fb9997c6074e294ba62352a7f9adba72",
+      "bytes": 87020
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2LowerCapPlanIntegerRetention.lean",
+      "sha256": "d1bc3b6d0a59947c65e05e533118152c72a17412b2c3b58a8d8d40e791cb6bc4",
+      "bytes": 9220
+    }
+  ],
+  "exact_published_source_bindings": [
+    {
+      "commit": "3c94ec71e13d038ae661138dac1037116615a20f",
+      "path": "verification/rebuild-20261030/UNACCEPTED-through070/ImbalancedChen/P2LowerFiniteCellRounding.lean",
+      "blob": "e1ed91dd558410342e87d17de761a71ab46b42f9",
+      "sha256": "2b273c5ba14e1b2c0a3b6712e4c580a4a8d68cd2af6bbe8fd00849afee6ed1ce",
+      "lexical_fragment_only_not_wholepost_migration": true
+    },
+    {
+      "commit": "1a4abdd81ef19be8248fcc0b2a35b2225bdc895b",
+      "path": "ImbalancedChen/P2LowerFiniteCellRounding.lean",
+      "blob": "e1ed91dd558410342e87d17de761a71ab46b42f9",
+      "sha256": "2b273c5ba14e1b2c0a3b6712e4c580a4a8d68cd2af6bbe8fd00849afee6ed1ce",
+      "lexical_fragment_only_not_wholepost_migration": true
+    }
+  ],
+  "manuscript_pin": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_anchors_independently_bound": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "lines": [
+        356,
+        390
+      ],
+      "excerpt_sha256": "5061ed13fe0c482a56165b6b41c082c6c5bf390294408d338ee9a5f6303572f1",
+      "matches_fixed_1106_git_pin": true
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "lines": [
+        445,
+        478
+      ],
+      "excerpt_sha256": "c4d5fc8b2e2ecd63042cd89f42c41fabd8b7e0777f2ed3de9e495c7c7c77560d",
+      "matches_fixed_1106_git_pin": true
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "lines": [
+        553,
+        599
+      ],
+      "excerpt_sha256": "b9b4f9c7c629cff6e5a0924a28fb02d22ab9e23e579e25dcda549420760c2cb4",
+      "matches_fixed_1106_git_pin": true
+    }
+  ],
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_calls": 0,
+    "proof_source_or_live_or_cache_edits": 0,
+    "existing_receipt_or_manifest_edits": 0,
+    "new_proofs_written": 0
+  },
+  "acceptance_boundary": "Non-author source and evidence review only. This does not claim normal/kernel/type/axiom acceptance. Exact owner validation of the frozen candidate postimages remains required."
+}

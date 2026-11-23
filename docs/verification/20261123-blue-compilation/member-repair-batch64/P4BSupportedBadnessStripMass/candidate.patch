@@ -1,0 +1,15 @@
+--- baseline/ImbalancedChen/P4BSupportedBadnessStripMass.lean
++++ candidate/ImbalancedChen/P4BSupportedBadnessStripMass.lean
+@@ -83,10 +83,8 @@
+     (b T : ℝ) (N : ℕ) (t : Fin 2 → Fin (N + 1)) :
+     physicalPairMargins b N T t 1 =
+       normalizedWall b N (tuplePair t).1 (tuplePair t).2 := by
+-  change (Real.log ((t 0).val : ℝ) / Real.log (N : ℝ) -
+-      b * (Real.log ((t 1).val : ℝ) / Real.log (N : ℝ))) =
+-    (Real.log ((t 0).val : ℝ) - b * Real.log ((t 1).val : ℝ)) / Real.log (N : ℝ)
+-  ring
++  norm_num [physicalPairMargins, physicalProductWallScale, actualPairMargins,
++    logPoint, tuplePair, normalizedWall, if_neg (by decide : (1 : Fin 4) ≠ 3)] <;> ring
+ 
+ /-- A nonpositive normalized numerator stays in the same one-sided collar
+ when the positive denominator increases from log N to log(2N). -/

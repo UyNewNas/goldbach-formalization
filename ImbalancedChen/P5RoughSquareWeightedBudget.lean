@@ -54,6 +54,7 @@ theorem positive_multiples_reciprocal_le (Q : ℕ) {d : ℕ} (hd : 0 < d) :
     simpa only [one_mul] using Nat.le_of_dvd (by omega : 0 < n) hdn
   have hinj : Set.InjOn (fun n : ℕ => n / d) (S : Set ℕ) := by
     intro a ha b hb hab
+    change a / d = b / d at hab
     have had := (mem_positiveMultiplesUpTo.mp ha).2.2
     have hbd := (mem_positiveMultiplesUpTo.mp hb).2.2
     calc
@@ -143,7 +144,7 @@ theorem rough_square_kernel_budget (Q : ℕ) {w T : ℝ} (hw : 1 < w) (hT : 0 �
     have hp := mul_le_mul_of_nonneg_left (reciprocal_totient_le_logBudget (by omega) hnQ) hT
     calc
       _ = T * (1 / (n : ℝ)) + 1 + T * (1 / (Nat.totient n : ℝ)) := by ring
-      _ ≤ T * (1 / (n : ℝ)) + 1 + T * (2 * ((1 / (n : ℝ)) * logBudget Q)) := add_le_add_left hp _
+      _ ≤ T * (1 / (n : ℝ)) + 1 + T * (2 * ((1 / (n : ℝ)) * logBudget Q)) := add_le_add (le_refl (T * (1 / (n : ℝ)) + 1)) hp
       _ = _ := by dsimp [C]; ring
   calc
     _ ≤ ∑ n ∈ roughSquareExceptions Q w, (C * (1 / (n : ℝ)) + 1) := Finset.sum_le_sum hpoint

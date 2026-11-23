@@ -69,7 +69,7 @@ private theorem finite_index_terms_le
     (R : Finset ℕ) (T a K L : ℝ)
     (hT : 0 ≤ T) (ha : 0 ≤ a) (hK : 0 ≤ K) (hL : 0 < L)
     (hR : ∀ r ∈ R, 1 ≤ r ∧ (r : ℝ) ≤ T) :
-    (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L) ≤
+    (∑ r ∈ R, (2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L)) ≤
       4 * a + (T + 1) * (6 * K / L) := by
   have hsubI : R ⊆ Icc 1 (Nat.floor T) := by
     intro r hr
@@ -91,17 +91,21 @@ private theorem finite_index_terms_le
   have hcard : (R.card : ℝ) ≤ T + 1 := by
     have hcardR : (R.card : ℝ) ≤ (Nat.floor T : ℝ) + 1 := by
       exact_mod_cast hcardNat
-    exact hcardR.trans (add_le_add_right hfloor 1)
+    exact hcardR.trans (add_le_add hfloor (le_refl 1))
   have hmain : 2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) ≤ 4 * a := by
     nlinarith [mul_le_mul_of_nonneg_left hsquares (by positivity : 0 ≤ 2 * a)]
   have herr : (R.card : ℝ) * (6 * K / L) ≤ (T + 1) * (6 * K / L) :=
     mul_le_mul_of_nonneg_right hcard (by positivity)
   calc
-    (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L) =
+    (∑ r ∈ R, (2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L)) =
         2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) +
           (R.card : ℝ) * (6 * K / L) := by
-      rw [sum_add_distrib, ← mul_sum]
-      simp only [sum_const_zero, sum_const, nsmul_eq_mul]
+      calc
+        _ = (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2) +
+            ∑ _r ∈ R, 6 * K / L :=
+          Finset.sum_add_distrib
+        _ = _ := by
+          rw [← Finset.mul_sum, Finset.sum_const, nsmul_eq_mul]
     _ ≤ 4 * a + (T + 1) * (6 * K / L) := add_le_add hmain herr
 
 /-- The original coarse-policy occupied natural indices are positive and
@@ -156,7 +160,9 @@ theorem occupied_lower_endpoint_two_of_log_scale
     nlinarith [hmult, hscale]
   have hlogtarget : Real.log (2 : ℝ) ≤
       (a / ((r : ℝ) + 1)) * Real.log (N : ℝ) := by
-    have h := (le_div_iff₀ hr1).mpr htarget
+    have h : Real.log (2 : ℝ) ≤
+        (a * Real.log (N : ℝ)) / ((r : ℝ) + 1) :=
+      (le_div_iff₀ hr1).mpr (by simpa only [mul_comm] using htarget)
     convert h using 1 <;> ring
   have hNpos : (0 : ℝ) < N := by exact_mod_cast (show 0 < N by omega)
   calc
@@ -176,7 +182,7 @@ theorem original_occupied_interval_terms_le
     (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m)
     (K : ℝ) (hK : 0 ≤ K) :
     (∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,
-      2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ)) ≤
+      (2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ))) ≤
         4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
   have hlogN : 0 < Real.log (N : ℝ) := by
     apply Real.log_pos
@@ -192,8 +198,7 @@ theorem original_occupied_interval_terms_le
       4 * a + (a * Real.log (N : ℝ) / Real.log 3 + 1) *
         (6 * K / Real.log (N : ℝ)) =
       4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
-    field_simp [hlogN.ne', hlog3.ne']
-    ring
+    field_simp [hlogN.ne', hlog3.ne'] <;> ring
   rw [hright] at h
   simpa only [div_eq_mul_inv, inv_pow] using h
 
@@ -218,11 +223,16 @@ theorem exists_original_occupied_last_prime_mass_le :
   intro e chi m omega a ha N cap hN hEven j hlow
   have hterms := original_occupied_interval_terms_le e chi m omega a ha
     N cap hN hEven j K (by linarith)
-  apply (Finset.sum_le_sum (fun r hr => ?_)).trans hterms
-  have hr1 := (occupied_reciprocal_indices_range e chi m omega a ha
-    N cap hN hEven j r hr).1
-  exact P1OriginalFourthMovingPrimeIntervalBound.weighted_last_prime_interval_le_terms
-    K (by linarith) hinterval N hN hEven a ha r hr1 (hlow r hr)
+  calc
+    _ ≤ ∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,
+        (2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ)) := by
+      apply Finset.sum_le_sum
+      intro r hr
+      have hr1 := (occupied_reciprocal_indices_range e chi m omega a ha
+        N cap hN hEven j r hr).1
+      exact P1OriginalFourthMovingPrimeIntervalBound.weighted_last_prime_interval_le_terms
+        K (by linarith) hinterval N hN hEven a ha r hr1 (hlow r hr)
+    _ ≤ _ := hterms
 
 /-- Supplier-free terminal-prime sum with the explicit eventual scale
 condition in place of a per-bin endpoint hypothesis. -/
@@ -245,6 +255,7 @@ theorem exists_original_occupied_last_prime_mass_le_of_log_scale :
     (occupied_lower_endpoint_two_of_log_scale e chi m omega a ha
       N cap hN hEven j hscale)
 
+open P1OriginalFourthSmallBinWeightedMass in
 /-- The box has three identical original `omega` to `19/96` factors and
 the one moving last-prime factor. -/
 private theorem original_bin_boxMass_eq_prefix_cube (N : ℕ) (omega a : ℝ) (r : ℕ) :
@@ -253,8 +264,7 @@ private theorem original_bin_boxMass_eq_prefix_cube (N : ℕ) (omega a : ℝ) (r
         actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))
           (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) := by
   rw [actualPrimeBoxMass_eq_prod]
-  simp [Fin.prod_univ_four, binLo, binHi]
-  ring
+  simp [Fin.prod_univ_four, binLo, binHi] <;> ring_nf <;> simp
 
 /-- The literal original-coarse Fin4 small-cell weighted first moment is
 bounded by its fixed prefix-prime mass cubed times the explicit uniform
@@ -295,7 +305,8 @@ theorem exists_original_smallCell_weighted_moment_le :
             actualPrimeTupleLog N p (Fin.last 3) :=
       sum_source_eq_reciprocalBins S a N _
     _ ≤ ∑ r ∈ R, (a / (r : ℝ)) *
-        actualPrimeBoxMass N (binLo omega a r) (binHi a r) := by
+        actualPrimeBoxMass N (P1OriginalFourthSmallBinWeightedMass.binLo omega a r)
+          (P1OriginalFourthSmallBinWeightedMass.binHi a r) := by
       apply Finset.sum_le_sum
       intro r hr
       exact weightedReciprocalBin_le_prime_box e chi m omega a 0 0 ha

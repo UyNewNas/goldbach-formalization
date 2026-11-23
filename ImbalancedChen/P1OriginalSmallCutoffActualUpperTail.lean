@@ -193,7 +193,9 @@ theorem exists_actualPlus_excess_exp_bound :
       (Real.log (Nat.ceil R : ℝ)) ^ (-(1 / 3 : ℝ)) ≤ C * Real.exp (-t) := by
     calc
       _ ≤ A * Real.exp (-t) + B * Real.exp (Real.sqrt K) * Real.exp (-t) * 1 :=
-        add_le_add_left (mul_le_mul_of_nonneg_left hlogpow (by positivity)) _
+        add_le_add (le_refl (A * Real.exp (-t)))
+          (mul_le_mul_of_nonneg_left hlogpow
+            (show 0 ≤ B * Real.exp (Real.sqrt K) * Real.exp (-t) by positivity))
       _ = C * Real.exp (-t) := by dsimp [C]; ring
   have hT' := hT.trans (mul_le_mul_of_nonneg_left herror
     (actualSmallEulerProduct_pos N cap y hEven).le)
@@ -335,7 +337,7 @@ theorem exp_neg_min_le_add (x L : ℝ) :
 
 theorem scalar_exp_tail_le_inverse (c x : ℝ) (hc : 0 < c) (hx : 0 < x) :
     x * Real.exp (-(c * x)) ≤ 2 / (c ^ 2 * x) := by
-  have hpow := Real.pow_div_factorial_le_exp (mul_pos hc hx).le 2
+  have hpow := Real.pow_div_factorial_le_exp (c * x) (mul_pos hc hx).le 2
   norm_num at hpow
   have hm := mul_le_mul_of_nonneg_right hpow (Real.exp_pos (-(c * x))).le
   have hcancel : Real.exp (c * x) * Real.exp (-(c * x)) = 1 := by
@@ -404,7 +406,7 @@ theorem actualPlus_sub_eq_zero_of_cutoff_le_three (N cap : ℕ) (hEven : Even N)
     (hold : y ≤ Rold) (hnew : y ≤ Rnew) :
     actualSmallRosserPlusDensity N cap y Rold - actualSmallRosserPlusDensity N cap y Rnew = 0 := by
   have hempty : actualSmallPrimeFinset N cap y = ∅ := by
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro p hp
     have hp3 : 3 ≤ p := by
       have hp2 := (actualSmallPrimeFinset_odd_of_even hEven hp).2

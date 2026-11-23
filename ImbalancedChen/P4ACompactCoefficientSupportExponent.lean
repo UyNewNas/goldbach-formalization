@@ -66,7 +66,7 @@ theorem compactPolicy_implies_ordinary_root
           have hpair : ordinaryRosserPrefixAdmissible false
               ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧
               (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history) := by
-            simpa [actualExtendedThirdCompactInitialPolicy, oddFirstExitPolicy] using hp
+            simpa [actualExtendedThirdCompactInitialPolicy, oddFirstExitPolicy, imp_iff_not_or] using hp
           exact hpair.1
         · have hraw : ordinaryRosserPrefixAdmissible false
               (actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history))

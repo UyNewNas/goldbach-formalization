@@ -1,0 +1,135 @@
+def _require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def _relative_record(source, record):
+    """Validate a regular, byte-exact relative artifact without changing it."""
+    rel = Path(record['path'])
+    _require(not rel.is_absolute() and '..' not in rel.parts and str(rel) == record['path'],
+             'Artifact path must be an exact relative path')
+    path = source / rel
+    _require(path.is_file() and not path.is_symlink(), f'Expected regular artifact: {path}')
+    data = path.read_bytes()
+    _require(type(record['bytes']) is int and len(data) == record['bytes']
+             and hashlib.sha256(data).hexdigest() == record['sha256'],
+             f'Artifact hash/size mismatch: {path}')
+    return data
+
+
+def _late_finalizer_record(source, manifest, review, original_entry):
+    """Authenticate only the two explicitly reviewed finalizer-stdout formats."""
+    publication_sha = sha(source / 'PUBLICATION_FILES.json')
+    empty_entry = {'path': 'finalizer.log', 'bytes': 0,
+                   'sha256': hashlib.sha256(b'').hexdigest()}
+    _require(original_entry == empty_entry, 'Only the original empty finalizer entry may drift')
+    binding_path = source / 'LATE_FINALIZER_LOG_BINDING.json'
+    late_manifest_path = source / 'FINAL_REVIEW_NEW_FILES_MANIFEST.json'
+    late_manifest = read(late_manifest_path)
+    _require(late_manifest['original_publication_manifest_sha256'] == publication_sha
+             and late_manifest.get('old_records_unchanged') is True,
+             'Final review manifest must bind the original publication')
+    additions = late_manifest['files']
+    _require(len({x['path'] for x in additions}) == len(additions), 'Duplicate final review artifact')
+    # Both the immutable binding and the very review accepting its sole finding
+    # must already have exact hashes in the final-review additions manifest.
+    for name in ['LATE_FINALIZER_LOG_BINDING.json', 'INDEPENDENT_REVIEW.json']:
+        matches = [x for x in additions if x['path'] == name]
+        _require(len(matches) == 1, f'Unbound late-review artifact: {name}')
+        data = _relative_record(source, matches[0])
+        if name == 'INDEPENDENT_REVIEW.json':
+            _require(json.loads(data) == review, 'Review differs from bound review bytes')
+    binding = read(binding_path)
+    schema = binding['schema']
+    outcome = review.get('outcome', review.get('status', review.get('result')))
+    _require(str(outcome).startswith('PASS_'), 'Late stdout requires an accepting review')
+    findings = review.get('findings', review.get('blocking_findings', review.get('review_findings')))
+    _require(isinstance(findings, list) and len(findings) == 1, 'Exactly one late-stdout finding required')
+    for key in ['blocking_findings', 'blocking_source_or_math_findings',
+                'blocking_source_or_mathematical_findings', 'review_findings']:
+        if key in review:
+            _require(review[key] == [], f'Additional review findings cannot be suppressed: {key}')
+    finding = findings[0]
+    _require(finding.get('severity') == 'minor_metadata', 'Only the late stdout metadata finding is allowed')
+    if schema == 'late_finalizer_stdout_manifest_binding_v1':
+        _require(binding['original_publication_manifest_sha256'] == publication_sha
+                 and binding['original_empty_finalizer_entry'] == empty_entry
+                 and binding.get('original_records_unchanged_by_review') is True,
+                 'Canonical late binding does not preserve the original manifest')
+        actual = binding['actual_finalizer_log']
+        final = binding['exact_stdout_equals_final_release']
+        _require(actual['path'] == 'finalizer.log' and final['path'] == 'FINAL_RELEASE.json'
+                 and final.get('byte_for_byte_equal') is True, 'Wrong canonical stdout/FINAL paths')
+        impact = 'Only this auxiliary stdout manifest entry; normal/kernel/audit logs, selected sources, proof outputs and full-owned acceptance evidence are unaffected.'
+        _require(set(finding) <= {'severity', 'path', 'summary', 'impact', 'disposition', 'source_or_validation_impact'}
+                 and finding.get('path') == 'PUBLICATION_FILES.json / finalizer.log',
+                 'Canonical finding must concern only the finalizer manifest entry')
+        _require(('source_or_validation_impact' not in finding or finding['source_or_validation_impact'] is False)
+                 and ('impact' not in finding or finding['impact'] is False or finding['impact'] == impact)
+                 and (finding.get('source_or_validation_impact') is False
+                      or finding.get('impact') is False or finding.get('impact') == impact),
+                 'Source or validation impact cannot be waived')
+        actual = {k: actual[k] for k in ['path', 'bytes', 'sha256']}
+        final_record = {k: final[k] for k in ['path', 'bytes', 'sha256']}
+    elif schema == 'immutable_late_finalizer_stdout_log_binding_v1':
+        publication = binding['original_publication']
+        _require(publication['path'] == str(source / 'PUBLICATION_FILES.json')
+                 and publication['bytes'] == (source / 'PUBLICATION_FILES.json').stat().st_size
+                 and publication['sha256'] == publication_sha
+                 and binding['original_manifest_entry'] == empty_entry
+                 and binding.get('old_records_unchanged') is True
+                 and binding.get('original_manifest_and_log_not_rewritten') is True,
+                 'Immutable late binding does not preserve the exact original publication')
+        raw_actual = binding['actual_finalizer_log']
+        raw_final = binding['actual_FINAL_RELEASE']
+        _require(raw_actual['path'] == str(source / 'finalizer.log')
+                 and raw_final['path'] == str(source / 'FINAL_RELEASE.json')
+                 and binding.get('actual_finalizer_log_equals_FINAL_RELEASE_bytes') is True,
+                 'Wrong immutable stdout/FINAL paths or equality flag')
+        cause = 'Finalizer stdout appended the exact FINAL_RELEASE.json bytes after its publication manifest captured an empty log. Proof/source/validation logs are unaffected.'
+        _require(set(finding) == {'severity', 'file', 'original_manifest_entry', 'current_actual',
+                                 'cause', 'actual_log_equals_FINAL_RELEASE_original_bytes'}
+                 and finding['file'] == 'finalizer.log'
+                 and finding['original_manifest_entry'] == empty_entry
+                 and finding['current_actual'] == raw_actual
+                 and finding['actual_log_equals_FINAL_RELEASE_original_bytes'] is True
+                 and finding['cause'] == binding['cause'] == cause,
+                 'Immutable finding must describe only the exact unaffected late stdout')
+        actual = {'path': 'finalizer.log', 'bytes': raw_actual['bytes'], 'sha256': raw_actual['sha256']}
+        final_record = {'path': 'FINAL_RELEASE.json', 'bytes': raw_final['bytes'], 'sha256': raw_final['sha256']}
+    else:
+        raise ValueError('Unsupported late finalizer binding schema')
+    stdout = _relative_record(source, actual)
+    final_bytes = _relative_record(source, final_record)
+    _require(stdout == final_bytes, 'Finalizer stdout must equal FINAL_RELEASE byte for byte')
+    _require(json.loads(final_bytes)['publication_files_sha256'] == publication_sha,
+             'FINAL_RELEASE must refer to the same original publication')
+    return actual, {
+        'path': 'finalizer.log', 'binding_schema': schema,
+        'binding_path': binding_path.name, 'binding_sha256': sha(binding_path),
+        'final_review_manifest_sha256': sha(late_manifest_path),
+        'original_manifest_sha256': publication_sha,
+        'original_manifest_entry': dict(original_entry), 'actual_finalizer_log': actual,
+        'actual_FINAL_RELEASE': final_record, 'stdout_equals_FINAL_RELEASE_bytes': True,
+        'original_manifest_current_exact': False,
+        'scope': 'Only the empty finalizer stdout entry; all source, proof output and other artifact records remain strict.',
+    }
+
+
+def prepare_publication_files(source, manifest, review):
+    """Read-only gate: return exact copy records plus at most one bound stdout exception."""
+    original = manifest.get('files', manifest.get('publication_files'))
+    _require(isinstance(original, list), 'Missing publication file list')
+    files = [dict(record) for record in original]
+    _require(len({x['path'] for x in files}) == len(files), 'Duplicate publication artifact')
+    exception = None
+    for index, record in enumerate(files):
+        if record['path'] == 'finalizer.log':
+            path = source / record['path']
+            if path.stat().st_size != record['bytes'] or sha(path) != record['sha256']:
+                files[index], exception = _late_finalizer_record(source, manifest, review, record)
+                continue
+        _relative_record(source, record)
+    return files, exception
+
+

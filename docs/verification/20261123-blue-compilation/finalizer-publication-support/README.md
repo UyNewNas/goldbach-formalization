@@ -1,0 +1,11 @@
+# Strict late finalizer stdout publication support
+
+Only `publish_verified_member_batch.py` changed. Its original bytes are in `publish_verified_member_batch.baseline.py`; the frozen candidate and unified patch are adjacent. `STRUCTURAL_COMPARISON.json` verifies that the entire old executable body is byte-exact after reversing only the documented gate integration and main guard. The existing Already Clarified metadata path and all source/output/validation/copy checks remain.
+
+`prepare_publication_files` is an importable read-only gate. It permits only the three explicitly authorized finalizer binding schemas. Every accepted case requires exactly the original empty `finalizer.log` entry, a binding and matching review bound in the canonical final-review additions manifest, exact original publication digest, actual stdout size/hash, and byte-for-byte equality with `FINAL_RELEASE.json`. Only the identified auxiliary copy record changes; original manifests and raw files remain unchanged. Exactly one narrowly typed metadata finding is allowed, with no source/validation impact or hidden blockers. Every other artifact remains strict. Publication integrity reports the original manifest exception and never calls all old entries current-exact in this case.
+
+38 isolated temporary-directory fixtures passed. The preserved red logs show the missing gate, then the explicitly unsupported third format, before each implementation. The final suite receipt binds the exact frozen script before and after. Fixtures invoke only helper functions, never actual publication or Lean. `gate_functions.txt` is the initial two-format helper drafting snapshot, not the final publisher.
+
+The real read-only preparation gate passed batches58/61/64/65. Initial batch68 was not ready, then was correctly rejected because its newly supplied final-review manifest used absolute additions paths; no gate was weakened and no batch68 record was changed here. A later separate68-only result can supersede that pending state after the canonical relative-path metadata is ready.
+
+No publisher main, actual publication, source build, Lean, kernel/audit, numeric replay, controller action, or production record mutation was run. Root reviews the frozen patch and owns actual publication.

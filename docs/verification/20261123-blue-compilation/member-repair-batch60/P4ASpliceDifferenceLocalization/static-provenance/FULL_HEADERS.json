@@ -1,0 +1,71 @@
+{
+  "count": 13,
+  "complete_headers_or_entire_aliases": [
+    {
+      "name": "incoming_length_le_leaf_length",
+      "header_or_entire_alias": "theorem incoming_length_le_leaf_length {α : Type*}\n    (policy : Bool → List α → Bool) (weight : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    ∀ leaf ∈ firstExitRetainedLeaves policy weight pre positive mass remaining,\n      pre.length ≤ leaf.selected.length :=",
+      "sha256": "7213b4e1efc55b26afa4ad8f21a28ea3dc15c25f5f7f7c62282d3dcc6793b516"
+    },
+    {
+      "name": "shallow_leaf_mem_iff",
+      "header_or_entire_alias": "theorem shallow_leaf_mem_iff {α : Type*} (k : ℕ)\n    (policy₁ policy₂ : Bool → List α → Bool)\n    (hagree : ∀ positive history, history.length ≤ k →\n      policy₁ positive history = policy₂ positive history)\n    (weight : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (leaf : FirstExitLeaf α) (hlen : leaf.selected.length ≤ k) :\n    leaf ∈ firstExitRetainedLeaves policy₁ weight pre positive mass remaining ↔\n      leaf ∈ firstExitRetainedLeaves policy₂ weight pre positive mass remaining :=",
+      "sha256": "c4afeb67c17d8160ef59707b3bef965f12a50c254c66cb79d4fd271f9de9b9d4"
+    },
+    {
+      "name": "shallow_odd_leaf_mem_iff",
+      "header_or_entire_alias": "theorem shallow_odd_leaf_mem_iff {α : Type*} (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List α → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (weight : α → ℝ) (carrier : List α) (leaf : FirstExitLeaf α)\n    (hlen : leaf.selected.length ≤ k) :\n    leaf ∈ oddFirstExitRetainedLeaves retainOdd₁ weight carrier ↔\n      leaf ∈ oddFirstExitRetainedLeaves retainOdd₂ weight carrier :=",
+      "sha256": "832b2a7ea722e46117f0a2d0c994d35398432b163edf51fb116d05a8a49723c0"
+    },
+    {
+      "name": "actual_leaf_primeFactors_card_eq_length",
+      "header_or_entire_alias": "theorem actual_leaf_primeFactors_card_eq_length\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd (fun _ => 1)\n      (roughPrimeUniverse N cap w z)) :\n    leaf.selected.prod.primeFactors.card = leaf.selected.length :=",
+      "sha256": "17765bb1f99c64cb5d14201c4737d56cd3709ce3981ec57b479b2d4a85d46f97"
+    },
+    {
+      "name": "shallow_support_mem_imp",
+      "header_or_entire_alias": "theorem shallow_support_mem_imp (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) (hcard : d.primeFactors.card ≤ k)\n    (hd : d ∈ fixedRoughSupport retainOdd₁ N cap w z) :\n    d ∈ fixedRoughSupport retainOdd₂ N cap w z :=",
+      "sha256": "2f741c22a6f78c942912f67e74bcf3395b378c12e9446df1cafcbc5ab09c305a"
+    },
+    {
+      "name": "shallow_support_mem_iff",
+      "header_or_entire_alias": "theorem shallow_support_mem_iff (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) (hcard : d.primeFactors.card ≤ k) :\n    d ∈ fixedRoughSupport retainOdd₁ N cap w z ↔\n      d ∈ fixedRoughSupport retainOdd₂ N cap w z :=",
+      "sha256": "995257c83debeb1a23733a2336a1eb07810701b937fdb0d4ef1055d3fff32cd0"
+    },
+    {
+      "name": "shallow_coefficient_eq",
+      "header_or_entire_alias": "theorem shallow_coefficient_eq (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) (hcard : d.primeFactors.card ≤ k) :\n    fixedRoughCoefficient retainOdd₁ N cap w z d =\n      fixedRoughCoefficient retainOdd₂ N cap w z d :=",
+      "sha256": "5d9918a4ce3b798681ad72c94ecc7d6b90d4468400a1e785c2b48f394ee2d868"
+    },
+    {
+      "name": "changed_support_has_more_primeFactors",
+      "header_or_entire_alias": "theorem changed_support_has_more_primeFactors (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd₁ N cap w z ∆\n      fixedRoughSupport retainOdd₂ N cap w z) :\n    k < d.primeFactors.card :=",
+      "sha256": "ebac938a89b74ed020f22d4ff4fb9583dccf76179806a8527f41fb3946fc156a"
+    },
+    {
+      "name": "compilerMass_eq_deeper_changed_moduli",
+      "header_or_entire_alias": "theorem compilerMass_eq_deeper_changed_moduli (k : ℕ)\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool)\n    (hagree : ∀ history, history.length ≤ k → retainOdd₁ history = retainOdd₂ history)\n    (N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n      (fixedRoughSupport retainOdd₁ N cap w z ∪ fixedRoughSupport retainOdd₂ N cap w z)\n      (fun d => |fixedRoughCoefficient retainOdd₁ N cap w z d -\n        fixedRoughCoefficient retainOdd₂ N cap w z d|) =\n      reciprocalTotientDensity\n        ((fixedRoughSupport retainOdd₁ N cap w z ∆ fixedRoughSupport retainOdd₂ N cap w z).filter\n          (fun d => k < d.primeFactors.card)) (fun _ => 1) :=",
+      "sha256": "c992099400f8358b0984162d2f35abea70d951fe9fcb72e2265e680b0d834ce3"
+    },
+    {
+      "name": "depthSplice_shallow_coefficient_eq",
+      "header_or_entire_alias": "theorem depthSplice_shallow_coefficient_eq (k : ℕ)\n    (parent replacement₁ replacement₂ : Bool → List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) (hcard : d.primeFactors.card ≤ k) :\n    fixedRoughCoefficient (firstExitDepthSplicePolicy k parent replacement₁ false) N cap w z d =\n      fixedRoughCoefficient (firstExitDepthSplicePolicy k parent replacement₂ false) N cap w z d :=",
+      "sha256": "52ed71828359b44b9630bdd8f279f33554d97d94859e78be58d87e8132e7c705"
+    },
+    {
+      "name": "actualThird_shallow_coefficient_eq",
+      "header_or_entire_alias": "theorem actualThird_shallow_coefficient_eq (e h : ℝ) (m N cap : ℕ) (w z : ℝ)\n    (d : ℕ) (hcard : d.primeFactors.card ≤ 2) :\n    fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z d =\n      fixedRoughCoefficient (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z d :=",
+      "sha256": "6545aa6072680d01a026a5007a3144d2b8d19f645091da9525d35d66fbf6f6a6"
+    },
+    {
+      "name": "actualThird_changed_support_has_at_least_three_primeFactors",
+      "header_or_entire_alias": "theorem actualThird_changed_support_has_at_least_three_primeFactors\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z ∆\n      fixedRoughSupport (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z) :\n    3 ≤ d.primeFactors.card :=",
+      "sha256": "3dea20d05bd6e18ebe2260a23a8e0dd55f41fe03e06a2b18a66f6b2a8346e56c"
+    },
+    {
+      "name": "actualThird_compilerMass_eq_deeper_changed_moduli",
+      "header_or_entire_alias": "theorem actualThird_compilerMass_eq_deeper_changed_moduli\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n      (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z ∪\n        fixedRoughSupport (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z)\n      (fun d => |fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z d -\n        fixedRoughCoefficient (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z d|) =\n      reciprocalTotientDensity\n        ((fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z ∆\n          fixedRoughSupport (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z).filter\n            (fun d => 2 < d.primeFactors.card)) (fun _ => 1) :=",
+      "sha256": "cbb4b92b5d96617023e599e0e6c862b5090c50b4fbe2c65cec4634e1eeb20cf5"
+    }
+  ],
+  "all_byte_identical": true
+}

@@ -1,0 +1,73 @@
+{
+  "module": "ImbalancedChen.P2FirstIntegralPolynomialEnclosure",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/baseline.lean",
+    "sha256": "c5d48026fc64fdb6cd423bf5e4b2bbc2d0d8a49758e52c729ca495c883ab46f3",
+    "bytes": 12995
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/candidate.lean",
+    "sha256": "99adc3690de755e1732ec537d60f59a1a5d1f1852c4a3ebf484c94887e67e7b2",
+    "bytes": 13137
+  },
+  "complete_headers": 40,
+  "complete_definitions_abbrevs_structures": 18,
+  "changed_proof_bodies": [
+    "approximant_eq_product",
+    "logPolynomial_abs_bound",
+    "transformedKernel_polynomial_error",
+    "integral_approximant",
+    "centerQ_cast",
+    "radiusQ_cast",
+    "originalFirstIntegral_Q80_polynomial_enclosure"
+  ],
+  "inventory": {
+    "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/FULL_HEADERS_AND_DEFINITIONS.json",
+    "sha256": "b6795ff2dafcf01674304fc42b51c1381eeec4cc25bf55e1193b0c1052b5ce6b",
+    "bytes": 25940
+  },
+  "actual_failure_slice": {
+    "path": "/workspace/p1-complete-proof/static-first-integral-typed-owners/P2FirstIntegralPolynomialEnclosure/actual-failure.log",
+    "sha256": "014d75f5021e1eab93f0b4ee62aa37c6388bfd4c8bc3ddc4f2b886ddbe9715bf",
+    "bytes": 4572
+  },
+  "fixes": [
+    {
+      "theorem": "approximant_eq_product",
+      "root_cause": "sum_mul/mul_sum simplification exposes RHS sums in reverse outer order",
+      "repair": "Apply existing Finset.sum_comm only to RHS, then retain original termwise degree/pow/ring proof."
+    },
+    {
+      "theorem": [
+        "logPolynomial_abs_bound",
+        "transformedKernel_polynomial_error"
+      ],
+      "root_cause": "abs_add unknown under pinned imported API",
+      "repair": "Use existing abs_add_le triangle inequality with exactly the original two operands."
+    },
+    {
+      "theorem": "integral_approximant",
+      "root_cause": "integral_pow is declared in root namespace after end intervalIntegral",
+      "repair": "Resolve existing integral_pow; same original monomial exponent and integrability premises."
+    },
+    {
+      "theorem": [
+        "centerQ_cast",
+        "radiusQ_cast"
+      ],
+      "root_cause": "ring leaves explicit True ∨ ... residual from normalized multiplicative equality",
+      "repair": "Use non-closing ring_nf then simp to discharge tautological proposition; same exact rational functions and prefactor."
+    },
+    {
+      "theorem": "originalFirstIntegral_Q80_polynomial_enclosure",
+      "root_cause": "exact_mod_cast leaves untransported rational radius inequality",
+      "repair": "Transport original rational inequality via Rat.cast_le then normalize only cast of division/one/power/numeral."
+    }
+  ],
+  "mathematical_scope": "Same complete original first integral: theta=299/500, rho=19/96, translated whole interval [0,51/2375], signed log Taylor polynomial, finite geometric reciprocal, rational center and radius, order16 radius<=2^(-80). No numerical endpoint or selected U1 frozen-decimal comparison is added.",
+  "original_contract_boundary": "Original OPEN GAP comments are retained byte for byte: finite center not numerically evaluated/compared with selected U1 payload, no original hUpper or endpoint assertion follows. This pre-existing endpoint gap is not a proof gap in these unchanged enclosure declarations.",
+  "classification": "PROOF_ONLY_CURRENT_API_AND_EXPRESSION_REDUCTION",
+  "substantive_mathematical_gap_identified_in_unchanged_declarations": false,
+  "header_definition_import_or_data_changes": false,
+  "status": "UNCOMPILED_STATIC_CANDIDATE"
+}

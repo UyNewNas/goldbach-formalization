@@ -1,0 +1,28 @@
+--- baseline/ImbalancedChen/SingletonPrimeProductTransportP5.lean
++++ candidate/ImbalancedChen/SingletonPrimeProductTransportP5.lean
+@@ -1,7 +1,7 @@
+ import ImbalancedChen.Part3DistributionTargets
+ import ImbalancedChen.CurrentChenOriginalLowerFiniteP5
+ 
+-/-! Source-only, uncompiled. Exact b=1 / rank-one dictionary between the
++/-! Compilation records: docs/verification/20261123-blue-compilation. Exact b=1 / rank-one dictionary between the
+ literal Part3 labelled prime-product error and the original prime source.
+ The label is a prime; the multiplier b=1 is not inserted as a fake prime.
+ No analytic licence or signed distribution estimate is asserted here. -/
+@@ -58,11 +58,14 @@
+   intro q _
+   apply congrArg (fun x : ℝ => rho q * x)
+   simp only [singletonWeight, labelledProduct_singleton]
+-  rw [sum_labelledSingleton, finitePrimitiveDiscrepancy_eq_sum]
++  rw [sum_labelledSingleton P (fun p => omega p *
++    ((if Nat.ModEq q p N then (1 : ℝ) else 0) -
++      (if Nat.Coprime p q then (1 : ℝ) else 0) / (q.totient : ℝ))),
++    finitePrimitiveDiscrepancy_eq_sum]
+   apply Finset.sum_congr rfl
+   intro p _
+   by_cases hAP : Nat.ModEq q p N <;> by_cases hcop : Nat.Coprime p q <;>
+-    simp [hAP, hcop] <;> ring
++    simp [hAP, hcop] <;> ring <;> simp only [if_pos hcop] <;> ring
+ 
+ def primeIntervalSource (P : ℕ) (lo hi : ℝ) : Finset ℕ := by
+   classical

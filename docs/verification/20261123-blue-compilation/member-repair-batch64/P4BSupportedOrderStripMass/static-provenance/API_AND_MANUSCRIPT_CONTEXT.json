@@ -1,0 +1,113 @@
+{
+  "schema": "supported_strips_1106_API_context_v1",
+  "pinned_API": [
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Finset/Card.lean",
+        "bytes": 40628,
+        "sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f"
+      },
+      "first_line": 647,
+      "last_line": 652,
+      "raw_excerpt": "theorem card_filter_add_card_filter_not\n    (p : α → Prop) [DecidablePred p] [∀ x, Decidable (¬p x)] :\n    #(s.filter p) + #(s.filter fun a ↦ ¬ p a) = #s := by\n  classical\n  rw [← card_union_of_disjoint (disjoint_filter_filter_not _ _ _), filter_union_filter_not_eq]\n\n"
+    }
+  ],
+  "exact_current_definitions": [
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P4BPhysicalProductOuterRamp.lean",
+        "bytes": 16950,
+        "sha256": "8e76d2aaaf403472adc34387a2dd8afafe2efd0d73667e225425f0207b8107c2"
+      },
+      "first_line": 128,
+      "last_line": 142,
+      "raw_excerpt": "\n/-- Only the upper product wall is changed; its scale is log N. -/\ndef physicalProductWallScale (N : ℕ) (i : Fin 4) : ℝ :=\n  if i = 3 then Real.log (N : ℝ) else 1\n\ntheorem physicalProductWallScale_pos {N : ℕ} (hN : (1 : ℝ) < N) :\n    ∀ i, 0 < physicalProductWallScale N i := by\n  intro i\n  by_cases hi : i = 3\n  · simpa only [physicalProductWallScale, if_pos hi] using Real.log_pos hN\n  · simp only [physicalProductWallScale, if_neg hi, zero_lt_one]\n\ndef physicalPairMargins (b : ℝ) (N : ℕ) (T : ℝ)\n    (t : Fin 2 → Fin (N + 1)) (i : Fin 4) : ℝ :=\n  physicalProductWallScale N i *\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P4BActualPairOuterRamp.lean",
+        "bytes": 9267,
+        "sha256": "285f573a10ec11e833b05c7c06401705bf29fdfd351168ca5914ad19232cb41b"
+      },
+      "first_line": 25,
+      "last_line": 28,
+      "raw_excerpt": "/-- Order, strict badness, lower cutoff, upper product, in that order. -/\ndef actualPairMargins (b lower : ℝ) (v : Fin 2 → ℝ) : Fin 4 → ℝ :=\n  ![v 1 - v 0, v 0 - b * v 1, v 0 + v 1 - lower, 1 - v 0 - v 1]\n\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P4BLabelledLogGeometry.lean",
+        "bytes": 6292,
+        "sha256": "1690b85ce51996a4de8b1831e72c78c1bae07aea748cc11e5a25039bc4a7ccfb"
+      },
+      "first_line": 26,
+      "last_line": 28,
+      "raw_excerpt": "/-- Actual normalized prime logarithms, with the original labelled slots. -/\ndef logPoint (N : ℕ) (t : Fin 2 → Fin (N + 1)) : Fin 2 → ℝ :=\n  fun i => Real.log ((t i).val : ℝ) / Real.log (N : ℝ)\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P4BLabelledPairDictionary.lean",
+        "bytes": 9098,
+        "sha256": "6bcfb21ce23f34cefcbfaa226622d903420ec07c9ac2d8054e6f5ce064654fd9"
+      },
+      "first_line": 29,
+      "last_line": 31,
+      "raw_excerpt": "/-- Read the two labelled coordinates as an ordered natural pair. -/\ndef tuplePair {N : ℕ} (t : Fin 2 → Fin (N + 1)) : ℕ × ℕ :=\n  ((t 0).val, (t 1).val)\n"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P4BNormalizedImbalanceStripMass.lean",
+        "bytes": 9675,
+        "sha256": "b2b9c253b455b9b42a319dc94322da48856905a60614e8370b9e8754b6cbe895"
+      },
+      "first_line": 25,
+      "last_line": 27,
+      "raw_excerpt": "/-- Literal normalized distance on the outside of the strict badness wall. -/\ndef normalizedWall (b : ℝ) (N r q : ℕ) : ℝ :=\n  (Real.log (r : ℝ) - b * Real.log (q : ℝ)) / Real.log (N : ℝ)\n"
+    }
+  ],
+  "working_same_source_normalization_pattern": {
+    "source": {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4BSupportedOrderStripMass.lean",
+      "bytes": 11513,
+      "sha256": "52e76ec961cb96ad5a53877cc0f217dcbe0e70b6db253f3427ff3d92571dc30e"
+    },
+    "first_line": 66,
+    "last_line": 71,
+    "raw_excerpt": "  have horder : -width < normalizedLog N q - normalizedLog N r ∧\n      normalizedLog N q - normalizedLog N r ≤ 0 := by\n    simpa [physicalPairMargins, physicalProductWallScale, actualPairMargins,\n      P4BLabelledLogGeometry.logPoint, normalizedLog, r, q, tuplePair] using hstrip\n  dsimp only [normalizedLog] at horder\n  have hnorm0 : 0 ≤ (Real.log (r : ℝ) - Real.log (q : ℝ)) / Real.log (N : ℝ) := by\n"
+  },
+  "manuscript_release_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_excerpts": [
+    {
+      "source": {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+        "bytes": 55378,
+        "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182"
+      },
+      "first_line": 1116,
+      "last_line": 1160,
+      "raw_excerpt": "\r\n\\section{Ordered bad semiprimes and the final subtraction}\r\n\\label{sec:current-transfer}\r\n\r\nWe now estimate $B_b(N)$. Its dependence on $b$ is contained in\r\nthe unsifted mass of the ordered semiprimes; the positive product\r\nestimate then imposes the prime complement.\r\n\r\nFix $1/2<b<1$ and set $\\beta=b/(1+b)$.  Products below\r\n$2N^{1-\\kappa_0}$ have a negligible count.  For a remaining bad\r\nproduct $m=rq$, the inequality $r>q^b$ implies $r>m^\\beta$;\r\nboth primes therefore have a fixed positive exponent.  Use the\r\ncoordinates\r\n\\[\r\n                       t=\\frac{\\log r}{\\log N},\\qquad y=\\frac{rq}{N}.\r\n\\]\r\nOn a fixed radial strip $\\eta\\le y\\le C$, PNT in $q=Ny/r$\r\nfollowed by reciprocal-prime partial summation in $r$ gives the\r\nunsifted mass element\r\n\\begin{equation}\r\n                         \\frac{N}{\\log N}\\,\r\n                              \\frac{dt\\,dy}{t(1-t)}.\r\n \\label{eq:current-pair-measure}\r\n\\end{equation}\r\nThe PNT errors are uniform on positive exponent compacta.  A prime\r\nupper bound controls $y<\\eta$ by $O_b(\\eta N/\\log N)$; $N$ tends\r\nto infinity first, then $\\eta$ tends to zero.\r\n\r\nThe exact ordered bad inequalities are\r\n\\[\r\n 0<y<1,\\qquad\r\n t\\le\\frac12+\\frac{\\log y}{2\\log N},\\qquad\r\n t>\\beta+\\frac{b\\log y}{(1+b)\\log N}.\r\n\\]\r\nTheir limiting unsifted mass is\r\n\\begin{equation}\r\n J_b=\\int_0^1dy\\int_\\beta^{1/2}\\frac{dt}{t(1-t)}\r\n     =\\left[\\log\\frac{t}{1-t}\\right]_\\beta^{1/2}\r\n     =\\log(1/b).\r\n \\label{eq:current-bad-mass}\r\n\\end{equation}\r\nThe ordering $r\\le q$ counts each composite once.  There is no\r\nfactor $2$ and no further singular factor in $J_b$.  The\r\nequal-prime diagonal has size $O(\\sqrt N)$ and can be retained or\r\nrestored after a squarefree argument.\r\n"
+    }
+  ],
+  "manuscript_scope": "Ordered bad semiprimes r<=q, strict badness r>q^b, low products negligible, exact product variable y=rq/N and limiting mass log(1/b). The two existing suppliers remove the actual order/badness boundary collars using joint upper-product support; only their formalization interfaces are repaired. No sharp coupled arbitrary-domain estimate is introduced.",
+  "bounded_prior_index_sources": [
+    {
+      "path": "/workspace/blue-member-blob-inventory.json",
+      "bytes": 1405462,
+      "sha256": "b5508317b6126e689f8a9810ab0e9e5f8bba5491823b63bd016b1ec5f5c617cf"
+    },
+    {
+      "path": "/workspace/blue-member-known-api-repair-inventory/INVENTORY.json",
+      "bytes": 6717,
+      "sha256": "feb6c40828632dcbbb03ccfec7e698e99eac123a25b3c479056ba0746d549c55"
+    },
+    {
+      "path": "/workspace/blue-member-four-commit-reuse-inventory-20261123.json",
+      "bytes": 150513,
+      "sha256": "a60103db75acd3954b44032b4f6e66ef79b5dd9460b26dd3ec5f226781e482e8"
+    },
+    {
+      "path": "/workspace/blue-reindex-build-evidence/EXACT_SELECTION.json",
+      "bytes": 1105894,
+      "sha256": "553708c41780b0b1293fe60ab24973a3565f98d029202053b0e024d642e24d34"
+    }
+  ]
+}

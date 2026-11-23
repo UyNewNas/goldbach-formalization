@@ -1,0 +1,58 @@
+✖ [9946/10109] Building ImbalancedChen.P5ZU1011H248ClampPrimeBox (17s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P5ZU1011H248ClampPrimeBox.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU1011H248ClampPrimeBox.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU1011H248ClampPrimeBox.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU1011H248ClampPrimeBox.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU1011H248ClampPrimeBox.setup.json --json
+error: ImbalancedChen/P5ZU1011H248ClampPrimeBox.lean:37:55: unsolved goals
+nums : Fin 200 → ℤ
+⊢ min (floorValue nums ⟨49, ⋯⟩) (floorValue nums ⟨50, ⋯⟩) = min (floorValue nums 49) (floorValue nums 50)
+error: ImbalancedChen/P5ZU1011H248ClampPrimeBox.lean:125:34: Unknown constant `continuousOn_const.max`
+error: ImbalancedChen/P5ZU1011H248ClampPrimeBox.lean:127:11: Invalid field `min`: The environment does not contain `Function.min`, so it is not possible to project the field `min` from an expression
+  hs
+of type
+  ∀ x ∈ univ.pi fun x => Icc (417 / 5000) (59 / 250),
+    ContinuousWithinAt (switchedKernel currentK LiLiuPrereqBuchstab.buchstab)
+      (univ.pi fun x => Icc (417 / 5000) (59 / 250)) x
+error: ImbalancedChen/P5ZU1011H248ClampPrimeBox.lean:189:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  min (switchedKernel currentK LiLiuPrereqBuchstab.buchstab v) (ordinaryKernel H248 (fun x => L) 0 v)
+in the target expression
+  (fun x => extendedClampMinimum ell L x * ∏ j, 1 / x j) v =
+    (fun x =>
+        min (switchedKernel currentK LiLiuPrereqBuchstab.buchstab x) (ordinaryKernel H248 (fun x => L) 0 x) *
+          ∏ j, 1 / x j)
+      v
+
+r : ℕ
+ell : ℝ
+hell : 0 < ell
+L : LogFour → ℝ
+hL : ContinuousOn L (univ.pi fun x => Icc (417 / 5000) (59 / 250))
+G : Fin r → LogFour →L[ℝ] ℝ
+c : Fin r → ℝ
+hG : ∀ (j : Fin r), G j ≠ 0
+R : Set LogFour
+hR : MeasurableSet R
+hstrict : primeAffineGateRegion G c ⊆ R
+hweak : ∀ v ∈ R, ∀ (j : Fin r), (G j) v ≤ c j
+hcell : ∀ v ∈ R, 0 < v 3 ∧ ell ≤ L v ∧ L v ≤ 2 * v 3
+heq :
+  ∀ v ∈ R,
+    min (switchedKernel currentK LiLiuPrereqBuchstab.buchstab v) (ordinaryKernel H248 (fun x => L) 0 v) =
+      extendedClampMinimum ell L v
+hf :
+  (R.indicator fun v =>
+      min (switchedKernel currentK LiLiuPrereqBuchstab.buchstab v) (ordinaryKernel H248 (fun x => L) 0 v)) =
+    R.indicator (extendedClampMinimum ell L)
+hlim :
+  Tendsto
+    (fun N =>
+      actualPrimeBoxTestSum N (fun x => 417 / 5000) (fun x => 59 / 250) (R.indicator (extendedClampMinimum ell L)))
+    atTop
+    (𝓝
+      (∫ (x : Fin 4 → ℝ) in (logPrimeBox (fun x => 417 / 5000) fun x => 59 / 250) ∩ R,
+        extendedClampMinimum ell L x * ∏ i, 1 / x i))
+v : Fin 4 → ℝ
+hv : v ∈ (logPrimeBox (fun x => 417 / 5000) fun x => 59 / 250) ∩ R
+⊢ (fun x => extendedClampMinimum ell L x * ∏ j, 1 / x j) v =
+    (fun x =>
+        min (switchedKernel currentK LiLiuPrereqBuchstab.buchstab x) (ordinaryKernel H248 (fun x => L) 0 x) *
+          ∏ j, 1 / x j)
+      v
+error: Lean exited with code 1

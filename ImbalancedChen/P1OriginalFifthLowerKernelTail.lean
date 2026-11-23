@@ -55,7 +55,7 @@ theorem kernel_tail_bound {u old new : ℝ} {t : Fin 5 → ℝ}
   have hsnew2 := hsold2.trans hsnew
   have hdiff := thirdTailLowerFactor_difference hsold2 hsnew
   have hdecay := hdiff.2.trans (actualSieveGap_normalized_le_three_div_sq hg.1)
-  have hweight : 0 ≤ ∏ i, 1 / t i := Finset.prod_nonneg (fun i _ => by positivity)
+  have hweight : 0 ≤ ∏ i, 1 / t i := Finset.prod_nonneg (fun i _ => one_div_nonneg.mpr (hpos i).le)
   have hgapPos : 0 < old - ∑ i, t i := hu.trans_le hgap
   have hprofile : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t =
       4 * (thirdTailLowerFactor ((new - ∑ i, t i) / t 4) -
@@ -63,8 +63,10 @@ theorem kernel_tail_bound {u old new : ℝ} {t : Fin 5 → ℝ}
     rw [primeOwnCubeGatedProfile, if_pos hg.2.2,
       primeOwnCubeGatedProfile, if_pos hg.2.1,
       p1PrimeTupleMinusProfile_eq_lowerFactor new t hw,
-      p1PrimeTupleMinusProfile_eq_lowerFactor old t hw,
-      actualExtendedThirdLowerFactor_of_two_le hsnew2,
+      p1PrimeTupleMinusProfile_eq_lowerFactor old t hw]
+    change 4 * actualExtendedThirdLowerFactor ((new - ∑ i, t i) / t 4) / t 4 -
+      4 * actualExtendedThirdLowerFactor ((old - ∑ i, t i) / t 4) / t 4 = _
+    rw [actualExtendedThirdLowerFactor_of_two_le hsnew2,
       actualExtendedThirdLowerFactor_of_two_le hsold2]
     ring
   have hprofileBound : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t ≤
@@ -86,7 +88,7 @@ theorem kernel_tail_bound {u old new : ℝ} {t : Fin 5 → ℝ}
       _ ≤ (12 * t 4 / u ^ 2) * ∏ i, 1 / t i :=
         mul_le_mul_of_nonneg_right hprofileBound hweight
       _ = 12 / (t 0 * t 1 * t 2 * t 3 * u ^ 2) := by
-        simp only [Fin.prod_univ_succ]
+        simp only [Fin.prod_univ_five]
         field_simp [(hpos 0).ne', (hpos 1).ne', (hpos 2).ne', (hpos 3).ne', hw.ne', hu.ne']
         <;> ring
 
@@ -177,7 +179,11 @@ theorem lintegral_active_three {c omega rho : ℝ} (hc : 0 ≤ c)
       apply setLIntegral_congr_fun measurableSet_Ioc
       intro x hx
       have hxpos : 0 < x := homega.trans hx.1
-      rw [thirdTail_lintegral_square (mul_nonneg hc (by positivity)) homega horho]
+      change (∫⁻ y in Ioc omega rho, ∫⁻ z in Ioc omega rho,
+        ENNReal.ofReal ((c * (1 / x)) * (1 / y) * (1 / z))) =
+          ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * (1 / x))
+      rw [thirdTail_lintegral_square
+        (c := c * (1 / x)) (mul_nonneg hc (one_div_nonneg.mpr hxpos.le)) homega horho]
       congr 1
       ring
     _ = ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * Real.log (rho / omega)) :=
@@ -213,7 +219,12 @@ theorem lintegral_majorant {c omega rho h : ℝ} (hc : 0 ≤ c)
           apply setLIntegral_congr_fun measurableSet_Ioc
           intro v hv
           have hvpos : 0 < v := hw.1.trans hv.1
-          rw [lintegral_active_three (mul_nonneg hc (by positivity)) homega horho]
+          change (∫⁻ x in Ioc omega rho, ∫⁻ y in Ioc omega rho,
+            ∫⁻ z in Ioc omega rho,
+              ENNReal.ofReal ((c * (1 / v)) * (1 / x) * (1 / y) * (1 / z))) =
+                ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * (1 / v))
+          rw [lintegral_active_three
+            (c := c * (1 / v)) (mul_nonneg hc (one_div_nonneg.mpr hvpos.le)) homega horho]
           congr 1
           ring
         _ = _ := thirdTail_lintegral_const_mul_one_div

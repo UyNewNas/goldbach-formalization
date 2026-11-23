@@ -88,11 +88,11 @@ theorem measurableSet_eligible (j : ℕ) : MeasurableSet {v | eligible j v} := b
   have hselected : MeasurableSet {v : LogFour | selectedSquares v (cap v)} :=
     (measurableSet_lt h2 hc).inter ((measurableSet_lt h3 hc).inter (measurableSet_lt h4 hc))
   by_cases hj : j = 0
-  · simpa only [eligible, hj, true_and] using
+  · simpa only [eligible, hj, true_and, Set.ofPred_and] using
       (measurableSet_lt measurable_const hc).inter (hfull.inter hselected)
   · have hh : {v | eligible j v} = (∅ : Set LogFour) := by ext v; simp [eligible, hj]
     rw [hh]
-    exact measurableSet_empty
+    exact MeasurableSet.empty
 
 theorem cap_le_Lambda (v : LogFour) : cap v ≤ (153 / 256 : ℝ) := by
   by_cases hx : v 0 ≤ (25 / 128 : ℝ)

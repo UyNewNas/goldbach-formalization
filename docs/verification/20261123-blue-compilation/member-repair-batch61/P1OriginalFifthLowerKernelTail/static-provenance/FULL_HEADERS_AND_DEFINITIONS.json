@@ -1,0 +1,236 @@
+{
+  "module": "ImbalancedChen.P1OriginalFifthLowerKernelTail",
+  "all_complete_source_headers": [
+    {
+      "name": "kernel",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def kernel (old new : ℝ) (t : Fin 5 → ℝ) : ℝ :=",
+      "header_sha256": "c79ffd762a88ec77e11e2025d2e17c563fe2ab63935fa3ae3638502c6d44fdf1",
+      "full_header_byte_exact": true,
+      "original_line": 29
+    },
+    {
+      "name": "small_last_both_ownCubes",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem small_last_both_ownCubes {u old new : ℝ} {t : Fin 5 → ℝ}\n    (hu : 0 < u) (hw : 0 < t 4) (hsmall : t 4 ≤ u / 3)\n    (hgap : u ≤ old - ∑ i, t i) (hlevels : old ≤ new) :\n    3 ≤ (old - ∑ i, t i) / t 4 ∧\n      primeTupleOwnCubeForm t < old ∧ primeTupleOwnCubeForm t < new :=",
+      "header_sha256": "3f35e3f8978683f0d72c4e915f3e01033c9c983525953aa2f0f740b9d209214d",
+      "full_header_byte_exact": true,
+      "original_line": 33
+    },
+    {
+      "name": "kernel_tail_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem kernel_tail_bound {u old new : ℝ} {t : Fin 5 → ℝ}\n    (hu : 0 < u) (hpos : ∀ i, 0 < t i) (hsmall : t 4 ≤ u / 3)\n    (hgap : u ≤ old - ∑ i, t i) (hlevels : old ≤ new) :\n    0 ≤ kernel old new t ∧\n      kernel old new t ≤ 12 / (t 0 * t 1 * t 2 * t 3 * u ^ 2) :=",
+      "header_sha256": "baf88aea5a9dbf1f483a7613c4c949ce8d2d5b0d47b06fc194acfdcf5c1b3f0e",
+      "full_header_byte_exact": true,
+      "original_line": 45
+    },
+    {
+      "name": "logPrimitive",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def logPrimitive (rho h : ℝ) : ℝ :=",
+      "header_sha256": "d4c161acb73d7464a39e6b831b3948c77a8c077485488be0d20156383bd22fda",
+      "full_header_byte_exact": true,
+      "original_line": 93
+    },
+    {
+      "name": "hasDerivAt_logPrimitive",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem hasDerivAt_logPrimitive {rho z : ℝ} (hrho : 0 < rho) (hz : 0 < z) :\n    HasDerivAt (logPrimitive rho) (Real.log (rho / z)) z :=",
+      "header_sha256": "984f655b2644f06bcda6d45c622edfa0990c7432f5a6a0b13b1c132ea8233e15",
+      "full_header_byte_exact": true,
+      "original_line": 95
+    },
+    {
+      "name": "tendsto_logPrimitive_zero",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_logPrimitive_zero {rho : ℝ} (hrho : 0 < rho) :\n    Tendsto (logPrimitive rho) (𝓝[>] 0) (𝓝 0) :=",
+      "header_sha256": "35e4124bfe58d47ba8cbb593e6ce6ba671c6f04be2512c706d1c4f046db785f0",
+      "full_header_byte_exact": true,
+      "original_line": 109
+    },
+    {
+      "name": "continuousOn_logPrimitive",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem continuousOn_logPrimitive {rho h : ℝ} (hrho : 0 < rho) :\n    ContinuousOn (logPrimitive rho) (Icc 0 h) :=",
+      "header_sha256": "37770b1b17ce7e99bba4852cf22a6cb0e5004e1195b4df748f005cee9bb58e4a",
+      "full_header_byte_exact": true,
+      "original_line": 122
+    },
+    {
+      "name": "integrableOn_log",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem integrableOn_log {rho h : ℝ} (hrho : 0 < rho) (hhrho : h ≤ rho) :\n    IntegrableOn (fun z : ℝ => Real.log (rho / z)) (Ioc 0 h) :=",
+      "header_sha256": "38306d83c6e34d96b50f5d2561aa834b852660cbce9ccfdd7797415ee4f52a1f",
+      "full_header_byte_exact": true,
+      "original_line": 135
+    },
+    {
+      "name": "integral_log",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem integral_log {rho h : ℝ} (hrho : 0 < rho) (hh : 0 < h) (hhrho : h ≤ rho) :\n    (∫ z in Ioc 0 h, Real.log (rho / z)) = logPrimitive rho h :=",
+      "header_sha256": "66994df70872bf187d8b7ef70864eb4ba476c7c67d4e27679fe523b746c2eb0b",
+      "full_header_byte_exact": true,
+      "original_line": 142
+    },
+    {
+      "name": "lintegral_log",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem lintegral_log {rho h : ℝ} (hrho : 0 < rho) (hh : 0 < h) (hhrho : h ≤ rho) :\n    (∫⁻ z in Ioc 0 h, ENNReal.ofReal (Real.log (rho / z))) =\n      ENNReal.ofReal (logPrimitive rho h) :=",
+      "header_sha256": "d1e4fab15c8090e241fa2b935bded777f72403ac0048137d958306d6eae156f0",
+      "full_header_byte_exact": true,
+      "original_line": 155
+    },
+    {
+      "name": "lintegral_active_three",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem lintegral_active_three {c omega rho : ℝ} (hc : 0 ≤ c)\n    (homega : 0 < omega) (horho : omega ≤ rho) :\n    (∫⁻ x in Ioc omega rho, ∫⁻ y in Ioc omega rho, ∫⁻ z in Ioc omega rho,\n      ENNReal.ofReal (c * (1 / x) * (1 / y) * (1 / z))) =\n      ENNReal.ofReal (c * Real.log (rho / omega) ^ 3) :=",
+      "header_sha256": "9db38190efcf0d08bb889cb8f8ffad3581b4d8c500b48e937e9e61d2a2eb86e3",
+      "full_header_byte_exact": true,
+      "original_line": 167
+    },
+    {
+      "name": "join",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def join (x y z v w : ℝ) : Fin 5 → ℝ :=",
+      "header_sha256": "b6b2f1b43cf93706b388bde0c640c7ac2a94dd34d6cc62b254cabdbd24da6b59",
+      "full_header_byte_exact": true,
+      "original_line": 187
+    },
+    {
+      "name": "tailMass",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def tailMass (S : Set (Fin 5 → ℝ)) (old new : (Fin 5 → ℝ) → ℝ)\n    (omega rho h : ℝ) : ℝ≥0∞ :=",
+      "header_sha256": "b74f14e41fda5acaa4a851013795ac55cdebb4676141a73a8d83e5ba23c893b7",
+      "full_header_byte_exact": true,
+      "original_line": 189
+    },
+    {
+      "name": "lintegral_majorant",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem lintegral_majorant {c omega rho h : ℝ} (hc : 0 ≤ c)\n    (homega : 0 < omega) (horho : omega ≤ rho) (hh : 0 < h) (hhrho : h ≤ rho) :\n    (∫⁻ w in Ioc 0 h, ∫⁻ v in Ioc w rho,\n      ∫⁻ x in Ioc omega rho, ∫⁻ y in Ioc omega rho, ∫⁻ z in Ioc omega rho,\n        ENNReal.ofReal (c * (1 / v) * (1 / x) * (1 / y) * (1 / z))) =\n      ENNReal.ofReal (c * Real.log (rho / omega) ^ 3 * logPrimitive rho h) :=",
+      "header_sha256": "3fbcb015bbde332c6a6c3d8310eb42c0e8164bde4b930c602d8802b55f80f49b",
+      "full_header_byte_exact": true,
+      "original_line": 197
+    },
+    {
+      "name": "tailMass_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tailMass_le {S : Set (Fin 5 → ℝ)} {old new : (Fin 5 → ℝ) → ℝ}\n    {u omega rho h : ℝ} (hu : 0 < u) (homega : 0 < omega) (horho : omega ≤ rho)\n    (hh : 0 < h) (hsmall : h ≤ u / 3) (hhrho : h ≤ rho)\n    (hgeom : ∀ t ∈ S, StrictAnti t → (∀ i, 0 < t i) →\n      omega ≤ t 2 → t 0 ≤ rho → t 4 ≤ h →\n        old t ≤ new t ∧ u ≤ old t - ∑ i, t i) :\n    tailMass S old new omega rho h ≤\n      ENNReal.ofReal ((12 / u ^ 2) * Real.log (rho / omega) ^ 3 * logPrimitive rho h) :=",
+      "header_sha256": "719484a3836b8732879d793c3431065246ba5162dc7dcf526b6b3ca123ee1bed",
+      "full_header_byte_exact": true,
+      "original_line": 231
+    },
+    {
+      "name": "tailMass_ne_top",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tailMass_ne_top {S : Set (Fin 5 → ℝ)} {old new : (Fin 5 → ℝ) → ℝ}\n    {u omega rho h : ℝ} (hu : 0 < u) (homega : 0 < omega) (horho : omega ≤ rho)\n    (hh : 0 < h) (hsmall : h ≤ u / 3) (hhrho : h ≤ rho)\n    (hgeom : ∀ t ∈ S, StrictAnti t → (∀ i, 0 < t i) →\n      omega ≤ t 2 → t 0 ≤ rho → t 4 ≤ h →\n        old t ≤ new t ∧ u ≤ old t - ∑ i, t i) :\n    tailMass S old new omega rho h ≠ ∞ :=",
+      "header_sha256": "ee94e14c931fd6971e5f439bd41e7229ab1c8032d8b8c1e021142b90260d3d1a",
+      "full_header_byte_exact": true,
+      "original_line": 272
+    },
+    {
+      "name": "tailMass_tendsto_zero",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tailMass_tendsto_zero {omega rho u : ℝ}\n    (homega : 0 < omega) (horho : omega ≤ rho) (hu : 0 < u)\n    (S : ℝ → Set (Fin 5 → ℝ)) (old new : ℝ → (Fin 5 → ℝ) → ℝ)\n    (hgeom : ∀ h, 0 < h → h ≤ u / 3 →\n      ∀ t ∈ S h, StrictAnti t → (∀ i, 0 < t i) →\n        omega ≤ t 2 → t 0 ≤ rho → t 4 ≤ h →\n          old h t ≤ new h t ∧ u ≤ old h t - ∑ i, t i) :\n    Tendsto (fun h => tailMass (S h) (old h) (new h) omega rho h)\n      (𝓝[>] 0) (𝓝 (0 : ℝ≥0∞)) :=",
+      "header_sha256": "dacf5ccf22826ccf382f5ec042651e66d70bf23ab2b38e18debc7fd5816cf792",
+      "full_header_byte_exact": true,
+      "original_line": 284
+    },
+    {
+      "name": "kernel_bound_of_original_third_cube",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem kernel_bound_of_original_third_cube {omega gamma old new : ℝ}\n    (t : Fin 5 → ℝ) (homega : 0 < omega) (hpos : ∀ i, 0 < t i)\n    (hactive : omega ≤ t 2) (hcube : t 0 + t 1 + 3 * t 2 < gamma)\n    (horder : t 3 < t 2) (h34 : gamma ≤ old) (h45 : old ≤ new)\n    (hsmall : t 4 ≤ omega / 6) :\n    0 ≤ kernel old new t ∧\n      kernel old new t ≤ 12 / (t 0 * t 1 * t 2 * t 3 * (omega / 2) ^ 2) :=",
+      "header_sha256": "5035931b8e0dc57758793fa610d8c98fa41321ec78fe76a9144f6ce301a6c932",
+      "full_header_byte_exact": true,
+      "original_line": 311
+    },
+    {
+      "name": "tailMass_tendsto_zero_of_original_third_cube",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tailMass_tendsto_zero_of_original_third_cube {omega rho : ℝ}\n    (homega : 0 < omega) (horho : omega ≤ rho)\n    (S : ℝ → Set (Fin 5 → ℝ)) (gamma old new : ℝ → (Fin 5 → ℝ) → ℝ)\n    (hregion : ∀ h, 0 < h → h ≤ omega / 6 →\n      ∀ t ∈ S h, StrictAnti t → (∀ i, 0 < t i) →\n        omega ≤ t 2 → t 0 ≤ rho → t 4 ≤ h →\n          t 0 + t 1 + 3 * t 2 < gamma h t ∧\n            gamma h t ≤ old h t ∧ old h t ≤ new h t) :\n    Tendsto (fun h => tailMass (S h) (old h) (new h) omega rho h)\n      (𝓝[>] 0) (𝓝 (0 : ℝ≥0∞)) :=",
+      "header_sha256": "458110df1880d2de799886a45758f30d56a85fecb48db3601583d9ee5b09e362",
+      "full_header_byte_exact": true,
+      "original_line": 325
+    },
+    {
+      "name": "tail_toReal_tendsto_zero_of_original_third_cube",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tail_toReal_tendsto_zero_of_original_third_cube {omega rho : ℝ}\n    (homega : 0 < omega) (horho : omega ≤ rho)\n    (S : ℝ → Set (Fin 5 → ℝ)) (gamma old new : ℝ → (Fin 5 → ℝ) → ℝ)\n    (hregion : ∀ h, 0 < h → h ≤ omega / 6 →\n      ∀ t ∈ S h, StrictAnti t → (∀ i, 0 < t i) →\n        omega ≤ t 2 → t 0 ≤ rho → t 4 ≤ h →\n          t 0 + t 1 + 3 * t 2 < gamma h t ∧\n            gamma h t ≤ old h t ∧ old h t ≤ new h t) :\n    Tendsto (fun h => (tailMass (S h) (old h) (new h) omega rho h).toReal)\n      (𝓝[>] 0) (𝓝 0) :=",
+      "header_sha256": "f8b0d6ecc872fa524c8467c5900cf65dd9eae5d5a7305bb6c1ade93cc4f2f780",
+      "full_header_byte_exact": true,
+      "original_line": 345
+    }
+  ],
+  "all_complete_definitions": [
+    {
+      "name": "kernel",
+      "complete_definition_and_following_interdecl_context": "def kernel (old new : ℝ) (t : Fin 5 → ℝ) : ℝ :=\n  (primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t) * ∏ i, 1 / t i\n\n/-- This is the actual two-indicator lower profile, not a shared-gate model. -/\n",
+      "sha256": "d7b5c14e23301ac8cdafbdf18d9c1790717557b80fa2949d29d976131a3cd776",
+      "byte_exact": true
+    },
+    {
+      "name": "logPrimitive",
+      "complete_definition_and_following_interdecl_context": "def logPrimitive (rho h : ℝ) : ℝ := h * (Real.log (rho / h) + 1)\n\n",
+      "sha256": "05e6a5a89d6c1fd54b22c9e77f3dd377a355c3b69fda8bab1a2199fc8a455a66",
+      "byte_exact": true
+    },
+    {
+      "name": "join",
+      "complete_definition_and_following_interdecl_context": "def join (x y z v w : ℝ) : Fin 5 → ℝ := ![x, y, z, v, w]\n\n",
+      "sha256": "4ff7ec3a7c5f26b22546ace890e47995bdc4e4d6550ae1981034f9d392ee0923",
+      "byte_exact": true
+    },
+    {
+      "name": "tailMass",
+      "complete_definition_and_following_interdecl_context": "def tailMass (S : Set (Fin 5 → ℝ)) (old new : (Fin 5 → ℝ) → ℝ)\n    (omega rho h : ℝ) : ℝ≥0∞ :=\n  ∫⁻ w in Ioc 0 h, ∫⁻ v in Ioc w rho,\n    ∫⁻ x in Ioc omega rho, ∫⁻ y in Ioc omega rho, ∫⁻ z in Ioc omega rho,\n      ENNReal.ofReal (if join x y z v w ∈ S ∧ StrictAnti (join x y z v w) then\n        kernel (old (join x y z v w)) (new (join x y z v w)) (join x y z v w) else 0)\n\n/-- A genuine fivefold improper integral of the explicit positive envelope. -/\n",
+      "sha256": "c7d32bf368c0976b02de299f9afffffd17de8752493f15dc8ca0a1cee84a683f",
+      "byte_exact": true
+    }
+  ],
+  "changed_proof_bodies": [
+    {
+      "name": "kernel_tail_bound",
+      "before_body": " by\n  have hw := hpos 4\n  have hg := small_last_both_ownCubes hu hw hsmall hgap hlevels\n  have hsnew : (old - ∑ i, t i) / t 4 ≤ (new - ∑ i, t i) / t 4 :=\n    div_le_div_of_nonneg_right (sub_le_sub_right hlevels _) hw.le\n  have hsold2 : 2 ≤ (old - ∑ i, t i) / t 4 := by linarith [hg.1]\n  have hsnew2 := hsold2.trans hsnew\n  have hdiff := thirdTailLowerFactor_difference hsold2 hsnew\n  have hdecay := hdiff.2.trans (actualSieveGap_normalized_le_three_div_sq hg.1)\n  have hweight : 0 ≤ ∏ i, 1 / t i := Finset.prod_nonneg (fun i _ => by positivity)\n  have hgapPos : 0 < old - ∑ i, t i := hu.trans_le hgap\n  have hprofile : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t =\n      4 * (thirdTailLowerFactor ((new - ∑ i, t i) / t 4) -\n        thirdTailLowerFactor ((old - ∑ i, t i) / t 4)) / t 4 := by\n    rw [primeOwnCubeGatedProfile, if_pos hg.2.2,\n      primeOwnCubeGatedProfile, if_pos hg.2.1,\n      p1PrimeTupleMinusProfile_eq_lowerFactor new t hw,\n      p1PrimeTupleMinusProfile_eq_lowerFactor old t hw,\n      actualExtendedThirdLowerFactor_of_two_le hsnew2,\n      actualExtendedThirdLowerFactor_of_two_le hsold2]\n    ring\n  have hprofileBound : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t ≤\n      12 * t 4 / u ^ 2 := by\n    rw [hprofile]\n    calc\n      _ ≤ 4 * (3 / ((old - ∑ i, t i) / t 4) ^ 2) / t 4 := by\n        exact div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hdecay (by norm_num)) hw.le\n      _ = 12 * t 4 / (old - ∑ i, t i) ^ 2 := by\n        field_simp [hw.ne', hgapPos.ne']\n        <;> ring\n      _ ≤ 12 * t 4 / u ^ 2 := by\n        apply div_le_div_of_nonneg_left (by positivity) (sq_pos_of_pos hu)\n        gcongr\n  constructor\n  · exact mul_nonneg (sub_nonneg.mpr (p1PrimeOwnCubeGatedProfile_mono t hw hlevels)) hweight\n  · unfold kernel\n    calc\n      _ ≤ (12 * t 4 / u ^ 2) * ∏ i, 1 / t i :=\n        mul_le_mul_of_nonneg_right hprofileBound hweight\n      _ = 12 / (t 0 * t 1 * t 2 * t 3 * u ^ 2) := by\n        simp only [Fin.prod_univ_succ]\n        field_simp [(hpos 0).ne', (hpos 1).ne', (hpos 2).ne', (hpos 3).ne', hw.ne', hu.ne']\n        <;> ring\n\n",
+      "after_body": " by\n  have hw := hpos 4\n  have hg := small_last_both_ownCubes hu hw hsmall hgap hlevels\n  have hsnew : (old - ∑ i, t i) / t 4 ≤ (new - ∑ i, t i) / t 4 :=\n    div_le_div_of_nonneg_right (sub_le_sub_right hlevels _) hw.le\n  have hsold2 : 2 ≤ (old - ∑ i, t i) / t 4 := by linarith [hg.1]\n  have hsnew2 := hsold2.trans hsnew\n  have hdiff := thirdTailLowerFactor_difference hsold2 hsnew\n  have hdecay := hdiff.2.trans (actualSieveGap_normalized_le_three_div_sq hg.1)\n  have hweight : 0 ≤ ∏ i, 1 / t i := Finset.prod_nonneg (fun i _ => one_div_nonneg.mpr (hpos i).le)\n  have hgapPos : 0 < old - ∑ i, t i := hu.trans_le hgap\n  have hprofile : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t =\n      4 * (thirdTailLowerFactor ((new - ∑ i, t i) / t 4) -\n        thirdTailLowerFactor ((old - ∑ i, t i) / t 4)) / t 4 := by\n    rw [primeOwnCubeGatedProfile, if_pos hg.2.2,\n      primeOwnCubeGatedProfile, if_pos hg.2.1,\n      p1PrimeTupleMinusProfile_eq_lowerFactor new t hw,\n      p1PrimeTupleMinusProfile_eq_lowerFactor old t hw]\n    change 4 * actualExtendedThirdLowerFactor ((new - ∑ i, t i) / t 4) / t 4 -\n      4 * actualExtendedThirdLowerFactor ((old - ∑ i, t i) / t 4) / t 4 = _\n    rw [actualExtendedThirdLowerFactor_of_two_le hsnew2,\n      actualExtendedThirdLowerFactor_of_two_le hsold2]\n    ring\n  have hprofileBound : primeOwnCubeGatedProfile new t - primeOwnCubeGatedProfile old t ≤\n      12 * t 4 / u ^ 2 := by\n    rw [hprofile]\n    calc\n      _ ≤ 4 * (3 / ((old - ∑ i, t i) / t 4) ^ 2) / t 4 := by\n        exact div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hdecay (by norm_num)) hw.le\n      _ = 12 * t 4 / (old - ∑ i, t i) ^ 2 := by\n        field_simp [hw.ne', hgapPos.ne']\n        <;> ring\n      _ ≤ 12 * t 4 / u ^ 2 := by\n        apply div_le_div_of_nonneg_left (by positivity) (sq_pos_of_pos hu)\n        gcongr\n  constructor\n  · exact mul_nonneg (sub_nonneg.mpr (p1PrimeOwnCubeGatedProfile_mono t hw hlevels)) hweight\n  · unfold kernel\n    calc\n      _ ≤ (12 * t 4 / u ^ 2) * ∏ i, 1 / t i :=\n        mul_le_mul_of_nonneg_right hprofileBound hweight\n      _ = 12 / (t 0 * t 1 * t 2 * t 3 * u ^ 2) := by\n        simp only [Fin.prod_univ_five]\n        field_simp [(hpos 0).ne', (hpos 1).ne', (hpos 2).ne', (hpos 3).ne', hw.ne', hu.ne']\n        <;> ring\n\n",
+      "before_sha256": "b05e74e81d6682cf1dcb541d37c520dca28953672c8f8e2823797faf4f5dff75",
+      "after_sha256": "d8b63186a4bff48ab52814c8b808e8a08c4ccb7d4bb1bf8f6e8fa350a71b97ba"
+    },
+    {
+      "name": "lintegral_active_three",
+      "before_body": " by\n  have hlog : 0 ≤ Real.log (rho / omega) :=\n    Real.log_nonneg ((le_div_iff₀ homega).mpr (by simpa using horho))\n  calc\n    _ = ∫⁻ x in Ioc omega rho,\n        ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * (1 / x)) := by\n      apply setLIntegral_congr_fun measurableSet_Ioc\n      intro x hx\n      have hxpos : 0 < x := homega.trans hx.1\n      rw [thirdTail_lintegral_square (mul_nonneg hc (by positivity)) homega horho]\n      congr 1\n      ring\n    _ = ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * Real.log (rho / omega)) :=\n      thirdTail_lintegral_const_mul_one_div (mul_nonneg hc (sq_nonneg _)) homega horho\n    _ = _ := by congr 1; ring\n\n",
+      "after_body": " by\n  have hlog : 0 ≤ Real.log (rho / omega) :=\n    Real.log_nonneg ((le_div_iff₀ homega).mpr (by simpa using horho))\n  calc\n    _ = ∫⁻ x in Ioc omega rho,\n        ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * (1 / x)) := by\n      apply setLIntegral_congr_fun measurableSet_Ioc\n      intro x hx\n      have hxpos : 0 < x := homega.trans hx.1\n      change (∫⁻ y in Ioc omega rho, ∫⁻ z in Ioc omega rho,\n        ENNReal.ofReal ((c * (1 / x)) * (1 / y) * (1 / z))) =\n          ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * (1 / x))\n      rw [thirdTail_lintegral_square\n        (c := c * (1 / x)) (mul_nonneg hc (one_div_nonneg.mpr hxpos.le)) homega horho]\n      congr 1\n      ring\n    _ = ENNReal.ofReal ((c * Real.log (rho / omega) ^ 2) * Real.log (rho / omega)) :=\n      thirdTail_lintegral_const_mul_one_div (mul_nonneg hc (sq_nonneg _)) homega horho\n    _ = _ := by congr 1; ring\n\n",
+      "before_sha256": "7ec7e56ee9dc227d4a86639ef583bf57d786c90482066c753445c0b77f6b2053",
+      "after_sha256": "3060047708cb26030501c3684cecdeb0333b05d199117c56e6e27927e4353507"
+    },
+    {
+      "name": "lintegral_majorant",
+      "before_body": " by\n  have hlog : 0 ≤ Real.log (rho / omega) :=\n    Real.log_nonneg ((le_div_iff₀ homega).mpr (by simpa using horho))\n  calc\n    _ = ∫⁻ w in Ioc 0 h,\n        ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * Real.log (rho / w)) := by\n      apply setLIntegral_congr_fun measurableSet_Ioc\n      intro w hw\n      calc\n        _ = ∫⁻ v in Ioc w rho,\n            ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * (1 / v)) := by\n          apply setLIntegral_congr_fun measurableSet_Ioc\n          intro v hv\n          have hvpos : 0 < v := hw.1.trans hv.1\n          rw [lintegral_active_three (mul_nonneg hc (by positivity)) homega horho]\n          congr 1\n          ring\n        _ = _ := thirdTail_lintegral_const_mul_one_div\n          (mul_nonneg hc (pow_nonneg hlog 3)) hw.1 (hw.2.trans hhrho)\n    _ = ENNReal.ofReal (c * Real.log (rho / omega) ^ 3) *\n        ∫⁻ w in Ioc 0 h, ENNReal.ofReal (Real.log (rho / w)) := by\n      simp_rw [ENNReal.ofReal_mul (mul_nonneg hc (pow_nonneg hlog 3))]\n      exact lintegral_const_mul' _ _ ENNReal.ofReal_ne_top\n    _ = _ := by\n      rw [lintegral_log (homega.trans_le horho) hh hhrho,\n        ENNReal.ofReal_mul (mul_nonneg hc (pow_nonneg hlog 3))]\n\n/-- A local original-strategy numerator gap is the only analytic input\ncondition. The canonical source decay and integrable majorant are conclusions. -/\n",
+      "after_body": " by\n  have hlog : 0 ≤ Real.log (rho / omega) :=\n    Real.log_nonneg ((le_div_iff₀ homega).mpr (by simpa using horho))\n  calc\n    _ = ∫⁻ w in Ioc 0 h,\n        ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * Real.log (rho / w)) := by\n      apply setLIntegral_congr_fun measurableSet_Ioc\n      intro w hw\n      calc\n        _ = ∫⁻ v in Ioc w rho,\n            ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * (1 / v)) := by\n          apply setLIntegral_congr_fun measurableSet_Ioc\n          intro v hv\n          have hvpos : 0 < v := hw.1.trans hv.1\n          change (∫⁻ x in Ioc omega rho, ∫⁻ y in Ioc omega rho,\n            ∫⁻ z in Ioc omega rho,\n              ENNReal.ofReal ((c * (1 / v)) * (1 / x) * (1 / y) * (1 / z))) =\n                ENNReal.ofReal ((c * Real.log (rho / omega) ^ 3) * (1 / v))\n          rw [lintegral_active_three\n            (c := c * (1 / v)) (mul_nonneg hc (one_div_nonneg.mpr hvpos.le)) homega horho]\n          congr 1\n          ring\n        _ = _ := thirdTail_lintegral_const_mul_one_div\n          (mul_nonneg hc (pow_nonneg hlog 3)) hw.1 (hw.2.trans hhrho)\n    _ = ENNReal.ofReal (c * Real.log (rho / omega) ^ 3) *\n        ∫⁻ w in Ioc 0 h, ENNReal.ofReal (Real.log (rho / w)) := by\n      simp_rw [ENNReal.ofReal_mul (mul_nonneg hc (pow_nonneg hlog 3))]\n      exact lintegral_const_mul' _ _ ENNReal.ofReal_ne_top\n    _ = _ := by\n      rw [lintegral_log (homega.trans_le horho) hh hhrho,\n        ENNReal.ofReal_mul (mul_nonneg hc (pow_nonneg hlog 3))]\n\n/-- A local original-strategy numerator gap is the only analytic input\ncondition. The canonical source decay and integrable majorant are conclusions. -/\n",
+      "before_sha256": "7abd5f6ddee3debb449331f146dcc325abc7d8e8efeb31d27b96b1ef770de9c3",
+      "after_sha256": "c30ef4a9b2a2295c7622d497a15328afede985f8a2d412c3281117a8fbdb08c1"
+    }
+  ],
+  "outside_registered_proof_bodies_sha256": "b963325d6ecf369bd4ad1d8b1aa7d79f8bd841e1dfc3f906f65b49d5617c1e96",
+  "outside_registered_proof_bodies_byte_exact_after_removing_explicit_scoped_open": true
+}

@@ -1,0 +1,133 @@
+{
+  "module": "ImbalancedChen.P1OriginalFourthFiniteBinBudget",
+  "all_complete_source_headers": [
+    {
+      "name": "sum_inv_sq_Icc_one_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem sum_inv_sq_Icc_one_le (M : ℕ) :\n    (∑ r ∈ Icc 1 M, ((r : ℝ)⁻¹) ^ 2) ≤ 2 :=",
+      "header_sha256": "8599d6c7ee345bb94789bffcbe8103f198fb47a56dd233373939333e9dd3a63e",
+      "full_header_byte_exact": true,
+      "original_line": 28
+    },
+    {
+      "name": "finite_index_terms_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem finite_index_terms_le\n    (R : Finset ℕ) (T a K L : ℝ)\n    (hT : 0 ≤ T) (ha : 0 ≤ a) (hK : 0 ≤ K) (hL : 0 < L)\n    (hR : ∀ r ∈ R, 1 ≤ r ∧ (r : ℝ) ≤ T) :\n    (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L) ≤\n      4 * a + (T + 1) * (6 * K / L) :=",
+      "header_sha256": "f71ddf713c410f1c6a919e30a2a151bc6afef5ad7b36b7a7d60a428b77edb52f",
+      "full_header_byte_exact": true,
+      "original_line": 68
+    },
+    {
+      "name": "occupied_reciprocal_indices_range",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem occupied_reciprocal_indices_range\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a)\n    (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m) :\n    ∀ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n      1 ≤ r ∧ (r : ℝ) ≤ a * Real.log (N : ℝ) / Real.log 3 :=",
+      "header_sha256": "22a56a57b4e36ad18922dba1f68f3158b0ca3bd9e3f9181419ba3c9c309010d9",
+      "full_header_byte_exact": true,
+      "original_line": 110
+    },
+    {
+      "name": "occupied_lower_endpoint_two_of_log_scale",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem occupied_lower_endpoint_two_of_log_scale\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a)\n    (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m)\n    (hscale : Real.log (2 : ℝ) * Real.log (3 : ℝ) ≤\n      a * Real.log (N : ℝ) *\n        (Real.log (3 : ℝ) - Real.log (2 : ℝ))) :\n    ∀ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n      2 ≤ (N : ℝ) ^ (a / ((r : ℝ) + 1)) :=",
+      "header_sha256": "63c10f909a90e8c07cf27088937e80cad86c78e7476b0d2f6bf2c2379844ee79",
+      "full_header_byte_exact": true,
+      "original_line": 134
+    },
+    {
+      "name": "original_occupied_interval_terms_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem original_occupied_interval_terms_le\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a)\n    (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m)\n    (K : ℝ) (hK : 0 ≤ K) :\n    (∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n      2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ)) ≤\n        4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) :=",
+      "header_sha256": "0fa50b70cfee068cf527102df4bf3b5fbe6ba6c2777b3eae890162eb4e3baeaf",
+      "full_header_byte_exact": true,
+      "original_line": 174
+    },
+    {
+      "name": "exists_original_occupied_last_prime_mass_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_original_occupied_last_prime_mass_le :\n    ∃ K : ℝ, 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ), 0 < a →\n      ∀ (N cap : ℕ), 1 < N → Even N → ∀ j : FourthCell m,\n        (∀ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n          2 ≤ (N : ℝ) ^ (a / ((r : ℝ) + 1))) →\n        (∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n          (a / (r : ℝ)) *\n            actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))\n              (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1)))) ≤\n          4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) :=",
+      "header_sha256": "c231ab00df8549b900637e803dd558f8859f1e5b56d12352c3b081bd16d67567",
+      "full_header_byte_exact": true,
+      "original_line": 204
+    },
+    {
+      "name": "exists_original_occupied_last_prime_mass_le_of_log_scale",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_original_occupied_last_prime_mass_le_of_log_scale :\n    ∃ K : ℝ, 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ), 0 < a →\n      ∀ (N cap : ℕ), 1 < N → Even N → ∀ j : FourthCell m,\n        Real.log (2 : ℝ) * Real.log (3 : ℝ) ≤\n          a * Real.log (N : ℝ) *\n            (Real.log (3 : ℝ) - Real.log (2 : ℝ)) →\n        (∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n          (a / (r : ℝ)) *\n            actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))\n              (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1)))) ≤\n          4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) :=",
+      "header_sha256": "5c598b76b21cbeec4f6a97fe462169700e6c65823a9edcd8ed7d12e507a67ced",
+      "full_header_byte_exact": true,
+      "original_line": 229
+    },
+    {
+      "name": "original_bin_boxMass_eq_prefix_cube",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem original_bin_boxMass_eq_prefix_cube (N : ℕ) (omega a : ℝ) (r : ℕ) :\n    actualPrimeBoxMass N (binLo omega a r) (binHi a r) =\n      (actualPrimeReciprocalMass N omega (19 / 96 : ℝ)) ^ 3 *\n        actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))\n          (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) :=",
+      "header_sha256": "58ce245cf28784dabfdc658807b91f08cb6018022137778aba9d4324abac6ac4",
+      "full_header_byte_exact": true,
+      "original_line": 250
+    },
+    {
+      "name": "exists_original_smallCell_weighted_moment_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_original_smallCell_weighted_moment_le :\n    ∃ K : ℝ, 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ), 0 < a →\n      ∀ (J4 : Finset (FourthCell m)) (N cap : ℕ), 1 < N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n        Real.log (2 : ℝ) * Real.log (3 : ℝ) ≤\n          a * Real.log (N : ℝ) *\n            (Real.log (3 : ℝ) - Real.log (2 : ℝ)) →\n        (∑ p ∈ smallCellTuples e chi m omega a N cap j,\n          (∏ i, 1 / ((p i : ℝ) - 1)) * actualPrimeTupleLog N p (Fin.last 3)) ≤\n          (actualPrimeReciprocalMass N omega (19 / 96 : ℝ)) ^ 3 *\n            (4 * a + 6 * K *\n              (a / Real.log 3 + 1 / Real.log (N : ℝ))) :=",
+      "header_sha256": "b919380e9bc41d77598baf61f17c08a2f0db48a417d8e8e2fa22191d5988d78d",
+      "full_header_byte_exact": true,
+      "original_line": 263
+    }
+  ],
+  "all_complete_definitions": [],
+  "changed_proof_bodies": [
+    {
+      "name": "finite_index_terms_le",
+      "before_body": " by\n  have hsubI : R ⊆ Icc 1 (Nat.floor T) := by\n    intro r hr\n    exact mem_Icc.mpr ⟨(hR r hr).1,\n      (Nat.le_floor_iff hT).mpr (hR r hr).2⟩\n  have hsubRange : R ⊆ range (Nat.floor T + 1) := by\n    intro r hr\n    exact mem_range.mpr (Nat.lt_succ_of_le (mem_Icc.mp (hsubI hr)).2)\n  have hsquares : (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) ≤ 2 := by\n    calc\n      _ ≤ ∑ r ∈ Icc 1 (Nat.floor T), ((r : ℝ)⁻¹) ^ 2 :=\n        sum_le_sum_of_subset_of_nonneg hsubI (fun _ _ _ => sq_nonneg _)\n      _ ≤ 2 := sum_inv_sq_Icc_one_le _\n  have hcardNat : R.card ≤ Nat.floor T + 1 := by\n    calc\n      R.card ≤ (range (Nat.floor T + 1)).card := card_le_card hsubRange\n      _ = Nat.floor T + 1 := card_range _\n  have hfloor : (Nat.floor T : ℝ) ≤ T := Nat.floor_le hT\n  have hcard : (R.card : ℝ) ≤ T + 1 := by\n    have hcardR : (R.card : ℝ) ≤ (Nat.floor T : ℝ) + 1 := by\n      exact_mod_cast hcardNat\n    exact hcardR.trans (add_le_add_right hfloor 1)\n  have hmain : 2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) ≤ 4 * a := by\n    nlinarith [mul_le_mul_of_nonneg_left hsquares (by positivity : 0 ≤ 2 * a)]\n  have herr : (R.card : ℝ) * (6 * K / L) ≤ (T + 1) * (6 * K / L) :=\n    mul_le_mul_of_nonneg_right hcard (by positivity)\n  calc\n    (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L) =\n        2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) +\n          (R.card : ℝ) * (6 * K / L) := by\n      rw [sum_add_distrib, ← mul_sum]\n      simp only [sum_const_zero, sum_const, nsmul_eq_mul]\n    _ ≤ 4 * a + (T + 1) * (6 * K / L) := add_le_add hmain herr\n\n/-- The original coarse-policy occupied natural indices are positive and\nlie below `a log N/log 3`. This uses the actual source, not a box index\ninvented after the fact. -/\n",
+      "after_body": " by\n  have hsubI : R ⊆ Icc 1 (Nat.floor T) := by\n    intro r hr\n    exact mem_Icc.mpr ⟨(hR r hr).1,\n      (Nat.le_floor_iff hT).mpr (hR r hr).2⟩\n  have hsubRange : R ⊆ range (Nat.floor T + 1) := by\n    intro r hr\n    exact mem_range.mpr (Nat.lt_succ_of_le (mem_Icc.mp (hsubI hr)).2)\n  have hsquares : (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) ≤ 2 := by\n    calc\n      _ ≤ ∑ r ∈ Icc 1 (Nat.floor T), ((r : ℝ)⁻¹) ^ 2 :=\n        sum_le_sum_of_subset_of_nonneg hsubI (fun _ _ _ => sq_nonneg _)\n      _ ≤ 2 := sum_inv_sq_Icc_one_le _\n  have hcardNat : R.card ≤ Nat.floor T + 1 := by\n    calc\n      R.card ≤ (range (Nat.floor T + 1)).card := card_le_card hsubRange\n      _ = Nat.floor T + 1 := card_range _\n  have hfloor : (Nat.floor T : ℝ) ≤ T := Nat.floor_le hT\n  have hcard : (R.card : ℝ) ≤ T + 1 := by\n    have hcardR : (R.card : ℝ) ≤ (Nat.floor T : ℝ) + 1 := by\n      exact_mod_cast hcardNat\n    exact hcardR.trans (add_le_add hfloor (le_refl 1))\n  have hmain : 2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) ≤ 4 * a := by\n    nlinarith [mul_le_mul_of_nonneg_left hsquares (by positivity : 0 ≤ 2 * a)]\n  have herr : (R.card : ℝ) * (6 * K / L) ≤ (T + 1) * (6 * K / L) :=\n    mul_le_mul_of_nonneg_right hcard (by positivity)\n  calc\n    (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2 + 6 * K / L) =\n        2 * a * (∑ r ∈ R, ((r : ℝ)⁻¹) ^ 2) +\n          (R.card : ℝ) * (6 * K / L) := by\n      calc\n        _ = (∑ r ∈ R, 2 * a * ((r : ℝ)⁻¹) ^ 2) +\n            ∑ _r ∈ R, 6 * K / L :=\n          Finset.sum_add_distrib\n        _ = _ := by\n          rw [← Finset.mul_sum, Finset.sum_const, nsmul_eq_mul]\n    _ ≤ 4 * a + (T + 1) * (6 * K / L) := add_le_add hmain herr\n\n/-- The original coarse-policy occupied natural indices are positive and\nlie below `a log N/log 3`. This uses the actual source, not a box index\ninvented after the fact. -/\n",
+      "before_sha256": "5c0b52dcad390ffa81ed888e493e13c62bec681c2fb32b76bbb574c1ae71d1f4",
+      "after_sha256": "6c36e28c50ec3d7beba5c451d007e9776ef32a33beaf35a8be31cee9425e344c"
+    },
+    {
+      "name": "occupied_lower_endpoint_two_of_log_scale",
+      "before_body": " by\n  intro r hr\n  have hbounds := occupied_reciprocal_indices_range e chi m omega a ha\n    N cap hN hEven j r hr\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hlog3 : 0 < Real.log (3 : ℝ) := Real.log_pos (by norm_num)\n  have hlogN : 0 < Real.log (N : ℝ) := by\n    apply Real.log_pos\n    exact_mod_cast hN\n  have hr1 : (0 : ℝ) < (r : ℝ) + 1 := by positivity\n  have hR : (r : ℝ) * Real.log (3 : ℝ) ≤ a * Real.log (N : ℝ) :=\n    (le_div_iff₀ hlog3).mp hbounds.2\n  have hmult := mul_le_mul_of_nonneg_right hR hlog2.le\n  have htarget : ((r : ℝ) + 1) * Real.log (2 : ℝ) ≤\n      a * Real.log (N : ℝ) := by\n    nlinarith [hmult, hscale]\n  have hlogtarget : Real.log (2 : ℝ) ≤\n      (a / ((r : ℝ) + 1)) * Real.log (N : ℝ) := by\n    have h := (le_div_iff₀ hr1).mpr htarget\n    convert h using 1 <;> ring\n  have hNpos : (0 : ℝ) < N := by exact_mod_cast (show 0 < N by omega)\n  calc\n    (2 : ℝ) = Real.exp (Real.log (2 : ℝ)) := (Real.exp_log (by norm_num)).symm\n    _ ≤ Real.exp ((a / ((r : ℝ) + 1)) * Real.log (N : ℝ)) :=\n      Real.exp_le_exp.mpr hlogtarget\n    _ = (N : ℝ) ^ (a / ((r : ℝ) + 1)) := by\n      rw [Real.rpow_def_of_pos hNpos]\n      congr 1\n      ring\n\n/-- The occupied-index summation is explicit and uniform after the\nmoving prime-interval estimate: its result is `O(a + 1/log N)` with\nconstants independent of the target, cap, and selected fourth cell. -/\n",
+      "after_body": " by\n  intro r hr\n  have hbounds := occupied_reciprocal_indices_range e chi m omega a ha\n    N cap hN hEven j r hr\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hlog3 : 0 < Real.log (3 : ℝ) := Real.log_pos (by norm_num)\n  have hlogN : 0 < Real.log (N : ℝ) := by\n    apply Real.log_pos\n    exact_mod_cast hN\n  have hr1 : (0 : ℝ) < (r : ℝ) + 1 := by positivity\n  have hR : (r : ℝ) * Real.log (3 : ℝ) ≤ a * Real.log (N : ℝ) :=\n    (le_div_iff₀ hlog3).mp hbounds.2\n  have hmult := mul_le_mul_of_nonneg_right hR hlog2.le\n  have htarget : ((r : ℝ) + 1) * Real.log (2 : ℝ) ≤\n      a * Real.log (N : ℝ) := by\n    nlinarith [hmult, hscale]\n  have hlogtarget : Real.log (2 : ℝ) ≤\n      (a / ((r : ℝ) + 1)) * Real.log (N : ℝ) := by\n    have h := (le_div_iff₀ hr1).mpr (by simpa only [mul_comm] using htarget)\n    convert h using 1 <;> ring\n  have hNpos : (0 : ℝ) < N := by exact_mod_cast (show 0 < N by omega)\n  calc\n    (2 : ℝ) = Real.exp (Real.log (2 : ℝ)) := (Real.exp_log (by norm_num)).symm\n    _ ≤ Real.exp ((a / ((r : ℝ) + 1)) * Real.log (N : ℝ)) :=\n      Real.exp_le_exp.mpr hlogtarget\n    _ = (N : ℝ) ^ (a / ((r : ℝ) + 1)) := by\n      rw [Real.rpow_def_of_pos hNpos]\n      congr 1\n      ring\n\n/-- The occupied-index summation is explicit and uniform after the\nmoving prime-interval estimate: its result is `O(a + 1/log N)` with\nconstants independent of the target, cap, and selected fourth cell. -/\n",
+      "before_sha256": "09c171e159f80fb46bee9bbde601752654788d1fcc39edbdd272760a3e048fdb",
+      "after_sha256": "198777ea4108020f4ea033c90ce478e0976954792c9d4723d4e9fcfe6f76df5d"
+    },
+    {
+      "name": "original_occupied_interval_terms_le",
+      "before_body": " by\n  have hlogN : 0 < Real.log (N : ℝ) := by\n    apply Real.log_pos\n    exact_mod_cast hN\n  have hlog3 : 0 < Real.log (3 : ℝ) := Real.log_pos (by norm_num)\n  have hT : 0 ≤ a * Real.log (N : ℝ) / Real.log 3 := by positivity\n  have h := finite_index_terms_le\n    (reciprocalBins (smallCellTuples e chi m omega a N cap j) a N)\n    (a * Real.log (N : ℝ) / Real.log 3) a K (Real.log (N : ℝ))\n    hT ha.le hK hlogN\n    (occupied_reciprocal_indices_range e chi m omega a ha N cap hN hEven j)\n  have hright :\n      4 * a + (a * Real.log (N : ℝ) / Real.log 3 + 1) *\n        (6 * K / Real.log (N : ℝ)) =\n      4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by\n    field_simp [hlogN.ne', hlog3.ne']\n    ring\n  rw [hright] at h\n  simpa only [div_eq_mul_inv, inv_pow] using h\n\n/-- The genuine target-deleted last-prime interval masses sum uniformly\nover all occupied original indices. The sole remaining geometric endpoint\ncondition is displayed: every occupied box lower endpoint is at least two.\nThe same pinned K works before the source parameters are chosen. -/\n",
+      "after_body": " by\n  have hlogN : 0 < Real.log (N : ℝ) := by\n    apply Real.log_pos\n    exact_mod_cast hN\n  have hlog3 : 0 < Real.log (3 : ℝ) := Real.log_pos (by norm_num)\n  have hT : 0 ≤ a * Real.log (N : ℝ) / Real.log 3 := by positivity\n  have h := finite_index_terms_le\n    (reciprocalBins (smallCellTuples e chi m omega a N cap j) a N)\n    (a * Real.log (N : ℝ) / Real.log 3) a K (Real.log (N : ℝ))\n    hT ha.le hK hlogN\n    (occupied_reciprocal_indices_range e chi m omega a ha N cap hN hEven j)\n  have hright :\n      4 * a + (a * Real.log (N : ℝ) / Real.log 3 + 1) *\n        (6 * K / Real.log (N : ℝ)) =\n      4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by\n    field_simp [hlogN.ne', hlog3.ne'] <;> ring\n  rw [hright] at h\n  simpa only [div_eq_mul_inv, inv_pow] using h\n\n/-- The genuine target-deleted last-prime interval masses sum uniformly\nover all occupied original indices. The sole remaining geometric endpoint\ncondition is displayed: every occupied box lower endpoint is at least two.\nThe same pinned K works before the source parameters are chosen. -/\n",
+      "before_sha256": "eb3ff147fbd2705895c46c71cf8202e830904227818f5699075b1d0772e31359",
+      "after_sha256": "095d3fa773b879c0de50605445f09f3e5c5f1de82eb072c128ae5ff717ba7a9b"
+    },
+    {
+      "name": "exists_original_occupied_last_prime_mass_le",
+      "before_body": " by\n  obtain ⟨K, hKpos, hinterval⟩ :=\n    P1OriginalFourthMovingPrimeIntervalBound.exists_uniform_reciprocal_interval_bound\n  refine ⟨K, hKpos, ?_⟩\n  intro e chi m omega a ha N cap hN hEven j hlow\n  have hterms := original_occupied_interval_terms_le e chi m omega a ha\n    N cap hN hEven j K (by linarith)\n  apply (Finset.sum_le_sum (fun r hr => ?_)).trans hterms\n  have hr1 := (occupied_reciprocal_indices_range e chi m omega a ha\n    N cap hN hEven j r hr).1\n  exact P1OriginalFourthMovingPrimeIntervalBound.weighted_last_prime_interval_le_terms\n    K (by linarith) hinterval N hN hEven a ha r hr1 (hlow r hr)\n\n/-- Supplier-free terminal-prime sum with the explicit eventual scale\ncondition in place of a per-bin endpoint hypothesis. -/\n",
+      "after_body": " by\n  obtain ⟨K, hKpos, hinterval⟩ :=\n    P1OriginalFourthMovingPrimeIntervalBound.exists_uniform_reciprocal_interval_bound\n  refine ⟨K, hKpos, ?_⟩\n  intro e chi m omega a ha N cap hN hEven j hlow\n  have hterms := original_occupied_interval_terms_le e chi m omega a ha\n    N cap hN hEven j K (by linarith)\n  calc\n    _ ≤ ∑ r ∈ reciprocalBins (smallCellTuples e chi m omega a N cap j) a N,\n        2 * a / (r : ℝ) ^ 2 + 6 * K / Real.log (N : ℝ) := by\n      apply Finset.sum_le_sum\n      intro r hr\n      have hr1 := (occupied_reciprocal_indices_range e chi m omega a ha\n        N cap hN hEven j r hr).1\n      exact P1OriginalFourthMovingPrimeIntervalBound.weighted_last_prime_interval_le_terms\n        K (by linarith) hinterval N hN hEven a ha r hr1 (hlow r hr)\n    _ ≤ _ := hterms\n\n/-- Supplier-free terminal-prime sum with the explicit eventual scale\ncondition in place of a per-bin endpoint hypothesis. -/\n",
+      "before_sha256": "a6dcd1fe4d8f92cd61c371beb68f16938d80c67fd17cb1288fdc45b3474feedc",
+      "after_sha256": "913bd34e54c22503776f6a4104f116d9b30e37ad25a1295b6064851c84a18e28"
+    },
+    {
+      "name": "original_bin_boxMass_eq_prefix_cube",
+      "before_body": " by\n  rw [actualPrimeBoxMass_eq_prod]\n  simp [Fin.prod_univ_four, binLo, binHi]\n  ring\n\n/-- The literal original-coarse Fin4 small-cell weighted first moment is\nbounded by its fixed prefix-prime mass cubed times the explicit uniform\nterminal-prime budget. No `hSupplier` or alternate fourth carrier occurs.\nThe logarithmic scale hypothesis is eventually true for each fixed a>0. -/\n",
+      "after_body": " by\n  rw [actualPrimeBoxMass_eq_prod]\n  simp [Fin.prod_univ_four, binLo, binHi] <;> ring\n\n/-- The literal original-coarse Fin4 small-cell weighted first moment is\nbounded by its fixed prefix-prime mass cubed times the explicit uniform\nterminal-prime budget. No `hSupplier` or alternate fourth carrier occurs.\nThe logarithmic scale hypothesis is eventually true for each fixed a>0. -/\n",
+      "before_sha256": "2423b2563a78194db60631fdc1a1057864d05588f385d08c7a03562d3b549f87",
+      "after_sha256": "ee36f25d351017ebce00da40facde0cb39e9ea0b037f1798d5f78ea0d77cb869"
+    },
+    {
+      "name": "exists_original_smallCell_weighted_moment_le",
+      "before_body": " by\n  obtain ⟨K, hK, hterminal⟩ := exists_original_occupied_last_prime_mass_le_of_log_scale\n  refine ⟨K, hK, ?_⟩\n  intro e chi m omega a ha J4 N cap hN hEven j hj hscale\n  let S := smallCellTuples e chi m omega a N cap j\n  let R := reciprocalBins S a N\n  let M := actualPrimeReciprocalMass N omega (19 / 96 : ℝ)\n  have hM : 0 ≤ M := by\n    unfold M actualPrimeReciprocalMass\n    apply Finset.sum_nonneg\n    intro p hp\n    have hp1 : (1 : ℝ) < p := by\n      exact_mod_cast (mem_roughPrimeFinset.mp hp).2.1.one_lt\n    positivity\n  have htail := hterminal e chi m omega a ha N cap hN hEven j hscale\n  calc\n    (∑ p ∈ S, (∏ i, 1 / ((p i : ℝ) - 1)) *\n        actualPrimeTupleLog N p (Fin.last 3)) =\n        ∑ r ∈ R, ∑ p ∈ reciprocalBin S a N r,\n          (∏ i, 1 / ((p i : ℝ) - 1)) *\n            actualPrimeTupleLog N p (Fin.last 3) :=\n      sum_source_eq_reciprocalBins S a N _\n    _ ≤ ∑ r ∈ R, (a / (r : ℝ)) *\n        actualPrimeBoxMass N (binLo omega a r) (binHi a r) := by\n      apply Finset.sum_le_sum\n      intro r hr\n      exact weightedReciprocalBin_le_prime_box e chi m omega a 0 0 ha\n        J4 N cap hN j hj r\n    _ = M ^ 3 * ∑ r ∈ R,\n        (a / (r : ℝ)) *\n          actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))\n            (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) := by\n      simp_rw [original_bin_boxMass_eq_prefix_cube]\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r _\n      ring\n    _ ≤ M ^ 3 * (4 * a + 6 * K *\n        (a / Real.log 3 + 1 / Real.log (N : ℝ))) :=\n      mul_le_mul_of_nonneg_left htail (pow_nonneg hM _)\n\nend P1OriginalFourthFiniteBinBudget\n\nend\n\nend ImbalancedChen\n",
+      "after_body": " by\n  obtain ⟨K, hK, hterminal⟩ := exists_original_occupied_last_prime_mass_le_of_log_scale\n  refine ⟨K, hK, ?_⟩\n  intro e chi m omega a ha J4 N cap hN hEven j hj hscale\n  let S := smallCellTuples e chi m omega a N cap j\n  let R := reciprocalBins S a N\n  let M := actualPrimeReciprocalMass N omega (19 / 96 : ℝ)\n  have hM : 0 ≤ M := by\n    unfold M actualPrimeReciprocalMass\n    apply Finset.sum_nonneg\n    intro p hp\n    have hp1 : (1 : ℝ) < p := by\n      exact_mod_cast (mem_roughPrimeFinset.mp hp).2.1.one_lt\n    positivity\n  have htail := hterminal e chi m omega a ha N cap hN hEven j hscale\n  calc\n    (∑ p ∈ S, (∏ i, 1 / ((p i : ℝ) - 1)) *\n        actualPrimeTupleLog N p (Fin.last 3)) =\n        ∑ r ∈ R, ∑ p ∈ reciprocalBin S a N r,\n          (∏ i, 1 / ((p i : ℝ) - 1)) *\n            actualPrimeTupleLog N p (Fin.last 3) :=\n      sum_source_eq_reciprocalBins S a N _\n    _ ≤ ∑ r ∈ R, (a / (r : ℝ)) *\n        actualPrimeBoxMass N (P1OriginalFourthSmallBinWeightedMass.binLo omega a r)\n          (P1OriginalFourthSmallBinWeightedMass.binHi a r) := by\n      apply Finset.sum_le_sum\n      intro r hr\n      exact weightedReciprocalBin_le_prime_box e chi m omega a 0 0 ha\n        J4 N cap hN j hj r\n    _ = M ^ 3 * ∑ r ∈ R,\n        (a / (r : ℝ)) *\n          actualPrimeReciprocalMass N (a / ((r : ℝ) + 1))\n            (a / (r : ℝ) + a / ((r : ℝ) * ((r : ℝ) + 1))) := by\n      simp_rw [original_bin_boxMass_eq_prefix_cube]\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r _\n      ring\n    _ ≤ M ^ 3 * (4 * a + 6 * K *\n        (a / Real.log 3 + 1 / Real.log (N : ℝ))) :=\n      mul_le_mul_of_nonneg_left htail (pow_nonneg hM _)\n\nend P1OriginalFourthFiniteBinBudget\n\nend\n\nend ImbalancedChen\n",
+      "before_sha256": "7472f87d44cf0d699e551d540ae38973acb9056b02b3e5314d5ae573a1ccf68a",
+      "after_sha256": "9a9905f46a34e5254858c8fe0496c8b998034c7e0b12be510e8f20fec074d28b"
+    }
+  ],
+  "outside_registered_proof_bodies_sha256": "f9547ea45f644edb1f10372dfe2a8a4c6396c726447d9dcfbb9918df0222ad2f",
+  "outside_registered_proof_bodies_byte_exact_after_removing_explicit_scoped_open": true
+}
