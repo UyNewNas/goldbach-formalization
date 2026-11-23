@@ -1,0 +1,151 @@
+{
+  "schema": "modern_literal_fifth_or_physical_reserve_static_candidate_v1",
+  "captured_utc": "2026-11-23T18:59:50.895706+00:00",
+  "author": "/root/blue_inventory",
+  "module": "ImbalancedChen.P4AHistoricalPhysicalSavingsReserve",
+  "status": "STATIC_UNCOMPILED",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-literal-fifth-physical-reserve/P4AHistoricalPhysicalSavingsReserve/baseline.lean",
+    "sha256": "c155792f9beae44154e090f8139911457299d96aff7d856835e676a199d1336f",
+    "bytes": 10136
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-literal-fifth-physical-reserve/P4AHistoricalPhysicalSavingsReserve/candidate.lean",
+    "sha256": "bfd4ba4a96321ed5ae313d89787b2a42dc381cd53d6ac2a4274d262a8ab9d258",
+    "bytes": 10191
+  },
+  "patch": {
+    "path": "/workspace/p1-complete-proof/static-literal-fifth-physical-reserve/P4AHistoricalPhysicalSavingsReserve/candidate.patch",
+    "sha256": "0a5302bdc5ca84457ddc155a4b675bc8eb7ee8d08796b3a0a572db98fcb425df",
+    "bytes": 459
+  },
+  "all_complete_literal_headers": [
+    {
+      "fqn_source_namespace": "ImbalancedChen.p4a_fullRaw_eq_euler_presieved_add_correction",
+      "private": false,
+      "complete_header": "theorem p4a_fullRaw_eq_euler_presieved_add_correction\n    (retain : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) :\n    p4aReserveRawDensity retain N cap 0 z =\n      actualSmallEulerProduct N cap w * p4aReserveRawDensity retain N cap w z +\n        p4aActualPresieveCorrection retain N cap w z :=",
+      "header_sha256": "571728045055e553d329ea845c978baf966453b1c66bf5a1172a7807add2c1b3",
+      "identical": true,
+      "proof_body_changed": false
+    },
+    {
+      "fqn_source_namespace": "ImbalancedChen.p4aActualPresieveCorrection_nonneg",
+      "private": false,
+      "complete_header": "theorem p4aActualPresieveCorrection_nonneg\n    (retain : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) :\n    0 ≤ p4aActualPresieveCorrection retain N cap w z :=",
+      "header_sha256": "25c753845c2b0a20aa9f903ef0b7064cab552e466e7fe8c0095642982e132d7a",
+      "identical": true,
+      "proof_body_changed": false
+    },
+    {
+      "fqn_source_namespace": "ImbalancedChen.exists_p4a_twoPolicy_physicalSavings_reserve",
+      "private": false,
+      "complete_header": "theorem exists_p4a_twoPolicy_physicalSavings_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hepsilonMax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) →\n          ∀ old new : List ℕ → Bool,\n            let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n            let z := (N : ℝ) ^ (nu * r)\n            let L := (N : ℝ) ^ (nu * epsilon)\n            let V := actualSmallEulerProduct N cap w\n            |(p4aReservePhysicalDensity old N cap w z L -\n                p4aReservePhysicalDensity new N cap w z L) -\n              V * (p4aReserveRawDensity old N cap w z -\n                p4aReserveRawDensity new N cap w z)| ≤\n              2 * eta * singularSeries N / Real.log (N : ℝ) :=",
+      "header_sha256": "16f8f3d60aa22dab9f6b157b9ca558524b81dabb86b3535824eca4c1a09e58e2",
+      "identical": true,
+      "proof_body_changed": true
+    },
+    {
+      "fqn_source_namespace": "ImbalancedChen.exists_p4a_historicalThirdToFifth_physicalSavings_reserve",
+      "private": false,
+      "complete_header": "theorem exists_p4a_historicalThirdToFifth_physicalSavings_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hepsilonMax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) →\n          ∀ D : HistoricalPrefixCapData, D.a ≤ D.b → D.levelCheck = true →\n            let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n            let z := (N : ℝ) ^ (nu * r)\n            let L := (N : ℝ) ^ (nu * epsilon)\n            |(p4aReservePhysicalDensity (D.upperThirdPolicy (N : ℝ) false) N cap w z L -\n                p4aReservePhysicalDensity (D.upperFifthPolicy (N : ℝ) false) N cap w z L) -\n              (actualHistoricalFourthSaving\n                (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n                (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) N cap z +\n                actualHistoricalFifthSaving\n                  (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n                  (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N cap z -\n                (p4aActualPresieveCorrection (D.upperThirdPolicy (N : ℝ) false) N cap w z -\n                  p4aActualPresieveCorrection (D.upperFifthPolicy (N : ℝ) false) N cap w z))| ≤\n              2 * eta * singularSeries N / Real.log (N : ℝ) :=",
+      "header_sha256": "405cb0e2d4d40bdc13504f864c13a855a4e48460d7cf1d3965eee17f81a0f70c",
+      "identical": true,
+      "proof_body_changed": false
+    }
+  ],
+  "all_complete_definition_regions": [
+    {
+      "name": "p4aReserveRawDensity",
+      "kind": "def",
+      "complete_definition_before": "def p4aReserveRawDensity (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : ℝ :=\n  reciprocalTotientDensity (fixedRoughSupport retain N cap w z)\n    (fixedRoughCoefficient retain N cap w z)\n\n",
+      "complete_definition_after": "def p4aReserveRawDensity (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : ℝ :=\n  reciprocalTotientDensity (fixedRoughSupport retain N cap w z)\n    (fixedRoughCoefficient retain N cap w z)\n\n",
+      "before_sha256": "f7a6e16344acdc3d40f08fa627915e3dd4e7757d47cfecd6630ab51b30813f74",
+      "after_sha256": "f7a6e16344acdc3d40f08fa627915e3dd4e7757d47cfecd6630ab51b30813f74",
+      "identical": true
+    },
+    {
+      "name": "p4aReservePhysicalDensity",
+      "kind": "def",
+      "complete_definition_before": "def p4aReservePhysicalDensity (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℝ :=\n  physicalDensitySum (actualSmallRoughModuli retain N cap w z)\n    (actualSmallRoughRho retain N cap w z L)\n\n/-- The small-carrier continuation correction, with every rough leaf's\nactual selected history, sign, and mass.  This is a literal finite sum,\nnot a name for the desired density difference. -/\n",
+      "complete_definition_after": "def p4aReservePhysicalDensity (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℝ :=\n  physicalDensitySum (actualSmallRoughModuli retain N cap w z)\n    (actualSmallRoughRho retain N cap w z L)\n\n/-- The small-carrier continuation correction, with every rough leaf's\nactual selected history, sign, and mass.  This is a literal finite sum,\nnot a name for the desired density difference. -/\n",
+      "before_sha256": "5ed5397ea7b91bde4f6c723908493090cde50d86a87e1a1d40241be6415b68be",
+      "after_sha256": "5ed5397ea7b91bde4f6c723908493090cde50d86a87e1a1d40241be6415b68be",
+      "identical": true
+    },
+    {
+      "name": "p4aActualPresieveCorrection",
+      "kind": "def",
+      "complete_definition_before": "def p4aActualPresieveCorrection (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : ℝ :=\n  ((firstExitRetainedLeaves (oddFirstExitPolicy retain)\n    (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n    (roughPrimeUniverse N cap w z)).map (fun leaf =>\n      firstExitCorrection (oddFirstExitPolicy retain)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) leaf.selected leaf.positive leaf.mass\n        (roughPrimeUniverse N cap 0 w))).sum\n\n/-- Exact physical presieve accounting before any estimate. -/\n",
+      "complete_definition_after": "def p4aActualPresieveCorrection (retain : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : ℝ :=\n  ((firstExitRetainedLeaves (oddFirstExitPolicy retain)\n    (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n    (roughPrimeUniverse N cap w z)).map (fun leaf =>\n      firstExitCorrection (oddFirstExitPolicy retain)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) leaf.selected leaf.positive leaf.mass\n        (roughPrimeUniverse N cap 0 w))).sum\n\n/-- Exact physical presieve accounting before any estimate. -/\n",
+      "before_sha256": "c69e1132dfdeb0bec4c4d54196c9136c37b1cab7451dfac0329446f3e4bb97b3",
+      "after_sha256": "c69e1132dfdeb0bec4c4d54196c9136c37b1cab7451dfac0329446f3e4bb97b3",
+      "identical": true
+    }
+  ],
+  "namespace_definition_exceptions": [],
+  "changed_existing_proof_bodies": [
+    {
+      "name": "exists_p4a_twoPolicy_physicalSavings_reserve",
+      "before_proof": "\n  obtain ⟨epsilon, hepsilon, hepsilon8, hepsilonMax', hepsilonr,\n      N₀, hN₀, hbound⟩ :=\n    exists_actualSmallRoughRho_density_error_le_target_reserve\n      nu r eta epsilonMax hnu hr heta hepsilonMax\n  refine ⟨epsilon, hepsilon, hepsilon8, hepsilonMax', hepsilonr, N₀, hN₀, ?_⟩\n  intro N hN hEven cap hcap old new\n  have hold := hbound N hN hEven cap hcap old\n  have hnew := hbound N hN hEven cap hcap new\n  dsimp only at hold hnew ⊢\n  change 0 ≤ p4aReservePhysicalDensity old N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity old N cap _ _ ∧\n    p4aReservePhysicalDensity old N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity old N cap _ _ ≤\n        eta * singularSeries N / Real.log (N : ℝ) at hold\n  change 0 ≤ p4aReservePhysicalDensity new N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity new N cap _ _ ∧\n    p4aReservePhysicalDensity new N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity new N cap _ _ ≤\n        eta * singularSeries N / Real.log (N : ℝ) at hnew\n  apply abs_le.mpr\n  constructor <;> nlinarith [hold.1, hold.2, hnew.1, hnew.2]\n\n",
+      "after_proof": "\n  obtain ⟨epsilon, hepsilon, hepsilon8, hepsilonMax', hepsilonr,\n      N₀, hN₀, hbound⟩ :=\n    exists_actualSmallRoughRho_density_error_le_target_reserve\n      nu r eta epsilonMax hnu hr heta hepsilonMax\n  refine ⟨epsilon, hepsilon, hepsilon8, hepsilonMax', hepsilonr, N₀, hN₀, ?_⟩\n  intro N hN hEven cap hcap old new\n  have hold := hbound N hN hEven cap hcap old\n  have hnew := hbound N hN hEven cap hcap new\n  dsimp only at hold hnew ⊢\n  change 0 ≤ p4aReservePhysicalDensity old N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity old N cap _ _ ∧\n    p4aReservePhysicalDensity old N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity old N cap _ _ ≤\n        eta * singularSeries N / Real.log (N : ℝ) at hold\n  change 0 ≤ p4aReservePhysicalDensity new N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity new N cap _ _ ∧\n    p4aReservePhysicalDensity new N cap _ _ _ -\n      actualSmallEulerProduct N cap _ * p4aReserveRawDensity new N cap _ _ ≤\n        eta * singularSeries N / Real.log (N : ℝ) at hnew\n  simp only [mul_sub, div_eq_mul_inv] at hold hnew ⊢\n  apply abs_le.mpr\n  constructor <;> nlinarith [hold.1, hold.2, hnew.1, hnew.2]\n\n",
+      "before_sha256": "a5635d734b1eb050a563ac0692bdaeae9393002fcba9f6c8abad8906f34cb4f8",
+      "after_sha256": "8c50323d4057dbdf768f30d00af8c91da47c87e95c11b9aa4cef538ed4ef8a79"
+    }
+  ],
+  "outside_registered_proofs_and_exact_authorised_definition_name_binding_identical": true,
+  "imports_all_public_headers_other_definitions_data_quantifiers_numeric_constants_and_original_licences_preserved": true,
+  "old_new_elaborated_value_identity_claimed": false,
+  "actual_failure": {
+    "path": "/workspace/p1-complete-proof/static-literal-fifth-physical-reserve/P4AHistoricalPhysicalSavingsReserve/actual-failure.log",
+    "sha256": "1cbb33b1d9192b4089ed750274a438d4a0cbb1d2e723e1b380f2ba702a12fb9b",
+    "bytes": 8276,
+    "module": "ImbalancedChen.P4AHistoricalPhysicalSavingsReserve",
+    "pre_sha256": "c155792f9beae44154e090f8139911457299d96aff7d856835e676a199d1336f",
+    "post_sha256": "bfd4ba4a96321ed5ae313d89787b2a42dc381cd53d6ac2a4274d262a8ab9d258",
+    "source_log": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "raw_byte_start": 367986,
+    "raw_byte_end_exclusive": 376262,
+    "raw_slice_sha256": "1cbb33b1d9192b4089ed750274a438d4a0cbb1d2e723e1b380f2ba702a12fb9b",
+    "master_prefix_through_slice_sha256": "6ec1db74744c78c004f25d29494073fad690996f33310f1b9ce96fe4d8ae1d50",
+    "verbatim_and_master_prefix_verified": true
+  },
+  "known_variant_search": {
+    "held_inventory": {
+      "path": "/workspace/p1-complete-proof/source-graph-inventory.json",
+      "sha256": "6efb6d8ee792f592d73f831cbedacbf768b5c76c8f2b9eefb33075fe0d38e912",
+      "bytes": 4810737
+    },
+    "variants": [
+      {
+        "sha256": "c155792f9beae44154e090f8139911457299d96aff7d856835e676a199d1336f",
+        "bytes": 10136,
+        "imports": [
+          "ImbalancedChen.ActualNormalizedRhoError",
+          "ImbalancedChen.ActualFirstExitDensityProjection",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge",
+          "ImbalancedChen.HistoricalPrefixCertificate"
+        ],
+        "project_imports": [
+          "ImbalancedChen.ActualNormalizedRhoError",
+          "ImbalancedChen.ActualFirstExitDensityProjection",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge",
+          "ImbalancedChen.HistoricalPrefixCertificate"
+        ],
+        "paths": [
+          {
+            "path": "/workspace/goldbach-formalization/ImbalancedChen/P4AHistoricalPhysicalSavingsReserve.lean",
+            "repo_relative_path": "ImbalancedChen/P4AHistoricalPhysicalSavingsReserve.lean",
+            "kind": "canonical"
+          }
+        ]
+      }
+    ],
+    "repaired_published_post_identified_in_held_context": false,
+    "all_history_object_or_remote_scan": false
+  },
+  "execution": {
+    "Lean_Lake_kernel_types_axioms_or_numerical_calls": 0,
+    "main_live_frozen_or_cache_edits": 0,
+    "soleowner_next_step": "Exact postimage normal/kernel/full-owned validation; retain real failing attempts and metadata."
+  }
+}

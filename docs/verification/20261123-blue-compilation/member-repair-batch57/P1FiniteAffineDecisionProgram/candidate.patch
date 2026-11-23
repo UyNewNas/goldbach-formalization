@@ -1,0 +1,52 @@
+--- baseline/ImbalancedChen/P1FiniteAffineDecisionProgram.lean
++++ candidate/ImbalancedChen/P1FiniteAffineDecisionProgram.lean
+@@ -2,7 +2,7 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / NO KERNEL CREDIT.
++Compilation records: docs/verification/20261123-blue-compilation.
+ 
+ A finite affine comparison program, with distinct strict and nonstrict
+ branches. The program contains no arbitrary point-dependent predicate.
+@@ -209,14 +209,15 @@
+ theorem Affine.box_bounds {k : ℕ} (a : Affine k) (lo hi t : Fin k → ℝ)
+     (hl : ∀ i, lo i ≤ t i) (hu : ∀ i, t i ≤ hi i) :
+     a.lower lo hi ≤ a.eval t ∧ a.eval t ≤ a.upper lo hi := by
++  dsimp only [Affine.lower, Affine.upper, Affine.eval]
+   constructor
+-  · apply add_le_add_left
++  · apply add_le_add le_rfl
+     apply Finset.sum_le_sum
+     intro i _
+     by_cases h : 0 ≤ a.coefficient i
+     · simp only [if_pos h]; exact mul_le_mul_of_nonneg_left (hl i) h
+     · simp only [if_neg h]; exact mul_le_mul_of_nonpos_left (hu i) (le_of_not_ge h)
+-  · apply add_le_add_left
++  · apply add_le_add le_rfl
+     apply Finset.sum_le_sum
+     intro i _
+     by_cases h : 0 ≤ a.coefficient i
+@@ -322,7 +323,7 @@
+   | cons g gs ih =>
+       cases hg : g.strict <;>
+         simp [allGates, Gate.branch, Gate.holds, hg, Program.eval, ih]
+-      all_goals split_ifs <;> simp_all
++      all_goals split_ifs <;> simp_all <;> exact ite_cond_congr rfl
+ 
+ private theorem finiteMax_insert {ι : Type*} (s : Finset ι) (i : ι)
+     (eligible : ι → Prop) (profile : ι → ℝ) (seed : ℝ) :
+@@ -378,7 +379,12 @@
+       exact finiteMax_eq_seed_of_outside _ _ _ _ (by simp)
+   | cons i xs ih =>
+       simp only [maxRows, eval_allGates, Program.eval, ih, List.toFinset_cons]
+-      exact (finiteMax_insert _ _ _ _ _).symm
++      have hins := (finiteMax_insert xs.toFinset i
++        (fun j => ∀ g ∈ tests j, g.holds t)
++        (fun j => (candidate j).eval t) (seed.eval t)).symm
++      by_cases hel : ∀ g ∈ tests i, g.holds t
++      · simpa only [if_pos hel] using hins
++      · simpa only [if_neg hel] using hins
+ 
+ end
+ end ImbalancedChen.P1FiniteAffineDecisionProgram

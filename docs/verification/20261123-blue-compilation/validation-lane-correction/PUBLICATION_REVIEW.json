@@ -1,0 +1,50 @@
+{
+  "schema": "validation_lane_scope_disclosure_and_static_review_v1",
+  "reviewer": "/root",
+  "created_utc": "2026-11-23T20:04:33.073808+00:00",
+  "outcome": "SOURCE_GUARD_SCOPE_CLARIFIED_AND_FULL_CHAIN_SERIALIZATION_RECORDED",
+  "original_evidence_bytes_preserved": true,
+  "files": [
+    {
+      "path": "LANE_SEMANTICS_ADDENDUM.json",
+      "original_path": "/workspace/p1-complete-proof/validation-lane-correction/LANE_SEMANTICS_ADDENDUM.json",
+      "bytes": 1480,
+      "sha256": "d5f97f822ab979644057259fd195a62b5261d0a346181a05a62e7fcc2040c599"
+    },
+    {
+      "path": "SERIALIZER_FIXTURE_TEST.json",
+      "original_path": "/workspace/p1-complete-proof/validation-lane-correction/SERIALIZER_FIXTURE_TEST.json",
+      "bytes": 365,
+      "sha256": "b5f9ebabeabf59ba31460120cd3712e9177b0d4acb21cd74ab3e7b021f871e57"
+    },
+    {
+      "path": "serialize_validation_lane.py",
+      "original_path": "/workspace/blue-build-tools/serialize_validation_lane.py",
+      "bytes": 2404,
+      "sha256": "734602546772451e12fcbe8d8c3380ee2db9211db30444cbb524c59c79a8f368"
+    },
+    {
+      "path": "resume_legacy_p6_lane.py",
+      "original_path": "/workspace/p1-complete-proof/validation-lane-correction/resume_legacy_p6_lane.py",
+      "bytes": 2336,
+      "sha256": "3fdaad9b1524c3743221a2da8cdd04bc72d06ef107c325bfa144cb8d742858f1"
+    },
+    {
+      "path": "PAUSED_OWN_PARENT_CONTROLLERS.json",
+      "original_path": "/workspace/p1-complete-proof/validation-lane-correction/PAUSED_OWN_PARENT_CONTROLLERS.json",
+      "bytes": 863,
+      "sha256": "6ea3afba44520b9b43983355840da7cf679b617c3d86209101e2c05195025e99"
+    }
+  ],
+  "static_review": [
+    "New lane lock is distinct from original compiler.lock, so wrapped Lake githash/source calls do not recursively deadlock.",
+    "New wrapper holds that lane until its complete validation child exits; it records actual flock owner and actual return code.",
+    "Legacy P6 bridge holds the same lane before resuming one verified waiting parent at a time; exact argv/starttime/state checks limit signals to owner parent controllers.",
+    "At transition old56 parent was already gone, so no56checker was allowed outside the bridge; old57 finishes before59 resumes.",
+    "Original runtime,flags,source guards and successful normal/kernel/audit evidence remain unchanged. No successful Lean command is repeated to correct scheduling."
+  ],
+  "earlier_scope_disclosure": "Original compiler locks bounded source/compiler tool dispatch; standalone leanchecker was not mechanically under that lock and could overlap another validation. No assertion that the earlier full validation chains always occupied only two lanes or a hard24GiB total is made.",
+  "verification_scope": "Author temporary fixture tested mutual exclusion of two concurrent non-Lean requests. Reviewer inspected source and authenticated files; no additional compiler or numerical run. Actual proof acceptance remains its original per-command exit/std3/source hashes.",
+  "dynamic_legacy_pid_log_not_copied_or_misrepresented_as_final": true,
+  "P1_complete": false
+}

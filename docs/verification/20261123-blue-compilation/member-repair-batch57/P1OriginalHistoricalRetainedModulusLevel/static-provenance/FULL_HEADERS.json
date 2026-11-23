@@ -1,0 +1,126 @@
+{
+  "complete_headers": [
+    {
+      "name": "currentLevel_through_four",
+      "header": "theorem currentLevel_through_four (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (Q5 : List ℕ → ℝ) (pre : List ℕ) (hlen : pre.length ≤ 4) :\n    currentLevel e chi m omega N Q5 pre = frozenLevel e chi m omega N pre :=",
+      "header_sha256": "eab6f434b1bd032acffcdd5609d8fbfbadc2c9fe1b21d932ad5c42c2fa3e928a"
+    },
+    {
+      "name": "currentLevel_from_five",
+      "header": "theorem currentLevel_from_five (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (Q5 : List ℕ → ℝ) (pre : List ℕ) (hlen : 5 ≤ pre.length) :\n    currentLevel e chi m omega N Q5 pre = Q5 (rosserAncestor 5 pre) :=",
+      "header_sha256": "4e28158316666d8246a05a5de39cbbb3d548cbf041899a92eaf413ab65148cb7"
+    },
+    {
+      "name": "evenListLength_eq_decide_even",
+      "header": "private theorem evenListLength_eq_decide_even (pre : List ℕ) :\n    evenListLength pre = decide (Even pre.length) :=",
+      "header_sha256": "ef2f18086b3b1a6f5344f98360f176ee52fae7d7649631f5d450e6ab661f8e9d"
+    },
+    {
+      "name": "original_coarse_step_valid",
+      "header": "theorem original_coarse_step_valid (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (pre : List ℕ) (positive : Bool) (q : ℕ)\n    (hpre : ordinaryRosserPrefixAdmissible false (frozenLevel e chi m omega N pre) pre)\n    (hsign : positive = evenListLength pre) (hq : q.Prime)\n    (hsort : (q :: pre).Pairwise (· < ·))\n    (hpass : policy e chi m omega N (!positive) (q :: pre) = true) :\n    ordinaryRosserPrefixAdmissible false\n      (frozenLevel e chi m omega N (q :: pre)) (q :: pre) :=",
+      "header_sha256": "aff03224042482b4ae641a624b33bf29cd1836be5f6cdd892fd684964c6c06e1"
+    },
+    {
+      "name": "mem_original_fifth_leaf_valid_from_entry",
+      "header": "theorem mem_original_fifth_leaf_valid_from_entry\n    (e chi : ℝ) (m : ℕ) (omega N : ℝ) (Q5 : List ℕ → ℝ) (weight : ℕ → ℝ)\n    (pre carrier : List ℕ) (positive : Bool) (mass : ℝ)\n    (hpre : ordinaryRosserPrefixAdmissible false (currentLevel e chi m omega N Q5 pre) pre)\n    (hsign : positive = evenListLength pre)\n    (hprime : ∀ p ∈ carrier, p.Prime)\n    (hsort : (carrier.reverse ++ pre).Pairwise (· < ·))\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega N Q5)\n      weight pre positive mass carrier) :\n    ordinaryRosserPrefixAdmissible false\n        (currentLevel e chi m omega N Q5 leaf.selected) leaf.selected ∧\n      leaf.positive = evenListLength leaf.selected :=",
+      "header_sha256": "4028b62fe255ce4dccb4940ef23a4432f276ae3d6579245da2820992981da838"
+    },
+    {
+      "name": "original_fifth_retained_leaf_valid",
+      "header": "theorem original_fifth_retained_leaf_valid\n    (e chi : ℝ) (m : ℕ) (omega N : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < N)\n    (weight : ℕ → ℝ) (carrier : List ℕ)\n    (hprime : ∀ p ∈ carrier, p.Prime) (hsort : carrier.Pairwise (· > ·))\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega N Q5)\n      weight [] true 1 carrier) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel e chi m omega N Q5 leaf.selected) leaf.selected :=",
+      "header_sha256": "fef579aab45805e9d39aa23b2b0535e503ca581a0118f54cbdd9236282fc7587"
+    },
+    {
+      "name": "actual_original_fifth_retained_leaf_valid",
+      "header": "theorem actual_original_fifth_retained_leaf_valid\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega (N : ℝ) Q5)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel e chi m omega (N : ℝ) Q5 leaf.selected) leaf.selected :=",
+      "header_sha256": "a327a4758079b729db838c401a3f355d0ef7a46bec5bff4c03663b3573788697"
+    },
+    {
+      "name": "actual_original_fifth_retained_leaf_prod_lt_current",
+      "header": "theorem actual_original_fifth_retained_leaf_prod_lt_current\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega (N : ℝ) Q5)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    (leaf.selected.prod : ℝ) < currentLevel e chi m omega (N : ℝ) Q5 leaf.selected :=",
+      "header_sha256": "7ad460a5fa5296dad865d9d9543ba841db20d8cf931fe26570344f39e0469ee0"
+    },
+    {
+      "name": "originalCeilingCheck_sound",
+      "header": "theorem originalCeilingCheck_sound (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true) :\n    0 ≤ e ∧ (299 / 500 : ℚ) - 2 * e ≤ theta ∧\n      (∀ j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4, cap4 j ≤ theta) ∧\n      (∀ j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5, cap5 j ≤ theta) :=",
+      "header_sha256": "b2ae88c4bf247903a1d8b5f10abd75f118e613731bef4a7f40ff3ff6f73b85a3"
+    },
+    {
+      "name": "tableValues_nonempty",
+      "header": "theorem tableValues_nonempty : (tableValues e chi m omega J4 cap4 J5 cap5).Nonempty :=",
+      "header_sha256": "62069f3c81e8ed2f58c2218793bed63bdfc706c9f0cd4d9e3b1e3bfdfcdca5b5"
+    },
+    {
+      "name": "mem_tableValues_le_ceiling",
+      "header": "theorem mem_tableValues_le_ceiling (a : ℚ)\n    (ha : a ∈ tableValues e chi m omega J4 cap4 J5 cap5) :\n    a ≤ tableCeiling e chi m omega J4 cap4 J5 cap5 :=",
+      "header_sha256": "b81cd4b1255cea687c6ad07bf45c2e5bd2c253b2d3301ce650c9fdb03dfa2641"
+    },
+    {
+      "name": "tableCeilingCheck_true",
+      "header": "theorem tableCeilingCheck_true (he : 0 ≤ e) :\n    originalCeilingCheck e chi m omega J4 cap4 J5 cap5\n      (tableCeiling e chi m omega J4 cap4 J5 cap5) = true :=",
+      "header_sha256": "962113cb71b6ce680edd944b4a79c27d2c784f4c221fc63635b188c08a5ddddd"
+    },
+    {
+      "name": "actual_effectiveExponent3Q_le_ceiling",
+      "header": "theorem actual_effectiveExponent3Q_le_ceiling (theta : ℚ)\n    (he : 0 ≤ e) (hTheta : (299 / 500 : ℚ) - 2 * e ≤ theta)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseContinuation.effectiveExponent3Q e chi m omega N pre ≤ theta :=",
+      "header_sha256": "63575015fa09841374e34eff55d8aec536afb02734fe615b19b3a7e9698b2f34"
+    },
+    {
+      "name": "actual_effectiveExponent4Q_le_ceiling",
+      "header": "theorem actual_effectiveExponent4Q_le_ceiling (theta : ℚ)\n    (he : 0 ≤ e) (hTheta : (299 / 500 : ℚ) - 2 * e ≤ theta)\n    (h4 : ∀ j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4, cap4 j ≤ theta)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseContinuation.effectiveExponent4Q e chi m omega J4 cap4 N pre ≤ theta :=",
+      "header_sha256": "e55c1c8b7e73877f8bcab8a6d8cbe133bde829bf57e89844f864207a6feac6fe"
+    },
+    {
+      "name": "actual_effectiveExponent5Q_le_ceiling",
+      "header": "theorem actual_effectiveExponent5Q_le_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseFifthContinuation.effectiveExponent5Q e chi m omega J4 cap4 J5 cap5 N pre ≤ theta :=",
+      "header_sha256": "62a04b101afc313e775d331622cdae016a1e382eab23185e38f6fd112972a989"
+    },
+    {
+      "name": "actual_level5_le_power_ceiling",
+      "header": "theorem actual_level5_le_power_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (pre : List ℕ) : Q5 N pre ≤ N ^ (theta : ℝ) :=",
+      "header_sha256": "9ad945f5379950947ecef4003e7601a7f0061de6780f30f23f04de60303c068d"
+    },
+    {
+      "name": "actual_currentLevel_le_power_ceiling",
+      "header": "theorem actual_currentLevel_le_power_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (pre : List ℕ) :\n    currentLevel (e : ℝ) chi m omega N (Q5 N) pre ≤ N ^ (theta : ℝ) :=",
+      "header_sha256": "d0b8daa5596ae0d116ef669dcd363d56831247b25845ec96b9bb03efd7a9f948"
+    },
+    {
+      "name": "actual_final_leaf_valid",
+      "header": "theorem actual_final_leaf_valid (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) weight [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected) leaf.selected :=",
+      "header_sha256": "796cf28a37176df244965eb222c44de6599955313f3473793ef6ff01e7bcc383"
+    },
+    {
+      "name": "actual_final_leaf_prod_lt_ceiling",
+      "header": "theorem actual_final_leaf_prod_lt_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) weight [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    (leaf.selected.prod : ℝ) < (N : ℝ) ^ (theta : ℝ) :=",
+      "header_sha256": "7e1ef9b754d00bd68423eb7642dceb51c0e286dbf5ca77319446e43831bcb2be"
+    },
+    {
+      "name": "actual_final_rough_nonzero_mem_support",
+      "header": "theorem actual_final_rough_nonzero_mem_support (N cap : ℕ) (w z : ℝ) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) : d ∈ S N cap w z :=",
+      "header_sha256": "0aeb8f66430f6a568ea47e23d502aa77b4a62818a9e55138c4d5364f5e60f464"
+    },
+    {
+      "name": "actual_final_rough_nonzero_valid_witness",
+      "header": "theorem actual_final_rough_nonzero_valid_witness (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) :\n    ∃ leaf : FirstExitLeaf ℕ,\n      leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) (fun _ => 1) [] true 1\n        (roughPrimeUniverse N cap w z) ∧\n      leaf.selected.prod = d ∧\n      ordinaryRosserPrefixAdmissible false\n        (currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected) leaf.selected ∧\n      (d : ℝ) < currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected ∧\n      currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected ≤\n        (N : ℝ) ^ (theta : ℝ) :=",
+      "header_sha256": "775c73823a48b8aea0a325a90ad02d3a1c616cbc7bdbc0d0ea6ae1973d9cfda3"
+    },
+    {
+      "name": "actual_final_rough_nonzero_modulus_lt_ceiling",
+      "header": "theorem actual_final_rough_nonzero_modulus_lt_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) : (d : ℝ) < (N : ℝ) ^ (theta : ℝ) :=",
+      "header_sha256": "535dd65873d9a1063fd9f643506c9936bb0c09277ff50f87427d4e5222820427"
+    },
+    {
+      "name": "actual_final_rough_zero_of_ceiling_le",
+      "header": "theorem actual_final_rough_zero_of_ceiling_le (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : (N : ℝ) ^ (theta : ℝ) ≤ (d : ℝ)) : C N cap w z d = 0 :=",
+      "header_sha256": "4a59dddc4223254d2bb1277bf67d2e39f44fc2efbd7beb7333e2937c39323163"
+    },
+    {
+      "name": "actual_final_rough_nonzero_modulus_lt_tableCeiling",
+      "header": "theorem actual_final_rough_nonzero_modulus_lt_tableCeiling (he : 0 ≤ e)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) :\n    (d : ℝ) < (N : ℝ) ^ (tableCeiling e chi m omega J4 cap4 J5 cap5 : ℝ) :=",
+      "header_sha256": "9358ed9bbc4883c4e64aa0ddbec0b391c0284ef6029491fbcaf1564ee1b56df9"
+    }
+  ],
+  "count": 24,
+  "all_byte_identical": true
+}

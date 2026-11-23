@@ -1,0 +1,114 @@
+✖ [9842/10087] Building ImbalancedChen.P1FiniteAffineDecisionProgram (20s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1FiniteAffineDecisionProgram.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1FiniteAffineDecisionProgram.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1FiniteAffineDecisionProgram.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1FiniteAffineDecisionProgram.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1FiniteAffineDecisionProgram.setup.json --json
+warning: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:118:19: This simp argument is unused:
+  max_eq_right hab
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hab, hcb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:128:19: This simp argument is unused:
+  min_eq_left hab
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hab, hca]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:213:4: Tactic `apply` failed: could not unify the conclusion of `@add_le_add_left`
+  ?b + ?a ≤ ?c + ?a
+with the goal
+  a.lower lo hi ≤ a.eval t
+
+Note: The full type of `@add_le_add_left` is
+  ∀ {α : Type ?u.23} [inst : Add α] [inst_1 : LE α] [i : AddRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+
+case left
+k : ℕ
+a : Affine k
+lo hi t : Fin k → ℝ
+hl : ∀ (i : Fin k), lo i ≤ t i
+hu : ∀ (i : Fin k), t i ≤ hi i
+⊢ a.lower lo hi ≤ a.eval t
+error: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:219:4: Tactic `apply` failed: could not unify the conclusion of `@add_le_add_left`
+  ?b + ?a ≤ ?c + ?a
+with the goal
+  a.eval t ≤ a.upper lo hi
+
+Note: The full type of `@add_le_add_left` is
+  ∀ {α : Type ?u.24} [inst : Add α] [inst_1 : LE α] [i : AddRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+
+case right
+k : ℕ
+a : Affine k
+lo hi t : Fin k → ℝ
+hl : ∀ (i : Fin k), lo i ≤ t i
+hu : ∀ (i : Fin k), t i ≤ hi i
+⊢ a.eval t ≤ a.upper lo hi
+error: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:322:17: unsolved goals
+case neg
+k : ℕ
+yes no : Program k
+t : Fin k → ℝ
+g : Gate k
+gs : List (Gate k)
+ih : Program.eval t (allGates gs yes no) = if ∀ g ∈ gs, Gate.holds t g then Program.eval t yes else Program.eval t no
+hg : g.strict = false
+h✝¹ : Program.eval t g.lhs ≤ Program.eval t g.rhs
+h✝ :
+  ∃ x ∈ gs,
+    ¬if x.strict = true then Program.eval t x.lhs < Program.eval t x.rhs
+      else Program.eval t x.lhs ≤ Program.eval t x.rhs
+⊢ (if
+        ∀ g ∈ gs,
+          if g.strict = true then Program.eval t g.lhs < Program.eval t g.rhs
+          else Program.eval t g.lhs ≤ Program.eval t g.rhs then
+      Program.eval t yes
+    else Program.eval t no) =
+    if
+        ∀ g ∈ gs,
+          if g.strict = true then Program.eval t g.lhs < Program.eval t g.rhs
+          else Program.eval t g.lhs ≤ Program.eval t g.rhs then
+      Program.eval t yes
+    else Program.eval t no
+
+case neg
+k : ℕ
+yes no : Program k
+t : Fin k → ℝ
+g : Gate k
+gs : List (Gate k)
+ih : Program.eval t (allGates gs yes no) = if ∀ g ∈ gs, Gate.holds t g then Program.eval t yes else Program.eval t no
+hg : g.strict = true
+h✝¹ : Program.eval t g.lhs < Program.eval t g.rhs
+h✝ :
+  ∃ x ∈ gs,
+    ¬if x.strict = true then Program.eval t x.lhs < Program.eval t x.rhs
+      else Program.eval t x.lhs ≤ Program.eval t x.rhs
+⊢ (if
+        ∀ g ∈ gs,
+          if g.strict = true then Program.eval t g.lhs < Program.eval t g.rhs
+          else Program.eval t g.lhs ≤ Program.eval t g.rhs then
+      Program.eval t yes
+    else Program.eval t no) =
+    if
+        ∀ g ∈ gs,
+          if g.strict = true then Program.eval t g.lhs < Program.eval t g.rhs
+          else Program.eval t g.lhs ≤ Program.eval t g.rhs then
+      Program.eval t yes
+    else Program.eval t no
+error: ImbalancedChen/P1FiniteAffineDecisionProgram.lean:381:6: Type mismatch
+  Eq.symm (finiteMax_insert ?m.43 ?m.44 ?m.45 ?m.46 ?m.47)
+has type
+  @ite ℝ (?m.45 ?m.44) (Classical.propDecidable (?m.45 ?m.44)) (max (?m.46 ?m.44) (finiteMax ?m.43 ?m.45 ?m.46 ?m.47))
+      (finiteMax ?m.43 ?m.45 ?m.46 ?m.47) =
+    finiteMax (insert ?m.44 ?m.43) ?m.45 ?m.46 ?m.47
+but is expected to have type
+  @ite ℝ (∀ g ∈ tests i, Gate.holds t g) (List.decidableBAll (Gate.holds t) (tests i))
+      (max (Program.eval t (candidate i))
+        (finiteMax xs.toFinset (fun i => ∀ g ∈ tests i, Gate.holds t g) (fun i => Program.eval t (candidate i))
+          (Program.eval t seed)))
+      (finiteMax xs.toFinset (fun i => ∀ g ∈ tests i, Gate.holds t g) (fun i => Program.eval t (candidate i))
+        (Program.eval t seed)) =
+    finiteMax (insert i xs.toFinset) (fun i => ∀ g ∈ tests i, Gate.holds t g) (fun i => Program.eval t (candidate i))
+      (Program.eval t seed)
+error: Lean exited with code 1

@@ -1,0 +1,101 @@
+{
+  "complete_headers": [
+    {
+      "name": "Affine.eval_const",
+      "header": "@[simp] theorem Affine.eval_const {k : ℕ} (x : ℝ) (t : Fin k → ℝ) :\n    (Affine.const x).eval t = x :=",
+      "header_sha256": "9c969a69c820f7dd3273eeb52f9344238a4fc522d28764121aa50262682ca3bf"
+    },
+    {
+      "name": "Affine.eval_coord",
+      "header": "@[simp] theorem Affine.eval_coord {k : ℕ} (i : Fin k) (t : Fin k → ℝ) :\n    (Affine.coord i).eval t = t i :=",
+      "header_sha256": "eb41c52d500957d757a6a961855eea4a57ba97fde113723cf6b76c0a95efc0b6"
+    },
+    {
+      "name": "Affine.eval_add",
+      "header": "@[simp] theorem Affine.eval_add {k : ℕ} (a b : Affine k) (t : Fin k → ℝ) :\n    (a.add b).eval t = a.eval t + b.eval t :=",
+      "header_sha256": "b7c902616e9c64ad917edd169dcf479c09ceb1a820388f3b58a784c685adf9f1"
+    },
+    {
+      "name": "Affine.eval_sub",
+      "header": "@[simp] theorem Affine.eval_sub {k : ℕ} (a b : Affine k) (t : Fin k → ℝ) :\n    (a.sub b).eval t = a.eval t - b.eval t :=",
+      "header_sha256": "1d1eae200039fdf2b73580732d5a146fef3df20c6f562319f58eaef4388999a9"
+    },
+    {
+      "name": "Affine.eval_scale",
+      "header": "@[simp] theorem Affine.eval_scale {k : ℕ} (s : ℝ) (a : Affine k) (t : Fin k → ℝ) :\n    (a.scale s).eval t = s * a.eval t :=",
+      "header_sha256": "532e11ef89e001dc9fc229ffcdb14e0a734965aa10f1d12fee0eecedb4be2ddb"
+    },
+    {
+      "name": "Affine.eval_sum",
+      "header": "@[simp] theorem Affine.eval_sum {k : ℕ} {ι : Type*} (s : Finset ι)\n    (f : ι → Affine k) (t : Fin k → ℝ) :\n    (Affine.sum s f).eval t = ∑ i ∈ s, (f i).eval t :=",
+      "header_sha256": "a616ca7374737597e7b57ee6bcc5fe50a27a6a3db0921bcfbf94651a7dc7c56f"
+    },
+    {
+      "name": "Program.select_mem",
+      "header": "theorem Program.select_mem {k : ℕ} (p : Program k)\n    (cmp : Affine k → Affine k → Bool × Bool) : p.select cmp ∈ p.leaves :=",
+      "header_sha256": "0069e602bf41674adb0f1d59841e14f10ef964d57cfa6479a39521e5908e7cda"
+    },
+    {
+      "name": "Program.select_correct",
+      "header": "theorem Program.select_correct {k : ℕ} (p : Program k) (t : Fin k → ℝ)\n    (cmp : Affine k → Affine k → Bool × Bool)\n    (hcmp : ∀ a ∈ p.leaves, ∀ b ∈ p.leaves,\n      cmp a b = (decide (a.eval t < b.eval t), decide (a.eval t ≤ b.eval t))) :\n    (p.select cmp).eval t = p.eval t :=",
+      "header_sha256": "aab1172cd3f309cd33349308f268a83d8f33acd0e88ecc99af0e53b11789efa2"
+    },
+    {
+      "name": "Program.table_exact",
+      "header": "theorem Program.table_exact {k : ℕ} (p : Program k) (t : Fin k → ℝ) :\n    (p.table (p.signature t)).eval t = p.eval t :=",
+      "header_sha256": "137824464d0f1a7338738faaad8cb80e17e2283cd6a110661563d52bbdac44a5"
+    },
+    {
+      "name": "Program.table_on_region",
+      "header": "theorem Program.table_on_region {k : ℕ} (p : Program k) (s : p.Signature)\n    (t : Fin k → ℝ) (ht : t ∈ p.region s) : (p.table s).eval t = p.eval t :=",
+      "header_sha256": "f441a65570c78ca68096b9e6c50fd819be4c4aa8d3f2e709160fd052b3c43d8e"
+    },
+    {
+      "name": "Program.regions_cover",
+      "header": "theorem Program.regions_cover {k : ℕ} (p : Program k) :\n    (⋃ s : p.Signature, p.region s) = Set.univ :=",
+      "header_sha256": "5f09af0dae21d4758ccf3ee26407bf0cb797605e099e94dbfd8c555eb5a4351b"
+    },
+    {
+      "name": "Program.region_unique",
+      "header": "theorem Program.region_unique {k : ℕ} (p : Program k) (s r : p.Signature)\n    (t : Fin k → ℝ) (hs : t ∈ p.region s) (hr : t ∈ p.region r) : s = r :=",
+      "header_sha256": "04f34887f4f9bac9a4ebfcfb26bb9fe830a63b5b5ea83f299d63577445264c7c"
+    },
+    {
+      "name": "Affine.box_bounds",
+      "header": "theorem Affine.box_bounds {k : ℕ} (a : Affine k) (lo hi t : Fin k → ℝ)\n    (hl : ∀ i, lo i ≤ t i) (hu : ∀ i, t i ≤ hi i) :\n    a.lower lo hi ≤ a.eval t ∧ a.eval t ≤ a.upper lo hi :=",
+      "header_sha256": "5df742219a0f48931db5e42035d9ef604f2efa5cebc4452e7d147e5f64bf9053"
+    },
+    {
+      "name": "Program.boxCertificate_sound",
+      "header": "theorem Program.boxCertificate_sound {k : ℕ} (p : Program k) (s : p.Signature)\n    (lo hi : Fin k → ℝ) (hc : p.BoxCertificate s lo hi)\n    (t : Fin k → ℝ) (hl : ∀ i, lo i ≤ t i) (hu : ∀ i, t i ≤ hi i) :\n    t ∈ p.region s ∧ (p.table s).eval t = p.eval t :=",
+      "header_sha256": "1c2b31cb6a918002ccc671e94b4f5c0a043de68316a12c19e61e88ec2cdb6765"
+    },
+    {
+      "name": "Affine.eval_pull",
+      "header": "@[simp] theorem Affine.eval_pull {k l : ℕ} (f : Fin k → Fin l)\n    (a : Affine k) (t : Fin l → ℝ) :\n    (a.pull f).eval t = a.eval (fun i => t (f i)) :=",
+      "header_sha256": "9b7f7cb31719e1960e4bd42aaae745d5c006cb4e475d038fa378555cd9a1e403"
+    },
+    {
+      "name": "Program.eval_pull",
+      "header": "@[simp] theorem Program.eval_pull {k l : ℕ} (f : Fin k → Fin l)\n    (p : Program k) (t : Fin l → ℝ) :\n    (p.pull f).eval t = p.eval (fun i => t (f i)) :=",
+      "header_sha256": "4950d7d44cfd4e3017815dff6f69a16601145fddcfafc3e101b07dc4945a7325"
+    },
+    {
+      "name": "eval_allGates",
+      "header": "@[simp] theorem eval_allGates {k : ℕ} (gs : List (Gate k))\n    (yes no : Program k) (t : Fin k → ℝ) :\n    (allGates gs yes no).eval t =\n      if ∀ g ∈ gs, g.holds t then yes.eval t else no.eval t :=",
+      "header_sha256": "a266d714cf04e2766642970d1b4e222763fa10b72ca2e3c2b3b0fb315505e45c"
+    },
+    {
+      "name": "finiteMax_insert",
+      "header": "private theorem finiteMax_insert {ι : Type*} (s : Finset ι) (i : ι)\n    (eligible : ι → Prop) (profile : ι → ℝ) (seed : ℝ) :\n    finiteMax (insert i s) eligible profile seed =\n      if eligible i then max (profile i) (finiteMax s eligible profile seed)\n      else finiteMax s eligible profile seed :=",
+      "header_sha256": "685044aee57db3593daf5b879b80eaaeca5fac258288b4544ae4a7a0b5eff379"
+    },
+    {
+      "name": "eval_maxRows",
+      "header": "theorem eval_maxRows {k : ℕ} {ι : Type*} (tests : ι → List (Gate k))\n    (candidate : ι → Program k) (seed : Program k) (xs : List ι) (t : Fin k → ℝ) :\n    (maxRows tests candidate seed xs).eval t =\n      finiteMax xs.toFinset (fun i => ∀ g ∈ tests i, g.holds t)\n        (fun i => (candidate i).eval t) (seed.eval t) :=",
+      "header_sha256": "953fbd61a5f363740032e91775dbb7f43de6f17d3a235560c25a88f76951663f"
+    }
+  ],
+  "count": 19,
+  "all_byte_identical": true
+}

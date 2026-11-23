@@ -1,0 +1,76 @@
+--- baseline/ImbalancedChen/P1LiteralVariableFifthCompactSupplier.lean
++++ candidate/ImbalancedChen/P1LiteralVariableFifthCompactSupplier.lean
+@@ -42,7 +42,7 @@
+ /-- This is the fifteen-tent raw fourth envelope, with its inherited W.
+ Its identity with an actual licensed policy is deliberately not asserted. -/
+ def rawFourth (t : Point) : ℝ :=
+-  finiteMax oldMasks (fun _ => True) (fun I => v (oldSubsetSum I t)) (B (t 2))
++  finiteMax oldMasks (fun _ => True) (fun I => v (oldSubsetSum I t)) (VariableEnvelope.B (t 2))
+ 
+ def old5 (e : ℝ) (t : Point) : ℝ := rawFourth t - 2 * e
+ 
+@@ -67,7 +67,8 @@
+ theorem selected_row_le_next5 (e : ℝ) (rows : Finset (Finset (Fin 5)))
+     (t : Point) (I : Finset (Fin 5)) (hI : I ∈ rows) :
+     M I t - 2 * e ≤ next5 e rows t :=
+-  finiteMax_row_le rows _ _ _ I hI trivial
++  finiteMax_row_le rows (fun _ => True) (fun J => M J t - 2 * e)
++    (old5 e t) I hI trivial
+ 
+ /-- Unlike a constant-seed maximum bound, this pays the old-profile motion.
+ It will also apply when a licensed raw-Q3/fourth seed has been identified. -/
+@@ -111,7 +112,7 @@
+   apply finiteMax_moving_abs_sub_le
+   · have hs := abs_le.mp (h 2)
+     apply abs_le.mpr
+-    dsimp [B]
++    dsimp [VariableEnvelope.B]
+     constructor <;> linarith
+   · intro I _ _
+     have hs := sum_coordinate_error I (fun i => t i.castSucc)
+@@ -152,8 +153,10 @@
+     (f : ι → ℝ) (a : ℝ) (r : ι) :
+     finiteMax (insert r rows) (fun _ => True) f a =
+       max (f r) (finiteMax rows (fun _ => True) f a) := by
+-  simp [finiteMax, finiteValues, Finset.image_insert, Finset.insert_comm,
+-    Finset.max'_insert]
++  simpa only [finiteMax, finiteValues, Finset.filter_true, Finset.image_insert,
++    Finset.insert_comm] using
++      (Finset.max'_insert (f r) (insert a (rows.image f))
++        (by exact ⟨a, Finset.mem_insert_self _ _⟩))
+ 
+ private theorem continuous_finiteMax_moving {ι : Type*} (rows : Finset ι)
+     (f : ι → Point → ℝ) (a : Point → ℝ) (ha : Continuous a) :
+@@ -171,7 +174,7 @@
+ 
+ theorem continuous_rawFourth : Continuous rawFourth := by
+   apply continuous_finiteMax_moving
+-  · unfold B
++  · unfold VariableEnvelope.B
+     fun_prop
+   · intro I _
+     apply continuous_v.comp
+@@ -186,7 +189,12 @@
+   apply continuous_finiteMax_moving rows _ _ (continuous_old5 e)
+   intro I _
+   have hsum : Continuous (fun t : Point => ∑ i ∈ I, t i) := by fun_prop
+-  simpa only [M_eq_v] using (continuous_v.comp hsum).sub continuous_const
++  have heq : (fun t : Point => M I t - 2 * e) =
++      (fun t : Point => v (∑ i ∈ I, t i) - 2 * e) := by
++    funext t
++    rw [M_eq_v]
++  rw [heq]
++  exact (continuous_v.comp hsum).sub continuous_const
+ 
+ def positiveCube (a b : ℝ) : Set Point := univ.pi (fun _ => Icc a b)
+ 
+@@ -235,6 +243,9 @@
+     (continuousOn_const.mul hfactor).div hlast (fun t ht' => (ht t ht').ne')
+   apply hc.congr
+   intro t ht'
++  change primeOwnCubeGatedProfile (level t) t =
++    4 * actualExtendedThirdLowerFactor ((level t - ∑ i, t i) / t (Fin.last 4)) /
++      t (Fin.last 4)
+   rw [p1PrimeOwnCubeGatedProfile_eq_profile _ t (ht t ht'),
+     p1PrimeTupleMinusProfile_eq_lowerFactor _ t (ht t ht')]
+ 

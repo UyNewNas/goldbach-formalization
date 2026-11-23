@@ -106,6 +106,7 @@ theorem exists_p4a_twoPolicy_physicalSavings_reserve
     p4aReservePhysicalDensity new N cap _ _ _ -
       actualSmallEulerProduct N cap _ * p4aReserveRawDensity new N cap _ _ ≤
         eta * singularSeries N / Real.log (N : ℝ) at hnew
+  simp only [mul_sub, div_eq_mul_inv] at hold hnew ⊢
   apply abs_le.mpr
   constructor <;> nlinarith [hold.1, hold.2, hnew.1, hnew.2]
 

@@ -220,3 +220,9 @@ Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充
 第六十七批 `Data.P5SubdivisionStoredBlock070` 复用同一证明模板，也通过三项检查及非作者最终复核，5 个 owned 声明（4 public、1 private）仅标准三公理，源码及五项主要产物稳定，见 [验收结果](member-repair-batch67/VALIDATION_RESULTS.json) 和 [最终复核](member-repair-batch67/INDEPENDENT_REVIEW.json)。该块原失败是 4000000-heartbeat 的 `whnf` 超时，修补保持 4096 行数据、原偏移 286720、完整原声明及预算；没有把超时记为数据反例或内存失败。
 
 这两份源码仍作为明确安装后像发布，主仓没有新建同名 canonical 文件。这里只验收两个档案块的原始索引事实；其它块、全部父子最大值检查和完整 P1 端点仍须各自取得实际验收。
+
+第五十七批 `P1FiniteAffineDecisionProgram` 和 `P1OriginalHistoricalRetainedModulusLevel` 完成正常编译、指定模块 kernel replay、完整 owned 审计及非作者最终复核，255 个声明（228 public、27 private）仅标准三公理，源码及十项主要产物稳定，见 [结果](member-repair-batch57/VALIDATION_RESULTS.json) 和 [复核](member-repair-batch57/INDEPENDENT_REVIEW.json)。修补仅处理同侧加法、相同命题的 Decidable 实例及原有限最大值参数，并在两处调用补传原 ceiling check 已提供的第四层界；所有完整声明与定义保持。FiniteAffine 仍作为安装后像发布。
+
+第六十二批四个供应者通过同样验收，共 78 个声明（75 public、3 private），源码及二十项主要产物稳定，见 [结果](member-repair-batch62/VALIDATION_RESULTS.json) 和 [非作者复核](member-repair-batch62/INDEPENDENT_REVIEW.json)。范围为 literal fifth、physical savings reserve、smooth common compact support 与 first derivative budget。两项定义恢复例外明确保留：`rawFourth` 的 Real 参数恢复使用既有 `VariableEnvelope.B`；四项原连续线性映射补齐同一类型信息，Derivative 完整文件原样复用已发表 `48db3d60` 后像。旧定义未 elaboration，不声称旧 kernel 值已经相同。原公式、常量、两策略／2eta／presieve 项及其余完整声明与定义保持。
+
+[调度语义补充](validation-lane-correction/LANE_SEMANTICS_ADDENDUM.json) 说明：原 `compiler.lock` 约束源码编译，独立 `leanchecker` 未自行取锁，早期有短时验证重叠；原真实通过结果和日志均保留。新的独立 lane 锁覆盖整条 normal／kernel／audit 调度，并与原编译锁分离。互斥 fixture 和过渡代码见 [发布复核](validation-lane-correction/PUBLICATION_REVIEW.json)。没有将原两条源码 guard 外推为早期整条验证链始终独占两个 lane 或 24 GiB 总硬上限，也没有为此重跑已经成功的 Lean 检查。

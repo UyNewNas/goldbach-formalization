@@ -30,10 +30,10 @@ open scoped Classical BigOperators
 /-- Linear parts of order, badness, lower product and physical upper product. -/
 def smoothPhysicalWallRow (b : ℝ) (N : ℕ) (i : Fin 4) :
     (Fin 2 → ℝ) →L[ℝ] ℝ :=
-  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - ContinuousLinearMap.proj 0,
-    ContinuousLinearMap.proj 0 - b • ContinuousLinearMap.proj 1,
-    ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1,
-    (-Real.log (N : ℝ)) • (ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1)] i
+  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ),
+    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) - b • (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),
+    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),
+    (-Real.log (N : ℝ)) • ((ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ))] i
 
 /-- Affine offsets, including log N at the physical upper-product wall. -/
 def smoothPhysicalWallOffset (b : ℝ) (N : ℕ) (T : ℝ) : Fin 4 → ℝ :=
@@ -137,7 +137,10 @@ theorem hasFDerivAt_smoothPhysicalProfileFactor
       (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i))
       (smoothPhysicalProfileMargin b N T v i) :=
     ((contDiff_smoothGateUpperStep width (n := 1)).differentiable_one _).hasDerivAt
-  exact hs.comp_hasFDerivAt v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)
+  exact hs.comp_hasFDerivAt
+    (h₂ := smoothGateUpperStep width)
+    (f := fun x : Fin 2 → ℝ => smoothPhysicalProfileMargin b N T x i)
+    v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)
 
 /-- The genuine four-term Leibniz sum: the scalar derivative and wall CLM
 are multiplied by precisely the other three genuine smooth factors. -/

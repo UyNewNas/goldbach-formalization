@@ -1,0 +1,247 @@
+{
+  "schema": "modern_smooth_profile_static_or_exact_published_reuse_v1",
+  "captured_utc": "2026-11-23T19:03:19.256867+00:00",
+  "author": "/root/blue_inventory",
+  "module": "ImbalancedChen.P4BSmoothProfileFirstDerivativeBudget",
+  "status": "UNCOMPILED_CANDIDATE_SOURCE_NOT_OBJECT_QUALIFICATION",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-smooth-profile-two-failures/P4BSmoothProfileFirstDerivativeBudget/baseline.lean",
+    "sha256": "938ad94c91924169fe0036ac9532c4799035728736275145e09c5606c197520f",
+    "bytes": 11254
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-smooth-profile-two-failures/P4BSmoothProfileFirstDerivativeBudget/candidate.lean",
+    "sha256": "ea8bccd2639083b36b188392f9344932b0c8ce5fcb31b29ec349a1030d1411c5",
+    "bytes": 11610
+  },
+  "patch": {
+    "path": "/workspace/p1-complete-proof/static-smooth-profile-two-failures/P4BSmoothProfileFirstDerivativeBudget/candidate.patch",
+    "sha256": "9d39d732afbb47a2a3b7ae08ef1877be29c1f3be9499ca3c74f9c78036df6eb8",
+    "bytes": 2020
+  },
+  "all_complete_headers": [
+    {
+      "fqn": "ImbalancedChen.P4B.smoothPhysicalProfileMargin_eq_offset_add_row",
+      "complete_header": "theorem smoothPhysicalProfileMargin_eq_offset_add_row\n    (b : ℝ) (N : ℕ) (T : ℝ) (v : Fin 2 → ℝ) (i : Fin 4) :\n    smoothPhysicalProfileMargin b N T v i =\n      smoothPhysicalWallOffset b N T i + smoothPhysicalWallRow b N i v :=",
+      "sha256": "a5460f6f87f732b7697ef8e1916f523055f5e19d9d7a0ffb52c1390b5de7e46f",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.smoothPhysicalProfileMargin_line",
+      "complete_header": "theorem smoothPhysicalProfileMargin_line\n    (b : ℝ) (N : ℕ) (T : ℝ) (x h : Fin 2 → ℝ) (t : ℝ) (i : Fin 4) :\n    smoothPhysicalProfileMargin b N T (x + t • h) i =\n      smoothPhysicalProfileMargin b N T x i + t * smoothPhysicalWallRow b N i h :=",
+      "sha256": "9b6eb8e3b6329f5ccd6c9a5efae56f9668c0fb7e10d1e592f96f17faac23596b",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.smoothPhysicalWallRow_norm_le",
+      "complete_header": "theorem smoothPhysicalWallRow_norm_le (b : ℝ) (N : ℕ) (hN : 2 ≤ N) (i : Fin 4) :\n    ‖smoothPhysicalWallRow b N i‖ ≤ (2 + |b|) * (1 + Real.log (N : ℝ)) :=",
+      "sha256": "269d75d64c07b8e7e73165c934fbd05d50ff6a211479f00fff09ab694a060fe3",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.smoothPhysicalWallRow_apply_abs_le",
+      "complete_header": "theorem smoothPhysicalWallRow_apply_abs_le\n    (b : ℝ) (N : ℕ) (hN : 2 ≤ N) (i : Fin 4) (h : Fin 2 → ℝ) :\n    |smoothPhysicalWallRow b N i h| ≤\n      ((2 + |b|) * (1 + Real.log (N : ℝ))) * ‖h‖ :=",
+      "sha256": "9b8df131b51b3277b442f73a18fec0947924af462a1dda22d96c95ccc17c1a59",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.hasFDerivAt_smoothPhysicalProfileMargin",
+      "complete_header": "theorem hasFDerivAt_smoothPhysicalProfileMargin\n    (b : ℝ) (N : ℕ) (T : ℝ) (v : Fin 2 → ℝ) (i : Fin 4) :\n    HasFDerivAt (fun x => smoothPhysicalProfileMargin b N T x i)\n      (smoothPhysicalWallRow b N i) v :=",
+      "sha256": "e349dcc66acbeb0858d8eb20f77b35277d36734c361f01ac5de690577e694a54",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.hasFDerivAt_smoothPhysicalProfileFactor",
+      "complete_header": "theorem hasFDerivAt_smoothPhysicalProfileFactor\n    (b : ℝ) (N : ℕ) (T width : ℝ) (v : Fin 2 → ℝ) (i : Fin 4) :\n    HasFDerivAt (fun x => smoothGateUpperStep width (smoothPhysicalProfileMargin b N T x i))\n      (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i) •\n        smoothPhysicalWallRow b N i) v :=",
+      "sha256": "11c07370cf997504effd97da89e0576b0af1236dcd6150ab3e70d131c599912c",
+      "identical": true,
+      "proof_changed": true
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.fderiv_smoothPhysicalProfile_eq_leibniz",
+      "complete_header": "theorem fderiv_smoothPhysicalProfile_eq_leibniz\n    (b : ℝ) (N : ℕ) (T width : ℝ) (v : Fin 2 → ℝ) :\n    fderiv ℝ (smoothPhysicalProfile b N T width) v =\n      ∑ i : Fin 4,\n        (∏ j ∈ (Finset.univ : Finset (Fin 4)).erase i,\n          smoothGateUpperStep width (smoothPhysicalProfileMargin b N T v j)) •\n          (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i) •\n            smoothPhysicalWallRow b N i) :=",
+      "sha256": "eb50e5fe7595913d47d315027451c751c8802effe6cb10e811d5d30f317ac02e",
+      "identical": true,
+      "proof_changed": false
+    },
+    {
+      "fqn": "ImbalancedChen.P4B.exists_smoothPhysicalProfile_first_derivative_budget",
+      "complete_header": "theorem exists_smoothPhysicalProfile_first_derivative_budget :\n    ∃ C1 : ℝ, 1 ≤ C1 ∧ ∀ b width : ℝ, 0 < width →\n      ∀ N : ℕ, 2 ≤ N → ∀ T : ℝ, ∀ v : Fin 2 → ℝ,\n        ‖fderiv ℝ (smoothPhysicalProfile b N T width) v‖ ≤\n          (4 * C1 * (2 + |b|) / width) * (1 + Real.log (N : ℝ)) :=",
+      "sha256": "eac70dbc27709cebfc03b99570b09555e196afbedb0a6568a137986937092639",
+      "identical": true,
+      "proof_changed": false
+    }
+  ],
+  "all_complete_definitions": [
+    {
+      "name": "smoothPhysicalWallRow",
+      "kind": "def",
+      "complete_definition_before": "def smoothPhysicalWallRow (b : ℝ) (N : ℕ) (i : Fin 4) :\n    (Fin 2 → ℝ) →L[ℝ] ℝ :=\n  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - ContinuousLinearMap.proj 0,\n    ContinuousLinearMap.proj 0 - b • ContinuousLinearMap.proj 1,\n    ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1,\n    (-Real.log (N : ℝ)) • (ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1)] i\n\n/-- Affine offsets, including log N at the physical upper-product wall. -/\n",
+      "complete_definition_after": "def smoothPhysicalWallRow (b : ℝ) (N : ℕ) (i : Fin 4) :\n    (Fin 2 → ℝ) →L[ℝ] ℝ :=\n  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ),\n    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) - b • (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),\n    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),\n    (-Real.log (N : ℝ)) • ((ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ))] i\n\n/-- Affine offsets, including log N at the physical upper-product wall. -/\n",
+      "before_sha256": "2d863d97469de6af8a661dd8f6d33a70ff291470004529e7a41c463e46dd464d",
+      "after_sha256": "9ae2e6268a1d6458b6f1793cebc210db93abb18df79b8e5be45d7fe450d138a6",
+      "identical": false
+    },
+    {
+      "name": "smoothPhysicalWallOffset",
+      "kind": "def",
+      "complete_definition_before": "def smoothPhysicalWallOffset (b : ℝ) (N : ℕ) (T : ℝ) : Fin 4 → ℝ :=\n  ![0, 0, -Real.log T / Real.log (N : ℝ), Real.log (N : ℝ)]\n\n/-- Exact dictionary from the defined actual profile margins to affine rows. -/\n",
+      "complete_definition_after": "def smoothPhysicalWallOffset (b : ℝ) (N : ℕ) (T : ℝ) : Fin 4 → ℝ :=\n  ![0, 0, -Real.log T / Real.log (N : ℝ), Real.log (N : ℝ)]\n\n/-- Exact dictionary from the defined actual profile margins to affine rows. -/\n",
+      "before_sha256": "100ac73cbbbd25e8c88e4f79cf2e9f6a0ca16c0dcfe93a5858ba488bd67a7114",
+      "after_sha256": "100ac73cbbbd25e8c88e4f79cf2e9f6a0ca16c0dcfe93a5858ba488bd67a7114",
+      "identical": true
+    }
+  ],
+  "definition_type_representation_exceptions": [
+    {
+      "name": "smoothPhysicalWallRow",
+      "kind": "ROOT_AUTHORIZED_UNELABORATED_DEFINITION_EXPLICIT_TYPE_INFORMATION",
+      "header_before_after_identical": true,
+      "domain": "Fin2->Real CLM Real",
+      "index": "i:Fin4",
+      "exact_transform": "Parenthesize each previously unannotated ContinuousLinearMap.proj0/1 with the same explicit original CLM type. The first original annotation remains.",
+      "all_four_formulas_order_indices_constants_and_body_beyond_added_type_information_exact": true,
+      "old_failed_expression_is_not_claimed_a_previously_accepted_kernel_value": true
+    }
+  ],
+  "changed_original_proofs": [
+    {
+      "name": "hasFDerivAt_smoothPhysicalProfileFactor",
+      "before_proof": "\n  have hs : HasDerivAt (smoothGateUpperStep width)\n      (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i))\n      (smoothPhysicalProfileMargin b N T v i) :=\n    ((contDiff_smoothGateUpperStep width (n := 1)).differentiable_one _).hasDerivAt\n  exact hs.comp_hasFDerivAt v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)\n\n",
+      "after_proof": "\n  have hs : HasDerivAt (smoothGateUpperStep width)\n      (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i))\n      (smoothPhysicalProfileMargin b N T v i) :=\n    ((contDiff_smoothGateUpperStep width (n := 1)).differentiable_one _).hasDerivAt\n  exact hs.comp_hasFDerivAt\n    (h₂ := smoothGateUpperStep width)\n    (f := fun x : Fin 2 → ℝ => smoothPhysicalProfileMargin b N T x i)\n    v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)\n\n",
+      "before_sha256": "b64e3bf0f3b809658b7a1de6cd0cc1e8e6c97aa1daa86e8c01a71b44683eae42",
+      "after_sha256": "7772d2337c8a96d5acdc44bea602e154f422aee8cbc9f3ab95dd7a39b6c7a9b4"
+    }
+  ],
+  "outside_registered_proof_and_explicit_definition_type_annotation_exception_identical": true,
+  "imports_rawheaders_other_definitions_all_original_hypotheses_domains_and_constants_preserved": true,
+  "actual_failure": {
+    "module": "ImbalancedChen.P4BSmoothProfileFirstDerivativeBudget",
+    "pre_sha256": "938ad94c91924169fe0036ac9532c4799035728736275145e09c5606c197520f",
+    "post_sha256": "ea8bccd2639083b36b188392f9344932b0c8ce5fcb31b29ec349a1030d1411c5",
+    "source_log": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "raw_byte_start": 421342,
+    "raw_byte_end_exclusive": 427273,
+    "raw_sha256": "7c81068ddefaa24cbd4e95152c9466b48dd74f22eee188fb3f903379ebe41d24",
+    "master_prefix_sha256": "eb6e9a00c7b7bbada99f486b8dada2b2e68785d6b183e469bde9ba634e4d9135",
+    "published_source": {
+      "commit": "48db3d603d632bc60037e149a55717832e4c04be",
+      "parent": "1a4abdd81ef19be8248fcc0b2a35b2225bdc895b",
+      "path": "ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean",
+      "git_blob_sha1": "37171d2c22fa40653ca01fd166bdbaf783523b7e",
+      "whole_source_byte_exact_reused": true,
+      "published_source_not_current_context_compilation_or_object_qualification": true
+    },
+    "raw_slice": {
+      "path": "/workspace/p1-complete-proof/static-smooth-profile-two-failures/P4BSmoothProfileFirstDerivativeBudget/actual-failure.log",
+      "sha256": "7c81068ddefaa24cbd4e95152c9466b48dd74f22eee188fb3f903379ebe41d24",
+      "bytes": 5931
+    },
+    "actual_bytes_and_prefix_verified": true
+  },
+  "existing_work": {
+    "held_inventory": {
+      "path": "/workspace/p1-complete-proof/source-graph-inventory.json",
+      "sha256": "6efb6d8ee792f592d73f831cbedacbf768b5c76c8f2b9eefb33075fe0d38e912",
+      "bytes": 4810737
+    },
+    "only_original_variant_in_initial_source_index": true,
+    "four_commit_source_inventory": {
+      "path": "/workspace/blue-member-four-commit-reuse-inventory-20261123.json",
+      "sha256": "a60103db75acd3954b44032b4f6e66ef79b5dd9460b26dd3ec5f226781e482e8",
+      "bytes": 150513
+    },
+    "published_exact_pre_post_row": {
+      "commit": "48db3d603d632bc60037e149a55717832e4c04be",
+      "parent": "1a4abdd81ef19be8248fcc0b2a35b2225bdc895b",
+      "status": "M",
+      "path": "ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean",
+      "module": "ImbalancedChen.P4BSmoothProfileFirstDerivativeBudget",
+      "archived_unaccepted_path": false,
+      "preimage_sha256": "938ad94c91924169fe0036ac9532c4799035728736275145e09c5606c197520f",
+      "postimage_sha256": "ea8bccd2639083b36b188392f9344932b0c8ce5fcb31b29ec349a1030d1411c5",
+      "postimage_bytes": 11610,
+      "registered_selected_sha256": "938ad94c91924169fe0036ac9532c4799035728736275145e09c5606c197520f",
+      "live_path": "/workspace/blue-member-build/ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean",
+      "live_sha256": "938ad94c91924169fe0036ac9532c4799035728736275145e09c5606c197520f",
+      "live_equals_published_post": false,
+      "registered_matches_commit_preimage": true,
+      "live_matches_commit_preimage": true,
+      "live_equals_post_except_status": false,
+      "git_blob_sha1": "37171d2c22fa40653ca01fd166bdbaf783523b7e",
+      "imports_before": [
+        "import ImbalancedChen.P4BSmoothPhysicalPairOuterRamp",
+        "import ImbalancedChen.P4BSmoothStepDerivativeBudget",
+        "import Mathlib.Analysis.Calculus.FDeriv.Mul",
+        "import Mathlib.Analysis.Calculus.FDeriv.Prod",
+        "import Mathlib.Analysis.Calculus.Deriv.Comp",
+        "import Mathlib.Analysis.Normed.Operator.Basic"
+      ],
+      "imports_after": [
+        "import ImbalancedChen.P4BSmoothPhysicalPairOuterRamp",
+        "import ImbalancedChen.P4BSmoothStepDerivativeBudget",
+        "import Mathlib.Analysis.Calculus.FDeriv.Mul",
+        "import Mathlib.Analysis.Calculus.FDeriv.Prod",
+        "import Mathlib.Analysis.Calculus.Deriv.Comp",
+        "import Mathlib.Analysis.Normed.Operator.Basic"
+      ],
+      "headers_token_identical": true,
+      "changed_header_names": [],
+      "changed_proof_names": [
+        "hasFDerivAt_smoothPhysicalProfileFactor"
+      ],
+      "added_theorems": [],
+      "removed_theorems": [],
+      "all_nonproof_tokens_identical": false,
+      "post_nonproof_tokens_equal_current": false,
+      "all_published_theorem_proof_tokens_already_current": false,
+      "current_compiled_olean_exists": false,
+      "imports_changed": false,
+      "static_classification": "INTERFACE_IMPORT_DEFINITION_OR_OTHER_NONPROOF_EXCEPTION_REQUIRES_SCOPED_REUSE",
+      "published_source_patch": {
+        "path": "/workspace/blue-member-four-commit-reuse-inventory-20261123/48db3d60-P4BSmoothProfileFirstDerivativeBudget.patch",
+        "bytes": 2113,
+        "sha256": "92dead823aeda701247feea966d6e504ca42446d2f031bb63c6af4f25eb51eae"
+      },
+      "changed_line_count": 13,
+      "all_original_theorem_header_bytes_exact": true,
+      "added_or_removed_declared_definition_names": {
+        "pre": [
+          "smoothPhysicalWallRow",
+          "smoothPhysicalWallOffset"
+        ],
+        "post": [
+          "smoothPhysicalWallRow",
+          "smoothPhysicalWallOffset"
+        ]
+      },
+      "all_named_definition_command_names_preserved": true,
+      "no_compiled_object_or_current_runtime_validation_qualification_claim": true,
+      "whole_source_install_recommendation": "Source candidate only; owner must assess exact failing statement/import context and normal validate before adoption."
+    },
+    "exact_published_source_pin": {
+      "commit": "48db3d603d632bc60037e149a55717832e4c04be",
+      "parent": "1a4abdd81ef19be8248fcc0b2a35b2225bdc895b",
+      "path": "ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean",
+      "git_blob_sha1": "37171d2c22fa40653ca01fd166bdbaf783523b7e",
+      "whole_source_byte_exact_reused": true,
+      "published_source_not_current_context_compilation_or_object_qualification": true
+    },
+    "no_new_history_scan_or_remote_fetch": true
+  },
+  "mathematical_scope": {
+    "CommonCompact": "Original full-plane nonzero support, fixed theta/width compact cube independentN, actual upper wall scale width/logN; only two Fin-case expressions normalized before same old strict inequality. No arithmetic point or stronger smoothness/P3 premise introduced.",
+    "FirstDerivative": "Exact original4wall coefficients including minuslogN atphysical upper wall, same firstorderLeibniz sum and4*C1*(2+absb)/width*(1+logN) budget. Existing exact published typeannotations/chainarguments only; original output formula and hypotheses unaltered.",
+    "new_analytic_estimate_or_P3_licence_added": false
+  },
+  "execution": {
+    "Lean_Lake_kernel_types_axioms_or_numerical_calls": 0,
+    "live_main_frozen_cache_or_original_metadata_edits": 0,
+    "required_next_step": "Soleowner actual normal/kernel/full-owned declaration validation; no compiled success inferred from existing source publication."
+  }
+}

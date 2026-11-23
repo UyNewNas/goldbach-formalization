@@ -1,0 +1,266 @@
+{
+  "schema": "non_author_historical_retained_modulus_existing_h4_argument_static_review_v1",
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_UNCOMPILED",
+  "reviewer": "/root/omega_review; not proof author",
+  "reviewed_utc": "2026-11-23T18:53:00.086651+00:00",
+  "findings": [],
+  "source_binding": {
+    "module": "ImbalancedChen.P1OriginalHistoricalRetainedModulusLevel",
+    "baseline_sha256": "1c25a0da52d75b19d0120bf7b199089fcdcf0f1390da3c95d322b4ddd75a1321",
+    "candidate_sha256": "9ca3e9ff05af489faa2884494b77cf7c5392bdff123fae91a37c704077b0dbc8",
+    "baseline_origin": {
+      "commit": "d5f392f6717227ab94ad4004044a037ac83be877",
+      "path": "ImbalancedChen/P1OriginalHistoricalRetainedModulusLevel.lean",
+      "blob_sha1": "3ba642dbfb5a7e2bcbb728e24e72f9edc8ba974c"
+    },
+    "original_manifest_files_verified": 7
+  },
+  "complete_theorem_headers": [
+    {
+      "name": "currentLevel_through_four",
+      "private": false,
+      "complete_raw_header": "theorem currentLevel_through_four (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (Q5 : List ℕ → ℝ) (pre : List ℕ) (hlen : pre.length ≤ 4) :\n    currentLevel e chi m omega N Q5 pre = frozenLevel e chi m omega N pre :=",
+      "sha256": "eab6f434b1bd032acffcdd5609d8fbfbadc2c9fe1b21d932ad5c42c2fa3e928a",
+      "byte_exact": true
+    },
+    {
+      "name": "currentLevel_from_five",
+      "private": false,
+      "complete_raw_header": "theorem currentLevel_from_five (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (Q5 : List ℕ → ℝ) (pre : List ℕ) (hlen : 5 ≤ pre.length) :\n    currentLevel e chi m omega N Q5 pre = Q5 (rosserAncestor 5 pre) :=",
+      "sha256": "4e28158316666d8246a05a5de39cbbb3d548cbf041899a92eaf413ab65148cb7",
+      "byte_exact": true
+    },
+    {
+      "name": "evenListLength_eq_decide_even",
+      "private": true,
+      "complete_raw_header": "private theorem evenListLength_eq_decide_even (pre : List ℕ) :\n    evenListLength pre = decide (Even pre.length) :=",
+      "sha256": "ef2f18086b3b1a6f5344f98360f176ee52fae7d7649631f5d450e6ab661f8e9d",
+      "byte_exact": true
+    },
+    {
+      "name": "original_coarse_step_valid",
+      "private": false,
+      "complete_raw_header": "theorem original_coarse_step_valid (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (pre : List ℕ) (positive : Bool) (q : ℕ)\n    (hpre : ordinaryRosserPrefixAdmissible false (frozenLevel e chi m omega N pre) pre)\n    (hsign : positive = evenListLength pre) (hq : q.Prime)\n    (hsort : (q :: pre).Pairwise (· < ·))\n    (hpass : policy e chi m omega N (!positive) (q :: pre) = true) :\n    ordinaryRosserPrefixAdmissible false\n      (frozenLevel e chi m omega N (q :: pre)) (q :: pre) :=",
+      "sha256": "aff03224042482b4ae641a624b33bf29cd1836be5f6cdd892fd684964c6c06e1",
+      "byte_exact": true
+    },
+    {
+      "name": "mem_original_fifth_leaf_valid_from_entry",
+      "private": false,
+      "complete_raw_header": "theorem mem_original_fifth_leaf_valid_from_entry\n    (e chi : ℝ) (m : ℕ) (omega N : ℝ) (Q5 : List ℕ → ℝ) (weight : ℕ → ℝ)\n    (pre carrier : List ℕ) (positive : Bool) (mass : ℝ)\n    (hpre : ordinaryRosserPrefixAdmissible false (currentLevel e chi m omega N Q5 pre) pre)\n    (hsign : positive = evenListLength pre)\n    (hprime : ∀ p ∈ carrier, p.Prime)\n    (hsort : (carrier.reverse ++ pre).Pairwise (· < ·))\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega N Q5)\n      weight pre positive mass carrier) :\n    ordinaryRosserPrefixAdmissible false\n        (currentLevel e chi m omega N Q5 leaf.selected) leaf.selected ∧\n      leaf.positive = evenListLength leaf.selected :=",
+      "sha256": "4028b62fe255ce4dccb4940ef23a4432f276ae3d6579245da2820992981da838",
+      "byte_exact": true
+    },
+    {
+      "name": "original_fifth_retained_leaf_valid",
+      "private": false,
+      "complete_raw_header": "theorem original_fifth_retained_leaf_valid\n    (e chi : ℝ) (m : ℕ) (omega N : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < N)\n    (weight : ℕ → ℝ) (carrier : List ℕ)\n    (hprime : ∀ p ∈ carrier, p.Prime) (hsort : carrier.Pairwise (· > ·))\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega N Q5)\n      weight [] true 1 carrier) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel e chi m omega N Q5 leaf.selected) leaf.selected :=",
+      "sha256": "fef579aab45805e9d39aa23b2b0535e503ca581a0118f54cbdd9236282fc7587",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_original_fifth_retained_leaf_valid",
+      "private": false,
+      "complete_raw_header": "theorem actual_original_fifth_retained_leaf_valid\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega (N : ℝ) Q5)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel e chi m omega (N : ℝ) Q5 leaf.selected) leaf.selected :=",
+      "sha256": "a327a4758079b729db838c401a3f355d0ef7a46bec5bff4c03663b3573788697",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_original_fifth_retained_leaf_prod_lt_current",
+      "private": false,
+      "complete_raw_header": "theorem actual_original_fifth_retained_leaf_prod_lt_current\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (w z : ℝ) (Q5 : List ℕ → ℝ)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (originalFifthPolicy e chi m omega (N : ℝ) Q5)\n      weight [] true 1 (roughPrimeUniverse N cap w z)) :\n    (leaf.selected.prod : ℝ) < currentLevel e chi m omega (N : ℝ) Q5 leaf.selected :=",
+      "sha256": "7ad460a5fa5296dad865d9d9543ba841db20d8cf931fe26570344f39e0469ee0",
+      "byte_exact": true
+    },
+    {
+      "name": "originalCeilingCheck_sound",
+      "private": false,
+      "complete_raw_header": "theorem originalCeilingCheck_sound (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true) :\n    0 ≤ e ∧ (299 / 500 : ℚ) - 2 * e ≤ theta ∧\n      (∀ j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4, cap4 j ≤ theta) ∧\n      (∀ j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5, cap5 j ≤ theta) :=",
+      "sha256": "b2ae88c4bf247903a1d8b5f10abd75f118e613731bef4a7f40ff3ff6f73b85a3",
+      "byte_exact": true
+    },
+    {
+      "name": "tableValues_nonempty",
+      "private": false,
+      "complete_raw_header": "theorem tableValues_nonempty : (tableValues e chi m omega J4 cap4 J5 cap5).Nonempty :=",
+      "sha256": "62069f3c81e8ed2f58c2218793bed63bdfc706c9f0cd4d9e3b1e3bfdfcdca5b5",
+      "byte_exact": true
+    },
+    {
+      "name": "mem_tableValues_le_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem mem_tableValues_le_ceiling (a : ℚ)\n    (ha : a ∈ tableValues e chi m omega J4 cap4 J5 cap5) :\n    a ≤ tableCeiling e chi m omega J4 cap4 J5 cap5 :=",
+      "sha256": "b81cd4b1255cea687c6ad07bf45c2e5bd2c253b2d3301ce650c9fdb03dfa2641",
+      "byte_exact": true
+    },
+    {
+      "name": "tableCeilingCheck_true",
+      "private": false,
+      "complete_raw_header": "theorem tableCeilingCheck_true (he : 0 ≤ e) :\n    originalCeilingCheck e chi m omega J4 cap4 J5 cap5\n      (tableCeiling e chi m omega J4 cap4 J5 cap5) = true :=",
+      "sha256": "962113cb71b6ce680edd944b4a79c27d2c784f4c221fc63635b188c08a5ddddd",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_effectiveExponent3Q_le_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_effectiveExponent3Q_le_ceiling (theta : ℚ)\n    (he : 0 ≤ e) (hTheta : (299 / 500 : ℚ) - 2 * e ≤ theta)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseContinuation.effectiveExponent3Q e chi m omega N pre ≤ theta :=",
+      "sha256": "63575015fa09841374e34eff55d8aec536afb02734fe615b19b3a7e9698b2f34",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_effectiveExponent4Q_le_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_effectiveExponent4Q_le_ceiling (theta : ℚ)\n    (he : 0 ≤ e) (hTheta : (299 / 500 : ℚ) - 2 * e ≤ theta)\n    (h4 : ∀ j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4, cap4 j ≤ theta)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseContinuation.effectiveExponent4Q e chi m omega J4 cap4 N pre ≤ theta :=",
+      "sha256": "e55c1c8b7e73877f8bcab8a6d8cbe133bde829bf57e89844f864207a6feac6fe",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_effectiveExponent5Q_le_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_effectiveExponent5Q_le_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (pre : List ℕ) :\n    P1OriginalCoarseFifthContinuation.effectiveExponent5Q e chi m omega J4 cap4 J5 cap5 N pre ≤ theta :=",
+      "sha256": "62a04b101afc313e775d331622cdae016a1e382eab23185e38f6fd112972a989",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_level5_le_power_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_level5_le_power_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (pre : List ℕ) : Q5 N pre ≤ N ^ (theta : ℝ) :=",
+      "sha256": "9ad945f5379950947ecef4003e7601a7f0061de6780f30f23f04de60303c068d",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_currentLevel_le_power_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_currentLevel_le_power_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N : ℝ) (hN : 1 ≤ N) (pre : List ℕ) :\n    currentLevel (e : ℝ) chi m omega N (Q5 N) pre ≤ N ^ (theta : ℝ) :=",
+      "sha256": "d0b8daa5596ae0d116ef669dcd363d56831247b25845ec96b9bb03efd7a9f948",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_leaf_valid",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_leaf_valid (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) weight [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    ordinaryRosserPrefixAdmissible false\n      (currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected) leaf.selected :=",
+      "sha256": "796cf28a37176df244965eb222c44de6599955313f3473793ef6ff01e7bcc383",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_leaf_prod_lt_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_leaf_prod_lt_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (weight : ℕ → ℝ) (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) weight [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    (leaf.selected.prod : ℝ) < (N : ℝ) ^ (theta : ℝ) :=",
+      "sha256": "7e1ef9b754d00bd68423eb7642dceb51c0e286dbf5ca77319446e43831bcb2be",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_rough_nonzero_mem_support",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_rough_nonzero_mem_support (N cap : ℕ) (w z : ℝ) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) : d ∈ S N cap w z :=",
+      "sha256": "0aeb8f66430f6a568ea47e23d502aa77b4a62818a9e55138c4d5364f5e60f464",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_rough_nonzero_valid_witness",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_rough_nonzero_valid_witness (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) :\n    ∃ leaf : FirstExitLeaf ℕ,\n      leaf ∈ firstExitRetainedLeaves (P (N : ℝ)) (fun _ => 1) [] true 1\n        (roughPrimeUniverse N cap w z) ∧\n      leaf.selected.prod = d ∧\n      ordinaryRosserPrefixAdmissible false\n        (currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected) leaf.selected ∧\n      (d : ℝ) < currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected ∧\n      currentLevel (e : ℝ) chi m omega (N : ℝ) (Q5 (N : ℝ)) leaf.selected ≤\n        (N : ℝ) ^ (theta : ℝ) :=",
+      "sha256": "775c73823a48b8aea0a325a90ad02d3a1c616cbc7bdbc0d0ea6ae1973d9cfda3",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_rough_nonzero_modulus_lt_ceiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_rough_nonzero_modulus_lt_ceiling (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) : (d : ℝ) < (N : ℝ) ^ (theta : ℝ) :=",
+      "sha256": "535dd65873d9a1063fd9f643506c9936bb0c09277ff50f87427d4e5222820427",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_rough_zero_of_ceiling_le",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_rough_zero_of_ceiling_le (theta : ℚ)\n    (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : (N : ℝ) ^ (theta : ℝ) ≤ (d : ℝ)) : C N cap w z d = 0 :=",
+      "sha256": "4a59dddc4223254d2bb1277bf67d2e39f44fc2efbd7beb7333e2937c39323163",
+      "byte_exact": true
+    },
+    {
+      "name": "actual_final_rough_nonzero_modulus_lt_tableCeiling",
+      "private": false,
+      "complete_raw_header": "theorem actual_final_rough_nonzero_modulus_lt_tableCeiling (he : 0 ≤ e)\n    (N cap : ℕ) (w z : ℝ)\n    (heupper : 2 * (e : ℝ) < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ)) (d : ℕ)\n    (hd : C N cap w z d ≠ 0) :\n    (d : ℝ) < (N : ℝ) ^ (tableCeiling e chi m omega J4 cap4 J5 cap5 : ℝ) :=",
+      "sha256": "9358ed9bbc4883c4e64aa0ddbec0b391c0284ef6029491fbcaf1564ee1b56df9",
+      "byte_exact": true
+    }
+  ],
+  "complete_non_theorem_region_bindings": [
+    {
+      "name": "originalFifthPolicy",
+      "kind": "def",
+      "whole_region_sha256": "97915eadfcd62afaa6903b892b483a8b4d22f384b901d2eea95e234d6595d967",
+      "byte_exact": true
+    },
+    {
+      "name": "currentLevel",
+      "kind": "def",
+      "whole_region_sha256": "4d72863e611f2911c1429d1c64e4c7fe169eac38d46113fc32d75cd8b2509f4a",
+      "byte_exact": true
+    },
+    {
+      "name": "originalCeilingCheck",
+      "kind": "def",
+      "whole_region_sha256": "f5f6bdcc088d9692848129d19b929dcbdb135fd53b1fc0996d194e9c4a7dcab3",
+      "byte_exact": true
+    },
+    {
+      "name": "tableValues",
+      "kind": "def",
+      "whole_region_sha256": "d58028c477e3a3c918b7d9aeb1b7d5aece116c88a33b4fb07d9b4f9fbd893635",
+      "byte_exact": true
+    },
+    {
+      "name": "tableCeiling",
+      "kind": "def",
+      "whole_region_sha256": "7ee83aff1220f456148001cadc62bceef1194d756013e29e45225165f94a83db",
+      "byte_exact": true
+    }
+  ],
+  "counts": {
+    "source_commands": 29,
+    "theorem_headers": 24,
+    "non_theorem_regions": 5,
+    "changed_proof_bodies": 1,
+    "added_proof_arguments": 2,
+    "new_declarations": 0
+  },
+  "exact_difference": "Only existing h4 is inserted after he,hTheta and before N at the two original actual_effectiveExponent4Q_le_ceiling calls in actual_effectiveExponent5Q_le_ceiling; candidate equals that exact2-occurrence raw replacement. All other proof and nonproof bytes, comments/imports/options/data/EOF and all24 complete headers are exact.",
+  "logic": {
+    "available_original_local_proof": "originalCeilingCheck_sound e chi m omega J4 cap4 J5 cap5 theta hc is already destructured as ⟨he,hTheta,h4,h5⟩.",
+    "h4_type": "∀ j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4, cap4 j ≤ theta",
+    "callee_required_order": "actual_effectiveExponent4Q_le_ceiling theta he hTheta h4 N pre; original missing h4 incorrectly supplied N at the proof position. Both new calls use the same original J4/cap4 and exact existing h4.",
+    "branch1": "Original selected-fifth lookup remains bounded by its inherited fourth exponent via the same h4 and its own h5.",
+    "branch2": "Unchanged inherited-fourth fallback uses that same bound.",
+    "no_strengthening_or_oracle": "No new h4 assumption, row licence, cap inequality, target-dependent policy, numerical smallness, signed-coefficient hypothesis or weakened conclusion is introduced; original check is the only caller premise."
+  },
+  "actual_failure_binding": {
+    "source_log": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "current_captured_sha256": "af60924a0cdc1549ad7d8e991296cfdef226d0ac6becebb54a139beceda374f9",
+    "current_captured_bytes": 418428,
+    "exact_block_offset": 246664,
+    "exact_block_end_exclusive": 249175,
+    "exact_block_sha256": "73b8d9e35bf3c59621a669e08074c6f9251d67574dfea27d6a2d1d96d6e02acd",
+    "source_error_lines": [
+      288,
+      289
+    ]
+  },
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "anchors": [
+      "argument.tex:4-18 inherited parent decision fixed before children",
+      "argument.tex:207-218 successive actual fourth/fifth cap replacements and original-parent chronology",
+      "coefficient-appendix.tex:20-45 retained full/selected gates and inherited cube tests"
+    ],
+    "scope": "Only the existing conditional historical rational ceiling interface; not a new concrete numerical table licence or complete P1 theorem."
+  },
+  "review_actions": {
+    "Lean_Lake_stock_kernel_type_axiom_or_tests_run": false,
+    "source_candidate_original_manifest_or_live_outputs_changed": false,
+    "new_Git_history_or_global_source_scan": false,
+    "only_known_exact_origin_blob_read": true,
+    "only_new_review_and_addendum_written": true
+  },
+  "acceptance_boundary": "Static review only. Candidate remains uncompiled in this record. Sole owner normal/kernel/full-owned acceptance must bind the exact9ca3e9ff post and preserve the original failure/selection/manifests."
+}

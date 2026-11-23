@@ -1,0 +1,486 @@
+{
+  "schema": "non_author_P1_finite_affine_decision_program_static_review_v1",
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_UNCOMPILED",
+  "reviewer": "/root/omega_review; root authored candidate, reviewer did not write these3 proofs",
+  "reviewed_utc": "2026-11-23T18:51:37.293432+00:00",
+  "findings": [],
+  "unresolved_blockers": 0,
+  "source_binding": {
+    "module": "ImbalancedChen.P1FiniteAffineDecisionProgram",
+    "baseline_sha256": "b541c185b120f03dc7371c54b16d0d2164a4bb76f42c3fb5854109d36744bbb2",
+    "candidate_sha256": "b84da3edd04f2d6aaeb469cdeb3b09903a432ce2418a06ff97a2875471168c96",
+    "baseline_origin": {
+      "commit": "be2efd01c561080672e6c0ad0ba21638837afe4c",
+      "path": "docs/source-only/20261103-full87-affine-guards/P1FiniteAffineDecisionProgram.lean",
+      "blob_sha1": "c4c738ded7796dc1ee0dcf5999e234eb91ee39b9"
+    },
+    "original_FILES_MANIFEST_verified_files": 7,
+    "all_original_artifacts_and_candidate_unmodified_by_reviewer": true
+  },
+  "counts": {
+    "original_retained_source_commands": 48,
+    "complete_source_theorem_headers_including_attributes": 19,
+    "public_source_theorems": 18,
+    "private_source_theorems": 1,
+    "definition_abbrev_structure_inductive_regions": 29,
+    "changed_proof_bodies": 3,
+    "new_declarations": 0,
+    "new_imports_or_options": 0
+  },
+  "complete_theorem_headers": [
+    {
+      "name": "Affine.eval_const",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_const {k : ℕ} (x : ℝ) (t : Fin k → ℝ) :\n    (Affine.const x).eval t = x :=",
+      "sha256": "9c969a69c820f7dd3273eeb52f9344238a4fc522d28764121aa50262682ca3bf",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_coord",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_coord {k : ℕ} (i : Fin k) (t : Fin k → ℝ) :\n    (Affine.coord i).eval t = t i :=",
+      "sha256": "eb41c52d500957d757a6a961855eea4a57ba97fde113723cf6b76c0a95efc0b6",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_add",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_add {k : ℕ} (a b : Affine k) (t : Fin k → ℝ) :\n    (a.add b).eval t = a.eval t + b.eval t :=",
+      "sha256": "b7c902616e9c64ad917edd169dcf479c09ceb1a820388f3b58a784c685adf9f1",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_sub",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_sub {k : ℕ} (a b : Affine k) (t : Fin k → ℝ) :\n    (a.sub b).eval t = a.eval t - b.eval t :=",
+      "sha256": "1d1eae200039fdf2b73580732d5a146fef3df20c6f562319f58eaef4388999a9",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_scale",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_scale {k : ℕ} (s : ℝ) (a : Affine k) (t : Fin k → ℝ) :\n    (a.scale s).eval t = s * a.eval t :=",
+      "sha256": "532e11ef89e001dc9fc229ffcdb14e0a734965aa10f1d12fee0eecedb4be2ddb",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_sum",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_sum {k : ℕ} {ι : Type*} (s : Finset ι)\n    (f : ι → Affine k) (t : Fin k → ℝ) :\n    (Affine.sum s f).eval t = ∑ i ∈ s, (f i).eval t :=",
+      "sha256": "a616ca7374737597e7b57ee6bcc5fe50a27a6a3db0921bcfbf94651a7dc7c56f",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.select_mem",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.select_mem {k : ℕ} (p : Program k)\n    (cmp : Affine k → Affine k → Bool × Bool) : p.select cmp ∈ p.leaves :=",
+      "sha256": "0069e602bf41674adb0f1d59841e14f10ef964d57cfa6479a39521e5908e7cda",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.select_correct",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.select_correct {k : ℕ} (p : Program k) (t : Fin k → ℝ)\n    (cmp : Affine k → Affine k → Bool × Bool)\n    (hcmp : ∀ a ∈ p.leaves, ∀ b ∈ p.leaves,\n      cmp a b = (decide (a.eval t < b.eval t), decide (a.eval t ≤ b.eval t))) :\n    (p.select cmp).eval t = p.eval t :=",
+      "sha256": "aab1172cd3f309cd33349308f268a83d8f33acd0e88ecc99af0e53b11789efa2",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.table_exact",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.table_exact {k : ℕ} (p : Program k) (t : Fin k → ℝ) :\n    (p.table (p.signature t)).eval t = p.eval t :=",
+      "sha256": "137824464d0f1a7338738faaad8cb80e17e2283cd6a110661563d52bbdac44a5",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.table_on_region",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.table_on_region {k : ℕ} (p : Program k) (s : p.Signature)\n    (t : Fin k → ℝ) (ht : t ∈ p.region s) : (p.table s).eval t = p.eval t :=",
+      "sha256": "f441a65570c78ca68096b9e6c50fd819be4c4aa8d3f2e709160fd052b3c43d8e",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.regions_cover",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.regions_cover {k : ℕ} (p : Program k) :\n    (⋃ s : p.Signature, p.region s) = Set.univ :=",
+      "sha256": "5f09af0dae21d4758ccf3ee26407bf0cb797605e099e94dbfd8c555eb5a4351b",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.region_unique",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.region_unique {k : ℕ} (p : Program k) (s r : p.Signature)\n    (t : Fin k → ℝ) (hs : t ∈ p.region s) (hr : t ∈ p.region r) : s = r :=",
+      "sha256": "04f34887f4f9bac9a4ebfcfb26bb9fe830a63b5b5ea83f299d63577445264c7c",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.box_bounds",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Affine.box_bounds {k : ℕ} (a : Affine k) (lo hi t : Fin k → ℝ)\n    (hl : ∀ i, lo i ≤ t i) (hu : ∀ i, t i ≤ hi i) :\n    a.lower lo hi ≤ a.eval t ∧ a.eval t ≤ a.upper lo hi :=",
+      "sha256": "5df742219a0f48931db5e42035d9ef604f2efa5cebc4452e7d147e5f64bf9053",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.boxCertificate_sound",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem Program.boxCertificate_sound {k : ℕ} (p : Program k) (s : p.Signature)\n    (lo hi : Fin k → ℝ) (hc : p.BoxCertificate s lo hi)\n    (t : Fin k → ℝ) (hl : ∀ i, lo i ≤ t i) (hu : ∀ i, t i ≤ hi i) :\n    t ∈ p.region s ∧ (p.table s).eval t = p.eval t :=",
+      "sha256": "1c2b31cb6a918002ccc671e94b4f5c0a043de68316a12c19e61e88ec2cdb6765",
+      "byte_exact": true
+    },
+    {
+      "name": "Affine.eval_pull",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Affine.eval_pull {k l : ℕ} (f : Fin k → Fin l)\n    (a : Affine k) (t : Fin l → ℝ) :\n    (a.pull f).eval t = a.eval (fun i => t (f i)) :=",
+      "sha256": "9b7f7cb31719e1960e4bd42aaae745d5c006cb4e475d038fa378555cd9a1e403",
+      "byte_exact": true
+    },
+    {
+      "name": "Program.eval_pull",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem Program.eval_pull {k l : ℕ} (f : Fin k → Fin l)\n    (p : Program k) (t : Fin l → ℝ) :\n    (p.pull f).eval t = p.eval (fun i => t (f i)) :=",
+      "sha256": "4950d7d44cfd4e3017815dff6f69a16601145fddcfafc3e101b07dc4945a7325",
+      "byte_exact": true
+    },
+    {
+      "name": "eval_allGates",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "@[simp] theorem eval_allGates {k : ℕ} (gs : List (Gate k))\n    (yes no : Program k) (t : Fin k → ℝ) :\n    (allGates gs yes no).eval t =\n      if ∀ g ∈ gs, g.holds t then yes.eval t else no.eval t :=",
+      "sha256": "a266d714cf04e2766642970d1b4e222763fa10b72ca2e3c2b3b0fb315505e45c",
+      "byte_exact": true
+    },
+    {
+      "name": "finiteMax_insert",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header_including_attributes_and_assignment": "private theorem finiteMax_insert {ι : Type*} (s : Finset ι) (i : ι)\n    (eligible : ι → Prop) (profile : ι → ℝ) (seed : ℝ) :\n    finiteMax (insert i s) eligible profile seed =\n      if eligible i then max (profile i) (finiteMax s eligible profile seed)\n      else finiteMax s eligible profile seed :=",
+      "sha256": "685044aee57db3593daf5b879b80eaaeca5fac258288b4544ae4a7a0b5eff379",
+      "byte_exact": true
+    },
+    {
+      "name": "eval_maxRows",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_including_attributes_and_assignment": "theorem eval_maxRows {k : ℕ} {ι : Type*} (tests : ι → List (Gate k))\n    (candidate : ι → Program k) (seed : Program k) (xs : List ι) (t : Fin k → ℝ) :\n    (maxRows tests candidate seed xs).eval t =\n      finiteMax xs.toFinset (fun i => ∀ g ∈ tests i, g.holds t)\n        (fun i => (candidate i).eval t) (seed.eval t) :=",
+      "sha256": "953fbd61a5f363740032e91775dbb7f43de6f17d3a235560c25a88f76951663f",
+      "byte_exact": true
+    }
+  ],
+  "complete_non_theorem_regions": [
+    {
+      "name": "Affine",
+      "kind": "structure",
+      "complete_header": "structure Affine (k : ℕ)",
+      "whole_region_sha256": "bdab3f3252f9ca8a8cc87bc0a44bb7a32917340d74f269aa2b03311d8261d641",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.eval",
+      "kind": "def",
+      "complete_header": "def Affine.eval {k : ℕ} (a : Affine k) (t : Fin k → ℝ) : ℝ :=",
+      "whole_region_sha256": "870507c41bddad14e20ed72b4104d21d94a340142d0796862e947a6f49372f81",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.const",
+      "kind": "def",
+      "complete_header": "def Affine.const {k : ℕ} (x : ℝ) : Affine k :=",
+      "whole_region_sha256": "42ee196119d460e5b6d10e3fadb2cf18868279851029bc96aad419cce1d84dce",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.coord",
+      "kind": "def",
+      "complete_header": "def Affine.coord {k : ℕ} (i : Fin k) : Affine k :=",
+      "whole_region_sha256": "1acd95f4e797157ed147b45b39a0d90492a4a364155fab37c709c1465c20f969",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.add",
+      "kind": "def",
+      "complete_header": "def Affine.add {k : ℕ} (a b : Affine k) : Affine k :=",
+      "whole_region_sha256": "199476e847ac0824a45bd4facdfe8f96b479ae1ff4052a069297e6b989b373ce",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.sub",
+      "kind": "def",
+      "complete_header": "def Affine.sub {k : ℕ} (a b : Affine k) : Affine k :=",
+      "whole_region_sha256": "fb4ed5753f4d7e16b03cbba9e0453c6a2767db259bcb914c2e808c6b5b60e80a",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.scale",
+      "kind": "def",
+      "complete_header": "def Affine.scale {k : ℕ} (s : ℝ) (a : Affine k) : Affine k :=",
+      "whole_region_sha256": "e98783b3be5655c924265eb5e542ff4e80bb7085dff4e2dd27b027ac6f6fa6ae",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.sum",
+      "kind": "def",
+      "complete_header": "def Affine.sum {k : ℕ} {ι : Type*} (s : Finset ι) (f : ι → Affine k) : Affine k :=",
+      "whole_region_sha256": "fa776abf93d1f913e641e75227f3a9c232fad144bfe2bf3036938db896a431c9",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program",
+      "kind": "inductive",
+      "complete_header": "inductive Program (k : ℕ)",
+      "whole_region_sha256": "dc31ddb314a72c1a5f14158a26845a308931bdad7099f21d177952da8876c425",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.eval",
+      "kind": "def",
+      "complete_header": "def Program.eval {k : ℕ} (t : Fin k → ℝ) : Program k → ℝ",
+      "whole_region_sha256": "ed6371e5ab2927b5a01227aa8c906e8499e6ce405fe83fc8e4120f8fe5da6293",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.leaves",
+      "kind": "def",
+      "complete_header": "def Program.leaves {k : ℕ} : Program k → Finset (Affine k)",
+      "whole_region_sha256": "d29e9387d690b84e0b458ee54b4f453d7eb633a88d6568734b6318a71d15d1d8",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.select",
+      "kind": "def",
+      "complete_header": "def Program.select {k : ℕ} (cmp : Affine k → Affine k → Bool × Bool) :\n    Program k → Affine k",
+      "whole_region_sha256": "b2f3da4473ab91e597084049c11b9fe78c2c097381574e8cc52a129c42b75d63",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.Label",
+      "kind": "abbrev",
+      "complete_header": "abbrev Program.Label {k : ℕ} (p : Program k) :=",
+      "whole_region_sha256": "df6f1f26c6a61e4909819b0fbcf87221e552ed9583d1411a7d7e3b20ad74c563",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.Signature",
+      "kind": "abbrev",
+      "complete_header": "abbrev Program.Signature {k : ℕ} (p : Program k) :=",
+      "whole_region_sha256": "e62ddd946bfc461eee4fdca93c0f5cd52d68f5d9d32bab05073a6552aa295245",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.allSignatures",
+      "kind": "def",
+      "complete_header": "def Program.allSignatures {k : ℕ} (p : Program k) : Finset p.Signature :=",
+      "whole_region_sha256": "c25d91256b8cedb23e215babd5dce5f14c3b43a1e42435563375ef29dad051bc",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.signature",
+      "kind": "def",
+      "complete_header": "def Program.signature {k : ℕ} (p : Program k) (t : Fin k → ℝ) : p.Signature :=",
+      "whole_region_sha256": "cbbd65f4570a38f0b6aea0d672abee4b14e834eaf82ed4368e6b2767b81b25a5",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.lookup",
+      "kind": "def",
+      "complete_header": "def Program.lookup {k : ℕ} (p : Program k) (s : p.Signature)\n    (a b : Affine k) : Bool × Bool :=",
+      "whole_region_sha256": "e50787ea492bdf8e5c3d290a9c8083d628132430cdfeb445483313fa6e8067c1",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.table",
+      "kind": "def",
+      "complete_header": "def Program.table {k : ℕ} (p : Program k) (s : p.Signature) : Affine k :=",
+      "whole_region_sha256": "c39982dd7aa4b383df1ca48031c914b97257fa10f56d741080d5d39c7fa042f2",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.region",
+      "kind": "def",
+      "complete_header": "def Program.region {k : ℕ} (p : Program k) (s : p.Signature) : Set (Fin k → ℝ) :=",
+      "whole_region_sha256": "3c123000fca8d7bf831cf64c2c974b3c13555141472b125007e27da91e707bfb",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.lower",
+      "kind": "def",
+      "complete_header": "def Affine.lower {k : ℕ} (a : Affine k) (lo hi : Fin k → ℝ) : ℝ :=",
+      "whole_region_sha256": "df848c173259cc58d17ad31c3747bd94c4ab8b41d30f2efe22f784b9b1e4b527",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.upper",
+      "kind": "def",
+      "complete_header": "def Affine.upper {k : ℕ} (a : Affine k) (lo hi : Fin k → ℝ) : ℝ :=",
+      "whole_region_sha256": "463bd9aa22b6ad69dda15bbc39ff30c14e5fd995aa5dcb9b9f2b1ffb0a25a9b5",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.BoxCertificate",
+      "kind": "def",
+      "complete_header": "def Program.BoxCertificate {k : ℕ} (p : Program k) (s : p.Signature)\n    (lo hi : Fin k → ℝ) : Prop :=",
+      "whole_region_sha256": "3910fb0571bdad4c5fc33660fa390c2a2d8bfeedd2fb989f30822556e3d2c6dc",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Affine.pull",
+      "kind": "def",
+      "complete_header": "def Affine.pull {k l : ℕ} (f : Fin k → Fin l) (a : Affine k) : Affine l :=",
+      "whole_region_sha256": "f0ad092732c71178fcee6aed02384aaea482416aaf6b1b342beda384be72c694",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Program.pull",
+      "kind": "def",
+      "complete_header": "def Program.pull {k l : ℕ} (f : Fin k → Fin l) : Program k → Program l",
+      "whole_region_sha256": "219f8b095b2e004912fcf4e5c63397146f0df7e6426d6bc286b908e65fbe0399",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Gate",
+      "kind": "structure",
+      "complete_header": "structure Gate (k : ℕ)",
+      "whole_region_sha256": "087a6add5fb39a6774afee687841b06ac7f7a87160e13991814d83e1bb4e028c",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Gate.holds",
+      "kind": "def",
+      "complete_header": "def Gate.holds {k : ℕ} (t : Fin k → ℝ) (g : Gate k) : Prop :=",
+      "whole_region_sha256": "476a3644c5b8f8983e397159493394456ead739d927922a2456ab9257201e65b",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "Gate.branch",
+      "kind": "def",
+      "complete_header": "def Gate.branch {k : ℕ} (g : Gate k) (yes no : Program k) : Program k :=",
+      "whole_region_sha256": "ba1e5c19f3f1358bf5a685a92e17a7524a21f7fe02be52a14d55af75efa2f182",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "allGates",
+      "kind": "def",
+      "complete_header": "def allGates {k : ℕ} : List (Gate k) → Program k → Program k → Program k",
+      "whole_region_sha256": "92909a31097fc99c84b99f79af3fe3c536ae89826297195553cf363eaa36ce1e",
+      "all_fields_data_and_body_bytes_exact": true
+    },
+    {
+      "name": "maxRows",
+      "kind": "def",
+      "complete_header": "def maxRows {k : ℕ} {ι : Type*} (tests : ι → List (Gate k))\n    (candidate : ι → Program k) (seed : Program k) : List ι → Program k",
+      "whole_region_sha256": "00b9425b710661f9402f34074d59375defa549b84947020b46de4a29bd2ba0cb",
+      "all_fields_data_and_body_bytes_exact": true
+    }
+  ],
+  "changed_proofs": [
+    {
+      "name": "Affine.box_bounds",
+      "before_proof_body_sha256": "c22c7a27c833ca5763b72ae8395da258656829f1b0bddd8ec6da0341d55a7e9f",
+      "after_proof_body_sha256": "01e4c82b860e79edd7cb1ac20e335f4a7c9e145f555776f12460e06d38262767"
+    },
+    {
+      "name": "eval_allGates",
+      "before_proof_body_sha256": "3459fb9ca860d4234fd6160604f88a6c29c200bc64fac8b2522aa773ea575e21",
+      "after_proof_body_sha256": "7276a4ddc522d2da21f9d78ddfa54b6026a33cad4f14e08f4537280b4addf241"
+    },
+    {
+      "name": "eval_maxRows",
+      "before_proof_body_sha256": "ca3aceaaf3f769c2df2fab21700ad04132f32f2aa38e53229eb73e456dc3d09c",
+      "after_proof_body_sha256": "07deae3cb12c174e3c813bf62ebd2e7554a1f2e17350686aa231a70b473ac90a"
+    }
+  ],
+  "raw_scope": {
+    "all19_complete_headers_including_simp_attribute_private_modifier_and_assignment_exact": true,
+    "all29_definition_data_field_and_implementation_regions_byte_exact": true,
+    "outside3_proofs_only_original_status_comment_replaced_with_neutral_records_pointer": true,
+    "neutral_comment_before_after": [
+      "SOURCE ONLY / UNCOMPILED / NO KERNEL CREDIT.",
+      "Compilation records: docs/verification/20261123-blue-compilation."
+    ],
+    "imports_options_constants_assumptions_and_quantifiers_unchanged": true,
+    "same_LF_and_original_EOF": true,
+    "syntax_or_statement_exceptions": []
+  },
+  "proof_logic_review": {
+    "Affine.box_bounds": {
+      "assessment": "The dsimponly step exposes exactly original lower/upper/eval constants plus finite sums. add_le_add le_rfl carries the unchanged constant on both left sides, then sum_le_sum preserves every coordinate.",
+      "lower": "For nonnegative coefficient, hl:lo≤t gives coeff*lo≤coeff*t. For negative coefficient, hu:t≤hi and coeff≤0 gives coeff*hi≤coeff*t.",
+      "upper": "For nonnegative coefficient, hu gives coeff*t≤coeff*hi. For negative coefficient, hl and coeff≤0 gives coeff*t≤coeff*lo.",
+      "boundaries": "Zero coefficient remains in the original nonnegative branch; arbitrary dimension including0, arbitrary affine signs and both full-box endpoints retained. No extra lo≤hi or coefficient-nonnegativity premise is added."
+    },
+    "eval_allGates": {
+      "assessment": "Existing strict Bool cases, all gate conjunctions and branch programs remain. After original split_ifs/simp_all, the logged residual goals have identical condition propositions/then/else branches with different Decidable witnesses.",
+      "actual_pinned_core_API": {
+        "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/SimpLemmas.lean",
+        "source_sha256": "fe0dc61e7380da95224dc4a7bb577a9395c5e64fbab93c62afaa2cf7883a8de5",
+        "line": 208,
+        "complete_signature": "theorem ite_cond_congr {α} {b c : Prop} {s : Decidable b} [Decidable c] {x y : α}\n    (h₁ : b = c) : ite b x y = ite c x y",
+        "namespace": "Global Init/SimpLemmas ite_cond_congr, not the separate Lean.Sym homonym."
+      },
+      "effect": "ite_cond_congr rfl transports equality of the same condition while allowing distinct Decidable instances. It does not replace strict < by ≤, remove equality faces, change a guard, or grant eligibility."
+    },
+    "eval_maxRows": {
+      "assessment": "Explicit finiteMax_insert is the unchanged original private theorem instantiated at xs.toFinset, i, the exact original all-Gates eligibility, same candidate evaluations and same seed. Its symmetry has the required recursive-program orientation.",
+      "Decidable_normalization": "by_cases hel splits only the original eligibility proposition. if_pos/if_neg normalize both computational List.decidableBAll and classical finiteMax instances to the same branches, preserving the exact underlying proposition.",
+      "original_parent_and_multiplicity": "maxRows remains parallel: tests i keep the original named parent program, and accumulated rest is not substituted into tests. Same list order, seed and original toFinset/max idempotence are retained; no row counts or signed summation multiplicities are altered.",
+      "unchanged_finiteMax_supplier_path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthContinuation.lean",
+      "supplier_source_sha256": "24957cfeb3d6e7278b035327e38d1823412f01f8bf56e402bc16a95c5bf3f58a"
+    }
+  },
+  "semantic_scope": {
+    "finite_signature": "Both strict and nonstrict bits and equality cells retained; impossible signatures may still be empty regions. Regions cover/unique/table correctness statements unchanged.",
+    "whole_box_certificate": "Original certificate still checks both endpoint signs and is only sufficient. No claim that arbitrary original rectangles pass the certificate is introduced.",
+    "no_oracle_or_gain_claim": "No new desired-gain/mean/tail/price or concrete numerical licence, target-dependent policy, axiom or weakened theorem is introduced. This is only an existing necessary finite affine supplier, not complete P1 acceptance."
+  },
+  "actual_failure_binding": {
+    "aggregate_log": "/workspace/p1-complete-proof/modern-p1-build/attempt-1-build.log",
+    "captured_current_log_bytes": 410247,
+    "captured_current_log_sha256": "f1f5da984de4db541c21f43e8fa8881c6bedbad526a4b830a4a82247262d35f0",
+    "exact_failure_block_offset": 257284,
+    "exact_failure_block_end_exclusive": 263400,
+    "exact_failure_block_sha256": "caf763c1a57946baedf9334e435aa446f1aef6e945ed4c389025bee9daa7a24b",
+    "source_error_lines": [
+      213,
+      219,
+      322,
+      381
+    ],
+    "raw_block_matches_current_actual_log": true,
+    "original_earlier_whole_log_snapshot_sha256_from_owner_metadata": "99d44a5ff826cc47aef2e465d37f0c46048bb78d2ec108b1f0d422bf76e5b8e8",
+    "earlier_snapshot_hash_is_not_reasserted_as_current_growing_log_hash": true
+  },
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "anchors": [
+      "argument.tex:4-18 finite prefix policy and inherited parent decisions fixed before children",
+      "coefficient-appendix.tex:100-126 finite compact pieces, proper affine-wall trimming and identically inherited labels retained",
+      "sieve-appendix.tex:144-181 inherited finite affine cap comparisons and whole-region bounds",
+      "numerical-appendix.tex:277-284 actual-parent versus complete-child aggregation"
+    ],
+    "scope_boundary": "The generic finite program certifies its original conditional box/table semantics; concrete row licences/integral prices and complete P1 terminal obligations remain outside this static repair review."
+  },
+  "review_actions": {
+    "Lean_Lake_compiler_stock_checker_types_axioms_or_tests_run": false,
+    "source_candidate_or_old_receipts_edited": false,
+    "live_main_Member_full87_P6_native_outputs_or_controllers_touched": false,
+    "new_Git_history_or_global_source_scan": false,
+    "only_known_exact_origin_blob_read": true,
+    "only_this_new_review_and_addendum_written": true
+  },
+  "acceptance_boundary": "UNCOMPILED static candidate. Sole owner must bind this exact post source to actual normal/kernel/full-owned declaration/type/axiom checks, including original private finiteMax_insert and generated public structure/inductive declarations. No compile success or prior object reuse is claimed by this review.",
+  "publication_instruction": "Preserve original FILES_MANIFEST/SOURCE_SELECTION/FULL_HEADERS/failure artifacts; add this review through a new manifest/late addendum."
+}

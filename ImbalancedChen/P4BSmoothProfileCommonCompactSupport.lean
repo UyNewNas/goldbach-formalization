@@ -130,8 +130,10 @@ theorem smoothPhysicalProfile_nonzero_coordinates_bounds
   have hy0 : 0 < v 1 := htheta.trans hy
   intro i
   fin_cases i
-  · exact ⟨hx, by linarith only [hsum, hratio, hy0]⟩
-  · exact ⟨hy, by linarith only [hsum, hratio, hx0]⟩
+  · change theta < v 0 ∧ v 0 < 1 + width / Real.log 2
+    exact ⟨hx, by linarith only [hsum, hratio, hy0]⟩
+  · change theta < v 1 ∧ v 1 < 1 + width / Real.log 2
+    exact ⟨hy, by linarith only [hsum, hratio, hx0]⟩
 
 /-- One genuine closed cube on the full plane. Its definition has no N. -/
 def commonCube (theta width : ℝ) : Set (Fin 2 → ℝ) :=
