@@ -122,4 +122,10 @@ Member 第十批 P4B 三模块全部通过标准构建、指定模块 kernel rep
 
 Member 第九批 P1 三模块通过标准构建、指定模块 kernel replay 和全部 118 个公开导出的完整类型／公理检查，仅标准三公理，源码及十五项主要产物稳定。NearOne 与 Fallback 复用已发表修补；NearOne 的主仓同名源码为不同版本，原件保持，已验 `5697` 后像仅作为精确选源的安装覆盖发布，不将本批验收套用于不同主仓源码。Wall 的四处 projection 加入原 `Fin 4 → ℝ` 连续线性映射类型注解，使原 `(1,1,1,2)` 权重形式可 elaboration，并导入已存在的 log-product 供应者。该定义正文的语法例外明确单列；原 log 自然数乘积、uniform width／N0 在 omega／cap 之前的量词顺序及数学假设保持。见 [验收结果](member-repair-batch9/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch9/INDEPENDENT_REVIEW.json)，实际旧失败和后续修补记录完整保留。
 
+Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定模块 kernel replay 和全部 33 个公开导出的完整类型／公理检查，仅标准三公理，源码及十项主要产物稳定。Overlap 只把绝对值下的自然数分母非负显式给出，signed coefficient 仍可任意取符号；Multiplicity 只展开原补映射等式后使用原算术证明。原 labelled carrier、product fibre、重复素数、weighted sum、`rank^rank`、截断及量词保持。见 [验收结果](member-repair-batch11/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch11/INDEPENDENT_REVIEW.json)。原批次 bookkeeping 对 Overlap 误记已添加中性验证注释，实际该源码保留旧历史注释；[发布补充清单](member-repair-batch11/PUBLICATION_ADDENDUM.json) 明确更正该字段，已验源码和原记录保持不动。
+
+第十二批 `P4BSublinearCutoffMass` 在首次标准编译前复用远端 `bc9ac33a` 的完整既有修补，非注释差异仅把同加项 API 改为 `add_le_add hsum (le_refl (1 : ℝ))`。原声明、定义、数值、cutoff 与 sublinear 条件保持。标准构建、指定模块 kernel replay 和全部 10 个公开导出检查通过，仅标准三公理，源码和五项主要产物稳定，见 [验收结果](member-repair-batch12/VALIDATION_RESULTS.json) 及 [root 独立复核](member-repair-batch12/INDEPENDENT_REVIEW.json)。该源码原先没有当前对象，也没有本地失败或验收记录，本批不制造旧失败、不以候选 CI 代替当前验证。一次增量远端核对仅发现一个分支变化，现成 SourceCutoff／Sublinear 修补因此直接复用；八个当前选源交集和其它旧 support copies 的界限见 [增量来源审计](remote-reuse-incremental/AUDIT.json)。
+
+十个 Member 入口第二次聚合构建启动时，项目源码覆盖为本目录登记的 34 个后像、一个 P6 共享后像和一个既有绿色供应者，共 36 项；native 的两个 import 覆盖与一个扩展另行登记。完整生产源码组合可从 [MEMBER_SOURCE_OVERRIDES.json](MEMBER_SOURCE_OVERRIDES.json) 定位。统一入口重试继续执行，单个依赖模块的成功检查不等于十入口全部通过。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

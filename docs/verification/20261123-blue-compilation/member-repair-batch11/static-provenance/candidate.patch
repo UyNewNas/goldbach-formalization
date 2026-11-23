@@ -1,0 +1,21 @@
+--- a/ImbalancedChen/CurrentChenUpsilon10OverlapDivisorSplit.lean
++++ b/ImbalancedChen/CurrentChenUpsilon10OverlapDivisorSplit.lean
+@@ -204,7 +204,7 @@
+     |effectiveCoefficient N t L e| ≤ 1 + 1 / (t.1.1 : ℝ) := by
+   unfold effectiveCoefficient
+   apply (abs_add_le _ _).trans
+-  rw [abs_div, abs_of_nonneg (Nat.cast_nonneg _)]
++  rw [abs_div, abs_of_nonneg (show (0 : ℝ) ≤ (t.1.1 : ℝ) from Nat.cast_nonneg _)]
+   exact add_le_add (coefficient_abs_le_one N t L e)
+     (div_le_div_of_nonneg_right (coefficient_abs_le_one N t L (t.1.1 * e))
+       (Nat.cast_nonneg _))
+--- a/ImbalancedChen/P5zMarkedPrimeFamilyMultiplicity.lean
++++ b/ImbalancedChen/P5zMarkedPrimeFamilyMultiplicity.lean
+@@ -130,6 +130,7 @@
+         · intro m hm r hr heq
+           have hmN := (Finset.mem_filter.mp hm).2.1
+           have hrN := (Finset.mem_filter.mp hr).2.1
++          change N - m = N - r at heq
+           omega
+       _ = z := Finset.card_range z
+   have hFreal : (F.card : ℝ) ≤ (z : ℝ) := by exact_mod_cast hF

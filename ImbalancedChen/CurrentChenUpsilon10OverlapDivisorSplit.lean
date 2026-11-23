@@ -204,7 +204,7 @@ theorem effectiveCoefficient_abs_le (N : ℕ) (t : Label) (L : ℝ) (e : ℕ) :
     |effectiveCoefficient N t L e| ≤ 1 + 1 / (t.1.1 : ℝ) := by
   unfold effectiveCoefficient
   apply (abs_add_le _ _).trans
-  rw [abs_div, abs_of_nonneg (Nat.cast_nonneg _)]
+  rw [abs_div, abs_of_nonneg (show (0 : ℝ) ≤ (t.1.1 : ℝ) from Nat.cast_nonneg _)]
   exact add_le_add (coefficient_abs_le_one N t L e)
     (div_le_div_of_nonneg_right (coefficient_abs_le_one N t L (t.1.1 * e))
       (Nat.cast_nonneg _))

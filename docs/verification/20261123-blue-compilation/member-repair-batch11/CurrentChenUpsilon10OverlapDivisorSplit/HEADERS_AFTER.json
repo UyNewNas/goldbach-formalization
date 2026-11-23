@@ -1,0 +1,128 @@
+[
+  {
+    "name": "divisors_prime_mul_eq_union",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem divisors_prime_mul_eq_union {p R : ℕ} (hp : Nat.Prime p) (hR : R ≠ 0) :\n    (p * R).divisors = R.divisors ∪ R.divisors.image (fun e => p * e)"
+  },
+  {
+    "name": "divisors_prime_mul_split_disjoint",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem divisors_prime_mul_split_disjoint {p R : ℕ} (hp : Nat.Prime p)\n    (hcop : Nat.Coprime p R) :\n    Disjoint R.divisors (R.divisors.image (fun e => p * e))"
+  },
+  {
+    "name": "sum_divisors_prime_mul_split",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sum_divisors_prime_mul_split {p R : ℕ} (hp : Nat.Prime p)\n    (hR : R ≠ 0) (hcop : Nat.Coprime p R) (f : ℕ → ℝ) :\n    (∑ d ∈ (p * R).divisors, f d) =\n      (∑ e ∈ R.divisors, f e) + ∑ e ∈ R.divisors, f (p * e)"
+  },
+  {
+    "name": "signed_overlap_divisor_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem signed_overlap_divisor_sum {p b R : ℕ} (hp : Nat.Prime p)\n    (hR : R ≠ 0) (hcop : Nat.Coprime b R) (hpb : p ∣ b) (rho : ℕ → ℝ) :\n    (∑ d ∈ (p * R).divisors, rho d / (Nat.totient (b * d) : ℝ)) =\n      1 / (Nat.totient b : ℝ) *\n        ∑ e ∈ R.divisors, (rho e + rho (p * e) / (p : ℝ)) /\n          (Nat.totient e : ℝ)"
+  },
+  {
+    "name": "residualProduct",
+    "kind": "def",
+    "private": false,
+    "header": "def residualProduct (N : ℕ) (t : Label) : ℕ"
+  },
+  {
+    "name": "first_dvd_sieveProduct",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem first_dvd_sieveProduct {N : ℕ} {t : Label} (ht : t ∈ selector N) :\n    t.1.1 ∣ sieveProduct N t.1.2"
+  },
+  {
+    "name": "first_mul_residualProduct",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem first_mul_residualProduct {N : ℕ} {t : Label} (ht : t ∈ selector N) :\n    t.1.1 * residualProduct N t = sieveProduct N t.1.2"
+  },
+  {
+    "name": "residualProduct_ne_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem residualProduct_ne_zero {N : ℕ} {t : Label} (ht : t ∈ selector N) :\n    residualProduct N t ≠ 0"
+  },
+  {
+    "name": "prime_coprime_sieveProduct_of_ge",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem prime_coprime_sieveProduct_of_ge {N p z : ℕ}\n    (hp : Nat.Prime p) (hzp : z ≤ p) : Nat.Coprime p (sieveProduct N z)"
+  },
+  {
+    "name": "remainingMultiplier_coprime_sieveProduct",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem remainingMultiplier_coprime_sieveProduct {N : ℕ} {t : Label}\n    (ht : t ∈ selector N) :\n    Nat.Coprime (t.1.2 * t.2.1 * t.2.2) (sieveProduct N t.1.2)"
+  },
+  {
+    "name": "gcd_multiplier_sieveProduct",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem gcd_multiplier_sieveProduct {N : ℕ} {t : Label} (ht : t ∈ selector N) :\n    Nat.gcd (multiplier t) (sieveProduct N t.1.2) = t.1.1"
+  },
+  {
+    "name": "multiplier_coprime_residualProduct",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem multiplier_coprime_residualProduct {N : ℕ} {t : Label}\n    (ht : t ∈ selector N) : Nat.Coprime (multiplier t) (residualProduct N t)"
+  },
+  {
+    "name": "residual_divisor_coprime_multiplier",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem residual_divisor_coprime_multiplier {N : ℕ} {t : Label}\n    (ht : t ∈ selector N) {e : ℕ} (he : e ∈ (residualProduct N t).divisors) :\n    Nat.Coprime (multiplier t) e"
+  },
+  {
+    "name": "current_signed_overlap_divisor_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem current_signed_overlap_divisor_sum {N : ℕ} {t : Label}\n    (ht : t ∈ selector N) (rho : ℕ → ℝ) :\n    (∑ d ∈ (sieveProduct N t.1.2).divisors,\n      rho d / (Nat.totient (multiplier t * d) : ℝ)) =\n      1 / (Nat.totient (multiplier t) : ℝ) *\n        ∑ e ∈ (residualProduct N t).divisors,\n          (rho e + rho (t.1.1 * e) / (t.1.1 : ℝ)) / (Nat.totient e : ℝ)"
+  },
+  {
+    "name": "support_eq_sieveProduct_divisors",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem support_eq_sieveProduct_divisors (N : ℕ) (t : Label) :\n    support N t = (sieveProduct N t.1.2).divisors"
+  },
+  {
+    "name": "effectiveCoefficient",
+    "kind": "def",
+    "private": false,
+    "header": "def effectiveCoefficient (N : ℕ) (t : Label) (L : ℝ) (e : ℕ) : ℝ"
+  },
+  {
+    "name": "overlapDensity_eq_effectiveCoefficient_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem overlapDensity_eq_effectiveCoefficient_sum {N : ℕ} {t : Label}\n    (ht : t ∈ selector N) (L : ℝ) :\n    overlapDensity N t L =\n      1 / (Nat.totient (multiplier t) : ℝ) *\n        ∑ e ∈ (residualProduct N t).divisors,\n          effectiveCoefficient N t L e / (Nat.totient e : ℝ)"
+  },
+  {
+    "name": "effectiveCoefficient_abs_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem effectiveCoefficient_abs_le (N : ℕ) (t : Label) (L : ℝ) (e : ℕ) :\n    |effectiveCoefficient N t L e| ≤ 1 + 1 / (t.1.1 : ℝ)"
+  },
+  {
+    "name": "effectiveCoefficient_eq_first_of_level_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem effectiveCoefficient_eq_first_of_level_le (N : ℕ) (t : Label) (L : ℝ)\n    (e : ℕ) (hlevel : L ≤ ((t.1.1 * e : ℕ) : ℝ)) :\n    effectiveCoefficient N t L e = coefficient N t L e"
+  },
+  {
+    "name": "currentChenUpsilon10_upper_effective",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem currentChenUpsilon10_upper_effective (N : ℕ) (M : ℝ) (L : Label → ℝ)\n    (hL : ∀ t ∈ selector N, 1 < L t)\n    (hpL : ∀ t ∈ selector N, (t.1.2 : ℝ) ≤ L t) :\n    currentChenUpsilon10 N ≤\n      M * (∑ t ∈ selector N, 1 / (Nat.totient (multiplier t) : ℝ) *\n        ∑ e ∈ (residualProduct N t).divisors,\n          effectiveCoefficient N t (L t) e / (Nat.totient e : ℝ)) +\n        (∑ t ∈ selector N, signedAPError N M t (L t)) -\n        ∑ t ∈ selector N, signedCentre N t (L t)"
+  },
+  {
+    "name": "effective_branches_physical_caps",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem effective_branches_physical_caps {N Q : ℕ} {t : Label}\n    (ht : t ∈ selector N) {e : ℕ} :\n    (coefficient N t (chenQuotientRowLevel Q (multiplier t) : ℝ) e ≠ 0 →\n      multiplier t * e ≤ Q) ∧\n    (coefficient N t (chenQuotientRowLevel Q (multiplier t) : ℝ) (t.1.1 * e) ≠ 0 →\n      multiplier t * (t.1.1 * e) ≤ Q)"
+  }
+]

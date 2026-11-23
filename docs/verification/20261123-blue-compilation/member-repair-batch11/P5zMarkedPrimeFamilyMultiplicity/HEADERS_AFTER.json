@@ -1,0 +1,62 @@
+[
+  {
+    "name": "p5z_prime_dvd_tuple_exists",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem p5z_prime_dvd_tuple_exists {rank P : ℕ}\n    (u : Fin rank → Fin (P + 1)) (hu : ∀ i, Nat.Prime (u i).val)\n    {p : ℕ} (hp : Nat.Prime p) (hd : p ∣ Part3.labelledProduct u) :\n    ∃ i : Fin rank, p = (u i).val"
+  },
+  {
+    "name": "p5z_marked_prime_product_fibre_card_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_marked_prime_product_fibre_card_le {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (m : ℕ) : (S.filter (fun t => Part3.labelledProduct t = m)).card ≤ rank ^ rank"
+  },
+  {
+    "name": "p5z_markedProductWeight",
+    "kind": "def",
+    "private": false,
+    "header": "def p5z_markedProductWeight {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (W : (Fin rank → Fin (N + 1)) → ℝ) (m : ℕ) : ℝ"
+  },
+  {
+    "name": "p5z_markedProductWeight_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedProductWeight_nonneg {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (W : (Fin rank → Fin (N + 1)) → ℝ)\n    (hW : ∀ t ∈ S, 0 ≤ W t) (m : ℕ) : 0 ≤ p5z_markedProductWeight S W m"
+  },
+  {
+    "name": "p5z_markedProductWeight_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedProductWeight_le {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (W : (Fin rank → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hW : ∀ t ∈ S, W t ≤ B) (m : ℕ) :\n    p5z_markedProductWeight S W m ≤ B * (rank ^ rank : ℕ)"
+  },
+  {
+    "name": "p5z_markedProductWeight_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedProductWeight_sum {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (W : (Fin rank → Fin (N + 1)) → ℝ)\n    (hcap : ∀ t ∈ S, Part3.labelledProduct t ≤ N) (G : ℕ → ℝ) :\n    (∑ m ∈ Finset.range (N + 1), p5z_markedProductWeight S W m * G m) =\n      ∑ t ∈ S, W t * G (Part3.labelledProduct t)"
+  },
+  {
+    "name": "p5z_markedSmallPrimeMass_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedSmallPrimeMass_le {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (W : (Fin rank → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hW : ∀ t ∈ S, W t ≤ B) (hcap : ∀ t ∈ S, Part3.labelledProduct t ≤ N) (z : ℕ) :\n    p5z_labelledSmallPrimeMass S Part3.labelledProduct W N z ≤ B * (rank ^ rank : ℕ) * (z : ℝ)"
+  },
+  {
+    "name": "p5z_markedPhysicalWeight",
+    "kind": "def",
+    "private": false,
+    "header": "def p5z_markedPhysicalWeight {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (W : (Fin rank → Fin (N + 1)) → ℝ)\n    (t : Fin rank → Fin (N + 1)) : ℝ"
+  },
+  {
+    "name": "p5z_markedPhysicalWeight_test_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedPhysicalWeight_test_sum {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (W : (Fin rank → Fin (N + 1)) → ℝ) (G : (Fin rank → Fin (N + 1)) → ℝ) :\n    (∑ t ∈ Part3.labelledPrimeTuples rank N, p5z_markedPhysicalWeight S W t * G t) =\n      ∑ t ∈ S, W t * G t"
+  },
+  {
+    "name": "p5z_markedDistribution_eq_physicalPP",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5z_markedDistribution_eq_physicalPP {rank N : ℕ}\n    (S : Finset (Fin rank → Fin (N + 1))) (hS : S ⊆ Part3.labelledPrimeTuples rank N)\n    (W : (Fin rank → Fin (N + 1)) → ℝ) (D : Finset ℕ) (rho : ℕ → ℝ) :\n    p5z_labelledDistributionError S Part3.labelledProduct W N D rho =\n      Part3.primeProductSignedError rank N N D rho (p5z_markedPhysicalWeight S W)"
+  }
+]

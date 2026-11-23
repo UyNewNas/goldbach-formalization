@@ -2,7 +2,7 @@ import ImbalancedChen.P5zPositiveFamilyBudget
 import ImbalancedChen.PowerErrorBudget
 import Mathlib.Data.Fintype.BigOperators
 
-/-! SOURCE ONLY / UNCOMPILED. Literal marked prime-tuples retain every slot
+/-! Verification records: docs/verification/20261123-blue-compilation. Literal marked prime-tuples retain every slot
 label and product multiplicity. No source-mass or U* estimate is asserted.
 The rank is fixed; the source may be an arbitrary marked subfamily. -/
 namespace ImbalancedChen
@@ -130,6 +130,7 @@ theorem p5z_markedSmallPrimeMass_le {rank N : ℕ}
         · intro m hm r hr heq
           have hmN := (Finset.mem_filter.mp hm).2.1
           have hrN := (Finset.mem_filter.mp hr).2.1
+          change N - m = N - r at heq
           omega
       _ = z := Finset.card_range z
   have hFreal : (F.card : ℝ) ≤ (z : ℝ) := by exact_mod_cast hF
