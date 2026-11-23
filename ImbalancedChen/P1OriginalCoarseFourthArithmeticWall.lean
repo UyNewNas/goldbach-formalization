@@ -1,6 +1,7 @@
 import ImbalancedChen.P1ActualCoarseLevelCeiling
 import ImbalancedChen.P1OriginalCoarseFourthJointGeometry
 import ImbalancedChen.AffinePrimeWallReserve
+import ImbalancedChen.ActualPrimeBoxInitialSavingIntegral
 
 /-!
 # The original coarse T3 frontier's actual fourth arithmetic wall
@@ -30,8 +31,10 @@ open HistoricalThirdCoarse
 namespace P1OriginalCoarseFourthArithmeticWall
 
 def wallForm : (Fin 4 → ℝ) →L[ℝ] ℝ :=
-  ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1 +
-    ContinuousLinearMap.proj 2 + (2 : ℝ) • ContinuousLinearMap.proj 3
+  (ContinuousLinearMap.proj 0 : (Fin 4 → ℝ) →L[ℝ] ℝ) +
+    (ContinuousLinearMap.proj 1 : (Fin 4 → ℝ) →L[ℝ] ℝ) +
+    (ContinuousLinearMap.proj 2 : (Fin 4 → ℝ) →L[ℝ] ℝ) +
+    (2 : ℝ) • (ContinuousLinearMap.proj 3 : (Fin 4 → ℝ) →L[ℝ] ℝ)
 
 theorem wallForm_eq_sum_last (t : Fin 4 → ℝ) :
     wallForm t = (∑ i, t i) + t 3 := by
@@ -149,7 +152,8 @@ theorem original_admitted_gap_pos
   have hthird : actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +
       3 * actualPrimeTupleLog N p 2 < lambda := by
     simpa only [HistoricalThirdCoarse.P1OriginalFourth.prefix3,
-      historicalPrefixProject, actualPrimeTupleLog] using hc.2.2
+      historicalPrefixProject, actualPrimeTupleLog, Fin.castLE,
+      Fin.val_zero, Fin.val_one, Fin.val_two, Fin.reduceFinMk] using hc.2.2
   have hs := (actualPrimeTupleLog_strictAnti_iff hN p hpos).mpr hd.1
   have h32 := hs (by decide : (2 : Fin 4) < 3)
   have hsum : (∑ i, actualPrimeTupleLog N p i) =

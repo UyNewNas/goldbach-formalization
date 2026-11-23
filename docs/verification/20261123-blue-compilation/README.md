@@ -120,4 +120,6 @@ Member 的 Renewal／Rational 两模块先将已不存在的 Mathlib imports 分
 
 Member 第十批 P4B 三模块全部通过标准构建、指定模块 kernel replay 与 71 个公开导出的完整类型／公理检查，仅标准三公理，源码及十五项主要产物稳定。`P4BSourceCutoffTransport` 复用增量远端 `6f4dd677` 的完整源码，`P4BLogGateOuterRamp` 复用已发表完整后像，均仅另加中性验证记录注释；`P4BLabelledPairDictionary` 两个证明逐字节复用 `48db`，保留当前 `Part3DistributionTargets` family、imports 和五个定义。Cutoff 原 header 中的 lambda binder 补充 `m : ℕ`，仍为原自然数 carrier 与实数 cutoff 比较；这是旧未 elaboration 声明的类型消歧例外，不声称旧 kernel 类型已存在。ordered bad、no2、相同 signed coefficient 与 outer approximation 的边界付款假设保持，见 [验收结果](member-repair-batch10/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch10/INDEPENDENT_REVIEW.json)。
 
+Member 第九批 P1 三模块通过标准构建、指定模块 kernel replay 和全部 118 个公开导出的完整类型／公理检查，仅标准三公理，源码及十五项主要产物稳定。NearOne 与 Fallback 复用已发表修补；NearOne 的主仓同名源码为不同版本，原件保持，已验 `5697` 后像仅作为精确选源的安装覆盖发布，不将本批验收套用于不同主仓源码。Wall 的四处 projection 加入原 `Fin 4 → ℝ` 连续线性映射类型注解，使原 `(1,1,1,2)` 权重形式可 elaboration，并导入已存在的 log-product 供应者。该定义正文的语法例外明确单列；原 log 自然数乘积、uniform width／N0 在 omega／cap 之前的量词顺序及数学假设保持。见 [验收结果](member-repair-batch9/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch9/INDEPENDENT_REVIEW.json)，实际旧失败和后续修补记录完整保留。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
