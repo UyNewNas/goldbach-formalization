@@ -1,0 +1,49 @@
+--- exact-current-selected-pre
++++ isolated-candidate
+@@ -3,7 +3,7 @@
+ import ImbalancedChen.FirstExitHistoricalLevels
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED_ZERO_CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ Actual inherited fourth cap on a rank-six physical carrier. The selected
+ third coarse seed is bounded through its own ordered Gamma endpoint: five
+@@ -49,9 +49,9 @@
+   have hs6 : subsetSum 6 t = t 1 + t 2 := by
+     norm_num [subsetSum, bit, Fin.sum_univ_succ]
+   have hs7 : subsetSum 7 t = t 0 + t 1 + t 2 := by
+-    norm_num [subsetSum, bit, Fin.sum_univ_succ]
+-  have hW : B (t 2) = W t := by
+-    dsimp [B, cap, W]
++    norm_num [subsetSum, bit, Fin.sum_univ_succ, add_assoc]
++  have hW : VariableEnvelope.B (t 2) = W t := by
++    dsimp [VariableEnvelope.B, VariableEnvelope.cap, W]
+     ring
+   have hordered : Ordered (t 0) (t 1) (t 2) :=
+     ⟨(hc.coordinates_pos 2).le, hc.order.2.2.2.1.le,
+@@ -94,16 +94,20 @@
+   obtain ⟨j, hj, ht⟩ := hs.2
+   have hbox := inBox_of_cell ht
+   have hgamma := gamma_le_endpoint e (box m j) he hbox
+-    (by rw [h2]; exact (hc.coordinates_pos 2).le)
+-    (by rw [h2, h1]; exact hc.order.2.2.2.1.le)
+-    (by rw [h1, h0]; exact hc.order.2.2.2.2.le)
++    (by change 0 ≤ u 2; rw [h2]; exact (hc.coordinates_pos 2).le)
++    (by change u 2 ≤ u 1; rw [h2, h1]; exact hc.order.2.2.2.1.le)
++    (by change u 1 ≤ u 0; rw [h1, h0]; exact hc.order.2.2.2.2.le)
++  have hmu : t 0 ≤ VariableEnvelope.mu := by
++    simpa only [Certificates.P2OriginalSixthElevenLogSemantics.mu,
++      VariableEnvelope.mu] using hc.largest.le
+   have hendpoint : endpoint (u 0) (u 1) (u 2) =
+       original (t 0) (t 1) (t 2) := by
+     rw [h0, h1, h2]
+-    simp only [endpoint, if_pos hc.largest.le]
++    simp only [HistoricalThirdCoarse.endpoint, if_pos hmu]
+   have hthird : exponent e chi m u ≤ original (t 0) (t 1) (t 2) := by
+     rw [exponent_on_cell e chi m u j hj ht]
+     dsimp only [levelExponent]
++    change (gamma e (box m j) : ℝ) ≤ endpoint (u 0) (u 1) (u 2) at hgamma
+     rw [hendpoint] at hgamma
+     linarith only [hgamma, he]
+   have hancestor :

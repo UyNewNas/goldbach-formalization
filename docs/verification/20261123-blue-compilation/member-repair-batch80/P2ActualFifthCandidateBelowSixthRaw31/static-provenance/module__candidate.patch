@@ -1,0 +1,32 @@
+--- exact-current-selected-pre
++++ isolated-candidate
+@@ -2,7 +2,7 @@
+ import ImbalancedChen.P2OriginalSixthElevenLogSemantics
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED_ZERO_CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ The source fifth candidate is the literal pointwise min of the ascending and
+ descending selected planes, minus 2e. On an actual selected sixth PhysicalCell,
+@@ -42,7 +42,7 @@
+   have hhalf := (gateCheck_sound e m r u helig.2.1 helig.2.2).1
+   by_contra hnot
+   have hempty : r.selected = ∅ := by
+-    apply Finset.eq_empty_iff_forall_not_mem.mpr
++    apply Finset.eq_empty_iff_forall_notMem.mpr
+     intro i hi
+     exact hnot ⟨i, hi⟩
+   have hcandidate : candidate (e : ℝ) r.selected u = 1 / 2 - 2 * (e : ℝ) := by
+@@ -85,7 +85,10 @@
+   have hI := eligible_selected_nonempty e chi m omega J5 r u he helig
+   obtain ⟨mask, hmask, hbits⟩ := nonempty_fin5_has_old_mask r.selected hI
+   have hcoord (i : Fin 5) : u i = t i.castSucc := by
+-    simpa [u, t] using
++    have hcast : i.castLE (by omega : 5 ≤ 6) = i.castSucc := by
++      apply Fin.ext
++      rfl
++    simpa only [u, t, hcast] using
+       (primeHistoryLogCoordinates_ancestor N hlen (by omega : 5 ≤ 6) i)
+   have hsum : (∑ i ∈ r.selected, u i) = subsetSum mask t := by
+     unfold subsetSum

@@ -279,3 +279,7 @@ H3 正常编译、kernel 和完整审计均实际退出 0；[调度补充](membe
 第七十八、七十九、八十一批再验收五个实际前置，共 112 个 owned 声明（110 public、2 private），完整类型／AST／宇宙参数／传递公理、真实环境清单与源码及二十五项主要产物均经最终复核，仅标准三公理。每项 normal／指定模块 kernel／完整 owned 审计实际退出 0，没有为发布重跑。见 [78](member-repair-batch78/VALIDATION_RESULTS.json)、[79](member-repair-batch79/VALIDATION_RESULTS.json)、[81](member-repair-batch81/VALIDATION_RESULTS.json)，各包保留 `FINAL_REVIEW.json`。
 
 范围为 SmallCellPointwise、PrefixRowDecode、ProducerAttainedRow、Ascending14 与 CommonBetaWidthPayment。只修原 Fin 同值、空集／强制转换 API、已有 tent crossing 等价和局部代数；Producer 整份复用已发表 `4837cc14` 修补。原完整声明、定义、原始数据、Q 预算与量词保持，未增加均值或许可前提。Prefix 原声明元数据截断在结构字面量 `:=` 内，实际完整声明保持，原元数据与不可变补充均保留。三个最终审查的原始版本和最初清单另存原样；规范 `INDEPENDENT_REVIEW.json` 只补发布接口要求的空 `findings` 数组及档案绑定，未改变审查结论或原验证记录。目录累计 224 份已验源码后像，完整 P1 验收继续。
+
+第八十批四个实际依赖完成最终验收，51 个 owned 声明（45 public、6 private），含一个非空宇宙参数记录；全部完整类型／AST／宇宙／标准三公理及真实 owned 清单逐项复核，源码及二十项主要产物稳定，见 [结果](member-repair-batch80/VALIDATION_RESULTS.json) 和 [非作者最终复核](member-repair-batch80/FINAL_REVIEW.json)。范围为 Ascending13、InheritedEighthHistory 和两个原 Raw31 传输供应者，原完整声明、定义、许可／seed 假设、数据与预算保持。Ascending13 复用原已验坐标证书，使用 kernel 决定；History 只补原 rpow 平方及相同 Fin 坐标，Raw31 仅修原 API 表达。
+
+初次批次因 History 的两个真实证明失败而退出 1，该历史记录保持；修补后仅重试失败的 History，另三个已成功 normal／kernel 原结果保留，随后组合完整 owned 审计退出 0。初次 lane 的退出 1 与修订 lane 的退出 0 分别记录，未将首轮批次改称成功。两个 Raw31 canonical 草稿与所选后像不同，主仓保留原稿，已验文件按明确安装路径发布。目录累计 228 份已验源码后像，这仍是完整 P1 的前置验收。

@@ -1,0 +1,12 @@
+--- baseline.lean
++++ candidate.lean
+@@ -243,7 +243,8 @@
+ set_option maxRecDepth 100000 in
+ set_option maxHeartbeats 0 in
+ theorem literal_coefficients_match : ∀ (i : Fin 13) (r : Fin 97) (k : Fin 9),
+-    exportedCoefficients i r k = coefficients (semanticExpr i r) k := by decide
++    exportedCoefficients i r k = coefficients (semanticExpr i r) k := by
++  decide +kernel
+ 
+ def semanticSlack (i : Fin 13) (r : Fin 97) (t : Fin 8 → ℝ) : ℝ := evaluate (semanticExpr i r) t
+ 

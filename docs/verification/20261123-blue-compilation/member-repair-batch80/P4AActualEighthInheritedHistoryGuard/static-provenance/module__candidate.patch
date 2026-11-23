@@ -1,0 +1,21 @@
+--- baseline.lean
++++ candidate.lean
+@@ -108,8 +108,8 @@
+       (a.headD 0 : ℝ) ^ 2 := by
+     rw [mul_comm, Real.rpow_mul hN0.le,
+       rpow_primeHistoryLogCoordinates (N : ℝ) hN ha hapos]
++    change (primeHistoryTuple 7 a (Fin.last 6) : ℝ) ^ 2 = (a.headD 0 : ℝ) ^ 2
+     rw [primeHistoryTuple_last (k := 6) ha]
+-    norm_num
+   have hpow : (N : ℝ) ^ ((∑ i : Fin 7, primeHistoryLogCoordinates (N : ℝ) 7 a i) +
+       2 * primeHistoryLogCoordinates (N : ℝ) 7 a 6) =
+       (a.prod : ℝ) * (a.headD 0 : ℝ) ^ 2 := by
+@@ -128,7 +128,7 @@
+         P2OriginalDescendingEighthLogSemantics.history7
+           (primeHistoryLogCoordinates (N : ℝ) 8 state.selectedPrefix) := by
+     simp only [Fin.sum_univ_succ, hcoord, P2OriginalDescendingEighthLogSemantics.history7]
+-    ring
++    norm_num [Fin.castLE, Fin.succ, Fin.ofNat] <;> ring
+   rwa [hsum] at hineq
+ 
+ /-- The original lower residual inequality follows from the inherited
