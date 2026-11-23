@@ -1,0 +1,51 @@
+--- baseline/ImbalancedChen/Part5OriginalUpsilon5CausalSplit.lean
++++ candidate/ImbalancedChen/Part5OriginalUpsilon5CausalSplit.lean
+@@ -3,7 +3,7 @@
+ import MathlibNt.SieveTheory.LinearSieve.JurkatRichert.JurkatRichert1965Section13HatSource
+ 
+ /-!
+-Original enhanced U5: exact first/second lower-factor split. SOURCE ONLY.
++Original enhanced U5: exact first/second lower-factor split. Verification records: docs/verification/20261123-blue-compilation.
+ The preceding dictionary's geometry is consumed, not reconstructed.
+ 
+ The manuscript defines abar(s)=s*f(s)/(2 exp(gamma)); this is the lower
+@@ -44,7 +44,7 @@
+   unfold argument
+   rw [div_le_iff₀ (show 0 < a by norm_num [a])]
+   unfold residual level
+-  constructor <;> linarith
++  constructor <;> intro hx <;> linarith only [hx]
+ 
+ def firstRegion : Set (Fin 2 → ℝ) := triangle ∩ {x | argument x ≤ 4}
+ def secondRegion : Set (Fin 2 → ℝ) := triangle ∩ {x | 4 < argument x}
+@@ -78,7 +78,9 @@
+ theorem regions_disjoint : Disjoint firstRegion secondRegion := by
+   apply disjoint_left.mpr
+   intro x hx hy
+-  exact (not_lt_of_ge hx.2) hy.2
++  have hle : argument x ≤ 4 := hx.2
++  have hlt : 4 < argument x := hy.2
++  exact (not_lt_of_ge hle) hlt
+ 
+ private theorem even_domain {s : ℝ} (hs : 2 ≤ s) (k : ℕ) :
+     s ∈ suzukiParityDomainOne 2 (2 * (k + 1)) := by
+@@ -191,6 +193,7 @@
+     IntegrableOn (fun x => canonicalKernel corr x * ∏ i, 1 / x i) triangle := by
+   apply (integrableOn_weightedKernel corr hcorr).congr_fun ?_ measurableSet_triangle
+   intro x hx
++  dsimp only
+   rw [kernel_eq_canonical hx]
+ 
+ /-- Exact partition of the full real integral, including the equality wall. -/
+@@ -218,9 +221,11 @@
+   congr 1
+   · apply setIntegral_congr_fun measurableSet_firstRegion
+     intro x hx
++    dsimp only
+     rw [kernel_eq_log_of_argument_le_four hx.1 hx.2]
+   · apply setIntegral_congr_fun measurableSet_secondRegion
+     intro x hx
++    dsimp only
+     rw [kernel_eq_canonical hx.1]
+ 
+ end

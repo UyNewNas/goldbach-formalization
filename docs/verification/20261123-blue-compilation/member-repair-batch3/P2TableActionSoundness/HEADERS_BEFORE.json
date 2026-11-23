@@ -1,0 +1,152 @@
+[
+  {
+    "name": "H",
+    "kind": "def",
+    "private": false,
+    "header": "def H (δ s : ℝ) : ℝ"
+  },
+  {
+    "name": "h",
+    "kind": "def",
+    "private": false,
+    "header": "def h (δ s : ℝ) : ℝ"
+  },
+  {
+    "name": "tableQ",
+    "kind": "def",
+    "private": false,
+    "header": "def tableQ : ℕ"
+  },
+  {
+    "name": "tableQ_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tableQ_pos : 0 < tableQ"
+  },
+  {
+    "name": "roundedProduct",
+    "kind": "def",
+    "private": false,
+    "header": "def roundedProduct (Q : ℕ) (v w : ℤ) : ℝ"
+  },
+  {
+    "name": "roundedProduct_eq_ediv",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem roundedProduct_eq_ediv (Q : ℕ) (v w : ℤ) :\n    roundedProduct Q v w = (((v * w / (Q : ℤ) : ℤ) : ℝ) / (Q : ℝ))"
+  },
+  {
+    "name": "roundedProduct_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem roundedProduct_le (Q : ℕ) (hQ : 0 < Q) (v w : ℤ) :\n    roundedProduct Q v w ≤ ((v : ℝ) / Q) * ((w : ℝ) / Q)"
+  },
+  {
+    "name": "roundedProduct_mono",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem roundedProduct_mono {Q : ℕ} (hQ : 0 < Q)\n    {v v' w : ℤ} (hvv' : v ≤ v') (hw : 0 ≤ w) :\n    roundedProduct Q v w ≤ roundedProduct Q v' w"
+  },
+  {
+    "name": "actual_antitone",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem actual_antitone (upper : Bool) {δ a b : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (ha : (if upper then 1 else 2 : ℝ) ≤ a) (hab : a ≤ b) (hb : b ≤ 10) :\n    wuImprovementLimit upper δ b ≤ wuImprovementLimit upper δ a"
+  },
+  {
+    "name": "actual_cell_enclosure",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_cell_enclosure (upper : Bool) {δ a b c : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (ha : (if upper then 1 else 2 : ℝ) ≤ a) (hab : a ≤ b) (hb : b ≤ 10)\n    (hc : c ≤ wuImprovementLimit upper δ b) :\n    ∀ u ∈ Icc a b, c ≤ wuImprovementLimit upper δ u"
+  },
+  {
+    "name": "rounded_log_cell_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_log_cell_sound (upper : Bool) {δ a b : ℝ}\n    {Q : ℕ} {v w : ℤ} (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hQ : 0 < Q) (hv : 0 ≤ v) (hw : 0 ≤ w)\n    (ha : (if upper then 1 else 2 : ℝ) ≤ a) (hab : a ≤ b) (hb : b ≤ 10)\n    (hvbound : (v : ℝ) / Q ≤ wuImprovementLimit upper δ b)\n    (hwbound : (w : ℝ) / Q ≤ Real.log (b / a)) :\n    roundedProduct Q v w ≤\n      ∫ u in a..b, wuImprovementLimit upper δ u / u"
+  },
+  {
+    "name": "rounded_log_tail_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_log_tail_sound (upper : Bool) {δ : ℝ}\n    {Q n : ℕ} (x : ℕ → ℝ) (v w : ℕ → ℤ)\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hQ : 0 < Q)\n    (hcells : ∀ j < n,\n      (if upper then 1 else 2 : ℝ) ≤ x j ∧ x j ≤ x (j+1) ∧ x (j+1) ≤ 10)\n    (hv : ∀ j < n, 0 ≤ v j) (hw : ∀ j < n, 0 ≤ w j)\n    (hvbound : ∀ j < n, (v j : ℝ) / Q ≤ wuImprovementLimit upper δ (x (j+1)))\n    (hwbound : ∀ j < n, (w j : ℝ) / Q ≤ Real.log (x (j+1) / x j)) :\n    (∑ j ∈ Finset.range n, roundedProduct Q (v j) (w j)) ≤\n      ∫ u in x 0..x n, wuImprovementLimit upper δ u / u"
+  },
+  {
+    "name": "tableGrid",
+    "kind": "def",
+    "private": false,
+    "header": "def tableGrid (j : ℕ) : ℝ"
+  },
+  {
+    "name": "tableGrid_mono",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tableGrid_mono : Monotone tableGrid"
+  },
+  {
+    "name": "tableGrid_bounds",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tableGrid_bounds {j : ℕ} (hj : j ≤ 200) :\n    1 ≤ tableGrid j ∧ tableGrid j ≤ 5"
+  },
+  {
+    "name": "tableGrid_lower_start",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tableGrid_lower_start {i : ℕ} (hi : 50 ≤ i) :\n    tableGrid (i-49) = tableGrid (i+1) - 1"
+  },
+  {
+    "name": "tableGrid_upper_start",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tableGrid_upper_start {i : ℕ} (hi : 50 ≤ i) :\n    tableGrid (max 50 (i-49)) = max 2 (tableGrid (i+1) - 1)"
+  },
+  {
+    "name": "rounded_original_grid_tail_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_original_grid_tail_sound (upper : Bool) {δ : ℝ}\n    {Q k : ℕ} (v w : ℕ → ℤ)\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hQ : 0 < Q) (hk : k ≤ 200)\n    (hklo : (if upper then 0 else 50 : ℕ) ≤ k)\n    (hv : ∀ j < 200, 0 ≤ v j) (hw : ∀ j < 200, 0 ≤ w j)\n    (hvbound : ∀ j < 200,\n      (v j : ℝ) / Q ≤ wuImprovementLimit upper δ (tableGrid (j+1)))\n    (hwbound : ∀ j < 200,\n      (w j : ℝ) / Q ≤ Real.log (tableGrid (j+1) / tableGrid j)) :\n    (∑ j ∈ Finset.range (200-k), roundedProduct Q (v (k+j)) (w (k+j))) ≤\n      ∫ u in tableGrid k..5, wuImprovementLimit upper δ u / u"
+  },
+  {
+    "name": "buchstab_lower_integral_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem buchstab_lower_integral_sound {δ s : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hs : 2 ≤ s) (hs5 : s ≤ 5) :\n    (∫ u in (s-1)..5, H δ u / u) ≤ h δ s"
+  },
+  {
+    "name": "buchstab_upper_integral_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem buchstab_upper_integral_sound {δ s : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hs : 2 ≤ s) (hs5 : s ≤ 5) :\n    (∫ u in (max 2 (s-1))..5, h δ u / u) ≤ H δ s"
+  },
+  {
+    "name": "rounded_buchstab_upper_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_buchstab_upper_sound {δ s : ℝ} {Q n : ℕ}\n    (x : ℕ → ℝ) (v w : ℕ → ℤ)\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hQ : 0 < Q)\n    (hs : 2 ≤ s) (hs5 : s ≤ 5)\n    (hx0 : x 0 = max 2 (s-1)) (hxn : x n = 5)\n    (hcells : ∀ j < n, 2 ≤ x j ∧ x j ≤ x (j+1) ∧ x (j+1) ≤ 10)\n    (hv : ∀ j < n, 0 ≤ v j) (hw : ∀ j < n, 0 ≤ w j)\n    (hvbound : ∀ j < n, (v j : ℝ) / Q ≤ h δ (x (j+1)))\n    (hwbound : ∀ j < n, (w j : ℝ) / Q ≤ Real.log (x (j+1) / x j)) :\n    (∑ j ∈ Finset.range n, roundedProduct Q (v j) (w j)) ≤ H δ s"
+  },
+  {
+    "name": "rounded_buchstab_lower_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_buchstab_lower_sound {δ s : ℝ} {Q n : ℕ}\n    (x : ℕ → ℝ) (v w : ℕ → ℤ)\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (hQ : 0 < Q)\n    (hs : 2 ≤ s) (hs5 : s ≤ 5) (hx0 : x 0 = s-1) (hxn : x n = 5)\n    (hcells : ∀ j < n, 1 ≤ x j ∧ x j ≤ x (j+1) ∧ x (j+1) ≤ 10)\n    (hv : ∀ j < n, 0 ≤ v j) (hw : ∀ j < n, 0 ≤ w j)\n    (hvbound : ∀ j < n, (v j : ℝ) / Q ≤ H δ (x (j+1)))\n    (hwbound : ∀ j < n, (w j : ℝ) / Q ≤ Real.log (x (j+1) / x j)) :\n    (∑ j ∈ Finset.range n, roundedProduct Q (v j) (w j)) ≤ h δ s"
+  },
+  {
+    "name": "rounded_w1_feedback_cell_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rounded_w1_feedback_cell_sound {δ a b c : ℝ}\n    {Q : ℕ} {v w : ℤ} (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hQ : 0 < Q) (hv : 0 ≤ v) (hw : 0 ≤ w)\n    (ha : 2 ≤ a) (hab : a ≤ b) (hb : b ≤ 10) (hbc : b < c)\n    (hvbound : (v : ℝ) / Q ≤ h δ b)\n    (hwbound : (w : ℝ) / Q ≤\n      Real.log (b * (c-a) / (a * (c-b)))) :\n    roundedProduct Q v w ≤\n      ∫ u in a..b, h δ u * firstFeedbackWeightedKernel c u"
+  },
+  {
+    "name": "adjacent_min_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem adjacent_min_sound (upper : Bool) {δ a b l r : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (ha : (if upper then 1 else 2 : ℝ) ≤ a) (hab : a ≤ b) (hb : b ≤ 10)\n    (hr : r ≤ wuImprovementLimit upper δ b) :\n    ∀ u ∈ Icc a b, min l r ≤ wuImprovementLimit upper δ u"
+  },
+  {
+    "name": "retain_max_sound",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem retain_max_sound (upper : Bool) {δ s old candidate : ℝ}\n    (hold : old ≤ wuImprovementLimit upper δ s)\n    (hcandidate : candidate ≤ wuImprovementLimit upper δ s) :\n    max old candidate ≤ wuImprovementLimit upper δ s"
+  }
+]

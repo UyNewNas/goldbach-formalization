@@ -1,0 +1,162 @@
+[
+  {
+    "name": "mass",
+    "kind": "def",
+    "header": "def mass {α : Type*} (s : Finset α) (w : α → ℝ) (E : α → Prop) : ℝ"
+  },
+  {
+    "name": "change",
+    "kind": "def",
+    "header": "def change {α : Type*} (E F : α → Prop) (t : α) : Prop"
+  },
+  {
+    "name": "disagreement",
+    "kind": "def",
+    "header": "def disagreement {α : Type*} (E F : α → Prop) (t : α) : Prop"
+  },
+  {
+    "name": "mass_nonneg",
+    "kind": "theorem",
+    "header": "theorem mass_nonneg {α : Type*} (s : Finset α) (w : α → ℝ)\n    (hw : ∀ t ∈ s, 0 ≤ w t) (E : α → Prop) : 0 ≤ mass s w E"
+  },
+  {
+    "name": "mass_change_identity",
+    "kind": "theorem",
+    "header": "theorem mass_change_identity {α : Type*} (s : Finset α) (w : α → ℝ)\n    (E F : α → Prop) :\n    mass s w E + mass s w (change E F) =\n      mass s w F + mass s w (change F E)"
+  },
+  {
+    "name": "mass_compl_sub",
+    "kind": "theorem",
+    "header": "theorem mass_compl_sub {α : Type*} (s : Finset α) (w : α → ℝ)\n    (E F : α → Prop) :\n    mass s w (fun t => ¬ E t) - mass s w (fun t => ¬ F t) =\n      mass s w (change E F) - mass s w (change F E)"
+  },
+  {
+    "name": "mass_disagreement",
+    "kind": "theorem",
+    "header": "theorem mass_disagreement {α : Type*} (s : Finset α) (w : α → ℝ)\n    (E F : α → Prop) :\n    mass s w (disagreement E F) =\n      mass s w (change E F) + mass s w (change F E)"
+  },
+  {
+    "name": "abs_mass_compl_sub_le",
+    "kind": "theorem",
+    "header": "theorem abs_mass_compl_sub_le {α : Type*} (s : Finset α) (w : α → ℝ)\n    (hw : ∀ t ∈ s, 0 ≤ w t) (E F : α → Prop) :\n    |mass s w (fun t => ¬ E t) - mass s w (fun t => ¬ F t)| ≤\n      mass s w (disagreement E F)"
+  },
+  {
+    "name": "mass_eq_zero_of_false",
+    "kind": "theorem",
+    "header": "theorem mass_eq_zero_of_false {α : Type*} (s : Finset α) (w : α → ℝ)\n    (E : α → Prop) (hE : ∀ t ∈ s, ¬ E t) : mass s w E = 0"
+  },
+  {
+    "name": "pairedWeight_mask_change",
+    "kind": "theorem",
+    "header": "theorem pairedWeight_mask_change (n : ℕ) (N A H D C : ℝ)\n    (E F : ℕ × ℕ → Prop) :\n    chenPairedElevenWeight n N A H D C E -\n      chenPairedElevenWeight n N A H D C F =\n      ((chenY6Selected n A H D (change E F) : ℝ) -\n        (chenY11Selected n A H D (change E F) : ℝ)) -\n      ((chenY6Selected n A H D (change F E) : ℝ) -\n        (chenY11Selected n A H D (change F E) : ℝ))"
+  },
+  {
+    "name": "pairedWeight_antitone_mask",
+    "kind": "theorem",
+    "header": "theorem pairedWeight_antitone_mask {n : ℕ} (hn : Squarefree n)\n    (N A H D C : ℝ) (E F : ℕ × ℕ → Prop)\n    (hEF : ∀ t, E t → F t) :\n    chenPairedElevenWeight n N A H D C F ≤\n      chenPairedElevenWeight n N A H D C E"
+  },
+  {
+    "name": "sixthSupport",
+    "kind": "abbrev",
+    "header": "abbrev sixthSupport (N : ℕ) : Finset (ℕ × ℕ)"
+  },
+  {
+    "name": "eleventhSupport",
+    "kind": "abbrev",
+    "header": "abbrev eleventhSupport (N : ℕ) : Finset ((ℕ × ℕ) × (ℕ × ℕ))"
+  },
+  {
+    "name": "sixthWeight",
+    "kind": "abbrev",
+    "header": "abbrev sixthWeight (N : ℕ) (t : ℕ × ℕ) : ℝ"
+  },
+  {
+    "name": "eleventhWeight",
+    "kind": "abbrev",
+    "header": "abbrev eleventhWeight (N : ℕ) (t : (ℕ × ℕ) × (ℕ × ℕ)) : ℝ"
+  },
+  {
+    "name": "sixthMass",
+    "kind": "def",
+    "header": "def sixthMass (N : ℕ) (E : ℕ × ℕ → Prop) : ℝ"
+  },
+  {
+    "name": "eleventhMass",
+    "kind": "def",
+    "header": "def eleventhMass (N : ℕ) (E : ℕ × ℕ → Prop) : ℝ"
+  },
+  {
+    "name": "retainedSupport",
+    "kind": "def",
+    "header": "def retainedSupport (N : ℕ) (eta : ℝ) : Finset (ℕ × ℕ)"
+  },
+  {
+    "name": "retainedMass",
+    "kind": "def",
+    "header": "def retainedMass (N : ℕ) (eta : ℝ) (E : ℕ × ℕ → Prop) : ℝ"
+  },
+  {
+    "name": "upsilon6_eq_compl_mass",
+    "kind": "theorem",
+    "header": "theorem upsilon6_eq_compl_mass (N : ℕ) (E : ℕ × ℕ → Prop) :\n    currentChenUpsilon6 N E = sixthMass N (fun t => ¬ E t)"
+  },
+  {
+    "name": "upsilon11_eq_compl_mass",
+    "kind": "theorem",
+    "header": "theorem upsilon11_eq_compl_mass (N : ℕ) (E : ℕ × ℕ → Prop) :\n    currentChenUpsilon11 N E = eleventhMass N (fun t => ¬ E t)"
+  },
+  {
+    "name": "retained_eq_compl_mass",
+    "kind": "theorem",
+    "header": "theorem retained_eq_compl_mass (N : ℕ) (eta : ℝ) (E : ℕ × ℕ → Prop) :\n    currentChenUpsilon6Retained N E eta = retainedMass N eta (fun t => ¬ E t)"
+  },
+  {
+    "name": "upsilon6_mask_change",
+    "kind": "theorem",
+    "header": "theorem upsilon6_mask_change (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    currentChenUpsilon6 N E - currentChenUpsilon6 N F =\n      sixthMass N (change E F) - sixthMass N (change F E)"
+  },
+  {
+    "name": "upsilon11_mask_change",
+    "kind": "theorem",
+    "header": "theorem upsilon11_mask_change (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    currentChenUpsilon11 N E - currentChenUpsilon11 N F =\n      eleventhMass N (change E F) - eleventhMass N (change F E)"
+  },
+  {
+    "name": "retained_mask_change",
+    "kind": "theorem",
+    "header": "theorem retained_mask_change (N : ℕ) (eta : ℝ) (E F : ℕ × ℕ → Prop) :\n    currentChenUpsilon6Retained N E eta - currentChenUpsilon6Retained N F eta =\n      retainedMass N eta (change E F) - retainedMass N eta (change F E)"
+  },
+  {
+    "name": "pairedPrimeSum_mask_change",
+    "kind": "theorem",
+    "header": "theorem pairedPrimeSum_mask_change (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    currentChenPairedPrimeSum N E - currentChenPairedPrimeSum N F =\n      (sixthMass N (change E F) - eleventhMass N (change E F)) -\n        (sixthMass N (change F E) - eleventhMass N (change F E))"
+  },
+  {
+    "name": "retained_pair_mask_change",
+    "kind": "theorem",
+    "header": "theorem retained_pair_mask_change (N : ℕ) (eta : ℝ) (E F : ℕ × ℕ → Prop) :\n    (currentChenUpsilon6Retained N E eta - currentChenUpsilon11 N E) -\n      (currentChenUpsilon6Retained N F eta - currentChenUpsilon11 N F) =\n      (retainedMass N eta (change E F) - eleventhMass N (change E F)) -\n        (retainedMass N eta (change F E) - eleventhMass N (change F E))"
+  },
+  {
+    "name": "abs_upsilon6_mask_change_le",
+    "kind": "theorem",
+    "header": "theorem abs_upsilon6_mask_change_le (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    |currentChenUpsilon6 N E - currentChenUpsilon6 N F| ≤\n      sixthMass N (disagreement E F)"
+  },
+  {
+    "name": "abs_upsilon11_mask_change_le",
+    "kind": "theorem",
+    "header": "theorem abs_upsilon11_mask_change_le (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    |currentChenUpsilon11 N E - currentChenUpsilon11 N F| ≤\n      eleventhMass N (disagreement E F)"
+  },
+  {
+    "name": "abs_retained_mask_change_le",
+    "kind": "theorem",
+    "header": "theorem abs_retained_mask_change_le (N : ℕ) (eta : ℝ)\n    (E F : ℕ × ℕ → Prop) :\n    |currentChenUpsilon6Retained N E eta - currentChenUpsilon6Retained N F eta| ≤\n      retainedMass N eta (disagreement E F)"
+  },
+  {
+    "name": "abs_pairedPrimeSum_mask_change_le",
+    "kind": "theorem",
+    "header": "theorem abs_pairedPrimeSum_mask_change_le (N : ℕ) (E F : ℕ × ℕ → Prop) :\n    |currentChenPairedPrimeSum N E - currentChenPairedPrimeSum N F| ≤\n      sixthMass N (disagreement E F) + eleventhMass N (disagreement E F)"
+  },
+  {
+    "name": "abs_retained_pair_mask_change_le",
+    "kind": "theorem",
+    "header": "theorem abs_retained_pair_mask_change_le (N : ℕ) (eta : ℝ)\n    (E F : ℕ × ℕ → Prop) :\n    |(currentChenUpsilon6Retained N E eta - currentChenUpsilon11 N E) -\n      (currentChenUpsilon6Retained N F eta - currentChenUpsilon11 N F)| ≤\n      retainedMass N eta (disagreement E F) + eleventhMass N (disagreement E F)"
+  }
+]

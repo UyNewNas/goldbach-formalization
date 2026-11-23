@@ -96,4 +96,8 @@ Member 的两个 native 模块原来调用未选入的 `roughCount_uniform_buchs
 
 扩展及 `Omega3XBuchstabUniform`、`NonunitRoughUniform` 的标准构建、指定三模块 kernel replay、全部 51 条定义模块声明的完整类型／传递公理检查均通过，仅标准三公理；三个源码和十五项主要产物稳定。最后标准 Lake stock 退出 0，源码编译调用为 0。可移植源码安装表见 [SOURCE_INSTALL.json](member-native-generic-m/SOURCE_INSTALL.json)，本地验收见 [ACCEPTANCE_SUMMARY.json](member-native-generic-m/local/ACCEPTANCE_SUMMARY.json)，来源与原量词顺序见 [SOURCE_REUSE.md](member-native-generic-m/published-source-candidate/SOURCE_REUSE.md)。历史 4151 项验收仅作为来源记录，单项历史 receipt 的 payload 未公开，本轮验收使用实际重新编译与复核的当前产物。
 
+`CurrentChenP5SelectedMaskTransport` 的五处有限和与 dependent tuple 证明完整复用 `86d2a123`，保留原选定 mask、标签重数、第二素数 cutoff 及正第六项 buffer。标准构建、kernel replay 和全部 48 个实际公开导出检查通过，原 32 条显式公开源码声明、定义、常量与假设保持，见 [验收结果](member-mask-transport/VALIDATION_RESULTS.json) 与 [独立复核](member-mask-transport/INDEPENDENT_REVIEW.json)。
+
+Member 第三修补批覆盖 `P2HistoricQ80DefectLookup`、`P2TableActionSoundness`、`Part5OriginalUpsilon5CausalSplit` 和 `P5OriginalSignedMidpoint`：四个标准构建、四次指定模块 kernel replay、全部 259 个实际公开导出（186、33、33、7）的完整类型／公理检查通过，仅标准三公理，源码及二十项主要产物稳定。HistoricQ80 十处证明逐段复用已有 `ab19e4c4` 后像，原 200 项 bank 数据和混合换行字节保持；其它修补为 API、cast、函数展开，原 signed midpoint 的 `1/24` 保持。SignedMidpoint 主仓 canonical 文件仍不存在，后像及显式安装路径保存在本批目录。原声明头、定义、常量、假设均保留，见 [验收结果](member-repair-batch3/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch3/INDEPENDENT_REVIEW.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

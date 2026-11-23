@@ -1,0 +1,512 @@
+[
+  {
+    "name": "Q",
+    "kind": "def",
+    "private": false,
+    "header": "def Q : ℕ"
+  },
+  {
+    "name": "Q_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Q_pos : (0 : ℚ) < Q"
+  },
+  {
+    "name": "Q_ne_zero",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Q_ne_zero : (Q : ℚ) ≠ 0"
+  },
+  {
+    "name": "I80",
+    "kind": "structure",
+    "private": false,
+    "header": "structure I80 where\n  lo : ℤ\n  hi : ℤ\n  deriving DecidableEq, Repr"
+  },
+  {
+    "name": "I80.decodeLo",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.decodeLo (x : I80) : ℚ"
+  },
+  {
+    "name": "I80.decodeHi",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.decodeHi (x : I80) : ℚ"
+  },
+  {
+    "name": "I80.enclosure",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.enclosure (x : I80) : Enclosure"
+  },
+  {
+    "name": "I80.Contains",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.Contains (x : I80) (v : ℝ) : Prop"
+  },
+  {
+    "name": "I80.ofEnclosure",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.ofEnclosure (x : Enclosure) : I80"
+  },
+  {
+    "name": "I80.point",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.point (q : ℚ) : I80"
+  },
+  {
+    "name": "I80.raw",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.raw (n : ℤ) : I80"
+  },
+  {
+    "name": "I80.add",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.add (x y : I80) : I80"
+  },
+  {
+    "name": "I80.neg",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.neg (x : I80) : I80"
+  },
+  {
+    "name": "I80.sub",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.sub (x y : I80) : I80"
+  },
+  {
+    "name": "I80.mul",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.mul (x y : I80) : I80"
+  },
+  {
+    "name": "I80.div",
+    "kind": "def",
+    "private": false,
+    "header": "def I80.div (x y : I80) : I80"
+  },
+  {
+    "name": "I80.enclosure_ofEnclosure",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.enclosure_ofEnclosure (x : Enclosure) :\n    (I80.ofEnclosure x).enclosure = x.round 80"
+  },
+  {
+    "name": "I80.ofEnclosure_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.ofEnclosure_contains {x : Enclosure} {v : ℝ}\n    (hx : x.Contains v) : (I80.ofEnclosure x).Contains v"
+  },
+  {
+    "name": "I80.point_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.point_contains (q : ℚ) : (I80.point q).Contains q"
+  },
+  {
+    "name": "I80.raw_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.raw_contains (n : ℤ) :\n    (I80.raw n).Contains (((n : ℚ) / Q : ℚ) : ℝ)"
+  },
+  {
+    "name": "I80.enclosure_add",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.enclosure_add (x y : I80) :\n    (x.add y).enclosure = x.enclosure.add y.enclosure"
+  },
+  {
+    "name": "I80.enclosure_neg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.enclosure_neg (x : I80) :\n    x.neg.enclosure = x.enclosure.neg"
+  },
+  {
+    "name": "I80.add_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.add_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) : (x.add y).Contains (v + w)"
+  },
+  {
+    "name": "I80.neg_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.neg_contains {x : I80} {v : ℝ}\n    (hx : x.Contains v) : x.neg.Contains (-v)"
+  },
+  {
+    "name": "I80.sub_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.sub_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) : (x.sub y).Contains (v - w)"
+  },
+  {
+    "name": "I80.mul_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.mul_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) : (x.mul y).Contains (v * w)"
+  },
+  {
+    "name": "I80.div_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.div_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) (hpos : 0 < y.lo) :\n    (x.div y).Contains (v / w)"
+  },
+  {
+    "name": "floor_div_Q",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem floor_div_Q (n : ℤ) : ⌊((n : ℚ) / Q)⌋ = n / (Q : ℤ)"
+  },
+  {
+    "name": "ceil_div_Q",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ceil_div_Q (n : ℤ) : ⌈((n : ℚ) / Q)⌉ = -((-n) / (Q : ℤ))"
+  },
+  {
+    "name": "floor_min_rat",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem floor_min_rat (v w : ℚ) : ⌊min v w⌋ = min ⌊v⌋ ⌊w⌋"
+  },
+  {
+    "name": "I80.mul_lo_integer",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.mul_lo_integer (x y : I80) :\n    (x.mul y).lo =\n      min (min ((x.lo*y.lo)/(Q:ℤ)) ((x.lo*y.hi)/(Q:ℤ)))\n        (min ((x.hi*y.lo)/(Q:ℤ)) ((x.hi*y.hi)/(Q:ℤ)))"
+  },
+  {
+    "name": "I80.lower_rounding",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.lower_rounding (x : Enclosure) :\n    0 ≤ x.lower - (I80.ofEnclosure x).decodeLo ∧\n      x.lower - (I80.ofEnclosure x).decodeLo < 1 / (Q : ℚ)"
+  },
+  {
+    "name": "I80.upper_rounding",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem I80.upper_rounding (x : Enclosure) :\n    0 ≤ (I80.ofEnclosure x).decodeHi - x.upper ∧\n      (I80.ofEnclosure x).decodeHi - x.upper < 1 / (Q : ℚ)"
+  },
+  {
+    "name": "a",
+    "kind": "def",
+    "private": false,
+    "header": "def a : ℚ"
+  },
+  {
+    "name": "Plane",
+    "kind": "structure",
+    "private": false,
+    "header": "structure Plane where\n  c : ℚ\n  b : ℚ\n  d : ℚ\n  deriving DecidableEq, Repr"
+  },
+  {
+    "name": "Plane.eval",
+    "kind": "def",
+    "private": false,
+    "header": "def Plane.eval (p : Plane) (t u : ℚ) : ℚ"
+  },
+  {
+    "name": "Plane.sub",
+    "kind": "def",
+    "private": false,
+    "header": "def Plane.sub (p q : Plane) : Plane"
+  },
+  {
+    "name": "affineRange",
+    "kind": "def",
+    "private": false,
+    "header": "def affineRange (p : Plane) (tl tr ul ur : ℚ) : ℚ × ℚ"
+  },
+  {
+    "name": "ordinaryPlane₀",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryPlane₀ : Plane"
+  },
+  {
+    "name": "ordinaryPlane₁",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryPlane₁ : Plane"
+  },
+  {
+    "name": "planeAccepted",
+    "kind": "def",
+    "private": false,
+    "header": "def planeAccepted (p q : Plane) (tl tr ul ur : ℚ) : Prop"
+  },
+  {
+    "name": "ordinaryRanges",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryRanges (tl tr ul ur : ℚ) : ℚ × ℚ"
+  },
+  {
+    "name": "rectangleMass",
+    "kind": "def",
+    "private": false,
+    "header": "def rectangleMass (logI : ℚ → I80) (tl tr ul ur : ℚ) : I80"
+  },
+  {
+    "name": "rectangleMomentT",
+    "kind": "def",
+    "private": false,
+    "header": "def rectangleMomentT (logI : ℚ → I80) (tl tr ul ur : ℚ) : I80"
+  },
+  {
+    "name": "rectangleMomentU",
+    "kind": "def",
+    "private": false,
+    "header": "def rectangleMomentU (logI : ℚ → I80) (tl tr ul ur : ℚ) : I80"
+  },
+  {
+    "name": "ordinaryRectangleBase",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryRectangleBase (sf logI : ℚ → I80)\n    (tl tr ul ur rl : ℚ) : I80"
+  },
+  {
+    "name": "ordinaryRectangleChord",
+    "kind": "def",
+    "private": false,
+    "header": "def ordinaryRectangleChord (sf logI : ℚ → I80)\n    (tl tr ul ur : ℚ) (p : Plane) : I80"
+  },
+  {
+    "name": "point_a_lo_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem point_a_lo_pos : 0 < (I80.point a).lo"
+  },
+  {
+    "name": "rectangleMass_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rectangleMass_contains (logI : ℚ → I80) (tl tr ul ur : ℚ)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :\n    (rectangleMass logI tl tr ul ur).Contains (rectangleMassValue tl tr ul ur)"
+  },
+  {
+    "name": "rectangleMomentT_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rectangleMomentT_contains (logI : ℚ → I80) (tl tr ul ur : ℚ)\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :\n    (rectangleMomentT logI tl tr ul ur).Contains (rectangleMomentTValue tl tr ul ur)"
+  },
+  {
+    "name": "rectangleMomentU_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem rectangleMomentU_contains (logI : ℚ → I80) (tl tr ul ur : ℚ)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ))) :\n    (rectangleMomentU logI tl tr ul ur).Contains (rectangleMomentUValue tl tr ul ur)"
+  },
+  {
+    "name": "ordinaryRectangleBase_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryRectangleBase_contains (sf logI : ℚ → I80)\n    (tl tr ul ur rl : ℚ) (f : ℝ)\n    (hf : (sf (rl/a)).Contains f)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :\n    (ordinaryRectangleBase sf logI tl tr ul ur rl).Contains\n      ((f * rectangleMassValue tl tr ul ur * 4) / (a:ℝ))"
+  },
+  {
+    "name": "ordinaryRectangleBase_decodeLo_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryRectangleBase_decodeLo_le (sf logI : ℚ → I80)\n    (tl tr ul ur rl : ℚ) (f : ℝ)\n    (hf : (sf (rl/a)).Contains f)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :\n    ((ordinaryRectangleBase sf logI tl tr ul ur rl).decodeLo:ℝ) ≤\n      (f * rectangleMassValue tl tr ul ur * 4) / (a:ℝ)"
+  },
+  {
+    "name": "ordinaryRectangleChord_contains",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryRectangleChord_contains (sf logI : ℚ → I80)\n    (tl tr ul ur : ℚ) (p : Plane)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ)))\n    (hden : 0 < (I80.point ((affineRange p tl tr ul ur).2 -\n      (affineRange p tl tr ul ur).1)).lo) :\n    (ordinaryRectangleChord sf logI tl tr ul ur p).Contains\n      (ordinaryRectangleChordValue sf tl tr ul ur p)"
+  },
+  {
+    "name": "ordinaryRectangleChord_decodeLo_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem ordinaryRectangleChord_decodeLo_le (sf logI : ℚ → I80)\n    (tl tr ul ur : ℚ) (p : Plane)\n    (ht : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ)))\n    (hden : 0 < (I80.point ((affineRange p tl tr ul ur).2 -\n      (affineRange p tl tr ul ur).1)).lo) :\n    ((ordinaryRectangleChord sf logI tl tr ul ur p).decodeLo:ℝ) ≤\n      ordinaryRectangleChordValue sf tl tr ul ur p"
+  },
+  {
+    "name": "chordEligible",
+    "kind": "def",
+    "private": false,
+    "header": "def chordEligible (p q : Plane) (tl tr ul ur : ℚ) : Prop"
+  },
+  {
+    "name": "savedOrdinaryRectangle",
+    "kind": "def",
+    "private": false,
+    "header": "def savedOrdinaryRectangle (sf logI : ℚ → I80) (tl tr ul ur : ℚ) : ℤ"
+  },
+  {
+    "name": "savedOrdinaryRectangle_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem savedOrdinaryRectangle_nonneg (sf logI : ℚ → I80) (tl tr ul ur : ℚ) :\n    0 ≤ savedOrdinaryRectangle sf logI tl tr ul ur"
+  },
+  {
+    "name": "lookupGuard",
+    "kind": "def",
+    "private": false,
+    "header": "def lookupGuard (x : I80) (lower : Bool) : Prop"
+  },
+  {
+    "name": "scaledLo",
+    "kind": "def",
+    "private": false,
+    "header": "def scaledLo (g : ℕ) (x : I80) : ℚ"
+  },
+  {
+    "name": "scaledHi",
+    "kind": "def",
+    "private": false,
+    "header": "def scaledHi (g : ℕ) (x : I80) : ℚ"
+  },
+  {
+    "name": "lookupStart",
+    "kind": "def",
+    "private": false,
+    "header": "def lookupStart (g : ℕ) (x : I80) : ℤ"
+  },
+  {
+    "name": "lookupStop",
+    "kind": "def",
+    "private": false,
+    "header": "def lookupStop (g : ℕ) (x : I80) : ℤ"
+  },
+  {
+    "name": "closedSliceMin",
+    "kind": "def",
+    "private": false,
+    "header": "def closedSliceMin (table : ℤ → ℤ) (start stop : ℤ) : ℤ"
+  },
+  {
+    "name": "defectLookup",
+    "kind": "def",
+    "private": false,
+    "header": "def defectLookup (g : ℕ) (table : ℤ → ℤ) (x : I80) (lower : Bool) : I80"
+  },
+  {
+    "name": "defectLookup_guard",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem defectLookup_guard (g : ℕ) (table : ℤ → ℤ) (x : I80) (lower : Bool)\n    (h : lookupGuard x lower) : defectLookup g table x lower = I80.raw 0"
+  },
+  {
+    "name": "defectLookup_lower_crossing",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem defectLookup_lower_crossing (g : ℕ) (table : ℤ → ℤ) (x : I80)\n    (h : x.lo < 2*(Q : ℤ)) : defectLookup g table x true = I80.raw 0"
+  },
+  {
+    "name": "lookupStart_integer_formula",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lookupStart_integer_formula (g : ℕ) (x : I80) :\n    lookupStart g x = max 0 (-(-((x.lo-(Q:ℤ))*(g:ℤ)) / (Q:ℤ))-1)"
+  },
+  {
+    "name": "lookupStop_integer_formula",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lookupStop_integer_formula (g : ℕ) (x : I80) :\n    lookupStop g x = min (4*(g:ℤ)-1) (((x.hi-(Q:ℤ))*(g:ℤ)) / (Q:ℤ))"
+  },
+  {
+    "name": "lookup_indices_iff",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lookup_indices_iff (g : ℕ) (x : I80) (k : ℤ) :\n    lookupStart g x ≤ k ∧ k ≤ lookupStop g x ↔\n      0 ≤ k ∧ k ≤ 4*(g:ℤ)-1 ∧\n        scaledLo g x ≤ (k:ℚ)+1 ∧ (k:ℚ) ≤ scaledHi g x"
+  },
+  {
+    "name": "lookupStart_le_stop",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lookupStart_le_stop (g : ℕ) (x : I80) (lower : Bool)\n    (hg : 0 < g) (horder : x.lo ≤ x.hi) (hguard : ¬ lookupGuard x lower) :\n    lookupStart g x ≤ lookupStop g x"
+  },
+  {
+    "name": "lookup_knot_both_cells",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lookup_knot_both_cells (g : ℕ) (x : I80) (k : ℤ)\n    (hk : 1 ≤ k) (hkg : k ≤ 4*(g:ℤ)-1)\n    (hl : scaledLo g x = (k:ℚ)) (hu : scaledHi g x = (k:ℚ)) :\n    (lookupStart g x ≤ k-1 ∧ k-1 ≤ lookupStop g x) ∧\n      (lookupStart g x ≤ k ∧ k ≤ lookupStop g x)"
+  },
+  {
+    "name": "foldr_min_le_of_mem",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem foldr_min_le_of_mem (xs : List ℤ) (seed z : ℤ) (hz : z ∈ xs) :\n    xs.foldr min seed ≤ z"
+  },
+  {
+    "name": "le_foldr_min",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem le_foldr_min (xs : List ℤ) (seed z : ℤ)\n    (hseed : z ≤ seed) (hz : ∀ v ∈ xs, z ≤ v) : z ≤ xs.foldr min seed"
+  },
+  {
+    "name": "closedSliceMin_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem closedSliceMin_le (table : ℤ → ℤ) (start stop k : ℤ)\n    (hk : start ≤ k) (hstop : k ≤ stop) :\n    closedSliceMin table start stop ≤ table k"
+  },
+  {
+    "name": "le_closedSliceMin",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem le_closedSliceMin (table : ℤ → ℤ) (start stop z : ℤ)\n    (hstart : start ≤ stop) (hz : ∀ k, start ≤ k → k ≤ stop → z ≤ table k) :\n    z ≤ closedSliceMin table start stop"
+  },
+  {
+    "name": "defectLookup_le_closed_cell",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem defectLookup_le_closed_cell (g : ℕ) (table : ℤ → ℤ) (x : I80)\n    (lower : Bool) (hguard : ¬ lookupGuard x lower) (k : ℤ)\n    (hk : 0 ≤ k) (hbound : k ≤ 4*(g:ℤ)-1)\n    (hl : scaledLo g x ≤ (k:ℚ)+1) (hu : (k:ℚ) ≤ scaledHi g x) :\n    (defectLookup g table x lower).lo ≤ table k"
+  },
+  {
+    "name": "savedRectangle",
+    "kind": "def",
+    "private": false,
+    "header": "def savedRectangle (sf logI : ℚ → I80) (table : ℤ → ℤ)\n    (tl tr ul ur : ℚ) : ℤ"
+  },
+  {
+    "name": "savedRectangle_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem savedRectangle_nonneg (sf logI : ℚ → I80) (table : ℤ → ℤ)\n    (tl tr ul ur : ℚ) : 0 ≤ savedRectangle sf logI table tl tr ul ur"
+  },
+  {
+    "name": "bankLowerNumerators",
+    "kind": "def",
+    "private": false,
+    "header": "def bankLowerNumerators : List ℤ"
+  },
+  {
+    "name": "bankLowerNumerators_length",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem bankLowerNumerators_length : bankLowerNumerators.length = 200"
+  },
+  {
+    "name": "bankLowerTable",
+    "kind": "def",
+    "private": false,
+    "header": "def bankLowerTable (k : ℤ) : ℤ"
+  },
+  {
+    "name": "bankDefectLookup",
+    "kind": "def",
+    "private": false,
+    "header": "def bankDefectLookup (x : I80) : I80"
+  },
+  {
+    "name": "bankDefectLookup_exact_s2",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem bankDefectLookup_exact_s2 :\n    bankDefectLookup (I80.raw (2*(Q:ℤ))) = I80.raw 0"
+  },
+  {
+    "name": "sourceSavedRectangle",
+    "kind": "def",
+    "private": false,
+    "header": "def sourceSavedRectangle (sf logI : ℚ → I80) (tl tr ul ur : ℚ) : ℤ"
+  }
+]

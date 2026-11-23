@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/P5OriginalSignedMidpoint.lean
++++ candidate/ImbalancedChen/P5OriginalSignedMidpoint.lean
+@@ -4,7 +4,7 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ Signed midpoint error with the exact 1/24 constant used by the original
+ sharp-switch producer. This module has no U7 dependency. The remainder is
+@@ -48,6 +48,7 @@
+     have hlin := (hasDerivAt_id x).sub_const v
+     apply ((hlin.mul (hf x hx)).sub
+       (((hlin.pow 2).div_const 2).mul (hf' x hx))).congr_deriv
++    simp only [Pi.pow_apply, id_eq]
+     ring
+   have hFTC := intervalIntegral.integral_eq_sub_of_hasDerivAt hd (hi.sub hwi)
+   rw [intervalIntegral.integral_sub hi hwi] at hFTC

@@ -1,0 +1,164 @@
+[
+  {
+    "name": "continuous_level",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuous_level :\n    Continuous (fun x : Fin 2 → ℝ => level (x 0) (x 1))"
+  },
+  {
+    "name": "continuous_residual",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuous_residual : Continuous residual"
+  },
+  {
+    "name": "continuous_argument",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuous_argument : Continuous argument"
+  },
+  {
+    "name": "argument_le_four_iff",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem argument_le_four_iff (x : Fin 2 → ℝ) :\n    argument x ≤ 4 ↔\n      max (VariableEnvelope.v (x 1))\n        (max (VariableEnvelope.v (x 1 + x 0)) (VariableEnvelope.B a)) ≤\n          x 0 + x 1 + 4 * a"
+  },
+  {
+    "name": "firstRegion",
+    "kind": "def",
+    "private": false,
+    "header": "def firstRegion : Set (Fin 2 → ℝ)"
+  },
+  {
+    "name": "secondRegion",
+    "kind": "def",
+    "private": false,
+    "header": "def secondRegion : Set (Fin 2 → ℝ)"
+  },
+  {
+    "name": "measurableSet_firstRegion",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem measurableSet_firstRegion : MeasurableSet firstRegion"
+  },
+  {
+    "name": "measurableSet_secondRegion",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem measurableSet_secondRegion : MeasurableSet secondRegion"
+  },
+  {
+    "name": "firstRegion_literal_max",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem firstRegion_literal_max :\n    firstRegion = triangle ∩ {x |\n      max (VariableEnvelope.v (x 1))\n        (max (VariableEnvelope.v (x 1 + x 0)) (VariableEnvelope.B a)) ≤\n          x 0 + x 1 + 4 * a}"
+  },
+  {
+    "name": "regions_union",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem regions_union : firstRegion ∪ secondRegion = triangle"
+  },
+  {
+    "name": "regions_disjoint",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem regions_disjoint : Disjoint firstRegion secondRegion"
+  },
+  {
+    "name": "even_domain",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem even_domain {s : ℝ} (hs : 2 ≤ s) (k : ℕ) :\n    s ∈ suzukiParityDomainOne 2 (2 * (k + 1))"
+  },
+  {
+    "name": "even_layer_bound",
+    "kind": "theorem",
+    "private": true,
+    "header": "private theorem even_layer_bound {s : ℝ} (hs : 2 ≤ s) (k : ℕ) :\n    ‖suzukiLayer 1 2 (2 * (k + 1)) s‖ ≤\n      suzukiLayer 1 2 (2 * (k + 1)) 2"
+  },
+  {
+    "name": "continuousOn_actualLowerFactor",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuousOn_actualLowerFactor :\n    ContinuousOn suzukiContinuousLowerFactor (Ici (2 : ℝ))"
+  },
+  {
+    "name": "actualLowerFactor_eq_JR",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actualLowerFactor_eq_JR {s : ℝ} (hs : s ∈ Icc (4 : ℝ) 5) :\n    suzukiContinuousLowerFactor s =\n      SwitchingPrinciple.dimensionOneLowerLinearSieveFactor s"
+  },
+  {
+    "name": "canonicalKernel_eq_JR_on_secondRegion",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem canonicalKernel_eq_JR_on_secondRegion (corr : ℝ → ℝ)\n    {x : Fin 2 → ℝ} (hx : x ∈ secondRegion) :\n    canonicalKernel corr x =\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) *\n          SwitchingPrinciple.dimensionOneLowerLinearSieveFactor (argument x) +\n        4 * corr (argument x) / residual x"
+  },
+  {
+    "name": "continuousOn_lowerAmplitude",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuousOn_lowerAmplitude : ContinuousOn lowerAmplitude (Icc (2 : ℝ) 5)"
+  },
+  {
+    "name": "closedTriangle",
+    "kind": "def",
+    "private": false,
+    "header": "def closedTriangle : Set (Fin 2 → ℝ)"
+  },
+  {
+    "name": "isCompact_closedTriangle",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem isCompact_closedTriangle : IsCompact closedTriangle"
+  },
+  {
+    "name": "triangle_subset_closedTriangle",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem triangle_subset_closedTriangle : triangle ⊆ closedTriangle"
+  },
+  {
+    "name": "closedTriangle_bounds",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem closedTriangle_bounds {x : Fin 2 → ℝ} (hx : x ∈ closedTriangle) :\n    0 < residual x ∧ argument x ∈ Icc (2 : ℝ) 5"
+  },
+  {
+    "name": "continuousOn_kernel_closedTriangle",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuousOn_kernel_closedTriangle (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    ContinuousOn (kernel corr) closedTriangle"
+  },
+  {
+    "name": "continuousOn_weightedKernel_closedTriangle",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem continuousOn_weightedKernel_closedTriangle (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    ContinuousOn (fun x => kernel corr x * ∏ i, 1 / x i) closedTriangle"
+  },
+  {
+    "name": "integrableOn_weightedKernel",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem integrableOn_weightedKernel (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    IntegrableOn (fun x => kernel corr x * ∏ i, 1 / x i) triangle"
+  },
+  {
+    "name": "integrableOn_canonicalWeightedKernel",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem integrableOn_canonicalWeightedKernel (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    IntegrableOn (fun x => canonicalKernel corr x * ∏ i, 1 / x i) triangle"
+  },
+  {
+    "name": "integral_split",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem integral_split (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    integral corr =\n      (∫ x in firstRegion, kernel corr x * ∏ i, 1 / x i) +\n        ∫ x in secondRegion, kernel corr x * ∏ i, 1 / x i"
+  },
+  {
+    "name": "integral_split_log_canonical",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem integral_split_log_canonical (corr : ℝ → ℝ)\n    (hcorr : ContinuousOn corr (Icc (2 : ℝ) 5)) :\n    integral corr =\n      (∫ x in firstRegion,\n        (4 * (Real.log (argument x - 1) + corr (argument x)) / residual x) *\n          ∏ i, 1 / x i) +\n      ∫ x in secondRegion, canonicalKernel corr x * ∏ i, 1 / x i"
+  }
+]

@@ -4,7 +4,7 @@ import Mathlib.Algebra.Order.Floor.Ring
 import Mathlib.Tactic
 
 /-!
-SOURCE_ONLY / UNCOMPILED / OPEN30.
+Verification records: docs/verification/20261123-blue-compilation.
 
 Semantic lower-enclosure lemmas for the positive actions in the shared table.
 `H` and `h` below are the actual Wu source improvement functions, not arrays
@@ -73,11 +73,14 @@ theorem roundedProduct_mono {Q : ℕ} (hQ : 0 < Q)
     {v v' w : ℤ} (hvv' : v ≤ v') (hw : 0 ≤ w) :
     roundedProduct Q v w ≤ roundedProduct Q v' w := by
   have hQr : (0 : ℝ) < Q := by exact_mod_cast hQ
-  apply div_le_div_of_nonneg_right _ hQr.le
-  exact_mod_cast Int.floor_mono
-    (div_le_div_of_nonneg_right
-      (mul_le_mul_of_nonneg_right (by exact_mod_cast hvv')
-        (by exact_mod_cast hw)) hQr.le)
+  have hvvR : (v : ℝ) ≤ (v' : ℝ) := by exact_mod_cast hvv'
+  have hwR : (0 : ℝ) ≤ (w : ℝ) := by exact_mod_cast hw
+  have hprod : (v : ℝ) * (w : ℝ) / (Q : ℝ) ≤
+      (v' : ℝ) * (w : ℝ) / (Q : ℝ) :=
+    div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hvvR hwR) hQr.le
+  unfold roundedProduct
+  exact div_le_div_of_nonneg_right
+    ((Int.cast_le (R := ℝ)).mpr (Int.floor_mono hprod)) hQr.le
 
 private theorem actual_antitone (upper : Bool) {δ a b : ℝ}
     (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)
@@ -134,6 +137,7 @@ theorem rounded_log_cell_sound (upper : Bool) {δ a b : ℝ}
       ((v : ℝ) / Q) * Real.log (b / a) := by
     simp_rw [div_eq_mul_inv]
     rw [intervalIntegral.integral_const_mul, integral_inv_of_pos ha0 hb0]
+    simp only [div_eq_mul_inv]
   rw [heval] at hcmp
   exact (roundedProduct_le Q hQ v w).trans
     ((mul_le_mul_of_nonneg_left hwbound hv0).trans hcmp)
@@ -154,8 +158,10 @@ theorem rounded_log_tail_sound (upper : Bool) {δ : ℝ}
       IntervalIntegrable (fun u => wuImprovementLimit upper δ u / u)
         volume (x j) (x (j+1)) := by
     have ha : 1 ≤ x j := by
-      have hh := (hcells j hj).1
-      cases upper <;> simp_all <;> linarith
+      cases upper
+      · have htwo : (2 : ℝ) ≤ x j := (hcells j hj).1
+        linarith only [htwo]
+      · exact (hcells j hj).1
     exact wuImprovementLimit_div_intervalIntegrable upper hδ
       (by linarith : δ < 1 / 2) ha (hcells j hj).2.1 (hcells j hj).2.2
   rw [← intervalIntegral.sum_integral_adjacent_intervals hi]
@@ -171,9 +177,10 @@ def tableGrid (j : ℕ) : ℝ := 1 + (j : ℝ) / 50
 
 theorem tableGrid_mono : Monotone tableGrid := by
   intro a b hab
-  dsimp [tableGrid]
-  exact add_le_add_left
-    (div_le_div_of_nonneg_right (by exact_mod_cast hab) (by norm_num)) _
+  have habR : (a : ℝ) ≤ (b : ℝ) := by exact_mod_cast hab
+  dsimp only [tableGrid]
+  exact add_le_add (le_refl (1 : ℝ))
+    (div_le_div_of_nonneg_right habR (by norm_num : (0 : ℝ) ≤ 50))
 
 theorem tableGrid_bounds {j : ℕ} (hj : j ≤ 200) :
     1 ≤ tableGrid j ∧ tableGrid j ≤ 5 := by
@@ -220,7 +227,9 @@ theorem rounded_original_grid_tail_sound (upper : Bool) {δ : ℝ}
       cases upper
       · have h50 : 50 ≤ k+j := by simp only [Bool.false_eq_true, if_false] at hklo; omega
         have hh := tableGrid_mono h50
-        simpa [tableGrid] using hh
+        have hgrid50 : tableGrid 50 = 2 := by norm_num [tableGrid]
+        rw [hgrid50] at hh
+        exact hh
       · exact (tableGrid_bounds (show k+j ≤ 200 by omega)).1
     exact ⟨hlo, tableGrid_mono (by omega),
       (tableGrid_bounds hlast).2.trans (by norm_num)⟩
@@ -264,13 +273,14 @@ theorem buchstab_upper_integral_sound {δ s : ℝ}
     · rw [max_eq_right h3, max_eq_right (by linarith)]
     · have hs3 : s ≤ 3 := by linarith
       rw [max_eq_left hs3, max_eq_left (by linarith)]
+      norm_num
   have hc := wuImprovementLimit_upper_cross hδ hδhi (by linarith : 2 ≤ r)
     (show r ≤ 6 by linarith) (show (6 : ℝ) ≤ 10 by norm_num)
   have hn := wuImprovementLimit_nonneg true hδ (by linarith : δ < 1 / 2)
     (show (1 : ℝ) ≤ 6 by norm_num) (show (6 : ℝ) ≤ 10 by norm_num)
   have hm := wuImprovementLimit_upper_antitone hδ hδhi
-    ⟨by linarith : 1 ≤ s, by linarith : s ≤ 10⟩
-    ⟨by linarith : 1 ≤ r, by linarith : r ≤ 10⟩ hsr
+    ⟨(by linarith : 1 ≤ s), (by linarith : s ≤ 10)⟩
+    ⟨(by linarith : 1 ≤ r), (by linarith : r ≤ 10)⟩ hsr
   norm_num at hc
   rw [hrshift] at hc
   change (∫ u in (max 2 (s-1))..5, wuImprovementLimit false δ u / u) ≤
