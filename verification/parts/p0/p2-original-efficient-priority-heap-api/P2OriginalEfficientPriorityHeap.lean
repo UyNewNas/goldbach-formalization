@@ -124,13 +124,12 @@ theorem deleteMin_spec (q : Queue) (p : Scheduled) (rest : Queue)
       simp only [Batteries.PairingHeap.deleteMin,Heap.deleteMin] at hd
       have he := Option.some.inj hd
       have hp : p = a := (congrArg Prod.fst he).symm
-      have hrest := congrArg Prod.snd he
+      have hrest : c.combine keyLe = rest.val :=
+        congrArg (fun x : Scheduled × Queue => x.2.val) he
       subst p
-      subst rest
       refine ⟨?_,by simp [contents,nodes_node,nodes_nil],?_⟩
-      · change bag (.node a c .nil) = {a} + bag (c.combine keyLe)
-        rw [bag_combine]
-        simp [bag_node,bag_nil]
+      · change bag (.node a c .nil) = {a} + bag rest.val
+        rw [← hrest, bag_combine] <;> simp [bag_node,bag_nil]
       · intro r hr
         simp only [contents,nodes_node,nodes_nil,List.append_nil,List.mem_cons] at hr
         rcases hr with rfl | hr
