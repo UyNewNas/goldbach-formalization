@@ -3,7 +3,7 @@ import ImbalancedChen.NormalizationGrowth
 import MathlibNt.SieveTheory.Distribution.BombieriVinogradov
 
 /-!
-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Verification records: docs/verification/20261123-blue-compilation.
 
 Exact conversion between the installed literal-li Theta and the trueLi
 normalization, with the SAME finite support, given sigma, singular series,
@@ -114,7 +114,7 @@ theorem uniform_trueTheta_relative_error (epsilon : ℝ) (he : 0<epsilon) :
       (mul_le_mul_of_nonneg_right hscalar hmean) (by norm_num : (0:ℝ)≤4)
     change 4*(2/Real.log 2)*kernelMean N Q D sigma≤
       epsilon*(4*logarithmicIntegral N*kernelMean N Q D sigma)
-    convert hm using 1 <;> ring
+    simpa only [mul_assoc, mul_left_comm, mul_comm] using hm
   have hdiff : trueTheta N Q D sigma-Theta N Q D sigma=
       4*(2/Real.log 2)*kernelMean N Q D sigma := by linarith only [hidentity]
   refine ⟨by linarith only [hidentity,herror0],?_,?_⟩

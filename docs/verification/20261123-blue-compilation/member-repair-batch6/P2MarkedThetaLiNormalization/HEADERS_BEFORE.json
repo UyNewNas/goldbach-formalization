@@ -1,0 +1,44 @@
+[
+  {
+    "name": "kernelMean",
+    "kind": "def",
+    "private": false,
+    "header": "def kernelMean (N : ℕ) (Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ) : ℝ"
+  },
+  {
+    "name": "trueTheta",
+    "kind": "def",
+    "private": false,
+    "header": "def trueTheta (N : ℕ) (Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ) : ℝ"
+  },
+  {
+    "name": "trueLi_eq_literalLi_add",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem trueLi_eq_literalLi_add (x : ℝ) :\n    trueLogarithmicIntegral x=logarithmicIntegral x+2/Real.log 2"
+  },
+  {
+    "name": "trueTheta_eq_Theta_add",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem trueTheta_eq_Theta_add (N : ℕ) (Q : ℝ) (D : Finset ℕ)\n    (sigma : ℕ → ℝ) :\n    trueTheta N Q D sigma=Theta N Q D sigma+\n      4*(2/Real.log 2)*kernelMean N Q D sigma"
+  },
+  {
+    "name": "kernelMean_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem kernelMean_nonneg {N : ℕ} (hN : 0<N) (Q : ℝ) (D : Finset ℕ)\n    (sigma : ℕ → ℝ) (hdpos : ∀d∈D,0<d)\n    (hsigma : ∀d∈D,0≤sigma d) (hlevel : ∀d∈D,1<Q/(d:ℝ)) :\n    0≤kernelMean N Q D sigma"
+  },
+  {
+    "name": "tendsto_literalLi_nat_atTop",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem tendsto_literalLi_nat_atTop :\n    Tendsto (fun N : ℕ=>logarithmicIntegral N) atTop atTop"
+  },
+  {
+    "name": "uniform_trueTheta_relative_error",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem uniform_trueTheta_relative_error (epsilon : ℝ) (he : 0<epsilon) :\n    ∃N0 : ℕ,4≤N0 ∧ ∀N : ℕ,N0≤N →\n      ∀(Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ),\n        (∀d∈D,0<d) → (∀d∈D,0≤sigma d) → (∀d∈D,1<Q/(d:ℝ)) →\n        Theta N Q D sigma≤trueTheta N Q D sigma ∧\n        trueTheta N Q D sigma≤(1+epsilon)*Theta N Q D sigma ∧\n        |trueTheta N Q D sigma-Theta N Q D sigma|≤epsilon*Theta N Q D sigma"
+  }
+]

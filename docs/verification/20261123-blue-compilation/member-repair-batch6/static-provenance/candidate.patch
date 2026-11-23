@@ -1,0 +1,24 @@
+--- a/ImbalancedChen/P2MarkedThetaLiNormalization.lean
++++ b/ImbalancedChen/P2MarkedThetaLiNormalization.lean
+@@ -114,7 +114,7 @@
+       (mul_le_mul_of_nonneg_right hscalar hmean) (by norm_num : (0:ℝ)≤4)
+     change 4*(2/Real.log 2)*kernelMean N Q D sigma≤
+       epsilon*(4*logarithmicIntegral N*kernelMean N Q D sigma)
+-    convert hm using 1 <;> ring
++    simpa only [mul_assoc, mul_left_comm, mul_comm] using hm
+   have hdiff : trueTheta N Q D sigma-Theta N Q D sigma=
+       4*(2/Real.log 2)*kernelMean N Q D sigma := by linarith only [hidentity]
+   refine ⟨by linarith only [hidentity,herror0],?_,?_⟩
+--- a/ImbalancedChen/Part3ActualCompactInitialSupport.lean
++++ b/ImbalancedChen/Part3ActualCompactInitialSupport.lean
+@@ -162,7 +162,9 @@
+       (([0, 1, 2, 3] : List (Fin 4)).map p) := by simpa using hs
+   have hlocal := physical_support_upper_local (R := 4) (theta := theta) hNr hx htau p upper
+     ([0, 1, 2, 3] : List (Fin 4)) (by simp) (fun i _ => hsize i) hphys
+-    (by simpa [mul_comm] using hbudget)
++    (by
++      have hfive : (4 : ℝ) + 1 = 5 := by norm_num
++      simpa only [Nat.cast_ofNat, hfive, mul_comm] using hbudget)
+   simpa using hlocal
+ 
+ end

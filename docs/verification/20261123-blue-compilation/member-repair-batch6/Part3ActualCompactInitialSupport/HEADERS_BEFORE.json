@@ -1,0 +1,44 @@
+[
+  {
+    "name": "triple_support_of_cubes",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem triple_support_of_cubes {D : ℝ} (p0 p1 p2 : ℕ)\n    (hp2 : 0 < p2) (h21 : p2 ≤ p1) (h10 : p1 ≤ p0)\n    (hfirst : (p0 : ℝ) ^ 3 < D)\n    (hthird : (p0 : ℝ) * p1 * p2 ^ 3 < D) :\n    actualDwellSupport D [p0, p1, p2]"
+  },
+  {
+    "name": "fourth_support_of_cubes",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem fourth_support_of_cubes {D : ℝ} (p0 p1 p2 p3 : ℕ)\n    (hp2 : 0 < p2) (h32 : p3 ≤ p2) (h21 : p2 ≤ p1) (h10 : p1 ≤ p0)\n    (hfirst : (p0 : ℝ) ^ 3 < D)\n    (hthird : (p0 : ℝ) * p1 * p2 ^ 3 < D) :\n    actualDwellSupport D [p0, p1, p2, p3]"
+  },
+  {
+    "name": "actual_compact_retained_third_support",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_compact_retained_third_support {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (h21 : p2 < p1) (h10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈\n      actualExtendedThirdOwnedCell m j)\n    (hret : actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true) :\n    actualDwellSupport ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n      [p0, p1, p2]"
+  },
+  {
+    "name": "actual_compact_retained_fourth_support",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_compact_retained_fourth_support {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 p3 : ℕ) (hp2 : 0 < p2)\n    (h32 : p3 ≤ p2) (h21 : p2 < p1) (h10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈\n      actualExtendedThirdOwnedCell m j)\n    (hret : actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true) :\n    actualExtendedThirdCompactUpperPolicy e h m N true [p3, p2, p1, p0] = true ∧\n      actualDwellSupport ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        [p0, p1, p2, p3]"
+  },
+  {
+    "name": "physical_power_eq_local",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem physical_power_eq_local {N x : ℝ} (hN : 0 < N) (hx : 1 < x) (lam : ℝ) :\n    N ^ lam = x ^ ((Real.log N / Real.log x) * lam)"
+  },
+  {
+    "name": "physical_support_upper_local",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem physical_support_upper_local {ι : Type*} {N x tau lam theta : ℝ} {R : ℕ}\n    (hN : 0 < N) (hx : 1 < x) (htau : 0 ≤ tau)\n    (actual upper : ι → ℕ) (input : List ι) (hlen : input.length ≤ R)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ tau * (actual i : ℝ))\n    (hphysical : actualDwellSupport (N ^ lam) (input.map actual))\n    (hbudget : (Real.log N / Real.log x) * lam + tau * (R + 1) ≤ theta) :\n    actualDwellSupport (x ^ theta) (input.map upper)"
+  },
+  {
+    "name": "actual_compact_fourth_upper_local",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_compact_fourth_upper_local {e h x tau theta : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p upper : Fin 4 → ℕ) (hp2 : 0 < p 2)\n    (h32 : p 3 ≤ p 2) (h21 : p 2 < p 1) (h10 : p 1 < p 0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] ∈\n      actualExtendedThirdOwnedCell m j)\n    (hret : actualExtendedThirdCompactUpperPolicy e h m N false [p 2, p 1, p 0] = true)\n    (hx : 1 < x) (htau : 0 ≤ tau)\n    (hsize : ∀ i, (upper i : ℝ) ≤ x ^ tau * (p i : ℝ))\n    (hbudget : (Real.log (N : ℝ) / Real.log x) *\n      actualExtendedThirdPhysicalLevel e m j + 5 * tau ≤ theta) :\n    actualDwellSupport (x ^ theta) [upper 0, upper 1, upper 2, upper 3]"
+  }
+]

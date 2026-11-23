@@ -5,7 +5,7 @@ import Mathlib.Tactic
 /-!
 # Full original square support from actual third admission
 
-SOURCE ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED.
+Verification records: docs/verification/20261123-blue-compilation.
 
 The full-square hypothesis in the endpoint allocator is discharged here
 for an actual retained third history and its fourth successor.  The
@@ -162,7 +162,9 @@ theorem actual_compact_fourth_upper_local {e h x tau theta : ℝ} {m N : ℕ}
       (([0, 1, 2, 3] : List (Fin 4)).map p) := by simpa using hs
   have hlocal := physical_support_upper_local (R := 4) (theta := theta) hNr hx htau p upper
     ([0, 1, 2, 3] : List (Fin 4)) (by simp) (fun i _ => hsize i) hphys
-    (by simpa [mul_comm] using hbudget)
+    (by
+      have hfive : (4 : ℝ) + 1 = 5 := by norm_num
+      simpa only [Nat.cast_ofNat, hfive, mul_comm] using hbudget)
   simpa using hlocal
 
 end

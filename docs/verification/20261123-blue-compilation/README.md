@@ -104,4 +104,6 @@ Member 第三修补批覆盖 `P2HistoricQ80DefectLookup`、`P2TableActionSoundne
 
 该分支将既有同名同正文 `completeProduct` 搬至共享 leaf，并缩窄原目标的导入；目标自身六处证明替换块包含七项 API 适配效果。声明语法有两项单列例外：将 `Group` 的五个 scalar 字段加括号，以免解析为函数字段；用局部记号将原 bare `R` 指向既有 dyadic `R`。原目标声明与数学假设保持。安装必须使用 [SOURCE_INSTALL.json](reindex-isolated/SOURCE_INSTALL.json) 的隔离选版；旧宽依赖 parent 与其未编译的 reexport 提案均未整合到主源码，也不能与新 leaf 同装后声称宽闭包通过。这一有限分支验收不代表 `RetainedAnalyticReserves` 完整闭包完成。
 
+Member 第六修补批的 `P2MarkedThetaLiNormalization` 与 `Part3ActualCompactInitialSupport` 通过两次标准构建、两次指定模块 kernel replay，以及全部 27 个公开导出的完整类型／公理检查，仅标准三公理。12 条原定理声明、定义、Theta 的统一阈值与零质量族条件、rank 4 的原 `5τ` 预算保持，源码和十项主要产物稳定，见 [验收结果](member-repair-batch6/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch6/INDEPENDENT_REVIEW.json)。本批初始暂存器将 absolute 路径拼接为 Member 路径，实际未同步主仓；已验证的相同后像随后在核对主仓原 baseline 后同步，真实时点及旧 metadata 的失效范围保存在 [MAIN_SYNC_PATH_CORRECTION.json](member-repair-batch6/MAIN_SYNC_PATH_CORRECTION.json)，没有为此重跑已通过的验证。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
