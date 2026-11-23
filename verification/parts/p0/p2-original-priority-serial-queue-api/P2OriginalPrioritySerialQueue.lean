@@ -105,7 +105,7 @@ theorem afterChildren_mono (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCe
 theorem children_serial_le (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCell)
     (p : Entry) (hp : p ∈ children enclose s c) :
     p.serial ≤ afterChildren enclose s c := by
-  simp only [children,List.mem_cons,List.mem_singleton] at hp
+  simp only [children,List.mem_cons,List.not_mem_nil,or_false] at hp
   rcases hp with rfl | rfl
   · exact (issue_serial_le enclose _ _).trans (advance_mono enclose _ _)
   · exact issue_serial_le enclose _ _
@@ -113,7 +113,7 @@ theorem children_serial_le (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCe
 theorem active_children_fresh (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCell)
     (p : Entry) (hp : p ∈ children enclose s c) (ha : active p) :
     s < p.serial := by
-  simp only [children,List.mem_cons,List.mem_singleton] at hp
+  simp only [children,List.mem_cons,List.not_mem_nil,or_false] at hp
   rcases hp with rfl | rfl
   · rw [(issue_active_fresh enclose _ _ ha).1]
     omega
@@ -195,19 +195,29 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
           obtain ⟨hperm,hmem,hmin⟩ := ih b bs hs
           by_cases hab : Before a b
           · simp only [popBest_nil,popBest_cons,hs,if_pos hab] at h
-            cases h
+            have hpair : (a, xs) = (p, rest) := Option.some.inj h
+            have hp : p = a := (congrArg Prod.fst hpair).symm
+            have hr : rest = xs := (congrArg Prod.snd hpair).symm
+            subst p
+            subst rest
             refine ⟨List.Perm.refl _,by simp,?_⟩
             intro q hq
-            rcases List.mem_cons.mp hq with rfl | hq
-            · exact before_refl a
+            rcases List.mem_cons.mp hq with hqa | hq
+            · rw [hqa]
+              exact before_refl a
             · exact before_trans hab (hmin q hq)
           · simp only [popBest_nil,popBest_cons,hs,if_neg hab] at h
-            cases h
-            refine ⟨(List.Perm.cons a hperm).trans (List.Perm.swap a b bs),
+            have hpair : (b, a :: bs) = (p, rest) := Option.some.inj h
+            have hp : p = b := (congrArg Prod.fst hpair).symm
+            have hr : rest = a :: bs := (congrArg Prod.snd hpair).symm
+            subst p
+            subst rest
+            refine ⟨(List.Perm.cons a hperm).trans (List.Perm.swap b a bs),
               List.mem_cons.mpr (Or.inr hmem),?_⟩
             intro q hq
-            rcases List.mem_cons.mp hq with rfl | hq
-            · exact (before_total a b).resolve_left hab
+            rcases List.mem_cons.mp hq with hqa | hq
+            · rw [hqa]
+              exact (before_total a b).resolve_left hab
             · exact hmin q hq
 
 theorem popped_active (xs : List Entry) (p : Entry) (rest : List Entry)
