@@ -42,6 +42,8 @@ def auxiliarySWError (S : Finset ℕ) (α : ℕ → ℂ) (k q b : ℕ) : ℂ :=
 
 theorem MediumAtom.auxSWError_eq_auxiliarySWError (d : MediumAtom) (k q b : ℕ) :
     d.auxSWError k q b = auxiliarySWError d.alphaCarrier d.alpha k q b := by
+  -- Generate the rewrite equation in its defining module.
+  simp only [auxiliarySWError]
   rfl
 
 private theorem norm_sum_ite_and_not_coprime_le
