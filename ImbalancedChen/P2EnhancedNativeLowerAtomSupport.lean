@@ -94,7 +94,7 @@ theorem actual_minus_residual_well {N cap d : ℕ} {w L : ℝ}
     fun p hp => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp hp)
   have hge : d.primeFactorsList.reverse.Pairwise (· ≥ ·) :=
     (Nat.primeFactorsList_sorted d).reverse.pairwise
-  have hnd : d.primeFactorsList.reverse.Nodup := hs.nodup_primeFactorsList.reverse
+  have hnd : d.primeFactorsList.reverse.Nodup := List.nodup_reverse.mpr hs.nodup_primeFactorsList
   have hgt : d.primeFactorsList.reverse.Pairwise (· > ·) := by
     apply List.pairwise_iff_getElem.mpr
     intro i j hi hj hij

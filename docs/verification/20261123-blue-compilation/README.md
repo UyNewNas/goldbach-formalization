@@ -168,4 +168,19 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 前四个模块分别修补空集积分 API／β 展开、原 Nat/Fin 坐标显式化、同一有限和标量分配，以及原不等式的标量改写。完整声明头、定义、bin endpoints、常量、假设和 K 的独立量词保持。最后的 Envelope 与原选源逐字一致，直接复用其唯一成功的顶层 normal invocation，无源码修改或重复编译。四十五批原静态证明标签的已知误写由原发布前补充记录更正，原定理名与声明未改。逐批结果及独立复核见 [41](member-repair-batch41/VALIDATION_RESULTS.json)、[42](member-repair-batch42/VALIDATION_RESULTS.json)、[43](member-repair-batch43/VALIDATION_RESULTS.json)、[45](member-repair-batch45/VALIDATION_RESULTS.json)、[46](member-repair-batch46/VALIDATION_RESULTS.json)；每个目录同时保存 `INDEPENDENT_REVIEW.json`。这使旧二十模块 P1 子集对象齐备，仍不等于完整 P1 的最终证明闭合。
 
+现代 P1 实际闭包还用到以下既有 Member 修补。本次完成独立复核并发布原验收记录，没有重跑成功的 Lean 检查。八批共十个模块、350 个实际公开导出，全部标准构建、指定模块 kernel replay 和完整类型／公理检查通过，仅标准三公理，源码及五十项主要产物稳定。
+
+| 批次／验收结果 | 模块 | 公开导出 | 修补范围 |
+| --- | --- | ---: | --- |
+| [25](member-repair-batch25/VALIDATION_RESULTS.json) | `CurrentChenP5CausalRhoFactorization`、`P2EnhancedNativeLowerAtomSupport` | 32 | 原 signed Fubini alias 展开、`nodup_reverse` API |
+| [26](member-repair-batch26/VALIDATION_RESULTS.json) | `Part5UpperTableLookup` | 31 | 原 `Set.indicator` 展开 |
+| [27](member-repair-batch27/VALIDATION_RESULTS.json) | `P2LowerCapPlanIntegerRetention` | 76 | 原字段 token 引用、`mem_cons_self` API |
+| [30](member-repair-batch30/VALIDATION_RESULTS.json) | `ActualPrimeMultiLabelNormalization` | 22 | 显式传入原 tuple carrier 和被积函数 |
+| [31](member-repair-batch31/VALIDATION_RESULTS.json) | `CurrentChenP5OriginalU5CausalFinite`、`P2HistoricalBankLogWeights` | 97 | 原 cutoff／rho 展开、分式消去和已有 interval endpoint 显式化 |
+| [32](member-repair-batch32/VALIDATION_RESULTS.json) | `P5ZU11MeasurableEnvelope` | 47 | 原 witness 重组、Bool／if 与 measurable API |
+| [33](member-repair-batch33/VALIDATION_RESULTS.json) | `P4BActualPairOuterRamp` | 21 | 原 ramp 定义展开、具名参数 |
+| [36](member-repair-batch36/VALIDATION_RESULTS.json) | `P4BWeightedHyperbolaSlotDecay` | 24 | 原有限和、倒数、非负与代数证明 API |
+
+各目录保存 `INDEPENDENT_REVIEW.json` 和不可变发布清单。原完整声明、数学假设、数据、数值和定义保持；二十七批仅把 reserved-token 字段 `Frame.prefix` 及同名引用写作 `«prefix»`，相同 Lean.Name、类型与数据 term 不变，旧未解析语法不声称已有相同 kernel 值。三十一批配对验收的 `P2HistoricalBankLogWeights` canonical 文件仍未创建，其源码作为明确安装后像保存；验收不外推到不同源版本，也不把这些共享供应者计作完整 P1 终点。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。

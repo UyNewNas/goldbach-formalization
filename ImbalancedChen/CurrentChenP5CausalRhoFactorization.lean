@@ -135,7 +135,9 @@ theorem signed_physical_sum_fubini (policy : List ℕ → Bool)
       actualLowerSmallRoughRho policy N cap w z L k * F (b * k)) =
       ∑ x ∈ pairs policy N cap w z,
         coefficient policy N cap w z L x * F ((b * x.1) * x.2) := by
-  simpa only [Nat.mul_assoc] using sum_smallRoughRho_mul
+  simpa only [actualLowerSmallRoughModuli, actualLowerSmallRoughRho, pairs, coefficient,
+    smallRoughPairs, smallRoughPairCoefficient, signAttachedCoefficient, Nat.mul_assoc] using
+    sum_smallRoughRho_mul
     (fun _ hd => actualSmallRosserSupport_smallPrimeSupportedAt N cap w hd)
     (fun _ hd => fixedEvenRoughSupport_roughPrimeSupportedAt policy N cap w z hd)
     (fixedEvenRoughCoefficient policy N cap w z)

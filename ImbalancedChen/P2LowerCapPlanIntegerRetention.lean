@@ -53,7 +53,7 @@ theorem physicalWord_power {N : ℕ} (hN : 1<(N:ℝ)) (history : List ℕ)
       simp only [List.sum_cons,List.sum_nil,add_zero]
       rw [Real.rpow_add (zero_lt_one.trans hN),
         ih (fun q hq=>hp q (List.mem_cons_of_mem p hq)),
-        coordinate_power hN (hp p (List.mem_cons_self p ps))]
+        coordinate_power hN (hp p (List.mem_cons_self))]
       simp only [List.prod_cons,Nat.cast_mul]
       ring
 
@@ -74,7 +74,7 @@ theorem cube_test_integer_iff {N p : ℕ} (hN : 1<(N:ℝ)) (hp : 0<p)
 def marked (word : List ℝ) : List MarkedExponent := word.map (fun x=>(x,false))
 
 structure Frame where
-  prefix : List ℝ
+  «prefix» : List ℝ
   incomingCap : ℝ
   tested : Prop
   choice : CapChoice

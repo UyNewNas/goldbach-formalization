@@ -1,0 +1,20 @@
+--- baseline/ImbalancedChen/P2LowerCapPlanIntegerRetention.lean
++++ candidate/ImbalancedChen/P2LowerCapPlanIntegerRetention.lean
+@@ -53,7 +53,7 @@
+       simp only [List.sum_cons,List.sum_nil,add_zero]
+       rw [Real.rpow_add (zero_lt_one.trans hN),
+         ih (fun q hq=>hp q (List.mem_cons_of_mem p hq)),
+-        coordinate_power hN (hp p (List.mem_cons_self p ps))]
++        coordinate_power hN (hp p (List.mem_cons_self))]
+       simp only [List.prod_cons,Nat.cast_mul]
+       ring
+ 
+@@ -74,7 +74,7 @@
+ def marked (word : List ℝ) : List MarkedExponent := word.map (fun x=>(x,false))
+ 
+ structure Frame where
+-  prefix : List ℝ
++  «prefix» : List ℝ
+   incomingCap : ℝ
+   tested : Prop
+   choice : CapChoice

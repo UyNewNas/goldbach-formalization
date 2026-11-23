@@ -111,6 +111,7 @@ theorem attachment_gates {N : ℕ} (hN : 2 ≤ N) {epsilon : ℝ}
   have hcut : attachmentNu * epsilon ^ 2 ≤ (417 / 5000 : ℝ) := by
     have hm := mul_le_mul_of_nonneg_left hsq64 hnu.le
     norm_num [attachmentNu] at hm
+    unfold attachmentNu
     linarith only [hm]
   refine ⟨Real.one_lt_rpow hNr (mul_pos hnu heps), ?_, ?_⟩
   · exact Real.rpow_le_rpow_of_exponent_le hNr.le
@@ -292,7 +293,8 @@ theorem exists_originalU5_full_density_causal_lower
       (div_nonneg (Nat.cast_nonneg (chenPrimePrefix N).card)
         (Nat.cast_nonneg (Nat.totient (t.1 * t.2))))
     change _ ≤ rowMain N epsilon (policy t) t
-    simpa only [rowMain, density, fullDensity, rho, support, smallCutoff, smallLevel, mul_sub] using hscaled
+    dsimp only [rowMain, density, fullDensity, rho, support, smallCutoff, smallLevel, cutoff] at hscaled ⊢
+    simpa +unfoldPartialApp only [rho, smallCutoff, smallLevel, cutoff, mul_sub] using hscaled
   have hfinite := originalU5_causal_lower hN2 heps heps8 policy
   linarith only [hmain, hfinite]
 

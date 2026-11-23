@@ -1,0 +1,75 @@
+✖ [11227/11256] Building ImbalancedChen.P4BActualPairOuterRamp (19s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P4BActualPairOuterRamp.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BActualPairOuterRamp.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BActualPairOuterRamp.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BActualPairOuterRamp.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BActualPairOuterRamp.setup.json --json
+error: ImbalancedChen/P4BActualPairOuterRamp.lean:142:39: Application type mismatch: The argument
+  hunion
+has type
+  ∏ i, logGateOuterRamp delta (actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i) -
+      @ite ℝ (∀ i ∈ Finset.univ, 0 < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i)
+        Finset.decidableDforallFinset 1 0 ≤
+    ∑ i,
+      if
+          -delta < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ∧
+            actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ≤ 0 then
+        1
+      else 0
+but is expected to have type
+  actualPairOuterRamp b N T delta t -
+      @ite ℝ (∀ i ∈ Finset.univ, 0 < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i)
+        (Nat.decidableForallFin fun i =>
+          i ∈ Finset.univ → 0 < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i)
+        1 0 ≤
+    ∑ i,
+      if
+          -delta < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ∧
+            actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ≤ 0 then
+        1
+      else 0
+in the application
+  LE.le.trans (sub_le_sub_left hind (actualPairOuterRamp b N T delta t)) hunion
+error: ImbalancedChen/P4BActualPairOuterRamp.lean:182:21: don't know how to synthesize implicit argument `b`
+  @actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators ?m.200 T delta N hN hT hdelta t ht
+context:
+b T delta : ℝ
+N : ℕ
+hN : 1 < ↑N
+hT : 0 < T
+hdelta : 0 < delta
+hstrips :
+  (∑ t ∈ labelledPrimeTuples 2 N,
+      ∑ i,
+        if
+            -delta < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ∧
+              actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ≤ 0 then
+          1
+        else 0) =
+    ∑ i, ↑(actualPairArithmeticStrip b N T delta i).card
+t : Fin 2 → Fin (N + 1)
+ht : t ∈ labelledPrimeTuples 2 N
+⊢ ℝ
+error: ImbalancedChen/P4BActualPairOuterRamp.lean:182:11: failed to infer `have` declaration type
+error: ImbalancedChen/P4BActualPairOuterRamp.lean:179:36: unsolved goals
+b T delta : ℝ
+N : ℕ
+hN : 1 < ↑N
+hT : 0 < T
+hdelta : 0 < delta
+hstrips :
+  (∑ t ∈ labelledPrimeTuples 2 N,
+      ∑ i,
+        if
+            -delta < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ∧
+              actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ≤ 0 then
+          1
+        else 0) =
+    ∑ i, ↑(actualPairArithmeticStrip b N T delta i).card
+t : Fin 2 → Fin (N + 1)
+ht : t ∈ labelledPrimeTuples 2 N
+⊢ actualPairOuterRamp b N T delta t ≤
+    W b N T t +
+      ∑ i,
+        if
+            -delta < actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ∧
+              actualPairMargins b (Real.log T / Real.log ↑N) (logPoint N t) i ≤ 0 then
+          1
+        else 0
+error: Lean exited with code 1

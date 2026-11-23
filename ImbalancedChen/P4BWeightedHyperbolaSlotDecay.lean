@@ -46,7 +46,8 @@ theorem mem_positiveHyperbolaPairs {K L : ℕ} (hL : 2 ≤ L) (a : ℕ × ℕ) :
   · rintro ⟨haL, haq, haK⟩
     have hp0 : 0 < a.1 := by omega
     have hpK : a.1 ≤ K :=
-      (by simpa only [Nat.mul_one] using Nat.mul_le_mul_left a.1 haq).trans haK
+      (show a.1 ≤ a.1 * a.2 by
+        simpa only [Nat.mul_one] using Nat.mul_le_mul_left a.1 haq).trans haK
     apply Finset.mem_biUnion.mpr
     refine ⟨a.1, Finset.mem_Icc.mpr ⟨haL, hpK⟩, ?_⟩
     apply Finset.mem_image.mpr
@@ -62,7 +63,7 @@ theorem hyperbola_first_reciprocal_eq (K L : ℕ) :
   · apply Finset.sum_congr rfl
     intro p _hp
     rw [Finset.sum_image]
-    · simp
+    · simp [div_eq_mul_inv]
     · intro q _hq r _hr hqr
       exact congrArg Prod.snd hqr
   · intro p _hp r _hr hpr
@@ -96,7 +97,7 @@ theorem hyperbola_first_reciprocal_le (K L : ℕ) (hL : 2 ≤ L) :
       _ = ((K / p : ℕ) : ℝ) * (1 / ((p : ℝ) - 1)) := by ring
       _ ≤ ((K : ℝ) / (p : ℝ)) * (2 / (p : ℝ)) :=
         mul_le_mul hdiv hrec (one_div_nonneg.mpr hp1.le) (by positivity)
-      _ = _ := by field_simp [hp0.ne']; ring
+      _ = _ := by field_simp [hp0.ne'] <;> ring
   calc
     _ ≤ ∑ p ∈ Finset.Icc L K, (2 * (K : ℝ)) * (1 / (p : ℝ) ^ 2) := hterms
     _ = (2 * (K : ℝ)) * ∑ p ∈ Finset.Icc L K, 1 / (p : ℝ) ^ 2 :=
@@ -167,7 +168,8 @@ theorem weighted_labelled_slot_cost_le {N K L : ℕ} (hL : 2 ≤ L)
         intro t ht
         have hp2 : (2 : ℝ) ≤ (t i).val := by
           exact_mod_cast ((Finset.mem_filter.mp (hS ht)).2 i).two_le
-        exact mul_le_mul_of_nonneg_right (hV t ht) (by positivity)
+        exact mul_le_mul_of_nonneg_right (hV t ht)
+          (div_nonneg (by norm_num) (by linarith only [hp2]))
       _ = (4 * B) * ∑ t ∈ S, 1 / (((t i).val : ℝ) - 1) := by
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
@@ -237,16 +239,17 @@ theorem actual_upper_outer_correction_le_hyperbola
   have hlog : 0 ≤ 1 + Real.log (max 1 (Q : ℝ)) := by
     have := Real.log_nonneg (le_max_left (1 : ℝ) (Q : ℝ))
     linarith
-  have heq : (∑ t ∈ labelledPrimeTuples 2 N, |V t| * (1 *
-      (∑ i : Fin 2, (4 / (((t i).val : ℝ) - 1)) *
-        (1 + Real.log (max 1 (Q : ℝ))))))) =
+  have heq :
+      (∑ t ∈ labelledPrimeTuples 2 N, |V t| *
+        (1 * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1) *
+          (1 + Real.log (max 1 (Q : ℝ)))))) =
       (∑ t ∈ labelledPrimeTuples 2 N,
         |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) *
           (1 + Real.log (max 1 (Q : ℝ))) := by
-    simp_rw [← Finset.sum_mul]
     rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro t _ht
+    rw [one_mul, ← Finset.sum_mul]
     ring
   rw [heq] at hfinite
   exact hfinite.trans (mul_le_mul_of_nonneg_right

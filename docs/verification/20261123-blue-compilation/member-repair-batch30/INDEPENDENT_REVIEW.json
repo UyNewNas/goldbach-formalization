@@ -1,0 +1,183 @@
+{
+  "schema": "independent_p1_shared_prerequisite_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "reviewed_utc": "2026-11-23T16:15:17.185148+00:00",
+  "batch": 30,
+  "source_review": [
+    {
+      "module": "ImbalancedChen.ActualPrimeMultiLabelNormalization",
+      "preimage_sha256": "14a4404a11f1e3b915c54d5aebbda6e22e2c2919e5931943b1ac8eb11d4c770f",
+      "postimage_sha256": "2dd02b7853931657e3f6d8f9b63c31022fd92065e5d0c689c512affd210f3357",
+      "complete_headers": [
+        {
+          "name": "actualPrimeSlotBox_replicate_label_eq",
+          "private": false,
+          "header": "theorem actualPrimeSlotBox_replicate_label_eq {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (m : ℕ) :\n    actualPrimeSlotBox B (List.replicate m i) =\n      actualPrimeSlotBox (fun _ : Unit => B i) (List.replicate m ()) :=",
+          "sha256": "288ab1b167b8cdc295d358d43dfa628ab944c90a4a28aaab5c2357eaefedebad"
+        },
+        {
+          "name": "actualPrimeSlotBox_replicate_squarefree_coefficient",
+          "private": false,
+          "header": "theorem actualPrimeSlotBox_replicate_squarefree_coefficient {ι : Type*}\n    (B : ι → Finset ℕ) (i : ι) (m n : ℕ)\n    (hprime : ∀ q ∈ B i, Nat.Prime q)\n    (hn : n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod)\n    (hsquarefree : Squarefree n) :\n    actualPrimeTupleCoefficient (actualPrimeSlotBox B (List.replicate m i)) n =\n      m.factorial :=",
+          "sha256": "3ad9756cdb88d6b1a5d312feaf890115708efd922152ad5c27705bc97eb7a3d2"
+        },
+        {
+          "name": "actualPrimeVector_moebius_mul_eq_zero",
+          "private": false,
+          "header": "theorem actualPrimeVector_moebius_mul_eq_zero {n r : ℕ}\n    (hn : ¬Squarefree n) : ArithmeticFunction.moebius (r * n) = 0 :=",
+          "sha256": "12d41b14ed9f7d89a32838bbf9eec8ad363df66115b00f362b6a90ae2a26b10c"
+        },
+        {
+          "name": "actualPrimeSlotBox_replicate_moebius_sum",
+          "private": false,
+          "header": "theorem actualPrimeSlotBox_replicate_moebius_sum {ι : Type*}\n    (B : ι → Finset ℕ) (i : ι) (m r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ q ∈ B i, Nat.Prime q) :\n    (∑ ps ∈ actualPrimeSlotBox B (List.replicate m i),\n      (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      (m.factorial : ℝ) *\n        ∑ n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod,\n          (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+          "sha256": "9200e9c68101f16177b031f66a2806e062b6cd8c0ff739eb1e3c5c4155f6063c"
+        },
+        {
+          "name": "actualPrimeLabelBlocksFactorial_pos",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlocksFactorial_pos {ι : Type*} (blocks : List (ι × ℕ)) :\n    0 < actualPrimeLabelBlocksFactorial blocks :=",
+          "sha256": "f567c79af3b61454f208b297ad5a22a9d479f03ecc5a224db672aaaf25a4ee9c"
+        },
+        {
+          "name": "actualPrimeLabelBlockProductSum_const_mul",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlockProductSum_const_mul {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (c : ℝ) (H : ℕ → ℝ) :\n    actualPrimeLabelBlockProductSum B blocks (fun n => c * H n) =\n      c * actualPrimeLabelBlockProductSum B blocks H :=",
+          "sha256": "51e3d81ee4cd27ed8595cbe1ed5a6fa06348547106405827cf70d00b161f0973"
+        },
+        {
+          "name": "actualPrimeLabelBlockProductSum_finsetSum",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlockProductSum_finsetSum {ι α : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (S : Finset α) (F : α → ℕ → ℝ) :\n    (∑ a ∈ S, actualPrimeLabelBlockProductSum B blocks (F a)) =\n      actualPrimeLabelBlockProductSum B blocks (fun n => ∑ a ∈ S, F a n) :=",
+          "sha256": "d6a7628905dc0fc5aa0e87e20ec1a66a2d336c61f4e9f5cb3c68a034665525d7"
+        },
+        {
+          "name": "actualPrimeLabelBlocks_moebius_sum",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlocks_moebius_sum {ι : Type*} (B : ι → Finset ℕ) :\n    ∀ (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ),\n      (∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) →\n      (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) *\n          actualPrimeLabelBlockProductSum B blocks\n            (fun n => (ArithmeticFunction.moebius (r * n) : ℝ) * H n) :=",
+          "sha256": "999335b7cf693111cb860814ea62ca7778119ca83dff765aac6000edbf7cf2c4"
+        },
+        {
+          "name": "actualPrimeLabelBlocks_moebius_sum_normalized",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlocks_moebius_sum_normalized {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) :\n    (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      actualPrimeLabelBlockProductSum B blocks\n        (fun n => (ArithmeticFunction.moebius (r * n) : ℝ) * H n) :=",
+          "sha256": "ab7e1c5ddf3976c9d3715ce0b06eaea400549c9103f7cfaf9e3950561104ccb7"
+        },
+        {
+          "name": "actualPrimeLabelBlocks_moebius_fibre_normalized",
+          "private": false,
+          "header": "theorem actualPrimeLabelBlocks_moebius_fibre_normalized {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r n : ℕ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeTupleCoefficient\n          (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      (ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeLabelBlockProductSum B blocks (fun k => if k = n then 1 else 0) :=",
+          "sha256": "ec8505379132a2114618ebed570e59b1d6656b4631fe194b11b6ea85532642a2"
+        }
+      ],
+      "raw_definitions": [
+        {
+          "raw": "def actualPrimeLabelBlocksWord {ι : Type*} (blocks : List (ι × ℕ)) : List ι :=\n  blocks.flatMap (fun b => List.replicate b.2 b.1)\n\n",
+          "sha256": "3b15ddf80adb0c81eaa01fd0c51620052c346bb01b29d10b63344ebbcc13e562"
+        },
+        {
+          "raw": "def actualPrimeLabelBlocksFactorial {ι : Type*} (blocks : List (ι × ℕ)) : ℕ :=\n  (blocks.map (fun b => b.2.factorial)).prod\n\n/-- This is a finite sum over complete block-product fibres. It is not\na quotient by the full product. -/\n",
+          "sha256": "9a3cf33e9d9542a0ff36233c8571d1c5a9e9242d8479002eabe6924d877adb9c"
+        },
+        {
+          "raw": "def actualPrimeLabelBlockProductSum {ι : Type*} (B : ι → Finset ℕ) :\n    List (ι × ℕ) → (ℕ → ℝ) → ℝ\n  | [], H => H 1\n  | (i, m) :: blocks, H =>\n      ∑ n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod,\n        actualPrimeLabelBlockProductSum B blocks (fun r => H (n * r))\n\n",
+          "sha256": "641fabce7732757c766ad5d0bbce518f24f89b8b2f8562bef2f0ba3951dff4b3"
+        }
+      ],
+      "changed_proof_names": [
+        "actualPrimeSlotBox_replicate_moebius_sum"
+      ],
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "current_source_bindings": [
+        {
+          "path": "/workspace/blue-member-build/ImbalancedChen/ActualPrimeMultiLabelNormalization.lean",
+          "bytes": 12223,
+          "sha256": "2dd02b7853931657e3f6d8f9b63c31022fd92065e5d0c689c512affd210f3357"
+        },
+        {
+          "path": "/workspace/goldbach-formalization/ImbalancedChen/ActualPrimeMultiLabelNormalization.lean",
+          "bytes": 12223,
+          "sha256": "2dd02b7853931657e3f6d8f9b63c31022fd92065e5d0c689c512affd210f3357"
+        }
+      ],
+      "new_assumptions_or_semantic_definition_changes": false,
+      "review_basis": "All patch hunks were manually inspected; changes only expose existing arguments, definitions, algebra or nonnegativity for the current API."
+    }
+  ],
+  "findings": [],
+  "release_and_manifest": [
+    {
+      "path": "/workspace/blue-member-repair-batch30/FINAL_RELEASE.json",
+      "bytes": 953,
+      "sha256": "53dbada7c3e8d91892875d211d431124fe94333ab159af3c1d2fc2fe7920c107"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch30/PUBLICATION_FILES.json",
+      "bytes": 5141,
+      "sha256": "7269ad5f5ee64b3f21734e095e505cb4fa8e80dde8d11659c6648cfcd3b7afbd"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch30/VALIDATION_RESULTS.json",
+      "bytes": 4301,
+      "sha256": "be68e5192ee8612967d4cadb891dc16df40be49500a0f13f3e7bff118d4b62cf"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch30/SOURCE_SELECTION.json",
+      "bytes": 1714,
+      "sha256": "0285b359af04b20e651ef599c13a66b6a26ef4fff1846a6ec75700daf338f53b"
+    }
+  ],
+  "original_packet_file_count": 29,
+  "all_manifest_size_sha256_bindings_match": true,
+  "source_plus_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualPrimeMultiLabelNormalization.lean",
+      "bytes": 12223,
+      "sha256": "2dd02b7853931657e3f6d8f9b63c31022fd92065e5d0c689c512affd210f3357"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeMultiLabelNormalization.olean",
+      "bytes": 302968,
+      "sha256": "5ef5950684d674cb905792b353929c4778e1bf946cdeba63c0d04432781ba59d"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeMultiLabelNormalization.ilean",
+      "bytes": 32494,
+      "sha256": "0fd36820732d9f577ef2e022cdcc576cf36d75c93751b5a2ae9cb0dd2c66306e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeMultiLabelNormalization.c",
+      "bytes": 17972,
+      "sha256": "5140066f5d83a8daa35e9454fa0914b490cc495859b165558848db2d6b7e6ebc"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeMultiLabelNormalization.setup.json",
+      "bytes": 2767284,
+      "sha256": "006ceb9763b5c27e3b2a86f2a6711e5306e949d616f458a7e2b3511134d3ea15"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeMultiLabelNormalization.trace",
+      "bytes": 2933,
+      "sha256": "99da2d6689d3f8829d6045ad5c4f15c04fad897c0499db7b6dde87d4deeaec22"
+    }
+  ],
+  "existing_validation": {
+    "public_export_counts": {
+      "ImbalancedChen.ActualPrimeMultiLabelNormalization": 22
+    },
+    "total_public_exports": 22,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "all_command_log_hashes_match": true,
+    "full_AST_equals_raw_log": true,
+    "transitive_axioms_equal_raw_log": true,
+    "only_standard_axioms": true
+  },
+  "scope": "Exact accepted Member prerequisites also used by the selected modern P1 source closure; no complete-P1 or whole-board claim.",
+  "reviewer_Lean_kernel_audit_stock_or_compiler_invocations": 0,
+  "original_source_log_trace_or_validation_record_edits": 0
+}

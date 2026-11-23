@@ -1,0 +1,116 @@
+[
+  {
+    "kind": "def",
+    "name": "pairs",
+    "header": "def pairs (policy : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset (ℕ × ℕ)",
+    "sha256": "96be04be19bd41ca7ab69d2ec2620fe8e808ed217453e9665e97a7701a899a72"
+  },
+  {
+    "kind": "def",
+    "name": "coefficient",
+    "header": "def coefficient (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (x : ℕ × ℕ) : ℝ",
+    "sha256": "21d02bbbe732eb0db616e0ae277fa31a7c242ca724df59d9d95f483a840dc0b6"
+  },
+  {
+    "kind": "theorem",
+    "name": "pair_product_injOn",
+    "header": "theorem pair_product_injOn (policy : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    Set.InjOn (fun x : ℕ × ℕ => x.1 * x.2)\n      (pairs policy N cap w z : Set (ℕ × ℕ))",
+    "sha256": "7bc93b3ea0cf43ca4b2401664a824b62798da19a7bdf4c2c0721af3b6691c8c5"
+  },
+  {
+    "kind": "theorem",
+    "name": "rho_at_pair",
+    "header": "theorem rho_at_pair (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    {x : ℕ × ℕ} (hx : x ∈ pairs policy N cap w z) :\n    actualLowerSmallRoughRho policy N cap w z L (x.1 * x.2) =\n      coefficient policy N cap w z L x",
+    "sha256": "65567daacef57a4f5361413ef16287e0d8933f4fbe76b40c8bca787904704b44"
+  },
+  {
+    "kind": "theorem",
+    "name": "rho_eq_fibre_convolution",
+    "header": "theorem rho_eq_fibre_convolution (policy : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) (k : ℕ) :\n    actualLowerSmallRoughRho policy N cap w z L k =\n      ∑ x ∈ (pairs policy N cap w z).filter (fun x => x.1 * x.2 = k),\n        coefficient policy N cap w z L x",
+    "sha256": "7e20fb1b7b7b556792e3c7b89ec0e4abd4011b4cf007b39cb265d2551da1eff5"
+  },
+  {
+    "kind": "def",
+    "name": "activePairs",
+    "header": "def activePairs (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) : Finset (ℕ × ℕ)",
+    "sha256": "0fa63d1794768967e94b5edfdbc0c46459e5be9ca5eed1dcaf386a91f0fb93de"
+  },
+  {
+    "kind": "theorem",
+    "name": "active_eq_image",
+    "header": "theorem active_eq_image (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) :\n    P5CausalRhoQuotientBridge.active policy N cap w z L =\n      (activePairs policy N cap w z L).image (fun x => x.1 * x.2)",
+    "sha256": "0c3f3a39d355337d5e30e088045d46f0470f5bc8fa9a391350cb514861c388c0"
+  },
+  {
+    "kind": "theorem",
+    "name": "active_unique_factors",
+    "header": "theorem active_unique_factors (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    {k : ℕ} (hk : k ∈ P5CausalRhoQuotientBridge.active policy N cap w z L) :\n    ∃! x : ℕ × ℕ, x ∈ activePairs policy N cap w z L ∧ x.1 * x.2 = k",
+    "sha256": "4c351334a4fbdc0933b32cb60c722ad9491e78878f20cc2dc5e9e941f1113534"
+  },
+  {
+    "kind": "theorem",
+    "name": "coefficient_abs_le_one",
+    "header": "theorem coefficient_abs_le_one (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    {x : ℕ × ℕ} (hx : x ∈ pairs policy N cap w z) :\n    |coefficient policy N cap w z L x| ≤ 1",
+    "sha256": "e4375df4d5c48afef7503541ff57b3f2a313a3d93a95643fd47feab7282f0d66"
+  },
+  {
+    "kind": "theorem",
+    "name": "active_small_factor_lt",
+    "header": "theorem active_small_factor_lt (policy : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    {x : ℕ × ℕ} (hx : x ∈ activePairs policy N cap w z L) : (x.1 : ℝ) < L",
+    "sha256": "11311b5b9d31bca9aaa19b4df0ddff0948f561a6ef0b74a420242e1ac46ee5a5"
+  },
+  {
+    "kind": "theorem",
+    "name": "pair_block_data",
+    "header": "theorem pair_block_data (policy : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    {x : ℕ × ℕ} (hx : x ∈ pairs policy N cap w z) :\n    Squarefree x.1 ∧ Squarefree x.2 ∧ Nat.Coprime x.1 x.2 ∧\n      Nat.Coprime x.1 N ∧ Nat.Coprime x.2 N",
+    "sha256": "6142018d2890badf73371556fac36f6923186b9f2c7aab39a229e1b512c2444e"
+  },
+  {
+    "kind": "theorem",
+    "name": "signed_physical_sum_fubini",
+    "header": "theorem signed_physical_sum_fubini (policy : List ℕ → Bool)\n    (N cap b : ℕ) (w z L : ℝ) (F : ℕ → ℝ) :\n    (∑ k ∈ actualLowerSmallRoughModuli policy N cap w z,\n      actualLowerSmallRoughRho policy N cap w z L k * F (b * k)) =\n      ∑ x ∈ pairs policy N cap w z,\n        coefficient policy N cap w z L x * F ((b * x.1) * x.2)",
+    "sha256": "a43824b94524366507992bd39a2680327938b47459d78b38165a2ef6edec14b8"
+  },
+  {
+    "kind": "theorem",
+    "name": "signed_physical_sum_nested",
+    "header": "theorem signed_physical_sum_nested (policy : List ℕ → Bool)\n    (N cap b : ℕ) (w z L : ℝ) (F : ℕ → ℝ) :\n    (∑ k ∈ actualLowerSmallRoughModuli policy N cap w z,\n      actualLowerSmallRoughRho policy N cap w z L k * F (b * k)) =\n      ∑ s ∈ actualSmallRosserSupport N cap w,\n        ∑ r ∈ fixedEvenRoughSupport policy N cap w z,\n          coefficient policy N cap w z L (s, r) * F ((b * s) * r)",
+    "sha256": "531b7414bed52f84e75a8cf9999836a7a3aac9a0c82b84f7b19a4b3fd9b2ec8e"
+  },
+  {
+    "kind": "theorem",
+    "name": "physical_label_injOn",
+    "header": "theorem physical_label_injOn (policy : List ℕ → Bool)\n    (N cap b : ℕ) (w z : ℝ) (hb : 0 < b) :\n    Set.InjOn (fun x : ℕ × ℕ => (b * x.1) * x.2)\n      (pairs policy N cap w z : Set (ℕ × ℕ))",
+    "sha256": "7cd13519f755372a097296142e082dab5d4a92cb7547e4f4a0e292d77351b830"
+  },
+  {
+    "kind": "def",
+    "name": "physicalActive",
+    "header": "def physicalActive (policy : List ℕ → Bool) (N cap b : ℕ) (w z L : ℝ) : Finset ℕ",
+    "sha256": "fa4dc4785eab2cd6dc6fd29c7243e234b1534a1ef672b66741e90375e8297d8f"
+  },
+  {
+    "kind": "theorem",
+    "name": "physicalActive_unique_label",
+    "header": "theorem physicalActive_unique_label (policy : List ℕ → Bool)\n    (N cap b : ℕ) (w z L : ℝ) (hb : 0 < b) {m : ℕ}\n    (hm : m ∈ physicalActive policy N cap b w z L) :\n    ∃! x : ℕ × ℕ, x ∈ activePairs policy N cap w z L ∧ (b * x.1) * x.2 = m",
+    "sha256": "8f78396a3486a9c1d9fdffb0738aadb0155262250c7d5f04687fea2dbcb300a5"
+  },
+  {
+    "kind": "theorem",
+    "name": "signed_primitive_sum_nested",
+    "header": "theorem signed_primitive_sum_nested (policy : List ℕ → Bool)\n    (N cap b : ℕ) (w z L : ℝ) :\n    (∑ k ∈ actualLowerSmallRoughModuli policy N cap w z,\n      actualLowerSmallRoughRho policy N cap w z L k *\n        finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N (b * k)) =\n      ∑ s ∈ actualSmallRosserSupport N cap w,\n        ∑ r ∈ fixedEvenRoughSupport policy N cap w z,\n          coefficient policy N cap w z L (s, r) *\n            finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N ((b * s) * r)",
+    "sha256": "e78c79b2a08125501f46f434c3ab8586eee128157dc3f2e54c79a3d5f8c900bc"
+  },
+  {
+    "kind": "theorem",
+    "name": "original_U6_three_block_data",
+    "header": "theorem original_U6_three_block_data {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ sixthSupport N) (policy : List ℕ → Bool) (cap : ℕ) (w : ℝ)\n    (hwz : w ≤ P5CausalRhoQuotientBridge.cutoff N) {x : ℕ × ℕ}\n    (hx : x ∈ pairs policy N cap w (P5CausalRhoQuotientBridge.cutoff N)) :\n    Nat.Coprime (t.1 * t.2) x.1 ∧ Nat.Coprime (t.1 * t.2) x.2 ∧\n      Nat.Coprime x.1 x.2 ∧ Squarefree (((t.1 * t.2) * x.1) * x.2) ∧\n      Nat.Coprime (((t.1 * t.2) * x.1) * x.2) N",
+    "sha256": "581a6ebf3c669c965e36f54ce5b9155347b6d863192f910b6102d3e451e5ec5f"
+  },
+  {
+    "kind": "theorem",
+    "name": "original_retained_signed_AP_fubini",
+    "header": "theorem original_retained_signed_AP_fubini (N : ℕ) (eta M : ℝ)\n    (policy : (ℕ × ℕ) → List ℕ → Bool) (w L : (ℕ × ℕ) → ℝ)\n    (E : ℕ × ℕ → Prop) :\n    (∑ t ∈ currentChenUpsilon6RetainedSelector N E eta,\n      ∑ k ∈ actualLowerSmallRoughModuli (policy t) N\n          (Nat.ceil (P5CausalRhoQuotientBridge.cutoff N)) (w t)\n          (P5CausalRhoQuotientBridge.cutoff N),\n        actualLowerSmallRoughRho (policy t) N\n          (Nat.ceil (P5CausalRhoQuotientBridge.cutoff N)) (w t)\n          (P5CausalRhoQuotientBridge.cutoff N) (L t) k *\n            chenQuotientPrimeAPError N M ((t.1 * t.2) * k)) =\n    ∑ t ∈ currentChenUpsilon6RetainedSelector N E eta,\n      ∑ s ∈ actualSmallRosserSupport N (Nat.ceil (P5CausalRhoQuotientBridge.cutoff N)) (w t),\n        ∑ r ∈ fixedEvenRoughSupport (policy t) N\n            (Nat.ceil (P5CausalRhoQuotientBridge.cutoff N)) (w t)\n            (P5CausalRhoQuotientBridge.cutoff N),\n          coefficient (policy t) N (Nat.ceil (P5CausalRhoQuotientBridge.cutoff N))\n            (w t) (P5CausalRhoQuotientBridge.cutoff N) (L t) (s, r) *\n              chenQuotientPrimeAPError N M (((t.1 * t.2) * s) * r)",
+    "sha256": "73cdd7f8f9649dafc80e5a4d5c3e10196ec878a69d4d698fb6d73b857a5dc06e"
+  }
+]

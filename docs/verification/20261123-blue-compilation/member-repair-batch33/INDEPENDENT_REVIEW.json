@@ -1,0 +1,189 @@
+{
+  "schema": "independent_p1_shared_prerequisite_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "reviewed_utc": "2026-11-23T16:15:41.440543+00:00",
+  "batch": 33,
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P4BActualPairOuterRamp",
+      "preimage_sha256": "4ef1d461057b573636b54a9294903dd7f6d7e5217bacea7c16ac08db6d818c7e",
+      "postimage_sha256": "285f573a10ec11e833b05c7c06401705bf29fdfd351168ca5914ad19232cb41b",
+      "complete_headers": [
+        {
+          "name": "actualPairMargins_nonneg_of_affineRegion",
+          "private": false,
+          "header": "theorem actualPairMargins_nonneg_of_affineRegion\n    {b lower : ℝ} {v : Fin 2 → ℝ} (hv : affineRegion b lower v) :\n    ∀ i : Fin 4, 0 ≤ actualPairMargins b lower v i :=",
+          "sha256": "e0ff8f57299ec0fa6b003d3dba9809aa3dbc228b56abbbe66df8e9a492b2cbdc"
+        },
+        {
+          "name": "affineRegion_of_all_strict_actualPairMargins",
+          "private": false,
+          "header": "theorem affineRegion_of_all_strict_actualPairMargins\n    {b lower : ℝ} {v : Fin 2 → ℝ}\n    (hstrict : ∀ i ∈ (Finset.univ : Finset (Fin 4)),\n      0 < actualPairMargins b lower v i) :\n    affineRegion b lower v :=",
+          "sha256": "24f650479991ea43aefd32dd2b6498e7d62d15d608674074b9a5db2fba43644b"
+        },
+        {
+          "name": "allStrictMargins_indicator_le_actual_affineIndicator",
+          "private": false,
+          "header": "theorem allStrictMargins_indicator_le_actual_affineIndicator\n    (b lower : ℝ) (v : Fin 2 → ℝ) :\n    (if ∀ i ∈ (Finset.univ : Finset (Fin 4)),\n        0 < actualPairMargins b lower v i then (1 : ℝ) else 0) ≤\n      (if affineRegion b lower v then (1 : ℝ) else 0) :=",
+          "sha256": "e4d7bcd6f4737014996e6fde78502497c58c7cf51cd3bf524ad270aef72ab148"
+        },
+        {
+          "name": "fourWallOuterWeight_eq_one_of_affineRegion",
+          "private": false,
+          "header": "theorem fourWallOuterWeight_eq_one_of_affineRegion\n    {b lower delta : ℝ} (hdelta : 0 < delta) {v : Fin 2 → ℝ}\n    (hv : affineRegion b lower v) :\n    fourWallOuterWeight b lower delta v = 1 :=",
+          "sha256": "89edc92b62b6c8b8cba57070f75aca4223a654439a3bed9e607d933ee6b72659"
+        },
+        {
+          "name": "fourWallOuterWeight_bounds",
+          "private": false,
+          "header": "theorem fourWallOuterWeight_bounds (b lower delta : ℝ) (v : Fin 2 → ℝ) :\n    0 ≤ fourWallOuterWeight b lower delta v ∧\n      fourWallOuterWeight b lower delta v ≤ 1 :=",
+          "sha256": "c10c70ff941f44402a5031d206d14ffdeaabb1856e1544811d11e508bbbfb119"
+        },
+        {
+          "name": "actual_W_le_pairOuterRamp",
+          "private": false,
+          "header": "theorem actual_W_le_pairOuterRamp\n    {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)\n    (hdelta : 0 < delta) {t : Fin 2 → Fin (N + 1)}\n    (ht : t ∈ labelledPrimeTuples 2 N) :\n    W b N T t ≤ actualPairOuterRamp b N T delta t :=",
+          "sha256": "1de2eb78b0023db75dd04ca786a87a478fb6a6b4455185e31bc6f53e0275fbb3"
+        },
+        {
+          "name": "actual_pairOuterRamp_surplus_nonneg",
+          "private": false,
+          "header": "theorem actual_pairOuterRamp_surplus_nonneg\n    {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)\n    (hdelta : 0 < delta) {t : Fin 2 → Fin (N + 1)}\n    (ht : t ∈ labelledPrimeTuples 2 N) :\n    0 ≤ actualPairOuterRamp b N T delta t - W b N T t :=",
+          "sha256": "07e09e9fa92e22bb06e4c61016733e8ca649580b3f0ba0f1edc94b8aaafb4a84"
+        },
+        {
+          "name": "actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators",
+          "private": false,
+          "header": "theorem actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators\n    {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)\n    (hdelta : 0 < delta) {t : Fin 2 → Fin (N + 1)}\n    (ht : t ∈ labelledPrimeTuples 2 N) :\n    actualPairOuterRamp b N T delta t - W b N T t ≤\n      ∑ i : Fin 4,\n        if -delta < actualPairMargins b (Real.log T / Real.log (N : ℝ))\n            (logPoint N t) i ∧\n          actualPairMargins b (Real.log T / Real.log (N : ℝ)) (logPoint N t) i ≤ 0\n        then (1 : ℝ) else 0 :=",
+          "sha256": "a7ef585ba0c9f80df14b97f7d5b45b178b3adb0402714be1bed796cf594642a8"
+        },
+        {
+          "name": "sum_actual_labelled_W_eq_source_card",
+          "private": false,
+          "header": "theorem sum_actual_labelled_W_eq_source_card (b : ℝ) (N : ℕ) (T : ℝ) :\n    (∑ t ∈ labelledPrimeTuples 2 N, W b N T t) =\n      ((realHalfProductSource b N T).card : ℝ) :=",
+          "sha256": "592bcb447284bd2b6f32cd11684e98b1536ec9c531f0f24a0444211ffacdd3d2"
+        },
+        {
+          "name": "sum_actual_pairOuterRamp_le_source_card_add_arithmetic_strip_cards",
+          "private": false,
+          "header": "theorem sum_actual_pairOuterRamp_le_source_card_add_arithmetic_strip_cards\n    {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)\n    (hdelta : 0 < delta) :\n    (∑ t ∈ labelledPrimeTuples 2 N, actualPairOuterRamp b N T delta t) ≤\n      ((realHalfProductSource b N T).card : ℝ) +\n        ∑ i : Fin 4, ((actualPairArithmeticStrip b N T delta i).card : ℝ) :=",
+          "sha256": "c9cfa347be8b0f2b455a00af8e1261f8852c47c45a609d4117b17fc07f7aea0c"
+        }
+      ],
+      "raw_definitions": [
+        {
+          "raw": "def actualPairMargins (b lower : ℝ) (v : Fin 2 → ℝ) : Fin 4 → ℝ :=\n  ![v 1 - v 0, v 0 - b * v 1, v 0 + v 1 - lower, 1 - v 0 - v 1]\n\n/-- Four explicit scalar outer ramps at the exact normalized margins. -/\n",
+          "sha256": "b5c06290fa80f465da62b98bd041adf64911d29e54994d7fffd8c360eb645ee0"
+        },
+        {
+          "raw": "def fourWallOuterWeight (b lower delta : ℝ) (v : Fin 2 → ℝ) : ℝ :=\n  ∏ i : Fin 4, logGateOuterRamp delta (actualPairMargins b lower v i)\n\n/-- The actual mixed region implies nonnegative margins at all four walls.\nOnly the badness margin is necessarily strictly positive. -/\n",
+          "sha256": "dfad3fa52a11bfa430dd77cc7b6802828c0bed56c30983dbd60171e6bb4628a7"
+        },
+        {
+          "raw": "def actualPairOuterRamp (b : ℝ) (N : ℕ) (T delta : ℝ)\n    (t : Fin 2 → Fin (N + 1)) : ℝ :=\n  fourWallOuterWeight b (Real.log T / Real.log (N : ℝ)) delta (logPoint N t)\n\n/-- Literal arithmetic tuples in the i-th one-sided boundary strip.\nThe zero wall is included, and the expanded outer endpoint is strict. -/\n",
+          "sha256": "7d7547f73ca6267b8098b1b1d888b077da03248bf730ab4e3a0e2d5f2c17c669"
+        },
+        {
+          "raw": "def actualPairArithmeticStrip (b : ℝ) (N : ℕ) (T delta : ℝ) (i : Fin 4) :\n    Finset (Fin 2 → Fin (N + 1)) :=\n  (labelledPrimeTuples 2 N).filter (fun t =>\n    -delta < actualPairMargins b (Real.log T / Real.log (N : ℝ)) (logPoint N t) i ∧\n      actualPairMargins b (Real.log T / Real.log (N : ℝ)) (logPoint N t) i ≤ 0)\n\n/-- The exact W is dominated on the genuine labelled prime carrier.\nThis uses its exact mixed-wall dictionary, rather than an all-strict source. -/\n",
+          "sha256": "8d8c8148a647c650741e76c0a7a4ef16a3de7a15a3f37da23d2074f077b03df0"
+        }
+      ],
+      "changed_proof_names": [
+        "actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators",
+        "sum_actual_pairOuterRamp_le_source_card_add_arithmetic_strip_cards"
+      ],
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "current_source_bindings": [
+        {
+          "path": "/workspace/blue-member-build/ImbalancedChen/P4BActualPairOuterRamp.lean",
+          "bytes": 9267,
+          "sha256": "285f573a10ec11e833b05c7c06401705bf29fdfd351168ca5914ad19232cb41b"
+        },
+        {
+          "path": "/workspace/goldbach-formalization/ImbalancedChen/P4BActualPairOuterRamp.lean",
+          "bytes": 9267,
+          "sha256": "285f573a10ec11e833b05c7c06401705bf29fdfd351168ca5914ad19232cb41b"
+        }
+      ],
+      "main_canonical_exists": true,
+      "new_assumptions_or_semantic_definition_changes": false,
+      "review_basis": "All patch hunks were manually inspected; changes only expose existing arguments, definitions, algebra or nonnegativity for the current API."
+    }
+  ],
+  "findings": [],
+  "release_and_manifest": [
+    {
+      "path": "/workspace/blue-member-repair-batch33/FINAL_RELEASE.json",
+      "bytes": 929,
+      "sha256": "55823ffa7262a3afb064676c14d15d38cec6dd51901ffe939449ce5b03e15a27"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch33/PUBLICATION_FILES.json",
+      "bytes": 5247,
+      "sha256": "78b1354c1acda86921035f8ca52e410212a36720f46e33671af8d5dd5c36eae1"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch33/VALIDATION_RESULTS.json",
+      "bytes": 4122,
+      "sha256": "f05352864ab5ad8b35150f70dae19949a28d1104b933cf90a68a192ffa490449"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch33/SOURCE_SELECTION.json",
+      "bytes": 1966,
+      "sha256": "4a9152a1a5d828a28aa39ce67b0ccacdb5bf38ef57221a1f52a4628f94d8a4d8"
+    }
+  ],
+  "original_packet_file_count": 30,
+  "all_manifest_size_sha256_bindings_match": true,
+  "source_plus_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4BActualPairOuterRamp.lean",
+      "bytes": 9267,
+      "sha256": "285f573a10ec11e833b05c7c06401705bf29fdfd351168ca5914ad19232cb41b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BActualPairOuterRamp.olean",
+      "bytes": 308344,
+      "sha256": "14480c89fe98ffca4bb26377e8a5c069c7f2ad8508a728dbb3ebd4f04cdaf5e5"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BActualPairOuterRamp.ilean",
+      "bytes": 27680,
+      "sha256": "6b74355a5d392136f147d03967f95df1decb156463cb21d8afce90cadfc44d2d"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BActualPairOuterRamp.c",
+      "bytes": 10978,
+      "sha256": "42bfe89ed2cc3816fc6e8357e6c906ae1b1fe43e3d03a283b0d67cac607d801d"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BActualPairOuterRamp.setup.json",
+      "bytes": 6412008,
+      "sha256": "c7ff9f342419d99636d9db0fe8de3d6766bc67d5ce1b22e302695b2dab81d8bb"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BActualPairOuterRamp.trace",
+      "bytes": 3024,
+      "sha256": "5bb4a3da5f5265310c579a210dfea37c0e187707251cecfd39133a32c05dee35"
+    }
+  ],
+  "existing_validation": {
+    "public_export_counts": {
+      "ImbalancedChen.P4BActualPairOuterRamp": 21
+    },
+    "total_public_exports": 21,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "all_command_log_hashes_match": true,
+    "full_AST_equals_raw_log": true,
+    "transitive_axioms_equal_raw_log": true,
+    "only_standard_axioms": true
+  },
+  "scope": "Exact accepted Member prerequisites also used by the selected modern P1 source closure; no complete-P1 or whole-board claim.",
+  "reviewer_Lean_kernel_audit_stock_or_compiler_invocations": 0,
+  "original_source_log_trace_or_validation_record_edits": 0
+}

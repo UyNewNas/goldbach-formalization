@@ -64,7 +64,7 @@ theorem upperFloor_eq_lowerFloor_of_two_le (nums : Fin 200 → ℤ) {s : ℝ}
   apply Finset.sum_congr rfl
   intro b _
   have hs1 : 1 ≤ s := by linarith
-  cases b <;> simp [upperAtomSet, floorAtomSet, hs, hs1]
+  cases b <;> simp [upperAtomSet, floorAtomSet, Set.indicator, hs, hs1]
 
 def upperRoot (nums : Fin 200 → ℤ) (s : ℝ) : ℝ := upperFloor nums (max 2 s)
 

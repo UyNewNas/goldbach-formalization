@@ -1,0 +1,359 @@
+{
+  "schema": "member_measurable_envelope_readonly_static_candidate_v1",
+  "status": "STATIC_CANDIDATE_UNCOMPILED_NO_KERNEL_OR_THEOREM_CREDIT",
+  "captured_utc": "2026-11-23T15:23:19.620581+00:00",
+  "static_preparer": "/root/blue_inventory",
+  "sole_live_source_and_build_owner": "/root/manuscript_inventory",
+  "module": "ImbalancedChen.P5ZU11MeasurableEnvelope",
+  "registered_source": {
+    "selection": "Y11",
+    "bytes": 17508,
+    "sha256": "d918bd69b0209ce0a187691c4cf83c4f3f0045dc5e43cb3d66ecbddae1bddc59",
+    "git_blob_sha1": "566715aaefd3c60544525d3422f40fb6d9650ff7",
+    "source_path": "ImbalancedChen/P5ZU11MeasurableEnvelope.lean",
+    "imports": [
+      "ImbalancedChen.P5ZU11AdaptiveMinimum",
+      "Mathlib.MeasureTheory.Integral.Bochner.Set",
+      "Mathlib.MeasureTheory.Constructions.BorelSpace.Order",
+      "Mathlib.Order.ConditionallyCompleteLattice.Finset"
+    ],
+    "install_path": "ImbalancedChen/P5ZU11MeasurableEnvelope.lean",
+    "installed_path": "/workspace/blue-member-build/ImbalancedChen/P5ZU11MeasurableEnvelope.lean",
+    "retrieval": "exact registered Git blob from local formalization object store"
+  },
+  "baseline": {
+    "path": "/workspace/blue-member-static-measurable-envelope/baseline.lean",
+    "bytes": 17508,
+    "sha256": "d918bd69b0209ce0a187691c4cf83c4f3f0045dc5e43cb3d66ecbddae1bddc59"
+  },
+  "candidate": {
+    "path": "/workspace/blue-member-static-measurable-envelope/candidate.lean",
+    "bytes": 17570,
+    "sha256": "5b9fa06abf2a5474a655b44f2b5eb93ab85fcffa30b773da170b41ec4e392feb"
+  },
+  "patch": {
+    "path": "/workspace/blue-member-static-measurable-envelope/candidate.patch",
+    "bytes": 2837,
+    "sha256": "6ad454dd83430409a05a65ccbbf57adb9486b377c38f1ffef52509e3834d018c"
+  },
+  "preimage_Main_Member_exact_match": true,
+  "P6_canonical_source_exists": false,
+  "changes": [
+    {
+      "theorem": "iUnion_winner",
+      "line": 120,
+      "old": "    exact exists_winner D bank f x hx",
+      "new": "    obtain ⟨c, hc, hwin⟩ := exists_winner D bank f x hx\n    exact ⟨c, hc, hwin⟩",
+      "classification": "Repackage original bounded-exists conjunction witness into the proof-indexed Exists representation exposed by Set.mem_iUnion; same c and membership/winner evidence."
+    },
+    {
+      "theorem": "measurable_guarded",
+      "line": 173,
+      "old": "  · simpa only [guarded, if_pos rfl] using hs\n",
+      "new": "  · delta guarded\n    simpa only [if_true] using hs\n",
+      "classification": "Explicit delta expansion handles the partially applied guarded function under Measurable; reduce unchanged zero tag using general-Decidable True branch theorem."
+    },
+    {
+      "theorem": "measurable_guarded",
+      "line": 175,
+      "old": "    simpa only [guarded, Nat.succ_ne_zero, if_false, Nat.pred_succ] using",
+      "new": "    delta guarded\n    simpa only [Nat.succ_ne_zero, if_false, Nat.pred_succ] using",
+      "classification": "Explicit delta expansion of guarded partial application exposes original successor-tag eligible piecewise function, with original measurable gates unchanged."
+    },
+    {
+      "theorem": "guarded_nonneg",
+      "line": 185,
+      "old": "simpa only [guarded, if_pos rfl] using hs x hx",
+      "new": "simpa only [guarded, if_true] using hs x hx",
+      "classification": "Only reduce the literal True branch remaining in pointwise zero-tag nonnegativity."
+    },
+    {
+      "theorem": "guarded_envelope_le_switched",
+      "line": 194,
+      "old": "simpa only [guarded, if_pos rfl] using\n    envelope_le",
+      "new": "simpa only [guarded, if_true] using\n    envelope_le",
+      "classification": "Same literal True branch reduction in existing domination proof."
+    },
+    {
+      "theorem": "integral_guarded_envelope_eq_raw",
+      "line": 240,
+      "old": "simp only [guarded, hc0, if_pos rfl]",
+      "new": "simp only [guarded, hc0, if_true]",
+      "classification": "Reduce both original zero-tag True branches after existing c=0 case split; no winner/eligibility change."
+    },
+    {
+      "theorem": "integrableOn_original_envelope",
+      "line": 328,
+      "old": "  · simpa only [guarded, if_pos rfl] using hi",
+      "new": "  · delta guarded\n    simpa only [if_true] using hi",
+      "classification": "Delta-expand zero-tag guarded function under IntegrableOn and reuse precisely original switched-kernel integrability hypothesis."
+    }
+  ],
+  "changed_existing_theorems": [
+    "guarded_envelope_le_switched",
+    "guarded_nonneg",
+    "iUnion_winner",
+    "integrableOn_original_envelope",
+    "integral_guarded_envelope_eq_raw",
+    "measurable_guarded"
+  ],
+  "exact_full_file_listed_replacement_replay": true,
+  "all_complete_public_private_theorem_headers_byte_exact": true,
+  "headers": [
+    {
+      "name": "tags_nonempty",
+      "private": false,
+      "header": "theorem tags_nonempty (bank : Finset ℕ) : (tags bank).Nonempty :=",
+      "sha256": "badc78a85059a635f41f201c7d6b5c88928de959471f0b5b28f80cc24d418b64"
+    },
+    {
+      "name": "envelope_eq_min",
+      "private": false,
+      "header": "theorem envelope_eq_min (bank : Finset ℕ) (f : ℕ → X → ℝ) (x : X) :\n    envelope bank f x = ((tags bank).image (fun c => f c x)).min'\n      ((tags_nonempty bank).image _) :=",
+      "sha256": "e0a7ab84680c507d7bc9b2ba5943a20864f366cffc14195aa7d7a3d35c4c5966"
+    },
+    {
+      "name": "measurable_envelope",
+      "private": false,
+      "header": "theorem measurable_envelope (bank : Finset ℕ) (f : ℕ → X → ℝ)\n    (hf : ∀ c ∈ tags bank, Measurable (f c)) : Measurable (envelope bank f) :=",
+      "sha256": "838dcb91445d4925ec7d00d13d4a8e765d9994965f95d9af6385978f71e3d865"
+    },
+    {
+      "name": "envelope_le",
+      "private": false,
+      "header": "theorem envelope_le (bank : Finset ℕ) (f : ℕ → X → ℝ) (x : X)\n    (c : ℕ) (hc : c ∈ tags bank) : envelope bank f x ≤ f c x :=",
+      "sha256": "5cc8162c8d3e936b1d7193a528ad2d5e9a37ba9caa8c29cf8d9f827c12e8b87c"
+    },
+    {
+      "name": "envelope_nonneg",
+      "private": false,
+      "header": "theorem envelope_nonneg (bank : Finset ℕ) (f : ℕ → X → ℝ) (x : X)\n    (hf : ∀ c ∈ tags bank, 0 ≤ f c x) : 0 ≤ envelope bank f x :=",
+      "sha256": "270ec904cc7cfcb07b8d6fd891d3a56864279f325ea90a5f918fd4f703800449"
+    },
+    {
+      "name": "measurableSet_winner",
+      "private": false,
+      "header": "theorem measurableSet_winner (D : Set X) (hD : MeasurableSet D)\n    (bank : Finset ℕ) (f : ℕ → X → ℝ)\n    (hf : ∀ c ∈ tags bank, Measurable (f c)) (c : ℕ) (hc : c ∈ tags bank) :\n    MeasurableSet (winner D bank f c) :=",
+      "sha256": "7950e29599a2b18ba61c30646fe25bc6cb8598d341c0f5c3cddd9d484fe08007"
+    },
+    {
+      "name": "winner_disjoint",
+      "private": false,
+      "header": "theorem winner_disjoint (D : Set X) (bank : Finset ℕ) (f : ℕ → X → ℝ)\n    {c d : ℕ} (hc : c ∈ tags bank) (hd : d ∈ tags bank) (hcd : c ≠ d) :\n    Disjoint (winner D bank f c) (winner D bank f d) :=",
+      "sha256": "3bd199a8a81dc9d157f076d34b6fb2e7378f243b8428cf0ddaef3e3b39f7984c"
+    },
+    {
+      "name": "exists_winner",
+      "private": false,
+      "header": "theorem exists_winner (D : Set X) (bank : Finset ℕ) (f : ℕ → X → ℝ)\n    (x : X) (hx : x ∈ D) : ∃ c ∈ tags bank, x ∈ winner D bank f c :=",
+      "sha256": "a6efc6ecb2586d85060b35e75d98df839ea4ae31a640dbd06ddb5b27f4b565fd"
+    },
+    {
+      "name": "iUnion_winner",
+      "private": false,
+      "header": "theorem iUnion_winner (D : Set X) (bank : Finset ℕ) (f : ℕ → X → ℝ) :\n    (⋃ c ∈ tags bank, winner D bank f c) = D :=",
+      "sha256": "13b6ac5b42c9062c142866202e86bde150cd84c8165315828c1cf527cb5784ec"
+    },
+    {
+      "name": "integrableOn_envelope",
+      "private": false,
+      "header": "theorem integrableOn_envelope (D : Set X) (hD : MeasurableSet D)\n    (bank : Finset ℕ) (f : ℕ → X → ℝ) (μ : Measure X)\n    (hf : ∀ c ∈ tags bank, Measurable (f c))\n    (hn : ∀ x ∈ D, ∀ c ∈ tags bank, 0 ≤ f c x)\n    (h0 : IntegrableOn (f 0) D μ) : IntegrableOn (envelope bank f) D μ :=",
+      "sha256": "c4b755e5654cbee8574d793b3126d9c4f4733b83366ba1e5317b5dc4b3a1c995"
+    },
+    {
+      "name": "integral_envelope_eq_sum_winner",
+      "private": false,
+      "header": "theorem integral_envelope_eq_sum_winner (D : Set X) (hD : MeasurableSet D)\n    (bank : Finset ℕ) (f : ℕ → X → ℝ) (μ : Measure X)\n    (hf : ∀ c ∈ tags bank, Measurable (f c))\n    (hi : IntegrableOn (envelope bank f) D μ) :\n    (∫ x in D, envelope bank f x ∂μ) =\n      ∑ c ∈ tags bank, ∫ x in winner D bank f c, f c x ∂μ :=",
+      "sha256": "01109f29f12fe29e31496669fc435e127dce7c5d709238e6ed0b0b1f85540511"
+    },
+    {
+      "name": "measurable_guarded",
+      "private": false,
+      "header": "theorem measurable_guarded (bank : Finset ℕ) (eligible : ℕ → X → Prop)\n    (switched : X → ℝ) (ordinary : ℕ → X → ℝ)\n    (he : ∀ j ∈ bank, MeasurableSet {x | eligible j x})\n    (hs : Measurable switched) (ho : ∀ j ∈ bank, Measurable (ordinary j)) :\n    ∀ c ∈ tags bank, Measurable (guarded eligible switched ordinary c) :=",
+      "sha256": "b8a70e7c8f746e2e13eeafd239253f16b6502fefeb5f07f570ef5c0622a29892"
+    },
+    {
+      "name": "guarded_nonneg",
+      "private": false,
+      "header": "theorem guarded_nonneg (D : Set X) (bank : Finset ℕ)\n    (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)\n    (hs : ∀ x ∈ D, 0 ≤ switched x)\n    (ho : ∀ j ∈ bank, ∀ x ∈ D, eligible j x → 0 ≤ ordinary j x) :\n    ∀ x ∈ D, ∀ c ∈ tags bank, 0 ≤ guarded eligible switched ordinary c x :=",
+      "sha256": "46de79b806c10346901a74d416cdab5971ee78d39c6ae5f42c16b77b9e2f083a"
+    },
+    {
+      "name": "guarded_envelope_le_switched",
+      "private": false,
+      "header": "theorem guarded_envelope_le_switched (bank : Finset ℕ)\n    (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)\n    (x : X) : envelope bank (guarded eligible switched ordinary) x ≤ switched x :=",
+      "sha256": "4d919b0010fddf212f77e394c982ef28ebcabd49fc0c159b7737a749726d4c0d"
+    },
+    {
+      "name": "guarded_envelope_bounds",
+      "private": false,
+      "header": "theorem guarded_envelope_bounds (D : Set X) (bank : Finset ℕ)\n    (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)\n    (hs : ∀ x ∈ D, 0 ≤ switched x)\n    (ho : ∀ j ∈ bank, ∀ x ∈ D, eligible j x → 0 ≤ ordinary j x)\n    (x : X) (hx : x ∈ D) :\n    0 ≤ envelope bank (guarded eligible switched ordinary) x ∧\n      envelope bank (guarded eligible switched ordinary) x ≤ switched x :=",
+      "sha256": "b1d0c6ee1f3f28981599eaef57135ae0995d9639595d3a8391c3201b0019cddd"
+    },
+    {
+      "name": "ordinary_winner_eligible",
+      "private": false,
+      "header": "theorem ordinary_winner_eligible (D : Set X) (bank : Finset ℕ)\n    (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)\n    (j : ℕ) (x : X)\n    (hx : x ∈ winner D bank (guarded eligible switched ordinary) j.succ) :\n    eligible j x :=",
+      "sha256": "65c99bc3ddd155b082c5863a40116603459a3859822681f42421fda9238c7bec"
+    },
+    {
+      "name": "integral_guarded_envelope_eq_raw",
+      "private": false,
+      "header": "theorem integral_guarded_envelope_eq_raw (D : Set X) (hD : MeasurableSet D)\n    (bank : Finset ℕ) (eligible : ℕ → X → Prop)\n    (switched : X → ℝ) (ordinary : ℕ → X → ℝ) (μ : Measure X)\n    (he : ∀ j ∈ bank, MeasurableSet {x | eligible j x})\n    (hs : Measurable switched) (ho : ∀ j ∈ bank, Measurable (ordinary j))\n    (hi : IntegrableOn (envelope bank (guarded eligible switched ordinary)) D μ) :\n    (∫ x in D, envelope bank (guarded eligible switched ordinary) x ∂μ) =\n      ∑ c ∈ tags bank,\n        ∫ x in winner D bank (guarded eligible switched ordinary) c,\n          (if c = 0 then switched x else ordinary c.pred x) ∂μ :=",
+      "sha256": "de2c3ae739126fbee39a0e618dc9272b01928ed3cbe94544b6b79b63798db556"
+    },
+    {
+      "name": "originalDomain_denominators_pos",
+      "private": false,
+      "header": "theorem originalDomain_denominators_pos (mask : Set (ℝ × ℝ))\n    (v : LogFour) (hv : v ∈ originalDomain mask) : 0 < v 3 ∧ 0 < v 2 :=",
+      "sha256": "419094afe2c73065f0ab914dd00a35544f35aba3c93d5e470bdfaf1327e604d8"
+    },
+    {
+      "name": "originalDomain_buchstab_argument_gt",
+      "private": false,
+      "header": "theorem originalDomain_buchstab_argument_gt (mask : Set (ℝ × ℝ))\n    (v : LogFour) (hv : v ∈ originalDomain mask) :\n    (77 / 38 : ℝ) < (1 - (v 0 + v 1 + v 2 + v 3)) / v 2 :=",
+      "sha256": "33612726bc75a79433fc77683a2c14a94346b3de5e677223f87aab1259484f17"
+    },
+    {
+      "name": "measurableSet_originalDomain",
+      "private": false,
+      "header": "theorem measurableSet_originalDomain (mask : Set (ℝ × ℝ))\n    (hm : MeasurableSet mask) : MeasurableSet (originalDomain mask) :=",
+      "sha256": "f9544cb4751e1047466189f75cc4b1657ca07b73fbaec288145d5e7912e76de1"
+    },
+    {
+      "name": "measurable_switchedKernel",
+      "private": false,
+      "header": "theorem measurable_switchedKernel (K : ℝ) (omega : ℝ → ℝ)\n    (ho : Measurable omega) : Measurable (switchedKernel K omega) :=",
+      "sha256": "f6f53f6088db5ee4331cc77c944d677af6967c47e9353906121a44bbbcb71016"
+    },
+    {
+      "name": "measurable_ordinaryKernel",
+      "private": false,
+      "header": "theorem measurable_ordinaryKernel (H : ℝ → ℝ) (L : ℕ → LogFour → ℝ)\n    (j : ℕ) (hH : Measurable H) (hL : Measurable (L j)) :\n    Measurable (ordinaryKernel H L j) :=",
+      "sha256": "d65163e27bdf79581ff8eb997d1f2a34f3e892a3ecfd4bd636c4bca3c2553c47"
+    },
+    {
+      "name": "integrableOn_original_envelope",
+      "private": false,
+      "header": "theorem integrableOn_original_envelope (mask : Set (ℝ × ℝ))\n    (hm : MeasurableSet mask) (bank : Finset ℕ)\n    (eligible : ℕ → LogFour → Prop) (K : ℝ) (omega H : ℝ → ℝ)\n    (L : ℕ → LogFour → ℝ) (μ : Measure LogFour)\n    (he : ∀ j ∈ bank, MeasurableSet {v | eligible j v})\n    (homega : Measurable omega) (hH : Measurable H)\n    (hL : ∀ j ∈ bank, Measurable (L j))\n    (hs : ∀ v ∈ originalDomain mask, 0 ≤ switchedKernel K omega v)\n    (ho : ∀ j ∈ bank, ∀ v ∈ originalDomain mask,\n      eligible j v → 0 ≤ ordinaryKernel H L j v)\n    (hi : IntegrableOn (switchedKernel K omega) (originalDomain mask) μ) :\n    IntegrableOn (envelope bank\n      (guarded eligible (switchedKernel K omega) (ordinaryKernel H L)))\n      (originalDomain mask) μ :=",
+      "sha256": "b35ffe7ebeb979727dc0bcebf563a67472c504656d74174bbfad22a523724535"
+    },
+    {
+      "name": "integral_original_envelope_eq_sum",
+      "private": false,
+      "header": "theorem integral_original_envelope_eq_sum (mask : Set (ℝ × ℝ))\n    (hm : MeasurableSet mask) (bank : Finset ℕ)\n    (eligible : ℕ → LogFour → Prop) (K : ℝ) (omega H : ℝ → ℝ)\n    (L : ℕ → LogFour → ℝ) (μ : Measure LogFour)\n    (he : ∀ j ∈ bank, MeasurableSet {v | eligible j v})\n    (homega : Measurable omega) (hH : Measurable H)\n    (hL : ∀ j ∈ bank, Measurable (L j))\n    (hs : ∀ v ∈ originalDomain mask, 0 ≤ switchedKernel K omega v)\n    (ho : ∀ j ∈ bank, ∀ v ∈ originalDomain mask,\n      eligible j v → 0 ≤ ordinaryKernel H L j v)\n    (hi : IntegrableOn (switchedKernel K omega) (originalDomain mask) μ) :\n    (∫ v in originalDomain mask,\n        envelope bank (guarded eligible (switchedKernel K omega) (ordinaryKernel H L)) v ∂μ) =\n      ∑ c ∈ tags bank,\n        ∫ v in winner (originalDomain mask) bank\n            (guarded eligible (switchedKernel K omega) (ordinaryKernel H L)) c,\n          (if c = 0 then switchedKernel K omega v else ordinaryKernel H L c.pred v) ∂μ :=",
+      "sha256": "5cbd22e6fdf86c74a705ee5c481aeba04218a0b5229e75e0a77611b2db3213bf"
+    }
+  ],
+  "public_theorem_count": 24,
+  "private_theorem_count": 0,
+  "all_other_bytes_imports_namespace_definitions_eligibility_tags_winner_order_originalDomain_constants_quantifiers_hypotheses_licences_unchanged": true,
+  "original_numeric_walls_preserved": [
+    "417/5000",
+    "19/125",
+    "59/250",
+    "77/38",
+    "max2 ordinary argument",
+    "ordinary kernel factor4"
+  ],
+  "no_new_global_declaration_definition_or_analytic_assumption": true,
+  "exact_published_source_search": {
+    "scope": "git log --all -- one exact module path only",
+    "events": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "source_exists": true,
+        "sha256": "d918bd69b0209ce0a187691c4cf83c4f3f0045dc5e43cb3d66ecbddae1bddc59",
+        "git_blob_sha1": "566715aaefd3c60544525d3422f40fb6d9650ff7"
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "source_exists": false
+      },
+      {
+        "commit": "e3383270bcdf1a22ce32ff379c0695f3729978cc",
+        "source_exists": true,
+        "sha256": "d918bd69b0209ce0a187691c4cf83c4f3f0045dc5e43cb3d66ecbddae1bddc59",
+        "git_blob_sha1": "566715aaefd3c60544525d3422f40fb6d9650ff7"
+      }
+    ],
+    "unique_existing_source_blobs": 1,
+    "existing_complete_same_module_fix_identified": false,
+    "no_all_history_or_cache_scan": true
+  },
+  "pinned_existing_reduction_APIs": {
+    "if_True_general_Decidable": {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/ByCases.lean",
+      "bytes": 2103,
+      "sha256": "3270f4bafaf99ca67f69b57972d0c3ef73e0ba46d359c8cd4645be254ac97965"
+    },
+    "explicit_delta_tactic": {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/Meta/Tactic/Delta.lean",
+      "bytes": 1776,
+      "sha256": "acd4741581de413ed29c0ac0bba4f28debed7f6b144002abce9f146f5612a131"
+    },
+    "reason_for_explicit_delta_over_equation_rewrite": "Observed goals leave guarded partially applied under Measurable/IntegrableOn. Explicit delta expands its original definition directly rather than depending on a fully applied simp equation or selected unfold theorem.",
+    "unfold_implementation_read_only_reference": {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/Meta/Tactic/Unfold.lean",
+      "bytes": 2822,
+      "sha256": "fcd02ecd23cfe19a3f4d697c90858d9633dc2b1c1e9d189c26cf49d9cd368b42"
+    }
+  },
+  "actual_failure": {
+    "aggregate_log": "/workspace/blue-member-aggregate-evidence/attempt-3-build.log",
+    "snapshot_bytes": 345759,
+    "snapshot_sha256": "4a886b2d9fce90773a776bc3103d561c74f7932ff7d32c6b395f247241bdf54d",
+    "raw_byte_start": 194294,
+    "raw_byte_end_exclusive": 200813,
+    "source_unit": {
+      "path": "/workspace/blue-member-static-measurable-envelope/ACTUAL_FAILED_SOURCE_UNIT.log",
+      "bytes": 6519,
+      "sha256": "f3eacf6fd727108736941bf514eafcb081eaed53a8a909394a07b47a1bd13d8b"
+    },
+    "error_original_lines": [
+      120,
+      173,
+      175,
+      185,
+      194,
+      240,
+      328
+    ],
+    "actual_source_sha256": "d918bd69b0209ce0a187691c4cf83c4f3f0045dc5e43cb3d66ecbddae1bddc59",
+    "logged_duration": "12s",
+    "compiler_not_rerun": true
+  },
+  "manuscript": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "bytes": 55378,
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "frozen_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "755-762 common four-prefix positive partition; minimum of switched and admissible ordinary kernels; all full/selected square conditions; overlapping alternatives compared not added"
+      ]
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "bytes": 42662,
+      "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "frozen_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "434-444 switched/ordinary minimum and original residual interval/complete ordered cover; fallback remains available when ordinary eligibility fails"
+      ]
+    }
+  ],
+  "mathematical_assessment": "Observed errors are bounded/dependent Exists witness packaging, function definition exposure and literal True reduction. Existing finite attained minimum, deterministic least-tag disjoint winners, eligible ordinary policies, always-present switched fallback, full original four-coordinate domain, measurable gates and the same switched integrability hypothesis are retained. No whole-U11 analytic mean, policy licence, distribution theorem, Rosser bound or quadrature certificate is added or assumed as proved.",
+  "adoption_conditions": [
+    "Recheck exactd918bd69 preimage at sole-owner adoption.",
+    "Normal target build, named kernel replay and full actual-owned type/axiom audit are still required; this packet is static only."
+  ],
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_calls": 0,
+    "live_Main_Member_P6_or_cache_edits": 0,
+    "artifact_downloads_installs": 0,
+    "source_reproduction_run": 0,
+    "new_proofs_outside_original_needed_support": 0,
+    "spawns": 0
+  }
+}

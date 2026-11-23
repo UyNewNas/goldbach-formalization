@@ -1,0 +1,176 @@
+{
+  "schema": "proof_only_static_candidate_v1",
+  "captured_utc": "2026-11-23T15:26:06.133979+00:00",
+  "module": "ImbalancedChen.P4BWeightedHyperbolaSlotDecay",
+  "status": "UNCOMPILED_STATIC_CANDIDATE_NO_KERNEL_OR_THEOREM_CREDIT",
+  "source": "/workspace/blue-member-build/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.lean",
+  "baseline_sha256": "a445092bea55b61acf7afdb91a5ff494c976105da420a47f18e989296b8d4324",
+  "candidate_sha256": "a0238da796e5a235e84c06cab0ca862ad1bc6d143af01be42be5a0221b1a241e",
+  "patch_sha256": "cc01f7f58bf78438005b49b14bcad6350d530e955f98012b3679bf9c8539dac3",
+  "baseline_bytes": 12440,
+  "candidate_bytes": 12548,
+  "baseline_CRLF": 0,
+  "candidate_CRLF": 0,
+  "baseline_bare_LF": 256,
+  "candidate_bare_LF": 259,
+  "changed_proofs": [
+    "mem_positiveHyperbolaPairs",
+    "hyperbola_first_reciprocal_eq",
+    "hyperbola_first_reciprocal_le",
+    "weighted_labelled_slot_cost_le",
+    "actual_upper_outer_correction_le_hyperbola"
+  ],
+  "headers": [
+    {
+      "name": "mem_positiveHyperbolaPairs",
+      "private": false,
+      "header": "theorem mem_positiveHyperbolaPairs {K L : ℕ} (hL : 2 ≤ L) (a : ℕ × ℕ) :\n    a ∈ positiveHyperbolaPairs K L ↔\n      L ≤ a.1 ∧ 1 ≤ a.2 ∧ a.1 * a.2 ≤ K :=",
+      "sha256": "4cd92d638aa0a2806c2a0d037e86d1cc886ddb548fd824733b942440713f7bd5",
+      "line": 34
+    },
+    {
+      "name": "hyperbola_first_reciprocal_eq",
+      "private": false,
+      "header": "theorem hyperbola_first_reciprocal_eq (K L : ℕ) :\n    (∑ a ∈ positiveHyperbolaPairs K L, 1 / ((a.1 : ℝ) - 1)) =\n      ∑ p ∈ Finset.Icc L K, ((K / p : ℕ) : ℝ) / ((p : ℝ) - 1) :=",
+      "sha256": "00bc1517a56766a48258ded84b156e950137222bcc114959264488b0ecdd6c6a",
+      "line": 57
+    },
+    {
+      "name": "hyperbola_first_reciprocal_le",
+      "private": false,
+      "header": "theorem hyperbola_first_reciprocal_le (K L : ℕ) (hL : 2 ≤ L) :\n    (∑ a ∈ positiveHyperbolaPairs K L, 1 / ((a.1 : ℝ) - 1)) ≤\n      2 * (K : ℝ) / ((L : ℝ) - 1) :=",
+      "sha256": "8ff2942a298f9fcc60f9a33ecdff8aa7c52afd0389a2e6b6bb3ee44366d2205b",
+      "line": 77
+    },
+    {
+      "name": "slotPair_injective",
+      "private": false,
+      "header": "theorem slotPair_injective (N : ℕ) (i : Fin 2) : Function.Injective (@slotPair N i) :=",
+      "sha256": "a4f085257c02efda7304405e1a6b21520b62f346c5a7f9aa0d6b1430194caec9",
+      "line": 113
+    },
+    {
+      "name": "slotPair_product",
+      "private": false,
+      "header": "theorem slotPair_product {N : ℕ} (i : Fin 2) (t : Fin 2 → Fin (N + 1)) :\n    (slotPair i t).1 * (slotPair i t).2 = labelledProduct t :=",
+      "sha256": "a893bfb7c652782af899009b2cbee5977a47e0823eeb12d8f501f59d2e411ee3",
+      "line": 123
+    },
+    {
+      "name": "labelled_slot_reciprocal_le",
+      "private": false,
+      "header": "theorem labelled_slot_reciprocal_le {N K L : ℕ} (hL : 2 ≤ L)\n    (S : Finset (Fin 2 → Fin (N + 1))) (hS : S ⊆ labelledPrimeTuples 2 N)\n    (hrough : ∀ t ∈ S, ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ S, labelledProduct t ≤ K) (i : Fin 2) :\n    (∑ t ∈ S, 1 / (((t i).val : ℝ) - 1)) ≤ 2 * (K : ℝ) / ((L : ℝ) - 1) :=",
+      "sha256": "4accee3b75d6d3baca69eaa877753d6703665d8b42dc90bcf23fc8ee71d69b86",
+      "line": 128
+    },
+    {
+      "name": "weighted_labelled_slot_cost_le",
+      "private": false,
+      "header": "theorem weighted_labelled_slot_cost_le {N K L : ℕ} (hL : 2 ≤ L)\n    (S : Finset (Fin 2 → Fin (N + 1))) (hS : S ⊆ labelledPrimeTuples 2 N)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ S, |V t| ≤ B)\n    (hrough : ∀ t ∈ S, ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ S, labelledProduct t ≤ K) :\n    (∑ t ∈ S, |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) ≤\n      16 * B * (K : ℝ) / ((L : ℝ) - 1) :=",
+      "sha256": "a67116b66943040b5bd1cd8dcae833f2d8726716fe272b831b6c04a9bc452917",
+      "line": 153
+    },
+    {
+      "name": "full_weighted_slot_cost_le",
+      "private": false,
+      "header": "theorem full_weighted_slot_cost_le {N K L : ℕ} (hL : 2 ≤ L)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ labelledPrimeTuples 2 N, |V t| ≤ B)\n    (hrough : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → labelledProduct t ≤ K) :\n    (∑ t ∈ labelledPrimeTuples 2 N,\n      |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) ≤\n      16 * B * (K : ℝ) / ((L : ℝ) - 1) :=",
+      "sha256": "a69bc5ec7014bcd83c7638c0465dc01fb97160087bfec58581e3c36a066bcc61",
+      "line": 188
+    },
+    {
+      "name": "actual_upper_outer_correction_le_hyperbola",
+      "private": false,
+      "header": "theorem actual_upper_outer_correction_le_hyperbola\n    {N K L Q : ℕ} (hL : 2 ≤ L)\n    (nu r epsilon : ℝ) (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ)\n    (hQ : attachedUpperModuli nu r epsilon retain cap N ⊆ Finset.Icc 1 Q)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ labelledPrimeTuples 2 N, |V t| ≤ B)\n    (hrough : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → labelledProduct t ≤ K) :\n    |∑ d ∈ attachedUpperModuli nu r epsilon retain cap N,\n      attachedUpperCoefficient nu r epsilon retain cap N d *\n        ((finiteCoprimeMass (P4BLabelledOuterPushforward.productCarrier N)\n            (P4BLabelledOuterPushforward.productWeight N V) d -\n          finiteSourceMass (P4BLabelledOuterPushforward.productCarrier N)\n            (P4BLabelledOuterPushforward.productWeight N V)) / (Nat.totient d : ℝ))| ≤\n      (16 * B * (K : ℝ) / ((L : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) :=",
+      "sha256": "5e3414fc7f2a81bd673e2da28942f604bbade9705b3a96717b425e9ee45df068",
+      "line": 215
+    }
+  ],
+  "public_theorem_count": 9,
+  "private_theorem_count": 0,
+  "all_complete_comment_aware_headers_exact": true,
+  "definitions_imports_constants_quantifiers_hypotheses_raw_bytes_preserved": true,
+  "all_bytes_outside_the_five_recorded_proof_replacements_exact": true,
+  "actual_relationships": {
+    "goldbach-formalization": {
+      "exists": true,
+      "sha256": "a445092bea55b61acf7afdb91a5ff494c976105da420a47f18e989296b8d4324",
+      "matches_baseline": true
+    },
+    "blue-member-build": {
+      "exists": true,
+      "sha256": "a445092bea55b61acf7afdb91a5ff494c976105da420a47f18e989296b8d4324",
+      "matches_baseline": true
+    },
+    "blue-p6-build": {
+      "exists": false
+    }
+  },
+  "published_blob": "b12cb266348ed537c38dc3bb1d0438f6a2ace150",
+  "published_blob_equals_baseline": true,
+  "published_commits": [
+    "226d42b471063ba7382b29b6ef99124ff955d58d",
+    "b2c20e789cd9026661bbc11eaae0e53fba9e94e5"
+  ],
+  "existing_fixed_alternative_found": false,
+  "focused_all_refs_exact_path_blob_variants": 1,
+  "original_failure": {
+    "path": "/workspace/blue-member-static-weighted-hyperbola/original-failure.log",
+    "sha256": "a3125554026310dbe13ce4122744b6e73d81ea0496bdc7fc91fbfdd4758ca95e",
+    "elapsed_seconds": 20,
+    "recovery_sorry_is_original_parse_error_not_new_assumption": true
+  },
+  "diagnosis": [
+    {
+      "line": 49,
+      "kind": "formal-expression-inference",
+      "gap": false,
+      "explanation": "The existing intermediate a.1 ≤ a.1*a.2 is explicitly typed before trans; no new premise."
+    },
+    {
+      "line": 65,
+      "kind": "existing-division-normalization",
+      "gap": false,
+      "explanation": "Add div_eq_mul_inv to the existing finite-fibre simplification."
+    },
+    {
+      "line": 99,
+      "kind": "tactic-control-flow",
+      "gap": false,
+      "explanation": "Use <;> ring rather than an unconditional ring after field_simp may already close the goal."
+    },
+    {
+      "line": 170,
+      "kind": "existing-denominator-nonnegativity",
+      "gap": false,
+      "explanation": "Use the existing hp2 prime≥2 fact explicitly for p-1≥0 and div_nonneg, preserving hrough and all original hypotheses."
+    },
+    {
+      "line": 240,
+      "kind": "proof-local-parenthesis-and-algebra",
+      "gap": false,
+      "explanation": "Remove the extra right parenthesis only in local have heq and use explicit finite sum distribution followed by ring. This changes no public/private theorem header, definition, source family, carrier, bound or quantifier."
+    }
+  ],
+  "preserved_mathematics": [
+    "positiveHyperbolaPairs retains every positive cofactor K/p",
+    "K is the complete-product cap and need not be ≤N",
+    "labelled rank-two primes, repetitions and both slot orientations retained",
+    "all rough/product/weight nonnegativity hypotheses unchanged",
+    "same absolute-value V, B and original 16*B*K/(L-1) estimate",
+    "same actualUpperCoefficient and visible original modulus cap Q/log factor"
+  ],
+  "manuscript_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_anchors": [
+    {
+      "path": "paper/release-20261106/en/argument.tex",
+      "lines": [
+        357,
+        390
+      ],
+      "scope": "Finite exact-coprime correction by union bound over original labelled prime slots, controlled by reciprocal prime squares/roughness; only this existing finite supplier is repaired, no distribution or source-mass theorem is added."
+    }
+  ],
+  "Lean_Lake_compiler_invocations": 0,
+  "live_source_edits": 0,
+  "review_limit": "Static text/API inspection only. Sole source owner must normal-build/kernel-check/audit before acceptance."
+}

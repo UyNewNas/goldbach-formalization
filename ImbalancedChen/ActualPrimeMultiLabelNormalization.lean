@@ -78,7 +78,8 @@ theorem actualPrimeSlotBox_replicate_moebius_sum {ι : Type*}
       (m.factorial : ℝ) *
         ∑ n ∈ (actualPrimeSlotBox B (List.replicate m i)).image List.prod,
           (ArithmeticFunction.moebius (r * n) : ℝ) * H n := by
-  rw [actualPrimeTuple_sum_by_product, Finset.mul_sum]
+  rw [actualPrimeTuple_sum_by_product (actualPrimeSlotBox B (List.replicate m i))
+    (fun n => (ArithmeticFunction.moebius (r * n) : ℝ) * H n), Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro n hn
   by_cases hsquarefree : Squarefree n

@@ -117,7 +117,8 @@ theorem iUnion_winner (D : Set X) (bank : Finset ℕ) (f : ℕ → X → ℝ) :
   · rintro ⟨c, hc, hx⟩
     exact hx.1
   · intro hx
-    exact exists_winner D bank f x hx
+    obtain ⟨c, hc, hwin⟩ := exists_winner D bank f x hx
+    exact ⟨c, hc, hwin⟩
 
 /-- Genuine domination: ordinary candidates need not themselves be
 integrable when the switched option already gives an integrable ceiling. -/
@@ -168,12 +169,15 @@ theorem measurable_guarded (bank : Finset ℕ) (eligible : ℕ → X → Prop)
     (he : ∀ j ∈ bank, MeasurableSet {x | eligible j x})
     (hs : Measurable switched) (ho : ∀ j ∈ bank, Measurable (ordinary j)) :
     ∀ c ∈ tags bank, Measurable (guarded eligible switched ordinary c) := by
+  classical
   intro c hc
   rcases Finset.mem_insert.mp hc with rfl | hc
-  · simpa only [guarded, if_pos rfl] using hs
+  · delta guarded
+    simpa only [if_true] using hs
   · obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hc
-    simpa only [guarded, Nat.succ_ne_zero, if_false, Nat.pred_succ] using
-      (ho j hj).piecewise (he j hj) hs
+    delta guarded
+    simp only [Nat.succ_ne_zero, if_false, Nat.pred_succ]
+    exact Measurable.ite (he j hj) (ho j hj) hs
 
 theorem guarded_nonneg (D : Set X) (bank : Finset ℕ)
     (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)
@@ -182,7 +186,7 @@ theorem guarded_nonneg (D : Set X) (bank : Finset ℕ)
     ∀ x ∈ D, ∀ c ∈ tags bank, 0 ≤ guarded eligible switched ordinary c x := by
   intro x hx c hc
   rcases Finset.mem_insert.mp hc with rfl | hc
-  · simpa only [guarded, if_pos rfl] using hs x hx
+  · simpa only [guarded, if_true] using hs x hx
   · obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hc
     by_cases he : eligible j x
     · simpa [guarded, he] using ho j hj x hx he
@@ -191,7 +195,7 @@ theorem guarded_nonneg (D : Set X) (bank : Finset ℕ)
 theorem guarded_envelope_le_switched (bank : Finset ℕ)
     (eligible : ℕ → X → Prop) (switched : X → ℝ) (ordinary : ℕ → X → ℝ)
     (x : X) : envelope bank (guarded eligible switched ordinary) x ≤ switched x := by
-  simpa only [guarded, if_pos rfl] using
+  simpa only [guarded, if_true] using
     envelope_le bank (guarded eligible switched ordinary) x 0 (Finset.mem_insert_self _ _)
 
 theorem guarded_envelope_bounds (D : Set X) (bank : Finset ℕ)
@@ -237,7 +241,7 @@ theorem integral_guarded_envelope_eq_raw (D : Set X) (hD : MeasurableSet D)
   apply setIntegral_congr_fun (measurableSet_winner D hD bank _ hg c hc)
   intro x hx
   by_cases hc0 : c = 0
-  · simp only [guarded, hc0, if_pos rfl]
+  · simp only [guarded, hc0, if_true]
   · obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hc0
     have hj := ordinary_winner_eligible D bank eligible switched ordinary j x hx
     simp [guarded, hj]
@@ -325,7 +329,8 @@ theorem integrableOn_original_envelope (mask : Set (ℝ × ℝ))
   · exact measurable_guarded bank eligible _ _ he (measurable_switchedKernel K omega homega)
       (fun j hj => measurable_ordinaryKernel H L j hH (hL j hj))
   · exact guarded_nonneg _ bank eligible _ _ hs ho
-  · simpa only [guarded, if_pos rfl] using hi
+  · delta guarded
+    simpa only [if_true] using hi
 
 /-- Exact set-integral accounting on the complete original U11 masked
 log-domain. Kernels with measurable table seams are fully admitted. -/

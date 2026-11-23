@@ -1,0 +1,182 @@
+{
+  "schema": "independent_p1_shared_prerequisite_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "reviewed_utc": "2026-11-23T16:15:41.579408+00:00",
+  "batch": 36,
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P4BWeightedHyperbolaSlotDecay",
+      "preimage_sha256": "a445092bea55b61acf7afdb91a5ff494c976105da420a47f18e989296b8d4324",
+      "postimage_sha256": "a0238da796e5a235e84c06cab0ca862ad1bc6d143af01be42be5a0221b1a241e",
+      "complete_headers": [
+        {
+          "name": "mem_positiveHyperbolaPairs",
+          "private": false,
+          "header": "theorem mem_positiveHyperbolaPairs {K L : ℕ} (hL : 2 ≤ L) (a : ℕ × ℕ) :\n    a ∈ positiveHyperbolaPairs K L ↔\n      L ≤ a.1 ∧ 1 ≤ a.2 ∧ a.1 * a.2 ≤ K :=",
+          "sha256": "4cd92d638aa0a2806c2a0d037e86d1cc886ddb548fd824733b942440713f7bd5"
+        },
+        {
+          "name": "hyperbola_first_reciprocal_eq",
+          "private": false,
+          "header": "theorem hyperbola_first_reciprocal_eq (K L : ℕ) :\n    (∑ a ∈ positiveHyperbolaPairs K L, 1 / ((a.1 : ℝ) - 1)) =\n      ∑ p ∈ Finset.Icc L K, ((K / p : ℕ) : ℝ) / ((p : ℝ) - 1) :=",
+          "sha256": "00bc1517a56766a48258ded84b156e950137222bcc114959264488b0ecdd6c6a"
+        },
+        {
+          "name": "hyperbola_first_reciprocal_le",
+          "private": false,
+          "header": "theorem hyperbola_first_reciprocal_le (K L : ℕ) (hL : 2 ≤ L) :\n    (∑ a ∈ positiveHyperbolaPairs K L, 1 / ((a.1 : ℝ) - 1)) ≤\n      2 * (K : ℝ) / ((L : ℝ) - 1) :=",
+          "sha256": "8ff2942a298f9fcc60f9a33ecdff8aa7c52afd0389a2e6b6bb3ee44366d2205b"
+        },
+        {
+          "name": "slotPair_injective",
+          "private": false,
+          "header": "theorem slotPair_injective (N : ℕ) (i : Fin 2) : Function.Injective (@slotPair N i) :=",
+          "sha256": "a4f085257c02efda7304405e1a6b21520b62f346c5a7f9aa0d6b1430194caec9"
+        },
+        {
+          "name": "slotPair_product",
+          "private": false,
+          "header": "theorem slotPair_product {N : ℕ} (i : Fin 2) (t : Fin 2 → Fin (N + 1)) :\n    (slotPair i t).1 * (slotPair i t).2 = labelledProduct t :=",
+          "sha256": "a893bfb7c652782af899009b2cbee5977a47e0823eeb12d8f501f59d2e411ee3"
+        },
+        {
+          "name": "labelled_slot_reciprocal_le",
+          "private": false,
+          "header": "theorem labelled_slot_reciprocal_le {N K L : ℕ} (hL : 2 ≤ L)\n    (S : Finset (Fin 2 → Fin (N + 1))) (hS : S ⊆ labelledPrimeTuples 2 N)\n    (hrough : ∀ t ∈ S, ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ S, labelledProduct t ≤ K) (i : Fin 2) :\n    (∑ t ∈ S, 1 / (((t i).val : ℝ) - 1)) ≤ 2 * (K : ℝ) / ((L : ℝ) - 1) :=",
+          "sha256": "4accee3b75d6d3baca69eaa877753d6703665d8b42dc90bcf23fc8ee71d69b86"
+        },
+        {
+          "name": "weighted_labelled_slot_cost_le",
+          "private": false,
+          "header": "theorem weighted_labelled_slot_cost_le {N K L : ℕ} (hL : 2 ≤ L)\n    (S : Finset (Fin 2 → Fin (N + 1))) (hS : S ⊆ labelledPrimeTuples 2 N)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ S, |V t| ≤ B)\n    (hrough : ∀ t ∈ S, ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ S, labelledProduct t ≤ K) :\n    (∑ t ∈ S, |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) ≤\n      16 * B * (K : ℝ) / ((L : ℝ) - 1) :=",
+          "sha256": "a67116b66943040b5bd1cd8dcae833f2d8726716fe272b831b6c04a9bc452917"
+        },
+        {
+          "name": "full_weighted_slot_cost_le",
+          "private": false,
+          "header": "theorem full_weighted_slot_cost_le {N K L : ℕ} (hL : 2 ≤ L)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ labelledPrimeTuples 2 N, |V t| ≤ B)\n    (hrough : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → labelledProduct t ≤ K) :\n    (∑ t ∈ labelledPrimeTuples 2 N,\n      |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) ≤\n      16 * B * (K : ℝ) / ((L : ℝ) - 1) :=",
+          "sha256": "a69bc5ec7014bcd83c7638c0465dc01fb97160087bfec58581e3c36a066bcc61"
+        },
+        {
+          "name": "actual_upper_outer_correction_le_hyperbola",
+          "private": false,
+          "header": "theorem actual_upper_outer_correction_le_hyperbola\n    {N K L Q : ℕ} (hL : 2 ≤ L)\n    (nu r epsilon : ℝ) (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ)\n    (hQ : attachedUpperModuli nu r epsilon retain cap N ⊆ Finset.Icc 1 Q)\n    (V : (Fin 2 → Fin (N + 1)) → ℝ) (B : ℝ) (hB : 0 ≤ B)\n    (hV : ∀ t ∈ labelledPrimeTuples 2 N, |V t| ≤ B)\n    (hrough : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → ∀ i, L ≤ (t i).val)\n    (hproduct : ∀ t ∈ labelledPrimeTuples 2 N, V t ≠ 0 → labelledProduct t ≤ K) :\n    |∑ d ∈ attachedUpperModuli nu r epsilon retain cap N,\n      attachedUpperCoefficient nu r epsilon retain cap N d *\n        ((finiteCoprimeMass (P4BLabelledOuterPushforward.productCarrier N)\n            (P4BLabelledOuterPushforward.productWeight N V) d -\n          finiteSourceMass (P4BLabelledOuterPushforward.productCarrier N)\n            (P4BLabelledOuterPushforward.productWeight N V)) / (Nat.totient d : ℝ))| ≤\n      (16 * B * (K : ℝ) / ((L : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) :=",
+          "sha256": "5e3414fc7f2a81bd673e2da28942f604bbade9705b3a96717b425e9ee45df068"
+        }
+      ],
+      "raw_definitions": [
+        {
+          "raw": "def positiveHyperbolaPairs (K L : ℕ) : Finset (ℕ × ℕ) :=\n  (Finset.Icc L K).biUnion (fun p =>\n    (Finset.Icc 1 (K / p)).image (fun q => (p, q)))\n\n",
+          "sha256": "47e507c01919d7b4b0234d9f176e69ffdb10bdebb9a27c61a5f12f07b1c3b0a1"
+        },
+        {
+          "raw": "def otherSlot (i : Fin 2) : Fin 2 := if i = 0 then 1 else 0\n\n",
+          "sha256": "4a1072c5eff583bee3b94d545c13b6897bc37ed50a9532180ff7186fa75f164f"
+        },
+        {
+          "raw": "def slotPair {N : ℕ} (i : Fin 2) (t : Fin 2 → Fin (N + 1)) : ℕ × ℕ :=\n  ((t i).val, (t (otherSlot i)).val)\n\n",
+          "sha256": "b6da01c356492fa3792b3538229c96d11d113d5a9950b36c2a4893873b164e3a"
+        }
+      ],
+      "changed_proof_names": [
+        "mem_positiveHyperbolaPairs",
+        "hyperbola_first_reciprocal_eq",
+        "hyperbola_first_reciprocal_le",
+        "weighted_labelled_slot_cost_le",
+        "actual_upper_outer_correction_le_hyperbola"
+      ],
+      "all_bytes_outside_changed_proof_bodies_exact": true,
+      "current_source_bindings": [
+        {
+          "path": "/workspace/blue-member-build/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.lean",
+          "bytes": 12548,
+          "sha256": "a0238da796e5a235e84c06cab0ca862ad1bc6d143af01be42be5a0221b1a241e"
+        },
+        {
+          "path": "/workspace/goldbach-formalization/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.lean",
+          "bytes": 12548,
+          "sha256": "a0238da796e5a235e84c06cab0ca862ad1bc6d143af01be42be5a0221b1a241e"
+        }
+      ],
+      "main_canonical_exists": true,
+      "new_assumptions_or_semantic_definition_changes": false,
+      "review_basis": "All patch hunks were manually inspected; changes only expose existing arguments, definitions, algebra or nonnegativity for the current API."
+    }
+  ],
+  "findings": [],
+  "release_and_manifest": [
+    {
+      "path": "/workspace/blue-member-repair-batch36/FINAL_RELEASE.json",
+      "bytes": 943,
+      "sha256": "6b7937bd9f19c846484f69e4d48001335378bad9b037b8018853e19108afa13f"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch36/PUBLICATION_FILES.json",
+      "bytes": 5076,
+      "sha256": "eef6cfdc47273b838f5470d84dca80d9e8ad0634960b70a795f40d3f8c68e7fc"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch36/VALIDATION_RESULTS.json",
+      "bytes": 4205,
+      "sha256": "793368ab9dce8d6a7d8dd04190200cd7ab01a37555b50c396358ab15b1c9b411"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch36/SOURCE_SELECTION.json",
+      "bytes": 1742,
+      "sha256": "65905c029baf63c6fd3d94e4da14909ce2ba40c6886ce3a41849798fdcd7a73a"
+    }
+  ],
+  "original_packet_file_count": 29,
+  "all_manifest_size_sha256_bindings_match": true,
+  "source_plus_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.lean",
+      "bytes": 12548,
+      "sha256": "a0238da796e5a235e84c06cab0ca862ad1bc6d143af01be42be5a0221b1a241e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.olean",
+      "bytes": 551424,
+      "sha256": "5b6e73097918516dfe938378d9f107bd5fdfd626ca243c85fbff8b67f45cd8ee"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.ilean",
+      "bytes": 48110,
+      "sha256": "0c31049ebe07a02b413dcb660941c0ae18b8cd566475bf0dcf077a30ee8c63a0"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.c",
+      "bytes": 27184,
+      "sha256": "abc353df2c62bf4b79a32b78d982f62346ed155ad8d5788540d9b2b064ba53b2"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.setup.json",
+      "bytes": 6415241,
+      "sha256": "146e38eefb40dad939b777a557ee5ee7116fa1fc2a5b1246c91fca1013f67c4e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BWeightedHyperbolaSlotDecay.trace",
+      "bytes": 3878,
+      "sha256": "d3d0001a841241a4b472a7ab1fbc4174aa8ed1e80212c103a51c21c391c5b8e0"
+    }
+  ],
+  "existing_validation": {
+    "public_export_counts": {
+      "ImbalancedChen.P4BWeightedHyperbolaSlotDecay": 24
+    },
+    "total_public_exports": 24,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "all_command_log_hashes_match": true,
+    "full_AST_equals_raw_log": true,
+    "transitive_axioms_equal_raw_log": true,
+    "only_standard_axioms": true
+  },
+  "scope": "Exact accepted Member prerequisites also used by the selected modern P1 source closure; no complete-P1 or whole-board claim.",
+  "reviewer_Lean_kernel_audit_stock_or_compiler_invocations": 0,
+  "original_source_log_trace_or_validation_record_edits": 0
+}

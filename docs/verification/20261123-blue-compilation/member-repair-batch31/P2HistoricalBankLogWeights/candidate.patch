@@ -1,0 +1,24 @@
+--- baseline/ImbalancedChen/P2HistoricalBankLogWeights.lean
++++ candidate/ImbalancedChen/P2HistoricalBankLogWeights.lean
+@@ -118,7 +118,8 @@
+     1 ≤ ((m : ℚ) / Q) * (1 / ((n : ℚ) / Q)) := by
+   have hnQ : (0 : ℚ) < n := by exact_mod_cast hn
+   have he : ((m : ℚ) / Q) * (1 / ((n : ℚ) / Q)) = (m : ℚ) / n := by
+-    field_simp [Q_ne_zero, hnQ.ne'] <;> ring
++    rw [one_div_div]
++    exact div_mul_div_cancel₀ Q_ne_zero
+   rw [he]
+   apply (le_div_iff₀ hnQ).mpr
+   simpa only [one_mul] using (show (n : ℚ) ≤ m by exact_mod_cast hnm)
+@@ -205,7 +206,10 @@
+         (Certificates.P2HistoricLogRangeReduction.sourceRL q)
+         (Certificates.P2HistoricLogRangeReduction.sourceRH q) := of_decide_eq_true hcheck
+     have hshift := sourceShift_nonnegative_of_Q_le hq
+-    have hbase := atanhBounds_lo_nonnegative hred.2.1
++    have hbase := atanhBounds_lo_nonnegative
++      (uh := (reducedParameter
++        (Certificates.P2HistoricLogRangeReduction.sourceRL q)
++        (Certificates.P2HistoricLogRangeReduction.sourceRH q)).hi) hred.2.1
+     simp only [logPoint, if_neg he, logPointFromReduction, I80.add,
+       integerScale, if_pos hshift]
+     exact add_nonneg hbase (mul_nonneg hshift logTwoBounds_lo_nonnegative)
