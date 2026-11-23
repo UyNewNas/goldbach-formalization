@@ -1,10 +1,12 @@
 /- Combined listing of the exact separately executed entry audits; no theorem is added. -/
 import ImbalancedChen.P2DegreeSixLogGapSoundness
 import ImbalancedChen.P2OriginalLogMomentQ96Checker
-import ImbalancedChen.P2WuJointWindowProfile
 import ImbalancedChen.P4BSmoothStepDerivativeBudget
+import ImbalancedChen.P2WuJointWindowProfile
 import ImbalancedChen.Part3UnitWeightCurveIntegral
 import ImbalancedChen.P3OriginalPrimeRoughThreshold
+import ImbalancedChen.P5PrimeFixedWidthMass
+import ImbalancedChen.P5OriginalCoprimeRationalEndpoint
 
 set_option pp.fullNames true
 set_option pp.universes true
@@ -99,6 +101,30 @@ set_option pp.maxSteps 1000000
 #check ImbalancedChen.P2OriginalLogMomentQ96CheckerSourceOnly.refloor_intermediate_sound
 #print axioms ImbalancedChen.P2OriginalLogMomentQ96CheckerSourceOnly.refloor_intermediate_sound
 
+#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_zero_abs_le_one
+#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_zero_abs_le_one
+
+#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_neg
+#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_neg
+
+#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_one_lt
+#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_one_lt
+
+#check ImbalancedChen.P4B.continuous_iteratedDeriv_smoothTransition
+#print axioms ImbalancedChen.P4B.continuous_iteratedDeriv_smoothTransition
+
+#check ImbalancedChen.P4B.exists_smoothTransition_compact_derivative_bound
+#print axioms ImbalancedChen.P4B.exists_smoothTransition_compact_derivative_bound
+
+#check ImbalancedChen.P4B.exists_smoothTransition_global_derivative_bound
+#print axioms ImbalancedChen.P4B.exists_smoothTransition_global_derivative_bound
+
+#check ImbalancedChen.P4B.iteratedDeriv_smoothGateUpperStep
+#print axioms ImbalancedChen.P4B.iteratedDeriv_smoothGateUpperStep
+
+#check ImbalancedChen.P4B.exists_smoothGateUpperStep_derivative_budget
+#print axioms ImbalancedChen.P4B.exists_smoothGateUpperStep_derivative_budget
+
 #check ImbalancedChen.P2WuJointWindowProfile.lowerBase_pos
 #print axioms ImbalancedChen.P2WuJointWindowProfile.lowerBase_pos
 
@@ -132,30 +158,6 @@ set_option pp.maxSteps 1000000
 #check ImbalancedChen.P2WuJointWindowProfile.profile_eq_indicator_off_collar
 #print axioms ImbalancedChen.P2WuJointWindowProfile.profile_eq_indicator_off_collar
 
-#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_zero_abs_le_one
-#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_zero_abs_le_one
-
-#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_neg
-#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_neg
-
-#check ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_one_lt
-#print axioms ImbalancedChen.P4B.smoothTransition_iteratedDeriv_eq_zero_of_one_lt
-
-#check ImbalancedChen.P4B.continuous_iteratedDeriv_smoothTransition
-#print axioms ImbalancedChen.P4B.continuous_iteratedDeriv_smoothTransition
-
-#check ImbalancedChen.P4B.exists_smoothTransition_compact_derivative_bound
-#print axioms ImbalancedChen.P4B.exists_smoothTransition_compact_derivative_bound
-
-#check ImbalancedChen.P4B.exists_smoothTransition_global_derivative_bound
-#print axioms ImbalancedChen.P4B.exists_smoothTransition_global_derivative_bound
-
-#check ImbalancedChen.P4B.iteratedDeriv_smoothGateUpperStep
-#print axioms ImbalancedChen.P4B.iteratedDeriv_smoothGateUpperStep
-
-#check ImbalancedChen.P4B.exists_smoothGateUpperStep_derivative_budget
-#print axioms ImbalancedChen.P4B.exists_smoothGateUpperStep_derivative_budget
-
 #check ImbalancedChen.Part3.UnitWeightCurveIntegral20261123.positive_curve_weight
 #print axioms ImbalancedChen.Part3.UnitWeightCurveIntegral20261123.positive_curve_weight
 
@@ -164,4 +166,16 @@ set_option pp.maxSteps 1000000
 
 #check ImbalancedChen.P3OriginalPrimeRoughThreshold.two_lt_rough_threshold
 #print axioms ImbalancedChen.P3OriginalPrimeRoughThreshold.two_lt_rough_threshold
+
+#check ImbalancedChen.P5PrimeFixedWidthMass.mem_window
+#print axioms ImbalancedChen.P5PrimeFixedWidthMass.mem_window
+
+#check ImbalancedChen.P5PrimeFixedWidthMass.eventually_window_mass
+#print axioms ImbalancedChen.P5PrimeFixedWidthMass.eventually_window_mass
+
+#check ImbalancedChen.P5OriginalCoprimeRationalEndpoint.prime_ne_coprime_power
+#print axioms ImbalancedChen.P5OriginalCoprimeRationalEndpoint.prime_ne_coprime_power
+
+#check ImbalancedChen.P5OriginalCoprimeRationalEndpoint.original_cutoff_strict
+#print axioms ImbalancedChen.P5OriginalCoprimeRationalEndpoint.original_cutoff_strict
 
