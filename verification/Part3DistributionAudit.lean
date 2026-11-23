@@ -23,6 +23,19 @@ import ImbalancedChen.Part3CleanBetaLargeGCDMajorant
 import ImbalancedChen.Part3PolynomialResidueDivisorBound
 import ImbalancedChen.Part3ActualLargeGCDBetaMass
 import ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity
+import ImbalancedChen.Part3CommonPoisson
+import ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson
+import ImbalancedChen.Part3ActualReciprocalSquarePoissonCore
+import ImbalancedChen.Part3OriginalSignedCountingNorm
+import ImbalancedChen.Part3DeterminantGCD
+import ImbalancedChen.Part3RoughAuxiliarySWChartBudget
+import ImbalancedChen.Part3SmoothReciprocalWeil
+import ImbalancedChen.Part3TwoLongBrunComparison
+import ImbalancedChen.Part3TwoLongCompletion
+import ImbalancedChen.Part3TwoLongSmooth
+import ImbalancedChen.Part3GevreyCutoff
+import ImbalancedChen.Part3E1ReciprocalPhase
+import ImbalancedChen.Part3BrunDensity
 import Lean.Util.CollectAxioms
 
 /-!
@@ -70,7 +83,20 @@ run_cmd do
     `ImbalancedChen.Part3CleanBetaLargeGCDMajorant,
     `ImbalancedChen.Part3PolynomialResidueDivisorBound,
     `ImbalancedChen.Part3ActualLargeGCDBetaMass,
-    `ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity]
+    `ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity,
+    `ImbalancedChen.Part3CommonPoisson,
+    `ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson,
+    `ImbalancedChen.Part3ActualReciprocalSquarePoissonCore,
+    `ImbalancedChen.Part3OriginalSignedCountingNorm,
+    `ImbalancedChen.Part3DeterminantGCD,
+    `ImbalancedChen.Part3RoughAuxiliarySWChartBudget,
+    `ImbalancedChen.Part3SmoothReciprocalWeil,
+    `ImbalancedChen.Part3TwoLongBrunComparison,
+    `ImbalancedChen.Part3TwoLongCompletion,
+    `ImbalancedChen.Part3TwoLongSmooth,
+    `ImbalancedChen.Part3GevreyCutoff,
+    `ImbalancedChen.Part3E1ReciprocalPhase,
+    `ImbalancedChen.Part3BrunDensity]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with

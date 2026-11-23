@@ -327,6 +327,48 @@ theorem completeKloosterman_zero_left_norm_le_gcd (q : ℕ) [NeZero q] (a : ℤ)
       exact mul_le_mul hleft hright (norm_nonneg _) (Nat.cast_nonneg _)
   simpa only [Int.cast_zero] using hall q inferInstance a
 
+/-- The nonzero Fourier contribution to one primitive mass has an
+absolute bound of `2 C τ(q)` for every positive mesh. -/
+theorem completedRamanujan_nonzero_norm_le (q : ℕ) [NeZero q]
+    (t : ℝ) (ht : 0 < t) (F : ℝ → ℂ) (C : ℝ) (hC : 0 ≤ C)
+    (hdecay : ∀ x : ℝ, ‖F x‖ ≤ C / (1 + |x|) ^ 2) :
+    ‖∑' m : ℤ, if m = 0 then 0 else
+      (t • F (t * (m : ℝ))) * completeKloosterman q 0 m‖ ≤
+      2 * C * (q.divisors.card : ℝ) := by
+  classical
+  let f (m : ℤ) := if m = 0 then 0 else (t • F (t * (m : ℝ))) * completeKloosterman q 0 m
+  let g (d : ℕ) (m : ℤ) := (d : ℝ) * decayOnMultiples t d m
+  have hgd (d : ℕ) : Summable (g d) := (decayOnMultiples_summable ht d).mul_left _
+  have hsum : Summable (fun m => ∑ d ∈ q.divisors, g d m) := summable_sum (fun d _ => hgd d)
+  have hpoint (m : ℤ) : ‖f m‖ ≤ C * ∑ d ∈ q.divisors, g d m := by
+    by_cases hm : m = 0
+    · simp [f, g, hm, decayOnMultiples, poissonNonzeroDecay]
+    · let d := q.gcd m.natAbs
+      have hd : d ∈ q.divisors := Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_left _ _, NeZero.ne q⟩
+      have hdm : (d : ℤ) ∣ m := by
+        rw [← Int.dvd_natAbs, Int.natCast_dvd_natCast]
+        exact Nat.gcd_dvd_right _ _
+      have hsingle : g d m ≤ ∑ i ∈ q.divisors, g i m :=
+        single_le_sum (fun i _ => mul_nonneg (Nat.cast_nonneg i) (decayOnMultiples_nonneg ht i _)) hd
+      calc
+        ‖f m‖ ≤ (t * (C / (1 + |t * (m : ℝ)|) ^ 2)) * (d : ℝ) := by
+          simp only [f, if_neg hm, norm_mul, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
+          exact mul_le_mul (mul_le_mul_of_nonneg_left (hdecay _) ht.le)
+            (completeKloosterman_zero_left_norm_le_gcd q m) (norm_nonneg _) (by positivity)
+        _ = C * g d m := by
+          simp only [g, decayOnMultiples, hdm, if_true, poissonNonzeroDecay, hm, if_false]
+          ring
+        _ ≤ _ := mul_le_mul_of_nonneg_left hsingle hC
+  have hf := (hsum.mul_left C).of_nonneg_of_le (fun _ => norm_nonneg _) hpoint
+  refine (norm_tsum_le_tsum_norm hf).trans ((hf.tsum_le_tsum hpoint (hsum.mul_left _)).trans ?_)
+  calc
+    _ = C * ∑ d ∈ q.divisors, ∑' m : ℤ, g d m := by
+      rw [tsum_mul_left, Summable.tsum_finsetSum (fun d _ => hgd d)]
+    _ ≤ C * ∑ _d ∈ q.divisors, (2 : ℝ) := by
+      apply mul_le_mul_of_nonneg_left _ hC
+      exact sum_le_sum (fun d hd => weighted_decayOnMultiples_tsum_le ht (Nat.pos_of_mem_divisors hd))
+    _ = _ := by simp only [sum_const, nsmul_eq_mul]; ring
+
 /-- Equation (17) for the fixed physical dyadic cutoff. There are no
 restrictions on the phase or on the relative sizes of `N` and `q`. -/
 theorem dyadicReciprocalSum_norm_le :
