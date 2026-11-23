@@ -1,0 +1,547 @@
+--- ImbalancedChen.P5ActualHBChartEventualClosure.registered
++++ ImbalancedChen.P5ActualHBChartEventualClosure.verified
+@@ -110,7 +110,7 @@
+         _ ≤ chartN gs := htrim
+         _ ≤ (2 : ℝ)^gs.length*chartX gs := hNX
+         _ ≤ (2 : ℝ)^K*chartX gs := mul_le_mul_of_nonneg_right h2pow hXp.le
+-    exact (mul_le_mul_left (by positivity : (0 : ℝ) < 2^K)).mp hh
++    exact (mul_le_mul_iff_right₀ (by positivity : (0 : ℝ) < 2^K)).mp hh
+   refine ⟨hXL,?_⟩
+   intro g hg
+   have hs := smooth_group_support g.positive g.lower_support g.upper_support
+@@ -124,7 +124,7 @@
+     linarith
+   have hscaled : D^a ≤ (c/2)*T^(astar-a) := by
+     have hh := mul_le_mul_of_nonneg_left hgap (by linarith : 0 ≤ c/2)
+-    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]; ring
++    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]
+     rw [hcancel] at hh
+     exact hh
+   have hpowid : T^(astar-a)*T^a = T^astar := by
+@@ -203,7 +203,7 @@
+     exact physical_original_branch_assignment (C:=2) (Cscale:=scaleConstant K)
+       g.positive g.rough_nonneg g.hb_nonneg
+       g.lower_support g.upper_support hX1.le hx1.le hzeta.le (by norm_num)
+-      (hmember g hg).2 hR2 g.hb_cube hshort hlong hA (scaleConstant_pos K).le
++      (hmember g hg).2 hR2 g.hb_cube hshort (by convert hlong using 1 <;> norm_num) hA (scaleConstant_pos K).le
+       hxXK hXxK hlowerRes hupperRes g.w g.order g.active
+   have hglobalCount :
+       firstMedium (originalLower (chartX gs) zeta) (originalUpper (chartX gs) zeta)
+@@ -217,7 +217,7 @@
+         have hlen := congrArg List.length hsplit
+         simp only [he,blocks,List.length_nil,List.length_append,List.length_cons] at hlen
+         omega
+-      | cons g tail => exact ⟨g,tail,he⟩
++      | cons g tail => exact ⟨g,tail,rfl⟩
+     have hg : g ∈ gs := by simp [hgs]
+     have hgNone : firstMedium (originalLower (chartX gs) zeta)
+         (originalUpper (chartX gs) zeta) g.bs = none := by
+@@ -234,7 +234,7 @@
+       OriginalHBMediumChartReserves.original_chart_numeric_reserves (C:=2)
+         hX1.le hzeta.le (by norm_num) (hmember g hg).2
+         (by linarith : g.R ≤ 2*chartX gs) (by linarith : g.R/128 ≤ (g.n : ℝ))
+-        hnX g.hb_nonneg g.hb_cube hshort hlong
++        hnX g.hb_nonneg g.hb_cube hshort (by convert hlong using 1 <;> norm_num)
+     obtain ⟨bb,hbb,hblong⟩ := actual_noMedium_has_long g.rough_nonneg hAr
+       g.order (mul_ne_zero_iff.mp g.active).2 hgNone hshortn
+     have hbfull : bb ∈ blocks gs := by
+@@ -243,12 +243,13 @@
+     have hlongmem : bb ∈ longBlocks (originalUpper (chartX gs) zeta) (blocks gs) := by
+       simp [longBlocks,hbfull,hblong]
+     have hpos : 0 < (longBlocks (originalUpper (chartX gs) zeta) (blocks gs)).length :=
+-      List.length_pos.mpr (by intro he; simpa [he] using hlongmem)
++      List.length_pos_iff.mpr (by intro he; simpa [he] using hlongmem)
+     have hB3 : (originalUpper (chartX gs) zeta)^3 =
+         chartX gs*(chartX gs)^(3*zeta/4) := by
+       unfold originalUpper
+       rw [← Real.rpow_natCast,← Real.rpow_mul hXp.le]
+       have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring
++      norm_num only [Nat.cast_ofNat]
+       rw [he,Real.rpow_add hXp,Real.rpow_one]
+     have hrawBelow : rawProduct (blocks gs) < (originalUpper (chartX gs) zeta)^3 := by
+       rw [hB3]
+@@ -348,7 +349,7 @@
+   have hfin : T^gap*T ≤ T^gap*x^(1+kappa) := by
+     simpa only [mul_comm] using hraise.trans hpay
+   have hshift : T ≤ x^(1+kappa) :=
+-    (mul_le_mul_left (Real.rpow_pos_of_pos hTp gap)).mp hfin
++    (mul_le_mul_iff_right₀ (Real.rpow_pos_of_pos hTp gap)).mp hfin
+   exact ⟨pl,p,pr,hints,hc0,hshift⟩
+ 
+ end
+--- ImbalancedChen.P5ActualHBDyadicOccurrenceFamily.registered
++++ ImbalancedChen.P5ActualHBDyadicOccurrenceFamily.verified
+@@ -33,8 +33,9 @@
+   induction r with
+   | zero => simp [blockWords]
+   | succ r ih =>
+-    rw [blockWords,Finset.card_image_of_injective _ cons_pair_injective,
+-      Finset.card_product,bank_card,ih,pow_succ]
++    rw [blockWords,Finset.card_image_of_injective _ cons_pair_injective]
++    change ((bank n) ×ˢ (blockWords n r)).card = _
++    rw [Finset.card_product,bank_card,ih,pow_succ]
+     exact Nat.mul_comm _ _
+ 
+ theorem blockWords_spec (n : ℕ) : ∀r : ℕ, ∀bs∈blockWords n r,
+@@ -85,6 +86,7 @@
+       simp only [assignedWeight]
+       simp_rw [← Finset.mul_sum,ih ps htail]
+       rw [← Finset.sum_mul,role_reconstruct hhead.1 hhead.2]
++      rfl
+ 
+ def blockCoefficient (z y : ℝ) (j n : ℕ) (bs : List Block) : ℂ :=
+   ∑ps∈factorTuples (2*(j+1)) n,assignedWeight z y (roles j) bs ps
+--- ImbalancedChen.P5ActualHBMediumBranchPartition.registered
++++ ImbalancedChen.P5ActualHBMediumBranchPartition.verified
+@@ -104,7 +104,9 @@
+     · exact False.elim (h ⟨b,hb,hl⟩)
+   have hp := rawProduct_le_pow (by linarith : 0 ≤ A) bs hcap
+   have hexp : A^bs.length ≤ A^6 := pow_le_pow_right₀ hA hlen
+-  have hn' : (n : ℝ) ≤ 64*rawProduct bs := by exact_mod_cast hhi
++  have hn' : (n : ℝ) ≤ 64*rawProduct bs := by
++    unfold rawProduct
++    exact_mod_cast hhi
+   nlinarith
+ 
+ -- This is also valid for concatenated original group words once their
+@@ -126,10 +128,12 @@
+     (longBlocks B bs).length = 1 ∨ (longBlocks B bs).length = 2 := by
+   obtain ⟨b,hb,hbl⟩ := actual_noMedium_has_long hz hA hj hn hbranch hshort
+   have hmem : b ∈ longBlocks B bs := by simp [longBlocks,hb,hbl]
+-  have hpos : 0 < (longBlocks B bs).length := List.length_pos.mpr (by
++  have hpos : 0 < (longBlocks B bs).length := List.length_pos_iff.mpr (by
+     intro he; simpa [he] using hmem)
+   have hlo := (actual_block_product_window hz hn).2.1
+-  have hr : rawProduct bs ≤ (n : ℝ) := by exact_mod_cast hlo
++  have hr : rawProduct bs ≤ (n : ℝ) := by
++    unfold rawProduct
++    exact_mod_cast hlo
+   have htwo := atMostTwoLong hB (hr.trans_lt hcomplete)
+   omega
+ 
+--- ImbalancedChen.P5ActualHBMediumRoleSupports.registered
++++ ImbalancedChen.P5ActualHBMediumRoleSupports.verified
+@@ -53,8 +53,8 @@
+     linarith
+   cases hrole : rb.1 with
+   | mobius => exact False.elim (hnot hrole)
+-  | one => exact Or.inl hrole
+-  | logarithm => exact Or.inr hrole
++  | one => exact Or.inl rfl
++  | logarithm => exact Or.inr rfl
+ 
+ -- The original medium selector gives the SAME selected occurrence in
+ -- every tuple. Its actual integer factor has the original dyadic support.
+--- ImbalancedChen.P5ActualLabelledPrimeSmoothCharts.registered
++++ ImbalancedChen.P5ActualLabelledPrimeSmoothCharts.verified
+@@ -13,6 +13,7 @@
+ open HBRightClosedDyadicRoles ActualHBDyadicOccurrenceFamily
+ open ActualHBDyadicProductWindow ActualHBMediumBranchPartition
+ open ActualMultiGroupHBChartScale ExactOriginalSmoothDyadicPartition
++local notation "R" => ExactOriginalSmoothDyadicPartition.R
+ 
+ def primeAlphabet (cap : ℕ) : Finset ℕ := (Finset.range (cap+1)).filter Nat.Prime
+ def primeTuples (cap k : ℕ) : Finset (List ℕ) := words (primeAlphabet cap) k
+@@ -162,7 +163,9 @@
+     exact lower_pos bb
+   have hcomp : 0 < (pl++pr).prod := hpos.trans_le hc.1
+   have ho := (owns_bounds (owner_owns hcomp)).2
+-  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
++  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
++    unfold rawProduct
++    exact_mod_cast hc.1
+   have hhigh : ((pl++pr).prod : ℝ) ≤ 2*(lower (owner (pl++pr).prod) : ℝ) := by
+     exact_mod_cast ho
+   have hid : rawProduct (blocks gs) = (lower b : ℝ)*rawProduct (left++right) := by
+--- ImbalancedChen.P5ActualMultiGroupHBChartScale.registered
++++ ImbalancedChen.P5ActualMultiGroupHBChartScale.verified
+@@ -15,8 +15,8 @@
+ 
+ structure Group where
+   psi : ℝ → ℂ
+-  R z y : ℝ
+-  j n : ℕ
++  (R z y : ℝ)
++  (j n : ℕ)
+   bs : List Block
+   w : ℕ → ℂ
+   positive : 0 < R
+@@ -107,7 +107,7 @@
+     · calc
+         rawProduct (blocks (g::gs)) = rawProduct g.bs * rawProduct (blocks gs) := raw_append _ _
+         _ ≤ (2*g.R)*chartXplus gs :=
+-          mul_le_mul hghi hhi hraw (by positivity)
++          mul_le_mul hghi hhi hraw (mul_nonneg (by norm_num) (g.positive).le)
+         _ = chartXplus (g::gs) := by
+           simp only [chartXplus,List.length_cons,chartX,pow_succ]
+           ring
+@@ -123,13 +123,13 @@
+     have hs := smooth_group_support g.positive g.lower_support g.upper_support
+       g.w (mul_ne_zero_iff.mp g.active).1
+     obtain ⟨hNp,hN,hX⟩ := ih
+-    have hn : 0 < (g.n : ℝ) := by linarith
++    have hn : 0 < (g.n : ℝ) := by linarith [g.positive]
+     have hR : g.R ≤ 2*(g.n : ℝ) := by linarith
+     refine ⟨mul_pos hn hNp,?_,?_⟩
+     · calc
+         chartN (g::gs) = (g.n : ℝ)*chartN gs := rfl
+         _ ≤ (2*g.R)*((2 : ℝ)^gs.length*chartX gs) :=
+-          mul_le_mul hs.2 hN hNp.le (by positivity)
++          mul_le_mul hs.2 hN hNp.le (mul_nonneg (by norm_num) (g.positive).le)
+         _ = (2 : ℝ)^(g::gs).length*chartX (g::gs) := by
+           simp only [List.length_cons,chartX,pow_succ]
+           ring
+@@ -156,7 +156,7 @@
+     refine ⟨le_trans hX hXmul,?_⟩
+     intro b hb
+     rcases List.mem_cons.mp hb with rfl | hb
+-    · simpa [chartX] using mul_le_mul_of_nonneg_left hX g.positive.le
++    · simpa [chartX] using mul_le_mul_of_nonneg_left hX (b.positive).le
+     · exact (hm b hb).trans hXmul
+ 
+ -- Select any actual occurrence by a list split. The aligned integer
+@@ -206,16 +206,28 @@
+   let U : ℝ := lower b
+   let M : ℝ := lower (owner (pl++pr).prod)
+   let x : ℝ := U*M
+-  have hU : 0 < U := by exact_mod_cast lower_pos b
+-  have hM : 0 < M := by exact_mod_cast lower_pos (owner (pl++pr).prod)
++  have hU : 0 < U := by
++    dsimp [U]
++    exact_mod_cast lower_pos b
++  have hM : 0 < M := by
++    dsimp [M]
++    exact_mod_cast lower_pos (owner (pl++pr).prod)
+   have hrawid : rawProduct (blocks gs) = U*rawProduct (left++right) := by
+     rw [hsplit,raw_append,rawProduct_cons,raw_append]
+     ring
+-  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
++  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
++    unfold rawProduct
++    exact_mod_cast hc.1
+   have hcHi : ((pl++pr).prod : ℝ) ≤
+-      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by exact_mod_cast hc.2
+-  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast ho.1
+-  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by exact_mod_cast ho.2
++      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by
++    unfold rawProduct
++    exact_mod_cast hc.2
++  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by
++    dsimp [M]
++    exact_mod_cast ho.1
++  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by
++    dsimp [M]
++    exact_mod_cast ho.2
+   have hrawTwo : rawProduct (blocks gs) ≤ 2*x := by
+     have h := mul_le_mul_of_nonneg_left (hcLo.trans hoHi) hU.le
+     rw [hrawid]
+--- ImbalancedChen.P5ActualRoughHeathBrownWords.registered
++++ ImbalancedChen.P5ActualRoughHeathBrownWords.verified
+@@ -21,10 +21,9 @@
+ 
+ theorem roughOne_mul {z : ℝ} (hz : 0≤z) (a b : ℕ) :
+     roughOneSlot z (a*b)=roughOneSlot z a*roughOneSlot z b := by
+-  rw [roughOneSlot_eq_coprime_indicator hz,roughOneSlot_eq_coprime_indicator hz,
+-    roughOneSlot_eq_coprime_indicator hz,Nat.coprime_mul_iff_left]
++  simp only [roughOneSlot_eq_coprime_indicator hz, Nat.coprime_mul_iff_left]
+   by_cases ha : Nat.Coprime a (smallProduct z) <;>
+-    by_cases hb : Nat.Coprime b (smallProduct z) <;> simp [ha,hb]
++    by_cases hb : Nat.Coprime b (smallProduct z) <;> simp [Nat.Coprime, ha, hb]
+ 
+ theorem roughOne_one {z : ℝ} (hz : 0≤z) : roughOneSlot z 1=1 := by
+   rw [roughOneSlot_eq_coprime_indicator hz]
+--- ImbalancedChen.P5ExactOriginalSmoothDyadicPartition.registered
++++ ImbalancedChen.P5ExactOriginalSmoothDyadicPartition.verified
+@@ -57,6 +57,7 @@
+     (∑ j ∈ Finset.range (J+1), psi chi ((p : ℝ)/R j)) = 1 := by
+   have hl : (p : ℝ)/R J ≤ 1 := by
+     apply (div_le_one (R_pos J)).mpr
++    unfold R
+     exact_mod_cast hcap
+   have hh : 2 ≤ 2*(p : ℝ) := by exact_mod_cast (show 2 ≤ 2*p by omega)
+   have hreal : (∑ j ∈ Finset.range (J+1), bump chi ((p : ℝ)/R j)) = 1 := by
+@@ -104,7 +105,7 @@
+   induction k with
+   | zero =>
+     intro js hlen hmem
+-    have hnil : js = [] := List.length_eq_zero.mp hlen
++    have hnil : js = [] := List.length_eq_zero_iff.mp hlen
+     simp only [hnil,words,Finset.mem_singleton]
+   | succ k ih =>
+     intro js hlen hmem
+--- ImbalancedChen.P5HBRightClosedDyadicRoles.registered
++++ ImbalancedChen.P5HBRightClosedDyadicRoles.verified
+@@ -68,7 +68,6 @@
+     cases h
+     rfl
+   rw [bank,Finset.card_insert_of_notMem hnot,Finset.card_image_of_injective _ hinj,Finset.card_range]
+-  omega
+ 
+ /-- The coordinate bound is DERIVED from the actual positive product
+ tuple; no per-factor bound is supplied by a later HB licence. -/
+--- ImbalancedChen.P5OrderedFactorTupleRectangleReindex.registered
++++ ImbalancedChen.P5OrderedFactorTupleRectangleReindex.verified
+@@ -1,5 +1,5 @@
+-import ImbalancedChen.P5ActualLowerNormalizedHBSource
+-import ImbalancedChen.P5ActualHBPostModulusLogCutoff
++import ImbalancedChen.Part3ActualOriginalProperPowerChartBridge
++import ImbalancedChen.P5HBCompleteProduct
+ 
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+@@ -56,7 +56,7 @@
+     cases i with
+     | zero => simpa using hxy
+     | succ i =>
+-      have hi' : i < _ := by simpa using hi
++      have hi' := Nat.lt_of_succ_lt_succ hi
+       simpa using ih i hi'
+ 
+ private theorem forall₂_of_getD {α β : Type*} (R : α → β → Prop)
+@@ -68,7 +68,7 @@
+   induction xs with
+   | nil =>
+     intro ys hlen h
+-    have hy : ys = [] := List.length_eq_zero.mp hlen.symm
++    have hy : ys = [] := List.length_eq_zero_iff.mp hlen.symm
+     subst ys
+     exact List.Forall₂.nil
+   | cons x xs ih =>
+@@ -105,7 +105,7 @@
+     (hpos : ∀ p ∈ fs, 0 < p) : fs ∈ factorTuples m n := by
+   induction m generalizing n fs with
+   | zero =>
+-    have hf : fs = [] := List.length_eq_zero.mp hlen
++    have hf : fs = [] := List.length_eq_zero_iff.mp hlen
+     subst fs
+     have hn : n = 1 := by simpa using hprod.symm
+     simp [factorTuples, hn]
+@@ -179,17 +179,19 @@
+       · intro n hn
+         obtain ⟨hnrect, hncap⟩ := Finset.mem_filter.mp hn
+         have hown : List.Forall₂ Owns bs (List.ofFn n) :=
+-          (owns_word_iff hb (List.length_ofFn n)).mpr
++          (owns_word_iff hb (List.length_ofFn (f := n))).mpr
+             (by simpa only [wordVector_ofFn] using (mem_rectangle _ _).mp hnrect)
+         have hpos : ∀ p ∈ List.ofFn n, 0 < p := by
+           intro p hp
+           obtain ⟨a, rfl⟩ := List.mem_ofFn.mp hp
+           exact owns_pos ((mem_rectangle _ _).mp hnrect a)
+         have hfp : List.ofFn n ∈ factorTuples m (completeProduct n) :=
+-          factorTuples_mem (List.length_ofFn n) (by simp [completeProduct]) hpos
++          factorTuples_mem (List.length_ofFn (f := n))
++            (by simp only [completeProduct, List.prod_ofFn]) hpos
+         have hp : 1 ≤ completeProduct n := by
+           have hh := List.prod_pos hpos
+-          simpa only [List.prod_ofFn, completeProduct] using hh
++          exact Nat.succ_le_of_lt (by
++            simpa only [List.prod_ofFn, completeProduct] using hh)
+         refine ⟨List.ofFn n, Finset.mem_filter.mpr ⟨?_, hown⟩, wordVector_ofFn n⟩
+         exact Finset.mem_biUnion.mpr ⟨completeProduct n,
+           Finset.mem_Icc.mpr ⟨hp, hncap⟩, hfp⟩
+--- ImbalancedChen.P5OriginalChartRoughCutoff.registered
++++ ImbalancedChen.P5OriginalChartRoughCutoff.verified
+@@ -189,7 +189,7 @@
+       _ ≤ (2 : ℝ)^K*(scaleConstant K*x) :=
+         mul_le_mul_of_nonneg_left hXxK (by positivity)
+       _ = A*x := by dsimp [A]; ring
+-  have hxlarge : threshold K ≤ x := (mul_le_mul_left hA).mp (hlarge.trans hbound)
++  have hxlarge : threshold K ≤ x := (mul_le_mul_iff_right₀ hA).mp (hlarge.trans hbound)
+   have hcut := cutoff_bounds_of_geometry K gs hrank hxp hS hXxK hxlarge
+   exact ⟨pl,p,pr,hints,hcut⟩
+ 
+--- ImbalancedChen.P5OriginalHBMediumChartReserves.registered
++++ ImbalancedChen.P5OriginalHBMediumChartReserves.verified
+@@ -36,6 +36,7 @@
+     unfold originalUpper
+     rw [← Real.rpow_natCast,← Real.rpow_mul hXp.le]
+     have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring
++    norm_num only [Nat.cast_ofNat]
+     rw [he,Real.rpow_add hXp,Real.rpow_one]
+   have hexp : X^a = X^(18*zeta)*X^(a-18*zeta) := by
+     rw [← Real.rpow_add hXp]
+--- ImbalancedChen.P5RealCutoffHeathBrownThree.registered
++++ ImbalancedChen.P5RealCutoffHeathBrownThree.verified
+@@ -62,7 +62,7 @@
+ theorem identity_at_one {y : ℝ} (hy : 1 ≤ y) :
+     (∑ j ∈ Finset.range 3, (-1 : ℝ)^j * (Nat.choose 3 (j+1) : ℝ) * term y j 1) = 0 := by
+   have hcube : (1 : ℝ) ≤ y^3 := one_le_pow₀ hy
+-  simpa using (order_three_identity (by linarith : 0 ≤ y) hcube).symm
++  simpa using (order_three_identity (n := 1) (by linarith : 0 ≤ y) (by simpa using hcube)).symm
+ 
+ end
+ end ImbalancedChen.P5Z.RealCutoffHeathBrownThree
+--- ImbalancedChen.P5RealTruncatedMobiusSupport.registered
++++ ImbalancedChen.P5RealTruncatedMobiusSupport.verified
+@@ -95,7 +95,7 @@
+     VanishesUpTo (remainder y ^ 3) (y^3) := by
+   have h2 := mul_vanishes hy hy (remainder_vanishes y) (remainder_vanishes y)
+   have h3 := mul_vanishes (mul_nonneg hy hy) hy h2 (remainder_vanishes y)
+-  simpa only [pow_three] using h3
++  simpa only [pow_three, mul_assoc] using h3
+ 
+ /-- Literal original annihilation, including n=0 and n=1 whenever
+ they belong to the stated REAL cube range. -/
+--- ImbalancedChen.P5SmoothChartPhysicalHBBranch.registered
++++ ImbalancedChen.P5SmoothChartPhysicalHBBranch.verified
+@@ -43,8 +43,12 @@
+   have hs := smooth_group_support hR hlo hhi w hh.1
+   have he := actual_block_product_window hz hh.2
+   have h6 := actual_block_six_slot_window hz hj hh.2
+-  have hl : rawProduct bs ≤ (n : ℝ) := by exact_mod_cast h6.2.1
+-  have hu : (n : ℝ) ≤ 64*rawProduct bs := by exact_mod_cast h6.2.2
++  have hl : rawProduct bs ≤ (n : ℝ) := by
++    unfold rawProduct
++    exact_mod_cast h6.2.1
++  have hu : (n : ℝ) ≤ 64*rawProduct bs := by
++    unfold rawProduct
++    exact_mod_cast h6.2.2
+   exact ⟨he.1,h6.1,hs.1,hs.2,by linarith,hl.trans hs.2⟩
+ 
+ -- Explicit absorption of a fixed scale-comparison constant by a strict
+@@ -122,13 +126,13 @@
+   | none =>
+     have hb := original_actual_noMedium_from_chart hz hX hzeta hC hj hh.2
+       hgroup hRCX hdyadic hnCX hy hcube hshortGrowth hlongGrowth hsel
+-    exact Or.inr ⟨hsel,hb.1,hb.2⟩
++    exact Or.inr ⟨rfl,hb.1,hb.2⟩
+   | some i =>
+     obtain ⟨ps,hps,ha,hi,hp,hm,hlt,hle,hpos,hpn,hcut⟩ :=
+       actual_selected_medium_support hz hA hh.2 hsel
+     have hlocal := original_to_local_medium hx hX hCscale hzeta hxX hXx
+       hlowerReserve hupperReserve hm
+-    exact Or.inl ⟨i,hsel,ps,hps,ha,hi,hp,hlocal.1,hlocal.2,hlt,hle,hpos,hpn,hcut⟩
++    exact Or.inl ⟨i,rfl,ps,hps,ha,hi,hp,hlocal.1,hlocal.2,hlt,hle,hpos,hpn,hcut⟩
+ 
+ -- A long occurrence has a positive-power local length. Its integer
+ -- coordinate lower bound then follows from literal interval ownership.
+--- ImbalancedChen.Part3ActualOriginalProperPowerChartBridge.registered
++++ ImbalancedChen.Part3ActualOriginalProperPowerChartBridge.verified
+@@ -79,11 +79,12 @@
+   have hjlen := (words_spec (Finset.range (cutoffIndex cap+1)) k js hjs).1
+   have hprofile : tupleProfile chi js ps ≠ 0 := (mul_ne_zero_iff.mp hactive).1
+   have hcoord := profile_nonzero_support chi hone hzero js ps hprofile
+-  apply Finset.mem_piFinset.mpr
++  apply Fintype.mem_piFinset.mpr
+   intro i
+   have hpi : i.val < ps.length := by simpa [hplen] using i.isLt
+   have hji : i.val < js.length := by simpa [hjlen] using i.isLt
+-  have hpair := List.Forall₂.get hcoord hji hpi
++  have hpair := List.Forall₂.get hcoord hji (by simpa using hpi)
++  simp only [bind_pure_comp, Functor.map, List.get_eq_getElem, List.getElem_map] at hpair
+   have hupperReal : (ps.getD i.val 0 : ℝ) ≤
+       (chartUpper k js i : ℝ) := by
+     have hgetp : ps.getD i.val 0 = ps[i.val] :=
+@@ -93,9 +94,9 @@
+     rw [hgetp]
+     change (ps[i.val] : ℝ) ≤ (2 ^ (js.getD i.val 0 + 1) : ℕ)
+     rw [hgetj]
+-    have hscale : (2 * R js[i.val] : ℝ) =
++    have hscale : (2 * ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R js[i.val] : ℝ) =
+         ((2 ^ (js[i.val] + 1) : ℕ) : ℝ) := by
+-      simp [R, pow_succ, mul_comm]
++      simp [ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
+     rw [← hscale]
+     exact hpair.2.2
+   have hupperNat : ps.getD i.val 0 ≤ chartUpper k js i :=
+@@ -210,11 +211,14 @@
+     intro i
+     have hpi : i.val < ps.length := by simpa [hplen] using i.isLt
+     have hji : i.val < js.length := by simpa [hjlen] using i.isLt
+-    have hpair := List.Forall₂.get hcoord hji hpi
++    have hpair := List.Forall₂.get hcoord hji (by simpa using hpi)
++    simp only [bind_pure_comp, Functor.map, List.get_eq_getElem, List.getElem_map] at hpair
+     have hpos : (1 : ℝ) ≤ (ps[i.val] : ℝ) := by
+       exact_mod_cast (hpositive ps[i.val] (List.getElem_mem hpi)).1
+-    have hscale : ((chartUpper k js i : ℕ) : ℝ) = 2*R js[i.val] := by
+-      simp [chartUpper, List.getD_eq_getElem _ _ hji, R, pow_succ, mul_comm]
++    have hscale : ((chartUpper k js i : ℕ) : ℝ) = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R js[i.val] := by
++      change ((2 ^ (js.getD i.val 0 + 1) : ℕ) : ℝ) = _
++      rw [List.getD_eq_getElem _ _ hji]
++      simp [ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
+     have hword : wordVector k ps i = ps[i.val] := by
+       exact List.getD_eq_getElem _ _ hpi
+     rw [Nat.cast_add, Nat.cast_one, hscale, hword]
+@@ -227,8 +231,10 @@
+       positivity
+     · intro i hi
+       exact hlocal i
++  have hwordProduct : (∏ i : Fin k, (wordVector k ps i : ℝ)) = (ps.prod : ℝ) := by
++    rw [← Nat.cast_prod, ← List.prod_ofFn, ofFn_wordVector hplen]
+   simpa only [Finset.prod_mul_distrib, Finset.prod_const, Finset.card_fin,
+-    ← List.prod_ofFn, ofFn_wordVector hplen, Nat.cast_prod] using hproduct
++    hwordProduct] using hproduct
+ 
+ theorem padded_chart_product_physical_bound
+     (chi eta : ℝ → ℝ) (W : List ℕ → ℂ)
+--- ImbalancedChen.Part3OriginalProperPowerChartCount.registered
++++ ImbalancedChen.Part3OriginalProperPowerChartCount.verified
+@@ -33,7 +33,7 @@
+   have hpU : p * p ≤ U := by
+     calc
+       p * p = p ^ 2 := by ring
+-      _ ≤ p ^ k := pow_le_pow_right₀ (by omega : 1 ≤ p) hk
++      _ ≤ p ^ k := pow_le_pow_right₀ (by have := hp.two_le; omega : 1 ≤ p) hk
+       _ ≤ U := (Finset.mem_Icc.mp hnrange).2
+   have hroot : p ≤ Nat.sqrt U := Nat.le_sqrt.mpr hpU
+   have htwo : 2 ^ k ≤ U := by
+@@ -153,6 +153,7 @@
+   have hrootSquare : (Real.sqrt (U bad : ℝ)) ^ 2 = (U bad : ℝ) :=
+     Real.sq_sqrt (Nat.cast_nonneg _)
+   have hNatSq : (Nat.sqrt (U bad) : ℝ) ^ 2 ≤ (U bad : ℝ) := by
++    rw [pow_two]
+     exact_mod_cast Nat.le_sqrt.mp (le_refl (Nat.sqrt (U bad)))
+   have hNatRoot : (Nat.sqrt (U bad) : ℝ) ≤ Real.sqrt (U bad : ℝ) :=
+     Real.le_sqrt_of_sq_le (by nlinarith)
+@@ -175,13 +176,13 @@
+           ((Nat.sqrt (U i) + 1) * (Nat.log2 (U i) + 1) : ℕ)
+         else U i + 1) =
+       ((Nat.sqrt (U bad) + 1) * (Nat.log2 (U bad) + 1)) *
+-        (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, U i + 1) := by
++        (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, (U i + 1)) := by
+     let f : Fin r → ℕ := fun i =>
+       if i = bad then
+         (Nat.sqrt (U i) + 1) * (Nat.log2 (U i) + 1)
+       else U i + 1
+     have he : (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, f i) =
+-        ∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, U i + 1 := by
++        ∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, (U i + 1) := by
+       apply Finset.prod_congr rfl
+       intro i hi
+       have hne : i ≠ bad := (Finset.mem_erase.mp hi).1
+@@ -205,7 +206,10 @@
+       _ ≤ (2 * Real.sqrt (U bad : ℝ)) * L *
+           Real.sqrt (U bad : ℝ) := by
+             gcongr
+-      _ = 2 * L * (U bad : ℝ) := by rw [← hrootSquare]; ring
++      _ = 2 * L * (U bad : ℝ) := by
++        calc
++          _ = 2 * L * (Real.sqrt (U bad : ℝ))^2 := by ring
++          _ = _ := by rw [hrootSquare]
+       _ ≤ 2 * L * V bad := by rw [hV]; nlinarith
+   have hbound :
+       (∑ ps ∈ oneBadSlotBox U bad, ‖weight ps‖) * Real.sqrt A ≤
+--- ImbalancedChen.Part3RoughAuxiliarySW.registered
++++ ImbalancedChen.Part3RoughAuxiliarySW.verified
+@@ -347,8 +347,8 @@
+         apply sum_le_sum
+         intro n hn
+         by_cases h : Nat.ModEq q n b ∧ Nat.Coprime n k
+-        · simpa only [h, h.1, ite_true] using hα n hn
+-        · simp only [h, ite_false, norm_zero]
++        · simpa only [if_pos h, if_pos h.1] using hα n hn
++        · simp only [if_neg h, norm_zero]
+           split_ifs <;> norm_num
+       _ = ((S.filter (fun n => Nat.ModEq q n b)).card : ℝ) := by
+         rw [← sum_filter]
+@@ -361,8 +361,8 @@
+         apply sum_le_sum
+         intro n hn
+         by_cases h : Nat.Coprime n (k * q)
+-        · simpa only [h, ite_true] using hα n hn
+-        · simp only [h, ite_false, norm_zero, zero_le_one]
++        · simpa only [if_pos h] using hα n hn
++        · simp only [if_neg h, norm_zero, zero_le_one]
+       _ = (S.card : ℝ) := by simp
+       _ ≤ (H : ℝ) := by
+         have hcard : S.card ≤ H := (card_le_card hS).trans_eq (by simp)

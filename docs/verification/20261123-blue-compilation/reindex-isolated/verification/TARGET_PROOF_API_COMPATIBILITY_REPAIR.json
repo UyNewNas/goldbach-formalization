@@ -1,0 +1,53 @@
+{
+  "module": "ImbalancedChen.P5OrderedFactorTupleRectangleReindex",
+  "file": "/workspace/blue-reindex-build/ImbalancedChen/P5OrderedFactorTupleRectangleReindex.lean",
+  "registered_preimage": {
+    "bytes": 9066,
+    "sha256": "d7cc6e2e42e52cd63b76cc46d5e1f1458c2a3b5a248260cca8a0be6415c42030",
+    "git_blob_sha1": "35ab3315b76274c6b0e2c1e67f59fa41ff59ea4b"
+  },
+  "import_only_historical_preimage": {
+    "bytes": 9065,
+    "sha256": "7cdb8cf45bff23b549dbf84c351c76239d4f586d964df6c0546cfe03fe76cd56",
+    "git_blob_sha1": "3926ccb374ffe67b8e7670bd2df21c1c02f8d86f"
+  },
+  "selected_postimage": {
+    "bytes": 9161,
+    "sha256": "70138d61aa2268ab4b8137ae9240e2ee5840105579ad5ca2b51d405ccacfc1cf",
+    "git_blob_sha1": "76a0145f769ec0d1bb2d7ea07fe24b514136a9db"
+  },
+  "proof_blocks": [
+    {
+      "before": "    have hy : ys = [] := List.length_eq_zero.mp hlen.symm",
+      "after": "    have hy : ys = [] := List.length_eq_zero_iff.mp hlen.symm"
+    },
+    {
+      "before": "    have hf : fs = [] := List.length_eq_zero.mp hlen",
+      "after": "    have hf : fs = [] := List.length_eq_zero_iff.mp hlen"
+    },
+    {
+      "before": "      have hi' : i < _ := by simpa using hi",
+      "after": "      have hi' := Nat.lt_of_succ_lt_succ hi"
+    },
+    {
+      "before": "          (owns_word_iff hb (List.length_ofFn n)).mpr",
+      "after": "          (owns_word_iff hb (List.length_ofFn (f := n))).mpr"
+    },
+    {
+      "before": "          factorTuples_mem (List.length_ofFn n) (by simp [completeProduct]) hpos",
+      "after": "          factorTuples_mem (List.length_ofFn (f := n))\n            (by simp only [completeProduct, List.prod_ofFn]) hpos"
+    },
+    {
+      "before": "          simpa only [List.prod_ofFn, completeProduct] using hh",
+      "after": "          exact Nat.succ_le_of_lt (by\n            simpa only [List.prod_ofFn, completeProduct] using hh)"
+    }
+  ],
+  "all_public_headers_definitions_constants_hypotheses_byte_identical": true,
+  "body_byte_identical_after_imports": false,
+  "new_theorems": 0,
+  "new_mathematical_proofs": 0,
+  "existing_pinned_api_evidence": "List.length_eq_zero.mp failed on ExactOriginalSmoothDyadicPartition in build.attempt-20.log; replacement List.length_eq_zero_iff.mp normal predecessor passed22.968s.",
+  "authorization": "Parent ALL necessary proof-body compatibility scope;2retired API substitutions explicitlypreauthorized; further actual attempt24 errors reported before routine repair.",
+  "additional_observed_baseline": "build.attempt-24.log",
+  "reason": "Existing length-zero/length-ofFn/prod-ofFn APIs, explicit successor inequality inference in helper and Nat positive-to-at-least-one conversion; all source changes remain inside original proof bodies."
+}

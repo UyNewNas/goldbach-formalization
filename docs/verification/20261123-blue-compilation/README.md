@@ -100,4 +100,8 @@ Member 的两个 native 模块原来调用未选入的 `roughCount_uniform_buchs
 
 Member 第三修补批覆盖 `P2HistoricQ80DefectLookup`、`P2TableActionSoundness`、`Part5OriginalUpsilon5CausalSplit` 和 `P5OriginalSignedMidpoint`：四个标准构建、四次指定模块 kernel replay、全部 259 个实际公开导出（186、33、33、7）的完整类型／公理检查通过，仅标准三公理，源码及二十项主要产物稳定。HistoricQ80 十处证明逐段复用已有 `ab19e4c4` 后像，原 200 项 bank 数据和混合换行字节保持；其它修补为 API、cast、函数展开，原 signed midpoint 的 `1/24` 保持。SignedMidpoint 主仓 canonical 文件仍不存在，后像及显式安装路径保存在本批目录。原声明头、定义、常量、假设均保留，见 [验收结果](member-repair-batch3/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch3/INDEPENDENT_REVIEW.json)。
 
+`P5OrderedFactorTupleRectangleReindex` 的有限分支在独立的 70 项项目源码、456 项 native 源码选版中完成标准构建。19 个变更／新增模块通过指定模块 kernel replay；70 个项目模块的全部 1742 个公开导出完成类型／传递公理检查，仅标准三公理。后续用完整环境常量枚举与定义模块归属核对名称集，恰与既有 1742 项审计相等，无遗漏、额外名称或归属差异，没有重跑已成功的证明检查。精确选版、全部源码后像、较小验收记录与独立复核保存在 [reindex-isolated](reindex-isolated/README.md)。
+
+该分支将既有同名同正文 `completeProduct` 搬至共享 leaf，并缩窄原目标的导入；目标自身六处证明替换块包含七项 API 适配效果。声明语法有两项单列例外：将 `Group` 的五个 scalar 字段加括号，以免解析为函数字段；用局部记号将原 bare `R` 指向既有 dyadic `R`。原目标声明与数学假设保持。安装必须使用 [SOURCE_INSTALL.json](reindex-isolated/SOURCE_INSTALL.json) 的隔离选版；旧宽依赖 parent 与其未编译的 reexport 提案均未整合到主源码，也不能与新 leaf 同装后声称宽闭包通过。这一有限分支验收不代表 `RetainedAnalyticReserves` 完整闭包完成。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。
