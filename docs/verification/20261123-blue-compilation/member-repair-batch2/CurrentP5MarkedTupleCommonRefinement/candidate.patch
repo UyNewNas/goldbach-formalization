@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/CurrentP5MarkedTupleCommonRefinement.lean
++++ candidate/ImbalancedChen/CurrentP5MarkedTupleCommonRefinement.lean
+@@ -3,7 +3,7 @@
+ /-!
+ # Common finite tuple-policy refinement of the actual marked source
+ 
+-Source-only candidate, uncompiled. A policy can inspect the row, additive
++Verification records: docs/verification/20261123-blue-compilation. A policy can inspect the row, additive
+ prime and all padded witness coordinates. Thus these cells are finer than
+ receiver cells. No policy decision fibre is declared a Cartesian box.
+ Genuine Cartesian boxes have a separate explicit constructor and source
+@@ -224,6 +224,7 @@
+   · intro ht
+     rcases t with ⟨j, P, q⟩
+     obtain ⟨hsource, hji, hq⟩ := Finset.mem_filter.mp ht
++    change j = i at hji
+     subst j
+     have hP : P ∈ p5MarkedTupleReceiverFibre N E i q := by
+       exact Finset.mem_filter.mpr ((mem_p5MarkedElevenSource N E i P q).mp hsource)

@@ -1,0 +1,128 @@
+[
+  {
+    "name": "localPrimeFactor",
+    "kind": "def",
+    "private": false,
+    "header": "def localPrimeFactor (d p : ℕ) : ℝ"
+  },
+  {
+    "name": "thetaAtom",
+    "kind": "def",
+    "private": false,
+    "header": "def thetaAtom (N : ℕ) (Q : ℝ) (d : ℕ) : ℝ"
+  },
+  {
+    "name": "Theta_eq_sum_atoms",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem Theta_eq_sum_atoms (N : ℕ) (Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ) :\n    P2EnhancedTwentyOneSameQWeighted.Theta N Q D sigma =\n      ∑ d∈D,sigma d*thetaAtom N Q d"
+  },
+  {
+    "name": "thetaAtom_single",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem thetaAtom_single {N d p : ℕ} {Q : ℝ}\n    (hN : 0<N) (hd : 0<d) (hp : p.Prime) (hp2 : 2<p)\n    (hpN : p.Coprime N) (hQ : 1<Q/d) :\n    thetaAtom N Q (d*p) = thetaAtom N Q d*\n      (localPrimeFactor d p/(1-log (p:ℝ)/log (Q/d)))"
+  },
+  {
+    "name": "pair_arithmetic_weight",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem pair_arithmetic_weight {N d p q : ℕ}\n    (hN : 0<N) (hd : 0<d) (hp : p.Prime) (hq : q.Prime)\n    (hp2 : 2<p) (hq2 : 2<q) (hpN : p.Coprime N) (hqN : q.Coprime N) :\n    wuSingularSeries ((d*p*q)*N)/(Nat.totient (d*p*q):ℝ) =\n      (wuSingularSeries (d*N)/(Nat.totient d:ℝ))*\n        (localPrimeFactor d p*localPrimeFactor (d*p) q)"
+  },
+  {
+    "name": "pair_log_denominator",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem pair_log_denominator {Q : ℝ} {d p q : ℕ}\n    (hd : 0<d) (hp : 0<p) (hq : 0<q) (hQ : 1<Q/d) :\n    log (Q/(d*p*q:ℕ)) = log (Q/d)*\n      (1-log (p:ℝ)/log (Q/d)-log (q:ℝ)/log (Q/d))"
+  },
+  {
+    "name": "thetaAtom_pair",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem thetaAtom_pair {N d p q : ℕ} {Q : ℝ}\n    (hN : 0<N) (hd : 0<d) (hp : p.Prime) (hq : q.Prime)\n    (hp2 : 2<p) (hq2 : 2<q) (hpN : p.Coprime N) (hqN : q.Coprime N)\n    (hQ : 1<Q/d) :\n    thetaAtom N Q (d*p*q) = thetaAtom N Q d*\n      (localPrimeFactor d p*localPrimeFactor (d*p) q/\n        (1-log (p:ℝ)/log (Q/d)-log (q:ℝ)/log (Q/d)))"
+  },
+  {
+    "name": "alpha",
+    "kind": "def",
+    "private": false,
+    "header": "def alpha (beta L : ℝ) : ℝ"
+  },
+  {
+    "name": "childAlpha",
+    "kind": "def",
+    "private": false,
+    "header": "def childAlpha (beta L w : ℝ) : ℝ"
+  },
+  {
+    "name": "childAlpha_eq",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem childAlpha_eq {beta L w : ℝ} (hL : L≠0) (hw : 1-w≠0) :\n    childAlpha beta L w=1+(alpha beta L-1)/(1-w)"
+  },
+  {
+    "name": "childAlpha_ge_parent",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem childAlpha_ge_parent {beta L w : ℝ}\n    (hL : 0<L) (ha : 2≤alpha beta L) (hw : 0≤w) (hw1 : w<1) :\n    alpha beta L≤childAlpha beta L w"
+  },
+  {
+    "name": "pair_childAlpha",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem pair_childAlpha {beta L u v : ℝ} (hL : L≠0) (huv : 1-u-v≠0) :\n    childAlpha beta L (u+v)=1+(alpha beta L-1)/(1-u-v)"
+  },
+  {
+    "name": "singleton_inherited_argument",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem singleton_inherited_argument {L s0 u : ℝ} (hL : L≠0) (hs : s0≠0) :\n    (L-L*u)/(L/s0)=s0*(1-u)"
+  },
+  {
+    "name": "pair_inherited_argument",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem pair_inherited_argument {L s0 u v : ℝ} (hL : L≠0) (hs : s0≠0) :\n    (L-L*u-L*v)/(L/s0)=s0*(1-u-v)"
+  },
+  {
+    "name": "pair_first_prime_argument",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem pair_first_prime_argument {L u v : ℝ} (hL : L≠0) (hu : u≠0) :\n    (L-L*u-L*v)/(L*u)=(1-u-v)/u"
+  },
+  {
+    "name": "inherited_cutoff_below_first",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem inherited_cutoff_below_first {L s0 u : ℝ}\n    (hL : 0<L) (hu : 1/s0<u) : L/s0<L*u"
+  },
+  {
+    "name": "appended_prime_below_ceiling",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem appended_prime_below_ceiling {L u b chi : ℝ}\n    (hL : 0<L) (hu : u<b) (hceil : L*b≤chi) : L*u<chi"
+  },
+  {
+    "name": "physical_pair_squares",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem physical_pair_squares {N : ℝ} (hN : 1<N) (beta L u v : ℝ) (hL : 0<L) :\n    (N^beta*(N^(L*v))^2<N^(beta+L) ∧\n      N^beta*(N^(L*u))^2*N^(L*v)<N^(beta+L)) ↔\n      2*v<1 ∧ 2*u+v<1"
+  },
+  {
+    "name": "retain_selected_tests",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem retain_selected_tests {P : Prop} {N : ℝ} (hN : 1<N)\n    (beta L u v : ℝ) (hL : 0<L) :\n    (P ∧ N^beta*(N^(L*v))^2<N^(beta+L) ∧\n      N^beta*(N^(L*u))^2*N^(L*v)<N^(beta+L)) ↔\n      P ∧ 2*v<1 ∧ 2*u+v<1"
+  },
+  {
+    "name": "localPrimeFactor_pos",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem localPrimeFactor_pos {d p : ℕ} (hp : (2:ℝ)<p) :\n    0<localPrimeFactor d p"
+  },
+  {
+    "name": "localPrimeFactor_relative_error",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem localPrimeFactor_relative_error {A : ℝ} {d p : ℕ}\n    (hA : 4≤A) (hp : A≤(p:ℝ)) :\n    |localPrimeFactor d p*((p:ℝ)-1)-1|≤2/A"
+  }
+]

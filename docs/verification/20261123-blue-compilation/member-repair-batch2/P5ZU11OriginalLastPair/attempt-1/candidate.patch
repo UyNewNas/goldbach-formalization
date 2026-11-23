@@ -1,0 +1,46 @@
+--- baseline/ImbalancedChen/P5ZU11OriginalLastPair.lean
++++ candidate/ImbalancedChen/P5ZU11OriginalLastPair.lean
+@@ -16,7 +16,7 @@
+ pinned LiLiu closed cross quadruple `goldbachWeightG12` has weak ordering,
+ closed prime walls and `literalH`; it is not this selected-mask source.
+ No such mean, source-to-kernel estimate, or numerical conclusion is an input
+-to any declaration here.  Status: source_written / uncompiled.
++to any declaration here.  Verification records: docs/verification/20261123-blue-compilation.
+ -/
+ 
+ namespace ImbalancedChen.P5Z.U11Original
+@@ -68,7 +68,12 @@
+     simp only [chenY11FullPrimeSelector, Finset.mem_filter]
+     tauto
+   rw [hs]
+-  exact sum_last_label _ _ _ _ f
++  simpa only [lastPairs, firstPairs] using
++    (sum_last_label
++      (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
++      (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
++      (fun p q => A ≤ (p.1 : ℝ) ∧ p.1 < p.2 ∧ p.2 < q.1)
++      (fun q => (q.1 : ℝ) < H ∧ H ≤ (q.2 : ℝ) ∧ (q.2 : ℝ) < D ∧ ¬ E q) f)
+ 
+ /-- The actual cardinal weight attached to one retained last pair. -/
+ def sourceMass (N : ℕ) (A : ℝ) (q : ℕ × ℕ) : ℝ :=
+@@ -86,7 +91,7 @@
+ theorem firstPairs_eq_empty_of_third_le (N : ℕ) (A : ℝ) (q : ℕ × ℕ)
+     (hq : (q.1 : ℝ) ≤ A) : firstPairs N A q = ∅ := by
+   classical
+-  apply Finset.eq_empty_iff_forall_not_mem.mpr
++  apply Finset.eq_empty_iff_forall_notMem.mpr
+   intro p hp
+   obtain ⟨_, hA, h12, h2q⟩ := Finset.mem_filter.mp hp
+   have h1q : (p.1 : ℝ) < (q.1 : ℝ) := by
+@@ -105,7 +110,10 @@
+       (chenY11Selected (N - P) A H D (fun q => ¬ E q) : ℝ)) =
+       ∑ q ∈ lastPairs N H D E, sourceMass N A q := by
+   rw [sum_chenY11Selected_eq_siftedQuotientPrimeSource]
+-  exact sum_fullSelector N A H D E _
++  simpa only [sourceMass] using
++    (sum_fullSelector N A H D E
++      (fun t => ((chenSiftedQuotientPrimeSource N
++        (t.1.1 * t.1.2 * t.2.1 * t.2.2) (t.1.2 : ℝ)).card : ℝ)))
+ 
+ /-- Current cutoffs are substituted literally; in particular no shorter
+ fourth-prime band is used to obtain this decomposition. -/

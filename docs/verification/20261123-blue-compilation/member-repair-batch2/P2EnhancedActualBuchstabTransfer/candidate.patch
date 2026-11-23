@@ -1,0 +1,47 @@
+--- baseline/ImbalancedChen/P2EnhancedActualBuchstabTransfer.lean
++++ candidate/ImbalancedChen/P2EnhancedActualBuchstabTransfer.lean
+@@ -3,7 +3,7 @@
+ import MathlibNt.Wu2008DoubleSieve.RosserSieveConsumer
+ 
+ /-!
+-SOURCE ONLY; UNCOMPILED; ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ Actual arbitrary-positive-sigma Buchstab count transfers at one original Q.
+ The source Phi and every child are existing prime-label sifted counts. The
+ child selected modulus is enlarged only by the proved strict-cutoff identity.
+@@ -37,7 +37,7 @@
+     (sigma : ℕ → ℝ) {s t : ℝ}
+     (hR : ∀ d∈D,1≤Q/(d:ℝ)) (hs : 0<s) (hst : s≤t) :
+     Phi N Q D sigma t = Phi N Q D sigma s + childCount N Q D sigma s t := by
+-  unfold Phi childCount
++  unfold Phi childCount childWindow
+   rw [←sum_add_distrib]
+   apply sum_congr rfl
+   intro d hd
+@@ -205,7 +205,7 @@
+       childMain false N Q D sigma s t-childError false N Q D sigma s t := by
+   have hi := actual_Phi_buchstab N Q D sigma (fun d hd=>(hR d hd).le)
+     (by linarith : 0<s) hst
+-  have hc := (actual_child_signed_sandwich N Q D sigma hd hsigma hR hs).1
++  have hc := (actual_child_signed_sandwich N Q D sigma (s := s) (t := t) hd hsigma hR hs).1
+   linarith
+ 
+ /-- Genuine lower count transfer: upper-sieving the same children gives
+@@ -218,7 +218,7 @@
+       childError true N Q D sigma s t≤Phi N Q D sigma s := by
+   have hi := actual_Phi_buchstab N Q D sigma (fun d hd=>(hR d hd).le)
+     (by linarith : 0<s) hst
+-  have hc := (actual_child_signed_sandwich N Q D sigma hd hsigma hR hs).2
++  have hc := (actual_child_signed_sandwich N Q D sigma (s := s) (t := t) hd hsigma hR hs).2
+   linarith
+ 
+ /-- Exact same-Theta child gain normalization. The denominator is the
+@@ -237,7 +237,7 @@
+   have ht := (Theta_pos hN Q D sigma hd hsigma hR hpositive).le
+   have hi := actual_Phi_buchstab N Q D sigma (fun d hd=>(hR d hd).le)
+     (by linarith : 0<s) hst
+-  have hc := actual_child_signed_sandwich N Q D sigma hd hsigma hR hs
++  have hc := actual_child_signed_sandwich N Q D sigma (s := s) (t := t) hd hsigma hR hs
+   constructor <;> apply div_le_div_of_nonneg_right _ ht <;> linarith
+ 
+ end

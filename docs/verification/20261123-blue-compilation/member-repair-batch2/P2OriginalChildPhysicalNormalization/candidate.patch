@@ -1,0 +1,61 @@
+--- baseline/ImbalancedChen/P2OriginalChildPhysicalNormalization.lean
++++ candidate/ImbalancedChen/P2OriginalChildPhysicalNormalization.lean
+@@ -2,7 +2,7 @@
+ import MathlibNt.Wu2008DoubleSieve.ReboxingNormalization
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ Exact physical identities for the same-Q child mass. The arithmetic
+ multiplier is 1/p on the repeated-prefix lane and 1/(p-2) on the fresh
+@@ -38,6 +38,7 @@
+     thetaAtom N Q (d*p) = thetaAtom N Q d*
+       (localPrimeFactor d p/(1-log (p:ℝ)/log (Q/d))) := by
+   unfold thetaAtom localPrimeFactor
++  simp only [Nat.cast_mul]
+   rw [wu_inserted_theta_weight hN hd hp hp2 hpN hQ]
+   ring
+ 
+@@ -109,17 +110,14 @@
+ theorem singleton_inherited_argument {L s0 u : ℝ} (hL : L≠0) (hs : s0≠0) :
+     (L-L*u)/(L/s0)=s0*(1-u) := by
+   field_simp [hL,hs]
+-  ring
+ 
+ theorem pair_inherited_argument {L s0 u v : ℝ} (hL : L≠0) (hs : s0≠0) :
+     (L-L*u-L*v)/(L/s0)=s0*(1-u-v) := by
+   field_simp [hL,hs]
+-  ring
+ 
+ theorem pair_first_prime_argument {L u v : ℝ} (hL : L≠0) (hu : u≠0) :
+     (L-L*u-L*v)/(L*u)=(1-u-v)/u := by
+   field_simp [hL,hu]
+-  ring
+ 
+ /-- The physical cutoff is inherited; its comparison with the first
+ new prime is derived from the actual lower endpoint. -/
+@@ -138,17 +136,19 @@
+       2*v<1 ∧ 2*u+v<1 := by
+   have hN0 : 0<N := zero_lt_one.trans hN
+   have hsq (w : ℝ) : (N^(L*w))^2=N^(2*(L*w)) := by
+-    rw [mul_comm (2:ℝ), Real.rpow_mul hN0.le]
+-    norm_num
++    calc
++      (N^(L*w))^2 = (N^(L*w))^(2:ℝ) := (Real.rpow_natCast _ 2).symm
++      _ = N^((L*w)*2) := (Real.rpow_mul hN0.le (L*w) 2).symm
++      _ = N^(2*(L*w)) := by rw [mul_comm (L*w) (2:ℝ)]
+   rw [hsq v, hsq u, ← Real.rpow_add hN0, ← Real.rpow_add hN0,
+     ← Real.rpow_add hN0, Real.rpow_lt_rpow_left_iff hN,
+     Real.rpow_lt_rpow_left_iff hN]
+   constructor
+   · rintro ⟨h1,h2⟩
+     constructor
+-    · apply (mul_lt_mul_left hL).mp
++    · apply (mul_lt_mul_iff_left₀ hL).mp
+       nlinarith only [h1]
+-    · apply (mul_lt_mul_left hL).mp
++    · apply (mul_lt_mul_iff_left₀ hL).mp
+       nlinarith only [h2]
+   · rintro ⟨h1,h2⟩
+     constructor

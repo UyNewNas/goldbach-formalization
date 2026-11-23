@@ -106,4 +106,8 @@ Member 第三修补批覆盖 `P2HistoricQ80DefectLookup`、`P2TableActionSoundne
 
 Member 第六修补批的 `P2MarkedThetaLiNormalization` 与 `Part3ActualCompactInitialSupport` 通过两次标准构建、两次指定模块 kernel replay，以及全部 27 个公开导出的完整类型／公理检查，仅标准三公理。12 条原定理声明、定义、Theta 的统一阈值与零质量族条件、rank 4 的原 `5τ` 预算保持，源码和十项主要产物稳定，见 [验收结果](member-repair-batch6/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch6/INDEPENDENT_REVIEW.json)。本批初始暂存器将 absolute 路径拼接为 Member 路径，实际未同步主仓；已验证的相同后像随后在核对主仓原 baseline 后同步，真实时点及旧 metadata 的失效范围保存在 [MAIN_SYNC_PATH_CORRECTION.json](member-repair-batch6/MAIN_SYNC_PATH_CORRECTION.json)，没有为此重跑已通过的验证。
 
+Member 第二修补批覆盖 physical normalization、actual Buchstab transfer、U11 LastPair、marked tuple common refinement 和 collision floor 五个模块。五个标准构建、五次指定模块 kernel replay 和全部 140 个公开导出的完整类型／公理检查通过，仅标准三公理，源码及二十五项主要产物稳定，原声明头、定义、数字与假设保持。LastPair 首版真实失败的源码和 exit 1 日志完整归档，只有最终 `a6d9a86f` 后像通过；原有限 carrier、筛选、标签重数不变。见 [验收结果](member-repair-batch2/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch2/INDEPENDENT_REVIEW.json)。physical／actual 两模块的主仓 canonical 路径仍不存在，仅按明确安装路径发布已验后像。
+
+第四批 `P2OriginalLowerAffineTieSelector` 的 `scan_ge_member` 用具名等式后 `subst`，避免 `rfl` 消去后引用已不存在的名字；18 个公开源码声明、定义、数字及假设保持。标准构建、指定模块 kernel replay 与全部 74 个公开导出的类型／公理检查通过，源码和五项主要产物稳定，仅标准三公理。该模块也保留为隔离安装后像，见 [验收结果](member-repair-batch4/VALIDATION_RESULTS.json)、[独立复核](member-repair-batch4/INDEPENDENT_REVIEW.json) 及统一 [源码覆盖表](MEMBER_SOURCE_OVERRIDES.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

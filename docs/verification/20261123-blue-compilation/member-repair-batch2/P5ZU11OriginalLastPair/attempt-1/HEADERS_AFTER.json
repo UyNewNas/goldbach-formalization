@@ -1,0 +1,92 @@
+[
+  {
+    "name": "sum_last_label",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sum_last_label {α β : Type*} [DecidableEq α] [DecidableEq β]\n    (s : Finset α) (t : Finset β) (P : α → β → Prop) (Q : β → Prop)\n    (f : α × β → ℝ) :\n    (∑ v ∈ (s ×ˢ t).filter (fun v => P v.1 v.2 ∧ Q v.2), f v) =\n      ∑ b ∈ t.filter Q, ∑ a ∈ s.filter (fun a => P a b), f (a, b)"
+  },
+  {
+    "name": "lastPairs",
+    "kind": "def",
+    "private": false,
+    "header": "def lastPairs (N : ℕ) (H D : ℝ) (E : ℕ × ℕ → Prop) : Finset (ℕ × ℕ)"
+  },
+  {
+    "name": "firstPairs",
+    "kind": "def",
+    "private": false,
+    "header": "def firstPairs (N : ℕ) (A : ℝ) (q : ℕ × ℕ) : Finset (ℕ × ℕ)"
+  },
+  {
+    "name": "sum_fullSelector",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sum_fullSelector (N : ℕ) (A H D : ℝ) (E : ℕ × ℕ → Prop)\n    (f : ((ℕ × ℕ) × (ℕ × ℕ)) → ℝ) :\n    (∑ v ∈ (chenY11FullPrimeSelector N A H D).filter (fun v => ¬ E v.2),\n      f v) =\n      ∑ q ∈ lastPairs N H D E, ∑ p ∈ firstPairs N A q, f (p, q)"
+  },
+  {
+    "name": "sourceMass",
+    "kind": "def",
+    "private": false,
+    "header": "def sourceMass (N : ℕ) (A : ℝ) (q : ℕ × ℕ) : ℝ"
+  },
+  {
+    "name": "sourceMass_nonneg",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sourceMass_nonneg (N : ℕ) (A : ℝ) (q : ℕ × ℕ) :\n    0 ≤ sourceMass N A q"
+  },
+  {
+    "name": "firstPairs_eq_empty_of_third_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem firstPairs_eq_empty_of_third_le (N : ℕ) (A : ℝ) (q : ℕ × ℕ)\n    (hq : (q.1 : ℝ) ≤ A) : firstPairs N A q = ∅"
+  },
+  {
+    "name": "sourceMass_eq_zero_of_third_le",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sourceMass_eq_zero_of_third_le (N : ℕ) (A : ℝ) (q : ℕ × ℕ)\n    (hq : (q.1 : ℝ) ≤ A) : sourceMass N A q = 0"
+  },
+  {
+    "name": "sum_selectedReceivers",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem sum_selectedReceivers (N : ℕ) (A H D : ℝ) (E : ℕ × ℕ → Prop) :\n    (∑ P ∈ chenAdditivePrimeCarrier N,\n      (chenY11Selected (N - P) A H D (fun q => ¬ E q) : ℝ)) =\n      ∑ q ∈ lastPairs N H D E, sourceMass N A q"
+  },
+  {
+    "name": "current_eq_lastPair_source",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem current_eq_lastPair_source (N : ℕ) (E : ℕ × ℕ → Prop) :\n    currentChenUpsilon11 N E =\n      ∑ q ∈ lastPairs N ((N : ℝ) ^ (19 / 125 : ℝ))\n          ((N : ℝ) ^ (59 / 250 : ℝ)) E,\n        sourceMass N ((N : ℝ) ^ (417 / 5000 : ℝ)) q"
+  },
+  {
+    "name": "current_eq_active_lastPair_source",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem current_eq_active_lastPair_source (N : ℕ) (E : ℕ × ℕ → Prop) :\n    currentChenUpsilon11 N E =\n      ∑ q ∈ (lastPairs N ((N : ℝ) ^ (19 / 125 : ℝ))\n          ((N : ℝ) ^ (59 / 250 : ℝ)) E).filter\n            (fun q => (N : ℝ) ^ (417 / 5000 : ℝ) < (q.1 : ℝ)),\n        sourceMass N ((N : ℝ) ^ (417 / 5000 : ℝ)) q"
+  },
+  {
+    "name": "mem_lastPairs_iff",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem mem_lastPairs_iff (N : ℕ) (H D : ℝ) (E : ℕ × ℕ → Prop)\n    (q : ℕ × ℕ) :\n    q ∈ lastPairs N H D E ↔\n      q.1 ∈ chenAdditivePrimeCarrier N ∧ q.2 ∈ chenAdditivePrimeCarrier N ∧\n        (q.1 : ℝ) < H ∧ H ≤ (q.2 : ℝ) ∧ (q.2 : ℝ) < D ∧ ¬ E q"
+  },
+  {
+    "name": "lastPairs_antitone_mask",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem lastPairs_antitone_mask (N : ℕ) (H D : ℝ)\n    (E F : ℕ × ℕ → Prop) (hEF : ∀ q, E q → F q) :\n    lastPairs N H D F ⊆ lastPairs N H D E"
+  },
+  {
+    "name": "current_antitone_mask",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem current_antitone_mask (N : ℕ) (E F : ℕ × ℕ → Prop)\n    (hEF : ∀ q, E q → F q) :\n    currentChenUpsilon11 N F ≤ currentChenUpsilon11 N E"
+  },
+  {
+    "name": "current_mask_congr",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem current_mask_congr (N : ℕ) (E F : ℕ × ℕ → Prop)\n    (hEF : ∀ q, q ∈ lastPairs N ((N : ℝ) ^ (19 / 125 : ℝ))\n      ((N : ℝ) ^ (59 / 250 : ℝ)) (fun _ => False) → (E q ↔ F q)) :\n    currentChenUpsilon11 N E = currentChenUpsilon11 N F"
+  }
+]

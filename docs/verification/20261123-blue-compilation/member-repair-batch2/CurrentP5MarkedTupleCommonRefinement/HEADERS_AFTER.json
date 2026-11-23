@@ -1,0 +1,170 @@
+[
+  {
+    "name": "p5MarkedWitnessCell",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedWitnessCell {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι) (a : ι) :\n    Finset P5MarkedWitness"
+  },
+  {
+    "name": "mem_p5MarkedWitnessCell",
+    "kind": "theorem",
+    "private": false,
+    "header": "@[simp] theorem mem_p5MarkedWitnessCell {ι : Type*} [DecidableEq ι]\n    {N : ℕ} {E : ℕ × ℕ → Prop} {policy : P5MarkedWitness → ι}\n    {a : ι} {t : P5MarkedWitness} :\n    t ∈ p5MarkedWitnessCell N E policy a ↔\n      t ∈ p5MarkedElevenSource N E ∧ policy t = a"
+  },
+  {
+    "name": "p5MarkedWitnessCell_subset",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_subset {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι) (a : ι) :\n    p5MarkedWitnessCell N E policy a ⊆ p5MarkedElevenSource N E"
+  },
+  {
+    "name": "p5MarkedWitnessCell_disjoint",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_disjoint {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι)\n    {a b : ι} (hab : a ≠ b) :\n    Disjoint (p5MarkedWitnessCell N E policy a) (p5MarkedWitnessCell N E policy b)"
+  },
+  {
+    "name": "p5MarkedWitnessCell_cover",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_cover {ι : Type*} [Fintype ι] [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι) :\n    Finset.univ.biUnion (p5MarkedWitnessCell N E policy) = p5MarkedElevenSource N E"
+  },
+  {
+    "name": "p5MarkedWitnessCellContribution",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedWitnessCellContribution {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι) (a : ι) : ℝ"
+  },
+  {
+    "name": "p5MarkedWitnessCell_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_sum {ι : Type*} [Fintype ι] [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι)\n    (f : P5MarkedWitness → ℝ) :\n    (∑ a, ∑ t ∈ p5MarkedWitnessCell N E policy a, f t) =\n      ∑ t ∈ p5MarkedElevenSource N E, f t"
+  },
+  {
+    "name": "p5MarkedWitnessCellContribution_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCellContribution_sum {ι : Type*}\n    [Fintype ι] [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : P5MarkedWitness → ι) :\n    (∑ a, p5MarkedWitnessCellContribution N E policy a) =\n      currentChenPairedPrimeSum N E"
+  },
+  {
+    "name": "p5MarkedCommonPolicy",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedCommonPolicy {J ι : Type*} (policy : J → P5MarkedWitness → ι)\n    (t : P5MarkedWitness) : J → ι"
+  },
+  {
+    "name": "p5MarkedCommonPolicyCell_eq_all",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCommonPolicyCell_eq_all {J ι : Type*}\n    [Fintype J] [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : J → P5MarkedWitness → ι) (a : J → ι) :\n    p5MarkedWitnessCell N E (p5MarkedCommonPolicy policy) a =\n      (p5MarkedElevenSource N E).filter (fun t => ∀ j, policy j t = a j)"
+  },
+  {
+    "name": "p5MarkedCommonPolicy_contribution_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCommonPolicy_contribution_sum {J ι : Type*}\n    [Fintype J] [Fintype ι] [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (policy : J → P5MarkedWitness → ι) :\n    (∑ a : J → ι, p5MarkedWitnessCellContribution N E (p5MarkedCommonPolicy policy) a) =\n      currentChenPairedPrimeSum N E"
+  },
+  {
+    "name": "p5MarkedWitnessCell_refine",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_refine {ι κ : Type*}\n    [DecidableEq ι] [DecidableEq κ]\n    (N : ℕ) (E : ℕ × ℕ → Prop)\n    (parent : P5MarkedWitness → ι) (child : P5MarkedWitness → κ) (a : ι) (b : κ) :\n    p5MarkedWitnessCell N E (fun t => (parent t, child t)) (a, b) =\n      (p5MarkedWitnessCell N E parent a).filter (fun t => child t = b)"
+  },
+  {
+    "name": "p5MarkedWitnessCellContribution_refine",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCellContribution_refine {ι κ : Type*}\n    [DecidableEq ι] [Fintype κ] [DecidableEq κ]\n    (N : ℕ) (E : ℕ × ℕ → Prop)\n    (parent : P5MarkedWitness → ι) (child : P5MarkedWitness → κ) (a : ι) :\n    p5MarkedWitnessCellContribution N E parent a =\n      ∑ b, p5MarkedWitnessCellContribution N E\n        (fun t => (parent t, child t)) (a, b)"
+  },
+  {
+    "name": "p5MarkedWitnessCell_child_gains_once",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedWitnessCell_child_gains_once {ι κ : Type*}\n    [DecidableEq ι] [Fintype κ] [DecidableEq κ]\n    (N : ℕ) (E : ℕ × ℕ → Prop)\n    (parent : P5MarkedWitness → ι) (child : P5MarkedWitness → κ)\n    (a : ι) (replacement : κ → ℝ) :\n    (∑ b, replacement b) - p5MarkedWitnessCellContribution N E parent a =\n      ∑ b, (replacement b - p5MarkedWitnessCellContribution N E\n        (fun t => (parent t, child t)) (a, b))"
+  },
+  {
+    "name": "p5MarkedCartesianBox",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedCartesianBox (i : Fin 11) (P : ℕ)\n    (B₀ B₁ B₂ B₃ : Finset ℕ) : Finset P5MarkedWitness"
+  },
+  {
+    "name": "p5MarkFour_injective",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkFour_injective (i : Fin 11) (P : ℕ) :\n    Function.Injective (fun q : P5WitnessFour => (i, (P, q)))"
+  },
+  {
+    "name": "p5MarkedCartesianBox_card",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianBox_card (i : Fin 11) (P : ℕ)\n    (B₀ B₁ B₂ B₃ : Finset ℕ) :\n    (p5MarkedCartesianBox i P B₀ B₁ B₂ B₃).card =\n      (B₀.card * B₁.card) * (B₂.card * B₃.card)"
+  },
+  {
+    "name": "p5MarkedCartesianBox_subset_source",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianBox_subset_source (N : ℕ) (E : ℕ × ℕ → Prop)\n    (i : Fin 11) (P : ℕ) (B₀ B₁ B₂ B₃ : Finset ℕ)\n    (hP : P ∈ chenAdditivePrimeCarrier N)\n    (hwitness : ∀ q ∈ (B₀ ×ˢ B₁) ×ˢ (B₂ ×ˢ B₃),\n      q ∈ p5PaddedActualWitnesses N E (N - P) i) :\n    p5MarkedCartesianBox i P B₀ B₁ B₂ B₃ ⊆ p5MarkedElevenSource N E"
+  },
+  {
+    "name": "p5MarkedCartesianBox_signed_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianBox_signed_sum (i : Fin 11) (P : ℕ)\n    (B₀ B₁ B₂ B₃ : Finset ℕ) :\n    (∑ t ∈ p5MarkedCartesianBox i P B₀ B₁ B₂ B₃,\n      p5CausalReceiverLedgerWeight t.1) =\n      (((B₀.card * B₁.card) * (B₂.card * B₃.card) : ℕ) : ℝ) *\n        p5CausalReceiverLedgerWeight i"
+  },
+  {
+    "name": "p5MarkedTupleReceiverFibre",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedTupleReceiverFibre (N : ℕ) (E : ℕ × ℕ → Prop)\n    (i : Fin 11) (q : P5WitnessFour) : Finset ℕ"
+  },
+  {
+    "name": "p5MarkedCartesianSourceBox",
+    "kind": "def",
+    "private": false,
+    "header": "def p5MarkedCartesianSourceBox (N : ℕ) (E : ℕ × ℕ → Prop) (i : Fin 11)\n    (B₀ B₁ B₂ B₃ : Finset ℕ) : Finset P5MarkedWitness"
+  },
+  {
+    "name": "p5MarkTupleReceiver_injective",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkTupleReceiver_injective (i : Fin 11) :\n    Function.Injective (fun t : Sigma (fun _ : P5WitnessFour => ℕ) =>\n      (i, (t.2, t.1)))"
+  },
+  {
+    "name": "p5MarkedCartesianSourceBox_eq_filter",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianSourceBox_eq_filter (N : ℕ) (E : ℕ × ℕ → Prop)\n    (i : Fin 11) (B₀ B₁ B₂ B₃ : Finset ℕ) :\n    p5MarkedCartesianSourceBox N E i B₀ B₁ B₂ B₃ =\n      (p5MarkedElevenSource N E).filter (fun t =>\n        t.1 = i ∧ t.2.2 ∈ (B₀ ×ˢ B₁) ×ˢ (B₂ ×ˢ B₃))"
+  },
+  {
+    "name": "p5MarkedCartesianSourceBox_subset",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianSourceBox_subset (N : ℕ) (E : ℕ × ℕ → Prop)\n    (i : Fin 11) (B₀ B₁ B₂ B₃ : Finset ℕ) :\n    p5MarkedCartesianSourceBox N E i B₀ B₁ B₂ B₃ ⊆ p5MarkedElevenSource N E"
+  },
+  {
+    "name": "p5MarkedCartesianSourceBox_signed_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianSourceBox_signed_sum (N : ℕ) (E : ℕ × ℕ → Prop)\n    (i : Fin 11) (B₀ B₁ B₂ B₃ : Finset ℕ) :\n    (∑ t ∈ p5MarkedCartesianSourceBox N E i B₀ B₁ B₂ B₃,\n      p5CausalReceiverLedgerWeight t.1) =\n      ∑ q ∈ (B₀ ×ˢ B₁) ×ˢ (B₂ ×ˢ B₃),\n        ((p5MarkedTupleReceiverFibre N E i q).card : ℝ) *\n          p5CausalReceiverLedgerWeight i"
+  },
+  {
+    "name": "p5Marked_disjoint_partition_signed_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5Marked_disjoint_partition_signed_sum {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (A : Finset ι) (cells : ι → Finset P5MarkedWitness)\n    (hdisjoint : Set.PairwiseDisjoint (A : Set ι) cells)\n    (hcover : A.biUnion cells = p5MarkedElevenSource N E) :\n    (∑ a ∈ A, ∑ t ∈ cells a, p5CausalReceiverLedgerWeight t.1) =\n      currentChenPairedPrimeSum N E"
+  },
+  {
+    "name": "p5MarkedCartesian_partition_signed_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesian_partition_signed_sum {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (A : Finset ι)\n    (row : ι → Fin 11) (prime : ι → ℕ) (B₀ B₁ B₂ B₃ : ι → Finset ℕ)\n    (hdisjoint : Set.PairwiseDisjoint (A : Set ι)\n      (fun a => p5MarkedCartesianBox (row a) (prime a) (B₀ a) (B₁ a) (B₂ a) (B₃ a)))\n    (hcover : A.biUnion (fun a =>\n      p5MarkedCartesianBox (row a) (prime a) (B₀ a) (B₁ a) (B₂ a) (B₃ a)) =\n        p5MarkedElevenSource N E) :\n    (∑ a ∈ A,\n      (((((B₀ a).card * (B₁ a).card) * ((B₂ a).card * (B₃ a).card)) : ℕ) : ℝ) *\n        p5CausalReceiverLedgerWeight (row a)) = currentChenPairedPrimeSum N E"
+  },
+  {
+    "name": "p5MarkedCartesianSource_partition_signed_sum",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem p5MarkedCartesianSource_partition_signed_sum {ι : Type*} [DecidableEq ι]\n    (N : ℕ) (E : ℕ × ℕ → Prop) (A : Finset ι)\n    (row : ι → Fin 11) (B₀ B₁ B₂ B₃ : ι → Finset ℕ)\n    (hdisjoint : Set.PairwiseDisjoint (A : Set ι) (fun a =>\n      p5MarkedCartesianSourceBox N E (row a) (B₀ a) (B₁ a) (B₂ a) (B₃ a)))\n    (hcover : A.biUnion (fun a =>\n      p5MarkedCartesianSourceBox N E (row a) (B₀ a) (B₁ a) (B₂ a) (B₃ a)) =\n        p5MarkedElevenSource N E) :\n    (∑ a ∈ A, ∑ q ∈ (B₀ a ×ˢ B₁ a) ×ˢ (B₂ a ×ˢ B₃ a),\n      ((p5MarkedTupleReceiverFibre N E (row a) q).card : ℝ) *\n        p5CausalReceiverLedgerWeight (row a)) = currentChenPairedPrimeSum N E"
+  }
+]

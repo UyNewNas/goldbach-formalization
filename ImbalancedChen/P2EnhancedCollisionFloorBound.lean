@@ -2,7 +2,7 @@ import ImbalancedChen.P2EnhancedPrefixMaskDefect
 import MathlibNt.Wu2008DoubleSieve.Omega3FiniteError
 
 /-!
-SOURCE_ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+Verification records: docs/verification/20261123-blue-compilation.
 
 The selected-prime collision event is embedded in the existing actual
 repeated-divisibility complement carrier at the COMPLETE labelled divisor
@@ -58,6 +58,7 @@ theorem collision_card_le_bad_complements {N d : ℕ} {l : List ℕ}
   · intro ell hell ell' hell' heq
     have hlt := collision_output_lt hN he hell
     have hlt' := collision_output_lt hN he hell'
+    change N - ell = N - ell' at heq
     omega
 
 /-- Exact finite floor count, retaining the complete labelled product. -/

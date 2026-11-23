@@ -1,0 +1,63 @@
+--- a/ImbalancedChen/P5ZU11OriginalLastPair.lean
++++ b/ImbalancedChen/P5ZU11OriginalLastPair.lean
+@@ -68,12 +68,25 @@
+     simp only [chenY11FullPrimeSelector, Finset.mem_filter]
+     tauto
+   rw [hs]
+-  simpa only [lastPairs, firstPairs] using
+-    (sum_last_label
+-      (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
+-      (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
+-      (fun p q => A ≤ (p.1 : ℝ) ∧ p.1 < p.2 ∧ p.2 < q.1)
+-      (fun q => (q.1 : ℝ) < H ∧ H ≤ (q.2 : ℝ) ∧ (q.2 : ℝ) < D ∧ ¬ E q) f)
++  have hsum := sum_last_label
++    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
++    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N)
++    (fun p q => A ≤ (p.1 : ℝ) ∧ p.1 < p.2 ∧ p.2 < q.1)
++    (fun q => (q.1 : ℝ) < H ∧ H ≤ (q.2 : ℝ) ∧ (q.2 : ℝ) < D ∧ ¬ E q) f
++  convert hsum using 1 <;>
++    first
++    | rfl
++    | apply Finset.sum_congr
++      · ext v
++        simp only [lastPairs, firstPairs, Finset.mem_filter]
++      · intro v hv
++        first
++        | rfl
++        | apply Finset.sum_congr
++          · ext p
++            simp only [lastPairs, firstPairs, Finset.mem_filter]
++          · intro p hp
++            rfl
+ 
+ /-- The actual cardinal weight attached to one retained last pair. -/
+ def sourceMass (N : ℕ) (A : ℝ) (q : ℕ × ℕ) : ℝ :=
+@@ -110,10 +123,24 @@
+       (chenY11Selected (N - P) A H D (fun q => ¬ E q) : ℝ)) =
+       ∑ q ∈ lastPairs N H D E, sourceMass N A q := by
+   rw [sum_chenY11Selected_eq_siftedQuotientPrimeSource]
+-  simpa only [sourceMass] using
+-    (sum_fullSelector N A H D E
+-      (fun t => ((chenSiftedQuotientPrimeSource N
+-        (t.1.1 * t.1.2 * t.2.1 * t.2.2) (t.1.2 : ℝ)).card : ℝ)))
++  have hsum := sum_fullSelector N A H D E
++    (fun t => ((chenSiftedQuotientPrimeSource N
++      (t.1.1 * t.1.2 * t.2.1 * t.2.2) (t.1.2 : ℝ)).card : ℝ))
++  unfold sourceMass
++  convert hsum using 1 <;>
++    first
++    | rfl
++    | apply Finset.sum_congr
++      · ext v
++        simp only [lastPairs, firstPairs, Finset.mem_filter]
++      · intro v hv
++        first
++        | rfl
++        | apply Finset.sum_congr
++          · ext p
++            simp only [lastPairs, firstPairs, Finset.mem_filter]
++          · intro p hp
++            rfl
+ 
+ /-- Current cutoffs are substituted literally; in particular no shorter
+ fourth-prime band is used to obtain this decomposition. -/

@@ -1,0 +1,98 @@
+[
+  {
+    "name": "childWindow",
+    "kind": "def",
+    "private": false,
+    "header": "def childWindow (N d : ℕ) (Q s t : ℝ) : Finset ℕ"
+  },
+  {
+    "name": "childCount",
+    "kind": "def",
+    "private": false,
+    "header": "def childCount (N : ℕ) (Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ)\r\n    (s t : ℝ) : ℝ"
+  },
+  {
+    "name": "actual_Phi_buchstab",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_Phi_buchstab (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) {s t : ℝ}\r\n    (hR : ∀ d∈D,1≤Q/(d:ℝ)) (hs : 0<s) (hst : s≤t) :\r\n    Phi N Q D sigma t = Phi N Q D sigma s + childCount N Q D sigma s t"
+  },
+  {
+    "name": "child_squared_prefix",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem child_squared_prefix {N d q : ℕ} {Q s t : ℝ}\r\n    (hd : 0<d) (hR : 1<Q/(d:ℝ)) (hs : 2≤s)\r\n    (hq : q∈childWindow N d Q s t) : (d:ℝ)*(q:ℝ)^2<Q"
+  },
+  {
+    "name": "child_actual_argument",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem child_actual_argument {N d q : ℕ} {Q s t : ℝ}\r\n    (hd : 0<d) (hR : 1<Q/(d:ℝ)) (hs : 0<s) (hst : s≤t)\r\n    (hq : q∈childWindow N d Q s t) :\r\n    s-1<Real.log (Q/((d*q:ℕ):ℝ))/Real.log (q:ℝ) ∧\r\n    Real.log (Q/((d*q:ℕ):ℝ))/Real.log (q:ℝ)≤t-1"
+  },
+  {
+    "name": "childLevel",
+    "kind": "def",
+    "private": false,
+    "header": "def childLevel (Q : ℝ) (d q : ℕ) : ℕ"
+  },
+  {
+    "name": "child_level_geometry",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem child_level_geometry {N d q : ℕ} {Q s t : ℝ}\r\n    (hd : 0<d) (hR : 1<Q/(d:ℝ)) (hs : 2≤s)\r\n    (hq : q∈childWindow N d Q s t) :\r\n    1<childLevel Q d q ∧ (q:ℝ)≤(childLevel Q d q:ℝ)"
+  },
+  {
+    "name": "child_coefficient_full_support",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem child_coefficient_full_support {side : Bool} {N d q r : ℕ} {Q s t : ℝ}\r\n    (hd : 0<d) (hR : 1<Q/(d:ℝ)) (hs : 2≤s)\r\n    (hq : q∈childWindow N d Q s t)\r\n    (hr : ordinaryRosserWeight side N (d*q) (childLevel Q d q) (q:ℝ) r≠0) :\r\n    ((d*q*r:ℕ):ℝ)≤Q ∧ r.Coprime ((d*q)*N)"
+  },
+  {
+    "name": "childMain",
+    "kind": "def",
+    "private": false,
+    "header": "def childMain (side : Bool) (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) (s t : ℝ) : ℝ"
+  },
+  {
+    "name": "childError",
+    "kind": "def",
+    "private": false,
+    "header": "def childError (side : Bool) (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) (s t : ℝ) : ℝ"
+  },
+  {
+    "name": "childPolynomial",
+    "kind": "def",
+    "private": false,
+    "header": "def childPolynomial (side : Bool) (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) (s t : ℝ) : ℝ"
+  },
+  {
+    "name": "childPolynomial_eq_main_add_error",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem childPolynomial_eq_main_add_error (side : Bool) (N : ℕ) (Q : ℝ)\r\n    (D : Finset ℕ) (sigma : ℕ → ℝ) (s t : ℝ) :\r\n    childPolynomial side N Q D sigma s t =\r\n      childMain side N Q D sigma s t+childError side N Q D sigma s t"
+  },
+  {
+    "name": "actual_child_signed_sandwich",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_child_signed_sandwich (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) {s t : ℝ}\r\n    (hd : ∀d∈D,0<d) (hsigma : ∀d∈D,0≤sigma d)\r\n    (hR : ∀d∈D,1<Q/(d:ℝ)) (hs : 2≤s) :\r\n    childMain false N Q D sigma s t+childError false N Q D sigma s t≤\r\n        childCount N Q D sigma s t ∧\r\n    childCount N Q D sigma s t≤\r\n        childMain true N Q D sigma s t+childError true N Q D sigma s t"
+  },
+  {
+    "name": "actual_upper_Buchstab_transfer",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_upper_Buchstab_transfer (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) {s t : ℝ}\r\n    (hd : ∀d∈D,0<d) (hsigma : ∀d∈D,0≤sigma d)\r\n    (hR : ∀d∈D,1<Q/(d:ℝ)) (hs : 2≤s) (hst : s≤t) :\r\n    Phi N Q D sigma s≤Phi N Q D sigma t-\r\n      childMain false N Q D sigma s t-childError false N Q D sigma s t"
+  },
+  {
+    "name": "actual_lower_Buchstab_transfer",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem actual_lower_Buchstab_transfer (N : ℕ) (Q : ℝ) (D : Finset ℕ)\r\n    (sigma : ℕ → ℝ) {s t : ℝ}\r\n    (hd : ∀d∈D,0<d) (hsigma : ∀d∈D,0≤sigma d)\r\n    (hR : ∀d∈D,1<Q/(d:ℝ)) (hs : 2≤s) (hst : s≤t) :\r\n    Phi N Q D sigma t-childMain true N Q D sigma s t-\r\n      childError true N Q D sigma s t≤Phi N Q D sigma s"
+  },
+  {
+    "name": "normalized_actual_Buchstab_gain",
+    "kind": "theorem",
+    "private": false,
+    "header": "theorem normalized_actual_Buchstab_gain {N : ℕ} (hN : 4≤N)\r\n    (Q : ℝ) (D : Finset ℕ) (sigma : ℕ → ℝ) {s t : ℝ}\r\n    (hd : ∀d∈D,0<d) (hsigma : ∀d∈D,0≤sigma d)\r\n    (hR : ∀d∈D,1<Q/(d:ℝ)) (hpositive : ∃d∈D,0<sigma d)\r\n    (hs : 2≤s) (hst : s≤t) :\r\n    (childMain false N Q D sigma s t+childError false N Q D sigma s t)/\r\n        Theta N Q D sigma≤\r\n      (Phi N Q D sigma t-Phi N Q D sigma s)/Theta N Q D sigma ∧\r\n    (Phi N Q D sigma t-Phi N Q D sigma s)/Theta N Q D sigma≤\r\n      (childMain true N Q D sigma s t+childError true N Q D sigma s t)/\r\n        Theta N Q D sigma"
+  }
+]

@@ -1,0 +1,22 @@
+--- baseline/ImbalancedChen/P2OriginalLowerAffineTieSelector.lean
++++ candidate/ImbalancedChen/P2OriginalLowerAffineTieSelector.lean
+@@ -1,6 +1,6 @@
+ import Mathlib
+ 
+--- SOURCE ONLY / UNCOMPILED_ZERO_CREDIT.
++-- Verification records: docs/verification/20261123-blue-compilation.
+ -- Paper internal finite-branch primitive for the causal lower approximation.
+ -- This is the deterministic label selector, not the selected certificate
+ -- array, a legal whole-box CapPlan, or the lower coefficient theorem.
+@@ -159,8 +159,9 @@
+   induction rest generalizing current with
+   | nil => simp at hnext
+   | cons first rest ih =>
+-      rcases List.mem_cons.mp hnext with rfl | hmem
+-      · exact (keepOrRaise_ge_right x current first).trans
++      rcases List.mem_cons.mp hnext with hfirst | hmem
++      · subst next
++        exact (keepOrRaise_ge_right x current first).trans
+           (scan_ge_start x (keepOrRaise x current first) rest)
+       · exact ih (keepOrRaise x current first) hmem
+ 
