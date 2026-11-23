@@ -1,0 +1,528 @@
+ImbalancedChen.chenY1011JointPrimeSelector (N : Nat) (A H D : Real) (E : Prod.{0, 0} Nat Nat → Prop) :
+  Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat))
+'ImbalancedChen.chenY1011JointPrimeSelector' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector (N : Nat) (A H D : Real) :
+  @Disjoint.{0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)))
+    (@Finset.instPartialOrder.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)))
+    (@Finset.instOrderBot.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)))
+    (ImbalancedChen.chenY10PrimeSelector N A H) (ImbalancedChen.chenY11FullPrimeSelector N A H D)
+'ImbalancedChen.chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.chenY1011JointPrimeSelector_eq_union (N : Nat) (A H D : Real) (E : Prod.{0, 0} Nat Nat → Prop)
+  (hHD : @LE.le.{0} Real Real.instLE H D) :
+  @Eq.{1} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)))
+    (ImbalancedChen.chenY1011JointPrimeSelector N A H D E)
+    (@Union.union.{0} (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)))
+      (@Finset.instUnion.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat))
+        fun (a b : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+        @instDecidableEqProd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)
+          (fun (a b : Prod.{0, 0} Nat Nat) =>
+            @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+          (fun (a b : Prod.{0, 0} Nat Nat) =>
+            @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+          a b)
+      (ImbalancedChen.chenY10PrimeSelector N A H)
+      (@Finset.filter.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat))
+        (fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+          Not (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+        (fun (a : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+          @instDecidableNot (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) a))
+            (Classical.propDecidable (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) a))))
+        (ImbalancedChen.chenY11FullPrimeSelector N A H D)))
+'ImbalancedChen.chenY1011JointPrimeSelector_eq_union' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.sum_chenY1011JointPrimeSelector (N : Nat) (A H D : Real) (E : Prod.{0, 0} Nat Nat → Prop)
+  (hHD : @LE.le.{0} Real Real.instLE H D) (f : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) → Real) :
+  @Eq.{1} Real
+    (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) Real Real.instAddCommMonoid
+      (ImbalancedChen.chenY1011JointPrimeSelector N A H D E)
+      fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) => f t)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) Real Real.instAddCommMonoid
+        (ImbalancedChen.chenY10PrimeSelector N A H) fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+        f t)
+      (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) Real Real.instAddCommMonoid
+        (@Finset.filter.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat))
+          (fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+            Not (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+          (fun (a : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+            @instDecidableNot (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) a))
+              (Classical.propDecidable (E (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) a))))
+          (ImbalancedChen.chenY11FullPrimeSelector N A H D))
+        fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) => f t))
+'ImbalancedChen.sum_chenY1011JointPrimeSelector' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.sum_chenY10_add_chenY11_compl_eq_joint_source (N : Nat) (A H D : Real) (E : Prod.{0, 0} Nat Nat → Prop)
+  (hHD : @LE.le.{0} Real Real.instLE H D) :
+  @Eq.{1} Real
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.chenAdditivePrimeCarrier N) fun (P : Nat) =>
+        @Nat.cast.{0} Real Real.instNatCast
+          (ImbalancedChen.chenY10 (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P) A H))
+      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.chenAdditivePrimeCarrier N) fun (P : Nat) =>
+        @Nat.cast.{0} Real Real.instNatCast
+          (ImbalancedChen.chenY11Selected (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P) A H D
+            fun (t : Prod.{0, 0} Nat Nat) => Not (E t))))
+    (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) Real Real.instAddCommMonoid
+      (ImbalancedChen.chenY1011JointPrimeSelector N A H D E)
+      fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+      @Nat.cast.{0} Real Real.instNatCast
+        (@Finset.card.{0} Nat
+          (ImbalancedChen.chenSiftedQuotientPrimeSource N
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t))
+                  (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+                (@Prod.fst.{0, 0} Nat Nat (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+            (@Nat.cast.{0} Real Real.instNatCast
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t))))))
+'ImbalancedChen.sum_chenY10_add_chenY11_compl_eq_joint_source' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.currentChenUpsilon10_add_11_eq_joint_source (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (hN :
+    @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+      (@Nat.cast.{0} Real Real.instNatCast N)) :
+  @Eq.{1} Real
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (ImbalancedChen.currentChenUpsilon10 N)
+      (ImbalancedChen.currentChenUpsilon11 N E))
+    (@Finset.sum.{0, 0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) Real Real.instAddCommMonoid
+      (ImbalancedChen.chenY1011JointPrimeSelector N
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast N)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real (nat_lit 417)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 417) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 416) (instOfNatNat (nat_lit 416)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 415) (instOfNatNat (nat_lit 415)))))))
+            (@OfNat.ofNat.{0} Real (nat_lit 5000)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 5000) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4999) (instOfNatNat (nat_lit 4999)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4998) (instOfNatNat (nat_lit 4998)))))))))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast N)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real (nat_lit 19)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 19) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 18) (instOfNatNat (nat_lit 18)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 17) (instOfNatNat (nat_lit 17)))))))
+            (@OfNat.ofNat.{0} Real (nat_lit 125)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 125) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 124) (instOfNatNat (nat_lit 124)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 123) (instOfNatNat (nat_lit 123)))))))))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast N)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real (nat_lit 59)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 59) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 58) (instOfNatNat (nat_lit 58)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 57) (instOfNatNat (nat_lit 57)))))))
+            (@OfNat.ofNat.{0} Real (nat_lit 250)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 250) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 249) (instOfNatNat (nat_lit 249)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 248) (instOfNatNat (nat_lit 248)))))))))
+        E)
+      fun (t : Prod.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)) =>
+      @Nat.cast.{0} Real Real.instNatCast
+        (@Finset.card.{0} Nat
+          (ImbalancedChen.chenSiftedQuotientPrimeSource N
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t))
+                  (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+                (@Prod.fst.{0, 0} Nat Nat (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t)))
+            (@Nat.cast.{0} Real Real.instNatCast
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat) t))))))
+'ImbalancedChen.currentChenUpsilon10_add_11_eq_joint_source' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.P5WitnessFour : Type
+'ImbalancedChen.P5WitnessFour' does not depend on any axioms
+ImbalancedChen.P5MarkedWitness : Type
+'ImbalancedChen.P5MarkedWitness' does not depend on any axioms
+ImbalancedChen.p5WitnessZero : ImbalancedChen.P5WitnessFour
+'ImbalancedChen.p5WitnessZero' does not depend on any axioms
+ImbalancedChen.p5PadOne (p : Nat) : ImbalancedChen.P5WitnessFour
+'ImbalancedChen.p5PadOne' does not depend on any axioms
+ImbalancedChen.p5PadPair (p : Prod.{0, 0} Nat Nat) : ImbalancedChen.P5WitnessFour
+'ImbalancedChen.p5PadPair' does not depend on any axioms
+ImbalancedChen.p5PadOne_injective : @Function.Injective.{1, 1} Nat ImbalancedChen.P5WitnessFour ImbalancedChen.p5PadOne
+'ImbalancedChen.p5PadOne_injective' does not depend on any axioms
+ImbalancedChen.p5PadPair_injective :
+  @Function.Injective.{1, 1} (Prod.{0, 0} Nat Nat) ImbalancedChen.P5WitnessFour ImbalancedChen.p5PadPair
+'ImbalancedChen.p5PadPair_injective' does not depend on any axioms
+ImbalancedChen.p5PadFour_injective :
+  @Function.Injective.{1, 1} ImbalancedChen.P5WitnessFour ImbalancedChen.P5WitnessFour
+    fun (t : ImbalancedChen.P5WitnessFour) => t
+'ImbalancedChen.p5PadFour_injective' does not depend on any axioms
+ImbalancedChen.p5PadOne_card (T : Finset.{0} Nat) :
+  @Eq.{1} Nat
+    (@Finset.card.{0} ImbalancedChen.P5WitnessFour
+      (@Finset.image.{0, 0} Nat ImbalancedChen.P5WitnessFour
+        (fun (a b : ImbalancedChen.P5WitnessFour) =>
+          @instDecidableEqProd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)
+            (fun (a b : Prod.{0, 0} Nat Nat) =>
+              @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+            (fun (a b : Prod.{0, 0} Nat Nat) =>
+              @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+            a b)
+        ImbalancedChen.p5PadOne T))
+    (@Finset.card.{0} Nat T)
+'ImbalancedChen.p5PadOne_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5PadPair_card (T : Finset.{0} (Prod.{0, 0} Nat Nat)) :
+  @Eq.{1} Nat
+    (@Finset.card.{0} ImbalancedChen.P5WitnessFour
+      (@Finset.image.{0, 0} (Prod.{0, 0} Nat Nat) ImbalancedChen.P5WitnessFour
+        (fun (a b : ImbalancedChen.P5WitnessFour) =>
+          @instDecidableEqProd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)
+            (fun (a b : Prod.{0, 0} Nat Nat) =>
+              @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+            (fun (a b : Prod.{0, 0} Nat Nat) =>
+              @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+            a b)
+        ImbalancedChen.p5PadPair T))
+    (@Finset.card.{0} (Prod.{0, 0} Nat Nat) T)
+'ImbalancedChen.p5PadPair_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5IndicatorWitness (condition : Prop) : Finset.{0} ImbalancedChen.P5WitnessFour
+'ImbalancedChen.p5IndicatorWitness' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5IndicatorWitness_card (condition : Prop) :
+  @Eq.{1} Nat (@Finset.card.{0} ImbalancedChen.P5WitnessFour (ImbalancedChen.p5IndicatorWitness condition))
+    (@ite.{1} Nat condition (Classical.propDecidable condition)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+'ImbalancedChen.p5IndicatorWitness_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5IndicatorWitness_quotient_one (n : Nat) (A : Real) :
+  @Eq.{1} (Finset.{0} ImbalancedChen.P5WitnessFour)
+    (ImbalancedChen.p5IndicatorWitness
+      (ImbalancedChen.ChenQuotient (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) A n))
+    (@ite.{1} (Finset.{0} ImbalancedChen.P5WitnessFour) (ImbalancedChen.ChenPrimeRough A n)
+      (Classical.propDecidable (ImbalancedChen.ChenPrimeRough A n))
+      (@Singleton.singleton.{0, 0} ImbalancedChen.P5WitnessFour (Finset.{0} ImbalancedChen.P5WitnessFour)
+        (@Finset.instSingleton.{0} ImbalancedChen.P5WitnessFour) ImbalancedChen.p5WitnessZero)
+      (@EmptyCollection.emptyCollection.{0} (Finset.{0} ImbalancedChen.P5WitnessFour)
+        (@Finset.instEmptyCollection.{0} ImbalancedChen.P5WitnessFour)))
+'ImbalancedChen.p5IndicatorWitness_quotient_one' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5PaddedActualWitnesses (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop) (n : Nat) :
+  Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))) → Finset.{0} ImbalancedChen.P5WitnessFour
+'ImbalancedChen.p5PaddedActualWitnesses' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5PaddedActualWitnesses_card (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop) (P : Nat)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  @Eq.{1} Real
+    (@Nat.cast.{0} Real Real.instNatCast
+      (@Finset.card.{0} ImbalancedChen.P5WitnessFour
+        (ImbalancedChen.p5PaddedActualWitnesses N E
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P) i)))
+    (ImbalancedChen.p5CausalReceiverOccurrence N E P i)
+'ImbalancedChen.p5PaddedActualWitnesses_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5ConstantSigmaPair.{u_1, u_2} {α : Type u_1} {β : Type u_2} (t : @Sigma.{u_1, u_2} α fun (x : α) => β) :
+  Prod.{u_1, u_2} α β
+'ImbalancedChen.p5ConstantSigmaPair' does not depend on any axioms
+ImbalancedChen.p5ConstantSigmaPair_injective.{u_1, u_2} {α : Type u_1} {β : Type u_2} :
+  @Function.Injective.{max (u_1 + 1) (u_2 + 1), max (u_1 + 1) (u_2 + 1)} (@Sigma.{u_1, u_2} α fun (x : α) => β)
+    (Prod.{u_1, u_2} α β) (@ImbalancedChen.p5ConstantSigmaPair.{u_1, u_2} α β)
+'ImbalancedChen.p5ConstantSigmaPair_injective' does not depend on any axioms
+ImbalancedChen.mem_p5ConstantSigmaPair_image.{u_1, u_2} {α : Type u_1} {β : Type u_2} [DecidableEq.{u_1 + 1} α]
+  [DecidableEq.{u_2 + 1} β] (S : Finset.{u_1} α) (T : α → Finset.{u_2} β) (a : α) (b : β) :
+  Iff
+    (@Membership.mem.{max u_2 u_1, max u_2 u_1} (Prod.{u_1, u_2} α β) (Finset.{max u_2 u_1} (Prod.{u_1, u_2} α β))
+      (@SetLike.instMembership.{max u_1 u_2, max u_1 u_2} (Finset.{max u_2 u_1} (Prod.{u_1, u_2} α β))
+        (Prod.{u_1, u_2} α β) (@Finset.instSetLike.{max u_1 u_2} (Prod.{u_1, u_2} α β)))
+      (@Finset.image.{max u_2 u_1, max u_2 u_1} (@Sigma.{u_1, u_2} α fun (x : α) => β) (Prod.{u_1, u_2} α β)
+        (fun (a b : Prod.{u_1, u_2} α β) => @instDecidableEqProd.{u_1, u_2} α β inst✝ inst✝¹ a b)
+        (@ImbalancedChen.p5ConstantSigmaPair.{u_1, u_2} α β) (@Finset.sigma.{u_1, u_2} α (fun (i : α) => β) S T))
+      (@Prod.mk.{u_1, u_2} α β a b))
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) S a)
+      (@Membership.mem.{u_2, u_2} β (Finset.{u_2} β)
+        (@SetLike.instMembership.{u_2, u_2} (Finset.{u_2} β) β (@Finset.instSetLike.{u_2} β)) (T a) b))
+'ImbalancedChen.mem_p5ConstantSigmaPair_image' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedRowSource (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  Finset.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)
+'ImbalancedChen.p5MarkedRowSource' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.mem_p5MarkedRowSource (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) (P : Nat)
+  (q : ImbalancedChen.P5WitnessFour) :
+  Iff
+    (@Membership.mem.{0, 0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)
+      (Finset.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour))
+      (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour))
+        (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)
+        (@Finset.instSetLike.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)))
+      (ImbalancedChen.p5MarkedRowSource N E i) (@Prod.mk.{0, 0} Nat ImbalancedChen.P5WitnessFour P q))
+    (And
+      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+        (ImbalancedChen.chenAdditivePrimeCarrier N) P)
+      (@Membership.mem.{0, 0} ImbalancedChen.P5WitnessFour (Finset.{0} ImbalancedChen.P5WitnessFour)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P5WitnessFour) ImbalancedChen.P5WitnessFour
+          (@Finset.instSetLike.{0} ImbalancedChen.P5WitnessFour))
+        (ImbalancedChen.p5PaddedActualWitnesses N E
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P) i)
+        q))
+'ImbalancedChen.mem_p5MarkedRowSource' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop) :
+  Finset.{0} ImbalancedChen.P5MarkedWitness
+'ImbalancedChen.p5MarkedElevenSource' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.mem_p5MarkedElevenSource (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) (P : Nat)
+  (q : ImbalancedChen.P5WitnessFour) :
+  Iff
+    (@Membership.mem.{0, 0}
+      (Prod.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+        (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour))
+      (Finset.{0} ImbalancedChen.P5MarkedWitness)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P5MarkedWitness) ImbalancedChen.P5MarkedWitness
+        (@Finset.instSetLike.{0} ImbalancedChen.P5MarkedWitness))
+      (ImbalancedChen.p5MarkedElevenSource N E)
+      (@Prod.mk.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+        (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) i (@Prod.mk.{0, 0} Nat ImbalancedChen.P5WitnessFour P q)))
+    (And
+      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+        (ImbalancedChen.chenAdditivePrimeCarrier N) P)
+      (@Membership.mem.{0, 0} ImbalancedChen.P5WitnessFour (Finset.{0} ImbalancedChen.P5WitnessFour)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P5WitnessFour) ImbalancedChen.P5WitnessFour
+          (@Finset.instSetLike.{0} ImbalancedChen.P5WitnessFour))
+        (ImbalancedChen.p5PaddedActualWitnesses N E
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P) i)
+        q))
+'ImbalancedChen.mem_p5MarkedElevenSource' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedRowSource_card (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  @Eq.{1} Real
+    (@Nat.cast.{0} Real Real.instNatCast
+      (@Finset.card.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) (ImbalancedChen.p5MarkedRowSource N E i)))
+    (@Matrix.vecCons.{0} Real
+      (Nat.succ
+        (Nat.succ
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ
+                      (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))))
+      (ImbalancedChen.currentChenUpsilon1 N)
+      (@Matrix.vecCons.{0} Real
+        (Nat.succ
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))))))
+        (ImbalancedChen.currentChenUpsilon2 N)
+        (@Matrix.vecCons.{0} Real
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))
+          (ImbalancedChen.currentChenUpsilon3 N)
+          (@Matrix.vecCons.{0} Real
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))))
+            (ImbalancedChen.currentChenUpsilon4 N)
+            (@Matrix.vecCons.{0} Real
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+              (ImbalancedChen.currentChenUpsilon5 N)
+              (@Matrix.vecCons.{0} Real
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+                (ImbalancedChen.currentChenUpsilon6 N E)
+                (@Matrix.vecCons.{0} Real
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                  (ImbalancedChen.currentChenUpsilon7 N)
+                  (@Matrix.vecCons.{0} Real
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))
+                    (ImbalancedChen.currentChenUpsilon8 N)
+                    (@Matrix.vecCons.{0} Real
+                      (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+                      (ImbalancedChen.currentChenUpsilon9 N)
+                      (@Matrix.vecCons.{0} Real (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                        (ImbalancedChen.currentChenUpsilon10 N)
+                        (@Matrix.vecCons.{0} Real (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (ImbalancedChen.currentChenUpsilon11 N E) (@Matrix.vecEmpty.{0} Real)))))))))))
+      i)
+'ImbalancedChen.p5MarkedRowSource_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource_row_filter (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  @Eq.{1} (Finset.{0} ImbalancedChen.P5MarkedWitness)
+    (@Finset.filter.{0} ImbalancedChen.P5MarkedWitness
+      (fun (t : ImbalancedChen.P5MarkedWitness) =>
+        @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+            (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) t)
+          i)
+      (fun (a : ImbalancedChen.P5MarkedWitness) =>
+        instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))
+          (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+            (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) a)
+          i)
+      (ImbalancedChen.p5MarkedElevenSource N E))
+    (@Finset.image.{0, 0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)
+      (Prod.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+        (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour))
+      (fun
+          (a b :
+            Prod.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+              (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)) =>
+        @instDecidableEqProd.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour)
+          (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (fun (a b : Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) =>
+            @instDecidableEqProd.{0, 0} Nat ImbalancedChen.P5WitnessFour instDecidableEqNat
+              (fun (a b : ImbalancedChen.P5WitnessFour) =>
+                @instDecidableEqProd.{0, 0} (Prod.{0, 0} Nat Nat) (Prod.{0, 0} Nat Nat)
+                  (fun (a b : Prod.{0, 0} Nat Nat) =>
+                    @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+                  (fun (a b : Prod.{0, 0} Nat Nat) =>
+                    @instDecidableEqProd.{0, 0} Nat Nat instDecidableEqNat instDecidableEqNat a b)
+                  a b)
+              a b)
+          a b)
+      (fun (t : Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) =>
+        @Prod.mk.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) i t)
+      (ImbalancedChen.p5MarkedRowSource N E i))
+'ImbalancedChen.p5MarkedElevenSource_row_filter' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource_row_filter_card (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  @Eq.{1} Nat
+    (@Finset.card.{0} ImbalancedChen.P5MarkedWitness
+      (@Finset.filter.{0} ImbalancedChen.P5MarkedWitness
+        (fun (t : ImbalancedChen.P5MarkedWitness) =>
+          @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+            (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+              (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) t)
+            i)
+        (fun (a : ImbalancedChen.P5MarkedWitness) =>
+          instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))
+            (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+              (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) a)
+            i)
+        (ImbalancedChen.p5MarkedElevenSource N E)))
+    (@Finset.card.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) (ImbalancedChen.p5MarkedRowSource N E i))
+'ImbalancedChen.p5MarkedElevenSource_row_filter_card' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource_row_card_eq_upsilon (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) :
+  @Eq.{1} Real
+    (@Nat.cast.{0} Real Real.instNatCast
+      (@Finset.card.{0} ImbalancedChen.P5MarkedWitness
+        (@Finset.filter.{0} ImbalancedChen.P5MarkedWitness
+          (fun (t : ImbalancedChen.P5MarkedWitness) =>
+            @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+              (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+                (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) t)
+              i)
+          (fun (a : ImbalancedChen.P5MarkedWitness) =>
+            instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))
+              (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+                (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) a)
+              i)
+          (ImbalancedChen.p5MarkedElevenSource N E))))
+    (@Matrix.vecCons.{0} Real
+      (Nat.succ
+        (Nat.succ
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ
+                      (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))))
+      (ImbalancedChen.currentChenUpsilon1 N)
+      (@Matrix.vecCons.{0} Real
+        (Nat.succ
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))))))
+        (ImbalancedChen.currentChenUpsilon2 N)
+        (@Matrix.vecCons.{0} Real
+          (Nat.succ
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))
+          (ImbalancedChen.currentChenUpsilon3 N)
+          (@Matrix.vecCons.{0} Real
+            (Nat.succ
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))))
+            (ImbalancedChen.currentChenUpsilon4 N)
+            (@Matrix.vecCons.{0} Real
+              (Nat.succ
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+              (ImbalancedChen.currentChenUpsilon5 N)
+              (@Matrix.vecCons.{0} Real
+                (Nat.succ
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+                (ImbalancedChen.currentChenUpsilon6 N E)
+                (@Matrix.vecCons.{0} Real
+                  (Nat.succ
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                  (ImbalancedChen.currentChenUpsilon7 N)
+                  (@Matrix.vecCons.{0} Real
+                    (Nat.succ (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))
+                    (ImbalancedChen.currentChenUpsilon8 N)
+                    (@Matrix.vecCons.{0} Real
+                      (Nat.succ (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+                      (ImbalancedChen.currentChenUpsilon9 N)
+                      (@Matrix.vecCons.{0} Real (Nat.succ (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                        (ImbalancedChen.currentChenUpsilon10 N)
+                        (@Matrix.vecCons.{0} Real (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (ImbalancedChen.currentChenUpsilon11 N E) (@Matrix.vecEmpty.{0} Real)))))))))))
+      i)
+'ImbalancedChen.p5MarkedElevenSource_row_card_eq_upsilon' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource_sum_by_row (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop)
+  (f : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))) → Real) :
+  @Eq.{1} Real
+    (@Finset.sum.{0, 0} ImbalancedChen.P5MarkedWitness Real Real.instAddCommMonoid
+      (ImbalancedChen.p5MarkedElevenSource N E) fun (t : ImbalancedChen.P5MarkedWitness) =>
+      f
+        (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) t))
+    (@Finset.sum.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) Real
+      Real.instAddCommMonoid
+      (@Finset.univ.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))))
+      fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))) =>
+      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Nat.cast.{0} Real Real.instNatCast
+          (@Finset.card.{0} (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) (ImbalancedChen.p5MarkedRowSource N E i)))
+        (f i))
+'ImbalancedChen.p5MarkedElevenSource_sum_by_row' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+ImbalancedChen.p5MarkedElevenSource_signed_sum (N : Nat) (E : Prod.{0, 0} Nat Nat → Prop) :
+  @Eq.{1} Real
+    (@Finset.sum.{0, 0} ImbalancedChen.P5MarkedWitness Real Real.instAddCommMonoid
+      (ImbalancedChen.p5MarkedElevenSource N E) fun (t : ImbalancedChen.P5MarkedWitness) =>
+      ImbalancedChen.p5CausalReceiverLedgerWeight
+        (@Prod.fst.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+          (Prod.{0, 0} Nat ImbalancedChen.P5WitnessFour) t))
+    (ImbalancedChen.currentChenPairedPrimeSum N E)
+'ImbalancedChen.p5MarkedElevenSource_signed_sum' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

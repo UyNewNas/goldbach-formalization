@@ -1,0 +1,73 @@
+import ImbalancedChen.CurrentChenUpsilon1011JointSource
+import ImbalancedChen.CurrentP5MarkedElevenWitnessSource
+
+set_option pp.all true
+
+#check ImbalancedChen.chenY1011JointPrimeSelector
+#print axioms ImbalancedChen.chenY1011JointPrimeSelector
+#check ImbalancedChen.chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector
+#print axioms ImbalancedChen.chenY10PrimeSelector_disjoint_chenY11FullPrimeSelector
+#check ImbalancedChen.chenY1011JointPrimeSelector_eq_union
+#print axioms ImbalancedChen.chenY1011JointPrimeSelector_eq_union
+#check ImbalancedChen.sum_chenY1011JointPrimeSelector
+#print axioms ImbalancedChen.sum_chenY1011JointPrimeSelector
+#check ImbalancedChen.sum_chenY10_add_chenY11_compl_eq_joint_source
+#print axioms ImbalancedChen.sum_chenY10_add_chenY11_compl_eq_joint_source
+#check ImbalancedChen.currentChenUpsilon10_add_11_eq_joint_source
+#print axioms ImbalancedChen.currentChenUpsilon10_add_11_eq_joint_source
+#check ImbalancedChen.P5WitnessFour
+#print axioms ImbalancedChen.P5WitnessFour
+#check ImbalancedChen.P5MarkedWitness
+#print axioms ImbalancedChen.P5MarkedWitness
+#check ImbalancedChen.p5WitnessZero
+#print axioms ImbalancedChen.p5WitnessZero
+#check ImbalancedChen.p5PadOne
+#print axioms ImbalancedChen.p5PadOne
+#check ImbalancedChen.p5PadPair
+#print axioms ImbalancedChen.p5PadPair
+#check ImbalancedChen.p5PadOne_injective
+#print axioms ImbalancedChen.p5PadOne_injective
+#check ImbalancedChen.p5PadPair_injective
+#print axioms ImbalancedChen.p5PadPair_injective
+#check ImbalancedChen.p5PadFour_injective
+#print axioms ImbalancedChen.p5PadFour_injective
+#check ImbalancedChen.p5PadOne_card
+#print axioms ImbalancedChen.p5PadOne_card
+#check ImbalancedChen.p5PadPair_card
+#print axioms ImbalancedChen.p5PadPair_card
+#check ImbalancedChen.p5IndicatorWitness
+#print axioms ImbalancedChen.p5IndicatorWitness
+#check ImbalancedChen.p5IndicatorWitness_card
+#print axioms ImbalancedChen.p5IndicatorWitness_card
+#check ImbalancedChen.p5IndicatorWitness_quotient_one
+#print axioms ImbalancedChen.p5IndicatorWitness_quotient_one
+#check ImbalancedChen.p5PaddedActualWitnesses
+#print axioms ImbalancedChen.p5PaddedActualWitnesses
+#check ImbalancedChen.p5PaddedActualWitnesses_card
+#print axioms ImbalancedChen.p5PaddedActualWitnesses_card
+#check ImbalancedChen.p5ConstantSigmaPair
+#print axioms ImbalancedChen.p5ConstantSigmaPair
+#check ImbalancedChen.p5ConstantSigmaPair_injective
+#print axioms ImbalancedChen.p5ConstantSigmaPair_injective
+#check ImbalancedChen.mem_p5ConstantSigmaPair_image
+#print axioms ImbalancedChen.mem_p5ConstantSigmaPair_image
+#check ImbalancedChen.p5MarkedRowSource
+#print axioms ImbalancedChen.p5MarkedRowSource
+#check ImbalancedChen.mem_p5MarkedRowSource
+#print axioms ImbalancedChen.mem_p5MarkedRowSource
+#check ImbalancedChen.p5MarkedElevenSource
+#print axioms ImbalancedChen.p5MarkedElevenSource
+#check ImbalancedChen.mem_p5MarkedElevenSource
+#print axioms ImbalancedChen.mem_p5MarkedElevenSource
+#check ImbalancedChen.p5MarkedRowSource_card
+#print axioms ImbalancedChen.p5MarkedRowSource_card
+#check ImbalancedChen.p5MarkedElevenSource_row_filter
+#print axioms ImbalancedChen.p5MarkedElevenSource_row_filter
+#check ImbalancedChen.p5MarkedElevenSource_row_filter_card
+#print axioms ImbalancedChen.p5MarkedElevenSource_row_filter_card
+#check ImbalancedChen.p5MarkedElevenSource_row_card_eq_upsilon
+#print axioms ImbalancedChen.p5MarkedElevenSource_row_card_eq_upsilon
+#check ImbalancedChen.p5MarkedElevenSource_sum_by_row
+#print axioms ImbalancedChen.p5MarkedElevenSource_sum_by_row
+#check ImbalancedChen.p5MarkedElevenSource_signed_sum
+#print axioms ImbalancedChen.p5MarkedElevenSource_signed_sum

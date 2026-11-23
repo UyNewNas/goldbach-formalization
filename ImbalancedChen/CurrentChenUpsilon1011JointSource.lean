@@ -98,6 +98,11 @@ theorem sum_chenY10_add_chenY11_compl_eq_joint_source
   rw [sum_chenY10_eq_siftedQuotientPrimeSource,
     sum_chenY11Selected_eq_siftedQuotientPrimeSource,
     sum_chenY1011JointPrimeSelector N A H D E hHD]
+  apply congrArg₂ (· + ·) rfl
+  simp only [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro t _
+  by_cases ht : E t.2 <;> simp [ht]
 
 /-- The original current cutoffs and the original last-pair complement
 mask give the same joint source, with no independent row bounds needed. -/

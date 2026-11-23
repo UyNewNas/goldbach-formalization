@@ -3,7 +3,8 @@ import ImbalancedChen.CurrentP5CausalCommonReceiverPartition
 /-!
 # A literal heterogeneous marked source for all eleven Upsilon terms
 
-Source-only candidate, uncompiled. The first import is the preceding
+Verification records are kept in docs/verification/20261123-blue-compilation.
+The first import is the preceding
 source-only common receiver partition candidate at its intended path.
 The marks retain the row, additive prime and every witness coordinate.
 Padding is injective within each row. No quotient by prime product occurs.
@@ -174,6 +175,7 @@ theorem p5MarkedElevenSource_row_filter (N : ℕ) (E : ℕ × ℕ → Prop) (i :
   constructor
   · intro h
     obtain ⟨hsource, hji⟩ := Finset.mem_filter.mp h
+    change j = i at hji
     subst j
     exact Finset.mem_image.mpr ⟨(P, q),
       (mem_p5MarkedRowSource N E i P q).mpr

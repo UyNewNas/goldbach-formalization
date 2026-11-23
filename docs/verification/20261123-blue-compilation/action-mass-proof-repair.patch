@@ -1,0 +1,100 @@
+--- a/ImbalancedChen/P5OriginalActionMassBound.lean
++++ b/ImbalancedChen/P5OriginalActionMassBound.lean
+@@ -3,7 +3,7 @@
+ /-!
+ # Real positive transition masses in the original action geometry
+ 
+-SOURCE ONLY; UNCOMPILED. Earlier delivered sources are frozen.
++Verification records: docs/verification/20261123-blue-compilation. Earlier delivered sources are frozen.
+ 
+ Original formulas: `own-chen-table-insertion-chain-20261009.tex` section 3,
+ `global-chen-lower-completion-20261010.txt` section 3, and
+@@ -119,8 +119,8 @@
+ 
+ theorem singletonAmbient_constant_integral :
+     (∫ _u in singletonAmbient, (10 : ℝ)) = 3 := by
+-  rw [integral_const]
+-  simp [singletonAmbient, Measure.real, Real.volume_Icc, smul_eq_mul]
++  rw [setIntegral_const]
++  norm_num [singletonAmbient, Measure.real, Real.volume_Icc, smul_eq_mul]
+ 
+ theorem pairAmbient_volume_real : (volume pairAmbient).toReal = 9 / 100 := by
+   rw [pairAmbient, Real.volume_Icc_pi_toReal (by intro i; norm_num)]
+@@ -128,15 +128,15 @@
+ 
+ theorem pairAmbient_constant_integral :
+     (∫ _x in pairAmbient, (125 : ℝ)) = 45 / 4 := by
+-  rw [integral_const]
+-  simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter,
+-    smul_eq_mul, pairAmbient_volume_real]
++  rw [setIntegral_const]
++  change (volume pairAmbient).toReal * _ = _
++  rw [pairAmbient_volume_real]
+   norm_num
+ 
+ theorem buchstabAmbient_constant_integral :
+     (∫ _w in buchstabAmbient, (1 : ℝ)) = 4 := by
+-  rw [integral_const]
+-  simp [buchstabAmbient, Measure.real, Real.volume_Icc, smul_eq_mul]
++  rw [setIntegral_const]
++  norm_num [buchstabAmbient, Measure.real, Real.volume_Icc, smul_eq_mul]
+ 
+ /-- These mass bounds use actual real integrals; no saved numeric total
+ and no operator-norm target is an input. -/
+@@ -310,8 +310,14 @@
+   have hlo : (1 / 5 : ℝ) ≤ x 0 := h0.trans hu.le
+   have hhi : x 1 ≤ (1 / 2 : ℝ) := hv.le.trans (h23.trans h3)
+   refine ⟨⟨?_, ?_⟩, ?_⟩
+-  · intro i; fin_cases i <;> simp only [Pi.le_def] <;> linarith
+-  · intro i; fin_cases i <;> simp only [Pi.le_def] <;> linarith
++  · intro i
++    fin_cases i
++    · exact hlo
++    · exact hlo.trans huv.le
++  · intro i
++    fin_cases i
++    · exact huv.le.trans hhi
++    · exact hhi
+   · linarith
+ 
+ theorem W2Pair6_geometry {p : W2Parameters} (hp : W2Geometry p)
+@@ -336,8 +342,14 @@
+   have hlo : (1 / 5 : ℝ) ≤ x 0 := h0.trans hu.le
+   have hhi : x 1 ≤ (1 / 2 : ℝ) := hv.le.trans (h12.trans (h23.trans h3))
+   refine ⟨⟨?_, ?_⟩, ?_⟩
+-  · intro i; fin_cases i <;> simp only [Pi.le_def] <;> linarith
+-  · intro i; fin_cases i <;> simp only [Pi.le_def] <;> linarith
++  · intro i
++    fin_cases i
++    · exact hlo
++    · exact hlo.trans huv.le
++  · intro i
++    fin_cases i
++    · exact huv.le.trans hhi
++    · exact hhi
+   · linarith
+ 
+ theorem W2Pair8_geometry {p : W2Parameters} (hp : W2Geometry p)
+@@ -416,9 +428,9 @@
+         (∫ x in W2Pair7 p, 1 / (x 0 * x 1 * (1 - x 0 - x 1))) +
+         (∫ x in W2Pair8 p, 1 / (x 0 * x 1 * (1 - x 0 - x 1)))) / 5 := by
+   dsimp [W2FeedbackMass]
+-  rw [singletonMass_eq_original measurableSet_Ioo (W2Singleton2_subset hp),
+-    singletonMass_eq_original measurableSet_Ioo (W2Singleton3_subset hp),
+-    singletonMass_eq_original measurableSet_Ioo (W2Singleton4_subset hp),
++  rw [singletonMass_eq_original (D := W2Singleton2 p) measurableSet_Ioo (W2Singleton2_subset hp),
++    singletonMass_eq_original (D := W2Singleton3 p) measurableSet_Ioo (W2Singleton3_subset hp),
++    singletonMass_eq_original (D := W2Singleton4 p) measurableSet_Ioo (W2Singleton4_subset hp),
+     pairMass_eq_original (W2Pair5_measurable p)
+       (fun x hx => (W2Pair5_geometry hp hx).1) (fun x hx => (W2Pair5_geometry hp hx).2),
+     pairMass_eq_original (W2Pair6_measurable p)
+@@ -478,7 +490,8 @@
+ theorem W1FeedbackMass_eq_original (i : Fin 7) (j : Fin 10) :
+     W1FeedbackMass i j = 1 +
+       (∫ u in W1Domain i j, 1 / (u * (1 - u))) / 2 := by
+-  rw [W1FeedbackMass, singletonMass_eq_original measurableSet_Ioo (W1Domain_subset i j)]
++  rw [W1FeedbackMass,
++    singletonMass_eq_original (D := W1Domain i j) measurableSet_Ioo (W1Domain_subset i j)]
+ 
+ theorem W1FeedbackValue_one (i : Fin 7) (j : Fin 10) :
+     W1FeedbackValue i j (fun _ => 1) (fun _ => 1) = W1FeedbackMass i j := by
