@@ -93,6 +93,7 @@ theorem roots15_to20_outside :
   rcases hc with h | h | h | h | h | h
   all_goals subst c <;>
     norm_num [oldCubeLower,root15,root16,root17,root18,root19,root20,
+      Matrix.cons_val_two,Matrix.tail_cons,Matrix.head_cons,
       decodeCoordinates,coordinateDenominator,thirdPrefixTheta,H,M,R]
 
 /-- Each original outside root has empty intersection with the actual
