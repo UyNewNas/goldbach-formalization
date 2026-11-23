@@ -1,0 +1,184 @@
+{
+  "schema": "p1_packed_decoder_independent_static_review_v1",
+  "reviewed_utc": "2026-11-23T16:57:27.743012+00:00",
+  "reviewer": "/root/blue_inventory",
+  "not_candidate_author": true,
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY",
+  "findings": [],
+  "module": "ImbalancedChen.P1OriginalFourthPackedTableDecoder",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/packed-decoder-candidate/baseline.lean",
+    "sha256": "cea2d97bdd8d1809856dfebf529aa1a705c8fdf7690603e5e60be7539821f0de",
+    "bytes": 5014
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/packed-decoder-candidate/candidate.lean",
+    "sha256": "f2312be058b8d026d9ff60e177982f62b201d4f1b0b557d9750dad2aec07f41c",
+    "bytes": 5048
+  },
+  "candidate_exact_small_patch_reconstruction": true,
+  "all_other_raw_bytes_outside_two_registered_proofs_identical": true,
+  "all_complete_theorem_headers": [
+    {
+      "name": "toProducerRow_lo",
+      "complete_header": "theorem toProducerRow_lo (r : FourthWireRow) : r.toProducerRow.lo = r.lo :=",
+      "sha256": "99df5ea43d245bf646790e8eca25a911d0f9f0a2151f3713c1c64d0b75637518",
+      "proof_changed": false
+    },
+    {
+      "name": "toProducerRow_hi",
+      "complete_header": "theorem toProducerRow_hi (r : FourthWireRow) : r.toProducerRow.hi = r.hi :=",
+      "sha256": "f14997f25cd8aec4d652d6770f10df0956f13a9ee9be3787ba12e37f61359bf0",
+      "proof_changed": false
+    },
+    {
+      "name": "toProducerRow_mask",
+      "complete_header": "theorem toProducerRow_mask (r : FourthWireRow) : r.toProducerRow.mask = r.mask :=",
+      "sha256": "0c7407bb2e6296583cc979bef06a8d960d5d3cb3a2596b8a88f4d91847817343",
+      "proof_changed": false
+    },
+    {
+      "name": "toProducerRow_lower",
+      "complete_header": "theorem toProducerRow_lower (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.lower i = (r.lo i : ℚ) / 204800 :=",
+      "sha256": "21723629767a30ba352f117730af652fde1c6a8996506e505e8d049887a70d78",
+      "proof_changed": false
+    },
+    {
+      "name": "toProducerRow_upper",
+      "complete_header": "theorem toProducerRow_upper (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.upper i = (r.hi i : ℚ) / 204800 :=",
+      "sha256": "157a5eebf7b6c344604da41aa2f8ae7199b13d5e3d1f29b9888bc5b4bd363fe3",
+      "proof_changed": false
+    },
+    {
+      "name": "toProducerRow_selected",
+      "complete_header": "theorem toProducerRow_selected (r : FourthWireRow) (i : Fin 4) :\n    i ∈ r.toProducerRow.selected ↔ Nat.testBit r.mask i.val = true :=",
+      "sha256": "aebab1f79465cdd1870a1aa15bb679317b71bea629644c2e34a1112a64b2cecf",
+      "proof_changed": true
+    },
+    {
+      "name": "rowFromBytes_fields",
+      "complete_header": "theorem rowFromBytes_fields\n    (l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w : ℕ) :\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).lo =\n      ![l0 + 256*l1, l2 + 256*l3, l4 + 256*l5, l6 + 256*l7] ∧\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).hi =\n      ![h0 + 256*h1, h2 + 256*h3, h4 + 256*h5, h6 + 256*h7] ∧\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).mask = w :=",
+      "sha256": "bcfdc7656477fe3416912122402b1f93b77ecbd3b0e5a88ef0f74ecfd2ce258d",
+      "proof_changed": false
+    },
+    {
+      "name": "hexDigit_bound",
+      "complete_header": "theorem hexDigit_bound (c : Char) (n : ℕ) (h : hexDigit c = some n) : n < 16 :=",
+      "sha256": "7ad3081b36d92e5b79ef1f0b7602f92a2967114330486d5dfb3f2dcb7fa74b13",
+      "proof_changed": true
+    },
+    {
+      "name": "decodedByte_bound",
+      "complete_header": "theorem decodedByte_bound (a b : Char) (x y : ℕ)\n    (ha : hexDigit a = some x) (hb : hexDigit b = some y) : 16*x+y < 256 :=",
+      "sha256": "3ba5d8b43f3d793d7657db8694f531adc4f4d86941984bb931a413e5c51a8181",
+      "proof_changed": false
+    },
+    {
+      "name": "decodeHexChars_cons",
+      "complete_header": "theorem decodeHexChars_cons (a b : Char) (rest : List Char) (x y : ℕ) (tail : List ℕ)\n    (ha : hexDigit a = some x) (hb : hexDigit b = some y)\n    (hr : decodeHexChars rest = some tail) :\n    decodeHexChars (a :: b :: rest) = some ((16*x+y) :: tail) :=",
+      "sha256": "3195f2189a089749fc3fb4df03fdcdc5b945374deea6d90e66d0a8762529e579",
+      "proof_changed": false
+    },
+    {
+      "name": "decodeWireRows_cons17",
+      "complete_header": "theorem decodeWireRows_cons17\n    (l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w : ℕ) (rest : List ℕ) :\n    decodeWireRows (l0 :: l1 :: l2 :: l3 :: l4 :: l5 :: l6 :: l7 ::\n      h0 :: h1 :: h2 :: h3 :: h4 :: h5 :: h6 :: h7 :: w :: rest) =\n      (do let tail ← decodeWireRows rest\n          pure (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w :: tail)) :=",
+      "sha256": "ac5d3d0f22ad36bbcfa9c46a370ebb30c827aefab16b2ffa020bb8ff1a6a0b9d",
+      "proof_changed": false
+    }
+  ],
+  "all_non_theorem_definition_structure_inductive_regions": [
+    {
+      "name": "FourthWireRow",
+      "kind": "structure",
+      "whole_region_sha256": "aef71d48912d561aead8d554b24e840c9cd54babe4e78b95320eab1fa18de983",
+      "unchanged": true
+    },
+    {
+      "name": "FourthWireRow.toProducerRow",
+      "kind": "def",
+      "whole_region_sha256": "ad68bcd36a10ba9a8823a491f0709b255a615dbf28e9044409d8be5292bddaab",
+      "unchanged": true
+    },
+    {
+      "name": "wordLE16",
+      "kind": "def",
+      "whole_region_sha256": "6f50b1a05666423e9903b50283e2f97f9a6780da7fd951decd23060faf824204",
+      "unchanged": true
+    },
+    {
+      "name": "rowFromBytes",
+      "kind": "def",
+      "whole_region_sha256": "cae466b0f773b8c97933457415b5822ba58b057eca9498abcb6c57d7e0f79393",
+      "unchanged": true
+    },
+    {
+      "name": "hexDigit",
+      "kind": "def",
+      "whole_region_sha256": "78026cb393e15e74d72d60d8c23d6ca305c2496a24a0b97e20b0237bd2056dfc",
+      "unchanged": true
+    },
+    {
+      "name": "decodeHexChars",
+      "kind": "def",
+      "whole_region_sha256": "7edae24d86f7c77bc65283377a3e2daf9c9bd1874abaeefda50ad7eead78d88b",
+      "unchanged": true
+    },
+    {
+      "name": "decodeWireRows",
+      "kind": "def",
+      "whole_region_sha256": "5c35a8d9dcbc7f43ec67f6a6e43e74514b27023b27dc8e42bfbd9e193feb4b52",
+      "unchanged": true
+    },
+    {
+      "name": "decodePackedHex",
+      "kind": "def",
+      "whole_region_sha256": "277f800b907856a1d0e0a5a19cd0c020566ba99a09de72972a59b4a1e6536047",
+      "unchanged": true
+    },
+    {
+      "name": "RawJson",
+      "kind": "inductive",
+      "whole_region_sha256": "03b98742c716c7cbb59cb16744d8572973ee3b1fb9989ea8df34f2a8d265b151",
+      "unchanged": true
+    }
+  ],
+  "theorem_count": 11,
+  "non_theorem_count": 9,
+  "original_metadata_literal_regions_checked": true,
+  "logic_review": {
+    "toProducerRow_selected": "The explicit change unfolds exactly the existing ProducerRow.selected/constructor mask. Finset.mem_filter yields univ-membership and the same Bool-coerced predicate; mem_univ and true_and remove only True. The Fin4 type annotation is exactly the original i domain; winner mask bits are unchanged.",
+    "hexDigit_bound": "Only the trailing cases h is removed after actual split_ifs already closes the impossible none=some branch. All three original decimal/lowercase/uppercase simp+omega arithmetic branches and all original Char thresholds/subtractions are byte-identical. The actual baseline error No goals to be solved matches this limited deletion.",
+    "scope": "Source gives17byte row ABI and total Option decoders. It proves no whole payload parse, no3699127row geometry/sum check, and no observed624s decoder computation; that Lake duration contains lock queue time."
+  },
+  "selected_mask_definition_source": {
+    "path": "/workspace/goldbach-formalization/ImbalancedChen/P2OriginalFourthCapProducerInterface.lean",
+    "sha256": "cb5ed8d9c1095d2fc460ed4426ab430db9543944508c58409d9a2906db723ade",
+    "bytes": 29345,
+    "exact_definition": "def ProducerRow.selected (r : ProducerRow) : Finset (Fin 4) :=\n  Finset.univ.filter (fun i => Nat.testBit r.mask i.val)"
+  },
+  "actual_failure": {
+    "path": "/workspace/p1-complete-proof/packed-decoder-candidate/actual-failure.log",
+    "sha256": "d1470c4419d3c11de819fdcbdcb5113d22f8b09d295362a7a02d6efa694fc497",
+    "bytes": 307,
+    "occurs_exactly_in_original_master_log": true,
+    "master_byte_offset": 238633,
+    "master_prefix_through_excerpt_sha256": "e4d307c36d8911cb0246139371551a3c8d462f9f128c428b248d52830d2bbdaa"
+  },
+  "file_bindings": [
+    {
+      "path": "/workspace/p1-complete-proof/packed-decoder-candidate/STATIC_REPAIR.json",
+      "sha256": "f0bac037d2b5b39fdaf169701076361249678f83d9c54740978db0a215c79a8b",
+      "bytes": 4789
+    },
+    {
+      "path": "/workspace/p1-complete-proof/packed-decoder-candidate/candidate.patch",
+      "sha256": "7b41a6af4f2c65c1a1130467aff3d5b6915bca33ffd56358b1ad6ceb0e1eb5b4",
+      "bytes": 674
+    }
+  ],
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_or_payload_decoder_execution": 0,
+    "main_live_frozen_candidate_original_manifest_mutations": 0,
+    "existing_inventory_or13helpers_rescanned": false
+  }
+}

@@ -3,7 +3,7 @@ import ImbalancedChen.UpperCoefficientPerturbation
 import Mathlib.Data.Finset.SymmDiff
 
 /-!
-SOURCEONLY / UNCOMPILED. Two actual retained policies at the identical
+Compilation records: docs/verification/20261123-blue-compilation. Two actual retained policies at the identical
 N, cap, w, z have the identical Möbius coefficient wherever both retain
 the same modulus. Squarefreeness of each actual retained support makes
 the absolute coefficient difference exactly the indicator of their
@@ -122,6 +122,7 @@ theorem compilerMass_commonCarrier_eq_symmDiff_unitMass
       fixedRoughSupport retainOdd₂ N cap w z := by
     intro hd
     exact hdnot (Finset.symmDiff_subset_union hd)
+  dsimp only
   rw [abs_coefficient_sub_eq_symmDiff_indicator, if_neg hnot, zero_div]
 
 /-- The existing sign-attached compiler transport now charges exactly the

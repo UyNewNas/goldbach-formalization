@@ -1,0 +1,53 @@
+--- baseline/ImbalancedChen/ActualPrimeDisjointLabelProducts.lean
++++ candidate/ImbalancedChen/ActualPrimeDisjointLabelProducts.lean
+@@ -72,8 +72,9 @@
+       obtain ⟨⟨q, qs⟩, hmem, rfl⟩ := Finset.mem_image.mp hps
+       obtain ⟨hq, hqs⟩ := Finset.mem_product.mp hmem
+       intro r hr
+-      rcases List.mem_cons.mp hr with rfl | hr
+-      · exact hP i (by simp) q hq
++      rcases List.mem_cons.mp hr with heq | hr
++      · subst r
++        exact hP i (by simp) q hq
+       · exact ih (fun j hj => hP j (List.mem_cons_of_mem i hj)) qs hqs r hr
+ 
+ theorem actualPrimeLabelBlocksWord_mem {ι : Type*} {blocks : List (ι × ℕ)} {i : ι}
+@@ -102,13 +103,13 @@
+       l.filter (fun q => decide (P q)) = [] :=
+     List.filter_eq_nil_iff.mpr (fun q hq => by simpa using h q hq)
+   have hhead : as.Perm cs := by
+-    simpa only [List.filter_append, hkeep _ as ha, hdrop _ bs hb,
+-      hkeep _ cs hc, hdrop _ ds hd, List.append_nil] using
++    simpa only [List.filter_append, hkeep (fun q => q ∈ C) as ha, hdrop (fun q => q ∈ C) bs hb,
++      hkeep (fun q => q ∈ C) cs hc, hdrop (fun q => q ∈ C) ds hd, List.append_nil] using
+         List.Perm.filter (fun q => decide (q ∈ C)) hperm
+   have htail : bs.Perm ds := by
+     simpa only [List.filter_append,
+-      hdrop _ as (fun q hq hn => hn (ha q hq)), hkeep _ bs hb,
+-      hdrop _ cs (fun q hq hn => hn (hc q hq)), hkeep _ ds hd,
++      hdrop (fun q => q ∉ C) as (fun q hq hn => hn (ha q hq)), hkeep (fun q => q ∉ C) bs hb,
++      hdrop (fun q => q ∉ C) cs (fun q hq hn => hn (hc q hq)), hkeep (fun q => q ∉ C) ds hd,
+       List.nil_append] using List.Perm.filter (fun q => decide (q ∉ C)) hperm
+   exact ⟨hhead.prod_eq, htail.prod_eq⟩
+ 
+@@ -159,7 +160,9 @@
+       let U := actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)
+       have hTin : ∀ ps ∈ T, ∀ q ∈ ps, q ∈ B i := by
+         intro ps hps
+-        have hps' := (actualPrimeSlotBox_replicate_label_eq B i m) ▸ hps
++        have hps' := hps
++        change ps ∈ actualPrimeSlotBox B (List.replicate m i) at hps'
++        rw [actualPrimeSlotBox_replicate_label_eq B i m] at hps'
+         exact ((mem_actualPrimeSlotBox_replicate (B i) m ps).mp hps').2
+       have hUprime : ∀ ps ∈ U, ∀ q ∈ ps, Nat.Prime q :=
+         actualPrimeSlotBox_prime B _ (fun j hj => by
+@@ -185,7 +188,8 @@
+           intro a _
+           exact ih (fun b => H (a * b)) htail hdisjointTail
+         _ = ∑ p ∈ (T.image List.prod).product (U.image List.prod), H (p.1 * p.2) :=
+-          (Finset.sum_product _ _ _).symm
++          (Finset.sum_product (T.image List.prod) (U.image List.prod)
++            (fun p : ℕ × ℕ => H (p.1 * p.2))).symm
+         _ = ∑ n ∈ ((T.image List.prod).product (U.image List.prod)).image
+               (fun p => p.1 * p.2), H n := by
+           rw [Finset.sum_image]

@@ -1,0 +1,926 @@
+{
+  "schema": "independent_P1_full_owned_source_and_final_binding_review_v1",
+  "status": "PASS_INDEPENDENT_REVIEW",
+  "reviewer": "/root",
+  "captured_utc": "2026-11-23T17:20:56.797654+00:00",
+  "batch": 54,
+  "findings": [],
+  "source_review": [
+    {
+      "module": "ImbalancedChen.P5ZU11CanonicalSwitchedIntegrable",
+      "baseline_sha256": "39d42c5e22907561f544a7fdcc9845060b3574159744236dd6b1f02acef313a8",
+      "postimage_sha256": "a3754a2ca9fdfd7fb68ed0908e538b577abd140d2cbc65093c821ba07d43049b",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "isCompact_compactBox",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem isCompact_compactBox : IsCompact compactBox := isCompact_Icc\n\n"
+        },
+        {
+          "name": "originalDomain_subset_compactBox",
+          "kind": "complete_header",
+          "raw": "theorem originalDomain_subset_compactBox (mask : Set (ℝ × ℝ)) :\n    originalDomain mask ⊆ compactBox :="
+        },
+        {
+          "name": "originalDomain_volume_lt_top",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem originalDomain_volume_lt_top (mask : Set (ℝ × ℝ)) :\n    volume (originalDomain mask) < ∞ :=\n  lt_of_le_of_lt (measure_mono (originalDomain_subset_compactBox mask))\n    isCompact_compactBox.measure_lt_top\n\n"
+        },
+        {
+          "name": "originalDomain_argument_mem",
+          "kind": "complete_header",
+          "raw": "theorem originalDomain_argument_mem (mask : Set (ℝ × ℝ))\n    (v : LogFour) (hv : v ∈ originalDomain mask) :\n    (1 - (v 0 + v 1 + v 2 + v 3)) / v 2 ∈ Icc (77 / 38 : ℝ) 8 :="
+        },
+        {
+          "name": "continuousOn_canonical_switched_compactBox",
+          "kind": "complete_header",
+          "raw": "theorem continuousOn_canonical_switched_compactBox (K : ℝ) :\n    ContinuousOn (switchedKernel K LiLiuPrereqBuchstab.buchstab) compactBox :="
+        },
+        {
+          "name": "integrableOn_original_canonical_switched",
+          "kind": "complete_header",
+          "raw": "theorem integrableOn_original_canonical_switched (mask : Set (ℝ × ℝ)) (K : ℝ) :\n    IntegrableOn (switchedKernel K LiLiuPrereqBuchstab.buchstab)\n      (originalDomain mask) volume :="
+        },
+        {
+          "name": "integrableOn_original_current_switched",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem integrableOn_original_current_switched (mask : Set (ℝ × ℝ)) :\n    IntegrableOn (switchedKernel currentK LiLiuPrereqBuchstab.buchstab)\n      (originalDomain mask) volume :=\n  integrableOn_original_canonical_switched mask currentK\n\n/-- The prime harmonic volume density used with four logarithmic labels. -/\n"
+        },
+        {
+          "name": "continuousOn_harmonicDensity_compactBox",
+          "kind": "complete_header",
+          "raw": "theorem continuousOn_harmonicDensity_compactBox :\n    ContinuousOn harmonicDensity compactBox :="
+        },
+        {
+          "name": "integrableOn_original_weighted_switched",
+          "kind": "complete_header",
+          "raw": "theorem integrableOn_original_weighted_switched (mask : Set (ℝ × ℝ)) (K : ℝ) :\n    IntegrableOn (fun v => harmonicDensity v *\n      switchedKernel K LiLiuPrereqBuchstab.buchstab v) (originalDomain mask) volume :="
+        },
+        {
+          "name": "canonical_switched_nonneg",
+          "kind": "complete_header",
+          "raw": "theorem canonical_switched_nonneg (mask : Set (ℝ × ℝ)) (K : ℝ) (hK : 0 ≤ K)\n    (v : LogFour) (hv : v ∈ originalDomain mask) :\n    0 ≤ switchedKernel K LiLiuPrereqBuchstab.buchstab v :="
+        },
+        {
+          "name": "abs_canonical_switched_le",
+          "kind": "complete_header",
+          "raw": "theorem abs_canonical_switched_le (mask : Set (ℝ × ℝ)) (K : ℝ)\n    (v : LogFour) (hv : v ∈ originalDomain mask) :\n    |switchedKernel K LiLiuPrereqBuchstab.buchstab v| ≤ |K| / (417 / 5000 : ℝ) :="
+        },
+        {
+          "name": "integrableOn_original_canonical_envelope",
+          "kind": "complete_header",
+          "raw": "theorem integrableOn_original_canonical_envelope (mask : Set (ℝ × ℝ))\n    (hm : MeasurableSet mask) (bank : Finset ℕ)\n    (eligible : ℕ → LogFour → Prop) (K : ℝ) (hK : 0 ≤ K)\n    (H : ℝ → ℝ) (L : ℕ → LogFour → ℝ)\n    (he : ∀ j ∈ bank, MeasurableSet {v | eligible j v})\n    (hH : Measurable H) (hL : ∀ j ∈ bank, Measurable (L j))\n    (ho : ∀ j ∈ bank, ∀ v ∈ originalDomain mask,\n      eligible j v → 0 ≤ ordinaryKernel H L j v) :\n    IntegrableOn (envelope bank\n      (guarded eligible (switchedKernel K LiLiuPrereqBuchstab.buchstab) (ordinaryKernel H L)))\n      (originalDomain mask) volume :="
+        },
+        {
+          "name": "integral_original_current_envelope_eq_sum",
+          "kind": "complete_header",
+          "raw": "theorem integral_original_current_envelope_eq_sum (mask : Set (ℝ × ℝ))\n    (hm : MeasurableSet mask) (bank : Finset ℕ)\n    (eligible : ℕ → LogFour → Prop) (H : ℝ → ℝ) (L : ℕ → LogFour → ℝ)\n    (he : ∀ j ∈ bank, MeasurableSet {v | eligible j v})\n    (hH : Measurable H) (hL : ∀ j ∈ bank, Measurable (L j))\n    (ho : ∀ j ∈ bank, ∀ v ∈ originalDomain mask,\n      eligible j v → 0 ≤ ordinaryKernel H L j v) :\n    (∫ v in originalDomain mask,\n      envelope bank (guarded eligible (switchedKernel currentK LiLiuPrereqBuchstab.buchstab)\n        (ordinaryKernel H L)) v) =\n      ∑ c ∈ tags bank,\n        ∫ v in winner (originalDomain mask) bank\n            (guarded eligible (switchedKernel currentK LiLiuPrereqBuchstab.buchstab)\n              (ordinaryKernel H L)) c,\n          (if c = 0 then switchedKernel currentK LiLiuPrereqBuchstab.buchstab v\n            else ordinaryKernel H L c.pred v) :="
+        }
+      ],
+      "changed_proof_names": [],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011AdaptivePrimeMeshError",
+      "baseline_sha256": "1b1fdc5f138c6cdd42378f01cebcad7a2a1798382071b19bf9564f379821ae02",
+      "postimage_sha256": "4f54e15ff45fc63f713f32b12acc1145b2c6b3552122ff0516e172380e922315",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "envelope_le_add",
+          "kind": "complete_header",
+          "raw": "theorem envelope_le_add (bank : Finset ℕ) (f g : ℕ → LogFour → ℝ)\n    (v : LogFour) (delta : ℝ)\n    (hfg : ∀ c ∈ tags bank, f c v ≤ g c v + delta) :\n    envelope bank f v ≤ envelope bank g v + delta :="
+        },
+        {
+          "name": "envelope_abs_sub_le",
+          "kind": "complete_header",
+          "raw": "theorem envelope_abs_sub_le (bank : Finset ℕ) (f g : ℕ → LogFour → ℝ)\n    (v : LogFour) (delta : ℝ)\n    (hfg : ∀ c ∈ tags bank, |f c v - g c v| ≤ delta) :\n    |envelope bank f v - envelope bank g v| ≤ delta :="
+        },
+        {
+          "name": "guarded_envelope_abs_sub_le",
+          "kind": "complete_header",
+          "raw": "theorem guarded_envelope_abs_sub_le (bank : Finset ℕ)\n    (eligible : ℕ → LogFour → Prop) (switchedA switchedB : LogFour → ℝ)\n    (ordinaryA ordinaryB : ℕ → LogFour → ℝ) (v : LogFour) (delta : ℝ)\n    (hs : |switchedA v - switchedB v| ≤ delta)\n    (ho : ∀ j ∈ bank, eligible j v → |ordinaryA j v - ordinaryB j v| ≤ delta) :\n    |envelope bank (guarded eligible switchedA ordinaryA) v -\n      envelope bank (guarded eligible switchedB ordinaryB) v| ≤ delta :="
+        },
+        {
+          "name": "maskedTestSum_error",
+          "kind": "complete_header",
+          "raw": "theorem maskedTestSum_error (N : ℕ) (a b : Fin 4 → ℝ)\n    (keep : (Fin 4 → ℕ) → Prop) (f g : LogFour → ℝ)\n    (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hfg : ∀ p ∈ actualPrimeBoxTuples N a b,\n      |f (actualPrimeTupleLog N p) - g (actualPrimeTupleLog N p)| ≤ delta) :\n    |maskedTestSum N a b keep f - maskedTestSum N a b keep g| ≤\n      delta * actualPrimeBoxMass N a b :="
+        },
+        {
+          "name": "masked_minimum_error",
+          "kind": "complete_header",
+          "raw": "theorem masked_minimum_error (N : ℕ) (a b : Fin 4 → ℝ)\n    (keep : (Fin 4 → ℕ) → Prop) (bank : Finset ℕ)\n    (f g : ℕ → LogFour → ℝ) (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hfg : ∀ p ∈ actualPrimeBoxTuples N a b, ∀ c ∈ tags bank,\n      |f c (actualPrimeTupleLog N p) - g c (actualPrimeTupleLog N p)| ≤ delta) :\n    |maskedTestSum N a b keep (envelope bank f) -\n      maskedTestSum N a b keep (envelope bank g)| ≤\n      delta * actualPrimeBoxMass N a b :="
+        },
+        {
+          "name": "eventually_originalCube_mass_bounded",
+          "kind": "complete_header",
+          "raw": "theorem eventually_originalCube_mass_bounded :\n    ∀ᶠ N : ℕ in atTop,\n      actualPrimeBoxMass N (fun _ : Fin 4 => (417 / 5000 : ℝ))\n        (fun _ => (59 / 250 : ℝ)) ≤ originalCubeMassBound :="
+        },
+        {
+          "name": "eventually_uniform_masked_minimum_error",
+          "kind": "complete_header",
+          "raw": "theorem eventually_uniform_masked_minimum_error (delta : ℝ) (hdelta : 0 ≤ delta) :\n    ∀ᶠ N : ℕ in atTop, ∀ (keep : (Fin 4 → ℕ) → Prop) (bank : Finset ℕ)\n      (f g : ℕ → LogFour → ℝ),\n      (∀ p ∈ actualPrimeBoxTuples N\n        (fun _ : Fin 4 => (417 / 5000 : ℝ)) (fun _ => (59 / 250 : ℝ)),\n        ∀ c ∈ tags bank,\n          |f c (actualPrimeTupleLog N p) - g c (actualPrimeTupleLog N p)| ≤ delta) →\n      |maskedTestSum N (fun _ : Fin 4 => (417 / 5000 : ℝ))\n          (fun _ => (59 / 250 : ℝ)) keep (envelope bank f) -\n        maskedTestSum N (fun _ : Fin 4 => (417 / 5000 : ℝ))\n          (fun _ => (59 / 250 : ℝ)) keep (envelope bank g)| ≤\n        delta * originalCubeMassBound :="
+        }
+      ],
+      "changed_proof_names": [
+        "guarded_envelope_abs_sub_le"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.P4ARetainedSupportDifferenceMass",
+      "baseline_sha256": "40f91e66a1d0eb845f8cc636daf005b818f6f51b4c3ac97605e13170370d1818",
+      "postimage_sha256": "fe2c6404397c45be98dbc78c4f12b4e0331bb593edc6d32120f14689b322c61a",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "coefficient_eq_moebius_indicator",
+          "kind": "complete_header",
+          "raw": "theorem coefficient_eq_moebius_indicator\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    fixedRoughCoefficient retainOdd N cap w z d =\n      if d ∈ fixedRoughSupport retainOdd N cap w z then\n        (ArithmeticFunction.moebius d : ℝ) else 0 :="
+        },
+        {
+          "name": "coefficient_abs_eq_one_of_mem",
+          "kind": "complete_header",
+          "raw": "theorem coefficient_abs_eq_one_of_mem\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) :\n    |fixedRoughCoefficient retainOdd N cap w z d| = 1 :="
+        },
+        {
+          "name": "coefficient_sub_eq_zero_on_intersection",
+          "kind": "complete_header",
+          "raw": "theorem coefficient_sub_eq_zero_on_intersection\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd₁ N cap w z ∩\n      fixedRoughSupport retainOdd₂ N cap w z) :\n    fixedRoughCoefficient retainOdd₁ N cap w z d -\n      fixedRoughCoefficient retainOdd₂ N cap w z d = 0 :="
+        },
+        {
+          "name": "abs_coefficient_sub_eq_symmDiff_indicator",
+          "kind": "complete_header",
+          "raw": "theorem abs_coefficient_sub_eq_symmDiff_indicator\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    |fixedRoughCoefficient retainOdd₁ N cap w z d -\n      fixedRoughCoefficient retainOdd₂ N cap w z d| =\n        if d ∈ fixedRoughSupport retainOdd₁ N cap w z ∆\n          fixedRoughSupport retainOdd₂ N cap w z then (1 : ℝ) else 0 :="
+        },
+        {
+          "name": "compilerMass_union_eq_symmDiff_unitMass",
+          "kind": "complete_header",
+          "raw": "theorem compilerMass_union_eq_symmDiff_unitMass\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n      (fixedRoughSupport retainOdd₁ N cap w z ∪ fixedRoughSupport retainOdd₂ N cap w z)\n      (fun d => |fixedRoughCoefficient retainOdd₁ N cap w z d -\n        fixedRoughCoefficient retainOdd₂ N cap w z d|) =\n      reciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∆ fixedRoughSupport retainOdd₂ N cap w z)\n        (fun _ => 1) :="
+        },
+        {
+          "name": "compilerMass_commonCarrier_eq_symmDiff_unitMass",
+          "kind": "complete_header",
+          "raw": "theorem compilerMass_commonCarrier_eq_symmDiff_unitMass\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (rough : Finset ℕ)\n    (hrough : fixedRoughSupport retainOdd₁ N cap w z ∪\n      fixedRoughSupport retainOdd₂ N cap w z ⊆ rough) :\n    reciprocalTotientDensity rough\n      (fun d => |fixedRoughCoefficient retainOdd₁ N cap w z d -\n        fixedRoughCoefficient retainOdd₂ N cap w z d|) =\n      reciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∆ fixedRoughSupport retainOdd₂ N cap w z)\n        (fun _ => 1) :="
+        },
+        {
+          "name": "abs_signAttached_density_sub_le_symmDiff_unitMass",
+          "kind": "complete_header",
+          "raw": "theorem abs_signAttached_density_sub_le_symmDiff_unitMass\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    {lo hi M : ℝ} (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signSensitiveReciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∪ fixedRoughSupport retainOdd₂ N cap w z)\n        (fixedRoughCoefficient retainOdd₁ N cap w z) lo hi -\n      signSensitiveReciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∪ fixedRoughSupport retainOdd₂ N cap w z)\n        (fixedRoughCoefficient retainOdd₂ N cap w z) lo hi| ≤\n      M * reciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∆ fixedRoughSupport retainOdd₂ N cap w z)\n        (fun _ => 1) :="
+        },
+        {
+          "name": "abs_actualAttached_density_sub_le_symmDiff_unitMass",
+          "kind": "complete_header",
+          "raw": "theorem abs_actualAttached_density_sub_le_symmDiff_unitMass\n    (retainOdd₁ retainOdd₂ : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    {M : ℝ}\n    (hminus : |reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n      (actualSmallRosserMinus N cap w L)| ≤ M)\n    (hplus : |reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n      (actualSmallRosserPlus N cap w L)| ≤ M) :\n    let rough := fixedRoughSupport retainOdd₁ N cap w z ∪\n      fixedRoughSupport retainOdd₂ N cap w z\n    let small := actualSmallRosserSupport N cap w\n    |physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough (fixedRoughCoefficient retainOdd₁ N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) -\n      physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough (fixedRoughCoefficient retainOdd₂ N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L))| ≤\n      M * reciprocalTotientDensity\n        (fixedRoughSupport retainOdd₁ N cap w z ∆ fixedRoughSupport retainOdd₂ N cap w z)\n        (fun _ => 1) :="
+        }
+      ],
+      "changed_proof_names": [
+        "compilerMass_commonCarrier_eq_symmDiff_unitMass"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.P1ActualFrontierReverseAdmission",
+      "baseline_sha256": "d15e60a780cc27ed8598f48b63cf3c8cf09bd80455c65c872058f94dd0d4c3de",
+      "postimage_sha256": "eda0e0a63517d0eff69bdecda22643973e064c693b79fb3ffdb039e0b6b3848b",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "exists_frontier_of_validSelection",
+          "kind": "complete_header",
+          "raw": "theorem exists_frontier_of_validSelection\n    {α : Type*} (parent : Bool → List α → Bool) (weight : α → ℝ)\n    {chosen carrier : List α} (hsub : chosen <+ carrier)\n    (pre : List α) (positive : Bool) (mass : ℝ)\n    (hvalid : FirstExitValidSelection parent pre positive chosen) :\n    ∃ state ∈ firstExitDepthFrontier (pre.length + chosen.length) parent weight\n      pre positive mass carrier, state.selectedPrefix = chosen.reverse ++ pre :="
+        },
+        {
+          "name": "decreasing_sublist_of_subset",
+          "kind": "complete_header",
+          "raw": "theorem decreasing_sublist_of_subset (xs ys : List ℕ)\n    (hx : xs.Pairwise (· > ·)) (hy : ys.Pairwise (· > ·))\n    (hmem : ∀ p ∈ xs, p ∈ ys) : xs <+ ys :="
+        },
+        {
+          "name": "valid_prime_history_reaches_frontier",
+          "kind": "complete_header",
+          "raw": "theorem valid_prime_history_reaches_frontier\n    (parent : Bool → List ℕ → Bool) (weight : ℕ → ℝ)\n    (N cap : ℕ) (w z : ℝ) (hzcap : z ≤ (cap : ℝ))\n    (pre : List ℕ) (hsort : pre.Pairwise (· < ·))\n    (hp : ∀ p ∈ pre, p.Prime ∧ ¬p ∣ N ∧ w ≤ (p : ℝ) ∧ (p : ℝ) < z)\n    (hvalid : FirstExitValidSelection parent [] true pre.reverse) :\n    ∃ state ∈ firstExitDepthFrontier pre.length parent weight [] true 1\n      (roughPrimeUniverse N cap w z), state.selectedPrefix = pre :="
+        }
+      ],
+      "changed_proof_names": [
+        "exists_frontier_of_validSelection"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactResidualProfile",
+      "baseline_sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251",
+      "postimage_sha256": "1394ff9b4bf6a8c6d016c60f0dacd4e69a627f71955d95ab9c3d5a6672e52584",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "actualPrimeTupleOwnCubeMinus_cap_congr",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeTupleOwnCubeMinus_cap_congr {k N cap₁ cap₂ : ℕ}\n    (hEven : Even N) (p : Fin (k + 1) → ℕ) (lam : ℝ)\n    (hc₁ : (p (Fin.last k) : ℝ) ≤ cap₁)\n    (hc₂ : (p (Fin.last k) : ℝ) ≤ cap₂) :\n    actualPrimeTupleOwnCubeMinus N cap₁ lam p =\n      actualPrimeTupleOwnCubeMinus N cap₂ lam p :="
+        },
+        {
+          "name": "primeTupleMinusProfile_eq_extendedThirdFactor",
+          "kind": "complete_header",
+          "raw": "theorem primeTupleMinusProfile_eq_extendedThirdFactor (lam : ℝ) (t : Fin 3 → ℝ)\n    (hz : 0 < t 2) :\n    primeTupleMinusProfile lam t =\n      4 * actualExtendedThirdLowerFactor ((lam - t 0 - t 1 - t 2) / t 2) / t 2 :="
+        },
+        {
+          "name": "primeTupleMinusProfile_ownCube_gate",
+          "kind": "complete_header",
+          "raw": "theorem primeTupleMinusProfile_ownCube_gate (lam : ℝ) (t : Fin 3 → ℝ)\n    (hz : 0 < t 2) :\n    (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) =\n      primeTupleMinusProfile lam t :="
+        },
+        {
+          "name": "primeTupleMinusProfile_sub_eq_compactHarmonicProfile",
+          "kind": "complete_header",
+          "raw": "theorem primeTupleMinusProfile_sub_eq_compactHarmonicProfile {h : ℝ} (hh : 0 < h)\n    (e lam : ℝ) (t : Fin 3 → ℝ) (hz : h ≤ t 2) :\n    primeTupleMinusProfile (thirdPrefixTheta - 2 * e) t - primeTupleMinusProfile lam t =\n      actualExtendedThirdCompactHarmonicProfile e h lam t :="
+        },
+        {
+          "name": "actualExtendedThirdOwnCubeMinusSum_cap_eq",
+          "kind": "complete_header",
+          "raw": "theorem actualExtendedThirdOwnCubeMinusSum_cap_eq {N : ℕ} (hN : 1 < N)\n    (hEven : Even N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) (lam : ℝ) :\n    actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1) lam\n        (actualExtendedThirdDistinctCellPrimeRegion m j) =\n      actualPrimeBoxOwnCubeMinusSum 2 N (Nat.ceil ((N : ℝ) ^ (thirdPrefixRho + 1)))\n        (h / 2) (thirdPrefixRho + 1) lam (actualExtendedThirdDistinctCellPrimeRegion m j) :="
+        },
+        {
+          "name": "tendsto_actualExtendedThirdOwnCubeMinusSum_error",
+          "kind": "complete_header",
+          "raw": "theorem tendsto_actualExtendedThirdOwnCubeMinusSum_error {h : ℝ} {m : ℕ}\n    (hh : 0 < h) (hab : h / 2 < thirdPrefixRho + 1)\n    (j : ActualExtendedThirdDyadicLabel m) (lam : ℝ) :\n    Tendsto (fun N : ℕ =>\n      actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1) lam\n        (actualExtendedThirdDistinctCellPrimeRegion m j) -\n      actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) else 0))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 0) :="
+        },
+        {
+          "name": "actualExtendedThird_gated_profile_difference",
+          "kind": "complete_header",
+          "raw": "theorem actualExtendedThird_gated_profile_difference {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) (N : ℕ) :\n    actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < thirdPrefixTheta - 2 * e then\n            primeTupleMinusProfile (thirdPrefixTheta - 2 * e) t else 0) else 0) -\n      actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < actualExtendedThirdPhysicalLevel e m j then\n            primeTupleMinusProfile (actualExtendedThirdPhysicalLevel e m j) t else 0) else 0) =\n      actualExtendedThirdDistinctCellPrimeSum N e h m j :="
+        },
+        {
+          "name": "tendsto_actualExtendedThirdCellResidualDensitySum",
+          "kind": "complete_header",
+          "raw": "theorem tendsto_actualExtendedThirdCellResidualDensitySum {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    Tendsto (fun N : ℕ => actualExtendedThirdCellResidualDensitySum N e h m j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdRetainedCellIntegral e m j)) :="
+        },
+        {
+          "name": "tendsto_actualExtendedThirdCompactResidualDensitySum",
+          "kind": "complete_header",
+          "raw": "theorem tendsto_actualExtendedThirdCompactResidualDensitySum {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdCompactResidualDensitySum N e h m)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m)) :="
+        },
+        {
+          "name": "exists_actualExtendedThirdCompactResidualDensitySum_approx_ideal",
+          "kind": "complete_header",
+          "raw": "theorem exists_actualExtendedThirdCompactResidualDensitySum_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n        |actualExtendedThirdCompactResidualDensitySum N e h m -\n          actualExtendedThirdIdealFunctional| ≤ ε :="
+        }
+      ],
+      "changed_proof_names": [
+        "primeTupleMinusProfile_ownCube_gate"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeDisjointLabelProducts",
+      "baseline_sha256": "30c9cc4ae1f639481f981b73f9b910d0d09edfd45d5c020cb55fa10c808e2906",
+      "postimage_sha256": "7eb4bfbc5f2d3c01ff43352ba904a87f5a6f12d0520daf442798244de428d508",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "actualPrimeSlotBox_mem_append",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeSlotBox_mem_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (ps : List ℕ) :\n    ps ∈ actualPrimeSlotBox B (left ++ right) ↔\n      ∃ qs ∈ actualPrimeSlotBox B left, ∃ rs ∈ actualPrimeSlotBox B right,\n        ps = qs ++ rs :="
+        },
+        {
+          "name": "actualPrimeSlotBox_product_image_append",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeSlotBox_product_image_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) :\n    (actualPrimeSlotBox B (left ++ right)).image List.prod =\n      (((actualPrimeSlotBox B left).image List.prod).product\n        ((actualPrimeSlotBox B right).image List.prod)).image (fun p => p.1 * p.2) :="
+        },
+        {
+          "name": "actualPrimeSlotBox_forall",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeSlotBox_forall {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (P : ℕ → Prop) (hP : ∀ i ∈ input, ∀ q ∈ B i, P q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, P q :="
+        },
+        {
+          "name": "actualPrimeLabelBlocksWord_mem",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeLabelBlocksWord_mem {ι : Type*} {blocks : List (ι × ℕ)} {i : ι}\n    (hi : i ∈ actualPrimeLabelBlocksWord blocks) : ∃ b ∈ blocks, i = b.1 :="
+        },
+        {
+          "name": "actualPrimeVector_split_product_eq",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeVector_split_product_eq (C : Finset ℕ)\n    (as bs cs ds : List ℕ)\n    (hprime₁ : ∀ q ∈ as ++ bs, Nat.Prime q)\n    (hprime₂ : ∀ q ∈ cs ++ ds, Nat.Prime q)\n    (ha : ∀ q ∈ as, q ∈ C) (hb : ∀ q ∈ bs, q ∉ C)\n    (hc : ∀ q ∈ cs, q ∈ C) (hd : ∀ q ∈ ds, q ∉ C)\n    (hprod : as.prod * bs.prod = cs.prod * ds.prod) :\n    as.prod = cs.prod ∧ bs.prod = ds.prod :="
+        },
+        {
+          "name": "actualPrimeTuple_product_injective_of_disjoint",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeTuple_product_injective_of_disjoint (C : Finset ℕ)\n    (T U : Finset (List ℕ))\n    (hTprime : ∀ ps ∈ T, ∀ q ∈ ps, Nat.Prime q)\n    (hUprime : ∀ ps ∈ U, ∀ q ∈ ps, Nat.Prime q)\n    (hTin : ∀ ps ∈ T, ∀ q ∈ ps, q ∈ C)\n    (hUout : ∀ ps ∈ U, ∀ q ∈ ps, q ∉ C) :\n    ∀ a ∈ (T.image List.prod).product (U.image List.prod),\n      ∀ b ∈ (T.image List.prod).product (U.image List.prod),\n        a.1 * a.2 = b.1 * b.2 → a = b :="
+        },
+        {
+          "name": "actualPrimeLabelBlockProductSum_eq_product_sum",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeLabelBlockProductSum_eq_product_sum {ι : Type*} (B : ι → Finset ℕ) :\n    ∀ (blocks : List (ι × ℕ)) (H : ℕ → ℝ),\n      (∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q) →\n      blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1)) →\n      actualPrimeLabelBlockProductSum B blocks H =\n        ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod, H n :="
+        },
+        {
+          "name": "actualPrimeLabelBlocks_moebius_sum_disjoint",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeLabelBlocks_moebius_sum_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    (∑ ps ∈ actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :="
+        },
+        {
+          "name": "actualPrimeLabelBlocks_moebius_fibre_disjoint",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeLabelBlocks_moebius_fibre_disjoint {ι : Type*}\n    (B : ι → Finset ℕ) (blocks : List (ι × ℕ)) (r n : ℕ)\n    (hprime : ∀ b ∈ blocks, ∀ q ∈ B b.1, Nat.Prime q)\n    (hdisjoint : blocks.Pairwise (fun b c => Disjoint (B b.1) (B c.1))) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox B (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0 :="
+        },
+        {
+          "name": "mem_actualPrimeFineLabelFinset",
+          "kind": "complete_header",
+          "raw": "theorem mem_actualPrimeFineLabelFinset {N j p : ℕ} {τ : ℝ} :\n    p ∈ actualPrimeFineLabelFinset N τ j ↔\n      p.Prime ∧ ¬p ∣ N ∧ (N : ℝ) ^ (τ * j) ≤ (p : ℝ) ∧\n        (p : ℝ) < (N : ℝ) ^ (τ * ((j : ℝ) + 1)) :="
+        },
+        {
+          "name": "actualPrimeFineLabelFinset_disjoint",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeFineLabelFinset_disjoint {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j : ℕ} (hij : i ≠ j) :\n    Disjoint (actualPrimeFineLabelFinset N τ i) (actualPrimeFineLabelFinset N τ j) :="
+        },
+        {
+          "name": "actualPrimeFineLabelBlocks_moebius_sum",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeFineLabelBlocks_moebius_sum {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ) (H : ℕ → ℝ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n        (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :="
+        },
+        {
+          "name": "actualPrimeFineLabelBlocks_moebius_fibre",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeFineLabelBlocks_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r n : ℕ)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      if n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod\n        then (ArithmeticFunction.moebius (r * n) : ℝ) else 0 :="
+        },
+        {
+          "name": "actualPrimeFineLabelBlocks_original_scalar",
+          "kind": "complete_header",
+          "raw": "theorem actualPrimeFineLabelBlocks_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ)) (r : ℕ)\n    (c : ℝ) (H : ℕ → ℝ) (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :="
+        }
+      ],
+      "changed_proof_names": [
+        "actualPrimeSlotBox_forall",
+        "actualPrimeVector_split_product_eq",
+        "actualPrimeLabelBlockProductSum_eq_product_sum"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.P2FirstIntegralSeries",
+      "baseline_sha256": "4c18897dfe0bbf4ed5571151eac1806d8cddc58aee91907cba99a0dc01e23d18",
+      "postimage_sha256": "e60dfa8e5e76d8c335b09f531b199dea4cb56b1d9b348a6555f3380e5bf5f941",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "stop_eq",
+          "kind": "complete_header",
+          "raw": "theorem stop_eq : stop = (4801 / 2375 : ℝ) :="
+        },
+        {
+          "name": "width_eq",
+          "kind": "complete_header",
+          "raw": "theorem width_eq : stop - 2 = (51 / 2375 : ℝ) :="
+        },
+        {
+          "name": "two_le_stop",
+          "kind": "complete_header",
+          "raw": "theorem two_le_stop : (2 : ℝ) ≤ stop :="
+        },
+        {
+          "name": "q_nonneg",
+          "kind": "complete_header",
+          "raw": "theorem q_nonneg : 0 ≤ q :="
+        },
+        {
+          "name": "q_lt_one",
+          "kind": "complete_header",
+          "raw": "theorem q_lt_one : q < 1 :="
+        },
+        {
+          "name": "prefactor_pos",
+          "kind": "complete_header",
+          "raw": "theorem prefactor_pos : (0 : ℝ) < 4 / theta :="
+        },
+        {
+          "name": "originalFirstIntegral_semantics",
+          "kind": "complete_header",
+          "raw": "theorem originalFirstIntegral_semantics :\n    originalFirstIntegral =\n      (4 / (299 / 500 : ℝ)) *\n        ∫ s in (2 : ℝ)..((299 / 500 : ℝ) / (19 / 96 : ℝ) - 1),\n          Real.log (s - 1) / s :="
+        },
+        {
+          "name": "coordinate_bounds",
+          "kind": "complete_header",
+          "raw": "theorem coordinate_bounds {s : ℝ} (hs : s ∈ Icc (2 : ℝ) stop) :\n    0 ≤ coordinate s ∧ coordinate s ≤ q :="
+        },
+        {
+          "name": "continuousOn_coordinate",
+          "kind": "complete_header",
+          "raw": "theorem continuousOn_coordinate : ContinuousOn coordinate (Icc (2 : ℝ) stop) :="
+        },
+        {
+          "name": "continuousOn_kernel",
+          "kind": "complete_header",
+          "raw": "theorem continuousOn_kernel : ContinuousOn kernel (Icc (2 : ℝ) stop) :="
+        },
+        {
+          "name": "continuousOn_partialLog",
+          "kind": "complete_header",
+          "raw": "private theorem continuousOn_partialLog (n : ℕ) :\n    ContinuousOn (fun s => logPartial (coordinate s) n) (Icc (2 : ℝ) stop) :="
+        },
+        {
+          "name": "continuousOn_partialKernel",
+          "kind": "complete_header",
+          "raw": "theorem continuousOn_partialKernel (n : ℕ) :\n    ContinuousOn (partialKernel n) (Icc (2 : ℝ) stop) :="
+        },
+        {
+          "name": "intervalIntegrable_kernel",
+          "kind": "complete_header",
+          "raw": "theorem intervalIntegrable_kernel : IntervalIntegrable kernel volume 2 stop :="
+        },
+        {
+          "name": "intervalIntegrable_partialKernel",
+          "kind": "complete_header",
+          "raw": "theorem intervalIntegrable_partialKernel (n : ℕ) :\n    IntervalIntegrable (partialKernel n) volume 2 stop :="
+        },
+        {
+          "name": "kernel_series_pointwise",
+          "kind": "complete_header",
+          "raw": "theorem kernel_series_pointwise (n : ℕ) {s : ℝ}\n    (hs : s ∈ Icc (2 : ℝ) stop) :\n    partialKernel n s ≤ kernel s ∧ kernel s ≤ partialKernel n s + pointTail n :="
+        },
+        {
+          "name": "originalFirstIntegral_series_enclosure",
+          "kind": "complete_header",
+          "raw": "theorem originalFirstIntegral_series_enclosure (n : ℕ) :\n    partialIntegral n ≤ originalFirstIntegral ∧\n      originalFirstIntegral ≤ partialIntegral n + integralTail n :="
+        },
+        {
+          "name": "integralTail_rational_formula",
+          "kind": "complete_header",
+          "raw": "theorem integralTail_rational_formula (n : ℕ) :\n    integralTail n =\n      (2000 / 299 : ℝ) * (51 / 2375) *\n        ((51 / 2426 : ℝ) ^ (n + 1) /\n          (((n : ℝ) + 1) * (1 - 51 / 2426) * 2)) :="
+        },
+        {
+          "name": "originalFirstIntegral_rational_coarse",
+          "kind": "complete_header",
+          "raw": "theorem originalFirstIntegral_rational_coarse :\n    0 ≤ originalFirstIntegral ∧\n      originalFirstIntegral ≤\n        (2000 / 299 : ℝ) * (51 / 2375) * (51 / 4750) :="
+        },
+        {
+          "name": "originalFirstIntegral_translate",
+          "kind": "complete_header",
+          "raw": "theorem originalFirstIntegral_translate :\n    originalFirstIntegral =\n      (4 / theta) * ∫ t in (0 : ℝ)..(stop - 2), Real.log (1 + t) / (2 + t) :="
+        }
+      ],
+      "changed_proof_names": [
+        "continuousOn_partialLog",
+        "kernel_series_pointwise"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.P4AActualOwnCubeCapPayment",
+      "baseline_sha256": "54f42c9032005da8824d9964983a6dc6d4e48fe56279a25e768bb0a26bbed5ec",
+      "postimage_sha256": "6b01c3837f5f33b50a517b5edd3400c5d8607884fc19c97934f066c2b9a7f7fb",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "profile_eq_canonical",
+          "kind": "complete_header",
+          "raw": "theorem profile_eq_canonical {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    primeTupleMinusProfile lam t =\n      4 * actualExtendedThirdLowerFactor\n        ((lam - ∑ i, t i) / t (Fin.last k)) / t (Fin.last k) :="
+        },
+        {
+          "name": "ownCube_profile_gate",
+          "kind": "complete_header",
+          "raw": "theorem ownCube_profile_gate {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) =\n      primeTupleMinusProfile lam t :="
+        },
+        {
+          "name": "clamped_argument_mem",
+          "kind": "complete_header",
+          "raw": "private theorem clamped_argument_mem {k : ℕ} {a theta lam : ℝ}\n    (ha : 0 < a) (htheta : 0 ≤ theta) (hlam : lam ≤ theta)\n    (t : Fin (k + 1) → ℝ) (ht : ∀ i, a ≤ t i) :\n    max 2 ((lam - ∑ i, t i) / t (Fin.last k)) ∈\n      Icc (2 : ℝ) (max 2 (theta / a)) :="
+        },
+        {
+          "name": "exists_rank_uniform_profile_cap_modulus",
+          "kind": "complete_header",
+          "raw": "theorem exists_rank_uniform_profile_cap_modulus (a theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∀ k : ℕ, ∀ lam L : ℝ,\n      lam ≤ theta → L ≤ theta → |lam - L| ≤ delta →\n      ∀ t : Fin (k + 1) → ℝ, (∀ i, a ≤ t i) →\n        |primeTupleMinusProfile lam t - primeTupleMinusProfile L t| ≤ eta :="
+        },
+        {
+          "name": "exists_actual_cap_difference_threshold",
+          "kind": "complete_header",
+          "raw": "theorem exists_actual_cap_difference_threshold (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin (k + 1) => a) (fun _ => b),\n      ∀ lam L : ℝ, lam ∈ Icc lower theta → L ∈ Icc lower theta →\n      |lam - L| ≤ delta →\n        |actualPrimeTupleOwnCubeMinus N cap lam p -\n          actualPrimeTupleOwnCubeMinus N cap L p| < eta :="
+        },
+        {
+          "name": "exists_weighted_cap_payment",
+          "kind": "complete_header",
+          "raw": "theorem exists_weighted_cap_payment (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (hab : a < b) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ chosen : Finset (Fin (k + 1) → ℕ),\n      chosen ⊆ actualPrimeBoxTuples N (fun _ => a) (fun _ => b) →\n      ∀ lam L : (Fin (k + 1) → ℕ) → ℝ,\n      (∀ p ∈ chosen, lam p ∈ Icc lower theta ∧ L p ∈ Icc lower theta ∧\n        |lam p - L p| ≤ delta) →\n        capDefect k N cap chosen lam L < eta :="
+        }
+      ],
+      "changed_proof_names": [
+        "exists_weighted_cap_payment"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    },
+    {
+      "module": "ImbalancedChen.Part3RoughAuxiliarySW",
+      "baseline_sha256": "d1dd21a3cd6da112f43bc69e7432675379c37df890d08b07384df155589b42e3",
+      "postimage_sha256": "659bc288166620c55d12997484ed36da120f1bd9f42cfcc02627030823cf02fe",
+      "complete_headers_or_entire_aliases": [
+        {
+          "name": "MediumAtom.auxSWError_eq_auxiliarySWError",
+          "kind": "complete_header",
+          "raw": "theorem MediumAtom.auxSWError_eq_auxiliarySWError (d : MediumAtom) (k q b : ℕ) :\n    d.auxSWError k q b = auxiliarySWError d.alphaCarrier d.alpha k q b :="
+        },
+        {
+          "name": "norm_sum_ite_and_not_coprime_le",
+          "kind": "complete_header",
+          "raw": "private theorem norm_sum_ite_and_not_coprime_le\n    (S : Finset ℕ) (α : ℕ → ℂ) (k : ℕ) (P : ℕ → Prop) [DecidablePred P] :\n    ‖∑ n ∈ S, if P n ∧ ¬Nat.Coprime n k then α n else 0‖ ≤\n      ∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖ :="
+        },
+        {
+          "name": "auxiliarySWError_sub_one_norm_le_bad_mass",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_sub_one_norm_le_bad_mass\n    (S : Finset ℕ) (α : ℕ → ℂ) (k q b : ℕ) (hq : 0 < q) :\n    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤\n      2 * (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖) :="
+        },
+        {
+          "name": "sum_norm_not_coprime_le_rough",
+          "kind": "complete_header",
+          "raw": "theorem sum_norm_not_coprime_le_rough\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖) ≤\n      (k.primeFactors.card : ℝ) * (H : ℝ) / z :="
+        },
+        {
+          "name": "auxiliarySWError_sub_one_norm_le_primeFactors",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_sub_one_norm_le_primeFactors\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤\n      2 * (k.primeFactors.card : ℝ) * (H : ℝ) / z :="
+        },
+        {
+          "name": "auxiliarySWError_sub_one_norm_le",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_sub_one_norm_le\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤\n      2 * (k.divisors.card : ℝ) * (H : ℝ) / z :="
+        },
+        {
+          "name": "auxiliarySWError_norm_le_one_add",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_norm_le_one_add\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S α k q b‖ ≤ ‖auxiliarySWError S α 1 q b‖ +\n      2 * (k.divisors.card : ℝ) * (H : ℝ) / z :="
+        },
+        {
+          "name": "roughOneSlot_norm_le",
+          "kind": "complete_header",
+          "raw": "theorem roughOneSlot_norm_le (z : ℝ) (n : ℕ) : ‖roughOneSlot z n‖ ≤ 1 :="
+        },
+        {
+          "name": "roughOneSlot_support",
+          "kind": "complete_header",
+          "raw": "theorem roughOneSlot_support (z : ℝ) (n : ℕ) (hn : roughOneSlot z n ≠ 0) :\n    ∀ p : ℕ, p.Prime → p ∣ n → z < (p : ℝ) :="
+        },
+        {
+          "name": "roughMoebiusSlot_norm_le",
+          "kind": "complete_header",
+          "raw": "theorem roughMoebiusSlot_norm_le (z : ℝ) (n : ℕ) : ‖roughMoebiusSlot z n‖ ≤ 1 :="
+        },
+        {
+          "name": "roughMoebiusSlot_support",
+          "kind": "complete_header",
+          "raw": "theorem roughMoebiusSlot_support (z : ℝ) (n : ℕ) (hn : roughMoebiusSlot z n ≠ 0) :\n    ∀ p : ℕ, p.Prime → p ∣ n → z < (p : ℝ) :="
+        },
+        {
+          "name": "roughOneSlot_auxiliarySWError_sub_one_norm_le",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem roughOneSlot_auxiliarySWError_sub_one_norm_le\n    (S : Finset ℕ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q) :\n    ‖auxiliarySWError S (roughOneSlot z) k q b -\n      auxiliarySWError S (roughOneSlot z) 1 q b‖ ≤\n        2 * (k.divisors.card : ℝ) * (H : ℝ) / z :=\n  auxiliarySWError_sub_one_norm_le S (roughOneSlot z) H k q b z hS hz hk hq\n    (fun n _ => roughOneSlot_norm_le z n) (fun n _ hn => roughOneSlot_support z n hn)\n\n"
+        },
+        {
+          "name": "roughMoebiusSlot_auxiliarySWError_sub_one_norm_le",
+          "kind": "entire_non_tactic_alias_declaration",
+          "raw": "theorem roughMoebiusSlot_auxiliarySWError_sub_one_norm_le\n    (S : Finset ℕ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q) :\n    ‖auxiliarySWError S (roughMoebiusSlot z) k q b -\n      auxiliarySWError S (roughMoebiusSlot z) 1 q b‖ ≤\n        2 * (k.divisors.card : ℝ) * (H : ℝ) / z :=\n  auxiliarySWError_sub_one_norm_le S (roughMoebiusSlot z) H k q b z hS hz hk hq\n    (fun n _ => roughMoebiusSlot_norm_le z n)\n    (fun n _ hn => roughMoebiusSlot_support z n hn)\n\n/-- The removal estimate permits arbitrary real Mellin frequency.  Its\nunit norm preserves the actual rough support; no frequency-dependent\nthreshold or constant appears in this finite estimate. -/\n"
+        },
+        {
+          "name": "auxiliarySWError_sub_one_norm_le_mellin",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_sub_one_norm_le_mellin\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z t : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S (fun n => α n * (n : ℂ) ^ (Complex.I * (t : ℂ))) k q b -\n      auxiliarySWError S (fun n => α n * (n : ℂ) ^ (Complex.I * (t : ℂ))) 1 q b‖ ≤\n        2 * (k.divisors.card : ℝ) * (H : ℝ) / z :="
+        },
+        {
+          "name": "card_filter_modEq_le_prefix",
+          "kind": "complete_header",
+          "raw": "private theorem card_filter_modEq_le_prefix\n    (S : Finset ℕ) (H q b : ℕ) (hS : S ⊆ Finset.Ioc 0 H) (hq : 0 < q) :\n    ((S.filter (fun n => Nat.ModEq q n b)).card : ℝ) ≤ (H : ℝ) / q + 2 :="
+        },
+        {
+          "name": "auxiliarySWError_norm_le_large_modulus",
+          "kind": "complete_header",
+          "raw": "theorem auxiliarySWError_norm_le_large_modulus\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hH : 3 ≤ H) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1) :\n    ‖auxiliarySWError S α k q b‖ ≤ (H : ℝ) / q + 2 +\n      (H : ℝ) * MathlibNt.SieveTheory.Richert1969.richertReciprocalTotientConstant *\n        Real.log (H : ℝ) / (min q H : ℕ) :="
+        }
+      ],
+      "changed_proof_names": [
+        "auxiliarySWError_norm_le_large_modulus"
+      ],
+      "all_definitions_data_domains_constants_quantifiers_hypotheses_preserved": true,
+      "source_review": "All nine patches were manually inspected. They preserve the original domains, hypotheses, multiplicities, functions, masks and numerical estimates: explicit ENNReal notation scope; zero-tag if_true; beta reduction; List length API; the same three-coordinate own-cube complement; explicit original C/complement filter identities and sum_product arguments; pointwise Pi.add normalization and same-side additive inequality; removing an already-closed ring; and exact published SW source with explicit if_pos/if_neg. The series enclosure does not close the separately open sharp numerical endpoint."
+    }
+  ],
+  "final_inputs": [
+    {
+      "path": "/workspace/blue-member-repair-batch54/FINAL_RELEASE.json",
+      "bytes": 4538,
+      "sha256": "d45363c54aa954abfc8bbe1b60284e89a54e918c43d8a0e49ac3877042782694"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch54/PUBLICATION_FILES.json",
+      "bytes": 29995,
+      "sha256": "cd5e88a6b5235ad891eb3ab22b70c198d81138ee9fab3aa57400474eeac6bce0"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch54/VALIDATION_RESULTS.json",
+      "bytes": 27939,
+      "sha256": "5e09a2e1abcc26bef5bfe3509ae2c813f8705fb50a9f6db28c956231dbdc65ab"
+    },
+    {
+      "path": "/workspace/blue-member-repair-batch54/SOURCE_SELECTION.json",
+      "bytes": 43108,
+      "sha256": "2762b4c27ed63eefa521593bcf0fb3e1e98f3c216bee42405eb4a8598f2f23cf"
+    }
+  ],
+  "original_publication_file_count": 162,
+  "all_packet_bindings_match": true,
+  "source_and_five_outputs": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.lean",
+      "bytes": 10105,
+      "sha256": "a3754a2ca9fdfd7fb68ed0908e538b577abd140d2cbc65093c821ba07d43049b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.olean",
+      "bytes": 666504,
+      "sha256": "296d0855dff0698b7249ac955356d4fcbb264803e06f3ca3e31b81693a66b68e"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.ilean",
+      "bytes": 36595,
+      "sha256": "5ea88a58b4e552630607f5edb6c9f44faac0fe3af2ec04f5c45416e59c6535b7"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.c",
+      "bytes": 3450,
+      "sha256": "5e32cb83c11c71a83f014fcae3c009ddbfd3677df95fa636f8a21a8077c3f023"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.setup.json",
+      "bytes": 2323485,
+      "sha256": "04eb1dcbbdb22e8b3eaac9364410019714137bd9fc2ced651a03c85e1c27ab72"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU11CanonicalSwitchedIntegrable.trace",
+      "bytes": 4265,
+      "sha256": "7ed0db4b841185bdb0e25eaf49a13c5aebe6d70059b0976f06a672a36b4b0e91"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.lean",
+      "bytes": 7780,
+      "sha256": "4f54e15ff45fc63f713f32b12acc1145b2c6b3552122ff0516e172380e922315"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.olean",
+      "bytes": 235440,
+      "sha256": "68d2a3b1ccdc8a4f801763af7fcfc2b627044836d0be0fb41f5e0193ae7e9670"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.ilean",
+      "bytes": 25321,
+      "sha256": "3e7bbb0363eb5d01be0a9c761288549cbdda233e8c57276b10e6c236c6074fc2"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.c",
+      "bytes": 1759,
+      "sha256": "96e08aab9bb61799ba06d8abf8233e75438be43a2cfbecda78fbaf0ad108e3ac"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.setup.json",
+      "bytes": 2695136,
+      "sha256": "7da442e686ca1170c39eef834c50ed26cff95558bc8487fc13724ac82d367212"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5ZU1011AdaptivePrimeMeshError.trace",
+      "bytes": 3084,
+      "sha256": "3f9d53600aa8ff1a648ba189c4ceb33e6443e3109838741666b1fbdd1ffd6d9a"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4ARetainedSupportDifferenceMass.lean",
+      "bytes": 9914,
+      "sha256": "fe2c6404397c45be98dbc78c4f12b4e0331bb593edc6d32120f14689b322c61a"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4ARetainedSupportDifferenceMass.olean",
+      "bytes": 134416,
+      "sha256": "7a4878ecd2e5454d9611824951197198367f3b32f5abebdfdf74c2ba1aa73970"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4ARetainedSupportDifferenceMass.ilean",
+      "bytes": 28480,
+      "sha256": "e06e986eac3cde64fe7599328d2cf152454c5e8612f65ac74ac1a28111c36b3d"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4ARetainedSupportDifferenceMass.c",
+      "bytes": 2011,
+      "sha256": "72cefc80d9e51ec2ecac4979a009133d0e77c7b9d0c51a6287ebd94b02ccd0f4"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4ARetainedSupportDifferenceMass.setup.json",
+      "bytes": 2781894,
+      "sha256": "f6eb6faf90e4f170c67a6867f782e60ae56d4bab1b9b73cf230ebba96c271bb4"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4ARetainedSupportDifferenceMass.trace",
+      "bytes": 3265,
+      "sha256": "eaf2620ac7a1eb19a3913da15cfba48ef199345a69acddaa5d858399ba36966a"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1ActualFrontierReverseAdmission.lean",
+      "bytes": 5435,
+      "sha256": "eda0e0a63517d0eff69bdecda22643973e064c693b79fb3ffdb039e0b6b3848b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1ActualFrontierReverseAdmission.olean",
+      "bytes": 156792,
+      "sha256": "07088b4cb55e6e8a5c2ab33d8599a712958a0336bb9247b4cc811d771864cde5"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1ActualFrontierReverseAdmission.ilean",
+      "bytes": 18765,
+      "sha256": "df058304a8bde7ce4e9c6a1bad08209f347c01b27e97bf4aea38b1b564247fe9"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1ActualFrontierReverseAdmission.c",
+      "bytes": 1760,
+      "sha256": "cc96b1e7dbfb3ddad8200eac16cfde0a29de6946c3aa7022e0b36528969f635f"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1ActualFrontierReverseAdmission.setup.json",
+      "bytes": 2283294,
+      "sha256": "9feffe94d1da8644528cdf4c8daa1e71a4557d13c1e1a3263dea91fee2a7c477"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1ActualFrontierReverseAdmission.trace",
+      "bytes": 3096,
+      "sha256": "3b97c69d3ab0bc68dcaf262bd3675251f3f924d448999730958818771783624c"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.lean",
+      "bytes": 12845,
+      "sha256": "1394ff9b4bf6a8c6d016c60f0dacd4e69a627f71955d95ab9c3d5a6672e52584"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.olean",
+      "bytes": 468096,
+      "sha256": "48053704c672ee3289fa817a679ea91a78d988ea990e929b5a48658bcc639dfa"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.ilean",
+      "bytes": 43021,
+      "sha256": "9bbed1c6521b4d15e0fc5d5f87ba48f7ffcff49cf89a0e9489c07c674f84322b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.c",
+      "bytes": 1835,
+      "sha256": "a796bfb125ba967ace20e6653defa1f1fb1783fe353806d649fecea681222bec"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.setup.json",
+      "bytes": 6351355,
+      "sha256": "7f9b4f63ba0f726eff13e2cbcbdb51f59aa5d53761d18ecdbbaf158f923b036d"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualExtendedThirdCompactResidualProfile.trace",
+      "bytes": 3453,
+      "sha256": "4438b793dfc73de253e044282fc5d6473d0d4b3c7525033d55605992d0039e84"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualPrimeDisjointLabelProducts.lean",
+      "bytes": 17468,
+      "sha256": "7eb4bfbc5f2d3c01ff43352ba904a87f5a6f12d0520daf442798244de428d508"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeDisjointLabelProducts.olean",
+      "bytes": 348688,
+      "sha256": "0e7b888f7194a33792ac02d149c5e949ef9f88a49aa91bf20037bbc3c3ab10c0"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeDisjointLabelProducts.ilean",
+      "bytes": 51604,
+      "sha256": "e40cc1a93505d088160583433bc5589fc4da1413719d27a09a10ffea3f3eed39"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeDisjointLabelProducts.c",
+      "bytes": 1766,
+      "sha256": "6664a6ceb13b849be98299296958c4332856bd66360c5f2ab298ef82dfdb3bf4"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeDisjointLabelProducts.setup.json",
+      "bytes": 2767848,
+      "sha256": "3b0bddad180e0b430b7cb605c387b85d900e81522137277705abc45c9078505a"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeDisjointLabelProducts.trace",
+      "bytes": 3100,
+      "sha256": "72be0884f94fac49b4005354c19404e37a4ceeeeb4a92cd09d83fddbdb2c3a68"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2FirstIntegralSeries.lean",
+      "bytes": 10030,
+      "sha256": "e60dfa8e5e76d8c335b09f531b199dea4cb56b1d9b348a6555f3380e5bf5f941"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2FirstIntegralSeries.olean",
+      "bytes": 405296,
+      "sha256": "ce37013bbaf046e53325893d093fb896c4470b93073cc6a1ddc7de97e300e325"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2FirstIntegralSeries.ilean",
+      "bytes": 46223,
+      "sha256": "315ca4db765cb86a8d14a180758faf5dcfd49e191e22c9fe85d555ae5cf170d6"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2FirstIntegralSeries.c",
+      "bytes": 1996,
+      "sha256": "82dc8010e0ff2af60afd9c3d4f2137c979949f35d89e104bf7e7b06ab72bee32"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2FirstIntegralSeries.setup.json",
+      "bytes": 2272073,
+      "sha256": "a1eee2c5dcb800ba5fc7b24bb524a28ef7713fcbbd4232b853cae14503d44bb3"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2FirstIntegralSeries.trace",
+      "bytes": 3192,
+      "sha256": "92c224cd3f40e636aa22a26f1b3a42bfefcb5da5fdeff6e8ee3bbb21b9450f2c"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4AActualOwnCubeCapPayment.lean",
+      "bytes": 11592,
+      "sha256": "6b01c3837f5f33b50a517b5edd3400c5d8607884fc19c97934f066c2b9a7f7fb"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4AActualOwnCubeCapPayment.olean",
+      "bytes": 495824,
+      "sha256": "6910c4d559183fa236f3104b6507d3d911fe4f034d7467b208cf6415db474ba2"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4AActualOwnCubeCapPayment.ilean",
+      "bytes": 37247,
+      "sha256": "52fac1c6f3bb5fe982539ffb5073ce36ea8410e0f56ef5a3923f63591904c4b7"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4AActualOwnCubeCapPayment.c",
+      "bytes": 2113,
+      "sha256": "afcd250d4d2ca783e3b1b25d7ff6ef6e796c8affac0a89b62f853df7a8920e76"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4AActualOwnCubeCapPayment.setup.json",
+      "bytes": 6348050,
+      "sha256": "f107164107e76ee08c81f9ab4dac24bd35f8ad07ffa5c9be147ccdd220ed3d54"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4AActualOwnCubeCapPayment.trace",
+      "bytes": 3547,
+      "sha256": "f196b2fdb6e5b54c84231fc00f9928beaab6cbd4e253f31c1140dda3e85ba001"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/Part3RoughAuxiliarySW.lean",
+      "bytes": 18957,
+      "sha256": "659bc288166620c55d12997484ed36da120f1bd9f42cfcc02627030823cf02fe"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part3RoughAuxiliarySW.olean",
+      "bytes": 475552,
+      "sha256": "4089f8987e85ee2c365767c2117ec66e3a56a2886ece5e59d583405b0ae575b7"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part3RoughAuxiliarySW.ilean",
+      "bytes": 59434,
+      "sha256": "81546eb74d6b7592a6957739c8b8dcf9b8d66ef5b1f51581e16250f2b9aa0ff5"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part3RoughAuxiliarySW.c",
+      "bytes": 3203,
+      "sha256": "cdcf6a50d41f649c1032f5cfd991c9eef82970b2d013820c169d2828d26c6c3b"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part3RoughAuxiliarySW.setup.json",
+      "bytes": 6325025,
+      "sha256": "ff9961379214192b0e897185efe437b8daa78bc741240b98301bae442483df2c"
+    },
+    {
+      "path": "/workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part3RoughAuxiliarySW.trace",
+      "bytes": 4030,
+      "sha256": "6e07ff79d4985b59a6eef0170a529b91c30e5e45ebc0107ab6619932e9f44979"
+    }
+  ],
+  "existing_validation": {
+    "owned": 175,
+    "public": 169,
+    "private": 6,
+    "normal_kernel_audit_exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "raw_AST_universe_axioms_and_owner_inventory_exact": true,
+    "only_standard_axioms": true
+  },
+  "scope": "These exact necessary P1 suppliers in their recorded Member import context; no complete P1 or whole-board acceptance.",
+  "new_Lean_kernel_audit_or_source_compiler_invocations": 0,
+  "original_source_outputs_logs_or_records_mutated": false
+}

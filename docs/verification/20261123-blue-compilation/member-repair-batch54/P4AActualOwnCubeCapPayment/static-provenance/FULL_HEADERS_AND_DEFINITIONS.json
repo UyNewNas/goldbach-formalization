@@ -1,0 +1,91 @@
+{
+  "parser_scope": "Comment-aware complete top-level headers with balanced binders/type-level lets; source comparison only.",
+  "baseline_headers": [
+    {
+      "name": "profile_eq_canonical",
+      "private": false,
+      "complete_header": "theorem profile_eq_canonical {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    primeTupleMinusProfile lam t =\n      4 * actualExtendedThirdLowerFactor\n        ((lam - ∑ i, t i) / t (Fin.last k)) / t (Fin.last k) :=",
+      "sha256": "395047e4b2e176b61247ac69d852fcfe30fe4f3a1eff919116f701c08309a588"
+    },
+    {
+      "name": "ownCube_profile_gate",
+      "private": false,
+      "complete_header": "theorem ownCube_profile_gate {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) =\n      primeTupleMinusProfile lam t :=",
+      "sha256": "543c201f8ae91bd2f64bed99f8e8556e4f17442e7b0aec30a1d35afb542da296"
+    },
+    {
+      "name": "clamped_argument_mem",
+      "private": true,
+      "complete_header": "private theorem clamped_argument_mem {k : ℕ} {a theta lam : ℝ}\n    (ha : 0 < a) (htheta : 0 ≤ theta) (hlam : lam ≤ theta)\n    (t : Fin (k + 1) → ℝ) (ht : ∀ i, a ≤ t i) :\n    max 2 ((lam - ∑ i, t i) / t (Fin.last k)) ∈\n      Icc (2 : ℝ) (max 2 (theta / a)) :=",
+      "sha256": "13b49c3ab3ad58905e57fb4ceb18955b44a409f786259df106cb75cabced8bc1"
+    },
+    {
+      "name": "exists_rank_uniform_profile_cap_modulus",
+      "private": false,
+      "complete_header": "theorem exists_rank_uniform_profile_cap_modulus (a theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∀ k : ℕ, ∀ lam L : ℝ,\n      lam ≤ theta → L ≤ theta → |lam - L| ≤ delta →\n      ∀ t : Fin (k + 1) → ℝ, (∀ i, a ≤ t i) →\n        |primeTupleMinusProfile lam t - primeTupleMinusProfile L t| ≤ eta :=",
+      "sha256": "67b8b842300a4bd52513205a3cf433aa69242a23b5cb560c2050e7af95ce3920"
+    },
+    {
+      "name": "exists_actual_cap_difference_threshold",
+      "private": false,
+      "complete_header": "theorem exists_actual_cap_difference_threshold (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin (k + 1) => a) (fun _ => b),\n      ∀ lam L : ℝ, lam ∈ Icc lower theta → L ∈ Icc lower theta →\n      |lam - L| ≤ delta →\n        |actualPrimeTupleOwnCubeMinus N cap lam p -\n          actualPrimeTupleOwnCubeMinus N cap L p| < eta :=",
+      "sha256": "85f820778d09620181cfe3d2105bd4adf5df1841bd2182609cbc525dcecdc833"
+    },
+    {
+      "name": "exists_weighted_cap_payment",
+      "private": false,
+      "complete_header": "theorem exists_weighted_cap_payment (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (hab : a < b) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ chosen : Finset (Fin (k + 1) → ℕ),\n      chosen ⊆ actualPrimeBoxTuples N (fun _ => a) (fun _ => b) →\n      ∀ lam L : (Fin (k + 1) → ℕ) → ℝ,\n      (∀ p ∈ chosen, lam p ∈ Icc lower theta ∧ L p ∈ Icc lower theta ∧\n        |lam p - L p| ≤ delta) →\n        capDefect k N cap chosen lam L < eta :=",
+      "sha256": "aaa98d8061ecdc8d53e03a3ae3d7bcee47aa43563bcbaa49a834dd8490465f38"
+    }
+  ],
+  "candidate_headers": [
+    {
+      "name": "profile_eq_canonical",
+      "private": false,
+      "complete_header": "theorem profile_eq_canonical {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    primeTupleMinusProfile lam t =\n      4 * actualExtendedThirdLowerFactor\n        ((lam - ∑ i, t i) / t (Fin.last k)) / t (Fin.last k) :=",
+      "sha256": "395047e4b2e176b61247ac69d852fcfe30fe4f3a1eff919116f701c08309a588"
+    },
+    {
+      "name": "ownCube_profile_gate",
+      "private": false,
+      "complete_header": "theorem ownCube_profile_gate {k : ℕ} (lam : ℝ) (t : Fin (k + 1) → ℝ)\n    (hz : 0 < t (Fin.last k)) :\n    (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) =\n      primeTupleMinusProfile lam t :=",
+      "sha256": "543c201f8ae91bd2f64bed99f8e8556e4f17442e7b0aec30a1d35afb542da296"
+    },
+    {
+      "name": "clamped_argument_mem",
+      "private": true,
+      "complete_header": "private theorem clamped_argument_mem {k : ℕ} {a theta lam : ℝ}\n    (ha : 0 < a) (htheta : 0 ≤ theta) (hlam : lam ≤ theta)\n    (t : Fin (k + 1) → ℝ) (ht : ∀ i, a ≤ t i) :\n    max 2 ((lam - ∑ i, t i) / t (Fin.last k)) ∈\n      Icc (2 : ℝ) (max 2 (theta / a)) :=",
+      "sha256": "13b49c3ab3ad58905e57fb4ceb18955b44a409f786259df106cb75cabced8bc1"
+    },
+    {
+      "name": "exists_rank_uniform_profile_cap_modulus",
+      "private": false,
+      "complete_header": "theorem exists_rank_uniform_profile_cap_modulus (a theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∀ k : ℕ, ∀ lam L : ℝ,\n      lam ≤ theta → L ≤ theta → |lam - L| ≤ delta →\n      ∀ t : Fin (k + 1) → ℝ, (∀ i, a ≤ t i) →\n        |primeTupleMinusProfile lam t - primeTupleMinusProfile L t| ≤ eta :=",
+      "sha256": "67b8b842300a4bd52513205a3cf433aa69242a23b5cb560c2050e7af95ce3920"
+    },
+    {
+      "name": "exists_actual_cap_difference_threshold",
+      "private": false,
+      "complete_header": "theorem exists_actual_cap_difference_threshold (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin (k + 1) => a) (fun _ => b),\n      ∀ lam L : ℝ, lam ∈ Icc lower theta → L ∈ Icc lower theta →\n      |lam - L| ≤ delta →\n        |actualPrimeTupleOwnCubeMinus N cap lam p -\n          actualPrimeTupleOwnCubeMinus N cap L p| < eta :=",
+      "sha256": "85f820778d09620181cfe3d2105bd4adf5df1841bd2182609cbc525dcecdc833"
+    },
+    {
+      "name": "exists_weighted_cap_payment",
+      "private": false,
+      "complete_header": "theorem exists_weighted_cap_payment (k : ℕ) (a b lower theta eta : ℝ)\n    (ha : 0 < a) (hab : a < b) (htheta : 0 ≤ theta) (heta : 0 < eta) :\n    ∃ delta : ℝ, 0 < delta ∧ ∃ N0 : ℕ, 2 ≤ N0 ∧\n      ∀ N : ℕ, N0 ≤ N → Even N → ∀ cap : ℕ,\n      (N : ℝ) ^ b ≤ (cap : ℝ) →\n      ∀ chosen : Finset (Fin (k + 1) → ℕ),\n      chosen ⊆ actualPrimeBoxTuples N (fun _ => a) (fun _ => b) →\n      ∀ lam L : (Fin (k + 1) → ℕ) → ℝ,\n      (∀ p ∈ chosen, lam p ∈ Icc lower theta ∧ L p ∈ Icc lower theta ∧\n        |lam p - L p| ≤ delta) →\n        capDefect k N cap chosen lam L < eta :=",
+      "sha256": "aaa98d8061ecdc8d53e03a3ae3d7bcee47aa43563bcbaa49a834dd8490465f38"
+    }
+  ],
+  "baseline_raw_definitions": [
+    {
+      "raw_command": "def capDefect (k N cap : ℕ) (chosen : Finset (Fin (k + 1) → ℕ))\n    (lam L : (Fin (k + 1) → ℕ) → ℝ) : ℝ :=\n  ∑ p ∈ chosen, (∏ i, 1 / ((p i : ℝ) - 1)) *\n    |actualPrimeTupleOwnCubeMinus N cap (lam p) p -\n      actualPrimeTupleOwnCubeMinus N cap (L p) p|\n\n/-- Genuine arithmetic payment.  The threshold is uniform over all later\nsubsets and cap tables satisfying only their geometric range and modulus.\nNo actual-error or full-policy density estimate is a premise. -/\n",
+      "sha256": "2a5f490b007accfcd2c29510eea3756b63ed058dd96b0ea7b515a74e2920dd85"
+    }
+  ],
+  "candidate_raw_definitions": [
+    {
+      "raw_command": "def capDefect (k N cap : ℕ) (chosen : Finset (Fin (k + 1) → ℕ))\n    (lam L : (Fin (k + 1) → ℕ) → ℝ) : ℝ :=\n  ∑ p ∈ chosen, (∏ i, 1 / ((p i : ℝ) - 1)) *\n    |actualPrimeTupleOwnCubeMinus N cap (lam p) p -\n      actualPrimeTupleOwnCubeMinus N cap (L p) p|\n\n/-- Genuine arithmetic payment.  The threshold is uniform over all later\nsubsets and cap tables satisfying only their geometric range and modulus.\nNo actual-error or full-policy density estimate is a premise. -/\n",
+      "sha256": "2a5f490b007accfcd2c29510eea3756b63ed058dd96b0ea7b515a74e2920dd85"
+    }
+  ]
+}

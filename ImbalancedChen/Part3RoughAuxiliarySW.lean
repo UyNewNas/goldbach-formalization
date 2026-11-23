@@ -347,8 +347,8 @@ theorem auxiliarySWError_norm_le_large_modulus
         apply sum_le_sum
         intro n hn
         by_cases h : Nat.ModEq q n b ∧ Nat.Coprime n k
-        · simpa only [h, h.1, ite_true] using hα n hn
-        · simp only [h, ite_false, norm_zero]
+        · simpa only [if_pos h, if_pos h.1] using hα n hn
+        · simp only [if_neg h, norm_zero]
           split_ifs <;> norm_num
       _ = ((S.filter (fun n => Nat.ModEq q n b)).card : ℝ) := by
         rw [← sum_filter]
@@ -361,8 +361,8 @@ theorem auxiliarySWError_norm_le_large_modulus
         apply sum_le_sum
         intro n hn
         by_cases h : Nat.Coprime n (k * q)
-        · simpa only [h, ite_true] using hα n hn
-        · simp only [h, ite_false, norm_zero, zero_le_one]
+        · simpa only [if_pos h] using hα n hn
+        · simp only [if_neg h, norm_zero, zero_le_one]
       _ = (S.card : ℝ) := by simp
       _ ≤ (H : ℝ) := by
         have hcard : S.card ≤ H := (card_le_card hS).trans_eq (by simp)

@@ -1,0 +1,23 @@
+✖ [10245/10261] Building ImbalancedChen.P2FirstIntegralSeries (12s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P2FirstIntegralSeries.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2FirstIntegralSeries.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2FirstIntegralSeries.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2FirstIntegralSeries.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2FirstIntegralSeries.setup.json --json
+error: ImbalancedChen/P2FirstIntegralSeries.lean:122:6: Type mismatch: After simplification, term
+  ContinuousOn.add ih (ContinuousOn.div_const (ContinuousOn.pow continuousOn_coordinate (n + 1)) (↑n + 1))
+ has type
+  @ContinuousOn ℝ ℝ PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    ((fun s => ∑ i ∈ Finset.range n, coordinate s ^ (i + 1) / (↑i + 1)) + fun x => (coordinate ^ (n + 1)) x / (↑n + 1))
+    (Icc 2 stop)
+but is expected to have type
+  @ContinuousOn ℝ ℝ PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (fun s => ∑ i ∈ Finset.range n, coordinate s ^ (i + 1) / (↑i + 1) + coordinate s ^ (n + 1) / (↑n + 1)) (Icc 2 stop)
+error: ImbalancedChen/P2FirstIntegralSeries.lean:179:19: Application type mismatch: The argument
+  add_le_add_left htail ?m.550
+has type
+  coordinate s ^ (n + 1) / ((↑n + 1) * (1 - coordinate s)) / s + ?m.550 ≤ pointTail n + ?m.550
+but is expected to have type
+  logPartial (coordinate s) n / s + coordinate s ^ (n + 1) / ((↑n + 1) * (1 - coordinate s)) / s ≤
+    partialKernel n s + pointTail n
+in the application
+  LE.le.trans hu (add_le_add_left htail ?m.550)
+error: Lean exited with code 1

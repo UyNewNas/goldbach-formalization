@@ -19,14 +19,14 @@ The switched kernel is continuous on a compact box with z >= 417/5000,
 which contains the complete original domain for every pair mask. This
 closes the switched-integrability premise in the preceding envelope API.
 Analytic policy licensing, cardinal means and quadrature are still open.
-Status: source_written / uncompiled.
+Compilation records: docs/verification/20261123-blue-compilation.
 -/
 
 namespace ImbalancedChen.P5Z.U11Canonical
 
 open Set MeasureTheory
 open U11Integral
-open scoped BigOperators
+open scoped BigOperators ENNReal
 
 noncomputable section
 

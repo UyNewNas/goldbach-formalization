@@ -1,0 +1,234 @@
+{
+  "module": "ImbalancedChen.P4AOriginalHistoricalFifthSelectedSlotBridge",
+  "all_raw_theorem_headers": [
+    {
+      "name": "stored_cap_unchanged",
+      "kind": "theorem",
+      "complete_header": "theorem stored_cap_unchanged (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (j : Label5 D) :\n    (bindStoredFifth D J).cap5 j = D.cap5 j :=",
+      "header_sha256": "5093b52a4f19449402ded7492a1e114fcc529d3cea3a1550f00c25d86c386218",
+      "start_line": 68,
+      "header_end_line": 70,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "stored_same_historical_parent",
+      "kind": "theorem",
+      "complete_header": "theorem stored_same_historical_parent (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (N : ℝ) :\n    (bindStoredFifth D J).upperThirdPolicy N = D.upperThirdPolicy N ∧\n    (bindStoredFifth D J).upperFourthPolicy N = D.upperFourthPolicy N ∧\n    (bindStoredFifth D J).p1FifthHistoricalParent = D.p1FifthHistoricalParent :=",
+      "header_sha256": "44d1660c17769427a0578f7f48fe5db56a6aa9384418fd7716c7a34f15e16b96",
+      "start_line": 72,
+      "header_end_line": 76,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "stored_cell_license",
+      "kind": "theorem",
+      "complete_header": "theorem stored_cell_license (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (hc : storedFifthPermit D J I nu)\n    (j : Label5 D) (hj : j ∈ D.cells5 ∩ J)\n    (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    (D.old5 j : ℝ) < (bindStoredFifth D J).cap5 j ∧\n      ((bindStoredFifth D J).cap5 j : ℝ) < originalEnvelope (I j) t ∧\n      (∀ k, prefixSquareExpr t k < (bindStoredFifth D J).cap5 j) ∧\n      (∀ k ∉ I j,\n        selectedSquareExpr (I j) t k < (bindStoredFifth D J).cap5 j) :=",
+      "header_sha256": "2ed53d741fa065c95d1342088b3fa9f8fd927d23ed11ca1671c999e96a06ece5",
+      "start_line": 81,
+      "header_end_line": 91,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "stored_actual_policy_charge",
+      "kind": "theorem",
+      "complete_header": "theorem stored_actual_policy_charge (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (hab : D.a ≤ D.b)\n    (hD : D.levelCheck = true)\n    (N cap : ℕ) (hN : 1 < (N : ℝ)) :\n    (bindStoredFifth D J).p4aPolicyDensity\n        ((bindStoredFifth D J).upperFifthPolicy (N : ℝ)) N cap\n        ((N : ℝ) ^ (D.b : ℝ)) =\n      D.p4aPolicyDensity (D.upperThirdPolicy (N : ℝ)) N cap\n          ((N : ℝ) ^ (D.b : ℝ)) -\n        D.p4aFourthEntry N cap ((N : ℝ) ^ (D.b : ℝ)) -\n          ∑ j ∈ D.cells5 ∩ J,\n            (bindStoredFifth D J).fifthCellPrimeCorrection N cap j :=",
+      "header_sha256": "27a2802962f6f487b604c14c0ff7918356551e5c46fa51d117c0494ec9dd8cea",
+      "start_line": 101,
+      "header_end_line": 112,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "stored_integral_is_original_cell_sum",
+      "kind": "theorem",
+      "complete_header": "theorem stored_integral_is_original_cell_sum (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (ha : 0 < D.a) (hab : D.a < D.b) :\n    (bindStoredFifth D J).fifthCorrectionIntegral =\n      ∑ j ∈ D.cells5 ∩ J,\n        ∫ t in logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n            primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j),\n          (primeOwnCubeGatedProfile (D.cap5 j : ℝ) t -\n            primeOwnCubeGatedProfile (D.old5 j : ℝ) t) * ∏ i, 1 / t i :=",
+      "header_sha256": "a94d2c0a0d990b7c9b3b168850f8e1f1f23301a6b218eae66081b595cfb7de19",
+      "start_line": 117,
+      "header_end_line": 124,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "stored_actual_saving_limit",
+      "kind": "theorem",
+      "complete_header": "theorem stored_actual_saving_limit (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hold : 0 < D.old) (hD : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ))\n        ((bindStoredFifth D J).level5 (N : ℝ))\n        N (cap N) ((N : ℝ) ^ (D.b : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (bindStoredFifth D J).fifthCorrectionIntegral) :=",
+      "header_sha256": "085a7fcd2c22b6181107e168b08f8ffd402094cd1e72cde015ee1bdedcf37bd8",
+      "start_line": 128,
+      "header_end_line": 141,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_cells5",
+      "kind": "theorem",
+      "complete_header": "theorem bound_cells5 (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) :\n    (bindFifth D J I nu).cells5 = D.cells5 ∩ J :=",
+      "header_sha256": "f60a03abba3b18d6f9f4fede76352b647e97ae24a0d2f329602eef4522f192db",
+      "start_line": 145,
+      "header_end_line": 148,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_old5",
+      "kind": "theorem",
+      "complete_header": "theorem bound_old5 (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (j : Label5 D) :\n    (bindFifth D J I nu).old5 j = D.old5 j :=",
+      "header_sha256": "c41ab14952760c4463036e1f81bbf6981fb40b4752ff37ee50bd61b9c0cad28f",
+      "start_line": 150,
+      "header_end_line": 153,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_cap5",
+      "kind": "theorem",
+      "complete_header": "theorem bound_cap5 (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (j : Label5 D) :\n    (bindFifth D J I nu).cap5 j =\n      selectedBoxCap (I j) (D.old5 j) (nu j)\n        (qLogPrimeMeshLo D.a D.b D.m j)\n        (qLogPrimeMeshHi D.a D.b D.m j) :=",
+      "header_sha256": "894395a34a5549f71d217f17dfad9678983595f17a36615124b45a6d8d4852dc",
+      "start_line": 155,
+      "header_end_line": 161,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "same_historical_parent",
+      "kind": "theorem",
+      "complete_header": "theorem same_historical_parent (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (N : ℝ) :\n    (bindFifth D J I nu).upperThirdPolicy N = D.upperThirdPolicy N ∧\n    (bindFifth D J I nu).upperFourthPolicy N = D.upperFourthPolicy N ∧\n    (bindFifth D J I nu).p1FifthHistoricalParent = D.p1FifthHistoricalParent :=",
+      "header_sha256": "5e3007679b39234d8da08e89ce6ecc8955feff42ed8182d24e1fda98e30b73da",
+      "start_line": 165,
+      "header_end_line": 170,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "same_fourth_old_gate",
+      "kind": "theorem",
+      "complete_header": "theorem same_fourth_old_gate (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (j : Label5 D) :\n    (bindFifth D J I nu).fifthParentGateBounds j =\n      D.fifthParentGateBounds j :=",
+      "header_sha256": "cb895c548bd383380d993a6142d91884cbd9a25263938413dd1ff6390843700b",
+      "start_line": 173,
+      "header_end_line": 177,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_cell_license",
+      "kind": "theorem",
+      "complete_header": "theorem bound_cell_license (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (hc : fifthChecks D J I nu)\n    (j : Label5 D) (hj : j ∈ D.cells5 ∩ J)\n    (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    (D.old5 j : ℝ) < (bindFifth D J I nu).cap5 j ∧\n      ((bindFifth D J I nu).cap5 j : ℝ) < originalEnvelope (I j) t ∧\n      (∀ k, prefixSquareExpr t k < (bindFifth D J I nu).cap5 j) ∧\n      (∀ k ∉ I j,\n        selectedSquareExpr (I j) t k < (bindFifth D J I nu).cap5 j) :=",
+      "header_sha256": "d0ad94d6af668bf893ae60a9b795c617428833aec6de22c846dbdf33439dc6af",
+      "start_line": 182,
+      "header_end_line": 192,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_levelCheck",
+      "kind": "theorem",
+      "complete_header": "theorem bound_levelCheck (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (hD : D.levelCheck = true)\n    (hc : fifthChecks D J I nu) :\n    (bindFifth D J I nu).levelCheck = true :=",
+      "header_sha256": "3376b02e0fc5c6561b655612201fe33f3533efd23d813a8f060c98017894d8ec",
+      "start_line": 211,
+      "header_end_line": 215,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_integral_is_original_cell_sum",
+      "kind": "theorem",
+      "complete_header": "theorem bound_integral_is_original_cell_sum (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (ha : 0 < D.a) (hab : D.a < D.b) :\n    (bindFifth D J I nu).fifthCorrectionIntegral =\n      ∑ j ∈ D.cells5 ∩ J,\n        ∫ t in logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n            primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j),\n          (primeOwnCubeGatedProfile ((bindFifth D J I nu).cap5 j : ℝ) t -\n            primeOwnCubeGatedProfile (D.old5 j : ℝ) t) * ∏ i, 1 / t i :=",
+      "header_sha256": "ba4926ae966edbbaf5d8cb3464d5861feddcde68664ddd7e9b7535af83f937c0",
+      "start_line": 230,
+      "header_end_line": 238,
+      "preserved_exactly": true,
+      "proof_changed": true
+    },
+    {
+      "name": "bound_actual_policy_charge",
+      "kind": "theorem",
+      "complete_header": "theorem bound_actual_policy_charge (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (hab : D.a ≤ D.b)\n    (hD : D.levelCheck = true) (hc : fifthChecks D J I nu)\n    (N cap : ℕ) (hN : 1 < (N : ℝ)) :\n    (bindFifth D J I nu).p4aPolicyDensity\n        ((bindFifth D J I nu).upperFifthPolicy (N : ℝ)) N cap\n        ((N : ℝ) ^ (D.b : ℝ)) =\n      D.p4aPolicyDensity (D.upperThirdPolicy (N : ℝ)) N cap\n          ((N : ℝ) ^ (D.b : ℝ)) -\n        D.p4aFourthEntry N cap ((N : ℝ) ^ (D.b : ℝ)) -\n          ∑ j ∈ D.cells5 ∩ J,\n            (bindFifth D J I nu).fifthCellPrimeCorrection N cap j :=",
+      "header_sha256": "31f969c7a14f6f6154e3e79df733daa4aa400385adac529102b869df24712a52",
+      "start_line": 244,
+      "header_end_line": 256,
+      "preserved_exactly": true,
+      "proof_changed": false
+    },
+    {
+      "name": "bound_actual_saving_limit",
+      "kind": "theorem",
+      "complete_header": "theorem bound_actual_saving_limit (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) (ha : 0 < D.a) (hab : D.a < D.b)\n    (hold : 0 < D.old) (hD : D.levelCheck = true)\n    (hc : fifthChecks D J I nu) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ))\n        ((bindFifth D J I nu).level5 (N : ℝ))\n        N (cap N) ((N : ℝ) ^ (D.b : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (bindFifth D J I nu).fifthCorrectionIntegral) :=",
+      "header_sha256": "7effd40da40d6fefc2360a09e6de5b52408c2fb2d3a6ce91f899d9430b99be14",
+      "start_line": 263,
+      "header_end_line": 278,
+      "preserved_exactly": true,
+      "proof_changed": false
+    }
+  ],
+  "all_complete_definitions": [
+    {
+      "kind": "abbrev",
+      "name": "Label5",
+      "complete_definition_and_following_interdecl_context": "abbrev Label5 (D : HistoricalPrefixCapData) := Fin 5 → Fin (D.m + 1)\n\n/-- The exact two-branch manuscript cap on a selected subproduct. -/\n",
+      "sha256": "d4f1603c7c87706a68345bac68bde601965d9ccc1fe9b202db948fd4afc77f48",
+      "start_line": 26
+    },
+    {
+      "kind": "def",
+      "name": "originalEnvelope",
+      "complete_definition_and_following_interdecl_context": "def originalEnvelope (I : Finset (Fin 5)) (t : Fin 5 → ℝ) : ℝ :=\n  let s := ∑ i ∈ I, t i\n  min ((1 + s) / 2) (57 / 64 - (3 / 2) * s)\n\n/-- Keep the original third and fourth cap tables.  Only selected fifth\nowners receive the checked rational midpoint above their *own* old5. -/\n",
+      "sha256": "1871ac4453997060fd92858ad7a118a3ded63ca729d5dfd83bb3f34de1c4bad7",
+      "start_line": 29
+    },
+    {
+      "kind": "def",
+      "name": "bindFifth",
+      "complete_definition_and_following_interdecl_context": "def bindFifth (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) : HistoricalPrefixCapData :=\n  { D with\n    cells5 := D.cells5 ∩ J\n    cap5 := fun j => selectedBoxCap (I j) (D.old5 j) (nu j)\n      (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) }\n\n/-- The finite whole-box license is the only input to this bridge.  It is\nneither a saving estimate nor a claim that a particular numeric table passed. -/\n",
+      "sha256": "15b60a8d5f856638759dfe816a936b006a46b2e39a62441a7e267d26e4d000a7",
+      "start_line": 35
+    },
+    {
+      "kind": "def",
+      "name": "fifthChecks",
+      "complete_definition_and_following_interdecl_context": "def fifthChecks (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) : Prop :=\n  ∀ j ∈ D.cells5 ∩ J,\n    selectedBoxCapCheck (I j) (D.old5 j) (nu j)\n      (qLogPrimeMeshLo D.a D.b D.m j)\n      (qLogPrimeMeshHi D.a D.b D.m j) = true\n\n/-- The direct historical-certificate path retains the stored cap table\nverbatim and restricts only the selected fifth cell family. -/\n",
+      "sha256": "1aefa93833393bf5e0e41e339f2694e0f062cd87d62c6e812aae96b1dd421959",
+      "start_line": 45
+    },
+    {
+      "kind": "def",
+      "name": "bindStoredFifth",
+      "complete_definition_and_following_interdecl_context": "def bindStoredFifth (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) : HistoricalPrefixCapData :=\n  D.p1RestrictFifth J\n\n/-- A finite permit for the actual stored cap on the actual inherited old5.\nThis is a checkable statement about a future concrete certificate table,\nnot a proposed analytic saving or an assumed target inequality. -/\n",
+      "sha256": "f1980fa54a4ac60dfe3af4239f453402481e355a23819b852557556c2840bbb1",
+      "start_line": 55
+    },
+    {
+      "kind": "def",
+      "name": "storedFifthPermit",
+      "complete_definition_and_following_interdecl_context": "def storedFifthPermit (D : HistoricalPrefixCapData)\n    (J : Finset (Label5 D)) (I : Label5 D → Finset (Fin 5))\n    (nu : Label5 D → ℚ) : Prop :=\n  storedMeshCapCheck D.a D.b D.m (D.cells5 ∩ J)\n    I D.old5 nu D.cap5 = true\n\n",
+      "sha256": "9f9b9f8fe8e94de7d3f0657ca58e1bde997526b640897423287353209359e636",
+      "start_line": 62
+    }
+  ],
+  "changed_proof_bodies": [
+    {
+      "name": "bound_integral_is_original_cell_sum",
+      "before_body": " by\n  simpa only [bound_cells5, bound_old5, same_fourth_old_gate] using\n    (bindFifth D J I nu).fifthCorrectionIntegral_eq_integrals ha hab\n\n/-- The actual fourth-to-fifth finite density charge is this cell sum,\nonce, on the original historical third parent and rough carrier. -/\n",
+      "after_body": " by\n  exact (bindFifth D J I nu).fifthCorrectionIntegral_eq_integrals ha hab\n\n/-- The actual fourth-to-fifth finite density charge is this cell sum,\nonce, on the original historical third parent and rough carrier. -/\n",
+      "before_sha256": "48cf1fad91dcef984b56980f21329e8ab7572cd9f9a22c3e40e462e264a2c6fd",
+      "after_sha256": "80685c725d51bb8a26d1c6889aa608b9ea594d06aeee7622a8174a92a230597f"
+    }
+  ],
+  "full_raw_headers_preserved": true,
+  "complete_definition_bytes_preserved": true,
+  "all_source_bytes_outside_exact_registered_tactic_delta_preserved": true,
+  "imports": [
+    "ImbalancedChen.StoredHistoricalBoxPermit",
+    "ImbalancedChen.P1HistoricalLevelCheckPreservation",
+    "ImbalancedChen.HistoricalFifthJointIntegralSupportP1",
+    "ImbalancedChen.P4AHistoricalCausalSavingsLedger"
+  ],
+  "rawEOL": {
+    "baseline_crlf": 0,
+    "candidate_crlf": 0,
+    "baseline_lf": 283,
+    "candidate_lf": 282
+  },
+  "header_or_definition_exception": []
+}

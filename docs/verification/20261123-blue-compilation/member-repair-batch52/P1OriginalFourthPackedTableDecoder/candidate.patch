@@ -1,0 +1,20 @@
+--- baseline/ImbalancedChen/P1OriginalFourthPackedTableDecoder.lean
++++ candidate/ImbalancedChen/P1OriginalFourthPackedTableDecoder.lean
+@@ -32,7 +32,8 @@
+ 
+ theorem toProducerRow_selected (r : FourthWireRow) (i : Fin 4) :
+     i ∈ r.toProducerRow.selected ↔ Nat.testBit r.mask i.val = true := by
+-  simp [FourthWireRow.toProducerRow, P2OriginalFourthCapProducerInterface.ProducerRow.selected]
++  change i ∈ Finset.univ.filter (fun j : Fin 4 => Nat.testBit r.mask j.val) ↔ _
++  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+ 
+ def wordLE16 (low high : ℕ) : ℕ := low + 256 * high
+ 
+@@ -67,7 +68,6 @@
+     omega
+   · simp only [Option.some.injEq] at h
+     omega
+-  · cases h
+ 
+ def decodeHexChars : List Char → Option (List ℕ)
+   | [] => some []

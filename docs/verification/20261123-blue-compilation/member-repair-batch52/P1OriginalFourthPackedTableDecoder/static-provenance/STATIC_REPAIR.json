@@ -1,0 +1,74 @@
+{
+  "status": "STATIC_CANDIDATE_NOT_COMPILED",
+  "module": "ImbalancedChen.P1OriginalFourthPackedTableDecoder",
+  "preimage_sha256": "cea2d97bdd8d1809856dfebf529aa1a705c8fdf7690603e5e60be7539821f0de",
+  "postimage_sha256": "f2312be058b8d026d9ff60e177982f62b201d4f1b0b557d9750dad2aec07f41c",
+  "complete_headers_or_non_tactic_declarations": [
+    {
+      "name": "toProducerRow_lo",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem toProducerRow_lo (r : FourthWireRow) : r.toProducerRow.lo = r.lo := rfl\n"
+    },
+    {
+      "name": "toProducerRow_hi",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem toProducerRow_hi (r : FourthWireRow) : r.toProducerRow.hi = r.hi := rfl\n"
+    },
+    {
+      "name": "toProducerRow_mask",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem toProducerRow_mask (r : FourthWireRow) : r.toProducerRow.mask = r.mask := rfl\n\n"
+    },
+    {
+      "name": "toProducerRow_lower",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem toProducerRow_lower (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.lower i = (r.lo i : ℚ) / 204800 := rfl\n\n"
+    },
+    {
+      "name": "toProducerRow_upper",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem toProducerRow_upper (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.upper i = (r.hi i : ℚ) / 204800 := rfl\n\n"
+    },
+    {
+      "name": "toProducerRow_selected",
+      "kind": "complete_tactic_header",
+      "raw": "theorem toProducerRow_selected (r : FourthWireRow) (i : Fin 4) :\n    i ∈ r.toProducerRow.selected ↔ Nat.testBit r.mask i.val = true :="
+    },
+    {
+      "name": "rowFromBytes_fields",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem rowFromBytes_fields\n    (l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w : ℕ) :\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).lo =\n      ![l0 + 256*l1, l2 + 256*l3, l4 + 256*l5, l6 + 256*l7] ∧\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).hi =\n      ![h0 + 256*h1, h2 + 256*h3, h4 + 256*h5, h6 + 256*h7] ∧\n    (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w).mask = w :=\n  ⟨rfl, rfl, rfl⟩\n\n"
+    },
+    {
+      "name": "hexDigit_bound",
+      "kind": "complete_tactic_header",
+      "raw": "theorem hexDigit_bound (c : Char) (n : ℕ) (h : hexDigit c = some n) : n < 16 :="
+    },
+    {
+      "name": "decodedByte_bound",
+      "kind": "complete_tactic_header",
+      "raw": "theorem decodedByte_bound (a b : Char) (x y : ℕ)\n    (ha : hexDigit a = some x) (hb : hexDigit b = some y) : 16*x+y < 256 :="
+    },
+    {
+      "name": "decodeHexChars_cons",
+      "kind": "complete_tactic_header",
+      "raw": "theorem decodeHexChars_cons (a b : Char) (rest : List Char) (x y : ℕ) (tail : List ℕ)\n    (ha : hexDigit a = some x) (hb : hexDigit b = some y)\n    (hr : decodeHexChars rest = some tail) :\n    decodeHexChars (a :: b :: rest) = some ((16*x+y) :: tail) :="
+    },
+    {
+      "name": "decodeWireRows_cons17",
+      "kind": "entire_non_tactic_declaration",
+      "raw": "theorem decodeWireRows_cons17\n    (l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w : ℕ) (rest : List ℕ) :\n    decodeWireRows (l0 :: l1 :: l2 :: l3 :: l4 :: l5 :: l6 :: l7 ::\n      h0 :: h1 :: h2 :: h3 :: h4 :: h5 :: h6 :: h7 :: w :: rest) =\n      (do let tail ← decodeWireRows rest\n          pure (rowFromBytes l0 l1 l2 l3 l4 l5 l6 l7 h0 h1 h2 h3 h4 h5 h6 h7 w :: tail)) := rfl\n\n/-- JSON numeric tokens, including diagnostics, remain uninterpreted text.\nObject field order and all array positions are retained. -/\n"
+    }
+  ],
+  "changed_proofs": [
+    "toProducerRow_selected",
+    "hexDigit_bound"
+  ],
+  "all_non_proof_bytes_including_defs_data_imports_constants_hypotheses_exact": true,
+  "scope": "Original Fin4 mask membership explicitly uses mem_filter/mem_univ. Remove only the already-closed impossible none branch after split_ifs; retain all three original hexDigit_bound arithmetic branches.",
+  "known_source_reuse": "retained existing inventory and source index: only this preimage; no matching full receipt/object/exact-source published repair. Thirteen near-G1 suppliers do not include this decoder.",
+  "data_computation": "This ABI/Option-decoder source asserts no complete payload parse and executes no 3699127-row geometry or sum check. Lake624s job elapsed includes compiler-lock queue time; no measured624s decoder computation is claimed.",
+  "manuscript": "Necessary existing fixed fourth row ABI; original17byte format/endpoints/winner mask, denominator204800 and total Option decoding unchanged. No new outside-manuscript theorem.",
+  "live_or_original_source_edits": false,
+  "Lean_Lake_or_kernel_invoked": false
+}

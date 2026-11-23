@@ -197,4 +197,12 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 Gamma 第一次 public-only 审计与随后完整 owned 补充均保存，补充确认该模块 owned 恰为原八个 public，无 private；原成功编译与 kernel 没有重复。Gamma、三个 literal 模块和 Fourteen 的主仓 canonical 文件仍不存在，已验源码按明确安装路径作为后像发布。其余九个 canonical 文件与实际已验后像一致。当前这些是完整 P1 的必要前置验收；三个新的 P1 raw／structure／ancestor 输出候选及完整现代端点仍须继续验证，不能把本表视作整个 P1 完成。
 
+随后第五十二批 `P1OriginalFourthPackedTableDecoder` 和 `P4AOriginalHistoricalFifthSelectedSlotBridge` 两模块通过同样三项检查及独立复核，155 个 owned 声明（151 public、4 private）仅标准三公理，源码及十项主要产物稳定，见 [验收结果](member-repair-batch52/VALIDATION_RESULTS.json)。Decoder 仅显式展开原 mask 的有限集会员并删除已经关闭的 impossible branch；它是原 17-byte ABI 的结构引理，没有以此声称整表解析或几何检查完成。SelectedSlot 原样复用已发表 `232c18b5` 的完整修补文件，保留历史注释及原参数、积分和 gate。
+
+第五十四批九个实际依赖也全部通过标准构建、指定模块 kernel replay、完整 owned 类型／宇宙参数／公理检查及独立复核，共 175 个声明（169 public、6 private），仅标准三公理，源码及四十五项主要产物稳定，见 [验收结果](member-repair-batch54/VALIDATION_RESULTS.json)。实际模块清单以该目录 `SOURCE_SELECTION.json` 为准；修补限定于 zero-tag、lambda、列表长度、原补域、互不相交标签的 filter、函数加法及已有代数的表达。CanonicalSwitched 只开启原测度 `∞` 所需的 ENNReal notation scope；旧未 elaboration 语法不声称已有相同 kernel 类型。FirstIntegralSeries 的级数包围证明通过不代表其另列的精确数值端点已经完成。Disjoint 和 Series 的首版真实失败归档，最终仅重跑失败的两模块，其余七个成功的 source／kernel 检查保留。
+
+本批 ReverseAdmission 和 OwnCubeCapPayment 仍只发布 stage 安装后像，主仓未创建同名 canonical 文件。RoughAuxiliarySW 直接复用 Prototype 已验源码 `659bc`，但四个实际项目导入对象不同，旧物件不能采用；当前 Member 因此完成自己的必要正常编译与 kernel，没有重复写其已有证明。各批 `INDEPENDENT_REVIEW.json`、完整原日志与发布清单均已保存。
+
+少数旧 `pointer_inserted_this_overlay` 字段实际只记录 owner-stager 是否插入注释，未计入候选作者预先加入的中性指针。新增 [字段语义补充](P1_POINTER_FIELD_SEMANTICS_CLARIFICATION.json) 明确这三处，旧源码、验证与冻结记录均未改动；后续批次分开记录实际 overlay 与 stager 两个动作。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成，尚不能声称全部蓝色节点完成；看板访问不阻塞依据固定手稿和现有源码继续完整 P1。
