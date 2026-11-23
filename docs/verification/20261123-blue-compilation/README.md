@@ -74,4 +74,10 @@ Member 工程还复用基线已验证的 `P4BSmoothGateUpperStep` 生产源码�
 
 入口绑定见 [SEVENTH_ROOT_ACCEPTANCE.json](SEVENTH_ROOT_ACCEPTANCE.json)，完整批次见 [p6-seventh/BATCH_SUMMARY.json](p6-seventh/BATCH_SUMMARY.json)，实际命令、类型、公理、构建尝试及精确选源均保存在该子目录。本批九处源码修补由独立复核确认保持原声明、定义、常量和假设，见 [INDEPENDENT_REVIEW.json](p6-seventh/INDEPENDENT_REVIEW.json)。该入口在隔离的精确选源工程验证，原始入口文件及全部证明修补均可按记录定位。
 
-项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。其余三个 P6 入口、H430 Member 入口及其它已确认范围继续构建，验收分别记录。
+原第八积分价格入口 `P6OriginalEighthMeshPrice` 也已通过完整标准构建。四个支撑模块和入口共五个模块通过指定模块 kernel replay，按定义模块元数据枚举的 172 条完整声明均通过类型和传递公理检查，公理仍为标准三项。五个源码与二十五项主要产物跨阶段稳定。原 `417/5000` 至 `1/3` 的积分域和 `log(2-3t)/(t*(1-t))` 对象保持不变。
+
+本批适配了集合可测性 API、有理数转换、函数应用展开和已有分母非负证明。入口本身只增加一行 `dsimp only`；冻结 R02 原图保持不变，单独的入口后像按记录安装到隔离工程，主仓没有新增同名 canonical 入口。源码覆盖及安装路径见 [EIGHTH_ROOT_ACCEPTANCE.json](EIGHTH_ROOT_ACCEPTANCE.json) 和 [VERIFIED_P6_SOURCE_OVERRIDES.json](VERIFIED_P6_SOURCE_OVERRIDES.json)。完整结果见 [p6-eighth/BATCH_SUMMARY.json](p6-eighth/BATCH_SUMMARY.json)，独立源码复核见 [INDEPENDENT_REVIEW.json](p6-eighth/INDEPENDENT_REVIEW.json)。跨工程 native 现成产物的资格与复用摘要也保存在该批次目录；复用数量不计新增定理或看板节点。
+
+Member 的 `P2HistoricLogRangeReduction` 复用既有提交 `085ef205771858c7115d092766b3ffcf7ab86d55` 的六处证明修补，显式处理整数/有理数转换、floor/ceil 与 `2^80` 位长为 81 的 kernel 计算。30 条显式公开源码声明、八个定义和全部常量、假设保持不变。标准构建、指定模块 kernel replay 及实际 `Certificates` 命名空间下的完整类型/传递公理检查均退出 0，仅标准三公理；源码和五项产物跨阶段稳定。结果见 [historic-log-range/VALIDATION_RESULTS.json](historic-log-range/VALIDATION_RESULTS.json)，源码复核见 [INDEPENDENT_REVIEW.json](historic-log-range/INDEPENDENT_REVIEW.json)。
+
+项目看板本轮读取返回 HTTP 401，完整蓝色节点到模块的对应清单仍待取得。其余两个 P6 入口、H430 Member 入口及其它已确认范围继续构建，验收分别记录。

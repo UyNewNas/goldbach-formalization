@@ -2,8 +2,8 @@ import ImbalancedChen.P2NegativeDomainCover
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-!
-SOURCE ONLY / UNCOMPILED. The companion draft directory must be a source
-search root when these candidates are eventually installed or compiled.
+Verification status for this exact source postimage is recorded in
+`docs/verification/20261123-blue-compilation`.
 
 Rational whole-box enclosures for the original U8 harmonic density. A
 boundary cell is charged its entire closed rectangle. The finite-cover
@@ -143,14 +143,15 @@ theorem Box.integrable_majorant (B : Box) : Integrable B.majorant := by
 theorem Box.integral_const {B : Box} (hB : B.Valid) (q : ℚ) :
     (∫ _x : Point in B.region, (q : ℝ)) = ((q * B.area : ℚ) : ℝ) := by
   rw [MeasureTheory.integral_const]
-  simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter,
+  simp only [Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter,
     smul_eq_mul, Box.volume_real hB, Rat.cast_mul]
   ring
 
 /-- A boundary cell is charged the whole rational rectangle area. -/
 theorem Box.integral_majorant {B : Box} (hB : B.Valid) :
     (∫ x, B.majorant x) = ((B.upper * B.area : ℚ) : ℝ) := by
-  rw [Box.majorant, integral_indicator measurableSet_Icc]
+  rw [Box.majorant,
+    integral_indicator (show MeasurableSet B.region from measurableSet_Icc)]
   exact Box.integral_const hB B.upper
 
 theorem Box.integrable_density {B : Box} (hB : B.Valid) :
@@ -215,7 +216,7 @@ theorem eighthIntegral_le_box_cover {ι : Type*} (s : Finset ι) (B : ι → Box
       rw [indicator_of_mem hx]
       calc
         eighthDensity x ≤ ((B i).upper : ℝ) := ((B i).density_enclosure (hvalid i hi) hix).2
-        _ = (B i).majorant x := (indicator_of_mem hix _).symm
+        _ = (B i).majorant x := by simp only [Box.majorant, indicator_of_mem hix]
         _ ≤ _ := Finset.single_le_sum (fun j hj => Box.majorant_nonneg (hvalid j hj) x) hi
     · rw [indicator_of_notMem hx]
       exact Finset.sum_nonneg (fun i hi => Box.majorant_nonneg (hvalid i hi) x)
@@ -232,6 +233,7 @@ theorem eighthIntegral_le_box_cover {ι : Type*} (s : Finset ι) (B : ι → Box
       exact Box.integral_majorant (hvalid i hi)
     _ = _ := by
       push_cast
+      rfl
 
 /-- A rational sufficient test for one rectangle to cover the entire U8.
 It retains the maximal moving-slice height at the left original endpoint. -/
@@ -248,7 +250,14 @@ theorem Box.coversOriginal_sound {B : Box} (hB : B.CoversOriginal) :
   have hBr : (B.xl : ℝ) ≤ 417 / 5000 ∧ (1 / 3 : ℝ) ≤ B.xu ∧
       (B.yl : ℝ) ≤ 1 / 3 ∧ (1 - (417 / 5000 : ℝ)) / 2 ≤ B.yu := by
     dsimp only [Box.CoversOriginal] at hB
-    exact_mod_cast hB
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hB.1
+    · simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr hB.2.1
+    · simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr hB.2.2.1
+    · simpa only [Rat.cast_div, Rat.cast_sub, Rat.cast_one, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr hB.2.2.2
   intro x hx
   have hx0 := mem_logPrimeBox.mp hx.1 (0 : Fin 2)
   have hr := hx.2

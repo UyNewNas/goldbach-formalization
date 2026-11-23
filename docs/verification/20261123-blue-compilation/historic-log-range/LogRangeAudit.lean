@@ -1,0 +1,93 @@
+import ImbalancedChen.P2HistoricLogRangeReduction
+
+set_option pp.all true
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.Q
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.Q
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.binaryExponent
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.binaryExponent
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRL
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRL
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRH
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRH
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.Q_pos
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.Q_pos
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.binaryExponent_bounds
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.binaryExponent_bounds
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_bit_length
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_bit_length
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_nonneg_iff
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_nonneg_iff
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.positive_shift_toNat
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.positive_shift_toNat
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.negative_shift_toNat
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.negative_shift_toNat
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced_bounds
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced_bounds
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact_positive_shift
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact_positive_shift
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact_negative_shift
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.scaledExact_negative_shift
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRL_eq_floor
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRL_eq_floor
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRH_eq_ceil
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceRH_eq_ceil
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoint_width
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoint_width
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoints_exact_of_negative
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoints_exact_of_negative
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_reduced_contains
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_reduced_contains
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoint_guards
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_endpoint_guards
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_reduced_contains_real
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.source_reduced_contains_real
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.log_point_decomposition
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.log_point_decomposition
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanhParameter
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanhParameter
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanh_parameter_bounds
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanh_parameter_bounds
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanh_parameter_bounds_real
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.atanh_parameter_bounds_real
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_Q
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.sourceShift_Q
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced_Q
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.exactReduced_Q
+
+#check @ImbalancedChen.Certificates.P2HistoricLogRangeReduction.log_point_shortcut
+#print axioms ImbalancedChen.Certificates.P2HistoricLogRangeReduction.log_point_shortcut

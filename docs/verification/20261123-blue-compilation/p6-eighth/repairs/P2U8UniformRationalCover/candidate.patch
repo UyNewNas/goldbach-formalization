@@ -1,0 +1,48 @@
+--- a/ImbalancedChen/P2U8UniformRationalCover.lean
++++ b/ImbalancedChen/P2U8UniformRationalCover.lean
+@@ -2,7 +2,9 @@
+ import Mathlib.Algebra.Order.Floor.Semiring
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED. Explicit complete uniform rational covers of
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
++Explicit complete uniform rational covers of
+ the original U8 domain, with no coverage hypothesis in the final bound.
+ 
+ The carrier meshes the entire closed rectangle
+@@ -42,7 +44,8 @@
+ 
+ theorem node_mono {a b : ℚ} (hab : a < b) {M : ℕ} (hM : 0 < M)
+     {j k : ℕ} (hjk : j ≤ k) : node a b M j ≤ node a b M k := by
+-  exact add_le_add_left (mul_le_mul_of_nonneg_left (by exact_mod_cast hjk)
++  have hjkQ : (j : ℚ) ≤ (k : ℚ) := by exact_mod_cast hjk
++  exact add_le_add_right (mul_le_mul_of_nonneg_left hjkQ
+     (step_pos hab hM).le) a
+ 
+ theorem start_le_node {a b : ℚ} (hab : a < b) {M : ℕ} (hM : 0 < M) (k : ℕ) :
+@@ -62,9 +65,12 @@
+         x ≤ ((node a b M (i.val + 1) : ℚ) : ℝ) := by
+   let δ : ℝ := (step a b M : ℝ)
+   let k := Nat.floor ((x - (a : ℝ)) / δ)
+-  have hδ : 0 < δ := by exact_mod_cast step_pos hab hM
++  have hδ : 0 < δ := by
++    change (0 : ℝ) < (step a b M : ℝ)
++    exact_mod_cast step_pos hab hM
+   have hcancel : δ * (M : ℝ) = (b : ℝ) - a := by
+-    exact_mod_cast step_mul_count a b hM
++    simpa only [δ, Rat.cast_mul, Rat.cast_natCast, Rat.cast_sub] using
++      congrArg (fun q : ℚ => (q : ℝ)) (step_mul_count a b hM)
+   have hnorm : 0 ≤ (x - (a : ℝ)) / δ := div_nonneg (sub_nonneg.mpr hx.1) hδ.le
+   have hk : k < M := by
+     apply (Nat.floor_lt hnorm).mpr
+@@ -76,7 +82,8 @@
+   · simp only [node, Rat.cast_add, Rat.cast_mul, Rat.cast_natCast]
+     change (a : ℝ) + δ * (k : ℝ) ≤ x
+     nlinarith only [hlo]
+-  · simp only [node, Rat.cast_add, Rat.cast_mul, Rat.cast_natCast, Nat.cast_add, Nat.cast_one]
++  · simp only [node, Rat.cast_add, Rat.cast_mul, Rat.cast_natCast, Rat.cast_one,
++      Nat.cast_add, Nat.cast_one]
+     change x ≤ (a : ℝ) + δ * ((k : ℝ) + 1)
+     nlinarith only [hhi]
+ 

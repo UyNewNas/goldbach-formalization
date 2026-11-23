@@ -1,0 +1,77 @@
+--- a/ImbalancedChen/P2U8QuadratureTendsto.lean
++++ b/ImbalancedChen/P2U8QuadratureTendsto.lean
+@@ -2,7 +2,8 @@
+ import Mathlib.Analysis.SpecificLimits.Basic
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ 
+ Global semantics of the explicit rational U8 upper quadrature. Shared
+ closed-cell walls are removed by the genuine product-measure Ico/Icc
+@@ -175,8 +176,10 @@
+     refine ⟨mem_logPrimeBox.mpr ?_, ?_⟩
+     · intro i
+       fin_cases i
+-      · exact ⟨ha, by linarith only [hxcap]⟩
+-      · exact ⟨by linarith only [hc], by linarith only [ha, hg]⟩
++      · change (417 / 5000 : ℝ) ≤ x 0 ∧ x 0 < 1 / 2
++        exact ⟨ha, by linarith only [hxcap]⟩
++      · change (417 / 5000 : ℝ) ≤ x 1 ∧ x 1 < 1 / 2
++        exact ⟨by linarith only [hc], by linarith only [ha, hg]⟩
+     · change x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1
+       exact ⟨by linarith only [hc, hg], hc, hg⟩
+   obtain ⟨_, hxu, _, hyu⟩ := Box.mem_region.mp hx
+@@ -202,14 +205,15 @@
+ 
+ theorem integral_upperMajorant {M : ℕ} (hM : 0 < M) :
+     (∫ x, upperMajorant M x) = (uniformUpper M : ℝ) := by
+-  rw [upperMajorant, integral_finsetSum (selected M)
++  unfold upperMajorant
++  rw [integral_finsetSum (selected M)
+     (fun ij _ => Box.integrable_majorant (meshBox M ij))]
+   calc
+     _ = ∑ ij ∈ selected M, (((meshBox M ij).upper * (meshBox M ij).area : ℚ) : ℝ) := by
+       apply Finset.sum_congr rfl
+       intro ij _
+       exact Box.integral_majorant (meshBox_valid hM ij)
+-    _ = _ := by unfold uniformUpper; push_cast
++    _ = _ := by unfold uniformUpper; push_cast <;> rfl
+ 
+ def errorMajorant (M : ℕ) (x : Point) : ℝ :=
+   rectangle.indicator (fun _ => (oscillationBudget M : ℝ)) x +
+@@ -298,6 +302,8 @@
+     integrableOn_eighthDensity.integrable_indicator measurableSet_eighthDomain
+   have hmono := integral_mono_ae ((integrable_upperMajorant M).sub hD)
+     (integrable_errorMajorant hM) (ae_quadrature_defect_le hM)
++  change (∫ x, upperMajorant M x - eighthDomain.indicator eighthDensity x) ≤
++    ∫ x, errorMajorant M x at hmono
+   rw [integral_sub (integrable_upperMajorant M) hD, integral_upperMajorant hM,
+     integral_indicator measurableSet_eighthDomain] at hmono
+   have hrect : Integrable (rectangle.indicator (fun _ => (oscillationBudget M : ℝ))) :=
+@@ -310,10 +316,12 @@
+   have heval : (∫ x, errorMajorant M x) =
+       (volume rectangle).toReal * (oscillationBudget M : ℝ) +
+         (volume (boundaryStaircase M)).toReal * 1000 := by
+-    rw [errorMajorant, integral_add hrect hbound,
+-      integral_indicator measurableSet_Icc, integral_indicator (measurableSet_boundaryStaircase M),
++    unfold errorMajorant
++    rw [integral_add hrect hbound,
++      integral_indicator (show MeasurableSet rectangle from measurableSet_Icc),
++      integral_indicator (measurableSet_boundaryStaircase M),
+       integral_const, integral_const]
+-    simp only [Measure.real, Measure.restrict_apply measurableSet_univ, univ_inter, smul_eq_mul]
++    simp only [Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter, smul_eq_mul]
+   rw [heval] at hmono
+   constructor
+   · exact sub_nonneg.mpr (eighthIntegral_le_uniformUpper M hM)
+@@ -323,7 +331,7 @@
+       _ ≤ (rectangleBox.area : ℝ) * (oscillationBudget M : ℝ) +
+           ((((cubeWall - alpha) * (1 - cubeWall - alpha) / (M : ℚ) : ℚ) : ℝ)) * 1000 := by
+         rw [show (volume rectangle).toReal = (rectangleBox.area : ℝ) from Box.volume_real rectangleBox_valid]
+-        exact add_le_add_left (mul_le_mul_of_nonneg_right
++        exact add_le_add_right (mul_le_mul_of_nonneg_right
+           (boundaryStaircase_volume_explicit hM) (by norm_num : (0 : ℝ) ≤ 1000)) _
+       _ = _ := by
+         unfold oscillationBudget errorNumerator

@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Q",
+    "kind": "def",
+    "header": "def Q : ℕ"
+  },
+  {
+    "name": "binaryExponent",
+    "kind": "def",
+    "header": "def binaryExponent (q : ℤ) : ℕ"
+  },
+  {
+    "name": "sourceShift",
+    "kind": "def",
+    "header": "def sourceShift (q : ℤ) : ℤ"
+  },
+  {
+    "name": "exactReduced",
+    "kind": "def",
+    "header": "def exactReduced (q : ℤ) : ℚ"
+  },
+  {
+    "name": "scaledExact",
+    "kind": "def",
+    "header": "def scaledExact (q : ℤ) : ℚ"
+  },
+  {
+    "name": "sourceRL",
+    "kind": "def",
+    "header": "def sourceRL (q : ℤ) : ℤ"
+  },
+  {
+    "name": "sourceRH",
+    "kind": "def",
+    "header": "def sourceRH (q : ℤ) : ℤ"
+  },
+  {
+    "name": "Q_pos",
+    "kind": "theorem",
+    "header": "theorem Q_pos : (0 : ℚ) < Q"
+  },
+  {
+    "name": "binaryExponent_bounds",
+    "kind": "theorem",
+    "header": "theorem binaryExponent_bounds {q : ℤ} (hq : 0 < q) :\n    2 ^ binaryExponent q ≤ q.toNat ∧ q.toNat < 2 ^ (binaryExponent q + 1)"
+  },
+  {
+    "name": "sourceShift_bit_length",
+    "kind": "theorem",
+    "header": "theorem sourceShift_bit_length {q : ℤ} (hq : 0 < q) :\n    sourceShift q = (q.toNat.size : ℤ) - 1 - 80"
+  },
+  {
+    "name": "sourceShift_nonneg_iff",
+    "kind": "theorem",
+    "header": "theorem sourceShift_nonneg_iff (q : ℤ) :\n    0 ≤ sourceShift q ↔ 80 ≤ binaryExponent q"
+  },
+  {
+    "name": "positive_shift_toNat",
+    "kind": "theorem",
+    "header": "theorem positive_shift_toNat {q : ℤ} (hk : 0 ≤ sourceShift q) :\n    (sourceShift q).toNat = binaryExponent q - 80"
+  },
+  {
+    "name": "negative_shift_toNat",
+    "kind": "theorem",
+    "header": "theorem negative_shift_toNat {q : ℤ} (hk : sourceShift q < 0) :\n    (-sourceShift q).toNat = 80 - binaryExponent q"
+  },
+  {
+    "name": "exactReduced_bounds",
+    "kind": "theorem",
+    "header": "theorem exactReduced_bounds {q : ℤ} (hq : 0 < q) :\n    1 ≤ exactReduced q ∧ exactReduced q < 2"
+  },
+  {
+    "name": "scaledExact_positive_shift",
+    "kind": "theorem",
+    "header": "theorem scaledExact_positive_shift {q : ℤ} (hk : 0 ≤ sourceShift q) :\n    scaledExact q = (q : ℚ) / (2 ^ (sourceShift q).toNat : ℕ)"
+  },
+  {
+    "name": "scaledExact_negative_shift",
+    "kind": "theorem",
+    "header": "theorem scaledExact_negative_shift {q : ℤ} (hk : sourceShift q < 0) :\n    scaledExact q = (q * (2 ^ (-sourceShift q).toNat : ℕ) : ℤ)"
+  },
+  {
+    "name": "sourceRL_eq_floor",
+    "kind": "theorem",
+    "header": "theorem sourceRL_eq_floor (q : ℤ) : sourceRL q = ⌊scaledExact q⌋"
+  },
+  {
+    "name": "sourceRH_eq_ceil",
+    "kind": "theorem",
+    "header": "theorem sourceRH_eq_ceil (q : ℤ) : sourceRH q = ⌈scaledExact q⌉"
+  },
+  {
+    "name": "source_endpoint_width",
+    "kind": "theorem",
+    "header": "theorem source_endpoint_width (q : ℤ) : sourceRH q ≤ sourceRL q + 1"
+  },
+  {
+    "name": "source_endpoints_exact_of_negative",
+    "kind": "theorem",
+    "header": "theorem source_endpoints_exact_of_negative {q : ℤ} (hk : sourceShift q < 0) :\n    sourceRL q = sourceRH q"
+  },
+  {
+    "name": "source_reduced_contains",
+    "kind": "theorem",
+    "header": "theorem source_reduced_contains (q : ℤ) :\n    (sourceRL q : ℚ) / Q ≤ exactReduced q ∧\n      exactReduced q ≤ (sourceRH q : ℚ) / Q"
+  },
+  {
+    "name": "source_endpoint_guards",
+    "kind": "theorem",
+    "header": "theorem source_endpoint_guards {q : ℤ} (hq : 0 < q) :\n    (Q : ℤ) ≤ sourceRL q ∧ sourceRL q ≤ sourceRH q ∧ sourceRH q ≤ 2 * Q"
+  },
+  {
+    "name": "source_reduced_contains_real",
+    "kind": "theorem",
+    "header": "theorem source_reduced_contains_real (q : ℤ) :\n    (sourceRL q : ℝ) / Q ≤ (exactReduced q : ℝ) ∧\n      (exactReduced q : ℝ) ≤ (sourceRH q : ℝ) / Q"
+  },
+  {
+    "name": "log_point_decomposition",
+    "kind": "theorem",
+    "header": "theorem log_point_decomposition {q : ℤ} (hq : 0 < q) :\n    Real.log ((q : ℝ) / Q) =\n      (sourceShift q : ℝ) * Real.log 2 + Real.log (exactReduced q : ℝ)"
+  },
+  {
+    "name": "atanhParameter",
+    "kind": "def",
+    "header": "def atanhParameter (q : ℤ) : ℚ"
+  },
+  {
+    "name": "atanh_parameter_bounds",
+    "kind": "theorem",
+    "header": "theorem atanh_parameter_bounds {q : ℤ} (hq : 0 < q) :\n    0 ≤ atanhParameter q ∧ atanhParameter q < 1 / 3"
+  },
+  {
+    "name": "atanh_parameter_bounds_real",
+    "kind": "theorem",
+    "header": "theorem atanh_parameter_bounds_real {q : ℤ} (hq : 0 < q) :\n    0 ≤ (atanhParameter q : ℝ) ∧ (atanhParameter q : ℝ) ≤ 1 / 3"
+  },
+  {
+    "name": "sourceShift_Q",
+    "kind": "theorem",
+    "header": "theorem sourceShift_Q : sourceShift (Q : ℤ) = 0"
+  },
+  {
+    "name": "exactReduced_Q",
+    "kind": "theorem",
+    "header": "theorem exactReduced_Q : exactReduced (Q : ℤ) = 1"
+  },
+  {
+    "name": "log_point_shortcut",
+    "kind": "theorem",
+    "header": "theorem log_point_shortcut : Real.log ((Q : ℝ) / Q) = 0"
+  }
+]
