@@ -14,7 +14,7 @@ The displayed integral is a genuine integral of the actual Buchstab
 function.  Its explicit elementary dictionary is proved pointwise and
 under both integrals.  No arithmetic mean, sharp coefficient estimate,
 same-rho distribution supplier, or numerical certificate is assumed.
-Source only; no compiler or runtime was invoked.
+Compilation and kernel checks are recorded under docs/verification/20261123-blue-compilation.
 -/
 
 namespace ImbalancedChen
@@ -220,10 +220,16 @@ theorem p5U7Omega_row_intervalIntegrable (K : ℝ) {t : ℝ}
     IntervalIntegrable (fun u => p5U7OmegaKernel K t u) volume t ((1 - t) / 2) := by
   have htpos : 0 < t := by linarith [ht.1]
   have hle : t ≤ (1 - t) / 2 := by linarith [ht.2]
+  have hpair : ContinuousOn (fun u : ℝ => (t, u)) (Icc t ((1 - t) / 2)) :=
+    (continuous_const.prodMk continuous_id).continuousOn
+  have hmaps : MapsTo (fun u : ℝ => (t, u)) (Icc t ((1 - t) / 2))
+      {x : ℝ × ℝ | 0 < x.1 ∧ 0 < x.2} := by
+    intro u hu
+    exact ⟨htpos, htpos.trans_le hu.1⟩
   have hc : ContinuousOn (fun u => p5U7OmegaKernel K t u) (Icc t ((1 - t) / 2)) :=
-    (p5U7Omega_kernel_continuousOn_positive K).comp
-      (continuous_const.prodMk continuous_id).continuousOn
-      (fun u hu => ⟨htpos, htpos.trans_le hu.1⟩)
+    ContinuousOn.comp' (g := fun x : ℝ × ℝ => p5U7OmegaKernel K x.1 x.2)
+      (f := fun u : ℝ => (t, u))
+      (p5U7Omega_kernel_continuousOn_positive K) hpair hmaps
   exact ContinuousOn.intervalIntegrable_of_Icc hle hc
 
 /-- The genuine original U7 functional, before any arithmetic mean theorem. -/
@@ -249,6 +255,8 @@ theorem p5U7OriginalOmegaIntegral_eq_elementary (K : ℝ) :
   have hle : t ≤ (1 - t) / 2 := by linarith [ht.2]
   rw [uIcc_of_le hle] at hu
   have h : p5U7OmegaClosedSupport t u := ⟨ht.1, hu.1, hu.2⟩
+  change p5U7OmegaKernel K t u =
+    if (1 - t) / 3 ≤ u then p5U7OmegaFirstKernel K t u else p5U7OmegaSecondKernel K t u
   by_cases hcut : (1 - t) / 3 ≤ u
   · rw [if_pos hcut]
     exact p5U7Omega_kernel_first K h hcut

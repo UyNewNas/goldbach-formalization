@@ -1,0 +1,64 @@
+import ImbalancedChen.P5U7OriginalOmegaIntegral
+
+set_option pp.all true
+
+#check ImbalancedChen.p5U7OmegaSupport
+#print axioms ImbalancedChen.p5U7OmegaSupport
+#check ImbalancedChen.p5U7OmegaClosedSupport
+#print axioms ImbalancedChen.p5U7OmegaClosedSupport
+#check ImbalancedChen.p5U7OmegaArgument
+#print axioms ImbalancedChen.p5U7OmegaArgument
+#check ImbalancedChen.p5U7Omega_closed_geometry
+#print axioms ImbalancedChen.p5U7Omega_closed_geometry
+#check ImbalancedChen.p5U7Omega_strict_geometry
+#print axioms ImbalancedChen.p5U7Omega_strict_geometry
+#check ImbalancedChen.p5U7Omega_maximum_attained
+#print axioms ImbalancedChen.p5U7Omega_maximum_attained
+#check ImbalancedChen.p5U7Omega_argument_le_two_iff
+#print axioms ImbalancedChen.p5U7Omega_argument_le_two_iff
+#check ImbalancedChen.p5U7Omega_argument_gt_two_iff
+#print axioms ImbalancedChen.p5U7Omega_argument_gt_two_iff
+#check ImbalancedChen.p5U7Omega_strict_segment_partition
+#print axioms ImbalancedChen.p5U7Omega_strict_segment_partition
+#check ImbalancedChen.p5U7Omega_closed_support_iff_nested
+#print axioms ImbalancedChen.p5U7Omega_closed_support_iff_nested
+#check ImbalancedChen.p5U7Omega_second_segment_outer_lt_quarter
+#print axioms ImbalancedChen.p5U7Omega_second_segment_outer_lt_quarter
+#check ImbalancedChen.p5U7Omega_argument_at_split
+#print axioms ImbalancedChen.p5U7Omega_argument_at_split
+#check ImbalancedChen.p5U7Omega_buchstab_first
+#print axioms ImbalancedChen.p5U7Omega_buchstab_first
+#check ImbalancedChen.p5U7Omega_buchstab_second
+#print axioms ImbalancedChen.p5U7Omega_buchstab_second
+#check ImbalancedChen.p5U7OmegaKernel
+#print axioms ImbalancedChen.p5U7OmegaKernel
+#check ImbalancedChen.p5U7OmegaFirstKernel
+#print axioms ImbalancedChen.p5U7OmegaFirstKernel
+#check ImbalancedChen.p5U7OmegaSecondKernel
+#print axioms ImbalancedChen.p5U7OmegaSecondKernel
+#check ImbalancedChen.p5U7Omega_kernel_first
+#print axioms ImbalancedChen.p5U7Omega_kernel_first
+#check ImbalancedChen.p5U7Omega_kernel_second
+#print axioms ImbalancedChen.p5U7Omega_kernel_second
+#check ImbalancedChen.p5U7Omega_kernels_agree_at_split
+#print axioms ImbalancedChen.p5U7Omega_kernels_agree_at_split
+#check ImbalancedChen.p5U7Omega_kernel_nonneg
+#print axioms ImbalancedChen.p5U7Omega_kernel_nonneg
+#check ImbalancedChen.p5U7Omega_kernel_continuousOn_positive
+#print axioms ImbalancedChen.p5U7Omega_kernel_continuousOn_positive
+#check ImbalancedChen.p5U7Omega_kernel_continuousOn_closed
+#print axioms ImbalancedChen.p5U7Omega_kernel_continuousOn_closed
+#check ImbalancedChen.p5U7Omega_row_intervalIntegrable
+#print axioms ImbalancedChen.p5U7Omega_row_intervalIntegrable
+#check ImbalancedChen.p5U7OriginalOmegaIntegral
+#print axioms ImbalancedChen.p5U7OriginalOmegaIntegral
+#check ImbalancedChen.p5U7OriginalElementaryIntegral
+#print axioms ImbalancedChen.p5U7OriginalElementaryIntegral
+#check ImbalancedChen.p5U7OriginalOmegaIntegral_eq_elementary
+#print axioms ImbalancedChen.p5U7OriginalOmegaIntegral_eq_elementary
+#check ImbalancedChen.p5U7CurrentOriginalOmegaIntegral
+#print axioms ImbalancedChen.p5U7CurrentOriginalOmegaIntegral
+#check ImbalancedChen.p5U7CurrentOriginalOmegaIntegral_dictionary
+#print axioms ImbalancedChen.p5U7CurrentOriginalOmegaIntegral_dictionary
+#check ImbalancedChen.p5U7CurrentOmega_kernel_nonneg
+#print axioms ImbalancedChen.p5U7CurrentOmega_kernel_nonneg
