@@ -1,0 +1,79 @@
+✖ [3005/3005] Building ImbalancedChen.RenewalFiniteErrorPropagationP5 (18s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/RenewalFiniteErrorPropagationP5.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/RenewalFiniteErrorPropagationP5.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/RenewalFiniteErrorPropagationP5.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/RenewalFiniteErrorPropagationP5.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/RenewalFiniteErrorPropagationP5.setup.json --json
+error: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:54:2: linarith failed to find a contradiction
+State : Type u_1
+Act : Type u_2
+Atom : Type u_3
+atoms : Act → Finset Atom
+child : Act → Atom → State
+base : Act → ℝ
+weight : Act → Atom → ℝ
+X Y : State → ℝ
+a : Act
+E : ℝ
+hE : 0 ≤ E
+hw : ∀ i ∈ atoms a, 0 ≤ weight a i
+hmass : ∑ i ∈ atoms a, weight a i ≤ 12
+hXY : ∀ (s : State), X s ≤ Y s + E
+hmassE : (∑ i ∈ atoms a, weight a i) * E ≤ 12 * E
+hsum :
+  ∑ i ∈ atoms a, weight a i * X (child a i) ≤ ∑ x ∈ atoms a, weight a x * Y (child a x) + ∑ x ∈ atoms a, weight a x * E
+a✝ : base a + ∑ i ∈ atoms a, weight a i * Y (child a i) + 12 * E < base a + ∑ i ∈ atoms a, weight a i * X (child a i)
+⊢ False
+failed
+warning: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:52:46: This simp argument is unused:
+  Finset.sum_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mul_add, Finset.sum_add_distrib] at hsum
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:92:6: Type mismatch
+  add_le_add_left (Finset.abs_sum_le_sum_abs ?m.137 ?m.138) ?m.139
+has type
+  |∑ i ∈ ?m.138, ?m.137 i| + ?m.139 ≤ ∑ i ∈ ?m.138, |?m.137 i| + ?m.139
+but is expected to have type
+  |baseA a - baseB a| + |∑ i ∈ atoms a, (weightA a i - weightB a i) * Y (child a i)| ≤
+    |baseA a - baseB a| + ∑ i ∈ atoms a, |(weightA a i - weightB a i) * Y (child a i)|
+error: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:138:25: Function expected at
+  List.mem_cons_self
+but this term has type
+  ?m.60 ∈ ?m.60 :: ?m.61
+
+Note: Expected a function because this term is being applied to the argument
+  _
+error: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:143:18: Application type mismatch: The argument
+  add_le_add_right (le_max_right ?m.113 ?m.114) ?m.115
+has type
+  ?m.115 + ?m.114 ≤ ?m.115 + max ?m.113 ?m.114
+but is expected to have type
+  valueB a + E ≤ max (maxActions target oldB valueB bank s) (valueB a) + E
+in the application
+  LE.le.trans ha (add_le_add_right (le_max_right ?m.113 ?m.114) ?m.115)
+info: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:266:6: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+error: ImbalancedChen/RenewalFiniteErrorPropagationP5.lean:263:90: unsolved goals
+X : Fin 11 → ℝ
+⊢ X 0 * (3 / 4) + X 1 * (1 / 4) + X 2 * (-1 / 4) + X 3 * (-1 / 4) + X 4 * (1 / 4) + X 5 * (1 / 4) + X 6 * (-1 / 2) +
+            X 7 * (-1 / 4) +
+          X 8 * (-1 / 4) +
+        X 9 * (-1 / 4) +
+      X 10 * (-1 / 4) =
+    X 0 * (3 / 4) + X 1 * (1 / 4) +
+                      X 2 * ![3 / 4, 1 / 4, -1 / 4, -1 / 4, 1 / 4, 1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 +
+                    ![1 / 4, -1 / 4, -1 / 4, 1 / 4, 1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2) +
+                  ![-1 / 4, -1 / 4, 1 / 4, 1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ +
+                ![-1 / 4, 1 / 4, 1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ +
+              ![1 / 4, 1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ.succ +
+            ![1 / 4, -1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ.succ.succ +
+          ![-1 / 2, -1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ.succ.succ.succ +
+        ![-1 / 4, -1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ.succ.succ.succ.succ +
+      ![-1 / 4, -1 / 4, -1 / 4] 2 * X (Fin.succ 2).succ.succ.succ.succ.succ.succ.succ
+error: Lean exited with code 1
+Some required targets logged failures:
+- ImbalancedChen.RenewalFiniteErrorPropagationP5
+error: build failed

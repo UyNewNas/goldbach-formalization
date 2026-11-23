@@ -1,0 +1,20 @@
+--- before/ImbalancedChen/P2BuchstabRationalSemantics.lean
++++ after/ImbalancedChen/P2BuchstabRationalSemantics.lean
+@@ -247,7 +247,7 @@
+   [⟨1, 1⟩, ⟨1, 1⟩, ⟨1, 1⟩, ⟨4 / 3, 3 / 2⟩, ⟨19 / 12, 11 / 6⟩]
+ 
+ theorem halfMeshSeed_checked : check 2 halfMeshSeed = true := by
+-  decide
++  decide +kernel
+ 
+ noncomputable section
+ 
+@@ -382,7 +382,7 @@
+   have hscaled : (S : ℝ) * buchstab s ≤ (num : ℝ) := by
+     have hmul := (le_div_iff₀ hs₀).mp hcell
+     have hp := mul_le_mul_of_nonneg_left hmul hSR.le
+-    apply (mul_le_mul_iff_right₀ hs₀).mp
++    apply (mul_le_mul_iff_left₀ hs₀).mp
+     calc
+       (S : ℝ) * buchstab s * s = (S : ℝ) * (buchstab s * s) := by ring
+       _ ≤ (S : ℝ) * ((entry cs (k + 1)).upper : ℝ) := hp

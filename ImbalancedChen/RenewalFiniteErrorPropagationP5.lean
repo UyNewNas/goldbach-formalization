@@ -1,7 +1,7 @@
-import Mathlib.Data.Matrix.Notation
+import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic
 
-/-! Source-only, uncompiled. Concrete finite atom sums and retention maxima
+/-! Verification records: docs/verification/20261123-blue-compilation. Concrete finite atom sums and retention maxima
 for common-refinement error propagation. The hypotheses concern literal atom
 weights and their local coefficient errors, never final H/h soundness.
 For the adopted action bank the nonnegative atom masses and their <=12 bound
@@ -49,7 +49,7 @@ theorem actionValue_oriented (atoms : Act → Finset Atom) (child : Act → Atom
   have hsum := Finset.sum_le_sum (s := atoms a) (fun i hi =>
     mul_le_mul_of_nonneg_left (hXY (child a i)) (hw i hi))
   have hmassE := mul_le_mul_of_nonneg_right hmass hE
-  simp only [mul_add, Finset.sum_add_distrib, Finset.sum_mul] at hsum
+  simp only [mul_add, Finset.sum_add_distrib, ← Finset.sum_mul] at hsum
   unfold actionValue
   linarith only [hsum, hmassE]
 
@@ -89,7 +89,7 @@ theorem actionValue_coefficient_error
     _ ≤ |baseA a - baseB a| + |∑ i ∈ atoms a, (weightA a i - weightB a i) * Y (child a i)| :=
       abs_add_le _ _
     _ ≤ |baseA a - baseB a| + ∑ i ∈ atoms a, |(weightA a i - weightB a i) * Y (child a i)| :=
-      add_le_add_left (Finset.abs_sum_le_sum_abs _ _) _
+      add_le_add le_rfl (Finset.abs_sum_le_sum_abs _ _)
     _ = _ := by simp only [localBudget, abs_mul]
 
 /-- Local coefficient and inherited table errors add once per generation. -/
@@ -135,12 +135,12 @@ theorem maxActions_oriented (target : Act → State) (oldA oldB : State → ℝ)
   | cons a bank ih =>
     intro hvalue s
     have htail := ih (fun b hb => hvalue b (List.mem_cons_of_mem _ hb)) s
-    have ha := hvalue a (List.mem_cons_self _ _)
+    have ha := hvalue a List.mem_cons_self
     simp only [maxActions]
     split_ifs
     · exact max_le
-        (htail.trans (add_le_add_right (le_max_left _ _) _))
-        (ha.trans (add_le_add_right (le_max_right _ _) _))
+        (htail.trans (add_le_add (le_max_left _ _) le_rfl))
+        (ha.trans (add_le_add (le_max_right _ _) le_rfl))
     · exact htail
 
 theorem maxActions_lipschitz (target : Act → State) (oldA oldB : State → ℝ)
@@ -262,7 +262,8 @@ def rootCoefficient : Fin 11 → ℝ :=
 
 theorem rootValue_eq_sum (X : Fin 11 → ℝ) : rootValue X = ∑ i, rootCoefficient i * X i := by
   simp only [rootValue, rootCoefficient, Fin.sum_univ_succ]
-  norm_num
+  norm_num [Matrix.vecCons, Fin.cons, Fin.cases, Fin.succ]
+  <;> simp only [Fin.reduceFinMk]
   <;> ring
 
 theorem rootCoefficient_norm : (∑ i : Fin 11, |rootCoefficient i|) = (7 / 2 : ℝ) := by

@@ -1,0 +1,256 @@
+{
+  "schema": "member_renewal_api_proof_candidates_v1",
+  "captured_utc": "2026-11-23T13:39:31.569866+00:00",
+  "status": "CANDIDATE_ONLY_UNCOMPILED_NO_THEOREM_CREDIT",
+  "actual_source_edits": 0,
+  "Lean_Lake_compiler_invocations": 0,
+  "source": "/workspace/blue-member-build/ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+  "baseline_sha256": "f8871a1e8b61fbbdcaa04b4501d3b83cd2647df20499efd07f7cf02d22fd3d43",
+  "candidate_sha256": "50524992c998196057aa069596249168b7c7e2afb2ce2468553d07efefacc431",
+  "baseline_bytes": 18068,
+  "candidate_bytes": 18082,
+  "baseline_EOL": {
+    "CRLF": 0,
+    "LF": 338
+  },
+  "candidate_EOL": {
+    "CRLF": 0,
+    "LF": 338
+  },
+  "all_nonproof_bytes_exact": true,
+  "all_headers": [
+    {
+      "name": "actionValue_sub_same",
+      "private": false,
+      "header": "theorem actionValue_sub_same (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ) (a : Act) :\n    actionValue atoms child base weight X a - actionValue atoms child base weight Y a =\n      ∑ i ∈ atoms a, weight a i * (X (child a i) - Y (child a i)) :=",
+      "sha256": "3841028c112c358773e00716ebf4729b14bf4e50ad36b3939407646a92737a83"
+    },
+    {
+      "name": "actionValue_oriented",
+      "private": false,
+      "header": "theorem actionValue_oriented (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ)\n    (a : Act) (E : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weight a i) (hmass : (∑ i ∈ atoms a, weight a i) ≤ 12)\n    (hXY : ∀ s, X s ≤ Y s + E) :\n    actionValue atoms child base weight X a ≤ actionValue atoms child base weight Y a + 12 * E :=",
+      "sha256": "f731b4d0295596bd05bcc629c0f43a18decc6b51ddd25438881baf7576c61e7c"
+    },
+    {
+      "name": "actionValue_lipschitz",
+      "private": false,
+      "header": "theorem actionValue_lipschitz (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ)\n    (a : Act) (E : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weight a i) (hmass : (∑ i ∈ atoms a, weight a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E) :\n    |actionValue atoms child base weight X a - actionValue atoms child base weight Y a| ≤ 12 * E :=",
+      "sha256": "51caf1774ceaab1dabd9262f24ebd02d5b254278c067ccdfd6828605856a9952"
+    },
+    {
+      "name": "actionValue_coefficient_error",
+      "private": false,
+      "header": "theorem actionValue_coefficient_error\n    (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (Y : State → ℝ) (a : Act) :\n    |actionValue atoms child baseA weightA Y a - actionValue atoms child baseB weightB Y a| ≤\n      localBudget atoms child baseA baseB weightA weightB Y a :=",
+      "sha256": "38e257270ca601fbe8530c8e3f913fc98091aa0dd7b88ee0ebbd43f7e4f9e415"
+    },
+    {
+      "name": "actionValue_total_error",
+      "private": false,
+      "header": "theorem actionValue_total_error\n    (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (X Y : State → ℝ) (a : Act) (E delta : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weightA a i) (hmass : (∑ i ∈ atoms a, weightA a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E)\n    (hlocal : localBudget atoms child baseA baseB weightA weightB Y a ≤ delta) :\n    |actionValue atoms child baseA weightA X a - actionValue atoms child baseB weightB Y a| ≤\n      12 * E + delta :=",
+      "sha256": "b4c86a3ee70b3ae2d9ef54de5453ad0424e05892e05e59df28fc13ec395ea4ac"
+    },
+    {
+      "name": "maxActions_oriented",
+      "private": false,
+      "header": "theorem maxActions_oriented (target : Act → State) (oldA oldB : State → ℝ)\n    (valueA valueB : Act → ℝ) (bank : List Act) (E : ℝ)\n    (hold : ∀ s, oldA s ≤ oldB s + E)\n    (hvalue : ∀ a ∈ bank, valueA a ≤ valueB a + E) :\n    ∀ s, maxActions target oldA valueA bank s ≤ maxActions target oldB valueB bank s + E :=",
+      "sha256": "6112cedb54422880c59d4976bb37af9077a2b387ab4e0ab329b98f565b3108d4"
+    },
+    {
+      "name": "maxActions_lipschitz",
+      "private": false,
+      "header": "theorem maxActions_lipschitz (target : Act → State) (oldA oldB : State → ℝ)\n    (valueA valueB : Act → ℝ) (bank : List Act) (E : ℝ)\n    (hold : ∀ s, |oldA s - oldB s| ≤ E)\n    (hvalue : ∀ a ∈ bank, |valueA a - valueB a| ≤ E) :\n    ∀ s, |maxActions target oldA valueA bank s - maxActions target oldB valueB bank s| ≤ E :=",
+      "sha256": "4504f240d6bd8f0847206ee72115794e8d18c2b1c5ebb05b27ea4b837a7ea80f"
+    },
+    {
+      "name": "step_error",
+      "private": false,
+      "header": "theorem step_error (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (target : Act → State) (bank : List Act)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (X Y : State → ℝ) (E delta : ℝ) (hE : 0 ≤ E) (hdelta : 0 ≤ delta)\n    (hw : ∀ a ∈ bank, ∀ i ∈ atoms a, 0 ≤ weightA a i)\n    (hmass : ∀ a ∈ bank, (∑ i ∈ atoms a, weightA a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E)\n    (hlocal : ∀ a ∈ bank, localBudget atoms child baseA baseB weightA weightB Y a ≤ delta) :\n    ∀ s, |maxActions target X (actionValue atoms child baseA weightA X) bank s -\n      maxActions target Y (actionValue atoms child baseB weightB Y) bank s| ≤ 12 * E + delta :=",
+      "sha256": "6a973fb7c7a1d2443439147b3ec0fdfc0f0bf2deaa58d4b2eb604b64249cf838"
+    },
+    {
+      "name": "amplification_nonneg",
+      "private": false,
+      "header": "theorem amplification_nonneg (n : ℕ) : 0 ≤ amplification n :=",
+      "sha256": "3a20e56cd92dddc2b772664abd603d14bd9e5480339a7f46dfcefd2c41325d48"
+    },
+    {
+      "name": "amplification_succ_pos",
+      "private": false,
+      "header": "theorem amplification_succ_pos (n : ℕ) : 0 < amplification (n + 1) :=",
+      "sha256": "36305811d0cac50558bb74a98a7aa627c924a4172f858d3c51c37523664b70c9"
+    },
+    {
+      "name": "amplification_eq_geometric",
+      "private": false,
+      "header": "theorem amplification_eq_geometric (n : ℕ) : amplification n = ((12 : ℝ) ^ n - 1) / 11 :=",
+      "sha256": "5fe2ef1d7ea18b33b44ccf2cacd415cf01a529b00771279aa1b9f49b41ddb301"
+    },
+    {
+      "name": "iterate_error",
+      "private": false,
+      "header": "theorem iterate_error (atoms : ℕ → Act → Finset Atom) (child : ℕ → Act → Atom → State)\n    (target : ℕ → Act → State) (bank : ℕ → List Act)\n    (baseA baseB : ℕ → Act → ℝ) (weightA weightB : ℕ → Act → Atom → ℝ)\n    (seed : State → ℝ) (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hw : ∀ n a, a ∈ bank n → ∀ i ∈ atoms n a, 0 ≤ weightA n a i)\n    (hmass : ∀ n a, a ∈ bank n → (∑ i ∈ atoms n a, weightA n a i) ≤ 12)\n    (hlocal : ∀ n a, a ∈ bank n → localBudget (atoms n) (child n) (baseA n) (baseB n)\n      (weightA n) (weightB n) (iterate atoms child target bank baseB weightB seed n) a ≤ delta)\n    (n : ℕ) : ∀ s,\n      |iterate atoms child target bank baseA weightA seed n s -\n        iterate atoms child target bank baseB weightB seed n s| ≤ delta * amplification n :=",
+      "sha256": "9094a55a1bacc549e8b7b6711e0e3c4a64636e5d99d24747c099803c1e6df605"
+    },
+    {
+      "name": "depth_430_plus_11",
+      "private": false,
+      "header": "theorem depth_430_plus_11 : (430 : ℕ) + 11 = 441 :=",
+      "sha256": "9b6998a4b7667ceabe7a5cf5bb703fd86bc77116c77e418479755eafabd72a4f"
+    },
+    {
+      "name": "iterate_430_rounds_11_depth",
+      "private": false,
+      "header": "theorem iterate_430_rounds_11_depth\n    (atoms : ℕ → Act → Finset Atom) (child : ℕ → Act → Atom → State)\n    (target : ℕ → Act → State) (bank : ℕ → List Act)\n    (baseA baseB : ℕ → Act → ℝ) (weightA weightB : ℕ → Act → Atom → ℝ)\n    (seed : State → ℝ) (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hw : ∀ n a, a ∈ bank n → ∀ i ∈ atoms n a, 0 ≤ weightA n a i)\n    (hmass : ∀ n a, a ∈ bank n → (∑ i ∈ atoms n a, weightA n a i) ≤ 12)\n    (hlocal : ∀ n a, a ∈ bank n → localBudget (atoms n) (child n) (baseA n) (baseB n)\n      (weightA n) (weightB n) (iterate atoms child target bank baseB weightB seed n) a ≤ delta) :\n    ∀ s,\n      |iterate atoms child target bank baseA weightA seed (430 + 11) s -\n        iterate atoms child target bank baseB weightB seed (430 + 11) s| ≤\n          delta * (((12 : ℝ) ^ 441 - 1) / 11) :=",
+      "sha256": "83dbce47a29d5f85f6342f504d96f30d4026d2fdb2ef04481c2e91849a719584"
+    },
+    {
+      "name": "rootValue_eq_sum",
+      "private": false,
+      "header": "theorem rootValue_eq_sum (X : Fin 11 → ℝ) : rootValue X = ∑ i, rootCoefficient i * X i :=",
+      "sha256": "b72e38656dc690211a8ba7568b5188a091d48247fb27bb6404b18d2114ee05e8"
+    },
+    {
+      "name": "rootCoefficient_norm",
+      "private": false,
+      "header": "theorem rootCoefficient_norm : (∑ i : Fin 11, |rootCoefficient i|) = (7 / 2 : ℝ) :=",
+      "sha256": "8ec93541f3de9fe3d51e5db63bc91ac29c5997be791d5e875d34599422671bf8"
+    },
+    {
+      "name": "rootValue_lipschitz",
+      "private": false,
+      "header": "theorem rootValue_lipschitz (X Y : Fin 11 → ℝ) (E : ℝ) (_hE : 0 ≤ E)\n    (hXY : ∀ i, |X i - Y i| ≤ E) : |rootValue X - rootValue Y| ≤ (7 / 2 : ℝ) * E :=",
+      "sha256": "b4f77fed62abdb56b2d83ae6d940ea7bcb1844402ffb2b8264c9aedf057389a6"
+    },
+    {
+      "name": "rootValue_oriented",
+      "private": false,
+      "header": "theorem rootValue_oriented (X Y : Fin 11 → ℝ) (E : ℝ)\n    (hplus : ∀ i, 0 ≤ rootCoefficient i → X i ≤ Y i + E)\n    (hminus : ∀ i, rootCoefficient i < 0 → Y i ≤ X i + E) :\n    rootValue X ≤ rootValue Y + (7 / 2 : ℝ) * E :=",
+      "sha256": "061eb1c2932e48d0ac3ffd63e3f1244224108ec3e045de908eb356c89f80475f"
+    },
+    {
+      "name": "exists_local_reserve",
+      "private": false,
+      "header": "theorem exists_local_reserve (reserve deltaMax : ℝ) (hreserve : 0 < reserve)\n    (hdeltaMax : 0 < deltaMax) :\n    ∃ delta : ℝ, 0 < delta ∧ delta < deltaMax ∧\n      (7 / 2 : ℝ) * (delta * (((12 : ℝ) ^ 441 - 1) / 11)) < reserve :=",
+      "sha256": "6d38444b1d965f3fdcc7a8fbfaa34452b534ce012d74b5653f4b298a54de7221"
+    },
+    {
+      "name": "root_reserve_of_entry_errors",
+      "private": false,
+      "header": "theorem root_reserve_of_entry_errors\n    (X Y : Fin 11 → ℝ) (reserve delta : ℝ) (hdelta : 0 ≤ delta)\n    (hentry : ∀ i, |X i - Y i| ≤ delta * amplification 441)\n    (hreserve : (7 / 2 : ℝ) * (delta * (((12 : ℝ) ^ 441 - 1) / 11)) < reserve) :\n    |rootValue X - rootValue Y| < reserve :=",
+      "sha256": "57aa24417717b42a93b5cb51f799bc71a464e28f13183a4f9cdf82c675b5c64a"
+    }
+  ],
+  "public_theorems": 20,
+  "private_theorems": 0,
+  "changed_proofs": [
+    "actionValue_oriented",
+    "actionValue_coefficient_error",
+    "maxActions_oriented",
+    "rootValue_eq_sum"
+  ],
+  "defs_constants_hypotheses_imports_changed": false,
+  "actual_relationships_snapshot": {
+    "goldbach-formalization": {
+      "exists": true,
+      "sha256": "f8871a1e8b61fbbdcaa04b4501d3b83cd2647df20499efd07f7cf02d22fd3d43",
+      "matches_candidate_baseline": true
+    },
+    "blue-member-build": {
+      "exists": true,
+      "sha256": "f8871a1e8b61fbbdcaa04b4501d3b83cd2647df20499efd07f7cf02d22fd3d43",
+      "matches_candidate_baseline": true
+    },
+    "blue-p6-build": {
+      "exists": false
+    }
+  },
+  "published_search": {
+    "scope": "All available refs only exact Renewal source path. No global history/cache audit.",
+    "source_variants": [
+      {
+        "blob": "2e710506c6a786dad2d47ab041646d1724f54217",
+        "sha256": "804709bc71b85ce677a585c1dbe6e9d90527eb40befad03f99214e7b6a0eeadd",
+        "proofs_contain_same_failures": true
+      },
+      {
+        "blob": "7497cbcf6f181bee0be69d0f5b42f869f5ca73e4",
+        "sha256": "aac9e9d6b08075670426bafd5a45d5be254145df84ce486ce3403108705abff8",
+        "proofs_contain_same_failures": true
+      }
+    ],
+    "difference_between_published_variants": "Only import Matrix.Notation -> Fin.VecNotation (ba1b4b49b4c144003a37478880a0b4f0d8ac9bab). Neither provides fixed proof bodies. Current baseline additionally carries owner-authorized neutral status record.",
+    "fixed_proof_alternative_found": false
+  },
+  "diagnosis": [
+    {
+      "theorem": "actionValue_oriented",
+      "source_line": 52,
+      "issue": "Forward sum_mul is unused on a sum of weight*E, leaving linarith unable to connect hmassE.",
+      "candidate": "Reverse Finset.sum_mul before existing linarith; same reverse direction already used by actionValue_lipschitz."
+    },
+    {
+      "theorem": "actionValue_coefficient_error",
+      "source_line": 92,
+      "issue": "Current add_le_add_left gives sum+c but target is c+sum.",
+      "candidate": "Generic add_le_add le_rfl abs_sum_bound."
+    },
+    {
+      "theorem": "maxActions_oriented",
+      "source_lines": [
+        138,
+        142,
+        143
+      ],
+      "issues": [
+        "List.mem_cons_self is a proof, not a function with2 arguments.",
+        "Current add_le_add_right gives E+term while target is term+E."
+      ],
+      "candidate": "Use mem_cons_self directly; generic add_le_add max_bound le_rfl in both max arms."
+    },
+    {
+      "theorem": "rootValue_eq_sum",
+      "source_lines": [
+        264,
+        265,
+        266
+      ],
+      "issue": "Finite root expansion leaves numeral-indexed vecCons terms at index2; ring sees unevaluated coefficients.",
+      "candidate": "norm_num [Matrix.cons_val] explicitly enables existing numeral evaluator.",
+      "pinned_API": "Mathlib/Data/Fin/VecNotation.lean186-219 defines dsimproc Matrix.cons_val; explicit uses in Mathlib/Data/Nat/Choose/Multinomial.lean184 and AlgebraicGeometry/EllipticCurve/Affine/AddSubMap.lean88."
+    }
+  ],
+  "classification": "Formalization rewrite orientation, ordered-add API, proof-term arity and vector evaluator registration; no local mathematical gap found.",
+  "manuscript": {
+    "release": "1106",
+    "file": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+    "lines": "717-730",
+    "content": "430 preceding-generation rounds, transition mass<=12, root norm<=7/2, local delta(12^441-1)/11, common nested refinement and local reserve.",
+    "preserved_constants": [
+      "200",
+      "12",
+      "430",
+      "11",
+      "441",
+      "7/2",
+      "2"
+    ],
+    "scope_caveat": "No original action-mass certificates, final table soundness or analytic supplier added; hw/hmass/hlocal hypotheses exact."
+  },
+  "patch": {
+    "path": "/workspace/blue-member-static-renewal/candidate.patch",
+    "sha256": "3e142a3dd47ba316b0179ece7a57c9e4c292e2365722112bf9f3e93de41ef028",
+    "check": {
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "/workspace/blue-member-static-renewal/candidate.patch"
+      ],
+      "cwd": "/workspace/blue-member-static-renewal/apply-check",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "owner_handoff": "Only manuscript_inventory applies proof overlays and runs normal/kernel/all-public; recheck exact f887 baseline first. No source selection/import changes proposed."
+}

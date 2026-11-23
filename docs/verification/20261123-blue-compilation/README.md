@@ -116,4 +116,6 @@ Member 第八批 `ActualFrozenSlotCoefficientRegrouping` 完整复用已发表 `
 
 Member 第七批 `P2EnhancedSortedDwellMerge` 通过标准构建、指定模块 kernel replay 与全部 14 个公开导出的完整类型／公理检查，仅标准三公理，源码和五项主要产物稳定。`cast_insertNth` 原声明无法推断 dependent family，现显式标注原常值自然数／实数 family；原 `q`、`v`、索引和 cast equality 意图保持，旧未 elaboration 的声明不声称已有相同 kernel 类型。其余修补为 β 展开、现有 `Fin.comp_cons` 和长度 API，原定义、标签、置换、Q／B 与常量保持。独立复核按顶层 `:=` 比较完整源码声明头，避免嵌套参数 `α :=` 截断，见 [验收结果](member-repair-batch7/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch7/INDEPENDENT_REVIEW.json)。
 
+Member 的 Renewal／Rational 两模块先将已不存在的 Mathlib imports 分别改为当前固定版本的 `Mathlib.Data.Fin.VecNotation` 和内置 `Lean.Elab.Tactic.Omega`，随后修补实际暴露的证明 API：有限和、序不等式方向、Fin 11 向量展开，以及原小 seed 的 kernel 决定过程与乘法消去名称。两个标准构建、两个指定模块 kernel replay 和全部 120 个实际公开导出（63、57）的完整类型／公理检查通过，仅标准三公理，源码及十项主要产物稳定。原完整声明头、定义、数值和假设保持；原 obsolete-import 失败、Renewal 四次失败和 Rational 一次失败的源码及日志均保留，没有把 import-only 中间版本记为通过。见 [验收结果](member-import-repair/VALIDATION_RESULTS.json) 和 [独立复核](member-import-repair/INDEPENDENT_REVIEW.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

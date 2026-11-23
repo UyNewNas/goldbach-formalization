@@ -1,0 +1,646 @@
+{
+  "schema": "member_importpair_independent_readonly_source_evidence_review_v1",
+  "reviewer": "/root/blue_inventory",
+  "reviewed_utc": "2026-11-23T14:09:58.611903+00:00",
+  "reviewer_implemented_these_repairs": false,
+  "result": "PASS_NO_SUBSTANTIVE_FINDINGS",
+  "blocking_findings": [],
+  "nonblocking_findings": [],
+  "scope": "Independent static proof-delta, declaration/definition/data preservation, existing-source provenance, frozen1106 manuscript roles, original failures and existing validation evidence consistency; no new Lean/kernel/type/axiom or cache qualification run.",
+  "reviewed_input_manifests": {
+    "FINAL_RELEASE.json": {
+      "path": "/workspace/blue-member-import-repair/FINAL_RELEASE.json",
+      "bytes": 1328,
+      "sha256": "8a58c7de87ef723831768697802f25b3c6cf30d4f2cc24f4ff72cadc4e08d48b"
+    },
+    "PUBLICATION_FILES.json": {
+      "path": "/workspace/blue-member-import-repair/PUBLICATION_FILES.json",
+      "bytes": 14538,
+      "sha256": "e575869a9342901b6cd597f7182e22595dc3ba253e9ad26bcaafac3fba0344f9"
+    },
+    "VALIDATION_RESULTS.json": {
+      "path": "/workspace/blue-member-import-repair/VALIDATION_RESULTS.json",
+      "bytes": 7117,
+      "sha256": "0796572ba1c01268f89d06e1f70b62c736bab034225a44f6be2bac5011d34049"
+    },
+    "SOURCE_SELECTION.json": {
+      "path": "/workspace/blue-member-import-repair/SOURCE_SELECTION.json",
+      "bytes": 7221,
+      "sha256": "c142bc70511c8bc7432ad695dfc14abe9c4476113684627d2cef4ad57a2bef41"
+    }
+  },
+  "publication_files_checked": 77,
+  "all_publication_size_sha256_bindings_pass": true,
+  "modules": [
+    {
+      "module": "ImbalancedChen.RenewalFiniteErrorPropagationP5",
+      "baseline_source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/baseline.lean",
+        "bytes": 18026,
+        "sha256": "804709bc71b85ce677a585c1dbe6e9d90527eb40befad03f99214e7b6a0eeadd"
+      },
+      "baseline_matches_exact_published_git": {
+        "commit": "9d82fafcdaa7d0706064d3df94072adf1be28c73",
+        "path": "ImbalancedChen/RenewalFiniteErrorPropagationP5.lean"
+      },
+      "postimage_source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/candidate.lean",
+        "bytes": 18146,
+        "sha256": "2120c44adb22911d5fe31f3985ec4465f61da8a79bc2862051e7ccfcc645c32a"
+      },
+      "main_member_postimage_bytes_exact": true,
+      "all_public_private_theorem_headers_byte_exact": true,
+      "public_theorem_count": 20,
+      "private_theorem_count": 0,
+      "header_records": [
+        {
+          "name": "actionValue_sub_same",
+          "private": false,
+          "sha256": "3841028c112c358773e00716ebf4729b14bf4e50ad36b3939407646a92737a83",
+          "header": "theorem actionValue_sub_same (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ) (a : Act) :\n    actionValue atoms child base weight X a - actionValue atoms child base weight Y a =\n      ∑ i ∈ atoms a, weight a i * (X (child a i) - Y (child a i)) :="
+        },
+        {
+          "name": "actionValue_oriented",
+          "private": false,
+          "sha256": "f731b4d0295596bd05bcc629c0f43a18decc6b51ddd25438881baf7576c61e7c",
+          "header": "theorem actionValue_oriented (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ)\n    (a : Act) (E : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weight a i) (hmass : (∑ i ∈ atoms a, weight a i) ≤ 12)\n    (hXY : ∀ s, X s ≤ Y s + E) :\n    actionValue atoms child base weight X a ≤ actionValue atoms child base weight Y a + 12 * E :="
+        },
+        {
+          "name": "actionValue_lipschitz",
+          "private": false,
+          "sha256": "51caf1774ceaab1dabd9262f24ebd02d5b254278c067ccdfd6828605856a9952",
+          "header": "theorem actionValue_lipschitz (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (base : Act → ℝ) (weight : Act → Atom → ℝ) (X Y : State → ℝ)\n    (a : Act) (E : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weight a i) (hmass : (∑ i ∈ atoms a, weight a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E) :\n    |actionValue atoms child base weight X a - actionValue atoms child base weight Y a| ≤ 12 * E :="
+        },
+        {
+          "name": "actionValue_coefficient_error",
+          "private": false,
+          "sha256": "38e257270ca601fbe8530c8e3f913fc98091aa0dd7b88ee0ebbd43f7e4f9e415",
+          "header": "theorem actionValue_coefficient_error\n    (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (Y : State → ℝ) (a : Act) :\n    |actionValue atoms child baseA weightA Y a - actionValue atoms child baseB weightB Y a| ≤\n      localBudget atoms child baseA baseB weightA weightB Y a :="
+        },
+        {
+          "name": "actionValue_total_error",
+          "private": false,
+          "sha256": "b4c86a3ee70b3ae2d9ef54de5453ad0424e05892e05e59df28fc13ec395ea4ac",
+          "header": "theorem actionValue_total_error\n    (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (X Y : State → ℝ) (a : Act) (E delta : ℝ) (hE : 0 ≤ E)\n    (hw : ∀ i ∈ atoms a, 0 ≤ weightA a i) (hmass : (∑ i ∈ atoms a, weightA a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E)\n    (hlocal : localBudget atoms child baseA baseB weightA weightB Y a ≤ delta) :\n    |actionValue atoms child baseA weightA X a - actionValue atoms child baseB weightB Y a| ≤\n      12 * E + delta :="
+        },
+        {
+          "name": "maxActions_oriented",
+          "private": false,
+          "sha256": "6112cedb54422880c59d4976bb37af9077a2b387ab4e0ab329b98f565b3108d4",
+          "header": "theorem maxActions_oriented (target : Act → State) (oldA oldB : State → ℝ)\n    (valueA valueB : Act → ℝ) (bank : List Act) (E : ℝ)\n    (hold : ∀ s, oldA s ≤ oldB s + E)\n    (hvalue : ∀ a ∈ bank, valueA a ≤ valueB a + E) :\n    ∀ s, maxActions target oldA valueA bank s ≤ maxActions target oldB valueB bank s + E :="
+        },
+        {
+          "name": "maxActions_lipschitz",
+          "private": false,
+          "sha256": "4504f240d6bd8f0847206ee72115794e8d18c2b1c5ebb05b27ea4b837a7ea80f",
+          "header": "theorem maxActions_lipschitz (target : Act → State) (oldA oldB : State → ℝ)\n    (valueA valueB : Act → ℝ) (bank : List Act) (E : ℝ)\n    (hold : ∀ s, |oldA s - oldB s| ≤ E)\n    (hvalue : ∀ a ∈ bank, |valueA a - valueB a| ≤ E) :\n    ∀ s, |maxActions target oldA valueA bank s - maxActions target oldB valueB bank s| ≤ E :="
+        },
+        {
+          "name": "step_error",
+          "private": false,
+          "sha256": "6a973fb7c7a1d2443439147b3ec0fdfc0f0bf2deaa58d4b2eb604b64249cf838",
+          "header": "theorem step_error (atoms : Act → Finset Atom) (child : Act → Atom → State)\n    (target : Act → State) (bank : List Act)\n    (baseA baseB : Act → ℝ) (weightA weightB : Act → Atom → ℝ)\n    (X Y : State → ℝ) (E delta : ℝ) (hE : 0 ≤ E) (hdelta : 0 ≤ delta)\n    (hw : ∀ a ∈ bank, ∀ i ∈ atoms a, 0 ≤ weightA a i)\n    (hmass : ∀ a ∈ bank, (∑ i ∈ atoms a, weightA a i) ≤ 12)\n    (hXY : ∀ s, |X s - Y s| ≤ E)\n    (hlocal : ∀ a ∈ bank, localBudget atoms child baseA baseB weightA weightB Y a ≤ delta) :\n    ∀ s, |maxActions target X (actionValue atoms child baseA weightA X) bank s -\n      maxActions target Y (actionValue atoms child baseB weightB Y) bank s| ≤ 12 * E + delta :="
+        },
+        {
+          "name": "amplification_nonneg",
+          "private": false,
+          "sha256": "3a20e56cd92dddc2b772664abd603d14bd9e5480339a7f46dfcefd2c41325d48",
+          "header": "theorem amplification_nonneg (n : ℕ) : 0 ≤ amplification n :="
+        },
+        {
+          "name": "amplification_succ_pos",
+          "private": false,
+          "sha256": "36305811d0cac50558bb74a98a7aa627c924a4172f858d3c51c37523664b70c9",
+          "header": "theorem amplification_succ_pos (n : ℕ) : 0 < amplification (n + 1) :="
+        },
+        {
+          "name": "amplification_eq_geometric",
+          "private": false,
+          "sha256": "5fe2ef1d7ea18b33b44ccf2cacd415cf01a529b00771279aa1b9f49b41ddb301",
+          "header": "theorem amplification_eq_geometric (n : ℕ) : amplification n = ((12 : ℝ) ^ n - 1) / 11 :="
+        },
+        {
+          "name": "iterate_error",
+          "private": false,
+          "sha256": "9094a55a1bacc549e8b7b6711e0e3c4a64636e5d99d24747c099803c1e6df605",
+          "header": "theorem iterate_error (atoms : ℕ → Act → Finset Atom) (child : ℕ → Act → Atom → State)\n    (target : ℕ → Act → State) (bank : ℕ → List Act)\n    (baseA baseB : ℕ → Act → ℝ) (weightA weightB : ℕ → Act → Atom → ℝ)\n    (seed : State → ℝ) (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hw : ∀ n a, a ∈ bank n → ∀ i ∈ atoms n a, 0 ≤ weightA n a i)\n    (hmass : ∀ n a, a ∈ bank n → (∑ i ∈ atoms n a, weightA n a i) ≤ 12)\n    (hlocal : ∀ n a, a ∈ bank n → localBudget (atoms n) (child n) (baseA n) (baseB n)\n      (weightA n) (weightB n) (iterate atoms child target bank baseB weightB seed n) a ≤ delta)\n    (n : ℕ) : ∀ s,\n      |iterate atoms child target bank baseA weightA seed n s -\n        iterate atoms child target bank baseB weightB seed n s| ≤ delta * amplification n :="
+        },
+        {
+          "name": "depth_430_plus_11",
+          "private": false,
+          "sha256": "9b6998a4b7667ceabe7a5cf5bb703fd86bc77116c77e418479755eafabd72a4f",
+          "header": "theorem depth_430_plus_11 : (430 : ℕ) + 11 = 441 :="
+        },
+        {
+          "name": "iterate_430_rounds_11_depth",
+          "private": false,
+          "sha256": "83dbce47a29d5f85f6342f504d96f30d4026d2fdb2ef04481c2e91849a719584",
+          "header": "theorem iterate_430_rounds_11_depth\n    (atoms : ℕ → Act → Finset Atom) (child : ℕ → Act → Atom → State)\n    (target : ℕ → Act → State) (bank : ℕ → List Act)\n    (baseA baseB : ℕ → Act → ℝ) (weightA weightB : ℕ → Act → Atom → ℝ)\n    (seed : State → ℝ) (delta : ℝ) (hdelta : 0 ≤ delta)\n    (hw : ∀ n a, a ∈ bank n → ∀ i ∈ atoms n a, 0 ≤ weightA n a i)\n    (hmass : ∀ n a, a ∈ bank n → (∑ i ∈ atoms n a, weightA n a i) ≤ 12)\n    (hlocal : ∀ n a, a ∈ bank n → localBudget (atoms n) (child n) (baseA n) (baseB n)\n      (weightA n) (weightB n) (iterate atoms child target bank baseB weightB seed n) a ≤ delta) :\n    ∀ s,\n      |iterate atoms child target bank baseA weightA seed (430 + 11) s -\n        iterate atoms child target bank baseB weightB seed (430 + 11) s| ≤\n          delta * (((12 : ℝ) ^ 441 - 1) / 11) :="
+        },
+        {
+          "name": "rootValue_eq_sum",
+          "private": false,
+          "sha256": "b72e38656dc690211a8ba7568b5188a091d48247fb27bb6404b18d2114ee05e8",
+          "header": "theorem rootValue_eq_sum (X : Fin 11 → ℝ) : rootValue X = ∑ i, rootCoefficient i * X i :="
+        },
+        {
+          "name": "rootCoefficient_norm",
+          "private": false,
+          "sha256": "8ec93541f3de9fe3d51e5db63bc91ac29c5997be791d5e875d34599422671bf8",
+          "header": "theorem rootCoefficient_norm : (∑ i : Fin 11, |rootCoefficient i|) = (7 / 2 : ℝ) :="
+        },
+        {
+          "name": "rootValue_lipschitz",
+          "private": false,
+          "sha256": "b4f77fed62abdb56b2d83ae6d940ea7bcb1844402ffb2b8264c9aedf057389a6",
+          "header": "theorem rootValue_lipschitz (X Y : Fin 11 → ℝ) (E : ℝ) (_hE : 0 ≤ E)\n    (hXY : ∀ i, |X i - Y i| ≤ E) : |rootValue X - rootValue Y| ≤ (7 / 2 : ℝ) * E :="
+        },
+        {
+          "name": "rootValue_oriented",
+          "private": false,
+          "sha256": "061eb1c2932e48d0ac3ffd63e3f1244224108ec3e045de908eb356c89f80475f",
+          "header": "theorem rootValue_oriented (X Y : Fin 11 → ℝ) (E : ℝ)\n    (hplus : ∀ i, 0 ≤ rootCoefficient i → X i ≤ Y i + E)\n    (hminus : ∀ i, rootCoefficient i < 0 → Y i ≤ X i + E) :\n    rootValue X ≤ rootValue Y + (7 / 2 : ℝ) * E :="
+        },
+        {
+          "name": "exists_local_reserve",
+          "private": false,
+          "sha256": "6d38444b1d965f3fdcc7a8fbfaa34452b534ce012d74b5653f4b298a54de7221",
+          "header": "theorem exists_local_reserve (reserve deltaMax : ℝ) (hreserve : 0 < reserve)\n    (hdeltaMax : 0 < deltaMax) :\n    ∃ delta : ℝ, 0 < delta ∧ delta < deltaMax ∧\n      (7 / 2 : ℝ) * (delta * (((12 : ℝ) ^ 441 - 1) / 11)) < reserve :="
+        },
+        {
+          "name": "root_reserve_of_entry_errors",
+          "private": false,
+          "sha256": "57aa24417717b42a93b5cb51f799bc71a464e28f13183a4f9cdf82c675b5c64a",
+          "header": "theorem root_reserve_of_entry_errors\n    (X Y : Fin 11 → ℝ) (reserve delta : ℝ) (hdelta : 0 ≤ delta)\n    (hentry : ∀ i, |X i - Y i| ≤ delta * amplification 441)\n    (hreserve : (7 / 2 : ℝ) * (delta * (((12 : ℝ) ^ 441 - 1) / 11)) < reserve) :\n    |rootValue X - rootValue Y| < reserve :="
+        }
+      ],
+      "exact_full_file_allowed_replacement_replay": true,
+      "all_other_bytes_preserved_including_definitions_abbrevs_structures_instance_bodies_numeric_constants_hypotheses_namespaces_and_open_scopes": true,
+      "replacement_count": 8,
+      "source_plus_five_outputs_rehashed": [
+        {
+          "relative_path": "ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+          "bytes": 18146,
+          "sha256": "2120c44adb22911d5fe31f3985ec4465f61da8a79bc2862051e7ccfcc645c32a"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/RenewalFiniteErrorPropagationP5.olean",
+          "bytes": 1037600,
+          "sha256": "a396171da23b45b8f8ac0ae591c77e87b698e603361b6ac68e612687b83b5411"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/RenewalFiniteErrorPropagationP5.ilean",
+          "bytes": 41843,
+          "sha256": "17f4450afdfd5cf906c526d2cd08af4341f91b52a412056e1e0d3c5a2fab5a9a"
+        },
+        {
+          "relative_path": ".lake/build/ir/ImbalancedChen/RenewalFiniteErrorPropagationP5.c",
+          "bytes": 24287,
+          "sha256": "3b1fb539378fe54562eb2689c70ae789770d1a561dc59063d708ecaa236f0f24"
+        },
+        {
+          "relative_path": ".lake/build/ir/ImbalancedChen/RenewalFiniteErrorPropagationP5.setup.json",
+          "bytes": 2033099,
+          "sha256": "687466b850b79ede98824f6e9acada33a9cb2d3e1a2c4945c7ec4c8032685867"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/RenewalFiniteErrorPropagationP5.trace",
+          "bytes": 3493,
+          "sha256": "7e77c369935b48f9ae9e6465fe204748a644ca4ef1571b9623da929193036e62"
+        }
+      ],
+      "actual_runtime_pid": 101897,
+      "trace_input_args_match_original_recorded_actual_event": true,
+      "runtime_flags": [
+        "-t0",
+        "-j2",
+        "-M12288",
+        "maxRecDepth=100000",
+        "maxHeartbeats=4000000"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.P2BuchstabRationalSemantics",
+      "baseline_source": {
+        "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/baseline.lean",
+        "bytes": 18624,
+        "sha256": "9e8e3c73165fe0e0277201def97249b4ab229dfcf33aa834d2ee49a6f1cad95f"
+      },
+      "baseline_matches_exact_published_git": {
+        "commit": "9d82fafcdaa7d0706064d3df94072adf1be28c73",
+        "path": "ImbalancedChen/P2BuchstabRationalSemantics.lean"
+      },
+      "postimage_source": {
+        "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/candidate.lean",
+        "bytes": 18664,
+        "sha256": "61be50d893630adbe13cc83e6a26c59743adab725c5c54ed754639aa9093665e"
+      },
+      "main_member_postimage_bytes_exact": true,
+      "all_public_private_theorem_headers_byte_exact": true,
+      "public_theorem_count": 11,
+      "private_theorem_count": 7,
+      "header_records": [
+        {
+          "name": "approx_positive",
+          "private": true,
+          "sha256": "8288557e29a924657ac16db6868cd305c72d08c3868d63502744fadfbd3f2cd4",
+          "header": "private theorem approx_positive (n : ℕ) (u : ℝ) : 0 < approx n u :="
+        },
+        {
+          "name": "buchstab_positive",
+          "private": false,
+          "sha256": "7e31758edd0e7f4738fbecce5049f5a090013a51d5876748938d43517ab7f3ba",
+          "header": "theorem buchstab_positive (u : ℝ) : 0 < LiLiuPrereqBuchstab.buchstab u :="
+        },
+        {
+          "name": "weighted_initial",
+          "private": false,
+          "sha256": "eecaeef85128e282398568bd069014b2a67199b2bb5bc81cdb7af8d436ae39e8",
+          "header": "theorem weighted_initial {s : ℝ} (hs : 1 ≤ s) (hs₂ : s ≤ 2) :\n    weighted s = 1 :="
+        },
+        {
+          "name": "delayed_integral_nonneg",
+          "private": true,
+          "sha256": "7f38d684b641e31ff2d6ea3e97641e5c5684f22aa544763d153b2c9149e3f4c2",
+          "header": "private theorem delayed_integral_nonneg {a b : ℝ} (ha : 2 ≤ a) (hab : a ≤ b) :\n    0 ≤ ∫ t in a..b, buchstab (t - 1) :="
+        },
+        {
+          "name": "weighted_mono",
+          "private": false,
+          "sha256": "bef9b55d18daf1152b328fa693d4e4e2175f25e0900caf9617036aa37dc700fc",
+          "header": "theorem weighted_mono {a b : ℝ} (ha : 1 ≤ a) (hab : a ≤ b) :\n    weighted a ≤ weighted b :="
+        },
+        {
+          "name": "weighted_step",
+          "private": false,
+          "sha256": "820d9061353646132a280b29dac2709a229c79595850beee9d6ce7551eebacf8",
+          "header": "theorem weighted_step {a b l₀ u₀ l₁ u₁ : ℝ}\n    (ha : 2 ≤ a) (hab : a ≤ b)\n    (hl₀ : l₀ ≤ weighted a) (hu₀ : weighted a ≤ u₀)\n    (hl₁ : l₁ ≤ weighted (a - 1)) (hu₁ : weighted (b - 1) ≤ u₁) :\n    l₀ + (b - a) * (l₁ / (b - 1)) ≤ weighted b ∧\n      weighted b ≤ u₀ + (b - a) * (u₁ / (a - 1)) :="
+        },
+        {
+          "name": "weighted_rational_step",
+          "private": false,
+          "sha256": "81e3669014fad4b7d67388178f8254055ed0b0b9f292a392e4292f439b9418a7",
+          "header": "theorem weighted_rational_step {a b l₀ u₀ l₁ u₁ : ℚ}\n    (ha : 2 ≤ a) (hab : a ≤ b)\n    (hl₀ : (l₀ : ℝ) ≤ weighted a) (hu₀ : weighted a ≤ (u₀ : ℝ))\n    (hl₁ : (l₁ : ℝ) ≤ weighted ((a : ℝ) - 1))\n    (hu₁ : weighted ((b : ℝ) - 1) ≤ (u₁ : ℝ)) :\n    ((l₀ + (b - a) * (l₁ / (b - 1)) : ℚ) : ℝ) ≤ weighted b ∧\n      weighted b ≤ ((u₀ + (b - a) * (u₁ / (a - 1)) : ℚ) : ℝ) :="
+        },
+        {
+          "name": "grid_step",
+          "private": true,
+          "sha256": "11914d508f00a3d4f25e8eed7c34305fa9e3670b5901f364ee3657aaa34c3534",
+          "header": "private theorem grid_step (m k : ℕ) :\n    grid m (k + 1) - grid m k = 1 / (m : ℚ) :="
+        },
+        {
+          "name": "grid_delay",
+          "private": true,
+          "sha256": "603605c364eb49c424f8bf027b6c94d4ded304aeb1773c63ee99a56e169ccb26",
+          "header": "private theorem grid_delay {m k : ℕ} (hm : 0 < m) (hkm : m ≤ k) :\n    grid m (k - m) = grid m k - 1 :="
+        },
+        {
+          "name": "grid_delay_succ",
+          "private": true,
+          "sha256": "304d79c6a8a09c041f219b4eb8f766ad360e5cfe80016827b12f631eda64001f",
+          "header": "private theorem grid_delay_succ {m k : ℕ} (hm : 0 < m) (hkm : m ≤ k) :\n    grid m (k - m + 1) = grid m (k + 1) - 1 :="
+        },
+        {
+          "name": "grid_initial_range",
+          "private": true,
+          "sha256": "d0aa2642afccf036f7e69b0ad983041f5278c252e78c8e951fc7b1a0e0e650d9",
+          "header": "private theorem grid_initial_range {m k : ℕ} (hm : 0 < m) (hk : k ≤ m) :\n    (1 : ℚ) ≤ grid m k ∧ grid m k ≤ 2 :="
+        },
+        {
+          "name": "grid_recursive_range",
+          "private": true,
+          "sha256": "8bbf47bb5974d7f5ef20e7e0328c603b932d4ac3f0c84f01ff87442e4810874f",
+          "header": "private theorem grid_recursive_range {m k : ℕ} (hm : 0 < m) (hk : m ≤ k) :\n    (2 : ℚ) ≤ grid m k ∧ grid m k ≤ grid m (k + 1) :="
+        },
+        {
+          "name": "halfMeshSeed_checked",
+          "private": false,
+          "sha256": "613e1af8b148f58536317b9bb0df84f787da5c62705704b76a0094ca4b214304",
+          "header": "theorem halfMeshSeed_checked : check 2 halfMeshSeed = true :="
+        },
+        {
+          "name": "valid_sound",
+          "private": false,
+          "sha256": "9245ceb0f276c7cacef4a206421a122b4ea5edc0f00e0aa9dd6f43ccfddcb357",
+          "header": "theorem valid_sound {m : ℕ} {cs : List NodeEnclosure} (hc : Valid m cs) :\n    ∀ k : ℕ, k < cs.length →\n      ((entry cs k).lower : ℝ) ≤ weighted (grid m k) ∧\n        weighted (grid m k) ≤ ((entry cs k).upper : ℝ) :="
+        },
+        {
+          "name": "check_sound",
+          "private": false,
+          "sha256": "ed4fb8905b7038d78a2a28287bef3d4455fd6f84a0bb0c3966496272dd39d8d9",
+          "header": "theorem check_sound {m : ℕ} {cs : List NodeEnclosure} (hc : check m cs = true)\n    {k : ℕ} (hk : k < cs.length) :\n    ((entry cs k).lower : ℝ) ≤ weighted (grid m k) ∧\n      weighted (grid m k) ≤ ((entry cs k).upper : ℝ) :="
+        },
+        {
+          "name": "weighted_three_seed_enclosure",
+          "private": false,
+          "sha256": "df356c67d3cc40de059a18ed0eae8790636860568a008e2206c01c35b2ac4a07",
+          "header": "theorem weighted_three_seed_enclosure :\n    (19 : ℝ) / 12 ≤ weighted 3 ∧ weighted 3 ≤ (11 : ℝ) / 6 :="
+        },
+        {
+          "name": "check_cell_sound",
+          "private": false,
+          "sha256": "b755a007940c23c949752f58a173e91db2b060a84982ac7dbe7119198206f469",
+          "header": "theorem check_cell_sound {m : ℕ} {cs : List NodeEnclosure}\n    (hc : check m cs = true) {k : ℕ} (hk : k + 1 < cs.length) {s : ℝ}\n    (hs : s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ)) :\n    ((entry cs k).lower : ℝ) / s ≤ buchstab s ∧\n      buchstab s ≤ ((entry cs (k + 1)).upper : ℝ) / s :="
+        },
+        {
+          "name": "check_cell_upper_scaled",
+          "private": false,
+          "sha256": "d0b0faa2b91fe3861acea65af1c0f58ce7de9bb78e46c798c44bf4fdd5112335",
+          "header": "theorem check_cell_upper_scaled {m : ℕ} {cs : List NodeEnclosure}\n    (hc : check m cs = true) {k : ℕ} (hk : k + 1 < cs.length)\n    {S num : ℚ} (hS : 0 < S) (hnum : 0 ≤ num)\n    (hcap : S * (entry cs (k + 1)).upper ≤ num * grid m k)\n    {s : ℝ} (hs : s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ)) :\n    buchstab s ≤ (num : ℝ) / (S : ℝ) :="
+        }
+      ],
+      "exact_full_file_allowed_replacement_replay": true,
+      "all_other_bytes_preserved_including_definitions_abbrevs_structures_instance_bodies_numeric_constants_hypotheses_namespaces_and_open_scopes": true,
+      "replacement_count": 5,
+      "source_plus_five_outputs_rehashed": [
+        {
+          "relative_path": "ImbalancedChen/P2BuchstabRationalSemantics.lean",
+          "bytes": 18664,
+          "sha256": "61be50d893630adbe13cc83e6a26c59743adab725c5c54ed754639aa9093665e"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/P2BuchstabRationalSemantics.olean",
+          "bytes": 978696,
+          "sha256": "0e3a670d634b73d2f0bbf953b9fb381132dbe837b4682511bb7c7c25f6af32d2"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/P2BuchstabRationalSemantics.ilean",
+          "bytes": 74667,
+          "sha256": "d3edeb48386b3f1352507a0c3bba4b617a383339e4f37ac156d278f966685ea9"
+        },
+        {
+          "relative_path": ".lake/build/ir/ImbalancedChen/P2BuchstabRationalSemantics.c",
+          "bytes": 67436,
+          "sha256": "c82a6709ebba620dae8f8b10badb14f90c54959deea69616271edfb26fba830b"
+        },
+        {
+          "relative_path": ".lake/build/ir/ImbalancedChen/P2BuchstabRationalSemantics.setup.json",
+          "bytes": 2278669,
+          "sha256": "6d5439c28ba37de8fc3947b15030bdfe34bad93f7d061f8c1866de11849fd6dd"
+        },
+        {
+          "relative_path": ".lake/build/lib/lean/ImbalancedChen/P2BuchstabRationalSemantics.trace",
+          "bytes": 3271,
+          "sha256": "d6e6035b044fa2f336bcd4e79673563da6f4785168da0d826578cac1244ad644"
+        }
+      ],
+      "actual_runtime_pid": 95366,
+      "trace_input_args_match_original_recorded_actual_event": true,
+      "runtime_flags": [
+        "-t0",
+        "-j2",
+        "-M12288",
+        "maxRecDepth=100000",
+        "maxHeartbeats=4000000"
+      ]
+    }
+  ],
+  "existing_import_suppliers": {
+    "renewal_published_import_only_source": {
+      "commit": "ba1b4b49b4c144003a37478880a0b4f0d8ac9bab",
+      "source_path": "ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+      "source_sha256": "aac9e9d6b08075670426bafd5a45d5be254145df84ce486ce3403108705abff8",
+      "git_blob": "7497cbcf6f181bee0be69d0f5b42f869f5ca73e4",
+      "adopted_import_only_bytes_identical_to_published_source_before_neutral_status": true
+    },
+    "published_source_matches_original_except_import_only": true,
+    "pinned_mathlib_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "vector_notation_supplier": {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/VecNotation.lean",
+      "bytes": 17629,
+      "sha256": "17b85a7ee9c4478995b91d56eda4115ac0b399ea676e1d29ba50485803d4b34e"
+    },
+    "omega_builtin_supplier": {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/Elab/Tactic/Omega.lean",
+      "bytes": 9449,
+      "sha256": "7a81cef2ff724f9f690993d01aef906b200ca11c36f72fb57f9e6e5eaf4ec45e"
+    },
+    "omega_frontend_reexport_confirmed": true,
+    "proof_api_supplier": {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Defs.lean",
+      "bytes": 22609,
+      "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02"
+    },
+    "proof_api_statement": "mul_le_mul_iff_left₀ (a0:0<a): b*a≤c*a↔b≤c; current proof cancels the same positive right factor s.",
+    "fin_closed_index_normalizer": {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/Meta/Tactic/Simp/BuiltinSimprocs/Fin.lean",
+      "bytes": 8573,
+      "sha256": "6e22f4a410ec146af6481c30693c141c4f9d120db24e5d2bc5a1e6a873915bdc"
+    }
+  },
+  "proof_delta_assessment": {
+    "renewal": [
+      "Orient existing Finset.sum_mul backwards to collect the unchanged scalar E.",
+      "Use the current order addition API and implicit List.mem_cons_self without changing comparison targets.",
+      "Expand the exact original eleven coefficients and closed Fin indices with existing Matrix.vecCons/Fin.cons/Fin.cases/Fin.succ/reduceFinMk before existing ring."
+    ],
+    "rational": [
+      "decide +kernel evaluates exactly the unchanged five rational seed nodes through the same Valid checker; no native_decide or trusted new assertion.",
+      "Use the current right-factor cancellation API name to match unchanged calc terms and the same s>0 hypothesis."
+    ],
+    "no_new_analytic_estimate_hypothesis_constant_definition_or_axiom": true
+  },
+  "original_obsolete_import_failures": [
+    {
+      "module": "ImbalancedChen.RenewalFiniteErrorPropagationP5",
+      "kind": "obsolete_import_supplier_path_missing_before_any_original_module_compile",
+      "raw_source_byte_interval": [
+        224518,
+        224729
+      ],
+      "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/obsolete-import-before-build.log",
+      "bytes": 211,
+      "sha256": "a330646ae979acd24781f04599c92a0f266c59e5804c0ec14b6fe8f7c3f6a9c7"
+    },
+    {
+      "module": "ImbalancedChen.P2BuchstabRationalSemantics",
+      "kind": "obsolete_import_supplier_path_missing_before_any_original_module_compile",
+      "raw_source_byte_interval": [
+        257667,
+        257863
+      ],
+      "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/obsolete-import-before-build.log",
+      "bytes": 196,
+      "sha256": "30cd412cbdf716a7a11b322590befe4a8f8823a3e77f73917d9957e467dbef32"
+    }
+  ],
+  "actual_failed_normal_attempts": [
+    {
+      "command": {
+        "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/attempt-1/P2BuchstabRationalSemantics-normal-command.json",
+        "bytes": 638,
+        "sha256": "3bc6afd09fff6544127eae95516c84f1d475c1dbc1d75e7ff45d46bb2caf853b"
+      },
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/attempt-1/candidate.lean",
+        "bytes": 18657,
+        "sha256": "72bb16fdb7224e64e985899d792f17499e37e2e4912944903b40829357adeae0"
+      },
+      "log": {
+        "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics/attempt-1/P2BuchstabRationalSemantics-normal.log",
+        "bytes": 3331,
+        "sha256": "7e2162ee4a385bcaf07f80935c7f1c53bd31c5cdb9e4d039397912e22606b653"
+      }
+    },
+    {
+      "command": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-1/RenewalFiniteErrorPropagationP5-normal-command.json",
+        "bytes": 652,
+        "sha256": "fec2d2e208b272c3f0d15592b3243e97d35848b2fb4be8f924d00576d309f587"
+      },
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-1/candidate.lean",
+        "bytes": 18068,
+        "sha256": "f8871a1e8b61fbbdcaa04b4501d3b83cd2647df20499efd07f7cf02d22fd3d43"
+      },
+      "log": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-1/RenewalFiniteErrorPropagationP5-normal.log",
+        "bytes": 5646,
+        "sha256": "000b77f68fcd73ad7c2045cbc79d3dac513766ac12bab033f062d9af7764a659"
+      }
+    },
+    {
+      "command": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-2/RenewalFiniteErrorPropagationP5-normal-command.json",
+        "bytes": 652,
+        "sha256": "226ff4bcc215a722436c5ab1847f27a20d33d7f9a310f9984d67fdade7530acd"
+      },
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-2/candidate.lean",
+        "bytes": 18082,
+        "sha256": "50524992c998196057aa069596249168b7c7e2afb2ce2468553d07efefacc431"
+      },
+      "log": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-2/RenewalFiniteErrorPropagationP5-normal.log",
+        "bytes": 3459,
+        "sha256": "b33b20d678fd360a1ecb58d258b7ebe8450ef17bd6b4a1e429aef8eb9ffd035e"
+      }
+    },
+    {
+      "command": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-3/RenewalFiniteErrorPropagationP5-normal-command.json",
+        "bytes": 652,
+        "sha256": "b0c062b4fb2fa6be8bb028e898536edb210a9be3126ff4436b1f1a7dbc5b7082"
+      },
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-3/candidate.lean",
+        "bytes": 18102,
+        "sha256": "158a9e57d901e12e0c9a4e7a23d3fcfb056bcc8f40c7b8e4dea2c973b4bf2171"
+      },
+      "log": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-3/RenewalFiniteErrorPropagationP5-normal.log",
+        "bytes": 2953,
+        "sha256": "a534a81eacefca1e2decf1d695d0d8986dff65ba30c5844d23e0459b5c918fa7"
+      }
+    },
+    {
+      "command": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-4/RenewalFiniteErrorPropagationP5-normal-command.json",
+        "bytes": 650,
+        "sha256": "d9f54708f01ac8e4a1e1077507c002a012f719ce8da9b503f9785446f390e3af"
+      },
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-4/candidate.lean",
+        "bytes": 18112,
+        "sha256": "eb095894ce3815c653f0fb32b197773f23d341b363ee8cfbff373c944c6dec30"
+      },
+      "log": {
+        "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5/attempt-4/RenewalFiniteErrorPropagationP5-normal.log",
+        "bytes": 2825,
+        "sha256": "2d5cbd0dbbb83c912274135b18ec354317d6d3960e68de04efef23e5b48cd330"
+      }
+    }
+  ],
+  "failure_history_assessment": "Import-only Renewal first attempt and Rational first attempt actually failed; Renewal attempts2,3,4 also failed on successive literal vector/index normalization. All five source/command/log postimages and exit1 records remain archived. Only final selected source postimages receive the existing PASS evidence.",
+  "existing_successful_validation_logs_rehashed": [
+    {
+      "name": "RenewalFiniteErrorPropagationP5-normal",
+      "exit_code": 0,
+      "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5-normal.log",
+      "bytes": 538,
+      "sha256": "637884b19d2b4629da90f8693d1807dfe1db7bb140f91f5a76d872e3138632aa"
+    },
+    {
+      "name": "P2BuchstabRationalSemantics-normal",
+      "exit_code": 0,
+      "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics-normal.log",
+      "bytes": 468,
+      "sha256": "944e5c6660d14a618d15b8e44f50d84e2c153cb864ad1a9345b42ae0b0a70248"
+    },
+    {
+      "name": "RenewalFiniteErrorPropagationP5-kernel",
+      "exit_code": 0,
+      "path": "/workspace/blue-member-import-repair/RenewalFiniteErrorPropagationP5-kernel.log",
+      "bytes": 57,
+      "sha256": "e7dea84376f5fbb61b98893df05e06d218d78aa434956e1cc6054bc5bb8e4a3f"
+    },
+    {
+      "name": "P2BuchstabRationalSemantics-kernel",
+      "exit_code": 0,
+      "path": "/workspace/blue-member-import-repair/P2BuchstabRationalSemantics-kernel.log",
+      "bytes": 53,
+      "sha256": "331d8032c0db7b19d08289e77072a65a94807f54a5b9f31c6e8f7f7a79f3dbe2"
+    },
+    {
+      "name": "all-public-types-axioms",
+      "exit_code": 0,
+      "path": "/workspace/blue-member-import-repair/types-axioms.log",
+      "bytes": 909891,
+      "sha256": "ae4fdd4710e17d6d527404a4ca467208fbcce5e2f3f33bfefb7f26be585591a8"
+    }
+  ],
+  "existing_export_coverage": {
+    "count": 120,
+    "by_module": {
+      "ImbalancedChen.RenewalFiniteErrorPropagationP5": 63,
+      "ImbalancedChen.P2BuchstabRationalSemantics": 57
+    },
+    "unique_names": 120,
+    "all_120_raw_AUDIT_RECORD_name_owner_pairs_equal_saved_PUBLIC_EXPORTS": true,
+    "canonical_complete_environment_owner_fold": true,
+    "generated_and_anonymous_nonprivate_exports_retained": true,
+    "private_filter": "Same original !isPrivateName filter; no claim about private declarations beyond named kernel replay.",
+    "only_standard_transitive_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_declarations": 0,
+    "no_sorryAx": true,
+    "no_audit_rerun": true
+  },
+  "manuscript": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "bytes": 55378,
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "717-735 renewal mass12/root7over2/error delta(12^441-1)/11/common refinement"
+      ]
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "bytes": 42662,
+      "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "122-145 rational method of steps, delayed branches and s*omega derivative"
+      ]
+    }
+  ],
+  "mathematical_scope": "Renewal remains conditional on unchanged literal atom nonnegativity/mass/local error hypotheses and carries the frozen1106 reserve formula. Rational method-of-steps semantic checker and its small seed do not certify the original rounded arrays or full analytic/numerical table coverage. These boundaries are explicitly retained in the source comments and statements.",
+  "no_main_member_P6_frozen_or_original_manifest_writes": true,
+  "execution": {
+    "Lean_Lake_kernel_type_axiom_calls": 0,
+    "source_edits": 0,
+    "new_proofs": 0,
+    "existing_source_outputs_verified_by_hash_only": 12,
+    "only_new_evidence_file": "/workspace/blue-member-import-repair/INDEPENDENT_REVIEW.json"
+  }
+}
