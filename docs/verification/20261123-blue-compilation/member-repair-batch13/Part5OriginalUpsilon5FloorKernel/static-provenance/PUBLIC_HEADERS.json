@@ -1,0 +1,212 @@
+[
+  {
+    "kind": "abbrev",
+    "name": "FloorAtom",
+    "header": "abbrev FloorAtom := Fin 200 ⊕ Fin 201",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorGrid",
+    "header": "def floorGrid (j : ℕ) : ℝ := 1 + (j : ℝ) / 50",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorValue",
+    "header": "def floorValue (nums : Fin 200 → ℤ) (i : Fin 200) : ℝ := (nums i : ℝ) / (2 ^ 80 : ℝ)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorKnotValue",
+    "header": "def floorKnotValue (nums : Fin 200 → ℤ) (j : Fin 201) : ℝ :=\n  if h0 : j.val = 0 then floorValue nums 0\n  else if hlast : j.val = 200 then floorValue nums 199\n  else min (floorValue nums ⟨j.val - 1, by omega⟩)\n    (floorValue nums ⟨j.val, by omega⟩)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorAtomValue",
+    "header": "def floorAtomValue (nums : Fin 200 → ℤ) : FloorAtom → ℝ\n  | .inl i => floorValue nums i\n  | .inr j => floorKnotValue nums j",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorAtomSet",
+    "header": "def floorAtomSet : FloorAtom → Set ℝ\n  | .inl i => Icc 2 5 ∩ Ioo (floorGrid i.val) (floorGrid (i.val + 1))\n  | .inr j => Icc 2 5 ∩ {floorGrid j.val}",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "measurableSet_floorAtomSet",
+    "header": "theorem measurableSet_floorAtomSet (b : FloorAtom) : MeasurableSet (floorAtomSet b)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorStep",
+    "header": "def floorStep (nums : Fin 200 → ℤ) (s : ℝ) : ℝ :=\n  ∑ b : FloorAtom, (floorAtomSet b).indicator (fun _ => floorAtomValue nums b) s",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "floorBound",
+    "header": "def floorBound (nums : Fin 200 → ℤ) : ℝ := ∑ b : FloorAtom, ‖floorAtomValue nums b‖",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "floor_atom_count",
+    "header": "theorem floor_atom_count : Fintype.card FloorAtom = 401",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "measurable_floorStep",
+    "header": "theorem measurable_floorStep (nums : Fin 200 → ℤ) : Measurable (floorStep nums)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "floorStep_outside",
+    "header": "theorem floorStep_outside (nums : Fin 200 → ℤ) {s : ℝ} (hs : s ∉ Icc (2 : ℝ) 5) :\n    floorStep nums s = 0",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "norm_floorStep_le",
+    "header": "theorem norm_floorStep_le (nums : Fin 200 → ℤ) (s : ℝ) :\n    ‖floorStep nums s‖ ≤ floorBound nums",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "floorBound_nonneg",
+    "header": "theorem floorBound_nonneg (nums : Fin 200 → ℤ) : 0 ≤ floorBound nums",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "pulledFloorAtom",
+    "header": "def pulledFloorAtom (b : FloorAtom) : Set (Fin 2 → ℝ) := argument ⁻¹' floorAtomSet b",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "measurableSet_pulledFloorAtom",
+    "header": "theorem measurableSet_pulledFloorAtom (b : FloorAtom) : MeasurableSet (pulledFloorAtom b)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "correctionWeight",
+    "header": "def correctionWeight (x : Fin 2 → ℝ) : ℝ := (4 / residual x) * ∏ i, 1 / x i",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "continuousOn_correctionWeight_closedTriangle",
+    "header": "theorem continuousOn_correctionWeight_closedTriangle :\n    ContinuousOn correctionWeight closedTriangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integrableOn_correctionWeight",
+    "header": "theorem integrableOn_correctionWeight : IntegrableOn correctionWeight triangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "original_denominator_margins",
+    "header": "theorem original_denominator_margins {x : Fin 2 → ℝ} (hx : x ∈ triangle) :\n    (34 / 125 : ℝ) ≤ residual x ∧ a ≤ x 0 ∧ a ≤ x 1",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "atomCorrection",
+    "header": "def atomCorrection (nums : Fin 200 → ℤ) (b : FloorAtom) (x : Fin 2 → ℝ) : ℝ :=\n  floorAtomValue nums b * (pulledFloorAtom b).indicator correctionWeight x",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "correction_eq_finite_sum",
+    "header": "theorem correction_eq_finite_sum (nums : Fin 200 → ℤ) (x : Fin 2 → ℝ) :\n    floorStep nums (argument x) * correctionWeight x =\n      ∑ b : FloorAtom, atomCorrection nums b x",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integrableOn_atomCorrection",
+    "header": "theorem integrableOn_atomCorrection (nums : Fin 200 → ℤ) (b : FloorAtom) :\n    IntegrableOn (atomCorrection nums b) triangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integrableOn_floorCorrection",
+    "header": "theorem integrableOn_floorCorrection (nums : Fin 200 → ℤ) :\n    IntegrableOn (fun x => floorStep nums (argument x) * correctionWeight x) triangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "weightedKernel_eq_base_add_floor",
+    "header": "theorem weightedKernel_eq_base_add_floor (nums : Fin 200 → ℤ) (x : Fin 2 → ℝ) :\n    kernel (floorStep nums) x * (∏ i, 1 / x i) =\n      kernel (fun _ => 0) x * (∏ i, 1 / x i) +\n        floorStep nums (argument x) * correctionWeight x",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integrableOn_floorKernel",
+    "header": "theorem integrableOn_floorKernel (nums : Fin 200 → ℤ) :\n    IntegrableOn (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) triangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integral_floor_finite_fubini",
+    "header": "theorem integral_floor_finite_fubini (nums : Fin 200 → ℤ) :\n    integral (floorStep nums) = integral (fun _ => 0) +\n      ∑ b : FloorAtom, floorAtomValue nums b *\n        ∫ x in triangle ∩ pulledFloorAtom b, correctionWeight x",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "floorAtom_integral_nested",
+    "header": "theorem floorAtom_integral_nested (b : FloorAtom) :\n    (∫ x in triangle ∩ pulledFloorAtom b, correctionWeight x) =\n      ∫ u : ℝ, ∫ t : ℝ,\n        (triangle ∩ pulledFloorAtom b).indicator correctionWeight ![u, t]",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integral_floor_nested_fubini",
+    "header": "theorem integral_floor_nested_fubini (nums : Fin 200 → ℤ) :\n    integral (floorStep nums) = integral (fun _ => 0) +\n      ∑ b : FloorAtom, floorAtomValue nums b *\n        ∫ u : ℝ, ∫ t : ℝ,\n          (triangle ∩ pulledFloorAtom b).indicator correctionWeight ![u, t]",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integral_floor_split_log_canonical",
+    "header": "theorem integral_floor_split_log_canonical (nums : Fin 200 → ℤ) :\n    integral (floorStep nums) =\n      (∫ x in firstRegion,\n        (4 * (Real.log (argument x - 1) + floorStep nums (argument x)) / residual x) *\n          ∏ i, 1 / x i) +\n      ∫ x in secondRegion, canonicalKernel (floorStep nums) x * ∏ i, 1 / x i",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "adoptedH248Floor",
+    "header": "def adoptedH248Floor : ℝ → ℝ := floorStep adoptedH248Numerators",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "measurable_adoptedH248Floor",
+    "header": "theorem measurable_adoptedH248Floor : Measurable adoptedH248Floor",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "norm_adoptedH248Floor_le",
+    "header": "theorem norm_adoptedH248Floor_le (s : ℝ) :\n    ‖adoptedH248Floor s‖ ≤ floorBound adoptedH248Numerators",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "integrableOn_adoptedH248Kernel",
+    "header": "theorem integrableOn_adoptedH248Kernel :\n    IntegrableOn (fun x => kernel adoptedH248Floor x * ∏ i, 1 / x i) triangle",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "adoptedH248_integral_finite_fubini",
+    "header": "theorem adoptedH248_integral_finite_fubini :\n    integral adoptedH248Floor = integral (fun _ => 0) +\n      ∑ b : FloorAtom, floorAtomValue adoptedH248Numerators b *\n        ∫ x in triangle ∩ pulledFloorAtom b, correctionWeight x",
+    "private": false
+  }
+]

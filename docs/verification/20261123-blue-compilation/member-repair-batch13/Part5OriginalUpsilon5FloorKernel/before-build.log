@@ -1,0 +1,46 @@
+✖ [9873/9976] Building ImbalancedChen.Part5OriginalUpsilon5FloorKernel (11s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/Part5OriginalUpsilon5FloorKernel.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part5OriginalUpsilon5FloorKernel.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part5OriginalUpsilon5FloorKernel.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part5OriginalUpsilon5FloorKernel.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part5OriginalUpsilon5FloorKernel.setup.json --json
+error: ImbalancedChen/Part5OriginalUpsilon5FloorKernel.lean:218:13: unsolved goals
+b : FloorAtom
+S : Set (Fin 2 → ℝ) := triangle ∩ pulledFloorAtom b
+F : (Fin 2 → ℝ) → ℝ := S.indicator correctionWeight
+hS : MeasurableSet S
+hF : Integrable F volume
+E : (Fin 2 → ℝ) ≃ᵐ ℝ × ℝ := MeasurableEquiv.piFinTwo fun x => ℝ
+hE : MeasurePreserving (⇑E) volume volume
+hPF : Integrable (fun p => F (E.symm p)) volume
+hvec : ∀ (u t : ℝ), E.symm (u, t) = ![u, t]
+⊢ ∫ (u : ℝ) (t : ℝ), F ![u, t] = ∫ (u : ℝ) (t : ℝ), (triangle ∩ pulledFloorAtom b).indicator correctionWeight ![u, t]
+error: ImbalancedChen/Part5OriginalUpsilon5FloorKernel.lean:250:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  kernel ?corr x
+in the target expression
+  (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) x =
+    (fun x => 4 * (Real.log (argument x - 1) + floorStep nums (argument x)) / residual x * ∏ i, 1 / x i) x
+
+case e_a
+nums : Fin 200 → ℤ
+hi : IntegrableOn (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) triangle volume
+hsplit :
+  integral (floorStep nums) =
+    (∫ (x : Fin 2 → ℝ) in firstRegion, kernel (floorStep nums) x * ∏ i, 1 / x i) +
+      ∫ (x : Fin 2 → ℝ) in secondRegion, kernel (floorStep nums) x * ∏ i, 1 / x i
+x : Fin 2 → ℝ
+hx : x ∈ firstRegion
+⊢ (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) x =
+    (fun x => 4 * (Real.log (argument x - 1) + floorStep nums (argument x)) / residual x * ∏ i, 1 / x i) x
+error: ImbalancedChen/Part5OriginalUpsilon5FloorKernel.lean:253:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  kernel ?corr x
+in the target expression
+  (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) x = (fun x => canonicalKernel (floorStep nums) x * ∏ i, 1 / x i) x
+
+case e_a
+nums : Fin 200 → ℤ
+hi : IntegrableOn (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) triangle volume
+hsplit :
+  integral (floorStep nums) =
+    (∫ (x : Fin 2 → ℝ) in firstRegion, kernel (floorStep nums) x * ∏ i, 1 / x i) +
+      ∫ (x : Fin 2 → ℝ) in secondRegion, kernel (floorStep nums) x * ∏ i, 1 / x i
+x : Fin 2 → ℝ
+hx : x ∈ secondRegion
+⊢ (fun x => kernel (floorStep nums) x * ∏ i, 1 / x i) x = (fun x => canonicalKernel (floorStep nums) x * ∏ i, 1 / x i) x
+error: Lean exited with code 1

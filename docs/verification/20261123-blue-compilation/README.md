@@ -138,4 +138,10 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 第十六批 Rho／Incoming 两模块通过同样三项检查，全部 116 个公开导出仅标准三公理，源码和十项主要产物稳定。Rho 只补原 True 条件化简，保留相同 rho 与商。Incoming 将原 reserved-token binder `prefix` 及其同一引用写成 `«prefix»`，保留相同 Lean.Name、类型、数据 term 与 `(b,false)` padding；原未解析定义不能声称已有相同 kernel 类型或 raw definition 字节。另一处证明仅从原 `s<2` 得到 `s≠2`。原物理先前 prefix 的因果性和精确 `s=2` 边界保持，见 [验收结果](member-repair-batch16/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch16/INDEPENDENT_REVIEW.json)。两批独立复核先冻结稳定源码／日志／产物摘要，FINAL 完成后只补相同 hash 链，没有重复源码或 Lean 检查。
 
+第十三批 Floor／LogPoint／ChildMass 三模块通过标准构建、三个指定模块 kernel replay 和全部 255 个公开导出的完整类型／公理检查（47、132、76），仅标准三公理，源码及十五项主要产物稳定。Floor 仅展开原 let／函数应用；LogPoint 七处证明逐字复用已发表 `d33a86e4`，另一处只展开当前 R03 的 `oddLoop`，保留当前 core、imports、算法与 guards。ChildMass 保留原 N、固定 `L>0`、70／36、标签重数与 D5 positive-cost 排除；首次尚有 pointwise smul 类型与多余 `ring` 两处 API 错误，原失败归档后最终 `3efe` 后像通过，Floor／LogPoint 已成功检查没有重跑。ChildMass 主仓 canonical 路径仍不存在，仅发布明确安装后像。
+
+完整结果见 [验收记录](member-repair-batch13/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch13/INDEPENDENT_REVIEW.json)。LogPoint 旧静态表受到注释内假声明及 let-result 截断影响，原记录保持，新 [完整 27 条声明头比较](member-repair-batch13/LOG_POINT_FULL_HEADERS_REVIEW.json) 与 [发布补充](member-repair-batch13/PUBLICATION_ADDENDUM.json) 给出修正；实际 132 项环境导出的完整类型／公理记录一直完整，没有因此重跑 Lean。
+
+第二轮最早九个新失败模块的本地验收及独立复核均已完成，代码分批发布。统一入口构建还暴露了更后层的模块，正复用已有修补或处理其当前 API；单个模块通过不代替十入口的最终验收。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

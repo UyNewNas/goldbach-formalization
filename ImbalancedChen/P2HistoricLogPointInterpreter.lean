@@ -4,7 +4,7 @@ import ImbalancedChen.Certificates.RationalLogCertificate
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 
 /-!
-SOURCE_ONLY / UNCOMPILED. Literal historic logarithm backend.
+Verification records: docs/verification/20261123-blue-compilation. Literal historic logarithm backend.
 
 Source: certify_conservative_chen.py, SHA256
 67b9429667e18786058e0fe58676fbe09d556868468f1281166cac2b55f8604e.
@@ -146,15 +146,17 @@ theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :
     have hh : HasDerivAt G
         ((((2*n+1 : ℕ) : ℝ)*y^(2*n))/(((2*n+1 : ℕ) : ℝ)*(1-u^2)) -
           (y^2)^n/(1-y^2)) y := by
-      simpa only [G, F, oddSum, Nat.add_sub_cancel, Nat.cast_add,
-        Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat] using hp.sub hf
+      convert! (hp.sub hf) using 1 <;>
+        simp only [G, F, oddSum, Pi.sub_apply, Nat.add_sub_cancel, Nat.cast_add,
+          Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
+      funext z
+      rfl
     convert hh using 1
     simp only [← pow_mul]
     have hylt : y < 1 := hy.2.trans_lt hu1
     have hdy : 1-y^2 ≠ 0 := ne_of_gt (by
       nlinarith [mul_pos (sub_pos.mpr hylt) (show 0 < 1+y by linarith [hy.1])])
-    field_simp [hn.ne',hd.ne',hdy]
-    ring
+    field_simp [hn.ne',hd.ne',hdy] <;> ring
   have hm : MonotoneOn G (Icc 0 u) := by
     apply monotoneOn_of_hasDerivWithinAt_nonneg (convex_Icc 0 u)
       (fun y hy => (hder y hy).continuousAt.continuousWithinAt)
@@ -170,7 +172,8 @@ theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :
   rw [hz] at hG
   dsimp [G,F] at hG
   have hoddpos : (0 : ℝ) < ((2*n+1 : ℕ) : ℝ)*(1-u^2) := mul_pos hn hd
-  linarith
+  ring_nf at hG ⊢
+  linarith only [hG]
 
 structure OddState where
   power : I80
@@ -196,8 +199,9 @@ theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains 
       state.total.Contains (oddSum u n) := by
   have hsq : (oddSquare ul uh).Contains (u^2) := by
     simpa only [oddSquare, positiveMul, pow_two] using positiveMul_contains hu hu hul hul
-  have hsq0 : 0 ≤ (oddSquare ul uh).lo :=
-    positiveMul_lo_nonnegative hul hul
+  have hsq0 : 0 ≤ (oddSquare ul uh).lo := by
+    simpa only [oddSquare, positiveMul] using
+      (positiveMul_lo_nonnegative (x := I80.mk ul uh) (y := I80.mk ul uh) hul hul)
   induction n with
   | zero =>
       refine ⟨?_,hul,?_⟩
@@ -208,8 +212,7 @@ theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains 
       have hprod := positiveMul_contains hp hsq hp0 hsq0
       have he : u^(2*n+1)*u^2 = u^(2*(n+1)+1) := by
         rw [← pow_add]
-        congr 1
-        omega
+        congr 1 <;> omega
       refine ⟨?_, positiveMul_lo_nonnegative hp0 hsq0, ?_⟩
       · simpa only [oddLoop,oddStep,he] using hprod
       · have hadd := I80.add_contains hs (divNat_contains hp (by omega : 0 < 2*n+1))
@@ -237,6 +240,10 @@ theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}
   obtain ⟨hp,hp0,hs⟩ := oddLoop_invariant hu hul 32
   obtain ⟨hsl,hsh⟩ := (contains_iff _ _).1 hs
   obtain ⟨hpl,hph⟩ := (contains_iff _ _).1 hp
+  change decode state.total.lo ≤ oddSum u 32 at hsl
+  change oddSum u 32 ≤ decode state.total.hi at hsh
+  change decode state.power.lo ≤ u^65 at hpl
+  change u^65 ≤ decode state.power.hi at hph
   have hsq := positiveMul_contains hu hu hul hul
   have hsqhi : u^2 ≤ decode square.hi := by
     simpa only [square,oddSquare,positiveMul,pow_two] using ((contains_iff _ _).1 hsq).2
@@ -250,7 +257,8 @@ theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}
     have h1 := div_le_div_of_nonneg_right hph (show (0 : ℝ) ≤ 65*(1-u^2) by positivity)
     have h2 := div_le_div_of_nonneg_left hph0 (show (0 : ℝ) < 65*(1-decode square.hi) by positivity)
       (show 65*(1-decode square.hi) ≤ 65*(1-u^2) by linarith)
-    nlinarith only [h1,h2]
+    have h12 := mul_le_mul_of_nonneg_left (h1.trans h2) (by norm_num : (0 : ℝ) ≤ 2)
+    simpa only [mul_div_assoc] using h12
   have htail := real_le_ceilDiv (2*state.power.hi*(Q : ℤ))
     (65*((Q : ℤ)-square.hi)) (by
       have hh : square.hi < (Q : ℤ) := hsquare
@@ -264,9 +272,10 @@ theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}
     have hdiff : (Q : ℝ)-(square.hi : ℝ) ≠ 0 := by
       have hh : (square.hi : ℝ) < (Q : ℝ) := by exact_mod_cast hsquare
       linarith
-    field_simp [Q_real_pos.ne',hdiff]
-    ring
+    field_simp [Q_real_pos.ne',hdiff] <;> ring
   rw [he] at htail'
+  change 2*decode state.power.hi/(65*(1-decode square.hi)) ≤
+    decode (ceilDiv (2*state.power.hi*(Q : ℤ)) (65*((Q : ℤ)-square.hi))) at htail'
   have hlo := Real.sum_range_le_log_div hu0 hu1 32
   have hhi := sharp_odd_log_upper hu0 hu1 32
   change (atanhBounds ul uh).Contains (Real.log ((1+u)/(1-u)))
@@ -276,8 +285,9 @@ theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}
     have helo : decode (2*state.total.lo) = 2*decode state.total.lo := by
       simp only [decode,Int.cast_mul,Int.cast_ofNat]; ring
     rw [helo]
-    change oddSum u 32 ≤ 1/2*Real.log ((1+u)/(1-u)) at hlo
-    linarith
+    have hlo' : oddSum u 32 ≤ 1/2*Real.log ((1+u)/(1-u)) := by
+      simpa only [oddSum, Nat.cast_add, Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat] using hlo
+    linarith only [hlo', hsl]
   · change _ ≤ decode (2*state.total.hi+
         ceilDiv (2*state.power.hi*(Q : ℤ)) (65*((Q : ℤ)-square.hi)))
     have hehi (z : ℤ) : decode (2*state.total.hi+z) =
@@ -293,7 +303,7 @@ theorem logTwoBounds_contains : logTwoBounds.Contains (Real.log 2) := by
   have hu : (I80.mk ((Q : ℤ)/3) (ceilDiv (Q : ℤ) 3)).Contains (1/3 : ℝ) := by
     have hh := divNat_contains (x := I80.raw (Q : ℤ))
       (v := (1 : ℝ)) (by simp [contains_iff,decode,I80.raw,Q_real_pos.ne']) (by norm_num : 0 < 3)
-    simpa [divNat] using hh
+    simpa [divNat, I80.raw] using hh
   have hh := atanhBounds_sound
     (ul := (Q : ℤ)/3) (uh := ceilDiv (Q : ℤ) 3)
     (by norm_num [Q]) (by norm_num [Q,ceilDiv])
@@ -309,8 +319,7 @@ theorem floor_scaled_div (a d : ℤ) (hd : 0 < d) :
     _ = _ := by
       push_cast
       have hdr : (d : ℝ) ≠ 0 := by exact_mod_cast hd.ne'
-      field_simp [Q_real_pos.ne',hdr]
-      ring
+      field_simp [Q_real_pos.ne',hdr] <;> ring
 
 theorem ceil_scaled_div (a d : ℤ) (hd : 0 < d) :
     (a : ℝ)/(d : ℝ) ≤ decode (ceilDiv (a*(Q : ℤ)) d) := by
@@ -318,8 +327,7 @@ theorem ceil_scaled_div (a d : ℤ) (hd : 0 < d) :
     (a : ℝ)/(d : ℝ) = (((a*(Q : ℤ) : ℤ) : ℝ)/(d : ℝ))/(Q : ℝ) := by
       push_cast
       have hdr : (d : ℝ) ≠ 0 := by exact_mod_cast hd.ne'
-      field_simp [Q_real_pos.ne',hdr]
-      ring
+      field_simp [Q_real_pos.ne',hdr] <;> ring
     _ ≤ _ := div_le_div_of_nonneg_right (real_le_ceilDiv _ _ hd) Q_real_pos.le
 
 /-- Literal ul/uh transformation in log_point, including its crossed
@@ -337,6 +345,7 @@ theorem reducedParameter_contains {rl rh : ℤ} {r : ℝ}
   have hrlr : (Q : ℝ) ≤ (rl : ℝ) := by exact_mod_cast hrl
   have hr1 : 1 ≤ r := by nlinarith [Q_real_pos]
   have hrp : 0 < r+1 := by linarith
+  have hQpos : (0 : ℤ) < Q := Q_int_pos
   have hdl : 0 < rl+(Q : ℤ) := by omega
   have hdr : 0 < rh+(Q : ℤ) := by
     have horder : rl ≤ rh := by exact_mod_cast (hlo'.trans hhi')
@@ -348,7 +357,7 @@ theorem reducedParameter_contains {rl rh : ℤ} {r : ℝ}
   · calc
       decode ((reducedParameter rl rh).lo) ≤
           ((rl : ℝ)-(Q : ℝ))/((rh : ℝ)+(Q : ℝ)) := by
-        simpa only [reducedParameter,Int.cast_sub,Int.cast_add] using
+        simpa only [reducedParameter,Int.cast_sub,Int.cast_add,Int.cast_natCast] using
           floor_scaled_div (rl-(Q : ℤ)) (rh+(Q : ℤ)) hdr
       _ ≤ (r-1)/(r+1) := by
         apply (div_le_div_iff₀ hdrr hrp).2
@@ -360,7 +369,7 @@ theorem reducedParameter_contains {rl rh : ℤ} {r : ℝ}
         nlinarith [mul_nonneg (show 0 ≤ r-1 by linarith) (sub_nonneg.mpr hlo'),
           mul_nonneg (sub_nonneg.mpr hhi') hrp.le]
       _ ≤ decode ((reducedParameter rl rh).hi) := by
-        simpa only [reducedParameter,Int.cast_sub,Int.cast_add] using
+        simpa only [reducedParameter,Int.cast_sub,Int.cast_add,Int.cast_natCast] using
           ceil_scaled_div (rh-(Q : ℤ)) (rl+(Q : ℤ)) hdl
 
 /-- These are entirely integer guards, not assumptions about Real.log.
@@ -486,9 +495,13 @@ theorem logPoint_contains {q : ℤ} (hq : 0 < q) :
     have hid' : Real.log ((q : ℝ)/(Q : ℝ)) =
         Real.log (P2HistoricLogRangeReduction.exactReduced q : ℝ)+
           (P2HistoricLogRangeReduction.sourceShift q : ℝ)*Real.log 2 := by
-      simpa only [add_comm] using hid
+      simpa only [add_comm, P2HistoricLogRangeReduction.Q, Q] using hid
     simpa only [logPoint,if_neg hqQ] using
       logPointFromReduction_contains hr hc hid'
+
+/- Literal log(I(q)): first round q to its old Q80 interval, then use
+log_point(lo).lo and log_point(hi).hi. No endpoint is exchanged for the
+output of RationalLogCertificate or a differently rounded algorithm. -/
 
 /-- Literal log(I(q)): first round q to its old Q80 interval, then use
 log_point(lo).lo and log_point(hi).hi. No endpoint is exchanged for the

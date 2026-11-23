@@ -1,0 +1,110 @@
+--- baseline/ImbalancedChen/P2OriginalBankChildPrimeMass.lean
++++ candidate/ImbalancedChen/P2OriginalBankChildPrimeMass.lean
+@@ -4,7 +4,7 @@
+ import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ Genuine target-deleted prime-tuple limits for every original W1 window
+ and all seven original W2 feedback domains, at each fixed positive
+@@ -75,7 +75,8 @@
+   have ht := tendsto_actualPrimeBoxTestSum_cube_affineGates
+     (a:=L/10) (b:=3*L/5) (by positivity) (by linarith)
+     A (fun j => L*c j) hA (fun x => f (L⁻¹ • x))
+-    (hf.comp (continuous_const.smul continuous_id)).continuousOn
++    (hf.comp (show Continuous (fun x : Coord d => L⁻¹ • x) from
++      continuous_const.smul continuous_id)).continuousOn
+   have hg (x : Coord d) :
+       (primeAffineGateRegion A (fun j => L*c j)).indicator
+         (fun y => f (L⁻¹ • y)) x =
+@@ -89,7 +90,12 @@
+     by_cases hx : x∈primeAffineGateRegion A (fun j => L*c j)
+     · simp only [indicator_of_mem hx,indicator_of_mem (hm.mp hx)]
+     · simp only [indicator_of_notMem hx,indicator_of_notMem (mt hm.mpr hx)]
+-  simp_rw [hg] at ht
++  have hgfun :
++      (primeAffineGateRegion A (fun j => L*c j)).indicator
++        (fun y => f (L⁻¹ • y)) =
++          fun x : Coord d => (primeAffineGateRegion A c).indicator f (L⁻¹ • x) :=
++    funext hg
++  rw [hgfun] at ht
+   rw [scaled_region hL A c, integral_log_density_dilation hL] at ht
+   exact ht
+ 
+@@ -149,6 +155,7 @@
+   apply mem_logPrimeBox.mpr
+   intro i
+   fin_cases i
++  change (1/10 : ℝ) ≤ x 0 ∧ x 0 < 3/5
+   change lo<x 0 ∧ x 0<hi at hx
+   constructor <;> linarith
+ 
+@@ -156,7 +163,9 @@
+     (hx : x∈singleDomain lo hi) :
+     residualSingle x*(∏ i,1/x i)=1/(x 0*(1-x 0)) := by
+   have hd : (1/10:ℝ)≤1-x 0 := by linarith [hx.2]
+-  simp only [residualSingle,max_eq_right hd,Fin.prod_univ_one,one_div,mul_inv_rev]
++  unfold residualSingle
++  rw [max_eq_right hd]
++  simp only [Fin.prod_univ_one,one_div,mul_inv_rev]
+   ring
+ 
+ /-- The rational singleton kernel is proved from a genuine prime sum.
+@@ -188,7 +197,7 @@
+   have hj : (j.val:ℝ)≤9 := by exact_mod_cast (show j.val≤9 by omega)
+   have hs : (2:ℝ)≤W1Target i := by
+     unfold W1Target
+-    linarith [show (0:ℝ)≤i.val from Nat.cast_nonneg _]
++    linarith [show (0 : ℝ) ≤ (i.val : ℝ) from Nat.cast_nonneg _]
+   have ha : 0<W1Anchor j := by unfold W1Anchor; positivity
+   apply tendsto_single_mass hL
+   · exact one_div_le_one_div_of_le ha (by unfold W1Anchor; linarith)
+@@ -206,8 +215,13 @@
+   have hp := originalRepairedW2Bank_geometry _ (originalW2At_mem j)
+   apply tendsto_single_mass hL hp.1
+   rcases hp with ⟨h0,h01,h12,h23,h3,hb,hg6,hg7,hg8⟩
+-  fin_cases k <;> simp only [singletonTop,Matrix.cons_val_zero,Matrix.cons_val_one,
+-    Matrix.cons_val_two] <;> linarith
++  fin_cases k
++  · change b (originalW2At j) ≤ 1/2
++    exact hb
++  · change a2 (originalW2At j) ≤ 1/2
++    exact h23.trans h3
++  · change a3 (originalW2At j) ≤ 1/2
++    exact h3
+ 
+ def pairForms : Fin 4 → Fin 4 → Coord 2 →L[ℝ] ℝ
+   | 0 => ![-coord 0,coord 0-coord 1,coord 1,2 • coord 0+coord 1]
+@@ -232,7 +246,8 @@
+   intro h
+   have h0 := congrArg (fun A : Coord 2 →L[ℝ] ℝ => A ![1,0]) h
+   have h1 := congrArg (fun A : Coord 2 →L[ℝ] ℝ => A ![0,1]) h
+-  fin_cases k <;> fin_cases i <;> norm_num [pairForms,coord] at h0 h1
++  fin_cases k <;> fin_cases i <;>
++    norm_num [pairForms,coord] at h0 <;> norm_num [pairForms,coord] at h1
+ 
+ theorem pair_in_cube {p : W2Parameters} (hp : W2Geometry p) (k : Fin 4) :
+     W2PairDomain p k ⊆ cube 2 := by
+@@ -257,8 +272,9 @@
+     (k : Fin 4) {x : Coord 2} (hx : x∈W2PairDomain p k) :
+     residualPair x*(∏ i,1/x i)=1/(x 0*x 1*(1-x 0-x 1)) := by
+   have hd := pair_residual_floor hp k hx
+-  simp only [residualPair,max_eq_right (show (1/10:ℝ)≤1-x 0-x 1 by linarith),
+-    Fin.prod_univ_two,one_div,mul_inv_rev]
++  unfold residualPair
++  rw [max_eq_right (show (1/10 : ℝ) ≤ 1-x 0-x 1 by linarith)]
++  simp only [Fin.prod_univ_two,one_div,mul_inv_rev]
+   ring
+ 
+ def W2PairPrimeMass (N : ℕ) (L : ℝ) (p : W2Parameters) (k : Fin 4) : ℝ :=
+@@ -349,7 +365,7 @@
+   intro a ha
+   by_cases hg : x a∈W2Pair5 p
+   · have hb := (D5_exact_partition p (x a)).mpr (Or.inl hg)
+-    simp only [if_pos hg,if_pos hb]
++    simp only [if_pos hg,if_pos hb,le_refl]
+   · simp only [if_neg hg]
+     split_ifs <;> first | exact hc a ha | exact le_rfl
+ 

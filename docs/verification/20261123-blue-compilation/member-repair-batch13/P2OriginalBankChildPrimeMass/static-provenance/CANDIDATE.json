@@ -1,0 +1,286 @@
+{
+  "schema": "member_bank_child_prime_mass_static_candidate_v1",
+  "captured_utc": "2026-11-23T14:25:09.904480+00:00",
+  "status": "UNCOMPILED_PROOF_ONLY_CANDIDATE_NO_KERNEL_OR_THEOREM_CREDIT",
+  "actual_source_edits": 0,
+  "Lean_Lake_compiler_invocations": 0,
+  "source": "/workspace/blue-member-build/ImbalancedChen/P2OriginalBankChildPrimeMass.lean",
+  "baseline_sha256": "9a5f74df70ee856b6d70352dd3afde8012bc783e6ae14d1d0600e2b46cd905fd",
+  "candidate_sha256": "6dac046e2c80a134814fffc81b5c17dcb326bd5a0012b81fe0ec647e128b3686",
+  "baseline_bytes": 16525,
+  "candidate_bytes": 16990,
+  "baseline_CRLF": 0,
+  "candidate_CRLF": 0,
+  "all_bytes_outside8_original_proof_implementations_exact": true,
+  "headers": [
+    {
+      "name": "integral_log_density_dilation",
+      "private": false,
+      "header": "theorem integral_log_density_dilation {d : ℕ} {L : ℝ} (hL : 0<L)\n    (D : Set (Coord d)) (f : Coord d → ℝ) :\n    (∫ x in L • D, f (L⁻¹ • x)*(∏ i,1/x i)) =\n      ∫ x in D,f x*(∏ i,1/x i) :=",
+      "sha256": "3924e99014cff877ad7a3c419c8dcd3068e4a9ef0f0314129ee21a1517a99a3d"
+    },
+    {
+      "name": "scaled_region",
+      "private": false,
+      "header": "theorem scaled_region {d r : ℕ} {L : ℝ} (hL : 0<L)\n    (A : Fin r → Coord d →L[ℝ] ℝ) (c : Fin r → ℝ) :\n    logPrimeBox (fun _ : Fin d => L/10) (fun _ => 3*L/5) ∩\n      primeAffineGateRegion A (fun j => L*c j) =\n        L • (cube d ∩ primeAffineGateRegion A c) :=",
+      "sha256": "3750c9c9e3de0406bb2fa4d6b24bcfed194e95d7af98a226104cd2150ef87414"
+    },
+    {
+      "name": "tendsto_scaledPrimeSum_affine",
+      "private": false,
+      "header": "theorem tendsto_scaledPrimeSum_affine {d r : ℕ} {L : ℝ} (hL : 0<L)\n    (A : Fin r → Coord d →L[ℝ] ℝ) (c : Fin r → ℝ)\n    (hA : ∀ j,A j≠0) (f : Coord d → ℝ) (hf : Continuous f) :\n    Tendsto (fun N : ℕ => scaledPrimeSum N L (primeAffineGateRegion A c) f)\n      atTop (𝓝 (∫ x in cube d ∩ primeAffineGateRegion A c,\n        f x*(∏ i,1/x i))) :=",
+      "sha256": "6b21b1874a461c158eb186426d9c9a7ed0ea379808eccbd5e8cd77ff3ba03488"
+    },
+    {
+      "name": "single_as_affine",
+      "private": false,
+      "header": "theorem single_as_affine (lo hi : ℝ) :\n    singleDomain lo hi=primeAffineGateRegion singleForms (singleBounds lo hi) :=",
+      "sha256": "94fb39ceb5f803e589e07caa2920cecc8af168123105f5b67ad5d0f89f1928b6"
+    },
+    {
+      "name": "singleForms_ne",
+      "private": false,
+      "header": "theorem singleForms_ne (i : Fin 2) : singleForms i≠0 :=",
+      "sha256": "ae41b28d3c2650d859948a7e274468ed0a13763d95f5accdc477b401659759aa"
+    },
+    {
+      "name": "single_integral_coordinates",
+      "private": false,
+      "header": "theorem single_integral_coordinates (lo hi : ℝ) (f : ℝ → ℝ) :\n    (∫ x in singleDomain lo hi,f (x 0))=∫ u in Ioo lo hi,f u :=",
+      "sha256": "9821455781e151dcc28aa92078ae5daad40a101a6e17782f5c697fa45fe27bdb"
+    },
+    {
+      "name": "residualSingle_continuous",
+      "private": false,
+      "header": "theorem residualSingle_continuous : Continuous residualSingle :=",
+      "sha256": "c2bc6ce968313345e8fff93242998d60bb9b9057da1fc38a2812c8dff3b69b15"
+    },
+    {
+      "name": "residualPair_continuous",
+      "private": false,
+      "header": "theorem residualPair_continuous : Continuous residualPair :=",
+      "sha256": "230768e2d1085217c7413e2c20abad96e7bd98ece8c4e93a8c947c0333daed36"
+    },
+    {
+      "name": "single_in_cube",
+      "private": false,
+      "header": "theorem single_in_cube {lo hi : ℝ} (hlo : (1/5:ℝ)≤lo) (hhi : hi≤1/2) :\n    singleDomain lo hi ⊆ cube 1 :=",
+      "sha256": "7f181c0b3dad052947f1c1c3801de70dcf5290d05d757b8710b0f0d66d84293f"
+    },
+    {
+      "name": "single_kernel",
+      "private": false,
+      "header": "theorem single_kernel {lo hi : ℝ} (hhi : hi≤1/2) {x : Coord 1}\n    (hx : x∈singleDomain lo hi) :\n    residualSingle x*(∏ i,1/x i)=1/(x 0*(1-x 0)) :=",
+      "sha256": "ba585992b04fe15e3c97829c1809bb2234420da8aeaf58b8726da4e1a6069476"
+    },
+    {
+      "name": "tendsto_single_mass",
+      "private": false,
+      "header": "theorem tendsto_single_mass {L lo hi : ℝ} (hL : 0<L)\n    (hlo : (1/5:ℝ)≤lo) (hhi : hi≤1/2) :\n    Tendsto (fun N : ℕ => scaledPrimeSum N L (singleDomain lo hi) residualSingle)\n      atTop (𝓝 (∫ x in singleDomain lo hi,1/(x 0*(1-x 0)))) :=",
+      "sha256": "fb11bd579d79f713fc408b4f4d464843790fee62b41d99b4a7a24c8f5df0dddb"
+    },
+    {
+      "name": "all70_W1_prime_mass",
+      "private": false,
+      "header": "theorem all70_W1_prime_mass {L : ℝ} (hL : 0<L) (i : Fin 7) (j : Fin 10) :\n    Tendsto (fun N : ℕ => W1PrimeMass N L i j) atTop\n      (𝓝 (∫ x in singleDomain (1/W1Anchor j) (1/W1Target i),\n        1/(x 0*(1-x 0)))) :=",
+      "sha256": "8a1098e32905d3f67afeccd0db4fd0901f685ae4aa78ae0e9b96ac570944bf85"
+    },
+    {
+      "name": "all36_three_singleton_prime_masses",
+      "private": false,
+      "header": "theorem all36_three_singleton_prime_masses {L : ℝ} (hL : 0<L)\n    (j : Fin 36) (k : Fin 3) :\n    Tendsto (fun N : ℕ => W2SingletonPrimeMass N L (originalW2At j) k) atTop\n      (𝓝 (∫ x in singleDomain (a0 (originalW2At j)) (singletonTop (originalW2At j) k),\n        1/(x 0*(1-x 0)))) :=",
+      "sha256": "af495f5d1eb92dad0545a41937ee64064e0d27ec37be5ad62c91d23f45ebe5e6"
+    },
+    {
+      "name": "pair_as_affine",
+      "private": false,
+      "header": "theorem pair_as_affine (p : W2Parameters) (k : Fin 4) :\n    W2PairDomain p k=primeAffineGateRegion (pairForms k) (pairBounds p k) :=",
+      "sha256": "dcfc4495a7cd0e204489442b45d4b67d2383644e60af357e5849107ac54f512a"
+    },
+    {
+      "name": "pairForms_ne",
+      "private": false,
+      "header": "theorem pairForms_ne (k i : Fin 4) : pairForms k i≠0 :=",
+      "sha256": "a365dda352d16084f74d5f4648c41410db45cc8f56a4405ed3b9046ec7622747"
+    },
+    {
+      "name": "pair_in_cube",
+      "private": false,
+      "header": "theorem pair_in_cube {p : W2Parameters} (hp : W2Geometry p) (k : Fin 4) :\n    W2PairDomain p k ⊆ cube 2 :=",
+      "sha256": "8b45fe731bbd951cd05ba62bfb9aa9cd98157aa10742751d81f10e6ae83aa25c"
+    },
+    {
+      "name": "pair_residual_floor",
+      "private": false,
+      "header": "theorem pair_residual_floor {p : W2Parameters} (hp : W2Geometry p)\n    (k : Fin 4) {x : Coord 2} (hx : x∈W2PairDomain p k) :\n    (1/5:ℝ)≤1-x 0-x 1 :=",
+      "sha256": "995e72134547eab9cc8e5116ee65376808d54f0cd1ce6da0be77e4beaded25a6"
+    },
+    {
+      "name": "pair_kernel",
+      "private": false,
+      "header": "theorem pair_kernel {p : W2Parameters} (hp : W2Geometry p)\n    (k : Fin 4) {x : Coord 2} (hx : x∈W2PairDomain p k) :\n    residualPair x*(∏ i,1/x i)=1/(x 0*x 1*(1-x 0-x 1)) :=",
+      "sha256": "c5567000a6dbc0be069c4ce7079aae5dabe2b01609954895d12f03ea92428d56"
+    },
+    {
+      "name": "all36_four_good_pair_prime_masses",
+      "private": false,
+      "header": "theorem all36_four_good_pair_prime_masses {L : ℝ} (hL : 0<L)\n    (j : Fin 36) (k : Fin 4) :\n    Tendsto (fun N : ℕ => W2PairPrimeMass N L (originalW2At j) k) atTop\n      (𝓝 (∫ x in W2PairDomain (originalW2At j) k,\n        1/(x 0*x 1*(1-x 0-x 1)))) :=",
+      "sha256": "b19e2d7cd1b0bf10ff46b8610c2548ec02debb55b56f0d47059a89757767d803"
+    },
+    {
+      "name": "all_good_pair_squares",
+      "private": false,
+      "header": "theorem all_good_pair_squares {p : W2Parameters} (hp : W2Geometry p)\n    (k : Fin 4) {x : Coord 2} (hx : x∈W2PairDomain p k) :\n    2*x 1<1 ∧ 2*x 0+x 1<1 :=",
+      "sha256": "6eb9c32b7b0f944e8e0464e0e785d656c874f72576709b53bf6b001c16fb92b6"
+    },
+    {
+      "name": "D5_exact_partition",
+      "private": false,
+      "header": "theorem D5_exact_partition (p : W2Parameters) (x : Coord 2) :\n    (a0 p<x 0 ∧ x 0<x 1 ∧ x 1<a2 p) ↔\n      x∈W2Pair5 p ∨ x∈excludedD5 p :=",
+      "sha256": "123b7db1c2a17c79fe9b01a044ee6b6e8c701e5a690cc420c8ef3a28d9737a31"
+    },
+    {
+      "name": "excludedD5_fails_square",
+      "private": false,
+      "header": "theorem excludedD5_fails_square {p : W2Parameters} {x : Coord 2}\n    (hx : x∈excludedD5 p) : ¬(2*x 0+x 1<1) :=",
+      "sha256": "f59ecec8b5244f6cf555d881a9cf6c34caaa1a2ba2b31c54b73871f57ee6fdf1"
+    },
+    {
+      "name": "D5_cost_exact_split",
+      "private": false,
+      "header": "theorem D5_cost_exact_split {ι : Type*} (T : Finset ι)\n    (p : W2Parameters) (x : ι → Coord 2) (cost : ι → ℝ) :\n    (∑ a∈T,if a0 p<x a 0 ∧ x a 0<x a 1 ∧ x a 1<a2 p then cost a else 0) =\n      (∑ a∈T,if x a∈W2Pair5 p then cost a else 0)+\n      (∑ a∈T,if x a∈excludedD5 p then cost a else 0) :=",
+      "sha256": "ec3f00405e53b2f7089bfea4f7d5d957342722d34b1380adf2c53f2bf7431036"
+    },
+    {
+      "name": "excludedD5_positive_cost",
+      "private": false,
+      "header": "theorem excludedD5_positive_cost {ι : Type*} (T : Finset ι)\n    (p : W2Parameters) (x : ι → Coord 2) (cost : ι → ℝ)\n    (hc : ∀a∈T,0≤cost a) :\n    (∑ a∈T,if x a∈W2Pair5 p then cost a else 0) ≤\n      ∑ a∈T,if a0 p<x a 0 ∧ x a 0<x a 1 ∧ x a 1<a2 p then cost a else 0 :=",
+      "sha256": "b82677bf5345248043c68ec4b49cba2cea5134a03c7d815bb8052933acf55cbc"
+    }
+  ],
+  "public_theorems": 24,
+  "private_theorems": 0,
+  "imports_definitions_constants_hypotheses_changed": false,
+  "changed_proofs": [
+    "tendsto_scaledPrimeSum_affine",
+    "single_in_cube",
+    "single_kernel",
+    "all70_W1_prime_mass",
+    "all36_three_singleton_prime_masses",
+    "pairForms_ne",
+    "pair_kernel",
+    "excludedD5_positive_cost"
+  ],
+  "actual_relationships": {
+    "goldbach-formalization": {
+      "exists": false
+    },
+    "blue-member-build": {
+      "exists": true,
+      "sha256": "9a5f74df70ee856b6d70352dd3afde8012bc783e6ae14d1d0600e2b46cd905fd",
+      "matches_baseline": true
+    },
+    "blue-p6-build": {
+      "exists": false
+    }
+  },
+  "existing_source_search": {
+    "allrefs_exact_module_variants": 1,
+    "blob": "87d26085e90107a481efc7d76d0e29746fd12295",
+    "path": "docs/source-only/20261102-resume-30m/h247_w2_mass_license/P2OriginalBankChildPrimeMass.lean",
+    "byte_equal_to_baseline": true,
+    "fixed_alternative_found": false,
+    "scope": "Exact module source only; no repeated global historical/cache audit."
+  },
+  "diagnoses": [
+    {
+      "theorem": "tendsto_scaledPrimeSum_affine",
+      "source_lines": [
+        78,
+        92
+      ],
+      "candidate": "Type the existing dilation map continuity; lift existing pointwise hg to function equality by funext before rewriting ht.",
+      "classification": "Function-valued smul inference and eta under higher-order argument."
+    },
+    {
+      "theorem": "single_in_cube",
+      "source_line": 153,
+      "candidate": "After Fin1 cases explicitly change to same x0 inequalities; retain original hx/hlo/hhi linarith.",
+      "classification": "Fin numeral/identity-lambda normalization."
+    },
+    {
+      "theorems": [
+        "single_kernel",
+        "pair_kernel"
+      ],
+      "source_lines": [
+        159,
+        260
+      ],
+      "candidate": "Unfold residual and rewrite max from original bound before one_div/inverse/product normalization.",
+      "classification": "Rewrite order: one_div transformed numeral before supplied max_eq_right could match."
+    },
+    {
+      "theorem": "all70_W1_prime_mass",
+      "source_line": 191,
+      "candidate": "Spaced explicit real inequality (0:Real) <= (i.val:Real).",
+      "classification": "Unspaced <=i parses as InitialSeg notation, not ordinary <= followed by i."
+    },
+    {
+      "theorem": "all36_three_singleton_prime_masses",
+      "source_line": 210,
+      "candidate": "Use change for the3 definitionally selected bounds; use existing hb, h23.trans h3, h3.",
+      "classification": "Fin3 vector closed coordinate reduction, unchanged W2 geometry."
+    },
+    {
+      "theorem": "pairForms_ne",
+      "source_line": 235,
+      "candidate": "Sequence norm_num at h0 and h1 with <;> to avoid tactic after contradiction closes.",
+      "classification": "NoGoals sequencing with original witnesses."
+    },
+    {
+      "theorem": "excludedD5_positive_cost",
+      "source_line": 351,
+      "candidate": "Include le_refl in original simp-only branch.",
+      "classification": "Already identical cost<=cost, no cost estimate added."
+    }
+  ],
+  "retained_mathematics": {
+    "target": "Same actual integer N, not floor(N^L).",
+    "fixed_L": "Same arbitrary fixed L>0; no moving-L uniformity added.",
+    "families": "All70 W1 windows and36 W2 entries, each3singletons+4goodpairs; D5 good/excluded partition retained.",
+    "constants": [
+      "1/10",
+      "3/5",
+      "1/5",
+      "1/2",
+      "7",
+      "10",
+      "36",
+      "3",
+      "4"
+    ],
+    "no_new_count_KI_seed_endpoint_or_mass_license_assumption": true,
+    "excluded_positive_cost_preserved": true
+  },
+  "manuscript": {
+    "release": "1106",
+    "directory": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en",
+    "anchors": [
+      "numerical-appendix.tex303-374 original70one-step/36two-step action bank and exact nonnegative weighted transitions",
+      "argument.tex670-708 positive Buchstab/action transitions retain same family/common total Q",
+      "coefficient-appendix.tex324-332 actual labelled PP discrepancy, same target/coprime kernels"
+    ],
+    "scope": "Compatibility of existing local prime-tuple limits; not a new full old-bank analytic licence or discarded excluded-D5 cost."
+  },
+  "classification": "Formalization/API/definitional simplification; no substantive local estimate gap found. Uncompiled: owner alone validates normal/kernel/all-public.",
+  "patch": {
+    "path": "/workspace/blue-member-static-bank-child-prime-mass/candidate.patch",
+    "sha256": "b02d71bb8b11577a4d620d0af3e795312d89d84af2b8196a895c055682fc6c08",
+    "check_cwd": "/workspace/blue-member-static-bank-child-prime-mass/apply-check",
+    "check_exit_code": 0,
+    "check_stdout": "",
+    "check_stderr": ""
+  },
+  "owner_handoff": "Only manuscript_inventory applies after rechecking baseline SHA. No old successful modules rerun here; main live/P6 have no module, selected docsource preserved."
+}

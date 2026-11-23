@@ -2,7 +2,7 @@ import ImbalancedChen.Part5OriginalUpsilon5CausalSplit
 import ImbalancedChen.Part5AdoptedH248Data
 
 /-!
-The adopted finite h248 floor as a bounded measurable function. SOURCE ONLY.
+The adopted finite h248 floor as a bounded measurable function. Verification records: docs/verification/20261123-blue-compilation.
 
 SavedDefects.lookup in certify_combined_chen_functional.py takes the minimum
 of all CLOSED grid cells meeting its argument enclosure, including BOTH
@@ -215,7 +215,7 @@ theorem floorAtom_integral_nested (b : FloorAtom) :
     _ = ∫ x, F x := (integral_indicator hS).symm
     _ = ∫ p : ℝ × ℝ, F (E.symm p) := (hE.symm.integral_comp' F).symm
     _ = ∫ u : ℝ, ∫ t : ℝ, F (E.symm (u, t)) := integral_prod _ hPF
-    _ = _ := by simp only [hvec]
+    _ = _ := by simp only [hvec, F, S]
 
 theorem integral_floor_nested_fubini (nums : Fin 200 → ℤ) :
     integral (floorStep nums) = integral (fun _ => 0) +
@@ -247,9 +247,11 @@ theorem integral_floor_split_log_canonical (nums : Fin 200 → ℤ) :
   congr 1
   · apply setIntegral_congr_fun measurableSet_firstRegion
     intro x hx
+    dsimp only
     rw [kernel_eq_log_of_argument_le_four hx.1 hx.2]
   · apply setIntegral_congr_fun measurableSet_secondRegion
     intro x hx
+    dsimp only
     rw [kernel_eq_canonical hx.1]
 
 def adoptedH248Floor : ℝ → ℝ := floorStep adoptedH248Numerators

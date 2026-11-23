@@ -1,0 +1,308 @@
+{
+  "schema": "member_historic_log_point_existing_proof_reuse_static_v1",
+  "captured_utc": "2026-11-23T14:21:39.582424+00:00",
+  "status": "UNCOMPILED_CANDIDATE_NO_KERNEL_CREDIT",
+  "actual_source_edits": 0,
+  "Lean_Lake_compiler_invocations": 0,
+  "source": "/workspace/blue-member-build/ImbalancedChen/P2HistoricLogPointInterpreter.lean",
+  "baseline_sha256": "003427cf551d9468d769591ceeaff2bfeee15296aa4f35280fa0a6fecb3e4b69",
+  "candidate_sha256": "531519792c4a292243e798af4bcb2091d3c48ebee7b19a1b9c1369402a657f86",
+  "baseline_bytes": 24796,
+  "candidate_bytes": 25879,
+  "baseline_CRLF": 0,
+  "candidate_CRLF": 0,
+  "all_bytes_outside8_original_proof_implementations_exact": true,
+  "all_headers": [
+    {
+      "name": "retains",
+      "private": false,
+      "header": "theorem retains exactly the producer's positive rounded-lower-endpoint\nguard; it assumes no true-log bound and no saved-output numerical check.\nNo producer, numeric replay, Lean evaluator, or native oracle was run.\n-/\n\nnamespace ImbalancedChen.Certificates.P2HistoricLogPointInterpreter\n\nnoncomputable section\nopen Set MeasureTheory\nopen scoped BigOperators\nopen P2HistoricQ80DefectLookup\nopen P2DirectedLogRounding\n\ndef ceilDiv (n d : ℤ) : ℤ :=",
+      "sha256": "e91b588fbcc99d28af5c25b69cae88788b4dac7b89d454d031a5887c7ae212f2"
+    },
+    {
+      "name": "Q_real_pos",
+      "private": false,
+      "header": "theorem Q_real_pos : (0 : ℝ) < Q :=",
+      "sha256": "30ca207f11ec1bd7740f0fff58fafb541a8153f7a20d71e53929a06adabc14c4"
+    },
+    {
+      "name": "Q_int_pos",
+      "private": false,
+      "header": "theorem Q_int_pos : (0 : ℤ) < Q :=",
+      "sha256": "d8bb6fd7a9eb991fbf7b2d04a3873c263c1eda671993fe388aaf47271a017dde"
+    },
+    {
+      "name": "contains_iff",
+      "private": false,
+      "header": "theorem contains_iff (x : I80) (v : ℝ) :\n    x.Contains v ↔ decode x.lo ≤ v ∧ v ≤ decode x.hi :=",
+      "sha256": "36f1e24e9933053cb98854b7e20030189b21d7d96011dfc1cfe3700ff88aee3f"
+    },
+    {
+      "name": "ediv_le_real",
+      "private": false,
+      "header": "theorem ediv_le_real (n d : ℤ) (hd : 0 < d) :\n    ((n/d : ℤ) : ℝ) ≤ (n : ℝ) / (d : ℝ) :=",
+      "sha256": "777d202783081e634072224e109705d4b8ce68c37182efa0beccce1a4029304b"
+    },
+    {
+      "name": "real_le_ceilDiv",
+      "private": false,
+      "header": "theorem real_le_ceilDiv (n d : ℤ) (hd : 0 < d) :\n    (n : ℝ) / (d : ℝ) ≤ (ceilDiv n d : ℝ) :=",
+      "sha256": "620971ec5015dd7309ac6d219ecbb41fde962833b9ed2b3903f332548f239298"
+    },
+    {
+      "name": "ceilDiv_le",
+      "private": false,
+      "header": "theorem ceilDiv_le (n d m : ℤ) (hd : 0 < d) (hnm : n ≤ m*d) :\n    ceilDiv n d ≤ m :=",
+      "sha256": "6f9cf12d2e3b531701d16680177680345978a6440721a4e972c70a2cfb69135b"
+    },
+    {
+      "name": "ceilDiv_nonnegative",
+      "private": false,
+      "header": "theorem ceilDiv_nonnegative {n d : ℤ} (hn : 0 ≤ n) (hd : 0 < d) :\n    0 ≤ ceilDiv n d :=",
+      "sha256": "56605147a10cbfa884309688fada10913578bd80f5d9c2fc74104f70b971865a"
+    },
+    {
+      "name": "floor_product_decode",
+      "private": false,
+      "header": "theorem floor_product_decode (a b : ℤ) :\n    decode (a*b/(Q : ℤ)) ≤ decode a * decode b :=",
+      "sha256": "a9f95381744f27e285accd5bd5b473889262fed055d4448b6c5dde3b097ea770"
+    },
+    {
+      "name": "ceil_product_decode",
+      "private": false,
+      "header": "theorem ceil_product_decode (a b : ℤ) :\n    decode a * decode b ≤ decode (ceilDiv (a*b) (Q : ℤ)) :=",
+      "sha256": "ea9fbb757e0548f793b4f8e274eb8381aedc4d1ce02d4922343ab8b275a4a458"
+    },
+    {
+      "name": "positiveMul_lo_nonnegative",
+      "private": false,
+      "header": "theorem positiveMul_lo_nonnegative {x y : I80} (hx : 0 ≤ x.lo) (hy : 0 ≤ y.lo) :\n    0 ≤ (positiveMul x y).lo :=",
+      "sha256": "a01ea90586d460284c66d77f5e114d48743939f347692917d54acc687d5023a8"
+    },
+    {
+      "name": "positiveMul_contains",
+      "private": false,
+      "header": "theorem positiveMul_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) (hx0 : 0 ≤ x.lo) (hy0 : 0 ≤ y.lo) :\n    (positiveMul x y).Contains (v*w) :=",
+      "sha256": "1f428ec6a90ae6223366d4e62d592858fc9d4dec78096ef05fde9d97426ddd29"
+    },
+    {
+      "name": "divNat_contains",
+      "private": false,
+      "header": "theorem divNat_contains {x : I80} {v : ℝ} (hx : x.Contains v)\n    {n : ℕ} (hn : 0 < n) : (divNat x n).Contains (v/(n : ℝ)) :=",
+      "sha256": "01323f9eb3ff2f5fc33a3ae1d789e37f90f50ca73bd3d345e6c06b1556250d27"
+    },
+    {
+      "name": "sharp_odd_log_upper",
+      "private": false,
+      "header": "theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :\n    Real.log ((1+u)/(1-u)) ≤\n      2*oddSum u n + 2*u^(2*n+1)/(((2*n+1 : ℕ) : ℝ)*(1-u^2)) :=",
+      "sha256": "36b97854a3ffcb48b06130999de43110c480ceaa7f3115d9cbc9982e796f5942"
+    },
+    {
+      "name": "oddLoop_invariant",
+      "private": false,
+      "header": "theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains u)\n    (hul : 0 ≤ ul) (n : ℕ) :\n    let square :=",
+      "sha256": "b91bf5edcceb076e8d0c42842ca237af0d1bd8f5e46ac74b83c947e33787ceae"
+    },
+    {
+      "name": "atanhBounds_sound",
+      "private": false,
+      "header": "theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}\n    (hul : 0 ≤ ul) (huh : uh < (Q : ℤ))\n    (hsquare : (oddSquare ul uh).hi < (Q : ℤ))\n    (hu : (I80.mk ul uh).Contains u) :\n    (atanhBounds ul uh).Contains (Real.log ((1+u)/(1-u))) :=",
+      "sha256": "17c8522b14a940b59952d3ed8b39a86353255cb4ea8956b4c2b4a5eedf589fc9"
+    },
+    {
+      "name": "logTwoBounds_contains",
+      "private": false,
+      "header": "theorem logTwoBounds_contains : logTwoBounds.Contains (Real.log 2) :=",
+      "sha256": "f0b56f82ce96f3abbc2b353dd9227666e7a8fa9a0850b22e2db7c754a8f27a98"
+    },
+    {
+      "name": "floor_scaled_div",
+      "private": false,
+      "header": "theorem floor_scaled_div (a d : ℤ) (hd : 0 < d) :\n    decode (a*(Q : ℤ)/d) ≤ (a : ℝ)/(d : ℝ) :=",
+      "sha256": "7a3f856213b66ba167e145c2d82e66738711cf8e9384db7af2ecae478ebf5c27"
+    },
+    {
+      "name": "ceil_scaled_div",
+      "private": false,
+      "header": "theorem ceil_scaled_div (a d : ℤ) (hd : 0 < d) :\n    (a : ℝ)/(d : ℝ) ≤ decode (ceilDiv (a*(Q : ℤ)) d) :=",
+      "sha256": "89cb0fdc1d73d51b893007121eb5631e8d458794536359006c1688a1f17db200"
+    },
+    {
+      "name": "reducedParameter_contains",
+      "private": false,
+      "header": "theorem reducedParameter_contains {rl rh : ℤ} {r : ℝ}\n    (hr : (I80.mk rl rh).Contains r) (hrl : (Q : ℤ) ≤ rl) :\n    (reducedParameter rl rh).Contains ((r-1)/(r+1)) :=",
+      "sha256": "ded5b7fb21a5fc2c9bf5249a192795f71b784579501ef8f4417a95c17eb3eb80"
+    },
+    {
+      "name": "reducedCheck_of_endpoints",
+      "private": false,
+      "header": "theorem reducedCheck_of_endpoints {rl rh : ℤ}\n    (hrl : (Q : ℤ) ≤ rl) (horder : rl ≤ rh) (hrh : rh ≤ 2*(Q : ℤ)) :\n    reducedCheck rl rh = true :=",
+      "sha256": "a797dde08278d6ae0fe0a8ac51dc7c82b6afc9d7ddb77998fc88cffdd1f52e8a"
+    },
+    {
+      "name": "reducedLogBounds_contains",
+      "private": false,
+      "header": "theorem reducedLogBounds_contains {rl rh : ℤ} {r : ℝ}\n    (hr : (I80.mk rl rh).Contains r) (hc : reducedCheck rl rh = true) :\n    (reducedLogBounds rl rh).Contains (Real.log r) :=",
+      "sha256": "e149bdcee2bdae6a4dc65c49f5b75db767c9d3d38cfca210233c5801f583242e"
+    },
+    {
+      "name": "integerScale_contains",
+      "private": false,
+      "header": "theorem integerScale_contains {x : I80} {v : ℝ} (hx : x.Contains v) (k : ℤ) :\n    (integerScale x k).Contains ((k : ℝ)*v) :=",
+      "sha256": "ce9ccd1c62479a39d927f5ad26c6180a511dc13b1190474664981f951c3090d7"
+    },
+    {
+      "name": "logPointFromReduction_contains",
+      "private": false,
+      "header": "theorem logPointFromReduction_contains {k rl rh : ℤ} {r x : ℝ}\n    (hr : (I80.mk rl rh).Contains r) (hc : reducedCheck rl rh = true)\n    (hidentity : Real.log x = Real.log r+(k : ℝ)*Real.log 2) :\n    (logPointFromReduction k rl rh).Contains (Real.log x) :=",
+      "sha256": "6080478a117f144c339ccbda23617b71585b3889a809a597c7295bc749caf358"
+    },
+    {
+      "name": "logPoint_contains",
+      "private": false,
+      "header": "theorem logPoint_contains {q : ℤ} (hq : 0 < q) :\n    (logPoint q).Contains (Real.log ((q : ℝ)/(Q : ℝ))) :=",
+      "sha256": "e690071008dacadd1df0c2e3994c0adb3df62f0c70a9ffa39a6de4152ca035ce"
+    },
+    {
+      "name": "logI_contains",
+      "private": false,
+      "header": "theorem logI_contains (q : ℚ) (hpos : 0 < (I80.point q).lo) :\n    (logI q).Contains (Real.log (q : ℝ)) :=",
+      "sha256": "3d06cc54713d6e6045853a9d036b9d5d05e6dceab6a6f229c590330e4fccfcb4"
+    },
+    {
+      "name": "logI_contains_of_one_le",
+      "private": false,
+      "header": "theorem logI_contains_of_one_le (q : ℚ) (hq : 1 ≤ q) :\n    (logI q).Contains (Real.log (q : ℝ)) :=",
+      "sha256": "81fe62c92faa1bb1e26e47be614c15590006e915dbc0ca4e3fda1ff16f84dfdc"
+    },
+    {
+      "name": "rectangleMass_logI_contains",
+      "private": false,
+      "header": "theorem rectangleMass_logI_contains (tl tr ul ur : ℚ)\n    (ht : 1 ≤ tr/tl) (hu : 1 ≤ ur/ul) :\n    (rectangleMass logI tl tr ul ur).Contains (rectangleMassValue tl tr ul ur) :=",
+      "sha256": "a73a15ccf975411f2412fd0f7fb4b90627eaa8620ed4a9cc5da4161af8e010f3"
+    }
+  ],
+  "public_theorems": 28,
+  "private_theorems": 0,
+  "imports_core_I80_owner_definitions_constants_hypotheses_changed": false,
+  "proof_reuse": [
+    {
+      "theorem": "sharp_odd_log_upper",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "ac0ad6039559847efe2b29dc5d9c59b23f97bd472ed25fe0540567c28e06c951",
+      "candidate_body_sha256": "ac0ad6039559847efe2b29dc5d9c59b23f97bd472ed25fe0540567c28e06c951",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "oddLoop_invariant",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "d2d300daf2efed86829ace2a283d84edb41232462a34a9f2cdb0180f6294f261",
+      "candidate_body_sha256": "ae504126e8a815f7dbac0c6243aeeaedbc0f0a2008230f781e6c9c222c1dae74",
+      "exact_existing_proof_body_reuse": false,
+      "definition_unfolding_adapters": [
+        {
+          "old_core_rewrite": "oddLoop_zero_eq",
+          "current_R03_definition": "oddLoop",
+          "occurrences": 2
+        },
+        {
+          "old_core_rewrite": "oddLoop_succ_eq",
+          "current_R03_definition": "oddLoop",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "theorem": "atanhBounds_sound",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "8aee737ac62cfafe69c3e09cb4052242ff4458fc2db3188335277a9011bfe924",
+      "candidate_body_sha256": "8aee737ac62cfafe69c3e09cb4052242ff4458fc2db3188335277a9011bfe924",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "logTwoBounds_contains",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "ed273bf59f2dfee18cf68c2d99611137809d4442986507269e3e7abf8ef1670c",
+      "candidate_body_sha256": "ed273bf59f2dfee18cf68c2d99611137809d4442986507269e3e7abf8ef1670c",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "floor_scaled_div",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "26cc7955e8f241d68dd913465c907d7c98c69d119c1daf4649998b158ed1943a",
+      "candidate_body_sha256": "26cc7955e8f241d68dd913465c907d7c98c69d119c1daf4649998b158ed1943a",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "ceil_scaled_div",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "a735562cd50937782fae1e7eacca5536ab0b66dd161f77dc5d35c03a71f0d96f",
+      "candidate_body_sha256": "a735562cd50937782fae1e7eacca5536ab0b66dd161f77dc5d35c03a71f0d96f",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "reducedParameter_contains",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "7c18384c934b7eb5086b0110e9e89267a89723f2572c3157a00ce1648216fb77",
+      "candidate_body_sha256": "7c18384c934b7eb5086b0110e9e89267a89723f2572c3157a00ce1648216fb77",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    },
+    {
+      "theorem": "logPoint_contains",
+      "header_byte_equal_to_published": true,
+      "published_body_sha256": "afc78743e309445dffe8e9ad7d27f71e2bc4ec5241082d1825b33f13fb0f11a5",
+      "candidate_body_sha256": "afc78743e309445dffe8e9ad7d27f71e2bc4ec5241082d1825b33f13fb0f11a5",
+      "exact_existing_proof_body_reuse": true,
+      "definition_unfolding_adapters": []
+    }
+  ],
+  "published": {
+    "exact_source_variant_count_on_all_refs": 2,
+    "fixed_blob": "45469aab2d5bce067207e63beed3ec5c17a6b222",
+    "fixed_sha256": "1b587f337f35b473557f188509828159e951281e8786963dd2245786c224aa96",
+    "history_locator": "d33a86e4cd226c0b3478d0b4695eb2452b96867c Backup independently accepted round3 current log analytic facade checkpoint007",
+    "entire_file_replacement_rejected": "Published source imports LogComputeCore and relocates definitions; only theorem proof implementations are reused. Existing R03 I80 and local integer operations stay authoritative."
+  },
+  "actual_relationships": {
+    "goldbach-formalization": {
+      "exists": true,
+      "sha256": "003427cf551d9468d769591ceeaff2bfeee15296aa4f35280fa0a6fecb3e4b69",
+      "matches_baseline": true
+    },
+    "blue-member-build": {
+      "exists": true,
+      "sha256": "003427cf551d9468d769591ceeaff2bfeee15296aa4f35280fa0a6fecb3e4b69",
+      "matches_baseline": true
+    },
+    "blue-p6-build": {
+      "exists": false
+    }
+  },
+  "classification": "Existing published proof-body compatibility fixes: derivative function eta/beta, numeral/cast/ring normalization, explicit state definitional shape, monotone tail composition, renamed scale definitions and no-goal sequencing; no local mathematical gap found.",
+  "retained_algorithm": {
+    "scale": "Q=2^80",
+    "odd_terms": 32,
+    "tail_divisor": 65,
+    "operations": "Exact old integer floors/ceilings on every power/summand and original crossed denominators, original reducedCheck, special Q exactzero, actual positive rounded lower guard.",
+    "no_numeric_replay_evaluator_or_native_oracle_invoked": true
+  },
+  "manuscript": {
+    "release": "1106",
+    "anchor": "numerical-appendix.tex94-102 directed interval/fixed-point arithmetic,303-374 Q80 bank and exact recurrence. The original file additionally identifies frozen certify_conservative_chen.py by SHA67b9429667e18786058e0fe58676fbe09d556868468f1281166cac2b55f8604e.",
+    "scope": "Soundness of the selected literal historic logarithm algorithm, not a different series certificate or a saved-output check."
+  },
+  "patch": {
+    "path": "/workspace/blue-member-static-historic-log-point/candidate.patch",
+    "sha256": "81c5a1158aa4f81d7ce48de928a02050c396eecbe74ebb66e8e14ee60e73f386",
+    "check_exit_code": 0,
+    "check_stdout": "",
+    "check_stderr": ""
+  },
+  "owner_handoff": "Only manuscript_inventory applies and runs normal/kernel/all-public; recheck baseline SHA. No proof of new statement, no import/core switch, no accepted theorem credit here."
+}
