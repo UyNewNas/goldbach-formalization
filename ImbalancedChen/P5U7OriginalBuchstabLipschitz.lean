@@ -2,7 +2,7 @@ import ImbalancedChen.P5U7OriginalOmegaIntegral
 import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-!
-SOURCE ONLY / UNCOMPILED / NOT ROOT ACCEPTED.
+Verification records are kept in docs/verification/20261123-blue-compilation.
 The actual Buchstab function is 1-Lipschitz on the complete original U7
 argument interval [1,132/59], including the s=2 seam. Proof uses exact
 finite differences of both actual formulas and elementary logarithm
@@ -96,7 +96,7 @@ theorem p5U7_buchstab_second_abs_sub_le {s t : ℝ}
     buchstab_eq_log_div ht.1 (by linarith only [ht.2] : t ≤ 3), heq]
   calc
     _ ≤ |(Real.log (s - 1) - Real.log (t - 1)) / s| +
-        |(1 + Real.log (t - 1)) * (1 / s - 1 / t)| := abs_add _ _
+        |(1 + Real.log (t - 1)) * (1 / s - 1 / t)| := abs_add_le _ _
     _ = |Real.log (s - 1) - Real.log (t - 1)| / s +
         |1 + Real.log (t - 1)| * |1 / s - 1 / t| := by
       rw [abs_div, abs_of_pos hs0, abs_mul]

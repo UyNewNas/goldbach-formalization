@@ -4,9 +4,8 @@ import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.MeasureTheory.Function.LocallyIntegrable
 
 /-!
-Source-only successor to P5U7OriginalOmegaIntegral.lean in this draft.
-Its proposed import path requires installing that predecessor at the
-corresponding ImbalancedChen path; neither candidate has been compiled.
+Moving-row integrability and product-triangle Fubini for the original U7 kernel.
+Verification records are kept in docs/verification/20261123-blue-compilation.
 
 This file supplies the missing outer moving-row integrability and actual
 product-triangle Fubini theorem, without assuming integrability.  A
@@ -137,7 +136,8 @@ theorem p5U7Omega_triangle_integral_eq_nested (K : ℝ) :
     calc
       _ = ∫ x in B, O.indicator g x := by rw [setIntegral_indicator hO, hset]
       _ = _ := by
-        rw [B, Measure.volume_eq_prod]
+        dsimp only [B]
+        rw [Measure.volume_eq_prod]
         exact setIntegral_prod _ (by
           simpa only [B, Measure.volume_eq_prod] using hiB.indicator hO)
   rw [hfubini]

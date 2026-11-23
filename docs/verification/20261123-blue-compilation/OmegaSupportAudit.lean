@@ -1,0 +1,59 @@
+import ImbalancedChen.P5U7OriginalBuchstabLipschitz
+import ImbalancedChen.P5U7OriginalOmegaFubini
+
+set_option pp.all true
+
+#check ImbalancedChen.p5U7_abs_log_sub_log_le
+#print axioms ImbalancedChen.p5U7_abs_log_sub_log_le
+#check ImbalancedChen.p5U7_abs_reciprocal_sub_le
+#print axioms ImbalancedChen.p5U7_abs_reciprocal_sub_le
+#check ImbalancedChen.p5U7_buchstab_first_abs_sub_le
+#print axioms ImbalancedChen.p5U7_buchstab_first_abs_sub_le
+#check ImbalancedChen.p5U7_buchstab_second_abs_sub_le
+#print axioms ImbalancedChen.p5U7_buchstab_second_abs_sub_le
+#check ImbalancedChen.p5U7_buchstab_abs_sub_le
+#print axioms ImbalancedChen.p5U7_buchstab_abs_sub_le
+#check ImbalancedChen.p5U7_buchstab_lipschitzOn_original
+#print axioms ImbalancedChen.p5U7_buchstab_lipschitzOn_original
+#check ImbalancedChen.p5U7OmegaTriangle
+#print axioms ImbalancedChen.p5U7OmegaTriangle
+#check ImbalancedChen.p5U7OmegaRow
+#print axioms ImbalancedChen.p5U7OmegaRow
+#check ImbalancedChen.p5U7OmegaPositiveExtension
+#print axioms ImbalancedChen.p5U7OmegaPositiveExtension
+#check ImbalancedChen.p5U7Omega_extension_continuous
+#print axioms ImbalancedChen.p5U7Omega_extension_continuous
+#check ImbalancedChen.p5U7Omega_extension_eq
+#print axioms ImbalancedChen.p5U7Omega_extension_eq
+#check ImbalancedChen.p5U7Omega_extension_row_continuous
+#print axioms ImbalancedChen.p5U7Omega_extension_row_continuous
+#check ImbalancedChen.p5U7Omega_extension_row_eq
+#print axioms ImbalancedChen.p5U7Omega_extension_row_eq
+#check ImbalancedChen.p5U7Omega_row_continuousOn
+#print axioms ImbalancedChen.p5U7Omega_row_continuousOn
+#check ImbalancedChen.p5U7Omega_row_at_third
+#print axioms ImbalancedChen.p5U7Omega_row_at_third
+#check ImbalancedChen.p5U7Omega_outer_intervalIntegrable
+#print axioms ImbalancedChen.p5U7Omega_outer_intervalIntegrable
+#check ImbalancedChen.p5U7Omega_triangle_compact
+#print axioms ImbalancedChen.p5U7Omega_triangle_compact
+#check ImbalancedChen.p5U7Omega_triangle_integrable
+#print axioms ImbalancedChen.p5U7Omega_triangle_integrable
+#check ImbalancedChen.p5U7Omega_triangle_integral_eq_nested
+#print axioms ImbalancedChen.p5U7Omega_triangle_integral_eq_nested
+#check ImbalancedChen.p5U7Omega_buchstab_zero_one
+#print axioms ImbalancedChen.p5U7Omega_buchstab_zero_one
+#check ImbalancedChen.p5U7OmegaFiniteBound
+#print axioms ImbalancedChen.p5U7OmegaFiniteBound
+#check ImbalancedChen.p5U7Omega_kernel_norm_le_explicit
+#print axioms ImbalancedChen.p5U7Omega_kernel_norm_le_explicit
+#check ImbalancedChen.p5U7Omega_row_norm_le_explicit
+#print axioms ImbalancedChen.p5U7Omega_row_norm_le_explicit
+#check ImbalancedChen.p5U7OriginalOmegaIntegral_norm_le_explicit
+#print axioms ImbalancedChen.p5U7OriginalOmegaIntegral_norm_le_explicit
+#check ImbalancedChen.p5U7OriginalOmegaIntegral_nonneg
+#print axioms ImbalancedChen.p5U7OriginalOmegaIntegral_nonneg
+#check ImbalancedChen.p5U7CurrentOriginalOmegaIntegral_nonneg
+#print axioms ImbalancedChen.p5U7CurrentOriginalOmegaIntegral_nonneg
+#check ImbalancedChen.p5U7Omega_triangle_integral_nonneg
+#print axioms ImbalancedChen.p5U7Omega_triangle_integral_nonneg
