@@ -128,4 +128,10 @@ Member 第十一批 Overlap／Multiplicity 两模块通过标准构建、指定�
 
 十个 Member 入口第二次聚合构建启动时，项目源码覆盖为本目录登记的 34 个后像、一个 P6 共享后像和一个既有绿色供应者，共 36 项；native 的两个 import 覆盖与一个扩展另行登记。完整生产源码组合可从 [MEMBER_SOURCE_OVERRIDES.json](MEMBER_SOURCE_OVERRIDES.json) 定位。统一入口重试继续执行，单个依赖模块的成功检查不等于十入口全部通过。
 
+第二轮新增第十五批 `P2SimultaneousTableIteration` 通过标准构建、指定模块 kernel replay 和全部 126 个公开导出的完整类型／公理检查，仅标准三公理，源码及五项主要产物稳定。原 `fullOrdinaryBank` 两个构造器的 Prop 资格证明显式展开为 `50 ≤ i.val+50`，原 `Fin 200` 索引 `i.val+50`、150 项 Upper 后接 150 项 Lower 的全部数据与次序不变；这是定义内部证明子项的 elaboration 例外，不声称原未 elaboration 定义已有相同 kernel 值或 raw body 不变。其余修补为长度、原网格常量和 Bool 化简，未增加 W1/W2 许可或正 seed／完整正表结论。原 154 秒失败中的 `sorry` 来自 elaboration 恢复，源码无字面 `sorry`，最终 126 项公理检查无 `sorryAx`。见 [验收结果](member-repair-batch15/VALIDATION_RESULTS.json) 与 [独立复核](member-repair-batch15/INDEPENDENT_REVIEW.json)。旧 static 计数漏掉 `inductive Action`，完整源码声明命令应为 41，补充见 [metadata clarification](member-repair-batch15/INDEPENDENT_METADATA_CLARIFICATION.json)；实际 126 项环境导出审计一直包含其构造器及 recursors。
+
+第十七批 `P2HistoricQ80OrdinaryEstimatorSoundness` 的五处变化限定于四个证明：同加项 API、函数 β 展开和显式使用既有 `ordinaryA_pos`。全部原声明、七个定义、数据、row bank、cutoffs、chord／max 与 actual-h 许可保持。标准构建、指定模块 kernel replay 和全部 54 个公开导出的完整类型／公理检查通过，仅标准三公理，源码及五项主要产物稳定，见 [验收结果](member-repair-batch17/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch17/INDEPENDENT_REVIEW.json)。原 155 秒失败记录完整保留，没有重跑已经成功的检查。
+
+第二轮启动时已提交源码与 36 项项目覆盖的逐项比较见 [ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json](ATTEMPT2_COMMITTED_SOURCE_ASSEMBLY_CHECK.json)，其 recipe commit 明确固定于 `31169d69`；后续通过的修补按批次追加。补充的 [只读复用核查](reuse-observations-iteration2/PUBLICATION_FILES.json) 确认当前缺失 native 对象没有漏用 P6 现成对象，四个已知修补提交中的其它匹配模块已有当前对象，未覆盖或重编它们。该核查没有执行新的 Lean、stock、资格检查或安装。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

@@ -1,7 +1,7 @@
 import ImbalancedChen.P2TableActionSoundness
 
 /-!
-SOURCE_ONLY / UNCOMPILED / OPEN30.
+Verification records: docs/verification/20261123-blue-compilation.
 
 This module is staged next to P2TableActionSoundness.lean; its directory must
 be a source root for the sibling import above. The table has exactly 400
@@ -110,12 +110,12 @@ def Action.target : Action → Bool × Fin 200
 concrete bank has 300 proved actions, not the unlicensed 106 W1/W2 actions. -/
 def fullOrdinaryBank : List Action :=
   List.ofFn (fun i : Fin 150 => Action.buchstabUpper
-    ⟨i.val+50, by omega⟩ (by omega)) ++
+    ⟨i.val+50, by omega⟩ (by change 50 ≤ i.val+50; omega)) ++
   List.ofFn (fun i : Fin 150 => Action.buchstabLower
-    ⟨i.val+50, by omega⟩ (by omega))
+    ⟨i.val+50, by omega⟩ (by change 50 ≤ i.val+50; omega))
 
 theorem fullOrdinaryBank_length : fullOrdinaryBank.length = 300 := by
-  simp [fullOrdinaryBank]
+  simp only [fullOrdinaryBank, List.length_append, List.length_ofFn] <;> norm_num
 
 /-- Original per-product Euclidean floors, with old-table reads only. -/
 def suffixNumerator (W : LogWeights) (X : Table) (upper : Bool) (k : ℕ) : ℤ :=
@@ -163,7 +163,9 @@ private theorem target_parameter_bounds (i : Fin 200) (hi : 50 ≤ i.val) :
   have hlo := tableGrid_mono (show 50 ≤ i.val+1 by omega)
   have hhi := (tableGrid_bounds (show i.val+1 ≤ 200 by omega)).2
   constructor
-  · simpa [tableGrid] using hlo
+  · have hgrid50 : tableGrid 50 = 2 := by norm_num [tableGrid]
+    rw [hgrid50] at hlo
+    exact hlo
   · exact hhi
 
 /-- Action soundness is proved separately for every legal constructor.
@@ -187,7 +189,7 @@ theorem evaluate_sound (W : LogWeights) {δ : ℝ} {old : Table}
   | buchstabLower i hi =>
       have ht := rounded_original_grid_tail_sound true
         (read old true) W.numerator hδ hδhi tableQ_pos (show i.val-49 ≤ 200 by omega)
-        (show (if true then 0 else 50 : ℕ) ≤ i.val-49 by omega)
+        (show (if true then 0 else 50 : ℕ) ≤ i.val-49 by simp)
         (fun j hj => read_nonnegative hn true j) W.nonnegative
         (fun j hj => read_sound hsound true j hj) W.log_lower
       rw [← suffixNumerator_scaled, tableGrid_lower_start hi] at ht

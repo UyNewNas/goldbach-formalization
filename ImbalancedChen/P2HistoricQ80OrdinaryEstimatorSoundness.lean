@@ -4,7 +4,7 @@ import ImbalancedChen.P2TableActionSoundness
 import ImbalancedChen.ActualThirdOriginalBoxMoments
 
 /-!
-SOURCE_WRITTEN_UNCOMPILED. Analytic half of the literal saved-Q80 pair cell.
+Verification records: docs/verification/20261123-blue-compilation. Analytic half of the literal saved-Q80 pair cell.
 The producer/interval/lookup definitions are imported, not redefined.
 
 The actual source was read, never run:
@@ -55,9 +55,9 @@ theorem affineRange_real_enclosure (p : Plane) (tl tr ul ur : ℚ)
   rcases signed_edge_bounds p.d ul ur hu with ⟨hdl, hdr⟩
   constructor
   · simpa only [affineRange, realPlane, Rat.cast_add] using
-      add_le_add (add_le_add_left hbl (p.c : ℝ)) hdl
+      add_le_add (add_le_add (le_refl (p.c : ℝ)) hbl) hdl
   · simpa only [affineRange, realPlane, Rat.cast_add] using
-      add_le_add (add_le_add_left hbr (p.c : ℝ)) hdr
+      add_le_add (add_le_add (le_refl (p.c : ℝ)) hbr) hdr
 
 theorem planeAccepted_real_minorant (p q : Plane) (tl tr ul ur : ℚ)
     (hp : planeAccepted p q tl tr ul ur)
@@ -187,6 +187,7 @@ theorem weightedIntegral_affine (c b d : ℝ) {tl tr ul ur : ℝ}
       apply intervalIntegral.integral_congr
       intro t ht'
       rw [Set.uIcc_of_le ht] at ht'
+      dsimp only
       rw [hinner t ht']
       field_simp [(htl.trans_le ht'.1).ne']
       <;> ring
@@ -243,7 +244,8 @@ theorem ordinary_base_real_sound {tl tr ul ur rl fl : ℝ}
       have hr := hrl.trans (ordinaryResidual_antitone ht'.2 hu'.2)
       have hp := monotone_actualExtendedThirdLowerFactor
         (div_le_div_of_nonneg_right hr ordinaryA_pos.le)
-      exact mul_le_mul_of_nonneg_left (hfl.trans hp) (by positivity))
+      exact mul_le_mul_of_nonneg_left (hfl.trans hp)
+        (div_nonneg (by norm_num) ordinaryA_pos.le))
   rw [weightedIntegral_const _ htl (htl.trans_le ht) hul (hul.trans_le hu)] at hs
   convert hs using 1 <;> ring
 
@@ -314,7 +316,8 @@ theorem ordinary_chord_real_sound (p : Plane) {tl tr ul ur pl ph fl fh : ℝ}
       intro t ht' u hu'
       exact mul_le_mul_of_nonneg_left
         (ordinary_chord_pointwise p hpl hspan (hrange t ht' u hu')
-          (hminor t ht' u hu') hfl hfh) (by positivity))
+          (hminor t ht' u hu') hfl hfh)
+        (div_nonneg (by norm_num) ordinaryA_pos.le))
   rw [weightedIntegral_scale, weightedIntegral_realChord p htl hul ht hu hspan] at hs
   exact hs
 

@@ -1,0 +1,242 @@
+[
+  {
+    "kind": "abbrev",
+    "name": "Table",
+    "header": "abbrev Table := Bool → Fin 200 → ℤ",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "entry_count",
+    "header": "theorem entry_count : Fintype.card (Bool × Fin 200) = 400",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "zeroTable",
+    "header": "def zeroTable : Table := fun _ _ => 0",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "Nonnegative",
+    "header": "def Nonnegative (X : Table) : Prop := ∀ upper i, 0 ≤ X upper i",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "Below",
+    "header": "def Below (X Y : Table) : Prop := ∀ upper i, X upper i ≤ Y upper i",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "Sound",
+    "header": "def Sound (δ : ℝ) (X : Table) : Prop := ∀ upper i,\n  (X upper i : ℝ) / tableQ ≤\n    wuImprovementLimit upper δ (tableGrid (i.val+1))",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "read",
+    "header": "def read (X : Table) (upper : Bool) (j : ℕ) : ℤ :=\n  if hj : j < 200 then X upper ⟨j, hj⟩ else 0",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "read_mono",
+    "header": "theorem read_mono {X Y : Table} (hXY : Below X Y) (upper : Bool) (j : ℕ) :\n    read X upper j ≤ read Y upper j",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "read_nonnegative",
+    "header": "theorem read_nonnegative {X : Table} (hX : Nonnegative X) (upper : Bool) (j : ℕ) :\n    0 ≤ read X upper j",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "read_sound",
+    "header": "theorem read_sound {δ : ℝ} {X : Table} (hX : Sound δ X)\n    (upper : Bool) (j : ℕ) (hj : j < 200) :\n    (read X upper j : ℝ) / tableQ ≤\n      wuImprovementLimit upper δ (tableGrid (j+1))",
+    "private": false
+  },
+  {
+    "kind": "structure",
+    "name": "LogWeights",
+    "header": "structure LogWeights where\n  numerator : ℕ → ℤ\n  nonnegative : ∀ j < 200, 0 ≤ numerator j\n  log_lower : ∀ j < 200, (numerator j : ℝ) / tableQ ≤\n    Real.log (tableGrid (j+1) / tableGrid j)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "zeroLogWeights",
+    "header": "def zeroLogWeights : LogWeights where\n  numerator := fun _ => 0\n  nonnegative := fun _ _ => le_rfl\n  log_lower := by\n    intro j hj\n    simp only [Int.cast_zero, zero_div]\n    apply Real.log_nonneg\n    have hj0 : 0 < tableGrid j :=\n      lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) (tableGrid_bounds (by omega)).1\n    apply (le_div_iff₀ hj0).2\n    simpa only [one_mul] using tableGrid_mono (Nat.le_succ j)\n\n                                                                        \n                                                                               \ninductive Action where\n  | buchstabUpper (i : Fin 200) (hi : 50 ≤ i.val)\n  | buchstabLower (i : Fin 200) (hi : 50 ≤ i.val)\n  | upperTransport (i j : Fin 200) (hij : i.val ≤ j.val)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "Action.target",
+    "header": "def Action.target : Action → Bool × Fin 200\n  | .buchstabUpper i _ => (true, i)\n  | .buchstabLower i _ => (false, i)\n  | .upperTransport i _ _ => (true, i)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "fullOrdinaryBank",
+    "header": "def fullOrdinaryBank : List Action :=\n  List.ofFn (fun i : Fin 150 => Action.buchstabUpper\n    ⟨i.val+50, by omega⟩ (by omega)) ++\n  List.ofFn (fun i : Fin 150 => Action.buchstabLower\n    ⟨i.val+50, by omega⟩ (by omega))",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "fullOrdinaryBank_length",
+    "header": "theorem fullOrdinaryBank_length : fullOrdinaryBank.length = 300",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "suffixNumerator",
+    "header": "def suffixNumerator (W : LogWeights) (X : Table) (upper : Bool) (k : ℕ) : ℤ :=\n  ∑ j ∈ Finset.range (200-k),\n    read X upper (k+j) * W.numerator (k+j) / (tableQ : ℤ)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "evaluate",
+    "header": "def evaluate (W : LogWeights) (old : Table) : Action → ℤ\n  | .buchstabUpper i _ => suffixNumerator W old false (max 50 (i.val-49))\n  | .buchstabLower i _ => suffixNumerator W old true (i.val-49)\n  | .upperTransport _ j _ => old true j",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "suffixNumerator_scaled",
+    "header": "theorem suffixNumerator_scaled (W : LogWeights) (X : Table) (upper : Bool) (k : ℕ) :\n    (suffixNumerator W X upper k : ℝ) / tableQ =\n      ∑ j ∈ Finset.range (200-k),\n        roundedProduct tableQ (read X upper (k+j)) (W.numerator (k+j))",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "suffixNumerator_mono",
+    "header": "theorem suffixNumerator_mono (W : LogWeights) {X Y : Table}\n    (hXY : Below X Y) (upper : Bool) {k : ℕ} (hk : k ≤ 200) :\n    suffixNumerator W X upper k ≤ suffixNumerator W Y upper k",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "evaluate_mono",
+    "header": "theorem evaluate_mono (W : LogWeights) {X Y : Table} (hXY : Below X Y) (a : Action) :\n    evaluate W X a ≤ evaluate W Y a",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "target_parameter_bounds",
+    "header": "private theorem target_parameter_bounds (i : Fin 200) (hi : 50 ≤ i.val) :\n    2 ≤ tableGrid (i.val+1) ∧ tableGrid (i.val+1) ≤ 5",
+    "private": true
+  },
+  {
+    "kind": "theorem",
+    "name": "evaluate_sound",
+    "header": "theorem evaluate_sound (W : LogWeights) {δ : ℝ} {old : Table}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hn : Nonnegative old) (hsound : Sound δ old) (a : Action) :\n    (evaluate W old a : ℝ) / tableQ ≤\n      wuImprovementLimit a.target.1 δ (tableGrid (a.target.2.val+1))",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "simultaneousStep",
+    "header": "def simultaneousStep (W : LogWeights) (old : Table) : List Action → Table\n  | [] => old\n  | a :: bank => fun upper i =>\n      if a.target = (upper,i) then\n        max (simultaneousStep W old bank upper i) (evaluate W old a)\n      else simultaneousStep W old bank upper i",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "simultaneousStep_retains",
+    "header": "theorem simultaneousStep_retains (W : LogWeights) (old : Table) (bank : List Action) :\n    Below old (simultaneousStep W old bank)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "simultaneousStep_nonnegative",
+    "header": "theorem simultaneousStep_nonnegative (W : LogWeights) {old : Table}\n    (hn : Nonnegative old) (bank : List Action) :\n    Nonnegative (simultaneousStep W old bank)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "simultaneousStep_mono",
+    "header": "theorem simultaneousStep_mono (W : LogWeights) {X Y : Table}\n    (hXY : Below X Y) (bank : List Action) :\n    Below (simultaneousStep W X bank) (simultaneousStep W Y bank)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "simultaneousStep_sound",
+    "header": "theorem simultaneousStep_sound (W : LogWeights) {δ : ℝ} {old : Table}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hn : Nonnegative old) (hsound : Sound δ old) (bank : List Action) :\n    Sound δ (simultaneousStep W old bank)",
+    "private": false
+  },
+  {
+    "kind": "def",
+    "name": "iterateFrom",
+    "header": "def iterateFrom (W : LogWeights) (bank : List Action) (seed : Table) : ℕ → Table\n  | 0 => seed\n  | rounds+1 => simultaneousStep W (iterateFrom W bank seed rounds) bank",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "iterateFrom_nonnegative",
+    "header": "theorem iterateFrom_nonnegative (W : LogWeights) (bank : List Action) {seed : Table}\n    (hn : Nonnegative seed) (rounds : ℕ) :\n    Nonnegative (iterateFrom W bank seed rounds)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "iterateFrom_sound",
+    "header": "theorem iterateFrom_sound (W : LogWeights) (bank : List Action) {δ : ℝ} {seed : Table}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hn : Nonnegative seed) (hsound : Sound δ seed) (rounds : ℕ) :\n    Sound δ (iterateFrom W bank seed rounds)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "iterateFrom_le_succ",
+    "header": "theorem iterateFrom_le_succ (W : LogWeights) (bank : List Action)\n    (seed : Table) (rounds : ℕ) :\n    Below (iterateFrom W bank seed rounds) (iterateFrom W bank seed (rounds+1))",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "iterateFrom_mono",
+    "header": "theorem iterateFrom_mono (W : LogWeights) (bank : List Action) (seed : Table) :\n    ∀ m n, m ≤ n → Below (iterateFrom W bank seed m) (iterateFrom W bank seed n)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "zeroTable_nonnegative",
+    "header": "theorem zeroTable_nonnegative : Nonnegative zeroTable",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "zeroTable_sound",
+    "header": "theorem zeroTable_sound {δ : ℝ} (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) :\n    Sound δ zeroTable",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "zero_seed_iteration_sound",
+    "header": "theorem zero_seed_iteration_sound (W : LogWeights) (bank : List Action) {δ : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) (rounds : ℕ) :\n    Sound δ (iterateFrom W bank zeroTable rounds)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "zero_seed_430_sound",
+    "header": "theorem zero_seed_430_sound (W : LogWeights) (bank : List Action) {δ : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) :\n    Sound δ (iterateFrom W bank zeroTable 430)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "concrete_ordinary_zero_seed_430_sound",
+    "header": "theorem concrete_ordinary_zero_seed_430_sound {δ : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10) :\n    Sound δ (iterateFrom zeroLogWeights fullOrdinaryBank zeroTable 430)",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "evaluate_zero",
+    "header": "theorem evaluate_zero (W : LogWeights) (a : Action) : evaluate W zeroTable a = 0",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "simultaneousStep_zero",
+    "header": "theorem simultaneousStep_zero (W : LogWeights) (bank : List Action) :\n    simultaneousStep W zeroTable bank = zeroTable",
+    "private": false
+  },
+  {
+    "kind": "theorem",
+    "name": "zero_seed_iteration_eq_zero",
+    "header": "theorem zero_seed_iteration_eq_zero (W : LogWeights) (bank : List Action) (rounds : ℕ) :\n    iterateFrom W bank zeroTable rounds = zeroTable",
+    "private": false
+  }
+]

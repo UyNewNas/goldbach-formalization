@@ -1,0 +1,342 @@
+{
+  "schema": "member_ordinary_estimator_readonly_static_candidate_v1",
+  "captured_utc": "2026-11-23T14:29:28.792124+00:00",
+  "owner": "/root/manuscript_inventory",
+  "static_reviewer_and_candidate_preparer": "/root/blue_inventory",
+  "status": "STATIC_CANDIDATE_UNCOMPILED_NO_KERNEL_OR_THEOREM_CREDIT",
+  "module": "ImbalancedChen.P2HistoricQ80OrdinaryEstimatorSoundness",
+  "selected_source": {
+    "selection": "Y11",
+    "bytes": 30118,
+    "sha256": "b48e69ff40f494c3f6e28634bb39a592b5ad19aa4d78afcd4a00605b7ae7de9a",
+    "git_blob_sha1": "1cfac7c07af49e5f0b645a2f5c6fe620acb7abaa",
+    "source_path": "ImbalancedChen/P2HistoricQ80OrdinaryEstimatorSoundness.lean",
+    "imports": [
+      "ImbalancedChen.P2HistoricQ80DefectLookup",
+      "ImbalancedChen.P2SavedFloorSemantics",
+      "ImbalancedChen.P2TableActionSoundness",
+      "ImbalancedChen.ActualThirdOriginalBoxMoments"
+    ],
+    "install_path": "ImbalancedChen/P2HistoricQ80OrdinaryEstimatorSoundness.lean",
+    "installed_path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80OrdinaryEstimatorSoundness.lean",
+    "retrieval": "exact registered Git blob from local formalization object store"
+  },
+  "baseline_source": {
+    "path": "/workspace/blue-member-static-ordinary-estimator/baseline.lean",
+    "bytes": 30118,
+    "sha256": "b48e69ff40f494c3f6e28634bb39a592b5ad19aa4d78afcd4a00605b7ae7de9a"
+  },
+  "candidate_source": {
+    "path": "/workspace/blue-member-static-ordinary-estimator/candidate.lean",
+    "bytes": 30217,
+    "sha256": "890eac4e31c903bff54dc4b9e7751d0134704ae46ccea547013df79d02bfcb9a"
+  },
+  "patch": {
+    "path": "/workspace/blue-member-static-ordinary-estimator/candidate.patch",
+    "bytes": 1845,
+    "sha256": "d0f45936e1165a2faa08a33e432d777c91590cb9171f66438cca9169368013b7"
+  },
+  "main_and_Member_exact_same_registered_preimage": true,
+  "P6_canonical_source_exists": false,
+  "all_changes_are_exact_local_proof_body_replacements": true,
+  "changes": [
+    {
+      "theorem": "affineRange_real_enclosure",
+      "old": "add_le_add (add_le_add_left hbl (p.c : ℝ)) hdl",
+      "new": "add_le_add (add_le_add (le_refl (p.c : ℝ)) hbl) hdl",
+      "failure_line": 57,
+      "classification": "current addition-side API; explicitly keep identical p.c as left summand",
+      "old_original_line": 58
+    },
+    {
+      "theorem": "affineRange_real_enclosure",
+      "old": "add_le_add (add_le_add_left hbr (p.c : ℝ)) hdr",
+      "new": "add_le_add (add_le_add (le_refl (p.c : ℝ)) hbr) hdr",
+      "failure_line": 59,
+      "classification": "same current addition-side API and unchanged p.c left summand",
+      "old_original_line": 60
+    },
+    {
+      "theorem": "weightedIntegral_affine",
+      "old": "      rw [Set.uIcc_of_le ht] at ht'\n      rw [hinner t ht']",
+      "new": "      rw [Set.uIcc_of_le ht] at ht'\n      dsimp only\n      rw [hinner t ht']",
+      "failure_line": 190,
+      "classification": "beta-reduce actual lambda applications before existing inner-integral equality rewrite",
+      "old_original_line": 189
+    },
+    {
+      "theorem": "ordinary_base_real_sound",
+      "old": "exact mul_le_mul_of_nonneg_left (hfl.trans hp) (by positivity)",
+      "new": "exact mul_le_mul_of_nonneg_left (hfl.trans hp)\n        (div_nonneg (by norm_num) ordinaryA_pos.le)",
+      "failure_line": 246,
+      "classification": "reuse existing ordinaryA_pos to establish unchanged 0≤4/ordinaryA multiplier",
+      "old_original_line": 246
+    },
+    {
+      "theorem": "ordinary_chord_real_sound",
+      "old": "(hminor t ht' u hu') hfl hfh) (by positivity))",
+      "new": "(hminor t ht' u hu') hfl hfh)\n        (div_nonneg (by norm_num) ordinaryA_pos.le))",
+      "failure_line": 317,
+      "classification": "same explicit existing denominator positivity for unchanged chord multiplier",
+      "old_original_line": 317
+    }
+  ],
+  "all_public_private_theorem_headers_byte_exact": true,
+  "public_theorem_count": 17,
+  "private_theorem_count": 6,
+  "headers": [
+    {
+      "name": "signed_edge_bounds",
+      "private": true,
+      "header_sha256": "df9b67f5b596cbe0b5f8683472499a3d3a7877a96dc79f6ea75f4d955085b292",
+      "header": "private theorem signed_edge_bounds (m l r : ℚ) {x : ℝ}\n    (hx : x ∈ Icc (l : ℝ) (r : ℝ)) :\n    ((m * (if 0 ≤ m then l else r) : ℚ) : ℝ) ≤ (m : ℝ) * x ∧\n      (m : ℝ) * x ≤ ((m * (if 0 ≤ m then r else l) : ℚ) : ℝ) :="
+    },
+    {
+      "name": "affineRange_real_enclosure",
+      "private": false,
+      "header_sha256": "6a8104da347cdfff2e53dfbdc94c42de2dcfb53963fb6d3c74fddcd3592f53ee",
+      "header": "theorem affineRange_real_enclosure (p : Plane) (tl tr ul ur : ℚ)\n    {t u : ℝ} (ht : t ∈ Icc (tl : ℝ) (tr : ℝ))\n    (hu : u ∈ Icc (ul : ℝ) (ur : ℝ)) :\n    (((affineRange p tl tr ul ur).1 : ℚ) : ℝ) ≤ realPlane p t u ∧\n      realPlane p t u ≤ (((affineRange p tl tr ul ur).2 : ℚ) : ℝ) :="
+    },
+    {
+      "name": "planeAccepted_real_minorant",
+      "private": false,
+      "header_sha256": "b9344e11b0d7d8b1e5cfadfe6e2738182aceb533bae4d5deb451fc771cf00f7d",
+      "header": "theorem planeAccepted_real_minorant (p q : Plane) (tl tr ul ur : ℚ)\n    (hp : planeAccepted p q tl tr ul ur)\n    {t u : ℝ} (ht : t ∈ Icc (tl : ℝ) (tr : ℝ))\n    (hu : u ∈ Icc (ul : ℝ) (ur : ℝ)) : realPlane p t u ≤ realPlane q t u :="
+    },
+    {
+      "name": "ordinaryPlane₁_real",
+      "private": false,
+      "header_sha256": "028ced1d41cb15f782ce592b8b56585aa520ffd5d41ab0dab823256049d45ef3",
+      "header": "theorem ordinaryPlane₁_real (t u : ℝ) :\n    realPlane ordinaryPlane₁ t u = ordinaryResidual t u :="
+    },
+    {
+      "name": "reciprocal_integrable",
+      "private": true,
+      "header_sha256": "17bbdec99b90fe28f3340b5f4e49771e4405616badc7b7dd2acb674c27482191",
+      "header": "private theorem reciprocal_integrable {l r : ℝ} (hl : 0 < l) (hlr : l ≤ r) :\n    IntervalIntegrable (fun x : ℝ => 1 / x) volume l r :="
+    },
+    {
+      "name": "weighted_inner_integrable",
+      "private": true,
+      "header_sha256": "7cc43ec32d1ab7f8f05725fa44f36a34360a92b2d77a97a28934ad13f9cfa3ba",
+      "header": "private theorem weighted_inner_integrable (f : ℝ → ℝ → ℝ)\n    (hf : Continuous (fun p : ℝ × ℝ => f p.1 p.2))\n    {t ul ur : ℝ} (ht : 0 < t) (hul : 0 < ul) (hu : ul ≤ ur) :\n    IntervalIntegrable (fun u => f t u / (t * u)) volume ul ur :="
+    },
+    {
+      "name": "weighted_outer_integrable",
+      "private": true,
+      "header_sha256": "465d29f5869997ae4b1e27558eab6583da86ee2b7719998b7b9eca343e243722",
+      "header": "private theorem weighted_outer_integrable (f : ℝ → ℝ → ℝ)\n    (hf : Continuous (fun p : ℝ × ℝ => f p.1 p.2))\n    {tl tr ul ur : ℝ} (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    IntervalIntegrable (fun t => ∫ u in ul..ur, f t u / (t * u)) volume tl tr :="
+    },
+    {
+      "name": "weightedIntegral_const",
+      "private": false,
+      "header_sha256": "0d85a9519c4834e8ffabfb163e9b7a5feeaba59af328b12c2f34bdfe9ab2234f",
+      "header": "theorem weightedIntegral_const (v : ℝ) {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (htr : 0 < tr) (hul : 0 < ul) (hur : 0 < ur) :\n    weightedIntegral (fun _ _ => v) tl tr ul ur = v * realMass tl tr ul ur :="
+    },
+    {
+      "name": "weightedIntegral_affine",
+      "private": false,
+      "header_sha256": "ea4fd4e778b24d7b78222fb36575f2d718a323971421e8b771bf1e171bdf4433",
+      "header": "theorem weightedIntegral_affine (c b d : ℝ) {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    weightedIntegral (fun t u => c + b * t + d * u) tl tr ul ur =\n      c * realMass tl tr ul ur + b * (tr - tl) * Real.log (ur / ul) +\n        d * (ur - ul) * Real.log (tr / tl) :="
+    },
+    {
+      "name": "weightedIntegral_scale",
+      "private": false,
+      "header_sha256": "39a543ce8923db8fce8e4f8dd7060a202f1a2d30ebc1155e2ebc02bc27175f80",
+      "header": "theorem weightedIntegral_scale (v : ℝ) (f : ℝ → ℝ → ℝ) (tl tr ul ur : ℝ) :\n    weightedIntegral (fun t u => v * f t u) tl tr ul ur =\n      v * weightedIntegral f tl tr ul ur :="
+    },
+    {
+      "name": "continuous_lower_comparison",
+      "private": true,
+      "header_sha256": "8ba4ee83754047f9de7de75447840acdc96cdc6109132af7618ae773056ad2b3",
+      "header": "private theorem continuous_lower_comparison (f : ℝ → ℝ → ℝ)\n    (hf : Continuous (fun p : ℝ × ℝ => f p.1 p.2))\n    {tl tr ul ur : ℝ} (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hpoint : ∀ t ∈ Icc tl tr, ∀ u ∈ Icc ul ur,\n      f t u ≤ (4 / ordinaryA) * actualExtendedThirdLowerFactor (ordinaryResidual t u / ordinaryA)) :\n    weightedIntegral f tl tr ul ur ≤ ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "ordinary_base_real_sound",
+      "private": false,
+      "header_sha256": "afdca3dc2d656bda2c3c42be85569f9e0f095296a4950d00a8c2250c01c45c7a",
+      "header": "theorem ordinary_base_real_sound {tl tr ul ur rl fl : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hrl : rl ≤ ordinaryResidual tr ur)\n    (hfl : fl ≤ actualExtendedThirdLowerFactor (rl / ordinaryA)) :\n    4 * fl * realMass tl tr ul ur / ordinaryA ≤ ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "ordinary_chord_pointwise",
+      "private": false,
+      "header_sha256": "f8d81d1b582d1cfe1309f017581870bb4f0f4eb986fb7c0890c4b6d52bfb67f4",
+      "header": "theorem ordinary_chord_pointwise (p : Plane) {pl ph fl fh t u : ℝ}\n    (hpl : 2 * ordinaryA ≤ pl) (hspan : pl < ph)\n    (hrange : realPlane p t u ∈ Icc pl ph)\n    (hminor : realPlane p t u ≤ ordinaryResidual t u)\n    (hfl : fl ≤ actualExtendedThirdLowerFactor (pl / ordinaryA))\n    (hfh : fh ≤ actualExtendedThirdLowerFactor (ph / ordinaryA)) :\n    realChord p pl ph fl fh t u ≤\n      actualExtendedThirdLowerFactor (ordinaryResidual t u / ordinaryA) :="
+    },
+    {
+      "name": "weightedIntegral_realChord",
+      "private": false,
+      "header_sha256": "316433e5f820f40a7fea36e9786f6d4a09891ad54c3cf9c286ac4209cab0e150",
+      "header": "theorem weightedIntegral_realChord (p : Plane) {tl tr ul ur pl ph fl fh : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) (hspan : pl < ph) :\n    weightedIntegral (realChord p pl ph fl fh) tl tr ul ur =\n      (fl * (ph * realMass tl tr ul ur - realMoment p tl tr ul ur) +\n        fh * (realMoment p tl tr ul ur - pl * realMass tl tr ul ur)) / (ph - pl) :="
+    },
+    {
+      "name": "ordinary_chord_real_sound",
+      "private": false,
+      "header_sha256": "550a60156e50672aa7e551e55cc0f3acedb4e4cb9793304c9da8ae5c0255ada0",
+      "header": "theorem ordinary_chord_real_sound (p : Plane) {tl tr ul ur pl ph fl fh : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hpl : 2 * ordinaryA ≤ pl) (hspan : pl < ph)\n    (hrange : ∀ t ∈ Icc tl tr, ∀ u ∈ Icc ul ur, realPlane p t u ∈ Icc pl ph)\n    (hminor : ∀ t ∈ Icc tl tr, ∀ u ∈ Icc ul ur, realPlane p t u ≤ ordinaryResidual t u)\n    (hfl : fl ≤ actualExtendedThirdLowerFactor (pl / ordinaryA))\n    (hfh : fh ≤ actualExtendedThirdLowerFactor (ph / ordinaryA)) :\n    (4 / ordinaryA) *\n      ((fl * (ph * realMass tl tr ul ur - realMoment p tl tr ul ur) +\n        fh * (realMoment p tl tr ul ur - pl * realMass tl tr ul ur)) / (ph - pl)) ≤\n      ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "actual_defect_endpoint_pointwise",
+      "private": false,
+      "header_sha256": "71b67da15cdcee36ff918410041968cdd1ecc20b4a1bb89499cf2964bf161f39",
+      "header": "theorem actual_defect_endpoint_pointwise {δ rl rh hlow t u : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (hlo : 2 * ordinaryA ≤ rl) (hrange : ordinaryResidual t u ∈ Icc rl rh)\n    (hhi : rh / ordinaryA ≤ 5) (hh0 : 0 ≤ hlow)\n    (hh : hlow ≤ P2TableActionSourceOnly.h δ (rh / ordinaryA)) :\n    hlow / rh ≤ P2TableActionSourceOnly.h δ (ordinaryResidual t u / ordinaryA) /\n      ordinaryResidual t u :="
+    },
+    {
+      "name": "actual_defect_logmass_sound",
+      "private": false,
+      "header_sha256": "b67a1724aa6020000e5a3c089843e11d5812da6a7f2dfeaeb695eee5cb7a4a1e",
+      "header": "theorem actual_defect_logmass_sound {δ tl tr ul ur rl rh hlow : ℝ}\n    (hδ : 0 < δ) (hδhi : δ ≤ 1 / 10)\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hlo : 2 * ordinaryA ≤ rl)\n    (hrange : ∀ t ∈ Icc tl tr, ∀ u ∈ Icc ul ur, ordinaryResidual t u ∈ Icc rl rh)\n    (hhi : rh / ordinaryA ≤ 5) (hh0 : 0 ≤ hlow)\n    (hh : hlow ≤ P2TableActionSourceOnly.h δ (rh / ordinaryA))\n    (hinner : ∀ t ∈ Icc tl tr, IntervalIntegrable (actualDefectKernel δ t) volume ul ur)\n    (houter : IntervalIntegrable (fun t => ∫ u in ul..ur, actualDefectKernel δ t u)\n      volume tl tr) :\n    4 * hlow * realMass tl tr ul ur / rh ≤\n      ∫ t in tl..tr, ∫ u in ul..ur, actualDefectKernel δ t u :="
+    },
+    {
+      "name": "cast_source_a",
+      "private": false,
+      "header_sha256": "53167b47f0c2db6e331da29b9973c060b4b784a7689ddbf444171f76911f3c9e",
+      "header": "theorem cast_source_a : (a : ℝ) = ordinaryA :="
+    },
+    {
+      "name": "ordinary_integral_nonneg",
+      "private": false,
+      "header_sha256": "f4f89aeb337be499ca9c8ece12bc18019df092d5e42416b0bc53312a7e3911de",
+      "header": "theorem ordinary_integral_nonneg {tl tr ul ur : ℝ}\n    (htl : 0 < tl) (hul : 0 < ul) (ht : tl ≤ tr) (hu : ul ≤ ur) :\n    0 ≤ ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "historical_base_decode_sound",
+      "private": false,
+      "header_sha256": "010d097ee399b67e8dd67334dfe674a4c013dd35678e062291da38cf2f58660d",
+      "header": "theorem historical_base_decode_sound (sf logI : ℚ → I80)\n    (tl tr ul ur rl : ℚ)\n    (htl : (0 : ℝ) < tl) (hul : (0 : ℝ) < ul)\n    (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hrl : (rl : ℝ) ≤ ordinaryResidual tr ur)\n    (hsf : (sf (rl/a)).Contains (actualExtendedThirdLowerFactor ((rl/a:ℚ):ℝ)))\n    (hlogT : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hlogU : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :\n    ((ordinaryRectangleBase sf logI tl tr ul ur rl).decodeLo : ℝ) ≤\n      ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "historical_chord_decode_sound",
+      "private": false,
+      "header_sha256": "70eaed7cecf8a98fc6e2838aff1ac4edb70edbe70c3b068f28fbb0a8ef3cd8e2",
+      "header": "theorem historical_chord_decode_sound (sf logI : ℚ → I80)\n    (tl tr ul ur : ℚ) (p : Plane)\n    (htl : (0 : ℝ) < tl) (hul : (0 : ℝ) < ul) (ht : tl ≤ tr) (hu : ul ≤ ur)\n    (hpl : 2*a ≤ (affineRange p tl tr ul ur).1)\n    (hne : (affineRange p tl tr ul ur).2 ≠ (affineRange p tl tr ul ur).1)\n    (hminor : ∀ t ∈ Icc (tl:ℝ) (tr:ℝ), ∀ u ∈ Icc (ul:ℝ) (ur:ℝ),\n      realPlane p t u ≤ ordinaryResidual t u)\n    (hfl : ((sf ((affineRange p tl tr ul ur).1/a)).decodeLo : ℝ) ≤\n      actualExtendedThirdLowerFactor (((affineRange p tl tr ul ur).1/a:ℚ):ℝ))\n    (hfh : ((sf ((affineRange p tl tr ul ur).2/a)).decodeLo : ℝ) ≤\n      actualExtendedThirdLowerFactor (((affineRange p tl tr ul ur).2/a:ℚ):ℝ))\n    (hlogT : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hlogU : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ)))\n    (hden : 0 < (I80.point ((affineRange p tl tr ul ur).2 -\n      (affineRange p tl tr ul ur).1)).lo) :\n    ((ordinaryRectangleChord sf logI tl tr ul ur p).decodeLo : ℝ) ≤\n      ordinaryCellIntegral tl tr ul ur :="
+    },
+    {
+      "name": "decodeInteger_max_le",
+      "private": true,
+      "header_sha256": "dc0136a8efe7d57af339c736bc58c659a123e5b47d0d76b8b7ecd8a8acf23507",
+      "header": "private theorem decodeInteger_max_le {x y : ℤ} {v : ℝ}\n    (hx : decodeInteger x ≤ v) (hy : decodeInteger y ≤ v) :\n    decodeInteger (max x y) ≤ v :="
+    },
+    {
+      "name": "savedOrdinaryRectangle_actual_lower",
+      "private": false,
+      "header_sha256": "5e1b881a318c085e61db8e15fc1024909545cc80c7a6619baea0cead26f917bb",
+      "header": "theorem savedOrdinaryRectangle_actual_lower (sf logI : ℚ → I80)\n    (tl tr ul ur : ℚ) (htl : (0 : ℝ) < tl) (hul : (0 : ℝ) < ul)\n    (ht : tl ≤ tr) (hu : ul ≤ ur) (_hHighBranch : (25/128:ℚ) ≤ tl)\n    (hsf : ∀ q : ℚ, (sf q).Contains (actualExtendedThirdLowerFactor (q:ℝ)))\n    (hlogT : (logI (tr/tl)).Contains (Real.log ((tr/tl:ℚ):ℝ)))\n    (hlogU : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ)))\n    (hden₀ : chordEligible ordinaryPlane₀ ordinaryPlane₁ tl tr ul ur →\n      0 < (I80.point ((affineRange ordinaryPlane₀ tl tr ul ur).2 -\n        (affineRange ordinaryPlane₀ tl tr ul ur).1)).lo)\n    (hden₁ : chordEligible ordinaryPlane₁ ordinaryPlane₀ tl tr ul ur →\n      0 < (I80.point ((affineRange ordinaryPlane₁ tl tr ul ur).2 -\n        (affineRange ordinaryPlane₁ tl tr ul ur).1)).lo) :\n    ((((savedOrdinaryRectangle sf logI tl tr ul ur : ℤ):ℚ) / Q : ℚ):ℝ) ≤\n      ordinaryCellIntegral tl tr ul ur :="
+    }
+  ],
+  "all_other_bytes_including_imports_namespaces_defs_structures_instances_constants_table_data_rowbanks_cutoffs_quantifiers_hypotheses_preserved_by_exact_replay": true,
+  "new_analytic_estimates_or_supplier_licences_or_axioms": false,
+  "observed_errors": {
+    "57_and59": "Term yielded coefficient-product+p.c but goal is p.c+coefficient-product; explicit two-argument add_le_add preserves summand positions.",
+    "190": "Actual target retains (fun x=>integral...) t; beta reduction exposes the exact existing hinner left-hand side without altering its integrand/domain.",
+    "246_and317": "positivity does not use the nonlocal ordinaryA_pos proof automatically. Existing div_nonneg plus ordinaryA_pos.le discharges precisely the same nonnegative multiplier."
+  },
+  "existing_reuse": {
+    "exact_module_published_variants": {
+      "path": "/workspace/blue-member-static-ordinary-estimator/PUBLISHED_SOURCE_VARIANTS.json",
+      "bytes": 887,
+      "sha256": "3f184046eb019f6e5a22c91d3ca523819ebac388a86180bf77e3cbc09349b366"
+    },
+    "whole_file_published_post_found": false,
+    "addition_API_existing_current_validated_pattern": {
+      "path": "/workspace/blue-member-build/ImbalancedChen/RenewalFiniteErrorPropagationP5.lean",
+      "bytes": 18146,
+      "sha256": "2120c44adb22911d5fe31f3985ec4465f61da8a79bc2862051e7ccfcc645c32a"
+    },
+    "positive_denominator_supplier": {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2SavedFloorSemantics.lean",
+      "bytes": 15186,
+      "sha256": "6b2503755fb93426d83f272526b2ba5a7382d04247cab9dad999af7bbc4a5aff"
+    },
+    "ordinaryA_exact_original_value": "417/5000 unchanged",
+    "ordinaryResidual_exact_original_value": "57/64-(5/2)t-u unchanged",
+    "div_nonneg_fixed_API": {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Basic.lean",
+      "bytes": 63984,
+      "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb"
+    },
+    "mathlib_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "beta_normalization_existing_published_pattern": {
+      "commit": "48db3d603d632bc60037e149a55717832e4c04be",
+      "path": "ImbalancedChen/P4BPhysicalShellMass.lean",
+      "declaration": "tendsto_physicalProductShell_mass",
+      "pattern": "dsimp only before existing equality rewrite; cited as tactic idiom, not proof/validation credit for this target"
+    }
+  },
+  "actual_failed_attempt": {
+    "aggregate_log_path": "/workspace/blue-member-aggregate-evidence/attempt-2-build.log",
+    "snapshot_read_bytes": 248386,
+    "snapshot_sha256": "9651cb07ecb687428ec14df6c5ec1d3481b465bcafd8b30bd66a000115650200",
+    "raw_byte_start": 236637,
+    "raw_byte_end_exclusive": 241783,
+    "unit_raw": {
+      "path": "/workspace/blue-member-static-ordinary-estimator/ACTUAL_FAILED_SOURCE_UNIT.log",
+      "bytes": 5146,
+      "sha256": "559c5c2b87ba6898b40e92a976e939edb177b8e5d75a42325ad162e375cffbde"
+    },
+    "actual_source_sha256": "b48e69ff40f494c3f6e28634bb39a592b5ad19aa4d78afcd4a00605b7ae7de9a",
+    "actual_duration_in_Lake_log": "155s",
+    "command_source": "unaltered trace line in extracted actual failed source unit",
+    "new_reproduction_or_Lean_run": false
+  },
+  "unchanged_direct_import_context": [
+    {
+      "module": "ImbalancedChen.P2HistoricQ80DefectLookup",
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+      "bytes": 29769,
+      "sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e"
+    },
+    {
+      "module": "ImbalancedChen.P2SavedFloorSemantics",
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2SavedFloorSemantics.lean",
+      "bytes": 15186,
+      "sha256": "6b2503755fb93426d83f272526b2ba5a7382d04247cab9dad999af7bbc4a5aff"
+    },
+    {
+      "module": "ImbalancedChen.P2TableActionSoundness",
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2TableActionSoundness.lean",
+      "bytes": 18801,
+      "sha256": "c4fa01de5f1c7348755ce35c3cf9877cd3d894a4d8d0afbe31232be3c66dc937"
+    },
+    {
+      "module": "ImbalancedChen.ActualThirdOriginalBoxMoments",
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualThirdOriginalBoxMoments.lean",
+      "bytes": 23492,
+      "sha256": "beac1c98677852897964b4bdb485bb5fa1fef8224cce95a5061561dea2edd1b9"
+    }
+  ],
+  "manuscript": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "bytes": 55378,
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "912-956 maximum of constant/chord ordinary alternatives; residual57/64-(5/2)t-u; exact dtdu/(tu) logarithmic moments; fixed rounding and factor1/4",
+        "958-969 defect closed-cell lookup/domain and zero conventions"
+      ]
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "bytes": 42662,
+      "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "anchors": [
+        "145-164 exact integrated affine chords against logarithmic measure and preserved estimate direction",
+        "378-412 original two-prefix residual, h248 admission2≤L/a≤5 and ordinary zero below2"
+      ]
+    }
+  ],
+  "mathematical_assessment": "The observed failures are source API orientation, reducibility and an already-proved fixed-denominator positivity premise. No substantive manuscript gap identified in these failures. Conditional sf/logI/h query licences, chord guards, actual residual domain, maximum-of-alternatives, zero conventions and all Q80/table data remain original. This candidate does not certify old numerical arrays, full saved loss/gain or unlicensed h endpoints.",
+  "pre_adoption_conditions": [
+    "Owner must verify exact registered preimage still matches immediately before adoption.",
+    "Only current normal build, named kernel replay and complete declaration/type/transitive-axiom audit may grant acceptance; no such calls were made here."
+  ],
+  "execution": {
+    "source_live_main_Member_P6_or_cache_edits": 0,
+    "Lean_Lake_kernel_type_axiom_calls": 0,
+    "artifact_downloads_or_installs": 0,
+    "unrelated_history_or_object_cache_scans": 0,
+    "isolated_static_candidate_only": true
+  }
+}
