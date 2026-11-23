@@ -64,7 +64,8 @@ theorem bag_merge_roots (h k : Heap Scheduled) :
       | nil => simp [Heap.merge,rootBag,bag_node,bag_nil]
       | node b d t =>
           simp only [Heap.merge]
-          split <;> simp [rootBag,bag_node,bag_nil,add_assoc,add_left_comm,add_comm]
+          split <;> simp [rootBag,bag_node,bag_nil,add_left_comm,add_comm] <;>
+            exact Multiset.cons_swap _ _ _
 
 theorem bag_combine (h : Heap Scheduled) : bag (h.combine keyLe) = bag h := by
   match h with
@@ -87,10 +88,11 @@ theorem contents_empty : contents (Batteries.PairingHeap.empty : Queue) = [] := 
 theorem contents_insert (p : Scheduled) (q : Queue) :
     (contents (Batteries.PairingHeap.insert p q) : Multiset Scheduled) =
       {p} + (contents q : Multiset Scheduled) := by
-  change bag ((Heap.singleton p).merge keyLe q.val) = {p} + bag q.val
-  rw [bag_merge_roots]
-  have hs : q.val.NoSibling := by cases q.property <;> constructor
-  simp [rootBag,Heap.singleton,bag_nil,rootBag_eq hs]
+  rcases q with ⟨h, hw⟩
+  change bag ((Heap.singleton p).merge keyLe h) = {p} + bag h
+  have hs : h.NoSibling := by cases hw <;> constructor
+  rw [bag_merge_roots, rootBag_eq hs]
+  simp [rootBag,Heap.singleton,bag_nil]
 
 /-- Every descendant of a root is later in the literal error/serial order. -/
 theorem nodeWF_priority (h : Heap Scheduled) (p : Scheduled)
@@ -120,7 +122,11 @@ theorem deleteMin_spec (q : Queue) (p : Scheduled) (rest : Queue)
   | nil => simp [Batteries.PairingHeap.deleteMin,Heap.deleteMin] at hd
   | @node a c hc =>
       simp only [Batteries.PairingHeap.deleteMin,Heap.deleteMin] at hd
-      cases hd
+      have he := Option.some.inj hd
+      have hp : p = a := (congrArg Prod.fst he).symm
+      have hrest := congrArg Prod.snd he
+      subst p
+      subst rest
       refine ⟨?_,by simp [contents,nodes_node,nodes_nil],?_⟩
       · change bag (.node a c .nil) = {a} + bag (c.combine keyLe)
         rw [bag_combine]
