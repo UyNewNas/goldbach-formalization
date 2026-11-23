@@ -1,0 +1,713 @@
+{
+  "schema": "independent_verified_member_p4b_source_reuse_review_v1",
+  "result": "NO_FINDINGS_IN_REVIEWED_POSTIMAGES",
+  "reviewer": "build_workflow",
+  "reviewed_utc": "2026-11-23T14:12:02.069361+00:00",
+  "scope": "Read-only source/proof/API/manuscript and existing acceptance review; no Lean/Lake/kernel/audit rerun, no live source/output or original record modified.",
+  "modules": [
+    {
+      "module": "ImbalancedChen.P4BSourceCutoffTransport",
+      "preimage_sha256": "7a401aa457679d73efc49e2dd0f8f9354660d9e4c539cc32df66eb92141fda61",
+      "postimage_sha256": "c585133615ec3f046bd8d1c64ddf59fa45a6de06eb57f6b4cb6b3c85c1447cd8",
+      "main_and_Member_current_sources_exact": true,
+      "full_source_command_count": 17,
+      "complete_raw_headers": [
+        {
+          "name": "cutoffBand",
+          "kind": "def",
+          "before": "def cutoffBand (b : \u211d) (N : \u2115) (T U : \u211d) : Finset \u2115",
+          "after": "def cutoffBand (b : \u211d) (N : \u2115) (T U : \u211d) : Finset \u2115",
+          "before_sha256": "6e76b804fd5084ef65bd69f3ea395af32477cf1f328ce234465b5d0ecebbb811",
+          "after_sha256": "6e76b804fd5084ef65bd69f3ea395af32477cf1f328ce234465b5d0ecebbb811"
+        },
+        {
+          "name": "mem_cutoffBand",
+          "kind": "theorem",
+          "before": "@[simp] theorem mem_cutoffBand {b T U : \u211d} {N m : \u2115} :\n    m \u2208 cutoffBand b N T U \u2194\n      m \u2264 N \u2227 T \u2264 (m : \u211d) \u2227 RealOrderedBadReceiver b m \u2227 (m : \u211d) < U",
+          "after": "@[simp] theorem mem_cutoffBand {b T U : \u211d} {N m : \u2115} :\n    m \u2208 cutoffBand b N T U \u2194\n      m \u2264 N \u2227 T \u2264 (m : \u211d) \u2227 RealOrderedBadReceiver b m \u2227 (m : \u211d) < U",
+          "before_sha256": "3b215870a2eab8d5ca29c602f52638137b93fc7154410e26c28fbc98a3891989",
+          "after_sha256": "3b215870a2eab8d5ca29c602f52638137b93fc7154410e26c28fbc98a3891989"
+        },
+        {
+          "name": "source_subset_of_cutoff_le",
+          "kind": "theorem",
+          "before": "theorem source_subset_of_cutoff_le {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    realHalfProductSource b N U \u2286 realHalfProductSource b N T",
+          "after": "theorem source_subset_of_cutoff_le {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    realHalfProductSource b N U \u2286 realHalfProductSource b N T",
+          "before_sha256": "6d4d6f339008507b6a982f79aafb6536a35525d16aff860146c74027842b365b",
+          "after_sha256": "6d4d6f339008507b6a982f79aafb6536a35525d16aff860146c74027842b365b"
+        },
+        {
+          "name": "source_sdiff_eq_band",
+          "kind": "theorem",
+          "before": "theorem source_sdiff_eq_band (b : \u211d) (N : \u2115) (T U : \u211d) :\n    realHalfProductSource b N T \\ realHalfProductSource b N U =\n      cutoffBand b N T U",
+          "after": "theorem source_sdiff_eq_band (b : \u211d) (N : \u2115) (T U : \u211d) :\n    realHalfProductSource b N T \\ realHalfProductSource b N U =\n      cutoffBand b N T U",
+          "before_sha256": "c8f894d86acfd4ccf46776af89cbe68c02ae2762807f999d7d8496718f763bb7",
+          "after_sha256": "c8f894d86acfd4ccf46776af89cbe68c02ae2762807f999d7d8496718f763bb7"
+        },
+        {
+          "name": "source_filter_upper_eq",
+          "kind": "theorem",
+          "before": "theorem source_filter_upper_eq {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    (realHalfProductSource b N T).filter (fun m => U \u2264 (m : \u211d)) =\n      realHalfProductSource b N U",
+          "after": "theorem source_filter_upper_eq {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    (realHalfProductSource b N T).filter (fun (m : \u2115) => U \u2264 (m : \u211d)) =\n      realHalfProductSource b N U",
+          "before_sha256": "d9eb67381ec60dc9c170106eb30a5eb9049ac40d9d2c75f171d1318d5f9051d8",
+          "after_sha256": "23aca0d5be6a0c2483aa4f8d07c632979a7251d956e4dffbcde4bd6673b1ba25"
+        },
+        {
+          "name": "sum_source_eq_upper_add_band",
+          "kind": "theorem",
+          "before": "theorem sum_source_eq_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (f : \u2115 \u2192 \u211d) :\n    (\u2211 m \u2208 realHalfProductSource b N T, f m) =\n      (\u2211 m \u2208 realHalfProductSource b N U, f m) +\n        \u2211 m \u2208 cutoffBand b N T U, f m",
+          "after": "theorem sum_source_eq_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (f : \u2115 \u2192 \u211d) :\n    (\u2211 m \u2208 realHalfProductSource b N T, f m) =\n      (\u2211 m \u2208 realHalfProductSource b N U, f m) +\n        \u2211 m \u2208 cutoffBand b N T U, f m",
+          "before_sha256": "521434e025bda2d4bc6e5656df65d49af722e78ceda0f2098e9cdb17cc99f477",
+          "after_sha256": "521434e025bda2d4bc6e5656df65d49af722e78ceda0f2098e9cdb17cc99f477"
+        },
+        {
+          "name": "cast_filter_card_eq_sum",
+          "kind": "theorem",
+          "before": "private theorem cast_filter_card_eq_sum (S : Finset \u2115) (P : \u2115 \u2192 Prop)\n    [DecidablePred P] :\n    ((S.filter P).card : \u211d) = \u2211 m \u2208 S, if P m then (1 : \u211d) else 0",
+          "after": "private theorem cast_filter_card_eq_sum (S : Finset \u2115) (P : \u2115 \u2192 Prop)\n    [DecidablePred P] :\n    ((S.filter P).card : \u211d) = \u2211 m \u2208 S, if P m then (1 : \u211d) else 0",
+          "before_sha256": "3162b3f941633d7cd509480c5af8cda71ddb54f7110af4b38d35c41de4c813ec",
+          "after_sha256": "3162b3f941633d7cd509480c5af8cda71ddb54f7110af4b38d35c41de4c813ec"
+        },
+        {
+          "name": "filter_card_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem filter_card_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (P : \u2115 \u2192 Prop) [DecidablePred P] :\n    (((realHalfProductSource b N T).filter P).card : \u211d) -\n        (((realHalfProductSource b N U).filter P).card : \u211d) =\n      (((cutoffBand b N T U).filter P).card : \u211d)",
+          "after": "theorem filter_card_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (P : \u2115 \u2192 Prop) [DecidablePred P] :\n    (((realHalfProductSource b N T).filter P).card : \u211d) -\n        (((realHalfProductSource b N U).filter P).card : \u211d) =\n      (((cutoffBand b N T U).filter P).card : \u211d)",
+          "before_sha256": "c7496c6c29ec7c706a2e273c9273b2d1a278ed057610f219bb5c42474170ad8a",
+          "after_sha256": "c7496c6c29ec7c706a2e273c9273b2d1a278ed057610f219bb5c42474170ad8a"
+        },
+        {
+          "name": "source_card_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem source_card_sub_eq_band {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    ((realHalfProductSource b N T).card : \u211d) -\n        ((realHalfProductSource b N U).card : \u211d) =\n      ((cutoffBand b N T U).card : \u211d)",
+          "after": "theorem source_card_sub_eq_band {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    ((realHalfProductSource b N T).card : \u211d) -\n        ((realHalfProductSource b N U).card : \u211d) =\n      ((cutoffBand b N T U).card : \u211d)",
+          "before_sha256": "7deebdea1eec03cbb151eedaba3490406229e2733c30521c500ed2fc999fe3cb",
+          "after_sha256": "7deebdea1eec03cbb151eedaba3490406229e2733c30521c500ed2fc999fe3cb"
+        },
+        {
+          "name": "congruenceMass_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem congruenceMass_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (d : \u2115) :\n    realHalfProductCongruenceMass b N T d -\n        realHalfProductCongruenceMass b N U d =\n      finiteCongruenceMass (cutoffBand b N T U) (fun _ => 1) N d",
+          "after": "theorem congruenceMass_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (d : \u2115) :\n    realHalfProductCongruenceMass b N T d -\n        realHalfProductCongruenceMass b N U d =\n      finiteCongruenceMass (cutoffBand b N T U) (fun _ => 1) N d",
+          "before_sha256": "034fde291c74b7227d17204f8fca74ba03ac1bceb1b9486dc36ecc4e62cd802e",
+          "after_sha256": "034fde291c74b7227d17204f8fca74ba03ac1bceb1b9486dc36ecc4e62cd802e"
+        },
+        {
+          "name": "coprimeMass_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem coprimeMass_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (d : \u2115) :\n    realHalfProductCoprimeMass b N T d -\n        realHalfProductCoprimeMass b N U d =\n      finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d",
+          "after": "theorem coprimeMass_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (d : \u2115) :\n    realHalfProductCoprimeMass b N T d -\n        realHalfProductCoprimeMass b N U d =\n      finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d",
+          "before_sha256": "488ddb1f136643cac6ecb260caeb9b75f6c93c55fef9aeeb7c5affb3ade2f5ee",
+          "after_sha256": "488ddb1f136643cac6ecb260caeb9b75f6c93c55fef9aeeb7c5affb3ade2f5ee"
+        },
+        {
+          "name": "distribution_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem distribution_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalDistributionError b N T Q rho -\n        realPhysicalDistributionError b N U Q rho =\n      \u2211 d \u2208 Q, rho d *\n        finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d",
+          "after": "theorem distribution_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalDistributionError b N T Q rho -\n        realPhysicalDistributionError b N U Q rho =\n      \u2211 d \u2208 Q, rho d *\n        finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d",
+          "before_sha256": "d3db42e0b2dd689ef66c6582f9a50285055554ebc13196b3b50c5b21c69007d6",
+          "after_sha256": "d3db42e0b2dd689ef66c6582f9a50285055554ebc13196b3b50c5b21c69007d6"
+        },
+        {
+          "name": "distribution_sub_eq_band_kernel",
+          "kind": "theorem",
+          "before": "theorem distribution_sub_eq_band_kernel {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalDistributionError b N T Q rho -\n        realPhysicalDistributionError b N U Q rho =\n      \u2211 d \u2208 Q, rho d * \u2211 m \u2208 cutoffBand b N T U,\n        ((if Nat.ModEq d m N then (1 : \u211d) else 0) -\n          (if Nat.Coprime m d then (1 : \u211d) else 0) / (Nat.totient d : \u211d))",
+          "after": "theorem distribution_sub_eq_band_kernel {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalDistributionError b N T Q rho -\n        realPhysicalDistributionError b N U Q rho =\n      \u2211 d \u2208 Q, rho d * \u2211 m \u2208 cutoffBand b N T U,\n        ((if Nat.ModEq d m N then (1 : \u211d) else 0) -\n          (if Nat.Coprime m d then (1 : \u211d) else 0) / (Nat.totient d : \u211d))",
+          "before_sha256": "dbbe6321ce875220bc403e51a1112bc9f0b4b8cf15c852af6c86efa313307dab",
+          "after_sha256": "dbbe6321ce875220bc403e51a1112bc9f0b4b8cf15c852af6c86efa313307dab"
+        },
+        {
+          "name": "coprimeCorrection_sub_eq_band",
+          "kind": "theorem",
+          "before": "theorem coprimeCorrection_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalCoprimeCorrection b N T Q rho -\n        realPhysicalCoprimeCorrection b N U Q rho =\n      \u2211 d \u2208 Q, rho d *\n        ((finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d -\n          ((cutoffBand b N T U).card : \u211d)) / (Nat.totient d : \u211d))",
+          "after": "theorem coprimeCorrection_sub_eq_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    realPhysicalCoprimeCorrection b N T Q rho -\n        realPhysicalCoprimeCorrection b N U Q rho =\n      \u2211 d \u2208 Q, rho d *\n        ((finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d -\n          ((cutoffBand b N T U).card : \u211d)) / (Nat.totient d : \u211d))",
+          "before_sha256": "39a8db2072447a2686252f349f7dd87ffb3be860ced0be8480a8cc955da1334f",
+          "after_sha256": "39a8db2072447a2686252f349f7dd87ffb3be860ced0be8480a8cc955da1334f"
+        },
+        {
+          "name": "abs_distribution_le_upper_add_band",
+          "kind": "theorem",
+          "before": "theorem abs_distribution_le_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalDistributionError b N T Q rho| \u2264\n      |realPhysicalDistributionError b N U Q rho| +\n        |\u2211 d \u2208 Q, rho d *\n          finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d|",
+          "after": "theorem abs_distribution_le_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalDistributionError b N T Q rho| \u2264\n      |realPhysicalDistributionError b N U Q rho| +\n        |\u2211 d \u2208 Q, rho d *\n          finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d|",
+          "before_sha256": "a6cee4be0f62479ef41722a3afea032675415fbfadbc3a8249196bd52a4d2703",
+          "after_sha256": "a6cee4be0f62479ef41722a3afea032675415fbfadbc3a8249196bd52a4d2703"
+        },
+        {
+          "name": "abs_coprimeCorrection_le_upper_add_band",
+          "kind": "theorem",
+          "before": "theorem abs_coprimeCorrection_le_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalCoprimeCorrection b N T Q rho| \u2264\n      |realPhysicalCoprimeCorrection b N U Q rho| +\n        |\u2211 d \u2208 Q, rho d *\n          ((finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d -\n            ((cutoffBand b N T U).card : \u211d)) / (Nat.totient d : \u211d))|",
+          "after": "theorem abs_coprimeCorrection_le_upper_add_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalCoprimeCorrection b N T Q rho| \u2264\n      |realPhysicalCoprimeCorrection b N U Q rho| +\n        |\u2211 d \u2208 Q, rho d *\n          ((finiteCoprimeMass (cutoffBand b N T U) (fun _ => 1) d -\n            ((cutoffBand b N T U).card : \u211d)) / (Nat.totient d : \u211d))|",
+          "before_sha256": "2c20628d39150f3d9052528e5c5537a40233ab792629d12a6d305b2bf2f2d73b",
+          "after_sha256": "2c20628d39150f3d9052528e5c5537a40233ab792629d12a6d305b2bf2f2d73b"
+        },
+        {
+          "name": "abs_distribution_le_upper_add_sum_abs_band",
+          "kind": "theorem",
+          "before": "theorem abs_distribution_le_upper_add_sum_abs_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalDistributionError b N T Q rho| \u2264\n      |realPhysicalDistributionError b N U Q rho| +\n        \u2211 d \u2208 Q, |rho d| *\n          |finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d|",
+          "after": "theorem abs_distribution_le_upper_add_sum_abs_band {b T U : \u211d} {N : \u2115}\n    (hTU : T \u2264 U) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    |realPhysicalDistributionError b N T Q rho| \u2264\n      |realPhysicalDistributionError b N U Q rho| +\n        \u2211 d \u2208 Q, |rho d| *\n          |finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d|",
+          "before_sha256": "78376c7722fe29af9f2647cb4edc44bf8ee698f6798c47ba26a822ec4dd8e528",
+          "after_sha256": "78376c7722fe29af9f2647cb4edc44bf8ee698f6798c47ba26a822ec4dd8e528"
+        }
+      ],
+      "header_exceptions": [
+        "source_filter_upper_eq"
+      ],
+      "definition_bodies_and_imports_unchanged": true,
+      "changed_proof_bodies": [
+        "abs_distribution_le_upper_add_band",
+        "abs_coprimeCorrection_le_upper_add_band",
+        "abs_distribution_le_upper_add_sum_abs_band"
+      ],
+      "origin_verified_from_local_published_git_commit_and_blob": {
+        "commit": "6f4dd677e516616b2b23c4c5f47e75fee0c4e9c3",
+        "path": "verification/parts/p0/p4b-source-cutoff-transport-api/P4BSourceCutoffTransport.lean",
+        "git_blob_sha1": "c235a8438cd43ca67639950ea80572e5c5b9e162",
+        "raw_published_source_sha256": "db4ee22c46d9b877f6e5a38b5cd599fed604476b24d86605b4e533926ddb8ae6",
+        "complete_source_exact_published_before_neutral_status": true,
+        "earlier_static_7bcb_candidate_not_adopted": true,
+        "prior_CI_not_claimed_current_context_acceptance": true
+      },
+      "raw_published_or_static_candidate_plus_only_neutral_comment_equals_postimage": true,
+      "header_exception_boundary": {
+        "name": "source_filter_upper_eq",
+        "authorized_by_root_via_owner": true,
+        "syntax_only": "Annotate already intended natural carrier binder `(fun m : \u2115 => U \u2264 (m : \u211d))`",
+        "old_header_failed_to_elaborate": true,
+        "old_and_new_elaborated_types_not_claimed_equal": true,
+        "complete_header_before": "theorem source_filter_upper_eq {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    (realHalfProductSource b N T).filter (fun m => U \u2264 (m : \u211d)) =\n      realHalfProductSource b N U :=",
+        "complete_header_after": "theorem source_filter_upper_eq {b T U : \u211d} {N : \u2115} (hTU : T \u2264 U) :\n    (realHalfProductSource b N T).filter (fun (m : \u2115) => U \u2264 (m : \u211d)) =\n      realHalfProductSource b N U :=",
+        "root_confirmed_original_already_had_real_cast_only_Nat_binder_type_new": true
+      }
+    },
+    {
+      "module": "ImbalancedChen.P4BLabelledPairDictionary",
+      "preimage_sha256": "e2e7bbd6f831136f76e91383e61a20ed7e513242b477f9d3bbc4a67437a8b7a5",
+      "postimage_sha256": "6bcfb21ce23f34cefcbfaa226622d903420ec07c9ac2d8054e6f5ce064654fd9",
+      "main_and_Member_current_sources_exact": true,
+      "full_source_command_count": 19,
+      "complete_raw_headers": [
+        {
+          "name": "tuplePair",
+          "kind": "def",
+          "before": "def tuplePair {N : \u2115} (t : Fin 2 \u2192 Fin (N + 1)) : \u2115 \u00d7 \u2115",
+          "after": "def tuplePair {N : \u2115} (t : Fin 2 \u2192 Fin (N + 1)) : \u2115 \u00d7 \u2115",
+          "before_sha256": "ee4456d19cd90c989264080724a982c148c9af4122541ff26759d01dad740860",
+          "after_sha256": "ee4456d19cd90c989264080724a982c148c9af4122541ff26759d01dad740860"
+        },
+        {
+          "name": "pairTuple",
+          "kind": "def",
+          "before": "def pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115) (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    Fin 2 \u2192 Fin (N + 1)",
+          "after": "def pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115) (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    Fin 2 \u2192 Fin (N + 1)",
+          "before_sha256": "faaaea9c42d1322102b1d4e45d562b9206b5e6dd6ad4ca96f31db9284e99efa3",
+          "after_sha256": "faaaea9c42d1322102b1d4e45d562b9206b5e6dd6ad4ca96f31db9284e99efa3"
+        },
+        {
+          "name": "tuplePair_pairTuple",
+          "kind": "theorem",
+          "before": "@[simp] theorem tuplePair_pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115)\n    (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    tuplePair (pairTuple N a hr hq) = a",
+          "after": "@[simp] theorem tuplePair_pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115)\n    (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    tuplePair (pairTuple N a hr hq) = a",
+          "before_sha256": "d03238e1dae94be11d60e90920a9d8b119f0e4c6f56496a582125b21a1ec8a2c",
+          "after_sha256": "d03238e1dae94be11d60e90920a9d8b119f0e4c6f56496a582125b21a1ec8a2c"
+        },
+        {
+          "name": "tuplePair_injective",
+          "kind": "theorem",
+          "before": "theorem tuplePair_injective (N : \u2115) :\n    Function.Injective (@tuplePair N)",
+          "after": "theorem tuplePair_injective (N : \u2115) :\n    Function.Injective (@tuplePair N)",
+          "before_sha256": "42b8817d6d2257f2f9b24ded5951ceb7e53569455adcbe9d26c51bf0272baa42",
+          "after_sha256": "42b8817d6d2257f2f9b24ded5951ceb7e53569455adcbe9d26c51bf0272baa42"
+        },
+        {
+          "name": "labelledProduct_eq_pairProduct",
+          "kind": "theorem",
+          "before": "@[simp] theorem labelledProduct_eq_pairProduct {N : \u2115}\n    (t : Fin 2 \u2192 Fin (N + 1)) :\n    labelledProduct t = (tuplePair t).1 * (tuplePair t).2",
+          "after": "@[simp] theorem labelledProduct_eq_pairProduct {N : \u2115}\n    (t : Fin 2 \u2192 Fin (N + 1)) :\n    labelledProduct t = (tuplePair t).1 * (tuplePair t).2",
+          "before_sha256": "06ffc535345e6e9280275a413e65c29f776c17a5ed2ce1fed1d950b7bf8b0b6a",
+          "after_sha256": "06ffc535345e6e9280275a413e65c29f776c17a5ed2ce1fed1d950b7bf8b0b6a"
+        },
+        {
+          "name": "labelledProduct_pairTuple",
+          "kind": "theorem",
+          "before": "@[simp] theorem labelledProduct_pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115)\n    (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    labelledProduct (pairTuple N a hr hq) = a.1 * a.2",
+          "after": "@[simp] theorem labelledProduct_pairTuple (N : \u2115) (a : \u2115 \u00d7 \u2115)\n    (hr : a.1 \u2264 N) (hq : a.2 \u2264 N) :\n    labelledProduct (pairTuple N a hr hq) = a.1 * a.2",
+          "before_sha256": "9a3e0b6c24dbfae6369e497f2c99c1e0f56fb77de88fa4f6ed5a0f246b0b03f4",
+          "after_sha256": "9a3e0b6c24dbfae6369e497f2c99c1e0f56fb77de88fa4f6ed5a0f246b0b03f4"
+        },
+        {
+          "name": "geometry",
+          "kind": "def",
+          "before": "def geometry (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : Prop",
+          "after": "def geometry (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : Prop",
+          "before_sha256": "b2ef84ddfe3aad9bda52d1fc31fe2a457caca1f147282c87f77a21423a8c3b17",
+          "after_sha256": "b2ef84ddfe3aad9bda52d1fc31fe2a457caca1f147282c87f77a21423a8c3b17"
+        },
+        {
+          "name": "W",
+          "kind": "def",
+          "before": "def W (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : \u211d",
+          "after": "def W (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : \u211d",
+          "before_sha256": "84f122baf66f7753383a46be6f34947f56afddea678985936510381b3f754f19",
+          "after_sha256": "84f122baf66f7753383a46be6f34947f56afddea678985936510381b3f754f19"
+        },
+        {
+          "name": "activeCarrier",
+          "kind": "def",
+          "before": "def activeCarrier (b : \u211d) (N : \u2115) (T : \u211d) :\n    Finset (Fin 2 \u2192 Fin (N + 1))",
+          "after": "def activeCarrier (b : \u211d) (N : \u2115) (T : \u211d) :\n    Finset (Fin 2 \u2192 Fin (N + 1))",
+          "before_sha256": "8879a8ad439cba7eed2660667d7d5bd79e927aef9ec1f129853c78cfc085b822",
+          "after_sha256": "8879a8ad439cba7eed2660667d7d5bd79e927aef9ec1f129853c78cfc085b822"
+        },
+        {
+          "name": "W_nonneg",
+          "kind": "theorem",
+          "before": "theorem W_nonneg (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : 0 \u2264 W b N T t",
+          "after": "theorem W_nonneg (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : 0 \u2264 W b N T t",
+          "before_sha256": "56a8890e9cedbafe8e8d54987bd7da19470eca770210e6c6e677d6daa1c603a5",
+          "after_sha256": "56a8890e9cedbafe8e8d54987bd7da19470eca770210e6c6e677d6daa1c603a5"
+        },
+        {
+          "name": "W_le_one",
+          "kind": "theorem",
+          "before": "theorem W_le_one (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : W b N T t \u2264 1",
+          "after": "theorem W_le_one (b : \u211d) (N : \u2115) (T : \u211d)\n    (t : Fin 2 \u2192 Fin (N + 1)) : W b N T t \u2264 1",
+          "before_sha256": "58d88c6292fdf6946827f98477662247fd64559f64e8518d508655ab08f9f132",
+          "after_sha256": "58d88c6292fdf6946827f98477662247fd64559f64e8518d508655ab08f9f132"
+        },
+        {
+          "name": "mem_activeCarrier_iff",
+          "kind": "theorem",
+          "before": "theorem mem_activeCarrier_iff {b T : \u211d} {N : \u2115}\n    (t : Fin 2 \u2192 Fin (N + 1)) :\n    t \u2208 activeCarrier b N T \u2194 tuplePair t \u2208 realHalfProductPairs b N T",
+          "after": "theorem mem_activeCarrier_iff {b T : \u211d} {N : \u2115}\n    (t : Fin 2 \u2192 Fin (N + 1)) :\n    t \u2208 activeCarrier b N T \u2194 tuplePair t \u2208 realHalfProductPairs b N T",
+          "before_sha256": "c70adf05e18205725e8599680700fd84968c84c4e735066ffbf5595e0edfc5e5",
+          "after_sha256": "c70adf05e18205725e8599680700fd84968c84c4e735066ffbf5595e0edfc5e5"
+        },
+        {
+          "name": "pair_coordinates_le",
+          "kind": "theorem",
+          "before": "theorem pair_coordinates_le {b T : \u211d} {N : \u2115} {a : \u2115 \u00d7 \u2115}\n    (ha : a \u2208 realHalfProductPairs b N T) : a.1 \u2264 N \u2227 a.2 \u2264 N",
+          "after": "theorem pair_coordinates_le {b T : \u211d} {N : \u2115} {a : \u2115 \u00d7 \u2115}\n    (ha : a \u2208 realHalfProductPairs b N T) : a.1 \u2264 N \u2227 a.2 \u2264 N",
+          "before_sha256": "8b22d87a77a86bfb98b5c611d1036322464eb87cae6d504c0a23d5e6809c0574",
+          "after_sha256": "8b22d87a77a86bfb98b5c611d1036322464eb87cae6d504c0a23d5e6809c0574"
+        },
+        {
+          "name": "pairTuple_mem_activeCarrier",
+          "kind": "theorem",
+          "before": "theorem pairTuple_mem_activeCarrier {b T : \u211d} {N : \u2115} {a : \u2115 \u00d7 \u2115}\n    (ha : a \u2208 realHalfProductPairs b N T) :\n    pairTuple N a (pair_coordinates_le ha).1 (pair_coordinates_le ha).2 \u2208\n      activeCarrier b N T",
+          "after": "theorem pairTuple_mem_activeCarrier {b T : \u211d} {N : \u2115} {a : \u2115 \u00d7 \u2115}\n    (ha : a \u2208 realHalfProductPairs b N T) :\n    pairTuple N a (pair_coordinates_le ha).1 (pair_coordinates_le ha).2 \u2208\n      activeCarrier b N T",
+          "before_sha256": "515501338b1151e1eccf1950b120367ec04c6ff51aed38cd72ba721031ec1b8f",
+          "after_sha256": "515501338b1151e1eccf1950b120367ec04c6ff51aed38cd72ba721031ec1b8f"
+        },
+        {
+          "name": "sum_activeCarrier_eq_pairs",
+          "kind": "theorem",
+          "before": "theorem sum_activeCarrier_eq_pairs (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 t \u2208 activeCarrier b N T, F (labelledProduct t)) =\n      \u2211 a \u2208 realHalfProductPairs b N T, F (a.1 * a.2)",
+          "after": "theorem sum_activeCarrier_eq_pairs (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 t \u2208 activeCarrier b N T, F (labelledProduct t)) =\n      \u2211 a \u2208 realHalfProductPairs b N T, F (a.1 * a.2)",
+          "before_sha256": "6adffabfa46c238a8485dcd84ee8ea4942398f83104d91383609841dbcba336f",
+          "after_sha256": "6adffabfa46c238a8485dcd84ee8ea4942398f83104d91383609841dbcba336f"
+        },
+        {
+          "name": "sum_pairs_eq_source",
+          "kind": "theorem",
+          "before": "theorem sum_pairs_eq_source (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 a \u2208 realHalfProductPairs b N T, F (a.1 * a.2)) =\n      \u2211 m \u2208 realHalfProductSource b N T, F m",
+          "after": "theorem sum_pairs_eq_source (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 a \u2208 realHalfProductPairs b N T, F (a.1 * a.2)) =\n      \u2211 m \u2208 realHalfProductSource b N T, F m",
+          "before_sha256": "9d99a3625c4c9f615d8f427c7cccbb79d568c96aff7f93b1c7c042c8c2936938",
+          "after_sha256": "9d99a3625c4c9f615d8f427c7cccbb79d568c96aff7f93b1c7c042c8c2936938"
+        },
+        {
+          "name": "sum_labelled_W_eq_source",
+          "kind": "theorem",
+          "before": "theorem sum_labelled_W_eq_source (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 t \u2208 labelledPrimeTuples 2 N, W b N T t * F (labelledProduct t)) =\n      \u2211 m \u2208 realHalfProductSource b N T, F m",
+          "after": "theorem sum_labelled_W_eq_source (b : \u211d) (N : \u2115) (T : \u211d) (F : \u2115 \u2192 \u211d) :\n    (\u2211 t \u2208 labelledPrimeTuples 2 N, W b N T t * F (labelledProduct t)) =\n      \u2211 m \u2208 realHalfProductSource b N T, F m",
+          "before_sha256": "7bb9183e1de87aaa4efb4dcc6e25e99dc94ebe13740e49061ab597900b399559",
+          "after_sha256": "7bb9183e1de87aaa4efb4dcc6e25e99dc94ebe13740e49061ab597900b399559"
+        },
+        {
+          "name": "sum_source_indicator",
+          "kind": "theorem",
+          "before": "private theorem sum_source_indicator (b : \u211d) (N : \u2115) (T : \u211d)\n    (P : \u2115 \u2192 Prop) [DecidablePred P] :\n    (\u2211 m \u2208 realHalfProductSource b N T, if P m then (1 : \u211d) else 0) =\n      (((realHalfProductSource b N T).filter P).card : \u211d)",
+          "after": "private theorem sum_source_indicator (b : \u211d) (N : \u2115) (T : \u211d)\n    (P : \u2115 \u2192 Prop) [DecidablePred P] :\n    (\u2211 m \u2208 realHalfProductSource b N T, if P m then (1 : \u211d) else 0) =\n      (((realHalfProductSource b N T).filter P).card : \u211d)",
+          "before_sha256": "e568653c93669330c4c3429b665305601c500b1c3c1e256c0f6d6534505e9381",
+          "after_sha256": "e568653c93669330c4c3429b665305601c500b1c3c1e256c0f6d6534505e9381"
+        },
+        {
+          "name": "primeProductSignedError_eq_realPhysicalDistributionError",
+          "kind": "theorem",
+          "before": "theorem primeProductSignedError_eq_realPhysicalDistributionError\n    (b : \u211d) (N : \u2115) (T : \u211d) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    primeProductSignedError 2 N N Q rho (W b N T) =\n      realPhysicalDistributionError b N T Q rho",
+          "after": "theorem primeProductSignedError_eq_realPhysicalDistributionError\n    (b : \u211d) (N : \u2115) (T : \u211d) (Q : Finset \u2115) (rho : \u2115 \u2192 \u211d) :\n    primeProductSignedError 2 N N Q rho (W b N T) =\n      realPhysicalDistributionError b N T Q rho",
+          "before_sha256": "26b7b4e01dc0ae5c8d470c5c709c6cbce1f7170909a1dd8c8bc1ece58a1f7865",
+          "after_sha256": "26b7b4e01dc0ae5c8d470c5c709c6cbce1f7170909a1dd8c8bc1ece58a1f7865"
+        }
+      ],
+      "header_exceptions": [],
+      "definition_bodies_and_imports_unchanged": true,
+      "changed_proof_bodies": [
+        "tuplePair_injective",
+        "primeProductSignedError_eq_realPhysicalDistributionError"
+      ],
+      "origin_verified_from_local_published_git_commit_and_blob": {
+        "commit": "48db3d603d632bc60037e149a55717832e4c04be",
+        "path": "ImbalancedChen/P4BLabelledPairDictionary.lean",
+        "blob_sha1": "2f3e4630839ad7ea65785439f6967fbe33a312b2",
+        "source_sha256": "b11ecf1f00d6721c5188cac0f5d1547bb35bb7d065736d8e89e42111f9a6195f",
+        "scope": "Only existing published proof blocks copied; current Part3DistributionTargets import/family retained. Not claiming whole-file identity to the different-import published version."
+      },
+      "raw_published_or_static_candidate_plus_only_neutral_comment_equals_postimage": true,
+      "header_exception_boundary": null
+    },
+    {
+      "module": "ImbalancedChen.P4BLogGateOuterRamp",
+      "preimage_sha256": "d12b8269a36cf974f86fa71a50422da69922cffcc6b5c82751be710618291a91",
+      "postimage_sha256": "5054300786f1a40d3c93c967aa3032904f6d6dcbc53dcd56f93fda9567fb38aa",
+      "main_and_Member_current_sources_exact": true,
+      "full_source_command_count": 21,
+      "complete_raw_headers": [
+        {
+          "name": "logGateOuterRamp",
+          "kind": "def",
+          "before": "def logGateOuterRamp (delta x : \u211d) : \u211d",
+          "after": "def logGateOuterRamp (delta x : \u211d) : \u211d",
+          "before_sha256": "079eb3f873d227f8ee48592b267275cf7e009275a20738a37f24efe0e702c4c3",
+          "after_sha256": "079eb3f873d227f8ee48592b267275cf7e009275a20738a37f24efe0e702c4c3"
+        },
+        {
+          "name": "continuous_logGateOuterRamp",
+          "kind": "theorem",
+          "before": "theorem continuous_logGateOuterRamp (delta : \u211d) :\n    Continuous (logGateOuterRamp delta)",
+          "after": "theorem continuous_logGateOuterRamp (delta : \u211d) :\n    Continuous (logGateOuterRamp delta)",
+          "before_sha256": "cfbbb8bc56a0cae3dd655790dc23a2775d2c9a3d988a5f161caed74041e55cca",
+          "after_sha256": "cfbbb8bc56a0cae3dd655790dc23a2775d2c9a3d988a5f161caed74041e55cca"
+        },
+        {
+          "name": "logGateOuterRamp_bounds",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_bounds (delta x : \u211d) :\n    0 \u2264 logGateOuterRamp delta x \u2227 logGateOuterRamp delta x \u2264 1",
+          "after": "theorem logGateOuterRamp_bounds (delta x : \u211d) :\n    0 \u2264 logGateOuterRamp delta x \u2227 logGateOuterRamp delta x \u2264 1",
+          "before_sha256": "948819b5dd6ebe7aec9f980f1009ac992eb48db012efd147b6aeafa0c79a2ac7",
+          "after_sha256": "948819b5dd6ebe7aec9f980f1009ac992eb48db012efd147b6aeafa0c79a2ac7"
+        },
+        {
+          "name": "logGateOuterRamp_eq_one",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_eq_one {delta x : \u211d}\n    (hdelta : 0 < delta) (hx : 0 \u2264 x) :\n    logGateOuterRamp delta x = 1",
+          "after": "theorem logGateOuterRamp_eq_one {delta x : \u211d}\n    (hdelta : 0 < delta) (hx : 0 \u2264 x) :\n    logGateOuterRamp delta x = 1",
+          "before_sha256": "1cb48d556921557c6d5ad2756d8166f86e89dccb915f63fef72f8c9efc6363f2",
+          "after_sha256": "1cb48d556921557c6d5ad2756d8166f86e89dccb915f63fef72f8c9efc6363f2"
+        },
+        {
+          "name": "logGateOuterRamp_eq_zero",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_eq_zero {delta x : \u211d}\n    (hdelta : 0 < delta) (hx : x \u2264 -delta) :\n    logGateOuterRamp delta x = 0",
+          "after": "theorem logGateOuterRamp_eq_zero {delta x : \u211d}\n    (hdelta : 0 < delta) (hx : x \u2264 -delta) :\n    logGateOuterRamp delta x = 0",
+          "before_sha256": "7d608be382a42cb9ca60f28e7297fde99a5e6fb13b819fba6bea4f0984423012",
+          "after_sha256": "7d608be382a42cb9ca60f28e7297fde99a5e6fb13b819fba6bea4f0984423012"
+        },
+        {
+          "name": "logGateOuterRamp_indicator_le",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_indicator_le {delta : \u211d}\n    (hdelta : 0 < delta) (x : \u211d) :\n    (if 0 < x then (1 : \u211d) else 0) \u2264 logGateOuterRamp delta x",
+          "after": "theorem logGateOuterRamp_indicator_le {delta : \u211d}\n    (hdelta : 0 < delta) (x : \u211d) :\n    (if 0 < x then (1 : \u211d) else 0) \u2264 logGateOuterRamp delta x",
+          "before_sha256": "0f5e58e6133bc87d4fa9b3f17aafdea778e3494353cc5d087c8ba6ee3155c5cf",
+          "after_sha256": "0f5e58e6133bc87d4fa9b3f17aafdea778e3494353cc5d087c8ba6ee3155c5cf"
+        },
+        {
+          "name": "logGateOuterRamp_nonzero_support",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_nonzero_support {delta x : \u211d}\n    (hdelta : 0 < delta) (hnonzero : logGateOuterRamp delta x \u2260 0) :\n    -delta < x",
+          "after": "theorem logGateOuterRamp_nonzero_support {delta x : \u211d}\n    (hdelta : 0 < delta) (hnonzero : logGateOuterRamp delta x \u2260 0) :\n    -delta < x",
+          "before_sha256": "ce22e9d2758d8522b6d4da9deba4c2e8311445150e805b4fab5a85a56b3b9094",
+          "after_sha256": "ce22e9d2758d8522b6d4da9deba4c2e8311445150e805b4fab5a85a56b3b9094"
+        },
+        {
+          "name": "logGateOuterRamp_surplus_support",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_surplus_support {delta x : \u211d}\n    (hdelta : 0 < delta)\n    (hsurplus : logGateOuterRamp delta x - (if 0 < x then (1 : \u211d) else 0) \u2260 0) :\n    -delta < x \u2227 x \u2264 0",
+          "after": "theorem logGateOuterRamp_surplus_support {delta x : \u211d}\n    (hdelta : 0 < delta)\n    (hsurplus : logGateOuterRamp delta x - (if 0 < x then (1 : \u211d) else 0) \u2260 0) :\n    -delta < x \u2227 x \u2264 0",
+          "before_sha256": "6aebc6407ca441c99006a311460bc7ddf5c4e2c23db71bfdf7379dadedd7a8fc",
+          "after_sha256": "6aebc6407ca441c99006a311460bc7ddf5c4e2c23db71bfdf7379dadedd7a8fc"
+        },
+        {
+          "name": "logGateOuterRamp_surplus_nonneg",
+          "kind": "theorem",
+          "before": "theorem logGateOuterRamp_surplus_nonneg {delta : \u211d}\n    (hdelta : 0 < delta) (x : \u211d) :\n    0 \u2264 logGateOuterRamp delta x - (if 0 < x then (1 : \u211d) else 0)",
+          "after": "theorem logGateOuterRamp_surplus_nonneg {delta : \u211d}\n    (hdelta : 0 < delta) (x : \u211d) :\n    0 \u2264 logGateOuterRamp delta x - (if 0 < x then (1 : \u211d) else 0)",
+          "before_sha256": "6f568979f8fe02fd1bfeff569868802eadd95fe36b9f88403f1157299fa9faa1",
+          "after_sha256": "6f568979f8fe02fd1bfeff569868802eadd95fe36b9f88403f1157299fa9faa1"
+        },
+        {
+          "name": "rpow_lt_iff_positive_logGate",
+          "kind": "theorem",
+          "before": "theorem rpow_lt_iff_positive_logGate {q r b : \u211d}\n    (hq : 0 < q) (hr : 0 < r) :\n    q ^ b < r \u2194 0 < Real.log r - b * Real.log q",
+          "after": "theorem rpow_lt_iff_positive_logGate {q r b : \u211d}\n    (hq : 0 < q) (hr : 0 < r) :\n    q ^ b < r \u2194 0 < Real.log r - b * Real.log q",
+          "before_sha256": "08e878bd43ce7f080543ef53ee6cc04d8dbd7f3dd81151d8a6ebd8be0921ea23",
+          "after_sha256": "08e878bd43ce7f080543ef53ee6cc04d8dbd7f3dd81151d8a6ebd8be0921ea23"
+        },
+        {
+          "name": "primeImbalanceLogGate",
+          "kind": "def",
+          "before": "def primeImbalanceLogGate (b : \u211d) (q r : \u2115) : \u211d",
+          "after": "def primeImbalanceLogGate (b : \u211d) (q r : \u2115) : \u211d",
+          "before_sha256": "c16b8500b9e431ac4c4afda029d83e105525362a0c1dfaefb9043bc86494b010",
+          "after_sha256": "c16b8500b9e431ac4c4afda029d83e105525362a0c1dfaefb9043bc86494b010"
+        },
+        {
+          "name": "prime_badness_iff_positive_logGate",
+          "kind": "theorem",
+          "before": "theorem prime_badness_iff_positive_logGate (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r) :\n    (q : \u211d) ^ b < (r : \u211d) \u2194 0 < primeImbalanceLogGate b q r",
+          "after": "theorem prime_badness_iff_positive_logGate (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r) :\n    (q : \u211d) ^ b < (r : \u211d) \u2194 0 < primeImbalanceLogGate b q r",
+          "before_sha256": "b283c9e0debc3b3bdd4504f2958b669a003120c0c5f060b12873aa4b10e3946f",
+          "after_sha256": "b283c9e0debc3b3bdd4504f2958b669a003120c0c5f060b12873aa4b10e3946f"
+        },
+        {
+          "name": "prime_badness_indicator_le_logGateOuterRamp",
+          "kind": "theorem",
+          "before": "theorem prime_badness_indicator_le_logGateOuterRamp\n    {delta : \u211d} (hdelta : 0 < delta) (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r) :\n    (if (q : \u211d) ^ b < (r : \u211d) then (1 : \u211d) else 0) \u2264\n      logGateOuterRamp delta (primeImbalanceLogGate b q r)",
+          "after": "theorem prime_badness_indicator_le_logGateOuterRamp\n    {delta : \u211d} (hdelta : 0 < delta) (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r) :\n    (if (q : \u211d) ^ b < (r : \u211d) then (1 : \u211d) else 0) \u2264\n      logGateOuterRamp delta (primeImbalanceLogGate b q r)",
+          "before_sha256": "5ff46518c256492b9e1bbbc9cafa5fc7b5e51e8ccb59234b10d80a431e37ebed",
+          "after_sha256": "5ff46518c256492b9e1bbbc9cafa5fc7b5e51e8ccb59234b10d80a431e37ebed"
+        },
+        {
+          "name": "prime_badness_outerRamp_surplus_support",
+          "kind": "theorem",
+          "before": "theorem prime_badness_outerRamp_surplus_support\n    {delta : \u211d} (hdelta : 0 < delta) (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r)\n    (hsurplus : logGateOuterRamp delta (primeImbalanceLogGate b q r) -\n      (if (q : \u211d) ^ b < (r : \u211d) then (1 : \u211d) else 0) \u2260 0) :\n    -delta < Real.log (r : \u211d) - b * Real.log (q : \u211d) \u2227\n      Real.log (r : \u211d) \u2264 b * Real.log (q : \u211d)",
+          "after": "theorem prime_badness_outerRamp_surplus_support\n    {delta : \u211d} (hdelta : 0 < delta) (b : \u211d) {q r : \u2115}\n    (hq : Nat.Prime q) (hr : Nat.Prime r)\n    (hsurplus : logGateOuterRamp delta (primeImbalanceLogGate b q r) -\n      (if (q : \u211d) ^ b < (r : \u211d) then (1 : \u211d) else 0) \u2260 0) :\n    -delta < Real.log (r : \u211d) - b * Real.log (q : \u211d) \u2227\n      Real.log (r : \u211d) \u2264 b * Real.log (q : \u211d)",
+          "before_sha256": "95a212fb206ab033fb8d99edb8d620d4237a029e33f373ad7e3fa4dc844b2b43",
+          "after_sha256": "95a212fb206ab033fb8d99edb8d620d4237a029e33f373ad7e3fa4dc844b2b43"
+        },
+        {
+          "name": "affineTupleOuterRamp",
+          "kind": "def",
+          "before": "def affineTupleOuterRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) (x : Fin d \u2192 \u211d) : \u211d",
+          "after": "def affineTupleOuterRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) (x : Fin d \u2192 \u211d) : \u211d",
+          "before_sha256": "1c24ca423b4c0c9b1f139e78c4233e8502ebf463f64ea9e69e59467a32ae8183",
+          "after_sha256": "1c24ca423b4c0c9b1f139e78c4233e8502ebf463f64ea9e69e59467a32ae8183"
+        },
+        {
+          "name": "continuous_affineTupleOuterRamp",
+          "kind": "theorem",
+          "before": "theorem continuous_affineTupleOuterRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) :\n    Continuous (affineTupleOuterRamp I L c delta)",
+          "after": "theorem continuous_affineTupleOuterRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) :\n    Continuous (affineTupleOuterRamp I L c delta)",
+          "before_sha256": "23e1db226d7f265d50c911339122fc946e37b982a3e2aad9b49663cc99581671",
+          "after_sha256": "23e1db226d7f265d50c911339122fc946e37b982a3e2aad9b49663cc99581671"
+        },
+        {
+          "name": "affineTupleOuterRamp_bounds",
+          "kind": "theorem",
+          "before": "theorem affineTupleOuterRamp_bounds {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) (x : Fin d \u2192 \u211d) :\n    0 \u2264 affineTupleOuterRamp I L c delta x \u2227\n      affineTupleOuterRamp I L c delta x \u2264 1",
+          "after": "theorem affineTupleOuterRamp_bounds {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d)\n    (c : \u03b9 \u2192 \u211d) (delta : \u211d) (x : Fin d \u2192 \u211d) :\n    0 \u2264 affineTupleOuterRamp I L c delta x \u2227\n      affineTupleOuterRamp I L c delta x \u2264 1",
+          "before_sha256": "f78f802e3957581fca05101cb30f1feea5398b1beb52b76f57fedfb21cde64c1",
+          "after_sha256": "f78f802e3957581fca05101cb30f1feea5398b1beb52b76f57fedfb21cde64c1"
+        },
+        {
+          "name": "affineTupleOuterRamp_eq_one_of_nonneg",
+          "kind": "theorem",
+          "before": "theorem affineTupleOuterRamp_eq_one_of_nonneg {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hx : \u2200 i \u2208 I, 0 \u2264 c i - L i x) :\n    affineTupleOuterRamp I L c delta x = 1",
+          "after": "theorem affineTupleOuterRamp_eq_one_of_nonneg {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hx : \u2200 i \u2208 I, 0 \u2264 c i - L i x) :\n    affineTupleOuterRamp I L c delta x = 1",
+          "before_sha256": "2266886a4a59d6028af9db2f421e09127dfec970e1383f70c6b95c6828827205",
+          "after_sha256": "2266886a4a59d6028af9db2f421e09127dfec970e1383f70c6b95c6828827205"
+        },
+        {
+          "name": "affineTuple_strict_indicator_le_outerRamp",
+          "kind": "theorem",
+          "before": "theorem affineTuple_strict_indicator_le_outerRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) (x : Fin d \u2192 \u211d) :\n    (if \u2200 i \u2208 I, L i x < c i then (1 : \u211d) else 0) \u2264\n      affineTupleOuterRamp I L c delta x",
+          "after": "theorem affineTuple_strict_indicator_le_outerRamp {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) (x : Fin d \u2192 \u211d) :\n    (if \u2200 i \u2208 I, L i x < c i then (1 : \u211d) else 0) \u2264\n      affineTupleOuterRamp I L c delta x",
+          "before_sha256": "744a1715d76d6aef4ed8c3ae24217e618f462f4ef3a37609680b29987c42a499",
+          "after_sha256": "744a1715d76d6aef4ed8c3ae24217e618f462f4ef3a37609680b29987c42a499"
+        },
+        {
+          "name": "affineTupleOuterRamp_nonzero_support",
+          "kind": "theorem",
+          "before": "theorem affineTupleOuterRamp_nonzero_support {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hnonzero : affineTupleOuterRamp I L c delta x \u2260 0) :\n    \u2200 i \u2208 I, -delta < c i - L i x",
+          "after": "theorem affineTupleOuterRamp_nonzero_support {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hnonzero : affineTupleOuterRamp I L c delta x \u2260 0) :\n    \u2200 i \u2208 I, -delta < c i - L i x",
+          "before_sha256": "79772f1fad098295a88a891070f8c9046a5e5edecbd0a5b46cf2ae16ad3cbf83",
+          "after_sha256": "79772f1fad098295a88a891070f8c9046a5e5edecbd0a5b46cf2ae16ad3cbf83"
+        },
+        {
+          "name": "affineTupleOuterRamp_surplus_support",
+          "kind": "theorem",
+          "before": "theorem affineTupleOuterRamp_surplus_support {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hsurplus : affineTupleOuterRamp I L c delta x -\n      (if \u2200 i \u2208 I, L i x < c i then (1 : \u211d) else 0) \u2260 0) :\n    (\u2200 i \u2208 I, -delta < c i - L i x) \u2227\n      \u2203 i \u2208 I, c i - L i x \u2264 0",
+          "after": "theorem affineTupleOuterRamp_surplus_support {d : \u2115} {\u03b9 : Type*}\n    (I : Finset \u03b9) (L : \u03b9 \u2192 (Fin d \u2192 \u211d) \u2192L[\u211d] \u211d) (c : \u03b9 \u2192 \u211d)\n    {delta : \u211d} (hdelta : 0 < delta) {x : Fin d \u2192 \u211d}\n    (hsurplus : affineTupleOuterRamp I L c delta x -\n      (if \u2200 i \u2208 I, L i x < c i then (1 : \u211d) else 0) \u2260 0) :\n    (\u2200 i \u2208 I, -delta < c i - L i x) \u2227\n      \u2203 i \u2208 I, c i - L i x \u2264 0",
+          "before_sha256": "72a58cc3172b03ba595ed89cb663de27df7f5ce266d17c3d0b0361c3fb13f744",
+          "after_sha256": "72a58cc3172b03ba595ed89cb663de27df7f5ce266d17c3d0b0361c3fb13f744"
+        }
+      ],
+      "header_exceptions": [],
+      "definition_bodies_and_imports_unchanged": true,
+      "changed_proof_bodies": [
+        "prime_badness_indicator_le_logGateOuterRamp",
+        "prime_badness_outerRamp_surplus_support"
+      ],
+      "origin_verified_from_local_published_git_commit_and_blob": {
+        "commit": "c1eb228f281d93e03a6fc231e0086baa9f589036",
+        "path": "verification/parts/p0/p4b-log-gate-outer-ramp-api/P4BLogGateOuterRamp.lean",
+        "blob_sha1": "16482d94aa91a6ca1b9a37e26c1d254c417c6f8d",
+        "source_sha256": "0c04adb36face26dbd3404ab6be92445985ad20d7a1babaf94adf858306b719a",
+        "scope": "Full candidate byte-exact to published source; exact original preimage bound in published candidate manifest."
+      },
+      "raw_published_or_static_candidate_plus_only_neutral_comment_equals_postimage": true,
+      "header_exception_boundary": null
+    }
+  ],
+  "complete_raw_header_extraction": "Balanced delimiter scan selects only top-level :=; includes private and attribute-prefixed declarations. No old first-:= truncation.",
+  "complete_source_command_count": 57,
+  "substantive_review": {
+    "P4BSourceCutoffTransport": "Complete db4ee22c/c235 source from6f4dd677 verified. Only typed natural carrier binder is a header exception; the original already contains the Real cast and failed to elaborate as Finset Real. No old/new elaborated-type equality claim. abs_add_le and explicit add_le_add preserve original signed transport and triangle bounds. The removed band remains T<=m<U, inclusive product cap, same Q and arbitrary signed rho.",
+    "P4BLabelledPairDictionary": "Only two published48db proof blocks reused byte-exact: tuplePair_injective and final signed error identity. Current Part3DistributionTargets import and all five definitions/headers preserved; no whole-file identity claim to changed-import upstream. Explicit original residue/coprime kernel and reverse Finset.sum_div retain all arithmetic data, including totient and signed rho. Ordered pair uniqueness/repeated primes have no factor two or extra positivity premise.",
+    "P4BLogGateOuterRamp": "Complete published0c04 source fromc1eb228f, apart from neutral comment. Two branchwise equalities restore the same strict prime indicator through dependent-Decidable rewriting. Ramp min1(max0(1+x/delta)), real-power/log gate and surplus strip -delta<x<=0 are unchanged. No derivative, distribution or boundary-count licence added."
+  },
+  "constants_definitions_domains_assumptions_preserved": true,
+  "numerical_qualification": "Proofs repeat original indicator literals0 and1 when explicitly instantiating the unchanged kernel; no new numerical parameter, table value or mathematical bound.",
+  "single_authorized_header_exception": "source_filter_upper_eq natural binder annotation only; old header did not elaborate, not an equality comparison of two old/new kernel types.",
+  "manuscript": {
+    "release": "paper/release-20261106",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "file_sha256": {
+      "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440"
+    },
+    "anchors": [
+      {
+        "file": "en/argument.tex",
+        "lines": [
+          1117,
+          1160
+        ],
+        "labels": [
+          "sec:current-transfer",
+          "eq:current-pair-measure",
+          "eq:current-bad-mass"
+        ],
+        "mapping": "Actual ordered bad products r<=q and strict r>q^b; no factor2, repeated-prime diagonal retained."
+      },
+      {
+        "file": "en/coefficient-appendix.tex",
+        "lines": [
+          491,
+          502
+        ],
+        "label": "coef:prime-product-insertion",
+        "mapping": "Same signed coefficient in the count and exact coprime mean; source transport/dictionary identities precede absolute estimates."
+      },
+      {
+        "file": "en/argument.tex",
+        "lines": [
+          400,
+          407
+        ],
+        "mapping": "Positive geometric outer approximation with same coefficient at each precision; ramp is geometric support only."
+      },
+      {
+        "file": "en/argument.tex",
+        "lines": [
+          618,
+          623
+        ],
+        "mapping": "Smoothing requires separate boundary and exact-coprime mean payment; no such estimate manufactured by these API repairs."
+      }
+    ]
+  },
+  "recorded_acceptance_review": {
+    "validation_results_sha256": "8eab4d14d1445f360046f25a081bbc4ac0f091565f81736b1966addf0913e663",
+    "original_publication_manifest_sha256": "60110ca14d0c91accbe89907483595c9a97543b1e545d3666efbb7e027203e56",
+    "original_final_release_sha256": "7150016f1c05f66b1c2efc431bb901ddc1bbaf1ad9510170942110a3a1204eef",
+    "publication_file_identities_checked": 52,
+    "normal_kernel_audit_all_recorded_exit0": true,
+    "actual_public_counts": {
+      "ImbalancedChen.P4BLogGateOuterRamp": 22,
+      "ImbalancedChen.P4BLabelledPairDictionary": 26,
+      "ImbalancedChen.P4BSourceCutoffTransport": 23
+    },
+    "actual_public_total": 71,
+    "private_exports_claimed": false,
+    "complete_raw_AST_types_and_pp_all_public_output_checked": true,
+    "standard_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "all_exports_are_not_axiom_declarations": true,
+    "source_plus_five_outputs_each_current_match_recorded_stage_hashes": {
+      "ImbalancedChen.P4BSourceCutoffTransport": {
+        "ImbalancedChen/P4BSourceCutoffTransport.lean": {
+          "bytes": 10971,
+          "sha256": "c585133615ec3f046bd8d1c64ddf59fa45a6de06eb57f6b4cb6b3c85c1447cd8"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BSourceCutoffTransport.olean": {
+          "bytes": 310296,
+          "sha256": "8d4383a8eed5d874c3bbbbeb4983f59f16941e8c0bd1b98866b592669c6fd454"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BSourceCutoffTransport.ilean": {
+          "bytes": 34710,
+          "sha256": "baee2bed8bb1b8e3675965943e5430caa40d7de2852ca4b4ba22584c81edce27"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BSourceCutoffTransport.c": {
+          "bytes": 1455,
+          "sha256": "58d186d75a5b1a2ca119f5052807fe9fada63ee1e068724f4f06274617bc2bf8"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BSourceCutoffTransport.setup.json": {
+          "bytes": 2782036,
+          "sha256": "2c308c30170bb346cd20f623f6011ad6a6e1fa31be09d382cac42431d90fa932"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BSourceCutoffTransport.trace": {
+          "bytes": 2852,
+          "sha256": "cf97bc4fbdbfa55fd8a19187f0ac0ae9d643b1939924f7e82ed446245a5c4654"
+        }
+      },
+      "ImbalancedChen.P4BLabelledPairDictionary": {
+        "ImbalancedChen/P4BLabelledPairDictionary.lean": {
+          "bytes": 9098,
+          "sha256": "6bcfb21ce23f34cefcbfaa226622d903420ec07c9ac2d8054e6f5ce064654fd9"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLabelledPairDictionary.olean": {
+          "bytes": 228776,
+          "sha256": "a2de52da18a84cda591430e1f7c3802d74c56a0b367914f73238b53f63a0b929"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLabelledPairDictionary.ilean": {
+          "bytes": 35648,
+          "sha256": "ebd8944d323da2759bde683969a1732b0f276a873741d0ec07fadc6b416e4b72"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BLabelledPairDictionary.c": {
+          "bytes": 11636,
+          "sha256": "8cfca2b2eabe96a900c4fed523d8818a7a66e98df4afde3867146220f52a0bc7"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BLabelledPairDictionary.setup.json": {
+          "bytes": 2876051,
+          "sha256": "3b480deb22b8989a8ab7b4e8295f26413de1ba0548a29fbae524cebbbda18b60"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLabelledPairDictionary.trace": {
+          "bytes": 3935,
+          "sha256": "f7caa9b64e2f807f4234b8dd366c72c63667aba3780b06e5b1f597f87812afff"
+        }
+      },
+      "ImbalancedChen.P4BLogGateOuterRamp": {
+        "ImbalancedChen/P4BLogGateOuterRamp.lean": {
+          "bytes": 10754,
+          "sha256": "5054300786f1a40d3c93c967aa3032904f6d6dcbc53dcd56f93fda9567fb38aa"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLogGateOuterRamp.olean": {
+          "bytes": 241432,
+          "sha256": "0ae695d3b196c9b2f08e3bab498690befc5e8cdff5950697dabefb94c608251f"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLogGateOuterRamp.ilean": {
+          "bytes": 31129,
+          "sha256": "e642fcc99d75c239b18dab5e429fe5e1e0c11897c19b63d7e618703a8046b3fa"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BLogGateOuterRamp.c": {
+          "bytes": 1689,
+          "sha256": "e737ac359cf84144ec6067d3db9330ca2c2ec474b01a7267a30a66ac58c520bf"
+        },
+        ".lake/build/ir/ImbalancedChen/P4BLogGateOuterRamp.setup.json": {
+          "bytes": 1861316,
+          "sha256": "e9954fd5e3437b2b9e42e96fc03a688517c1981f0a385d12713a60d3356642a5"
+        },
+        ".lake/build/lib/lean/ImbalancedChen/P4BLogGateOuterRamp.trace": {
+          "bytes": 3368,
+          "sha256": "394f3278573411c4eefb9894a8ea970cbc53afd056df2b857d563601fd7063e9"
+        }
+      }
+    },
+    "trust0_threads2_memory12288_recorded_for_three_sources_and_public_audit": true,
+    "no_new_execution_credit_from_review": true
+  },
+  "findings": []
+}

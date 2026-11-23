@@ -118,4 +118,6 @@ Member 第七批 `P2EnhancedSortedDwellMerge` 通过标准构建、指定模块 
 
 Member 的 Renewal／Rational 两模块先将已不存在的 Mathlib imports 分别改为当前固定版本的 `Mathlib.Data.Fin.VecNotation` 和内置 `Lean.Elab.Tactic.Omega`，随后修补实际暴露的证明 API：有限和、序不等式方向、Fin 11 向量展开，以及原小 seed 的 kernel 决定过程与乘法消去名称。两个标准构建、两个指定模块 kernel replay 和全部 120 个实际公开导出（63、57）的完整类型／公理检查通过，仅标准三公理，源码及十项主要产物稳定。原完整声明头、定义、数值和假设保持；原 obsolete-import 失败、Renewal 四次失败和 Rational 一次失败的源码及日志均保留，没有把 import-only 中间版本记为通过。见 [验收结果](member-import-repair/VALIDATION_RESULTS.json) 和 [独立复核](member-import-repair/INDEPENDENT_REVIEW.json)。
 
+Member 第十批 P4B 三模块全部通过标准构建、指定模块 kernel replay 与 71 个公开导出的完整类型／公理检查，仅标准三公理，源码及十五项主要产物稳定。`P4BSourceCutoffTransport` 复用增量远端 `6f4dd677` 的完整源码，`P4BLogGateOuterRamp` 复用已发表完整后像，均仅另加中性验证记录注释；`P4BLabelledPairDictionary` 两个证明逐字节复用 `48db`，保留当前 `Part3DistributionTargets` family、imports 和五个定义。Cutoff 原 header 中的 lambda binder 补充 `m : ℕ`，仍为原自然数 carrier 与实数 cutoff 比较；这是旧未 elaboration 声明的类型消歧例外，不声称旧 kernel 类型已存在。ordered bad、no2、相同 signed coefficient 与 outer approximation 的边界付款假设保持，见 [验收结果](member-repair-batch10/VALIDATION_RESULTS.json) 和 [独立复核](member-repair-batch10/INDEPENDENT_REVIEW.json)。
+
 项目看板最近读取仍返回 HTTP 401，完整蓝色节点到模块的对应清单尚未取得。四个已确认 P6 入口的验收完成；H430 Member 入口及其它已确认范围继续构建，尚不能声称全部蓝色节点完成。

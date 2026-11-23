@@ -1,0 +1,47 @@
+--- baseline/ImbalancedChen/P4BSourceCutoffTransport.lean
++++ candidate/ImbalancedChen/P4BSourceCutoffTransport.lean
+@@ -3,7 +3,7 @@
+ /-!
+ # P4B: exact signed transport between real source cutoffs
+ 
+-SOURCE ONLY / YELLOW / UNCOMPILED.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ For `T <= U`, moving the lower cutoff removes exactly `T <= m < U`.
+ The same physical support `Q` and signed coefficient `rho` are used at both
+@@ -61,7 +61,7 @@
+ /-- The high part of the lower-cutoff source is exactly the higher-cutoff
+ source. -/
+ theorem source_filter_upper_eq {b T U : ℝ} {N : ℕ} (hTU : T ≤ U) :
+-    (realHalfProductSource b N T).filter (fun m => U ≤ (m : ℝ)) =
++    (realHalfProductSource b N T).filter (fun (m : ℕ) => U ≤ (m : ℝ)) =
+       realHalfProductSource b N U := by
+   classical
+   ext m
+@@ -203,7 +203,7 @@
+           finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- The analogous triangle bound for the actual coprime correction. -/
+ theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
+@@ -221,7 +221,7 @@
+             ((cutoffBand b N T U).card : ℝ)) / (Nat.totient d : ℝ)) := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- Optional fully expanded finite triangle payment.  This absolute modulus
+ sum is a consequence of the preceding signed identities, not their premise. -/
+@@ -242,7 +242,7 @@
+         Finset.abs_sum_le_sum_abs _ _
+       _ = _ := by simp only [abs_mul]
+   exact (abs_distribution_le_upper_add_band (b := b) (N := N) hTU Q rho).trans
+-    (add_le_add_left hband _)
++    (add_le_add (le_refl _) hband)
+ 
+ end
+ end ImbalancedChen.P4BSourceCutoffTransport

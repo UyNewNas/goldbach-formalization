@@ -1,0 +1,47 @@
+--- baseline/ImbalancedChen/P4BLogGateOuterRamp.lean
++++ candidate/ImbalancedChen/P4BLogGateOuterRamp.lean
+@@ -4,7 +4,7 @@
+ /-!
+ # P4B: explicit continuous positive outer ramps for actual log gates
+ 
+-YELLOW / SOURCE ONLY / UNCOMPILED.
++Verification records: docs/verification/20261123-blue-compilation.
+ 
+ The scalar ramp is exactly `min 1 (max 0 (1 + x / delta))`.
+ The actual prime imbalance gate is derived from the rpow/log equivalence;
+@@ -121,7 +121,16 @@
+     (hq : Nat.Prime q) (hr : Nat.Prime r) :
+     (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≤
+       logGateOuterRamp delta (primeImbalanceLogGate b q r) := by
+-  rw [prime_badness_iff_positive_logGate b hq hr]
++  have hgate := prime_badness_iff_positive_logGate b hq hr
++  have hindicator :
++      (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) =
++        (if 0 < primeImbalanceLogGate b q r then (1 : ℝ) else 0) := by
++    by_cases hbad : (q : ℝ) ^ b < (r : ℝ)
++    · simp only [if_pos hbad, if_pos (hgate.mp hbad)]
++    · have hnonpos : ¬ 0 < primeImbalanceLogGate b q r :=
++        fun hpos => hbad (hgate.mpr hpos)
++      simp only [if_neg hbad, if_neg hnonpos]
++  rw [hindicator]
+   exact logGateOuterRamp_indicator_le hdelta _
+ 
+ /-- The surplus for the actual prime imbalance is confined to its explicit
+@@ -133,7 +142,16 @@
+       (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≠ 0) :
+     -delta < Real.log (r : ℝ) - b * Real.log (q : ℝ) ∧
+       Real.log (r : ℝ) ≤ b * Real.log (q : ℝ) := by
+-  rw [prime_badness_iff_positive_logGate b hq hr] at hsurplus
++  have hgate := prime_badness_iff_positive_logGate b hq hr
++  have hindicator :
++      (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) =
++        (if 0 < primeImbalanceLogGate b q r then (1 : ℝ) else 0) := by
++    by_cases hbad : (q : ℝ) ^ b < (r : ℝ)
++    · simp only [if_pos hbad, if_pos (hgate.mp hbad)]
++    · have hnonpos : ¬ 0 < primeImbalanceLogGate b q r :=
++        fun hpos => hbad (hgate.mpr hpos)
++      simp only [if_neg hbad, if_neg hnonpos]
++  rw [hindicator] at hsurplus
+   obtain ⟨hleft, hright⟩ := logGateOuterRamp_surplus_support hdelta hsurplus
+   refine ⟨hleft, ?_⟩
+   exact sub_nonpos.mp hright

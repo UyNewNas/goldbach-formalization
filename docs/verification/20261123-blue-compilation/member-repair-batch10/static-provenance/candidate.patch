@@ -1,0 +1,102 @@
+--- a/ImbalancedChen/P4BSourceCutoffTransport.lean
++++ b/ImbalancedChen/P4BSourceCutoffTransport.lean
+@@ -61,7 +61,7 @@
+ /-- The high part of the lower-cutoff source is exactly the higher-cutoff
+ source. -/
+ theorem source_filter_upper_eq {b T U : ℝ} {N : ℕ} (hTU : T ≤ U) :
+-    (realHalfProductSource b N T).filter (fun m => U ≤ (m : ℝ)) =
++    (realHalfProductSource b N T).filter (fun m : ℕ => U ≤ (m : ℝ)) =
+       realHalfProductSource b N U := by
+   classical
+   ext m
+@@ -203,7 +203,7 @@
+           finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- The analogous triangle bound for the actual coprime correction. -/
+ theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
+@@ -221,7 +221,7 @@
+             ((cutoffBand b N T U).card : ℝ)) / (Nat.totient d : ℝ)) := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- Optional fully expanded finite triangle payment.  This absolute modulus
+ sum is a consequence of the preceding signed identities, not their premise. -/
+@@ -242,7 +242,7 @@
+         Finset.abs_sum_le_sum_abs _ _
+       _ = _ := by simp only [abs_mul]
+   exact (abs_distribution_le_upper_add_band (b := b) (N := N) hTU Q rho).trans
+-    (add_le_add_left hband _)
++    (add_le_add (le_refl _) hband)
+ 
+ end
+ end ImbalancedChen.P4BSourceCutoffTransport
+--- a/ImbalancedChen/P4BLabelledPairDictionary.lean
++++ b/ImbalancedChen/P4BLabelledPairDictionary.lean
+@@ -47,9 +47,9 @@
+   funext i
+   fin_cases i
+   · apply Fin.ext
+-    simpa only [tuplePair] using congrArg Prod.fst h
++    simpa [tuplePair] using congrArg Prod.fst h
+   · apply Fin.ext
+-    simpa only [tuplePair] using congrArg Prod.snd h
++    simpa [tuplePair] using congrArg Prod.snd h
+ 
+ @[simp] theorem labelledProduct_eq_pairProduct {N : ℕ}
+     (t : Fin 2 → Fin (N + 1)) :
+@@ -217,7 +217,10 @@
+   apply Finset.sum_congr rfl
+   intro d hd
+   apply congrArg (fun x : ℝ => rho d * x)
+-  rw [sum_labelled_W_eq_source, Finset.sum_sub_distrib, Finset.sum_div]
++  rw [sum_labelled_W_eq_source b N T (fun m =>
++    ((if Nat.ModEq d m N then (1 : ℝ) else 0) -
++      (if Nat.Coprime m d then (1 : ℝ) else 0) / (Nat.totient d : ℝ))),
++    Finset.sum_sub_distrib, ← Finset.sum_div]
+   rw [sum_source_indicator, sum_source_indicator]
+   rfl
+ 
+--- a/ImbalancedChen/P4BLogGateOuterRamp.lean
++++ b/ImbalancedChen/P4BLogGateOuterRamp.lean
+@@ -121,7 +121,16 @@
+     (hq : Nat.Prime q) (hr : Nat.Prime r) :
+     (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≤
+       logGateOuterRamp delta (primeImbalanceLogGate b q r) := by
+-  rw [prime_badness_iff_positive_logGate b hq hr]
++  have hgate := prime_badness_iff_positive_logGate b hq hr
++  have hindicator :
++      (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) =
++        (if 0 < primeImbalanceLogGate b q r then (1 : ℝ) else 0) := by
++    by_cases hbad : (q : ℝ) ^ b < (r : ℝ)
++    · simp only [if_pos hbad, if_pos (hgate.mp hbad)]
++    · have hnonpos : ¬ 0 < primeImbalanceLogGate b q r :=
++        fun hpos => hbad (hgate.mpr hpos)
++      simp only [if_neg hbad, if_neg hnonpos]
++  rw [hindicator]
+   exact logGateOuterRamp_indicator_le hdelta _
+ 
+ /-- The surplus for the actual prime imbalance is confined to its explicit
+@@ -133,7 +142,16 @@
+       (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≠ 0) :
+     -delta < Real.log (r : ℝ) - b * Real.log (q : ℝ) ∧
+       Real.log (r : ℝ) ≤ b * Real.log (q : ℝ) := by
+-  rw [prime_badness_iff_positive_logGate b hq hr] at hsurplus
++  have hgate := prime_badness_iff_positive_logGate b hq hr
++  have hindicator :
++      (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) =
++        (if 0 < primeImbalanceLogGate b q r then (1 : ℝ) else 0) := by
++    by_cases hbad : (q : ℝ) ^ b < (r : ℝ)
++    · simp only [if_pos hbad, if_pos (hgate.mp hbad)]
++    · have hnonpos : ¬ 0 < primeImbalanceLogGate b q r :=
++        fun hpos => hbad (hgate.mpr hpos)
++      simp only [if_neg hbad, if_neg hnonpos]
++  rw [hindicator] at hsurplus
+   obtain ⟨hleft, hright⟩ := logGateOuterRamp_surplus_support hdelta hsurplus
+   refine ⟨hleft, ?_⟩
+   exact sub_nonpos.mp hright
