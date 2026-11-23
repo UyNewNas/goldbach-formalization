@@ -1,0 +1,140 @@
+{
+  "schema": "original_eighth_common_beta_width_payment_actual_API_candidate_v1",
+  "prepared_utc": "2026-11-23T22:41:56.446584+00:00",
+  "author": "/root/member_current_repairs",
+  "status": "ISOLATED_UNCOMPILED_REQUIRES_NONAUTHOR_REVIEW_AND_SOLEOWNER_VALIDATION",
+  "module": "ImbalancedChen.OriginalEighthCommonBetaWidthPayment",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-eighth-common-beta-width-payment-api/baseline.lean",
+    "bytes": 13894,
+    "sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-eighth-common-beta-width-payment-api/candidate.lean",
+    "bytes": 14094,
+    "sha256": "f1c7da9bb719c873ae2763df69f0dad81a62f2172328689ac4195f094013dc7a"
+  },
+  "complete_source_commands": 7,
+  "public_theorems": 3,
+  "private_theorems": 1,
+  "definitions": 3,
+  "all_complete_headers_definitions_imports_comments_data_constants_hypotheses_quantifiers_and_licences_raw_unchanged": true,
+  "changed_proofs": [
+    "absoluteMass_nonneg",
+    "exists_pair_power_error_envelope",
+    "exists_pair_target_error_reserve"
+  ],
+  "replacements": [
+    {
+      "before": "    0 ≤ absoluteMass ret N cap w z :=\n  Finset.sum_nonneg (fun _ _ => div_nonneg (abs_nonneg _) (Nat.cast_nonneg _))",
+      "after": "    0 ≤ absoluteMass ret N cap w z := by\n  unfold absoluteMass reciprocalTotientDensity\n  exact Finset.sum_nonneg (fun _ _ => div_nonneg (abs_nonneg _) (Nat.cast_nonneg _))",
+      "reason": "Expose the two original density definitions before applying the unchanged finite sum nonnegativity proof."
+    },
+    {
+      "before": "  have hV : 0 ≤ V := (actualSmallEulerProduct_pos N cap w hEven).le\n  have hE : 0 ≤ E := by dsimp [E, actualSmallRosserDensityError]; positivity\n  have hVE : 0 ≤ V * E := mul_nonneg hV hE",
+      "after": "  have hV : 0 ≤ V := (actualSmallEulerProduct_pos N cap w hEven).le\n  have hE : 0 ≤ E := by\n    have hlogD : 0 < Real.log D := Real.log_pos hD1\n    dsimp [E, actualSmallRosserDensityError]\n    positivity\n  have hVE : 0 ≤ V * E := mul_nonneg hV hE",
+      "reason": "The original fractional negative rpow error needs its already positive base epsilon*logD made visible to positivity; logD>0 follows from the existing hD1."
+    },
+    {
+      "before": "    rw [← actualSmallRoughRho_density_eq ret N cap w z B] at hh",
+      "after": "    dsimp only [lo, hi, actualSmallRosserMinusDensity, actualSmallRosserPlusDensity] at hh\n    rw [← actualSmallRoughRho_density_eq ret N cap w z B] at hh",
+      "reason": "Normalize the two proof-local density aliases to the exact already imported physical rho identity before the existing rewrite."
+    },
+    {
+      "before": "            (1 + Kr / (epsilon ^ 2 * Real.log D))) := by dsimp [Q]; field_simp; ring",
+      "after": "            (1 + Kr / (epsilon ^ 2 * Real.log D))) := by dsimp [Q]; field_simp",
+      "reason": "Actual line180 column80 is the trailing ring; field_simp already closes the original identical scalar identity, so remove only that no-goals tactic."
+    }
+  ],
+  "header_or_definition_exceptions": [],
+  "classification": "PROOF_ONLY_DEFINITION_EXPOSURE_POSITIVITY_WITNESS_AND_REDUNDANT_TACTIC_API",
+  "actual_failure": {
+    "original_observation_path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0002/ACTUAL_FAILURES.json",
+    "observed_utc": "2026-11-23T22:37:17.859100+00:00",
+    "aggregate_still_running_at_observation": true,
+    "captured_prefix_bytes": 322397,
+    "captured_prefix_sha256": "4d1eef8046a3dae2dfcb6c32101772d053868cb1e006350bda9ad7b94c94e674",
+    "slice_sha256": "afb8aec848bac5c069f999aa48fe8514dfd9be7fdae1d6e8121f16b45a0b3556",
+    "raw_byte_start": 306442,
+    "raw_byte_end_exclusive": 313907,
+    "source_sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3",
+    "elapsed_label": "16s",
+    "unit_source_compile_exit_code": 1,
+    "errors_at_source_lines": [
+      38,
+      75,
+      104,
+      180
+    ],
+    "aggregate_final_exit_not_claimed": true
+  },
+  "existing_published_lookup": {
+    "scope": "Exact filename all-ref Git log and only the four returned commit:path payloads; no broad history/object scan.",
+    "rows": [
+      {
+        "commit": "410d13f5912db8e767ae823f4823a93e252e488a",
+        "path": "docs/source-only/20261123-yellow-node-owners/y01_gain_reserves/selected-api/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean",
+        "exists": true,
+        "bytes": 16498,
+        "sha256": "8c9c83eafed5420e2f53f345187ec1b0b5d77ebd70af47c03593cb4e15acae13",
+        "git_blob": "1f08d978be6adf7f3d76645064bb3d16e5d67053",
+        "same_preimage": false,
+        "why_not_adopted": "This source adds all_small_floors and a stronger cofinal-beta public reserve export, moves/rewrites the old reserve proof, and still contains all four actual failing proof fragments. Not an exact proof-API post for this contract; not imported or adopted."
+      },
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean",
+        "exists": true,
+        "bytes": 13894,
+        "sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3",
+        "git_blob": "0b6e43aebcf26c911b515cef5b86415dd37ce341",
+        "same_preimage": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean",
+        "exists": false,
+        "git_exit_code": 128
+      },
+      {
+        "commit": "06500d594dfa15b36777fcee00aff5551f552521",
+        "path": "ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean",
+        "exists": true,
+        "bytes": 13894,
+        "sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3",
+        "git_blob": "0b6e43aebcf26c911b515cef5b86415dd37ce341",
+        "same_preimage": true
+      }
+    ],
+    "result": "Two present canonical payloads exactly equal current pre. The different published selected-api variant is a cofinal contract extension, not an existing fix, and preserves every failing fragment. Current original headers and all definitions kept."
+  },
+  "mathematical_boundary": "Same common constants C,K,Kr chosen before epsilon/D/targets/caps/old-new policies; same Q=(r/epsilon²)(1+Kr/(epsilon² logD)), not2Q. The difference of the two absolute masses and two signed nonnegative attachment errors each uses the common interval[0,Q] or[0,VEQ]. No signed mass replaces absolute mass. Same beta pair and presieve; same positive-w charge centered at V(w); w0 projection defect remains explicitlyOPEN. Same eta reserve, nu/r/epsilonMax ranges, cap coverage, original action/base even-retention hypothesis and all quantifier order retained. No Ready, desired charge/gain, density, tail, or strengthened theorem is introduced.",
+  "substantive_mathematical_gap_found": false,
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "anchors": [
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "source_sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+        "start_line": 317,
+        "end_line": 325,
+        "snapshot": "sieve-appendix-317-325.tex",
+        "snapshot_sha256": "c6a7dbd95cfe03db32ef32c83b49e21ffff118e4fc9ed6fdac0c1fa0b1c3d916",
+        "role": "Sign-sensitive beta choice for the exact same physical rho"
+      },
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "source_sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+        "start_line": 327,
+        "end_line": 345,
+        "snapshot": "sieve-appendix-327-345.tex",
+        "snapshot_sha256": "b68260a3ef5fb127ea679a6fb12150ce7a8c0f4190cf73f2b279d189871015b6",
+        "role": "Projection is a separate direction; absolute beta error and parameter-before-N reserve"
+      }
+    ]
+  },
+  "no_Lean_Lake_kernel_type_axiom_or_numerical_execution": true,
+  "no_live_main_cache_guard_queue_or_prior_record_edits": true,
+  "required_validation": "Non-author exact source/API gate, then soleowner normal guarded Lake + kernel + full-owned type/axiom/rawAST/source-and-five-output validation; static preparation claims no compile success."
+}

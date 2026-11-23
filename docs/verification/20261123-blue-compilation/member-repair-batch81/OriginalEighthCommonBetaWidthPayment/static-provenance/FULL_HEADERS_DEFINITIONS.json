@@ -1,0 +1,98 @@
+{
+  "module": "ImbalancedChen.OriginalEighthCommonBetaWidthPayment",
+  "headers": [
+    {
+      "name": "absoluteMass",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def absoluteMass (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℝ :=",
+      "header_sha256": "e068e6dab20c0b1041506b5ce55e9e1f3c828b27dece1e37360babbfc03ed9b4"
+    },
+    {
+      "name": "widthTerm",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def widthTerm (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "header_sha256": "82d77ce0bed3b2ca9d15b9cfefe2633e87c96135505647351d2191d1fd28026e"
+    },
+    {
+      "name": "pairedError",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def pairedError (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "header_sha256": "d7edf091811591bba4af50950fee9bb4b4f8dfd1e564da2295229fb25f9a61f4"
+    },
+    {
+      "name": "absoluteMass_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem absoluteMass_nonneg (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    0 ≤ absoluteMass ret N cap w z :=",
+      "header_sha256": "1fd5aa234b62e77f41e41bee5cf6bdbf7e74600769ba4b933011ff2bcb6c8ccb"
+    },
+    {
+      "name": "exists_pair_power_error_envelope",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_pair_power_error_envelope :\n    ∃ C K Kr : ℝ, 0 < C ∧ 1 < K ∧ 1 < Kr ∧\n      ∀ epsilon : ℝ, 0 < epsilon → epsilon < 1 / 8 →\n        ∃ D0 : ℝ, 2 ≤ D0 ∧ ∀ D : ℝ, D0 ≤ D →\n          ∀ N cap : ℕ, Even N → ∀ r : ℝ, epsilon ^ 2 ≤ r →\n            ∀ old new : List ℕ → Bool,\n              let w := D ^ (epsilon ^ 2)\n              let z := D ^ r\n              let B := D ^ epsilon\n              let V := actualSmallEulerProduct N cap w\n              let E := actualSmallRosserDensityError C K D epsilon\n              let Q := (r / epsilon ^ 2) * (1 + Kr / (epsilon ^ 2 * Real.log D))\n              |widthTerm old new N cap w z B| ≤ (V * E) * Q ∧\n                |pairedError old new N cap w z B| ≤ (V * E) * Q :=",
+      "header_sha256": "6c7da32d476b25e505c5c923e80baac58810902e4963194965eea40855530bbe"
+    },
+    {
+      "name": "exists_pair_target_error_reserve",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_pair_target_error_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hmax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧ epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) → ∀ old new : List ℕ → Bool,\n          let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n          let z := (N : ℝ) ^ (nu * r)\n          let B := (N : ℝ) ^ (nu * epsilon)\n          |widthTerm old new N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) ∧\n            |pairedError old new N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) :=",
+      "header_sha256": "c8fed23a4946c32738713ce4fb996286ae42047f6f22dbc24daa147bb9e71ccf"
+    },
+    {
+      "name": "exists_original_eighth_width_and_paired_charge_reserve",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_original_eighth_width_and_paired_charge_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hmax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧ epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) →\n          ∀ (lambda6 : List ℕ → ℝ) (base : Bool → List ℕ → Bool),\n            (∀ pre, base true pre = true) →\n            ∀ a : P4AOriginalEighthParentPhysicalLedger.Action,\n              let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n              let z := (N : ℝ) ^ (nu * r)\n              let B := (N : ℝ) ^ (nu * epsilon)\n              let old := P4AOriginalEighthParentPhysicalLedger.parentPolicy (N : ℝ) lambda6 base false\n              let fresh := P4AOriginalEighthParentPhysicalLedger.actionPolicy a (N : ℝ) lambda6 base false\n              |widthTerm old fresh N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) ∧\n                |(physicalDensitySum (actualSmallRoughModuli old N cap w z)\n                    (actualSmallRoughRho old N cap w z B) -\n                  physicalDensitySum (actualSmallRoughModuli fresh N cap w z)\n                    (actualSmallRoughRho fresh N cap w z B)) -\n                  actualSmallEulerProduct N cap w *\n                    P4AOriginalEighthParentPhysicalLedger.charge a N cap w z lambda6 base| ≤\n                  eta * singularSeries N / Real.log (N : ℝ) :=",
+      "header_sha256": "5899058b38508e83f07463792f08722cab71140f1bb6c2dc243d0c18228fd6ae"
+    }
+  ],
+  "definitions": [
+    {
+      "name": "absoluteMass",
+      "kind": "def",
+      "private": false,
+      "start_line": 21,
+      "complete_raw_header": "def absoluteMass (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℝ :=",
+      "header_sha256": "e068e6dab20c0b1041506b5ce55e9e1f3c828b27dece1e37360babbfc03ed9b4",
+      "raw_region": "def absoluteMass (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℝ :=\n  reciprocalTotientDensity (fixedRoughSupport ret N cap w z)\n    (fun d => |fixedRoughCoefficient ret N cap w z d|)\n\n",
+      "raw_region_sha256": "ed84bee81e8fd3cd3acd84408453d7116cb0cfd03fe41c91943aaf8846b84866"
+    },
+    {
+      "name": "widthTerm",
+      "kind": "def",
+      "private": false,
+      "start_line": 25,
+      "complete_raw_header": "def widthTerm (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "header_sha256": "82d77ce0bed3b2ca9d15b9cfefe2633e87c96135505647351d2191d1fd28026e",
+      "raw_region": "def widthTerm (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=\n  ((actualSmallRosserPlusDensity N cap w B - actualSmallRosserMinusDensity N cap w B) / 2) *\n    (absoluteMass old N cap w z - absoluteMass new N cap w z)\n\n",
+      "raw_region_sha256": "65da2afd9479e09f7cd82437f0db8e58940ee0d092d2a576c3839b6de6e68b2d"
+    },
+    {
+      "name": "pairedError",
+      "kind": "def",
+      "private": false,
+      "start_line": 29,
+      "complete_raw_header": "def pairedError (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "header_sha256": "d7edf091811591bba4af50950fee9bb4b4f8dfd1e564da2295229fb25f9a61f4",
+      "raw_region": "def pairedError (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=\n  (physicalDensitySum (actualSmallRoughModuli old N cap w z) (actualSmallRoughRho old N cap w z B) -\n    physicalDensitySum (actualSmallRoughModuli new N cap w z) (actualSmallRoughRho new N cap w z B)) -\n    actualSmallEulerProduct N cap w *\n      (reciprocalTotientDensity (fixedRoughSupport old N cap w z) (fixedRoughCoefficient old N cap w z) -\n        reciprocalTotientDensity (fixedRoughSupport new N cap w z) (fixedRoughCoefficient new N cap w z))\n\n",
+      "raw_region_sha256": "1f799e0984e82b075231723be44f298417522f5d13e2695bc6221e2be0887da8"
+    }
+  ],
+  "headers_raw_exact": true,
+  "definitions_raw_exact": true,
+  "changed_proof_bodies": [
+    "absoluteMass_nonneg",
+    "exists_pair_power_error_envelope",
+    "exists_pair_target_error_reserve"
+  ],
+  "new_declarations": 0,
+  "new_definitions": 0,
+  "all_bytes_outside_exact_four_proof_replacements_unchanged": true,
+  "reverse_reconstruction_exact": true,
+  "header_parser": "Comment mask with original offsets; declaration statement-ending :=, never a let binder := in the contract."
+}

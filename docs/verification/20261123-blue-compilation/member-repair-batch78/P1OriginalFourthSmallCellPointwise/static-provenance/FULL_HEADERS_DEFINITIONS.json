@@ -1,0 +1,34 @@
+{
+  "module": "ImbalancedChen.P1OriginalFourthSmallCellPointwise",
+  "headers": [
+    {
+      "name": "coarseDifference_eq_normalized",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem coarseDifference_eq_normalized\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (N cap : ℕ) (p : Fin 4 → ℕ) :\n    P1OriginalCoarseFourthResidual.coarseTupleResidualDifference\n        e chi m omega J4 cap4 N cap p =\n      normalizedResidual N cap p (oldLevel (e : ℝ) chi m omega N p) -\n        normalizedResidual N cap p (newLevel e chi m omega J4 cap4 N p) :=",
+      "sha256": "7747b0ec52ba5190e691e2f19800f2cc950f582f83f11f04c432c39e226d0a5a",
+      "byte_identical": true
+    },
+    {
+      "name": "exists_original_smallCell_pointwise_linear_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_original_smallCell_pointwise_linear_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ),\n        0 < omega → 0 < a → 2 * a ≤ omega →\n      ∀ (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ),\n        h34Check e chi m omega J4 cap4 = true →\n      ∀ (N cap : ℕ), 2 ≤ N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n      ∀ p ∈ smallCellTuples e chi m omega a N cap j,\n      ∀ L : ℝ, 2 ≤ L → L ^ 13 ≤ omega * Real.log (N : ℝ) →\n        Real.exp 1 ≤ omega * Real.log (N : ℝ) →\n        |fourthTuplePlusResidualP1 N cap (thirdCellExponent e m j : ℝ) p -\n            fourthTuplePlusResidualP1 N cap (cap4 j : ℝ) p| ≤\n          (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +\n            (C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L) :=",
+      "sha256": "739e1f39395da92ed346c9a1d8069e60b8b7d602e825bf747b55efe1ec1dc0cc",
+      "byte_identical": true
+    }
+  ],
+  "definitions": [],
+  "changed_private_proofs": [
+    {
+      "name": "coarseDifference_eq_normalized",
+      "before_body": " by\n  have hhist : P1OriginalCoarseFourthResidual.tupleHistory p = fourthHistory p := by\n    simp [P1OriginalCoarseFourthResidual.tupleHistory, fourthHistory, List.ofFn_succ]\n  unfold P1OriginalCoarseFourthResidual.coarseTupleResidualDifference\n    P1OriginalCoarseFourthResidual.literalTupleResidualDifference\n  rw [hhist, thirdAncestor_fourthHistory]\n  unfold normalizedResidual oldLevel newLevel\n  ring\n\n/-- The original signed upper-tail theorem acts on the literal finite\nsmall cell, including the p_last=3 case where both actual PLUS tails are\nidentically equal. Its coefficient C is independent of a,N,cap and cell. -/\n",
+      "after_body": " by\n  have hhist : P1OriginalCoarseFourthResidual.tupleHistory p = fourthHistory p := by\n    simp [P1OriginalCoarseFourthResidual.tupleHistory, fourthHistory, List.ofFn_succ]\n  unfold P1OriginalCoarseFourthResidual.coarseTupleResidualDifference\n    P1OriginalCoarseFourthResidual.literalTupleResidualDifference\n  rw [hhist, thirdAncestor_fourthHistory]\n  unfold normalizedResidual oldLevel newLevel\n  have hlast : (Fin.last 3 : Fin 4) = 3 := rfl\n  simp only [hlast]\n  ring\n\n/-- The original signed upper-tail theorem acts on the literal finite\nsmall cell, including the p_last=3 case where both actual PLUS tails are\nidentically equal. Its coefficient C is independent of a,N,cap and cell. -/\n",
+      "before_sha256": "160b880325ef413c9c625cdb5b67d18d427fe508bf7b827f927a9ae5cb06e991",
+      "after_sha256": "1548a7c174108090b848419d5f519c074365479beba6ad34a7f6b7d3e7fc7fbe"
+    }
+  ],
+  "all_other_raw_bytes_including_entire_public_proof_identical": true,
+  "new_declarations_imports_data_hypotheses_or_numeric_budget": false,
+  "header_definition_or_syntax_exceptions": []
+}

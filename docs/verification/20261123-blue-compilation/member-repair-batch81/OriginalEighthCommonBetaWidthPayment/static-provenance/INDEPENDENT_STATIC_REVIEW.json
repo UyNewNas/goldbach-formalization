@@ -1,0 +1,213 @@
+{
+  "schema": "original_eighth_beta_width_payment_non_author_static_review_v1",
+  "reviewer": "/root/omega_review",
+  "candidate_author": "/root/member_current_repairs",
+  "reviewer_is_candidate_author": false,
+  "reviewed_utc": "2026-11-23T22:46:16.682068+00:00",
+  "status": "NO_FINDINGS_STATIC_ONLY_CANDIDATE_UNCOMPILED",
+  "findings": [],
+  "module": "ImbalancedChen.OriginalEighthCommonBetaWidthPayment",
+  "original_manifest": {
+    "path": "FILES_MANIFEST.json",
+    "bytes": 1964,
+    "sha256": "a2d9e13cc10644d283e9d051ef5b2f6f549372f4090dc9f27f4a2222c82eb08a"
+  },
+  "source_selection": {
+    "path": "SOURCE_SELECTION.json",
+    "bytes": 8517,
+    "sha256": "40374fde1e80505a984be27ae31b5aaba1279cf1e2b0db58a8588fe6189ff084"
+  },
+  "all12_original_manifest_payloads_size_SHA_exact": true,
+  "baseline": {
+    "path": "baseline.lean",
+    "bytes": 13894,
+    "sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3"
+  },
+  "candidate": {
+    "path": "candidate.lean",
+    "bytes": 14094,
+    "sha256": "f1c7da9bb719c873ae2763df69f0dad81a62f2172328689ac4195f094013dc7a"
+  },
+  "actual_failure_slice": {
+    "path": "ACTUAL_FAILURE_SLICE.log",
+    "bytes": 7465,
+    "sha256": "afb8aec848bac5c069f999aa48fe8514dfd9be7fdae1d6e8121f16b45a0b3556"
+  },
+  "actual_log_prefix": {
+    "path": "ACTUAL_LOG_PREFIX.log",
+    "bytes": 322397,
+    "sha256": "4d1eef8046a3dae2dfcb6c32101772d053868cb1e006350bda9ad7b94c94e674"
+  },
+  "source_Git_lookup_bounded_payloads_bound_to_commit_path_and_blob": true,
+  "current_Member_source_is_exact_preimage": true,
+  "main_readonly_state": {
+    "exists": true,
+    "sha256": "7cce15106a64093a5715c3733c4504917ada8aba20a9a111dbc54a1f87f489b3"
+  },
+  "complete_raw_headers": [
+    {
+      "name": "absoluteMass",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before_and_after": "def absoluteMass (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℝ :=",
+      "sha256": "e068e6dab20c0b1041506b5ce55e9e1f3c828b27dece1e37360babbfc03ed9b4"
+    },
+    {
+      "name": "widthTerm",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before_and_after": "def widthTerm (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "sha256": "82d77ce0bed3b2ca9d15b9cfefe2633e87c96135505647351d2191d1fd28026e"
+    },
+    {
+      "name": "pairedError",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before_and_after": "def pairedError (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ :=",
+      "sha256": "d7edf091811591bba4af50950fee9bb4b4f8dfd1e564da2295229fb25f9a61f4"
+    },
+    {
+      "name": "absoluteMass_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header_before_and_after": "private theorem absoluteMass_nonneg (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    0 ≤ absoluteMass ret N cap w z :=",
+      "sha256": "1fd5aa234b62e77f41e41bee5cf6bdbf7e74600769ba4b933011ff2bcb6c8ccb"
+    },
+    {
+      "name": "exists_pair_power_error_envelope",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before_and_after": "theorem exists_pair_power_error_envelope :\n    ∃ C K Kr : ℝ, 0 < C ∧ 1 < K ∧ 1 < Kr ∧\n      ∀ epsilon : ℝ, 0 < epsilon → epsilon < 1 / 8 →\n        ∃ D0 : ℝ, 2 ≤ D0 ∧ ∀ D : ℝ, D0 ≤ D →\n          ∀ N cap : ℕ, Even N → ∀ r : ℝ, epsilon ^ 2 ≤ r →\n            ∀ old new : List ℕ → Bool,\n              let w := D ^ (epsilon ^ 2)\n              let z := D ^ r\n              let B := D ^ epsilon\n              let V := actualSmallEulerProduct N cap w\n              let E := actualSmallRosserDensityError C K D epsilon\n              let Q := (r / epsilon ^ 2) * (1 + Kr / (epsilon ^ 2 * Real.log D))\n              |widthTerm old new N cap w z B| ≤ (V * E) * Q ∧\n                |pairedError old new N cap w z B| ≤ (V * E) * Q :=",
+      "sha256": "6c7da32d476b25e505c5c923e80baac58810902e4963194965eea40855530bbe"
+    },
+    {
+      "name": "exists_pair_target_error_reserve",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before_and_after": "theorem exists_pair_target_error_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hmax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧ epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) → ∀ old new : List ℕ → Bool,\n          let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n          let z := (N : ℝ) ^ (nu * r)\n          let B := (N : ℝ) ^ (nu * epsilon)\n          |widthTerm old new N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) ∧\n            |pairedError old new N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) :=",
+      "sha256": "c8fed23a4946c32738713ce4fb996286ae42047f6f22dbc24daa147bb9e71ccf"
+    },
+    {
+      "name": "exists_original_eighth_width_and_paired_charge_reserve",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before_and_after": "theorem exists_original_eighth_width_and_paired_charge_reserve\n    (nu r eta epsilonMax : ℝ) (hnu : 0 < nu) (hr : 0 < r)\n    (heta : 0 < eta) (hmax : 0 < epsilonMax) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧ epsilon < epsilonMax ∧ epsilon ^ 2 ≤ r ∧\n      ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n        ∀ cap : ℕ, (N : ℝ) ^ (nu * r) ≤ (cap : ℝ) →\n          ∀ (lambda6 : List ℕ → ℝ) (base : Bool → List ℕ → Bool),\n            (∀ pre, base true pre = true) →\n            ∀ a : P4AOriginalEighthParentPhysicalLedger.Action,\n              let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n              let z := (N : ℝ) ^ (nu * r)\n              let B := (N : ℝ) ^ (nu * epsilon)\n              let old := P4AOriginalEighthParentPhysicalLedger.parentPolicy (N : ℝ) lambda6 base false\n              let fresh := P4AOriginalEighthParentPhysicalLedger.actionPolicy a (N : ℝ) lambda6 base false\n              |widthTerm old fresh N cap w z B| ≤ eta * singularSeries N / Real.log (N : ℝ) ∧\n                |(physicalDensitySum (actualSmallRoughModuli old N cap w z)\n                    (actualSmallRoughRho old N cap w z B) -\n                  physicalDensitySum (actualSmallRoughModuli fresh N cap w z)\n                    (actualSmallRoughRho fresh N cap w z B)) -\n                  actualSmallEulerProduct N cap w *\n                    P4AOriginalEighthParentPhysicalLedger.charge a N cap w z lambda6 base| ≤\n                  eta * singularSeries N / Real.log (N : ℝ) :=",
+      "sha256": "5899058b38508e83f07463792f08722cab71140f1bb6c2dc243d0c18228fd6ae"
+    }
+  ],
+  "unchanged_complete_definition_regions": [
+    {
+      "name": "absoluteMass",
+      "complete_raw_region_sha256": "ed84bee81e8fd3cd3acd84408453d7116cb0cfd03fe41c91943aaf8846b84866"
+    },
+    {
+      "name": "widthTerm",
+      "complete_raw_region_sha256": "65da2afd9479e09f7cd82437f0db8e58940ee0d092d2a576c3839b6de6e68b2d"
+    },
+    {
+      "name": "pairedError",
+      "complete_raw_region_sha256": "1f799e0984e82b075231723be44f298417522f5d13e2695bc6221e2be0887da8"
+    }
+  ],
+  "changed_proofs": [
+    "absoluteMass_nonneg",
+    "exists_pair_power_error_envelope",
+    "exists_pair_target_error_reserve"
+  ],
+  "counts": {
+    "source_commands": 7,
+    "public_theorems": 3,
+    "private_theorems": 1,
+    "definitions": 3,
+    "exact_proof_replacements": 4,
+    "new_source_declarations": 0,
+    "header_or_definition_exceptions": 0
+  },
+  "whole_source_delta": "The four unique published replacements reverse exactly to baseline bytes. The entire source skeleton with theorem proof bodies replaced is byte-identical, so all imports/options/comments/definitions/headers/quantifiers and other nonproof text remain.",
+  "mathematical_API_checks": {
+    "absoluteMass_nonneg": "Unfold only the two original aliases. The unchanged finite sum proof uses abs_nonneg on each actual fixed rough coefficient and nonnegative real Nat.totient denominator; it adds no positive-totient or nonzero-support assumption. Division by zero causes no strengthened premise.",
+    "hE": "C>0, epsilon>0 and D≥D0≥2 already hold in the unchanged proof. New local logD>0 is derived by Real.log_pos from the existing1<D; it exposes positivity of the original epsilon*logD base for its original exponent−1/3. No analytic estimate, new bound or choice of constants is introduced. The same visible-log proof shape already exists in ActualNormalizedRhoError.",
+    "density_alias_rewrite": "Unfold lo/hi and the actualSmallRosserMinusDensity/PlusDensity aliases only at the existing hh. This produces precisely the two reciprocalTotientDensity arguments in actualSmallRoughRho_density_eq, with the same ret,N,cap,w,z,B and sign-sensitive selection; the original rewrite and error bounds then apply. No positive-w coefficient is identified with a native w=0 coefficient.",
+    "field_simp": "The actual line180 diagnostic is No goals to be solved at trailing ring. Remove only that command after unchanged dsimp[Q];field_simp; original scalar identity and logarithmic denominators remain.",
+    "Q_not_2Q": "Each nonnegative absolute rough mass lies in[0,Q], so their difference has absolute value≤Q. Each signed attachment error lies in[0,VEQ], so the paired difference costsVEQ. Neither bound is obtained by replacing signed mass with absolute mass or inserting a target-size assumption.",
+    "cofinal_quantifiers": "Same common C,K,Kr precede epsilon and thresholdD0. Same epsilon is fixed before all targetN/cap/policies/action; nu,r,eta,epsilonMax ranges and cap coverage are unchanged. The bound stays eta*singularSeries/logN with original epsilon²≤r and Q=(r/epsilon²)(1+Kr/(epsilon²logD)).",
+    "original_rank8_bridge": "Final old/fresh physical policies retain the same inheritedlambda6/base/action and original even-retention condition. The paired charge is centered at V(w) times the same positive-w charge; projection to native w=0 remains explicitly OPEN, not silently proved.",
+    "no_new_oracle_or_hypothesis": "No Ready, density, tail, mean, desired charge or gain premise, numerical endpoint change or outside analytic theorem is added."
+  },
+  "actual_pinned_API_sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SmallRoughMainTerm.lean",
+      "sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+      "start_line": 20,
+      "end_line": 23,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SmallRoughDensityError.lean",
+      "sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+      "start_line": 54,
+      "end_line": 65,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRoughAttachment.lean",
+      "sha256": "211d48055ec640a666dfde8721833eacb7fbc215ef9cda791c44b869404b9ee5",
+      "start_line": 173,
+      "end_line": 189,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRosserDensity.lean",
+      "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+      "start_line": 36,
+      "end_line": 44,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRosserDensity.lean",
+      "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+      "start_line": 122,
+      "end_line": 128,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualNormalizedRhoError.lean",
+      "sha256": "ac6936d7ae3d493d36b3cf5f84c24d9e45cfb21a366bfad13cb09222481558c5",
+      "start_line": 72,
+      "end_line": 85,
+      "raw_excerpt_exact": true
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "start_line": 163,
+      "end_line": 165,
+      "raw_excerpt_exact": true
+    }
+  ],
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "exact_raw_snapshots_checked": [
+      "sieve-appendix-317-325.tex",
+      "sieve-appendix-327-345.tex"
+    ],
+    "scope": "Same sign-sensitive beta pair/physical rho, absolute beta error and parameters-before-N reserve; projection remains a separate direction."
+  },
+  "failure_classification": {
+    "actual_module_normal_exit": 1,
+    "source_lines": [
+      38,
+      75,
+      104,
+      180
+    ],
+    "errors_are_definition_exposure_positivity_alias_match_and_redundant_tactic": "No aggregate final completion or mathematical falsehood inferred. This was an actual source compile failure, not stock readiness absence."
+  },
+  "review_actions": {
+    "Lean_Lake_normal_kernel_audit_stock_or_numeric_replay": 0,
+    "candidate_or_runner_execution": false,
+    "live_main_Member_cache_runtime_guard_queue_or_old_records_changed": false
+  },
+  "next_gate": "Soleowner originalguard actual normal/kernel/full-owned audit; current static review is not source acceptance.",
+  "old_records_unchanged": true
+}

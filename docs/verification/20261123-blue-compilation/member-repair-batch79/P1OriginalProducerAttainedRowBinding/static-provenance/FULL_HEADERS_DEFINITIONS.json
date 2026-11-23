@@ -1,0 +1,91 @@
+{
+  "module": "ImbalancedChen.P1OriginalProducerAttainedRowBinding",
+  "headers": [
+    {
+      "name": "finiteMax_seed_or_winning_row",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 28,
+      "complete_raw_header": "theorem finiteMax_seed_or_winning_row {ι : Type*} (rows : Finset ι)\n    (eligible : ι → Prop) (profile : ι → ℝ) (seed : ℝ) :\n    (finiteMax rows eligible profile seed = seed ∧\n      ∀ r ∈ rows, eligible r → profile r ≤ seed) ∨\n    ∃ r ∈ rows, eligible r ∧ seed ≤ profile r ∧\n      (∀ s ∈ rows, eligible s → profile s ≤ profile r) ∧\n      finiteMax rows eligible profile seed = profile r :=",
+      "header_sha256": "e6075672403df1fce1291608ef4dfdaa4eb4341aa893799ce1a3a8fb8011602e"
+    },
+    {
+      "name": "level4_seed_or_attained_row",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 52,
+      "complete_raw_header": "theorem level4_seed_or_attained_row (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (pre : List ℕ) (hlen : pre.length = 4) :\n    producerLevel4 e chi m omega N rows licensed pre =\n        frozenLevel e chi m omega N pre ∨\n      ∃ r ∈ rows, producerEligible licensed r (primeHistoryLogCoordinates N 4 pre) ∧\n        producerLevel4 e chi m omega N rows licensed pre =\n          N ^ (VariableEnvelope.v\n            (∑ i ∈ r.selected, primeHistoryLogCoordinates N 4 pre i) - 2 * e) :=",
+      "header_sha256": "60e3da0721a0d8bf65fdb16b13e1d878b5d2146f0f96643231540571c01fb6a3"
+    },
+    {
+      "name": "descendant_seed_or_attained_row",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 77,
+      "complete_raw_header": "theorem descendant_seed_or_attained_row (e chi : ℝ) (m : ℕ) (omega N : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (pre : List ℕ) (hlen : 5 ≤ pre.length) :\n    fourthDescendantLevel e chi m omega N rows (producerEligible licensed)\n        (fun r => r.bufferedCandidate e) pre = frozenLevel e chi m omega N pre ∨\n      ∃ r ∈ rows,\n        producerEligible licensed r\n          (primeHistoryLogCoordinates N 4 (rosserAncestor 4 pre)) ∧\n        fourthDescendantLevel e chi m omega N rows (producerEligible licensed)\n            (fun s => s.bufferedCandidate e) pre =\n          N ^ (VariableEnvelope.v (∑ i ∈ r.selected,\n            primeHistoryLogCoordinates N 4 (rosserAncestor 4 pre) i) - 2 * e) :=",
+      "header_sha256": "af01580329f1b4046bdf4bc9a54e6541c0234e57c93e9ad9016139f7bffcae80"
+    },
+    {
+      "name": "retained_modulus_seed_or_attained_row",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 107,
+      "complete_raw_header": "theorem retained_modulus_seed_or_attained_row (e chi : ℝ) (m : ℕ)\n    (omega : ℝ) (N cap : ℕ) (w z : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop)\n    (heupper : 2 * e < (299 / 500 : ℝ)) (hN : 1 < (N : ℝ))\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRetainedLeaves\n      (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n      (fun _ => 1) [] true 1 (roughPrimeUniverse N cap w z))\n    (hlen : 5 ≤ leaf.selected.length) :\n    leaf.selected.prod ∈ producerRoughModuli e chi m omega N cap w z rows licensed ∧\n      ((leaf.selected.prod : ℝ) < frozenLevel e chi m omega (N : ℝ) leaf.selected ∨\n      ∃ r ∈ rows,\n        producerEligible licensed r\n          (primeHistoryLogCoordinates (N : ℝ) 4 (rosserAncestor 4 leaf.selected)) ∧\n        (leaf.selected.prod : ℝ) < (N : ℝ) ^ (VariableEnvelope.v (∑ i ∈ r.selected,\n          primeHistoryLogCoordinates (N : ℝ) 4 (rosserAncestor 4 leaf.selected) i) - 2 * e)) :=",
+      "header_sha256": "ca34b2174de5500f61575215d9779013812dee604c92f5ffed8bc73a29e2fc2a"
+    },
+    {
+      "name": "original_joint_geometry_from_admission",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 136,
+      "complete_raw_header": "theorem original_joint_geometry_from_admission (e chi : ℝ) (m n : ℕ)\n    (omega : ℝ) (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (p : Fin 4 → ℕ) (j3 : Cell m) (hj3 : j3 ∈ cells e chi m)\n    (j4 : Fin 4 → Fin (n + 1))\n    (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m j3 2)\n    (ht : actualPrimeTupleLog N p ∈ P1OriginalFourth.jointCell m n j3 j4)\n    (hp : p ∈ firstExitAdmittedTuples 4 (policy e chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))) :\n    actualPrimeTupleLog N p ∈ P1OriginalFourth.jointRegion e omega m j3 :=",
+      "header_sha256": "3aa234fefecffedecd84d62b01fdae44d5febf2599b2e8a77f832fd5e5320ed9"
+    },
+    {
+      "name": "original_admitted_tuple_row_binding",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 153,
+      "complete_raw_header": "theorem original_admitted_tuple_row_binding (e chi : ℝ) (m n : ℕ)\n    (omega : ℝ) (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (hlicenses : ∀ r ∈ rows, licensed r → r.Geometry)\n    (p : Fin 4 → ℕ) (j3 : Cell m) (hj3 : j3 ∈ cells e chi m)\n    (j4 : Fin 4 → Fin (n + 1))\n    (hwhole : omega ≤ logPrimeMeshLo 0 (19 / 96) m j3 2)\n    (ht : actualPrimeTupleLog N p ∈ P1OriginalFourth.jointCell m n j3 j4)\n    (hp : p ∈ firstExitAdmittedTuples 4 (policy e chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))) :\n    actualPrimeTupleLog N p ∈ P1OriginalFourth.jointRegion e omega m j3 ∧\n      (producerLevel4 e chi m omega (N : ℝ) rows licensed (P1OriginalFourth.history4 p) =\n          frozenLevel e chi m omega (N : ℝ) (P1OriginalFourth.history4 p) ∨\n      ∃ r ∈ rows, r.Geometry ∧ actualPrimeTupleLog N p ∈ r.box ∧\n        producerLevel4 e chi m omega (N : ℝ) rows licensed (P1OriginalFourth.history4 p) =\n          (N : ℝ) ^ (VariableEnvelope.v (∑ i ∈ r.selected, actualPrimeTupleLog N p i) - 2 * e) ∧\n        (∀ k, prefixSquareExpr (actualPrimeTupleLog N p) k < r.candidate (actualPrimeTupleLog N p)) ∧\n        (∀ k ∉ r.selected, selectedSquareExpr r.selected (actualPrimeTupleLog N p) k <\n          r.candidate (actualPrimeTupleLog N p))) :=",
+      "header_sha256": "3f38d05728176fbb726d9c06af61a3eb36688aa7493a44bfacfb3d1b5440e426"
+    },
+    {
+      "name": "producer_same_physical_rho",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 185,
+      "complete_raw_header": "theorem producer_same_physical_rho (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (N cap : ℕ) (w z L : ℝ) :\n    actualSmallRoughRho (producerPolicy4 e chi m omega (N : ℝ) rows licensed false)\n      N cap w z L =\n    smallRoughRho (actualSmallRosserSupport N cap w)\n      (producerRoughModuli e chi m omega N cap w z rows licensed)\n      (producerRoughCoefficient e chi m omega N cap w z rows licensed)\n      (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) :=",
+      "header_sha256": "23b35f13b414d72d18170a8bb651917c95955736dd0382bad58ad0a6af1add19"
+    },
+    {
+      "name": "producer_empty_history_mem",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 203,
+      "complete_raw_header": "theorem producer_empty_history_mem (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (N cap : ℕ) (w z : ℝ) :\n    ({selected := [], positive := true, mass := 1} : FirstExitLeaf ℕ) ∈\n      firstExitRetainedLeaves (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n        (fun _ => 1) [] true 1 (roughPrimeUniverse N cap w z) :=",
+      "header_sha256": "eb57d0dcbcf744e4f40a880c6daf535cdcc0c54e179e539938e4497a6012145b"
+    },
+    {
+      "name": "producer_one_mem",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 211,
+      "complete_raw_header": "theorem producer_one_mem (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (N cap : ℕ) (w z : ℝ) :\n    1 ∈ producerRoughModuli e chi m omega N cap w z rows licensed :=",
+      "header_sha256": "1e3981792a8838d6efba812ca344c99f97c91b749e25b4ce97e9054c8d9f8216"
+    },
+    {
+      "name": "producer_coefficient_one",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 219,
+      "complete_raw_header": "theorem producer_coefficient_one (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (N cap : ℕ) (w z : ℝ) :\n    producerRoughCoefficient e chi m omega N cap w z rows licensed 1 = 1 :=",
+      "header_sha256": "f97f8cd8a0eb34bc37189344fc39583716d99282efcfa3cd36ef548628b6dd42"
+    }
+  ],
+  "definitions": [],
+  "all_complete_headers_raw_byte_identical": true,
+  "source_command_count": 10,
+  "all_outside_changed_proof_bytes_exact": true,
+  "raw_header_parser": "Comment-mask offsets retained; declaration-statement line-ending := located, never first let :=.",
+  "reverse_reconstruction_exact": true
+}

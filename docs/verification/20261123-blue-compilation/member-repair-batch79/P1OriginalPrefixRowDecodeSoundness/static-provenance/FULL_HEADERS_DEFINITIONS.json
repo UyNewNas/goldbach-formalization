@@ -1,0 +1,250 @@
+{
+  "module": "ImbalancedChen.P1OriginalPrefixRowDecodeSoundness",
+  "headers": [
+    {
+      "kind": "def",
+      "name": "maskSlots",
+      "complete_raw_header": "def maskSlots (rank mask : ℕ) : Finset (Fin rank) :=",
+      "sha256": "ba31a083680ab840c4b80329f28f7f75207adda28a222a3ad72b42c108a294d3",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "mem_maskSlots",
+      "complete_raw_header": "@[simp] theorem mem_maskSlots {rank mask : ℕ} (i : Fin rank) :\n    i ∈ maskSlots rank mask ↔ Nat.testBit mask i.val = true :=",
+      "sha256": "11b2fcd0b144b4744f0a7531c3f9e47118a09a291ee5d77104bb429b17263d9f",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_maskSlots",
+      "complete_raw_header": "theorem sum_maskSlots {rank mask : ℕ} {α : Type*} [AddCommMonoid α] (f : Fin rank → α) :\n    (∑ i ∈ maskSlots rank mask, f i) =\n      ∑ i, if Nat.testBit mask i.val then f i else 0 :=",
+      "sha256": "7cde26db1499310895d18ef23fbc03c5e38ba8f907f919211972308361865cb0",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "structure",
+      "name": "FourthWireRow",
+      "complete_raw_header": "structure FourthWireRow where",
+      "sha256": "c23796d9905b609437af620b78639bdf256bc52a6af82fdb151464ad4d6a035a",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FourthWireRow.toProducerRow",
+      "complete_raw_header": "def FourthWireRow.toProducerRow (r : FourthWireRow) :\n    P2OriginalFourthCapProducerInterface.ProducerRow :=",
+      "sha256": "766125776dc0daa581c0eb5b2c3234f28fcad7f811fb7bb85445640a7bb16e91",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "fourth_selected",
+      "complete_raw_header": "@[simp] theorem fourth_selected (r : FourthWireRow) :\n    r.toProducerRow.selected = maskSlots 4 r.mask :=",
+      "sha256": "12772477d7bfee17c9939b4a0be681c7fa5b2b7c3d1d0ff8037df18dea3077a9",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "fourth_lower",
+      "complete_raw_header": "@[simp] theorem fourth_lower (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.lower i = (r.lo i : ℚ) / 204800 :=",
+      "sha256": "a1675202af550beeafb97a5f5f7c5c55d8b762871fd3994fa97cd5c5f3abe435",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "fourth_upper",
+      "complete_raw_header": "@[simp] theorem fourth_upper (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.upper i = (r.hi i : ℚ) / 204800 :=",
+      "sha256": "ec9d900b8c5b698ec8299edd4482db31749f1acc4bbd6bbfc1ca6f672d07d69a",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "fourth_box",
+      "complete_raw_header": "theorem fourth_box (r : FourthWireRow) (t : Fin 4 → ℝ) :\n    t ∈ r.toProducerRow.box ↔\n      (∀ i, (r.lo i : ℝ) / 204800 ≤ t i) ∧\n        (∀ i, t i ≤ (r.hi i : ℝ) / 204800) :=",
+      "sha256": "7825c8ee4b1d9e3d4805d79ed5d5153745246e9827daae378b9de0c3c5009415",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "structure",
+      "name": "FifthWireRow",
+      "complete_raw_header": "structure FifthWireRow where",
+      "sha256": "bedf51cb300550c8212997fe787b107e763485001e5b62a670c9f9ab19b3cd48",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.lower",
+      "complete_raw_header": "def FifthWireRow.lower (r : FifthWireRow) (i : Fin 5) : ℚ :=",
+      "sha256": "5947abbac67c8477d3b3946c08656ec6c4197d31e467061d0503bcbdec19ebb4",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.upper",
+      "complete_raw_header": "def FifthWireRow.upper (r : FifthWireRow) (i : Fin 5) : ℚ :=",
+      "sha256": "0877358df4788ccc364927b49dc0fe6c35bc87bc0e18ca2582548fd0a5f98e47",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.originalBox",
+      "complete_raw_header": "def FifthWireRow.originalBox (r : FifthWireRow) : Set (Fin 5 → ℝ) :=",
+      "sha256": "b62b8a8bdcedcd86b7cdf74e25c7283d79196545fc0b6f807b033a75c00717b8",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "fifthCellContained",
+      "complete_raw_header": "def fifthCellContained (r : FifthWireRow) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Prop :=",
+      "sha256": "f82a3bef6788d276004e7d6df16be5a4bb125badcfa5b688bd402ea647d6aeea",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "decodeFifthRows",
+      "complete_raw_header": "def decodeFifthRows (r : FifthWireRow) (m : ℕ) : Finset (FifthRow m) :=",
+      "sha256": "92240bc254151119735a3bd9201f01e451510c24583af3e6770fbc1fd84a458f",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "mem_decodeFifthRows_iff",
+      "complete_raw_header": "theorem mem_decodeFifthRows_iff (raw : FifthWireRow) (m : ℕ) (r : FifthRow m) :\n    r ∈ decodeFifthRows raw m ↔\n      0 < raw.grid ∧ 0 ≤ raw.mask ∧ ∃ j,\n        fifthCellContained raw m j ∧\n          r = ({cell :=",
+      "sha256": "16bc436c8edc5cdf9cfd3e17afb1d9d07ed5a2fdbd24089c61be3c0061508f2b",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "decodeFifthRows_selected_eq",
+      "complete_raw_header": "theorem decodeFifthRows_selected_eq (raw : FifthWireRow) (m : ℕ) (r : FifthRow m)\n    (hr : r ∈ decodeFifthRows raw m) : r.selected = maskSlots 5 raw.mask.toNat :=",
+      "sha256": "5499104ade4f8c1bfdba9f938511bfa366fdda4e8d8a1ed89626c692d8b89786",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "decodeFifthRows_source_geometry",
+      "complete_raw_header": "theorem decodeFifthRows_source_geometry (raw : FifthWireRow) (m : ℕ) (r : FifthRow m)\n    (hr : r ∈ decodeFifthRows raw m) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    0 < raw.grid ∧ 0 ≤ raw.mask ∧\n      r.selected = maskSlots 5 raw.mask.toNat ∧ t ∈ raw.originalBox :=",
+      "sha256": "bb62f23e8803f6af9e51d947fcfd0a76759073bf9467bc676fbde97b87089ad6",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "checkedFifthRows",
+      "complete_raw_header": "def checkedFifthRows (raw : FifthWireRow) (m : ℕ) (e : ℚ) : Finset (FifthRow m) :=",
+      "sha256": "8ac9ea94fae5453a2152e02f28af1b91e37ae89a1db96a935e4ed11e561dd084",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "checkedFifthRows_sound",
+      "complete_raw_header": "theorem checkedFifthRows_sound (raw : FifthWireRow) (m : ℕ) (e : ℚ) (r : FifthRow m)\n    (hr : r ∈ checkedFifthRows raw m e) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    t ∈ raw.originalBox ∧ r.selected = maskSlots 5 raw.mask.toNat ∧\n      (1 / 2 : ℝ) < candidate (e : ℝ) r.selected t ∧\n      (∀ k, prefixSquareExpr t k < candidate (e : ℝ) r.selected t) ∧\n      (∀ k ∉ r.selected, selectedSquareExpr r.selected t k < candidate (e : ℝ) r.selected t) :=",
+      "sha256": "9f3f74bd79367cb4e3ddb23d33dd022121bf4a7cfbbefadd44abfa7982266617",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "theorem",
+      "name": "checkedFifthRows_original_eligible",
+      "complete_raw_header": "theorem checkedFifthRows_original_eligible (raw : FifthWireRow) (m : ℕ) (e : ℚ)\n    (chi omega : ℝ) (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m))\n    (r : FifthRow m) (hr : r ∈ checkedFifthRows raw m e)\n    (howner : r.cell ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5)\n    (t : Fin 5 → ℝ) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    eligible e chi m omega J5 r t :=",
+      "sha256": "5dc23d5aeae99a7b437624d0675eb92917fa22fbac8df1dd6ad0fb331a46a912",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "definitions": [
+    {
+      "kind": "def",
+      "name": "maskSlots",
+      "complete_raw_region": "def maskSlots (rank mask : ℕ) : Finset (Fin rank) :=\n  Finset.univ.filter (fun i => Nat.testBit mask i.val)\n\n",
+      "sha256": "1ce3bb80567050b3964c03dec4f40fa119ac8c62c62f7abca79ed95a72323f71",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FourthWireRow.toProducerRow",
+      "complete_raw_region": "def FourthWireRow.toProducerRow (r : FourthWireRow) :\n    P2OriginalFourthCapProducerInterface.ProducerRow := ⟨r.lo, r.hi, r.mask⟩\n\n",
+      "sha256": "ad68bcd36a10ba9a8823a491f0709b255a615dbf28e9044409d8be5292bddaab",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.lower",
+      "complete_raw_region": "def FifthWireRow.lower (r : FifthWireRow) (i : Fin 5) : ℚ := (r.lo i : ℚ) / (r.grid : ℚ)\n",
+      "sha256": "c7beacaa2030212325cdfc97a691c7da3ac3777d7872d51a9a13222c2e0cc948",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.upper",
+      "complete_raw_region": "def FifthWireRow.upper (r : FifthWireRow) (i : Fin 5) : ℚ := ((r.lo i : ℚ) + 1) / (r.grid : ℚ)\n\n",
+      "sha256": "7dfd1387fb79f3146964ac96006d42a9b55a8def78bfc99d60a930b41d6d8291",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "FifthWireRow.originalBox",
+      "complete_raw_region": "def FifthWireRow.originalBox (r : FifthWireRow) : Set (Fin 5 → ℝ) :=\n  {t | ∀ i, (r.lower i : ℝ) ≤ t i ∧ t i < (r.upper i : ℝ)}\n\n/-- Exact rational containment of a candidate original mesh cell in the\nsaved1/grid box. This accommodates differing original mesh widths. -/\n",
+      "sha256": "78d075f2746f7c8906c709fb561b3ea0ea2282a589fec9d16c01753a92f40e36",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "fifthCellContained",
+      "complete_raw_region": "def fifthCellContained (r : FifthWireRow) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Prop :=\n  ∀ i, r.lower i ≤ qLogPrimeMeshLo 0 (19 / 96) m j i ∧\n    qLogPrimeMeshHi 0 (19 / 96) m j i ≤ r.upper i\n\nnoncomputable section\nopen scoped Classical\nopen P1OriginalVariableFifthContinuation\n\n/-- Total conservative decoder. Invalid signed grids/masks decode to no\nrows. A valid saved box can contain many, one, or no cells at this mesh. -/\n",
+      "sha256": "d1cd4bc7530cd320a85da0d27ac1dc8414d366135ad7e34751a5aa625d88e141",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "decodeFifthRows",
+      "complete_raw_region": "def decodeFifthRows (r : FifthWireRow) (m : ℕ) : Finset (FifthRow m) :=\n  if 0 < r.grid ∧ 0 ≤ r.mask then\n    (Finset.univ.filter (fifthCellContained r m)).image\n      (fun j => ({cell := j, selected := maskSlots 5 r.mask.toNat} : FifthRow m))\n  else ∅\n\n",
+      "sha256": "d1a722a4793f788ce9cdadab15227d46b557148050f9713cb2a2c954d5149525",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "def",
+      "name": "checkedFifthRows",
+      "complete_raw_region": "def checkedFifthRows (raw : FifthWireRow) (m : ℕ) (e : ℚ) : Finset (FifthRow m) :=\n  (decodeFifthRows raw m).filter (fun r => gateCheck e m r = true)\n\n",
+      "sha256": "99b0f4dbf24d670ea6261e9675d4a5f9c4d7ed1b3f289ba6daab0191dcdf9a0b",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "complete_structure_regions": [
+    {
+      "kind": "structure",
+      "name": "FourthWireRow",
+      "complete_raw_region": "structure FourthWireRow where\n  lo : Fin 4 → ℕ\n  hi : Fin 4 → ℕ\n  mask : ℕ\n\n/-- The original fourth producer endpoints are on lattice204800. -/\n",
+      "sha256": "969da4162aa96df5cf85e5ae6a2e69e50df1a6f1b0f60f043d91beec7e542a6f",
+      "pre_post_byte_identical": true
+    },
+    {
+      "kind": "structure",
+      "name": "FifthWireRow",
+      "complete_raw_region": "structure FifthWireRow where\n  grid : ℤ\n  lo : Fin 5 → ℤ\n  mask : ℤ\n  vertexGapSum : ℤ\n  ratioA : ℤ\n  ratioB : ℤ\n\n",
+      "sha256": "b5efd2e3e87d965a2bb4d81765646e90c978c18f34a04c0f551c1ab9322d8e44",
+      "pre_post_byte_identical": true
+    }
+  ],
+  "changed_proof_bodies": [
+    {
+      "name": "mem_decodeFifthRows_iff",
+      "complete_raw_header": "theorem mem_decodeFifthRows_iff (raw : FifthWireRow) (m : ℕ) (r : FifthRow m) :\n    r ∈ decodeFifthRows raw m ↔\n      0 < raw.grid ∧ 0 ≤ raw.mask ∧ ∃ j,\n        fifthCellContained raw m j ∧\n          r = ({cell := j, selected := maskSlots 5 raw.mask.toNat} : FifthRow m) :=",
+      "header_sha256": "2767dcf505b95fc295476a916ee5267bcd67386158c2a9c184c28937107e967e",
+      "before_body": "\n  unfold decodeFifthRows\n  by_cases hvalid : 0 < raw.grid ∧ 0 ≤ raw.mask\n  · rw [if_pos hvalid]\n    constructor\n    · intro hr\n      obtain ⟨j, hj, heq⟩ := Finset.mem_image.mp hr\n      exact ⟨hvalid.1, hvalid.2, j, (Finset.mem_filter.mp hj).2, heq.symm⟩\n    · rintro ⟨_hg, _hm, j, hj, rfl⟩\n      exact Finset.mem_image.mpr ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hj⟩, rfl⟩\n  · rw [if_neg hvalid]\n    simp only [Finset.not_mem_empty, false_iff]\n    rintro ⟨hg, hm, _⟩\n    exact hvalid ⟨hg, hm⟩\n\n",
+      "after_body": "\n  unfold decodeFifthRows\n  by_cases hvalid : 0 < raw.grid ∧ 0 ≤ raw.mask\n  · rw [if_pos hvalid]\n    constructor\n    · intro hr\n      obtain ⟨j, hj, heq⟩ := Finset.mem_image.mp hr\n      exact ⟨hvalid.1, hvalid.2, j, (Finset.mem_filter.mp hj).2, heq.symm⟩\n    · rintro ⟨_hg, _hm, j, hj, rfl⟩\n      exact Finset.mem_image.mpr ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hj⟩, rfl⟩\n  · rw [if_neg hvalid]\n    simp only [Finset.notMem_empty, false_iff]\n    rintro ⟨hg, hm, _⟩\n    exact hvalid ⟨hg, hm⟩\n\n",
+      "before_body_sha256": "60750ae31616d9bdb213bc644b7723d631f90df29a01c52db6acd4ec928d2864",
+      "after_body_sha256": "f41d278fca625b74874e6400dfb4db0766ba391ba4877eb93fe24a3f532782d7"
+    },
+    {
+      "name": "decodeFifthRows_source_geometry",
+      "complete_raw_header": "theorem decodeFifthRows_source_geometry (raw : FifthWireRow) (m : ℕ) (r : FifthRow m)\n    (hr : r ∈ decodeFifthRows raw m) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    0 < raw.grid ∧ 0 ≤ raw.mask ∧\n      r.selected = maskSlots 5 raw.mask.toNat ∧ t ∈ raw.originalBox :=",
+      "header_sha256": "bb62f23e8803f6af9e51d947fcfd0a76759073bf9467bc676fbde97b87089ad6",
+      "before_body": "\n  obtain ⟨hg, hm, j, hj, rfl⟩ := (mem_decodeFifthRows_iff raw m r).mp hr\n  refine ⟨hg, hm, rfl, ?_⟩\n  intro i\n  have hc := mem_logPrimeMeshCell.mp ht i\n  have hlo : (raw.lower i : ℝ) ≤ logPrimeMeshLo 0 (19 / 96) m j i := by\n    have hq : (raw.lower i : ℝ) ≤ (qLogPrimeMeshLo 0 (19 / 96) m j i : ℝ) :=\n      Rat.cast_le.mpr (hj i).1\n    simpa only [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) i] using hq\n  have hhi : logPrimeMeshHi 0 (19 / 96) m j i ≤ (raw.upper i : ℝ) := by\n    have hq : (qLogPrimeMeshHi 0 (19 / 96) m j i : ℝ) ≤ (raw.upper i : ℝ) :=\n      Rat.cast_le.mpr (hj i).2\n    simpa only [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j) i] using hq\n  exact ⟨hlo.trans hc.1, hc.2.trans_le hhi⟩\n\n",
+      "after_body": "\n  obtain ⟨hg, hm, j, hj, rfl⟩ := (mem_decodeFifthRows_iff raw m r).mp hr\n  refine ⟨hg, hm, rfl, ?_⟩\n  intro i\n  have hc := mem_logPrimeMeshCell.mp ht i\n  have hlo : (raw.lower i : ℝ) ≤ logPrimeMeshLo 0 (19 / 96) m j i := by\n    have hq : (raw.lower i : ℝ) ≤ (qLogPrimeMeshLo 0 (19 / 96) m j i : ℝ) :=\n      Rat.cast_le.mpr (hj i).1\n    simpa only [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) i,\n      Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using hq\n  have hhi : logPrimeMeshHi 0 (19 / 96) m j i ≤ (raw.upper i : ℝ) := by\n    have hq : (qLogPrimeMeshHi 0 (19 / 96) m j i : ℝ) ≤ (raw.upper i : ℝ) :=\n      Rat.cast_le.mpr (hj i).2\n    simpa only [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j) i,\n      Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using hq\n  exact ⟨hlo.trans hc.1, hc.2.trans_le hhi⟩\n\n",
+      "before_body_sha256": "813938c828062a5523ccf5ed369b8eebdf4fe0a58a4a0d24807031f6ac21d141",
+      "after_body_sha256": "db2fe94f11254e39a99b7eef532bdb433c8618f3568bdb2379b840d0a42631f8"
+    }
+  ],
+  "outside_two_original_proof_bodies_byte_identical": true,
+  "outside_proofs_sha256": "134cd03349cced67e3476e80e0087bae33ef0dd670999b5ba7c39a0e612dc8f5",
+  "header_definition_import_option_data_hypothesis_or_numeric_changes": false,
+  "new_declarations": 0
+}

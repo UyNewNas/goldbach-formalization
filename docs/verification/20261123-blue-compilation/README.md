@@ -275,3 +275,7 @@ H3 正常编译、kernel 和完整审计均实际退出 0；[调度补充](membe
 另两项实际依赖 [Mobius／HeathBrown 既有物件复用](member-two-qualified-reuse/FINAL_REVIEW.json) 沿用可靠 producer 的正常编译和 kernel 验收，在空闲原调度窗口采用已核定的原源码及十六项物件，当前 stock 检查退出 0 且源码事件为零；只补做当前上下文完整 owned 审计，21 个声明（19 public、2 private）与原公开类型／AST／宇宙／公理一致。未为复用重复原成功编译，也未重扫已有 14951 个实际导入的资格记录。锁范围证据来自已执行并审查的代码路径，没有伪称另有独立 OS 锁快照。
 
 本次登记七个实际供应模块，共 681 个 owned 声明（439 public、242 private），目录累计 219 份已验源码后像。新的六终点共享增量构建正在继续处理实际失败；四个最终 P1 输出、完整数据与分析供应链仍须各自闭合。这些前置验收尚不构成完整 P1，也不构成全部看板蓝色节点已完成的声明。
+
+第七十八、七十九、八十一批再验收五个实际前置，共 112 个 owned 声明（110 public、2 private），完整类型／AST／宇宙参数／传递公理、真实环境清单与源码及二十五项主要产物均经最终复核，仅标准三公理。每项 normal／指定模块 kernel／完整 owned 审计实际退出 0，没有为发布重跑。见 [78](member-repair-batch78/VALIDATION_RESULTS.json)、[79](member-repair-batch79/VALIDATION_RESULTS.json)、[81](member-repair-batch81/VALIDATION_RESULTS.json)，各包保留 `FINAL_REVIEW.json`。
+
+范围为 SmallCellPointwise、PrefixRowDecode、ProducerAttainedRow、Ascending14 与 CommonBetaWidthPayment。只修原 Fin 同值、空集／强制转换 API、已有 tent crossing 等价和局部代数；Producer 整份复用已发表 `4837cc14` 修补。原完整声明、定义、原始数据、Q 预算与量词保持，未增加均值或许可前提。Prefix 原声明元数据截断在结构字面量 `:=` 内，实际完整声明保持，原元数据与不可变补充均保留。三个最终审查的原始版本和最初清单另存原样；规范 `INDEPENDENT_REVIEW.json` 只补发布接口要求的空 `findings` 数组及档案绑定，未改变审查结论或原验证记录。目录累计 224 份已验源码后像，完整 P1 验收继续。

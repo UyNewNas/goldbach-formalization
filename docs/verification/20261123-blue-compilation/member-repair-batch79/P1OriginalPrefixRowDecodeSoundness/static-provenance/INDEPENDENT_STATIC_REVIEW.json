@@ -1,0 +1,305 @@
+{
+  "schema": "prefix_row_decode_soundness_independent_static_gate_v1",
+  "reviewer": "/root/member_current_repairs",
+  "reviewed_utc": "2026-11-23T22:38:56.937632+00:00",
+  "outcome": "NO_SOURCE_FINDINGS_READY_FOR_UNIQUE_OWNER_ACTUAL_VALIDATION",
+  "authorship": "Reviewer did not author these two proof repairs. Reciprocal author reviewed independent Producer published-source packet.",
+  "scope": "Read-only frozen source/header/definition/structure/diff/API/manuscript/log-prefix identities. No Lean/Lake/kernel/type/axiom/numerical execution and no live source or prior-record edits.",
+  "module": "ImbalancedChen.P1OriginalPrefixRowDecodeSoundness",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/baseline.lean",
+    "bytes": 7638,
+    "sha256": "cf8cc8d98a8ec95811fdeb34fa2d780657fb29a87b4809224389aa6c08ba5a8e"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/candidate.lean",
+    "bytes": 7739,
+    "sha256": "28437a1c5353e8e5f17b631f6c52ab1cf6b6d412243fbc756208a06367d0aee1"
+  },
+  "original_selection": {
+    "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/SOURCE_SELECTION.json",
+    "bytes": 3497,
+    "sha256": "8d75e68536ee024abac61c3eaa6bd3afd942fa29e7fb62a7745218c35babedca"
+  },
+  "original_manifest": {
+    "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/FILES_MANIFEST.json",
+    "bytes": 1695,
+    "sha256": "af8bf44eb5056513ae5bf69a0379fd8e66f6022d2bff834c90858715e27a02fd"
+  },
+  "original_all_manifest_files_byte_bound": true,
+  "exact_three_replacement_forward_and_reverse_reconstruction": true,
+  "all_complete_raw_headers_equal": true,
+  "source_commands": 21,
+  "theorem_commands": 11,
+  "definition_commands": 8,
+  "structures": 2,
+  "complete_headers": [
+    {
+      "name": "maskSlots",
+      "kind": "def",
+      "complete_raw_header": "def maskSlots (rank mask : ℕ) : Finset (Fin rank) :=",
+      "header_sha256": "ba31a083680ab840c4b80329f28f7f75207adda28a222a3ad72b42c108a294d3"
+    },
+    {
+      "name": "mem_maskSlots",
+      "kind": "theorem",
+      "complete_raw_header": "@[simp] theorem mem_maskSlots {rank mask : ℕ} (i : Fin rank) :\n    i ∈ maskSlots rank mask ↔ Nat.testBit mask i.val = true :=",
+      "header_sha256": "11b2fcd0b144b4744f0a7531c3f9e47118a09a291ee5d77104bb429b17263d9f"
+    },
+    {
+      "name": "sum_maskSlots",
+      "kind": "theorem",
+      "complete_raw_header": "theorem sum_maskSlots {rank mask : ℕ} {α : Type*} [AddCommMonoid α] (f : Fin rank → α) :\n    (∑ i ∈ maskSlots rank mask, f i) =\n      ∑ i, if Nat.testBit mask i.val then f i else 0 :=",
+      "header_sha256": "7cde26db1499310895d18ef23fbc03c5e38ba8f907f919211972308361865cb0"
+    },
+    {
+      "name": "FourthWireRow",
+      "kind": "structure",
+      "complete_raw_header": "structure FourthWireRow where",
+      "header_sha256": "c23796d9905b609437af620b78639bdf256bc52a6af82fdb151464ad4d6a035a"
+    },
+    {
+      "name": "FourthWireRow.toProducerRow",
+      "kind": "def",
+      "complete_raw_header": "def FourthWireRow.toProducerRow (r : FourthWireRow) :\n    P2OriginalFourthCapProducerInterface.ProducerRow :=",
+      "header_sha256": "766125776dc0daa581c0eb5b2c3234f28fcad7f811fb7bb85445640a7bb16e91"
+    },
+    {
+      "name": "fourth_selected",
+      "kind": "theorem",
+      "complete_raw_header": "@[simp] theorem fourth_selected (r : FourthWireRow) :\n    r.toProducerRow.selected = maskSlots 4 r.mask :=",
+      "header_sha256": "12772477d7bfee17c9939b4a0be681c7fa5b2b7c3d1d0ff8037df18dea3077a9"
+    },
+    {
+      "name": "fourth_lower",
+      "kind": "theorem",
+      "complete_raw_header": "@[simp] theorem fourth_lower (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.lower i = (r.lo i : ℚ) / 204800 :=",
+      "header_sha256": "a1675202af550beeafb97a5f5f7c5c55d8b762871fd3994fa97cd5c5f3abe435"
+    },
+    {
+      "name": "fourth_upper",
+      "kind": "theorem",
+      "complete_raw_header": "@[simp] theorem fourth_upper (r : FourthWireRow) (i : Fin 4) :\n    r.toProducerRow.upper i = (r.hi i : ℚ) / 204800 :=",
+      "header_sha256": "ec9d900b8c5b698ec8299edd4482db31749f1acc4bbd6bbfc1ca6f672d07d69a"
+    },
+    {
+      "name": "fourth_box",
+      "kind": "theorem",
+      "complete_raw_header": "theorem fourth_box (r : FourthWireRow) (t : Fin 4 → ℝ) :\n    t ∈ r.toProducerRow.box ↔\n      (∀ i, (r.lo i : ℝ) / 204800 ≤ t i) ∧\n        (∀ i, t i ≤ (r.hi i : ℝ) / 204800) :=",
+      "header_sha256": "7825c8ee4b1d9e3d4805d79ed5d5153745246e9827daae378b9de0c3c5009415"
+    },
+    {
+      "name": "FifthWireRow",
+      "kind": "structure",
+      "complete_raw_header": "structure FifthWireRow where",
+      "header_sha256": "bedf51cb300550c8212997fe787b107e763485001e5b62a670c9f9ab19b3cd48"
+    },
+    {
+      "name": "FifthWireRow.lower",
+      "kind": "def",
+      "complete_raw_header": "def FifthWireRow.lower (r : FifthWireRow) (i : Fin 5) : ℚ :=",
+      "header_sha256": "5947abbac67c8477d3b3946c08656ec6c4197d31e467061d0503bcbdec19ebb4"
+    },
+    {
+      "name": "FifthWireRow.upper",
+      "kind": "def",
+      "complete_raw_header": "def FifthWireRow.upper (r : FifthWireRow) (i : Fin 5) : ℚ :=",
+      "header_sha256": "0877358df4788ccc364927b49dc0fe6c35bc87bc0e18ca2582548fd0a5f98e47"
+    },
+    {
+      "name": "FifthWireRow.originalBox",
+      "kind": "def",
+      "complete_raw_header": "def FifthWireRow.originalBox (r : FifthWireRow) : Set (Fin 5 → ℝ) :=",
+      "header_sha256": "b62b8a8bdcedcd86b7cdf74e25c7283d79196545fc0b6f807b033a75c00717b8"
+    },
+    {
+      "name": "fifthCellContained",
+      "kind": "def",
+      "complete_raw_header": "def fifthCellContained (r : FifthWireRow) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Prop :=",
+      "header_sha256": "f82a3bef6788d276004e7d6df16be5a4bb125badcfa5b688bd402ea647d6aeea"
+    },
+    {
+      "name": "decodeFifthRows",
+      "kind": "def",
+      "complete_raw_header": "def decodeFifthRows (r : FifthWireRow) (m : ℕ) : Finset (FifthRow m) :=",
+      "header_sha256": "92240bc254151119735a3bd9201f01e451510c24583af3e6770fbc1fd84a458f"
+    },
+    {
+      "name": "mem_decodeFifthRows_iff",
+      "kind": "theorem",
+      "complete_raw_header": "theorem mem_decodeFifthRows_iff (raw : FifthWireRow) (m : ℕ) (r : FifthRow m) :\n    r ∈ decodeFifthRows raw m ↔\n      0 < raw.grid ∧ 0 ≤ raw.mask ∧ ∃ j,\n        fifthCellContained raw m j ∧\n          r = ({cell := j, selected := maskSlots 5 raw.mask.toNat} : FifthRow m) :=",
+      "header_sha256": "2767dcf505b95fc295476a916ee5267bcd67386158c2a9c184c28937107e967e"
+    },
+    {
+      "name": "decodeFifthRows_selected_eq",
+      "kind": "theorem",
+      "complete_raw_header": "theorem decodeFifthRows_selected_eq (raw : FifthWireRow) (m : ℕ) (r : FifthRow m)\n    (hr : r ∈ decodeFifthRows raw m) : r.selected = maskSlots 5 raw.mask.toNat :=",
+      "header_sha256": "5499104ade4f8c1bfdba9f938511bfa366fdda4e8d8a1ed89626c692d8b89786"
+    },
+    {
+      "name": "decodeFifthRows_source_geometry",
+      "kind": "theorem",
+      "complete_raw_header": "theorem decodeFifthRows_source_geometry (raw : FifthWireRow) (m : ℕ) (r : FifthRow m)\n    (hr : r ∈ decodeFifthRows raw m) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    0 < raw.grid ∧ 0 ≤ raw.mask ∧\n      r.selected = maskSlots 5 raw.mask.toNat ∧ t ∈ raw.originalBox :=",
+      "header_sha256": "bb62f23e8803f6af9e51d947fcfd0a76759073bf9467bc676fbde97b87089ad6"
+    },
+    {
+      "name": "checkedFifthRows",
+      "kind": "def",
+      "complete_raw_header": "def checkedFifthRows (raw : FifthWireRow) (m : ℕ) (e : ℚ) : Finset (FifthRow m) :=",
+      "header_sha256": "8ac9ea94fae5453a2152e02f28af1b91e37ae89a1db96a935e4ed11e561dd084"
+    },
+    {
+      "name": "checkedFifthRows_sound",
+      "kind": "theorem",
+      "complete_raw_header": "theorem checkedFifthRows_sound (raw : FifthWireRow) (m : ℕ) (e : ℚ) (r : FifthRow m)\n    (hr : r ∈ checkedFifthRows raw m e) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    t ∈ raw.originalBox ∧ r.selected = maskSlots 5 raw.mask.toNat ∧\n      (1 / 2 : ℝ) < candidate (e : ℝ) r.selected t ∧\n      (∀ k, prefixSquareExpr t k < candidate (e : ℝ) r.selected t) ∧\n      (∀ k ∉ r.selected, selectedSquareExpr r.selected t k < candidate (e : ℝ) r.selected t) :=",
+      "header_sha256": "9f3f74bd79367cb4e3ddb23d33dd022121bf4a7cfbbefadd44abfa7982266617"
+    },
+    {
+      "name": "checkedFifthRows_original_eligible",
+      "kind": "theorem",
+      "complete_raw_header": "theorem checkedFifthRows_original_eligible (raw : FifthWireRow) (m : ℕ) (e : ℚ)\n    (chi omega : ℝ) (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m))\n    (r : FifthRow m) (hr : r ∈ checkedFifthRows raw m e)\n    (howner : r.cell ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5)\n    (t : Fin 5 → ℝ) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :\n    eligible e chi m omega J5 r t :=",
+      "header_sha256": "5dc23d5aeae99a7b437624d0675eb92917fa22fbac8df1dd6ad0fb331a46a912"
+    }
+  ],
+  "all8definition_and2whole_structure_regions_exact": true,
+  "changed_proofs": [
+    "mem_decodeFifthRows_iff",
+    "decodeFifthRows_source_geometry"
+  ],
+  "all_other_imports_comments_attributes_options_data_constants_hypotheses_quantifiers_mask_order_wire_ABI_grid_and_containment_bytes_exact": true,
+  "eol_before": {
+    "CRLF": 0,
+    "bare_LF": 159,
+    "bare_CR": 0
+  },
+  "eol_after": {
+    "CRLF": 0,
+    "bare_LF": 161,
+    "bare_CR": 0
+  },
+  "new_declarations_or_hypotheses": 0,
+  "findings": [],
+  "proof_API_review": [
+    "Finset.notMem_empty is the current imported Finset theorem with exactly the same proposition a notin empty. It restores the existing invalid signed-grid/mask branch proof and does not change total decoder behavior.",
+    "The endpoint equations already cast the entire rational mesh to the same real mesh. Adding Rat.cast_zero/div/ofNat only normalizes the coerced rational 0 and19/96 arguments to the original real 0 and19/96 after each congrFun rewrite. This matches the existing source normalization in P4AOriginalOrderedThirdAgreement; no positivity/grid/nonzero or containment premise is added.",
+    "Original hlo.trans hc.1 and hc.2.trans_le hhi retain lower-inclusive/upper-strict cell containment in exactly raw.originalBox. Membership validity, mask slot order, gateCheck_sound and actual selected-owner premise remain untouched."
+  ],
+  "mathematical_boundary": "This is conservative raw-wire containment only. It proves neither full saved-payload validation nor coverage, one-record/one-cell identity, dynamic parent/history licence, fixed-cap permission, paid gain, density mean or tail estimate. Same selected slots, signed payload fields, lattice204800, Fin5 original0..19/96 mesh, and all original licence hypotheses remain.",
+  "substantive_mathematical_gap_found": false,
+  "actual_failure": {
+    "captured_prefix": {
+      "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/ACTUAL_CAPTURED_LOG_PREFIX.log",
+      "bytes": 226336,
+      "sha256": "0357999c6e767fd91a5c6257a226dd1bc9cad0e6fc156c6b59a5217d1ebf3177"
+    },
+    "raw_slice": {
+      "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/ACTUAL_FAILURE_SLICE.log",
+      "bytes": 2451,
+      "sha256": "64b8ec02822918c84c7fc21e13105e4c85ab9fdd3f392a54018a08010018e64f"
+    },
+    "exact_slice_in_prefix": true,
+    "source_errors": 4,
+    "unit_source_compile_exit": 1,
+    "elapsed_label": "12s",
+    "whole_aggregate_final_exit_not_claimed": true
+  },
+  "source_reuse_check": {
+    "authority": {
+      "path": "/workspace/p1-complete-proof/source-graph-inventory.json",
+      "bytes": 4810737,
+      "sha256": "6efb6d8ee792f592d73f831cbedacbf768b5c76c8f2b9eefb33075fe0d38e912"
+    },
+    "bounded_exact_record_single_preimage_verified": true,
+    "no_broad_history_or_object_scan": true,
+    "no_global_object_absence_claim": true
+  },
+  "pinned_API_readback": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Finset/Empty.lean",
+      "source_sha256": "eafc3dc35b044c7ebddefe9742ced8b270f7f3bc29d7822b811574d8f60a28e3",
+      "start_line": 108,
+      "end_line": 109,
+      "raw_excerpt": "theorem notMem_empty (a : α) : a ∉ (∅ : Finset α) := by\n  simp only [mem_def, empty_val, notMem_zero, not_false_iff]\n",
+      "raw_excerpt_sha256": "26f1ddd68ebc8aedfebd3f247995b9973729238f9a4c887332befcd924e049e5"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SelectedPrefixRationalMesh.lean",
+      "source_sha256": "89d6fb42f80ec67075febcb3b1f11a9f6915c02074d45c398ede962c30ad0c3a",
+      "start_line": 36,
+      "end_line": 47,
+      "raw_excerpt": "theorem cast_qLogPrimeMeshLo {d : ℕ} (a b : ℚ) (m : ℕ)\n    (j : Fin d → Fin (m + 1)) :\n    (fun i => (qLogPrimeMeshLo a b m j i : ℝ)) = logPrimeMeshLo a b m j := by\n  funext i\n  exact cast_qLogPrimeMeshPoint a b m (j i).val\n\ntheorem cast_qLogPrimeMeshHi {d : ℕ} (a b : ℚ) (m : ℕ)\n    (j : Fin d → Fin (m + 1)) :\n    (fun i => (qLogPrimeMeshHi a b m j i : ℝ)) = logPrimeMeshHi a b m j := by\n  funext i\n  exact cast_qLogPrimeMeshPoint a b m ((j i).val + 1)\n\n",
+      "raw_excerpt_sha256": "5ae2d797392c56138b8cf669909e41b87dc5b5352368b0f2930fe50fce86e798"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Defs.lean",
+      "source_sha256": "0e71257b1ee1db6fb243f76c916f39332288323ca8ae00c85ac1271fd2deb0eb",
+      "start_line": 122,
+      "end_line": 128,
+      "raw_excerpt": "@[simp, norm_cast] lemma cast_ofNat (n : ℕ) [n.AtLeastTwo] :\n    ((ofNat(n) : ℚ) : α) = (ofNat(n) : α) := by\n  simp [cast_def]\n\n@[simp, norm_cast]\ntheorem cast_zero : ((0 : ℚ) : α) = 0 :=\n  (cast_intCast _).trans Int.cast_zero\n",
+      "raw_excerpt_sha256": "9fad8b3ab88c46c0140258327faef38fb97b62c9415d40414c5614081d805447"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/CharZero.lean",
+      "source_sha256": "39c30fd995f1c9f0b8e74b8d494ee14295763c6d290c46b81af97a15d6bc3764",
+      "start_line": 63,
+      "end_line": 63,
+      "raw_excerpt": "@[simp, norm_cast] lemma cast_div (p q : ℚ) : ↑(p / q) = (p / q : α) := map_div₀ (castHom α) ..\n",
+      "raw_excerpt_sha256": "1daa868a13d7f92a77f82bf847951cac1dd93f59fca3359cf0901ec9d5297a65"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4AOriginalOrderedThirdAgreement.lean",
+      "source_sha256": "502af922994be89badbd425d9944111633885256fa8f5ba64deea54bfc537bdb",
+      "start_line": 12,
+      "end_line": 18,
+      "raw_excerpt": "private theorem lo_cast (m : ℕ) (j : Cell m) (i : Fin 3) :\n    (qLogPrimeMeshLo 0 (19/96) m j i : ℝ)=logPrimeMeshLo 0 (19/96) m j i := by\n  simpa only [Rat.cast_zero,Rat.cast_div,Rat.cast_ofNat] using congrFun (cast_qLogPrimeMeshLo 0 (19/96) m j) i\n\ntheorem hi_cast (m : ℕ) (j : Cell m) (i : Fin 3) :\n    (qLogPrimeMeshHi 0 (19/96) m j i : ℝ)=logPrimeMeshHi 0 (19/96) m j i := by\n  simpa only [Rat.cast_zero,Rat.cast_div,Rat.cast_ofNat] using congrFun (cast_qLogPrimeMeshHi 0 (19/96) m j) i\n",
+      "raw_excerpt_sha256": "55f3eadc8e5724e79ef8ed0b07d5d04a5a718599e870a1e010686e946541b7e6"
+    }
+  ],
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "verified_anchors": [
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "line_start": 26,
+        "line_end": 39,
+        "raw_excerpt": "The candidate selected-product endpoint is\r\n\\begin{equation}\\label{sv:tent}\r\n v(b)=\\min\\left\\{\\frac{1+b}{2},\\frac{57}{64}-\\frac{3b}{2}\\right\\}.\r\n\\end{equation}\r\nA selected branch on a compact prefix region is admitted only when\r\nits constant cap $\\lambda$ satisfies, with a fixed positive margin,\r\n\\begin{equation}\\label{sv:branch-licence}\r\n \\max\\{1/2,G_{\\mathrm{full}}(t),G_I(t)\\}\r\n       <\\lambda<v(b_I)\r\n\\end{equation}\r\nthroughout that region.  The separate three-slot branch with endpoint\r\n$\\Lambda_{\\rm cap}-3t_3/8$ is subject to the whole-box factorization conditions\r\nof Appendix~\\ref{app:coefficients}.  A maximum of candidate endpoints\r\nis always taken over branches satisfying their support conditions.\r\n",
+        "raw_excerpt_sha256": "9f1d1bbd3a94c07b02c6b2b2d90ff0c892c3868696a79b9fe8abd56b59016750",
+        "role": "Whole-region candidate licensing remains conditional; containment alone is not a licence."
+      },
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "line_start": 95,
+        "line_end": 109,
+        "raw_excerpt": "Set\r\n\\[\r\n \\rho_0=\\frac{19}{96},\\qquad \\mu_0=\\frac{25}{128},\\qquad\r\n \\Theta=\\frac{299}{500},\\qquad \\Lambda_{\\rm cap}=\\frac{153}{256}.\r\n\\]\r\nThe first prime is less than $N^{\\rho_0}$.  The three-slot endpoint\r\nbelow $t_1=\\mu_0$ is the envelope of admissible branches of\r\n\\begin{equation}\\label{sv:third-envelope}\r\n v(t_1),\\ v(t_1+t_2),\\ v(t_1+t_3),\\ v(t_2+t_3),\\ v(S_3),\\\r\n                         \\Lambda_{\\rm cap}-\\frac{3t_3}{8};\r\n\\end{equation}\r\nabove $\\mu_0$ the initial three-slot endpoint is $v(t_1)$.\r\nEvery branch in \\eqref{sv:third-envelope} retains its individual\r\nfactorization conditions.  In particular the displayed list is not\r\nan unconditional permission to select any nonleading pair.\r\n",
+        "raw_excerpt_sha256": "88af3e028ee2fd4f05b4c5f90509f29298e4e52031daca95bf53d4d0e5e32a2e",
+        "role": "The same rho0=19/96 fixes both rational and real endpoint meshes."
+      },
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+        "line_start": 130,
+        "line_end": 150,
+        "raw_excerpt": "At rank five a candidate $v(b_I)$, $5\\in I$, is compared with the\r\ninherited cap and the fifth cube $S_4+3t_5$.  Its cap is fixed before\r\nthat cube.  Thus a fifth prefix rejected at the smaller cap may be\r\nretained at the larger one; all earlier decisions remain fixed.\r\nThe negative fifth subtree has the ordinary lower residual, and its\r\nsaving is\r\n\\begin{equation}\\label{sv:odd-gain}\r\n 4\\int_{\\mathcal C}\r\n \\frac{\\overline f((M-S_5)/t_5)\r\n                   -\\overline f((L-S_5)/t_5)}\r\n      {t_1t_2t_3t_4t_5^2}\\,dt_1\\cdots dt_5,\r\n \\qquad \\overline f=\\frac{f}{2e^\\gamma},\r\n\\end{equation}\r\nwith the zero extension of $\\overline f$ below $2$.\r\nThe inherited first-five cap is bounded above by\r\n\\begin{equation}\\label{sv:fifth-envelope}\r\n R_5(t)=\\max\\left\\{\\Lambda_{\\rm cap}-\\frac{3t_3}{8},\\\r\n         v(b_I):\\varnothing\\ne I\\subseteq\\{1,\\ldots,5\\}\\right\\}.\r\n\\end{equation}\r\nUsing an upper bound for the inherited cap in a positive saving is\r\nconservative.  It does not change the physical cap or its density.\r\n",
+        "raw_excerpt_sha256": "c656b4a2f20d601d2b081a52f55deb677f95c5a2cc273875ba209f0dcdd1c34a",
+        "role": "Actual fifth selected-prefix policy and inherited cap remain separate from conservative wire-row containment."
+      }
+    ],
+    "interpretation": "Same Fin5 half-open originalBox, same rational and real 0..19/96 mesh and same raw grids/masks. Decoding is conservative containment, not full saved-payload validation, coverage, one-record/one-policy identity, historical parent assignment or a numerical gain. Existing gateCheck plus actual selected-owner premise remain necessary and unchanged."
+  },
+  "metadata_clarification": {
+    "kind": "One original header inventory entry truncates at structure-literal field :=, not a source defect.",
+    "affected": "FULL_HEADERS_DEFINITIONS.json.headers[mem_decodeFifthRows_iff]",
+    "original_truncated_header_sha256": "16bc436c8edc5cdf9cfd3e17afb1d9d07ed5a2fdbd24089c61be3c0061508f2b",
+    "true_complete_header_sha256": "2767dcf505b95fc295476a916ee5267bcd67386158c2a9c184c28937107e967e",
+    "original_changed_proof_bodies_already_had_true_full_header": true,
+    "immutable_author_addendum": {
+      "path": "/workspace/p1-complete-proof/static-prefix-row-decode-soundness-api/FULL_HEADER_ADDENDUM.json",
+      "bytes": 2740,
+      "sha256": "31efcc9b19c1f68f0250d10e9fba02314562ac2b36bb71d53c829946eda12554"
+    },
+    "original_records_and_source_preserved": true,
+    "independent_full21_header_inventory_in_this_review": true
+  },
+  "compile_status": "UNCOMPILED_BY_REVIEWER; static source gate is not Lean/kernel/owned acceptance.",
+  "required_next_step": "Unique owner adopts exact candidate only, then normal guarded Lake/kernel/full-owned source-and-five-output-bound audits. No successful previous check repeated here."
+}

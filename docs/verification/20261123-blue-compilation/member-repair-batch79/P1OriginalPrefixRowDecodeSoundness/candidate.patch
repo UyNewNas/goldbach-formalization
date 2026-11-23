@@ -1,0 +1,27 @@
+--- baseline/ImbalancedChen/P1OriginalPrefixRowDecodeSoundness.lean
++++ candidate/ImbalancedChen/P1OriginalPrefixRowDecodeSoundness.lean
+@@ -101,7 +101,7 @@
+     · rintro ⟨_hg, _hm, j, hj, rfl⟩
+       exact Finset.mem_image.mpr ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hj⟩, rfl⟩
+   · rw [if_neg hvalid]
+-    simp only [Finset.not_mem_empty, false_iff]
++    simp only [Finset.notMem_empty, false_iff]
+     rintro ⟨hg, hm, _⟩
+     exact hvalid ⟨hg, hm⟩
+ 
+@@ -122,11 +122,13 @@
+   have hlo : (raw.lower i : ℝ) ≤ logPrimeMeshLo 0 (19 / 96) m j i := by
+     have hq : (raw.lower i : ℝ) ≤ (qLogPrimeMeshLo 0 (19 / 96) m j i : ℝ) :=
+       Rat.cast_le.mpr (hj i).1
+-    simpa only [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) i] using hq
++    simpa only [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) i,
++      Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using hq
+   have hhi : logPrimeMeshHi 0 (19 / 96) m j i ≤ (raw.upper i : ℝ) := by
+     have hq : (qLogPrimeMeshHi 0 (19 / 96) m j i : ℝ) ≤ (raw.upper i : ℝ) :=
+       Rat.cast_le.mpr (hj i).2
+-    simpa only [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j) i] using hq
++    simpa only [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j) i,
++      Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using hq
+   exact ⟨hlo.trans hc.1, hc.2.trans_le hhi⟩
+ 
+ /-- This filtered mathematical family is licensed by the actual rational

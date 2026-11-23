@@ -36,6 +36,8 @@ private theorem coarseDifference_eq_normalized
     P1OriginalCoarseFourthResidual.literalTupleResidualDifference
   rw [hhist, thirdAncestor_fourthHistory]
   unfold normalizedResidual oldLevel newLevel
+  have hlast : (Fin.last 3 : Fin 4) = 3 := rfl
+  simp only [hlast]
   ring
 
 /-- The original signed upper-tail theorem acts on the literal finite

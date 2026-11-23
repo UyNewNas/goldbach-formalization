@@ -1,0 +1,61 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SmallRoughMainTerm.lean",
+      "source_sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+      "start_line": 20,
+      "end_line": 23,
+      "raw_excerpt": "/-- Reciprocal-totient density of a coefficient on a displayed support. -/\ndef reciprocalTotientDensity (S : Finset ℕ) (beta : ℕ → ℝ) : ℝ :=\n  ∑ d ∈ S, beta d / (Nat.totient d : ℝ)\n\n",
+      "raw_excerpt_sha256": "2679b59750d2785345c486b0626de0482cad6d248c3e2362da7603cac4a12cc2"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/SmallRoughDensityError.lean",
+      "source_sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+      "start_line": 54,
+      "end_line": 65,
+      "raw_excerpt": "theorem signSensitiveReciprocalTotientDensity_error\n    (rough : Finset ℕ) (c : ℕ → ℝ) {lo hi V delta : ℝ}\n    (hlo : V - delta ≤ lo) (hloV : lo ≤ V)\n    (hVhi : V ≤ hi) (hhi : hi ≤ V + delta) :\n    0 ≤ signSensitiveReciprocalTotientDensity rough c lo hi -\n        V * reciprocalTotientDensity rough c ∧\n      signSensitiveReciprocalTotientDensity rough c lo hi -\n          V * reciprocalTotientDensity rough c ≤\n        delta * reciprocalTotientDensity rough (fun d => |c d|) := by\n  rw [signSensitiveReciprocalTotientDensity_sub_eq]\n  constructor\n  · apply Finset.sum_nonneg\n",
+      "raw_excerpt_sha256": "9076f190b0fa05e8edb6d2480b618cf4a125b064d76ebcd0a28c19086a3c4f7c"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRoughAttachment.lean",
+      "source_sha256": "211d48055ec640a666dfde8721833eacb7fbc215ef9cda791c44b869404b9ee5",
+      "start_line": 173,
+      "end_line": 189,
+      "raw_excerpt": "/-- The density of this very same coefficient factors into the actual two\nsmall-weight densities. This is an identity, not yet the sharp K bound. -/\ntheorem actualSmallRoughRho_density_eq\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) :\n    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) =\n      signSensitiveReciprocalTotientDensity\n        (fixedRoughSupport retainOdd N cap w z)\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n          (actualSmallRosserMinus N cap w L))\n        (reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n          (actualSmallRosserPlus N cap w L)) :=\n  physicalDensitySum_smallRoughRho_eq_signSensitive\n    (fun _ hd => actualSmallRosserSupport_smallPrimeSupportedAt N cap w hd)\n    (fun _ hd => fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hd)\n    (fixedRoughCoefficient retainOdd N cap w z)\n",
+      "raw_excerpt_sha256": "33cafbf2503041be206e2b56707c3b213dc8f981df1cc12fb1ff3dba1555f9eb"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRosserDensity.lean",
+      "source_sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+      "start_line": 36,
+      "end_line": 44,
+      "raw_excerpt": "whose pointwise polynomial is used in the physical majorant. -/\ndef actualSmallRosserMinusDensity (N cap : ℕ) (w L : ℝ) : ℝ :=\n  reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n    (actualSmallRosserMinus N cap w L)\n\n/-- The reciprocal-totient density of the same literal upper coefficient. -/\ndef actualSmallRosserPlusDensity (N cap : ℕ) (w L : ℝ) : ℝ :=\n  reciprocalTotientDensity (actualSmallRosserSupport N cap w)\n    (actualSmallRosserPlus N cap w L)\n",
+      "raw_excerpt_sha256": "911cc773864c30f2c5e2bc3c358d428a781540be6dc4c548415487628d4e8015"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualSmallRosserDensity.lean",
+      "source_sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+      "start_line": 122,
+      "end_line": 128,
+      "raw_excerpt": "/-- The exact relative error from the proved fundamental lemma. Its first\nterm is small when epsilon is chosen small, but does not decay with D. -/\ndef actualSmallRosserDensityError (C K D epsilon : ℝ) : ℝ :=\n  C * (Real.exp (-(1 / epsilon)) +\n    Real.exp (Real.sqrt K - 1 / epsilon) *\n      (epsilon * Real.log D) ^ (-(1 / 3 : ℝ)))\n\n",
+      "raw_excerpt_sha256": "283eb9aaa1f61138d81e1e8f882494f92d33a6a6ac4e2f35636a187791b9a317"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualNormalizedRhoError.lean",
+      "source_sha256": "ac6936d7ae3d493d36b3cf5f84c24d9e45cfb21a366bfad13cb09222481558c5",
+      "start_line": 72,
+      "end_line": 85,
+      "raw_excerpt": "  have hD1 : 1 < D := by linarith\n  have hDpos : 0 < D := by linarith\n  have hlogD : 0 < Real.log D := Real.log_pos hD1\n  have hV := actualSmallEulerProduct_pos N cap (D ^ (epsilon ^ 2)) hN\n  have hVbound := hEuler N cap hNpos hN (D ^ (epsilon ^ 2))\n    (hDscalar D hDt).2 hcap\n  rw [Real.log_rpow hDpos] at hVbound\n  have hE : 0 ≤ actualSmallRosserDensityError C K D epsilon := by\n    unfold actualSmallRosserDensityError\n    positivity\n  have hQ : 0 ≤ (r / epsilon ^ 2) *\n      (1 + Krough / (epsilon ^ 2 * Real.log D)) := by\n    have : 0 < Krough := by linarith\n    positivity\n",
+      "raw_excerpt_sha256": "98580e25a2f4cd0dba35d6bd5d06539a5ec94fcb171460a7be556d61d50d4d08"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "source_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "start_line": 163,
+      "end_line": 165,
+      "raw_excerpt": "theorem rpow_nonneg {x : ℝ} (hx : 0 ≤ x) (y : ℝ) : 0 ≤ x ^ y := by\n  rw [rpow_def_of_nonneg hx]; split_ifs <;>\n    simp only [zero_le_one, le_refl, le_of_lt (exp_pos _)]\n",
+      "raw_excerpt_sha256": "d841ad06c23f59a26c2468e405eb9b120d155f6331dc0c27c4bd3ca2d8a2d506"
+    }
+  ],
+  "existing_proof_shape": "ActualNormalizedRhoError has the same positivity calculation after making logD positive. No new analytic estimate is introduced."
+}

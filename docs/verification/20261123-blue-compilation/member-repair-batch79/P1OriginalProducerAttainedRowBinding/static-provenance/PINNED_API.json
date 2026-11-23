@@ -1,0 +1,69 @@
+{
+  "scope": "Current physical imported source only; no new import or compiler invocation.",
+  "sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean",
+      "source_sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3",
+      "start_line": 43,
+      "end_line": 63,
+      "exact_source_excerpt": "  change ((if d ∈ fixedRoughSupport (retained false) N cap w z then\n    ArithmeticFunction.moebius d else 0 : ℤ) : ℝ) = _\n  rw [fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained\n    retained heven N cap w z]\n  rfl\n\ntheorem actualSmallRoughRho_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z L : ℝ) :\n    actualSmallRoughRho (retained false) N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient retained\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) := by\n  unfold actualSmallRoughRho\n  rw [fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained\n    retained heven N cap w z]\n  rw [funext (fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained\n    retained heven N cap w z)]\n",
+      "excerpt_sha256": "97971b7541e5a9ce9a3c0d2f2bb3f38d61d87b2946cd677b575949411e087128"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean",
+      "source_sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3",
+      "start_line": 79,
+      "end_line": 94,
+      "exact_source_excerpt": "theorem firstExitDepthSplicePolicy_even_retained {α : Type*} (k : ℕ)\n    (parent replacement : Bool → List α → Bool)\n    (hparent : ∀ pre, parent true pre = true)\n    (hreplacement : ∀ pre, replacement true pre = true) (pre : List α) :\n    firstExitDepthSplicePolicy k parent replacement true pre = true := by\n  simp [firstExitDepthSplicePolicy, hparent, hreplacement]\n\ntheorem thirdCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    thirdCappedUpperPolicy base Q3 true pre = true := by\n  unfold thirdCappedUpperPolicy\n  exact firstExitDepthSplicePolicy_even_retained 2 _ _ hbase\n    (fun history => by\n      simp [frozenParityRosserPolicy, ancestorFrozenPolicy,\n        ordinaryParityRosserPolicy, oddFirstExitPolicy]) pre\n",
+      "excerpt_sha256": "16549f949116263f3e4a898043e6074ab1cfc6452c526b9faa7c2e3bab85a27b"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthContinuation.lean",
+      "source_sha256": "24957cfeb3d6e7278b035327e38d1823412f01f8bf56e402bc16a95c5bf3f58a",
+      "start_line": 153,
+      "end_line": 158,
+      "exact_source_excerpt": "def policy4 {ι : Type*} (e chi : ℝ) (m : ℕ) (omega N : ℝ) (rows : Finset ι)\n    (eligible : ι → (Fin 4 → ℝ) → Prop) (profile : ι → (Fin 4 → ℝ) → ℝ) :\n    Bool → List ℕ → Bool :=\n  fourthCappedUpperPolicy (initialPolicy e m N) (rawLevel e chi m omega N)\n    (level4 e chi m omega N rows eligible profile)\n\n",
+      "excerpt_sha256": "91d9d3d6af8e9cbc7da85292dd7831bad6643844928805f8bdf13c9dcb411f28"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthContinuation.lean",
+      "source_sha256": "24957cfeb3d6e7278b035327e38d1823412f01f8bf56e402bc16a95c5bf3f58a",
+      "start_line": 293,
+      "end_line": 296,
+      "exact_source_excerpt": "def producerPolicy4 (e chi : ℝ) (m : ℕ) (omega N : ℝ) (rows : Finset ProducerRow)\n    (licensed : ProducerRow → Prop) : Bool → List ℕ → Bool :=\n  policy4 e chi m omega N rows (producerEligible licensed) (fun r => r.bufferedCandidate e)\n\n",
+      "excerpt_sha256": "438c9bc2988e187e13de276234c8e3e31ed7d60209da34ab06569bcd0f3679c1"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/FirstExitHistoricalLevels.lean",
+      "source_sha256": "50b7c42ca4b987814a86fbd4b9264ad302f1f752126b857158f5115dd28b1e71",
+      "start_line": 174,
+      "end_line": 177,
+      "exact_source_excerpt": "def fourthCappedUpperPolicy (base : Bool → List ℕ → Bool)\n    (Q3 Q4 : List ℕ → ℝ) : Bool → List ℕ → Bool :=\n  firstExitDepthSplicePolicy 4 (thirdCappedUpperPolicy base Q3)\n    (frozenParityRosserPolicy false 4 Q4)\n",
+      "excerpt_sha256": "59a90c9653707124308baf72bdf2fdf40f98d5a259070c26c63f05fa43e1e2e7"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/HistoricalThirdCoarsePolicy.lean",
+      "source_sha256": "86424459ed1208c11b400c56e1127c9fb39f2d137773eb2505c735361accbc50",
+      "start_line": 470,
+      "end_line": 475,
+      "exact_source_excerpt": "/-- The original initial policy includes the first-label stop. -/\ndef initialPolicy (e : ℝ) (m : ℕ) (N : ℝ) : Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false (N ^ initial e) history ∧\n      (history.length = 1 → firstStop e m N history))\n\n",
+      "excerpt_sha256": "ded7222dd6aa1b31e2e35f4c9b35422a1ba85bb283feb285a004f50cf6b76a01"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/FirstExitTree.lean",
+      "source_sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+      "start_line": 334,
+      "end_line": 345,
+      "exact_source_excerpt": "\n/-- A retention policy with no even-rank exit.  At odd rank `retainOdd`\ndecides whether the branch continues; at even rank it always continues. -/\ndef oddFirstExitPolicy {α : Type*}\n    (retainOdd : List α → Bool) (positive : Bool) (selectedPrefix : List α) : Bool :=\n  positive || retainOdd selectedPrefix\n\n@[simp] theorem oddFirstExitPolicy_even {α : Type*}\n    (retainOdd : List α → Bool) (selectedPrefix : List α) :\n    oddFirstExitPolicy retainOdd true selectedPrefix = true := by\n  simp [oddFirstExitPolicy]\n\n",
+      "excerpt_sha256": "4efbf75c38c9ab91743a8c77fec0da74aac05de10d1814ca730c029d9c1c2bd2"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/FrozenRosserPolicy.lean",
+      "source_sha256": "7dbad4ecc60d7ec5a7897c5836b5122a6f6eb0c88f66b4e4c014cecd06e1e165",
+      "start_line": 146,
+      "end_line": 149,
+      "exact_source_excerpt": "@[simp] theorem frozenParityRosserPolicy_upper_even (k : ℕ) (Q : List ℕ → ℝ)\n    (pre : List ℕ) : frozenParityRosserPolicy false k Q true pre = true := by\n  simp [frozenParityRosserPolicy, ancestorFrozenPolicy]\n\n",
+      "excerpt_sha256": "113e94d226b7734c1ffa67c36a34f003a0bdd33bee962db65c5d45f454cc5ba9"
+    }
+  ]
+}

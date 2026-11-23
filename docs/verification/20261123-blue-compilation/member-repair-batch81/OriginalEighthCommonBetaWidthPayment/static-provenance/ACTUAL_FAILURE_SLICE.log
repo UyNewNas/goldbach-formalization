@@ -1,0 +1,131 @@
+✖ [9718/9886] Building ImbalancedChen.OriginalEighthCommonBetaWidthPayment (16s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/OriginalEighthCommonBetaWidthPayment.setup.json --json
+error: ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean:38:2: Type mismatch
+  Finset.sum_nonneg fun x x_1 => ?m.33
+has type
+  0 ≤ ∑ i ∈ ?m.10, ?m.9 i
+but is expected to have type
+  0 ≤ absoluteMass ret N cap w z
+error: ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean:75:66: failed to prove positivity/nonnegativity/nonzeroness
+error: ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean:104:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  signSensitiveReciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z)
+    (reciprocalTotientDensity (actualSmallRosserSupport N cap w) (actualSmallRosserMinus N cap w B))
+    (reciprocalTotientDensity (actualSmallRosserSupport N cap w) (actualSmallRosserPlus N cap w B))
+in the target expression
+  0 ≤
+      signSensitiveReciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) lo
+          hi -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ∧
+    signSensitiveReciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) lo
+          hi -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ≤
+      V * E *
+        reciprocalTotientDensity (fixedRoughSupport ret N cap w z) fun d => |fixedRoughCoefficient ret N cap w z d|
+
+C K : ℝ
+hC : 0 < C
+hK : 1 < K
+hsmall :
+  ∀ (epsilon : ℝ),
+    0 < epsilon →
+      epsilon < 1 / 8 →
+        ∃ D₀,
+          2 ≤ D₀ ∧
+            ∀ (D : ℝ),
+              D₀ ≤ D →
+                ∀ (N cap : ℕ),
+                  Even N →
+                    have w := D ^ epsilon ^ 2;
+                    have L := D ^ epsilon;
+                    have V := actualSmallEulerProduct N cap w;
+                    have E := actualSmallRosserDensityError C K D epsilon;
+                    have lo := actualSmallRosserMinusDensity N cap w L;
+                    have hi := actualSmallRosserPlusDensity N cap w L;
+                    V * (1 - E) ≤ lo ∧ lo ≤ V ∧ V ≤ hi ∧ hi ≤ V * (1 + E) ∧ hi - lo ≤ 2 * V * E
+Kr : ℝ
+hKr : 1 < Kr
+hrough :
+  ∀ (retainOdd : List ℕ → Bool) (N cap : ℕ),
+    Even N →
+      ∀ (D epsilon r : ℝ),
+        1 < D →
+          0 < epsilon →
+            epsilon ^ 2 ≤ r →
+              (reciprocalTotientDensity (fixedRoughSupport retainOdd N cap (D ^ epsilon ^ 2) (D ^ r)) fun d =>
+                  |fixedRoughCoefficient retainOdd N cap (D ^ epsilon ^ 2) (D ^ r) d|) ≤
+                r / epsilon ^ 2 * (1 + Kr / (epsilon ^ 2 * Real.log D))
+epsilon : ℝ
+he : 0 < epsilon
+he8 : epsilon < 1 / 8
+D0 : ℝ
+hD0 : 2 ≤ D0
+hs :
+  ∀ (D : ℝ),
+    D0 ≤ D →
+      ∀ (N cap : ℕ),
+        Even N →
+          have w := D ^ epsilon ^ 2;
+          have L := D ^ epsilon;
+          have V := actualSmallEulerProduct N cap w;
+          have E := actualSmallRosserDensityError C K D epsilon;
+          have lo := actualSmallRosserMinusDensity N cap w L;
+          have hi := actualSmallRosserPlusDensity N cap w L;
+          V * (1 - E) ≤ lo ∧ lo ≤ V ∧ V ≤ hi ∧ hi ≤ V * (1 + E) ∧ hi - lo ≤ 2 * V * E
+D : ℝ
+hD : D0 ≤ D
+N cap : ℕ
+hEven : Even N
+r : ℝ
+her : epsilon ^ 2 ≤ r
+old new : List ℕ → Bool
+w : ℝ := D ^ epsilon ^ 2
+z : ℝ := D ^ r
+B : ℝ := D ^ epsilon
+V : ℝ := actualSmallEulerProduct N cap w
+E : ℝ := actualSmallRosserDensityError C K D epsilon
+Q : ℝ := r / epsilon ^ 2 * (1 + Kr / (epsilon ^ 2 * Real.log D))
+lo : ℝ := actualSmallRosserMinusDensity N cap w B
+hi : ℝ := actualSmallRosserPlusDensity N cap w B
+hD1 : 1 < D
+hV : 0 ≤ V
+hE : 0 ≤ E
+hVE : 0 ≤ V * E
+hS :
+  have w := D ^ epsilon ^ 2;
+  have L := D ^ epsilon;
+  have V := actualSmallEulerProduct N cap w;
+  have E := actualSmallRosserDensityError C K D epsilon;
+  have lo := actualSmallRosserMinusDensity N cap w L;
+  have hi := actualSmallRosserPlusDensity N cap w L;
+  V * (1 - E) ≤ lo ∧ lo ≤ V ∧ V ≤ hi ∧ hi ≤ V * (1 + E) ∧ hi - lo ≤ 2 * V * E
+hLoBound : V * (1 - E) ≤ lo
+hLoV : lo ≤ V
+hVHi : V ≤ hi
+hHiBound : hi ≤ V * (1 + E)
+hGap : hi - lo ≤ 2 * V * E
+ha0 : 0 ≤ absoluteMass old N cap w z
+hb0 : 0 ≤ absoluteMass new N cap w z
+ha : absoluteMass old N cap w z ≤ Q
+hb : absoluteMass new N cap w z ≤ Q
+hdiff : |absoluteMass old N cap w z - absoluteMass new N cap w z| ≤ Q
+hwidth0 : 0 ≤ (hi - lo) / 2
+hwidth : (hi - lo) / 2 ≤ V * E
+ret : List ℕ → Bool
+hh :
+  0 ≤
+      signSensitiveReciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) lo
+          hi -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ∧
+    signSensitiveReciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) lo
+          hi -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ≤
+      V * E *
+        reciprocalTotientDensity (fixedRoughSupport ret N cap w z) fun d => |fixedRoughCoefficient ret N cap w z d|
+⊢ 0 ≤
+      physicalDensitySum (actualSmallRoughModuli ret N cap w z) (actualSmallRoughRho ret N cap w z B) -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ∧
+    physicalDensitySum (actualSmallRoughModuli ret N cap w z) (actualSmallRoughRho ret N cap w z B) -
+        V * reciprocalTotientDensity (fixedRoughSupport ret N cap w z) (fixedRoughCoefficient ret N cap w z) ≤
+      V * E * Q
+error: ImbalancedChen/OriginalEighthCommonBetaWidthPayment.lean:180:80: No goals to be solved
+error: Lean exited with code 1

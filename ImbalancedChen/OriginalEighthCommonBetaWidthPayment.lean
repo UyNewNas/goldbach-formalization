@@ -34,8 +34,9 @@ def pairedError (old new : List ℕ → Bool) (N cap : ℕ) (w z B : ℝ) : ℝ 
         reciprocalTotientDensity (fixedRoughSupport new N cap w z) (fixedRoughCoefficient new N cap w z))
 
 private theorem absoluteMass_nonneg (ret : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :
-    0 ≤ absoluteMass ret N cap w z :=
-  Finset.sum_nonneg (fun _ _ => div_nonneg (abs_nonneg _) (Nat.cast_nonneg _))
+    0 ≤ absoluteMass ret N cap w z := by
+  unfold absoluteMass reciprocalTotientDensity
+  exact Finset.sum_nonneg (fun _ _ => div_nonneg (abs_nonneg _) (Nat.cast_nonneg _))
 
 /-- Genuine common constants and one threshold supply both actual width
 and signed paired errors. No arithmetic policy, cap or target selects a
@@ -72,7 +73,10 @@ theorem exists_pair_power_error_envelope :
   let hi := actualSmallRosserPlusDensity N cap w B
   have hD1 : 1 < D := by linarith
   have hV : 0 ≤ V := (actualSmallEulerProduct_pos N cap w hEven).le
-  have hE : 0 ≤ E := by dsimp [E, actualSmallRosserDensityError]; positivity
+  have hE : 0 ≤ E := by
+    have hlogD : 0 < Real.log D := Real.log_pos hD1
+    dsimp [E, actualSmallRosserDensityError]
+    positivity
   have hVE : 0 ≤ V * E := mul_nonneg hV hE
   have hS := hs D hD N cap hEven
   have hLoBound : V * (1 - E) ≤ lo := hS.1
@@ -101,6 +105,7 @@ theorem exists_pair_power_error_envelope :
       (show V - V * E ≤ lo by nlinarith only [hLoBound])
       hLoV hVHi
       (show hi ≤ V + V * E by nlinarith only [hHiBound])
+    dsimp only [lo, hi, actualSmallRosserMinusDensity, actualSmallRosserPlusDensity] at hh
     rw [← actualSmallRoughRho_density_eq ret N cap w z B] at hh
     exact ⟨hh.1, hh.2.trans (mul_le_mul_of_nonneg_left
       (hrough ret N cap hEven D epsilon r hD1 he her) hVE)⟩
@@ -177,7 +182,7 @@ theorem exists_pair_target_error_reserve
         mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hVbound hE) hQ
       _ = (singularSeries N / Real.log D) *
           ((B0 / epsilon ^ 2) * E * (r / epsilon ^ 2) *
-            (1 + Kr / (epsilon ^ 2 * Real.log D))) := by dsimp [Q]; field_simp; ring
+            (1 + Kr / (epsilon ^ 2 * Real.log D))) := by dsimp [Q]; field_simp
       _ ≤ (singularSeries N / Real.log D) * (eta * nu) :=
         mul_le_mul_of_nonneg_left (hDs D hDsge).1.le
           (div_nonneg (singularSeries_pos N).le hlogD.le)
