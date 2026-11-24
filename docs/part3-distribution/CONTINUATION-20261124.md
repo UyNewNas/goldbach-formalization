@@ -35,6 +35,13 @@ old private-helper LogSaving inventory. Together with the unchanged
 baseline this is 88 modules and 1,950 declarations, not a certificate
 that the full P3 targets have been proved.
 
+At `198f777f25d5a236f9456e0dbb16fafc8fc823b7`, the compatible Core and
+actual smooth-pair adapter also passed all gates: 17 and 11 complete owned
+declarations. The selected continuation therefore currently has **10
+modules and 204 declarations**. Including the unchanged original baseline
+gives 90 modules and 1,978 declarations. Reused historical imported-module
+inventories are not added to this total.
+
 The machine-readable [aggregate](continuation-20261124/aggregate.json)
 validates the saved ZIP/report/inventory/log evidence and the current
 source/import closure for each selected module. It performs no new Lean
@@ -140,6 +147,8 @@ open. No new axiom has been introduced for them.
 | `Part3ProperPowerChartSum` | Full acceptance at `70e8f69c` | 11 |
 | `Part3ExceptionalWeightExtension` | Full acceptance at `80d7eeb`, unchanged | 43 |
 | `Part3ExceptionalWeightGeometry` | Full acceptance at `80d7eeb`, unchanged | 45 |
+| `FiniteUpperCarrierCore` | Compatibility version fully accepted at `198f777f` | 17 |
+| `Part3ProperPowerActualPair` | Full acceptance at `198f777f` | 11 |
 
 ## Actual original-chart geometry and logarithmic saving
 
@@ -218,19 +227,19 @@ The [complete receipt](continuation-20261124/chart-sum-70e8f69c/README.md)
 retains all stage logs, types and hashes. ZIP SHA-256:
 `f99f8e72deedc8a7b0b6468da82c230a9ca3db9dfa9db0fff9f387ba46def6a2`.
 
-## Actual-source reuse identified for the next connection
+## Accepted actual-source connection
 
 The blue snapshot `10b89181754c78c0e77616677295ee2105de0bb6` already has
 an accepted `P4BSmoothPrimeVariableProfile` (batch86), source SHA-256
 `ca93e79e4022b473e0b2ce90e766b14d84eec76e15ba4b2eb79d32c34d0deca5`.
 Its positive-real support theorems apply to effective VM integer tuples,
 so the actual rank-two smooth pair has amplitude one, lower coordinate
-scale `N^a`, and complete-product cap `exp(width)*N`. This supplier will
-be reused rather than re-proved. Its 94-module project closure shares
+scale `N^a`, and complete-product cap `exp(width)*N`. This supplier has been
+reused rather than re-proved. Its 94-module project closure shares
 74 identical files with this P3 baseline, adds 19 missing files, and has
 one definition-placement conflict in `ActualSmallRoughAttachment`.
-A compatibility import must retain the same literal rho definitions and
-avoid duplicate declarations or changes to the accepted baseline.
+The accepted compatibility import retains the same literal rho definitions
+and avoids duplicate declarations or changes to the accepted baseline.
 
 The actual upper/lower rho amplitude bounds already exist. A literal
 final-policy instance still needs that same policy's active-modulus cap;
@@ -257,7 +266,7 @@ for checkpoints compiled in the selected Workspace environment.
 
 This file is a work ledger, not a completion certificate for P3.
 
-## Actual-pair integration candidate
+## Accepted actual-pair integration
 
 `Part3ProperPowerActualPair.lean` now applies ChartSum to the literal
 `smoothPhysicalPairOuterRamp b N (manuscriptHalfProductCutoff kappa N) width`.
@@ -279,8 +288,12 @@ old finite identity proof is retained. The full adapter import closure
 has 125 project modules, no missing file and no cycle. Independent review
 found no blocking semantic issue. [Provenance](continuation-20261124/actual-pair-reuse/README.md)
 binds all file hashes and the original profile acceptance. The changed
-Core and actual adapter await a dedicated two-module acceptance; the
-previous eight-module receipt remains valid for its unchanged sources.
+Core and actual adapter passed the dedicated two-module acceptance at
+`198f777f`; the previous eight-module receipt remains valid for its
+unchanged sources. [The complete receipt](continuation-20261124/actual-pair-198f777f/README.md)
+retains the exact 28-declaration inventory and all 35 stage logs. The
+verification ZIP has SHA-256
+`2e2ac86605b883dae113a43c3950dfab57f802b4c7a5ec27bf9cf472f07e96a9`.
 
 ## Task-internal parallel compilation
 
@@ -313,3 +326,28 @@ need a compatible connection. The older continuous consumer uses native
 `dt/cosh(pi*t)` and an exterior `1/(4*pi)`, so it cannot be silently
 identified with the manuscript's printed `dt/pi` normalization. Existing
 printed-normalization candidates remain the intended reuse path.
+
+### Printed continuous-spectrum connection: inspected boundary
+
+The already archived `Part3OriginalPrintedContinuousTrace` at the fixed
+`fa22a56829ee880404516a36d498ce27dcb32f92` source selection gives the actual
+printed row normalization (`printedLine = 4 * lineTerm`), the actual
+`M`/`source` product identity and printed removal. Its existing
+`Y04_SPECTRAL_SOURCE_SELECTION.json` records 840 readable selected files,
+41 missing project modules and four unresolved different-byte versions;
+`public_build_closure_available` is false. The directly related
+`Part3OriginalCumulativeContinuousRemoval` selection already has 477
+selected files and 35 missing modules. These are source-only candidates,
+not an accepted alternative to the current spectral obligations.
+
+Their actual finite coefficient rows are continuous, so local L2 on a
+compact height interval can be obtained without postulating new `hMA` or
+`hMB` assumptions. However, `original_cumulative_removal` only compares
+the source energy with the reduced energy, with the existing divisor
+factor. It does not prove the required height/length cumulative large
+sieve bound. The printed large-sieve supplier still depends on the
+unaccepted source closure above. The actual `M` dyadic interval is
+`[2^j, 2^(j+1))`; it must not be confused with the other dyadic convention
+`(L, 2L]`. No new conditional consumer has been added to hide these
+missing suppliers, and the existing shell-exhaustion proof is retained
+for later reuse.

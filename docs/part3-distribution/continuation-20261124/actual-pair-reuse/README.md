@@ -1,8 +1,11 @@
 # Actual smooth pair: reuse provenance and compatibility
 
 The fixed donor sources and the new adapter have been integrated into the
-continuation branch. The compatibility Core and new adapter await their
-`actual-pair` strict/kernel/full-inventory gate. Existing accepted proof
+continuation branch. The compatibility Core and new adapter passed their
+`actual-pair` strict/kernel/full-inventory gate at
+`198f777f25d5a236f9456e0dbb16fafc8fc823b7`, with 28 complete owned
+declarations; see the [current-context receipt](../actual-pair-198f777f/README.md).
+Existing accepted proof
 sources and the old Attachment remain unchanged. The copied source manifest
 records the original isolated staging checks; it is provenance, not a
 compilation receipt for this integration.
@@ -80,7 +83,7 @@ divisor-order bound on `ρ` remain explicit inputs. No `policy8` replacement is
 made. The existing original-cutoff plateau and range conditions are retained;
 no cutoff construction or analysis is repeated.
 
-## Remaining acceptance and scope
+## Acceptance and remaining scope
 
 The changed Core and new adapter are selected together by
 `verification/verify_part3_continuation.py --group actual-pair` for strict
@@ -120,3 +123,15 @@ task statuses and build-log hashes are retained in
 [initial-build-timeout.json](initial-build-timeout.json) and
 [dependency-selection-failure.json](dependency-selection-failure.json).
 Neither attempt is a successful verification receipt.
+
+The [existing-repair manifest](EXISTING_REPAIRS_MANIFEST.json) records the
+19-file selection and exact original evidence. The unchanged
+[evidence archive](existing-repairs-evidence.tar.gz) retains the selected
+sources, diffs, original receipts, audit sources, compressed/raw axiom logs,
+normal/kernel logs and the source-selection checkpoints: 36 files,
+335,478 bytes, SHA-256
+`a1a21fdf59dc22f01bff3df3f05305ef8e8898c7072f728ee3f4d89be5120851`.
+All three original text-stage log hashes and audit-source hashes were
+rechecked against the historical receipts. The old 87 audit records use
+only the standard permitted axioms. Those historical counts are not added
+to the current continuation declaration total.
