@@ -34,7 +34,7 @@ theorem exists_actual_compiled_raw_density_reserve :
           reciprocalTotientDensity (fixedEvenRoughSupport retainEven N cap 0 z)
             (fixedEvenRoughCoefficient retainEven N cap 0 z)-
               V*roundingLoss retainEven N cap w z tau-
-              (V*E)*reciprocalTotientDensity (universe N cap w z)
+              (V*E)*reciprocalTotientDensity («universe» N cap w z)
                 (fun d=>|coefficient retainEven N cap w z tau d|)≤
             physicalDensitySum (support N cap w z) (rho retainEven N cap w z tau L) := by
   obtain ⟨C,K,hC,hK,hsupply⟩ := exists_actualSmallRosser_density_sandwich
@@ -46,13 +46,13 @@ theorem exists_actual_compiled_raw_density_reserve :
   have hs := hsupply D hD N cap hEven
   have hbeta :
       actualSmallEulerProduct N cap (D^(epsilon^2))*
-        reciprocalTotientDensity (universe N cap (D^(epsilon^2)) z)
+        reciprocalTotientDensity («universe» N cap (D^(epsilon^2)) z)
           (coefficient retainEven N cap (D^(epsilon^2)) z tau)-
         physicalDensitySum (support N cap (D^(epsilon^2)) z)
           (rho retainEven N cap (D^(epsilon^2)) z tau (D^epsilon))≤
       (actualSmallEulerProduct N cap (D^(epsilon^2))*
         actualSmallRosserDensityError C K D epsilon)*
-          reciprocalTotientDensity (universe N cap (D^(epsilon^2)) z)
+          reciprocalTotientDensity («universe» N cap (D^(epsilon^2)) z)
             (fun d=>|coefficient retainEven N cap (D^(epsilon^2)) z tau d|) := by
     apply (physicalDensitySum_smallRoughRho_lower_error
       (fun _ hd=>actualSmallRosserSupport_smallPrimeSupportedAt N cap _ hd)

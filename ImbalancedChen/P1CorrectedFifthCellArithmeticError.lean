@@ -92,6 +92,7 @@ theorem actualPrimeBoxTestSum_region_sub {k : ℕ}
   rw [← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro p _hp
+  dsimp only
   split_ifs <;> ring
 
 /-- Genuine arithmetic approximation for one selected original cell.

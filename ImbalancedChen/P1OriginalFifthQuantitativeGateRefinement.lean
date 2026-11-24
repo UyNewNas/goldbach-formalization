@@ -31,7 +31,7 @@ theorem sum_le_sum_add_five (S : Finset (Fin 5)) (l u : Fin 5 → ℚ)
       simp [Finset.sum_add_distrib]
     _ ≤ (∑ i ∈ S, l i) + 5 * h := by
       have hc : (S.card : ℚ) ≤ 5 := by exact_mod_cast hcard
-      exact add_le_add_left (mul_le_mul_of_nonneg_right hc hh) _
+      exact add_le_add_right (mul_le_mul_of_nonneg_right hc hh) _
 
 theorem prefixSquareExpr_upper_loss (l u : Fin 5 → ℚ) (h : ℚ)
     (hh : 0 ≤ h) (hwidth : ∀ i, u i ≤ l i + h) (j : Fin 5) :
@@ -229,7 +229,8 @@ theorem all_decoded_gateCheck_eq_true_of_uniform_margin
   apply gateCheck_eq_true_of_lower_endpoint_margin e delta m r hsmall
   · have hc := cast_lower_candidate e r.selected l
     rw [← hc] at hh
-    exact_mod_cast hh
+    apply (Rat.cast_le (K := ℝ)).mp
+    simpa only [l, Rat.cast_add, Rat.cast_div, Rat.cast_ofNat, Rat.cast_one] using hh
   · intro j
     have h := hp j
     rw [← cast_lower_candidate e r.selected l,

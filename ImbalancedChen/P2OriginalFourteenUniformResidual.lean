@@ -97,6 +97,8 @@ theorem exists_uniform_comparison_gain (epsilon : ℝ) (hepsilon : 0 < epsilon) 
 private theorem oddCube6_eq_history7 (t : Point) :
     oddCube t 6 = P2OriginalDescendingEighthLogSemantics.history7 t := by
   norm_num [oddCube, prefixSum, Finset.sum_filter, Fin.sum_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.lt_def, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
     P2OriginalDescendingEighthLogSemantics.history7]
   <;> ring
 
@@ -157,6 +159,7 @@ theorem exists_uniform_actual_fourteen_frontier_gain
     (pre.headD 0 : ℝ) hcell hcurrent hgeom.2.2.1 hy hlog.1.symm hlog.2.symm cap hcap
   have hguard : SelectedFamilyGuard patterns t ∧ CurrentParentGuard t current :=
     ⟨⟨i, hi, hcell⟩, hcurrent⟩
+  dsimp only [pre, t, current] at hguard h
   simpa only [currentLevel, familyNextLevel, familyNextExponent, if_pos hguard] using h
 
 end

@@ -129,7 +129,7 @@ theorem source_integral (v : RationalVertices)
 theorem source_volume (v : RationalVertices)
     (hv : (edgeMatrix v).det ≠ 0) :
     (∫ _y in sourceSupport v, (1 : ℝ)) =
-      |((edgeMatrix v).det : ℝ)| / (8.factorial : ℝ) := by
+      |((edgeMatrix v).det : ℝ)| / ((8 : ℕ).factorial : ℝ) := by
   have h := physical_volume (realCLE v hv) (realVertices v 0)
   simpa only [physicalSupport_eq_sourceSupport, realCLE_det] using h
 
@@ -168,13 +168,13 @@ def row22CLE : Ambient ≃L[ℝ] Ambient := realCLE row22 row22_det_ne_zero
 
 theorem row21_jacobian :
     |row21CLE.toContinuousLinearMap.det| =
-      (8.factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ) := by
+      ((8 : ℕ).factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ) := by
   rw [row21CLE, realCLE_det]
   exact_mod_cast row21_abs_det_volume
 
 theorem row22_jacobian :
     |row22CLE.toContinuousLinearMap.det| =
-      (8.factorial : ℝ) * (row22Volume : ℝ) := by
+      ((8 : ℕ).factorial : ℝ) * (row22Volume : ℝ) := by
   rw [row22CLE, realCLE_det]
   exact_mod_cast row22_abs_det_volume
 
@@ -194,10 +194,10 @@ theorem row21_actual_volume :
       (P2Winner9Row21RawVertexData.physicalVolume : ℝ) := by
   rw [source_volume row21 row21_det_ne_zero]
   have h : |((edgeMatrix row21).det : ℝ)| =
-      (8.factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ) := by
+      ((8 : ℕ).factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ) := by
     exact_mod_cast row21_abs_det_volume
   rw [h]
-  have hn : (8.factorial : ℝ) ≠ 0 := by norm_num
+  have hn : ((8 : ℕ).factorial : ℝ) ≠ 0 := by norm_num
   field_simp [hn] <;> ring
 
 /-- The actual physical row22 cell has its distinct literal saved volume. -/
@@ -205,15 +205,15 @@ theorem row22_actual_volume :
     (∫ _y in sourceSupport row22, (1 : ℝ)) = (row22Volume : ℝ) := by
   rw [source_volume row22 row22_det_ne_zero]
   have h : |((edgeMatrix row22).det : ℝ)| =
-      (8.factorial : ℝ) * (row22Volume : ℝ) := by
+      ((8 : ℕ).factorial : ℝ) * (row22Volume : ℝ) := by
     exact_mod_cast row22_abs_det_volume
   rw [h]
-  have hn : (8.factorial : ℝ) ≠ 0 := by norm_num
+  have hn : ((8 : ℕ).factorial : ℝ) ≠ 0 := by norm_num
   field_simp [hn] <;> ring
 
 theorem row21_actual_integral (f : Ambient → ℝ) :
     (∫ y in sourceSupport row21, f y) =
-      ((8.factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ)) *
+      (((8 : ℕ).factorial : ℝ) * (P2Winner9Row21RawVertexData.physicalVolume : ℝ)) *
         ∫ x in canonicalSupport, f (vertexMap (realVertices row21) x) := by
   rw [source_integral row21 row21_det_ne_zero]
   congr 1
@@ -221,7 +221,7 @@ theorem row21_actual_integral (f : Ambient → ℝ) :
 
 theorem row22_actual_integral (f : Ambient → ℝ) :
     (∫ y in sourceSupport row22, f y) =
-      ((8.factorial : ℝ) * (row22Volume : ℝ)) *
+      (((8 : ℕ).factorial : ℝ) * (row22Volume : ℝ)) *
         ∫ x in canonicalSupport, f (vertexMap (realVertices row22) x) := by
   rw [source_integral row22 row22_det_ne_zero]
   congr 1

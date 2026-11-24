@@ -50,7 +50,7 @@ theorem supported_tupleWeight_sub_W_le_strip_union
     have hnotStrict : ¬ ∀ i : Fin 4, 0 < physicalPairMargins b N T t i := by
       intro hall
       have hWlower : 1 ≤ W b N T t := by
-        simpa only [if_pos hall] using allStrictPhysicalMargins_indicator_le_W hN hT ht
+        simpa only [if_pos hall] using allStrictPhysicalMargins_indicator_le_W (b := b) hN hT ht
       have hVupper := hupper t ht
       linarith only [hresidual, hWlower, hVupper]
     obtain ⟨i, hbad⟩ : ∃ i : Fin 4, physicalPairMargins b N T t i ≤ 0 := by
@@ -66,6 +66,10 @@ theorem supported_tupleWeight_sub_W_le_strip_union
             (∀ j : Fin 4, -width < physicalPairMargins b N T t j)
           then (1 : ℝ) else 0) := (if_pos hjoint).symm
       _ ≤ _ := Finset.single_le_sum
+        (f := fun j : Fin 4 => if
+          (-width < physicalPairMargins b N T t j ∧ physicalPairMargins b N T t j ≤ 0) ∧
+            (∀ k : Fin 4, -width < physicalPairMargins b N T t k)
+          then (1 : ℝ) else 0)
         (fun j _hj => by split_ifs <;> norm_num) (Finset.mem_univ i)
   · apply (le_of_not_gt hresidual).trans
     apply Finset.sum_nonneg
@@ -216,7 +220,7 @@ theorem exists_smooth_physical_ramp_mass_reserve
   have hT : 0 < manuscriptHalfProductCutoff kappa N := by
     exact mul_pos (by norm_num) (Real.rpow_pos_of_pos (zero_lt_one.trans hNreal) _)
   exact (sum_smoothPhysicalPairOuterRamp_le_source_card_add_supported_strip_cards
-    hNreal hT hwidth).trans (add_le_add_left (hcards N hNN0 hEven) _)
+    hNreal hT hwidth).trans (add_le_add le_rfl (hcards N hNN0 hEven))
 
 end
 

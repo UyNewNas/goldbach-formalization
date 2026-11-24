@@ -60,8 +60,10 @@ def appendOne (n : PhysicalNode) (x s : ℝ) : PhysicalNode :=
 
 /-- Original pair coordinates have x<y; the prime word appends [y,x]. -/
 def appendPair (n : PhysicalNode) (x y s : ℝ) : PhysicalNode :=
-  { n with slots := n.slots ++ [unselected y, unselected x],
-    ceiling := x, argument := s }
+  { n with
+    slots := n.slots ++ [unselected y, unselected x]
+    ceiling := x
+    argument := s }
 
 /-- A comparison changes only the physical cutoff argument. -/
 def compareAt (n : PhysicalNode) (s : ℝ) : PhysicalNode := { n with argument := s }

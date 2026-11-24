@@ -60,9 +60,8 @@ theorem eventually_moving_budgets (C omega a : ℝ)
     have h : Tendsto (fun x : ℝ => (Real.log x) ^ 13 / x)
         atTop (𝓝 0) := by
       simpa using Real.tendsto_pow_log_div_mul_add_atTop 1 0 13 one_ne_zero
-    convert h.const_mul ((3 : ℝ) ^ 13) using 1 <;> simp only [mul_zero]
-    funext x
-    ring
+    simpa only [mul_pow, mul_div_assoc, mul_zero] using
+      h.const_mul ((3 : ℝ) ^ 13)
   have hpower := (hp.comp hlog).eventually (gt_mem_nhds homega)
   have hexp : Tendsto (fun N : ℕ =>
       (C / (Real.log 4 * Real.log 3)) / Real.log (N : ℝ)) atTop (𝓝 0) :=
@@ -85,7 +84,11 @@ theorem eventually_moving_budgets (C omega a : ℝ)
         Real.exp (-(3 * Real.log (Real.log (N : ℝ))))) *
           (Real.log (N : ℝ) / Real.log 3) =
         (C / (Real.log 4 * Real.log 3)) / Real.log (N : ℝ) := by
-    rw [Real.exp_neg, Real.exp_nat_mul, Real.exp_log hx]
+    have hexp3 : Real.exp (3 * Real.log (Real.log (N : ℝ))) =
+        (Real.log (N : ℝ)) ^ 3 := by
+      simpa only [Nat.cast_ofNat, Real.exp_log hx] using
+        (Real.exp_nat_mul (Real.log (Real.log (N : ℝ))) 3)
+    rw [Real.exp_neg, hexp3]
     field_simp [hx.ne', (Real.log_pos (by norm_num : (1 : ℝ) < 3)).ne',
       (Real.log_pos (by norm_num : (1 : ℝ) < 4)).ne']
     <;> ring
@@ -151,7 +154,12 @@ theorem exists_eventually_original_smallRemainder_abs_le_linear
   have hterm : 4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) ≤ T * a := by
     dsimp [T]
     have hm := mul_le_mul_of_nonneg_left hinv (show 0 ≤ 6 * K by linarith)
-    nlinarith
+    calc
+      _ = 4 * a + 6 * K * (a / Real.log 3) +
+          6 * K * (1 / Real.log (N : ℝ)) := by ring
+      _ ≤ 4 * a + 6 * K * (a / Real.log 3) + 6 * K * a :=
+        add_le_add_left hm _
+      _ = _ := by ring
   have hterm0 : 0 ≤ 4 * a + 6 * K *
       (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
     have hlogN : 0 < Real.log (N : ℝ) :=

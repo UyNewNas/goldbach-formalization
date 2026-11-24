@@ -17,7 +17,7 @@ abbrev QPoint := Fin 6 → ℚ
 def castPoint (x : QPoint) : Point := fun j => (x j : ℝ)
 def edgeMatrix (v : Fin 7 → QPoint) : Matrix (Fin 6) (Fin 6) ℚ :=
   fun i j => v i.succ j - v 0 j
-def physicalVolumeQ (v : Fin 7 → QPoint) : ℚ := |(edgeMatrix v).det| / (6.factorial : ℚ)
+def physicalVolumeQ (v : Fin 7 → QPoint) : ℚ := |(edgeMatrix v).det| / (Nat.factorial 6 : ℚ)
 
 def edgeLinear (v : Fin 7 → QPoint) : Point →L[ℝ] Point :=
   (Matrix.toLin' ((edgeMatrix v).transpose.map (fun q => (q : ℝ)))).toContinuousLinearMap

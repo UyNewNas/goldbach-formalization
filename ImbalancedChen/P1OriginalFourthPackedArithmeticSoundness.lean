@@ -101,7 +101,7 @@ theorem decodeWireRows_encodeRow_append (r : FourthWireRow) (rest : List ℕ) :
 
 theorem decodeWireRows_encodeRow (r : FourthWireRow) :
     decodeWireRows (encodeRow r) = some [r] := by
-  simpa only [List.append_nil, decodeWireRows] using decodeWireRows_encodeRow_append r []
+  simpa [decodeWireRows] using decodeWireRows_encodeRow_append r []
 
 /-- An arbitrary seventeen valid input bytes produce unsigned endpoint
 words and an unsigned mask. No concrete archive row is evaluated here. -/

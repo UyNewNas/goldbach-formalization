@@ -64,7 +64,9 @@ theorem exists_moving_tuplePlus_uniform_threshold
     rintro q ⟨t, ht, rfl⟩
     have hh := ht.2
     change (∑ i, t i) + t (Fin.last 3) ≤ lambda t at hh
-    exact ⟨ha.trans_le (ht.1 _ (mem_univ _)).1, by dsimp [F]; linarith⟩
+    refine ⟨ha.trans_le (ht.1 _ (mem_univ _)).1, ?_⟩
+    change t (Fin.last 3) ≤ lambda t - ∑ i, t i
+    exact le_sub_iff_add_le.mpr (by simpa only [add_comm] using hh)
   obtain ⟨N₀, hN₀, hbound⟩ :=
     exists_p1_actualSmallRosserPlusDensity_closed_quotient_compact_normalized_threshold
       T hT hparam eta heta
@@ -83,23 +85,30 @@ theorem exists_moving_tuplePlus_uniform_threshold
       (p (Fin.last 3) : ℝ) (lambda (actualPrimeTupleLog N p)) =
         F (actualPrimeTupleLog N p) := by
     change (lambda (actualPrimeTupleLog N p) - Real.log (∏ i, p i : ℕ) / Real.log (N : ℝ),
-        actualPrimeTupleLog N p (Fin.last 3)) = _
+        actualPrimeTupleLog N p (Fin.last 3)) =
+      (lambda (actualPrimeTupleLog N p) - ∑ i, actualPrimeTupleLog N p i,
+        actualPrimeTupleLog N p (Fin.last 3))
     rw [actualPrimeTupleLog_sum_prod p hpos]
   have hh := hbound N hN hEven _ _ (lambda (actualPrimeTupleLog N p)) hP hy
     (by rw [hparams]; exact mem_image_of_mem F ht) cap
     ((hpi (Fin.last 3)).2.2.2.le.trans hcap)
   have hu : 0 < actualPrimeTupleLog N p (Fin.last 3) :=
     ha.trans_le (ht.1 _ (mem_univ _)).1
-  have hs : 1 ≤ residual (lambda (actualPrimeTupleLog N p)) (actualPrimeTupleLog N p) := by
+  have hs : 1 ≤ P1FourthNearOneKernel.residual
+      (lambda (actualPrimeTupleLog N p)) (actualPrimeTupleLog N p) := by
+    change 1 ≤ (lambda (actualPrimeTupleLog N p) - ∑ i, actualPrimeTupleLog N p i) /
+      actualPrimeTupleLog N p (Fin.last 3)
     apply (le_div_iff₀ hu).mpr
-    dsimp [residual]
-    linarith
+    simpa only [one_mul] using
+      (show actualPrimeTupleLog N p (Fin.last 3) ≤
+          lambda (actualPrimeTupleLog N p) - ∑ i, actualPrimeTupleLog N p i from
+        le_sub_iff_add_le.mpr (by simpa only [add_comm] using hlegal))
   have hprofile : extendedProfile (lambda (actualPrimeTupleLog N p)) (actualPrimeTupleLog N p) =
       (2 * Real.exp (-Real.eulerMascheroniConstant) / actualPrimeTupleLog N p (Fin.last 3)) *
         closedUpper ((lambda (actualPrimeTupleLog N p) - ∑ i, actualPrimeTupleLog N p i) /
           actualPrimeTupleLog N p (Fin.last 3)) := by
     rw [extendedProfile, maxOneNormalized, max_eq_right hs]
-    dsimp [residual]
+    dsimp only [P1FourthNearOneKernel.residual]
     ring
   rw [hprofile]
   simpa only [fourthTuplePlusResidualP1, hparams, F] using hh
@@ -179,7 +188,9 @@ theorem literalResidual_eq_variableProfile_on_selected_cell
   rw [hs] at hold
   have hnew : producerLevel4 (e : ℝ) chi m omega (N : ℝ) rows licensed (tupleHistory p) =
       (N : ℝ) ^ producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) (actualPrimeTupleLog N p) := by
-    simp only [producerLevel4, level4, exponent4, show (tupleHistory p).length = 4 by simp [tupleHistory],
+    simp only [producerLevel4, P1OriginalVariableFourthContinuation.level4,
+      P1OriginalVariableFourthContinuation.exponent4,
+      show (tupleHistory p).length = 4 by simp [tupleHistory],
       if_pos, hs, tupleHistory_log, producerProfile4]
   unfold literalTupleResidualDifference fourthTuplePlusResidualP1
   rw [hold, hnew]
@@ -285,11 +296,11 @@ theorem tendsto_positiveCellSource_sub_labelledRawCellSum
     apply Finset.sum_congr rfl
     intro p hp
     by_cases hs : actualPrimeTupleLog N p ∈ R
-    · simp only [R] at hs
+    · simp only [R] at hs ⊢
       simp only [Set.indicator_of_mem hs, hprofile _ hs]
       ring
-    · simp only [R] at hs
-      simp only [Set.indicator_of_not_mem hs, mul_zero, sub_self]
+    · simp only [R] at hs ⊢
+      simp only [Set.indicator_of_notMem hs, mul_zero, sub_self]
   rw [htest]
   ring
 

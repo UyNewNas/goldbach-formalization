@@ -42,7 +42,9 @@ theorem bankEnvelope_continuousAt_zero {ι : Type*} (S : Finset ι)
   induction T using Finset.induction_on with
   | empty =>
       intro _
-      simpa only [bankEnvelope, Finset.sum_empty] using
+      change ContinuousAt
+        (fun x : ℝ => ∑ j ∈ (∅ : Finset ι), rowEnvelope modulus massBound j x) 0
+      simpa only [Finset.sum_empty] using
         (continuousAt_const : ContinuousAt (fun _ : ℝ => (0 : ℝ)) 0)
   | @insert i T hi ih =>
       intro hT
@@ -51,7 +53,12 @@ theorem bankEnvelope_continuousAt_zero {ι : Type*} (S : Finset ι)
         have hw : ContinuousAt (modulus i) 0 := hT i (Finset.mem_insert_self i T)
         unfold rowEnvelope
         fun_prop
-      simpa only [bankEnvelope, Finset.sum_insert hi] using hhead.add htail
+      have hadd : ContinuousAt
+          (fun x : ℝ => rowEnvelope modulus massBound i x +
+            bankEnvelope T modulus massBound x) 0 := hhead.add htail
+      change ContinuousAt
+        (fun x : ℝ => ∑ j ∈ insert i T, rowEnvelope modulus massBound j x) 0
+      simpa only [bankEnvelope, Finset.sum_insert hi] using hadd
 
 theorem bankEnvelope_zero {ι : Type*} (S : Finset ι)
     (modulus : ι → ℝ → ℝ) (massBound : ι → ℝ)

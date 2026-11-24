@@ -38,7 +38,6 @@ theorem swapped_W_row_le {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}
     max (v (t 0)) (wInner (t 0) (t 1) (t 2))
   rw [wInner_eq_B (t 0) hz hy0, wInner_eq_B (t 0) hy ht.2.1]
   apply max_le_max le_rfl
-  dsimp [B]
   linarith [ht.2.2.1]
 
 /-- A dominated later W row cannot be the actual least winner, even
@@ -64,7 +63,8 @@ theorem actual_least_winner_ne_swapped_W {e : ℝ} {m : ℕ}
     exact hl.trans hdom
   have hle := actualExtendedThirdLeastWinningIndex_le hfour
   rw [hfive] at hle
-  norm_num at hle
+  change (5 : ℕ) ≤ 4 at hle
+  omega
 
 /-- Actual least-winner dispatch has just one W row on the full domain. -/
 theorem actual_full_winner_six_cases {e : ℝ} {m : ℕ}
@@ -120,7 +120,10 @@ theorem actual_W_gap_initial_two_slots {e : ℝ} {m : ℕ}
       linarith
     rw [v_eq_A hbelow] at hgate
     dsimp [A] at hgate
-    change theta + e / 16 ≤ wInner _ _ _ at hW
+    change theta + e / 16 ≤ wInner
+      (actualSelectedPrimeCoordinates N p 0)
+      (actualSelectedPrimeCoordinates N p 1)
+      (actualSelectedPrimeCoordinates N p 2) at hW
     simp only [wInner, B, cap, le_min_iff] at hW
     obtain ⟨hW1, hW2, hW3⟩ := hW
     have hfirst : (p 0 : ℝ) ≤ N ^ (2 * theta - 1) := by

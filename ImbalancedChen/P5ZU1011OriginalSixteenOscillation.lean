@@ -31,8 +31,9 @@ theorem l1Delta_nonneg (v w : LogFour) : 0≤l1Delta v w :=
   Finset.sum_nonneg (fun _ _ => abs_nonneg _)
 
 theorem coordinate_abs_sub_le_l1Delta (v w : LogFour) (j : Fin 4) :
-    |v j-w j|≤l1Delta v w :=
-  Finset.single_le_sum (fun _ _ => abs_nonneg _) (Finset.mem_univ j)
+    |v j-w j|≤l1Delta v w := by
+  unfold l1Delta
+  exact Finset.single_le_sum (fun i _ => abs_nonneg (v i-w i)) (Finset.mem_univ j)
 
 theorem selectedMass_abs_sub_le (p : Policy) (v w : LogFour) :
     |selectedMass p v-selectedMass p w|≤l1Delta v w := by
@@ -136,7 +137,7 @@ theorem reciprocal_clippedResidual_abs_sub_le (a : ℝ) (ha : 0<a)
     _ = _ := by ring
 
 /-- Every state value is from the actual H248 array or its exact exterior zero. -/
-theorem stateValue_bounds (b : AtomState) : 0≤stateValue b ∧ stateValue b≤1 := by
+theorem stateValue_bounds (b : AtomState) : 0 ≤ stateValue b ∧ stateValue b ≤ 1 := by
   cases b with
   | none => norm_num [stateValue]
   | some b => exact H248_atom_bounds b
@@ -179,7 +180,7 @@ theorem frozenOrdinary_eq_actual_on_cell (a : ℝ) (b : AtomState) (p : Policy) 
     (hcell : typedResidual p v/v 3∈scalarCell b) :
     frozenOrdinary a b p v=ordinaryKernel Part5UpperTables.H248 residual p.val v := by
   have hr : residual p.val v=typedResidual p v := by
-    simp only [residual,dif_pos p.isLt]
+    simp only [U1011OriginalSixteenPolicyBank.residual,dif_pos p.isLt]
   unfold frozenOrdinary ordinaryKernel
   rw [hr,H248_eq_stateValue hcell,max_eq_right hclip]
 
@@ -227,7 +228,7 @@ theorem l1Delta_meshLo_le {m : ℕ} {lo hi : ℝ}
       rw [abs_of_nonneg (sub_nonneg.mpr hvi.1)]
       have hstep := logPrimeMeshHi_eq_lo_add_step lo hi m j i
       linarith
-    _ = _ := by simp; ring
+    _ = _ := by simp
 
 /-- All sixteen policies and every actual marked atom share this one
 explicit error bound, even when the cap changes branch inside the cell. -/

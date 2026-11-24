@@ -22,17 +22,17 @@ open scoped Classical BigOperators
 open P4AUpperTaggedParityCompiler
 
 def support (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
-  smallRoughModuli (actualSmallRosserSupport N cap w) (universe N cap w z)
+  smallRoughModuli (actualSmallRosserSupport N cap w) («universe» N cap w z)
 
 def rho (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (w z tau L : ℝ) : ℕ → ℝ :=
-  smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+  smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
     (coefficient retainOdd tag N cap w z tau)
     (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)
 
 theorem raw_divisorSum_on_universe (retainOdd : List ℕ → Bool)
     (N cap : ℕ) (w z : ℝ) (n : ℕ) :
-    supportedDivisorSum (universe N cap w z) (raw retainOdd N cap w z) n =
+    supportedDivisorSum («universe» N cap w z) (raw retainOdd N cap w z) n =
       supportedDivisorSum (rawSupport retainOdd N cap w z) (raw retainOdd N cap w z) n := by
   unfold supportedDivisorSum
   symm
@@ -50,13 +50,13 @@ theorem raw_divisorSum_on_universe (retainOdd : List ℕ → Bool)
 theorem raw_rough_majorant (retainOdd : List ℕ → Bool) (N cap : ℕ)
     (w z : ℝ) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :
     actualIntervalRoughIndicator N w z n ≤
-      supportedDivisorSum (universe N cap w z) (raw retainOdd N cap w z) n.natAbs := by
+      supportedDivisorSum («universe» N cap w z) (raw retainOdd N cap w z) n.natAbs := by
   rw [raw_divisorSum_on_universe]
   exact roughIndicator_le_fixedRoughDivisorSum retainOdd N cap w z hzcap n
 
 theorem raw_attachment_eq_actual (retainOdd : List ℕ → Bool) (N cap : ℕ)
     (w z L : ℝ) :
-    smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+    smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
       (raw retainOdd N cap w z) (actualSmallRosserMinus N cap w L)
       (actualSmallRosserPlus N cap w L) = actualSmallRoughRho retainOdd N cap w z L := by
   apply smallRoughRho_eq_of_rough_enlargement (actualSmallRosserSupport N cap w)
@@ -69,7 +69,7 @@ theorem raw_attachment_eq_actual (retainOdd : List ℕ → Bool) (N cap : ℕ)
 theorem raw_physical_density_on_universe (retainOdd : List ℕ → Bool)
     (N cap : ℕ) (w z L : ℝ) :
     physicalDensitySum (support N cap w z)
-      (smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+      (smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
         (raw retainOdd N cap w z) (actualSmallRosserMinus N cap w L)
         (actualSmallRosserPlus N cap w L)) =
       physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
@@ -90,7 +90,7 @@ theorem rho_majorant (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
     (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :
     actualSmallRoughIndicator N z n ≤
       physicalDivisorSum (support N cap w z) (rho retainOdd tag N cap w z tau L) n.natAbs := by
-  exact actualAttachedRho_majorant_of_rough_domination N cap w z L (universe N cap w z)
+  exact actualAttachedRho_majorant_of_rough_domination N cap w z L («universe» N cap w z)
     (raw retainOdd N cap w z) (coefficient retainOdd tag N cap w z tau)
     (fun _ hd => P2LowerFiniteCellRounding.universe_rough N cap w z hd)
     (raw_rough_majorant retainOdd N cap w z hzcap)
@@ -107,7 +107,7 @@ theorem rho_divisorSum_nonneg (retainOdd : List ℕ → Bool) (tag : ℕ → Lis
 
 theorem rho_at_product (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (w z tau L : ℝ) {a d : ℕ}
-    (ha : a ∈ actualSmallRosserSupport N cap w) (hd : d ∈ universe N cap w z) :
+    (ha : a ∈ actualSmallRosserSupport N cap w) (hd : d ∈ «universe» N cap w z) :
     rho retainOdd tag N cap w z tau L (a * d) = coefficient retainOdd tag N cap w z tau d *
       (if 0 ≤ coefficient retainOdd tag N cap w z tau d then actualSmallRosserPlus N cap w L a
        else actualSmallRosserMinus N cap w L a) :=
@@ -118,8 +118,8 @@ theorem rho_at_product (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
     (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) ha hd
 
 theorem product_unique (N cap : ℕ) (w z : ℝ) {a d a' d' : ℕ}
-    (ha : a ∈ actualSmallRosserSupport N cap w) (hd : d ∈ universe N cap w z)
-    (ha' : a' ∈ actualSmallRosserSupport N cap w) (hd' : d' ∈ universe N cap w z)
+    (ha : a ∈ actualSmallRosserSupport N cap w) (hd : d ∈ «universe» N cap w z)
+    (ha' : a' ∈ actualSmallRosserSupport N cap w) (hd' : d' ∈ «universe» N cap w z)
     (h : a * d = a' * d') : a = a' ∧ d = d' := by
   have hp := smallRough_factorization_unique
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w ha)
@@ -146,7 +146,7 @@ theorem rho_abs_le_one (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
     norm_num
 
 theorem universe_coprime_target (N cap : ℕ) (w z : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap w z) : d.Coprime N := by
+    (hd : d ∈ «universe» N cap w z) : d.Coprime N := by
   have hprod : (roughPrimeUniverse N cap w z).prod.Coprime N := by
     apply Nat.coprime_list_prod_left_iff.mpr
     intro p hp
@@ -194,13 +194,13 @@ theorem exists_density_difference_le_changedMass :
   intro N hN hEven cap hcap retainOdd tag z tau
   let w := (N : ℝ) ^ (nu * epsilon ^ 2)
   let L := (N : ℝ) ^ (nu * epsilon)
-  have h := hsupply N hN hEven cap hcap (universe N cap w z)
+  have h := hsupply N hN hEven cap hcap («universe» N cap w z)
     (fun _ hd => P2LowerFiniteCellRounding.universe_rough N cap w z hd)
     (coefficient retainOdd tag N cap w z tau) (raw retainOdd N cap w z)
   dsimp only at h ⊢
   change |physicalDensitySum (support N cap w z) (rho retainOdd tag N cap w z tau L) -
     physicalDensitySum (support N cap w z)
-      (smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+      (smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
         (raw retainOdd N cap w z) (actualSmallRosserMinus N cap w L)
         (actualSmallRosserPlus N cap w L))| ≤ _ at h
   rw [raw_physical_density_on_universe, coefficient_error_eq_changedMass] at h

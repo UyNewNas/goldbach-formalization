@@ -102,25 +102,29 @@ private theorem gamma_zero_le_buffer_box
     linarith [hYZLo, hlt, hwidth, hchi]
   let G : ℝ := (fullGamma e b : ℝ)
   have hG0 : (qVLo b.lx b.ux : ℝ) ≤ G := by
-    exact_mod_cast baseline_le_fullGamma e b
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr (baseline_le_fullGamma e b)
   have hGxy : (qVLo (b.lx + b.ly) (b.ux + b.uy) : ℝ) ≤ G := by
     have h : qVLo (b.lx + b.ly) (b.ux + b.uy) ≤ fullGamma e b := by
       unfold fullGamma
       exact le_max_of_le_right (le_max_left _ _)
-    exact_mod_cast h
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr h
   have hGxyz :
       (qVLo (b.lx + b.ly + b.lz) (b.ux + b.uy + b.uz) : ℝ) ≤ G := by
     have h : qVLo (b.lx + b.ly + b.lz) (b.ux + b.uy + b.uz) ≤
         fullGamma e b := by
       unfold fullGamma
       exact le_max_of_le_right (le_max_of_le_right (le_max_left _ _))
-    exact_mod_cast h
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr h
   have hGrescue : (rescue b : ℝ) ≤ G := by
     have h : rescue b ≤ fullGamma e b := by
       unfold fullGamma
       exact le_max_of_le_right (le_max_of_le_right
         (le_max_of_le_right (le_max_left _ _)))
-    exact_mod_cast h
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr h
   have hGxz (hgate : e ≤ xzGap b) :
       (qVLo (b.lx + b.lz) (b.ux + b.uz) : ℝ) ≤ G := by
     have h : (if e ≤ xzGap b then
@@ -130,7 +134,8 @@ private theorem gamma_zero_le_buffer_box
       exact le_max_of_le_right (le_max_of_le_right
         (le_max_of_le_right (le_max_of_le_right (le_max_left _ _))))
     rw [if_pos hgate] at h
-    exact_mod_cast h
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr h
   have hGyz (hgate : e ≤ yzGap b) :
       (qVLo (b.ly + b.lz) (b.uy + b.uz) : ℝ) ≤ G := by
     have h : (if e ≤ yzGap b then
@@ -140,7 +145,8 @@ private theorem gamma_zero_le_buffer_box
       exact le_max_of_le_right (le_max_of_le_right
         (le_max_of_le_right (le_max_of_le_right (le_max_right _ _))))
     rw [if_pos hgate] at h
-    exact_mod_cast h
+    dsimp only [G]
+    exact (Rat.cast_le (K := ℝ)).mpr h
   have hXZ0 :
       ((if (0 : ℝ) ≤ xzGap b then qVLo (b.lx + b.lz) (b.ux + b.uz)
         else qVLo b.lx b.ux : ℚ) : ℝ) ≤ G + e / 20 := by
@@ -194,8 +200,8 @@ theorem actual_refined_grid400_gamma_zero_le_buffer
   rcases (mem_cells e chi (refinedMesh q) (thirdOwner j)).mp hadopted with
     ⟨hw, hz, hzy, hyx, _hstop, _hwidth⟩
   have hUXRaw : b.ux ≤ raw.upper 0 := by
-    simpa [b, box, thirdOwner, historicalPrefixProject] using
-      (hcontained (0 : Fin 5)).2
+    change qLogPrimeMeshHi 0 (19 / 96) (refinedMesh q) j (0 : Fin 5) ≤ raw.upper 0
+    exact (hcontained (0 : Fin 5)).2
   have hRawBound : raw.upper 0 ≤ (78 / 400 : ℚ) := by
     unfold FifthWireRow.upper
     rw [hgrid]
@@ -203,14 +209,15 @@ theorem actual_refined_grid400_gamma_zero_le_buffer
     norm_num at *
     linarith
   have hUX : (b.ux : ℝ) ≤ 78 / 400 := by
-    exact_mod_cast hUXRaw.trans hRawBound
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (hUXRaw.trans hRawBound)
   have hLoCast : (b.lx : ℝ) =
       logPrimeMeshLo 0 (19 / 96) (refinedMesh q) (thirdOwner j) 0 := by
-    simpa only [b, box] using
+    simpa only [b, box, Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
       congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) (refinedMesh q) (thirdOwner j)) 0
   have hHiCast : (b.ux : ℝ) =
       logPrimeMeshHi 0 (19 / 96) (refinedMesh q) (thirdOwner j) 0 := by
-    simpa only [b, box] using
+    simpa only [b, box, Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
       congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) (refinedMesh q) (thirdOwner j)) 0
   have hWidth : (b.ux : ℝ) - b.lx ≤ chi := by
     have hm := logPrimeMeshHi_eq_lo_add_step

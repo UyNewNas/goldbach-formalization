@@ -161,8 +161,13 @@ theorem eligibleSixth_newCap_le_lambda6 (d : OriginalData) (N : ℝ)
     (c : SixthCell) (pre : List ℕ) (hc : eligibleSixth d N c pre) :
     Certificates.P2OriginalSixthElevenLogSemantics.newCap c
       (primeHistoryLogCoordinates N 6 pre) ≤ lambda6 d N pre := by
-  exact finiteMax_row_le _ _ _ _ c (List.mem_toFinset.mpr
-    (Certificates.P2OriginalSixthElevenLogSemantics.allCells_complete c)) hc
+  exact finiteMax_row_le
+    Certificates.P2OriginalSixthElevenLogSemantics.allCells.toFinset
+    (fun cell => eligibleSixth d N cell pre)
+    (fun cell => Certificates.P2OriginalSixthElevenLogSemantics.newCap cell
+      (primeHistoryLogCoordinates N 6 pre))
+    (actualParent5 d N pre) c (List.mem_toFinset.mpr
+      (Certificates.P2OriginalSixthElevenLogSemantics.allCells_complete c)) hc
 
 theorem eligibleSixth_actualParent_lt_newCap (d : OriginalData) (N : ℝ)
     (c : SixthCell) (pre : List ℕ) (hc : eligibleSixth d N c pre) :
@@ -181,6 +186,7 @@ theorem policy6_rank_seven (d : OriginalData) (N : ℝ) (pre : List ℕ)
       (N ^ lambda6 d N (rosserAncestor 6 pre)) pre) := by
   simp [policy6, firstExitDepthSplicePolicy, hlen, frozenParityRosserPolicy,
     ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6]
+  exact decide_eq_decide.mpr Iff.rfl
 
 end
 end ImbalancedChen.P5OriginalCommonRefinedConstructor

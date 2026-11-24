@@ -83,7 +83,7 @@ theorem unsigned64LE8_lt (bytes : Bytes8) (hbyte : ∀ i, bytes i < 256) :
   have hsum : unsigned64LE8 bytes ≤ ∑ i : Fin 8, 255 * 256 ^ i.val := by
     apply Finset.sum_le_sum
     intro i hi
-    have hb : bytes i ≤ 255 := by omega
+    have hb : bytes i ≤ 255 := Nat.le_of_lt_succ (hbyte i)
     exact Nat.mul_le_mul_right _ hb
   have htop : (∑ i : Fin 8, 255 * 256 ^ i.val) = modulus64 - 1 := by
     norm_num [Fin.sum_univ_succ, modulus64]
@@ -135,9 +135,11 @@ theorem columnBytes_unflatten (columns : Fin 10 → Bytes8) (column : Fin 10) :
       (⟨(8 * column.val + byte.val) % 8, Nat.mod_lt _ (by norm_num)⟩ : Fin 8) = columns column byte
   have hc : (⟨(8 * column.val + byte.val) / 8, by omega⟩ : Fin 10) = column := by
     apply Fin.ext
+    change (8 * column.val + byte.val) / 8 = column.val
     omega
   have hb : (⟨(8 * column.val + byte.val) % 8, Nat.mod_lt _ (by norm_num)⟩ : Fin 8) = byte := by
     apply Fin.ext
+    change (8 * column.val + byte.val) % 8 = byte.val
     omega
   rw [hc, hb]
 

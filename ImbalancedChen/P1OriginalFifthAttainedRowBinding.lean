@@ -2,6 +2,7 @@ import ImbalancedChen.P1OriginalProducerAttainedRowBinding
 import ImbalancedChen.P1OriginalVariableFifthContinuation
 import ImbalancedChen.P1CorrectedFifthCausalTupleDictionary
 import ImbalancedChen.FirstExitValidSelection
+import ImbalancedChen.ActualUpperPolicyDensity
 
 /-!
 SOURCE ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED.
@@ -90,6 +91,7 @@ theorem retained_fifth_ancestor_mem_original_candidates
     omega
   have hdrop : (List.ofFn (fifthTuple leaf.selected)).dropLast = chosen.take 4 := by
     rw [hofn, List.dropLast_eq_take, htake5, List.take_take]
+    rfl
   have hfirst4 : FirstExitValidSelection
       (HistoricalThirdCoarse.policy (e : ℝ) chi m omega N)
       [] true (chosen.take 4) := by

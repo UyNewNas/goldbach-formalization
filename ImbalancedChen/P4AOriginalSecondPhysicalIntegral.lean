@@ -132,15 +132,18 @@ private theorem continuous_safeRow (a b : ℝ → ℝ)
         ∫ y in (0:ℝ)..a x, safeKernel x y := by
     funext x
     exact (intervalIntegral.integral_interval_sub_left
-      ((continuous_safeKernel.uncurry_left x).intervalIntegrable 0 (b x))
-      ((continuous_safeKernel.uncurry_left x).intervalIntegrable 0 (a x))).symm
+      ((show Continuous (safeKernel x) from
+      continuous_safeKernel.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 (b x))
+      ((show Continuous (safeKernel x) from
+      continuous_safeKernel.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 (a x))).symm
   rw [heq]
   exact hu.sub hl
 
 theorem physical_fibre_intervalIntegrable {x a b : ℝ} (hx : x ∈ Icc mu rho)
     (ha : lowerBoundary x ≤ a) (hab : a ≤ b) (hb : b ≤ x) :
     IntervalIntegrable (physicalKernel x) volume a b := by
-  apply ((continuous_safeKernel.uncurry_left x).intervalIntegrable a b).congr
+  apply ((show Continuous (safeKernel x) from
+      continuous_safeKernel.comp (continuous_const.prodMk continuous_id)).intervalIntegrable a b).congr
   intro y hy
   rw [uIoc_of_le hab] at hy
   exact safeKernel_eq hx ⟨ha.trans hy.1.le,hy.2.trans hb⟩
@@ -156,7 +159,7 @@ theorem physical_row_split {x : ℝ} (hx : x ∈ Icc mu rho) :
 theorem negativePhysicalRow_intervalIntegrable :
     IntervalIntegrable negativePhysicalRow volume mu rho := by
   have hs := (continuous_safeRow lowerBoundary (fun _ => mu)
-    (by unfold lowerBoundary; fun_prop) continuous_const).intervalIntegrable mu rho
+    (by unfold lowerBoundary; fun_prop) continuous_const).intervalIntegrable (μ := volume) mu rho
   apply hs.congr
   intro x hx
   rw [uIoc_of_le (by norm_num [mu,rho])] at hx
@@ -169,7 +172,7 @@ theorem negativePhysicalRow_intervalIntegrable :
 theorem positivePhysicalRow_intervalIntegrable :
     IntervalIntegrable positivePhysicalRow volume mu rho := by
   have hs := (continuous_safeRow (fun _ => mu) id
-    continuous_const continuous_id).intervalIntegrable mu rho
+    continuous_const continuous_id).intervalIntegrable (μ := volume) mu rho
   apply hs.congr
   intro x hx
   rw [uIoc_of_le (by norm_num [mu,rho])] at hx
@@ -242,6 +245,7 @@ theorem orientedPhysicalChart_eq_pullback (k : ℝ) :
       rw [hleft,hright] at hinner
       change (k*step*u) * (∫ v in (0:ℝ)..1,
         physicalKernel (chartX u) ((k*step*u)*v+mu)) = _ at hinner
+      dsimp only
       rw [← hinner]
       rw [← intervalIntegral.integral_const_mul,
         ← intervalIntegral.integral_const_mul]
@@ -263,10 +267,11 @@ theorem negative_oriented_chart : orientedPhysicalChart (-3) = -chartIntegral (-
   rw [← intervalIntegral.integral_neg]
   apply intervalIntegral.integral_congr
   intro v hv
+  dsimp only
   rw [uIcc_of_le (by norm_num : (0:ℝ) ≤ 1)] at hv
   rw [chartKernel_eq_physical_pullback (Or.inl rfl) hu hv]
   change physicalKernel (chartX u) (chartY (-3) u v) * ((-3)*step^2*u) =
-    -(physicalKernel (chartX u) (chartY (-3) u v) * (|(-3:ℝ)|*step^2*u))
+    -(physicalKernel (chartX u) (chartY (-3) u v) * (|(-3:ℝ)| *step^2*u))
   norm_num only [abs_of_neg (by norm_num : (-3:ℝ) < 0)] <;> ring
 
 theorem positive_oriented_chart : orientedPhysicalChart 1 = chartIntegral 1 := by
@@ -277,10 +282,11 @@ theorem positive_oriented_chart : orientedPhysicalChart 1 = chartIntegral 1 := b
   rw [uIcc_of_le (by norm_num : (0:ℝ) ≤ 1)] at hu
   apply intervalIntegral.integral_congr
   intro v hv
+  dsimp only
   rw [uIcc_of_le (by norm_num : (0:ℝ) ≤ 1)] at hv
   rw [chartKernel_eq_physical_pullback (Or.inr rfl) hu hv]
   change physicalKernel (chartX u) (chartY 1 u v) * (1*step^2*u) =
-    physicalKernel (chartX u) (chartY 1 u v) * (|(1:ℝ)|*step^2*u)
+    physicalKernel (chartX u) (chartY 1 u v) * (|(1:ℝ)| *step^2*u)
   norm_num
 
 theorem negativePhysicalIntegral_eq_chart :
@@ -294,6 +300,7 @@ theorem negativePhysicalIntegral_eq_chart :
     have he : mu+(-3)*(x-mu) = lowerBoundary x := by
       unfold mu lowerBoundary
       ring
+    dsimp only
     rw [he,intervalIntegral.integral_symm]
   linarith only [h,negative_oriented_chart]
 
@@ -304,6 +311,7 @@ theorem positivePhysicalIntegral_eq_chart :
       unfold orientedPhysicalChart positivePhysicalRow
       apply intervalIntegral.integral_congr
       intro x _hx
+      dsimp only
       rw [show mu+1*(x-mu)=x by ring]
     _ = chartIntegral 1 := positive_oriented_chart
 

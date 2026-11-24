@@ -19,6 +19,8 @@ namespace ImbalancedChen.P4B
 
 noncomputable section
 
+open scoped ContDiff
+
 /-- The real-b parameter has a uniform row bound before choosing the
 profile point or cutoff. -/
 theorem smoothPhysicalWallRow_apply_abs_le_of_b_le
@@ -33,7 +35,7 @@ theorem smoothPhysicalWallRow_apply_abs_le_of_b_le
   apply (smoothPhysicalWallRow_apply_abs_le b N hN i h).trans
   rw [abs_of_nonneg hb]
   exact mul_le_mul_of_nonneg_right
-    (mul_le_mul_of_nonneg_right (add_le_add_left hbHi 2) hlog) (norm_nonneg h)
+    (mul_le_mul_of_nonneg_right (add_le_add le_rfl hbHi) hlog) (norm_nonneg h)
 
 /-- The constant depends only on k and the real-b upper endpoint, while
 all physical parameters are quantified afterwards. It includes k=0 and

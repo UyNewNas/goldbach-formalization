@@ -65,7 +65,8 @@ theorem approved_of_separated {k : ℕ} (p : Program k) (m : ℕ)
     (hs : Separated p (logPrimeMeshStep 0 1 m) t) : j ∈ approved p m := by
   have hw (i : Fin k) : hi m j i = lo m j i + logPrimeMeshStep 0 1 m :=
     logPrimeMeshHi_eq_lo_add_step 0 1 m j i
-  have hb := mem_logPrimeMeshCell.mp ht
+  have hb : ∀ i, lo m j i ≤ t i ∧ t i < hi m j i :=
+    mem_logPrimeMeshCell.mp ht
   have hc := boxCertificate_of_separated p (logPrimeMeshStep 0 1 m)
     (logPrimeMeshStep_pos (by norm_num : (0 : ℝ) < 1) m) (lo m j) (hi m j) t
     (fun i => by linarith [(hb i).2, hw i])
@@ -103,7 +104,7 @@ theorem uncovered_has_proper_strip {k : ℕ} (p : Program k) (m : ℕ)
         |a.eval t| < logPrimeMeshStep 0 1 m * (a.slopeMass + 1) := by
   have hns : ¬Separated p (logPrimeMeshStep 0 1 m) t :=
     fun h => hn (covered_of_separated p m t ht h)
-  simpa only [Separated, not_forall, not_imp, not_le] using hns
+  simpa only [Separated, not_forall, Classical.not_imp, not_le] using hns
 
 theorem eventually_covered {k : ℕ} (p : Program k) (t : Fin k → ℝ)
     (ht : t ∈ cube k) (hr : Regular p t) :
@@ -212,7 +213,10 @@ theorem tendsto_omitted {d : ℕ} {ι : Type*} [Fintype ι]
       apply tendsto_const_nhds.congr'
       filter_upwards [ht] with m hm
       simp only [indicator_of_notMem hm])
-  simpa only [omitted, integral_zero] using hlim
+  change Tendsto
+    (fun m => ∫ t in domain, (rejected s m).indicator (fun t => ‖f t‖) t)
+    atTop (𝓝 0)
+  simpa only [integral_zero] using hlim
 
 end
 end ImbalancedChen.P1AffineCertifiedMesh

@@ -35,8 +35,8 @@ def physicalRowBag (i : Cell) : Multiset RowTag :=
 
 def rowHolds (i : Cell) (leftCodes : Finset ℕ) (t : Point) : RowTag → Prop
   | .old I =>
-      (if oldMaskCode I ∈ leftCodes then A (oldSubsetSum t I)
-        else C (oldSubsetSum t I)) ≤ oldComparison i t
+      (if oldMaskCode I ∈ leftCodes then VariableEnvelope.A (oldSubsetSum t I)
+        else VariableEnvelope.C (oldSubsetSum t I)) ≤ oldComparison i t
   | .full j => prefixSquareExpr t j < newCap i t
   | .selectedComplement j =>
       selectedSquareExpr (selectedMask i) t j < newCap i t
@@ -46,8 +46,23 @@ theorem physical_row_bag_holds_iff (i : Cell) (leftCodes : Finset ℕ)
     (∀ r ∈ physicalRowBag i, rowHolds i leftCodes t r) ↔
       oldPlaneRows i leftCodes t ∧ fullSquareRows i t ∧
         selectedComplementRows i t := by
-  simp [physicalRowBag, rowHolds, oldPlaneRows, fullSquareRows,
-    selectedComplementRows]
+  constructor
+  · intro h
+    refine ⟨?_, ?_, ?_⟩
+    · intro I hI
+      exact h (.old I) (by simp [physicalRowBag, hI])
+    · intro j hj
+      exact h (.full j) (by simp [physicalRowBag, hj])
+    · intro j hj
+      exact h (.selectedComplement j) (by simp [physicalRowBag, hj])
+  · rintro ⟨hOld, hFull, hSelected⟩ r hr
+    cases r with
+    | old I =>
+        exact hOld I (by simpa [physicalRowBag] using hr)
+    | full j =>
+        exact hFull j (by simpa [physicalRowBag] using hr)
+    | selectedComplement j =>
+        exact hSelected j (by simpa [physicalRowBag] using hr)
 
 /-- No pattern is assigned by a default value: the Phase10 `Option`
 lookup must be present at each of the 87 published owner slots. -/

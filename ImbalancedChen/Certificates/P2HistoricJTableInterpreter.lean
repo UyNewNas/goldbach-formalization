@@ -97,7 +97,7 @@ theorem node_bounds {n j : ℕ} (hn : 0 < n) (hj : j ≤ n) :
 theorem node_mono {n : ℕ} (hn : 0 < n) {i j : ℕ} (hij : i ≤ j) :
     node n i ≤ node n j := by
   unfold node
-  apply add_le_add_left
+  apply add_le_add le_rfl
   exact div_le_div_of_nonneg_right
     (mul_le_mul_of_nonneg_left (by exact_mod_cast hij) (by norm_num))
     (by exact_mod_cast hn.le)
@@ -107,7 +107,9 @@ theorem node_step (n j : ℕ) : node n (j + 1) - node n j = 2 / (n : ℚ) := by
   ring
 
 theorem node_real_bounds {n j : ℕ} (hn : 0 < n) (hj : j ≤ n) :
-    (node n j : ℝ) ∈ Icc (2 : ℝ) 4 := by exact_mod_cast node_bounds hn hj
+    (node n j : ℝ) ∈ Icc (2 : ℝ) 4 := by
+  change (2 : ℝ) ≤ (node n j : ℝ) ∧ (node n j : ℝ) ≤ 4
+  exact_mod_cast node_bounds hn hj
 
 /-- Precisely the external logarithm obligation; no J endpoint occurs. -/
 def LogContract (logI : I80 → I80) : Prop :=
@@ -133,21 +135,21 @@ def cell (logI : I80 → I80) (n j : ℕ) : I80 :=
   ⟨lowerCell logI n j, upperCell logI n j⟩
 
 /-- Literal arrays are represented by their common integer prefix state. -/
-def prefix (logI : I80 → I80) (n : ℕ) : ℕ → I80
+def «prefix» (logI : I80 → I80) (n : ℕ) : ℕ → I80
   | 0 => ⟨0, 0⟩
-  | k + 1 => (prefix logI n k).add (cell logI n k)
+  | k + 1 => («prefix» logI n k).add (cell logI n k)
 
 theorem prefix_lower_sum (logI : I80 → I80) (n k : ℕ) :
-    (prefix logI n k).lo = ∑ j ∈ Finset.range k, lowerCell logI n j := by
+    («prefix» logI n k).lo = ∑ j ∈ Finset.range k, lowerCell logI n j := by
   induction k with
-  | zero => simp [prefix]
-  | succ k hk => simp [prefix, I80.add, hk, Finset.sum_range_succ]
+  | zero => simp [«prefix»]
+  | succ k hk => simp [«prefix», I80.add, hk, Finset.sum_range_succ]
 
 theorem prefix_upper_sum (logI : I80 → I80) (n k : ℕ) :
-    (prefix logI n k).hi = ∑ j ∈ Finset.range k, upperCell logI n j := by
+    («prefix» logI n k).hi = ∑ j ∈ Finset.range k, upperCell logI n j := by
   induction k with
-  | zero => simp [prefix]
-  | succ k hk => simp [prefix, I80.add, hk, Finset.sum_range_succ]
+  | zero => simp [«prefix»]
+  | succ k hk => simp [«prefix», I80.add, hk, Finset.sum_range_succ]
 
 theorem gridPoint_guards {n : ℕ} (hn : 0 < n) (j : ℕ) :
     0 < (gridPoint n j).lo ∧ 0 < ((gridPoint n j).sub (I80.point 1)).lo := by
@@ -180,14 +182,14 @@ theorem right_contains (logI : I80 → I80) (hlog : LogContract logI)
     linarith
   have hnr : (2 : ℝ) ≤ (node n j : ℝ) := by exact_mod_cast hnode
   have hl := hlog ((gridPoint n j).sub (I80.point 1)) ((node n j : ℝ) - 1)
-    (gridPoint_guards hn j).2 (by linarith) (by simpa only [Rat.cast_one] using hx)
+    (gridPoint_guards hn j).2 (by linarith) (by simpa only [gridPoint, Rat.cast_one] using hx)
   exact historicalDiv_contains hl hp (gridPoint_guards hn j).1
 
 theorem left_contains (logI : I80 → I80) (hlog : LogContract logI)
     {n j : ℕ} (hn : 0 < n) : (left logI n j).Contains (q (node n j : ℝ)) := by
   by_cases hj : j = 0
   · subst j
-    simpa [left, node, q] using I80.point_contains 0
+    convert I80.point_contains 0 using 1 <;> norm_num [left, node, q]
   · simpa only [left, if_neg hj] using right_contains logI hlog hn
 
 theorem cell_contains (logI : I80 → I80) (hlog : LogContract logI)
@@ -220,10 +222,10 @@ theorem cell_contains (logI : I80 → I80) (hlog : LogContract logI)
 
 theorem prefix_contains (logI : I80 → I80) (hlog : LogContract logI)
     {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) :
-    (prefix logI n k).Contains (∫ v in (2 : ℝ)..(node n k : ℝ), q v) := by
+    («prefix» logI n k).Contains (∫ v in (2 : ℝ)..(node n k : ℝ), q v) := by
   revert hk
   induction k with
-  | zero => intro _; simp [prefix, node, I80.Contains, I80.enclosure, I80.decodeLo, I80.decodeHi,
+  | zero => intro _; simp [«prefix», node, I80.Contains, I80.enclosure, I80.decodeLo, I80.decodeHi,
       P2DirectedLogRounding.Enclosure.Contains]
   | succ k ih =>
       intro hk
@@ -255,7 +257,7 @@ def upperIndex (n : ℕ) (s : I80) : ℕ :=
   (ceilDiv (clamp s.hi * (n : ℤ)) (2 * (Q : ℤ))).toNat
 
 def lookup (logI : I80 → I80) (n : ℕ) (s : I80) : I80 :=
-  ⟨(prefix logI n (lowerIndex n s)).lo, (prefix logI n (upperIndex n s)).hi⟩
+  ⟨(«prefix» logI n (lowerIndex n s)).lo, («prefix» logI n (upperIndex n s)).hi⟩
 
 def buildCheck (logI : I80 → I80) (n : ℕ) : Bool :=
   decide (0 < n ∧ (logI (I80.point 3)).hi < (I80.point (4 / 3)).lo)
@@ -371,22 +373,26 @@ theorem lookup_node_bracket {n : ℕ} (hn : 0 < n) {sI : I80} {s : ℝ}
   have hcl := clamped_endpoints_enclose hsI hs
   have hnR : (0 : ℝ) < n := by exact_mod_cast hn
   have hlo : 2 * (lowerIndex n sI : ℝ) ≤ (min s 5 - 3) * (n : ℝ) := by
-    apply (mul_le_mul_right Q_real_pos).mp
-    calc
-      (2 * (lowerIndex n sI : ℝ)) * (Q : ℝ) =
-          (lowerIndex n sI : ℝ) * (2 * (Q : ℝ)) := by ring
-      _ ≤ (clamp sI.lo : ℝ) * (n : ℝ) := hilR
-      _ ≤ ((min s 5 - 3) * (Q : ℝ)) * (n : ℝ) :=
-        mul_le_mul_of_nonneg_right hcl.1 hnR.le
-      _ = ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) := by ring
+    have hmul : (2 * (lowerIndex n sI : ℝ)) * (Q : ℝ) ≤
+        ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) := by
+      calc
+        (2 * (lowerIndex n sI : ℝ)) * (Q : ℝ) =
+            (lowerIndex n sI : ℝ) * (2 * (Q : ℝ)) := by ring
+        _ ≤ (clamp sI.lo : ℝ) * (n : ℝ) := hilR
+        _ ≤ ((min s 5 - 3) * (Q : ℝ)) * (n : ℝ) :=
+          mul_le_mul_of_nonneg_right hcl.1 hnR.le
+        _ = ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) := by ring
+    nlinarith [Q_real_pos]
   have hhi : (min s 5 - 3) * (n : ℝ) ≤ 2 * (upperIndex n sI : ℝ) := by
-    apply (mul_le_mul_right Q_real_pos).mp
-    calc
-      ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) =
-          ((min s 5 - 3) * (Q : ℝ)) * (n : ℝ) := by ring
-      _ ≤ (clamp sI.hi : ℝ) * (n : ℝ) := mul_le_mul_of_nonneg_right hcl.2 hnR.le
-      _ ≤ (upperIndex n sI : ℝ) * (2 * (Q : ℝ)) := hihR
-      _ = (2 * (upperIndex n sI : ℝ)) * (Q : ℝ) := by ring
+    have hmul : ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) ≤
+        (2 * (upperIndex n sI : ℝ)) * (Q : ℝ) := by
+      calc
+        ((min s 5 - 3) * (n : ℝ)) * (Q : ℝ) =
+            ((min s 5 - 3) * (Q : ℝ)) * (n : ℝ) := by ring
+        _ ≤ (clamp sI.hi : ℝ) * (n : ℝ) := mul_le_mul_of_nonneg_right hcl.2 hnR.le
+        _ ≤ (upperIndex n sI : ℝ) * (2 * (Q : ℝ)) := hihR
+        _ = (2 * (upperIndex n sI : ℝ)) * (Q : ℝ) := by ring
+    nlinarith [Q_real_pos]
   have hlo' := (div_le_iff₀ hnR).mpr hlo
   have hhi' := (le_div_iff₀ hnR).mpr hhi
   constructor <;> simp only [node, Rat.cast_add, Rat.cast_div, Rat.cast_mul,

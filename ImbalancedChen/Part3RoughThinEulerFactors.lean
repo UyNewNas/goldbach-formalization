@@ -40,7 +40,7 @@ theorem thinLogCost_nonneg (κ z : ℝ) : 0≤thinLogCost κ z := by
     (logPrimeMass_nonneg z)
 
 theorem prime_twist_norm_le_radius {q p : ℕ} (χ : DirichletCharacter ℂ q)
-    (hp : p.Prime) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤s.re) :
+    (hp : p.Prime) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤ s.re) :
     ‖χ p*(p : ℂ)^(-s)‖ ≤ primeRadius := by
   have hp1 : (1 : ℝ)≤p := by exact_mod_cast hp.one_lt.le
   calc
@@ -56,12 +56,12 @@ theorem prime_twist_norm_le_radius {q p : ℕ} (χ : DirichletCharacter ℂ q)
 
 theorem prime_twist_norm_le_exp_div {q p : ℕ} (χ : DirichletCharacter ℂ q)
     {z δ κ : ℝ} (hz : 0≤z) (hp : p∈smallPrimes z) (hδ : 0≤δ)
-    (hκ : δ*Real.log (max 2 z)≤κ) {s : ℂ} (hs : 1-δ≤s.re) :
+    (hκ : δ*Real.log (max 2 z)≤κ) {s : ℂ} (hs : 1-δ≤ s.re) :
     ‖χ p*(p : ℂ)^(-s)‖ ≤ Real.exp κ/(p : ℝ) := by
   have hprime := smallPrimes_prime hp
   have hpR : 0<(p : ℝ) := by exact_mod_cast hprime.pos
   have hlog : 0≤Real.log (p : ℝ) := Real.log_nonneg (by exact_mod_cast hprime.one_lt.le)
-  have hpz : (p : ℝ)≤max 2 z := ((mem_smallPrimes hz).mp hp).2.trans (le_max_right _ _)
+  have hpz : (p : ℝ)≤ max 2 z := ((mem_smallPrimes hz).mp hp).2.trans (le_max_right _ _)
   have hlogz := Real.log_le_log hpR hpz
   have hκp : δ*Real.log (p : ℝ)≤κ :=
     (mul_le_mul_of_nonneg_left hlogz hδ).trans hκ
@@ -76,7 +76,7 @@ theorem prime_twist_norm_le_exp_div {q p : ℕ} (χ : DirichletCharacter ℂ q)
     _ = _ := by rw [Real.exp_sub,Real.exp_log hpR]
 
 theorem thin_prime_factor {q p : ℕ} (χ : DirichletCharacter ℂ q)
-    (hp : p.Prime) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤s.re) :
+    (hp : p.Prime) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤ s.re) :
     0<(1-χ p*(p : ℂ)^(-s)).re ∧ (1-χ p*(p : ℂ)^(-s))≠0 ∧
       1-primeRadius≤‖1-χ p*(p : ℂ)^(-s)‖ ∧
       ‖(1-χ p*(p : ℂ)^(-s))⁻¹‖≤(1-primeRadius)⁻¹ := by
@@ -95,14 +95,14 @@ theorem thin_prime_factor {q p : ℕ} (χ : DirichletCharacter ℂ q)
   simpa only [one_div] using one_div_le_one_div_of_le hmargin hlow
 
 theorem finiteCorrection_ne_zero_thin {q : ℕ} (χ : DirichletCharacter ℂ q)
-    (z : ℝ) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤s.re) :
+    (z : ℝ) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤ s.re) :
     finiteCorrection χ z s≠0 := by
   apply Finset.prod_ne_zero_iff.mpr
   intro p hp
   exact (thin_prime_factor χ (smallPrimes_prime hp) hδ hs).2.1
 
 theorem finiteCorrection_logDeriv_thin {q : ℕ} (χ : DirichletCharacter ℂ q)
-    (z : ℝ) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤s.re) :
+    (z : ℝ) {δ : ℝ} (hδ : δ≤1/4) {s : ℂ} (hs : 1-δ≤ s.re) :
     logDeriv (finiteCorrection χ z) s =
       ∑ p ∈ smallPrimes z,
         (χ p*(p : ℂ)^(-s)*Complex.log (p : ℂ))/(1-χ p*(p : ℂ)^(-s)) := by
@@ -110,7 +110,7 @@ theorem finiteCorrection_logDeriv_thin {q : ℕ} (χ : DirichletCharacter ℂ q)
       ∏ p ∈ smallPrimes z,(fun w : ℂ => 1-χ p*(p : ℂ)^(-w)) := by
     funext w
     simp only [finiteCorrection,Finset.prod_apply]
-  rw [hfun,logDeriv_prod
+  rw [hfun, Finset.prod_fn, logDeriv_prod
     (fun p hp => (thin_prime_factor χ (smallPrimes_prime hp) hδ hs).2.1)
     (fun p hp => (factor_hasDerivAt χ (smallPrimes_prime hp) s).differentiableAt)]
   apply Finset.sum_congr rfl
@@ -119,7 +119,7 @@ theorem finiteCorrection_logDeriv_thin {q : ℕ} (χ : DirichletCharacter ℂ q)
 
 theorem finiteCorrection_logDeriv_norm_thin {q : ℕ} (χ : DirichletCharacter ℂ q)
     {z δ κ : ℝ} (hz : 0≤z) (hδ : 0≤δ) (hδ1 : δ≤1/4)
-    (hκ : δ*Real.log (max 2 z)≤κ) {s : ℂ} (hs : 1-δ≤s.re) :
+    (hκ : δ*Real.log (max 2 z)≤κ) {s : ℂ} (hs : 1-δ≤ s.re) :
     ‖logDeriv (finiteCorrection χ z) s‖ ≤ thinLogCost κ z := by
   rw [finiteCorrection_logDeriv_thin χ z hδ1 hs]
   apply (norm_sum_le _ _).trans

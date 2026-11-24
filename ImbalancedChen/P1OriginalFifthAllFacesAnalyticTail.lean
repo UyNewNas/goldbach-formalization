@@ -158,9 +158,10 @@ theorem selected_continuous_tails_tendsto_zero
           (fun _ => (old5 e chi m omega J4 cap4 j : ℝ))
           (fun _ => (cap5 j : ℝ)) omega (19 / 96) a).toReal)
       (𝓝[>] 0) (𝓝 0) := by
-  exact tendsto_finsetSum (selectedFifthCells e chi m omega J5)
-    (fun j hj => original_cell_continuous_tail_tendsto_zero
-      e chi m omega homega horho J4 cap4 J5 cap5 h45 j hj (h34 j hj))
+  simpa only [Finset.sum_const_zero] using
+    (tendsto_finsetSum (selectedFifthCells e chi m omega J5)
+      (fun j hj => original_cell_continuous_tail_tendsto_zero
+        e chi m omega homega horho J4 cap4 J5 cap5 h45 j hj (h34 j hj)))
 
 end
 

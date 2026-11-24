@@ -23,6 +23,8 @@ namespace ImbalancedChen.P4B
 
 noncomputable section
 
+open scoped ContDiff
+
 /-- The genuine positive multiplicative flow in the two prime variables. -/
 def primeEulerFlow (p h : Fin 2 → ℝ) (t : ℝ) : Fin 2 → ℝ :=
   fun i => p i * Real.exp (t * h i)
@@ -109,7 +111,7 @@ theorem physical_log_growth_normalized_le {N : ℕ} (hN : 2 ≤ N) :
         1 + (Real.log (N : ℝ))⁻¹ := by
       field_simp [hlog.ne']
       <;> ring
-    _ ≤ 1 + (Real.log 2)⁻¹ := add_le_add_left hinv 1
+    _ ≤ 1 + (Real.log 2)⁻¹ := add_le_add le_rfl hinv
 
 /-- A constant chosen after k,b and before width,N,T,p,h controls all
 orders of the genuine prime-variable Euler-flow curve at time zero.

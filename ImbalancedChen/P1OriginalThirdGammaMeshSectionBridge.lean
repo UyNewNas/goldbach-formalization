@@ -45,7 +45,9 @@ theorem firstDelta_nonneg (m : ℕ) (j k : Cell m)
 theorem box_first_coordinate_shift (m : ℕ) (j k : Cell m)
     (hy : j 1 = k 1) (hz : j 2 = k 2) :
     box m k = shiftX (box m j) (firstDelta m j k) := by
-  ext
+  unfold box shiftX
+  apply RationalBox.mk.injEq.mpr
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · simpa [box, shiftX, firstDelta, qLogPrimeMeshLo, stepQ,
       point_shift m (j 0).val (k 0).val] using
       (point_shift m (j 0).val (k 0).val)
@@ -86,7 +88,9 @@ theorem third_gate_section_span
     (hy : c ≤ y-gy) (hy' : y-gy ≤ c+d) :
     y-x ≤ 2*d+h := by
   have hh := section_span_of_one_sided_rise 1 h d x y gx gy c
-    (by norm_num) hxy hg hx hx' hy hy'
+    (by norm_num) hxy hg
+    (by simpa only [one_mul] using hx) (by simpa only [one_mul] using hx')
+    (by simpa only [one_mul] using hy) (by simpa only [one_mul] using hy')
   norm_num at hh
   linarith
 

@@ -220,6 +220,9 @@ theorem literal_correlated_pair_positive_iff (raw : FourthWireRow) (j : Fin 6)
   have h := correlated_pair_positive_iff
     ((sourceTent raw.toProducerRow.selected side).sub (sourceOld j false))
     ((sourceTent raw.toProducerRow.selected side).sub (sourceOld j true)) raw.lo raw.hi
+  have hlo : raw.toProducerRow.lower = endpoint raw.lo := rfl
+  have hhi : raw.toProducerRow.upper = endpoint raw.hi := rfl
+  rw [hlo, hhi]
   simpa only [toAffine_sub, sourceTent_toAffine, sourceOld_toAffine] using h
 
 /-- The literal source integer correlated tests and the common finite

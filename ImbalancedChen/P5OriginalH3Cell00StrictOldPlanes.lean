@@ -44,8 +44,14 @@ theorem winner_plane_identity (t : Point) :
     (if oldMaskCode winnerMask ∈ firstFailureH3LeftCodes 0 then
         A (oldSubsetSum t winnerMask)
       else C (oldSubsetSum t winnerMask)) = oldComparison slot t := by
-  norm_num [winnerMask, slot, oldMaskCode, firstFailureH3LeftCodes,
-    oldSubsetSum, oldComparison, e, A, C] <;> ring
+  have hleft : oldMaskCode winnerMask ∈ firstFailureH3LeftCodes 0 := by decide
+  rw [if_pos hleft]
+  have hsum : oldSubsetSum t winnerMask = t 0 + t 3 := by
+    unfold oldSubsetSum winnerMask
+    rw [Finset.sum_pair (by decide : (0 : Fin 6) ≠ 3)]
+    rfl
+  rw [hsum]
+  norm_num [slot, oldComparison, ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, A, C] <;> ring
 
 /-- All 62 proper old-plane rows have exact positive slack at the
 source's strict rational center. The winning identity is excluded. -/
@@ -59,7 +65,8 @@ theorem strict_center_proper_old_planes :
   fin_cases I <;>
     norm_num [oldMasks, winnerMask, slot, oldMaskCode,
       firstFailureH3LeftCodes, oldSubsetSum, oldComparison,
-      strictCenter, e, A, C] at *
+      strictCenter, Matrix.cons_val_three, Fin.ext_iff,
+      ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, A, C] at *
 
 theorem strict_center_all_old_planes :
     oldPlaneRows slot (firstFailureH3LeftCodes 0) strictCenter := by

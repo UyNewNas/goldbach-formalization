@@ -68,7 +68,6 @@ theorem bank_card (n : ℕ) : (bank n).card=Nat.log2 (n-1)+2 := by
     cases h
     rfl
   rw [bank,Finset.card_insert_of_notMem hnot,Finset.card_image_of_injective _ hinj,Finset.card_range]
-  omega
 
 /-- The coordinate bound is DERIVED from the actual positive product
 tuple; no per-factor bound is supplied by a later HB licence. -/
