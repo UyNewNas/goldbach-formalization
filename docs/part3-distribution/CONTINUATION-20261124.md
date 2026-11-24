@@ -26,13 +26,19 @@ inventory/transitive-axiom acceptance: five proper-power modules with
 The only allowed transitive axioms are `propext`, `Classical.choice`,
 and `Quot.sound`.
 
-The current source adds `Part3ProperPowerChartSum` and makes the already
-proved `ProperPowerLogSaving.log_ceil_linear_le` public, without changing
-its proof. These two current module versions are not yet compiler-verified.
-Their dedicated `--group chart-sum` verification will reuse the other six
-accepted modules. A final aggregate must select the latest verified
-version of each module: the old nine LogSaving declarations must not be
-counted again alongside the replacement LogSaving inventory.
+At `70e8f69cbbacb2b851147a5fa51948a106beeca7`, the public-helper
+LogSaving version and the new ChartSum both passed all gates in the
+selected workspace: 9 and 11 declarations, respectively. Selecting the
+latest complete inventory per defining module gives **8 continuation
+modules and 176 declarations** (`68 + 88 + 20`), without re-counting the
+old private-helper LogSaving inventory. Together with the unchanged
+baseline this is 88 modules and 1,950 declarations, not a certificate
+that the full P3 targets have been proved.
+
+The machine-readable [aggregate](continuation-20261124/aggregate.json)
+validates the saved ZIP/report/inventory/log evidence and the current
+source/import closure for each selected module. It performs no new Lean
+compilation and explicitly records that P3 remains open.
 
 ## Implementation plan and completed mathematics
 
@@ -65,9 +71,8 @@ counted again alongside the replacement LogSaving inventory.
 
 The proper-power result estimates the actual labelled residual. It does
 not assume the desired residual bound, the box volume or a uniform
-nonzero-distance divisor estimate. The original chart bank now has a
-source implementation and independent semantic review; its validation
-is pending. The physical cap, logarithmic growth, divisor/mean masses
+nonzero-distance divisor estimate. The original chart bank has now passed strict compilation, kernel
+replay and the complete declaration/transitive-axiom gate. The physical cap, logarithmic growth, divisor/mean masses
 and complete diagonal have already been paid in the accepted per-chart
 proof. Actual upper/lower/marked source instances must still provide
 uniform amplitude and geometric support on **nonzero W * VM integer
@@ -131,8 +136,8 @@ open. No new axiom has been introduced for them.
 | `Part3ProperPowerResidualPayment` | Full acceptance at `60cf3d49` | 23 |
 | `Part3ProperPowerDyadicBudget` | Full acceptance at `60cf3d49` | 7 |
 | `Part3ProperPowerOriginalChart` | Full acceptance at `60cf3d49` | 17 |
-| `Part3ProperPowerLogSaving` | Full acceptance at `60cf3d49`; public-helper revision awaits revalidation | 9 at accepted revision |
-| `Part3ProperPowerChartSum` | Complete source and independent semantic review; not compiled | Pending |
+| `Part3ProperPowerLogSaving` | Public-helper version fully accepted at `70e8f69c` | 9 |
+| `Part3ProperPowerChartSum` | Full acceptance at `70e8f69c` | 11 |
 | `Part3ExceptionalWeightExtension` | Full acceptance at `80d7eeb`, unchanged | 43 |
 | `Part3ExceptionalWeightGeometry` | Full acceptance at `80d7eeb`, unchanged | 45 |
 
@@ -156,7 +161,7 @@ SHA-256 `289913d4c27daee7b556f7d4a1bd5d68c38b44f375cde28baa16905665c672fc`;
 the current public-helper version has SHA-256
 `136815a60067b4e7eded3df5f9782b2d0cb3632d3e5da510019a04b6c86b5954`.
 
-## Full original chart-bank source
+## Accepted full original chart bank
 
 `Part3ProperPowerChartSum.lean` has source SHA-256
 `6033d5b3e829400a2b91bd8c55f7a61b4adcc72b853c1d6beff412aab0fac9c1`.
@@ -176,7 +181,8 @@ found no blocking mathematical issue. The first selected-workspace run
 built both modules and strictly compiled LogSaving, then rejected an
 unused `ring` after a `field_simp` that had already closed the goal. The
 redundant tactic was removed without changing any statement or disabling
-lint; the full two-module acceptance remains pending.
+lint. The corrected two-module run then passed all strict, kernel and
+full inventory/transitive-axiom gates at `70e8f69c`.
 
 ## Requested compilation environment and receipts
 
@@ -204,6 +210,33 @@ all gates at `80d7eeb`. Its ZIP SHA-256 is
 `02b1f2f9dd1afb828166ae4ee619481c0e71d706e8aba678a90144ac1ededb1e`.
 Both archives were checked against their recorded log digests, source
 hashes, literal module replay messages and complete inventories.
+
+The full chart-bank verification task
+`e59ba7fbaf2c4d1fb38d51af2c0b6580` succeeded with exit code 0 at
+`70e8f69c`, covering the current LogSaving and ChartSum with 20 declarations.
+The [complete receipt](continuation-20261124/chart-sum-70e8f69c/README.md)
+retains all stage logs, types and hashes. ZIP SHA-256:
+`f99f8e72deedc8a7b0b6468da82c230a9ca3db9dfa9db0fff9f387ba46def6a2`.
+
+## Actual-source reuse identified for the next connection
+
+The blue snapshot `10b89181754c78c0e77616677295ee2105de0bb6` already has
+an accepted `P4BSmoothPrimeVariableProfile` (batch86), source SHA-256
+`ca93e79e4022b473e0b2ce90e766b14d84eec76e15ba4b2eb79d32c34d0deca5`.
+Its positive-real support theorems apply to effective VM integer tuples,
+so the actual rank-two smooth pair has amplitude one, lower coordinate
+scale `N^a`, and complete-product cap `exp(width)*N`. This supplier will
+be reused rather than re-proved. Its 94-module project closure shares
+74 identical files with this P3 baseline, adds 19 missing files, and has
+one definition-placement conflict in `ActualSmallRoughAttachment`.
+A compatibility import must retain the same literal rho definitions and
+avoid duplicate declarations or changes to the accepted baseline.
+
+The actual upper/lower rho amplitude bounds already exist. A literal
+final-policy instance still needs that same policy's active-modulus cap;
+the old `policy8` range cannot be substituted for a different final
+policy. A prime-filtered marked weight likewise cannot stand in for the
+unfiltered smooth integer source used by VM/HB.
 
 ## Historical compilation continuity
 

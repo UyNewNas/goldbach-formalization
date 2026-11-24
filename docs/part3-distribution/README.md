@@ -4,7 +4,7 @@
 
 已在用户指定的 **Workspace Compile 27f68009** 找到原工作目录 `/workspace/goldbach-p3`，并读到原始成功回执：`c509267` 的 **80 个模块、1,774 个声明**已通过验收。本轮保持这 80 个 Lean 源文件逐字不变，复用原对象；[原回执副本](continuation-20261124/baseline-c509267-report.json) 已保存，没有重跑原 80 模块。
 
-远端 `60cf3d49` 的 **7 个新增模块、165 个声明**已全部通过严格编译、内核重放和完整 serialized／传递公理审计。当前增加第八个全图册汇总模块，并公开已有的对数高度辅助引理；这两个受影响模块将单独验收，尚未将新源码记为通过。
+当前证明提交 `70e8f69c` 的 **8 个新增模块、176 个声明**已全部通过严格编译、内核重放和完整 serialized／传递公理审计。[汇总记录](continuation-20261124/README.md) 逐模块选择最新成功库存，并核对源码及本地导入闭包；原 80 模块加本轮 8 模块共 **88 个模块、1,950 个声明**。这些模块的验收不等于 P3 整体完成。
 
 | 新模块 | 稿内工作 | 当前验收状态 |
 | --- | --- | --- |
@@ -12,14 +12,14 @@
 | [ProperPowerResidualPayment](../../ImbalancedChen/Part3ProperPowerResidualPayment.lean) | 实际 labelled 残差的盒计数、零纤维、对角及 prime/VM 接合 | 完整验收通过，23 声明 |
 | [ProperPowerDyadicBudget](../../ImbalancedChen/Part3ProperPowerDyadicBudget.lean) | 从实际盒预算和几何范围推出 `x^(1-a/2)` 节省 | 完整验收通过，7 声明 |
 | [ProperPowerOriginalChart](../../ImbalancedChen/Part3ProperPowerOriginalChart.lean) | 从原整数平移图册的有效支持推出盒几何，处理空图册并绑定物理 cap | 完整验收通过，17 声明 |
-| [ProperPowerLogSaving](../../ImbalancedChen/Part3ProperPowerLogSaving.lean) | 将距离除数、互素均值及完整对角收束到逐图册任意实数对数节省 | `60cf3d49` 版完整通过，9 声明；当前仅公开既有辅助引理，待重验 |
-| [ProperPowerChartSum](../../ImbalancedChen/Part3ProperPowerChartSum.lean) | 在真实 VM 有效整数支撑上精确重组全图册残差，支付整个 bank 的对数数量，接回 prime−VM | 源码和独立语义审查完成；待编译 |
+| [ProperPowerLogSaving](../../ImbalancedChen/Part3ProperPowerLogSaving.lean) | 将距离除数、互素均值及完整对角收束到逐图册任意实数对数节省 | 公开辅助引理后的当前版本完整验收通过，9 声明 |
+| [ProperPowerChartSum](../../ImbalancedChen/Part3ProperPowerChartSum.lean) | 在真实 VM 有效整数支撑上精确重组全图册残差，支付整个 bank 的对数数量，接回 prime−VM | 完整验收通过，11 声明 |
 | [ExceptionalWeightExtension](../../ImbalancedChen/Part3ExceptionalWeightExtension.lean) | 共同相位、任意谱权重、公共整数区间及前缀谱和可和性 | 完整验收通过，43 声明 |
 | [ExceptionalWeightGeometry](../../ImbalancedChen/Part3ExceptionalWeightGeometry.lean) | 实际 `4*pi` 尺度、两 level 窗口与 `7/32` 权重适配 | 完整验收通过，45 声明 |
 
-[五模块素数幂组回执](continuation-20261124/proper-power-60cf3d49/README.md) 来自指定 Workspace Compile，覆盖 77 声明；[两模块谱组回执](continuation-20261124/spectral-80d7eeb/README.md) 覆盖 88 声明。两组都只允许 `propext`、`Classical.choice`、`Quot.sound`，并保存完整声明类型、源码／对象哈希和每阶段实际日志。
+[五模块素数幂组回执](continuation-20261124/proper-power-60cf3d49/README.md) 来自指定 Workspace Compile，覆盖 77 声明；[两模块谱组回执](continuation-20261124/spectral-80d7eeb/README.md) 覆盖 88 声明。[全图册组回执](continuation-20261124/chart-sum-70e8f69c/README.md) 覆盖新 LogSaving 与 ChartSum 共 20 声明。三份回执都只允许 `propext`、`Classical.choice`、`Quot.sound`，并保存完整声明类型、源码／对象哈希和每阶段实际日志。汇总为 `68 + 88 + 20 = 176`，旧 LogSaving 的 9 声明没有重复计入。
 
-新增 `ProperPowerChartSum` 取 `L=0`、`H=Nat.log 2 (ceil(C*N))+2`，在 **`W * VM` 的真实有效整数支撑**上应用原分区，包含真素数幂。先逐点重构实际残差，再对同一 `rho`、同一完整乘积及精确互素均值重构 signed error；最后以逐图册精度 `A+k` 支付 bank 基数的 `log(N)^k` 损失，得到整体任意实数 `A` 的对数节省。完整乘积 `N` 的真实对角仍计入。阈值先于 `P/B/Q/rho/W/chi` 选定。源码审查完成不代替编译验收。
+新增 `ProperPowerChartSum` 取 `L=0`、`H=Nat.log 2 (ceil(C*N))+2`，在 **`W * VM` 的真实有效整数支撑**上应用原分区，包含真素数幂。先逐点重构实际残差，再对同一 `rho`、同一完整乘积及精确互素均值重构 signed error；最后以逐图册精度 `A+k` 支付 bank 基数的 `log(N)^k` 损失，得到整体任意实数 `A` 的对数节省。完整乘积 `N` 的真实对角仍计入。阈值先于 `P/B/Q/rho/W/chi` 选定。该完整 bank 的实际证明已通过全部验收。
 
 增量入口 `verification/verify_part3_continuation.py --group chart-sum` 只验收 `LogSaving` 与 `ChartSum`，复用其余六模块及原 80 模块的可靠验收；所有组都保留原完整库存和传递公理门。[实施及边界记录](CONTINUATION-20261124.md) 保留手稿对应关系。
 
