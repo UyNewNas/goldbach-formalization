@@ -1,0 +1,127 @@
+name: P4B outer coprime elimination exact closure validation
+on:
+  push:
+    branches: [ci/p1-near-one-api-20261117]
+    paths: [.github/workflows/p4b-outer-coprime-elimination-api.yml, verification/parts/p0/p4b-outer-coprime-elimination-api/**]
+permissions:
+  contents: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  fifth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      SOURCE_COMMIT: b7b0f5613f1b34855e0da7ad44d1d79ed34519cf
+      EXPECTED_MANIFEST: 07a15ffe4a92a4ff2517c8c6a5f2f1cceb7ae10714af76bfb7812ac1a8ab1ba7
+      CHECK_PURPOSE: source_validation
+      LEAN_NUM_THREADS: 2
+      T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Validate immutable source identity
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_MANIFEST" =~ ^[0-9a-f]{64}$ ]]
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: b7b0f5613f1b34855e0da7ad44d1d79ed34519cf
+          path: candidate
+          persist-credentials: false
+      - name: Stage exact v3 sources with bound accepted-source and fifth API repairs
+        id: materialize
+        run: |
+          set -euo pipefail
+          export PROJECT="$RUNNER_TEMP/p4b-outer-coprime-elimination-api-project"
+          export LOGS="$RUNNER_TEMP/p4b-outer-coprime-elimination-api-evidence"
+          python3 verification/parts/p0/p4b-outer-coprime-elimination-api/stage_candidate.py
+          cmp "$PROJECT/lean-toolchain" lean-toolchain
+          cmp "$PROJECT/lake-manifest.json" lake-manifest.json
+          printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
+          git -C candidate ls-tree -r HEAD > "$LOGS/source-tree.txt"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Install unchanged successful 12 GiB serial trust-zero runtime guard
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" setup --evidence "$LOGS/runtime"
+      - name: Reuse pinned dependency cache and bind dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake exe cache get 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 - <<'PY'
+          import json,pathlib,subprocess,os
+          lock=json.loads(pathlib.Path('lake-manifest.json').read_text())
+          receipt=[]
+          for p in lock['packages']:
+              d=pathlib.Path('.lake/packages')/p['name']
+              sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+              assert sha==p['rev'],(p['name'],sha,p['rev'])
+              assert not subprocess.check_output(['git','-C',str(d),'diff','HEAD','--'],text=True)
+              receipt.append({'name':p['name'],'sha':sha})
+          pathlib.Path(os.environ['LOGS'],'dependencies.json').write_text(json.dumps(receipt,indent=2))
+          PY
+      - name: Prepare full local import closure and declaration audit
+        run: python3 verification/parts/p0/p4b-outer-coprime-elimination-api/prepare_candidate_validation.py prepare
+      - name: Compile exact P4B outer coprime elimination and entire 61-module local closure
+        timeout-minutes: 200
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake build "${modules[@]}" 2>&1 | tee "$LOGS/batch-build.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/p4b-outer-coprime-elimination-api/prepare_candidate_validation.py" snapshot
+      - name: Replay candidate and entire local closure with bundled kernel checker
+        timeout-minutes: 100
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          mapfile -t modules < "$LOGS/modules.txt"
+          lake env leanchecker --verbose "${modules[@]}" 2>&1 | tee "$LOGS/batch-checker.log"
+      - name: Export every serialized declaration complete type and transitive axioms
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          lake env lean -DwarningAsError=true CandidateAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
+          python3 "$GITHUB_WORKSPACE/verification/parts/p0/p4b-outer-coprime-elimination-api/prepare_candidate_validation.py" verify
+      - name: Audit actual trust-zero 12 GiB runtime
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$T01/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+      - name: Retain exact candidate closure evidence and runtime audit
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p4b-outer-coprime-elimination-api-${{ github.run_id }}
+          path: ${{ runner.temp }}/p4b-outer-coprime-elimination-api-evidence/
+          if-no-files-found: error
+          retention-days: 30
