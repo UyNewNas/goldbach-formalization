@@ -1,0 +1,44 @@
+✖ [11141/11163] Building ImbalancedChen.P5OriginalTaylorFiveDimensionalMidpoint (8.2s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.setup.json --json
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:31:54: unsolved goals
+n : ℕ
+l u t : Fin n → ℝ
+⊢ l ≤ t ∧ t ≤ u ↔ ∀ (i : Fin n), l i ≤ t i ∧ t i ≤ u i
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:53:78: Application type mismatch: The argument
+  x
+has type
+  ℝ
+but is expected to have type
+  ?m.5 i.succ
+in the application
+  Function.update ?m.19 i x
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:78:14: typeclass instance problem is stuck
+  IsFiniteMeasureOnCompacts ?m.188
+
+Note: Lean will not try to resolve this typeclass instance problem because the fourth type argument to `IsFiniteMeasureOnCompacts` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:89:4: No goals to be solved
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:114:16: Application type mismatch: The argument
+  i
+has type
+  ?m.1
+but is expected to have type
+  Fin n
+in the application
+  l i
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:189:12: Unknown identifier `successive_midpoints`
+error: ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean:188:29: unsolved goals
+i : Fin 5
+l u M : Fin 5 → ℝ
+f : (Fin 5 → ℝ) → ℝ
+f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ
+hlu : ∀ (i : Fin 5), l i ≤ u i
+hc : ContinuousOn f (Icc l u)
+hd : ∀ t ∈ Icc l u, ∀ (i : Fin 5), ∀ x ∈ Icc (l i) (u i), HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x
+hdd : ∀ t ∈ Icc l u, ∀ (i : Fin 5), ∀ x ∈ Icc (l i) (u i), HasDerivAt (f' t i) (f'' t i x) x
+hcc : ∀ t ∈ Icc l u, ∀ (i : Fin 5), ContinuousOn (f'' t i) (Icc (l i) (u i))
+hM : ∀ t ∈ Icc l u, ∀ (i : Fin 5), ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i
+⊢ (∏ i, u i - l i) * ((f fun i => (l i + u i) / 2) - (∑ i, (u i - l i) ^ 2 * M i) / 24) ≤
+    ∫ (t : Fin 5 → ℝ) in Icc l u, f t
+error: Lean exited with code 1

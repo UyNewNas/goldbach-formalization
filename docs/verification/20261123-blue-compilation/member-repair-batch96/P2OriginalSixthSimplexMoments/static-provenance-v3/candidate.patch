@@ -1,0 +1,40 @@
+--- baseline-v2.lean
++++ candidate.lean
+@@ -141,20 +141,32 @@
+   have he : (∫ x in canonical, bary i x) = baryMoment (unitExponent i) := by
+     unfold baryMoment
+     simp_rw [prod_unitExponent]
+-  rw [he, baryMoment_eq]
+-  fin_cases i <;> norm_num [unitExponent, factorialProduct, List.ofFn_succ, List.ofFn_zero]
++  have hvalues : ∀ i : Fin 7,
++      (unitExponent i 0).factorial *
++          factorialProduct (List.ofFn (fun r : Fin 6 => unitExponent i r.succ)) = 1 ∧
++      unitExponent i 0 + (List.ofFn (fun r : Fin 6 => unitExponent i r.succ)).sum + 6 = 7 := by
++    decide +kernel
++  rw [he, baryMoment_eq, (hvalues i).1, (hvalues i).2]
++  norm_num
+ 
+ theorem bary_second (i j : Fin 7) :
+     (∫ x in canonical, bary i x * bary j x) =
+       (1 + if i = j then 1 else 0) / ((8 : ℕ).factorial : ℝ) := by
++  have hvalues : ∀ i j : Fin 7,
++      (unitExponent i 0 + unitExponent j 0).factorial *
++          factorialProduct (List.ofFn
++            (fun r : Fin 6 => unitExponent i r.succ + unitExponent j r.succ)) =
++        1 + (if i = j then 1 else 0) ∧
++      (unitExponent i 0 + unitExponent j 0) +
++          (List.ofFn (fun r : Fin 6 => unitExponent i r.succ + unitExponent j r.succ)).sum + 6 = 8 := by
++    decide +kernel
+   classical
+   have he : (∫ x in canonical, bary i x * bary j x) =
+       baryMoment (fun r => unitExponent i r + unitExponent j r) := by
+     unfold baryMoment
+     simp_rw [pow_add, Finset.prod_mul_distrib, prod_unitExponent]
+-  rw [he, baryMoment_eq]
+-  fin_cases i <;> fin_cases j <;>
+-    norm_num [unitExponent, factorialProduct, List.ofFn_succ, List.ofFn_zero]
++  rw [he, baryMoment_eq, (hvalues i j).1, (hvalues i j).2]
++  by_cases h : i = j <;> norm_num [h]
+ 
+ theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / ((6 : ℕ).factorial : ℝ) := by
+   have h := actual_six_factorial 0 (fun _ : Fin 6 => 0) (s := 1) (by norm_num)

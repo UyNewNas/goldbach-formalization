@@ -1,0 +1,40 @@
+{
+  "replacements": [
+    {
+      "scope": "update_cons_succ proof",
+      "before_raw": "  ext j\n  refine Fin.cases ?_ (fun k => ?_) j\n  · simp\n  · by_cases h : k = i\n    · subst k\n      simp\n    · simp [Function.update, h, Ne.symm h]",
+      "after_raw": "  exact (Fin.cons_update (α := fun _ : Fin (n+1) => ℝ) a t i x).symm",
+      "root_cause": "Reuse exact existing tuple update equality, including zero coordinate, from mathlib. No new tuple proof or type header change."
+    },
+    {
+      "scope": "successive_midpoints proof induction",
+      "before_raw": "  induction n generalizing l u e f with",
+      "after_raw": "  induction n with",
+      "root_cause": "Current Lean automatically generalizes the four dependent arguments and rejects their redundant explicit listing."
+    },
+    {
+      "scope": "successive_midpoints proof htail",
+      "before_raw": "        simpa [lt, ut, et, update_cons_succ] using",
+      "after_raw": "        simpa only [lt, ut, et, update_cons_succ] using",
+      "root_cause": "Only original alias/tuple-update normalization. Avoid the actual maxSteps loop between custom update_cons_succ and default simp lemma Fin.cons_update in the reverse direction. No simp step budget change."
+    },
+    {
+      "scope": "successive_midpoints proof h0 normalization",
+      "before_raw": "      have hup (x : ℝ) :\n          Function.update (Fin.cons ((l 0+u 0)/2) ct) 0 x = Fin.cons x ct := by\n        ext i\n        refine Fin.cases ?_ (fun j => ?_) i <;> simp\n      simp_rw [hup] at h0",
+      "after_raw": "      simp_rw [Fin.update_cons_zero] at h0",
+      "root_cause": "Reuse exact existing zero-coordinate update dictionary; remove locally unelaborated duplicate statement and proof, preserving the same h0 integrand."
+    },
+    {
+      "scope": "five_dimensional_midpoint_lower final proof conversion",
+      "before_raw": "  convert h using 1\n  rw [Finset.sum_div]",
+      "after_raw": "  simpa only [closedBox, Finset.sum_div] using h",
+      "root_cause": "Normalize original definitional closedBox=Icc and original sum/24 in one exact conversion; actual remaining goal was only the definitional set-integral equality."
+    }
+  ],
+  "all_five_unique_forward_and_reverse": true,
+  "whole_reverse_exact": true,
+  "pre_sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69",
+  "post_sha256": "e42ba5083e689ee4e1e086c1b8702274ff1de148033ba0e2ca82a9bc3e9f7634",
+  "only_three_original_proof_bodies_changed": true,
+  "all_other_bytes_unchanged": true
+}

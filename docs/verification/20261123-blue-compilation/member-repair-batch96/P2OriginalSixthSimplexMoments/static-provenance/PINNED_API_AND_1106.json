@@ -1,0 +1,85 @@
+{
+  "Fin_ofNat": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Fin/Basic.lean",
+    "bytes": 12956,
+    "sha256": "bb3d4e46cb40a24f5a09e6e003c76f2b84140a598df81233f0bffe3afe08cbf4",
+    "start_line": 47,
+    "end_line": 56,
+    "raw_excerpt": "\n/--\nReturns `a` modulo `n` as a `Fin n`.\n\nThe assumption `NeZero n` ensures that `Fin n` is nonempty.\n-/\n@[implicit_reducible]\nprotected def ofNat (n : Nat) [NeZero n] (a : Nat) : Fin n :=\n  ⟨a % n, Nat.mod_lt _ (pos_of_neZero n)⟩\n\n",
+    "excerpt_sha256": "695a56e5769dc6cfe6750ef120240252f0e989919ca2aa3de2ef04d48887d37d"
+  },
+  "Fin_numeral_instance": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Fin/Basic.lean",
+    "bytes": 12956,
+    "sha256": "bb3d4e46cb40a24f5a09e6e003c76f2b84140a598df81233f0bffe3afe08cbf4",
+    "start_line": 245,
+    "end_line": 247,
+    "raw_excerpt": "instance instOfNat {n : Nat} [NeZero n] {i : Nat} : OfNat (Fin n) i where\n  ofNat := Fin.ofNat n i\n\n",
+    "excerpt_sha256": "995fb9efad333727a962e9fc6f990a08bfd98d7da794c2c5199b469170c72feb"
+  },
+  "Fin_last": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Fin/Basic.lean",
+    "bytes": 12956,
+    "sha256": "bb3d4e46cb40a24f5a09e6e003c76f2b84140a598df81233f0bffe3afe08cbf4",
+    "start_line": 282,
+    "end_line": 290,
+    "raw_excerpt": "\n/--\nThe greatest value of `Fin (n+1)`, namely `n`.\n\nExamples:\n * `Fin.last 4 = (4 : Fin 5)`\n * `(Fin.last 0).val = (0 : Nat)`\n-/\n@[inline, implicit_reducible] def last (n : Nat) : Fin (n + 1) := ⟨n, n.lt_succ_self⟩\n",
+    "excerpt_sha256": "d5d46db018b7d7d5841a2c3961205e49c33b73389d2852390420c0416b99c3a4"
+  },
+  "continuous_apply": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Topology/Constructions.lean",
+    "bytes": 63396,
+    "sha256": "1b2099fa575c72263e2d512bf166ed78cc483fb09100b0e56a923e9b8dc31048",
+    "start_line": 768,
+    "end_line": 774,
+    "raw_excerpt": "theorem continuous_pi (h : ∀ i, Continuous fun a => f a i) : Continuous f :=\n  continuous_pi_iff.2 h\n\n@[continuity, fun_prop]\ntheorem continuous_apply (i : ι) : Continuous fun p : ∀ i, A i => p i :=\n  continuous_iInf_dom continuous_induced_dom\n\n",
+    "excerpt_sha256": "04b41b81818b6ed53342718b1e44a83c1477ef230711e90bca0a8b0989741cf7"
+  },
+  "actual_generic_simplex_monomial": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9SimplexCoordinateSlice.lean",
+    "bytes": 6539,
+    "sha256": "5d2afa3da92658193b9dcb415afbe6b5a003d1ad1e79b68b91c00a6b928afb3d",
+    "start_line": 90,
+    "end_line": 107,
+    "raw_excerpt": "def monomial {n : Nat} (m0 : Nat) (ms : Fin n → Nat)\n    (s : ℝ) (x : Fin n → ℝ) : ℝ :=\n  (s - ∑ i : Fin n, x i)^m0 *\n    (∏ i : Fin n, (x i)^(ms i))\n\n/-- The same slice factors the actual polynomial integrand. -/\ntheorem monomial_cons {n : Nat} (m0 : Nat)\n    (ms : Fin (n + 1) → Nat) (s t : ℝ) (y : Fin n → ℝ) :\n    monomial m0 ms s (Fin.cons t y) =\n      t^(ms 0) * monomial m0 (fun i => ms i.succ) (s - t) y := by\n  simp [monomial, Fin.sum_univ_succ, Fin.prod_univ_succ]\n  ring\n\ntheorem continuous_monomial {n : Nat} (m0 : Nat)\n    (ms : Fin n → Nat) (s : ℝ) :\n    Continuous (monomial m0 ms s) := by\n  unfold monomial\n  fun_prop\n",
+    "excerpt_sha256": "c51da8c0cab8ee5e0b5ed9892c91705e098a4972151b50780f34fc98fc61e876"
+  },
+  "actual_arbitrary_dimension_integral": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9ActualEightSimplexMoment.lean",
+    "bytes": 7805,
+    "sha256": "63c7ab5742209450f24fe8c0b44bcf7a1dafdbf8da368e855f8f41de4fdd693a",
+    "start_line": 25,
+    "end_line": 30,
+    "raw_excerpt": "open Set MeasureTheory\nopen ImbalancedChen.P2Winner9SimplexCoordinateSlice\nopen ImbalancedChen.P2Winner9NestedEightSimplexMoment\n\ndef actualMomentN (n m0 : Nat) (ms : Fin n → Nat) (s : ℝ) : ℝ :=\n  ∫ x in standardSimplex n s, monomial m0 ms s x\n",
+    "excerpt_sha256": "0a674e43a27286fa677e2234e5a297c35f3e9cb3fb4fa907552092cff86bac63"
+  },
+  "original_barycentric_eta_pattern": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2AffineSimplexMomentLaw.lean",
+    "bytes": 31989,
+    "sha256": "392db9ece173e92db68c970b895432fced7f89537945743e46103f9a17802520",
+    "start_line": 285,
+    "end_line": 292,
+    "raw_excerpt": "theorem barycentric_continuous (i : Fin 4) : Continuous (barycentric i) := by\n  fin_cases i\n  · change Continuous (fun p : Point => 1 - p.1 - p.2.1 - p.2.2)\n    fun_prop\n  · exact continuous_fst\n  · exact continuous_fst.comp continuous_snd\n  · exact continuous_snd.comp continuous_snd\n\n",
+    "excerpt_sha256": "57441d16ea1ea4ce5621d6fba887de7255fde64fd8b67c257feb7775f0656a39"
+  },
+  "manuscript_1106_simplex_moment": {
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+    "bytes": 42662,
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "start_line": 177,
+    "end_line": 195,
+    "raw_excerpt": "The finite integrations use rational boxes or rational polytopes.\r\nFor a polytope given by affine inequalities, every possible active\r\nbasis is solved exactly, and each resulting vertex is tested against\r\nevery original inequality.  Boundedness and the face incidences are\r\nverified before a pulling triangulation is formed.  Polynomial\r\nmoments are then exact: on a $d$-simplex $T$ with barycentric\r\ncoordinates $\\lambda_0,\\ldots,\\lambda_d$,\r\n\\begin{equation}\r\n \\int_T\\prod_{j=0}^d\\lambda_j^{\\alpha_j}\\,dx\r\n =d!\\operatorname{vol}(T)\r\n   \\frac{\\prod_{j=0}^d\\alpha_j!}{(d+\\sum_j\\alpha_j)!}.\r\n \\label{num:simplex-moment}\r\n\\end{equation}\r\nRational lower or upper bounds for the remaining kernel factors,\r\ntogether with these moments and \\eqref{num:log-enclosure}, give the\r\nrequired integral enclosure.  A boundary box in a negative-cost upper\r\nintegral is retained with an upper bound for its whole contribution.\r\nIn a positive saving, a box may instead be omitted after establishing\r\nthat its omitted contribution is nonnegative.  These two rules have\r\n",
+    "excerpt_sha256": "44c8638ae373a1ce65f9ac61fc38225744dfd89e2a41bb5b544c3f66271a5186"
+  },
+  "manuscript_1106_literal_closed_cube_density": {
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+    "bytes": 52306,
+    "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+    "start_line": 223,
+    "end_line": 263,
+    "raw_excerpt": "$V_N(y)=\\prod_{p<y}(1-g_N(p))$.  The ordinary cubic Rosser\r\ncoefficients satisfy, uniformly on compact subsets of the stated\r\nranges,\r\n\\begin{equation}\\label{sv:literal-density}\r\n \\frac{V_N^+(N^\\beta,N^t)}{V_N(N^t)}=F(\\beta/t)+o(1)\r\n       \\quad(\\beta/t>1),\\qquad\r\n \\frac{V_N^-(N^\\beta,N^t)}{V_N(N^t)}=f(\\beta/t)+o(1)\r\n       \\quad(\\beta/t\\ge2).\r\n\\end{equation}\r\nHere the densities are those of the literal coefficients, not merely\r\nupper and lower bounds for an arbitrary sifted sequence.\r\n\r\nTo see the uniformity in $N$, compare a normalized fixed-rank exit\r\nwith the corresponding exit for $g_0(p)=\\one_{p>2}/(p-1)$.\r\nA surviving prefix gains the multiplier\r\n\\[\r\n \\prod_{\\substack{p_{\\rm last}\\le p<y\\\\p\\mid N}}(1-g_0(p))\\le1;\r\n\\]\r\nother prefixes disappear.  A rank-$j$ exit has last prime at least\r\n$N^{\\beta_{\\min}/(3\\cdot2^{j-1})}$ on a positive compact parameter\r\nrange.  Deleting prime divisors of $N$ therefore changes any\r\nfixed-rank integral by $o(1)$ uniformly.  The positive Rosser exit\r\nseries converges uniformly on compact parameter ranges, and the\r\nraw one-sided bounds give the opposite side of a finite-rank\r\nsandwich; see \\cite[Proposition~11.8 and Lemma~14.7]{Suzuki}.\r\nFirst choose the rank and then let $N$ increase.  This proves\r\n\\eqref{sv:literal-density}.  For $1<s\\le3$ the identity at the first\r\ncube reduces the upper calculation to cutoff $N^{\\beta/3}$, giving\r\n$F(s)=2e^\\gamma/s$.\r\n\r\nThe normalization follows from Mertens' formula.  In particular the\r\nexact ratio to $2C_N\\prod_{p<z}(1-1/p)$ is\r\n\\begin{equation}\\label{sv:euler-ratio}\r\n \\frac{V_N(z)}{2C_N\\prod_{p<z}(1-1/p)}\r\n =\\prod_{p\\ge z}\\left(1-\\frac1{(p-1)^2}\\right)^{-1}\r\n  \\prod_{\\substack{p\\mid N\\\\p\\ge z}}\\left(1-\\frac1{p-1}\\right).\r\n\\end{equation}\r\nIts logarithm is $O((1+\\log N/\\log z)/(z-2))$.\r\nThus $V_N(N^t)\\sim2e^{-\\gamma}C_N/(t\\log N)$ uniformly in $N$.\r\nThe factor $4$ in \\eqref{sv:even-gain} and \\eqref{sv:odd-gain}\r\nis exactly $2e^{-\\gamma}\\cdot2e^\\gamma$.\r\n",
+    "excerpt_sha256": "31543221780a011f08d74e66fa26e7c4f173662eb193a7a70ea7ba964a94d8af"
+  },
+  "manuscript_fixed_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "scope": "Existing arbitrary-dimension Fubini/beta suppliers are specialized at n6. No eight-dimensional volume is reused and no new moment-law premise is introduced."
+}

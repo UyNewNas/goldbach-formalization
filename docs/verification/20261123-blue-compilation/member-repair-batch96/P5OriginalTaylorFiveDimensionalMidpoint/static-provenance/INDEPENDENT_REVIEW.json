@@ -1,0 +1,68 @@
+{
+  "schema": "taylor5_midpoint_independent_source_expression_review_v1",
+  "reviewer": "/root/build_workflow",
+  "reviewer_is_candidate_author": false,
+  "author": "/root/ascending14_api",
+  "utc": "2026-11-24T00:37:03.115995+00:00",
+  "status": "NO_FINDINGS_IN_ROOT_AUTHORIZED_SCOPE_READY_FOR_SOLE_OWNER_VALIDATION",
+  "findings": [],
+  "original_files_manifest_sha256": "273c79dd94d9a5d237190c076bc213baafbdb4464b14f489b2f593cf826690b5",
+  "original_source_selection_sha256": "1d04096dee239ebe72c52283e48eb7887a2421ca4217a8bbe8094f151a63275a",
+  "baseline_sha256": "9080979ffd6595b08551da3955ea32566cc64fdb11b7f4b869cd9e5563d76eb1",
+  "candidate_sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69",
+  "old_records_unchanged": true,
+  "all29_manifested_files_size_sha256_verified": true,
+  "scope": {
+    "all9complete_headers_verified_against_actual_pre_and_post_bytes": true,
+    "headers_byte_exact": 6,
+    "root_authorized_header_expression_exceptions": [
+      {
+        "name": "update_cons_succ",
+        "complete_header_before": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t) i.succ x = Fin.cons a (Function.update t i x) :=",
+        "complete_header_after": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t : Fin (n+1) → ℝ) i.succ x =\n      Fin.cons a (Function.update t i x) :=",
+        "exception": "Explicit original constant Real codomain"
+      },
+      {
+        "name": "successive_midpoints",
+        "complete_header_before": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i, u i-l i) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+        "complete_header_after": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+        "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+      },
+      {
+        "name": "five_dimensional_midpoint_lower",
+        "complete_header_before": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i, u i-l i) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+        "complete_header_after": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i : Fin 5, (u i-l i)) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+        "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+      }
+    ],
+    "root_authorized_local_letV_exception": "successive_midpoints: let V is explicitly product over Fin n of parenthesized ut i-lt i, the original box-side-length volume. Not a new global function or an assertion about old misparsed kernel equality.",
+    "original_private_closedBox_definition_full_raw_exact": true,
+    "exact9_replacements_forward_reverse_independently_verified": true,
+    "all_other_source_bytes_imports_options_comments_proofs_original_binders_quantifier_order_hypotheses_data_and_budget_exact": true,
+    "new_target_oracle_licence_floor_mean_tail_or_mixed_derivative_hypothesis": false,
+    "old_malformed_or_wrong_parse_kernel_type_value_equivalence_claimed": false
+  },
+  "mathematical_API_review": {
+    "Fin_cons": "Explicit Fin(n+1)->Real type fixes the constant codomain for the same update at i.succ; neither index nor endpoint vector changes.",
+    "volume": "Both successive_midpoints and five_dimensional_midpoint_lower use the product of original nonnegative side widths, matching closedBox=Icc and its Fubini induction. The same grouping is used by local V; no replacement volume or density is introduced.",
+    "membership": "After closedBox_eq_pi, explicit mem_pi/mem_univ/forall_true_left yields the same pointwise closed-interval membership without broad simp returning to a joint pointwise order expression.",
+    "Fubini": "Only original ambient Lebesgue volume is specified to ContinuousOn.integrableOn_compact; prepared restricted-product measure and measurePreserving_piFinSuccAbove construction unchanged. Extra rfl removed after the same rw closes the equality.",
+    "one_dimensional_integrability": "him and hlow acquire the original real-interval IntegrableOn types. Same ContinuousOn proofs, htail comparison, setIntegral_mono_on and signed scalar midpoint theorem are used.",
+    "constant_and_assumption_boundary": "All original ordered endpoints, continuity, first/second axis derivatives, second-derivative continuity and |f-double-prime|<=M conditions remain. Final factor is still box volume times midpoint minus sum(width²*M)/24; no mixed derivative, geometric licence or desired integral floor premise added."
+  },
+  "context_evidence": {
+    "all12_pinned_reference_file_payloads_hashes_match_original_sources": true,
+    "both_consumer_source_hashes_still_match_author_record": true,
+    "references_include_existing_FinitePiIntegral_and_accepted_signed_midpoint_recipe_not_copied_new_core": true,
+    "manuscript1106_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "box_simplex_anchor": "numerical-appendix177–195 exact rational boxes/polytopes and directed moment enclosures; scalar1/24 analytic law remains the original SignedMidpoint supplier.",
+    "actual0007_completed_full_log_sha256": "63da4b14f4b1f9dda09882e90464cf8cffd322667471932e2a4e4b2898ae8bb9",
+    "actual_failure_slice_sha256": "76e2b4fa5ef6020188017c840788d6593e551ff6e57a25f289ed2d5f64c631ae",
+    "actual_ledger_offsets_exact": true,
+    "unknown_successive_midpoints_is_downstream_of_original_failed_declaration_not_separate_new_axiom": true,
+    "aggregate4577seconds_not_module_CPU_time_or_candidate_pass": true
+  },
+  "acceptance_boundary": "Static source/API and explicitly authorized expression-recovery review only. Candidate remains uncompiled; unique owner normal/named-kernel/complete-owned type-axiom validation required. No numerical bank, geometric row or full P1 acceptance claimed.",
+  "Lean_Lake_kernel_audit_stock_test_numeric_invocations": 0,
+  "live_source_guard_cache_queue_or_old_packet_edits": false
+}

@@ -1,0 +1,53 @@
+{
+  "project_module_statement_scope_unchanged": true,
+  "existing_API": [
+    {
+      "original": {
+        "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Core.lean",
+        "bytes": 102417,
+        "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20"
+      },
+      "packet_excerpt": "references/InitCore_Prod_map_projections_excerpt.lean",
+      "line_start": 1474,
+      "line_end_inclusive": 1491,
+      "exact_signatures": [
+        "@[simp] theorem Prod.map_fst (f : α → β) (g : γ → δ) (x) : (Prod.map f g x).1 = f x.1 := rfl",
+        "@[simp] theorem Prod.map_snd (f : α → β) (g : γ → δ) (x) : (Prod.map f g x).2 = g x.2 := rfl"
+      ],
+      "role": "Reduce exactly the two actual arbitrary-pair projections, after p is introduced; these are Init.Core APIs already imported, no new import or product lemma."
+    },
+    {
+      "original": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Defs.lean",
+        "bytes": 62382,
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def"
+      },
+      "packet_excerpt": "references/Mathlib_Group_Defs_pow_succ_excerpt.lean",
+      "line_start": 690,
+      "line_end_inclusive": 706,
+      "API": "pow_succ a n : a^(n+1)=a^n*a",
+      "role": "After original succ/id projection normalization, expose the original same Nat product to unchanged ring."
+    }
+  ],
+  "normalization_of_actual_goal": [
+    "Prod.map_fst gives Nat.succ p.1; Prod.map_snd gives id p.2.",
+    "id_eq and Nat.succ_eq_add_one give p.2 and p.1+1.",
+    "pow_succ gives a^p.1*a; original ring reorders its same three factors to a*a^p.1*exactPrefixH as p.2."
+  ],
+  "all_original_prefix_recursion_equivalences_algorithms_and_4floors_preserved": true,
+  "prior_gate": {
+    "path": "/workspace/p1-complete-proof/static-row21-prefix-two-proof-api-v3/INDEPENDENT_REVIEW.json",
+    "bytes": 5026,
+    "sha256": "71495d3a5a850214ae2ba0272c1e8223e37393e7214cc5b12f277a2441b13c90"
+  },
+  "manuscript_1106_commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "manuscript_anchor": {
+    "file": "references/numerical-appendix.tex",
+    "lines": [
+      177,
+      195
+    ],
+    "role": "Original exact rational simplex moments; no new mathematical lemma beyond needed projection normalization."
+  },
+  "classification": "One actual proof API/projection normal form issue. No generic new enumeration, algorithm, target oracle or numerical/manuscript gap."
+}

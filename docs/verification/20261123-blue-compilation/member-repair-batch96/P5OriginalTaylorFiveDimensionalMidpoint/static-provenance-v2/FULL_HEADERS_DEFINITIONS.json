@@ -1,0 +1,93 @@
+{
+  "headers": [
+    {
+      "name": "closedBox",
+      "kind": "def",
+      "private": true,
+      "complete_header_before": "private def closedBox {n : ℕ} (l u : Fin n → ℝ) : Set (Fin n → ℝ) :=",
+      "complete_header_after": "private def closedBox {n : ℕ} (l u : Fin n → ℝ) : Set (Fin n → ℝ) :=",
+      "sha256": "1dee46047416beb4521cf47d601a7f7c735dda4caf1c4c5d93a0f85dfa44b20c",
+      "raw_equal": true
+    },
+    {
+      "name": "closedBox_eq_pi",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem closedBox_eq_pi {n : ℕ} (l u : Fin n → ℝ) :\n    closedBox l u = univ.pi (fun i => Icc (l i) (u i)) :=",
+      "complete_header_after": "private theorem closedBox_eq_pi {n : ℕ} (l u : Fin n → ℝ) :\n    closedBox l u = univ.pi (fun i => Icc (l i) (u i)) :=",
+      "sha256": "19c0e030556b39368a17b939cd8284d65e099e94526660d9fb5da55384a99707",
+      "raw_equal": true
+    },
+    {
+      "name": "mem_closedBox",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem mem_closedBox {n : ℕ} {l u t : Fin n → ℝ} :\n    t ∈ closedBox l u ↔ ∀ i, t i ∈ Icc (l i) (u i) :=",
+      "complete_header_after": "private theorem mem_closedBox {n : ℕ} {l u t : Fin n → ℝ} :\n    t ∈ closedBox l u ↔ ∀ i, t i ∈ Icc (l i) (u i) :=",
+      "sha256": "1ed58a26c58e1d313e7c92c3d05a0e27e97b87d496b36624a86e4677a520093e",
+      "raw_equal": true
+    },
+    {
+      "name": "cons_mem_closedBox",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem cons_mem_closedBox {n : ℕ} {l u : Fin (n+1) → ℝ}\n    {a : ℝ} {t : Fin n → ℝ} (ha : a ∈ Icc (l 0) (u 0))\n    (ht : t ∈ closedBox (fun i => l i.succ) (fun i => u i.succ)) :\n    Fin.cons a t ∈ closedBox l u :=",
+      "complete_header_after": "private theorem cons_mem_closedBox {n : ℕ} {l u : Fin (n+1) → ℝ}\n    {a : ℝ} {t : Fin n → ℝ} (ha : a ∈ Icc (l 0) (u 0))\n    (ht : t ∈ closedBox (fun i => l i.succ) (fun i => u i.succ)) :\n    Fin.cons a t ∈ closedBox l u :=",
+      "sha256": "22eb63dfe155372c174722e19f52cf59772c598210672df1726cca4ded5ae05b",
+      "raw_equal": true
+    },
+    {
+      "name": "midpoint_mem",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem midpoint_mem {n : ℕ} {l u : Fin n → ℝ}\n    (hlu : ∀ i, l i ≤ u i) :\n    (fun i => (l i + u i)/2) ∈ closedBox l u :=",
+      "complete_header_after": "private theorem midpoint_mem {n : ℕ} {l u : Fin n → ℝ}\n    (hlu : ∀ i, l i ≤ u i) :\n    (fun i => (l i + u i)/2) ∈ closedBox l u :=",
+      "sha256": "3ccceb530769af4d3655c9f724f2fa65ad54ac44d3bd970df0519bf2d115beea",
+      "raw_equal": true
+    },
+    {
+      "name": "update_cons_succ",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t : Fin (n+1) → ℝ) i.succ x =\n      Fin.cons a (Function.update t i x) :=",
+      "complete_header_after": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t : Fin (n+1) → ℝ) i.succ x =\n      Fin.cons a (Function.update t i x) :=",
+      "sha256": "d07d4a1c40cefdaab93b6d9d000313d7890055e63237fcf13be9fc4403919042",
+      "raw_equal": true
+    },
+    {
+      "name": "box_fubini",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem box_fubini {n : ℕ} (l u : Fin (n+1) → ℝ)\n    (f : (Fin (n+1) → ℝ) → ℝ) (hc : ContinuousOn f (closedBox l u)) :\n    (∫ t in closedBox l u, f t) =\n      ∫ a in Icc (l 0) (u 0),\n        ∫ v in closedBox (fun i => l i.succ) (fun i => u i.succ), f (Fin.cons a v) ∧\n    IntegrableOn (fun a =>\n      ∫ v in closedBox (fun i => l i.succ) (fun i => u i.succ), f (Fin.cons a v))\n      (Icc (l 0) (u 0)) :=",
+      "complete_header_after": "private theorem box_fubini {n : ℕ} (l u : Fin (n+1) → ℝ)\n    (f : (Fin (n+1) → ℝ) → ℝ) (hc : ContinuousOn f (closedBox l u)) :\n    (∫ t in closedBox l u, f t) =\n      ∫ a in Icc (l 0) (u 0),\n        ∫ v in closedBox (fun i => l i.succ) (fun i => u i.succ), f (Fin.cons a v) ∧\n    IntegrableOn (fun a =>\n      ∫ v in closedBox (fun i => l i.succ) (fun i => u i.succ), f (Fin.cons a v))\n      (Icc (l 0) (u 0)) :=",
+      "sha256": "2ba9c48674feec9dd1973b3317cc73a12d52be7d0722247ab34b1214e2ff56eb",
+      "raw_equal": true
+    },
+    {
+      "name": "successive_midpoints",
+      "kind": "theorem",
+      "private": true,
+      "complete_header_before": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+      "complete_header_after": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+      "sha256": "3be3ff6e9eafa7aab90747a9683b9233bb51e16b0ccff614440721d529fa41a8",
+      "raw_equal": true
+    },
+    {
+      "name": "five_dimensional_midpoint_lower",
+      "kind": "theorem",
+      "private": false,
+      "complete_header_before": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i : Fin 5, (u i-l i)) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+      "complete_header_after": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i : Fin 5, (u i-l i)) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+      "sha256": "7f484769fe486b61bce7674d787a55adc74ea28120195d492ae2a8399f0a60c7",
+      "raw_equal": true
+    }
+  ],
+  "complete_header_count": 9,
+  "complete_theorem_header_count": 8,
+  "complete_definition_count": 1,
+  "complete_definition_before": "private def closedBox {n : ℕ} (l u : Fin n → ℝ) : Set (Fin n → ℝ) := Icc l u",
+  "complete_definition_after": "private def closedBox {n : ℕ} (l u : Fin n → ℝ) : Set (Fin n → ℝ) := Icc l u",
+  "all_nine_full_parsed_headers_and_closedBox_raw_same": true,
+  "prior_three_Root_authorized_volume_and_Real_codomain_expression_recoveries_retained": true,
+  "no_new_header_or_definition_expression_exception": true
+}

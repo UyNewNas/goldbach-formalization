@@ -1,0 +1,3 @@
+# Row21 prefix v3: two actual private proof API repairs
+
+Exact current e6bf pre is preserved except two proof fragments: delete no-progress pow_succ simplification before the original ring, and replace map_flatMap by map_flatten to match the actual normalized list-flatten goal. All37 complete headers and28 full definitions, including both equation-style private Nat representations, are raw-identical. Four floor statements and their terminal proof, data, algorithms, hypotheses and budgets remain unchanged. Full7686B actual log and command are bound. No Lean/live/native/producer action; nonauthor gate and sole-owner complete validation remain.

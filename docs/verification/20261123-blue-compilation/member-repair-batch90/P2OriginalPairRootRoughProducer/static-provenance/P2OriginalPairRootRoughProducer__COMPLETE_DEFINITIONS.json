@@ -1,0 +1,26 @@
+[
+  {
+    "name": "pairRoot",
+    "kind": "def",
+    "complete_raw_region_before_and_after": "def pairRoot (N : ℕ) (p : ℕ × ℕ) (seedCap : ℝ) : Trace :=\r\n  ⟨[coordinate N p.2, coordinate N p.1], seedCap, [], true⟩\r\n\r\n",
+    "sha256": "77456ba2a8ba088b3c2092a92687661ac01e1c27ed83efa65730f70bad2e5b9f"
+  },
+  {
+    "name": "warmTrace",
+    "kind": "def",
+    "complete_raw_region_before_and_after": "def warmTrace {depth mesh : ℕ} (P : CapPlan depth mesh)\r\n    (a b : ℝ) (base : Trace) (N : ℕ) (pre : List ℕ) : Trace :=\r\n  run P a b base (physicalWord N pre)\r\n\r\n",
+    "sha256": "c501a3aab461c3e114a361c4fd015271758ecabbcce3a44cbf472419fe438839"
+  },
+  {
+    "name": "warmRetain",
+    "kind": "def",
+    "complete_raw_region_before_and_after": "def warmRetain {depth mesh : ℕ} (P : CapPlan depth mesh)\r\n    (a b : ℝ) (base : Trace) (N : ℕ) (pre : List ℕ) : Bool :=\r\n  (warmTrace P a b base N pre).accepted\r\n\r\n",
+    "sha256": "b02a4d9ddc2580bbfd7b4e568e7c2d5683fe900a340fa94bd46006ad6232d28b"
+  },
+  {
+    "name": "pairPolicy",
+    "kind": "def",
+    "complete_raw_region_before_and_after": "def pairPolicy {depth mesh : ℕ} (P : CapPlan depth mesh)\r\n    (a b seedCap : ℝ) (N : ℕ) (p : ℕ × ℕ) : List ℕ → Bool :=\r\n  warmRetain P a b (pairRoot N p seedCap) N\r\n\r\n",
+    "sha256": "33e0ee1a271c1917963e358b1a3287e3b22009cac71db38361dea9727d00ec14"
+  }
+]

@@ -1,0 +1,27 @@
+--- exact-preimage
++++ isolated-candidate
+@@ -91,7 +91,7 @@
+         omega
+       have hnext : warmRetain P a b base N (p::pre) = true := by
+         apply (warmRetain_cons_iff P a b base N p pre).mpr
+-        exact ⟨hpre, by simp [admission, hnonempty, hodd]⟩
++        exact ⟨hpre, by simp only [admission, if_neg hnonempty, if_neg hodd]⟩
+       simp only [hs, Bool.not_true, evenFirstExitPolicy, Bool.not_false, Bool.true_or]
+       exact iff_of_true trivial hnext
+ 
+@@ -132,6 +132,7 @@
+           exact run_accepted_incoming P a b _ _ hfinal'
+         exact ⟨hnext.mpr hpassed, (ih (p::pre) hpassed).mpr hfinal'⟩
+ 
++open scoped List in
+ /-- Concrete retained rough moduli, with both directions of the actual
+     tree-to-trace correspondence. No initial cutoff-square margin is
+     required at this marked pair root. -/
+@@ -158,6 +159,7 @@
+       rfl N chosen [] hbase).mpr
+     simpa only [List.append_nil, heq] using haccept
+ 
++open scoped List in
+ /-- The actual signed lower coefficient supplies the actual rough word;
+     neither that word nor its accepted run is an input licence. -/
+ theorem pair_rho_nonzero_rough_word {depth mesh : ℕ} (P : CapPlan depth mesh)

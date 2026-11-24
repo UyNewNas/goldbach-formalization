@@ -1,0 +1,73 @@
+{
+  "current_API": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/Monoid/Defs.lean",
+    "bytes": 5188,
+    "sha256": "ca45e64be405f50d506afb09051a929c7896ef25f1a42b260a5466e0a497f59b",
+    "start_line": 23,
+    "end_line": 30,
+    "raw_excerpt": "\n-- TODO: assume weaker typeclasses\n\n/-- An ordered (additive) monoid is a monoid with a preorder such that addition is monotone. -/\nclass IsOrderedAddMonoid (α : Type*) [AddCommMonoid α] [Preorder α] where\n  protected add_le_add_left (a b : α) : a ≤ b → ∀ c, a + c ≤ b + c\n  protected add_le_add_right (a b : α) : a ≤ b → ∀ c, c + a ≤ c + b := fun h c ↦ by\n    rw [add_comm c, add_comm c]; exact add_le_add_left a b h c\n",
+    "raw_excerpt_sha256": "df42b4d74ef4afabdb848748eab6df83209295c55122ff795db3ebe3fdfe1f2f"
+  },
+  "same_proof_existing_after_line": "add_le_add le_rfl hsecond",
+  "existing_accepted_addition_recipe": {
+    "source": {
+      "path": "/workspace/p1-complete-proof/static-finite-affine-decision-program/candidate.lean",
+      "bytes": 18540,
+      "sha256": "b84da3edd04f2d6aaeb469cdeb3b09903a432ce2418a06ff97a2875471168c96"
+    },
+    "acceptance": {
+      "path": "/workspace/blue-member-repair-batch57/VALIDATION_RESULTS.json",
+      "bytes": 7490,
+      "sha256": "78159c1e3a24d55cf7a65cc04c680d5858615584b737f9d4fe8696b39d2e04f8"
+    },
+    "exact_pattern": "apply add_le_add le_rfl",
+    "scope": "Only standard same-left monotonicity recipe; no Affine model/data substituted."
+  },
+  "manuscript_context_reused_from_original_non_author_review": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/argument.tex",
+      "bytes": 55378,
+      "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "start_line": 4,
+      "end_line": 18,
+      "role": "Same causal prefix policy/marked residual level fixed before descendants.",
+      "raw_excerpt": "\\begin{definition}\r\nA finite prefix policy specifies finitely many regions in the\r\ncoordinates $t_i=\\log_Np_i$ of ordered prime prefixes and a sieve level\r\non each region. The decision at a prefix is fixed before its children\r\nare refined. A selected branch is admissible when its full-square and\r\nselected-complement conditions in\r\n\\eqref{coef:full-squares}--\\eqref{coef:selected-squares} have the required\r\nstrict margins; an inherited branch keeps its parent decision.\r\nA marked family is a nonnegative finite weighted family of prefixes\r\n$B$ at a common total level $Q$, with residual level $Q/B$ and the\r\noriginal prime ceiling retained. A marked query is a sifted count for\r\none such family. References below to an admitted coefficient mean a\r\ncoefficient obtained from these policies and finite marked transitions,\r\nwith the three-factor representations of\r\nAppendix~\\ref{app:coefficients}.\r\n",
+      "raw_excerpt_sha256": "6e95d788467e9fcb85210d0f277e8883d37fa852d5d4e386444a4a16b0b9b182"
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "bytes": 52306,
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "start_line": 56,
+      "end_line": 80,
+      "role": "Exact squarefree first-exit identity and genuine finite prime support.",
+      "raw_excerpt": "Let $\\mathcal T$ be a prefix-closed collection of squarefree products\r\nfrom a finite prime set $\\mathcal P$, containing the empty product.\r\nSuppose that all first excluded prefixes have odd rank.  For every\r\nmultiplicative $\\xi$ with $0\\le \\xi(p)\\le1$,\r\n\\begin{equation}\\label{sv:upper-exit}\r\n \\sum_{d\\in\\mathcal T}\\mu(d)\\xi(d)\r\n =\\prod_{p\\in\\mathcal P}(1-\\xi(p))\r\n +\\sum_{e\\text{ first exit}}\\xi(e)\r\n           \\prod_{\\substack{p\\in\\mathcal P\\\\p<p_{\\mathrm{last}}(e)}}\r\n                            (1-\\xi(p)).\r\n\\end{equation}\r\nIn particular $\\sum_{d\\mid n,\\ d\\in\\mathcal T}\\mu(d)$ majorizes\r\n$\\one_{(n,\\prod_{p\\in\\mathcal P}p)=1}$ for every integer $n$.\r\n\\end{lemma}\r\n\r\n\\begin{proof}\r\nEach excluded divisor has a unique first excluded prefix $e$; its\r\nremaining prime factors are smaller than $p_{\\mathrm{last}}(e)$.\r\nSumming the complete continuation gives\r\n$\\mu(e)\\xi(e)\\prod_{p<p_{\\mathrm{last}}(e)}(1-\\xi(p))$.\r\nSubtract these disjoint continuations from the complete Euler product.\r\nSince $\\mu(e)=-1$, the sign in \\eqref{sv:upper-exit} is positive.\r\nTake $\\xi(p)=\\one_{p\\mid n}$ for the last assertion.  The same\r\nfinite identity applies at $n=0$ and at negative integers.\r\n\\end{proof}\r\n",
+      "raw_excerpt_sha256": "927facbfc3f0d7c9423a32b008bb117eb66485ef2f5255fa30affb22955fd3cb"
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "bytes": 52306,
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "start_line": 111,
+      "end_line": 149,
+      "role": "Original inherited fourth/fifth cap chronology and signed subtree comparison.",
+      "raw_excerpt": "At rank four the selected candidates are $M=v(b_I)$ with\r\n$4\\in I$, satisfying \\eqref{sv:branch-licence} and exceeding the\r\ninherited third cap.  Such a change is made only on prefixes that\r\nalready pass the third cube.  Membership through rank four is\r\nunchanged and subsequent odd cubes use the new cap.\r\nThe limiting density difference on a region $\\mathcal C$ is\r\n\\begin{equation}\\label{sv:even-gain}\r\n 4\\int_{\\mathcal C}\r\n \\frac{\\overline F((L-S_r)/t_r)\r\n                   -\\overline F((M-S_r)/t_r)}\r\n      {t_1\\cdots t_{r-1}t_r^2}\\,dt_1\\cdots dt_r,\r\n \\qquad \\overline F=\\frac{F}{2e^\\gamma},\r\n\\end{equation}\r\nwhere $r=4$, $L$ is the inherited cap and $M$ the selected endpoint.\r\nIndeed an even prefix $P_r$ contributes\r\n$g_N(P_r)V_N^+(N^\\lambda/P_r,p_r)$ to its complete subtree.\r\nSubtracting the two subtrees gives \\eqref{sv:even-gain}; it is an\r\nidentity of raw densities before taking an asymptotic limit.\r\n\r\nAt rank five a candidate $v(b_I)$, $5\\in I$, is compared with the\r\ninherited cap and the fifth cube $S_4+3t_5$.  Its cap is fixed before\r\nthat cube.  Thus a fifth prefix rejected at the smaller cap may be\r\nretained at the larger one; all earlier decisions remain fixed.\r\nThe negative fifth subtree has the ordinary lower residual, and its\r\nsaving is\r\n\\begin{equation}\\label{sv:odd-gain}\r\n 4\\int_{\\mathcal C}\r\n \\frac{\\overline f((M-S_5)/t_5)\r\n                   -\\overline f((L-S_5)/t_5)}\r\n      {t_1t_2t_3t_4t_5^2}\\,dt_1\\cdots dt_5,\r\n \\qquad \\overline f=\\frac{f}{2e^\\gamma},\r\n\\end{equation}\r\nwith the zero extension of $\\overline f$ below $2$.\r\nThe inherited first-five cap is bounded above by\r\n\\begin{equation}\\label{sv:fifth-envelope}\r\n R_5(t)=\\max\\left\\{\\Lambda_{\\rm cap}-\\frac{3t_3}{8},\\\r\n         v(b_I):\\varnothing\\ne I\\subseteq\\{1,\\ldots,5\\}\\right\\}.\r\n\\end{equation}\r\nUsing an upper bound for the inherited cap in a positive saving is\r\n",
+      "raw_excerpt_sha256": "2ac111c3837846cc59e8f8b693afaefffcb5057d05fb8613e7bf4eb331d476d2"
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+      "bytes": 39389,
+      "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+      "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "start_line": 20,
+      "end_line": 45,
+      "role": "Full and selected-complement square conditions at the same inherited level.",
+      "raw_excerpt": "high-rank levels.  A finite policy specifies a level $N^\\lambda$ at each\r\nof finitely many prime prefixes.  An ancestor decision is fixed before\r\nthe children are subdivided.  For decreasing exponents $t_1,\\ldots,t_j$,\r\nput $S_j=t_1+\\cdots+t_j$.  The full square conditions at an auxiliary\r\nlevel $N^\\ell$ are\r\n\\begin{equation}\r\n S_{j-1}+2t_j\\le\\ell.\r\n \\label{coef:full-squares}\r\n\\end{equation}\r\nIf $I$ is a selected subset of the marked slots, put\r\n$b_I=\\sum_{i\\in I}t_i$.  In addition to \\eqref{coef:full-squares}, retain\r\nall the conditions\r\n\\begin{equation}\r\n b_I+\\sum_{\\substack{i<j\\\\i\\notin I}}t_i+2t_j\\le\\ell\r\n \\qquad(j\\notin I).\r\n \\label{coef:selected-squares}\r\n\\end{equation}\r\nFor $j$ after the last selected index, the left side of\r\n\\eqref{coef:selected-squares} is exactly $S_{j-1}+2t_j$.\r\nThus adjoining smaller primes preserves the selected conditions whenever\r\nthe full conditions are preserved.  An admitted cube also implies the\r\nnext square, since\r\n\\[\r\n S_j+2t_{j+1}\\le S_{j-1}+3t_j.\r\n\\]\r\nThis observation applies to both parities of the ordinary sieve tree:\r\n",
+      "raw_excerpt_sha256": "6587269923f5f347607baddcbcf3b658b4852147506b384e27b54e29992bb734"
+    }
+  ],
+  "mechanism": "The actual goal is A+B<=A+C. add_le_add_left hfirst has B+?<=C+? at this pin. add_le_add le_rfl hfirst produces the exact same-left goal and is already the recipe used immediately afterward for hsecond. No inequality, sign, budget or variable changes."
+}

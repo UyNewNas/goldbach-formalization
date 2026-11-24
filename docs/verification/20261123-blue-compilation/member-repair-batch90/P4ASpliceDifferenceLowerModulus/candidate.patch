@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/P4ASpliceDifferenceLowerModulus.lean
++++ candidate/ImbalancedChen/P4ASpliceDifferenceLowerModulus.lean
+@@ -100,6 +100,7 @@
+     apply lt_of_not_ge
+     intro hlarge
+     exact hdnot (Finset.mem_filter.mpr ⟨hd, hlarge⟩)
++  dsimp only
+   rw [actualThird_abs_coefficient_sub_eq_zero_below_cube e h m N cap hw z d hsmall, zero_div]
+ 
+ /-- Common-union form of the exact original third compiler restriction. -/
+@@ -133,7 +134,7 @@
+   have hfilter :
+       (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z ∆
+         fixedRoughSupport (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z).filter
+-          (fun d => w ^ 3 ≤ (d : ℝ)) =
++          (fun d : ℕ => w ^ 3 ≤ (d : ℝ)) =
+       fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z ∆
+         fixedRoughSupport (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z := by
+     apply Finset.filter_eq_self.mpr

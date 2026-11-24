@@ -1,0 +1,63 @@
+{
+  "replacements": [
+    {
+      "location": "mem_closedBox proof",
+      "before_raw": "  rw [closedBox_eq_pi]\n  simp\n",
+      "after_raw": "  rw [closedBox_eq_pi]\n  simp only [mem_pi, mem_univ, forall_true_left]\n",
+      "classification": "proof-only exact set-pi membership API; avoid broad simp rewriting back to pointwise Icc"
+    },
+    {
+      "location": "update_cons_succ private theorem header",
+      "before_raw": "    Function.update (Fin.cons a t) i.succ x = Fin.cons a (Function.update t i x) := by",
+      "after_raw": "    Function.update (Fin.cons a t : Fin (n+1) → ℝ) i.succ x =\n      Fin.cons a (Function.update t i x) := by",
+      "classification": "explicit constant Real codomain annotation of original Fin.cons; same original Fin(n+1) function update equality"
+    },
+    {
+      "location": "box_fubini proof integrability",
+      "before_raw": "    have h := hc.integrableOn_compact (show IsCompact (closedBox l u) from isCompact_Icc)",
+      "after_raw": "    have h := hc.integrableOn_compact\n      (μ := (volume : Measure (Fin (n+1) → ℝ)))\n      (show IsCompact (closedBox l u) from isCompact_Icc)",
+      "classification": "proof-only explicit original restricted Lebesgue ambient measure; resolve actual stuck IsFiniteMeasureOnCompacts μ"
+    },
+    {
+      "location": "box_fubini proof htail",
+      "before_raw": "    rw [closedBox_eq_pi, volume_pi, Measure.restrict_pi_pi]\n    rfl\n",
+      "after_raw": "    rw [closedBox_eq_pi, volume_pi, Measure.restrict_pi_pi]\n",
+      "classification": "proof-only remove extra rfl after rw already closes exact original measure equality"
+    },
+    {
+      "location": "successive_midpoints private theorem header",
+      "before_raw": "    (∏ i, u i-l i) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤",
+      "after_raw": "    (∏ i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤",
+      "classification": "explicit original volume product body grouping; old term:67 syntax put subtraction outside binder"
+    },
+    {
+      "location": "successive_midpoints proof let V",
+      "before_raw": "      let V : ℝ := ∏ i : Fin n, ut i-lt i",
+      "after_raw": "      let V : ℝ := ∏ i : Fin n, (ut i-lt i)",
+      "classification": "proof-local same volume product grouping recovery"
+    },
+    {
+      "location": "successive_midpoints proof him",
+      "before_raw": "      have him := hcm.integrableOn_Icc",
+      "after_raw": "      have him : IntegrableOn (fun a => f (Fin.cons a ct)) (Icc (l 0) (u 0)) :=\n        hcm.integrableOn_Icc",
+      "classification": "proof-only expected original Lebesgue integrability type; same μ metavariable family as actual box_fubini failure"
+    },
+    {
+      "location": "successive_midpoints proof hlow",
+      "before_raw": "      have hlow := ((hcm.sub continuousOn_const).const_mul V).integrableOn_Icc",
+      "after_raw": "      have hlow : IntegrableOn (fun a => V * (f (Fin.cons a ct)-E))\n          (Icc (l 0) (u 0)) :=\n        ((hcm.sub continuousOn_const).const_mul V).integrableOn_Icc",
+      "classification": "proof-only original V*(f-E) lower integrand and Lebesgue measure made explicit"
+    },
+    {
+      "location": "five_dimensional_midpoint_lower public theorem header",
+      "before_raw": "    (∏ i, u i-l i) *\n",
+      "after_raw": "    (∏ i : Fin 5, (u i-l i)) *\n",
+      "classification": "explicit original five-dimensional Lebesgue volume product grouping; public expression recovery, not raw header identity"
+    }
+  ],
+  "all_unique_forward_and_reverse": true,
+  "whole_reverse_exact": true,
+  "reconstructed_pre_sha256": "9080979ffd6595b08551da3955ea32566cc64fdb11b7f4b869cd9e5563d76eb1",
+  "candidate_sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69",
+  "no_unlisted_delta": true
+}

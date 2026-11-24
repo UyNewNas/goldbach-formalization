@@ -1,0 +1,3 @@
+# Row21 v4: one actual projection-normalization line
+
+The exact a555 failed source is preserved except one line inside exactPrefixH_cons_succ: after introducing the arbitrary pair, use existing Init.Core Prod.map_fst/map_snd and original id/succ/pow normalization before the unchanged ring. This matches the sole d407 actual goal. All37 complete headers,28 full definitions, current seven private supplier statements, original data, algorithms, four floor statements and their terminal proof, and budgets remain raw-identical. Full4091B log and17.113s failed command are pinned. No Lean/native/live action or module/kernel acceptance claim.

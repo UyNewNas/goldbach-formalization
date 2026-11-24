@@ -1,0 +1,19 @@
+--- actual-failed-pre/P4AActualSquaredGapDecay.lean
++++ f5415e467b95/P4AActualSquaredGapDecay.lean
+@@ -69,8 +69,8 @@
+       (s * ((upper s - lower s) - (upper (s - 1) - lower (s - 1)))) s := by
+   have hs0 : s ≠ 0 := by linarith
+   have hsquare : HasDerivAt (fun t : ℝ => t ^ 2) (s + s) s := by
+-    simpa only [pow_two, id_eq, one_mul, mul_one] using
+-      (hasDerivAt_id s).mul (hasDerivAt_id s)
++    simpa only [pow_two, Pi.mul_apply, id_eq, one_mul, mul_one] using
++      (hasDerivAt_id s).fun_mul (hasDerivAt_id s)
+   have hd := hsquare.mul (hasDerivAt_normalized_gap hs)
+   apply hd.congr_deriv
+   field_simp [hs0] <;> ring
+@@ -123,3 +123,5 @@
+ end
+ 
+ end ImbalancedChen.P4AActualSquaredGapDecay20261024zSourceOnly
++
++

@@ -1,0 +1,86 @@
+{
+  "module": "ImbalancedChen.P5OriginalTaylorFiveDimensionalMidpoint",
+  "preimage_sha256": "9080979ffd6595b08551da3955ea32566cc64fdb11b7f4b869cd9e5563d76eb1",
+  "postimage_sha256": "e42ba5083e689ee4e1e086c1b8702274ff1de148033ba0e2ca82a9bc3e9f7634",
+  "static_candidate_before_owner_comment_sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69",
+  "static_candidate": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api/candidate.lean",
+  "complete_published_source_byte_exact_preserved": false,
+  "existing_published_source": null,
+  "current_validation_state_recorded_externally": true,
+  "candidate_source_byte_exact_preserved": true,
+  "pointer_inserted_this_overlay": false,
+  "pointer_inserted_by_owner_stager": false,
+  "pointer_present_in_adopted_source": false,
+  "all_original_theorem_headers_numeric_constants_hypotheses_and_integrability_premises_preserved": false,
+  "raw_headers_preserved_except_explicit_syntax_exceptions": true,
+  "all_numeric_constants_original_hypotheses_and_integrability_premises_preserved": true,
+  "all_data_expressions_and_algorithms_preserved": true,
+  "explicit_syntax_exceptions": [],
+  "all_definition_raw_bytes_preserved_except_listed_exception": true,
+  "root_old_unelaborated_or_unparsed_kernel_type_equality_not_claimed": false,
+  "notation_scope_support_restoration": null,
+  "neutral_status_text_replacements": [],
+  "verification_pointer_present_before_owner_canonical_compile": false,
+  "owner_did_not_insert_pointer_where_no_matching_status_label": true,
+  "main_Member_same_baseline_synchronized": false,
+  "main_canonical_absent_not_created": true,
+  "different_main_source_preserved": null,
+  "P6_native_or_frozen_sources_modified": false,
+  "owner_canonical_compiler_invoked_at_staging": false,
+  "original_failure_log": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0007/actual-completed-normal.log",
+  "explicit_statement_exceptions": [
+    {
+      "kind": "ROOT_AUTHORIZED_ORIGINAL_VOLUME_PRODUCT_GROUPING_AND_CONSTANT_Real_CODOMAIN_RESTORATION",
+      "complete_header_before_after": [
+        {
+          "name": "update_cons_succ",
+          "complete_header_before": "private theorem update_cons_succ {n : \u2115} (a x : \u211d) (t : Fin n \u2192 \u211d) (i : Fin n) :\n    Function.update (Fin.cons a t) i.succ x = Fin.cons a (Function.update t i x) :=",
+          "complete_header_after": "private theorem update_cons_succ {n : \u2115} (a x : \u211d) (t : Fin n \u2192 \u211d) (i : Fin n) :\n    Function.update (Fin.cons a t : Fin (n+1) \u2192 \u211d) i.succ x =\n      Fin.cons a (Function.update t i x) :=",
+          "exception": "Explicit original constant Real codomain"
+        },
+        {
+          "name": "successive_midpoints",
+          "complete_header_before": "private theorem successive_midpoints (n : \u2115) (l u e : Fin n \u2192 \u211d)\n    (f : (Fin n \u2192 \u211d) \u2192 \u211d) (hlu : \u2200 i, l i \u2264 u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : \u2200 t \u2208 closedBox l u, \u2200 i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) \u2264\n        \u222b x in Icc (l i) (u i), f (Function.update t i x)) :\n    (\u220f i, u i-l i) * (f (fun i => (l i+u i)/2)-\u2211 i, e i) \u2264\n      \u222b t in closedBox l u, f t :=",
+          "complete_header_after": "private theorem successive_midpoints (n : \u2115) (l u e : Fin n \u2192 \u211d)\n    (f : (Fin n \u2192 \u211d) \u2192 \u211d) (hlu : \u2200 i, l i \u2264 u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : \u2200 t \u2208 closedBox l u, \u2200 i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) \u2264\n        \u222b x in Icc (l i) (u i), f (Function.update t i x)) :\n    (\u220f i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-\u2211 i, e i) \u2264\n      \u222b t in closedBox l u, f t :=",
+          "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+        },
+        {
+          "name": "five_dimensional_midpoint_lower",
+          "complete_header_before": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 \u2192 \u211d) (f : (Fin 5 \u2192 \u211d) \u2192 \u211d)\n    (f' f'' : (Fin 5 \u2192 \u211d) \u2192 Fin 5 \u2192 \u211d \u2192 \u211d)\n    (hlu : \u2200 i, l i \u2264 u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : \u2200 t \u2208 Icc l u, \u2200 i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i), |f'' t i x| \u2264 M i) :\n    (\u220f i, u i-l i) *\n        (f (fun i => (l i+u i)/2) - (\u2211 i, (u i-l i)^2*M i)/24) \u2264\n      \u222b t in Icc l u, f t :=",
+          "complete_header_after": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 \u2192 \u211d) (f : (Fin 5 \u2192 \u211d) \u2192 \u211d)\n    (f' f'' : (Fin 5 \u2192 \u211d) \u2192 Fin 5 \u2192 \u211d \u2192 \u211d)\n    (hlu : \u2200 i, l i \u2264 u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : \u2200 t \u2208 Icc l u, \u2200 i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : \u2200 t \u2208 Icc l u, \u2200 i, \u2200 x \u2208 Icc (l i) (u i), |f'' t i x| \u2264 M i) :\n    (\u220f i : Fin 5, (u i-l i)) *\n        (f (fun i => (l i+u i)/2) - (\u2211 i, (u i-l i)^2*M i)/24) \u2264\n      \u222b t in Icc l u, f t :=",
+          "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+        }
+      ],
+      "root_scope": "Root 2026-11-24 directed explicit original Fin n / Fin 5 volume product grouping and constant Real codomain annotation; original malformed parse not claimed kernel equivalent.",
+      "old_unparsed_or_misgrouped_type_kernel_equivalence_not_claimed": true,
+      "same_original_geometry_hypotheses_side_lengths_derivatives_and_1_over_24_budget": true,
+      "complete_closedBox_definition_raw_unchanged": true
+    }
+  ],
+  "old_false_internal_statement_not_claimed_kernel_equal_to_new_bound": false,
+  "old_unparsed_or_misgrouped_statement_not_claimed_kernel_equivalent": true,
+  "all_original_geometry_and_explicit_derivative_hypotheses_and_1_over_24_budget_preserved": true,
+  "candidate_source_byte_exact_preserved_at_initial_adoption": true,
+  "candidate_source_byte_exact_preserved_current": true,
+  "proof_revisions": [
+    {
+      "preimage_sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69",
+      "postimage_sha256": "e42ba5083e689ee4e1e086c1b8702274ff1de148033ba0e2ca82a9bc3e9f7634",
+      "details": {
+        "candidate": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api-v2/candidate.lean",
+        "candidate_sha256": "e42ba5083e689ee4e1e086c1b8702274ff1de148033ba0e2ca82a9bc3e9f7634",
+        "independent_review": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api-v2/INDEPENDENT_REVIEW.json",
+        "independent_review_sha256": "a781e43c5fbc49dd54eb8e3e86045f5e93e8574fb0218d6d20c62d40de54f6d6",
+        "only_previously_failed_module_retried": true,
+        "all_other_six_successful_normal_kernel_stages_reused_without_rerun": true,
+        "all_current_headers_definitions_data_math_hypotheses_and_budget_raw_unchanged": true,
+        "prior_root_approved_volume_codomain_and_Nat_factorial_exceptions_retained_without_new_exception": true
+      },
+      "prior_failed_attempt": "attempt-1",
+      "adopted_utc": "2026-11-24T01:07:01.125781+00:00",
+      "main_synced_same_preimage": false
+    }
+  ],
+  "current_approved_candidate_source": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api-v2/candidate.lean",
+  "current_approved_candidate_sha256": "e42ba5083e689ee4e1e086c1b8702274ff1de148033ba0e2ca82a9bc3e9f7634"
+}

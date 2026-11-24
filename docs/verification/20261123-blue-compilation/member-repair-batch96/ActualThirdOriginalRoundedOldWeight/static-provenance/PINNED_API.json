@@ -1,0 +1,102 @@
+{
+  "schema": "four_existing_published_proofs_current_API_binding_v1",
+  "sources": [
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/ActualThirdOriginalRoundedNewOperations.lean",
+        "bytes": 7456,
+        "sha256": "c5763c8ddfe5754997a1bc98f16a26e808149f8d578a7be6ef75b089630dc63f"
+      },
+      "start_line": 10,
+      "end_line": 21,
+      "role": "Original IV lo/hi, Encloses and up(n,d)=-((-n)/d); no sign restriction on n.",
+      "raw_excerpt": "structure IV where\n  lo : ℤ\n  hi : ℤ\n\ndef Encloses (v : IV) (x : ℝ) : Prop := value v.lo≤x ∧ x≤value v.hi\n\ndef up (a b : ℤ) : ℤ := -((-a)/b)\n\ndef ofReal (x : ℝ) : IV := ⟨⌊x*(P160:ℝ)⌋,-⌊(-x)*(P160:ℝ)⌋⟩\n\ndef sub (v w : IV) : IV := ⟨v.lo-w.hi,v.hi-w.lo⟩\n\n",
+      "excerpt_sha256": "63b431c1fb09b1c90c7d9d6df294a2e0798ab2dd53584ebda768ce509fddaca3"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/ActualThirdOriginalFixedpointClippedChord.lean",
+        "bytes": 5871,
+        "sha256": "2946c73ba42798c1149781974194d6f0a08b3133f1e54012beba9fb21141e386"
+      },
+      "start_line": 11,
+      "end_line": 16,
+      "role": "Original P160=2^160 and value(z)=z/P160.",
+      "raw_excerpt": "def P160 : ℤ := 2^160\n\ndef value (z : ℤ) : ℝ := (z:ℝ)/(P160:ℝ)\n\ndef clippedLo (l : ℤ) : ℤ := max 0 l\n\n",
+      "excerpt_sha256": "56f6d89b41fae57491c76155aeee43fc55f94d937cee68def85fe284f99515b3"
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/ActualThirdOriginalRationalQuery.lean",
+        "bytes": 24672,
+        "sha256": "d1a354a6d04f4c4e4f5560b25255f4d720cbbb50178b22eb0b277f9d5399b3e4"
+      },
+      "start_line": 20,
+      "end_line": 30,
+      "role": "Original rational floor/ceil by explicitly cast integer denominator, valid for all signed x and d>0.",
+      "raw_excerpt": "theorem query_floor_div_literal (x d : ℤ) (hd : 0 < d) :\n    ⌊(x : ℚ)/(d : ℚ)⌋ = x/d := by\n  simpa using Int.floor_div_cast_of_nonneg (k := ℚ) hd.le (x : ℚ)\n\ntheorem query_ceil_div_literal (x d : ℤ) (hd : 0 < d) :\n    ⌈(x : ℚ)/(d : ℚ)⌉ = -(-x/d) := by\n  have hneg : ⌈(x : ℚ)/(d : ℚ)⌉ = -⌊-((x : ℚ)/(d : ℚ))⌋ := by\n    have h := Int.floor_neg (a := (x : ℚ)/(d : ℚ))\n    omega\n  rw [hneg, show -((x : ℚ)/(d : ℚ)) = ((-x : ℤ) : ℚ)/(d : ℚ) by simp only [Int.cast_neg, neg_div],\n    query_floor_div_literal (-x) d hd]\n",
+      "excerpt_sha256": "e4bb91873c91496ddea6fc1f1e3c32cc4604be4d947f435d53cdc8a334546583"
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Mul.lean",
+        "bytes": 29294,
+        "sha256": "9eaf8d222c347ea647939daa68fac11edeb7c2572719246ce03d43cb04c94b44"
+      },
+      "start_line": 258,
+      "end_line": 270,
+      "role": "@[to_fun] on HasDerivAt.mul generates HasDerivAt.fun_mul with same derivative and explicit pointwise product.",
+      "raw_excerpt": "  [NormedAlgebra 𝕜 𝔸] {c d : 𝕜 → 𝔸} {c' d' : 𝔸} {u v : 𝕜 → 𝕜'}\n\n@[to_fun]\ntheorem HasDerivWithinAt.mul (hc : HasDerivWithinAt c c' s x) (hd : HasDerivWithinAt d d' s x) :\n    HasDerivWithinAt (c * d) (c' * d x + c x * d') s x := by\n  simpa [add_comm] using (HasFDerivWithinAt.mul' hc hd).hasDerivWithinAt\n\n@[to_fun]\ntheorem HasDerivAt.mul (hc : HasDerivAt c c' x) (hd : HasDerivAt d d' x) :\n    HasDerivAt (c * d) (c' * d x + c x * d') x := by\n  rw [← hasDerivWithinAt_univ] at *\n  exact HasDerivWithinAt.mul hc hd\n\n",
+      "excerpt_sha256": "1cc4fcc9c901ba86870c9ff39e3e4e99d6a448c79114766caeef4d195867659c"
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Tactic/ToFun.lean",
+        "bytes": 3249,
+        "sha256": "f48ae3ad95e86b8778054cc3fea7dc582ec2b495d16c529ad1d46a882cc879f2"
+      },
+      "start_line": 13,
+      "end_line": 39,
+      "role": "Actual attribute naming and eta-expansion contract for generated fun_mul.",
+      "raw_excerpt": "# The `to_fun` attribute\n\nAdding `@[to_fun]` to a lemma named `foo` creates a new lemma named `fun_foo`, which is obtained by\nrunning `pull fun _ ↦ _` on the type of `F`. This can be useful for generating the applied form\nof a continuity lemma from the unapplied form.\n-/\n\nmeta section\n\nopen Lean Meta Elab Tactic\nnamespace Mathlib.Tactic\n\n/--\nGenerate an eta-expanded version of a lemma. Adding `@[to_fun]` to a lemma written in \"point-free\"\nform, e.g.\n```\ntheorem Differentiable.mul (hf : Differentiable 𝕜 f) (hg : Differentiable 𝕜 g) :\n    Differentiable 𝕜 (f * g)\n```\nwill generate a new lemma `Differentiable.fun_mul` with conclusion\n`Differentiable 𝕜 fun x => f x * g x`.\n\nYou can specify the name of the new declaration manually, as in `@[to_fun Differentiable.fun_mul]`.\nIf you do so, the newly generated name is namespaced to match the original declaration's name:\ntagging `Foo.bar` with `to_fun baz` generates `Foo.baz`;\ntagging `Foo.Bar.baz` with `Bars.baz` generates `Foo.Bars.baz`, etc.\n\n",
+      "excerpt_sha256": "b1854cdf7770791a3d4c7fc9abc29a88b23ac22d8d5797b77fced4dfb07f779b"
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Pi/Defs.lean",
+        "bytes": 4694,
+        "sha256": "79c1a26611ae1d19d22b47b0b109eb02ff5502545b55e7ad96b2a9164622a89c"
+      },
+      "start_line": 64,
+      "end_line": 72,
+      "role": "Pi.mul_apply exposes pointwise multiplication without any new mathematical assumption.",
+      "raw_excerpt": "variable [∀ i, Mul (M i)]\n\n@[to_additive]\ninstance instMul : Mul (∀ i, M i) where mul f g i := f i * g i\n\n@[to_additive (attr := simp)]\nlemma mul_apply (f g : ∀ i, M i) (i : ι) : (f * g) i = f i * g i := rfl\n\n@[to_additive (attr := push ←)]\n",
+      "excerpt_sha256": "59d8110cc4ac3cd067246f0369cf1d04e07e833788dd88876466154c5a11cb2e"
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/Floor/Ring.lean",
+        "bytes": 32255,
+        "sha256": "f6a8977a677b89759b7071a38710a5a56a92970a3d93820344bfd1d8a21cacb2"
+      },
+      "start_line": 283,
+      "end_line": 294,
+      "role": "Current Int.floor_div_cast_of_nonneg signature retains positive divisor via hd.le, including signed numerator.",
+      "raw_excerpt": "\nsection LinearOrderedField\nvariable {k : Type*} [Field k] [LinearOrder k] [IsOrderedRing k] [FloorRing k] {a b : k}\n\ntheorem floor_div_cast_of_nonneg {n : ℤ} (hn : 0 ≤ n) (a : k) : ⌊a / n⌋ = ⌊a⌋ / n := by\n  obtain rfl | hn := hn.eq_or_lt\n  · simp\n  nth_rw 2 [← div_mul_cancel₀ (a := a) (ne_of_gt (Int.cast_pos.mpr hn))]\n  rw [mul_cast_floor_div_cancel_of_pos hn]\n\ntheorem floor_div_natCast (a : k) (n : ℕ) : ⌊a / n⌋ = ⌊a⌋ / n := by\n  simpa using floor_div_cast_of_nonneg n.cast_nonneg a\n",
+      "excerpt_sha256": "4329f0e9c7ac367776cb57ed390f599d8530ffefb880d97ebe3881913c140a8b"
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Order/Floor/Defs.lean",
+        "bytes": 13071,
+        "sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad"
+      },
+      "start_line": 297,
+      "end_line": 326,
+      "role": "Int.floor_le and Int.le_ceil do not require a nonnegative real/rational numerator.",
+      "raw_excerpt": "theorem floor_lt : ⌊a⌋ < z ↔ a < z :=\n  lt_iff_lt_of_le_iff_le le_floor\n\n@[bound]\ntheorem floor_le (a : α) : (⌊a⌋ : α) ≤ a :=\n  gc_coe_floor.l_u_le a\n\ntheorem floor_le_iff : ⌊a⌋ ≤ z ↔ a < z + 1 := by rw [← lt_add_one_iff, floor_lt]; norm_cast\n\ntheorem lt_floor_iff : z < ⌊a⌋ ↔ z + 1 ≤ a := by rw [← add_one_le_iff, le_floor]; norm_cast\n\ntheorem floor_nonneg : 0 ≤ ⌊a⌋ ↔ 0 ≤ a := by rw [le_floor, Int.cast_zero]\n\ntheorem floor_lt_zero : ⌊a⌋ < 0 ↔ a < 0 := by rw [floor_lt, Int.cast_zero]\n\n/-! #### Ceil -/\n\ntheorem gc_ceil_coe : GaloisConnection ceil ((↑) : ℤ → α) :=\n  FloorRing.gc_ceil_coe\n\ntheorem ceil_le : ⌈a⌉ ≤ z ↔ a ≤ z :=\n  gc_ceil_coe a z\n\ntheorem lt_ceil : z < ⌈a⌉ ↔ (z : α) < a :=\n  lt_iff_lt_of_le_iff_le ceil_le\n\n@[bound]\ntheorem le_ceil (a : α) : a ≤ ⌈a⌉ :=\n  gc_ceil_coe.le_u_l a\n\n",
+      "excerpt_sha256": "ef845bb272b7c57fe103b181bdaf63c06d2751f097723a6f73b5b48c213574e3"
+    }
+  ],
+  "no_elaboration_of_candidates_or_generated_API_declarations_performed": true
+}

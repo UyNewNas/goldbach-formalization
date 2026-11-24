@@ -1,0 +1,52 @@
+{
+  "schema": "taylor_five_dimensional_actual_API_and_original_volume_expression_recovery_v1",
+  "author": "/root/ascending14_api",
+  "created_utc": "2026-11-24T00:20:34.099069+00:00",
+  "status": "ISOLATED_SOURCE_ONLY_UNCOMPILED_REQUIRES_ROOT_EXPRESSION_SCOPE_GATE_NONAUTHOR_REVIEW_AND_OWNER_VALIDATION",
+  "module": "ImbalancedChen.P5OriginalTaylorFiveDimensionalMidpoint",
+  "original_runtime_source": "/workspace/blue-member-build/ImbalancedChen/P5OriginalTaylorFiveDimensionalMidpoint.lean",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api/baseline.lean",
+    "bytes": 9409,
+    "sha256": "9080979ffd6595b08551da3955ea32566cc64fdb11b7f4b869cd9e5563d76eb1"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-taylor-five-dimensional-midpoint-api/candidate.lean",
+    "bytes": 9708,
+    "sha256": "098f2e5162a61a3ce879e10aa9c5db7aeaa3ede8d947d5571b3ae98964a00c69"
+  },
+  "headers_total": 9,
+  "theorem_headers_total": 8,
+  "definitions_total": 1,
+  "header_expression_exceptions": [
+    {
+      "name": "update_cons_succ",
+      "complete_header_before": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t) i.succ x = Fin.cons a (Function.update t i x) :=",
+      "complete_header_after": "private theorem update_cons_succ {n : ℕ} (a x : ℝ) (t : Fin n → ℝ) (i : Fin n) :\n    Function.update (Fin.cons a t : Fin (n+1) → ℝ) i.succ x =\n      Fin.cons a (Function.update t i x) :=",
+      "exception": "Explicit original constant Real codomain"
+    },
+    {
+      "name": "successive_midpoints",
+      "complete_header_before": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i, u i-l i) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+      "complete_header_after": "private theorem successive_midpoints (n : ℕ) (l u e : Fin n → ℝ)\n    (f : (Fin n → ℝ) → ℝ) (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (closedBox l u))\n    (haxis : ∀ t ∈ closedBox l u, ∀ i,\n      (u i-l i) * (f (Function.update t i ((l i+u i)/2))-e i) ≤\n        ∫ x in Icc (l i) (u i), f (Function.update t i x)) :\n    (∏ i : Fin n, (u i-l i)) * (f (fun i => (l i+u i)/2)-∑ i, e i) ≤\n      ∫ t in closedBox l u, f t :=",
+      "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+    },
+    {
+      "name": "five_dimensional_midpoint_lower",
+      "complete_header_before": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i, u i-l i) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+      "complete_header_after": "theorem five_dimensional_midpoint_lower\n    (l u M : Fin 5 → ℝ) (f : (Fin 5 → ℝ) → ℝ)\n    (f' f'' : (Fin 5 → ℝ) → Fin 5 → ℝ → ℝ)\n    (hlu : ∀ i, l i ≤ u i)\n    (hc : ContinuousOn f (Icc l u))\n    (hd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (fun y => f (Function.update t i y)) (f' t i x) x)\n    (hdd : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i),\n      HasDerivAt (f' t i) (f'' t i x) x)\n    (hcc : ∀ t ∈ Icc l u, ∀ i, ContinuousOn (f'' t i) (Icc (l i) (u i)))\n    (hM : ∀ t ∈ Icc l u, ∀ i, ∀ x ∈ Icc (l i) (u i), |f'' t i x| ≤ M i) :\n    (∏ i : Fin 5, (u i-l i)) *\n        (f (fun i => (l i+u i)/2) - (∑ i, (u i-l i)^2*M i)/24) ≤\n      ∫ t in Icc l u, f t :=",
+      "exception": "Original side-length product body parentheses restoring volume; old wrong-parse kernel type equivalence not claimed"
+    }
+  ],
+  "six_other_headers_and_complete_closedBox_definition_raw_preserved": true,
+  "all_original_binders_quantifier_order_geometric_derivative_hypotheses_numeric_data_1_over_24_and_budget_preserved": true,
+  "no_new_imports_declarations_or_target_hypotheses": true,
+  "new_target_oracle_floor_algorithm_or_budget_change": false,
+  "only_three_header_expressions_and_six_proof_local_API_replacements": true,
+  "whole_reverse_exact": true,
+  "runtime_still_actual_pre": true,
+  "Lean_Lake_checker_audit_producer_calls": 0,
+  "main_runtime_queue_cache_or_old_evidence_mutations": 0,
+  "no_current_compilation_or_P1_completion_claim": true,
+  "root_approved_original_volume_and_codomain_expression_scope": "Root 2026-11-24 directed explicit original Fin n / Fin 5 volume product grouping and constant Real codomain annotation; original malformed parse not claimed kernel equivalent."
+}

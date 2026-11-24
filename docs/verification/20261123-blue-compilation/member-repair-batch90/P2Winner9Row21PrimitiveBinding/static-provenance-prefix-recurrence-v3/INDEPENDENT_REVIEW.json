@@ -1,0 +1,214 @@
+{
+  "schema": "independent_row21_exact_prefix_recurrence_v2_static_gate_v1",
+  "reviewer": "/root/member_current_repairs",
+  "source_author": "/root/ascending14_api",
+  "reviewed_utc": "2026-11-24T02:59:11.766593+00:00",
+  "conclusion": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_READY_FOR_OWNER_FAILED_ROW21_VALIDATION",
+  "findings": [],
+  "source_selection_sha256": "e69f01b17b7ba8232c0e6fb5cf62124c355a0a0d5ae61fbe2224f26070ab94d5",
+  "input_manifest_sha256": "d098913606da07673973896991f32078535190d1f038947cb4268f2e073e129e",
+  "input_files_verified": 28,
+  "module": "ImbalancedChen.P2Winner9Row21PrimitiveBinding",
+  "baseline_sha256": "361bf5e839084b1d5497429b60830fa2dbf0800f04b2c2b73b054d75d3f12603",
+  "candidate_sha256": "e6bf6d570f85e0e03f26ef3568736c5b0552ed50fad85dc0b30cdf055ebb16b0",
+  "original_headers": 30,
+  "original_definitions": 26,
+  "original_private_antidiagonal_bijection_header_and_body_raw_unchanged": true,
+  "new_private_definitions": 2,
+  "new_private_theorems": 5,
+  "total_candidate_headers": 37,
+  "new_private_header_inventory": [
+    {
+      "name": "exactPrefixH",
+      "kind": "def",
+      "complete_raw_header": "private def exactPrefixH : List Nat → Nat → Nat",
+      "sha256": "6a305eeb42f7b67192e55450d3aefcfdd92454d5bfc8d2165aa5edfec292aef3"
+    },
+    {
+      "name": "exactPrefixH_zero",
+      "kind": "theorem",
+      "complete_raw_header": "private theorem exactPrefixH_zero (as : List Nat) : exactPrefixH as 0 = 1 :=",
+      "sha256": "d3c5e2c0f0564f337d2f496e5d8773946c24437af9b5c583b4c41bdd39b9914f"
+    },
+    {
+      "name": "exactPrefixH_cons_succ",
+      "kind": "theorem",
+      "complete_raw_header": "private theorem exactPrefixH_cons_succ (a : Nat) (as : List Nat) (k : Nat) :\n    exactPrefixH (a :: as) (k + 1) =\n      exactPrefixH as (k + 1) + a * exactPrefixH (a :: as) k :=",
+      "sha256": "48cf591b6c21c4c267dcba1f4df34342afc8702b0534487ee4dfe3d83935bcb0"
+    },
+    {
+      "name": "antidiagonalTuple_sum_eq_prefixH",
+      "kind": "theorem",
+      "complete_raw_header": "private theorem antidiagonalTuple_sum_eq_prefixH {n : Nat}\n    (nodes : Fin n → Nat) (k : Nat) :\n    ((List.Nat.antidiagonalTuple n k).map\n      (fun α => ∏ i : Fin n, nodes i ^ α i)).sum =\n        exactPrefixH (List.ofFn nodes) k :=",
+      "sha256": "c52a0478816aff139d51212569aa063edd08057de43256cd51474ce507ce3f5c"
+    },
+    {
+      "name": "exactPrefixRec",
+      "kind": "def",
+      "complete_raw_header": "private def exactPrefixRec : List Nat → Nat → Nat",
+      "sha256": "cdb6ebab46b6613101530a2af7edc3bac15251ac58628cd8d6115c1c813c1d85"
+    },
+    {
+      "name": "exactPrefixH_eq_rec",
+      "kind": "theorem",
+      "complete_raw_header": "private theorem exactPrefixH_eq_rec (as : List Nat) (k : Nat) :\n    exactPrefixH as k = exactPrefixRec as k :=",
+      "sha256": "1ef12258f33dfa70e6079d6ff3e1f978f72e0943498d7eed5df7cef5c5e506a0"
+    },
+    {
+      "name": "homogeneous_eq_exact_prefixRec",
+      "kind": "theorem",
+      "complete_raw_header": "private theorem homogeneous_eq_exact_prefixRec (nodes : Fin 9 → Nat) (k : Nat) :\n    homogeneous nodes k = exactPrefixRec (List.ofFn nodes) k :=",
+      "sha256": "6cda1fa1b79268614597691be4b6d7b3f17163ed269b2add873ab2dd12486b7f"
+    }
+  ],
+  "all_existing_complete_headers_26_full_definition_bodies_SimplexData_8computational_5proof_fields_and_numeric_data_raw_same": true,
+  "only_original_final_floor_theorem_body_changed": true,
+  "whole_forward_reverse_byte_exact": true,
+  "new_import": "Mathlib.Algebra.BigOperators.Ring.List",
+  "proof_assessment": [
+    {
+      "lemma": "exactPrefixH and exactPrefixH_zero",
+      "assessment": "The private Nat interface is the original complete-homogeneous coefficient convolution over the already proved List.Nat.antidiagonal, with empty-list coefficients1 atdegree0 and0 otherwise. Every recursive call decreases the node list, including calls under map; no node distinctness/nonzero, sign, degree cutoff or row premise is added. Zero degree is the unique allzero exponent choice on every node list."
+    },
+    {
+      "lemma": "exactPrefixH_cons_succ",
+      "assessment": "Existing antidiagonal_succ partitions alldegree(k+1)pairs exactly into(0,k+1) and the image(p1+1,p2) ofdegree(k)pairs. The former contributes shorterH(k+1); pow_succ and existing sum_map_mul_left factor a from every latter term. These pieces are disjoint by the first exponent and jointly exhaustive, with unchanged list multiplicity/order. ring closes only multiplication association/commutation of Nat."
+    },
+    {
+      "lemma": "antidiagonalTuple_sum_eq_prefixH",
+      "assessment": "Induction on node count follows the existing library tuple recursion: first exponent and remaining-degree pair, then a tail tuple. Fin.prod_univ_succ factors the same head power, map_flatMap/map_map and the real flatMap=flatten(map) definition preserve every term, sum_flatten and sum_map_mul_left expose the induction hypothesis for the tail node list. It is a reindexing of the same exponent tuples for all n,k, including n=0; no additional moment law or tuple enumerator is assumed."
+    },
+    {
+      "lemma": "exactPrefixRec and exactPrefixH_eq_rec",
+      "assessment": "exactPrefixRec structurally recurses on the node list, returning a Nat.rec on degree with base1 and successor shorterRec(k+1)+a*previous. Calls to shorterRec always decrease the list; Nat.rec decreases degree through its built-in recursor. The double list/degree induction uses precisely the zero and Pascal identities above. Every degree and every arbitrary Nat node, includingzero/repeats, remains allowed; no memoization or numeric floor is a premise."
+    },
+    {
+      "lemma": "homogeneous_eq_exact_prefixRec",
+      "assessment": "The unchanged old bounded-Fin↔antidiagonalTuple bijection first connects original homogeneous to the existing finite tuple sum. Finset tuple sum→List tuple sum is definitionally the same library quotient/list representation. The newly proved tuple/convolution and convolution/Nat.rec equalities then give the exact original homogeneous value. No original public total, homogeneous or floor definition is replaced."
+    },
+    {
+      "proof": "row21_exact_rounding_proposal",
+      "assessment": "The two original T10 Q80 integer inequalities alone rewrite homogeneous to this proved prefix representation, retaining original source total/add/t10/t10Numerator/z/weightedMoment and decide+kernel. The two original Jensen Q96 inequalities use their original direct decide+kernel, avoiding an irrelevant no-progress simp. Both positive-denominator fields remain original, and all four floor inequalities stay mandatory."
+    }
+  ],
+  "API_assessment": "Current List.antidiagonal_succ, map_congr_left, map_flatMap, sum_map_mul_left, List.flatMap definition, sum_flatten and Fin.prod_univ_succ signatures match the proof directions and index order. Existing completeH/completeH_cons_succ source fragment is reused in its necessary private Nat interface; that unverified analytic module is neither imported nor given compiled-supplier credit. The old degree-one proof and old tuple bijection are not duplicated.",
+  "additional_actual_API_binding": {
+    "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Prelude.lean",
+    "source_sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+    "start_line": 3178,
+    "end_line": 3180,
+    "raw_excerpt": "* `[\"red\", \"blue\"].flatMap String.toList = ['r', 'e', 'd', 'b', 'l', 'u', 'e']`\n-/\n@[inline, implicit_reducible] noncomputable def List.flatMap {α : Type u} {β : Type v} (b : α → List β) (as : List α) : List β := flatten (map b as)\n",
+    "excerpt_sha256": "1fe5ecb29dc7be16ea0f1d171f2373f9a4433684cf5b9e7d7cd7df3b762a2fba"
+  },
+  "pinned_API": {
+    "metadata_sha256": "82297cdf1c22b9508db62cf27b7d233d205c891a8416fb0bf7c54b10ac230cd1",
+    "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "all_twelve_current_snapshots_byte_exact": [
+      {
+        "original_path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/Tuple/NatAntidiagonal.lean",
+        "packet": "references/NatAntidiagonalTuple.lean",
+        "sha256": "fb7ea2d8714ecf4411bf5a32fad378205ad4abd1a69314ce5ba17be343e4773d",
+        "bytes": 8631
+      },
+      {
+        "original_path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/List/NatAntidiagonal.lean",
+        "packet": "references/ListNatAntidiagonal.lean",
+        "sha256": "ed3b3260efdceb94add55e4b84e3ce9121942c748c2422fff13117b79a36312c",
+        "bytes": 2797
+      },
+      {
+        "original_path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Ring/List.lean",
+        "packet": "references/RingList.lean",
+        "sha256": "09294b112339b0d3fd08d5f18b7a5e22522431cb59885a63a560d0547d9abc50",
+        "bytes": 3608
+      },
+      {
+        "original_path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Group/List/Defs.lean",
+        "packet": "references/ListBigOperatorsDefs.lean",
+        "sha256": "766cfa60d8424b97370517fbe4052c65a8860f3875811bc50d2d484c04b91a44",
+        "bytes": 2990
+      },
+      {
+        "original_path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/Lemmas.lean",
+        "packet": "references/LeanListLemmas.lean",
+        "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac",
+        "bytes": 152635
+      },
+      {
+        "original_path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Fin.lean",
+        "packet": "references/FinBigOperators.lean",
+        "sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+        "bytes": 31770
+      },
+      {
+        "original_path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9CurvatureFullExactAssembly.lean",
+        "packet": "references/CurvatureFullExactAssembly.lean",
+        "sha256": "2c959785d7b0057a90b84ba7ea129c460bc817746c0ae9e84a621ea71477c4fa",
+        "bytes": 6598
+      },
+      {
+        "original_path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9CurvatureExactMomentFloor.lean",
+        "packet": "references/CurvatureExactMomentFloor.lean",
+        "sha256": "3420f1d550dba9f25a5e9eb4bf5ea2089b7eaa8ca525d9ec5c4bf9f7b9ad1c13",
+        "bytes": 5554
+      },
+      {
+        "original_path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9Row21RawVertexData.lean",
+        "packet": "references/Row21RawVertexData.lean",
+        "sha256": "88452d355d20d97a94c2fbb14c3961eac49b3ee16caeb3337b9be2fd49c6bca2",
+        "bytes": 5208
+      },
+      {
+        "original_path": "/workspace/blue-member-build/ImbalancedChen/P2OriginalSaving19HigherMoments.lean",
+        "packet": "references/ExistingSaving19HigherMoments.lean",
+        "sha256": "59ccbb110e9aceac63a5bb7030b49e0f1103993bc6b2f6fb2b49a80391b2d41e",
+        "bytes": 20641
+      },
+      {
+        "original_path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Lean/Elab/Tactic/Decide.lean",
+        "packet": "references/LeanDecide.lean",
+        "sha256": "99e84ce67778157e77d7261aa25b64ed72da16e9d1f60031cf2aa26f5ea6ee68",
+        "bytes": 9135
+      },
+      {
+        "original_path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+        "packet": "references/numerical-appendix.tex",
+        "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+        "bytes": 42662
+      }
+    ]
+  },
+  "prior_source_gate": {
+    "sha256": "e8174c27a6b0bdf58f1241a8ee020923a5b219b1e6bfa3bcd44a868adeac4d62",
+    "source_scope_reused": true,
+    "no_inference_old_private_bijection_or_module_kernel_pass": true
+  },
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "numerical_appendix_full_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "start_line": 177,
+    "end_line": 195,
+    "exact_original_moment_excerpt_sha256": "44c8638ae373a1ce65f9ac61fc38225744dfd89e2a41bb5b544c3f66271a5186"
+  },
+  "actual": {
+    "full_log_sha256": "3721d4fe1aa7e9548a6d2ad011cd3826c4d1fe358779801e2cc99bbe84d8731d",
+    "bytes": 8133,
+    "command_sha256": "e2d3e70668be0ce55eb4cb43dcf880995936e058732663a523c8f5b75e6a5b0e",
+    "elapsed_seconds": 245.6197098679986,
+    "exit_code": 1,
+    "all_actual_error_header_lines": [
+      197,
+      197,
+      196,
+      196
+    ],
+    "Q80": "Two decide didnotreduce diagnostics, not isFalse witnesses; underlying kernel exception is not printed and is not inferred.",
+    "Q96": "Two simp made no progress diagnostics; actual original decide was not reached in those branches.",
+    "no_OOM_timeout_false_floor_or_resource_improvement_claim": true
+  },
+  "mathematical_boundary": "Original72coordinates,9vertices/10factors, all primitive gap/deviation/exactJensen data, observedQ80/Q96 literals and actual total/floor owner definitions are raw unchanged. No row data, desiredfloor, Source, positivity/nonzero/distinctness, momentlaw, oracle, native_decide, newenumerator or budget premise is added. New private representations are linked by universal exact finite identities and used only in proofs.",
+  "no_Lean_Lake_compiler_kernel_type_axiom_numeric_or_stock_invocations": true,
+  "no_candidate_live_main_source_96_other_successful_sources_Row21_guard_queue_cache_or_oldrecord_mutation": true,
+  "resources_and_new_kernel_owned_acceptance_remain_unknown": true,
+  "next_step": "Unique owner actual normal on only failed Row21 at exacte6bf source under existing guard, then kernel/full-owned audit including both newprivate definitions, five newprivate theorems, oldbijection and generated constants. Other seven greenbatch90 targets and unrelated96 results remain untouched."
+}

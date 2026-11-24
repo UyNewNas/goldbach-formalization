@@ -1,0 +1,52 @@
+--- baseline/ImbalancedChen/P2LowerCanonicalRetainedTrace.lean
++++ candidate/ImbalancedChen/P2LowerCanonicalRetainedTrace.lean
+@@ -19,7 +19,7 @@
+ namespace ImbalancedChen.P2LowerCanonicalRetainedTrace
+ 
+ noncomputable section
+-open scoped Classical BigOperators
++open scoped Classical BigOperators List
+ open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
+ open P2LowerIntegerRetainedSupport P2LowerFiniteCellRounding
+ 
+@@ -38,7 +38,7 @@
+ /-- Every divisor in the COMPLETE actual rough carrier constructs its
+ canonical chronological subword. No retained-support premise is needed. -/
+ theorem canonical_subword_of_universe (N cap : ℕ) (z0 z : ℝ) {d : ℕ}
+-    (hd : d∈universe N cap z0 z) :
++    (hd : d∈«universe» N cap z0 z) :
+     d.primeFactorsList.reverse <+ roughPrimeUniverse N cap z0 z ∧
+       d.primeFactorsList.reverse.prod=d := by
+   let carrier:=roughPrimeUniverse N cap z0 z
+@@ -46,7 +46,8 @@
+   have hcarrier0 : carrier.prod≠0 := (roughProduct_squarefree N cap z0 z).ne_zero
+   have hpf : carrier.prod.primeFactors=carrier.toFinset := by
+     have heq : (∏p∈carrier.toFinset,p)=carrier.prod := by
+-      simpa using List.prod_toFinset (fun p : ℕ=>p) (roughPrimeUniverse_nodup N cap z0 z)
++      simpa only [carrier, List.map_id_fun', id_eq] using
++        List.prod_toFinset (fun p : ℕ=>p) (roughPrimeUniverse_nodup N cap z0 z)
+     rw [←heq]
+     exact Nat.primeFactors_prod (fun p hp=>mem_roughPrimeUniverse_prime (List.mem_toFinset.mp hp))
+   have hsubset : d.primeFactors⊆carrier.toFinset := by
+@@ -75,7 +76,7 @@
+     (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)
+     (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :
+     d∈rawSupport (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) ↔
+-      d∈universe N cap z0 ((N:ℝ)^w) ∧
++      d∈«universe» N cap z0 ((N:ℝ)^w) ∧
+         retainEven P a b seedCap N d.primeFactorsList=true := by
+   constructor
+   · intro hd
+@@ -96,9 +97,10 @@
+     (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)
+     (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :
+     raw (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) d=
+-      if d∈universe N cap z0 ((N:ℝ)^w) ∧ retainEven P a b seedCap N d.primeFactorsList=true
++      if d∈«universe» N cap z0 ((N:ℝ)^w) ∧ retainEven P a b seedCap N d.primeFactorsList=true
+       then (ArithmeticFunction.moebius d:ℝ) else 0 := by
+-  rw [raw_value,raw_support_iff_canonical_trace P a b seedCap hN cap z0 w hmargin d]
++  rw [raw_value]
++  simp only [raw_support_iff_canonical_trace P a b seedCap hN cap z0 w hmargin d]
+ 
+ end
+ end ImbalancedChen.P2LowerCanonicalRetainedTrace

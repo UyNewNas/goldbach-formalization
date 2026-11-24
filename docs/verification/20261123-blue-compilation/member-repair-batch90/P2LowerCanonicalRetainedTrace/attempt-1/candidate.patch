@@ -1,0 +1,38 @@
+--- baseline/ImbalancedChen/P2LowerCanonicalRetainedTrace.lean
++++ candidate/ImbalancedChen/P2LowerCanonicalRetainedTrace.lean
+@@ -19,7 +19,7 @@
+ namespace ImbalancedChen.P2LowerCanonicalRetainedTrace
+ 
+ noncomputable section
+-open scoped Classical BigOperators
++open scoped Classical BigOperators List
+ open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
+ open P2LowerIntegerRetainedSupport P2LowerFiniteCellRounding
+ 
+@@ -38,7 +38,7 @@
+ /-- Every divisor in the COMPLETE actual rough carrier constructs its
+ canonical chronological subword. No retained-support premise is needed. -/
+ theorem canonical_subword_of_universe (N cap : ℕ) (z0 z : ℝ) {d : ℕ}
+-    (hd : d∈universe N cap z0 z) :
++    (hd : d∈«universe» N cap z0 z) :
+     d.primeFactorsList.reverse <+ roughPrimeUniverse N cap z0 z ∧
+       d.primeFactorsList.reverse.prod=d := by
+   let carrier:=roughPrimeUniverse N cap z0 z
+@@ -75,7 +75,7 @@
+     (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)
+     (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :
+     d∈rawSupport (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) ↔
+-      d∈universe N cap z0 ((N:ℝ)^w) ∧
++      d∈«universe» N cap z0 ((N:ℝ)^w) ∧
+         retainEven P a b seedCap N d.primeFactorsList=true := by
+   constructor
+   · intro hd
+@@ -96,7 +96,7 @@
+     (a b seedCap : ℝ) {N : ℕ} (hN : 1<(N:ℝ)) (cap : ℕ)
+     (z0 w : ℝ) (hmargin : 2*w<seedCap) (d : ℕ) :
+     raw (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) d=
+-      if d∈universe N cap z0 ((N:ℝ)^w) ∧ retainEven P a b seedCap N d.primeFactorsList=true
++      if d∈«universe» N cap z0 ((N:ℝ)^w) ∧ retainEven P a b seedCap N d.primeFactorsList=true
+       then (ArithmeticFunction.moebius d:ℝ) else 0 := by
+   rw [raw_value,raw_support_iff_canonical_trace P a b seedCap hN cap z0 w hmargin d]
+ 

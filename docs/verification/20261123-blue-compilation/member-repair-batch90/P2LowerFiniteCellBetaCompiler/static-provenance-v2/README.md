@@ -1,0 +1,3 @@
+# LowerTrace / LowerBeta: actual proof API v2
+
+The prior quoted-name/List-scope candidate is the exact current failed pre in batch90. Three proof-only changes reuse original identity-map product, raw-support iff and small/rough factorization theorem APIs. All 14 complete parsed headers and both complete definitions are byte-identical; original numbers, hypotheses, algorithms and budgets remain. Both whole logs, exact failure slices and command receipts are bound. The complete deltas reverse exactly. This isolated packet is uncompiled pending a nonauthor static gate and sole owner actual validation.

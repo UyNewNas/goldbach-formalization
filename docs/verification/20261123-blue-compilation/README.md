@@ -328,3 +328,13 @@ Sixteen 两头恢复原表的实际 H248 全限定名，Structural 一头恢复�
 98 闭合原 k=1 的实际八维 simplex 混合期望与 frozen signed coefficient 的精确恒等式：由真实积分的 factorial sum，经四标签有限核和原卷积，得到原分母 `gapTotal * U * L² * (10*11*12)`，没有将解析 moment identity 当作前提。四标签有限事实用私有封闭 kernel 决定证明，有限和按原索引先逐点替换再提出常数；原公开声明、数据和预算保持，私有 `12.factorial` 的 Nat 语法恢复明确保留，不声称旧未解析类型相等。实际 normal 32.913 秒、kernel 36.156 秒、完整审计 7.289 秒均退出 0，29 个真实 owned 声明为 26 public、3 private，并包括原命名空间前缀之外的生成声明。
 
 98 的原 Member guard 首次真实失败与 v2 P6 guard 成功链分别保留；新成功全链均在同一原 P6 guard 下，没有拼接混合成功状态或重跑旧已绿模块。该恒等式是 P1 必需的实际供应者，P1 最终四出口与其余原始算术／分析义务仍须继续闭合。
+
+第九十、九十六批新增 16 个实际验收模块、365 个 owned 声明（271 public、94 private），目录累计 323 份已验源码后像。[90](member-repair-batch90/VALIDATION_RESULTS.json) 为 179／112／67，[96](member-repair-batch96/VALIDATION_RESULTS.json) 为 186／159／27。全部 16 次正常编译、16 次指定 kernel replay 及两次完整 owned 审计真实退出 0；最终非作者复核确认完整类型／AST／宇宙／标准三公理、动态声明清单及源码和 80 项主要产物稳定。发布没有重跑形式检查。
+
+90 保留原 lower trace／beta、winner／splice／remainder 和几何范围，恢复原 List／universe 的语法位置；Row21 将同一个原完全齐次有限和，经已证双射与原 prefix/Pascal 递推等价表示完成计算。原 total 算法、所有原数据与四个 floor 目标均保持，最终正常编译 17.837 秒、kernel 17.174 秒及组审计退出 0，没有使用 native_decide、目标数值 oracle 或增加预算。先前 did-not-reduce、无进展 simp 与私有 API 失败原样保留，不据它们判定 false floor 或 OOM。作者库存历史措辞补充原已在旧清单，随后到达的非作者绑定另外记录在最终复核新增清单，旧 PUB／FINAL 不改。
+
+96 包含五份既有完整修补后像、Taylor 与原 Sixth 两模块。Taylor 恢复原边长乘积与 Fin.cons 类型表达，修补同一积分／更新 API；Sixth 明确恢复原 Nat factorial 的语法，局部封闭有限值证明覆盖七个标签和四十九个有序对，再接原真实六维单纯形积分公式。原 1/24、6!／7!／8!、对角重数、所有假设、数据与最终目标保持；旧未解析类型不声称已有 kernel 相等。所有初次真实失败保留，仅失败源重试；七个既有成功源码／kernel 检查没有重复。
+
+[原 103 个实际失败的闭合集合核对](main-103-repair-completion/COMPLETED_ORIGINAL_103_FAILURE_REPAIR_ACCEPTANCE.json) 绑定各已验修补与当前源码，恰好覆盖上一轮 103 个失败模块。新的同六终点共享增量构建已单独启动；这些供应者验收不构成最终四个 P1 出口、全部原数值／分析义务或看板全部节点已完成的声明。完整 P1 继续保持未完成。
+
+本次另三份完整复用源码保留已验末尾空行，[EOF 核对](publication-20261124/SOURCE_EOF_PRESERVATION_323.json) 记录预期提示；其余默认空白检查通过，未改已验源码。

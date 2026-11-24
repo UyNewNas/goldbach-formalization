@@ -1,0 +1,23 @@
+{
+  "baseline_sha256": "a9f917ac50c2d9fa7db448a6b58e2da9cf814d268a61bb923233bd02290f9bf2",
+  "candidate_sha256": "66a76c3482eb658d79d761ba29cf227487d2d12a8a68a545bf3fb84b65548929",
+  "ordered_replacements": [
+    {
+      "before": "  rw [he, baryMoment_eq]\r\n  fin_cases i <;> norm_num [unitExponent, factorialProduct, List.ofFn_succ, List.ofFn_zero]",
+      "after": "  have hvalues : ∀ i : Fin 7,\r\n      (unitExponent i 0).factorial *\r\n          factorialProduct (List.ofFn (fun r : Fin 6 => unitExponent i r.succ)) = 1 ∧\r\n      unitExponent i 0 + (List.ofFn (fun r : Fin 6 => unitExponent i r.succ)).sum + 6 = 7 := by\r\n    decide +kernel\r\n  rw [he, baryMoment_eq, (hvalues i).1, (hvalues i).2]\r\n  norm_num",
+      "replacement_count": 1
+    },
+    {
+      "before": "theorem bary_second (i j : Fin 7) :\r\n    (∫ x in canonical, bary i x * bary j x) =\r\n      (1 + if i = j then 1 else 0) / ((8 : ℕ).factorial : ℝ) := by\r\n  classical\r\n",
+      "after": "theorem bary_second (i j : Fin 7) :\r\n    (∫ x in canonical, bary i x * bary j x) =\r\n      (1 + if i = j then 1 else 0) / ((8 : ℕ).factorial : ℝ) := by\r\n  have hvalues : ∀ i j : Fin 7,\r\n      (unitExponent i 0 + unitExponent j 0).factorial *\r\n          factorialProduct (List.ofFn\r\n            (fun r : Fin 6 => unitExponent i r.succ + unitExponent j r.succ)) =\r\n        1 + (if i = j then 1 else 0) ∧\r\n      (unitExponent i 0 + unitExponent j 0) +\r\n          (List.ofFn (fun r : Fin 6 => unitExponent i r.succ + unitExponent j r.succ)).sum + 6 = 8 := by\r\n    decide +kernel\r\n  classical\r\n",
+      "replacement_count": 1
+    },
+    {
+      "before": "  rw [he, baryMoment_eq]\r\n  fin_cases i <;> fin_cases j <;>\r\n    norm_num [unitExponent, factorialProduct, List.ofFn_succ, List.ofFn_zero]",
+      "after": "  rw [he, baryMoment_eq, (hvalues i j).1, (hvalues i j).2]\r\n  by_cases h : i = j <;> norm_num [h]",
+      "replacement_count": 1
+    }
+  ],
+  "whole_forward_and_reverse_exact": true,
+  "all_other_source_bytes_and_original_CRLF_preserved": true
+}

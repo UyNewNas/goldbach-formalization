@@ -1,0 +1,71 @@
+{
+  "module": "ImbalancedChen.ActualThirdOriginalStoredQueryAllBranches",
+  "counts": {
+    "full_source_commands": 5,
+    "public_source_commands": 5,
+    "private_source_commands": 0,
+    "theorems_including_private": 5,
+    "definitions": 0
+  },
+  "all_complete_headers": [
+    {
+      "name": "terminal_division_node_rounding",
+      "kind": "theorem",
+      "private": false,
+      "complete_before_raw_header": "theorem terminal_division_node_rounding (lo hi : ℤ) :\n    nodeValue (lo/12) ≤ nodeValue lo/12 ∧\n      nodeValue hi/12 ≤ nodeValue (-(-hi/12)) :=",
+      "complete_after_raw_header": "theorem terminal_division_node_rounding (lo hi : ℤ) :\n    nodeValue (lo/12) ≤ nodeValue lo/12 ∧\n      nodeValue hi/12 ≤ nodeValue (-(-hi/12)) :=",
+      "sha256": "42dff7e23744f1db61960d85fd7d1ca629054b11844ea2393b6ba1220907e9bf",
+      "exact": true
+    },
+    {
+      "name": "original_terminal_query_112bit_encloses",
+      "kind": "theorem",
+      "private": false,
+      "complete_before_raw_header": "theorem original_terminal_query_112bit_encloses (s : ℝ) (hs : 12 ≤ s) :\n    nodeValue ((originalFinalNodes 196608).Llo/12) ≤\n      actualExtendedThirdLowerFactor s ∧\n    actualExtendedThirdLowerFactor s ≤\n      nodeValue (-(-(originalFinalNodes 196608).Hhi/12)) :=",
+      "complete_after_raw_header": "theorem original_terminal_query_112bit_encloses (s : ℝ) (hs : 12 ≤ s) :\n    nodeValue ((originalFinalNodes 196608).Llo/12) ≤\n      actualExtendedThirdLowerFactor s ∧\n    actualExtendedThirdLowerFactor s ≤\n      nodeValue (-(-(originalFinalNodes 196608).Hhi/12)) :=",
+      "sha256": "5a752e47b5ce905b41b9683f76b514ee497528e5665005e824360850bd6b6469",
+      "exact": true
+    },
+    {
+      "name": "query160_scale_eq_nodeValue",
+      "kind": "theorem",
+      "private": false,
+      "complete_before_raw_header": "theorem query160_scale_eq_nodeValue (z : ℤ) :\n    ((z*2^48 : ℤ) : ℝ)/2^160=nodeValue z :=",
+      "complete_after_raw_header": "theorem query160_scale_eq_nodeValue (z : ℤ) :\n    ((z*2^48 : ℤ) : ℝ)/2^160=nodeValue z :=",
+      "sha256": "ec0992e6f42d0223f8a936bc3ea9401066a3848fa9f9e921073f140fd121776f",
+      "exact": true
+    },
+    {
+      "name": "CheckedBlockTable.query_encloses_all",
+      "kind": "theorem",
+      "private": false,
+      "complete_before_raw_header": "theorem CheckedBlockTable.query_encloses_all (T : CheckedBlockTable)\n    (a b : ℤ) (hb : 0<b) :\n    (readQueryLo160 (assembledRead T.blocks) a b : ℝ)/2^160 ≤\n      actualExtendedThirdLowerFactor ((a : ℝ)/(b : ℝ)) ∧\n    actualExtendedThirdLowerFactor ((a : ℝ)/(b : ℝ)) ≤\n      (readQueryHi160 (assembledRead T.blocks) a b : ℝ)/2^160 :=",
+      "complete_after_raw_header": "theorem CheckedBlockTable.query_encloses_all (T : CheckedBlockTable)\n    (a b : ℤ) (hb : 0<b) :\n    (readQueryLo160 (assembledRead T.blocks) a b : ℝ)/2^160 ≤\n      actualExtendedThirdLowerFactor ((a : ℝ)/(b : ℝ)) ∧\n    actualExtendedThirdLowerFactor ((a : ℝ)/(b : ℝ)) ≤\n      (readQueryHi160 (assembledRead T.blocks) a b : ℝ)/2^160 :=",
+      "sha256": "7713968eed3c2c35740e4efff1c2cccb0ca738158280506e5919ddd3b9d2b4e8",
+      "exact": true
+    },
+    {
+      "name": "CheckedBlockTable.rational_query_encloses_all",
+      "kind": "theorem",
+      "private": false,
+      "complete_before_raw_header": "theorem CheckedBlockTable.rational_query_encloses_all (T : CheckedBlockTable)\n    (q : ℚ) :\n    (readQueryLo160 (assembledRead T.blocks) q.num (q.den : ℤ) : ℝ)/2^160 ≤\n      actualExtendedThirdLowerFactor (q : ℝ) ∧\n    actualExtendedThirdLowerFactor (q : ℝ) ≤\n      (readQueryHi160 (assembledRead T.blocks) q.num (q.den : ℤ) : ℝ)/2^160 :=",
+      "complete_after_raw_header": "theorem CheckedBlockTable.rational_query_encloses_all (T : CheckedBlockTable)\n    (q : ℚ) :\n    (readQueryLo160 (assembledRead T.blocks) q.num (q.den : ℤ) : ℝ)/2^160 ≤\n      actualExtendedThirdLowerFactor (q : ℝ) ∧\n    actualExtendedThirdLowerFactor (q : ℝ) ≤\n      (readQueryHi160 (assembledRead T.blocks) q.num (q.den : ℤ) : ℝ)/2^160 :=",
+      "sha256": "d2d4a728354b1b951e47c38096fd9f8770020207a1e7d890c95538a72aeea82c",
+      "exact": true
+    }
+  ],
+  "all_complete_definition_regions": [],
+  "proof_delta_fragments": [
+    {
+      "proof": "terminal_division_node_rounding",
+      "before": "  have hloQ := Int.floor_le ((lo : ℚ)/12)\n  have hhiQ := Int.le_ceil ((hi : ℚ)/12)\n",
+      "after": "  have hloQ := Int.floor_le ((lo : ℚ)/((12 : ℤ) : ℚ))\n  have hhiQ := Int.le_ceil ((hi : ℚ)/((12 : ℤ) : ℚ))\n",
+      "before_sha256": "db0c80bbba4220d940e8d6ab8f9bcf548bfdd5705205d4b86fad6f5f69613e0a",
+      "after_sha256": "03e26baf03178f3dae53d87ffd5dd7d9cd376ca88891867e84a4b4dbffdc0b00"
+    }
+  ],
+  "added_published_trailing_EOF_LF_bytes": 0,
+  "only_allowed_proof_fragments_plus_exact_published_EOF_reconstruct_candidate": true,
+  "whole_original_reverse_sha256": "839167b1e610ba542a19d5f4d6256cbd4ec0bcadb5e1b65b3c71c9517daab904",
+  "no_header_or_def_exceptions": true
+}

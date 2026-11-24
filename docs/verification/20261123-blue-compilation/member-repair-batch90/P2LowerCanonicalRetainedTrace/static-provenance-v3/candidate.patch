@@ -1,0 +1,11 @@
+--- baseline.lean
++++ candidate.lean
+@@ -46,7 +46,7 @@
+   have hcarrier0 : carrier.prod≠0 := (roughProduct_squarefree N cap z0 z).ne_zero
+   have hpf : carrier.prod.primeFactors=carrier.toFinset := by
+     have heq : (∏p∈carrier.toFinset,p)=carrier.prod := by
+-      simpa only [List.map_id_fun'] using
++      simpa only [carrier, List.map_id_fun', id_eq] using
+         List.prod_toFinset (fun p : ℕ=>p) (roughPrimeUniverse_nodup N cap z0 z)
+     rw [←heq]
+     exact Nat.primeFactors_prod (fun p hp=>mem_roughPrimeUniverse_prime (List.mem_toFinset.mp hp))

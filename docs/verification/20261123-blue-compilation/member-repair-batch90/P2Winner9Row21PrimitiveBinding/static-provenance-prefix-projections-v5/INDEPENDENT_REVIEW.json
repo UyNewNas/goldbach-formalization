@@ -1,0 +1,65 @@
+{
+  "schema": "independent_row21_single_private_projection_API_v4_static_gate_v1",
+  "reviewer": "/root/member_current_repairs",
+  "source_author": "/root/ascending14_api",
+  "reviewed_utc": "2026-11-24T03:20:16.237905+00:00",
+  "conclusion": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_READY_FOR_OWNER_ONLY_FAILED_ROW21_RETRY",
+  "findings": [],
+  "source_selection_sha256": "0285c4a96f3b5892153a11cf6644cdd81623f513ca8668cad0c81bd254c931cb",
+  "input_manifest_sha256": "cf57918813961fd5a209d107c2927cd19cd4272b616b95306ca40008462a6f83",
+  "input_files_verified": 18,
+  "module": "ImbalancedChen.P2Winner9Row21PrimitiveBinding",
+  "baseline_sha256": "a555c9d2b99f82557cc65a4e128b984bd8566c33c525ac7a7062f5e8c90023b6",
+  "candidate_sha256": "1c437635b38f2a8f89e5c9681eb07bfe114ad3ee8c1e66caf3a7b834e63e8b08",
+  "one_added_normalization_line_only": true,
+  "proof": "exactPrefixH_cons_succ",
+  "whole_forward_reverse_byte_exact": true,
+  "all_37_complete_headers_28_whole_definitions_including_2_equation_style_Nat_definitions_retained_from_verified_prior_snapshot": true,
+  "all_7_private_supplier_statements_old_bijection_and_other_proofs_data_algorithms_hypotheses_quantifiers_imports_and_budgets_unchanged": true,
+  "all_four_floor_statement_and_terminal_proof_raw_same_sha256": "92ea8a506b0ab0c14ebc00ed4875aa6ca28ab86d938e1789d930d9cbdbf1e31c",
+  "new_header_definition_import_or_semantic_exception": [],
+  "assessment": "Actual residual goal contains an arbitrary introduced pair p, with exponent(Prod.map Nat.succ id p).1 and tail-degree(Prod.map Nat.succ id p).2. Existing Init.Core Prod.map_fst/map_snd are rfl projection equalities, giving Nat.succ p.1 and id p.2. id_eq and Nat.succ_eq_add_one expose p.2 and p.1+1, then existing pow_succ gives(a^p.1)*a. Unchanged ring rearranges precisely these same three Nat factors to a*(a^p.1)*exactPrefixH as p.2. No pair is removed, no new condition or recurrence identity is introduced, and normalization occurs after the relevant pair has entered scope.",
+  "pinned_actual_API": [
+    {
+      "path": "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/src/lean/Init/Core.lean",
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "line_start": 1474,
+      "line_end": 1491,
+      "raw_excerpt": "\nExamples:\n * `(1, 2).map (· + 1) (· * 3) = (2, 6)`\n * `(1, 2).map toString (· * 3) = (\"1\", 6)`\n-/\n@[implicit_reducible] def Prod.map {α₁ : Type u₁} {α₂ : Type u₂} {β₁ : Type v₁} {β₂ : Type v₂}\n    (f : α₁ → α₂) (g : β₁ → β₂) : α₁ × β₁ → α₂ × β₂\n  | (a, b) => (f a, g b)\n\n@[simp] theorem Prod.map_apply (f : α → β) (g : γ → δ) (x) (y) :\n    Prod.map f g (x, y) = (f x, g y) := rfl\n\n-- We add `@[grind =]` to these in `Init.Data.Prod`.\n@[simp] theorem Prod.map_fst (f : α → β) (g : γ → δ) (x) : (Prod.map f g x).1 = f x.1 := rfl\n@[simp] theorem Prod.map_snd (f : α → β) (g : γ → δ) (x) : (Prod.map f g x).2 = g x.2 := rfl\n\n/-! # Dependent products -/\n\n",
+      "excerpt_sha256": "3a3d516b8d27babb89fccca528ba8ebaa62cd777323594b22cb464ade3a6eccc"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Defs.lean",
+      "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+      "line_start": 690,
+      "line_end": 706,
+      "raw_excerpt": "-- This lemma is higher priority than later `zero_smul` so that the `simpNF` is happy\n@[to_additive (attr := simp high) zero_nsmul]\ntheorem pow_zero (a : M) : a ^ 0 = 1 :=\n  Monoid.npow_zero _\n\n@[to_additive succ_nsmul]\ntheorem pow_succ (a : M) (n : ℕ) : a ^ (n + 1) = a ^ n * a :=\n  Monoid.npow_succ n a\n\n@[to_additive one_nsmul, simp]\nlemma pow_one (a : M) : a ^ 1 = a := by rw [pow_succ, pow_zero, one_mul]\n\n@[to_additive succ_nsmul'] lemma pow_succ' (a : M) : ∀ n, a ^ (n + 1) = a * a ^ n\n  | 0 => by simp\n  | n + 1 => by rw [pow_succ _ n, pow_succ, pow_succ', mul_assoc]\n\n@[to_additive] lemma mul_pow_mul (a b : M) (n : ℕ) :\n",
+      "excerpt_sha256": "f6defc66d9280bf422dd64d4ca8c060c697676a415c0f7edb1314b98f95a15b3"
+    }
+  ],
+  "prior_source_and_universal_equivalence_scope": {
+    "prior_review_sha256": "71495d3a5a850214ae2ba0272c1e8223e37393e7214cc5b12f277a2441b13c90",
+    "source_math_data_header_definition_and_recursion_scope_reused_without_repetition": true
+  },
+  "actual": {
+    "full_log_sha256": "d40711eb9b48596c8243bc81540438bb9a49babc20b5a6a2af68f34d9aff7e75",
+    "log_bytes": 4091,
+    "command_sha256": "3d2db2021c7c1deff767a01502a31e0754f7cae8340f698831460fa99df9f012",
+    "elapsed_seconds": 17.113233315001708,
+    "exit_code": 1,
+    "only_actual_error_line": 198,
+    "diagnostic": "Original ring lacked reduction of the two Prod.map projections on arbitrary p.",
+    "no_floor_absence_to_module_or_kernel_PASS_inference": true,
+    "new_runtime_memory_kernel_and_owned_audit_acceptance_unknown": true
+  },
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "source_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "start_line": 177,
+    "end_line": 195,
+    "moment_excerpt_sha256": "44c8638ae373a1ce65f9ac61fc38225744dfd89e2a41bb5b544c3f66271a5186"
+  },
+  "no_Lean_Lake_compiler_kernel_type_axiom_numeric_or_stock_invocations": true,
+  "no_candidate_live_main_source_96_other_green_sources_guard_queue_cache_or_oldrecord_mutation": true,
+  "next_step": "Unique owner retries only failed Row21 at exact1c437source and, after normal success, runs required kernel/full-owned including all private/generated suppliers. No earlier successful module or whole96 check is repeated."
+}

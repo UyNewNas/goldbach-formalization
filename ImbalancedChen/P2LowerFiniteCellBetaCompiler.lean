@@ -24,7 +24,7 @@ open P2LowerFiniteCellRounding
 
 theorem raw_divisorSum_on_universe (retainEven : List ℕ → Bool)
     (N cap : ℕ) (w z : ℝ) (n : ℕ) :
-    supportedDivisorSum (universe N cap w z) (raw retainEven N cap w z) n=
+    supportedDivisorSum («universe» N cap w z) (raw retainEven N cap w z) n=
       supportedDivisorSum (rawSupport retainEven N cap w z) (raw retainEven N cap w z) n := by
   unfold supportedDivisorSum
   symm
@@ -40,7 +40,7 @@ theorem raw_divisorSum_on_universe (retainEven : List ℕ → Bool)
 
 theorem raw_density_on_universe (retainEven : List ℕ → Bool)
     (N cap : ℕ) (w z : ℝ) :
-    reciprocalTotientDensity (universe N cap w z) (raw retainEven N cap w z)=
+    reciprocalTotientDensity («universe» N cap w z) (raw retainEven N cap w z)=
       reciprocalTotientDensity (rawSupport retainEven N cap w z) (raw retainEven N cap w z) := by
   unfold reciprocalTotientDensity
   symm
@@ -50,19 +50,19 @@ theorem raw_density_on_universe (retainEven : List ℕ → Bool)
 
 theorem compiled_rough_minorant (retainEven : List ℕ → Bool) (N cap : ℕ)
     (w z tau : ℝ) (hzcap : z≤(cap:ℝ)) (n : ℤ) :
-    supportedDivisorSum (universe N cap w z) (coefficient retainEven N cap w z tau) n.natAbs≤
+    supportedDivisorSum («universe» N cap w z) (coefficient retainEven N cap w z tau) n.natAbs≤
       actualIntervalRoughIndicator N w z n := by
-  have hcoeff := supportedDivisorSum_le_of_coefficient_le (universe N cap w z)
+  have hcoeff := supportedDivisorSum_le_of_coefficient_le («universe» N cap w z)
     (coefficient retainEven N cap w z tau) (raw retainEven N cap w z)
     (fun d _=>coefficient_le_raw retainEven N cap w z tau d) n.natAbs
   rw [raw_divisorSum_on_universe] at hcoeff
   exact hcoeff.trans (fixedEvenRoughDivisorSum_le_roughIndicator retainEven N cap w z hzcap n)
 
 def support (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
-  smallRoughModuli (actualSmallRosserSupport N cap w) (universe N cap w z)
+  smallRoughModuli (actualSmallRosserSupport N cap w) («universe» N cap w z)
 
 def rho (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau L : ℝ) : ℕ → ℝ :=
-  smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+  smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
     (coefficient retainEven N cap w z tau)
     (actualSmallRosserPlus N cap w L) (actualSmallRosserMinus N cap w L)
 
@@ -70,7 +70,7 @@ def rho (retainEven : List ℕ → Bool) (N cap : ℕ) (w z tau L : ℝ) : ℕ �
 is exactly the already-installed raw lower rho, as a physical function. -/
 theorem raw_attachment_eq_actual (retainEven : List ℕ → Bool) (N cap : ℕ)
     (w z L : ℝ) :
-    smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
+    smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
       (raw retainEven N cap w z) (actualSmallRosserPlus N cap w L)
       (actualSmallRosserMinus N cap w L)=actualLowerSmallRoughRho retainEven N cap w z L := by
   apply smallRoughRho_eq_of_rough_enlargement (actualSmallRosserSupport N cap w)
@@ -84,7 +84,7 @@ theorem raw_attachment_eq_actual (retainEven : List ℕ → Bool) (N cap : ℕ)
 Zero c contributes zero, so its choice of beta at equality is immaterial. -/
 theorem rho_at_product (retainEven : List ℕ → Bool) (N cap : ℕ)
     (w z tau L : ℝ) {e d : ℕ} (he : e∈actualSmallRosserSupport N cap w)
-    (hd : d∈universe N cap w z) :
+    (hd : d∈«universe» N cap w z) :
     rho retainEven N cap w z tau L (e*d)=coefficient retainEven N cap w z tau d*
       (if 0≤coefficient retainEven N cap w z tau d then actualSmallRosserMinus N cap w L e
        else actualSmallRosserPlus N cap w L e) := by
@@ -95,10 +95,10 @@ theorem rho_at_product (retainEven : List ℕ → Bool) (N cap : ℕ)
     (actualSmallRosserPlus N cap w L) (actualSmallRosserMinus N cap w L) he hd
 
 theorem product_unique (N cap : ℕ) (w z : ℝ) {e d e' d' : ℕ}
-    (he : e∈actualSmallRosserSupport N cap w) (hd : d∈universe N cap w z)
-    (he' : e'∈actualSmallRosserSupport N cap w) (hd' : d'∈universe N cap w z)
+    (he : e∈actualSmallRosserSupport N cap w) (hd : d∈«universe» N cap w z)
+    (he' : e'∈actualSmallRosserSupport N cap w) (hd' : d'∈«universe» N cap w z)
     (h : e*d=e'*d') : e=e' ∧ d=d' := by
-  have hp := smallRough_factorization_unique
+  have hp := smallRough_factorization_unique (d := (e,d)) (e := (e',d'))
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he) (universe_rough N cap w z hd)
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he') (universe_rough N cap w z hd') h
   exact ⟨congrArg Prod.fst hp,congrArg Prod.snd hp⟩

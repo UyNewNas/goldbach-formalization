@@ -1,0 +1,6 @@
+Winner9 selected edge geometry / row21 primitive source-only packet
+
+Geometry reuses the entire exact already verified post2f96c073 from commitfa22a568, including its existing proved private determinant evaluation helpers. Same original pre426fad. Explicit original representation exceptions are defaulting array lookup spelling and Nat factorial syntax in two previously unparsed headers; all original rational vertices/volumes and target meanings remain. Historical normal/kernel/public6 acceptance is preserved as historical, not current mainDAG acceptance.
+Primitive restores the same defaulting array access and nested array parentheses, retains all original data/formulas, and uses kernel decide for the same original closed propositions. The SimplexData computational fields are raw-identical; five Prop proof fields change only their proof mechanism. Final original Q80/Q96 predicates are unfolded for their existing computable instances. Original algorithms/floors/targets/budgets are not changed or assumed. Numeric success and runtime resources remain unknown pending actual owner validation.
+
+Full original headers and definition before/after inventories disclose every exception; exact reverse checks were executed without Lean or numeric producer/checker calls. No live source/controller/cache/queue changes.

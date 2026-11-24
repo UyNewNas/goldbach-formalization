@@ -1,0 +1,22 @@
+--- baseline.lean
++++ candidate.lean
+@@ -46,7 +46,8 @@
+   have hcarrier0 : carrier.prod≠0 := (roughProduct_squarefree N cap z0 z).ne_zero
+   have hpf : carrier.prod.primeFactors=carrier.toFinset := by
+     have heq : (∏p∈carrier.toFinset,p)=carrier.prod := by
+-      simpa using List.prod_toFinset (fun p : ℕ=>p) (roughPrimeUniverse_nodup N cap z0 z)
++      simpa only [List.map_id_fun'] using
++        List.prod_toFinset (fun p : ℕ=>p) (roughPrimeUniverse_nodup N cap z0 z)
+     rw [←heq]
+     exact Nat.primeFactors_prod (fun p hp=>mem_roughPrimeUniverse_prime (List.mem_toFinset.mp hp))
+   have hsubset : d.primeFactors⊆carrier.toFinset := by
+@@ -98,7 +99,8 @@
+     raw (retainEven P a b seedCap N) N cap z0 ((N:ℝ)^w) d=
+       if d∈«universe» N cap z0 ((N:ℝ)^w) ∧ retainEven P a b seedCap N d.primeFactorsList=true
+       then (ArithmeticFunction.moebius d:ℝ) else 0 := by
+-  rw [raw_value,raw_support_iff_canonical_trace P a b seedCap hN cap z0 w hmargin d]
++  rw [raw_value]
++  simp only [raw_support_iff_canonical_trace P a b seedCap hN cap z0 w hmargin d]
+ 
+ end
+ end ImbalancedChen.P2LowerCanonicalRetainedTrace

@@ -1,0 +1,45 @@
+{
+  "List_ofFn_current_implementation": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/OfFn.lean",
+    "bytes": 6336,
+    "sha256": "e2054feea94eea72e5ddca3145b03e9e669db8bb89cf8d0286354fdd2dfb9de2",
+    "start_line": 30,
+    "end_line": 35,
+    "raw_excerpt": "Examples:\n * `List.ofFn (n := 3) toString = [\"0\", \"1\", \"2\"]`\n * `List.ofFn (fun i => #[\"red\", \"green\", \"blue\"].get i.val i.isLt) = [\"red\", \"green\", \"blue\"]`\n-/\n@[expose] def ofFn {n} (f : Fin n → α) : List α := Fin.foldr n (f · :: ·) []\n\n",
+    "excerpt_sha256": "5ab8a65cc006b9f0d634bd6f5042f5732dc050ec83a07a2e9e3036b8bed473f8"
+  },
+  "existing_List_ofFn_simp_recursions": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/List/OfFn.lean",
+    "bytes": 6336,
+    "sha256": "e2054feea94eea72e5ddca3145b03e9e669db8bb89cf8d0286354fdd2dfb9de2",
+    "start_line": 74,
+    "end_line": 84,
+    "raw_excerpt": "\n/-- `ofFn` on an empty domain is the empty list. -/\n@[simp, grind =]\ntheorem ofFn_zero {f : Fin 0 → α} : ofFn f = [] := by\n  rw [ofFn, Fin.foldr_zero]\n\n@[simp]\ntheorem ofFn_succ {n} {f : Fin (n + 1) → α} : ofFn f = f 0 :: ofFn fun i => f i.succ :=\n  ext_get (by simp) (fun i hi₁ hi₂ => by\n    cases i\n    · simp\n",
+    "excerpt_sha256": "10a78dcbec664b0cdc9f382a0b908906bddeadd2c63a89b4d4c2f5df8acf2310"
+  },
+  "existing_same_ordered_double_sum_and_finite_barycentric_moment_recipe": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2AffineSimplexMomentLaw.lean",
+    "bytes": 31989,
+    "sha256": "392db9ece173e92db68c970b895432fced7f89537945743e46103f9a17802520",
+    "start_line": 408,
+    "end_line": 446,
+    "raw_excerpt": "    (∫ p in tetrahedron, affineVertex g p * affineVertex l p) =\n      (vertexSum g * vertexSum l + dot g l) / 120 := by\n  have he : (fun p => affineVertex g p * affineVertex l p) =\n      (fun p => ∑ i : Fin 4, ∑ j : Fin 4,\n        (g i * l j) * (barycentric i p * barycentric j p)) := by\n    funext p\n    simp only [affineVertex]\n    rw [Finset.sum_mul]\n    apply Finset.sum_congr rfl\n    intro i _\n    rw [Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro j _\n    ring\n  have hi (i j : Fin 4) : IntegrableOn\n      (fun p => (g i * l j) * (barycentric i p * barycentric j p)) tetrahedron := by\n    exact (continuous_const.mul ((barycentric_continuous i).mul\n      (barycentric_continuous j))).continuousOn.integrableOn_compact isCompact_tetrahedron\n  have hs (i : Fin 4) : IntegrableOn (fun p => ∑ j : Fin 4,\n      (g i * l j) * (barycentric i p * barycentric j p)) tetrahedron :=\n    integrable_finsetSum Finset.univ (fun j _ => hi i j)\n  have hm (i : Fin 4) :\n      (∫ p in tetrahedron, ∑ j : Fin 4,\n        (g i * l j) * (barycentric i p * barycentric j p)) =\n      ∑ j : Fin 4, (g i * l j) * ((1 + delta i j) / 120) := by\n    rw [integral_finsetSum Finset.univ (fun j _ => hi i j)]\n    simp only [integral_const_mul, integral_barycentric_two]\n  rw [he, integral_finsetSum Finset.univ (fun i _ => hs i)]\n  simp_rw [hm]\n  simp [vertexSum, dot, delta, Fin.sum_univ_four]\n  <;> ring\n\n/-- Third barycentric moments yield the actual second affine moment under\nan affine gap weight. Correlations are kept in the mixed terms. -/\ntheorem integral_affineVertex_square (g l : Fin 4 → ℝ) :\n    (∫ p in tetrahedron, affineVertex g p * (affineVertex l p) ^ 2) =\n      (vertexSum g * ((vertexSum l) ^ 2 + squareSum l) +\n        2 * dot g l * vertexSum l + 2 * weightedSquareSum g l) / 720 := by\n  have he : (fun p => affineVertex g p * (affineVertex l p) ^ 2) =\n",
+    "excerpt_sha256": "5182010b80f606b3887461ea2300b803501aa68a93a0f49067515aa99321f639"
+  },
+  "same_actual_generic6D_monomial": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9SimplexCoordinateSlice.lean",
+    "bytes": 6539,
+    "sha256": "5d2afa3da92658193b9dcb415afbe6b5a003d1ad1e79b68b91c00a6b928afb3d",
+    "start_line": 90,
+    "end_line": 107,
+    "raw_excerpt": "def monomial {n : Nat} (m0 : Nat) (ms : Fin n → Nat)\n    (s : ℝ) (x : Fin n → ℝ) : ℝ :=\n  (s - ∑ i : Fin n, x i)^m0 *\n    (∏ i : Fin n, (x i)^(ms i))\n\n/-- The same slice factors the actual polynomial integrand. -/\ntheorem monomial_cons {n : Nat} (m0 : Nat)\n    (ms : Fin (n + 1) → Nat) (s t : ℝ) (y : Fin n → ℝ) :\n    monomial m0 ms s (Fin.cons t y) =\n      t^(ms 0) * monomial m0 (fun i => ms i.succ) (s - t) y := by\n  simp [monomial, Fin.sum_univ_succ, Fin.prod_univ_succ]\n  ring\n\ntheorem continuous_monomial {n : Nat} (m0 : Nat)\n    (ms : Fin n → Nat) (s : ℝ) :\n    Continuous (monomial m0 ms s) := by\n  unfold monomial\n  fun_prop\n",
+    "excerpt_sha256": "c51da8c0cab8ee5e0b5ed9892c91705e098a4972151b50780f34fc98fc61e876"
+  },
+  "pinned_simplex_moment_and_manuscript_v1_reused": {
+    "path": "/workspace/p1-complete-proof/static-sixth-closed-quotients-simplex-moments-0007-api/PINNED_API_AND_1106.json",
+    "bytes": 9124,
+    "sha256": "5ccbef6a7b0b5055c9fdaa058a2976fceb81638a9dfc54b39274b40ffca59b1f"
+  },
+  "dimension_boundary": "Only the ordered bilinear finite-sum proof recipe is reused from the tetrahedron module. Every moment/integral supplier remains the original6D actual_six_factorial/baryMoment_eq at7vertices. No3D/8D volume, assumed moment law, positivity or enclosure is substituted.",
+  "finite_case_scope": "bary_first retains all7 Fin7 cases; bary_second retains all49 ordered pairs. ofFn_succ/zero computes the same six-entry exponent list. Final Fin7 expansion is the same original seven-vertex bilinear expression, not a separate numeric checker or new data algorithm."
+}

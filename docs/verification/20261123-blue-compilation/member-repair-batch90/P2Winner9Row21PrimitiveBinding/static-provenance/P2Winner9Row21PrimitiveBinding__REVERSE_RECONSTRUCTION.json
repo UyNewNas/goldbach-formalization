@@ -1,0 +1,32 @@
+{
+  "mode": "Same-data local API/parser/proof-mechanism restoration",
+  "ordered_replacements": [
+    {
+      "before_raw": "  (coords[i.val]!).get! j\n",
+      "after_raw": "  (coords[i.val]!)[j]!\n",
+      "count": 1
+    },
+    {
+      "before_raw": "  (factorNum[i.val]![j.val]! : ℚ) / factorDen[i.val]![j.val]!\n",
+      "after_raw": "  ((factorNum[i.val]!)[j.val]! : ℚ) / (factorDen[i.val]!)[j.val]!\n",
+      "count": 1
+    },
+    {
+      "before_raw": "  decide\n",
+      "after_raw": "  decide +kernel\n",
+      "count": 3
+    },
+    {
+      "before_raw": ":= by decide\n",
+      "after_raw": ":= by decide +kernel\n",
+      "count": 5
+    },
+    {
+      "before_raw": "      observedCurvatureRawQ96 := by\n  decide +kernel\n",
+      "after_raw": "      observedCurvatureRawQ96 := by\n  unfold curvatureFloorQ80 jensenProductFloorQ96\n  decide +kernel\n",
+      "count": 1
+    }
+  ],
+  "whole_reverse_sha256": "ec6cae1b05d3dbc33355a5864eee73ed50d8136e443f938dfd92de208685e8ae",
+  "whole_reverse_exact": true
+}

@@ -1,0 +1,19 @@
+--- baseline.lean
++++ candidate.lean
+@@ -204,7 +204,6 @@
+   apply congrArg List.sum
+   apply List.map_congr_left
+   intro p _
+-  simp only [pow_succ]
+   ring
+ 
+ private theorem antidiagonalTuple_sum_eq_prefixH {n : Nat}
+@@ -217,7 +216,7 @@
+       cases k <;> simp [List.Nat.antidiagonalTuple, exactPrefixH, List.ofFn]
+   | succ n ih =>
+       rw [List.ofFn_succ, exactPrefixH]
+-      simp only [List.Nat.antidiagonalTuple, List.map_flatMap,
++      simp only [List.Nat.antidiagonalTuple, List.map_flatten,
+         List.map_map, Function.comp_def, Fin.prod_univ_succ,
+         Fin.cons_zero, Fin.cons_succ, List.flatMap, List.sum_flatten,
+         List.sum_map_mul_left, ih]

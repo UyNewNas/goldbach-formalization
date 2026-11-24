@@ -1,0 +1,19 @@
+--- baseline/ImbalancedChen/P1OriginalFourthSmallRemainderBound.lean
++++ candidate/ImbalancedChen/P1OriginalFourthSmallRemainderBound.lean
+@@ -160,6 +160,7 @@
+         ((C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L)) *
+           cellMass e chi m omega a N cap j := by
+       unfold cellMoment cellMass
++      simp_rw [mul_add]
+       rw [Finset.sum_add_distrib, Finset.mul_sum, Finset.mul_sum]
+       congr 1 <;> apply Finset.sum_congr rfl <;> intro p _ <;> ring
+ 
+@@ -257,7 +258,7 @@
+                 cellMoment e chi m omega a N cap j := by ring
+         _ ≤ (2 * C / omega ^ 2) * cellMoment e chi m omega a N cap j +
+               1 * cellMoment e chi m omega a N cap j :=
+-          add_le_add_left hsecond _
++          add_le_add le_rfl hsecond
+         _ = _ := by ring
+     have hmoment := hmomentSource e chi m omega a ha
+       J4 N cap hN1 hEven j hj hscale

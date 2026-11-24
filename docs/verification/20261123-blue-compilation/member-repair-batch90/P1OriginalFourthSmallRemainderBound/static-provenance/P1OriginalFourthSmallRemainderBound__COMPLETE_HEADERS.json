@@ -1,0 +1,62 @@
+[
+  {
+    "name": "cellMoment",
+    "kind": "def",
+    "private": true,
+    "complete_raw_header_before": "private def cellMoment (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ :=",
+    "complete_raw_header_after": "private def cellMoment (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ :=",
+    "before_sha256": "1b58cdf3adb886d10c2a03eb051bb7417b11ddb2ba052d99d0c2944620a68a6c",
+    "after_sha256": "1b58cdf3adb886d10c2a03eb051bb7417b11ddb2ba052d99d0c2944620a68a6c",
+    "byte_exact": true
+  },
+  {
+    "name": "cellMass",
+    "kind": "def",
+    "private": true,
+    "complete_raw_header_before": "private def cellMass (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ :=",
+    "complete_raw_header_after": "private def cellMass (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (j : FourthCell m) : ℝ :=",
+    "before_sha256": "be497c993cf2e05b45d7fe577c4956ffc54878e765e86256510b80ca5e24e20a",
+    "after_sha256": "be497c993cf2e05b45d7fe577c4956ffc54878e765e86256510b80ca5e24e20a",
+    "byte_exact": true
+  },
+  {
+    "name": "weight_nonneg",
+    "kind": "theorem",
+    "private": true,
+    "complete_raw_header_before": "private theorem weight_nonneg (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) (p : Fin 4 → ℕ)\n    (hp : p ∈ smallCellTuples e chi m omega a N cap j) :\n    0 ≤ ∏ i, 1 / ((p i : ℝ) - 1) :=",
+    "complete_raw_header_after": "private theorem weight_nonneg (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (j : FourthCell m) (p : Fin 4 → ℕ)\n    (hp : p ∈ smallCellTuples e chi m omega a N cap j) :\n    0 ≤ ∏ i, 1 / ((p i : ℝ) - 1) :=",
+    "before_sha256": "8abacacbdc91cba436d33651d228c9336c3fb1338cb6272186eaadad6d6531a3",
+    "after_sha256": "8abacacbdc91cba436d33651d228c9336c3fb1338cb6272186eaadad6d6531a3",
+    "byte_exact": true
+  },
+  {
+    "name": "cellMass_le_log_times_moment",
+    "kind": "theorem",
+    "private": true,
+    "complete_raw_header_before": "private theorem cellMass_le_log_times_moment\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m) :\n    cellMass e chi m omega a N cap j ≤\n      (Real.log (N : ℝ) / Real.log 3) * cellMoment e chi m omega a N cap j :=",
+    "complete_raw_header_after": "private theorem cellMass_le_log_times_moment\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (hEven : Even N) (j : FourthCell m) :\n    cellMass e chi m omega a N cap j ≤\n      (Real.log (N : ℝ) / Real.log 3) * cellMoment e chi m omega a N cap j :=",
+    "before_sha256": "8584d3579efe2e7bb2965aa5ff43926350b7f61a039b5f624e4e4dc7e09be10f",
+    "after_sha256": "8584d3579efe2e7bb2965aa5ff43926350b7f61a039b5f624e4e4dc7e09be10f",
+    "byte_exact": true
+  },
+  {
+    "name": "cell_remainder_le_moment_and_mass",
+    "kind": "theorem",
+    "private": true,
+    "complete_raw_header_before": "private theorem cell_remainder_le_moment_and_mass\n    (C : ℝ) (hC : 0 < C)\n    (hpoint : ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ),\n        0 < omega → 0 < a → 2 * a ≤ omega →\n      ∀ (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ),\n        h34Check e chi m omega J4 cap4 = true →\n      ∀ (N cap : ℕ), 2 ≤ N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n      ∀ p ∈ smallCellTuples e chi m omega a N cap j,\n      ∀ L : ℝ, 2 ≤ L → L ^ 13 ≤ omega * Real.log (N : ℝ) →\n        Real.exp 1 ≤ omega * Real.log (N : ℝ) →\n        |fourthTuplePlusResidualP1 N cap (thirdCellExponent e m j : ℝ) p -\n            fourthTuplePlusResidualP1 N cap (cap4 j : ℝ) p| ≤\n          (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +\n            (C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L))\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (homega : 0 < omega) (ha : 0 < a) (haomega : 2 * a ≤ omega)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true)\n    (N cap : ℕ) (hN : 2 ≤ N) (hEven : Even N)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (L : ℝ) (hL : 2 ≤ L)\n    (hbudget : L ^ 13 ≤ omega * Real.log (N : ℝ))\n    (hlog : Real.exp 1 ≤ omega * Real.log (N : ℝ)) :\n    |P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j| ≤\n      (2 * C / omega ^ 2) * cellMoment e chi m omega a N cap j +\n        ((C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L)) *\n          cellMass e chi m omega a N cap j :=",
+    "complete_raw_header_after": "private theorem cell_remainder_le_moment_and_mass\n    (C : ℝ) (hC : 0 < C)\n    (hpoint : ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ),\n        0 < omega → 0 < a → 2 * a ≤ omega →\n      ∀ (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ),\n        h34Check e chi m omega J4 cap4 = true →\n      ∀ (N cap : ℕ), 2 ≤ N → Even N →\n      ∀ (j : FourthCell m), j ∈ selectedFourthCells e chi m omega J4 →\n      ∀ p ∈ smallCellTuples e chi m omega a N cap j,\n      ∀ L : ℝ, 2 ≤ L → L ^ 13 ≤ omega * Real.log (N : ℝ) →\n        Real.exp 1 ≤ omega * Real.log (N : ℝ) →\n        |fourthTuplePlusResidualP1 N cap (thirdCellExponent e m j : ℝ) p -\n            fourthTuplePlusResidualP1 N cap (cap4 j : ℝ) p| ≤\n          (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +\n            (C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L))\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (homega : 0 < omega) (ha : 0 < a) (haomega : 2 * a ≤ omega)\n    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)\n    (hcheck : h34Check e chi m omega J4 cap4 = true)\n    (N cap : ℕ) (hN : 2 ≤ N) (hEven : Even N)\n    (j : FourthCell m) (hj : j ∈ selectedFourthCells e chi m omega J4)\n    (L : ℝ) (hL : 2 ≤ L)\n    (hbudget : L ^ 13 ≤ omega * Real.log (N : ℝ))\n    (hlog : Real.exp 1 ≤ omega * Real.log (N : ℝ)) :\n    |P1OriginalFourthLimit.smallCellRemainder e chi m omega a J4 cap4 N cap j| ≤\n      (2 * C / omega ^ 2) * cellMoment e chi m omega a N cap j +\n        ((C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L)) *\n          cellMass e chi m omega a N cap j :=",
+    "before_sha256": "aca683df21d6082236ba6da33b2e38f80bdc2a59aecbfcdab68ccd685daa2df0",
+    "after_sha256": "aca683df21d6082236ba6da33b2e38f80bdc2a59aecbfcdab68ccd685daa2df0",
+    "byte_exact": true
+  },
+  {
+    "name": "exists_original_smallRemainder_abs_le",
+    "kind": "theorem",
+    "private": false,
+    "complete_raw_header_before": "theorem exists_original_smallRemainder_abs_le :\n    ∃ C K : ℝ, 0 < C ∧ 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ),\n        0 < omega → 0 < a → 2 * a ≤ omega →\n      ∀ (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ),\n        h34Check e chi m omega J4 cap4 = true →\n      ∀ (N cap : ℕ), 2 ≤ N → Even N →\n      ∀ L : ℝ, 2 ≤ L → L ^ 13 ≤ omega * Real.log (N : ℝ) →\n        Real.exp 1 ≤ omega * Real.log (N : ℝ) →\n        Real.log (2 : ℝ) * Real.log (3 : ℝ) ≤\n          a * Real.log (N : ℝ) *\n            (Real.log (3 : ℝ) - Real.log (2 : ℝ)) →\n        ((C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L)) *\n          (Real.log (N : ℝ) / Real.log 3) ≤ 1 →\n        |P1OriginalFourthLimit.smallRemainder\n            e chi m omega a J4 cap4 N cap| ≤\n          ((selectedFourthCells e chi m omega J4).card : ℝ) *\n            (2 * C / omega ^ 2 + 1) *\n            (actualPrimeReciprocalMass N omega (19 / 96 : ℝ)) ^ 3 *\n            (4 * a + 6 * K *\n              (a / Real.log 3 + 1 / Real.log (N : ℝ))) :=",
+    "complete_raw_header_after": "theorem exists_original_smallRemainder_abs_le :\n    ∃ C K : ℝ, 0 < C ∧ 1 < K ∧\n      ∀ (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ),\n        0 < omega → 0 < a → 2 * a ≤ omega →\n      ∀ (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ),\n        h34Check e chi m omega J4 cap4 = true →\n      ∀ (N cap : ℕ), 2 ≤ N → Even N →\n      ∀ L : ℝ, 2 ≤ L → L ^ 13 ≤ omega * Real.log (N : ℝ) →\n        Real.exp 1 ≤ omega * Real.log (N : ℝ) →\n        Real.log (2 : ℝ) * Real.log (3 : ℝ) ≤\n          a * Real.log (N : ℝ) *\n            (Real.log (3 : ℝ) - Real.log (2 : ℝ)) →\n        ((C / Real.log 4) * Real.log (N : ℝ) * Real.exp (-L)) *\n          (Real.log (N : ℝ) / Real.log 3) ≤ 1 →\n        |P1OriginalFourthLimit.smallRemainder\n            e chi m omega a J4 cap4 N cap| ≤\n          ((selectedFourthCells e chi m omega J4).card : ℝ) *\n            (2 * C / omega ^ 2 + 1) *\n            (actualPrimeReciprocalMass N omega (19 / 96 : ℝ)) ^ 3 *\n            (4 * a + 6 * K *\n              (a / Real.log 3 + 1 / Real.log (N : ℝ))) :=",
+    "before_sha256": "bb9a9cb15ef9b19efa8ede4f9fc0e87dc57f0b3f8d9bacdc6b01710514f31f54",
+    "after_sha256": "bb9a9cb15ef9b19efa8ede4f9fc0e87dc57f0b3f8d9bacdc6b01710514f31f54",
+    "byte_exact": true
+  }
+]

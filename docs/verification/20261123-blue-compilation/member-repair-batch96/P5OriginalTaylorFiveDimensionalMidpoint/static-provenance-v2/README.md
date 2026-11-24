@@ -1,0 +1,3 @@
+# Taylor midpoint: actual failed-only proof API v2
+
+The exact batch96 failed pre is098f2. Five narrowly reversible proof-body edits reuse existing Fin.cons_update / Fin.update_cons_zero, remove redundant automatic generalization, constrain a reverse-rule simp loop without increasing steps, and normalize the original closedBox=Icc and sum/24 conversion. All nine original complete parsed headers and the complete closedBox definition are byte-identical. The prior root-approved volume/codomain expression recoveries, all original derivative hypotheses, exact1/24, data and budget remain. Full4235B actual log and command are pinned. No Lean, producer, runtime or running Row21 source was touched; candidate requires nonauthor gate and sole-owner actual verification.

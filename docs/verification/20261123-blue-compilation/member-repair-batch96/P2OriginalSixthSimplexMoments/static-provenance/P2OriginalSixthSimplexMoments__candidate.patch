@@ -1,0 +1,77 @@
+--- baseline.lean
++++ candidate.lean
+@@ -38,10 +38,11 @@
+ 
+ theorem bary_continuous (i : Fin 7) : Continuous (bary i) := by
+   refine Fin.cases ?_ ?_ i
+-  · dsimp [bary]
++  · change Continuous (fun x : Point => 1 - ∑ j : Fin 6, x j)
+     fun_prop
+   · intro j
+-    simpa only [bary, Fin.cases_succ] using (continuous_apply j : Continuous (fun x : Point => x j))
++    change Continuous (fun x : Point => x j)
++    exact continuous_apply j
+ 
+ theorem interpolate_continuous (v : Fin 7 → ℝ) : Continuous (interpolate v) := by
+   apply continuous_finsetSum
+@@ -119,7 +120,7 @@
+     unfold baryMoment actualMomentN
+     apply setIntegral_congr_fun canonical_measurable
+     intro x _
+-    simp [bary, Fin.prod_univ_succ]
++    simp [bary, P2Winner9SimplexCoordinateSlice.monomial, Fin.prod_univ_succ]
+   rw [he, actual_six_factorial (e 0) (fun i : Fin 6 => e i.succ) (by norm_num)]
+   simp
+ 
+@@ -136,7 +137,7 @@
+     _ = _ := by simp
+ 
+ theorem bary_first (i : Fin 7) :
+-    (∫ x in canonical, bary i x) = 1 / (7.factorial : ℝ) := by
++    (∫ x in canonical, bary i x) = 1 / ((7 : ℕ).factorial : ℝ) := by
+   have he : (∫ x in canonical, bary i x) = baryMoment (unitExponent i) := by
+     unfold baryMoment
+     simp_rw [prod_unitExponent]
+@@ -145,7 +146,7 @@
+ 
+ theorem bary_second (i j : Fin 7) :
+     (∫ x in canonical, bary i x * bary j x) =
+-      (1 + if i = j then 1 else 0) / (8.factorial : ℝ) := by
++      (1 + if i = j then 1 else 0) / ((8 : ℕ).factorial : ℝ) := by
+   classical
+   have he : (∫ x in canonical, bary i x * bary j x) =
+       baryMoment (fun r => unitExponent i r + unitExponent j r) := by
+@@ -155,13 +156,13 @@
+   fin_cases i <;> fin_cases j <;>
+     norm_num [unitExponent, factorialProduct, List.ofFn]
+ 
+-theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / (6.factorial : ℝ) := by
++theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / ((6 : ℕ).factorial : ℝ) := by
+   have h := actual_six_factorial 0 (fun _ : Fin 6 => 0) (s := 1) (by norm_num)
+   simpa [actualMomentN, canonical,
+     P2Winner9SimplexCoordinateSlice.standardSimplex, factorialProduct, List.ofFn] using h
+ 
+ theorem integral_interpolate (v : Fin 7 → ℝ) :
+-    (∫ x in canonical, interpolate v x) = (∑ i : Fin 7, v i) / (7.factorial : ℝ) := by
++    (∫ x in canonical, interpolate v x) = (∑ i : Fin 7, v i) / ((7 : ℕ).factorial : ℝ) := by
+   unfold interpolate
+   rw [integral_finsetSum]
+   · simp only [integral_mul_const, bary_first]
+@@ -175,7 +176,7 @@
+ theorem integral_interpolate_mul (g l : Fin 7 → ℝ) :
+     (∫ x in canonical, interpolate g x * interpolate l x) =
+       ((∑ i : Fin 7, g i) * (∑ i : Fin 7, l i) + ∑ i : Fin 7, g i * l i) /
+-        (8.factorial : ℝ) := by
++        ((8 : ℕ).factorial : ℝ) := by
+   classical
+   let term (i j : Fin 7) (x : Point) := (g i * l j) * (bary i x * bary j x)
+   have hi (i j : Fin 7) : IntegrableOn (term i j) canonical := by
+@@ -206,7 +207,7 @@
+ 
+ def jacobian (L : Point ≃L[ℝ] Point) : ℝ := |L.toContinuousLinearMap.det|
+ 
+-def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / (6.factorial : ℝ)
++def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / ((6 : ℕ).factorial : ℝ)
+ 
+ theorem jacobian_pos (L : Point ≃L[ℝ] Point) : 0 < jacobian L := by
+   exact abs_pos.mpr L.toLinearEquiv.isUnit_det'.ne_zero

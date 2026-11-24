@@ -1,0 +1,12 @@
+{
+  "import_before": "import ImbalancedChen.P2Winner9CurvatureFullExactAssembly\n",
+  "import_after": "import ImbalancedChen.P2Winner9CurvatureFullExactAssembly\nimport Mathlib.Data.Fin.Tuple.NatAntidiagonal\n",
+  "new_private_proof": "/-- Reindex the original bounded exponent enumeration by the existing exact\nsum-k tuple enumeration. Only the implementation of the finite sum changes\ninside the proof; every original term appears exactly once. -/\nprivate theorem homogeneous_eq_exact_antidiagonal (nodes : Fin 9 → Nat) (k : Nat) :\n    homogeneous nodes k =\n      ∑ α ∈ Finset.Nat.antidiagonalTuple 9 k, ∏ i : Fin 9, nodes i ^ α i := by\n  classical\n  unfold homogeneous\n  rw [← Finset.sum_filter]\n  refine Finset.sum_bij\n    (fun (α : Fin 9 → Fin (k + 1)) _ => fun i : Fin 9 => (α i).val) ?_ ?_ ?_ ?_\n  · intro α hα\n    exact Finset.Nat.mem_antidiagonalTuple.mpr (Finset.mem_filter.mp hα).2\n  · intro α _ β _ h\n    funext i\n    exact Fin.ext (congrFun h i)\n  · intro β hβ\n    have hsum : (∑ i : Fin 9, β i) = k :=\n      Finset.Nat.mem_antidiagonalTuple.mp hβ\n    have hbound (i : Fin 9) : β i ≤ k := by\n      calc\n        β i ≤ ∑ j : Fin 9, β j :=\n          Finset.single_le_sum (fun j _ => Nat.zero_le (β j)) (Finset.mem_univ i)\n        _ = k := hsum\n    let α : Fin 9 → Fin (k + 1) :=\n      fun i => ⟨β i, Nat.lt_succ_of_le (hbound i)⟩\n    refine ⟨α, Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩, ?_⟩\n    · change (∑ i : Fin 9, β i) = k\n      exact hsum\n    · rfl\n  · intro α _\n    rfl\n\n",
+  "existing_last_proof_before": "  unfold curvatureFloorQ80 jensenProductFloorQ96\n  decide +kernel",
+  "existing_last_proof_after": "  unfold curvatureFloorQ80 jensenProductFloorQ96\n  refine ⟨⟨(total row21SimplexData).denPos, ?_, ?_⟩,\n    row21SimplexData.jensenDenPos, ?_, ?_⟩\n  all_goals\n    simp only [total, add, t10, t10Numerator, z, weightedMoment,\n      homogeneous_eq_exact_antidiagonal] <;> decide +kernel",
+  "three_unique_reversible_deltas": true,
+  "whole_reverse_exact": true,
+  "pre_sha256": "41e29004576507b1e93db6f7c629a9ff5915c3743b6076a36b1f5166d1267ef9",
+  "post_sha256": "361bf5e839084b1d5497429b60830fa2dbf0800f04b2c2b73b054d75d3f12603",
+  "no_other_delta": true
+}
