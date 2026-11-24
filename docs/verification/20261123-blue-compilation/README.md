@@ -338,3 +338,7 @@ Sixteen 两头恢复原表的实际 H248 全限定名，Structural 一头恢复�
 [原 103 个实际失败的闭合集合核对](main-103-repair-completion/COMPLETED_ORIGINAL_103_FAILURE_REPAIR_ACCEPTANCE.json) 绑定各已验修补与当前源码，恰好覆盖上一轮 103 个失败模块。新的同六终点共享增量构建已单独启动；这些供应者验收不构成最终四个 P1 出口、全部原数值／分析义务或看板全部节点已完成的声明。完整 P1 继续保持未完成。
 
 本次另三份完整复用源码保留已验末尾空行，[EOF 核对](publication-20261124/SOURCE_EOF_PRESERVATION_323.json) 记录预期提示；其余默认空白检查通过，未改已验源码。
+
+第 100、101 批新增两份已验 P1 供应链源码后像，目录累计 325 份。Pair12 retained actual fifth policy bound 恢复原全限定名的连续表达；Ascending13 export ownership join 修补原有限分配表达与 API，保留原公开声明、数据和预算。实际 normal／指定 kernel replay／完整 owned 审计均通过，分别覆盖 10 个声明（10 public）与 58 个声明（45 public、13 private），非作者最终复核无阻断发现。见 [100](member-repair-batch100/VALIDATION_RESULTS.json)、[101](member-repair-batch101/VALIDATION_RESULTS.json) 及各自独立复核记录。
+
+本次按已验源码及产物哈希发布，没有重跑已成功的形式检查。101 的最终复核新增文件清单以字节相同的规范文件名收录，原清单、源码与检查记录不改。当前六终点全链仍有待处理义务，以上两模块通过不代表完整 P1 已完成。

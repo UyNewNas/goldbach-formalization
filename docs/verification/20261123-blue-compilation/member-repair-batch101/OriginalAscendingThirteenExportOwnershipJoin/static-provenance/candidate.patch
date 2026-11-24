@@ -1,0 +1,58 @@
+--- baseline.lean
++++ candidate.lean
+@@ -21,6 +21,15 @@
+ private theorem evaluate_ite (p : Prop) [Decidable p] (a b : Expr) (t : Point) :
+     evaluate (if p then a else b) t = if p then evaluate a t else evaluate b t := by
+   by_cases hp : p <;> simp [hp]
++
++private theorem ownership_eval_notation_add (a b : Expr) (t : Point) :
++    evaluate (a + b) t = evaluate a t + evaluate b t := by rfl
++
++private theorem ownership_eval_notation_sub (a b : Expr) (t : Point) :
++    evaluate (a - b) t = evaluate a t - evaluate b t := by rfl
++
++private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :
++    evaluate (q • a) t = (q : ℝ) * evaluate a t := by rfl
+ 
+ private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :
+     evaluate (subsetExpr m) t = subsetSum m t := by
+@@ -130,12 +139,27 @@
+     semanticSlack i r t = namedSlack i r t := by
+   fin_cases r
+   all_goals
+-    simp [semanticSlack, semanticExpr, namedSlack, evaluate, evaluate_ite,
++    norm_num only [semanticSlack, semanticExpr, namedSlack,
++      Matrix.cons_val_zero, Matrix.cons_val_zero',
++      Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
++      ownership_eval_notation_add, ownership_eval_notation_sub,
++      ownership_eval_notation_smul, evaluate, evaluate_ite,
+       evaluate_subsetExpr, oldExpr, thirdExpr, newExpr, ascendingExpr, descendingExpr, K, X,
+       comparisonCap, thirdMinorant, newCap, total, history3, history5, history7, selectedSum,
+-      branchPlane, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ,
++      branchPlane, prefixSquareExpr, Finset.sum_filter,
++      Fin.sum_univ_succ, Fin.sum_univ_zero,
++      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
++      Fin.lt_def, Fin.ext_iff, Fin.val_zero, Fin.val_succ,
++      Fin.val_mk, Fin.coe_ofNat_eq_mod, Fin.mk_lt_mk, Fin.mk.inj_iff,
++      ne_eq, Nat.reduceMod, and_true, true_and, and_false, false_and,
++      not_true_eq_false, not_false_eq_true, ite_true, ite_false,
++      Rat.cast_zero, Rat.cast_one, Rat.cast_add, Rat.cast_sub,
++      Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat,
+       VariableEnvelope.A, VariableEnvelope.C, eta, VariableEnvelope.cap, mu]
+-    <;> split_ifs <;> ring
++    <;> first
++      | rfl
++      | (split_ifs <;> ring1!)
++      | ring1!
+ 
+ def fullRow : Fin 8 → Fin 97 := ![20,22,23,25,26,28,30,32]
+ def middleIndex : Fin 5 → Fin 8 := ![0,2,4,5,6]
+@@ -159,7 +183,7 @@
+       newCap t - (selectedSum t + (∑ j ∈ Finset.univ.filter
+         (fun j : Fin 8 => j < middleIndex k ∧ j ≠ 1 ∧ j ≠ 3 ∧ j ≠ 7), t j) +
+           2 * t (middleIndex k)) := by
+-  fin_cases k <;> simp [complementRow, middleIndex, namedSlack]
++  fin_cases k <;> rfl
+ 
+ private theorem namedSlack_branch (i : Fin 13) (k : Fin 62) (t : Point) :
+     namedSlack i (branchRow k) t = comparisonCap t - branchPlane i (branchMasks k) t := by
