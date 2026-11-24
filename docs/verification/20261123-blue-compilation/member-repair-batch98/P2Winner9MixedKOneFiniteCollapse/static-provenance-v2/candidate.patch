@@ -1,0 +1,47 @@
+--- actual-e88f-failed
++++ factor-pull-v2
+@@ -152,38 +152,20 @@
+       (f g : Fin 9 → ℤ) (k : ℤ)
+       (hp : ∀ a b, F a b = k * f a * g b) :
+       (∑ a : Fin 9, ∑ b : Fin 9, F a b) = k * (∑ i : Fin 9, f i) * (∑ i : Fin 9, g i) := by
+-    simp only [Finset.sum_mul, Finset.mul_sum]
+-    apply Finset.sum_congr rfl
+-    intro a ha
+-    apply Finset.sum_congr rfl
+-    intro b hb
+-    exact hp a b
++    simp_rw [hp]
++    simp only [← Finset.mul_sum, ← Finset.sum_mul]
+   have sep3 (F : Fin 9 → Fin 9 → Fin 9 → ℤ)
+       (f g h : Fin 9 → ℤ) (k : ℤ)
+       (hp : ∀ a b c, F a b c = k * f a * g b * h c) :
+       (∑ a : Fin 9, ∑ b : Fin 9, ∑ c : Fin 9, F a b c) = k * (∑ i : Fin 9, f i) * (∑ i : Fin 9, g i) * (∑ i : Fin 9, h i) := by
+-    simp only [Finset.sum_mul, Finset.mul_sum]
+-    apply Finset.sum_congr rfl
+-    intro a ha
+-    apply Finset.sum_congr rfl
+-    intro b hb
+-    apply Finset.sum_congr rfl
+-    intro c hc
+-    exact hp a b c
++    simp_rw [hp]
++    simp only [← Finset.mul_sum, ← Finset.sum_mul]
+   have sep4 (F : Fin 9 → Fin 9 → Fin 9 → Fin 9 → ℤ)
+       (f g h r : Fin 9 → ℤ) (k : ℤ)
+       (hp : ∀ a b c e, F a b c e = k * f a * g b * h c * r e) :
+       (∑ a : Fin 9, ∑ b : Fin 9, ∑ c : Fin 9, ∑ e : Fin 9, F a b c e) = k * (∑ i : Fin 9, f i) * (∑ i : Fin 9, g i) * (∑ i : Fin 9, h i) * (∑ i : Fin 9, r i) := by
+-    simp only [Finset.sum_mul, Finset.mul_sum]
+-    apply Finset.sum_congr rfl
+-    intro a ha
+-    apply Finset.sum_congr rfl
+-    intro b hb
+-    apply Finset.sum_congr rfl
+-    intro c hc
+-    apply Finset.sum_congr rfl
+-    intro e he
+-    exact hp a b c e
++    simp_rw [hp]
++    simp only [← Finset.mul_sum, ← Finset.sum_mul]
+   have hk (g y z : Fin 9 → ℤ) :
+       (∑ a : Fin 9, ∑ b : Fin 9, ∑ c : Fin 9, ∑ e : Fin 9,
+         g a * y b * z c * z e * kernel a b c e) =

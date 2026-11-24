@@ -1,0 +1,99 @@
+{
+  "full_headers": [
+    {
+      "name": "delta",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def delta (i j : Fin 9) : ℤ :=",
+      "sha256": "bead0529132ad679e91827f3aec715da76e381ce3c238194b28e8ef86fe65f8f"
+    },
+    {
+      "name": "kernel",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def kernel (a b c d : Fin 9) : ℤ :=",
+      "sha256": "b7b38de0009b0c98a64775fb3af56a0fbf576f037ead671c2035a23b9ccc746c"
+    },
+    {
+      "name": "closed_four_labels",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem closed_four_labels :\n    (∀ a b c d : Fin 9,\n    fourExponent a b c d 0 +\n      (List.ofFn (fun q : Fin 8 => fourExponent a b c d q.succ)).sum + 8 = 12) ∧\n    (∀ a b c d : Fin 9,\n    (((fourExponent a b c d 0).factorial *\n      factorialProduct (List.ofFn\n        (fun q : Fin 8 => fourExponent a b c d q.succ)) : Nat) : ℤ) =\n      kernel a b c d) :=",
+      "sha256": "89c2267c89fc831f5a94cbf0fc8d6f4f7087200046a4ce162b7632539e06cc81"
+    },
+    {
+      "name": "fourExponent_degree",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem fourExponent_degree (a b c d : Fin 9) :\n    fourExponent a b c d 0 +\n      (List.ofFn (fun q : Fin 8 => fourExponent a b c d q.succ)).sum + 8 = 12 :=",
+      "sha256": "26100d7efd0e4a5461d36823941c661656f34c72c7fa0a2ce446e754e1f7c281"
+    },
+    {
+      "name": "fourFactorial_kernel",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem fourFactorial_kernel (a b c d : Fin 9) :\n    (((fourExponent a b c d 0).factorial *\n      factorialProduct (List.ofFn\n        (fun q : Fin 8 => fourExponent a b c d q.succ)) : Nat) : ℤ) =\n      kernel a b c d :=",
+      "sha256": "2e808a93280cc2927325fbf38244937365e34a3b8ded449075856f6d4109f68e"
+    },
+    {
+      "name": "homogeneous_one",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem homogeneous_one (y : Fin 9 → Nat) :\n    (homogeneous y 1 : ℤ) = ∑ i : Fin 9, (y i : ℤ) :=",
+      "sha256": "f1b43c36eb28530a68124817ec7089b82c79a65eb31c047fdf630b5ddbd5acca"
+    },
+    {
+      "name": "weighted_kernel_mixedNumerator",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem weighted_kernel_mixedNumerator (d : SimplexData) (j : Fin 10) :\n    (∑ a : Fin 9, ∑ b : Fin 9, ∑ c : Fin 9, ∑ e : Fin 9,\n      (d.gaps a : ℤ) * (d.y b : ℤ) * d.deviations j c *\n        d.deviations j e * kernel a b c e) =\n      mixedNumerator d j 1 :=",
+      "sha256": "21cef03603b1186ef911c46bdda18757a8b45af106cbb91eaecc7856702c7bac"
+    },
+    {
+      "name": "fourthMoment_kernel",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem fourthMoment_kernel (a b c e : Fin 9) :\n    (((fourExponent a b c e 0).factorial *\n      factorialProduct (List.ofFn\n        (fun q : Fin 8 => fourExponent a b c e q.succ)) : Nat) : ℝ) /\n        (((fourExponent a b c e 0) +\n          (List.ofFn (fun q : Fin 8 => fourExponent a b c e q.succ)).sum + 8).factorial : ℝ) =\n      (kernel a b c e : ℝ) / ((12 : ℕ).factorial : ℝ) :=",
+      "sha256": "4da92819538b0982430777507fff06397bf833ff5895dc230941d6caa4f1197c"
+    },
+    {
+      "name": "actualMixedExpectation_eq_candidate",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem actualMixedExpectation_eq_candidate (d : SimplexData) (j : Fin 10) :\n    actualMixedExpectation d j =\n      (mixedNumerator d j 1 : ℝ) /\n        ((gapTotal d.gaps : ℝ) * d.U * d.L^2 * (10 * 11 * 12)) :=",
+      "sha256": "a19e82205e78357bc5e7dce1c6f95fb360d4ee8987d53e63e7582b7bca71a5a8"
+    }
+  ],
+  "complete_defs": [
+    {
+      "name": "delta",
+      "complete_raw_region": "def delta (i j : Fin 9) : ℤ := if i = j then 1 else 0\n\n/-- Fifteen equality partitions of four labelled factors. -/\n",
+      "sha256": "6638d3bb71393daf59f1dee69dd85396bcaaf11ed539dcf6ad145ae36137c869"
+    },
+    {
+      "name": "kernel",
+      "complete_raw_region": "def kernel (a b c d : Fin 9) : ℤ :=\n  1 + delta a b + delta a c + delta a d +\n    delta b c + delta b d + delta c d +\n    delta a b * delta c d +\n    delta a c * delta b d +\n    delta a d * delta b c +\n    2 * (delta a b * delta a c + delta a b * delta a d +\n      delta a c * delta a d + delta b c * delta b d) +\n    6 * delta a b * delta a c * delta a d\n\n",
+      "sha256": "ff021402f8d2b7f32be02d3b8488e7f0a34e1686c9707a1f2465f3a1b2d9f4eb"
+    }
+  ],
+  "only_changed_original_theorem": "weighted_kernel_mixedNumerator",
+  "local_proof_fragments": [
+    {
+      "before": "    simp only [Finset.sum_mul, Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro a ha\n    apply Finset.sum_congr rfl\n    intro b hb\n    exact hp a b\n",
+      "after": "    simp_rw [hp]\n    simp only [← Finset.mul_sum, ← Finset.sum_mul]\n",
+      "local_helper": "sep2"
+    },
+    {
+      "before": "    simp only [Finset.sum_mul, Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro a ha\n    apply Finset.sum_congr rfl\n    intro b hb\n    apply Finset.sum_congr rfl\n    intro c hc\n    exact hp a b c\n",
+      "after": "    simp_rw [hp]\n    simp only [← Finset.mul_sum, ← Finset.sum_mul]\n",
+      "local_helper": "sep3"
+    },
+    {
+      "before": "    simp only [Finset.sum_mul, Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro a ha\n    apply Finset.sum_congr rfl\n    intro b hb\n    apply Finset.sum_congr rfl\n    intro c hc\n    apply Finset.sum_congr rfl\n    intro e he\n    exact hp a b c e\n",
+      "after": "    simp_rw [hp]\n    simp only [← Finset.mul_sum, ← Finset.sum_mul]\n",
+      "local_helper": "sep4"
+    }
+  ],
+  "whole_reverse_exact": true,
+  "all_other_bytes_exact": true
+}

@@ -320,3 +320,11 @@ Sixteen 两头恢复原表的实际 H248 全限定名，Structural 一头恢复�
 95 的六次 source、六次指定 kernel 与一次完整审计原已全部退出 0，外层控制器随后退出 120。后续只恢复元数据收集，原十四份命令与日志（含 stock readiness）和原 journal 前缀保持；没有新增形式检查，也未将未知的外层退出原因写成已证事实。六模块最终验收与其它批次同样完整。上述结果仍是 P1 供应链验收，最终四个 P1 导出和全部原算术／分析义务继续验证。
 
 两份完整复用源码按已验后像保留其原末尾空行；[发布核对](publication-20261124/SOURCE_EOF_PRESERVATION.json) 记录默认 diff-check 的两项预期 EOF 提示，其余默认空白检查通过。没有为消除提示更改已验源码。
+
+第九十七至九十九批新增 13 个已验模块、233 个 owned 声明（38 public、195 private），目录累计 307 份已验源码后像。三组实际 normal／指定 kernel／完整 owned 审计及非作者最终复核通过，完整类型／AST／宇宙／传递公理与源码及 65 项主要产物稳定，仅标准三公理；未为发布重跑。见 [97](member-repair-batch97/VALIDATION_RESULTS.json)、[98](member-repair-batch98/VALIDATION_RESULTS.json)、[99](member-repair-batch99/VALIDATION_RESULTS.json)。
+
+97、99 各验收 Seed 六块、102 个声明（6 public、96 private）。至此全部 43 个修补块 Seed00–42 实际 normal／kernel／完整 owned 均通过，覆盖 11008 行原数据、297216 个字段、731 个声明（43 public、688 private）。原 Seed43 未改，沿用其既有 ordinary normal 成功，没有补称独立 kernel 验收。这一范围仍是字面数据表示与类型事实，不能替代数值 floor、全部父子 max 或完整 P1。
+
+98 闭合原 k=1 的实际八维 simplex 混合期望与 frozen signed coefficient 的精确恒等式：由真实积分的 factorial sum，经四标签有限核和原卷积，得到原分母 `gapTotal * U * L² * (10*11*12)`，没有将解析 moment identity 当作前提。四标签有限事实用私有封闭 kernel 决定证明，有限和按原索引先逐点替换再提出常数；原公开声明、数据和预算保持，私有 `12.factorial` 的 Nat 语法恢复明确保留，不声称旧未解析类型相等。实际 normal 32.913 秒、kernel 36.156 秒、完整审计 7.289 秒均退出 0，29 个真实 owned 声明为 26 public、3 private，并包括原命名空间前缀之外的生成声明。
+
+98 的原 Member guard 首次真实失败与 v2 P6 guard 成功链分别保留；新成功全链均在同一原 P6 guard 下，没有拼接混合成功状态或重跑旧已绿模块。该恒等式是 P1 必需的实际供应者，P1 最终四出口与其余原始算术／分析义务仍须继续闭合。
