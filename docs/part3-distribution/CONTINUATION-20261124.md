@@ -37,10 +37,16 @@ that the full P3 targets have been proved.
 
 At `198f777f25d5a236f9456e0dbb16fafc8fc823b7`, the compatible Core and
 actual smooth-pair adapter also passed all gates: 17 and 11 complete owned
-declarations. The selected continuation therefore currently has **10
+declarations. At that checkpoint the selected continuation had **10
 modules and 204 declarations**. Including the unchanged original baseline
 gives 90 modules and 1,978 declarations. Reused historical imported-module
 inventories are not added to this total.
+
+At `d23f13b1d55423ede87153a147f77bbd227fa916`, the separate uniform-width
+actual-pair family passed all gates with five theorems. The current selected
+continuation is therefore **11 modules and 209 declarations**, or **91
+modules and 1,983 declarations** including the unchanged baseline. The
+whole P3 target remains open.
 
 The machine-readable [aggregate](continuation-20261124/aggregate.json)
 validates the saved ZIP/report/inventory/log evidence and the current
@@ -149,6 +155,7 @@ open. No new axiom has been introduced for them.
 | `Part3ExceptionalWeightGeometry` | Full acceptance at `80d7eeb`, unchanged | 45 |
 | `FiniteUpperCarrierCore` | Compatibility version fully accepted at `198f777f` | 17 |
 | `Part3ProperPowerActualPair` | Full acceptance at `198f777f` | 11 |
+| `Part3ProperPowerActualPairFamily` | Full acceptance at `d23f13b1` | 5 |
 
 ## Actual original-chart geometry and logarithmic saving
 
@@ -295,7 +302,7 @@ retains the exact 28-declaration inventory and all 35 stage logs. The
 verification ZIP has SHA-256
 `2e2ac86605b883dae113a43c3950dfab57f802b4c7a5ec27bf9cf472f07e96a9`.
 
-## Pending uniform-width actual pair family
+## Accepted uniform-width actual pair family
 
 `Part3ProperPowerActualPairFamily` is a new leaf importing the accepted
 ActualPair source. It fixes a common `widthMax` and applies ChartSum with
@@ -321,7 +328,12 @@ issue. The exact reviewed source SHA256 is
 `d663cf07c61ac7f2844faf7303aea42e502b305f7a47b56b725a9edbcf8c4ca0`.
 The dedicated `actual-pair-family` gate selects only this new module;
 none of the ten accepted continuation modules is edited or re-audited.
-This paragraph records a pending source, not a compilation receipt.
+The selected-workspace task `ff76d4db005f4de79bc6fb7b5d8f30f6` passed strict
+compilation, literal kernel replay and the complete inventory/axiom gate
+at `d23f13b1`, with five owned theorems. The
+[complete receipt](continuation-20261124/actual-pair-family-d23f13b1/README.md)
+retains all 33 stage logs and exact declaration types. ZIP SHA256:
+`58bd16d8783e3c26f885d9768db1ffacc84fbf0489f3a7b4d127e1f3316bab33`.
 
 ## Task-internal parallel compilation
 

@@ -1,11 +1,11 @@
 # Accepted P3 continuation inventory
 
 The accepted continuation, through source commit
-`198f777f25d5a236f9456e0dbb16fafc8fc823b7`, comprises
-**ten modules and 204 complete serialized declarations** with
+`d23f13b1d55423ede87153a147f77bbd227fa916`, comprises
+**eleven modules and 209 complete serialized declarations** with
 strict compilation, kernel replay and full transitive-axiom acceptance.
 The baseline c509267's 80 modules and 1,774 declarations are unchanged.
-Combined, these inventories cover 90 modules and 1,978 declarations.
+Combined, these inventories cover 91 modules and 1,983 declarations.
 **P3 as a whole remains open.**
 
 | Evidence | Selected modules | Selected declarations |
@@ -14,7 +14,8 @@ Combined, these inventories cover 90 modules and 1,978 declarations.
 | [Spectral at 80d7eeb](spectral-80d7eeb/README.md) | 2 | 88 |
 | [LogSaving and ChartSum at 70e8f69c](chart-sum-70e8f69c/README.md) | 2 | 20 |
 | [ActualPair and compatible Core at 198f777f](actual-pair-198f777f/README.md) | 2 | 28 |
-| Total continuation | 10 | 204 |
+| [Uniform-width actual pair family at d23f13b1](actual-pair-family-d23f13b1/README.md) | 1 | 5 |
+| Total continuation | 11 | 209 |
 
 [aggregate.json](aggregate.json) selects the last complete inventory for
 each defining module, validates all recorded stage logs, literal kernel
@@ -37,6 +38,7 @@ python3 -B verification/aggregate_part3_continuation.py \
   --receipt docs/part3-distribution/continuation-20261124/spectral-80d7eeb \
   --receipt docs/part3-distribution/continuation-20261124/chart-sum-70e8f69c \
   --receipt docs/part3-distribution/continuation-20261124/actual-pair-198f777f \
+  --receipt docs/part3-distribution/continuation-20261124/actual-pair-family-d23f13b1 \
   --output .lake/p3-continuation-aggregate.json
 ```
 
