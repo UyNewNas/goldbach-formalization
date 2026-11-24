@@ -30,6 +30,8 @@ PROPER_POWER_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ProperPowerOriginalChart",
     "Part3ProperPowerLogSaving",
     "Part3ProperPowerChartSum",
+    "FiniteUpperCarrierCore",
+    "Part3ProperPowerActualPair",
 ))
 SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
@@ -39,7 +41,12 @@ MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
-                        "ImbalancedChen.Part3ProperPowerChartSum")}
+                        "ImbalancedChen.Part3ProperPowerChartSum"),
+          "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
+                          "ImbalancedChen.Part3ProperPowerActualPair")}
+PROFILE_REUSE_MANIFEST = (
+    "docs/part3-distribution/continuation-20261124/actual-pair-reuse/SOURCE_MANIFEST.json"
+)
 
 
 def sha256(path: Path) -> str:
@@ -123,6 +130,16 @@ def main() -> None:
         audit = out / "Part3ContinuationAudit.lean"
         audit.write_text(render_audit(modules))
         paths = [ROOT / (m.replace(".", "/") + ".lean") for m in MODULES]
+        reuse = json.loads((ROOT / PROFILE_REUSE_MANIFEST).read_text())
+        for item in reuse["donor_sources"]:
+            relative = item["path"]
+            if relative != item["module"].replace(".", "/") + ".lean":
+                raise RuntimeError("Invalid reused profile source path: " + relative)
+            path = ROOT / relative
+            if sha256(path) != item["staged_sha256"]:
+                raise RuntimeError("Reused profile source changed: " + relative)
+            paths.append(path)
+        paths.append(ROOT / PROFILE_REUSE_MANIFEST)
         paths += [Path(__file__).resolve(), ROOT / "verification/verify_part3_distribution.py",
                   ROOT / baseline.AUDIT, ROOT / baseline.LEXER,
                   ROOT / ".github/workflows/part3-continuation.yml",

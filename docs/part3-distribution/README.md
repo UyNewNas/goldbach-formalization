@@ -25,6 +25,12 @@
 
 P3 整体仍未关闭。谱定理的经典 full-block J 与实际特征值下界仍是明确输入；实际 automorphic spectrum 上的全范围 J、KS、ABL／trace 接合尚缺可靠完整供应者。全图册求和现已实现，接下来仍需实际 upper/lower/marked 源的整数几何、幅度与同一模数权实例，以及完整 HB／medium／prime-product 组装；`RestrictedMediumObligation`、`UniformPrimeProductTarget` 仍开放。
 
+## 实际二槽源接合：源码已接入，待验收
+
+[ProperPowerActualPair](../../ImbalancedChen/Part3ProperPowerActualPair.lean) 采用实际 `smoothPhysicalPairOuterRamp`，从已验收 P4B 实变量支撑证明推导全部 VM 有效整数元组的几何与振幅，不再把这两个性质作为源的输入。十八个缺失依赖直接复用固定 blue 提交；兼容 `FiniteUpperCarrierCore` 只消除与旧 Attachment 重复的两个同体定义，保留原有限恒等式证明。旧源码文件保持不变。[复用证据与兼容说明](continuation-20261124/actual-pair-reuse/README.md) 已保存。
+
+新接合与兼容 Core 将按 `--group actual-pair` 单独严格编译、重放和完整审计。上一节八模块仍为已经通过的检查点；本节不提前声明新两模块验收成功。当前实际 finalPolicy 的活跃模数范围，以及完整谱／medium／lower／marked 组装仍未由这一步供应。
+
 ## 2026-11-24 物理 S2 续证
 
 - **完整物理级数与遗漏尾项。** 自然数样本上的原始同余求和精确等于零 Fourier 项加带符号的完整非零频率级数。两侧独立互素门和右侧 $\varphi(qds)$ 逐项保留。对当前已验证的 Gevrey 平顶窗，实际支撑和粗糙系数使总尾项的多项式系数至多为 $81{,}920X^8$。取 $K=12$ 后，完整物理 S2 扣除精确零项并除以 $V$，满足 (20) 的同一 $X^{-\sigma/2}$ 节省。[原始同余的 Poisson 恒等式](../../ImbalancedChen/Part3E1ProfileS2Progression.lean) · [总尾项](../../ImbalancedChen/Part3E1PhysicalTail.lean) · [归一化物理界](../../ImbalancedChen/Part3E1MediumPhysical.lean)

@@ -256,3 +256,39 @@ Its reusable dependency cache is retained; no new GitHub CI is started
 for checkpoints compiled in the selected Workspace environment.
 
 This file is a work ledger, not a completion certificate for P3.
+
+## Actual-pair integration candidate
+
+`Part3ProperPowerActualPair.lean` now applies ChartSum to the literal
+`smoothPhysicalPairOuterRamp b N (manuscriptHalfProductCutoff kappa N) width`.
+The VM-effective integer support gives positive coordinates, and the
+already accepted positive-real P4B profile supplies the lower scale and
+product cap. The existing pointwise profile bound gives amplitude one.
+Thus this source's `hGeometry` and `hW` are proved rather than assumed.
+The final threshold remains before B/Q/rho/chi. The modulus cap, fixed
+rho divisor order and original cutoff conditions remain explicit.
+
+Eighteen missing donor files are copied byte-for-byte from the fixed blue
+commit. `FiniteUpperCarrierCore` imports the unchanged existing Attachment
+instead of redeclaring its two identical rho/carrier definitions; every
+old finite identity proof is retained. The full adapter import closure
+has 125 project modules, no missing file and no cycle. Independent review
+found no blocking semantic issue. [Provenance](continuation-20261124/actual-pair-reuse/README.md)
+binds all file hashes and the original profile acceptance. The changed
+Core and actual adapter await a dedicated two-module acceptance; the
+previous eight-module receipt remains valid for its unchanged sources.
+
+## Existing regular-spectral proof to reuse
+
+The archived `Part3RegularCumulativeShellPayment` and
+`Part3RegularPositiveMeasureExhaustion` at `fa22a56829ee880404516a36d498ce27dcb32f92`
+already contain the manuscript's genuine positive-measure shell argument,
+including local L2, global integrability and the full absolute integral
+bound. They are source-only candidates, with no acceptance receipt found;
+their analysis should not be duplicated. The latter's source SHA-256 is
+`9cee631c6bdfd388c1d3987b16a495e2550cd94d2912d3a20cbe2eefd62e5d71`.
+The actual 1106 regular direct-sum measure and coefficient arrays still
+need a compatible connection. The older continuous consumer uses native
+`dt/cosh(pi*t)` and an exterior `1/(4*pi)`, so it cannot be silently
+identified with the manuscript's printed `dt/pi` normalization. Existing
+printed-normalization candidates remain the intended reuse path.
