@@ -1,0 +1,163 @@
+--- batch7/run_batch7_parallel.py
++++ batch8/run_batch8_parallel.py
+@@ -1,9 +1,9 @@
+ #!/usr/bin/env python3
+-"""Compile only new repair candidates and new probes; audit eight existing builds.
++"""Compile the batch8 repairs and conditional probes; audit seventeen existing builds.
+ 
+ The exact previous helper and acceptance runner remain authoritative. Installation
+ is source-hash guarded and happens before both established lanes start. The
+-already accepted 90 + 24 modules and degree-six probe are never scheduled.
++already accepted 90 + 24 + 8 modules and degree-six probe are never scheduled.
+ """
+ from __future__ import annotations
+ 
+@@ -21,7 +21,7 @@
+ 
+ PROJECT = Path('/workspace/blue-member-build')
+ GIT = Path('/workspace/goldbach-formalization')
+-ROOT = Path('/workspace/p1-complete-proof/20261124-resume/batch7-repairs-probes-next8')
++ROOT = Path('/workspace/p1-complete-proof/20261124-resume/batch8-repairs-probes-next17')
+ PREFIX = 'docs/p1/20261124/'
+ HELPER_PATH = PREFIX + 'batch5-parallel/run_batch5_parallel.py'
+ HELPER_SHA = '1d166b6a36362e185559ea08a82100a49ba9edbeefcb98b1a904b9ff9330cbd5'
+@@ -29,9 +29,8 @@
+ OPS_SHA = 'e1338ef756fba98b126bb089413f2c489ed4de8682a61c11dfb8e61c8e518d11'
+ RUNNER_PATH = PREFIX + 'normal-supplement-audit/run_parallel_acceptance_multibatch.py'
+ RUNNER_SHA = 'e9dadb4ee5cd0a9ad50e298a77c6133fe5e0d012f8b194ae02bd5118460fc9e1'
+-AUDIT_PATH = PREFIX + 'next8-rowmodulus-rebound/AUDIT_PLAN.json'
+-AUDIT_SHA = 'eadf25801c129e3b055e472cca0d372666f97140097031c12c1986ad682db920'
+-PLAN_PATH = PREFIX + 'batch7-parallel/EXECUTION_PLAN.json'
++PLAN_PATH = PREFIX + 'batch8-parallel/EXECUTION_PLAN.json'
++BASELINE_COMMIT = '2ab8216113394bce00f8d2d9d76de330541f1720'
+ 
+ 
+ def sha(path):
+@@ -40,7 +39,7 @@
+ 
+ 
+ def emit(stage, **fields):
+-    print(json.dumps({'batch7': stage, **fields}, ensure_ascii=False), flush=True)
++    print(json.dumps({'batch8': stage, **fields}, ensure_ascii=False), flush=True)
+ 
+ 
+ def load_module(name, path, expected):
+@@ -55,7 +54,7 @@
+     h = load_module('batch5_exact_helpers', ROOT / 'inputs' / 'batch5_helpers.py', HELPER_SHA)
+     ops = load_module('batch6_exact_operations', ROOT / 'inputs' / 'batch6_operations.py', OPS_SHA)
+     # Preserve the inherited batch6 progress label as well as run(),
+-    # diagnostics() and relay matching; the receipt directory identifies batch7.
++    # diagnostics() and relay matching; the receipt directory identifies batch8.
+     assert h.PROJECT == ops.PROJECT == PROJECT
+     return h, ops
+ 
+@@ -89,7 +88,7 @@
+     else:
+         if config['audit_preparation_exit_code'] == 0:
+             audit_root = Path(config['audit_receipt_root'])
+-            results.append(ops.run(directory, 'next8-rowmodulus-rebound-full-audit', [
++            results.append(ops.run(directory, 'next17-existing-normal-full-audit', [
+                 'python3', config['audit_runner'], '--plan', str(audit_root / 'AUDIT_PLAN.json'),
+                 '--receipt-root', str(audit_root), '--lane', '1']))
+         else:
+@@ -116,7 +115,7 @@
+                 'normal_requires_separate_kernel_and_owned_audit': True})
+         h.save(directory / 'LANE_RESULT.json', {
+             'stages': results, 'audit_failure_does_not_suppress_independent_normal': True,
+-            'already_accepted90_and24_repeated': False, 'whole_P1_complete': False})
++            'already_accepted90_and24_and8_repeated': False, 'whole_P1_complete': False})
+     return 0 if all(x['exit_code'] == 0 and not x.get('unexpected_built_modules')
+                     for x in results) else 1
+ 
+@@ -151,21 +150,35 @@
+     extract(OPS_PATH, inputs / 'batch6_operations.py', OPS_SHA)
+     h, ops = helpers()
+     plan = json.loads(extract(PLAN_PATH, inputs / 'EXECUTION_PLAN.json'))
+-    assert plan['baseline_commit'] == '01f5bcc251cadb8d8548eef9b65c63b4b923723b'
+-    audit = json.loads(extract(AUDIT_PATH, inputs / 'AUDIT_PLAN.json', AUDIT_SHA))
++    assert plan['baseline_commit'] == BASELINE_COMMIT
++    # Both bindings must be frozen before any project source can be installed.
++    for key in ('audit_plan_sha256', 'source_update_sha256'):
++        assert isinstance(plan.get(key), str) and re.fullmatch(r'[0-9a-f]{64}', plan[key]), \
++            ('unfrozen_input_binding', key)
++    audit = json.loads(extract(plan['audit_plan_path'], inputs / 'AUDIT_PLAN.json',
++                               plan['audit_plan_sha256']))
+     runner = inputs / 'run_parallel_acceptance_multibatch.py'
+     extract(RUNNER_PATH, runner, RUNNER_SHA)
+     assert audit['project'] == str(PROJECT)
+     assert audit['runtime_states'] == [str(x) for x in h.STATES]
+-    assert audit['lanes'][0]['modules'] == [] and len(audit['lanes'][1]['modules']) == 8
++    assert [x['id'] for x in audit['lanes']] == [0, 1]
++    assert audit['lanes'][0]['modules'] == []
+     audit_targets = audit['lanes'][1]['modules']
++    assert len(audit_targets) == len(set(audit_targets)) == plan['audit_module_count']
+     assert set(audit_targets) == set(audit['modules'])
+     normal = [m for g in plan['normal_groups'] for m in g['targets']]
+-    assert len(normal) == len(set(normal)) == 10
++    assert len(normal) == len(set(normal)) == plan['normal_module_count']
+     assert h.HIGHER not in normal
+-    update = json.loads(extract(PREFIX + 'batch7-repairs/SOURCE_UPDATE.json', inputs / 'SOURCE_UPDATE.json'))
+-    assert len(update['updates']) == 11
+-    assert {x['module'] for x in update['updates'] if x['cloud_source_mutation_required']} == set(normal)
++    assert not set(audit_targets) & set(audit['reused_complete_modules'])
++    assert not set(normal) & (set(audit_targets) | set(audit['reused_complete_modules']))
++    update = json.loads(extract(plan['source_update_path'], inputs / 'SOURCE_UPDATE.json',
++                                plan['source_update_sha256']))
++    assert update['baseline_commit'] == plan['baseline_commit']
++    assert len(update['updates']) == plan['normal_module_count'] + plan['reused_source_count']
++    mutable = {x['module'] for x in update['updates'] if x['cloud_source_mutation_required']}
++    preserved = {x['module'] for x in update['updates'] if not x['cloud_source_mutation_required']}
++    assert mutable == set(normal) and len(preserved) == plan['reused_source_count']
++    assert not mutable & preserved and h.HIGHER not in mutable | preserved
+     payloads = {x['path']: extract(x['path'], inputs / 'sources' / x['path'], x['after_sha256'])
+                 for x in update['updates']}
+     probe_deps = set()
+@@ -173,17 +186,24 @@
+         data = extract(probe['path'], inputs / 'probes' / Path(probe['path']).name, probe['sha256'])
+         probe_deps.update(m for m in h.imports(data) if m.startswith('ImbalancedChen.'))
+     h.check_roots()
++    higher_source_sha256 = sha(PROJECT / h.module_path(h.HIGHER))
+     installed = h.install_sources(PROJECT, update['updates'], payloads, ROOT / 'source-backups')
+     h.save(ROOT / 'SOURCE_INSTALL.json', {'commit': commit, 'sources': installed,
+         'protected_roots': h.check_roots(), 'higher_full_candidate_not_installed': True})
+     graph, sources = h.project_graph(PROJECT, normal + audit_targets + sorted(probe_deps))
++    # Keep the complete audit dependency gate, including the three preserved
++    # existing cloud sources. A partial source match never qualifies the audit.
++    expected_audit_sources = audit['expected_project_sources']
++    assert set(expected_audit_sources) == h.closure(graph, audit_targets)
++    assert {m: sources[m]['sha256'] for m in expected_audit_sources} == expected_audit_sources, \
++        'audit_project_source_context_mismatch'
+     assert not set(normal) & h.closure(graph, audit_targets)
+     assert not set(normal) & h.closure(graph, sorted(probe_deps))
+     for m in normal:
+         assert not (set(normal) - {m}) & h.closure(graph, [m]), ('normal_target_has_other_normal_ancestor', m)
+     h.save(ROOT / 'PROJECT_SOURCE_CONTEXT.json', sources)
+     h.save(ROOT / 'GIT_SHOW_READS.json', reads)
+-    preparation = ops.run(ROOT, 'next8-prepare-only', [
++    preparation = ops.run(ROOT, 'next17-prepare-only', [
+         'python3', str(runner), '--plan', str(inputs / 'AUDIT_PLAN.json'), '--prepare-only'])
+     config = {'commit': commit, 'driver_sha256': sha(executed),
+         'plan_sha256': sha(inputs / 'EXECUTION_PLAN.json'), 'graph': graph,
+@@ -204,15 +224,19 @@
+     assert {m: sha(PROJECT / h.module_path(m)) for m in sources} == {m: x['sha256'] for m, x in sources.items()}
+     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=GIT) == original_head
+     assert subprocess.check_output(['git', 'status', '--porcelain=v1', '-z'], cwd=GIT) == original_status
+-    h.save(ROOT / 'BATCH7_RESULT.json', {
++    assert sha(PROJECT / h.module_path(h.HIGHER)) == higher_source_sha256
++    h.save(ROOT / 'BATCH8_RESULT.json', {
+         'commit': commit, 'lane_commands': lanes, 'protected_roots': h.check_roots(),
+         'all_context_sources_unchanged_during_execution': True,
++        'audit_project_source_count': len(expected_audit_sources),
++        'preserved_source_count': len(preserved),
+         'original_dirty_git_worktree_unchanged': True,
++        'higher_canonical_source_unchanged': True,
+         'higher_full_module_candidate_installed': False,
+         'normal_requires_separate_kernel_and_owned_audit': True,
+-        'already_accepted90_and24_repeated': False,
++        'already_accepted90_and24_and8_repeated': False,
+         'old_degree6_probe_repeated': False, 'whole_P1_complete': False})
+-    emit('RESULT', lane_exit_codes=[x['exit_code'] for x in lanes], receipt=str(ROOT / 'BATCH7_RESULT.json'))
++    emit('RESULT', lane_exit_codes=[x['exit_code'] for x in lanes], receipt=str(ROOT / 'BATCH8_RESULT.json'))
+     return 0 if all(x['exit_code'] == 0 for x in lanes) else 1
+ 
+ 

@@ -326,7 +326,8 @@ theorem exists_actual_second_prime_pair_uniform_threshold
     exact Or.inr ⟨_,hsource,by simp only [newResidualPair,actualPrimeTupleLog,sub_sub]⟩
   have h := hbound N hN hEven _ _ _ _ hP hy ho hn cap hcap
   rw [hsum] at h
-  simpa only [actualPrimeTupleInitialSaving,residualSaving,sub_sub] using h
+  have hlast : (Fin.last 1 : Fin 2) = 1 := by decide
+  simpa only [actualPrimeTupleInitialSaving,residualSaving,sub_sub,hlast] using h
 
 /-! Actual target-deleted, strictly ordered original prime source. -/
 

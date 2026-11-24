@@ -83,8 +83,10 @@ theorem physical_factor_bounds {t : Point} (ht : PhysicalRows t) (j : Fin 10) :
       linarith [hk.2]
   fin_cases j <;>
     simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
-  · exact ⟨hlast.1.trans hr.1, by linarith [hr.2.1, hr.2.2, hlast.2]⟩
-  · exact ⟨hlast.1.trans (hr.1.trans hr.2.1), by linarith [hr.2.2, hlast.2]⟩
+  · change comparisonCap t - total t ∈ Icc cutoff (3 * mu)
+    exact ⟨hlast.1.trans hr.1, by linarith [hr.2.1, hr.2.2, hlast.2]⟩
+  · change newCap t - total t ∈ Icc cutoff (3 * mu)
+    exact ⟨hlast.1.trans (hr.1.trans hr.2.1), by linarith [hr.2.2, hlast.2]⟩
   all_goals exact hcoord _
 
 theorem physical_gap_bounds {t : Point} (ht : PhysicalRows t) :
@@ -100,9 +102,10 @@ theorem physicalRows_mem_hull {t : Point} (ht : PhysicalRows t) : t ∈ analytic
   refine ⟨⟨⟨?_, ?_⟩, ?_⟩, physical_gap_bounds ht⟩
   · exact ⟨fun j => (physical_coordinate_bounds ht j).1,
       fun j => (physical_coordinate_bounds ht j).2⟩
-  · simpa only [factors, Matrix.cons_val_zero] using physical_factor_bounds ht 0
-  · simpa only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ] using
-      physical_factor_bounds ht 1
+  · change comparisonCap t - total t ∈ Icc cutoff (3 * mu)
+    exact physical_factor_bounds ht 0
+  · change newCap t - total t ∈ Icc cutoff (3 * mu)
+    exact physical_factor_bounds ht 1
 
 theorem analyticHull_closed : IsClosed analyticHull := by
   exact ((isClosed_Icc.inter

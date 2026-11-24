@@ -1,0 +1,124 @@
+--- a/ImbalancedChen/P4AOriginalFull87SourceDictionary.lean
++++ b/ImbalancedChen/P4AOriginalFull87SourceDictionary.lean
+@@ -102,13 +102,17 @@
+       simp only [newCap,selected]
+       have heq : (∑ j ∈ ({1,3,7} : Finset (Fin 8)), t j) =
+           P2OriginalThirdMinorantLogDictionarySourceOnly.selectedSum t := by
+-        norm_num [P2OriginalThirdMinorantLogDictionarySourceOnly.selectedSum]
++        change (∑ j ∈ ({1,3,7} : Finset (Fin 8)), t j) = t 1+t 3+t 7
++        rw [Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({3,7} : Finset (Fin 8))),
++          Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({7} : Finset (Fin 8))),
++          Finset.sum_singleton]
++        exact (add_assoc _ _ _).symm
+       rw [heq,hv]
+       dsimp [P2OriginalThirdMinorantLogDictionarySourceOnly.newCap,
+         P2OriginalThirdMinorantLogDictionarySourceOnly.eta]
+       linarith
+   | h3 i =>
+-      simpa [newCap,selected,P4AOriginalFirstFailureH3Literal.selected138] using
++      simpa [newCap,selected,P4AOriginalFirstFailureH3Literal.selected138,add_assoc] using
+         P4AOriginalFirstFailureH3SourceSemantics.source_selected_license h
+ 
+ theorem source_full_selected {c : Cell} {t : Point} (h : Source c t) :
+@@ -126,9 +130,16 @@
+       have heq : selectedSquareExpr ({0,7} : Finset (Fin 8)) t j =
+           P2OriginalDescendingEighthLogSemantics.selectedSum t +
+           (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < j), t k)+2*t j := by
+-        fin_cases j <;> norm_num at hn
+-        all_goals norm_num [selectedSquareExpr,P2OriginalDescendingEighthLogSemantics.selectedSum,
+-          Finset.sum_filter,Fin.sum_univ_succ] <;> ring
++        have hfilter :
++            (Finset.univ.filter (fun k : Fin 8 => k < j ∧ k ∉ ({0,7} : Finset (Fin 8)))) =
++              Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < j) := by
++          ext k
++          simp only [Finset.mem_filter, Finset.mem_univ, true_and,
++            Finset.mem_insert, Finset.mem_singleton, not_or, Fin.lt_def, Fin.ext_iff]
++          omega
++        unfold selectedSquareExpr P2OriginalDescendingEighthLogSemantics.selectedSum
++        rw [Finset.sum_insert (by decide : (0 : Fin 8) ∉ ({7} : Finset (Fin 8))),
++          Finset.sum_singleton, hfilter]
+       rw [heq]
+       exact hg
+   | ascendingPair i =>
+@@ -170,7 +181,8 @@
+       · subst m
+         have heq : OriginalDescendingFifteenCellOwnership.subsetSum 6 t = t 1+t 2 := by
+           norm_num [OriginalDescendingFifteenCellOwnership.subsetSum,
+-            OriginalDescendingFifteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ]
++            OriginalDescendingFifteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
++            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]
+         rw [heq,v_eq_min]
+         exact min_le_right _ _
+       · have hg := hs.branches m hm hw
+@@ -187,7 +199,8 @@
+       · subst m
+         have heq : OriginalAscendingThirteenCellOwnership.subsetSum 9 t = t 0+t 3 := by
+           norm_num [OriginalAscendingThirteenCellOwnership.subsetSum,
+-            OriginalAscendingThirteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ]
++            OriginalAscendingThirteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
++            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]
+         rw [heq,v_eq_min]
+         exact min_le_left _ _
+       · have hg := hs.branches m hm hw
+@@ -203,7 +216,8 @@
+       by_cases hw : m = 9
+       · subst m
+         have heq : P4AOriginalFirstFailureH3Literal.oldSubsetSum 9 t = t 0+t 3 := by
+-          norm_num [P4AOriginalFirstFailureH3Literal.oldSubsetSum,Fin.sum_univ_succ]
++          norm_num [P4AOriginalFirstFailureH3Literal.oldSubsetSum,Fin.sum_univ_succ,
++            Fin.ofNat,Fin.succ]
+         rw [heq,v_eq_min]
+         exact min_le_left _ _
+       · have hg := hs.old_planes m hm hw
+@@ -232,30 +246,31 @@
+       OriginalAscendingThirteenCellOwnership.subsetSum,
+       OriginalAscendingThirteenCellOwnership.maskSlots,
+       P4AOriginalFirstFailureH3Literal.oldSubsetSum,
+-      Finset.sum_filter,Fin.sum_univ_succ,add_assoc]
++      Finset.sum_filter,Fin.sum_univ_succ,Nat.testBit_eq_decide_div_mod_eq,
++      Fin.ofNat,Fin.succ,add_assoc]
+ 
+ theorem source_old_w {c : Cell} {t : Point} (h : Source c t) :
+-    B (t 2) < comparison c t := by
++    VariableEnvelope.B (t 2) < comparison c t := by
+   cases c with
+   | remaining c => exact (P4AOriginalRemainingEighthSources.source_basic h).2.2.2.2.2.1
+   | descending i =>
+       have hs := (OriginalDescendingFifteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
+       have hw := hs.oldW
+-      change B (t 2) < P2OriginalDescendingEighthLogSemantics.oldRaw t
+-      dsimp [B]
++      change VariableEnvelope.B (t 2) < P2OriginalDescendingEighthLogSemantics.oldRaw t
++      dsimp [VariableEnvelope.B]
+       linarith
+   | ascendingPair i =>
+       have hs := (OriginalAscendingThirteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
+       have hw := hs.oldW
+-      change B (t 2) < P2OriginalThirdMinorantLogDictionarySourceOnly.comparisonCap t
+-      dsimp [B]
++      change VariableEnvelope.B (t 2) < P2OriginalThirdMinorantLogDictionarySourceOnly.comparisonCap t
++      dsimp [VariableEnvelope.B]
+       linarith
+   | h3 i =>
+       have hs := (P4AOriginalFirstFailureH3SourceSemantics.sourceAffineGuard_iff_StrictH3 i t).mp h
+       have hw := hs.W_below_R6
+-      change B (t 2) < P4AOriginalFirstFailureH3Literal.R6 t
++      change VariableEnvelope.B (t 2) < P4AOriginalFirstFailureH3Literal.R6 t
+       dsimp [P4AOriginalFirstFailureH3Literal.W] at hw
+-      dsimp [B,cap]
++      dsimp [VariableEnvelope.B,cap]
+       linarith
+ 
+ /-- The original gated and Theta-clipped ideal third is bounded on all87
+@@ -358,9 +373,9 @@
+   have hh := source_histories_original_ideal h 3
+   have ho := (source_basic h).2.2.2 6
+   dsimp [P4AOriginalRemainingEighthSources.history] at hh
+-  norm_num at ho
++  change t 7 < t 6 at ho
+   simp [Fin.sum_univ_succ]
+-  linarith
++  linarith only [hh, ho]
+ 
+ /-- Every source square is at the literal same physical cap and same N. -/
+ theorem source_integer_squares {c : Cell} {t : Point} (h : Source c t)

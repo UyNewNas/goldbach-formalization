@@ -51,7 +51,7 @@ theorem tendsto_actualExtendedThirdCompactSignedDensityCorrection {e h : ℝ} {m
   filter_upwards [hlarge] with N hN
   rw [actualExtendedThirdCompactRoughDensity_eq_policy,
     ← actualExtendedThirdInitialPolicy_eq_actualPlus he0 he hN m]
-  exact actualExtendedThirdCompactPolicySaving hN hh he0 he hmesh
+  exact (actualExtendedThirdCompactPolicySaving hN hh he0 he hmesh).symm
 
 /-- One legal finite policy is fixed before N. Its literal normalized
 signed correction approximates the original unbuffered third functional

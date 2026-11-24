@@ -141,7 +141,7 @@ theorem checkedChoice_fresh_has_finite_gates {mesh : ℕ}
   | some pair =>
       rcases pair with ⟨candidate, argument⟩
       by_cases hg : branchGates rank parent candidate (prefixCode rank.val code)
-      · exact ⟨candidate, argument, hr, hg⟩
+      · exact ⟨candidate, argument, rfl, hg⟩
       · simp [checkedChoice, hr, hg] at hfresh
 
 theorem checkedCap_monotone {mesh : ℕ} (table : BranchTable mesh)

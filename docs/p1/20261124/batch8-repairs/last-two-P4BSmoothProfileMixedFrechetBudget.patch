@@ -1,0 +1,23 @@
+--- a/ImbalancedChen/P4BSmoothProfileMixedFrechetBudget.lean
++++ b/ImbalancedChen/P4BSmoothProfileMixedFrechetBudget.lean
+@@ -25,7 +25,9 @@
+   let g : ℝ → ℝ := fun t => f (a + t)
+   have hg : ContDiff ℝ ∞ g := hf.comp (contDiff_const.add contDiff_id)
+   change ‖iteratedFDeriv ℝ k (g ∘ L) x‖ ≤ _
+-  rw [L.iteratedFDeriv_comp_right hg x (by simp)]
++  have hk : (k : WithTop ℕ∞) ≤ ∞ :=
++    WithTop.coe_le_coe.mpr (show (k : ℕ∞) ≤ ⊤ from le_top)
++  rw [L.iteratedFDeriv_comp_right hg x hk]
+   have hnorm := (iteratedFDeriv ℝ k g (L x)).norm_compContinuousLinearMap_le
+     (fun _ : Fin k => L)
+   have hshift : iteratedDeriv k g (L x) = iteratedDeriv k f (a + L x) :=
+@@ -47,7 +49,8 @@
+     ‖iteratedFDeriv ℝ k (fun y => f y * g y) x‖ ≤
+         ∑ j ∈ Finset.range (k + 1), (k.choose j : ℝ) *
+           ‖iteratedFDeriv ℝ j f x‖ * ‖iteratedFDeriv ℝ (k - j) g x‖ :=
+-      norm_iteratedFDeriv_mul_le hf hg x (by simp)
++      norm_iteratedFDeriv_mul_le hf hg x
++        (WithTop.coe_le_coe.mpr (show (k : ℕ∞) ≤ ⊤ from le_top))
+     _ ≤ ∑ j ∈ Finset.range (k + 1), (k.choose j : ℝ) * (Cf * Cg * R ^ k) := by
+       apply Finset.sum_le_sum
+       intro j hj

@@ -86,9 +86,9 @@ def run {α : Type*} (w : α → ℝ) (A B C : ℝ) :
 def RunSpec {α : Type*} (w : α → ℝ) (A B C : ℝ)
     (initial : Bins α) (input : List α) : Outcome α → Prop
   | .done g => Bounded w A B C g ∧ Trace initial input g
-  | .overflow g p rest => ∃ prefix,
-      input = prefix ++ p :: rest ∧ Bounded w A B C g ∧
-      Trace initial prefix g ∧
+  | .overflow g p rest => ∃ «prefix»,
+      input = «prefix» ++ p :: rest ∧ Bounded w A B C g ∧
+      Trace initial «prefix» g ∧
       A < wp w g.left * w p ∧ B < wp w g.middle * w p ∧
       C < wp w g.right * w p
 
@@ -111,8 +111,8 @@ theorem run_spec {α : Type*} (w : α → ℝ) (A B C : ℝ)
             exact ⟨hs.1, Trace.left initial p hs.2⟩
         | overflow g q rest =>
             rw [hout] at hs
-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
-            exact ⟨p :: prefix, by simp [heq], hb, Trace.left initial p ht, hf⟩
+            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
+            exact ⟨p :: «prefix», by simp [heq], hb, Trace.left initial p ht, hf⟩
       · have hn : Bounded w A B C (putMiddle initial p) := by
           exact ⟨hinit.1, by simpa [putMiddle, wp] using hm, hinit.2.2⟩
         have hs := ih (putMiddle initial p) hn
@@ -122,8 +122,8 @@ theorem run_spec {α : Type*} (w : α → ℝ) (A B C : ℝ)
             exact ⟨hs.1, Trace.middle initial p hs.2⟩
         | overflow g q rest =>
             rw [hout] at hs
-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
-            exact ⟨p :: prefix, by simp [heq], hb, Trace.middle initial p ht, hf⟩
+            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
+            exact ⟨p :: «prefix», by simp [heq], hb, Trace.middle initial p ht, hf⟩
       · have hn : Bounded w A B C (putRight initial p) := by
           exact ⟨hinit.1, hinit.2.1, by simpa [putRight, wp] using hr⟩
         have hs := ih (putRight initial p) hn
@@ -133,8 +133,8 @@ theorem run_spec {α : Type*} (w : α → ℝ) (A B C : ℝ)
             exact ⟨hs.1, Trace.right initial p hs.2⟩
         | overflow g q rest =>
             rw [hout] at hs
-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
-            exact ⟨p :: prefix, by simp [heq], hb, Trace.right initial p ht, hf⟩
+            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
+            exact ⟨p :: «prefix», by simp [heq], hb, Trace.right initial p ht, hf⟩
       · exact ⟨[], rfl, hinit, Trace.nil initial,
           lt_of_not_ge hl, lt_of_not_ge hm, lt_of_not_ge hr⟩
 
@@ -150,15 +150,15 @@ theorem run_done_product {α : Type*} (w : α → ℝ) (A B C : ℝ)
 
 /-- The original full-square at an actual stopping slot. -/
 theorem stopping_square {α : Type*} (w : α → ℝ) {D : ℝ}
-    {seed input prefix rest : List α} {p : α} {initial g : Bins α}
+    {seed input «prefix» rest : List α} {p : α} {initial g : Bins α}
     (hseed : total w initial = wp w seed)
     (hfull : PrefixSquareBound w D (seed ++ input))
-    (hinput : input = prefix ++ p :: rest) (htrace : Trace initial prefix g) :
+    (hinput : input = «prefix» ++ p :: rest) (htrace : Trace initial «prefix» g) :
     total w g * w p ^ 2 ≤ D := by
-  have hs : PrefixSquareBound w D ((seed ++ prefix) ++ p :: rest) := by
+  have hs : PrefixSquareBound w D ((seed ++ «prefix») ++ p :: rest) := by
     simpa only [hinput, List.append_assoc] using hfull
-  have hh := hs (seed ++ prefix).length (by simp)
-  have heq : total w g = wp w (seed ++ prefix) := by
+  have hh := hs (seed ++ «prefix»).length (by simp)
+  have heq : total w g = wp w (seed ++ «prefix») := by
     rw [htrace.product w, hseed]
     simp [wp]
   rw [heq]
@@ -166,15 +166,15 @@ theorem stopping_square {α : Type*} (w : α → ℝ) {D : ℝ}
 
 /-- Read an arbitrary square after an exact original prefix. -/
 theorem suffix_square {α : Type*} (w : α → ℝ) {D : ℝ}
-    {prefix rest : List α} (hfull : PrefixSquareBound w D (prefix ++ rest))
+    {«prefix» rest : List α} (hfull : PrefixSquareBound w D («prefix» ++ rest))
     (i : ℕ) (hi : i < rest.length) :
-    (wp w prefix * wp w (rest.take i)) * w rest[i] ^ 2 ≤ D := by
-  have hindex : prefix.length + i < (prefix ++ rest).length := by simp; omega
-  have hh := hfull (prefix.length + i) hindex
-  have htake : (prefix ++ rest).take (prefix.length + i) = prefix ++ rest.take i := by
+    (wp w «prefix» * wp w (rest.take i)) * w rest[i] ^ 2 ≤ D := by
+  have hindex : «prefix».length + i < («prefix» ++ rest).length := by simp; omega
+  have hh := hfull («prefix».length + i) hindex
+  have htake : («prefix» ++ rest).take («prefix».length + i) = «prefix» ++ rest.take i := by
     rw [List.take_append, List.take_of_length_le (by omega)]
     simp
-  have hget : (prefix ++ rest)[prefix.length + i]'hindex = rest[i] := by
+  have hget : («prefix» ++ rest)[«prefix».length + i]'hindex = rest[i] := by
     rw [List.getElem_append_right (by omega)]
     simp
   rw [htake, hget] at hh
@@ -184,17 +184,17 @@ theorem suffix_square {α : Type*} (w : α → ℝ) {D : ℝ}
 inherited from the same original full list.  The two existing complementary
 products remain explicit; there is no reordered-square assumption. -/
 theorem overflow_residual_squares {α : Type*} (w : α → ℝ) {D : ℝ}
-    {seed input prefix rest : List α} {p : α} {initial g : Bins α}
+    {seed input «prefix» rest : List α} {p : α} {initial g : Bins α}
     (hseed : total w initial = wp w seed)
     (hfull : PrefixSquareBound w D (seed ++ input))
-    (hinput : input = prefix ++ p :: rest) (htrace : Trace initial prefix g)
+    (hinput : input = «prefix» ++ p :: rest) (htrace : Trace initial «prefix» g)
     (hb : 0 < wp w g.middle) (hp : 0 < w p) :
     ∀ (i : ℕ) (hi : i < rest.length),
       ((wp w g.left * wp w g.right) * wp w (rest.take i)) * w rest[i] ^ 2 ≤
         D / (wp w g.middle * w p) := by
-  have hs : PrefixSquareBound w D (((seed ++ prefix) ++ [p]) ++ rest) := by
+  have hs : PrefixSquareBound w D (((seed ++ «prefix») ++ [p]) ++ rest) := by
     simpa only [hinput, List.append_assoc, List.singleton_append] using hfull
-  have hpre : wp w ((seed ++ prefix) ++ [p]) = total w g * w p := by
+  have hpre : wp w ((seed ++ «prefix») ++ [p]) = total w g * w p := by
     rw [htrace.product w, hseed]
     simp [wp, mul_assoc]
   intro i hi
@@ -217,14 +217,14 @@ theorem run_overflow_original_square {α : Type*} (w : α → ℝ) (A B C : ℝ)
     (hseed : total w initial = wp w seed)
     (hfull : PrefixSquareBound w D (seed ++ input))
     (hstop : run w A B C initial input = .overflow g p rest) :
-    (∃ prefix, input = prefix ++ p :: rest ∧ Trace initial prefix g) ∧
+    (∃ «prefix», input = «prefix» ++ p :: rest ∧ Trace initial «prefix» g) ∧
       Bounded w A B C g ∧
       A < wp w g.left * w p ∧ B < wp w g.middle * w p ∧
       C < wp w g.right * w p ∧ total w g * w p ^ 2 ≤ D := by
   have hs := run_spec w A B C input initial hinit
   rw [hstop] at hs
-  obtain ⟨prefix, heq, hb, ht, hA, hB, hC⟩ := hs
-  exact ⟨⟨prefix, heq, ht⟩, hb, hA, hB, hC,
+  obtain ⟨«prefix», heq, hb, ht, hA, hB, hC⟩ := hs
+  exact ⟨⟨«prefix», heq, ht⟩, hb, hA, hB, hC,
     stopping_square w hseed hfull heq ht⟩
 
 /-- The decisive manuscript inequality is strict.  It follows from the
@@ -299,13 +299,13 @@ theorem actual_W_gap_run {e : ℝ} {m : ℕ}
       (N ^ (1 - actualExtendedThirdRescueParameter e m j t - e / 32) / A)
       (initialBins A p) := by
     refine ⟨?_, ?_, ?_⟩
-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
+    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
     · simpa [initialBins, wp] using hfirst
-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
+    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
   refine ⟨?_, run_spec _ _ _ _ _ _ hinit⟩
   have hcast := congrArg (fun n : ℕ => (n : ℝ)) hprod
-  simpa [total, initialBins, wp, actualTwoCapacityFactors,
-    actualNatList_cast_prod, Nat.cast_mul] using hcast
+  simpa only [total, initialBins, wp, actualTwoCapacityFactors,
+    actualNatList_cast_prod, List.prod_singleton, Nat.cast_mul] using hcast
 
 end
 

@@ -1,0 +1,314 @@
+{
+  "schema": "batch6-five-minimal-proof-repair-candidates-v1",
+  "created_utc": "2026-11-24T11:30:11.506893+00:00",
+  "baseline": "2ab82161",
+  "manuscript_root": "/workspace/scratch/89135e928d3c/chen-paper/paper/release-20261106/en",
+  "manuscript_git_pin": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+  "records": [
+    {
+      "module": "ImbalancedChen.P2CompiledCausalPrimeSourceLower",
+      "candidate": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/ImbalancedChen/P2CompiledCausalPrimeSourceLower.lean",
+      "patch": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/P2CompiledCausalPrimeSourceLower.patch",
+      "pre_sha256": "fecc55f011fbacda448ffc99410984c69e7de0f3241b75d46cdab88b6b4b63ea",
+      "post_sha256": "885911eaaf0be9bb71cf90a3c305078daef67dfc8acebb610aa7e15cc5fc9ee4",
+      "git_blob_sha1": "23dc7a415ec9f46f5feb82617b834eb50fe6d6ae",
+      "baseline_2ab82161_exact": true,
+      "original_declaration_count": 14,
+      "public_declaration_count": 13,
+      "preserved_definition_or_inductive_count": 1,
+      "declaration_names_unchanged": true,
+      "definition_bodies_unchanged": true,
+      "imports_and_scopes_unchanged": true,
+      "header_text_changes": [
+        {
+          "declaration": "universe_coprime_target",
+          "before": "theorem universe_coprime_target (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ universe N cap w z) : d.Coprime N",
+          "after": "theorem universe_coprime_target (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ «universe» N cap w z) : d.Coprime N",
+          "classification": "Identifier escaping/name qualification only. Original text did not elaborate; no prior well-typed type is claimed."
+        },
+        {
+          "declaration": "exists_compiled_full_policy_original_prime_lower",
+          "before": "theorem exists_compiled_full_policy_original_prime_lower :\n    ∃ C K : ℝ, 0 < C ∧ 1 < K ∧\n      ∀ epsilon : ℝ, 0 < epsilon → epsilon < 1 / 8 →\n      ∃ D0 : ℝ, 2 ≤ D0 ∧ ∀ D : ℝ, D0 ≤ D →\n      ∀ N cap : ℕ, Even N → ∀ (keep : List ℕ → Bool) (z tau : ℝ),\n        D ^ (epsilon ^ 2) ≤ z → z ≤ (cap : ℝ) →\n        let w := D ^ (epsilon ^ 2)\n        let L := D ^ epsilon\n        let V := actualSmallEulerProduct N cap w\n        let E := actualSmallRosserDensityError C K D epsilon\n        ((chenAdditivePrimeCarrier N).card : ℝ) *\n          (reciprocalTotientDensity (fixedEvenRoughSupport keep N cap 0 z)\n              (fixedEvenRoughCoefficient keep N cap 0 z) -\n            V * roundingLoss keep N cap w z tau -\n            (V * E) * reciprocalTotientDensity (universe N cap w z)\n              (fun d => |coefficient keep N cap w z tau d|)) +\n          (∑ q ∈ active keep N cap w z tau L,\n            rho keep N cap w z tau L q *\n              finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N q) -\n          chenInitialCorrectionCost N (active keep N cap w z tau L) ≤\n            ((chenSiftedPrimeSource N z).card : ℝ)",
+          "after": "theorem exists_compiled_full_policy_original_prime_lower :\n    ∃ C K : ℝ, 0 < C ∧ 1 < K ∧\n      ∀ epsilon : ℝ, 0 < epsilon → epsilon < 1 / 8 →\n      ∃ D0 : ℝ, 2 ≤ D0 ∧ ∀ D : ℝ, D0 ≤ D →\n      ∀ N cap : ℕ, Even N → ∀ (keep : List ℕ → Bool) (z tau : ℝ),\n        D ^ (epsilon ^ 2) ≤ z → z ≤ (cap : ℝ) →\n        let w := D ^ (epsilon ^ 2)\n        let L := D ^ epsilon\n        let V := actualSmallEulerProduct N cap w\n        let E := actualSmallRosserDensityError C K D epsilon\n        ((chenAdditivePrimeCarrier N).card : ℝ) *\n          (reciprocalTotientDensity (fixedEvenRoughSupport keep N cap 0 z)\n              (fixedEvenRoughCoefficient keep N cap 0 z) -\n            V * roundingLoss keep N cap w z tau -\n            (V * E) * reciprocalTotientDensity («universe» N cap w z)\n              (fun d => |coefficient keep N cap w z tau d|)) +\n          (∑ q ∈ active keep N cap w z tau L,\n            rho keep N cap w z tau L q *\n              finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N q) -\n          chenInitialCorrectionCost N (active keep N cap w z tau L) ≤\n            ((chenSiftedPrimeSource N z).card : ℝ)",
+          "classification": "Identifier escaping/name qualification only. Original text did not elaborate; no prior well-typed type is claimed."
+        }
+      ],
+      "other_header_text_unchanged": true,
+      "placeholder_or_native_decide_found": false,
+      "actual_failure_log": "/workspace/scratch/638a86a3af73/context-recovery/batch6-module-errors/P2CompiledCausalPrimeSourceLower.log",
+      "actual_failure_log_sha256": "beb23aa6ce649168c3d53231ab12972f3a328f02b26d9883b96d29b6cc90c132",
+      "acceptance": "Candidate only; no normal/kernel compilation run.",
+      "repair": {
+        "classification": "Parser/identifier escaping",
+        "changes": [
+          "Escape the two universe identifier occurrences as «universe», matching the existing P2LowerFiniteCellRounding declaration.",
+          "All proof bodies and the rounded coefficient, correction, density reserve and signed error expressions remain unchanged."
+        ],
+        "manuscript": [
+          {
+            "file": "argument.tex",
+            "lines": [
+              552,
+              598
+            ],
+            "labels": [
+              "eq:current-lower-projection"
+            ],
+            "relation": "Actual signed lower coefficient, density projection, and absolute coefficient-realization errors."
+          },
+          {
+            "file": "argument.tex",
+            "lines": [
+              600,
+              625
+            ],
+            "labels": [
+              "lem:current-sharp-prime",
+              "eq:current-sharp-pi"
+            ],
+            "relation": "Same signed primitive lower coefficient on the original prime sequence; this source does not assert the missing distribution supplier."
+          }
+        ]
+      }
+    },
+    {
+      "module": "ImbalancedChen.P4AOriginalFull87SourceDictionary",
+      "candidate": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/ImbalancedChen/P4AOriginalFull87SourceDictionary.lean",
+      "patch": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/P4AOriginalFull87SourceDictionary.patch",
+      "pre_sha256": "dbfadaa879e08c2c3ecb270f699b84f3f9ac7b0b044ba96be8046da4a73c501c",
+      "post_sha256": "50a8b31050fde72e41fb7ba0d03ede59d9f21998cbb448eb8a3c099871f82be5",
+      "git_blob_sha1": "8e98d0da15d0019df2f6141be9218c499431e56e",
+      "baseline_2ab82161_exact": true,
+      "original_declaration_count": 24,
+      "public_declaration_count": 23,
+      "preserved_definition_or_inductive_count": 8,
+      "declaration_names_unchanged": true,
+      "definition_bodies_unchanged": true,
+      "imports_and_scopes_unchanged": true,
+      "header_text_changes": [
+        {
+          "declaration": "source_old_w",
+          "before": "theorem source_old_w {c : Cell} {t : Point} (h : Source c t) :\n    B (t 2) < comparison c t",
+          "after": "theorem source_old_w {c : Cell} {t : Point} (h : Source c t) :\n    VariableEnvelope.B (t 2) < comparison c t",
+          "classification": "Identifier escaping/name qualification only. Original text did not elaborate; no prior well-typed type is claimed."
+        }
+      ],
+      "other_header_text_unchanged": true,
+      "placeholder_or_native_decide_found": false,
+      "actual_failure_log": "/workspace/scratch/638a86a3af73/context-recovery/batch6-module-errors/P4AOriginalFull87SourceDictionary.log",
+      "actual_failure_log_sha256": "e0cef114afd93caaacfafca01b5d43c2e2873e974f0224a2a631e52ff60b0a5d",
+      "acceptance": "Candidate only; no normal/kernel compilation run.",
+      "repair": {
+        "classification": "API/definition reduction plus elementary omitted finite-set derivation",
+        "changes": [
+          "Reuse accepted Full87Bridge {1,3,7} sum_insert proof pattern, with explicit finite nonmembership proof terms; normalize associativity for the H3 branch.",
+          "Replace failing eight-way descending complement expansion with a local filter-set equality, using k < j < 8 to exclude the last index; expand {0,7} by sum_insert.",
+          "Reduce Nat.testBit by the exact div/mod theorem and expand Fin.ofNat/Fin.succ in the fixed mask sums, following existing H3/remaining source semantics proofs.",
+          "Qualify VariableEnvelope.B in source_old_w; the original bare name resolved to a natural-number function and did not elaborate.",
+          "Make the final ordered-coordinate fact explicitly t 7 < t 6 before the existing linear residual deduction."
+        ],
+        "manuscript": [
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              13,
+              36
+            ],
+            "labels": [
+              "sv:selected-gate",
+              "sv:full-gate"
+            ],
+            "relation": "Literal full and selected-complement square expressions."
+          },
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              202,
+              219
+            ],
+            "labels": [
+              "sv:eighth-range",
+              "sv:eighth-density"
+            ],
+            "relation": "All original 87 source cells retain ancestor tests, physical square conditions and the same old/new residuals."
+          },
+          {
+            "file": "argument.tex",
+            "lines": [
+              210,
+              219
+            ],
+            "labels": [
+              "sec:current-upper"
+            ],
+            "relation": "Original 30+15+13+29 = 87 family count and ancestry-preserving successive cap changes."
+          }
+        ],
+        "verified_pattern_source": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-existing-work/MANIFEST.json",
+        "preserved_boundary": "No actual sixth-parent bound is newly supplied; the original ideal-third comparison theorem remains the same."
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5OriginalPhaseBPhysicalBinding",
+      "candidate": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/ImbalancedChen/P5OriginalPhaseBPhysicalBinding.lean",
+      "patch": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/P5OriginalPhaseBPhysicalBinding.patch",
+      "pre_sha256": "9ebd4cc43d35a9d3deaaeb7c1ffd0d3c70f14a8e0fdd3b616577bf6eaf55b4b8",
+      "post_sha256": "ff4abdbcc5385f37ad37924f25033ee28854a1c4134e5a7a876d9b4975bbae80",
+      "git_blob_sha1": "ee23c9fe18b34409fce80a9f0ec556bfa88db979",
+      "baseline_2ab82161_exact": true,
+      "original_declaration_count": 11,
+      "public_declaration_count": 11,
+      "preserved_definition_or_inductive_count": 3,
+      "declaration_names_unchanged": true,
+      "definition_bodies_unchanged": true,
+      "imports_and_scopes_unchanged": true,
+      "header_text_changes": [],
+      "other_header_text_unchanged": true,
+      "placeholder_or_native_decide_found": false,
+      "actual_failure_log": "/workspace/scratch/638a86a3af73/context-recovery/batch6-module-errors/P5OriginalPhaseBPhysicalBinding.log",
+      "actual_failure_log_sha256": "a73130d306bc4b3f041424e0b7d7f7c822f9b84cb34b7dbb0592ef2841cbfd29",
+      "acceptance": "Candidate only; no normal/kernel compilation run.",
+      "repair": {
+        "classification": "Dependent case reduction and constant name resolution",
+        "changes": [
+          "Use rfl for the already-rewritten some leftCodes = some leftCodes branch, keeping hleft for the old-plane hypothesis.",
+          "Fully qualify VariableEnvelope.A/C in the existing rational old-plane proof. The vertex, 63 old rows, original guard and caller-supplied old-plane premise are unchanged."
+        ],
+        "manuscript": [
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              182,
+              219
+            ],
+            "labels": [
+              "sv:eighth-range",
+              "sv:eighth-density"
+            ],
+            "relation": "Above-mu third change and later eighth update on inherited parent; all ancestor/full/selected tests retained."
+          },
+          {
+            "file": "argument.tex",
+            "lines": [
+              294,
+              309
+            ],
+            "labels": [],
+            "relation": "One physical signed small/rough coefficient with inherited prefix decisions."
+          }
+        ]
+      }
+    },
+    {
+      "module": "ImbalancedChen.P1Pair12RetainedSignedSource",
+      "candidate": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/ImbalancedChen/P1Pair12RetainedSignedSource.lean",
+      "patch": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/P1Pair12RetainedSignedSource.patch",
+      "pre_sha256": "f3238c37bc2c45aafbabafbc9cc69f4eeef12ba44d5e2b3d6852d10533564d16",
+      "post_sha256": "a8eee999d9e32ab7946f4ad7cdd4fd55e799dcd85feaacc8a729157d920d20b5",
+      "git_blob_sha1": "2afad3407454bd5d4f4052066c35aca0108456f0",
+      "baseline_2ab82161_exact": true,
+      "original_declaration_count": 14,
+      "public_declaration_count": 14,
+      "preserved_definition_or_inductive_count": 4,
+      "declaration_names_unchanged": true,
+      "definition_bodies_unchanged": true,
+      "imports_and_scopes_unchanged": true,
+      "header_text_changes": [],
+      "other_header_text_unchanged": true,
+      "placeholder_or_native_decide_found": false,
+      "actual_failure_log": "/workspace/scratch/638a86a3af73/context-recovery/batch6-module-errors/P1Pair12RetainedSignedSource.log",
+      "actual_failure_log_sha256": "bef3974c5a6352e6b88c60c6f119c3cf999acb90bb9f2c65a0110eb2b79ed0cb",
+      "acceptance": "Candidate only; no normal/kernel compilation run.",
+      "repair": {
+        "classification": "Higher-order rewrite instantiation",
+        "changes": [
+          "Supply the existing explicit F : Bool → Nat → Real terminal test to signedTest_eq_fixed_moduli_test. The former higher-order metavariable could not be inferred under pre.prod.",
+          "No change to signedTest, leaf multiplicities, signs, mark*(small*rough) modulus or small-prime attachment."
+        ],
+        "manuscript": [
+          {
+            "file": "argument.tex",
+            "lines": [
+              112,
+              156
+            ],
+            "labels": [
+              "eq:current-PP"
+            ],
+            "relation": "The identical signed coefficient occurs in the arithmetic count and exact coprime mean; unique small/rough attachment."
+          },
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              317,
+              326
+            ],
+            "labels": [
+              "sv:finite-realization"
+            ],
+            "relation": "Sign-dependent small-prime beta attachment to the retained coefficient."
+          }
+        ]
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5OriginalCommonRefinedAncestry",
+      "candidate": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/ImbalancedChen/P5OriginalCommonRefinedAncestry.lean",
+      "patch": "/workspace/scratch/638a86a3af73/p1-pending-repairs/batch6-fixes/P5OriginalCommonRefinedAncestry.patch",
+      "pre_sha256": "72cc512b0e00f04a58fdb41239705ab485293e8557425486839d0f93984c63ad",
+      "post_sha256": "2228f4c178c8803cc41db122b11ce51c0c0c8ee19a59845eb3b1c21602099690",
+      "git_blob_sha1": "e46cf2978828cbe95954150eccaf3340a5f55a0b",
+      "baseline_2ab82161_exact": true,
+      "original_declaration_count": 6,
+      "public_declaration_count": 6,
+      "preserved_definition_or_inductive_count": 0,
+      "declaration_names_unchanged": true,
+      "definition_bodies_unchanged": true,
+      "imports_and_scopes_unchanged": true,
+      "header_text_changes": [],
+      "other_header_text_unchanged": true,
+      "placeholder_or_native_decide_found": false,
+      "actual_failure_log": "/workspace/scratch/638a86a3af73/context-recovery/batch6-module-errors/P5OriginalCommonRefinedAncestry.log",
+      "actual_failure_log_sha256": "16149925b372aa43bc81647125f29887282e2633c574d8da96cddb05139ce777",
+      "acceptance": "Candidate only; no normal/kernel compilation run.",
+      "repair": {
+        "classification": "Definitional equality / eta-expanded function alias",
+        "changes": [
+          "Unfold the rank-eight family splice, rewrite its preserved-prefix branch using hlen, and close the unchanged rank-six parent equality by rfl.",
+          "All six public ancestry statements and constructor definitions remain unchanged."
+        ],
+        "manuscript": [
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              152,
+              155
+            ],
+            "labels": [],
+            "relation": "Rank-six changes preserve the earlier admission tests."
+          },
+          {
+            "file": "sieve-appendix.tex",
+            "lines": [
+              202,
+              219
+            ],
+            "labels": [
+              "sv:eighth-range",
+              "sv:eighth-density"
+            ],
+            "relation": "Rank-eight changes retain all ancestor tests; stages telescope from their respective parents."
+          }
+        ]
+      }
+    }
+  ],
+  "validation": {
+    "declarations": 69,
+    "public_declarations": 67,
+    "unchanged_definitions": 16,
+    "header_identifier_only_changes": 3
+  },
+  "limits": "No local or cloud Lean run. No shared canonical changes. No new imports, definitions, public names, mathematical assumptions, constants, sorry/axiom/native_decide, or budget changes. Existing malformed identifier spellings are documented explicitly in STATIC_CONTRACT_CHECK.json.",
+  "mathematical_gap_review": "The supplied actual errors are accounted for by parser/name resolution, elaboration/reduction, and the displayed finite-set/linear consequences. No substantive mathematical gap identified in these changes; formal acceptance is pending root compilation."
+}

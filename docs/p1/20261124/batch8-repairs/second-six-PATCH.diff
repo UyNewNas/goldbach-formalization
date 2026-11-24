@@ -1,0 +1,291 @@
+--- a/ImbalancedChen/P2OriginalInitialClosedTree.lean
++++ b/ImbalancedChen/P2OriginalInitialClosedTree.lean
+@@ -92,8 +92,12 @@
+       initialSeeds := by
+   rw [initialSeeds_eq_records]
+   norm_num [initialTree,xyTree,integerLeafBoxes,leftIntegerUpper,rightIntegerLower,
+-    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,M,R,
+-    Function.update,funext_iff,Fin.forall_fin_succ]
++    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,
++    P4AOriginalInitialSeedInventorySourceOnly.M,
++    P4AOriginalInitialSeedInventorySourceOnly.R,
++    Function.update,funext_iff,Fin.forall_fin_succ,
++    Fin.succ,Fin.instOfNat,Fin.ofNat,Fin.Internal.ofNat,Fin.ext_iff,
++    Fin.val_zero,Fin.val_succ,Fin.val_mk,Fin.coe_ofNat_eq_mod]
+ 
+ theorem compactRegion_subset_initial_box :
+     compactRegion ⊆ Icc (decodeCoordinates initialLower)
+@@ -108,7 +112,8 @@
+     fin_cases i <;> norm_num [decodeCoordinates,initialLower,H,coordinateDenominator]
+   have hhi : decodeCoordinates initialUpper = fun _ => thirdPrefixRho := by
+     ext i
+-    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,R,
++    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,
++      P4AOriginalInitialSeedInventorySourceOnly.R,
+       coordinateDenominator,thirdPrefixRho]
+   rw [hlo,hhi]
+   constructor
+@@ -145,7 +150,7 @@
+ /-- The actual compact correction is the sum over ALL 21 original seed
+ portions. This is an exact initial-mesh identity, with no charge premise. -/
+ theorem originalCompactThirdCorrection_eq_original_seed_integrals :
+-    originalCompactThirdCorrection =
++    OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection =
+       ((initialSeeds.map rootCell).map (fun c => ∫ t in c, compactKernel t)).sum := by
+   rw [originalCompactThirdCorrection_eq_sum_closedLeaves initialTree,
+     closedLeaves_initialTree_eq_original_seedCells]
+--- a/ImbalancedChen/P2OriginalLowerSelectedCapConstructor.lean
++++ b/ImbalancedChen/P2OriginalLowerSelectedCapConstructor.lean
+@@ -141,7 +141,7 @@
+   | some pair =>
+       rcases pair with ⟨candidate, argument⟩
+       by_cases hg : branchGates rank parent candidate (prefixCode rank.val code)
+-      · exact ⟨candidate, argument, hr, hg⟩
++      · exact ⟨candidate, argument, rfl, hg⟩
+       · simp [checkedChoice, hr, hg] at hfresh
+ 
+ theorem checkedCap_monotone {mesh : ℕ} (table : BranchTable mesh)
+--- a/ImbalancedChen/Part3ActualWThreeCapacityRun.lean
++++ b/ImbalancedChen/Part3ActualWThreeCapacityRun.lean
+@@ -86,9 +86,9 @@
+ def RunSpec {α : Type*} (w : α → ℝ) (A B C : ℝ)
+     (initial : Bins α) (input : List α) : Outcome α → Prop
+   | .done g => Bounded w A B C g ∧ Trace initial input g
+-  | .overflow g p rest => ∃ prefix,
+-      input = prefix ++ p :: rest ∧ Bounded w A B C g ∧
+-      Trace initial prefix g ∧
++  | .overflow g p rest => ∃ «prefix»,
++      input = «prefix» ++ p :: rest ∧ Bounded w A B C g ∧
++      Trace initial «prefix» g ∧
+       A < wp w g.left * w p ∧ B < wp w g.middle * w p ∧
+       C < wp w g.right * w p
+ 
+@@ -111,8 +111,8 @@
+             exact ⟨hs.1, Trace.left initial p hs.2⟩
+         | overflow g q rest =>
+             rw [hout] at hs
+-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
+-            exact ⟨p :: prefix, by simp [heq], hb, Trace.left initial p ht, hf⟩
++            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
++            exact ⟨p :: «prefix», by simp [heq], hb, Trace.left initial p ht, hf⟩
+       · have hn : Bounded w A B C (putMiddle initial p) := by
+           exact ⟨hinit.1, by simpa [putMiddle, wp] using hm, hinit.2.2⟩
+         have hs := ih (putMiddle initial p) hn
+@@ -122,8 +122,8 @@
+             exact ⟨hs.1, Trace.middle initial p hs.2⟩
+         | overflow g q rest =>
+             rw [hout] at hs
+-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
+-            exact ⟨p :: prefix, by simp [heq], hb, Trace.middle initial p ht, hf⟩
++            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
++            exact ⟨p :: «prefix», by simp [heq], hb, Trace.middle initial p ht, hf⟩
+       · have hn : Bounded w A B C (putRight initial p) := by
+           exact ⟨hinit.1, hinit.2.1, by simpa [putRight, wp] using hr⟩
+         have hs := ih (putRight initial p) hn
+@@ -133,8 +133,8 @@
+             exact ⟨hs.1, Trace.right initial p hs.2⟩
+         | overflow g q rest =>
+             rw [hout] at hs
+-            obtain ⟨prefix, heq, hb, ht, hf⟩ := hs
+-            exact ⟨p :: prefix, by simp [heq], hb, Trace.right initial p ht, hf⟩
++            obtain ⟨«prefix», heq, hb, ht, hf⟩ := hs
++            exact ⟨p :: «prefix», by simp [heq], hb, Trace.right initial p ht, hf⟩
+       · exact ⟨[], rfl, hinit, Trace.nil initial,
+           lt_of_not_ge hl, lt_of_not_ge hm, lt_of_not_ge hr⟩
+ 
+@@ -150,15 +150,15 @@
+ 
+ /-- The original full-square at an actual stopping slot. -/
+ theorem stopping_square {α : Type*} (w : α → ℝ) {D : ℝ}
+-    {seed input prefix rest : List α} {p : α} {initial g : Bins α}
++    {seed input «prefix» rest : List α} {p : α} {initial g : Bins α}
+     (hseed : total w initial = wp w seed)
+     (hfull : PrefixSquareBound w D (seed ++ input))
+-    (hinput : input = prefix ++ p :: rest) (htrace : Trace initial prefix g) :
++    (hinput : input = «prefix» ++ p :: rest) (htrace : Trace initial «prefix» g) :
+     total w g * w p ^ 2 ≤ D := by
+-  have hs : PrefixSquareBound w D ((seed ++ prefix) ++ p :: rest) := by
++  have hs : PrefixSquareBound w D ((seed ++ «prefix») ++ p :: rest) := by
+     simpa only [hinput, List.append_assoc] using hfull
+-  have hh := hs (seed ++ prefix).length (by simp)
+-  have heq : total w g = wp w (seed ++ prefix) := by
++  have hh := hs (seed ++ «prefix»).length (by simp)
++  have heq : total w g = wp w (seed ++ «prefix») := by
+     rw [htrace.product w, hseed]
+     simp [wp]
+   rw [heq]
+@@ -166,15 +166,15 @@
+ 
+ /-- Read an arbitrary square after an exact original prefix. -/
+ theorem suffix_square {α : Type*} (w : α → ℝ) {D : ℝ}
+-    {prefix rest : List α} (hfull : PrefixSquareBound w D (prefix ++ rest))
++    {«prefix» rest : List α} (hfull : PrefixSquareBound w D («prefix» ++ rest))
+     (i : ℕ) (hi : i < rest.length) :
+-    (wp w prefix * wp w (rest.take i)) * w rest[i] ^ 2 ≤ D := by
+-  have hindex : prefix.length + i < (prefix ++ rest).length := by simp; omega
+-  have hh := hfull (prefix.length + i) hindex
+-  have htake : (prefix ++ rest).take (prefix.length + i) = prefix ++ rest.take i := by
++    (wp w «prefix» * wp w (rest.take i)) * w rest[i] ^ 2 ≤ D := by
++  have hindex : «prefix».length + i < («prefix» ++ rest).length := by simp; omega
++  have hh := hfull («prefix».length + i) hindex
++  have htake : («prefix» ++ rest).take («prefix».length + i) = «prefix» ++ rest.take i := by
+     rw [List.take_append, List.take_of_length_le (by omega)]
+     simp
+-  have hget : (prefix ++ rest)[prefix.length + i]'hindex = rest[i] := by
++  have hget : («prefix» ++ rest)[«prefix».length + i]'hindex = rest[i] := by
+     rw [List.getElem_append_right (by omega)]
+     simp
+   rw [htake, hget] at hh
+@@ -184,17 +184,17 @@
+ inherited from the same original full list.  The two existing complementary
+ products remain explicit; there is no reordered-square assumption. -/
+ theorem overflow_residual_squares {α : Type*} (w : α → ℝ) {D : ℝ}
+-    {seed input prefix rest : List α} {p : α} {initial g : Bins α}
++    {seed input «prefix» rest : List α} {p : α} {initial g : Bins α}
+     (hseed : total w initial = wp w seed)
+     (hfull : PrefixSquareBound w D (seed ++ input))
+-    (hinput : input = prefix ++ p :: rest) (htrace : Trace initial prefix g)
++    (hinput : input = «prefix» ++ p :: rest) (htrace : Trace initial «prefix» g)
+     (hb : 0 < wp w g.middle) (hp : 0 < w p) :
+     ∀ (i : ℕ) (hi : i < rest.length),
+       ((wp w g.left * wp w g.right) * wp w (rest.take i)) * w rest[i] ^ 2 ≤
+         D / (wp w g.middle * w p) := by
+-  have hs : PrefixSquareBound w D (((seed ++ prefix) ++ [p]) ++ rest) := by
++  have hs : PrefixSquareBound w D (((seed ++ «prefix») ++ [p]) ++ rest) := by
+     simpa only [hinput, List.append_assoc, List.singleton_append] using hfull
+-  have hpre : wp w ((seed ++ prefix) ++ [p]) = total w g * w p := by
++  have hpre : wp w ((seed ++ «prefix») ++ [p]) = total w g * w p := by
+     rw [htrace.product w, hseed]
+     simp [wp, mul_assoc]
+   intro i hi
+@@ -217,14 +217,14 @@
+     (hseed : total w initial = wp w seed)
+     (hfull : PrefixSquareBound w D (seed ++ input))
+     (hstop : run w A B C initial input = .overflow g p rest) :
+-    (∃ prefix, input = prefix ++ p :: rest ∧ Trace initial prefix g) ∧
++    (∃ «prefix», input = «prefix» ++ p :: rest ∧ Trace initial «prefix» g) ∧
+       Bounded w A B C g ∧
+       A < wp w g.left * w p ∧ B < wp w g.middle * w p ∧
+       C < wp w g.right * w p ∧ total w g * w p ^ 2 ≤ D := by
+   have hs := run_spec w A B C input initial hinit
+   rw [hstop] at hs
+-  obtain ⟨prefix, heq, hb, ht, hA, hB, hC⟩ := hs
+-  exact ⟨⟨prefix, heq, ht⟩, hb, hA, hB, hC,
++  obtain ⟨«prefix», heq, hb, ht, hA, hB, hC⟩ := hs
++  exact ⟨⟨«prefix», heq, ht⟩, hb, hA, hB, hC,
+     stopping_square w hseed hfull heq ht⟩
+ 
+ /-- The decisive manuscript inequality is strict.  It follows from the
+@@ -299,13 +299,13 @@
+       (N ^ (1 - actualExtendedThirdRescueParameter e m j t - e / 32) / A)
+       (initialBins A p) := by
+     refine ⟨?_, ?_, ?_⟩
+-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
++    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
+     · simpa [initialBins, wp] using hfirst
+-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
++    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
+   refine ⟨?_, run_spec _ _ _ _ _ _ hinit⟩
+   have hcast := congrArg (fun n : ℕ => (n : ℝ)) hprod
+-  simpa [total, initialBins, wp, actualTwoCapacityFactors,
+-    actualNatList_cast_prod, Nat.cast_mul] using hcast
++  simpa only [total, initialBins, wp, actualTwoCapacityFactors,
++    actualNatList_cast_prod, List.prod_singleton, Nat.cast_mul] using hcast
+ 
+ end
+ 
+--- a/ImbalancedChen/P2OriginalSaving19SourceMeasure.lean
++++ b/ImbalancedChen/P2OriginalSaving19SourceMeasure.lean
+@@ -83,8 +83,10 @@
+       linarith [hk.2]
+   fin_cases j <;>
+     simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
+-  · exact ⟨hlast.1.trans hr.1, by linarith [hr.2.1, hr.2.2, hlast.2]⟩
+-  · exact ⟨hlast.1.trans (hr.1.trans hr.2.1), by linarith [hr.2.2, hlast.2]⟩
++  · change comparisonCap t - total t ∈ Icc cutoff (3 * mu)
++    exact ⟨hlast.1.trans hr.1, by linarith [hr.2.1, hr.2.2, hlast.2]⟩
++  · change newCap t - total t ∈ Icc cutoff (3 * mu)
++    exact ⟨hlast.1.trans (hr.1.trans hr.2.1), by linarith [hr.2.2, hlast.2]⟩
+   all_goals exact hcoord _
+ 
+ theorem physical_gap_bounds {t : Point} (ht : PhysicalRows t) :
+@@ -100,9 +102,10 @@
+   refine ⟨⟨⟨?_, ?_⟩, ?_⟩, physical_gap_bounds ht⟩
+   · exact ⟨fun j => (physical_coordinate_bounds ht j).1,
+       fun j => (physical_coordinate_bounds ht j).2⟩
+-  · simpa only [factors, Matrix.cons_val_zero] using physical_factor_bounds ht 0
+-  · simpa only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ] using
+-      physical_factor_bounds ht 1
++  · change comparisonCap t - total t ∈ Icc cutoff (3 * mu)
++    exact physical_factor_bounds ht 0
++  · change newCap t - total t ∈ Icc cutoff (3 * mu)
++    exact physical_factor_bounds ht 1
+ 
+ theorem analyticHull_closed : IsClosed analyticHull := by
+   exact ((isClosed_Icc.inter
+--- a/ImbalancedChen/P4AOriginalSecondResidualSupplier.lean
++++ b/ImbalancedChen/P4AOriginalSecondResidualSupplier.lean
+@@ -326,7 +326,8 @@
+     exact Or.inr ⟨_,hsource,by simp only [newResidualPair,actualPrimeTupleLog,sub_sub]⟩
+   have h := hbound N hN hEven _ _ _ _ hP hy ho hn cap hcap
+   rw [hsum] at h
+-  simpa only [actualPrimeTupleInitialSaving,residualSaving,sub_sub] using h
++  have hlast : (Fin.last 1 : Fin 2) = 1 := by decide
++  simpa only [actualPrimeTupleInitialSaving,residualSaving,sub_sub,hlast] using h
+ 
+ /-! Actual target-deleted, strictly ordered original prime source. -/
+ 
+--- a/ImbalancedChen/Part3RoughWeightedPrimeMass.lean
++++ b/ImbalancedChen/Part3RoughWeightedPrimeMass.lean
+@@ -28,7 +28,8 @@
+ 
+ private theorem inverseSquare_continuous (z : ℝ) :
+     ContinuousOn (fun t : ℝ => (t ^ 2)⁻¹) (Set.Icc 1 z) := by
+-  exact (continuousOn_id.pow 2).inv₀ (fun t ht => pow_ne_zero 2 (by linarith [ht.1]))
++  exact (continuousOn_id.pow 2).inv₀ (fun t ht =>
++    pow_ne_zero 2 (ne_of_gt (lt_of_lt_of_le zero_lt_one ht.1)))
+ 
+ /-- Exact finite Abel identity for Joint's literal inclusive prime carrier. -/
+ theorem logPrimeMass_eq_theta_abel {z : ℝ} (hz : 1 ≤ z) :
+@@ -46,8 +47,9 @@
+     intro t ht
+     exact (hasDerivAt_inv (by linarith [ht.1])).differentiableAt
+   have hderiv : IntegrableOn (deriv (fun u : ℝ => u⁻¹)) (Set.Icc 1 z) := by
+-    simpa only [deriv_inv] using
++    have hi : IntegrableOn (fun t : ℝ => -((t ^ 2)⁻¹)) (Set.Icc 1 z) volume :=
+       (inverseSquare_continuous z).neg.integrableOn_Icc
++    simpa only [deriv_inv] using hi
+   have hAbel := sum_mul_eq_sub_integral_mul₀ thetaCoeff
+     (by simp [thetaCoeff]) z hdiff hderiv
+   rw [← hsum, thetaCoeff_sum, ← intervalIntegral.integral_of_le hz] at hAbel
+@@ -61,8 +63,10 @@
+ 
+ private theorem theta_inverseSquare_integrable {z : ℝ} (hz : 1 ≤ z) :
+     IntervalIntegrable (fun t : ℝ => Chebyshev.theta t / t ^ 2) volume 1 z := by
+-  have h := integrableOn_mul_sum_Icc thetaCoeff (by norm_num : (0 : ℝ) ≤ 1)
++  have hi : IntegrableOn (fun t : ℝ => (t ^ 2)⁻¹) (Set.Icc 1 z) volume :=
+     (inverseSquare_continuous z).integrableOn_Icc
++  have h := integrableOn_mul_sum_Icc (m := 0) thetaCoeff
++    (by norm_num : (0 : ℝ) ≤ 1) hi
+   rw [intervalIntegrable_iff_integrableOn_Icc_of_le hz]
+   simpa only [thetaCoeff_sum, div_eq_mul_inv, mul_comm] using h
+ 
+@@ -75,7 +79,8 @@
+   have hinv : IntervalIntegrable (fun t : ℝ => t⁻¹) volume 1 z := by
+     apply ContinuousOn.intervalIntegrable
+     rw [Set.uIcc_of_le hz]
+-    exact continuousOn_id.inv₀ (fun t ht => by linarith [ht.1])
++    exact continuousOn_id.inv₀ (fun t ht =>
++      ne_of_gt (lt_of_lt_of_le zero_lt_one ht.1))
+   have hint : (∫ t in 1..z, Chebyshev.theta t / t ^ 2) ≤ log 4 * log z := by
+     calc
+       _ ≤ ∫ t in 1..z, log 4 * t⁻¹ := by
+@@ -87,7 +92,7 @@
+           Chebyshev.theta t / t ^ 2 ≤ (log 4 * t) / t ^ 2 :=
+             div_le_div_of_nonneg_right (Chebyshev.theta_le_log4_mul_x htpos.le)
+               (sq_nonneg t)
+-          _ = log 4 * t⁻¹ := by field_simp [htpos.ne']; ring
++          _ = log 4 * t⁻¹ := by field_simp [htpos.ne']
+       _ = log 4 * log z := by
+         rw [intervalIntegral.integral_const_mul,
+           integral_inv_of_pos (by norm_num : (0 : ℝ) < 1) hzpos]

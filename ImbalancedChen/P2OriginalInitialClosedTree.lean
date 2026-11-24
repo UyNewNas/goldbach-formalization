@@ -92,8 +92,12 @@ theorem normalized_initial_boxes :
       initialSeeds := by
   rw [initialSeeds_eq_records]
   norm_num [initialTree,xyTree,integerLeafBoxes,leftIntegerUpper,rightIntegerLower,
-    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,M,R,
-    Function.update,funext_iff,Fin.forall_fin_succ]
+    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,
+    P4AOriginalInitialSeedInventorySourceOnly.M,
+    P4AOriginalInitialSeedInventorySourceOnly.R,
+    Function.update,funext_iff,Fin.forall_fin_succ,
+    Fin.succ,Fin.instOfNat,Fin.ofNat,Fin.Internal.ofNat,Fin.ext_iff,
+    Fin.val_zero,Fin.val_succ,Fin.val_mk,Fin.coe_ofNat_eq_mod]
 
 theorem compactRegion_subset_initial_box :
     compactRegion ⊆ Icc (decodeCoordinates initialLower)
@@ -108,7 +112,8 @@ theorem compactRegion_subset_initial_box :
     fin_cases i <;> norm_num [decodeCoordinates,initialLower,H,coordinateDenominator]
   have hhi : decodeCoordinates initialUpper = fun _ => thirdPrefixRho := by
     ext i
-    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,R,
+    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,
+      P4AOriginalInitialSeedInventorySourceOnly.R,
       coordinateDenominator,thirdPrefixRho]
   rw [hlo,hhi]
   constructor
@@ -145,7 +150,7 @@ theorem closedLeaves_initialTree_eq_original_seedCells :
 /-- The actual compact correction is the sum over ALL 21 original seed
 portions. This is an exact initial-mesh identity, with no charge premise. -/
 theorem originalCompactThirdCorrection_eq_original_seed_integrals :
-    originalCompactThirdCorrection =
+    OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection =
       ((initialSeeds.map rootCell).map (fun c => ∫ t in c, compactKernel t)).sum := by
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves initialTree,
     closedLeaves_initialTree_eq_original_seedCells]

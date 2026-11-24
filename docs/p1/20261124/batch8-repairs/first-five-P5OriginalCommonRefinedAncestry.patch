@@ -1,0 +1,17 @@
+--- a/ImbalancedChen/P5OriginalCommonRefinedAncestry.lean
++++ b/ImbalancedChen/P5OriginalCommonRefinedAncestry.lean
+@@ -11,11 +11,9 @@
+ theorem policy8_through_eight_eq_six
+     (d : OriginalData) (N : ℝ) (positive : Bool) (pre : List ℕ)
+     (hlen : pre.length ≤ 8) : policy8 d N positive pre = policy6 d N positive pre := by
+-  simp [policy8, P5OriginalAdoptedEighthPhysicalMasks.familyPolicy,
+-    P5OriginalAdoptedEighthPhysicalMasks.parentPolicy,
+-    P4AOriginalEighthParentPhysicalLedger.parentPolicy,
+-    P4AActualSixthFrozenEighthAdmission.sixthPolicy, policy6, level6,
+-    firstExitDepthSplicePolicy, hlen]
++  unfold policy8 P5OriginalAdoptedEighthPhysicalMasks.familyPolicy
++  rw [firstExitDepthSplicePolicy, if_pos hlen]
++  rfl
+ 
+ theorem policy8_through_six_eq_fifth
+     (d : OriginalData) (N : ℝ) (positive : Bool) (pre : List ℕ)

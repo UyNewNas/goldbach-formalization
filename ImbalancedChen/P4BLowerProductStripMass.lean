@@ -88,7 +88,7 @@ theorem prime_pairs_card_le_two_ceil (S : Finset (ℕ × ℕ)) (U : ℝ)
         exact Prod.ext h1 h2
     simpa only [Nat.card_Icc, Nat.add_sub_cancel] using hcard
   have hsplit : A.card + B.card = S.card :=
-    Finset.card_filter_add_card_filter_not S (fun p => p.1 ≤ p.2)
+    Finset.card_filter_add_card_filter_not (s := S) (fun p => p.1 ≤ p.2)
   omega
 
 /-- Ordinary prime pairs on the literal finite coordinate cap; no order or
@@ -102,7 +102,7 @@ def ordinaryPrimePairs (N : ℕ) : Finset (ℕ × ℕ) := by
     p ∈ ordinaryPrimePairs N ↔
       p.1 ≤ N ∧ p.2 ≤ N ∧ Nat.Prime p.1 ∧ Nat.Prime p.2 := by
   classical
-  simp only [ordinaryPrimePairs, Finset.mem_filter, Finset.mem_product,
+  simp only [ordinaryPrimePairs, Finset.mem_filter, Finset.product_eq_sprod, Finset.mem_product,
     Finset.mem_range, Nat.lt_succ_iff, and_assoc]
 
 /-- Signed normalized distance below the lower-product wall. -/
@@ -130,7 +130,7 @@ an empty collar. -/
 theorem lowerProductStrip_eq_empty_of_nonpos {kappa delta : ℝ} {N : ℕ}
     (hdelta : delta ≤ 0) : lowerProductStrip kappa delta N = ∅ := by
   classical
-  apply Finset.eq_empty_iff_forall_not_mem.mpr
+  apply Finset.eq_empty_iff_forall_notMem.mpr
   intro p hp
   have hwall := (Finset.mem_filter.mp hp).2
   linarith [hwall.1, hwall.2]

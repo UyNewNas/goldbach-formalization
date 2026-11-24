@@ -28,7 +28,8 @@ private theorem thetaCoeff_sum (t : ℝ) :
 
 private theorem inverseSquare_continuous (z : ℝ) :
     ContinuousOn (fun t : ℝ => (t ^ 2)⁻¹) (Set.Icc 1 z) := by
-  exact (continuousOn_id.pow 2).inv₀ (fun t ht => pow_ne_zero 2 (by linarith [ht.1]))
+  exact (continuousOn_id.pow 2).inv₀ (fun t ht =>
+    pow_ne_zero 2 (ne_of_gt (lt_of_lt_of_le zero_lt_one ht.1)))
 
 /-- Exact finite Abel identity for Joint's literal inclusive prime carrier. -/
 theorem logPrimeMass_eq_theta_abel {z : ℝ} (hz : 1 ≤ z) :
@@ -46,8 +47,9 @@ theorem logPrimeMass_eq_theta_abel {z : ℝ} (hz : 1 ≤ z) :
     intro t ht
     exact (hasDerivAt_inv (by linarith [ht.1])).differentiableAt
   have hderiv : IntegrableOn (deriv (fun u : ℝ => u⁻¹)) (Set.Icc 1 z) := by
-    simpa only [deriv_inv] using
+    have hi : IntegrableOn (fun t : ℝ => -((t ^ 2)⁻¹)) (Set.Icc 1 z) volume :=
       (inverseSquare_continuous z).neg.integrableOn_Icc
+    simpa only [deriv_inv] using hi
   have hAbel := sum_mul_eq_sub_integral_mul₀ thetaCoeff
     (by simp [thetaCoeff]) z hdiff hderiv
   rw [← hsum, thetaCoeff_sum, ← intervalIntegral.integral_of_le hz] at hAbel
@@ -61,8 +63,10 @@ theorem logPrimeMass_eq_theta_abel {z : ℝ} (hz : 1 ≤ z) :
 
 private theorem theta_inverseSquare_integrable {z : ℝ} (hz : 1 ≤ z) :
     IntervalIntegrable (fun t : ℝ => Chebyshev.theta t / t ^ 2) volume 1 z := by
-  have h := integrableOn_mul_sum_Icc thetaCoeff (by norm_num : (0 : ℝ) ≤ 1)
+  have hi : IntegrableOn (fun t : ℝ => (t ^ 2)⁻¹) (Set.Icc 1 z) volume :=
     (inverseSquare_continuous z).integrableOn_Icc
+  have h := integrableOn_mul_sum_Icc (m := 0) thetaCoeff
+    (by norm_num : (0 : ℝ) ≤ 1) hi
   rw [intervalIntegrable_iff_integrableOn_Icc_of_le hz]
   simpa only [thetaCoeff_sum, div_eq_mul_inv, mul_comm] using h
 
@@ -75,7 +79,8 @@ theorem logPrimeMass_le_log4_mul_one_add_log {z : ℝ} (hz : 1 ≤ z) :
   have hinv : IntervalIntegrable (fun t : ℝ => t⁻¹) volume 1 z := by
     apply ContinuousOn.intervalIntegrable
     rw [Set.uIcc_of_le hz]
-    exact continuousOn_id.inv₀ (fun t ht => by linarith [ht.1])
+    exact continuousOn_id.inv₀ (fun t ht =>
+      ne_of_gt (lt_of_lt_of_le zero_lt_one ht.1))
   have hint : (∫ t in 1..z, Chebyshev.theta t / t ^ 2) ≤ log 4 * log z := by
     calc
       _ ≤ ∫ t in 1..z, log 4 * t⁻¹ := by
@@ -87,7 +92,7 @@ theorem logPrimeMass_le_log4_mul_one_add_log {z : ℝ} (hz : 1 ≤ z) :
           Chebyshev.theta t / t ^ 2 ≤ (log 4 * t) / t ^ 2 :=
             div_le_div_of_nonneg_right (Chebyshev.theta_le_log4_mul_x htpos.le)
               (sq_nonneg t)
-          _ = log 4 * t⁻¹ := by field_simp [htpos.ne']; ring
+          _ = log 4 * t⁻¹ := by field_simp [htpos.ne']
       _ = log 4 * log z := by
         rw [intervalIntegral.integral_const_mul,
           integral_inv_of_pos (by norm_num : (0 : ℝ) < 1) hzpos]

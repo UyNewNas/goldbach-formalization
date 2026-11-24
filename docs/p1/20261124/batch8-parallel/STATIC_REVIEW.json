@@ -1,0 +1,112 @@
+{
+  "status": "STATIC_AND_OFFLINE_WORKER_CHECKS_PASS_INPUT_SHA_FREEZE_PENDING",
+  "driver_sha256": "1a1082f99a89a50714a7973216531f279e88d9d7805959a5a2cfcf5caa39a403",
+  "plan_sha256_draft": "36bdfea4c7f7775cbc756a3220210d43cbc7156d581520eb7c20852fb8678689",
+  "reviewed_batch7_driver_sha256": "54fb4907cc033d6f432fc8e3ba6a21f92432afc7835444877400729f0738bb6e",
+  "python_ast_parse_passed": true,
+  "worker_checks": [
+    {
+      "case": "low_success_then_first_middle",
+      "passed": true,
+      "exit_code": 0,
+      "stages": [
+        "higher-new-probes-directdeps",
+        "higher-corrected-lowboundary-probe",
+        "higher-first-middle-probe"
+      ],
+      "real_external_commands_executed": 0
+    },
+    {
+      "case": "low_failure_does_not_run_middle",
+      "passed": true,
+      "exit_code": 1,
+      "stages": [
+        "higher-new-probes-directdeps",
+        "higher-corrected-lowboundary-probe"
+      ],
+      "real_external_commands_executed": 0
+    },
+    {
+      "case": "missing_probe_dependency_runs_no_probe",
+      "passed": true,
+      "exit_code": 1,
+      "stages": [
+        "higher-new-probes-directdeps"
+      ],
+      "real_external_commands_executed": 0
+    },
+    {
+      "case": "audit_failure_preserves_independent_normal_groups",
+      "passed": true,
+      "exit_code": 1,
+      "stages": [
+        "next17-existing-normal-full-audit",
+        "repair-first-five-normal-directdeps",
+        "repair-first-five-normal",
+        "repair-second-six-normal-directdeps",
+        "repair-second-six-normal",
+        "repair-third-six-normal-directdeps",
+        "repair-third-six-normal"
+      ],
+      "real_external_commands_executed": 0
+    },
+    {
+      "case": "one_normal_readiness_failure_preserves_later_groups",
+      "passed": true,
+      "exit_code": 1,
+      "stages": [
+        "next17-existing-normal-full-audit",
+        "repair-first-five-normal-directdeps",
+        "repair-second-six-normal-directdeps",
+        "repair-second-six-normal",
+        "repair-third-six-normal-directdeps",
+        "repair-third-six-normal"
+      ],
+      "real_external_commands_executed": 0
+    }
+  ],
+  "normal_group_sizes": [
+    5,
+    6,
+    6
+  ],
+  "normal_module_count": 17,
+  "audit_module_count": 17,
+  "source_update_expected_mutable": 17,
+  "source_update_expected_preserve_noop": 3,
+  "exact_inherited_inputs": {
+    "docs/p1/20261124/batch5-parallel/run_batch5_parallel.py": "1d166b6a36362e185559ea08a82100a49ba9edbeefcb98b1a904b9ff9330cbd5",
+    "docs/p1/20261124/batch6-parallel/run_batch6_parallel.py": "e1338ef756fba98b126bb089413f2c489ed4de8682a61c11dfb8e61c8e518d11",
+    "docs/p1/20261124/normal-supplement-audit/run_parallel_acceptance_multibatch.py": "e9dadb4ee5cd0a9ad50e298a77c6133fe5e0d012f8b194ae02bd5118460fc9e1"
+  },
+  "five_output_gate": "Unchanged exact e9 acceptance runner snapshots source plus .olean/.ilean/.c/.setup.json/.trace before and after kernel/full-owned audit.",
+  "lane_binding": "Both workers use original serializer for their respective state. Probe/normal commands use original guard. Audit uses --lane 1 without an outer guard because the exact runner guards internally.",
+  "probe_root_option": "Explicit --root=<probe-directory> immediately before the absolute Lean source path; no -o/-i/-c.",
+  "normal_failure_flow": "Audit failure and one not-ready normal group do not suppress later independent normal groups. Unexpected source-hash mismatch stops the worker.",
+  "source_install": "Original exact helper validates whole batch before backups/writes; exact preimage backup; preserved sources must already equal after_sha256 and retain original mtime/ino/size.",
+  "audit_source_gate": "Complete expected_project_sources must exactly equal the graph closure and all SHA256s must match; not a subset gate.",
+  "known_static_graph_check": {
+    "baseline": "2ab8216113394bce00f8d2d9d76de330541f1720",
+    "normal_plus_probe_project_source_count": 525,
+    "normal_target_ancestor_overlaps": {},
+    "normal_writes_in_probe_closure": [],
+    "audit_project_source_count_reported_by_terminal": 572,
+    "normal_writes_in_audit_closure_reported_by_terminal": []
+  },
+  "freeze_pending": [
+    "audit_plan_sha256",
+    "source_update_sha256"
+  ],
+  "runtime_checks_not_executed": [
+    "cloud Git fetch/show",
+    "actual runtime preimages/stat",
+    "actual all-audit-dependency source check",
+    "no-build readiness",
+    "Lean probes",
+    "normal builds",
+    "kernel replay and full-owned audits"
+  ],
+  "new_subagents": false,
+  "cloud_commands": 0,
+  "whole_P1_complete": false
+}

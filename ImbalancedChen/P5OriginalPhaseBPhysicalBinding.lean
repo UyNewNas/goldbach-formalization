@@ -130,7 +130,7 @@ theorem chosen_actual_row_bag_of_old_planes
   | none => simp [hleft] at hp
   | some leftCodes =>
       have hs := chosen_guard_square_rows N lambda3 lambda6 pre hguard
-      refine ⟨leftCodes, hleft, (physical_row_bag_holds_iff i leftCodes t).2 ?_⟩
+      refine ⟨leftCodes, rfl, (physical_row_bag_holds_iff i leftCodes t).2 ?_⟩
       exact ⟨hplanes leftCodes hleft, hs.2.1, hs.2.2⟩
 
 /-- First exact vertex in the verified H3 cell00 witness, global slot 58.
@@ -155,7 +155,8 @@ theorem h3_cell00_vertex_old_planes :
   intro I hI
   fin_cases I <;>
     norm_num [oldMasks, oldMaskCode, oldSubsetSum, oldComparison,
-      firstFailureH3LeftCodes, h3Cell00Vertex, A, C] at *
+      firstFailureH3LeftCodes, h3Cell00Vertex, VariableEnvelope.A,
+      VariableEnvelope.C] at *
 /-- The occupied rho uses the very same corrected-parent/eighth policy;
 its modulus is physical, squarefree, target-coprime and one-bounded. -/
 theorem physical_rho_nonzero_support

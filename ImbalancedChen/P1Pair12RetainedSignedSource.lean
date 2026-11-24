@@ -160,7 +160,10 @@ theorem physical_test_eq_signedTest
          else actualSmallRosserMinus N cap w L a) * G (mark * (a * d))) s pre.prod)
       from rfl]
   rw [signedTest_eq_fixed_moduli_test R _ (roughPrimeUniverse_nodup N cap w z)
-    (fun _ hp => mem_roughPrimeUniverse_prime hp)]
+    (fun _ hp => mem_roughPrimeUniverse_prime hp)
+    (fun b d => ∑ a ∈ actualSmallRosserSupport N cap w,
+      (if b then actualSmallRosserPlus N cap w L a
+       else actualSmallRosserMinus N cap w L a) * G (mark * (a * d)))]
   apply Finset.sum_congr rfl
   intro d hd
   rw [Finset.mul_sum]
