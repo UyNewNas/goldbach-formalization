@@ -82,13 +82,16 @@ theorem argument_abs_sub_le {v w : LogFour} (hv : v ∈ compactBox) (hw : w ∈ 
     have hh := mul_le_mul hNW hInv (abs_nonneg _) zero_le_one
     simpa only [one_mul] using hh
   rw [heq]
-  have hh := (abs_add _ _).trans (add_le_add h1 h2)
+  have hh := (abs_add_le _ _).trans (add_le_add h1 h2)
   nlinarith only [hh]
 
 theorem clamped_argument_abs_sub_le {v w : LogFour} (hv : v ∈ compactBox) (hw : w ∈ compactBox) :
     |max 2 (argument v) - max 2 (argument w)| ≤ 182 * l1Delta v w := by
   have hh := abs_max_sub_max_le_max (2 : ℝ) (argument v) 2 (argument w)
-  exact hh.trans (max_le (by simp; positivity) (argument_abs_sub_le hv hw))
+  have hzero : |(2 : ℝ) - 2| ≤ 182 * l1Delta v w := by
+    simpa only [sub_self, abs_zero] using
+      mul_nonneg (by norm_num : (0 : ℝ) ≤ 182) (l1Delta_nonneg v w)
+  exact hh.trans (max_le hzero (argument_abs_sub_le hv hw))
 
 /-- A genuine explicit modulus on the WHOLE original compact coordinate
 box, even when the two points cross delay-integer or max-two seams. -/
@@ -126,7 +129,7 @@ theorem extendedSwitched_abs_sub_le {v w : LogFour}
     unfold extendedSwitched
     field_simp [hzV0.ne', hzW0.ne']
     <;> ring
-  have hSum := (abs_add _ _).trans (add_le_add h1 h2)
+  have hSum := (abs_add_le _ _).trans (add_le_add h1 h2)
   have hK : 0 ≤ currentK := by norm_num [currentK]
   have hK7 : currentK ≤ 7 := by norm_num [currentK]
   have hkD := mul_le_mul_of_nonneg_right hK7 hD
@@ -140,7 +143,9 @@ theorem extendedSwitched_eq_actual (mask : Set (ℝ × ℝ)) (v : LogFour)
   have harg : argument v = (1 - (v 0 + v 1 + v 2 + v 3)) / v 2 := by
     rfl
   have hs2 : 2 ≤ argument v := by rw [harg]; linarith only [hs.1]
-  simp only [extendedSwitched, max_eq_right hs2, switchedKernel, harg]
+  change currentK * buchstab (max 2 (argument v)) / v 2 =
+    currentK * buchstab (argument v) / v 2
+  rw [max_eq_right hs2]
 
 theorem actual_switched_abs_sub_le (mask : Set (ℝ × ℝ)) (v w : LogFour)
     (hv : v ∈ originalDomain mask) (hw : w ∈ originalDomain mask) :

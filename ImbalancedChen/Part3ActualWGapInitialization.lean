@@ -38,6 +38,7 @@ theorem swapped_W_row_le {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}
     max (v (t 0)) (wInner (t 0) (t 1) (t 2))
   rw [wInner_eq_B (t 0) hz hy0, wInner_eq_B (t 0) hy ht.2.1]
   apply max_le_max le_rfl
+  dsimp [VariableEnvelope.B]
   linarith [ht.2.2.1]
 
 /-- A dominated later W row cannot be the actual least winner, even
@@ -124,7 +125,7 @@ theorem actual_W_gap_initial_two_slots {e : ℝ} {m : ℕ}
       (actualSelectedPrimeCoordinates N p 0)
       (actualSelectedPrimeCoordinates N p 1)
       (actualSelectedPrimeCoordinates N p 2) at hW
-    simp only [wInner, B, cap, le_min_iff] at hW
+    simp only [wInner, VariableEnvelope.B, VariableEnvelope.cap, le_min_iff] at hW
     obtain ⟨hW1, hW2, hW3⟩ := hW
     have hfirst : (p 0 : ℝ) ≤ N ^ (2 * theta - 1) := by
       rw [← rpow_actualSelectedPrimeCoordinates N hN p hp 0]

@@ -38,8 +38,7 @@ theorem Words.prepend_eq (w : Words) (tail : List (ℕ × ℕ)) :
   | leaf c q => rfl
   | branch l r il ir =>
     change l.prepend (r.prepend tail) = l.prepend (r.prepend []) ++ tail
-    simp only [il (r.prepend tail), il (r.prepend []), ir tail, ir [],
-      List.append_nil, List.append_assoc]
+    simp only [il, ir, List.append_nil, List.append_assoc]
 
 theorem Words.sum_list {α : Type*} [AddMonoid α] (w : Words) (f : ℕ × ℕ → α) :
     (w.list.map f).sum = w.total f := by
@@ -75,7 +74,10 @@ theorem Words.all_spec (p : ℕ × ℕ → Bool) (w : Words) (h : w.all p = true
       · exact hv
       · exact ht r hm
     | branch l r il ir =>
-      obtain ⟨hl,hr⟩ := Bool.and_eq_true.mp hv
+      have hboth : l.all p = true ∧ r.all p = true := by
+        change (l.all p && r.all p) = true at hv
+        cases hl : l.all p <;> cases hr : r.all p <;> simp_all
+      obtain ⟨hl,hr⟩ := hboth
       exact il hl _ (ir hr _ ht)
   exact aux w h [] (by simp)
 
@@ -94,7 +96,7 @@ def expectedHeader (count : ℕ) (floor : Bool) : ℕ :=
   bytes.foldr (fun byte rest => byte + 256*rest) 0
 
 def signedField (packed column : ℕ) : ℤ :=
-  let u := (packed / 2^(64*column)) % 2^64
+  let u : ℕ := (packed / 2^(64*column)) % 2^64
   if u < 2^63 then (u : ℤ) else (u : ℤ) - (2 : ℤ)^64
 
 def wire (x : ℕ × ℕ) : FifthWireRow :=
@@ -134,15 +136,15 @@ elab "include_new_fifth_pair% " cellpath:str floorpath:str : term => do
   if f.size != 128 + 160*n then throwError "original arrays have different row counts"
   let mut layer : Array Expr := #[]
   for j in [:n] do
-    layer := layer.push (mkApp2 (mkConst ``Words.leaf)
+    layer := layer.push (mkApp2 (Lean.mkConst ``Words.leaf)
       (mkNatLit (packBytes c (128+80*j) 80)) (mkNatLit (packBytes f (128+160*j) 160)))
   while 1 < layer.size do
     let mut next : Array Expr := #[]
     for j in [:(layer.size+1)/2] do
       let l := layer[2*j]!
-      next := next.push (if 2*j+1 < layer.size then mkApp2 (mkConst ``Words.branch) l layer[2*j+1]! else l)
+      next := next.push (if 2*j+1 < layer.size then mkApp2 (Lean.mkConst ``Words.branch) l layer[2*j+1]! else l)
     layer := next
-  let words := if layer.isEmpty then mkConst ``Words.empty else layer[0]!
-  return mkApp3 (mkConst ``Block.mk) (mkNatLit (packBytes c 0 128)) (mkNatLit (packBytes f 0 128)) words
+  let words := if layer.isEmpty then Lean.mkConst ``Words.empty else layer[0]!
+  return mkApp3 (Lean.mkConst ``Block.mk) (mkNatLit (packBytes c 0 128)) (mkNatLit (packBytes f 0 128)) words
 
 end ImbalancedChen.P4AOriginalNewFifthArchiveReader

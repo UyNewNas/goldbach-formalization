@@ -27,13 +27,10 @@ def basis (i : Fin 4) : LogFour := fun j => if j=i then 1 else 0
 
 /-- This is a fact about every actual selected source ID 1..15. -/
 theorem exists_selected (p : Policy) (hp : p.val<15) : ∃ i : Fin 4, Selected p i := by
-  fin_cases p <;>
-    first
-    | exact ⟨0, by norm_num [Selected,sourceId]⟩
-    | exact ⟨1, by norm_num [Selected,sourceId]⟩
-    | exact ⟨2, by norm_num [Selected,sourceId]⟩
-    | exact ⟨3, by norm_num [Selected,sourceId]⟩
-    | omega
+  fin_cases p
+  all_goals norm_num at hp
+  all_goals unfold Selected sourceId
+  all_goals decide
 
 theorem selectedMass_basis (p : Policy) (i : Fin 4) :
     selectedMass p (basis i) = if Selected p i then 1 else 0 := by
@@ -53,7 +50,7 @@ theorem selectedLinear_basis (p : Policy) (i : Fin 4) :
 
 theorem fullSquareLinear_basis (j : Fin 4) : fullSquareLinear j (basis j)=2 := by
   rw [fullSquareLinear_apply]
-  fin_cases j <;> norm_num [fullSquare,basis,Fin.sum_univ_succ]
+  fin_cases j <;> norm_num [fullSquare,basis,Fin.sum_univ_succ,Fin.ext_iff]
 
 theorem selectedSquareLinear_basis (p : Policy) (j : Fin 4) :
     selectedSquareLinear p j (basis j)=(if Selected p j then 1 else 0)+2 := by
@@ -72,14 +69,18 @@ theorem selectedSquareLinear_basis (p : Policy) (j : Fin 4) :
 
 theorem sumLinear_basis (i : Fin 4) : sumLinear (basis i)=1 := by
   rw [sumLinear_apply]
-  fin_cases i <;> norm_num [U11SelectedLargest.prefixSum,basis]
+  fin_cases i <;> norm_num [U11SelectedLargest.prefixSum,basis,Fin.ext_iff]
 
 theorem capLinear_basis (p : Policy) (left : Bool) (i : Fin 4) :
     capLinear p left (basis i)=
       if p.val<15 then (if left then (1/2:ℝ) else -(3/2:ℝ))*
         (if Selected p i then 1 else 0)
       else -(3/8:ℝ)*(if (2 : Fin 4)=i then 1 else 0) := by
-  simp [capLinear,selectedLinear_basis,basis,smul_eq_mul]
+  by_cases hp : p.val < 15
+  · cases left <;> simp [capLinear, hp, selectedLinear_basis,
+      ContinuousLinearMap.smul_apply, smul_eq_mul]
+  · simp [capLinear, hp, ContinuousLinearMap.smul_apply,
+      ContinuousLinearMap.proj_apply, basis, smul_eq_mul]
 
 /-- The cap-half gate has a proper wall for each of the sixteen policies. -/
 theorem capLinear_ne_zero (p : Policy) (left : Bool) : capLinear p left ≠ 0 := by
@@ -155,49 +156,49 @@ theorem highKnotGate_ne_zero (p : Policy) (left : Bool) (j : Fin 201)
   simp only [highKnotGate,ContinuousLinearMap.sub_apply,ContinuousLinearMap.smul_apply,
     ContinuousLinearMap.proj_apply,ContinuousLinearMap.zero_apply,smul_eq_mul,
     sumLinear_basis,capLinear_basis] at he
-  norm_num [basis] at he
+  norm_num [basis, Fin.ext_iff] at he
   split_ifs at he <;> norm_num at he
 
 theorem wExtraGate_ne_zero (left : Bool) : wExtraGate left ≠ 0 := by
   intro hz
   have he := congrArg (fun F : LogFour →L[ℝ] ℝ => F (basis 0)) hz
-  norm_num [wExtraGate,capLinear,wPolicy,basis,smul_eq_mul] at he
+  norm_num [wExtraGate,capLinear,wPolicy,basis,smul_eq_mul,Fin.ext_iff] at he
 
 theorem coordinateGate_ne_zero (i : Fin 4) :
     (ContinuousLinearMap.proj i : LogFour →L[ℝ] ℝ) ≠ 0 := by
   intro hz
   have he := congrArg (fun F : LogFour →L[ℝ] ℝ => F (basis i)) hz
-  norm_num [basis] at he
+  norm_num [basis, Fin.ext_iff] at he
 
 /-- Exact affine dictionaries for the original literal strict tests. -/
 theorem halfGate_dictionary (p : Policy) (left : Bool) (v : LogFour) :
     (1/2:ℝ)<affineCap p left v ↔
       halfGate p left v<capOffset p left-1/2 := by
   simp only [affineCap,halfGate,ContinuousLinearMap.neg_apply]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 theorem fullGate_dictionary (p : Policy) (left : Bool) (j : Fin 4) (v : LogFour) :
     fullSquare j v<affineCap p left v ↔ fullGate p left j v<capOffset p left := by
   simp only [affineCap,fullGate,ContinuousLinearMap.sub_apply,fullSquareLinear_apply]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 theorem selectedGate_dictionary (p : Policy) (left : Bool) (j : Fin 4) (v : LogFour) :
     selectedSquare p j v<affineCap p left v ↔ selectedGate p left j v<capOffset p left := by
   simp only [affineCap,selectedGate,ContinuousLinearMap.sub_apply,selectedSquareLinear_apply]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 theorem branchGate_dictionary (p : Policy) (v : LogFour) :
     affineCap p true v≤affineCap p false v ↔
       branchGate p v≤capOffset p false-capOffset p true := by
   simp only [affineCap,branchGate,ContinuousLinearMap.sub_apply]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 theorem wExtraGate_dictionary (left : Bool) (v : LogFour) :
     (1+v 0)/2<affineCap wPolicy left v ↔
       wExtraGate left v<capOffset wPolicy left-1/2 := by
   simp only [affineCap,wExtraGate,ContinuousLinearMap.sub_apply,
     ContinuousLinearMap.smul_apply,ContinuousLinearMap.proj_apply,smul_eq_mul]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 theorem highKnotGate_dictionary (p : Policy) (left : Bool) (j : Fin 201) (v : LogFour)
     (hbranch : cap p v=affineCap p left v) :
@@ -205,7 +206,7 @@ theorem highKnotGate_dictionary (p : Policy) (left : Bool) (j : Fin 201) (v : Lo
       highKnotGate p left j v= -capOffset p left := by
   simp only [typedResidual,hbranch,affineCap,highKnotGate,ContinuousLinearMap.sub_apply,
     ContinuousLinearMap.smul_apply,ContinuousLinearMap.proj_apply,smul_eq_mul,sumLinear_apply]
-  linarith
+  constructor <;> intro h <;> linarith only [h]
 
 /-- Original high-knot query, with no supplied form-properness premise.
 The separate max-two clamp is never identified with this equality wall. -/

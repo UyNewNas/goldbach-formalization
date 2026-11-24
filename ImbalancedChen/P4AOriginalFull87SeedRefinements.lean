@@ -127,7 +127,9 @@ set_option maxHeartbeats 0 in
 theorem original_seed_vertex_bindings : seedData.vertices.size = 201 ∧
     (∀ v : Fin 201, P2OriginalFull87PullingCell.vertex seedData v = originalPoint v) ∧
     (∀ (s : SeedRow) (k : Fin 9), P2OriginalFull87PullingCell.idAt seedData s k =
-      (entry (sourceOrdinal s)).vertexIds k) := by decide
+      (entry (sourceOrdinal s)).vertexIds k) := by
+  simp only [entry_eq_allRows]
+  decide
 
 theorem original_seed_row_vertices (s : SeedRow) (k : Fin 9) :
     physicalVertices (sourceOrdinal s) k = rowVertices seedData s k := by

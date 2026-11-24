@@ -74,7 +74,11 @@ theorem slots_strictAnti {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) : StrictAnti (slots t) := by
   obtain ⟨_,_,_,_,h12,h23,h34⟩ := joint_carrier_order ht
   intro i j hij
-  fin_cases i <;> fin_cases j <;> norm_num [slots] at hij ⊢ <;> omega
+  fin_cases i <;> fin_cases j
+  all_goals norm_num at hij
+  all_goals simp only [slots, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+  all_goals omega
 
 theorem coordinates_strictAnti {N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) : StrictAnti (coordinates N t) :=
@@ -86,11 +90,21 @@ theorem fullPrefix_eq_multiplier (t : Four) : fullPrefix t = P5U10OriginalMean.m
 
 /-- No bit is reinterpreted as an increasing arithmetic position. -/
 theorem selected_first_largest (t : Four) : selectedProduct first t = t.2.2 := by
-  norm_num [selectedProduct,selectedIndices,Selected,sourceId,first,slots,
-    Finset.prod_filter,Fin.prod_univ_succ]
+  have hfirst : selectedIndices first = {0} := by
+    ext i
+    simp only [selectedIndices, Finset.mem_filter, Finset.mem_univ, true_and,
+      Finset.mem_singleton, Selected, sourceId, first]
+    fin_cases i <;> decide
+  rw [selectedProduct, hfirst, Finset.prod_singleton]
+  rfl
 
 theorem selected_W_eq_one (t : Four) : selectedProduct wPolicy t = 1 := by
-  simp [selectedProduct,selectedIndices,Selected,wPolicy]
+  have hw : selectedIndices wPolicy = ∅ := by
+    ext i
+    simp only [selectedIndices, Finset.mem_filter, Finset.mem_univ, true_and,
+      Finset.not_mem_empty, Selected, wPolicy]
+    norm_num
+  rw [selectedProduct, hw, Finset.prod_empty]
 
 theorem selected_mul_remainder (p : Policy) (t : Four) :
     selectedProduct p t * remainderProduct p t = fullPrefix t := by
@@ -172,12 +186,12 @@ theorem subproduct_rpow {N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Fo
 
 theorem selectedSquare_eq_generic (p : Policy) (v : LogFour) (j : Fin 4) :
     selectedSquare p j v = selectedSquareExpr (selectedIndices p) v j := by
-  simp [selectedSquare,selectedSquareExpr,selectedIndices,selectedMass,Finset.sum_filter,
-    Fin.lt_def]
+  simp only [selectedSquare, selectedSquareExpr, selectedIndices, selectedMass,
+    Finset.sum_filter, Finset.mem_filter, Finset.mem_univ, true_and, Fin.lt_def]
 
 theorem fullSquare_eq_generic (v : LogFour) (j : Fin 4) :
     fullSquare j v = prefixSquareExpr v j := by
-  simp [fullSquare,prefixSquareExpr,Finset.sum_filter,Fin.lt_def]
+  simp only [fullSquare, prefixSquareExpr, Finset.sum_filter, Fin.lt_def]
 
 /-- Literal original full and selected-square tests imply the corresponding
 strict natural product tests on this same arithmetic tuple. W contributes

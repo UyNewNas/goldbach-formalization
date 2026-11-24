@@ -46,7 +46,7 @@ theorem box_first_coordinate_shift (m : ℕ) (j k : Cell m)
     (hy : j 1 = k 1) (hz : j 2 = k 2) :
     box m k = shiftX (box m j) (firstDelta m j k) := by
   unfold box shiftX
-  apply RationalBox.mk.injEq.mpr
+  simp only [RationalBox.mk.injEq]
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · simpa [box, shiftX, firstDelta, qLogPrimeMeshLo, stepQ,
       point_shift m (j 0).val (k 0).val] using

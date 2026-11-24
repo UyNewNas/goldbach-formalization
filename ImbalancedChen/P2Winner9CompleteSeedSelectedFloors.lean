@@ -26,7 +26,7 @@ increments, is present. This is exact source coverage, not physical coverage. -/
 theorem full_source_membership (n : ℕ) (hn : n < allRows.size) :
     ∃ i : RowIndex, i.val = n ∧ entry i = allRows[n]! ∧ (entry i).parentId = n := by
   have hn' : n < 11026 := by simpa only [full_source_shapes_and_chronology.1] using hn
-  refine ⟨⟨n, hn'⟩, rfl, rfl, ?_⟩
+  refine ⟨⟨n, hn'⟩, rfl, entry_eq_allRows ⟨n, hn'⟩, ?_⟩
   exact (full_source_shapes_and_chronology.2.2 ⟨n, hn'⟩).1
 
 /-- Ordinal uniqueness does not assert null overlap of physical supports. -/

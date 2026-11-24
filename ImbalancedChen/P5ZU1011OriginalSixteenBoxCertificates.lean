@@ -28,6 +28,11 @@ open scoped BigOperators
 open U11Integral
 open P2OriginalFourthCapProducerInterface
 
+private local instance selectedDecidable (p : Policy) (i : Fin 4) :
+    Decidable (Selected p i) := by
+  unfold Selected sourceId
+  infer_instance
+
 abbrev RationalPoint := Fin 4 → ℚ
 
 structure Box where
@@ -78,7 +83,7 @@ theorem capPiece_eval (p : Policy) (left : Bool) (v : LogFour) :
         Affine.eval, selected_scaled_sum, Rat.cast_div, Rat.cast_ofNat,
         Rat.cast_neg, Rat.cast_one]
     <;> ring
-  · simp [capPiece, hp, Affine.eval, ite_mul]
+  · simp [capPiece, hp, Affine.eval, apply_ite, ite_mul]
     <;> ring
 
 theorem cap_eq_piece_min (p : Policy) (v : LogFour) :
@@ -95,7 +100,7 @@ theorem fullSquarePiece_eval (j : Fin 4) (v : LogFour) :
   · apply Finset.sum_congr rfl
     intro i hi
     by_cases hij : i.val < j.val <;> simp [hij]
-  · simp [ite_mul]
+  · simp [apply_ite, ite_mul]
 
 theorem selectedSquarePiece_eval (p : Policy) (j : Fin 4) (v : LogFour) :
     (selectedSquarePiece p j).eval v = selectedSquare p j v := by
@@ -109,7 +114,7 @@ theorem selectedSquarePiece_eval (p : Policy) (j : Fin 4) (v : LogFour) :
     · apply Finset.sum_congr rfl
       intro i hi
       by_cases hs : i.val < j.val ∧ ¬Selected p i <;> simp [hs]
-  · simp [ite_mul]
+  · simp [apply_ite, ite_mul]
 
 theorem prefixPiece_eval (v : LogFour) :
     prefixPiece.eval v = U11SelectedLargest.prefixSum v := by
@@ -118,7 +123,7 @@ theorem prefixPiece_eval (v : LogFour) :
 
 theorem wExtraPiece_eval (v : LogFour) :
     wExtraPiece.eval v = (1 + v 0) / 2 := by
-  simp [wExtraPiece, Affine.eval, ite_mul]
+  simp [wExtraPiece, Affine.eval, apply_ite, ite_mul]
   <;> ring
 
 def selectedMassQ (p : Policy) (q : RationalPoint) : ℚ :=
@@ -210,7 +215,9 @@ theorem wholeBoxEligibleTest_sound (p : Policy) (B : Box)
   unfold WholeBoxEligible at ht
   intro v hv
   have hc := (cap_bounds p B hv).1
-  have hhalf : (1 / 2 : ℝ) < (capLower p B : ℝ) := by exact_mod_cast ht.1
+  have hhalf : (1 / 2 : ℝ) < (capLower p B : ℝ) := by
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+      (Rat.cast_lt (K := ℝ)).mpr ht.1
   refine ⟨hhalf.trans_le hc, ?_, ?_⟩
   · intro j
     have hj := (fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
@@ -231,7 +238,9 @@ theorem wholeBoxEligibleTest_sound (p : Policy) (B : Box)
       rw [wExtraPiece_eval] at hs
       have htA : (wExtraPiece.upper B.lo B.hi : ℝ) < (capLower p B : ℝ) := by
         exact_mod_cast ht.2.2.1
-      have htX : (B.hi 0 : ℝ) < (25 / 128 : ℝ) := by exact_mod_cast ht.2.2.2
+      have htX : (B.hi 0 : ℝ) < (25 / 128 : ℝ) := by
+        simpa only [Rat.cast_div, Rat.cast_ofNat] using
+          (Rat.cast_lt (K := ℝ)).mpr ht.2.2.2
       exact ⟨hs.trans_lt (htA.trans_le hc), (hv.2 0).trans_lt htX⟩
 
 /-- Non-strict reverse comparisons reject a strict original gate on the
@@ -257,7 +266,9 @@ theorem wholeBoxIneligibleTest_sound (p : Policy) (B : Box)
   intro v hv he
   have hc := (cap_bounds p B hv).2
   rcases ht with hhalf | hfull | hextra
-  · have hhalfR : (capUpper p B : ℝ) ≤ (1 / 2 : ℝ) := by exact_mod_cast hhalf
+  · have hhalfR : (capUpper p B : ℝ) ≤ (1 / 2 : ℝ) := by
+      simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr hhalf
     exact (not_lt_of_ge (hc.trans hhalfR)) he.1
   · obtain ⟨j, hj⟩ := hfull
     have hsq := (fullSquarePiece j).lower_le_eval B.lo B.hi v hv.1 hv.2
@@ -284,7 +295,9 @@ theorem wholeBoxIneligibleTest_sound (p : Policy) (B : Box)
         have hAR : (capUpper p B : ℝ) ≤ (wExtraPiece.lower B.lo B.hi : ℝ) := by
           exact_mod_cast hA
         exact (not_lt_of_ge ((hc.trans hAR).trans hs)) heextra.1
-      · have hXR : (25 / 128 : ℝ) ≤ (B.lo 0 : ℝ) := by exact_mod_cast hX
+      · have hXR : (25 / 128 : ℝ) ≤ (B.lo 0 : ℝ) := by
+          simpa only [Rat.cast_div, Rat.cast_ofNat] using
+            (Rat.cast_le (K := ℝ)).mpr hX
         exact (not_lt_of_ge (hXR.trans (hv.1 0))) heextra.2
 
 end

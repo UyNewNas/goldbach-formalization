@@ -90,7 +90,10 @@ structure SourceFacts (i : RowIndex) : Prop where
 /-- Closed source proof proposal over the genuine Fin11026. NOT EXECUTED. -/
 theorem all_source_facts : ∀ i : RowIndex, SourceFacts i := by
   intro i
-  constructor <;> revert i <;> decide +kernel
+  constructor <;> revert i <;>
+    dsimp only [powerMoment, powerPoly, gapPoly, factorPoly, yPoly,
+      upper, pLower, transverseUpper, vertices, means, physicalVertices] <;>
+    simp only [entry_eq_allRows] <;> decide +kernel
 
 /-- Each original stored Q80/Q96 field is compared with an independently
 integrated rational polynomial, never with the real integral to be bounded.
@@ -114,7 +117,11 @@ structure FieldFacts (i : RowIndex) : Prop where
 /-- No checker/decision execution was performed; this body is source only. -/
 theorem all_field_facts : ∀ i : RowIndex, FieldFacts i := by
   intro i
-  constructor <;> revert i <;> simp only [FloorAt] <;> decide +kernel
+  constructor <;> revert i <;>
+    dsimp only [FloorAt, mixedMoment, t10, q6, q0, mixedTerm,
+      powerMoment, powerPoly, gapPoly, yPoly, bPoly, transverseUpper,
+      upper, vertices, means, physicalVertices] <;>
+    simp only [entry_eq_allRows] <;> decide +kernel
 
 def jacobian (i : RowIndex) : ℝ := |((edgeMatrix (vertices i)).det : ℝ)|
 def gapMass (i : RowIndex) : ℝ := ∫ z in actualSupport i, physicalGap z

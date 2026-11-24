@@ -76,8 +76,7 @@ def recordAt (i : Fin 21) : SeedCell :=
 theorem initialSeeds_index (i : Fin 21) :
     initialSeeds[i.1]'(by rw [initialSeeds_eq_records,records_length]; exact i.isLt) =
       recordAt i := by
-  rw [initialSeeds_eq_records]
-  rfl
+  simp only [initialSeeds_eq_records, recordAt]
 
 /-- The source's three distinguished integer cuts are exactly its stated
 physical h, mu and rho at the original denominator. -/
@@ -116,7 +115,7 @@ private theorem witness_mem_of_geometry (c : SeedCell)
     (hlo : ∀ j, (decodeCoordinates c.1) j ≤ (witness c) j)
     (hhi : ∀ j, (witness c) j ≤ (decodeCoordinates c.2) j) :
     witness c ∈ rootCell c := by
-  exact ⟨⟨⟨horder,by simpa only [sub_zero,mul_zero] using hcube⟩,hcutoff⟩,
+  exact ⟨⟨⟨horder,by simpa only [Set.mem_setOf_eq,sub_zero,mul_zero] using hcube⟩,hcutoff⟩,
     ⟨hlo,hhi⟩⟩
 
 /-- Exactly indices 0..12 and 14 have a point in their closed actual
@@ -128,9 +127,10 @@ theorem roots0_to14_overlap (i : Fin 21)
   apply witness_mem_of_geometry
   all_goals
     try (intro j; fin_cases j)
-    fin_cases i <;>
-      norm_num [witness,recordAt,records,decodeCoordinates,
-        coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R] at hi ⊢
+    all_goals
+      fin_cases i <;>
+        norm_num [witness,recordAt,records,decodeCoordinates,
+          coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R] at hi ⊢
 
 /-- Root 13 has only x≤mu≤y, whereas the ordered domain requires y≤x.
 The forced equality x=y=mu violates the old-cube test already at z=8h. -/
@@ -139,7 +139,7 @@ theorem root13_empty : rootCell (recordAt ⟨13,by omega⟩) = ∅ := by
   constructor
   · intro ht
     have hcube : t 0 + t 1 + 3*t 2 ≤ thirdPrefixTheta := by
-      simpa only [sub_zero,mul_zero] using ht.1.1.2
+      simpa only [Set.mem_setOf_eq,sub_zero,mul_zero] using ht.1.1.2
     have horder : t 1 ≤ t 0 := ht.1.1.1.2.2.2.1
     have hx : t 0 ≤ (M:ℝ)/coordinateDenominator := by
       simpa [rootCell,recordAt,records,decodeCoordinates] using ht.2.2 0
@@ -158,7 +158,7 @@ theorem initial15_overlap_iff (i : Fin 21) (hi : i.1 < 15) :
     (rootCell (recordAt i)).Nonempty ↔ i.1 ≠ 13 := by
   constructor
   · intro hn h13
-    have heq : i = ⟨13,by omega⟩ := Fin.ext h13
+    have heq : i = (⟨13,by decide⟩ : Fin 21) := Fin.ext h13
     subst i
     rcases hn with ⟨t,ht⟩
     simp [root13_empty] at ht

@@ -74,7 +74,7 @@ theorem raw_physical_density_on_universe (retainOdd : List ℕ → Bool)
         (actualSmallRosserPlus N cap w L)) =
       physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
         (actualSmallRoughRho retainOdd N cap w z L) := by
-  simpa only [support, actualSmallRoughModuli, actualSmallRoughRho,
+  simpa only [support, rawSupport, raw, actualSmallRoughModuli, actualSmallRoughRho,
     physicalDensitySum, div_eq_mul_inv] using
     sum_smallRoughRho_mul_eq_of_rough_enlargement (actualSmallRosserSupport N cap w)
       (rawSupport_subset_universe retainOdd N cap w z)
@@ -121,7 +121,7 @@ theorem product_unique (N cap : ℕ) (w z : ℝ) {a d a' d' : ℕ}
     (ha : a ∈ actualSmallRosserSupport N cap w) (hd : d ∈ «universe» N cap w z)
     (ha' : a' ∈ actualSmallRosserSupport N cap w) (hd' : d' ∈ «universe» N cap w z)
     (h : a * d = a' * d') : a = a' ∧ d = d' := by
-  have hp := smallRough_factorization_unique
+  have hp := smallRough_factorization_unique (d := (a, d)) (e := (a', d'))
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w ha)
     (P2LowerFiniteCellRounding.universe_rough N cap w z hd)
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w ha')

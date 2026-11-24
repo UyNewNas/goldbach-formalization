@@ -104,7 +104,7 @@ theorem uncovered_has_proper_strip {k : ℕ} (p : Program k) (m : ℕ)
         |a.eval t| < logPrimeMeshStep 0 1 m * (a.slopeMass + 1) := by
   have hns : ¬Separated p (logPrimeMeshStep 0 1 m) t :=
     fun h => hn (covered_of_separated p m t ht h)
-  simpa only [Separated, not_forall, Classical.not_imp, not_le] using hns
+  simpa only [Separated, not_forall, Classical.not_imp, not_le, exists_prop] using hns
 
 theorem eventually_covered {k : ℕ} (p : Program k) (t : Fin k → ℝ)
     (ht : t ∈ cube k) (hr : Regular p t) :

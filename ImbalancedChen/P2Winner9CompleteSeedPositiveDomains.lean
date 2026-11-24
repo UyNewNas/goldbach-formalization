@@ -48,6 +48,7 @@ theorem original_vertex_analytic_guards :
 /-- Positivity of every actual literal stored mean, not a mean vector
 postulated for a generic index family. The closed proof remains unexecuted. -/
 theorem all_original_means_positive : ∀ i : RowIndex, ∀ j : Fin 10, 0 < (entry i).means j := by
+  simp only [entry_eq_allRows]
   decide +kernel
 
 theorem vertex_id_bound (i : RowIndex) (k : Fin 9) : (entry i).vertexIds k < 201 :=

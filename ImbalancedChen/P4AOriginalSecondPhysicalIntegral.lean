@@ -179,6 +179,7 @@ theorem positivePhysicalRow_intervalIntegrable :
   have hxc : x ∈ Icc mu rho := ⟨hx.1.le,hx.2⟩
   apply intervalIntegral.integral_congr
   intro y hy
+  change y ∈ uIcc mu x at hy
   rw [uIcc_of_le hxc.1] at hy
   exact safeKernel_eq hxc ⟨(boundary_order hxc).2.1.trans hy.1,hy.2⟩
 
@@ -254,6 +255,7 @@ theorem orientedPhysicalChart_eq_pullback (k : ℝ) :
       have harg : (k*step*u)*v+mu = chartY k u v := by
         rw [chartY_eq]
         ring
+      dsimp only
       rw [harg]
       ring
 
@@ -264,6 +266,7 @@ theorem negative_oriented_chart : orientedPhysicalChart (-3) = -chartIntegral (-
   apply intervalIntegral.integral_congr
   intro u hu
   rw [uIcc_of_le (by norm_num : (0:ℝ) ≤ 1)] at hu
+  dsimp only
   rw [← intervalIntegral.integral_neg]
   apply intervalIntegral.integral_congr
   intro v hv

@@ -35,6 +35,7 @@ theorem leafCharges_length (tree : ChargedCutTree) (s : Set Point) :
       simp only [leafCharges, eraseCharges, closedLeaves, List.length_append]
       rw [ihL (s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}),
         ihR (s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis})]
+      rfl
 
 theorem totalCharge_eq_leafCharges_sum (tree : ChargedCutTree) :
     totalCharge tree = (leafCharges tree).sum := by
@@ -117,6 +118,17 @@ theorem localChargeBound_iff_positional (tree : ChargedCutTree) :
         List.Forall₂ (fun c q =>
           (∫ t in c, compactKernel t) ≤ (q : ℝ) / 2^80)
           (closedLeaves (eraseCharges tree) s) (leafCharges tree) := by
+  have hcastLength (xs : List ℤ) :
+      ((do let q ← xs; pure (q : ℝ)) : List ℝ).length = xs.length := by
+    induction xs with
+    | nil => rfl
+    | cons q xs ih => exact congrArg Nat.succ ih
+  have hcastAppend (xs ys : List ℤ) :
+      ((do let q ← xs ++ ys; pure (q : ℝ)) : List ℝ) =
+        (do let q ← xs; pure (q : ℝ)) ++ (do let q ← ys; pure (q : ℝ)) := by
+    induction xs with
+    | nil => rfl
+    | cons q xs ih => exact congrArg (List.cons (q : ℝ)) ih
   induction tree with
   | leaf q =>
       intro s
@@ -126,12 +138,15 @@ theorem localChargeBound_iff_positional (tree : ChargedCutTree) :
       let sL := s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}
       let sR := s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis}
       change (LocalChargeBound left sL ∧ LocalChargeBound right sR) ↔
-        List.Forall₂ _
+        List.Forall₂ (fun (c : Set Point) (q : ℝ) =>
+          (∫ t in c, compactKernel t) ≤ q / 2^80)
           (closedLeaves (eraseCharges left) sL ++
             closedLeaves (eraseCharges right) sR)
-          (leafCharges left ++ leafCharges right)
-      rw [forall₂_append_iff_of_length_eq _ _ _ _
-        (leafCharges_length left sL).symm]
+          (do let q ← leafCharges left ++ leafCharges right; pure (q : ℝ))
+      rw [hcastAppend]
+      rw [forall₂_append_iff_of_length_eq _ _ _ _ (by
+        rw [hcastLength]
+        exact (leafCharges_length left sL).symm)]
       exact and_congr (ihL sL) (ihR sR)
 
 /-- Concrete tree and charge data may use the structural constructor directly;

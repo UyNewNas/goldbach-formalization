@@ -61,7 +61,10 @@ structure LogFacts (i : RowIndex) : Prop where
 /-- Closed full-family source proof bodies, not executed in this task. -/
 theorem all_log_facts : ∀ i : RowIndex, LogFacts i := by
   intro i
-  constructor <;> revert i <;> simp only [FloorAt] <;> decide +kernel
+  constructor <;> revert i <;>
+    dsimp only [FloorAt, top, logGap, logPower, logYPoly, savedGap,
+      gapPoly, vertices, physicalVertices] <;>
+    simp only [entry_eq_allRows] <;> decide +kernel
 
 theorem factor_le_top (i : RowIndex) (j : Fin 10) {z : Ambient}
     (hz : z ∈ actualSupport i) : physicalFactor j z ≤ (top i j : ℝ) := by

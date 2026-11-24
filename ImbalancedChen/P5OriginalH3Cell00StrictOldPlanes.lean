@@ -67,6 +67,7 @@ theorem strict_center_proper_old_planes :
       firstFailureH3LeftCodes, oldSubsetSum, oldComparison,
       strictCenter, Matrix.cons_val_three, Fin.ext_iff,
       ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, A, C] at *
+  all_goals exact (hproper (by decide)).elim
 
 theorem strict_center_all_old_planes :
     oldPlaneRows slot (firstFailureH3LeftCodes 0) strictCenter := by

@@ -100,7 +100,7 @@ private theorem oddCube6_eq_history7 (t : Point) :
     Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
     Fin.lt_def, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
     P2OriginalDescendingEighthLogSemantics.history7]
-  <;> ring
+  <;> first | rfl | ring1!
 
 /-- Actual saving16 source, with no H7/admissibility premise. The remaining
 parent upper comparison is the real inheritance obligation lambda6<=R,

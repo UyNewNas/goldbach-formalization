@@ -1,10 +1,17 @@
 import ImbalancedChen.P2Winner9CompleteSeedTypes
 
-/-! SOURCE ONLY / ZERO CREDIT. Literal original ordinal rows 11008 through 11025. No arithmetic/geometry/checker execution. -/
+/-!
+Original archive rows 11008 through 11025 with their fields and order preserved.
+Pages of at most sixteen records bound elaboration depth.
+-/
+
 namespace ImbalancedChen.P2Winner9CompleteSeedBlock43
 open P2Winner9CompleteSeedTypes
 
-def rows : Array RawRow := #[
+set_option maxRecDepth 20000
+set_option maxHeartbeats 8000000
+
+private def rows000 : Array RawRow := #[
   { parentId := 11008,
     vertexIds := ![200, 192, 190, 162, 130, 125, 124, 121, 120],
     physicalVolume := ((5402763024059664878009028455978747150971 : ℚ) / 57917447457472512000000000000000000000000000000000000000000000000),
@@ -436,7 +443,10 @@ def rows : Array RawRow := #[
     mixedCorrectionQ80 := 5479137521942933034754,
     mixedTotalQ80 := 6998644676603552466964,
     mixedRaw := 216608688168766,
-    mixedSelected := 217190727334950 },
+    mixedSelected := 217190727334950 }
+]
+
+private def rows016 : Array RawRow := #[
   { parentId := 11024,
     vertexIds := ![200, 192, 190, 174, 170, 169, 168, 167, 152],
     physicalVolume := ((22353099942904010055468401043517684200475649 : ℚ) / 25737254642902892544000000000000000000000000000000000000000000000000),
@@ -492,5 +502,11 @@ def rows : Array RawRow := #[
     mixedRaw := 18799963163832,
     mixedSelected := 18846081100141 }
 ]
+
+def pages : Array (Array RawRow) := #[
+  rows000, rows016
+]
+
+def rows : Array RawRow := pages.flatten
 
 end ImbalancedChen.P2Winner9CompleteSeedBlock43

@@ -74,7 +74,7 @@ theorem original_selected_tent_guard_bridge
       rw [hdelta hi b hb] at htest
       have hactive : sourceActive s .rise a b := by
         change sourceDelta s b≤0
-        exact (mul_le_mul_iff_left₀ h128).mp (by simpa only [mul_zero] using htest)
+        exact (mul_le_mul_iff_right₀ h128).mp (by simpa only [mul_zero] using htest)
       have hupperIdentity : ((D+(literalTentX s)*hi 0+(literalTentY s)*hi 1+(literalTentZ s)*hi 2:ℤ):ℝ)=
           2*(D:ℝ)*planeUpper s .rise a b := by
         unfold planeUpper tentPlane planeConst planeSlope tentSum
@@ -84,7 +84,7 @@ theorem original_selected_tent_guard_bridge
       have hrootReal : ((D+(literalTentX s)*hi 0+(literalTentY s)*hi 1+(literalTentZ s)*hi 2:ℤ):ℝ)≤2*(T:ℝ) := by
         exact_mod_cast hroot
       have hupper : planeUpper s .rise a b≤thirdPrefixTheta := by
-        apply (mul_le_mul_iff_left₀ h2).mp
+        apply (mul_le_mul_iff_right₀ h2).mp
         calc
           2*(D:ℝ)*planeUpper s .rise a b=
               ((D+(literalTentX s)*hi 0+(literalTentY s)*hi 1+(literalTentZ s)*hi 2:ℤ):ℝ) := hupperIdentity.symm
@@ -100,7 +100,7 @@ theorem original_selected_tent_guard_bridge
         exact_mod_cast hres
       rw [hresIdentity] at hresReal
       have hresidual : 0<oldNumerator s .rise b :=
-        (mul_lt_mul_iff_left₀ h2).mp (by simpa only [mul_zero] using hresReal)
+        (mul_lt_mul_iff_right₀ h2).mp (by simpa only [mul_zero] using hresReal)
       exact ⟨hactive,hupper,hresidual⟩
   | fall =>
       have h64 : (0:ℝ)<64*(D:ℝ) := mul_pos (by norm_num) hDpos
@@ -115,9 +115,9 @@ theorem original_selected_tent_guard_bridge
       have hactive : sourceActive s .fall a b := by
         change ¬sourceDelta s b≤0 ∧ 0≤sourceDelta s a
         have hpositive : 0<sourceDelta s b :=
-          (mul_lt_mul_iff_left₀ h128).mp (by simpa only [mul_zero] using htestUpper)
+          (mul_lt_mul_iff_right₀ h128).mp (by simpa only [mul_zero] using htestUpper)
         have hnonnegative : 0≤sourceDelta s a :=
-          (mul_le_mul_iff_left₀ h128).mp (by simpa only [mul_zero] using htestLower)
+          (mul_le_mul_iff_right₀ h128).mp (by simpa only [mul_zero] using htestLower)
         exact ⟨not_le_of_gt hpositive,hnonnegative⟩
       have hupperIdentity : ((57*D-96*((literalTentX s)*lo 0+(literalTentY s)*lo 1+(literalTentZ s)*lo 2):ℤ):ℝ)=
           64*(D:ℝ)*planeUpper s .fall a b := by
@@ -128,7 +128,7 @@ theorem original_selected_tent_guard_bridge
       have hrootReal : ((57*D-96*((literalTentX s)*lo 0+(literalTentY s)*lo 1+(literalTentZ s)*lo 2):ℤ):ℝ)≤64*(T:ℝ) := by
         exact_mod_cast hroot
       have hupper : planeUpper s .fall a b≤thirdPrefixTheta := by
-        apply (mul_le_mul_iff_left₀ h64).mp
+        apply (mul_le_mul_iff_right₀ h64).mp
         calc
           64*(D:ℝ)*planeUpper s .fall a b=
               ((57*D-96*((literalTentX s)*lo 0+(literalTentY s)*lo 1+(literalTentZ s)*lo 2):ℤ):ℝ) := hupperIdentity.symm
@@ -145,7 +145,7 @@ theorem original_selected_tent_guard_bridge
         exact_mod_cast hres
       rw [hresIdentity] at hresReal
       have hresidual : 0<oldNumerator s .fall b :=
-        (mul_lt_mul_iff_left₀ h64).mp (by simpa only [mul_zero] using hresReal)
+        (mul_lt_mul_iff_right₀ h64).mp (by simpa only [mul_zero] using hresReal)
       exact ⟨hactive,hupper,hresidual⟩
 
 end

@@ -143,13 +143,13 @@ theorem prefix_lower_sum (logI : I80 → I80) (n k : ℕ) :
     («prefix» logI n k).lo = ∑ j ∈ Finset.range k, lowerCell logI n j := by
   induction k with
   | zero => simp [«prefix»]
-  | succ k hk => simp [«prefix», I80.add, hk, Finset.sum_range_succ]
+  | succ k hk => simp [«prefix», I80.add, cell, hk, Finset.sum_range_succ]
 
 theorem prefix_upper_sum (logI : I80 → I80) (n k : ℕ) :
     («prefix» logI n k).hi = ∑ j ∈ Finset.range k, upperCell logI n j := by
   induction k with
   | zero => simp [«prefix»]
-  | succ k hk => simp [«prefix», I80.add, hk, Finset.sum_range_succ]
+  | succ k hk => simp [«prefix», I80.add, cell, hk, Finset.sum_range_succ]
 
 theorem gridPoint_guards {n : ℕ} (hn : 0 < n) (j : ℕ) :
     0 < (gridPoint n j).lo ∧ 0 < ((gridPoint n j).sub (I80.point 1)).lo := by

@@ -1,10 +1,17 @@
 import ImbalancedChen.P2Winner9CompleteSeedTypes
 
-/-! SOURCE ONLY / ZERO CREDIT. Literal original ordinal rows 6400 through 6655. No arithmetic/geometry/checker execution. -/
+/-!
+Original archive rows 6400 through 6655 with their fields and order preserved.
+Pages of at most sixteen records bound elaboration depth.
+-/
+
 namespace ImbalancedChen.P2Winner9CompleteSeedBlock25
 open P2Winner9CompleteSeedTypes
 
-private def rowsChunk00 : Array RawRow := #[
+set_option maxRecDepth 20000
+set_option maxHeartbeats 8000000
+
+private def rows000 : Array RawRow := #[
   { parentId := 6400,
     vertexIds := ![200, 197, 170, 125, 122, 69, 7, 3, 2],
     physicalVolume := ((2263819585141694021728954090059174489347 : ℚ) / 4561245831168000000000000000000000000000000000000000000000000),
@@ -439,7 +446,7 @@ private def rowsChunk00 : Array RawRow := #[
     mixedSelected := 1335055296686644602 }
 ]
 
-private def rowsChunk01 : Array RawRow := #[
+private def rows016 : Array RawRow := #[
   { parentId := 6416,
     vertexIds := ![200, 197, 170, 125, 122, 31, 25, 2, 1],
     physicalVolume := ((1455242968790077638359403884525699518622470271 : ℚ) / 977444573313761280000000000000000000000000000000000000000000000000),
@@ -874,7 +881,7 @@ private def rowsChunk01 : Array RawRow := #[
     mixedSelected := 535379160863362590 }
 ]
 
-private def rowsChunk02 : Array RawRow := #[
+private def rows032 : Array RawRow := #[
   { parentId := 6432,
     vertexIds := ![200, 197, 170, 125, 122, 121, 120, 17, 16],
     physicalVolume := ((2380876473124352666074071510755827 : ℚ) / 181888449144422400000000000000000000000000000000000000000),
@@ -1309,7 +1316,7 @@ private def rowsChunk02 : Array RawRow := #[
     mixedSelected := 91120425781569521240 }
 ]
 
-private def rowsChunk03 : Array RawRow := #[
+private def rows048 : Array RawRow := #[
   { parentId := 6448,
     vertexIds := ![200, 197, 170, 125, 114, 81, 72, 21, 0],
     physicalVolume := ((1051927499339355978578059024766116732830523 : ℚ) / 13371857436672000000000000000000000000000000000000000000000000),
@@ -1744,7 +1751,7 @@ private def rowsChunk03 : Array RawRow := #[
     mixedSelected := 4547438830485700571 }
 ]
 
-private def rowsChunk04 : Array RawRow := #[
+private def rows064 : Array RawRow := #[
   { parentId := 6464,
     vertexIds := ![200, 197, 170, 125, 31, 30, 25, 2, 1],
     physicalVolume := ((2405676557844113482579227623011755875044640113 : ℚ) / 494755895134126080000000000000000000000000000000000000000000000000),
@@ -2179,7 +2186,7 @@ private def rowsChunk04 : Array RawRow := #[
     mixedSelected := 11360445714156472179 }
 ]
 
-private def rowsChunk05 : Array RawRow := #[
+private def rows080 : Array RawRow := #[
   { parentId := 6480,
     vertexIds := ![200, 197, 170, 125, 124, 81, 69, 15, 7],
     physicalVolume := ((441611858446610190152337624474713339 : ℚ) / 636235315937280000000000000000000000000000000000000000000),
@@ -2614,7 +2621,7 @@ private def rowsChunk05 : Array RawRow := #[
     mixedSelected := 190197611788743612 }
 ]
 
-private def rowsChunk06 : Array RawRow := #[
+private def rows096 : Array RawRow := #[
   { parentId := 6496,
     vertexIds := ![200, 197, 170, 125, 124, 123, 120, 17, 16],
     physicalVolume := ((68642682747224638291170084415963 : ℚ) / 8205910828646400000000000000000000000000000000000000000),
@@ -3049,7 +3056,7 @@ private def rowsChunk06 : Array RawRow := #[
     mixedSelected := 47505024619226164106 }
 ]
 
-private def rowsChunk07 : Array RawRow := #[
+private def rows112 : Array RawRow := #[
   { parentId := 6512,
     vertexIds := ![200, 197, 170, 80, 22, 17, 7, 3, 2],
     physicalVolume := ((803287653335036195748109758596713 : ℚ) / 1326452834304000000000000000000000000000000000000000000),
@@ -3484,7 +3491,7 @@ private def rowsChunk07 : Array RawRow := #[
     mixedSelected := 34384834517899746232 }
 ]
 
-private def rowsChunk08 : Array RawRow := #[
+private def rows128 : Array RawRow := #[
   { parentId := 6528,
     vertexIds := ![200, 197, 170, 80, 70, 22, 20, 7, 6],
     physicalVolume := ((2250095135326674946931110708750028445767 : ℚ) / 16835747512320000000000000000000000000000000000000000000000),
@@ -3919,7 +3926,7 @@ private def rowsChunk08 : Array RawRow := #[
     mixedSelected := 1747564518184850245 }
 ]
 
-private def rowsChunk09 : Array RawRow := #[
+private def rows144 : Array RawRow := #[
   { parentId := 6544,
     vertexIds := ![200, 197, 170, 169, 114, 105, 104, 103, 16],
     physicalVolume := ((254586397009259526322310717283971087483821 : ℚ) / 343299535994880000000000000000000000000000000000000000000000000),
@@ -4354,7 +4361,7 @@ private def rowsChunk09 : Array RawRow := #[
     mixedSelected := 1663737714241464877 }
 ]
 
-private def rowsChunk10 : Array RawRow := #[
+private def rows160 : Array RawRow := #[
   { parentId := 6560,
     vertexIds := ![200, 197, 170, 169, 159, 70, 22, 16, 6],
     physicalVolume := ((1837112998701550791893328024468919 : ℚ) / 2439595111219200000000000000000000000000000000000000000),
@@ -4789,7 +4796,7 @@ private def rowsChunk10 : Array RawRow := #[
     mixedSelected := 106435831304893255 }
 ]
 
-private def rowsChunk11 : Array RawRow := #[
+private def rows176 : Array RawRow := #[
   { parentId := 6576,
     vertexIds := ![200, 197, 170, 169, 159, 153, 113, 104, 68],
     physicalVolume := ((10655172583384040054520442008359146312757 : ℚ) / 41343600033792000000000000000000000000000000000000000000000000),
@@ -5224,7 +5231,7 @@ private def rowsChunk11 : Array RawRow := #[
     mixedSelected := 2267002055969212882 }
 ]
 
-private def rowsChunk12 : Array RawRow := #[
+private def rows192 : Array RawRow := #[
   { parentId := 6592,
     vertexIds := ![200, 197, 170, 32, 31, 9, 5, 4, 2],
     physicalVolume := ((15591309876872190851282235694769 : ℚ) / 251304581655429120000000000000000000000000000000000000),
@@ -5659,7 +5666,7 @@ private def rowsChunk12 : Array RawRow := #[
     mixedSelected := 24242280410879296574 }
 ]
 
-private def rowsChunk13 : Array RawRow := #[
+private def rows208 : Array RawRow := #[
   { parentId := 6608,
     vertexIds := ![200, 197, 170, 146, 125, 74, 63, 30, 25],
     physicalVolume := ((15465946861983680202821169726486420658513 : ℚ) / 1743294006558720000000000000000000000000000000000000000000000),
@@ -6094,7 +6101,7 @@ private def rowsChunk13 : Array RawRow := #[
     mixedSelected := 566014482965665822 }
 ]
 
-private def rowsChunk14 : Array RawRow := #[
+private def rows224 : Array RawRow := #[
   { parentId := 6624,
     vertexIds := ![200, 197, 170, 146, 125, 31, 30, 4, 2],
     physicalVolume := ((921201236828187960493076465185267451 : ℚ) / 1773142083108864000000000000000000000000000000000000000000),
@@ -6529,7 +6536,7 @@ private def rowsChunk14 : Array RawRow := #[
     mixedSelected := 3403057101476018 }
 ]
 
-private def rowsChunk15 : Array RawRow := #[
+private def rows240 : Array RawRow := #[
   { parentId := 6640,
     vertexIds := ![200, 197, 170, 146, 144, 124, 123, 120, 115],
     physicalVolume := ((2022518596656970030784571057431167583 : ℚ) / 302735425536000000000000000000000000000000000000000000000000),
@@ -6964,23 +6971,10 @@ private def rowsChunk15 : Array RawRow := #[
     mixedSelected := 26764582908133219034 }
 ]
 
-def rows : Array RawRow := #[
-  rowsChunk00,
-  rowsChunk01,
-  rowsChunk02,
-  rowsChunk03,
-  rowsChunk04,
-  rowsChunk05,
-  rowsChunk06,
-  rowsChunk07,
-  rowsChunk08,
-  rowsChunk09,
-  rowsChunk10,
-  rowsChunk11,
-  rowsChunk12,
-  rowsChunk13,
-  rowsChunk14,
-  rowsChunk15
-].flatten
+def pages : Array (Array RawRow) := #[
+  rows000, rows016, rows032, rows048, rows064, rows080, rows096, rows112, rows128, rows144, rows160, rows176, rows192, rows208, rows224, rows240
+]
+
+def rows : Array RawRow := pages.flatten
 
 end ImbalancedChen.P2Winner9CompleteSeedBlock25

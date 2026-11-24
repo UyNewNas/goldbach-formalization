@@ -158,7 +158,7 @@ theorem exists_eventually_original_smallRemainder_abs_le_linear
       _ = 4 * a + 6 * K * (a / Real.log 3) +
           6 * K * (1 / Real.log (N : ℝ)) := by ring
       _ ≤ 4 * a + 6 * K * (a / Real.log 3) + 6 * K * a :=
-        add_le_add_left hm _
+        add_le_add le_rfl hm
       _ = _ := by ring
   have hterm0 : 0 ≤ 4 * a + 6 * K *
       (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by

@@ -160,14 +160,18 @@ theorem value_ediv_le (x d : ℤ) (hd : 0 < d) :
     value (x / d) ≤ value x / (d : ℝ) := by
   have h := div_le_div_of_nonneg_right (floor_div_le x d hd) scale_pos.le
   unfold value
-  convert h using 1 <;> ring
+  calc
+    _ ≤ ((x : ℝ) / (d : ℝ)) / (scale : ℝ) := h
+    _ = _ := by ring
 
 /-- Each ceiling line is conservative for signed inputs. -/
 theorem value_ceilDiv_ge (x d : ℤ) (hd : 0 < d) :
     value x / (d : ℝ) ≤ value (ceilDiv x d) := by
   have h := div_le_div_of_nonneg_right (ceil_div_ge x d hd) scale_pos.le
   unfold value
-  convert h using 1 <;> ring
+  calc
+    _ = ((x : ℝ) / (d : ℝ)) / (scale : ℝ) := by ring
+    _ ≤ _ := h
 
 theorem value_mul_int (x n : ℤ) : value (x * n) = value x * (n : ℝ) := by
   unfold value
@@ -228,9 +232,15 @@ theorem original_error_constants (g : ℕ) (hg : 0 < g) :
     1 / (8 * (g : ℝ) ^ 2) ≤ value (interpError g) := by
   have hgZ : (0 : ℤ) < g := by exact_mod_cast hg
   refine ⟨?_, ?_, ?_⟩
-  · simpa only [errL, Int.cast_mul, Int.cast_pow, Int.cast_ofNat, Int.cast_natCast] using reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
-  · simpa only [errH, Int.cast_mul, Int.cast_pow, Int.cast_ofNat, Int.cast_natCast] using reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
-  · simpa only [interpError, Int.cast_mul, Int.cast_pow, Int.cast_ofNat, Int.cast_natCast] using reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
+  · calc
+      1 / (6 * (g : ℝ) ^ 3) = 1 / ((6 * (g : ℤ) ^ 3 : ℤ) : ℝ) := by norm_num
+      _ ≤ _ := reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
+  · calc
+      1 / (12 * (g : ℝ) ^ 3) = 1 / ((12 * (g : ℤ) ^ 3 : ℤ) : ℝ) := by norm_num
+      _ ≤ _ := reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
+  · calc
+      1 / (8 * (g : ℝ) ^ 2) = 1 / ((8 * (g : ℤ) ^ 2 : ℤ) : ℝ) := by norm_num
+      _ ≤ _ := reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
 
 /-- The scaling relation is a conversion factor, not identity of tables. -/
 theorem scale_dictionary : (scale : ℚ) = (originalWeightP : ℚ) / (2 : ℚ) ^ 32 := by
@@ -280,10 +290,12 @@ theorem interpolation_roundline_transport (b r : ℤ) (hb : 0 < b)
     (add_le_add (mul_le_mul_of_nonneg_right hx.2 hbrR)
       (mul_le_mul_of_nonneg_right hy.2 hrR)) hbR
   constructor
-  · have h := hl.trans hlo
-    convert h using 1 <;> dsimp -failIfUnchanged [interpolationLo] <;> ring
-  · have h := hhi.trans hu
-    convert h using 1 <;> dsimp -failIfUnchanged [interpolationHi] <;> ring
+  · calc
+      _ ≤ (x * ((b - r : ℤ) : ℝ) + y * (r : ℝ)) / (b : ℝ) := hl.trans hlo
+      _ = _ := by ring
+  · calc
+      _ = (x * ((b - r : ℤ) : ℝ) + y * (r : ℝ)) / (b : ℝ) := by ring
+      _ ≤ _ := hhi.trans hu
 
 /-- The final source point division by s=a/b is itself conservative,
 separately from interpolation and from table-generation semantics. -/
@@ -300,11 +312,7 @@ theorem factor_division_rounds (p : I80) (a b : ℤ) (ha : 0 < a) (hb : 0 < b)
     (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hp.1 hbR) haR)
   have hu := (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hp.2 hbR) haR).trans
     hceil
-  constructor
-  · convert hl using 1 <;> try field_simp [ne_of_gt (by exact_mod_cast ha : (0 : ℝ) < a),
-      ne_of_gt (by exact_mod_cast hb : (0 : ℝ) < b)] <;> ring
-  · convert hu using 1 <;> try field_simp [ne_of_gt (by exact_mod_cast ha : (0 : ℝ) < a),
-      ne_of_gt (by exact_mod_cast hb : (0 : ℝ) < b)] <;> ring
+  simpa only [div_div_eq_mul_div] using And.intro hl hu
 
 /-- The zero extension branch is completely licensed for every rational
 q<=2, independently of every generated historical table entry. -/
