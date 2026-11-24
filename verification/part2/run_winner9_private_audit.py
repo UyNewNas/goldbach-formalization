@@ -21,7 +21,7 @@ import subprocess
 import time
 
 from run_winner9_private_checks import (
-    CACHE_SCHEMA, LEAN, MATHLIB, PIN, closure_signature, digest, imports, json_digest,
+    CACHE_SCHEMA, EXTERNAL_CACHE_SCHEMA, LEAN, MATHLIB, PIN, closure_signature, digest, imports, json_digest,
 )
 
 LEANCHECKER = str(Path(LEAN).with_name("leanchecker"))
@@ -62,7 +62,7 @@ def project_nodes(root: Path, target: str) -> dict[str, dict]:
     return nodes
 
 
-def snapshot(root: Path, lib: Path, nodes: dict, toolchain: dict) -> dict:
+def snapshot(root: Path, lib: Path, nodes: dict, toolchain: dict, external=None) -> dict:
     project = {}
     for name, node in nodes.items():
         source, obj = node["source"], lib / (name.replace(".", "/") + ".olean")
@@ -70,20 +70,43 @@ def snapshot(root: Path, lib: Path, nodes: dict, toolchain: dict) -> dict:
             "source": str(source.relative_to(root)), "source_sha256": digest(source) if source.is_file() else None,
             "object": str(obj), "object_sha256": digest(obj) if obj.is_file() else None,
         }
-    return {"project": project, "toolchain": toolchain,
-            "lean_binary_sha256": digest(Path(LEAN)), "leanchecker_sha256": digest(Path(LEANCHECKER)),
-            "template_sha256": digest(TEMPLATE), "driver_sha256": digest(Path(__file__))}
+    result = {"project": project, "toolchain": toolchain,
+              "lean_binary_sha256": digest(Path(LEAN)), "leanchecker_sha256": digest(Path(LEANCHECKER)),
+              "template_sha256": digest(TEMPLATE), "driver_sha256": digest(Path(__file__))}
+    if external is not None and any(node.get("requires_external") for node in nodes.values()):
+        require(Path(external.value["runtime"]["leanchecker"]).resolve() == Path(LEANCHECKER).resolve(),
+                "Native snapshot selects another independent checker")
+        result["external_snapshot"] = external.verify()
+    return result
+
+
+def replay_context(frozen: dict) -> dict:
+    keys = ["project", "toolchain", "lean_binary_sha256", "leanchecker_sha256"]
+    if "external_snapshot" in frozen:
+        keys.append("external_snapshot")
+    return {key: frozen[key] for key in keys}
 
 
 def verify_compilation(records: dict, nodes: dict, frozen: dict) -> None:
+    from winner9_external_snapshot import mark_project_nodes
+    external = frozen.get("external_snapshot")
+    mark_project_nodes(nodes, set(external["native_modules"]) if external else set())
     require(frozen["lean_binary_sha256"] == frozen["toolchain"]["lean_binary_sha256"],
             "Lean binary changed after environment verification")
     for name, node in nodes.items():
         record = records.get(name, {})
         actual = frozen["project"][name]
-        require(record.get("cache_schema") == CACHE_SCHEMA and record.get("module") == name
+        needs_external = node["requires_external"]
+        schema = EXTERNAL_CACHE_SCHEMA if needs_external else CACHE_SCHEMA
+        if needs_external:
+            check = record.get("external_check", {})
+            require(record.get("external_snapshot") == external
+                    and check.get("status") == "PASSED_BATCH_PRE_POST"
+                    and check.get("before") == external and check.get("after") == external,
+                    "Native compilation context was not frozen before/after its actual batch: " + name)
+        require(record.get("cache_schema") == schema and record.get("module") == name
                 and record.get("exit_code") == 0 and record.get("toolchain") == frozen["toolchain"],
-                "No valid schema-2 compilation record: " + name)
+                "No valid source/dependency-bound compilation record: " + name)
         require(record.get("source_sha256") == actual["source_sha256"]
                 and actual["source_sha256"] is not None
                 and record.get("object_sha256") == actual["object_sha256"]
@@ -150,6 +173,8 @@ def main() -> int:
     parser.add_argument("modules", nargs="+")
     parser.add_argument("--summary-name", default="summary.json",
                         help="JSON basename under the audit directory; use distinct names for disjoint workers")
+    parser.add_argument("--external-snapshot", type=Path,
+                        help="Previously qualified native source/object/import/runtime environment")
     args = parser.parse_args()
     require(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*\.json", args.summary_name) is not None,
             "Expected a safe JSON summary basename")
@@ -170,6 +195,11 @@ def main() -> int:
     require(template.count(TEMPLATE_TARGET) == 2, "Unexpected target occurrences in the original audit template")
     env = dict(os.environ)
     env["LEAN_PATH"] = str(lib) + ":" + env.get("LEAN_PATH", "")
+    from winner9_external_snapshot import ExternalSnapshot, mark_project_nodes
+    external = (ExternalSnapshot(args.external_snapshot, lean=LEAN, mathlib_pin=PIN, project_lib=lib)
+                if args.external_snapshot else None)
+    if external:
+        env = external.environment(env)
     results = {}
     for target in targets:
         directory = audit_root / target
@@ -181,7 +211,8 @@ def main() -> int:
         try:
             records = json.loads((out / "records.json").read_text())
             nodes = project_nodes(root, target)
-            before = snapshot(root, lib, nodes, toolchain)
+            mark_project_nodes(nodes, set(external.modules) if external else set())
+            before = snapshot(root, lib, nodes, toolchain, external)
             require(before["template_sha256"] == template_sha256, "Audit template changed after loading")
             verify_compilation(records, nodes, before)
             if (previous.get("accepted") is True and previous.get("input_snapshot") == before
@@ -197,8 +228,7 @@ def main() -> int:
                             "compile_closure_signature": records[target]["closure_signature"],
                             "compile_provenance": records[target].get("provenance", "private compilation")})
             replay_command = [LEANCHECKER, "--verbose", target]
-            replay_binding = {key: before[key] for key in (
-                "project", "toolchain", "lean_binary_sha256", "leanchecker_sha256")}
+            replay_binding = replay_context(before)
             old_replay = previous.get("replay", {})
             if (previous.get("replay_binding") == replay_binding and old_replay.get("exit_code") == 0
                     and old_replay.get("inputs_unchanged") is True and old_replay.get("command") == replay_command
@@ -208,7 +238,7 @@ def main() -> int:
                 print("REPLAY", target, flush=True)
                 receipt["replay"] = run_process(replay_command, attempt / "replay.log", root, env)
             receipt["replay_binding"] = replay_binding
-            after_replay = snapshot(root, lib, nodes, toolchain)
+            after_replay = snapshot(root, lib, nodes, toolchain, external)
             receipt["replay"]["inputs_unchanged"] = after_replay == before
             write_json(latest, receipt)
             require(receipt["replay"]["exit_code"] == 0, "Independent leanchecker replay failed")
@@ -221,7 +251,7 @@ def main() -> int:
             print("AUDIT", target, flush=True)
             receipt["audit"] = run_process(command, attempt / "audit.log", root, env)
             receipt["audit"].update({"source": str(source.relative_to(root)), "source_sha256": audit_source_sha})
-            after_audit = snapshot(root, lib, nodes, toolchain)
+            after_audit = snapshot(root, lib, nodes, toolchain, external)
             receipt["audit"]["inputs_unchanged"] = after_audit == before and digest(source) == audit_source_sha
             require(receipt["audit"]["exit_code"] == 0, "Owned-declaration audit failed")
             require(receipt["audit"]["inputs_unchanged"], "Source/object/audit template changed during audit")

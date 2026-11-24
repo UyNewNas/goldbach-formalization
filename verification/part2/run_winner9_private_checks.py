@@ -18,11 +18,14 @@ import shutil
 import subprocess
 import time
 
+from inspect_winner9_owner_native import imports as parsed_source_imports
+
 PIN = "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
 BASELINE = "8657cfffef159185f73c6a04ae4d31c846c0d0a9"
 LEAN = "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean"
 MATHLIB = "/workspace/compile-deps/mathlib"
 CACHE_SCHEMA = 2
+EXTERNAL_CACHE_SCHEMA = 3
 
 
 def digest(path: Path) -> str:
@@ -34,9 +37,7 @@ def json_digest(payload: dict) -> str:
 
 
 def imports(path: Path) -> list[str]:
-    return [name for line in path.read_text().splitlines()
-            if line.startswith("import ") for name in line[7:].split()
-            if name.startswith("ImbalancedChen.")]
+    return [name for name in parsed_source_imports(path.read_text()) if name.startswith("ImbalancedChen.")]
 
 
 def closure_signature(record: dict) -> str:
@@ -50,7 +51,9 @@ def closure_signature(record: dict) -> str:
     """
     payload = {key: record[key] for key in (
         "module", "source_sha256", "object_sha256", "toolchain", "dependency_signatures")}
-    payload["cache_schema"] = CACHE_SCHEMA
+    payload["cache_schema"] = record.get("cache_schema", CACHE_SCHEMA)
+    if payload["cache_schema"] == EXTERNAL_CACHE_SCHEMA:
+        payload["external_snapshot"] = record["external_snapshot"]
     return json_digest(payload)
 
 
@@ -65,6 +68,8 @@ def main() -> int:
     parser.add_argument("--install-candidates", action="store_true")
     parser.add_argument("--time-budget-seconds", type=float,
                         help="Stop starting uncached modules after this elapsed time; finish running tasks")
+    parser.add_argument("--external-snapshot", type=Path,
+                        help="Previously qualified native source/object/import/runtime environment")
     args = parser.parse_args()
     if args.time_budget_seconds is not None and not 0 <= args.time_budget_seconds < float("inf"):
         parser.error("--time-budget-seconds must be a finite nonnegative number")
@@ -120,10 +125,17 @@ def main() -> int:
     for name in order:
         nodes[name]["dependency_closure"] = set(nodes[name]["deps"]).union(
             *(nodes[dep]["dependency_closure"] for dep in nodes[name]["deps"]))
+    from winner9_external_snapshot import ExternalSnapshot, mark_project_nodes
+    external = (ExternalSnapshot(args.external_snapshot, lean=LEAN, mathlib_pin=PIN, project_lib=lib)
+                if args.external_snapshot else None)
+    mark_project_nodes(nodes, set(external.modules) if external else set())
+    external_before = external.binding() if external else None
     records_path = out / "records.json"
     records = json.loads(records_path.read_text()) if records_path.exists() else {}
     env = dict(os.environ)
     env["LEAN_PATH"] = f"{lib}:{baseline_lib}:" + env.get("LEAN_PATH", "")
+    if external:
+        env = external.environment(env)
     flags = ["-t0", f"-j{args.threads}", f"-M{args.memory_mb}", "-DwarningAsError=true",
              "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000"]
     # These are recorded historical style exceptions, never proof-warning exceptions.
@@ -135,7 +147,8 @@ def main() -> int:
         original = baseline / path.relative_to(root)
         obj = lib / (name.replace(".", "/") + ".olean")
         old_obj = baseline_lib / (name.replace(".", "/") + ".olean")
-        if (original.is_file() and obj.is_file() and old_obj.is_file()
+        if (not nodes[name]["requires_external"]
+                and original.is_file() and obj.is_file() and old_obj.is_file()
                 and digest(obj) == digest(old_obj) and digest(path) == digest(original)
                 and all(dep in reusable_baseline for dep in nodes[name]["deps"])):
             reusable_baseline.add(name)
@@ -155,7 +168,15 @@ def main() -> int:
 
     def save() -> None:
         temporary = records_path.with_suffix(".tmp")
-        temporary.write_text(json.dumps(records, indent=2, sort_keys=True) + "\n")
+        # A terminated batch cannot leave fresh native-context records with
+        # successful credit before its final physical-file check completes.
+        persisted = {
+            name: (dict(record, exit_code=125, new_strict_compile=False)
+                   if record.get("external_check", {}).get("status") == "PENDING_BATCH_POSTCHECK"
+                   else record)
+            for name, record in records.items()
+        }
+        temporary.write_text(json.dumps(persisted, indent=2, sort_keys=True) + "\n")
         temporary.replace(records_path)
 
     def dependencies(name: str) -> dict[str, str]:
@@ -178,7 +199,14 @@ def main() -> int:
         return snapshot
 
     def valid_record(name: str, old: dict) -> bool:
-        if (old.get("cache_schema") != CACHE_SCHEMA or old.get("module") != name
+        needs_external = nodes[name]["requires_external"]
+        schema = EXTERNAL_CACHE_SCHEMA if needs_external else CACHE_SCHEMA
+        if needs_external and (old.get("external_snapshot") != external_before
+                               or old.get("external_check", {}).get("status") != "PASSED_BATCH_PRE_POST"
+                               or old["external_check"].get("before") != external_before
+                               or old["external_check"].get("after") != external_before):
+            return False
+        if (old.get("cache_schema") != schema or old.get("module") != name
                 or old.get("toolchain") != toolchain or old.get("exit_code") != 0
                 or old.get("source_sha256") != digest(nodes[name]["source"])):
             return False
@@ -270,6 +298,9 @@ def main() -> int:
             "attempts": attempts, "mathlib_commit": PIN, "lean": "4.33.0-rc1",
             "new_strict_compile": exit_code == 0, "object": str(obj),
         }
+        if nodes[name]["requires_external"]:
+            record.update({"cache_schema": EXTERNAL_CACHE_SCHEMA, "external_snapshot": external_before,
+                           "external_check": {"status": "PENDING_BATCH_POSTCHECK", "before": external_before}})
         if exit_code == 0:
             record["object_sha256"] = digest(obj)
             record["closure_signature"] = closure_signature(record)
@@ -329,6 +360,25 @@ def main() -> int:
                     print("FAIL", name, record["exit_code"], flush=True)
                     print((root / record["log"]).read_text()[-10000:], flush=True)
                 save()
+    if external:
+        try:
+            external_after = external.verify()
+            if external_after != external_before:
+                raise ValueError("External native environment binding changed during the batch")
+            for name in done:
+                record = records[name]
+                if record.get("external_check", {}).get("status") == "PENDING_BATCH_POSTCHECK":
+                    record["external_check"] = {"status": "PASSED_BATCH_PRE_POST", "before": external_before,
+                                                "after": external_after}
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            print("FAIL_EXTERNAL_POSTCHECK", str(error), flush=True)
+            affected = {name for name in done if nodes[name]["requires_external"]}
+            for name in affected:
+                records[name].update({"exit_code": 125, "new_strict_compile": False,
+                                      "external_check": {"status": "FAILED_BATCH_POSTCHECK", "error": str(error),
+                                                         "before": external_before}})
+            done.difference_update(affected)
+            failed.update(affected)
     save()
     exit_code = 1 if failed else 2 if pending else 0
     print(json.dumps({"roots": args.modules, "successful_closure": len(done),

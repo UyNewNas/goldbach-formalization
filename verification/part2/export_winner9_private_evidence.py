@@ -22,12 +22,15 @@ import tarfile
 
 from run_winner9_private_checks import LEAN, MATHLIB, PIN, digest, json_digest
 from run_winner9_private_audit import (
-    LEANCHECKER, TEMPLATE, TEMPLATE_TARGET, parse_audit, project_nodes, require, verify_compilation,
+    LEANCHECKER, TEMPLATE, TEMPLATE_TARGET, parse_audit, project_nodes, replay_context, require, verify_compilation,
 )
 
 DRIVER_V1 = "05f31ad7f78c69bf58a1f0daab4b597db9a90190f255a880abdab22767c864b5"
 DRIVER_V2 = "b214fe826d40f96c9907cb9c42f0ac96dcc9bc48dc080a264c9c13de2b43cc08"
+DRIVER_V3 = "36b2e1252b3b926a22505e7a7489485c78b33d1fb6904060840dfc9d613a9637"
+DRIVER_FILES = {DRIVER_V1: "driver-v1.py", DRIVER_V2: "driver-v2.py", DRIVER_V3: "driver-v3.py"}
 COMPILE_BEFORE_BUDGET = "dc6cbb64bbcf1e3db7080ddc4fc0ebff4742e9cced16f325f9817344bfc1c480"
+COMPILE_BUDGET_V2 = "df9949270753bb36cace92d70099de4a7c30dcea8f761ade36ecd03f50c5684d"
 GEOMETRY = {"ImbalancedChen." + name for name in (
     ["P2Winner9PullingArchiveCore", "P2Winner9PullingOrderChecks"]
     + [f"P2Winner9CompletePullingData{i:02}" for i in range(44)]
@@ -62,6 +65,8 @@ class Evidence:
     def __init__(self) -> None:
         self.files: dict[str, dict] = {}
         self.frozen: dict[Path, str] = {}
+        self.external_contexts: dict[str, tuple[dict, object]] = {}
+        self.accepted_external_contexts: set[str] = set()
 
     def freeze(self, path: Path) -> str:
         if path not in self.frozen:
@@ -91,6 +96,19 @@ class Evidence:
     def verify_frozen(self) -> None:
         for path, expected in self.frozen.items():
             require(digest(path) == expected, "A verified input changed during export: " + str(path))
+        for key in self.accepted_external_contexts:
+            binding, external = self.external_contexts[key]
+            require(external.verify() == binding, "Accepted native environment changed during export")
+
+    def bind_external(self, root: Path, binding: dict) -> str:
+        from winner9_external_snapshot import ExternalSnapshot
+        key = json_digest(binding)
+        if key not in self.external_contexts:
+            external = ExternalSnapshot(Path(binding["snapshot"]), lean=LEAN, mathlib_pin=PIN,
+                                        project_lib=root / ".lake/p2-private/lib")
+            require(external.binding() == binding, "Accepted native snapshot differs from the actual environment")
+            self.external_contexts[key] = (binding, external)
+        return key
 
 
 def page_binding(module: str, source: str, declarations: list[dict]) -> dict | None:
@@ -121,6 +139,11 @@ def validate_receipt(root: Path, target: str, receipt: dict, records: dict,
     frozen = receipt["input_snapshot"]
     require(receipt.get("input_sha256") == json_digest(frozen), "Input snapshot digest mismatch")
     require(frozen["driver_sha256"] in drivers, "Missing the exact accepted audit driver version")
+    external_key = None
+    if "external_snapshot" in frozen:
+        require(frozen["driver_sha256"] not in {DRIVER_V1, DRIVER_V2},
+                "A historical audit driver cannot bind a retrofitted native snapshot")
+        external_key = evidence.bind_external(root, frozen["external_snapshot"])
     require(frozen["template_sha256"] == evidence.freeze(TEMPLATE), "Audit template differs from accepted bytes")
     require(frozen["lean_binary_sha256"] == evidence.freeze(Path(LEAN))
             and frozen["leanchecker_sha256"] == evidence.freeze(Path(LEANCHECKER))
@@ -143,8 +166,7 @@ def validate_receipt(root: Path, target: str, receipt: dict, records: dict,
             "Target source/object metadata differs from its frozen dependency graph")
     require(receipt["compile_closure_signature"] == records[target]["closure_signature"],
             "The accepted target no longer matches its compiled closure signature")
-    require(receipt.get("replay_binding") == {key: frozen[key] for key in (
-        "project", "toolchain", "lean_binary_sha256", "leanchecker_sha256")},
+    require(receipt.get("replay_binding") == replay_context(frozen),
         "Independent replay is not bound to the accepted dependency graph")
     replay, audit = receipt["replay"], receipt["audit"]
     require(replay.get("exit_code") == 0 and replay.get("inputs_unchanged") is True
@@ -171,7 +193,7 @@ def validate_receipt(root: Path, target: str, receipt: dict, records: dict,
             for record in parsed["declarations"]) + "\n", "Stored declaration types differ from the actual audit log")
     require(audit["declaration_count"] == parsed["declaration_count"]
             and audit["axiom_counts"] == parsed["axiom_counts"], "Stored audit counts differ from the owned inventory")
-    return {"project": project, "nodes": nodes, "parsed": parsed}
+    return {"project": project, "nodes": nodes, "parsed": parsed, "external_key": external_key}
 
 
 def package(path: Path, names: set[str], modules: list[str], evidence: Evidence, page_bytes: int) -> dict:
@@ -212,8 +234,9 @@ def main() -> int:
     require(pin == PIN, "Live Mathlib checkout differs from the fixed pin")
     source_root = Path(__file__).resolve().parents[2]
     driver_paths = [source_root / "docs/verification/20261124-p2-private/driver-v1.py",
+                    source_root / "docs/verification/20261124-p2-private/audit-driver-v2.py",
                     Path(__file__).with_name("run_winner9_private_audit.py"), *args.driver_file]
-    drivers = {digest(path): path for path in driver_paths if path.is_file() and digest(path) in {DRIVER_V1, DRIVER_V2}}
+    drivers = {digest(path): path for path in driver_paths if path.is_file() and digest(path) in DRIVER_FILES}
     require({DRIVER_V1, DRIVER_V2} <= set(drivers), "Both exact historical audit driver versions must be available")
     records_raw = (private / "records.json").read_bytes()
     records = json.loads(records_raw)
@@ -267,6 +290,9 @@ def main() -> int:
                             "driver_sha256": receipt["input_snapshot"]["driver_sha256"],
                             "declaration_count": parsed["declaration_count"], "axiom_counts": parsed["axiom_counts"],
                             "project_modules": sorted(verified["project"]), "artifact_paths": sorted(files)}
+                if verified["external_key"] is not None:
+                    evidence.accepted_external_contexts.add(verified["external_key"])
+                    metadata["external_snapshot"] = receipt["input_snapshot"]["external_snapshot"]
                 try:
                     metadata["page_binding"] = page_binding(target, verified["nodes"][target]["source"].read_text(),
                                                             parsed["declarations"])
@@ -301,22 +327,56 @@ def main() -> int:
             except (OSError, ValueError) as error:
                 warnings.append({"module": name, "compile_log": value, "unavailable": str(error)})
     for driver_sha, path in drivers.items():
-        label = "driver-v1.py" if driver_sha == DRIVER_V1 else "driver-v2.py"
+        label = DRIVER_FILES[driver_sha]
         common.add(evidence.add_path(path, "tooling/" + label, "exact historical audit driver", driver_sha))
     tooling = [Path(__file__), TEMPLATE, Path(__file__).with_name("run_winner9_private_checks.py"),
                Path(__file__).with_name("migrate_winner9_private_snapshot.py"),
-               source_root / "docs/verification/20261124-p2-private/compile-driver-before-budget.py"]
+               source_root / "docs/verification/20261124-p2-private/compile-driver-before-budget.py",
+               source_root / "docs/verification/20261124-p2-private/compile-driver-budget-v2.py",
+               Path(__file__).with_name("winner9_external_snapshot.py"),
+               Path(__file__).with_name("inspect_winner9_owner_native.py")]
     for path in tooling:
         if path.is_file():
-            expected = COMPILE_BEFORE_BUDGET if path.name == "compile-driver-before-budget.py" else None
+            expected = {"compile-driver-before-budget.py": COMPILE_BEFORE_BUDGET,
+                        "compile-driver-budget-v2.py": COMPILE_BUDGET_V2}.get(path.name)
             common.add(evidence.add_path(path, "tooling/" + path.name, "verification implementation snapshot", expected))
         else:
             warnings.append({"tooling_file_missing": str(path)})
+    external_metadata = {}
+    for key in sorted(evidence.accepted_external_contexts):
+        binding, external = evidence.external_contexts[key]
+        prefix = "context/native/" + key + "/"
+        snapshot_name = evidence.add_path(external.path, prefix + "snapshot.json", "qualified native environment inventory; no proof credit",
+                                          binding["snapshot_sha256"])
+        common.add(snapshot_name)
+        texts = {}
+        for value, item in external.files.items():
+            path = Path(value)
+            original_trace = path.suffix == ".trace" and item.get("role") == "original-trace"
+            if (path.suffix not in TEXT_SUFFIXES and not original_trace) or ".olean" in path.suffixes:
+                continue
+            name = prefix + "files/" + hashlib.sha256(value.encode()).hexdigest() + "-" + path.name
+            role = "qualified native source/provenance text; no independent proof credit"
+            if original_trace:
+                raw = path.read_bytes()
+                require(sha_bytes(raw) == item["sha256"], "Evidence artifact changed: " + str(path))
+                try:
+                    json.loads(raw.decode("utf-8"))
+                except (UnicodeDecodeError, json.JSONDecodeError) as error:
+                    raise ValueError("Original trace must be UTF-8 JSON: " + str(path)) from error
+                name += ".json"
+                common.add(evidence.add_bytes(name, raw, str(path), role))
+            else:
+                common.add(evidence.add_path(path, name, role, item["sha256"]))
+            texts[value] = name
+        external_metadata[key] = {"binding": binding, "snapshot_archive": snapshot_name, "text_artifact_map": texts}
     # Supplemental receipts are retained for provenance, never used to award
-    # accepted module/declaration/page counts. Skip all proof object directories.
+    # accepted module/declaration/page counts. Skip proof object and isolated
+    # native-cache directories; bound native files above and explicit extras
+    # below retain their separate inclusion rules.
     supplements = [path for path in private.rglob("*") if path.is_file()
                    and path != private / "records.json"
-                   and not {"audit", "lib", "exports"}.intersection(path.relative_to(private).parts)
+                   and not {"audit", "lib", "exports", "native-cache"}.intersection(path.relative_to(private).parts)
                    and (path.suffix == ".json" or (path.suffix == ".log" and any(
                        word in str(path.relative_to(private)).lower() for word in ("bench", "probe", "stable", "migration"))))]
     for path in [*supplements, *args.extra_evidence]:
@@ -349,7 +409,8 @@ def main() -> int:
                                 "full_row_coverage": rows == set(range(11026))}},
         "object_manifest": project_union, "records_snapshot_sha256": sha_bytes(records_raw),
         "driver_sources": {sha: str(path) for sha, path in drivers.items()}, "no_olean_objects": True,
-        "source_boundary": "Project source/object closure verified onsite; fixed Mathlib remains the locked environment boundary.",
+        "external_snapshots": external_metadata,
+        "source_boundary": "Project source/object closure verified onsite; fixed Mathlib remains the locked environment boundary. Native dependencies, when used, additionally require the exact qualified external snapshot and physical input checks.",
         "acceptance_boundary": "Only selected valid accepted audit receipts are counted. Compiler-only, diagnostic, benchmark and migration records grant no additional audit or P2 credit.",
         "split": args.split, "transfer_page_bytes": args.transfer_page_bytes,
     }

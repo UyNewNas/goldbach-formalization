@@ -1,7 +1,7 @@
 # P2 private-environment continuation — 2026-11-24
 
 This verification continues `work/p2-formal-proof` from `8657cfff`, through
-`8fdeb981` and `a5a42f8`, using the original 20261106 manuscript.
+`8fdeb981`, `a5a42f8`, and `0f87651d`, using the original 20261106 manuscript.
 **Full P2 is not complete. The complete 11,026-row numerical family and its
 closed original-terminal lower bound are not accepted yet.**
 
@@ -45,10 +45,10 @@ are recorded in the private evidence. A compiler success, an independent
   decision procedure uses the already proved factor-mean identity to derive
   the redundant P-mean check, and materializes exact rational inputs before
   repeated kernel arithmetic.
-- All sixteen numerical pages 0000–0015 and their block-00 aggregator pass
+- All thirty-two numerical pages 0000–0031 and their two block aggregators pass
   strict compilation, independent replay, and complete owned-declaration
-  audits: 256 original rows, 544 page declarations and one block declaration.
-  This does not establish the remaining 10,770 selected inequalities.
+  audits: 512 original rows, 1,088 page declarations and two block declarations.
+  This does not establish the remaining 10,514 selected inequalities.
 - The unchanged six-row theorem was rebuilt against the revised checker
   dependencies and passed independent replay and its 20-declaration audit.
   Its source and conclusion remain unchanged.
@@ -74,6 +74,69 @@ No `sorry`, custom axiom, `native_decide`, or replacement integral is used to
 close these goals. The original selected log/Q6 branch for every row remains
 in the complete numerical renderer.
 
+
+## Verified logarithmic prefix estimates
+
+Private job `8eae22d6f9f4499f836f015b157af926` strictly compiled the new
+`P2WuPrefixLogDerivativeBudget` and reused the already strictly compiled
+profile/support modules. It then independently replayed and audited all five
+modules: 18 + 8 + 16 + 24 + 22 = **88 owned declarations**. The two new
+main sources retain exactly the accepted bytes. Their historical source-only
+header describes their drafting state; this receipt records the later gate.
+
+`moving_physical_log_chart_budget` supplies one constant before the target,
+endpoints, positive prime point, and chart point. It bounds the full mixed
+Frechet derivative tensor by a fixed constant times
+`(Real.log ((N : Real) + 2)) ^ (B * q)`. It uses the existing scalar smooth
+step budget and the actual finite-product estimate. It does not assume the
+budget it proves, and it does not supply a signed positive-product bound.
+
+The [five-module evidence archive](evidence-wu-prefix-20261124.slim.tar.xz)
+contains all 77 original members with five exact source references. Its
+SHA-256 is `e83c1f2d9941d765ba09b887b302bf14a9e0ec34dc2526739d92bd65e19ed2eb`;
+[byte/source verification](wu-prefix-repository-verification.json) passed.
+Combined with the first export, those two archives contain **131 accepted
+modules and 5,535 owned declarations**. `P2WuPrefixLogTheta` remains source-only: its older P5
+import frontier is incomplete. The complete marked seed is not claimed.
+
+## Second numerical block
+
+Private job `eaf64cad17f14acabd5cb1f7d540d313` independently replayed and
+audited pages 0016–0028 with two disjoint workers: all 13 pages and 442 owned
+declarations passed. The existing cloud task
+`3a5f35ce413f49c8a1fc138a17f65246` then completed pages 0029–0031 and the
+block-01 aggregator: 103 more declarations passed. Its actual source/object
+preflight and both audit-worker exit codes are retained; these existing
+results were reused without another compiler or replay invocation.
+
+The accepted union is now **148 modules and 6,080 owned declarations**.
+Numerical coverage is exactly **pages 0000–0031, 512 original rows, and two
+block aggregators**. These counts do not include incomplete native cache
+qualification, failed memory trials, or pending later numerical pages.
+The new main-source copies retain the accepted source hashes.
+
+The [second-block evidence archive](evidence-numerical16-31-20261124.slim.tar.xz)
+preserves all 239 original export members, using 63 concrete repository
+source references. Sources for which only symlink entry points were available
+remain embedded as original bytes. The first ad-hoc catalog was rejected by
+the local verifier because it referenced symlink entries; the corrected repack
+uses the existing canonical catalog routine and passes
+[full byte/source verification](numerical16-31-repository-verification.json).
+Archive SHA-256:
+`0b89748bb7d6e39e87e9768ffdadbfc5d46ada39032b2157ce70f43ce55ec02d`.
+The [disjoint accepted union](ACCEPTED_UNION.json) verifies that the three
+published proof archives contain no duplicated accepted module and cover
+exactly original row ordinals 0–511. Packaging introduces no new proof credit.
+
+The first follow-up export validated all 13 selected receipts, but its
+automatic supplemental-file discovery also collected unrelated quarantined
+native-cache JSON. Its completed original archive remains on the private
+worker. The subsequent large repack was cancelled before the planned fresh
+compiler trial. The scoped exporter excludes that directory only from
+automatic supplements; every bound native-context file and explicit
+`--extra-evidence` selection still retains its original inclusion rules.
+The original exporter bytes are preserved in `export-driver-v3-before-scope.py`.
+
 ## Cache and audit discipline
 
 `verification/part2/run_winner9_private_checks.py` uses schema-2 records bound
@@ -94,6 +157,14 @@ unchanged. Previously accepted audits are retained without re-running them
 just because the summary-output option changed. Parallel workers use disjoint
 module lists and distinct summary names.
 
+The optional v3 native-context consumer preserves the existing finite
+schema-2 cache signatures. Only project modules with actual native ancestry
+require its explicit qualified source/object/import/runtime snapshot. Legacy
+records cannot acquire native binding merely by changing their schema field.
+The independent review is recorded in
+[`native_snapshot_consumer_review.json`](../../../verification/part2/native_snapshot_consumer_review.json);
+it tests consumer logic and does not qualify any actual native object.
+
 The only permitted transitive axioms in accepted new declarations are
 `propext`, `Classical.choice`, and `Quot.sound`. Audits record every serialized
 and environment-owned declaration, including private and generated names;
@@ -111,6 +182,20 @@ process-tree RSS. The complete geometry/core/page audit also used two disjoint
 worker lists and distinct summaries: all 119 new module audits passed in
 1,742.210 seconds, with about 7.41 GiB peak aggregate RSS. These are observed parallel runs, not
 only advertised support.
+
+A three-process trial on previously uncompiled pages 0022–0024, with a
+3,072 MiB Lean memory threshold per process, failed with Lean
+`memory_exception` in all three processes. The same pages subsequently passed
+under the established two-process / 6,144 MiB configuration. A separate
+three-process trial on previously uncompiled all-log pages 0041–0043, with
+4,096 MiB per process, also reached Lean's per-process memory threshold.
+It produced no new compiled page and peaked at 12,918,591,488 bytes aggregate
+RSS. Neither result is described as a mathematical failure or a proof pass.
+
+The page-0029 `--threads 4` invocation reused all 58 existing closure records
+and invoked no source compiler. It therefore supplies no four-thread speed
+measurement. Increasing threads inside one process must not be confused
+with the observed cross-page parallelism. The service limits remain unchanged.
 
 Keep two heavy numerical compiler processes at this measured memory level.
 The optional `--time-budget-seconds 3000` stops dispatching new modules before
@@ -139,12 +224,16 @@ compilation. A source-only compatibility scan is not a combined Lean import
 check, and a Mathlib-only project-cache record does not bind this new native
 dependency boundary.
 
-Even a completed Winner9 family leaves the actual same-rho positive-product
-supplier, the original H247 endpoint licences, and the moving-family
-quantifier/interface work. The native library already has a uniform lower
-bound for the actual Wu boxes and uniform collar/prefix error payments;
-these must be reused. A finite fixed-query maximum alone does not prove the
-required uniform estimate for all moving admitted weights. No counterexample
-to the manuscript is inferred from that interface obligation.
+Even a completed Winner9 family leaves the same-rho positive-product
+supplier and the original H247 endpoint licences. The 20261106 manuscript
+fixes a finite marked-query family before taking its asymptotic limit. The
+current `P2TableActionSourceOnly.H/h` instead use the native
+`wuImprovementLimit` over `wuSourceBox`; identifying that native family with
+the manuscript enhanced family remains a separate semantic obligation.
+A stronger estimate over arbitrary moving native boxes must not be presented
+as a requirement of the manuscript itself. Existing native box lower bounds
+and collar/prefix error payments are reusable suppliers, but a fixed-query
+maximum alone does not establish the stronger native interface. No
+counterexample to the manuscript is inferred from this mismatch.
 
 No full-P2 dashboard status is promoted by these partial results.
