@@ -126,12 +126,15 @@ theorem frontier_original_first_cell
     e chi m omega N weight carrier k hk state hstate).1
   obtain ⟨i, hlo, hhi, hstop⟩ := hstop
   have hcoord := primeHistoryLogCoordinates_ancestor N hlen (by omega : 1 ≤ k) (0 : Fin 1)
+  have hidx : Fin.castLE (by omega : 1 ≤ k) (0 : Fin 1) = (⟨0, hk⟩ : Fin k) := by
+    apply Fin.ext
+    rfl
   have hlo' : logPrimeMeshPoint 0 (19 / 96) m i.val ≤
       primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩ := by
-    simpa only [hcoord] using hlo
+    simpa only [hcoord, hidx] using hlo
   have hhi' : primeHistoryLogCoordinates N k state.selectedPrefix ⟨0, hk⟩ <
       logPrimeMeshPoint 0 (19 / 96) m (i.val + 1) := by
-    simpa only [hcoord] using hhi
+    simpa only [hcoord, hidx] using hhi
   exact ⟨i, hlo', hhi', hstop⟩
 
 /-- A next candidate need not pass its own old or new gate. Its already

@@ -122,7 +122,7 @@ theorem original_integer_below_mu_log32_guard (x0 x1 : ℤ)
   · have hgap : (1:ℤ)≤x1-x0 := by omega
     have hsmall : (25:ℤ)*(48000*2^24)≤128*P160 := by norm_num [P160]
     have hx1small : x1≤P160 :=
-      (mul_le_mul_left (by norm_num : (0:ℤ)<128)).mp (hmu.trans hsmall)
+      le_of_mul_le_mul_left (hmu.trans hsmall) (by norm_num : (0:ℤ)<128)
     have hscaled : x1≤(x1-x0)*P160 :=
       hx1small.trans (by
         simpa only [one_mul] using mul_le_mul_of_nonneg_right hgap P160_pos.le)
@@ -135,11 +135,13 @@ theorem original_integer_below_mu_log32_guard (x0 x1 : ℤ)
         _ = (1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ) := by
           field_simp [hx0Real.ne', hx1Real.ne'] <;> ring
     have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo :=
-      Int.le_floor.mpr hfirst
+      Int.le_floor.mpr (by simpa only [Int.cast_one] using hfirst)
     have hlo := hfloor.trans (originalLnUnit_lo_ge_first h1 h2)
-    rw [originalLn32, if_pos h2]
-    change 0<(originalLnUnit ((x1:ℝ)/(x0:ℝ))).lo
-    omega
+    have hbranch : originalLogBranch ((x1:ℝ)/(x0:ℝ)) 0 =
+        originalLnUnit ((x1:ℝ)/(x0:ℝ)) := by
+      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
+    rw [originalLn32, if_pos h2, hbranch]
+    exact (by norm_num : (0:ℤ)<1).trans_le hlo
   · exact range32_two_lt_lo_pos (lt_of_not_ge h2) h32
 
 /-- Direct reusable wrapper for one of the original ordinary x/y log
@@ -169,7 +171,9 @@ theorem original_stored_below_mu_log32_guard (x0 x1 : ℤ) (a b : ℚ)
   have hupper : (x1:ℝ)≤(25:ℝ)/128*((48000*2^24:ℤ):ℝ) :=
     (div_le_iff₀ hD).1 (by simpa only [hbReal] using hmu)
   have hmuInt : 128*x1≤25*(48000*2^24:ℤ) := by
-    have h : 128*(x1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by linarith only [hupper]
+    have h : 128*(x1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by
+      norm_num at hupper ⊢
+      linarith only [hupper]
     exact_mod_cast h
   have hratio : (b:ℝ)/(a:ℝ)=(x1:ℝ)/(x0:ℝ) := by
     rw [haReal,hbReal]
@@ -198,3 +202,4 @@ theorem original_stored_ordinary_log32_guards
 
 end
 end ImbalancedChen.OriginalThirdPositiveLogSourceOnly
+

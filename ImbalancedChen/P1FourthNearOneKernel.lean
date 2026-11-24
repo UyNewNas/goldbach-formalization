@@ -3,7 +3,7 @@ import ImbalancedChen.RosserContinuousSourceUniformity
 import Mathlib.MeasureTheory.Function.LocallyIntegrable
 
 /-!
-SOURCE_WRITTEN / UNCOMPILED / CODE_ONLY.
+Verification records: docs/verification/20261123-blue-compilation.
 
 The right-continuous extension of the literal Suzuki upper factor at one.
 No assertion is made that the totalized source-tsum definition at one has
@@ -55,9 +55,13 @@ theorem continuousOn_closedUpper : ContinuousOn closedUpper (Ici 1) := by
     simp only [closedUpper, if_pos hs.2]
   have hright : ContinuousOn closedUpper (Ici 2) := by
     apply (continuousOn_suzukiContinuousUpperFactor.mono
-      (fun s hs => (show (1 : ℝ) < s by linarith [hs]))).congr
+      (fun s hs => (show s ∈ Ioi (1 : ℝ) by
+        change (2 : ℝ) ≤ s at hs
+        change (1 : ℝ) < s
+        linarith))).congr
     intro s hs
-    exact closedUpper_eq_actual (by linarith [hs])
+    change (2 : ℝ) ≤ s at hs
+    exact closedUpper_eq_actual (by linarith)
   have hu : Icc (1 : ℝ) 2 ∪ Ici 2 = Ici 1 := by
     ext s
     simp only [mem_union, mem_Icc, mem_Ici]
@@ -73,7 +77,11 @@ theorem continuousOn_closedUpper : ContinuousOn closedUpper (Ici 1) := by
 theorem tendsto_closedUpper_one :
     Tendsto closedUpper (𝓝[>] 1) (𝓝 A) := by
   have h : ContinuousWithinAt closedUpper (Ioi 1) 1 :=
-    (continuousOn_closedUpper 1 (by simp)).mono (fun _ hs => hs.le)
+    (continuousOn_closedUpper 1 (by simp)).mono (by
+      intro s hs
+      change (1 : ℝ) < s at hs
+      change (1 : ℝ) ≤ s
+      exact hs.le)
   change Tendsto closedUpper (𝓝[>] 1) (𝓝 (closedUpper 1)) at h
   simpa only [closedUpper_one] using h
 
@@ -103,9 +111,9 @@ theorem closedUpper_nonneg {s : ℝ} (hs : 1 ≤ s) : 0 ≤ closedUpper s := by
     exact div_nonneg A_pos.le (by linarith)
   · rw [closedUpper_eq_actual (by linarith)]
     unfold suzukiContinuousUpperFactor
-      MathlibNt.SieveTheory.SuzukiFiniteContinuousLayers.suzukiProposition118SourceTPlus
+      MathlibNt.SieveTheory.suzukiProposition118SourceTPlus
     exact add_nonneg (by norm_num) (tsum_nonneg (fun k =>
-      MathlibNt.SieveTheory.SuzukiFiniteContinuousLayers.suzukiLayer_one_two_odd_nonneg
+      MathlibNt.SieveTheory.suzukiLayer_one_two_odd_nonneg
         (by linarith) k))
 
 /-- A global bound, without an upper bound on s. -/
@@ -115,8 +123,9 @@ theorem closedUpper_le_amplitude {s : ℝ} (hs : 1 ≤ s) : closedUpper s ≤ A 
     exact (div_le_iff₀ (show 0 < s by linarith)).mpr
       (by nlinarith [A_pos])
   · have hs2' : 2 ≤ s := le_of_not_ge hs2
-    have h := upper_antitone (show (2 : ℝ) ∈ Ici 2 from le_rfl) hs2' hs2'
-    rw [upper_eq_inv (by norm_num) (by norm_num)] at h
+    have h := upper_antitone (show (2 : ℝ) ∈ Ici 2 by simp)
+      (by change (2 : ℝ) ≤ s; exact hs2') hs2'
+    rw [upper_eq_inv (s := (2 : ℝ)) (by norm_num) (by norm_num)] at h
     change suzukiContinuousUpperFactor s / A ≤ 1 / 2 at h
     have h' := (div_le_iff₀ A_pos).mp h
     rw [closedUpper_eq_actual (by linarith)]
@@ -145,7 +154,6 @@ theorem isClosed_legal (a lambda : ℝ) : IsClosed (legal a lambda) := by
 theorem residual_one_le {a lambda : ℝ} (ha : 0 < a) {t : Fin 4 → ℝ}
     (ht : t ∈ legal a lambda) : 1 ≤ residual lambda t := by
   apply (le_div_iff₀ (ha.trans_le ht.1)).mpr
-  dsimp only [residual]
   linarith [ht.2]
 
 theorem continuousOn_normalized {a lambda : ℝ} (ha : 0 < a) :
@@ -244,7 +252,10 @@ theorem continuousOn_maxOneNormalized {a b lambda : ℝ} (ha : 0 < a) :
   have hr : ContinuousOn (residual lambda) (univ.pi (fun _ : Fin 4 => Icc a b)) :=
     (continuousOn_const.sub hsum.continuousOn).div hlast.continuousOn hne
   exact (continuousOn_closedUpper.comp (continuousOn_const.sup hr)
-    (fun t _ => le_max_left _ _)).div hlast.continuousOn hne
+    (by
+      intro t _
+      change (1 : ℝ) ≤ max 1 (residual lambda t)
+      exact le_max_left _ _)).div hlast.continuousOn hne
 
 theorem integrableOn_maxOneNormalized {a b lambda : ℝ} (ha : 0 < a) :
     IntegrableOn (maxOneNormalized lambda)

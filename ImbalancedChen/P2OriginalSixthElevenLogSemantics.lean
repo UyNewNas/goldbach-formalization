@@ -210,10 +210,10 @@ theorem subsetSum_one (t : Physical) : subsetSum 1 t = t 0 := by
   norm_num [subsetSum, bit, Fin.sum_univ_succ]
 
 theorem subsetSum_seventeen (t : Physical) : subsetSum 17 t = t 0 + t 4 := by
-  norm_num [subsetSum, bit, Fin.sum_univ_succ]
+  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl
 
 theorem subsetSum_twelve (t : Physical) : subsetSum 12 t = t 2 + t 3 := by
-  norm_num [subsetSum, bit, Fin.sum_univ_succ]
+  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl
 
 def priority (c : Cell) (t : Physical) : Prop :=
   match c with
@@ -287,7 +287,7 @@ theorem PhysicalCell.raw_envelope {c : Cell} {t : Physical} (hc : PhysicalCell c
         have hw : t 2 + t 3 < mu := by simpa only [winnerPlane, hf] using hc.winner
         refine ⟨12, by decide, ?_⟩
         rw [subsetSum_twelve, tent_ascending hw.le]
-        simp only [oldCap, hf]
+        simp only [oldCap, hf, add_assoc]
 
 /-- Historical first-three licenses stay at R0, including in the pair
 families where the raw old fifth comparison is strictly larger. -/
@@ -303,9 +303,13 @@ theorem PhysicalCell.third_envelope {c : Cell} {t : Physical} (hc : PhysicalCell
 
 theorem PhysicalCell.coordinates_pos {c : Cell} {t : Physical} (hc : PhysicalCell c t) :
     ∀ i : Fin 6, 0 < t i := by
+  have h4 := hc.rpos.trans hc.order.1
+  have h3 := h4.trans hc.order.2.1
+  have h2 := h3.trans hc.order.2.2.1
+  have h1 := h2.trans hc.order.2.2.2.1
+  have h0 := h1.trans hc.order.2.2.2.2
   intro i
-  fin_cases i <;> linarith [hc.rpos, hc.order.1, hc.order.2.1,
-    hc.order.2.2.1, hc.order.2.2.2.1, hc.order.2.2.2.2]
+  fin_cases i <;> first | exact h0 | exact h1 | exact h2 | exact h3 | exact h4 | exact hc.rpos
 
 /-- These residuals share the sixth-node cutoff r=t6 and the same S6. -/
 theorem PhysicalCell.residual_guards {c : Cell} {t : Physical} (hc : PhysicalCell c t) :
@@ -375,9 +379,12 @@ theorem PhysicalCell.factors_pos {c : Cell} {t : Physical} (hc : PhysicalCell c 
     ∀ j : Fin 8, 0 < factors c t j := by
   have hr := hc.residual_guards
   have hp := hc.coordinates_pos
+  have hold : 0 < oldResidual c t := hr.1.trans hr.2.1
+  have hnew : 0 < newResidual c t := hold.trans hr.2.2.1
   intro j
-  fin_cases j <;> simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ] <;>
-    first | exact hp _ | linarith only [hr.1, hr.2.1, hr.2.2.1]
+  fin_cases j <;> first
+    | exact hold | exact hnew | exact hp 0 | exact hp 1
+    | exact hp 2 | exact hp 3 | exact hp 4 | exact hp 5
 
 theorem PhysicalCell.coordinateProduct_pos {c : Cell} {t : Physical}
     (hc : PhysicalCell c t) : 0 < coordinateProduct t := by
@@ -443,9 +450,8 @@ theorem PhysicalCell.inherited_cap_saving {c : Cell} {t : Physical}
   have hR : oldCap c t - S6 t ≤ 3 * t 5 := by
     dsimp only [oldResidual, newResidual] at hr
     linarith only [hr.2.2.1, hr.2.2.2]
-  have hrecip := one_div_le_one_div_of_le hsmall hcomp
-  have hfour : 4 / (oldCap c t - S6 t) ≤ 4 / (lambda - S6 t) := by
-    convert mul_le_mul_of_nonneg_left hrecip (by norm_num : (0 : ℝ) ≤ 4) using 1 <;> ring
+  have hfour : 4 / (oldCap c t - S6 t) ≤ 4 / (lambda - S6 t) :=
+    div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 4) hsmall hcomp
   rw [← hc.same_node_normalization]
   rw [normalizedOrdinary_initial hr.1 hr.2.1 hR,
     normalizedOrdinary_initial hr.1 hguard hu]
@@ -525,6 +531,7 @@ theorem sourceIntegral_eq_logarithmic_of_pos (c : Cell) (T : Set Physical)
     sourceIntegral c T = logarithmicIntegral c T := by
   apply setIntegral_congr_fun hT
   intro t ht
+  change savingKernel c t = 4 * gap c t * Real.exp (factorLog c t)
   rw [exp_factorLog_of_pos c t (hp t ht), savingKernel]
   ring
 
@@ -533,6 +540,7 @@ theorem weightedLogIntegral_eq_of_pos (c : Cell) (T : Set Physical)
     weightedLogIntegral c T = weightedFactorLogIntegral c T := by
   apply setIntegral_congr_fun hT
   intro t ht
+  change gap c t * Real.log (1 / factorProduct c t) = gap c t * factorLog c t
   rw [factorLog_eq_of_pos c t (hp t ht)]
 
 /-- Literal source expression `4 I_g E_g exp(log(1/product ell))`.
@@ -564,6 +572,7 @@ theorem weightedLogIntegral_eq (c : Cell) (T : Set Physical)
     weightedLogIntegral c T = weightedFactorLogIntegral c T := by
   apply setIntegral_congr_fun hT
   intro t ht
+  change gap c t * Real.log (1 / factorProduct c t) = gap c t * factorLog c t
   rw [(hcell t ht).factorLog_eq]
 
 /-- The true integral can equivalently be written with the normalized

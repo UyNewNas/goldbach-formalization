@@ -1,0 +1,12 @@
+import ImbalancedChen.P1OriginalCompleteFormalProof
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+
+#check ImbalancedChen.P1OriginalFinalPolicyRawBound.exists_cofinal_final_raw_upper
+#check ImbalancedChen.P1OriginalFinalPolicyStructure.final_integer_sieve_majorant
+#check ImbalancedChen.P1OriginalFinalPolicyAncestorReads.physical_modulus_ancestor_reads
+#check ImbalancedChen.P1OriginalCompleteFormalProof.exists_cofinal_same_policy_same_coefficient
+#print ImbalancedChen.P1OriginalCompleteFormalProof.exists_cofinal_same_policy_same_coefficient
+#print axioms ImbalancedChen.P1OriginalCompleteFormalProof.exists_cofinal_same_policy_same_coefficient

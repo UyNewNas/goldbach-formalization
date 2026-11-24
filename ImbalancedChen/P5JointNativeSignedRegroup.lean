@@ -321,7 +321,7 @@ def otherRows (N : ℕ) : ℝ :=
     currentChenUpsilon4 N + currentChenUpsilon5 N - 2 * currentChenUpsilon7 N -
     currentChenUpsilon8 N - currentChenUpsilon9 N
 
-/-- The original paired weight, including the literal +U6/-U10/-U11 signs,
+/-- The original paired weight, including the literal +U6, -U10, -U11 signs,
 receives the SAME signed sigma for its main, AP and centre terms. -/
 theorem original_paired_lower_same_sigma (D : LowerData) {n N : ℕ} {eta : ℚ}
     (hN : 1 < N) (heta : 0 < eta) (E : ℕ × ℕ → Prop) (M : ℝ)

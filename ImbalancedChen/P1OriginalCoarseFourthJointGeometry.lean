@@ -66,7 +66,10 @@ theorem valid_fourth_iff (e chi : ℝ) (m : ℕ) (omega N : ℝ)
   have hparent : FirstExitValidSelection (policy e chi m omega N) [] true
       (List.ofFn (prefix3 p)).dropLast ↔
       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by
-    simpa only [prefix3, historicalPrefixProject] using
+    have hidx : Fin.castLE (by omega : 3 ≤ 4) (0 : Fin 3) = (0 : Fin 4) := by
+      apply Fin.ext
+      rfl
+    simpa only [prefix3, historicalPrefixProject, hidx] using
       P1ActualTuple.parent_two_iff e chi m omega N (prefix3 p) (hpos 0)
   rw [hv, hparent]
   have hthird := policy_third_iff e chi m omega N (p 0) (p 1) (p 2) (hpos 2)
@@ -504,7 +507,7 @@ theorem truncated_admittedTuples_filter_eq_if
         hwhole.trans (mem_logPrimeMeshCell.mp ht3 2).1
       exact ⟨hp, ht, ⟨⟨hg, hstop⟩, hrough⟩⟩
   · rw [if_neg hs]
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro p hp
     obtain ⟨_hpbox, ht, hg⟩ := Finset.mem_filter.mp hp
     have hstop := (firstStopRegion_on_cell e m j4 _ ht).mp hg.1.2

@@ -242,7 +242,7 @@ theorem exists_p1_actualSmallRosserPlusDensity_endpoint_normalized_bound
   have hV0 := (actualSmallEulerProduct_pos N cap y hEven).le
   have hEuler' := hEuler N cap hNpos hEven y hy4 hcap
   have hEulerMul : actualSmallEulerProduct N cap y * Real.log y ≤
-      B * singularSeries N := (div_le_iff₀ hlogy).mp hEuler'
+      B * singularSeries N := (le_div_iff₀ hlogy).mp hEuler'
   have hEulerNorm : actualSmallEulerProduct N cap y * Real.log (N : ℝ) /
       singularSeries N ≤ B / a := by
     apply (div_le_div_iff₀ (singularSeries_pos N) ha).mpr

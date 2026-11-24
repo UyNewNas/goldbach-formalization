@@ -50,8 +50,6 @@ theorem hasDerivAt_partialSix (y : ℝ) :
     ((hasDerivAt_pow 5 y).div_const 5)).add ((hasDerivAt_pow 6 y).div_const 6)
   have he : (fun x : ℝ => x + x ^ 2 / 2 + x ^ 3 / 3 + x ^ 4 / 4 + x ^ 5 / 5 + x ^ 6 / 6) =
       partialSix := funext (fun x => (partialSix_explicit x).symm)
-  change HasDerivAt
-    (fun x : ℝ => x + x ^ 2 / 2 + x ^ 3 / 3 + x ^ 4 / 4 + x ^ 5 / 5 + x ^ 6 / 6) _ y at h
   rw [he] at h
   convert h using 1 <;> norm_num <;> ring
 
@@ -59,11 +57,8 @@ theorem hasDerivAt_remainderSix {y : ℝ} (hy : y < 1) :
     HasDerivAt remainderSix (-y ^ 6 / (1 - y)) y := by
   have hn : 1 - y ≠ 0 := by linarith
   have h := (((hasDerivAt_id y).const_sub 1).log hn).add (hasDerivAt_partialSix y)
-  have hd : -y ^ 6 / (1 - y) =
-      -1 / (1 - y) + (1 + y + y ^ 2 + y ^ 3 + y ^ 4 + y ^ 5) := by
-    field_simp [hn] <;> ring
-  rw [hd]
-  exact h
+  convert h using 1 <;> dsimp [remainderSix]
+  <;> field_simp [hn] <;> ring
 
 theorem continuousOn_remainderSix {q : ℝ} (hq : q < 1) :
     ContinuousOn remainderSix (Icc (0 : ℝ) q) := by

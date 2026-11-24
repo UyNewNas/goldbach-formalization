@@ -46,7 +46,7 @@ theorem fixedNumerator_eq_floor (bits : ℕ) (r : ℚ) :
   unfold fixedNumerator
   have h := Int.floor_div_cast_of_nonneg (k := ℝ) (Int.natCast_nonneg r.den)
     (((r.num * (2 : ℤ) ^ bits : ℤ) : ℝ))
-  simpa only [Int.floor_intCast, Int.cast_natCast] using h.symm
+  simpa using h.symm
 
 theorem roundDownQ_le (bits : ℕ) (r : ℚ) : (roundDownQ bits r : ℝ) ≤ (r : ℝ) := by
   have hp : (0 : ℝ) < (2 : ℝ) ^ bits := pow_pos (by norm_num) _

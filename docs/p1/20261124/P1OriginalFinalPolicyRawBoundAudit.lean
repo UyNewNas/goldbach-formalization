@@ -1,0 +1,9 @@
+import ImbalancedChen.P1OriginalFinalPolicyRawBound
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+
+#check ImbalancedChen.P1OriginalFinalPolicyRawBound.exists_cofinal_final_raw_upper
+#print ImbalancedChen.P1OriginalFinalPolicyRawBound.exists_cofinal_final_raw_upper
+#print axioms ImbalancedChen.P1OriginalFinalPolicyRawBound.exists_cofinal_final_raw_upper

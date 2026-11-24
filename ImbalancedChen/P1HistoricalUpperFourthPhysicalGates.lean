@@ -109,7 +109,7 @@ theorem p1_fourth_plus_gate_iff_quotient {N : ℕ} (hN : 1 < N) (p : Fin 4 → �
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   rw [p1_fourth_quotient_rpow hN p hp,
     ← actualPrimeTupleLog_rpow hN p hp 3, Real.rpow_lt_rpow_left_iff hn]
-  linarith
+  constructor <;> intro h <;> linarith
 
 /-- Both actual quotient levels are legal for the positive upper residual;
 the associated strict total-product bounds are also derived. -/
@@ -241,7 +241,7 @@ actual active support, with the original strict level. -/
 theorem p1_fourthPlusActive_filter_affine (N cap : ℕ) (hN : 1 < N) (lambda : ℝ)
     (p : Fin 4 → ℕ) (hp : ∀ i, 0 < p i) :
     (p1_fourthPlusActiveDivisors N cap lambda p).filter
-      (fun d => (∑ i, actualPrimeTupleLog N p i) +
+      (fun (d : ℕ) => (∑ i, actualPrimeTupleLog N p i) +
         Real.log (d : ℝ) / Real.log (N : ℝ) < lambda) =
       p1_fourthPlusActiveDivisors N cap lambda p := by
   apply Finset.filter_eq_self.mpr

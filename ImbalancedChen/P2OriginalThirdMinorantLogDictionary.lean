@@ -1,6 +1,6 @@
 import ImbalancedChen.ActualExtendedThirdOrderedIntegral
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Data.Matrix.Notation
+import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic
 
 /-!
@@ -84,8 +84,8 @@ theorem coordinate_pos {t : Point} (ht : PhysicalRows t) (i : Fin 8) : 0 < t i :
 
 theorem firstThree_ordered {t : Point} (ht : PhysicalRows t) :
     Ordered (t 0) (t 1) (t 2) := by
-  exact ⟨(coordinate_pos ht 2).le, ht.ordered (by norm_num),
-    ht.ordered (by norm_num), ht.largestBelowMu⟩
+  exact ⟨(coordinate_pos ht 2).le, ht.ordered (by decide : (1 : Fin 8) ≤ 2),
+    ht.ordered (by decide : (0 : Fin 8) ≤ 1), ht.largestBelowMu⟩
 
 theorem thirdMinorant_active {t : Point} (ht : PhysicalRows t) :
     thirdMinorant t = v (t 1 + t 2) := by
@@ -180,7 +180,8 @@ theorem actual_third_kernel_le_minorant {t : Point} (ht : PhysicalRows t) :
       (pow_pos (coordinate_pos ht 2) _)
   rw [actualExtendedThirdOrderedKernel]
   simp only [mul_zero, sub_zero]
-  exact (div_le_div_iff_of_pos_right hd).2 (by dsimp [minorantThirdKernel]; nlinarith)
+  exact (div_le_div_iff_of_pos_right hd).2
+    (mul_le_mul_of_nonneg_left (sub_le_sub_left hf _) (by norm_num : (0 : ℝ) ≤ 4))
 
 /-- Integrate the actual kernel comparison on any genuine selected cell or
 union whose physical rows and integrability have been established. -/
@@ -199,7 +200,7 @@ theorem history7_residual (t : Point) : history7 t - total t = 2 * t 6 - t 7 := 
 
 theorem comparison_residual_lower {t : Point} (ht : PhysicalRows t) :
     t 7 ≤ comparisonCap t - total t := by
-  have ho : t 7 ≤ t 6 := ht.ordered (by norm_num)
+  have ho : t 7 ≤ t 6 := ht.ordered (by decide : (6 : Fin 8) ≤ 7)
   have hh := ht.seventhHistory.trans ht.comparisonAboveThird
   linarith [history7_residual t]
 
@@ -280,7 +281,7 @@ theorem parent_residual_range {t : Point} (ht : PhysicalRows t) {parent : ℝ}
       (comparisonCap t - total t) / t 7 ≤ (newCap t - total t) / t 7 ∧
       (newCap t - total t) / t 7 ≤ 3 := by
   have hr := coordinate_pos ht 7
-  have ho : t 7 ≤ t 6 := ht.ordered (by norm_num)
+  have ho : t 7 ≤ t 6 := ht.ordered (by decide : (6 : Fin 8) ≤ 7)
   constructor
   · apply (lt_div_iff₀ hr).2
     linarith [history7_residual t]
@@ -295,7 +296,7 @@ theorem conservativeDensity_le_parentDensity {t : Point} (ht : PhysicalRows t) {
     conservativeDensity t ≤ parentDensity parent t := by
   have hr := coordinate_pos ht 7
   have hOld : 0 < parent - total t := by
-    have ho : t 7 ≤ t 6 := ht.ordered (by norm_num)
+    have ho : t 7 ≤ t 6 := ht.ordered (by decide : (6 : Fin 8) ≤ 7)
     linarith [history7_residual t]
   have hR : 0 < comparisonCap t - total t := hr.trans_le (comparison_residual_lower ht)
   have hM : 0 < newCap t - total t := hR.trans_le (sub_le_sub_right ht.improvement _)

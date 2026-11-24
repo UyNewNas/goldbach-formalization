@@ -86,17 +86,17 @@ theorem tent_le_chosenPlane (left : Finset (Finset (Fin 8)))
   · exact min_le_right _ _
 
 def branchValues (slots : Finset (Fin 8)) (t : Point) : Finset ℝ :=
-  insert (B (t 2)) ((slots.powerset.filter Finset.Nonempty).image
+  insert (VariableEnvelope.B (t 2)) ((slots.powerset.filter Finset.Nonempty).image
     (fun I => v (∑ i ∈ I, t i)))
 
 theorem branchValues_nonempty (slots : Finset (Fin 8)) (t : Point) :
-    (branchValues slots t).Nonempty := ⟨B (t 2), by simp [branchValues]⟩
+    (branchValues slots t).Nonempty := ⟨VariableEnvelope.B (t 2), by simp [branchValues]⟩
 
 def rawCap (slots : Finset (Fin 8)) (t : Point) : ℝ :=
   (branchValues slots t).max' (branchValues_nonempty slots t)
 
 def BranchGuards (left : Finset (Finset (Fin 8))) (t : Point) : Prop :=
-  mu < d t ∧ B (t 2) ≤ oldRaw t ∧
+  mu < d t ∧ VariableEnvelope.B (t 2) ≤ oldRaw t ∧
     ∀ I ⊆ firstSix, I.Nonempty → chosenPlane left I t ≤ oldRaw t
 
 theorem tent_le_oldRaw {left : Finset (Finset (Fin 8))} {t : Point}
@@ -113,8 +113,10 @@ theorem rawCap_eq_oldRaw {left : Finset (Finset (Fin 8))} {t : Point}
   have hupper : rawCap slots t ≤ oldRaw t := by
     apply Finset.max'_le
     intro y hy
+    unfold branchValues at hy
     rcases Finset.mem_insert.mp hy with hy | hy
-    · simpa only [hy] using h.2.1
+    · rw [hy]
+      exact h.2.1
     · obtain ⟨I, hI, rfl⟩ := Finset.mem_image.mp hy
       have hi := Finset.mem_filter.mp hI
       exact tent_le_oldRaw h I ((Finset.mem_powerset.mp hi.1).trans hslots) hi.2
@@ -122,6 +124,7 @@ theorem rawCap_eq_oldRaw {left : Finset (Finset (Fin 8))} {t : Point}
     rw [winningMask6_sum, v_eq_C h.1.le]
     rfl
   have hmember : oldRaw t ∈ branchValues slots t := by
+    unfold branchValues
     apply Finset.mem_insert.mpr
     right
     apply Finset.mem_image.mpr
@@ -176,7 +179,7 @@ selector; the active descending license retains its fixed eta buffer. -/
 theorem descending_selector (t : Point) :
     0 < A (selectedSum t) - eta - newCap t ↔ mu < selectedSum t := by
   dsimp [A, C, eta, newCap, mu]
-  constructor <;> linarith
+  constructor <;> intro h <;> linarith
 
 theorem selected129_license {t : Point} (ht : mu < selectedSum t) :
     v (∑ i ∈ selectedMask129, t i) - newCap t = eta ∧
@@ -291,8 +294,16 @@ theorem physicalKernel_eq_literal (t : Point) :
     physicalKernel t =
       4 * (newCap t - oldRaw t) /
         ((oldRaw t - total t) * (newCap t - total t) * ∏ i, t i) := by
-  simp only [physicalKernel, primeBoxInitialSavingProfile, total, one_div,
-    Finset.prod_inv_distrib, div_eq_mul_inv, mul_inv_rev]
+  have hprod (s : Finset (Fin 8)) :
+      (∏ i ∈ s, 1 / t i) = 1 / (∏ i ∈ s, t i) := by
+    classical
+    induction s using Finset.induction_on with
+    | empty => simp
+    | @insert a s ha ih =>
+        rw [Finset.prod_insert ha, Finset.prod_insert ha, ih]
+        simp only [one_div, mul_inv_rev] <;> exact mul_comm _ _
+  rw [physicalKernel, primeBoxInitialSavingProfile, hprod]
+  simp only [total, one_div, div_eq_mul_inv, mul_inv_rev]
   ring
 
 /-- Exactly the ten affine factors in the frozen simplex engine. -/
