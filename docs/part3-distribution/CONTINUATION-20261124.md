@@ -295,6 +295,34 @@ retains the exact 28-declaration inventory and all 35 stage logs. The
 verification ZIP has SHA-256
 `2e2ac86605b883dae113a43c3950dfab57f802b4c7a5ec27bf9cf472f07e96a9`.
 
+## Pending uniform-width actual pair family
+
+`Part3ProperPowerActualPairFamily` is a new leaf importing the accepted
+ActualPair source. It fixes a common `widthMax` and applies ChartSum with
+`C = exp(widthMax)` before quantifying the positive width, carriers, rho
+and cutoff. Existing effective-VM integer geometry and exponent/ceiling
+monotonicity supply the common full-product cap. The resulting residual
+and prime-minus-VM estimates share one threshold for every admitted width.
+A direct specialization permits an N-dependent width that eventually lies
+in that fixed interval. Its eventual-admissibility threshold may still
+depend on the chosen width sequence.
+
+This is the proper-power deletion step for the manuscript's allowed W_N
+families. In frozen 1106, `argument.tex` 100--108 specifies such families
+with fixed polylogarithmic Euler-derivative budgets; 619--620 illustrates
+logarithmically shrinking smoothing. The actual ordered-pair passage at
+1162--1167 first fixes epsilon, so its already accepted fixed-width route
+has not been invalidated. `coefficient-appendix.tex` 513--524 supplies the
+original proper-power argument. This new leaf does not assert that every
+shrinking width meets the separate HB/spectral derivative budget.
+
+Independent source review found no blocking quantifier/support/mean/diagonal
+issue. The exact reviewed source SHA256 is
+`d663cf07c61ac7f2844faf7303aea42e502b305f7a47b56b725a9edbcf8c4ca0`.
+The dedicated `actual-pair-family` gate selects only this new module;
+none of the ten accepted continuation modules is edited or re-audited.
+This paragraph records a pending source, not a compilation receipt.
+
 ## Task-internal parallel compilation
 
 Workspace Compile 27f68009 permits four CPU quota cores but executes one

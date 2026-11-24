@@ -32,6 +32,7 @@ PROPER_POWER_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ProperPowerChartSum",
     "FiniteUpperCarrierCore",
     "Part3ProperPowerActualPair",
+    "Part3ProperPowerActualPairFamily",
 ))
 SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
@@ -43,7 +44,8 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
-                          "ImbalancedChen.Part3ProperPowerActualPair")}
+                          "ImbalancedChen.Part3ProperPowerActualPair"),
+          "actual-pair-family": ("ImbalancedChen.Part3ProperPowerActualPairFamily",)}
 PROFILE_REUSE_MANIFEST = (
     "docs/part3-distribution/continuation-20261124/actual-pair-reuse/SOURCE_MANIFEST.json"
 )
