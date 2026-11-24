@@ -1,0 +1,1 @@
+../docs/source-only/20261028-resume-30g/certificate_rows/P2Winner9CompleteSeedVertices.lean

@@ -1,0 +1,29 @@
+ImbalancedChen.P2Winner9FiniteMomentKernel.fourExponent_degree (a b c d : Vertex) :
+  fourExponent a b c d 0 + (List.ofFn fun q => fourExponent a b c d q.succ).sum + 8 = 12
+'ImbalancedChen.P2Winner9FiniteMomentKernel.fourExponent_degree' depends on axioms: [propext, Quot.sound]
+ImbalancedChen.P2Winner9FiniteMomentKernel.fourFactorial_kernel (a b c d : Vertex) :
+  Int.ofNat (factorial (fourExponent a b c d 0) * factorialProduct (List.ofFn fun q => fourExponent a b c d q.succ)) =
+    kernel a b c d
+'ImbalancedChen.P2Winner9FiniteMomentKernel.fourFactorial_kernel' depends on axioms: [propext]
+ImbalancedChen.P2Winner9FiniteMomentKernel.weighted_kernel_expansion (g y z : Fin 9 → Int) :
+  (sumFin fun a => sumFin fun b => sumFin fun c => sumFin fun e => g a * y b * z c * z e * kernel a b c e) =
+    ((2 * (3 * sumFin fun i => g i * z i ^ 2 * y i) +
+            2 *
+              ((sumFin fun i => z i) * (2 * sumFin fun i => g i * z i * y i) +
+                (sumFin fun i => z i * y i) * sumFin fun i => g i * z i) +
+          ((sumFin fun i => z i) ^ 2 + sumFin fun i => z i ^ 2) * sumFin fun i => g i * y i) +
+        (((2 * sumFin fun i => z i) * sumFin fun i => z i * y i) + 2 * sumFin fun i => z i ^ 2 * y i) *
+          sumFin fun i => g i) +
+      (sumFin fun i => y i) *
+        ((2 * sumFin fun i => g i * z i ^ 2) + 2 * ((sumFin fun i => z i) * sumFin fun i => g i * z i) +
+          (((sumFin fun i => z i) * sumFin fun i => z i) + sumFin fun i => z i ^ 2) * sumFin fun i => g i)
+'ImbalancedChen.P2Winner9FiniteMomentKernel.weighted_kernel_expansion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ImbalancedChen.P2Winner9FiniteMomentKernel.weighted_kernel_linear_coefficient (g y z : Fin 9 → Int) (h : Nat → Int)
+  (h0 : h 0 = 1) (h1 : h 1 = sumFin fun i => y i) :
+  (sumFin fun a => sumFin fun b => sumFin fun c => sumFin fun e => g a * y b * z c * z e * kernel a b c e) =
+    conv h (doubled g y z) 1
+'ImbalancedChen.P2Winner9FiniteMomentKernel.weighted_kernel_linear_coefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
