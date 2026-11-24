@@ -64,7 +64,7 @@ theorem inverse_scale_ratio {A V nu L Z C : ℝ}
       hA hV (mul_pos hnu hL) hZ hC]
   unfold comparisonThreshold
   field_simp [hA.ne', hV.ne', hnu.ne', hL.ne', hZ.ne', hC.ne',
-    Real.pi_ne_zero, hnormalizer, hLZ, hVZ] <;> ring
+    Real.pi_ne_zero, hnormalizer, hLZ, hVZ]
 
 /-- The same identity in the literal dictionary L=U/nu. -/
 theorem inverse_scale_ratio_divisor {A V U nu Z C : ℝ}
@@ -73,7 +73,7 @@ theorem inverse_scale_ratio_divisor {A V U nu Z C : ℝ}
     (1 / spectralScale A V U Z C) ^ 2 /
         (1 + Z / (U / nu)) / comparisonThreshold V Z =
       C ^ 2 * Z / (16 * Real.pi ^ 2 * A * nu * (U / nu + Z) * (V + Z) ^ 2) := by
-  have hcancel : nu * (U / nu) = U := by field_simp [hnu.ne'] <;> ring
+  have hcancel : nu * (U / nu) = U := by field_simp [hnu.ne']
   simpa only [hcancel] using inverse_scale_ratio hA hV hnu (div_pos hU hnu) hZ hC
 
 theorem weight_pos {X Z L : ℝ} (hX : 0 ≤ X) (hZ : 0 < Z) (hL : 0 < L) :
@@ -111,7 +111,7 @@ theorem weight_ratio_le {X V Z L : ℝ}
         (mul_le_mul_of_nonneg_right hweight hT.le)
     _ = 2 / threshold V Z + (2 * (X ^ 2 / (1 + Z / L))) / threshold V Z := by ring
     _ ≤ 2 / threshold V Z + (8 * (X ^ 2 / (1 + Z / L))) / comparisonThreshold V Z :=
-      add_le_add_left hterm _
+      add_le_add le_rfl hterm
     _ = 2 / threshold V Z + 8 * (X ^ 2 / (1 + Z / L) / comparisonThreshold V Z) := by ring
 
 /-- Explicit actual-geometry bound. There is no suppressed pi constant. -/
@@ -169,7 +169,7 @@ theorem packet_power_cancellation {A V nu L Z C cap : ℝ}
       (C ^ 2 * Z / (16 * Real.pi ^ 2 * (L + Z) * (V + Z) ^ 2)) ^ cap := by
   rw [← Real.mul_rpow (mul_nonneg hA.le hnu.le) (by positivity)]
   congr 1
-  field_simp [hA.ne', hnu.ne', (add_pos hL hZ).ne', (add_pos hV hZ).ne', Real.pi_ne_zero] <;> ring
+  field_simp [hA.ne', hnu.ne', (add_pos hL hZ).ne', (add_pos hV hZ).ne', Real.pi_ne_zero]
 
 /-- The endpoint-corrected classical length. The original integer block
 and its common additive phase are retained. -/
@@ -179,7 +179,8 @@ theorem classicalMScale_bounds (j : ℕ) :
     (1 : ℝ) / 2 ≤ classicalMScale j ∧
       ((2 : ℕ) ^ j : ℝ) / 2 ≤ classicalMScale j ∧
       classicalMScale j ≤ ((2 : ℕ) ^ j : ℝ) := by
-  have hvN : 1 ≤ (2 : ℕ) ^ j := pow_pos (by norm_num) _
+  have hvN : 1 ≤ (2 : ℕ) ^ j :=
+    Nat.succ_le_iff.mpr (pow_pos (by norm_num : 0 < (2 : ℕ)) j)
   have hv : (1 : ℝ) ≤ ((2 : ℕ) ^ j : ℝ) := by exact_mod_cast hvN
   unfold classicalMScale
   constructor
@@ -189,8 +190,8 @@ theorem classicalMScale_bounds (j : ℕ) :
 /-- The existing exact Fourier support identity, with the classical
 length made explicit. It includes `j = 0` and the integer `m = 1`. -/
 theorem fullBlock_classical_support (j m : ℕ) :
-    m ∈ fullBlock j ↔ (m : ℝ) ∈ Set.Ioc (classicalMScale j) (2 * classicalMScale j) :=
-  mem_fullBlock_iff_classical_interval j m
+    m ∈ fullBlock j ↔ (m : ℝ) ∈ Set.Ioc (classicalMScale j) (2 * classicalMScale j) := by
+  simpa [classicalMScale] using mem_fullBlock_iff_classical_interval j m
 
 /-- Two fixed level scales cover the closed physical plateau. -/
 def classicalLevelScale (Z : ℝ) (lower : Bool) : ℝ := if lower then Z / 2 else Z
@@ -224,7 +225,8 @@ theorem physical_threshold_le_four_classical (j : ℕ) (Z : ℝ) (lower : Bool) 
   have hM : 0 < M := lt_of_lt_of_le (by norm_num) hmb.1
   have hV : 0 < V := hM.trans_le hmb.2.2
   have hMV : M ≤ V := hmb.2.2
-  have hVM : V ≤ 2 * M := by linarith only [hmb.2.1]
+  have hhalf : V / 2 ≤ M := hmb.2.1
+  have hVM : V ≤ 2 * M := by linarith only [hhalf]
   have hZQ : Z ^ 2 ≤ 4 * Q ^ 2 := by
     cases lower
     · change Z ^ 2 ≤ 4 * Z ^ 2
