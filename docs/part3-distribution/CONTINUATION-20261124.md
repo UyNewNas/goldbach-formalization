@@ -3,10 +3,13 @@
 ## Baseline and scope
 
 The baseline is `c509267dc630d91df33033abde1c484ec86b96ae` on
-`codex/p3-formalization-20261123`. The user supplied the successful
-80-module, 1,774-declaration strict compilation, kernel replay and axiom
-audit result. That receipt is not part of the Git tree; this continuation
-keeps the baseline proofs and records its own verification separately.
+`codex/p3-formalization-20261123`. The actual original successful receipt
+was located in the user-selected Workspace Compile 27f68009 environment,
+at `/workspace/goldbach-p3/.lake/p3-fourth-verification/report.json`.
+It records **80 modules and 1,774 declarations**. Its exact bytes are
+preserved in [baseline-c509267-report.json](continuation-20261124/baseline-c509267-report.json).
+All 80 baseline Lean source files remain byte-identical. Their existing
+proof objects and receipt are reused rather than revalidated.
 
 The frozen manuscript is the 2026-11-06 release at
 `chen-imbalanced-semiprimes@3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e`.
@@ -14,58 +17,74 @@ The earlier equation (24) is the stable label `ana:spectral-polynomial`,
 equation (96) in that release. The prime-product target is
 `eq:current-PP`, Proposition D.3.
 
-## Implementation plan
+## Verified checkpoints and current source
 
-1. Reuse `Part3OffDiagonalModuli` to pay the signed progression kernel
-   after the whole modulus sum. Keep the same complex modulus weights,
-   complete product, coprimality predicate and totient denominator. Keep
-   the actual product-equals-target diagonal separate from the divisor
-   bound for nonzero differences.
-2. Apply that finite bound to the existing labelled proper-power
-   residual. Prove its zero fibre, its total mass from the existing
-   proper-prime-power count, and its diagonal multiplicity. Connect the
-   result to the existing exact prime/von Mangoldt identity. Derive the
-   square-root box budget, then supply its geometric inputs from the
-   original integer-shifted dyadic windows and the source's effective
-   support, treating empty charts separately.
-3. Reuse the existing common-interval Fourier completion and archived
-   scalar threshold proofs to extend a full-block exceptional spectral
-   estimate to the actual clipped interval and arbitrary positive
-   physical weight. Retain each spectral exponent at the threshold,
-   and use the exponent cap only on the excess-weight ratio.
-4. Strictly compile and kernel-replay the new modules with the original
-   pinned toolchain. Audit their complete serialized declaration
-   inventories and transitive axioms using the existing audit rules.
-   Rebuild only missing dependencies; do not erase or revalidate all
-   80 baseline proof objects as part of an incremental run.
-5. Review the statements against the manuscript, publish the source and
-   incremental receipt, and identify exactly which P3 obligations remain.
+At `60cf3d49f8aefc687a6ce3dd7008ae5804cc61d3`, all seven continuation
+modules have strict compilation, kernel replay and complete serialized
+inventory/transitive-axiom acceptance: five proper-power modules with
+77 declarations, and two unchanged spectral modules with 88 declarations.
+The only allowed transitive axioms are `propext`, `Classical.choice`,
+and `Quot.sound`.
+
+The current source adds `Part3ProperPowerChartSum` and makes the already
+proved `ProperPowerLogSaving.log_ceil_linear_le` public, without changing
+its proof. These two current module versions are not yet compiler-verified.
+Their dedicated `--group chart-sum` verification will reuse the other six
+accepted modules. A final aggregate must select the latest verified
+version of each module: the old nine LogSaving declarations must not be
+counted again alongside the replacement LogSaving inventory.
+
+## Implementation plan and completed mathematics
+
+1. The whole-modulus signed kernel is paid using the existing nonzero
+   distance divisor bound, keeping the same complex rho, complete
+   product, coprimality predicate and totient denominator. The actual
+   product-equals-target diagonal is kept separate.
+2. The actual labelled proper-power residual is bounded by the existing
+   proper-prime-power count. Its zero fibre and diagonal multiplicity
+   are proved, then connected to the exact prime/von Mangoldt identity.
+3. The box budget gives `x^(1-a/2)`. Original integer-shifted dyadic
+   windows and the effective source support supply the padded box
+   geometry and physical cap; empty effective charts have zero residual.
+4. Existing divisor subpower, weighted divisor means and logarithmic
+   absorption pay the actual distance budget, exact coprime mean and
+   full-product diagonal, uniformly in individual original charts.
+5. The new ChartSum source reconstructs the complete original residual
+   and same-rho signed error before taking norms. Its bank cardinality
+   costs `log(N)^k`; invoking the per-chart result at `A+k` gives arbitrary
+   logarithmic accuracy for the full residual and for prime minus VM.
+6. The spectral adapters extend a supplied full-block energy estimate
+   to common integer intervals, arbitrary physical weight and two level
+   windows. They preserve the full threshold power and actual `4*pi`.
+7. Strictly compile, kernel-replay and audit only affected modules using
+   the original pinned toolchain, then retain exact source hashes,
+   complete declaration types and actual logs. No source-only check or
+   conditional transport theorem is a certificate of the full P3 target.
 
 ## Boundaries
 
-The prime-power payment is a theorem about the actual labelled residual,
-not a residual-bound assumption. The original-chart source now derives
-the coordinate box support, lower scale and padded volume from an
-effective source witness; it does not assume the box volume. The
-remaining proper-power obligations are to instantiate `hGeometry` for
-the actual integer source on nonzero `W * VM` support, fix constants
-uniformly over the finite family, sum the original charts, turn the
-physical coordinate cap into a logarithmic growth bound, and pay the
-divisor, exact-coprime-mean and modulus masses asymptotically. A
-prime-only support bound cannot replace that integer-source geometry.
+The proper-power result estimates the actual labelled residual. It does
+not assume the desired residual bound, the box volume or a uniform
+nonzero-distance divisor estimate. The original chart bank now has a
+source implementation and independent semantic review; its validation
+is pending. The physical cap, logarithmic growth, divisor/mean masses
+and complete diagonal have already been paid in the accepted per-chart
+proof. Actual upper/lower/marked source instances must still provide
+uniform amplitude and geometric support on **nonzero W * VM integer
+support** and the fixed divisor-order bound for their actual rho.
+Prime-only support cannot replace that integer-source geometry.
 
 The spectral extension consumes an explicit full-block classical
-estimate and a spectral-parameter bound; it does not assert that these
-automorphic inputs have already been formalized. No ordinary
-Bombieri--Vinogradov theorem is substituted for the missing spectral
-estimate. The frozen manuscript's external Kuznetsov, ABL, Kim--Sarnak
-and Pascadi inputs remain visible. `RestrictedMediumObligation`,
-`UniformPrimeProductTarget` and the full P3 assembly remain open.
+estimate and an eigenvalue bound. It does not assert their instances on
+the actual automorphic spectrum. No ordinary Bombieri--Vinogradov bound
+is substituted for the missing spectral estimate. The frozen
+manuscript's external Kuznetsov, ABL, Kim--Sarnak and Pascadi inputs stay
+visible. `RestrictedMediumObligation`, `UniformPrimeProductTarget` and
+the full P3 assembly remain open.
 
-Pascadi's full-block exceptional Theorem J allows the weight threshold
-`max(V, Z^2 / V)`. Its common-phase clause and the exact integer interval
-endpoints must be preserved. The actual `4*pi` normalization cannot be
-dropped when the physical weight is substituted.
+Pascadi's full-block exceptional Theorem J permits threshold
+`max(V, Z^2/V)`. The common-phase clause, exact integer endpoints and
+physical `4*pi` normalization are all retained.
 
 ## Exact remaining spectral inputs
 
@@ -106,133 +125,97 @@ open. No new axiom has been introduced for them.
 
 ## Task ledger
 
-| Task | Owner | Status |
-| --- | --- | --- |
-| `Part3SignedModulusPayment`: whole-modulus signed kernel payment | `p3_modulus_payment` | Strict compile and kernel replay passed on Cloud; full inventory pending |
-| `Part3ProperPowerResidualPayment`: actual labelled proper-power residual | `p3_proper_power` | Actual-import Lake build passed in run `45340826739`; strict, replay and inventory still pending |
-| `Part3ProperPowerDyadicBudget`: actual box budget to square-root saving | `p3_power_saving` | One actual CI API error repaired; fixed source awaits compilation |
-| `Part3ProperPowerOriginalChart`: original-chart support, volume, empty case and physical cap | root; independent review by `p3_existing_audit` | Complete source at the SHA-256 below; read-only semantic review found no blocking issue; not compiled |
-| `Part3ProperPowerLogSaving`: actual distance, mean and complete-diagonal asymptotic payment | `p3_power_saving` | Complete source; not compiled; awaiting the user-selected Workspace Compile connection |
-| `Part3ExceptionalWeightExtension`: exceptional weight and common integer interval | `p3_spectral_extension` | Strict compile, kernel replay and full axiom inventory passed at `80d7eeb`; 43 declarations |
-| `Part3ExceptionalWeightGeometry`: physical scale and two level windows | `p3_spectral_extension` | Strict compile, kernel replay and full axiom inventory passed at `80d7eeb`; 45 declarations |
-| Dependency reuse, verification, review and publication | root | The two-module spectral group passed; proper-power group and original-chart verification remain pending |
+| Module | Status | Accepted declarations |
+| --- | --- | ---: |
+| `Part3SignedModulusPayment` | Full acceptance at `60cf3d49` | 21 |
+| `Part3ProperPowerResidualPayment` | Full acceptance at `60cf3d49` | 23 |
+| `Part3ProperPowerDyadicBudget` | Full acceptance at `60cf3d49` | 7 |
+| `Part3ProperPowerOriginalChart` | Full acceptance at `60cf3d49` | 17 |
+| `Part3ProperPowerLogSaving` | Full acceptance at `60cf3d49`; public-helper revision awaits revalidation | 9 at accepted revision |
+| `Part3ProperPowerChartSum` | Complete source and independent semantic review; not compiled | Pending |
+| `Part3ExceptionalWeightExtension` | Full acceptance at `80d7eeb`, unchanged | 43 |
+| `Part3ExceptionalWeightGeometry` | Full acceptance at `80d7eeb`, unchanged | 45 |
 
-## Original-chart source checkpoint
+## Actual original-chart geometry and logarithmic saving
 
-The sixth source module is `Part3ProperPowerOriginalChart.lean`, with
-SHA-256
+The accepted OriginalChart source has SHA-256
 `50a372771ebfa4cee6554402e938e5b7d334bd3cc1c0440a57df39c86fed26ca`.
-It has not been compiled. Independent read-only review of this exact
-source found no blocking semantic issue; that review is not a
-compilation, kernel-replay or axiom-audit receipt.
+It reuses `originalDyadicChartWeight chi L j` for arbitrary integer `L`,
+with `U_i = Nat.ceil (2 * 2^(L+j_i))`. An effective integer witness gives
+`U_i+1 <= 5*n_i`, hence padded box volume at most `5^k*C*x` and physical
+cap `Nat.ceil (5*C*x)`. Without an effective witness the actual residual
+is identically zero, including the empty-rank case.
 
-The module reuses `originalDyadicChartWeight chi L j` with the original
-integer shift `L`. Its fixed coordinate endpoint is
-`U_i = Nat.ceil (2 * 2^(L+j_i))`; no nonnegative-exponent assumption is
-introduced. A nonzero window at an integer `n_i` gives `n_i <= U_i`
-and `U_i+1 <= 5*n_i`.
+The accepted LogSaving proof uses the actual distance budget over
+`B.erase N`, with `B` contained in `[1, ceil(C*N)]`, while retaining the
+complete `N` diagonal with `tau(N)^k`. The exact primitive mean has a
+separate logarithmic estimate; it is not bounded by the much larger
+total modulus mass. The threshold precedes all varying carriers,
+weights, cutoffs and charts. The accepted private-helper version has
+SHA-256 `289913d4c27daee7b556f7d4a1bd5d68c38b44f375cde28baa16905665c672fc`;
+the current public-helper version has SHA-256
+`136815a60067b4e7eded3df5f9782b2d0cb3632d3e5da510019a04b6c86b5954`.
 
-An effective witness is a tuple where
-`(W * originalDyadicChartWeight) * labelledVonMangoldtWeight` is nonzero.
-It retains the same original weight and implies nonzero `W * VM`.
-The source's geometric support at that witness supplies the coordinate
-lower bounds and complete-product bound `product <= C*x`, from which
-the module derives padded-box volume at most `5^k*C*x`. Every coordinate
-is a positive integer, so each divides and is at most the complete
-product; hence `max_i U_i <= Nat.ceil (5*C*x)`.
+## Full original chart-bank source
 
-If there is no effective witness, the actual labelled proper-power
-residual is identically zero, even when the formal box is large. The
-empty-rank case is retained. The resulting bound preserves the same
-modulus weights, exact coprime mean and separate complete-product
-diagonal. For `a > 0`, the factor `x^(1-a/2)` gives the intended power
-reserve, subject to the remaining uniform asymptotic assembly above.
+`Part3ProperPowerChartSum.lean` has source SHA-256
+`57b29276be9b5ece9a2f794f78d84e488ecc91a9e6983844121d00bb6a1c5fae`.
+It takes `L=0`, `H=Nat.log 2 (Nat.ceil (C*N))+2` and the tensor bank of
+`range H`. Every effective integer coordinate is positive and at most
+the complete product, so the original partition covers proper powers
+as well as primes. The bank depends on the physical cap, not on rho.
 
-## Original-chart logarithmic saving candidate
+The proof first reconstructs the actual union residual pointwise, then
+its original signed error. There is no overcounting of tuples with
+multiple proper-power coordinates and no deletion of the product-N
+diagonal. The exact bank cardinality is `H^k` and is at most
+`(2/log 2 + 2)^k * log(N)^k`. The existing per-chart theorem at accuracy
+`A+k` and suitably divided epsilon pays the full bank. A final corollary
+uses the unchanged exact prime/von-Mangoldt identity. Independent review
+found no blocking mathematical issue; compiler validation is pending.
 
-`Part3ProperPowerLogSaving.lean` reuses the existing divisor subpower,
-weighted divisor means, constant absorption and arbitrary-log accuracy
-lemmas. It retains the actual residual and finite signed error. Its
-source is not yet compiler-verified. Independent semantic review found
-no blocking issue. The sole unused-parameter lint risk was resolved by
-renaming `hK` to `_hK`, preserving the statement. Current source SHA-256:
-`289913d4c27daee7b556f7d4a1bd5d68c38b44f375cde28baa16905665c672fc`.
+## Requested compilation environment and receipts
 
-For fixed rank, divisor order, polylogarithmic amplitude degree and
-geometric constants, its final threshold precedes every varying source
-cap, physical product subcarrier, modulus set, same complex rho, weight,
-cutoff and original chart. It assumes the actual positive-modulus range
-`q <= K*N^theta` with `0 <= theta < 1`, a fixed divisor-order rho bound,
-and geometric support of `W*VM`. It does not assume the desired residual
-bound or a uniform distance-divisor estimate.
+All subsequent compilation uses **Workspace Compile 27f68009**, as
+explicitly selected by the user. The original workspace was found at
+`/workspace/goldbach-p3`, initially clean at c509267, with 9,336 existing
+Lean objects. The continuation branch was fetched into that worktree
+without replacing the original branch ref. Lean is `4.33.0-rc1`, commit
+`62eed1db4d67327ec8120be05f1a1b0847d74561`; Mathlib is
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Actual pinned revisions and
+clean status of all eleven manifest packages passed the gate.
 
-The distance budget is computed on the actual `B.erase N`, with
-`B` contained in `[1, ceil(C*N)]`. This physical-carrier restriction
-prevents unrelated huge zero-coefficient indices from inflating the
-supremum. The exact-product diagonal retains `tau(N)^k`; the primitive
-mean is bounded by logarithms separately from the total modulus mass.
-The resulting candidate gives any real logarithmic exponent, uniformly
-across the individual original charts. Actual policy-specific rho
-instances and full chart-bank linear reassembly are still separate.
+The five-module proper-power verification task
+`01939e7a38db48588e48759820e6a787` completed successfully in that workspace
+at `60cf3d49`, with 77 declarations. It ran all strict, literal kernel
+replay and full inventory/transitive-axiom stages, and final clean-tree
+checks. The [complete receipt](continuation-20261124/proper-power-60cf3d49/README.md)
+retains the exact report, declarations and ZIP of all logs. ZIP SHA-256:
+`0f6b483e36815cd341896b8e84027a7a4c7540fa49c9317b29567a054cc15fee`.
 
-## Requested compilation environment
+The [two-module spectral receipt](continuation-20261124/spectral-80d7eeb/README.md)
+remains valid for its unchanged source hashes, with 88 declarations.
+GitHub run `45343356986`, job `138272108983`, artifact `14897342383` passed
+all gates at `80d7eeb`. Its ZIP SHA-256 is
+`02b1f2f9dd1afb828166ae4ee619481c0e71d706e8aba678a90144ac1ededb1e`.
+Both archives were checked against their recorded log digests, source
+hashes, literal module replay messages and complete inventories.
 
-The user selected **Workspace Compile 27f68009** for subsequent
-compilation. Its private plugin was found, separate from the old
-Cloud Compile connection. The current conversation has not exposed its
-command tools, so no task has been submitted to that environment yet.
-The earlier successful spectral receipt remains valid for its recorded
-source hashes. The pre-existing proper-power GitHub build completed its dependency
-construction and built the actual residual module. It reported one error
-in the dyadic budget final sum comparison; the source now uses
-`add_le_add` explicitly, with the unchanged diagonal given by `le_rfl`.
-The fixed source has not been recompiled. New checkpoint publication
-does not start another CI build while waiting for the requested environment.
+## Historical compilation continuity
 
-## Compilation continuity
+The old Cloud Compile connection reached its 128-retained-task limit.
+Its single-module strict/kernel receipt is preserved in
+`continuation-20261124/cloud-modulus-receipt.json`. This limit does not
+apply to the newly connected, user-selected Workspace Compile service.
 
-Cloud Compile reached its 128-retained-job limit during this continuation.
-Its exposed tools have no archive operation. No other task was cancelled,
-and the limit was not modified. The single-module strict/kernel receipt is
-preserved in `continuation-20261124/cloud-modulus-receipt.json`.
+The earlier GitHub proper-power run `45340826739`, job `138263810092`,
+at `21bd742f8e42e7ba2fb507bddc47ff40d94b25f2` built the actual residual
+module and found a dyadic-budget `add_le_add_right` API mismatch. The
+replacement `refine add_le_add ?_ le_rfl` preserves the theorem statement
+and is now fully accepted in the successful workspace run above.
+The failed historical artifact is `14898615187`, SHA-256
+`c8ab6a5e44d47b2b32cce50871f1de5c59f5ffcafa945b7fb0730ec0fdb351bd`.
+Its reusable dependency cache is retained; no new GitHub CI is started
+for checkpoints compiled in the selected Workspace environment.
 
-The new GitHub workflow runs the original pinned Lean and dependencies.
-It verifies two disjoint groups, `spectral` and `proper-power`, so a missing
-heavy arithmetic dependency does not delay diagnostics for the light
-spectral modules. Both groups use the original complete inventory rules.
-Only a successful receipt for the exact source hashes is a proof-validation
-result; static review, source-only checks and the development harness are
-not substitutes for that result. The spectral group passed all gates at `80d7eeb`, covering 88 complete
-serialized declarations. Its original artifact, report and complete types
-are retained in `continuation-20261124/spectral-80d7eeb/`. The proper-power
-group failed at one source-level API call before its strict/replay/audit
-stages. That call has been fixed; its full acceptance remains pending.
-`Part3ProperPowerOriginalChart` has no compilation result yet.
-
-The proper-power box budget now supplies an explicit `x^(1-a/2)` factor
-from a coordinate lower bound `c*x^a` and complete box volume `C*x`.
-The original-chart source derives those box inputs, with the padded
-factor `5^k`, from the actual source's effective geometric support and
-handles empty charts by zero residual. Its physical cap is bounded by
-`Nat.ceil (5*C*x)`; the logarithmic-growth and uniform source-family
-instances remain to be supplied.
-The spectral adapters now include arbitrary common integer intervals,
-both classical level windows, the positive-integer endpoint `m=1`, and
-a proof of summability before passing from finite spectral sums to `tsum`.
-The actual automorphic input instances and the final uniform P3 assembly
-are still separate obligations.
-
-The first proper-power run was `45340826739`, job `138263810092`, at
-`21bd742f8e42e7ba2fb507bddc47ff40d94b25f2`. The actual-import build of
-`Part3ProperPowerResidualPayment` passed. The sole error in the new
-modules was the `add_le_add_right` API mismatch in
-`Part3ProperPowerDyadicBudget`; it is now replaced by
-`refine add_le_add ?_ le_rfl`, without changing the theorem statement.
-The failed verification artifact is `14898615187` (SHA-256
-`c8ab6a5e44d47b2b32cce50871f1de5c59f5ffcafa945b7fb0730ec0fdb351bd`).
-The run saved a reusable 9,844,306,019-byte Lake dependency tree with key
-`lake-Linux-X64-d450b2731e0e580dd4810dc06549d62b51dd63f81f1e56526d8ca765965a4618-61a3b1a855fb0d2910782499918e9924f5abf5dad42616522ef96e26cf7641ca-21bd742f8e42e7ba2fb507bddc47ff40d94b25f2`.
-This cache is a reusable build artifact, not a substitute for the
-remaining strict/replay/axiom gates.
-
-This file is a work ledger, not a completion certificate.
+This file is a work ledger, not a completion certificate for P3.

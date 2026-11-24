@@ -131,7 +131,7 @@ theorem modulus_masses_le_divisor_moments (J : ℕ) (Q : Finset ℕ) (ρ : ℕ �
           (sum_le_sum_of_subset_of_nonneg hQ (fun _ _ _ => by positivity)) hCρ
       _ ≤ _ := mul_le_mul_of_nonneg_left (sum_fouvryTau_div_totient_le_real (2 ^ J) hR) hCρ
 
-private theorem log_ceil_linear_le {C : ℝ} (hC : 0 < C) {N : ℕ}
+theorem log_ceil_linear_le {C : ℝ} (hC : 0 < C) {N : ℕ}
     (hN : 1 ≤ N) (hCN : C + 1 ≤ (N : ℝ)) :
     (Nat.log 2 (Nat.ceil (C * (N : ℝ))) : ℝ) ≤
       (2 / Real.log 2) * Real.log (N : ℝ) := by

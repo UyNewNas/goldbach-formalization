@@ -29,6 +29,7 @@ PROPER_POWER_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ProperPowerDyadicBudget",
     "Part3ProperPowerOriginalChart",
     "Part3ProperPowerLogSaving",
+    "Part3ProperPowerChartSum",
 ))
 SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
@@ -36,7 +37,9 @@ SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
 ))
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
-          "spectral": SPECTRAL_MODULES}
+          "spectral": SPECTRAL_MODULES,
+          "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
+                        "ImbalancedChen.Part3ProperPowerChartSum")}
 
 
 def sha256(path: Path) -> str:
