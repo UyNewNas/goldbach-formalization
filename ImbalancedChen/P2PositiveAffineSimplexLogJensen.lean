@@ -2,6 +2,7 @@ import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 import Mathlib.MeasureTheory.Constructions.Pi
+import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.Tactic
 
 /-!
@@ -115,7 +116,7 @@ theorem weighted_probability_log_jensen
     hLν.mono (fun x hx => exp_negativeLogProduct L hx)
   have hExp : Integrable (Real.exp ∘ negativeLogProduct L) ν :=
     hRecipν.congr hExpEq.symm
-  have hJ := Real.convexOn_exp.map_integral_le
+  have hJ := convexOn_exp.map_integral_le (μ := ν) (f := negativeLogProduct L)
     Real.continuous_exp.continuousOn isClosed_univ
     (Filter.Eventually.of_forall (fun x => mem_univ (negativeLogProduct L x))) hU hExp
   have hMean : (∫ x, negativeLogProduct L x ∂ν) =
@@ -196,7 +197,7 @@ theorem weighted_log_gap_cubic_lower_four
       4 * ∫ x, g x / ∏ i, L i x ∂μ := by
     simpa only [mul_div_assoc] using integral_const_mul 4 (fun x => g x / ∏ i, L i x)
   rw [he]
-  nlinarith
+  simpa only [mul_div_assoc, mul_assoc] using h
 
 /-! An actual finite-dimensional affine-cell receiver.  A closed simplex is
 one such compact measurable cell; its volume/moments remain external data. -/
@@ -234,7 +235,7 @@ theorem compact_affine_cell_log_jensen {d : ℕ}
     filter_upwards [ae_restrict_mem hDMeas] with x hx
     exact hL0 x hx
   have hLogInt (i : ι) : Integrable (fun x => g x * Real.log (L i x)) (volume.restrict D) := by
-    apply ContinuousOn.integrableOn_compact _ hD
+    apply ContinuousOn.integrableOn_compact hD
     exact hgCont.continuousOn.mul
       ((hLCont i).continuousOn.log (fun x hx => (hL0 x hx i).ne'))
   have hProd : ContinuousOn (fun x => ∏ i, L i x) D := by
@@ -242,7 +243,7 @@ theorem compact_affine_cell_log_jensen {d : ℕ}
     intro i hi
     exact (hLCont i).continuousOn
   have hRecip : Integrable (fun x => g x / ∏ i, L i x) (volume.restrict D) := by
-    apply ContinuousOn.integrableOn_compact _ hD
+    apply ContinuousOn.integrableOn_compact hD
     exact hgCont.continuousOn.div hProd (fun x hx =>
       (Finset.prod_pos (fun i hi => hL0 x hx i)).ne')
   exact weighted_probability_log_jensen (volume.restrict D) g L B hgCont.measurable

@@ -1,0 +1,22 @@
+{
+  "task_id": "job_4ec79e33d4734824a4bcf2e8d58cddac",
+  "job_id": "job_4ec79e33d4734824a4bcf2e8d58cddac",
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib,json,tarfile,lzma,io,base64,importlib.util\nroot=Path('/workspace/p1-complete-proof/20261124-resume')\nout=root/'batch8-evidence-export-v1';out.mkdir(exist_ok=False)\nmain=root/'batch8-repairs-probes-next17'\nassert (main/'BATCH8_RESULT.json').is_file()\ndef load(name,path,expected):\n assert hashlib.sha256(path.read_bytes()).hexdigest()==expected\n spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m\nh=load('batch8_export_exact_helper',main/'inputs/batch5_helpers.py','1d166b6a36362e185559ea08a82100a49ba9edbeefcb98b1a904b9ff9330cbd5')\nops=load('batch8_export_exact_ops',main/'inputs/batch6_operations.py','e1338ef756fba98b126bb089413f2c489ed4de8682a61c11dfb8e61c8e518d11')\nchecks=[]\nfor name,targets in [('four-roots-no-build',list(h.FOUR_ROOTS)),('wire-no-build',[h.WIRE])]:\n checks.append(ops.run(out,name,h.serialize(0,out/(name+'-LANE.json'),h.guard(0,['lake','--no-build','build']+['+'+m+':olean' for m in targets]))))\nh.save(out/'READINESS_RESULT.json',{'commands':checks,'protected_roots':h.check_roots(),'whole_P1_complete':False})\nconfig=json.loads((main/'RUN_CONFIG.json').read_bytes());auditroot=Path(config['audit_receipt_root'])\npaths=[main,auditroot,out];files=[]\nfor source in paths:\n for p in sorted(source.rglob('*')):\n  if p.is_file() and '__pycache__' not in p.parts and p.suffix not in ['.olean','.ilean','.o']:\n   files.append((str(p.relative_to(root)),p.read_bytes()))\nassert len({p for p,b in files})==len(files)\nindex={'batch8_completed_result':json.loads((main/'BATCH8_RESULT.json').read_bytes()),'files':[{'path':p,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for p,b in files]}\nfiles.append(('ARCHIVE_FILES.json',(json.dumps(index,indent=2,ensure_ascii=False)+'\\n').encode()))\nbuf=io.BytesIO()\nwith tarfile.open(fileobj=buf,mode='w',format=tarfile.PAX_FORMAT) as a:\n for name,data in files:\n  i=tarfile.TarInfo(name);i.size=len(data);i.mtime=0;i.mode=0o644;a.addfile(i,io.BytesIO(data))\nraw=buf.getvalue();compressed=lzma.compress(raw,preset=6);target=out/'verification.tar.xz';target.write_bytes(compressed)\nsummary={'path':str(target),'bytes':len(compressed),'files':len(files),'sha256':hashlib.sha256(compressed).hexdigest(),'uncompressed_tar_sha256':hashlib.sha256(raw).hexdigest(),'whole_P1_complete':False}\nauditfile=auditroot/'lane-1/VALIDATION_RESULTS.json'\nif auditfile.is_file():\n audit=json.loads(auditfile.read_bytes())\n print('AUDIT17_SUMMARY '+json.dumps({k:audit.get(k) for k in ['status','total_owned_exports','total_public_exports','verified_utc','only_standard_axioms','full_owned_including_private_generated']}),flush=True)\nprint('ARCHIVE_SUMMARY '+json.dumps(summary),flush=True)\nprint('ARCHIVE_BASE64 '+base64.b64encode(compressed).decode(),flush=True)\nPY",
+  "cwd": "/workspace/blue-member-build",
+  "timeout_seconds": 180,
+  "memory_mb": 3072,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795521103.8845706,
+  "started_at": 1795522025.5098248,
+  "finished_at": 1795522054.1851954,
+  "exit_code": 0,
+  "memory_peak_bytes": 666660864,
+  "cpu_time_seconds": 27.43,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 1009479,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 28.675370693206787
+}

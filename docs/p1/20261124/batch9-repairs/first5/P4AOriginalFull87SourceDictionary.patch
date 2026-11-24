@@ -1,0 +1,55 @@
+--- a/ImbalancedChen/P4AOriginalFull87SourceDictionary.lean
++++ b/ImbalancedChen/P4AOriginalFull87SourceDictionary.lean
+@@ -171,6 +171,8 @@
+ theorem source_all_old_tents {c : Cell} {t : Point} (h : Source c t)
+     (m : ℕ) (hm : m ∈ Finset.Icc 1 63) :
+     v (oldSubsetSum c m t) ≤ comparison c t := by
++  have htwo : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
++  have hthree : (⟨3, by decide⟩ : Fin 8) = (3 : Fin 8) := Fin.ext rfl
+   cases c with
+   | remaining c => exact P4AOriginalRemainingEighthSources.source_all_old_tents h m hm
+   | descending i =>
+@@ -182,7 +184,7 @@
+         have heq : OriginalDescendingFifteenCellOwnership.subsetSum 6 t = t 1+t 2 := by
+           norm_num [OriginalDescendingFifteenCellOwnership.subsetSum,
+             OriginalDescendingFifteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
+-            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]
++            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ] <;> simp only [htwo]
+         rw [heq,v_eq_min]
+         exact min_le_right _ _
+       · have hg := hs.branches m hm hw
+@@ -200,7 +202,7 @@
+         have heq : OriginalAscendingThirteenCellOwnership.subsetSum 9 t = t 0+t 3 := by
+           norm_num [OriginalAscendingThirteenCellOwnership.subsetSum,
+             OriginalAscendingThirteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
+-            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]
++            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ] <;> simp only [hthree]
+         rw [heq,v_eq_min]
+         exact min_le_left _ _
+       · have hg := hs.branches m hm hw
+@@ -217,7 +219,7 @@
+       · subst m
+         have heq : P4AOriginalFirstFailureH3Literal.oldSubsetSum 9 t = t 0+t 3 := by
+           norm_num [P4AOriginalFirstFailureH3Literal.oldSubsetSum,Fin.sum_univ_succ,
+-            Fin.ofNat,Fin.succ]
++            Fin.ofNat,Fin.succ] <;> simp only [hthree]
+         rw [heq,v_eq_min]
+         exact min_le_left _ _
+       · have hg := hs.old_planes m hm hw
+@@ -239,6 +241,7 @@
+     oldSubsetSum c 1 t = t 0 ∧ oldSubsetSum c 3 t = t 0+t 1 ∧
+     oldSubsetSum c 7 t = t 0+t 1+t 2 ∧ oldSubsetSum c 5 t = t 0+t 2 ∧
+     oldSubsetSum c 6 t = t 1+t 2 := by
++  have htwo : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
+   cases c <;>
+     norm_num [oldSubsetSum,P4AOriginalRemainingEighthSources.subsetSum,
+       OriginalDescendingFifteenCellOwnership.subsetSum,
+@@ -247,7 +250,7 @@
+       OriginalAscendingThirteenCellOwnership.maskSlots,
+       P4AOriginalFirstFailureH3Literal.oldSubsetSum,
+       Finset.sum_filter,Fin.sum_univ_succ,Nat.testBit_eq_decide_div_mod_eq,
+-      Fin.ofNat,Fin.succ,add_assoc]
++      Fin.ofNat,Fin.succ,add_assoc] <;> simp only [htwo]
+ 
+ theorem source_old_w {c : Cell} {t : Point} (h : Source c t) :
+     VariableEnvelope.B (t 2) < comparison c t := by

@@ -1,0 +1,82 @@
+--- a/ImbalancedChen/P2PositiveAffineSimplexLogJensen.lean
++++ b/ImbalancedChen/P2PositiveAffineSimplexLogJensen.lean
+@@ -2,6 +2,7 @@
+ import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+ import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+ import Mathlib.MeasureTheory.Constructions.Pi
++import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+ import Mathlib.Tactic
+ 
+ /-!
+@@ -115,7 +116,7 @@
+     hLν.mono (fun x hx => exp_negativeLogProduct L hx)
+   have hExp : Integrable (Real.exp ∘ negativeLogProduct L) ν :=
+     hRecipν.congr hExpEq.symm
+-  have hJ := Real.convexOn_exp.map_integral_le
++  have hJ := convexOn_exp.map_integral_le (μ := ν) (f := negativeLogProduct L)
+     Real.continuous_exp.continuousOn isClosed_univ
+     (Filter.Eventually.of_forall (fun x => mem_univ (negativeLogProduct L x))) hU hExp
+   have hMean : (∫ x, negativeLogProduct L x ∂ν) =
+@@ -196,7 +197,7 @@
+       4 * ∫ x, g x / ∏ i, L i x ∂μ := by
+     simpa only [mul_div_assoc] using integral_const_mul 4 (fun x => g x / ∏ i, L i x)
+   rw [he]
+-  nlinarith
++  simpa only [mul_div_assoc, mul_assoc] using h
+ 
+ /-! An actual finite-dimensional affine-cell receiver.  A closed simplex is
+ one such compact measurable cell; its volume/moments remain external data. -/
+@@ -234,7 +235,7 @@
+     filter_upwards [ae_restrict_mem hDMeas] with x hx
+     exact hL0 x hx
+   have hLogInt (i : ι) : Integrable (fun x => g x * Real.log (L i x)) (volume.restrict D) := by
+-    apply ContinuousOn.integrableOn_compact _ hD
++    apply ContinuousOn.integrableOn_compact hD
+     exact hgCont.continuousOn.mul
+       ((hLCont i).continuousOn.log (fun x hx => (hL0 x hx i).ne'))
+   have hProd : ContinuousOn (fun x => ∏ i, L i x) D := by
+@@ -242,7 +243,7 @@
+     intro i hi
+     exact (hLCont i).continuousOn
+   have hRecip : Integrable (fun x => g x / ∏ i, L i x) (volume.restrict D) := by
+-    apply ContinuousOn.integrableOn_compact _ hD
++    apply ContinuousOn.integrableOn_compact hD
+     exact hgCont.continuousOn.div hProd (fun x hx =>
+       (Finset.prod_pos (fun i hi => hL0 x hx i)).ne')
+   exact weighted_probability_log_jensen (volume.restrict D) g L B hgCont.measurable
+--- a/ImbalancedChen/P2DegreeSixLogGapSoundness.lean
++++ b/ImbalancedChen/P2DegreeSixLogGapSoundness.lean
+@@ -50,6 +50,8 @@
+     ((hasDerivAt_pow 5 y).div_const 5)).add ((hasDerivAt_pow 6 y).div_const 6)
+   have he : (fun x : ℝ => x + x ^ 2 / 2 + x ^ 3 / 3 + x ^ 4 / 4 + x ^ 5 / 5 + x ^ 6 / 6) =
+       partialSix := funext (fun x => (partialSix_explicit x).symm)
++  change HasDerivAt
++    (fun x : ℝ => x + x ^ 2 / 2 + x ^ 3 / 3 + x ^ 4 / 4 + x ^ 5 / 5 + x ^ 6 / 6) _ y at h
+   rw [he] at h
+   convert h using 1 <;> norm_num <;> ring
+ 
+@@ -57,8 +59,11 @@
+     HasDerivAt remainderSix (-y ^ 6 / (1 - y)) y := by
+   have hn : 1 - y ≠ 0 := by linarith
+   have h := (((hasDerivAt_id y).const_sub 1).log hn).add (hasDerivAt_partialSix y)
+-  convert h using 1 <;> dsimp [remainderSix]
+-  <;> field_simp [hn] <;> ring
++  have hd : -y ^ 6 / (1 - y) =
++      -1 / (1 - y) + (1 + y + y ^ 2 + y ^ 3 + y ^ 4 + y ^ 5) := by
++    field_simp [hn] <;> ring
++  rw [hd]
++  exact h
+ 
+ theorem continuousOn_remainderSix {q : ℝ} (hq : q < 1) :
+     ContinuousOn remainderSix (Icc (0 : ℝ) q) := by
+--- a/ImbalancedChen/P2OriginalLogMomentQ96Checker.lean
++++ b/ImbalancedChen/P2OriginalLogMomentQ96Checker.lean
+@@ -46,7 +46,7 @@
+   unfold fixedNumerator
+   have h := Int.floor_div_cast_of_nonneg (k := ℝ) (Int.natCast_nonneg r.den)
+     (((r.num * (2 : ℤ) ^ bits : ℤ) : ℝ))
+-  simpa using h.symm
++  simpa only [Int.floor_intCast, Int.cast_natCast] using h.symm
+ 
+ theorem roundDownQ_le (bits : ℕ) (r : ℚ) : (roundDownQ bits r : ℝ) ≤ (r : ℝ) := by
+   have hp : (0 : ℝ) < (2 : ℝ) ^ bits := pow_pos (by norm_num) _

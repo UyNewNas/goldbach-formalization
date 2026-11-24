@@ -158,6 +158,7 @@ theorem stopping_square {α : Type*} (w : α → ℝ) {D : ℝ}
   have hs : PrefixSquareBound w D ((seed ++ «prefix») ++ p :: rest) := by
     simpa only [hinput, List.append_assoc] using hfull
   have hh := hs (seed ++ «prefix»).length (by simp)
+  rw [List.take_append_length] at hh
   have heq : total w g = wp w (seed ++ «prefix») := by
     rw [htrace.product w, hseed]
     simp [wp]

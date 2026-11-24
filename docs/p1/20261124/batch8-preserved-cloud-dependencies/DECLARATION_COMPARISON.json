@@ -1,0 +1,627 @@
+[
+  {
+    "module": "ImbalancedChen.P2PositiveAffineSimplexLogJensen",
+    "declarations": [
+      {
+        "name": "mass",
+        "kind": "def",
+        "privacy": null,
+        "header": "def mass (μ : Measure α) (g : α → ℝ) : ℝ ",
+        "header_sha256": "83f06289aa206c0a76b914f35c2389443dc235ce103a5e10c8d80ed71f404131",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weightedProbability",
+        "kind": "def",
+        "privacy": null,
+        "header": "def weightedProbability (μ : Measure α) (g : α → ℝ) : Measure α ",
+        "header_sha256": "a5d8a4a55852adaeedc0fc7a9eac7f1d9b95cb1f19ea358276f7ca5111e6fa7b",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weightedProbability_isProbability",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem weightedProbability_isProbability (μ : Measure α) (g : α → ℝ)\n    (hg : Integrable g μ) (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g) :\n    IsProbabilityMeasure (weightedProbability μ g) ",
+        "header_sha256": "153493a9b740f4f9bc2584e4fe5df01fa46fbe365b4e7a796067cb19bca21669",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "integral_weightedProbability",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem integral_weightedProbability (μ : Measure α) (g : α → ℝ)\n    (hg : Measurable g) (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g) (f : α → ℝ) :\n    (∫ x, f x ∂weightedProbability μ g) = (∫ x, g x * f x ∂μ) / mass μ g ",
+        "header_sha256": "ae33d833b41cd8c062b19385b7739c89583b2c3603e6470f002fa4b83d8260c5",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "integrable_weightedProbability",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem integrable_weightedProbability (μ : Measure α) (g : α → ℝ)\n    (hg : Measurable g) (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    {f : α → ℝ} (hf : Integrable (fun x => g x * f x) μ) :\n    Integrable f (weightedProbability μ g) ",
+        "header_sha256": "698ce77a28890c43d76ed9fc5b40479689e87883feaf0e9b7f2a0a8cf35509d3",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "negativeLogProduct",
+        "kind": "def",
+        "privacy": null,
+        "header": "def negativeLogProduct (L : ι → α → ℝ) (x : α) : ℝ ",
+        "header_sha256": "07a8c9ffa463c68a81ec8c8c87b99f0acad9266ef9f8e9c460c09c3109fe6875",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "exp_negativeLogProduct",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem exp_negativeLogProduct (L : ι → α → ℝ) {x : α} (hL : ∀ i, 0 < L i x) :\n    Real.exp (negativeLogProduct L x) = 1 / ∏ i, L i x ",
+        "header_sha256": "015f0f910bcad0b144ce181c258866bee061bc2d01f263fcb3e52570edf2ce9c",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weighted_probability_log_jensen",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem weighted_probability_log_jensen\n    (μ : Measure α) (g : α → ℝ) (L : ι → α → ℝ) (B : ι → ℝ)\n    (hgMeas : Measurable g) (hgInt : Integrable g μ)\n    (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    (hL0 : ∀ᵐ x ∂μ, ∀ i, 0 < L i x)\n    (hLog : ∀ i, Integrable (fun x => g x * Real.log (L i x)) μ)\n    (hRecip : Integrable (fun x => g x / ∏ i, L i x) μ)\n    (hBound : ∀ i, (∫ x, g x * Real.log (L i x) ∂μ) / mass μ g ≤ B i) :\n    mass μ g * Real.exp (-∑ i, B i) ≤ ∫ x, g x / ∏ i, L i x ∂μ ",
+        "header_sha256": "da51cf44755c9ddce3570ea6377b160e4e0bad08759736a801c02e357ce507d1",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      },
+      {
+        "name": "cubicCorrection",
+        "kind": "def",
+        "privacy": null,
+        "header": "def cubicCorrection (T : ℝ) : ℝ ",
+        "header_sha256": "24b198a139a2245cbbc74aff46b21f112323810318438bcd430eb72607b0a711",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "cubicCorrection_le_exp",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem cubicCorrection_le_exp {T : ℝ} (hT : 0 ≤ T) : cubicCorrection T ≤ Real.exp T ",
+        "header_sha256": "071693a284a6e5ff6c74d9406eef95ad8c9d22ae16a8b17c666a968f77b4b460",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weighted_log_gap_cubic_lower",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem weighted_log_gap_cubic_lower\n    (μ : Measure α) (g : α → ℝ) (L : ι → α → ℝ) (means gaps : ι → ℝ)\n    (hgMeas : Measurable g) (hgInt : Integrable g μ)\n    (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    (hL0 : ∀ᵐ x ∂μ, ∀ i, 0 < L i x)\n    (hLog : ∀ i, Integrable (fun x => g x * Real.log (L i x)) μ)\n    (hRecip : Integrable (fun x => g x / ∏ i, L i x) μ)\n    (hMeans : ∀ i, 0 < means i) (hGaps : ∀ i, 0 ≤ gaps i)\n    (hBound : ∀ i, (∫ x, g x * Real.log (L i x) ∂μ) / mass μ g ≤\n      Real.log (means i) - gaps i) :\n    (mass μ g / ∏ i, means i) * cubicCorrection (∑ i, gaps i) ≤\n      ∫ x, g x / ∏ i, L i x ∂μ ",
+        "header_sha256": "9560356f7954fd239aba422c66695db798368af6fc3f0accf875c44557c718d0",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weighted_log_gap_cubic_lower_four",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem weighted_log_gap_cubic_lower_four\n    (μ : Measure α) (g : α → ℝ) (L : ι → α → ℝ) (means gaps : ι → ℝ)\n    (hgMeas : Measurable g) (hgInt : Integrable g μ)\n    (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    (hL0 : ∀ᵐ x ∂μ, ∀ i, 0 < L i x)\n    (hLog : ∀ i, Integrable (fun x => g x * Real.log (L i x)) μ)\n    (hRecip : Integrable (fun x => g x / ∏ i, L i x) μ)\n    (hMeans : ∀ i, 0 < means i) (hGaps : ∀ i, 0 ≤ gaps i)\n    (hBound : ∀ i, (∫ x, g x * Real.log (L i x) ∂μ) / mass μ g ≤\n      Real.log (means i) - gaps i) :\n    (4 * mass μ g / ∏ i, means i) * cubicCorrection (∑ i, gaps i) ≤\n      ∫ x, 4 * g x / ∏ i, L i x ∂μ ",
+        "header_sha256": "236fe2dedeb9cc5c8172ae1a527b2e9609cfec6c2bb40db62d23de710d21b809",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      },
+      {
+        "name": "affineScalar",
+        "kind": "def",
+        "privacy": null,
+        "header": "def affineScalar {d : ℕ} (c : ℝ) (a : Fin d → ℝ) (x : Fin d → ℝ) : ℝ ",
+        "header_sha256": "037cb4e2262c9c6967b8f8f0f20f167f53fc9e49ddd1f83a6c4ae1d9f0eddd69",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "continuous_affineScalar",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem continuous_affineScalar {d : ℕ} (c : ℝ) (a : Fin d → ℝ) :\n    Continuous (affineScalar c a) ",
+        "header_sha256": "88b91de6247036004f334af52a66d4220d0d169c9bb307c64baa956d153b781f",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "compact_affine_cell_log_jensen",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem compact_affine_cell_log_jensen {d : ℕ}\n    (D : Set (Fin d → ℝ)) (hD : IsCompact D) (hDMeas : MeasurableSet D)\n    (gc : ℝ) (ga : Fin d → ℝ) (Lc : ι → ℝ) (La : ι → Fin d → ℝ) (B : ι → ℝ)\n    (hg0 : ∀ x ∈ D, 0 ≤ affineScalar gc ga x)\n    (hL0 : ∀ x ∈ D, ∀ i, 0 < affineScalar (Lc i) (La i) x)\n    (hm : 0 < ∫ x in D, affineScalar gc ga x)\n    (hBound : ∀ i,\n      (∫ x in D, affineScalar gc ga x * Real.log (affineScalar (Lc i) (La i) x)) /\n        (∫ x in D, affineScalar gc ga x) ≤ B i) :\n    (∫ x in D, affineScalar gc ga x) * Real.exp (-∑ i, B i) ≤\n      ∫ x in D, affineScalar gc ga x / ∏ i, affineScalar (Lc i) (La i) x ",
+        "header_sha256": "73f5b5a159594f85baf619b2492f839e4fdfc8c8ff169485e997d859bad552ab",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      }
+    ]
+  },
+  {
+    "module": "ImbalancedChen.P2DegreeSixLogGapSoundness",
+    "declarations": [
+      {
+        "name": "partialSix",
+        "kind": "def",
+        "privacy": null,
+        "header": "def partialSix (y : ℝ) : ℝ ",
+        "header_sha256": "93f6b710a56c8cb92d17507b3051722b5f98b7fdb59c3341051b5c1ec60efe07",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "remainderSix",
+        "kind": "def",
+        "privacy": null,
+        "header": "def remainderSix (y : ℝ) : ℝ ",
+        "header_sha256": "6d3cc44e075ec355139533891c7d37d2380c1405138bdee5aa83416459961751",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "partialSix_explicit",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem partialSix_explicit (y : ℝ) :\n    partialSix y = y + y ^ 2 / 2 + y ^ 3 / 3 + y ^ 4 / 4 + y ^ 5 / 5 + y ^ 6 / 6 ",
+        "header_sha256": "4d370d4c37ca3ddea4406c5e4da070e7a6df3400bb27727fa5b539761a6073b0",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "hasDerivAt_partialSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem hasDerivAt_partialSix (y : ℝ) :\n    HasDerivAt partialSix (1 + y + y ^ 2 + y ^ 3 + y ^ 4 + y ^ 5) y ",
+        "header_sha256": "e70de189f5f982c78e2adccd9eb1a26b116a68bfabffb7460af8d9cf5ac228ce",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      },
+      {
+        "name": "hasDerivAt_remainderSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem hasDerivAt_remainderSix {y : ℝ} (hy : y < 1) :\n    HasDerivAt remainderSix (-y ^ 6 / (1 - y)) y ",
+        "header_sha256": "b7baac559017e37b948cf6da9634d5a249dbb4f16e3df24f8150d0be43e3ca6a",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      },
+      {
+        "name": "continuousOn_remainderSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem continuousOn_remainderSix {q : ℝ} (hq : q < 1) :\n    ContinuousOn remainderSix (Icc (0 : ℝ) q) ",
+        "header_sha256": "02d048cd9ff92fa13a03e3bd6c37d0fcf7ad20bac7a03ad6b66ba4a6fd3394bd",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "concaveOn_remainderSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem concaveOn_remainderSix {q : ℝ} (hq : q < 1) :\n    ConcaveOn ℝ (Icc (0 : ℝ) q) remainderSix ",
+        "header_sha256": "fc84a708adda4da2002e13fa260b6e23803eee569c7aff83dc780dba2ee4a2fc",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "gapSix",
+        "kind": "def",
+        "privacy": null,
+        "header": "def gapSix (ν : Measure α) (Y : α → ℝ) : ℝ ",
+        "header_sha256": "e2d1cd850583d5ed62f4b73dba894d7334b96dcda591e7fbc261978f39f9035c",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "integrable_partialSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem integrable_partialSix (ν : Measure α) (Y : α → ℝ)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν) :\n    Integrable (fun x => partialSix (Y x)) ν ",
+        "header_sha256": "29322ac4903895321fe5396e1d343949f5830c3f326c41741597d51a4eabfdd1",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "integral_partialSix",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem integral_partialSix (ν : Measure α) (Y : α → ℝ)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν) :\n    (∫ x, partialSix (Y x) ∂ν) =\n      ∑ i ∈ Finset.range 6, (∫ x, Y x ^ (i + 1) ∂ν) / ((i : ℝ) + 1) ",
+        "header_sha256": "f9a3f664168c8f6bbf4fb1a1ae5937b3a5ae51a3b2a1433d8450447622e063a3",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "partialSix_integral_difference",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem partialSix_integral_difference (ν : Measure α) (Y : α → ℝ)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν) :\n    (∫ x, partialSix (Y x) ∂ν) - partialSix (∫ x, Y x ∂ν) = gapSix ν Y ",
+        "header_sha256": "a57717a8bcabcc0b2b20caa8e7a3445fd974b64ea51781cf2b858b3ac0ce2fa8",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "probability_log_one_sub_bound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem probability_log_one_sub_bound\n    (ν : Measure α) [IsProbabilityMeasure ν] (Y : α → ℝ) {q : ℝ} (hq : q < 1)\n    (hRange : ∀ᵐ x ∂ν, Y x ∈ Icc (0 : ℝ) q)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν)\n    (hLog : Integrable (fun x => Real.log (1 - Y x)) ν) :\n    (∫ x, Real.log (1 - Y x) ∂ν) ≤\n      Real.log (1 - ∫ x, Y x ∂ν) - gapSix ν Y ",
+        "header_sha256": "f518e533f0b1cad2b260edffdfa944af96bda1e0ac9c596ae84d6fc8fe1b288f",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "scaledDeviation",
+        "kind": "def",
+        "privacy": null,
+        "header": "def scaledDeviation (top : ℝ) (L : α → ℝ) (x : α) : ℝ ",
+        "header_sha256": "480d98f7acb900256fdc70ddd646bb08a938bbfd99c3b3a30382cc8b1d3919cf",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "scaledDeviation_range",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem scaledDeviation_range {top lo v : ℝ}\n    (hTop : 0 < top) (hLo : 0 < lo) (hV : lo ≤ v ∧ v ≤ top) :\n    (1 - v / top) ∈ Icc (0 : ℝ) (1 - lo / top) ∧ 1 - lo / top < 1 ",
+        "header_sha256": "aaaca6845fca20cbd588d74af52929b0535b1445a464cf67e00ac5ad35e08796",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "scaledDeviation_mean",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem scaledDeviation_mean (ν : Measure α) [IsProbabilityMeasure ν]\n    (top : ℝ) (L : α → ℝ) (hL : Integrable L ν) :\n    (∫ x, scaledDeviation top L x ∂ν) = 1 - (∫ x, L x ∂ν) / top ",
+        "header_sha256": "84b2ef39486d9ebfe7ed596c0a3a02a745f1ece09409b676778c591fc14257ef",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "probability_factor_log_bound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem probability_factor_log_bound\n    (ν : Measure α) [IsProbabilityMeasure ν] (top : ℝ) (hTop : 0 < top) (L : α → ℝ)\n    {q : ℝ} (hq : q < 1)\n    (hRange : ∀ᵐ x ∂ν, scaledDeviation top L x ∈ Icc (0 : ℝ) q)\n    (hL0 : ∀ᵐ x ∂ν, 0 < L x) (hL : Integrable L ν)\n    (hLogL : Integrable (fun x => Real.log (L x)) ν)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 →\n      Integrable (fun x => scaledDeviation top L x ^ k) ν) :\n    (∫ x, Real.log (L x) ∂ν) ≤\n      Real.log (∫ x, L x ∂ν) - gapSix ν (scaledDeviation top L) ",
+        "header_sha256": "9763e6dc7ca31e679921ccaa43a360d3496b33a6298e6b9c275b77980d6cff6e",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "probability_gapSix_nonneg",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem probability_gapSix_nonneg\n    (ν : Measure α) [IsProbabilityMeasure ν] (Y : α → ℝ)\n    (hY0 : ∀ᵐ x ∂ν, 0 ≤ Y x)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν) :\n    0 ≤ gapSix ν Y ",
+        "header_sha256": "afcafd1c6c4b07bdaae883361818a7eb9f9c3c4f293b0e355a59a37b8906c419",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "weighted_degreeSix_log_moment_bound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem weighted_degreeSix_log_moment_bound\n    (μ : Measure α) (g L : α → ℝ) (top : ℝ) (hTop : 0 < top)\n    (hgMeas : Measurable g) (hgInt : Integrable g μ)\n    (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    (hLInt : Integrable (fun x => g x * L x) μ)\n    (hLogInt : Integrable (fun x => g x * Real.log (L x)) μ)\n    (hL0 : ∀ᵐ x ∂μ, 0 < L x) {q : ℝ} (hq : q < 1)\n    (hRange : ∀ᵐ x ∂μ, scaledDeviation top L x ∈ Icc (0 : ℝ) q)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 →\n      Integrable (fun x => scaledDeviation top L x ^ k) (weightedProbability μ g)) :\n    (∫ x, g x * Real.log (L x) ∂μ) / mass μ g ≤\n      Real.log ((∫ x, g x * L x ∂μ) / mass μ g) -\n        gapSix (weightedProbability μ g) (scaledDeviation top L) ",
+        "header_sha256": "2561a7c35a7215da8383df782f9f1a22cdd3958365a6cb618d2ac3c262f9ff89",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      }
+    ]
+  },
+  {
+    "module": "ImbalancedChen.P2OriginalLogMomentQ96Checker",
+    "declarations": [
+      {
+        "name": "fixedNumerator",
+        "kind": "def",
+        "privacy": null,
+        "header": "def fixedNumerator (bits : ℕ) (r : ℚ) : ℤ ",
+        "header_sha256": "7a55d20c4da14767df9813fc2bc580e44a50c2dd0b3a44152a18ccdcc4e169b8",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "roundDownQ",
+        "kind": "def",
+        "privacy": null,
+        "header": "def roundDownQ (bits : ℕ) (r : ℚ) : ℚ ",
+        "header_sha256": "f2e43e073e4a1b7b8a64f324eb21509822ad41f1bcef57eadbe48fe17840ce64",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "fixedNumerator_eq_floor",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem fixedNumerator_eq_floor (bits : ℕ) (r : ℚ) :\n    fixedNumerator bits r = ⌊(r : ℝ) * (2 : ℝ) ^ bits⌋ ",
+        "header_sha256": "5774614f5f14794ae92771834da26d7916d8f1a6b860d78bf845c9fac6de058b",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": true
+      },
+      {
+        "name": "roundDownQ_le",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem roundDownQ_le (bits : ℕ) (r : ℚ) : (roundDownQ bits r : ℝ) ≤ (r : ℝ) ",
+        "header_sha256": "b31825e5b2e59a654dd2a7a6eaf2f998d33dd3264f8b2cf4053873e6d5e238e7",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "roundDownQ_nonneg",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem roundDownQ_nonneg (bits : ℕ) {r : ℚ} (hr : 0 ≤ r) : 0 ≤ roundDownQ bits r ",
+        "header_sha256": "492fc2b9737efa5bd7f0e6c1527a43412608feeaa26c2f048a77d04a5fb75157",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "fixedNumerator_mono",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem fixedNumerator_mono (bits : ℕ) {r s : ℚ} (hrs : r ≤ s) :\n    fixedNumerator bits r ≤ fixedNumerator bits s ",
+        "header_sha256": "f3bc56b654d4509fa17f677bb18e1afdd2bd08e81a9d33fe97367b4d57496641",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "gapEvaluator",
+        "kind": "def",
+        "privacy": null,
+        "header": "def gapEvaluator (moments : ℕ → ℚ) : ℚ ",
+        "header_sha256": "fb92fcb631d9023af85194350cbf2e33d3aff6cdb74ecf5aca0c2e1ea3a533cc",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "factorFloorQ80",
+        "kind": "def",
+        "privacy": null,
+        "header": "def factorFloorQ80 (moments : ℕ → ℚ) : ℤ ",
+        "header_sha256": "c5ef6a96afb54a6a04dce5bb344e01b7c085ecaffff3ff7592c7c529416b38ec",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "factorLowerQ80",
+        "kind": "def",
+        "privacy": null,
+        "header": "def factorLowerQ80 (moments : ℕ → ℚ) : ℚ ",
+        "header_sha256": "27fab37f784a054973f629df470e21a79ed39ead47b63b6e38031f681c48d923",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "gapEvaluator_cast",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem gapEvaluator_cast (ν : Measure α) (Y : α → ℝ) (moments : ℕ → ℚ)\n    (hMom : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → (moments k : ℝ) = ∫ x, Y x ^ k ∂ν) :\n    (gapEvaluator moments : ℝ) = gapSix ν Y ",
+        "header_sha256": "899fcc554947381cb69db6ac0462c963ba9ba2f84265d230d29e23b25faeb34d",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "factor_Q80_sound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem factor_Q80_sound\n    (ν : Measure α) [IsProbabilityMeasure ν] (L : α → ℝ) (top : ℝ) (hTop : 0 < top)\n    (moments : ℕ → ℚ) {q : ℝ} (hq : q < 1)\n    (hRange : ∀ᵐ x ∂ν, scaledDeviation top L x ∈ Icc (0 : ℝ) q)\n    (hL0 : ∀ᵐ x ∂ν, 0 < L x) (hL : Integrable L ν)\n    (hLog : Integrable (fun x => Real.log (L x)) ν)\n    (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => scaledDeviation top L x ^ k) ν)\n    (hMom : ∀ k : ℕ, 1 ≤ k → k ≤ 6 →\n      (moments k : ℝ) = ∫ x, scaledDeviation top L x ^ k ∂ν) :\n    0 ≤ factorLowerQ80 moments ∧\n      (∫ x, Real.log (L x) ∂ν) ≤\n        Real.log (∫ x, L x ∂ν) - (factorLowerQ80 moments : ℝ) ",
+        "header_sha256": "6d8cdcb31873bf41316439822d27369a5a8e70b4839eb71eb25a10684296eca5",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "totalLowerQ80",
+        "kind": "def",
+        "privacy": null,
+        "header": "def totalLowerQ80 (moments : ι → ℕ → ℚ) : ℚ ",
+        "header_sha256": "ed09e0b232c553e37cbdbbb3e98fa3af94fc81b09bcdfe259438f48c94ad6045",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "totalLowerQ80_integer_formula",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem totalLowerQ80_integer_formula (moments : ι → ℕ → ℚ) :\n    totalLowerQ80 moments = ((∑ i, factorFloorQ80 (moments i) : ℤ) : ℚ) / (2 : ℚ) ^ 80 ",
+        "header_sha256": "59f42a54bbabe1b3a86f4a60142813379daba0afd1de5dff871add8fb662fb4d",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "cubicQ",
+        "kind": "def",
+        "privacy": null,
+        "header": "def cubicQ (T : ℚ) : ℚ ",
+        "header_sha256": "0470dd1fb56f90c9e2c8d1743624358eb73090ff5c6a24ccef9ebbefdb7a2063",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "oldEvaluator",
+        "kind": "def",
+        "privacy": null,
+        "header": "def oldEvaluator (actualMass : ℚ) (means : ι → ℚ) : ℚ ",
+        "header_sha256": "32a1b8e69f01bb8dbeccb662a38c525c7521336109c9d01b52a127a7c4743524",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "newEvaluator",
+        "kind": "def",
+        "privacy": null,
+        "header": "def newEvaluator (actualMass : ℚ) (means : ι → ℚ) (moments : ι → ℕ → ℚ) : ℚ ",
+        "header_sha256": "8d04f0c4347aa7be781781ff22800bd0ead69a3ce9b17c6ea4543c7094ea6cbc",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "oldFloorQ96",
+        "kind": "def",
+        "privacy": null,
+        "header": "def oldFloorQ96 (actualMass : ℚ) (means : ι → ℚ) : ℤ ",
+        "header_sha256": "f8161b6f0bc27739e411cee692cd57441c3d2d0704fe3a647b67447070370b24",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "newFloorQ96",
+        "kind": "def",
+        "privacy": null,
+        "header": "def newFloorQ96 (actualMass : ℚ) (means : ι → ℚ) (moments : ι → ℕ → ℚ) : ℤ ",
+        "header_sha256": "19e61e36121baa549007b6bc0a7ca22b987fe28f7f831cac81ba9295d149922c",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "simplexLowerQ96",
+        "kind": "def",
+        "privacy": null,
+        "header": "def simplexLowerQ96 (actualMass : ℚ) (means : ι → ℚ) (moments : ι → ℕ → ℚ) : ℚ ",
+        "header_sha256": "c4c59c35c4e2fb1c84bb1fd04fe9c1a08f01cd957fc108e4a47ce3c873a8a6ea",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "cubicQ_cast",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem cubicQ_cast (T : ℚ) : (cubicQ T : ℝ) = cubicCorrection (T : ℝ) ",
+        "header_sha256": "f8c939928a009b5ea02d31a1cd9a238035661c9e876a93c92b93cd4d48e248a2",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "newEvaluator_cast",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem newEvaluator_cast (m : ℚ) (means : ι → ℚ) (moments : ι → ℕ → ℚ) :\n    (newEvaluator m means moments : ℝ) =\n      (4 * (m : ℝ) / ∏ i, (means i : ℝ)) *\n        cubicCorrection (∑ i, (factorLowerQ80 (moments i) : ℝ)) ",
+        "header_sha256": "f7d4ace252c731c607397a67ca2447902b46fa2951a2455b4bb0faded6f647c5",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "old_le_newEvaluator",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem old_le_newEvaluator {m : ℚ} (hm : 0 ≤ m) (means : ι → ℚ)\n    (hMeans : ∀ i, 0 < means i) (moments : ι → ℕ → ℚ)\n    (hGaps : ∀ i, 0 ≤ factorLowerQ80 (moments i)) :\n    oldEvaluator m means ≤ newEvaluator m means moments ",
+        "header_sha256": "74c9e80e66a73651a3403a7106b6540a9fdfbced25033af7ba627d19766707f9",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "oldFloorQ96_le_newFloorQ96",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem oldFloorQ96_le_newFloorQ96 {m : ℚ} (hm : 0 ≤ m) (means : ι → ℚ)\n    (hMeans : ∀ i, 0 < means i) (moments : ι → ℕ → ℚ)\n    (hGaps : ∀ i, 0 ≤ factorLowerQ80 (moments i)) :\n    oldFloorQ96 m means ≤ newFloorQ96 m means moments ",
+        "header_sha256": "95193443b95b03691656f51026c01f2da6dd366bf1ac9eb01fa0e5625b81da4f",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "source_old_mass_dictionary",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem source_old_mass_dictionary (volume G den : ℚ) (means : ι → ℚ) :\n    oldEvaluator (volume * G / (9 * den)) means =\n      4 * volume * (G / (9 * den)) / ∏ i, means i ",
+        "header_sha256": "a145ee3ab30ac2cee261eddf9b20ba0a8611a341928ee9a4b8201628f2117bf0",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "checkStoredQ96",
+        "kind": "def",
+        "privacy": null,
+        "header": "def checkStoredQ96 (stored : ℤ) (m : ℚ) (means : ι → ℚ) (moments : ι → ℕ → ℚ) : Bool ",
+        "header_sha256": "d42072d8f5f42eb4c3858f245b183f112af6593e348a27a733cf11c008e2391a",
+        "same_header": true,
+        "same_definition_body": true,
+        "changed_proof_body": false
+      },
+      {
+        "name": "storedQ96_le_computed",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem storedQ96_le_computed (stored : ℤ) (m : ℚ) (means : ι → ℚ)\n    (moments : ι → ℕ → ℚ) (hStored : checkStoredQ96 stored m means moments = true) :\n    (stored : ℚ) / (2 : ℚ) ^ 96 ≤ simplexLowerQ96 m means moments ",
+        "header_sha256": "995cfd6f6c2b3a022fcd9dbc1cd2b9acd62fa1e372c0bea208280313520e39db",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "simplex_Q96_sound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem simplex_Q96_sound\n    (μ : Measure α) (g : α → ℝ) (L : ι → α → ℝ)\n    (m : ℚ) (means top : ι → ℚ) (moments : ι → ℕ → ℚ)\n    (hgMeas : Measurable g) (hgInt : Integrable g μ)\n    (hg0 : ∀ᵐ x ∂μ, 0 ≤ g x) (hm : 0 < mass μ g)\n    (hMass : (m : ℝ) = mass μ g) (hMeansPos : ∀ i, 0 < means i) (hTop : ∀ i, 0 < top i)\n    (hMeans : ∀ i, (means i : ℝ) = (∫ x, g x * L i x ∂μ) / mass μ g)\n    (hL0 : ∀ᵐ x ∂μ, ∀ i, 0 < L i x)\n    (hLInt : ∀ i, Integrable (fun x => g x * L i x) μ)\n    (hLog : ∀ i, Integrable (fun x => g x * Real.log (L i x)) μ)\n    (hRecip : Integrable (fun x => g x / ∏ i, L i x) μ)\n    (q : ι → ℝ) (hq : ∀ i, q i < 1)\n    (hRange : ∀ i, ∀ᵐ x ∂μ, scaledDeviation (top i : ℝ) (L i) x ∈ Icc (0 : ℝ) (q i))\n    (hPow : ∀ i, ∀ k : ℕ, 1 ≤ k → k ≤ 6 →\n      Integrable (fun x => scaledDeviation (top i : ℝ) (L i) x ^ k) (weightedProbability μ g))\n    (hMom : ∀ i, ∀ k : ℕ, 1 ≤ k → k ≤ 6 →\n      (moments i k : ℝ) = ∫ x, scaledDeviation (top i : ℝ) (L i) x ^ k ∂weightedProbability μ g) :\n    (simplexLowerQ96 m means moments : ℝ) ≤ ∫ x, 4 * g x / ∏ i, L i x ∂μ ",
+        "header_sha256": "5a8eacdfcf5013b0be9d2d5609e696d2c43af32b0bf242425466c82068f942fa",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      },
+      {
+        "name": "refloor_intermediate_sound",
+        "kind": "theorem",
+        "privacy": null,
+        "header": "theorem refloor_intermediate_sound (bits : ℕ) (r : ℚ) {I : ℝ} (h : (r : ℝ) ≤ I) :\n    (roundDownQ bits r : ℝ) ≤ I ",
+        "header_sha256": "57cca60340a81317ab9e7e56171fc2501cd0fcaa6bc3f6e2853f5e70ed0ee042",
+        "same_header": true,
+        "same_definition_body": null,
+        "changed_proof_body": false
+      }
+    ]
+  }
+]

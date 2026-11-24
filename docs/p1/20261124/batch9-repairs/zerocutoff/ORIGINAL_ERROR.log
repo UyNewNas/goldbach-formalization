@@ -1,0 +1,92 @@
+✖ [9878/9879] Building ImbalancedChen.P1OriginalFourthZeroCutoffLimit (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.setup.json --json
+warning: ImbalancedChen/P1OriginalFourthZeroCutoffLimit.lean:57:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+error: ImbalancedChen/P1OriginalFourthZeroCutoffLimit.lean:201:58: unsolved goals
+case calc.step
+e : ℚ
+chi : ℝ
+m : ℕ
+omega : ℝ
+homega : 0 < omega
+homegaRho : omega < 19 / 96
+J4 : Finset (FourthCell m)
+cap4 : FourthCell m → ℚ
+hcheck : h34Check e chi m omega J4 cap4 = true
+L : ℝ
+hI : Tendsto (fun a => selectedIntegral e chi m omega a J4 cap4) (𝓝[>] 0) (𝓝 L)
+D : ℝ
+hD : 0 < D
+hbound :
+  ∀ (a : ℝ),
+    0 < a →
+      2 * a ≤ omega →
+        ∀ᶠ (N : ℕ) in atTop,
+          Even N → ∀ (cap : ℕ), |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N cap| ≤ D * a
+cap : ℕ → ℕ
+hcap : ∀ᶠ (N : ℕ) in evenTargets, ↑N ^ (19 / 96) ≤ ↑(cap N)
+epsilon : ℝ
+hepsilon : epsilon > 0
+hthird : 0 < epsilon / 3
+hcut : 0 < min (omega / 2) (epsilon / (3 * D))
+hpositiveCutoff : ∀ᶠ (a : ℝ) in 𝓝[>] 0, 0 < a
+hsmallCutoff : ∀ᶠ (a : ℝ) in 𝓝[>] 0, a < min (omega / 2) (epsilon / (3 * D))
+a : ℝ
+ha : 0 < a
+hsmall : a < min (omega / 2) (epsilon / (3 * D))
+hnear : |selectedIntegral e chi m omega a J4 cap4 - L| < epsilon / 3
+ha0 : 0 < a
+haomega : 2 * a ≤ omega
+hDa : D * a < epsilon / 3
+hpos :
+  Tendsto
+    (fun N =>
+      actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (↑e) m ↑N)
+              (HistoricalThirdCoarse.rawLevel (↑e) chi m omega ↑N) (level4 e chi m omega J4 cap4 ↑N) N (cap N)
+              (↑N ^ (19 / 96)) *
+            Real.log ↑N /
+          singularSeries N -
+        P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N))
+    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 (selectedIntegral e chi m omega a J4 cap4))
+hclose :
+  ∀ᶠ (x : ℕ) in atTop ⊓ 𝓟 {N | 0 < N ∧ Even N},
+    dist
+        (actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (↑e) m ↑x)
+                (HistoricalThirdCoarse.rawLevel (↑e) chi m omega ↑x) (level4 e chi m omega J4 cap4 ↑x) x (cap x)
+                (↑x ^ (19 / 96)) *
+              Real.log ↑x /
+            singularSeries x -
+          P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 x (cap x))
+        (selectedIntegral e chi m omega a J4 cap4) <
+      epsilon / 3
+hev : ∀ᶠ (N : ℕ) in evenTargets, 0 < N ∧ Even N
+N : ℕ
+hrem : Even N → ∀ (cap : ℕ), |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N cap| ≤ D * a
+hposN :
+  |actualHistoricalFourthSaving (HistoricalThirdCoarse.initialPolicy (↑e) m ↑N)
+                (HistoricalThirdCoarse.rawLevel (↑e) chi m omega ↑N) (level4 e chi m omega J4 cap4 ↑N) N (cap N)
+                (↑N ^ (19 / 96)) *
+              Real.log ↑N /
+            singularSeries N -
+          P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N) -
+        selectedIntegral e chi m omega a J4 cap4| <
+    epsilon / 3
+heN : 0 < N ∧ Even N
+hR : |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N)| ≤ D * a
+⊢ |normalizedActualSaving e chi m omega J4 cap4 N (cap N) -
+              P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N) -
+            selectedIntegral e chi m omega a J4 cap4 +
+          P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N)| +
+      (|selectedIntegral e chi m omega a J4 cap4| + |(-L)|) ≤
+    |normalizedActualSaving e chi m omega J4 cap4 N (cap N) -
+              P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N) -
+            selectedIntegral e chi m omega a J4 cap4| +
+        |P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N)| +
+      |selectedIntegral e chi m omega a J4 cap4 - L|
+error: Lean exited with code 1

@@ -175,715 +175,925 @@ private theorem integratedPower_newton_guard_0_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 0 = duplicateH y 0 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 0 = duplicateH y 1 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 0 = duplicateH y 2 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 0 = duplicateH y 3 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 0 = duplicateH y 4 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 0 = duplicateH y 5 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 0 = duplicateH y 6 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Degree zero was already enumerated by the preceding norm_num.
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 1 = duplicateH y 0 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 1 = duplicateH y 1 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 1 = duplicateH y 2 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 1 = duplicateH y 3 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 1 = duplicateH y 4 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 1 = duplicateH y 5 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 1 = duplicateH y 6 1 /
       ((Nat.factorial 7 : ℝ) * ((7 + 1).choose 1 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 2 = duplicateH y 0 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 2 = duplicateH y 1 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 2 = duplicateH y 2 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 2 = duplicateH y 3 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 2 = duplicateH y 4 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 2 = duplicateH y 5 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 2 = duplicateH y 6 2 /
       ((Nat.factorial 7 : ℝ) * ((7 + 2).choose 2 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 3 = duplicateH y 0 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 3 = duplicateH y 1 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 3 = duplicateH y 2 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 3 = duplicateH y 3 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 3 = duplicateH y 4 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 3 = duplicateH y 5 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 3 = duplicateH y 6 3 /
       ((Nat.factorial 7 : ℝ) * ((7 + 3).choose 3 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 4 = duplicateH y 0 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 4 = duplicateH y 1 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 4 = duplicateH y 2 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 4 = duplicateH y 3 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 4 = duplicateH y 4 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 4 = duplicateH y 5 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 4 = duplicateH y 6 4 /
       ((Nat.factorial 7 : ℝ) * ((7 + 4).choose 4 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 5 = duplicateH y 0 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 5 = duplicateH y 1 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 5 = duplicateH y 2 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 5 = duplicateH y 3 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 5 = duplicateH y 4 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 5 = duplicateH y 5 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 5 = duplicateH y 6 5 /
       ((Nat.factorial 7 : ℝ) * ((7 + 5).choose 5 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  -- Reuse the accepted coefficient cancellation before any tuple enumeration.
+  rw [integratedPower_eq_factored]
+  all_goals
+    norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Enumerate tuples without opening factorials, multinomial or Newton products.
+  all_goals
+    simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
       Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
       List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
-      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
+      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- The final stage contains only monomials and the original Newton recurrence.
+  all_goals
+    norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+      rational_smul_real]
+    <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 6 = duplicateH y 0 6 /

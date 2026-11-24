@@ -156,7 +156,7 @@ theorem h3_cell00_vertex_old_planes :
   fin_cases I <;>
     norm_num [oldMasks, oldMaskCode, oldSubsetSum, oldComparison,
       firstFailureH3LeftCodes, h3Cell00Vertex, VariableEnvelope.A,
-      VariableEnvelope.C] at *
+      VariableEnvelope.C, P5OriginalAdoptedEighthPhysicalMasks.e] at *
 /-- The occupied rho uses the very same corrected-parent/eighth policy;
 its modulus is physical, squarefree, target-coprime and one-bounded. -/
 theorem physical_rho_nonzero_support
