@@ -55,7 +55,20 @@ MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3TwoLongCompletion", "Part3TwoLongSmooth", "Part3GevreyCutoff",
     "Part3E1ReciprocalPhase", "Part3BrunDensity",
     "Part3E1FiniteCauchy", "Part3E1CompletedAggregate", "Part3E1Equation18",
-    "Part3E1SourceMask", "Part3E1RealScales", "Part3E2Reciprocity"))
+    "Part3E1SourceMask", "Part3E1RealScales", "Part3E2Reciprocity",
+    "Part3E1FixedDSource", "Part3E1FixedDEstimate",
+    "Part3E1MediumMargins", "Part3E1MediumCaps",
+    "Part3RectangularAbel", "Part3RectangularCorners", "Part3MixedFiniteDifference",
+    "Part3SmoothRectangularAbel", "Part3E2SlowPhase", "Part3E2RectangularVariation",
+    "Part3SpectralReturn25", "Part3CommonIntervalFourier",
+    "Part3E4PrimitiveMean", "Part3E4PrimitiveMeanAssembly",
+    "Part3OriginalDyadicChartPartition", "Part3PrimeProductChartTransfer",
+    "Part3E1MediumRetained", "Part3E1MediumDivisorBudget", "Part3E1MediumQCover",
+    "Part3E3FixedDTransport", "Part3HeathBrownThree",
+    "Part3E1MediumWindowBound", "Part3TwoLongRoughSigned",
+    "Part3PrimeProductVonMangoldt", "Part3LabelledHeathBrown",
+    "Part3E1GevreyWindow", "Part3ProperPrimePowerCount", "Part3OffDiagonalModuli",
+    "Part3E1SameCutoffTail"))
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/Part3DistributionAudit.lean"
 WORKFLOW = ".github/workflows/part3-distribution.yml"

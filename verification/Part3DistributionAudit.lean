@@ -42,6 +42,35 @@ import ImbalancedChen.Part3E1Equation18
 import ImbalancedChen.Part3E1SourceMask
 import ImbalancedChen.Part3E1RealScales
 import ImbalancedChen.Part3E2Reciprocity
+import ImbalancedChen.Part3E1FixedDSource
+import ImbalancedChen.Part3E1FixedDEstimate
+import ImbalancedChen.Part3E1MediumMargins
+import ImbalancedChen.Part3E1MediumCaps
+import ImbalancedChen.Part3RectangularAbel
+import ImbalancedChen.Part3RectangularCorners
+import ImbalancedChen.Part3MixedFiniteDifference
+import ImbalancedChen.Part3SmoothRectangularAbel
+import ImbalancedChen.Part3E2SlowPhase
+import ImbalancedChen.Part3E2RectangularVariation
+import ImbalancedChen.Part3SpectralReturn25
+import ImbalancedChen.Part3CommonIntervalFourier
+import ImbalancedChen.Part3E4PrimitiveMean
+import ImbalancedChen.Part3E4PrimitiveMeanAssembly
+import ImbalancedChen.Part3OriginalDyadicChartPartition
+import ImbalancedChen.Part3PrimeProductChartTransfer
+import ImbalancedChen.Part3E1MediumRetained
+import ImbalancedChen.Part3E1MediumDivisorBudget
+import ImbalancedChen.Part3E1MediumQCover
+import ImbalancedChen.Part3E3FixedDTransport
+import ImbalancedChen.Part3HeathBrownThree
+import ImbalancedChen.Part3E1MediumWindowBound
+import ImbalancedChen.Part3TwoLongRoughSigned
+import ImbalancedChen.Part3PrimeProductVonMangoldt
+import ImbalancedChen.Part3LabelledHeathBrown
+import ImbalancedChen.Part3E1GevreyWindow
+import ImbalancedChen.Part3ProperPrimePowerCount
+import ImbalancedChen.Part3OffDiagonalModuli
+import ImbalancedChen.Part3E1SameCutoffTail
 import Lean.Util.CollectAxioms
 
 /-!
@@ -108,7 +137,36 @@ run_cmd do
     `ImbalancedChen.Part3E1Equation18,
     `ImbalancedChen.Part3E1SourceMask,
     `ImbalancedChen.Part3E1RealScales,
-    `ImbalancedChen.Part3E2Reciprocity]
+    `ImbalancedChen.Part3E2Reciprocity,
+    `ImbalancedChen.Part3E1FixedDSource,
+    `ImbalancedChen.Part3E1FixedDEstimate,
+    `ImbalancedChen.Part3E1MediumMargins,
+    `ImbalancedChen.Part3E1MediumCaps,
+    `ImbalancedChen.Part3RectangularAbel,
+    `ImbalancedChen.Part3RectangularCorners,
+    `ImbalancedChen.Part3MixedFiniteDifference,
+    `ImbalancedChen.Part3SmoothRectangularAbel,
+    `ImbalancedChen.Part3E2SlowPhase,
+    `ImbalancedChen.Part3E2RectangularVariation,
+    `ImbalancedChen.Part3SpectralReturn25,
+    `ImbalancedChen.Part3CommonIntervalFourier,
+    `ImbalancedChen.Part3E4PrimitiveMean,
+    `ImbalancedChen.Part3E4PrimitiveMeanAssembly,
+    `ImbalancedChen.Part3OriginalDyadicChartPartition,
+    `ImbalancedChen.Part3PrimeProductChartTransfer,
+    `ImbalancedChen.Part3E1MediumRetained,
+    `ImbalancedChen.Part3E1MediumDivisorBudget,
+    `ImbalancedChen.Part3E1MediumQCover,
+    `ImbalancedChen.Part3E3FixedDTransport,
+    `ImbalancedChen.Part3HeathBrownThree,
+    `ImbalancedChen.Part3E1MediumWindowBound,
+    `ImbalancedChen.Part3TwoLongRoughSigned,
+    `ImbalancedChen.Part3PrimeProductVonMangoldt,
+    `ImbalancedChen.Part3LabelledHeathBrown,
+    `ImbalancedChen.Part3E1GevreyWindow,
+    `ImbalancedChen.Part3ProperPrimePowerCount,
+    `ImbalancedChen.Part3OffDiagonalModuli,
+    `ImbalancedChen.Part3E1SameCutoffTail]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with

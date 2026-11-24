@@ -1,5 +1,17 @@
 # Part 3：算术分布与实际误差供应者交接
 
+## 2026-11-24 本地续证
+
+- **固定 $d$ 的保留 S2。** 有限式逐项保留 $q'=dq$、两侧平方根平滑权、正负频率、原始 $\varphi(qds)$ 和外部尺度 $V$。闭区间 E1 估计接受精确的模数像和原始子支撑。若粗糙系数范数至多为 $B$，平方范数估计带 $V^2 B^4$。从 `MediumAdmissible` 导出 (19) 的尺度余量和移位 $q$ 小块的多项式包络，再沿显式不交的 $q$ 分块对闭 $d$ 区间求和。除以 $V$ 后得到 (20) 的 $X^{-\sigma/2}$ 节省，粗糙系数使用统一子幂界。[有限重索引](../../ImbalancedChen/Part3E1FixedDSource.lean) · [尺度余量](../../ImbalancedChen/Part3E1MediumMargins.lean) · [(20) 的数值组装](../../ImbalancedChen/Part3E1MediumRetained.lean)
+- **同一个 S2 截断。** 实数模数权和 Fourier 变换来自同一个 Gevrey 平顶函数。三块 $q$ 区间覆盖原始支撑，尺度与粗糙系数预算在所有数据之前固定。每个 S2 项的完整去零频率级数与原始保留和之差，在相同物理网格和倒数相位下有 $8X^{-K}$ 界。[同一平顶窗的保留和](../../ImbalancedChen/Part3E1GevreyWindow.lean) · [逐项遗漏尾和](../../ImbalancedChen/Part3E1SameCutoffTail.lean)
+- **手稿 (22)。** 在五坐标上应用精确矩形分部求和，保留全部上边界面和同一组前缀端点。对两个平滑因子与带符号慢相位的乘积，将导数界转成实际网格的混合差分界。固定 $d$ 的 E3 有限式保留原始 $q w_1w_2$ 分母及 $n_2$ 内求和。对同一个去除平滑权重后的矩形前缀界，总代价为 $X^{5\kappa+\varepsilon}$，其中 $\varepsilon>0$ 预先固定。[完整权重的导数](../../ImbalancedChen/Part3E2SlowPhase.lean) · [固定块的物理估计](../../ImbalancedChen/Part3E3FixedDTransport.lean)
+- **谱估计接口。** 共同 dyadic 区间的精确有限 Fourier 限制只使用一个移位相位，并给出掩码的对数 $\ell^1$ 界。由 (24) 到 (25) 的标量比较在实际 ceil 截断的正频率小块上成立，保留改进的例外谱幂次和独立的零频代价。[共同区间限制](../../ImbalancedChen/Part3CommonIntervalFourier.lean) · [(24) 到 (25)](../../ImbalancedChen/Part3SpectralReturn25.lean)
+- **两长槽与原始素数图册。** 平滑一槽的 Brun 上权和间隙使用精确倒数密度，两个槽的互素均值乘积保留单个物理 $\varphi(q)$ 分母。E3–E4 比较对所有物理模数求和，分别支付平滑除子展开的差异和间隙互素主项。原始带标签素数元组可按 dyadic 窗口精确分拆。有限图册在完整乘积的系数恒等式下调用现有一长槽和两长槽估计，保留残差的原始 AP 和互素主项。[两长槽带符号比较](../../ImbalancedChen/Part3TwoLongRoughSigned.lean) · [原始窗口分拆](../../ImbalancedChen/Part3OriginalDyadicChartPartition.lean) · [系数接合](../../ImbalancedChen/Part3PrimeProductChartTransfer.lean)
+
+- **三阶 Heath–Brown 恒等式。** 对实截断 $z$ 及所有 $n\le z^3$，精确展开 von Mangoldt。取各原始槽尺度 $z_i=(2R_i)^{1/3}$ 后，原始带标签素数乘积逐个完整乘积展开成各标签独立的三阶选择，并扣除一次含真素数幂的并集残差。真素数幂通过底数和指数对计数，非对角同余模数通过 $|b-N|$ 的除数精确比较，完整对角仍保留。[带标签的完整系数展开](../../ImbalancedChen/Part3LabelledHeathBrown.lean) · [真素数幂计数](../../ImbalancedChen/Part3ProperPrimePowerCount.lean) · [非对角模数](../../ImbalancedChen/Part3OffDiagonalModuli.lean)
+
+完整 `RestrictedMediumObligation` 和 `UniformPrimeProductTarget` 仍开放。P3.5 原始 S2 调用仍需接入固定 $d$ 的有限式，并把遗漏尾项汇总到完整误差。手稿 (24) 仍需物理权重全范围上的 Pascadi J、实际 ABL packet 归一化和 $\vartheta=7/32$ 谱输入。例如 $Z$ 为 $S^2$、$V$ 为 $S$ 量级时，完整 J 权重达到 $S^3$ 量级。素数乘积组装仍需展开各阶卷积的实际因子图册、界定素数幂残差，以及支付耦合的 Fourier 分离与尾界。
+
 ## 2026-11-23 第二批本地续证
 
 - **手稿 (17)、(18)**。原始 E1 复权和保留 $\varphi(qs)qr$ 分母、两侧互素门、正负频率和原始 $r,s$ 支撑。Cauchy 平方把模数 $qr,qr'$ 的相位积提升到 $qrr'$，再分别计数零行列式及支付 Weil 和非零行列式的 Ramanujan 项。在固定多项式包络和原始对数截断下，项目的实尺度闭区间 `factorCarrier` 上的 E1 和满足三项乘任意固定 $X^\varepsilon$ 的估计 (18)。[平滑完成](../../ImbalancedChen/Part3SmoothReciprocalWeil.lean) · [加权 Cauchy](../../ImbalancedChen/Part3E1FiniteCauchy.lean) · [实尺度 (18)](../../ImbalancedChen/Part3E1RealScales.lean)
