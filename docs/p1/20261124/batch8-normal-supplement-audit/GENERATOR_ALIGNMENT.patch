@@ -1,0 +1,254 @@
+--- history/prepare_batch8_normal_audit_bf59.py
++++ prepare_batch8_normal_audit.py
+@@ -7,6 +7,7 @@
+ from __future__ import annotations
+ 
+ import argparse
++import base64
+ from datetime import datetime
+ import hashlib
+ import json
+@@ -35,6 +36,23 @@
+     "batch8-completed-normal-supplement-acceptance"
+ )
+ COMPLETE_STATUS = "PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS"
++PRESERVE_REVIEW_COMMIT = "ccb0f2e25c288a5c865241f392cc5586e6bc2847"
++PRESERVE_PREFIX = PREFIX + "batch8-preserved-cloud-dependencies/"
++PRESERVE_PACKAGE_SHA = "e169eab27d8e2f11c69cdfc73cd177abd3ae59cb757d5c7d1c32a477d3cd461c"
++PRESERVE_MANIFEST_SHA = "c5823a4d466c75f7a52675dcf86b3cbe23702de9a760a395620c39b78cbc7cd1"
++PRESERVE_CONTEXT_SHA = "abb849aec311b84e039b6c3ecfdde710f72517f6ab41064420e96149432d2fa2"
++PRESERVE_DONOR_COMMIT = "a5a42f8f70418a7b2b8a378713911e829786ec8b"
++PRESERVE_ALLOWLIST = {
++    "ImbalancedChen.P2PositiveAffineSimplexLogJensen":
++        ("2c4cac96d6b340d91478be773a80ccead2004a49e217026a5914ebd879e5101f",
++         "e6f14d4c857bef8550499fa1637904a6940ec416"),
++    "ImbalancedChen.P2DegreeSixLogGapSoundness":
++        ("50efb68de1d444a77b8374e4c7245bba0b28977de006879f3a466aed1f4ef39c",
++         "d8501525f7fcc6449dbfcc1856e7e4d392cfc4ee"),
++    "ImbalancedChen.P2OriginalLogMomentQ96Checker":
++        ("49dddfb3fd522baed9938278d1711030ce204e0954c83758590b173e4197925c",
++         "c6544018c3d6e78320c8a6d7590ad84a4699c59c"),
++}
+ 
+ 
+ class EvidenceError(ValueError):
+@@ -183,6 +201,119 @@
+         if (match := helper.BUILT.match(line))
+     ]
+     return built, failed, headers
++
++
++def preserved_ancestor_sources(args, normal, review, context, candidates, helper):
++    """Admit only the three already-present, published, non-target ancestors."""
++    require(review.commit == PRESERVE_REVIEW_COMMIT,
++            "preserved_binding_requires_exact_review_commit")
++    require(not set(PRESERVE_ALLOWLIST) & set(candidates),
++            "preserved_ancestor_is_a_normal_target")
++    context_path = args.evidence_root / "PROJECT_SOURCE_CONTEXT.json"
++    require(digest_file(context_path) == PRESERVE_CONTEXT_SHA,
++            "preserved_binding_actual_batch8_context_changed")
++    package_raw = review.read(PRESERVE_PREFIX + "PACKAGE_BINDING.json")
++    require(sha(package_raw) == PRESERVE_PACKAGE_SHA, "preserved_package_binding_changed")
++    package = json.loads(package_raw)
++    files = {}
++    for name, bound in package["files"].items():
++        data = review.read(PRESERVE_PREFIX + name)
++        require(sha(data) == bound["sha256"] and len(data) == bound["bytes"],
++                "preserved_published_package_member_changed", name)
++        files[name] = data
++    require(sha(files["MANIFEST.json"]) == PRESERVE_MANIFEST_SHA,
++            "preserved_source_manifest_changed")
++    manifest = json.loads(files["MANIFEST.json"])
++    require(manifest["source_context"]["sha256"] == PRESERVE_CONTEXT_SHA and
++            manifest["published_commit"] == PRESERVE_DONOR_COMMIT and
++            manifest["new_proofs_authored"] == 0 and manifest["lean_invocations"] == 0,
++            "preserved_manifest_origin_or_scope_changed")
++    rows = {r["module"]: r for r in manifest["modules"]}
++    require(len(manifest["modules"]) == 3 and set(rows) == set(PRESERVE_ALLOWLIST),
++            "preserved_module_allowlist_changed")
++    artifacts = json.loads(files["CLOUD_ARTIFACT_BINDINGS.json"])
++    export_raw = args.preserved_source_export.read_bytes()
++    require(sha(export_raw) == artifacts["original_export_sha256"],
++            "independent_preserved_cloud_export_changed")
++    export = json.loads(export_raw)
++    require(export["project"] == PROJECT and export["project_source_mutated"] is False and
++            export["compiled"] is False and artifacts["project_source_mutated"] is False and
++            artifacts["compiled"] is False, "preserved_cloud_export_is_not_read_only_evidence")
++    exports = {r["module"]: r for r in export["records"]}
++    fingerprints = {r["module"]: r for r in artifacts["records"]}
++    require(len(export["records"]) == len(artifacts["records"]) == 3 and
++            set(exports) == set(fingerprints) == set(rows), "preserved_export_module_set_changed")
++    donor = GitTree(args.preserved_donor_repo, PRESERVE_DONOR_COMMIT)
++    admitted = {}
++    try:
++        for m, row in rows.items():
++            rel = helper.module_path(m)
++            digest, blob = PRESERVE_ALLOWLIST[m]
++            require(row["path"] == row["git_path"] == rel and
++                    row["git_commit"] == PRESERVE_DONOR_COMMIT and
++                    row["preserved_cloud_sha256"] == digest and row["git_blob_sha1"] == blob and
++                    row["action"] == "PRESERVE_EXISTING_CLOUD_BYTES_NO_CLOUD_INSTALL_OR_REBUILD",
++                    "preserved_donor_manifest_binding_changed", m)
++            raw = base64.b64decode(exports[m]["source_base64"], validate=True)
++            require(sha(raw) == digest and len(raw) == row["bytes"] ==
++                    exports[m]["source_bytes"] and exports[m]["source_sha256"] == digest,
++                    "preserved_export_source_bytes_mismatch", m)
++            require(donor.blobs[rel] == blob and donor.read(rel) == raw ==
++                    files[rel] == review.read(rel),
++                    "preserved_donor_export_package_review_not_identical", m)
++            require(sha(normal.read(rel)) == row["canonical_old_sha256"] and
++                    normal.read(rel) != raw, "preserved_historical_preimage_mismatch", m)
++            deps = [d for d in helper.imports(raw) if d.startswith("ImbalancedChen.")]
++            require(m in context and context[m] ==
++                    {"sha256": digest, "bytes": len(raw), "imports": deps},
++                    "preserved_actual_batch8_context_mismatch", m)
++            require(deps == [d for d in helper.imports(normal.read(rel))
++                             if d.startswith("ImbalancedChen.")],
++                    "preserved_project_imports_changed", m)
++            binding = fingerprints[m]
++            require(binding == {k: exports[m][k] for k in
++                    ("module", "source_sha256", "source_bytes", "source_plus_five_outputs")},
++                    "preserved_source_plus_five_export_binding_mismatch", m)
++            stem = m.replace(".", "/")
++            paths = {rel, ".lake/build/lib/lean/" + stem + ".olean",
++                     ".lake/build/lib/lean/" + stem + ".ilean",
++                     ".lake/build/ir/" + stem + ".c",
++                     ".lake/build/ir/" + stem + ".setup.json",
++                     ".lake/build/lib/lean/" + stem + ".trace"}
++            require(set(binding["source_plus_five_outputs"]) == paths and
++                    binding["source_plus_five_outputs"][rel] ==
++                    {"bytes": len(raw), "sha256": digest},
++                    "preserved_source_plus_five_scope_mismatch", m)
++            for fingerprint in binding["source_plus_five_outputs"].values():
++                require(isinstance(fingerprint["bytes"], int) and fingerprint["bytes"] > 0 and
++                        re.fullmatch(r"[0-9a-f]{64}", fingerprint["sha256"]),
++                        "invalid_preserved_artifact_fingerprint", m)
++            admitted[m] = {
++                "raw": raw, "donor": donor.metadata(rel),
++                "historical_normal15_preimage": normal.metadata(rel),
++                "actual_source_plus_five_outputs": binding["source_plus_five_outputs"],
++                "binding_basis": "ALREADY_PRESENT_CLOUD_SOURCE_EXACT_PUBLIC_A5A_DONOR_NOT_NORMAL15_BLOB"
++            }
++        provenance = {
++            "status": "THREE_EXACT_EXISTING_CLOUD_ANCESTORS_PRESERVED_NO_NEW_ACCEPTANCE",
++            "published_alignment_commit": review.commit,
++            "published_package": review.metadata(PRESERVE_PREFIX + "PACKAGE_BINDING.json"),
++            "published_manifest": review.metadata(PRESERVE_PREFIX + "MANIFEST.json"),
++            "published_artifact_binding": review.metadata(PRESERVE_PREFIX + "CLOUD_ARTIFACT_BINDINGS.json"),
++            "published_contract_comparison": review.metadata(PRESERVE_PREFIX + "DECLARATION_COMPARISON.json"),
++            "published_existing_receipts": review.metadata(PRESERVE_PREFIX + "REUSED_ACCEPTANCE_RECORDS.json"),
++            "actual_batch8_source_context": file_info(context_path),
++            "independent_cloud_export": file_info(args.preserved_source_export),
++            "donor_commit": donor.commit, "donor_tree": donor.tree,
++            "donor_repository_read_only": str(args.preserved_donor_repo.resolve()),
++            "all_three_non_target_ancestors": True,
++            "modules": {m: {k: v for k, v in r.items() if k != "raw"} for m, r in admitted.items()},
++            "new_source_writes": 0, "new_compile_or_acceptance": False,
++            "historical_receipts_not_promoted_to_new_p1_full_owned_acceptance": True
++        }
++        return admitted, provenance
++    finally:
++        donor.close()
+ 
+ 
+ def prepare(args):
+@@ -356,12 +487,15 @@
+                             "owned_count": receipt["total_owned_exports"],
+                             "repeated_by_this_plan": False}
+ 
++        preserved, preserve_provenance = preserved_ancestor_sources(
++            args, normal, review, context, candidates, helper)
+         graph, sources = {}, {}
+         def visit(m):
+             if m in graph:
+                 return
+             rel = helper.module_path(m)
+-            raw = normal.read(rel)
++            preserved_row = preserved.get(m)
++            raw = preserved_row["raw"] if preserved_row else normal.read(rel)
+             deps = [d for d in helper.imports(raw) if d.startswith("ImbalancedChen.")]
+             require(m in context and sha(raw) == context[m]["sha256"] and len(raw) == context[m]["bytes"],
+                     "normal_project_ancestor_source_not_bound_to_actual_context", m)
+@@ -370,9 +504,15 @@
+             require(review.read(rel) == raw, "project_ancestor_changed_since_normal",
+                     {"module": m, "normal_sha256": sha(raw), "review_sha256": sha(review.read(rel))})
+             graph[m] = deps
+-            sources[m] = {**review.metadata(rel), "imports": deps,
+-                          "normal_source_commit": NORMAL_COMMIT,
+-                          "normal_source_git_blob_sha1": normal.blobs[rel]}
++            origin = preserved_row["donor"] if preserved_row else normal.metadata(rel)
++            sources[m] = {
++                **review.metadata(rel), "imports": deps,
++                "normal_source_commit": origin["source_commit"],
++                "normal_source_git_blob_sha1": origin["git_blob_sha1"],
++                "normal_build_context_commit": NORMAL_COMMIT,
++                "source_binding_basis": preserved_row["binding_basis"] if preserved_row else
++                    "EXACT_NORMAL15_SOURCE_MATCHES_ACTUAL_CONTEXT_AND_REVIEW"
++            }
+             for d in deps:
+                 visit(d)
+         for m in selected:
+@@ -380,6 +520,7 @@
+         closures = {m: sorted(helper.closure(graph, [m])) for m in selected}
+         require(set(sources) == set().union(*(set(c) for c in closures.values())),
+                 "audit_source_closure_not_exact")
++        preserve_provenance["used_in_selected_audit_closure"] = sorted(set(preserved) & set(sources))
+         concurrent = list(dict.fromkeys(args.concurrent_module))
+         for m in concurrent:
+             helper.module_path(m)
+@@ -417,10 +558,15 @@
+             "successful_normal_not_to_be_repeated": True,
+             "whole_P1_complete": False, "full_selected_11026_accepted": False,
+             "source_context_binding": {
+-                "kind": "COMPLETE_ORIGINAL_BATCH8_SOURCE_CONTEXT_MATCHES_REVIEW_GIT_TREE",
++                "kind": "COMPLETE_ACTUAL_BATCH8_CONTEXT_NORMAL15_TARGETS_PLUS_FIXED_A5A_ANCESTORS",
+                 "normal_commit": NORMAL_COMMIT, "review_commit": review.commit,
+                 "review_tree": review.tree, "project_module_count": len(sources),
+-                "actual_cloud_source_gate_required": True, "current_cloud_readiness_claimed": False
++                "actual_cloud_source_gate_required": True, "current_cloud_readiness_claimed": False,
++                "preserved_ancestor_donor_commit": PRESERVE_DONOR_COMMIT,
++                "preserved_ancestor_modules": preserve_provenance["used_in_selected_audit_closure"],
++                "preserved_ancestor_manifest_sha256": PRESERVE_MANIFEST_SHA,
++                "actual_batch8_context_sha256": PRESERVE_CONTEXT_SHA,
++                "all_selected_targets_remain_exact_normal15_sources": True
+             },
+             "runner_binding": {
+                 "repository_path": RUNNER_PATH, "reviewed_commit": review.commit, "sha256": RUNNER_SHA,
+@@ -461,6 +607,7 @@
+             "target_count": len(selected), "project_source_count": len(sources),
+             "current_project_import_graph": graph, "current_expected_source_metadata": sources,
+             "prior17_actual_acceptance": prior_result,
++            "preserved_ancestor_source_provenance": preserve_provenance,
+             "prior_exclusions_basis": {
+                 "original_prior17_plan": file_info(root / "inputs/AUDIT_PLAN.json"),
+                 "excluded_prior13": excluded13, "previous_complete_modules": prior["reused_complete_modules"]
+@@ -497,11 +644,18 @@
+         for p, meta in sorted(evidence.used.items()):
+             require(digest_file(p) == meta["sha256"], "evidence_changed_during_preparation", p)
+             archive.add(p, arcname=meta["archive_member"], recursive=False)
++        preserved_export = provenance["preserved_ancestor_source_provenance"]["independent_cloud_export"]
++        require(digest_file(preserved_export["local_path"]) == preserved_export["sha256"],
++                "preserved_export_changed_during_preparation")
++        archive.add(preserved_export["local_path"],
++                    arcname="preserved-cloud-dependencies/EXPORTED_SOURCES.json", recursive=False)
+     if selection["actual_built_targets"]:
+         (args.out / "AUDIT_PLAN.json").write_bytes(json_bytes(plan))
+         provenance["audit_plan_sha256"] = digest_file(args.out / "AUDIT_PLAN.json")
+     provenance["raw_evidence_bundle"] = file_info(bundle)
+     (args.out / "PROVENANCE.json").write_bytes(json_bytes(provenance))
++    (args.out / "PRESERVED_SOURCE_BINDINGS.json").write_bytes(
++        json_bytes(provenance["preserved_ancestor_source_provenance"]))
+     (args.out / "SOURCE_GRAPH.json").write_bytes(json_bytes({
+         "source_commit": plan["source_review_head"],
+         "graph": provenance["current_project_import_graph"],
+@@ -532,6 +686,10 @@
+                         help="The independently bound original archive-index SHA; never inferred by this script.")
+     parser.add_argument("--review-commit", required=True,
+                         help="Full published source commit for the proposed subsequent audit run.")
++    parser.add_argument("--preserved-donor-repo", required=True, type=Path,
++                        help="Existing read-only local Git repository containing the exact a5a donor tree.")
++    parser.add_argument("--preserved-source-export", required=True, type=Path,
++                        help="Original independent three-source export; hash is fixed by the published ccb package.")
+     parser.add_argument("--prior-audit-receipt", type=Path,
+                         help="Optional explicit exported prior audit17 VALIDATION_RESULTS.json path.")
+     parser.add_argument("--out", required=True, type=Path,
