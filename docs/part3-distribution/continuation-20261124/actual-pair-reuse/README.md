@@ -29,7 +29,15 @@ the fixed donor receipt hashes.
 
 The fixed donor root has a 94-module project import closure. The canonical P3
 checkout already contains 74 byte-identical modules. This staging area supplies
-the missing 19 modules. Eighteen are copied byte for byte from the fixed donor.
+the missing 19 modules. Fifteen are copied byte for byte from the fixed donor.
+Three use the already accepted proof-only postimages at
+`48db3d603d632bc60037e149a55717832e4c04be`, selected by the donor's own
+`modern-frontier-existing-repairs.json`: `P4BPhysicalProductOuterRamp`,
+`P4BOuterRampRoughness`, and `P4BSmoothPhysicalPairOuterRamp`.
+Their original acceptance is in `verification/rebuild-20261030/batch043`
+and `batch045`. Imports, definitions and theorem statement headers are
+unchanged. The canonical blue tree had retained the earlier preimages;
+the selection manifest now records both hashes and the exact selected commit.
 
 The remaining module, `FiniteUpperCarrierCore`, retains every existing finite
 identity declaration and proof verbatim. Its two definitions
@@ -78,8 +86,12 @@ The changed Core and new adapter are selected together by
 `verification/verify_part3_continuation.py --group actual-pair` for strict
 compilation, kernel replay and the original complete serialized declaration
 inventory/transitive-axiom acceptance. The source manifest hashes are checked
-for every reused file, and all original package/configuration pins remain. The eighteen byte-identical donor
-modules keep their existing proof sources and donor provenance.
+for every reused file, and all original package/configuration pins remain.
+The eighteen reused donor/repair modules keep their existing proof sources
+and acceptance provenance. Necessary dependency builds check their use in
+the current import context. Historical normal/kernel/axiom receipts are not
+described as current strict-warning-free receipts; the unchanged repairs
+retain some harmless old linter/deprecation warnings.
 
 This adapter closes the weight geometry and amplitude inputs for this actual
 rank-two source. It does not prove the manuscript's spectral estimate, select
@@ -97,3 +109,14 @@ checked. The full original type/axiom log remains at the fixed donor's
 [batch86 evidence](https://github.com/UyNewNas/goldbach-formalization/tree/10b89181754c78c0e77616677295ee2105de0bb6/docs/verification/20261123-blue-compilation/member-repair-batch86).
 Only the new adapter and changed compatibility module are being re-audited;
 necessary dependency builds do not constitute new mathematics.
+
+## Dependency build history
+
+The initial run at `020456c2` reached the service's 1,800-second limit while
+building missing pinned dependencies, without a Lean error. The resumed run
+reused that cache and reached the stale physical-product preimage. Its
+elaboration errors prompted the existing-repair lookup above. The exact
+task statuses and build-log hashes are retained in
+[initial-build-timeout.json](initial-build-timeout.json) and
+[dependency-selection-failure.json](dependency-selection-failure.json).
+Neither attempt is a successful verification receipt.

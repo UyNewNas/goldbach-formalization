@@ -268,8 +268,12 @@ Thus this source's `hGeometry` and `hW` are proved rather than assumed.
 The final threshold remains before B/Q/rho/chi. The modulus cap, fixed
 rho divisor order and original cutoff conditions remain explicit.
 
-Eighteen missing donor files are copied byte-for-byte from the fixed blue
-commit. `FiniteUpperCarrierCore` imports the unchanged existing Attachment
+Fifteen missing donor files are copied byte-for-byte from the fixed blue
+commit; three reuse the exact existing accepted proof repairs at
+`48db3d603d632bc60037e149a55717832e4c04be`, after the dependency build showed
+that the canonical blue tree still held their preimages. Those repairs
+preserve imports, definitions and theorem statements. `FiniteUpperCarrierCore`
+imports the unchanged existing Attachment
 instead of redeclaring its two identical rho/carrier definitions; every
 old finite identity proof is retained. The full adapter import closure
 has 125 project modules, no missing file and no cycle. Independent review
@@ -277,6 +281,23 @@ found no blocking semantic issue. [Provenance](continuation-20261124/actual-pair
 binds all file hashes and the original profile acceptance. The changed
 Core and actual adapter await a dedicated two-module acceptance; the
 previous eight-module receipt remains valid for its unchanged sources.
+
+## Task-internal parallel compilation
+
+Workspace Compile 27f68009 permits four CPU quota cores but executes one
+service task at a time. A capability probe ran two independent direct
+`lean -j1` processes concurrently in one task. Both exited successfully and
+produced their own objects; their execution intervals overlapped for 0.425
+seconds. The task used 0.8 CPU-seconds in 0.501 seconds of wall time, with a
+combined sampled peak RSS of 994,582,528 bytes. The exact report is retained
+in [parallel-compile-capability.json](continuation-20261124/parallel-compile-capability.json).
+
+This establishes lightweight task-internal parallelism, not a safe budget
+for two full-Mathlib compilations: the current dependency run alone reached
+8,671,346,688 bytes, and heavier preliminary probes exceeded their small
+2/4 GB allocations. The probe adds no manuscript theorem or P3 acceptance
+credit. Independent lightweight work can be parallelized; heavy proof gates
+retain an explicit memory budget and preserve their dependency order.
 
 ## Existing regular-spectral proof to reuse
 
