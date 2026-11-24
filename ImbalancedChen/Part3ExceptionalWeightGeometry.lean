@@ -182,7 +182,7 @@ theorem classicalMScale_bounds (j : ℕ) :
   have hvN : 1 ≤ (2 : ℕ) ^ j :=
     Nat.succ_le_iff.mpr (pow_pos (by norm_num : 0 < (2 : ℕ)) j)
   have hv : (1 : ℝ) ≤ (2 : ℝ) ^ j := by exact_mod_cast hvN
-  simp only [classicalMScale, Nat.cast_pow, Nat.cast_ofNat]
+  simp only [classicalMScale, Nat.cast_ofNat]
   constructor
   · linarith only [hv]
   constructor <;> linarith only [hv]
