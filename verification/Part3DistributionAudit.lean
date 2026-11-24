@@ -71,6 +71,13 @@ import ImbalancedChen.Part3E1GevreyWindow
 import ImbalancedChen.Part3ProperPrimePowerCount
 import ImbalancedChen.Part3OffDiagonalModuli
 import ImbalancedChen.Part3E1SameCutoffTail
+import ImbalancedChen.Part3E1ProfileS2Progression
+import ImbalancedChen.Part3E1SameCutoffProgression
+import ImbalancedChen.Part3E1WholeTail
+import ImbalancedChen.Part3E1PhysicalTail
+import ImbalancedChen.Part3E1GevreyTailEnvelope
+import ImbalancedChen.Part3E1MediumPhysical
+import ImbalancedChen.Part3E1NativeS2Fibres
 import Lean.Util.CollectAxioms
 
 /-!
@@ -166,7 +173,14 @@ run_cmd do
     `ImbalancedChen.Part3E1GevreyWindow,
     `ImbalancedChen.Part3ProperPrimePowerCount,
     `ImbalancedChen.Part3OffDiagonalModuli,
-    `ImbalancedChen.Part3E1SameCutoffTail]
+    `ImbalancedChen.Part3E1SameCutoffTail,
+    `ImbalancedChen.Part3E1ProfileS2Progression,
+    `ImbalancedChen.Part3E1SameCutoffProgression,
+    `ImbalancedChen.Part3E1WholeTail,
+    `ImbalancedChen.Part3E1PhysicalTail,
+    `ImbalancedChen.Part3E1GevreyTailEnvelope,
+    `ImbalancedChen.Part3E1MediumPhysical,
+    `ImbalancedChen.Part3E1NativeS2Fibres]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with

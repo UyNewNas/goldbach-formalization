@@ -68,7 +68,9 @@ MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3E1MediumWindowBound", "Part3TwoLongRoughSigned",
     "Part3PrimeProductVonMangoldt", "Part3LabelledHeathBrown",
     "Part3E1GevreyWindow", "Part3ProperPrimePowerCount", "Part3OffDiagonalModuli",
-    "Part3E1SameCutoffTail"))
+    "Part3E1SameCutoffTail", "Part3E1ProfileS2Progression", "Part3E1SameCutoffProgression",
+    "Part3E1WholeTail", "Part3E1PhysicalTail", "Part3E1GevreyTailEnvelope",
+    "Part3E1MediumPhysical", "Part3E1NativeS2Fibres"))
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/Part3DistributionAudit.lean"
 WORKFLOW = ".github/workflows/part3-distribution.yml"

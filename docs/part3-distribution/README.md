@@ -1,5 +1,10 @@
 # Part 3：算术分布与实际误差供应者交接
 
+## 2026-11-24 物理 S2 续证
+
+- **完整物理级数与遗漏尾项。** 自然数样本上的原始同余求和精确等于零 Fourier 项加带符号的完整非零频率级数。两侧独立互素门和右侧 $\varphi(qds)$ 逐项保留。对当前已验证的 Gevrey 平顶窗，实际支撑和粗糙系数使总尾项的多项式系数至多为 $81{,}920X^8$。取 $K=12$ 后，完整物理 S2 扣除精确零项并除以 $V$，满足 (20) 的同一 $X^{-\sigma/2}$ 节省。[原始同余的 Poisson 恒等式](../../ImbalancedChen/Part3E1ProfileS2Progression.lean) · [总尾项](../../ImbalancedChen/Part3E1PhysicalTail.lean) · [归一化物理界](../../ImbalancedChen/Part3E1MediumPhysical.lean)
+- **归档 S2 的接合。** 归档的恢复和 `restoredSum` 使用一个 $q$、一个 $d$ 与两对独立的粗糙及 $\alpha$ 标签。带标签换序和 Poisson 恒等式接受任意支撑在 $[1/2,5/2]$ 的 Schwartz 样本函数和独立的实数 $q$ 权。要得到归档 S2 的完整误差界，仍须接入归档盒卷积截断及其 Fourier 尾界，并支付移除另一侧粗糙互素门与恢复精确等式 $nm=a$ 的两项差异。手稿也允许从线性插入开始统一选用当前平顶函数。[恢复和的带标签恒等式](../../ImbalancedChen/Part3E1NativeS2Fibres.lean)
+
 ## 2026-11-24 本地续证
 
 - **固定 $d$ 的保留 S2。** 有限式逐项保留 $q'=dq$、两侧平方根平滑权、正负频率、原始 $\varphi(qds)$ 和外部尺度 $V$。闭区间 E1 估计接受精确的模数像和原始子支撑。若粗糙系数范数至多为 $B$，平方范数估计带 $V^2 B^4$。从 `MediumAdmissible` 导出 (19) 的尺度余量和移位 $q$ 小块的多项式包络，再沿显式不交的 $q$ 分块对闭 $d$ 区间求和。除以 $V$ 后得到 (20) 的 $X^{-\sigma/2}$ 节省，粗糙系数使用统一子幂界。[有限重索引](../../ImbalancedChen/Part3E1FixedDSource.lean) · [尺度余量](../../ImbalancedChen/Part3E1MediumMargins.lean) · [(20) 的数值组装](../../ImbalancedChen/Part3E1MediumRetained.lean)
