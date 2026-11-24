@@ -109,8 +109,8 @@ open. No new axiom has been introduced for them.
 | Task | Owner | Status |
 | --- | --- | --- |
 | `Part3SignedModulusPayment`: whole-modulus signed kernel payment | `p3_modulus_payment` | Strict compile and kernel replay passed on Cloud; full inventory pending |
-| `Part3ProperPowerResidualPayment`: actual labelled proper-power residual | `p3_proper_power` | Complete source; development harness passed; actual imports pending |
-| `Part3ProperPowerDyadicBudget`: actual box budget to square-root saving | `p3_power_saving` | Complete source; compilation pending |
+| `Part3ProperPowerResidualPayment`: actual labelled proper-power residual | `p3_proper_power` | Actual-import Lake build passed in run `45340826739`; strict, replay and inventory still pending |
+| `Part3ProperPowerDyadicBudget`: actual box budget to square-root saving | `p3_power_saving` | One actual CI API error repaired; fixed source awaits compilation |
 | `Part3ProperPowerOriginalChart`: original-chart support, volume, empty case and physical cap | root; independent review by `p3_existing_audit` | Complete source at the SHA-256 below; read-only semantic review found no blocking issue; not compiled |
 | `Part3ProperPowerLogSaving`: actual distance, mean and complete-diagonal asymptotic payment | `p3_power_saving` | Complete source; not compiled; awaiting the user-selected Workspace Compile connection |
 | `Part3ExceptionalWeightExtension`: exceptional weight and common integer interval | `p3_spectral_extension` | Strict compile, kernel replay and full axiom inventory passed at `80d7eeb`; 43 declarations |
@@ -182,9 +182,12 @@ compilation. Its private plugin was found, separate from the old
 Cloud Compile connection. The current conversation has not exposed its
 command tools, so no task has been submitted to that environment yet.
 The earlier successful spectral receipt remains valid for its recorded
-source hashes. The pre-existing proper-power GitHub build is retained;
-new checkpoint publication does not start another CI build while waiting
-for the requested environment.
+source hashes. The pre-existing proper-power GitHub build completed its dependency
+construction and built the actual residual module. It reported one error
+in the dyadic budget final sum comparison; the source now uses
+`add_le_add` explicitly, with the unchanged diagonal given by `le_rfl`.
+The fixed source has not been recompiled. New checkpoint publication
+does not start another CI build while waiting for the requested environment.
 
 ## Compilation continuity
 
@@ -202,8 +205,9 @@ result; static review, source-only checks and the development harness are
 not substitutes for that result. The spectral group passed all gates at `80d7eeb`, covering 88 complete
 serialized declarations. Its original artifact, report and complete types
 are retained in `continuation-20261124/spectral-80d7eeb/`. The proper-power
-group is still awaiting its acceptance result; `Part3ProperPowerOriginalChart`
-has no compilation result yet.
+group failed at one source-level API call before its strict/replay/audit
+stages. That call has been fixed; its full acceptance remains pending.
+`Part3ProperPowerOriginalChart` has no compilation result yet.
 
 The proper-power box budget now supplies an explicit `x^(1-a/2)` factor
 from a coordinate lower bound `c*x^a` and complete box volume `C*x`.
@@ -217,5 +221,18 @@ both classical level windows, the positive-integer endpoint `m=1`, and
 a proof of summability before passing from finite spectral sums to `tsum`.
 The actual automorphic input instances and the final uniform P3 assembly
 are still separate obligations.
+
+The first proper-power run was `45340826739`, job `138263810092`, at
+`21bd742f8e42e7ba2fb507bddc47ff40d94b25f2`. The actual-import build of
+`Part3ProperPowerResidualPayment` passed. The sole error in the new
+modules was the `add_le_add_right` API mismatch in
+`Part3ProperPowerDyadicBudget`; it is now replaced by
+`refine add_le_add ?_ le_rfl`, without changing the theorem statement.
+The failed verification artifact is `14898615187` (SHA-256
+`c8ab6a5e44d47b2b32cce50871f1de5c59f5ffcafa945b7fb0730ec0fdb351bd`).
+The run saved a reusable 9,844,306,019-byte Lake dependency tree with key
+`lake-Linux-X64-d450b2731e0e580dd4810dc06549d62b51dd63f81f1e56526d8ca765965a4618-61a3b1a855fb0d2910782499918e9924f5abf5dad42616522ef96e26cf7641ca-21bd742f8e42e7ba2fb507bddc47ff40d94b25f2`.
+This cache is a reusable build artifact, not a substitute for the
+remaining strict/replay/axiom gates.
 
 This file is a work ledger, not a completion certificate.

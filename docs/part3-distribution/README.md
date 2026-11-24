@@ -7,8 +7,8 @@
 | 新模块 | 稿内工作 | 当前验收状态 |
 | --- | --- | --- |
 | [SignedModulusPayment](../../ImbalancedChen/Part3SignedModulusPayment.lean) | 同一模数权的非对角除数付款、精确互素均值和真实对角分离 | Cloud strict 和 kernel replay 已通过；完整声明审计待增量 CI |
-| [ProperPowerResidualPayment](../../ImbalancedChen/Part3ProperPowerResidualPayment.lean) | 实际 labelled 残差的盒计数、零纤维、对角及 prime/VM 接合 | 完整开发 harness 已通过；原 import 正式验收待 CI |
-| [ProperPowerDyadicBudget](../../ImbalancedChen/Part3ProperPowerDyadicBudget.lean) | 从实际盒预算和几何范围推出 `x^(1-a/2)` 节省 | 源码完成，待编译 |
+| [ProperPowerResidualPayment](../../ImbalancedChen/Part3ProperPowerResidualPayment.lean) | 实际 labelled 残差的盒计数、零纤维、对角及 prime/VM 接合 | 实际 imports 的 `lake build` 已通过；strict、kernel 与完整公理审计待验收 |
+| [ProperPowerDyadicBudget](../../ImbalancedChen/Part3ProperPowerDyadicBudget.lean) | 从实际盒预算和几何范围推出 `x^(1-a/2)` 节省 | 已按实际 CI 修正加法单调性调用；修复后待编译 |
 | [ProperPowerOriginalChart](../../ImbalancedChen/Part3ProperPowerOriginalChart.lean) | 从原整数平移 dyadic 图册的有效支持推出盒几何，处理空图册并绑定物理坐标 cap | 源码完成，独立只读语义审查完成；尚未编译 |
 | [ProperPowerLogSaving](../../ImbalancedChen/Part3ProperPowerLogSaving.lean) | 复用已有除数小幂、模数均值和对数吸收，把原图册的实际残差预算收束到任意实数对数幂 | 源码完成，独立语义审查完成；尚未编译，等待指定的新环境验收 |
 | [ExceptionalWeightExtension](../../ImbalancedChen/Part3ExceptionalWeightExtension.lean) | 共同相位、任意谱权重、一般公共整数区间及完整前缀谱和的可和性 | strict、kernel replay、完整声明／传递公理审计已通过（43 声明） |

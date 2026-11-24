@@ -155,7 +155,7 @@ theorem labelledProperPowerResidual_signedError_norm_le_power_scale
       (M * (properPowerDiagonalBudget k N : ℝ)) * SignedModulusPayment.modulusMass Q ρ := by
   apply (labelledProperPowerResidual_signedError_norm_le
     k P N J D B Q ρ W U hM hCρ hW hU hρ hD).trans
-  apply add_le_add_right
+  refine add_le_add ?_ le_rfl
   apply mul_le_mul_of_nonneg_right
   · exact mul_le_mul_of_nonneg_left
       (properPowerBoxBudget_le_power_scale k U Y hx hc hLower hUpper hVolume) hM
