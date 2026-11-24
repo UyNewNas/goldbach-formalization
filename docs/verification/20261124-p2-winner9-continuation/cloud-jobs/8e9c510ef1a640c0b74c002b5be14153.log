@@ -1,0 +1,36 @@
+START ImbalancedChen.P2Winner9RowArithmeticChecker
+FAILED ImbalancedChen.P2Winner9RowArithmeticChecker 1
+ImbalancedChen/P2Winner9RowArithmeticChecker.lean:164:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  forceFn (forceFn forceRat) ?f ?k
+in the target expression
+  (let B := swapPivot A p;
+    forceFn (fun row k => forceFn forceRat row k) (pivotMinor B) fun C x =>
+      (if p = 0 then 1 else -1) * B 0 0 * fastDetCore C) =
+    A.det
+
+case h_2
+n : ℕ
+ih : ∀ (A : Matrix (Fin n) (Fin n) ℚ), fastDetCore A = A.det
+A : Matrix (Fin (n + 1)) (Fin (n + 1)) ℚ
+x✝ : Option (Fin (n + 1))
+p : Fin (n + 1)
+h : List.find? (fun i => A i 0 != 0) (List.finRange (n + 1)) = some p
+hp : A p 0 ≠ 0
+h00 : swapPivot A p 0 0 = A p 0
+⊢ (let B := swapPivot A p;
+    forceFn (fun row k => forceFn forceRat row k) (pivotMinor B) fun C x =>
+      (if p = 0 then 1 else -1) * B 0 0 * fastDetCore C) =
+    A.det
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    pivotMinor B
+  has type
+    Matrix (Fin n) (Fin n) ℚ
+  but is expected to have type
+    Fin n → Fin n → ℚ
+  in the application
+    forceFn (fun row k => forceFn forceRat row k) (pivotMinor B)
+
+{"roots": ["ImbalancedChen.P2Winner9SelectedArchiveChecker"], "restored_or_reused": 53, "failed_or_blocked": ["ImbalancedChen.P2Winner9RowArithmeticChecker", "ImbalancedChen.P2Winner9SelectedArchiveChecker"], "total": 55}

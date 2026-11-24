@@ -1,7 +1,14 @@
 import ImbalancedChen.P2Winner9LedgerBridge
 import ImbalancedChen.P2Winner9ArchiveIntegral
+import ImbalancedChen.P2Winner9CompletePullingGeometry
+import ImbalancedChen.P2Winner9CompleteNumericalChecks
 
-/-! Assembly of the original complete Winner9 ledger at terminal 41. -/
+/-! SOURCE ONLY / NOT COMPILED.
+Assembly of the original complete Winner9 ledger at literal terminal 41.
+The complete numerical and pulling modules must be accepted before this
+closed statement receives any formal credit. The original Full87 cellIntegral
+identity is a separate bridge; it is not asserted by this file.
+-/
 
 namespace ImbalancedChen.P2Winner9CompleteSeedTerminal
 
@@ -9,7 +16,6 @@ open Set MeasureTheory
 open P2Winner9CompleteSeedData (RowIndex entry full_source_shapes_and_chronology selected_eq_max_log_mixed)
 open P2Winner9CompleteSeedChronology (adoptedLogTotal selected_real_sum_eq)
 open P2Winner9RowArithmeticChecker (archiveVertices)
-open P2Winner9SelectedArchiveChecker (checkSelected)
 open P2Winner9SelectedRowRealJacobian (sourceSupport)
 open P2Winner9SeedVertexAnalyticGuards (VertexIndex originalPoint)
 open P2Winner9OriginalSourceGates (originalClosedSource originalPhysicalSource sourceWalls
@@ -43,15 +49,13 @@ theorem each_support_density_integrable (i : RowIndex) :
 
 /-- The finite row checks and geometric null-overlap certificates supply
 the adopted log bound plus the two original ledger increments. -/
-theorem complete_seed_ledger_le_terminal41
-    (hcheck : ∀ i : RowIndex, checkSelected (entry i) = true)
-    (hoverlap : Pairwise fun i j : RowIndex => volume
-      (sourceSupport (archiveVertices (entry i)) ∩ sourceSupport (archiveVertices (entry j))) = 0) :
+theorem complete_seed_ledger_le_terminal41 :
     (adoptedLogTotal : ℝ) + (savingLower slot21 : ℝ) + (savingLower slot22 : ℝ) ≤
       terminal41Integral := by
   rw [← selected_real_sum_eq, terminal41_integral_eq]
   exact checked_family_floor entry
     (fun i k => (full_source_shapes_and_chronology.2.2 i).2.2.2.2.1 k)
-    selected_eq_max_log_mixed hcheck hoverlap
+    selected_eq_max_log_mixed P2Winner9CompleteNumericalChecks.selected_checked
+    P2Winner9CompletePullingGeometry.complete_seed_actual_overlap_null
 
 end ImbalancedChen.P2Winner9CompleteSeedTerminal

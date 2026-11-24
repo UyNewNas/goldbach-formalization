@@ -62,3 +62,7 @@ Lean 对原始 201 个顶点逐一核验了全部 97 条编号门条件，并证
 11,026 个原始行的索引与字段拼接已通过严格编译和内核重放。第 0、1、2、3、21、22 行的选定数值证书已合并到终端 41，并以 Lean 严格编译、`leanchecker` 重放和公理审计核验下界 \(3793646749864309049480/2^{96}\)。[完整档案索引](../../../ImbalancedChen/P2Winner9CompleteSeedData.lean) · [终端 41 六行下界](../../../ImbalancedChen/P2Winner9Terminal41SixRows.lean)
 
 整族数值核验、跨块支撑交叠及接入 P2 的 87 个原积分终端仍待完成。整族选定值的汇总草稿及其终端接线保存在 `docs/source-only`。当前构建在汇总证明的 Lean 递归深度处停止，终端接线也依赖整族行检查及零测交叠。[汇总草稿](../../source-only/20261124-p2-winner9/ImbalancedChen/P2Winner9LedgerBridge.lean) · [终端接线草稿](../../source-only/20261124-p2-winner9/ImbalancedChen/P2Winner9CompleteSeedTerminal.lean)
+
+## 20261124 续作
+
+新一轮已严格编译完整几何接口、44 个见证数据块及首末块检查；其余几何行、整族数值分页、账本修复和闭合终端仍待验收。完整记录、源码哈希、实际失败及云端 retained-job 上限见 [20261124 续作记录](../20261124-p2-winner9-continuation/README.md)。本段不改变上面的六行已验收下界，也不将完整 P2 标为完成。

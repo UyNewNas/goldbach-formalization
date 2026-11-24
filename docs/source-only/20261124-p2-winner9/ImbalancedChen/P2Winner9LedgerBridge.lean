@@ -17,6 +17,10 @@ open P2Winner9CompleteSeedData P2Winner9LedgerCore
 set_option maxRecDepth 20000
 set_option maxHeartbeats 8000000
 
+-- The archive module's local transparency settings do not survive an import.
+-- Keep the complete array symbolic: only its named flatten equation is used below.
+attribute [local irreducible] allRows blocks
+
 abbrev SourceOwner := RowIndex
 
 def q96 : Nat := 79228162514264337593543950336
@@ -234,6 +238,54 @@ private theorem block43_totals : selectedTotals P2Winner9CompleteSeedBlock43.row
     (11779887571055696, 11779887571055696, 11779887571055696) := by
   decide +kernel
 
+-- Each numerical reduction above is confined to one original block.  Once
+-- those equalities are available, matching them must not unfold the row data.
+attribute [local irreducible] selectedTotals
+  P2Winner9CompleteSeedBlock00.rows
+  P2Winner9CompleteSeedBlock01.rows
+  P2Winner9CompleteSeedBlock02.rows
+  P2Winner9CompleteSeedBlock03.rows
+  P2Winner9CompleteSeedBlock04.rows
+  P2Winner9CompleteSeedBlock05.rows
+  P2Winner9CompleteSeedBlock06.rows
+  P2Winner9CompleteSeedBlock07.rows
+  P2Winner9CompleteSeedBlock08.rows
+  P2Winner9CompleteSeedBlock09.rows
+  P2Winner9CompleteSeedBlock10.rows
+  P2Winner9CompleteSeedBlock11.rows
+  P2Winner9CompleteSeedBlock12.rows
+  P2Winner9CompleteSeedBlock13.rows
+  P2Winner9CompleteSeedBlock14.rows
+  P2Winner9CompleteSeedBlock15.rows
+  P2Winner9CompleteSeedBlock16.rows
+  P2Winner9CompleteSeedBlock17.rows
+  P2Winner9CompleteSeedBlock18.rows
+  P2Winner9CompleteSeedBlock19.rows
+  P2Winner9CompleteSeedBlock20.rows
+  P2Winner9CompleteSeedBlock21.rows
+  P2Winner9CompleteSeedBlock22.rows
+  P2Winner9CompleteSeedBlock23.rows
+  P2Winner9CompleteSeedBlock24.rows
+  P2Winner9CompleteSeedBlock25.rows
+  P2Winner9CompleteSeedBlock26.rows
+  P2Winner9CompleteSeedBlock27.rows
+  P2Winner9CompleteSeedBlock28.rows
+  P2Winner9CompleteSeedBlock29.rows
+  P2Winner9CompleteSeedBlock30.rows
+  P2Winner9CompleteSeedBlock31.rows
+  P2Winner9CompleteSeedBlock32.rows
+  P2Winner9CompleteSeedBlock33.rows
+  P2Winner9CompleteSeedBlock34.rows
+  P2Winner9CompleteSeedBlock35.rows
+  P2Winner9CompleteSeedBlock36.rows
+  P2Winner9CompleteSeedBlock37.rows
+  P2Winner9CompleteSeedBlock38.rows
+  P2Winner9CompleteSeedBlock39.rows
+  P2Winner9CompleteSeedBlock40.rows
+  P2Winner9CompleteSeedBlock41.rows
+  P2Winner9CompleteSeedBlock42.rows
+  P2Winner9CompleteSeedBlock43.rows
+
 private theorem all_row_totals : selectedTotals allRows =
     (475182339168330434688559, 475259749604404591554030, 475741072397709744401965) := by
   rw [allRows, selectedTotals_flatten]
@@ -259,23 +311,27 @@ theorem selected_numerators_exact :
       (475182339168330434688559, 475259749604404591554030, 475741072397709744401965) := by
   calc
     _ = ∑ i : RowIndex, selectedNumerators (entry i) :=
-      (sum_selectedNumerators_components entry).symm
+      (sum_selectedNumerators_components (ι := RowIndex) entry).symm
     _ = ∑ i : RowIndex, selectedNumerators allRows[i.val]! :=
       Finset.sum_congr rfl fun i _ => congrArg selectedNumerators (entry_eq_allRows i)
     _ = selectedTotals allRows :=
-      sum_selectedNumerators_eq full_source_shapes_and_chronology.1
+      sum_selectedNumerators_eq (n := 11026) (rows := allRows)
+        full_source_shapes_and_chronology.1
     _ = _ := all_row_totals
+
+-- Project a symbolic triple before instantiating its coordinates with archive sums.
+-- This keeps projection normalization independent of the 11,026-element index type.
+private theorem nat_triple_components {a b c x y z : ℕ}
+    (h : (a, b, c) = (x, y, z)) : a = x ∧ b = y ∧ c = z := by
+  exact ⟨congrArg (fun t : ℕ × ℕ × ℕ => t.1) h,
+    congrArg (fun t : ℕ × ℕ × ℕ => t.2.1) h,
+    congrArg (fun t : ℕ × ℕ × ℕ => t.2.2) h⟩
 
 theorem full_literal_totals :
     adoptedLogTotal = P2OriginalSeedChronologicalMaxArithmetic.adoptedLogTotal ∧
       curvatureSelectedTotal = P2OriginalSeedChronologicalMaxArithmetic.curvatureSelectedTotal ∧
       mixedSelectedTotal = P2OriginalSeedChronologicalMaxArithmetic.mixedSelectedTotal := by
-  have hl : (∑ i : RowIndex, (entry i).logSelected) = 475182339168330434688559 :=
-    congrArg (fun t : ℕ × ℕ × ℕ => t.1) selected_numerators_exact
-  have hc : (∑ i : RowIndex, (entry i).curvatureSelected) = 475259749604404591554030 :=
-    congrArg (fun t : ℕ × ℕ × ℕ => t.2.1) selected_numerators_exact
-  have hm : (∑ i : RowIndex, (entry i).mixedSelected) = 475741072397709744401965 :=
-    congrArg (fun t : ℕ × ℕ × ℕ => t.2.2) selected_numerators_exact
+  rcases nat_triple_components selected_numerators_exact with ⟨hl, hc, hm⟩
   refine ⟨?_, ?_, ?_⟩
   · rw [adoptedLogTotal, hl]
     norm_num [q96, P2OriginalSeedChronologicalMaxArithmetic.adoptedLogTotal]
