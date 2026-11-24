@@ -1,0 +1,128 @@
+--- baseline.lean
++++ candidate.lean
+@@ -24,7 +24,7 @@
+ noncomputable section
+ open scoped Classical BigOperators
+ 
+-abbrev universe := P2LowerFiniteCellRounding.universe
++abbrev «universe» := P2LowerFiniteCellRounding.universe
+ abbrev primeLabel := P2LowerFiniteCellRounding.primeLabel
+ abbrev primeWordLabel := P2LowerFiniteCellRounding.label
+ 
+@@ -39,7 +39,7 @@
+     List Bool × List ℤ := (tag d, primeWordLabel N tau d)
+ 
+ def cell (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Finset ℕ :=
+-  (universe N cap w z).filter (fun e => label tag N tau e = label tag N tau d)
++  («universe» N cap w z).filter (fun e => label tag N tau e = label tag N tau d)
+ 
+ def inner (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=
+@@ -51,14 +51,14 @@
+ 
+ def coefficient (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : ℝ :=
+-  if d ∈ universe N cap w z then
++  if d ∈ «universe» N cap w z then
+     if 0 ≤ (ArithmeticFunction.moebius d : ℝ) then
+       if outer retainOdd tag N cap w z tau d then (ArithmeticFunction.moebius d : ℝ) else 0
+     else if inner retainOdd tag N cap w z tau d then (ArithmeticFunction.moebius d : ℝ) else 0
+   else 0
+ 
+ theorem rawSupport_subset_universe (retainOdd : List ℕ → Bool)
+-    (N cap : ℕ) (w z : ℝ) : rawSupport retainOdd N cap w z ⊆ universe N cap w z := by
++    (N cap : ℕ) (w z : ℝ) : rawSupport retainOdd N cap w z ⊆ «universe» N cap w z := by
+   intro d hd
+   obtain ⟨leaf, hleaf, hprod⟩ :=
+     (mem_oddFirstExitRetainedModuli retainOdd (fun _ => 1)
+@@ -73,10 +73,10 @@
+     raw retainOdd N cap w z d =
+       if d ∈ rawSupport retainOdd N cap w z then (ArithmeticFunction.moebius d : ℝ) else 0 := by
+   unfold raw fixedRoughCoefficient oddFirstExitRetainedCoefficient rawSupport fixedRoughSupport
+-  split_ifs <;> rfl
++  split_ifs <;> simp only [Int.cast_zero]
+ 
+ theorem self_mem_cell (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)
+-    {d : ℕ} (hd : d ∈ universe N cap w z) : d ∈ cell tag N cap w z tau d :=
++    {d : ℕ} (hd : d ∈ «universe» N cap w z) : d ∈ cell tag N cap w z tau d :=
+   Finset.mem_filter.mpr ⟨hd, rfl⟩
+ 
+ theorem cell_frozen_tag (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)
+@@ -101,6 +101,8 @@
+     |Real.log (p : ℝ) / Real.log N - Real.log (q : ℝ) / Real.log N| < tau := by
+   have hp := P2LowerFiniteCellRounding.primeLabel_halfopen N htau p
+   have hq := P2LowerFiniteCellRounding.primeLabel_halfopen N htau q
++  change P2LowerFiniteCellRounding.primeLabel N tau p =
++    P2LowerFiniteCellRounding.primeLabel N tau q at h
+   rw [h] at hp
+   apply abs_lt.mpr
+   constructor <;> linarith [hp.1, hp.2, hq.1, hq.2]
+@@ -123,7 +125,7 @@
+     (N cap : ℕ) (w z tau : ℝ) (d : ℕ) :
+     raw retainOdd N cap w z d ≤ coefficient retainOdd tag N cap w z tau d := by
+   rw [raw_value]
+-  by_cases hd : d ∈ universe N cap w z
++  by_cases hd : d ∈ «universe» N cap w z
+   · have hself := self_mem_cell tag N cap w z tau hd
+     by_cases hsign : 0 ≤ (ArithmeticFunction.moebius d : ℝ)
+     · by_cases hr : d ∈ rawSupport retainOdd N cap w z
+@@ -154,7 +156,7 @@
+     ∃ e ∈ rawSupport retainOdd N cap w z,
+       e ∈ cell tag N cap w z tau d ∧ tag e = tag d ∧
+         primeWordLabel N tau e = primeWordLabel N tau d := by
+-  have hu : d ∈ universe N cap w z := by
++  have hu : d ∈ «universe» N cap w z := by
+     by_contra hu
+     exact hd (by simp only [coefficient, if_neg hu])
+   have ho : outer retainOdd tag N cap w z tau d := by
+@@ -200,7 +202,7 @@
+   exact ⟨a, (Finset.mem_inter.mp ha).1, b, hb, (Finset.mem_inter.mp ha).2, hbr⟩
+ 
+ theorem changed_implies_crossing (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+-    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ universe N cap w z)
++    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ «universe» N cap w z)
+     (hc : changed retainOdd tag N cap w z tau d) : crossing retainOdd tag N cap w z tau d := by
+   by_cases hsign : 0 ≤ (ArithmeticFunction.moebius d : ℝ)
+   · rw [changed, if_pos hsign] at hc
+@@ -210,7 +212,7 @@
+ 
+ /-- There is no factor two: squarefree parity changes only between zero and one sign. -/
+ theorem abs_coefficient_sub_raw (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+-    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ universe N cap w z) :
++    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ «universe» N cap w z) :
+     |coefficient retainOdd tag N cap w z tau d - raw retainOdd N cap w z d| =
+       if changed retainOdd tag N cap w z tau d then 1 else 0 := by
+   have hmu : |(ArithmeticFunction.moebius d : ℝ)| = 1 := by
+@@ -240,18 +242,18 @@
+ 
+ def changedMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (changed retainOdd tag N cap w z tau),
++  ∑ d ∈ («universe» N cap w z).filter (changed retainOdd tag N cap w z tau),
+     1 / (Nat.totient d : ℝ)
+ 
+ def crossingMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (crossing retainOdd tag N cap w z tau),
++  ∑ d ∈ («universe» N cap w z).filter (crossing retainOdd tag N cap w z tau),
+     1 / (Nat.totient d : ℝ)
+ 
+ /-- Exact literal compiler norm; no wall estimate or compiler-error premise. -/
+ theorem coefficient_error_eq_changedMass (retainOdd : List ℕ → Bool)
+     (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) :
+-    reciprocalTotientDensity (universe N cap w z)
++    reciprocalTotientDensity («universe» N cap w z)
+       (fun d => |coefficient retainOdd tag N cap w z tau d - raw retainOdd N cap w z d|) =
+         changedMass retainOdd tag N cap w z tau := by
+   unfold reciprocalTotientDensity changedMass
+@@ -275,8 +277,8 @@
+ /-- Exact signed density increase equals the nonnegative literal compiler norm. -/
+ theorem rough_density_increase_eq_changedMass (retainOdd : List ℕ → Bool)
+     (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) :
+-    reciprocalTotientDensity (universe N cap w z) (coefficient retainOdd tag N cap w z tau) -
+-      reciprocalTotientDensity (universe N cap w z) (raw retainOdd N cap w z) =
++    reciprocalTotientDensity («universe» N cap w z) (coefficient retainOdd tag N cap w z tau) -
++      reciprocalTotientDensity («universe» N cap w z) (raw retainOdd N cap w z) =
+         changedMass retainOdd tag N cap w z tau := by
+   rw [← coefficient_error_eq_changedMass]
+   unfold reciprocalTotientDensity

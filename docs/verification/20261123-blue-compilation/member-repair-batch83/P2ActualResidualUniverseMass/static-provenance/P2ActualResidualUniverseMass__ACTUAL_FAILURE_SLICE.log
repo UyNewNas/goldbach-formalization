@@ -1,0 +1,36 @@
+✖ [10255/10265] Building ImbalancedChen.P2ActualResidualUniverseMass (12s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P2ActualResidualUniverseMass.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2ActualResidualUniverseMass.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2ActualResidualUniverseMass.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2ActualResidualUniverseMass.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2ActualResidualUniverseMass.setup.json --json
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:24:7: unexpected token 'universe'; expected term
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:24:26: unexpected token ','; expected command
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:27:2: Tactic `apply` failed: could not unify the conclusion of `@Finset.sum_nonneg`
+  0 ≤ ∑ i ∈ ?s, ?f i
+with the goal
+  0 ≤ mass N cap w z
+
+Note: The full type of `@Finset.sum_nonneg` is
+  ∀ {ι : Type ?u.10} {N : Type ?u.9} [inst : AddCommMonoid N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}
+    [AddLeftMono N], (∀ i ∈ s, 0 ≤ f i) → 0 ≤ ∑ i ∈ s, f i
+
+N cap : ℕ
+w z : ℝ
+⊢ 0 ≤ mass N cap w z
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:34:2: Type mismatch: After simplification, term
+  Eq.symm h
+ has type
+  (List.map (fun p => p) (roughPrimeUniverse N cap w z)).prod = ∏ p ∈ roughPrimeFinset N cap w z, p
+but is expected to have type
+  (roughPrimeUniverse N cap w z).prod = (roughPrimeFinset N cap w z).prod id
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:39:67: unsolved goals
+N cap : ℕ
+w z : ℝ
+⊢ sorry N cap w z = ∏ p ∈ roughPrimeFinset N cap w z, (1 + 1 / (↑p - 1))
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:41:2: expected checkColGt
+error: ImbalancedChen/P2ActualResidualUniverseMass.lean:103:43: Application type mismatch: The argument
+  add_le_add_left hfrac 1
+has type
+  K / (omega * Real.log ↑N) + 1 ≤ K + 1
+but is expected to have type
+  1 + K / (omega * Real.log ↑N) ≤ 1 + K
+in the application
+  mul_le_mul_of_nonneg_left (add_le_add_left hfrac 1)
+error: Lean exited with code 1

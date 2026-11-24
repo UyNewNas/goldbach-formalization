@@ -218,9 +218,9 @@ theorem original_tent_old_range (s : TentSum) (k : TentSide) (a b : BoxPoint)
   have hl := div_le_div₀ (hres.le.trans hlow) hlow hz (ht.2 2)
   have hh := div_le_div₀ ((hres.le.trans hlow).trans hhigh) hhigh (ha 2) (ht.1 2)
   constructor
-  · simpa only [tentOldLow,tentOldArgument,affineArgument,oldNumerator] using
+  · simpa only [tentOldLow,tentOldArgument,affineArgument,oldNumerator,add_comm] using
       add_le_add_right hl (oldZ s k)
-  · simpa only [tentOldHigh,tentOldArgument,affineArgument,oldNumerator] using
+  · simpa only [tentOldHigh,tentOldArgument,affineArgument,oldNumerator,add_comm] using
       add_le_add_right hh (oldZ s k)
 
 theorem original_tent_old_span (s : TentSum) (k : TentSide) (a b : BoxPoint)
@@ -236,7 +236,7 @@ theorem original_tent_old_span (s : TentSum) (k : TentSide) (a b : BoxPoint)
   have hfirst := (div_lt_div_iff_of_pos_right hb2).2 hnumlt
   have hsecond := div_le_div₀ (hres.trans hnumlt).le
     (le_refl (oldNumerator s k a)) (ha 2) (hab 2).le
-  simpa only [tentOldLow,tentOldHigh,tentOldArgument,affineArgument,oldNumerator] using
+  simpa only [tentOldLow,tentOldHigh,tentOldArgument,affineArgument,oldNumerator,add_comm] using
     add_lt_add_right (hfirst.trans_le hsecond) (oldZ s k)
 
 theorem original_tent_old_minorant
@@ -311,3 +311,4 @@ theorem original_tent_leaf_exact_candidate
 
 end
 end ImbalancedChen.OriginalThirdSixTentCandidatesSourceOnly
+

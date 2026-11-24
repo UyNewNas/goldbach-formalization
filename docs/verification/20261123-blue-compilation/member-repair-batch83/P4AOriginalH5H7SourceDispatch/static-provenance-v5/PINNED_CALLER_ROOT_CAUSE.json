@@ -1,0 +1,46 @@
+{
+  "norm_num_methods_explicitly_empty_simproc_arrays": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Tactic/NormNum/Core.lean",
+    "bytes": 16229,
+    "sha256": "60010da4c961753d1895171471f7816ca40dd71c1444462f9f66264213fb76da",
+    "start_line": 213,
+    "end_line": 233,
+    "raw_excerpt": "def tryNormNum (post := false) (e : Expr) : SimpM Simp.Step := do\n  try\n    return .done (← eval e post)\n  catch _ =>\n    return .continue\n\n/-- A `Methods` implementation which calls `norm_num`. -/\ndef methods (useSimp := true) : Simp.Methods :=\n  if useSimp then {\n    pre := Simp.preDefault #[] >> tryNormNum\n    post := Simp.postDefault #[] >> tryNormNum (post := true)\n    discharge? := Simp.dischargeGround\n  } else {\n    pre := tryNormNum\n    post := tryNormNum (post := true)\n    discharge? := Simp.dischargeGround\n  }\n\n/-- Traverses the given expression using simp and normalises any numbers it finds. -/\ndef deriveSimp (ctx : Simp.Context) (useSimp := true) (e : Expr) : MetaM Simp.Result :=\n  (·.1) <$> Simp.main e ctx (methods := methods useSimp)\n",
+    "excerpt_sha256": "2bc570c692b176981a9ab799a110521ddf31a0fe01ccb3afdb6bdf41f630d600"
+  },
+  "norm_num_elaboration_discards_simproc_result": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Tactic/NormNum/Core.lean",
+    "bytes": 16229,
+    "sha256": "60010da4c961753d1895171471f7816ca40dd71c1444462f9f66264213fb76da",
+    "start_line": 239,
+    "end_line": 266,
+    "raw_excerpt": "open Tactic in\n/-- Constructs a simp context from the simp argument syntax. -/\ndef getSimpContext (cfg args : Syntax) (simpOnly := false) : TacticM Simp.Context := do\n  let { config, userConfig } ← elabSimpConfigCore cfg\n  let simpTheorems ←\n    if simpOnly then simpOnlyBuiltins.foldlM (·.addConst ·) {} else getSimpTheorems\n  let { ctx, .. } ←\n    elabSimpArgs args[0] (eraseLocal := false) (kind := .simp) (simprocs := {})\n      (← Simp.mkContext config (simpTheorems := #[simpTheorems])\n        (congrTheorems := ← getSimpCongrTheorems) (userConfig := userConfig))\n  return ctx\n\nopen Elab Tactic in\n/--\nElaborates a call to `norm_num only? [args]` or `norm_num1`.\n* `args`: the `(simpArgs)?` syntax for simp arguments\n* `loc`: the `(location)?` syntax for the optional location argument\n* `simpOnly`: true if `only` was used in `norm_num`\n* `useSimp`: false if `norm_num1` was used, in which case only the structural parts\n  of `simp` will be used, not any of the post-processing that `simp only` does without lemmas\n-/\ndef elabNormNum (cfg args loc : Syntax) (simpOnly := false) (useSimp := true) :\n    TacticM Unit := withMainContext do\n  let ctx ← getSimpContext cfg args (!useSimp || simpOnly)\n  let loc := expandOptLocation loc\n  transformAtNondepPropLocation (fun e ctx ↦ deriveSimp ctx useSimp e) \"norm_num\" loc\n    (ifUnchanged := .silent) (mayCloseGoalFromHyp := true) ctx\n\n",
+    "excerpt_sha256": "e2230e47eda3f3b1448c21e2696a675da0aafbdd91a716b32ac6ae78500d4185"
+  },
+  "pinned_standard_simp_only_executes_existing_Fin_and_Matrix_simprocs_example": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/LinearAlgebra/CrossProduct.lean",
+    "bytes": 7105,
+    "sha256": "c2de1917968f25a1a11bb003663cac4aeeb202fd1db77cbea5804d29427bdaa4",
+    "start_line": 175,
+    "end_line": 184,
+    "raw_excerpt": "/-- The scalar triple product expansion of the vector triple product. -/\ntheorem cross_cross_eq_smul_sub_smul (u v w : Fin 3 → R) :\n    u ⨯₃ v ⨯₃ w = (u ⬝ᵥ w) • v - (v ⬝ᵥ w) • u := by\n  simp_rw [cross_apply, vec3_dotProduct]\n  ext i\n  fin_cases i <;>\n  · simp only [Fin.isValue, Nat.succ_eq_add_one, Nat.reduceAdd, Fin.reduceFinMk, cons_val,\n      Pi.sub_apply, Pi.smul_apply, smul_eq_mul]\n    ring\n\n",
+    "excerpt_sha256": "56beb4a38e21f3870116eae0785e12fc218e7b7aa936dde8b597fa5445ae818a"
+  },
+  "second_pinned_standard_simp_only_example": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/AlgebraicGeometry/EllipticCurve/Affine/AddSubMap.lean",
+    "bytes": 7965,
+    "sha256": "f2242f08dad6f6a0c1f097b3491e7f1cdea7576c1933ea6d68fa905babedf725",
+    "start_line": 85,
+    "end_line": 91,
+    "raw_excerpt": "lemma isHomogeneous_addSubMap (i : Fin 3) : (addSubMap W i).IsHomogeneous 2 := by\n  simp only [addSubMap]\n  fin_cases i <;>\n    simp only [Fin.isValue, Fin.mk_one, Fin.zero_eta, Fin.reduceFinMk, Matrix.cons_val,\n      Matrix.cons_val_one, Matrix.cons_val_zero]\n  · exact isHomogeneous_X_pow .. |>.sub CXY |>.sub CXY |>.sub CXX\n  · exact CXY.add CXY |>.add CXY |>.add CXX\n",
+    "excerpt_sha256": "56454b371197b0e9f672d42f17f07a58359f09002536b9124100d590b694b003"
+  },
+  "caller_root_cause": "The previous norm_num-only call elaborates simp arguments with simprocs:={}, retains only ctx from elabSimpArgs, and runs Simp.preDefault #[]/postDefault #[]. Therefore listing Fin.isValue/Fin.reduceFinMk/Matrix.cons_val could not execute these simprocs. This source-level caller boundary explains why previous revisions left identical literal table lookup goals despite their explicit APIs being listed.",
+  "minimum_change": "Use actual standard simp-only execution for the same explicit list. Both pinned Mathlib examples combine Fin.isValue+Fin.reduceFinMk+Matrix.cons_val under simp only. All declared literal row identities remain the same; after explicit symbolic casts and finite sum reduction the unchanged rfl/ring1! proves the remaining free-real affine algebra.",
+  "no_pretended_dynamic_Expr_inspection_or_current_success": true,
+  "prior_canonical_Fin_implementation_analysis_reused": {
+    "path": "/workspace/p1-complete-proof/static-h5h7-source-dispatch-cardinality-api/v4-canonical-fin-numerals/PINNED_CANONICAL_FIN_API.json",
+    "bytes": 6439,
+    "sha256": "b1851ccfcac96506032b08b29c49600a882b8b52660f0aa36dde7508c49f6779"
+  }
+}

@@ -1,0 +1,177 @@
+[
+  {
+    "name": "trapezoid",
+    "kind": "def",
+    "complete_raw_header": "def trapezoid (f : ℝ → ℝ) (a b : ℝ) : ℝ :=",
+    "sha256": "375a6535f63d0d011bfbd22b3bc2d277e84549a99dcabcd61ad2e1b53cae3199",
+    "byte_exact": true
+  },
+  {
+    "name": "continuousOn_endpointChord",
+    "kind": "theorem",
+    "complete_raw_header": "theorem continuousOn_endpointChord (f : ℝ → ℝ) (a b : ℝ) :\n    ContinuousOn (endpointChord f a b) (Icc a b) :=",
+    "sha256": "224034ed458892296bcb5693d64d2930bad8e9cd7f737b62641c5de735f5f54b",
+    "byte_exact": true
+  },
+  {
+    "name": "integral_endpointChord",
+    "kind": "theorem",
+    "complete_raw_header": "theorem integral_endpointChord (f : ℝ → ℝ) {a b : ℝ} (hab : a < b) :\n    (∫ x in a..b, endpointChord f a b x) = trapezoid f a b :=",
+    "sha256": "62c4dce0e93e455a0a7c5180563da2b4b25a4fa35bce2d3fa288d43b8c7205a6",
+    "byte_exact": true
+  },
+  {
+    "name": "integral_quadratic_remainder",
+    "kind": "theorem",
+    "complete_raw_header": "theorem integral_quadratic_remainder (M : ℝ) {a b : ℝ} (ha : 0 < a) :\n    (∫ x in a..b, M*(x-a)*(b-x)/2) = M*(b-a)^3/12 :=",
+    "sha256": "4d8849a0987bd71774f4112075dec0c1b328b29ea4d242c096a13eb7fc445db0",
+    "byte_exact": true
+  },
+  {
+    "name": "integrate_remainder",
+    "kind": "theorem",
+    "complete_raw_header": "private theorem integrate_remainder {e : ℝ → ℝ} {a b M : ℝ}\n    (ha : 0 < a) (hab : a < b) (he : ContinuousOn e (Icc a b))\n    (hpoint : ∀ x ∈ Icc a b, 0 ≤ e x ∧ e x ≤ M*(x-a)*(b-x)/2) :\n    0 ≤ (∫ x in a..b, e x) ∧ (∫ x in a..b, e x) ≤ M*(b-a)^3/12 :=",
+    "sha256": "26f89cfeedb5c5ca76988eb95a3c58f5d51a4bd7aa6afef056771fc0437095fd",
+    "byte_exact": true
+  },
+  {
+    "name": "concave_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem concave_trapezoid_error {f f' f'' : ℝ → ℝ} {a b M : ℝ}\n    (ha : 0 < a) (hab : a < b) (hM : 0 ≤ M)\n    (hf : ContinuousOn f (Icc a b))\n    (hf' : ∀ x ∈ Ioo a b, HasDerivAt f (f' x) x)\n    (hf'' : ∀ x ∈ Ioo a b, HasDerivAt f' (f'' x) x)\n    (hbound : ∀ x ∈ Ioo a b, -M ≤ f'' x ∧ f'' x ≤ 0) :\n    trapezoid f a b ≤ (∫ x in a..b, f x) ∧\n      (∫ x in a..b, f x) ≤ trapezoid f a b + M*(b-a)^3/12 :=",
+    "sha256": "d81d91c739c7dd838715253a61abff81739a5dbab19915e6b0dd6280bf1613e1",
+    "byte_exact": true
+  },
+  {
+    "name": "convex_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem convex_trapezoid_error {f f' f'' : ℝ → ℝ} {a b M : ℝ}\n    (ha : 0 < a) (hab : a < b) (hM : 0 ≤ M)\n    (hf : ContinuousOn f (Icc a b))\n    (hf' : ∀ x ∈ Ioo a b, HasDerivAt f (f' x) x)\n    (hf'' : ∀ x ∈ Ioo a b, HasDerivAt f' (f'' x) x)\n    (hbound : ∀ x ∈ Ioo a b, 0 ≤ f'' x ∧ f'' x ≤ M) :\n    trapezoid f a b - M*(b-a)^3/12 ≤ (∫ x in a..b, f x) ∧\n      (∫ x in a..b, f x) ≤ trapezoid f a b :=",
+    "sha256": "1cf98a4eb413f38f86457b1bfbcb6d362c3db82c557ccec8690eb0d359052111",
+    "byte_exact": true
+  },
+  {
+    "name": "lowerCurvature",
+    "kind": "def",
+    "complete_raw_header": "def lowerCurvature (s : ℝ) : ℝ :=",
+    "sha256": "0938add0e732d0d832c0f57bbb392aceeebb2671d43102c6dce9cafb5b482c47",
+    "byte_exact": true
+  },
+  {
+    "name": "upperTailCurvature",
+    "kind": "def",
+    "complete_raw_header": "def upperTailCurvature (s : ℝ) : ℝ :=",
+    "sha256": "e2c342c4e09d79758b4e1c67a6d4a9a1a66ccbd8d2795cc9a9c20ce9b8f975f0",
+    "byte_exact": true
+  },
+  {
+    "name": "hasDerivAt_lowerSlope",
+    "kind": "theorem",
+    "complete_raw_header": "theorem hasDerivAt_lowerSlope {s : ℝ} (hs : 2 < s)\n    (hp : HasDerivAt (fun u => upper (u-1)) (Lcurvature s) s) :\n    HasDerivAt lowerSlope (lowerCurvature s) s :=",
+    "sha256": "99a65d5793f40b68bf2a1202aa6a16cafacae173d77fe69701d8725c23407d72",
+    "byte_exact": true
+  },
+  {
+    "name": "hasDerivAt_upperSlope",
+    "kind": "theorem",
+    "complete_raw_header": "theorem hasDerivAt_upperSlope {s : ℝ} (hs : 3 < s) :\n    HasDerivAt upperSlope (upperTailCurvature s) s :=",
+    "sha256": "4380fdd4e9166b0363cb61f1457503410612740066f8057cda5bef90ab9679db",
+    "byte_exact": true
+  },
+  {
+    "name": "lowerCurvature_bounds",
+    "kind": "theorem",
+    "complete_raw_header": "theorem lowerCurvature_bounds {s : ℝ} (hs : 2 < s)\n    (hc : -1 ≤ Lcurvature s ∧ Lcurvature s ≤ 0) :\n    -1 ≤ lowerCurvature s ∧ lowerCurvature s ≤ 0 :=",
+    "sha256": "a98af283f12bb25cf72963b72ccf207da9b4e46104f2da644deea1d8b1fd1f15",
+    "byte_exact": true
+  },
+  {
+    "name": "upperTailCurvature_bounds",
+    "kind": "theorem",
+    "complete_raw_header": "theorem upperTailCurvature_bounds {s : ℝ} (hs : 3 < s) :\n    0 ≤ upperTailCurvature s ∧ upperTailCurvature s ≤ 2 :=",
+    "sha256": "e88681f81c056960e23f8ad73ec2af755ccac46aa7f513d8592001186026436c",
+    "byte_exact": true
+  },
+  {
+    "name": "hasDerivAt_inverseSlope",
+    "kind": "theorem",
+    "complete_raw_header": "theorem hasDerivAt_inverseSlope {s : ℝ} (hs : 0 < s) :\n    HasDerivAt (fun u : ℝ => -((u^2)⁻¹)) (2/s^3) s :=",
+    "sha256": "d70e6af0885cd0ab05e8c208a67577baca16d19835014d4978b9094fef6d7fe1",
+    "byte_exact": true
+  },
+  {
+    "name": "upper_initial_integral_eq_reciprocal",
+    "kind": "theorem",
+    "complete_raw_header": "theorem upper_initial_integral_eq_reciprocal {a b : ℝ}\n    (ha : 1 ≤ a) (hab : a ≤ b) (hb : b ≤ 3) :\n    (∫ x in a..b, upper x) = ∫ x in a..b, 1/x :=",
+    "sha256": "cc4872088bbd7e7253d037b4105dc97f46ab9fdf4c44365da4a709a44e72b776",
+    "byte_exact": true
+  },
+  {
+    "name": "upper_initial_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem upper_initial_trapezoid_error {a b : ℝ}\n    (ha : 1 ≤ a) (hab : a < b) (hb : b ≤ 3) :\n    trapezoid (fun x : ℝ => 1/x) a b - 2*(b-a)^3/12 ≤ (∫ x in a..b, upper x) ∧\n      (∫ x in a..b, upper x) ≤ trapezoid (fun x : ℝ => 1/x) a b :=",
+    "sha256": "9502942e15c76b10169c068039fc6137675114595ba1a1c341f038e2a24bb5a8",
+    "byte_exact": true
+  },
+  {
+    "name": "lower_cell_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem lower_cell_trapezoid_error (j : ℕ) (hj : 32768 ≤ j) :\n    trapezoid lower (cellLeft j) (cellRight j) ≤\n        (∫ x in (cellLeft j)..(cellRight j), lower x) ∧\n      (∫ x in (cellLeft j)..(cellRight j), lower x) ≤\n        trapezoid lower (cellLeft j) (cellRight j) + 1/(12*(16384 : ℝ)^3) :=",
+    "sha256": "8d593881d11d3363fbcb801168d564738226a6ea7dd0592df1b5d2446fa75c73",
+    "byte_exact": true
+  },
+  {
+    "name": "upper_tail_cell_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem upper_tail_cell_trapezoid_error (j : ℕ) (hj : 49152 ≤ j) :\n    trapezoid upper (cellLeft j) (cellRight j) - 1/(6*(16384 : ℝ)^3) ≤\n        (∫ x in (cellLeft j)..(cellRight j), upper x) ∧\n      (∫ x in (cellLeft j)..(cellRight j), upper x) ≤\n        trapezoid upper (cellLeft j) (cellRight j) :=",
+    "sha256": "e5ab681a7ff0498c275efce9670f9206c22cf3dd6d394924e6cb8f0022afe4a6",
+    "byte_exact": true
+  },
+  {
+    "name": "upper_initial_cell_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem upper_initial_cell_trapezoid_error (j : ℕ)\n    (hj : 16384 ≤ j) (hj3 : j < 49152) :\n    trapezoid (fun x : ℝ => 1/x) (cellLeft j) (cellRight j) - 1/(6*(16384 : ℝ)^3) ≤\n        (∫ x in (cellLeft j)..(cellRight j), upper x) ∧\n      (∫ x in (cellLeft j)..(cellRight j), upper x) ≤\n        trapezoid (fun x : ℝ => 1/x) (cellLeft j) (cellRight j) :=",
+    "sha256": "beca7c5bc6172e2da9166415e951d08c1b1f68110216cd8eddf39f6bef2b4b7f",
+    "byte_exact": true
+  },
+  {
+    "name": "L_initial_increment_eq_upper_integral",
+    "kind": "theorem",
+    "complete_raw_header": "theorem L_initial_increment_eq_upper_integral {a b : ℝ}\n    (ha : 1 ≤ a) (hab : a < b) (hb : b ≤ 2) :\n    L (b+1) - L (a+1) = ∫ x in a..b, upper x :=",
+    "sha256": "3ec943a5ffc3b8dc5c73e7732eb3621e90f2559cffb10069f28fbf126655d385",
+    "byte_exact": true
+  },
+  {
+    "name": "L_cell_increment_eq_upper_integral",
+    "kind": "theorem",
+    "complete_raw_header": "theorem L_cell_increment_eq_upper_integral (j : ℕ) (hj : 16384 ≤ j) :\n    L (cellRight j+1) - L (cellLeft j+1) =\n      ∫ x in (cellLeft j)..(cellRight j), upper x :=",
+    "sha256": "15887aa3936d557c667622782ec77a6367d790975d54bf0403ee6a8c22351f03",
+    "byte_exact": true
+  },
+  {
+    "name": "H_cell_increment_eq_lower_integral",
+    "kind": "theorem",
+    "complete_raw_header": "theorem H_cell_increment_eq_lower_integral (j : ℕ) (hj : 32768 ≤ j) :\n    H (cellRight j+1) - H (cellLeft j+1) =\n      ∫ x in (cellLeft j)..(cellRight j), lower x :=",
+    "sha256": "7f25845e5f10d78bf49716de165431c15a92bb2a6760154477952abd2d891642",
+    "byte_exact": true
+  },
+  {
+    "name": "H_cell_increment_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem H_cell_increment_trapezoid_error (j : ℕ) (hj : 32768 ≤ j) :\n    trapezoid lower (cellLeft j) (cellRight j) ≤\n        H (cellRight j+1) - H (cellLeft j+1) ∧\n      H (cellRight j+1) - H (cellLeft j+1) ≤\n        trapezoid lower (cellLeft j) (cellRight j) + 1/(12*(16384 : ℝ)^3) :=",
+    "sha256": "e8b681dc371d2a702e8d6e6d76686ccd23732f13a1fec8b39a0c049a665d69a9",
+    "byte_exact": true
+  },
+  {
+    "name": "L_initial_cell_increment_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem L_initial_cell_increment_trapezoid_error (j : ℕ)\n    (hj : 16384 ≤ j) (hj3 : j < 49152) :\n    trapezoid (fun x : ℝ => 1/x) (cellLeft j) (cellRight j) - 1/(6*(16384 : ℝ)^3) ≤\n        L (cellRight j+1) - L (cellLeft j+1) ∧\n      L (cellRight j+1) - L (cellLeft j+1) ≤\n        trapezoid (fun x : ℝ => 1/x) (cellLeft j) (cellRight j) :=",
+    "sha256": "478c3ba9836e9bec6ad2ad43e1bb475bb108a1e57d31ac7640b355b2e117f62f",
+    "byte_exact": true
+  },
+  {
+    "name": "L_tail_cell_increment_trapezoid_error",
+    "kind": "theorem",
+    "complete_raw_header": "theorem L_tail_cell_increment_trapezoid_error (j : ℕ) (hj : 49152 ≤ j) :\n    trapezoid upper (cellLeft j) (cellRight j) - 1/(6*(16384 : ℝ)^3) ≤\n        L (cellRight j+1) - L (cellLeft j+1) ∧\n      L (cellRight j+1) - L (cellLeft j+1) ≤\n        trapezoid upper (cellLeft j) (cellRight j) :=",
+    "sha256": "e6cde0407b0300f352284bd605a833df29c0e6b716d6d2aee741ee0e3228aad8",
+    "byte_exact": true
+  }
+]

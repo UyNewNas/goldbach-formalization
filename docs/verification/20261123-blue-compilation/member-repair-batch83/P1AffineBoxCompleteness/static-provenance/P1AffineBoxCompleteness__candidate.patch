@@ -1,0 +1,30 @@
+--- baseline.lean
++++ candidate.lean
+@@ -65,7 +65,9 @@
+ 
+ theorem separated_mono {k : ℕ} (p : Program k) {r eta : ℝ}
+     (hr : r ≤ eta) {t : Fin k → ℝ} (ht : Separated p eta t) : Separated p r t := by
+-  intro ab ha
++  intro ab
++  dsimp only
++  intro ha
+   exact (mul_le_mul_of_nonneg_right hr
+     (by linarith [(ab.1.val.sub ab.2.val).slopeMass_nonneg])).trans (ht ab ha)
+ 
+@@ -107,7 +109,7 @@
+   intro ab
+   have h := sign_certificate (ab.1.val.sub ab.2.val) eta heta lo hi t hl hu (ht ab)
+   simpa only [Program.signature, decide_eq_true_eq, Affine.eval_sub,
+-    sub_lt_zero, sub_le_zero] using h
++    sub_lt_zero, sub_nonpos] using h
+ 
+ /-- The existing null-wall theorem receives an actual nonzero linear map. -/
+ def _root_.ImbalancedChen.P1FiniteAffineDecisionProgram.Affine.linearPart {k : ℕ} (a : Affine k) : (Fin k → ℝ) →L[ℝ] ℝ :=
+@@ -158,6 +160,7 @@
+       rw [ae_iff]
+       simpa only [not_not] using hnull
+     filter_upwards [hn] with t ht
++    dsimp only
+     intro _
+     simpa only [Affine.eval_pull] using ht
+ 

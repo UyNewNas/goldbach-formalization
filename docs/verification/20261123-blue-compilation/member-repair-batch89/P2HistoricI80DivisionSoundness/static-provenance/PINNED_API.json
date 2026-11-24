@@ -1,0 +1,42 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+      "source_sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e",
+      "start_line": 27,
+      "end_line": 34,
+      "role": "Literal Q2^80 and original two-field I80 constructor, no ext attribute",
+      "raw_excerpt": "def Q : ℕ := 2 ^ 80\n\ntheorem Q_pos : (0 : ℚ) < Q := by norm_num [Q]\ntheorem Q_ne_zero : (Q : ℚ) ≠ 0 := ne_of_gt Q_pos\n\nstructure I80 where\n  lo : ℤ\n  hi : ℤ\n",
+      "raw_excerpt_sha256": "5a2bedae1440e73d1fe1d02df3fa86b2912fb15cca73e61114ca20352d460041"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+      "source_sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e",
+      "start_line": 37,
+      "end_line": 61,
+      "role": "Original coordinate decoding/division implementation and already-used constructor congruence API",
+      "raw_excerpt": "def I80.decodeLo (x : I80) : ℚ := (x.lo : ℚ) / Q\ndef I80.decodeHi (x : I80) : ℚ := (x.hi : ℚ) / Q\ndef I80.enclosure (x : I80) : Enclosure := ⟨x.decodeLo, x.decodeHi⟩\ndef I80.Contains (x : I80) (v : ℝ) : Prop := x.enclosure.Contains v\n\n/-- Convert exact rational endpoints with precisely one directed Q80 round. -/\ndef I80.ofEnclosure (x : Enclosure) : I80 :=\n  ⟨⌊x.lower * Q⌋, ⌈x.upper * Q⌉⟩\n\ndef I80.point (q : ℚ) : I80 := I80.ofEnclosure (Enclosure.point q)\ndef I80.raw (n : ℤ) : I80 := ⟨n, n⟩\ndef I80.add (x y : I80) : I80 := ⟨x.lo + y.lo, x.hi + y.hi⟩\ndef I80.neg (x : I80) : I80 := ⟨-x.hi, -x.lo⟩\ndef I80.sub (x y : I80) : I80 := x.add y.neg\ndef I80.mul (x y : I80) : I80 := I80.ofEnclosure (x.enclosure.mul y.enclosure)\n\n/-- The literal producer asserts `0 < y.lo` before this operation.\nThe formula itself remains total; soundness retains that guard. -/\ndef I80.div (x y : I80) : I80 :=\n  I80.ofEnclosure (x.enclosure.divisionBounds y.enclosure)\n\ntheorem I80.enclosure_ofEnclosure (x : Enclosure) :\n    (I80.ofEnclosure x).enclosure = x.round 80 := by\n  apply congrArg₂ Enclosure.mk <;>\n    norm_num [I80.ofEnclosure, I80.enclosure, I80.decodeLo, I80.decodeHi,\n",
+      "raw_excerpt_sha256": "429577553be085666795b9d3ccb79404170fa12d90dab25b72a0ade935bdd7df"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+      "source_sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e",
+      "start_line": 73,
+      "end_line": 75,
+      "role": "Original unit integer interval contains its exact rational decoded value",
+      "raw_excerpt": "theorem I80.raw_contains (n : ℤ) :\n    (I80.raw n).Contains (((n : ℚ) / Q : ℚ) : ℝ) := by\n  exact ⟨le_rfl, le_rfl⟩\n",
+      "raw_excerpt_sha256": "0414b75916bcd2d1a35674998e0ec3c06a360d789a792fe71ebcb87e3a8bf00e"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Defs.lean",
+      "source_sha256": "0e71257b1ee1db6fb243f76c916f39332288323ca8ae00c85ac1271fd2deb0eb",
+      "start_line": 114,
+      "end_line": 132,
+      "role": "Exact existing Int/Nat cast and Rat one normalization",
+      "raw_excerpt": "theorem cast_intCast (n : ℤ) : ((n : ℚ) : α) = n :=\n  (cast_def _).trans <| show (n / (1 : ℕ) : α) = n by rw [Nat.cast_one, div_one]\n\n@[simp, norm_cast]\ntheorem cast_natCast (n : ℕ) : ((n : ℚ) : α) = n := by\n  rw [← Int.cast_natCast, cast_intCast, Int.cast_natCast]\n\n\n@[simp, norm_cast] lemma cast_ofNat (n : ℕ) [n.AtLeastTwo] :\n    ((ofNat(n) : ℚ) : α) = (ofNat(n) : α) := by\n  simp [cast_def]\n\n@[simp, norm_cast]\ntheorem cast_zero : ((0 : ℚ) : α) = 0 :=\n  (cast_intCast _).trans Int.cast_zero\n\n@[simp, norm_cast]\ntheorem cast_one : ((1 : ℚ) : α) = 1 :=\n  (cast_intCast _).trans Int.cast_one\n",
+      "raw_excerpt_sha256": "5d6a84fc3f8c293e59ef80d8b9ddb1ebf673600d0bbbde2f985d3d969ae2c916"
+    }
+  ],
+  "implementation": "congrArg₂ I80.mk applies the imported original constructor; no new ext theorem or attribute is introduced. The same constructor proof shape is already in I80.enclosure_ofEnclosure for Enclosure.mk.",
+  "classification": "Ordinary proof API and explicit exact rational cast normalization only."
+}

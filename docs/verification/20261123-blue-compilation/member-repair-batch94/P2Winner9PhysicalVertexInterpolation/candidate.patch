@@ -1,0 +1,21 @@
+--- baseline/ImbalancedChen/P2Winner9PhysicalVertexInterpolation.lean
++++ candidate/ImbalancedChen/P2Winner9PhysicalVertexInterpolation.lean
+@@ -70,7 +70,7 @@
+ theorem vertexMap_single (v : Fin 9 → Ambient) (j : Fin 8) :
+     vertexMap v (Pi.single j (1 : ℝ)) = v j.succ := by
+   ext i
+-  simp [vertexMap]
++  simp [vertexMap, Pi.single_apply, mul_ite] <;> ring
+ 
+ /-- The true physical R retains its constant term under the affine map. -/
+ theorem physicalR_vertexMap (v : Fin 9 → Ambient) (x : Ambient) :
+@@ -110,7 +110,8 @@
+   · simp only [physicalFactor_zero]
+     rw [physicalR_vertexMap, coordinateSum_vertexMap, ← affine_sub]
+   · refine Fin.cases ?_ (fun i => ?_) j
+-    · simp only [physicalFactor_one]
++    · change physicalM (vertexMap v x) - coordinateSum (vertexMap v x) =
++        affine (fun k => physicalM (v k) - coordinateSum (v k)) x
+       rw [physicalM_vertexMap, coordinateSum_vertexMap, ← affine_sub]
+     · simpa only [physicalFactor_succ_succ] using vertexMap_coordinate v x i
+ 

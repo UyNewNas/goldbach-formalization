@@ -1,0 +1,56 @@
+--- baseline/ImbalancedChen/P4AOriginalH5H7SourceDispatch.lean
++++ candidate/ImbalancedChen/P4AOriginalH5H7SourceDispatch.lean
+@@ -10,6 +10,9 @@
+ open scoped Classical BigOperators
+ open P4AOriginalRemainingEighthSources
+ 
++private local instance rowCount_neZero (c : Cell) : NeZero (rowCount c) where
++  out := by cases c <;> norm_num [rowCount]
++
+ set_option maxRecDepth 8192 in
+ set_option maxHeartbeats 0 in
+ theorem h5_priority_rows (i : Fin 7) (t : Point) :
+@@ -21,11 +24,19 @@
+       P4AOriginalFirstFailureH5H7Literal.H5 t-P4AOriginalFirstFailureH5H7Literal.D23 t := by
+   fin_cases i
+   all_goals repeat' constructor
+-  all_goals norm_num [row,evalRow,Fin.sum_univ_succ,
++  all_goals simp only [
++    row, rowCount, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
++    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_zero',
++    Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
++    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
++    Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
++    Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
++    Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat,
+     P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
+     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
+     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,
+-    P4AOriginalFirstFailureH5H7Literal.H5] <;> ring
++    P4AOriginalFirstFailureH5H7Literal.H5]
++    <;> first | rfl | ring1!
+ 
+ set_option maxRecDepth 8192 in
+ set_option maxHeartbeats 0 in
+@@ -40,11 +51,19 @@
+       P4AOriginalFirstFailureH5H7Literal.H7 t-P4AOriginalFirstFailureH5H7Literal.D23 t := by
+   fin_cases i
+   all_goals repeat' constructor
+-  all_goals norm_num [row,evalRow,Fin.sum_univ_succ,
++  all_goals simp only [
++    row, rowCount, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
++    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_zero',
++    Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
++    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
++    Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
++    Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
++    Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat,
+     P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
+     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
+     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,
+-    P4AOriginalFirstFailureH5H7Literal.H5,P4AOriginalFirstFailureH5H7Literal.H7] <;> ring
++    P4AOriginalFirstFailureH5H7Literal.H5,P4AOriginalFirstFailureH5H7Literal.H7]
++    <;> first | rfl | ring1!
+ 
+ theorem source_h5_priority {i : Fin 7} {t : Point} (h : Source (.h5 i) t) :
+     P4AOriginalFirstFailureH5H7Literal.H5Priority t := by

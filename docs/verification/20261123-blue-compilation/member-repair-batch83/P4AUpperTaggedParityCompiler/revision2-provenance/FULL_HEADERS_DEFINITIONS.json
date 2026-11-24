@@ -1,0 +1,449 @@
+{
+  "module": "ImbalancedChen.P4AUpperTaggedParityCompiler",
+  "all_complete_original_parsed_headers": [
+    {
+      "kind": "abbrev",
+      "name": "«universe»",
+      "complete_raw_header": "abbrev «universe» :=",
+      "sha256": "0de69b1ef0427362142b428f49ff270fe317b191bdb3a2c0f114013c6ab287c2",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "abbrev",
+      "name": "primeLabel",
+      "complete_raw_header": "abbrev primeLabel :=",
+      "sha256": "c84ddbf00457e6bc7b8551935e8a01f0533ee1e210b06b608a5593b1a58e76a9",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "abbrev",
+      "name": "primeWordLabel",
+      "complete_raw_header": "abbrev primeWordLabel :=",
+      "sha256": "a43d0e1a3b0a795a42c5edf0ca2f6605ea06685e4c52c1df4146b5ddcba1616d",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "rawSupport",
+      "complete_raw_header": "def rawSupport (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset ℕ :=",
+      "sha256": "8621abb8fe9d009ed2adbf29ebfdc66dad9d54d5b440249739b62042e10cd3cc",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "raw",
+      "complete_raw_header": "def raw (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℕ → ℝ :=",
+      "sha256": "1ac48faaec73825d0699a5288b8f388426c750e1e03ff2af98f0d3094b8010e4",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "label",
+      "complete_raw_header": "def label (tag : ℕ → List Bool) (N : ℕ) (tau : ℝ) (d : ℕ) :\n    List Bool × List ℤ :=",
+      "sha256": "b92b6ca346beb836647ce471ece0cf8b0ef3a8322f55dc0f73b885dc94f0a5bc",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "cell",
+      "complete_raw_header": "def cell (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Finset ℕ :=",
+      "sha256": "404e8fed4ce5cfa3107e81f34ca4fbba4f85479d188c10f6593aae8b819a5a0e",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "inner",
+      "complete_raw_header": "def inner (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+      "sha256": "ac073b9620d75ca6913b27191424f6322ca8fa07f27f0af78781e8cb2c769a9f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "outer",
+      "complete_raw_header": "def outer (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+      "sha256": "be27818d85482d24265c919a6be0292059a683010453d36afee9fce5d6370899",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "coefficient",
+      "complete_raw_header": "def coefficient (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : ℝ :=",
+      "sha256": "b41ef5420957d833c2c59d5e86d758357e5a03be561ebab3273a17bc7d49e543",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "rawSupport_subset_universe",
+      "complete_raw_header": "theorem rawSupport_subset_universe (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : rawSupport retainOdd N cap w z ⊆ «universe» N cap w z :=",
+      "sha256": "eda70a2def77043cf679867a707185af1b1b3789bac5fd9750813e0762139fd5",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "raw_value",
+      "complete_raw_header": "theorem raw_value (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    raw retainOdd N cap w z d =\n      if d ∈ rawSupport retainOdd N cap w z then (ArithmeticFunction.moebius d : ℝ) else 0 :=",
+      "sha256": "5ca4a2cec90600e0f8f489138ae36279fca1b6e238e42227c2cb5e702deb482f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "self_mem_cell",
+      "complete_raw_header": "theorem self_mem_cell (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)\n    {d : ℕ} (hd : d ∈ «universe» N cap w z) : d ∈ cell tag N cap w z tau d :=",
+      "sha256": "30a06718ffb4f1b1f117e2d11c819a521bb14691afc4bfcc3dac5f40884665a0",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "cell_frozen_tag",
+      "complete_raw_header": "theorem cell_frozen_tag (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)\n    {d e : ℕ} (he : e ∈ cell tag N cap w z tau d) : tag e = tag d :=",
+      "sha256": "a5a7dda878156d3e9dc5cf684a9a4e5e4eff770fb43b143bfbae476b8bfaeb5c",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "cell_prime_labels",
+      "complete_raw_header": "theorem cell_prime_labels (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)\n    {d e : ℕ} (he : e ∈ cell tag N cap w z tau d) :\n    primeWordLabel N tau e = primeWordLabel N tau d :=",
+      "sha256": "937e602a42ac8f5e310758762db2dda96232007ffb3028929b90e712c6565ba0",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "cell_rank_preserved",
+      "complete_raw_header": "theorem cell_rank_preserved (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)\n    {d e : ℕ} (he : e ∈ cell tag N cap w z tau d) :\n    e.primeFactorsList.length = d.primeFactorsList.length :=",
+      "sha256": "deb4c573d85b022da63fe3ca55c75639af589106e8443a2e333db919116ae37b",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "same_primeLabel_coordinate_distance_lt",
+      "complete_raw_header": "theorem same_primeLabel_coordinate_distance_lt (N : ℕ) {tau : ℝ}\n    (htau : 0 < tau) {p q : ℕ} (h : primeLabel N tau p = primeLabel N tau q) :\n    |Real.log (p : ℝ) / Real.log N - Real.log (q : ℝ) / Real.log N| < tau :=",
+      "sha256": "0edee54438111220aca14ee941ec4d5e39c57a20da9ebbf2c5ddedbed543b408",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "cells_disjoint",
+      "complete_raw_header": "theorem cells_disjoint (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ)\n    {d e : ℕ} (h : label tag N tau d ≠ label tag N tau e) :\n    Disjoint (cell tag N cap w z tau d) (cell tag N cap w z tau e) :=",
+      "sha256": "9d1c8dbb9829f73b8b743c958cbbd21a052d6c4abc6b262910e6e50a9f39b4c4",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "outer_of_raw",
+      "complete_raw_header": "theorem outer_of_raw (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) {d : ℕ}\n    (hd : d ∈ rawSupport retainOdd N cap w z) : outer retainOdd tag N cap w z tau d :=",
+      "sha256": "e7ec5f157895159316a31cfa381bfd70d57c6a397c51c15a0f67818c46eff825",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "raw_le_coefficient",
+      "complete_raw_header": "theorem raw_le_coefficient (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) :\n    raw retainOdd N cap w z d ≤ coefficient retainOdd tag N cap w z tau d :=",
+      "sha256": "17fbe3a624add2d23b55d2fff8baf2767098db8618bbdc7826e4b1016fba8081",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "coefficient_abs_le_one",
+      "complete_raw_header": "theorem coefficient_abs_le_one (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) :\n    |coefficient retainOdd tag N cap w z tau d| ≤ 1 :=",
+      "sha256": "969376d059842430585d7ae7e39b17cc2cad1a0d53d7148e8fc40f263036cf39",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "active_has_raw_witness",
+      "complete_raw_header": "theorem active_has_raw_witness (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) {d : ℕ}\n    (hd : coefficient retainOdd tag N cap w z tau d ≠ 0) :\n    ∃ e ∈ rawSupport retainOdd N cap w z,\n      e ∈ cell tag N cap w z tau d ∧ tag e = tag d ∧\n        primeWordLabel N tau e = primeWordLabel N tau d :=",
+      "sha256": "ba6c73892a14cd53eb61c07a37e61660f5eb6aa87613075a03561913f805a7bf",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "changed",
+      "complete_raw_header": "def changed (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+      "sha256": "7f92f8b63cb564b4a83c07d12ce668d0c0dc196f747bd978c0be71c308686124",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "crossing",
+      "complete_raw_header": "def crossing (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=",
+      "sha256": "9adf5be37bc773f7a24628e9e95c3e6ba30857b70100d9364f85fff21815f10e",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "crossing_has_opposite_witnesses",
+      "complete_raw_header": "theorem crossing_has_opposite_witnesses (retainOdd : List ℕ → Bool)\n    (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) {d : ℕ}\n    (hc : crossing retainOdd tag N cap w z tau d) :\n    ∃ a ∈ cell tag N cap w z tau d, ∃ b ∈ cell tag N cap w z tau d,\n      a ∈ rawSupport retainOdd N cap w z ∧ b ∉ rawSupport retainOdd N cap w z :=",
+      "sha256": "a4d099e7c201f73b9e810ec919ac29d545f6d44f630c7cd1a218c382060ab259",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "changed_implies_crossing",
+      "complete_raw_header": "theorem changed_implies_crossing (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ «universe» N cap w z)\n    (hc : changed retainOdd tag N cap w z tau d) : crossing retainOdd tag N cap w z tau d :=",
+      "sha256": "fb8d0b9748e656fda6ec5d68ae347e5bea7b839f5080c2dab87a3dc7a2bd9cb5",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "abs_coefficient_sub_raw",
+      "complete_raw_header": "theorem abs_coefficient_sub_raw (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) {d : ℕ} (hd : d ∈ «universe» N cap w z) :\n    |coefficient retainOdd tag N cap w z tau d - raw retainOdd N cap w z d| =\n      if changed retainOdd tag N cap w z tau d then 1 else 0 :=",
+      "sha256": "a2f0ccb6c0187b53b1d76263c9876af095c0f5fd0e8750a9bccd51fabd0c7ac9",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "changedMass",
+      "complete_raw_header": "def changedMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) : ℝ :=",
+      "sha256": "c4e4daebdac9d02f6cb00383298eeaffacbe6a6362bf5a5c54fad3d1c474fd3a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "crossingMass",
+      "complete_raw_header": "def crossingMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) : ℝ :=",
+      "sha256": "bf4e5218440e9f0b60f99a806f7e38e30d05b907a7f60c51008e63e34ed350bd",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "coefficient_error_eq_changedMass",
+      "complete_raw_header": "theorem coefficient_error_eq_changedMass (retainOdd : List ℕ → Bool)\n    (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) :\n    reciprocalTotientDensity («universe» N cap w z)\n      (fun d => |coefficient retainOdd tag N cap w z tau d - raw retainOdd N cap w z d|) =\n        changedMass retainOdd tag N cap w z tau :=",
+      "sha256": "36425cd985d3edacaef5ba7a36281c16f8f66c6dadaa1c482a833814b484bcb8",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "changedMass_le_crossingMass",
+      "complete_raw_header": "theorem changedMass_le_crossingMass (retainOdd : List ℕ → Bool)\n    (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) :\n    changedMass retainOdd tag N cap w z tau ≤ crossingMass retainOdd tag N cap w z tau :=",
+      "sha256": "b878dfc8a38431e7828d0ba67aa6fbe7cb95d64d60c5794a510b937bc0c641ea",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "rough_density_increase_eq_changedMass",
+      "complete_raw_header": "theorem rough_density_increase_eq_changedMass (retainOdd : List ℕ → Bool)\n    (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) :\n    reciprocalTotientDensity («universe» N cap w z) (coefficient retainOdd tag N cap w z tau) -\n      reciprocalTotientDensity («universe» N cap w z) (raw retainOdd N cap w z) =\n        changedMass retainOdd tag N cap w z tau :=",
+      "sha256": "3a47f5da4da1e4462bedb6d63bb6bc78be9256038e6493f1af0778327ea0667b",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "all_complete_original_definitions": [
+    {
+      "kind": "abbrev",
+      "name": "«universe»",
+      "complete_raw_definition": "abbrev «universe» := P2LowerFiniteCellRounding.universe",
+      "sha256": "cc9ca8fe7b7a4b20b50cd4419fb692e321bd895495e2092e33c04fc119942639",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "abbrev",
+      "name": "primeLabel",
+      "complete_raw_definition": "abbrev primeLabel := P2LowerFiniteCellRounding.primeLabel",
+      "sha256": "75c0a755a57f7000b95e20cc0bf397da8cbc1b4fa20a3de1c58c584d4a3a3c02",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "abbrev",
+      "name": "primeWordLabel",
+      "complete_raw_definition": "abbrev primeWordLabel := P2LowerFiniteCellRounding.label",
+      "sha256": "abadffd96fbaaa7f75244ef376f7a23490f8d21055f12de548c3e8dcc9deb85a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "rawSupport",
+      "complete_raw_definition": "def rawSupport (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  fixedRoughSupport retainOdd N cap w z",
+      "sha256": "cd5b06caf20e86ead90e56cc88ad56233166aed038cb55cf36eb3a7d6a5eba83",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "raw",
+      "complete_raw_definition": "def raw (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : ℕ → ℝ :=\n  fixedRoughCoefficient retainOdd N cap w z",
+      "sha256": "24554eb0bf76c7bd8ce0fa475ba9ba9f43521a3c682964e606b731fbc03eabb0",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "label",
+      "complete_raw_definition": "def label (tag : ℕ → List Bool) (N : ℕ) (tau : ℝ) (d : ℕ) :\n    List Bool × List ℤ := (tag d, primeWordLabel N tau d)",
+      "sha256": "9985416e300addc91ce2aeab9e8c12239eb4ab1a24ce77e208b94a514d6063c6",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "cell",
+      "complete_raw_definition": "def cell (tag : ℕ → List Bool) (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Finset ℕ :=\n  («universe» N cap w z).filter (fun e => label tag N tau e = label tag N tau d)",
+      "sha256": "9688c97a99a090240510f2b1d49ad1778077ab1518dd95c22854ed84c9788af6",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "inner",
+      "complete_raw_definition": "def inner (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=\n  cell tag N cap w z tau d ⊆ rawSupport retainOdd N cap w z",
+      "sha256": "44d755747465c02ff743232f0cc6e8caefbfb256072085f3de63617254005394",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "outer",
+      "complete_raw_definition": "def outer (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=\n  (cell tag N cap w z tau d ∩ rawSupport retainOdd N cap w z).Nonempty",
+      "sha256": "021e17e90cae009a691fa384de511c671fb56370057ae1c956e1e35b0c2e0de5",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "coefficient",
+      "complete_raw_definition": "def coefficient (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : ℝ :=\n  if d ∈ «universe» N cap w z then\n    if 0 ≤ (ArithmeticFunction.moebius d : ℝ) then\n      if outer retainOdd tag N cap w z tau d then (ArithmeticFunction.moebius d : ℝ) else 0\n    else if inner retainOdd tag N cap w z tau d then (ArithmeticFunction.moebius d : ℝ) else 0\n  else 0",
+      "sha256": "86aac4375e559ab054bd5a2f3e38c9879920ac21812856c5c0013e9316f6a3f0",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "changed",
+      "complete_raw_definition": "def changed (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=\n  if 0 ≤ (ArithmeticFunction.moebius d : ℝ) then\n    outer retainOdd tag N cap w z tau d ∧ d ∉ rawSupport retainOdd N cap w z\n  else d ∈ rawSupport retainOdd N cap w z ∧ ¬inner retainOdd tag N cap w z tau d",
+      "sha256": "dc48fc34575a6eebfb1394f8d08d3afba0be407b19cbac0ccf2fc3b7cf321a2a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "crossing",
+      "complete_raw_definition": "def crossing (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) (d : ℕ) : Prop :=\n  outer retainOdd tag N cap w z tau d ∧ ¬inner retainOdd tag N cap w z tau d",
+      "sha256": "2d02ccd336c4ea2c5739e0c7a6e650ce3c9ca80e0179b2b61c72174a117ca8df",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "changedMass",
+      "complete_raw_definition": "def changedMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) : ℝ :=\n  ∑ d ∈ («universe» N cap w z).filter (changed retainOdd tag N cap w z tau),\n    1 / (Nat.totient d : ℝ)",
+      "sha256": "c88a47d359634de98776557de1b7cb62e99ceaeb5e72a5054f250d7d8bd40131",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "crossingMass",
+      "complete_raw_definition": "def crossingMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)\n    (N cap : ℕ) (w z tau : ℝ) : ℝ :=\n  ∑ d ∈ («universe» N cap w z).filter (crossing retainOdd tag N cap w z tau),\n    1 / (Nat.totient d : ℝ)",
+      "sha256": "56d298f3aac74d0bef1a852fb03e2ec385f4b8ebed90c7131615657ad077fe93",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "proof_inventory": [
+    {
+      "name": "rawSupport_subset_universe",
+      "baseline_proof_sha256": "408d32a3cc8526cc8ae4080f3f021209c5fb70d1a1a87ff66ba9b2e78fd1ecab",
+      "candidate_proof_sha256": "eba6baaf33455b2abd8325f510d812ba1dcadd47cfcaf4a9588f2fc3b6ecfa11",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "raw_value",
+      "baseline_proof_sha256": "39633029cf9575b4ded9af0a2660c9079b54a1e7614e12c55566c65c406c4f32",
+      "candidate_proof_sha256": "39633029cf9575b4ded9af0a2660c9079b54a1e7614e12c55566c65c406c4f32",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "self_mem_cell",
+      "baseline_proof_sha256": "d2d5c962451b305fed651ce7d56cc4dbce7d05d127d64649d331923cc6ed161f",
+      "candidate_proof_sha256": "d2d5c962451b305fed651ce7d56cc4dbce7d05d127d64649d331923cc6ed161f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "cell_frozen_tag",
+      "baseline_proof_sha256": "a6dc6e97e996dd0e4818ff2a8ce44a823ebb407fbbc5d5e2eed1c7eb67c00469",
+      "candidate_proof_sha256": "a6dc6e97e996dd0e4818ff2a8ce44a823ebb407fbbc5d5e2eed1c7eb67c00469",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "cell_prime_labels",
+      "baseline_proof_sha256": "7bb2a1a92e6a64553a5bd83b1f32a2f2b61cab5c5a2f0167adc6b8de47659b7a",
+      "candidate_proof_sha256": "7bb2a1a92e6a64553a5bd83b1f32a2f2b61cab5c5a2f0167adc6b8de47659b7a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "cell_rank_preserved",
+      "baseline_proof_sha256": "e0c86654af612b9674f915fc5d09b73790fd3c40ef1f0a5224d9f4e026eef745",
+      "candidate_proof_sha256": "e0c86654af612b9674f915fc5d09b73790fd3c40ef1f0a5224d9f4e026eef745",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "same_primeLabel_coordinate_distance_lt",
+      "baseline_proof_sha256": "b4811543bc7979ee4875d049fc626d8957a6264073d3cfbba2cb16e69cb24551",
+      "candidate_proof_sha256": "b4811543bc7979ee4875d049fc626d8957a6264073d3cfbba2cb16e69cb24551",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "cells_disjoint",
+      "baseline_proof_sha256": "ea1fc276e036095923d02b927fb34aef478332d78c881cd4f481404cb661f70f",
+      "candidate_proof_sha256": "ea1fc276e036095923d02b927fb34aef478332d78c881cd4f481404cb661f70f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "outer_of_raw",
+      "baseline_proof_sha256": "0a45d3acc452648af2dd942a7cdf392ccff109bbfcb1931cf05d809eb42ce6d8",
+      "candidate_proof_sha256": "0a45d3acc452648af2dd942a7cdf392ccff109bbfcb1931cf05d809eb42ce6d8",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "raw_le_coefficient",
+      "baseline_proof_sha256": "763f7b256761bdd15d48fa4b619f14e8b85ca38a1b62258c3c80a956a829ec10",
+      "candidate_proof_sha256": "763f7b256761bdd15d48fa4b619f14e8b85ca38a1b62258c3c80a956a829ec10",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "coefficient_abs_le_one",
+      "baseline_proof_sha256": "4dd91db8a2579a5bc37161e8fef8b65cd22956f03470243a78c799c54870627f",
+      "candidate_proof_sha256": "4dd91db8a2579a5bc37161e8fef8b65cd22956f03470243a78c799c54870627f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "active_has_raw_witness",
+      "baseline_proof_sha256": "a324ffda7a51748dfdbc0f710b283864a4e3a4ca2ff4213284447e577968b583",
+      "candidate_proof_sha256": "a324ffda7a51748dfdbc0f710b283864a4e3a4ca2ff4213284447e577968b583",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "crossing_has_opposite_witnesses",
+      "baseline_proof_sha256": "4170bf46ffd8eabe95d58ca26ba46f3e53b7d9b2baee669ad92c5cbbcca6ac3e",
+      "candidate_proof_sha256": "4170bf46ffd8eabe95d58ca26ba46f3e53b7d9b2baee669ad92c5cbbcca6ac3e",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "changed_implies_crossing",
+      "baseline_proof_sha256": "19130340726fb706456174da846b13fa7160d4d88236ee7bc5f8deb6420339a1",
+      "candidate_proof_sha256": "19130340726fb706456174da846b13fa7160d4d88236ee7bc5f8deb6420339a1",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "abs_coefficient_sub_raw",
+      "baseline_proof_sha256": "2851431ad3d0554fa8cadc9e04c86dfee345b2c3c889b7fa5d35871c75b123e8",
+      "candidate_proof_sha256": "582e5458b7aa914250f580f481849edcb66c284dcb614909bcea0bfe7db87792",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "coefficient_error_eq_changedMass",
+      "baseline_proof_sha256": "98a032eeb60e06d14cae3b669b6cb9aca99625eb2bd78ac955e7556803c0baeb",
+      "candidate_proof_sha256": "a3054d0960367ada602a944b0a53e3e24ce475aeca0776fe5c940c1f82086891",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "changedMass_le_crossingMass",
+      "baseline_proof_sha256": "3bc7a614ac1e8d91db6e0c41a0f16b565c4afdccfca37007cf7ae631b99fa9ac",
+      "candidate_proof_sha256": "3bc7a614ac1e8d91db6e0c41a0f16b565c4afdccfca37007cf7ae631b99fa9ac",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "rough_density_increase_eq_changedMass",
+      "baseline_proof_sha256": "e4d5acccf266671d60e09ca70fcd0f3a502d7573e8c537d315bf3937c9477bc6",
+      "candidate_proof_sha256": "77d5291deabf5149d20c5f89a85fb6264b94cee6d87a26e732be350616c5725e",
+      "pre_post_raw_equal": false
+    }
+  ],
+  "counts": {
+    "complete_headers": 32,
+    "theorems": 18,
+    "definitions_including_abbrevs": 14,
+    "changed_proof_bodies": 4,
+    "local_expression_replacements": 6
+  },
+  "all_headers_and_all_definitions_pre_post_raw_equal": true,
+  "previous14same_name_universe_quotes_exact_preserved": true,
+  "new_header_definition_or_budget_exceptions": []
+}

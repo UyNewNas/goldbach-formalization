@@ -1,0 +1,432 @@
+{
+  "schema": "independent_I80_three_proof_constructor_and_cast_API_review_v1",
+  "reviewer": "/root/omega_review",
+  "source_author": "/root/member_current_repairs",
+  "reviewer_is_not_candidate_source_author": true,
+  "reviewed_utc": "2026-11-23T23:49:31.494347+00:00",
+  "outcome": "NO_FINDINGS_STATIC_ONLY_READY_FOR_UNIQUE_OWNER_ACTUAL_VALIDATION",
+  "findings": [],
+  "module": "ImbalancedChen.P2HistoricI80DivisionSoundness",
+  "original_files_manifest_sha256": "8bebdf7d4a684321f33c598d38e521f64b98c78a067023ab3b9c4e159ebd184c",
+  "source_selection_sha256": "08eef7d7392aeb10da8265b5eb1381e3c11f9e4efbdd2113a2654b4cade22918",
+  "preimage_sha256": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+  "postimage_sha256": "7533f2c28d2473eae13f84bdfb0214a1d92e1f9458b3a822abdb3da9e5944072",
+  "all_11_original_manifest_entries_size_and_sha_exact": true,
+  "complete_headers_independently_scanned": 26,
+  "theorem_headers": 19,
+  "definition_headers": 7,
+  "complete_raw_headers": [
+    {
+      "kind": "def",
+      "name": "ceilDiv",
+      "complete_raw_header": "def ceilDiv (n d : ℤ) : ℤ :=",
+      "raw_sha256": "fa59858684ab4d0693c15645d2057b1a4dcab8d1c75e61d21f846108c4838a7b",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "historicalDiv",
+      "complete_raw_header": "def historicalDiv (x y : I80) : I80 :=",
+      "raw_sha256": "71aca4ac28b0a9274304f6fbf78f34c6ec3c7c51ae1013894cbc70bf498cb2f8",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "floor_int_div_of_pos",
+      "complete_raw_header": "theorem floor_int_div_of_pos (n d : ℤ) (hd : 0 < d) :\n    ⌊((n:ℚ)/(d:ℚ))⌋ = n/d :=",
+      "raw_sha256": "635bdc52a884815f7fc4f2a039d00015bef6b1e0f6c2ab83e2d0e6fecfd8108d",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "ceil_int_div_of_pos",
+      "complete_raw_header": "theorem ceil_int_div_of_pos (n d : ℤ) (hd : 0 < d) :\n    ⌈((n:ℚ)/(d:ℚ))⌉ = ceilDiv n d :=",
+      "raw_sha256": "655c235170c04d707f81b718f53ff3342aac7da31afe71cb293db0d76a59184a",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "ceil_max_rat",
+      "complete_raw_header": "theorem ceil_max_rat (v w : ℚ) : ⌈max v w⌉ = max ⌈v⌉ ⌈w⌉ :=",
+      "raw_sha256": "e5b31786c55b8540308b70c37dfaaebf6bf6668c5d021d2e65e374ea7fd7734d",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "signed_quotient_scaled",
+      "complete_raw_header": "theorem signed_quotient_scaled (n d : ℤ) (hd : d ≠ 0) :\n    ((n:ℚ)/Q * (1/((d:ℚ)/Q)))*Q = (((n*(Q:ℤ):ℤ):ℚ)/(d:ℚ)) :=",
+      "raw_sha256": "4eb79b3ddba5ec2bef69eedff637631893859984cea7590bbe17e0ded22b0b5c",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalDiv_eq_I80_div",
+      "complete_raw_header": "theorem historicalDiv_eq_I80_div (x y : I80)\n    (hpos : 0 < y.lo) (horder : y.lo ≤ y.hi) : historicalDiv x y = x.div y :=",
+      "raw_sha256": "610a87f69cf43ca9bb2305464a4f7a05271db3eb3c7908d62941aa48dfe1c61b",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalDiv_contains",
+      "complete_raw_header": "theorem historicalDiv_contains {x y : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w) (hpos : 0 < y.lo) :\n    (historicalDiv x y).Contains (v/w) :=",
+      "raw_sha256": "30f1d7d2bdf41d93063c09d4cf48999a80911b48cb4019edba1d34d3a4cabe9d",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "denominatorCheck",
+      "complete_raw_header": "def denominatorCheck (y : I80) : Bool :=",
+      "raw_sha256": "e734dcc9679aaacbf68f787e0e99c45762c99a7049ed2629820d9358d7b672a2",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "checkedHistoricalDiv",
+      "complete_raw_header": "def checkedHistoricalDiv (x y : I80) : Option I80 :=",
+      "raw_sha256": "21b4ac2d8e53d46a11dce12e81c5df75fa2fc17d124e5f7b3795ad7db89d557d",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "checkedHistoricalDiv_none",
+      "complete_raw_header": "theorem checkedHistoricalDiv_none (x y : I80) (hy : y.lo ≤ 0) :\n    checkedHistoricalDiv x y = none :=",
+      "raw_sha256": "9992b387e3150e9c6c606e61d8d74bf3f8a36b67865d5cb1550853a3c581a72a",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "checkedHistoricalDiv_sound",
+      "complete_raw_header": "theorem checkedHistoricalDiv_sound {x y z : I80} {v w : ℝ}\n    (hx : x.Contains v) (hy : y.Contains w)\n    (hresult : checkedHistoricalDiv x y = some z) : z.Contains (v/w) :=",
+      "raw_sha256": "257edc6048a87ef37cbae7900bf051363d78d2cb11cfcefa30c11eeb08ad05a7",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalDiv_lower_error",
+      "complete_raw_header": "theorem historicalDiv_lower_error (x y : I80)\n    (hp : 0 < y.lo) (ho : y.lo ≤ y.hi) :\n    0 ≤ (x.enclosure.divisionBounds y.enclosure).lower - (historicalDiv x y).decodeLo ∧\n      (x.enclosure.divisionBounds y.enclosure).lower - (historicalDiv x y).decodeLo <\n        1/(Q:ℚ) :=",
+      "raw_sha256": "e6e6424c512107d704e77aff871c8c4aa57df167ac72a191b601bb509632a878",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalDiv_upper_error",
+      "complete_raw_header": "theorem historicalDiv_upper_error (x y : I80)\n    (hp : 0 < y.lo) (ho : y.lo ≤ y.hi) :\n    0 ≤ (historicalDiv x y).decodeHi - (x.enclosure.divisionBounds y.enclosure).upper ∧\n      (historicalDiv x y).decodeHi - (x.enclosure.divisionBounds y.enclosure).upper <\n        1/(Q:ℚ) :=",
+      "raw_sha256": "457380667ac20bda6d63b556500cdbb067554760aa82d857886faa53b3b8b6d7",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "unit",
+      "complete_raw_header": "def unit : I80 :=",
+      "raw_sha256": "93e3d0647a709f769719c37d1e8ffb279b239e0d1047df86f4fd5546540f45d9",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "unit_contains",
+      "complete_raw_header": "theorem unit_contains : unit.Contains (1:ℝ) :=",
+      "raw_sha256": "0442c6ed6abae167243e6e4e13b1c7b0e63c816108f9a455be46f9a681e5e5ce",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "historicalReciprocal",
+      "complete_raw_header": "def historicalReciprocal (y : I80) : I80 :=",
+      "raw_sha256": "773ffd0c8b2d06f2990f0a36a9e37fca6c3c8217a6ae327dbd963cfb7fe77c81",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalReciprocal_eq_div",
+      "complete_raw_header": "theorem historicalReciprocal_eq_div (y : I80)\n    (hp : 0 < y.lo) (ho : y.lo ≤ y.hi) : historicalReciprocal y = historicalDiv unit y :=",
+      "raw_sha256": "cd5940a9a53792f07d025af6c7cdc051d6aad47b9863b2ee0355a482642169d1",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalReciprocal_contains",
+      "complete_raw_header": "theorem historicalReciprocal_contains {y : I80} {w : ℝ}\n    (hy : y.Contains w) (hp : 0 < y.lo) : (historicalReciprocal y).Contains (1/w) :=",
+      "raw_sha256": "38612c34c75f16351212a98304e3e9085b5408ef6684ae0fa7762b3999f59de8",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalReciprocal_lower_error",
+      "complete_raw_header": "theorem historicalReciprocal_lower_error (y : I80)\n    (hp : 0 < y.lo) (ho : y.lo ≤ y.hi) :\n    0 ≤ 1/y.decodeHi - (historicalReciprocal y).decodeLo ∧\n      1/y.decodeHi - (historicalReciprocal y).decodeLo < 1/(Q:ℚ) :=",
+      "raw_sha256": "4940b09a4346bec4b4b8d28ed8bb7f6c63604f068f033d1af659e5352ac8c941",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "historicalReciprocal_upper_error",
+      "complete_raw_header": "theorem historicalReciprocal_upper_error (y : I80)\n    (hp : 0 < y.lo) :\n    0 ≤ (historicalReciprocal y).decodeHi - 1/y.decodeLo ∧\n      (historicalReciprocal y).decodeHi - 1/y.decodeLo < 1/(Q:ℚ) :=",
+      "raw_sha256": "f5763545648c5ab053d411d0338b819acc383e61e272851cfce32773e07691a5",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "point_lo_pos_iff",
+      "complete_raw_header": "theorem point_lo_pos_iff (q : ℚ) : 0 < (I80.point q).lo ↔ 1/(Q:ℚ) ≤ q :=",
+      "raw_sha256": "003ea57f2593b335d18374cfb884fe88a265dac54435888accb66bf04c8f6314",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "point_lo_pos_of_one_ulp_le",
+      "complete_raw_header": "theorem point_lo_pos_of_one_ulp_le (q : ℚ) (hq : 1/(Q:ℚ) ≤ q) :\n    0 < (I80.point q).lo :=",
+      "raw_sha256": "9242eef9e6161693ddc46bf4f959028aaa70d447cc8b2a6d3bf1d4d7a4ab2ba8",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "chord_denominator_guard",
+      "complete_raw_header": "theorem chord_denominator_guard (pl ph : ℚ) (hwidth : 1/(Q:ℚ) ≤ ph-pl) :\n    0 < (I80.point (ph-pl)).lo :=",
+      "raw_sha256": "fa31258065c9aa22929904b051280923a7f2febef1de301ca91855f4388405cb",
+      "before_after_exact": true
+    },
+    {
+      "kind": "def",
+      "name": "ordinaryPair512Width",
+      "complete_raw_header": "def ordinaryPair512Width : ℚ :=",
+      "raw_sha256": "bc4950b7e890ef7d6d33b2f65ea15e237aaaa76b3aef36148bff59cc2651317e",
+      "before_after_exact": true
+    },
+    {
+      "kind": "theorem",
+      "name": "ordinaryPair512Width_guard",
+      "complete_raw_header": "theorem ordinaryPair512Width_guard : 0 < (I80.point ordinaryPair512Width).lo :=",
+      "raw_sha256": "4c94a773f6703562e65199966bc076c0e4dfa3ea45adbbca45cb3350eb9c7b99",
+      "before_after_exact": true
+    }
+  ],
+  "all_7_complete_definition_regions": [
+    {
+      "name": "ceilDiv",
+      "bytes": 44,
+      "raw_sha256": "429665beb8b3f6e1b698e5ef222447b17796898d7b4590de85cf662db33d2f3f",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "historicalDiv",
+      "bytes": 304,
+      "raw_sha256": "8161cf8f39c873f5edb1415767f430ba37478e7195c89256dbe45c0fd9630a9e",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "denominatorCheck",
+      "bytes": 60,
+      "raw_sha256": "a19d543afe3d649cb7a80c58ff1d2c641d5ee521286c3538ebbbbc683de511a4",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "checkedHistoricalDiv",
+      "bytes": 118,
+      "raw_sha256": "58bda1522d8f8ab1633793318b047e0d9e9f88672cc667179c73f8b73101f396",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "unit",
+      "bytes": 35,
+      "raw_sha256": "f76e79f82734e8b99f57916607b96009d26be94020e64c205ed0781d3447233f",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "historicalReciprocal",
+      "bytes": 108,
+      "raw_sha256": "5d795902a9a316c3f1c280b77774d1f2be73b58fbb12c01181f826e270d5cc62",
+      "complete_region_before_after_exact": true
+    },
+    {
+      "name": "ordinaryPair512Width",
+      "bytes": 91,
+      "raw_sha256": "12b65f337bc7e7e176570a0456d785090dcce29fec1d3882fe1c4aa79171d9a0",
+      "complete_region_before_after_exact": true
+    }
+  ],
+  "three_only_changed_proof_bodies": [
+    "historicalDiv_eq_I80_div",
+    "unit_contains",
+    "historicalReciprocal_eq_div"
+  ],
+  "exact_forward_and_reverse_reconstruction_of_entire_source": true,
+  "every_other_source_byte_preserved_including_imports_comments_EOL_namespace_options": true,
+  "public_header_or_definition_representation_or_semantic_exceptions": [],
+  "proof_scope": [
+    {
+      "name": "historicalDiv_eq_I80_div",
+      "review": "The original record equality is reduced using the imported binary constructor I80.mk. The original two floor/ceiling min/max proofs remain byte-exact. Q_pos is used to scale min/max, while y.lo>0 and y.lo<=y.hi give both denominator nonzero witnesses. No numerator sign premise is introduced."
+    },
+    {
+      "name": "unit_contains",
+      "review": "The original raw_contains(Q:Int) proposition is retained. unit unfolds only to raw Q; Int.cast_natCast makes the rational numerator Q; div_self Q_ne_zero reduces that rational Q/Q to one; Rat.cast_one produces the existing real1 target. Q remains the original2^80."
+    },
+    {
+      "name": "historicalReciprocal_eq_div",
+      "review": "The same two integer constructor-coordinate equalities use all original floor/ceil monotonicity witnesses and unchanged min_eq_right/max_eq_left simplification. The original Q^2 numerators and positive denominator lo/hi guards remain."
+    }
+  ],
+  "mathematical_scope_preserved": {
+    "signed_numerator_negative_and_crossing_zero_allowed": true,
+    "no_added_numerator_nonnegativity_hypothesis": true,
+    "four_original_integer_floor_corners_and_four_ceil_corners_unchanged": true,
+    "positive_denominator_check_and_Option_none_some_behavior_unchanged": true,
+    "one_ulp_lower_and_upper_error_targets_strict_less_than_one_over_Q_unchanged": true,
+    "ordinary_pair512_width_formula_and_exact_guard_unchanged": true,
+    "no_saved_output_certificate_adoption_numeric_checker_or_budget_change": true
+  },
+  "actual_failure": {
+    "owner_frozen_entry": {
+      "module": "ImbalancedChen.P2HistoricI80DivisionSoundness",
+      "source_sha256_at_initial_failure": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+      "current_sha256_at_observation": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+      "raw_failure_slice": "P2HistoricI80DivisionSoundness.failure.log",
+      "slice_sha256": "650c38a6895034b120b2eec4a7ae844056ce7ccf9266f9298e63d3dc74b7d614",
+      "raw_byte_start": 6900414,
+      "raw_byte_end_exclusive": 6903789,
+      "actual_lean_exit_code": 1
+    },
+    "source_context_binding": {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricI80DivisionSoundness.lean",
+      "sha256": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+      "bytes": 10191
+    },
+    "whole_bound_prefix_and_slice_sha_exact": true,
+    "slice_equals_exact_frozen_prefix_byte_range": true,
+    "actual_error_lines": [
+      63,
+      133,
+      151
+    ],
+    "actual_original_Lean_exit_code": 1,
+    "job_wall_label": "17s",
+    "individual_CPU_time_or_finished_command_not_inferred": true,
+    "aggregate_was_still_running_at_observation_final_exit_not_inferred": true
+  },
+  "actual_pinned_API_source_and_excerpt_bindings": [
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+        "bytes": 29769,
+        "sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e"
+      },
+      "line_range": [
+        27,
+        34
+      ],
+      "excerpt_sha256": "5a2bedae1440e73d1fe1d02df3fa86b2912fb15cca73e61114ca20352d460041",
+      "actual_pinned_excerpt_exact": true
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+        "bytes": 29769,
+        "sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e"
+      },
+      "line_range": [
+        37,
+        61
+      ],
+      "excerpt_sha256": "429577553be085666795b9d3ccb79404170fa12d90dab25b72a0ade935bdd7df",
+      "actual_pinned_excerpt_exact": true
+    },
+    {
+      "source": {
+        "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricQ80DefectLookup.lean",
+        "bytes": 29769,
+        "sha256": "a0a598b9129cecd045de5832a68ecbb2a833313905fac44a8001ded52e5bdd6e"
+      },
+      "line_range": [
+        73,
+        75
+      ],
+      "excerpt_sha256": "0414b75916bcd2d1a35674998e0ec3c06a360d789a792fe71ebcb87e3a8bf00e",
+      "actual_pinned_excerpt_exact": true
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Defs.lean",
+        "bytes": 11348,
+        "sha256": "0e71257b1ee1db6fb243f76c916f39332288323ca8ae00c85ac1271fd2deb0eb"
+      },
+      "line_range": [
+        114,
+        132
+      ],
+      "excerpt_sha256": "5d6a84fc3f8c293e59ef80d8b9ddb1ebf673600d0bbbde2f985d3d969ae2c916",
+      "actual_pinned_excerpt_exact": true
+    }
+  ],
+  "additional_actual_API_signatures": [
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/batteries/Batteries/Logic.lean",
+        "bytes": 4559,
+        "sha256": "dcfc3dd1580feebc8a29b6f9d65e32a0eadbce486fd02c5b1ce03c43fcf872ce"
+      },
+      "signature_line": 38,
+      "signature_prefix": "theorem congrArg₂ (f : α → β → γ)",
+      "role": "congrArg₂ takes the two same-coordinate equalities and concludes constructor equality; I80.mk has precisely two integer fields."
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Int/Cast/Basic.lean",
+        "bytes": 4073,
+        "sha256": "f844c670a3e5f09565d6d3648e740f64aba02d5cf308aa0d81770ffd7499a9a2"
+      },
+      "signature_line": 71,
+      "signature_prefix": "theorem cast_natCast (n : ℕ) : ((n : ℤ) : R) = n :=",
+      "role": "Int.cast_natCast reduces the Int-to-Rat cast of the original natural Q."
+    },
+    {
+      "source": {
+        "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/GroupWithZero/Units/Basic.lean",
+        "bytes": 21010,
+        "sha256": "70d9819b0015e85972be567f2864a0516302a566f12fda8f67c243bff5d16bca"
+      },
+      "signature_line": 294,
+      "signature_prefix": "lemma div_self (h : a ≠ 0) : a / a = 1",
+      "role": "div_self consumes the existing rational Q_ne_zero and proves the same rational quotient is one."
+    }
+  ],
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "source": {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+      "bytes": 42662,
+      "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232"
+    },
+    "line_range": [
+      95,
+      104
+    ],
+    "snapshot_sha256": "205882493de6e16dc436b1750dc6a3d450aa8f3bf2c77d7d4c6f2df7c1cdb6c2",
+    "review": "Nov6 outward/inward integer interval rounding and four-endpoint multiplication, with division only after a positive denominator interval check. The original Q80 signed implementation and same guard are retained."
+  },
+  "bounded_published_preimage_objects_independently_verified": [
+    {
+      "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+      "path": "ImbalancedChen/P2HistoricI80DivisionSoundness.lean",
+      "blob": "cb81e45bc20f5a72b2d1ce074801f592a21f071e",
+      "payload_sha256": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+      "exact_original_preimage": true
+    },
+    {
+      "commit": "29a0717b23cbab3a4bfb5f9066b815c181b3efa4",
+      "path": "ImbalancedChen/P2HistoricI80DivisionSoundness.lean",
+      "blob": "cb81e45bc20f5a72b2d1ce074801f592a21f071e",
+      "payload_sha256": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d",
+      "exact_original_preimage": true
+    }
+  ],
+  "source_origin_inventory_scope_not_a_claim_of_absence_over_all_Git_history": true,
+  "current_live_source_read_only_binding": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P2HistoricI80DivisionSoundness.lean",
+    "bytes": 10191,
+    "sha256": "fe0248cc8c7b6fb1fbcf476a924f172c41b0d17c5a51732b547635b7938c140d"
+  },
+  "current_live_source_is": "REVIEWED_PREIMAGE",
+  "new_Lean_Lake_normal_kernel_type_axiom_numeric_or_stock_invocations": 0,
+  "live_source_cache_guard_runtime_controller_queue_or_old_record_writes": 0,
+  "candidate_normal_kernel_and_full_owned_success_not_claimed": true,
+  "next_step": "Unique owner rechecks live preimage and active/queued writers, then performs exact-source normal/kernel/all-owned acceptance with original guards/budgets. This review is source-only and establishes no whole-P1 acceptance."
+}

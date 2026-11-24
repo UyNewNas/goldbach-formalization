@@ -60,7 +60,7 @@ enclosure comparison and retains each intermediate signed floor/ceiling. -/
 theorem historicalDiv_eq_I80_div (x y : I80)
     (hpos : 0 < y.lo) (horder : y.lo ≤ y.hi) : historicalDiv x y = x.div y := by
   have hhi : 0 < y.hi := hpos.trans_le horder
-  ext
+  apply congrArg₂ I80.mk
   · simp only [historicalDiv, I80.div, I80.ofEnclosure, I80.enclosure,
       I80.decodeLo, I80.decodeHi, Enclosure.divisionBounds, Enclosure.mul,
       Enclosure.reciprocalBounds, min_mul_of_nonneg _ _ Q_pos.le, floor_min_rat,
@@ -130,7 +130,7 @@ def unit : I80 := I80.raw (Q:ℤ)
 
 theorem unit_contains : unit.Contains (1:ℝ) := by
   have h := I80.raw_contains (Q:ℤ)
-  simpa [Q_ne_zero] using h
+  simpa only [unit,Int.cast_natCast,div_self Q_ne_zero,Rat.cast_one] using h
 
 /-- The specialised inverse has the two literal integer endpoint formulas. -/
 def historicalReciprocal (y : I80) : I80 :=
@@ -148,7 +148,7 @@ theorem historicalReciprocal_eq_div (y : I80)
   have hu := Int.ceil_mono hr
   rw [floor_int_div_of_pos _ _ hhi, floor_int_div_of_pos _ _ hp] at hl
   rw [ceil_int_div_of_pos _ _ hhi, ceil_int_div_of_pos _ _ hp] at hu
-  ext <;> simp [historicalReciprocal,historicalDiv,unit,I80.raw,
+  apply congrArg₂ I80.mk <;> simp [historicalReciprocal,historicalDiv,unit,I80.raw,
     min_eq_right hl,max_eq_left hu]
 
 theorem historicalReciprocal_contains {y : I80} {w : ℝ}

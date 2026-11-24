@@ -135,7 +135,7 @@ instantiate this theorem. -/
 theorem originalCompactThirdCorrection_le_totalCharge
     (tree : ChargedCutTree)
     (hlocal : LocalChargeBound tree compactRegion) :
-    originalCompactThirdCorrection ≤ (totalCharge tree : ℝ) / 2^80 := by
+    _root_.ImbalancedChen.OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection ≤ (totalCharge tree : ℝ) / 2^80 := by
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves (eraseCharges tree)]
   rw [← integral_eq_sum_closedLeaves (eraseCharges tree)
     measurableSet_compactRegion (fun _ ht => ht)]

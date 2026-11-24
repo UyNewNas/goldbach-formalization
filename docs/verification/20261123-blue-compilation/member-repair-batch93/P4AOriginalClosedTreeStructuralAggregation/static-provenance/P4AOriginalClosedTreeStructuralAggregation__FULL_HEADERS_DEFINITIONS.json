@@ -1,0 +1,134 @@
+{
+  "module": "ImbalancedChen.P4AOriginalClosedTreeStructuralAggregation",
+  "source_commands": 9,
+  "complete_headers": [
+    {
+      "name": "splitCount",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before": "def splitCount : ClosedCutTree → ℕ",
+      "before_sha256": "8c1bc4ef9b6d997154e9f94ab7d9e863eee32f572c725eaef8eaf114d2b042fe",
+      "complete_raw_header_after": "def splitCount : ClosedCutTree → ℕ",
+      "after_sha256": "8c1bc4ef9b6d997154e9f94ab7d9e863eee32f572c725eaef8eaf114d2b042fe",
+      "same_raw": true
+    },
+    {
+      "name": "closedLeaves_length",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before": "theorem closedLeaves_length (tree : ClosedCutTree) (s : Set Point) :\n    (closedLeaves tree s).length = splitCount tree + 1 :=",
+      "before_sha256": "215e7d7e6cb858efaebf2442ae696ff6bc96464d606da0f3abe4a625f6d0ec77",
+      "complete_raw_header_after": "theorem closedLeaves_length (tree : ClosedCutTree) (s : Set Point) :\n    (closedLeaves tree s).length = splitCount tree + 1 :=",
+      "after_sha256": "215e7d7e6cb858efaebf2442ae696ff6bc96464d606da0f3abe4a625f6d0ec77",
+      "same_raw": true
+    },
+    {
+      "name": "mem_iff_exists_closedLeaf",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before": "theorem mem_iff_exists_closedLeaf (tree : ClosedCutTree) :\n    ∀ (s : Set Point) (t : Point),\n      t ∈ s ↔ ∃ c ∈ closedLeaves tree s, t ∈ c :=",
+      "before_sha256": "815766d447f37aad8419415fced897cbbfe53de4a1eb90e769297bd848547f7a",
+      "complete_raw_header_after": "theorem mem_iff_exists_closedLeaf (tree : ClosedCutTree) :\n    ∀ (s : Set Point) (t : Point),\n      t ∈ s ↔ ∃ c ∈ closedLeaves tree s, t ∈ c :=",
+      "after_sha256": "815766d447f37aad8419415fced897cbbfe53de4a1eb90e769297bd848547f7a",
+      "same_raw": true
+    },
+    {
+      "name": "ChargedCutTree",
+      "kind": "inductive",
+      "private": false,
+      "complete_raw_header_before": "inductive ChargedCutTree where",
+      "before_sha256": "7f469784463c3d33d1e8efca9ec1b073ee161372cdd6b910d817c3da04b6aa0b",
+      "complete_raw_header_after": "inductive ChargedCutTree where",
+      "after_sha256": "7f469784463c3d33d1e8efca9ec1b073ee161372cdd6b910d817c3da04b6aa0b",
+      "same_raw": true
+    },
+    {
+      "name": "eraseCharges",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before": "def eraseCharges : ChargedCutTree → ClosedCutTree",
+      "before_sha256": "3ba7f5937f2aff3d4eb750af9c4e225dbcb16a8f827b589842faeecd50c08ac6",
+      "complete_raw_header_after": "def eraseCharges : ChargedCutTree → ClosedCutTree",
+      "after_sha256": "3ba7f5937f2aff3d4eb750af9c4e225dbcb16a8f827b589842faeecd50c08ac6",
+      "same_raw": true
+    },
+    {
+      "name": "totalCharge",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before": "def totalCharge : ChargedCutTree → ℤ",
+      "before_sha256": "527681a4cf5ab5a7b35b3f77a1524847f21d8ddb1a1aefde2d5e897b456186ab",
+      "complete_raw_header_after": "def totalCharge : ChargedCutTree → ℤ",
+      "after_sha256": "527681a4cf5ab5a7b35b3f77a1524847f21d8ddb1a1aefde2d5e897b456186ab",
+      "same_raw": true
+    },
+    {
+      "name": "LocalChargeBound",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header_before": "def LocalChargeBound : ChargedCutTree → Set Point → Prop",
+      "before_sha256": "70d764692315df5de0403d2a46a1f625e7857e9c1d9157394d1e57bf315820f4",
+      "complete_raw_header_after": "def LocalChargeBound : ChargedCutTree → Set Point → Prop",
+      "after_sha256": "70d764692315df5de0403d2a46a1f625e7857e9c1d9157394d1e57bf315820f4",
+      "same_raw": true
+    },
+    {
+      "name": "integral_le_totalCharge",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before": "theorem integral_le_totalCharge (tree : ChargedCutTree) :\n    ∀ {s : Set Point}, MeasurableSet s → s ⊆ compactRegion →\n      LocalChargeBound tree s →\n      (∫ t in s, compactKernel t) ≤ (totalCharge tree : ℝ) / 2^80 :=",
+      "before_sha256": "9bb68efaf2152dc2aaad21d265b7f47dd9c136d301fac6216584ef489bbad1f0",
+      "complete_raw_header_after": "theorem integral_le_totalCharge (tree : ChargedCutTree) :\n    ∀ {s : Set Point}, MeasurableSet s → s ⊆ compactRegion →\n      LocalChargeBound tree s →\n      (∫ t in s, compactKernel t) ≤ (totalCharge tree : ℝ) / 2^80 :=",
+      "after_sha256": "9bb68efaf2152dc2aaad21d265b7f47dd9c136d301fac6216584ef489bbad1f0",
+      "same_raw": true
+    },
+    {
+      "name": "originalCompactThirdCorrection_le_totalCharge",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header_before": "theorem originalCompactThirdCorrection_le_totalCharge\n    (tree : ChargedCutTree)\n    (hlocal : LocalChargeBound tree compactRegion) :\n    originalCompactThirdCorrection ≤ (totalCharge tree : ℝ) / 2^80 :=",
+      "before_sha256": "bbeecef2aade1b87acddfd31ba4a292cb3c12e1684015f2ef41df31a781daad5",
+      "complete_raw_header_after": "theorem originalCompactThirdCorrection_le_totalCharge\n    (tree : ChargedCutTree)\n    (hlocal : LocalChargeBound tree compactRegion) :\n    _root_.ImbalancedChen.OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection ≤ (totalCharge tree : ℝ) / 2^80 :=",
+      "after_sha256": "16d7ba9bf4ca52c80d01028b4fcd93d376d752f156307796ca2e19fd51d132ce",
+      "same_raw": false
+    }
+  ],
+  "definitions_and_inductive_carriers": [
+    {
+      "name": "splitCount",
+      "kind": "def",
+      "raw_region": "def splitCount : ClosedCutTree → ℕ\n  | .leaf => 0\n  | .split _ _ left right => 1 + splitCount left + splitCount right\n\n/-- The actual recursor retains all leaves, including empty or zero-width\nchildren; no positive-width heap filter is applied to this list. -/\n",
+      "sha256": "508f62d44c7532db9e2394b2210b219895735f3d163335a2532a2754c069a0b5"
+    },
+    {
+      "name": "ChargedCutTree",
+      "kind": "inductive",
+      "raw_region": "inductive ChargedCutTree where\n  | leaf (charge : ℤ) : ChargedCutTree\n  | split (axis : Fin 3) (cut : ℤ)\n      (left right : ChargedCutTree) : ChargedCutTree\n\n",
+      "sha256": "d6ae3a0f5140b360efa704a2e082f95724be27639cc0229847e6a46c8674ca03"
+    },
+    {
+      "name": "eraseCharges",
+      "kind": "def",
+      "raw_region": "def eraseCharges : ChargedCutTree → ClosedCutTree\n  | .leaf _ => .leaf\n  | .split axis cut left right =>\n      .split axis cut (eraseCharges left) (eraseCharges right)\n\n",
+      "sha256": "8771a57c7f1c154c347bde37cd9fa1ddd4759623fd506291350ba14ef9e817d5"
+    },
+    {
+      "name": "totalCharge",
+      "kind": "def",
+      "raw_region": "def totalCharge : ChargedCutTree → ℤ\n  | .leaf charge => charge\n  | .split _ _ left right => totalCharge left + totalCharge right\n\n/-- Local integral bounds follow the original closed children exactly. No\nwhole compact-integral inequality occurs in a leaf premise. -/\n",
+      "sha256": "bcc8c90cc5b7879622aeff1540c90e3b4daca5d47e2d18cbbc2d9ef9f5fd84fc"
+    },
+    {
+      "name": "LocalChargeBound",
+      "kind": "def",
+      "raw_region": "def LocalChargeBound : ChargedCutTree → Set Point → Prop\n  | .leaf charge, s =>\n      (∫ t in s, compactKernel t) ≤ (charge : ℝ) / 2^80\n  | .split axis cut left right, s =>\n      LocalChargeBound left\n          (s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}) ∧\n        LocalChargeBound right\n          (s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis})\n\n/-- Recursive charge aggregation uses the actual closed-face-null integral\nidentity at every cut. No disjointness of closed children is postulated. -/\n",
+      "sha256": "8fabd15218dcf3841363f27cc375fb79f3662afa19fe9aa37b57dde450672d9f"
+    }
+  ],
+  "proof_changes": [],
+  "header_exceptions": [
+    "originalCompactThirdCorrection_le_totalCharge"
+  ],
+  "all_other_headers_and_all_definitions_raw_identical": true,
+  "complete_forward_reverse_exact": true
+}

@@ -1,0 +1,50 @@
+{
+  "builtin_Fin_canonicalization": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Lean/Meta/Tactic/Simp/BuiltinSimprocs/Fin.lean",
+    "bytes": 8573,
+    "sha256": "6e22f4a410ec146af6481c30693c141c4f9d120db24e5d2bc5a1e6a873915bdc",
+    "start_line": 90,
+    "end_line": 110,
+    "raw_excerpt": "\n/-- Simplification procedure for ensuring `Fin n` literals are normalized. -/\nbuiltin_dsimproc [simp, seval] isValue ((OfNat.ofNat _ : Fin _)) := fun e => do\n  let_expr OfNat.ofNat _ m _ ← e | return .continue\n  let some ⟨n, v⟩ ← getFinValue? e | return .continue\n  let some m ← getNatValue? m | return .continue\n  if m < n then\n    -- Design decision: should we return `.continue` instead of `.done` when simplifying.\n    -- In the symbolic evaluator, we must return `.done`, otherwise it will unfold the `OfNat.ofNat`\n    return .done e\n  return .done <| toExpr v\n\nbuiltin_dsimproc [simp, seval] reduceFinMk (Fin.mk _ _)  := fun e => do\n  let_expr Fin.mk n v _ ← e | return .continue\n  let some n ← evalNat n |>.run | return .continue\n  let some v ← getNatValue? v | return .continue\n  if h : n ≠ 0 then\n    have : NeZero n := ⟨h⟩\n    return .done <| toExpr (Fin.ofNat n v)\n  else\n    return .continue\n",
+    "excerpt_sha256": "e893431e6034c60c33b801d253388f1d6576302a4856fe32503f44040db749c6"
+  },
+  "Matrix_numeric_index_reader": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/VecNotation.lean",
+    "bytes": 17629,
+    "sha256": "17b85a7ee9c4478995b91d56eda4115ac0b399ea676e1d29ba50485803d4b34e",
+    "start_line": 186,
+    "end_line": 196,
+    "raw_excerpt": "/-- A simproc that handles terms of the form `Matrix.vecCons a f i` where `i` is a numeric literal.\n\nIn practice, this is most effective at handling `![a, b, c] i`-style terms. -/\ndsimproc cons_val (Matrix.vecCons _ _ _) := fun e => do\n  let_expr Matrix.vecCons α en x xs' ei := ← Meta.whnfR e | return .continue\n  let some i := ei.int? | return .continue\n  let (xs, etailn, tail) ← matchVecConsPrefix en xs'\n  let xs := x :: xs\n  -- Determine if the tail is a numeral or only an offset.\n  let (tailn, variadic, etailn) ← do\n    let etailn_whnf : Q(ℕ) ← Meta.whnfD etailn\n",
+    "excerpt_sha256": "a0e6dd2b8f59446c78bf6cfec7b34a67dcebbdb81939e61174d1b733c3200ae9"
+  },
+  "OfNat_only_Expr_literal_reader": {
+    "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Lean/Expr.lean",
+    "bytes": 87215,
+    "sha256": "b9a91d9d170201c2a3622b9c55d694466f54e0e1b8f6068a2d296ff98650169c",
+    "start_line": 1796,
+    "end_line": 1819,
+    "raw_excerpt": "Checks if an expression is a \"natural number numeral in normal form\",\ni.e. of type `Nat`, and explicitly of the form `OfNat.ofNat n`\nwhere `n` matches `.lit (.natVal n)` for some literal natural number `n`.\nand if so returns `n`.\n-/\n-- Note that `Expr.lit (.natVal n)` is not considered in normal form!\ndef nat? (e : Expr) : Option Nat := do\n  let_expr OfNat.ofNat _ n _ := e | failure\n  let lit (.natVal n) := n | failure\n  n\n\n/--\nChecks if an expression is an \"integer numeral in normal form\",\ni.e. of type `Nat` or `Int`, and either a natural number numeral in normal form (as specified by `nat?`),\nor the negation of a positive natural number numeral in normal form,\nand if so returns the integer.\n-/\ndef int? (e : Expr) : Option Int :=\n  let_expr Neg.neg _ _ a := e | e.nat?\n  match a.nat? with\n  | none => none\n  | some 0 => none\n  | some n => some (-n)\n\n",
+    "excerpt_sha256": "0929be953a6957bf680b8509c3938c7ee59ad2c34c43fb7afc7cb85e4b2383fe"
+  },
+  "existing_exact_three_API_combination": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/LinearAlgebra/CrossProduct.lean",
+    "bytes": 7105,
+    "sha256": "c2de1917968f25a1a11bb003663cac4aeeb202fd1db77cbea5804d29427bdaa4",
+    "start_line": 175,
+    "end_line": 184,
+    "raw_excerpt": "/-- The scalar triple product expansion of the vector triple product. -/\ntheorem cross_cross_eq_smul_sub_smul (u v w : Fin 3 → R) :\n    u ⨯₃ v ⨯₃ w = (u ⬝ᵥ w) • v - (v ⬝ᵥ w) • u := by\n  simp_rw [cross_apply, vec3_dotProduct]\n  ext i\n  fin_cases i <;>\n  · simp only [Fin.isValue, Nat.succ_eq_add_one, Nat.reduceAdd, Fin.reduceFinMk, cons_val,\n      Pi.sub_apply, Pi.smul_apply, smul_eq_mul]\n    ring\n\n",
+    "excerpt_sha256": "56beb4a38e21f3870116eae0785e12fc218e7b7aa936dde8b597fa5445ae818a"
+  },
+  "second_existing_exact_three_API_combination": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/AlgebraicGeometry/EllipticCurve/Affine/AddSubMap.lean",
+    "bytes": 7965,
+    "sha256": "f2242f08dad6f6a0c1f097b3491e7f1cdea7576c1933ea6d68fa905babedf725",
+    "start_line": 85,
+    "end_line": 91,
+    "raw_excerpt": "lemma isHomogeneous_addSubMap (i : Fin 3) : (addSubMap W i).IsHomogeneous 2 := by\n  simp only [addSubMap]\n  fin_cases i <;>\n    simp only [Fin.isValue, Fin.mk_one, Fin.zero_eta, Fin.reduceFinMk, Matrix.cons_val,\n      Matrix.cons_val_one, Matrix.cons_val_zero]\n  · exact isHomogeneous_X_pow .. |>.sub CXY |>.sub CXY |>.sub CXX\n  · exact CXY.add CXY |>.add CXY |>.add CXX\n",
+    "excerpt_sha256": "56454b371197b0e9f672d42f17f07a58359f09002536b9124100d590b694b003"
+  },
+  "source_determined_normalization_boundary": "The existing only-list unfolds Fin.instOfNat/ofNat/Internal.ofNat and Fin.succ. Matrix.cons_val reads its index with Expr.int?, which recognizes OfNat.ofNat rather than an exposed Fin.mk. Fin.reduceFinMk reifies closed Fin.mk into a canonical Fin numeral, and Fin.isValue protects valid literals with .done specifically to prevent OfNat unfolding, as the pinned implementation comments explain. Both are existing builtin proof-preserving definitional simprocs.",
+  "actual_goal_observation": "All61 actual errors still print unreduced Matrix.vecCons literal tables at row36/37/38/18 and coordinates0 or explicit Fin constructor projections. The pretty log does not expose full Expr AST; this packet does not claim a runtime AST inspection or prior successful application of the proposed normalization.",
+  "no_new_mathematical_algorithm": "Adds only the same canonical-Fin/vector APIs used together in pinned Mathlib. No custom reducer, data/model/compiler/certificate, coordinate sampling, source premise or new lemma is introduced."
+}

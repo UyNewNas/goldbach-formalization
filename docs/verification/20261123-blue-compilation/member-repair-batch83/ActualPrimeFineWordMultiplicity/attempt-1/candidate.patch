@@ -1,0 +1,46 @@
+--- baseline/ImbalancedChen/ActualPrimeFineWordMultiplicity.lean
++++ candidate/ImbalancedChen/ActualPrimeFineWordMultiplicity.lean
+@@ -45,6 +45,7 @@
+             rw [hb] at ih
+             exact ih
+           rw [actualPrimeFineLabelBlocksOfWord, hb]
++          dsimp only
+           by_cases hij : i = j
+           · rw [if_pos hij]
+             subst i
+@@ -65,6 +66,7 @@
+           rcases b with ⟨j, m⟩
+           have hprev : ∀ b ∈ (j, m) :: blocks, 0 < b.2 := by simpa only [hb] using ih
+           rw [actualPrimeFineLabelBlocksOfWord, hb]
++          dsimp only
+           by_cases hij : i = j
+           · rw [if_pos hij]
+             intro b hb
+@@ -107,6 +109,7 @@
+             exact List.mem_cons_self
+           have hji : j ≤ i := hcross j hjmem
+           rw [actualPrimeFineLabelBlocksOfWord, hb]
++          dsimp only
+           by_cases hij : i = j
+           · rw [if_pos hij]
+             obtain ⟨hhead, hrest⟩ := List.pairwise_cons.mp hprev'
+@@ -128,8 +131,9 @@
+   | cons a blocks ih =>
+       obtain ⟨hcross, htail⟩ := List.pairwise_cons.mp hlabels
+       intro b hb
+-      rcases List.mem_cons.mp hb with rfl | hb
+-      · have hnot : a.1 ∉ actualPrimeLabelBlocksWord blocks := by
++      rcases List.mem_cons.mp hb with hba | hb
++      · subst b
++        have hnot : a.1 ∉ actualPrimeLabelBlocksWord blocks := by
+           intro hi
+           obtain ⟨c, hc, heq⟩ := actualPrimeLabelBlocksWord_mem hi
+           exact hcross c hc heq
+@@ -169,6 +173,7 @@
+     _ = ((blocks.map Prod.fst).map
+         (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial)).prod := by
+       rw [List.map_map]
++      rfl
+     _ = (blocks.map Prod.fst).toFinset.prod
+         (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial) :=
+       (List.prod_toFinset _ hnodup).symm

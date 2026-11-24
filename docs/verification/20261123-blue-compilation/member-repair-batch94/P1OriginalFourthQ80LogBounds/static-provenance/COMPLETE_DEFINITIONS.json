@@ -1,0 +1,56 @@
+[
+  {
+    "name": "scale",
+    "complete_raw_region": "def scale : ℕ := 2^80\n",
+    "sha256": "8f23723241ebe43417d578a7a0cbee2d5f5b843ce80146f23972894fe28eed21",
+    "byte_exact": true
+  },
+  {
+    "name": "z",
+    "complete_raw_region": "def z (j : ℕ) : ℚ := (j:ℚ)/(8192+j)\n",
+    "sha256": "d4faf9fea7475078895849c405ce71a16de11fd7da190d641b5d19b869e6c8c0",
+    "byte_exact": true
+  },
+  {
+    "name": "term",
+    "complete_raw_region": "def term (j k : ℕ) : ℚ := (scale:ℚ)*2*(z j)^(2*k+1)/((2*k+1:ℕ):ℚ)\n",
+    "sha256": "ede44819baca2b1ee3e43fbe9fc71b49970d807afc6c0ae6566875a62bff94d6",
+    "byte_exact": true
+  },
+  {
+    "name": "tail",
+    "complete_raw_region": "def tail (j : ℕ) : ℚ := (scale:ℚ)*2*(z j)^49/(49*(1-(z j)^2))\n",
+    "sha256": "cf601cb4d3ae3f9c16dca370ee71604350f5c6f7681d462fbf7a241d4b69e914",
+    "byte_exact": true
+  },
+  {
+    "name": "lo",
+    "complete_raw_region": "def lo (j : ℕ) : ℤ := ∑ k ∈ Finset.range 24, ⌊term j k⌋\n",
+    "sha256": "541ad29b29a3e16ecd612e20e7472403feff6eb0091995d59c032a0ff74bf515",
+    "byte_exact": true
+  },
+  {
+    "name": "hi",
+    "complete_raw_region": "def hi (j : ℕ) : ℤ := if j = 0 then 0 else lo j + 24 + ⌈tail j⌉\n",
+    "sha256": "f8aaae6c573b5581c0b8cebfab62797c0cc6eeaaa125f34fd38044539b03eadc",
+    "byte_exact": true
+  },
+  {
+    "name": "leftStep",
+    "complete_raw_region": "def leftStep (j : ℕ) : ℤ := ⌊(lo j:ℚ)/(8192+j)⌋\n",
+    "sha256": "9692536ca697b0deaa2fb398f9d926b7eaa324bfb9a1c8247b72ffad533695f3",
+    "byte_exact": true
+  },
+  {
+    "name": "ratio",
+    "complete_raw_region": "def ratio (j : ℕ) : ℚ := (12288+(j:ℚ))/(8192+j)\n",
+    "sha256": "0bab794f528102c8edda98e000cd2817f682d9b1fbeedd677bc6e74049d170a7",
+    "byte_exact": true
+  },
+  {
+    "name": "penalty",
+    "complete_raw_region": "def penalty (j : ℕ) : ℤ := ⌈ratio j*(hi j:ℚ)⌉\n\n",
+    "sha256": "e0fa2b0c19197f34449f8cd906a14b52a05c2f7bbd2940e51ecafff3ca67750b",
+    "byte_exact": true
+  }
+]

@@ -1,0 +1,165 @@
+--- baseline/ImbalancedChen/P5ZU1011OriginalSixteenPolicyBank.lean
++++ candidate/ImbalancedChen/P5ZU1011OriginalSixteenPolicyBank.lean
+@@ -89,7 +89,8 @@
+   congr 2
+   apply Finset.sum_congr rfl
+   intro i _
+-  by_cases hi : i.val<j.val ∧ ¬Selected p i <;> simp [hi]
++  by_cases hi : i.val<j.val ∧ ¬Selected p i <;>
++    simp only [hi,ite_true,ite_false,ContinuousLinearMap.proj_apply,ContinuousLinearMap.zero_apply]
+ 
+ theorem cap_eq_affine_circuit (p : Policy) (v : LogFour) :
+     cap p v=if p.val<15 then min (affineCap p true v) (affineCap p false v)
+@@ -106,10 +107,14 @@
+ def wPolicy : Policy := ⟨15,by norm_num⟩
+ 
+ theorem selectedMass_first (v : LogFour) : selectedMass first v=v 0 := by
+-  norm_num [selectedMass,Selected,sourceId,first,Fin.sum_univ_succ]
++  have hbit1 : Nat.testBit 1 1 = false := by decide
++  have hbit2 : Nat.testBit 1 2 = false := by decide
++  have hbit3 : Nat.testBit 1 3 = false := by decide
++  norm_num [selectedMass,Selected,sourceId,first,Fin.sum_univ_succ,hbit1,hbit2,hbit3]
+ 
+ theorem cap_first (v : LogFour) : cap first v=U11SelectedLargest.cap v := by
+-  simp [cap,first,selectedMass_first,U11SelectedLargest.cap]
++  rw [cap,selectedMass_first]
++  norm_num [first,U11SelectedLargest.cap]
+ 
+ theorem typedResidual_first (v : LogFour) :
+     typedResidual first v=U11SelectedLargest.residual 0 v := by
+@@ -117,9 +122,12 @@
+ 
+ theorem selectedSquare_first_of_unselected (j : Fin 4) (v : LogFour)
+     (hj : ¬Selected first j) : selectedSquare first j v=fullSquare j v := by
+-  fin_cases j <;> norm_num [Selected,sourceId,first] at hj
++  have hbit1 : Nat.testBit 1 1 = false := by decide
++  have hbit2 : Nat.testBit 1 2 = false := by decide
++  have hbit3 : Nat.testBit 1 3 = false := by decide
++  fin_cases j <;> norm_num [Selected,sourceId,first,hbit1,hbit2,hbit3] at hj
+   all_goals norm_num [selectedSquare,selectedMass,Selected,sourceId,first,
+-    fullSquare,Fin.sum_univ_succ] <;> ring
++    fullSquare,Fin.sum_univ_succ,hbit1,hbit2,hbit3] <;> ring
+ 
+ theorem first_fullSquares (v : LogFour) :
+     (∀ j : Fin 4, fullSquare j v<cap first v) ↔
+@@ -134,8 +142,13 @@
+     norm_num [fullSquare,Fin.sum_univ_succ] at h0 h1 h2 h3
+     exact ⟨by linarith,by linarith,by linarith,by linarith⟩
+   · intro h j
+-    fin_cases j <;> norm_num [fullSquare,Fin.sum_univ_succ] <;>
+-      linarith [h.1,h.2.1,h.2.2.1,h.2.2.2]
++    fin_cases j <;> norm_num [fullSquare,Fin.sum_univ_succ]
++    · exact h.1
++    · exact h.2.1
++    · exact h.2.2.1
++    · have hindex : v (⟨3, by decide⟩ : Fin 4) = v (3 : Fin 4) := by rfl
++      rw [hindex]
++      simpa only [add_assoc] using h.2.2.2
+ 
+ /-- Exact mask1 correspondence with the already existing single-policy
+ source, including all full and selected squares, not only its cap. -/
+@@ -219,28 +232,54 @@
+ 
+ theorem continuous_cap (p : Policy) : Continuous (cap p) := by
+   by_cases hp : p.val<15
+-  · simp only [cap,if_pos hp]
+-    exact ((continuous_const.add (continuous_selectedMass p)).div_const 2).min
+-      (continuous_const.sub ((continuous_selectedMass p).const_mul (3/2:ℝ)))
+-  · simp only [cap,if_neg hp]
+-    exact continuous_const.sub ((continuous_apply 2).const_mul (3/8:ℝ))
++  · have hcap : cap p = (fun v : LogFour =>
++        min ((1 + selectedMass p v) / 2) (57 / 64 - (3 / 2 : ℝ) * selectedMass p v)) := by
++      funext v
++      exact if_pos hp
++    rw [hcap]
++    exact (((continuous_const : Continuous (fun _ : LogFour => (1 : ℝ))).add
++      (continuous_selectedMass p)).div_const 2).min
++        ((continuous_const : Continuous (fun _ : LogFour => (57 / 64 : ℝ))).sub
++          ((continuous_const : Continuous (fun _ : LogFour => (3 / 2 : ℝ))).mul
++            (continuous_selectedMass p)))
++  · have hcap : cap p = (fun v : LogFour => (153 / 256 : ℝ) - (3 / 8 : ℝ) * v 2) := by
++      funext v
++      exact if_neg hp
++    rw [hcap]
++    exact (continuous_const : Continuous (fun _ : LogFour => (153 / 256 : ℝ))).sub
++      ((continuous_const : Continuous (fun _ : LogFour => (3 / 8 : ℝ))).mul
++        (continuous_apply (2 : Fin 4)))
+ 
+ theorem measurableSet_typedEligible (p : Policy) : MeasurableSet {v | TypedEligible p v} := by
+   have hc := (continuous_cap p).measurable
+   have hf : MeasurableSet {v | ∀ j : Fin 4, fullSquare j v<cap p v} := by
+-    exact MeasurableSet.iInter (fun j => measurableSet_lt (continuous_fullSquare j).measurable hc)
++    simpa only [Set.ofPred_forall] using
++      MeasurableSet.iInter (fun j => measurableSet_lt (continuous_fullSquare j).measurable hc)
+   have hextra : MeasurableSet {v | if p.val<15 then
+       ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v
+       else (1+v 0)/2<cap p v ∧ v 0<(25/128:ℝ)} := by
+     by_cases hp : p.val<15
+-    · simp only [if_pos hp,setOf_forall]
++    · have hbranch : {v : LogFour | if p.val<15 then
++          ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v
++          else (1+v 0)/2<cap p v ∧ v 0<(25/128:ℝ)} =
++          {v : LogFour | ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v} := by
++        ext v
++        simp only [Set.mem_setOf_eq,hp,ite_true]
++      rw [hbranch,Set.ofPred_forall]
+       apply MeasurableSet.iInter
+       intro j
+       by_cases hj : Selected p j
+-      · simp only [hj,not_true_eq_false,false_implies,setOf_true]
++      · have hset : {v : LogFour | ¬Selected p j → selectedSquare p j v<cap p v} = Set.univ := by
++          ext v
++          simp only [Set.mem_setOf_eq,hj,not_true_eq_false,false_implies,Set.mem_univ]
++        rw [hset]
+         exact MeasurableSet.univ
+-      · simpa only [hj,not_false_eq_true,true_implies] using
+-          measurableSet_lt (continuous_selectedSquare p j).measurable hc
++      · have hset : {v : LogFour | ¬Selected p j → selectedSquare p j v<cap p v} =
++            {v : LogFour | selectedSquare p j v<cap p v} := by
++          ext v
++          simp only [Set.mem_setOf_eq,hj,not_false_eq_true,true_implies]
++        rw [hset]
++        exact measurableSet_lt (continuous_selectedSquare p j).measurable hc
+     · simp only [if_neg hp]
+       have ht : Measurable (fun v : LogFour => (1+v 0)/2) := by fun_prop
+       exact (measurableSet_lt ht hc).inter (measurableSet_lt (measurable_pi_apply 0) measurable_const)
+@@ -254,16 +293,22 @@
+ 
+ theorem measurable_residual (j : ℕ) : Measurable (residual j) := by
+   by_cases hj : j<16
+-  · simp only [residual,dif_pos hj,typedResidual]
++  · have hres : residual j = (fun v : LogFour => cap ⟨j,hj⟩ v - U11SelectedLargest.prefixSum v) := by
++      funext v
++      simp only [residual,dif_pos hj,typedResidual]
++    rw [hres]
+     exact ((continuous_cap ⟨j,hj⟩).sub U11SelectedLargest.continuous_prefixSum).measurable
+-  · simp only [residual,dif_neg hj]
++  · have hres : residual j = (fun _ : LogFour => (0 : ℝ)) := by
++      funext v
++      exact dif_neg hj
++    rw [hres]
+     exact measurable_const
+ 
+ /-- Concrete sixteen-policy ordinary range on the ORIGINAL unaltered
+ U11 support. H248 range is proved by its existing literal array supplier. -/
+ theorem ordinary_actual_bounds (mask : Set (ℝ×ℝ)) (j : ℕ) (v : LogFour)
+     (hv : v ∈ originalDomain mask) (he : eligible j v) :
+-    0≤ordinaryKernel H248 residual j v ∧ ordinaryKernel H248 residual j v≤(20000/417:ℝ) := by
++    0≤ordinaryKernel Part5UpperTables.H248 residual j v ∧ ordinaryKernel Part5UpperTables.H248 residual j v≤(20000/417:ℝ) := by
+   have hj : j<16 := by
+     by_contra hn
+     simp only [eligible,dif_neg hn] at he
+@@ -286,10 +331,10 @@
+     (hm : MeasurableSet mask) :
+     IntegrableOn (envelope bank (guarded eligible
+       (switchedKernel currentK LiLiuPrereqBuchstab.buchstab)
+-      (ordinaryKernel H248 residual))) (originalDomain mask) volume := by
++      (ordinaryKernel Part5UpperTables.H248 residual))) (originalDomain mask) volume := by
+   apply U11Canonical.integrableOn_original_canonical_envelope mask hm bank eligible currentK
+-    (by norm_num [currentK]) H248 residual (fun j _ => measurableSet_eligible j)
+-    measurable_H248 (fun j _ => measurable_residual j)
++    (by norm_num [currentK]) Part5UpperTables.H248 residual (fun j _ => measurableSet_eligible j)
++    Part5UpperTables.measurable_H248 (fun j _ => measurable_residual j)
+   intro j hj v hv he
+   exact (ordinary_actual_bounds mask j v hv he).1
+ 

@@ -1,0 +1,90 @@
+{
+  "schema": "actual0007_physical_vertex_proof_api_candidate_v1",
+  "status": "UNCOMPILED_SOURCE_ONLY",
+  "author": "/root/build_workflow",
+  "utc": "2026-11-24T00:29:08.136760+00:00",
+  "module": "ImbalancedChen.P2Winner9PhysicalVertexInterpolation",
+  "preimage": {
+    "sha256": "d1c03af3cb0bcf2ca64abc6f4c7d2151250651aac9b2a2cf8ec04597c3a7c1db",
+    "commit": "d5f392f6717227ab94ad4004044a037ac83be877",
+    "repository_path": "docs/source-only/20261028-resume-30/certificate_rows/P2Winner9PhysicalVertexInterpolation.lean",
+    "git_blob_sha1": "dea4606b3397b5802beb4f0283c43093247759ee"
+  },
+  "postimage_sha256": "2d2ee6ce08c9a505b6afc0b2707ab4aeff33d5ce6008b3accbb4b4191e535428",
+  "bounded_published_first_lookup": {
+    "known_exact_filename_docs_commits": [
+      "34b992557691df5ea3897d1f6f640d043518e355",
+      "e239210af62aa4ab7640e451b46e85846acce1b4"
+    ],
+    "34b992_exact_current_pre": true,
+    "older_e239_mathematical_source_exact_only_LF_instead_of_CRLF": true,
+    "no_reliable_repaired_wholepost_located": true,
+    "no_new_broad_history_or_cache_scan": true
+  },
+  "actual_failure": {
+    "ledger_path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0007/ACTUAL_FAILURES.json",
+    "ledger_sha256": "ec0cff1483b56d8d26917fa07ffaedff69decaa4f129c98212c1dd64b9da1a8f",
+    "record": {
+      "module": "ImbalancedChen.P2Winner9PhysicalVertexInterpolation",
+      "source_sha256_at_initial_failure": "d1c03af3cb0bcf2ca64abc6f4c7d2151250651aac9b2a2cf8ec04597c3a7c1db",
+      "current_sha256_at_observation": "d1c03af3cb0bcf2ca64abc6f4c7d2151250651aac9b2a2cf8ec04597c3a7c1db",
+      "raw_failure_slice": "P2Winner9PhysicalVertexInterpolation.failure.log",
+      "slice_sha256": "44bffae79aadc11fb9b1e2173119aede7b4831c402e0f7fb0bb84064971fee26",
+      "raw_byte_start": 9217394,
+      "raw_byte_end_exclusive": 9219394,
+      "actual_lean_exit_code": 1,
+      "new_since_0006": true
+    },
+    "completed_log_sha256": "63da4b14f4b1f9dda09882e90464cf8cffd322667471932e2a4e4b2898ae8bb9",
+    "exact_slice_verified": true
+  },
+  "classification": {
+    "vertexMap_single": "Current simp does not expand non-dependent Pi.single_apply. Its generated to_additive lemma rewrites the basis point to an if. mul_ite plus existing finite-sum simplification leaves exactly the jth edge, and ring closes any residual additive normalization.",
+    "physicalFactor_vertexMap": "The inner Fin.cases zero branch already has the original M-coordinate factor presentation; simp only[physicalFactor_one] makes no progress. A proof-local change exposes the same definitional M-coordinateSum expression before the existing affine rewrites."
+  },
+  "scope": {
+    "all_complete_headers": 20,
+    "all_full_definition_regions": 1,
+    "all_headers_defs_other_proofs_and_nonproof_bytes_exact": true,
+    "all9arbitrary_vertices_AmbientFin8_original10factors_R_M_shift1over1000000_gap_Y_signed_deviations_exact": true,
+    "new_vertex_value_invertibility_moment_RowFloor_or_target_licence_premise": false,
+    "public_header_definition_or_semantic_exception": false,
+    "new_import_checker_budget_or_data_algorithm": false,
+    "whole_reverse_exact": true,
+    "original_CRLF_style_preserved": true,
+    "comments_EOF_unchanged": true
+  },
+  "pinned_API": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Pi/Basic.lean",
+      "sha256": "d43040b92adbb8ebcddab07470e26da05f34a625604831787d2b69fe79c9281e",
+      "lines": [
+        106,
+        115
+      ],
+      "raw_excerpt": "/-- On non-dependent functions, `Pi.mulSingle` can be expressed as an `ite` -/\n@[to_additive (attr := grind =)\n  /-- On non-dependent functions, `Pi.single` can be expressed as an `ite` -/]\nlemma mulSingle_apply (i : ι) (x : M) (i' : ι) :\n    (mulSingle i x : ι → M) i' = if i' = i then x else 1 :=\n  Function.update_apply (1 : ι → M) i x i'\n\n-- Porting note: added type ascription (_ : ι → M)\n/-- On non-dependent functions, `Pi.mulSingle` is symmetric in the two indices. -/\n@[to_additive /-- On non-dependent functions, `Pi.single` is symmetric in the two indices. -/]\n"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2Winner9PhysicalAffineTransfer.lean",
+      "sha256": "684cad298889716ee6da11b01149765b9881d6c39828f385049ee58ad5372d0e",
+      "lines": [
+        148,
+        166
+      ],
+      "raw_excerpt": "def coordinateSum (v : Ambient) : ℝ := ∑ i : Fin 8, v i\ndef physicalR (v : Ambient) : ℝ := (1 + v 0 + v 3) / 2\ndef physicalM (v : Ambient) : ℝ :=\n  (1 + v 1 + v 3 + v 7) / 2 - 1 / 1000000\ndef physicalGap (v : Ambient) : ℝ := physicalM v - physicalR v\ndef physicalFactor (j : Fin 10) (v : Ambient) : ℝ :=\n  Fin.cases (physicalR v - coordinateSum v)\n    (Fin.cases (physicalM v - coordinateSum v)\n      (fun i : Fin 8 => v i)) j\n\ntheorem physicalFactor_zero (v : Ambient) :\n    physicalFactor 0 v = physicalR v - coordinateSum v := rfl\n\ntheorem physicalFactor_one (v : Ambient) :\n    physicalFactor 1 v = physicalM v - coordinateSum v := rfl\n\ntheorem physicalFactor_succ_succ (i : Fin 8) (v : Ambient) :\n    physicalFactor i.succ.succ v = v i := rfl\n\n"
+    }
+  ],
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "lines": [
+      177,
+      193
+    ],
+    "excerpt_sha256": "5852a0cd6adeb0c6fda54f5e60826984901486c4c05bbe93f777fa11793ae10f",
+    "contract": "Original affine vertices and exact barycentric polynomial moments. This local interpolation identity does not instantiate a physical row, invertibility/Jacobian premise or final numerical enclosure."
+  },
+  "acceptance_boundary": "Source/API candidate only. Unique owner normal/kernel/complete-owned validation remains necessary; no existing object or measured acceptance claimed.",
+  "no_Lean_Lake_kernel_test_replay_live_source_cache_guard_queue_or_frozen_edits": true
+}

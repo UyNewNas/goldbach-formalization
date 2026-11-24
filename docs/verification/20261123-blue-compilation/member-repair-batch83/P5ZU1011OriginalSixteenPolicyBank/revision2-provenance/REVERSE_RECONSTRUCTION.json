@@ -1,0 +1,34 @@
+{
+  "baseline_sha256": "b2c4f215a526da5f7b6247390ffbaddf7c3065bd5a637729fd21d1962d1df074",
+  "candidate_sha256": "0b85ec6d44dfe41dff457d4b4791f748300537ce5c18b75cfa83b8ab7047db82",
+  "ordered_proof_replacements": [
+    {
+      "before": "  by_cases hi : i.val<j.val ∧ ¬Selected p i <;> simp [Fin.lt_def,hi]",
+      "after": "  by_cases hi : i.val<j.val ∧ ¬Selected p i <;>\n    simp only [hi,ite_true,ite_false,ContinuousLinearMap.proj_apply,ContinuousLinearMap.zero_apply]",
+      "reason": "Restrict to the exact already split predicate, core conditionals and projection/zero computation. Remove the actual global Fin.lt_def/Fin.val_fin_lt simplifier cycle, without changing either finite comparison."
+    },
+    {
+      "before": "    · simpa only [add_assoc] using h.2.2.2",
+      "after": "    · have hindex : v (⟨3, by decide⟩ : Fin 4) = v (3 : Fin 4) := by rfl\n      rw [hindex]\n      simpa only [add_assoc] using h.2.2.2",
+      "reason": "Name and rewrite only the original closed Fin4 last coordinate representation, then retain the same last full-square conjunct and associativity."
+    },
+    {
+      "before": "  by_cases hp : p.val<15\n  · simpa only [cap,if_pos hp] using\n      ((continuous_const.add (continuous_selectedMass p)).div_const 2).min\n        (continuous_const.sub ((continuous_selectedMass p).const_mul (3/2:ℝ)))\n  · simpa only [cap,if_neg hp] using\n      continuous_const.sub ((continuous_apply 2).const_mul (3/8:ℝ))",
+      "after": "  by_cases hp : p.val<15\n  · have hcap : cap p = (fun v : LogFour =>\n        min ((1 + selectedMass p v) / 2) (57 / 64 - (3 / 2 : ℝ) * selectedMass p v)) := by\n      funext v\n      exact if_pos hp\n    rw [hcap]\n    exact (((continuous_const : Continuous (fun _ : LogFour => (1 : ℝ))).add\n      (continuous_selectedMass p)).div_const 2).min\n        ((continuous_const : Continuous (fun _ : LogFour => (57 / 64 : ℝ))).sub\n          ((continuous_const : Continuous (fun _ : LogFour => (3 / 2 : ℝ))).mul\n            (continuous_selectedMass p)))\n  · have hcap : cap p = (fun v : LogFour => (153 / 256 : ℝ) - (3 / 8 : ℝ) * v 2) := by\n      funext v\n      exact if_neg hp\n    rw [hcap]\n    exact (continuous_const : Continuous (fun _ : LogFour => (153 / 256 : ℝ))).sub\n      ((continuous_const : Continuous (fun _ : LogFour => (3 / 8 : ℝ))).mul\n        (continuous_apply (2 : Fin 4)))",
+      "reason": "First identify the exact original cap branch pointwise at each v. Supply complete types and the same literal constants to the existing continuity algebra, avoiding unsolved constant metavariables and overloaded const_mul arguments on partially applied cap."
+    },
+    {
+      "before": "    · rw [if_pos hp,Set.ofPred_forall]",
+      "after": "    · have hbranch : {v : LogFour | if p.val<15 then\n          ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v\n          else (1+v 0)/2<cap p v ∧ v 0<(25/128:ℝ)} =\n          {v : LogFour | ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v} := by\n        ext v\n        simp only [Set.mem_setOf_eq,hp,ite_true]\n      rw [hbranch,Set.ofPred_forall]",
+      "reason": "Expose the same positive branch by predicate-set extensionality and pointwise core if reduction, then perform the original outer forall-to-iInter rewrite. All inner selected/unselected implication sets are retained."
+    },
+    {
+      "before": "  by_cases hj : j<16\n  · simpa only [residual,dif_pos hj,typedResidual] using\n      ((continuous_cap ⟨j,hj⟩).sub U11SelectedLargest.continuous_prefixSum).measurable\n  · simpa only [residual,dif_neg hj] using\n      (measurable_const : Measurable (fun _ : LogFour => (0 : ℝ)))",
+      "after": "  by_cases hj : j<16\n  · have hres : residual j = (fun v : LogFour => cap ⟨j,hj⟩ v - U11SelectedLargest.prefixSum v) := by\n      funext v\n      simp only [residual,dif_pos hj,typedResidual]\n    rw [hres]\n    exact ((continuous_cap ⟨j,hj⟩).sub U11SelectedLargest.continuous_prefixSum).measurable\n  · have hres : residual j = (fun _ : LogFour => (0 : ℝ)) := by\n      funext v\n      exact dif_neg hj\n    rw [hres]\n    exact measurable_const",
+      "reason": "Reduce the identical dependent if at each explicit point before rewriting the whole function; use the unchanged cap-minus-prefix or constant-zero measurable witnesses."
+    }
+  ],
+  "whole_reverse_sha256": "b2c4f215a526da5f7b6247390ffbaddf7c3065bd5a637729fd21d1962d1df074",
+  "whole_reverse_exact": true,
+  "all_other_bytes_same": true
+}

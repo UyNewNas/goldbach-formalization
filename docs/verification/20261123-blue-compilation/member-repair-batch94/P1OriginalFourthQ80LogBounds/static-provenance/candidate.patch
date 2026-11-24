@@ -1,0 +1,15 @@
+--- actual0007-preimage
++++ cast-normalized-log-lower
+@@ -49,8 +49,10 @@
+   · subst j
+     simp [lo,hi,term,z]
+   have hz := z_bounds j
+-  have hlow := Real.sum_range_le_log_div hz.1 hz.2 24
+-  change oddSum (z j:ℝ) 24 ≤ (1/2)*Real.log ((1+(z j:ℝ))/(1-(z j:ℝ))) at hlow
++  have hlow : oddSum (z j:ℝ) 24 ≤
++      (1/2)*Real.log ((1+(z j:ℝ))/(1-(z j:ℝ))) := by
++    simpa only [oddSum, Nat.cast_add, Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
++      using Real.sum_range_le_log_div hz.1 hz.2 24
+   have hupp := sharp_odd_log_upper hz.1 hz.2 24
+   rw [z_identity] at hlow hupp
+   have hpoly : 2*oddSum (z j:ℝ) 24 ≤ Real.log (1+(j:ℝ)/4096) := by linarith only [hlow]

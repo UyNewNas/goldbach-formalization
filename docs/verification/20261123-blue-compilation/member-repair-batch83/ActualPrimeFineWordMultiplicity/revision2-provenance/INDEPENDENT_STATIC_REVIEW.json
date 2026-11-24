@@ -1,0 +1,152 @@
+{
+  "schema": "batch83_failed_target_v2_independent_static_delta_gate_v1",
+  "reviewer": "/root/member_current_repairs",
+  "reviewed_utc": "2026-11-23T23:39:48.541000+00:00",
+  "outcome": "NO_FINDINGS_READY_FOR_UNIQUE_OWNER_ONLY_FAILED_TARGET_RETRY",
+  "reviewer_is_nonauthor": true,
+  "module": "ImbalancedChen.ActualPrimeFineWordMultiplicity",
+  "source_selection": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/SOURCE_SELECTION.json",
+    "bytes": 2825,
+    "sha256": "e420fceae97b0490e1714f9fb31d160461a80d3709fedf15df623290dfbd8234"
+  },
+  "original_files_manifest": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/FILES_MANIFEST.json",
+    "bytes": 1355,
+    "sha256": "c758c0cbbab3c638d691414655f4d4f0d81cc409c69f8c3b80a85972533747b7"
+  },
+  "all_manifest_rows_verified": 8,
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/baseline-v1.lean",
+    "bytes": 10660,
+    "sha256": "7ee0966fd322999c9769fa7062b82040a12833061ae76b01d9eafb36add3aa52"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/candidate.lean",
+    "bytes": 10674,
+    "sha256": "331a99d9d5766c4fd8723540a95db1f23ca6c93c6a9ca2a3d8f10aff2e830f2d"
+  },
+  "prior_author_scope_review": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/INDEPENDENT_STATIC_REVIEW.json",
+    "bytes": 11436,
+    "sha256": "69b4ad0cbad762e7614012205070561ab78e379546c0a08f29b397a84518ed95"
+  },
+  "baseline_exact_prior_candidate": true,
+  "complete_headers": 11,
+  "definitions": 2,
+  "complete_header_inventory": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "kind": "def",
+      "complete_raw_header": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n",
+      "sha256": "9e9ba8789d8c70ebe842c02c7688b0e5bf9d77919b2f798acbeb423c493f58ec"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_word",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_word (input : List ℕ) :\n    actualPrimeLabelBlocksWord (actualPrimeFineLabelBlocksOfWord input) = input :=",
+      "sha256": "731235b37a51704f300cd6bcc7d3d80e57e14c72d695b7c92a4e48aa4b2fff80"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2 :=",
+      "sha256": "bdf04a28e7d7c42e65aaea468dcc534849e120daa857d4e9be7b1c431bfffc05"
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_label_mem",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_label_mem (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2) (b : ℕ × ℕ) (hb : b ∈ blocks) :\n    b.1 ∈ actualPrimeLabelBlocksWord blocks :=",
+      "sha256": "7717bdff393eb37b61836c45c968dcbd532b73c07ad3616ede03005e5f306d9e"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_order",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_order (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    (actualPrimeFineLabelBlocksOfWord input).Pairwise (fun b c => c.1 < b.1) :=",
+      "sha256": "a771da55e3271e98599597dd52846b07a930d97258e3e223d0e5bd3900679bfa"
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_count",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_count (blocks : List (ℕ × ℕ))\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ∀ b ∈ blocks, (actualPrimeLabelBlocksWord blocks).count b.1 = b.2 :=",
+      "sha256": "9747b0861a08bd2e131b5e1677c249296ec8603015aede3f8ead790ad4b38c43"
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial_eq_wordCounts",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksFactorial_eq_wordCounts (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    actualPrimeLabelBlocksFactorial blocks =\n      ∏ i ∈ (actualPrimeLabelBlocksWord blocks).toFinset,\n        ((actualPrimeLabelBlocksWord blocks).count i).factorial :=",
+      "sha256": "f8cd444c5aec13cf34ca8db032d8e8d258bde6f1211170a51b76b43de5b12c94"
+    },
+    {
+      "name": "actualPrimeFineWordMultiplicity",
+      "kind": "def",
+      "complete_raw_header": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=",
+      "sha256": "064b2c7df6afffa62decf1169923518cf5e739aa47338a6bd166b4833f796560"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_factorial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_factorial (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    actualPrimeLabelBlocksFactorial (actualPrimeFineLabelBlocksOfWord input) =\n      actualPrimeFineWordMultiplicity input :=",
+      "sha256": "99debd3f7179baef63d3b8701a296059a7ebf86637827e02d7b817672fae7e9f"
+    },
+    {
+      "name": "actualPrimeFineWord_literal_multiplicity",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineWord_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input) n : ℝ) else 0) =\n      (actualPrimeFineWordMultiplicity input : ℝ) *\n        (if n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n          List.SortedGT).image List.prod then 1 else 0) :=",
+      "sha256": "1513ace3a6d8322f2e77e695f4943cc66448e30243c480beabfc9d44fe551a8c"
+    },
+    {
+      "name": "actualPrimeFineWord_original_scalar",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineWord_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·))\n    (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeFineWordMultiplicity input : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input,\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n        List.SortedGT).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+      "sha256": "5e87065f1bd5bb56cc4833ce95654ebf7837315be5d2e9c85d6c65b10aba60dc"
+    }
+  ],
+  "changed_proofs": [
+    "actualPrimeFineLabelBlocksOfWord_positive"
+  ],
+  "all_complete_headers_definitions_other_code_data_indices_constants_hypotheses_quantifiers_imports_options_budget_and_EOL_bytes_exact": true,
+  "whole_forward_reverse_reconstruction_exact": true,
+  "new_declarations_hypotheses_or_budget_changes": 0,
+  "findings": [],
+  "semantic_review": "Only the newly prepended block(i,1) head positivity subgoal changes from closed-goal decide to existing Nat.succ_pos0. The second projection is definitionally1 for every freei; no premise depends on deciding or restrictingi. Same merged branch already uses Nat.succ_posm. All list recursion, equality/substitution branches, original order, squarefree selector, factorial multiplicity scalar and signed coefficient statement stay unchanged.",
+  "prior_scope_exception": "No new or old header/definition exception introduced by this v2.",
+  "actual_failure": {
+    "full_log": {
+      "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/ACTUAL_V1_NORMAL_FULL.log",
+      "bytes": 9943,
+      "sha256": "1167eefc97f78dcf762e52c976e75995a3071b5417f8c289ba33ba5dbb1f2beb"
+    },
+    "original_command": {
+      "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/v2-projection-positive/ACTUAL_V1_NORMAL_COMMAND.json",
+      "bytes": 645,
+      "sha256": "9d0e56b4e890981a5f6f2ed42d0ee5042de685450fef1717e0c49c1b13f9fc1d"
+    },
+    "exit_code": 1,
+    "elapsed_seconds": 14.634745923001901,
+    "all_actual_source_error_lines": [
+      79
+    ],
+    "not_memory_exception": true,
+    "no_candidate_or_whole83_acceptance_claim": true
+  },
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "prior_scope_reused_without_repeating_prior_math_review": true,
+    "anchors": [
+      {
+        "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+        "source_sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+        "start_line": 191,
+        "end_line": 211,
+        "meaning": "Common disjoint half-open label alphabet; literal M=product m_I!; squarefree sorted coefficient and original residual multiplicity scalar.",
+        "raw_excerpt": "\\subsection{The coefficient identity and squarefree restriction}\r\n\r\nRefine the interval labels to a common disjoint half-open alphabet.\r\nIf $m_I$ slots have label $I$, set $M=\\prod_I m_I!$.\r\nThe unrestricted prime convolution $N_J$ of the slot list has value\r\n$M/\\prod_p\\nu_p(n)!$ on its support.  Its sorted squarefree coefficient\r\nis therefore $\\one_{\\mathrm{sf}}N_J/M$.  For a fixed three-group\r\npartition put $M_j=\\prod_I m_{I,j}!$ and let $\\gamma_j$ be the group\r\nconvolution divided by $M_j$.  Then $0\\le\\gamma_j\\le1$ on every integer\r\nand the exact identity is\r\n\\begin{equation}\r\n \\frac{N_J}{M}\r\n =\\frac{M_1M_2M_3}{M}\\,\r\n       (\\gamma_1*\\gamma_2*\\gamma_3).\r\n \\label{coef:tensor-identity}\r\n\\end{equation}\r\nAn empty group is the unit mass at one.  A marked convolution already\r\ncontains its marked multiplicities.  Only its ordered residual slots\r\nare divided by their factorials: regrouping a signed atom\r\n$\\epsilon\\one_{\\mathrm{sf}}N_{\\mathrm{all}}/M_{\\mathrm{res}}$\r\ngives the external scalar $\\epsilon M_1M_2M_3/M_{\\mathrm{res}}$.\r\n",
+        "raw_excerpt_sha256": "dc5477f18b3979e714d25c85790e7b5467c9b19d67cb920e734e6b914ddcffe0"
+      }
+    ]
+  },
+  "no_Lean_Lake_kernel_type_axiom_numeric_checker_or_stock_execution": true,
+  "no_live_source_main_other_module_guard_queue_cache_or_old_record_edits": true,
+  "next_step": "Owner retries only this failed exact source, then kernel/full-owned source+five-output identity. Other accepted modules/successful checks not repeated; static source scope is not executable proof acceptance."
+}

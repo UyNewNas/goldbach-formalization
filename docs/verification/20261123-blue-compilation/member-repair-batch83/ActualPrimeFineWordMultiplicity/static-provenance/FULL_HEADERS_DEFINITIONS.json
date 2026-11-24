@@ -1,0 +1,145 @@
+{
+  "module": "ImbalancedChen.ActualPrimeFineWordMultiplicity",
+  "headers": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "kind": "def",
+      "complete_raw_header": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n",
+      "sha256": "9e9ba8789d8c70ebe842c02c7688b0e5bf9d77919b2f798acbeb423c493f58ec",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_word",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_word (input : List ℕ) :\n    actualPrimeLabelBlocksWord (actualPrimeFineLabelBlocksOfWord input) = input :=",
+      "sha256": "731235b37a51704f300cd6bcc7d3d80e57e14c72d695b7c92a4e48aa4b2fff80",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2 :=",
+      "sha256": "bdf04a28e7d7c42e65aaea468dcc534849e120daa857d4e9be7b1c431bfffc05",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_label_mem",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_label_mem (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2) (b : ℕ × ℕ) (hb : b ∈ blocks) :\n    b.1 ∈ actualPrimeLabelBlocksWord blocks :=",
+      "sha256": "7717bdff393eb37b61836c45c968dcbd532b73c07ad3616ede03005e5f306d9e",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_order",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_order (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    (actualPrimeFineLabelBlocksOfWord input).Pairwise (fun b c => c.1 < b.1) :=",
+      "sha256": "a771da55e3271e98599597dd52846b07a930d97258e3e223d0e5bd3900679bfa",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_count",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_count (blocks : List (ℕ × ℕ))\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ∀ b ∈ blocks, (actualPrimeLabelBlocksWord blocks).count b.1 = b.2 :=",
+      "sha256": "9747b0861a08bd2e131b5e1677c249296ec8603015aede3f8ead790ad4b38c43",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial_eq_wordCounts",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksFactorial_eq_wordCounts (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    actualPrimeLabelBlocksFactorial blocks =\n      ∏ i ∈ (actualPrimeLabelBlocksWord blocks).toFinset,\n        ((actualPrimeLabelBlocksWord blocks).count i).factorial :=",
+      "sha256": "f8cd444c5aec13cf34ca8db032d8e8d258bde6f1211170a51b76b43de5b12c94",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineWordMultiplicity",
+      "kind": "def",
+      "complete_raw_header": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=",
+      "sha256": "064b2c7df6afffa62decf1169923518cf5e739aa47338a6bd166b4833f796560",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_factorial",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_factorial (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    actualPrimeLabelBlocksFactorial (actualPrimeFineLabelBlocksOfWord input) =\n      actualPrimeFineWordMultiplicity input :=",
+      "sha256": "99debd3f7179baef63d3b8701a296059a7ebf86637827e02d7b817672fae7e9f",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineWord_literal_multiplicity",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineWord_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input) n : ℝ) else 0) =\n      (actualPrimeFineWordMultiplicity input : ℝ) *\n        (if n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n          List.SortedGT).image List.prod then 1 else 0) :=",
+      "sha256": "1513ace3a6d8322f2e77e695f4943cc66448e30243c480beabfc9d44fe551a8c",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineWord_original_scalar",
+      "kind": "theorem",
+      "complete_raw_header": "theorem actualPrimeFineWord_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·))\n    (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeFineWordMultiplicity input : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input,\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n        List.SortedGT).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+      "sha256": "5e87065f1bd5bb56cc4833ce95654ebf7837315be5d2e9c85d6c65b10aba60dc",
+      "pre_post_raw_byte_exact": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "complete_raw_definition_and_context_region": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n  | [] => []\n  | i :: input =>\n      match actualPrimeFineLabelBlocksOfWord input with\n      | [] => [(i, 1)]\n      | (j, m) :: blocks =>\n          if i = j then (j, m + 1) :: blocks else (i, 1) :: (j, m) :: blocks\n\n",
+      "sha256": "0821c8f9bf32e3cd7a212ec77d1a4f370c64569f30f1d6111821a86c6d8a31d1",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "actualPrimeFineWordMultiplicity",
+      "complete_raw_definition_and_context_region": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=\n  ∏ i ∈ input.toFinset, (input.count i).factorial\n\n",
+      "sha256": "b86988ad7af97edfa2933f0dbc99b496014283646590e6f66058f9c67c5df7dc",
+      "pre_post_raw_byte_exact": true
+    }
+  ],
+  "changed_original_proofs": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_word",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_word (input : List ℕ) :\n    actualPrimeLabelBlocksWord (actualPrimeFineLabelBlocksOfWord input) = input :=",
+      "header_sha256": "731235b37a51704f300cd6bcc7d3d80e57e14c72d695b7c92a4e48aa4b2fff80",
+      "before_body": "\n  induction input with\n  | nil => rfl\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil =>\n          have hnil : input = [] := by\n            rw [hb] at ih\n            exact ih.symm\n          subst input\n          rfl\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have htail : List.replicate m j ++ actualPrimeLabelBlocksWord blocks = input := by\n            rw [hb] at ih\n            exact ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            subst i\n            change j :: (List.replicate m j ++ actualPrimeLabelBlocksWord blocks) = j :: input\n            exact congrArg (List.cons j) htail\n          · rw [if_neg hij]\n            change i :: (List.replicate m j ++ actualPrimeLabelBlocksWord blocks) = i :: input\n            exact congrArg (List.cons i) htail\n\n",
+      "after_body": "\n  induction input with\n  | nil => rfl\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil =>\n          have hnil : input = [] := by\n            rw [hb] at ih\n            exact ih.symm\n          subst input\n          rfl\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have htail : List.replicate m j ++ actualPrimeLabelBlocksWord blocks = input := by\n            rw [hb] at ih\n            exact ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          dsimp only\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            subst i\n            change j :: (List.replicate m j ++ actualPrimeLabelBlocksWord blocks) = j :: input\n            exact congrArg (List.cons j) htail\n          · rw [if_neg hij]\n            change i :: (List.replicate m j ++ actualPrimeLabelBlocksWord blocks) = i :: input\n            exact congrArg (List.cons i) htail\n\n",
+      "before_body_sha256": "4cbdbb137be86bb5ee37de239c8172c03b55b8f37c7fc03603f66f1185ec8527",
+      "after_body_sha256": "8689b25cee264c6f6be9af61845d862b039a7181b523e1d4fb7e005c45e87ec4"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2 :=",
+      "header_sha256": "bdf04a28e7d7c42e65aaea468dcc534849e120daa857d4e9be7b1c431bfffc05",
+      "before_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev : ∀ b ∈ (j, m) :: blocks, 0 < b.2 := by simpa only [hb] using ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact Nat.succ_pos m\n            · exact hprev b (List.mem_cons_of_mem _ hb)\n          · rw [if_neg hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · decide\n            · exact hprev b hb\n\n",
+      "after_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev : ∀ b ∈ (j, m) :: blocks, 0 < b.2 := by simpa only [hb] using ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          dsimp only\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact Nat.succ_pos m\n            · exact hprev b (List.mem_cons_of_mem _ hb)\n          · rw [if_neg hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · decide\n            · exact hprev b hb\n\n",
+      "before_body_sha256": "4a6a01324b72c345c84fb973a7e2bdc02d61ff288f5e49546bc4a74753c29654",
+      "after_body_sha256": "9075437eae448fff001e31e42dc5106766f3fb9cfa8ec8e3475f39959c600368"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_order",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_order (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    (actualPrimeFineLabelBlocksOfWord input).Pairwise (fun b c => c.1 < b.1) :=",
+      "header_sha256": "a771da55e3271e98599597dd52846b07a930d97258e3e223d0e5bd3900679bfa",
+      "before_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      obtain ⟨hcross, htail⟩ := List.pairwise_cons.mp horder\n      have hprev := ih htail\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev' : ((j, m) :: blocks).Pairwise (fun b c => c.1 < b.1) := by\n            simpa only [hb] using hprev\n          have hjmem : j ∈ input := by\n            rw [← actualPrimeFineLabelBlocksOfWord_word input]\n            apply actualPrimeLabelBlocksWord_label_mem _\n              (actualPrimeFineLabelBlocksOfWord_positive input) (j, m)\n            rw [hb]\n            exact List.mem_cons_self\n          have hji : j ≤ i := hcross j hjmem\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            obtain ⟨hhead, hrest⟩ := List.pairwise_cons.mp hprev'\n            exact List.pairwise_cons.mpr ⟨fun b hb => hhead b hb, hrest⟩\n          · rw [if_neg hij]\n            have hji' : j < i := by omega\n            apply List.pairwise_cons.mpr\n            refine ⟨?_, hprev'⟩\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact hji'\n            · exact ((List.pairwise_cons.mp hprev').1 b hb).trans hji'\n\n",
+      "after_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      obtain ⟨hcross, htail⟩ := List.pairwise_cons.mp horder\n      have hprev := ih htail\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev' : ((j, m) :: blocks).Pairwise (fun b c => c.1 < b.1) := by\n            simpa only [hb] using hprev\n          have hjmem : j ∈ input := by\n            rw [← actualPrimeFineLabelBlocksOfWord_word input]\n            apply actualPrimeLabelBlocksWord_label_mem _\n              (actualPrimeFineLabelBlocksOfWord_positive input) (j, m)\n            rw [hb]\n            exact List.mem_cons_self\n          have hji : j ≤ i := hcross j hjmem\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          dsimp only\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            obtain ⟨hhead, hrest⟩ := List.pairwise_cons.mp hprev'\n            exact List.pairwise_cons.mpr ⟨fun b hb => hhead b hb, hrest⟩\n          · rw [if_neg hij]\n            have hji' : j < i := by omega\n            apply List.pairwise_cons.mpr\n            refine ⟨?_, hprev'⟩\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact hji'\n            · exact ((List.pairwise_cons.mp hprev').1 b hb).trans hji'\n\n",
+      "before_body_sha256": "31574590d12f967c13851700172cbe911a11a5b29a181848b98498d48cc9bbf2",
+      "after_body_sha256": "75f7ada366e3a619ac8e62aba40040162db817861bc45bb3efd8e816727db2ff"
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_count",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_count (blocks : List (ℕ × ℕ))\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ∀ b ∈ blocks, (actualPrimeLabelBlocksWord blocks).count b.1 = b.2 :=",
+      "header_sha256": "9747b0861a08bd2e131b5e1677c249296ec8603015aede3f8ead790ad4b38c43",
+      "before_body": "\n  induction blocks with\n  | nil => simp\n  | cons a blocks ih =>\n      obtain ⟨hcross, htail⟩ := List.pairwise_cons.mp hlabels\n      intro b hb\n      rcases List.mem_cons.mp hb with rfl | hb\n      · have hnot : a.1 ∉ actualPrimeLabelBlocksWord blocks := by\n          intro hi\n          obtain ⟨c, hc, heq⟩ := actualPrimeLabelBlocksWord_mem hi\n          exact hcross c hc heq\n        change (List.replicate a.2 a.1 ++ actualPrimeLabelBlocksWord blocks).count a.1 = a.2\n        rw [List.count_append, List.count_replicate_self, List.count_eq_zero.mpr hnot, Nat.add_zero]\n      · have hzero : (List.replicate a.2 a.1).count b.1 = 0 :=\n          List.count_eq_zero.mpr (fun h => hcross b hb (List.mem_replicate.mp h).2.symm)\n        change (List.replicate a.2 a.1 ++ actualPrimeLabelBlocksWord blocks).count b.1 = b.2\n        rw [List.count_append, hzero, Nat.zero_add, ih htail b hb]\n\n",
+      "after_body": "\n  induction blocks with\n  | nil => simp\n  | cons a blocks ih =>\n      obtain ⟨hcross, htail⟩ := List.pairwise_cons.mp hlabels\n      intro b hb\n      rcases List.mem_cons.mp hb with hba | hb\n      · subst b\n        have hnot : a.1 ∉ actualPrimeLabelBlocksWord blocks := by\n          intro hi\n          obtain ⟨c, hc, heq⟩ := actualPrimeLabelBlocksWord_mem hi\n          exact hcross c hc heq\n        change (List.replicate a.2 a.1 ++ actualPrimeLabelBlocksWord blocks).count a.1 = a.2\n        rw [List.count_append, List.count_replicate_self, List.count_eq_zero.mpr hnot, Nat.add_zero]\n      · have hzero : (List.replicate a.2 a.1).count b.1 = 0 :=\n          List.count_eq_zero.mpr (fun h => hcross b hb (List.mem_replicate.mp h).2.symm)\n        change (List.replicate a.2 a.1 ++ actualPrimeLabelBlocksWord blocks).count b.1 = b.2\n        rw [List.count_append, hzero, Nat.zero_add, ih htail b hb]\n\n",
+      "before_body_sha256": "9e25d45893097a24899ccba0f896e59d33ddbad7c62a664e89a3c8ddb7faf31c",
+      "after_body_sha256": "c6779b0e84454793bbb705fc4aa4f1ce0d2b91c97e22a1de73c25aa0e78f78fc"
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial_eq_wordCounts",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksFactorial_eq_wordCounts (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    actualPrimeLabelBlocksFactorial blocks =\n      ∏ i ∈ (actualPrimeLabelBlocksWord blocks).toFinset,\n        ((actualPrimeLabelBlocksWord blocks).count i).factorial :=",
+      "header_sha256": "f8cd444c5aec13cf34ca8db032d8e8d258bde6f1211170a51b76b43de5b12c94",
+      "before_body": "\n  have hnodup : (blocks.map Prod.fst).Nodup := by\n    change (blocks.map Prod.fst).Pairwise (· ≠ ·)\n    exact List.pairwise_map.mpr hlabels\n  have hlabelsSet : (blocks.map Prod.fst).toFinset =\n      (actualPrimeLabelBlocksWord blocks).toFinset := by\n    ext i\n    constructor\n    · intro hi\n      obtain ⟨b, hb, rfl⟩ := List.mem_map.mp (List.mem_toFinset.mp hi)\n      exact List.mem_toFinset.mpr (actualPrimeLabelBlocksWord_label_mem blocks hpositive b hb)\n    · intro hi\n      obtain ⟨b, hb, heq⟩ := actualPrimeLabelBlocksWord_mem (List.mem_toFinset.mp hi)\n      exact List.mem_toFinset.mpr (List.mem_map.mpr ⟨b, hb, heq.symm⟩)\n  calc\n    _ = (blocks.map (fun b => ((actualPrimeLabelBlocksWord blocks).count b.1).factorial)).prod := by\n      unfold actualPrimeLabelBlocksFactorial\n      congr 1\n      apply List.map_congr_left\n      intro b hb\n      rw [actualPrimeLabelBlocksWord_count blocks hlabels b hb]\n    _ = ((blocks.map Prod.fst).map\n        (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial)).prod := by\n      rw [List.map_map]\n    _ = (blocks.map Prod.fst).toFinset.prod\n        (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial) :=\n      (List.prod_toFinset _ hnodup).symm\n    _ = _ := by rw [hlabelsSet]\n\n",
+      "after_body": "\n  have hnodup : (blocks.map Prod.fst).Nodup := by\n    change (blocks.map Prod.fst).Pairwise (· ≠ ·)\n    exact List.pairwise_map.mpr hlabels\n  have hlabelsSet : (blocks.map Prod.fst).toFinset =\n      (actualPrimeLabelBlocksWord blocks).toFinset := by\n    ext i\n    constructor\n    · intro hi\n      obtain ⟨b, hb, rfl⟩ := List.mem_map.mp (List.mem_toFinset.mp hi)\n      exact List.mem_toFinset.mpr (actualPrimeLabelBlocksWord_label_mem blocks hpositive b hb)\n    · intro hi\n      obtain ⟨b, hb, heq⟩ := actualPrimeLabelBlocksWord_mem (List.mem_toFinset.mp hi)\n      exact List.mem_toFinset.mpr (List.mem_map.mpr ⟨b, hb, heq.symm⟩)\n  calc\n    _ = (blocks.map (fun b => ((actualPrimeLabelBlocksWord blocks).count b.1).factorial)).prod := by\n      unfold actualPrimeLabelBlocksFactorial\n      congr 1\n      apply List.map_congr_left\n      intro b hb\n      rw [actualPrimeLabelBlocksWord_count blocks hlabels b hb]\n    _ = ((blocks.map Prod.fst).map\n        (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial)).prod := by\n      rw [List.map_map]\n      rfl\n    _ = (blocks.map Prod.fst).toFinset.prod\n        (fun i => ((actualPrimeLabelBlocksWord blocks).count i).factorial) :=\n      (List.prod_toFinset _ hnodup).symm\n    _ = _ := by rw [hlabelsSet]\n\n",
+      "before_body_sha256": "e3e04d9a2327ed4945d92a0a5b0aefa5d3441edc4561dec760148bc101ccb07f",
+      "after_body_sha256": "7d9f5e959be3a1ce200d122928920a6120a1bcc322a3d76610be38410330f502"
+    }
+  ],
+  "all_original_headers_definitions_data_imports_options_and_other_bytes_preserved_except_explicit_addition_or_changed_proof_bodies": true,
+  "public_header_or_original_definition_exception": false
+}

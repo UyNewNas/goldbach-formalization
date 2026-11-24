@@ -1,0 +1,107 @@
+{
+  "schema": "actual_batch89_historic_trapezoid_proof_api_v2",
+  "status": "UNCOMPILED_STATIC_CANDIDATE",
+  "author": "/root/build_workflow",
+  "utc": "2026-11-24T00:24:15.705534+00:00",
+  "module": "ImbalancedChen.P2HistoricSieveTrapezoidError",
+  "preimage_sha256": "cab93528a8b68c2f1e08a730ec62689cbe1c7ffa3f924245ba8b4128cc624a48",
+  "postimage_sha256": "4fa843a8d67cafcfe701901012a7eea81f9d64171707c323ebb48e9e55fd57d8",
+  "preimage_is_root_lexical_post": {
+    "source_selection_sha256": "3768f9d5817d3bb26b5bb8ada5ae7df01136c69b5d55def4a3e4e7008927bcce",
+    "nonauthor_lexical_gate_sha256": "983270aea18079d0b8435682ab149b60b7d0386f5411a664d2086e08a498052d",
+    "current_import_position_bytes_preserved": true
+  },
+  "bounded_published_first_lookup": {
+    "exact_canonical_path": "ImbalancedChen/P2HistoricSieveTrapezoidError.lean",
+    "git_log_all8_returned": [
+      "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+      "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+      "29a0717b23cbab3a4bfb5f9066b815c181b3efa4"
+    ],
+    "known_repaired_post_not_found": true,
+    "prior_root_lookup_pins_original_pre_c54_not_compiled_acceptance": true
+  },
+  "actual_failure": {
+    "full_log_path": "/workspace/blue-member-repair-batch89/P2HistoricSieveTrapezoidError-normal.log",
+    "full_log_sha256": "a88aefda2f0d0cf3cafd396c9609461514b9b49104067f5e411d4d2d619a735c",
+    "bytes": 12666,
+    "command_sha256": "669252a77f3b3952f26844e9af70ce4461b8b455726a6692f04e6dbbece13ffc",
+    "exit_code": 1,
+    "normal_command_elapsed_seconds": 14.39599407800415,
+    "slice_range": [
+      7304,
+      12666
+    ],
+    "slice_sha256": "2e253ac5311addd460ea865338a6d479a759da3f429ba4d4bffbae6ed9be71f6",
+    "all6_actual_errors_in_slice": true
+  },
+  "classification": {
+    "line67": "NoGoals from field_simp already closing the function equality; sequence ring only over remaining goals.",
+    "line75": "Measure implicit metavariable under ContinuousOn interval integrability; local hi receives exact e/volume/a/b type.",
+    "line97_and115": "Original hrem integrand is pointwise Pi subtraction; expose Pi.sub_apply and set existing volume measure explicitly before original integral_sub rewrite.",
+    "line178": "Derivative formula retains function-level(id^2)s; dsimp Pi.pow_apply/id_eq before unchanged denominator/ring normalization.",
+    "line241": "Existing hlocal uses j/16384 and hinv uses definitionally identical cellLeft j; unfold only cellLeft at hinv before original linarith."
+  },
+  "scope": {
+    "all25complete_headers22theorems3defs_exact": true,
+    "all3full_definition_bodies_exact": true,
+    "all_original_Actual_F_f_and_endpoint_at1_contracts_preserved": true,
+    "all_assumptions_integrability_curvature_signs_original_grid16384_and_1over6_1over12_error_budgets_exact": true,
+    "new_public_header_def_or_semantic_exception": false,
+    "new_hypothesis_target_licence_checker_or_budget": false,
+    "mixed_EOL_and_all_nonproof_bytes_exact": true,
+    "comments_unchanged": true,
+    "whole_reverse_exact": true
+  },
+  "pinned_API": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/IntervalIntegral/Basic.lean",
+      "sha256": "543c9927916958d2480b83148095de97f4beed5239b65214df71c502e3121d78",
+      "line_range": [
+        787,
+        794
+      ],
+      "raw_excerpt": "nonrec theorem integral_neg : ∫ x in a..b, -f x ∂μ = -∫ x in a..b, f x ∂μ := by\n  simp only [intervalIntegral, integral_neg]; abel\n\n@[simp]\ntheorem integral_sub (hf : IntervalIntegrable f μ a b) (hg : IntervalIntegrable g μ a b) :\n    ∫ x in a..b, f x - g x ∂μ = (∫ x in a..b, f x ∂μ) - ∫ x in a..b, g x ∂μ := by\n  simpa only [sub_eq_add_neg] using! (integral_add hf hg.neg).trans (congr_arg _ integral_neg)\n\n"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Pi/Defs.lean",
+      "sha256": "79c1a26611ae1d19d22b47b0b109eb02ff5502545b55e7ad96b2a9164622a89c",
+      "line_range": [
+        107,
+        114
+      ],
+      "raw_excerpt": "variable [∀ i, Div (G i)]\n\n@[to_additive]\ninstance instDiv : Div (∀ i, G i) where div f g i := f i / g i\n\n@[to_additive (attr := simp)]\nlemma div_apply (f g : ∀ i, G i) (i : ι) : (f / g) i = f i / g i := rfl\n\n"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Pi/Defs.lean",
+      "sha256": "79c1a26611ae1d19d22b47b0b109eb02ff5502545b55e7ad96b2a9164622a89c",
+      "line_range": [
+        130,
+        137
+      ],
+      "raw_excerpt": "variable [∀ i, Pow (M i) α]\n\n@[to_additive (attr := to_additive) instSMul]\ninstance instPow : Pow (∀ i, M i) α where pow f a i := f i ^ a\n\n@[to_additive (attr := simp, to_additive) (reorder := 5 6) smul_apply]\nlemma pow_apply (f : ∀ i, M i) (a : α) (i : ι) : (f ^ a) i = f i ^ a := rfl\n\n"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/ActualThirdOriginalSharpChord.lean",
+      "sha256": "fa24b22bb362cfe02ec9deec918b7189b57e960e3ca0421141a4b2e10bf9a1d9",
+      "line_range": [
+        120,
+        126
+      ],
+      "raw_excerpt": "  rw [heq] at h\n  exact h\n\n/-- Literal original grid geometry and its original local curvature. -/\ndef cellLeft (i : ℕ) : ℝ := (i : ℝ)/16384\ndef cellRight (i : ℕ) : ℝ := ((i : ℝ)+1)/16384\ndef cellCurvature (i : ℕ) : ℝ := 1/(cellLeft i-1)\n"
+    }
+  ],
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "lines": [
+      128,
+      175
+    ],
+    "excerpt_sha256": "354e82d5d583a544cc66db1f34ebe5491fb4d4f3b72813f1c0fc318e68e29754",
+    "contract": "Original ordinary trapezoids of actual normalized F/f, curvature-controlled h^3/12 remainder. No replacement by weighted numerator chord theorem or stronger numerical table premise."
+  },
+  "no_substantive_mathematical_gap_identified_by_this_static_read": true,
+  "no_Lean_Lake_kernel_test_replay_live_source_cache_guard_or_queue_changes": true
+}

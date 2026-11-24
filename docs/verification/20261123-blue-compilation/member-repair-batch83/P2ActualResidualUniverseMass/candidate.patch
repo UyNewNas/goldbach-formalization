@@ -1,0 +1,36 @@
+--- baseline/ImbalancedChen/P2ActualResidualUniverseMass.lean
++++ candidate/ImbalancedChen/P2ActualResidualUniverseMass.lean
+@@ -21,7 +21,7 @@
+ 
+ /-- Literal full residual mass, including the unit divisor. -/
+ def mass (N cap : ℕ) (w z : ℝ) : ℝ :=
+-  ∑ d ∈ universe N cap w z, 1 / (Nat.totient d : ℝ)
++  ∑ d ∈ «universe» N cap w z, 1 / (Nat.totient d : ℝ)
+ 
+ theorem mass_nonneg (N cap : ℕ) (w z : ℝ) : 0 ≤ mass N cap w z := by
+   apply Finset.sum_nonneg
+@@ -31,13 +31,13 @@
+ theorem roughProduct_eq_finsetProduct (N cap : ℕ) (w z : ℝ) :
+     roughProduct N cap w z = (roughPrimeFinset N cap w z).prod id := by
+   have h := List.prod_toFinset (fun p : ℕ => p) (roughPrimeUniverse_nodup N cap w z)
+-  simpa only [roughProduct, roughPrimeUniverse_toFinset, List.map_id] using h.symm
++  simpa only [roughProduct, roughPrimeUniverse_toFinset, List.map_id', id_eq] using h.symm
+ 
+ /-- Exact finite Euler expansion of ALL actual residual moduli. -/
+ theorem mass_eq_eulerProduct (N cap : ℕ) (w z : ℝ) :
+     mass N cap w z =
+       ∏ p ∈ roughPrimeFinset N cap w z, (1 + 1 / ((p : ℝ) - 1)) := by
+-  unfold mass universe
++  unfold mass «universe»
+   rw [roughProduct_eq_finsetProduct]
+   apply reciprocalTotient_sum_divisors_primeProduct N
+   · intro p hp
+@@ -100,7 +100,7 @@
+   have hfrac : K / (omega * Real.log (N : ℝ)) ≤ K := by
+     apply (div_le_iff₀ (by linarith : 0 < omega * Real.log (N : ℝ))).mpr
+     simpa only [mul_one] using mul_le_mul_of_nonneg_left hden hKpos.le
+-  exact h.trans (mul_le_mul_of_nonneg_left (add_le_add_left hfrac 1)
++  exact h.trans (mul_le_mul_of_nonneg_left (add_le_add_right hfrac 1)
+     (div_nonneg (homega.le.trans hov.le) homega.le))
+ 
+ end

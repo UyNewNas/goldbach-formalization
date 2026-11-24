@@ -1,0 +1,51 @@
+--- baseline17e.lean
++++ isolated-v2.lean
+@@ -67,7 +67,9 @@
+     retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) leaf hleaf
+   apply Nat.mem_divisors.mpr
+   refine ⟨?_, (P2LowerFiniteCellRounding.roughProduct_squarefree N cap w z).ne_zero⟩
+-  simpa only [List.prod_reverse, hprod] using hsub.prod_dvd_prod
++  obtain ⟨k,hk⟩ := hsub.prod_dvd_prod
++  refine ⟨k, ?_⟩
++  simpa only [P2LowerFiniteCellRounding.roughProduct,List.prod_reverse,hprod] using hk
+ 
+ theorem raw_value (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :
+     raw retainOdd N cap w z d =
+@@ -223,10 +225,10 @@
+   · by_cases hr : d ∈ rawSupport retainOdd N cap w z
+     · have ho := outer_of_raw retainOdd tag N cap w z tau hr
+       simp only [coefficient, if_pos hd, if_pos hsign, if_pos ho, if_pos hr,
+-        changed, hr, not_true_eq_false, and_false, if_false, sub_self, abs_zero]
++        changed, hr, not_true_eq_false, and_false, if_false, ite_true, sub_self, abs_zero]
+     · by_cases ho : outer retainOdd tag N cap w z tau d
+       · simp only [coefficient, if_pos hd, if_pos hsign, if_pos ho, if_neg hr,
+-          changed, ho, hr, not_false_eq_true, and_self, if_true, sub_zero, hmu]
++          changed, ho, hr, not_false_eq_true, and_self, if_true, ite_false, sub_zero, hmu]
+       · simp only [coefficient, if_pos hd, if_pos hsign, if_neg ho, if_neg hr,
+           changed, ho, false_and, if_false, sub_self, abs_zero]
+   · by_cases hr : d ∈ rawSupport retainOdd N cap w z
+@@ -234,7 +236,7 @@
+       · simp only [coefficient, if_pos hd, if_neg hsign, if_pos hi, if_pos hr,
+           changed, hr, hi, not_true_eq_false, and_false, if_false, sub_self, abs_zero]
+       · simp only [coefficient, if_pos hd, if_neg hsign, if_neg hi, if_pos hr,
+-          changed, hr, hi, not_false_eq_true, and_self, if_true, zero_sub, abs_neg, hmu]
++          changed, hr, hi, not_false_eq_true, and_self, if_true, ite_false, zero_sub, abs_neg, hmu]
+     · have hi : ¬inner retainOdd tag N cap w z tau d :=
+         fun hi => hr (hi (self_mem_cell tag N cap w z tau hd))
+       simp only [coefficient, if_pos hd, if_neg hsign, if_neg hi, if_neg hr,
+@@ -260,6 +262,7 @@
+   rw [Finset.sum_filter]
+   apply Finset.sum_congr rfl
+   intro d hd
++  dsimp only
+   rw [abs_coefficient_sub_raw retainOdd tag N cap w z tau hd]
+   split_ifs <;> simp
+ 
+@@ -285,6 +288,7 @@
+   rw [← Finset.sum_sub_distrib]
+   apply Finset.sum_congr rfl
+   intro d _
++  dsimp only
+   rw [abs_of_nonneg (sub_nonneg.mpr (raw_le_coefficient retainOdd tag N cap w z tau d))]
+   ring
+ 

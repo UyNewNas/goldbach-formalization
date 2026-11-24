@@ -163,7 +163,7 @@ theorem decode_leftIntegerUpper (b : Fin 3 → ℤ) (axis : Fin 3) (cut : ℤ) :
   ext i
   by_cases hi : i = axis
   · subst i
-    simp only [decodeCoordinates, leftIntegerUpper, leftUpper, Function.update_same]
+    simp only [decodeCoordinates, leftIntegerUpper, leftUpper, Function.update_self]
     by_cases hb : b axis ≤ cut
     · have hbr : (b axis : ℝ) ≤ (cut : ℝ) := by exact_mod_cast hb
       rw [min_eq_left hb, min_eq_left
@@ -181,7 +181,7 @@ theorem decode_rightIntegerLower (a : Fin 3 → ℤ) (axis : Fin 3) (cut : ℤ) 
   ext i
   by_cases hi : i = axis
   · subst i
-    simp only [decodeCoordinates, rightIntegerLower, rightLower, Function.update_same]
+    simp only [decodeCoordinates, rightIntegerLower, rightLower, Function.update_self]
     by_cases ha : a axis ≤ cut
     · have har : (a axis : ℝ) ≤ (cut : ℝ) := by exact_mod_cast ha
       rw [max_eq_right ha, max_eq_right
@@ -228,3 +228,4 @@ theorem compact_closedLeaves_eq_integer_boxes (tree : ClosedCutTree)
 
 end
 end ImbalancedChen.P4AClosedTreeCoordinatePropagationSourceOnly
+

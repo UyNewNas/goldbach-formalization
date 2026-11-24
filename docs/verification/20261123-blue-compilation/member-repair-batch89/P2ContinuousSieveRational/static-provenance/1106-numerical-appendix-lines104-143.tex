@@ -1,0 +1,40 @@
+For logarithms put $z=(x-1)/(x+1)$.  If $1\le x\le2$, then
+\begin{equation}
+ 2\sum_{j=0}^{n-1}\frac{z^{2j+1}}{2j+1}
+ \le\log x\le
+ 2\sum_{j=0}^{n-1}\frac{z^{2j+1}}{2j+1}
+ +\frac{2z^{2n+1}}{(2n+1)(1-z^2)}.
+ \label{num:log-enclosure}
+\end{equation}
+This follows by summing the positive power series for
+$2\operatorname{arctanh}z$ and bounding the remaining denominators
+below by $2n+1$.  For $n=96$ the remainder is at most
+$9/(4\cdot193\cdot3^{193})$.  Range reduction and a separate
+enclosure of $\log2$ extend the formula to every positive rational
+argument used here.  The paired-cell calculation uses denominator
+$2^{224}$ for the series and denominator $2^{160}$ for its returned
+intervals.  Thus no floating-point evaluation of a logarithm determines
+the direction of an inequality.
+
+\subsection{Enclosing delayed functions and integrals}
+It is convenient to propagate the numerators
+\[
+ A_+(s)=\frac{sF(s)}{2e^\gamma},\qquad
+ A_-(s)=\frac{sf(s)}{2e^\gamma}.
+\]
+Their initial branches are $A_+(s)=1$ for $1\le s\le3$ and
+$A_-(s)=0$ for $s\le2$, and subsequent branches satisfy
+\[
+ A_+'(s)=\frac{A_-(s-1)}{s-1},\qquad
+ A_-'(s)=\frac{A_+(s-1)}{s-1}.
+\]
+The equation for a branch involves only the preceding unit interval.
+One therefore obtains rational interval enclosures successively on a
+rational mesh, splitting at every integer breakpoint.  Lower and upper
+integral bounds follow from the corresponding interval bounds for the
+integrand.  Chord bounds and curvature bounds sharpen these enclosures
+without changing their direction.  An arbitrary query is enclosed on
+its entire support, including both adjoining cells when an endpoint
+is a mesh knot.  The analogous construction for $s\omega(s)$ uses
+$(s\omega(s))'=\omega(s-1)$ and its initial branch
+$\omega(s)=1/s$ on $[1,2]$.

@@ -1,0 +1,675 @@
+{
+  "numeric_vector_simproc": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/VecNotation.lean",
+    "bytes": 17629,
+    "sha256": "17b85a7ee9c4478995b91d56eda4115ac0b399ea676e1d29ba50485803d4b34e",
+    "line_start": 186,
+    "line_end": 218,
+    "literal_excerpt": "/-- A simproc that handles terms of the form `Matrix.vecCons a f i` where `i` is a numeric literal.\n\nIn practice, this is most effective at handling `![a, b, c] i`-style terms. -/\ndsimproc cons_val (Matrix.vecCons _ _ _) := fun e => do\n  let_expr Matrix.vecCons α en x xs' ei := ← Meta.whnfR e | return .continue\n  let some i := ei.int? | return .continue\n  let (xs, etailn, tail) ← matchVecConsPrefix en xs'\n  let xs := x :: xs\n  -- Determine if the tail is a numeral or only an offset.\n  let (tailn, variadic, etailn) ← do\n    let etailn_whnf : Q(ℕ) ← Meta.whnfD etailn\n    if let Expr.lit (.natVal length) := etailn_whnf then\n      pure (length, false, q(OfNat.ofNat $etailn_whnf))\n    else if let some ((base : Q(ℕ)), offset) ← (Meta.isOffset? etailn_whnf).run then\n      let offset_e : Q(ℕ) := mkNatLit offset\n      pure (offset, true, q($base + $offset))\n    else\n      pure (0, true, etailn)\n  -- Wrap the index if possible, and abort if not\n  let wrapped_i ←\n    if variadic then\n      -- can't wrap as we don't know the length\n      unless 0 ≤ i ∧ i < xs.length + tailn do return .continue\n      pure i.toNat\n    else\n      pure (i % (xs.length + tailn)).toNat\n  if h : wrapped_i < xs.length then\n    return .continue xs[wrapped_i]\n  else\n    -- Within the `tail`\n    let _ ← synthInstanceQ q(NeZero $etailn)\n    have i_lit : Q(ℕ) := mkRawNatLit (wrapped_i - xs.length)\n    return .continue (.some <| .app tail q(OfNat.ofNat $i_lit : Fin $etailn))\n",
+    "excerpt_sha256": "38aa58165a5a382012e8f1ab1f0dcc72063dba2195de04add12636e1ef4ea082"
+  },
+  "existing_pinned_simp_only_use": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/CStarAlgebra/SpecialFunctions/PosPart.lean",
+    "bytes": 3033,
+    "sha256": "e8916b3635e28c041544924c22c9c2bdf7f5620305286ba92430147f0cd0e0f1",
+    "line_start": 73,
+    "line_end": 80,
+    "literal_excerpt": "    · exact CStarAlgebra.norm_posPart_le _ |>.trans <| imaginaryPart.norm_le a\n    · exact CStarAlgebra.norm_negPart_le _ |>.trans <| realPart.norm_le a\n    · exact CStarAlgebra.norm_negPart_le _ |>.trans <| imaginaryPart.norm_le a\n  · nth_rw 1 [← CStarAlgebra.linear_combination_nonneg a]\n    simp only [Fin.sum_univ_four, Fin.coe_ofNat_eq_mod, Matrix.cons_val, Nat.reduceMod, I_sq,\n      I_pow_three]\n    module\n\n",
+    "excerpt_sha256": "1aae2c30ee40e00385a5914a525fb08337ebc3f8946e4654009b7bc2a4074631"
+  },
+  "existing_pinned_fin_cases_dsimp_only_use": {
+    "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/RingTheory/Complex.lean",
+    "bytes": 1501,
+    "sha256": "f5bed2a7f480fccedc983a42fc26cb46a77d5873a9cbba83ab8ac84c9373595e",
+    "line_start": 19,
+    "line_end": 25,
+    "literal_excerpt": "theorem Algebra.leftMulMatrix_complex (z : ℂ) :\n    Algebra.leftMulMatrix Complex.basisOneI z = !![z.re, -z.im; z.im, z.re] := by\n  ext i j\n  rw [Algebra.leftMulMatrix_eq_repr_mul, Complex.coe_basisOneI_repr, Complex.coe_basisOneI, mul_re,\n    mul_im, Matrix.of_apply]\n  fin_cases j <;> dsimp only [Fin.zero_eta, Fin.mk_one, Matrix.cons_val]\n  · simp only [one_re, mul_one, one_im, mul_zero,\n",
+    "excerpt_sha256": "465ea20d0acf754a167cdbb651f5f787550a34224c7f700f270e84fc0c542e42"
+  },
+  "new_reduction": "Matrix.cons_val is the existing dsimproc for Matrix.vecCons at numeric Fin indices; it selects the same literal row/coordinate. No custom reducer or compiler is introduced.",
+  "manual_affine_dictionary": {
+    "D23": "57/64 - 3*(t1+t2)/2",
+    "H1": "3*t0",
+    "H3": "t0+t1+3*t2",
+    "H5": "t0+t1+t2+t3+3*t4",
+    "H7": "t0+t1+t2+t3+t4+t5+3*t6"
+  },
+  "all61_literal_rows": [
+    {
+      "table": "h5AffineRows",
+      "cell_index": 0,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 0,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 0,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 1,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 1,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 1,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 2,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 2,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 2,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 3,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 3,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 3,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 4,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 4,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 4,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 5,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 5,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 5,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 6,
+      "row_index": 36,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 6,
+      "row_index": 37,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h5AffineRows",
+      "cell_index": 6,
+      "row_index": 18,
+      "row_count": 100,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H5 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 3, 0, 0, 0])",
+      "literal_row_sha256": "25cc2306fff091948bb7797b28dd971ec8f67df1ca9d368b801b4a295580294b",
+      "target": "H5 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 0,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 0,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 0,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 0,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 1,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 1,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 1,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 1,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 2,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 2,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 2,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 2,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 3,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 3,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 3,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 3,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 4,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 4,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 4,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 4,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 5,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 5,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 5,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 5,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 6,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 6,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 6,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 6,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 7,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 7,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 7,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 7,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 8,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 8,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 8,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 8,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 9,
+      "row_index": 36,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H1 strictly below D23\", ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "36b75fe60e07cae5dfecfe4eaeb8cc1bfccdb030d42a10fe3aaca60665e7bc17",
+      "target": "D23 - H1"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 9,
+      "row_index": 37,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H3 strictly below D23\", ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0])",
+      "literal_row_sha256": "806b1c863ef9f736258cab61d079a8fa712eb100544881f77f832de158c56e3f",
+      "target": "D23 - H3"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 9,
+      "row_index": 38,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"previous H5 strictly below D23\", ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0])",
+      "literal_row_sha256": "6e9ea1017c6b874f1bba1f08dc0aec75015f8718c972785e0a2a63e733c35c70",
+      "target": "D23 - H5"
+    },
+    {
+      "table": "h7AffineRows",
+      "cell_index": 9,
+      "row_index": 18,
+      "row_count": 101,
+      "strictly_in_bounds": true,
+      "literal_row": "(\"new region H7 above D23\", ![-57/64, 1, 5/2, 5/2, 1, 1, 1, 3, 0])",
+      "literal_row_sha256": "a5f89612b409d823ab354ca7f056b7338928203d2cb53badfa1f2ecabbc4e1a2",
+      "target": "H7 - D23"
+    }
+  ],
+  "literal_supplier": {
+    "path": "/workspace/blue-member-build/ImbalancedChen/P4AOriginalFirstFailureH5H7Literal.lean",
+    "bytes": 150476,
+    "sha256": "03c64a16bba85abe94754a7411c37fb875cfeead777cb4e19e90b081256e660f"
+  },
+  "manual_interpretation": "All seven H5 cells use the same three priority coefficient vectors; all ten H7 cells use the same four. Direct expansion of the five displayed affine differences agrees with those literal vectors. No nonzero constant residual or row-index discrepancy is visible; the actual errors still contain the unreduced literal vector selection. This is not a Lean certificate or a separate numeric checker.",
+  "manuscript_1106": [
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+      "bytes": 52306,
+      "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+      "line_start": 202,
+      "line_end": 220,
+      "literal_excerpt": "At rank eight a selected endpoint $M$ is compared with a valid\r\nupper bound $R_6$ for the inherited sixth cap.  The retained seventh\r\ncube and the additional condition $M-S_8<3t_8$ give\r\n\\begin{equation}\\label{sv:eighth-range}\r\n 1<\\frac{\\lambda_6-S_8}{t_8}\r\n \\le\\frac{R_6-S_8}{t_8}<\\frac{M-S_8}{t_8}<3.\r\n\\end{equation}\r\nConsequently \\eqref{sv:even-gain} is bounded below by the integral of\r\n\\begin{equation}\\label{sv:eighth-density}\r\n \\frac{4(M-R_6)}{(R_6-S_8)(M-S_8)\\prod_{i=1}^8t_i}.\r\n\\end{equation}\r\nEach chosen region must retain every full and selected-complement\r\nsquare, as well as all ancestor tests.  Regions acted upon at one\r\nstage have disjoint interiors.  Changes at different stages are\r\ncombined by the exact telescope\r\n$V_3-V_6=(V_3-V_4)+(V_4-V_5)+(V_5-V_6)$.\r\nFor each density difference we use one lower enclosure.\r\n\r\n\\subsection{Literal ordinary densities and finite realization}\r\n",
+      "excerpt_sha256": "ebe70203f7620c5fd54b950e1a6d582409f1c855c0760374baa3e8b1d1e36d45"
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+      "bytes": 39389,
+      "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+      "line_start": 102,
+      "line_end": 126,
+      "literal_excerpt": "\r\nThe finite partition is chosen jointly for all the marked queries.\r\nAt the third upper exit, the omitted last-prime tail is\r\n\\[\r\n O\\!\\left(\\eta\\left(1+\\log^2\\frac{\\rho_0}{\\eta}\\right)\\right),\r\n \\qquad\\eta\\downarrow0.\r\n\\]\r\nAt lower exits of rank $r=3,4,5$, the corresponding bound is\r\n$O(\\eta(1+\\log^{r-1}({h_{\\rm s}}/\\eta)))$.  The higher changes have positive\r\nlast-prime cutoffs; in particular the eighth-rank domains have\r\n$t_8>53/13824$.  On the compact remainder, proper affine walls can be\r\ntrimmed with arbitrarily small mass.  A region on which the chosen\r\nlabel is identically inherited is retained rather than treated as a\r\nwall.  Freezing the coarse decision before refining the children gives\r\none common finite policy for the count and the density.\r\n\r\nFor the third envelope, the coarse parameters $e,\\chi$ give\r\n$0\\le L_{\\mathrm{end}}-\\lambda\\le4e+6\\chi$.\r\nFix the finite policy and its positive reserves. The admissibility\r\nfunctions are continuous on finitely many compact boxes, so their\r\nstrict reserves have a positive minimum. Hence some $\\kappa_*>0$\r\npreserves all the inequalities when\r\n$\\log_xN\\in[1,1+\\kappa_*]$ and the endpoint enlargement is\r\nsufficiently small. The margin is obtained on these fixed compact\r\npieces, after the limiting boundary regions have been removed.\r\n",
+      "excerpt_sha256": "d0ddeb8668da46b97072ce4d4d91581b000156c7623e72dfbd31f1610f723063"
+    }
+  ]
+}

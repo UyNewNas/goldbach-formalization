@@ -1,0 +1,14 @@
+--- actual_failed_0b85.lean
++++ isolated_predicate_API_v3.lean
+@@ -89,8 +89,9 @@
+   congr 2
+   apply Finset.sum_congr rfl
+   intro i _
+-  by_cases hi : i.val<j.val ∧ ¬Selected p i <;>
+-    simp only [hi,ite_true,ite_false,ContinuousLinearMap.proj_apply,ContinuousLinearMap.zero_apply]
++  by_cases hi : i.val<j.val ∧ ¬Selected p i
++  · simp only [if_pos hi,ContinuousLinearMap.proj_apply]
++  · simp only [if_neg hi,ContinuousLinearMap.zero_apply]
+ 
+ theorem cap_eq_affine_circuit (p : Policy) (v : LogFour) :
+     cap p v=if p.val<15 then min (affineCap p true v) (affineCap p false v)

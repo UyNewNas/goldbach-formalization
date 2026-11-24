@@ -1,0 +1,37 @@
+--- baseline/ImbalancedChen/P2ContinuousSieveRational.lean
++++ candidate/ImbalancedChen/P2ContinuousSieveRational.lean
+@@ -2,7 +2,8 @@
+ import ImbalancedChen.ActualThirdOriginalLocalCurvature
+ 
+ /-!
+-SOURCE_WRITTEN / UNCOMPILED / CODE_ONLY.
++Verification status for this exact source postimage is recorded in
++`docs/verification/20261123-blue-compilation`.
+ 
+ Rational enclosures for the literal, amplitude-normalized Suzuki F, f and D.
+ The first-strip suppliers below are finite rational expressions, proved from
+@@ -37,7 +38,7 @@
+ def D (s : ℝ) : ℝ := actualSieveGap s / A
+ 
+ theorem D_eq_upper_sub_lower (s : ℝ) : D s = upper s - lower s := by
+-  unfold D actualSieveGap upper lower thirdTailLowerFactor
++  unfold D actualSieveGap upper lower thirdTailLowerFactor A
+   rw [sub_div]
+ 
+ /-- A rational Taylor calculation encloses the actual logarithm, including q=2. -/
+@@ -73,6 +74,7 @@
+   · rw [hlcast]
+     linarith only [hl]
+   · rw [hucast, hlcast]
++    simp only [mul_div_assoc]
+     linarith only [hu]
+ 
+ /-- The first-strip f-node is enclosed by finite rational expressions. -/
+@@ -105,6 +107,7 @@
+   have hF := upper_rational_node_eq q (by linarith) hq3
+   rw [D_eq_upper_sub_lower, hF]
+   push_cast at hl hu ⊢
++  simp only [sub_div]
+   constructor <;> linarith only [hl, hu]
+ 
+ /-- Endpoint rational calculations enclose the actual f throughout a cell.

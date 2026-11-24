@@ -95,6 +95,8 @@ theorem selectedCells_disjoint (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : �
     Set.PairwiseDisjoint (cells e chi m : Set (Cell m))
       (selectedCell e chi m omega N cap) := by
   intro j _ k _ hne
+  change Disjoint (selectedCell e chi m omega N cap j)
+    (selectedCell e chi m omega N cap k)
   rw [Finset.disjoint_left]
   intro p hpj hpk
   exact hne (logPrimeMeshCell_unique (by norm_num : (0 : ℝ) ≤ 19 / 96)

@@ -1,3 +1,4 @@
+import ImbalancedChen.ActualThirdOriginalWeightedCurvature
 /-!
 SOURCE_WRITTEN / UNCOMPILED. Historic Q80 ordinary-trapezoid supplier.
 
@@ -17,7 +18,6 @@ endpoint value1. The actual upper integral is unchanged by that endpoint;
 no unsupported assertion about the canonical source's value at1 occurs.
 No sf/table soundness or desired node enclosure is a premise.
 -/
-import ImbalancedChen.ActualThirdOriginalWeightedCurvature
 
 set_option Elab.async false
 
@@ -63,8 +63,7 @@ theorem integral_quadratic_remainder (M : ℝ) {a b : ℝ} (ha : 0 < a) :
   have heq : (fun x : ℝ => (M*a)*(x-a)*(b-x)/(2*a)) =
       (fun x : ℝ => M*(x-a)*(b-x)/2) := by
     funext x
-    field_simp [ha.ne']
-    ring
+    field_simp [ha.ne'] <;> ring
   rw [heq] at h
   convert h using 1 <;> field_simp [ha.ne'] <;> ring
 
@@ -72,7 +71,8 @@ private theorem integrate_remainder {e : ℝ → ℝ} {a b M : ℝ}
     (ha : 0 < a) (hab : a < b) (he : ContinuousOn e (Icc a b))
     (hpoint : ∀ x ∈ Icc a b, 0 ≤ e x ∧ e x ≤ M*(x-a)*(b-x)/2) :
     0 ≤ (∫ x in a..b, e x) ∧ (∫ x in a..b, e x) ≤ M*(b-a)^3/12 := by
-  have hi := he.intervalIntegrable_of_Icc hab.le
+  have hi : IntervalIntegrable e volume a b :=
+    he.intervalIntegrable_of_Icc hab.le
   have hg : IntervalIntegrable (fun x : ℝ => M*(x-a)*(b-x)/2) volume a b :=
     (((continuous_const.mul (continuous_id.sub continuous_const)).mul
       (continuous_const.sub continuous_id)).div_const 2).intervalIntegrable a b
@@ -94,7 +94,8 @@ theorem concave_trapezoid_error {f f' f'' : ℝ → ℝ} {a b M : ℝ}
     (hf.sub (continuousOn_endpointChord f a b)) (fun x hx => by
       have h := concave_chord_of_local_second_bounds hab hM hf hf' hf'' hbound hx
       exact ⟨h.1, h.2.1⟩)
-  rw [intervalIntegral.integral_sub (hf.intervalIntegrable_of_Icc hab.le)
+  simp only [Pi.sub_apply] at hrem
+  rw [intervalIntegral.integral_sub (μ := volume) (hf.intervalIntegrable_of_Icc hab.le)
     ((continuousOn_endpointChord f a b).intervalIntegrable_of_Icc hab.le),
     integral_endpointChord f hab] at hrem
   constructor <;> linarith only [hrem.1, hrem.2]
@@ -112,7 +113,8 @@ theorem convex_trapezoid_error {f f' f'' : ℝ → ℝ} {a b M : ℝ}
     ((continuousOn_endpointChord f a b).sub hf) (fun x hx => by
       have h := convex_chord_of_local_second_bounds hab hM hf hf' hf'' hbound hx
       exact ⟨h.1, h.2.1⟩)
-  rw [intervalIntegral.integral_sub
+  simp only [Pi.sub_apply] at hrem
+  rw [intervalIntegral.integral_sub (μ := volume)
     ((continuousOn_endpointChord f a b).intervalIntegrable_of_Icc hab.le)
     (hf.intervalIntegrable_of_Icc hab.le), integral_endpointChord f hab] at hrem
   constructor <;> linarith only [hrem.1, hrem.2]
@@ -178,8 +180,8 @@ theorem hasDerivAt_inverseSlope {s : ℝ} (hs : 0 < s) :
     HasDerivAt (fun u : ℝ => -((u^2)⁻¹)) (2/s^3) s := by
   have hd := ((((hasDerivAt_id s).pow 2).inv (pow_ne_zero 2 hs.ne')).neg)
   apply hd.congr_deriv
-  field_simp [hs.ne']
-  ring
+  dsimp only [Pi.pow_apply, id_eq]
+  field_simp [hs.ne'] <;> ring
 
 /-- The initial upper strip uses its exact reciprocal, including the chosen
 historical endpoint at1. Canonical upper(1) is never used in this equality. -/
@@ -237,6 +239,7 @@ theorem lower_cell_trapezoid_error (j : ℕ) (hj : 32768 ≤ j) :
       have hinv : 1/(cellLeft j-1) ≤ (1 : ℝ) := by
         simpa using one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1)
           (by linarith : (1 : ℝ) ≤ cellLeft j-1)
+      dsimp only [cellLeft] at hinv
       exact lowerCurvature_bounds (by linarith [hx.1])
         ⟨by linarith only [hlocal.1, hinv], hlocal.2⟩)
   have herror : (1 : ℝ)*(cellRight j-cellLeft j)^3/12 = 1/(12*(16384 : ℝ)^3) := by

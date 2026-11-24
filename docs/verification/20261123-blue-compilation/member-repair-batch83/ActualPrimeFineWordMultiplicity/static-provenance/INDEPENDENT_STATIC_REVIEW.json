@@ -1,0 +1,152 @@
+{
+  "schema": "non_author_source_scope_static_review_v1",
+  "reviewer": "/root/ascending14_api",
+  "author": "/root/blue_inventory",
+  "reviewed_utc": "2026-11-23T22:54:27.490436+00:00",
+  "result": "PASS_STATIC_SCOPE_ONLY_READY_FOR_SOLE_OWNER_GUARDED_VALIDATION",
+  "module": "ImbalancedChen.ActualPrimeFineWordMultiplicity",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/baseline.lean",
+    "bytes": 10571,
+    "sha256": "9f8128f0c717b6748908d2f9f3fb67159ca9346d5a1477267065f62365118c74"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/candidate.lean",
+    "bytes": 10660,
+    "sha256": "7ee0966fd322999c9769fa7062b82040a12833061ae76b01d9eafb36add3aa52"
+  },
+  "original_manifest": {
+    "path": "/workspace/p1-complete-proof/static-actual-prime-fine-word-multiplicity-api/FILES_MANIFEST.json",
+    "bytes": 1537,
+    "sha256": "238a477cb583fbaefcb9ef9fa21e1596d3fdd6acd9891879e6ac7f8c2ccbb15c"
+  },
+  "original_files_hash_size_checked": 9,
+  "all_eleven_complete_command_headers_raw_equal": [
+    {
+      "kind": "def",
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "complete_raw_header": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n",
+      "sha256": "9e9ba8789d8c70ebe842c02c7688b0e5bf9d77919b2f798acbeb423c493f58ec"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineLabelBlocksOfWord_word",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_word (input : List ℕ) :\n    actualPrimeLabelBlocksWord (actualPrimeFineLabelBlocksOfWord input) = input :=",
+      "sha256": "731235b37a51704f300cd6bcc7d3d80e57e14c72d695b7c92a4e48aa4b2fff80"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2 :=",
+      "sha256": "bdf04a28e7d7c42e65aaea468dcc534849e120daa857d4e9be7b1c431bfffc05"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeLabelBlocksWord_label_mem",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_label_mem (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2) (b : ℕ × ℕ) (hb : b ∈ blocks) :\n    b.1 ∈ actualPrimeLabelBlocksWord blocks :=",
+      "sha256": "7717bdff393eb37b61836c45c968dcbd532b73c07ad3616ede03005e5f306d9e"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineLabelBlocksOfWord_order",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_order (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    (actualPrimeFineLabelBlocksOfWord input).Pairwise (fun b c => c.1 < b.1) :=",
+      "sha256": "a771da55e3271e98599597dd52846b07a930d97258e3e223d0e5bd3900679bfa"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeLabelBlocksWord_count",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksWord_count (blocks : List (ℕ × ℕ))\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ∀ b ∈ blocks, (actualPrimeLabelBlocksWord blocks).count b.1 = b.2 :=",
+      "sha256": "9747b0861a08bd2e131b5e1677c249296ec8603015aede3f8ead790ad4b38c43"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeLabelBlocksFactorial_eq_wordCounts",
+      "complete_raw_header": "theorem actualPrimeLabelBlocksFactorial_eq_wordCounts (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    actualPrimeLabelBlocksFactorial blocks =\n      ∏ i ∈ (actualPrimeLabelBlocksWord blocks).toFinset,\n        ((actualPrimeLabelBlocksWord blocks).count i).factorial :=",
+      "sha256": "f8cd444c5aec13cf34ca8db032d8e8d258bde6f1211170a51b76b43de5b12c94"
+    },
+    {
+      "kind": "def",
+      "name": "actualPrimeFineWordMultiplicity",
+      "complete_raw_header": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=",
+      "sha256": "064b2c7df6afffa62decf1169923518cf5e739aa47338a6bd166b4833f796560"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineLabelBlocksOfWord_factorial",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_factorial (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    actualPrimeLabelBlocksFactorial (actualPrimeFineLabelBlocksOfWord input) =\n      actualPrimeFineWordMultiplicity input :=",
+      "sha256": "99debd3f7179baef63d3b8701a296059a7ebf86637827e02d7b817672fae7e9f"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineWord_literal_multiplicity",
+      "complete_raw_header": "theorem actualPrimeFineWord_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input) n : ℝ) else 0) =\n      (actualPrimeFineWordMultiplicity input : ℝ) *\n        (if n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n          List.SortedGT).image List.prod then 1 else 0) :=",
+      "sha256": "1513ace3a6d8322f2e77e695f4943cc66448e30243c480beabfc9d44fe551a8c"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeFineWord_original_scalar",
+      "complete_raw_header": "theorem actualPrimeFineWord_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·))\n    (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeFineWordMultiplicity input : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input,\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n        List.SortedGT).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n :=",
+      "sha256": "5e87065f1bd5bb56cc4833ce95654ebf7837315be5d2e9c85d6c65b10aba60dc"
+    }
+  ],
+  "both_complete_data_definitions_raw_equal": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "complete_raw_definition": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n  | [] => []\n  | i :: input =>\n      match actualPrimeFineLabelBlocksOfWord input with\n      | [] => [(i, 1)]\n      | (j, m) :: blocks =>\n          if i = j then (j, m + 1) :: blocks else (i, 1) :: (j, m) :: blocks",
+      "sha256": "b6756df7463eb895db345ef4538e2bd5b9adcbf6b5a2c1af2a0e456903e3bef2"
+    },
+    {
+      "name": "actualPrimeFineWordMultiplicity",
+      "complete_raw_definition": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=\n  ∏ i ∈ input.toFinset, (input.count i).factorial",
+      "sha256": "c72095cf218ed0b3181a0d6b34b02de574c27bd8d6122a42c0c4309389d94d29"
+    }
+  ],
+  "whole_candidate_reverse_exact_baseline": true,
+  "changed_proof_bodies": [
+    "actualPrimeFineLabelBlocksOfWord_word",
+    "actualPrimeFineLabelBlocksOfWord_positive",
+    "actualPrimeFineLabelBlocksOfWord_order",
+    "actualPrimeLabelBlocksWord_count",
+    "actualPrimeLabelBlocksFactorial_eq_wordCounts"
+  ],
+  "proof_checks": [
+    "Each of three dsimp only additions reduces the existing cons/pair matcher after the original saved hb rewrite. The same if_pos/if_neg conditions and branches remain.",
+    "The original List.mem_cons rfl pattern substituted away original head a, matching actual unknown-a diagnostics. Naming the same equality and subst b preserves a and proves the same original head-count case without a new premise.",
+    "The final rfl reduces existing Function.comp and Prod.fst lambda after original List.map_map. The original residual goal is bound in the actual failure; factorials, word, list and product remain the same."
+  ],
+  "all_other_original_source_bytes_imports_names_numeric_data_factorial_count_order_squarefree_selector_signed_scalar_hypotheses_targets_and_budgets_preserved": true,
+  "new_declarations_or_hypotheses_or_target_weakening": 0,
+  "actual_failure_binding": {
+    "source_sha256": "9f8128f0c717b6748908d2f9f3fb67159ca9346d5a1477267065f62365118c74",
+    "frozen_observation": {
+      "path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0003/ACTUAL_FAILURES.json",
+      "bytes": 13753,
+      "sha256": "af306e71b46c5517ec2f01323848236c8858184f7bb2cca4989b77be907ff067"
+    },
+    "failure_slice": {
+      "path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0003/ActualPrimeFineWordMultiplicity.failure.log",
+      "bytes": 8484,
+      "sha256": "84eddefaf1f08ee4c32919894242fa389fcb116348a3e09f73445b22c3fe573e"
+    },
+    "prefix_sha256": "7920c7e2a52eac189aa994b929edcb01ca80156978d3671662ac00768d1e6fc3",
+    "slice_start": 6681582,
+    "slice_end": 6690066,
+    "verbatim_original_compiler_command": "LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/ActualPrimeFineWordMultiplicity.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeFineWordMultiplicity.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/ActualPrimeFineWordMultiplicity.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeFineWordMultiplicity.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/ActualPrimeFineWordMultiplicity.setup.json --json",
+    "unit_exit1_present": true
+  },
+  "manuscript_1106_anchor": {
+    "source": {
+      "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+      "bytes": 39389,
+      "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440"
+    },
+    "lines": [
+      191,
+      211
+    ],
+    "meaning": "Common disjoint half-open label alphabet; literal M=product m_I!; squarefree sorted coefficient and original residual multiplicity scalar."
+  },
+  "classification": "Existing match/iota, equality-substitution and composition definitional reduction only; no mathematical omission or manuscript gap identified.",
+  "Lean_Lake_checker_kernel_or_live_controller_mutations": 0,
+  "compile_or_complete_P1_acceptance_claim": false
+}

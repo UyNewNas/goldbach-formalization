@@ -1,0 +1,52 @@
+✖ [11014/11048] Building ImbalancedChen.P2ContinuousSieveRational (9.7s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P2ContinuousSieveRational.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2ContinuousSieveRational.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2ContinuousSieveRational.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2ContinuousSieveRational.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2ContinuousSieveRational.setup.json --json
+error: ImbalancedChen/P2ContinuousSieveRational.lean:39:66: unsolved goals
+s : ℝ
+⊢ suzukiContinuousUpperFactor s / A - suzukiContinuousLowerFactor s / A =
+    suzukiContinuousUpperFactor s / A - suzukiContinuousLowerFactor s / (2 * Real.exp Real.eulerMascheroniConstant)
+error: ImbalancedChen/P2ContinuousSieveRational.lean:76:4: linarith failed to find a contradiction
+case right
+n : ℕ
+q : ℚ
+hq : 2 ≤ q
+hqR : 2 ≤ ↑q
+hqpos : 0 < ↑q
+z : ℝ := (↑q - 2) / ↑q
+hz0 : 0 ≤ z
+hz1 : z < 1
+hratio : (1 + z) / (1 - z) = ↑q - 1
+hl : ∑ i ∈ Finset.range n, z ^ (2 * i + 1) / (2 * ↑i + 1) ≤ 1 / 2 * Real.log (↑q - 1)
+hu : 1 / 2 * Real.log (↑q - 1) ≤ ∑ i ∈ Finset.range n, z ^ (2 * i + 1) / (2 * ↑i + 1) + z ^ (2 * n + 1) / (1 - z ^ 2)
+hlcast : ↑(logLower n q) = 2 * ∑ k ∈ Finset.range n, z ^ (2 * k + 1) / (2 * ↑k + 1)
+hucast : ↑(logUpper n q) = ↑(logLower n q) + 2 * z ^ (2 * n + 1) / (1 - z ^ 2)
+a✝ : 2 * ∑ k ∈ Finset.range n, z ^ (2 * k + 1) / (2 * ↑k + 1) + 2 * z ^ (2 * n + 1) / (1 - z ^ 2) < Real.log (↑q - 1)
+⊢ False
+failed
+error: ImbalancedChen/P2ContinuousSieveRational.lean:108:18: linarith failed to find a contradiction
+case left
+n : ℕ
+q : ℚ
+hq2 : 2 ≤ q
+hq3 : q ≤ 3
+hF : upper ↑q = ↑(1 / q)
+hl : ↑(logLower n q) / ↑q ≤ lower ↑q
+hu : lower ↑q ≤ ↑(logUpper n q) / ↑q
+a✝ : 1 / ↑q - lower ↑q < (1 - ↑(logUpper n q)) / ↑q
+⊢ False
+failed
+error: ImbalancedChen/P2ContinuousSieveRational.lean:108:18: linarith failed to find a contradiction
+case right
+n : ℕ
+q : ℚ
+hq2 : 2 ≤ q
+hq3 : q ≤ 3
+hF : upper ↑q = ↑(1 / q)
+hl : ↑(logLower n q) / ↑q ≤ lower ↑q
+hu : lower ↑q ≤ ↑(logUpper n q) / ↑q
+a✝ : (1 - ↑(logLower n q)) / ↑q < 1 / ↑q - lower ↑q
+⊢ False
+failed
+warning: ImbalancedChen/P2ContinuousSieveRational.lean:174:6: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+error: Lean exited with code 1

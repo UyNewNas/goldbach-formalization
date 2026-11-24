@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "complete_raw_header": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2 :=",
+      "header_sha256": "bdf04a28e7d7c42e65aaea468dcc534849e120daa857d4e9be7b1c431bfffc05",
+      "before_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev : ∀ b ∈ (j, m) :: blocks, 0 < b.2 := by simpa only [hb] using ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          dsimp only\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact Nat.succ_pos m\n            · exact hprev b (List.mem_cons_of_mem _ hb)\n          · rw [if_neg hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · decide\n            · exact hprev b hb\n\n",
+      "after_body": "\n  induction input with\n  | nil => simp [actualPrimeFineLabelBlocksOfWord]\n  | cons i input ih =>\n      cases hb : actualPrimeFineLabelBlocksOfWord input with\n      | nil => simp [actualPrimeFineLabelBlocksOfWord, hb]\n      | cons b blocks =>\n          rcases b with ⟨j, m⟩\n          have hprev : ∀ b ∈ (j, m) :: blocks, 0 < b.2 := by simpa only [hb] using ih\n          rw [actualPrimeFineLabelBlocksOfWord, hb]\n          dsimp only\n          by_cases hij : i = j\n          · rw [if_pos hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact Nat.succ_pos m\n            · exact hprev b (List.mem_cons_of_mem _ hb)\n          · rw [if_neg hij]\n            intro b hb\n            rcases List.mem_cons.mp hb with rfl | hb\n            · exact Nat.succ_pos 0\n            · exact hprev b hb\n\n",
+      "before_body_sha256": "9075437eae448fff001e31e42dc5106766f3fb9cfa8ec8e3475f39959c600368",
+      "after_body_sha256": "52ec1d597abf82cc0fbc0afbf5710865149c3a5336a7b49b6874840e3b11c29d"
+    }
+  ],
+  "original_command_headers_raw_preserved": 11,
+  "original_definition_regions_raw_preserved": 2,
+  "whole_source_reverse_exact": true,
+  "all_other_source_bytes_including_previously_successful_proofs_data_imports_options_and_hypotheses_exact": true,
+  "new_declarations_definitions_or_hypotheses": 0
+}

@@ -1,0 +1,13 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Core.lean",
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "start_line": 1178,
+      "end_line": 1186,
+      "raw_excerpt": "theorem if_pos {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t e : α} : (ite c t e) = t :=\n  match h with\n  | isTrue  _   => rfl\n  | isFalse hnc => absurd hc hnc\n\ntheorem if_neg {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t e : α} : (ite c t e) = e :=\n  match h with\n  | isTrue hc   => absurd hc hnc\n  | isFalse _   => rfl\n",
+      "excerpt_sha256": "cd7f2a29e46460d7ee84e612eb6c800ad91566fb419fc20226b35b1c9128c323"
+    }
+  ],
+  "logic": "Supply the original full conjunction directly as hc/hnc to core if_pos/if_neg. Both conditionals, one over a continuous-linear-map and one over Real, then reduce to the same projection or zero. This avoids inserting hi as a raw proposition rewrite which recursively changes the full condition into True ∧ ¬False. No finite comparison, selected predicate or coordinate is changed."
+}

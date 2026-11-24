@@ -1,0 +1,88 @@
+--- actual_failed_b2c4.lean
++++ isolated_proof_v2.lean
+@@ -89,7 +89,8 @@
+   congr 2
+   apply Finset.sum_congr rfl
+   intro i _
+-  by_cases hi : i.val<j.val ∧ ¬Selected p i <;> simp [Fin.lt_def,hi]
++  by_cases hi : i.val<j.val ∧ ¬Selected p i <;>
++    simp only [hi,ite_true,ite_false,ContinuousLinearMap.proj_apply,ContinuousLinearMap.zero_apply]
+ 
+ theorem cap_eq_affine_circuit (p : Policy) (v : LogFour) :
+     cap p v=if p.val<15 then min (affineCap p true v) (affineCap p false v)
+@@ -145,7 +146,9 @@
+     · exact h.1
+     · exact h.2.1
+     · exact h.2.2.1
+-    · simpa only [add_assoc] using h.2.2.2
++    · have hindex : v (⟨3, by decide⟩ : Fin 4) = v (3 : Fin 4) := by rfl
++      rw [hindex]
++      simpa only [add_assoc] using h.2.2.2
+ 
+ /-- Exact mask1 correspondence with the already existing single-policy
+ source, including all full and selected squares, not only its cap. -/
+@@ -229,11 +232,23 @@
+ 
+ theorem continuous_cap (p : Policy) : Continuous (cap p) := by
+   by_cases hp : p.val<15
+-  · simpa only [cap,if_pos hp] using
+-      ((continuous_const.add (continuous_selectedMass p)).div_const 2).min
+-        (continuous_const.sub ((continuous_selectedMass p).const_mul (3/2:ℝ)))
+-  · simpa only [cap,if_neg hp] using
+-      continuous_const.sub ((continuous_apply 2).const_mul (3/8:ℝ))
++  · have hcap : cap p = (fun v : LogFour =>
++        min ((1 + selectedMass p v) / 2) (57 / 64 - (3 / 2 : ℝ) * selectedMass p v)) := by
++      funext v
++      exact if_pos hp
++    rw [hcap]
++    exact (((continuous_const : Continuous (fun _ : LogFour => (1 : ℝ))).add
++      (continuous_selectedMass p)).div_const 2).min
++        ((continuous_const : Continuous (fun _ : LogFour => (57 / 64 : ℝ))).sub
++          ((continuous_const : Continuous (fun _ : LogFour => (3 / 2 : ℝ))).mul
++            (continuous_selectedMass p)))
++  · have hcap : cap p = (fun v : LogFour => (153 / 256 : ℝ) - (3 / 8 : ℝ) * v 2) := by
++      funext v
++      exact if_neg hp
++    rw [hcap]
++    exact (continuous_const : Continuous (fun _ : LogFour => (153 / 256 : ℝ))).sub
++      ((continuous_const : Continuous (fun _ : LogFour => (3 / 8 : ℝ))).mul
++        (continuous_apply (2 : Fin 4)))
+ 
+ theorem measurableSet_typedEligible (p : Policy) : MeasurableSet {v | TypedEligible p v} := by
+   have hc := (continuous_cap p).measurable
+@@ -244,7 +259,13 @@
+       ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v
+       else (1+v 0)/2<cap p v ∧ v 0<(25/128:ℝ)} := by
+     by_cases hp : p.val<15
+-    · rw [if_pos hp,Set.ofPred_forall]
++    · have hbranch : {v : LogFour | if p.val<15 then
++          ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v
++          else (1+v 0)/2<cap p v ∧ v 0<(25/128:ℝ)} =
++          {v : LogFour | ∀ j : Fin 4, ¬Selected p j → selectedSquare p j v<cap p v} := by
++        ext v
++        simp only [Set.mem_setOf_eq,hp,ite_true]
++      rw [hbranch,Set.ofPred_forall]
+       apply MeasurableSet.iInter
+       intro j
+       by_cases hj : Selected p j
+@@ -272,10 +293,16 @@
+ 
+ theorem measurable_residual (j : ℕ) : Measurable (residual j) := by
+   by_cases hj : j<16
+-  · simpa only [residual,dif_pos hj,typedResidual] using
+-      ((continuous_cap ⟨j,hj⟩).sub U11SelectedLargest.continuous_prefixSum).measurable
+-  · simpa only [residual,dif_neg hj] using
+-      (measurable_const : Measurable (fun _ : LogFour => (0 : ℝ)))
++  · have hres : residual j = (fun v : LogFour => cap ⟨j,hj⟩ v - U11SelectedLargest.prefixSum v) := by
++      funext v
++      simp only [residual,dif_pos hj,typedResidual]
++    rw [hres]
++    exact ((continuous_cap ⟨j,hj⟩).sub U11SelectedLargest.continuous_prefixSum).measurable
++  · have hres : residual j = (fun _ : LogFour => (0 : ℝ)) := by
++      funext v
++      exact dif_neg hj
++    rw [hres]
++    exact measurable_const
+ 
+ /-- Concrete sixteen-policy ordinary range on the ORIGINAL unaltered
+ U11 support. H248 range is proved by its existing literal array supplier. -/

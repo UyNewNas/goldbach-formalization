@@ -1,0 +1,149 @@
+[
+  {
+    "name": "TentSum",
+    "kind": "inductive",
+    "complete_raw_region": "inductive TentSum where\n  | x | y | xy | xz | yz | xyz\n\n",
+    "sha256": "75786f68e5239e9e62a368a6b281492dc00105f6c38e5f3b75574f7d14854ec4",
+    "byte_exact": true
+  },
+  {
+    "name": "TentSide",
+    "kind": "inductive",
+    "complete_raw_region": "inductive TentSide where\n  | rise | fall\n\n",
+    "sha256": "1f247eef06e9c7f9de853e0b5606db16a4315f572502dfcdb02e2a8ca9f8415b",
+    "byte_exact": true
+  },
+  {
+    "name": "sumX",
+    "kind": "def",
+    "complete_raw_region": "def sumX : TentSum → ℝ\n  | .x => 1 | .y => 0 | .xy => 1 | .xz => 1 | .yz => 0 | .xyz => 1\n\n",
+    "sha256": "15d560b8ff1e916e115678ad7be3fdbc6e725901b7bb86ff9fd163cd82951c93",
+    "byte_exact": true
+  },
+  {
+    "name": "sumY",
+    "kind": "def",
+    "complete_raw_region": "def sumY : TentSum → ℝ\n  | .x => 0 | .y => 1 | .xy => 1 | .xz => 0 | .yz => 1 | .xyz => 1\n\n",
+    "sha256": "947851841081a0a49e4195e6b95784a3292f288d6ea30642ea54db150d616240",
+    "byte_exact": true
+  },
+  {
+    "name": "sumZ",
+    "kind": "def",
+    "complete_raw_region": "def sumZ : TentSum → ℝ\n  | .x => 0 | .y => 0 | .xy => 0 | .xz => 1 | .yz => 1 | .xyz => 1\n\n",
+    "sha256": "04b09ea6941cda9a8c832b128908c43c320049d98840cabacb966a8bc83b79d5",
+    "byte_exact": true
+  },
+  {
+    "name": "tentSum",
+    "kind": "def",
+    "complete_raw_region": "def tentSum (s : TentSum) (t : BoxPoint) : ℝ :=\n  sumX s*t 0+sumY s*t 1+sumZ s*t 2\n\n",
+    "sha256": "d59b0efbbb44ab57dce3c42f345bd1ae573350fe5541f8ea68df490ec5f8afc3",
+    "byte_exact": true
+  },
+  {
+    "name": "planeConst",
+    "kind": "def",
+    "complete_raw_region": "def planeConst : TentSide → ℝ\n  | .rise => 1/2 | .fall => 57/64\n\n",
+    "sha256": "a1d0cab11b61761011914f4788712e0ea9574a587cd74f51825a39a1c57bd534",
+    "byte_exact": true
+  },
+  {
+    "name": "planeSlope",
+    "kind": "def",
+    "complete_raw_region": "def planeSlope : TentSide → ℝ\n  | .rise => 1/2 | .fall => -3/2\n\n",
+    "sha256": "0d7fde407746d3c95e49c88d1f305e90e729deaabfb72a5987d8981a7a0938ba",
+    "byte_exact": true
+  },
+  {
+    "name": "tentPlane",
+    "kind": "def",
+    "complete_raw_region": "def tentPlane (s : TentSum) (k : TentSide) (t : BoxPoint) : ℝ :=\n  planeConst k+planeSlope k*tentSum s t\n\n/-- The physical-coordinate version of the original cross-multiplied p-q.\nThe original integer plane_range value is D times this normalized value. -/\n",
+    "sha256": "d28e83376d8fb46dcd614ca4cf7d12b3410aba83721d0a0f47584d3e78dc4176",
+    "byte_exact": true
+  },
+  {
+    "name": "sourceDelta",
+    "kind": "def",
+    "complete_raw_region": "def sourceDelta (s : TentSum) (t : BoxPoint) : ℝ :=\n  tentPlane s .rise t-tentPlane s .fall t\n\n/-- Keep the original if/elif priority: the descending branch requires the\nascending test to have failed, as well as the nonnegative lower delta. -/\n",
+    "sha256": "e3013ffc13c7718973ebf8db81f99a568c3e3a22dcc69e163717ccd8c4c18542",
+    "byte_exact": true
+  },
+  {
+    "name": "sourceActive",
+    "kind": "def",
+    "complete_raw_region": "def sourceActive (s : TentSum) (k : TentSide) (a b : BoxPoint) : Prop :=\n  match k with\n  | .rise => sourceDelta s b≤0\n  | .fall => ¬sourceDelta s b≤0 ∧ 0≤sourceDelta s a\n\n/-- Exact source plane_range upper: A is increasing, C is decreasing. -/\n",
+    "sha256": "adddbc936bfcf9fd8a3279cf1bf962c95b89c6a76754c25b0416158ef62f0646",
+    "byte_exact": true
+  },
+  {
+    "name": "planeUpper",
+    "kind": "def",
+    "complete_raw_region": "def planeUpper (s : TentSum) (k : TentSide) (a b : BoxPoint) : ℝ :=\n  match k with\n  | .rise => tentPlane s .rise b\n  | .fall => tentPlane s .fall a\n\n",
+    "sha256": "361b50e1e9479e7ecb26153125858647a3e912d6c97304c3ff6454fde09a9b4b",
+    "byte_exact": true
+  },
+  {
+    "name": "oldX",
+    "kind": "def",
+    "complete_raw_region": "def oldX (s : TentSum) (k : TentSide) : ℝ := planeSlope k*sumX s-1\n",
+    "sha256": "ade15dcf5d87c5f871ed601e63439eacd160bb998d7d7e91424ce4a9c5b44039",
+    "byte_exact": true
+  },
+  {
+    "name": "oldY",
+    "kind": "def",
+    "complete_raw_region": "def oldY (s : TentSum) (k : TentSide) : ℝ := planeSlope k*sumY s-1\n",
+    "sha256": "5aede5e14d20c12069ab14ffc1ad83a36f229cae66ea08c088490b31fa3413e3",
+    "byte_exact": true
+  },
+  {
+    "name": "oldZ",
+    "kind": "def",
+    "complete_raw_region": "def oldZ (s : TentSum) (k : TentSide) : ℝ := planeSlope k*sumZ s-1\n\n",
+    "sha256": "1d9292824920a2c65c2b0ab207ff81368d7332dec8401e9edd0a32a7c88ee40c",
+    "byte_exact": true
+  },
+  {
+    "name": "oldNumerator",
+    "kind": "def",
+    "complete_raw_region": "def oldNumerator (s : TentSum) (k : TentSide) (t : BoxPoint) : ℝ :=\n  planeConst k+oldX s k*t 0+oldY s k*t 1\n\n",
+    "sha256": "0246aa424d519481bf9de622a9fe93c8efed1f97197cce77991b14eaa24b5129",
+    "byte_exact": true
+  },
+  {
+    "name": "tentOldArgument",
+    "kind": "def",
+    "complete_raw_region": "def tentOldArgument (s : TentSum) (k : TentSide) (t : BoxPoint) : ℝ :=\n  affineArgument (planeConst k) (oldX s k) (oldY s k) (oldZ s k) t\n\n",
+    "sha256": "2acdcc1dbe47fa89f67d187d0c066e7609b765da0fa125dd5423f9b170bbf6ad",
+    "byte_exact": true
+  },
+  {
+    "name": "tentOldLow",
+    "kind": "def",
+    "complete_raw_region": "def tentOldLow (s : TentSum) (k : TentSide) (b : BoxPoint) : ℝ :=\n  tentOldArgument s k b\n\n",
+    "sha256": "a7ca995bc2151c6faa497d4fdbededb1041fbe89c769a99aaab5ccd9cd104771",
+    "byte_exact": true
+  },
+  {
+    "name": "tentOldHigh",
+    "kind": "def",
+    "complete_raw_region": "def tentOldHigh (s : TentSum) (k : TentSide) (a : BoxPoint) : ℝ :=\n  tentOldArgument s k a\n\n",
+    "sha256": "5a433e40a0a44145f49de04045904ff68b53f7aaf3bee749d89278d7e675e0f0",
+    "byte_exact": true
+  },
+  {
+    "name": "tentOldMean",
+    "kind": "def",
+    "complete_raw_region": "def tentOldMean (s : TentSum) (k : TentSide) (a b : BoxPoint) : ℝ :=\n  (planeConst k+oldX s k*boxEX a b+oldY s k*boxEY a b)*boxEZInv a b+oldZ s k\n\n",
+    "sha256": "c7e5a6dec98276eba4a8b2ac72e625f0b949421f64a87b75efad3a9c551a4e19",
+    "byte_exact": true
+  },
+  {
+    "name": "tentOldChord",
+    "kind": "def",
+    "complete_raw_region": "def tentOldChord (s : TentSum) (k : TentSide) (a b : BoxPoint)\n    (flo fhi : ℝ) : ℝ :=\n  flo+(tentOldMean s k a b-tentOldLow s k b)/\n    (tentOldHigh s k a-tentOldLow s k b)*(fhi-flo)\n\n",
+    "sha256": "7eed4c6c20d1b7e2bb58bbf891d35fe61f63158dadcf735684767a7ea2c18da4",
+    "byte_exact": true
+  }
+]

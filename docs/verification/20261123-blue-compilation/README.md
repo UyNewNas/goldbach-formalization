@@ -302,3 +302,21 @@ H3 正常编译、kernel 和完整审计均实际退出 0；[调度补充](membe
 84 的完整验收由既有 Seed42 owned 审计和新的 Archive-only 审计组合，两条真实命令、各自完整记录和不交叉的声明归属均保留，没有虚构一条全组 Lean 命令。86 的最终复核明确分区：omega 复核自身未编写的六源，root 复核另两源，两组精确覆盖全部 171 个声明；不将作者自审称为全球独审。Coarse 与 PrimeProfile 等初次真实失败、修订记录和旧通过命令保持，仅失败模块重试。辅助日志退出码捕获修正也作为原始事实发布，没有据此重跑形式检查。
 
 上一轮六终点共享 normal 已于 2026-11-23 23:45:47 UTC 自然退出 1，累计观察到 103 个实际失败模块与 42 个实际 Built；这些是历史累计数，不能当作当前未解决数。外层控制器退出 120 另行保留，未据此篡改实际 normal 的退出 1 或推断未经证明的原因。当前继续逐项处理剩余失败并保留已通过结果。四个最终 P1 导出和完整数据／分析供应链仍未完成验收，完整 P1 状态保持未完成。
+
+第八十三、八十九、九十三至九十五批新增 23 个验收模块，共 793 个 owned 声明（664 public、129 private），目录累计 294 份已验源码后像。每模块实际 normal／指定 kernel replay 及每组完整 owned 审计通过，全部类型／AST／宇宙参数／标准三公理和源码及 115 项主要产物经最终复核。见 [83](member-repair-batch83/VALIDATION_RESULTS.json)、[89](member-repair-batch89/VALIDATION_RESULTS.json)、[93](member-repair-batch93/VALIDATION_RESULTS.json)、[94](member-repair-batch94/VALIDATION_RESULTS.json)、[95](member-repair-batch95/VALIDATION_RESULTS.json)。
+
+| 批次 | 模块数 | owned／public／private |
+| --- | ---: | ---: |
+| 83 | 6 | 204／196／8 |
+| 89 | 5 | 147／146／1 |
+| 93 | 4 | 282／259／23 |
+| 94 | 2 | 58／57／1 |
+| 95 | 6 | 102／6／96 |
+
+范围为 affine box、原 Sixteen／H5H7 分配、residual mass／parity compiler／fine multiplicity、历史 I80／trapezoid／frontier／Seed chronology、原闭树与历史分区、SixTent／Q80／顶点插值，以及 Seed24–29 的 1536 行原始数据。H5 最终仅将两处 `norm_num only` 改为 `simp only`，使已列出的 Fin／Matrix simprocs 实际执行；61 行原公式和数据保持。其它成功 source／kernel 检查没有重复。89 的最终独立覆盖按四模块与 I80 分区组合，作者身份和精确声明并集明确记录。
+
+Sixteen 两头恢复原表的实际 H248 全限定名，Structural 一头恢复原 correction 实际常量，避免未绑定名成为任意 autoImplicit 参数；这些表达例外及 Compiler／Mass 的 universe 引号语法恢复均明确保留，不声称未解析旧类型已有 kernel 相等。93 原元数据中的 Partition whole-published 标签与 Structural 例外遗漏，通过 [不可变补充](member-repair-batch93/SOURCE_METADATA_CONTEXT_ADDENDUM.json) 纠正：Partition 是新的 proof-only 后像，Structural 具体常量绑定保持原手稿范围。原 SOURCE／清单与真实检查字节不改，发现与解决记录在最终审查中。
+
+95 的六次 source、六次指定 kernel 与一次完整审计原已全部退出 0，外层控制器随后退出 120。后续只恢复元数据收集，原十四份命令与日志（含 stock readiness）和原 journal 前缀保持；没有新增形式检查，也未将未知的外层退出原因写成已证事实。六模块最终验收与其它批次同样完整。上述结果仍是 P1 供应链验收，最终四个 P1 导出和全部原算术／分析义务继续验证。
+
+两份完整复用源码按已验后像保留其原末尾空行；[发布核对](publication-20261124/SOURCE_EOF_PRESERVATION.json) 记录默认 diff-check 的两项预期 EOF 提示，其余默认空白检查通过。没有为消除提示更改已验源码。
