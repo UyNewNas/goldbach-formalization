@@ -157,9 +157,9 @@ private theorem parse_spec_bounded (n : ℕ) :
         · exact hunsigned r hr
       · simp only [List.length_cons]
         omega
-      · simpa only [encodeRows,
+      · simp only [encodeRows,
           encodeRow_rowFromBytes b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 hhead,
-          hencode]
+          hencode, List.cons_append, List.nil_append]
 
 /-- Any successful parse on the byte domain produces unsigned row fields,
 consumes every byte, and re-encodes to the exact original ordered list. -/
@@ -193,7 +193,7 @@ private theorem parse_complete_bounded (n : ℕ) :
       omega
     obtain ⟨tail, htail⟩ := ih rest.length hrestlt rest le_rfl hdivRest
     refine ⟨rowFromBytes b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 :: tail, ?_⟩
-    simpa only [decodeWireRows_cons17, htail]
+    simpa [decodeWireRows_cons17, htail]
 
 /-- Format completeness: the old decoder needs exactly a multiple of17
 entries. Byte validity is separate and supplies unsigned semantic ranges. -/

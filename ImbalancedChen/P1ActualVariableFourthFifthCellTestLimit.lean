@@ -310,7 +310,9 @@ theorem actualOld4_integral_eq_sum_atoms
       apply Finset.sum_congr rfl
       intro s _
       by_cases ha : t ∈ liftedAtom rows s
-      · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
+      · simp only [indicator_of_mem (show t ∈
+          P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
+            from ⟨hs, ha⟩), indicator_of_mem ha]
       · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
           (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
             from fun hh => ha hh.2), zero_mul]
@@ -368,7 +370,9 @@ theorem integrableOn_actualOld4_weight
   apply Finset.sum_congr rfl
   intro s _
   by_cases ha : t ∈ liftedAtom rows s
-  · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
+  · simp only [indicator_of_mem (show t ∈
+      P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
+        from ⟨hs, ha⟩), indicator_of_mem ha]
   · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
       (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
         from fun hh => ha hh.2), zero_mul]

@@ -61,7 +61,9 @@ theorem exists_tuplePlus_bounded_levels_threshold
     · exact fun i => (ha.trans_le (mem_logPrimeBox.mp hx i).1).le
     · exact (mem_logPrimeBox.mp hx (Fin.last 3)).1
     · exact (mem_logPrimeBox.mp hx (Fin.last 3)).2.le
-    · linarith
+    · change actualPrimeTupleLog N p (Fin.last 3) ≤
+        lambda - ∑ i, actualPrimeTupleLog N p i
+      linarith only [hlegal]
     · exact hlambda.2
   have hP : (0 : ℝ) < (∏ i, p i : ℕ) := by
     exact_mod_cast Finset.prod_pos (fun i _ => hpos i)
@@ -74,16 +76,17 @@ theorem exists_tuplePlus_bounded_levels_threshold
     HistoricalThirdCoarse.P1OriginalUpperResidual.quotientParameters_eq_tuple N p hpos lambda
   have hu : 0 < actualPrimeTupleLog N p (Fin.last 3) :=
     ha.trans_le (mem_logPrimeBox.mp hx (Fin.last 3)).1
-  have hs : 1 ≤ residual lambda (actualPrimeTupleLog N p) := by
-    apply (le_div_iff₀ hu).mpr
-    dsimp [residual]
-    linarith
+  have hs : 1 ≤ P1FourthNearOneKernel.residual lambda (actualPrimeTupleLog N p) := by
+    change 1 ≤ (lambda - ∑ i, actualPrimeTupleLog N p i) /
+      actualPrimeTupleLog N p (Fin.last 3)
+    rw [le_div_iff₀ hu, one_mul]
+    linarith only [hlegal]
   have hprofile : extendedProfile lambda (actualPrimeTupleLog N p) =
       (2 * Real.exp (-Real.eulerMascheroniConstant) / actualPrimeTupleLog N p (Fin.last 3)) *
         closedUpper ((lambda - ∑ i, actualPrimeTupleLog N p i) /
           actualPrimeTupleLog N p (Fin.last 3)) := by
     rw [extendedProfile, maxOneNormalized, max_eq_right hs]
-    dsimp [residual]
+    dsimp only [P1FourthNearOneKernel.residual]
     ring
   rw [hprofile]
   simpa only [fourthTuplePlusResidualP1, hparams] using hh
@@ -220,11 +223,11 @@ theorem tendsto_positiveCellSource_sub_actual_test
     apply Finset.sum_congr rfl
     intro p hp
     by_cases hs : actualPrimeTupleLog N p ∈ R
-    · simp only [R] at hs
+    · simp only [R] at hs ⊢
       simp only [indicator_of_mem hs]
       ring
-    · simp only [R] at hs
-      simp only [indicator_of_not_mem hs, mul_zero, sub_self]
+    · simp only [R] at hs ⊢
+      simp only [Set.indicator_of_notMem hs, mul_zero, sub_self]
   rw [htest]
   ring
 

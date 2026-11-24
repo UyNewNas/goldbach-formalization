@@ -1,0 +1,34 @@
+--- before/ImbalancedChen/P1OriginalFourthDerivativeNumerator.lean
++++ candidate/ImbalancedChen/P1OriginalFourthDerivativeNumerator.lean
+@@ -45,6 +45,7 @@
+       apply intervalIntegral.integral_congr
+       intro t ht
+       rw [uIcc_of_le hs'] at ht
++      change lower (t - 1) = stopped t
+       rw [lower_shift ht.1 (ht.2.trans hb),stopped_right ht.1]
+     rw [hi,H_eq_one (by norm_num : (1:ℝ)<3) le_rfl] at hd
+     linarith
+@@ -59,13 +60,20 @@
+     apply (hI.const_add 1).congr_of_eventuallyEq
+     filter_upwards [Ioo_mem_nhds (by norm_num : (1:ℝ)<3) (by norm_num : (3:ℝ)<5)] with u hu
+     exact H_eq_primitive hu.1 hu.2.le
+-  have hU := hH.fun_div (hasDerivAt_id (3:ℝ)) (by norm_num)
++  have hU : HasDerivAt (fun s : ℝ => H s / s)
++      ((0 * (3 : ℝ) - H 3 * 1) / (3 : ℝ) ^ 2) 3 :=
++    hH.fun_div (hasDerivAt_id (3 : ℝ)) (by norm_num)
+   have hd : HasDerivAt (fun s : ℝ => H s/s) (-(3:ℝ)^(-2:ℤ)) 3 := by
+-    convert hU using 1 <;> norm_num [H_eq_one (by norm_num : (1:ℝ)<3) le_rfl]
++    have hvalue : (0 * (3 : ℝ) - H 3 * 1) / (3 : ℝ) ^ 2 =
++        -(3 : ℝ) ^ (-2 : ℤ) := by
++      norm_num [H_eq_one (by norm_num : (1 : ℝ) < 3) le_rfl]
++    rw [hvalue] at hU
++    exact hU
+   apply hd.congr_of_eventuallyEq
+   filter_upwards [Ioi_mem_nhds (by norm_num : (0:ℝ)<3)] with u hu
+   change upper u = (u*upper u)/u
+-  field_simp [hu.ne']
++  have hu0 : (0 : ℝ) < u := hu
++  field_simp [hu0.ne']
+ 
+ theorem numerator_initial {s : ℝ} (ha : 1 < s) (hb : s ≤ 3) : numerator s = 1 := by
+   rcases lt_or_eq_of_le hb with h | rfl

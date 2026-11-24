@@ -102,7 +102,7 @@ theorem exists_uniform_smooth_physical_mass_precision
       physicalSupportedStrip_cast_card_mono hle i)).trans (hstrips N hNsN hEven)
   have hupper :=
     (sum_smoothPhysicalPairOuterRamp_le_source_card_add_supported_strip_cards
-      (b := b) hN1 hT hwidth).trans (add_le_add_left hsum _)
+      (b := b) hN1 hT hwidth).trans (add_le_add le_rfl hsum)
   have hlower : ((realHalfProductSource b N
       (manuscriptHalfProductCutoff kappa N)).card : ℝ) ≤
       ∑ t ∈ labelledPrimeTuples 2 N, smoothPhysicalPairOuterRamp b N

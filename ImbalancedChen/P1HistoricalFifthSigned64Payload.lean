@@ -95,16 +95,12 @@ theorem decodeWord8_some_length (bytes : List ℕ) (z : ℤ) (h : decodeWord8 by
   unfold decodeWord8 at h
   split_ifs at h with hlen hvalid
   · exact hlen
-  · cases h
-  · cases h
 
 theorem decodeWord8_some_bytes (bytes : List ℕ) (z : ℤ) (h : decodeWord8 bytes = some z) :
     ∀ b ∈ bytes, b < 256 := by
   unfold decodeWord8 at h
   split_ifs at h with hlen hvalid
   · exact hvalid
-  · cases h
-  · cases h
 
 theorem decodeWord8_some_range (bytes : List ℕ) (z : ℤ) (h : decodeWord8 bytes = some z) :
     -(half64 : ℤ) ≤ z ∧ z < (half64 : ℤ) := by
@@ -156,7 +152,7 @@ theorem decodeChunks_some_lengths {α : Type*} (size : ℕ) (decode : List ℕ �
   | zero =>
       by_cases hb : bytes = []
       · subst bytes
-        simp only [decodeChunks, if_pos rfl, Option.some.injEq] at h
+        simp [decodeChunks] at h
         subst values
         simp
       · simp only [decodeChunks, if_neg hb] at h
@@ -288,6 +284,7 @@ theorem decodeRowsFuel_cons_chunk (count : ℕ) (chunk tail : List ℕ) (hchunk 
       | _, _ => none := by
   unfold decodeRowsFuel
   rw [decodeChunks, List.take_left' hchunk, List.drop_left' hchunk]
+  cases decodeRow80 chunk <;> cases decodeChunks 80 decodeRow80 count tail <;> rfl
 
 theorem decodeRows_encodeRows (rows : List FifthWireRow)
     (hrange : ∀ wire ∈ rows, ∀ c,
@@ -311,7 +308,6 @@ theorem decodeRows_some_length (bytes : List ℕ) (rows : List FifthWireRow)
   · have hlengths := decodeChunks_some_lengths 80 decodeRow80 decodeRow80_some_length
       (bytes.length / 80) bytes rows h
     omega
-  · cases h
 
 theorem decodeRows_some_bytes (bytes : List ℕ) (rows : List FifthWireRow)
     (h : decodeRows bytes = some rows) : ∀ b ∈ bytes, b < 256 := by
@@ -319,7 +315,6 @@ theorem decodeRows_some_bytes (bytes : List ℕ) (rows : List FifthWireRow)
   split_ifs at h with hmod
   · exact decodeChunks_some_bytes 80 decodeRow80 decodeRow80_some_bytes
       (bytes.length / 80) bytes rows h
-  · cases h
 
 /-- The encoder itself always emits byte-domain values, independent of
 whether the supplied signed integers are in the injective source range. -/

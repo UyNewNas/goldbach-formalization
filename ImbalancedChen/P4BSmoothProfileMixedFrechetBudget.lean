@@ -14,7 +14,7 @@ actual profile. The genuine positive prime chart is p_i exp(z_i).
 namespace ImbalancedChen.P4B
 
 noncomputable section
-open scoped BigOperators
+open scoped BigOperators ContDiff
 
 /-- The full norm of an affine scalar pullback, retaining exactly k row factors. -/
 theorem norm_iteratedFDeriv_scalar_affine_le

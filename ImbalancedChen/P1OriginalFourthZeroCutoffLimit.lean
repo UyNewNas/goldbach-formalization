@@ -94,21 +94,20 @@ theorem cauchy_original_selectedIntegral_at_zero
   intro epsilon hepsilon
   let delta := min (omega / 2) (epsilon / (2 * D))
   have hdelta : 0 < delta := lt_min (by positivity) (by positivity)
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), a < delta :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hdelta)
   refine ⟨I '' Ioo 0 delta, ?_, ?_⟩
   · apply Filter.mem_map.2
-    filter_upwards [self_mem_nhdsWithin,
-      (Iio_mem_nhds hdelta).filter_mono nhdsWithin_le_nhds] with a ha haD
+    filter_upwards [self_mem_nhdsWithin, hsmallCutoff] with a ha haD
     exact ⟨a, ⟨ha, haD⟩, rfl⟩
   · intro x hx y hy
     obtain ⟨a, ⟨ha, hadelta⟩, rfl⟩ := hx
     obtain ⟨b, ⟨hb, hbdelta⟩, rfl⟩ := hy
     have haomega : 2 * a ≤ omega := by
       have := hadelta.trans_le (min_le_left _ _)
-      dsimp only [delta] at this
       linarith
     have hbomega : 2 * b ≤ omega := by
       have := hbdelta.trans_le (min_le_left _ _)
-      dsimp only [delta] at this
       linarith
     have had : a < epsilon / (2 * D) := hadelta.trans_le (min_le_right _ _)
     have hbd : b < epsilon / (2 * D) := hbdelta.trans_le (min_le_right _ _)
@@ -168,9 +167,14 @@ theorem exists_original_fourth_actual_mean_and_cutoff_limit
   have hthird : 0 < epsilon / 3 := by positivity
   have hcut : 0 < min (omega / 2) (epsilon / (3 * D)) :=
     lt_min (by positivity) (by positivity)
+  have hpositiveCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), 0 < a :=
+    self_mem_nhdsWithin
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ),
+      a < min (omega / 2) (epsilon / (3 * D)) :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)
   obtain ⟨a, ha, hsmall, hnear⟩ :=
-    (self_mem_nhdsWithin.and
-      (((Iio_mem_nhds hcut).filter_mono nhdsWithin_le_nhds).and
+    (hpositiveCutoff.and
+      (hsmallCutoff.and
         (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
   have ha0 : 0 < a := ha
   have haomega : 2 * a ≤ omega := by

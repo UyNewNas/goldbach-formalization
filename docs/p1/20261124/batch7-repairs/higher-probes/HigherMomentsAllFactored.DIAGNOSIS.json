@@ -1,0 +1,374 @@
+{
+  "status": "MINIMAL_REPAIR_AND_TWO_CONDITIONAL_PROBES_PREPARED_NOT_COMPILED",
+  "failed_candidate_sha256": "3bc124a836f6637bdb8fd8448a3c76d1ed313756022329221ffa1268838b010d",
+  "original_normal_log_sha256_reported_by_root": "f5edb89a86afc5c565db7e2974af2307831ebd5ef382a446ab92b812e1cc9709",
+  "normal_elapsed_seconds": 1372.5201492400083,
+  "actual_leaf_errors": [
+    {
+      "source_line": 178,
+      "degree": 0,
+      "index": 0,
+      "error": "simp maximum number of steps exceeded"
+    },
+    {
+      "source_line": 195,
+      "degree": 0,
+      "index": 1,
+      "error": "simp maximum number of steps exceeded"
+    },
+    {
+      "source_line": 297,
+      "degree": 1,
+      "index": 0,
+      "error": "simp maximum number of steps exceeded"
+    },
+    {
+      "source_line": 314,
+      "degree": 1,
+      "index": 1,
+      "error": "simp maximum number of steps exceeded"
+    },
+    {
+      "source_line": 427,
+      "degree": 2,
+      "index": 0,
+      "error": "truncated error JSON says simp maximum number of steps exceeded; followed by interpreter memory_exception and Lean exit 134"
+    }
+  ],
+  "evidence_limits": [
+    "The log did not reach a reliable result for degrees 4, 5, or 6 in this whole-module attempt.",
+    "The log establishes an interpreter memory exception, not a whole-container OOM; root reported aggregate peak 13.49 GiB below 21 GiB.",
+    "Existing passed degree-six i=6 probe is retained; it is not scheduled for repetition."
+  ],
+  "root_cause_classification": {
+    "class": "FORMAL_REDUCTION_ORDER_AND_INTERPRETER_RESOURCE_FAILURE",
+    "observed_source_structure": "All 42 degree-0-through-5 leaves still use one norm_num that opens tuple enumeration, multinomial, shifted factorials, Nat.choose, products, and Newton recurrence together. Only seven degree-six leaves use the accepted factored three-stage path.",
+    "bounded_causal_claim": "The affected leaves still contain the previously problematic eager coefficient/tuple reduction path. The new short probes test whether applying the already-proved coefficient cancellation eliminates the actual low-index failures; their success is not assumed.",
+    "mathematical_gap_claim": false
+  },
+  "manuscript_check": {
+    "git_pin": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "source": "/workspace/scratch/89135e928d3c/chen-paper/paper/release-20261106/en/numerical-appendix.tex",
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "label": "num:simplex-moment",
+    "formula": "Integral of product(lambda_j^alpha_j) = d! vol(T) product(alpha_j!)/(d+sum(alpha_j))!.",
+    "specialization": "d=6 and alpha=e+unitExponent_i with sum(e)=k gives denominator (k+7)!; multiplying by multinomial k!/product(e_j!) yields k!*(e_i+1)/(k+7)!.",
+    "reuse": "This is exactly the existing integratedPower_eq_factored coefficient lemma; no new analytic proof or change to the manuscript claim is needed."
+  },
+  "minimal_patch": {
+    "candidate": {
+      "path": "/workspace/scratch/638a86a3af73/p1-p2-repairs/work/P2OriginalSixthHigherMomentsAllFactoredRepair.lean",
+      "sha256": "7488182a934248acc0d9a7ecdffb7297ee83f671ffc1b6d0a1fd9beca59d3ab0",
+      "bytes": 77212,
+      "status": "UNCOMPILED",
+      "private_bodies_changed": [
+        {
+          "degree": 0,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 0,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 1,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 2,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 3,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 4,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 0,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 1,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 2,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 3,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 4,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 5,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        },
+        {
+          "degree": 5,
+          "index": 6,
+          "old_body_sha256": "ff3dc5928ff0bb791cb38829ac58b7b319543d52c03c7c607fb1402080ccb136"
+        }
+      ],
+      "public_theorems_unchanged": [
+        "duplicateH_map",
+        "rationalMoment_cast",
+        "baryCoefficient_cast",
+        "bary_bumped",
+        "integratedPower_newton_guard",
+        "completeH_map",
+        "completeH_cons_succ",
+        "duplicateH_author_guard",
+        "authorMoment_eq_rationalMoment",
+        "integerDuplicateH_cast",
+        "integerNewtonNumerator_spec",
+        "integerNewtonNumerator_divisible",
+        "binomial_normalization",
+        "integral_bary_interpolate_power",
+        "integral_interpolate_mul_power"
+      ],
+      "degree6_and_every_later_declaration_byte_identical": true
+    },
+    "description": "Apply the already tested three-stage coefficient/enumeration/polynomial proof to every remaining degree-0-through-5 leaf. Use all_goals between stages so lower-degree goals that close early do not produce No goals errors.",
+    "outside_42_private_bodies_byte_identical": true,
+    "all_public_definitions_and_theorem_bodies_byte_identical": true,
+    "resource_increases": false,
+    "degree6_source_unchanged": true
+  },
+  "validation_plan": {
+    "first": {
+      "path": "/workspace/scratch/638a86a3af73/p1-p2-repairs/probes/P2OriginalSixthHigherMomentsFactoredLowBoundaryProbe.lean",
+      "sha256": "9c5b0f2dbc5ac3286b53dd254ed0c183f5008f8e1a90566c4e90d14f9502d298",
+      "bytes": 12617,
+      "cases": [
+        {
+          "degree": 0,
+          "index": 0
+        },
+        {
+          "degree": 0,
+          "index": 1
+        },
+        {
+          "degree": 1,
+          "index": 0
+        },
+        {
+          "degree": 1,
+          "index": 1
+        },
+        {
+          "degree": 2,
+          "index": 0
+        }
+      ],
+      "status": "UNCOMPILED",
+      "maxHeartbeats": 4000000,
+      "maxRecDepth": 100000,
+      "maxSteps_override": false
+    },
+    "only_after_first_exit_zero": {
+      "path": "/workspace/scratch/638a86a3af73/p1-p2-repairs/probes/P2OriginalSixthHigherMomentsFactoredMiddleProbe.lean",
+      "sha256": "989ba9d558fb5675b457f87c7a127976763cca261a2ded17657cffe3e97c6c4c",
+      "bytes": 8821,
+      "cases": [
+        {
+          "degree": 4,
+          "index": 0
+        },
+        {
+          "degree": 5,
+          "index": 1
+        }
+      ],
+      "status": "UNCOMPILED",
+      "maxHeartbeats": 4000000,
+      "maxRecDepth": 100000,
+      "maxSteps_override": false
+    },
+    "do_not_repeat": "FactoredDegreeSixProbe 11b4a705... / degree 6 index 6, already passed in 109.1217 s.",
+    "production_installation": "Root should install/push the candidate only after these new boundary and middle probes actually pass; then normal/kernel/full-owned acceptance remains necessary."
+  },
+  "fallback_if_monolithic_memory_persists": {
+    "status": "PLAN_ONLY_NOT_IMPLEMENTED",
+    "principle": "Reuse the same definitions and leaf proof bodies in smaller compilation units; do not introduce a replacement evaluator or increase resource budgets.",
+    "layout": [
+      "A Core module holds the unchanged original numeric definitions and four early public theorems; all retain their existing fully qualified names.",
+      "Expose the existing private coefficient proof only through a dedicated Internal support namespace so degree modules can import it; record this source-owner/API change explicitly.",
+      "Seven per-degree modules each hold the existing seven index leaf proofs and one Internal finite-index aggregate, so one Lean elaboration process handles one degree.",
+      "The original P2OriginalSixthHigherMoments module imports those modules and retains the existing public integratedPower_newton_guard signature and all remaining public declarations; its degree-case proof calls the seven Internal aggregates."
+    ],
+    "owner_boundary": "Moving unchanged public definitions to Core changes module ownership and object/import closure. Remove their original duplicate declarations, preserve qualified names and all 15 public theorem statements, and require ordinary source-bound rebuild/audit; never rename existing .olean files or fabricate traces.",
+    "when_justified": "Only if the factored boundary/middle leaves pass but whole-file elaboration still hits demonstrated accumulated memory limits."
+  },
+  "actions": {
+    "cloud_calls": 0,
+    "Lean_runs": 0,
+    "canonical_edits": 0,
+    "new_analytic_proofs": 0,
+    "proofs_added_outside_manuscript": 0
+  }
+}

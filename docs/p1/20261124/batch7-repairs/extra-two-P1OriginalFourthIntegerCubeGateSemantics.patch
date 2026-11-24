@@ -1,0 +1,43 @@
+--- a/ImbalancedChen/P1OriginalFourthIntegerCubeGateSemantics.lean
++++ b/ImbalancedChen/P1OriginalFourthIntegerCubeGateSemantics.lean
+@@ -57,8 +57,8 @@
+   apply congrArg₂ Affine.mk
+   · norm_num [sourceSelectedGate, IntegerAffine.toAffine, selectedGate]
+   · funext i
+-    by_cases hm : i ∈ I <;> by_cases hb : i < j ∧ i ∉ I <;> by_cases heq : i = j <;>
+-      norm_num [sourceSelectedGate, IntegerAffine.toAffine, selectedGate, hm, hb, heq]
++    by_cases hm : i ∈ I <;> by_cases hlt : i < j <;> by_cases heq : i = j <;>
++      norm_num [sourceSelectedGate, IntegerAffine.toAffine, selectedGate, hm, hlt, heq]
+ 
+ /-- Source max-old/min-oldline cube margin in the literal Python OLD order. -/
+ def integerOldCubeSlack (raw : FourthWireRow) : ℤ :=
+@@ -131,6 +131,9 @@
+     (0 : ℚ) < ((tentPlane raw.toProducerRow.selected side).sub halfGate).lower
+       raw.toProducerRow.lower raw.toProducerRow.upper ↔
+     (0 : ℤ) < ((sourceTent raw.toProducerRow.selected side).sub sourceHalfGate).lower raw.lo raw.hi := by
++  have hlo : raw.toProducerRow.lower = endpoint raw.lo := rfl
++  have hhi : raw.toProducerRow.upper = endpoint raw.hi := rfl
++  rw [hlo, hhi]
+   simpa only [toAffine_sub, sourceTent_toAffine, sourceHalfGate_toAffine] using
+     (lower_positive_iff ((sourceTent raw.toProducerRow.selected side).sub sourceHalfGate) raw.lo raw.hi)
+ 
+@@ -138,6 +141,9 @@
+     (0 : ℚ) < ((tentPlane raw.toProducerRow.selected side).sub (fullGate j)).lower
+       raw.toProducerRow.lower raw.toProducerRow.upper ↔
+     (0 : ℤ) < ((sourceTent raw.toProducerRow.selected side).sub (sourceFullGate j)).lower raw.lo raw.hi := by
++  have hlo : raw.toProducerRow.lower = endpoint raw.lo := rfl
++  have hhi : raw.toProducerRow.upper = endpoint raw.hi := rfl
++  rw [hlo, hhi]
+   simpa only [toAffine_sub, sourceTent_toAffine, sourceFullGate_toAffine] using
+     (lower_positive_iff ((sourceTent raw.toProducerRow.selected side).sub (sourceFullGate j)) raw.lo raw.hi)
+ 
+@@ -147,6 +153,9 @@
+         raw.toProducerRow.lower raw.toProducerRow.upper ↔
+     (0 : ℤ) < ((sourceTent raw.toProducerRow.selected side).sub
+       (sourceSelectedGate raw.toProducerRow.selected j)).lower raw.lo raw.hi := by
++  have hlo : raw.toProducerRow.lower = endpoint raw.lo := rfl
++  have hhi : raw.toProducerRow.upper = endpoint raw.hi := rfl
++  rw [hlo, hhi]
+   simpa only [toAffine_sub, sourceTent_toAffine, sourceSelectedGate_toAffine] using
+     (lower_positive_iff ((sourceTent raw.toProducerRow.selected side).sub
+       (sourceSelectedGate raw.toProducerRow.selected j)) raw.lo raw.hi)
