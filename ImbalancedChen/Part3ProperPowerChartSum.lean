@@ -210,7 +210,7 @@ theorem eventually_labelledProperPowerResidual_logAccuracy
       mul_le_mul_of_nonneg_right hcard (by positivity)
     _ = ε * (N : ℝ) / Real.log (N : ℝ) ^ A := by
       rw [Real.rpow_add hlogpos, Real.rpow_natCast]
-      field_simp [hD.ne', hlogpos.ne', (Real.rpow_pos_of_pos hlogpos A).ne'] <;> ring
+      field_simp [hD.ne', hlogpos.ne', (Real.rpow_pos_of_pos hlogpos A).ne']
 
 /-- The exact prime/von-Mangoldt identity now has every logarithmic
 accuracy after summing all original charts, with the same signed rho. -/

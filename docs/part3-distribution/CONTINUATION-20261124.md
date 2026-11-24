@@ -159,7 +159,7 @@ the current public-helper version has SHA-256
 ## Full original chart-bank source
 
 `Part3ProperPowerChartSum.lean` has source SHA-256
-`57b29276be9b5ece9a2f794f78d84e488ecc91a9e6983844121d00bb6a1c5fae`.
+`6033d5b3e829400a2b91bd8c55f7a61b4adcc72b853c1d6beff412aab0fac9c1`.
 It takes `L=0`, `H=Nat.log 2 (Nat.ceil (C*N))+2` and the tensor bank of
 `range H`. Every effective integer coordinate is positive and at most
 the complete product, so the original partition covers proper powers
@@ -172,7 +172,11 @@ diagonal. The exact bank cardinality is `H^k` and is at most
 `(2/log 2 + 2)^k * log(N)^k`. The existing per-chart theorem at accuracy
 `A+k` and suitably divided epsilon pays the full bank. A final corollary
 uses the unchanged exact prime/von-Mangoldt identity. Independent review
-found no blocking mathematical issue; compiler validation is pending.
+found no blocking mathematical issue. The first selected-workspace run
+built both modules and strictly compiled LogSaving, then rejected an
+unused `ring` after a `field_simp` that had already closed the goal. The
+redundant tactic was removed without changing any statement or disabling
+lint; the full two-module acceptance remains pending.
 
 ## Requested compilation environment and receipts
 
