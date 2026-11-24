@@ -1,0 +1,84 @@
+import ImbalancedChen.P2Winner9CompleteSeedBlock03
+import ImbalancedChen.P2Winner9SelectedArchiveChecker
+import ImbalancedChen.P2Winner9SeedArchiveChecks
+
+/-! Original selected numerical certificates for ordinals 896–911. -/
+
+namespace ImbalancedChen.P2Winner9NumericalPage0056
+open P2Winner9SelectedArchiveChecker (checkSelected)
+open P2Winner9SeedArchiveChecks (Checked)
+
+set_option maxRecDepth 50000
+set_option maxHeartbeats 40000000
+set_option Elab.async true
+
+private theorem row00 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[0]! = true := by
+  decide +kernel
+
+private theorem row01 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[1]! = true := by
+  decide +kernel
+
+private theorem row02 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[2]! = true := by
+  decide +kernel
+
+private theorem row03 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[3]! = true := by
+  decide +kernel
+
+private theorem row04 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[4]! = true := by
+  decide +kernel
+
+private theorem row05 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[5]! = true := by
+  decide +kernel
+
+private theorem row06 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[6]! = true := by
+  decide +kernel
+
+private theorem row07 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[7]! = true := by
+  decide +kernel
+
+private theorem row08 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[8]! = true := by
+  decide +kernel
+
+private theorem row09 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[9]! = true := by
+  decide +kernel
+
+private theorem row10 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[10]! = true := by
+  decide +kernel
+
+private theorem row11 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[11]! = true := by
+  decide +kernel
+
+private theorem row12 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[12]! = true := by
+  decide +kernel
+
+private theorem row13 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[13]! = true := by
+  decide +kernel
+
+private theorem row14 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[14]! = true := by
+  decide +kernel
+
+private theorem row15 : checkSelected (P2Winner9CompleteSeedBlock03.pages[8]!)[15]! = true := by
+  decide +kernel
+
+theorem checked : Checked (fun _ r => checkSelected r = true) 896 16
+    (P2Winner9CompleteSeedBlock03.pages[8]!) := by
+  refine ⟨by decide +kernel, fun i => ?_⟩
+  fin_cases i
+  · exact row00
+  · exact row01
+  · exact row02
+  · exact row03
+  · exact row04
+  · exact row05
+  · exact row06
+  · exact row07
+  · exact row08
+  · exact row09
+  · exact row10
+  · exact row11
+  · exact row12
+  · exact row13
+  · exact row14
+  · exact row15
+
+end ImbalancedChen.P2Winner9NumericalPage0056

@@ -50,7 +50,19 @@ theorem selectedLinear_basis (p : Policy) (i : Fin 4) :
 
 theorem fullSquareLinear_basis (j : Fin 4) : fullSquareLinear j (basis j)=2 := by
   rw [fullSquareLinear_apply]
-  fin_cases j <;> norm_num [fullSquare,basis,Fin.sum_univ_succ,Fin.ext_iff]
+  unfold fullSquare
+  have hsum : (∑ i : Fin 4, if i.val < j.val then basis j i else 0) = 0 := by
+    apply Finset.sum_eq_zero
+    intro i _
+    by_cases hij : i.val < j.val
+    · have hne : i ≠ j := by
+        intro heq
+        subst i
+        exact (Nat.lt_irrefl j.val) hij
+      simp only [if_pos hij, basis, if_neg hne]
+    · simp only [if_neg hij]
+  rw [hsum]
+  simp only [basis, if_pos rfl, mul_one, zero_add]
 
 theorem selectedSquareLinear_basis (p : Policy) (j : Fin 4) :
     selectedSquareLinear p j (basis j)=(if Selected p j then 1 else 0)+2 := by

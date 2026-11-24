@@ -76,8 +76,7 @@ theorem slots_strictAnti {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
   intro i j hij
   fin_cases i <;> fin_cases j
   all_goals norm_num at hij
-  all_goals simp only [slots, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two, Matrix.cons_val_three]
+  all_goals norm_num [slots, Matrix.cons_val_zero', Matrix.cons_val_succ', Fin.reduceFinMk]
   all_goals omega
 
 theorem coordinates_strictAnti {N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Four}
@@ -91,19 +90,24 @@ theorem fullPrefix_eq_multiplier (t : Four) : fullPrefix t = P5U10OriginalMean.m
 /-- No bit is reinterpreted as an increasing arithmetic position. -/
 theorem selected_first_largest (t : Four) : selectedProduct first t = t.2.2 := by
   have hfirst : selectedIndices first = {0} := by
-    ext i
-    simp only [selectedIndices, Finset.mem_filter, Finset.mem_univ, true_and,
-      Finset.mem_singleton, Selected, sourceId, first]
+    apply Finset.ext
+    intro i
+    change i ∈ Finset.univ.filter (Selected first) ↔ i ∈ ({0} : Finset (Fin 4))
+    rw [Finset.mem_filter, Finset.mem_singleton]
+    simp only [Finset.mem_univ, true_and]
+    change ((0 : ℕ) < 15 ∧ Nat.testBit 1 i.val = true) ↔ i = 0
     fin_cases i <;> decide
   rw [selectedProduct, hfirst, Finset.prod_singleton]
   rfl
 
 theorem selected_W_eq_one (t : Four) : selectedProduct wPolicy t = 1 := by
   have hw : selectedIndices wPolicy = ∅ := by
-    ext i
-    simp only [selectedIndices, Finset.mem_filter, Finset.mem_univ, true_and,
-      Finset.not_mem_empty, Selected, wPolicy]
-    norm_num
+    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    intro i hi
+    change i ∈ Finset.univ.filter (Selected wPolicy) at hi
+    have hs : Selected wPolicy i := (Finset.mem_filter.mp hi).2
+    have hlt : (15 : ℕ) < 15 := hs.1
+    exact (Nat.lt_irrefl 15) hlt
   rw [selectedProduct, hw, Finset.prod_empty]
 
 theorem selected_mul_remainder (p : Policy) (t : Four) :

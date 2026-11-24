@@ -1,6 +1,6 @@
 import ImbalancedChen.P2OriginalSaving18UnequalIntegral
 import ImbalancedChen.P2Winner9CompleteSeedSourceGates
-import ImbalancedChen.P2Winner9CompleteSeedSelectedFloors
+import ImbalancedChen.P2Winner9CompleteSeedTerminal
 
 /-! The last two original eighth ledger entries replace successive
 lower bounds on the already counted winner9 seed at physical index 41.
@@ -17,13 +17,11 @@ open P4AOriginalFull87ArchivedIntegralRows (archived)
 open P2OriginalFull87PullingCell (originalGate gate_eval rowVertices rowSupport row_det sum_support_integrals_le)
 open P2OriginalSaving19OwnedSource (AffineRow eval)
 open P2OriginalSaving18UnequalArchive (data original_geometry)
-open P2Winner9CompleteSeedData (RowIndex entry physicalVertices)
+open P2Winner9CompleteSeedData (RowIndex entry physicalVertices entry_eq_allRows)
 open P2Winner9CompleteSeedPositiveDomains (originalPoint actualSupport actual_vertex_lookup)
-open P2Winner9CompleteSeedGapReserve (fullMass)
 open P2Winner9CompleteSeedSourceGates (Gate gate originalPhysicalSource)
 open P2Winner9PhysicalAffineTransfer (physicalR physicalM physicalGap physicalFactor
   coordinateSum physicalUpperIntegrand canonicalSupport)
-open P2Winner9CompleteSeedSelectedFloors (selectedFloorSum original_slot_normalization complete_selected_floor_sum)
 open P2OriginalCertificateBudget (savingLower)
 open P2OriginalSeedChronologicalMaxArithmetic (slot21 slot22)
 
@@ -163,16 +161,18 @@ theorem original_seed_row_support (s : SeedRow) :
   rw [original_seed_row_vertices]
   exact mul_comm _ _
 
-theorem selected_floor_sum_le_seed_integral : selectedFloorSum ≤ cellIntegral seed := by
-  have hr (s : SeedRow) : fullMass (sourceOrdinal s) =
-      ∫ t in rowSupport seedData s (row_det (original_geometry (.nine 11)) s), kernel seed t := by
-    simp only [fullMass,original_seed_row_support,original_seed_density_eq]
-  refine complete_selected_floor_sum.trans ?_
-  calc
-    (∑ i : RowIndex, fullMass i) = ∑ s : SeedRow, fullMass (sourceOrdinal s) :=
-      (sourceOrdinal.sum_comp fullMass).symm
-    _ = _ := Finset.sum_congr rfl (fun s _ => hr s)
-    _ ≤ cellIntegral seed := sum_support_integrals_le seed seedData (original_geometry (.nine 11))
+/-- This is the original selectedFloorSum with its definition expanded.
+The ordinal, selected numerator, Q96 scale and original integral are unchanged.
+Its supplier still requires every original selected certificate. -/
+theorem selected_floor_sum_le_seed_integral :
+    (∑ i : RowIndex, ((entry i).mixedSelected : ℝ) / ((2 ^ 96 : ℚ) : ℝ)) ≤
+      cellIntegral seed := by
+  have hscale : ((2 ^ 96 : ℚ) : ℝ) =
+      (P2Winner9CompleteSeedChronology.q96 : ℝ) := by
+    norm_num [P2Winner9CompleteSeedChronology.q96]
+  rw [hscale, P2Winner9CompleteSeedChronology.selected_real_sum_eq]
+  simpa only [seed] using
+    P2Winner9CompleteSeedTerminal.complete_seed_ledger_le_original_full87_nine11
 
 theorem original_seed_log_selected :
     archived seed = P2Winner9CompleteSeedChronology.adoptedLogTotal := by
@@ -183,7 +183,9 @@ theorem original_seed_log_selected :
 very same eight-dimensional integral, by the complete mixed maximum. -/
 theorem original_seed_refined_floor :
     (archived seed : ℝ) + (savingLower slot21 : ℝ) + (savingLower slot22 : ℝ) ≤ cellIntegral seed := by
-  simpa only [original_slot_normalization,original_seed_log_selected] using selected_floor_sum_le_seed_integral
+  rw [original_seed_log_selected]
+  simpa only [seed] using
+    P2Winner9CompleteSeedTerminal.complete_seed_ledger_le_original_full87_nine11
 
 def refinedRecord (c : Cell) : ℚ :=
   archived c + if c = seed then savingLower slot21 + savingLower slot22 else 0

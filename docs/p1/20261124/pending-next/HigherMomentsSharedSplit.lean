@@ -900,56 +900,63 @@ theorem integratedPower_newton_guard (y : Fin 7 → ℝ) (i : Fin 7) (k : ℕ)
     (hk : k ≤ 6) :
     integratedPower y i k = duplicateH y i k /
       ((Nat.factorial 7 : ℝ) * ((7 + k).choose k : ℝ)) := by
-  interval_cases k <;> fin_cases i <;> first
-    | exact integratedPower_newton_guard_0_0 y
-    | exact integratedPower_newton_guard_0_1 y
-    | exact integratedPower_newton_guard_0_2 y
-    | exact integratedPower_newton_guard_0_3 y
-    | exact integratedPower_newton_guard_0_4 y
-    | exact integratedPower_newton_guard_0_5 y
-    | exact integratedPower_newton_guard_0_6 y
-    | exact integratedPower_newton_guard_1_0 y
-    | exact integratedPower_newton_guard_1_1 y
-    | exact integratedPower_newton_guard_1_2 y
-    | exact integratedPower_newton_guard_1_3 y
-    | exact integratedPower_newton_guard_1_4 y
-    | exact integratedPower_newton_guard_1_5 y
-    | exact integratedPower_newton_guard_1_6 y
-    | exact integratedPower_newton_guard_2_0 y
-    | exact integratedPower_newton_guard_2_1 y
-    | exact integratedPower_newton_guard_2_2 y
-    | exact integratedPower_newton_guard_2_3 y
-    | exact integratedPower_newton_guard_2_4 y
-    | exact integratedPower_newton_guard_2_5 y
-    | exact integratedPower_newton_guard_2_6 y
-    | exact integratedPower_newton_guard_3_0 y
-    | exact integratedPower_newton_guard_3_1 y
-    | exact integratedPower_newton_guard_3_2 y
-    | exact integratedPower_newton_guard_3_3 y
-    | exact integratedPower_newton_guard_3_4 y
-    | exact integratedPower_newton_guard_3_5 y
-    | exact integratedPower_newton_guard_3_6 y
-    | exact integratedPower_newton_guard_4_0 y
-    | exact integratedPower_newton_guard_4_1 y
-    | exact integratedPower_newton_guard_4_2 y
-    | exact integratedPower_newton_guard_4_3 y
-    | exact integratedPower_newton_guard_4_4 y
-    | exact integratedPower_newton_guard_4_5 y
-    | exact integratedPower_newton_guard_4_6 y
-    | exact integratedPower_newton_guard_5_0 y
-    | exact integratedPower_newton_guard_5_1 y
-    | exact integratedPower_newton_guard_5_2 y
-    | exact integratedPower_newton_guard_5_3 y
-    | exact integratedPower_newton_guard_5_4 y
-    | exact integratedPower_newton_guard_5_5 y
-    | exact integratedPower_newton_guard_5_6 y
-    | exact integratedPower_newton_guard_6_0 y
-    | exact integratedPower_newton_guard_6_1 y
-    | exact integratedPower_newton_guard_6_2 y
-    | exact integratedPower_newton_guard_6_3 y
-    | exact integratedPower_newton_guard_6_4 y
-    | exact integratedPower_newton_guard_6_5 y
-    | exact integratedPower_newton_guard_6_6 y
+  interval_cases k
+  · fin_cases i
+    · exact integratedPower_newton_guard_0_0 y
+    · exact integratedPower_newton_guard_0_1 y
+    · exact integratedPower_newton_guard_0_2 y
+    · exact integratedPower_newton_guard_0_3 y
+    · exact integratedPower_newton_guard_0_4 y
+    · exact integratedPower_newton_guard_0_5 y
+    · exact integratedPower_newton_guard_0_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_1_0 y
+    · exact integratedPower_newton_guard_1_1 y
+    · exact integratedPower_newton_guard_1_2 y
+    · exact integratedPower_newton_guard_1_3 y
+    · exact integratedPower_newton_guard_1_4 y
+    · exact integratedPower_newton_guard_1_5 y
+    · exact integratedPower_newton_guard_1_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_2_0 y
+    · exact integratedPower_newton_guard_2_1 y
+    · exact integratedPower_newton_guard_2_2 y
+    · exact integratedPower_newton_guard_2_3 y
+    · exact integratedPower_newton_guard_2_4 y
+    · exact integratedPower_newton_guard_2_5 y
+    · exact integratedPower_newton_guard_2_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_3_0 y
+    · exact integratedPower_newton_guard_3_1 y
+    · exact integratedPower_newton_guard_3_2 y
+    · exact integratedPower_newton_guard_3_3 y
+    · exact integratedPower_newton_guard_3_4 y
+    · exact integratedPower_newton_guard_3_5 y
+    · exact integratedPower_newton_guard_3_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_4_0 y
+    · exact integratedPower_newton_guard_4_1 y
+    · exact integratedPower_newton_guard_4_2 y
+    · exact integratedPower_newton_guard_4_3 y
+    · exact integratedPower_newton_guard_4_4 y
+    · exact integratedPower_newton_guard_4_5 y
+    · exact integratedPower_newton_guard_4_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_5_0 y
+    · exact integratedPower_newton_guard_5_1 y
+    · exact integratedPower_newton_guard_5_2 y
+    · exact integratedPower_newton_guard_5_3 y
+    · exact integratedPower_newton_guard_5_4 y
+    · exact integratedPower_newton_guard_5_5 y
+    · exact integratedPower_newton_guard_5_6 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_6_0 y
+    · exact integratedPower_newton_guard_6_1 y
+    · exact integratedPower_newton_guard_6_2 y
+    · exact integratedPower_newton_guard_6_3 y
+    · exact integratedPower_newton_guard_6_4 y
+    · exact integratedPower_newton_guard_6_5 y
+    · exact integratedPower_newton_guard_6_6 y
 
 /-- Coefficients of the product of the geometric series of the nodes.
 This is the complete-homogeneous polynomial, expressed without a
@@ -1048,14 +1055,14 @@ theorem duplicateH_author_guard (y : Fin 7 → ℚ) (i : Fin 7) (k : ℕ)
     (hk : k ≤ 6) :
     duplicateH y i k = ∑ j : Fin (k + 1),
       completeH (List.ofFn y) (k - j.val) * y i ^ j.val := by
-  interval_cases k <;> first
-    | exact duplicateH_author_guard_0 y i
-    | exact duplicateH_author_guard_1 y i
-    | exact duplicateH_author_guard_2 y i
-    | exact duplicateH_author_guard_3 y i
-    | exact duplicateH_author_guard_4 y i
-    | exact duplicateH_author_guard_5 y i
-    | exact duplicateH_author_guard_6 y i
+  interval_cases k
+  · exact duplicateH_author_guard_0 y i
+  · exact duplicateH_author_guard_1 y i
+  · exact duplicateH_author_guard_2 y i
+  · exact duplicateH_author_guard_3 y i
+  · exact duplicateH_author_guard_4 y i
+  · exact duplicateH_author_guard_5 y i
+  · exact duplicateH_author_guard_6 y i
 
 /-- The actual frozen author engine's numerator h*gp, before Q80 and
 Q96. It is distinct from the independent duplicated-node algorithm. -/

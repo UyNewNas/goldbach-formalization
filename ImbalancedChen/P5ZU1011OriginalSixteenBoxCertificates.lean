@@ -113,7 +113,7 @@ theorem selectedSquarePiece_eval (p : Policy) (j : Fin 4) (v : LogFour) :
       by_cases hs : Selected p i <;> simp [hs]
     · apply Finset.sum_congr rfl
       intro i hi
-      by_cases hs : i.val < j.val ∧ ¬Selected p i <;> simp [hs]
+      by_cases hs : i < j ∧ ¬Selected p i <;> simp [hs]
   · simp [apply_ite, ite_mul]
 
 theorem prefixPiece_eval (v : LogFour) :
