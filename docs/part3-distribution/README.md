@@ -1,5 +1,21 @@
 # Part 3：算术分布与实际误差供应者交接
 
+## 2026-11-24：从 `c509267` 接续的五模块增量
+
+本轮保持 `c509267` 的 80 个 Lean 模块逐字不变；其 1,774 条声明的既有验收按用户提供的成功回执记录。
+
+| 新模块 | 稿内工作 | 当前验收状态 |
+| --- | --- | --- |
+| [SignedModulusPayment](../../ImbalancedChen/Part3SignedModulusPayment.lean) | 同一模数权的非对角除数付款、精确互素均值和真实对角分离 | Cloud strict 和 kernel replay 已通过；完整声明审计待增量 CI |
+| [ProperPowerResidualPayment](../../ImbalancedChen/Part3ProperPowerResidualPayment.lean) | 实际 labelled 残差的盒计数、零纤维、对角及 prime/VM 接合 | 完整开发 harness 已通过；原 import 正式验收待 CI |
+| [ProperPowerDyadicBudget](../../ImbalancedChen/Part3ProperPowerDyadicBudget.lean) | 从实际盒预算和几何范围推出 `x^(1-a/2)` 节省 | 源码完成，待编译 |
+| [ExceptionalWeightExtension](../../ImbalancedChen/Part3ExceptionalWeightExtension.lean) | 共同相位、任意谱权重、一般公共整数区间及完整前缀谱和的可和性 | 最新完整模块待编译 |
+| [ExceptionalWeightGeometry](../../ImbalancedChen/Part3ExceptionalWeightGeometry.lean) | 实际 `4*pi` 尺度、两 level 窗口与 `7/32` 权重适配 | 最新完整模块待编译 |
+
+增量入口是 `verification/verify_part3_continuation.py`，复用原有完整 serialized/defining-module 库存和传递公理门。GitHub workflow 分别验证 `spectral` 与 `proper-power` 两组，保留精确提交、源码及对象哈希和实际日志。Cloud Compile 已达到 128 个保留任务上限；当前工具没有归档接口，故后续验证使用独立 GitHub CI。已有 [单模块回执](continuation-20261124/cloud-modulus-receipt.json) 和 [实施及边界记录](CONTINUATION-20261124.md) 已保存。
+
+本轮谱定理保留经典 full-block J 与实际特征值下界作为明确输入，尚未提供实际自动形式谱对象上的实例。素数幂付款仍需把每个活动 dyadic 图册的几何范围、模数平均和除数次幂界统一接入。`RestrictedMediumObligation`、`UniformPrimeProductTarget` 和 P3 整体仍未关闭。
+
 ## 2026-11-24 物理 S2 续证
 
 - **完整物理级数与遗漏尾项。** 自然数样本上的原始同余求和精确等于零 Fourier 项加带符号的完整非零频率级数。两侧独立互素门和右侧 $\varphi(qds)$ 逐项保留。对当前已验证的 Gevrey 平顶窗，实际支撑和粗糙系数使总尾项的多项式系数至多为 $81{,}920X^8$。取 $K=12$ 后，完整物理 S2 扣除精确零项并除以 $V$，满足 (20) 的同一 $X^{-\sigma/2}$ 节省。[原始同余的 Poisson 恒等式](../../ImbalancedChen/Part3E1ProfileS2Progression.lean) · [总尾项](../../ImbalancedChen/Part3E1PhysicalTail.lean) · [归一化物理界](../../ImbalancedChen/Part3E1MediumPhysical.lean)

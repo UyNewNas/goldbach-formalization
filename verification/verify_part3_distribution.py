@@ -79,7 +79,7 @@ FORBIDDEN = re.compile(
     r"\b(?:sorry|admit|axiom|unsafe|native_decide|sorryAx|skipKernel(?:TC)?)\b")
 
 
-def validate_inventory(log: str) -> tuple[list[dict], list[dict]]:
+def validate_inventory(log: str, *, modules: tuple[str, ...] = MODULES) -> tuple[list[dict], list[dict]]:
     """Reject incomplete or inconsistent output from the Lean audit command."""
     records = [json.loads(line.removeprefix("PART3_AUDIT_DECL "))
                for line in log.splitlines() if line.startswith("PART3_AUDIT_DECL ")]
@@ -92,14 +92,14 @@ def validate_inventory(log: str) -> tuple[list[dict], list[dict]]:
     if len({r["name"] for r in records}) != len(records):
         raise RuntimeError("Duplicate declaration in inventory")
     by_module = Counter(r["module"] for r in records)
-    if len(counts) != len(MODULES) or {c["module"] for c in counts} != set(MODULES):
+    if len(counts) != len(modules) or {c["module"] for c in counts} != set(modules):
         raise RuntimeError("Incomplete module coverage")
     for c in counts:
         if type(c["count"]) is not int or by_module[c["module"]] != c["count"] or c["count"] <= 0:
             raise RuntimeError("Empty or inconsistent module inventory")
     kinds = {"theorem", "definition", "opaque", "quotient", "inductive", "constructor", "recursor"}
     for r in records:
-        if (r["module"] not in MODULES or set(r["axioms"]) - ALLOWED
+        if (r["module"] not in modules or set(r["axioms"]) - ALLOWED
                 or r["kind"] not in kinds or not isinstance(r["name"], str) or not r["name"]
                 or not isinstance(r["type"], str) or not r["type"]):
             raise RuntimeError("Invalid declaration audit record")
