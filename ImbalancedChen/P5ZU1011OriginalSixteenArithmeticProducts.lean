@@ -102,7 +102,7 @@ theorem selected_first_largest (t : Four) : selectedProduct first t = t.2.2 := b
 
 theorem selected_W_eq_one (t : Four) : selectedProduct wPolicy t = 1 := by
   have hw : selectedIndices wPolicy = ∅ := by
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro i hi
     change i ∈ Finset.univ.filter (Selected wPolicy) at hi
     have hs : Selected wPolicy i := (Finset.mem_filter.mp hi).2

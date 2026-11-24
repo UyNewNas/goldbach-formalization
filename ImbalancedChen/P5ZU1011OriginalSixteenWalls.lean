@@ -62,7 +62,7 @@ theorem fullSquareLinear_basis (j : Fin 4) : fullSquareLinear j (basis j)=2 := b
       simp only [if_pos hij, basis, if_neg hne]
     · simp only [if_neg hij]
   rw [hsum]
-  simp only [basis, if_pos rfl, mul_one, zero_add]
+  simp only [basis, if_pos rfl, if_true, mul_one, zero_add]
 
 theorem selectedSquareLinear_basis (p : Policy) (j : Fin 4) :
     selectedSquareLinear p j (basis j)=(if Selected p j then 1 else 0)+2 := by

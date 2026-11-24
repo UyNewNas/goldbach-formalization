@@ -174,10 +174,10 @@ theorem source_test_eq_sum_atom_tests (e seed : ℝ) (rows : Finset ProducerRow)
     · simp only [indicator_of_mem ht, indicator_of_mem
         (show t ∈ R ∩ wallAtom rows (actualPattern rows t) from ⟨ht, mem_actual_wallAtom rows t⟩),
         fixedCellTest, producerProfile_eq_fixed_on_atom e seed rows licensed _ (mem_actual_wallAtom rows t)]
-    · simp only [indicator_of_not_mem ht,
-        indicator_of_not_mem (show t ∉ R ∩ wallAtom rows (actualPattern rows t) from fun h => ht h.1)]
+    · simp only [Set.indicator_of_notMem ht,
+        Set.indicator_of_notMem (show t ∉ R ∩ wallAtom rows (actualPattern rows t) from fun h => ht h.1)]
   · intro s _hs hne
-    apply indicator_of_not_mem
+    apply Set.indicator_of_notMem
     intro ht
     exact hne (wallAtom_unique ht.2 (mem_actual_wallAtom rows t))
   · simp
@@ -290,7 +290,7 @@ theorem tendsto_test_original_source_wallAtom
       exact ⟨fun i => (mem_logPrimeBox.mp ht.1 i).1,
         fun i => (mem_logPrimeBox.mp ht.1 i).2.le, fun k => (ht.2 k).le⟩
   · simp only [if_neg hs, empty_inter, inter_empty, indicator_empty,
-      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, integral_empty]
+      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, MeasureTheory.setIntegral_empty]
     exact tendsto_const_nhds
 
 /-- Refined continuous tests now have a proved source limit without an

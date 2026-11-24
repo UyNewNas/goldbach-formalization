@@ -131,7 +131,7 @@ theorem roots0_to14_overlap (i : Fin 21)
   all_goals norm_num at hi
   all_goals
     norm_num [witness,recordAt,records,decodeCoordinates,
-      coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R]
+      coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R,Matrix.cons_val_two]
 
 /-- Root 13 has only x≤mu≤y, whereas the ordered domain requires y≤x.
 The forced equality x=y=mu violates the old-cube test already at z=8h. -/

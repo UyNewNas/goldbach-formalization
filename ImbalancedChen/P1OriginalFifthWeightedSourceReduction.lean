@@ -192,7 +192,7 @@ theorem exists_weighted_source_bound
           rw [if_pos ht, if_pos ht, abs_mul, hshape, abs_mul]
           exact mul_le_mul_of_nonneg_left
             (mul_le_mul_of_nonneg_right hb (abs_nonneg _)) (abs_nonneg _)
-        · simp only [if_neg ht, mul_zero, abs_zero]
+        · simp only [if_neg ht, mul_zero, abs_zero, le_refl]
   calc
     _ ≤ _ := hsum
     _ = |Real.log (N : ℝ) / singularSeries N| *
