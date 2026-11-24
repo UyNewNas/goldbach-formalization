@@ -1,6 +1,6 @@
 # Part 3：算术分布与实际误差供应者交接
 
-## 2026-11-24：从 `c509267` 接续的五模块增量
+## 2026-11-24：从 `c509267` 接续的七模块增量
 
 本轮保持 `c509267` 的 80 个 Lean 模块逐字不变；其 1,774 条声明的既有验收按用户提供的成功回执记录。
 
@@ -9,12 +9,16 @@
 | [SignedModulusPayment](../../ImbalancedChen/Part3SignedModulusPayment.lean) | 同一模数权的非对角除数付款、精确互素均值和真实对角分离 | Cloud strict 和 kernel replay 已通过；完整声明审计待增量 CI |
 | [ProperPowerResidualPayment](../../ImbalancedChen/Part3ProperPowerResidualPayment.lean) | 实际 labelled 残差的盒计数、零纤维、对角及 prime/VM 接合 | 完整开发 harness 已通过；原 import 正式验收待 CI |
 | [ProperPowerDyadicBudget](../../ImbalancedChen/Part3ProperPowerDyadicBudget.lean) | 从实际盒预算和几何范围推出 `x^(1-a/2)` 节省 | 源码完成，待编译 |
-| [ExceptionalWeightExtension](../../ImbalancedChen/Part3ExceptionalWeightExtension.lean) | 共同相位、任意谱权重、一般公共整数区间及完整前缀谱和的可和性 | 最新完整模块待编译 |
-| [ExceptionalWeightGeometry](../../ImbalancedChen/Part3ExceptionalWeightGeometry.lean) | 实际 `4*pi` 尺度、两 level 窗口与 `7/32` 权重适配 | 最新完整模块待编译 |
+| [ProperPowerOriginalChart](../../ImbalancedChen/Part3ProperPowerOriginalChart.lean) | 从原整数平移 dyadic 图册的有效支持推出盒几何，处理空图册并绑定物理坐标 cap | 源码完成，独立只读语义审查完成；尚未编译 |
+| [ProperPowerLogSaving](../../ImbalancedChen/Part3ProperPowerLogSaving.lean) | 复用已有除数小幂、模数均值和对数吸收，把原图册的实际残差预算收束到任意实数对数幂 | 源码完成，独立语义审查完成；尚未编译，等待指定的新环境验收 |
+| [ExceptionalWeightExtension](../../ImbalancedChen/Part3ExceptionalWeightExtension.lean) | 共同相位、任意谱权重、一般公共整数区间及完整前缀谱和的可和性 | strict、kernel replay、完整声明／传递公理审计已通过（43 声明） |
+| [ExceptionalWeightGeometry](../../ImbalancedChen/Part3ExceptionalWeightGeometry.lean) | 实际 `4*pi` 尺度、两 level 窗口与 `7/32` 权重适配 | strict、kernel replay、完整声明／传递公理审计已通过（45 声明） |
 
-增量入口是 `verification/verify_part3_continuation.py`，复用原有完整 serialized/defining-module 库存和传递公理门。GitHub workflow 分别验证 `spectral` 与 `proper-power` 两组，保留精确提交、源码及对象哈希和实际日志。Cloud Compile 已达到 128 个保留任务上限；当前工具没有归档接口，故后续验证使用独立 GitHub CI。已有 [单模块回执](continuation-20261124/cloud-modulus-receipt.json) 和 [实施及边界记录](CONTINUATION-20261124.md) 已保存。
+新增原图册模块直接复用 `originalDyadicChartWeight χ L j`，允许任意整数移位 `L`，取 `U_i = ceil(2 * 2^(L+j_i))`。同一 `(W * 原图册权重) * VM` 的非零见证给出 `U_i+1 ≤ 5*n_i`、完整盒体积至多 `5^k*C*x`，以及 `max_i U_i ≤ ceil(5*C*x)`；没有有效见证时，实际 proper-power 残差恒为零。源码 SHA-256 为 `50a372771ebfa4cee6554402e938e5b7d334bd3cc1c0440a57df39c86fed26ca`，该源码检查点尚无编译回执。
 
-本轮谱定理保留经典 full-block J 与实际特征值下界作为明确输入，尚未提供实际自动形式谱对象上的实例。素数幂付款仍需把每个活动 dyadic 图册的几何范围、模数平均和除数次幂界统一接入。`RestrictedMediumObligation`、`UniformPrimeProductTarget` 和 P3 整体仍未关闭。
+增量入口是 `verification/verify_part3_continuation.py`，复用原有完整 serialized/defining-module 库存和传递公理门。GitHub workflow 分别验证 `spectral` 与 `proper-power` 两组，保留精确提交、源码及对象哈希和实际日志。谱组已在 `80d7eeb` 完成全部验收，共 88 声明；[完整回执与类型](continuation-20261124/spectral-80d7eeb/README.md) 已保存。素数幂组仍待正式验收；新增原图册模块的源码完成和只读审查不构成编译验收。原 Cloud Compile 曾达到 128 个保留任务上限，因此启动了独立 GitHub CI。用户随后指定 `Workspace Compile 27f68009` 为后续编译环境；该私有连接已找到，但当前对话尚未提供其命令入口，尚未向新环境提交任务。已有 [单模块回执](continuation-20261124/cloud-modulus-receipt.json) 和 [实施及边界记录](CONTINUATION-20261124.md) 已保存。
+
+本轮谱定理保留经典 full-block J 与实际特征值下界作为明确输入，尚未提供实际自动形式谱对象上的实例。原图册的盒几何现已从源的有效支持合同推出；新增 `ProperPowerLogSaving` 已在源码中把物理 cap、非零差除数界、互素均值和完整对角收束为逐图册任意对数节省，阈值在源、图册和同一模数权之前选定；该模块尚未编译。仍需实例化真实整数源的 `hGeometry`、实际上下／marked 模数权的固定界，并完成整个图册族的线性重组。`RestrictedMediumObligation`、`UniformPrimeProductTarget` 和 P3 整体仍未关闭。
 
 ## 2026-11-24 物理 S2 续证
 

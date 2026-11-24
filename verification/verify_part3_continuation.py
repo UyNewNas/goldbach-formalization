@@ -23,14 +23,20 @@ import verify_part3_distribution as baseline
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_HEAD = "c509267dc630d91df33033abde1c484ec86b96ae"
 LEAN_COMMIT = "62eed1db4d67327ec8120be05f1a1b0847d74561"
-MODULES = tuple("ImbalancedChen." + name for name in (
+PROPER_POWER_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3SignedModulusPayment",
     "Part3ProperPowerResidualPayment",
     "Part3ProperPowerDyadicBudget",
+    "Part3ProperPowerOriginalChart",
+    "Part3ProperPowerLogSaving",
+))
+SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
     "Part3ExceptionalWeightGeometry",
 ))
-GROUPS = {"all": MODULES, "proper-power": MODULES[:3], "spectral": MODULES[3:]}
+MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
+GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
+          "spectral": SPECTRAL_MODULES}
 
 
 def sha256(path: Path) -> str:

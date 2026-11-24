@@ -34,7 +34,7 @@ jobs:
           groups=['spectral','proper-power']
           if before and set(before) != {'0'}:
               changed=subprocess.check_output(['git','diff','--name-only',before,os.environ['GITHUB_SHA']],text=True).splitlines()
-              validators=any(p.startswith('verification/') or p in ['lean-toolchain','lakefile.toml','lake-manifest.json'] for p in changed)
+              validators=any(p.startswith('verification/') or p in ['lean-toolchain','lakefile.toml','lake-manifest.json','.github/workflows/part3-continuation.yml'] for p in changed)
               lean=[p for p in changed if p.endswith('.lean')]
               selected=[]
               if any('/Part3ExceptionalWeight' in p for p in lean): selected.append('spectral')
