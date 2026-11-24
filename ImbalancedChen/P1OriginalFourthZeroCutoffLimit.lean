@@ -209,8 +209,8 @@ theorem exists_original_fourth_actual_mean_and_cutoff_limit
         congr 1
         ring
       _ ≤ |(S - R - I) + R| + |I - L| := abs_add_le _ _
-      _ ≤ |S - R - I| + |R| + |I - L| :=
-        add_le_add_right (abs_add_le (S - R - I) R) |I - L|
+      _ ≤ |S - R - I| + |R| + |I - L| := by
+        linarith only [abs_add_le (S - R - I) R]
   change |normalizedActualSaving e chi m omega J4 cap4 N (cap N) -
       P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N) -
       selectedIntegral e chi m omega a J4 cap4| < epsilon / 3 at hposN

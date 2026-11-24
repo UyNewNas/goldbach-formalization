@@ -104,7 +104,9 @@ theorem actual_noMedium_has_long {z y A B : ℝ} (hz : 0 ≤ z) (hA : 1 ≤ A)
     · exact False.elim (h ⟨b,hb,hl⟩)
   have hp := rawProduct_le_pow (by linarith : 0 ≤ A) bs hcap
   have hexp : A^bs.length ≤ A^6 := pow_le_pow_right₀ hA hlen
-  have hn' : (n : ℝ) ≤ 64*rawProduct bs := by exact_mod_cast hhi
+  have hn' : (n : ℝ) ≤ 64*rawProduct bs := by
+    unfold rawProduct
+    exact_mod_cast hhi
   nlinarith
 
 -- This is also valid for concatenated original group words once their
@@ -126,10 +128,12 @@ theorem actual_noMedium_one_or_two_long {z y A B : ℝ}
     (longBlocks B bs).length = 1 ∨ (longBlocks B bs).length = 2 := by
   obtain ⟨b,hb,hbl⟩ := actual_noMedium_has_long hz hA hj hn hbranch hshort
   have hmem : b ∈ longBlocks B bs := by simp [longBlocks,hb,hbl]
-  have hpos : 0 < (longBlocks B bs).length := List.length_pos.mpr (by
+  have hpos : 0 < (longBlocks B bs).length := List.length_pos_iff.mpr (by
     intro he; simpa [he] using hmem)
   have hlo := (actual_block_product_window hz hn).2.1
-  have hr : rawProduct bs ≤ (n : ℝ) := by exact_mod_cast hlo
+  have hr : rawProduct bs ≤ (n : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast hlo
   have htwo := atMostTwoLong hB (hr.trans_lt hcomplete)
   omega
 

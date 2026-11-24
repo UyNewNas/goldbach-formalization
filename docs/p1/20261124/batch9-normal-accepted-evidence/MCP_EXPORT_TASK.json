@@ -1,0 +1,22 @@
+{
+  "task_id": "job_41f898a9e12b4090b0d438ff37208626",
+  "job_id": "job_41f898a9e12b4090b0d438ff37208626",
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport base64,hashlib,io,json,lzma,tarfile\nbase=Path('/workspace/p1-complete-proof/20261124-resume')\nroot=base/'batch9-audit12-evidence-export-v1';root.mkdir(exist_ok=False)\nparents=[base/'batch9-normal-audit-bootstrap',base/'batch9-completed-normal-supplement-acceptance']\nfiles=[]\nfor parent in parents:\n assert parent.is_dir()\n files.extend(p for p in sorted(parent.rglob('*')) if p.is_file() and '__pycache__' not in p.parts and p.suffix not in {'.olean','.ilean','.o','.pyc'})\nrows=[{'path':str(p.relative_to(base)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]\nresult_path=parents[0]/'RESULT.json';result=json.loads(result_path.read_bytes()) if result_path.exists() else {'status':'NO_FINAL_RESULT_EXPORTED','whole_P1_complete':False}\nindex={'actual_bootstrap_result':result,'files':rows};ib=(json.dumps(index,sort_keys=True,indent=2)+'\\n').encode();(root/'ARCHIVE_FILES.json').write_bytes(ib)\nbuf=io.BytesIO()\nwith tarfile.open(fileobj=buf,mode='w') as t:\n for p in files+[root/'ARCHIVE_FILES.json']:\n  b=p.read_bytes();n='ARCHIVE_FILES.json' if p.parent==root else str(p.relative_to(base));i=tarfile.TarInfo(n);i.size=len(b);i.mtime=0;i.mode=0o644;t.addfile(i,io.BytesIO(b))\nraw=buf.getvalue();packed=lzma.compress(raw);(root/'verification.tar.xz').write_bytes(packed)\nsummary={'path':str(root/'verification.tar.xz'),'bytes':len(packed),'sha256':hashlib.sha256(packed).hexdigest(),'uncompressed_tar_sha256':hashlib.sha256(raw).hexdigest(),'index_sha256':hashlib.sha256(ib).hexdigest(),'payload_files':len(rows),'actual_result':result}\nprint('ARCHIVE_SUMMARY '+json.dumps(summary),flush=True)\nprint('ARCHIVE_BASE64 '+base64.b64encode(packed).decode(),flush=True)\nPY",
+  "cwd": "/workspace/blue-member-build",
+  "timeout_seconds": 240,
+  "memory_mb": 3072,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795525768.0595763,
+  "started_at": 1795525920.301445,
+  "finished_at": 1795525924.2902944,
+  "exit_code": 0,
+  "memory_peak_bytes": 135598080,
+  "cpu_time_seconds": 3.9,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 622700,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 3.988849401473999
+}

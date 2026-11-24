@@ -90,6 +90,7 @@ literal initial cuts. It never evaluates a sieve, logarithm or saved cost. -/
 theorem normalized_initial_boxes :
     (integerLeafBoxes initialTree initialLower initialUpper).map normalizeRoot =
       initialSeeds := by
+  have hlast (z : ℤ) : (![z,z,z] : Fin 3 → ℤ) 2 = z := rfl
   rw [initialSeeds_eq_records]
   simp only [initialTree,xyTree,integerLeafBoxes,List.map_append,
     List.map_cons,List.map_nil,List.cons_append,List.nil_append,
@@ -100,7 +101,7 @@ theorem normalized_initial_boxes :
     fin_cases i <;>
       norm_num [leftIntegerUpper,rightIntegerLower,initialLower,initialUpper,
         orderedIntegerLower,H,P4AOriginalInitialSeedInventorySourceOnly.M,
-        P4AOriginalInitialSeedInventorySourceOnly.R,Function.update,Fin.ext_iff]
+        P4AOriginalInitialSeedInventorySourceOnly.R,Function.update,Fin.ext_iff,hlast]
 
 theorem compactRegion_subset_initial_box :
     compactRegion ⊆ Icc (decodeCoordinates initialLower)

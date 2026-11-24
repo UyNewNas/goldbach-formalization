@@ -17,6 +17,7 @@ budget consequently bounds the genuine Euler words at every fixed order.
 namespace ImbalancedChen.P4B
 
 noncomputable section
+open scoped ContDiff
 
 /-- The i-th coordinate vector in the original sup-norm plane. -/
 def primeEulerCoordinateUnit (i : Fin 2) : Fin 2 → ℝ :=
@@ -97,6 +98,8 @@ theorem primeEulerOperator_chart_conjugacy
     primeEulerOperator i F (primeEulerChart p z) =
       fderiv ℝ (fun y => F (primeEulerChart p y)) z (primeEulerCoordinateUnit i) := by
   have hchain := hF.hasFDerivAt.comp z (hasFDerivAt_primeEulerChart p z)
+  change primeEulerOperator i F (primeEulerChart p z) =
+    fderiv ℝ (F ∘ primeEulerChart p) z (primeEulerCoordinateUnit i)
   rw [hchain.fderiv, ContinuousLinearMap.comp_apply, primeEulerChartJacobian_coordinate]
   rfl
 

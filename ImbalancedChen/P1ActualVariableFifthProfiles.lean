@@ -138,7 +138,7 @@ theorem actualOld4_mem_interval
     apply finiteMax_le _ _ _ _ _ hseedhi
     intro r _hr _he
     rw [r.bufferedCandidate_eq]
-    exact (sub_le_sub_right (v_le_cap _) _).trans (le_max_right _ _)
+    exact (sub_le_sub_right (VariableEnvelope.v_le_cap _) _).trans (le_max_right _ _)
 
 theorem actualNext5_mem_interval
     (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m)
@@ -152,7 +152,7 @@ theorem actualNext5_mem_interval
   · apply finiteMax_le _ _ _ _ _ hold.2
     intro r _hr _he
     rw [candidate, envelope_eq_v]
-    exact (sub_le_sub_right (v_le_cap _) _).trans (le_max_right _ _)
+    exact (sub_le_sub_right (VariableEnvelope.v_le_cap _) _).trans (le_max_right _ _)
 
 def literalTupleCharge (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)

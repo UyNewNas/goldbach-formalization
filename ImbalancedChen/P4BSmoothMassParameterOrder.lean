@@ -32,7 +32,8 @@ theorem physicalPairMargins_antitone_parameter
   intro bLo bHi hb
   fin_cases i
   · exact le_rfl
-  · rw [physicalPairMargins_eq_original_of_ne_upper bHi T N t
+  · change physicalPairMargins bHi N T t 1 ≤ physicalPairMargins bLo N T t 1
+    rw [physicalPairMargins_eq_original_of_ne_upper bHi T N t
       (by decide : (1 : Fin 4) ≠ 3),
       physicalPairMargins_eq_original_of_ne_upper bLo T N t
         (by decide : (1 : Fin 4) ≠ 3)]
@@ -125,7 +126,7 @@ theorem exists_compact_endpoint_smooth_mass_control
   have hmassH : |normalizedSmoothPhysicalMass bHi kappa width N -
       Real.log (1 / bHi)| < epsilon :=
     hmassHi width hwidth hwHi N hNH hEven
-  have hsand := normalizedSmoothPhysicalMass_endpoint_sandwich hN1 hwidth hbLo hbHi
+  have hsand := normalizedSmoothPhysicalMass_endpoint_sandwich (kappa := kappa) hN1 hwidth hbLo hbHi
   have hbLoPos : 0 < bLo := by linarith only [hLoHalf]
   have hbPos : 0 < b := hbLoPos.trans_le hbLo
   have hcoeffLo := smoothMass_logCoefficient_le hbLoPos hbLo

@@ -1,0 +1,154 @@
+✖ [9911/9957] Building ImbalancedChen.P4BSmoothMassParameterOrder (15s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P4BSmoothMassParameterOrder.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BSmoothMassParameterOrder.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BSmoothMassParameterOrder.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BSmoothMassParameterOrder.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BSmoothMassParameterOrder.setup.json --json
+error: ImbalancedChen/P4BSmoothMassParameterOrder.lean:35:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  physicalPairMargins bHi N T t 1
+in the target expression
+  (fun b => physicalPairMargins b N T t ((fun i => i) ⟨1, ⋯⟩)) bHi ≤
+    (fun b => physicalPairMargins b N T t ((fun i => i) ⟨1, ⋯⟩)) bLo
+
+case «1»
+N : ℕ
+T : ℝ
+hN : 1 < ↑N
+t : Fin 2 → Fin (N + 1)
+ht : t ∈ labelledPrimeTuples 2 N
+hp : Nat.Prime ↑(t 1)
+hq : 1 ≤ ↑↑(t 1)
+hy : 0 ≤ logPoint N t 1
+bLo bHi : ℝ
+hb : bLo ≤ bHi
+⊢ (fun b => physicalPairMargins b N T t ((fun i => i) ⟨1, ⋯⟩)) bHi ≤
+    (fun b => physicalPairMargins b N T t ((fun i => i) ⟨1, ⋯⟩)) bLo
+error: ImbalancedChen/P4BSmoothMassParameterOrder.lean:128:16: don't know how to synthesize implicit argument `kappa`
+  @normalizedSmoothPhysicalMass_endpoint_sandwich N bLo b bHi ?m.365 width hN1 hwidth hbLo hbHi
+context:
+bLo bHi kappa : ℝ
+hLoHalf : 1 / 2 < bLo
+horder : bLo ≤ bHi
+hHiOne : bHi < 1
+hkappa : 0 < kappa
+hkappaOne : kappa < 1
+epsilon widthMax : ℝ
+hepsilon : 0 < epsilon
+hwidthMax : 0 < widthMax
+widthLo : ℝ
+hwidthLo : 0 < widthLo
+hmaxLo : widthLo ≤ widthMax
+NLo : ℕ
+hNLo : 2 ≤ NLo
+hmassLo :
+  ∀ (width : ℝ),
+    0 < width →
+      width ≤ widthLo →
+        ∀ (N : ℕ),
+          NLo ≤ N →
+            Even N →
+              |(∑ t ∈ labelledPrimeTuples 2 N,
+                        smoothPhysicalPairOuterRamp bLo N (manuscriptHalfProductCutoff kappa N) width t) /
+                      (↑N / Real.log ↑N) -
+                    Real.log (1 / bLo)| <
+                epsilon
+widthHi : ℝ
+hwidthHi : 0 < widthHi
+_hmaxHi : widthHi ≤ widthMax
+NHi : ℕ
+hNHi : 2 ≤ NHi
+hmassHi :
+  ∀ (width : ℝ),
+    0 < width →
+      width ≤ widthHi →
+        ∀ (N : ℕ),
+          NHi ≤ N →
+            Even N →
+              |(∑ t ∈ labelledPrimeTuples 2 N,
+                        smoothPhysicalPairOuterRamp bHi N (manuscriptHalfProductCutoff kappa N) width t) /
+                      (↑N / Real.log ↑N) -
+                    Real.log (1 / bHi)| <
+                epsilon
+width0 : ℝ := ⋯
+N0 : ℕ := ⋯
+width : ℝ
+hwidth : 0 < width
+hwidth0 : width ≤ width0
+N : ℕ
+hN : N0 ≤ N
+hEven : Even N
+b : ℝ
+hbLo : bLo ≤ b
+hbHi : b ≤ bHi
+hwLo : width ≤ widthLo
+hwHi : width ≤ widthHi
+hNL : NLo ≤ N
+hNH : NHi ≤ N
+hN2 : 2 ≤ N
+hN1 : 1 < ↑N
+hmassL : |normalizedSmoothPhysicalMass bLo kappa width N - Real.log (1 / bLo)| < epsilon
+hmassH : |normalizedSmoothPhysicalMass bHi kappa width N - Real.log (1 / bHi)| < epsilon
+⊢ ℝ
+error: ImbalancedChen/P4BSmoothMassParameterOrder.lean:128:7: failed to infer `have` declaration type
+error: ImbalancedChen/P4BSmoothMassParameterOrder.lean:103:67: unsolved goals
+bLo bHi kappa : ℝ
+hLoHalf : 1 / 2 < bLo
+horder : bLo ≤ bHi
+hHiOne : bHi < 1
+hkappa : 0 < kappa
+hkappaOne : kappa < 1
+epsilon widthMax : ℝ
+hepsilon : 0 < epsilon
+hwidthMax : 0 < widthMax
+widthLo : ℝ
+hwidthLo : 0 < widthLo
+hmaxLo : widthLo ≤ widthMax
+NLo : ℕ
+hNLo : 2 ≤ NLo
+hmassLo :
+  ∀ (width : ℝ),
+    0 < width →
+      width ≤ widthLo →
+        ∀ (N : ℕ),
+          NLo ≤ N →
+            Even N →
+              |(∑ t ∈ labelledPrimeTuples 2 N,
+                        smoothPhysicalPairOuterRamp bLo N (manuscriptHalfProductCutoff kappa N) width t) /
+                      (↑N / Real.log ↑N) -
+                    Real.log (1 / bLo)| <
+                epsilon
+widthHi : ℝ
+hwidthHi : 0 < widthHi
+_hmaxHi : widthHi ≤ widthMax
+NHi : ℕ
+hNHi : 2 ≤ NHi
+hmassHi :
+  ∀ (width : ℝ),
+    0 < width →
+      width ≤ widthHi →
+        ∀ (N : ℕ),
+          NHi ≤ N →
+            Even N →
+              |(∑ t ∈ labelledPrimeTuples 2 N,
+                        smoothPhysicalPairOuterRamp bHi N (manuscriptHalfProductCutoff kappa N) width t) /
+                      (↑N / Real.log ↑N) -
+                    Real.log (1 / bHi)| <
+                epsilon
+width0 : ℝ := min widthLo widthHi
+N0 : ℕ := max NLo NHi
+width : ℝ
+hwidth : 0 < width
+hwidth0 : width ≤ width0
+N : ℕ
+hN : N0 ≤ N
+hEven : Even N
+b : ℝ
+hbLo : bLo ≤ b
+hbHi : b ≤ bHi
+hwLo : width ≤ widthLo
+hwHi : width ≤ widthHi
+hNL : NLo ≤ N
+hNH : NHi ≤ N
+hN2 : 2 ≤ N
+hN1 : 1 < ↑N
+hmassL : |normalizedSmoothPhysicalMass bLo kappa width N - Real.log (1 / bLo)| < epsilon
+hmassH : |normalizedSmoothPhysicalMass bHi kappa width N - Real.log (1 / bHi)| < epsilon
+⊢ |normalizedSmoothPhysicalMass b kappa width N - Real.log (1 / b)| <
+    epsilon + (Real.log (1 / bLo) - Real.log (1 / bHi))
+error: Lean exited with code 1

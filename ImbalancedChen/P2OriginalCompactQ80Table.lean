@@ -39,7 +39,7 @@ theorem numerator12_contains_actual_L (a b : ℤ) (hb : 0 < b)
   let r := queryResidual 16384 a b
   have hidx : originalQueryIndex q = i := by
     have h := congrArg Int.toNat (original_query_index_literal_divmod a b hb ha0)
-    simpa only [Int.toNat_natCast, queryIndex, q, i] using h
+    simpa only [Int.toNat_natCast, queryIndex, q, i, Nat.cast_ofNat] using h
   obtain ⟨hilow, _himax, hw0, hw1, hql, hqr⟩ := original_query_cell_geometry hq2.le
     (hq12.trans (by norm_num : (12 : ℚ) ≤ 12))
   rw [hidx] at hilow hw0 hw1 hql hqr
@@ -49,7 +49,8 @@ theorem numerator12_contains_actual_L (a b : ℤ) (hb : 0 < b)
       simpa only [originalQueryIndex, Nat.floor_ofNat] using h
     simpa only [hidx] using h'
   have hw : queryCellWeight i q = (r : ℚ) / (b : ℚ) := by
-    simpa only [hidx, queryResidual, q, r] using original_query_weight_literal_divmod a b hb ha0
+    simpa only [hidx, queryResidual, q, r, Nat.cast_ofNat] using
+      original_query_weight_literal_divmod a b hb ha0
   have hwR : (queryCellWeight i q : ℝ) = (r : ℝ) / (b : ℝ) := by exact_mod_cast hw
   have hqR : (q : ℝ) = (a : ℝ) / (b : ℝ) := by simp [q]
   have ht : (a : ℝ) / (b : ℝ) ∈ Icc (cellLeft i) (cellRight i) := by
@@ -108,7 +109,10 @@ theorem numerator12_contains_actual_L (a b : ℤ) (hb : 0 < b)
         push_cast
         <;> ring
       rw [hqR, hwR] at hwForm
-      convert hwForm using 1 <;> push_cast <;> ring
+      rw [hwForm]
+      push_cast
+      have hbR : (0 : ℝ) < (b : ℝ) := by exact_mod_cast hb
+      field_simp [hbR.ne'] <;> ring
     rw [← hchord] at hc
     have ha := (actual_numerator_interpolation_allowance i hilow ht).1
     have hlow : value (interpolationLo (table 16384 12 i).ll (table 16384 12 (i + 1)).ll b r) ≤

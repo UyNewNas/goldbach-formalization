@@ -52,10 +52,11 @@ def pointInterpolate (v : Fin 9 → Point) (x : Point) : Point :=
 
 theorem bary_continuous (i : Fin 9) : Continuous (bary i) := by
   refine Fin.cases ?_ ?_ i
-  · dsimp [bary]
+  · change Continuous (fun x : Point => 1 - ∑ j : Fin 8, x j)
     fun_prop
   · intro j
-    simpa only [bary, Fin.cases_succ] using (continuous_apply j : Continuous (fun x : Point => x j))
+    change Continuous (fun x : Point => x j)
+    exact continuous_apply j
 
 theorem interpolate_continuous (v : Fin 9 → ℝ) : Continuous (interpolate v) := by
   apply continuous_finsetSum
@@ -139,7 +140,7 @@ theorem prod_unitExponent (i : Fin 9) (x : Point) :
     _ = _ := by simp
 
 theorem bary_first (i : Fin 9) :
-    (∫ x in canonical, bary i x) = 1 / (9.factorial : ℝ) := by
+    (∫ x in canonical, bary i x) = 1 / ((9 : ℕ).factorial : ℝ) := by
   have he : (∫ x in canonical, bary i x) = baryMoment (unitExponent i) := by
     unfold baryMoment
     simp_rw [prod_unitExponent]
@@ -148,7 +149,7 @@ theorem bary_first (i : Fin 9) :
 
 theorem bary_second (i j : Fin 9) :
     (∫ x in canonical, bary i x * bary j x) =
-      (1 + if i = j then 1 else 0) / (10.factorial : ℝ) := by
+      (1 + if i = j then 1 else 0) / ((10 : ℕ).factorial : ℝ) := by
   classical
   have he : (∫ x in canonical, bary i x * bary j x) =
       baryMoment (fun r => unitExponent i r + unitExponent j r) := by
@@ -158,13 +159,13 @@ theorem bary_second (i j : Fin 9) :
   fin_cases i <;> fin_cases j <;>
     norm_num [unitExponent, factorialProduct, List.ofFn]
 
-theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / (8.factorial : ℝ) := by
+theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / ((8 : ℕ).factorial : ℝ) := by
   have h := actual_eight_factorial 0 (fun _ : Fin 8 => 0) (s := 1) (by norm_num)
   simpa [actualMoment, canonical, P2Winner9NestedEightSimplexMoment.standardSimplex,
     P2Winner9SimplexCoordinateSlice.standardSimplex, factorialProduct, List.ofFn] using h
 
 theorem integral_interpolate (v : Fin 9 → ℝ) :
-    (∫ x in canonical, interpolate v x) = (∑ i : Fin 9, v i) / (9.factorial : ℝ) := by
+    (∫ x in canonical, interpolate v x) = (∑ i : Fin 9, v i) / ((9 : ℕ).factorial : ℝ) := by
   unfold interpolate
   rw [integral_finsetSum]
   · simp only [integral_mul_const, bary_first]
@@ -178,7 +179,7 @@ enters. Diagonal terms have multiplicity two, not one. -/
 theorem integral_interpolate_mul (g l : Fin 9 → ℝ) :
     (∫ x in canonical, interpolate g x * interpolate l x) =
       ((∑ i : Fin 9, g i) * (∑ i : Fin 9, l i) + ∑ i : Fin 9, g i * l i) /
-        (10.factorial : ℝ) := by
+        ((10 : ℕ).factorial : ℝ) := by
   classical
   let term (i j : Fin 9) (x : Point) := (g i * l j) * (bary i x * bary j x)
   have hi (i j : Fin 9) : IntegrableOn (term i j) canonical := by
@@ -225,8 +226,12 @@ theorem factors_interpolate (v : Fin 9 → Point) (x : Point) (j : Fin 10) :
     factors (pointInterpolate v x) j = interpolate (fun i => factors (v i) j) x := by
   fin_cases j <;>
     simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
-  · rw [comparisonCap_interpolate, total_interpolate, interpolate_sub]
-  · rw [newCap_interpolate, total_interpolate, interpolate_sub]
+  · change comparisonCap (pointInterpolate v x) - total (pointInterpolate v x) =
+      interpolate (fun i => comparisonCap (v i) - total (v i)) x
+    rw [comparisonCap_interpolate, total_interpolate, interpolate_sub]
+  · change newCap (pointInterpolate v x) - total (pointInterpolate v x) =
+      interpolate (fun i => newCap (v i) - total (v i)) x
+    rw [newCap_interpolate, total_interpolate, interpolate_sub]
   all_goals exact pointInterpolate_apply v x _
 
 def vertices (L : Point ≃L[ℝ] Point) (b : Point) : Fin 9 → Point :=
@@ -237,7 +242,7 @@ def support (L : Point ≃L[ℝ] Point) (b : Point) : Set Point :=
 
 def jacobian (L : Point ≃L[ℝ] Point) : ℝ := |L.toContinuousLinearMap.det|
 
-def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / (8.factorial : ℝ)
+def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / ((8 : ℕ).factorial : ℝ)
 
 def gapTotal (v : Fin 9 → Point) : ℝ := ∑ i : Fin 9, gap (v i)
 
@@ -297,7 +302,7 @@ theorem integral_gap_factor (L : Point ≃L[ℝ] Point) (b : Point) (j : Fin 10)
       jacobian L *
         (gapTotal (vertices L b) * (∑ i : Fin 9, factors (vertices L b i) j) +
           ∑ i : Fin 9, gap (vertices L b i) * factors (vertices L b i) j) /
-          (10.factorial : ℝ) := by
+          ((10 : ℕ).factorial : ℝ) := by
   rw [integral_support]
   simp_rw [← vertices_interpolate L b, gap_interpolate, factors_interpolate]
   rw [integral_interpolate_mul]
@@ -363,6 +368,8 @@ theorem support_factor_bounds (L : Point ≃L[ℝ] Point) (b : Point)
     (hv : ∀ i, PhysicalRows (vertices L b i)) {t : Point} (ht : t ∈ support L b)
     (j : Fin 10) : cutoff ≤ factors t j ∧ factors t j ≤ vertexTop (vertices L b) j := by
   obtain ⟨x, hx, rfl⟩ := ht
+  change cutoff ≤ factors (b + L x) j ∧
+    factors (b + L x) j ≤ vertexTop (vertices L b) j
   rw [← vertices_interpolate L b x, factors_interpolate]
   exact interpolate_bounds (fun i => factors (vertices L b i) j)
     (fun i => ⟨(physical_factor_bounds (hv i) j).1,
@@ -372,6 +379,7 @@ theorem support_gap_bounds (L : Point ≃L[ℝ] Point) (b : Point)
     (hv : ∀ i, PhysicalRows (vertices L b i)) {t : Point} (ht : t ∈ support L b) :
     0 ≤ gap t ∧ gap t ≤ 2 * VariableEnvelope.mu := by
   obtain ⟨x, hx, rfl⟩ := ht
+  change 0 ≤ gap (b + L x) ∧ gap (b + L x) ≤ 2 * VariableEnvelope.mu
   rw [← vertices_interpolate L b x, gap_interpolate]
   exact interpolate_bounds (fun i => gap (vertices L b i))
     (fun i => physical_gap_bounds (hv i)) hx

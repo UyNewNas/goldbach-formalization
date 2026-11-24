@@ -1,0 +1,51 @@
+--- a/ImbalancedChen/P1OriginalVariableFourthFullSourceActivation.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthFullSourceActivation.lean
+@@ -60,7 +60,10 @@
+ theorem active_history3_iff (N : ℕ) (hN : 1 < N) (omega : ℝ) (p : Fin 4 → ℕ)
+     (hp : ∀ i, 0 < p i) :
+     active omega (N : ℝ) (history3 p) ↔ omega ≤ actualPrimeTupleLog N p 2 := by
+-  simpa only [history3, prefix3, historicalPrefixProject, actualPrimeTupleLog] using
++  have hidx : Fin.castLE (by omega : 3 ≤ 4) (2 : Fin 3) = (2 : Fin 4) := by
++    apply Fin.ext
++    rfl
++  simpa only [history3, prefix3, historicalPrefixProject, actualPrimeTupleLog, hidx] using
+     HistoricalThirdCoarse.P1ActualTuple.active_iff_log hN omega (prefix3 p)
+       (fun i => hp ⟨i.val, by omega⟩)
+ 
+@@ -154,9 +157,15 @@
+   have hb : l.2 = r.2 := by
+     have hal := hl.2
+     have har := hr.2
+-    cases hleft : l.2 <;> cases hright : r.2 <;>
+-      simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
+-        if_false, if_true] at hal har ⊢ <;> try rfl <;> linarith
++    cases hleft : l.2 <;> cases hright : r.2
++    · rfl
++    · simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
++        if_false, if_true] at hal har
++      exact (not_lt_of_ge har hal).elim
++    · simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
++        if_false, if_true] at hal har
++      exact (not_lt_of_ge hal har).elim
++    · rfl
+   exact Prod.ext hj hb
+ 
+ theorem measurableSet_meshBranch (m : ℕ) (omega : ℝ) (label : Label m) :
+@@ -292,7 +301,7 @@
+   rw [hs] at hold
+   have hnew : producerLevel4 e chi m omega (N : ℝ) rows licensed (tupleHistory p) =
+       (N : ℝ) ^ producerProfile4 e rows licensed (branchSeed e chi m label) (actualPrimeTupleLog N p) := by
+-    simp only [producerLevel4, level4, exponent4, show (tupleHistory p).length = 4 by simp [tupleHistory],
++    simp only [producerLevel4, P1OriginalVariableFourthContinuation.level4, exponent4, show (tupleHistory p).length = 4 by simp [tupleHistory],
+       if_pos, hs, tupleHistory_log, producerProfile4]
+   unfold literalTupleResidualDifference fourthTuplePlusResidualP1
+   rw [hold, hnew]
+@@ -324,7 +333,7 @@
+         intro hother
+         exact hne (meshBranch_unique m omega hother.1 ht.1)), mul_zero]
+     · simp
+-  · rw [if_neg (mt hiff.mp hs)]
++  · rw [if_neg (mt hiff.mp hs), mul_zero]
+     symm
+     apply Finset.sum_eq_zero
+     intro label _hl

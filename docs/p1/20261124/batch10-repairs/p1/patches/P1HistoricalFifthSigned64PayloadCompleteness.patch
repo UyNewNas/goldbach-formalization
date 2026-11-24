@@ -1,0 +1,66 @@
+--- a/ImbalancedChen/P1HistoricalFifthSigned64PayloadCompleteness.lean
++++ b/ImbalancedChen/P1HistoricalFifthSigned64PayloadCompleteness.lean
+@@ -87,7 +87,7 @@
+   | zero =>
+       by_cases hb : bytes = []
+       · subst bytes
+-        simp only [decodeChunks, if_pos rfl, Option.some.injEq] at h
++        simp only [decodeChunks, if_true, Option.some.injEq] at h
+         subst values
+         rfl
+       · simp only [decodeChunks, if_neg hb] at h
+@@ -114,7 +114,10 @@
+     (hb : ∀ b ∈ bytes, b < 256) : ∃ values, decodeChunks size decode n bytes = some values := by
+   induction n generalizing bytes with
+   | zero =>
+-      have hnil : bytes = [] := List.length_eq_zero.mp (by simpa using hlen)
++      have hnil : bytes = [] := by
++        cases bytes with
++        | nil => rfl
++        | cons b tail => simp at hlen
+       subst bytes
+       exact ⟨[], by simp [decodeChunks]⟩
+   | succ n ih =>
+@@ -147,7 +150,7 @@
+   | zero =>
+       by_cases hb : bytes = []
+       · subst bytes
+-        simp only [decodeChunks, if_pos rfl, Option.some.injEq] at h
++        simp only [decodeChunks, if_true, Option.some.injEq] at h
+         subst values
+         simp
+       · simp only [decodeChunks, if_neg hb] at h
+@@ -183,7 +186,7 @@
+   | none => simp only [hf, Option.map_none] at h; cases h
+   | some fields =>
+       have heq : wireOfColumns (listColumns fields) = wire := by
+-        simpa only [hf, Option.map_some] using h
++        simpa only [hf, Option.map_some, Option.some.injEq] using h
+       have hlen := (decodeChunks_some_lengths 8 decodeWord8 decodeWord8_some_length 10 bytes fields hf).1
+       rw [← heq]
+       unfold encodeRow
+@@ -206,7 +209,7 @@
+   cases hf : decodeFields 10 bytes with
+   | none => simp only [hf, Option.map_none] at h; cases h
+   | some fields =>
+-      have heq : wireOfColumns (listColumns fields) = wire := by simpa only [hf, Option.map_some] using h
++      have heq : wireOfColumns (listColumns fields) = wire := by simpa only [hf, Option.map_some, Option.some.injEq] using h
+       have hfields := decodeChunks_some_values 8 decodeWord8
+         (fun z => -(half64 : ℤ) ≤ z ∧ z < (half64 : ℤ)) decodeWord8_some_range 10 bytes fields hf
+       have hget : ∀ (values : List ℤ),
+@@ -233,7 +236,6 @@
+   split_ifs at h with hmod
+   · exact encodeChunks_of_decodeChunks 80 decodeRow80 encodeRow encodeRow_of_decodeRow80
+       (bytes.length / 80) bytes rows h
+-  · cases h
+ 
+ /-- Every legal byte-domain payload whose length is80*n is accepted. -/
+ theorem decodeRows_exists_of_length (bytes : List ℕ) (n : ℕ)
+@@ -278,7 +280,6 @@
+       (fun wire => ∀ column : Fin 10,
+         -(half64 : ℤ) ≤ wireColumns wire column ∧ wireColumns wire column < (half64 : ℤ))
+       decodeRow80_some_signed_range (bytes.length / 80) bytes rows h
+-  · cases h
+ 
+ end
+ end ImbalancedChen.P1HistoricalFifthSigned64PayloadCompleteness

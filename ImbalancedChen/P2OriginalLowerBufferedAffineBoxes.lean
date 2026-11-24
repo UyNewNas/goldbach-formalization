@@ -77,7 +77,7 @@ theorem wholeBoxInfimum_le_affine (constant : ℚ)
     exact Finset.sum_le_sum (fun i _ => lowerVertex_term_le slope box x hx i)
   unfold wholeBoxInfimum affineValue
   push_cast
-  exact add_le_add_left hsum _
+  exact add_le_add (le_refl (constant : ℝ)) hsum
 
 theorem buffered_infimum_below_affine (constant : ℚ)
     (slope : Fin 5 → ℚ) (box : RationalBox) (buffer : ℚ)

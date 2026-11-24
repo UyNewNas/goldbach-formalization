@@ -1,0 +1,269 @@
+--- a/ImbalancedChen/P4BSmoothMassParameterOrder.lean
++++ b/ImbalancedChen/P4BSmoothMassParameterOrder.lean
+@@ -32,7 +32,8 @@
+   intro bLo bHi hb
+   fin_cases i
+   · exact le_rfl
+-  · rw [physicalPairMargins_eq_original_of_ne_upper bHi T N t
++  · change physicalPairMargins bHi N T t 1 ≤ physicalPairMargins bLo N T t 1
++    rw [physicalPairMargins_eq_original_of_ne_upper bHi T N t
+       (by decide : (1 : Fin 4) ≠ 3),
+       physicalPairMargins_eq_original_of_ne_upper bLo T N t
+         (by decide : (1 : Fin 4) ≠ 3)]
+@@ -125,7 +126,7 @@
+   have hmassH : |normalizedSmoothPhysicalMass bHi kappa width N -
+       Real.log (1 / bHi)| < epsilon :=
+     hmassHi width hwidth hwHi N hNH hEven
+-  have hsand := normalizedSmoothPhysicalMass_endpoint_sandwich hN1 hwidth hbLo hbHi
++  have hsand := normalizedSmoothPhysicalMass_endpoint_sandwich (kappa := kappa) hN1 hwidth hbLo hbHi
+   have hbLoPos : 0 < bLo := by linarith only [hLoHalf]
+   have hbPos : 0 < b := hbLoPos.trans_le hbLo
+   have hcoeffLo := smoothMass_logCoefficient_le hbLoPos hbLo
+--- a/ImbalancedChen/P4AUpperTaggedContinuationAccounting.lean
++++ b/ImbalancedChen/P4AUpperTaggedContinuationAccounting.lean
+@@ -21,13 +21,13 @@
+ 
+ def positiveChangedMass (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (fun d =>
++  ∑ d ∈ («universe» N cap w z).filter (fun d =>
+     changed keep tag N cap w z tau d ∧ 0 ≤ (ArithmeticFunction.moebius d : ℝ)),
+     1 / (Nat.totient d : ℝ)
+ 
+ def negativeChangedMass (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (fun d =>
++  ∑ d ∈ («universe» N cap w z).filter (fun d =>
+     changed keep tag N cap w z tau d ∧ ¬0 ≤ (ArithmeticFunction.moebius d : ℝ)),
+     1 / (Nat.totient d : ℝ)
+ 
+@@ -50,7 +50,7 @@
+ theorem signAttachedValue_change
+     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau lo hi : ℝ) {d : ℕ}
+-    (hd : d ∈ universe N cap w z) :
++    (hd : d ∈ «universe» N cap w z) :
+     signAttachedValue (coefficient keep tag N cap w z tau d) lo hi -
+       signAttachedValue (raw keep N cap w z d) lo hi =
+         if changed keep tag N cap w z tau d then
+@@ -94,7 +94,7 @@
+           negativeChangedMass keep tag N cap w z tau := by
+   rw [show p4aReservePhysicalDensity keep N cap w z level =
+       physicalDensitySum (P4AUpperTaggedBetaAttachment.support N cap w z)
+-        (smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
++        (smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
+           (raw keep N cap w z) (actualSmallRosserMinus N cap w level)
+           (actualSmallRosserPlus N cap w level)) from
+     (P4AUpperTaggedBetaAttachment.raw_physical_density_on_universe keep N cap w z level).symm]
+@@ -180,8 +180,12 @@
+     eta * singularSeries N / Real.log (N : ℝ) at hb
+   rw [compiled_density_eq_full_plus_beta_and_changed_minus_correction keep tag
+     N cap _ _ tau _ hwz]
+-  have hb' : p4aReservePhysicalDensity keep N cap _ _ _ -
+-      actualSmallEulerProduct N cap _ * p4aReserveRawDensity keep N cap _ _ ≤
++  have hb' : p4aReservePhysicalDensity keep N cap
++      ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r))
++        ((N : ℝ) ^ (nu * epsilon)) -
++      actualSmallEulerProduct N cap ((N : ℝ) ^ (nu * epsilon ^ 2)) *
++        p4aReserveRawDensity keep N cap
++          ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r)) ≤
+     eta * (singularSeries N / Real.log (N : ℝ)) := by
+     simpa only [mul_div_assoc] using hb
+   linarith only [hb']
+--- a/ImbalancedChen/P4ACatalogFivePrimeIntegral.lean
++++ b/ImbalancedChen/P4ACatalogFivePrimeIntegral.lean
+@@ -87,9 +87,12 @@
+ 
+ /-- The actual four trim walls, in original coordinate order. -/
+ def trimForms : Fin 4 → Point →L[ℝ] ℝ :=
+-  ![-ContinuousLinearMap.proj 0, ContinuousLinearMap.proj 0,
+-    -(3:ℝ) • ContinuousLinearMap.proj 0 - ContinuousLinearMap.proj 1,
+-    -ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1]
++  ![-(ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ),
++    (ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ),
++    -(3:ℝ) • (ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ) -
++      (ContinuousLinearMap.proj 1 : Point →L[ℝ] ℝ),
++    -(ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ) +
++      (ContinuousLinearMap.proj 1 : Point →L[ℝ] ℝ)]
+ 
+ def trimBounds (delta : ℝ) : Fin 4 → ℝ :=
+   ![-(mu+delta),rho-delta,-(25/32+delta),-delta]
+@@ -98,7 +101,7 @@
+   fin_cases j <;> intro h
+   all_goals
+     have hv := congrArg (fun F : Point →L[ℝ] ℝ => F ![1,0]) h
+-    norm_num [trimForms] at hv
++    norm_num [trimForms,Matrix.cons_val_two,Matrix.cons_val_three] at hv
+ 
+ /-- Properness is proved from explicit rows, including at delta=0. -/
+ theorem ae_trim_no_wall (delta : ℝ) :
+@@ -112,7 +115,7 @@
+   have h1 := ht (1 : Fin 4)
+   have h2 := ht (2 : Fin 4)
+   have h3 := ht (3 : Fin 4)
+-  norm_num [trimForms,trimBounds] at h0 h1 h2 h3
++  norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] at h0 h1 h2 h3
+   change mu+delta ≤ t 0 ∧ t 0 ≤ rho-delta ∧
+     lowerBoundary (t 0)+delta ≤ t 1 ∧ t 1 ≤ t 0-delta
+   unfold lowerBoundary
+@@ -125,7 +128,7 @@
+   rcases ht with ⟨h0,h1,h2,h3⟩
+   unfold lowerBoundary at h2
+   intro j
+-  fin_cases j <;> norm_num [trimForms,trimBounds] <;> linarith
++  fin_cases j <;> norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] <;> linarith
+ 
+ /-- The actual topological trim boundary is null, including empty trims. -/
+ theorem volume_frontier_trimRegion (delta : ℝ) :
+@@ -143,7 +146,7 @@
+       fun j => lt_of_le_of_ne (trim_weak_gates delta t htr j) (ht j)
+     exact ((mem_frontier_iff_notMem_interior htr).mp hfront)
+       (interior_maximal (strictGates_subset_trim delta) hO hstrict)
+-  simpa only [ae_iff,not_not] using ha
++  simpa only [ae_iff,not_not,ofPred_mem_eq] using ha
+ 
+ theorem sourceRegion_eq_strictGates :
+     sourceRegion = primeAffineGateRegion trimForms (trimBounds 0) := by
+@@ -152,13 +155,13 @@
+   constructor
+   · rintro ⟨⟨h0,h1⟩,⟨h2,h3⟩⟩ j
+     unfold lowerBoundary at h2
+-    fin_cases j <;> norm_num [trimForms,trimBounds] <;> linarith
++    fin_cases j <;> norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] <;> linarith
+   · intro ht
+     have h0 := ht (0 : Fin 4)
+     have h1 := ht (1 : Fin 4)
+     have h2 := ht (2 : Fin 4)
+     have h3 := ht (3 : Fin 4)
+-    norm_num [trimForms,trimBounds] at h0 h1 h2 h3
++    norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] at h0 h1 h2 h3
+     unfold lowerBoundary
+     exact ⟨⟨by linarith,h1⟩,⟨by linarith,by linarith⟩⟩
+ 
+@@ -223,8 +226,8 @@
+   <;> ring
+ 
+ theorem integrableOn_safePhysical_source : IntegrableOn safePhysical sourceRegion :=
+-  ((continuous_safePhysical.continuousOn : ContinuousOn safePhysical closedCube).
+-    integrableOn_compact (show IsCompact closedCube from isCompact_Icc)).mono_set
++  ((continuous_safePhysical.continuousOn : ContinuousOn safePhysical closedCube).integrableOn_compact
++    (show IsCompact closedCube from isCompact_Icc)).mono_set
+       (sourceRegion_subset_cube.trans cube_subset_closedCube)
+ 
+ def trimIntegral (delta : ℝ) : ℝ := ∫ t in trimRegion delta, safePhysical t
+@@ -313,7 +316,9 @@
+     fin_cases i <;> rfl
+   calc
+     _ = ∫ p : ℝ × ℝ, F (E.symm p) := (hE.symm.integral_comp' F).symm
+-    _ = _ := by simpa only [hvec] using integral_prod _ hi
++    _ = _ := by
++      change (∫ p : ℝ × ℝ, F (E.symm p) ∂(volume.prod volume)) = _
++      simpa only [hvec] using integral_prod _ hi
+ 
+ private theorem integral_fixed_indicator (s : Set ℝ) (x : ℝ) (F : ℝ → ℝ → ℝ) :
+     (∫ y : ℝ, s.indicator (fun x => F x y) x) =
+@@ -382,8 +387,10 @@
+   let F : ℕ → Point → ℝ := fun n => (trimRegion (width n)).indicator safePhysical
+   let G : Point → ℝ := sourceRegion.indicator safePhysical
+   let bound : Point → ℝ := sourceRegion.indicator (fun t => |safePhysical t|)
++  have hAbs : IntegrableOn (fun t => |safePhysical t|) sourceRegion :=
++    integrableOn_safePhysical_source.abs
+   have hb : Integrable bound :=
+-    integrableOn_safePhysical_source.abs.integrable_indicator isOpen_sourceRegion.measurableSet
++    hAbs.integrable_indicator isOpen_sourceRegion.measurableSet
+   have hF (n : ℕ) : Integrable (F n) :=
+     (integrableOn_safePhysical_source.mono_set
+       (trimRegion_subset_sourceRegion (width_pos n))).integrable_indicator
+@@ -423,10 +430,12 @@
+   let F : ℕ → Point → ℝ := fun n =>
+     (discarded (width n)).indicator (fun t => |safePhysical t|)
+   let bound : Point → ℝ := sourceRegion.indicator (fun t => |safePhysical t|)
++  have hAbs : IntegrableOn (fun t => |safePhysical t|) sourceRegion :=
++    integrableOn_safePhysical_source.abs
+   have hb : Integrable bound :=
+-    integrableOn_safePhysical_source.abs.integrable_indicator isOpen_sourceRegion.measurableSet
++    hAbs.integrable_indicator isOpen_sourceRegion.measurableSet
+   have hF (n : ℕ) : Integrable (F n) :=
+-    (integrableOn_safePhysical_source.abs.mono_set
++    (hAbs.mono_set
+       (show discarded (width n) ⊆ sourceRegion from diff_subset)).integrable_indicator
+         (measurableSet_discarded _)
+   have hlim := tendsto_integral_of_dominated_convergence bound
+--- a/ImbalancedChen/P5OriginalPhaseBPhysicalBinding.lean
++++ b/ImbalancedChen/P5OriginalPhaseBPhysicalBinding.lean
+@@ -155,7 +155,7 @@
+   intro I hI
+   fin_cases I <;>
+     norm_num [oldMasks, oldMaskCode, oldSubsetSum, oldComparison,
+-      firstFailureH3LeftCodes, h3Cell00Vertex, VariableEnvelope.A,
++      firstFailureH3LeftCodes, h3Cell00Vertex, Matrix.cons_val_three, VariableEnvelope.A,
+       VariableEnvelope.C, P5OriginalAdoptedEighthPhysicalMasks.e] at *
+ /-- The occupied rho uses the very same corrected-parent/eighth policy;
+ its modulus is physical, squarefree, target-coprime and one-bounded. -/
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenKnotPayment.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenKnotPayment.lean
+@@ -151,7 +151,7 @@
+     _ ≤ _ := by rw [abs_neg,abs_mul,abs_of_nonneg hg0]; linarith
+ 
+ theorem actual_gap_separated_of_not_strip (p : Policy) (v : LogFour) (i : Fin 151)
+-    (delta : ℝ) (hoff : v∉knotStrip delta) : delta<|policyGap p i v| := by
++    (delta : ℝ) (hoff : v∉knotStrip delta) : delta < |policyGap p i v| := by
+   apply lt_of_not_ge
+   intro hnear
+   exact hoff (actual_gap_mem_knotStrip p v i delta hnear)
+@@ -179,7 +179,7 @@
+   have he' : TypedEligible ⟨j,hj⟩ v := by simpa only [eligible,dif_pos hj] using he
+   have hres := typedEligible_residual_gt_smallest ⟨j,hj⟩ v he'
+   have hw := (originalDomain_denominators_pos mask v hv).1
+-  have hr : v 3<residual j v := by simpa only [residual,dif_pos hj] using hres
++  have hr : v 3<residual j v := by simpa only [U1011OriginalSixteenPolicyBank.residual,dif_pos hj] using hres
+   have hp : 0<residual j v := hw.trans hr
+   have ha : (417/5000:ℝ)≤v 3 := hv.1
+   have hval := hF ⟨j,hj⟩ v
+@@ -216,7 +216,7 @@
+       constructor <;> dsimp [ordinaryBound] at * <;> linarith
+     · rw [indicator_of_notMem hs]
+       have hr : residual j v=typedResidual ⟨j,hj16⟩ v := by
+-        simp only [residual,dif_pos hj16]
++        simp only [U1011OriginalSixteenPolicyBank.residual,dif_pos hj16]
+       simp only [ordinaryKernel,profileOrdinary,dif_pos hj16,hr,
+         hagree ⟨j,hj16⟩ v hs,sub_self,abs_zero,le_refl]
+ 
+@@ -267,7 +267,7 @@
+   refine ⟨delta,hd,N0,hN0,?_⟩
+   intro N hN d hd0 hsmall F switched mask keep hF hagree hkeep
+   have hmass := hpay N hN keep d hd0 hsmall
+-  have hmass0 : 0≤maskedStripMass N keep d := by
++  have hmass0 : 0 ≤ maskedStripMass N keep d := by
+     apply Finset.sum_nonneg
+     intro p hp
+     exact actualPrimeBoxWeight_nonneg (Finset.mem_filter.mp hp).1
+--- a/ImbalancedChen/P4ASameRhoCompact.lean
++++ b/ImbalancedChen/P4ASameRhoCompact.lean
+@@ -224,6 +224,7 @@
+   have hsum := hbase.add hcorr
+   apply hsum.congr'
+   filter_upwards [] with N
++  symm
+   change fullDensity e h m N * Real.log (N : ℝ) / singularSeries N =
+     baselineDensity e m N * Real.log (N : ℝ) / singularSeries N +
+       (fullDensity e h m N - baselineDensity e m N) * Real.log (N : ℝ) / singularSeries N
+--- a/ImbalancedChen/P4BPrimeEulerOperatorWords.lean
++++ b/ImbalancedChen/P4BPrimeEulerOperatorWords.lean
+@@ -17,6 +17,7 @@
+ namespace ImbalancedChen.P4B
+ 
+ noncomputable section
++open scoped ContDiff
+ 
+ /-- The i-th coordinate vector in the original sup-norm plane. -/
+ def primeEulerCoordinateUnit (i : Fin 2) : Fin 2 → ℝ :=
+@@ -97,6 +98,8 @@
+     primeEulerOperator i F (primeEulerChart p z) =
+       fderiv ℝ (fun y => F (primeEulerChart p y)) z (primeEulerCoordinateUnit i) := by
+   have hchain := hF.hasFDerivAt.comp z (hasFDerivAt_primeEulerChart p z)
++  change primeEulerOperator i F (primeEulerChart p z) =
++    fderiv ℝ (F ∘ primeEulerChart p) z (primeEulerCoordinateUnit i)
+   rw [hchain.fderiv, ContinuousLinearMap.comp_apply, primeEulerChartJacobian_coordinate]
+   rfl
+ 

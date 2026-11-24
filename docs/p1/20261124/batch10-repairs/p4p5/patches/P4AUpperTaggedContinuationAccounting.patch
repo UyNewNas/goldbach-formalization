@@ -1,0 +1,51 @@
+--- a/ImbalancedChen/P4AUpperTaggedContinuationAccounting.lean
++++ b/ImbalancedChen/P4AUpperTaggedContinuationAccounting.lean
+@@ -21,13 +21,13 @@
+ 
+ def positiveChangedMass (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (fun d =>
++  ∑ d ∈ («universe» N cap w z).filter (fun d =>
+     changed keep tag N cap w z tau d ∧ 0 ≤ (ArithmeticFunction.moebius d : ℝ)),
+     1 / (Nat.totient d : ℝ)
+ 
+ def negativeChangedMass (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau : ℝ) : ℝ :=
+-  ∑ d ∈ (universe N cap w z).filter (fun d =>
++  ∑ d ∈ («universe» N cap w z).filter (fun d =>
+     changed keep tag N cap w z tau d ∧ ¬0 ≤ (ArithmeticFunction.moebius d : ℝ)),
+     1 / (Nat.totient d : ℝ)
+ 
+@@ -50,7 +50,7 @@
+ theorem signAttachedValue_change
+     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
+     (N cap : ℕ) (w z tau lo hi : ℝ) {d : ℕ}
+-    (hd : d ∈ universe N cap w z) :
++    (hd : d ∈ «universe» N cap w z) :
+     signAttachedValue (coefficient keep tag N cap w z tau d) lo hi -
+       signAttachedValue (raw keep N cap w z d) lo hi =
+         if changed keep tag N cap w z tau d then
+@@ -94,7 +94,7 @@
+           negativeChangedMass keep tag N cap w z tau := by
+   rw [show p4aReservePhysicalDensity keep N cap w z level =
+       physicalDensitySum (P4AUpperTaggedBetaAttachment.support N cap w z)
+-        (smallRoughRho (actualSmallRosserSupport N cap w) (universe N cap w z)
++        (smallRoughRho (actualSmallRosserSupport N cap w) («universe» N cap w z)
+           (raw keep N cap w z) (actualSmallRosserMinus N cap w level)
+           (actualSmallRosserPlus N cap w level)) from
+     (P4AUpperTaggedBetaAttachment.raw_physical_density_on_universe keep N cap w z level).symm]
+@@ -180,8 +180,12 @@
+     eta * singularSeries N / Real.log (N : ℝ) at hb
+   rw [compiled_density_eq_full_plus_beta_and_changed_minus_correction keep tag
+     N cap _ _ tau _ hwz]
+-  have hb' : p4aReservePhysicalDensity keep N cap _ _ _ -
+-      actualSmallEulerProduct N cap _ * p4aReserveRawDensity keep N cap _ _ ≤
++  have hb' : p4aReservePhysicalDensity keep N cap
++      ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r))
++        ((N : ℝ) ^ (nu * epsilon)) -
++      actualSmallEulerProduct N cap ((N : ℝ) ^ (nu * epsilon ^ 2)) *
++        p4aReserveRawDensity keep N cap
++          ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r)) ≤
+     eta * (singularSeries N / Real.log (N : ℝ)) := by
+     simpa only [mul_div_assoc] using hb
+   linarith only [hb']

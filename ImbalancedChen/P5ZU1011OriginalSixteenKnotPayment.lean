@@ -151,7 +151,7 @@ theorem policyGap_abs_sub_le (p : Policy) (i : Fin 151) (v w : LogFour) :
     _ ≤ _ := by rw [abs_neg,abs_mul,abs_of_nonneg hg0]; linarith
 
 theorem actual_gap_separated_of_not_strip (p : Policy) (v : LogFour) (i : Fin 151)
-    (delta : ℝ) (hoff : v∉knotStrip delta) : delta<|policyGap p i v| := by
+    (delta : ℝ) (hoff : v∉knotStrip delta) : delta < |policyGap p i v| := by
   apply lt_of_not_ge
   intro hnear
   exact hoff (actual_gap_mem_knotStrip p v i delta hnear)
@@ -179,7 +179,7 @@ theorem profileOrdinary_bounds (F : Policy→LogFour→ℝ)
   have he' : TypedEligible ⟨j,hj⟩ v := by simpa only [eligible,dif_pos hj] using he
   have hres := typedEligible_residual_gt_smallest ⟨j,hj⟩ v he'
   have hw := (originalDomain_denominators_pos mask v hv).1
-  have hr : v 3<residual j v := by simpa only [residual,dif_pos hj] using hres
+  have hr : v 3<residual j v := by simpa only [U1011OriginalSixteenPolicyBank.residual,dif_pos hj] using hres
   have hp : 0<residual j v := hw.trans hr
   have ha : (417/5000:ℝ)≤v 3 := hv.1
   have hval := hF ⟨j,hj⟩ v
@@ -216,7 +216,7 @@ theorem envelope_strip_error (F : Policy→LogFour→ℝ)
       constructor <;> dsimp [ordinaryBound] at * <;> linarith
     · rw [indicator_of_notMem hs]
       have hr : residual j v=typedResidual ⟨j,hj16⟩ v := by
-        simp only [residual,dif_pos hj16]
+        simp only [U1011OriginalSixteenPolicyBank.residual,dif_pos hj16]
       simp only [ordinaryKernel,profileOrdinary,dif_pos hj16,hr,
         hagree ⟨j,hj16⟩ v hs,sub_self,abs_zero,le_refl]
 
@@ -267,7 +267,7 @@ theorem exists_uniform_masked_replacement_reserve (epsilon : ℝ) (he : 0<epsilo
   refine ⟨delta,hd,N0,hN0,?_⟩
   intro N hN d hd0 hsmall F switched mask keep hF hagree hkeep
   have hmass := hpay N hN keep d hd0 hsmall
-  have hmass0 : 0≤maskedStripMass N keep d := by
+  have hmass0 : 0 ≤ maskedStripMass N keep d := by
     apply Finset.sum_nonneg
     intro p hp
     exact actualPrimeBoxWeight_nonneg (Finset.mem_filter.mp hp).1

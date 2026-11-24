@@ -1,0 +1,259 @@
+--- a/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.lean
++++ b/ImbalancedChen/P1OriginalFourthZeroCutoffLimit.lean
+@@ -209,8 +209,8 @@
+         congr 1
+         ring
+       _ ≤ |(S - R - I) + R| + |I - L| := abs_add_le _ _
+-      _ ≤ |S - R - I| + |R| + |I - L| :=
+-        add_le_add_right (abs_add_le (S - R - I) R) |I - L|
++      _ ≤ |S - R - I| + |R| + |I - L| := by
++        linarith only [abs_add_le (S - R - I) R]
+   change |normalizedActualSaving e chi m omega J4 cap4 N (cap N) -
+       P1OriginalFourthLimit.smallRemainder e chi m omega a J4 cap4 N (cap N) -
+       selectedIntegral e chi m omega a J4 cap4| < epsilon / 3 at hposN
+--- a/ImbalancedChen/P1ActualVariableFifthProfiles.lean
++++ b/ImbalancedChen/P1ActualVariableFifthProfiles.lean
+@@ -138,7 +138,7 @@
+     apply finiteMax_le _ _ _ _ _ hseedhi
+     intro r _hr _he
+     rw [r.bufferedCandidate_eq]
+-    exact (sub_le_sub_right (v_le_cap _) _).trans (le_max_right _ _)
++    exact (sub_le_sub_right (VariableEnvelope.v_le_cap _) _).trans (le_max_right _ _)
+ 
+ theorem actualNext5_mem_interval
+     (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m)
+@@ -152,7 +152,7 @@
+   · apply finiteMax_le _ _ _ _ _ hold.2
+     intro r _hr _he
+     rw [candidate, envelope_eq_v]
+-    exact (sub_le_sub_right (v_le_cap _) _).trans (le_max_right _ _)
++    exact (sub_le_sub_right (VariableEnvelope.v_le_cap _) _).trans (le_max_right _ _)
+ 
+ def literalTupleCharge (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
+     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
+--- a/ImbalancedChen/P1HistoricalFifthSigned64PayloadCompleteness.lean
++++ b/ImbalancedChen/P1HistoricalFifthSigned64PayloadCompleteness.lean
+@@ -87,7 +87,7 @@
+   | zero =>
+       by_cases hb : bytes = []
+       · subst bytes
+-        simp only [decodeChunks, if_pos rfl, Option.some.injEq] at h
++        simp only [decodeChunks, if_true, Option.some.injEq] at h
+         subst values
+         rfl
+       · simp only [decodeChunks, if_neg hb] at h
+@@ -114,7 +114,10 @@
+     (hb : ∀ b ∈ bytes, b < 256) : ∃ values, decodeChunks size decode n bytes = some values := by
+   induction n generalizing bytes with
+   | zero =>
+-      have hnil : bytes = [] := List.length_eq_zero.mp (by simpa using hlen)
++      have hnil : bytes = [] := by
++        cases bytes with
++        | nil => rfl
++        | cons b tail => simp at hlen
+       subst bytes
+       exact ⟨[], by simp [decodeChunks]⟩
+   | succ n ih =>
+@@ -147,7 +150,7 @@
+   | zero =>
+       by_cases hb : bytes = []
+       · subst bytes
+-        simp only [decodeChunks, if_pos rfl, Option.some.injEq] at h
++        simp only [decodeChunks, if_true, Option.some.injEq] at h
+         subst values
+         simp
+       · simp only [decodeChunks, if_neg hb] at h
+@@ -183,7 +186,7 @@
+   | none => simp only [hf, Option.map_none] at h; cases h
+   | some fields =>
+       have heq : wireOfColumns (listColumns fields) = wire := by
+-        simpa only [hf, Option.map_some] using h
++        simpa only [hf, Option.map_some, Option.some.injEq] using h
+       have hlen := (decodeChunks_some_lengths 8 decodeWord8 decodeWord8_some_length 10 bytes fields hf).1
+       rw [← heq]
+       unfold encodeRow
+@@ -206,7 +209,7 @@
+   cases hf : decodeFields 10 bytes with
+   | none => simp only [hf, Option.map_none] at h; cases h
+   | some fields =>
+-      have heq : wireOfColumns (listColumns fields) = wire := by simpa only [hf, Option.map_some] using h
++      have heq : wireOfColumns (listColumns fields) = wire := by simpa only [hf, Option.map_some, Option.some.injEq] using h
+       have hfields := decodeChunks_some_values 8 decodeWord8
+         (fun z => -(half64 : ℤ) ≤ z ∧ z < (half64 : ℤ)) decodeWord8_some_range 10 bytes fields hf
+       have hget : ∀ (values : List ℤ),
+@@ -233,7 +236,6 @@
+   split_ifs at h with hmod
+   · exact encodeChunks_of_decodeChunks 80 decodeRow80 encodeRow encodeRow_of_decodeRow80
+       (bytes.length / 80) bytes rows h
+-  · cases h
+ 
+ /-- Every legal byte-domain payload whose length is80*n is accepted. -/
+ theorem decodeRows_exists_of_length (bytes : List ℕ) (n : ℕ)
+@@ -278,7 +280,6 @@
+       (fun wire => ∀ column : Fin 10,
+         -(half64 : ℤ) ≤ wireColumns wire column ∧ wireColumns wire column < (half64 : ℤ))
+       decodeRow80_some_signed_range (bytes.length / 80) bytes rows h
+-  · cases h
+ 
+ end
+ end ImbalancedChen.P1HistoricalFifthSigned64PayloadCompleteness
+--- a/ImbalancedChen/P1OriginalVariableFourthFullSourceActivation.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthFullSourceActivation.lean
+@@ -60,7 +60,10 @@
+ theorem active_history3_iff (N : ℕ) (hN : 1 < N) (omega : ℝ) (p : Fin 4 → ℕ)
+     (hp : ∀ i, 0 < p i) :
+     active omega (N : ℝ) (history3 p) ↔ omega ≤ actualPrimeTupleLog N p 2 := by
+-  simpa only [history3, prefix3, historicalPrefixProject, actualPrimeTupleLog] using
++  have hidx : Fin.castLE (by omega : 3 ≤ 4) (2 : Fin 3) = (2 : Fin 4) := by
++    apply Fin.ext
++    rfl
++  simpa only [history3, prefix3, historicalPrefixProject, actualPrimeTupleLog, hidx] using
+     HistoricalThirdCoarse.P1ActualTuple.active_iff_log hN omega (prefix3 p)
+       (fun i => hp ⟨i.val, by omega⟩)
+ 
+@@ -154,9 +157,15 @@
+   have hb : l.2 = r.2 := by
+     have hal := hl.2
+     have har := hr.2
+-    cases hleft : l.2 <;> cases hright : r.2 <;>
+-      simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
+-        if_false, if_true] at hal har ⊢ <;> try rfl <;> linarith
++    cases hleft : l.2 <;> cases hright : r.2
++    · rfl
++    · simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
++        if_false, if_true] at hal har
++      exact (not_lt_of_ge har hal).elim
++    · simp only [activationRegion, mem_setOf_eq, hleft, hright, Bool.false_eq_true,
++        if_false, if_true] at hal har
++      exact (not_lt_of_ge hal har).elim
++    · rfl
+   exact Prod.ext hj hb
+ 
+ theorem measurableSet_meshBranch (m : ℕ) (omega : ℝ) (label : Label m) :
+@@ -292,7 +301,7 @@
+   rw [hs] at hold
+   have hnew : producerLevel4 e chi m omega (N : ℝ) rows licensed (tupleHistory p) =
+       (N : ℝ) ^ producerProfile4 e rows licensed (branchSeed e chi m label) (actualPrimeTupleLog N p) := by
+-    simp only [producerLevel4, level4, exponent4, show (tupleHistory p).length = 4 by simp [tupleHistory],
++    simp only [producerLevel4, P1OriginalVariableFourthContinuation.level4, exponent4, show (tupleHistory p).length = 4 by simp [tupleHistory],
+       if_pos, hs, tupleHistory_log, producerProfile4]
+   unfold literalTupleResidualDifference fourthTuplePlusResidualP1
+   rw [hold, hnew]
+@@ -324,7 +333,7 @@
+         intro hother
+         exact hne (meshBranch_unique m omega hother.1 ht.1)), mul_zero]
+     · simp
+-  · rw [if_neg (mt hiff.mp hs)]
++  · rw [if_neg (mt hiff.mp hs), mul_zero]
+     symm
+     apply Finset.sum_eq_zero
+     intro label _hl
+--- a/ImbalancedChen/P1OriginalVariableFourthSmallRemainder.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthSmallRemainder.lean
+@@ -149,14 +149,25 @@
+         (Finset.mem_filter.mp hp).1).2.2 (Fin.last 3)
+       have hu := last_coordinate_pays_unit e chi m omega a N cap hN1 hEven j p hp
+       have hpay : E ≤ actualPrimeTupleLog N p (Fin.last 3) := by
+-        have hleft := mul_le_mul_of_nonneg_left hu hE
+-        have hright := mul_le_mul_of_nonneg_right hExp ht0.le
+-        dsimp [E] at hleft ⊢
+-        nlinarith only [hleft, hright]
++        calc
++          E = E * 1 := (mul_one E).symm
++          _ ≤ E * ((Real.log (N : ℝ) / Real.log 3) *
++              actualPrimeTupleLog N p (Fin.last 3)) :=
++            mul_le_mul_of_nonneg_left hu hE
++          _ = (E * (Real.log (N : ℝ) / Real.log 3)) *
++              actualPrimeTupleLog N p (Fin.last 3) := (mul_assoc _ _ _).symm
++          _ ≤ 1 * actualPrimeTupleLog N p (Fin.last 3) :=
++            mul_le_mul_of_nonneg_right hExp ht0.le
++          _ = _ := one_mul _
+       have hb := hpoint e chi m omega a homega ha haomega J4 j hj rows licensed
+         N cap hN hEven p hp L hL hbudget hlog
+-      dsimp [A]
+-      linarith
++      calc
++        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) + E := hb
++        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +
++            actualPrimeTupleLog N p (Fin.last 3) := by linarith only [hpay]
++        _ = A * actualPrimeTupleLog N p (Fin.last 3) := by
++          dsimp only [A]
++          ring
+     have hsum : |smallCellSource e chi m omega a j rows licensed N cap| ≤
+         A * ∑ p ∈ smallCellTuples e chi m omega a N cap j,
+           (∏ i, 1 / ((p i : ℝ) - 1)) * actualPrimeTupleLog N p (Fin.last 3) := by
+@@ -238,9 +249,10 @@
+   have hraw := hsource e chi m omega a homega ha haomega J4 rows licensed
+     N cap hN hEven (3 * Real.log (Real.log (N : ℝ))) hL hpower hlog hscale hexp
+   have hterm : 4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) ≤ T * a := by
+-    dsimp [T]
++    dsimp only [T]
+     have hm := mul_le_mul_of_nonneg_left hinv (show 0 ≤ 6 * K by linarith)
+-    nlinarith
++    simp only [div_eq_mul_inv] at hm ⊢
++    nlinarith only [hm]
+   have hterm0 : 0 ≤ 4 * a + 6 * K *
+       (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
+     have hlogN : 0 < Real.log (N : ℝ) :=
+--- a/ImbalancedChen/P5OriginalCommonRefinedPreservation.lean
++++ b/ImbalancedChen/P5OriginalCommonRefinedPreservation.lean
+@@ -90,8 +90,9 @@
+     (pre : List ℕ) : lambda3 d N (rosserAncestor k pre) = lambda3 d N pre := by
+   have h3 := rosserAncestor_nested 3 k hk pre
+   have h2 := rosserAncestor_nested 2 k (by omega) pre
+-  simp [lambda3, fallbackSeed, originalSeed,
+-    P1OriginalVariableFourthContinuation.seedExponent, thirdGuard, secondGuard, h3, h2]
++  simp only [lambda3, fallbackSeed, originalSeed,
++    P1OriginalVariableFourthContinuation.seedExponent, thirdGuard, secondGuard, h3, h2] <;>
++    split_ifs <;> rfl
+ 
+ theorem common3_through_two (d : OriginalData) (N : ℝ) (positive : Bool)
+     (pre : List ℕ) (hlen : pre.length ≤ 2) : common3 d N positive pre = old3 d N positive pre := by
+@@ -174,11 +175,11 @@
+               d.rows4 d.licensed4 d.J5 d.rows5 (rosserAncestor 5 pre)) pre := by
+           simpa [P1OriginalVariableFifthContinuation.policy5, fifthCappedUpperPolicy,
+             firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy, ancestorFrozenPolicy,
+-            ordinaryParityRosserPolicy, oddFirstExitPolicy, P1OriginalVariableFifthContinuation.level5] using hp
++            ordinaryParityRosserPolicy, oddFirstExitPolicy, P1OriginalVariableFifthContinuation.level5, decide_eq_true_eq] using hp
+         have hn := ordinaryRosserPrefixAdmissible_mono false pre
+           (Real.rpow_le_rpow_of_exponent_le hN (original_exponent5_le_common d N _)) ho
+         simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
+-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5] using hn
++          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hn
+ 
+ /-- Corrected second/third actions are also retained on their actual
+ histories; their level is bounded by the SAME common fifth ancestor. -/
+@@ -200,7 +201,7 @@
+         have hn := ordinaryRosserPrefixAdmissible_mono false pre
+           (Real.rpow_le_rpow_of_exponent_le hN he) ho
+         simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
+-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5] using hn
++          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hn
+ 
+ /-- The actual eleven-family maximum inherits the TRUE fifth cap. -/
+ theorem fifth_approval_preserved_by_sixth
+@@ -215,13 +216,13 @@
+         have ho : ordinaryRosserPrefixAdmissible false
+             (N ^ exponent5 d N (rosserAncestor 5 pre)) pre := by
+           simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
+-            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5] using hp
++            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hp
+         have he := actualParent5_le_lambda6 d N (rosserAncestor 6 pre)
+         rw [actualParent5_ancestor_six d N pre] at he
+         have hn := ordinaryRosserPrefixAdmissible_mono false pre
+           (Real.rpow_le_rpow_of_exponent_le hN he) ho
+         simpa [policy6, firstExitDepthSplicePolicy, h6, frozenParityRosserPolicy,
+-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6] using hn
++          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6, decide_eq_true_eq] using hn
+ 
+ /-- The adopted eighth guard either raises its current sixth cap or
+ inherits that exact cap. It cannot erase an earlier accepted history. -/
+@@ -237,7 +238,7 @@
+         have ho : ordinaryRosserPrefixAdmissible false
+             (N ^ lambda6 d N (rosserAncestor 6 pre)) pre := by
+           simpa [policy6, firstExitDepthSplicePolicy, h6, frozenParityRosserPolicy,
+-            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6] using hp
++            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6, decide_eq_true_eq] using hp
+         have he := P5OriginalAdoptedEighthPhysicalMasks.actual_sixth_le_raised N
+           (lambda3 d N) (lambda6 d N) (rosserAncestor 8 pre)
+         rw [rosserAncestor_nested 6 8 (by decide)] at he

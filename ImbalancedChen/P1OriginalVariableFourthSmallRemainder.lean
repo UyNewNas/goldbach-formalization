@@ -149,14 +149,25 @@ theorem exists_selectedSmallSource_abs_le_with_budgets :
         (Finset.mem_filter.mp hp).1).2.2 (Fin.last 3)
       have hu := last_coordinate_pays_unit e chi m omega a N cap hN1 hEven j p hp
       have hpay : E ≤ actualPrimeTupleLog N p (Fin.last 3) := by
-        have hleft := mul_le_mul_of_nonneg_left hu hE
-        have hright := mul_le_mul_of_nonneg_right hExp ht0.le
-        dsimp [E] at hleft ⊢
-        nlinarith only [hleft, hright]
+        calc
+          E = E * 1 := (mul_one E).symm
+          _ ≤ E * ((Real.log (N : ℝ) / Real.log 3) *
+              actualPrimeTupleLog N p (Fin.last 3)) :=
+            mul_le_mul_of_nonneg_left hu hE
+          _ = (E * (Real.log (N : ℝ) / Real.log 3)) *
+              actualPrimeTupleLog N p (Fin.last 3) := (mul_assoc _ _ _).symm
+          _ ≤ 1 * actualPrimeTupleLog N p (Fin.last 3) :=
+            mul_le_mul_of_nonneg_right hExp ht0.le
+          _ = _ := one_mul _
       have hb := hpoint e chi m omega a homega ha haomega J4 j hj rows licensed
         N cap hN hEven p hp L hL hbudget hlog
-      dsimp [A]
-      linarith
+      calc
+        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) + E := hb
+        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +
+            actualPrimeTupleLog N p (Fin.last 3) := by linarith only [hpay]
+        _ = A * actualPrimeTupleLog N p (Fin.last 3) := by
+          dsimp only [A]
+          ring
     have hsum : |smallCellSource e chi m omega a j rows licensed N cap| ≤
         A * ∑ p ∈ smallCellTuples e chi m omega a N cap j,
           (∏ i, 1 / ((p i : ℝ) - 1)) * actualPrimeTupleLog N p (Fin.last 3) := by
@@ -238,9 +249,10 @@ theorem exists_eventually_selectedSmallSource_abs_le_linear
   have hraw := hsource e chi m omega a homega ha haomega J4 rows licensed
     N cap hN hEven (3 * Real.log (Real.log (N : ℝ))) hL hpower hlog hscale hexp
   have hterm : 4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) ≤ T * a := by
-    dsimp [T]
+    dsimp only [T]
     have hm := mul_le_mul_of_nonneg_left hinv (show 0 ≤ 6 * K by linarith)
-    nlinarith
+    simp only [div_eq_mul_inv] at hm ⊢
+    nlinarith only [hm]
   have hterm0 : 0 ≤ 4 * a + 6 * K *
       (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
     have hlogN : 0 < Real.log (N : ℝ) :=

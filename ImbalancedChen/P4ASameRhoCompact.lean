@@ -224,6 +224,7 @@ theorem tendsto_full_density {e h : ℝ} {m : ℕ}
   have hsum := hbase.add hcorr
   apply hsum.congr'
   filter_upwards [] with N
+  symm
   change fullDensity e h m N * Real.log (N : ℝ) / singularSeries N =
     baselineDensity e m N * Real.log (N : ℝ) / singularSeries N +
       (fullDensity e h m N - baselineDensity e m N) * Real.log (N : ℝ) / singularSeries N

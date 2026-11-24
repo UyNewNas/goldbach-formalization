@@ -1,0 +1,119 @@
+--- a/ImbalancedChen/P4ACatalogFivePrimeIntegral.lean
++++ b/ImbalancedChen/P4ACatalogFivePrimeIntegral.lean
+@@ -87,9 +87,12 @@
+ 
+ /-- The actual four trim walls, in original coordinate order. -/
+ def trimForms : Fin 4 → Point →L[ℝ] ℝ :=
+-  ![-ContinuousLinearMap.proj 0, ContinuousLinearMap.proj 0,
+-    -(3:ℝ) • ContinuousLinearMap.proj 0 - ContinuousLinearMap.proj 1,
+-    -ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1]
++  ![-(ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ),
++    (ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ),
++    -(3:ℝ) • (ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ) -
++      (ContinuousLinearMap.proj 1 : Point →L[ℝ] ℝ),
++    -(ContinuousLinearMap.proj 0 : Point →L[ℝ] ℝ) +
++      (ContinuousLinearMap.proj 1 : Point →L[ℝ] ℝ)]
+ 
+ def trimBounds (delta : ℝ) : Fin 4 → ℝ :=
+   ![-(mu+delta),rho-delta,-(25/32+delta),-delta]
+@@ -98,7 +101,7 @@
+   fin_cases j <;> intro h
+   all_goals
+     have hv := congrArg (fun F : Point →L[ℝ] ℝ => F ![1,0]) h
+-    norm_num [trimForms] at hv
++    norm_num [trimForms,Matrix.cons_val_two,Matrix.cons_val_three] at hv
+ 
+ /-- Properness is proved from explicit rows, including at delta=0. -/
+ theorem ae_trim_no_wall (delta : ℝ) :
+@@ -112,7 +115,7 @@
+   have h1 := ht (1 : Fin 4)
+   have h2 := ht (2 : Fin 4)
+   have h3 := ht (3 : Fin 4)
+-  norm_num [trimForms,trimBounds] at h0 h1 h2 h3
++  norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] at h0 h1 h2 h3
+   change mu+delta ≤ t 0 ∧ t 0 ≤ rho-delta ∧
+     lowerBoundary (t 0)+delta ≤ t 1 ∧ t 1 ≤ t 0-delta
+   unfold lowerBoundary
+@@ -125,7 +128,7 @@
+   rcases ht with ⟨h0,h1,h2,h3⟩
+   unfold lowerBoundary at h2
+   intro j
+-  fin_cases j <;> norm_num [trimForms,trimBounds] <;> linarith
++  fin_cases j <;> norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] <;> linarith
+ 
+ /-- The actual topological trim boundary is null, including empty trims. -/
+ theorem volume_frontier_trimRegion (delta : ℝ) :
+@@ -143,7 +146,7 @@
+       fun j => lt_of_le_of_ne (trim_weak_gates delta t htr j) (ht j)
+     exact ((mem_frontier_iff_notMem_interior htr).mp hfront)
+       (interior_maximal (strictGates_subset_trim delta) hO hstrict)
+-  simpa only [ae_iff,not_not] using ha
++  simpa only [ae_iff,not_not,ofPred_mem_eq] using ha
+ 
+ theorem sourceRegion_eq_strictGates :
+     sourceRegion = primeAffineGateRegion trimForms (trimBounds 0) := by
+@@ -152,13 +155,13 @@
+   constructor
+   · rintro ⟨⟨h0,h1⟩,⟨h2,h3⟩⟩ j
+     unfold lowerBoundary at h2
+-    fin_cases j <;> norm_num [trimForms,trimBounds] <;> linarith
++    fin_cases j <;> norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] <;> linarith
+   · intro ht
+     have h0 := ht (0 : Fin 4)
+     have h1 := ht (1 : Fin 4)
+     have h2 := ht (2 : Fin 4)
+     have h3 := ht (3 : Fin 4)
+-    norm_num [trimForms,trimBounds] at h0 h1 h2 h3
++    norm_num [trimForms,trimBounds,Matrix.cons_val_two,Matrix.cons_val_three] at h0 h1 h2 h3
+     unfold lowerBoundary
+     exact ⟨⟨by linarith,h1⟩,⟨by linarith,by linarith⟩⟩
+ 
+@@ -223,8 +226,8 @@
+   <;> ring
+ 
+ theorem integrableOn_safePhysical_source : IntegrableOn safePhysical sourceRegion :=
+-  ((continuous_safePhysical.continuousOn : ContinuousOn safePhysical closedCube).
+-    integrableOn_compact (show IsCompact closedCube from isCompact_Icc)).mono_set
++  ((continuous_safePhysical.continuousOn : ContinuousOn safePhysical closedCube).integrableOn_compact
++    (show IsCompact closedCube from isCompact_Icc)).mono_set
+       (sourceRegion_subset_cube.trans cube_subset_closedCube)
+ 
+ def trimIntegral (delta : ℝ) : ℝ := ∫ t in trimRegion delta, safePhysical t
+@@ -313,7 +316,9 @@
+     fin_cases i <;> rfl
+   calc
+     _ = ∫ p : ℝ × ℝ, F (E.symm p) := (hE.symm.integral_comp' F).symm
+-    _ = _ := by simpa only [hvec] using integral_prod _ hi
++    _ = _ := by
++      change (∫ p : ℝ × ℝ, F (E.symm p) ∂(volume.prod volume)) = _
++      simpa only [hvec] using integral_prod _ hi
+ 
+ private theorem integral_fixed_indicator (s : Set ℝ) (x : ℝ) (F : ℝ → ℝ → ℝ) :
+     (∫ y : ℝ, s.indicator (fun x => F x y) x) =
+@@ -382,8 +387,10 @@
+   let F : ℕ → Point → ℝ := fun n => (trimRegion (width n)).indicator safePhysical
+   let G : Point → ℝ := sourceRegion.indicator safePhysical
+   let bound : Point → ℝ := sourceRegion.indicator (fun t => |safePhysical t|)
++  have hAbs : IntegrableOn (fun t => |safePhysical t|) sourceRegion :=
++    integrableOn_safePhysical_source.abs
+   have hb : Integrable bound :=
+-    integrableOn_safePhysical_source.abs.integrable_indicator isOpen_sourceRegion.measurableSet
++    hAbs.integrable_indicator isOpen_sourceRegion.measurableSet
+   have hF (n : ℕ) : Integrable (F n) :=
+     (integrableOn_safePhysical_source.mono_set
+       (trimRegion_subset_sourceRegion (width_pos n))).integrable_indicator
+@@ -423,10 +430,12 @@
+   let F : ℕ → Point → ℝ := fun n =>
+     (discarded (width n)).indicator (fun t => |safePhysical t|)
+   let bound : Point → ℝ := sourceRegion.indicator (fun t => |safePhysical t|)
++  have hAbs : IntegrableOn (fun t => |safePhysical t|) sourceRegion :=
++    integrableOn_safePhysical_source.abs
+   have hb : Integrable bound :=
+-    integrableOn_safePhysical_source.abs.integrable_indicator isOpen_sourceRegion.measurableSet
++    hAbs.integrable_indicator isOpen_sourceRegion.measurableSet
+   have hF (n : ℕ) : Integrable (F n) :=
+-    (integrableOn_safePhysical_source.abs.mono_set
++    (hAbs.mono_set
+       (show discarded (width n) ⊆ sourceRegion from diff_subset)).integrable_indicator
+         (measurableSet_discarded _)
+   have hlim := tendsto_integral_of_dominated_convergence bound

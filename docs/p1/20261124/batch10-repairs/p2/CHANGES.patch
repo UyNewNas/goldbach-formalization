@@ -1,0 +1,172 @@
+--- a/ImbalancedChen/P2OriginalInitialClosedTree.lean
++++ b/ImbalancedChen/P2OriginalInitialClosedTree.lean
+@@ -90,6 +90,7 @@
+ theorem normalized_initial_boxes :
+     (integerLeafBoxes initialTree initialLower initialUpper).map normalizeRoot =
+       initialSeeds := by
++  have hlast (z : ℤ) : (![z,z,z] : Fin 3 → ℤ) 2 = z := rfl
+   rw [initialSeeds_eq_records]
+   simp only [initialTree,xyTree,integerLeafBoxes,List.map_append,
+     List.map_cons,List.map_nil,List.cons_append,List.nil_append,
+@@ -100,7 +101,7 @@
+     fin_cases i <;>
+       norm_num [leftIntegerUpper,rightIntegerLower,initialLower,initialUpper,
+         orderedIntegerLower,H,P4AOriginalInitialSeedInventorySourceOnly.M,
+-        P4AOriginalInitialSeedInventorySourceOnly.R,Function.update,Fin.ext_iff]
++        P4AOriginalInitialSeedInventorySourceOnly.R,Function.update,Fin.ext_iff,hlast]
+ 
+ theorem compactRegion_subset_initial_box :
+     compactRegion ⊆ Icc (decodeCoordinates initialLower)
+--- a/ImbalancedChen/P2OriginalCompactQ80Table.lean
++++ b/ImbalancedChen/P2OriginalCompactQ80Table.lean
+@@ -39,7 +39,7 @@
+   let r := queryResidual 16384 a b
+   have hidx : originalQueryIndex q = i := by
+     have h := congrArg Int.toNat (original_query_index_literal_divmod a b hb ha0)
+-    simpa only [Int.toNat_natCast, queryIndex, q, i] using h
++    simpa only [Int.toNat_natCast, queryIndex, q, i, Nat.cast_ofNat] using h
+   obtain ⟨hilow, _himax, hw0, hw1, hql, hqr⟩ := original_query_cell_geometry hq2.le
+     (hq12.trans (by norm_num : (12 : ℚ) ≤ 12))
+   rw [hidx] at hilow hw0 hw1 hql hqr
+@@ -49,7 +49,8 @@
+       simpa only [originalQueryIndex, Nat.floor_ofNat] using h
+     simpa only [hidx] using h'
+   have hw : queryCellWeight i q = (r : ℚ) / (b : ℚ) := by
+-    simpa only [hidx, queryResidual, q, r] using original_query_weight_literal_divmod a b hb ha0
++    simpa only [hidx, queryResidual, q, r, Nat.cast_ofNat] using
++      original_query_weight_literal_divmod a b hb ha0
+   have hwR : (queryCellWeight i q : ℝ) = (r : ℝ) / (b : ℝ) := by exact_mod_cast hw
+   have hqR : (q : ℝ) = (a : ℝ) / (b : ℝ) := by simp [q]
+   have ht : (a : ℝ) / (b : ℝ) ∈ Icc (cellLeft i) (cellRight i) := by
+@@ -108,7 +109,10 @@
+         push_cast
+         <;> ring
+       rw [hqR, hwR] at hwForm
+-      convert hwForm using 1 <;> push_cast <;> ring
++      rw [hwForm]
++      push_cast
++      have hbR : (0 : ℝ) < (b : ℝ) := by exact_mod_cast hb
++      field_simp [hbR.ne'] <;> ring
+     rw [← hchord] at hc
+     have ha := (actual_numerator_interpolation_allowance i hilow ht).1
+     have hlow : value (interpolationLo (table 16384 12 i).ll (table 16384 12 (i + 1)).ll b r) ≤
+--- a/ImbalancedChen/P2OriginalLowerBufferedAffineBoxes.lean
++++ b/ImbalancedChen/P2OriginalLowerBufferedAffineBoxes.lean
+@@ -77,7 +77,7 @@
+     exact Finset.sum_le_sum (fun i _ => lowerVertex_term_le slope box x hx i)
+   unfold wholeBoxInfimum affineValue
+   push_cast
+-  exact add_le_add_left hsum _
++  exact add_le_add (le_refl (constant : ℝ)) hsum
+ 
+ theorem buffered_infimum_below_affine (constant : ℚ)
+     (slope : Fin 5 → ℚ) (box : RationalBox) (buffer : ℚ)
+--- a/ImbalancedChen/P2OriginalSaving19SimplexMoments.lean
++++ b/ImbalancedChen/P2OriginalSaving19SimplexMoments.lean
+@@ -52,10 +52,11 @@
+ 
+ theorem bary_continuous (i : Fin 9) : Continuous (bary i) := by
+   refine Fin.cases ?_ ?_ i
+-  · dsimp [bary]
++  · change Continuous (fun x : Point => 1 - ∑ j : Fin 8, x j)
+     fun_prop
+   · intro j
+-    simpa only [bary, Fin.cases_succ] using (continuous_apply j : Continuous (fun x : Point => x j))
++    change Continuous (fun x : Point => x j)
++    exact continuous_apply j
+ 
+ theorem interpolate_continuous (v : Fin 9 → ℝ) : Continuous (interpolate v) := by
+   apply continuous_finsetSum
+@@ -139,7 +140,7 @@
+     _ = _ := by simp
+ 
+ theorem bary_first (i : Fin 9) :
+-    (∫ x in canonical, bary i x) = 1 / (9.factorial : ℝ) := by
++    (∫ x in canonical, bary i x) = 1 / ((9 : ℕ).factorial : ℝ) := by
+   have he : (∫ x in canonical, bary i x) = baryMoment (unitExponent i) := by
+     unfold baryMoment
+     simp_rw [prod_unitExponent]
+@@ -148,7 +149,7 @@
+ 
+ theorem bary_second (i j : Fin 9) :
+     (∫ x in canonical, bary i x * bary j x) =
+-      (1 + if i = j then 1 else 0) / (10.factorial : ℝ) := by
++      (1 + if i = j then 1 else 0) / ((10 : ℕ).factorial : ℝ) := by
+   classical
+   have he : (∫ x in canonical, bary i x * bary j x) =
+       baryMoment (fun r => unitExponent i r + unitExponent j r) := by
+@@ -158,13 +159,13 @@
+   fin_cases i <;> fin_cases j <;>
+     norm_num [unitExponent, factorialProduct, List.ofFn]
+ 
+-theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / (8.factorial : ℝ) := by
++theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / ((8 : ℕ).factorial : ℝ) := by
+   have h := actual_eight_factorial 0 (fun _ : Fin 8 => 0) (s := 1) (by norm_num)
+   simpa [actualMoment, canonical, P2Winner9NestedEightSimplexMoment.standardSimplex,
+     P2Winner9SimplexCoordinateSlice.standardSimplex, factorialProduct, List.ofFn] using h
+ 
+ theorem integral_interpolate (v : Fin 9 → ℝ) :
+-    (∫ x in canonical, interpolate v x) = (∑ i : Fin 9, v i) / (9.factorial : ℝ) := by
++    (∫ x in canonical, interpolate v x) = (∑ i : Fin 9, v i) / ((9 : ℕ).factorial : ℝ) := by
+   unfold interpolate
+   rw [integral_finsetSum]
+   · simp only [integral_mul_const, bary_first]
+@@ -178,7 +179,7 @@
+ theorem integral_interpolate_mul (g l : Fin 9 → ℝ) :
+     (∫ x in canonical, interpolate g x * interpolate l x) =
+       ((∑ i : Fin 9, g i) * (∑ i : Fin 9, l i) + ∑ i : Fin 9, g i * l i) /
+-        (10.factorial : ℝ) := by
++        ((10 : ℕ).factorial : ℝ) := by
+   classical
+   let term (i j : Fin 9) (x : Point) := (g i * l j) * (bary i x * bary j x)
+   have hi (i j : Fin 9) : IntegrableOn (term i j) canonical := by
+@@ -225,8 +226,12 @@
+     factors (pointInterpolate v x) j = interpolate (fun i => factors (v i) j) x := by
+   fin_cases j <;>
+     simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
+-  · rw [comparisonCap_interpolate, total_interpolate, interpolate_sub]
+-  · rw [newCap_interpolate, total_interpolate, interpolate_sub]
++  · change comparisonCap (pointInterpolate v x) - total (pointInterpolate v x) =
++      interpolate (fun i => comparisonCap (v i) - total (v i)) x
++    rw [comparisonCap_interpolate, total_interpolate, interpolate_sub]
++  · change newCap (pointInterpolate v x) - total (pointInterpolate v x) =
++      interpolate (fun i => newCap (v i) - total (v i)) x
++    rw [newCap_interpolate, total_interpolate, interpolate_sub]
+   all_goals exact pointInterpolate_apply v x _
+ 
+ def vertices (L : Point ≃L[ℝ] Point) (b : Point) : Fin 9 → Point :=
+@@ -237,7 +242,7 @@
+ 
+ def jacobian (L : Point ≃L[ℝ] Point) : ℝ := |L.toContinuousLinearMap.det|
+ 
+-def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / (8.factorial : ℝ)
++def physicalVolume (L : Point ≃L[ℝ] Point) : ℝ := jacobian L / ((8 : ℕ).factorial : ℝ)
+ 
+ def gapTotal (v : Fin 9 → Point) : ℝ := ∑ i : Fin 9, gap (v i)
+ 
+@@ -297,7 +302,7 @@
+       jacobian L *
+         (gapTotal (vertices L b) * (∑ i : Fin 9, factors (vertices L b i) j) +
+           ∑ i : Fin 9, gap (vertices L b i) * factors (vertices L b i) j) /
+-          (10.factorial : ℝ) := by
++          ((10 : ℕ).factorial : ℝ) := by
+   rw [integral_support]
+   simp_rw [← vertices_interpolate L b, gap_interpolate, factors_interpolate]
+   rw [integral_interpolate_mul]
+@@ -363,6 +368,8 @@
+     (hv : ∀ i, PhysicalRows (vertices L b i)) {t : Point} (ht : t ∈ support L b)
+     (j : Fin 10) : cutoff ≤ factors t j ∧ factors t j ≤ vertexTop (vertices L b) j := by
+   obtain ⟨x, hx, rfl⟩ := ht
++  change cutoff ≤ factors (b + L x) j ∧
++    factors (b + L x) j ≤ vertexTop (vertices L b) j
+   rw [← vertices_interpolate L b x, factors_interpolate]
+   exact interpolate_bounds (fun i => factors (vertices L b i) j)
+     (fun i => ⟨(physical_factor_bounds (hv i) j).1,
+@@ -372,6 +379,7 @@
+     (hv : ∀ i, PhysicalRows (vertices L b i)) {t : Point} (ht : t ∈ support L b) :
+     0 ≤ gap t ∧ gap t ≤ 2 * VariableEnvelope.mu := by
+   obtain ⟨x, hx, rfl⟩ := ht
++  change 0 ≤ gap (b + L x) ∧ gap (b + L x) ≤ 2 * VariableEnvelope.mu
+   rw [← vertices_interpolate L b x, gap_interpolate]
+   exact interpolate_bounds (fun i => gap (vertices L b i))
+     (fun i => physical_gap_bounds (hv i)) hx
