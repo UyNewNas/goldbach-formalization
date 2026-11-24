@@ -26,9 +26,9 @@ theorem exists_source_dyadic_equation18 {κ ε Ccut : ℝ}
         8 * (Q : ℝ) * (R : ℝ)^2 ≤ X ^ κ → 4 * (H : ℝ) * (R : ℝ) ≤ X ^ κ →
         (H : ℝ) ≤ (Ccut * (Real.log X)^5) * ((Q : ℝ) * (R : ℝ) / M) →
         ∀ (a : ℤ) (lambda : ℕ → ℕ → ℂ) (alpha : ℕ → ℂ),
-          (∀ q ∈ Ico Q (2 * Q), ∀ r ∈ Ico R (2 * R), ‖lambda q r‖ ≤ 1) →
-          (∀ n ∈ Ico N (2 * N), ‖alpha n‖ ≤ 1) →
-          ‖source (Ico Q (2 * Q)) (Ico R (2 * R)) (Ico N (2 * N))
+          (∀ q ∈ Icc Q (2 * Q), ∀ r ∈ Icc R (2 * R), ‖lambda q r‖ ≤ 1) →
+          (∀ n ∈ Icc N (2 * N), ‖alpha n‖ ≤ 1) →
+          ‖source (Icc Q (2 * Q)) (Icc R (2 * R)) (Icc N (2 * N))
             (e1NonzeroFrequencies H) a M (⇑(𝓕 ψ : 𝓢(ℝ, ℂ))) lambda alpha‖ ^ 2 ≤
             A * X ^ ε * ((N : ℝ)^4 / (Q : ℝ)^2) *
               ((N : ℝ) * Q / X + (N : ℝ) * (Q : ℝ) ^ (5/2 : ℝ) * (R : ℝ)^3 / X^2 +
@@ -41,7 +41,7 @@ theorem exists_source_dyadic_equation18 {κ ε Ccut : ℝ}
   obtain ⟨D, hD, hphi⟩ := exists_e1ReciprocalTotient_rpow hκ hδ
   obtain ⟨K, hK, hmass⟩ := exists_e1CompletedCauchyMass_rpow (B := 4) hκ hδ
     (by norm_num) hC.le
-  refine ⟨D^2 * P^2 * K * (1 + Ccut * (40 / ε)^5)^2, by positivity, ?_⟩
+  refine ⟨(8 * D)^2 * P^2 * K * (1 + Ccut * (40 / ε)^5)^2, by positivity, ?_⟩
   intro X M Q R N H hX hM hQ hR hN hscale hQR hHR hcut a lambda alpha hlambda halpha
   let S := Icc 0 (3 * N)
   let L := Ccut * (Real.log X)^5
@@ -73,17 +73,17 @@ theorem exists_source_dyadic_equation18 {κ ε Ccut : ℝ}
     unfold completedTerm smoothReciprocalSum
     exact sum_congr rfl (fun n _ => by
       rw [completedPhase_eq_reciprocalPhase, show (v n : ℂ) = w ((n : ℝ) / N) from hwComplex n])
-  have hmassEq : completedMass (Ico Q (2 * Q)) (Ico R (2 * R)) S (e1NonzeroFrequencies H) a v =
+  have hmassEq : completedMass (Icc Q (2 * Q)) (Icc R (2 * R)) S (e1NonzeroFrequencies H) a v =
       e1CompletedCauchyMass Q R H a N w S := by
-    simp only [completedMass, primitive, e1CompletedCauchyMass]
+    simp only [completedMass, primitive_eq_filter, e1CompletedCauchyMass]
     refine sum_congr rfl (fun q hq => sum_congr rfl (fun r hr => sum_congr rfl (fun r' hr' =>
       sum_congr rfl (fun h _ => sum_congr rfl (fun h' _ => ?_)))))
     have hm : 0 < q * r * r' := Nat.mul_pos (Nat.mul_pos
-      (hQ.trans_le (mem_Ico.mp (mem_filter.mp hq).1).1)
-      (hR.trans_le (mem_Ico.mp (mem_filter.mp hr).1).1))
-      (hR.trans_le (mem_Ico.mp (mem_filter.mp hr').1).1)
+      (hQ.trans_le (mem_Icc.mp (mem_filter.mp hq).1).1)
+      (hR.trans_le (mem_Icc.mp (mem_filter.mp hr).1).1))
+      (hR.trans_le (mem_Icc.mp (mem_filter.mp hr').1).1)
     rw [hterm q r r' h h' hm]
-  have hsource := source_norm_sq_le_completedMass Q R N hQ hR S (e1NonzeroFrequencies H)
+  have hsource := source_norm_sq_le_completedMass Q R N hQ hR hN S (e1NonzeroFrequencies H)
     a M (⇑(𝓕 ψ : 𝓢(ℝ, ℂ))) lambda alpha v (D * X ^ (ε/4)) P (by positivity) hP.le hNS hw hmaj
     (fun q hq r hr => hlambda q (mem_filter.mp hq).1 r (mem_filter.mp hr).1) halpha hψ
     (fun q hq s hs => by
@@ -93,11 +93,11 @@ theorem exists_source_dyadic_equation18 {κ ε Ccut : ℝ}
   let E := (N : ℝ) * Q * R * H + (Q : ℝ) * Real.sqrt Q * (R : ℝ)^3 * (H : ℝ)^2 +
     (N : ℝ) * R * (H : ℝ)^2
   calc
-    _ ≤ (D * X ^ (ε/4))^2 * P^2 * (N : ℝ)^3 / ((Q : ℝ)^3 * (R : ℝ)^2) *
+    _ ≤ 64 * (D * X ^ (ε/4))^2 * P^2 * (N : ℝ)^3 / ((Q : ℝ)^3 * (R : ℝ)^2) *
         e1CompletedCauchyMass Q R H a N w S := hsource
-    _ ≤ (D * X ^ (ε/4))^2 * P^2 * (N : ℝ)^3 / ((Q : ℝ)^3 * (R : ℝ)^2) *
+    _ ≤ 64 * (D * X ^ (ε/4))^2 * P^2 * (N : ℝ)^3 / ((Q : ℝ)^3 * (R : ℝ)^2) *
         (K * X ^ (ε/4) * E) := mul_le_mul_of_nonneg_left hT2 (by positivity)
-    _ = (D * X ^ (ε/4))^2 * P^2 * (K * X ^ (ε/4)) *
+    _ = (8 * D * X ^ (ε/4))^2 * P^2 * (K * X ^ (ε/4)) *
         ((N : ℝ)^3 / ((Q : ℝ)^3 * (R : ℝ)^2) * E) := by ring
     _ ≤ _ := e1_scale_budget_le hN' hQ' hR' hM (Nat.cast_nonneg H)
       hL hX hε hK.le hCcut hscale hcut le_rfl

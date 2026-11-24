@@ -23,6 +23,9 @@ namespace E1Finite
 /-- The integer support restricted to factors coprime to the signed residue. -/
 def primitive (a : ℤ) (S : Finset ℕ) : Finset ℕ := S.filter (fun s => s.Coprime a.natAbs)
 
+theorem primitive_eq_filter (a : ℤ) (S : Finset ℕ) :
+    primitive a S = S.filter (fun s => s.Coprime a.natAbs) := rfl
+
 private def phase (l n : ℕ) (A : ℤ) : ℂ :=
   if hl : l ≠ 0 then
     letI : NeZero l := ⟨hl⟩
@@ -238,39 +241,43 @@ theorem leftRows_weighted_sq_le (Q R S : Finset ℕ) (H : Finset ℤ) (a : ℤ) 
 
 /-- The actual dyadic Cauchy multiplier in (E6), with a separately paid
 inverse-totient factor `T` and the uniform Fourier amplitude `P`. -/
-theorem source_norm_sq_le_completedMass (Q R N : ℕ) (hQ : 0 < Q) (hR : 0 < R)
+theorem source_norm_sq_le_completedMass (Q R N : ℕ) (hQ : 0 < Q) (hR : 0 < R) (hN : 0 < N)
     (S : Finset ℕ) (H : Finset ℤ) (a : ℤ) (M : ℝ)
     (ψhat : ℝ → ℂ) (lambda : ℕ → ℕ → ℂ) (alpha : ℕ → ℂ)
     (w : ℕ → ℝ) (T P : ℝ) (hT : 0 ≤ T) (hP : 0 ≤ P)
-    (hNS : Ico N (2 * N) ⊆ S) (hw : ∀ n ∈ S, 0 ≤ w n)
-    (hmajorant : ∀ n ∈ Ico N (2 * N), 1 ≤ w n)
-    (hlambda : ∀ q ∈ primitive a (Ico Q (2 * Q)),
-      ∀ r ∈ primitive a (Ico R (2 * R)), ‖lambda q r‖ ≤ 1)
-    (halpha : ∀ n ∈ Ico N (2 * N), ‖alpha n‖ ≤ 1)
+    (hNS : Icc N (2 * N) ⊆ S) (hw : ∀ n ∈ S, 0 ≤ w n)
+    (hmajorant : ∀ n ∈ Icc N (2 * N), 1 ≤ w n)
+    (hlambda : ∀ q ∈ primitive a (Icc Q (2 * Q)),
+      ∀ r ∈ primitive a (Icc R (2 * R)), ‖lambda q r‖ ≤ 1)
+    (halpha : ∀ n ∈ Icc N (2 * N), ‖alpha n‖ ≤ 1)
     (hpsi : ∀ x, ‖ψhat x‖ ≤ P)
-    (hφ : ∀ q ∈ primitive a (Ico Q (2 * Q)), ∀ s ∈ primitive a (Ico R (2 * R)),
+    (hφ : ∀ q ∈ primitive a (Icc Q (2 * Q)), ∀ s ∈ primitive a (Icc R (2 * R)),
       ((q * s).totient : ℝ)⁻¹ ≤ T / ((Q : ℝ) * R)) :
-    ‖source (Ico Q (2 * Q)) (Ico R (2 * R)) (Ico N (2 * N)) H a M ψhat lambda alpha‖ ^ 2 ≤
-      T ^ 2 * P ^ 2 * (N : ℝ) ^ 3 / ((Q : ℝ) ^ 3 * (R : ℝ) ^ 2) *
-        completedMass (Ico Q (2 * Q)) (Ico R (2 * R)) S H a w := by
-  let U := Ico Q (2 * Q)
-  let V := Ico R (2 * R)
-  let W := Ico N (2 * N)
+    ‖source (Icc Q (2 * Q)) (Icc R (2 * R)) (Icc N (2 * N)) H a M ψhat lambda alpha‖ ^ 2 ≤
+      64 * T ^ 2 * P ^ 2 * (N : ℝ) ^ 3 / ((Q : ℝ) ^ 3 * (R : ℝ) ^ 2) *
+        completedMass (Icc Q (2 * Q)) (Icc R (2 * R)) S H a w := by
+  let U := Icc Q (2 * Q)
+  let V := Icc R (2 * R)
+  let W := Icc N (2 * N)
   have hQ0 : 0 < (Q : ℝ) := by exact_mod_cast hQ
   have hR0 : 0 < (R : ℝ) := by exact_mod_cast hR
   have hQR0 : 0 < (Q : ℝ) * R := mul_pos hQ0 hR0
-  have hcard (L : ℕ) : ((Ico L (2 * L)).card : ℝ) = L := by
-    simp only [Nat.card_Ico]
-    congr 1
-    omega
-  have hqCard : ((primitive a U).card : ℝ) ≤ Q := by
-    rw [← hcard Q]
+  have hcard (L : ℕ) : ((Icc L (2 * L)).card : ℝ) = (L : ℝ) + 1 := by
+    have h : (Icc L (2 * L)).card = L + 1 := by rw [Nat.card_Icc]; omega
+    exact_mod_cast h
+  have hcardUpper (L : ℕ) (hL : 0 < L) : ((Icc L (2 * L)).card : ℝ) ≤ 2 * (L : ℝ) := by
+    rw [hcard]
+    have hL' : (1 : ℝ) ≤ L := by exact_mod_cast hL
+    linarith
+  have hqCard : ((primitive a U).card : ℝ) ≤ 2 * (Q : ℝ) := by
+    apply le_trans _ (hcardUpper Q hQ)
     exact_mod_cast card_filter_le _ _
-  have hrCard : ((primitive a V).card : ℝ) ≤ R := by
-    rw [← hcard R]
+  have hrCard : ((primitive a V).card : ℝ) ≤ 2 * (R : ℝ) := by
+    apply le_trans _ (hcardUpper R hR)
     exact_mod_cast card_filter_le _ _
+  have hnCard : (W.card : ℝ) ≤ 2 * (N : ℝ) := hcardUpper N hN
   have hright (q : ℕ) (hq : q ∈ primitive a U) :
-      ‖rightRow V W a lambda alpha q‖ ≤ T * N / Q := by
+      ‖rightRow V W a lambda alpha q‖ ≤ 4 * T * N / Q := by
     refine (norm_rightRow_le V W a lambda alpha q (hlambda q hq) halpha).trans ?_
     calc
       _ ≤ ∑ s ∈ primitive a V, ∑ _n ∈ W, T / ((Q : ℝ) * R) := by
@@ -278,26 +285,26 @@ theorem source_norm_sq_le_completedMass (Q R N : ℕ) (hQ : 0 < Q) (hR : 0 < R)
         split_ifs
         · exact hφ q hq s hs
         · positivity
-      _ = ((primitive a V).card : ℝ) * (N * (T / ((Q : ℝ) * R))) := by
-        simp only [sum_const, nsmul_eq_mul, W, hcard]
-      _ ≤ R * (N * (T / ((Q : ℝ) * R))) :=
-        mul_le_mul_of_nonneg_right hrCard (by positivity)
-      _ = _ := by field_simp
+      _ = ((primitive a V).card : ℝ) * ((W.card : ℝ) * (T / ((Q : ℝ) * R))) := by
+        simp only [sum_const, nsmul_eq_mul]
+      _ ≤ (2 * (R : ℝ)) * ((2 * (N : ℝ)) * (T / ((Q : ℝ) * R))) := by
+        gcongr
+      _ = _ := by field_simp; ring
   have houter : (∑ q ∈ primitive a U, ∑ n ∈ W, ‖rightRow V W a lambda alpha q * alpha n‖ ^ 2) ≤
-      Q * (N * (T * N / Q) ^ 2) := by
+      (2 * (Q : ℝ)) * ((2 * (N : ℝ)) * (4 * T * N / Q) ^ 2) := by
     calc
-      _ ≤ ∑ q ∈ primitive a U, ∑ _n ∈ W, (T * N / Q) ^ 2 := by
+      _ ≤ ∑ q ∈ primitive a U, ∑ _n ∈ W, (4 * T * N / Q) ^ 2 := by
         refine sum_le_sum (fun q hq => sum_le_sum (fun n hn => ?_))
         apply pow_le_pow_left₀ (norm_nonneg _) _ 2
         rw [norm_mul]
         exact (mul_le_of_le_one_right (norm_nonneg _) (halpha n hn)).trans (hright q hq)
-      _ = ((primitive a U).card : ℝ) * (N * (T * N / Q) ^ 2) := by
-        simp only [sum_const, nsmul_eq_mul, W, hcard]
-      _ ≤ _ := mul_le_mul_of_nonneg_right hqCard (by positivity)
+      _ = ((primitive a U).card : ℝ) * ((W.card : ℝ) * (4 * T * N / Q) ^ 2) := by
+        simp only [sum_const, nsmul_eq_mul]
+      _ ≤ _ := by gcongr
   have hamp (q : ℕ) (hq : q ∈ primitive a U) (r : ℕ) (hr : r ∈ primitive a V) (h : ℤ) :
       ‖leftAmplitude M ψhat lambda q r h‖ ≤ P / ((Q : ℝ) * R) := by
-    have hqL : (Q : ℝ) ≤ q := by exact_mod_cast (mem_Ico.mp (mem_filter.mp hq).1).1
-    have hrL : (R : ℝ) ≤ r := by exact_mod_cast (mem_Ico.mp (mem_filter.mp hr).1).1
+    have hqL : (Q : ℝ) ≤ q := by exact_mod_cast (mem_Icc.mp (mem_filter.mp hq).1).1
+    have hrL : (R : ℝ) ≤ r := by exact_mod_cast (mem_Icc.mp (mem_filter.mp hr).1).1
     have hprod : (Q : ℝ) * R ≤ q * (r : ℝ) :=
       mul_le_mul hqL hrL hR0.le (Nat.cast_nonneg q)
     unfold leftAmplitude
@@ -313,7 +320,7 @@ theorem source_norm_sq_le_completedMass (Q R N : ℕ) (hQ : 0 < Q) (hR : 0 < R)
     (div_nonneg hP hQR0.le) (fun q hq r hr h _ => hamp q hq r hr h)
   calc
     _ ≤ _ := source_norm_sq_le_weighted U V W S H a M ψhat lambda alpha w hNS hw hmajorant
-    _ ≤ (Q * (N * (T * N / Q) ^ 2)) * ((P / ((Q : ℝ) * R)) ^ 2 * completedMass U V S H a w) :=
+    _ ≤ ((2 * (Q : ℝ)) * ((2 * (N : ℝ)) * (4 * T * N / Q) ^ 2)) * ((P / ((Q : ℝ) * R)) ^ 2 * completedMass U V S H a w) :=
       mul_le_mul houter hinner hpositive (by positivity)
     _ = _ := by field_simp; ring
 

@@ -17,7 +17,7 @@ open scoped BigOperators
 private theorem primitive_eq_filter_of_subset (a : ℤ) {S T : Finset ℕ} (hST : S ⊆ T) :
     primitive a S = (primitive a T).filter (fun n => n ∈ S) := by
   ext n
-  simp only [primitive, mem_filter]
+  simp only [primitive_eq_filter, mem_filter]
   exact ⟨fun h => ⟨⟨hST h.1, h.2⟩, h.1⟩, fun h => ⟨h.2, h.1.2⟩⟩
 
 /-- Extend the source carriers with the same coefficient masks on each

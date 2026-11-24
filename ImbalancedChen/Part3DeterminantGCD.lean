@@ -256,9 +256,10 @@ private theorem e1_zeroDeterminant_reduced_dvd {h h' : ℤ} {r r' : ℕ}
 
 /-- For a fixed signed numerator and positive dyadic denominator, the
 partner denominator determines the partner numerator. -/
-private theorem e1_zeroDeterminant_partners_card_le (H R : ℕ) {h : ℤ} {r : ℕ}
+private theorem e1_zeroDeterminant_partners_card_le (H R : ℕ) (S : Finset ℕ)
+    (hS : S ⊆ Icc R (2 * R)) {h : ℤ} {r : ℕ}
     (hR : 0 < R) (hr : R ≤ r) :
-    (((e1NonzeroFrequencies H ×ˢ Ico R (2 * R)).filter
+    (((e1NonzeroFrequencies H ×ˢ S).filter
       (fun p => e1Determinant h p.1 r p.2 = 0)).card) ≤ 2 * r.gcd h.natAbs := by
   let d := r / r.gcd h.natAbs
   have hr0 := hR.trans_le hr
@@ -270,8 +271,8 @@ private theorem e1_zeroDeterminant_partners_card_le (H R : ℕ) {h : ℤ} {r : �
       apply card_le_card_of_injOn Prod.snd
       · intro p hp
         obtain ⟨hp, hj⟩ := mem_filter.mp hp
-        obtain ⟨hlo, hhi⟩ := mem_Ico.mp (mem_product.mp hp).2
-        exact mem_filter.mpr ⟨mem_Ioc.mpr ⟨hR.trans_le hlo, hhi.le⟩,
+        obtain ⟨hlo, hhi⟩ := mem_Icc.mp (hS (mem_product.mp hp).2)
+        exact mem_filter.mpr ⟨mem_Ioc.mpr ⟨hR.trans_le hlo, hhi⟩,
           e1_zeroDeterminant_reduced_dvd hr0 hj⟩
       · intro p hp p' hp' he
         have hpj : h * (p.2 : ℤ) = p.1 * (r : ℤ) := sub_eq_zero.mp (mem_filter.mp hp).2
@@ -287,36 +288,42 @@ private theorem e1_zeroDeterminant_partners_card_le (H R : ℕ) {h : ℤ} {r : �
         _ ≤ 2 * r := Nat.mul_le_mul_left _ hr
         _ = (2 * r.gcd h.natAbs) * d := by rw [mul_assoc, hdiv]
 
-/-- The signed zero-determinant count over a dyadic denominator box. The
-bound uses positive denominator divisor counts only. -/
-theorem e1ZeroDeterminantTuples_card_le (H R : ℕ) (hR : 0 < R) :
-    (e1ZeroDeterminantTuples H R).card ≤
-      4 * H * ∑ r ∈ Ico R (2 * R), r.divisors.card := by
+private theorem e1ZeroDeterminantTuplesOn_card_le (H R : ℕ) (S : Finset ℕ)
+    (hR : 0 < R) (hS : S ⊆ Icc R (2 * R)) :
+    (((e1NonzeroFrequencies H ×ˢ S) ×ˢ (e1NonzeroFrequencies H ×ˢ S)).filter
+      (fun p => e1Determinant p.1.1 p.2.1 p.1.2 p.2.2 = 0)).card ≤
+      4 * H * ∑ r ∈ S, r.divisors.card := by
   let F := e1NonzeroFrequencies H
-  let S := Ico R (2 * R)
   calc
     _ = ∑ h ∈ F, ∑ r ∈ S,
         ((F ×ˢ S).filter (fun p => e1Determinant h p.1 r p.2 = 0)).card := by
-      simp only [e1ZeroDeterminantTuples, F, S, card_eq_sum_ones, sum_filter, sum_product]
+      simp only [F, card_eq_sum_ones, sum_filter, sum_product]
     _ ≤ ∑ h ∈ F, ∑ r ∈ S, 2 * Int.gcd h (r : ℤ) := by
       apply sum_le_sum
       intro h _
       apply sum_le_sum
       intro r hr
       simpa only [Int.gcd_eq_natAbs_gcd_natAbs, Int.natAbs_natCast, Nat.gcd_comm r] using
-        (e1_zeroDeterminant_partners_card_le H R (h := h) hR (mem_Ico.mp hr).1)
+        (e1_zeroDeterminant_partners_card_le H R S hS (h := h) hR (mem_Icc.mp (hS hr)).1)
     _ = ∑ r ∈ S, 2 * ∑ h ∈ F, Int.gcd h (r : ℤ) := by
       rw [sum_comm]
       simp only [mul_sum]
     _ ≤ ∑ r ∈ S, 2 * (2 * H * r.divisors.card) := by
       apply sum_le_sum
       intro r hr
-      exact Nat.mul_le_mul_left 2 (sum_e1NonzeroFrequencies_gcd_le H r (hR.trans_le (mem_Ico.mp hr).1))
+      exact Nat.mul_le_mul_left 2 (sum_e1NonzeroFrequencies_gcd_le H r (hR.trans_le (mem_Icc.mp (hS hr)).1))
     _ = _ := by
       rw [mul_sum]
       apply sum_congr rfl
       intro r _
       ring
+
+/-- The signed zero-determinant count over a half-open dyadic denominator box. -/
+theorem e1ZeroDeterminantTuples_card_le (H R : ℕ) (hR : 0 < R) :
+    (e1ZeroDeterminantTuples H R).card ≤
+      4 * H * ∑ r ∈ Ico R (2 * R), r.divisors.card :=
+  e1ZeroDeterminantTuplesOn_card_le H R _ hR fun _ hr =>
+    mem_Icc.mpr ⟨(mem_Ico.mp hr).1, (mem_Ico.mp hr).2.le⟩
 
 /-- A uniform divisor-count cap gives the stated `R*H` count with its
 explicit divisor factor. -/
@@ -330,6 +337,40 @@ theorem e1ZeroDeterminantTuples_card_le_of_divisor_cap (H R T : ℕ) (hR : 0 < R
     _ = _ := by
       have hcard : (Ico R (2 * R)).card = R := by rw [Nat.card_Ico]; omega
       simp only [sum_const, hcard, Nat.nsmul_eq_mul]
+
+/-- The zero determinant tuples retain both signed frequencies and both
+closed dyadic positive denominators. -/
+noncomputable def e1ZeroDeterminantTuplesClosed (H R : ℕ) : Finset ((ℤ × ℕ) × (ℤ × ℕ)) :=
+  ((e1NonzeroFrequencies H ×ˢ Icc R (2 * R)) ×ˢ
+    (e1NonzeroFrequencies H ×ˢ Icc R (2 * R))).filter
+    (fun p => e1Determinant p.1.1 p.2.1 p.1.2 p.2.2 = 0)
+
+/-- The signed zero-determinant count over the closed dyadic denominator box. -/
+theorem e1ZeroDeterminantTuplesClosed_card_le (H R : ℕ) (hR : 0 < R) :
+    (e1ZeroDeterminantTuplesClosed H R).card ≤
+      4 * H * ∑ r ∈ Icc R (2 * R), r.divisors.card :=
+  e1ZeroDeterminantTuplesOn_card_le H R _ hR Subset.rfl
+
+/-- The closed interval has exactly `R+1` denominator values. -/
+theorem e1ZeroDeterminantTuplesClosed_card_le_of_divisor_cap (H R T : ℕ) (hR : 0 < R)
+    (hT : ∀ r ∈ Icc R (2 * R), r.divisors.card ≤ T) :
+    (e1ZeroDeterminantTuplesClosed H R).card ≤ 4 * H * (R + 1) * T := by
+  rw [mul_assoc (4 * H) (R + 1) T]
+  refine (e1ZeroDeterminantTuplesClosed_card_le H R hR).trans (Nat.mul_le_mul_left _ ?_)
+  calc
+    _ ≤ ∑ _r ∈ Icc R (2 * R), T := sum_le_sum hT
+    _ = _ := by
+      have hcard : (Icc R (2 * R)).card = R + 1 := by rw [Nat.card_Icc]; omega
+      simp only [sum_const, hcard, Nat.nsmul_eq_mul]
+
+/-- A closed dyadic box has at most `8 * H * R * T` zero determinant tuples. -/
+theorem e1ZeroDeterminantTuplesClosed_card_le_eight_mul (H R T : ℕ) (hR : 0 < R)
+    (hT : ∀ r ∈ Icc R (2 * R), r.divisors.card ≤ T) :
+    (e1ZeroDeterminantTuplesClosed H R).card ≤ 8 * H * R * T := by
+  calc
+    _ ≤ 4 * H * (R + 1) * T := e1ZeroDeterminantTuplesClosed_card_le_of_divisor_cap H R T hR hT
+    _ ≤ 4 * H * (2 * R) * T := Nat.mul_le_mul_right _ (Nat.mul_le_mul_left _ (by omega))
+    _ = _ := by ring
 
 /-- With the exact complete scale `x = M*N`, the three raw Cauchy
 monomials become the terms of (18). The frequency cutoff slack is linear

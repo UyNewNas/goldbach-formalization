@@ -1,5 +1,6 @@
 import ImbalancedChen.Part3E1Equation18
 import ImbalancedChen.Part3E1SourceMask
+import ImbalancedChen.Part3DistributionTargets
 
 /-!
 # E1 with real dyadic scales
@@ -85,22 +86,16 @@ noncomputable section
 open Finset
 open scoped BigOperators SchwartzMap FourierTransform
 
-/-- The natural points of the exact half-open real dyadic interval. -/
-def realDyadicCarrier (L : ℝ) : Finset ℕ := Ico ⌈L⌉₊ ⌈2 * L⌉₊
-
-theorem mem_realDyadicCarrier {L : ℝ} {n : ℕ} :
-    n ∈ realDyadicCarrier L ↔ L ≤ (n : ℝ) ∧ (n : ℝ) < 2 * L := by
-  simp only [realDyadicCarrier, mem_Ico, Nat.ceil_le, Nat.lt_ceil]
-
-private theorem realDyadicCarrier_subset (L : ℝ) :
-    realDyadicCarrier L ⊆ Ico ⌈L⌉₊ (2 * ⌈L⌉₊) := by
+private theorem factorCarrier_subset_natDyadic (L : ℝ) :
+    factorCarrier L ⊆ Icc ⌈L⌉₊ (2 * ⌈L⌉₊) := by
   intro n hn
-  obtain ⟨hlo, hup⟩ := mem_Ico.mp hn
-  have hc : ⌈2 * L⌉₊ ≤ 2 * ⌈L⌉₊ := by
-    apply Nat.ceil_le.mpr
-    push_cast
-    exact mul_le_mul_of_nonneg_left (Nat.le_ceil L) (by norm_num)
-  exact mem_Ico.mpr ⟨hlo, hup.trans_le hc⟩
+  obtain ⟨hlo, hup⟩ := mem_Icc.mp hn
+  have hc : ⌊2 * L⌋₊ ≤ 2 * ⌈L⌉₊ := by
+    have hf : 2 * L ≤ ((2 * ⌈L⌉₊ : ℕ) : ℝ) := by
+      push_cast
+      exact mul_le_mul_of_nonneg_left (Nat.le_ceil L) (by norm_num)
+    simpa only [Nat.floor_natCast] using Nat.floor_mono hf
+  exact mem_Icc.mpr ⟨hlo, hup.trans hc⟩
 
 private theorem ceil_realScale_upper {L : ℝ} (hL : 1 ≤ L) : (⌈L⌉₊ : ℝ) ≤ 2 * L :=
   (Nat.ceil_lt_add_one (zero_le_one.trans hL)).le.trans (by linarith)
@@ -117,9 +112,9 @@ theorem exists_source_realDyadic_equation18 {κ ε Ccut : ℝ}
         X = M * N → 8 * Q * R^2 ≤ X ^ κ → 4 * H * R ≤ X ^ κ →
         H ≤ (Ccut * (Real.log X)^5) * (Q * R / M) →
         ∀ (a : ℤ) (lambda : ℕ → ℕ → ℂ) (alpha : ℕ → ℂ),
-          (∀ q ∈ realDyadicCarrier Q, ∀ r ∈ realDyadicCarrier R, ‖lambda q r‖ ≤ 1) →
-          (∀ n ∈ realDyadicCarrier N, ‖alpha n‖ ≤ 1) →
-          ‖source (realDyadicCarrier Q) (realDyadicCarrier R) (realDyadicCarrier N)
+          (∀ q ∈ factorCarrier Q, ∀ r ∈ factorCarrier R, ‖lambda q r‖ ≤ 1) →
+          (∀ n ∈ factorCarrier N, ‖alpha n‖ ≤ 1) →
+          ‖source (factorCarrier Q) (factorCarrier R) (factorCarrier N)
             (e1NonzeroFrequencies ⌊H⌋₊) a M (⇑(𝓕 ψ : 𝓢(ℝ, ℂ))) lambda alpha‖ ^ 2 ≤
             A * X ^ ε * (N^4 / Q^2) * (N * Q / X + N * Q ^ (5/2 : ℝ) * R^3 / X^2 + N^2 * Q * R / X^2) := by
   obtain ⟨A, hA, hAall⟩ := exists_source_dyadic_equation18 (κ := κ + 3)
@@ -131,8 +126,8 @@ theorem exists_source_realDyadic_equation18 {κ ε Ccut : ℝ}
   let n := ⌈N⌉₊
   let f := ⌊H⌋₊
   let Y := M * (n : ℝ)
-  let lambdaExt (u v : ℕ) := if u ∈ realDyadicCarrier Q ∧ v ∈ realDyadicCarrier R then lambda u v else 0
-  let alphaExt (u : ℕ) := if u ∈ realDyadicCarrier N then alpha u else 0
+  let lambdaExt (u v : ℕ) := if u ∈ factorCarrier Q ∧ v ∈ factorCarrier R then lambda u v else 0
+  let alphaExt (u : ℕ) := if u ∈ factorCarrier N then alpha u else 0
   have hq : Q ≤ (q : ℝ) := Nat.le_ceil Q
   have hq' : (q : ℝ) ≤ 2 * Q := ceil_realScale_upper hQ
   have hr : R ≤ (r : ℝ) := Nat.le_ceil R
@@ -178,13 +173,13 @@ theorem exists_source_realDyadic_equation18 {κ ε Ccut : ℝ}
     exact mul_le_mul (mul_le_mul_of_nonneg_left hpow hCcut)
       (div_le_div_of_nonneg_right hprod hM.le) (by positivity)
       (mul_nonneg hCcut (pow_nonneg (Real.log_nonneg hY) _))
-  have hlambda' : ∀ u ∈ Ico q (2 * q), ∀ v ∈ Ico r (2 * r), ‖lambdaExt u v‖ ≤ 1 := by
+  have hlambda' : ∀ u ∈ Icc q (2 * q), ∀ v ∈ Icc r (2 * r), ‖lambdaExt u v‖ ≤ 1 := by
     intro u _ v _
     dsimp only [lambdaExt]
     split_ifs with h
     · exact hlambda u h.1 v h.2
     · simp only [norm_zero, zero_le_one]
-  have halpha' : ∀ u ∈ Ico n (2 * n), ‖alphaExt u‖ ≤ 1 := by
+  have halpha' : ∀ u ∈ Icc n (2 * n), ‖alphaExt u‖ ≤ 1 := by
     intro u _
     dsimp only [alphaExt]
     split_ifs with h
@@ -192,8 +187,8 @@ theorem exists_source_realDyadic_equation18 {κ ε Ccut : ℝ}
     · simp only [norm_zero, zero_le_one]
   have hs := hAall Y M q r n f hY hM (ceil_realScale_pos hQ) (ceil_realScale_pos hR)
     (ceil_realScale_pos hN) rfl hqrCap hfrCap hcut' a lambdaExt alphaExt hlambda' halpha'
-  rw [source_subsets_eq_zero_extend _ _ _ _ _ _ (realDyadicCarrier_subset Q)
-    (realDyadicCarrier_subset R) (realDyadicCarrier_subset N)]
+  rw [source_subsets_eq_zero_extend _ _ _ _ _ _ (factorCarrier_subset_natDyadic Q)
+    (factorCarrier_subset_natDyadic R) (factorCarrier_subset_natDyadic N)]
   have hb := e1RoundedMonomials_le Q R N X q r n Y ε hQ hR hN hX1
     hq hq' hr hr' hn hn' hXY hYX hε.le
   refine hs.trans ?_

@@ -27,20 +27,20 @@ theorem card_e1NonzeroFrequencies (H : ℕ) : (e1NonzeroFrequencies H).card = 2 
 theorem e1DyadicNonzeroGcd_sum_le (Q R H T J : ℕ) (hQ : 0 < Q) (hR : 0 < R)
     (hT : ∀ d ∈ Ioc 0 (2 * R), d.divisors.card ≤ T)
     (hJ : ∀ j : ℤ, j ≠ 0 → j.natAbs ≤ 2 * H * (2 * R) → j.natAbs.divisors.card ≤ J) :
-    (∑ q ∈ Ico Q (2 * Q), ∑ r ∈ Ico R (2 * R), ∑ r' ∈ Ico R (2 * R),
+    (∑ q ∈ Icc Q (2 * Q), ∑ r ∈ Icc R (2 * R), ∑ r' ∈ Icc R (2 * R),
       ∑ h ∈ e1NonzeroFrequencies H, ∑ h' ∈ e1NonzeroFrequencies H,
         if e1Determinant h h' r r' = 0 then 0 else
           Int.gcd (e1Determinant h h' r r') ((q * r * r' : ℕ) : ℤ)) ≤
       64 * Q * J * (H * T) ^ 2 * R ^ 3 := by
-  let D := Ico Q (2 * Q)
-  let S := Ico R (2 * R)
+  let D := Icc Q (2 * Q)
+  let S := Icc R (2 * R)
   let F := e1NonzeroFrequencies H
   let j (r r' : ℕ) (h h' : ℤ) := e1Determinant h h' r r'
   let g (q r r' : ℕ) (h h' : ℤ) := Int.gcd (j r r' h h') ((q * r * r' : ℕ) : ℤ)
   have hD : D ⊆ Ioc 0 (2 * Q) := fun _ hq =>
-    mem_Ioc.mpr ⟨hQ.trans_le (mem_Ico.mp hq).1, (mem_Ico.mp hq).2.le⟩
+    mem_Ioc.mpr ⟨hQ.trans_le (mem_Icc.mp hq).1, (mem_Icc.mp hq).2⟩
   have hS : S ⊆ Ioc 0 (2 * R) := fun _ hr =>
-    mem_Ioc.mpr ⟨hR.trans_le (mem_Ico.mp hr).1, (mem_Ico.mp hr).2.le⟩
+    mem_Ioc.mpr ⟨hR.trans_le (mem_Icc.mp hr).1, (mem_Icc.mp hr).2⟩
   have hqSum (r r' : ℕ) (h h' : ℤ) :
       (if j r r' h h' = 0 then 0 else ∑ q ∈ D, g q r r' h h') ≤
         (if j r r' h h' = 0 then 0 else ∑ q ∈ Ioc 0 (2 * Q), g q r r' h h') := by
@@ -81,9 +81,9 @@ def e1CompletedSmoothTerm (q r r' : ℕ) (h h' a : ℤ) (N : ℝ)
 /-- The actual Cauchy mass, with the original factorwise primitive gates. -/
 def e1CompletedCauchyMass (Q R H : ℕ) (a : ℤ) (N : ℝ) (w : 𝓢(ℝ, ℂ))
     (S : Finset ℕ) : ℝ :=
-  ∑ q ∈ (Ico Q (2 * Q)).filter (fun n => n.Coprime a.natAbs),
-    ∑ r ∈ (Ico R (2 * R)).filter (fun n => n.Coprime a.natAbs),
-      ∑ r' ∈ (Ico R (2 * R)).filter (fun n => n.Coprime a.natAbs),
+  ∑ q ∈ (Icc Q (2 * Q)).filter (fun n => n.Coprime a.natAbs),
+    ∑ r ∈ (Icc R (2 * R)).filter (fun n => n.Coprime a.natAbs),
+      ∑ r' ∈ (Icc R (2 * R)).filter (fun n => n.Coprime a.natAbs),
         ∑ h ∈ e1NonzeroFrequencies H, ∑ h' ∈ e1NonzeroFrequencies H,
           ‖e1CompletedSmoothTerm q r r' h h' a N w S‖
 
@@ -105,17 +105,17 @@ private theorem e1Term_norm_le_sampleMass (q r r' : ℕ) (h h' a : ℤ) (N : ℝ
   · rw [norm_zero]
     exact sum_nonneg fun n _ => norm_nonneg _
 
-private theorem e1Dyadic_mem_Ioc {L n : ℕ} (hL : 0 < L) (hn : n ∈ Ico L (2 * L)) :
+private theorem e1Dyadic_mem_Ioc {L n : ℕ} (hL : 0 < L) (hn : n ∈ Icc L (2 * L)) :
     n ∈ Ioc 0 (2 * L) :=
-  mem_Ioc.mpr ⟨hL.trans_le (mem_Ico.mp hn).1, (mem_Ico.mp hn).2.le⟩
+  mem_Ioc.mpr ⟨hL.trans_le (mem_Icc.mp hn).1, (mem_Icc.mp hn).2⟩
 
-private theorem e1Dyadic_card (L : ℕ) : (Ico L (2 * L)).card = L := by
-  rw [Nat.card_Ico]
+private theorem e1Dyadic_card (L : ℕ) : (Icc L (2 * L)).card = L + 1 := by
+  rw [Nat.card_Icc]
   omega
 
 private theorem e1Term_norm_le_completed (Q R q r r' : ℕ) (a h h' : ℤ)
     (hQ : 0 < Q) (hR : 0 < R)
-    (hq : q ∈ Ico Q (2 * Q)) (hr : r ∈ Ico R (2 * R)) (hr' : r' ∈ Ico R (2 * R))
+    (hq : q ∈ Icc Q (2 * Q)) (hr : r ∈ Icc R (2 * R)) (hr' : r' ∈ Icc R (2 * R))
     (haq : a.natAbs.Coprime q) (har : a.natAbs.Coprime r) (har' : a.natAbs.Coprime r')
     {N : ℝ} (hN : 0 < N) (w : 𝓢(ℝ, ℂ)) (S : Finset ℕ)
     (hneg : ∀ x : ℝ, x < 0 → w x = 0)
@@ -131,8 +131,8 @@ private theorem e1Term_norm_le_completed (Q R q r r' : ℕ) (a h h' : ℤ)
     (mem_Ioc.mp (e1Dyadic_mem_Ioc hQ hq)).1 (mem_Ioc.mp (e1Dyadic_mem_Ioc hR hr)).1)
     (mem_Ioc.mp (e1Dyadic_mem_Ioc hR hr')).1
   let _ : NeZero m := ⟨hm.ne'⟩
-  have hlow (L n : ℕ) (hn : n ∈ Ico L (2 * L)) : L ≤ n := (mem_Ico.mp hn).1
-  have hupp (L n : ℕ) (hn : n ∈ Ico L (2 * L)) : n ≤ 2 * L := (mem_Ico.mp hn).2.le
+  have hlow (L n : ℕ) (hn : n ∈ Icc L (2 * L)) : L ≤ n := (mem_Icc.mp hn).1
+  have hupp (L n : ℕ) (hn : n ∈ Icc L (2 * L)) : n ≤ 2 * L := (mem_Icc.mp hn).2
   have hmLower : Q * R ^ 2 ≤ m := by
     calc
       _ = Q * R * R := by ring
@@ -172,15 +172,15 @@ private theorem e1Term_norm_le_completed (Q R q r r' : ℕ) (a h h' : ℤ)
     gcongr
 
 private theorem e1DyadicZero_sum_eq_card (Q R H : ℕ) :
-    (∑ _q ∈ Ico Q (2 * Q), ∑ r ∈ Ico R (2 * R), ∑ r' ∈ Ico R (2 * R),
+    (∑ _q ∈ Icc Q (2 * Q), ∑ r ∈ Icc R (2 * R), ∑ r' ∈ Icc R (2 * R),
         ∑ h ∈ e1NonzeroFrequencies H, ∑ h' ∈ e1NonzeroFrequencies H,
           if e1Determinant h h' r r' = 0 then (1 : ℝ) else 0) =
-      (Q : ℝ) * ((e1ZeroDeterminantTuples H R).card : ℝ) := by
-  let Rset := Ico R (2 * R)
+      ((Q : ℝ) + 1) * ((e1ZeroDeterminantTuplesClosed H R).card : ℝ) := by
+  let Rset := Icc R (2 * R)
   let F := e1NonzeroFrequencies H
-  simp only [sum_const, e1Dyadic_card, nsmul_eq_mul]
+  simp only [sum_const, e1Dyadic_card, nsmul_eq_mul, Nat.cast_add, Nat.cast_one]
   congr 1
-  rw [e1ZeroDeterminantTuples, card_eq_sum_ones, Nat.cast_sum]
+  rw [e1ZeroDeterminantTuplesClosed, card_eq_sum_ones, Nat.cast_sum]
   simp only [Nat.cast_one, sum_filter, sum_product]
   let z (r r' : ℕ) (h h' : ℤ) : ℝ := if e1Determinant h h' r r' = 0 then 1 else 0
   change (∑ r ∈ Rset, ∑ r' ∈ Rset, ∑ h ∈ F, ∑ h' ∈ F, z r r' h h') =
@@ -200,11 +200,11 @@ theorem e1CompletedCauchyMass_le (Q R H P T J : ℕ) (hQ : 0 < Q) (hR : 0 < R)
     (hT : ∀ d ∈ Ioc 0 (2 * R), d.divisors.card ≤ T)
     (hJ : ∀ j : ℤ, j ≠ 0 → j.natAbs ≤ 2 * H * (2 * R) → j.natAbs.divisors.card ≤ J) :
     e1CompletedCauchyMass Q R H a N w S ≤
-      (4 * B * (T : ℝ)) * (N * Q * R * H) +
-      (24 * C * (P : ℝ)^2) * ((Q : ℝ) * Real.sqrt Q * (R : ℝ)^3 * (H : ℝ)^2) +
+      (16 * B * (T : ℝ)) * (N * Q * R * H) +
+      (192 * C * (P : ℝ)^2) * ((Q : ℝ) * Real.sqrt Q * (R : ℝ)^3 * (H : ℝ)^2) +
       (64 * C * (J : ℝ) * (T : ℝ)^2) * (N * R * (H : ℝ)^2) := by
-  let D := Ico Q (2 * Q)
-  let A := Ico R (2 * R)
+  let D := Icc Q (2 * Q)
+  let A := Icc R (2 * R)
   let F := e1NonzeroFrequencies H
   let K := 6 * C * (P : ℝ)^2 * (Real.sqrt Q * R)
   let L := C * N / ((Q : ℝ) * (R : ℝ)^2)
@@ -232,15 +232,22 @@ theorem e1CompletedCauchyMass_le (Q R H P T J : ℕ) (hQ : 0 < Q) (hR : 0 < R)
     have := hz0 r r' h h'
     dsimp only [W, K, L]
     positivity
+  have hQcard : (Q : ℝ) + 1 ≤ 2 * (Q : ℝ) := by
+    have h : (1 : ℝ) ≤ Q := by exact_mod_cast hQ
+    linarith
+  have hRcard : (R : ℝ) + 1 ≤ 2 * (R : ℝ) := by
+    have h : (1 : ℝ) ≤ R := by exact_mod_cast hR
+    linarith
   have hDiag : (∑ _q ∈ D, ∑ r ∈ A, ∑ r' ∈ A, ∑ h ∈ F, ∑ h' ∈ F, z r r' h h') ≤
-      (4 * (Q : ℝ) * H * R * T) := by
+      (16 * (Q : ℝ) * H * R * T) := by
     rw [show (∑ _q ∈ D, ∑ r ∈ A, ∑ r' ∈ A, ∑ h ∈ F, ∑ h' ∈ F, z r r' h h') =
-      (Q : ℝ) * ((e1ZeroDeterminantTuples H R).card : ℝ) from e1DyadicZero_sum_eq_card Q R H]
-    have hb : ((e1ZeroDeterminantTuples H R).card : ℝ) ≤ 4 * (H : ℝ) * R * T := by
-      exact_mod_cast e1ZeroDeterminantTuples_card_le_of_divisor_cap H R T hR
+      ((Q : ℝ) + 1) * ((e1ZeroDeterminantTuplesClosed H R).card : ℝ) from e1DyadicZero_sum_eq_card Q R H]
+    have hb : ((e1ZeroDeterminantTuplesClosed H R).card : ℝ) ≤ 8 * (H : ℝ) * R * T := by
+      exact_mod_cast e1ZeroDeterminantTuplesClosed_card_le_eight_mul H R T hR
         (fun _ hd => hT _ (e1Dyadic_mem_Ioc hR hd))
-    refine (mul_le_mul_of_nonneg_left hb (Nat.cast_nonneg _)).trans_eq ?_
-    ring
+    calc
+      _ ≤ (2 * (Q : ℝ)) * (8 * (H : ℝ) * R * T) := by gcongr
+      _ = _ := by ring
   have hGcd : (∑ q ∈ D, ∑ r ∈ A, ∑ r' ∈ A, ∑ h ∈ F, ∑ h' ∈ F, (g q r r' h h' : ℝ)) ≤
       (64 * (Q : ℝ) * J * ((H : ℝ) * T)^2 * (R : ℝ)^3) := by
     exact_mod_cast e1DyadicNonzeroGcd_sum_le Q R H T J hQ hR hT hJ
@@ -265,16 +272,18 @@ theorem e1CompletedCauchyMass_le (Q R H P T J : ℕ) (hQ : 0 < Q) (hR : 0 < R)
       exact sum_le_sum_of_subset_of_nonneg (filter_subset _ _) (fun r' _ _ =>
         sum_nonneg fun h _ => sum_nonneg fun h' _ => hW q r r' h h')
     _ = (B * N) * (∑ _q ∈ D, ∑ r ∈ A, ∑ r' ∈ A, ∑ h ∈ F, ∑ h' ∈ F, z r r' h h') +
-        K * ((Q : ℝ) * ((R : ℝ) * (2 * H))^2) +
+        K * (((Q : ℝ) + 1) * (((R : ℝ) + 1) * (2 * H))^2) +
         L * (∑ q ∈ D, ∑ r ∈ A, ∑ r' ∈ A, ∑ h ∈ F, ∑ h' ∈ F, (g q r r' h h' : ℝ)) := by
       simp only [W, sum_add_distrib, ← mul_sum, sum_const, D, A, F, e1Dyadic_card,
-        card_e1NonzeroFrequencies, nsmul_eq_mul, Nat.cast_mul, Nat.cast_ofNat]
+        card_e1NonzeroFrequencies, nsmul_eq_mul, Nat.cast_mul, Nat.cast_ofNat, Nat.cast_add,
+        Nat.cast_one]
       ring
-    _ ≤ (B * N) * (4 * (Q : ℝ) * H * R * T) +
-        K * ((Q : ℝ) * ((R : ℝ) * (2 * H))^2) +
+    _ ≤ (B * N) * (16 * (Q : ℝ) * H * R * T) +
+        K * ((2 * (Q : ℝ)) * ((2 * (R : ℝ)) * (2 * H))^2) +
         L * (64 * (Q : ℝ) * J * ((H : ℝ) * T)^2 * (R : ℝ)^3) :=
-      add_le_add (add_le_add (mul_le_mul_of_nonneg_left hDiag (by positivity)) le_rfl)
-        (mul_le_mul_of_nonneg_left hGcd (by dsimp only [L]; positivity))
+      add_le_add (add_le_add (mul_le_mul_of_nonneg_left hDiag (by positivity))
+        (by have hK : 0 ≤ K := by dsimp only [K]; positivity
+            gcongr)) (mul_le_mul_of_nonneg_left hGcd (by dsimp only [L]; positivity))
     _ = _ := by
       dsimp only [K, L]
       have hQ' : (Q : ℝ) ≠ 0 := by exact_mod_cast hQ.ne'
@@ -301,7 +310,7 @@ theorem exists_e1CompletedCauchyMass_rpow {κ ε B C : ℝ}
   have hδ : 0 < δ := by dsimp only [δ]; positivity
   obtain ⟨D, hD, htau⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow
     (k := 2) (by norm_num) hδ
-  refine ⟨(1 + 4 * B + 64 * C) * (D + 2)^3, by positivity, ?_⟩
+  refine ⟨(1 + 16 * B + 192 * C) * (D + 2)^3, by positivity, ?_⟩
   intro X hX Q R H hQ hR hQR hRbox hHR a N hN w S hneg hS hdecay hmass
   let Dcap := 1 + ⌈D * X ^ (κ * δ)⌉₊
   have hX0 : 0 < X := zero_lt_one.trans_le hX
@@ -346,8 +355,8 @@ theorem exists_e1CompletedCauchyMass_rpow {κ ε B C : ℝ}
         congr 1
         dsimp only [δ]
         field_simp
-  let Ω := (1 + 4 * B + 64 * C) * (Dcap : ℝ)^3
-  have hΩ : Ω ≤ (1 + 4 * B + 64 * C) * (D + 2)^3 * X ^ ε := by
+  let Ω := (1 + 16 * B + 192 * C) * (Dcap : ℝ)^3
+  have hΩ : Ω ≤ (1 + 16 * B + 192 * C) * (D + 2)^3 * X ^ ε := by
     dsimp only [Ω]
     rw [mul_assoc]
     exact mul_le_mul_of_nonneg_left hcapCube (by positivity)
@@ -355,15 +364,15 @@ theorem exists_e1CompletedCauchyMass_rpow {κ ε B C : ℝ}
     nlinarith only [mul_nonneg (sub_nonneg.mpr hcap1) (show 0 ≤ (Dcap : ℝ)^2 + Dcap by positivity)]
   have h2 : (Dcap : ℝ)^2 ≤ (Dcap : ℝ)^3 := by
     nlinarith only [mul_nonneg (sub_nonneg.mpr hcap1) (show 0 ≤ (Dcap : ℝ)^2 by positivity)]
-  have hc1 : 4 * B * (Dcap : ℝ) ≤ Ω := by
+  have hc1 : 16 * B * (Dcap : ℝ) ≤ Ω := by
     dsimp only [Ω]
     exact mul_le_mul (by linarith) h1 (by positivity) (by positivity)
-  have hc2 : 24 * C * (Dcap : ℝ)^2 ≤ Ω := by
+  have hc2 : 192 * C * (Dcap : ℝ)^2 ≤ Ω := by
     dsimp only [Ω]
     exact mul_le_mul (by linarith) h2 (by positivity) (by positivity)
   have hc3 : 64 * C * (Dcap : ℝ)^2 * (Dcap : ℝ) ≤ Ω := by
     dsimp only [Ω]
-    nlinarith only [mul_nonneg (show 0 ≤ 1 + 4 * B by positivity)
+    nlinarith only [mul_nonneg (show 0 ≤ 1 + 16 * B + 128 * C by positivity)
       (show 0 ≤ (Dcap : ℝ)^3 by positivity)]
   have hc3' : 64 * C * (Dcap : ℝ) * (Dcap : ℝ)^2 ≤ Ω := by
     calc
@@ -380,7 +389,7 @@ theorem exists_e1CompletedCauchyMass_rpow {κ ε B C : ℝ}
 theorem exists_e1ReciprocalTotient_rpow {κ ε : ℝ} (hκ : 0 < κ) (hε : 0 < ε) :
     ∃ D : ℝ, 0 < D ∧ ∀ (X : ℝ), 1 ≤ X → ∀ (Q R : ℕ), 0 < Q → 0 < R →
       4 * (Q : ℝ) * R ≤ X ^ κ →
-      ∀ q ∈ Ico Q (2 * Q), ∀ s ∈ Ico R (2 * R),
+      ∀ q ∈ Icc Q (2 * Q), ∀ s ∈ Icc R (2 * R),
         (1 : ℝ) / (q * s).totient ≤ (D * X ^ ε) / ((Q : ℝ) * R) := by
   let δ := ε / κ
   have hδ : 0 < δ := by dsimp only [δ]; positivity
@@ -389,11 +398,11 @@ theorem exists_e1ReciprocalTotient_rpow {κ ε : ℝ} (hκ : 0 < κ) (hε : 0 < 
   refine ⟨D, hD, ?_⟩
   intro X hX Q R hQ hR hcap q hq s hs
   let m := q * s
-  have hlow : Q * R ≤ m := Nat.mul_le_mul (mem_Ico.mp hq).1 (mem_Ico.mp hs).1
+  have hlow : Q * R ≤ m := Nat.mul_le_mul (mem_Icc.mp hq).1 (mem_Icc.mp hs).1
   have hm : 0 < m := (Nat.mul_pos hQ hR).trans_le hlow
   have hup : (m : ℝ) ≤ 4 * (Q : ℝ) * R := by
     have h : (m : ℝ) ≤ (2 * (Q : ℝ)) * (2 * (R : ℝ)) := by
-      exact_mod_cast Nat.mul_le_mul (mem_Ico.mp hq).2.le (mem_Ico.mp hs).2.le
+      exact_mod_cast Nat.mul_le_mul (mem_Icc.mp hq).2 (mem_Icc.mp hs).2
     exact h.trans_eq (by ring)
   have hφ : (0 : ℝ) < m.totient := Nat.cast_pos.mpr (Nat.totient_pos.mpr hm)
   have hm' : (0 : ℝ) < m := Nat.cast_pos.mpr hm
@@ -498,9 +507,9 @@ has total sampled mass at most (4N). -/
 theorem e1_fixedMajorant (N : ℕ) (hN : 0 < N) :
     let w := CommonSmoothCutoff.dyadicCutoffSchwartz
     let S := Icc 0 (3 * N)
-    Ico N (2 * N) ⊆ S ∧
+    Icc N (2 * N) ⊆ S ∧
       (∀ n ∈ S, 0 ≤ (w ((n : ℝ) / (N : ℝ))).re) ∧
-      (∀ n ∈ Ico N (2 * N), 1 ≤ (w ((n : ℝ) / (N : ℝ))).re) ∧
+      (∀ n ∈ Icc N (2 * N), 1 ≤ (w ((n : ℝ) / (N : ℝ))).re) ∧
       (∀ x : ℝ, x < 0 → w x = 0) ∧
       (∀ n : ℕ, w ((n : ℝ) / (N : ℝ)) ≠ 0 → n ∈ S) ∧
       (∑ n ∈ S, ‖w ((n : ℝ) / (N : ℝ))‖) ≤ 4 * (N : ℝ) := by
@@ -510,7 +519,7 @@ theorem e1_fixedMajorant (N : ℕ) (hN : 0 < N) :
       x ∈ Set.Icc (1 / 2 : ℝ) 3 := by
     rw [CommonSmoothCutoff.dyadicCutoffSchwartz_apply, Ne, Complex.ofReal_eq_zero] at hx
     exact CommonSmoothCutoff.dyadicCutoff_tsupport_subset (subset_closure hx)
-  refine ⟨fun n hn => mem_Icc.mpr ⟨Nat.zero_le _, by have := (mem_Ico.mp hn).2; omega⟩, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨fun n hn => mem_Icc.mpr ⟨Nat.zero_le _, by have := (mem_Icc.mp hn).2; omega⟩, ?_, ?_, ?_, ?_, ?_⟩
   · intro n _
     simpa only [CommonSmoothCutoff.dyadicCutoffSchwartz_apply, Complex.ofReal_re] using
       CommonSmoothCutoff.dyadicCutoff_nonneg ((n : ℝ) / N)
@@ -518,8 +527,8 @@ theorem e1_fixedMajorant (N : ℕ) (hN : 0 < N) :
     rw [CommonSmoothCutoff.dyadicCutoffSchwartz_apply, Complex.ofReal_re,
       CommonSmoothCutoff.dyadicCutoff_eq_one]
     refine ⟨(le_div_iff₀ hN').mpr ?_, (div_le_iff₀ hN').mpr ?_⟩
-    · simpa using (Nat.cast_le.mpr (mem_Ico.mp hn).1 : (N : ℝ) ≤ n)
-    · exact_mod_cast (mem_Ico.mp hn).2.le
+    · simpa using (Nat.cast_le.mpr (mem_Icc.mp hn).1 : (N : ℝ) ≤ n)
+    · exact_mod_cast (mem_Icc.mp hn).2
   · intro x hx
     by_contra h
     have := (hne x h).1

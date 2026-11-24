@@ -430,7 +430,7 @@ theorem cutoff_order_four : ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ) (x : ℝ),
             push_cast
             linarith
 
-open scoped FourierTransform
+open scoped FourierTransform SchwartzMap
 
 /-- The complex-valued cutoff used in Fourier integrals. -/
 def complexCutoff : ℝ → ℂ := Complex.ofRealCLM ∘ cutoff
@@ -442,6 +442,16 @@ private theorem complexCutoff_tsupport_subset : tsupport complexCutoff ⊆ tsupp
   apply closure_mono
   intro x hx
   exact fun h => hx (by simp [complexCutoff, h])
+
+/-- The same fixed cutoff as a Schwartz profile for the physical
+Poisson and E1 completion APIs. -/
+def cutoffSchwartz : 𝓢(ℝ, ℂ) := by
+  have hcompact : HasCompactSupport complexCutoff :=
+    isCompact_Icc.of_isClosed_subset (isClosed_tsupport _)
+      (complexCutoff_tsupport_subset.trans cutoff_tsupport_subset)
+  exact hcompact.toSchwartzMap complexCutoff_contDiff
+
+@[simp] theorem cutoffSchwartz_coe : ⇑cutoffSchwartz = complexCutoff := rfl
 
 private theorem norm_iteratedDeriv_complexCutoff (n : ℕ) (x : ℝ) :
     ‖iteratedDeriv n complexCutoff x‖ = |iteratedDeriv n cutoff x| := by
@@ -606,6 +616,15 @@ theorem cutoff_fourier_log_five (D : ℕ) : ∀ᶠ x : ℝ in atTop, ∀ t : ℝ
 /-- Absolute Poisson tail on the lattice of mesh `t = M/ℓ`. -/
 def cutoffFourierTail (t H : ℝ) (h : ℤ) : ℝ :=
   if H < |(h : ℝ)| then t * ‖𝓕 complexCutoff (t * (h : ℝ))‖ else 0
+
+/-- The absolute tail uses the same Fourier coefficients when the
+cutoff is passed to a Schwartz-space Poisson identity. -/
+theorem cutoffFourierTail_eq_schwartz (t H : ℝ) (h : ℤ) :
+    cutoffFourierTail t H h =
+      if H < |(h : ℝ)| then t * ‖(𝓕 cutoffSchwartz) (t * (h : ℝ))‖ else 0 := by
+  have hFourier : ⇑(𝓕 cutoffSchwartz : 𝓢(ℝ, ℂ)) = 𝓕 complexCutoff := by
+    rw [SchwartzMap.fourier_coe, cutoffSchwartz_coe]
+  rw [cutoffFourierTail, ← hFourier]
 
 /-- The absolute omitted Poisson mass at the fixed `log(x)^5` cutoff is
 `O_D(x^{-D})`, with a threshold uniform in every positive mesh. -/
