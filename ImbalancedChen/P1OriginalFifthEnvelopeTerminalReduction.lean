@@ -108,7 +108,7 @@ theorem terminalEnvelopeSum_le_pointwise_bound_mul_mass
   · simp only [if_pos ht, mul_one]
     rw [mul_comm M]
     exact mul_le_mul_of_nonneg_left (hM j hj p hp ht) (abs_nonneg _)
-  · simp only [if_neg ht, mul_zero, mul_zero]
+  · simp only [if_neg ht, mul_zero, le_refl]
 
 /-- The precise finite normalized reduction at the original Suzuki scale.
 It leaves two independent inputs visible: a pointwise source envelope and

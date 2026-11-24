@@ -43,12 +43,8 @@ theorem cons_mem_iff {n : Nat} (s t : ℝ) (y : Fin n → ℝ) :
       simpa only [Fin.sum_univ_succ, Fin.cons_zero, Fin.cons_succ] using hsum
     exact ⟨⟨ht, by linarith⟩, ⟨hy, by linarith⟩⟩
   · rintro ⟨⟨ht, _⟩, ⟨hy, hys⟩⟩
-    have hc : ∀ i : Fin (n + 1), 0 ≤ Fin.cons t y i := by
-      intro i
-      refine Fin.cases ?_ ?_ i
-      · simpa using ht
-      · intro j
-        simpa using hy j
+    have hc : ∀ i : Fin (n + 1), 0 ≤ (Fin.cons t y : Fin (n + 1) → ℝ) i := by
+      simpa only [Fin.forall_fin_succ, Fin.cons_zero, Fin.cons_succ] using And.intro ht hy
     have hs : t + ∑ i : Fin n, y i ≤ s := by linarith
     exact ⟨hc, by
       simpa only [Fin.sum_univ_succ, Fin.cons_zero, Fin.cons_succ] using hs⟩
@@ -123,7 +119,9 @@ theorem isClosed_standardSimplex {n : Nat} (s : ℝ) :
     fun_prop
   have hbound : IsClosed {x : Fin n → ℝ | (∑ i : Fin n, x i) ≤ s} :=
     isClosed_le hsum continuous_const
-  simpa [standardSimplex] using hcoords.inter hbound
+  change IsClosed ({x : Fin n → ℝ | ∀ i, 0 ≤ x i} ∩
+    {x : Fin n → ℝ | (∑ i : Fin n, x i) ≤ s})
+  exact hcoords.inter hbound
 
 /-- The coordinate sum bounds each nonnegative coordinate by s. -/
 theorem simplex_subset_box {n : Nat} {s : ℝ} (hs : 0 ≤ s) :

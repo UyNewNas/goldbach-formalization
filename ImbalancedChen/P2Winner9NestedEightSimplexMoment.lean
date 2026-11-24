@@ -56,7 +56,6 @@ private theorem coefficient_cons (m0 a : Nat) (ms : List Nat) :
   unfold coefficient factorialProduct
   simp only [List.map_cons, List.prod_cons, Nat.cast_mul, hi]
   field_simp [hOld, hNew]
-  ring
 
 /-- Exact factorial evaluation of every iterated simplex monomial.
 The induction uses the previously proved beta monomial integral once per
@@ -66,7 +65,8 @@ theorem nestedMoment_eq (m0 : Nat) (ms : List Nat) (s : ℝ) :
       coefficient m0 ms * s ^ totalDegree m0 ms := by
   induction ms generalizing s with
   | nil =>
-      simp [nestedMoment, coefficient, factorialProduct, totalDegree]
+      have hf : (m0.factorial : ℝ) ≠ 0 := by positivity
+      simp [nestedMoment, coefficient, factorialProduct, totalDegree, hf]
   | cons a ms ih =>
       let b := totalDegree m0 ms
       let c := coefficient m0 ms

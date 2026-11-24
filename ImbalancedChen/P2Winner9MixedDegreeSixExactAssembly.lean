@@ -110,18 +110,15 @@ theorem mixed_term_fraction (d : SimplexData)
       (mixedTermNumerator d j k.val : ℚ) /
         mixedTermDenominator d j k.val := rfl
 
-/-- One Q80 floor of T10+Q6, then one Q96 floor of positive Jensen,
-gives the mixed raw bound. The former curvature maximum is a predecessor
-for the later maximum, not another summand in this expression. -/
-theorem mixed_directed_floor_semantics
-    (d : SimplexData) (tFloor raw : Nat)
-    (hT : curvatureFloorQ80 (total d).num (total d).den tFloor)
+private theorem directed_floor_of_fraction
+    (d : SimplexData) (p : ExactFraction) (tFloor raw : Nat)
+    (hT : curvatureFloorQ80 p.num p.den tFloor)
     (hRaw : jensenProductFloorQ96 d.jensenNum d.jensenDen
       tFloor raw) :
     (raw : ℚ) / q96 ≤
-      ((d.jensenNum : ℚ) / d.jensenDen) * (1 + value (total d)) := by
-  have ht : (tFloor : ℚ) / q80 ≤ value (total d) := by
-    simpa [value] using (curvature_floor_Q80_semantics hT).1
+      ((d.jensenNum : ℚ) / d.jensenDen) * (1 + value p) := by
+  have ht : (tFloor : ℚ) / q80 ≤ value p := by
+    exact (curvature_floor_Q80_semantics hT).1
   have hr : (raw : ℚ) / q96 ≤
       ((d.jensenNum : ℚ) / d.jensenDen) *
         (1 + (tFloor : ℚ) / q80) := by
@@ -133,9 +130,21 @@ theorem mixed_directed_floor_semantics
         ((d.jensenNum : ℚ) / d.jensenDen) *
           (1 + (tFloor : ℚ) / q80) := hr
     _ ≤ ((d.jensenNum : ℚ) / d.jensenDen) *
-        (1 + value (total d)) := by
+        (1 + value p) := by
       apply mul_le_mul_of_nonneg_left (by linarith [ht])
       positivity
+
+/-- One Q80 floor of T10+Q6, then one Q96 floor of positive Jensen,
+gives the mixed raw bound. The former curvature maximum is a predecessor
+for the later maximum, not another summand in this expression. -/
+theorem mixed_directed_floor_semantics
+    (d : SimplexData) (tFloor raw : Nat)
+    (hT : curvatureFloorQ80 (total d).num (total d).den tFloor)
+    (hRaw : jensenProductFloorQ96 d.jensenNum d.jensenDen
+      tFloor raw) :
+    (raw : ℚ) / q96 ≤
+      ((d.jensenNum : ℚ) / d.jensenDen) * (1 + value (total d)) :=
+  directed_floor_of_fraction d (total d) tFloor raw hT hRaw
 
 /-- The mixed stage can only replace the already selected curvature floor.
 The ledger increment is this difference, never the full new raw floor. -/

@@ -61,7 +61,7 @@ theorem rationalMoment_cast (g y : Fin 7 → ℚ) (k : ℕ) :
   apply Finset.sum_congr rfl
   intro i _
   have hmap := duplicateH_map (Algebra.ofId ℚ ℝ) y i k
-  change (duplicateH y i k : ℝ) = duplicateH (fun r => (y r : ℝ)) i k at hmap
+  change ((duplicateH y i k : ℚ) : ℝ) = duplicateH (fun r => (y r : ℝ)) i k at hmap
   rw [hmap]
 
 /-- The exact rational coefficient already proved by the held K
@@ -112,6 +112,65 @@ private theorem rational_smul_self (q x : ℚ) : q • x = q * x := by rfl
 
 private theorem rational_smul_real (q : ℚ) (x : ℝ) : q • x = (q : ℝ) * x := by rfl
 
+/-- Same factorial-product rewrite as P2Winner9PowerMoment, specialized to
+seven barycentric coordinates of the manuscript's six-dimensional simplex. -/
+private theorem baryCoefficient_eq_product (e : Fin 7 → ℕ) :
+    baryCoefficient e =
+      ((∏ r, (e r).factorial : ℕ) : ℚ) / (((∑ r, e r) + 6).factorial : ℚ) := by
+  rw [baryCoefficient, P2Winner9NestedEightSimplexMoment.factorialProduct,
+    List.map_ofFn, List.prod_ofFn, List.sum_ofFn,
+    Fin.prod_univ_succ (fun r : Fin 7 => (e r).factorial),
+    Fin.sum_univ_succ (fun r : Fin 7 => e r)]
+  rfl
+
+/-- The existing multinomial_shifted_factorial proof, with Fin 7 and the
+already defined unitExponent. No finite numerical certificate is introduced. -/
+private theorem multinomial_bumped_factorial {k : ℕ} {e : Fin 7 → ℕ}
+    (he : e ∈ Finset.piAntidiag Finset.univ k) (i : Fin 7) :
+    Nat.multinomial Finset.univ e * (∏ r, (bumped e i r).factorial) =
+      k.factorial * (e i + 1) := by
+  classical
+  have hprod : (∏ r, (bumped e i r).factorial) =
+      (∏ r, (e r).factorial) * (e i + 1) := by
+    calc
+      _ = ∏ r, ((e r).factorial * if r = i then e i + 1 else 1) := by
+        refine Finset.prod_congr rfl (fun r _ => ?_)
+        by_cases h : r = i
+        · subst r
+          simp [bumped, unitExponent, Nat.factorial_succ, mul_comm]
+        · simp [bumped, unitExponent, h]
+      _ = _ := by rw [Finset.prod_mul_distrib]; simp
+  rw [hprod, ← mul_assoc, mul_comm (Nat.multinomial _ _), Nat.multinomial_spec,
+    (Finset.mem_piAntidiag.mp he).1]
+
+/-- Cancel multinomial and Dirichlet factorials before enumerating the 924
+sixth-degree exponent tuples. This is num:simplex-moment's exact coefficient. -/
+private theorem integratedPower_eq_factored (y : Fin 7 → ℝ) (i : Fin 7) (k : ℕ) :
+    integratedPower y i k =
+      ((k.factorial : ℝ) / ((k + 7).factorial : ℝ)) *
+        ∑ e ∈ Finset.piAntidiag Finset.univ k,
+          ((e i + 1 : ℕ) : ℝ) * ∏ r : Fin 7, y r ^ e r := by
+  classical
+  rw [integratedPower, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun e he => ?_)
+  have hu : (∑ r : Fin 7, unitExponent i r) = 1 := by
+    simp [unitExponent, Finset.sum_ite_eq']
+  have hsum : (∑ r : Fin 7, bumped e i r) + 6 = k + 7 := by
+    simp only [bumped, Finset.sum_add_distrib, hu, (Finset.mem_piAntidiag.mp he).1]
+    <;> omega
+  have hprod : (Nat.multinomial Finset.univ e : ℝ) *
+      ((∏ r, (bumped e i r).factorial : ℕ) : ℝ) =
+        (k.factorial : ℝ) * ((e i + 1 : ℕ) : ℝ) := by
+    exact_mod_cast multinomial_bumped_factorial he i
+  rw [baryCoefficient_eq_product]
+  simp only [Rat.cast_div, Rat.cast_natCast]
+  rw [hsum]
+  calc
+    _ = ((Nat.multinomial Finset.univ e : ℝ) *
+          ((∏ r, (bumped e i r).factorial : ℕ) : ℝ)) *
+        ((∏ r : Fin 7, y r ^ e r) / ((k + 7).factorial : ℝ)) := by ring
+    _ = _ := by rw [hprod]; ring
+
 private theorem integratedPower_newton_guard_0_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 0 = duplicateH y 0 0 /
       ((Nat.factorial 7 : ℝ) * ((7 + 0).choose 0 : ℝ)) := by
@@ -123,10 +182,11 @@ private theorem integratedPower_newton_guard_0_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 0 = duplicateH y 1 0 /
@@ -139,10 +199,11 @@ private theorem integratedPower_newton_guard_0_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 0 = duplicateH y 2 0 /
@@ -155,10 +216,11 @@ private theorem integratedPower_newton_guard_0_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 0 = duplicateH y 3 0 /
@@ -171,10 +233,11 @@ private theorem integratedPower_newton_guard_0_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 0 = duplicateH y 4 0 /
@@ -187,10 +250,11 @@ private theorem integratedPower_newton_guard_0_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 0 = duplicateH y 5 0 /
@@ -203,10 +267,11 @@ private theorem integratedPower_newton_guard_0_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_0_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 0 = duplicateH y 6 0 /
@@ -219,10 +284,11 @@ private theorem integratedPower_newton_guard_0_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 1 = duplicateH y 0 1 /
@@ -235,10 +301,11 @@ private theorem integratedPower_newton_guard_1_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 1 = duplicateH y 1 1 /
@@ -251,10 +318,11 @@ private theorem integratedPower_newton_guard_1_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 1 = duplicateH y 2 1 /
@@ -267,10 +335,11 @@ private theorem integratedPower_newton_guard_1_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 1 = duplicateH y 3 1 /
@@ -283,10 +352,11 @@ private theorem integratedPower_newton_guard_1_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 1 = duplicateH y 4 1 /
@@ -299,10 +369,11 @@ private theorem integratedPower_newton_guard_1_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 1 = duplicateH y 5 1 /
@@ -315,10 +386,11 @@ private theorem integratedPower_newton_guard_1_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_1_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 1 = duplicateH y 6 1 /
@@ -331,10 +403,11 @@ private theorem integratedPower_newton_guard_1_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 2 = duplicateH y 0 2 /
@@ -347,10 +420,11 @@ private theorem integratedPower_newton_guard_2_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 2 = duplicateH y 1 2 /
@@ -363,10 +437,11 @@ private theorem integratedPower_newton_guard_2_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 2 = duplicateH y 2 2 /
@@ -379,10 +454,11 @@ private theorem integratedPower_newton_guard_2_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 2 = duplicateH y 3 2 /
@@ -395,10 +471,11 @@ private theorem integratedPower_newton_guard_2_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 2 = duplicateH y 4 2 /
@@ -411,10 +488,11 @@ private theorem integratedPower_newton_guard_2_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 2 = duplicateH y 5 2 /
@@ -427,10 +505,11 @@ private theorem integratedPower_newton_guard_2_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_2_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 2 = duplicateH y 6 2 /
@@ -443,10 +522,11 @@ private theorem integratedPower_newton_guard_2_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 3 = duplicateH y 0 3 /
@@ -459,10 +539,11 @@ private theorem integratedPower_newton_guard_3_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 3 = duplicateH y 1 3 /
@@ -475,10 +556,11 @@ private theorem integratedPower_newton_guard_3_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 3 = duplicateH y 2 3 /
@@ -491,10 +573,11 @@ private theorem integratedPower_newton_guard_3_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 3 = duplicateH y 3 3 /
@@ -507,10 +590,11 @@ private theorem integratedPower_newton_guard_3_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 3 = duplicateH y 4 3 /
@@ -523,10 +607,11 @@ private theorem integratedPower_newton_guard_3_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 3 = duplicateH y 5 3 /
@@ -539,10 +624,11 @@ private theorem integratedPower_newton_guard_3_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_3_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 3 = duplicateH y 6 3 /
@@ -555,10 +641,11 @@ private theorem integratedPower_newton_guard_3_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 4 = duplicateH y 0 4 /
@@ -571,10 +658,11 @@ private theorem integratedPower_newton_guard_4_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 4 = duplicateH y 1 4 /
@@ -587,10 +675,11 @@ private theorem integratedPower_newton_guard_4_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 4 = duplicateH y 2 4 /
@@ -603,10 +692,11 @@ private theorem integratedPower_newton_guard_4_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 4 = duplicateH y 3 4 /
@@ -619,10 +709,11 @@ private theorem integratedPower_newton_guard_4_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 4 = duplicateH y 4 4 /
@@ -635,10 +726,11 @@ private theorem integratedPower_newton_guard_4_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 4 = duplicateH y 5 4 /
@@ -651,10 +743,11 @@ private theorem integratedPower_newton_guard_4_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_4_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 4 = duplicateH y 6 4 /
@@ -667,10 +760,11 @@ private theorem integratedPower_newton_guard_4_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 5 = duplicateH y 0 5 /
@@ -683,10 +777,11 @@ private theorem integratedPower_newton_guard_5_0 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 5 = duplicateH y 1 5 /
@@ -699,10 +794,11 @@ private theorem integratedPower_newton_guard_5_1 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 5 = duplicateH y 2 5 /
@@ -715,10 +811,11 @@ private theorem integratedPower_newton_guard_5_2 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 5 = duplicateH y 3 5 /
@@ -731,10 +828,11 @@ private theorem integratedPower_newton_guard_5_3 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 5 = duplicateH y 4 5 /
@@ -747,10 +845,11 @@ private theorem integratedPower_newton_guard_5_4 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 5 = duplicateH y 5 5 /
@@ -763,10 +862,11 @@ private theorem integratedPower_newton_guard_5_5 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_5_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 5 = duplicateH y 6 5 /
@@ -779,122 +879,151 @@ private theorem integratedPower_newton_guard_5_6 (y : Fin 7 → ℝ) :
       baryCoefficient, bumped, unitExponent,
       P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
       List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+      Nat.multinomial, Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial,
+      duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
       Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+      Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_0 (y : Fin 7 → ℝ) :
     integratedPower y 0 6 = duplicateH y 0 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_1 (y : Fin 7 → ℝ) :
     integratedPower y 1 6 = duplicateH y 1 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_2 (y : Fin 7 → ℝ) :
     integratedPower y 2 6 = duplicateH y 2 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_3 (y : Fin 7 → ℝ) :
     integratedPower y 3 6 = duplicateH y 3 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_4 (y : Fin 7 → ℝ) :
     integratedPower y 4 6 = duplicateH y 4 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_5 (y : Fin 7 → ℝ) :
     integratedPower y 5 6 = duplicateH y 5 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 private theorem integratedPower_newton_guard_6_6 (y : Fin 7 → ℝ) :
     integratedPower y 6 6 = duplicateH y 6 6 /
       ((Nat.factorial 7 : ℝ) * ((7 + 6).choose 6 : ℝ)) := by
   classical
-  norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
-      baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, ofFn_seven, ofFn_six,
-      List.range_succ, List.range_zero,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, rational_smul_real] <;> first | rfl | ring1!
+  -- Phase 1: a previously structured coefficient proof removes all tuple factorials.
+  rw [integratedPower_eq_factored]
+  norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
+  -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
+  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+    Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
+    List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
+    List.range_succ, List.range_zero,
+    Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
+  -- Phase 3: expand the simple monomials and the existing Newton recurrence.
+  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+    Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
+    rational_smul_real]
+  <;> first | rfl | ring1!
 
 theorem integratedPower_newton_guard (y : Fin 7 → ℝ) (i : Fin 7) (k : ℕ)
     (hk : k ≤ 6) :

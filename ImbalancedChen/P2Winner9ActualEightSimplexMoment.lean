@@ -54,7 +54,8 @@ theorem integral_simplex_succ (n : Nat) {s : ℝ} (hs : 0 ≤ s)
   have hIntR : IntegrableOn (fun p : ℝ × (Fin n → ℝ) => f (Fin.cons p.1 p.2)) R := by
     have h := ((splitEquiv_volume n).integrableOn_comp_preimage
       (splitEquiv n).measurableEmbedding (f := f) (s := S)).2 hInt
-    simpa only [hpre, Function.comp_def, splitEquiv_apply] using h
+    rw [← hpre]
+    simpa only [Function.comp_def, splitEquiv_apply] using h
   have hInd : Integrable (R.indicator
       (fun p : ℝ × (Fin n → ℝ) => f (Fin.cons p.1 p.2))) :=
     hIntR.integrable_indicator hR
@@ -82,20 +83,23 @@ theorem integral_simplex_succ (n : Nat) {s : ℝ} (hs : 0 ≤ s)
             (standardSimplex n (s - t)).indicator
               (fun y => f (Fin.cons t y)) := by
           funext y
+          have hmem : (t, y) ∈ R ↔ y ∈ standardSimplex n (s - t) :=
+            and_iff_right ht
           by_cases hy : y ∈ standardSimplex n (s - t)
-          · simp [R, ht, hy]
-          · simp [R, ht, hy]
+          · simp only [Set.indicator_of_mem (hmem.mpr hy), Set.indicator_of_mem hy]
+          · simp only [Set.indicator_of_notMem (fun h => hy (hmem.mp h)),
+              Set.indicator_of_notMem hy]
         simp only [Set.indicator_of_mem ht]
         rw [hslice, integral_indicator
           (isClosed_standardSimplex (s - t)).measurableSet]
       · have hzero : ∀ y : Fin n → ℝ, (t, y) ∉ R := by
           intro y hy
           exact ht hy.1
-        simp only [Set.indicator_of_not_mem ht]
+        simp only [Set.indicator_of_notMem ht]
         have hz : (fun y : Fin n → ℝ =>
             R.indicator (fun p => f (Fin.cons p.1 p.2)) (t, y)) = 0 := by
           funext y
-          exact Set.indicator_of_not_mem (hzero y) _
+          exact Set.indicator_of_notMem (hzero y) _
         simp [hz]
 
 /-- Repeated Fubini identifies the actual n-dimensional integral with
@@ -105,13 +109,15 @@ theorem actualMomentN_eq_nested (n m0 : Nat) (ms : Fin n → Nat)
     {s : ℝ} (hs : 0 ≤ s) :
     actualMomentN n m0 ms s =
       nestedMoment m0 (List.ofFn ms) s := by
-  induction n generalizing s ms with
+  induction n generalizing s with
   | zero =>
       have hset : standardSimplex 0 s = Set.univ := by
         ext x
-        simp [standardSimplex, hs]
-      simp [actualMomentN, hset, monomial, nestedMoment,
-        Measure.volume_pi_eq_dirac]
+        simp [P2Winner9SimplexCoordinateSlice.standardSimplex, hs]
+      have hv : (volume : Measure (Fin 0 → ℝ)) = Measure.dirac (0 : Fin 0 → ℝ) :=
+        Measure.volume_pi_eq_dirac _
+      rw [actualMomentN, hset, hv]
+      simp [monomial, nestedMoment]
   | succ n ih =>
       rw [actualMomentN, integral_simplex_succ n hs _
         (continuous_monomial m0 ms s)]

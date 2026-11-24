@@ -185,7 +185,7 @@ theorem tendsto_original_source_liftedAtom_test
         · simpa only [Sum.elim_inr, O, d, hsk, if_true,
             ContinuousLinearMap.comp_apply] using hk
   · simp only [if_neg hs, empty_inter, inter_empty, indicator_empty,
-      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, integral_empty]
+      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, MeasureTheory.setIntegral_empty]
     exact tendsto_const_nhds
 
 def actualOldTest (e : ℚ) (chi omega : ℝ) (m : ℕ) (j : Label5 m)
@@ -213,11 +213,11 @@ theorem actual_source_test_eq_sum_atoms
             liftedAtom rows (actualPattern rows (firstFour t)) from ⟨ht, ha⟩),
         actualOldTest, fixedOldTest,
         actualOld4_eq_fixed_on_atom e chi m omega J5 j hj rows licensed _ ht.1 ha]
-    · simp only [indicator_of_not_mem ht, indicator_of_not_mem
+    · simp only [Set.indicator_of_notMem ht, Set.indicator_of_notMem
         (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
           liftedAtom rows (actualPattern rows (firstFour t)) from fun h => ht h.1)]
   · intro s _ hne
-    apply indicator_of_not_mem
+    apply Set.indicator_of_notMem
     intro ht
     exact hne (wallAtom_unique ht.2 (mem_actual_wallAtom rows (firstFour t)))
   · simp
@@ -273,7 +273,7 @@ theorem integrableOn_fixedOldTest_weight
         ∏ i, 1 / t i) (P1OriginalFifthIntegral.truncatedCell e chi m omega a j) := by
   have hc := (continuousOn_fixedOldTest (e : ℝ) (selectedSeed e m j) a (19 / 96)
       ha rows licensed s).mul (P1OriginalFifthIntegral.continuousOn_reciprocalWeight ha)
-  have hi := hc.integrableOn_compact (isCompact_univ_pi (fun _ => isCompact_Icc))
+  have hi := hc.integrableOn_compact (μ := volume) (isCompact_univ_pi (fun _ => isCompact_Icc))
   exact hi.mono_set (P1OriginalFifthIntegral.truncatedCell_subset_closedBox e chi m omega a j)
 
 /-- Exact integral gluing of the face-owning finite refinement. The RHS
@@ -303,12 +303,15 @@ theorem actualOld4_integral_eq_sum_atoms
       have hs : t ∈ P1OriginalFifthLimit.sourceRegion e chi m omega j := ht.2
       have h := actual_source_test_eq_sum_atoms e chi m omega J5 j hj rows licensed t
       simp only [indicator_of_mem hs] at h
+      change actualOldTest e chi omega m j rows licensed t * (∏ i, 1 / t i) =
+        ∑ s : Pattern rows, (liftedAtom rows s).indicator (fun t =>
+          fixedOldTest (e : ℝ) (selectedSeed e m j) rows licensed s t * ∏ i, 1 / t i) t
       rw [h, Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro s _
       by_cases ha : t ∈ liftedAtom rows s
       · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
-      · simp only [indicator_of_not_mem ha, indicator_of_not_mem
+      · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
           (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
             from fun hh => ha hh.2), zero_mul]
     _ = ∑ s : Pattern rows, ∫ t in P1OriginalFifthIntegral.truncatedCell e chi m omega a j,
@@ -351,9 +354,13 @@ theorem integrableOn_actualOld4_weight
       (P1OriginalFifthIntegral.truncatedCell e chi m omega a j) :=
     (integrableOn_fixedOldTest_weight e chi m omega a ha j rows licensed s).indicator
       (measurableSet_liftedAtom rows s)
-  apply (integrable_finsetSum (Finset.univ : Finset (Pattern rows)) (fun s _ => hint s)).congr_fun
-    ?_ (P1OriginalFifthIntegral.truncatedCell_measurable e chi m omega a j)
+  refine (integrableOn_congr_fun ?_
+    (P1OriginalFifthIntegral.truncatedCell_measurable e chi m omega a j)).mpr
+      (integrable_finsetSum (Finset.univ : Finset (Pattern rows)) (fun s _ => hint s))
   intro t ht
+  change actualOldTest e chi omega m j rows licensed t * (∏ i, 1 / t i) =
+    ∑ s : Pattern rows, (liftedAtom rows s).indicator (fun t =>
+      fixedOldTest (e : ℝ) (selectedSeed e m j) rows licensed s t * ∏ i, 1 / t i) t
   have hs : t ∈ P1OriginalFifthLimit.sourceRegion e chi m omega j := ht.2
   have h := actual_source_test_eq_sum_atoms e chi m omega J5 j hj rows licensed t
   simp only [indicator_of_mem hs] at h
@@ -362,7 +369,7 @@ theorem integrableOn_actualOld4_weight
   intro s _
   by_cases ha : t ∈ liftedAtom rows s
   · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
-  · simp only [indicator_of_not_mem ha, indicator_of_not_mem
+  · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
       (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩ liftedAtom rows s
         from fun hh => ha hh.2), zero_mul]
 
@@ -387,11 +394,9 @@ theorem tendsto_corrected_positiveCell_gatedTest
     e chi D.m omega a ha haRho J5 j hj rows licensed
   have hintNew : IntegrableOn (fun t : Point5 =>
       primeOwnCubeGatedProfile (D.cap5 j : ℝ) t * ∏ i, 1 / t i)
-      (P1OriginalFifthIntegral.truncatedCell e chi D.m omega a j) := by
-    have hc := (P1OriginalFifthIntegral.continuousOn_gatedProfile ha (D.cap5 j : ℝ)).mul
-      (P1OriginalFifthIntegral.continuousOn_reciprocalWeight ha)
-    exact (hc.integrableOn_compact (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set
-      (P1OriginalFifthIntegral.truncatedCell_subset_closedBox e chi D.m omega a j)
+      (P1OriginalFifthIntegral.truncatedCell e chi D.m omega a j) :=
+    P1OriginalFifthIntegral.integrableOn_gatedWeightedProfile
+      e chi D.m omega ha j (D.cap5 j : ℝ)
   have hintOld := integrableOn_actualOld4_weight e chi D.m omega a ha J5 j hj rows licensed
   have hIntegral : correctedSelectedStoredIntegral D e chi omega a j rows licensed =
       (∫ t in P1OriginalFifthIntegral.truncatedCell e chi D.m omega a j,

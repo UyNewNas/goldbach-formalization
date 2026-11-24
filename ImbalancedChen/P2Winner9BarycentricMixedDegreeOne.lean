@@ -21,6 +21,7 @@ open Set MeasureTheory
 open ImbalancedChen.P2Winner9SimplexCoordinateSlice
 open ImbalancedChen.P2Winner9ActualEightSimplexMoment
 open ImbalancedChen.P2Winner9NestedEightSimplexMoment
+open ImbalancedChen.P2Winner9CurvatureExactMomentFloor (gapTotal)
 open ImbalancedChen.P2Winner9CurvatureFullExactAssembly
 open ImbalancedChen.P2Winner9MixedDegreeSixExactAssembly
 
@@ -31,7 +32,12 @@ def affine (v : Fin 9 → ℝ) (x : Fin 8 → ℝ) : ℝ :=
   ∑ i : Fin 9, v i * barycentric i x
 
 theorem barycentric_continuous (i : Fin 9) : Continuous (barycentric i) := by
-  fin_cases i <;> simp [barycentric] <;> fun_prop
+  refine Fin.cases ?_ ?_ i
+  · change Continuous (fun x : Fin 8 → ℝ => 1 - ∑ j : Fin 8, x j)
+    fun_prop
+  · intro j
+    change Continuous (fun x : Fin 8 → ℝ => x j)
+    exact continuous_apply j
 
 theorem affine_continuous (v : Fin 9 → ℝ) : Continuous (affine v) := by
   apply continuous_finsetSum
@@ -92,10 +98,19 @@ theorem barycentric_first (i : Fin 9) :
 
 theorem barycentric_first_value (i : Fin 9) :
     (∫ x in standardSimplex 8 (1 : ℝ), barycentric i x) =
-      1 / (9.factorial : ℝ) := by
+      1 / ((9 : ℕ).factorial : ℝ) := by
   rw [barycentric_first, barycentricMoment_eq]
-  fin_cases i <;>
-    norm_num [unitExponent, factorialProduct, List.ofFn]
+  have hfac (r : Fin 9) : (unitExponent i r).factorial = 1 := by
+    by_cases h : r = i <;> simp [unitExponent, h]
+  have hprod : factorialProduct (List.ofFn (fun r : Fin 8 => unitExponent i r.succ)) = 1 := by
+    rw [factorialProduct, List.map_ofFn, List.prod_ofFn]
+    simp [hfac]
+  have hsum : unitExponent i 0 +
+      (List.ofFn (fun r : Fin 8 => unitExponent i r.succ)).sum = 1 := by
+    rw [List.sum_ofFn, ← Fin.sum_univ_succ]
+    simp [unitExponent, Finset.sum_ite_eq']
+  rw [hfac, hprod, hsum]
+  norm_num
 
 def fourExponent (i k j l : Fin 9) (r : Fin 9) : Nat :=
   unitExponent i r + unitExponent k r +
@@ -138,7 +153,7 @@ def actualMixedExpectation (d : SimplexData) (j : Fin 10) : ℝ :=
 /-- The actual gap measure is the claimed Dirichlet-mixture normalizer.
 This uses nine genuine first barycentric set integrals. -/
 theorem actualGapMass_eq (d : SimplexData) :
-    actualGapMass d = (gapTotal d.gaps : ℝ) / (9.factorial : ℝ) := by
+    actualGapMass d = (gapTotal d.gaps : ℝ) / ((9 : ℕ).factorial : ℝ) := by
   have hi (i : Fin 9) : IntegrableOn
       (fun x : Fin 8 → ℝ => gapVertices d i * barycentric i x)
       (standardSimplex 8 (1 : ℝ)) := by
@@ -166,7 +181,28 @@ theorem mixed_integrand_expand (d : SimplexData) (j : Fin 10)
           bVertices d j r * bVertices d j t) *
           (barycentric i x * barycentric k x *
             barycentric r x * barycentric t x) := by
-  simp only [affine, pow_two, Finset.sum_mul, Finset.mul_sum]
+  let A (i : Fin 9) := gapVertices d i * barycentric i x
+  let B (k : Fin 9) := yVertices d k * barycentric k x
+  let C (r : Fin 9) := bVertices d j r * barycentric r x
+  have hAB : (∑ i, A i) * (∑ k, B k) = ∑ i, ∑ k, A i * B k := by
+    rw [Finset.sum_mul]
+    simp_rw [Finset.mul_sum]
+  have hABC : (∑ i, A i) * (∑ k, B k) * (∑ r, C r) =
+      ∑ i, ∑ k, ∑ r, A i * B k * C r := by
+    rw [hAB]
+    simp_rw [Finset.sum_mul, Finset.mul_sum]
+  change (∑ i, A i) * (∑ k, B k) * (∑ r, C r)^2 = _
+  rw [pow_two, ← mul_assoc, hABC]
+  simp_rw [Finset.sum_mul, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro k _
+  apply Finset.sum_congr rfl
+  intro r _
+  apply Finset.sum_congr rfl
+  intro t _
+  dsimp [A, B, C]
   ring
 
 private def term (d : SimplexData) (j : Fin 10)
@@ -179,12 +215,11 @@ private def term (d : SimplexData) (j : Fin 10)
 private theorem term_integrable (d : SimplexData) (j : Fin 10)
     (i k r t : Fin 9) :
     IntegrableOn (term d j i k r t) (standardSimplex 8 (1 : ℝ)) := by
-  apply ContinuousOn.integrableOn_compact _
-    (isCompact_standardSimplex (by norm_num))
   unfold term
   exact (continuous_const.mul ((((barycentric_continuous i).mul
     (barycentric_continuous k)).mul (barycentric_continuous r)).mul
-      (barycentric_continuous t))).continuousOn
+      (barycentric_continuous t))).continuousOn.integrableOn_compact
+        (isCompact_standardSimplex (by norm_num))
 
 /-- The actual numerator is an exact finite sum of measured fourth
 moments. Each summand is an actual integral, and `barycentricMoment_eq`
@@ -236,7 +271,7 @@ theorem actualMixedNumerator_eq_moment_sum
 theorem actualMixedExpectation_eq_moment_sum
     (d : SimplexData) (j : Fin 10) :
     actualMixedExpectation d j =
-      ((9.factorial : ℝ) / (gapTotal d.gaps : ℝ)) *
+      (((9 : ℕ).factorial : ℝ) / (gapTotal d.gaps : ℝ)) *
         (∑ i : Fin 9, ∑ k : Fin 9, ∑ r : Fin 9, ∑ t : Fin 9,
           (gapVertices d i * yVertices d k *
             bVertices d j r * bVertices d j t) *
@@ -245,7 +280,7 @@ theorem actualMixedExpectation_eq_moment_sum
     actualGapMass_eq]
   have hG : (gapTotal d.gaps : ℝ) ≠ 0 := by
     exact ne_of_gt (by exact_mod_cast d.gapsPos)
-  have hf : (9.factorial : ℝ) ≠ 0 := by norm_num
+  have hf : ((9 : ℕ).factorial : ℝ) ≠ 0 := by norm_num
   field_simp [hG, hf]
 
 /-- An explicit finite Dirichlet factorial expression for the actual
@@ -254,11 +289,11 @@ integer convolution is finite algebra, not a measure-theory premise. -/
 theorem actualMixedExpectation_eq_factorial_sum
     (d : SimplexData) (j : Fin 10) :
     actualMixedExpectation d j =
-      ((9.factorial : ℝ) / (gapTotal d.gaps : ℝ)) *
+      (((9 : ℕ).factorial : ℝ) / (gapTotal d.gaps : ℝ)) *
         (∑ i : Fin 9, ∑ k : Fin 9, ∑ r : Fin 9, ∑ t : Fin 9,
           (gapVertices d i * yVertices d k *
             bVertices d j r * bVertices d j t) *
-            (((fourExponent i k r t 0).factorial *
+            ((((fourExponent i k r t 0).factorial *
               factorialProduct (List.ofFn
                 (fun q : Fin 8 => fourExponent i k r t q.succ)) : Nat) : ℝ) /
               (((fourExponent i k r t 0) +

@@ -62,7 +62,6 @@ theorem curvature_summand_fraction
   unfold curvatureNumerator curvatureDenominator
   push_cast
   field_simp [hGq, hBq, hvq]
-  ring
 
 /-- A directed Q80 floor condition for the exact reconstructed summand.
 The signed numerator is retained as an integer until nonnegativity is
@@ -78,6 +77,7 @@ theorem curvature_floor_Q80_semantics {num : ℤ} {den : Nat} {floor : ℤ}
   rcases h with ⟨hden, hlo, hhi⟩
   have hdq : (0 : ℚ) < den := by exact_mod_cast hden
   have hq : (0 : ℚ) < q80 := by norm_num [q80]
+  rw [mul_comm (q80 : ℤ) num] at hlo hhi
   constructor
   · apply (div_le_div_iff₀ hq hdq).2
     exact_mod_cast hlo
@@ -101,7 +101,6 @@ theorem jensen_product_fraction (jNum jDen tFloor : Nat)
   unfold jensenProductNumerator jensenProductDenominator
   push_cast
   field_simp [hdq, hq]
-  ring
 
 def jensenProductFloorQ96 (jNum jDen tFloor raw : Nat) : Prop :=
   0 < jDen ∧
@@ -124,6 +123,7 @@ theorem jensen_product_floor_Q96_semantics
       unfold jensenProductDenominator q80
       positivity)
   have hq : (0 : ℚ) < q96 := by norm_num [q96]
+  rw [mul_comm q96 (jensenProductNumerator jNum tFloor)] at hlo hhi
   constructor
   · apply (div_le_div_iff₀ hq hdq).2
     exact_mod_cast hlo

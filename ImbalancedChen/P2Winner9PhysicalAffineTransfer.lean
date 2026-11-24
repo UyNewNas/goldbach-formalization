@@ -27,6 +27,7 @@ open ImbalancedChen.P2Winner9SimplexCoordinateSlice
 open ImbalancedChen.P2Winner9ActualEightSimplexMoment
 open ImbalancedChen.P2Winner9BarycentricMixedDegreeOne
 open ImbalancedChen.Certificates.P2AffineSimplexMomentLaw
+open ImbalancedChen.P2Winner9CurvatureExactMomentFloor (gapTotal)
 open ImbalancedChen.P2Winner9CurvatureFullExactAssembly
 
 abbrev Ambient := Fin 8 → ℝ
@@ -62,9 +63,9 @@ theorem physical_integral (L : Ambient ≃L[ℝ] Ambient) (b : Ambient)
     (∫ y in physicalSupport L b, f y) =
       |L.toContinuousLinearMap.det| *
         ∫ x in canonicalSupport, f (affinePoint L b x) := by
-  simpa only [physicalSupport, canonicalSupport, affinePoint]
-    using integral_affine_image volume L b
-      (standardSimplex 8 (1 : ℝ)) canonicalSupport_measurable f
+  change (∫ y in (fun x => b + L x) '' canonicalSupport, f y) =
+    |L.toContinuousLinearMap.det| * ∫ x in canonicalSupport, f (b + L x)
+  exact integral_affine_image volume L b canonicalSupport canonicalSupport_measurable f
 
 def pullback (L : Ambient ≃L[ℝ] Ambient) (b : Ambient)
     (f : Ambient → ℝ) (y : Ambient) : ℝ :=
@@ -86,15 +87,19 @@ theorem physical_pullback_integral (L : Ambient ≃L[ℝ] Ambient)
 
 theorem canonical_volume :
     (∫ _x in canonicalSupport, (1 : ℝ)) =
-      1 / (8.factorial : ℝ) := by
+      1 / ((8 : ℕ).factorial : ℝ) := by
   have h := actual_eight_factorial 0 (fun _ : Fin 8 => 0)
     (s := (1 : ℝ)) (by norm_num)
-  simpa [canonicalSupport, factorialProduct, List.ofFn] using h
+  norm_num [canonicalSupport, standardSimplex_eight,
+    P2Winner9NestedEightSimplexMoment.actualMoment,
+    P2Winner9NestedEightSimplexMoment.factorialProduct, List.ofFn_const,
+    List.sum_replicate_nat, List.prod_replicate_nat] at h ⊢
+  exact h
 
 /-- Actual physical volume, with no inserted ordering factorial. -/
 theorem physical_volume (L : Ambient ≃L[ℝ] Ambient) (b : Ambient) :
     (∫ _y in physicalSupport L b, (1 : ℝ)) =
-      |L.toContinuousLinearMap.det| / (8.factorial : ℝ) := by
+      |L.toContinuousLinearMap.det| / ((8 : ℕ).factorial : ℝ) := by
   rw [physical_integral, canonical_volume]
   ring
 
@@ -113,7 +118,7 @@ theorem physical_gap_mass (L : Ambient ≃L[ℝ] Ambient)
     (∫ y in physicalSupport L b,
       pullback L b (affine (gapVertices d)) y) =
       |L.toContinuousLinearMap.det| *
-        ((gapTotal d.gaps : ℝ) / (9.factorial : ℝ)) := by
+        ((gapTotal d.gaps : ℝ) / ((9 : ℕ).factorial : ℝ)) := by
   rw [physical_pullback_integral]
   exact congrArg (|L.toContinuousLinearMap.det| * ·)
     (actualGapMass_eq d)
@@ -134,7 +139,7 @@ theorem physical_pullback_mixed_ratio
       actualMixedExpectation d j := by
   rw [physical_mixed_degree_one, physical_gap_mass]
   rw [actualMixedExpectation, actualGapMass_eq]
-  have hG : (gapTotal d.gaps : ℝ) / (9.factorial : ℝ) ≠ 0 :=
+  have hG : (gapTotal d.gaps : ℝ) / ((9 : ℕ).factorial : ℝ) ≠ 0 :=
     ne_of_gt (by simpa only [actualGapMass_eq] using actualGapMass_pos d)
   field_simp [hJac.ne', hG]
 
@@ -232,13 +237,15 @@ private theorem canonical_zero_mem : (0 : Ambient) ∈ canonicalSupport := by
 
 private theorem canonical_single_mem (i : Fin 8) :
     Pi.single i (1 : ℝ) ∈ canonicalSupport := by
-  have hcoord : ∀ k : Fin 8, 0 ≤ Pi.single i (1 : ℝ) k := by
-    intro k
-    by_cases h : k = i <;> simp [Pi.single_apply, h]
-  have hsum : (∑ k : Fin 8, Pi.single i (1 : ℝ) k) = 1 := by simp
-  change (∀ k : Fin 8, 0 ≤ Pi.single i (1 : ℝ) k) ∧
-    (∑ k : Fin 8, Pi.single i (1 : ℝ) k) ≤ 1
-  exact ⟨hcoord, by rw [hsum]⟩
+  let v : Ambient := Pi.single i (1 : ℝ)
+  have hcoord (k : Fin 8) : 0 ≤ v k := by
+    by_cases h : k = i
+    · subst k
+      simp [v]
+    · simp [v, Pi.single_eq_of_ne h]
+  have hsum : (∑ k : Fin 8, v k) = 1 := by simp [v]
+  change (∀ k : Fin 8, 0 ≤ v k) ∧ (∑ k : Fin 8, v k) ≤ 1
+  exact ⟨hcoord, hsum.le⟩
 
 /-- Under the exact vertex-order guard, every named selected vertex
 belongs to the measurable physical parent support. This does not prove

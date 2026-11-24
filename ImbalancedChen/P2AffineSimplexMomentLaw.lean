@@ -43,17 +43,18 @@ theorem beta_recurrence (a b : ℕ) (s : ℝ) :
       ((b : ℝ) + 1) * (x ^ (a + 1) * (s - x) ^ b)
   have hd (x : ℝ) : HasDerivAt F (D x) x := by
     have hx := hasDerivAt_pow (a + 1) x
-    have hs := ((hasDerivAt_const x s).sub (hasDerivAt_id x)).pow (b + 1)
-    convert hx.mul hs using 1 <;>
-      simp [F, D, Nat.cast_add, Nat.cast_one] <;> ring
+    have hs := ((hasDerivAt_const x s).fun_sub (hasDerivAt_id' x)).fun_pow (b + 1)
+    refine (hx.fun_mul hs).congr_deriv ?_
+    simp only [D, Nat.cast_add, Nat.cast_one, Nat.add_sub_cancel, zero_sub]
+    ring
   have hD : Continuous D := by dsimp [D]; fun_prop
   have he := intervalIntegral.integral_eq_sub_of_hasDerivAt
     (fun x _ => hd x) (hD.intervalIntegrable 0 s)
   have hends : F s - F 0 = 0 := by simp [F]
   rw [hends] at he
-  have h₁ := ((beta_continuous a (b + 1) s).intervalIntegrable 0 s).const_mul
+  have h₁ := ((beta_continuous a (b + 1) s).intervalIntegrable (μ := volume) 0 s).const_mul
     ((a : ℝ) + 1)
-  have h₂ := ((beta_continuous (a + 1) b s).intervalIntegrable 0 s).const_mul
+  have h₂ := ((beta_continuous (a + 1) b s).intervalIntegrable (μ := volume) 0 s).const_mul
     ((b : ℝ) + 1)
   change (∫ x in (0 : ℝ)..s,
     ((a : ℝ) + 1) * (x ^ a * (s - x) ^ (b + 1)) -
@@ -71,7 +72,7 @@ theorem betaMonomial_eq (a b : ℕ) (s : ℝ) :
   | zero =>
       have ha : (a : ℝ) + 1 ≠ 0 := by positivity
       have hf : (a.factorial : ℝ) ≠ 0 := by exact_mod_cast Nat.factorial_ne_zero a
-      simp only [betaMonomial, pow_zero, mul_one, intervalIntegral.integral_pow,
+      simp only [betaMonomial, pow_zero, mul_one, integral_pow,
         Nat.add_zero, Nat.factorial_zero, Nat.cast_one, mul_one, zero_pow (by omega : a + 1 ≠ 0),
         sub_zero, Nat.factorial_succ, Nat.cast_mul, Nat.cast_add]
       field_simp [ha, hf, Nat.cast_ne_zero, Nat.factorial_ne_zero] <;> ring
@@ -143,6 +144,8 @@ theorem integral_triangle_nested {s : ℝ} (hs : 0 ≤ s) (f : Pair → ℝ)
           simp [O, h, h']
         · have h' : ¬ x + y ≤ s := by linarith
           simp [O, h, h']
+      change (∫ y in Icc (0 : ℝ) s, O.indicator f (x, y)) =
+        ∫ y in Icc (0 : ℝ) (s - x), f (x, y)
       rw [he, setIntegral_indicator measurableSet_Iic]
       have hset : Icc (0 : ℝ) s ∩ Iic (s - x) = Icc (0 : ℝ) (s - x) := by
         ext y
@@ -184,18 +187,20 @@ theorem integral_tetrahedron_nested (f : Point → ℝ) (hf : Continuous f) :
           simp [O, h, h']
       have hclosed : MeasurableSet {yz : Pair | yz.1 + yz.2 ≤ 1 - x} :=
         (isClosed_le (continuous_fst.add continuous_snd) continuous_const).measurableSet
+      change (∫ yz in square 1, O.indicator f (x, yz)) =
+        ∫ y in Icc (0 : ℝ) (1 - x), ∫ z in Icc (0 : ℝ) (1 - x - y), f (x, y, z)
       rw [he, setIntegral_indicator hclosed]
       have hset : square 1 ∩ {yz : Pair | yz.1 + yz.2 ≤ 1 - x} = triangle (1 - x) := by
         ext yz
-        simp only [square, triangle, mem_inter_iff, mem_prod, mem_Icc, mem_setOf_eq]
+        simp only [square, triangle, mem_inter_iff, mem_prod, mem_Icc, mem_ofPred_eq]
         constructor
         · rintro ⟨⟨⟨hy0, hy1⟩, ⟨hz0, hz1⟩⟩, hsum⟩
           exact ⟨⟨⟨hy0, by linarith⟩, ⟨hz0, by linarith⟩⟩, hsum⟩
         · rintro ⟨⟨⟨hy0, hy1⟩, ⟨hz0, hz1⟩⟩, hsum⟩
           exact ⟨⟨⟨hy0, by linarith [hx.1]⟩, ⟨hz0, by linarith [hx.1]⟩⟩, hsum⟩
       rw [hset]
-      simpa only [sub_sub] using integral_triangle_nested (by linarith [hx.2])
-        (fun yz => f (x, yz)) (hf.comp (continuous_const.prod_mk continuous_id))
+      exact integral_triangle_nested (by linarith [hx.2])
+        (fun yz => f (x, yz)) (hf.comp (Continuous.prodMk_right x))
 
 def monomial (a b c d : ℕ) (p : Point) : ℝ :=
   p.1 ^ a * p.2.1 ^ b * p.2.2 ^ c * (1 - p.1 - p.2.1 - p.2.2) ^ d
@@ -206,7 +211,10 @@ theorem integral_monomial (a b c d : ℕ) :
     (∫ p in tetrahedron, monomial a b c d p) =
       (a.factorial : ℝ) * b.factorial * c.factorial * d.factorial /
         ((a + b + c + d + 3).factorial : ℝ) := by
-  rw [integral_tetrahedron_nested _ (by dsimp [monomial]; fun_prop)]
+  have hcontinuous : Continuous (monomial a b c d) := by
+    unfold monomial
+    fun_prop
+  rw [integral_tetrahedron_nested _ hcontinuous]
   have hinner (x y : ℝ) (hy : 0 ≤ 1 - x - y) :
       (∫ z in Icc (0 : ℝ) (1 - x - y), monomial a b c d (x, y, z)) =
         x ^ a * y ^ b *
@@ -232,6 +240,7 @@ theorem integral_monomial (a b c d : ℕ) :
             (y ^ b * ((1 - x) - y) ^ (c + d + 1)) := by
       apply setIntegral_congr_fun measurableSet_Icc
       intro y hy
+      dsimp only
       rw [hinner x y (by linarith [hy.2])]
       ring
     rw [hfun, integral_const_mul, beta_Icc_eq b (c + d + 1) (by linarith [hx.2])]
@@ -251,6 +260,7 @@ theorem integral_monomial (a b c d : ℕ) :
               (x ^ a * (1 - x) ^ (b + (c + d + 1) + 1)) := by
         apply setIntegral_congr_fun measurableSet_Icc
         intro x hx
+        dsimp only
         rw [hmiddle x hx]
         ring
       _ = _ := by
@@ -273,7 +283,12 @@ def barycentric (i : Fin 4) (p : Point) : ℝ :=
 def affineVertex (v : Fin 4 → ℝ) (p : Point) : ℝ := ∑ i, barycentric i p * v i
 
 theorem barycentric_continuous (i : Fin 4) : Continuous (barycentric i) := by
-  fin_cases i <;> dsimp [barycentric] <;> fun_prop
+  fin_cases i
+  · change Continuous (fun p : Point => 1 - p.1 - p.2.1 - p.2.2)
+    fun_prop
+  · exact continuous_fst
+  · exact continuous_fst.comp continuous_snd
+  · exact continuous_snd.comp continuous_snd
 
 theorem affineVertex_continuous (v : Fin 4 → ℝ) : Continuous (affineVertex v) := by
   apply continuous_finsetSum
@@ -283,8 +298,13 @@ theorem affineVertex_continuous (v : Fin 4 → ℝ) : Continuous (affineVertex v
 theorem barycentric_nonneg {p : Point} (hp : p ∈ tetrahedron) (i : Fin 4) :
     0 ≤ barycentric i p := by
   rcases hp with ⟨⟨hx, hy, hz⟩, hsum⟩
-  fin_cases i <;> simp only [barycentric, Matrix.cons_val_zero, Matrix.cons_val_succ] <;>
-    linarith [hx.1, hy.1, hz.1]
+  fin_cases i
+  · change 0 ≤ 1 - p.1 - p.2.1 - p.2.2
+    change p.1 + p.2.1 + p.2.2 ≤ 1 at hsum
+    linarith
+  · exact hx.1
+  · exact hy.1
+  · exact hz.1
 
 theorem affineVertex_nonneg {v : Fin 4 → ℝ} (hv : ∀ i, 0 ≤ v i)
     {p : Point} (hp : p ∈ tetrahedron) : 0 ≤ affineVertex v p := by
@@ -294,21 +314,21 @@ theorem integral_barycentric_monomial (e : Fin 4 → ℕ) :
     (∫ p in tetrahedron, ∏ i : Fin 4, barycentric i p ^ e i) =
       (∏ i : Fin 4, (e i).factorial : ℝ) / ((∑ i : Fin 4, e i) + 3).factorial := by
   have he : e 1 + e 2 + e 3 + e 0 + 3 = (∑ i : Fin 4, e i) + 3 := by
-    simp only [Fin.sum_univ_succ]
+    simp only [Fin.sum_univ_four]
     omega
   have hf : (∫ p in tetrahedron, ∏ i : Fin 4, barycentric i p ^ e i) =
       ∫ p in tetrahedron, monomial (e 1) (e 2) (e 3) (e 0) p := by
     apply setIntegral_congr_fun measurableSet_tetrahedron
     intro p _
-    simp [Fin.prod_univ_succ, barycentric, monomial]
+    simp [Fin.prod_univ_four, barycentric, monomial]
     <;> ring
   rw [hf, integral_monomial, he]
-  simp only [Fin.prod_univ_succ]
+  simp only [Fin.prod_univ_four]
   ring
 
 theorem integral_one : (∫ _p in tetrahedron, (1 : ℝ)) = 1 / 6 := by
   have h := integral_monomial 0 0 0 0
-  norm_num [monomial] at h
+  norm_num [monomial] at h ⊢
   exact h
 
 private theorem prod_barycentric_single (i : Fin 4) (p : Point) :
@@ -328,7 +348,8 @@ theorem integral_barycentric (i : Fin 4) :
       exact (prod_barycentric_single i p).symm
     _ = _ := by
       rw [integral_barycentric_monomial]
-      fin_cases i <;> norm_num [Fin.sum_univ_succ, Fin.prod_univ_succ]
+      fin_cases i <;>
+        norm_num (config := { decide := true }) [Fin.sum_univ_four, Fin.prod_univ_four]
 
 def delta (i j : Fin 4) : ℝ := if i = j then 1 else 0
 
@@ -346,7 +367,7 @@ theorem integral_barycentric_two (i j : Fin 4) :
     _ = _ := by
       rw [integral_barycentric_monomial]
       fin_cases i <;> fin_cases j <;>
-        norm_num [e, delta, Fin.sum_univ_succ, Fin.prod_univ_succ]
+        norm_num (config := { decide := true }) [e, delta, Fin.sum_univ_four, Fin.prod_univ_four]
 
 theorem integral_barycentric_three (i j k : Fin 4) :
     (∫ p in tetrahedron, barycentric i p * barycentric j p * barycentric k p) =
@@ -364,7 +385,7 @@ theorem integral_barycentric_three (i j k : Fin 4) :
     _ = _ := by
       rw [integral_barycentric_monomial]
       fin_cases i <;> fin_cases j <;> fin_cases k <;>
-        norm_num [e, delta, Fin.sum_univ_succ, Fin.prod_univ_succ]
+        norm_num (config := { decide := true }) [e, delta, Fin.sum_univ_four, Fin.prod_univ_four]
 
 def vertexSum (v : Fin 4 → ℝ) : ℝ := ∑ i, v i
 def dot (g l : Fin 4 → ℝ) : ℝ := ∑ i, g i * l i
@@ -377,9 +398,10 @@ theorem integral_affineVertex (g : Fin 4 → ℝ) :
   have hi (i : Fin 4) : IntegrableOn (fun p => barycentric i p * g i) tetrahedron :=
     ((barycentric_continuous i).mul continuous_const).continuousOn.integrableOn_compact
       isCompact_tetrahedron
-  rw [affineVertex, integral_finsetSum Finset.univ (fun i _ => hi i)]
+  change (∫ p in tetrahedron, ∑ i, barycentric i p * g i) = _
+  rw [integral_finsetSum Finset.univ (fun i _ => hi i)]
   simp only [integral_mul_const, integral_barycentric]
-  simp [vertexSum, Fin.sum_univ_succ]
+  simp [vertexSum, Fin.sum_univ_four]
   <;> ring
 
 theorem integral_affineVertex_two (g l : Fin 4 → ℝ) :
@@ -389,17 +411,18 @@ theorem integral_affineVertex_two (g l : Fin 4 → ℝ) :
       (fun p => ∑ i : Fin 4, ∑ j : Fin 4,
         (g i * l j) * (barycentric i p * barycentric j p)) := by
     funext p
-    simp only [affineVertex, Finset.sum_mul, Finset.mul_sum]
+    simp only [affineVertex]
+    rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro i _
+    rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro j _
     ring
   have hi (i j : Fin 4) : IntegrableOn
       (fun p => (g i * l j) * (barycentric i p * barycentric j p)) tetrahedron := by
-    apply ContinuousOn.integrableOn_compact _ isCompact_tetrahedron
     exact (continuous_const.mul ((barycentric_continuous i).mul
-      (barycentric_continuous j))).continuousOn
+      (barycentric_continuous j))).continuousOn.integrableOn_compact isCompact_tetrahedron
   have hs (i : Fin 4) : IntegrableOn (fun p => ∑ j : Fin 4,
       (g i * l j) * (barycentric i p * barycentric j p)) tetrahedron :=
     integrable_finsetSum Finset.univ (fun j _ => hi i j)
@@ -411,7 +434,7 @@ theorem integral_affineVertex_two (g l : Fin 4 → ℝ) :
     simp only [integral_const_mul, integral_barycentric_two]
   rw [he, integral_finsetSum Finset.univ (fun i _ => hs i)]
   simp_rw [hm]
-  simp [vertexSum, dot, delta, Fin.sum_univ_succ]
+  simp [vertexSum, dot, delta, Fin.sum_univ_four]
   <;> ring
 
 /-- Third barycentric moments yield the actual second affine moment under
@@ -424,20 +447,23 @@ theorem integral_affineVertex_square (g l : Fin 4 → ℝ) :
       (fun p => ∑ i : Fin 4, ∑ j : Fin 4, ∑ k : Fin 4,
         (g i * l j * l k) * (barycentric i p * barycentric j p * barycentric k p)) := by
     funext p
-    simp only [affineVertex, pow_two, Finset.sum_mul, Finset.mul_sum]
+    simp only [affineVertex, pow_two]
+    rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro i _
+    rw [← mul_assoc, Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro j _
+    rw [mul_assoc, Finset.sum_mul, Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro k _
     ring
   have hi (i j k : Fin 4) : IntegrableOn
       (fun p => (g i * l j * l k) *
         (barycentric i p * barycentric j p * barycentric k p)) tetrahedron := by
-    apply ContinuousOn.integrableOn_compact _ isCompact_tetrahedron
     exact (continuous_const.mul (((barycentric_continuous i).mul
-      (barycentric_continuous j)).mul (barycentric_continuous k))).continuousOn
+      (barycentric_continuous j)).mul (barycentric_continuous k))).continuousOn.integrableOn_compact
+        isCompact_tetrahedron
   have hs (i j : Fin 4) : IntegrableOn (fun p => ∑ k : Fin 4,
       (g i * l j * l k) * (barycentric i p * barycentric j p * barycentric k p))
       tetrahedron := integrable_finsetSum Finset.univ (fun k _ => hi i j k)
@@ -460,7 +486,7 @@ theorem integral_affineVertex_square (g l : Fin 4 → ℝ) :
     simp_rw [hm]
   rw [he, integral_finsetSum Finset.univ (fun i _ => hss i)]
   simp_rw [hmm]
-  simp [vertexSum, dot, squareSum, weightedSquareSum, delta, Fin.sum_univ_succ]
+  simp [vertexSum, dot, squareSum, weightedSquareSum, delta, Fin.sum_univ_four]
   <;> ring
 
 def gapMass (g : Fin 4 → ℝ) : ℝ := ∫ p in tetrahedron, affineVertex g p
@@ -514,8 +540,14 @@ theorem centralMoment_eq (g l : Fin 4 → ℝ) (hG : vertexSum g ≠ 0) :
   have hm : gapMass g ≠ 0 := by rw [gapMass, integral_affineVertex]; exact div_ne_zero hG (by norm_num)
   change (∫ p in tetrahedron, affineVertex g p * (affineVertex l p - m) ^ 2) /
       gapMass g = weightedVariance g l
-  rw [he, integral_add (hi₂.sub (hi₁.const_mul _)) (hi₀.const_mul _),
-    integral_sub hi₂ (hi₁.const_mul _), integral_const_mul, integral_const_mul]
+  have hsplit :
+      (∫ p in tetrahedron, (affineVertex g p * (affineVertex l p) ^ 2 -
+        (2 * m) * (affineVertex g p * affineVertex l p)) + m ^ 2 * affineVertex g p) =
+      (∫ p in tetrahedron, affineVertex g p * (affineVertex l p) ^ 2 -
+        (2 * m) * (affineVertex g p * affineVertex l p)) +
+        (∫ p in tetrahedron, m ^ 2 * affineVertex g p) :=
+    integral_add (hi₂.sub (hi₁.const_mul (2 * m))) (hi₀.const_mul (m ^ 2))
+  rw [he, hsplit, integral_sub hi₂ (hi₁.const_mul (2 * m)), integral_const_mul, integral_const_mul]
   dsimp [weightedVariance, weightedSecond, weightedMean, m, gapMass] at hm ⊢
   field_simp [hm] <;> ring
 
@@ -535,7 +567,7 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 /-- The genuine affine change-of-variables theorem, in every finite
 dimension. The multiplier is the absolute determinant, not its reciprocal
 and not an ordering factorial. -/
-theorem integral_affine_image (μ : Measure E) [IsAddHaarMeasure μ]
+theorem integral_affine_image (μ : Measure E) [Measure.IsAddHaarMeasure μ]
     (L : E ≃L[ℝ] E) (b : E) (D : Set E) (hD : MeasurableSet D) (f : E → ℝ) :
     (∫ y in (fun x => b + L x) '' D, f y ∂μ) =
       |L.toContinuousLinearMap.det| * ∫ x in D, f (b + L x) ∂μ := by
@@ -556,7 +588,7 @@ theorem transport_apply (L : E ≃L[ℝ] E) (b x : E) (f : E → ℝ) :
     transport L b f (b + L x) = f x := by
   simp [transport, add_sub_cancel_left]
 
-theorem integral_affine_transport (μ : Measure E) [IsAddHaarMeasure μ]
+theorem integral_affine_transport (μ : Measure E) [Measure.IsAddHaarMeasure μ]
     (L : E ≃L[ℝ] E) (b : E) (D : Set E) (hD : MeasurableSet D) (f : E → ℝ) :
     (∫ y in (fun x => b + L x) '' D, transport L b f y ∂μ) =
       |L.toContinuousLinearMap.det| * ∫ x in D, f x ∂μ := by
@@ -564,6 +596,12 @@ theorem integral_affine_transport (μ : Measure E) [IsAddHaarMeasure μ]
   simp only [transport_apply]
 
 end AffineTransport
+
+-- The volume instances on the nested product reduce to two product Haar measures.
+local instance : Measure.IsAddHaarMeasure (volume : Measure Point) := by
+  letI : Measure.IsAddHaarMeasure (volume : Measure Pair) :=
+    Measure.prod.instIsAddHaarMeasure (volume : Measure ℝ) (volume : Measure ℝ)
+  exact Measure.prod.instIsAddHaarMeasure (volume : Measure ℝ) (volume : Measure Pair)
 
 def physicalTetrahedron (L : Point ≃L[ℝ] Point) (b : Point) : Set Point :=
   (fun x => b + L x) '' tetrahedron

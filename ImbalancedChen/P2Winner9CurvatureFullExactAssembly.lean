@@ -105,7 +105,6 @@ theorem add_value (a b : ExactFraction) :
   unfold value add
   push_cast
   field_simp [ha, hb]
-  ring
 
 def sumFractions : List ExactFraction → ExactFraction
   | [] => zero

@@ -27,7 +27,7 @@ open ImbalancedChen.P2Winner9MixedZeroCoefficientCurvatureLink
 /-- Degree-one convolution uses precisely the two coefficient pairs. -/
 theorem conv_one (a b : Nat → ℤ) :
     conv a b 1 = a 0 * b 1 + a 1 * b 0 := by
-  simp [conv]
+  norm_num [conv, Finset.sum_range_succ]
 
 /-- Expand the signed mixed generating-function coefficient at t¹.
 No positivity of B1, W1 or the intermediate signed convolutions is used. -/
@@ -45,8 +45,7 @@ coefficients; the constant coefficient is the D2 term from Phase13. -/
 theorem mixed_numerator_one (d : SimplexData) (j : Fin 10) :
     mixedNumerator d j 1 =
       doubled d j 1 + homogeneous d.y 1 * doubled d j 0 := by
-  simp [mixedNumerator, conv_one, homogeneous_zero]
-  ring
+  rw [mixedNumerator, conv_one, homogeneous_zero, Nat.cast_one, one_mul]
 
 /-- Exact signed rational candidate for E_nu[Y*b_j²] at k=1, with the
 unreduced vertex scales `Y_i=y_i/U`, `b_i=deviation_i/L` and total
@@ -70,10 +69,10 @@ theorem mixed_degree_one_fraction_normalization
   have hL : (d.L : ℚ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt d.LPos)
   have hv : (d.maxima j : ℚ) ≠ 0 := by
     exact_mod_cast (Nat.ne_of_gt (d.maximaPos j))
-  unfold momentOneCandidate value mixedTerm
-    mixedTermNumerator mixedTermDenominator
+  rw [mixed_term_fraction]
+  unfold momentOneCandidate mixedTermNumerator mixedTermDenominator
+  rw [show (1 : Fin 7).val = 1 from rfl]
   push_cast
-  field_simp [hG, hU, hL, hv]
-  ring
+  field_simp [hG, hU, hL, hv] <;> ring
 
 end ImbalancedChen.P2Winner9MixedDegreeOnePolynomialMoment
