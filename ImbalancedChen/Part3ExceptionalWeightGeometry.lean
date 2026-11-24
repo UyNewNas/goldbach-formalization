@@ -181,11 +181,11 @@ theorem classicalMScale_bounds (j : ℕ) :
       classicalMScale j ≤ ((2 : ℕ) ^ j : ℝ) := by
   have hvN : 1 ≤ (2 : ℕ) ^ j :=
     Nat.succ_le_iff.mpr (pow_pos (by norm_num : 0 < (2 : ℕ)) j)
-  have hv : (1 : ℝ) ≤ ((2 : ℕ) ^ j : ℝ) := by exact_mod_cast hvN
-  unfold classicalMScale
+  have hv : (1 : ℝ) ≤ (2 : ℝ) ^ j := by exact_mod_cast hvN
+  simp only [classicalMScale, Nat.cast_pow, Nat.cast_ofNat]
   constructor
-  · linarith
-  constructor <;> linarith
+  · linarith only [hv]
+  constructor <;> linarith only [hv]
 
 /-- The existing exact Fourier support identity, with the classical
 length made explicit. It includes `j = 0` and the integer `m = 1`. -/
