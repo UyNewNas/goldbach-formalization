@@ -33,8 +33,9 @@ theorem blockWords_card (n r : ℕ) : (blockWords n r).card=(Nat.log2 (n-1)+2)^r
   induction r with
   | zero => simp [blockWords]
   | succ r ih =>
-    rw [blockWords,Finset.card_image_of_injective _ cons_pair_injective,
-      Finset.card_product,bank_card,ih,pow_succ]
+    rw [blockWords,Finset.card_image_of_injective _ cons_pair_injective]
+    change ((bank n) ×ˢ (blockWords n r)).card = _
+    rw [Finset.card_product,bank_card,ih,pow_succ]
     exact Nat.mul_comm _ _
 
 theorem blockWords_spec (n : ℕ) : ∀r : ℕ, ∀bs∈blockWords n r,
@@ -85,6 +86,7 @@ theorem occurrence_reconstruct (n : ℕ) (z y : ℝ) :
       simp only [assignedWeight]
       simp_rw [← Finset.mul_sum,ih ps htail]
       rw [← Finset.sum_mul,role_reconstruct hhead.1 hhead.2]
+      rfl
 
 def blockCoefficient (z y : ℝ) (j n : ℕ) (bs : List Block) : ℂ :=
   ∑ps∈factorTuples (2*(j+1)) n,assignedWeight z y (roles j) bs ps
