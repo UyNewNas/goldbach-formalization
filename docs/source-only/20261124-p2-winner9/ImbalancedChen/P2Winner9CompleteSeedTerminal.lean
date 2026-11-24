@@ -2,12 +2,14 @@ import ImbalancedChen.P2Winner9LedgerBridge
 import ImbalancedChen.P2Winner9ArchiveIntegral
 import ImbalancedChen.P2Winner9CompletePullingGeometry
 import ImbalancedChen.P2Winner9CompleteNumericalChecks
+import ImbalancedChen.P2Winner9OriginalFull87Bridge
 
 /-! SOURCE ONLY / NOT COMPILED.
 Assembly of the original complete Winner9 ledger at literal terminal 41.
 The complete numerical and pulling modules must be accepted before this
-closed statement receives any formal credit. The original Full87 cellIntegral
-identity is a separate bridge; it is not asserted by this file.
+closed statement receives any formal credit. The final theorem uses the exact
+original Full87 integral identity; the definition cores and their original
+owner refactors must be installed together before integration.
 -/
 
 namespace ImbalancedChen.P2Winner9CompleteSeedTerminal
@@ -57,5 +59,13 @@ theorem complete_seed_ledger_le_terminal41 :
     (fun i k => (full_source_shapes_and_chronology.2.2 i).2.2.2.2.1 k)
     selected_eq_max_log_mixed P2Winner9CompleteNumericalChecks.selected_checked
     P2Winner9CompletePullingGeometry.complete_seed_actual_overlap_null
+
+/-- The same adopted log total and two chronological increments bound the
+original Full87 integral, with its original full cell type and density. -/
+theorem complete_seed_ledger_le_original_full87_nine11 :
+    (adoptedLogTotal : ℝ) + (savingLower slot21 : ℝ) + (savingLower slot22 : ℝ) ≤
+      P4AOriginalFull87SourcePrimeTests.cellIntegral (.remaining (.nine 11)) := by
+  rw [← P2Winner9OriginalFull87Bridge.terminal41_integral_eq_original]
+  exact complete_seed_ledger_le_terminal41
 
 end ImbalancedChen.P2Winner9CompleteSeedTerminal

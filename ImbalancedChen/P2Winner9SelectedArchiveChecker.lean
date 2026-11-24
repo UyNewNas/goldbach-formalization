@@ -41,6 +41,7 @@ abbrev LogChecks (v : RationalVertices) (r : RawRow) (h : BasicChecks v r) : Pro
 
 def checkLog (v : RationalVertices) (r : RawRow) : Bool :=
   withRowNumerics v r fun v' r' =>
+    letI : Decidable (BasicChecks v' r') := basicDecidable v' r'
     if h : BasicChecks v' r' then
       decide ((∀ j, logFloorCheck (logGeometry v' r' h) j (logFloors r' j)) ∧
         (r'.logSelected : ℚ) / q96 ≤ logPriceQ r'.jensen (logFloors r'))

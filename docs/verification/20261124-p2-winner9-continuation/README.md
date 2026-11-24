@@ -2,6 +2,8 @@
 
 ## Acceptance boundary
 
+> This is the earlier public-environment checkpoint. The subsequent private-environment results are recorded in [20261124-p2-private](../20261124-p2-private/README.md). Its historical pending counts and service blocker do not describe the current private worker.
+
 This checkpoint continues `work/p2-formal-proof@8657cfffef159185f73c6a04ae4d31c846c0d0a9` against the 20261106 manuscript. **P2 is not complete. The full 11,026-row Winner9 integral bound is not accepted by this checkpoint.**
 
 The prior six-row lower bound and its source are unchanged. This round strictly compiled **50 new geometry modules**, including the generic complete-archive interface, the order-composition lemma, all 44 witness data blocks, their lookup/interface modules, and the first and last block checkers. New independent `leanchecker` replay and transitive axiom audit could not be scheduled before the service reached its retained-job limit.

@@ -1,4 +1,5 @@
 import ImbalancedChen.P2Winner9CompleteSeedTypes
+import ImbalancedChen.P2Winner9GenericRowIntegral
 import ImbalancedChen.P2Winner9CompleteSeedVertices
 import ImbalancedChen.P2Winner9DyadicQ6
 import ImbalancedChen.P2Winner9RationalSimplexCaps
@@ -128,7 +129,8 @@ private theorem swapPivot_det {n : ℕ} (A : Matrix (Fin (n + 1)) (Fin (n + 1)) 
   · rw [Matrix.det_permute, Equiv.Perm.sign_swap (Ne.symm hp), if_neg hp]
     norm_num
 
-/-- Exact Gaussian determinant over ℚ with first-column pivoting. -/
+/-- Exact Gaussian determinant over ℚ with first-column pivoting.
+Materialize each minor before the next pivot search and elimination. -/
 private def fastDetCore {n : ℕ} : Matrix (Fin n) (Fin n) ℚ → ℚ :=
   Nat.rec (motive := fun m => Matrix (Fin m) (Fin m) ℚ → ℚ) (fun _ => 1)
     (fun m recurse A =>
@@ -136,7 +138,8 @@ private def fastDetCore {n : ℕ} : Matrix (Fin n) (Fin n) ℚ → ℚ :=
       | none => 0
       | some p =>
           let B := swapPivot A p
-          (if p = 0 then 1 else -1) * B 0 0 * recurse (pivotMinor B)) n
+          forceFn (fun row k => forceFn forceRat row k) (fun i j => pivotMinor B i j)
+            (fun C _ => (if p = 0 then 1 else -1) * B 0 0 * recurse C)) n
 
 private theorem fastDetCore_eq {n : ℕ} (A : Matrix (Fin n) (Fin n) ℚ) : fastDetCore A = A.det := by
   induction n with
@@ -146,7 +149,8 @@ private theorem fastDetCore_eq {n : ℕ} (A : Matrix (Fin n) (Fin n) ℚ) : fast
         | none => 0
         | some p =>
           let B := swapPivot A p
-          (if p = 0 then 1 else -1) * B 0 0 * fastDetCore (pivotMinor B)) = A.det
+          forceFn (fun row k => forceFn forceRat row k) (fun i j => pivotMinor B i j)
+            (fun C _ => (if p = 0 then 1 else -1) * B 0 0 * fastDetCore C)) = A.det
       split <;> rename_i h
       · rw [Matrix.det_succ_column_zero]
         symm
@@ -158,6 +162,8 @@ private theorem fastDetCore_eq {n : ℕ} (A : Matrix (Fin n) (Fin n) ℚ) : fast
       · rename_i p
         have hp : A p 0 ≠ 0 := by simpa using List.find?_some h
         have h00 : swapPivot A p 0 0 = A p 0 := by simp [swapPivot]
+        dsimp only
+        rw [forceFn_eq _ (fun row k => forceFn_eq _ forceRat_eq row k)]
         change (if p = 0 then 1 else -1) * swapPivot A p 0 0 *
           fastDetCore (pivotMinor (swapPivot A p)) = A.det
         rw [ih, mul_assoc, ← pivotMinor_det _ (h00 ▸ hp), swapPivot_det]
@@ -187,6 +193,30 @@ abbrev BasicChecks (v : RationalVertices) (r : RawRow) : Prop :=
     affineMeanQ (rawGap v) (rawP v r.means) = 1 ∧
     r.jensen = 4 * (((8 : ℕ).factorial : ℚ) * r.physicalVolume) *
       gapMomentQ (rawGap v) / ∏ j, r.means j
+
+/-- The exact arithmetic premises whose ten factor means already imply the P mean. -/
+private abbrev BasicComputations (v : RationalVertices) (r : RawRow) : Prop :=
+  0 < r.physicalVolume ∧
+    |fastDet (edgeMatrix v)| = ((8 : ℕ).factorial : ℚ) * r.physicalVolume ∧
+    (∀ i, 0 ≤ rawGap v i) ∧ 0 < ∑ i, rawGap v i ∧
+    (∀ i j, 0 < rawFactor v i j) ∧ (∀ j, 0 < r.means j) ∧
+    gapMomentQ (rawGap v) = r.meanGap / ((8 : ℕ).factorial : ℚ) ∧
+    (∀ j, affineMeanQ (rawGap v) (fun i => rawFactor v i j) = r.means j) ∧
+    r.jensen = 4 * (((8 : ℕ).factorial : ℚ) * r.physicalVolume) *
+      gapMomentQ (rawGap v) / ∏ j, r.means j
+
+private theorem basicComputations_iff (v : RationalVertices) (r : RawRow) :
+    BasicComputations v r ↔ BasicChecks v r := by
+  constructor
+  · rintro ⟨hvol, hdet, hgap, hG, hfac, hmus, hmg, hmf, hJ⟩
+    exact ⟨hvol, hdet, hgap, hG, hfac, hmus, hmg, hmf,
+      P2Winner9GenericRowIntegral.p_mean_of_factor_means v r.means hG hmus hmf, hJ⟩
+  · rintro ⟨hvol, hdet, hgap, hG, hfac, hmus, hmg, hmf, _, hJ⟩
+    exact ⟨hvol, hdet, hgap, hG, hfac, hmus, hmg, hmf, hJ⟩
+
+/-- Decide the unchanged checks, reusing the proved factor-to-P mean identity. -/
+def basicDecidable (v : RationalVertices) (r : RawRow) : Decidable (BasicChecks v r) :=
+  decidable_of_iff (BasicComputations v r) (basicComputations_iff v r)
 
 /-- A successful arithmetic check supplies the exact rational row premises. -/
 structure BasicFacts (v : RationalVertices) (r : RawRow) : Prop where
@@ -243,6 +273,30 @@ theorem input_jensen (v : RationalVertices) (r : RawRow) (h : BasicChecks v r) :
     r.jensen = (d.jensenNum : ℚ) / d.jensenDen :=
   P2Winner9RationalSimplexData.jensen_eq (input v r h)
 
+/-- Materialize the rational input fields before repeated common-denominator scans. -/
+private def forceInput {α : Type} (a : Input) (k : Input → α) : α :=
+  forceFn forceRat a.gaps fun gaps hg =>
+    forceFn forceRat a.p fun p hp =>
+      forceFn (fun row tail => forceFn forceRat row tail) a.deviations fun deviations _ =>
+        forceRat a.upper fun upper hu =>
+          forceFn forceRat a.maxima fun maxima hm =>
+            forceRat a.jensen fun jensen hj =>
+              k { gaps := gaps, p := p, deviations := deviations, upper := upper,
+                  maxima := maxima, jensen := jensen,
+                  gaps_nonneg := hg.symm ▸ a.gaps_nonneg,
+                  gaps_pos := hg.symm ▸ a.gaps_pos,
+                  upper_pos := hu.symm ▸ a.upper_pos,
+                  p_le_upper := by simpa only [hp, hu] using a.p_le_upper,
+                  maxima_pos := hm.symm ▸ a.maxima_pos,
+                  jensen_nonneg := hj.symm ▸ a.jensen_nonneg }
+
+private theorem forceInput_eq {α : Type} (a : Input) (k : Input → α) :
+    forceInput a k = k a := by
+  unfold forceInput
+  rw [forceFn_eq _ forceRat_eq, forceFn_eq _ forceRat_eq,
+    forceFn_eq _ (fun row tail => forceFn_eq _ forceRat_eq row tail),
+    forceRat_eq, forceFn_eq _ forceRat_eq, forceRat_eq]
+
 /-- Materialize repeated integer inputs before evaluating the correction. -/
 private def forceData {α : Type} (d : SimplexData) (k : SimplexData → α) : α :=
   forceNat d.L fun L hL =>
@@ -264,6 +318,7 @@ private theorem forceData_eq {α : Type} (d : SimplexData) (k : SimplexData → 
   unfold forceData
   simp only [forceNat_eq, forceFn_eq _ forceNat_eq,
     forceFn_eq (fun row tail => forceFn forceInt row tail) (fun r t => forceFn_eq _ forceInt_eq r t)]
+
 
 
 private def curvatureTotalFast (d : SimplexData) : ExactFraction :=
@@ -330,15 +385,17 @@ theorem q6_lower {r : RawRow} {d : SimplexData} (h : Q6Checks r d) :
 /-- Check the numerical fields for a row supplied by the Q6 branch. -/
 def checkQ6 (v : RationalVertices) (r : RawRow) : Bool :=
   withRowNumerics v r fun v' r' =>
+    letI : Decidable (BasicChecks v' r') := basicDecidable v' r'
     if h : BasicChecks v' r' then
-      forceData (toSimplexData (input v' r' h)) (fun d => decide (Q6Checks r' d))
+      forceInput (input v' r' h) fun a =>
+        forceData (toSimplexData a) (fun d => decide (Q6Checks r' d))
     else false
 
 theorem checkQ6_sound {v : RationalVertices} {r : RawRow} (h : checkQ6 v r = true) :
     ∃ basic : BasicChecks v r, Q6Checks r (toSimplexData (input v r basic)) := by
   rw [checkQ6, withRowNumerics_eq] at h
   split at h
-  · rw [forceData_eq] at h
+  · rw [forceInput_eq, forceData_eq] at h
     exact ⟨‹BasicChecks v r›, of_decide_eq_true h⟩
   · contradiction
 
@@ -352,9 +409,11 @@ theorem q6_lower_normalized {v : RationalVertices} {r : RawRow} (hb : BasicCheck
 /-- The numerical checks keep the two originally recorded directed stages. -/
 def check (v : RationalVertices) (r : RawRow) : Bool :=
   withRowNumerics v r fun v' r' =>
+    letI : Decidable (BasicChecks v' r') := basicDecidable v' r'
     if h : BasicChecks v' r' then
-      forceData (toSimplexData (input v' r' h)) (fun d =>
-        decide (CurvatureChecks r' d ∧ Q6Checks r' d))
+      forceInput (input v' r' h) fun a =>
+        forceData (toSimplexData a) (fun d =>
+          decide (CurvatureChecks r' d ∧ Q6Checks r' d))
     else false
 
 theorem check_sound {v : RationalVertices} {r : RawRow} (h : check v r = true) :
@@ -363,7 +422,7 @@ theorem check_sound {v : RationalVertices} {r : RawRow} (h : check v r = true) :
         Q6Checks r (toSimplexData (input v r basic)) := by
   rw [check, withRowNumerics_eq] at h
   split at h
-  · rw [forceData_eq] at h
+  · rw [forceInput_eq, forceData_eq] at h
     exact ⟨‹BasicChecks v r›, of_decide_eq_true h⟩
   · contradiction
 

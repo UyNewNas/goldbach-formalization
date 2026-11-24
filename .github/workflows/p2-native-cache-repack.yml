@@ -1,0 +1,186 @@
+name: P2 original cache byte repack
+
+on:
+  push:
+    branches:
+      - 'work/p2-formal-proof'
+    paths:
+      - '.github/workflows/p2-native-cache-repack.yml'
+      - 'verification/part2/repack_winner9_native_cache.py'
+      - 'verification/part2/winner9_native_cache_request.json'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: p2-original-cache-byte-repack
+  cancel-in-progress: false
+
+jobs:
+  repack:
+    if: ${{ github.repository == 'UyNewNas/goldbach-formalization' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      DRIVER: verification/part2/repack_winner9_native_cache.py
+      REQUEST: verification/part2/winner9_native_cache_request.json
+    steps:
+      - name: Read the exact pushed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Require the actual complete request before any artifact download
+        run: |
+          set -euo pipefail
+          python3 "$DRIVER" validate-request --request "$REQUEST"
+
+      - name: Download the fixed existing artifact with normal read authorization
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/p2-native-cache-repack"
+          mkdir "$work"
+          gh api repos/UyNewNas/goldbach-formalization/actions/artifacts/13749339878 > "$work/artifact-metadata.json"
+          python3 "$DRIVER" validate-metadata --metadata "$work/artifact-metadata.json"
+          gh api repos/UyNewNas/goldbach-formalization/actions/artifacts/13749339878/zip > "$work/original.zip"
+          printf '%s  %s\n' c506ac0c034e971c5554802a4e551762f122a42d25701b07a5a6c4c6471d4b7b "$work/original.zip" | sha256sum --check --strict
+
+      - name: Copy only source-matching requested bytes into bounded packets
+        id: packets
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/p2-native-cache-repack"
+          python3 "$DRIVER" repack --archive "$work/original.zip" --metadata "$work/artifact-metadata.json" --request "$REQUEST" --out "$work/packets"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          directory = Path(os.environ['RUNNER_TEMP']) / 'p2-native-cache-repack/packets'
+          summary = json.loads((directory / 'SUMMARY.json').read_text())
+          assert summary['compiler_or_kernel_or_object_loader_invocations'] == 0
+          assert not summary['compile_credit'] and not summary['kernel_credit'] and not summary['cache_acceptance']
+          names = {part['file'] for part in summary['parts']}
+          assert names == {f'part-{i:03}.zip' for i in range(len(names))}
+          assert 1 <= len(names) <= 10
+          assert all(part['bytes'] <= 399 * 1024 * 1024 for part in summary['parts'])
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for i in range(10):
+                  output.write(f'part_{i:03}={"true" if f"part-{i:03}.zip" in names else "false"}\n')
+          PY
+
+      - name: Retain original byte packet 000
+        if: ${{ success() && steps.packets.outputs.part_000 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-000
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-000.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 001
+        if: ${{ success() && steps.packets.outputs.part_001 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-001
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-001.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 002
+        if: ${{ success() && steps.packets.outputs.part_002 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-002
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-002.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 003
+        if: ${{ success() && steps.packets.outputs.part_003 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-003
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-003.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 004
+        if: ${{ success() && steps.packets.outputs.part_004 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-004
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-004.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 005
+        if: ${{ success() && steps.packets.outputs.part_005 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-005
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-005.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 006
+        if: ${{ success() && steps.packets.outputs.part_006 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-006
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-006.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 007
+        if: ${{ success() && steps.packets.outputs.part_007 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-007
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-007.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 008
+        if: ${{ success() && steps.packets.outputs.part_008 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-008
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-008.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain original byte packet 009
+        if: ${{ success() && steps.packets.outputs.part_009 == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-009
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/part-009.zip
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Retain byte transport summary
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2-native-cache-${{ github.run_id }}-${{ github.run_attempt }}-summary
+          path: ${{ runner.temp }}/p2-native-cache-repack/packets/SUMMARY.json
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+

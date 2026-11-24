@@ -21,10 +21,16 @@ import time
 PIN = "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
 BASELINE = "8657cfffef159185f73c6a04ae4d31c846c0d0a9"
 LEAN = "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean"
+MATHLIB = "/workspace/compile-deps/mathlib"
+CACHE_SCHEMA = 2
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def json_digest(payload: dict) -> str:
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 def imports(path: Path) -> list[str]:
@@ -33,7 +39,23 @@ def imports(path: Path) -> list[str]:
             if name.startswith("ImbalancedChen.")]
 
 
+def closure_signature(record: dict) -> str:
+    """Bind the source/object to the recursively frozen dependency environment.
+
+    A parent's .olean bytes can remain identical when an imported definition
+    changes. Object hashes alone therefore do not identify the proof context.
+    This helper must only be called for actual compilation snapshots or an
+    explicitly evidenced historical migration, never to backfill an old probe
+    with whatever dependency objects happen to exist now.
+    """
+    payload = {key: record[key] for key in (
+        "module", "source_sha256", "object_sha256", "toolchain", "dependency_signatures")}
+    payload["cache_schema"] = CACHE_SCHEMA
+    return json_digest(payload)
+
+
 def main() -> int:
+    started = time.monotonic()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("modules", nargs="+")
     parser.add_argument("--baseline-root", type=Path, default=Path("/workspace/goldbach-p2"))
@@ -41,9 +63,22 @@ def main() -> int:
     parser.add_argument("--threads", type=int, default=1)
     parser.add_argument("--memory-mb", type=int, default=6144)
     parser.add_argument("--install-candidates", action="store_true")
+    parser.add_argument("--time-budget-seconds", type=float,
+                        help="Stop starting uncached modules after this elapsed time; finish running tasks")
     args = parser.parse_args()
+    if args.time_budget_seconds is not None and not 0 <= args.time_budget_seconds < float("inf"):
+        parser.error("--time-budget-seconds must be a finite nonnegative number")
+    deadline = None if args.time_budget_seconds is None else started + args.time_budget_seconds
     root = Path.cwd()
     baseline = args.baseline_root
+    mathlib_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=MATHLIB, text=True).strip()
+    assert mathlib_commit == PIN, "Mathlib checkout does not match the pinned environment"
+    toolchain = {
+        "lean_version": subprocess.check_output([LEAN, "--version"], text=True).strip(),
+        "lean_binary_sha256": digest(Path(LEAN)),
+        "mathlib_commit": mathlib_commit,
+    }
     out = root / ".lake/p2-private"
     lib, logs = out / "lib", out / "logs"
     for path in (lib, logs):
@@ -82,6 +117,9 @@ def main() -> int:
 
     for name in args.modules:
         visit(name)
+    for name in order:
+        nodes[name]["dependency_closure"] = set(nodes[name]["deps"]).union(
+            *(nodes[dep]["dependency_closure"] for dep in nodes[name]["deps"]))
     records_path = out / "records.json"
     records = json.loads(records_path.read_text()) if records_path.exists() else {}
     env = dict(os.environ)
@@ -91,6 +129,7 @@ def main() -> int:
     # These are recorded historical style exceptions, never proof-warning exceptions.
     baseline_style: dict[str, list[str]] = {}
     reusable_baseline: set[str] = set()
+    baseline_records: dict[str, dict] = {}
     for name in order:
         path = nodes[name]["source"]
         original = baseline / path.relative_to(root)
@@ -100,15 +139,19 @@ def main() -> int:
                 and digest(obj) == digest(old_obj) and digest(path) == digest(original)
                 and all(dep in reusable_baseline for dep in nodes[name]["deps"])):
             reusable_baseline.add(name)
-            if name not in records:
-                records[name] = {
-                    "module": name, "source": str(path.relative_to(root)),
-                    "source_sha256": digest(path), "object": str(obj),
-                    "object_sha256": digest(obj), "exit_code": 0,
-                    "deps": {dep: records[dep]["object_sha256"] for dep in nodes[name]["deps"]},
-                    "provenance": "existing accepted baseline cache",
-                    "baseline_commit": BASELINE, "new_strict_compile": False,
-                }
+            record = {
+                "module": name, "source": str(path.relative_to(root)),
+                "source_sha256": digest(path), "object": str(obj),
+                "object_sha256": digest(obj), "exit_code": 0,
+                "deps": {dep: baseline_records[dep]["object_sha256"] for dep in nodes[name]["deps"]},
+                "dependency_signatures": {
+                    dep: baseline_records[dep]["closure_signature"] for dep in nodes[name]["deps"]},
+                "provenance": "existing accepted baseline cache",
+                "baseline_commit": BASELINE, "new_strict_compile": False,
+                "cache_schema": CACHE_SCHEMA, "toolchain": toolchain,
+            }
+            record["closure_signature"] = closure_signature(record)
+            baseline_records[name] = record
 
     def save() -> None:
         temporary = records_path.with_suffix(".tmp")
@@ -118,34 +161,54 @@ def main() -> int:
     def dependencies(name: str) -> dict[str, str]:
         return {dep: records[dep]["object_sha256"] for dep in nodes[name]["deps"]}
 
-    def valid(name: str) -> bool:
-        old = records.get(name, {})
-        if old.get("exit_code") != 0 or old.get("source_sha256") != digest(nodes[name]["source"]):
-            return False
-        if old.get("deps") != dependencies(name):
-            return False
-        obj = Path(old["object"])
-        return obj.is_file() and digest(obj) == old["object_sha256"]
+    def dependency_signatures(name: str) -> dict[str, str]:
+        return {dep: records[dep]["closure_signature"] for dep in nodes[name]["deps"]}
 
-    # Reuse the already completed, explicitly logged initial private benchmark.
-    # This is the same isolated worktree and the same immutable baseline objects.
+    def dependency_files(name: str) -> dict:
+        snapshot = {}
+        for dep in sorted(nodes[name]["dependency_closure"]):
+            paths = {"source_sha256": nodes[dep]["source"],
+                     "object_sha256": lib / (dep.replace(".", "/") + ".olean")}
+            snapshot[dep] = {}
+            for key, path in paths.items():
+                try:
+                    snapshot[dep][key] = digest(path)
+                except OSError:
+                    snapshot[dep][key] = None
+        return snapshot
+
+    def valid_record(name: str, old: dict) -> bool:
+        if (old.get("cache_schema") != CACHE_SCHEMA or old.get("module") != name
+                or old.get("toolchain") != toolchain or old.get("exit_code") != 0
+                or old.get("source_sha256") != digest(nodes[name]["source"])):
+            return False
+        if (old.get("deps") != dependencies(name)
+                or old.get("dependency_signatures") != dependency_signatures(name)):
+            return False
+        # Check the object Lean will actually import, not an old absolute path
+        # that might still exist in another worktree after records are copied.
+        obj = lib / (name.replace(".", "/") + ".olean")
+        return (obj.is_file() and digest(obj) == old.get("object_sha256")
+                and old.get("closure_signature") == closure_signature(old))
+
+    # Legacy probes without frozen dependency signatures remain historical
+    # evidence, but cannot automatically certify the current proof environment.
     probe_path = out / "probe-records.json"
     probes = json.loads(probe_path.read_text()) if probe_path.exists() else {}
-    for name in order:
+
+    def adopt_probe(name: str) -> bool:
         source = nodes[name]["source"]
         obj = lib / (name.replace(".", "/") + ".olean")
         for previous in probes.values():
             if (previous.get("source") == str(source.relative_to(root))
-                    and previous.get("exit_code") == 0
-                    and previous.get("source_sha256") == digest(source)
-                    and obj.is_file() and previous.get("object_sha256") == digest(obj)
-                    and all(dep in records for dep in nodes[name]["deps"])):
+                    and previous.get("new_strict_compile") is True
+                    and valid_record(name, previous)):
                 record = dict(previous)
-                record.update({"module": name, "object": str(obj), "deps": dependencies(name),
-                               "provenance": "initial private strict-compile benchmark",
-                               "new_strict_compile": True, "mathlib_commit": PIN,
-                               "lean": "4.33.0-rc1"})
+                record.update({"object": str(obj),
+                               "provenance": "initial private strict-compile benchmark"})
                 records[name] = record
+                return True
+        return False
 
     def compile_one(name: str) -> dict:
         source = nodes[name]["source"]
@@ -155,6 +218,12 @@ def main() -> int:
         log = logs / f"{name}.attempt{attempt}.log"
         command = [LEAN, *flags, *baseline_style.get(name, []), "-o", str(obj),
                    str(source.relative_to(root))]
+        source_before = digest(source)
+        deps_before = dependencies(name)
+        signatures_before = dependency_signatures(name)
+        expected_files = {dep: {key: records[dep][key] for key in ("source_sha256", "object_sha256")}
+                          for dep in nodes[name]["dependency_closure"]}
+        files_before = dependency_files(name)
         start = time.monotonic()
         print("START", name, flush=True)
         original = baseline / source.relative_to(root)
@@ -176,16 +245,34 @@ def main() -> int:
             print("BASELINE_STYLE_OPTIONS", name, extra, flush=True)
             command = command[:-3] + extra + command[-3:]
             log = logs / f"{name}.attempt{len(attempts) + 1}.log"
+        exit_code = result.returncode
+        files_after = dependency_files(name)
+        if exit_code == 0 and (digest(source) != source_before or dependencies(name) != deps_before
+                               or dependency_signatures(name) != signatures_before
+                               or files_before != expected_files or files_after != expected_files):
+            exit_code = 125
+            with log.open("a") as stream:
+                stream.write("\nProof-cache source/dependency snapshot changed or disagreed with records; "
+                             "result not accepted.\n")
         record = {
             "module": name, "source": str(source.relative_to(root)),
-            "source_sha256": digest(source), "deps": dependencies(name),
-            "command": command, "exit_code": result.returncode,
+            "source_sha256": source_before, "deps": deps_before,
+            "dependency_signatures": signatures_before,
+            "dependency_file_check": {
+                "modules": len(expected_files), "expected_sha256": json_digest(expected_files),
+                "before_sha256": json_digest(files_before), "after_sha256": json_digest(files_after),
+                "before_matches_records": files_before == expected_files,
+                "after_matches_records": files_after == expected_files,
+            },
+            "cache_schema": CACHE_SCHEMA, "toolchain": toolchain,
+            "command": command, "exit_code": exit_code,
             "seconds": round(time.monotonic() - start, 3), "log": str(log.relative_to(root)),
             "attempts": attempts, "mathlib_commit": PIN, "lean": "4.33.0-rc1",
-            "new_strict_compile": result.returncode == 0, "object": str(obj),
+            "new_strict_compile": exit_code == 0, "object": str(obj),
         }
-        if result.returncode == 0:
+        if exit_code == 0:
             record["object_sha256"] = digest(obj)
+            record["closure_signature"] = closure_signature(record)
         return record
 
     done: set[str] = set()
@@ -193,6 +280,7 @@ def main() -> int:
     pending = set(nodes)
     running = {}
     reused = 0
+    budget_exhausted = False
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
         while pending or running:
             for name in order:
@@ -205,15 +293,28 @@ def main() -> int:
                     continue
                 if not all(dep in done for dep in deps):
                     continue
-                pending.remove(name)
-                if valid(name):
+                if not valid_record(name, records.get(name, {})):
+                    if name in baseline_records and valid_record(name, baseline_records[name]):
+                        records[name] = baseline_records[name]
+                    else:
+                        adopt_probe(name)
+                if valid_record(name, records.get(name, {})):
+                    pending.remove(name)
+                    records[name]["object"] = str(lib / (name.replace(".", "/") + ".olean"))
                     done.add(name)
                     reused += 1
                 else:
+                    if deadline is not None and time.monotonic() >= deadline:
+                        if not budget_exhausted:
+                            print("TIME_BUDGET_REACHED", "finishing running tasks; retaining pending modules", flush=True)
+                        budget_exhausted = True
+                        continue
+                    pending.remove(name)
                     running[pool.submit(compile_one, name)] = name
             if not running:
                 if pending:
-                    raise RuntimeError(f"Unresolved import cycle: {sorted(pending)}")
+                    if not budget_exhausted:
+                        raise RuntimeError(f"Unresolved import cycle: {sorted(pending)}")
                 break
             finished, _ = concurrent.futures.wait(running, return_when=concurrent.futures.FIRST_COMPLETED)
             for future in finished:
@@ -229,10 +330,15 @@ def main() -> int:
                     print((root / record["log"]).read_text()[-10000:], flush=True)
                 save()
     save()
+    exit_code = 1 if failed else 2 if pending else 0
     print(json.dumps({"roots": args.modules, "successful_closure": len(done),
                       "reused": reused, "failed_or_blocked": sorted(failed),
-                      "total": len(nodes)}), flush=True)
-    return int(bool(failed))
+                      "pending": sorted(pending), "complete": not failed and not pending,
+                      "status": "failed" if failed else "partial" if pending else "complete",
+                      "budget_exhausted": budget_exhausted, "time_budget_seconds": args.time_budget_seconds,
+                      "elapsed_seconds": round(time.monotonic() - started, 3),
+                      "exit_code": exit_code, "total": len(nodes)}), flush=True)
+    return exit_code
 
 
 if __name__ == "__main__":

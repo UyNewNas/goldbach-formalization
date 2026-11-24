@@ -54,16 +54,23 @@ theorem terminal41_comparison_eq_original (t : Point) :
       P4AOriginalFull87SourceDictionary.comparison (.remaining (.nine 11)) t := by
   rfl
 
+private theorem original_selected_sum (t : Point) :
+    P4AOriginalRemainingEighthSources.selectedSum (.nine 11) t =
+      t 1 + t 3 + t 7 := by
+  change (∑ i ∈ ({1, 3, 7} : Finset (Fin 8)), t i) = t 1 + t 3 + t 7
+  rw [Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({3, 7} : Finset (Fin 8))),
+    Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({7} : Finset (Fin 8))),
+    Finset.sum_singleton]
+  exact (add_assoc _ _ _).symm
+
 theorem terminal41_newCap_eq_original (t : Point) :
     terminal41NewCap t =
       P4AOriginalFull87SourceDictionary.newCap (.remaining (.nine 11)) t := by
-  norm_num [P4AOriginalFull87SourceDictionary.newCap,
-    P4AOriginalRemainingEighthSources.newCap,
-    P4AOriginalRemainingEighthSources.descendingNew,
-    P4AOriginalRemainingEighthSources.selectedSum,
-    P4AOriginalRemainingEighthSources.selected,
-    P4AOriginalRemainingEighthSources.eta, VariableEnvelope.A, terminal41NewCap]
-  <;> ring
+  change terminal41NewCap t =
+    VariableEnvelope.A (P4AOriginalRemainingEighthSources.selectedSum (.nine 11) t) -
+      P4AOriginalRemainingEighthSources.eta
+  rw [original_selected_sum]
+  rfl
 
 /-- Equality of the full real density, including both residual denominators
 and the eight coordinate factors, on every ambient point. -/

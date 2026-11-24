@@ -177,7 +177,8 @@ theorem complete_seed_actual_overlap_null :
       (sourceSupport (archiveVertices (entry i)) ∩
         sourceSupport (archiveVertices (entry j))) = 0 := by
   intro i j hij
-  simpa only [entry_eq_allRows, archiveVertices, originalSupport] using
-    allRows_actual_overlap_null hij
+  change volume (originalSupport (entry i) ∩ originalSupport (entry j)) = 0
+  rw [entry_eq_allRows, entry_eq_allRows]
+  exact allRows_actual_overlap_null hij
 
 end ImbalancedChen.P2Winner9CompletePullingGeometry

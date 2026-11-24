@@ -1,6 +1,6 @@
 # Exact original Full87 definition bridge — source-only candidate
 
-**Not compiled. No new kernel credit is claimed by this archive.**
+**Integration candidate with isolated verification.** The exact bridge and eleven definition cores have now passed strict private-environment compilation, independent replay, and complete owned-declaration audits. The four former owner modules still require their combined compatibility check before promotion. The frozen source banners describe the earlier preparation state; see [current verification](../../verification/20261124-p2-private/README.md) for the exact subsequent receipts.
 
 The candidate connects the existing literal Winner9 integral to the actual
 original declaration:
@@ -125,8 +125,10 @@ The isolated verification target is
 the 12 candidates, existing `VariableEnvelope`, and the existing Winner9
 terminal closure; it avoids the unrelated historical 803-module proof tree.
 
-Acceptance still requires strict Lean compilation, independent kernel replay,
-expanded target/type inspection, and transitive axiom review. Integration also
-requires checking the four active owner refactors. Even acceptance of this
+The isolated bridge and definition cores have passed strict Lean compilation,
+independent kernel replay, expanded target/type inspection, and complete
+transitive axiom review in the private environment. Integration still requires
+checking the four active owner refactors together against their actual native
+dependency objects. Even acceptance of this
 identity would not establish the missing complete numerical Winner9 family,
 same-rho balance supplier, or remaining original H247 endpoint comparisons.
