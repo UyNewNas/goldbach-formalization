@@ -1,0 +1,187 @@
+{
+  "module": "ImbalancedChen.P1OriginalCoarseFifthCellLimit",
+  "source_commands": 18,
+  "headers": [
+    {
+      "name": "sourceRegion",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def sourceRegion (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m) : Set (Fin 5 → ℝ) :=",
+      "header_sha256": "b1b02f7f89841077abf546bc6f93379556b43bfffff6c16f375a62b044337ad5"
+    },
+    {
+      "name": "sourceRegion_eq_if",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem sourceRegion_eq_if (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    (J5 : Finset (Label5 m)) (j : Label5 m)\n    (hj : j ∈ selectedFifthCells e chi m omega J5) :\n    sourceRegion e chi m omega j =\n      if P1OriginalHistoricalFifthOwnCubeAffineGates.firstStopCellCheck (e : ℝ) m j = true then\n        logPrimeMeshCell 0 (19 / 96) m j ∩ primeAffineGateRegion historicalUnorderedThirdGateForms\n          (P1OriginalHistoricalFifthOwnCubeAffineGates.parentBounds e m j)\n      else ∅ :=",
+      "header_sha256": "3f3ceb93683e4ceb7f1d563fbd04a94476fb83f12ff6c2fa65027e20f6207273"
+    },
+    {
+      "name": "truncatedCell_eq_inter_sourceRegion",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem truncatedCell_eq_inter_sourceRegion (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (j : Label5 m) :\n    P1OriginalFifthIntegral.truncatedCell e chi m omega a j =\n      logPrimeBox (fun _ : Fin 5 => a) (fun _ => (19 / 96 : ℝ)) ∩ sourceRegion e chi m omega j :=",
+      "header_sha256": "db378260c8a80450e38654a00ea5a0918e0b9ee576298f7856ca3168097a255d"
+    },
+    {
+      "name": "tendsto_test_cube_IcoBox_affineGates",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_test_cube_IcoBox_affineGates {r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b) (lo hi : Fin 5 → ℝ)\n    (L : Fin r → (Fin 5 → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ i, L i ≠ 0)\n    (f : (Fin 5 → ℝ) → ℝ)\n    (hf : ContinuousOn f (univ.pi (fun _ : Fin 5 => Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin 5 => a) (fun _ => b)\n        ((logPrimeBox lo hi ∩ primeAffineGateRegion L c).indicator f)) atTop\n      (𝓝 (∫ t in logPrimeBox (fun _ : Fin 5 => a) (fun _ => b) ∩\n          (logPrimeBox lo hi ∩ primeAffineGateRegion L c), f t * ∏ i, 1 / t i)) :=",
+      "header_sha256": "10aab1c690154f4bd4ae525f862921baa3b91fd3ac394345f49be50def741669"
+    },
+    {
+      "name": "tendsto_test_original_sourceRegion",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_test_original_sourceRegion\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J5 : Finset (Label5 m)) (j : Label5 m) (hj : j ∈ selectedFifthCells e chi m omega J5)\n    (f : (Fin 5 → ℝ) → ℝ)\n    (hf : ContinuousOn f (univ.pi (fun _ : Fin 5 => Icc a (19 / 96 : ℝ)))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin 5 => a) (fun _ => (19 / 96 : ℝ))\n        ((sourceRegion e chi m omega j).indicator f)) atTop\n      (𝓝 (∫ t in P1OriginalFifthIntegral.truncatedCell e chi m omega a j,\n        f t * ∏ i, 1 / t i)) :=",
+      "header_sha256": "0bc9432e789ffae4c1706414738ed42830edc4804e7b74bee638b3859bc25f48"
+    },
+    {
+      "name": "tendsto_original_box_ownCubeMinus",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_original_box_ownCubeMinus\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J5 : Finset (Label5 m)) (j : Label5 m) (hj : j ∈ selectedFifthCells e chi m omega J5)\n    (lambda : ℝ) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => actualPrimeBoxOwnCubeMinusSum 4 N (cap N) a (19 / 96) lambda\n        (sourceRegion e chi m omega j))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (∫ t in P1OriginalFifthIntegral.truncatedCell e chi m omega a j,\n        primeOwnCubeGatedProfile lambda t * ∏ i, 1 / t i)) :=",
+      "header_sha256": "9b085e9fa31208360dbf0277065fa644c8b3c3246b76226a35b168cd21fc1007"
+    },
+    {
+      "name": "positive_candidates_weighted_sum",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem positive_candidates_weighted_sum\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ)) (j : Label5 m)\n    (f : (Fin 5 → ℕ) → ℝ) :\n    (∑ p ∈ (firstExitFrontierTuples 4\n        (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n        (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))).filter\n          (fun p => ∀ i, a ≤ actualPrimeTupleLog N p i),\n      (∏ i, 1 / ((p i : ℝ) - 1)) *\n        (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then f p else 0)) =\n      ∑ p ∈ actualPrimeBoxTuples N (fun _ : Fin 5 => a) (fun _ => (19 / 96 : ℝ)),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          (if actualPrimeTupleLog N p ∈ sourceRegion e chi m omega j then f p else 0) :=",
+      "header_sha256": "d94502194356f9339d4708ecf31e8fd8eaf07f4ffc26eb96ac42029871bf0495"
+    },
+    {
+      "name": "positiveCellCorrection",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=",
+      "header_sha256": "3501b9b21cfec631a8861adf46645430dfa49af111703400a9d2b470a662ea8a"
+    },
+    {
+      "name": "smallCellRemainder",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smallCellRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=",
+      "header_sha256": "2cd1c636b28553b227c22c5f46e2ce80c04373b83778be7947a53111b64fe4f7"
+    },
+    {
+      "name": "positiveCorrection",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positiveCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=",
+      "header_sha256": "62cafdad829fafb60abe97c5cd1b3e0b6f40f718e5ab32888518f294d157ea15"
+    },
+    {
+      "name": "smallRemainder",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smallRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=",
+      "header_sha256": "4c37b9737bc86c92cbbaa5f56753d72e0ab7027b44c734576cb6bf0c1c95d11e"
+    },
+    {
+      "name": "actualSaving_eq_positive_add_smallRemainder",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem actualSaving_eq_positive_add_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (hN : 1 < N) :\n    actualHistoricalFifthSaving (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) N cap ((N : ℝ) ^ (19 / 96 : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N =\n      positiveCorrection e chi m omega a J4 cap4 J5 cap5 N cap +\n        smallRemainder e chi m omega a J4 cap4 J5 cap5 N cap :=",
+      "header_sha256": "b2a40b9d2513836fa17c43d64c299094e39ef4ef6bd2a881dc6f2abdd37c8415"
+    },
+    {
+      "name": "positiveCellCorrection_eq_box_residual_difference",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem positiveCellCorrection_eq_box_residual_difference\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ)) (j : Label5 m) :\n    positiveCellCorrection e chi m omega a J4 cap4 J5 cap5 N cap j =\n      actualPrimeBoxOwnCubeMinusSum 4 N cap a (19 / 96) (cap5 j : ℝ) (sourceRegion e chi m omega j) -\n        actualPrimeBoxOwnCubeMinusSum 4 N cap a (19 / 96)\n          (old5 e chi m omega J4 cap4 j : ℝ) (sourceRegion e chi m omega j) :=",
+      "header_sha256": "bff972c69bd9495e4e8947ce30aa14fc414102fd550472e454cd6a5812457fd9"
+    },
+    {
+      "name": "tendsto_positiveCellCorrection",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_positiveCellCorrection\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (j : Label5 m)\n    (hj : j ∈ selectedFifthCells e chi m omega J5) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => positiveCellCorrection e chi m omega a J4 cap4 J5 cap5 N (cap N) j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFifthIntegral.cellIntegral e chi m omega a J4 cap4 cap5 j)) :=",
+      "header_sha256": "66824f147acbdc56697847566975cab4ab95a264f379c90c037610056c3040aa"
+    },
+    {
+      "name": "tendsto_positiveCorrection",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_positiveCorrection\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => positiveCorrection e chi m omega a J4 cap4 J5 cap5 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFifthIntegral.selectedIntegral e chi m omega a J4 cap4 J5 cap5)) :=",
+      "header_sha256": "d6d306949e14cf6a58c4f003e7cce6b144f7540008fad838ec7530bbf1382499"
+    },
+    {
+      "name": "tendsto_actualSaving_sub_smallRemainder",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_actualSaving_sub_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => actualHistoricalFifthSaving\n        (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ)) N (cap N) ((N : ℝ) ^ (19 / 96 : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N - smallRemainder e chi m omega a J4 cap4 J5 cap5 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFifthIntegral.selectedIntegral e chi m omega a J4 cap4 J5 cap5)) :=",
+      "header_sha256": "abf19f436aaed627f4924870b8f065ad0c2b359b5e5d66793b115fd4737be007"
+    },
+    {
+      "name": "tendsto_actualSaving_sub_smallRemainder_ceil",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_actualSaving_sub_smallRemainder_ceil\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) :\n    Tendsto (fun N : ℕ => actualHistoricalFifthSaving\n        (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n        (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n        (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ))\n        (level5 e chi m omega J4 cap4 J5 cap5 (N : ℝ))\n        N (Nat.ceil ((N : ℝ) ^ (19 / 96 : ℝ))) ((N : ℝ) ^ (19 / 96 : ℝ)) *\n          Real.log (N : ℝ) / singularSeries N -\n        smallRemainder e chi m omega a J4 cap4 J5 cap5 N (Nat.ceil ((N : ℝ) ^ (19 / 96 : ℝ))))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFifthIntegral.selectedIntegral e chi m omega a J4 cap4 J5 cap5)) :=",
+      "header_sha256": "6457a0008e961674d238f136ed0695bf3f37b8bbc47515e5a44f66381a3daac6"
+    },
+    {
+      "name": "tendsto_originalFourthToFifthSaving_sub_smallRemainder",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem tendsto_originalFourthToFifthSaving_sub_smallRemainder\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ) (ha : 0 < a) (haRho : a < (19 / 96 : ℝ))\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ)\n    (h34 : P1OriginalCoarseContinuation.h34Check e chi m omega J4 cap4 = true)\n    (h45 : h45Check e chi m omega J4 cap4 J5 cap5 = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial\n          (fourthCappedUpperPolicy (HistoricalThirdCoarse.initialPolicy (e : ℝ) m (N : ℝ))\n            (HistoricalThirdCoarse.rawLevel (e : ℝ) chi m omega (N : ℝ))\n            (P1OriginalCoarseContinuation.level4 e chi m omega J4 cap4 (N : ℝ)))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (19 / 96 : ℝ))) -\n        firstExitRetainedPolynomial (policy5 e chi m omega J4 cap4 J5 cap5 (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 ((N : ℝ) ^ (19 / 96 : ℝ)))) *\n          Real.log (N : ℝ) / singularSeries N - smallRemainder e chi m omega a J4 cap4 J5 cap5 N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (P1OriginalFifthIntegral.selectedIntegral e chi m omega a J4 cap4 J5 cap5)) :=",
+      "header_sha256": "e4bc8aa7e2d223c95a594bca80783ad76a95190578d5b7db831d9c738316b089"
+    }
+  ],
+  "definitions": [
+    {
+      "name": "sourceRegion",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def sourceRegion (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m) : Set (Fin 5 → ℝ) :=",
+      "header_sha256": "b1b02f7f89841077abf546bc6f93379556b43bfffff6c16f375a62b044337ad5",
+      "raw_region": "def sourceRegion (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m) : Set (Fin 5 → ℝ) :=\n  logPrimeMeshCell 0 (19 / 96) m j ∩ jointRegion (e : ℝ) chi m omega j\n\n",
+      "region_sha256": "5e4c02f1d7fbe6b167cffd40d99ba6e60a5f75bbd852193ba9c9a02ec82f9a1a"
+    },
+    {
+      "name": "positiveCellCorrection",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=",
+      "header_sha256": "3501b9b21cfec631a8861adf46645430dfa49af111703400a9d2b470a662ea8a",
+      "raw_region": "def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=\n  ∑ p ∈ (firstExitFrontierTuples 4\n      (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))).filter\n        (fun p => ∀ i, a ≤ actualPrimeTupleLog N p i),\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n        actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n          actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0)\n\n",
+      "region_sha256": "dc649f1a9faa61e5bd28c5e817c639515a3be7d518a5f97dff9f2e79a8b440ea"
+    },
+    {
+      "name": "smallCellRemainder",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smallCellRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=",
+      "header_sha256": "2cd1c636b28553b227c22c5f46e2ce80c04373b83778be7947a53111b64fe4f7",
+      "raw_region": "def smallCellRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) (j : Label5 m) : ℝ :=\n  ∑ p ∈ (firstExitFrontierTuples 4\n      (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))).filter\n        (fun p => ∃ i, actualPrimeTupleLog N p i < a),\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n        actualPrimeTupleOwnCubeMinus N cap (cap5 j : ℝ) p -\n          actualPrimeTupleOwnCubeMinus N cap (old5 e chi m omega J4 cap4 j : ℝ) p else 0)\n\n",
+      "region_sha256": "17b5a14170b345c54121745a42bf8bd4d77b1b40d3328ab0862141d80c671464"
+    },
+    {
+      "name": "positiveCorrection",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positiveCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=",
+      "header_sha256": "62cafdad829fafb60abe97c5cd1b3e0b6f40f718e5ab32888518f294d157ea15",
+      "raw_region": "def positiveCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=\n  ∑ j ∈ selectedFifthCells e chi m omega J5,\n    positiveCellCorrection e chi m omega a J4 cap4 J5 cap5 N cap j\n\n",
+      "region_sha256": "5e561969c8d75d7b11d9b48bb35c8e8bb7de6ef6144029c49c118e246dc4766b"
+    },
+    {
+      "name": "smallRemainder",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smallRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=",
+      "header_sha256": "4c37b9737bc86c92cbbaa5f56753d72e0ab7027b44c734576cb6bf0c1c95d11e",
+      "raw_region": "def smallRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (J5 : Finset (Label5 m)) (cap5 : Label5 m → ℚ) (N cap : ℕ) : ℝ :=\n  ∑ j ∈ selectedFifthCells e chi m omega J5,\n    smallCellRemainder e chi m omega a J4 cap4 J5 cap5 N cap j\n\n",
+      "region_sha256": "b5cc28b27edf37ca47f806f53e51a57e118d83b790f031f1d4716d8122247906"
+    }
+  ],
+  "all_complete_raw_headers_and_definitions_exact": true,
+  "changed_proof_bodies": [
+    "tendsto_test_original_sourceRegion",
+    "positive_candidates_weighted_sum",
+    "tendsto_positiveCellCorrection"
+  ],
+  "new_declarations": 0,
+  "all_other_bytes_exact_and_reverse_reconstruction": true
+}

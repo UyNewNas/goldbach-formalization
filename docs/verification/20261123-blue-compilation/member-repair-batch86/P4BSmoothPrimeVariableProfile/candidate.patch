@@ -1,0 +1,35 @@
+--- baseline/ImbalancedChen/P4BSmoothPrimeVariableProfile.lean
++++ candidate/ImbalancedChen/P4BSmoothPrimeVariableProfile.lean
+@@ -46,6 +46,7 @@
+     primeTuplePoint N t ∈ positivePrimeOrthant := by
+   have hp : ∀ i : Fin 2, Nat.Prime (t i).val := (Finset.mem_filter.mp ht).2
+   intro i
++  change (0 : ℝ) < ((t i).val : ℝ)
+   exact_mod_cast (hp i).pos
+ 
+ theorem smoothPhysicalPairOuterRamp_eq_primeVariableProfile (b : ℝ) (N : ℕ)
+@@ -101,8 +102,13 @@
+   apply hasFDerivAt_pi.mpr
+   intro i
+   have hlog := (hasFDerivAt_apply (𝕜 := ℝ) i p).log (hp i).ne'
+-  simpa only [div_eq_mul_inv, mul_comm] using
+-    hlog.const_mul (Real.log (N : ℝ))⁻¹
++  have hfun : ((Real.log (N : ℝ))⁻¹ • (fun x : Fin 2 → ℝ => Real.log (x i))) =
++      (fun x : Fin 2 → ℝ => Real.log (x i) / Real.log (N : ℝ)) := by
++    funext x
++    simp only [Pi.smul_apply, smul_eq_mul, div_eq_mul_inv, mul_comm]
++  have hscaled := hlog.const_smul (Real.log (N : ℝ))⁻¹
++  rw [hfun] at hscaled
++  simpa only [primeVariableLogPoint] using hscaled
+ 
+ /-- Exact continuous-prime-variable chain rule for the full genuine
+ profile. All N, width and variable dependence is visible in the Jacobian. -/
+@@ -117,7 +123,7 @@
+       (by norm_num)).differentiableAt
+   have hlog := hasFDerivAt_primeVariableLogPoint N hp
+   change fderiv ℝ ((smoothPhysicalProfile b N T width) ∘ primeVariableLogPoint N) p = _
+-  rw [fderiv_comp hprofile hlog.differentiableAt, hlog.fderiv]
++  rw [fderiv_comp p hprofile hlog.differentiableAt, hlog.fderiv]
+ 
+ /-- The continuous upper physical margin is precisely the physical
+ logarithmic product gap, now for real positive prime variables. -/

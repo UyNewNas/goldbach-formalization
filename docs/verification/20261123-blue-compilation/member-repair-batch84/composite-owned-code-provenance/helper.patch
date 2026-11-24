@@ -1,0 +1,12 @@
+--- v1/seed42_reuse_metadata.py
++++ v2/seed42_reuse_metadata.py
+@@ -68,6 +68,9 @@
+         assert record['is_private'] == record['name'].startswith('_private.')
+         assert isinstance(record['type'], str) and record['type']
+         assert isinstance(record['type_expression'], str) and record['type_expression']
++        assert not any(token in record[field]
++                       for field in ['type', 'type_expression']
++                       for token in ['sorryAx', '…', '⋯', '...'])
+         assert isinstance(record['universe_parameters'], list)
+         assert all(isinstance(x, str) for x in record['universe_parameters'])
+         assert isinstance(record['axioms'], list) and set(record['axioms']) <= ALLOWED

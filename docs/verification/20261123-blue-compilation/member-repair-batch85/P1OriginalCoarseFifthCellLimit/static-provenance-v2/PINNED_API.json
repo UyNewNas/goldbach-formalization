@@ -1,0 +1,50 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Finset/Defs.lean",
+      "source_sha256": "07acf066602108961d74d40cef2947a2f6e6258624a00f56965912c7f897c9de",
+      "start_line": 146,
+      "end_line": 148,
+      "role": "Finite sets equal iff every element has the same membership, independent of filter decision expression",
+      "raw_excerpt": "@[ext, grind ext]\ntheorem ext {s₁ s₂ : Finset α} (h : ∀ a, a ∈ s₁ ↔ a ∈ s₂) : s₁ = s₂ :=\n  SetLike.ext h\n",
+      "raw_excerpt_sha256": "7ae722134f25fbad72e1a8d933af769c30781d3cad9e1cc8181105ec21033d32"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Finset/Filter.lean",
+      "source_sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+      "start_line": 124,
+      "end_line": 128,
+      "role": "Actual filter membership expands to original carrier membership and predicate",
+      "raw_excerpt": "variable {p}\n\n@[simp, grind =]\ntheorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=\n  Multiset.mem_filter\n",
+      "raw_excerpt_sha256": "4f37a527148e93ead0c18d0ca186967d184cf72c2e5c9e083b103608eac79566"
+    },
+    {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Core.lean",
+      "source_sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "start_line": 1042,
+      "end_line": 1042,
+      "role": "Turn equality of the same membership propositions into iff",
+      "raw_excerpt": "theorem Iff.of_eq (h : a = b) : a ↔ b := h ▸ Iff.rfl\n",
+      "raw_excerpt_sha256": "5fa9ed6a7e666c34d956626f0ecb4889012a5538cc3f80909b74c5a9b6dca308"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalHistoricalFifthOwnCubeAffineGates.lean",
+      "source_sha256": "9f11f5db2a2a1d289fa57d6eb57bd3dddfad858b3355da6f570d34eb37b3f931",
+      "start_line": 429,
+      "end_line": 449,
+      "role": "Existing exact truncated-candidate source filter identity",
+      "raw_excerpt": "theorem truncated_candidates_filter (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (j : Label5 m) (a : ℝ) :\n    (candidates e chi m omega N cap).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j ∧\n          actualPrimeTupleLog N p ∈ logPrimeBox (fun _ => a) (fun _ => (19 / 96 : ℝ))) =\n      (actualPrimeBoxTuples N (fun _ : Fin 5 => a) (fun _ => (19 / 96 : ℝ))).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j ∩\n          jointRegion e chi m omega j) := by\n  ext p\n  simp only [Finset.mem_filter, Set.mem_inter_iff]\n  constructor\n  · rintro ⟨hp, ht, hbox⟩\n    have hg := (mem_candidates_iff_log_on_cell e chi m omega N cap hN hcap p j ht).mp hp\n    exact ⟨(mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr\n      ⟨fun i => ⟨(hg.1 i).1, (hg.1 i).2.1⟩, hbox⟩, ht, hg.2⟩\n  · rintro ⟨hp, ht, hg⟩\n    have hpi := mem_actualPrimeBoxTuples_iff.mp hp\n    have hbox := ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n    exact ⟨(mem_candidates_iff_log_on_cell e chi m omega N cap hN hcap p j ht).mpr\n      ⟨fun i => ⟨(hpi i).1, (hpi i).2.1, Nat.cast_nonneg _, (hpi i).2.2.2⟩, hg⟩, ht, hbox⟩\n",
+      "raw_excerpt_sha256": "879efcc0ad29c59254a9e0af33a4168c2afcf2a2ceef1d5948ed136c0c3a20e1"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean",
+      "source_sha256": "6ef428428364edd0b4b9f6fa06de2d6f091f1cff5ce63138b47a5324695f9037",
+      "start_line": 23,
+      "end_line": 24,
+      "role": "Original sourceRegion alias is mesh intersect same jointRegion",
+      "raw_excerpt": "def sourceRegion (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (j : Label5 m) : Set (Fin 5 → ℝ) :=\n  logPrimeMeshCell 0 (19 / 96) m j ∩ jointRegion (e : ℝ) chi m omega j\n",
+      "raw_excerpt_sha256": "77031cc76dd5cf46216bf2c0f4f794ebba02556c23c36c348818be4cabdd18f1"
+    }
+  ],
+  "classification": "Pointwise logical membership transport of the existing equality; no replacement carrier or hypothesis."
+}

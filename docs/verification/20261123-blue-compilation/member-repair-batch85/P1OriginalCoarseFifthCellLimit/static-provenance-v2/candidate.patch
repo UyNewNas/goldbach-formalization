@@ -1,0 +1,14 @@
+--- actual_failed_6ef4.lean
++++ isolated_membership_v2.lean
+@@ -160,7 +160,10 @@
+       · rintro ⟨hp, ht, hbox⟩
+         exact ⟨⟨hp, fun i => (mem_logPrimeBox.mp hbox i).1⟩, ht⟩
+     rw [hcondition]
+-    exact hsource
++    apply Finset.ext
++    intro p
++    have hp := Iff.of_eq (congrArg (fun s : Finset (Fin 5 → ℕ) => p ∈ s) hsource)
++    simpa only [S, sourceRegion, Finset.mem_filter] using hp
+   simp_rw [mul_ite, mul_zero]
+   dsimp only [S, HistoricalThirdCoarse.P1OriginalCoarseFifth.candidates] at hfin
+   rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]

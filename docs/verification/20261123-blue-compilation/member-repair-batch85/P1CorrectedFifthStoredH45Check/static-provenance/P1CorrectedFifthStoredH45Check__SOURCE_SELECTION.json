@@ -1,0 +1,87 @@
+{
+  "module": "ImbalancedChen.P1CorrectedFifthStoredH45Check",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-coarse-fifth-source-coefficient-h45-api/P1CorrectedFifthStoredH45Check/baseline.lean",
+    "bytes": 15465,
+    "sha256": "ed42d51ce382f5b1b6df75e22fceda697f675f1779eb5861827b34f51b254122"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-coarse-fifth-source-coefficient-h45-api/P1CorrectedFifthStoredH45Check/candidate.lean",
+    "bytes": 15917,
+    "sha256": "283de000ccd2121969ba1109a72fa8b8e1fc38245123fb29b474a951d59c9843"
+  },
+  "complete_source_commands": 16,
+  "definitions": 8,
+  "changed_proof_bodies": [
+    "gamma_le_gammaUpperQ",
+    "bufferedCandidate_le_rowUpperQ"
+  ],
+  "all_complete_headers_definitions_data_imports_options_comments_hypotheses_quantifiers_raw_identical": true,
+  "header_definition_exceptions": [],
+  "proof_replacements": [
+    {
+      "before": "      exact_mod_cast hq",
+      "after": "      have hcast : (b.ux : ℝ) ≤ ((25 / 128 - 4 * e : ℚ) : ℝ) := Rat.cast_le.mpr hq\n      simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_mul, Rat.cast_ofNat] using hcast",
+      "reason": "Cast the original rational transition comparison first, then normalize the same arithmetic casts explicitly."
+    },
+    {
+      "before": "      exact_mod_cast h",
+      "after": "      have hcast : (b.ux : ℝ) ≤ ((25 / 128 - 4 * e : ℚ) : ℝ) := by\n        simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_mul, Rat.cast_ofNat] using h\n      exact Rat.cast_le.mp hcast",
+      "reason": "Reverse the same rational-real transition comparison via the original order-preserving cast; no transition threshold changes."
+    },
+    {
+      "before": "    exact (mem_logPrimeMeshCell.mp ht _).1",
+      "after": "    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using\n      (mem_logPrimeMeshCell.mp ht _).1",
+      "reason": "Normalize the coerced rational0,19/96 mesh arguments in the original lower projected endpoint proof."
+    },
+    {
+      "before": "    exact (mem_logPrimeMeshCell.mp ht _).2.le",
+      "after": "    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using\n      (mem_logPrimeMeshCell.mp ht _).2.le",
+      "reason": "Same original upper projected endpoint proof and half-open cell, only rational-real mesh argument casts normalized."
+    }
+  ],
+  "mathematical_boundary": "Same computable rational whole-cell H45 checker, full Gamma conservative upper bound, rational25/128−4e transition, Gamma−2e seed, all supplied rows bounded with qVHi even if ineligible, original projected fifth mesh and original owned-row/check premises. Exact finite adopted-data check remains OPEN; no claim numerical rows pass or no new arithmetic licence/gain.",
+  "actual_failure": {
+    "original_observation_path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0003/ACTUAL_FAILURES.json",
+    "captured_prefix_sha256": "7920c7e2a52eac189aa994b929edcb01ca80156978d3671662ac00768d1e6fc3",
+    "prefix_bytes": 6732897,
+    "slice_sha256": "649f7bc9e0ee09846b9a7c83a8a83b076c79d9c413dc3cb4887df1109b261896",
+    "raw_byte_start": 6671994,
+    "raw_byte_end_exclusive": 6674658,
+    "unit_source_compile_exit_code": 1,
+    "whole_aggregate_final_exit_not_claimed": true
+  },
+  "existing_published_lookup": {
+    "scope": "Exact filename all-ref Git lookup and only returned canonical payloads; no full history/object scan.",
+    "rows": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P1CorrectedFifthStoredH45Check.lean",
+        "exists": true,
+        "bytes": 15465,
+        "sha256": "ed42d51ce382f5b1b6df75e22fceda697f675f1779eb5861827b34f51b254122",
+        "blob": "a942fc51027b3dbe5b86f70cdd2166e565e0786e",
+        "same_preimage": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/P1CorrectedFifthStoredH45Check.lean",
+        "exists": false,
+        "git_exit_code": 128
+      },
+      {
+        "commit": "3d4e8c2e3f62d40b92ef522bcb42c07d763ba823",
+        "path": "ImbalancedChen/P1CorrectedFifthStoredH45Check.lean",
+        "exists": true,
+        "bytes": 15465,
+        "sha256": "ed42d51ce382f5b1b6df75e22fceda697f675f1779eb5861827b34f51b254122",
+        "blob": "a942fc51027b3dbe5b86f70cdd2166e565e0786e",
+        "same_preimage": true
+      }
+    ],
+    "result": "All present published payloads exactly equal current failing pre, no distinct existing post found in this bounded scope."
+  },
+  "classification": "PROOF_API_ARGUMENT_ELABORATION_CAST_OR_DEFINITIONAL_NORMALIZATION",
+  "substantive_mathematical_gap_found": false,
+  "status": "UNCOMPILED_STATIC_CANDIDATE_REQUIRES_NONAUTHOR_GATE_AND_UNIQUE_OWNER_ACTUAL_VALIDATION"
+}

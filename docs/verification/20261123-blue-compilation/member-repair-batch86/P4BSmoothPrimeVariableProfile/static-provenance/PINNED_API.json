@@ -1,0 +1,59 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Defs.lean",
+      "source_sha256": "5d2f01069c6265873a372d4aed746c5d3411073b8acb108a180d02a84c832dca",
+      "start_line": 1115,
+      "end_line": 1117,
+      "role": "C-infinity iff all natural finite orders",
+      "raw_excerpt": "theorem contDiff_infty : ContDiff 𝕜 ∞ f ↔ ∀ n : ℕ, ContDiff 𝕜 n f := by\n  simp [contDiffOn_univ.symm, contDiffOn_infty]\n\n",
+      "raw_excerpt_sha256": "0617d3b3977574ca7e9ca7625dc112818c3dd9c85765f8a37d8474e21ace3b04"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/FTaylorSeries.lean",
+      "source_sha256": "8c82bcae96ad4759777af750ea750ffe9af2721914dde7a4ce7438ac5940c9af",
+      "start_line": 116,
+      "end_line": 120,
+      "role": "Current nested smoothness-order notation distinguishes infinity from analytic omega",
+      "raw_excerpt": "scoped[ContDiff] notation \"ℕ∞ω\" => WithTop ℕ∞\n/-- Smoothness exponent for analytic functions. -/\nscoped[ContDiff] notation3 \"ω\" => (⊤ : WithTop ℕ∞)\n/-- Smoothness exponent for infinitely differentiable functions. -/\nscoped[ContDiff] notation3 \"∞\" => ((⊤ : ℕ∞) : WithTop ℕ∞)\n",
+      "raw_excerpt_sha256": "388bb2658ec311e13a8fd72971a13c8b3c565e552e60b7cf1d86e729cd3b411f"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Add.lean",
+      "source_sha256": "51930d73c6e80a0dbb3db0fcb6b09e4d72363266c2493aec136ed40311474c13",
+      "start_line": 62,
+      "end_line": 69,
+      "role": "Generic const_smul preserves the existing normed module structure",
+      "raw_excerpt": "theorem HasFDerivWithinAt.const_smul (h : HasFDerivWithinAt f f' s x) (c : R) :\n    HasFDerivWithinAt (c • f) (c • f') s x :=\n  HasFDerivAtFilter.const_smul h c\n\n@[to_fun (attr := fun_prop)]\ntheorem HasFDerivAt.const_smul (h : HasFDerivAt f f' x) (c : R) :\n    HasFDerivAt (c • f) (c • f') x :=\n  HasFDerivAtFilter.const_smul h c\n",
+      "raw_excerpt_sha256": "a26ae6fbe71831fa144d71c201e83501a92316b5b7f475cd235da13aa68116ff"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Comp.lean",
+      "source_sha256": "22b49670dfaa646c560b62e60674ac86288f32b09e920c00cf2d867c60f36a80",
+      "start_line": 38,
+      "end_line": 45,
+      "role": "Current composition rules make point x explicit",
+      "raw_excerpt": "/-!\n### Derivative of the composition of two functions\n\nFor composition lemmas, we put `x` explicit to help the elaborator, as otherwise Lean tends to\nget confused since there are too many possibilities for composition. -/\n\n\nvariable (x)\n",
+      "raw_excerpt_sha256": "d7a10dd01a8fccd1d4440735d7538e17fdf437853b4cdeba21d1626fa98962b8"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Comp.lean",
+      "source_sha256": "22b49670dfaa646c560b62e60674ac86288f32b09e920c00cf2d867c60f36a80",
+      "start_line": 176,
+      "end_line": 180,
+      "role": "Exact current fderiv chain rule",
+      "raw_excerpt": "@[to_fun fderiv_fun_comp]\ntheorem fderiv_comp {g : F → G} (hg : DifferentiableAt 𝕜 g (f x)) (hf : DifferentiableAt 𝕜 f x) :\n    fderiv 𝕜 (g ∘ f) x = (fderiv 𝕜 g (f x)).comp (fderiv 𝕜 f x) :=\n  (hg.hasFDerivAt.comp x hf.hasFDerivAt).fderiv\n@[deprecated (since := \"2026-05-18\")] alias fderiv_comp' := fderiv_fun_comp\n",
+      "raw_excerpt_sha256": "d76e989b5e473228c9e5c29acd73016f36f8f91c216fe491f62eec3892f9e7bb"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean",
+      "source_sha256": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+      "start_line": 141,
+      "end_line": 152,
+      "role": "Existing real logarithm Frechet derivative",
+      "raw_excerpt": "\nvariable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {f : E → ℝ} {x : E}\n  {f' : StrongDual ℝ E} {s : Set E}\n\ntheorem HasFDerivWithinAt.log (hf : HasFDerivWithinAt f f' s x) (hx : f x ≠ 0) :\n    HasFDerivWithinAt (fun x => log (f x)) ((f x)⁻¹ • f') s x :=\n  (hasDerivAt_log hx).comp_hasFDerivWithinAt x hf\n\ntheorem HasFDerivAt.log (hf : HasFDerivAt f f' x) (hx : f x ≠ 0) :\n    HasFDerivAt (fun x => log (f x)) ((f x)⁻¹ • f') x :=\n  (hasDerivAt_log hx).comp_hasFDerivAt x hf\n\n",
+      "raw_excerpt_sha256": "af7dfd3e5bdc6ddbbfe46c4d508b49e657e2fb701e1586ed26d353ebb9114671"
+    }
+  ],
+  "concrete_previous_same_side_API": "Already owner-validated API repairs in this session use add_le_add le_rfl for a common leading summand. No successful validation rerun here."
+}

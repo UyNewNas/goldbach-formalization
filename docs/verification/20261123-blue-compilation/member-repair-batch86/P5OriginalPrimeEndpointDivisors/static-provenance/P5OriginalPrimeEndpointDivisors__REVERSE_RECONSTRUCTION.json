@@ -1,0 +1,32 @@
+{
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-prime-endpoint-hb-words-api/P5OriginalPrimeEndpointDivisors/baseline.lean",
+    "bytes": 12103,
+    "sha256": "65d6b1f423829e6160609121288a06bb4d6b4d02548c4c0f1548d70044735067"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-prime-endpoint-hb-words-api/P5OriginalPrimeEndpointDivisors/candidate.lean",
+    "bytes": 12203,
+    "sha256": "83a82babae2749bdbf995434987d3b9a18735afd28ca7bfb69118ef2effd6518"
+  },
+  "ordered_proof_replacements": [
+    {
+      "before_raw": "    _ ≤ _ := sum_distance_le_two_sum S N D _ hS (fun _ _ => Nat.cast_nonneg _)\n",
+      "after_raw": "    _ ≤ _ := sum_distance_le_two_sum S N D (fun n : ℕ => (n.divisors.card : ℝ)) hS\n      (fun n _ => Nat.cast_nonneg (n.divisors.card))\n",
+      "count": 1
+    },
+    {
+      "before_raw": "  rw [abs_mul,abs_div,abs_of_nonneg (Nat.cast_nonneg (Nat.totient q))]\n",
+      "after_raw": "  rw [abs_mul,abs_div,\n    abs_of_nonneg (show (0 : ℝ) ≤ (Nat.totient q : ℝ) from Nat.cast_nonneg _)]\n",
+      "count": 1
+    },
+    {
+      "before_raw": "  apply add_le_add_left\n",
+      "after_raw": "  apply add_le_add le_rfl\n",
+      "count": 1
+    }
+  ],
+  "whole_reverse_sha256": "65d6b1f423829e6160609121288a06bb4d6b4d02548c4c0f1548d70044735067",
+  "whole_reverse_exact": true,
+  "all_other_original_source_bytes_imports_EOL_numerical_data_coefficients_hypotheses_targets_and_budget_options_preserved": true
+}

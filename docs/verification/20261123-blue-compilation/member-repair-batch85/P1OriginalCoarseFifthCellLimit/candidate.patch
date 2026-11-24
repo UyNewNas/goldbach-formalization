@@ -1,0 +1,44 @@
+--- baseline/ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean
++++ candidate/ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean
+@@ -96,7 +96,7 @@
+       historicalUnorderedThirdGateForms_ne_zero f hf
+   · simp only [if_neg hs]
+     simpa only [Set.indicator_empty, actualPrimeBoxTestSum, Pi.zero_apply,
+-      mul_zero, Finset.sum_const_zero, inter_empty, integral_empty] using
++      mul_zero, Finset.sum_const_zero, inter_empty, MeasureTheory.setIntegral_empty] using
+       (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (𝓝 0))
+ 
+ /-- One actual own-cube residual, with its literal strict arithmetic
+@@ -160,8 +160,20 @@
+       · rintro ⟨hp, ht, hbox⟩
+         exact ⟨⟨hp, fun i => (mem_logPrimeBox.mp hbox i).1⟩, ht⟩
+     rw [hcondition]
+-    simpa only [S, sourceRegion] using hsource
++    apply Finset.ext
++    intro p
++    have hp := Iff.of_eq (congrArg (fun s : Finset (Fin 5 → ℕ) => p ∈ s) hsource)
++    constructor
++    · intro hmem
++      have hleft := Finset.mem_filter.mp hmem
++      have hright := Finset.mem_filter.mp (hp.mp (Finset.mem_filter.mpr hleft))
++      exact Finset.mem_filter.mpr hright
++    · intro hmem
++      have hright := Finset.mem_filter.mp hmem
++      have hleft := Finset.mem_filter.mp (hp.mpr (Finset.mem_filter.mpr hright))
++      exact Finset.mem_filter.mpr hleft
+   simp_rw [mul_ite, mul_zero]
++  dsimp only [S, HistoricalThirdCoarse.P1OriginalCoarseFifth.candidates] at hfin
+   rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]
+ 
+ def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)
+@@ -252,7 +264,9 @@
+   have hold := tendsto_original_box_ownCubeMinus e chi m omega a ha haRho J5 j hj
+     (old5 e chi m omega J4 cap4 j : ℝ) cap hcap
+   have hlim := hnew.sub hold
+-  rw [← P1OriginalFifthIntegral.cellIntegral_eq_gated_difference e chi m omega ha J4 cap4 cap5 j] at hlim
++  have hcell := P1OriginalFifthIntegral.cellIntegral_eq_gated_difference e chi m omega ha J4 cap4 cap5 j
++  dsimp only [P1OriginalFifthIntegral.reciprocalWeight] at hcell
++  rw [← hcell] at hlim
+   apply hlim.congr'
+   have hlarge : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}, 1 < N :=
+     (eventually_gt_atTop 1).filter_mono inf_le_left

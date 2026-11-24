@@ -1,0 +1,18 @@
+--- exact-selected-pre
++++ isolated-proof-only-candidate
+@@ -123,10 +123,11 @@
+   have hS : S t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + t 6 + t 7 := by
+     simp [S, Fin.sum_univ_succ] <;> ring
+   have hH : H7 t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + 3 * t 6 := by
+-    simp [H7, Fin.sum_univ_succ] <;> ring
+-  rw [hS] at *
+-  rw [hH] at *
+-  linarith [h.third_history, h.third_to_sixth, h.ordered_last]
++    norm_num [H7, Finset.sum_filter, Fin.sum_univ_succ, Fin.succ, Fin.ofNat] <;> ring
++  have hhistory := h.third_history
++  rw [hH] at hhistory
++  rw [hS]
++  linarith only [hhistory, h.third_to_sixth, h.ordered_last]
+ 
+ theorem PhysicalRows.new_residual_lt_three_last {i : Cell} {t : Point}
+     {lambda3 current : ℝ} (h : PhysicalRows i t lambda3 current) :

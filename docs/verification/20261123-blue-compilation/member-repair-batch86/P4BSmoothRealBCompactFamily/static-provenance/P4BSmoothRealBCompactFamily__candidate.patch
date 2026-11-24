@@ -1,0 +1,22 @@
+--- baseline.lean
++++ candidate.lean
+@@ -67,8 +67,8 @@
+   intro v hv
+   refine ⟨hv.1, fun i => (hv.2 i).trans ?_⟩
+   unfold commonUpper
+-  exact add_le_add_left
+-    (div_le_div_of_nonneg_right hwidth (Real.log_pos (by norm_num : (1 : ℝ) < 2)).le) 1
++  exact add_le_add le_rfl
++    (div_le_div_of_nonneg_right hwidth (Real.log_pos (by norm_num : (1 : ℝ) < 2)).le)
+ 
+ /-- A common compact support is fixed before every member of the real-b
+ family. In fact no upper b bound is needed for support alone. -/
+@@ -115,7 +115,7 @@
+     calc
+       _ ≤ 4 * C1 * (2 + bHi) / width :=
+         div_le_div_of_nonneg_right
+-          (mul_le_mul_of_nonneg_left (add_le_add_left hbMax 2)
++          (mul_le_mul_of_nonneg_left (add_le_add le_rfl hbMax)
+             (mul_nonneg (by norm_num) hC1pos)) hwidthPos.le
+       _ ≤ _ := div_le_div_of_nonneg_left hnum hwidthMin hwidth
+   exact (hderiv b width hwidthPos N hN T v).trans

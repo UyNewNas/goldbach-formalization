@@ -283,3 +283,22 @@ H3 正常编译、kernel 和完整审计均实际退出 0；[调度补充](membe
 第八十批四个实际依赖完成最终验收，51 个 owned 声明（45 public、6 private），含一个非空宇宙参数记录；全部完整类型／AST／宇宙／标准三公理及真实 owned 清单逐项复核，源码及二十项主要产物稳定，见 [结果](member-repair-batch80/VALIDATION_RESULTS.json) 和 [非作者最终复核](member-repair-batch80/FINAL_REVIEW.json)。范围为 Ascending13、InheritedEighthHistory 和两个原 Raw31 传输供应者，原完整声明、定义、许可／seed 假设、数据与预算保持。Ascending13 复用原已验坐标证书，使用 kernel 决定；History 只补原 rpow 平方及相同 Fin 坐标，Raw31 仅修原 API 表达。
 
 初次批次因 History 的两个真实证明失败而退出 1，该历史记录保持；修补后仅重试失败的 History，另三个已成功 normal／kernel 原结果保留，随后组合完整 owned 审计退出 0。初次 lane 的退出 1 与修订 lane 的退出 0 分别记录，未将首轮批次改称成功。两个 Raw31 canonical 草稿与所选后像不同，主仓保留原稿，已验文件按明确安装路径发布。目录累计 228 份已验源码后像，这仍是完整 P1 的前置验收。
+
+第八十二、八十四至八十八、九十一、九十二批新增 43 个实际验收模块，共 873 个 owned 声明（433 public、440 private），目录累计 271 份已验源码后像。每份最终源码均有真实 normal、指定模块 kernel replay、完整 owned 类型／AST／宇宙参数／传递公理和最终非作者覆盖；仅标准三公理，源码及 215 项主要产物跨阶段稳定。发布未重跑已成功检查。
+
+| 批次／结果 | 模块数 | owned／public／private |
+| --- | ---: | ---: |
+| [82](member-repair-batch82/VALIDATION_RESULTS.json) | 2 | 121／107／14 |
+| [84](member-repair-batch84/VALIDATION_RESULTS.json) | 2 | 30／5／25 |
+| [85](member-repair-batch85/VALIDATION_RESULTS.json) | 7 | 143／142／1 |
+| [86](member-repair-batch86/VALIDATION_RESULTS.json) | 8 | 171／155／16 |
+| [87](member-repair-batch87/VALIDATION_RESULTS.json) | 6 | 102／6／96 |
+| [88](member-repair-batch88/VALIDATION_RESULTS.json) | 6 | 102／6／96 |
+| [91](member-repair-batch91/VALIDATION_RESULTS.json) | 6 | 102／6／96 |
+| [92](member-repair-batch92/VALIDATION_RESULTS.json) | 6 | 102／6／96 |
+
+范围包括原所有权 join／物理 mask、Archive 索引、原 fourth／fifth 与平滑 profile 依赖，以及 Seed00–23、42 的 6400 行原始字面数据。Seed 仅将每个公开 rows 的同序字面记录分为十六个私有数组后 flatten；全部 172800 个字段逐字保持。公开定义体的表示变化明确记录，不声称旧未 elaboration 稿已有相同 kernel 值。Archive 保留原 72 块左结合 append 定义与数据，复用各块已验索引，通过私有追加证书证明原两个公开索引事实。它们不能替代父子 max、数值 gain 或所有 simplex floor 的验收。
+
+84 的完整验收由既有 Seed42 owned 审计和新的 Archive-only 审计组合，两条真实命令、各自完整记录和不交叉的声明归属均保留，没有虚构一条全组 Lean 命令。86 的最终复核明确分区：omega 复核自身未编写的六源，root 复核另两源，两组精确覆盖全部 171 个声明；不将作者自审称为全球独审。Coarse 与 PrimeProfile 等初次真实失败、修订记录和旧通过命令保持，仅失败模块重试。辅助日志退出码捕获修正也作为原始事实发布，没有据此重跑形式检查。
+
+上一轮六终点共享 normal 已于 2026-11-23 23:45:47 UTC 自然退出 1，累计观察到 103 个实际失败模块与 42 个实际 Built；这些是历史累计数，不能当作当前未解决数。外层控制器退出 120 另行保留，未据此篡改实际 normal 的退出 1 或推断未经证明的原因。当前继续逐项处理剩余失败并保留已通过结果。四个最终 P1 导出和完整数据／分析供应链仍未完成验收，完整 P1 状态保持未完成。

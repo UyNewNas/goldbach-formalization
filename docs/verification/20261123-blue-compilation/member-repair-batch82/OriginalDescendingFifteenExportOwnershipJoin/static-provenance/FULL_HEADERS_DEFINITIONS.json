@@ -1,0 +1,259 @@
+{
+  "module": "ImbalancedChen.OriginalDescendingFifteenExportOwnershipJoin",
+  "headers": [
+    {
+      "name": "evaluate_ite",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem evaluate_ite (p : Prop) [Decidable p] (a b : Expr) (t : Point) :\n    evaluate (if p then a else b) t = if p then evaluate a t else evaluate b t :=",
+      "header_sha256": "fbfffeec15fbddb51475cfb778d377f46d281ab140a05b60e35875b20cd09e27",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "evaluate_subsetExpr",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :\n    evaluate (subsetExpr m) t = subsetSum m t :=",
+      "header_sha256": "e373b8ca0e13afae49266cfafb3de6e464b6730ae13b282064cfa10c7a0f47bb",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "namedSlack",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def namedSlack (i : Fin 15) (r : Fin 96) (t : Point) : ℝ :=",
+      "header_sha256": "5c273612ac2d6661926c0fe783d0ee1bd8cf70877f78dadd2f84b635d3f2009c",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "semanticSlack_eq_namedSlack",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem semanticSlack_eq_namedSlack (i : Fin 15) (r : Fin 96) (t : Point) :\n    semanticSlack i r t = namedSlack i r t :=",
+      "header_sha256": "f8f0d631534a90d7be00c6b4820141e9aa6e8b344c4c5e3bd63807fe72d2574e",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "fullRow",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def fullRow : Fin 8 → Fin 96 :=",
+      "header_sha256": "ee43a30375adbe4c77c9b68740d6d1d7833e48a721bd7b27d8ad055e668df13a",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "middleIndex",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def middleIndex (k : Fin 6) : Fin 8 :=",
+      "header_sha256": "75b582ee59af5d32ed6991b2686f280fc39e31cdc7418b702ee9fdd0defac95a",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "complementRow",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def complementRow : Fin 6 → Fin 96 :=",
+      "header_sha256": "cb2a9c14f97ff8768258f991a9830a3e4c163e2f48c2810efa070ec8f2383525",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchRow",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def branchRow (k : Fin 62) : Fin 96 :=",
+      "header_sha256": "7224f0fa9905ddefad77885d52e7723246ae2ac58bd783fdf0be2c4ed2117e1e",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchMasks",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def branchMasks : Fin 62 → ℕ :=",
+      "header_sha256": "542010c5559dc54c0e83af6aa656712d6b67778f463f0f3390aa845d219a1c28",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "middleIndex_covers",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem middleIndex_covers : ∀ j : Fin 8, j ≠ 0 → j ≠ 7 →\n    ∃ k : Fin 6, middleIndex k = j :=",
+      "header_sha256": "36b5c8e6df9addf4abd297fa5490521bd5ed5b5e8d0ad1989fa0dc55dc613ea9",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchMask_mem",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem branchMask_mem (k : Fin 62) :\n    branchMasks k ∈ Finset.Icc 1 63 ∧ branchMasks k ≠ 6 :=",
+      "header_sha256": "4f72c5b119b8460f60f4e92bc807c0074edeaf74b5316fb8e95126c231c81148",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchMasks_cover",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem branchMasks_cover : ∀ m : Fin 64, 0 < m.val → m.val ≠ 6 →\n    ∃ k : Fin 62, branchMasks k = m.val :=",
+      "header_sha256": "222bf099f0d46d049c796b1435b06e79d116327594e7fe3379ee4133e2671180",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "namedSlack_full",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem namedSlack_full (i : Fin 15) (j : Fin 8) (t : Point) :\n    namedSlack i (fullRow j) t = newCap t - prefixSquareExpr t j :=",
+      "header_sha256": "974367f7d452426514a780aa6055c86fed5469e941af0c762e62d2b5c12a2de4",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "namedSlack_complement",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem namedSlack_complement (i : Fin 15) (k : Fin 6) (t : Point) :\n    namedSlack i (complementRow k) t =\n      newCap t - (selectedSum t +\n        (∑ j ∈ Finset.univ.filter (fun j : Fin 8 => 0 < j ∧ j < middleIndex k), t j) +\n          2 * t (middleIndex k)) :=",
+      "header_sha256": "a4b35c6c7abb255b6674bf6280766975f8aa07827c9f4d977f148cbac6656e3a",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "namedSlack_branch",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem namedSlack_branch (i : Fin 15) (k : Fin 62) (t : Point) :\n    namedSlack i (branchRow k) t = oldRaw t - branchPlane i (branchMasks k) t :=",
+      "header_sha256": "f8d031b4eb6a92267078eb2878dd67384dc85287c94aa1a2f099379b428e002d",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "strictRows_namedSlack_pos",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem strictRows_namedSlack_pos {i : Fin 15} {t : Point}\n    (h : StrictRows i t) : ∀ r : Fin 96, 0 < namedSlack i r t :=",
+      "header_sha256": "cca64d7190088ef8fd275d61231d04a3da572cf0a757704b163cf1fbcd3fc6a1",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "strictRows_of_namedSlack_pos",
+      "kind": "theorem",
+      "private": true,
+      "complete_raw_header": "private theorem strictRows_of_namedSlack_pos {i : Fin 15} {t : Point}\n    (h : ∀ r : Fin 96, 0 < namedSlack i r t) : StrictRows i t where",
+      "header_sha256": "9e29712c6db4360119c9caf43f4e3fa0e992c5d24b76e94257186f4ac436ae72",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "strictExportedRows_iff_StrictRows",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem strictExportedRows_iff_StrictRows (i : Fin 15) (t : Point) :\n    StrictExportedRows i t ↔ StrictRows i t :=",
+      "header_sha256": "ec0531cc35a16c596b7fe2c4d0d547a72bb99bc50314ca38eac519f3b3017d9c",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "exported_strict_cells_disjoint",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exported_strict_cells_disjoint {i j : Fin 15} (hij : i ≠ j) :\n    Disjoint {t : Point | StrictExportedRows i t} {t : Point | StrictExportedRows j t} :=",
+      "header_sha256": "12e637302798a97511912bfdf969732cb85ab2257789a8d85125a7046372d2e0",
+      "pre_post_byte_exact": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "namedSlack",
+      "complete_raw_definition_and_context_region": "def namedSlack (i : Fin 15) (r : Fin 96) (t : Point) : ℝ :=\r\n  (![mu - t 0,\r\n    t 2 - 1 / 100,\r\n    t 7 - 53 / 13824,\r\n    t 0 - t 1,\r\n    t 1 - t 2,\r\n    t 2 - t 3,\r\n    t 3 - t 4,\r\n    t 4 - t 5,\r\n    t 5 - t 6,\r\n    t 6 - t 7,\r\n    oldRaw t - 3 * t 0,\r\n    oldRaw t - history3 t,\r\n    oldRaw t - history5 t,\r\n    oldRaw t - history7 t,\r\n    A (d t) - oldRaw t,\r\n    oldRaw t - (VariableEnvelope.cap - 3 * t 2 / 8),\r\n    newCap t - oldRaw t,\r\n    A (selectedSum t) - eta - newCap t,\r\n    newCap t - prefixSquareExpr t 0,\r\n    newCap t - prefixSquareExpr t 1,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 1), t k) + 2 * t 1),\r\n    newCap t - prefixSquareExpr t 2,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 2), t k) + 2 * t 2),\r\n    newCap t - prefixSquareExpr t 3,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 3), t k) + 2 * t 3),\r\n    newCap t - prefixSquareExpr t 4,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 4), t k) + 2 * t 4),\r\n    newCap t - prefixSquareExpr t 5,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 5), t k) + 2 * t 5),\r\n    newCap t - prefixSquareExpr t 6,\r\n    newCap t - (selectedSum t + (∑ k ∈ Finset.univ.filter (fun k : Fin 8 => 0 < k ∧ k < 6), t k) + 2 * t 6),\r\n    newCap t - prefixSquareExpr t 7,\r\n    oldRaw t - (total t + t 7),\r\n    total t + 3 * t 7 - newCap t,\r\n    oldRaw t - branchPlane i 1 t,\r\n    oldRaw t - branchPlane i 2 t,\r\n    oldRaw t - branchPlane i 3 t,\r\n    oldRaw t - branchPlane i 4 t,\r\n    oldRaw t - branchPlane i 5 t,\r\n    oldRaw t - branchPlane i 7 t,\r\n    oldRaw t - branchPlane i 8 t,\r\n    oldRaw t - branchPlane i 9 t,\r\n    oldRaw t - branchPlane i 10 t,\r\n    oldRaw t - branchPlane i 11 t,\r\n    oldRaw t - branchPlane i 12 t,\r\n    oldRaw t - branchPlane i 13 t,\r\n    oldRaw t - branchPlane i 14 t,\r\n    oldRaw t - branchPlane i 15 t,\r\n    oldRaw t - branchPlane i 16 t,\r\n    oldRaw t - branchPlane i 17 t,\r\n    oldRaw t - branchPlane i 18 t,\r\n    oldRaw t - branchPlane i 19 t,\r\n    oldRaw t - branchPlane i 20 t,\r\n    oldRaw t - branchPlane i 21 t,\r\n    oldRaw t - branchPlane i 22 t,\r\n    oldRaw t - branchPlane i 23 t,\r\n    oldRaw t - branchPlane i 24 t,\r\n    oldRaw t - branchPlane i 25 t,\r\n    oldRaw t - branchPlane i 26 t,\r\n    oldRaw t - branchPlane i 27 t,\r\n    oldRaw t - branchPlane i 28 t,\r\n    oldRaw t - branchPlane i 29 t,\r\n    oldRaw t - branchPlane i 30 t,\r\n    oldRaw t - branchPlane i 31 t,\r\n    oldRaw t - branchPlane i 32 t,\r\n    oldRaw t - branchPlane i 33 t,\r\n    oldRaw t - branchPlane i 34 t,\r\n    oldRaw t - branchPlane i 35 t,\r\n    oldRaw t - branchPlane i 36 t,\r\n    oldRaw t - branchPlane i 37 t,\r\n    oldRaw t - branchPlane i 38 t,\r\n    oldRaw t - branchPlane i 39 t,\r\n    oldRaw t - branchPlane i 40 t,\r\n    oldRaw t - branchPlane i 41 t,\r\n    oldRaw t - branchPlane i 42 t,\r\n    oldRaw t - branchPlane i 43 t,\r\n    oldRaw t - branchPlane i 44 t,\r\n    oldRaw t - branchPlane i 45 t,\r\n    oldRaw t - branchPlane i 46 t,\r\n    oldRaw t - branchPlane i 47 t,\r\n    oldRaw t - branchPlane i 48 t,\r\n    oldRaw t - branchPlane i 49 t,\r\n    oldRaw t - branchPlane i 50 t,\r\n    oldRaw t - branchPlane i 51 t,\r\n    oldRaw t - branchPlane i 52 t,\r\n    oldRaw t - branchPlane i 53 t,\r\n    oldRaw t - branchPlane i 54 t,\r\n    oldRaw t - branchPlane i 55 t,\r\n    oldRaw t - branchPlane i 56 t,\r\n    oldRaw t - branchPlane i 57 t,\r\n    oldRaw t - branchPlane i 58 t,\r\n    oldRaw t - branchPlane i 59 t,\r\n    oldRaw t - branchPlane i 60 t,\r\n    oldRaw t - branchPlane i 61 t,\r\n    oldRaw t - branchPlane i 62 t,\r\n    oldRaw t - branchPlane i 63 t] : Fin 96 → ℝ) r\n\n",
+      "sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "fullRow",
+      "complete_raw_definition_and_context_region": "def fullRow : Fin 8 → Fin 96 := ![18,19,21,23,25,27,29,31]\n",
+      "sha256": "ad210dbd412234e5cb8e9bcbd4c6f6c270756362d83a18caf6dcebea466b395d",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "middleIndex",
+      "complete_raw_definition_and_context_region": "def middleIndex (k : Fin 6) : Fin 8 := ⟨k.val + 1, by omega⟩\n",
+      "sha256": "ca0a7007ad7b3d6b9df5d3bd4f05cc7e1a1216497095e73d2f2c9af34689cc5d",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "complementRow",
+      "complete_raw_definition_and_context_region": "def complementRow : Fin 6 → Fin 96 := ![20,22,24,26,28,30]\n",
+      "sha256": "89ecd11567fda9a980fc3ec0db5ea4eb1ff2e35ab0874087b0472f55ad4fdaaa",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchRow",
+      "complete_raw_definition_and_context_region": "def branchRow (k : Fin 62) : Fin 96 := ⟨34 + k.val, by omega⟩\n\n",
+      "sha256": "5e1d36002366dec0a79a863632d3c82b2229fde8b4123b45c8f29114e9647387",
+      "pre_post_byte_exact": true
+    },
+    {
+      "name": "branchMasks",
+      "complete_raw_definition_and_context_region": "def branchMasks : Fin 62 → ℕ := ![1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63]\n\n",
+      "sha256": "8df7be128e29ace8ad7975ee978ccd30d716ce773d9ccdbd976c154284b1178a",
+      "pre_post_byte_exact": true
+    }
+  ],
+  "changed_original_proof_bodies": [
+    {
+      "name": "semanticSlack_eq_namedSlack",
+      "complete_raw_header": "theorem semanticSlack_eq_namedSlack (i : Fin 15) (r : Fin 96) (t : Point) :\n    semanticSlack i r t = namedSlack i r t :=",
+      "header_sha256": "f8f0d631534a90d7be00c6b4820141e9aa6e8b344c4c5e3bd63807fe72d2574e",
+      "before_body": "\n  fin_cases r\n  all_goals\n    simp [semanticSlack, semanticExpr, namedSlack, evaluate, evaluate_ite,\n      evaluate_subsetExpr, oldExpr, newExpr, ascendingExpr, descendingExpr, K, X,\n      oldRaw, newCap, total, history3, history5, history7, d, selectedSum,\n      branchPlane, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ,\n      VariableEnvelope.A, VariableEnvelope.C, eta, VariableEnvelope.cap, mu]\n    <;> split_ifs <;> ring\n\n",
+      "after_body": "\n  fin_cases r\n  all_goals\n    norm_num [semanticSlack, semanticExpr, namedSlack,\n      ownership_eval_notation_add, ownership_eval_notation_sub,\n      ownership_eval_notation_smul, evaluate, evaluate_ite,\n      evaluate_subsetExpr, oldExpr, newExpr, ascendingExpr, descendingExpr, K, X,\n      oldRaw, newCap, total, history3, history5, history7, d, selectedSum,\n      branchPlane, prefixSquareExpr, Finset.sum_filter,\n      Fin.sum_univ_succ, Fin.sum_univ_zero,\n      Fin.lt_def, Fin.val_zero, Fin.val_succ, Fin.val_mk,\n      Fin.coe_ofNat_eq_mod, Nat.reduceMod,\n      VariableEnvelope.A, VariableEnvelope.C, eta, VariableEnvelope.cap, mu]\n    <;> first\n      | rfl\n      | (split_ifs <;> ring1!)\n      | ring1!\n\n",
+      "before_body_sha256": "a14ac6998d4b95e12ab5ea6021b3ed01eed548c5f2c862cfe93d9d26cedc8e2d",
+      "after_body_sha256": "4c160ca17a341724cfe2f36247e15155552688aeae191604128a11f7e6d5e5de"
+    },
+    {
+      "name": "namedSlack_complement",
+      "complete_raw_header": "private theorem namedSlack_complement (i : Fin 15) (k : Fin 6) (t : Point) :\n    namedSlack i (complementRow k) t =\n      newCap t - (selectedSum t +\n        (∑ j ∈ Finset.univ.filter (fun j : Fin 8 => 0 < j ∧ j < middleIndex k), t j) +\n          2 * t (middleIndex k)) :=",
+      "header_sha256": "a4b35c6c7abb255b6674bf6280766975f8aa07827c9f4d977f148cbac6656e3a",
+      "before_body": "\n  fin_cases k <;> simp [complementRow, middleIndex, namedSlack]\n\n",
+      "after_body": "\n  fin_cases k <;>\n    norm_num [complementRow, middleIndex, namedSlack, Fin.lt_def,\n      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod]\n    <;> rfl\n\n",
+      "before_body_sha256": "9ced57fab99d6cbc89a88a772cfdf2a4ff859fc33b97015593f1f11f28802a60",
+      "after_body_sha256": "4ebec0a982ee36c3f01070a8ba32b1821bd47e89fd48b84884eb1220a576ffb9"
+    }
+  ],
+  "new_private_definitionally_reducing_interfaces": [
+    {
+      "name": "ownership_eval_notation_add",
+      "source_name": "h3_eval_notation_add",
+      "source_file": {
+        "path": "/workspace/p1-complete-proof/static-h3-affine-reuse/v5-finite-comparison/candidate.lean",
+        "bytes": 32953,
+        "sha256": "30e062173ddc363f3c054df70da09a84659b237af9c9595e60c8998c63a67ba4"
+      },
+      "source_region_sha256": "3ed9f0995393ff0ef0ff92ed74ab42efed09908d2f4a850133bafc1b9651caa3",
+      "candidate_region_sha256": "66a6a7fbaf71663bf53e69778c401cb8a50c130d551fae6f9d2ddfa75f1f77c8",
+      "only_namespace_local_name_changed_from_accepted_pattern": true,
+      "complete_raw_header_and_proof": "private theorem ownership_eval_notation_add (a b : Expr) (t : Point) :\n    evaluate (a + b) t = evaluate a t + evaluate b t := by rfl\n\n"
+    },
+    {
+      "name": "ownership_eval_notation_sub",
+      "source_name": "h3_eval_notation_sub",
+      "source_file": {
+        "path": "/workspace/p1-complete-proof/static-h3-affine-reuse/v5-finite-comparison/candidate.lean",
+        "bytes": 32953,
+        "sha256": "30e062173ddc363f3c054df70da09a84659b237af9c9595e60c8998c63a67ba4"
+      },
+      "source_region_sha256": "9d1c51ba9933ee122fc7246c8ebe0fbe10e208f1e084ec178365e2055ea8d232",
+      "candidate_region_sha256": "0f10ef095900bb3bf3ed8483f7fb7b71bc4d4b3f2c2d4bc9bbc4f7ea6dd90191",
+      "only_namespace_local_name_changed_from_accepted_pattern": true,
+      "complete_raw_header_and_proof": "private theorem ownership_eval_notation_sub (a b : Expr) (t : Point) :\n    evaluate (a - b) t = evaluate a t - evaluate b t := by rfl\n\n"
+    },
+    {
+      "name": "ownership_eval_notation_smul",
+      "source_name": "h3_eval_notation_smul",
+      "source_file": {
+        "path": "/workspace/p1-complete-proof/static-h3-affine-reuse/v5-finite-comparison/candidate.lean",
+        "bytes": 32953,
+        "sha256": "30e062173ddc363f3c054df70da09a84659b237af9c9595e60c8998c63a67ba4"
+      },
+      "source_region_sha256": "c7ab79593f34cc31be784b4703c9669bb72953dcbde24fcfc70030eb405504ad",
+      "candidate_region_sha256": "78ee7fb662333e6cbbb95575fd17fc1a9cf97fdc553f295bb4339161a8fc7bbd",
+      "only_namespace_local_name_changed_from_accepted_pattern": true,
+      "complete_raw_header_and_proof": "private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :\n    evaluate (q • a) t = (q : ℝ) * evaluate a t := by rfl\n\n"
+    }
+  ],
+  "all19_original_command_headers_6definition_regions_and_mixed_CRLF_data_byte_exact": true,
+  "whole_byte_reverse_reconstruction_exact": true,
+  "new_generic_compiler_or_literal_data_or_mathematical_premise": false
+}

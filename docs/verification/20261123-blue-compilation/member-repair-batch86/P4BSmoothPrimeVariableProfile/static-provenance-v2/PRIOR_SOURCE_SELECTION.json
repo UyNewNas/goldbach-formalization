@@ -1,0 +1,92 @@
+{
+  "module": "ImbalancedChen.P4BSmoothPrimeVariableProfile",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-smooth-family-four-actual-api/P4BSmoothPrimeVariableProfile/baseline.lean",
+    "bytes": 8322,
+    "sha256": "72a386872607c8b131dd3551bbedc4a61c9500f5a2ae30f89a388543e17b1294"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-smooth-family-four-actual-api/P4BSmoothPrimeVariableProfile/candidate.lean",
+    "bytes": 8419,
+    "sha256": "41f57d0900ccfa0a69104617d4da8de7c6f911a3cebd705ee239438a5d2d5af5"
+  },
+  "source_commands": 16,
+  "definitions": 5,
+  "changed_proofs": [
+    "primeTuplePoint_mem_positivePrimeOrthant",
+    "hasFDerivAt_primeVariableLogPoint",
+    "fderiv_smoothPrimeVariableProfile"
+  ],
+  "proof_replacements": [
+    {
+      "before": "  intro i\n  exact_mod_cast (hp i).pos",
+      "after": "  intro i\n  change (0 : ℝ) < ((t i).val : ℝ)\n  exact_mod_cast (hp i).pos",
+      "reason": "Expose the original finite prime coordinate Nat.val cast before the same positivity cast proof."
+    },
+    {
+      "before": "  simpa only [div_eq_mul_inv, mul_comm] using\n    hlog.const_mul (Real.log (N : ℝ))⁻¹",
+      "after": "  simpa only [primeVariableLogPoint, Pi.smul_apply, smul_eq_mul,\n    div_eq_mul_inv, mul_comm] using\n    hlog.const_smul (Real.log (N : ℝ))⁻¹",
+      "reason": "Use the generic existing constant-scalar derivative rule preserving the same real module instance, rather than algebra multiplication which selects the incompatible NormedAlgebra scalar structure; unfold only the original logarithmic coordinate definition and scalar multiplication notation."
+    },
+    {
+      "before": "  rw [fderiv_comp hprofile hlog.differentiableAt, hlog.fderiv]",
+      "after": "  rw [fderiv_comp p hprofile hlog.differentiableAt, hlog.fderiv]",
+      "reason": "The pinned current chain rule has an explicit point parameter x; supply exactly the original p before the original two differentiability facts."
+    }
+  ],
+  "all_complete_headers_definitions_imports_comments_data_hypotheses_quantifiers_licences_and_budgets_raw_exact": true,
+  "header_or_definition_exceptions": [],
+  "mathematical_boundary": "Same positive continuous prime orthant, repeated-prime tuples allowed, exact normalized log map/logN divisor and exact N,p-dependent diagonal Jacobian. Same genuine Frechet chain rule and smooth profile support/product/rpow conclusions. No uniform derivative constant, analytic continuation, strengthened domain or Part3 licence.",
+  "substantive_mathematical_gap_found": false,
+  "actual_failure": {
+    "observation": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0005/ACTUAL_FAILURES.json",
+    "prefix_sha256": "8f5f7fbf5e9a22b160471d95f9c95951fe906db17920858de39ce0a3063e5b1a",
+    "prefix_bytes": 6798176,
+    "slice_sha256": "7b97d8bb80f8766fc4a904a4f5f1cc642b60c73b85986d0efabad9cb8e5ffde7",
+    "raw_byte_start": 6772734,
+    "raw_byte_end_exclusive": 6777083,
+    "source_pre_sha256": "72a386872607c8b131dd3551bbedc4a61c9500f5a2ae30f89a388543e17b1294",
+    "unit_source_compile_exit": 1,
+    "whole_aggregate_final_exit_not_claimed": true
+  },
+  "existing_published_lookup": {
+    "scope": "Exact4filenames all-ref Git log and returned commit:path payloads only; no broad history/object/network scan.",
+    "rows": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P4BSmoothPrimeVariableProfile.lean",
+        "exists": true,
+        "sha256": "72a386872607c8b131dd3551bbedc4a61c9500f5a2ae30f89a388543e17b1294",
+        "bytes": 8322,
+        "blob": "d1690c2ddcfcc53aa0ded9ef5e670f9b202efd51",
+        "same_preimage": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/P4BSmoothPrimeVariableProfile.lean",
+        "exists": false,
+        "git_exit_code": 128
+      },
+      {
+        "commit": "ba1b4b49b4c144003a37478880a0b4f0d8ac9bab",
+        "path": "ImbalancedChen/P4BSmoothPrimeVariableProfile.lean",
+        "exists": true,
+        "sha256": "72a386872607c8b131dd3551bbedc4a61c9500f5a2ae30f89a388543e17b1294",
+        "bytes": 8322,
+        "blob": "d1690c2ddcfcc53aa0ded9ef5e670f9b202efd51",
+        "same_preimage": true
+      },
+      {
+        "commit": "86690fc4872804c1e0ede28299f8cb6a91e62285",
+        "path": "ImbalancedChen/P4BSmoothPrimeVariableProfile.lean",
+        "exists": true,
+        "sha256": "72a386872607c8b131dd3551bbedc4a61c9500f5a2ae30f89a388543e17b1294",
+        "bytes": 8322,
+        "blob": "d1690c2ddcfcc53aa0ded9ef5e670f9b202efd51",
+        "same_preimage": true
+      }
+    ],
+    "no_reliable_exact_repaired_post_found": true
+  },
+  "status": "ISOLATED_UNCOMPILED_PENDING_NONAUTHOR_REVIEW_AND_OWNER_ACTUAL_VALIDATION"
+}

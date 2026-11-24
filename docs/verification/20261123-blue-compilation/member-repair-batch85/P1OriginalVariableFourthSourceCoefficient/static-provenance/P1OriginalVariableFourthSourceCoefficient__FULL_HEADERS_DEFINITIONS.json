@@ -1,0 +1,48 @@
+{
+  "module": "ImbalancedChen.P1OriginalVariableFourthSourceCoefficient",
+  "source_commands": 5,
+  "headers": [
+    {
+      "name": "original_policy_difference_eq_fourth_saving",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem original_policy_difference_eq_fourth_saving\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (z : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (hN : 1 ≤ (N : ℝ)) :\n    firstExitRetainedPolynomial (HistoricalThirdCoarse.policy e chi m omega (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial\n        (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      actualHistoricalFourthSaving (initialPolicy e m (N : ℝ))\n        (rawLevel e chi m omega (N : ℝ))\n        (producerLevel4 e chi m omega (N : ℝ) rows licensed) N cap z :=",
+      "header_sha256": "c0b39e28687763ece9e9aaa46f61eae7a9e89dd49d91de7480ff60ddedc8f481"
+    },
+    {
+      "name": "original_policy_difference_eq_admitted_tuple_sum",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem original_policy_difference_eq_admitted_tuple_sum\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) (z : ℝ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (hN : 1 ≤ (N : ℝ)) :\n    (firstExitRetainedPolynomial (HistoricalThirdCoarse.policy e chi m omega (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial\n        (producerPolicy4 e chi m omega (N : ℝ) rows licensed)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z)) *\n        Real.log (N : ℝ) / singularSeries N =\n      ∑ p ∈ firstExitAdmittedTuples 4\n          (HistoricalThirdCoarse.policy e chi m omega (N : ℝ))\n          (roughPrimeUniverse N cap 0 z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) *\n          literalTupleResidualDifference\n            (rawLevel e chi m omega (N : ℝ))\n            (producerLevel4 e chi m omega (N : ℝ) rows licensed) N cap p :=",
+      "header_sha256": "ba33745827416c8f58e50e5e2a6228d325f970967b3d39405c1b9f6e66c75b1c"
+    },
+    {
+      "name": "literal_fourth_plus_coefficient_eq_winning_row",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem literal_fourth_plus_coefficient_eq_winning_row\n    (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (p : Fin 4 → ℕ) (r : ProducerRow) (hr : r ∈ rows)\n    (her : producerEligible licensed r (actualPrimeTupleLog N p))\n    (hseed : seedExponent e chi m omega (N : ℝ) (tupleHistory p) ≤\n      r.bufferedCandidate e (actualPrimeTupleLog N p))\n    (hrows : ∀ s ∈ rows, producerEligible licensed s (actualPrimeTupleLog N p) →\n      s.bufferedCandidate e (actualPrimeTupleLog N p) ≤\n        r.bufferedCandidate e (actualPrimeTupleLog N p)) :\n    literalTupleResidualDifference\n        (rawLevel e chi m omega (N : ℝ))\n        (producerLevel4 e chi m omega (N : ℝ) rows licensed) N cap p =\n      fourthTuplePlusResidualP1 N cap\n          (seedExponent e chi m omega (N : ℝ) (tupleHistory p)) p -\n        fourthTuplePlusResidualP1 N cap\n          (v (∑ i ∈ r.selected, actualPrimeTupleLog N p i) - 2 * e) p :=",
+      "header_sha256": "a8d04ccb72fa460fb3964bdbdde386764e6c9320daf8a7e8e5e83f1c8c1aea8b"
+    },
+    {
+      "name": "original_winning_row_source_eq_weighted_prime_box",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem original_winning_row_source_eq_weighted_prime_box\n    (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)\n    (J4 : Finset (P1OriginalCoarseContinuation.FourthCell m))\n    (j : P1OriginalCoarseContinuation.FourthCell m)\n    (hj : j ∈ P1OriginalCoarseContinuation.selectedFourthCells e chi m omega J4)\n    (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (r : ProducerRow) (hr : r ∈ rows)\n    (hwin : ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a)\n        (fun _ => (19 / 96 : ℝ)),\n      actualPrimeTupleLog N p ∈ P1OriginalFourthLimit.sourceRegion e m omega j →\n        producerEligible licensed r (actualPrimeTupleLog N p) ∧\n        seedExponent (e : ℝ) chi m omega (N : ℝ) (tupleHistory p) ≤\n          r.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p) ∧\n        ∀ s ∈ rows, producerEligible licensed s (actualPrimeTupleLog N p) →\n          s.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p) ≤\n            r.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p)) :\n    (∑ p ∈ (firstExitAdmittedTuples 4\n        (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))\n        (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))).filter\n          (fun p => ∀ i, a ≤ actualPrimeTupleLog N p i),\n      (∏ i, 1 / ((p i : ℝ) - 1)) *\n        (if actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j then\n          literalTupleResidualDifference\n            (rawLevel (e : ℝ) chi m omega (N : ℝ))\n            (producerLevel4 (e : ℝ) chi m omega (N : ℝ) rows licensed) N cap p\n         else 0)) =\n      ∑ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a)\n          (fun _ => (19 / 96 : ℝ)),\n        P1OriginalCoarseFourthArithmeticWall.signedTupleWeight p *\n          (if actualPrimeTupleLog N p ∈\n              P1OriginalFourthLimit.sourceRegion e m omega j then\n            fourthTuplePlusResidualP1 N cap\n                (seedExponent (e : ℝ) chi m omega (N : ℝ) (tupleHistory p)) p -\n              fourthTuplePlusResidualP1 N cap\n                (v (∑ i ∈ r.selected, actualPrimeTupleLog N p i) - 2 * (e : ℝ)) p\n           else 0) :=",
+      "header_sha256": "1f5550c38203ef3637c08597f25b84f23edb2092a8a47e449db48332033b989a"
+    },
+    {
+      "name": "labelledRawCellSum_eq_winning_row_test",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem labelledRawCellSum_eq_winning_row_test\n    (e : ℚ) (m N : ℕ) (omega a : ℝ)\n    (ha : 0 < a) (hN : 1 < N)\n    (j : P1OriginalCoarseContinuation.FourthCell m)\n    (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)\n    (r : ProducerRow) (hr : r ∈ rows)\n    (hwin : ∀ p ∈ actualPrimeBoxTuples N (fun _ : Fin 4 => a)\n        (fun _ => (19 / 96 : ℝ)),\n      actualPrimeTupleLog N p ∈ P1OriginalFourthLimit.sourceRegion e m omega j →\n        producerEligible licensed r (actualPrimeTupleLog N p) ∧\n        oldExponent e m j ≤\n          r.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p) ∧\n        ∀ s ∈ rows, producerEligible licensed s (actualPrimeTupleLog N p) →\n          s.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p) ≤\n            r.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p)) :\n    labelledRawCellSum e m omega a j rows licensed N =\n      actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))\n        ((P1OriginalFourthLimit.sourceRegion e m omega j).indicator\n          (fun t => extendedProfile (oldExponent e m j) t -\n            extendedProfile\n              (v (∑ i ∈ r.selected, t i) - 2 * (e : ℝ)) t)) :=",
+      "header_sha256": "3397a671dfd4cb560d8e0fb55602e67e97f42a169a8c604c784e6c4591d39da8"
+    }
+  ],
+  "definitions": [],
+  "all_complete_raw_headers_and_definitions_exact": true,
+  "changed_proof_bodies": [
+    "labelledRawCellSum_eq_winning_row_test"
+  ],
+  "new_declarations": 0,
+  "all_other_bytes_exact_and_reverse_reconstruction": true
+}

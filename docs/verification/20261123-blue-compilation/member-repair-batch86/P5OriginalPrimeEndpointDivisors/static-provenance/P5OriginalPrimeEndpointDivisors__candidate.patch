@@ -1,0 +1,31 @@
+--- baseline.lean
++++ candidate.lean
+@@ -133,7 +133,8 @@
+         _ ≤ _ := by
+           rw [one_mul]
+           exact sum_abs_rho_congruence_le_divisors Q rho N p (hS p hp).1 hrho
+-    _ ≤ _ := sum_distance_le_two_sum S N D _ hS (fun _ _ => Nat.cast_nonneg _)
++    _ ≤ _ := sum_distance_le_two_sum S N D (fun n : ℕ => (n.divisors.card : ℝ)) hS
++      (fun n _ => Nat.cast_nonneg (n.divisors.card))
+ 
+ /-- The exact coprime mean is paid without replacing it by the total count. -/
+ theorem abs_signed_coprime_mean_le (S Q : Finset ℕ) (rho delta : ℕ → ℝ)
+@@ -155,7 +156,8 @@
+         simpa only [Finset.sum_const, nsmul_eq_mul, mul_one] using
+           (show ((S.filter (fun p => Nat.Coprime p q)).card : ℝ) ≤ (S.card : ℝ) from
+             by exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _))
+-  rw [abs_mul,abs_div,abs_of_nonneg (Nat.cast_nonneg (Nat.totient q))]
++  rw [abs_mul,abs_div,
++    abs_of_nonneg (show (0 : ℝ) ≤ (Nat.totient q : ℝ) from Nat.cast_nonneg _)]
+   calc
+     _ ≤ |rho q| * ((S.card : ℝ) / (Nat.totient q : ℝ)) :=
+       mul_le_mul_of_nonneg_left (div_le_div_of_nonneg_right hmass (Nat.cast_nonneg _))
+@@ -203,7 +205,7 @@
+     omega
+   refine (abs_signed_primitive_endpoint_le S Q _ delta N D hS
+     (fun q _ => actualLowerSmallRoughRho_abs_le_one retainEven N cap w z L q) hdelta).trans ?_
+-  apply add_le_add_left
++  apply add_le_add le_rfl
+   exact mul_le_mul_of_nonneg_right (endpoint_card_le S N D hS)
+     (Finset.sum_nonneg (fun q _ => div_nonneg (abs_nonneg _) (Nat.cast_nonneg _)))
+ 

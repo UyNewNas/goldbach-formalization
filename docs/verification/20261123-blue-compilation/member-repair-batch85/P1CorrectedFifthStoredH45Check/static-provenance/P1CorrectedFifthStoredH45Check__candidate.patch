@@ -1,0 +1,39 @@
+--- baseline.lean
++++ candidate.lean
+@@ -93,14 +93,17 @@
+   by_cases hq : b.ux ≤ 25 / 128 - 4 * e
+   · have hr : (b.ux : ℝ) ≤ mu - 4 * (e : ℝ) := by
+       change (b.ux : ℝ) ≤ 25 / 128 - 4 * (e : ℝ)
+-      exact_mod_cast hq
++      have hcast : (b.ux : ℝ) ≤ ((25 / 128 - 4 * e : ℚ) : ℝ) := Rat.cast_le.mpr hq
++      simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_mul, Rat.cast_ofNat] using hcast
+     simp only [gammaUpperQ, if_pos hq, HistoricalThirdCoarse.gamma, if_pos hr]
+     exact fullGamma_le_fullGammaUpperQ (e : ℝ) b
+   · have hr : ¬ (b.ux : ℝ) ≤ mu - 4 * (e : ℝ) := by
+       intro h
+       apply hq
+       change (b.ux : ℝ) ≤ 25 / 128 - 4 * (e : ℝ) at h
+-      exact_mod_cast h
++      have hcast : (b.ux : ℝ) ≤ ((25 / 128 - 4 * e : ℚ) : ℝ) := by
++        simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_mul, Rat.cast_ofNat] using h
++      exact Rat.cast_le.mp hcast
+     simp only [gammaUpperQ, if_neg hq, HistoricalThirdCoarse.gamma, if_neg hr]
+     exact le_rfl
+ 
+@@ -129,12 +132,14 @@
+       historicalPrefixProject (by omega : 4 ≤ 5) t i := by
+     unfold projectedLo historicalPrefixProject
+     rw [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j)]
+-    exact (mem_logPrimeMeshCell.mp ht _).1
++    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
++      (mem_logPrimeMeshCell.mp ht _).1
+   have hhi (i : Fin 4) : historicalPrefixProject (by omega : 4 ≤ 5) t i ≤
+       (projectedHi m j i : ℝ) := by
+     unfold projectedHi historicalPrefixProject
+     rw [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j)]
+-    exact (mem_logPrimeMeshCell.mp ht _).2.le
++    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
++      (mem_logPrimeMeshCell.mp ht _).2.le
+   have hslo : ((∑ i ∈ r.selected, projectedLo m j i : ℚ) : ℝ) ≤
+       ∑ i ∈ r.selected, historicalPrefixProject (by omega : 4 ≤ 5) t i := by
+     push_cast

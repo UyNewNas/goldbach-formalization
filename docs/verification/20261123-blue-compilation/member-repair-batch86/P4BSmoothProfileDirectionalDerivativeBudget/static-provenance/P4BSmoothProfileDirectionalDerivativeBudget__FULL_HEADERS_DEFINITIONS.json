@@ -1,0 +1,81 @@
+{
+  "module": "ImbalancedChen.P4BSmoothProfileDirectionalDerivativeBudget",
+  "complete_headers": [
+    {
+      "name": "exists_smoothGateUpperStep_finite_derivative_budget",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_smoothGateUpperStep_finite_derivative_budget\n    (k : ℕ) :\n    ∃ B : ℝ, 1 ≤ B ∧ ∀ j : ℕ, j ≤ k → ∀ width : ℝ, 0 < width → ∀ y : ℝ,\n      |iteratedDeriv j (smoothGateUpperStep width) y| ≤ B / width ^ j :=",
+      "header_sha256": "fd268045e88448df7c85b5842742459ce347c08eddeb1c48e4d114d3696f043c"
+    },
+    {
+      "name": "iteratedDeriv_comp_real_affine",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem iteratedDeriv_comp_real_affine\n    (k : ℕ) (f : ℝ → ℝ) (hf : ContDiff ℝ ∞ f)\n    (offset slope x : ℝ) :\n    iteratedDeriv k (fun t => f (offset + slope * t)) x =\n      slope ^ k * iteratedDeriv k f (offset + slope * x) :=",
+      "header_sha256": "5e8fa9fae2a5ff6771ca65a5a4ae7882ff4e14d4791b60df396e7985b86956b8"
+    },
+    {
+      "name": "abs_iteratedDeriv_two_mul_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem abs_iteratedDeriv_two_mul_le\n    (k : ℕ) (f g : ℝ → ℝ) (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)\n    (x R Cf Cg : ℝ) (hR : 0 ≤ R) (hCf : 0 ≤ Cf) (hCg : 0 ≤ Cg)\n    (hleft : ∀ j : ℕ, j ≤ k → |iteratedDeriv j f x| ≤ Cf * R ^ j)\n    (hright : ∀ j : ℕ, j ≤ k → |iteratedDeriv j g x| ≤ Cg * R ^ j) :\n    |iteratedDeriv k (fun t => f t * g t) x| ≤ Cf * Cg * (2 * R) ^ k :=",
+      "header_sha256": "15b6bca7c66a5b63ba2e62d8f5f65112d6b490dc300cb6d6c7f50d50ec68896d"
+    },
+    {
+      "name": "abs_iteratedDeriv_four_gate_product_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem abs_iteratedDeriv_four_gate_product_le\n    (k : ℕ) (f : Fin 4 → ℝ → ℝ) (hf : ∀ i, ContDiff ℝ ∞ (f i))\n    (x R B : ℝ) (hR : 0 ≤ R) (hB : 0 ≤ B)\n    (hfactor : ∀ i : Fin 4, ∀ j : ℕ, j ≤ k →\n      |iteratedDeriv j (f i) x| ≤ B * R ^ j) :\n    |iteratedDeriv k (fun t => ∏ i : Fin 4, f i t) x| ≤ B ^ 4 * (4 * R) ^ k :=",
+      "header_sha256": "2a61a354d9ff701d61d0056f3d19ef661f57bdac5b82792b8f91d1d44b1973e4"
+    },
+    {
+      "name": "smoothPhysicalProfileLine",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smoothPhysicalProfileLine (b : ℝ) (N : ℕ) (T width : ℝ)\n    (x h : Fin 2 → ℝ) (t : ℝ) : ℝ :=",
+      "header_sha256": "2ed7fd7d5fb8ffd161687a16c6c4ab082c9e73611b5d109b5a3d6fb4e2028211"
+    },
+    {
+      "name": "smoothPhysicalProfileLine_eq_affine_gate_product",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem smoothPhysicalProfileLine_eq_affine_gate_product\n    (b : ℝ) (N : ℕ) (T width : ℝ) (x h : Fin 2 → ℝ) :\n    smoothPhysicalProfileLine b N T width x h = fun t =>\n      ∏ i : Fin 4, smoothGateUpperStep width\n        (smoothPhysicalProfileMargin b N T x i + smoothPhysicalWallRow b N i h * t) :=",
+      "header_sha256": "ac38973c5b5594c255ffcb070e8cdc201bbe9cd546cec51eb970ed6a0a3a9281"
+    },
+    {
+      "name": "exists_smoothPhysicalProfile_directional_derivative_budget",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_smoothPhysicalProfile_directional_derivative_budget\n    (k : ℕ) (b : ℝ) :\n    ∃ C : ℝ, 0 ≤ C ∧ ∀ width : ℝ, 0 < width →\n      ∀ N : ℕ, 2 ≤ N → ∀ T : ℝ,\n      ∀ x h : Fin 2 → ℝ,\n        |iteratedDeriv k (smoothPhysicalProfileLine b N T width x h) 0| ≤\n          (C / width ^ k) * (1 + Real.log (N : ℝ)) ^ k * ‖h‖ ^ k :=",
+      "header_sha256": "c1932a9956ae51c1bd20fc6b9e8b96d9255671fd51dac10aea91fb2e08ebfa15"
+    },
+    {
+      "name": "exists_smoothPhysicalProfile_Lipschitz_budget",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem exists_smoothPhysicalProfile_Lipschitz_budget :\n    ∃ C1 : ℝ, 1 ≤ C1 ∧ ∀ b width : ℝ, 0 < width →\n      ∀ N : ℕ, 2 ≤ N → ∀ T : ℝ, ∀ x y : Fin 2 → ℝ,\n        |smoothPhysicalProfile b N T width x -\n          smoothPhysicalProfile b N T width y| ≤\n          ((4 * C1 * (2 + |b|) / width) * (1 + Real.log (N : ℝ))) * ‖x - y‖ :=",
+      "header_sha256": "7076ed2c0aeefbc9a5c0c2c29458864ecef3bf4daab9f3d42b80b4204a83dab9"
+    }
+  ],
+  "complete_definitions": [
+    {
+      "name": "smoothPhysicalProfileLine",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smoothPhysicalProfileLine (b : ℝ) (N : ℕ) (T width : ℝ)\n    (x h : Fin 2 → ℝ) (t : ℝ) : ℝ :=",
+      "header_sha256": "2ed7fd7d5fb8ffd161687a16c6c4ab082c9e73611b5d109b5a3d6fb4e2028211",
+      "raw_region": "def smoothPhysicalProfileLine (b : ℝ) (N : ℕ) (T width : ℝ)\n    (x h : Fin 2 → ℝ) (t : ℝ) : ℝ :=\n  smoothPhysicalProfile b N T width (x + t • h)\n\n/-- Exact four-affine-wall line dictionary, using the companion's actual\nrow maps. In particular T and x affect only the offsets. -/\n",
+      "region_sha256": "9e75f3d774ff06856c038796679671d8e901368ab2632d06c5a0f45b7a58a28b"
+    }
+  ],
+  "source_commands": 8,
+  "all_raw_headers_and_definitions_exact": true,
+  "changed_proof_bodies": [
+    "iteratedDeriv_comp_real_affine",
+    "abs_iteratedDeriv_two_mul_le"
+  ],
+  "header_definition_exceptions": [],
+  "all_outside_exact_proof_replacements_bytes_preserved": true,
+  "reverse_reconstruction_exact": true
+}

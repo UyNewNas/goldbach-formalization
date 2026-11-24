@@ -1,0 +1,90 @@
+{
+  "schema": "independent_actual_single_filter_membership_delta_review_v3",
+  "reviewer": "/root/blue_inventory",
+  "author": "/root/member_current_repairs",
+  "reviewed_utc": "2026-11-24T00:20:04.450831+00:00",
+  "status": "NO_DETERMINISTIC_FINDINGS_STATIC_ONLY_READY_FOR_OWNER_FAILED_TARGET_RETRY",
+  "findings": [],
+  "module": "ImbalancedChen.P1OriginalCoarseFifthCellLimit",
+  "baseline": {
+    "path": "baseline-v2.lean",
+    "bytes": 21180,
+    "sha256": "4203147e55cb87e1dd246f24bd1e8923b69cfab8fdd21d8a6fdae02db9efe6b7"
+  },
+  "candidate": {
+    "path": "candidate.lean",
+    "bytes": 21506,
+    "sha256": "4c2206699c7ac05f9fe245155237176772605c7d8e17941ecfb1ac8d05be0e92"
+  },
+  "original_SOURCE_SELECTION": {
+    "path": "SOURCE_SELECTION.json",
+    "bytes": 3454,
+    "sha256": "677e90dbd521ff10d11e3c25bd511578254a5cb753b12b56015dcff9ee25aee7"
+  },
+  "original_files_manifest": {
+    "path": "FILES_MANIFEST.json",
+    "sha256": "d91fc0690f76478f6e4b98baec2408384ae92eda55a4349a041ad799a2f0a4f0",
+    "bytes": 2292
+  },
+  "all_original_manifest_entries_exact": true,
+  "actual_failure": {
+    "full_log": {
+      "path": "ACTUAL_NORMAL_FULL.log",
+      "bytes": 168985,
+      "sha256": "7f0ec051da15b0b45450608651e71373c1b52789a7a3863e410512c692623963"
+    },
+    "complete_unit_slice": {
+      "path": "ACTUAL_FULL_UNIT_DIAGNOSTICS.log",
+      "bytes": 3402,
+      "sha256": "dea8890e4d27d103b1eb275bcdad3d09d208110ba2fcecae219efed727c46d7c"
+    },
+    "original_command": {
+      "path": "ACTUAL_NORMAL_COMMAND.json",
+      "bytes": 642,
+      "sha256": "9a4108ca90388a60b8f230b16244f7001aeba53ac26b411fb437fafd5c054c09"
+    },
+    "exit_code": 1,
+    "elapsed_seconds": 18.211232736997772,
+    "only_source_error_line": 166,
+    "classification": "FILTER_MEMBERSHIP_PRESENTATION_NOT_MATHEMATICAL_DOMAIN_CHANGE"
+  },
+  "exact_delta": [
+    {
+      "before": "    simpa only [S, sourceRegion, Finset.mem_filter] using hp",
+      "after": "    constructor\n    · intro hmem\n      have hleft := Finset.mem_filter.mp hmem\n      have hright := Finset.mem_filter.mp (hp.mp (Finset.mem_filter.mpr hleft))\n      exact Finset.mem_filter.mpr hright\n    · intro hmem\n      have hright := Finset.mem_filter.mp hmem\n      have hleft := Finset.mem_filter.mp (hp.mpr (Finset.mem_filter.mpr hright))\n      exact Finset.mem_filter.mpr hleft"
+    }
+  ],
+  "whole_source_forward_and_reverse_exact": true,
+  "eighteen_complete_command_headers_and_five_definition_regions_checked_raw": true,
+  "original_headers_defs_numeric_constants_data_quantifiers_hypotheses_imports_options_and_budgets_unchanged": true,
+  "logical_review": {
+    "original_input": "After the original hcondition rewrite, target lhs is the original candidates filter by logPrimeMeshCell and logPrimeBox. hsource supplies precisely that set equality to the original actualPrimeBoxTuples/sourceRegion filter.",
+    "membership_equality": "hp is Iff.of_eq of congrArg (fun s => p ∈ s) hsource; no new set equality or source licence is assumed.",
+    "forward": "Peel actual lhs filter with mem_filter.mp, rebuild the definitionally same hsource lhs, apply hp.mp, peel its rhs filter, and reconstruct the actual rhs filter.",
+    "reverse": "Peel actual rhs filter, rebuild hsource rhs, apply hp.mpr, peel lhs filter, and reconstruct actual lhs filter.",
+    "definitional_names": "S unfolds to the same candidates; sourceRegion unfolds to exactly logPrimeMeshCell ∩ jointRegion. Constructor transport keeps every membership conjunct and its original order; proof irrelevance accounts for Decidable implementations.",
+    "no_new_hypothesis_or_weakened_conclusion": true,
+    "actual_error_match": "The v2 failure printed precisely the same conjunctions for hp while rhs target retained its filter notation. Both directions now use existing mem_filter constructors explicitly, without simp relying on target normalization."
+  },
+  "pinned_API": {
+    "path": "PINNED_API.json",
+    "bytes": 1011,
+    "sha256": "8a9629ce513cbe42d7e74d1dee2f83e9117f68b8b543ba6ccef4fb532490cbd4"
+  },
+  "prior_v2_peer_scope_reused_without_repeating_math_audit": {
+    "path": "PRIOR_INDEPENDENT_REVIEW.json",
+    "bytes": 8903,
+    "sha256": "5f6d99f0678fe598a3beaec4b5b804c35ada9e58025fbdf4ab4c259c284dfe1d"
+  },
+  "manuscript_1106_context_preserved": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "snapshot": "sieve-appendix-130-150.tex",
+    "sha256": "c656b4a2f20d601d2b081a52f55deb677f95c5a2cc273875ba209f0dcdd1c34a"
+  },
+  "only_one_existing_proof_body_changed": true,
+  "Lean_Lake_kernel_type_axiom_numeric_stock_or_materializer_calls": 0,
+  "live_source_controller_guard_queue_or_old_record_mutations": false,
+  "old_records_unchanged": true,
+  "acceptance_boundary": "Static nonauthor gate only. Owner must retry only failed Coarse source then its kernel/full-owned validation. Other six successful batch85 sources are not repeated; no current candidate PASS or complete P1 acceptance is asserted."
+}

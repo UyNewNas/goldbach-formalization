@@ -1,0 +1,43 @@
+✖ [10583/10619] Building ImbalancedChen.P4BSmoothPrimeVariableProfile (14s)
+trace: .> LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P4BSmoothPrimeVariableProfile.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BSmoothPrimeVariableProfile.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P4BSmoothPrimeVariableProfile.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BSmoothPrimeVariableProfile.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P4BSmoothPrimeVariableProfile.setup.json --json
+error: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:49:2: mod_cast has type
+  (0 : Fin (N + 1)) < t i
+but is expected to have type
+  (0 : ℝ) < primeTuplePoint N t i
+warning: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:96:2: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+error: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:104:2: Type mismatch: After simplification, term
+  HasFDerivAt.const_mul hlog (Real.log ↑N)⁻¹
+ has type
+  @HasFDerivAt ℝ DenselyNormedField.toNontriviallyNormedField (Fin 2 → ℝ) Pi.normedAddCommGroup.toAddCommGroup
+    Pi.normedSpace.toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℝ Real.normedCommRing.toAddCommGroup
+    (NormedAlgebra.toNormedSpace ℝ).toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (fun y => Real.log (y i) * (Real.log ↑N)⁻¹) ((Real.log ↑N)⁻¹ • (p i)⁻¹ • ContinuousLinearMap.proj i) p
+but is expected to have type
+  @HasFDerivAt ℝ DenselyNormedField.toNontriviallyNormedField (Fin 2 → ℝ) Pi.normedAddCommGroup.toAddCommGroup
+    Pi.normedSpace.toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace ℝ Real.normedAddCommGroup.toAddCommGroup
+    RCLike.toInnerProductSpaceReal.toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (fun x => primeVariableLogPoint N x i) ((Real.log ↑N)⁻¹ • (p i)⁻¹ • ContinuousLinearMap.proj i) p
+error: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:120:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fderiv ?m.104 (?m.117 ∘ ?m.115) ?m.116
+in the target expression
+  fderiv ℝ (smoothPhysicalProfile b N T width ∘ primeVariableLogPoint N) p =
+    fderiv ℝ (smoothPhysicalProfile b N T width) (primeVariableLogPoint N p) ∘SL primeVariableLogJacobian N p
+
+b : ℝ
+N : ℕ
+T width : ℝ
+p : Fin 2 → ℝ
+hp : p ∈ positivePrimeOrthant
+hprofile : DifferentiableAt ℝ (smoothPhysicalProfile b N T width) (primeVariableLogPoint N p)
+hlog : HasFDerivAt (primeVariableLogPoint N) (primeVariableLogJacobian N p) p
+⊢ fderiv ℝ (smoothPhysicalProfile b N T width ∘ primeVariableLogPoint N) p =
+    fderiv ℝ (smoothPhysicalProfile b N T width) (primeVariableLogPoint N p) ∘SL primeVariableLogJacobian N p
+warning: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:131:46: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: ImbalancedChen/P4BSmoothPrimeVariableProfile.lean:131:46: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+error: Lean exited with code 1

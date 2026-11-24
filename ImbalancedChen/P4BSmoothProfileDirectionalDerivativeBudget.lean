@@ -64,7 +64,7 @@ theorem iteratedDeriv_comp_real_affine
     iteratedDeriv k (fun t => f (offset + slope * t)) x =
       slope ^ k * iteratedDeriv k f (offset + slope * x) := by
   have hg : ContDiff ℝ k (fun y => f (offset + y)) :=
-    (hf.of_le (by simp)).comp (contDiff_const.add contDiff_id)
+    (contDiff_infty.mp hf k).comp (contDiff_const.add contDiff_id)
   have hscale := congrFun (iteratedDeriv_comp_const_mul hg slope) x
   have hshift := congrFun (iteratedDeriv_comp_const_add k f offset) (slope * x)
   exact hscale.trans (congrArg (fun z : ℝ => slope ^ k * z) hshift)
@@ -77,8 +77,8 @@ theorem abs_iteratedDeriv_two_mul_le
     (hleft : ∀ j : ℕ, j ≤ k → |iteratedDeriv j f x| ≤ Cf * R ^ j)
     (hright : ∀ j : ℕ, j ≤ k → |iteratedDeriv j g x| ≤ Cg * R ^ j) :
     |iteratedDeriv k (fun t => f t * g t) x| ≤ Cf * Cg * (2 * R) ^ k := by
-  have hfK : ContDiffAt ℝ k f x := (hf.of_le (by simp)).contDiffAt
-  have hgK : ContDiffAt ℝ k g x := (hg.of_le (by simp)).contDiffAt
+  have hfK : ContDiffAt ℝ k f x := (contDiff_infty.mp hf k).contDiffAt
+  have hgK : ContDiffAt ℝ k g x := (contDiff_infty.mp hg k).contDiffAt
   have hsum : (∑ j ∈ Finset.range (k + 1), (k.choose j : ℝ)) = 2 ^ k := by
     exact_mod_cast Nat.sum_range_choose k
   change |iteratedDeriv k (f * g) x| ≤ Cf * Cg * (2 * R) ^ k

@@ -1,0 +1,150 @@
+{
+  "module": "ImbalancedChen.P5OriginalFeedbackTableKernels",
+  "headers": [
+    {
+      "name": "tableAtomSet",
+      "kind": "def",
+      "complete_raw_header": "def tableAtomSet (lower : Bool) (b : FloorAtom) : Set ℝ :=",
+      "sha256": "6eb1acef4981d5e626948be517ee7e94945005f9170ff4da99140eadc65d3537",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tableFunction",
+      "kind": "def",
+      "complete_raw_header": "def tableFunction (lower : Bool) (nums : Fin 200 → ℤ) (s : ℝ) : ℝ :=",
+      "sha256": "5d2f7ebf6c7556005c281f44e4130d1a7e3a62e4c6889b9bcc3aaf7cb17e93d7",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tableFunction_lower",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tableFunction_lower (nums : Fin 200 → ℤ) : tableFunction true nums = floorStep nums :=",
+      "sha256": "1b7a73916d55f058e1f482ea596b70681aa6e9bd8a4eb9fcd8f3618211c0a284",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tableFunction_upper",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tableFunction_upper (nums : Fin 200 → ℤ) : tableFunction false nums = upperFloor nums :=",
+      "sha256": "4982a6d3febf8ae9519ed70db92adc2032209e809785a4a62b1a2386d3a42a74",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "measurableSet_tableAtomSet",
+      "kind": "theorem",
+      "complete_raw_header": "theorem measurableSet_tableAtomSet (lower : Bool) (b : FloorAtom) :\n    MeasurableSet (tableAtomSet lower b) :=",
+      "sha256": "1e80cc67a5802c8a75bace3711364c81667c7048bb64cb232d4f9b13d5bacf85",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "measurable_tableFunction",
+      "kind": "theorem",
+      "complete_raw_header": "theorem measurable_tableFunction (lower : Bool) (nums : Fin 200 → ℤ) :\n    Measurable (tableFunction lower nums) :=",
+      "sha256": "889b42d4da67f365027c74e1845e0963568087430a393cfa02f92a90c499cddc",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "floorStep_bounds_of_data",
+      "kind": "theorem",
+      "complete_raw_header": "theorem floorStep_bounds_of_data {nums : Fin 200 → ℤ} (hn : UnitBoundedData nums) (s : ℝ) :\n    0 ≤ floorStep nums s ∧ floorStep nums s ≤ 1 :=",
+      "sha256": "62635431c2a97f9e20f12273131c944852c8c1061528b6c60948187b2913b2a0",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tableFunction_bounds",
+      "kind": "theorem",
+      "complete_raw_header": "theorem tableFunction_bounds (lower : Bool) {nums : Fin 200 → ℤ}\n    (hn : UnitBoundedData nums) (s : ℝ) :\n    0 ≤ tableFunction lower nums s ∧ tableFunction lower nums s ≤ 1 :=",
+      "sha256": "8ce19e0f8f8dd4923e5a6ee5ec79ce6f6e31179738208342f6417b23f644c97a",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tablePullback",
+      "kind": "def",
+      "complete_raw_header": "def tablePullback (lower : Bool) (p : X → ℝ) (b : FloorAtom) : Set X :=",
+      "sha256": "1855c57e853ebb806ae2ec92dcc7e4b5a5d409e07349be778970fab62c5b154a",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "measurableSet_tablePullback",
+      "kind": "theorem",
+      "complete_raw_header": "theorem measurableSet_tablePullback (lower : Bool) {p : X → ℝ}\n    (hp : Measurable p) (b : FloorAtom) : MeasurableSet (tablePullback lower p b) :=",
+      "sha256": "a2c65aa8a9341e81165af53a94d96ead0056168e995c9f33f1e084db9ca2a690",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "weightedTable",
+      "kind": "def",
+      "complete_raw_header": "def weightedTable (lower : Bool) (nums : Fin 200 → ℤ) (p W : X → ℝ) (x : X) : ℝ :=",
+      "sha256": "05835dabdc5257c9f3024696519380bd2e03875fba55361fdb577086adb9e515",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "measurable_weightedTable",
+      "kind": "theorem",
+      "complete_raw_header": "theorem measurable_weightedTable (lower : Bool) (nums : Fin 200 → ℤ)\n    {p W : X → ℝ} (hp : Measurable p) (hW : Measurable W) :\n    Measurable (weightedTable lower nums p W) :=",
+      "sha256": "f1ca219da2fdca619d9c9992c048094a99a510888ea4a9de97bdf72a65d85f69",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "weightedTable_eq_atom_sum",
+      "kind": "theorem",
+      "complete_raw_header": "theorem weightedTable_eq_atom_sum (lower : Bool) (nums : Fin 200 → ℤ)\n    (p W : X → ℝ) (x : X) :\n    weightedTable lower nums p W x =\n      ∑ b : FloorAtom, floorAtomValue nums b * (tablePullback lower p b).indicator W x :=",
+      "sha256": "068c34fe36e4f5a30fe996948f9cd0222b9f1cf49291cc22f545e6217e85a243",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "integrableOn_weightedTable",
+      "kind": "theorem",
+      "complete_raw_header": "theorem integrableOn_weightedTable (lower : Bool) (nums : Fin 200 → ℤ)\n    {p W : X → ℝ} (hp : Measurable p) {D : Set X} (hD : MeasurableSet D)\n    {μ : Measure X} (hW : IntegrableOn W D μ) :\n    IntegrableOn (weightedTable lower nums p W) D μ :=",
+      "sha256": "6c784678161266c718bce87909d170786eb1270dd7c2a2d77dd3070f6cb8cf70",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "weightedTable_integral_atom_sum",
+      "kind": "theorem",
+      "complete_raw_header": "theorem weightedTable_integral_atom_sum (lower : Bool) (nums : Fin 200 → ℤ)\n    {p W : X → ℝ} (hp : Measurable p) {D : Set X} (hD : MeasurableSet D)\n    {μ : Measure X} (hW : IntegrableOn W D μ) :\n    (∫ x in D, weightedTable lower nums p W x ∂μ) =\n      ∑ b : FloorAtom, floorAtomValue nums b *\n        ∫ x in D ∩ tablePullback lower p b, W x ∂μ :=",
+      "sha256": "ac8124af186c8f715d7928539156c0f276f811dc9af7f74143f1e29743e4d99c",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "weightedTable_bounds",
+      "kind": "theorem",
+      "complete_raw_header": "theorem weightedTable_bounds (lower : Bool) {nums : Fin 200 → ℤ}\n    (hn : UnitBoundedData nums) (p W : X → ℝ) (x : X) (hW : 0 ≤ W x) :\n    0 ≤ weightedTable lower nums p W x ∧ weightedTable lower nums p W x ≤ W x :=",
+      "sha256": "9a95460efd134f08fcc2106df8d99737d0a12546d31e049854f8546798fffcd0",
+      "pre_post_raw_byte_exact": true
+    }
+  ],
+  "definitions": [
+    {
+      "name": "tableAtomSet",
+      "complete_raw_definition_region": "def tableAtomSet (lower : Bool) (b : FloorAtom) : Set ℝ :=\n  if lower then floorAtomSet b else upperAtomSet b\n\n",
+      "sha256": "e03cd828029dda1d1c53f8e4b3412e6a49844b03c86848a3eb2c51c749e6f202",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tableFunction",
+      "complete_raw_definition_region": "def tableFunction (lower : Bool) (nums : Fin 200 → ℤ) (s : ℝ) : ℝ :=\n  ∑ b : FloorAtom, (tableAtomSet lower b).indicator (fun _ => floorAtomValue nums b) s\n\n",
+      "sha256": "fe3a6535d3b195fecf1afff58954798e06f68f3cefa07f2671346524e2b892e4",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "tablePullback",
+      "complete_raw_definition_region": "def tablePullback (lower : Bool) (p : X → ℝ) (b : FloorAtom) : Set X :=\n  p ⁻¹' tableAtomSet lower b\n\n",
+      "sha256": "c8e68f21da76b081fe5cc328a1fbe3250ed8c82db44a973298aea0f0a900da8e",
+      "pre_post_raw_byte_exact": true
+    },
+    {
+      "name": "weightedTable",
+      "complete_raw_definition_region": "def weightedTable (lower : Bool) (nums : Fin 200 → ℤ) (p W : X → ℝ) (x : X) : ℝ :=\n  W x * tableFunction lower nums (p x)\n\n",
+      "sha256": "1e4f7ffa06a4cce42bf31b3738e32385accb72ceedd9dfa4b54d204f6c3c8913",
+      "pre_post_raw_byte_exact": true
+    }
+  ],
+  "only_changed_proof": "weightedTable_bounds",
+  "complete_changed_header": "theorem weightedTable_bounds (lower : Bool) {nums : Fin 200 → ℤ}\n    (hn : UnitBoundedData nums) (p W : X → ℝ) (x : X) (hW : 0 ≤ W x) :\n    0 ≤ weightedTable lower nums p W x ∧ weightedTable lower nums p W x ≤ W x :=",
+  "before_body": "\n  have ht := tableFunction_bounds lower hn (p x)\n  exact ⟨mul_nonneg hW ht.1,\n    by simpa only [mul_one] using mul_le_mul_of_nonneg_left ht.2 hW⟩\n\n",
+  "after_body": "\n  have ht := tableFunction_bounds lower hn (p x)\n  exact ⟨mul_nonneg hW ht.1,\n    by simpa only [weightedTable, mul_one] using mul_le_mul_of_nonneg_left ht.2 hW⟩\n\n",
+  "whole_reverse_exact": true,
+  "outside_this_original_proof_raw_byte_exact": true,
+  "original_imports_options_data_quantifiers_hypotheses_constants_and_all_other_proofs_raw_exact": true
+}

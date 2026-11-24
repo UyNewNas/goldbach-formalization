@@ -1,0 +1,88 @@
+{
+  "module": "ImbalancedChen.P1OriginalCoarseFifthCellLimit",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-coarse-fifth-source-coefficient-h45-api/P1OriginalCoarseFifthCellLimit/baseline.lean",
+    "bytes": 20860,
+    "sha256": "0b855af740bfee8347e8f0e023a34179e98595e59b291e70ac28bc6971fb5cb4"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-coarse-fifth-source-coefficient-h45-api/P1OriginalCoarseFifthCellLimit/candidate.lean",
+    "bytes": 21016,
+    "sha256": "6ef428428364edd0b4b9f6fa06de2d6f091f1cff5ce63138b47a5324695f9037"
+  },
+  "complete_source_commands": 18,
+  "definitions": 5,
+  "changed_proof_bodies": [
+    "tendsto_test_original_sourceRegion",
+    "positive_candidates_weighted_sum",
+    "tendsto_positiveCellCorrection"
+  ],
+  "all_complete_headers_definitions_data_imports_options_comments_hypotheses_quantifiers_raw_identical": true,
+  "header_definition_exceptions": [],
+  "proof_replacements": [
+    {
+      "before": "mul_zero, Finset.sum_const_zero, inter_empty, integral_empty] using",
+      "after": "mul_zero, Finset.sum_const_zero, inter_empty, MeasureTheory.setIntegral_empty] using",
+      "reason": "Use the current set integral empty API, leaving the original false firstStop branch identically zero."
+    },
+    {
+      "before": "    simpa only [S, sourceRegion] using hsource",
+      "after": "    exact hsource",
+      "reason": "Use direct definitional type transport for the identical imported candidate filter, preserving the local S/sourceRegion aliases rather than simp-mediated lambda transport."
+    },
+    {
+      "before": "  rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]",
+      "after": "  dsimp only [S, HistoricalThirdCoarse.P1OriginalCoarseFifth.candidates] at hfin\n  rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]",
+      "reason": "Expose the two original candidate aliases in the filter equality before rewriting the literal firstExitFrontierTuples sum."
+    },
+    {
+      "before": "  rw [← P1OriginalFifthIntegral.cellIntegral_eq_gated_difference e chi m omega ha J4 cap4 cap5 j] at hlim",
+      "after": "  have hcell := P1OriginalFifthIntegral.cellIntegral_eq_gated_difference e chi m omega ha J4 cap4 cap5 j\n  dsimp only [P1OriginalFifthIntegral.reciprocalWeight] at hcell\n  rw [← hcell] at hlim",
+      "reason": "Expose the original reciprocalWeight product on the existing integral equality before matching the literal product-weighted limit. Same two separately gated integrals and same limiting filter."
+    }
+  ],
+  "mathematical_boundary": "Original firstStop false branch, initial/current first cubes, rawQ3, third cube and rough activation remain. Same positive [a,19/96)^5 truncation and explicit named small-cell remainder. New/old own-cube gates stay separately attached to the same candidate carrier. No a→0, desired tail, positive saving, cap-order or new density identity premise introduced.",
+  "actual_failure": {
+    "original_observation_path": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0003/ACTUAL_FAILURES.json",
+    "captured_prefix_sha256": "7920c7e2a52eac189aa994b929edcb01ca80156978d3671662ac00768d1e6fc3",
+    "prefix_bytes": 6732897,
+    "slice_sha256": "f848ce3452ccfc205331e179f2a5114da0fac1fdc81cf9d51fbc242cd16d595b",
+    "raw_byte_start": 6633898,
+    "raw_byte_end_exclusive": 6642610,
+    "unit_source_compile_exit_code": 1,
+    "whole_aggregate_final_exit_not_claimed": true
+  },
+  "existing_published_lookup": {
+    "scope": "Exact filename all-ref Git lookup and only returned canonical payloads; no full history/object scan.",
+    "rows": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean",
+        "exists": true,
+        "bytes": 20860,
+        "sha256": "0b855af740bfee8347e8f0e023a34179e98595e59b291e70ac28bc6971fb5cb4",
+        "blob": "82ccdf084ff3d234a36387a25ed47ed2261fcafb",
+        "same_preimage": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean",
+        "exists": false,
+        "git_exit_code": 128
+      },
+      {
+        "commit": "3d4e8c2e3f62d40b92ef522bcb42c07d763ba823",
+        "path": "ImbalancedChen/P1OriginalCoarseFifthCellLimit.lean",
+        "exists": true,
+        "bytes": 20860,
+        "sha256": "0b855af740bfee8347e8f0e023a34179e98595e59b291e70ac28bc6971fb5cb4",
+        "blob": "82ccdf084ff3d234a36387a25ed47ed2261fcafb",
+        "same_preimage": true
+      }
+    ],
+    "result": "All present published payloads exactly equal current failing pre, no distinct existing post found in this bounded scope."
+  },
+  "classification": "PROOF_API_ARGUMENT_ELABORATION_CAST_OR_DEFINITIONAL_NORMALIZATION",
+  "substantive_mathematical_gap_found": false,
+  "status": "UNCOMPILED_STATIC_CANDIDATE_REQUIRES_NONAUTHOR_GATE_AND_UNIQUE_OWNER_ACTUAL_VALIDATION"
+}

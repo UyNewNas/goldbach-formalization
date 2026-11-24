@@ -1,0 +1,199 @@
+{
+  "module": "ImbalancedChen.P1CorrectedFifthStoredH45Check",
+  "source_commands": 16,
+  "headers": [
+    {
+      "name": "fullGammaUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def fullGammaUpperQ (b : RationalBox) : ℚ :=",
+      "header_sha256": "d368d5f4088e1e494a8e91bc53d8dc7a2bacd1c37e95926cf6fc22c2f6235b6a"
+    },
+    {
+      "name": "gammaUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def gammaUpperQ (e : ℚ) (b : RationalBox) : ℚ :=",
+      "header_sha256": "662b4926bb3d3cdffb89de9f53f74f5fe37e96277c687eba019fec96d07f1b0a"
+    },
+    {
+      "name": "seedUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def seedUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : ℚ :=",
+      "header_sha256": "30a78f65c6e8080ae60c3857b9419aeaafdb79fafeb59e493fd68f94641d15d1"
+    },
+    {
+      "name": "projectedLo",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def projectedLo (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=",
+      "header_sha256": "47efd12f1bff019884b1c27d8ff9d5b45de01e57645d8f4b626349221a4ea34c"
+    },
+    {
+      "name": "projectedHi",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def projectedHi (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=",
+      "header_sha256": "4eb8e7968a247c049eb50dbba63f421177cc67bf45a937eae60ab371a9aa5560"
+    },
+    {
+      "name": "rowUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def rowUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1))\n    (r : P2OriginalFourthCapProducerInterface.ProducerRow) : ℚ :=",
+      "header_sha256": "4f5bd1829969687eba812683dd9afc0ae8018c9fc5084812c9d3e34ea3b3ff9f"
+    },
+    {
+      "name": "rowUpperCheck",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def rowUpperCheck (D : HistoricalPrefixCapData) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (j : Fin 5 → Fin (D.m + 1)) : Bool :=",
+      "header_sha256": "786deefec448af68b35b80b2bd0d083d9996dca1eefd3c20553873594eda60a8"
+    },
+    {
+      "name": "storedH45Check",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def storedH45Check (D : HistoricalPrefixCapData)\n    (J : Finset (Fin 5 → Fin (D.m + 1))) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow) : Bool :=",
+      "header_sha256": "44cbd359a2529d3f49765635044a77233ea44a85861521b6c77df8ebe35209df"
+    },
+    {
+      "name": "fullGamma_le_fullGammaUpperQ",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem fullGamma_le_fullGammaUpperQ (e : ℝ) (b : RationalBox) :\n    HistoricalThirdCoarse.fullGamma e b ≤ fullGammaUpperQ b :=",
+      "header_sha256": "366a4ce5432c1420b7e77dd5cbf2000895a69ee02fc15ffae984a7c04c8b6f32"
+    },
+    {
+      "name": "gamma_le_gammaUpperQ",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem gamma_le_gammaUpperQ (e : ℚ) (b : RationalBox) :\n    HistoricalThirdCoarse.gamma (e : ℝ) b ≤ gammaUpperQ e b :=",
+      "header_sha256": "e08b135ab63ef1f2dfef5d2570d365ce227148b0785a34ccc437b2c68f1b6cb7"
+    },
+    {
+      "name": "storedH45Check_sound",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem storedH45Check_sound\n    (D : HistoricalPrefixCapData) (J : Finset (Label5 D.m)) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (hcheck : storedH45Check D J e rows4 = true) :\n    ∀ j ∈ D.cells5 ∩ J, seedUpperQ e D.m j ≤ D.cap5 j ∧\n      ∀ r ∈ rows4, rowUpperQ e D.m j r ≤ D.cap5 j :=",
+      "header_sha256": "a23ff17c6a4515a16fce000b5429d2fc2589c083e2cfaf27c5037d684c635b47"
+    },
+    {
+      "name": "bufferedCandidate_le_rowUpperQ",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem bufferedCandidate_le_rowUpperQ\n    (e : ℚ) (m : ℕ) (j : Label5 m)\n    (r : P2OriginalFourthCapProducerInterface.ProducerRow) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m j) :\n    r.bufferedCandidate (e : ℝ) (historicalPrefixProject (by omega : 4 ≤ 5) t) ≤\n      (rowUpperQ e m j r : ℝ) :=",
+      "header_sha256": "fb1251ffcf0636c333e1a57cda3a802f9e6df3c55b4e8624afe0f9370c5345d9"
+    },
+    {
+      "name": "originalVariableFourthProfile_le_storedCap",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem originalVariableFourthProfile_le_storedCap\n    (D : HistoricalPrefixCapData) (J : Finset (Label5 D.m))\n    (e : ℚ) (chi omega : ℝ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)\n    (howned : P1VariableFifthSelectedStoredBinding.OriginalOwnedRows D J e chi omega)\n    (hcheck : storedH45Check D J e rows4 = true)\n    (j : Label5 D.m) (hj : j ∈ D.cells5 ∩ J) (t : Fin 5 → ℝ)\n    (ht : t ∈ logPrimeMeshCell 0 (19 / 96) D.m j) :\n    originalVariableFourthProfile e chi omega D.m j rows4 licensed4 t ≤ (D.cap5 j : ℝ) :=",
+      "header_sha256": "1129deebac222ffe106688d4ac8d9eca32da4c1d756930915c97777713bc22eb"
+    },
+    {
+      "name": "fourthAncestorLevel_le_correctedStoredLevel",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem fourthAncestorLevel_le_correctedStoredLevel\n    (D : HistoricalPrefixCapData) (J : Finset (Label5 D.m))\n    (e : ℚ) (chi omega : ℝ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)\n    (howned : P1VariableFifthSelectedStoredBinding.OriginalOwnedRows D J e chi omega)\n    (hcheck : storedH45Check D J e rows4 = true)\n    (N : ℕ) (hN : 1 < N) (history : List ℕ) (hlen : history.length = 5)\n    (hprime : ∀ p ∈ history, Nat.Prime p) :\n    P1OriginalVariableFourthContinuation.producerLevel4 (e : ℝ) chi D.m omega (N : ℝ)\n        rows4 licensed4 (rosserAncestor 4 history) ≤\n      P1VariableFifthOriginalBaseQ3Bridge.correctedStoredLevel5\n        D J e chi omega (N : ℝ) rows4 licensed4 history :=",
+      "header_sha256": "2b9f1d7b709804c90737a0b0f9afb90dde13e1594b98577f505efc300f274612"
+    },
+    {
+      "name": "actual_h45",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem actual_h45\n    (D : HistoricalPrefixCapData) (J : Finset (Label5 D.m))\n    (e : ℚ) (chi omega : ℝ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)\n    (howned : P1VariableFifthSelectedStoredBinding.OriginalOwnedRows D J e chi omega)\n    (hcheck : storedH45Check D J e rows4 = true)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ)\n    (frontier candidate : FirstExitDepthState ℕ)\n    (hf : frontier ∈ firstExitDepthFrontier 4 (originalT3 e chi D.m omega N)\n      (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z))\n    (hc : candidate ∈ firstExitNextSelectionCandidates (fun p : ℕ => 1 / ((p : ℝ) - 1))\n      frontier.selectedPrefix frontier.positive frontier.mass frontier.remaining) :\n    originalQ4 e chi D.m omega N rows4 licensed4 frontier.selectedPrefix ≤\n      P1VariableFifthOriginalBaseQ3Bridge.correctedStoredLevel5\n        D J e chi omega (N : ℝ) rows4 licensed4 candidate.selectedPrefix :=",
+      "header_sha256": "7245d3e98cd5ecbc69bbb587c070afe11564b9c24c2e8535b1fdb879d93c27f4"
+    },
+    {
+      "name": "corrected_fourth_to_fifth_finite_density_identity",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem corrected_fourth_to_fifth_finite_density_identity\n    (D : HistoricalPrefixCapData) (J : Finset (Label5 D.m))\n    (e : ℚ) (chi omega : ℝ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)\n    (howned : P1VariableFifthSelectedStoredBinding.OriginalOwnedRows D J e chi omega)\n    (hcheck : storedH45Check D J e rows4 = true)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ) :\n    originalFourthRetained e chi D.m omega N cap z rows4 licensed4 -\n      firstExitRetainedPolynomial\n        (P1VariableFifthOriginalBaseQ3Bridge.correctedStoredPolicy5\n          D J e chi omega (N : ℝ) rows4 licensed4)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      correctedStoredCharge D J e chi omega N cap z rows4 licensed4 :=",
+      "header_sha256": "81ebe9d56dd33aa31d91c524e1dc4449d2426baf94ab5fa8327c262e0a58d618"
+    }
+  ],
+  "definitions": [
+    {
+      "name": "fullGammaUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def fullGammaUpperQ (b : RationalBox) : ℚ :=",
+      "header_sha256": "d368d5f4088e1e494a8e91bc53d8dc7a2bacd1c37e95926cf6fc22c2f6235b6a",
+      "raw_region": "def fullGammaUpperQ (b : RationalBox) : ℚ :=\n  max (qVLo b.lx b.ux) (max (qVLo (b.lx + b.ly) (b.ux + b.uy))\n    (max (qVLo (b.lx + b.ly + b.lz) (b.ux + b.uy + b.uz))\n      (max (HistoricalThirdCoarse.rescue b)\n        (max (qVLo (b.lx + b.lz) (b.ux + b.uz))\n          (qVLo (b.ly + b.lz) (b.uy + b.uz))))))\n\n/-- The original transition is rational when e is rational. -/\n",
+      "region_sha256": "5607b8e22e71995facca0679de79ccfd325ea3acef063dc9bb0b98d8aaa1d40e"
+    },
+    {
+      "name": "gammaUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def gammaUpperQ (e : ℚ) (b : RationalBox) : ℚ :=",
+      "header_sha256": "662b4926bb3d3cdffb89de9f53f74f5fe37e96277c687eba019fec96d07f1b0a",
+      "raw_region": "def gammaUpperQ (e : ℚ) (b : RationalBox) : ℚ :=\n  if b.ux ≤ 25 / 128 - 4 * e then fullGammaUpperQ b else qVLo b.lx b.ux\n\n",
+      "region_sha256": "0f0a5bc684f4fe429bc57c9d758cb262a9bd47db36a2a8d07b90aea775ec94dc"
+    },
+    {
+      "name": "seedUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def seedUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : ℚ :=",
+      "header_sha256": "30a78f65c6e8080ae60c3857b9419aeaafdb79fafeb59e493fd68f94641d15d1",
+      "raw_region": "def seedUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1)) : ℚ :=\n  gammaUpperQ e (HistoricalThirdCoarse.box m\n    (HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner j)) - 2 * e\n\n",
+      "region_sha256": "64b0ecb6d87b65317ea2b5f2cdbad43aa7cf7adc4b8648538c95c8193634bfab"
+    },
+    {
+      "name": "projectedLo",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def projectedLo (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=",
+      "header_sha256": "47efd12f1bff019884b1c27d8ff9d5b45de01e57645d8f4b626349221a4ea34c",
+      "raw_region": "def projectedLo (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=\n  historicalPrefixProject (by omega : 4 ≤ 5) (qLogPrimeMeshLo 0 (19 / 96) m j)\n\n",
+      "region_sha256": "a6df45621100cbe3195ae4f84b75465241c03f5d6dbdd7c1505ee4774d26ccbf"
+    },
+    {
+      "name": "projectedHi",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def projectedHi (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=",
+      "header_sha256": "4eb8e7968a247c049eb50dbba63f421177cc67bf45a937eae60ab371a9aa5560",
+      "raw_region": "def projectedHi (m : ℕ) (j : Fin 5 → Fin (m + 1)) : Fin 4 → ℚ :=\n  historicalPrefixProject (by omega : 4 ≤ 5) (qLogPrimeMeshHi 0 (19 / 96) m j)\n\n",
+      "region_sha256": "1e78b5d0ef99b702e9c20fc1352b07deba851413ceaafabaf4d1d49bec7aafcb"
+    },
+    {
+      "name": "rowUpperQ",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def rowUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1))\n    (r : P2OriginalFourthCapProducerInterface.ProducerRow) : ℚ :=",
+      "header_sha256": "4f5bd1829969687eba812683dd9afc0ae8018c9fc5084812c9d3e34ea3b3ff9f",
+      "raw_region": "def rowUpperQ (e : ℚ) (m : ℕ) (j : Fin 5 → Fin (m + 1))\n    (r : P2OriginalFourthCapProducerInterface.ProducerRow) : ℚ :=\n  qVHi (∑ i ∈ r.selected, projectedLo m j i)\n    (∑ i ∈ r.selected, projectedHi m j i) - 2 * e\n\n/-- Explicit finite decidability avoids a real comparison or classical\nproposition decision inside the rational row checker. -/\n",
+      "region_sha256": "b0d8d0f17504b81592c899ebf82a24d681b17a6be625aec8831a12c862c35cc9"
+    },
+    {
+      "name": "rowUpperCheck",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def rowUpperCheck (D : HistoricalPrefixCapData) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (j : Fin 5 → Fin (D.m + 1)) : Bool :=",
+      "header_sha256": "786deefec448af68b35b80b2bd0d083d9996dca1eefd3c20553873594eda60a8",
+      "raw_region": "def rowUpperCheck (D : HistoricalPrefixCapData) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)\n    (j : Fin 5 → Fin (D.m + 1)) : Bool :=\n  @decide _ (Finset.decidableDforallFinset (s := rows4)\n    (p := fun r _ => rowUpperQ e D.m j r ≤ D.cap5 j))\n\n",
+      "region_sha256": "fce10d88692d3593cc78c97830658310aac075989e1ec7f4e4ff930e3dec970c"
+    },
+    {
+      "name": "storedH45Check",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def storedH45Check (D : HistoricalPrefixCapData)\n    (J : Finset (Fin 5 → Fin (D.m + 1))) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow) : Bool :=",
+      "header_sha256": "44cbd359a2529d3f49765635044a77233ea44a85861521b6c77df8ebe35209df",
+      "raw_region": "def storedH45Check (D : HistoricalPrefixCapData)\n    (J : Finset (Fin 5 → Fin (D.m + 1))) (e : ℚ)\n    (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow) : Bool :=\n  @decide _ (Finset.decidableDforallFinset (s := D.cells5 ∩ J)\n    (p := fun j _ => seedUpperQ e D.m j ≤ D.cap5 j ∧ rowUpperCheck D e rows4 j = true))\n\nnoncomputable section\nopen scoped Classical\nopen P1CorrectedFifthDensityDictionary P1CorrectedFifthCausalTupleDictionary\n\n",
+      "region_sha256": "355439441dc9a7f4fe80493515a42a57c3d123807ed683487cc001d14300c599"
+    }
+  ],
+  "all_complete_raw_headers_and_definitions_exact": true,
+  "changed_proof_bodies": [
+    "gamma_le_gammaUpperQ",
+    "bufferedCandidate_le_rowUpperQ"
+  ],
+  "new_declarations": 0,
+  "all_other_bytes_exact_and_reverse_reconstruction": true
+}

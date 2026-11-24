@@ -1,0 +1,255 @@
+{
+  "module": "ImbalancedChen.P5ActualRoughHeathBrownWords",
+  "complete_headers": [
+    {
+      "kind": "theorem",
+      "name": "roughOne_mul",
+      "complete_raw_header": "theorem roughOne_mul {z : ℝ} (hz : 0≤z) (a b : ℕ) :\n    roughOneSlot z (a*b)=roughOneSlot z a*roughOneSlot z b :=",
+      "sha256": "fa156b8ec93c3996cfeecebf70d7b964473183ff7b03071479b5f307e2c137d1",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "roughOne_one",
+      "complete_raw_header": "theorem roughOne_one {z : ℝ} (hz : 0≤z) : roughOneSlot z 1=1 :=",
+      "sha256": "9343b007c129b341f4bc9ac41de710e244aaae6cfb84f97047ca277aff77e673",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "roughOne_list_prod",
+      "complete_raw_header": "theorem roughOne_list_prod {z : ℝ} (hz : 0≤z) (ps : List ℕ) :\n    roughOneSlot z ps.prod=(ps.map (roughOneSlot z)).prod :=",
+      "sha256": "0be2c41d15a4e715fdc283e156e2f4e0a6a256019ba6869b930af2f3d0031fef",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "inductive",
+      "name": "Role",
+      "complete_raw_header": "inductive Role where",
+      "sha256": "00614d2ca2afce9b1c7e655c16b225b3109a4868b376ab77b12cbf95bf15cdc6",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "base",
+      "complete_raw_header": "def base (y : ℝ) : Role → ArithmeticFunction ℝ\n",
+      "sha256": "0727a4b072b1911d7c331d0ffd9735c1031bd61348a7de4a1a00c09b15dfd40c",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "roughMuTrunc",
+      "complete_raw_header": "def roughMuTrunc (z y : ℝ) (n : ℕ) : ℂ :=",
+      "sha256": "e08b3c34bffb76e8359018dca4c2c1b7f9d5690e93aaa737a20de20b22687eeb",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "roughLog",
+      "complete_raw_header": "def roughLog (z : ℝ) (n : ℕ) : ℂ :=",
+      "sha256": "4cc87a231c8addfd8688bbac8006a5e35638efb6c1abf72b66196c00ef13a6c5",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "actual",
+      "complete_raw_header": "def actual (z y : ℝ) : Role → ℕ → ℂ\n",
+      "sha256": "9b988cdbfdf72ac4710e012610b4fe7992484aed0ff2b4e8e309d431681e6098",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "roles",
+      "complete_raw_header": "def roles (j : ℕ) : List Role :=",
+      "sha256": "ea8db74177e17a22db4ba585c7bfb79a608d129aec5279e7e961c24e44b83ebc",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "def",
+      "name": "roughTupleWeight",
+      "complete_raw_header": "def roughTupleWeight (z y : ℝ) : List Role → List ℕ → ℂ\n",
+      "sha256": "477e28fc10dada31e3fa56c1fac2487f3825881e89c4dc50812ec7cc6ccbb333",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "roles_base",
+      "complete_raw_header": "theorem roles_base (y : ℝ) (j : ℕ) : (roles j).map (base y)=hbWord y j :=",
+      "sha256": "731110144a7f4d0ae835ec92e3a635d9842c47b1e8a3dcbde690a938b64b7d02",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "roles_length",
+      "complete_raw_header": "theorem roles_length (j : ℕ) : (roles j).length=2*(j+1) :=",
+      "sha256": "162409cb2b6f729935ed9c6626684e9d78edd1be458318e2cf76b1a9221b65df",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_eq_base_mask",
+      "complete_raw_header": "theorem actual_eq_base_mask (z y : ℝ) (r : Role) {n : ℕ} (hn : 0<n) :\n    actual z y r n=((base y r n : ℝ) : ℂ)*roughOneSlot z n :=",
+      "sha256": "565d86fe6321978e907cb1cf3050ca472e323b0cf0760595605154d5bfa03d2c",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "rough_tuple_weight_mask",
+      "complete_raw_header": "theorem rough_tuple_weight_mask {z : ℝ} (hz : 0≤z) (y : ℝ) :\n    ∀ (rs : List Role) (ps : List ℕ), (∀p∈ps,0<p) →\n      roughTupleWeight z y rs ps=\n        ((tupleWeight (rs.map (base y)) ps : ℝ) : ℂ)*roughOneSlot z ps.prod :=",
+      "sha256": "8a14072cea1827d799013d6a0db26c19104dfdd0829a9b59f778a638f291fa42",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_word_mask",
+      "complete_raw_header": "theorem actual_word_mask {z : ℝ} (hz : 0≤z) (y : ℝ) (j n : ℕ) (ps : List ℕ)\n    (hps : ps∈factorTuples (2*(j+1)) n) :\n    roughTupleWeight z y (roles j) ps=\n      ((tupleWeight (hbWord y j) ps : ℝ) : ℂ)*roughOneSlot z n :=",
+      "sha256": "1941f26f1a77b4d6adb1375cdca91a73ce49ceade1169f2b618a2216a94a6ea5",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_word_nonzero_cutoff",
+      "complete_raw_header": "theorem actual_word_nonzero_cutoff {z : ℝ} (hz : 0≤z) (y : ℝ) (j n : ℕ) (ps : List ℕ)\n    (hps : ps∈factorTuples (2*(j+1)) n)\n    (hn : roughTupleWeight z y (roles j) ps≠0) :\n    ∀p∈ps.take (j+1),(p : ℝ)≤y :=",
+      "sha256": "54a0e40f553cf126b9316598cac9963941ab80ef4ee2c5389deb158ef4652205",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_rough_order_three_identity",
+      "complete_raw_header": "theorem actual_rough_order_three_identity {z y : ℝ} (hz : 0≤z) (hy : 0≤y)\n    {n : ℕ} (hn : (n : ℝ)≤y^3) :\n    ((ArithmeticFunction.vonMangoldt n : ℝ) : ℂ)*roughOneSlot z n=\n      ∑ j∈Finset.range 3,\n        (((-1 : ℝ)^j*(Nat.choose 3 (j+1) : ℝ) : ℝ) : ℂ)*\n          ∑ ps∈factorTuples (2*(j+1)) n,roughTupleWeight z y (roles j) ps :=",
+      "sha256": "f9bfed6bafb9a2568aeeffb53c4a422dd0bffe84e23feab89bf9a1a41c14c492",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "roughMuTrunc_norm_le",
+      "complete_raw_header": "theorem roughMuTrunc_norm_le (z y : ℝ) (n : ℕ) : ‖roughMuTrunc z y n‖≤1 :=",
+      "sha256": "ea95332c410d80139dfd624fdd3b6de40a771185c6c8148d6de6fa95606a7bae",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "complete_definitions": [
+    {
+      "name": "base",
+      "complete_raw_definition": "def base (y : ℝ) : Role → ArithmeticFunction ℝ\n  | .mobius => muTrunc y\n  | .one => (ζ : ArithmeticFunction ℝ)\n  | .logarithm => ArithmeticFunction.log",
+      "sha256": "0b6226645ed16e3675100faef6325dffca1cffaebbc1e811bff69a3193406ccb",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roughMuTrunc",
+      "complete_raw_definition": "def roughMuTrunc (z y : ℝ) (n : ℕ) : ℂ :=\n  if (n : ℝ)≤y then roughMoebiusSlot z n else 0",
+      "sha256": "af5e0334b4220870d2f57a92b8dff45dfa56d84453b824f9d379ec32ee9bf24c",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roughLog",
+      "complete_raw_definition": "def roughLog (z : ℝ) (n : ℕ) : ℂ := (Real.log (n : ℝ) : ℂ)*roughOneSlot z n",
+      "sha256": "92ee8d0a5e150966540c3a1000fe5fd7bfa42e74e432160f9ab183e01e593b41",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual",
+      "complete_raw_definition": "def actual (z y : ℝ) : Role → ℕ → ℂ\n  | .mobius => roughMuTrunc z y\n  | .one => roughOneSlot z\n  | .logarithm => roughLog z",
+      "sha256": "cf7e3f5bf0489f305492c2be8043feceebe7d39b632cfc6d2fcc76c0cd181bb4",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roles",
+      "complete_raw_definition": "def roles (j : ℕ) : List Role :=\n  List.replicate (j+1) .mobius ++ List.replicate j .one ++ [.logarithm]",
+      "sha256": "ac7a8d928eb348e2b3a50920f02906339b3884114767fb2e958461609bcdf603",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roughTupleWeight",
+      "complete_raw_definition": "def roughTupleWeight (z y : ℝ) : List Role → List ℕ → ℂ\n  | [],[] => 1\n  | r::rs,p::ps => actual z y r p*roughTupleWeight z y rs ps\n  | _,_ => 0",
+      "sha256": "9bb64b96d28bf7ffac91e202d949ada71c957859d3eafffe1e24154c10270e9c",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "complete_inductives": [
+    {
+      "name": "Role",
+      "complete_raw_inductive": "inductive Role where\n  | mobius\n  | one\n  | logarithm\n  deriving DecidableEq",
+      "sha256": "77c63b4189df3cb13f4042ca004223207317f6c71d8cbd2d57b62661a139c23d",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "proof_inventory": [
+    {
+      "name": "roughOne_mul",
+      "baseline_sha256": "8d50fb27e621ea713bcc63fcdfb80b4282b77e101a9e2e87fb775de821b4850f",
+      "candidate_sha256": "575648b65da0e53e922ca7e39b91d87736dc3f76ef2e12cbc73a3caed7ccaaf8",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "roughOne_one",
+      "baseline_sha256": "0d82562eb98973c25e7902413a0fc2bdf88d359910edd4bb31214d2da48c26c8",
+      "candidate_sha256": "0d82562eb98973c25e7902413a0fc2bdf88d359910edd4bb31214d2da48c26c8",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roughOne_list_prod",
+      "baseline_sha256": "96d18762eb8dfa7b4eed4e95366cdd0efa281abd4d984165ee6d4b072749c2dd",
+      "candidate_sha256": "96d18762eb8dfa7b4eed4e95366cdd0efa281abd4d984165ee6d4b072749c2dd",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roles_base",
+      "baseline_sha256": "2f8944bdaf89b338b9f6a9de27881bfae69d2b52993f8a8860b6cc090758ec9f",
+      "candidate_sha256": "2f8944bdaf89b338b9f6a9de27881bfae69d2b52993f8a8860b6cc090758ec9f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roles_length",
+      "baseline_sha256": "d9a70e03de0c37e5fd5e9a48c10ae1a7597fe2df8b241b64ea203c5609148227",
+      "candidate_sha256": "d9a70e03de0c37e5fd5e9a48c10ae1a7597fe2df8b241b64ea203c5609148227",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_eq_base_mask",
+      "baseline_sha256": "dfc444c0e94b73e0e75588d9f49068f4a9136763bd2f973d3dc52e33b58fce30",
+      "candidate_sha256": "dfc444c0e94b73e0e75588d9f49068f4a9136763bd2f973d3dc52e33b58fce30",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "rough_tuple_weight_mask",
+      "baseline_sha256": "e5fe6cac6ead38be56db5f9deb65bd467c2482c8f5f7bc649cb03aa916eb2041",
+      "candidate_sha256": "e5fe6cac6ead38be56db5f9deb65bd467c2482c8f5f7bc649cb03aa916eb2041",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_word_mask",
+      "baseline_sha256": "ddffc334c636aff71f54309d82b27027ce7c8f300ce816f3f46ab3d5dec70b49",
+      "candidate_sha256": "ddffc334c636aff71f54309d82b27027ce7c8f300ce816f3f46ab3d5dec70b49",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_word_nonzero_cutoff",
+      "baseline_sha256": "c9ae176e03ebd67d079b5e620c43e0c42a9b60c21c8f1730e890c90c8ae3687e",
+      "candidate_sha256": "c9ae176e03ebd67d079b5e620c43e0c42a9b60c21c8f1730e890c90c8ae3687e",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_rough_order_three_identity",
+      "baseline_sha256": "44a92e67da33e2bf06328a71aa96c7cfb55b7f589140906835fa95f54580aad1",
+      "candidate_sha256": "44a92e67da33e2bf06328a71aa96c7cfb55b7f589140906835fa95f54580aad1",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "roughMuTrunc_norm_le",
+      "baseline_sha256": "3b37f1bed2f10bfa1df54e9d045780b600a45ca63193690d92c11b61b15e3ce2",
+      "candidate_sha256": "3b37f1bed2f10bfa1df54e9d045780b600a45ca63193690d92c11b61b15e3ce2",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "counts": {
+    "headers": 18,
+    "theorems": 11,
+    "definitions": 6,
+    "inductives": 1,
+    "changed_proof_bodies": [
+      "roughOne_mul"
+    ]
+  },
+  "all_headers_definitions_inductives_raw_preserved": true
+}

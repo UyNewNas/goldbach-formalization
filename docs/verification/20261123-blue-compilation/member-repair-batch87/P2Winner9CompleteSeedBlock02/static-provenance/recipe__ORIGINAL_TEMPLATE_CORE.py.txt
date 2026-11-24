@@ -1,0 +1,37 @@
+header=b'def rows : Array RawRow :=';assert before.count(header)==1;h=before.index(header);body_start=h+len(header);opener=b' #[\r\n';assert before[body_start:body_start+len(opener)]==opener;data_start=body_start+len(opener)
+suffix_start=before.rindex(b']\r\n\r\nend ImbalancedChen.P2Winner9CompleteSeedBlock42\r\n');suffix=before[suffix_start+1:];prefix=before[:h]
+raw_data=before[data_start:suffix_start]
+pattern=rb'(?ms)^  \{ parentId := (\d+),\r\n.*?^    mixedSelected := [0-9]+ \}'
+matches=list(re.finditer(pattern,raw_data));assert len(matches)==256
+rows=[m.group(0)for m in matches];ids=[int(m.group(1))for m in matches];assert ids==list(range(10752,11008))
+separators=[]
+for i,m in enumerate(matches):
+ z=matches[i+1].start()if i+1<len(matches)else len(raw_data);sep=raw_data[m.end():z];assert sep==(b',\r\n'if i<255 else b'\r\n');separators.append(sep)
+assert matches[0].start()==0
+schema_path=W/'blue-member-build/ImbalancedChen/P2Winner9CompleteSeedTypes.lean';schema=schema_path.read_bytes();schema_fields=[m.group(1).decode()for m in re.finditer(rb'(?m)^  (\w+) : ',schema)];assert len(schema_fields)==27
+row_records=[]
+for i,(m,raw)in enumerate(zip(matches,rows)):
+ fields=list(re.finditer(rb'(?m)^(?:  \{ |    )(\w+) := ',raw));assert [f.group(1).decode()for f in fields]==schema_fields
+ field_records=[]
+ for j,f in enumerate(fields):
+  z=fields[j+1].start()if j+1<len(fields)else len(raw);field=raw[f.start():z]
+  field_records.append({'field':f.group(1).decode(),'row_relative_byte_start':f.start(),'row_relative_byte_end_exclusive':z,'bytes':len(field),'sha256':sha(field)})
+ row_records.append({'ordinal':ids[i],'original_position':i,'chunk':i//16,'chunk_position':i%16,'original_file_byte_start':data_start+m.start(),'original_file_byte_end_exclusive':data_start+m.end(),'bytes':len(raw),'raw_row_sha256':sha(raw),'fields_in_original_order':field_records})
+private_blocks=[];chunk_records=[]
+for n in range(16):
+ name=f'rowsChunk{n:02d}';chunk_rows=rows[16*n:16*(n+1)];chunk_header=f'private def {name} : Array RawRow :='.encode();block=chunk_header+b' #[\r\n'+b',\r\n'.join(chunk_rows)+b'\r\n]\r\n\r\n';private_blocks.append(block);chunk_records.append({'name':name,'record_count':16,'first_ordinal':10752+16*n,'last_ordinal':10752+16*n+15,'complete_raw_header':chunk_header.decode(),'chunk_source_sha256':sha(block),'concatenated_raw_records_sha256':sha(b''.join(chunk_rows))})
+public_rhs=b' #[\r\n'+b',\r\n'.join(f'  rowsChunk{n:02d}'.encode()for n in range(16))+b'\r\n].flatten'
+after=prefix+b''.join(private_blocks)+header+public_rhs+suffix
+new_matches=list(re.finditer(pattern,after));new_rows=[m.group(0)for m in new_matches];assert new_rows==rows
+assert [int(m.group(1))for m in new_matches]==ids
+for row,match in zip(row_records,new_matches):
+ row['candidate_file_byte_start']=match.start();row['candidate_file_byte_end_exclusive']=match.end()
+ assert sha(match.group(0))==row['raw_row_sha256']
+ for field in row['fields_in_original_order']:
+  raw=match.group(0)[field['row_relative_byte_start']:field['row_relative_byte_end_exclusive']];assert sha(raw)==field['sha256']
+reconstructed=prefix+header+opener+b''.join(raw+sep for raw,sep in zip(new_rows,separators))+b']'+suffix
+assert reconstructed==before
+assert after.count(header)==1
+assert re.findall(rb'(?m)^import[^\r\n]+',before)==re.findall(rb'(?m)^import[^\r\n]+',after)
+assert re.findall(rb'(?m)^set_option[^\r\n]+',before)==re.findall(rb'(?m)^set_option[^\r\n]+',after)==[]
+assert before[:h]==after[:h]and after.endswith(suffix)

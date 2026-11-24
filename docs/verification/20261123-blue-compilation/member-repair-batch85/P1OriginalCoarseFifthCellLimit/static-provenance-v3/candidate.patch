@@ -1,0 +1,19 @@
+--- actual_failed_4203.lean
++++ isolated_membership_constructors_v3.lean
+@@ -163,7 +163,15 @@
+     apply Finset.ext
+     intro p
+     have hp := Iff.of_eq (congrArg (fun s : Finset (Fin 5 → ℕ) => p ∈ s) hsource)
+-    simpa only [S, sourceRegion, Finset.mem_filter] using hp
++    constructor
++    · intro hmem
++      have hleft := Finset.mem_filter.mp hmem
++      have hright := Finset.mem_filter.mp (hp.mp (Finset.mem_filter.mpr hleft))
++      exact Finset.mem_filter.mpr hright
++    · intro hmem
++      have hright := Finset.mem_filter.mp hmem
++      have hleft := Finset.mem_filter.mp (hp.mpr (Finset.mem_filter.mpr hright))
++      exact Finset.mem_filter.mpr hleft
+   simp_rw [mul_ite, mul_zero]
+   dsimp only [S, HistoricalThirdCoarse.P1OriginalCoarseFifth.candidates] at hfin
+   rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]

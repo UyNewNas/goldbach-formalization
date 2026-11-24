@@ -1,0 +1,63 @@
+{
+  "schema": "smooth_prime_variable_actual86_single_function_smul_API_v2",
+  "author": "/root/member_current_repairs",
+  "prepared_utc": "2026-11-24T00:02:29.418921+00:00",
+  "status": "ISOLATED_UNCOMPILED_PENDING_NONAUTHOR_GATE_AND_UNIQUE_OWNER_ONLY_FAILED_TARGET_RETRY",
+  "module": "ImbalancedChen.P4BSmoothPrimeVariableProfile",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-smooth-prime-variable-profile-function-smul-api-v2/baseline-v1.lean",
+    "bytes": 8419,
+    "sha256": "41f57d0900ccfa0a69104617d4da8de7c6f911a3cebd705ee239438a5d2d5af5"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-smooth-prime-variable-profile-function-smul-api-v2/candidate.lean",
+    "bytes": 8653,
+    "sha256": "ca93e79e4022b473e0b2ce90e766b14d84eec76e15ba4b2eb79d32c34d0deca5"
+  },
+  "source_headers": 16,
+  "definitions": 5,
+  "all_current_headers_definitions_data_imports_options_comments_hypotheses_domains_quantifiers_and_budgets_raw_preserved": true,
+  "new_header_definition_instance_or_semantic_exceptions": [],
+  "changed_proofs": [
+    "hasFDerivAt_primeVariableLogPoint"
+  ],
+  "proof_delta": {
+    "before": "  simpa only [primeVariableLogPoint, Pi.smul_apply, smul_eq_mul,\n    div_eq_mul_inv, mul_comm] using\n    hlog.const_smul (Real.log (N : ℝ))⁻¹\n",
+    "after": "  have hfun : ((Real.log (N : ℝ))⁻¹ • (fun x : Fin 2 → ℝ => Real.log (x i))) =\n      (fun x : Fin 2 → ℝ => Real.log (x i) / Real.log (N : ℝ)) := by\n    funext x\n    simp only [Pi.smul_apply, smul_eq_mul, div_eq_mul_inv, mul_comm]\n  have hscaled := hlog.const_smul (Real.log (N : ℝ))⁻¹\n  rw [hfun] at hscaled\n  simpa only [primeVariableLogPoint] using hscaled\n",
+    "whole_reverse_exact": true
+  },
+  "actual_failure": {
+    "log_path": "/workspace/blue-member-repair-batch86/P4BSmoothPrimeVariableProfile-normal.log",
+    "log_bytes": 185362,
+    "log_sha256": "03dc5d444aeb1db1d8b881458c03f5507654d427128629ec83b4e0d47e0c72a5",
+    "command_sha256": "b85c43fb11fb1c320a04a18a7b9c907125e93c71769dc0097e083679a92159ad",
+    "exit_code": 1,
+    "actual_elapsed_seconds": 15.962387036997825,
+    "unit_Lake_job_wall_label": "8.3s",
+    "full_unit_slice_start": 182571,
+    "full_unit_slice_sha256": "38165950b7e907d14292a65f8da1f0fc4359434ed92e37a347bfd2ccbafe1b4e",
+    "all_remaining_error_lines": [
+      105
+    ],
+    "individual_CPU_time_or_candidate_success_not_claimed": true
+  },
+  "root_cause": "The generic const_smul now has exactly the target derivative/Jacobian type, but its whole functionc•f is not an applied(c•f)x expression, so Pi.smul_apply in the previous simpa list does not expose the body. The actual diagnostic shows only this whole-function notation mismatch. A local function equality by funext uses the same pointwise scalar/log quotient rules at everyx; rewrite that equality in the same hlog.const_smul witness before transporting the original coordinate definition.",
+  "mathematical_scope": "Same unrestricted targetN (including totalized fixedlogN division), same positive orthant assumption for the derivative pointp, same all-real coordinate variablex and exact original derivative(logN)^−1•(p_i)^−1•proj_i. No N≥2/logN≠0 premise, changed Jacobian, new uniform constant, normed-space instance, positive-domain restriction, source/PP or mean licence introduced. Original v1 Nat.val positivity and explicit chain-rule pointp repairs preserved; no other proof changed.",
+  "classification": "PROOF_ONLY_POINTWISE_FUNCTION_SMUL_NOTATION_EQUALITY",
+  "substantive_mathematical_gap_found": false,
+  "prior_published_work": "Original bounded published-source lookup and pinned calculus suppliers retained in PRIOR_SOURCE_SELECTION. No second author or alternative same-current-source post supplied for the new actual feedback.",
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "release": "paper/release-20261106/en",
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/coefficient-appendix.tex",
+    "source_sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+    "start_line": 318,
+    "end_line": 338,
+    "snapshot_sha256": "2b4459baeb570027b06a914ad82d8ef1cdeb749e89bcb5033e8ad687fb247b13",
+    "meaning": "Actual smooth prime-product profile and derivative requirements remain explicit; calculus algebra does not supply a P3/PP licence."
+  },
+  "no_Lean_Lake_kernel_type_axiom_numeric_checker_or_stock_execution": true,
+  "no_live_main_context_guard_queue_cache_or_old_record_edits": true,
+  "other7_passed_sources_and_I80_and_frozen_candidates_untouched": true,
+  "next_step": "Non-author exact source/API gate then unique owner retries only SmoothPrimeVariableProfile; kernel and pending group full-owned audit. No other seven passed normal/kernel modules repeated."
+}

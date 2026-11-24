@@ -1,0 +1,54 @@
+--- baseline/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean
++++ candidate/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean
+@@ -19,6 +19,15 @@
+ private theorem evaluate_ite (p : Prop) [Decidable p] (a b : Expr) (t : Point) :
+     evaluate (if p then a else b) t = if p then evaluate a t else evaluate b t := by
+   by_cases hp : p <;> simp [hp]
++
++private theorem ownership_eval_notation_add (a b : Expr) (t : Point) :
++    evaluate (a + b) t = evaluate a t + evaluate b t := by rfl
++
++private theorem ownership_eval_notation_sub (a b : Expr) (t : Point) :
++    evaluate (a - b) t = evaluate a t - evaluate b t := by rfl
++
++private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :
++    evaluate (q • a) t = (q : ℝ) * evaluate a t := by rfl
+ 
+ private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :
+     evaluate (subsetExpr m) t = subsetSum m t := by
+@@ -127,12 +136,20 @@
+     semanticSlack i r t = namedSlack i r t := by
+   fin_cases r
+   all_goals
+-    simp [semanticSlack, semanticExpr, namedSlack, evaluate, evaluate_ite,
++    norm_num [semanticSlack, semanticExpr, namedSlack,
++      ownership_eval_notation_add, ownership_eval_notation_sub,
++      ownership_eval_notation_smul, evaluate, evaluate_ite,
+       evaluate_subsetExpr, oldExpr, newExpr, ascendingExpr, descendingExpr, K, X,
+       oldRaw, newCap, total, history3, history5, history7, d, selectedSum,
+-      branchPlane, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ,
++      branchPlane, prefixSquareExpr, Finset.sum_filter,
++      Fin.sum_univ_succ, Fin.sum_univ_zero,
++      Fin.lt_def, Fin.val_zero, Fin.val_succ, Fin.val_mk,
++      Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+       VariableEnvelope.A, VariableEnvelope.C, eta, VariableEnvelope.cap, mu]
+-    <;> split_ifs <;> ring
++    <;> first
++      | rfl
++      | (split_ifs <;> ring1!)
++      | ring1!
+ 
+ def fullRow : Fin 8 → Fin 96 := ![18,19,21,23,25,27,29,31]
+ def middleIndex (k : Fin 6) : Fin 8 := ⟨k.val + 1, by omega⟩
+@@ -160,7 +177,10 @@
+       newCap t - (selectedSum t +
+         (∑ j ∈ Finset.univ.filter (fun j : Fin 8 => 0 < j ∧ j < middleIndex k), t j) +
+           2 * t (middleIndex k)) := by
+-  fin_cases k <;> simp [complementRow, middleIndex, namedSlack]
++  fin_cases k <;>
++    norm_num [complementRow, middleIndex, namedSlack, Fin.lt_def,
++      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod]
++    <;> rfl
+ 
+ private theorem namedSlack_branch (i : Fin 15) (k : Fin 62) (t : Point) :
+     namedSlack i (branchRow k) t = oldRaw t - branchPlane i (branchMasks k) t := by

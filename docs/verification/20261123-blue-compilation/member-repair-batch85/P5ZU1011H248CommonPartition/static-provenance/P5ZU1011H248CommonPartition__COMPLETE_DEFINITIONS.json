@@ -1,0 +1,50 @@
+[
+  {
+    "name": "AtomState",
+    "complete_region_before_and_after": "abbrev AtomState := Option FloorAtom\n\n",
+    "sha256": "9eb2e8aa822c782e5af1f62512246b3bf5da93b46f1bfeef3011521a045b2837",
+    "byte_exact": true
+  },
+  {
+    "name": "scalarCell",
+    "complete_region_before_and_after": "def scalarCell : AtomState → Set ℝ\n  | none => {s | ∀ b : FloorAtom, max 2 s ∉ upperAtomSet b}\n  | some b => {s | max 2 s ∈ upperAtomSet b}\n\n",
+    "sha256": "e9f5dde781c6df0873495d2f2bdddece2909a2d69b04f20c3d88f3f2e2c5b5a1",
+    "byte_exact": true
+  },
+  {
+    "name": "stateValue",
+    "complete_region_before_and_after": "def stateValue : AtomState → ℝ\n  | none => 0\n  | some b => floorAtomValue H248Numerators b\n\n",
+    "sha256": "a36b667cfc6d0ebdc7102383da5f9779654eb089028c4e5c8000a262872f748f",
+    "byte_exact": true
+  },
+  {
+    "name": "chosenState",
+    "complete_region_before_and_after": "def chosenState (s : ℝ) : AtomState := Classical.choose (exists_scalarCell s)\n\n",
+    "sha256": "271d25d0b0d7bdbb2a45fcd7d7f92cd290c5c7573e72e6bb7db993b84a486d24",
+    "byte_exact": true
+  },
+  {
+    "name": "CommonState",
+    "complete_region_before_and_after": "abbrev CommonState (bank : Finset ℕ) := {j : ℕ // j ∈ bank} → AtomState\n\n",
+    "sha256": "a0b76c6f530be4f6920d3cd6ba98de922bc20eb8f23f2bc47e26f387b9fc6fe7",
+    "byte_exact": true
+  },
+  {
+    "name": "commonCell",
+    "complete_region_before_and_after": "def commonCell (bank : Finset ℕ) (L : ℕ → LogFour → ℝ)\n    (sigma : CommonState bank) : Set LogFour :=\n  {v | ∀ j : {j : ℕ // j ∈ bank}, L j.val v / v 3 ∈ scalarCell (sigma j)}\n\n",
+    "sha256": "685f7f25d6619ceff6a3547fb185c0a91c11bd7eb6aa76a9d12bd7c6571cf975",
+    "byte_exact": true
+  },
+  {
+    "name": "commonState",
+    "complete_region_before_and_after": "def commonState (bank : Finset ℕ) (L : ℕ → LogFour → ℝ) (v : LogFour) :\n    CommonState bank := fun j => chosenState (L j.val v / v 3)\n\n",
+    "sha256": "fbde20258e018b9a9552605ccde49535e26e8e2a0d5228c53897f6252f404efd",
+    "byte_exact": true
+  },
+  {
+    "name": "stateOrdinary",
+    "complete_region_before_and_after": "def stateOrdinary (bank : Finset ℕ) (L : ℕ → LogFour → ℝ)\n    (sigma : CommonState bank) (j : ℕ) (v : LogFour) : ℝ :=\n  if hj : j ∈ bank then 4 * (1 - stateValue (sigma ⟨j, hj⟩)) / L j v else 0\n\n",
+    "sha256": "f3e7ae2caca3eb7a9ff6d7fd84ee15cf258a74405e531b48adbfbf14835777b1",
+    "byte_exact": true
+  }
+]

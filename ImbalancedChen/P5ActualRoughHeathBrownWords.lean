@@ -21,10 +21,9 @@ open ImbalancedChen.Part3.RoughSlotCharacterLift20261026b
 
 theorem roughOne_mul {z : ℝ} (hz : 0≤z) (a b : ℕ) :
     roughOneSlot z (a*b)=roughOneSlot z a*roughOneSlot z b := by
-  rw [roughOneSlot_eq_coprime_indicator hz,roughOneSlot_eq_coprime_indicator hz,
-    roughOneSlot_eq_coprime_indicator hz,Nat.coprime_mul_iff_left]
+  simp only [roughOneSlot_eq_coprime_indicator hz, Nat.coprime_mul_iff_left]
   by_cases ha : Nat.Coprime a (smallProduct z) <;>
-    by_cases hb : Nat.Coprime b (smallProduct z) <;> simp [ha,hb]
+    by_cases hb : Nat.Coprime b (smallProduct z) <;> simp [Nat.Coprime, ha, hb]
 
 theorem roughOne_one {z : ℝ} (hz : 0≤z) : roughOneSlot z 1=1 := by
   rw [roughOneSlot_eq_coprime_indicator hz]

@@ -29,7 +29,8 @@ theorem factor_hasDerivAt {q p : ℕ} (chi : DirichletCharacter ℂ q)
   have hd : HasDerivAt (fun w : ℂ => (p : ℂ)^(-w))
       ((p : ℂ)^(-s)*Complex.log (p : ℂ)*(-1)) s :=
     ((hasDerivAt_id s).neg).const_cpow (Or.inl hpC)
-  convert (hd.const_mul (chi p)).const_sub 1 using 1 <;> ring
+  simpa only [mul_neg, neg_mul, mul_one, neg_neg, mul_assoc] using
+    (hd.const_mul (chi p)).const_sub 1
 
 /-- Finite product differentiation is applied to the original correction,
 not to an assumed infinite Euler product derivative. -/
@@ -42,7 +43,7 @@ theorem finiteCorrection_logDeriv {q : ℕ} (chi : DirichletCharacter ℂ q)
       ∏ p ∈ smallPrimes z, (fun w : ℂ => 1-chi p*(p : ℂ)^(-w)) := by
     funext w
     simp only [finiteCorrection,Finset.prod_apply]
-  rw [hfun,logDeriv_prod
+  rw [hfun, Finset.prod_fn, logDeriv_prod
     (fun p hp => (prime_factor_bounds chi (smallPrimes_prime hp) hs).1)
     (fun p hp => (factor_hasDerivAt chi (smallPrimes_prime hp) s).differentiableAt)]
   apply Finset.sum_congr rfl

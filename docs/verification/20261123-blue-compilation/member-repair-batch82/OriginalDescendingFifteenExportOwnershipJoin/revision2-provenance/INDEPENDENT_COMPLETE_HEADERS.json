@@ -1,0 +1,134 @@
+[
+  {
+    "name": "evaluate_ite",
+    "complete_raw_header": "private theorem evaluate_ite (p : Prop) [Decidable p] (a b : Expr) (t : Point) :\n    evaluate (if p then a else b) t = if p then evaluate a t else evaluate b t :=",
+    "sha256": "fbfffeec15fbddb51475cfb778d377f46d281ab140a05b60e35875b20cd09e27",
+    "byte_exact": true
+  },
+  {
+    "name": "ownership_eval_notation_add",
+    "complete_raw_header": "private theorem ownership_eval_notation_add (a b : Expr) (t : Point) :\n    evaluate (a + b) t = evaluate a t + evaluate b t :=",
+    "sha256": "e253be37e244a75f6b2acfee7a32838eca360264610f91d11543b3ece52d910a",
+    "byte_exact": true
+  },
+  {
+    "name": "ownership_eval_notation_sub",
+    "complete_raw_header": "private theorem ownership_eval_notation_sub (a b : Expr) (t : Point) :\n    evaluate (a - b) t = evaluate a t - evaluate b t :=",
+    "sha256": "9aebf857f015959bb4bca6f57fb2cadfff392e34c5448da5d625121cef630e5b",
+    "byte_exact": true
+  },
+  {
+    "name": "ownership_eval_notation_smul",
+    "complete_raw_header": "private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :\n    evaluate (q • a) t = (q : ℝ) * evaluate a t :=",
+    "sha256": "a275f739df35c78b347503fe9f2043052cf0058755424e8cdea0adc1bd7b456b",
+    "byte_exact": true
+  },
+  {
+    "name": "evaluate_subsetExpr",
+    "complete_raw_header": "private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :\n    evaluate (subsetExpr m) t = subsetSum m t :=",
+    "sha256": "e373b8ca0e13afae49266cfafb3de6e464b6730ae13b282064cfa10c7a0f47bb",
+    "byte_exact": true
+  },
+  {
+    "name": "namedSlack",
+    "complete_raw_header": "def namedSlack (i : Fin 15) (r : Fin 96) (t : Point) : ℝ :=",
+    "sha256": "5c273612ac2d6661926c0fe783d0ee1bd8cf70877f78dadd2f84b635d3f2009c",
+    "byte_exact": true
+  },
+  {
+    "name": "semanticSlack_eq_namedSlack",
+    "complete_raw_header": "theorem semanticSlack_eq_namedSlack (i : Fin 15) (r : Fin 96) (t : Point) :\n    semanticSlack i r t = namedSlack i r t :=",
+    "sha256": "f8f0d631534a90d7be00c6b4820141e9aa6e8b344c4c5e3bd63807fe72d2574e",
+    "byte_exact": true
+  },
+  {
+    "name": "fullRow",
+    "complete_raw_header": "def fullRow : Fin 8 → Fin 96 :=",
+    "sha256": "ee43a30375adbe4c77c9b68740d6d1d7833e48a721bd7b27d8ad055e668df13a",
+    "byte_exact": true
+  },
+  {
+    "name": "middleIndex",
+    "complete_raw_header": "def middleIndex (k : Fin 6) : Fin 8 :=",
+    "sha256": "75b582ee59af5d32ed6991b2686f280fc39e31cdc7418b702ee9fdd0defac95a",
+    "byte_exact": true
+  },
+  {
+    "name": "complementRow",
+    "complete_raw_header": "def complementRow : Fin 6 → Fin 96 :=",
+    "sha256": "cb2a9c14f97ff8768258f991a9830a3e4c163e2f48c2810efa070ec8f2383525",
+    "byte_exact": true
+  },
+  {
+    "name": "branchRow",
+    "complete_raw_header": "def branchRow (k : Fin 62) : Fin 96 :=",
+    "sha256": "7224f0fa9905ddefad77885d52e7723246ae2ac58bd783fdf0be2c4ed2117e1e",
+    "byte_exact": true
+  },
+  {
+    "name": "branchMasks",
+    "complete_raw_header": "def branchMasks : Fin 62 → ℕ :=",
+    "sha256": "542010c5559dc54c0e83af6aa656712d6b67778f463f0f3390aa845d219a1c28",
+    "byte_exact": true
+  },
+  {
+    "name": "middleIndex_covers",
+    "complete_raw_header": "private theorem middleIndex_covers : ∀ j : Fin 8, j ≠ 0 → j ≠ 7 →\n    ∃ k : Fin 6, middleIndex k = j :=",
+    "sha256": "36b5c8e6df9addf4abd297fa5490521bd5ed5b5e8d0ad1989fa0dc55dc613ea9",
+    "byte_exact": true
+  },
+  {
+    "name": "branchMask_mem",
+    "complete_raw_header": "private theorem branchMask_mem (k : Fin 62) :\n    branchMasks k ∈ Finset.Icc 1 63 ∧ branchMasks k ≠ 6 :=",
+    "sha256": "4f72c5b119b8460f60f4e92bc807c0074edeaf74b5316fb8e95126c231c81148",
+    "byte_exact": true
+  },
+  {
+    "name": "branchMasks_cover",
+    "complete_raw_header": "private theorem branchMasks_cover : ∀ m : Fin 64, 0 < m.val → m.val ≠ 6 →\n    ∃ k : Fin 62, branchMasks k = m.val :=",
+    "sha256": "222bf099f0d46d049c796b1435b06e79d116327594e7fe3379ee4133e2671180",
+    "byte_exact": true
+  },
+  {
+    "name": "namedSlack_full",
+    "complete_raw_header": "private theorem namedSlack_full (i : Fin 15) (j : Fin 8) (t : Point) :\n    namedSlack i (fullRow j) t = newCap t - prefixSquareExpr t j :=",
+    "sha256": "974367f7d452426514a780aa6055c86fed5469e941af0c762e62d2b5c12a2de4",
+    "byte_exact": true
+  },
+  {
+    "name": "namedSlack_complement",
+    "complete_raw_header": "private theorem namedSlack_complement (i : Fin 15) (k : Fin 6) (t : Point) :\n    namedSlack i (complementRow k) t =\n      newCap t - (selectedSum t +\n        (∑ j ∈ Finset.univ.filter (fun j : Fin 8 => 0 < j ∧ j < middleIndex k), t j) +\n          2 * t (middleIndex k)) :=",
+    "sha256": "a4b35c6c7abb255b6674bf6280766975f8aa07827c9f4d977f148cbac6656e3a",
+    "byte_exact": true
+  },
+  {
+    "name": "namedSlack_branch",
+    "complete_raw_header": "private theorem namedSlack_branch (i : Fin 15) (k : Fin 62) (t : Point) :\n    namedSlack i (branchRow k) t = oldRaw t - branchPlane i (branchMasks k) t :=",
+    "sha256": "f8d031b4eb6a92267078eb2878dd67384dc85287c94aa1a2f099379b428e002d",
+    "byte_exact": true
+  },
+  {
+    "name": "strictRows_namedSlack_pos",
+    "complete_raw_header": "private theorem strictRows_namedSlack_pos {i : Fin 15} {t : Point}\n    (h : StrictRows i t) : ∀ r : Fin 96, 0 < namedSlack i r t :=",
+    "sha256": "cca64d7190088ef8fd275d61231d04a3da572cf0a757704b163cf1fbcd3fc6a1",
+    "byte_exact": true
+  },
+  {
+    "name": "strictRows_of_namedSlack_pos",
+    "complete_raw_header": "private theorem strictRows_of_namedSlack_pos {i : Fin 15} {t : Point}\n    (h : ∀ r : Fin 96, 0 < namedSlack i r t) : StrictRows i t where\n  largest :=",
+    "sha256": "9947e25648240eb4fb39aa4e16c080b0d743fa78a9a715a3d3a49bbd36aec029",
+    "byte_exact": true
+  },
+  {
+    "name": "strictExportedRows_iff_StrictRows",
+    "complete_raw_header": "theorem strictExportedRows_iff_StrictRows (i : Fin 15) (t : Point) :\n    StrictExportedRows i t ↔ StrictRows i t :=",
+    "sha256": "ec0531cc35a16c596b7fe2c4d0d547a72bb99bc50314ca38eac519f3b3017d9c",
+    "byte_exact": true
+  },
+  {
+    "name": "exported_strict_cells_disjoint",
+    "complete_raw_header": "theorem exported_strict_cells_disjoint {i j : Fin 15} (hij : i ≠ j) :\n    Disjoint {t : Point | StrictExportedRows i t} {t : Point | StrictExportedRows j t} :=",
+    "sha256": "12e637302798a97511912bfdf969732cb85ab2257789a8d85125a7046372d2e0",
+    "byte_exact": true
+  }
+]

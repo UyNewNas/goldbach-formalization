@@ -1,0 +1,13 @@
+--- baseline/ImbalancedChen/P5ZU1011BufferedOrdinaryClamp.lean
++++ candidate/ImbalancedChen/P5ZU1011BufferedOrdinaryClamp.lean
+@@ -75,8 +75,8 @@
+     (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hNum4 hτ) (pow_nonneg hc.le 2))
+   rw [hEq]
+   have hErr' : (4 * (1 - h)) * τ / (R * (R - τ)) ≤ (4 / c ^ 2) * τ := by
+-    convert hErr using 1 <;> ring
+-  exact add_le_add_left hErr' _
++    simpa only [div_mul_eq_mul_div₀] using hErr
++  exact add_le_add le_rfl hErr'
+ 
+ /-- Entire-clamp safe upper approximation for the PHYSICAL buffered cost.
+ The literal H lookup moves in the safe direction even when its right

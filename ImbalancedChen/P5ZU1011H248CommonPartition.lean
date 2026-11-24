@@ -263,7 +263,7 @@ theorem guarded_eq_state {bank : Finset ℕ} {L : ℕ → LogFour → ℝ}
     guarded eligible switched (ordinaryKernel H248 L) c v =
       guarded eligible switched (stateOrdinary bank L sigma) c v := by
   rcases Finset.mem_insert.mp hc with rfl | hc
-  · simp only [guarded, if_pos rfl]
+  · simp only [guarded, if_true]
   · obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hc
     by_cases helig : eligible j v
     · simpa [guarded, helig] using ordinary_eq_state hv j hj
@@ -350,8 +350,13 @@ theorem actual_masked_minimum_eq_sum_states (N : ℕ) (a b : Fin 4 → ℝ)
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro p _
-  exact masked_weighted_minimum_eq_sum_states bank L eligible switched
-    (actualPrimeTupleLog N p) (∏ i, 1 / ((p i : ℝ) - 1)) (keep p)
+  refine (masked_weighted_minimum_eq_sum_states bank L eligible switched
+    (actualPrimeTupleLog N p) (∏ i, 1 / ((p i : ℝ) - 1)) (keep p)).trans ?_
+  apply Finset.sum_congr rfl
+  intro sigma _
+  dsimp only
+  by_cases hm : keep p ∧ actualPrimeTupleLog N p ∈ commonCell bank L sigma <;>
+    simp only [hm, if_true, if_false]
 
 end
 

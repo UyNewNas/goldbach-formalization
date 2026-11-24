@@ -1,0 +1,191 @@
+{
+  "module": "ImbalancedChen.P5OriginalPrimeEndpointDivisors",
+  "complete_headers": [
+    {
+      "kind": "def",
+      "name": "distance",
+      "complete_raw_header": "def distance (N p : ℕ) : ℕ :=",
+      "sha256": "cc10bb4b0d862dc904fc45d57f7b4b6ba94bb2c0aeb5861adf3f0a6635d5ff5f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "distance_pos",
+      "complete_raw_header": "theorem distance_pos {N p : ℕ} (hp : p ≠ N) : 0 < distance N p :=",
+      "sha256": "b8c0188bca81e28d0328efeb65677cfa305a2b5affa6d3a94e47a286635537ff",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "modEq_iff_dvd_distance",
+      "complete_raw_header": "theorem modEq_iff_dvd_distance (N p q : ℕ) :\n    Nat.ModEq q p N ↔ q ∣ distance N p :=",
+      "sha256": "b56445da8ad930b3ec6be75d427bd0e05e22604d5b003adb14627562c7a0b3df",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "distance_fiber_card_le_two",
+      "complete_raw_header": "theorem distance_fiber_card_le_two (S : Finset ℕ) (N n : ℕ) :\n    ((S.filter (fun p => distance N p = n)).card : ℝ) ≤ 2 :=",
+      "sha256": "a3610e4593c01660dff391bf7d8ef6ba89ee75b2069610d25feaa4f36203af36",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_distance_le_two_sum",
+      "complete_raw_header": "theorem sum_distance_le_two_sum (S : Finset ℕ) (N D : ℕ) (f : ℕ → ℝ)\n    (hS : ∀ p ∈ S, p ≠ N ∧ distance N p ≤ D)\n    (hf : ∀ n ∈ Finset.Icc 1 D, 0 ≤ f n) :\n    (∑ p ∈ S, f (distance N p)) ≤ 2 * ∑ n ∈ Finset.Icc 1 D, f n :=",
+      "sha256": "1594218a8072325f763f69442e8e9dd4a31e13d95b13d985dfe43e9a59224570",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "endpoint_card_le",
+      "complete_raw_header": "theorem endpoint_card_le (S : Finset ℕ) (N D : ℕ)\n    (hS : ∀ p ∈ S, p ≠ N ∧ distance N p ≤ D) :\n    (S.card : ℝ) ≤ 2 * (D : ℝ) :=",
+      "sha256": "bb08bf132fa4902a0e5f669488a44d1c5475d0631677841110a8993657119e02",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "sum_abs_rho_congruence_le_divisors",
+      "complete_raw_header": "theorem sum_abs_rho_congruence_le_divisors (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (N p : ℕ) (hp : p ≠ N) (hrho : ∀ q ∈ Q, |rho q| ≤ 1) :\n    (∑ q ∈ Q with Nat.ModEq q p N, |rho q|) ≤\n      ((distance N p).divisors.card : ℝ) :=",
+      "sha256": "cf9cd5b4ec4e77c078829f90aae6ab7355cf069de0ed83ebfba37284a9ba6e1a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "abs_signed_congruence_endpoint_le",
+      "complete_raw_header": "theorem abs_signed_congruence_endpoint_le (S Q : Finset ℕ) (rho delta : ℕ → ℝ)\n    (N D : ℕ) (hS : ∀ p ∈ S, p ≠ N ∧ distance N p ≤ D)\n    (hrho : ∀ q ∈ Q, |rho q| ≤ 1) (hdelta : ∀ p ∈ S, |delta p| ≤ 1) :\n    |∑ q ∈ Q, rho q * finiteCongruenceMass S delta N q| ≤\n      2 * ∑ n ∈ Finset.Icc 1 D, (n.divisors.card : ℝ) :=",
+      "sha256": "ed67053704f624e6b56e90d0ca0d825bada20688f99502d39d32ad27c7a3cdd4",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "abs_signed_coprime_mean_le",
+      "complete_raw_header": "theorem abs_signed_coprime_mean_le (S Q : Finset ℕ) (rho delta : ℕ → ℝ)\n    (hdelta : ∀ p ∈ S, |delta p| ≤ 1) :\n    |∑ q ∈ Q, rho q * (finiteCoprimeMass S delta q / (Nat.totient q : ℝ))| ≤\n      (S.card : ℝ) * ∑ q ∈ Q, |rho q| / (Nat.totient q : ℝ) :=",
+      "sha256": "691adfb72e3322c0fcd804bb611d031d78a2fef7ed417f7a8e8712650b5012d9",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "abs_signed_primitive_endpoint_le",
+      "complete_raw_header": "theorem abs_signed_primitive_endpoint_le (S Q : Finset ℕ) (rho delta : ℕ → ℝ)\n    (N D : ℕ) (hS : ∀ p ∈ S, p ≠ N ∧ distance N p ≤ D)\n    (hrho : ∀ q ∈ Q, |rho q| ≤ 1) (hdelta : ∀ p ∈ S, |delta p| ≤ 1) :\n    |∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy S delta N q| ≤\n      2 * ∑ n ∈ Finset.Icc 1 D, (n.divisors.card : ℝ) +\n        (S.card : ℝ) * ∑ q ∈ Q, |rho q| / (Nat.totient q : ℝ) :=",
+      "sha256": "db723f4b704a2d5ca785bbbbd5f355c94205da8e2fca33712abcea6b48ae097b",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_causal_prime_endpoint_le",
+      "complete_raw_header": "theorem actual_causal_prime_endpoint_le\n    (retainEven : List ℕ → Bool) (N cap D : ℕ) (w z L : ℝ)\n    (S Q : Finset ℕ) (delta : ℕ → ℝ)\n    (hEven : Even N) (hN : 2 < N)\n    (hprime : ∀ p ∈ S, Nat.Prime p)\n    (hwindow : ∀ p ∈ S, distance N p ≤ D)\n    (hdelta : ∀ p ∈ S, |delta p| ≤ 1) :\n    |∑ q ∈ Q, actualLowerSmallRoughRho retainEven N cap w z L q *\n        finitePrimitiveDiscrepancy S delta N q| ≤\n      2 * ∑ n ∈ Finset.Icc 1 D, (n.divisors.card : ℝ) +\n        2 * (D : ℝ) * ∑ q ∈ Q,\n          |actualLowerSmallRoughRho retainEven N cap w z L q| / (Nat.totient q : ℝ) :=",
+      "sha256": "d2680c81c0c1db0a3c985a0dd3d174e0851716c6bb0b9a4165e72df9ccfb1770",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "singleton_test_difference_eq_endpoint",
+      "complete_raw_header": "theorem singleton_test_difference_eq_endpoint\n    (P N : ℕ) (S Q : Finset ℕ) (rho sharp smooth : ℕ → ℝ)\n    (hS : S ⊆ chenPrimePrefix P)\n    (hagree : ∀ p ∈ chenPrimePrefix P, p ∉ S → sharp p = smooth p) :\n    Part3.primeProductSignedError 1 P N Q rho (P5S1SingletonPP.singletonWeight P sharp) -\n      Part3.primeProductSignedError 1 P N Q rho (P5S1SingletonPP.singletonWeight P smooth) =\n        ∑ q ∈ Q, rho q * finitePrimitiveDiscrepancy S (fun p => sharp p-smooth p) N q :=",
+      "sha256": "3201757666af3cd6d0ca0399a083abb06fa2ef05f5b1d2a095f4ae16257c2b42",
+      "pre_post_raw_equal": true
+    },
+    {
+      "kind": "theorem",
+      "name": "actual_causal_singleton_sharp_smooth_le",
+      "complete_raw_header": "theorem actual_causal_singleton_sharp_smooth_le\n    (retainEven : List ℕ → Bool) (N cap P D : ℕ) (w z L : ℝ)\n    (S Q : Finset ℕ) (sharp smooth : ℕ → ℝ)\n    (hEven : Even N) (hN : 2 < N) (hS : S ⊆ chenPrimePrefix P)\n    (hwindow : ∀ p ∈ S, distance N p ≤ D)\n    (hagree : ∀ p ∈ chenPrimePrefix P, p ∉ S → sharp p = smooth p)\n    (hdelta : ∀ p ∈ S, |sharp p-smooth p| ≤ 1) :\n    |Part3.primeProductSignedError 1 P N Q (actualLowerSmallRoughRho retainEven N cap w z L)\n        (P5S1SingletonPP.singletonWeight P sharp) -\n      Part3.primeProductSignedError 1 P N Q (actualLowerSmallRoughRho retainEven N cap w z L)\n        (P5S1SingletonPP.singletonWeight P smooth)| ≤\n      2 * ∑ n ∈ Finset.Icc 1 D, (n.divisors.card : ℝ) +\n        2 * (D : ℝ) * ∑ q ∈ Q,\n          |actualLowerSmallRoughRho retainEven N cap w z L q| / (Nat.totient q : ℝ) :=",
+      "sha256": "646050b185e168cc115891b21feda97ca7e4c764680413b9f05910565d8aae29",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "complete_definitions": [
+    {
+      "name": "distance",
+      "complete_raw_definition": "def distance (N p : ℕ) : ℕ := if p ≤ N then N - p else p - N",
+      "sha256": "062d2e778b1ea4b9804641064427b919c422ca0c3138902a7cc3c5b6aec497fa",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "complete_inductives": [],
+  "proof_inventory": [
+    {
+      "name": "distance_pos",
+      "baseline_sha256": "4eebf59c1adad2273525469ac6fda4dab0eb282d06b7de8744786757ac90c728",
+      "candidate_sha256": "4eebf59c1adad2273525469ac6fda4dab0eb282d06b7de8744786757ac90c728",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "modEq_iff_dvd_distance",
+      "baseline_sha256": "5432812a4b6fa83d6ae7d63a183ffab47153e92e7337316eb48d286bbd44fd5f",
+      "candidate_sha256": "5432812a4b6fa83d6ae7d63a183ffab47153e92e7337316eb48d286bbd44fd5f",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "distance_fiber_card_le_two",
+      "baseline_sha256": "d55d50249934f6476c21422fc5a159504ff2b98e9c036dac4f25000e0a6a6dbd",
+      "candidate_sha256": "d55d50249934f6476c21422fc5a159504ff2b98e9c036dac4f25000e0a6a6dbd",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "sum_distance_le_two_sum",
+      "baseline_sha256": "44e7c4f7e08565e4b8f0740184b2e327688910dc4f5599ff3fea4aa4ca7e0d16",
+      "candidate_sha256": "44e7c4f7e08565e4b8f0740184b2e327688910dc4f5599ff3fea4aa4ca7e0d16",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "endpoint_card_le",
+      "baseline_sha256": "eec85719b5d977a3bacd4542d58dbc37312b7e985ed13ec6ffa68f0b54d0646a",
+      "candidate_sha256": "eec85719b5d977a3bacd4542d58dbc37312b7e985ed13ec6ffa68f0b54d0646a",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "sum_abs_rho_congruence_le_divisors",
+      "baseline_sha256": "42bace4a35ed649c0fd137fc0864492a8f695f68354e064770bdbdad29d4f2a7",
+      "candidate_sha256": "42bace4a35ed649c0fd137fc0864492a8f695f68354e064770bdbdad29d4f2a7",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "abs_signed_congruence_endpoint_le",
+      "baseline_sha256": "e2e37cc5942c9b7ebd32b22579e932dd872184675a8bb3535304847148b28f59",
+      "candidate_sha256": "7ae342f5f43c5ba21d53937884ba74797179714e989e032d687b680d6db9a7c0",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "abs_signed_coprime_mean_le",
+      "baseline_sha256": "4470b81a74f0ce3a4d78aa635572cf76539b23053dec33edfac1dc2c7621f433",
+      "candidate_sha256": "4038f871c15d4a4c58013316c5595dc590989889fb8e7ff526c86058b1ced4eb",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "abs_signed_primitive_endpoint_le",
+      "baseline_sha256": "e5b52ac948a3606b13a7eb9f7f64c9294ddcafdce9704e6366bbc609cfb2b64d",
+      "candidate_sha256": "e5b52ac948a3606b13a7eb9f7f64c9294ddcafdce9704e6366bbc609cfb2b64d",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_causal_prime_endpoint_le",
+      "baseline_sha256": "17c65c18a1daf46499c98ff31a6d0b5333f69c8af79abfe5360769fac2b2c0d1",
+      "candidate_sha256": "ac8e90a9957eb6353a6d5f9b7d614a8f1a5142d20ff081078026ddfb62b00d65",
+      "pre_post_raw_equal": false
+    },
+    {
+      "name": "singleton_test_difference_eq_endpoint",
+      "baseline_sha256": "29d6b2c2411afa5218efe6e0320e7c3b845cdec724b806125ccd139f7608d52c",
+      "candidate_sha256": "29d6b2c2411afa5218efe6e0320e7c3b845cdec724b806125ccd139f7608d52c",
+      "pre_post_raw_equal": true
+    },
+    {
+      "name": "actual_causal_singleton_sharp_smooth_le",
+      "baseline_sha256": "ddde21b2221080442492d142bb08e9ebd3f6200ed4ae04591a463b60009f3303",
+      "candidate_sha256": "ddde21b2221080442492d142bb08e9ebd3f6200ed4ae04591a463b60009f3303",
+      "pre_post_raw_equal": true
+    }
+  ],
+  "counts": {
+    "headers": 13,
+    "theorems": 12,
+    "definitions": 1,
+    "inductives": 0,
+    "changed_proof_bodies": [
+      "abs_signed_congruence_endpoint_le",
+      "abs_signed_coprime_mean_le",
+      "actual_causal_prime_endpoint_le"
+    ]
+  },
+  "all_headers_definitions_inductives_raw_preserved": true
+}

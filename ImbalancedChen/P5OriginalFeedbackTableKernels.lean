@@ -122,7 +122,7 @@ theorem weightedTable_bounds (lower : Bool) {nums : Fin 200 → ℤ}
     0 ≤ weightedTable lower nums p W x ∧ weightedTable lower nums p W x ≤ W x := by
   have ht := tableFunction_bounds lower hn (p x)
   exact ⟨mul_nonneg hW ht.1,
-    by simpa only [mul_one] using mul_le_mul_of_nonneg_left ht.2 hW⟩
+    by simpa only [weightedTable, mul_one] using mul_le_mul_of_nonneg_left ht.2 hW⟩
 
 end General
 end

@@ -1,0 +1,46 @@
+{
+  "status": "STATIC_ONLY_NO_MATHEMATICAL_GAP_IDENTIFIED",
+  "actual_errors": [
+    "125 finite sum overFin8 filteredj<6 remained opaque because sum_filter was absent",
+    "129 freshprojection h.third_history introduces H7 after earlier rw-at-all had turned hH into reflexive equality, leaving needed affineatom hidden tolinarith"
+  ],
+  "resolution": [
+    "Expand only original H7 filter with pinnedFinset.sum_filter then existing finite8sum/index normalization",
+    "Project existingstrictthird_history first, rewrite originalhH there, rewrite hS only in target, use originalthird_to_sixth andordered_last in linarith only"
+  ],
+  "local_mathematical_derivation": "LetP=t0+...+t5. H7=P+3t6<lambda3<=current andt7<t6 implyP+t6+2t7<P+3t6<current. WithS=P+t6+t7, t7<current−S. No extra positivity, genericR6, licence, mean or desiredgain premise needed.",
+  "actual_source_data_scope": "Cell remainsFin87 with30+13+1+1+13+12+7+10 original partition, samefourmasks129/138/184/134 andallPhysicalRows fields. The thirteen-cell groups are subsets of these87, not a replacement domain.",
+  "pinned_API": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "line_start": 323,
+      "line_end": 334,
+      "raw_excerpt": "\n@[to_additive]\ntheorem prod_filter (p : ι → Prop) [DecidablePred p] (f : ι → M) :\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s, if p a then f a else 1 :=\n  calc\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s with p a, if p a then f a else 1 :=\n      prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2\n    _ = ∏ a ∈ s, if p a then f a else 1 := by\n      { refine prod_subset (filter_subset _ s) fun x hs h => ?_\n        rw [mem_filter, not_and] at h\n        exact if_neg (by simpa using h hs) }\n\n"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Fin.lean",
+      "sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+      "line_start": 65,
+      "line_end": 79,
+      "raw_excerpt": "is the product of `f x`, for some `x : Fin (n + 1)` times the remaining product -/\n@[to_additive /-- A sum of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)` is the sum of\n`f x`, for some `x : Fin (n + 1)` plus the remaining sum -/]\ntheorem prod_univ_succAbove (f : Fin (n + 1) → M) (x : Fin (n + 1)) :\n    ∏ i, f i = f x * ∏ i : Fin n, f (x.succAbove i) := by\n  rw [univ_succAbove n x, prod_cons, Finset.prod_map, coe_succAboveEmb]\n\n/-- A product of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)`\nis the product of `f 0` times the remaining product -/\n@[to_additive /-- A sum of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)` is the sum of\n`f 0` plus the remaining sum -/]\ntheorem prod_univ_succ (f : Fin (n + 1) → M) :\n    ∏ i, f i = f 0 * ∏ i : Fin n, f i.succ :=\n  prod_univ_succAbove f 0\n\n"
+    },
+    {
+      "path": "/workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/src/lean/Init/Data/Fin/Basic.lean",
+      "sha256": "bb3d4e46cb40a24f5a09e6e003c76f2b84140a598df81233f0bffe3afe08cbf4",
+      "line_start": 41,
+      "line_end": 58,
+      "raw_excerpt": " * `(2 : Fin 3) + 1 = (0 : Fin 3)`\n-/\n@[implicit_reducible] def succ : Fin n → Fin (n + 1)\n  | ⟨i, h⟩ => ⟨i+1, Nat.succ_lt_succ h⟩\n\nvariable {n : Nat}\n\n/--\nReturns `a` modulo `n` as a `Fin n`.\n\nThe assumption `NeZero n` ensures that `Fin n` is nonempty.\n-/\n@[implicit_reducible]\nprotected def ofNat (n : Nat) [NeZero n] (a : Nat) : Fin n :=\n  ⟨a % n, Nat.mod_lt _ (pos_of_neZero n)⟩\n\n@[simp]\ntheorem Internal.ofNat_eq_ofNat {n : Nat} {hn} {a : Nat} :\n"
+    }
+  ],
+  "manuscript1106": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+    "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+    "line_start": 202,
+    "line_end": 218,
+    "raw_excerpt": "At rank eight a selected endpoint $M$ is compared with a valid\r\nupper bound $R_6$ for the inherited sixth cap.  The retained seventh\r\ncube and the additional condition $M-S_8<3t_8$ give\r\n\\begin{equation}\\label{sv:eighth-range}\r\n 1<\\frac{\\lambda_6-S_8}{t_8}\r\n \\le\\frac{R_6-S_8}{t_8}<\\frac{M-S_8}{t_8}<3.\r\n\\end{equation}\r\nConsequently \\eqref{sv:even-gain} is bounded below by the integral of\r\n\\begin{equation}\\label{sv:eighth-density}\r\n \\frac{4(M-R_6)}{(R_6-S_8)(M-S_8)\\prod_{i=1}^8t_i}.\r\n\\end{equation}\r\nEach chosen region must retain every full and selected-complement\r\nsquare, as well as all ancestor tests.  Regions acted upon at one\r\nstage have disjoint interiors.  Changes at different stages are\r\ncombined by the exact telescope\r\n$V_3-V_6=(V_3-V_4)+(V_4-V_5)+(V_5-V_6)$.\r\nFor each density difference we use one lower enclosure.\r\n"
+  },
+  "SOURCE_ONLY_comment_unchanged_per_owner_preference": true,
+  "no_Lean_source_kernel_audit_numeric_replay_or_live_mutation": true
+}

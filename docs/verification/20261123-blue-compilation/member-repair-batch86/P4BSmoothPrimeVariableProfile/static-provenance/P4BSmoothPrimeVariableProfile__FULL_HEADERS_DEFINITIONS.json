@@ -1,0 +1,174 @@
+{
+  "module": "ImbalancedChen.P4BSmoothPrimeVariableProfile",
+  "complete_headers": [
+    {
+      "name": "positivePrimeOrthant",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positivePrimeOrthant : Set (Fin 2 → ℝ) :=",
+      "header_sha256": "759bef6c5bb69f7a38cdf4d0ace8bc7263d3c43521d4d35f14e2db16c03e212a"
+    },
+    {
+      "name": "primeVariableLogPoint",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeVariableLogPoint (N : ℕ) (p : Fin 2 → ℝ) : Fin 2 → ℝ :=",
+      "header_sha256": "8f9a9353f8fd058a58db664b1c4324a50524bf776b9464e34f23a063196d0092"
+    },
+    {
+      "name": "smoothPrimeVariableProfile",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smoothPrimeVariableProfile (b : ℝ) (N : ℕ) (T width : ℝ)\n    (p : Fin 2 → ℝ) : ℝ :=",
+      "header_sha256": "126e87732bf10be7eba5a5b936b052f6b582e5e7a08b568cc4f233620e86db92"
+    },
+    {
+      "name": "primeTuplePoint",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeTuplePoint (N : ℕ) (t : Fin 2 → Fin (N + 1)) : Fin 2 → ℝ :=",
+      "header_sha256": "e3f4c0bd6ff577ab5fc58cf045c9b8d9db1504c8e96bb72e660e9e1fa45c41e5"
+    },
+    {
+      "name": "primeTuplePoint_mem_positivePrimeOrthant",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem primeTuplePoint_mem_positivePrimeOrthant {N : ℕ}\n    {t : Fin 2 → Fin (N + 1)} (ht : t ∈ labelledPrimeTuples 2 N) :\n    primeTuplePoint N t ∈ positivePrimeOrthant :=",
+      "header_sha256": "e0295ef299c8807996ec853ad8378a6ca6e5aeea42f7c15f4420802af7df355e"
+    },
+    {
+      "name": "smoothPhysicalPairOuterRamp_eq_primeVariableProfile",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem smoothPhysicalPairOuterRamp_eq_primeVariableProfile (b : ℝ) (N : ℕ)\n    (T width : ℝ) (t : Fin 2 → Fin (N + 1)) :\n    smoothPhysicalPairOuterRamp b N T width t =\n      smoothPrimeVariableProfile b N T width (primeTuplePoint N t) :=",
+      "header_sha256": "eba57dca185a8e214566401910944033d0be84fc97493b748567f18901f121d9"
+    },
+    {
+      "name": "contDiffOn_primeVariableLogPoint",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem contDiffOn_primeVariableLogPoint (N : ℕ) {n : ℕ∞} :\n    ContDiffOn ℝ n (primeVariableLogPoint N) positivePrimeOrthant :=",
+      "header_sha256": "71f7cb5de219984564aa2026ca2b112bfd1c185415e36e61299b3ead0cd6fd95"
+    },
+    {
+      "name": "contDiffOn_smoothPrimeVariableProfile",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem contDiffOn_smoothPrimeVariableProfile (b : ℝ) (N : ℕ) (T width : ℝ)\n    {n : ℕ∞} :\n    ContDiffOn ℝ n (smoothPrimeVariableProfile b N T width) positivePrimeOrthant :=",
+      "header_sha256": "66f976321c6b480db3aab787e290c24826097480099e890854d01a89d74cbc2a"
+    },
+    {
+      "name": "hasDerivAt_normalizedPrimeLog",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem hasDerivAt_normalizedPrimeLog (N : ℕ) {u : ℝ} (hu : 0 < u) :\n    HasDerivAt (fun x : ℝ => Real.log x / Real.log (N : ℝ))\n      (u⁻¹ / Real.log (N : ℝ)) u :=",
+      "header_sha256": "d7e1e15fd6c090851a52b2f40574f6d3721a4127c9d997cf895a50554ec6e60e"
+    },
+    {
+      "name": "primeVariableLogJacobian",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeVariableLogJacobian (N : ℕ) (p : Fin 2 → ℝ) :\n    (Fin 2 → ℝ) →L[ℝ] (Fin 2 → ℝ) :=",
+      "header_sha256": "5a9a8c53abd7af62880578e8657b52cb6fcc6f8b2d1e291588f33b5c25e8a3d8"
+    },
+    {
+      "name": "primeVariableLogJacobian_apply",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem primeVariableLogJacobian_apply (N : ℕ) (p h : Fin 2 → ℝ) (i : Fin 2) :\n    primeVariableLogJacobian N p h i = h i / (p i * Real.log (N : ℝ)) :=",
+      "header_sha256": "304a0f0050c9a3f1c9df092752083b7e78760ccd1eced1c5b66ef8817051a55e"
+    },
+    {
+      "name": "hasFDerivAt_primeVariableLogPoint",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem hasFDerivAt_primeVariableLogPoint (N : ℕ) {p : Fin 2 → ℝ}\n    (hp : p ∈ positivePrimeOrthant) :\n    HasFDerivAt (primeVariableLogPoint N) (primeVariableLogJacobian N p) p :=",
+      "header_sha256": "ada1c4f58309de1d9766ab6784b43f7d6ec644f0f2b7d79e10ec693545a0454b"
+    },
+    {
+      "name": "fderiv_smoothPrimeVariableProfile",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem fderiv_smoothPrimeVariableProfile (b : ℝ) (N : ℕ) (T width : ℝ)\n    {p : Fin 2 → ℝ} (hp : p ∈ positivePrimeOrthant) :\n    fderiv ℝ (smoothPrimeVariableProfile b N T width) p =\n      (fderiv ℝ (smoothPhysicalProfile b N T width) (primeVariableLogPoint N p)).comp\n        (primeVariableLogJacobian N p) :=",
+      "header_sha256": "dded341ee2b6521953c493de277422c57d42ff9d443e775fc320654b0d42de8c"
+    },
+    {
+      "name": "primeVariable_upper_margin_eq_log_gap",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem primeVariable_upper_margin_eq_log_gap (b T : ℝ) {N : ℕ}\n    (hN : (1 : ℝ) < N) (p : Fin 2 → ℝ) :\n    smoothPhysicalProfileMargin b N T (primeVariableLogPoint N p) 3 =\n      Real.log (N : ℝ) - Real.log (p 0) - Real.log (p 1) :=",
+      "header_sha256": "a0cca3a8553eb61c323e5dd11a914e65804bf93974b25f9170e6fbedb1f72f1c"
+    },
+    {
+      "name": "smoothPrimeVariableProfile_nonzero_product_lt_exp_mul_N",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem smoothPrimeVariableProfile_nonzero_product_lt_exp_mul_N\n    {b T width : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hwidth : 0 < width)\n    {p : Fin 2 → ℝ} (hp : p ∈ positivePrimeOrthant)\n    (hnonzero : smoothPrimeVariableProfile b N T width p ≠ 0) :\n    p 0 * p 1 < Real.exp width * (N : ℝ) :=",
+      "header_sha256": "677823800fc84e02697791e7d59c3fb7ba5727fb643f717d1041fdd7c16b34ee"
+    },
+    {
+      "name": "smoothPrimeVariableProfile_nonzero_above_rpow",
+      "kind": "theorem",
+      "private": false,
+      "complete_raw_header": "theorem smoothPrimeVariableProfile_nonzero_above_rpow\n    {b kappa width theta : ℝ} {N : ℕ} (hb : 0 < b) (htheta : 0 < theta)\n    (hN : 2 ≤ N) (hwidth : 0 < width)\n    (hgap : 2 * width ≤ P4BOuterRampRoughness.baseline b kappa - theta)\n    {p : Fin 2 → ℝ} (hp : p ∈ positivePrimeOrthant)\n    (hnonzero : smoothPrimeVariableProfile b N (manuscriptHalfProductCutoff kappa N)\n      width p ≠ 0) :\n    ∀ i : Fin 2, (N : ℝ) ^ theta < p i :=",
+      "header_sha256": "32cdabce9605bd33f898b8d6bb58f524765613a47c98ddff8dda5bad0aa15f3e"
+    }
+  ],
+  "complete_definitions": [
+    {
+      "name": "positivePrimeOrthant",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def positivePrimeOrthant : Set (Fin 2 → ℝ) :=",
+      "header_sha256": "759bef6c5bb69f7a38cdf4d0ace8bc7263d3c43521d4d35f14e2db16c03e212a",
+      "raw_region": "def positivePrimeOrthant : Set (Fin 2 → ℝ) := {p | ∀ i, 0 < p i}\n\n",
+      "region_sha256": "e7200fd84fbded1d775d799b08df276f4c25bca415881d9050630ff74ac9609d"
+    },
+    {
+      "name": "primeVariableLogPoint",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeVariableLogPoint (N : ℕ) (p : Fin 2 → ℝ) : Fin 2 → ℝ :=",
+      "header_sha256": "8f9a9353f8fd058a58db664b1c4324a50524bf776b9464e34f23a063196d0092",
+      "raw_region": "def primeVariableLogPoint (N : ℕ) (p : Fin 2 → ℝ) : Fin 2 → ℝ :=\n  fun i => Real.log (p i) / Real.log (N : ℝ)\n\n",
+      "region_sha256": "060f9cc1605655f77a600802efe21ce6e7f8abc75f8a1179fba897b1c6202f86"
+    },
+    {
+      "name": "smoothPrimeVariableProfile",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def smoothPrimeVariableProfile (b : ℝ) (N : ℕ) (T width : ℝ)\n    (p : Fin 2 → ℝ) : ℝ :=",
+      "header_sha256": "126e87732bf10be7eba5a5b936b052f6b582e5e7a08b568cc4f233620e86db92",
+      "raw_region": "def smoothPrimeVariableProfile (b : ℝ) (N : ℕ) (T width : ℝ)\n    (p : Fin 2 → ℝ) : ℝ :=\n  smoothPhysicalProfile b N T width (primeVariableLogPoint N p)\n\n",
+      "region_sha256": "f9cd27f01db47614f2361cb46fec58ffe46801288ba715ceffcad2c4a8087452"
+    },
+    {
+      "name": "primeTuplePoint",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeTuplePoint (N : ℕ) (t : Fin 2 → Fin (N + 1)) : Fin 2 → ℝ :=",
+      "header_sha256": "e3f4c0bd6ff577ab5fc58cf045c9b8d9db1504c8e96bb72e660e9e1fa45c41e5",
+      "raw_region": "def primeTuplePoint (N : ℕ) (t : Fin 2 → Fin (N + 1)) : Fin 2 → ℝ :=\n  fun i => ((t i).val : ℝ)\n\n/-- Every genuine labelled prime tuple evaluates inside the positive\ncontinuous domain, including repeated-prime tuples. -/\n",
+      "region_sha256": "fcdffcc802119d0adafa3e37c225089e5adc72da1cf30962136c96dd4b8a86d0"
+    },
+    {
+      "name": "primeVariableLogJacobian",
+      "kind": "def",
+      "private": false,
+      "complete_raw_header": "def primeVariableLogJacobian (N : ℕ) (p : Fin 2 → ℝ) :\n    (Fin 2 → ℝ) →L[ℝ] (Fin 2 → ℝ) :=",
+      "header_sha256": "5a9a8c53abd7af62880578e8657b52cb6fcc6f8b2d1e291588f33b5c25e8a3d8",
+      "raw_region": "def primeVariableLogJacobian (N : ℕ) (p : Fin 2 → ℝ) :\n    (Fin 2 → ℝ) →L[ℝ] (Fin 2 → ℝ) :=\n  ContinuousLinearMap.pi (fun i =>\n    (Real.log (N : ℝ))⁻¹ • ((p i)⁻¹ • ContinuousLinearMap.proj i))\n\n",
+      "region_sha256": "1a13912c5759419797188751d159c0101679a4588472f4c889c602da8ad05d52"
+    }
+  ],
+  "source_commands": 16,
+  "all_raw_headers_and_definitions_exact": true,
+  "changed_proof_bodies": [
+    "primeTuplePoint_mem_positivePrimeOrthant",
+    "hasFDerivAt_primeVariableLogPoint",
+    "fderiv_smoothPrimeVariableProfile"
+  ],
+  "header_definition_exceptions": [],
+  "all_outside_exact_proof_replacements_bytes_preserved": true,
+  "reverse_reconstruction_exact": true
+}

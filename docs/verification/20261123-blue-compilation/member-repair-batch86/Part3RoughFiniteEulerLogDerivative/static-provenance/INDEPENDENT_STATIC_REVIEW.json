@@ -1,0 +1,383 @@
+{
+  "schema": "non_author_Euler_and_Integral_actual_scope_review_v1",
+  "reviewer": "/root/ascending14_api",
+  "author": "/root/omega_review",
+  "reviewed_utc": "2026-11-23T23:12:25.650800+00:00",
+  "result": "PASS_STATIC_SCOPE_ONLY_READY_FOR_SOLE_OWNER_ORIGINAL_GUARDED_VALIDATION",
+  "original_source_selection": {
+    "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/SOURCE_SELECTION.json",
+    "bytes": 1610,
+    "sha256": "f44860539977d7d9507551c841569d1fea82f734616c8f6fa91394491c0029c7"
+  },
+  "original_files_manifest": {
+    "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/FILES_MANIFEST.json",
+    "bytes": 4367,
+    "sha256": "ef1043478af22f225e4ef247f0e1a7c8d73d3af67154cf0e77c4edaf7049d6f6"
+  },
+  "all_original_manifest_file_hashes_and_sizes_checked": 23,
+  "counts": {
+    "complete_original_headers": 12,
+    "complete_original_definitions": 2,
+    "changed_original_Euler_proof_bodies": 2,
+    "changed_Integral_proof_bodies": 0,
+    "new_declarations": 0
+  },
+  "module_reviews": [
+    {
+      "module": "ImbalancedChen.Part3RoughFiniteEulerLogDerivative",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/Part3RoughFiniteEulerLogDerivative/baseline.lean",
+        "bytes": 4719,
+        "sha256": "2e01fffb203fce39bc39740a5c9e61f9f00cd0c8f3391e3a31d95cbb2e303c97"
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/Part3RoughFiniteEulerLogDerivative/candidate.lean",
+        "bytes": 4780,
+        "sha256": "4640bb0363eef7a2dab072f66bee5004315a62fdac45364658c59e88a82c19b9"
+      },
+      "complete_original_headers": [
+        {
+          "kind": "def",
+          "name": "logDerivativeCost",
+          "complete_raw_header": "def logDerivativeCost (z : ℝ) : ℝ :=",
+          "sha256": "875d3b4e253541f0d1fc593b83846e6620290228fac1801083c58a2303f94138",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "factor_hasDerivAt",
+          "complete_raw_header": "theorem factor_hasDerivAt {q p : ℕ} (chi : DirichletCharacter ℂ q)\n    (hp : p.Prime) (s : ℂ) :\n    HasDerivAt (fun w : ℂ => 1-chi p*(p : ℂ)^(-w))\n      (chi p*(p : ℂ)^(-s)*Complex.log (p : ℂ)) s :=",
+          "sha256": "2c774f85b226be7a8e96702e7a39721b00ba0b8ee16e5925fcf0f4af34f47d41",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "finiteCorrection_logDeriv",
+          "complete_raw_header": "theorem finiteCorrection_logDeriv {q : ℕ} (chi : DirichletCharacter ℂ q)\n    (z : ℝ) {s : ℂ} (hs : 1 ≤ s.re) :\n    logDeriv (finiteCorrection chi z) s =\n      ∑ p ∈ smallPrimes z,\n        (chi p*(p : ℂ)^(-s)*Complex.log (p : ℂ))/(1-chi p*(p : ℂ)^(-s)) :=",
+          "sha256": "f261ea66e8a0d21ce09292f93ff6075d4b2ae17c7a999e86c176125cccaffabe",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "factor_logDeriv_norm_le",
+          "complete_raw_header": "private theorem factor_logDeriv_norm_le {q p : ℕ} (chi : DirichletCharacter ℂ q)\n    (hp : p.Prime) {s : ℂ} (hs : 1 ≤ s.re) :\n    ‖(chi p*(p : ℂ)^(-s)*Complex.log (p : ℂ))/(1-chi p*(p : ℂ)^(-s))‖ ≤\n      Real.log (p : ℝ)/((p : ℝ)-1) :=",
+          "sha256": "a225707055df03dc69991cd66437a77302135887a8487221571476412fc0b433",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "finiteCorrection_logDeriv_norm_le",
+          "complete_raw_header": "theorem finiteCorrection_logDeriv_norm_le {q : ℕ} (chi : DirichletCharacter ℂ q)\n    (z : ℝ) {s : ℂ} (hs : 1 ≤ s.re) :\n    ‖logDeriv (finiteCorrection chi z) s‖ ≤ logDerivativeCost z :=",
+          "sha256": "f83e1ca3674f364360fb832e4f6b04e4606dbf8f3adcd37213ef4da29682b438",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "finiteCorrection_deriv_norm_le",
+          "complete_raw_header": "theorem finiteCorrection_deriv_norm_le {q : ℕ} (chi : DirichletCharacter ℂ q)\n    (z : ℝ) {s : ℂ} (hs : 1 ≤ s.re) :\n    ‖deriv (finiteCorrection chi z) s‖ ≤ logDerivativeCost z*plusEnvelope z :=",
+          "sha256": "943473f8ca4caf02e904978e2a18a13d05d98ab9c9e11f8341abef84ba7f47af",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "complete_original_definitions": [
+        {
+          "name": "logDerivativeCost",
+          "complete_raw_definition": "def logDerivativeCost (z : ℝ) : ℝ :=\n  ∑ p ∈ smallPrimes z, Real.log (p : ℝ)/((p : ℝ)-1)",
+          "sha256": "7e91f354d293970231bb00d7ec43655afb932288fafe35b39ee5d6e263a39adb",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "original_proof_body_inventory": [
+        {
+          "name": "factor_hasDerivAt",
+          "baseline_body_sha256": "caf01f5d7090aec0c341e1f2ce1ed0a4be4a5272fd290631d9eb42f52ac2c683",
+          "candidate_body_sha256": "915ec4849ca43ca8765caa9cbd8c7ac34bde07b37c986fe4b1129ab62601482b",
+          "pre_post_raw_equal": false
+        },
+        {
+          "name": "finiteCorrection_logDeriv",
+          "baseline_body_sha256": "77ba0f0af7a7670ee489dd6476b9d0e4935dd44db3c1b804c2895a81b110ac54",
+          "candidate_body_sha256": "8311eedd09ef5eb0b3c8f2196ea9873ea77351d779f1a98a9faf999b37d07c0e",
+          "pre_post_raw_equal": false
+        },
+        {
+          "name": "factor_logDeriv_norm_le",
+          "baseline_body_sha256": "be5ba5b54f0b5e369347efa18256084f765896d14e1d2e733f7fba408d3ce0c9",
+          "candidate_body_sha256": "be5ba5b54f0b5e369347efa18256084f765896d14e1d2e733f7fba408d3ce0c9",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "finiteCorrection_logDeriv_norm_le",
+          "baseline_body_sha256": "57f649b5779ed05df308db144ecff7cfda9d580818b5c742f4289fb72fbffaa5",
+          "candidate_body_sha256": "57f649b5779ed05df308db144ecff7cfda9d580818b5c742f4289fb72fbffaa5",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "finiteCorrection_deriv_norm_le",
+          "baseline_body_sha256": "5145c05e5d3f76527776b53aaf40f15101e17e084468154de9db82055e1cb99f",
+          "candidate_body_sha256": "5145c05e5d3f76527776b53aaf40f15101e17e084468154de9db82055e1cb99f",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "complete_source_reverse_actually_exact": true,
+      "all_other_original_bytes_imports_EOF_EOL_numericdata_targets_hypotheses_raw_equal": true,
+      "unchanged_option_commands_and_order": [],
+      "origin_commit_blob_byte_binding": {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/Part3RoughFiniteEulerLogDerivative.lean",
+        "blob_sha1": "b5617d0f93f2ca313d1180763c1261f67dd37468",
+        "whole_blob_exact_pre": true
+      },
+      "actual_failure_binding": {
+        "slice": {
+          "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/Part3RoughFiniteEulerLogDerivative/ACTUAL_FAILURE.log",
+          "bytes": 3029,
+          "sha256": "9e6e24125407fa794b7cf359c8612894120bf647c1e250bebd16cb69e4e5089c"
+        },
+        "source_pre_sha256": "2e01fffb203fce39bc39740a5c9e61f9f00cd0c8f3391e3a31d95cbb2e303c97",
+        "prefix_sha256": "8f5f7fbf5e9a22b160471d95f9c95951fe906db17920858de39ce0a3063e5b1a",
+        "slice_start": 6786138,
+        "slice_end": 6789167,
+        "verbatim_original_compiler_command": "LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/Part3RoughFiniteEulerLogDerivative.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part3RoughFiniteEulerLogDerivative.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/Part3RoughFiniteEulerLogDerivative.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part3RoughFiniteEulerLogDerivative.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/Part3RoughFiniteEulerLogDerivative.setup.json --json",
+        "unit_exit1_present": true
+      }
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalFirstIntegralEndpoint",
+      "baseline": {
+        "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/P2OriginalFirstIntegralEndpoint/baseline.lean",
+        "bytes": 3679,
+        "sha256": "38cd75e72a98e0e267850f73e0ec6fe6e2c6ae527d4d5bee8d4da8af31b29dfc"
+      },
+      "candidate": {
+        "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/P2OriginalFirstIntegralEndpoint/candidate.lean",
+        "bytes": 3679,
+        "sha256": "80e2e221cee1d16a68b6864114fcd57bb186773d91ba4304fe3e1d084470a1ec"
+      },
+      "complete_original_headers": [
+        {
+          "kind": "def",
+          "name": "selectedUpperQ",
+          "complete_raw_header": "def selectedUpperQ : ℚ :=",
+          "sha256": "0ab304e391acbd7e3281c5dba4ae33486fac97950162ccd260b44b277b54201d",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "selectedUpperQ_eq_budget",
+          "complete_raw_header": "theorem selectedUpperQ_eq_budget :\n    selectedUpperQ = P2OriginalCertificateBudget.baseUpper 1 :=",
+          "sha256": "c5e8f97b6625340c91b4e35d0f453d4c7710c3ead2c52d5d328b49e6dc63d115",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "polynomial_upper_le_selected",
+          "complete_raw_header": "theorem polynomial_upper_le_selected :\n    centerQ 16 16 + radiusQ 16 16 ≤ selectedUpperQ :=",
+          "sha256": "872f2633234ddab254e3695d09a7076ffc8fb02077efd632751c6d9a44003fd5",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "originalFirstIntegral_le_selected",
+          "complete_raw_header": "theorem originalFirstIntegral_le_selected :\n    originalFirstIntegral ≤ (selectedUpperQ : ℝ) :=",
+          "sha256": "711216776909af71f1bc95d2b3e7b6905b6982193052ba051d6f32417eef3edd",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "originalFirstIntegral_literal_selected_bound",
+          "complete_raw_header": "theorem originalFirstIntegral_literal_selected_bound :\n    (4 / (299 / 500 : ℝ)) *\n        (∫ s in (2 : ℝ)..((299 / 500 : ℝ) / (19 / 96 : ℝ) - 1),\n          Real.log (s - 1) / s) ≤\n      (7179974843999672947 / 9444732965739290427392 : ℝ) :=",
+          "sha256": "79c1b1a1411f346bf36f33984aa1e2c495d5e39216c782357c8b3b417ed2a8ac",
+          "pre_post_raw_equal": true
+        },
+        {
+          "kind": "theorem",
+          "name": "originalFirstIntegral_le_budget_base_one",
+          "complete_raw_header": "theorem originalFirstIntegral_le_budget_base_one :\n    originalFirstIntegral ≤ (P2OriginalCertificateBudget.baseUpper 1 : ℝ) :=",
+          "sha256": "49b3641dfb842d37f9656e04489b481b6e7c5055978b9c9d9891c492375633a2",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "complete_original_definitions": [
+        {
+          "name": "selectedUpperQ",
+          "complete_raw_definition": "def selectedUpperQ : ℚ := 7179974843999672947 / 9444732965739290427392",
+          "sha256": "899ab7cbc373b7cd0e89f92dcc56342a8649f750808bdd7ed81a66265f258289",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "original_proof_body_inventory": [
+        {
+          "name": "selectedUpperQ_eq_budget",
+          "baseline_body_sha256": "4b43eb23b4b4d0e009fab77399cc43b11721fa54096da6ec8b90382ee5d96163",
+          "candidate_body_sha256": "4b43eb23b4b4d0e009fab77399cc43b11721fa54096da6ec8b90382ee5d96163",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "polynomial_upper_le_selected",
+          "baseline_body_sha256": "80a0d59013a9ef00a7c35df5e93c63a942cf88f0f6f671cdb583df9b60edd480",
+          "candidate_body_sha256": "80a0d59013a9ef00a7c35df5e93c63a942cf88f0f6f671cdb583df9b60edd480",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "originalFirstIntegral_le_selected",
+          "baseline_body_sha256": "f40bc09ab81fd43236a3639827e8fc6a38154ec0a13832ddff2005f846d5eeaa",
+          "candidate_body_sha256": "f40bc09ab81fd43236a3639827e8fc6a38154ec0a13832ddff2005f846d5eeaa",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "originalFirstIntegral_literal_selected_bound",
+          "baseline_body_sha256": "8b251ec1bf5726a6583504b095062b5e3889214e9b54dc23f4ed623476ca9d20",
+          "candidate_body_sha256": "8b251ec1bf5726a6583504b095062b5e3889214e9b54dc23f4ed623476ca9d20",
+          "pre_post_raw_equal": true
+        },
+        {
+          "name": "originalFirstIntegral_le_budget_base_one",
+          "baseline_body_sha256": "992988fde1a4bf2b65591d5c59e33a84d558245c2a7f12d83ea7c67b2e3018c4",
+          "candidate_body_sha256": "992988fde1a4bf2b65591d5c59e33a84d558245c2a7f12d83ea7c67b2e3018c4",
+          "pre_post_raw_equal": true
+        }
+      ],
+      "complete_source_reverse_actually_exact": true,
+      "all_other_original_bytes_imports_EOF_EOL_numericdata_targets_hypotheses_raw_equal": true,
+      "unchanged_option_commands_and_order": [
+        "set_option maxRecDepth 10000 in",
+        "set_option maxHeartbeats 4000000 in"
+      ],
+      "origin_commit_blob_byte_binding": {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P2OriginalFirstIntegralEndpoint.lean",
+        "blob_sha1": "31e7fee292f427060b8474cca8933cfe45b8ea13",
+        "whole_blob_exact_pre": true
+      },
+      "actual_failure_binding": {
+        "slice": {
+          "path": "/workspace/p1-complete-proof/static-euler-logderiv-integral-endpoint/P2OriginalFirstIntegralEndpoint/ACTUAL_FAILURE.log",
+          "bytes": 1792,
+          "sha256": "24537da0fc42aeff7d3afb06fea389f5c5670a0050822e0b2d453128027a1b1e"
+        },
+        "source_pre_sha256": "38cd75e72a98e0e267850f73e0ec6fe6e2c6ae527d4d5bee8d4da8af31b29dfc",
+        "prefix_sha256": "8f5f7fbf5e9a22b160471d95f9c95951fe906db17920858de39ce0a3063e5b1a",
+        "slice_start": 6783714,
+        "slice_end": 6785506,
+        "verbatim_original_compiler_command": "LEAN_PATH=/workspace/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/blue-member-build/.lake/build/lib/lean /workspace/blue-build-tools/member-runtime/p0-ci-shadow-toolchain/bin/lean -DmaxRecDepth=100000 -DmaxHeartbeats=4000000 /workspace/blue-member-build/ImbalancedChen/P2OriginalFirstIntegralEndpoint.lean -o /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2OriginalFirstIntegralEndpoint.olean -i /workspace/blue-member-build/.lake/build/lib/lean/ImbalancedChen/P2OriginalFirstIntegralEndpoint.ilean -c /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2OriginalFirstIntegralEndpoint.c --setup /workspace/blue-member-build/.lake/build/ir/ImbalancedChen/P2OriginalFirstIntegralEndpoint.setup.json --json",
+        "unit_exit1_present": true
+      }
+    }
+  ],
+  "Euler_algebra_check": "The original hd derivative is pPower*logp*(-1). Original const_mul(chi p) then const_sub1 gives minus(chi*pPower*logp*(-1)); only mul_neg/neg_mul/mul_one/neg_neg/mul_assoc normalize this to the identical unchanged header chi*pPower*logp. Original complex-power derivative, prime nonzero fact and function are retained.",
+  "Euler_product_check": "Finset.prod_fn is exactly extensional equality of the same finite smallPrimes z function-valued product with its pointwise lambda. It exposes the product form needed by the original pinned logDeriv_prod with the same s and unchanged nonzero-factor/differentiable hypotheses. No infinite product, principal-character exclusion, p|q exclusion or new Lprime/L premise appears.",
+  "Integral_scope_exception": {
+    "root_explicit_authorization": "Root approved the already accepted H3-style set_option-before-doccomment ordering pattern for the same theorem only.",
+    "complete_original_move_record": [
+      {
+        "theorem": "polynomial_upper_le_selected",
+        "before_complete_doccomment_and_options": "/-- The selected catalog upper endpoint is compared with actual finite\npolynomial integration plus its derived analytic remainder.  All 256 terms\nare expanded using exact rational arithmetic by this proof body. -/\nset_option maxRecDepth 10000 in\nset_option maxHeartbeats 4000000 in\n",
+        "after_complete_same_options_and_doccomment": "set_option maxRecDepth 10000 in\nset_option maxHeartbeats 4000000 in\n/-- The selected catalog upper endpoint is compared with actual finite\npolynomial integration plus its derived analytic remainder.  All 256 terms\nare expanded using exact rational arithmetic by this proof body. -/\n",
+        "same_original_options": {
+          "maxRecDepth": 10000,
+          "maxHeartbeats": 4000000
+        },
+        "same_single_wrapped_declaration": true,
+        "no_budget_raise_or_scope_leak": true,
+        "old_unparsed_kernel_type_equality_not_claimed": true
+      }
+    ],
+    "old_unparsed_kernel_type_equality_claimed": false,
+    "same_single_declaration_polynomial_upper_le_selected": true,
+    "budget_values_unchanged": {
+      "maxRecDepth": 10000,
+      "maxHeartbeats": 4000000
+    },
+    "no_new_scope_leak_or_global_option_change": true
+  },
+  "Integral_numeric_scope": {
+    "selected_endpoint_unchanged": "7179974843999672947/9444732965739290427392",
+    "budget_index": 1,
+    "orders": [
+      16,
+      16
+    ],
+    "source_shape_of_center": "range16 × range16 (256 original index pairs), same original coefficientQ and degree",
+    "exact_radiusQ_used_and_not_replaced_by_Q80": true,
+    "polynomial_dependency_source": {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P2FirstIntegralPolynomialEnclosure.lean",
+      "bytes": 13137,
+      "sha256": "99adc3690de755e1732ec537d60f59a1a5d1f1852c4a3ebf484c94887e67e7b2"
+    },
+    "original_norm_num_proofcode_exact": "  norm_num [centerQ, coefficientQ, degree, radiusQ, errorQ, dQ,\n    selectedUpperQ, Finset.sum_range_succ]",
+    "all_five_Integral_theorem_proofcode_bodies_raw_equal": true,
+    "Theta_and_rho_original": [
+      299,
+      500,
+      19,
+      96
+    ],
+    "rational_producer_or_comparison_replay_by_reviewer": false,
+    "current_comparison_truth_or_budget_success_not_claimed": true,
+    "if_owner_unchanged_norm_num_fails": "Report the genuine failure and inspect the original manuscript/source; no weaker endpoint, assumed bound or numeric replacement is approved."
+  },
+  "all_pinned_API_source_files_and_raw_excerpt_hashes_checked": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Mul.lean",
+      "sha256": "9eaf8d222c347ea647939daa68fac11edeb7c2572719246ce03d43cb04c94b44",
+      "start_line": 355,
+      "end_line": 358,
+      "excerpt_sha256": "5f883e3fb2812942ae016661bd235f7194eb663e997c9c63d6248f937d6a5c26",
+      "exact_pin_verified": true
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Add.lean",
+      "sha256": "9208b59d49bcd81d464de04591c4dbd43bf0d244e6a484b1bad8b4c9d26897b8",
+      "start_line": 434,
+      "end_line": 436,
+      "excerpt_sha256": "ebae1972dc5aab7a820eda5d8fe1aab021b6488ba886b27d759858e8178554e3",
+      "exact_pin_verified": true
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Pi.lean",
+      "sha256": "45020113307de3d0666a4aead78684fe8ea53576c40f28f0a3d750160e21e1e1",
+      "start_line": 43,
+      "end_line": 53,
+      "excerpt_sha256": "38d982c514b62b56814a8f5ca67c3a6d677d361d509e91e6331c4151388e427e",
+      "exact_pin_verified": true
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/LogDeriv.lean",
+      "sha256": "717dc5f2f707f4fc401a88be555fe61373b1d1b50edd45a4f1b5bb7843b8c246",
+      "start_line": 72,
+      "end_line": 84,
+      "excerpt_sha256": "fa88569d01f8ef509e27ebff5ea2f6698b8c2567375c4d11b3d0ada0bb793b03",
+      "exact_pin_verified": true
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/Part3RoughSlotDirichletSeries.lean",
+      "sha256": "a5850a9219faa05863ee38f6bf1f921042c4346a539e13356d6843ae7ff3462c",
+      "start_line": 21,
+      "end_line": 29,
+      "excerpt_sha256": "3be49700820e02044bd9003825c377862256b17a950c498d65e502f2bf48e7bb",
+      "exact_pin_verified": true
+    }
+  ],
+  "reused_same_declaration_scope_review_pin_verified": {
+    "path": "/workspace/blue-member-repair-batch59/P4AOriginalFirstFailureH3SourceSemantics/affine-reuse-revision3-provenance/INDEPENDENT_ROOT_SCOPE_PUBLIC_REVIEW.json",
+    "bytes": 2906,
+    "sha256": "ab022f6304fed4aa4442a041d4c67e6ee4eee36d27dfa53eac88431b42dd1fb4"
+  },
+  "original_1106_manuscript_pin_and_excerpt_verified": {
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+    "bytes": 42662,
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "start_line": 225,
+    "end_line": 233,
+    "raw_excerpt": "\\end{equation}\r\nHere the ordered $x,y$ integral is\r\n$\\tfrac12\\log^2(\\rho_0/z)$, and the remaining integral\r\nover $0<z<\\delta$ is elementary.  In particular the\r\nlogarithmic singularity at $z=0$ is integrated rather\r\nthan discarded.  The first integral is\r\nenclosed by a positive series with its geometric remainder.\r\nThe compact third integral is covered by a disjoint partition,\r\nincluding conservative bounds on its boundary boxes.\r\n",
+    "raw_excerpt_sha256": "70784286859e5cf221527e760a221386f87a6b6c52e32ab28da36990ffe7e492",
+    "role": "The original first integral uses a positive series with geometric remainder; source exact endpoint, order16 and analytic radius are unchanged."
+  },
+  "manuscript_scope": "1106 numerical appendix225–233 requires first integral positive-series enclosure with geometric remainder. Scope restoration preserves that existing finite polynomial/radius route; the static review does not supply an analytic/numeric bound.",
+  "existing_work_lookup_boundary": "Original exact two canonicalpath all-ref limited lookup reported no corrected post. The recorded b2c original blobs were independently read and equal failed preimages. Only prior reliable same-declaration option-order syntax pattern is reused; no prior H3 mathematical success is attributed to IntegralEndpoint.",
+  "classification": "Proof-expression/Pi-product API plus explicit authorized parser-scope restoration. No changed mathematical statement/data or substantive proof gap identified by these source checks.",
+  "Lean_Lake_kernel_checker_type_axiom_stock_numeric_or_live_controller_source_cache_mutations": 0,
+  "fresh_compile_or_complete_P1_acceptance_claim": false
+}

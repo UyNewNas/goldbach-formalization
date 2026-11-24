@@ -1,0 +1,99 @@
+{
+  "schema": "Euler_integral_actual_failure_pinned_API_scope_v1",
+  "status": "UNCOMPILED_NO_NUMERIC_OR_RESOURCE_SUCCESS_CLAIM",
+  "pinned_API_sources": [
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Mul.lean",
+      "bytes": 29294,
+      "sha256": "9eaf8d222c347ea647939daa68fac11edeb7c2572719246ce03d43cb04c94b44",
+      "start_line": 355,
+      "end_line": 358,
+      "role": "Original HasDerivAt.const_mul derivative value and function.",
+      "raw_excerpt": "theorem HasDerivAt.const_mul (c : 𝔸) (hd : HasDerivAt d d' x) :\n    HasDerivAt (fun y => c * d y) (c * d') x := by\n  rw [← hasDerivWithinAt_univ] at *\n  exact hd.const_mul c\n",
+      "raw_excerpt_sha256": "5f883e3fb2812942ae016661bd235f7194eb663e997c9c63d6248f937d6a5c26"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Add.lean",
+      "bytes": 17189,
+      "sha256": "9208b59d49bcd81d464de04591c4dbd43bf0d244e6a484b1bad8b4c9d26897b8",
+      "start_line": 434,
+      "end_line": 436,
+      "role": "Original HasDerivAt.const_sub negates the derivative.",
+      "raw_excerpt": "nonrec theorem HasDerivAt.const_sub (c : F) (hf : HasDerivAt f f' x) :\n    HasDerivAt (fun x ↦ c - f x) (-f') x :=\n  hf.const_sub c\n",
+      "raw_excerpt_sha256": "ebae1972dc5aab7a820eda5d8fe1aab021b6488ba886b27d759858e8178554e3"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Pi.lean",
+      "bytes": 9854,
+      "sha256": "45020113307de3d0666a4aead78684fe8ea53576c40f28f0a3d750160e21e1e1",
+      "start_line": 43,
+      "end_line": 53,
+      "role": "prod_fn is extensional pointwise equality for exactly the same finite product.",
+      "raw_excerpt": "\n@[to_additive (attr := simp)]\ntheorem Finset.prod_apply {α : Type*} {M : α → Type*} [∀ a, CommMonoid (M a)] (a : α)\n    (s : Finset ι) (g : ι → ∀ a, M a) : (∏ c ∈ s, g c) a = ∏ c ∈ s, g c a :=\n  map_prod (Pi.evalMonoidHom M a) _ _\n\n/-- An 'unapplied' analogue of `Finset.prod_apply`. -/\n@[to_additive (attr := push ←) /-- An 'unapplied' analogue of `Finset.sum_apply`. -/]\ntheorem Finset.prod_fn {α : Type*} {M : α → Type*} {ι} [∀ a, CommMonoid (M a)] (s : Finset ι)\n    (g : ι → ∀ a, M a) : ∏ c ∈ s, g c = fun a ↦ ∏ c ∈ s, g c a :=\n  funext fun _ ↦ Finset.prod_apply _ _ _\n",
+      "raw_excerpt_sha256": "38d982c514b62b56814a8f5ca67c3a6d677d361d509e91e6331c4151388e427e"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/LogDeriv.lean",
+      "bytes": 6906,
+      "sha256": "717dc5f2f707f4fc401a88be555fe61373b1d1b50edd45a4f1b5bb7843b8c246",
+      "start_line": 72,
+      "end_line": 84,
+      "role": "Product log derivative uses pointwise product with original nonzero/differentiable hypotheses.",
+      "raw_excerpt": "/-- The logarithmic derivative of a finite product is the sum of the logarithmic derivatives. -/\ntheorem logDeriv_prod {ι : Type*} {s : Finset ι} {f : ι → 𝕜 → 𝕜'} {x : 𝕜} (hf : ∀ i ∈ s, f i x ≠ 0)\n    (hd : ∀ i ∈ s, DifferentiableAt 𝕜 (f i) x) :\n    logDeriv (∏ i ∈ s, f i ·) x = ∑ i ∈ s, logDeriv (f i) x := by\n  induction s using Finset.cons_induction with\n  | empty => simp\n  | cons a s ha ih =>\n    rw [Finset.forall_mem_cons] at hf hd\n    simp_rw [Finset.prod_cons, Finset.sum_cons]\n    rw [logDeriv_mul, ih hf.2 hd.2]\n    · exact hf.1\n    · simpa [Finset.prod_eq_zero_iff] using hf.2\n    · exact hd.1\n",
+      "raw_excerpt_sha256": "fa88569d01f8ef509e27ebff5ea2f6698b8c2567375c4d11b3d0ada0bb793b03"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/Part3RoughSlotDirichletSeries.lean",
+      "bytes": 5580,
+      "sha256": "a5850a9219faa05863ee38f6bf1f921042c4346a539e13356d6843ae7ff3462c",
+      "start_line": 21,
+      "end_line": 29,
+      "role": "The same original finiteCorrection; p-divides-level branch is retained.",
+      "raw_excerpt": "def finiteCorrection {q : ℕ} (chi : DirichletCharacter ℂ q) (z : ℝ) (s : ℂ) : ℂ :=\n  ∏ p ∈ smallPrimes z, (1-chi p*(p : ℂ)^(-s))\n\ntheorem correction_factor_eq_one_of_dvd_level {q p : ℕ}\n    (chi : DirichletCharacter ℂ q) (hp : p.Prime) (hpq : p ∣ q) (s : ℂ) :\n    1-chi p*(p : ℂ)^(-s) = 1 := by\n  have hzero : chi p = 0 := MulChar.map_nonunit _ (by\n    intro hu\n    exact ((ZMod.isUnit_prime_iff_not_dvd hp).mp hu) hpq)\n",
+      "raw_excerpt_sha256": "3be49700820e02044bd9003825c377862256b17a950c498d65e502f2bf48e7bb"
+    }
+  ],
+  "reused_existing_scope_restoration": {
+    "H3_static_public_scope_review": {
+      "path": "/workspace/blue-member-repair-batch59/P4AOriginalFirstFailureH3SourceSemantics/affine-reuse-revision3-provenance/INDEPENDENT_ROOT_SCOPE_PUBLIC_REVIEW.json",
+      "bytes": 2906,
+      "sha256": "ab022f6304fed4aa4442a041d4c67e6ee4eee36d27dfa53eac88431b42dd1fb4"
+    },
+    "scope": "Only the already accepted same-declaration set_option-before-doccomment ordering pattern is reused. No H3 proof/data or acceptance is attributed to IntegralEndpoint."
+  },
+  "single_factor_algebra": "Original derivative witness is minus(chi*pPower*logp*(-1)); standard mul_neg/neg_mul/mul_one/neg_neg/mul_assoc reduce it to the identical chi*pPower*logp derivative in the unchanged header. No infinite product or analytic estimate is added.",
+  "finite_product_shape": "After original hfun equality the exact same finite product is a Pi-valued product. Existing Finset.prod_fn exposes its pointwise lambda form expected by pinned logDeriv_prod. Original prime nonzero-factor and differentiability arguments remain exactly the same.",
+  "Euler_domain": "Arbitrary q,DirichletCharacter including principal andp|q branches, all finite cutoffz and Re(s)>=1 remain. No Lprime/L or1/L assertion at or below the line1.",
+  "integral_numeric_boundary": {
+    "selectedUpperQ": "7179974843999672947 / 9444732965739290427392",
+    "order_parameters": [
+      16,
+      16
+    ],
+    "original_terms": 256,
+    "radius_unchanged": true,
+    "original_proof_norm_num_list_unchanged": true,
+    "maxRecDepth": 10000,
+    "maxHeartbeats": 4000000,
+    "options_only_moved_before_original_doccomment_for_same_theorem": true,
+    "old_unparsed_context_kernel_equality_not_claimed": true,
+    "all_proofcode_unchanged": "The scanner lexical region of the preceding theorem contains the moved doccomment/option prefix; only that explicitly listed same-declaration prefix is ignored when comparing actual theorem proofcode.",
+    "new_rational_comparison_execution": false,
+    "future_failure_policy": "If the original exact rational comparison does not establish the unchanged selected endpoint, report the actual failure; no assumed bound or weaker fallback is authorized."
+  },
+  "manuscript_context": {
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/numerical-appendix.tex",
+    "bytes": 42662,
+    "sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "start_line": 225,
+    "end_line": 233,
+    "raw_excerpt": "\\end{equation}\r\nHere the ordered $x,y$ integral is\r\n$\\tfrac12\\log^2(\\rho_0/z)$, and the remaining integral\r\nover $0<z<\\delta$ is elementary.  In particular the\r\nlogarithmic singularity at $z=0$ is integrated rather\r\nthan discarded.  The first integral is\r\nenclosed by a positive series with its geometric remainder.\r\nThe compact third integral is covered by a disjoint partition,\r\nincluding conservative bounds on its boundary boxes.\r\n",
+    "raw_excerpt_sha256": "70784286859e5cf221527e760a221386f87a6b6c52e32ab28da36990ffe7e492",
+    "role": "The original first integral uses a positive series with geometric remainder; source exact endpoint, order16 and analytic radius are unchanged."
+  },
+  "execution": {
+    "Lean_Lake_source_compiler_kernel_audit_stock_rational_checker_or_other_numerical_replay": 0,
+    "live_main_Member_P6_cache_runtime_guard_controller_or_oldrecord_mutation": false
+  }
+}

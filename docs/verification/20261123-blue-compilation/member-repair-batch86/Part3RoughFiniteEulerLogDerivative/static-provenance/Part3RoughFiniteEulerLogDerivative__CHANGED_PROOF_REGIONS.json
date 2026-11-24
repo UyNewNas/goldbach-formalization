@@ -1,0 +1,12 @@
+[
+  {
+    "name": "factor_hasDerivAt",
+    "before_complete_proof_region": " by\n  have hpC : (p : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hp.ne_zero\n  have hd : HasDerivAt (fun w : ℂ => (p : ℂ)^(-w))\n      ((p : ℂ)^(-s)*Complex.log (p : ℂ)*(-1)) s :=\n    ((hasDerivAt_id s).neg).const_cpow (Or.inl hpC)\n  convert (hd.const_mul (chi p)).const_sub 1 using 1 <;> ring\n\n/-- Finite product differentiation is applied to the original correction,\nnot to an assumed infinite Euler product derivative. -/\n",
+    "after_complete_proof_region": " by\n  have hpC : (p : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hp.ne_zero\n  have hd : HasDerivAt (fun w : ℂ => (p : ℂ)^(-w))\n      ((p : ℂ)^(-s)*Complex.log (p : ℂ)*(-1)) s :=\n    ((hasDerivAt_id s).neg).const_cpow (Or.inl hpC)\n  simpa only [mul_neg, neg_mul, mul_one, neg_neg, mul_assoc] using\n    (hd.const_mul (chi p)).const_sub 1\n\n/-- Finite product differentiation is applied to the original correction,\nnot to an assumed infinite Euler product derivative. -/\n"
+  },
+  {
+    "name": "finiteCorrection_logDeriv",
+    "before_complete_proof_region": " by\n  have hfun : finiteCorrection chi z =\n      ∏ p ∈ smallPrimes z, (fun w : ℂ => 1-chi p*(p : ℂ)^(-w)) := by\n    funext w\n    simp only [finiteCorrection,Finset.prod_apply]\n  rw [hfun,logDeriv_prod\n    (fun p hp => (prime_factor_bounds chi (smallPrimes_prime hp) hs).1)\n    (fun p hp => (factor_hasDerivAt chi (smallPrimes_prime hp) s).differentiableAt)]\n  apply Finset.sum_congr rfl\n  intro p hp\n  rw [logDeriv_apply,(factor_hasDerivAt chi (smallPrimes_prime hp) s).deriv]\n\n",
+    "after_complete_proof_region": " by\n  have hfun : finiteCorrection chi z =\n      ∏ p ∈ smallPrimes z, (fun w : ℂ => 1-chi p*(p : ℂ)^(-w)) := by\n    funext w\n    simp only [finiteCorrection,Finset.prod_apply]\n  rw [hfun, Finset.prod_fn, logDeriv_prod\n    (fun p hp => (prime_factor_bounds chi (smallPrimes_prime hp) hs).1)\n    (fun p hp => (factor_hasDerivAt chi (smallPrimes_prime hp) s).differentiableAt)]\n  apply Finset.sum_congr rfl\n  intro p hp\n  rw [logDeriv_apply,(factor_hasDerivAt chi (smallPrimes_prime hp) s).deriv]\n\n"
+  }
+]

@@ -1,0 +1,1 @@
+Source-only exact append composition of72 already accepted block index theorems. Original global predicate and292633 row data are unchanged. No row is replayed or sampled. Candidate has not been compiled; ordinary source/kernel/full-owned checks remain with the sole runtime owner. Interpreter memory failure has no line location; no exact hotspot or speedup is claimed.

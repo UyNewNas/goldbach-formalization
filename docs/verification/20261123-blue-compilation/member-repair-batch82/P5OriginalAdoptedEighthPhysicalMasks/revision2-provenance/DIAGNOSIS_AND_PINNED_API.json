@@ -1,0 +1,40 @@
+{
+  "status": "UNCOMPILED_STATIC_CANDIDATE",
+  "classification": "Proof-local Fin comparison/constructor numeral normalization after actual failed elaboration; no mathematical gap or header/definition change identified.",
+  "actual_remaining_goal": "Filtered Fin8 sum leaves conditional tests on Fin order and constructor coordinates. Existing lambda3/current/ordered-last reasoning has no further actual error in this normal log.",
+  "resolution": "Expose exact closed Fin comparisons with pinned lt_def/val lemmas; four derived Fin.ext rfl facts normalize remaining included coordinates. No whole-domain enumeration or new theorem/assumption.",
+  "pinned_API": [
+    {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/Fin/Lemmas.lean",
+      "sha256": "4b77e061431db2682c388e5df160c1f280c36f09f6c7b51b6a73d88457e98e51",
+      "line_start": 59,
+      "line_end": 80,
+      "raw_excerpt": "\n/-- Restatement of `Fin.mk.injEq` as an `iff`. -/\nprotected theorem mk.inj_iff {n a b : Nat} {ha : a < n} {hb : b < n} :\n    (⟨a, ha⟩ : Fin n) = ⟨b, hb⟩ ↔ a = b := Fin.ext_iff\n\ntheorem val_mk {m n : Nat} (h : m < n) : (⟨m, h⟩ : Fin n).val = m := rfl\n\ntheorem eq_mk_iff_val_eq {a : Fin n} {k : Nat} {hk : k < n} :\n    a = ⟨k, hk⟩ ↔ (a : Nat) = k := Fin.ext_iff\n\ntheorem mk_val (i : Fin n) : (⟨i, i.isLt⟩ : Fin n) = i := Fin.eta ..\n\n@[simp] theorem mk_eq_zero {n a : Nat} {ha : a < n} [NeZero n] :\n    (⟨a, ha⟩ : Fin n) = 0 ↔ a = 0 :=\n  mk.inj_iff\n\n@[simp] theorem zero_eq_mk {n a : Nat} {ha : a < n} [NeZero n] :\n    0 = (⟨a, ha⟩ : Fin n) ↔ a = 0 := by\n  simp [eq_comm]\n\n@[simp, grind =] theorem val_ofNat (n : Nat) [NeZero n] (a : Nat) :\n  (Fin.ofNat n a).val = a % n := rfl\n"
+    },
+    {
+      "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/Fin/Lemmas.lean",
+      "sha256": "4b77e061431db2682c388e5df160c1f280c36f09f6c7b51b6a73d88457e98e51",
+      "line_start": 157,
+      "line_end": 165,
+      "raw_excerpt": "    (x : Fin n) = if 0 ≤ x then Fin.ofNat n x.natAbs else -Fin.ofNat n x.natAbs := rfl\n\n/-! ### order -/\n\ntheorem le_def {a b : Fin n} : a ≤ b ↔ a.1 ≤ b.1 := .rfl\n\ntheorem lt_def {a b : Fin n} : a < b ↔ a.1 < b.1 := .rfl\n\n@[deprecated lt_def (since := \"2025-10-26\")]\n"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Fin/Basic.lean",
+      "sha256": "8e0eaf32283e9bf44c09b0a3d20a2a0944901c880b9977bf88233c17aca0f462",
+      "line_start": 532,
+      "line_end": 540,
+      "raw_excerpt": "theorem coe_natCast_eq_mod (m n : ℕ) [NeZero m] :\n    ((n : Fin m) : ℕ) = n % m :=\n  rfl\n\n@[simp]\ntheorem coe_ofNat_eq_mod (m n : ℕ) [NeZero m] :\n    ((ofNat(n) : Fin m) : ℕ) = ofNat(n) % m :=\n  rfl\n\n"
+    }
+  ],
+  "manuscript1106_inherited_unchanged": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "/workspace/chen-imbalanced-semiprimes/paper/release-20261106/en/sieve-appendix.tex",
+    "sha256": "15c9f561b870edb43ec1de3a8adf88b0b4561982f0617b58b26b1de966f9f9d8",
+    "line_start": 202,
+    "line_end": 218,
+    "raw_excerpt": "At rank eight a selected endpoint $M$ is compared with a valid\r\nupper bound $R_6$ for the inherited sixth cap.  The retained seventh\r\ncube and the additional condition $M-S_8<3t_8$ give\r\n\\begin{equation}\\label{sv:eighth-range}\r\n 1<\\frac{\\lambda_6-S_8}{t_8}\r\n \\le\\frac{R_6-S_8}{t_8}<\\frac{M-S_8}{t_8}<3.\r\n\\end{equation}\r\nConsequently \\eqref{sv:even-gain} is bounded below by the integral of\r\n\\begin{equation}\\label{sv:eighth-density}\r\n \\frac{4(M-R_6)}{(R_6-S_8)(M-S_8)\\prod_{i=1}^8t_i}.\r\n\\end{equation}\r\nEach chosen region must retain every full and selected-complement\r\nsquare, as well as all ancestor tests.  Regions acted upon at one\r\nstage have disjoint interiors.  Changes at different stages are\r\ncombined by the exact telescope\r\n$V_3-V_6=(V_3-V_4)+(V_4-V_5)+(V_5-V_6)$.\r\nFor each density difference we use one lower enclosure.\r\n"
+  },
+  "existing_mathematical_derivation": "LetP=t0+...+t5. H7=P+3t6<lambda3<=current andt7<t6 implyP+t6+2t7<P+3t6<current. WithS=P+t6+t7, t7<current−S. No extra positivity, genericR6, licence, mean or desiredgain premise needed.",
+  "API_pattern_boundary": "Uses the same local Fin.ext rfl normalization pattern as the earlier inherited-history candidate, and Fin.lt_def/val_mk/coe_ofNat_eq_mod names present in current H3 source. This metadata does not claim those imports or this candidate were recompiled or accepted by this static task.",
+  "no_Lean_Lake_kernel_audit_stock_or_numeric_replay": true
+}

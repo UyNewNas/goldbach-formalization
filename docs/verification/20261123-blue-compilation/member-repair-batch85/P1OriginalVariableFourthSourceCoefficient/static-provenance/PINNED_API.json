@@ -1,0 +1,95 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalHistoricalFifthOwnCubeAffineGates.lean",
+      "source_sha256": "9f11f5db2a2a1d289fa57d6eb57bd3dddfad858b3355da6f570d34eb37b3f931",
+      "start_line": 429,
+      "end_line": 449,
+      "role": "Exact same candidate filter theorem",
+      "raw_excerpt": "theorem truncated_candidates_filter (e chi : ℝ) (m : ℕ) (omega : ℝ)\n    (N cap : ℕ) (hN : 1 < N) (hcap : (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap : ℝ))\n    (j : Label5 m) (a : ℝ) :\n    (candidates e chi m omega N cap).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j ∧\n          actualPrimeTupleLog N p ∈ logPrimeBox (fun _ => a) (fun _ => (19 / 96 : ℝ))) =\n      (actualPrimeBoxTuples N (fun _ : Fin 5 => a) (fun _ => (19 / 96 : ℝ))).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell 0 (19 / 96) m j ∩\n          jointRegion e chi m omega j) := by\n  ext p\n  simp only [Finset.mem_filter, Set.mem_inter_iff]\n  constructor\n  · rintro ⟨hp, ht, hbox⟩\n    have hg := (mem_candidates_iff_log_on_cell e chi m omega N cap hN hcap p j ht).mp hp\n    exact ⟨(mem_actualPrimeBoxTuples_log_iff hN _ _ p).mpr\n      ⟨fun i => ⟨(hg.1 i).1, (hg.1 i).2.1⟩, hbox⟩, ht, hg.2⟩\n  · rintro ⟨hp, ht, hg⟩\n    have hpi := mem_actualPrimeBoxTuples_iff.mp hp\n    have hbox := ((mem_actualPrimeBoxTuples_log_iff hN _ _ p).mp hp).2\n    exact ⟨(mem_candidates_iff_log_on_cell e chi m omega N cap hN hcap p j ht).mpr\n      ⟨fun i => ⟨(hpi i).1, (hpi i).2.1, Nat.cast_nonneg _, (hpi i).2.2.2⟩, hg⟩, ht, hbox⟩\n",
+      "raw_excerpt_sha256": "879efcc0ad29c59254a9e0af33a4168c2afcf2a2ceef1d5948ed136c0c3a20e1"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean",
+      "source_sha256": "4efe88fc59e6b6e56c631573f94427a6853aa55ede0d2531ec8066d8bf635937",
+      "start_line": 154,
+      "end_line": 156,
+      "role": "candidates is the original literal frontier alias",
+      "raw_excerpt": "def candidates (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) : Finset (Fin 5 → ℕ) :=\n  firstExitFrontierTuples 4 (policy e chi m omega (N : ℝ))\n    (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (19 / 96 : ℝ)))\n",
+      "raw_excerpt_sha256": "9f59ba2d8ca4207fb72820cda8133ba4fb2613b8cf3cedc636b39a6a05c492d5"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFifthCellIntegral.lean",
+      "source_sha256": "229c42dce61c01e2964639a55161b7c8e5793caff9e7ac4a18813040571aecb6",
+      "start_line": 87,
+      "end_line": 87,
+      "role": "reciprocalWeight is the same finite product",
+      "raw_excerpt": "def reciprocalWeight (t : Fin 5 → ℝ) : ℝ := ∏ i, 1 / t i\n",
+      "raw_excerpt_sha256": "557238224eb0cffd5cd867655e65055c5202bc8269d5bf620d0bbfb78c1c54c2"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalCoarseFifthCellIntegral.lean",
+      "source_sha256": "229c42dce61c01e2964639a55161b7c8e5793caff9e7ac4a18813040571aecb6",
+      "start_line": 157,
+      "end_line": 168,
+      "role": "Existing difference of the two separately gated integrals",
+      "raw_excerpt": "theorem cellIntegral_eq_gated_difference (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)\n    {a : ℝ} (ha : 0 < a) (J4 : Finset (Label4 m)) (cap4 : Label4 m → ℚ)\n    (cap5 : Label5 m → ℚ) (j : Label5 m) :\n    cellIntegral e chi m omega a J4 cap4 cap5 j =\n      (∫ t in truncatedCell e chi m omega a j,\n        primeOwnCubeGatedProfile (cap5 j : ℝ) t * reciprocalWeight t) -\n      ∫ t in truncatedCell e chi m omega a j,\n        primeOwnCubeGatedProfile (old5 e chi m omega J4 cap4 j : ℝ) t * reciprocalWeight t := by\n  unfold cellIntegral cellKernel\n  simp_rw [sub_mul]\n  exact integral_sub (integrableOn_gatedWeightedProfile e chi m omega ha j _)\n    (integrableOn_gatedWeightedProfile e chi m omega ha j _)\n",
+      "raw_excerpt_sha256": "692a2ec6f1eadcd779fdacafa167f790024338fce69c0e94eb38f48e9c7be232"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P1OriginalVariableFourthContinuation.lean",
+      "source_sha256": "24957cfeb3d6e7278b035327e38d1823412f01f8bf56e402bc16a95c5bf3f58a",
+      "start_line": 35,
+      "end_line": 40,
+      "role": "Exact same finiteMax_row_le current argument order",
+      "raw_excerpt": "  exact Finset.le_max' _ seed (Finset.mem_insert_self _ _)\n\ntheorem finiteMax_row_le {ι : Type*} (rows : Finset ι) (eligible : ι → Prop)\n    (profile : ι → ℝ) (seed : ℝ) (r : ι) (hr : r ∈ rows) (he : eligible r) :\n    profile r ≤ finiteMax rows eligible profile seed := by\n  exact Finset.le_max' _ (profile r) (Finset.mem_insert_of_mem\n",
+      "raw_excerpt_sha256": "3532fe439da3ff48a43baa2045f7f53befd99d1b4f170bbada972271ee2f1985"
+    },
+    {
+      "path": "/workspace/blue-member-build/ImbalancedChen/P4AOriginalOrderedThirdAgreement.lean",
+      "source_sha256": "502af922994be89badbd425d9944111633885256fa8f5ba64deea54bfc537bdb",
+      "start_line": 12,
+      "end_line": 18,
+      "role": "Existing rational mesh endpoint cast-normalization proof shape",
+      "raw_excerpt": "private theorem lo_cast (m : ℕ) (j : Cell m) (i : Fin 3) :\n    (qLogPrimeMeshLo 0 (19/96) m j i : ℝ)=logPrimeMeshLo 0 (19/96) m j i := by\n  simpa only [Rat.cast_zero,Rat.cast_div,Rat.cast_ofNat] using congrFun (cast_qLogPrimeMeshLo 0 (19/96) m j) i\n\ntheorem hi_cast (m : ℕ) (j : Cell m) (i : Fin 3) :\n    (qLogPrimeMeshHi 0 (19/96) m j i : ℝ)=logPrimeMeshHi 0 (19/96) m j i := by\n  simpa only [Rat.cast_zero,Rat.cast_div,Rat.cast_ofNat] using congrFun (cast_qLogPrimeMeshHi 0 (19/96) m j) i\n",
+      "raw_excerpt_sha256": "55f3eadc8e5724e79ef8ed0b07d5d04a5a718599e870a1e010686e946541b7e6"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Bochner/Set.lean",
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "start_line": 141,
+      "end_line": 145,
+      "role": "Current empty setIntegral API",
+      "raw_excerpt": "  · simp [pairwise_univ, h's]\n\ntheorem setIntegral_empty : ∫ x in ∅, f x ∂μ = 0 := by\n  rw [Measure.restrict_empty, integral_zero_measure]\n\n",
+      "raw_excerpt_sha256": "7cff21e11e6855c65b1584d6968c0896acb28d9b38a9f07b63eb84ae5a5a087a"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Algebra/Notation/Indicator.lean",
+      "source_sha256": "cdffdb2811704a457253c1387d7e7ae784d9ba10f51bc38d3697bcfaf9ab4ef9",
+      "start_line": 68,
+      "end_line": 72,
+      "role": "to_additive generates Set.indicator_of_notMem",
+      "raw_excerpt": "\n@[to_additive (attr := simp)]\nlemma mulIndicator_of_notMem (h : a ∉ s) (f : α → M) : mulIndicator s f a = 1 := if_neg h\n\n@[to_additive]\n",
+      "raw_excerpt_sha256": "aa79d32cc59d336633cfdb9b1631af9a1a2d5ce0287df008865184f761f35472"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/Defs.lean",
+      "source_sha256": "0e71257b1ee1db6fb243f76c916f39332288323ca8ae00c85ac1271fd2deb0eb",
+      "start_line": 122,
+      "end_line": 128,
+      "role": "Current casts of numerals and zero",
+      "raw_excerpt": "@[simp, norm_cast] lemma cast_ofNat (n : ℕ) [n.AtLeastTwo] :\n    ((ofNat(n) : ℚ) : α) = (ofNat(n) : α) := by\n  simp [cast_def]\n\n@[simp, norm_cast]\ntheorem cast_zero : ((0 : ℚ) : α) = 0 :=\n  (cast_intCast _).trans Int.cast_zero\n",
+      "raw_excerpt_sha256": "9fad8b3ab88c46c0140258327faef38fb97b62c9415d40414c5614081d805447"
+    },
+    {
+      "path": "/workspace/goldbach-formalization/.lake/packages/mathlib/Mathlib/Data/Rat/Cast/CharZero.lean",
+      "source_sha256": "39c30fd995f1c9f0b8e74b8d494ee14295763c6d290c46b81af97a15d6bc3764",
+      "start_line": 63,
+      "end_line": 63,
+      "role": "Current rational quotient cast",
+      "raw_excerpt": "@[simp, norm_cast] lemma cast_div (p q : ℚ) : ↑(p / q) = (p / q : α) := map_div₀ (castHom α) ..\n",
+      "raw_excerpt_sha256": "1daa868a13d7f92a77f82bf847951cac1dd93f59fca3359cf0901ec9d5297a65"
+    }
+  ],
+  "already_verified_same_family": "CellTestLimit batch76 uses the same indicator_of_notMem spelling; no validated check was rerun here."
+}

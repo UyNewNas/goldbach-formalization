@@ -1,0 +1,92 @@
+{
+  "module": "ImbalancedChen.P4BSmoothProfileDirectionalDerivativeBudget",
+  "baseline": {
+    "path": "/workspace/p1-complete-proof/static-smooth-family-four-actual-api/P4BSmoothProfileDirectionalDerivativeBudget/baseline.lean",
+    "bytes": 12418,
+    "sha256": "64f59f5e133aee792de1d26b875ffc3e7d41ad95620518cead660f9d8a902ccd"
+  },
+  "candidate": {
+    "path": "/workspace/p1-complete-proof/static-smooth-family-four-actual-api/P4BSmoothProfileDirectionalDerivativeBudget/candidate.lean",
+    "bytes": 12430,
+    "sha256": "d411f868ba5a66b269efa64178e8efed1206f7c17b21f4eb35401ce5202a67bf"
+  },
+  "source_commands": 8,
+  "definitions": 1,
+  "changed_proofs": [
+    "iteratedDeriv_comp_real_affine",
+    "abs_iteratedDeriv_two_mul_le"
+  ],
+  "proof_replacements": [
+    {
+      "before": "    (hf.of_le (by simp)).comp (contDiff_const.add contDiff_id)",
+      "after": "    (contDiff_infty.mp hf k).comp (contDiff_const.add contDiff_id)",
+      "reason": "Extract exactly natural order k from the same C-infinity hypothesis using its existing characterization, avoiding a failed simplifier proof of the nested order bound."
+    },
+    {
+      "before": "  have hfK : ContDiffAt ℝ k f x := (hf.of_le (by simp)).contDiffAt",
+      "after": "  have hfK : ContDiffAt ℝ k f x := (contDiff_infty.mp hf k).contDiffAt",
+      "reason": "Same existing C-infinity premise supplies its order-k pointwise differentiability, with no new derivative assumption."
+    },
+    {
+      "before": "  have hgK : ContDiffAt ℝ k g x := (hg.of_le (by simp)).contDiffAt",
+      "after": "  have hgK : ContDiffAt ℝ k g x := (contDiff_infty.mp hg k).contDiffAt",
+      "reason": "Same C-infinity-to-order-k characterization for the second original factor."
+    }
+  ],
+  "all_complete_headers_definitions_imports_comments_data_hypotheses_quantifiers_licences_and_budgets_raw_exact": true,
+  "header_or_definition_exceptions": [],
+  "mathematical_boundary": "Same arbitrary fixed natural k, exact scalar affine and binomial Leibniz identities, four actual wall factors, R=0 and k=0 included, width^-k and exactly k powers of the original logN and norm direction. Constants selected before widths/targets/cutoffs/points/directions. No analytic or P3/PP licence or higher derivative budget premise.",
+  "substantive_mathematical_gap_found": false,
+  "actual_failure": {
+    "observation": "/workspace/p1-complete-proof/modern-p1-build/incremental-six-root-after-source-repairs/failure-observation-0005/ACTUAL_FAILURES.json",
+    "prefix_sha256": "8f5f7fbf5e9a22b160471d95f9c95951fe906db17920858de39ce0a3063e5b1a",
+    "prefix_bytes": 6798176,
+    "slice_sha256": "167e7de3732a62ff74b30adeb6daab21c68b57048eb8e967c35657030d8e5d8c",
+    "raw_byte_start": 6780913,
+    "raw_byte_end_exclusive": 6782969,
+    "source_pre_sha256": "64f59f5e133aee792de1d26b875ffc3e7d41ad95620518cead660f9d8a902ccd",
+    "unit_source_compile_exit": 1,
+    "whole_aggregate_final_exit_not_claimed": true
+  },
+  "existing_published_lookup": {
+    "scope": "Exact4filenames all-ref Git log and returned commit:path payloads only; no broad history/object/network scan.",
+    "rows": [
+      {
+        "commit": "b2c20e789cd9026661bbc11eaae0e53fba9e94e5",
+        "path": "ImbalancedChen/P4BSmoothProfileDirectionalDerivativeBudget.lean",
+        "exists": true,
+        "sha256": "64f59f5e133aee792de1d26b875ffc3e7d41ad95620518cead660f9d8a902ccd",
+        "bytes": 12418,
+        "blob": "5e1b8e49e83ffd87831a2e6ddac6ae91081ac4a1",
+        "same_preimage": true
+      },
+      {
+        "commit": "ed77a85f25e3d1e0e745745c355ddfd26795beef",
+        "path": "ImbalancedChen/P4BSmoothProfileDirectionalDerivativeBudget.lean",
+        "exists": false,
+        "git_exit_code": 128
+      },
+      {
+        "commit": "3d4e8c2e3f62d40b92ef522bcb42c07d763ba823",
+        "path": "ImbalancedChen/P4BSmoothProfileDirectionalDerivativeBudget.lean",
+        "exists": true,
+        "sha256": "64f59f5e133aee792de1d26b875ffc3e7d41ad95620518cead660f9d8a902ccd",
+        "bytes": 12418,
+        "blob": "5e1b8e49e83ffd87831a2e6ddac6ae91081ac4a1",
+        "same_preimage": true
+      },
+      {
+        "commit": "368736567624353986efd3b6d6c5ccef97e8b535",
+        "path": "ImbalancedChen/P4BSmoothProfileDirectionalDerivativeBudget.lean",
+        "exists": true,
+        "sha256": "7df5211f171b39dc9820799be6bbd8712ccd3f876e316def8ea736bb3453df3f",
+        "bytes": 12408,
+        "blob": "08abc9b1f7c4fa20a59a43d0b5234759b29a8ad5",
+        "same_preimage": false,
+        "why_not_reuse": "Earlier2026-10-24 draft lacks current ContDiff scope and has older wrong MeanValue norm_deriv API/order. It retains all three actual of_le(by simp) failures; not an existing repair for this exact contract."
+      }
+    ],
+    "no_reliable_exact_repaired_post_found": true
+  },
+  "status": "ISOLATED_UNCOMPILED_PENDING_NONAUTHOR_REVIEW_AND_OWNER_ACTUAL_VALIDATION"
+}

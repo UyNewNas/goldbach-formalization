@@ -1,0 +1,22 @@
+private theorem append_source_index
+    {xs ys : Array StoredParent} {start n m : ℕ}
+    (hx : xs.size = n ∧ ∀ j : Fin xs.size, (xs[j.val]).sourceIndex = start + j.val)
+    (hy : ys.size = m ∧ ∀ j : Fin ys.size, (ys[j.val]).sourceIndex = start + n + j.val) :
+    (xs ++ ys).size = n + m ∧
+      ∀ j : Fin (xs ++ ys).size, ((xs ++ ys)[j.val]).sourceIndex = start + j.val := by
+  refine ⟨by rw [Array.size_append, hx.1, hy.1], ?_⟩
+  intro j
+  by_cases hj : j.val < xs.size
+  · rw [Array.getElem_append_left hj]
+    exact hx.2 ⟨j.val, hj⟩
+  · have hle : xs.size ≤ j.val := Nat.le_of_not_lt hj
+    have hlt : j.val - xs.size < ys.size := by
+      have hbound := j.isLt
+      rw [Array.size_append] at hbound
+      omega
+    rw [Array.getElem_append_right hle]
+    have hind : (ys[j.val - xs.size]).sourceIndex = start + n + (j.val - xs.size) :=
+      hy.2 ⟨j.val - xs.size, hlt⟩
+    rw [hind]
+    have hsize : xs.size = n := hx.1
+    omega

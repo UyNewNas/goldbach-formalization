@@ -34,6 +34,7 @@ def multiplier (t : Four) : ℕ := t.1.1 * t.1.2 * t.2.1 * t.2.2
 with units and squareful receivers retained. -/
 theorem siftedSource_subset_lowered (N b : ℕ) (low high : ℝ) (h : low ≤ high) :
     chenSiftedQuotientPrimeSource N b high ⊆ chenSiftedQuotientPrimeSource N b low := by
+  classical
   intro q hq
   obtain ⟨hqc, hr⟩ := Finset.mem_filter.mp hq
   exact Finset.mem_filter.mpr ⟨hqc, fun p hp hpd => h.trans (hr p hp hpd)⟩
