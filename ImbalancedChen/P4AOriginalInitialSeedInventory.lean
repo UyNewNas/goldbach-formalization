@@ -127,10 +127,11 @@ theorem roots0_to14_overlap (i : Fin 21)
   apply witness_mem_of_geometry
   all_goals
     try (intro j; fin_cases j)
-    all_goals
-      fin_cases i <;>
-        norm_num [witness,recordAt,records,decodeCoordinates,
-          coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R] at hi ⊢
+  all_goals fin_cases i
+  all_goals norm_num at hi
+  all_goals
+    norm_num [witness,recordAt,records,decodeCoordinates,
+      coordinateDenominator,thirdPrefixTheta,thirdPrefixRho,H,M,R]
 
 /-- Root 13 has only x≤mu≤y, whereas the ordered domain requires y≤x.
 The forced equality x=y=mu violates the old-cube test already at z=8h. -/
@@ -161,7 +162,8 @@ theorem initial15_overlap_iff (i : Fin 21) (hi : i.1 < 15) :
     have heq : i = (⟨13,by decide⟩ : Fin 21) := Fin.ext h13
     subst i
     rcases hn with ⟨t,ht⟩
-    simp [root13_empty] at ht
+    rw [root13_empty] at ht
+    exact ht
   · intro h13
     apply roots0_to14_overlap i
     omega

@@ -88,6 +88,12 @@ private theorem compactThirdAdmitted_three (Q : List ℕ → ℝ) (N cap : ℕ)
     rw [decide_eq_true_eq, historicalUnorderedThird_admissible_iff _ p0 p1 p2 hp2 h21 h10,
       hprod]
     exact and_iff_right hfirst
+  have hgated : actualOwnCubeGatedMinusDensity N cap Q [p2, p1, p0] =
+      (if (([p2, p1, p0].prod : ℕ) : ℝ) * (p2 : ℝ) ^ 2 < Q [p2, p1, p0] then
+        actualSmallRosserMinusDensity N cap (p2 : ℝ)
+          (Q [p2, p1, p0] / (([p2, p1, p0].prod : ℕ) : ℝ))
+      else 0) := rfl
+  rw [hgated]
   unfold compactThirdAdmitted
   by_cases hc : (([p2, p1, p0].prod : ℕ) : ℝ) * (p2 : ℝ) ^ 2 < Q [p2, p1, p0]
   · rw [if_pos (htest.mpr hc)]
@@ -98,10 +104,8 @@ private theorem compactThirdAdmitted_three (Q : List ℕ → ℝ) (N cap : ℕ)
       hadm hsort hP hcut false mass rfl
     have hres : ordinaryRosserResidualLower false 3 = true := by decide
     rw [hd]
-    simp only [hres, if_true, signedTreeCoefficient_false,
-      actualOwnCubeGatedMinusDensity, List.headD_cons, if_pos hc]
+    simp only [hres, if_true, signedTreeCoefficient_false, if_pos hc]
   · rw [if_neg (fun ht => hc (htest.mp ht))]
-    dsimp only [actualOwnCubeGatedMinusDensity, List.headD_cons]
     simp only [if_neg hc, mul_zero]
 
 private theorem compactUpper_ownSplice (e h : ℝ) (m N : ℕ) :
