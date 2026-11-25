@@ -4,7 +4,17 @@
 
 本轮接续 `eac59fac68a389eee5d15c3c44eb9dd487049ab9` 的已验收共同区间接口，
 把 P3.2 已有的真实 `PacketData` Fourier producer 接入它。
-**当前为已实现待编译；本文件的后续验收段只能依据实际云端回执更新。**
+**本轮接口已通过 P3 云端验收。** 固定源码提交为
+`acfa81c6d593276ef50f8af4e4f79b150772d7c8`，成功任务为
+`691cc77d9c654ec4954ded0f1b7bc02d`。严格编译、bundled `leanchecker`
+重放、完整声明枚举及传递公理审计均通过；新增 10 个声明包含 6 条定理和
+4 个定义。验收完成时间为北京时间 2026-11-26 01:03:54。
+
+最终归档提交只更新文档和证据；实际 Lean 源码与验收器固定在上述源码提交。
+机器可读的结论见 `ACCEPTANCE.json`，云端任务原始元数据见 `RUN.json`，
+完整回执见 `verification.zip`，主要日志另展开在 `verification/` 便于浏览。
+独立产物复核 `ARTIFACT_REVIEW.json` 核对了 105 个源码/配置哈希、
+35 份阶段日志、完整声明清单及对象冻结证据，未发现问题，也未重复运行 Lean。
 
 正式入口为 `ImbalancedChen.Part3Node31`。本轮新增数学模块只有
 `ImbalancedChen.Part3ActualCommonCompletedInterface`，其余七个恢复的 Lean
@@ -67,11 +77,16 @@ replay、P3.2 新回执中的对象绑定和本轮新模块的严格复编。旧
 
 ## 可复核的增量验收
 
+以下命令应在固定源码提交 `acfa81c6d593276ef50f8af4e4f79b150772d7c8`
+的干净工作树中运行。`actual-interface` 是显式增量组，旧 `--group all`
+不会自动纳入本模块。
+
 ```sh
 python3 -B verification/verify_part3_continuation.py --source-only \
   --group actual-interface --output-dir .lake/p31-actual-source-check
-python3 -B verification/verify_part3_continuation.py \
-  --group actual-interface --expected-head "$(git rev-parse HEAD)" \
+LEAN_NUM_THREADS=1 python3 -B verification/verify_part3_continuation.py \
+  --group actual-interface \
+  --expected-head acfa81c6d593276ef50f8af4e4f79b150772d7c8 \
   --output-dir .lake/p31-actual-interface-verification
 ```
 
@@ -81,10 +96,27 @@ python3 -B verification/verify_part3_continuation.py \
 bundled `leanchecker` replay；已验收 provider 不重复申领 fresh replay 信用。
 通常的缺失依赖构建与证明重新验收明确区分。
 
+本次实测完整任务耗时 471.255 秒，峰值内存 8,549,105,664 字节。
+验收器的 35 个阶段全部退出码为 0；其中新增模块严格编译 7.948 秒、
+内核重放 8.906 秒、声明与公理审计 301.830 秒。实际项目闭包共 64 个模块，
+依赖对象在严格编译期间保持不变，全部项目对象在重放和审计后保持不变。
+10 个完整声明的传递公理均仅含 `propext`、`Classical.choice` 和 `Quot.sound`。
+
+首次任务在依赖构建阶段超过 10,000 MB 服务内存限制而终止，未形成通过回执。
+保持源码不变，将任务限制提高为 13,107 MB 并改为单线程后验收通过。
+两次任务的服务状态都如实保存在 `RUN.json`，失败尝试的日志在归档
+`prior-memory-attempt/` 中；不会将其未结束的 `RUNNING` 报告算作通过。
+
+证明归档为 77,130 字节、43 个成员，SHA256：
+`c292e9bd98bfd7d4e788312054658b924b8dd86e4e5ae0e6c861ac7a47e248ba`。
+
 ## 未由本次接口关闭的责任
 
 source68 的 WindowGate/FiniteCover 附件不在本次导入闭包，仍单列为原始源码
-恢复及验收问题。原 `MediumAtom` 到全部实际 automorphic packet 的族构造，
+恢复及验收问题。`SOURCE68_RECOVERY.json` 记录了已完成的 P1 检索与其边界：
+142,456 个普通文件、129 个候选归档路径和 6 个 Git 对象库中，已检查部分未找到
+两份已知源字节；一个大 ZIP 的专项补查在该记录冻结时仍排队，P2 和备用环境
+未完成源码检查。这不是全局缺源结论。原 `MediumAtom` 到全部实际 automorphic packet 的族构造，
 以及 regular/exceptional/Plancherel 完整组装、zero/tail 的物理支付和 7/32
 最终返回属于 P3.5 后续责任。本次不声称完整 P3 或最终 1+1.7482 已证明。
 

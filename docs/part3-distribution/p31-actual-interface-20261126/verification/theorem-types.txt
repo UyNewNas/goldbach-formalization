@@ -1,0 +1,346 @@
+head_commit=acfa81c6d593276ef50f8af4e4f79b150772d7c8
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.fullBlock_weight_sum_eq_mCarrier :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ)
+  (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (j : Nat),
+  @LE.le.{0} (Finset.{0} Nat)
+      (@Preorder.toLE.{0} (Finset.{0} Nat)
+        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P)
+      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) →
+    ∀ (b : Nat → Complex),
+      @Eq.{1} Complex
+        (∑ m ∈ ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            ((@P3ActualLiteralPacketIntegralSourceOnly.PacketData.completed.{u_1} κ P k).weight m) (b m))
+        (∑ m ∈ @P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            ((@P3ActualLiteralPacketIntegralSourceOnly.PacketData.completed.{u_1} κ P k).weight m) (b m))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.modeCore_eq_fullBlock :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ)
+  (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (j : Nat) (q : Real),
+  @LE.le.{0} (Finset.{0} Nat)
+      (@Preorder.toLE.{0} (Finset.{0} Nat)
+        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P)
+      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) →
+    @Eq.{1} Complex (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.modeCore.{u_1} κ P k q)
+      (∑ row ∈ @P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P,
+        ∑ m ∈ ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            ((@P3ActualLiteralPacketIntegralSourceOnly.PacketData.completed.{u_1} κ P k).weight m)
+            (∑ n ∈ @P3ActualLiteralPacketIntegralSourceOnly.PacketData.nCarrier.{u_1} κ P row,
+              @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient
+                  (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.negativeCusp.{u_1} κ P)
+                  (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                    (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.packet.{u_1} κ P row) k
+                    (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.U.{u_1} κ P)
+                    (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.Z.{u_1} κ P))
+                  n)
+                (@DFunLike.coe.{1, 1, 1}
+                  (@ContinuousMap.{0, 0} Real Complex
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@UniformSpace.toTopologicalSpace.{0} Complex
+                      (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                        (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                          (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                            (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                              (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))))))
+                  Real (fun x => Complex)
+                  (@ContinuousMap.instFunLike.{0, 0} Real Complex
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@UniformSpace.toTopologicalSpace.{0} Complex
+                      (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                        (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                          (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                            (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                              (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))))))
+                  (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.kernel.{u_1} κ P row m n) q)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.modeCore_eq_sum_nSide_mul_mSide :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ)
+  (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (q : Real) (Rone Rinf : κ → Nat → Complex),
+  (∀ (row : κ),
+      @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+          (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ (@Finset.instSetLike.{u_1} κ))
+          (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) row →
+        ∀ (m : Nat),
+          @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+              (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+              (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P) m →
+            ∀ (n : Nat),
+              @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+                  (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+                  (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.nCarrier.{u_1} κ P row) n →
+                @Eq.{1} Complex
+                  (@DFunLike.coe.{1, 1, 1}
+                    (@ContinuousMap.{0, 0} Real Complex
+                      (@UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@UniformSpace.toTopologicalSpace.{0} Complex
+                        (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                          (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                            (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                                (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))))))
+                    Real (fun x => Complex)
+                    (@ContinuousMap.instFunLike.{0, 0} Real Complex
+                      (@UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@UniformSpace.toTopologicalSpace.{0} Complex
+                        (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                          (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                            (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                                (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex)))))))
+                    (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.kernel.{u_1} κ P row m n) q)
+                  (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (Rone row n)
+                    (Rinf row m))) →
+    @Eq.{1} Complex (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.modeCore.{u_1} κ P k q)
+      (∑ row ∈ @P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P,
+        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (@ImbalancedChen.Part3.ActualCommonCompletedInterface.nSide.{u_1} κ P k row (Rone row))
+          (@ImbalancedChen.Part3.ActualCommonCompletedInterface.mSide.{u_1} κ P k (Rinf row)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.rowPair_eq_nSide_mul_mSide :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ)
+  (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (row : κ) (Rone Rinf : Nat → Complex),
+  @Eq.{1} Complex (@ImbalancedChen.Part3.ActualCommonCompletedInterface.rowPair.{u_1} κ P k row Rone Rinf)
+    (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+      (@ImbalancedChen.Part3.ActualCommonCompletedInterface.nSide.{u_1} κ P k row Rone)
+      (@ImbalancedChen.Part3.ActualCommonCompletedInterface.mSide.{u_1} κ P k Rinf))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.spectral_mSide_weightedEnergy_le :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ) (Height : κ → Type u_2)
+  [inst : (row : κ) → Fintype.{u_2} (Height row)] (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (j : Nat),
+  @LE.le.{0} (Finset.{0} Nat)
+      (@Preorder.toLE.{0} (Finset.{0} Nat)
+        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P)
+      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) →
+    ∀ (bound : Real) {W T cap : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) W →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) T →
+          ∀
+            (exponent :
+              @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height → Real),
+            (∀ (i : @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height),
+                @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+                  (exponent i)) →
+              (∀ (i : @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height),
+                  @LE.le.{0} Real Real.instLE (exponent i) cap) →
+                ∀
+                  (Rinf :
+                    @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height →
+                      Nat → Complex),
+                  (∀ (ρ : Real),
+                      @LE.le.{0} Real Real.instLE
+                        (@ImbalancedChen.Part3.ExceptionalWeightExtension.weightedEnergy.{max u_1 u_2}
+                          (@ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height)
+                          (@Sigma.instFintype.{u_1, u_2}
+                            (↥(@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P))
+                            (fun row =>
+                              Height
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  row))
+                            (fun i =>
+                              inst
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  i))
+                            (@Finset.Subtype.fintype.{u_1} κ
+                              (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P)))
+                          (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) ρ T exponent Rinf)
+                        bound) →
+                    @LE.le.{0} Real Real.instLE
+                      (∑ i,
+                        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) W (exponent i))
+                          (@HPow.hPow.{0, 0, 0} Real Nat Real
+                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                            (@Norm.norm.{0} Complex Complex.instNorm
+                              (@ImbalancedChen.Part3.ActualCommonCompletedInterface.mSide.{u_1} κ P k (Rinf i)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@OfNat.ofNat.{0} Real (nat_lit 4)
+                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                            (@HPow.hPow.{0, 0, 0} Real Nat Real
+                              (@instHPow.{0, 0} Real Nat
+                                (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                                    (@Nat.instAtLeastTwoHAddOfNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                      (@Nat.instNeZeroSucc
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                                (Real.log
+                                  (@Nat.cast.{0} Real Real.instNatCast
+                                    (ImbalancedChen.Part3.CommonIntervalFourier.period j))))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (@Max.max.{0} Real Real.instMax
+                              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) W T)
+                                cap)))
+                          bound))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCommonCompletedInterface.spectral_pair_norm_sq_le :
+∀ {κ : Type u_1} (P : P3ActualLiteralPacketIntegralSourceOnly.PacketData.{u_1} κ) (Height : κ → Type u_2)
+  [inst : (row : κ) → Fintype.{u_2} (Height row)] (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (j : Nat),
+  @LE.le.{0} (Finset.{0} Nat)
+      (@Preorder.toLE.{0} (Finset.{0} Nat)
+        (@PartialOrder.toPreorder.{0} (Finset.{0} Nat) (@Finset.instPartialOrder.{0} Nat)))
+      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.mCarrier.{u_1} κ P)
+      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) →
+    ∀ (bound : Real) {W T cap : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) W →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) T →
+          ∀
+            (exponent :
+              @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height → Real),
+            (∀ (i : @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height),
+                @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+                  (exponent i)) →
+              (∀ (i : @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height),
+                  @LE.le.{0} Real Real.instLE (exponent i) cap) →
+                ∀
+                  (Rone Rinf :
+                    @ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height →
+                      Nat → Complex),
+                  (∀ (ρ : Real),
+                      @LE.le.{0} Real Real.instLE
+                        (@ImbalancedChen.Part3.ExceptionalWeightExtension.weightedEnergy.{max u_1 u_2}
+                          (@ImbalancedChen.Part3.ActualCommonCompletedInterface.SpectralIndex.{u_1, u_2} κ P Height)
+                          (@Sigma.instFintype.{u_1, u_2}
+                            (↥(@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P))
+                            (fun row =>
+                              Height
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  row))
+                            (fun i =>
+                              inst
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  i))
+                            (@Finset.Subtype.fintype.{u_1} κ
+                              (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P)))
+                          (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) ρ T exponent Rinf)
+                        bound) →
+                    @LE.le.{0} Real Real.instLE
+                      (@HPow.hPow.{0, 0, 0} Real Nat Real
+                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                        (@Norm.norm.{0} Complex Complex.instNorm
+                          (∑ i,
+                            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                              (↑(@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) W
+                                    (exponent i)).sqrt)
+                              (@ImbalancedChen.Part3.ActualCommonCompletedInterface.rowPair.{u_1} κ P k
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  (@Sigma.fst.{u_1, u_2}
+                                    (↥(@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P))
+                                    (fun row =>
+                                      Height
+                                        (@Subtype.val.{u_1 + 1} κ
+                                          (fun x =>
+                                            @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                              (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                                (@Finset.instSetLike.{u_1} κ))
+                                              (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                          row))
+                                    i))
+                                (Rone i) (Rinf i))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (∑ i,
+                          @HPow.hPow.{0, 0, 0} Real Nat Real
+                            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                            (@Norm.norm.{0} Complex Complex.instNorm
+                              (@ImbalancedChen.Part3.ActualCommonCompletedInterface.nSide.{u_1} κ P k
+                                (@Subtype.val.{u_1 + 1} κ
+                                  (fun x =>
+                                    @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                        (@Finset.instSetLike.{u_1} κ))
+                                      (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                  (@Sigma.fst.{u_1, u_2}
+                                    (↥(@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P))
+                                    (fun row =>
+                                      Height
+                                        (@Subtype.val.{u_1 + 1} κ
+                                          (fun x =>
+                                            @Membership.mem.{u_1, u_1} κ (Finset.{u_1} κ)
+                                              (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} κ) κ
+                                                (@Finset.instSetLike.{u_1} κ))
+                                              (@P3ActualLiteralPacketIntegralSourceOnly.PacketData.rows.{u_1} κ P) x)
+                                          row))
+                                    i))
+                                (Rone i)))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                          (@OfNat.ofNat.{0} Real (nat_lit 4)
+                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                              (@Nat.instAtLeastTwoHAddOfNat
+                                (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                                (@instHPow.{0, 0} Real Nat
+                                  (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                                (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                                  (@OfNat.ofNat.{0} Real (nat_lit 2)
+                                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                                      (@Nat.instAtLeastTwoHAddOfNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                        (@Nat.instNeZeroSucc
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                                  (Real.log
+                                    (@Nat.cast.{0} Real Real.instNatCast
+                                      (ImbalancedChen.Part3.CommonIntervalFourier.period j))))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              (@Max.max.{0} Real Real.instMax
+                                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                                (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) W T)
+                                  cap)))
+                            bound)))
+axioms=propext,Classical.choice,Quot.sound
