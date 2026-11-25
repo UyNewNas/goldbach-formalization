@@ -1,0 +1,76 @@
+end ImbalancedChen.P2OriginalSaving19Original28918
+
+namespace ImbalancedChen.P2OriginalSaving19RowNumerics
+
+open scoped BigOperators
+open P2OriginalSaving19Original28918
+open P2OriginalSaving19Archive
+open P2OriginalLogMomentQ96CheckerSourceOnly
+
+def edgeOf (v : Fin 9 → QPoint) : Matrix (Fin 8) (Fin 8) ℚ :=
+  fun i j => v j.succ i - v 0 i
+
+def gapSumOf (v : Fin 9 → QPoint) : ℚ := ∑ i : Fin 9, gapQ (v i)
+
+def massOf (g : GeometryRow) : ℚ := g.physicalVolume * g.meanGap
+
+def meansOf (g : GeometryRow) (j : Fin 10) : ℚ := g.gapWeightedMeans[j.val]!
+
+def topsOf (g : GeometryRow) (j : Fin 10) : ℚ := g.factorMaxima[j.val]!
+
+def computedMeanOf (v : Fin 9 → QPoint) (j : Fin 10) : ℚ :=
+  ((∑ i : Fin 9, factorsQ (v i) j) +
+    (∑ i : Fin 9, gapQ (v i) * factorsQ (v i) j) / gapSumOf v) / 10
+
+/-- All ten original finite obligations, with the original determinant
+specification. No actual row is supplied or certified by this definition. -/
+def RowDataChecksFor (v : Fin 9 → QPoint) (g : GeometryRow) : Prop :=
+  (edgeOf v).det ≠ 0 ∧
+  (∀ i, PhysicalQ (v i)) ∧
+  0 < gapSumOf v ∧
+  g.physicalVolume = |(edgeOf v).det| / (Nat.factorial 8 : ℚ) ∧
+  g.meanGap = gapSumOf v / 9 ∧
+  (∀ j, meansOf g j = computedMeanOf v j) ∧
+  (∀ i j, factorsQ (v i) j ≤ topsOf g j) ∧
+  (∀ j, ∃ i : Fin 9, factorsQ (v i) j = topsOf g j) ∧
+  g.jensenBound = oldEvaluator (massOf g) (meansOf g) ∧
+  g.jensenFloorQ96 = oldFloorQ96 (massOf g) (meansOf g)
+
+instance (v : Fin 9 → QPoint) (g : GeometryRow) : Decidable (RowDataChecksFor v g) := by
+  unfold RowDataChecksFor
+  infer_instance
+
+/-- Definitional bridge to the original row-specific formula for any index
+type and any actual vertex/row selectors. The right side is the original
+formula with its seven row-local definitions abstracted as lets. Neither
+side is assumed true, and no archive success or numerical guard is used. -/
+theorem rowDataChecksFor_iff_originalForm {R : Type*}
+    (rawVertex : R → Fin 9 → QPoint) (rawGeometryRow : R → GeometryRow) (r : R) :
+    RowDataChecksFor (rawVertex r) (rawGeometryRow r) ↔
+      let edgeQ : R → Matrix (Fin 8) (Fin 8) ℚ := fun s i j =>
+        rawVertex s j.succ i - rawVertex s 0 i
+      let gapSumQ : R → ℚ := fun s => ∑ i : Fin 9, gapQ (rawVertex s i)
+      let volumeQ : R → ℚ := fun s => (rawGeometryRow s).physicalVolume
+      let massQ : R → ℚ := fun s => volumeQ s * (rawGeometryRow s).meanGap
+      let meansQ : R → Fin 10 → ℚ := fun s j =>
+        (rawGeometryRow s).gapWeightedMeans[j.val]!
+      let topsQ : R → Fin 10 → ℚ := fun s j =>
+        (rawGeometryRow s).factorMaxima[j.val]!
+      let computedMeanQ : R → Fin 10 → ℚ := fun s j =>
+        ((∑ i : Fin 9, factorsQ (rawVertex s i) j) +
+          (∑ i : Fin 9, gapQ (rawVertex s i) * factorsQ (rawVertex s i) j) / gapSumQ s) / 10
+      (edgeQ r).det ≠ 0 ∧
+      (∀ i, PhysicalQ (rawVertex r i)) ∧
+      0 < gapSumQ r ∧
+      volumeQ r = |(edgeQ r).det| / (Nat.factorial 8 : ℚ) ∧
+      (rawGeometryRow r).meanGap = gapSumQ r / 9 ∧
+      (∀ j, meansQ r j = computedMeanQ r j) ∧
+      (∀ i j, factorsQ (rawVertex r i) j ≤ topsQ r j) ∧
+      (∀ j, ∃ i : Fin 9, factorsQ (rawVertex r i) j = topsQ r j) ∧
+      (rawGeometryRow r).jensenBound = oldEvaluator (massQ r) (meansQ r) ∧
+      (rawGeometryRow r).jensenFloorQ96 = oldFloorQ96 (massQ r) (meansQ r) :=
+  Iff.rfl
+
+#print axioms rowDataChecksFor_iff_originalForm
+
+end ImbalancedChen.P2OriginalSaving19RowNumerics
