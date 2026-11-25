@@ -71,3 +71,13 @@ Every new module still requires all three gates: strict ordinary compilation,
 independent stock `leanchecker`, and complete owned-declaration/type/axiom audit.
 Generated per-job caches do not stand in for those receipts. No private cloud
 cache, environment variables or credentials are part of the source checkpoint.
+
+## Accepted-prefix assembly
+
+The accepted prefix ends at page 0127, but its final block aggregator
+`P2Winner9NumericalCheck07` has not yet been installed. The existing original
+candidate is reused unchanged and will be verified during final assembly.
+This does not rerun its already accepted pages or claim new numerical rows.
+
+The archived seed-data ownership candidates and optional shared-scale checker
+remain source only. They are not active imports of the numerical matrix.
