@@ -253,7 +253,9 @@ theorem chenInitialBoundingSieve_totalMass_eq_sum (N : ℕ) (z : ℝ) (hN : Even
     (chenInitialBoundingSieve N z hN).totalMass =
       ∑ n ∈ (chenInitialBoundingSieve N z hN).support,
         (chenInitialBoundingSieve N z hN).weights n := by
-  simp [chenInitialBoundingSieve, chenPrimeReceiverSource_card]
+  change ((chenAdditivePrimeCarrier N).card : ℝ) =
+    ∑ _n ∈ chenPrimeReceiverSource N, (1 : ℝ)
+  simp [chenPrimeReceiverSource_card]
 
 theorem chenInitialBoundingSieve_prime_density (N : ℕ) (z : ℝ) (hN : Even N)
     {q : ℕ} (hq : Nat.Prime q) :

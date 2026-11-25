@@ -182,7 +182,7 @@ theorem actualPrimeNextSelection_rank_four_exists
     exact ⟨hsort.1 p4 (by simp), hsort.2.1 p3 (by simp),
       hsort.2.2.1 p2 (by simp), hsort.2.2.2.1 p1 (by simp)⟩
   exact ⟨p1, p2, p3, p4, p5, hf, hs, hord.1, hord.2.1, hord.2.2.1,
-    hord.2.2.2, hp5, hp5.one_lt, by simpa [evenListLength] using hsign,
+    hord.2.2.2, hp5, hp5.one_lt, by simpa [evenListLength_nil, evenListLength_cons] using hsign,
     hmass, by simpa only [List.headD_cons] using hremaining⟩
 
 end

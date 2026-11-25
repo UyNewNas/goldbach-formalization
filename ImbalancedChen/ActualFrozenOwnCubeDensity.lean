@@ -179,7 +179,7 @@ theorem actual_frozen_lower_four_candidate_density
     simp only [List.pairwise_cons] at hsort
     exact ⟨hsort.1 p3 (by simp), hsort.2.1 p2 (by simp), hsort.2.2.1 p1 (by simp)⟩
   obtain ⟨h43, h32, h21⟩ := hord
-  have htrue : candidate.positive = true := by simpa [evenListLength] using hsign
+  have htrue : candidate.positive = true := by simpa [evenListLength_nil, evenListLength_cons] using hsign
   rw [hf, hs] at hpre
   have hfilter : ([p3, p2, p1].toFinset.filter (fun p => p2 ≤ p)) = {p2, p1} := by
     ext p

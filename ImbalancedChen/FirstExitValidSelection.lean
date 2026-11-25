@@ -30,17 +30,17 @@ theorem exists_firstExitRetainedLeaf_of_validSelection
       leaf.selected = chosen.reverse ++ pre := by
   induction hsub generalizing pre positive mass with
   | slnil =>
-      exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves], by simp⟩
+      exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons], by simp⟩
   | cons p hsub ih =>
       obtain ⟨leaf, hleaf, heq⟩ := ih pre positive mass hvalid
       refine ⟨leaf, ?_, heq⟩
-      rw [firstExitRetainedLeaves]
+      rw [firstExitRetainedLeaves_cons]
       exact List.mem_append_left _ hleaf
   | cons_cons p hsub ih =>
       obtain ⟨hleafTest, htail⟩ := hvalid
       obtain ⟨leaf, hleaf, heq⟩ := ih (p :: pre) (!positive) (mass * h p) htail
       refine ⟨leaf, ?_, ?_⟩
-      · rw [firstExitRetainedLeaves, if_pos hleafTest]
+      · rw [firstExitRetainedLeaves_cons, if_pos hleafTest]
         exact List.mem_append_right _ hleaf
       · simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using heq
 
@@ -54,11 +54,11 @@ theorem exists_validSelection_of_mem_firstExitRetainedLeaves
         leaf.selected = chosen.reverse ++ pre := by
   induction remaining generalizing pre positive mass with
   | nil =>
-      simp only [firstExitRetainedLeaves, List.mem_singleton] at hleaf
+      simp only [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, List.mem_singleton] at hleaf
       subst leaf
       exact ⟨[], List.Sublist.refl [], trivial, by simp⟩
   | cons p ps ih =>
-      rw [firstExitRetainedLeaves, List.mem_append] at hleaf
+      rw [firstExitRetainedLeaves_cons, List.mem_append] at hleaf
       rcases hleaf with hskip | hselect
       · obtain ⟨chosen, hsub, hvalid, heq⟩ := ih pre positive mass hskip
         exact ⟨chosen, hsub.cons p, hvalid, heq⟩

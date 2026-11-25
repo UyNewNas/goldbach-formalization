@@ -47,6 +47,9 @@ theorem sum_physicalDivisorSum_halfProductSource
 def physicalDensitySum (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=
   ∑ q ∈ Q, rho q / (Nat.totient q : ℝ)
 
+-- Share the existing lazy equation from its defining module across import branches.
+#print equations physicalDensitySum
+
 /-- The exact price for replacing the modulus-dependent coprime source mass
 by the total source mass. -/
 def physicalCoprimeCorrection

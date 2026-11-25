@@ -57,30 +57,72 @@ inside the tree.  If it is false, that branch contributes no retained
 coefficient and becomes a first exit. -/
 def firstExitRetainedPolynomial {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
-    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
-  | [] => signedTreeCoefficient positive mass
-  | p :: ps =>
-      firstExitRetainedPolynomial retained h selectedPrefix positive mass ps +
-        if retained (Bool.not positive) (p :: selectedPrefix) = true then
-          firstExitRetainedPolynomial retained h (p :: selectedPrefix) (Bool.not positive)
-            (mass * h p) ps
-        else 0
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=
+  fun remaining =>
+    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)
+      (fun selectedPrefix positive mass =>
+        signedTreeCoefficient positive mass)
+      (fun p ps ih selectedPrefix positive mass =>
+        ih selectedPrefix positive mass +
+          if retained (Bool.not positive) (p :: selectedPrefix) = true then
+            ih (p :: selectedPrefix) (Bool.not positive)
+              (mass * h p)
+          else 0)
+      remaining) selectedPrefix positive mass
+
+theorem firstExitRetainedPolynomial_nil {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
+    firstExitRetainedPolynomial retained h selectedPrefix positive mass [] =
+      (signedTreeCoefficient positive mass) := rfl
+
+theorem firstExitRetainedPolynomial_cons {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) (p : α) (ps : List α) :
+    firstExitRetainedPolynomial retained h selectedPrefix positive mass (p :: ps) =
+      (firstExitRetainedPolynomial retained h selectedPrefix positive mass ps +
+              if retained (Bool.not positive) (p :: selectedPrefix) = true then
+                firstExitRetainedPolynomial retained h (p :: selectedPrefix) (Bool.not positive)
+                  (mass * h p) ps
+              else 0) := rfl
 
 /-- The signed correction contributed by all first exits below a retained
 selectedPrefix.  At an exit, all later smaller labels are free, hence the product of
 `1 - h` over the unprocessed tail. -/
 def firstExitCorrection {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
-    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
-  | [] => 0
-  | p :: ps =>
-      firstExitCorrection retained h selectedPrefix positive mass ps +
-        if retained (Bool.not positive) (p :: selectedPrefix) = true then
-          firstExitCorrection retained h (p :: selectedPrefix) (Bool.not positive)
-            (mass * h p) ps
-        else
-          -signedTreeCoefficient (Bool.not positive) (mass * h p) *
-            (ps.map fun q => 1 - h q).prod
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=
+  fun remaining =>
+    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)
+      (fun selectedPrefix positive mass =>
+        0)
+      (fun p ps ih selectedPrefix positive mass =>
+        ih selectedPrefix positive mass +
+          if retained (Bool.not positive) (p :: selectedPrefix) = true then
+            ih (p :: selectedPrefix) (Bool.not positive)
+              (mass * h p)
+          else
+            -signedTreeCoefficient (Bool.not positive) (mass * h p) *
+              (ps.map fun q => 1 - h q).prod)
+      remaining) selectedPrefix positive mass
+
+theorem firstExitCorrection_nil {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
+    firstExitCorrection retained h selectedPrefix positive mass [] =
+      (0) := rfl
+
+theorem firstExitCorrection_cons {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) (p : α) (ps : List α) :
+    firstExitCorrection retained h selectedPrefix positive mass (p :: ps) =
+      (firstExitCorrection retained h selectedPrefix positive mass ps +
+              if retained (Bool.not positive) (p :: selectedPrefix) = true then
+                firstExitCorrection retained h (p :: selectedPrefix) (Bool.not positive)
+                  (mass * h p) ps
+              else
+                -signedTreeCoefficient (Bool.not positive) (mass * h p) *
+                  (ps.map fun q => 1 - h q).prod) := rfl
 
 /-- Exact finite product-plus-first-exit identity, before imposing that first
 exits have odd rank. -/
@@ -92,9 +134,9 @@ theorem firstExitRetainedPolynomial_eq_product_add_correction
           (remaining.map fun p => 1 - h p).prod +
         firstExitCorrection retained h selectedPrefix positive mass remaining := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedPolynomial, firstExitCorrection]
+  | nil => simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitCorrection_nil, firstExitCorrection_cons]
   | cons p ps ih =>
-      simp only [firstExitRetainedPolynomial, firstExitCorrection,
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitCorrection_nil, firstExitCorrection_cons,
         List.map_cons, List.prod_cons]
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
       · rw [if_pos hr, ih, ih, signedTreeCoefficient_not_mul]
@@ -122,14 +164,34 @@ is retained. -/
 def firstExitRetainedLeaves {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
-    List α → List (FirstExitLeaf α)
-  | [] => [{ selected := selectedPrefix, positive := positive, mass := mass }]
-  | p :: ps =>
-      firstExitRetainedLeaves retained h selectedPrefix positive mass ps ++
-        if retained (Bool.not positive) (p :: selectedPrefix) = true then
-          firstExitRetainedLeaves retained h (p :: selectedPrefix) (Bool.not positive)
-            (mass * h p) ps
-        else []
+    List α → List (FirstExitLeaf α) :=
+  fun remaining =>
+    (List.rec (motive := fun _ => List α → Bool → ℝ → List (FirstExitLeaf α))
+      (fun selectedPrefix positive mass =>
+        [{ selected := selectedPrefix, positive := positive, mass := mass }])
+      (fun p ps ih selectedPrefix positive mass =>
+        ih selectedPrefix positive mass ++
+          if retained (Bool.not positive) (p :: selectedPrefix) = true then
+            ih (p :: selectedPrefix) (Bool.not positive)
+              (mass * h p)
+          else [])
+      remaining) selectedPrefix positive mass
+
+theorem firstExitRetainedLeaves_nil {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
+    firstExitRetainedLeaves retained h selectedPrefix positive mass [] =
+      ([{ selected := selectedPrefix, positive := positive, mass := mass }]) := rfl
+
+theorem firstExitRetainedLeaves_cons {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) (p : α) (ps : List α) :
+    firstExitRetainedLeaves retained h selectedPrefix positive mass (p :: ps) =
+      (firstExitRetainedLeaves retained h selectedPrefix positive mass ps ++
+              if retained (Bool.not positive) (p :: selectedPrefix) = true then
+                firstExitRetainedLeaves retained h (p :: selectedPrefix) (Bool.not positive)
+                  (mass * h p) ps
+              else []) := rfl
 
 /-- Skipping every remaining label always produces the incoming branch as a
 terminal leaf.  In particular, the root tree always contains its empty
@@ -141,9 +203,9 @@ theorem firstExitRetainedLeaves_skipAll_mem
         FirstExitLeaf α) ∈
       firstExitRetainedLeaves retained h selectedPrefix positive mass remaining := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedLeaves]
+  | nil => simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons]
   | cons p ps ih =>
-      rw [firstExitRetainedLeaves]
+      rw [firstExitRetainedLeaves_cons]
       exact List.mem_append_left _ (ih selectedPrefix positive mass)
 
 /-- The recursive retained polynomial is exactly the sum of its explicitly
@@ -155,12 +217,12 @@ theorem firstExitRetainedPolynomial_eq_leaves_sum
       ((firstExitRetainedLeaves retained h selectedPrefix positive mass remaining).map
         FirstExitLeaf.value).sum := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedPolynomial, firstExitRetainedLeaves,
+  | nil => simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons,
       FirstExitLeaf.value]
   | cons p ps ih =>
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · simp [firstExitRetainedPolynomial, firstExitRetainedLeaves, hr, ih]
-      · simp [firstExitRetainedPolynomial, firstExitRetainedLeaves, hr, ih]
+      · simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih]
+      · simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih]
 
 /-- If the incoming mass is the product of the already selected labels, the
 recorded mass of every enumerated leaf is the product of its selected labels.
@@ -174,25 +236,29 @@ theorem firstExitRetainedLeaves_mass_eq_selected_prod
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       intro leaf hleaf
-      simp [firstExitRetainedLeaves] at hleaf
+      simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons] at hleaf
       subst leaf
       exact hmass
   | cons p ps ih =>
       intro leaf hleaf
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_pos hr, List.mem_append] at hleaf
         rcases hleaf with hskip | hselect
         · exact ih selectedPrefix positive mass hmass leaf hskip
         · have hmass' : mass * h p = ((p :: selectedPrefix).map h).prod := by
             simp [hmass, mul_comm]
           exact ih (p :: selectedPrefix) (Bool.not positive) (mass * h p) hmass' leaf hselect
-      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil] at hleaf
         exact ih selectedPrefix positive mass hmass leaf hleaf
 
 /-- Boolean parity of a list length: `true` means even. -/
-def evenListLength {α : Type*} : List α → Bool
-  | [] => true
-  | _ :: xs => !evenListLength xs
+def evenListLength {α : Type*} : List α → Bool :=
+  List.rec (motive := fun _ => Bool) true (fun _ _ ih => !ih)
+
+theorem evenListLength_nil {α : Type*} : evenListLength ([] : List α) = true := rfl
+
+theorem evenListLength_cons {α : Type*} (p : α) (ps : List α) :
+    evenListLength (p :: ps) = !evenListLength ps := rfl
 
 /-- The Boolean parity sign is the usual algebraic factor `(-1)^length`. -/
 theorem signedTreeCoefficient_evenListLength_eq_negOnePow
@@ -200,12 +266,12 @@ theorem signedTreeCoefficient_evenListLength_eq_negOnePow
     signedTreeCoefficient (evenListLength xs) mass =
       (-1 : ℝ) ^ xs.length * mass := by
   induction xs with
-  | nil => simp [evenListLength]
+  | nil => simp [evenListLength_nil, evenListLength_cons]
   | cons x xs ih =>
       calc
         signedTreeCoefficient (evenListLength (x :: xs)) mass =
             -signedTreeCoefficient (evenListLength xs) mass := by
-              simpa [evenListLength] using
+              simpa [evenListLength_nil, evenListLength_cons] using
                 signedTreeCoefficient_not_mul (evenListLength xs) mass 1
         _ = -((-1 : ℝ) ^ xs.length * mass) := by rw [ih]
         _ = (-1 : ℝ) ^ (x :: xs).length * mass := by
@@ -222,21 +288,21 @@ theorem firstExitRetainedLeaves_positive_eq_evenListLength
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       intro leaf hleaf
-      simp [firstExitRetainedLeaves] at hleaf
+      simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons] at hleaf
       subst leaf
       exact hpositive
   | cons p ps ih =>
       intro leaf hleaf
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_pos hr, List.mem_append] at hleaf
         rcases hleaf with hskip | hselect
         · exact ih selectedPrefix positive mass hpositive leaf hskip
         · have hpositive' : Bool.not positive = evenListLength (p :: selectedPrefix) := by
-            simpa [evenListLength] using
+            simpa [evenListLength_nil, evenListLength_cons] using
               congrArg Bool.not hpositive
           exact ih (p :: selectedPrefix) (Bool.not positive) (mass * h p)
             hpositive' leaf hselect
-      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil] at hleaf
         exact ih selectedPrefix positive mass hpositive leaf hleaf
 
 /-- Every selected list is accumulated in reverse processing order.  Reversing
@@ -250,19 +316,19 @@ theorem firstExitRetainedLeaves_selected_reverse_sublist
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       intro leaf hleaf
-      simp [firstExitRetainedLeaves] at hleaf
+      simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons] at hleaf
       subst leaf
       simp
   | cons p ps ih =>
       intro leaf hleaf
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_pos hr, List.mem_append] at hleaf
         rcases hleaf with hskip | hselect
         · exact (ih selectedPrefix positive mass leaf hskip).trans
             ((List.Sublist.refl _).append (List.sublist_cons_self p ps))
         · simpa [List.reverse_cons, List.append_assoc] using
             ih (p :: selectedPrefix) (Bool.not positive) (mass * h p) leaf hselect
-      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil] at hleaf
         exact (ih selectedPrefix positive mass leaf hleaf).trans
           ((List.Sublist.refl _).append (List.sublist_cons_self p ps))
 
@@ -277,18 +343,18 @@ theorem firstExitRetainedLeaves_prefix_subset
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       intro leaf hleaf x hx
-      simp [firstExitRetainedLeaves] at hleaf
+      simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons] at hleaf
       subst leaf
       exact hx
   | cons p ps ih =>
       intro leaf hleaf x hx
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_pos hr, List.mem_append] at hleaf
         rcases hleaf with hskip | hselect
         · exact ih selectedPrefix positive mass leaf hskip x hx
         · exact ih (p :: selectedPrefix) (Bool.not positive) (mass * h p)
             leaf hselect x (by simp [hx])
-      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+      · rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil] at hleaf
         exact ih selectedPrefix positive mass leaf hleaf x hx
 
 /-- If the labels already selected (in processing order) followed by the
@@ -302,7 +368,7 @@ theorem firstExitRetainedLeaves_nodup
     (hcarrier : (selectedPrefix.reverse ++ remaining).Nodup) :
     (firstExitRetainedLeaves retained h selectedPrefix positive mass remaining).Nodup := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedLeaves]
+  | nil => simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons]
   | cons p ps ih =>
       have hskipCarrier : (selectedPrefix.reverse ++ ps).Nodup :=
         hcarrier.sublist
@@ -310,7 +376,7 @@ theorem firstExitRetainedLeaves_nodup
             (List.sublist_cons_self p ps))
       have hskip := ih selectedPrefix positive mass hskipCarrier
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · rw [firstExitRetainedLeaves, if_pos hr]
+      · rw [firstExitRetainedLeaves_cons, if_pos hr]
         have hselectCarrier : ((p :: selectedPrefix).reverse ++ ps).Nodup := by
           simpa [List.reverse_cons, List.append_assoc] using hcarrier
         apply hskip.append
@@ -329,7 +395,7 @@ theorem firstExitRetainedLeaves_nodup
         exact hpNotCarrier
           ((firstExitRetainedLeaves_selected_reverse_sublist
             retained h selectedPrefix ps positive mass leaf hleafSkip).subset hpReverse)
-      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil]
+      · rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil]
         exact hskip
 
 /-- A retention policy with no even-rank exit.  At odd rank `retainOdd`
@@ -411,7 +477,7 @@ theorem mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength
     (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h carrier) :
     leaf.positive = evenListLength leaf.selected := by
   exact firstExitRetainedLeaves_positive_eq_evenListLength
-    (oddFirstExitPolicy retainOdd) h [] carrier true 1 (by simp [evenListLength])
+    (oddFirstExitPolicy retainOdd) h [] carrier true 1 (by simp [evenListLength_nil, evenListLength_cons])
       leaf hleaf
 
 /-- At the root, reversing a leaf's accumulated selected list gives a sublist
@@ -717,7 +783,7 @@ theorem firstExitCorrection_nonneg_of_even_retained
     (hh : ∀ p ∈ remaining, 0 ≤ h p ∧ h p ≤ 1) :
     0 ≤ firstExitCorrection retained h selectedPrefix positive mass remaining := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitCorrection]
+  | nil => simp [firstExitCorrection_nil, firstExitCorrection_cons]
   | cons p ps ih =>
       have hp : 0 ≤ h p ∧ h p ≤ 1 := hh p (by simp)
       have hps : ∀ q ∈ ps, 0 ≤ h q ∧ h q ≤ 1 := by
@@ -734,7 +800,7 @@ theorem firstExitCorrection_nonneg_of_even_retained
       have hprod : 0 ≤ (ps.map fun q => 1 - h q).prod :=
         list_prod_nonneg_of_mem (fun q => 1 - h q) ps
           (fun q hq => sub_nonneg.mpr (hps q hq).2)
-      simp only [firstExitCorrection]
+      simp only [firstExitCorrection_nil, firstExitCorrection_cons]
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
       · rw [if_pos hr]
         exact add_nonneg hleft hright

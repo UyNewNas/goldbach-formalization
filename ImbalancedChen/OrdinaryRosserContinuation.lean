@@ -179,7 +179,7 @@ private theorem ordinaryRosser_polynomial_append
         change decide (ordinaryRosserPrefixAdmissible lower Q ((q :: suffix) ++ pre)) = _
         rw [ordinaryRosserPrefixAdmissible_append_iff lower Q pre (q :: suffix)
           hpre hnd hP hnext]
-      simp only [firstExitRetainedPolynomial, htest]
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, htest]
       rw [ih hqs suffix positive mass hsuffix]
       by_cases ht : ordinaryRosserRetainedPolicy
           (ordinaryRosserResidualLower lower pre.length) (Q / (pre.prod : ℝ))
@@ -196,9 +196,9 @@ private theorem signIndependent_polynomial_mul
       signedTreeCoefficient positive mass *
         firstExitRetainedPolynomial (fun _ => retained) h pre true 1 remaining := by
   induction remaining generalizing pre positive mass with
-  | nil => simp [firstExitRetainedPolynomial]
+  | nil => simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons]
   | cons p ps ih =>
-      simp only [firstExitRetainedPolynomial]
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons]
       by_cases ht : retained (p :: pre) = true
       · simp only [if_pos ht, Bool.not_true]
         rw [ih pre positive mass, ih (p :: pre) (!positive) (mass * h p),
@@ -281,7 +281,7 @@ theorem firstExitRetainedPolynomial_ordinaryParityRosser_eq_full_valid
       have htest := ordinaryParityRosserPolicy_eq_full_on_valid_prefix lower Q pre positive q
         hpre hsign hqprime (fun hl => hlevel hl q (by simp))
         (List.pairwise_append.mp hsort').2.1
-      simp only [firstExitRetainedPolynomial, htest]
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, htest]
       rw [ih pre positive mass hpre hsign hprime' hlevel' hskipSort]
       by_cases ht : ordinaryRosserRetainedPolicy lower Q (!positive) (q :: pre) = true
       · simp only [if_pos ht]

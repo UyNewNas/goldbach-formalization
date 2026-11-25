@@ -1,3 +1,4 @@
+import ImbalancedChen.HistoricalUnorderedThirdGeometry
 import ImbalancedChen.FirstExitValidSelection
 import ImbalancedChen.RosserEndpointBridge
 import ImbalancedChen.ActualPrimePresieveSplit
@@ -313,9 +314,9 @@ theorem ordinaryParityRosserPolicy_eq_full_on_valid_prefix
   have hparity : ∀ xs : List ℕ, evenListLength xs = decide (Even xs.length) := by
     intro xs
     induction xs with
-    | nil => simp [evenListLength]
+    | nil => simp [evenListLength_nil, evenListLength_cons]
     | cons x xs ih =>
-        simp only [evenListLength, ih, List.length_cons, Nat.even_add_one, decide_not]
+        simp only [evenListLength_nil, evenListLength_cons, ih, List.length_cons, Nat.even_add_one, decide_not]
   cases lower <;> cases positive
   · have hodd : ¬Even pre.toFinset.card := by
       simpa only [List.toFinset_card_of_nodup hnd, hparity, decide_eq_false_iff_not]
@@ -394,7 +395,7 @@ theorem ordinaryParityRosserRetainedModuli_eq
   have hcsort : (chosen.reverse ++ []).Pairwise (· < ·) := by
     simpa only [List.append_nil, List.pairwise_reverse] using hsort.sublist hsub
   rw [firstExitValidSelection_ordinaryParityRosser_iff lower R chosen [] true
-    (ordinaryRosserPrefixAdmissible_nil lower hR) (by simp [evenListLength])
+    (ordinaryRosserPrefixAdmissible_nil lower hR) (by simp [evenListLength_nil, evenListLength_cons])
     hcprime (fun hl p hp => hlevel hl p (hsub.subset hp)) hcsort]
 
 theorem firstExitRetainedCoefficient_ordinaryParityRosser

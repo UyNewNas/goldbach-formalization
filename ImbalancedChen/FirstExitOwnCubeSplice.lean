@@ -75,9 +75,9 @@ theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections
             firstExitRetainedPolynomial retained h state.selectedPrefix state.positive
               state.mass state.remaining else 0)).sum := by
   induction remaining with
-  | nil => simp [firstExitRetainedPolynomial, firstExitNextSelectionCandidates]
+  | nil => simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitNextSelectionCandidates]
   | cons q qs ih =>
-      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates_cons,
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitNextSelectionCandidates_cons,
         List.map_cons, List.sum_cons]
       rw [ih]
       ring

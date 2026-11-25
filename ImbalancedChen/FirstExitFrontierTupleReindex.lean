@@ -101,7 +101,7 @@ theorem firstExitDepthFrontier_candidates_history_perm
       ((firstExitParentChoices r parent pre positive carrier).map
         (fun chosen => pre.reverse ++ chosen)) := by
   induction carrier generalizing r pre positive mass with
-  | nil => cases r <;> simp [firstExitDepthFrontier, firstExitNextSelectionCandidates,
+  | nil => cases r <;> simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, firstExitNextSelectionCandidates,
       firstExitParentChoices]
   | cons p ps ih =>
       cases r with
@@ -113,7 +113,7 @@ theorem firstExitDepthFrontier_candidates_history_perm
             (fun p => pre.reverse ++ [p])
       | succ r =>
           have hk : ¬ pre.length + (r + 1) ≤ pre.length := by omega
-          rw [firstExitDepthFrontier, if_neg hk, parentChoices_cons,
+          rw [firstExitDepthFrontier_cons, if_neg hk, parentChoices_cons,
             List.flatMap_append, List.map_append, List.map_append]
           by_cases hp : parent (!positive) (p :: pre) = true
           · rw [if_pos hp, if_pos hp]

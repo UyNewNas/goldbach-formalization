@@ -49,36 +49,83 @@ so the remaining smaller labels are retained as part of the state. -/
 def firstExitDepthFrontier {α : Type*} (k : ℕ)
     (parent : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
-    List α → List (FirstExitDepthState α)
-  | [] =>
-      if k ≤ selectedPrefix.length then
-        [{selectedPrefix := selectedPrefix, positive := positive, mass := mass, remaining := []}]
-      else []
-  | p :: ps =>
-      if k ≤ selectedPrefix.length then
-        [{selectedPrefix := selectedPrefix, positive := positive, mass := mass,
-          remaining := p :: ps}]
-      else
-        firstExitDepthFrontier k parent h selectedPrefix positive mass ps ++
-          if parent (Bool.not positive) (p :: selectedPrefix) = true then
-            firstExitDepthFrontier k parent h (p :: selectedPrefix) (Bool.not positive)
-              (mass * h p) ps
-          else []
+    List α → List (FirstExitDepthState α) :=
+  fun remaining =>
+    (List.rec (motive := fun _ => List α → Bool → ℝ → List (FirstExitDepthState α))
+      (fun selectedPrefix positive mass =>
+        if k ≤ selectedPrefix.length then
+          [{selectedPrefix := selectedPrefix, positive := positive, mass := mass, remaining := []}]
+        else [])
+      (fun p ps ih selectedPrefix positive mass =>
+        if k ≤ selectedPrefix.length then
+          [{selectedPrefix := selectedPrefix, positive := positive, mass := mass,
+            remaining := p :: ps}]
+        else
+          ih selectedPrefix positive mass ++
+            if parent (Bool.not positive) (p :: selectedPrefix) = true then
+              ih (p :: selectedPrefix) (Bool.not positive)
+                (mass * h p)
+            else [])
+      remaining) selectedPrefix positive mass
+
+theorem firstExitDepthFrontier_nil {α : Type*} (k : ℕ)
+    (parent : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
+    firstExitDepthFrontier k parent h selectedPrefix positive mass [] =
+      (if k ≤ selectedPrefix.length then
+              [{selectedPrefix := selectedPrefix, positive := positive, mass := mass, remaining := []}]
+            else []) := rfl
+
+theorem firstExitDepthFrontier_cons {α : Type*} (k : ℕ)
+    (parent : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) (p : α) (ps : List α) :
+    firstExitDepthFrontier k parent h selectedPrefix positive mass (p :: ps) =
+      (if k ≤ selectedPrefix.length then
+              [{selectedPrefix := selectedPrefix, positive := positive, mass := mass,
+                remaining := p :: ps}]
+            else
+              firstExitDepthFrontier k parent h selectedPrefix positive mass ps ++
+                if parent (Bool.not positive) (p :: selectedPrefix) = true then
+                  firstExitDepthFrontier k parent h (p :: selectedPrefix) (Bool.not positive)
+                    (mass * h p) ps
+                else []) := rfl
 
 /-- Signed terminal values of branches ending before the frontier. Branches
 that reach the frontier contribute zero here and are continued separately. -/
 def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)
     (parent : Bool → List α → Bool) (h : α → ℝ)
-    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
-  | [] => if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass
-  | p :: ps =>
-      if k ≤ selectedPrefix.length then 0
-      else
-        firstExitDepthTerminalPolynomial k parent h selectedPrefix positive mass ps +
-          if parent (Bool.not positive) (p :: selectedPrefix) = true then
-            firstExitDepthTerminalPolynomial k parent h (p :: selectedPrefix)
-              (Bool.not positive) (mass * h p) ps
-          else 0
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ :=
+  fun remaining =>
+    (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)
+      (fun selectedPrefix positive mass =>
+        if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass)
+      (fun p ps ih selectedPrefix positive mass =>
+        if k ≤ selectedPrefix.length then 0
+        else
+          ih selectedPrefix positive mass +
+            if parent (Bool.not positive) (p :: selectedPrefix) = true then
+              ih (p :: selectedPrefix)
+                (Bool.not positive) (mass * h p)
+            else 0)
+      remaining) selectedPrefix positive mass
+
+theorem firstExitDepthTerminalPolynomial_nil {α : Type*} (k : ℕ)
+    (parent : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
+    firstExitDepthTerminalPolynomial k parent h selectedPrefix positive mass [] =
+      (if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass) := rfl
+
+theorem firstExitDepthTerminalPolynomial_cons {α : Type*} (k : ℕ)
+    (parent : Bool → List α → Bool) (h : α → ℝ)
+    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) (p : α) (ps : List α) :
+    firstExitDepthTerminalPolynomial k parent h selectedPrefix positive mass (p :: ps) =
+      (if k ≤ selectedPrefix.length then 0
+            else
+              firstExitDepthTerminalPolynomial k parent h selectedPrefix positive mass ps +
+                if parent (Bool.not positive) (p :: selectedPrefix) = true then
+                  firstExitDepthTerminalPolynomial k parent h (p :: selectedPrefix)
+                    (Bool.not positive) (mass * h p) ps
+                else 0) := rfl
 
 /-- Every returned state has exactly the selected rank, provided the scan
 starts at or before that rank. No exhausted lower-rank branch is returned. -/
@@ -92,24 +139,24 @@ theorem firstExitDepthFrontier_selected_length
   | nil =>
       intro state hstate
       by_cases hk : k ≤ selectedPrefix.length
-      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact Nat.le_antisymm hpre hk
-      · simp [firstExitDepthFrontier, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
   | cons p ps ih =>
       intro state hstate
       by_cases hk : k ≤ selectedPrefix.length
-      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact Nat.le_antisymm hpre hk
       · have hnext : (p :: selectedPrefix).length ≤ k := by
           simpa only [List.length_cons] using Nat.succ_le_of_lt (Nat.lt_of_not_ge hk)
         by_cases hr : parent (Bool.not positive) (p :: selectedPrefix) = true
-        · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_pos hr, List.mem_append] at hstate
           rcases hstate with hskip | hselect
           · exact ih selectedPrefix positive mass hpre state hskip
           · exact ih (p :: selectedPrefix) (Bool.not positive) (mass * h p) hnext state hselect
-        · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_neg hr, List.append_nil] at hstate
           exact ih selectedPrefix positive mass hpre state hstate
 
 /-- At or beyond the frontier, all future selected prefixes use the
@@ -126,7 +173,7 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_of_rank_le_length
   | cons p ps ih =>
       have hnext : k < (p :: selectedPrefix).length := by
         simpa only [List.length_cons] using Nat.lt_succ_of_le hk
-      simp only [firstExitRetainedPolynomial, firstExitDepthSplicePolicy,
+      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitDepthSplicePolicy,
         if_neg (Nat.not_le_of_gt hnext)]
       rw [ih selectedPrefix positive mass hk,
         ih (p :: selectedPrefix) (Bool.not positive) (mass * h p) hnext.le]
@@ -145,13 +192,13 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       by_cases hk : k ≤ selectedPrefix.length <;>
-        simp [firstExitRetainedPolynomial, firstExitDepthTerminalPolynomial,
-          firstExitDepthFrontier, hk]
+        simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons,
+          firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk]
   | cons p ps ih =>
       by_cases hk : k ≤ selectedPrefix.length
       · rw [firstExitRetainedPolynomial_depthSplice_eq_of_rank_le_length
           k parent replacement h selectedPrefix (p :: ps) positive mass hk]
-        simp only [firstExitDepthTerminalPolynomial, firstExitDepthFrontier, if_pos hk,
+        simp only [firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons, firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk,
           List.map_singleton, List.sum_singleton, zero_add]
       · have hnext : (p :: selectedPrefix).length ≤ k := by
           simpa only [List.length_cons] using Nat.succ_le_of_lt (Nat.lt_of_not_ge hk)
@@ -159,8 +206,8 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier
             (Bool.not positive) (p :: selectedPrefix) =
           parent (Bool.not positive) (p :: selectedPrefix) := by
           simp only [firstExitDepthSplicePolicy, if_pos hnext]
-        simp only [firstExitRetainedPolynomial, htest, firstExitDepthTerminalPolynomial,
-          firstExitDepthFrontier, if_neg hk]
+        simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, htest, firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons,
+          firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_neg hk]
         by_cases hr : parent (Bool.not positive) (p :: selectedPrefix) = true
         · rw [if_pos hr, if_pos hr, if_pos hr, List.map_append, List.sum_append,
             ih selectedPrefix positive mass,

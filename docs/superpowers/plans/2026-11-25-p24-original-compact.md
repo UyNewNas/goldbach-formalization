@@ -29,8 +29,8 @@
 
 ## Task 1: Install and compile existing proof closure
 
-- [ ] Select all missing project imports from the pinned source-only records; record sources and hashes in verification/part2/p24_source_selection.json.
-- [ ] Reuse the reviewed transparent abbreviation repair in Part4ActualThirdOriginalClosedSplitAggregation.lean.
+- [x] Select all missing project imports from the pinned source-only records; record sources and hashes in verification/part2/p24_source_selection.json.
+- [x] Reuse the reviewed transparent abbreviation repair in Part4ActualThirdOriginalClosedSplitAggregation.lean.
 - [ ] Run existing verification/part2/run_winner9_private_checks.py on ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint using isolated outputs and valid inherited compilation records.
 - [ ] Read every failed module log, classify the cause and repair the exact source without weakening statements. Re-run the affected closure.
 
@@ -51,3 +51,8 @@
 - Baseline: a929011ec95843553fc2e10b7291c8077e0952c0 on work/p2-formal-proof; isolated local worktree /workspace/scratch/daaa8ebc2a3f/goldbach-p24.
 - Remote P2 baseline /workspace/goldbach-p2 remains at 8657cfffef159185f73c6a04ae4d31c846c0d0a9. Existing /workspace/p2-private-20261124 contains unrelated uncommitted work and will be read only for validated cache reuse.
 - Ruling: proceed with the already authorized task without a new design-approval pause; acceptance is fixed by the manuscript and existing P2.4 obligations.
+- Published source installation: `1af39633da1e6274d4e338edc44316b9e9c6d7ff`. Published six exact later CI overlays: `543643fd074ca989e7b21d3b2f749531bb0e89c8`. Published exact later serial-queue/heap overlays and manuscript semantic review: `2dbe821e7f6eabc4fd7ec4de793d4e243c1df02b`. These are source checkpoints, not current combined-closure acceptance.
+- A local transient-workspace reset was recovered by cloning the already published branch. The current local directory is now an independent checkout at the same absolute path, rather than the original linked worktree.
+- P2's initial symbolic build job `37583cbeb3454f0892bdaea181f72ff2` was cancelled while still queued: inspection showed its command omitted the explicit native dependency snapshot required by the existing verifier. No Lean result is claimed from that job. Read-only discovery job `09582ca9043240a98d564e2a491002e3` checks for existing qualified snapshots.
+- Temporary P1 use is restricted to a separate directory because the P2 queue is congested. Setup job `job_c2dc0dc74dbd4a39ab74edd392d6fd1f` succeeded and created `/workspace/p24-original-compact-20261125` at `2dbe821e7f6eabc4fd7ec4de793d4e243c1df02b`, plus clean source baseline `/workspace/p24-accepted-baseline-8657`. The pinned Lean/Mathlib versions match P2. Shared blue build/package directories are read-only inputs for this task.
+- P1 inventory job `job_5f86596ef9634787a90a36cf8a7aa597` found 262 source/import-matching object candidates for the earlier 337-module snapshot; source-compatible project ancestry reduces that set to 253. These counts are only an inventory. Original inputs, current source changes, native dependencies, and runtime still require qualification before cache acceptance. Diagnostic compilation, if used to locate interface failures first, must remain explicitly separate from acceptance.

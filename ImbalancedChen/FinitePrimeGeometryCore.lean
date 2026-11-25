@@ -40,6 +40,9 @@ def ordinaryParityRosserPolicy (lower : Bool) (R : ℝ) : Bool → List ℕ → 
   if lower then evenFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible true R pre))
   else oddFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible false R pre))
 
+-- Materialize the existing equation in its defining module before downstream imports.
+#print equations ordinaryParityRosserPolicy
+
 
 end
 
@@ -58,9 +61,15 @@ def ancestorFrozenPolicy {α : Type*} (k : ℕ) (Q : List α → ℝ)
     (policy : ℝ → Bool → List α → Bool) (positive : Bool) (history : List α) : Bool :=
   policy (Q (rosserAncestor k history)) positive history
 
+-- Materialize the existing equation in its defining module before downstream imports.
+#print equations ancestorFrozenPolicy
+
 def frozenParityRosserPolicy (lower : Bool) (k : ℕ) (Q : List ℕ → ℝ) :
     Bool → List ℕ → Bool :=
   ancestorFrozenPolicy k Q (ordinaryParityRosserPolicy lower)
+
+-- Materialize the existing equation in its defining module before downstream imports.
+#print equations frozenParityRosserPolicy
 
 
 end

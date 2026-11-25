@@ -38,10 +38,16 @@ def actualSmallRosserMinusDensity (N cap : ℕ) (w L : ℝ) : ℝ :=
   reciprocalTotientDensity (actualSmallRosserSupport N cap w)
     (actualSmallRosserMinus N cap w L)
 
+-- Materialize the shared existing equation in its defining module.
+#print equations actualSmallRosserMinusDensity
+
 /-- The reciprocal-totient density of the same literal upper coefficient. -/
 def actualSmallRosserPlusDensity (N cap : ℕ) (w L : ℝ) : ℝ :=
   reciprocalTotientDensity (actualSmallRosserSupport N cap w)
     (actualSmallRosserPlus N cap w L)
+
+-- Materialize the shared existing equation in its defining module.
+#print equations actualSmallRosserPlusDensity
 
 /-- The actual target-prime-deleted Goldbach Euler product. For even
 targets the carrier automatically excludes the prime two. -/

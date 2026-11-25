@@ -21,6 +21,9 @@ open scoped BigOperators
 def reciprocalTotientDensity (S : Finset ℕ) (beta : ℕ → ℝ) : ℝ :=
   ∑ d ∈ S, beta d / (Nat.totient d : ℝ)
 
+-- Materialize the generated equation in its defining module for strict ownership.
+#print equations reciprocalTotientDensity
+
 /-- A positive rough coefficient selects the upper small density; a negative
 rough coefficient selects the lower small density. -/
 def signSensitiveReciprocalTotientDensity

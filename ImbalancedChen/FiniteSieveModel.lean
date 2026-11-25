@@ -184,7 +184,9 @@ theorem halfProductBoundingSieve_totalMass_eq_sum
     (halfProductBoundingSieve num den N T z hN).totalMass =
       ∑ n ∈ (halfProductBoundingSieve num den N T z hN).support,
         (halfProductBoundingSieve num den N T z hN).weights n := by
-  simp [halfProductBoundingSieve, shiftedHalfProductSource_card]
+  change ((halfProductSource num den N T).card : ℝ) =
+    ∑ _n ∈ shiftedHalfProductSource num den N T, (1 : ℝ)
+  simp [shiftedHalfProductSource_card]
 
 /-- Mathlib's sifted sum is the cardinality of the existing actual sifted set. -/
 theorem halfProductBoundingSieve_siftedSum
@@ -234,8 +236,9 @@ theorem halfProductBoundingSieve_mainSum
     (num den N : ℕ) (T : ℝ) (z : ℕ) (hN : Even N) (muPlus : ℕ → ℝ) :
     (halfProductBoundingSieve num den N T z hN).mainSum muPlus =
       ∑ d ∈ (sieveProduct N z).divisors, muPlus d / (Nat.totient d : ℝ) := by
-  simp only [BoundingSieve.mainSum, halfProductBoundingSieve, halfProductDensity_apply,
-    div_eq_mul_inv, one_mul]
+  change (∑ d ∈ (sieveProduct N z).divisors,
+    muPlus d * (1 / (Nat.totient d : ℝ))) = _
+  simp only [div_eq_mul_inv, one_mul]
 
 /-- The error sum is the weighted absolute discrepancy of actual residue counts. -/
 theorem halfProductBoundingSieve_errSum

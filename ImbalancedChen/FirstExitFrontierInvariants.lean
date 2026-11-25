@@ -24,7 +24,7 @@ theorem firstExitDepthFrontier_of_rank_le_length
     (hk : k ≤ pre.length) :
     firstExitDepthFrontier k parent h pre positive mass remaining =
       [{selectedPrefix := pre, positive := positive, mass := mass, remaining := remaining}] := by
-  cases remaining <;> simp [firstExitDepthFrontier, hk]
+  cases remaining <;> simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk]
 
 /-- Skipping the remaining labels turns an actual frontier state into an
 actual retained terminal leaf of the same original tree. -/
@@ -38,10 +38,10 @@ theorem firstExitDepthFrontier_toLeaf_mem
   induction remaining generalizing pre positive mass with
   | nil =>
       by_cases hk : k ≤ pre.length
-      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact firstExitRetainedLeaves_skipAll_mem parent h pre [] positive mass
-      · simp [firstExitDepthFrontier, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
   | cons p ps ih =>
       by_cases hk : k ≤ pre.length
       · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)
@@ -49,13 +49,13 @@ theorem firstExitDepthFrontier_toLeaf_mem
         subst state
         exact firstExitRetainedLeaves_skipAll_mem parent h pre (p :: ps) positive mass
       · by_cases hr : parent (!positive) (p :: pre) = true
-        · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate
-          rw [firstExitRetainedLeaves, if_pos hr, List.mem_append]
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_pos hr, List.mem_append] at hstate
+          rw [firstExitRetainedLeaves_cons, if_pos hr, List.mem_append]
           rcases hstate with hskip | hselect
           · exact Or.inl (ih pre positive mass hskip)
           · exact Or.inr (ih (p :: pre) (!positive) (mass * h p) hselect)
-        · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate
-          rw [firstExitRetainedLeaves, if_neg hr, List.append_nil]
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_neg hr, List.append_nil] at hstate
+          rw [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil]
           exact ih pre positive mass hstate
 
 /-- The remaining labels are included together with the selected history;
@@ -69,10 +69,10 @@ theorem firstExitDepthFrontier_selected_remaining_sublist
   induction remaining generalizing pre positive mass with
   | nil =>
       by_cases hk : k ≤ pre.length
-      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact List.Sublist.refl _
-      · simp [firstExitDepthFrontier, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
   | cons p ps ih =>
       by_cases hk : k ≤ pre.length
       · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)
@@ -84,12 +84,12 @@ theorem firstExitDepthFrontier_selected_remaining_sublist
           (ih pre positive mass hs).trans
             ((List.Sublist.refl _).append (List.sublist_cons_self p ps))
         by_cases hr : parent (!positive) (p :: pre) = true
-        · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_pos hr, List.mem_append] at hstate
           rcases hstate with hs | hs
           · exact hskip hs
           · simpa [List.reverse_cons, List.append_assoc] using
               ih (p :: pre) (!positive) (mass * h p) hs
-        · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate
+        · rw [firstExitDepthFrontier_cons, if_neg hk, if_neg hr, List.append_nil] at hstate
           exact hskip hstate
 
 /-- A frontier reached from strictly below its rank has a last selected
@@ -102,7 +102,7 @@ theorem firstExitDepthFrontier_exists_last_selection
     ∃ before q tail, remaining = before ++ q :: state.remaining ∧
       state.selectedPrefix = q :: tail := by
   induction remaining generalizing pre positive mass with
-  | nil => simp [firstExitDepthFrontier, Nat.not_le_of_gt hpre] at hstate
+  | nil => simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, Nat.not_le_of_gt hpre] at hstate
   | cons p ps ih =>
       have hk : ¬k ≤ pre.length := Nat.not_le_of_gt hpre
       have hskip (hs : state ∈ firstExitDepthFrontier k parent h pre positive mass ps) :
@@ -111,7 +111,7 @@ theorem firstExitDepthFrontier_exists_last_selection
         obtain ⟨before, q, tail, hrem, hsel⟩ := ih pre positive mass hpre hs
         exact ⟨p :: before, q, tail, by simp [hrem], hsel⟩
       by_cases hr : parent (!positive) (p :: pre) = true
-      · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate
+      · rw [firstExitDepthFrontier_cons, if_neg hk, if_pos hr, List.mem_append] at hstate
         rcases hstate with hs | hs
         · exact hskip hs
         · by_cases hnext : k ≤ (p :: pre).length
@@ -122,7 +122,7 @@ theorem firstExitDepthFrontier_exists_last_selection
           · obtain ⟨before, q, tail, hrem, hsel⟩ :=
               ih (p :: pre) (!positive) (mass * h p) (Nat.lt_of_not_ge hnext) hs
             exact ⟨p :: before, q, tail, by simp [hrem], hsel⟩
-      · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate
+      · rw [firstExitDepthFrontier_cons, if_neg hk, if_neg hr, List.append_nil] at hstate
         exact hskip hstate
 
 theorem mem_firstExitDepthFrontier_mass_eq_selected_prod
