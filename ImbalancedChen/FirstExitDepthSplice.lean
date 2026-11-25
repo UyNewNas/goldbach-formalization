@@ -99,7 +99,7 @@ def firstExitDepthTerminalPolynomial {α : Type*} (k : ℕ)
     (List.rec (motive := fun _ => List α → Bool → ℝ → ℝ)
       (fun selectedPrefix positive mass =>
         if k ≤ selectedPrefix.length then 0 else signedTreeCoefficient positive mass)
-      (fun p ps ih selectedPrefix positive mass =>
+      (fun p _ ih selectedPrefix positive mass =>
         if k ≤ selectedPrefix.length then 0
         else
           ih selectedPrefix positive mass +
@@ -139,14 +139,14 @@ theorem firstExitDepthFrontier_selected_length
   | nil =>
       intro state hstate
       by_cases hk : k ≤ selectedPrefix.length
-      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact Nat.le_antisymm hpre hk
-      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, hk] at hstate
   | cons p ps ih =>
       intro state hstate
       by_cases hk : k ≤ selectedPrefix.length
-      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact Nat.le_antisymm hpre hk
       · have hnext : (p :: selectedPrefix).length ≤ k := by
@@ -173,7 +173,7 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_of_rank_le_length
   | cons p ps ih =>
       have hnext : k < (p :: selectedPrefix).length := by
         simpa only [List.length_cons] using Nat.lt_succ_of_le hk
-      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitDepthSplicePolicy,
+      simp only [firstExitRetainedPolynomial_cons, firstExitDepthSplicePolicy,
         if_neg (Nat.not_le_of_gt hnext)]
       rw [ih selectedPrefix positive mass hk,
         ih (p :: selectedPrefix) (Bool.not positive) (mass * h p) hnext.le]
@@ -192,13 +192,13 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       by_cases hk : k ≤ selectedPrefix.length <;>
-        simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons,
-          firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk]
+        simp [firstExitRetainedPolynomial_nil, firstExitDepthTerminalPolynomial_nil,
+          firstExitDepthFrontier_nil, hk]
   | cons p ps ih =>
       by_cases hk : k ≤ selectedPrefix.length
       · rw [firstExitRetainedPolynomial_depthSplice_eq_of_rank_le_length
           k parent replacement h selectedPrefix (p :: ps) positive mass hk]
-        simp only [firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons, firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk,
+        simp only [firstExitDepthTerminalPolynomial_cons, firstExitDepthFrontier_cons, if_pos hk,
           List.map_singleton, List.sum_singleton, zero_add]
       · have hnext : (p :: selectedPrefix).length ≤ k := by
           simpa only [List.length_cons] using Nat.succ_le_of_lt (Nat.lt_of_not_ge hk)
@@ -206,8 +206,8 @@ theorem firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier
             (Bool.not positive) (p :: selectedPrefix) =
           parent (Bool.not positive) (p :: selectedPrefix) := by
           simp only [firstExitDepthSplicePolicy, if_pos hnext]
-        simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, htest, firstExitDepthTerminalPolynomial_nil, firstExitDepthTerminalPolynomial_cons,
-          firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_neg hk]
+        simp only [firstExitRetainedPolynomial_cons, htest, firstExitDepthTerminalPolynomial_cons,
+          firstExitDepthFrontier_cons, if_neg hk]
         by_cases hr : parent (Bool.not positive) (p :: selectedPrefix) = true
         · rw [if_pos hr, if_pos hr, if_pos hr, List.map_append, List.sum_append,
             ih selectedPrefix positive mass,

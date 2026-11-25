@@ -122,7 +122,8 @@ theorem twice_prime_euler_product {z : ℕ} (hz : 2 < z) :
       ∏ p ∈ oddPrimesBelowCap z, (1 - 1 / (p : ℝ)) := by
   rw [primesBelowCap_eq_insert_two hz,
     Finset.prod_insert (by simp : 2 ∉ oddPrimesBelowCap z)]
-  norm_num <;> ring
+  norm_num
+  ring
 
 /-- The elementary local identity behind the odd-prime Euler factors. -/
 theorem odd_prime_euler_factor {p : ℕ} (hp : 2 < p) :
@@ -131,7 +132,8 @@ theorem odd_prime_euler_factor {p : ℕ} (hp : 2 < p) :
   have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp
   have hp0 : (p : ℝ) ≠ 0 := by linarith
   have hp1 : (p : ℝ) - 1 ≠ 0 := by linarith
-  field_simp [hp0, hp1] <;> ring
+  field_simp [hp0, hp1]
+  ring
 
 /-- For an excluded odd prime, the manuscript's correction cancels the
 local sieve factor exactly. -/
@@ -142,7 +144,8 @@ theorem odd_prime_euler_factor_correction {p : ℕ} (hp : 2 < p) :
   have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp
   have hp1 : (p : ℝ) - 1 ≠ 0 := by linarith
   have hp2 : (p : ℝ) - 2 ≠ 0 := by linarith
-  field_simp [hp1, hp2] <;> ring
+  field_simp [hp1, hp2]
+  ring
 
 /-- The exact finite identity with every range and the factor two explicit.
 It holds for all even `N`, including zero. There is no asymptotic premise. -/
@@ -234,7 +237,7 @@ theorem halfProductBoundingSieve_selbergTerms
       ((p : ℝ) - 2) / ((p : ℝ) - 1) := by
     field_simp [hp1r] <;> ring
   rw [hfactor]
-  field_simp [hp1r, hp2r] <;> ring
+  field_simp [hp1r, hp2r]
 
 end
 

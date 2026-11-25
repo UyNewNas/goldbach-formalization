@@ -31,11 +31,11 @@ theorem firstExitRetainedLeaves_append
         (fun leaf => firstExitRetainedLeaves retained h leaf.selected
           leaf.positive leaf.mass small) := by
   induction rough generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons]
+  | nil => simp [firstExitRetainedLeaves_nil]
   | cons p ps ih =>
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih, List.flatMap_append]
-      · simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih]
+      · simp [firstExitRetainedLeaves_cons, hr, ih, List.flatMap_append]
+      · simp [firstExitRetainedLeaves_cons, hr, ih]
 
 /-- The full polynomial is the sum of the actual continued rough leaves. -/
 theorem firstExitRetainedPolynomial_append_eq_leaves_sum
@@ -46,11 +46,11 @@ theorem firstExitRetainedPolynomial_append_eq_leaves_sum
         (fun leaf => firstExitRetainedPolynomial retained h leaf.selected
           leaf.positive leaf.mass small)).sum := by
   induction rough generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons]
+  | nil => simp [firstExitRetainedLeaves_nil]
   | cons p ps ih =>
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
-      · simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih]
-      · simp [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, ih]
+      · simp [firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_cons, hr, ih]
+      · simp [firstExitRetainedPolynomial_cons, firstExitRetainedLeaves_cons, hr, ih]
 
 /-- Exact presieve decomposition. The remaining error is a sum of genuine
 small-carrier corrections with the rough leaves' inherited histories. -/
@@ -90,7 +90,7 @@ theorem firstExitRetainedLeaves_mass_nonneg
   induction remaining generalizing selectedPrefix positive mass with
   | nil =>
       intro leaf hleaf
-      simp only [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, List.mem_singleton] at hleaf
+      simp only [firstExitRetainedLeaves_nil, List.mem_singleton] at hleaf
       subst leaf
       exact hmass
   | cons p ps ih =>
@@ -116,7 +116,7 @@ theorem firstExitCorrection_nonpos_of_odd_retained
     (hh : ∀ p ∈ remaining, 0 ≤ h p ∧ h p ≤ 1) :
     firstExitCorrection retained h selectedPrefix positive mass remaining ≤ 0 := by
   induction remaining generalizing selectedPrefix positive mass with
-  | nil => simp [firstExitCorrection_nil, firstExitCorrection_cons]
+  | nil => simp [firstExitCorrection_nil]
   | cons p ps ih =>
       have hp : 0 ≤ h p ∧ h p ≤ 1 := hh p List.mem_cons_self
       have hps : ∀ q ∈ ps, 0 ≤ h q ∧ h q ≤ 1 :=
@@ -127,7 +127,7 @@ theorem firstExitCorrection_nonpos_of_odd_retained
       have hprod : 0 ≤ (ps.map fun q => 1 - h q).prod :=
         list_prod_nonneg_of_mem (fun q => 1 - h q) ps
           (fun q hq => sub_nonneg.mpr (hps q hq).2)
-      simp only [firstExitCorrection_nil, firstExitCorrection_cons]
+      simp only [firstExitCorrection_cons]
       by_cases hr : retained (Bool.not positive) (p :: selectedPrefix) = true
       · rw [if_pos hr]
         exact add_nonpos hleft hright
