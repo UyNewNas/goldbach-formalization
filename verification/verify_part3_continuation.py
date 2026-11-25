@@ -39,13 +39,22 @@ SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightGeometry",
 ))
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
+NODE32_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3ComplexCRTFiniteFourier",
+    "Part3SharedFirstFactorEnergyNonzeroReduction",
+    "Part3ActualCompletedZeroDifferencePayment",
+    "Part3ActualNonzeroChartEpsilonTagPayment",
+    "Part3ActualZeroTagFreeEpsilonPayment",
+    "Part3ActualKPacketAdapter",
+))
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
                           "ImbalancedChen.Part3ProperPowerActualPair"),
-          "actual-pair-family": ("ImbalancedChen.Part3ProperPowerActualPairFamily",)}
+          "actual-pair-family": ("ImbalancedChen.Part3ProperPowerActualPairFamily",),
+          "node32": NODE32_MODULES}
 PROFILE_REUSE_MANIFEST = (
     "docs/part3-distribution/continuation-20261124/actual-pair-reuse/SOURCE_MANIFEST.json"
 )
@@ -94,6 +103,11 @@ def main() -> None:
         "allowed_transitive_axioms": sorted(baseline.ALLOWED),
         "stages": [],
     }
+    if args.group == "node32":
+        report["scope"] = (
+            "Current-source composition of the six P3.2 historical terminals; "
+            "not a new proof of their historical declarations, the full outer "
+            "physical return, or RestrictedMediumObligation")
 
     def save() -> None:
         (out / "report.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -131,7 +145,25 @@ def main() -> None:
             raise RuntimeError("Dependency pin changed")
         audit = out / "Part3ContinuationAudit.lean"
         audit.write_text(render_audit(modules))
-        paths = [ROOT / (m.replace(".", "/") + ".lean") for m in MODULES]
+        paths = [ROOT / (m.replace(".", "/") + ".lean")
+                 for m in dict.fromkeys(MODULES + modules)]
+        if args.group == "node32":
+            closure_manifest = ROOT / "docs/part3-distribution/node32-20261125/CLOSURE.json"
+            closure = json.loads(closure_manifest.read_text())
+            if tuple(closure["targets"]) != NODE32_MODULES:
+                raise RuntimeError("P3.2 closure targets differ from the selected terminal gate")
+            for item in closure["project_sources"]:
+                relative = item["module"].replace(".", "/") + ".lean"
+                if item["path"] != relative:
+                    raise RuntimeError("Invalid P3.2 source path: " + item["path"])
+                path = ROOT / relative
+                if sha256(path) != item["sha256"]:
+                    raise RuntimeError("P3.2 import source changed: " + relative)
+                paths.append(path)
+            paths += [closure_manifest, ROOT / "ImbalancedChen/Part3Node32.lean",
+                      ROOT / "docs/part3-distribution/node32-20261125/SOURCE_REUSE.json",
+                      ROOT / ".github/workflows/part3-node32.yml"]
+            report["project_import_closure"] = closure
         reuse = json.loads((ROOT / PROFILE_REUSE_MANIFEST).read_text())
         for item in reuse["donor_sources"]:
             relative = item["path"]
@@ -199,6 +231,8 @@ def main() -> None:
                    "clean-" + package["name"]).strip():
                 raise RuntimeError("Dependency checkout has uncommitted changes: " + package["name"])
         run(["lake", "build", *modules], "build-new-targets")
+        if args.group == "node32":
+            run(["lake", "build", "ImbalancedChen.Part3Node32"], "build-node32-composition")
         objdir = ROOT / ".lake/build/lib/lean"
         # Bind the actual Lake import resolution for all owned modules to this tree.
         roots = [Path(p).resolve() for p in tools["lean_path"].split(":") if p]
