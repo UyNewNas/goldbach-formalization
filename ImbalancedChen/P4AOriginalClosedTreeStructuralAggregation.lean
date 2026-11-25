@@ -21,7 +21,7 @@ def splitCount (tree : ClosedCutTree) : ℕ :=
       cases t with
       | leaf => exact 0
       | split axis cut left right =>
-          exact 1 + rec left (by simp_wf <;> omega) + rec right (by simp_wf))
+          exact 1 + rec left (by simp_wf; omega) + rec right (by simp_wf))
     tree
 
 theorem splitCount_leaf : splitCount .leaf = 0 := by
@@ -93,7 +93,7 @@ def eraseCharges (tree : ChargedCutTree) : ClosedCutTree :=
       | leaf charge => exact .leaf
       | split axis cut left right =>
           exact .split axis cut
-            (rec left (by simp_wf <;> omega)) (rec right (by simp_wf)))
+            (rec left (by simp_wf; omega)) (rec right (by simp_wf)))
     tree
 
 theorem eraseCharges_leaf (charge : ℤ) :
@@ -113,7 +113,7 @@ def totalCharge (tree : ChargedCutTree) : ℤ :=
       cases t with
       | leaf charge => exact charge
       | split axis cut left right =>
-          exact rec left (by simp_wf <;> omega) + rec right (by simp_wf))
+          exact rec left (by simp_wf; omega) + rec right (by simp_wf))
     tree
 
 theorem totalCharge_leaf (charge : ℤ) : totalCharge (.leaf charge) = charge := by

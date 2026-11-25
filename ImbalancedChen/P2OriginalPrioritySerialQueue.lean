@@ -150,7 +150,6 @@ def popBest (xs : List Entry) : Option (Entry × List Entry) :=
 
 private theorem popBest_nil : popBest [] = none := by
   conv_lhs => unfold popBest; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 private theorem popBest_cons (p : Entry) (ps : List Entry) :
     popBest (p :: ps) =
@@ -163,13 +162,13 @@ private theorem popBest_cons (p : Entry) (ps : List Entry) :
 
 theorem popBest_none_iff (xs : List Entry) : popBest xs = none ↔ xs = [] := by
   cases xs with
-  | nil => simp [popBest_nil,popBest_cons]
+  | nil => simp [popBest_nil]
   | cons p ps =>
       cases h : popBest ps with
-      | none => simp [popBest_nil,popBest_cons,h]
+      | none => simp [popBest_cons,h]
       | some pair =>
           rcases pair with ⟨q,qs⟩
-          by_cases hkey : Before p q <;> simp [popBest_nil,popBest_cons,h,hkey]
+          by_cases hkey : Before p q <;> simp [popBest_cons,h,hkey]
 
 /-- Both the exact removal multiset and priority of the returned parent are
 proved; neither is a heap-validity assumption supplied by the caller. -/
@@ -177,7 +176,7 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
     (h : popBest xs = some (p,rest)) :
     xs.Perm (p :: rest) ∧ p ∈ xs ∧ ∀ q ∈ xs, Before p q := by
   induction xs generalizing p rest with
-  | nil => simp [popBest_nil,popBest_cons] at h
+  | nil => simp [popBest_nil] at h
   | cons a xs ih =>
       cases hs : popBest xs with
       | none =>
@@ -194,7 +193,7 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
           rcases pair with ⟨b,bs⟩
           obtain ⟨hperm,hmem,hmin⟩ := ih b bs hs
           by_cases hab : Before a b
-          · simp only [popBest_nil,popBest_cons,hs,if_pos hab] at h
+          · simp only [popBest_cons,hs,if_pos hab] at h
             have hpair : (a, xs) = (p, rest) := Option.some.inj h
             have hp : p = a := (congrArg Prod.fst hpair).symm
             have hr : rest = xs := (congrArg Prod.snd hpair).symm
@@ -206,7 +205,7 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
             · rw [hqa]
               exact before_refl a
             · exact before_trans hab (hmin q hq)
-          · simp only [popBest_nil,popBest_cons,hs,if_neg hab] at h
+          · simp only [popBest_cons,hs,if_neg hab] at h
             have hpair : (b, a :: bs) = (p, rest) := Option.some.inj h
             have hp : p = b := (congrArg Prod.fst hpair).symm
             have hr : rest = a :: bs := (congrArg Prod.snd hpair).symm
