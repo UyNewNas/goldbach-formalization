@@ -1,0 +1,153 @@
+{
+  "schema": "p27-fubini-pinned-api-preflight-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_strip_analysis",
+  "status": "NO_DEFINITE_API_MISMATCH_OBSERVED_COMPILATION_PENDING",
+  "purpose": "Record the already observed signatures of the pinned Mathlib APIs used by the two pending Fubini modules; diagnostic background only.",
+  "project_sources_reviewed": [
+    "ImbalancedChen/Certificates/P2PairedSupportFubini.lean",
+    "ImbalancedChen/Certificates/P2ContinuousFibreFubini.lean"
+  ],
+  "upstream": {
+    "repository": "leanprover-community/mathlib4",
+    "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "retrieval": "Official GitHub file contents fetched at this exact commit. Code search was used only to locate files; all signature conclusions below use the pinned file contents.",
+    "recorded_from_already_observed_read_only_review": true
+  },
+  "checks": [
+    {
+      "id": "pi_fin_succ_above_type",
+      "api": "MeasurableEquiv.piFinSuccAbove",
+      "observed_signature": "For alpha : Fin (n + 1) -> Type, the equivalence maps (forall j, alpha j) to alpha i x (forall j, alpha (i.succAbove j)).",
+      "conclusion": "The constant real-valued family and pivot zero used by split4 and split3 match this domain and codomain.",
+      "source_path": "Mathlib/MeasureTheory/MeasurableSpace/Embedding.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/MeasurableSpace/Embedding.lean#L564-L575"
+    },
+    {
+      "id": "measure_preserving_symm_dot_notation",
+      "api": "MeasurePreserving.symm followed by integral_comp'",
+      "observed_signature": "MeasurePreserving.symm has an explicit measurable equivalence argument and a measure-preservation proof; the pinned Integral/Pi.lean itself uses (measurePreserving_piFinSuccAbove ...).symm.integral_comp'.",
+      "conclusion": "The explicit equivalence parameter does not establish a missing-argument error in the project's matching dot-notation call.",
+      "source_paths": [
+        "Mathlib/Dynamics/Ergodic/MeasurePreserving.lean",
+        "Mathlib/MeasureTheory/Integral/Pi.lean"
+      ],
+      "source_urls": [
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Dynamics/Ergodic/MeasurePreserving.lean#L73-L76",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Pi.lean#L85-L96"
+      ]
+    },
+    {
+      "id": "integral_comp_direction",
+      "api": "MeasurePreserving.integral_comp'",
+      "observed_signature": "For h : MeasurePreserving f mu nu and g on the codomain, the conclusion equates the integral of g (f x) against mu with the integral of g against nu.",
+      "conclusion": "Applying this to the inverse measurable equivalence and taking the symmetry of the resulting equality has the direction used by the project.",
+      "source_path": "Mathlib/MeasureTheory/Integral/Bochner/Basic.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Bochner/Basic.lean#L1077-L1084"
+    },
+    {
+      "id": "integral_prod_parameters",
+      "api": "MeasureTheory.integral_prod",
+      "observed_signature": "The explicit arguments are the product-space function f followed by hf : Integrable f (mu.prod nu). The conclusion integrates the first coordinate outside the second coordinate.",
+      "conclusion": "The project's integral_prod f hf calls and coordinate order match the pinned signature.",
+      "source_path": "Mathlib/MeasureTheory/Integral/Prod.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Prod.lean#L444-L445"
+    },
+    {
+      "id": "prod_right_ae_slice_direction",
+      "api": "MeasureTheory.Integrable.prod_right_ae",
+      "observed_signature": "For a product-integrable f, the conclusion is: for mu-almost every x, the function y -> f (x, y) is integrable against nu.",
+      "conclusion": "The slices used by integral_fin_three and integral_fin_four have the correct outer and inner coordinate order.",
+      "source_path": "Mathlib/MeasureTheory/Integral/Prod.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Prod.lean#L250-L252"
+    },
+    {
+      "id": "integral_prod_mul_parameters",
+      "api": "MeasureTheory.integral_prod_mul",
+      "observed_signature": "The theorem takes f and g as explicit arguments and equates the integral of f z.1 * g z.2 with the product of their integrals; it has no additional explicit Integrable premises.",
+      "conclusion": "The two-coordinate separation calls integral_prod_mul _ _ do not omit an explicit integrability argument.",
+      "source_path": "Mathlib/MeasureTheory/Integral/Prod.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Prod.lean#L539-L541"
+    },
+    {
+      "id": "insert_nth_cons_vector_conversion",
+      "api": "Fin.insertNth_zero, Fin.zero_succAbove, Matrix.vecCons",
+      "observed_signature": "The pinned library contains insertNth_zero and zero_succAbove, uses the same insertNthEquiv conversion in Integral/Pi.lean, and defines Matrix.vecCons h t as Fin.cons h t.",
+      "conclusion": "The coordinate conversions and vector concatenations have the required declaration and definitional-equality basis. Closure of the project's concrete simp goals has not been compiled.",
+      "source_paths": [
+        "Mathlib/Data/Fin/Tuple/Basic.lean",
+        "Mathlib/Data/Fin/SuccPred.lean",
+        "Mathlib/MeasureTheory/Integral/Pi.lean",
+        "Mathlib/Data/Fin/VecNotation.lean"
+      ],
+      "source_urls": [
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Data/Fin/Tuple/Basic.lean#L941-L950",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Data/Fin/SuccPred.lean#L694-L694",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Pi.lean#L90-L93",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Data/Fin/VecNotation.lean#L54-L75"
+      ]
+    },
+    {
+      "id": "pi_fin_two_inverse",
+      "api": "piFinTwoEquiv and MeasurableEquiv.piFinTwo",
+      "observed_signature": "piFinTwoEquiv has inverse p -> Fin.cons p.1 (Fin.cons p.2 finZeroElim); MeasurableEquiv.piFinTwo uses that equivalence.",
+      "conclusion": "The two-coordinate inverse in split2_symm has the expected underlying definition for its coordinatewise reduction.",
+      "source_paths": [
+        "Mathlib/Data/Fin/Tuple/Basic.lean",
+        "Mathlib/MeasureTheory/MeasurableSpace/Embedding.lean"
+      ],
+      "source_urls": [
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Data/Fin/Tuple/Basic.lean#L1327-L1334",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/MeasurableSpace/Embedding.lean#L553-L557"
+      ]
+    },
+    {
+      "id": "interval_integral_congruence_and_endpoints",
+      "api": "intervalIntegral.integral_congr, intervalIntegral.integral_of_le, MeasureTheory.integral_Ioc_eq_integral_Ioo",
+      "observed_signature": "integral_congr uses EqOn over uIcc. integral_of_le converts the oriented interval integral to a set integral over Ioc. integral_Ioc_eq_integral_Ioo equates that set integral with the Ioo integral under the declared atomless-measure assumptions.",
+      "conclusion": "The project's uIcc_of_le step and Ioc-to-Ioo rewrites match these signatures and directions.",
+      "source_paths": [
+        "Mathlib/MeasureTheory/Integral/IntervalIntegral/Basic.lean",
+        "Mathlib/MeasureTheory/Integral/Bochner/Set.lean"
+      ],
+      "source_urls": [
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/IntervalIntegral/Basic.lean#L677-L678",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/IntervalIntegral/Basic.lean#L1074-L1081",
+        "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Integral/Bochner/Set.lean#L709-L713"
+      ]
+    },
+    {
+      "id": "continuous_on_compact_integrability",
+      "api": "ContinuousOn.integrableOn_compact",
+      "observed_signature": "The theorem consumes compactness and continuity on the set. The pinned library's compact-interval adapter itself calls hf.integrableOn_compact isCompact_Icc.",
+      "conclusion": "The project's parameter order and dot-notation calls match the pinned API; actual instance synthesis remains a compilation obligation.",
+      "source_path": "Mathlib/MeasureTheory/Function/LocallyIntegrable.lean",
+      "source_url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Function/LocallyIntegrable.lean#L592-L602"
+    }
+  ],
+  "findings": {
+    "definite_api_mismatches_observed": [],
+    "source_changes_proposed": [],
+    "meaning": "No definite API mismatch was found in the listed checks. This is not evidence that either complete Lean file elaborates or passes its proof obligations."
+  },
+  "scope": {
+    "read_only_source_preflight": true,
+    "lean_compilation_performed": false,
+    "kernel_replay_performed": false,
+    "declaration_or_axiom_audit_performed": false,
+    "cloud_jobs_submitted": 0,
+    "lean_source_modified": false,
+    "python_source_modified": false,
+    "currentchen_receiver_remained_frozen": true,
+    "source_reread_for_this_record": false,
+    "tests_run_for_this_record": false,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual Lean elaboration and typeclass-instance synthesis for both complete Fubini modules.",
+    "Actual closure of the concrete simp, fin_cases and rw goals under the pinned compiler and project environment.",
+    "Strict compilation and the separately required independent replay, declaration ownership and transitive-axiom gates."
+  ]
+}
