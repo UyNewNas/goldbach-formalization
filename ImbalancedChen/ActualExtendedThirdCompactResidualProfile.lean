@@ -50,7 +50,7 @@ theorem primeTupleMinusProfile_eq_extendedThirdFactor (lam : ℝ) (t : Fin 3 →
   change (2 * (Real.exp Real.eulerMascheroniConstant)⁻¹ / t 2) *
       suzukiContinuousLowerFactor (max 2 ((lam - t 0 - t 1 - t 2) / t 2)) = _
   field_simp [ne_of_gt hz, ne_of_gt (Real.exp_pos Real.eulerMascheroniConstant)]
-  <;> ring
+  ring
 
 /-- The limiting extension is zero whenever the original strict gate
 fails, including equality.  No arithmetic wall is deleted. -/

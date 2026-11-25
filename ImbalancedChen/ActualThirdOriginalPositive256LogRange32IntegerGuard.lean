@@ -133,7 +133,7 @@ theorem original_integer_below_mu_log32_guard (x0 x1 : ℤ)
         (1:ℝ)≤((x1:ℝ)-(x0:ℝ))*(P160:ℝ)/(x1:ℝ) :=
           (le_div_iff₀ hx1Real).2 (by simpa only [one_mul] using hscaledReal)
         _ = (1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ) := by
-          field_simp [hx0Real.ne', hx1Real.ne'] <;> ring
+          field_simp [hx0Real.ne', hx1Real.ne']
     have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo := by
       change (1:ℤ)≤⌊(1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ)⌋
       apply Int.le_floor.mpr

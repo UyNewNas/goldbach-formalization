@@ -59,7 +59,6 @@ theorem stored_grid_ex_eq (x0 x1 : ℤ) (a b : ℚ) (lx : IV)
     rw [haR,hbR]
     push_cast
     field_simp [hDr.ne']
-    ring
   unfold symmetricEx storedGridEx
   rw [hwidth,ofReal_int_div_source (x1-x0) (48000*2^24:ℤ) hD]
 

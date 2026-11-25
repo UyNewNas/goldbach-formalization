@@ -64,7 +64,8 @@ theorem tree_integer_boxes {enclose : SeedCell → Bounds} {c : SeedCell}
           (sourceRight c).1 := by
         simp [rightIntegerLower,sourceRight,max_eq_right hmid.1.le]
       simpa only [eraseTree,integerLeafBoxes,treeEntries,List.map_append,hl,hr,
-        sourceLeft,sourceRight] using congrArg₂ List.append ihL ihR
+        sourceLeft,sourceRight] using
+        congrArg₂ (fun xs ys : List SeedCell => xs ++ ys) ihL ihR
 
 inductive SourceForest (enclose : SeedCell → Bounds) : List SeedCell → Type where
   | nil : SourceForest enclose []
@@ -109,14 +110,14 @@ theorem completeTree_closedLeaves {enclose : SeedCell → Bounds}
     closedLeaves (completeTree forest) compactRegion =
       (entries forest).map (fun p => rootCell p.cell) := by
   unfold completeTree
-  rw [originalAdaptiveTree_closedLeaves,forest_integer_boxes,List.map_map]
+  rw [originalAdaptiveTree_closedLeaves,forest_integer_boxes,List.map_map,Function.comp_def]
 
 theorem complete_integral_identity {enclose : SeedCell → Bounds}
     (forest : SourceForest enclose initialSeeds) :
     originalCompactThirdCorrection =
       ((entries forest).map (fun p => ∫ t in rootCell p.cell, compactKernel t)).sum := by
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves (completeTree forest),
-    completeTree_closedLeaves,List.map_map]
+    completeTree_closedLeaves,List.map_map,Function.comp_def]
 
 def lowerSum (xs : List Entry) : ℤ := (xs.map (fun p => p.bounds.lower)).sum
 def upperSum (xs : List Entry) : ℤ := (xs.map (fun p => p.bounds.upper)).sum
@@ -296,8 +297,9 @@ theorem refine_sum_updates {enclose : SeedCell → Bounds} {s : ℕ} {p : Entry}
     (entries forest').length = (entries forest).length + 1 := by
   obtain ⟨pre,post,hpre,hpost⟩ := forest_refines_entries h
   rw [hpre,hpost]
-  simp only [lowerSum_append,upperSum_append,lowerSum,upperSum,List.map_cons,
-    List.sum_cons,List.length_append,List.length_cons,children,List.length_nil]
+  simp only [lowerSum_append,upperSum_append,List.length_append]
+  simp only [lowerSum,upperSum,children,List.map_cons,List.map_nil,List.sum_cons,
+    List.sum_nil,List.length_cons,List.length_nil]
   omega
 
 private theorem perm_move_parent (pre post : List Entry) (p : Entry) :
@@ -305,7 +307,7 @@ private theorem perm_move_parent (pre post : List Entry) (p : Entry) :
   induction pre with
   | nil => exact List.Perm.refl _
   | cons a pre ih =>
-      exact (List.Perm.cons a ih).trans (List.Perm.swap a p (pre ++ post))
+      exact (List.Perm.cons a ih).trans (List.Perm.swap p a (pre ++ post))
 
 /-- Exact multiset update of the heap, proved from the full source-tree
 replacement and the specified pop. No arbitrary heap/source alignment is
@@ -449,13 +451,13 @@ theorem step_preserves_invariant {enclose : SeedCell → Bounds}
     (h : Step enclose fixedUpper target maxSplits st st') (hi : Invariant st) :
     Invariant st' := by
   cases h with
-  | split st p rest forest' gate pop refines =>
+  | split p rest forest' gate pop refines =>
       obtain ⟨hl,hu,hcount⟩ := refine_sum_updates refines
       refine ⟨by simpa only [hi.1] using hl.symm,
         by simpa only [hi.2.1] using hu.symm,?_⟩
       obtain ⟨pre,post,hpre,hpost⟩ := forest_refines_entries refines
       intro q hq
-      rw [hpost] at hq
+      rw [hpost,List.append_assoc] at hq
       rcases List.mem_append.mp hq with hq | hq
       · have hqold : q ∈ entries st.forest := by
           rw [hpre]
@@ -489,11 +491,11 @@ theorem run_complete_leaf_count {enclose : SeedCell → Bounds} {fixedUpper targ
     (entries st.forest).length = 21 + st.splits := by
   induction h with
   | initial =>
-      simpa only [initialState,seedForest_entries_length,initialSeeds_eq_records,
+      simp only [initialState,seedForest_entries_length,initialSeeds_eq_records,
         records_length,Nat.add_zero]
-  | next prior step ih =>
+  | @next st _ prior step ih =>
       cases step with
-      | split st p rest forest' gate pop refines =>
+      | split p rest forest' gate pop refines =>
           have hc := (refine_sum_updates refines).2.2
           change (entries forest').length = 21 + (st.splits + 1)
           omega
@@ -519,20 +521,31 @@ def chargeTree {enclose : SeedCell → Bounds} {fixedUpper target : ℚ}
   (attachCharges (completeTree st.forest)
     ((entries st.forest).map (fun p => p.bounds.upper)) (run_complete_charges h).2).val
 
+private theorem chargeTree_eq_attachCharges
+    {enclose : SeedCell → Bounds} {fixedUpper target : ℚ}
+    {maxSplits : ℕ} {st : State enclose} :
+    chargeTree (enclose := enclose) (fixedUpper := fixedUpper) (target := target)
+        (maxSplits := maxSplits) (st := st) =
+      fun (h : Run enclose fixedUpper target maxSplits st) =>
+        (attachCharges (completeTree st.forest)
+          ((entries st.forest).map (fun p => p.bounds.upper))
+          (run_complete_charges h).2).val := rfl
+
 theorem chargeTree_erase {enclose : SeedCell → Bounds} {fixedUpper target : ℚ}
     {maxSplits : ℕ} {st : State enclose}
     (h : Run enclose fixedUpper target maxSplits st) :
-    eraseCharges (chargeTree h) = completeTree st.forest :=
-  attachCharges_erase _ _ _
+    eraseCharges (chargeTree h) = completeTree st.forest := by
+  exact (congrArg eraseCharges (congrFun chargeTree_eq_attachCharges h)).trans
+    (attachCharges_erase _ _ _)
 
 theorem chargeTree_total {enclose : SeedCell → Bounds} {fixedUpper target : ℚ}
     {maxSplits : ℕ} {st : State enclose}
     (h : Run enclose fixedUpper target maxSplits st) :
     totalCharge (chargeTree h) = st.totalUpper := by
-  rw [totalCharge_eq_leafCharges_sum]
-  unfold chargeTree
-  rw [attachCharges_list]
-  exact (run_complete_charges h).1
+  exact (congrArg totalCharge (congrFun chargeTree_eq_attachCharges h)).trans
+    ((totalCharge_eq_leafCharges_sum _).trans
+      ((congrArg (fun qs : List ℤ => qs.sum) (attachCharges_list _ _ _)).trans
+        (run_complete_charges h).1))
 
 /-- Analytic payment is precisely the remaining per-leaf input. The source,
 tree, ordering, length and total-charge identities have already been proved. -/
@@ -544,8 +557,17 @@ theorem chargeTree_local_iff {enclose : SeedCell → Bounds} {fixedUpper target 
         (∫ t in domain, compactKernel t) ≤ (q : ℝ) / 2^80)
         ((entries st.forest).map (fun p => rootCell p.cell))
         ((entries st.forest).map (fun p => p.bounds.upper)) := by
-  unfold chargeTree
+  have htree := congrFun chargeTree_eq_attachCharges h
+  have hlocal := congrArg (fun tree => LocalChargeBound tree compactRegion) htree
+  refine (Iff.intro (Eq.mp hlocal) (Eq.mpr hlocal)).trans ?_
   rw [attachCharges_local_iff,completeTree_closedLeaves]
+  have castAsMap (qs : List ℤ) :
+      (show List ℝ from do
+        let q ← qs
+        pure (q : ℝ)) = qs.map (fun q : ℤ => (q : ℝ)) := by
+    change qs.flatMap (fun q : ℤ => [(q : ℝ)]) = _
+    exact List.map_eq_flatMap.symm
+  rw [castAsMap,List.map_map,Function.comp_def]
 
 /-- Exact uncertainty bookkeeping for every original-driver state. This
 does not assert that the actual Q80 enclosures are analytically sound.

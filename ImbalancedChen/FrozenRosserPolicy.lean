@@ -95,7 +95,7 @@ theorem firstExitRetainedPolynomial_ancestorFrozenPolicy
   | cons q qs ih =>
       have hk' : k ≤ (q :: pre).length := by simp only [List.length_cons]; omega
       have hanc := rosserAncestor_cons k q pre hk
-      simp only [firstExitRetainedPolynomial_nil, firstExitRetainedPolynomial_cons, ancestorFrozenPolicy, hanc]
+      simp only [firstExitRetainedPolynomial_cons, ancestorFrozenPolicy, hanc]
       rw [ih pre positive mass hk]
       by_cases ht : policy (Q (rosserAncestor k pre)) (!positive) (q :: pre) = true
       · simp only [if_pos ht]

@@ -93,6 +93,8 @@ theorem literal_ordinary_mass_encloses
     rw [hfactor]
     unfold boxMass zMass
     ring
+  simp only [show (0 : Fin 2).castSucc = (0 : Fin 3) from rfl,
+    show (1 : Fin 2).castSucc = (1 : Fin 3) from rfl] at hraw
   rw [heq] at hraw
   exact hraw
 
@@ -169,7 +171,7 @@ theorem ordinary_three_stored_queries
     P160 P160_pos).2
   refine ⟨hfl,hfh,?_⟩
   simpa only [ordinaryNewQuery,Rat.cast_div,Rat.cast_intCast,value,P160,
-    Int.cast_pow,Int.cast_ofNat] using hout
+    Int.cast_pow,Int.cast_ofNat,Rat.cast_pow,Rat.cast_ofNat] using hout
 
 /-- Original ordinary tent candidate: literal integer branch/root/residual
  -> exact Fraction endpoints -> original OLD/NEW queries -> rounded/clipped

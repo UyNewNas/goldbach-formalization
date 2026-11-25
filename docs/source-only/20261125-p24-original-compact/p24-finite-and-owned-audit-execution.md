@@ -8,21 +8,22 @@ whole endpoint = 322 modules**. The finite candidates and complete independent
 audit have not been accepted. Source availability, diagnostic passes, and
 compile-cache migration do not supply either missing credit.
 
-The original checkpoint recorded P2 timeouts and `Session terminated`.
-After the user's recovery message, P3 became accessible; its focused forest
-retry passed with 38 reused inputs and one freshly compiled module. P2 still
-returned a connection-layer MCP SSE 429 at 15:18:29 UTC. The existing canonical
-task's actual running state remains unknown. These interface errors establish
-neither process termination nor success. The commands below are execution
-preparation, not a record that finite checks or complete audits ran.
+P2 is now accessible. The older queued task
+`17a7f22f17c24bcebc03335048c7439e` was observed interrupted before
+starting, with zero output. The subsequent original-checker task
+`c2edcc3a270e4e2aabb7155f3b8bc0e0`, pinned to the source above,
+finished with exit 1: 267 of 319 symbolic modules accepted, 264 reused and
+three freshly compiled. Its complete log and summary are stored as
+`p2-strict-symbolic-03.log` and `p2-strict-symbolic-03-summary.json`.
+The forest conversion fix passed on canonical P2; eight direct module
+failures remain. Their candidate repairs require a new published source
+pin and original-checker retry before the finite jobs below can start.
 
-First recover and query canonical task `17a7f22f17c24bcebc03335048c7439e`.
-It is pinned to the older `d6a9d76c` source. Once that task is terminal, collect
-its results, preserve every valid record, and apply the current forest fix in
-the owned P2 checkout. The same original checker must then accept the five
-symbolic roots at the final source before starting Job A. Reuse the existing
-mirror and qualified snapshot; do not repeat cleanup, cloning, migration, or
-native qualification. P3's diagnostic pass supplies no canonical acceptance.
+Reuse the existing mirror and qualified snapshot; do not repeat cleanup,
+cloning, migration, or native qualification. P3's earlier diagnostic pass
+does not supply canonical acceptance. These commands remain a template
+pinned to the last actual batch; update the pin to the finally accepted
+symbolic source before executing Job A.
 
 The ordered module list returned by the existing `project_nodes` for
 `ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint`, encoded as one

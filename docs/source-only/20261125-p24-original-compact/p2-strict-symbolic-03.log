@@ -1,0 +1,265 @@
+fb61b4cd912765dc7975051055b0d2c3ed3d3714
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              fcd0acba7dfc34cf14075b880e7a31aef1550b87 -> FETCH_HEAD
+{"source_head": "fcd0acba7dfc34cf14075b880e7a31aef1550b87", "baseline_mirror": "/workspace/p2-4-compact-proof-20261125/.lake/p24-baseline-8657/attempt-001", "baseline_mirror_receipt_sha256": "88ae271b76916e4882974030de044cc54b47d445f22f54534df51667d5bad5f2", "external_snapshot": "/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json", "external_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27", "records_before_sha256": "f5741fd393cd2f514fdcae6170fac6569bc0fb531121d7c638419c9d01ab5877", "existing_record_count": 271, "existing_exit_zero_records": 264, "previous_task": "17a7f22f17c24bcebc03335048c7439e", "previous_task_observed_state": "interrupted_before_start_with_zero_output", "actual_source_object_dependency_and_native_validation": "delegated to unchanged original checker", "cleanup_or_clone_or_migration_repeated": false}
+START ImbalancedChen.P2HistoricSieveStateInduction
+FAIL ImbalancedChen.P2HistoricSieveStateInduction 1
+ImbalancedChen/P2HistoricSieveStateInduction.lean:62:2: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2HistoricSieveStateInduction.lean:345:8: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2HistoricSieveStateInduction.lean:403:12: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+START ImbalancedChen.ActualThirdOriginalSymmetricMassCeil
+PASS ImbalancedChen.ActualThirdOriginalSymmetricMassCeil 3.865
+START ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil
+BASELINE_STYLE_OPTIONS ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil ['-Dlinter.unusedVariables=false']
+FAIL ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil 1
+ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean:96:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Real.log (b 0 / a 0) * Real.log (b 1 / a 1) * (↑(4 * (48000 * 2 ^ 24) * (hi 2 - lo 2)) / ↑(lo 2 * hi 2))
+in the target expression
+  Encloses
+    (mul
+      (mul (originalLnUnit (↑(hi (Fin.castSucc 0)) / ↑(lo (Fin.castSucc 0))))
+        (originalLnUnit (↑(hi (Fin.castSucc 1)) / ↑(lo (Fin.castSucc 1)))))
+      (literalMassZ (lo 2) (hi 2)))
+    (Real.log (b (Fin.castSucc 0) / a (Fin.castSucc 0)) * Real.log (b (Fin.castSucc 1) / a (Fin.castSucc 1)) *
+      (↑(4 * (48000 * 2 ^ 24) * (hi 2 - lo 2)) / ↑(lo 2 * hi 2)))
+
+lo hi : Fin 3 → ℤ
+D : ℤ
+a b : BoxPoint
+hD : D = 48000 * 2 ^ 24
+haBind : ∀ (i : Fin 3), a i = ↑(lo i) / ↑D
+hbBind : ∀ (i : Fin 3), b i = ↑(hi i) / ↑D
+ha : ∀ (i : Fin 3), 0 < a i
+hab : ∀ (i : Fin 3), a i < b i
+hratio : ∀ (i : Fin 2), b i.castSucc / a i.castSucc ≤ 2
+hDr : 0 < ↑D
+hposLo : ∀ (i : Fin 3), 0 < lo i
+hposHi : ∀ (i : Fin 3), 0 < hi i
+hratioEq : ∀ (i : Fin 3), b i / a i = ↑(hi i) / ↑(lo i)
+hlog :
+  ∀ (i : Fin 2),
+    Encloses (originalLnUnit (↑(hi i.castSucc) / ↑(lo i.castSucc))) (Real.log (b i.castSucc / a i.castSucc))
+hz0 : 0 < ↑(lo 2)
+hz1 : 0 < ↑(hi 2)
+hfactor : ↑(4 * (48000 * 2 ^ 24) * (hi 2 - lo 2)) / ↑(lo 2 * hi 2) = 4 * (b 2 - a 2) / (a 2 * b 2)
+hraw :
+  Encloses
+    (mul
+      (mul (originalLnUnit (↑(hi (Fin.castSucc 0)) / ↑(lo (Fin.castSucc 0))))
+        (originalLnUnit (↑(hi (Fin.castSucc 1)) / ↑(lo (Fin.castSucc 1)))))
+      (literalMassZ (lo 2) (hi 2)))
+    (Real.log (b (Fin.castSucc 0) / a (Fin.castSucc 0)) * Real.log (b (Fin.castSucc 1) / a (Fin.castSucc 1)) *
+      (↑(4 * (48000 * 2 ^ 24) * (hi 2 - lo 2)) / ↑(lo 2 * hi 2)))
+heq :
+  Real.log (b 0 / a 0) * Real.log (b 1 / a 1) * (↑(4 * (48000 * 2 ^ 24) * (hi 2 - lo 2)) / ↑(lo 2 * hi 2)) =
+    4 * boxMass a b
+⊢ Encloses (literalOrdinaryMass lo hi) (4 * boxMass a b)
+ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean:171:2: error: Type mismatch: After simplification, term
+  hout
+ has type
+  actualExtendedThirdLowerFactor (↑(ordinaryNew a b).hi / 2 ^ 160) ≤
+    ↑(readQueryHi160 (assembledRead table.blocks) (ordinaryNew a b).hi (2 ^ 160)) / 2 ^ 160
+but is expected to have type
+  actualExtendedThirdLowerFactor (↑(ordinaryNew a b).hi / ↑(2 ^ 160)) ≤
+    ↑(readQueryHi160 (assembledRead table.blocks) (ordinaryNew a b).hi (2 ^ 160)) / 2 ^ 160
+
+START ImbalancedChen.ActualThirdOriginalPositive256LogRange32IntegerGuard
+FAIL ImbalancedChen.ActualThirdOriginalPositive256LogRange32IntegerGuard 1
+ImbalancedChen/ActualThirdOriginalPositive256LogRange32IntegerGuard.lean:136:52: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+START ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer
+BASELINE_STYLE_OPTIONS ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer ['-Dlinter.unusedTactic=false']
+BASELINE_STYLE_OPTIONS ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer ['-Dlinter.unreachableTactic=false']
+FAIL ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer 1
+ImbalancedChen/ActualThirdOriginalRoundedStoredQueryIntegerConsumer.lean:62:4: error: No goals to be solved
+
+START ImbalancedChen.P2OriginalAdaptiveForestSourceIdentity
+PASS ImbalancedChen.P2OriginalAdaptiveForestSourceIdentity 3.765
+START ImbalancedChen.P2OriginalPriorityForestLedger
+FAIL ImbalancedChen.P2OriginalPriorityForestLedger 1
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:66:6: error: Type mismatch: After simplification, term
+  congrArg₂ List.append ihL ihR
+ has type
+  @Eq (List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+    ((ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+          (fun a b => [(a, b)])
+          (fun axis cut _left _right leftBoxes rightBoxes a b =>
+            leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+          (eraseTree left) c.1 (Function.update c.2 (originalAxis c) (originalMidpoint c))).append
+      (ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+        (fun a b => [(a, b)])
+        (fun axis cut _left _right leftBoxes rightBoxes a b =>
+          leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+        (eraseTree right) (Function.update c.1 (originalAxis c) (originalMidpoint c)) c.2))
+    ((List.map Entry.cell (treeEntries left)).append (List.map Entry.cell (treeEntries right)))
+but is expected to have type
+  @Eq (List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+    (ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+        (fun a b => [(a, b)])
+        (fun axis cut _left _right leftBoxes rightBoxes a b =>
+          leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+        (eraseTree left) c.1 (Function.update c.2 (originalAxis c) (originalMidpoint c)) ++
+      ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+        (fun a b => [(a, b)])
+        (fun axis cut _left _right leftBoxes rightBoxes a b =>
+          leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+        (eraseTree right) (Function.update c.1 (originalAxis c) (originalMidpoint c)) c.2)
+    (List.map Entry.cell (treeEntries left) ++ List.map Entry.cell (treeEntries right))
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:110:57: error: unsolved goals
+enclose : SeedCell → Bounds
+forest : SourceForest enclose initialSeeds
+⊢ List.map (rootCell ∘ Entry.cell) (entries forest) = List.map (fun p => rootCell p.cell) (entries forest)
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:117:87: error: unsolved goals
+enclose : SeedCell → Bounds
+forest : SourceForest enclose initialSeeds
+⊢ (List.map ((fun c => ∫ (t : Point) in c, compactKernel t) ∘ fun p => rootCell p.cell) (entries forest)).sum =
+    (List.map (fun p => ∫ (t : Point) in rootCell p.cell, compactKernel t) (entries forest)).sum
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:301:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a - b + c + d + f - g ≥ 1
+where
+ a := (List.map (fun p => p.bounds.lower) (pre ++ p :: post)).sum
+ b := p.bounds.lower
+ c := (issue enclose (sourceLeft p.cell) s).bounds.lower
+ d := (issue enclose (sourceRight p.cell) (advance enclose (sourceLeft p.cell) s)).bounds.lower
+ f := (List.map (fun p => p.bounds.lower) []).sum
+ g := (List.map (fun p => p.bounds.lower)
+    (pre ++
+        [issue enclose (sourceLeft p.cell) s,
+          issue enclose (sourceRight p.cell) (advance enclose (sourceLeft p.cell) s)] ++
+      post)).sum
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:299:13: error: This simp argument is unused:
+  lowerSum_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [upperSum_append, lowerSum, upperSum, List.map_cons, List.sum_cons, List.length_append,
+    List.length_cons, children, List.length_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:299:29: error: This simp argument is unused:
+  upperSum_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [lowerSum_append, lowerSum, upperSum, List.map_cons, List.sum_cons, List.length_append,
+    List.length_cons, children, List.length_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:308:40: error: Application type mismatch: The argument
+  List.Perm.swap a p (pre ++ post)
+has type
+  (p :: a :: (pre ++ post)).Perm (a :: p :: (pre ++ post))
+but is expected to have type
+  (a :: p :: (pre ++ post)).Perm (p :: (a :: pre ++ post))
+in the application
+  List.Perm.trans (List.Perm.cons a ih) (List.Perm.swap a p (pre ++ post))
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:452:2: error: Too many variable names provided at alternative `split`: 7 provided, but 6 expected
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:453:50: error(lean.unknownIdentifier): Unknown identifier `refines`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:456:61: error(lean.unknownIdentifier): Unknown identifier `refines`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:460:36: error(lean.invalidField): Invalid field `forest`: The environment does not contain `ImbalancedChen.P2OriginalPrioritySerialQueueSourceOnly.Entry.forest`, so it is not possible to project the field `forest` from an expression
+  st
+of type `Entry`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:464:34: error: Application type mismatch: The argument
+  hq
+has type
+  q ∈ post
+but is expected to have type
+  ?m.160 ∈ ?m.161 ++ ?m.162
+in the application
+  List.mem_append.mp hq
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:492:6: error: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:496:6: error: Too many variable names provided at alternative `split`: 7 provided, but 6 expected
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:497:41: error(lean.unknownIdentifier): Unknown identifier `refines`
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:522:8: error: (kernel) excessive memory consumption detected
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:528:8: error: (kernel) excessive memory consumption detected
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:546:63: error: unsolved goals
+enclose : SeedCell → Bounds
+fixedUpper target : ℚ
+maxSplits : ℕ
+st : State enclose
+h : Run enclose fixedUpper target maxSplits st
+⊢ (List.Forall₂ (fun c q => ∫ (t : Point) in c, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest)) do
+      let a ← List.map (fun p => p.bounds.upper) (entries st.forest)
+      pure ↑a) ↔
+    List.Forall₂ (fun domain q => ∫ (t : Point) in domain, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest))
+      (List.map (fun p => ↑p.bounds.upper) (entries st.forest))
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:539:8: error: (kernel) excessive memory consumption detected
+
+START ImbalancedChen.ActualExtendedThirdCompactFrontier
+FAIL ImbalancedChen.ActualExtendedThirdCompactFrontier 1
+ImbalancedChen/ActualExtendedThirdCompactFrontier.lean:175:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map
+      (fun state =>
+        (List.map (fun q => 1 / (↑q - 1)) state.selectedPrefix).prod *
+          ?f (primeHistoryTuple (2 + 1) state.selectedPrefix))
+      (firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N) (fun q => 1 / (↑q - 1))
+        (roughPrimeUniverse N cap w (↑N ^ thirdPrefixRho)))).sum
+in the target expression
+  (List.map
+        (fun candidate =>
+          (List.map (fun q => 1 / (↑q - 1)) candidate.selectedPrefix).prod *
+            if
+                actualPrimeTupleLog N (primeHistoryTuple 3 candidate.selectedPrefix) ∈
+                  actualExtendedThirdOwnedCell m j then
+              G (primeHistoryTuple 3 candidate.selectedPrefix)
+            else 0)
+        (firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N) (fun q => 1 / (↑q - 1))
+          (roughPrimeUniverse N cap w (↑N ^ thirdPrefixRho)))).sum =
+    ∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j, (∏ i, 1 / (↑(p i) - 1)) * G p
+
+e h : ℝ
+m N cap : ℕ
+hN : 1 < N
+hh : 0 < h
+he0 : 0 < e
+he : e ≤ 1 / 384
+hmesh : actualExtendedThirdDyadicStep m ≤ e / 2
+w : ℝ
+hw : w ≤ ↑N ^ h
+hcap : ↑N ^ thirdPrefixRho ≤ ↑cap
+j : ActualExtendedThirdDyadicLabel m
+hj : j ∈ actualExtendedThirdCompactCells e h m
+G : (Fin 3 → ℕ) → ℝ
+⊢ (List.map
+        (fun candidate =>
+          (List.map (fun q => 1 / (↑q - 1)) candidate.selectedPrefix).prod *
+            if
+                actualPrimeTupleLog N (primeHistoryTuple 3 candidate.selectedPrefix) ∈
+                  actualExtendedThirdOwnedCell m j then
+              G (primeHistoryTuple 3 candidate.selectedPrefix)
+            else 0)
+        (firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N) (fun q => 1 / (↑q - 1))
+          (roughPrimeUniverse N cap w (↑N ^ thirdPrefixRho)))).sum =
+    ∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j, (∏ i, 1 / (↑(p i) - 1)) * G p
+
+START ImbalancedChen.ActualExtendedThirdCompactResidualProfile
+FAIL ImbalancedChen.ActualExtendedThirdCompactResidualProfile 1
+ImbalancedChen/ActualExtendedThirdCompactResidualProfile.lean:53:2: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+
+START ImbalancedChen.OrdinaryRosserContinuation
+PASS ImbalancedChen.OrdinaryRosserContinuation 7.258
+START ImbalancedChen.FrozenRosserPolicy
+FAIL ImbalancedChen.FrozenRosserPolicy 1
+ImbalancedChen/FrozenRosserPolicy.lean:98:17: error: This simp argument is unused:
+  firstExitRetainedPolynomial_nil
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [firstExitRetainedPolynomial_cons, ancestorFrozenPolicy, hanc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve"], "successful_closure": 267, "reused": 264, "failed_or_blocked": ["ImbalancedChen.ActualExtendedThirdCompactFrontier", "ImbalancedChen.ActualExtendedThirdCompactPolicySaving", "ImbalancedChen.ActualExtendedThirdCompactResidualProfile", "ImbalancedChen.ActualExtendedThirdCompactSignedDensityLimit", "ImbalancedChen.ActualFrozenFrontierDensity", "ImbalancedChen.ActualFrozenOwnCubeDensity", "ImbalancedChen.ActualRosserShortPrefixDensity", "ImbalancedChen.ActualThirdOriginalP4ABalancedSymmetricLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryEarlyReturnLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteDispatch", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryOuterMinimum", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld", "ImbalancedChen.ActualThirdOriginalP4AOriginalClippedGapLeaf", "ImbalancedChen.ActualThirdOriginalP4ASixTentSymmetricLeaf", "ImbalancedChen.ActualThirdOriginalP4ASymmetricBLeaf", "ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue", "ImbalancedChen.ActualThirdOriginalP4ASymmetricSafeChordDirection", "ImbalancedChen.ActualThirdOriginalP4ASymmetricTentPrerequisites", "ImbalancedChen.ActualThirdOriginalPositive256LogRange32IntegerGuard", "ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer", "ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil", "ImbalancedChen.FirstExitCandidateGeometry", "ImbalancedChen.FrozenRosserPolicy", "ImbalancedChen.P2HistoricSieveStateInduction", "ImbalancedChen.P2OriginalCompactBoundaryCapFloor", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactConcreteLoop", "ImbalancedChen.P2OriginalCompactConcreteRun", "ImbalancedChen.P2OriginalCompactQ80Arithmetic", "ImbalancedChen.P2OriginalCompactQ80ArrayTable", "ImbalancedChen.P2OriginalCompactQ80CacheEncloser", "ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80Encloser", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P2OriginalCompactQ80JensenBounds", "ImbalancedChen.P2OriginalCompactQ80JensenGeometry", "ImbalancedChen.P2OriginalCompactQ80JensenMoments", "ImbalancedChen.P2OriginalCompactQ80JensenSelection", "ImbalancedChen.P2OriginalCompactQ80Leaf", "ImbalancedChen.P2OriginalCompactQ80LogGuards", "ImbalancedChen.P2OriginalCompactQ80LowerDifference", "ImbalancedChen.P2OriginalCompactQ80PhiBounds", "ImbalancedChen.P2OriginalCompactQ80Reachability", "ImbalancedChen.P2OriginalCompactQ80Selection", "ImbalancedChen.P2OriginalCompactQ80Symmetry", "ImbalancedChen.P2OriginalCompactQ80Table", "ImbalancedChen.P2OriginalPriorityForestLedger", "ImbalancedChen.P4ACompactBaselineLimit", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.P4ASameRhoCompact"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 1800.0, "elapsed_seconds": 546.099, "exit_code": 1, "total": 319}
