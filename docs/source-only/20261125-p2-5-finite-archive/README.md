@@ -131,3 +131,28 @@ Winner9 numerical-page proof uses this path at the same recursion/heartbeat
 limits. Its acceptance is not transferred to saving16. Current kernel-mode
 guards still need their own compile/replay/full-owned result, including all
 new auxiliary declarations. The whole P2.5 endpoint remains open.
+
+## Subsequent input/decoder owner separation
+
+The later source installation is recorded in
+`../20261125-p2-5-decoder/INTEGRATION.json`. It moves the existing reader
+and originalText commands to `P2OriginalSaving16OriginalInput`, and the
+nine existing decoder/schema commands to `P2OriginalSaving16Decoder`.
+All moved command bytes, the remaining finite declarations and the four
+closed guards are preserved. This installation has no compilation or
+numerical acceptance credit.
+
+Use `../20261125-p2-5-decoder/CURRENT_FINITE_SOURCE_CLOSURE.json` for the
+current five-module production closure. This directory's original
+three-module `FINITE_SOURCE_CLOSURE.json`, its runners and its receipts
+remain unchanged historical evidence; an actual attempt-004 receipt binds
+the old map's exact hash.
+
+The separate unguarded check covers OriginalInput and Decoder with the
+already accepted parser/floor dependencies, four project modules in all.
+It does not import FiniteArchive or run its closed guards. Fresh external
+input binding must now be established at OriginalInput's compilation,
+because that owner reads the fourteen original files. A later fresh
+FiniteArchive compilation alone cannot establish that binding. All new
+owners and their generated/private declarations remain subject to strict
+compile, independent kernel replay and the unchanged full-owned audit.

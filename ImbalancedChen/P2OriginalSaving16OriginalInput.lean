@@ -1,0 +1,42 @@
+import Lean
+import Mathlib.Data.Fin.VecNotation
+
+/-!
+SOURCE ONLY / NOT COMPILED / ZERO FORMAL CREDIT.
+
+Mechanical relocation of the existing originalSaving16Text% elaborator and
+originalText definition. Both command byte sequences and the namespace are
+preserved from the current finite archive. The original noncomputable context
+is retained. No reader, codec, parser, numerical operation, or theorem is added.
+
+The unchanged definition reads all fourteen ORIGINAL witness texts during
+elaboration from ../goldbach-research and emits ordinary String literals.
+This source has not been compiled or audited. It does not connect the separate
+cell00 String/Char diagnostic, prove parsing, or certify any Q96 guard.
+-/
+
+namespace ImbalancedChen.P2OriginalSaving16OriginalArchive
+
+open Lean Elab Term
+
+elab "originalSaving16Text% " n:num : term => do
+  let c := n.getNat
+  unless c < 15 && c != 7 do
+    throwError "saving16 selects source IDs0..14 except7"
+  let suffix := if c < 10 then "0" ++ toString c else toString c
+  let path := "../goldbach-research/eighth-prefix-family-20261009-cell-" ++
+    suffix ++ ".witness.json"
+  let raw ← IO.FS.readFile path
+  elabTerm (Syntax.mkStrLit raw) (some (mkConst ``String))
+
+noncomputable section
+
+def originalText : Fin 14 → String :=
+  ![originalSaving16Text% 0, originalSaving16Text% 1, originalSaving16Text% 2,
+    originalSaving16Text% 3, originalSaving16Text% 4, originalSaving16Text% 5,
+    originalSaving16Text% 6, originalSaving16Text% 8, originalSaving16Text% 9,
+    originalSaving16Text% 10, originalSaving16Text% 11, originalSaving16Text% 12,
+    originalSaving16Text% 13, originalSaving16Text% 14]
+
+end
+end ImbalancedChen.P2OriginalSaving16OriginalArchive
