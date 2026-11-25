@@ -50,7 +50,7 @@ theorem unitFamilyPartitionCheck_sound (raw : Array FifthWireRow)
     (hc : unitFamilyPartitionCheck raw = true) :
     (∀ row ∈ raw.toList, row.grid = 400) ∧ (raw.toList.map rowKey).Nodup := by
   have hp : grid400Check raw = true ∧ unitKeyCheck raw = true :=
-    Bool.and_eq_true.mp hc
+    by simpa [unitFamilyPartitionCheck] using hc
   exact ⟨grid400Check_sound raw hp.1, unitKeyCheck_sound raw hp.2⟩
 
 /-- Two source1/400 half-open intervals cannot share a point unless their
@@ -122,9 +122,11 @@ theorem loaded_records_pairwise_disjoint (raw : Array FifthWireRow)
     Set.PairwiseDisjoint (raw.toList.toFinset : Set FifthWireRow)
       FifthWireRow.originalBox := by
   have hp := unitFamilyPartitionCheck_sound raw hc
+  have hk : grid400Check raw = true ∧ unitKeyCheck raw = true := by
+    simpa [unitFamilyPartitionCheck] using hc
   exact records_pairwise_disjoint raw.toList.toFinset
     (fun row hr => hp.1 row (List.mem_toFinset.mp hr))
-    (loaded_key_injective_finset raw (Bool.and_eq_true.mp hc).2)
+    (loaded_key_injective_finset raw hk.2)
 
 /-- Common membership now identifies the complete record within this family. -/
 theorem records_common_point_eq (records : Finset FifthWireRow)
