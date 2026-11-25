@@ -81,7 +81,7 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | [reuse-audit.md](reuse-audit.md)、[reuse-audit.json](reuse-audit.json) | 原证明复用、历史源码匹配与证据边界。 |
 | [audit-targets.txt](audit-targets.txt)、[project-closure.json](project-closure.json) | 26 个审核目标及 81 个仓库内依赖节点。 |
 
-Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目标 Lean 编译耗时 11.078 秒。以上是编译与对象复用记录，不包含独立 replay。73 个无需 native 根的数值/Fubini 模块准备继续验证，目前不记为该 73 模块整体通过。
+Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目标 Lean 编译耗时 11.078 秒。以上是编译与对象复用记录，不包含独立 replay。73 个无需 native 根的数值/Fubini 模块已入队继续验证（任务 `e0cdaba244874eecbfb9bf787ac90367`），目前不记为该 73 模块整体通过。
 
 当前运行及验收状态：
 
@@ -90,10 +90,14 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 | 53 个前置模块严格编译 | 编译成功；独立回放/审核 pending。 |
 | Strip00，任务 `96d6a29e696b4bfa97d85b22f90822ac` | 编译成功；独立 replay / 声明审核 pending。 |
 | 分析链，任务 `0ecd373efb4d4b44957f05f3416631f8` | 前置验证失败：旧 external snapshot 缺少 TailPropagation，未启动 Lean；任务记录绑定 `77db7b4…`。 |
-| 73 个无 native 数值/Fubini 模块的继续验证 | 准备中；整体通过状态 pending。 |
+| 73 个无 native 数值/Fubini 模块的继续验证 | 已入队：`e0cdaba244874eecbfb9bf787ac90367`；整体通过状态 pending。 |
 | 12 个条带检查块及完整证书 | 除上述 Strip00 编译记录外，完整验收仍 pending。 |
 | 补充 native 资格及 P1 物理 payload | 准备中；资格审查与实际接收结果 pending。 |
 | 26 模块声明类型、owner、传递公理审核及独立回放 | pending。 |
 | 最终源码/对象/依赖哈希绑定与正式接收凭据 | pending，待实际记录补入。 |
 
 **最终验收结果：pending；本快照不标记 accepted。** 后续更新本节时应引用实际运行记录及其绑定的提交，不以源码评审或历史叶模块凭据替代本轮结果。
+
+## 现有 Buchstab 对象的接入校验
+
+[p27_qualify_native_inputs.py](../../../../verification/part2/p27_qualify_native_inputs.py) 为本入口创建独立输入快照，复用旧环境和原 P6 来源，不改外部数学源码或旧快照。其[独立源码审查](native-adapter-review.json)与 22 项无编译检查已通过；真实对象包、完整 checkpoint provider 和最终 `ExternalSnapshot.verify` 仍待实际执行。输入资格不等于 P2.7 编译、内核重放或数学验收。
