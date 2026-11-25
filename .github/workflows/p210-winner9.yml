@@ -1,0 +1,601 @@
+name: P2.10 Winner9 remaining numerical certificates
+
+on:
+  push:
+    branches: [codex-p210-complete-20261125]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: p210-winner9-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  BASELINE_COMMIT: 8657cfffef159185f73c6a04ae4d31c846c0d0a9
+  MATHLIB_COMMIT: e4c91783ca8e6a7c693ae624ade32fd22d4e43c1
+  LEAN_NUM_THREADS: 1
+
+jobs:
+  bootstrap:
+    if: ${{ github.ref == 'refs/heads/codex-p210-complete-20261125' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+      archive_sha256: ${{ steps.seal.outputs.archive_sha256 }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Prepare transport and fail-closed cache orchestration
+        run: |
+          set -euo pipefail
+          mkdir -p .lake/p210-ci
+          cat > .lake/p210-ci/control.py <<'PY'
+          # This is transport/orchestration, not a replacement proof verifier.
+          # The repository's compile, audit and evidence drivers stay unchanged.
+          import concurrent.futures, hashlib, json, os, re, shutil, subprocess, sys, tarfile, zipfile
+          from pathlib import Path
+          ROOT = Path.cwd().resolve()
+          sys.path.insert(0, str(ROOT / 'verification/part2'))
+          import run_winner9_private_checks as C
+          import run_winner9_private_audit as A
+          from inspect_winner9_owner_native import imports as source_imports
+          W = ROOT / '.lake/p210-ci'
+          P = ROOT / '.lake/p2-private'
+          LIB = P / 'lib'
+          PREFIX = 'ImbalancedChen.P2Winner9'
+          FACETS = ('.olean', '.olean.server', '.olean.private', '.ir', '.ir.sig')
+          KEYS = ('module', 'source_sha256', 'object_sha256', 'toolchain', 'cache_schema',
+                  'deps', 'dependency_signatures', 'closure_signature', 'exit_code')
+          LEAN_SHA = 'e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550'
+          CHECKER_SHA = 'ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a'
+          def need(ok, message):
+              if not ok: raise RuntimeError(message)
+          def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+          def sha_bytes(raw): return hashlib.sha256(raw).hexdigest()
+          def read(path): return json.loads(Path(path).read_text())
+          def write(path, value):
+              Path(path).parent.mkdir(parents=True, exist_ok=True)
+              Path(path).write_text(json.dumps(value, sort_keys=True, indent=2) + '\n')
+          def run(command, log):
+              print('RUN', ' '.join(map(str, command)), flush=True)
+              with Path(log).open('w') as stream:
+                  result = subprocess.run(list(map(str, command)), stdout=stream, stderr=subprocess.STDOUT)
+              if result.returncode:
+                  print(Path(log).read_text()[-16000:], flush=True)
+                  raise RuntimeError(f'Command failed ({result.returncode}); full log: {log}')
+          def nodes(roots):
+              result = {}
+              for target in roots: result.update(A.project_nodes(ROOT, target))
+              return result
+          def source(name): return ROOT / (name.replace('.', '/') + '.lean')
+          def wanted(block):
+              block = int(block)
+              need(8 <= block <= 43, 'Only previously unaccepted blocks 08..43 are allowed')
+              return [PREFIX + f'NumericalPage{p:04}' for p in range(16*block, min(16*(block+1), 690))] + [PREFIX + f'NumericalCheck{block:02}']
+          def stable(record): return {key: record[key] for key in KEYS}
+          def bound_member(archive, member, expected_sha, manifest=None, manifest_member=None):
+              with tarfile.open(archive) as tar:
+                  raw = tar.extractfile(member).read()
+              need(sha_bytes(raw) == expected_sha, 'Public reference member hash mismatch: ' + member)
+              if manifest is not None:
+                  item = manifest['files'][manifest_member or member]
+                  need(item['sha256'] == expected_sha and item['bytes'] == len(raw), 'Public manifest/member mismatch')
+              return json.loads(raw)
+          def plan():
+              need(subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip() == os.environ['GITHUB_SHA'], 'Wrong source commit')
+              common = nodes([PREFIX+'MaterializedLogChecker', PREFIX+'SeedArchiveChecks'])
+              seeds = [PREFIX+f'CompleteSeedBlock{b:02}' for b in range(8,44)]
+              base = nodes([*common, *seeds])
+              need(len(common) == 57 and len(base) == 93, 'Unexpected bootstrap scope')
+              need(set(base) == set(common) | set(seeds), 'Unexpected bootstrap imports')
+              newer = ROOT/'docs/verification/20261125-p2-winner9-112-127'
+              need(sha(newer/'manifest.json') == 'de77df19ba0e5041b0273aaec8c5e49e98c21bf489df661c26c4c538d2fd3042', 'Changed public 112-127 manifest')
+              need(sha(newer/'evidence.tar.gz') == 'c8ed23cf27418cb2766770c501547e7519cb46932fc1cc11d7fb012c76985e12', 'Changed public 112-127 evidence')
+              manifest = read(newer/'manifest.json')
+              recent = bound_member(newer/'evidence.tar.gz', 'context/selected-compile-records.json',
+                  '83f036eda484bdeaddcaeec6e1cc1ef72629ecceae63bb777b8d2bd6dfc978a9', manifest)
+              archive = ROOT/'docs/verification/20261124-p2-private/evidence-checkpoint-20261124.slim.tar.xz'
+              need(sha(archive) == '3fc76106288cba9e4f0e77daa69e2b4e886fef1848433511e38cb73db83d450c', 'Changed public geometry evidence')
+              older_manifest = bound_member(archive, 'ORIGINAL_EXPORT_MANIFEST.json',
+                  '464bc35fd5b785ea6cd05ff77b253fdb3f0cc297e45193dc522eeabd729255e3')
+              older = bound_member(archive, 'packages/common.tar.gz/context/selected-compile-records.json',
+                  'cfc15061b345efb4adde626e839687df2f0bec3a298fedf3829faacb395b1437', older_manifest,
+                  'context/selected-compile-records.json')
+              need(set(common) <= set(recent) and set(seeds) <= set(older), 'Public reference omits a required dependency')
+              for name in set(common) & set(older):
+                  need(stable(recent[name]) == stable(older[name]), 'Conflicting public dependency histories: '+name)
+              reference = {name: recent[name] for name in common}
+              reference.update({name: older[name] for name in seeds})
+              for name, record in reference.items():
+                  need(record['source_sha256'] == sha(source(name)), 'Source differs from accepted dependency: '+name)
+                  need(record['cache_schema'] == 2 and record['exit_code'] == 0, 'Unsupported public record')
+                  need(set(record['deps']) == set(base[name]['deps']) <= set(reference), 'Incomplete public closure')
+                  need(record['deps'] == {d: reference[d]['object_sha256'] for d in base[name]['deps']}, 'Public dependency object conflict')
+                  need(record['dependency_signatures'] == {d: reference[d]['closure_signature'] for d in base[name]['deps']}, 'Public recursive signature conflict')
+                  need(record['closure_signature'] == C.closure_signature(record), 'Invalid public closure signature')
+                  index = manifest['object_manifest'] if name in common else older_manifest['object_manifest']
+                  need(all(index[name][k] == record[k] for k in ('source_sha256','object_sha256')), 'Public object manifest conflict')
+              imports = set()
+              for node in base.values():
+                  for name in source_imports(node['source'].read_text()):
+                      need(name.startswith(('ImbalancedChen.', 'Mathlib.', 'Lean.', 'Init.')) or name in ('Lean','Init'), 'Unexpected external dependency: '+name)
+                      if name.startswith('Mathlib.'): imports.add(name)
+              for block in range(8,44):
+                  targets = wanted(block)
+                  need(set(nodes([targets[-1]])) - set(base) == set(targets), 'Shard would compile an unplanned module')
+                  need(C.imports(source(targets[-1])) == targets[:-1], 'Block imports do not exactly match its pages')
+                  for name in targets[:-1]:
+                      need(PREFIX+'MaterializedLogChecker' in C.imports(source(name)), 'Unqualified numerical helper')
+              write(W/'public-reference.json', reference)
+              value = {'commit': os.environ['GITHUB_SHA'], 'run_id': os.environ['GITHUB_RUN_ID'],
+                  'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'], 'modules': sorted(base),
+                  'blocks': {f'{b:02}': wanted(b) for b in range(8,44)}, 'shared_count': 57,
+                  'seed_count': 36, 'new_pages': 562, 'new_rows': 8978, 'old_rows_replayed': 0,
+                  'toolchain': reference[PREFIX+'MaterializedLogChecker']['toolchain'],
+                  'public_reference_sha256': sha(W/'public-reference.json')}
+              need(all(r['toolchain'] == value['toolchain'] for r in reference.values()), 'Public toolchain conflict')
+              write(W/'plan.json', value)
+              (W/'cache-imports.txt').write_text('\n'.join(sorted(imports))+'\n')
+              (W/'bootstrap-roots.txt').write_text('\n'.join(sorted(base))+'\n')
+              print(json.dumps({k:v for k,v in value.items() if k not in ('blocks','modules')}, sort_keys=True))
+          def provenance():
+              value = read(W/'plan.json')
+              need(value['commit'] == os.environ['GITHUB_SHA'] and value['run_id'] == os.environ['GITHUB_RUN_ID']
+                   and 1 <= int(value['run_attempt']) <= int(os.environ['GITHUB_RUN_ATTEMPT']),
+                   'Artifact is not from this exact run/commit or has a future producer attempt')
+              need(sha(W/'public-reference.json') == value['public_reference_sha256'], 'Reference changed')
+              return value
+          def environment(mode):
+              value = provenance()
+              need(sha(C.LEAN) == LEAN_SHA and sha(A.LEANCHECKER) == CHECKER_SHA, 'Lean or stock leanchecker differs from the accepted environment')
+              actual = {'lean_version': subprocess.check_output([C.LEAN,'--version'], text=True).strip(),
+                  'lean_binary_sha256': sha(C.LEAN),
+                  'mathlib_commit': subprocess.check_output(['git','rev-parse','HEAD'], cwd=C.MATHLIB, text=True).strip()}
+              need(actual == value['toolchain'], 'Toolchain does not match public accepted records')
+              need(sha(ROOT/'verification/part2/run_winner9_private_checks.py') == '164bc271d8806ed45ebdd71c8f394c4706d7cfdaf4a121b633d738e094bad7ac', 'Compile driver changed')
+              need(sha(ROOT/'verification/part2/run_winner9_private_audit.py') == '571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5', 'Audit driver changed')
+              available = int(re.search(r'^MemAvailable:\s+(\d+)', Path('/proc/meminfo').read_text(), re.M)[1])*1024
+              cg = Path('/sys/fs/cgroup')
+              if (cg/'memory.max').is_file() and (cg/'memory.max').read_text().strip() != 'max':
+                  available = min(available, int((cg/'memory.max').read_text())-int((cg/'memory.current').read_text()))
+              need(available >= (13 if mode == 'bootstrap' else 7)*2**30, 'Insufficient actual available memory for this stage')
+              workers = 1 if mode == 'bootstrap' or available < 13*2**30 else 2
+              disk = shutil.disk_usage(ROOT).free
+              need(disk >= 2**30, 'Less than 1 GiB free after environment setup')
+              write(W/f'resources-{mode}.json', {'available_bytes': available, 'disk_free_bytes': disk,
+                  'workers': workers, 'memory_mib_per_process': 11264 if mode == 'bootstrap' else 6144})
+              with open(os.environ['GITHUB_ENV'], 'a') as env: env.write(f'P210_WORKERS={workers}\n')
+          def verified(roots):
+              value = provenance()
+              records = read(P/'records.json')
+              graph = nodes(roots)
+              A.verify_compilation(records, graph, A.snapshot(ROOT, LIB, graph, value['toolchain']))
+              return records
+          def facets(modules):
+              paths = []
+              for name in modules:
+                  stem = LIB / name.replace('.', '/')
+                  need(Path(str(stem)+'.olean').is_file(), 'Missing object: '+name)
+                  paths.extend(Path(str(stem)+suffix) for suffix in FACETS if Path(str(stem)+suffix).is_file())
+              return paths
+          def pack(path, files):
+              with tarfile.open(path, 'w:gz') as tar:
+                  for item in sorted(set(files)):
+                      need(item.is_file() and not item.is_symlink(), 'Missing or linked artifact file')
+                      tar.add(item, arcname=str(item.relative_to(ROOT)), recursive=False)
+          def check_bootstrap(initial=False):
+              value = provenance()
+              sealed = read(W/'bootstrap.json')
+              for name, digest in sealed['files'].items():
+                  if initial or name != '.lake/p2-private/records.json':
+                      need(sha(ROOT/name) == digest, 'Bootstrap file changed: '+name)
+              records = verified(value['modules'])
+              need(not initial or set(records) == set(value['modules']), 'Restored cache includes unplanned modules')
+              reference = read(W/'public-reference.json')
+              for name in value['modules']: need(stable(records[name]) == stable(reference[name]), 'Bootstrap differs from public accepted closure: '+name)
+              return records
+          def seal():
+              value = provenance()
+              records = verified(value['modules'])
+              need(set(records) == set(value['modules']), 'Bootstrap compiled outside the 93-module scope')
+              reference = read(W/'public-reference.json')
+              for name in value['modules']: need(stable(records[name]) == stable(reference[name]), 'Fresh dependency is incompatible with the old accepted prefix: '+name)
+              files = [p for p in W.iterdir() if p.is_file()] + [P/'records.json'] + facets(value['modules'])
+              files += [ROOT/r['log'] for r in records.values() if 'log' in r]
+              write(W/'bootstrap.json', {'commit': value['commit'], 'run_id': value['run_id'],
+                  'run_attempt': value['run_attempt'], 'modules': value['modules'], 'proof_credit': 0,
+                  'compatibility': 'all 93 source/object/toolchain/recursive closure bindings equal public accepted evidence',
+                  'files': {str(p.relative_to(ROOT)): sha(p) for p in sorted(set(files))}})
+              pack(W/'bootstrap.tar.gz', [*files, W/'bootstrap.json'])
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as out: out.write('archive_sha256='+sha(W/'bootstrap.tar.gz')+'\n')
+          def compile_shard(block):
+              check_bootstrap(initial=True)
+              targets = wanted(block)
+              run(['python3','verification/part2/run_winner9_private_checks.py', targets[-1],
+                  '--baseline-root', os.environ['P210_BASELINE'], '--workers', os.environ['P210_WORKERS'],
+                  '--threads','1','--memory-mb','6144','--time-budget-seconds','3600'], W/'compile.log')
+              records = check_bootstrap()
+              need(set(records) == set(provenance()['modules']) | set(targets), 'Unexpected compiled module set')
+              started = [line.split()[1] for line in (W/'compile.log').read_text().splitlines() if line.startswith('START ')]
+              need(len(started) == len(targets) and set(started) == set(targets), 'Shared dependency was recompiled or a new module was skipped')
+              verified([targets[-1]])
+              need(all(records[m].get('new_strict_compile') is True for m in targets), 'Missing strict compile credit')
+          def audit_shard(block):
+              targets = wanted(block)
+              check_bootstrap()
+              verified([targets[-1]])
+              workers = int(os.environ['P210_WORKERS'])
+              groups = [targets[i::workers] for i in range(workers)]
+              def worker(item):
+                  i, group = item
+                  run(['python3','verification/part2/run_winner9_private_audit.py', *group,
+                      '--summary-name', f'ci-worker-{i}.json', '--memory-mb','6144'], W/f'audit-{i}.log')
+                  summary = read(P/f'audit/ci-worker-{i}.json')
+                  need(summary['all_accepted'] is True and set(summary['modules']) == set(group)
+                       and all(v['accepted'] is True for v in summary['modules'].values()), 'Incomplete replay/audit worker')
+              with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+                  list(pool.map(worker, enumerate(groups)))
+              check_bootstrap()
+          def export_gate(manifest, targets):
+              need(set(manifest['accepted_modules']) == set(targets) and not manifest['unselected_modules'], 'Exporter did not accept exactly the requested block')
+              need(not manifest['rejected_candidates'] and not manifest['duplicate_owned_declarations'], 'Exporter contains rejected or duplicate evidence')
+              bindings = manifest['coverage']['numerical_pages']['bindings']
+              need(set(bindings) == set(targets[:-1]), 'Missing page Checked binding')
+              expected_rows = 0
+              for name in targets[:-1]:
+                  p = int(name[-4:]); count = min(16, 11026-16*p); expected_rows += count
+                  need(bindings[name] == {'page':p,'first_ordinal':16*p,'row_count':count,
+                      'last_ordinal':16*p+count-1,'block':p//16,'local_page':p%16}, 'Wrong page interval')
+              need(manifest['coverage']['numerical_pages']['covered_rows'] == expected_rows, 'Wrong row coverage')
+          def deliver(block):
+              targets = wanted(block)
+              records = check_bootstrap()
+              verified([targets[-1]])
+              output = W/'delivery/evidence'
+              run(['python3','verification/part2/export_winner9_private_evidence.py', *targets,
+                  '--output-dir', output, '--split','all', '--extra-evidence', W/'plan.json',
+                  '--extra-evidence', W/'resources-shard.json'], W/'export.log')
+              export_gate(read(output/'manifest.json'), targets)
+              write(W/'delivery/new-records.json', {m: records[m] for m in targets})
+              paths = facets(targets)
+              for module in targets:
+                  paths.extend(p for p in (P/'audit'/module).rglob('*') if p.is_file())
+                  paths.append(ROOT/records[module]['log'])
+              paths += [W/'delivery/new-records.json', W/'compile.log', W/'export.log', W/'resources-shard.json']
+              paths += list(W.glob('audit-*.log'))
+              info = {'block': f'{int(block):02}', 'commit': os.environ['GITHUB_SHA'],
+                  'run_id': os.environ['GITHUB_RUN_ID'], 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                  'bootstrap_sha256': os.environ['BOOTSTRAP_SHA'], 'modules': targets,
+                  'evidence_manifest_sha256': sha(output/'manifest.json'),
+                  'files': {str(p.relative_to(ROOT)): sha(p) for p in sorted(set(paths))},
+                  'gates': {'strict_compile': True, 'stock_leanchecker': True, 'owned_declarations_and_axioms': True}}
+              write(W/'delivery/provenance.json', info)
+              pack(W/'delivery/new-objects-and-receipts.tar.gz', paths)
+              info['object_archive_sha256'] = sha(W/'delivery/new-objects-and-receipts.tar.gz')
+              info['delivery_files'] = {str(p.relative_to(W/'delivery')): sha(p) for p in (W/'delivery').rglob('*') if p.is_file() and p.name != 'provenance.json'}
+              write(W/'delivery/provenance.json', info)
+              print(f'ACCEPTED block {block}: {len(targets)-1} pages and one Check; all three gates passed')
+          def recover(block):
+              # Recovery material is diagnostic. Its existence grants no proof credit.
+              # Keep partial new objects when a later compile/audit/export step fails.
+              paths = []
+              for module in wanted(block):
+                  stem = LIB/module.replace('.', '/')
+                  paths.extend(Path(str(stem)+s) for s in FACETS if Path(str(stem)+s).is_file())
+                  paths.extend(p for p in (P/'audit'/module).rglob('*') if p.is_file())
+                  if source(module).is_file(): paths.append(source(module))
+              paths += [p for p in (P/'logs').rglob('*') if p.is_file()]
+              paths += [p for p in W.iterdir() if p.is_file() and p.suffix in ('.json','.log','.py')]
+              if (P/'records.json').is_file(): paths.append(P/'records.json')
+              output = W/'recovery'; output.mkdir(exist_ok=True)
+              write(output/'provenance.json', {'block': f'{int(block):02}', 'commit': os.environ['GITHUB_SHA'],
+                  'run_id': os.environ['GITHUB_RUN_ID'], 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                  'bootstrap_sha256': os.environ.get('BOOTSTRAP_SHA'),
+                  'credit': 'NONE: recovery material must pass the unchanged drivers before reuse or acceptance',
+                  'files': {str(p.relative_to(ROOT)): sha(p) for p in sorted(set(paths))}})
+              pack(output/'new-objects-records-and-receipts.tar.gz', [*paths, output/'provenance.json'])
+          def aggregate():
+              value = provenance()
+              result = W/'aggregate'; result.mkdir()
+              artifacts = []
+              page = 1
+              while True:
+                  data = json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{os.environ["GITHUB_RUN_ID"]}/artifacts?per_page=100&page={page}']))
+                  artifacts.extend(data['artifacts'])
+                  if len(data['artifacts']) < 100: break
+                  page += 1
+              selected = {}
+              all_modules = set()
+              for block, targets in value['blocks'].items():
+                  pattern = re.compile(rf'p210-block-{block}-{re.escape(value["run_id"])}-([1-9][0-9]*)')
+                  matches = [(int(m[1]), a) for a in artifacts if not a['expired']
+                             and (m := pattern.fullmatch(a['name']))
+                             and int(m[1]) <= int(os.environ['GITHUB_RUN_ATTEMPT'])]
+                  need(matches, 'Missing successful block artifact: '+block)
+                  # Successful previous-attempt blocks are immutable inputs, not work to repeat.
+                  attempt, artifact = max(matches, key=lambda item: item[0])
+                  need(sum(a == attempt for a, _ in matches) == 1, 'Ambiguous successful block artifact')
+                  archive = result/f'block-{block}.zip'
+                  with archive.open('wb') as out:
+                      subprocess.run(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/artifacts/{artifact["id"]}/zip'], stdout=out, check=True)
+                  with zipfile.ZipFile(archive) as package:
+                      need(len(package.namelist()) == len(set(package.namelist())), 'Duplicate archive member')
+                      info = json.loads(package.read('provenance.json'))
+                      need(info['block'] == block and info['modules'] == targets and info['bootstrap_sha256'] == os.environ['BOOTSTRAP_SHA'], 'Block provenance mismatch')
+                      need(all(info[k] == value[k] for k in ('commit','run_id'))
+                           and int(info['run_attempt']) == attempt, 'Foreign block artifact')
+                      need(info['gates'] == {'strict_compile':True,'stock_leanchecker':True,'owned_declarations_and_axioms':True}, 'Missing block gate')
+                      need(set(package.namelist()) == set(info['delivery_files']) | {'provenance.json'}, 'Delivery file inventory mismatch')
+                      for member, digest in info['delivery_files'].items(): need(sha_bytes(package.read(member)) == digest, 'Delivery hash mismatch')
+                      manifest = json.loads(package.read('evidence/manifest.json'))
+                      need(sha_bytes(package.read('evidence/manifest.json')) == info['evidence_manifest_sha256'], 'Manifest provenance mismatch')
+                      export_gate(manifest, targets)
+                      need(sha_bytes(package.read('new-objects-and-receipts.tar.gz')) == info['object_archive_sha256'], 'New object archive mismatch')
+                  need(not all_modules.intersection(targets), 'Overlapping numerical ownership')
+                  all_modules.update(targets)
+                  selected[block] = {'artifact_id': artifact['id'], 'zip_sha256': sha(archive), 'provenance': info}
+              need(len(all_modules) == 598 and len(selected) == 36, 'Incomplete 562-page/36-Check result')
+              shutil.copy2(W/'bootstrap.tar.gz', result/'bootstrap.tar.gz')
+              write(result/'index.json', {'commit': value['commit'], 'run_id': value['run_id'],
+                  'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'], 'bootstrap_producer_attempt': value['run_attempt'],
+                  'bootstrap_sha256': os.environ['BOOTSTRAP_SHA'],
+                  'blocks': selected, 'new_pages': 562, 'new_rows': 8978,
+                  'old_rows_replayed': 0, 'terminal_integrated': False,
+                  'boundary': 'Original receipts and object facets preserved; final integration with the accepted 2048-row prefix remains in its original environment.'})
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                  summary.write('### P2.10 numerical shard evidence\n\nAll 36 blocks passed strict compilation, stock leanchecker and the full owned-declaration/axiom audit. New coverage: 562 pages, 8978 rows, plus 36 Check modules. Old pages 0–127 were not replayed. The final combined numerical/terminal theorem still requires integration with the existing 2048-row prefix.\n')
+          if __name__ == '__main__':
+              mode = sys.argv[1]
+              if mode == 'plan': plan()
+              elif mode == 'environment': environment(sys.argv[2])
+              elif mode == 'seal': seal()
+              elif mode == 'check': check_bootstrap(initial=True)
+              elif mode == 'compile': compile_shard(sys.argv[2])
+              elif mode == 'audit': audit_shard(sys.argv[2])
+              elif mode == 'deliver': deliver(sys.argv[2])
+              elif mode == 'recover': recover(sys.argv[2])
+              elif mode == 'aggregate': aggregate()
+              else: raise RuntimeError('Unknown orchestration command')
+          PY
+          python3 .lake/p210-ci/control.py plan
+      - name: Install the existing pinned Lean setup and public Mathlib cache
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          mv .ci-lean-action "$RUNNER_TEMP/p210-lean-action"
+          "$RUNNER_TEMP/p210-lean-action/scripts/install_elan.sh" 2>&1 | tee .lake/p210-ci/install.log
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          mapfile -t imports < .lake/p210-ci/cache-imports.txt
+          test "${#imports[@]}" -gt 0
+          lake exe cache get "${imports[@]}" 2>&1 | tee .lake/p210-ci/mathlib-cache.log
+          test "$(git -C .lake/packages/mathlib rev-parse HEAD)" = "$MATHLIB_COMMIT"
+          sudo mkdir -p /workspace/toolchains /workspace/compile-deps
+          sudo ln -s "$(dirname "$(dirname "$(elan which lean)")")" /workspace/toolchains/lean-4.33.0-rc1-linux
+          sudo ln -s "$GITHUB_WORKSPACE/.lake/packages/mathlib" /workspace/compile-deps/mathlib
+          git fetch --no-tags --depth=1 origin "$BASELINE_COMMIT"
+          git worktree add --detach "$RUNNER_TEMP/p210-baseline" "$BASELINE_COMMIT"
+          printf 'P210_BASELINE=%s\n' "$RUNNER_TEMP/p210-baseline" >> "$GITHUB_ENV"
+          python3 .lake/p210-ci/control.py environment bootstrap
+      - name: Build the 93 public dependencies once as environment initialization
+        run: |
+          set -euo pipefail
+          test ! -e .lake/p2-private/records.json
+          mapfile -t roots < .lake/p210-ci/bootstrap-roots.txt
+          test "${#roots[@]}" -eq 93
+          lake env python3 verification/part2/run_winner9_private_checks.py "${roots[@]}" \
+            --baseline-root "$P210_BASELINE" --workers 1 --threads 1 --memory-mb 11264 \
+            --time-budget-seconds 9000 2>&1 | tee .lake/p210-ci/bootstrap.compile.log
+      - name: Require all 93 historical source/object/recursive bindings before any numerical shard
+        id: seal
+        run: |
+          set -euo pipefail
+          python3 .lake/p210-ci/control.py seal
+      - name: Retain this run's public-source bootstrap for exact reuse
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-bootstrap-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-ci/bootstrap.tar.gz
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Retain bootstrap diagnostics even when compatibility fails
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-bootstrap-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .lake/p210-ci/*.json
+            .lake/p210-ci/*.log
+            .lake/p210-ci/control.py
+            .lake/p2-private/records.json
+            .lake/p2-private/logs/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Retain partial bootstrap objects for explicit recovery after failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-bootstrap-recovery-objects-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p2-private/lib/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
+
+  numerical:
+    needs: bootstrap
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        block: ['08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43']
+    env:
+      BOOTSTRAP_SHA: ${{ needs.bootstrap.outputs.archive_sha256 }}
+      BOOTSTRAP_ID: ${{ needs.bootstrap.outputs.artifact_id }}
+      P210_BLOCK: ${{ matrix.block }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Restore only the exact same-run public-source bootstrap
+        run: |
+          set -euo pipefail
+          mkdir -p .lake/p210-ci
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$BOOTSTRAP_ID/zip" > "$RUNNER_TEMP/p210-bootstrap.zip"
+          python3 - <<'PY'
+          import hashlib, os, tarfile, zipfile
+          from pathlib import Path
+          with zipfile.ZipFile(Path(os.environ['RUNNER_TEMP'])/'p210-bootstrap.zip') as archive:
+              assert archive.namelist() == ['bootstrap.tar.gz'], 'Unexpected bootstrap ZIP contents'
+              raw = archive.read('bootstrap.tar.gz')
+          assert hashlib.sha256(raw).hexdigest() == os.environ['BOOTSTRAP_SHA'], 'Bootstrap transport hash mismatch'
+          path = Path('.lake/p210-ci/bootstrap.tar.gz'); path.write_bytes(raw)
+          with tarfile.open(path) as archive:
+              names = []
+              for member in archive.getmembers():
+                  p = Path(member.name)
+                  assert member.isfile() and not p.is_absolute() and '..' not in p.parts
+                  assert member.name.startswith(('.lake/p210-ci/', '.lake/p2-private/'))
+                  names.append(member.name)
+              assert len(names) == len(set(names)), 'Duplicate bootstrap member'
+              archive.extractall('.', filter='data')
+          PY
+      - name: Install the same pinned public Lean and Mathlib environment
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          mv .ci-lean-action "$RUNNER_TEMP/p210-lean-action"
+          "$RUNNER_TEMP/p210-lean-action/scripts/install_elan.sh" 2>&1 | tee .lake/p210-ci/shard-install.log
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          mapfile -t imports < .lake/p210-ci/cache-imports.txt
+          lake exe cache get "${imports[@]}" 2>&1 | tee .lake/p210-ci/shard-mathlib-cache.log
+          test "$(git -C .lake/packages/mathlib rev-parse HEAD)" = "$MATHLIB_COMMIT"
+          sudo mkdir -p /workspace/toolchains /workspace/compile-deps
+          sudo ln -s "$(dirname "$(dirname "$(elan which lean)")")" /workspace/toolchains/lean-4.33.0-rc1-linux
+          sudo ln -s "$GITHUB_WORKSPACE/.lake/packages/mathlib" /workspace/compile-deps/mathlib
+          git fetch --no-tags --depth=1 origin "$BASELINE_COMMIT"
+          git worktree add --detach "$RUNNER_TEMP/p210-baseline" "$BASELINE_COMMIT"
+          printf 'P210_BASELINE=%s\n' "$RUNNER_TEMP/p210-baseline" >> "$GITHUB_ENV"
+          python3 .lake/p210-ci/control.py environment shard
+          python3 .lake/p210-ci/control.py check
+      - name: Gate 1 — strict compile only this block's new pages and Check
+        run: |
+          set -euo pipefail
+          lake env python3 .lake/p210-ci/control.py compile "$P210_BLOCK"
+      - name: Gates 2 and 3 — stock leanchecker plus complete owned declarations and transitive axioms
+        run: |
+          set -euo pipefail
+          lake env python3 .lake/p210-ci/control.py audit "$P210_BLOCK"
+      - name: Validate exact accepted coverage and preserve new objects with original receipts
+        run: |
+          set -euo pipefail
+          lake env python3 .lake/p210-ci/control.py deliver "$P210_BLOCK"
+      - name: Retain the successful block for integration
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-block-${{ matrix.block }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-ci/delivery/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Retain complete failure diagnostics without granting acceptance
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          if test -f .lake/p210-ci/control.py; then
+            python3 .lake/p210-ci/control.py recover "$P210_BLOCK"
+          else
+            mkdir -p .lake/p210-ci/recovery
+            printf '%s\n' 'Bootstrap restore did not complete; no numerical compilation was authorized.' > .lake/p210-ci/recovery/unavailable.txt
+          fi
+      - name: Upload diagnostics and recovery objects without granting acceptance
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-block-diagnostics-${{ matrix.block }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .lake/p210-ci/*.log
+            .lake/p210-ci/resources-shard.json
+            .lake/p210-ci/recovery/
+            .lake/p2-private/records.json
+            .lake/p2-private/logs/
+            .lake/p2-private/audit/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
+
+  collect:
+    needs: [bootstrap, numerical]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      BOOTSTRAP_SHA: ${{ needs.bootstrap.outputs.archive_sha256 }}
+      BOOTSTRAP_ID: ${{ needs.bootstrap.outputs.artifact_id }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Restore the same-run orchestration and provenance without compilation
+        run: |
+          set -euo pipefail
+          mkdir -p .lake/p210-ci
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$BOOTSTRAP_ID/zip" > "$RUNNER_TEMP/p210-bootstrap.zip"
+          python3 - <<'PY'
+          import hashlib, os, tarfile, zipfile
+          from pathlib import Path
+          with zipfile.ZipFile(Path(os.environ['RUNNER_TEMP'])/'p210-bootstrap.zip') as archive:
+              assert archive.namelist() == ['bootstrap.tar.gz']
+              raw = archive.read('bootstrap.tar.gz')
+          assert hashlib.sha256(raw).hexdigest() == os.environ['BOOTSTRAP_SHA']
+          path = Path('.lake/p210-ci/bootstrap.tar.gz'); path.write_bytes(raw)
+          with tarfile.open(path) as archive:
+              for name in ('.lake/p210-ci/control.py','.lake/p210-ci/plan.json','.lake/p210-ci/public-reference.json'):
+                  member = archive.getmember(name)
+                  assert member.isfile()
+                  archive.extract(member, '.', filter='data')
+          PY
+      - name: Require all 36 exact disjoint successful blocks and prepare one integration artifact
+        run: |
+          set -euo pipefail
+          python3 .lake/p210-ci/control.py aggregate
+      - name: Retain the complete integration input with all original evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-all-new-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-ci/aggregate/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
