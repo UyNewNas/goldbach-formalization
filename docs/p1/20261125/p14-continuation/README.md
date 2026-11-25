@@ -20,8 +20,16 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1OriginalFifthPositiveBufferSchedule` | `e5b8f2b22156261e7074d4a0f03e6e250761b82f` | checkpoint02; 28 owned declarations |
 | `P1FifthRawKeyThirdOwnerPersistence` | `c26df93b46104bf0fad4565dfb04aaa9131ff5f1` | checkpoint02; 8 owned declarations |
 | `P5OriginalCommonRefinedSeedHull` | `540244f58dcfa10e035c12c7196597ee2198f327` | checkpoint03; 18 owned declarations |
-| `P1HistoricalFifthOriginalByteLiteral` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | accepted in `bytes-frame-retry`; outside checkpoints01–03 |
-| `P1HistoricalFifthNpyFrame` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | accepted in `bytes-frame-retry`; outside checkpoints01–03 |
+| `P1HistoricalFifthOriginalByteLiteral` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | checkpoint04; 66 owned declarations |
+| `P1HistoricalFifthNpyFrame` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | checkpoint04; 33 owned declarations |
+| `P1FifthUnitBoxGainDecomposition` | `4d294de6b2a3128a6fb281426e4f204a8514beaa` | checkpoint04; 18 owned declarations |
+| `P1OriginalFifthActualOwnerGateCrossing` | `4d294de6b2a3128a6fb281426e4f204a8514beaa` | checkpoint04; 13 owned declarations |
+| `P1HistoricalFifthTypedArchiveShape` | `4d294de6b2a3128a6fb281426e4f204a8514beaa` | checkpoint04; 176 owned declarations |
+| `P1FifthUnitBoxLiteralGainLower` | `8237d0b698ca01153a7e2823510cf67148083c0a` | `owner-expression-retry`; checkpoint05 pending |
+| `P1OriginalFifthMovingMeshFubiniBridge` | `8237d0b698ca01153a7e2823510cf67148083c0a` | `owner-expression-retry`; checkpoint05 pending |
+| `P1OriginalFifthLiteralKernelModulus` | `8237d0b698ca01153a7e2823510cf67148083c0a` | `unit-literal-consumers`; checkpoint05 pending |
+| `P1HistoricalFifthTypedArchiveRangeCore` | `61566a18871e26b80cced0a4408944294d793071` | `typed-range-core`; checkpoint05 pending |
+| `P1HistoricalFifthTypedArchiveRangeBlock000` | `61566a18871e26b80cced0a4408944294d793071` | `typed-range-block000`; checkpoint05 pending |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
@@ -37,12 +45,15 @@ The first eight P1.4 owners contain 248 environment-owned declarations in total 
 
 [checkpoint03](evidence/checkpoint-03.tar.xz) and [CHECKPOINT03_VERIFIED.json](CHECKPOINT03_VERIFIED.json) add the seed-hull owner and twelve accepted shared owners from rounds03–07. All 725 exported files are hash-checked, with no omitted files. The archive contains 13 accepted owners / 197 owned declarations. Its full roots also preserve the failed ByteLiteral, NpyFrame and FullMean attempts without promoting them to acceptance. The three disjoint checkpoints total 30 owners / 622 declarations: eight P1.4 owners / 248 declarations and 22 reused owners / 374 declarations. Later `bytes-frame-retry` acceptance is outside these fixed archive roots.
 
+[checkpoint04](evidence/checkpoint-04.tar.xz) and [CHECKPOINT04_VERIFIED.json](CHECKPOINT04_VERIFIED.json) add five P1.4 owners and the reused FullMean owner from round08. All 386 exported files are checked, including original failed attempts and the cancelled Range partial history. The six accepted owners contain 310 owned declarations. The fixed ByteLiteral/NPY-frame audit lane contains both owners and all 99 declarations; their separate source, normal and kernel receipts are checked. Checkpoints01–04 total 36 distinct owners / 932 owned declarations: 13 P1.4 owners / 554 declarations and 23 reused owners / 378 declarations. The retained23 review adds no duplicate acceptance. Five later accepted owners listed above await checkpoint05 and are not counted in these four archives.
+
 Run the offline consistency check from the repository root:
 
 ```sh
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 03
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 04
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
@@ -107,6 +118,6 @@ The final shared analytic supplier `P1ActualVariableFifthFullMean` is now reused
 
 Task `job_1cea508c1b3745b694cb5ff810334b66` was deliberately stopped after 1843.106 seconds while the first full `TypedArchiveRange` normal compilation was still running. This is a resource-scheduling interruption, not a reported Lean proof failure or a mathematical counterexample. The earlier completed UnitBoxGain, ActualOwnerGateCrossing and TypedArchiveShape stage receipts remain individually accepted. Range is not accepted and no missing final pipeline/result/Git receipt is reconstructed. The original terminal task responses are retained as explicitly labelled local observer attachments under `evidence/checkpoint-04-observations/`.
 
-The existing `TypedValid` definition and constructive instance are factored unchanged into `P1HistoricalFifthTypedArchiveRangeCore`. The existing block000 closed obligation is factored into `P1HistoricalFifthTypedArchiveRangeBlock000`, retaining its exact statement, actual data and resource limits, and requesting `decide +kernel`. The full range module imports this block; its other 142 closed obligations and full-table conclusions remain present. These source changes await acceptance and do not give a single block the status of the complete range proof.
+The existing `TypedValid` definition and constructive instance are factored unchanged into `P1HistoricalFifthTypedArchiveRangeCore`. The existing block000 closed obligation is factored into `P1HistoricalFifthTypedArchiveRangeBlock000`, retaining its exact statement, actual data and resource limits, and requesting `decide +kernel`. Both owners were accepted by task `job_7b50045d5ba442e593de467f321eb031` at `61566a18871e26b80cced0a4408944294d793071`. Block000 normal compilation took 32.866 seconds and its kernel/full-owned audit stage took 52.424 seconds. The remaining 142 existing closed obligations are moved, with their statements unchanged, into 15 bounded owner groups; only their proof command changes to the accepted kernel-reduction form. The full range module imports all 143 obligations and retains the complete original aggregation and full-table conclusions verbatim. These further groups and the full aggregation still require acceptance; block000 does not stand for the full table or the independent original-file association.
 
 `run_original_npy.py` and `ORIGINAL_NPY_INPUT_MANIFEST.json` add a fixed, single-consumer data-input binding around the unchanged normal/kernel/full-owned APIs. They pin the retained original `cells.npy` by canonical path, bytes, SHA256 and Git blob before/after normal compilation and after the audit. Existing objects without the original compilation-time data records are held. Worker completion remains pending until the serializer exits successfully and the original Git before/after states match; only the outer attempt can then issue `DATA_BOUND_ACCEPTANCE.json`. The adapter has received static review but has not executed the original NPY proof, and supplies no mathematical acceptance by itself.

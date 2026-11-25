@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Offline consistency check of the three fixed P1.4 checkpoints; never rebuild.
+"""Offline consistency check of the fixed P1.4 checkpoints; never rebuild.
 
 Checks the fixed archive, reported cloud commands, complete owned inventory,
 cross-receipt source/object fingerprints and current target source bytes. The
 archive does not contain compiled objects: this is not a local kernel replay.
 """
 import argparse
+import base64
 import collections
 import hashlib
 import json
@@ -108,6 +109,37 @@ CHECKPOINTS = {
                                 'ImbalancedChen.P1ActualVariableFifthFullMean'],
      'owned': 197,
      'public': 176},
+    '04': {'sealed': True,
+     'sha256': '76eff073f9d8f6e97e2d704f25bba1424c6cdb2f57c74fd259e9b4a59a0ec93b',
+     'bytes': 227004, 'files': 386, 'owned': 310, 'public': 299,
+     'paired_owner_lane': 'p14/bytes-frame-retry/c6d6d5eed2b4a4c5a288645864e781716c7e5771/audits/df6e4be1191b00ae1b5e/lane-0',
+     'paired_owners': ['ImbalancedChen.P1HistoricalFifthNpyFrame',
+                       'ImbalancedChen.P1HistoricalFifthOriginalByteLiteral'],
+     'cancelled_unaccepted_owner': 'ImbalancedChen.P1HistoricalFifthTypedArchiveRange',
+     'cancelled_partial_root': 'p14/typed-archive-range/4d294de6b2a3128a6fb281426e4f204a8514beaa',
+     'cancelled_source_commit': '4d294de6b2a3128a6fb281426e4f204a8514beaa',
+     'cancelled_driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+     'observer_path': 'docs/p1/20261125/p14-continuation/evidence/checkpoint-04-observations/job_1cea508c1b3745b694cb5ff810334b66/OBSERVER.json',
+     'observer_sha256': '738497c0645c5b1f61e688fe93ce71e12fb89ebfa8ff90e61c92b8a043ed69f5',
+     'groups': {
+         'p14_new': ['P1HistoricalFifthOriginalByteLiteral', 'P1HistoricalFifthNpyFrame',
+                     'P1FifthUnitBoxGainDecomposition', 'P1OriginalFifthActualOwnerGateCrossing',
+                     'P1HistoricalFifthTypedArchiveShape'],
+         'p15_shared_repairs_reused': ['P1ActualVariableFifthFullMean']},
+     'shared_runs': [{'path': 'p15_shared_round08/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1ActualVariableFifthFullMean'],
+                      'failures': [], 'exit_code': 0}],
+     'shared_failures': [],
+     'excluded_failed_owners': ['ImbalancedChen.P1FifthUnitBoxLiteralGainLower',
+                                'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                'ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge'],
+     'pipeline_paths': [
+         'p14_pipeline/c6d6d5eed2b4a4c5a288645864e781716c7e5771/PIPELINE_RESULT.json',
+         'p14_pipeline/439a6189094202185336fd70d652f8f5544b93e9/PIPELINE_RESULT.json'],
+     'retained_review': {
+         'path': 'p15_shared_round08_review/retained-29295f6a7196c523b525104f864da20035cc15d9.json',
+         'sha256': 'a5dbdb1865f95e1b886cc1ce1fd7f84e3a5e09ae631eaa3e4e3b04fb289a8f31'}},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -124,8 +156,58 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def checkpoint04_observation(repo):
+    """Read the fixed cancelled task's verbatim MCP payloads, not proof receipts."""
+    config = CHECKPOINTS['04']
+    path = repo / config['observer_path']
+    raw = path.read_bytes()
+    need(sha(raw) == config['observer_sha256'], 'checkpoint04 observer manifest binding')
+    observer = json.loads(raw)
+    task_id = 'job_1cea508c1b3745b694cb5ff810334b66'
+    need(observer['schema'] == 'p14_mcp_task_observer_transport_v1' and
+         observer['task_id'] == task_id and observer['counts_as_acceptance'] is False and
+         observer['whole_P1_4_complete'] is False, 'checkpoint04 observer scope')
+    names = ['get_task.json', 'read_task_output-00000000.json', 'read_task_output-00032768.json']
+    need([r['path'] for r in observer['files']] == names, 'checkpoint04 observer files')
+    payloads = {}
+    for row in observer['files']:
+        data = (path.parent / row['path']).read_bytes()
+        need(sha(data) == row['sha256'] and len(data) == row['bytes'], 'checkpoint04 MCP payload hash')
+        payloads[row['path']] = json.loads(data)
+        need(row['request']['task_id'] == task_id, 'checkpoint04 MCP request identity')
+    metadata = payloads[names[0]]
+    need(metadata['task_id'] == task_id and metadata['status'] == 'cancelled' and
+         metadata['cancel_requested'] is True and metadata['exit_code'] == -9 and
+         metadata['finished_at'] is not None and not metadata['output_truncated'] and
+         metadata['runtime_seconds'] < metadata['timeout_seconds'], 'checkpoint04 cancellation outcome')
+    need("source='" + config['cancelled_source_commit'] + "'" in metadata['command'],
+         'checkpoint04 cancelled task source binding')
+    chunks, offset = [], 0
+    for name in names[1:]:
+        page = payloads[name]
+        data = base64.b64decode(page['data_base64'], validate=True)
+        need(page['task_id'] == task_id and page['offset'] == offset and
+             page['bytes'] == len(data) and page['next_offset'] == offset + len(data) and
+             data.decode() == page['output'] and not page['output_truncated'], 'checkpoint04 output pagination')
+        chunks.append(data)
+        offset += len(data)
+    stdout = b''.join(chunks)
+    need(page['eof'] is True and observer['eof'] is True and not observer['output_truncated'] and
+         len(stdout) == metadata['output_bytes'] == observer['stdout_bytes'] == 32861 and
+         sha(stdout) == observer['stdout_sha256'], 'checkpoint04 complete observed stdout')
+    events = [json.loads(line) for line in stdout.decode().splitlines() if line.startswith('{')]
+    module = config['cancelled_unaccepted_owner']
+    need(sum(e.get('batch6') == 'NORMAL_START' and e.get('module') == module for e in events) == 1,
+         'checkpoint04 Range normal-start observation')
+    need(not any(e.get('batch6') == 'PROJECT_ERROR' and module.replace('.', '/') + '.lean' in
+                 e.get('text', '') for e in events), 'checkpoint04 Range proof diagnostic appeared')
+    return metadata, events
+
+
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
+    need(checkpoint != '04' or config['sealed'],
+         'checkpoint 04 is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
     raw = archive.read_bytes()
@@ -143,8 +225,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03'):
-        predecessor = '01' if checkpoint == '02' else '02'
+    if checkpoint in ('02', '03', '04'):
+        predecessor = {'02': '01', '03': '02', '04': '03'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -154,9 +236,25 @@ def verify(archive, repo, checkpoint='01'):
         need(row['original_path'] not in originals, 'duplicate original receipt path')
         originals[row['original_path']] = row['path']
     need(set(files) == {r['path'] for r in manifest['files']} | {'EXPORT_MANIFEST.json'}, 'unlisted archive file')
+    partial_report, partial_missing_git_after = None, []
+    if checkpoint == '04':
+        cancelled_metadata, observed_events = checkpoint04_observation(repo)
+        partial_root = config['cancelled_partial_root']
+        need(config['cancelled_unaccepted_owner'] not in expected, 'cancelled owner counted as accepted')
+        need(any(p.startswith(partial_root + '/') for p in files), 'cancelled Range partial evidence missing')
+        need(not any(p.startswith(partial_root + '/') and
+             (p.endswith('/NORMAL_PASS.json') or p.endswith('/VALIDATION_RESULTS.json') or
+              re.search(r'/runs/attempt-[0-9]{5}/RESULT\.json$', p)) for p in files),
+             'cancelled Range unexpectedly has completion/acceptance receipts; inspect originals')
     git_pairs = [p for p in files if p.endswith('/GIT_BEFORE.json')]
     for path in git_pairs:
-        need(get(path) == get(path.replace('/GIT_BEFORE.json', '/GIT_AFTER.json')), 'original Git checkout changed')
+        after = path.replace('/GIT_BEFORE.json', '/GIT_AFTER.json')
+        if after not in files:
+            need(checkpoint == '04' and path == config['cancelled_partial_root'] +
+                 '/runs/attempt-00000/GIT_BEFORE.json', 'missing Git-after receipt outside cancelled Range')
+            partial_missing_git_after.append(after)
+        else:
+            need(get(path) == get(after), 'original Git checkout changed')
     shared_expected = {m for m, g in expected.items() if g == 'p15_shared_repairs_reused'}
     shared_specs = config['shared_runs'] if 'shared_runs' in config else [{
         'path': config['shared_root'] + '/runs/attempt-00000', 'accepted': sorted(shared_expected),
@@ -183,6 +281,102 @@ def verify(archive, repo, checkpoint='01'):
     deployments = [get(p) for p in files if '/source-materialization/' in p and p.endswith('/RESULT.json')]
     need(all(d['status'] == 'SOURCE_DEPLOYMENT_ONLY_NOT_ACCEPTANCE' and d['acceptance_claimed'] is False
              and 'accepted_owners' not in d for d in deployments), 'source deployment misstates acceptance')
+    if checkpoint == '04':
+        review = config['retained_review']
+        need(sha(files[review['path']]) == review['sha256'], 'retained23 review binding differs')
+        retained = get(review['path'])
+        retained_owners = {'ImbalancedChen.' + m for prior in CHECKPOINTS.values()
+                           for group, modules in prior['groups'].items() if group != 'p14_new'
+                           for m in modules}
+        need(retained['schema'] == 'p15_retained_actual_means_review_v1' and
+             retained['all_23_accepted'] is True and retained['compilation_performed'] is False and
+             retained['context_and_inventory_stable'] is True and
+             retained['context_before'] == retained['context_after'] and
+             retained['git_before'] == retained['git_after'] and not retained['changed_files'] and
+             not retained['changed_receipts'] and not retained['failures'] and
+             retained['whole_P1_complete'] is False, 'retained23 review scope/context differs')
+        need(set(retained['owners']) == retained_owners and len(retained_owners) == 23 and
+             sum(r['total_owned_exports'] for r in retained['owners'].values()) == 378 and
+             sum(r['total_public_exports'] for r in retained['owners'].values()) == 349,
+             'retained23 owner set/counts differ')
+        for module, row in retained['owners'].items():
+            need(sha((repo / (module.replace('.', '/') + '.lean')).read_bytes()) == row['source_sha256'],
+                 'retained23 current source differs: ' + module)
+        pipeline_accepted, pipeline_results = [], set()
+
+        def check_completed_stages(stages, source_commit, driver_sha256):
+            accepted_so_far = set()
+            for stage in stages:
+                if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
+                    need('result_path' not in stage and not stage.get('accepted_owners') and
+                         not set(stage['requires']) <= accepted_so_far, 'held stage misstates acceptance')
+                    continue
+                result_path = originals[stage['result_path']]
+                need(result_path not in pipeline_results, 'duplicate pipeline result')
+                pipeline_results.add(result_path)
+                outer = get(result_path)
+                binding = get(PurePosixPath(result_path).parents[2] / 'BINDING.json')
+                need(outer['source_commit'] == source_commit == binding['source_commit'] and
+                     outer['stage'] == stage['stage'] and
+                     driver_sha256 == binding['driver_sha256'], 'pipeline source/driver binding')
+                need(outer['targets'] == binding['targets'] and
+                     outer['protected_roots'] == binding['protected_roots'] == shared_protected and
+                     outer['whole_P1_4_complete'] is False, 'pipeline target/protected binding')
+                accepted = set(outer['accepted_owners'])
+                need(accepted == set(stage['accepted_owners']) and
+                     accepted <= set(outer['normal_passed']) <= set(outer['targets']), 'pipeline accepted owners')
+                complete = (accepted == set(outer['targets']) and
+                            not outer['normal_failed_or_held'] and outer['audit_error'] is None)
+                need(stage['exit_code'] == (0 if complete else 1), 'pipeline stage exit differs')
+                accepted_so_far.update(accepted)
+                pipeline_accepted.extend(accepted)
+            return accepted_so_far
+
+        for path in config['pipeline_paths']:
+            pipeline = get(path)
+            need(pipeline['whole_P1_4_complete'] is False, 'pipeline overstates completion')
+            accepted_so_far = check_completed_stages(pipeline['stages'], pipeline['source_commit'],
+                                                     pipeline['driver_sha256'])
+            need(accepted_so_far == set(pipeline['accepted_owners']), 'pipeline accepted union differs')
+        # These are original stdout events, not a reconstructed PIPELINE_RESULT.
+        observed_stages = [e['pipeline_stage_result'] if 'pipeline_stage_result' in e else e
+                           for e in observed_events if 'pipeline_stage_result' in e or
+                           e.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED']
+        need([r['stage'] for r in observed_stages] == [
+             'unit-box-gain-measure', 'unit-box-consumers', 'unit-owner-geometry',
+             'unit-literal-consumers', 'owner-fibre-volume', 'owner-gamma-volume',
+             'typed-archive-shape-cast'], 'cancelled task completed/held stage observations differ')
+        check_completed_stages(observed_stages, config['cancelled_source_commit'],
+                               config['cancelled_driver_sha256'])
+        need(pipeline_results == {p for p in files if p.startswith('p14/') and
+             re.search(r'/runs/attempt-[0-9]{5}/RESULT\.json$', p)}, 'pipeline stage export differs')
+        need(collections.Counter(pipeline_accepted) == collections.Counter(
+             m for m, group in expected.items() if group == 'p14_new'), 'pipeline owner counted twice or omitted')
+        partial_binding = get(partial_root + '/BINDING.json')
+        partial_normal = partial_root + '/normal/' + config['cancelled_unaccepted_owner'] + '/attempt-00000'
+        partial_context = get(partial_normal + '/CONTEXT_BEFORE.json')
+        need(partial_binding['source_commit'] == partial_context['source_commit'] ==
+             config['cancelled_source_commit'] and partial_binding['protected_roots'] == shared_protected,
+             'cancelled Range source/protected binding')
+        need(set(partial_binding['targets']) == {config['cancelled_unaccepted_owner']} and
+             partial_binding['targets'][config['cancelled_unaccepted_owner']] ==
+             partial_context['project_sources'][config['cancelled_unaccepted_owner']], 'cancelled Range target binding')
+        need(partial_normal + '/normal.log' in files, 'cancelled Range original partial log missing')
+        partial_report = {
+            'module': config['cancelled_unaccepted_owner'], 'source_commit': config['cancelled_source_commit'],
+            'partial_root': partial_root, 'accepted': False,
+            'classification': 'OPERATOR_CANCELLED_TO_UNBLOCK_GEOMETRY_NOT_PROOF_FAILURE',
+            'task_id': cancelled_metadata['task_id'], 'status': cancelled_metadata['status'],
+            'exit_code': cancelled_metadata['exit_code'], 'cancel_requested': cancelled_metadata['cancel_requested'],
+            'runtime_seconds': cancelled_metadata['runtime_seconds'],
+            'observer_manifest': config['observer_path'], 'observer_manifest_sha256': config['observer_sha256'],
+            'observer_is_compiler_acceptance_receipt': False,
+            'missing_original_git_after_receipts': partial_missing_git_after,
+            'completed_original_stage_result_present': False,
+            'normal_acceptance_receipt_present': False,
+            'no_range_proof_diagnostic_in_observed_task_output': True,
+            'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
+            'original_receipts_synthesized': False}
 
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
@@ -217,13 +411,20 @@ def verify(archive, repo, checkpoint='01'):
 
     reports = []
     seen = set()
-    for path in sorted(p for p in files if p.endswith('/VALIDATION_RESULTS.json')):
+    validation_paths = sorted(p for p in files if p.endswith('/VALIDATION_RESULTS.json'))
+    need(all(get(path)['modules'] for path in validation_paths), 'empty audited lane')
+    validation_targets = [(path, module) for path in validation_paths
+        for module in sorted(get(path)['modules'])]
+    for path, module in validation_targets:
         v = get(path)
         lane = PurePosixPath(path).parent
         audit_root = lane.parent
         need(v['status'] == 'PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS', 'audit status')
-        need(len(v['modules']) == 1, 'checkpoint lane scope')
-        module, digest = next(iter(v['modules'].items()))
+        lane_modules = sorted(v['modules'])
+        need(len(lane_modules) == 1 or (checkpoint == '04' and
+             str(lane) == config['paired_owner_lane'] and lane_modules == config['paired_owners']),
+             'checkpoint lane scope')
+        digest = v['modules'][module]
         need(module in expected and module not in seen, 'duplicate or unexpected audited owner')
         seen.add(module)
         need(all(v[k] is True for k in ['full_owned_including_private_generated', 'only_standard_axioms',
@@ -252,11 +453,14 @@ def verify(archive, repo, checkpoint='01'):
         need(sha(files[str(audit_root / 'AUDIT_PLAN.json')]) == v['plan_sha256'] == plan_binding['sha256'], 'audit plan hash')
         need(plan_binding['runner_sha256'] == AUDIT_RUNNER_SHA and plan_binding['no_compiler_invoked_by_preparation'], 'audit runner binding')
         need(v['audit_template_sha256'] == plan['audit_template']['sha256'] == AUDIT_TEMPLATE_SHA, 'audit template pin')
-        need(get(lane / 'MODULES.json') == get(audit_root / 'TARGETS.json') == [module], 'module inventory scope')
+        need(get(lane / 'MODULES.json') == get(audit_root / 'TARGETS.json') == lane_modules, 'module inventory scope')
         need(plan['source_review_head'] == normal['source_commit'], 'normal/audit source commits differ')
-        sources = v['project_dependency_sources']
-        need(sources == get(lane / 'PROJECT_SOURCE_BINDING.json') == context['project_sources'], 'normal/audit source closure differs')
-        need(sources == {m: plan['expected_project_sources'][m] for m in plan['modules'][module]['project_closure']}, 'plan source closure differs')
+        lane_sources = {m: plan['expected_project_sources'][m] for owner in lane_modules
+                        for m in plan['modules'][owner]['project_closure']}
+        need(v['project_dependency_sources'] == get(lane / 'PROJECT_SOURCE_BINDING.json') == lane_sources,
+             'plan lane source closure differs')
+        sources = {m: lane_sources[m] for m in plan['modules'][module]['project_closure']}
+        need(sources == context['project_sources'], 'normal/audit source closure differs')
         need(sources[module] == plan['modules'][module]['source_sha256'] == digest, 'target source binding')
         if expected[module] == 'p14_new':
             owner_root = PurePosixPath(normal_path).parents[2]
@@ -279,7 +483,7 @@ def verify(archive, repo, checkpoint='01'):
         current = (repo / source_path).read_bytes()
         need(sha(current) == snapshot[source_path]['sha256'] == digest and len(current) == snapshot[source_path]['bytes'], 'current target source differs: ' + module)
         reused = v['reused_normal_evidence']
-        need(reused == get(lane / 'REUSED_NORMAL_EVIDENCE.json') and set(reused) == {module}, 'normal reuse record')
+        need(reused == get(lane / 'REUSED_NORMAL_EVIDENCE.json') and set(reused) == set(lane_modules), 'normal reuse record')
         record = reused[module]
         need(record['source_commit'] == normal['source_commit'] and record['sha256'] == nc['log_sha256'], 'reused normal binding')
         need(record['all_actual_built_modules'] == [module] and record['selected_sources'] == {module: digest}, 'reused normal target')
@@ -302,23 +506,29 @@ def verify(archive, repo, checkpoint='01'):
         names = [r['name'] for r in records]
         need(records == get(lane / 'OWNED_EXPORTS.json'), 'owned export records differ from log')
         need(len(inventory) == 1 and sorted(inventory[0]) == sorted(names) and len(set(names)) == len(names), 'owned inventory incomplete')
-        need(counts == [{'count': len(records), 'module': module}] and totals == [len(records)], 'owned module count')
+        need(counts == [{'count': sum(r['module'] == owner for r in records), 'module': owner}
+                        for owner in lane_modules] and totals == [len(records)], 'owned module count')
         need(len(records) == v['total_owned_exports'] and sum(not r['is_private'] for r in records) == v['total_public_exports'], 'owned/public count')
-        need(all(r['module'] == module and r['kind'] != 'axiom' and set(r['axioms']) <= ALLOWED_AXIOMS and
+        need(all(r['module'] in lane_modules and r['kind'] != 'axiom' and set(r['axioms']) <= ALLOWED_AXIOMS and
                  r['type'] and r['type_expression'].startswith('Lean.Expr.') for r in records), 'type or axiom audit')
         need(not any(s in text for s in ['sorryAx', '…', '⋯', '...']), 'type dump has elisions or sorry')
         audit_source = files[str(lane / 'PublicAudit.lean')].decode()
         body = re.sub(r'^import ImbalancedChen\.[^\n]+\n', '', audit_source, flags=re.M)
         body = re.sub(r'let modules := #\[[^\n]*\]', 'let modules := #[__MODULES__]', body, count=1)
         need(sha(body.encode()) == AUDIT_BODY_SHA, 'full environment audit program differs')
-        need(audit_source.startswith('import ' + module + '\n') and 'let modules := #[`' + module + ']' in audit_source, 'audit program target')
+        need(audit_source.startswith(''.join('import ' + owner + '\n' for owner in lane_modules)) and
+             'let modules := #[' + ', '.join('`' + owner for owner in lane_modules) + ']' in audit_source,
+             'audit program target')
         for key in ['stock_readiness_before', 'stock_readiness_after']:
             rec = v[key]
             need(get(lane / (key.replace('_', '-') + '-command.json')) == rec, 'readiness command sidecar')
-            need(BUILT.findall(command(rec, str(lane), ['lake', '--no-build', 'build', '+' + module + ':olean'])) == [], 'audit repeated a normal build')
+            need(BUILT.findall(command(rec, str(lane), ['lake', '--no-build', 'build'] +
+                 ['+' + owner + ':olean' for owner in lane_modules])) == [], 'audit repeated a normal build')
+        records = [r for r in records if r['module'] == module]
+        public_count = sum(not r['is_private'] for r in records)
         reports.append({'module': module, 'group': expected[module], 'source_commit': normal['source_commit'],
-            'current_source_sha256': digest, 'owned_declarations': len(records), 'public_declarations': v['total_public_exports'],
-            'private_declarations': len(records) - v['total_public_exports'], 'source_closure_modules': len(sources),
+            'current_source_sha256': digest, 'owned_declarations': len(records), 'public_declarations': public_count,
+            'private_declarations': len(records) - public_count, 'source_closure_modules': len(sources),
             'normal_seconds': nc['elapsed_seconds'], 'kernel_seconds': kernel['elapsed_seconds'],
             'normal_log_sha256': nc['log_sha256'], 'kernel_log_sha256': kernel['log_sha256'],
             'owned_log_sha256': audit['log_sha256'], 'normal_receipt': normal_path,
@@ -342,15 +552,24 @@ def verify(archive, repo, checkpoint='01'):
         limits.extend([
             'The shared B2 batch exited 1: only its three individually accepted owners are counted; failed MiddleShellMovingLimit is excluded.',
             'Source-materialization receipts describe deployment, not acceptance, and add no accepted owner.'])
-    else:
+    elif checkpoint == '03':
         limits.extend([
             'Shared rounds 03 through 07 contain failed and held attempts; only the twelve individually accepted source-bound owners are counted.',
             'The bytes-frame-seed stage accepted only P5OriginalCommonRefinedSeedHull. ByteLiteral, NpyFrame and the round07 FullMean failure are excluded.',
             'Later retries and pipelines outside the six fixed export roots are not included in checkpoint 03.'])
+    else:
+        limits.extend([
+            'Only the individually accepted owners in the fixed c6/439/4d pipelines and shared round08 are counted; failed and held stages remain history.',
+            'The fixed ByteLiteral/NpyFrame lane contains both owners: all 99 declarations and both kernel commands are checked, with each source and normal receipt checked separately.',
+            'The retained23 review is bound by its original receipt hash and adds no duplicate owner or declaration; earlier owners remain in checkpoints 01 through 03.',
+            'Root cancelled job_1cea during TypedArchiveRange to unblock geometry. Its partial files and separately pinned verbatim MCP observations are not acceptance, a timeout or a proved mathematical failure.',
+            'No original Range RESULT/GIT_AFTER or final 4d PIPELINE_RESULT is synthesized; any missing Range Git-after receipt is reported without claiming that partial run has a verified before/after pair.',
+            'The full original-NPY association and complete stored-floor obligations are not discharged by these reader, frame, typed-shape and owner-geometry acceptances.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
-        'exported_files_verified': len(manifest['files']), 'unchanged_original_git_pairs_verified': len(git_pairs),
+        'exported_files_verified': len(manifest['files']),
+        'unchanged_original_git_pairs_verified': len(git_pairs) - len(partial_missing_git_after),
         'groups': totals, 'owners': reports,
         'total_owners': len(expected), 'total_owned_declarations': config['owned'], 'total_public_declarations': config['public'],
         'total_private_declarations': config['owned'] - config['public'], 'permitted_transitive_axioms': sorted(ALLOWED_AXIOMS),
@@ -360,12 +579,17 @@ def verify(archive, repo, checkpoint='01'):
         'compiled_object_binaries_exported_or_rehashed_locally': False,
         'historical_git_blobs_independently_resolved': False,
         'verification_limits': limits,
+        **({'cancelled_unaccepted_partial_history': partial_report,
+            'noncounting_retained_review': {'path': review['path'], 'sha256': review['sha256'],
+                'owners': 23, 'owned_declarations': 378, 'public_declarations': 349,
+                'all_current_owner_sources_match': True, 'additional_accepted_owners': 0,
+                'additional_owned_declarations': 0}} if checkpoint == '04' else {}),
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)

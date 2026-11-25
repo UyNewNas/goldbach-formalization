@@ -113,7 +113,8 @@ private theorem binary_cover (u : ℝ) (hu : 0 ≤ u ∧ u < 4) :
   · refine ⟨0, ?_⟩
     simpa using (show 0 ≤ u ∧ u < 2 from ⟨hu.1, h⟩)
   · refine ⟨1, ?_⟩
-    simpa using (show 2 ≤ u ∧ u < 4 from ⟨le_of_not_gt h, hu.2⟩)
+    norm_num
+    exact ⟨le_of_not_gt h, hu.2⟩
 
 private theorem quartic_cover (u : ℝ) (hu : 0 ≤ u ∧ u < 4) :
     ∃ d : Fin 4, (d.val : ℝ) ≤ u ∧ u < (d.val : ℝ) + 1 := by
@@ -122,12 +123,15 @@ private theorem quartic_cover (u : ℝ) (hu : 0 ≤ u ∧ u < 4) :
     simpa using (show 0 ≤ u ∧ u < 1 from ⟨hu.1, h1⟩)
   by_cases h2 : u < 2
   · refine ⟨1, ?_⟩
-    simpa using (show 1 ≤ u ∧ u < 2 from ⟨le_of_not_gt h1, h2⟩)
+    norm_num
+    exact ⟨le_of_not_gt h1, h2⟩
   by_cases h3 : u < 3
   · refine ⟨2, ?_⟩
-    simpa using (show 2 ≤ u ∧ u < 3 from ⟨le_of_not_gt h2, h3⟩)
+    norm_num
+    exact ⟨le_of_not_gt h2, h3⟩
   · refine ⟨3, ?_⟩
-    simpa using (show 3 ≤ u ∧ u < 4 from ⟨le_of_not_gt h3, hu.2⟩)
+    norm_num
+    exact ⟨le_of_not_gt h3, hu.2⟩
 
 theorem parent_covered_by_child (raw : FifthWireRow) (hgrid : raw.grid = 400)
     (t : Point) (ht : t ∈ raw.originalBox) :
@@ -138,8 +142,10 @@ theorem parent_covered_by_child (raw : FifthWireRow) (hgrid : raw.grid = 400)
         scaled raw t i < (width i : ℝ) * ((d.val : ℝ) + 1) := by
     intro i
     by_cases hi : i.val < 4
-    · simpa [divisions, width, hi] using binary_cover (scaled raw t i) (hp i)
-    · simpa [divisions, width, hi] using quartic_cover (scaled raw t i) (hp i)
+    · rw [show divisions i = 2 by simp [divisions, hi]]
+      simpa only [width, if_pos hi, Nat.cast_ofNat] using binary_cover (scaled raw t i) (hp i)
+    · rw [show divisions i = 4 by simp [divisions, hi]]
+      simpa only [width, if_neg hi, Nat.cast_one, one_mul] using quartic_cover (scaled raw t i) (hp i)
   classical
   choose c hc using hcoord
   exact ⟨c, (mem_childBox_iff_scaled raw c t).mpr hc⟩
@@ -154,13 +160,13 @@ theorem child_subset_parent (raw : FifthWireRow) (hgrid : raw.grid = 400)
   by_cases hslot : i.val < 4
   · have hd : (c i).val < 2 := by simpa [divisions, hslot] using (c i).isLt
     have hdR : ((c i).val : ℝ) ≤ 1 := by exact_mod_cast (show (c i).val ≤ 1 by omega)
-    simp only [width, if_pos hslot] at hi
+    simp only [width, if_pos hslot, Nat.cast_ofNat] at hi
     constructor
     · nlinarith
     · nlinarith
   · have hd : (c i).val < 4 := by simpa [divisions, hslot] using (c i).isLt
     have hdR : ((c i).val : ℝ) ≤ 3 := by exact_mod_cast (show (c i).val ≤ 3 by omega)
-    simp only [width, if_neg hslot] at hi
+    simp only [width, if_neg hslot, Nat.cast_one, one_mul] at hi
     constructor
     · nlinarith
     · nlinarith
@@ -171,14 +177,14 @@ theorem common_child_point_eq (raw : FifthWireRow) (a b : ChildIndex)
   have hai := (mem_childBox_iff_scaled raw a t).mp ha i
   have hbi := (mem_childBox_iff_scaled raw b t).mp hb i
   by_cases hslot : i.val < 4
-  · simp only [width, if_pos hslot] at hai hbi
+  · simp only [width, if_pos hslot, Nat.cast_ofNat] at hai hbi
     have habR : ((a i).val : ℝ) < ((b i).val : ℝ) + 1 := by nlinarith
     have hbaR : ((b i).val : ℝ) < ((a i).val : ℝ) + 1 := by nlinarith
     have habN : (a i).val < (b i).val + 1 := by exact_mod_cast habR
     have hbaN : (b i).val < (a i).val + 1 := by exact_mod_cast hbaR
     apply Fin.ext
     omega
-  · simp only [width, if_neg hslot] at hai hbi
+  · simp only [width, if_neg hslot, Nat.cast_one, one_mul] at hai hbi
     have habR : ((a i).val : ℝ) < ((b i).val : ℝ) + 1 := by linarith
     have hbaR : ((b i).val : ℝ) < ((a i).val : ℝ) + 1 := by linarith
     have habN : (a i).val < (b i).val + 1 := by exact_mod_cast habR
@@ -269,12 +275,12 @@ theorem literalRawOwnerIntegral_eq_sum_64_children (raw : FifthWireRow)
   rw [rawOwnerDomain_eq_union_children raw hgrid]
   have hi := integrableOn_literalRawKernel_rawOwner raw hgrid hpositive
     e chi m omega j
-  rw [integral_biUnion_finset (Finset.univ : Finset ChildIndex)
+  exact integral_biUnion_finset (Finset.univ : Finset ChildIndex)
     (fun c _ => childOwnerDomain_measurable raw c e chi m omega j)
-    (childOwnerDomains_pairwise_disjoint raw e chi m omega j)
+    (by simpa only [Finset.coe_univ] using
+      (childOwnerDomains_pairwise_disjoint raw e chi m omega j))
     (fun c _ => hi.mono_set
-      (childOwnerDomain_subset_rawOwner raw hgrid c e chi m omega j))]
-  simp
+      (childOwnerDomain_subset_rawOwner raw hgrid c e chi m omega j))
 
 end
 end ImbalancedChen.P5OldFifthExact64ChildTiling
