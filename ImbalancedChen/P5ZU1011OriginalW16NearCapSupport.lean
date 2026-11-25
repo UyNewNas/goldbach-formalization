@@ -42,7 +42,7 @@ theorem specified_well_support {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
   have hs : ∀j:Fin 4,(prefixProduct j t:ℝ)*(slots t j:ℝ)^2≤runLevel B eta N := by
     intro j
     exact (native_full_squares hN ht B eta heta htest hbox j).trans
-      (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))
+      (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
   intro i hi
   have hi4 : i<4 := by simpa only [specified,List.length_cons,List.length_nil] using hi
   interval_cases i
@@ -77,7 +77,7 @@ theorem prefix_residual_budget {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
         congr 1
         simp only [residualExponent,Rat.cast_sub,Rat.cast_mul,Rat.cast_ofNat]
         ring
-  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))⟩
+  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))⟩
 
 /-- The primitive residual well vector is promoted to the full original
 four-prime vector, at one box-fixed level. In particular this is not a
@@ -129,7 +129,6 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
   have hnu : (nu B eta:ℝ)≤153/256 := by linarith
   let P := (N:ℝ)^(1-(nu B eta:ℝ)-2*(delta B eta:ℝ))
   have hP : A≤P := hAupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by
-    dsimp [P]
     linarith [hm.2.1]))
   have hC : 1≤rightCapacity B eta N A := (le_div_iff₀ hApos).2 (by simpa [rightCapacity,P] using hP)
   have hAC : A*rightCapacity B eta N A=P := by
@@ -144,9 +143,9 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
   have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
   have hd : (0:ℝ)<(delta B eta:ℝ) := by exact_mod_cast hdQ
-  have hB : 1≤middleCapacity B eta N := Real.one_le_rpow hn.le (by dsimp [middleCapacity]; linarith [hm.1])
+  have hB : 1≤middleCapacity B eta N := Real.one_le_rpow hn.le (by linarith [hm.1])
   have hfirst : (slots t 0:ℝ)≤middleCapacity B eta N := hc.1.trans
-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [middleCapacity]; linarith))
+    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
   refine ⟨hB,hC,?_,?_,?_,?_,?_⟩
   · calc
       A*middleCapacity B eta N*rightCapacity B eta N A=middleCapacity B eta N*P := by rw [←hAC]; ring
@@ -157,9 +156,11 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
         ring
   · have hh := initialBins_product A (firstThree t) hA hC (by simpa [firstThree] using hs)
     simpa [wp,firstThree] using hh
-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
+  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
   · simpa [initialBins,firstThree,wp] using hfirst
-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
+  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
 
 end
 end ImbalancedChen.P5Z.U1011OriginalW16NearCapSupport
