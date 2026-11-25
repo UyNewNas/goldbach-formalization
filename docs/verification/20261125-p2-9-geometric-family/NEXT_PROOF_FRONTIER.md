@@ -4,7 +4,7 @@ The frozen manuscript is chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50ef
 
 ## Current result and acceptance boundary
 
-The latest three source packets contain 18 new modules / 2,870 lines. Their static source, hash and independent mathematical reviews passed; all 18 remain SOURCE_ONLY / UNCOMPILED. The existing root-strip interface has ten added lines, and the coarse-support helper has only its eight-byte private modifier removed. No old proof was replaced by a hypothesis or unchecked proof escape.
+The latest four source packets contain 19 new modules / 3,016 lines. Their static source, hash and independent mathematical reviews passed; all 19 remain SOURCE_ONLY / UNCOMPILED. The existing root-strip interface has ten added lines, and the coarse-support helper has only its eight-byte private modifier removed. No old proof was replaced by a hypothesis or unchecked proof escape.
 
 The independently accepted increment is eleven modules / 131 owned declarations. Counts include definitions and private/generated declarations, not 131 new mathematical theorems. FibreCore/Tuple acceptance includes complete reconstruction and SHA verification of all 59 evidence members, exact sources and objects, normal build, named kernel replay and full-owned/axiom records. Full-import replay is not claimed. Full P2.9 and the board node remain open.
 
@@ -16,6 +16,8 @@ The independently accepted increment is eleven modules / 131 owned declarations.
 4. The actual tested Gamma5 badFibre true mass injects, with identical marks and identical N-product test, into this same finite Family. Its target is definitionally the finite fallback left side. The saved direct composition keeps the full 2N carrier and all four right-hand terms at one Q/rho.
 5. SeedCorrectionCarrier compresses only coordinate bounds on nonzero support, preserving the complete product and full correction. Only the small-prime summand uses its own product<N test to remove product>N. SeedCorrectionPayment directly reuses the original two eventual estimates and pays absolute marked coprimality correction plus marked small-prime mass by epsilon*singularNormalization N for the actual Fine-supported rho.
 
+6. SeedSignedPPPayment aggregates an explicit actual-entry A=3 signed estimate over that same fixed finite family. It reuses P4BLogSavingBudget for normalization and SeedCorrectionPayment for the other two errors, preserving the common Q/rho and complete 2N weight. This is a conditional payment theorem; the signed analytic estimate itself is not proved here.
+
 The actual fallback coefficient and geometry meshes are distinct parameters. At each fixed approximation precision, pointwise majorization, density and distribution must use the same rho. The 1106 argument explicitly allows the coefficient to change between approximation precisions. Ordinary geometric uniformity in tau does not by itself prove a distribution statement for N-moving choices.
 
 ## Remaining mathematical dependency
@@ -23,6 +25,8 @@ The actual fallback coefficient and geometry meshes are distinct parameters. At 
 The central unbound input is the signed prime-product estimate for every entry of the actual fixed finite Gamma5 atlas at the same Fine-selected Q/rho, full rank and full 2N coordinate cap. A sufficient fixed-precision input is an A=3 bound C_v*N/(log N)^3 for each entry, with constants depending on fixed entry/precision and the threshold taken after the finite family. Existing definition-only UniformPrimeProductTarget is not a proof of that input.
 
 The candidate audit checks ten exact suppliers at the recorded repository tree. They provide all-rank Fourier identities, prime-power correction transfers, support/range statements, singleton transport or conditional/rank-two estimates. No directly applicable bound was found in that inspected set. This is not a claim of absence from all branches and is not evidence of a mathematical gap in the manuscript. See ../20261125-p2-9-same-rho/P3_SIGNED_SUPPLIER_SCOPE.json.
+
+The newer P3.2/P3.3 exact-supplier delta has also been reviewed. P3.3 already invokes the P3.2 signed-square reduction, so that connection is reused. Its output still retains a nonzero/small-core energy term and is not yet the actual real primeProductSignedError bound for this finite atlas. The 468 unique names in the P3.3 historical reused audit are not fresh executions or new P2.9 credit. See ../20261125-p2-9-same-rho/P32_P33_SIGNED_SUPPLIER_DELTA.json.
 
 The existing FineDensity source gives a delta-constant actual same-rho density family and its active-modulus support. Its own header is SOURCE_ONLY / UNCOMPILED / NOT KERNEL ACCEPTED. Reuse its statement and preserve its quantifier choices; qualify its source/object closure separately.
 
@@ -34,7 +38,7 @@ The seed net gain actualJ2omega includes Gamma5 and Gamma9-21 charges; it is not
 
 ## Compilation and receiving closure
 
-Only individually qualified exact modules have green-level evidence. The new consumers still need the coherent full historical/finite-fallback source and object closure, normal Lean compilation, named kernel replay and full-owned audit. P1 ProfileCollar/NaturalMass receiving qualification, CoordinateCore and current Nonunit object qualification retain their existing job identities. Queue submission is not execution or acceptance. P2's prior probe returned Session terminated; it was not resubmitted. The original guard's real-Elan requirement is retained on P3. See CURRENT_RUN_STATUS.json for the latest observations.
+Only individually qualified exact modules have green-level evidence. The new consumers still need the coherent full historical/finite-fallback source and object closure, normal Lean compilation, named kernel replay and full-owned audit. CoordinateCore passed all reported normal/kernel/owned gates; the full archive export remains pending, so the accepted aggregate above has not yet increased. The P1 ProfileCollar/NaturalMass and current Nonunit retries correct pre-compilation input binding without recompiling old providers. P2's original probe is confirmed interrupted before execution; a focused read recovered the existing three accepted Family objects, whose complete transfer archive has been root-verified. Chart API repairs and the dependent light atlas qualification are in progress on P2. A real existing Elan was located on P3; no shim or relaxation of the original guard is used. Queue submission is not execution or acceptance. See ../20261126-p2-9-continuation/CHECKPOINT.json for the dated observations; subsequent status records supersede its queue sample.
 
 No new outside-manuscript analytic theorem or necessary 29-H247/native-Wu Binder obligation is introduced. The inspected native Binder remains a sufficient alternate route, not an established equivalent characterization of the manuscript mainline.
 
