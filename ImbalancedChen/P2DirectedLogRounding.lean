@@ -59,14 +59,14 @@ theorem Enclosure.add_contains {a b : Enclosure} {x y : ℝ}
     (a.add b).Contains (x + y) := by
   rcases hx with ⟨hxl, hxu⟩
   rcases hy with ⟨hyl, hyu⟩
-  constructor <;> simp only [Enclosure.add, Enclosure.Contains, Rat.cast_add]
+  constructor <;> simp only [Enclosure.add, Rat.cast_add]
   · exact add_le_add hxl hyl
   · exact add_le_add hxu hyu
 
 theorem Enclosure.neg_contains {a : Enclosure} {x : ℝ} (hx : a.Contains x) :
     a.neg.Contains (-x) := by
   rcases hx with ⟨hxl, hxu⟩
-  constructor <;> simp only [Enclosure.neg, Enclosure.Contains, Rat.cast_neg]
+  constructor <;> simp only [Enclosure.neg, Rat.cast_neg]
   · exact neg_le_neg hxu
   · exact neg_le_neg hxl
 
@@ -217,27 +217,27 @@ def instReprExpr.repr : Expr → Nat → Std.Format :=
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.add" ++
                 Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
-                Std.Format.line ++ rec b (by simp_wf <;> omega) max_prec))) prec
+                Std.Format.line ++ rec b (by simp_wf) max_prec))) prec
       | neg a =>
           exact fun prec =>
             Repr.addAppParen (Std.Format.group (Std.Format.nest
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.neg" ++
-                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec))) prec
+                Std.Format.line ++ rec a (by simp_wf) max_prec))) prec
       | mul a b =>
           exact fun prec =>
             Repr.addAppParen (Std.Format.group (Std.Format.nest
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.mul" ++
                 Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
-                Std.Format.line ++ rec b (by simp_wf <;> omega) max_prec))) prec
+                Std.Format.line ++ rec b (by simp_wf) max_prec))) prec
       | rounded bits a =>
           exact fun prec =>
             Repr.addAppParen (Std.Format.group (Std.Format.nest
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.rounded" ++
                 Std.Format.line ++ reprArg bits ++
-                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec))) prec)
+                Std.Format.line ++ rec a (by simp_wf) max_prec))) prec)
 
 instance instReprExpr : Repr Expr := ⟨instReprExpr.repr⟩
 
@@ -256,21 +256,19 @@ def Expr.enclosure : Expr → Enclosure :=
       | rational q => exact Enclosure.point q
       | logarithm c => exact Enclosure.log c
       | add a b =>
-          exact (rec a (by simp_wf <;> omega)).add (rec b (by simp_wf <;> omega))
-      | neg a => exact (rec a (by simp_wf <;> omega)).neg
+          exact (rec a (by simp_wf <;> omega)).add (rec b (by simp_wf))
+      | neg a => exact (rec a (by simp_wf)).neg
       | mul a b =>
-          exact (rec a (by simp_wf <;> omega)).mul (rec b (by simp_wf <;> omega))
-      | rounded bits a => exact (rec a (by simp_wf <;> omega)).round bits)
+          exact (rec a (by simp_wf <;> omega)).mul (rec b (by simp_wf))
+      | rounded bits a => exact (rec a (by simp_wf)).round bits)
 
 @[simp] theorem Expr.enclosure_rational (q : ℚ) :
     (.rational q : Expr).enclosure = Enclosure.point q := by
   conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 @[simp] theorem Expr.enclosure_logarithm (c : RationalLogCertificate) :
     (.logarithm c : Expr).enclosure = Enclosure.log c := by
   conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 @[simp] theorem Expr.enclosure_add (a b : Expr) :
     (Expr.add a b).enclosure = a.enclosure.add b.enclosure := by
@@ -336,21 +334,19 @@ def Expr.check : Expr → Bool :=
       | rational _ => exact true
       | logarithm c => exact c.check
       | add a b =>
-          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf <;> omega)
-      | neg a => exact rec a (by simp_wf <;> omega)
+          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf)
+      | neg a => exact rec a (by simp_wf)
       | mul a b =>
-          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf <;> omega)
-      | rounded _ a => exact rec a (by simp_wf <;> omega))
+          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf)
+      | rounded _ a => exact rec a (by simp_wf))
 
 @[simp] theorem Expr.check_rational (q : ℚ) :
     (.rational q : Expr).check = true := by
   conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 @[simp] theorem Expr.check_logarithm (c : RationalLogCertificate) :
     (.logarithm c : Expr).check = c.check := by
   conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 @[simp] theorem Expr.check_add (a b : Expr) :
     (Expr.add a b).check = (a.check && b.check) := by
