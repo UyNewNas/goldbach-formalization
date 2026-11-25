@@ -1,6 +1,6 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定，以 `b963056ffbb22d28f2413e8ea5dd02b347356396` 为基线，并补入下述排序壁第四坐标归约。各历史任务仍只对其记录的原提交与源码/对象哈希负责。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
+**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定，证明源码已提交于 `9833f3e2a9981931c8c57d06c0fd82ea9af5f84e`，含下述排序壁第四坐标归约。各历史任务仍只对其记录的原提交与源码/对象哈希负责。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
 
 ## 稿件范围
 
@@ -110,7 +110,7 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 
 [CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，必须逐项重绑实际运行时和 16,623 项原导入 facets，并保留既有 registry 条目。记录明确 `new_strict_compile=false`，仍须执行该模块本轮独立审核。
 
-[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用。现场接受成功后，使用[补充证据导出命令](supplemental-export-command.sh)保留单模块接入回执及完整导入映射；该步骤复用已接受回执，不重新编译或回放。
+[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用。现场接受成功后，使用下述增量证据命令保留单模块接入回执及完整导入映射；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
 
 Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisites-review.json)：29 项针对性测试和真实历史包字段检查通过；原 checkpoint、Tail provider 和 descriptor 门禁保持不变，原 `selected={}` 的结果未被改写。这一审查仍不代表 P2 实际环境接收或数学验收。
 
@@ -119,3 +119,24 @@ Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisit
 P3 参数化表达探针 `67f828f5c16f4dd58ebdeca4c891aa00` 实际以退出码 1 结束，唯一诊断是在 `orderingWallForm_ne_zero` 中仍有 `![0, 0, 0, 1] 3 = 0`。在原简化后增加 `change (1 : ℝ) = 0 at hh` 和 `norm_num at hh`，仅补齐该具体坐标的定义归约。参见 [原始错误日志](p3-expression-probe-before.compile.log)、[探针原源码](p3-expression-probe-before.lean)及[两行修正的独立审查](ordering-wall-review.json)。修复探针 `cdaef8c04ada491abd231363ac6788dc` 实际通过，退出码 0，外层约 3.464 秒、Lean 约 3.376 秒，日志为空且无警告。参见[前后原件字节核对与边界说明](p3-expression-probe-verification.json)。探针使用显式参数化的已有供应结论，不是 P2.7 模块接收；本轮完整模块编译仍为 pending。
 
 最终证据将引用固定旧归档中逐字节相同的依赖记录，并完整保留本轮新审核材料及 CurrentChen 接入补充；不再运行一次会重复写出全部旧上下文的补充全量导出。该打包安排不改变任何接收计数或证明信用。
+
+## 增量证据交付入口
+
+[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。打包本身不增加任何数学信用，实际运行仍为 pending。
+
+从首次 exporter 的实际输出取得 `manifest_sha256` 后，在 P2 工作目录执行：
+
+```sh
+bash docs/p2/20261125/p27/prepare-delta-evidence.sh ORIGINAL_MANIFEST_SHA256
+```
+
+[该准备命令](prepare-delta-evidence.sh)仅从首次全量导出派生增量包，并保留 CurrentChen 接入材料。传输页数以实际输出为准。接收端再执行：
+
+```sh
+python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.tar.xz \
+  --repo . --git-tree FIXED_PUBLICATION_COMMIT \
+  --manifest-sha256 ORIGINAL_MANIFEST_SHA256 \
+  --output p27-delta-verification.json
+```
+
+`ORIGINAL_MANIFEST_SHA256` 必须独立取自原导出任务回执，不能只相信传输包自己的声明。接收成功后仍应核对最终发布的全部 81 个源文件与原接收清单的字节身份。

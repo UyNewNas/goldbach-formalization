@@ -1,0 +1,155 @@
+{
+  "schema": "p27-delta-evidence-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "PASS_SOURCE_AND_TARGETED_TESTS_REAL_EXPORT_PACK_AND_RECEIVER_PENDING",
+  "reviewed_sources": [
+    {
+      "path": "verification/part2/p27_delta_evidence.py",
+      "bytes": 31292,
+      "sha256": "f4ddcb99b81da3718955973573eddbdd398d82ee7064e093f0a0c7859ae46604"
+    },
+    {
+      "path": "verification/part2/test_p27_delta_evidence.py",
+      "bytes": 16843,
+      "sha256": "258908ead6dfb2c5d92f874fbcbbf2a0c33e0470ab64ce36b26c06c0a2a6228f"
+    }
+  ],
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "resolved_during_review": [
+    {
+      "severity": "Important",
+      "identified_by": "/root/p27_source_review",
+      "problem": "The first packer rejected every symlink in the CurrentChen adoption directory, but the unchanged receiver necessarily creates eight original-metadata facet symlinks. A normal real receiver output would therefore fail packaging.",
+      "resolution": "Only the eight exact CurrentChen metadata staging paths may be omitted. The packer hashes each actual target against a fixed SHA256/length, requires a complete staging set when present, and records a separate nontransported staging inventory. Unknown links, unknown staging paths, partial sets and wrong target bytes remain rejected.",
+      "independently_confirmed": true,
+      "proof_objects_transported_by_this_exception": false
+    },
+    {
+      "severity": "Minor",
+      "identified_by": "/root/p27_source_review",
+      "problem": "The first receiver checked supplemental namespace/inventory but did not mirror the packer's text-only and .olean refusal, allowing a self-listed proof-object supplement through that structural check.",
+      "resolution": "The packer and receiver now share supplemental_text_name; the added injection test rejects an .olean member even when the delta's self-declared inventories are updated.",
+      "independently_confirmed": true
+    }
+  ],
+  "independent_test_run": {
+    "command": "python3 -B -m unittest discover -s verification/part2 -p test_p27_delta_evidence.py -q",
+    "cwd": "/workspace/scratch/5f6fdc4576f1/goldbach-p27",
+    "tests": 17,
+    "exit_code": 0,
+    "elapsed_seconds": 2.697,
+    "result": "OK",
+    "synthetic_transport_fixtures_only": true,
+    "lean_or_lake_invocations": 0,
+    "recorded_from_already_observed_run": true,
+    "rerun_to_write_this_record": false
+  },
+  "additional_independent_refusal_cases": [
+    {
+      "case": "independent_exporter_manifest_SHA_mismatch",
+      "rejected": true,
+      "reason": "Original export manifest differs from the independent exporter SHA"
+    },
+    {
+      "case": "same_original_member_assigned_to_two_reference_classes",
+      "rejected": true,
+      "reason": "Delta member classes overlap"
+    },
+    {
+      "case": "partial_omitted_staging_inventory",
+      "rejected": true,
+      "reason": "Unknown or incomplete omitted CurrentChen staging inventory"
+    },
+    {
+      "case": "supplement_reclassifies_an_original_audit_member",
+      "rejected": true,
+      "reason": "Supplemental namespace/inventory differs"
+    },
+    {
+      "case": "prior_compressed_stream_not_consumed_to_EOF",
+      "rejected": true,
+      "reason": "Prior compressed stream was incomplete or changed"
+    }
+  ],
+  "real_byte_checks": {
+    "currentchen_canonical_manifest": "/workspace/scratch/5f6fdc4576f1/p27-native-transfer-5f6fdc4576f1/current-chen/canonical/MANIFEST.json",
+    "staging_whitelist_entries_checked": 8,
+    "staging_original_paths_sha256_and_lengths_matched_manifest": true,
+    "staging_payload_sha256_and_lengths_independently_rehashed": true,
+    "staging_boundary": "The sidecar anchors identify previously published transport bytes; this review does not turn them into an independent historical audit or new qualification.",
+    "prior_catalog": {
+      "path": "docs/p2/20261125/p27/prior-evidence-slim-catalog.json.xz",
+      "bytes": 1204096,
+      "sha256": "7a188902bf63285058d114d2308883b82c2ce588edd153974608416d59c2fa2a",
+      "uncompressed_slim_bytes": 6597479,
+      "slim_sha256": "be5d5b57751756fa1d1b443a9f4a7cb00fab80accae41ee2c31ca401bc955bb7",
+      "indexed_embedded_members": 13858,
+      "actual_small_catalog_bytes_and_fixed_slim_sha_checked": true
+    },
+    "real_prior_archive_stream_rescanned_by_reviewer": false,
+    "prior_full_scan": {
+      "reported_by": "/root/p27_existing_evidence",
+      "reported_actual_members_hashed": 13859,
+      "explanation": "The implementer reported one completed stream scan of the 37 fixed Git parts, including SLIM_MANIFEST.json. This reviewer inspected the implementation and verified the resulting small fixed catalog bytes, and did not repeat that multi-gigabyte decompression."
+    }
+  },
+  "reviewed_protocol": {
+    "original_export_anchor": "Both pack and verify require the caller-supplied SHA256 from the first original exporter. A hash asserted only inside the delta is insufficient.",
+    "original_reader": "The packer reuses the existing repack_winner9_private_evidence.Export.walk and its package/member hash and coverage checks.",
+    "original_manifests": "The original export manifest and every original package manifest remain embedded. EXPORT_METADATA.json must equal the original manifest with only files/packages removed; original acceptance metadata is not rewritten.",
+    "exact_scope": {
+      "audit_targets": 26,
+      "audit_targets_sha256": "df8c1c35a7829476f95eb84212626270b5d68e25126d34704848f80b653e0cdf",
+      "project_contexts": 81,
+      "project_closure_sha256": "2499c7d548c8d4bb0dcb327bd6139e0034240a7bb1ef0577215627589179a514",
+      "final_module": "ImbalancedChen.P2PairedCertificateCompletion",
+      "accepted_target_set_exact": true,
+      "unselected_modules_required_empty": true,
+      "duplicate_owned_declarations_required_empty": true,
+      "selected_receipts_required_accepted_and_bound": true,
+      "complete_selected_compile_context_required": true
+    },
+    "member_partition": "Each original package/member key belongs to exactly one of embedded, exact repository source reference, or prior archive member reference. Receiver checks preserve all original per-member metadata and reject overlaps, omissions and extra references.",
+    "repository_sources": "Only original verified project-source payloads can use this class. The receiver reads candidate blobs from the explicitly selected Git tree and checks exact SHA256 and length; working-tree drift does not supply bytes.",
+    "prior_members": "Only actual embedded regular members under the fixed old main archive's native-context prefix can supply prior references. The old slim source-reference table is not treated as an existing payload.",
+    "streaming_receiver": "GitParts checks each fixed part's order, length, SHA256 and Git blob identity. scan_prior streams and hashes every actual old member, compares the actual catalog/inventory, drains decompressed and compressed streams to EOF, then requires the full compressed size/hash. It does not unpack the multi-gigabyte donor to disk.",
+    "supplemental_context": "CurrentChen provenance uses an isolated supplemental namespace. Its text predicate and separate staging inventory cannot reclassify an original evidence member or change acceptance counts.",
+    "publication": "Outputs use temporary files and no-clobber publication. Successful receiver reports are written only after all checks, including a final delta-file identity check. CLI results are compact metadata.",
+    "legacy_coverage_boundary": "The unchanged original Winner9 coverage and full_p2_complete:false remain original metadata; they are not converted into a full-P2 completion claim."
+  },
+  "fixed_external_artifacts": {
+    "main_archive": {
+      "history_commit": "77db7b4250077ba9bd2cafb14dfa51b5a2e6e549",
+      "parts": 37,
+      "index_path": "docs/verification/20261125-p2-resume/MAIN_ARCHIVE_PARTS.json",
+      "index_sha256": "f6e9c37881bf6055aaea3e420d32aa9c8b0c539dcb192d573b6bbc2733e58f47",
+      "archive_bytes": 44304524,
+      "archive_sha256": "92c1067a1694ea74af4d15ee841199ab72094f2147b7651e77cf21f60e68faf4"
+    },
+    "native_input_archive_sha256": "25a5b45cf649c8b97df57e6a1dcac71c7f22d5ccd5ab2bf92eda399aeff9ffba",
+    "currentchen_input_archive_sha256": "7308d5b143841734f94b95c7d4499f71110a206ffacf4374f101ef8633ab04eb",
+    "input_archive_boundary": "The two already published input archives are checked as complete Git blobs by SHA256, byte length and Git blob identity. They are not new prior-member providers, and this tool does not claim a fresh per-member scan of those two archives."
+  },
+  "scope": {
+    "reviewer_changed_implementation_or_tests": false,
+    "reviewer_reran_old_reviews_or_lean": false,
+    "reviewer_submitted_cloud_jobs": 0,
+    "real_p2_export_or_delta_pack_performed_by_reviewer": false,
+    "real_final_delta_receiver_verification_performed": false,
+    "new_compile_credit": false,
+    "new_kernel_credit": false,
+    "new_mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Finish the already authorized original P2 export and preserve its independently reported manifest SHA256.",
+    "Run the reviewed delta packer on that one original export and the actual completed CurrentChen adoption directory; confirm actual output size and transfer receipts.",
+    "Receive the final delta and run the reviewed receiver against the explicit publication Git tree, fixed original-export SHA and actual published prior parts/input archives.",
+    "Record the original acceptance results and final receiver evidence without awarding extra proof credit for packaging."
+  ]
+}
