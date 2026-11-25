@@ -53,8 +53,8 @@ theorem actual_long_role_is_unweighted {z y B : ℝ} (hz : 0 ≤ z) (hyB : y ≤
     linarith
   cases hrole : rb.1 with
   | mobius => exact False.elim (hnot hrole)
-  | one => exact Or.inl hrole
-  | logarithm => exact Or.inr hrole
+  | one => exact Or.inl rfl
+  | logarithm => exact Or.inr rfl
 
 -- The original medium selector gives the SAME selected occurrence in
 -- every tuple. Its actual integer factor has the original dyadic support.

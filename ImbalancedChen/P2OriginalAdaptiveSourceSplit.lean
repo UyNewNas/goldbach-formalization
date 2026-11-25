@@ -50,7 +50,7 @@ theorem chooseWider_eq_relativeSpan (c : SeedCell) (i j : Fin 3)
     chooseWider c i j =
       if relativeSpan c i < relativeSpan c j then j else i := by
   unfold chooseWider
-  rw [← relativeSpan_lt_iff c i j hi hj]
+  simp only [← relativeSpan_lt_iff c i j hi hj]
 
 /-- The equality case keeps the earlier axis, rather than changing priority. -/
 theorem chooseWider_keeps_tie (c : SeedCell) (i j : Fin 3)
@@ -128,8 +128,8 @@ theorem closedLeaves_sourceSplitTree (c : SeedCell)
     (hwidth : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)) :
     closedLeaves (sourceSplitTree c) (rootCell c) =
       (sourceChildren c).map rootCell := by
-  rw [compact_closedLeaves_eq_integer_boxes,
-    integerLeafBoxes_sourceSplitTree c hwidth]
+  simpa only [integerLeafBoxes_sourceSplitTree c hwidth] using
+    (compact_closedLeaves_eq_integer_boxes (sourceSplitTree c) c.1 c.2)
 
 /-- Exact source parent-removal/two-child integral identity for the literal
 source split. It does not pay either child's numerical upper charge. -/

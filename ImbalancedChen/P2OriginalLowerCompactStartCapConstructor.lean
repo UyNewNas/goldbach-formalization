@@ -236,9 +236,11 @@ theorem inBox_of_exponentCodes (S : CompactStart) {mesh : ℕ}
     P2OriginalLowerBufferedAffineBoxes.inBox (boxOfCode S code) x := by
   intro i
   constructor
-  · rw [qCellLo_cast]
+  · change (qCellLo S mesh (code i).1 : ℝ) ≤ x i
+    rw [qCellLo_cast]
     exact cellLower_le_of_mem S mesh (hx i)
-  · rw [qCellHi_cast]
+  · change x i ≤ (qCellHi S mesh (code i).1 : ℝ)
+    rw [qCellHi_cast]
     exact mem_exponentCell_le_upper S mesh (hx i)
 
 def boxedTable (S : CompactStart) {mesh : ℕ}

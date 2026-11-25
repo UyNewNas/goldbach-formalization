@@ -69,11 +69,11 @@ private theorem original_literal_row_margin :
   intro i
   fin_cases i <;> decide +kernel
 
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 0 in
 /-- Unlike the previous ascending14 family (max slope 9/2),
 these sixteen originals contain slope of absolute value 11/2.
 The honest shared coefficient bound is SIX, not FIVE. -/
-set_option maxRecDepth 8192 in
-set_option maxHeartbeats 0 in
 private theorem original_literal_slope_bound :
     ∀ i : Fin 16,
     ∀ k : Fin (P4AOriginalRemainingEighthSources.rowCount (originalCell i)),

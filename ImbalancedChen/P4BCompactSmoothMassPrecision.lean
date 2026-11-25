@@ -89,7 +89,7 @@ theorem exists_compact_uniform_smooth_physical_mass_precision
     | empty =>
       refine ⟨widthMax, hwidthMax, le_rfl, 2, le_rfl, ?_⟩
       intro x hx
-      exact False.elim (Finset.not_mem_empty x hx)
+      simp at hx
     | @insert x F hx ih =>
       obtain ⟨widthF, hwidthF, hmaxF, NF, hNF, hF⟩ := ih
       obtain ⟨widthX, hwidthX, _hmaxX, NX, hNX, hX⟩ :=
@@ -102,7 +102,7 @@ theorem exists_compact_uniform_smooth_physical_mass_precision
       rcases Finset.mem_insert.mp hy with rfl | hyF
       · have hbound := hX width hwidth (hwidth0.trans (min_le_right _ _))
           N ((le_max_right NF NX).trans hN) hEven b hb.1.le hb.2.le
-        have hosc := hspan x
+        have hosc := hspan y
         linarith only [hbound, hosc]
       · exact hF y hyF width hwidth (hwidth0.trans (min_le_left _ _))
           N ((le_max_left NF NX).trans hN) hEven b hb

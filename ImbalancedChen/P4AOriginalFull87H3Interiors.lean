@@ -44,11 +44,11 @@ private theorem original_eval_eq (i : Fin 12) (a : Fin 9 → ℚ) :
   push_cast
   rfl
 
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 0 in
 /-- All twelve times 99 ORIGINAL H3 strict affine rows are evaluated.
     Exact external rational audit: 1188/1188 rows >= 9/1000000;
     smallest row is 477/50000000 at cell 0, original row 20. -/
-set_option maxRecDepth 8192 in
-set_option maxHeartbeats 0 in
 private theorem original_h3_literal_margin :
     ∀ i : Fin 12, ∀ k : Fin 99,
       (9/1000000 : ℚ) ≤
@@ -56,10 +56,10 @@ private theorem original_h3_literal_margin :
   intro i
   fin_cases i <;> decide +kernel
 
-/-- True maximal coordinate slope of these literal rows is 9/2.
-    We use a conservative common coefficient bound 6. -/
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
+/-- True maximal coordinate slope of these literal rows is 9/2.
+    We use a conservative common coefficient bound 6. -/
 private theorem original_h3_literal_slope :
     ∀ i : Fin 12, ∀ k : Fin 99, ∀ j : Fin 8,
       |(P4AOriginalFirstFailureH3Literal.sourceAffineRows i k).2 j.succ| ≤

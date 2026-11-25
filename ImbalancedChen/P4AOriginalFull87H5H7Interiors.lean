@@ -57,12 +57,12 @@ private theorem real_row_eq_rational (i : Fin 17) (a : Fin 9 → ℚ) :
   push_cast
   rfl
 
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 0 in
 /-- Candidate kernel computation against all 1710 ORIGINAL strict rows.
 The external exact-Fraction audit confirms the weaker bound 9/100000;
 the minimum is 3999/40000000 at packet index 2, literal row 18.
 This proof body has NOT been elaborated or kernel-evaluated. -/
-set_option maxRecDepth 8192 in
-set_option maxHeartbeats 0 in
 private theorem original_literal_row_margin :
     ∀ i : Fin 17,
     ∀ k : Fin (P4AOriginalRemainingEighthSources.rowCount (originalCell i)),
@@ -71,10 +71,10 @@ private theorem original_literal_row_margin :
   intro i
   fin_cases i <;> decide +kernel
 
-/-- True maximal absolute coordinate slope in all 1710 rows is 9/2;
-conservative 5 is used to avoid an unsound family-independent bound. -/
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
+/-- True maximal absolute coordinate slope in all 1710 rows is 9/2;
+conservative 5 is used to avoid an unsound family-independent bound. -/
 private theorem original_literal_slope_bound :
     ∀ i : Fin 17,
     ∀ k : Fin (P4AOriginalRemainingEighthSources.rowCount (originalCell i)),

@@ -50,7 +50,7 @@ theorem producerLevel4_eq_frozen_of_seed_initial
     (hseed : seedExponent e chi m omega N history = initial e) :
     producerLevel4 e chi m omega N rows licensed history = frozenLevel e chi m omega N history := by
   rw [P1OriginalVariableFourthContinuation.frozenLevel_eq_rpow_seed]
-  unfold producerLevel4 level4 exponent4
+  unfold producerLevel4 P1OriginalVariableFourthContinuation.level4 exponent4
   split_ifs with hlen
   · simp only [hseed]
     exact congrArg (fun x : ℝ => N ^ x) (producerProfile_initial e rows licensed _)

@@ -80,10 +80,10 @@ private theorem pair_eval_eq (i : Fin 13) (a : Fin 9 → ℚ) :
   push_cast
   rfl
 
-/-- Exact coefficient checks against ALL 15*96 original exported descending
-    literal rows. Smallest global margin of both families is 289/25000000. -/
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
+/-- Exact coefficient checks against ALL 15*96 original exported descending
+    literal rows. Smallest global margin of both families is 289/25000000. -/
 private theorem desc_literal_margin :
     ∀ i : Fin 15, ∀ r : Fin 96,
       (9/1000000 : ℚ) ≤
@@ -100,9 +100,9 @@ private theorem pair_literal_margin :
   intro i
   fin_cases i <;> decide +kernel
 
-/-- Original maximum coordinate slope is 11/2, so the safe common bound is 6. -/
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
+/-- Original maximum coordinate slope is 11/2, so the safe common bound is 6. -/
 private theorem desc_slope :
     ∀ i : Fin 15, ∀ r : Fin 96, ∀ j : Fin 8,
       |OriginalDescendingFifteenLiteralAffineRows.exportedCoefficients
