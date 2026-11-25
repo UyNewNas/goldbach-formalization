@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Extend a qualified native input snapshot with three pinned Buchstab providers."""
 import argparse
+import base64
 import copy
 import fcntl
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import subprocess
+import tarfile
 import tempfile
 import time
 
@@ -18,6 +21,9 @@ from winner9_external_snapshot import ExternalSnapshot, PINS, PROVIDER_STATUSES,
 TARGETS = tuple("MathlibNt.SieveTheory." + leaf for leaf in (
     "LiLiuPrereqBuchstabFunction", "LiLiuPrereqBuchstabBounds", "LiLiuBuchstabTailPropagation"))
 FRESH = "FRESH_PRIVATE_SOURCE_COMPILATION"
+CASING = "Lake.Util.Casing"
+CASING_BASE = "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27"
+CASING_RECEIPT_SHA = "903fbc57d2a7882ae9e025c8183fbd46f552f17ab166816bc67743eb92a6952c"
 
 
 # Same inventory primitive as LongSlotNormalizationAudit.lean. The observer
@@ -47,21 +53,46 @@ def probe_source(raw, direct):
     return b"".join(lines[:len(direct) + 1]) + OBSERVER
 
 
-def observed(log, name, direct):
-    rows, summary = {}, []
-    for line in log.decode().splitlines():
-        if line.startswith("P21_HEADER "):
-            summary.append(json.loads(line.removeprefix("P21_HEADER ")))
-        else:
-            require(line.startswith("P21_IMPORT "), "Unexpected output from provider header observer")
-            row = json.loads(line.removeprefix("P21_IMPORT "))
-            module = row["module"]
-            require(module not in rows, "Duplicate observed import: " + module)
-            rows[module] = row["olean"]
-    require(summary == [{"main": name, "count": len(rows)}] and name not in rows
-            and {"Init", *direct} <= rows.keys(), "Incomplete actual legacy header inventory: " + name)
-    return rows
+def unique_fields(pairs):
+    fields = dict(pairs)
+    require(len(fields) == len(pairs), "Duplicate field in observer JSON")
+    return fields
 
+
+def observed(log, name, direct):
+    # --json wraps the single run_cmd's captured stdout as one SerialMessage.
+    require(log.startswith(b"{") and log.endswith(b"}\n") and log.count(b"\n") == 1
+            and b"\r" not in log, "Expected exactly one JSON observer message")
+    message = json.loads(log.decode("utf-8"), object_pairs_hook=unique_fields)
+    require(isinstance(message, dict), "Expected observer message object")
+    body = message.pop("data", None)
+    # One line per import, then one preserved blank line, then the observer.
+    line = len(direct) + 2 + OBSERVER.splitlines().index(b"run_cmd do")
+    expected = {"caption": "", "fileName": relative(name, ".lean"), "isSilent": False,
+                "keepFullRange": False, "kind": "[anonymous]", "severity": "information",
+                "pos": {"column": 0, "line": line}, "endPos": {"column": len("run_cmd"), "line": line}}
+    # Compare JSON types as well as values (Python would accept 0 as False).
+    require(json.dumps(message, sort_keys=True) == json.dumps(expected, sort_keys=True),
+            "Unexpected observer message metadata")
+    require(isinstance(body, str) and body.endswith("\n") and "\r" not in body,
+            "Expected newline-terminated observer data")
+    lines = body[:-1].split("\n")
+    rows = {}
+    for entry in lines[:-1]:
+        require(entry.startswith("P21_IMPORT {") and entry.endswith("}"), "Unexpected observer import line")
+        row = json.loads(entry.removeprefix("P21_IMPORT "), object_pairs_hook=unique_fields)
+        require(row.keys() == {"module", "olean"} and all(isinstance(v, str) and v for v in row.values()),
+                "Malformed observed import")
+        module = row["module"]
+        require(module not in rows, "Duplicate observed import: " + module)
+        rows[module] = row["olean"]
+    header = lines[-1]
+    require(header.startswith("P21_HEADER {") and header.endswith("}"), "Expected final observer header")
+    summary = json.loads(header.removeprefix("P21_HEADER "), object_pairs_hook=unique_fields)
+    require(type(summary.get("count")) is int and summary == {"main": name, "count": len(rows)}
+            and name not in rows and {"Init", *direct} <= rows.keys(),
+            "Incomplete actual legacy header inventory: " + name)
+    return rows
 
 def publish(path, value):
     raw = (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
@@ -133,6 +164,7 @@ class Extension:
                     require(str(path.resolve()) in self.base.files, "Unfrozen namespace root")
                     self.original_links[path.name] = path.resolve()
         self.links = dict(self.original_links)
+        self.casing = self.bind_lake_casing()
 
     def bind(self, p, role, expected=None):
         p = p.resolve(strict=True)
@@ -165,6 +197,68 @@ class Extension:
         self.bind(source, "pinned-buchstab-source")
         return source, expected
 
+    def bind_lake_casing(self):
+        """Reuse one standard toolchain input from an observed, byte-frozen P3 audit."""
+        require(self.base.raw_sha256 == CASING_BASE and CASING not in self.base.value["resolutions"],
+                "Unexpected base for Lake.Util.Casing evidence")
+        self.casing_hashes = {}
+        def bind(path, role, expected):
+            require(path.resolve(strict=True) == path, "Non-canonical Casing evidence path")
+            digest = self.bind(path, role, expected)
+            self.casing_hashes[path] = digest
+            return digest
+
+        evidence_dir = self.project / "verification/parts/p3/long-slot-normalization"
+        publication = evidence_dir / "receipt.json"
+        bind(publication, "historical-casing-input-receipt", CASING_RECEIPT_SHA)
+        raw = publication.read_bytes()
+        require(hashlib.sha256(raw).hexdigest() == CASING_RECEIPT_SHA, "Historical P3 receipt changed")
+        published = json.loads(raw)
+        for filename in ("lean-toolchain", "lake-manifest.json"):
+            bind(self.project / filename, "historical-casing-runtime-pin",
+                      published["scope_guard"]["frozen_configs_and_complete_gates"][filename])
+        archive = evidence_dir / "local-evidence.tar.xz.b64"
+        archive_sha = bind(archive, "historical-casing-input-evidence", published["evidence"]["archive_base64_sha256"])
+        encoded = archive.read_bytes()
+        require(hashlib.sha256(encoded).hexdigest() == archive_sha, "Historical Casing archive changed")
+        stem = "execution/20261012T090930892745Z-audit"
+        with tarfile.open(fileobj=io.BytesIO(base64.b64decode(encoded)), mode="r:xz") as tar:
+            def member(path):
+                return tar.extractfile(path).read()
+            inventory = member(stem + "-imports.json")
+            receipt = json.loads(member(stem + "-receipt.json"))
+            actual = json.loads(member(stem + "-actual-imports.json"))
+            config = member("runtime/runtime-config.json")
+        require(published["selected_gates"]["audit"] == receipt and receipt["scoped_gate_passed"] is True and receipt["returncode"] == 0
+                and receipt["actual_imports_match_predicted_paths"] is True
+                and receipt["all_import_sources_and_object_parts_unchanged"] is True
+                and receipt["import_snapshot_sha256"] == hashlib.sha256(inventory).hexdigest()
+                and receipt["runtime_config_sha256"] == hashlib.sha256(config).hexdigest(),
+                "Historical Casing input evidence failed")
+        history = json.loads(inventory)
+        old = Path(receipt["environment"]["LEAN_SYSROOT"])
+        sysroot = Path(self.value["runtime"]["sysroot"])
+        source = Path("src/lean/lake/Lake/Util/Casing.lean")
+        parts = [Path("lib/lean/Lake/Util/Casing" + suffix) for suffix in LOAD_SUFFIXES]
+        expected = {"module": CASING, "source": str(old / source), "olean": str(old / parts[0]),
+                    "parts": [str(old / p) for p in parts]}
+        require([row for row in history["modules"] if row["module"] == CASING] == [expected]
+                and [row for row in actual if row["module"] == CASING] == [{"module": CASING, "olean": expected["olean"]}],
+                "Historical Lake.Util.Casing source, facet set or observed resolution differs")
+        # P3 used the stock Lake frontend and checker. Its runtime config binds
+        # those tools and both shared libraries. The parent pins the current Lean binary.
+        tools = json.loads(config)["stock_tools_and_driver"]
+        for leaf in ("bin/lake", "bin/leanchecker", "lib/lean/libleanshared.so", "lib/lean/libLake_shared.so"):
+            bind(sysroot / leaf, "historical-casing-toolchain",
+                      tools[str(old / leaf)]["sha256"])
+        frozen = {}
+        for rel in [source, *parts]:
+            path = sysroot / rel
+            bind(path, "historical-casing-input", history["sha256"][str(old / rel)])
+            frozen[str(path)] = self.files[str(path)]
+        self.resolutions[CASING] = str(sysroot / parts[0])
+        return sysroot / source, frozen
+
     def standard_source(self, name):
         rel = relative(name, ".lean")
         matches = [p / rel for p in self.source_roots if str(p / rel) in self.base.files]
@@ -191,6 +285,9 @@ class Extension:
 
     def recheck_base(self):
         self.base.verify()
+        for path, digest in self.casing_hashes.items():
+            require(path.resolve(strict=True) == path and self.hashes.digest(path) == digest,
+                    "Historical Casing input changed: " + str(path))
         for root, pin in self.extra_roots.items():
             require(git(root, "rev-parse", "HEAD").decode().strip() == pin, "Standard-source checkout changed")
 
@@ -198,7 +295,11 @@ class Extension:
         found = {}
         for name, observed_path in observed_paths.items():
             new_native = native(name) and name not in self.base.modules
-            if new_native:
+            historical_casing = name == CASING and self.casing is not None
+            if historical_casing:
+                source, frozen = self.casing
+                wanted = self.resolutions[name]
+            elif new_native:
                 require(name in TARGETS and name in self.modules, "Missing qualified native predecessor: " + name)
                 frozen, wanted = self.files, self.resolutions.get(name)
             else:
@@ -212,7 +313,7 @@ class Extension:
                     require(provider == {"status": FRESH, "receipt": str(self.out / "providers" / (name + ".json"))},
                             "New native predecessor lacks its own successful private compile: " + name)
                 source = Path(row["source"])
-            else:
+            elif not historical_casing:
                 source = self.standard_source(name)
             source = source.resolve(strict=True)
             require(str(source) in frozen and wanted in frozen, "Unfrozen source or resolution: " + name)
@@ -225,6 +326,8 @@ class Extension:
             parts = {}
             for suffix in LOAD_SUFFIXES:
                 part, original = Path(str(stem) + suffix), Path(str(expected) + suffix)
+                if historical_casing:
+                    require(part.is_file(), "Missing qualified Casing facet: " + suffix)
                 require(part.is_file() == original.is_file(), "Qualified facet set differs: " + name + suffix)
                 if part.is_file():
                     physical = part.resolve(strict=True)
@@ -254,8 +357,14 @@ class Extension:
                 f.write(result.stdout)
             print("HEADER_INVENTORY_FAILURE_LOG", f.name, result.stdout[-12000:].decode(errors="replace"), flush=True)
             raise ValueError(f"Header inventory exit {result.returncode}: {f.name}")
-        paths = observed(result.stdout, name, direct)
-        closure = self.inputs(paths, roots)
+        try:
+            paths = observed(result.stdout, name, direct)
+            closure = self.inputs(paths, roots)
+        except (ValueError, OSError):
+            with tempfile.NamedTemporaryFile(dir=folder, prefix=phase + "-inventory-failed-", delete=False) as f:
+                f.write(result.stdout)
+            print("HEADER_INVENTORY_VALIDATION_FAILURE_LOG", f.name, hashlib.sha256(result.stdout).hexdigest(), flush=True)
+            raise
         log_sha = hashlib.sha256(result.stdout).hexdigest()
         atomic_missing(log, result.stdout, log_sha)
         witness = {"source": str(probe), "source_sha256": self.bind(probe, "input-probe-source", probe_sha),
