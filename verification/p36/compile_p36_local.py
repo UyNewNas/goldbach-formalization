@@ -277,6 +277,7 @@ class Runner:
     def command(self, name: str, command: list[str], *, checked=True) -> tuple[int, str, dict]:
         log = self.run_dir / (name.replace("/", "_") + ".log")
         started = time.monotonic()
+        print("P36_COMMAND_START " + json.dumps({"name": name, "log": str(log)}), flush=True)
         with log.open("w") as handle:
             handle.write("command=" + json.dumps(command) + "\n")
             handle.flush()
@@ -293,6 +294,7 @@ class Runner:
                   "log": str(log), "log_sha256": sha256(log)}
         self.report["commands"].append(record)
         self.save()
+        print("P36_COMMAND_END " + json.dumps(record), flush=True)
         if checked and code:
             raise RuntimeError(f"{name} failed with exit {code}; see {log}\n{body[-3000:]}")
         return code, body, record
