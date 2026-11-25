@@ -163,7 +163,7 @@ theorem selected_fifth_actual_rough_budget (S : CompactStart)
     have heq := double_buffer_identity S code buffer branch
     linarith
   have hpow := Real.rpow_le_rpow_of_exponent_le hN.le hcapLe
-  exact ⟨integerSquareGates_mono (rough.map Prod.fst) hpow hrough.1,
+  refine ⟨integerSquareGates_mono (rough.map Prod.fst) hpow hrough.1,
     integerSquareGates_mono (remainingPrimes rough) hpow hrough.2,
     appendUnselected_selected old ds, ?_⟩
   change ((rough.map Prod.fst).prod : ℝ) * L < (N : ℝ)^physical
