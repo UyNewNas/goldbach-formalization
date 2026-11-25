@@ -20,7 +20,7 @@ theorem integratedPower_newton_guard_6_0 (y : Fin 9 → ℝ) :
   rw [integratedPower_eq_factored]
   norm_num [Nat.choose_eq_descFactorial_div_factorial, Nat.descFactorial]
   -- Phase 2: enumerate only the finite tuple list; keep products/Newton opaque.
-  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
+  simp (config := { maxSteps := 2000000 }) [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
     Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
     List.Nat.antidiagonalTuple, List.Nat.antidiagonal,
     List.range_succ, List.range_zero,

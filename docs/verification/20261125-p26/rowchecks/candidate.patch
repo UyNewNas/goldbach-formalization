@@ -1,0 +1,19 @@
+--- a/ImbalancedChen/P2OriginalSaving19Original28918.lean
++++ b/ImbalancedChen/P2OriginalSaving19Original28918.lean
+@@ -1,4 +1,5 @@
+ import ImbalancedChen.P2OriginalSaving19Archive
++import ImbalancedChen.P2Winner9RowArithmeticChecker
+ import Mathlib.LinearAlgebra.Matrix.ToLinearEquiv
+ import Mathlib.Topology.Algebra.Module.FiniteDimension
+ 
+@@ -150,7 +151,9 @@
+ 
+ /-- This is a closed pure proofterm request, NOT a hypothesis and NOT an
+ executed successful certificate. Resource feasibility is also untested. -/
+-theorem original_data_checks : ∀ r, RowDataChecks r := by decide
++theorem original_data_checks : ∀ r, RowDataChecks r := by
++  simp only [RowDataChecks, ← P2Winner9RowArithmeticChecker.fastDet_eq]
++  decide
+ 
+ theorem original_data_guard (r : OriginalRowIndex) : RowDataGuard r := by
+   rcases original_data_checks r with ⟨hd, hp, hg, hv, hmg, hm, ht, ha, hj, hf⟩

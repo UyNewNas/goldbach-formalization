@@ -4,6 +4,7 @@
 Default output is Core, the five-leaf LowBoundary pilot, and the K6I0 pilot.
 All 68 planned modules are constructed in memory and checked before any writes.
 --all emits the full source partition; --module additionally emits named modules.
+--only-module emits only the named module(s), retaining existing accepted sources.
 The parent owns source installation, serialized compilation, and acceptance.
 """
 
@@ -35,6 +36,27 @@ RECORDED_DONOR_SOURCES = {
     OLD_NS + 'AuthorK6': 'b97c246736d895a684a758e5f4275a5a88972ebbae134d6fca12a9b15b2b3b78',
 }
 CORE = NS + 'Core'
+K6I0 = NS + 'GuardK6I0'
+K6I0_ENUMERATION_MAX_STEPS = 2_000_000
+K6I0_FAILED_SOURCE_SHA = 'da73c863f0155ae3bfbe7c48424a6b8b89a8a0b56b5a6968296b3972a12bd338'
+PARENT_ACCEPTED_PILOTS = {
+    CORE: {'sha256': '3738b75a69892c1f9ab68a395b6394817e24a94083ca5254b38c32d73a859832',
+           'job_id': 'job_b86c096a5ec74c7bad39e7155fb6f8ec'},
+    NS + 'GuardLowBoundary': {
+        'sha256': '3fa7f12eb715a9aabac0c431533fbb515ad3d2512aadd8eec677c5b098486604',
+        'job_id': None},
+}
+K6I0_PARENT_FAILURE = {
+    'evidence_source': 'Parent compile feedback; this generator did not execute Lean.',
+    'job_id': 'job_89bd4c3ac4574f5e922ed0fd428835b8',
+    'source_sha256': K6I0_FAILED_SOURCE_SHA,
+    'phase': 'normal compilation; Phase 2 finite tuple enumeration',
+    'line': 23,
+    'error': 'simp failed: maximum number of steps exceeded',
+    'normal_seconds': 21.75,
+    'peak_memory_gb_as_reported': 7.55,
+    'memory_failure': False,
+}
 INTERNAL = NS + '.ProofPieces'
 LOW_PAIRS = [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0)]
 CORE_PUBLIC = ['duplicateH', 'baryCoefficient', 'bumped', 'integratedPower', 'completeH', 'completeH_cons_succ']
@@ -228,6 +250,12 @@ def build(baseline: Path, donor_root: Path) -> tuple[dict, dict, dict]:
                 f'      ((Nat.factorial 9 : ℝ) * ((9 + {k}).choose {k} : ℝ)) :='
                 + dimension_specialize(proof_body(donor_guards[old_name]['text'])))
         assert proof_body(text) == dimension_specialize(proof_body(donor_guards[old_name]['text']))
+        if (k, i) == (6, 0):
+            before = '  simp [Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,'
+            after = (f'  simp (config := {{ maxSteps := {K6I0_ENUMERATION_MAX_STEPS} }}) '
+                     '[Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,')
+            assert text.count(before) == 1
+            text = text.replace(before, after)
         expected = (f'theorem {new_name} (y : Fin 9 → ℝ) : '
                     f'integratedPower y {i} {k} = duplicateH y {i} {k} / '
                     f'((Nat.factorial 9 : ℝ) * ((9 + {k}).choose {k} : ℝ))')
@@ -303,6 +331,11 @@ def build(baseline: Path, donor_root: Path) -> tuple[dict, dict, dict]:
         'all_63_integrated_guard_headers_checked_against_original_degree_and_fin9_normalization': True,
         'all_7_author_headers_checked_against_original_degree_and_fin9_nodes': True,
         'planned_source_modules': 68, 'forbidden_code_tokens_absent': True,
+        'local_execution_patch': {
+            'module': K6I0, 'phase': 'Phase 2 tuple-enumeration simp only',
+            'maxSteps': K6I0_ENUMERATION_MAX_STEPS,
+            'other_guard_bodies_unchanged': True,
+            'status': 'PROPOSED_LIMIT_NOT_COMPILED'},
         'original_declaration_owners': owners,
         'scope_classification': {
             'expression_and_kernel_execution': 'Source partition and explicit reduction order.',
@@ -330,13 +363,17 @@ def main() -> None:
     ap.add_argument('--out', type=Path, default=HERE)
     ap.add_argument('--all', action='store_true')
     ap.add_argument('--module', action='append', default=[])
+    ap.add_argument('--only-module', action='append', default=[])
     ap.add_argument('--check-only', action='store_true')
     args = ap.parse_args()
+    if args.only_module and (args.all or args.module):
+        ap.error('--only-module cannot be combined with --all or --module')
     out = args.out.resolve()
     assert out == HERE or HERE in out.parents, 'write only inside the isolated candidate directory'
     files, validation, pins = build(args.baseline, args.donor_root)
     pilots = [CORE, NS + 'GuardLowBoundary', NS + 'GuardK6I0']
-    selected = set(files) if args.all else set(pilots + args.module)
+    selected = (set(args.only_module) if args.only_module else
+                set(files) if args.all else set(pilots + args.module))
     assert selected <= set(files)
     if args.check_only:
         print(json.dumps({'status': validation['status'], 'planned_modules': 68,
@@ -346,17 +383,40 @@ def main() -> None:
     for module, row in files.items():
         rel = Path(module.replace('.', '/') + '.lean')
         data = row['text'].encode()
+        if module in PARENT_ACCEPTED_PILOTS:
+            assert sha(data) == PARENT_ACCEPTED_PILOTS[module]['sha256'], module
         if module in selected:
             atomic_write(out / rel, data)
         manifest[module] = {k: v for k, v in row.items() if k != 'text'}
         manifest[module].update({'path': str(rel), 'bytes': len(data), 'sha256': sha(data),
                                  'emitted_this_invocation': module in selected, 'status': 'SOURCE_ONLY_UNCOMPILED'})
-    plan = {'status': 'PROPOSED_PARENT_COMPILE_ORDER_NOT_EXECUTED',
+        if module in PARENT_ACCEPTED_PILOTS:
+            manifest[module].update({
+                'status': 'PARENT_REPORTED_NORMAL_KERNEL_FULL_OWNED_ACCEPTED',
+                'parent_result': PARENT_ACCEPTED_PILOTS[module],
+                'receipt_rechecked_by_generator': False})
+    plan = {'status': 'K6I0_LOCAL_STEP_LIMIT_REPAIR_PENDING_PARENT_COMPILATION',
             'recommended_first_order': pilots,
+            'recommended_next_order': [K6I0],
+            'retain_accepted_parent_sources_without_recompiling': PARENT_ACCEPTED_PILOTS,
+            'acceptance_evidence_note': 'Core and LowBoundary gates reported by parent; no receipts independently rechecked here.',
             'first_stage_import_graph': {m: files[m]['imports'] for m in pilots},
             'pilot_leaves': {pilots[1]: LOW_PAIRS, pilots[2]: [(6, 0)]},
             'requires_MomentFloorConsumer_for_first_stage': False,
             'runner': 'Parent existing serialized guarded pipeline; unchanged limits and gates.',
+            'parent_reported_failure': K6I0_PARENT_FAILURE,
+            'proposed_local_repair': {
+                'module': K6I0,
+                'preimage_sha256': K6I0_FAILED_SOURCE_SHA,
+                'candidate_sha256': manifest[K6I0]['sha256'],
+                'classification': 'Expression execution limit; manuscript moment identity unchanged.',
+                'tactic_scope': 'Only the Phase 2 finite-tuple enumeration simp invocation.',
+                'maxSteps': K6I0_ENUMERATION_MAX_STEPS,
+                'global_runtime_changes': False,
+                'other_guard_limits_changed': False,
+                'theorem_statement_or_data_changes': False,
+                'recompiled': False,
+                'status': 'PROPOSED_LIMIT_NOT_COMPILED'},
             'no_cold_facade_build': True,
             'after_pilots': 'Retain passed receipts; emit pending providers as needed, compile serially, then facade.',
             'audit_scope': 'Core, all proof providers, and facade; never facade alone.',
