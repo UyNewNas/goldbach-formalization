@@ -24,9 +24,9 @@ open P1HistoricalFifthOriginalByteLiteral P1HistoricalFifthOriginalNpyAssociatio
 open P1HistoricalFifthTypedArchiveShape P1HistoricalFifthIndexedOwnerArchive
 open P1HistoricalFifthTypedKeyPartition P1HistoricalFifthTypedBaseGeometry
 
+set_option maxHeartbeats 0 in
 /-- This term is produced solely from the original binary at user compile
 time. Changing the file changes the term and requires every check again. -/
-set_option maxHeartbeats 0 in
 def originalLiteral : ByteLiteral := include_original_bytes%
   "provenance/original-fifth/cells.npy"
 
@@ -35,19 +35,19 @@ def originalBytes : List Nat := originalLiteral.bytes
 theorem original_bytes_bound : ∀ b ∈ originalBytes, b < 256 :=
   originalLiteral.bytes_bound
 
-/-- UNEVALUATED structural guard. This computes only tree lengths. -/
 set_option maxRecDepth 1000000 in
 set_option maxHeartbeats 400000000 in
+/-- UNEVALUATED structural guard. This computes only tree lengths. -/
 theorem original_literal_length : originalLiteral.byteLength = 23410768 := by
   decide
 
 theorem original_bytes_length : originalBytes.length = 23410768 :=
   originalLiteral.bytes_length.trans original_literal_length
 
-/-- UNEVALUATED128-byte guard, including magic/version/header length,
-dtype/order/shape and every original padding/newline byte. -/
 set_option maxRecDepth 1000000 in
 set_option maxHeartbeats 400000000 in
+/-- UNEVALUATED128-byte guard, including magic/version/header length,
+dtype/order/shape and every original padding/newline byte. -/
 theorem original_header :
     originalBytes.take authenticHeader.length = authenticHeader := by
   decide
@@ -132,6 +132,8 @@ theorem parseColumns_eq (parsed : Option (List FifthWireRow)) (typed : List Fift
   | none => exact False.elim h
   | some rows => exact congrArg some (orderedColumns_eq rows typed h)
 
+set_option maxRecDepth 50000000 in
+set_option maxHeartbeats 0 in
 /-- THE decisive full historical check, UNEVALUATED. The left side runs the
 real fixed-frame/signed64 parser on the independent embedded original bytes;
 the right side is the real independent143-block hub, in its original order.
@@ -139,8 +141,6 @@ No success/association hypothesis occurs in this closed proof body.
 
 Resource feasibility of this large kernel reduction has NOT been tested.
 Neither a passing flag nor formal credit is asserted before user compilation. -/
-set_option maxRecDepth 50000000 in
-set_option maxHeartbeats 0 in
 theorem original_complete_ordered_columns :
     ParseColumns (decodeFrame originalBytes)
       Data.P1HistoricalFifthSavedTableData.rows.toList := by
