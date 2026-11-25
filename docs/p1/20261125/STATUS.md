@@ -34,11 +34,31 @@ these bytes. Their own compilation and the further U04 consumer chain remain
 unaccepted.
 
 The next [candidate groups](next-frontier/batch12-candidates/README.md) retain
-exact accepted-parent provenance. Four symbolic owners and one separate literal
-pilot have reviewed source checks and execution callers; no acceptance is
-credited before their actual runs. Heavier Full87 finite checks remain separate.
-The G3 census found all 188 required original fixture files with matching hashes;
-no download or regeneration is required.
+exact accepted-parent provenance. Their first normal attempts exposed five
+source failures. The [five minimal repairs](batch13-repairs/README.md), published
+at `c257b7ade3b82d8f3ae126ffb1ca999871e9cd57`, have exact before/after hashes,
+complete target diagnostic sections and static peer review. The four symbolic
+owners and the separate Ascending literal pilot are queued for actual normal,
+kernel and full-owned retry. None is added to the accepted count above yet.
+
+The [other four Full87 interior candidates](full87-other-interiors/README.md)
+apply the same reviewed expression fixes while retaining all 17 definitions,
+15 public theorem headers and family-specific constants. These are explicitly
+source-only candidates: they have no target-specific diagnostic or actual
+normal/kernel/full-owned acceptance. Their larger finite checks remain separate.
+
+The next [five existing Wire ancestors](next-frontier/wire-ancestors/README.md)
+have an unchanged 271-source closure and precise parent-evidence bindings; their
+normal/audit caller reuses the published validation APIs without source writes.
+The five candidates do not by themselves establish the terminal Wire binding.
+
+The [G3 Data pilot](g3-data-pilot/README.md) reuses the accepted Reader and all
+188 existing original fixtures, with hashes checked before and after the actual
+normal run and bound to a durable companion receipt. Data normal compilation is
+in progress; kernel/full-owned acceptance remains a separate step. The downstream
+Archive still contains 94 separate `Checked` theorem declarations in one module;
+Data acceptance alone would not verify these numerical checks. No fixtures were
+downloaded or regenerated.
 
 **P1 remains incomplete.** The original terminal roots, remaining numerical and
 archive obligations, same-coefficient density integration and the signed-PP

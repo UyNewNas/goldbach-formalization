@@ -54,7 +54,7 @@ private theorem original_h3_literal_margin :
       (9/1000000 : ℚ) ≤
         originalRowValue i (P4AOriginalFirstFailureH3Literal.sourceAffineRows i k).2 := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 /-- True maximal coordinate slope of these literal rows is 9/2.
     We use a conservative common coefficient bound 6. -/
@@ -65,12 +65,12 @@ private theorem original_h3_literal_slope :
       |(P4AOriginalFirstFailureH3Literal.sourceAffineRows i k).2 j.succ| ≤
         (6 : ℚ) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 private theorem affine_perturbation
     (a : Fin 9 → ℚ) (u v : Point)
     (hc : ∀ j, |v j - u j| ≤ (1/100000000 : ℝ))
-    (ha : ∀ j, |(a j.succ : ℝ)| ≤ 6) :
+    (ha : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6) :
     |P4AOriginalFirstFailureH3Literal.evalAffine a v -
       P4AOriginalFirstFailureH3Literal.evalAffine a u| ≤
         (3/6250000 : ℝ) := by
@@ -116,10 +116,12 @@ theorem all12_original_h3_rows_box_slack
       P4AOriginalFirstFailureH3Literal.evalAffine
         a (originalH3Point i) := by
     rw [original_eval_eq]
-    exact_mod_cast original_h3_literal_margin i k
-  have hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 6 := by
+    simpa only [a, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_h3_literal_margin i k)
+  have hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6 := by
     intro j
-    exact_mod_cast original_h3_literal_slope i k j
+    simpa only [a, Rat.cast_abs, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_h3_literal_slope i k j)
   have hdelta := affine_perturbation a (originalH3Point i) s hs hcoeff
   have hleft := (abs_le.mp hdelta).1
   linarith

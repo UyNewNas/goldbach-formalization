@@ -67,7 +67,7 @@ private theorem original_literal_row_margin :
       (7/10000 : ℚ) ≤
         rowValue i (P4AOriginalRemainingEighthSources.row (originalCell i) k) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 /-- Unlike the previous ascending14 family (max slope 9/2),
 these sixteen originals contain slope of absolute value 11/2.
@@ -81,12 +81,12 @@ private theorem original_literal_slope_bound :
       |P4AOriginalRemainingEighthSources.row
           (originalCell i) k j.succ| ≤ (6 : ℚ) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 private theorem affine_perturbation
     (a : Fin 9 → ℚ) (u v : Point)
     (hcoordinate : ∀ j, |v j - u j| ≤ (1/100000 : ℝ))
-    (hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 6) :
+    (hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6) :
     |P4AOriginalRemainingEighthSources.evalRow a v -
       P4AOriginalRemainingEighthSources.evalRow a u| ≤
         (3/6250 : ℝ) := by
@@ -134,10 +134,12 @@ theorem all16_original_rows_box_slack
   have hcentre : (7/10000 : ℝ) ≤
       P4AOriginalRemainingEighthSources.evalRow a (originalPoint i) := by
     rw [real_row_eq_rational]
-    exact_mod_cast original_literal_row_margin i k
-  have hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 6 := by
+    simpa only [a, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_literal_row_margin i k)
+  have hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6 := by
     intro j
-    exact_mod_cast original_literal_slope_bound i k j
+    simpa only [a, Rat.cast_abs, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_literal_slope_bound i k j)
   have hdelta := affine_perturbation a (originalPoint i) s hs hcoeff
   have hleft := (abs_le.mp hdelta).1
   linarith

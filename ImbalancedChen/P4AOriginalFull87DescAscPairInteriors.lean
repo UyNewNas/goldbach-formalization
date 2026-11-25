@@ -89,7 +89,7 @@ private theorem desc_literal_margin :
       (9/1000000 : ℚ) ≤
         descRowQ i (OriginalDescendingFifteenLiteralAffineRows.exportedCoefficients i r) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
@@ -98,7 +98,7 @@ private theorem pair_literal_margin :
       (9/1000000 : ℚ) ≤
         pairRowQ i (OriginalAscendingThirteenLiteralAffineRows.exportedCoefficients i r) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 /-- Original maximum coordinate slope is 11/2, so the safe common bound is 6. -/
 set_option maxRecDepth 8192 in
@@ -108,7 +108,7 @@ private theorem desc_slope :
       |OriginalDescendingFifteenLiteralAffineRows.exportedCoefficients
         i r j.succ| ≤ (6 : ℚ) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
@@ -117,14 +117,14 @@ private theorem pair_slope :
       |OriginalAscendingThirteenLiteralAffineRows.exportedCoefficients
         i r j.succ| ≤ (6 : ℚ) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 /-- Pure manuscript-internal affine perturbation bound, with the
     full original 8-coordinate coefficients and no geometric-to-arithmetic leap. -/
 private theorem affine_perturbation
     (a : Fin 9 → ℚ) (u v : Point)
     (hc : ∀ j, |v j - u j| ≤ (1/100000000 : ℝ))
-    (ha : ∀ j, |(a j.succ : ℝ)| ≤ 6) :
+    (ha : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6) :
     |OriginalDescendingFifteenLiteralAffineRows.evaluateCoefficients a v -
       OriginalDescendingFifteenLiteralAffineRows.evaluateCoefficients a u| ≤
         (3/6250000 : ℝ) := by
@@ -169,10 +169,12 @@ theorem all15_original_desc_rows_box_slack (i : Fin 15) (s : Point)
       OriginalDescendingFifteenLiteralAffineRows.evaluateCoefficients
         a (originalDescPoint i) := by
     rw [desc_eval_eq]
-    exact_mod_cast desc_literal_margin i r
-  have hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 6 := by
+    simpa only [a, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (desc_literal_margin i r)
+  have hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6 := by
     intro j
-    exact_mod_cast desc_slope i r j
+    simpa only [a, Rat.cast_abs, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (desc_slope i r j)
   have hdelta := affine_perturbation a (originalDescPoint i) s hs hcoeff
   have hleft := (abs_le.mp hdelta).1
   linarith
@@ -205,10 +207,12 @@ theorem all13_original_pair_rows_box_slack (i : Fin 13) (s : Point)
       OriginalDescendingFifteenLiteralAffineRows.evaluateCoefficients
         a (originalPairPoint i) := by
     rw [pair_eval_eq]
-    exact_mod_cast pair_literal_margin i r
-  have hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 6 := by
+    simpa only [a, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (pair_literal_margin i r)
+  have hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 6 := by
     intro j
-    exact_mod_cast pair_slope i r j
+    simpa only [a, Rat.cast_abs, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (pair_slope i r j)
   have hdelta := affine_perturbation a (originalPairPoint i) s hs hcoeff
   have hleft := (abs_le.mp hdelta).1
   linarith
